@@ -32,7 +32,9 @@ COPY --chown=synthseek:nodejs web/static ./web/.next/static/
 COPY --chown=synthseek:nodejs web/public ./web/public/
 
 COPY --chown=synthseek:nodejs docker/start.sh ./start.sh
-RUN chmod +x ./start.sh
+RUN chmod +x ./start.sh \
+    && chmod -R 755 /app/web \
+    && rm -f /app/web/.env 2>/dev/null || true
 
 
 ENV NODE_ENV=production \
@@ -40,7 +42,7 @@ ENV NODE_ENV=production \
     PGID=1000 \
     API_PORT=4401 \
     API_HOST=0.0.0.0 \
-    PORT=4400 \
+    WEB_UI_PORT=4400 \
     HOSTNAME=0.0.0.0 \
     DATABASE_URL=file:/data/db/synthseek.db \
     DOWNLOADS_COMPLETE_PATH=/downloads \

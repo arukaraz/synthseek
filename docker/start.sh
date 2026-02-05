@@ -8,7 +8,7 @@ echo ""
 PUID=${PUID:-1000}
 PGID=${PGID:-1000}
 API_PORT=${API_PORT:-4401}
-WEB_PORT=${PORT:-4400}
+WEB_PORT=${WEB_UI_PORT:-4400}
 
 echo "  User:     PUID=${PUID}, PGID=${PGID}"
 echo "  API:      port ${API_PORT}"
@@ -44,7 +44,7 @@ fi
 echo "[4/5] Running database migrations..."
 cd /app/server
 if [ -f "db/schema.prisma" ]; then
-    su-exec synthseek npx prisma migrate deploy --schema=db/schema.prisma 2>&1 | grep -v "^Prisma\|^Datasource\|^[0-9]* migration" || true
+    PRISMA_HIDE_UPDATE_MESSAGE=1 PRISMA_HIDE_DEPRECATION_WARNING=1 su-exec synthseek npx prisma migrate deploy --schema=db/schema.prisma 2>/dev/null
     echo "      Done"
 else
     echo "      Skipped (schema not found)"
@@ -71,7 +71,7 @@ SERVER_PID=$!
 MAX_WAIT=120
 WAITED=0
 while [ $WAITED -lt $MAX_WAIT ]; do
-    if curl -s "http://localhost:${API_PORT}/api/health" >/dev/null 2>&1; then
+    if wget -q --spider "http://localhost:${API_PORT}/api/health" 2>/dev/null; then
         break
     fi
     sleep 1
@@ -84,7 +84,7 @@ if [ $WAITED -ge $MAX_WAIT ]; then
 fi
 
 cd /app/web
-su-exec synthseek sh -c "HOSTNAME=0.0.0.0 PORT=$WEB_PORT node server.js" >/dev/null 2>&1 &
+su-exec synthseek sh -c "cd /app/web && HOSTNAME=0.0.0.0 PORT=$WEB_PORT node server.js" >/dev/null &
 WEB_PID=$!
 
 sleep 2
@@ -92,9 +92,6 @@ if ! kill -0 "$WEB_PID" 2>/dev/null; then
     echo "      UI failed to start"
     exit 1
 fi
-
-echo "      Server: http://0.0.0.0:${API_PORT} (PID: $SERVER_PID)"
-echo "      UI:     http://0.0.0.0:${WEB_PORT} (PID: $WEB_PID)"
 
 echo ""
 echo "Synthseek ready"
