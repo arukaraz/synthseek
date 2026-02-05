@@ -184,10 +184,13 @@ jobs:
           echo "Frontend build verified"
 
       - name: Commit version sync
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
           git add package.json package-lock.json
           git diff --staged --quiet || git commit -m "chore: sync version to $VERSION [skip ci]"
           git push
