@@ -1,0 +1,93 @@
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl,
+  .backdrop-blur-3xl {
+    backdrop-filter: none !important;
+  }
+
+  .glass-panel,
+  .glass-panel-hover,
+  .glass-subtle,
+  .glass-intense,
+  .modal-backdrop {
+    backdrop-filter: none !important;
+  }
+
+  .hover-lift:hover,
+  .glass-panel-hover:hover {
+    transform: none !important;
+  }
+
+  .decorative-animation {
+    display: none !important;
+  }
+}
+
+@layer utilities {
+  .focus-ring {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid oklch(var(--neon-primary));
+    outline-offset: 2px;
+  }
+
+  .focus-ring-high-contrast:focus-visible {
+    outline: 3px solid oklch(var(--neon-primary));
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px oklch(var(--neon-primary) / 0.2);
+  }
+}
+
+@layer utilities {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .not-sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --border-default: oklch(0.5 0 0);
+    --border-subtle: oklch(0.4 0 0);
+    --glass-border: oklch(0.5 0 0 / 0.5);
+  }
+
+  .glass-panel,
+  .glass-subtle,
+  .glass-intense {
+    border-width: 2px;
+  }
+}

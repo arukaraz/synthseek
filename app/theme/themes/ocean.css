@@ -1,0 +1,45 @@
+@layer base {
+  [data-theme="ocean"] {
+    color-scheme: dark;
+
+    --surface-bg: oklch(0.1 0.02 220);
+    --surface-bg-elevated: oklch(0.14 0.025 220);
+    --surface-bg-sunken: oklch(0.06 0.015 220);
+    --surface-fg: oklch(0.92 0.01 200);
+    --surface-fg-muted: oklch(0.65 0.01 200);
+
+    --border-default: oklch(0.22 0.03 220);
+    --border-subtle: oklch(0.17 0.02 220);
+
+    --glass-bg: oklch(0.12 0.03 220 / 0.7);
+    --glass-border: oklch(0.5 0.1 200 / 0.2);
+
+    --color-primary-500: oklch(0.65 0.15 200);
+    --color-primary-600: oklch(0.55 0.15 200);
+    --color-secondary-500: oklch(0.7 0.12 160);
+    --neon-primary: 0.65 0.15 200;
+    --neon-accent: 0.65 0.15 200;
+    --neon-secondary: 0.7 0.12 160;
+
+    --neon-glow-opacity: 0.45;
+
+    --background: 0.1 0.02 220;
+    --foreground: 0.92 0.01 200;
+    --card: 0.14 0.025 220;
+    --card-foreground: 0.92 0.01 200;
+    --popover: 0.14 0.025 220;
+    --popover-foreground: 0.92 0.01 200;
+    --primary: 0.92 0.01 200;
+    --primary-foreground: 0.1 0.02 220;
+    --secondary: 0.17 0.02 220;
+    --secondary-foreground: 0.92 0.01 200;
+    --muted: 0.17 0.02 220;
+    --muted-foreground: 0.65 0.01 200;
+    --accent: 0.17 0.02 220;
+    --accent-foreground: 0.92 0.01 200;
+    --destructive: 0.4 0.2 25;
+    --border: 0.22 0.03 220;
+    --input: 0.22 0.03 220;
+    --ring: 0.65 0.15 200;
+  }
+}

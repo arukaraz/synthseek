@@ -1,0 +1,54 @@
+import type { ContentType } from "@api/__generated__/types";
+
+export type FilterType = ContentType | "all";
+
+export interface FilterTab {
+  value: FilterType;
+  label: string;
+}
+
+export type SpotifyItem =
+  | SpotifyApi.TrackObjectFull
+  | SpotifyApi.TrackObjectSimplified
+  | SpotifyApi.AlbumObjectSimplified
+  | SpotifyApi.ArtistObjectFull
+  | SpotifyApi.PlaylistObjectSimplified;
+
+export interface Result {
+  id: string;
+  type: ContentType;
+  name: string;
+  artist: string;
+  album?: string;
+  image?: string;
+  year?: string;
+}
+
+export interface CardProps {
+  result: Result;
+  onResultClick: (resultId: string, type: ContentType) => void;
+}
+
+export interface ResultsProps {
+  results: SpotifyItem[];
+  onResultClick: (resultId: string, type: ContentType) => void;
+}
+
+export interface FilterTabsProps {
+  activeFilter: FilterType;
+  onFilterChange: (filter: FilterType) => void;
+}
+
+export interface AllResultsProps {
+  title: string;
+  results: SpotifyItem[];
+  totalCount: number;
+  maxDisplay: number;
+  onSeeAll: () => void;
+  filterType: ContentType;
+  onResultClick: (resultId: string, type: ContentType) => void;
+}
+
+export interface SkeletonGridProps {
+  count?: number;
+}

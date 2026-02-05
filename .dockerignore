@@ -1,0 +1,83 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Database files (will be mounted as volume)
+*.db
+*.db-journal
+
+# Logs
+*.log
+logs
+
+# Testing
+coverage
+.nyc_output
+e2e
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+__tests__
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+docs
+
+# Editor configs
+.editorconfig
+.prettierrc
+.prettierignore
+eslint.config.*
+
+# Misc
+*.tgz
+.turbo
+.vercel
+.cache
+tmp
+temp
+
+# Development configs
+nodemon.json
+cypress.config.ts
+vitest.config.ts
+vitest.setup.ts
+
+# Types generated (will be regenerated)
+app/api/__generated__
+
+# Example configs (not needed in image)
+*.example.yml
+
+# Keep docker folder explicitly
+!docker/
