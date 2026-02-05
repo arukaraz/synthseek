@@ -1,9 +1,4 @@
-export {
-  mockNavigatorLanguage,
-  mockNavigatorWithoutLanguage,
-  clearNavigator,
-  mockMatchMedia,
-} from "./browser.mock";
+export { mockNavigatorLanguage, mockNavigatorWithoutLanguage, clearNavigator, mockMatchMedia } from "./browser.mock";
 
 export {
   createMockUseRequest,

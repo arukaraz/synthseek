@@ -35,9 +35,7 @@ describe("EmptyState", () => {
   });
 
   it("has flex layout with centered items", () => {
-    const { container } = render(
-      <EmptyState icon={Search} title="Title" description="Description" />
-    );
+    const { container } = render(<EmptyState icon={Search} title="Title" description="Description" />);
     const wrapper = container.firstChild as HTMLElement;
     expect(wrapper).toHaveClass("flex", "flex-col", "items-center", "justify-center");
   });

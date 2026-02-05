@@ -1,12 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { isSingleTrackRequest, calculateAlbumStatus } from "../request-helpers";
 import { RequestStatus, ContentType } from "@api/__generated__/types";
-import {
-  createTrackRequest,
-  createCompletedTrack,
-  createFailedTrack,
-  createDownloadingTrack,
-} from "@test/factories";
+import { createTrackRequest, createCompletedTrack, createFailedTrack, createDownloadingTrack } from "@test/factories";
 
 describe("isSingleTrackRequest", () => {
   it("returns false for empty array", () => {
@@ -91,10 +86,7 @@ describe("calculateAlbumStatus", () => {
   });
 
   it("returns in_progress when some tracks are complete but others are queued", () => {
-    const tracks = [
-      createCompletedTrack(),
-      createTrackRequest({ status: RequestStatus.enum.queued }),
-    ];
+    const tracks = [createCompletedTrack(), createTrackRequest({ status: RequestStatus.enum.queued })];
     const result = calculateAlbumStatus(tracks);
     expect(result.newStatus).toBe(RequestStatus.enum.in_progress);
   });

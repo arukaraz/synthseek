@@ -1,6 +1,4 @@
-export function createSpotifyImage(
-  overrides?: Partial<SpotifyApi.ImageObject>
-): SpotifyApi.ImageObject {
+export function createSpotifyImage(overrides?: Partial<SpotifyApi.ImageObject>): SpotifyApi.ImageObject {
   return {
     url: "https://i.scdn.co/image/test",
     height: 300,
@@ -67,9 +65,7 @@ export function createSpotifyTrackSimplified(
   };
 }
 
-export function createSpotifyTrackFull(
-  overrides?: Partial<SpotifyApi.TrackObjectFull>
-): SpotifyApi.TrackObjectFull {
+export function createSpotifyTrackFull(overrides?: Partial<SpotifyApi.TrackObjectFull>): SpotifyApi.TrackObjectFull {
   return {
     ...createSpotifyTrackSimplified(),
     album: createSpotifyAlbumSimplified(),
@@ -79,9 +75,7 @@ export function createSpotifyTrackFull(
   } as SpotifyApi.TrackObjectFull;
 }
 
-export function createSpotifyArtistFull(
-  overrides?: Partial<SpotifyApi.ArtistObjectFull>
-): SpotifyApi.ArtistObjectFull {
+export function createSpotifyArtistFull(overrides?: Partial<SpotifyApi.ArtistObjectFull>): SpotifyApi.ArtistObjectFull {
   return {
     ...createSpotifyArtistSimplified(),
     followers: { href: null, total: 1000000 },

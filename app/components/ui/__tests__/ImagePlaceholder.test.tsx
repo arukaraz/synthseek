@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@test/test-utils";
+import { render } from "@test/test-utils";
 import { ImagePlaceholder } from "../ImagePlaceholder";
-import { Music, User, Album } from "lucide-react";
+import { User } from "lucide-react";
 
 describe("ImagePlaceholder", () => {
   it("renders with default Music icon", () => {

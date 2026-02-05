@@ -74,10 +74,7 @@ describe("staggerItem", () => {
   });
 
   it("has transition with easeOut in visible state", () => {
-    expect((staggerItem.visible as Record<string, unknown>).transition).toHaveProperty(
-      "ease",
-      "easeOut"
-    );
+    expect((staggerItem.visible as Record<string, unknown>).transition).toHaveProperty("ease", "easeOut");
   });
 });
 
@@ -119,17 +116,11 @@ describe("modalContent", () => {
   });
 
   it("has spring transition in visible state", () => {
-    expect((modalContent.visible as Record<string, unknown>).transition).toHaveProperty(
-      "type",
-      "spring"
-    );
+    expect((modalContent.visible as Record<string, unknown>).transition).toHaveProperty("type", "spring");
   });
 
   it("has stiffness and damping in visible transition", () => {
-    const transition = (modalContent.visible as Record<string, unknown>).transition as Record<
-      string,
-      unknown
-    >;
+    const transition = (modalContent.visible as Record<string, unknown>).transition as Record<string, unknown>;
     expect(transition).toHaveProperty("stiffness");
     expect(transition).toHaveProperty("damping");
   });

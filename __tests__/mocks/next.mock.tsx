@@ -18,8 +18,7 @@ export const createMockSearchParams = (params: Record<string, string> = {}) => {
     keys: () => searchParams.keys(),
     values: () => searchParams.values(),
     entries: () => searchParams.entries(),
-    forEach: (callback: (value: string, key: string) => void) =>
-      searchParams.forEach(callback),
+    forEach: (callback: (value: string, key: string) => void) => searchParams.forEach(callback),
     toString: () => searchParams.toString(),
   };
 };
@@ -47,15 +46,7 @@ export const resetNextMocks = () => {
 
 export const mockNextImage = () => {
   vi.mock("next/image", () => ({
-    default: ({
-      src,
-      alt,
-      ...props
-    }: {
-      src: string;
-      alt: string;
-      [key: string]: unknown;
-    }) => {
+    default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => {
       // eslint-disable-next-line @next/next/no-img-element
       return <img src={src} alt={alt} {...props} />;
     },
@@ -64,15 +55,7 @@ export const mockNextImage = () => {
 
 export const mockNextLink = () => {
   vi.mock("next/link", () => ({
-    default: ({
-      children,
-      href,
-      ...props
-    }: {
-      children: React.ReactNode;
-      href: string;
-      [key: string]: unknown;
-    }) => (
+    default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
       <a href={href} {...props}>
         {children}
       </a>

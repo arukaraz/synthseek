@@ -1,9 +1,7 @@
 import { vi } from "vitest";
 import type { TrackRequest, Album } from "@api/__generated__/types";
 
-export const createMockUseRequest = (
-  overrides: Partial<ReturnType<typeof createMockUseRequest>> = {}
-) => ({
+export const createMockUseRequest = (overrides: Partial<ReturnType<typeof createMockUseRequest>> = {}) => ({
   requests: [] as TrackRequest[],
   isLoading: false,
   refreshRequests: vi.fn().mockResolvedValue({ data: [] }),
@@ -43,9 +41,7 @@ export const createMockUseRequest = (
   ...overrides,
 });
 
-export const createMockUseAlbum = (
-  overrides: Partial<ReturnType<typeof createMockUseAlbum>> = {}
-) => ({
+export const createMockUseAlbum = (overrides: Partial<ReturnType<typeof createMockUseAlbum>> = {}) => ({
   albums: [] as Album[],
   isLoading: false,
   refreshAlbums: vi.fn().mockResolvedValue({ data: [] }),

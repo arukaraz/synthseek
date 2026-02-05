@@ -1,10 +1,4 @@
-import {
-  TrackRequest,
-  RequestStatus,
-  ContentType,
-  RequestFormat,
-  RequestMatchingMode,
-} from "@api/__generated__/types";
+import { TrackRequest, RequestStatus, ContentType, RequestFormat, RequestMatchingMode } from "@api/__generated__/types";
 
 let trackCounter = 0;
 
@@ -44,10 +38,7 @@ export function createTrackRequest(overrides?: Partial<TrackRequest>): TrackRequ
   };
 }
 
-export function createTrackRequestList(
-  count: number,
-  overrides?: Partial<TrackRequest>
-): TrackRequest[] {
+export function createTrackRequestList(count: number, overrides?: Partial<TrackRequest>): TrackRequest[] {
   return Array.from({ length: count }, (_, i) =>
     createTrackRequest({
       track_number: i + 1,

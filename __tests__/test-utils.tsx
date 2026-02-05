@@ -21,9 +21,7 @@ interface WrapperOptions {
 export function createWrapper(options: WrapperOptions = {}) {
   const queryClient = options.queryClient ?? createTestQueryClient();
   return function Wrapper({ children }: { children: ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    );
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   };
 }
 
@@ -31,10 +29,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
   queryClient?: QueryClient;
 }
 
-export function renderWithProviders(
-  ui: ReactElement,
-  options: CustomRenderOptions = {}
-) {
+export function renderWithProviders(ui: ReactElement, options: CustomRenderOptions = {}) {
   const { queryClient, ...renderOptions } = options;
   return {
     user: userEvent.setup(),

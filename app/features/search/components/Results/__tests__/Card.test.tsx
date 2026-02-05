@@ -5,14 +5,31 @@ import { ContentType } from "@api/__generated__/types";
 import type { DisplayResult } from "../types";
 
 vi.mock("next/image", () => ({
-  default: ({ src, alt, onError, ...props }: { src: string; alt: string; onError?: () => void; [key: string]: unknown }) => (
-    <img src={src} alt={alt} data-testid="result-image" onError={onError} {...props} />
-  ),
+  default: ({
+    src,
+    alt,
+    onError,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    onError?: () => void;
+    [key: string]: unknown;
+    // eslint-disable-next-line @next/next/no-img-element
+  }) => <img src={src} alt={alt} data-testid="result-image" onError={onError} {...props} />,
 }));
 
 vi.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, onClick, ...props }: { children: React.ReactNode; onClick?: () => void; [key: string]: unknown }) => (
+    div: ({
+      children,
+      onClick,
+      ...props
+    }: {
+      children: React.ReactNode;
+      onClick?: () => void;
+      [key: string]: unknown;
+    }) => (
       <div onClick={onClick} {...props}>
         {children}
       </div>
@@ -101,7 +118,13 @@ describe("Card", () => {
 
   it("calls onResultClick with id and type when clicked", () => {
     const onResultClick = vi.fn();
-    render(<Card {...defaultProps} onResultClick={onResultClick} result={createResult({ id: "song-123", type: ContentType.enum.track })} />);
+    render(
+      <Card
+        {...defaultProps}
+        onResultClick={onResultClick}
+        result={createResult({ id: "song-123", type: ContentType.enum.track })}
+      />
+    );
 
     fireEvent.click(screen.getByText("Test Song"));
 
@@ -119,7 +142,13 @@ describe("Card", () => {
 
   it("does not call onResultClick for playlists", () => {
     const onResultClick = vi.fn();
-    render(<Card {...defaultProps} onResultClick={onResultClick} result={createResult({ type: ContentType.enum.playlist })} />);
+    render(
+      <Card
+        {...defaultProps}
+        onResultClick={onResultClick}
+        result={createResult({ type: ContentType.enum.playlist })}
+      />
+    );
 
     fireEvent.click(screen.getByText("Test Song"));
 

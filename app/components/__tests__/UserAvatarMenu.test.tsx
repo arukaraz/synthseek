@@ -16,20 +16,12 @@ vi.mock("framer-motion", async () => {
   return {
     ...actual,
     motion: {
-      button: ({
-        children,
-        className,
-        ...props
-      }: React.ComponentProps<"button">) => (
+      button: ({ children, className, ...props }: React.ComponentProps<"button">) => (
         <button className={className} {...props}>
           {children}
         </button>
       ),
-      div: ({
-        children,
-        className,
-        ...props
-      }: React.ComponentProps<"div">) => (
+      div: ({ children, className, ...props }: React.ComponentProps<"div">) => (
         <div className={className} {...props}>
           {children}
         </div>

@@ -59,14 +59,18 @@ describe("SortableHeader", () => {
   });
 
   it("shows ArrowUp icon when active and direction is asc", () => {
-    const { container } = render(<SortableHeader {...defaultProps} field="title" currentField="title" direction="asc" />);
+    const { container } = render(
+      <SortableHeader {...defaultProps} field="title" currentField="title" direction="asc" />
+    );
 
     const svg = container.querySelector("svg");
     expect(svg).toHaveClass("h-3", "w-3");
   });
 
   it("shows ArrowDown icon when active and direction is desc", () => {
-    const { container } = render(<SortableHeader {...defaultProps} field="title" currentField="title" direction="desc" />);
+    const { container } = render(
+      <SortableHeader {...defaultProps} field="title" currentField="title" direction="desc" />
+    );
 
     const svg = container.querySelector("svg");
     expect(svg).toHaveClass("h-3", "w-3");

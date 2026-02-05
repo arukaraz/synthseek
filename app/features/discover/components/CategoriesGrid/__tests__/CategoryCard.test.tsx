@@ -3,9 +3,18 @@ import { render, screen, fireEvent } from "@test/test-utils";
 import { CategoryCard } from "../CategoryCard";
 
 vi.mock("next/image", () => ({
-  default: ({ src, alt, onError, ...props }: { src: string; alt: string; onError?: () => void; [key: string]: unknown }) => (
-    <img src={src} alt={alt} data-testid="category-image" onError={onError} {...props} />
-  ),
+  default: ({
+    src,
+    alt,
+    onError,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    onError?: () => void;
+    [key: string]: unknown;
+    // eslint-disable-next-line @next/next/no-img-element
+  }) => <img src={src} alt={alt} data-testid="category-image" onError={onError} {...props} />,
 }));
 
 const createCategory = (overrides: Partial<SpotifyApi.CategoryObject> = {}): SpotifyApi.CategoryObject => ({

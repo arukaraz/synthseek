@@ -7,12 +7,7 @@ export {
   resetTrackCounter,
 } from "./track.factory";
 
-export {
-  createAlbum,
-  createCompletedAlbum,
-  createInProgressAlbum,
-  resetAlbumCounter,
-} from "./album.factory";
+export { createAlbum, createCompletedAlbum, createInProgressAlbum, resetAlbumCounter } from "./album.factory";
 
 export {
   createSpotifyImage,

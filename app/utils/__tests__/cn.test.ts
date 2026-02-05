@@ -58,8 +58,6 @@ describe("cn", () => {
   });
 
   it("handles mixed inputs", () => {
-    expect(cn("class1", ["class2", "class3"], { class4: true })).toBe(
-      "class1 class2 class3 class4"
-    );
+    expect(cn("class1", ["class2", "class3"], { class4: true })).toBe("class1 class2 class3 class4");
   });
 });

@@ -20,10 +20,7 @@ export interface MockMutationResult {
   isSuccess: boolean;
 }
 
-export function createMockQuery<T>(
-  data: T,
-  overrides: Partial<MockQueryResult<T>> = {}
-): MockQueryResult<T> {
+export function createMockQuery<T>(data: T, overrides: Partial<MockQueryResult<T>> = {}): MockQueryResult<T> {
   return {
     data,
     isLoading: false,
@@ -36,9 +33,7 @@ export function createMockQuery<T>(
   };
 }
 
-export function createMockMutation(
-  overrides: Partial<MockMutationResult> = {}
-): MockMutationResult {
+export function createMockMutation(overrides: Partial<MockMutationResult> = {}): MockMutationResult {
   return {
     mutate: vi.fn(),
     mutateAsync: vi.fn().mockResolvedValue(undefined),

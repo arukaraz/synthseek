@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@test/test-utils";
+import { render, screen, fireEvent } from "@test/test-utils";
 import { SearchInput } from "../SearchInput";
 
 vi.mock("framer-motion", async () => {
@@ -75,7 +75,9 @@ describe("SearchInput", () => {
     it("clears value and closes when close button clicked", () => {
       const onChange = vi.fn();
       const onOpenChange = vi.fn();
-      render(<SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} isMobile={false} />);
+      render(
+        <SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} isMobile={false} />
+      );
 
       fireEvent.click(screen.getByLabelText("Close search"));
 
@@ -86,7 +88,9 @@ describe("SearchInput", () => {
     it("closes on Escape key press", () => {
       const onChange = vi.fn();
       const onOpenChange = vi.fn();
-      render(<SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} isMobile={false} />);
+      render(
+        <SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} isMobile={false} />
+      );
 
       fireEvent.keyDown(screen.getByPlaceholderText("Search..."), { key: "Escape" });
 
@@ -132,7 +136,9 @@ describe("SearchInput", () => {
     it("clears and closes on mobile close button click", () => {
       const onChange = vi.fn();
       const onOpenChange = vi.fn();
-      render(<SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} isMobile={true} />);
+      render(
+        <SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} isMobile={true} />
+      );
 
       fireEvent.click(screen.getByLabelText("Close search"));
 

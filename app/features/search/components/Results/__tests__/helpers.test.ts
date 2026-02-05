@@ -234,9 +234,7 @@ describe("transformPlaylistTrackForDisplay", () => {
 
   it("returns null for null track", () => {
     const playlistTrack = { ...createSpotifyPlaylistTrack(), track: null };
-    const result = transformPlaylistTrackForDisplay(
-      playlistTrack as unknown as SpotifyApi.PlaylistTrackObject
-    );
+    const result = transformPlaylistTrackForDisplay(playlistTrack as unknown as SpotifyApi.PlaylistTrackObject);
     expect(result).toBeNull();
   });
 
@@ -245,9 +243,7 @@ describe("transformPlaylistTrackForDisplay", () => {
       ...createSpotifyPlaylistTrack(),
       track: { ...createSpotifyTrackFull(), type: ContentType.enum.album },
     };
-    const result = transformPlaylistTrackForDisplay(
-      playlistTrack as unknown as SpotifyApi.PlaylistTrackObject
-    );
+    const result = transformPlaylistTrackForDisplay(playlistTrack as unknown as SpotifyApi.PlaylistTrackObject);
     expect(result).toBeNull();
   });
 

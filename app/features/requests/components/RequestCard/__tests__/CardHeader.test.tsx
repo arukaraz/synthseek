@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 
 vi.mock("next/image", () => ({
   default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} data-testid="card-image" {...props} />
   ),
 }));
@@ -80,9 +81,7 @@ describe("CardHeader", () => {
   });
 
   it("applies md size config", () => {
-    const { container } = render(
-      <CardHeader {...defaultProps} size="md" imageUrl="https://example.com/image.jpg" />
-    );
+    const { container } = render(<CardHeader {...defaultProps} size="md" imageUrl="https://example.com/image.jpg" />);
 
     const imageContainer = container.querySelector(".h-16.w-16");
     expect(imageContainer).toBeInTheDocument();
