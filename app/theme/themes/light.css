@@ -1,0 +1,38 @@
+@layer base {
+  [data-theme="light"] {
+    color-scheme: light;
+
+    --surface-bg: oklch(1 0 0);
+    --surface-bg-elevated: oklch(0.98 0 0);
+    --surface-bg-sunken: oklch(0.96 0 0);
+    --surface-fg: oklch(0.145 0.05 265);
+    --surface-fg-muted: oklch(0.55 0.03 250);
+
+    --border-default: oklch(0.93 0.02 250);
+    --border-subtle: oklch(0.95 0.01 250);
+
+    --glass-bg: oklch(1 0 0 / 0.7);
+    --glass-border: oklch(0 0 0 / 0.1);
+
+    --neon-glow-opacity: 0.2;
+
+    --background: 1 0 0;
+    --foreground: 0.145 0.05 265;
+    --card: 1 0 0;
+    --card-foreground: 0.145 0.05 265;
+    --popover: 1 0 0;
+    --popover-foreground: 0.145 0.05 265;
+    --primary: 0.205 0.05 265;
+    --primary-foreground: 0.985 0.015 250;
+    --secondary: 0.97 0.015 250;
+    --secondary-foreground: 0.205 0.05 265;
+    --muted: 0.97 0.015 250;
+    --muted-foreground: 0.55 0.03 250;
+    --accent: 0.97 0.015 250;
+    --accent-foreground: 0.205 0.05 265;
+    --destructive: 0.6 0.25 25;
+    --border: 0.93 0.02 250;
+    --input: 0.93 0.02 250;
+    --ring: 0.145 0.05 265;
+  }
+}

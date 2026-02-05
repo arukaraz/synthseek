@@ -1,0 +1,112 @@
+@layer base {
+  :root {
+    color-scheme: light dark;
+
+    --surface-bg: light-dark(oklch(1 0 0), oklch(0.145 0.05 265));
+    --surface-bg-elevated: light-dark(oklch(0.98 0 0), oklch(0.16 0.05 265));
+    --surface-bg-sunken: light-dark(oklch(0.96 0 0), oklch(0.08 0.03 265));
+    --surface-fg: light-dark(oklch(0.145 0.05 265), oklch(0.985 0.015 250));
+    --surface-fg-muted: light-dark(oklch(0.55 0.03 250), oklch(0.7 0.03 250));
+
+    --interactive-primary: var(--color-primary-500);
+    --interactive-primary-hover: var(--color-primary-600);
+    --interactive-secondary: var(--color-secondary-500);
+    --interactive-secondary-hover: var(--color-secondary-600);
+
+    --border-default: light-dark(oklch(0.93 0.02 250), oklch(0.25 0.04 260));
+    --border-subtle: light-dark(oklch(0.95 0.01 250), oklch(0.2 0.03 260));
+    --border-emphasis: var(--color-primary-500);
+
+    --glass-bg: light-dark(oklch(1 0 0 / 0.7), oklch(0 0 0 / 0.4));
+    --glass-bg-dark: light-dark(oklch(1 0 0 / 0.8), oklch(0 0 0 / 0.7));
+    --glass-border: light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1));
+    --glass-blur: 10px;
+
+    --overlay-fg: oklch(0.985 0.015 250);
+    --overlay-fg-muted: oklch(0.985 0.015 250 / 0.7);
+
+    --neon-primary: 0.6 0.28 285;
+    --neon-secondary: 0.8 0.16 195;
+    --neon-accent: 0.7 0.32 328;
+    --neon-success: 0.55 0.178 145;
+    --neon-warning: 0.85 0.176 85;
+    --neon-error: 0.55 0.225 27;
+    --neon-glow-opacity: light-dark(0.2, 0.4);
+
+    --background: light-dark(1 0 0, 0.145 0.05 265);
+    --foreground: light-dark(0.145 0.05 265, 0.985 0.015 250);
+
+    --card: light-dark(1 0 0, 0.145 0.05 265);
+    --card-foreground: light-dark(0.145 0.05 265, 0.985 0.015 250);
+
+    --popover: light-dark(1 0 0, 0.145 0.05 265);
+    --popover-foreground: light-dark(0.145 0.05 265, 0.985 0.015 250);
+
+    --primary: light-dark(0.205 0.05 265, 0.985 0.015 250);
+    --primary-foreground: light-dark(0.985 0.015 250, 0.205 0.05 265);
+
+    --secondary: light-dark(0.97 0.015 250, 0.25 0.04 260);
+    --secondary-foreground: light-dark(0.205 0.05 265, 0.985 0.015 250);
+
+    --muted: light-dark(0.97 0.015 250, 0.25 0.04 260);
+    --muted-foreground: light-dark(0.55 0.03 250, 0.7 0.03 250);
+
+    --accent: light-dark(0.97 0.015 250, 0.25 0.04 260);
+    --accent-foreground: light-dark(0.205 0.05 265, 0.985 0.015 250);
+
+    --destructive: light-dark(0.6 0.25 25, 0.4 0.2 25);
+    --destructive-foreground: 0.985 0.015 250;
+
+    --border: light-dark(0.93 0.02 250, 0.25 0.04 260);
+    --input: light-dark(0.93 0.02 250, 0.25 0.04 260);
+    --ring: light-dark(0.145 0.05 265, 0.87 0.03 250);
+    --radius: 0.5rem;
+
+    --status-queued: oklch(0.75 0.15 55);
+    --status-searching: oklch(0.7 0.15 250);
+    --status-downloading: var(--color-primary-500);
+    --status-paused: var(--color-warning);
+    --status-importing: oklch(0.6 0.2 280);
+    --status-complete: var(--color-success);
+    --status-failed: var(--color-error);
+    --status-cancelled: var(--color-gray-400);
+
+    --scrollbar-thumb: oklch(var(--neon-primary) / 0.4);
+    --scrollbar-thumb-hover: oklch(var(--neon-primary) / 0.6);
+    --scrollbar-track: oklch(0 0 0 / 0.3);
+
+    --selection-bg: oklch(var(--neon-primary) / 0.3);
+
+    --shadow-dark: oklch(0 0 0 / 0.3);
+
+    --height-hero: 200px;
+    --height-config-header: 140px;
+
+    --spacing-page-x: 1rem;
+    --spacing-page-y: 1.5rem;
+    --spacing-modal: 1rem;
+    --spacing-card: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --height-hero: 240px;
+      --height-config-header: 120px;
+      --spacing-page-x: 1.5rem;
+      --spacing-page-y: 2rem;
+      --spacing-modal: 1.5rem;
+      --spacing-card: 1.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --height-hero: 320px;
+      --height-config-header: 160px;
+      --spacing-page-x: 2rem;
+      --spacing-page-y: 2rem;
+      --spacing-modal: 1.5rem;
+      --spacing-card: 1.5rem;
+    }
+  }
+}

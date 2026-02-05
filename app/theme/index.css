@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-surface: var(--surface-bg);
+  --color-surface-elevated: var(--surface-bg-elevated);
+  --color-surface-sunken: var(--surface-bg-sunken);
+
+  --color-fg: var(--surface-fg);
+  --color-fg-muted: var(--surface-fg-muted);
+
+  --color-overlay-fg: var(--overlay-fg);
+  --color-overlay-fg-muted: var(--overlay-fg-muted);
+
+  --color-glass: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+
+  --color-border: var(--border-default);
+  --color-border-subtle: var(--border-subtle);
+}
+
+@import "./tokens/primitives.css";
+@import "./tokens/semantic.css";
+@import "./tokens/shadows.css";
+
+@import "./themes/light.css";
+@import "./themes/dark.css";
+@import "./themes/midnight.css";
+@import "./themes/ocean.css";
+
+@import "./base/reset.css";
+@import "./base/typography.css";
+
+@import "./utilities/glass.css";
+@import "./utilities/status.css";
+@import "./utilities/layout.css";
+@import "./utilities/animations.css";
+@import "./utilities/toast.css";
+@import "./utilities/accessibility.css";
+
+@custom-variant loading (&:where([data-loading="true"], [data-loading="true"] *));
+@custom-variant error (&:where([data-error="true"], [data-error="true"] *));
+@custom-variant active (&:where([data-active="true"], [data-active="true"] *));
+@custom-variant selected (&:where([data-selected="true"], [data-selected="true"] *));
+@custom-variant expanded (&:where([data-expanded="true"], [data-expanded="true"] *));
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="midnight"], [data-theme="ocean"]) *);

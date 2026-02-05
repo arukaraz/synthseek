@@ -1,0 +1,278 @@
+name: Build and Deploy Docker Image
+
+on:
+  repository_dispatch:
+    types: [server-release]
+
+  workflow_dispatch:
+    inputs:
+      server_version:
+        description: "Server version (e.g., v1.2.3 or 1.2.3)"
+        required: true
+        type: string
+      skip_cache:
+        description: "Skip Docker layer cache"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: web-deploy
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  NODE_VERSION: "22"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version and source
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            VERSION="${{ github.event.client_payload.version }}"
+            TAG="${{ github.event.client_payload.tag }}"
+            SERVER_REPO="${{ github.event.client_payload.server_repo }}"
+            ARTIFACT_NAME="${{ github.event.client_payload.artifact_name }}"
+            COMMIT_SHA="${{ github.event.client_payload.commit_sha }}"
+
+            echo "Triggered by server release"
+          else
+            INPUT_VERSION="${{ github.event.inputs.server_version }}"
+            VERSION="${INPUT_VERSION#v}"
+            TAG="v${VERSION}"
+            SERVER_REPO="arukaraz/synthseek-server"
+            ARTIFACT_NAME="server-bundle-v${VERSION}.tar.gz"
+            COMMIT_SHA="manual"
+
+            echo "Manual trigger"
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "server_repo=$SERVER_REPO" >> $GITHUB_OUTPUT
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+
+          echo "Building Docker image for server version: $VERSION"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+
+      - name: Download server artifact from release
+        env:
+          GH_TOKEN: ${{ secrets.SERVER_REPO_PAT }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          SERVER_REPO="${{ steps.version.outputs.server_repo }}"
+
+          echo "Downloading from: $SERVER_REPO release $TAG"
+
+          mkdir -p artifacts
+          gh release download "$TAG" \
+            --repo "$SERVER_REPO" \
+            --pattern "server-bundle-*.tar.gz" \
+            --dir ./artifacts
+
+          echo "Downloaded files:"
+          ls -lh ./artifacts/
+
+          mkdir -p server-build
+          tar -xzvf ./artifacts/server-bundle-*.tar.gz -C ./server-build --strip-components=1
+
+          echo ""
+          echo "Server artifact contents:"
+          ls -la ./server-build/
+
+          echo ""
+          echo "Verifying artifact structure..."
+
+          if [ ! -f "./server-build/dist/index.cjs" ]; then
+            echo "Error: dist/index.cjs not found"
+            exit 1
+          fi
+          echo "  [OK] dist/index.cjs exists"
+
+          if [ ! -f "./server-build/db/schema.prisma" ]; then
+            echo "Error: db/schema.prisma not found"
+            exit 1
+          fi
+          echo "  [OK] db/schema.prisma exists"
+
+          if [ ! -d "./server-build/node_modules/.prisma" ]; then
+            echo "Error: Prisma client not found"
+            exit 1
+          fi
+          echo "  [OK] Prisma client exists"
+
+          if [ -f "./server-build/VERSION" ]; then
+            echo ""
+            echo "Server version: $(cat ./server-build/VERSION)"
+          fi
+
+          echo ""
+          echo "Server artifact verified successfully"
+
+      - name: Update package.json version
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          echo "Syncing package.json to version $VERSION"
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+          echo ""
+          echo "Updated package.json:"
+          grep '"version"' package.json
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
+
+      - name: Verify frontend build
+        run: |
+          echo "Next.js build output:"
+          ls -la .next/
+
+          if [ ! -d ".next/standalone" ]; then
+            echo "Error: .next/standalone not found"
+            exit 1
+          fi
+          echo "  [OK] standalone directory exists"
+
+          if [ ! -d ".next/static" ]; then
+            echo "Error: .next/static not found"
+            exit 1
+          fi
+          echo "  [OK] static directory exists"
+
+          echo ""
+          echo "Frontend build verified"
+
+      - name: Commit version sync
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git diff --staged --quiet || git commit -m "chore: sync version to $VERSION [skip ci]"
+          git push
+
+      - name: Prepare Docker build context
+        run: |
+          echo "Preparing Docker build context..."
+
+          mkdir -p docker-context/server
+          mkdir -p docker-context/web
+          mkdir -p docker-context/docker
+
+          cp -r ./server-build/* docker-context/server/
+
+          cp -r .next/standalone docker-context/web/standalone
+          cp -r .next/static docker-context/web/static
+          if [ -d "public" ]; then
+            cp -r public docker-context/web/public
+          else
+            mkdir -p docker-context/web/public
+          fi
+
+          cp docker/start.sh docker-context/docker/
+          chmod +x docker-context/docker/start.sh
+
+          # Copiar Dockerfile al contexto
+          cp Dockerfile docker-context/Dockerfile
+
+          echo ""
+          echo "Docker context structure:"
+          find docker-context -type f | head -30
+
+      - name: Set up QEMU (for multi-platform)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=v${{ steps.version.outputs.version }}
+            type=raw,value=${{ steps.version.outputs.version }}
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: docker-context
+          file: docker-context/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: ${{ github.event.inputs.skip_cache != 'true' && 'type=gha' || '' }}
+          cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Create deployment summary
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## Synthseek v${VERSION}
+
+          \`\`\`
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v${VERSION}
+          \`\`\`
+
+          | Tag | Platforms |
+          |-----|-----------|
+          | \`v${VERSION}\` | linux/amd64, linux/arm64 |
+          | \`latest\` | linux/amd64, linux/arm64 |
+
+          ---
+
+          **Version**: v${VERSION} | **Commit**: \`${{ steps.version.outputs.commit_sha }}\`
+          EOF

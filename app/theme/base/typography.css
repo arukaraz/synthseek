@@ -1,0 +1,157 @@
+@layer base {
+  body {
+    font-family:
+      var(--font-space-grotesk),
+      var(--font-exo-2),
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    color: oklch(var(--foreground));
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    letter-spacing: -0.025em;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    letter-spacing: -0.015em;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+  }
+
+  h6 {
+    font-size: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    h1 {
+      font-size: 3rem;
+    }
+
+    h2 {
+      font-size: 2.25rem;
+    }
+
+    h3 {
+      font-size: 1.875rem;
+    }
+  }
+
+  p {
+    line-height: 1.6;
+    color: oklch(var(--foreground));
+  }
+
+  code,
+  pre {
+    font-family: var(--font-space-mono), ui-monospace, "SF Mono", "Cascadia Code", monospace;
+  }
+
+  code {
+    font-size: 0.875em;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    background-color: oklch(var(--muted));
+  }
+
+  pre code {
+    padding: 0;
+    background-color: transparent;
+  }
+  small {
+    font-size: 0.875rem;
+    color: oklch(var(--muted-foreground));
+  }
+}
+
+@layer utilities {
+  .text-muted {
+    color: oklch(var(--muted-foreground));
+  }
+
+  .text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .font-courgette {
+    font-family: var(--font-courgette), cursive;
+  }
+
+  .font-space-grotesk {
+    font-family: var(--font-space-grotesk), sans-serif;
+  }
+
+  .font-rajdhani {
+    font-family: var(--font-rajdhani), sans-serif;
+  }
+
+  .font-chakra-petch {
+    font-family: var(--font-chakra-petch), sans-serif;
+  }
+
+  .font-exo-2 {
+    font-family: var(--font-exo-2), sans-serif;
+  }
+
+  .font-orbitron {
+    font-family: var(--font-orbitron), sans-serif;
+  }
+
+  .font-audiowide {
+    font-family: var(--font-audiowide), sans-serif;
+  }
+
+  .font-oxanium {
+    font-family: var(--font-oxanium), sans-serif;
+  }
+
+  .font-teko {
+    font-family: var(--font-teko), sans-serif;
+  }
+
+  .font-russo-one {
+    font-family: var(--font-russo-one), sans-serif;
+  }
+
+  .font-space-mono {
+    font-family: var(--font-space-mono), monospace;
+  }
+}

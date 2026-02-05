@@ -1,0 +1,48 @@
+services:
+  synthseek:
+    image: ghcr.io/arukaraz/synthseek:latest
+    container_name: synthseek
+    restart: unless-stopped
+
+    ports:
+      - "4400:${WEB_UI_PORT:-4400}"
+
+    volumes:
+      - ./data:/data
+      - /path/to/your/music:/music
+      - /path/to/slskd/downloads/complete:/downloads
+
+    environment:
+      - PUID=1000
+      - PGID=1000
+
+      # REQUIRED - Spotify (https://developer.spotify.com/dashboard)
+      - SPOTIFY_CLIENT_ID=your_spotify_client_id
+      - SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+
+      # REQUIRED - Slskd (Settings > Options > Web)
+      - SLSKD_API_URL=http://slskd:5030
+      - SLSKD_API_KEY=your_slskd_api_key
+
+      # OPTIONAL - Plex (https://support.plex.tv/articles/204059436)
+      # - PLEX_URL=http://plex:32400
+      # - PLEX_TOKEN=your_plex_token
+
+      # OPTIONAL - Beets Import
+      # - ENABLE_BEETS_IMPORT=false
+      # - USE_MUSIC_BRAINZ=true
+
+      # OPTIONAL but recommended - AcoustID (https://acoustid.org/api-key)
+      # Audio fingerprinting for better track identification
+      # - USE_ACOUSTIC_ID=false
+      # - ACOUSTID_API_KEY=your_acoustid_api_key
+
+      # Internal Port override
+      # - WEB_UI_PORT=4400
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:${API_PORT:-4401}/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
