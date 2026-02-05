@@ -3,6 +3,7 @@
 ![License](https://img.shields.io/github/license/arukaraz/synthseek)
 ![GitHub last commit](https://img.shields.io/github/last-commit/arukaraz/synthseek)
 ![GitHub stars](https://img.shields.io/github/stars/arukaraz/synthseek)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/arukaraz)
 ![Codecov](https://img.shields.io/codecov/c/github/arukaraz/synthseek)
 
 Self-hosted Music discovery and library management.
@@ -66,9 +67,7 @@ For bugs or questions, [open an issue](https://github.com/arukaraz/synthseek/iss
 
 If this project saved you clicks, a coffee goes a long way:
 
-<a href="https://ko-fi.com/arukaraz">
-  <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support on Ko-fi" />
-</a>
+<a href="https://github.com/sponsors/arukaraz"><img src="https://img.shields.io/badge/Sponsor_❤-EA4AAA?style=for-the-badge&logo=GitHub-Sponsors&logoColor=white" alt="Sponsor on GitHub" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ko-fi.com/arukaraz"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support on Ko-fi" /></a>
 
 ## License
 
