@@ -29,8 +29,8 @@ services:
       # - PLEX_TOKEN=your_plex_token
 
       # OPTIONAL - Beets Import
-      # - ENABLE_BEETS_IMPORT=false
-      # - USE_MUSIC_BRAINZ=true
+      - ENABLE_BEETS_IMPORT=true
+      - USE_MUSIC_BRAINZ=true
 
       # OPTIONAL but recommended - AcoustID (https://acoustid.org/api-key)
       # Audio fingerprinting for better track identification
