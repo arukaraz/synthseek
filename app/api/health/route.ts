@@ -1,10 +1,9 @@
+import { API_URL } from "@utils/env";
 import { NextRequest, NextResponse } from "next/server";
-
-const BACKEND_URL = process.env.INTERNAL_API_URL || `http://localhost:${process.env.API_PORT || "4401"}`;
 
 export async function GET(request: NextRequest): Promise<Response> {
   const full = request.nextUrl.searchParams.get("full");
-  const url = `${BACKEND_URL}/api/health${full ? "?full=true" : ""}`;
+  const url = `${API_URL}/api/health${full ? "?full=true" : ""}`;
 
   try {
     const response = await fetch(url, { cache: "no-store" });

@@ -7,7 +7,7 @@ echo ""
 
 PUID=${PUID:-1000}
 PGID=${PGID:-1000}
-API_PORT=${API_PORT:-4401}
+API_PORT=4401
 WEB_PORT=${WEB_UI_PORT:-4400}
 
 echo "  User:     PUID=${PUID}, PGID=${PGID}"

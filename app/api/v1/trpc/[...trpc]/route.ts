@@ -1,13 +1,12 @@
+import { API_URL } from "@utils/env";
 import { NextRequest, NextResponse } from "next/server";
-
-const BACKEND_URL = process.env.INTERNAL_API_URL || `http://localhost:${process.env.API_PORT || "4401"}`;
 
 function isSSERequest(request: NextRequest): boolean {
   return request.headers.get("accept")?.includes("text/event-stream") ?? false;
 }
 
 async function handleSSERequest(request: NextRequest, path: string): Promise<Response> {
-  const url = `${BACKEND_URL}/api/v1/trpc/${path}${request.nextUrl.search}`;
+  const url = `${API_URL}/api/v1/trpc/${path}${request.nextUrl.search}`;
 
   const headers = new Headers();
   request.headers.forEach((value, key) => {
@@ -44,7 +43,7 @@ async function handleSSERequest(request: NextRequest, path: string): Promise<Res
 }
 
 async function handleHTTPRequest(request: NextRequest, path: string): Promise<Response> {
-  const url = `${BACKEND_URL}/api/v1/trpc/${path}${request.nextUrl.search}`;
+  const url = `${API_URL}/api/v1/trpc/${path}${request.nextUrl.search}`;
 
   const headers = new Headers();
   request.headers.forEach((value, key) => {

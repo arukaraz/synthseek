@@ -2,6 +2,7 @@ import { httpBatchLink, httpLink, httpSubscriptionLink, splitLink } from "@trpc/
 import { createTRPCReact } from "@trpc/react-query";
 import type { AppRouter } from "@api/__generated__/types";
 import superjson from "superjson";
+import { API_URL } from "@utils/env";
 
 export const trpc = createTRPCReact<AppRouter>();
 
@@ -9,7 +10,7 @@ function getBaseUrl() {
   if (typeof window !== "undefined") {
     return window.location.origin;
   }
-  return `http://localhost:${process.env.API_PORT || "4401"}`;
+  return API_URL;
 }
 
 export function getTRPCClientConfig() {

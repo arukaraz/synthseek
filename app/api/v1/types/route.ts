@@ -1,9 +1,8 @@
+import { API_URL } from "@utils/env";
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.INTERNAL_API_URL || `http://localhost:${process.env.API_PORT || "4401"}`;
-
 export async function GET(request: NextRequest): Promise<Response> {
-  const url = `${BACKEND_URL}/api/v1/types${request.nextUrl.search}`;
+  const url = `${API_URL}/api/v1/types${request.nextUrl.search}`;
 
   try {
     const response = await fetch(url, { cache: "no-store" });
