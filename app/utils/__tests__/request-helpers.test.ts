@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { isSingleTrackRequest, calculateAlbumStatus } from "../request-helpers";
 import { RequestStatus, ContentType } from "@api/__generated__/types";
-import { createTrackRequest, createCompletedTrack, createFailedTrack, createDownloadingTrack } from "@test/factories";
+import { createTrackRequest, createCompletedTrack, createFailedTrack, createCancelledTrack, createDownloadingTrack } from "@test/factories";
 
 describe("isSingleTrackRequest", () => {
   it("returns false for empty array", () => {
@@ -132,5 +132,58 @@ describe("calculateAlbumStatus", () => {
     expect(result.failedCount).toBe(1);
     expect(result.totalTracks).toBe(5);
     expect(result.newStatus).toBe(RequestStatus.enum.in_progress);
+  });
+
+  it("returns cancelled when all tracks are cancelled", () => {
+    const tracks = [createCancelledTrack(), createCancelledTrack(), createCancelledTrack()];
+    const result = calculateAlbumStatus(tracks);
+    expect(result.newStatus).toBe(RequestStatus.enum.cancelled);
+    expect(result.completedAt).toBeInstanceOf(Date);
+  });
+
+  it("returns partially_complete when some complete and some cancelled (multi-track)", () => {
+    const tracks = [
+      createCompletedTrack({ request_type: ContentType.enum.album }),
+      createCompletedTrack({ request_type: ContentType.enum.album }),
+      createCancelledTrack({ request_type: ContentType.enum.album }),
+      createCancelledTrack({ request_type: ContentType.enum.album }),
+      createCancelledTrack({ request_type: ContentType.enum.album }),
+    ];
+    const result = calculateAlbumStatus(tracks);
+    expect(result.newStatus).toBe(RequestStatus.enum.partially_complete);
+    expect(result.completedAt).toBeInstanceOf(Date);
+  });
+
+  it("returns failed when all tracks are failed or cancelled", () => {
+    const tracks = [
+      createFailedTrack(),
+      createFailedTrack(),
+      createFailedTrack(),
+      createCancelledTrack(),
+      createCancelledTrack(),
+    ];
+    const result = calculateAlbumStatus(tracks);
+    expect(result.newStatus).toBe(RequestStatus.enum.failed);
+    expect(result.completedAt).toBeInstanceOf(Date);
+  });
+
+  it("returns in_progress when some tracks are downloading and some cancelled", () => {
+    const tracks = [
+      createDownloadingTrack(),
+      createDownloadingTrack(),
+      createCancelledTrack(),
+      createCancelledTrack(),
+      createCancelledTrack(),
+    ];
+    const result = calculateAlbumStatus(tracks);
+    expect(result.newStatus).toBe(RequestStatus.enum.in_progress);
+    expect(result.completedAt).toBeNull();
+  });
+
+  it("returns cancelled for single cancelled track", () => {
+    const track = createCancelledTrack({ request_type: ContentType.enum.track });
+    const result = calculateAlbumStatus([track]);
+    expect(result.newStatus).toBe(RequestStatus.enum.cancelled);
+    expect(result.newStatus).not.toBe(RequestStatus.enum.partially_complete);
   });
 });

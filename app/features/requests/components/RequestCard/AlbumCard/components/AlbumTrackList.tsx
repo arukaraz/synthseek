@@ -27,9 +27,11 @@ interface AlbumTrackListProps {
   expanded: boolean;
   isSingleTrack?: boolean;
   onToggleExpanded: () => void;
+  onCancelTrack?: (trackId: string) => void;
+  onRetryTrack?: (trackId: string) => void;
 }
 
-export function AlbumTrackList({ request, expanded, isSingleTrack, onToggleExpanded }: AlbumTrackListProps) {
+export function AlbumTrackList({ request, expanded, isSingleTrack, onToggleExpanded, onCancelTrack, onRetryTrack }: AlbumTrackListProps) {
   const sortedTracks = useMemo(() => {
     return [...request.tracks].sort((a, b) => {
       const priorityA = STATUS_PRIORITY[a.status as RequestStatus] ?? 99;
@@ -63,7 +65,14 @@ export function AlbumTrackList({ request, expanded, isSingleTrack, onToggleExpan
           >
             <div className="custom-scrollbar mt-3 max-h-64 space-y-1 overflow-y-auto pr-1">
               {sortedTracks.map((track, index) => (
-                <AlbumTrackItem key={track.id} track={track} albumArt={request.album_art} index={index} />
+                <AlbumTrackItem
+                  key={track.id}
+                  track={track}
+                  albumArt={request.album_art}
+                  index={index}
+                  onCancel={() => onCancelTrack?.(track.id)}
+                  onRetry={() => onRetryTrack?.(track.id)}
+                />
               ))}
             </div>
           </motion.div>

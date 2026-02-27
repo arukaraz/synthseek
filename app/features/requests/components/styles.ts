@@ -121,6 +121,8 @@ export const actionButtonLabel = cva("w-full transition-all", {
     color: {
       primary:
         "border-primary-500/30 bg-primary-500/10 text-primary-300 hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200",
+      warning:
+        "border-yellow-500/30 bg-yellow-500/10 text-yellow-300 hover:border-yellow-500/50 hover:bg-yellow-500/20 hover:text-yellow-200",
       danger:
         "border-red-500/30 bg-red-500/10 text-red-300 hover:border-red-500/50 hover:bg-red-500/20 hover:text-red-200",
     },

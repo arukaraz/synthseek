@@ -22,9 +22,10 @@ export function AlbumTrackItem({ track, albumArt, index, onCancel, onRetry }: Al
 
   const isComplete = track.status === RequestStatus.enum.complete;
   const isFailed = track.status === RequestStatus.enum.failed;
+  const isCancelled = track.status === RequestStatus.enum.cancelled;
 
-  const showCancel = !isComplete && !isFailed;
-  const showRetry = isFailed;
+  const showCancel = !isComplete && !isFailed && !isCancelled;
+  const showRetry = isFailed || isCancelled;
 
   return (
     <motion.div

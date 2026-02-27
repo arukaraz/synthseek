@@ -269,6 +269,7 @@ export const actionIconButton = cva("flex items-center justify-center rounded-lg
       ghost: "text-fg/40 hover:bg-fg/10 hover:text-fg",
       danger: "text-fg/30 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-400",
       success: "border-secondary-500/30 bg-secondary-500/10 text-secondary-400",
+      warning: "border-yellow-500/30 bg-yellow-500/10 text-yellow-400",
       primary: "border-primary-500/30 bg-primary-500/10 text-primary-300",
     },
     size: {

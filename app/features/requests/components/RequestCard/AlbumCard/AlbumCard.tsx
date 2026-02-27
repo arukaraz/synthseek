@@ -1,10 +1,12 @@
 "use client";
 
 import useAlbum from "@hooks/api/useAlbum";
+import { useRequestMutations } from "@hooks/api/mutations/useRequestMutations";
 import { ContentType, RequestStatus, type AlbumWithTracks } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { confirm } from "@utils/confirm";
 import { calculateAlbumStatus, isSingleTrackRequest } from "@utils/request-helpers";
+import { isProcessingStatus } from "@utils/status-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { motion } from "framer-motion";
 import { memo, useState } from "react";
@@ -20,13 +22,19 @@ interface AlbumCardProps {
 export const AlbumCard = memo(function AlbumCard({ album }: AlbumCardProps) {
   const [expanded, setExpanded] = useState(false);
   const { getActions } = useAlbum();
-  const { handleRemove, handleRetryAlbum } = getActions(album.id);
+  const { handleRemove, handleRetryAlbum, handleCancelAlbum } = getActions(album.id);
+  const { getActions: getTrackActions } = useRequestMutations();
 
   const { newStatus: calculatedStatus, completedCount } = calculateAlbumStatus(album.tracks);
   const statusConfig = REQUEST_STATUS_CONFIG[calculatedStatus];
   const isSingleTrack = isSingleTrackRequest(album.tracks);
 
-  const canRetry = calculatedStatus === RequestStatus.enum.failed || calculatedStatus === RequestStatus.enum.paused;
+  const canRetry =
+    calculatedStatus === RequestStatus.enum.failed ||
+    calculatedStatus === RequestStatus.enum.cancelled ||
+    calculatedStatus === RequestStatus.enum.partially_complete ||
+    calculatedStatus === RequestStatus.enum.paused;
+  const canCancel = isProcessingStatus(calculatedStatus);
 
   const handleDelete = async () => {
     const confirmed = await confirm({
@@ -34,11 +42,25 @@ export const AlbumCard = memo(function AlbumCard({ album }: AlbumCardProps) {
       message: `Remove "${album.name}" by ${album.artist}? This action cannot be undone.`,
       variant: "danger",
       confirmText: "Remove Album",
-      cancelText: "Cancel",
+      cancelText: "Keep",
     });
 
     if (confirmed) {
       handleRemove();
+    }
+  };
+
+  const handleCancel = async () => {
+    const confirmed = await confirm({
+      title: "Cancel Album Downloads",
+      message: `Cancel all active downloads for "${album.name}" by ${album.artist}?`,
+      variant: "danger",
+      confirmText: "Cancel Downloads",
+      cancelText: "Keep Downloading",
+    });
+
+    if (confirmed) {
+      handleCancelAlbum();
     }
   };
 
@@ -106,12 +128,16 @@ export const AlbumCard = memo(function AlbumCard({ album }: AlbumCardProps) {
             expanded={expanded}
             isSingleTrack={isSingleTrack}
             onToggleExpanded={() => setExpanded(!expanded)}
+            onCancelTrack={(trackId) => getTrackActions(trackId).handleCancelTrack()}
+            onRetryTrack={(trackId) => getTrackActions(trackId).handleRetryTrack()}
           />
         )}
 
         <CardActions
           canRetry={canRetry}
+          canCancel={canCancel}
           onRetry={handleRetryAlbum}
+          onCancel={handleCancel}
           onRemove={handleDelete}
           variant="with-label"
           itemType={ContentType.enum.album}

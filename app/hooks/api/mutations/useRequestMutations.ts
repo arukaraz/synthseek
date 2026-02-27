@@ -156,6 +156,102 @@ export function useRequestMutations() {
     },
   });
 
+  const cancelTrackMutation = trpc.requests.cancelTrack.useMutation({
+    onMutate: async ({ trackId }) => {
+      await utils.requests.getAll.cancel();
+      await utils.requests.getAllAlbums.cancel();
+      const previousRequests = utils.requests.getAll.getData();
+      const previousAlbums = utils.requests.getAllAlbums.getData();
+
+      utils.requests.getAll.setData(undefined, (old) => {
+        if (!old) return old;
+        return old.map((req) =>
+          req.id === trackId
+            ? { ...req, status: RequestStatus.enum.cancelled, progress: 0, updated_at: new Date() }
+            : req
+        );
+      });
+
+      utils.requests.getAllAlbums.setData(undefined, (old) => {
+        if (!old) return old;
+        return old.map((album) => ({
+          ...album,
+          tracks: album.tracks.map((t) =>
+            t.id === trackId
+              ? { ...t, status: RequestStatus.enum.cancelled, progress: 0 }
+              : t
+          ),
+        }));
+      });
+
+      return { previousRequests, previousAlbums };
+    },
+    onError: (_err, _variables, context) => {
+      if (context?.previousRequests) {
+        utils.requests.getAll.setData(undefined, context.previousRequests);
+      }
+      if (context?.previousAlbums) {
+        utils.requests.getAllAlbums.setData(undefined, context.previousAlbums);
+      }
+      toast.error("Failed to cancel track");
+    },
+    onSuccess: () => {
+      toast.success("Track cancelled");
+    },
+    onSettled: () => {
+      utils.requests.getAll.invalidate();
+      utils.requests.getAllAlbums.invalidate();
+    },
+  });
+
+  const retryTrackMutation = trpc.requests.retryTrack.useMutation({
+    onMutate: async ({ trackId }) => {
+      await utils.requests.getAll.cancel();
+      await utils.requests.getAllAlbums.cancel();
+      const previousRequests = utils.requests.getAll.getData();
+      const previousAlbums = utils.requests.getAllAlbums.getData();
+
+      utils.requests.getAll.setData(undefined, (old) => {
+        if (!old) return old;
+        return old.map((req) =>
+          req.id === trackId
+            ? { ...req, status: RequestStatus.enum.queued, progress: 0, error: null, updated_at: new Date() }
+            : req
+        );
+      });
+
+      utils.requests.getAllAlbums.setData(undefined, (old) => {
+        if (!old) return old;
+        return old.map((album) => ({
+          ...album,
+          tracks: album.tracks.map((t) =>
+            t.id === trackId
+              ? { ...t, status: RequestStatus.enum.queued, progress: 0, error: null }
+              : t
+          ),
+        }));
+      });
+
+      return { previousRequests, previousAlbums };
+    },
+    onError: (_err, _variables, context) => {
+      if (context?.previousRequests) {
+        utils.requests.getAll.setData(undefined, context.previousRequests);
+      }
+      if (context?.previousAlbums) {
+        utils.requests.getAllAlbums.setData(undefined, context.previousAlbums);
+      }
+      toast.error("Failed to retry track");
+    },
+    onSuccess: () => {
+      toast.success("Track retry queued");
+    },
+    onSettled: () => {
+      utils.requests.getAll.invalidate();
+      utils.requests.getAllAlbums.invalidate();
+    },
+  });
+
   const cancelRequestMutation = trpc.requests.cancel.useMutation({
     onMutate: async ({ id }) => {
       await utils.requests.getAll.cancel();
@@ -197,12 +293,10 @@ export function useRequestMutations() {
         deleteRequestMutation.mutate({ id: requestId });
       },
       handleRetryTrack: () => {
-        updateRequestMutation.mutate({
-          id: requestId,
-          status: RequestStatus.enum.queued,
-          error: null,
-        });
-        toast.info("Retrying download...");
+        retryTrackMutation.mutate({ trackId: requestId });
+      },
+      handleCancelTrack: () => {
+        cancelTrackMutation.mutate({ trackId: requestId });
       },
       handlePause: () => {
         updateRequestMutation.mutate({
@@ -219,7 +313,7 @@ export function useRequestMutations() {
         toast.info("Download resumed");
       },
     }),
-    [deleteRequestMutation, updateRequestMutation]
+    [deleteRequestMutation, updateRequestMutation, cancelTrackMutation, retryTrackMutation]
   );
 
   return {
@@ -229,6 +323,7 @@ export function useRequestMutations() {
     deleteRequest: deleteRequestMutation,
     clearCompleted: clearCompletedRequestMutation,
     cancelRequest: cancelRequestMutation,
+    cancelTrack: cancelTrackMutation,
     getActions,
   };
 }

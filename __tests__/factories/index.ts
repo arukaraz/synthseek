@@ -3,6 +3,7 @@ export {
   createTrackRequestList,
   createCompletedTrack,
   createFailedTrack,
+  createCancelledTrack,
   createDownloadingTrack,
   resetTrackCounter,
 } from "./track.factory";

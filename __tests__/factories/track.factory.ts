@@ -66,6 +66,13 @@ export function createFailedTrack(overrides?: Partial<TrackRequest>): TrackReque
   });
 }
 
+export function createCancelledTrack(overrides?: Partial<TrackRequest>): TrackRequest {
+  return createTrackRequest({
+    status: RequestStatus.enum.cancelled,
+    ...overrides,
+  });
+}
+
 export function createDownloadingTrack(overrides?: Partial<TrackRequest>): TrackRequest {
   return createTrackRequest({
     status: RequestStatus.enum.downloading,
