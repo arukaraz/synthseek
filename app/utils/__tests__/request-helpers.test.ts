@@ -1,7 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { isSingleTrackRequest, calculateAlbumStatus } from "../request-helpers";
 import { RequestStatus, ContentType } from "@api/__generated__/types";
-import { createTrackRequest, createCompletedTrack, createFailedTrack, createCancelledTrack, createDownloadingTrack } from "@test/factories";
+import {
+  createTrackRequest,
+  createCompletedTrack,
+  createFailedTrack,
+  createCancelledTrack,
+  createDownloadingTrack,
+} from "@test/factories";
 
 describe("isSingleTrackRequest", () => {
   it("returns false for empty array", () => {

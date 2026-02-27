@@ -177,9 +177,7 @@ export function useRequestMutations() {
         return old.map((album) => ({
           ...album,
           tracks: album.tracks.map((t) =>
-            t.id === trackId
-              ? { ...t, status: RequestStatus.enum.cancelled, progress: 0 }
-              : t
+            t.id === trackId ? { ...t, status: RequestStatus.enum.cancelled, progress: 0 } : t
           ),
         }));
       });
@@ -225,9 +223,7 @@ export function useRequestMutations() {
         return old.map((album) => ({
           ...album,
           tracks: album.tracks.map((t) =>
-            t.id === trackId
-              ? { ...t, status: RequestStatus.enum.queued, progress: 0, error: null }
-              : t
+            t.id === trackId ? { ...t, status: RequestStatus.enum.queued, progress: 0, error: null } : t
           ),
         }));
       });

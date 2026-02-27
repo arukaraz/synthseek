@@ -31,7 +31,14 @@ interface AlbumTrackListProps {
   onRetryTrack?: (trackId: string) => void;
 }
 
-export function AlbumTrackList({ request, expanded, isSingleTrack, onToggleExpanded, onCancelTrack, onRetryTrack }: AlbumTrackListProps) {
+export function AlbumTrackList({
+  request,
+  expanded,
+  isSingleTrack,
+  onToggleExpanded,
+  onCancelTrack,
+  onRetryTrack,
+}: AlbumTrackListProps) {
   const sortedTracks = useMemo(() => {
     return [...request.tracks].sort((a, b) => {
       const priorityA = STATUS_PRIORITY[a.status as RequestStatus] ?? 99;

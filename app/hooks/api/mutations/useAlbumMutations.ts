@@ -82,7 +82,9 @@ export function useAlbumMutations() {
             ...album,
             status: RequestStatus.enum.cancelled,
             tracks: album.tracks.map((t) =>
-              t.status !== RequestStatus.enum.complete && t.status !== RequestStatus.enum.failed && t.status !== RequestStatus.enum.cancelled
+              t.status !== RequestStatus.enum.complete &&
+              t.status !== RequestStatus.enum.failed &&
+              t.status !== RequestStatus.enum.cancelled
                 ? { ...t, status: RequestStatus.enum.cancelled, progress: 0 }
                 : t
             ),

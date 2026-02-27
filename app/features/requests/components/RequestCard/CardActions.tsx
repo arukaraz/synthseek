@@ -30,10 +30,27 @@ export function CardActions({
   itemType = ContentType.enum.track,
 }: CardActionsProps) {
   if (variant === "icon-only") {
-    return <IconOnlyActions canRetry={canRetry} canCancel={canCancel} onRetry={onRetry} onCancel={onCancel} onRemove={onRemove} />;
+    return (
+      <IconOnlyActions
+        canRetry={canRetry}
+        canCancel={canCancel}
+        onRetry={onRetry}
+        onCancel={onCancel}
+        onRemove={onRemove}
+      />
+    );
   }
 
-  return <LabeledActions canRetry={canRetry} canCancel={canCancel} onRetry={onRetry} onCancel={onCancel} onRemove={onRemove} itemType={itemType} />;
+  return (
+    <LabeledActions
+      canRetry={canRetry}
+      canCancel={canCancel}
+      onRetry={onRetry}
+      onCancel={onCancel}
+      onRemove={onRemove}
+      itemType={itemType}
+    />
+  );
 }
 
 function IconOnlyActions({
