@@ -11,6 +11,7 @@ accounts for API access and impose stricter rate limits. Search and album
 track limits reduced to 10, trending tracks rewritten to use direct search
 instead of playlist endpoints (now requiring user OAuth), and browse
 categories replaced with a static genre list.
+Currently working on a more reliable metadata provider integration
 
 Reference: https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security
 
