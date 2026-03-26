@@ -32,6 +32,14 @@ export function UpdateBanner({ latestVersion, currentVersion }: UpdateBannerProp
             <p className="text-fg/90">
               <span className="font-medium">Version {latestVersion}</span> is available
               <span className="text-fg/50 ml-1.5 text-xs">(current: {currentVersion})</span>
+              <a
+                href="https://github.com/arukaraz/synthseek/blob/main/PATCH-NOTES.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-400 hover:text-primary-300 ml-2 text-xs underline transition-colors"
+              >
+                Patch Notes
+              </a>
             </p>
           </div>
 
