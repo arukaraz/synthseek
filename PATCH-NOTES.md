@@ -14,7 +14,6 @@ categories replaced with a static genre list.
 
 Reference: https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security
 
-
 ---
 
 ### Version Update Notifications

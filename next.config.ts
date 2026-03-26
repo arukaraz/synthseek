@@ -1,12 +1,14 @@
 import type { NextConfig } from "next";
+import { createRequire } from "module";
 
-const packageJson = require("./package.json");
+const require = createRequire(import.meta.url);
+const { version } = require("./package.json") as { version: string };
 
 const nextConfig: NextConfig = {
   output: "standalone",
 
   env: {
-    NEXT_PUBLIC_APP_VERSION: packageJson.version,
+    NEXT_PUBLIC_APP_VERSION: version,
   },
 
   typescript: {
