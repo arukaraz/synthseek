@@ -10,7 +10,7 @@ export default function useSearchContent(
     offset?: number;
   }
 ) {
-  const { enabled = true, limit = 20, offset = 0 } = options || {};
+  const { enabled = true, limit = 10, offset = 0 } = options || {};
 
   return trpc.spotify.search.useQuery(
     {

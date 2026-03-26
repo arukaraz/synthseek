@@ -15,7 +15,7 @@ import { ArrowLeft, AlertCircle, ListMusic } from "lucide-react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-const PLAYLISTS_LIMIT = 50;
+const PLAYLISTS_LIMIT = 10;
 
 function PlaylistsSkeleton() {
   return (

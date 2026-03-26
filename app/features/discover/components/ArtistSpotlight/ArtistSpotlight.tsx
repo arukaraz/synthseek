@@ -54,7 +54,6 @@ export function ArtistSpotlight() {
     id: string;
     name: string;
     images: SpotifyApi.ImageObject[];
-    followers: { total: number };
     genres: string[];
   }) => {
     setSelectedArtist(artist as SpotifyApi.ArtistObjectFull);

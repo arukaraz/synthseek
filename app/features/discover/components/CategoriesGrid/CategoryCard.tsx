@@ -2,14 +2,17 @@
 
 import { cn } from "@utils/cn";
 import { Music } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
 import { categoryPlaceholder } from "../styles";
 
 export type CardSize = "small" | "medium" | "large";
 
+interface GenreItem {
+  id: string;
+  name: string;
+}
+
 interface CategoryCardProps {
-  category: SpotifyApi.CategoryObject;
+  category: GenreItem;
   size?: CardSize;
   onClick?: (categoryId: string, categoryName: string) => void;
 }
@@ -21,13 +24,9 @@ const sizeClasses: Record<CardSize, string> = {
 };
 
 export function CategoryCard({ category, size = "small", onClick }: CategoryCardProps) {
-  const [imageError, setImageError] = useState(false);
-
   const handleClick = () => {
     onClick?.(category.id, category.name);
   };
-
-  const categoryImage = category.icons[0]?.url;
 
   return (
     <div
@@ -39,21 +38,9 @@ export function CategoryCard({ category, size = "small", onClick }: CategoryCard
         sizeClasses[size]
       )}
     >
-      {categoryImage && !imageError ? (
-        <Image
-          src={categoryImage}
-          alt={category.name}
-          fill
-          className="object-cover"
-          sizes={size === "large" ? "(max-width: 640px) 100vw, 50vw" : "(max-width: 640px) 50vw, 25vw"}
-          unoptimized
-          onError={() => setImageError(true)}
-        />
-      ) : (
-        <div className={categoryPlaceholder()}>
-          <Music className={cn("text-fg/20", size === "large" ? "h-16 w-16" : "h-12 w-12")} />
-        </div>
-      )}
+      <div className={categoryPlaceholder()}>
+        <Music className={cn("text-fg/20", size === "large" ? "h-16 w-16" : "h-12 w-12")} />
+      </div>
 
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 

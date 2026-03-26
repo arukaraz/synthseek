@@ -2,6 +2,7 @@
 
 import { Badge } from "@components/ui/Badge";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
+import { ContentType } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { scale } from "@utils/animations";
 import { cardImagePlaceholder, cardHoverBorder, resultCard, cardInfo, cardTitle } from "../styles";
@@ -11,7 +12,6 @@ import Image from "next/image";
 import { useState } from "react";
 import type { CardProps } from "./types";
 import { getSecondaryInfo, getTypeBadgeLabel, getTypeBadgeColors } from "./helpers";
-import { ContentType } from "@api/__generated__/types";
 
 export function Card({ result, onResultClick }: CardProps) {
   const [imageError, setImageError] = useState(false);

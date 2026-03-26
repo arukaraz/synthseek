@@ -1,6 +1,6 @@
 import { trpc } from "@utils/trpc";
 
-export function useCategories(limit = 16, locale?: string) {
+export function useCategories(limit = 10, locale?: string) {
   return trpc.spotify.getCategories.useQuery(
     { limit, locale },
     {

@@ -1,6 +1,6 @@
 import { trpc } from "@utils/trpc";
 
-export function useCategoryPlaylists(categoryId: string, categoryName: string, limit = 20) {
+export function useCategoryPlaylists(categoryId: string, categoryName: string, limit = 10) {
   return trpc.spotify.getCategoryPlaylists.useQuery(
     { categoryId, categoryName, limit },
     {
