@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
+const packageJson = require("./package.json");
+
 const nextConfig: NextConfig = {
   output: "standalone",
+
+  env: {
+    NEXT_PUBLIC_APP_VERSION: packageJson.version,
+  },
 
   typescript: {
     ignoreBuildErrors: true,
