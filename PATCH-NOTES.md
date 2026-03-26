@@ -11,6 +11,7 @@ accounts for API access and impose stricter rate limits. Search and album
 track limits reduced to 10, trending tracks rewritten to use direct search
 instead of playlist endpoints (now requiring user OAuth), and browse
 categories replaced with a static genre list.
+
 Currently working on a more reliable metadata provider integration
 
 Reference: https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security
@@ -20,4 +21,4 @@ Reference: https://developer.spotify.com/blog/2026-02-06-update-on-developer-acc
 ### Version Update Notifications
 
 Added automatic detection of new releases published to GitHub Container Registry.
-A dismissable ribbon banner appears at the top of the page when a newer version is available and reappears on page refresh until the user updates.
+A dismissable ribbon banner appears at the top of the page when a newer version is available.
