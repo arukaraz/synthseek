@@ -1,5 +1,6 @@
 "use client";
 
+import type { MusicTrack } from "@api/__generated__/types";
 import { EmptyState } from "@components/ui/EmptyState";
 import { staggerItem } from "@utils/animations";
 import { cn } from "@utils/cn";
@@ -11,7 +12,7 @@ import { CoverflowSkeleton } from "./CoverflowSkeleton";
 import { calculateAllTransforms, COVERFLOW_CONFIG, getCircularOffset } from "./utils/transforms";
 
 interface TrendingTrackItem {
-  track: SpotifyApi.TrackObjectFull;
+  track: MusicTrack;
   addedAt: string;
 }
 
@@ -83,7 +84,7 @@ export function CoverflowCarousel({
         <EmptyState
           icon={AlertCircle}
           title="Failed to load trending tracks"
-          description="Unable to fetch trending content from Spotify. Please try again later."
+          description="Unable to fetch trending content. Please try again later."
         />
       </motion.div>
     );
@@ -122,7 +123,7 @@ export function CoverflowCarousel({
               return (
                 <CoverflowCard
                   key={trackItem.track.id}
-                  imageUrl={trackItem.track?.album?.images?.[0]?.url}
+                  imageUrl={trackItem.track?.images?.[0]?.url}
                   track={trackItem.track}
                   transform={transform}
                   isCenter={index === currentIndex}

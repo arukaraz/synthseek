@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Inbox, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useMemo, useState } from "react";
-import type { SpotifyItem } from "@api/__generated__/types";
+import type { MusicItem } from "@api/__generated__/types";
 import useSearch from "@hooks/api/queries/useSearchContent";
 import { ContentBrowserModal } from "../components/ContentBrowserModal/ContentBrowserModal";
 import type { RequestContext } from "../components/ContentBrowserModal/types";
@@ -40,11 +40,11 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
     ContentType.enum.artist,
     ContentType.enum.playlist,
   ]);
-  const [selectedResult, setSelectedResult] = useState<SpotifyItem | null>(null);
+  const [selectedResult, setSelectedResult] = useState<MusicItem | null>(null);
   const [showContentBrowserModal, setShowContentBrowserModal] = useState(false);
   const [showConfigRequestModal, setShowConfigRequestModal] = useState(false);
-  const [selectedContentToRequest, setSelectedContentToRequest] = useState<SpotifyItem | null>(null);
-  const [parentAlbumFromContext, setParentAlbumFromContext] = useState<SpotifyItem | null>(null);
+  const [selectedContentToRequest, setSelectedContentToRequest] = useState<MusicItem | null>(null);
+  const [parentAlbumFromContext, setParentAlbumFromContext] = useState<MusicItem | null>(null);
   const [isFilterTransitioning, setIsFilterTransitioning] = useState(false);
 
   const filterParam = searchParams.get("filter") ?? initialFilter;
@@ -71,7 +71,7 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
 
     setSelectedResult(result);
     if (type === ContentType.enum.track) {
-      setSelectedContentToRequest(result as SpotifyApi.TrackObjectFull);
+      setSelectedContentToRequest(result);
       setShowConfigRequestModal(true);
     } else {
       setShowContentBrowserModal(true);
@@ -83,9 +83,9 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
     setShowContentBrowserModal(false);
   };
 
-  const handleRequestContentClick = (requestedItem: SpotifyItem, context?: RequestContext) => {
+  const handleRequestContentClick = (requestedItem: MusicItem, context?: RequestContext) => {
     if (requestedItem.type === ContentType.enum.track || requestedItem.type === ContentType.enum.album) {
-      setSelectedContentToRequest(requestedItem as SpotifyApi.TrackObjectFull | SpotifyApi.AlbumObjectSimplified);
+      setSelectedContentToRequest(requestedItem);
       setParentAlbumFromContext(context?.parentAlbum ?? null);
       setShowConfigRequestModal(true);
       setShowContentBrowserModal(false);
@@ -137,7 +137,7 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
         <EmptyState
           icon={Search}
           title="Start Searching"
-          description="Use the search bar above to find tracks, albums, or artists on Spotify"
+          description="Use the search bar above to find tracks, albums, or artists"
         />
       </>
     );

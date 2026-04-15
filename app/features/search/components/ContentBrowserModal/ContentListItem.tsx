@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@components/ui/Button";
-import { ContentType, type SpotifyItem } from "@api/__generated__/types";
+import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { Download, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@utils/cn";
@@ -9,24 +9,31 @@ import { itemImage, trackListContainer } from "../styles";
 import { formatTrackDuration, formatYear } from "@utils/formatters";
 
 interface ContentListItemProps {
-  item: SpotifyItem;
+  item: MusicItem;
   parentType: ContentType;
-  onActionClick: (item: SpotifyItem) => void;
-  onNavigate?: (item: SpotifyItem) => void;
+  onActionClick: (item: MusicItem) => void;
+  onNavigate?: (item: MusicItem) => void;
   isClickable?: boolean;
+}
+
+function getItemName(item: MusicItem): string {
+  return item.type === ContentType.enum.track ? item.title : item.name;
+}
+
+function getItemImage(item: MusicItem): string | undefined {
+  if (item.type === ContentType.enum.track && "images" in item) return item.images?.[0]?.url;
+  if ("images" in item) return item.images?.[0]?.url;
+  return undefined;
 }
 
 export function ContentListItem({ item, parentType, onActionClick, onNavigate, isClickable }: ContentListItemProps) {
   const isArtistView = parentType === ContentType.enum.artist;
   const isAlbumView = parentType === ContentType.enum.album;
-
-  const albumItem = isArtistView ? (item as SpotifyApi.AlbumObjectSimplified) : null;
-  const trackItem = isAlbumView ? (item as SpotifyApi.TrackObjectSimplified) : null;
+  const name = getItemName(item) || "Unknown";
+  const imageUrl = getItemImage(item);
 
   const handleClick = () => {
-    if (isClickable && onNavigate) {
-      onNavigate(item);
-    }
+    if (isClickable && onNavigate) onNavigate(item);
   };
 
   const handleActionClick = (e: React.MouseEvent) => {
@@ -34,9 +41,9 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
     onActionClick(item);
   };
 
-  if (isArtistView && albumItem) {
-    const releaseYear = formatYear(albumItem.release_date);
-    const trackCount = albumItem.total_tracks;
+  if (isArtistView && item.type === ContentType.enum.album) {
+    const releaseYear = formatYear(item.release_date);
+    const trackCount = item.total_tracks;
 
     return (
       <div
@@ -47,15 +54,9 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
         )}
         data-cy="content-list-item"
       >
-        <div className="relative flex-shrink-0">
-          {albumItem.images?.[0]?.url ? (
-            <Image
-              src={albumItem.images[0].url}
-              alt={albumItem.name}
-              width={64}
-              height={64}
-              className="rounded-md object-cover"
-            />
+        <div className="relative shrink-0">
+          {imageUrl ? (
+            <Image src={imageUrl} alt={name} width={64} height={64} className="rounded-md object-cover" unoptimized />
           ) : (
             <div className={itemImage()} />
           )}
@@ -63,7 +64,7 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
 
         <div className="min-w-0 flex-1">
           <h3 className="text-fg truncate font-medium" data-cy="content-item-name">
-            {albumItem.name}
+            {name}
           </h3>
           <p className="text-fg/60 text-sm">
             {releaseYear && `${releaseYear} • `}
@@ -72,7 +73,7 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
         </div>
 
         {isClickable && (
-          <div className="text-fg/40 group-hover:text-fg/70 flex-shrink-0 transition-colors">
+          <div className="text-fg/40 group-hover:text-fg/70 shrink-0 transition-colors">
             <ChevronRight className="h-5 w-5" />
           </div>
         )}
@@ -80,24 +81,24 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
     );
   }
 
-  if (isAlbumView && trackItem) {
-    const duration = formatTrackDuration(trackItem.duration_ms);
-    const artists = trackItem.artists?.map((a) => a.name).join(", ");
+  if (isAlbumView && item.type === ContentType.enum.track) {
+    const duration = "duration_ms" in item ? formatTrackDuration(item.duration_ms) : "";
+    const artistNames = item.artists?.map((a) => a.name).join(", ");
 
     return (
       <div className={trackListContainer()} data-cy="content-list-item">
-        <div className="text-fg/50 w-8 flex-shrink-0 text-center text-sm font-medium">{trackItem.track_number}</div>
+        <div className="text-fg/50 w-8 shrink-0 text-center text-sm font-medium">{item.track_number}</div>
 
         <div className="min-w-0 flex-1">
           <h3 className="text-fg truncate font-medium" data-cy="content-item-name">
-            {trackItem.name}
+            {name}
           </h3>
-          {artists && <p className="text-fg/60 truncate text-sm">{artists}</p>}
+          {artistNames && <p className="text-fg/60 truncate text-sm">{artistNames}</p>}
         </div>
 
-        <div className="text-fg/50 hidden flex-shrink-0 text-sm sm:block">{duration}</div>
+        <div className="text-fg/50 hidden shrink-0 text-sm sm:block">{duration}</div>
 
-        <div className="flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
           <Button
             onClick={handleActionClick}
             size="icon"

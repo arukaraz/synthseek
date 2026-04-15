@@ -16,7 +16,7 @@ export function useRequestMutations() {
 
         const optimisticRequest = {
           id: crypto.randomUUID(),
-          spotify_id: newRequest.spotify_id,
+          external_id: newRequest.external_id,
           title: newRequest.title,
           artist: newRequest.artist,
           track_number: newRequest.track_number ?? null,
@@ -30,7 +30,7 @@ export function useRequestMutations() {
           album_id: crypto.randomUUID(),
           completed_at: null,
           error: null,
-          source: newRequest.source ?? "spotify",
+          source: newRequest.source ?? "unknown",
           bitrate: newRequest.bitrate || 320,
           format: newRequest.format || "mp3",
           format_matching: RequestMatchingMode.enum.flexible,

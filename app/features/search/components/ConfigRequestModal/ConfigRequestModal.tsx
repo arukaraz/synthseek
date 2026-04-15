@@ -2,7 +2,13 @@
 
 import { Button } from "@components/ui/Button";
 import { Dialog, DialogContent, DialogTitle } from "@components/ui/Dialog";
-import { ContentType, RequestFormat, RequestMatchingMode, FORMAT_OPTIONS } from "@api/__generated__/types";
+import {
+  ContentType,
+  RequestFormat,
+  RequestMatchingMode,
+  FORMAT_OPTIONS,
+  type MusicTrack,
+} from "@api/__generated__/types";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { trpc } from "@utils/trpc";
 import { confirm } from "@utils/confirm";
@@ -136,30 +142,28 @@ Re-requesting will delete the existing album and all its tracks. This action can
       format: { value: format, matching: formatMatching },
     };
 
-    if (itemType === ContentType.enum.track) {
-      const track = item as SpotifyApi.TrackObjectFull;
+    if (item.type === ContentType.enum.track && "album" in item) {
       downloadMutation.mutate({
         track: {
-          spotify_id: track.id,
-          title: track.name,
-          artist: track.artists[0]?.name || "Unknown Artist",
-          track_number: track.track_number,
-          disc_number: track.disc_number,
-          duration_ms: track.duration_ms,
-          explicit: track.explicit,
-          isrc: track.external_ids?.isrc || null,
+          external_id: item.id,
+          title: item.title,
+          artist: item.artists[0]?.name || item.artist,
+          track_number: item.track_number,
+          disc_number: item.disc_number,
+          duration_ms: item.duration_ms,
+          explicit: item.explicit,
+          isrc: item.isrc,
         },
         config,
-        album_spotify_id: parentAlbum?.id ?? track.album?.id ?? `single_${track.id}`,
+        album_external_id: parentAlbum?.id ?? item.album.id ?? `single_${item.id}`,
       });
       return;
     }
 
-    if (itemType === ContentType.enum.album) {
-      const album = item as SpotifyApi.AlbumObjectSimplified;
+    if (item.type === ContentType.enum.album) {
       try {
-        const tracksResponse = await utils.spotify.getContents.fetch({
-          parentId: album.id,
+        const tracksResponse = await utils.music.getContents.fetch({
+          parentId: item.id,
           parentType: ContentType.enum.album,
         });
 
@@ -168,25 +172,28 @@ Re-requesting will delete the existing album and all its tracks. This action can
           return;
         }
 
-        const tracks = tracksResponse.content as SpotifyApi.TrackObjectFull[];
+        const content = tracksResponse.content;
+        const trackList = Array.isArray(content) ? content : [];
 
         downloadAlbumMutation.mutate({
-          spotify_id: album.id,
-          name: album.name,
-          artist: album.artists[0]?.name || "Unknown Artist",
-          album_art: album.images?.[0]?.url ?? null,
-          release_date: album.release_date || "1900-01-01",
-          total_tracks: album.total_tracks,
-          tracks: tracks.map((track) => ({
-            spotify_id: track.id,
-            title: track.name,
-            artist: track.artists[0]?.name || "Unknown Artist",
-            track_number: track.track_number,
-            disc_number: track.disc_number,
-            duration_ms: track.duration_ms,
-            explicit: track.explicit,
-            isrc: track.external_ids?.isrc || null,
-          })),
+          external_id: item.id,
+          name: item.name,
+          artist: item.artists[0]?.name || item.artist,
+          album_art: item.images[0]?.url ?? null,
+          release_date: item.release_date || "1900-01-01",
+          total_tracks: item.total_tracks || trackList.length,
+          tracks: trackList
+            .filter((t): t is MusicTrack => "type" in t && (t as MusicTrack).type === ContentType.enum.track)
+            .map((t) => ({
+              external_id: t.id,
+              title: t.title,
+              artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
+              track_number: t.track_number,
+              disc_number: t.disc_number,
+              duration_ms: t.duration_ms,
+              explicit: t.explicit,
+              isrc: t.isrc,
+            })),
           config,
         });
       } catch (error) {

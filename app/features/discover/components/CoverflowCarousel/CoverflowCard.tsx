@@ -1,7 +1,6 @@
 "use client";
 
-import type { SpotifyItem } from "@api/__generated__/types";
-import { ContentType } from "@api/__generated__/types";
+import { ContentType, type MusicItem, type MusicTrack } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
 import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
@@ -16,7 +15,7 @@ import type { CardTransform } from "./utils/transforms";
 
 interface CoverflowCardProps {
   imageUrl: string | null | undefined;
-  track: SpotifyApi.TrackObjectFull;
+  track: MusicTrack;
   transform: CardTransform;
   isCenter: boolean;
   index: number;
@@ -37,7 +36,7 @@ export const CoverflowCard = memo(function CoverflowCard({
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const trackName = track?.name ?? "Unknown Track";
+  const trackName = track?.title ?? "Unknown Track";
   const artistName = track?.artists?.[0]?.name ?? "Unknown Artist";
 
   const handleDownload = useCallback((e: React.MouseEvent) => {
@@ -139,10 +138,10 @@ export const CoverflowCard = memo(function CoverflowCard({
         createPortal(
           <ConfigRequestModal
             isOpen={showModal}
-            item={track as unknown as SpotifyItem}
+            item={track}
             itemType={ContentType.enum.track}
             onClose={() => setShowModal(false)}
-            parentAlbum={track.album as unknown as SpotifyItem}
+            parentAlbum={null}
           />,
           document.body
         )}

@@ -4,10 +4,10 @@ import { EmptyState } from "@components/ui/EmptyState";
 import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
 import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
+import type { MusicItem } from "@api/__generated__/types";
 import { useArtistSpotlight } from "@hooks/api/queries/useArtistSpotlight";
 import { useCountry } from "@modules/providers/CountryProvider";
 import { ContentType } from "@api/__generated__/types";
-import type { SpotifyItem } from "@api/__generated__/types";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { glassPanelCard } from "../styles";
 import { fadeIn } from "@utils/animations";
@@ -39,24 +39,19 @@ export function ArtistSpotlight() {
   const { data, isLoading, isError } = useArtistSpotlight(countryName, ARTIST_SPOTLIGHT_COUNT);
   const artists = data?.data?.artists ?? [];
 
-  const [selectedArtist, setSelectedArtist] = useState<SpotifyApi.ArtistObjectFull | null>(null);
+  const [selectedArtist, setSelectedArtist] = useState<MusicItem | null>(null);
   const [showContentBrowserModal, setShowContentBrowserModal] = useState(false);
   const [showConfigRequestModal, setShowConfigRequestModal] = useState(false);
-  const [selectedContentToRequest, setSelectedContentToRequest] = useState<SpotifyItem | null>(null);
-  const [parentAlbumFromContext, setParentAlbumFromContext] = useState<SpotifyItem | null>(null);
+  const [selectedContentToRequest, setSelectedContentToRequest] = useState<MusicItem | null>(null);
+  const [parentAlbumFromContext, setParentAlbumFromContext] = useState<MusicItem | null>(null);
 
   const handleSeeMore = () => {
     const query = `top artists in ${countryName}`;
     router.push(`/search?q=${encodeURIComponent(query)}&filter=artist`);
   };
 
-  const handleArtistClick = (artist: {
-    id: string;
-    name: string;
-    images: SpotifyApi.ImageObject[];
-    genres: string[];
-  }) => {
-    setSelectedArtist(artist as SpotifyApi.ArtistObjectFull);
+  const handleArtistClick = (artist: MusicItem) => {
+    setSelectedArtist(artist);
     setShowContentBrowserModal(true);
   };
 
@@ -65,7 +60,7 @@ export function ArtistSpotlight() {
     setShowContentBrowserModal(false);
   };
 
-  const handleRequestContentClick = (requestedItem: SpotifyItem, context?: RequestContext) => {
+  const handleRequestContentClick = (requestedItem: MusicItem, context?: RequestContext) => {
     if (requestedItem.type === ContentType.enum.track || requestedItem.type === ContentType.enum.album) {
       setSelectedContentToRequest(requestedItem);
       setParentAlbumFromContext(context?.parentAlbum ?? null);
@@ -132,7 +127,7 @@ export function ArtistSpotlight() {
       {selectedArtist && (
         <ContentBrowserModal
           type={ContentType.enum.artist}
-          data={selectedArtist as unknown as SpotifyItem}
+          data={selectedArtist}
           onClose={handleCloseContentBrowserModal}
           open={showContentBrowserModal}
           onRequestClick={handleRequestContentClick}

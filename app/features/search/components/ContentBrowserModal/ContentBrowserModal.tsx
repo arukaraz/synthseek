@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogContent, DialogTitle } from "@components/ui/Dialog";
-import { ContentType, type SpotifyItem } from "@api/__generated__/types";
+import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { modalContainer } from "../styles";
 import { useCallback } from "react";
 import { HeroHeader } from "./HeroHeader";
@@ -17,7 +17,7 @@ export function ContentBrowserModal({ type, data, open, onClose, onRequestClick 
     });
 
   const handleRequestWithContext = useCallback(
-    (item: SpotifyItem) => {
+    (item: MusicItem) => {
       const context: RequestContext = {};
 
       if (currentType === ContentType.enum.album && item.type === ContentType.enum.track) {

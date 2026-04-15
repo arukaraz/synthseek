@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentType, type SpotifyItem } from "@api/__generated__/types";
+import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { Disc3, Music } from "lucide-react";
 import { loadingSpinner } from "../styles";
@@ -9,10 +9,10 @@ import { EmptyState } from "@components/ui/EmptyState";
 
 interface ContentListProps {
   type: ContentType;
-  items: SpotifyItem[];
+  items: MusicItem[];
   isLoading: boolean;
-  onActionClick: (item: SpotifyItem) => void;
-  onNavigate?: (item: SpotifyItem) => void;
+  onActionClick: (item: MusicItem) => void;
+  onNavigate?: (item: MusicItem) => void;
 }
 
 export function ContentList({ type, items, isLoading, onActionClick, onNavigate }: ContentListProps) {

@@ -1,25 +1,25 @@
 "use client";
 
 import useGetContents from "@hooks/api/queries/useGetContents";
-import { ContentType, type SpotifyItem } from "@api/__generated__/types";
+import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ContentMetadata } from "../types";
 
 interface UseContentBrowserProps {
   initialType: ContentType;
-  initialData: SpotifyItem;
+  initialData: MusicItem;
 }
 
 export function useContentBrowser({ initialType, initialData }: UseContentBrowserProps) {
   const [navigationStack, setNavigationStack] = useState<
     Array<{
       type: ContentType;
-      data: SpotifyItem;
+      data: MusicItem;
     }>
   >([]);
 
   const [currentType, setCurrentType] = useState<ContentType>(initialType);
-  const [currentData, setCurrentData] = useState<SpotifyItem>(initialData);
+  const [currentData, setCurrentData] = useState<MusicItem>(initialData);
 
   useEffect(() => {
     setCurrentType(initialType);
@@ -27,16 +27,14 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
     setNavigationStack([]);
   }, [initialType, initialData]);
 
-  const { data: fetchedContent, isLoading } = useGetContents(
-    currentData?.id || "",
-    !!currentData?.id && !!currentType,
-    currentType
-  );
+  const id = currentData?.id || "";
 
-  const items = useMemo((): SpotifyItem[] => {
+  const { data: fetchedContent, isLoading } = useGetContents(id, !!id && !!currentType, currentType);
+
+  const items = useMemo((): MusicItem[] => {
     if (!fetchedContent?.content) return [];
     const content = Array.isArray(fetchedContent.content) ? fetchedContent.content : [];
-    return content.filter(Boolean) as SpotifyItem[];
+    return content.filter(Boolean) as MusicItem[];
   }, [fetchedContent]);
 
   const metadata: ContentMetadata = useMemo(() => {
@@ -52,31 +50,55 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
       };
     }
 
-    switch (currentType) {
+    switch (currentData.type) {
       case ContentType.enum.album: {
-        const album = currentData as SpotifyApi.AlbumObjectSimplified;
-        const releaseYear = album.release_date?.split("-")[0];
-        const artistNames = album.artists?.map((a) => a.name).join(", ") || "Unknown Artist";
+        const releaseYear = currentData.release_date?.split("-")[0];
+        const artistNames =
+          currentData.artists?.map((a) => a.name).join(", ") || currentData.artist || "Unknown Artist";
+        const trackCount = currentData.total_tracks || items.length || 0;
         return {
-          title: album.name || "",
+          title: currentData.name,
           subtitle: artistNames,
-          metadata: `${releaseYear} • ${album.total_tracks || 0} tracks`,
-          thumbnail: album.images?.[0]?.url || "",
+          metadata: [releaseYear, `${trackCount} tracks`].filter(Boolean).join(" • "),
+          thumbnail: currentData.images?.[0]?.url || "",
+          showRequestButton: true,
+        };
+      }
+
+      case ContentType.enum.track: {
+        const artistNames = currentData.artists?.[0]?.name || currentData.artist || "Unknown Artist";
+        return {
+          title: currentData.title,
+          subtitle: artistNames,
+          metadata: "",
+          thumbnail: ("images" in currentData ? currentData.images?.[0]?.url : undefined) || "",
           showRequestButton: true,
         };
       }
 
       case ContentType.enum.artist: {
-        const artist = currentData as SpotifyApi.ArtistObjectFull;
-        const genres = artist.genres?.slice(0, 2).join(", ") || "";
-        const followers = artist.followers?.total.toLocaleString() || "0";
+        const genres = currentData.genres?.slice(0, 2).join(", ") || "";
+        const followersText = currentData.followers ? `${currentData.followers.toLocaleString()} followers` : "";
+        const albumCount = items.length || 0;
         return {
-          title: artist.name || "",
+          title: currentData.name,
           subtitle: genres || "Artist",
-          metadata: `${followers} followers`,
-          thumbnail: artist.images?.[0]?.url || "",
+          metadata: [followersText, `${albumCount} ${albumCount === 1 ? "album" : "albums"}`]
+            .filter(Boolean)
+            .join(" • "),
+          thumbnail: currentData.images?.[0]?.url || "",
           showRequestButton: false,
-          albumCount: items.length || 0,
+          albumCount,
+        };
+      }
+
+      case ContentType.enum.playlist: {
+        return {
+          title: currentData.name,
+          subtitle: currentData.owner?.name || "Unknown",
+          metadata: `${currentData.total_tracks} tracks`,
+          thumbnail: currentData.images?.[0]?.url || "",
+          showRequestButton: false,
         };
       }
 
@@ -94,7 +116,7 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
   }, [currentType, currentData, items.length]);
 
   const handleRowClick = useCallback(
-    (item: SpotifyItem) => {
+    (item: MusicItem) => {
       if (item.type === ContentType.enum.album) {
         setNavigationStack((prev) => [...prev, { type: currentType, data: currentData }]);
         setCurrentType(ContentType.enum.album);

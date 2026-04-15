@@ -2,7 +2,6 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { useCategories } from "@hooks/api/queries/useCategories";
-import { useCountry } from "@modules/providers/CountryProvider";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { glassPanelCard } from "../styles";
 import { fadeIn } from "@utils/animations";
@@ -52,9 +51,7 @@ function GenresGridSkeleton() {
 
 export function CategoriesGrid() {
   const router = useRouter();
-  const { country } = useCountry();
-  const locale = `en_${country}`;
-  const { data, isLoading, isError } = useCategories(CATEGORIES_LIMIT, locale);
+  const { data, isLoading, isError } = useCategories(CATEGORIES_LIMIT);
   const categories = data?.data?.items ?? [];
 
   const handleCategoryClick = (categoryId: string, categoryName: string) => {
@@ -77,7 +74,7 @@ export function CategoriesGrid() {
           <EmptyState
             icon={AlertCircle}
             title="Failed to load genres"
-            description="Unable to fetch categories from Spotify. Please try again later."
+            description="Unable to fetch genres. Please try again later."
           />
         </div>
       </div>
