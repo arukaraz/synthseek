@@ -64,6 +64,15 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
     [searchResponse]
   );
 
+  const availableTypes = useMemo(() => {
+    const types = new Set<string>();
+    if (searchResponse?.tracks?.items.length) types.add(ContentType.enum.track);
+    if (searchResponse?.albums?.items.length) types.add(ContentType.enum.album);
+    if (searchResponse?.artists?.items.length) types.add(ContentType.enum.artist);
+    if (searchResponse?.playlists?.items.length) types.add(ContentType.enum.playlist);
+    return types;
+  }, [searchResponse]);
+
   const handleContentClick = async (resultId: string, type: ContentType) => {
     const result = results.find((item) => item.id === resultId && item.type === type) || null;
 
@@ -186,9 +195,11 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
           </p>
         </div>
 
-        <div className="pb-4">
-          <FilterTabs activeFilter={activeFilter} onFilterChange={handleFilterChange} />
-        </div>
+        {availableTypes.size > 1 && (
+          <div className="pb-4">
+            <FilterTabs activeFilter={activeFilter} onFilterChange={handleFilterChange} availableTypes={availableTypes} />
+          </div>
+        )}
       </div>
 
       <div className="custom-scrollbar flex-1 overflow-auto">

@@ -30,6 +30,7 @@ export interface ResultsProps {
 export interface FilterTabsProps {
   activeFilter: FilterType;
   onFilterChange: (filter: FilterType) => void;
+  availableTypes?: Set<string>;
 }
 
 export interface AllResultsProps {

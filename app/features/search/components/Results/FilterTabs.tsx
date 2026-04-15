@@ -12,10 +12,14 @@ const FILTER_TABS: Array<{ value: FilterType; label: string }> = [
   { value: ContentType.enum.track, label: "Songs" },
 ];
 
-export function FilterTabs({ activeFilter, onFilterChange }: FilterTabsProps) {
+export function FilterTabs({ activeFilter, onFilterChange, availableTypes }: FilterTabsProps) {
+  const visibleTabs = availableTypes
+    ? FILTER_TABS.filter((tab) => tab.value === "all" || availableTypes.has(tab.value))
+    : FILTER_TABS;
+
   return (
     <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto px-2">
-      {FILTER_TABS.map((tab) => (
+      {visibleTabs.map((tab) => (
         <button
           key={tab.value}
           data-cy={`filter-tab-${tab.value}`}
