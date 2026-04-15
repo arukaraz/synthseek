@@ -5,7 +5,7 @@ let albumCounter = 0;
 const generateId = () => `album-${++albumCounter}-${Date.now()}`;
 
 const defaultAlbum: Omit<Album, "id"> = {
-  spotify_id: "spotify:album:xyz789",
+  external_id: "album:xyz789",
   name: "Test Album",
   artist: "Test Artist",
   album_art: "https://example.com/album-art.jpg",

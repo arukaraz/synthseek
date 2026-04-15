@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import type { TrackRequest, Album } from "@api/__generated__/types";
+import type { TrackRequest, Album, MusicTrack, MusicAlbum, MusicArtist, MusicPlaylist } from "@api/__generated__/types";
 
 export const createMockUseRequest = (overrides: Partial<ReturnType<typeof createMockUseRequest>> = {}) => ({
   requests: [] as TrackRequest[],
@@ -118,7 +118,7 @@ export const createMockUseCategories = (
 
 export const createMockUseTrendingTracks = (
   overrides: Partial<{
-    data: SpotifyApi.TrackObjectFull[];
+    data: MusicTrack[];
     isLoading: boolean;
     isError: boolean;
     error: Error | null;
@@ -133,7 +133,7 @@ export const createMockUseTrendingTracks = (
 
 export const createMockUseArtistSpotlight = (
   overrides: Partial<{
-    data: SpotifyApi.ArtistObjectFull[];
+    data: MusicArtist[];
     isLoading: boolean;
     isError: boolean;
     error: Error | null;
@@ -149,10 +149,10 @@ export const createMockUseArtistSpotlight = (
 export const createMockUseSearchContent = (
   overrides: Partial<{
     data: {
-      tracks?: { items: SpotifyApi.TrackObjectFull[] };
-      albums?: { items: SpotifyApi.AlbumObjectSimplified[] };
-      artists?: { items: SpotifyApi.ArtistObjectFull[] };
-      playlists?: { items: SpotifyApi.PlaylistObjectSimplified[] };
+      tracks?: { items: MusicTrack[] };
+      albums?: { items: MusicAlbum[] };
+      artists?: { items: MusicArtist[] };
+      playlists?: { items: MusicPlaylist[] };
     };
     isLoading: boolean;
     isError: boolean;

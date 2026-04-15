@@ -6,7 +6,7 @@ const generateId = () => `track-${++trackCounter}-${Date.now()}`;
 
 const defaultTrackRequest: Omit<TrackRequest, "id"> = {
   slskd_request_id: "slskd-req-001",
-  spotify_id: "spotify:track:abc123",
+  external_id: "track:abc123",
   user_id: null,
   title: "Test Track",
   artist: "Test Artist",
@@ -24,7 +24,7 @@ const defaultTrackRequest: Omit<TrackRequest, "id"> = {
   album_id: "album-001",
   error: null,
   explicit: false,
-  source: "spotify",
+  source: "provider",
   created_at: new Date("2024-01-01T00:00:00Z"),
   completed_at: null,
   updated_at: new Date("2024-01-01T00:00:00Z"),
@@ -43,7 +43,7 @@ export function createTrackRequestList(count: number, overrides?: Partial<TrackR
     createTrackRequest({
       track_number: i + 1,
       title: `Track ${i + 1}`,
-      spotify_id: `spotify:track:track${i + 1}`,
+      external_id: `track:${i + 1}`,
       ...overrides,
     })
   );

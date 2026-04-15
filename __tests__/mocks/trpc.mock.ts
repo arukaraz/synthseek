@@ -93,7 +93,7 @@ export const createMockTrpcUtils = () => ({
       invalidate: vi.fn().mockResolvedValue(undefined),
     },
   },
-  spotify: {
+  music: {
     search: {
       invalidate: vi.fn().mockResolvedValue(undefined),
     },
