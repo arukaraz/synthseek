@@ -22,7 +22,7 @@ usermod -o -u "$PUID" synthseek 2>/dev/null || true
 echo "      Done"
 
 echo "[2/5] Creating directories..."
-mkdir -p /data/db /data/config /data/logs /downloads /music
+mkdir -p /data/db /data/config /data/logs /data/artwork-cache /downloads /music
 chown -R synthseek:nodejs /data /app /downloads /music
 echo "      Done"
 

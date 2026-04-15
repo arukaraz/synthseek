@@ -23,17 +23,23 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "i.scdn.co",
-        pathname: "/image/**",
+        hostname: "cdn-images.dzcdn.net",
       },
       {
         protocol: "https",
-        hostname: "mosaic.scdn.co",
-        pathname: "/**",
+        hostname: "e-cdns-images.dzcdn.net",
       },
       {
         protocol: "https",
-        hostname: "**.spotifycdn.com",
+        hostname: "coverartarchive.org",
+      },
+      {
+        protocol: "https",
+        hostname: "**.archive.org",
+      },
+      {
+        protocol: "https",
+        hostname: "assets.fanart.tv",
       },
     ],
   },

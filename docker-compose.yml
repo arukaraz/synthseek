@@ -16,10 +16,6 @@ services:
       - PUID=1000
       - PGID=1000
 
-      # REQUIRED - Spotify (https://developer.spotify.com/dashboard)
-      - SPOTIFY_CLIENT_ID=your_spotify_client_id
-      - SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-
       # REQUIRED - Slskd (Settings > Options > Web)
       - SLSKD_API_URL=http://slskd:5030
       - SLSKD_API_KEY=your_slskd_api_key
@@ -36,6 +32,13 @@ services:
       # Audio fingerprinting for better track identification
       # - USE_ACOUSTIC_ID=false
       # - ACOUSTID_API_KEY=your_acoustid_api_key
+
+      # OPTIONAL - Enrichment services (all optional, but recommended)
+      # - LASTFM_API_KEY=your_lastfm_api_key
+      # - FANART_API_KEY=your_fanart_api_key
+      # - SONGLINK_API_KEY=your_songlink_api_key
+      # MusicBrainz requires a contact email so they can reach you instead of banning if you exceed rate limits
+      # - MUSICBRAINZ_CONTACT_EMAIL=your@email.com
 
       # Internal Port override
       # - WEB_UI_PORT=4400

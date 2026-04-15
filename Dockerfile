@@ -20,8 +20,8 @@ RUN pip3 install --break-system-packages --no-cache-dir \
 
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 synthseek \
-    && mkdir -p /data/db /data/config /data/logs /downloads /music \
-    && chown -R synthseek:nodejs /data /downloads /music
+    && mkdir -p /data/db /data/config /data/logs /data/artwork-cache /downloads /music \
+    && chown -R synthseek:nodejs /data /data/artwork-cache /downloads /music
 
 WORKDIR /app
 
@@ -47,6 +47,7 @@ ENV NODE_ENV=production \
     DOWNLOADS_COMPLETE_PATH=/downloads \
     MUSIC_LIBRARY_PATH=/music \
     BEETS_CONFIG=/data/config/beets-config.yaml \
+    ARTWORK_CACHE_PATH=/data/artwork-cache \
     NEXT_TELEMETRY_DISABLED=1
 
 
