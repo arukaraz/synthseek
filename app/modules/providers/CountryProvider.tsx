@@ -17,7 +17,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
   const [country, setCountryState] = useState(DEFAULT_COUNTRY);
   const [needsDetection, setNeedsDetection] = useState(false);
 
-  const { data } = trpc.spotify.detectCountry.useQuery(undefined, {
+  const { data } = trpc.music.detectCountry.useQuery(undefined, {
     enabled: needsDetection,
     staleTime: Infinity,
   });

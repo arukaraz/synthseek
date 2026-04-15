@@ -1,8 +1,8 @@
 import { trpc } from "@utils/trpc";
 
-export function useCategories(limit = 10, locale?: string) {
-  return trpc.spotify.getCategories.useQuery(
-    { limit, locale },
+export function useCategories(limit = 30) {
+  return trpc.music.getCategories.useQuery(
+    { limit },
     {
       staleTime: 60 * 60 * 1000,
       gcTime: 2 * 60 * 60 * 1000,
