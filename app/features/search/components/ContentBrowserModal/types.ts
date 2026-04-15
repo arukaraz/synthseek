@@ -1,5 +1,4 @@
-import type { ContentType } from "@api/__generated__/types";
-import type { SpotifyItem } from "@api/__generated__/types";
+import type { ContentType, MusicItem } from "@api/__generated__/types";
 
 export interface ContentMetadata {
   title: string;
@@ -12,13 +11,13 @@ export interface ContentMetadata {
 }
 
 export interface RequestContext {
-  parentAlbum?: SpotifyItem;
+  parentAlbum?: MusicItem;
 }
 
 export interface ContentBrowserModalProps {
   type: ContentType;
-  data: SpotifyItem;
+  data: MusicItem;
   open: boolean;
   onClose: () => void;
-  onRequestClick: (item: SpotifyItem, context?: RequestContext) => void;
+  onRequestClick: (item: MusicItem, context?: RequestContext) => void;
 }

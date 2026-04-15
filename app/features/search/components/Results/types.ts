@@ -1,4 +1,4 @@
-import type { ContentType } from "@api/__generated__/types";
+import type { ContentType, MusicItem } from "@api/__generated__/types";
 
 export type FilterType = ContentType | "all";
 
@@ -6,13 +6,6 @@ export interface FilterTab {
   value: FilterType;
   label: string;
 }
-
-export type SpotifyItem =
-  | SpotifyApi.TrackObjectFull
-  | SpotifyApi.TrackObjectSimplified
-  | SpotifyApi.AlbumObjectSimplified
-  | SpotifyApi.ArtistObjectFull
-  | SpotifyApi.PlaylistObjectSimplified;
 
 export interface Result {
   id: string;
@@ -30,7 +23,7 @@ export interface CardProps {
 }
 
 export interface ResultsProps {
-  results: SpotifyItem[];
+  results: MusicItem[];
   onResultClick: (resultId: string, type: ContentType) => void;
 }
 
@@ -41,7 +34,7 @@ export interface FilterTabsProps {
 
 export interface AllResultsProps {
   title: string;
-  results: SpotifyItem[];
+  results: MusicItem[];
   totalCount: number;
   maxDisplay: number;
   onSeeAll: () => void;

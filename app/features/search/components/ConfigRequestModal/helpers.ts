@@ -1,55 +1,43 @@
-import type { SpotifyItem } from "@api/__generated__/types";
+import { ContentType, type MusicItem, type MusicTrack, type MusicAlbum } from "@api/__generated__/types";
 
-export function isSpotifyAlbum(item: unknown): item is SpotifyApi.AlbumObjectSimplified {
-  return (
-    !!item &&
-    typeof item === "object" &&
-    "artists" in item &&
-    Array.isArray((item as SpotifyApi.AlbumObjectSimplified).artists) &&
-    "total_tracks" in item
-  );
+export function isAlbum(item: unknown): item is MusicAlbum {
+  return !!item && typeof item === "object" && "type" in item && (item as MusicItem).type === ContentType.enum.album;
 }
 
-export function isSpotifyTrack(item: unknown): item is SpotifyApi.TrackObjectFull {
+export function isTrack(item: unknown): item is MusicTrack {
   return (
     !!item &&
     typeof item === "object" &&
-    "artists" in item &&
-    Array.isArray((item as SpotifyApi.TrackObjectFull).artists) &&
-    "duration_ms" in item &&
+    "type" in item &&
+    (item as MusicItem).type === ContentType.enum.track &&
     "album" in item
   );
 }
 
-export function isSpotifyTrackSimplified(item: unknown): item is SpotifyApi.TrackObjectSimplified {
-  return (
-    !!item &&
-    typeof item === "object" &&
-    "artists" in item &&
-    Array.isArray((item as SpotifyApi.TrackObjectSimplified).artists) &&
-    "duration_ms" in item &&
-    !("album" in item)
-  );
+export function isAnyTrack(item: unknown): item is MusicTrack {
+  return isTrack(item);
 }
 
-export function isAnySpotifyTrack(
-  item: unknown
-): item is SpotifyApi.TrackObjectFull | SpotifyApi.TrackObjectSimplified {
-  return isSpotifyTrack(item) || isSpotifyTrackSimplified(item);
+function getDisplayName(item: MusicItem): string {
+  if (item.type === ContentType.enum.track) return item.title;
+  return item.name;
 }
 
-export function getItemDisplayName(item: SpotifyItem | null): string {
+function getArtistName(item: MusicItem): string {
+  if (item.type === ContentType.enum.artist) return item.name;
+  if (item.type === ContentType.enum.playlist) return item.owner?.name || "Unknown";
+  return item.artists?.[0]?.name || item.artist || "Unknown Artist";
+}
+
+export function getItemDisplayName(item: MusicItem | null): string {
   if (!item) return "";
-
-  if ("artists" in item && Array.isArray(item.artists)) {
-    const artist = item.artists[0]?.name || "Unknown Artist";
-    return `${artist} - ${item.name}`;
-  }
-
-  return item.name || "";
+  const name = getDisplayName(item);
+  if (!name) return "";
+  if (item.type === ContentType.enum.artist) return name;
+  return `${getArtistName(item)} - ${name}`;
 }
 
-export function extractItemMetadata(item: SpotifyItem | null, parentAlbum?: SpotifyItem | null) {
+export function extractItemMetadata(item: MusicItem | null, parentAlbum?: MusicItem | null) {
   if (!item) {
     return {
       name: "",
@@ -61,36 +49,34 @@ export function extractItemMetadata(item: SpotifyItem | null, parentAlbum?: Spot
     };
   }
 
-  const name = item.name;
-
-  const artist =
-    isSpotifyAlbum(item) || isAnySpotifyTrack(item) ? item.artists[0]?.name || "Unknown Artist" : undefined;
+  const name = getDisplayName(item);
+  const artist = getArtistName(item);
 
   let image: string | undefined;
-  if (isSpotifyAlbum(item)) {
-    image = item.images?.[0]?.url;
-  } else if (isSpotifyTrack(item)) {
-    image = item.album?.images?.[0]?.url;
-  } else if (isSpotifyTrackSimplified(item) && parentAlbum && isSpotifyAlbum(parentAlbum)) {
-    image = parentAlbum.images?.[0]?.url;
-  }
-
   let year: string | undefined;
-  if (isSpotifyAlbum(item)) {
-    year = item.release_date?.slice(0, 4);
-  } else if (isSpotifyTrack(item)) {
-    year = item.album?.release_date?.slice(0, 4);
-  } else if (isSpotifyTrackSimplified(item) && parentAlbum && isSpotifyAlbum(parentAlbum)) {
-    year = parentAlbum.release_date?.slice(0, 4);
+  let totalTracks: number | undefined;
+  let albumName: string | undefined;
+
+  switch (item.type) {
+    case ContentType.enum.album:
+      image = item.images?.[0]?.url;
+      year = item.release_date?.split("-")[0];
+      totalTracks = item.total_tracks;
+      break;
+    case ContentType.enum.track:
+      image = item.images?.[0]?.url || item.album.images?.[0]?.url;
+      albumName = item.album.name;
+      break;
+    case ContentType.enum.artist:
+    case ContentType.enum.playlist:
+      image = item.images?.[0]?.url;
+      break;
   }
 
-  const totalTracks = isSpotifyAlbum(item) ? item.total_tracks : undefined;
-
-  let albumName: string | undefined;
-  if (isSpotifyTrack(item)) {
-    albumName = item.album?.name;
-  } else if (isSpotifyTrackSimplified(item) && parentAlbum && isSpotifyAlbum(parentAlbum)) {
-    albumName = parentAlbum.name;
+  if (!image && parentAlbum && isAlbum(parentAlbum)) {
+    image = parentAlbum.images?.[0]?.url;
+    year = year || parentAlbum.release_date?.split("-")[0];
+    albumName = albumName || parentAlbum.name;
   }
 
   return { name, artist, image, year, totalTracks, albumName };

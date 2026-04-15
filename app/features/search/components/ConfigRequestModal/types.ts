@@ -1,13 +1,12 @@
-import type { ContentType } from "@api/__generated__/types";
-import type { SpotifyItem } from "@api/__generated__/types";
+import type { ContentType, MusicItem } from "@api/__generated__/types";
 
 export interface ConfigRequestModalProps {
   isOpen: boolean;
   onClose: () => void;
-  item: SpotifyItem | null;
+  item: MusicItem | null;
   itemType: ContentType;
   onSuccess?: (itemName: string) => void;
-  parentAlbum?: SpotifyItem | null;
+  parentAlbum?: MusicItem | null;
 }
 
 export interface BitrateOption {

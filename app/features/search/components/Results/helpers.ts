@@ -1,46 +1,56 @@
-import { ContentType } from "@api/__generated__/types";
-import type { SpotifyItem } from "./types";
+import { ContentType, type MusicItem } from "@api/__generated__/types";
 import type { Result } from "./types";
 
-export function transformResultForDisplay(item: SpotifyItem): Result {
-  switch (item.type) {
-    case ContentType.enum.track: {
-      const track = item as SpotifyApi.TrackObjectFull | SpotifyApi.TrackObjectSimplified;
-      const album = "album" in track ? track.album : undefined;
+function getDisplayName(item: MusicItem): string {
+  if (item.type === ContentType.enum.track) return item.title || "Unknown";
+  return item.name || "Unknown";
+}
+
+function getArtistName(item: MusicItem): string {
+  if (item.type === ContentType.enum.artist) return item.name;
+  if (item.type === ContentType.enum.playlist) return item.owner?.name || "Unknown";
+  return item.artists?.[0]?.name || item.artist || "Unknown Artist";
+}
+
+export function transformResultForDisplay(item: MusicItem): Result {
+  const type = item.type;
+  const name = getDisplayName(item);
+  const artistName = getArtistName(item);
+
+  switch (type) {
+    case ContentType.enum.track:
       return {
         id: item.id,
-        type: item.type,
-        name: item.name,
-        artist: item.artists[0]?.name || "Unknown Artist",
-        album: album?.name,
-        image: album?.images?.[0]?.url,
-        year: album?.release_date?.split("-")[0],
+        type,
+        name,
+        artist: artistName,
+        album: item.album.name,
+        image: item.images?.[0]?.url || item.album.images?.[0]?.url,
       };
-    }
     case ContentType.enum.album:
       return {
         id: item.id,
-        type: item.type,
-        name: item.name,
-        artist: item.artists[0]?.name || "Unknown Artist",
-        image: item.images[0]?.url,
+        type,
+        name,
+        artist: artistName,
+        image: item.images?.[0]?.url,
         year: item.release_date?.split("-")[0],
       };
     case ContentType.enum.artist:
       return {
         id: item.id,
-        type: item.type,
-        name: item.name,
-        artist: item.name,
+        type,
+        name,
+        artist: name,
         image: item.images?.[0]?.url,
       };
     case ContentType.enum.playlist:
       return {
         id: item.id,
-        type: item.type,
-        name: item.name,
-        artist: item.owner.display_name || "Unknown",
-        image: item.images[0]?.url,
+        type,
+        name,
+        artist: item.owner?.name || "Unknown",
+        image: item.images?.[0]?.url,
       };
   }
 }
@@ -61,6 +71,7 @@ export function getSecondaryInfo(result: Result): string {
 }
 
 export function getTypeBadgeLabel(type: ContentType): string {
+  if (!type) return "Unknown";
   return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
@@ -79,19 +90,19 @@ export function getTypeBadgeColors(type: ContentType): string {
   }
 }
 
-export function transformPlaylistTrackForDisplay(playlistTrack: SpotifyApi.PlaylistTrackObject): Result | null {
+export function transformPlaylistTrackForDisplay(playlistTrack: { track: MusicItem }): Result | null {
   const track = playlistTrack.track;
-  if (!track || track.type !== ContentType.enum.track) return null;
+  if (!track) return null;
 
-  const fullTrack = track as SpotifyApi.TrackObjectFull;
+  if (track.type !== ContentType.enum.track) return null;
+
   return {
-    id: fullTrack.id,
+    id: track.id,
     type: ContentType.enum.track,
-    name: fullTrack.name,
-    artist: fullTrack.artists[0]?.name || "Unknown Artist",
-    album: fullTrack.album?.name,
-    image: fullTrack.album?.images?.[0]?.url,
-    year: fullTrack.album?.release_date?.split("-")[0],
+    name: track.title,
+    artist: track.artists?.[0]?.name || track.artist || "Unknown Artist",
+    album: track.album.name,
+    image: track.images?.[0]?.url || track.album.images?.[0]?.url,
   };
 }
 
