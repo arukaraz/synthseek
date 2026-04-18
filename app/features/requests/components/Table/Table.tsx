@@ -53,7 +53,7 @@ export function Table({ items, sort, onSortChange }: TableProps) {
           <TableBody>
             <AnimatePresence mode="sync">
               {items.map((item) => (
-                <RequestRow key={item.id} item={item} />
+                <RequestRow key={`${item.parent.id}:${item.id}`} item={item} />
               ))}
             </AnimatePresence>
           </TableBody>
