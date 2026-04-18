@@ -3,8 +3,8 @@
 import { ContentShell } from "@components/ContentShell";
 import TopHeader from "@components/TopHeader";
 import { UpdateBanner } from "@components/UpdateBanner";
-import { useRequestSubscription } from "@hooks/api/queries/useRequestSubscription";
-import { useVersionSubscription } from "@hooks/api/queries/useVersionSubscription";
+import { useRequestSubscription } from "@hooks/api/subscriptions/useRequestSubscription";
+import { useVersionSubscription } from "@hooks/api/subscriptions/useVersionSubscription";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
