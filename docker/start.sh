@@ -35,10 +35,21 @@ else
     echo "      Using existing config.yml"
 fi
 
+if [ -f "/app/server/data/config/config.yml" ]; then
+    cp /app/server/data/config/config.yml /data/config/config.example.yml
+    chown synthseek:nodejs /data/config/config.example.yml
+    echo "      Refreshed config.example.yml"
+fi
+
 if [ ! -f "/data/config/beets-config.yaml" ] && [ -f "/app/server/data/config/beets-config.yaml" ]; then
     cp /app/server/data/config/beets-config.yaml /data/config/
     chown synthseek:nodejs /data/config/beets-config.yaml
     echo "      Created default beets-config.yaml"
+fi
+
+if [ -f "/app/server/data/config/beets-config.yaml" ]; then
+    cp /app/server/data/config/beets-config.yaml /data/config/beets-config.example.yaml
+    chown synthseek:nodejs /data/config/beets-config.example.yaml
 fi
 
 echo "[4/5] Running database migrations..."

@@ -10,6 +10,16 @@ on:
         description: "Server version (e.g., v1.2.3 or 1.2.3)"
         required: true
         type: string
+      prerelease:
+        description: "Mark as prerelease (tag with label, skip :latest)"
+        required: false
+        default: false
+        type: boolean
+      prerelease_name:
+        description: "Prerelease label. Defaults to 'beta'. Example: prerelease-name"
+        required: false
+        default: ""
+        type: string
       skip_cache:
         description: "Skip Docker layer cache"
         required: false
@@ -48,6 +58,8 @@ jobs:
             SERVER_REPO="${{ github.event.client_payload.server_repo }}"
             ARTIFACT_NAME="${{ github.event.client_payload.artifact_name }}"
             COMMIT_SHA="${{ github.event.client_payload.commit_sha }}"
+            PRERELEASE="${{ github.event.client_payload.prerelease }}"
+            PRERELEASE_NAME="${{ github.event.client_payload.prerelease_name }}"
 
             echo "Triggered by server release"
           else
@@ -57,8 +69,22 @@ jobs:
             SERVER_REPO="arukaraz/synthseek-server"
             ARTIFACT_NAME="server-bundle-v${VERSION}.tar.gz"
             COMMIT_SHA="manual"
+            PRERELEASE="${{ github.event.inputs.prerelease }}"
+            PRERELEASE_NAME="${{ github.event.inputs.prerelease_name }}"
 
             echo "Manual trigger"
+          fi
+
+          if [ "$PRERELEASE" != "true" ]; then
+            PRERELEASE="false"
+            PRERELEASE_LABEL=""
+          else
+            PRERELEASE="true"
+            if [ -z "$PRERELEASE_NAME" ]; then
+              PRERELEASE_LABEL="beta"
+            else
+              PRERELEASE_LABEL="$PRERELEASE_NAME"
+            fi
           fi
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -66,8 +92,10 @@ jobs:
           echo "server_repo=$SERVER_REPO" >> $GITHUB_OUTPUT
           echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
           echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          echo "prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
+          echo "prerelease_label=$PRERELEASE_LABEL" >> $GITHUB_OUTPUT
 
-          echo "Building Docker image for server version: $VERSION"
+          echo "Building Docker image for server version: $VERSION (prerelease: $PRERELEASE, label: '$PRERELEASE_LABEL')"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -242,9 +270,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=v${{ steps.version.outputs.version }}
-            type=raw,value=${{ steps.version.outputs.version }}
-            type=raw,value=latest
+            type=raw,value=v${{ steps.version.outputs.version }}-${{ steps.version.outputs.prerelease_label }},enable=${{ steps.version.outputs.prerelease == 'true' }}
+            type=raw,value=${{ steps.version.outputs.prerelease_label }},enable=${{ steps.version.outputs.prerelease == 'true' }}
+            type=raw,value=v${{ steps.version.outputs.version }},enable=${{ steps.version.outputs.prerelease != 'true' }}
+            type=raw,value=${{ steps.version.outputs.version }},enable=${{ steps.version.outputs.prerelease != 'true' }}
+            type=raw,value=latest,enable=${{ steps.version.outputs.prerelease != 'true' }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -262,20 +292,29 @@ jobs:
       - name: Create deployment summary
         run: |
           VERSION="${{ steps.version.outputs.version }}"
+          PRERELEASE="${{ steps.version.outputs.prerelease }}"
+          LABEL="${{ steps.version.outputs.prerelease_label }}"
+
+          if [ "$PRERELEASE" = "true" ]; then
+            PRIMARY_TAG="v${VERSION}-${LABEL}"
+            TAG_ROWS="| \`v${VERSION}-${LABEL}\` | linux/amd64, linux/arm64 |\n| \`${LABEL}\` | linux/amd64, linux/arm64 |"
+          else
+            PRIMARY_TAG="v${VERSION}"
+            TAG_ROWS="| \`v${VERSION}\` | linux/amd64, linux/arm64 |\n| \`${VERSION}\` | linux/amd64, linux/arm64 |\n| \`latest\` | linux/amd64, linux/arm64 |"
+          fi
 
           cat >> $GITHUB_STEP_SUMMARY << EOF
-          ## Synthseek v${VERSION}
+          ## Synthseek v${VERSION}${PRERELEASE:+ (prerelease)}
 
           \`\`\`
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v${VERSION}
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${PRIMARY_TAG}
           \`\`\`
 
           | Tag | Platforms |
           |-----|-----------|
-          | \`v${VERSION}\` | linux/amd64, linux/arm64 |
-          | \`latest\` | linux/amd64, linux/arm64 |
+          $(printf '%b\n' "$TAG_ROWS")
 
           ---
 
-          **Version**: v${VERSION} | **Commit**: \`${{ steps.version.outputs.commit_sha }}\`
+          **Version**: v${VERSION} | **Commit**: \`${{ steps.version.outputs.commit_sha }}\` | **Prerelease**: ${PRERELEASE}
           EOF
