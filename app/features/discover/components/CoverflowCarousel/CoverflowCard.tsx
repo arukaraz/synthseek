@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentType, type MusicItem, type MusicTrack } from "@api/__generated__/types";
+import { ContentType, type MusicTrack } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
 import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";

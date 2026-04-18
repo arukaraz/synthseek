@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@test/test-utils";
-import { CardHeader } from "../CardHeader";
+import { CardHeader } from "../components/CardHeader";
 import { RequestStatus } from "@api/__generated__/types";
 import { Clock } from "lucide-react";
 

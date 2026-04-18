@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@components/ui/Badge";
-import { ContentType } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { scale } from "@utils/animations";
 import { cardImagePlaceholder, cardHoverBorder, resultCard, cardInfo, cardTitle } from "../styles";

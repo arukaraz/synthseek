@@ -119,7 +119,7 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
           albumCount: 0,
         };
     }
-  }, [currentType, currentData, items.length]);
+  }, [currentData, items.length]);
 
   const handleRowClick = useCallback(
     (item: MusicItem) => {

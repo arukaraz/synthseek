@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@test/test-utils";
-import { RequestProgress } from "../RequestProgress";
+import { RequestProgress } from "../components/RequestProgress";
 import { RequestStatus } from "@api/__generated__/types";
 
 vi.mock("@utils/formatters", async (importOriginal) => {

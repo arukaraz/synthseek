@@ -65,7 +65,7 @@ export function getSecondaryInfo(result: Result): string {
     case ContentType.enum.artist:
       return result.year || "";
     case ContentType.enum.playlist:
-      return `${result.artist} · ${result.trackCount} tracks`;
+      return result.trackCount ? `${result.artist} · ${result.trackCount} tracks` : result.artist;
     default:
       return result.artist;
   }

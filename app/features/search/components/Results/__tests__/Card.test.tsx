@@ -131,28 +131,19 @@ describe("Card", () => {
     expect(onResultClick).toHaveBeenCalledWith("song-123", ContentType.enum.track);
   });
 
-  it("shows coming soon modal for playlists", () => {
-    render(<Card {...defaultProps} result={createResult({ type: ContentType.enum.playlist })} />);
-
-    fireEvent.click(screen.getByText("Test Song"));
-
-    expect(screen.getByText("Coming Soon")).toBeInTheDocument();
-    expect(screen.getByText("Playlist requests will be available soon.")).toBeInTheDocument();
-  });
-
-  it("does not call onResultClick for playlists", () => {
+  it("calls onResultClick for playlists", () => {
     const onResultClick = vi.fn();
     render(
       <Card
         {...defaultProps}
         onResultClick={onResultClick}
-        result={createResult({ type: ContentType.enum.playlist })}
+        result={createResult({ id: "playlist-123", type: ContentType.enum.playlist })}
       />
     );
 
     fireEvent.click(screen.getByText("Test Song"));
 
-    expect(onResultClick).not.toHaveBeenCalled();
+    expect(onResultClick).toHaveBeenCalledWith("playlist-123", ContentType.enum.playlist);
   });
 
   it("renders secondary info for tracks", () => {

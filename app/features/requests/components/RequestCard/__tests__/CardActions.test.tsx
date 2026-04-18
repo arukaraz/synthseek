@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@test/test-utils";
-import { CardActions } from "../CardActions";
+import { CardActions } from "../components/CardActions";
 import { ContentType } from "@api/__generated__/types";
 
 vi.mock("framer-motion", () => ({
@@ -80,10 +80,10 @@ describe("CardActions", () => {
       expect(screen.getByText("Remove")).toBeInTheDocument();
     });
 
-    it("renders Retry button when canRetry is true", () => {
+    it("renders Retry Track button when canRetry is true", () => {
       render(<CardActions {...defaultProps} variant="with-label" canRetry />);
 
-      expect(screen.getByText("Retry")).toBeInTheDocument();
+      expect(screen.getByText("Retry Track")).toBeInTheDocument();
     });
 
     it("renders Retry Album for album item type", () => {
@@ -105,7 +105,7 @@ describe("CardActions", () => {
       const onRetry = vi.fn();
       render(<CardActions {...defaultProps} variant="with-label" canRetry onRetry={onRetry} />);
 
-      fireEvent.click(screen.getByText("Retry"));
+      fireEvent.click(screen.getByText("Retry Track"));
 
       expect(onRetry).toHaveBeenCalledTimes(1);
     });
