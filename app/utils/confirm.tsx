@@ -20,7 +20,9 @@ export function confirm(options: ConfirmOptions): Promise<boolean> {
 
     const cleanup = () => {
       root.unmount();
-      document.body.removeChild(container);
+      if (container.parentNode) {
+        container.parentNode.removeChild(container);
+      }
     };
 
     const handleConfirm = () => {

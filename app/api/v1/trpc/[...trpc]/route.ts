@@ -55,6 +55,7 @@ async function handleHTTPRequest(request: NextRequest, path: string): Promise<Re
   let body: BodyInit | null = null;
   if (request.method === "POST") {
     body = await request.text();
+    headers.set("content-length", String(Buffer.byteLength(body)));
   }
 
   const backendResponse = await fetch(url, {
