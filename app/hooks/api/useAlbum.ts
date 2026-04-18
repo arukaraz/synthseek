@@ -1,13 +1,22 @@
-import { useAlbumMutations, useAlbumQuery } from "./mutations/useAlbumMutations";
+import { trpc } from "@utils/trpc";
+import { useAlbumMutations } from "./mutations/useAlbumMutations";
 
 export default function useAlbum() {
-  const { albums, isLoading, refreshAlbums } = useAlbumQuery();
+  const {
+    data: albums,
+    refetch,
+    isLoading,
+  } = trpc.requests.getAllAlbums.useQuery(undefined, {
+    staleTime: 2000,
+    refetchOnMount: "always",
+  });
+
   const mutations = useAlbumMutations();
 
   return {
     albums,
     isLoading,
-    refreshAlbums,
+    refreshAlbums: refetch,
     getActions: mutations.getActions,
     update: mutations.update,
     delete: mutations.delete,
@@ -18,5 +27,3 @@ export default function useAlbum() {
     isDeletingAll: mutations.isDeletingAll,
   };
 }
-
-export { useAlbumMutations, useAlbumQuery } from "./mutations/useAlbumMutations";

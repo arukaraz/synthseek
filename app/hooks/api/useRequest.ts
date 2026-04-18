@@ -3,13 +3,7 @@ import { useMemo } from "react";
 import { RequestStatus, ACTIVE_STATUSES } from "@api/__generated__/types";
 import { useRequestMutations } from "./mutations/useRequestMutations";
 
-const defaultStats = {
-  total: 0,
-  queued: 0,
-  active: 0,
-  complete: 0,
-  failed: 0,
-};
+const ACTIVE_SET = new Set<string>(ACTIVE_STATUSES);
 
 export default function useRequest() {
   const {
@@ -24,19 +18,17 @@ export default function useRequest() {
   const mutations = useRequestMutations();
 
   const stats = useMemo(() => {
-    if (!requests) {
-      return defaultStats;
+    if (!requests?.length) {
+      return { total: 0, queued: 0, active: 0, complete: 0, failed: 0 };
     }
 
-    return requests.length
-      ? {
-          total: requests.length,
-          queued: requests.filter((r) => r.status === RequestStatus.enum.queued).length,
-          active: requests.filter((r) => (ACTIVE_STATUSES as readonly string[]).includes(r.status)).length,
-          complete: requests.filter((r) => r.status === RequestStatus.enum.complete).length,
-          failed: requests.filter((r) => r.status === RequestStatus.enum.failed).length,
-        }
-      : defaultStats;
+    return {
+      total: requests.length,
+      queued: requests.filter((r) => r.status === RequestStatus.enum.queued).length,
+      active: requests.filter((r) => ACTIVE_SET.has(r.status)).length,
+      complete: requests.filter((r) => r.status === RequestStatus.enum.complete).length,
+      failed: requests.filter((r) => r.status === RequestStatus.enum.failed).length,
+    };
   }, [requests]);
 
   const getRequest = (id: string) => {
@@ -58,5 +50,3 @@ export default function useRequest() {
     cancelRequestMutation: mutations.cancelRequest,
   };
 }
-
-export { useRequestMutations } from "./mutations/useRequestMutations";

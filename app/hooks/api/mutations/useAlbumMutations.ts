@@ -1,4 +1,4 @@
-import { RequestStatus, type AlbumWithTracks } from "@api/__generated__/types";
+import { RequestStatus } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
 import { useCallback } from "react";
 import { toast } from "sonner";
@@ -215,19 +215,3 @@ export function useAlbumMutations() {
   };
 }
 
-export function useAlbumQuery() {
-  const {
-    data: albums,
-    refetch,
-    isLoading,
-  } = trpc.requests.getAllAlbums.useQuery(undefined, {
-    staleTime: 2000,
-    refetchOnMount: "always",
-  });
-
-  return {
-    albums: albums as AlbumWithTracks[] | undefined,
-    isLoading,
-    refreshAlbums: refetch,
-  };
-}
