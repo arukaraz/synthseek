@@ -7,7 +7,7 @@ import type { RequestStatus } from "@api/__generated__/types";
 import { type LucideIcon, Disc, Music } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@utils/cn";
-import { musicBadge } from "../styles";
+import { musicBadge } from "../../styles";
 
 type CardSize = "sm" | "md";
 

@@ -3,11 +3,11 @@
 import useAlbum from "@hooks/api/useAlbum";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Toolbar } from "../components/Toolbar/Toolbar";
 import { requestsView } from "../components/styles";
-import { SortConfig, StatusFilter, ViewMode } from "../types";
+import { SortField, SortConfig, StatusFilter, ViewMode } from "../types";
 import { CompactView } from "./CompactView";
 import { ListView } from "./ListView";
 
@@ -17,10 +17,15 @@ interface RequestsViewProps {
 
 export function RequestsView({ viewMode }: RequestsViewProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { albums, retryAllFailed, deleteAll, isRetryingAll, isDeletingAll } = useAlbum();
 
+  const sortParam = searchParams.get("sort");
+  const validSortValues = Object.values(SortField);
+  const initialSort = validSortValues.includes(sortParam as SortField) ? (sortParam as SortField) : SortField.RECENT;
+
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [sort, setSort] = useState<SortConfig>({ field: "recents", direction: "desc" });
+  const [sort, setSort] = useState<SortConfig>({ field: initialSort, direction: "desc" });
   const [searchQuery, setSearchQuery] = useState("");
 
   const debouncedSearchQuery = useDebounce(searchQuery, { delay: 300 });

@@ -7,15 +7,10 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
+import { titleCase } from "@utils/formatters";
 import { ghostButton } from "@theme/utilities/styles";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { SortField } from "../../types";
-
-const SORT_OPTIONS: { value: SortField; label: string }[] = [
-  { value: "recents", label: "Recent" },
-  { value: "artist", label: "Artist" },
-  { value: "album", label: "Album" },
-];
 
 interface SortDropdownProps {
   value: SortField;
@@ -23,22 +18,20 @@ interface SortDropdownProps {
 }
 
 export function SortDropdown({ value, onChange }: SortDropdownProps) {
-  const current = SORT_OPTIONS.find((o) => o.value === value);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className={ghostButton({ size: "sm", hover: "default" })}>
           <ArrowUpDown className="size-3.5 sm:size-3" />
-          <span className="hidden sm:inline">{current?.label}</span>
+          <span className="hidden sm:inline">{titleCase(value)}</span>
           <ChevronDown className="size-3 opacity-50" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-25">
         <DropdownMenuRadioGroup value={value} onValueChange={(v) => onChange(v as SortField)}>
-          {SORT_OPTIONS.map((option) => (
-            <DropdownMenuRadioItem key={option.value} value={option.value}>
-              {option.label}
+          {Object.values(SortField).map((field) => (
+            <DropdownMenuRadioItem key={field} value={field}>
+              {titleCase(field)}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>

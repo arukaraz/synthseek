@@ -5,11 +5,11 @@ import { cn } from "@utils/cn";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { CircularLoadingImage } from "@components/ui/CircularLoadingImage";
 import { IconButton } from "@components/ui/IconButton";
-import { trackItem } from "../../../styles";
+import { trackItem } from "../../styles";
 import { motion } from "framer-motion";
 import { X, RefreshCw } from "lucide-react";
 
-interface AlbumTrackItemProps {
+interface TrackItemProps {
   track: TrackRequest;
   albumArt?: string | null;
   index: number;
@@ -17,7 +17,7 @@ interface AlbumTrackItemProps {
   onRetry?: () => void;
 }
 
-export function AlbumTrackItem({ track, albumArt, index, onCancel, onRetry }: AlbumTrackItemProps) {
+export function TrackItem({ track, albumArt, index, onCancel, onRetry }: TrackItemProps) {
   const statusConfig = REQUEST_STATUS_CONFIG[track.status];
 
   const isComplete = track.status === RequestStatus.enum.complete;

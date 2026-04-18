@@ -14,21 +14,21 @@ interface BaseProgressProps {
 }
 
 interface TrackProgressProps extends BaseProgressProps {
-  variant: "track";
+  variant: typeof ContentType.enum.track;
   progress?: number;
   completedTracks?: never;
   totalTracks?: never;
 }
 
-interface AlbumProgressProps extends BaseProgressProps {
-  variant: "album";
+interface ContentProgressProps extends BaseProgressProps {
+  variant: typeof ContentType.enum.album | typeof ContentType.enum.playlist;
   completedTracks: number;
   totalTracks: number;
   isSingleTrack?: boolean;
   progress?: never;
 }
 
-type RequestProgressProps = TrackProgressProps | AlbumProgressProps;
+type RequestProgressProps = TrackProgressProps | ContentProgressProps;
 
 export function RequestProgress(props: RequestProgressProps) {
   const { status, createdAt, completedAt, variant, dataCyPrefix = variant } = props;

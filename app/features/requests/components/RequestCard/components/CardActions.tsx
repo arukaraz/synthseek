@@ -2,8 +2,9 @@
 
 import { Button } from "@components/ui/Button";
 import { ContentType } from "@api/__generated__/types";
+import { titleCase } from "@utils/formatters";
 import { actionIconButton } from "@theme/utilities/styles";
-import { actionButtonLabel } from "../styles";
+import { actionButtonLabel } from "../../styles";
 import { scale } from "@utils/animations";
 import { motion } from "framer-motion";
 import { RotateCcw, Square, Trash2 } from "lucide-react";
@@ -111,10 +112,10 @@ function LabeledActions({
   onRetry,
   onCancel,
   onRemove,
-  itemType,
+  itemType = ContentType.enum.track,
 }: Pick<CardActionsProps, "canRetry" | "canCancel" | "onRetry" | "onCancel" | "onRemove" | "itemType">) {
-  const retryLabel = itemType === ContentType.enum.album ? "Retry Album" : "Retry";
-  const cancelLabel = itemType === ContentType.enum.album ? "Cancel Album" : "Cancel";
+  const retryLabel = `Retry ${titleCase(itemType)}`;
+  const cancelLabel = `Cancel ${titleCase(itemType)}`;
 
   return (
     <div className="flex items-center gap-2 pt-2">

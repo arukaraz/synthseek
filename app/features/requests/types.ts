@@ -8,7 +8,12 @@ import {
 export type ViewMode = "compact" | "list";
 export type StatusFilter = "all" | "active" | "done" | "failed";
 
-export type SortField = "recents" | "artist" | "album";
+export enum SortField {
+  RECENT = "recent",
+  PLAYLIST = "playlist",
+  ARTIST = "artist",
+  ALBUM = "album",
+}
 export type SortDirection = "asc" | "desc";
 
 export interface SortConfig {

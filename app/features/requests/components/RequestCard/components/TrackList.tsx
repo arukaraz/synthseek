@@ -3,8 +3,8 @@
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { AlbumTrackItem } from "./AlbumTrackItem";
-import { trackListTrigger } from "../../../styles";
+import { TrackItem } from "./TrackItem";
+import { trackListTrigger } from "../../styles";
 import type { AlbumWithTracks, RequestStatus } from "@api/__generated__/types";
 
 const STATUS_PRIORITY: Record<RequestStatus, number> = {
@@ -22,7 +22,7 @@ const STATUS_PRIORITY: Record<RequestStatus, number> = {
   cancelled: 11,
 };
 
-interface AlbumTrackListProps {
+interface TrackListProps {
   request: AlbumWithTracks;
   expanded: boolean;
   isSingleTrack?: boolean;
@@ -31,14 +31,14 @@ interface AlbumTrackListProps {
   onRetryTrack?: (trackId: string) => void;
 }
 
-export function AlbumTrackList({
+export function TrackList({
   request,
   expanded,
   isSingleTrack,
   onToggleExpanded,
   onCancelTrack,
   onRetryTrack,
-}: AlbumTrackListProps) {
+}: TrackListProps) {
   const sortedTracks = useMemo(() => {
     return [...request.tracks].sort((a, b) => {
       const priorityA = STATUS_PRIORITY[a.status as RequestStatus] ?? 99;
@@ -72,7 +72,7 @@ export function AlbumTrackList({
           >
             <div className="custom-scrollbar mt-3 max-h-64 space-y-1 overflow-y-auto pr-1">
               {sortedTracks.map((track, index) => (
-                <AlbumTrackItem
+                <TrackItem
                   key={track.id}
                   track={track}
                   albumArt={request.album_art}
