@@ -212,6 +212,7 @@ jobs:
           echo "Frontend build verified"
 
       - name: Commit version sync
+        if: steps.version.outputs.prerelease != 'true'
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
