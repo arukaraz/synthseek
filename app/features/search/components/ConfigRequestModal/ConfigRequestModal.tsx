@@ -8,8 +8,10 @@ import {
   RequestMatchingMode,
   FORMAT_OPTIONS,
   type MusicTrack,
+  type MusicPlaylistTrack,
 } from "@api/__generated__/types";
 import { primaryGradientButton } from "@theme/utilities/styles";
+import { titleCase } from "@utils/formatters";
 import { trpc } from "@utils/trpc";
 import { confirm } from "@utils/confirm";
 import { Download, Loader2 } from "lucide-react";
@@ -20,6 +22,38 @@ import { ConfigHeader } from "./ConfigHeader";
 import { OptionGrid, Option } from "./OptionGrid";
 import { extractItemMetadata, getItemDisplayName } from "./helpers";
 import { BITRATE_OPTIONS, MATCHING_OPTIONS, ConfigRequestModalProps } from "./types";
+
+function mapTrackFields(t: MusicTrack) {
+  return {
+    external_id: t.id,
+    title: t.title,
+    artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
+    track_number: t.track_number,
+    disc_number: t.disc_number,
+    duration_ms: t.duration_ms,
+    explicit: t.explicit,
+    isrc: t.isrc,
+  };
+}
+
+async function fetchContentTracks(
+  fetchFn: typeof trpc.useUtils.prototype.music.getContents.fetch,
+  parentId: string,
+  parentType: ContentType
+): Promise<MusicTrack[] | null> {
+  const response = await fetchFn({ parentId, parentType });
+
+  if (!response?.success || !response.content) return null;
+
+  const content = Array.isArray(response.content) ? response.content : [];
+
+  if (parentType === ContentType.enum.playlist) {
+    const playlistTracks = content as MusicPlaylistTrack[];
+    return playlistTracks.filter((pt) => pt?.track).map((pt) => pt.track);
+  }
+
+  return content as MusicTrack[];
+}
 
 export default function ConfigRequestModal({
   isOpen,
@@ -59,53 +93,38 @@ export default function ConfigRequestModal({
     description: opt.description,
   }));
 
+  const onMutationSuccess = async (label: string, route = "/requests?view=compact") => {
+    const itemName = getItemDisplayName(item);
+
+    toast.success(`${label} started`, { description: `${itemName} is being downloaded.` });
+
+    await Promise.all([
+      utils.requests.getAll.refetch(),
+      utils.requests.getAllAlbums.refetch(),
+      utils.requests.getAllPlaylists.refetch(),
+    ]);
+
+    router.push(route);
+    onSuccess?.(itemName);
+    handleClose();
+  };
+
   const downloadMutation = trpc.requests.request.useMutation({
-    onSuccess: async () => {
-      const itemName = getItemDisplayName(item);
-
-      toast.success(`Download started`, {
-        description: `${itemName} is being downloaded.`,
-      });
-
-      await Promise.all([utils.requests.getAll.invalidate(), utils.requests.getAllAlbums.invalidate()]);
-
-      router.push("/requests?view=compact");
-      onSuccess?.(itemName);
-      handleClose();
-    },
-    onError: (error) => {
-      toast.error("Download failed", { description: error.message });
-    },
+    onSuccess: () => onMutationSuccess("Download"),
+    onError: (error) => toast.error("Download failed", { description: error.message }),
   });
 
   const downloadAlbumMutation = trpc.requests.batchRequest.useMutation({
-    onSuccess: async (data) => {
-      const itemName = getItemDisplayName(item);
-
-      toast.success(`Album "${data.name}" started`, {
-        description: `${itemName} with ${data.tracks.length} tracks is being downloaded.`,
-      });
-
-      await Promise.all([utils.requests.getAll.refetch(), utils.requests.getAllAlbums.refetch()]);
-
-      router.push("/requests?view=compact");
-      onSuccess?.(itemName);
-      handleClose();
-    },
+    onSuccess: () => onMutationSuccess("Album"),
     onError: async (error) => {
       if (error.data?.code === "CONFLICT") {
         try {
           const existing = JSON.parse(error.message);
-
           const requestedDate = new Date(existing.created_at).toLocaleDateString();
 
           const confirmed = await confirm({
             title: "Album Already Requested",
-            message: `"${existing.name}" by ${existing.artist} was requested on ${requestedDate}.
-
-Current status: ${existing.status} (${existing.completed_tracks}/${existing.total_tracks} tracks)
-
-Re-requesting will delete the existing album and all its tracks. This action cannot be undone.`,
+            message: `"${existing.name}" by ${existing.artist} was requested on ${requestedDate}.\n\nCurrent status: ${existing.status} (${existing.completed_tracks}/${existing.total_tracks} tracks)\n\nRe-requesting will delete the existing album and all its tracks. This action cannot be undone.`,
             variant: "warning",
             confirmText: "Replace Album",
             cancelText: "Keep Existing",
@@ -118,17 +137,19 @@ Re-requesting will delete the existing album and all its tracks. This action can
           return;
         } catch {}
       }
-
       toast.error("Album download failed", { description: error.message });
     },
   });
 
-  const isLoading = downloadMutation.isPending || downloadAlbumMutation.isPending;
+  const downloadPlaylistMutation = trpc.requests.playlistRequest.useMutation({
+    onSuccess: () => onMutationSuccess("Playlist", "/requests?view=compact&sort=playlist"),
+    onError: (error) => toast.error("Playlist download failed", { description: error.message }),
+  });
+
+  const isLoading = downloadMutation.isPending || downloadAlbumMutation.isPending || downloadPlaylistMutation.isPending;
 
   const handleClose = () => {
-    if (!isLoading) {
-      onClose();
-    }
+    if (!isLoading) onClose();
   };
 
   const handleDownload = async () => {
@@ -142,39 +163,24 @@ Re-requesting will delete the existing album and all its tracks. This action can
       format: { value: format, matching: formatMatching },
     };
 
-    if (item.type === ContentType.enum.track && "album" in item) {
+    if (item.type === ContentType.enum.track) {
       downloadMutation.mutate({
-        track: {
-          external_id: item.id,
-          title: item.title,
-          artist: item.artists[0]?.name || item.artist,
-          track_number: item.track_number,
-          disc_number: item.disc_number,
-          duration_ms: item.duration_ms,
-          explicit: item.explicit,
-          isrc: item.isrc,
-        },
+        track: mapTrackFields(item),
         config,
         album_external_id: parentAlbum?.id ?? item.album.id ?? `single_${item.id}`,
       });
       return;
     }
 
-    if (item.type === ContentType.enum.album) {
-      try {
-        const tracksResponse = await utils.music.getContents.fetch({
-          parentId: item.id,
-          parentType: ContentType.enum.album,
-        });
+    try {
+      const trackList = await fetchContentTracks(utils.music.getContents.fetch, item.id, item.type);
 
-        if (!tracksResponse?.success || !tracksResponse.content) {
-          toast.error("Failed to fetch album tracks");
-          return;
-        }
+      if (!trackList) {
+        toast.error(`Failed to fetch ${titleCase(item.type)} tracks`);
+        return;
+      }
 
-        const content = tracksResponse.content;
-        const trackList = Array.isArray(content) ? content : [];
-
+      if (item.type === ContentType.enum.album) {
         downloadAlbumMutation.mutate({
           external_id: item.id,
           name: item.name,
@@ -182,31 +188,36 @@ Re-requesting will delete the existing album and all its tracks. This action can
           album_art: item.images[0]?.url ?? null,
           release_date: item.release_date || "1900-01-01",
           total_tracks: item.total_tracks || trackList.length,
-          tracks: trackList
-            .filter((t): t is MusicTrack => "type" in t && (t as MusicTrack).type === ContentType.enum.track)
-            .map((t) => ({
-              external_id: t.id,
-              title: t.title,
-              artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
-              track_number: t.track_number,
-              disc_number: t.disc_number,
-              duration_ms: t.duration_ms,
-              explicit: t.explicit,
-              isrc: t.isrc,
-            })),
+          tracks: trackList.map(mapTrackFields),
           config,
         });
-      } catch (error) {
-        toast.error("Failed to process album", {
-          description: error instanceof Error ? error.message : "Unknown error",
-        });
+        return;
       }
-      return;
-    }
 
-    toast.error("Invalid item type", {
-      description: "Only tracks and albums are supported",
-    });
+      if (item.type === ContentType.enum.playlist) {
+        downloadPlaylistMutation.mutate({
+          external_id: item.id,
+          name: item.name,
+          description: item.description ?? null,
+          owner: item.owner?.name ?? "Unknown",
+          image: item.images?.[0]?.url ?? null,
+          total_tracks: item.total_tracks || trackList.length,
+          tracks: trackList.map((t) => ({
+            ...mapTrackFields(t),
+            album_external_id: t.album.id,
+            album_name: t.album.name,
+            album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
+            album_image: t.album.images?.[0]?.url ?? null,
+          })),
+          config,
+        });
+        return;
+      }
+    } catch (error) {
+      toast.error(`Failed to process ${titleCase(item.type)}`, {
+        description: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
   };
 
   if (!item) return null;
@@ -219,7 +230,7 @@ Re-requesting will delete the existing album and all its tracks. This action can
         aria-describedby="config-modal-description"
       >
         <DialogTitle className="sr-only">
-          Download {ContentType.enum[itemType]} - {metadata.name}
+          Download {titleCase(itemType)} - {metadata.name}
         </DialogTitle>
 
         <div id="config-modal-description" className="sr-only">

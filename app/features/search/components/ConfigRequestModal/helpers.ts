@@ -67,8 +67,11 @@ export function extractItemMetadata(item: MusicItem | null, parentAlbum?: MusicI
       image = item.images?.[0]?.url || item.album.images?.[0]?.url;
       albumName = item.album.name;
       break;
-    case ContentType.enum.artist:
     case ContentType.enum.playlist:
+      image = item.images?.[0]?.url;
+      totalTracks = item.total_tracks;
+      break;
+    case ContentType.enum.artist:
       image = item.images?.[0]?.url;
       break;
   }
