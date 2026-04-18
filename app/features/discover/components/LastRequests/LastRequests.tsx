@@ -1,9 +1,10 @@
 "use client";
 
 import { EmptyState } from "@components/ui/EmptyState";
+import type { FlatTrackRow } from "@features/requests/types";
+import { useTrackRequests } from "@hooks/api";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
-import { trpc } from "@utils/trpc";
 import { motion } from "framer-motion";
 import { AlertCircle, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,14 +16,28 @@ const RECENT_REQUESTS_LIMIT = 15;
 
 export function LastRequests() {
   const router = useRouter();
-  const { data: allRequests, isLoading, isError } = trpc.requests.getAll.useQuery();
+  const { data: items, isLoading, isError } = useTrackRequests();
 
-  const recentRequests = useMemo(() => {
-    if (!allRequests) return [];
-    return allRequests
+  const recentRequests = useMemo<FlatTrackRow[]>(() => {
+    if (!items) return [];
+
+    const flat: FlatTrackRow[] = items.flatMap((item) =>
+      item.tracks.map((track) => ({
+        ...track,
+        parent: {
+          id: item.id,
+          name: item.name,
+          artist: item.artist,
+          album_art: item.album_art,
+          contentType: item.contentType,
+        },
+      }))
+    );
+
+    return flat
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
       .slice(0, RECENT_REQUESTS_LIMIT);
-  }, [allRequests]);
+  }, [items]);
 
   const handleSeeMore = () => {
     router.push("/requests");

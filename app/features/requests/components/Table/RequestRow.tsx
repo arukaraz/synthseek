@@ -3,42 +3,40 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { IconButton } from "@components/ui/IconButton";
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
-import useRequest from "@hooks/api/useRequest";
-import { RequestStatus, TrackRequestWithAlbum } from "@api/__generated__/types";
+import { useCancelTrack, useRetryTrack } from "@hooks/api";
+import { RequestStatus } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { confirm } from "@utils/confirm";
-import { formatRelativeTime } from "@utils/formatters";
+import { formatRelativeTime, titleCase } from "@utils/formatters";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { mobileActionsButton } from "../styles";
+import { FlatTrackRow } from "../../types";
 import { motion } from "framer-motion";
 import { MoreVertical, Music, RefreshCw, Trash2 } from "lucide-react";
 import Image from "next/image";
 
 interface RequestRowProps {
-  item: TrackRequestWithAlbum;
+  item: FlatTrackRow;
 }
 
 export function RequestRow({ item }: RequestRowProps) {
-  const { getActions } = useRequest();
-  const { handleRemove, handleRetryTrack } = getActions(item.id);
+  const retryTrack = useRetryTrack();
+  const cancelTrack = useCancelTrack();
 
   const statusConfig = REQUEST_STATUS_CONFIG[item.status];
   const canRetry = item.status === RequestStatus.enum.failed || item.status === RequestStatus.enum.cancelled;
 
-  const albumArt = item.Album?.album_art;
-  const albumName = item.Album?.name ?? "-";
-
   const handleDelete = async () => {
     const confirmed = await confirm({
-      title: "Remove Request",
-      message: `Remove "${item.title}" by ${item.artist}? This action cannot be undone.`,
+      title: "Cancel Track",
+      message: `Cancel "${item.title}" by ${item.artist}?`,
       variant: "danger",
-      confirmText: "Remove",
-      cancelText: "Cancel",
+      confirmText: "Cancel",
+      cancelText: "Keep",
     });
 
     if (confirmed) {
-      handleRemove();
+      cancelTrack.mutate({ trackId: item.id });
     }
   };
 
@@ -52,8 +50,14 @@ export function RequestRow({ item }: RequestRowProps) {
     >
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
-          {albumArt ? (
-            <Image src={albumArt} alt={item.title} width={40} height={40} className="rounded-md object-cover" />
+          {item.parent.album_art ? (
+            <Image
+              src={item.parent.album_art}
+              alt={item.title}
+              width={40}
+              height={40}
+              className="rounded-md object-cover"
+            />
           ) : (
             <ImagePlaceholder size="sm" icon={Music} />
           )}
@@ -71,11 +75,15 @@ export function RequestRow({ item }: RequestRowProps) {
       </td>
 
       <td className="px-4 py-3">
-        <span className="text-fg/60 truncate text-sm">{albumName}</span>
+        <span className="text-fg/60 truncate text-sm">{item.parent.name}</span>
       </td>
 
       <td className="px-4 py-3">
         <span className="text-fg/60 truncate text-sm">{item.artist}</span>
+      </td>
+
+      <td className="px-4 py-3">
+        <span className="text-fg/60 text-xs">{titleCase(item.parent.contentType)}</span>
       </td>
 
       <td className="px-4 py-3">
@@ -95,7 +103,7 @@ export function RequestRow({ item }: RequestRowProps) {
               icon={RefreshCw}
               variant="green"
               size="sm"
-              onClick={handleRetryTrack}
+              onClick={() => retryTrack.mutate({ trackId: item.id })}
               aria-label="Retry download"
               title="Retry"
             />
@@ -105,8 +113,8 @@ export function RequestRow({ item }: RequestRowProps) {
             variant="red"
             size="sm"
             onClick={handleDelete}
-            aria-label="Delete request"
-            title="Delete"
+            aria-label="Cancel track"
+            title="Cancel"
           />
         </div>
 
@@ -119,14 +127,17 @@ export function RequestRow({ item }: RequestRowProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               {canRetry && (
-                <DropdownMenuItem onClick={handleRetryTrack} className="text-green-400 hover:text-green-300">
+                <DropdownMenuItem
+                  onClick={() => retryTrack.mutate({ trackId: item.id })}
+                  className="text-green-400 hover:text-green-300"
+                >
                   <RefreshCw className="size-4" />
                   Retry download
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem onClick={handleDelete} className="text-red-400 hover:text-red-300">
                 <Trash2 className="size-4" />
-                Delete request
+                Cancel track
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

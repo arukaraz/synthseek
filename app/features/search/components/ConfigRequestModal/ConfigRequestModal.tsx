@@ -98,11 +98,7 @@ export default function ConfigRequestModal({
 
     toast.success(`${label} started`, { description: `${itemName} is being downloaded.` });
 
-    await Promise.all([
-      utils.requests.getAll.refetch(),
-      utils.requests.getAllAlbums.refetch(),
-      utils.requests.getAllPlaylists.refetch(),
-    ]);
+    await utils.requests.getAll.refetch();
 
     router.push(route);
     onSuccess?.(itemName);

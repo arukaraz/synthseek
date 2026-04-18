@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { TrackItem } from "./TrackItem";
 import { trackListTrigger } from "../../styles";
-import type { AlbumWithTracks, RequestStatus } from "@api/__generated__/types";
+import type { RequestStatus, RequestWithTracks } from "@api/__generated__/types";
 
 const STATUS_PRIORITY: Record<RequestStatus, number> = {
   importing: 0,
@@ -23,7 +23,7 @@ const STATUS_PRIORITY: Record<RequestStatus, number> = {
 };
 
 interface TrackListProps {
-  request: AlbumWithTracks;
+  request: RequestWithTracks;
   expanded: boolean;
   isSingleTrack?: boolean;
   onToggleExpanded: () => void;

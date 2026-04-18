@@ -2,20 +2,20 @@
 
 import { StatusBadge } from "@components/ui/StatusBadge";
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
-import type { TrackRequestWithAlbum } from "@api/__generated__/types";
+import type { FlatTrackRow } from "@features/requests/types";
 import { listItem } from "../styles";
 import { motion } from "framer-motion";
 import { Disc } from "lucide-react";
 import Image from "next/image";
 
 interface LastRequestItemProps {
-  request: TrackRequestWithAlbum;
+  request: FlatTrackRow;
   index: number;
 }
 
 export function LastRequestItem({ request, index }: LastRequestItemProps) {
-  const albumName = request.Album?.name || "Unknown Album";
-  const albumArt = request.Album?.album_art;
+  const parentName = request.parent.name;
+  const parentArt = request.parent.album_art;
 
   return (
     <motion.article
@@ -25,10 +25,10 @@ export function LastRequestItem({ request, index }: LastRequestItemProps) {
       className={listItem()}
     >
       <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
-        {albumArt ? (
+        {parentArt ? (
           <Image
-            src={albumArt}
-            alt={`Album art for ${albumName}`}
+            src={parentArt}
+            alt={`Album art for ${parentName}`}
             fill
             className="object-cover"
             sizes="48px"
@@ -42,7 +42,7 @@ export function LastRequestItem({ request, index }: LastRequestItemProps) {
 
       <div className="min-w-0 flex-1">
         <h4 className="text-fg line-clamp-1 text-sm font-medium">{request.title}</h4>
-        <p className="text-fg/60 line-clamp-1 text-xs">{albumName}</p>
+        <p className="text-fg/60 line-clamp-1 text-xs">{parentName}</p>
       </div>
 
       <StatusBadge status={request.status} size="sm" />

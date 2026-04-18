@@ -1,9 +1,6 @@
 import { RequestStatus, type TrackRequest, type SubscriptionEvent } from "@api/__generated__/types";
 
-export function matchesEvent(
-  track: { id: string; slskd_request_id: string },
-  event: SubscriptionEvent
-): boolean {
+export function matchesEvent(track: { id: string; slskd_request_id: string }, event: SubscriptionEvent): boolean {
   return track.id === event.requestId || track.slskd_request_id === event.requestId;
 }
 

@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@test/test-utils";
 import { LastRequestItem } from "../LastRequestItem";
 import { RequestStatus } from "@api/__generated__/types";
-import type { TrackRequestWithAlbum } from "@api/__generated__/types";
+import type { FlatTrackRow } from "@features/requests/types";
 
 vi.mock("next/image", () => ({
   default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => (
@@ -19,29 +19,40 @@ vi.mock("framer-motion", () => ({
   },
 }));
 
-const createRequest = (overrides: Partial<TrackRequestWithAlbum> = {}): TrackRequestWithAlbum => ({
+const baseParent: FlatTrackRow["parent"] = {
+  id: "album-1",
+  name: "Test Album",
+  artist: "Test Artist",
+  album_art: "https://example.com/album.jpg",
+  contentType: "album",
+};
+
+const createRequest = (overrides: Partial<FlatTrackRow> = {}): FlatTrackRow => ({
   id: "test-id",
+  slskd_request_id: "req_1",
   title: "Test Track",
   artist: "Test Artist",
   external_id: "track:123",
   status: RequestStatus.enum.queued,
   request_type: "track",
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-  Album: {
-    id: "album-1",
-    external_id: "album:123",
-    name: "Test Album",
-    artist: "Test Artist",
-    album_art: "https://example.com/album.jpg",
-    user_id: "user-1",
-    status: RequestStatus.enum.queued,
-    total_tracks: 10,
-    completed_tracks: 0,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    release_date: null,
-  },
+  user_id: null,
+  isrc: null,
+  track_number: 1,
+  disc_number: 1,
+  duration_ms: 180_000,
+  progress: 0,
+  bitrate: 320,
+  format: "mp3",
+  format_matching: "flexible",
+  bitrate_matching: "flexible",
+  album_id: "album-1",
+  error: null,
+  explicit: false,
+  source: "deezer",
+  created_at: new Date(),
+  completed_at: null,
+  updated_at: new Date(),
+  parent: baseParent,
   ...overrides,
 });
 
@@ -52,26 +63,13 @@ describe("LastRequestItem", () => {
     expect(screen.getByText("My Song")).toBeInTheDocument();
   });
 
-  it("renders album name", () => {
-    render(
-      <LastRequestItem
-        request={createRequest({
-          Album: { ...createRequest().Album!, name: "Great Album" },
-        })}
-        index={0}
-      />
-    );
+  it("renders parent name", () => {
+    render(<LastRequestItem request={createRequest({ parent: { ...baseParent, name: "Great Album" } })} index={0} />);
 
     expect(screen.getByText("Great Album")).toBeInTheDocument();
   });
 
-  it("renders Unknown Album when Album is null", () => {
-    render(<LastRequestItem request={createRequest({ Album: null })} index={0} />);
-
-    expect(screen.getByText("Unknown Album")).toBeInTheDocument();
-  });
-
-  it("renders album art when available", () => {
+  it("renders parent art when available", () => {
     render(<LastRequestItem request={createRequest()} index={0} />);
 
     const img = screen.getByTestId("album-image");
@@ -79,15 +77,8 @@ describe("LastRequestItem", () => {
     expect(img).toHaveAttribute("src", "https://example.com/album.jpg");
   });
 
-  it("renders placeholder when no album art", () => {
-    render(
-      <LastRequestItem
-        request={createRequest({
-          Album: { ...createRequest().Album!, album_art: null },
-        })}
-        index={0}
-      />
-    );
+  it("renders placeholder when no parent art", () => {
+    render(<LastRequestItem request={createRequest({ parent: { ...baseParent, album_art: null } })} index={0} />);
 
     expect(screen.queryByTestId("album-image")).not.toBeInTheDocument();
   });

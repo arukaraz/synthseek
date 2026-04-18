@@ -2,37 +2,48 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { SectionLoading } from "@components/ui/SectionLoading";
-import useRequest from "@hooks/api/useRequest";
+import { useTrackRequests } from "@hooks/api";
 import { Inbox, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Table } from "../components/Table/Table";
-import { TableSortConfig } from "../types";
+import { FlatTrackRow, TableSortConfig } from "../types";
 
 interface ListViewProps {
   searchQuery: string;
 }
 
 export function ListView({ searchQuery }: ListViewProps) {
-  const { requests: tracks, isLoading } = useRequest();
+  const { data: items, isLoading } = useTrackRequests();
 
   const [sort, setSort] = useState<TableSortConfig>({ field: "created_at", direction: "desc" });
 
-  const sortedTracks = useMemo(() => {
-    let safeTracks = tracks ?? [];
+  const rows = useMemo<FlatTrackRow[]>(() => {
+    const flat: FlatTrackRow[] = (items ?? []).flatMap((item) =>
+      item.tracks.map((track) => ({
+        ...track,
+        parent: {
+          id: item.id,
+          name: item.name,
+          artist: item.artist,
+          album_art: item.album_art,
+          contentType: item.contentType,
+        },
+      }))
+    );
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      safeTracks = safeTracks.filter((track) => {
-        if (track.title.toLowerCase().includes(query)) return true;
-        if (track.artist.toLowerCase().includes(query)) return true;
-        if (track.Album?.name?.toLowerCase().includes(query)) return true;
-        return false;
-      });
-    }
+    const filtered = searchQuery.trim()
+      ? flat.filter((row) => {
+          const query = searchQuery.toLowerCase();
+          if (row.title.toLowerCase().includes(query)) return true;
+          if (row.artist.toLowerCase().includes(query)) return true;
+          if (row.parent.name.toLowerCase().includes(query)) return true;
+          return false;
+        })
+      : flat;
 
     const direction = sort.direction === "asc" ? 1 : -1;
 
-    return [...safeTracks].sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       switch (sort.field) {
         case "title":
           return direction * a.title.localeCompare(b.title);
@@ -41,7 +52,9 @@ export function ListView({ searchQuery }: ListViewProps) {
         case "artist":
           return direction * a.artist.localeCompare(b.artist);
         case "album":
-          return direction * (a.Album?.name ?? "").localeCompare(b.Album?.name ?? "");
+          return direction * a.parent.name.localeCompare(b.parent.name);
+        case "type":
+          return direction * a.parent.contentType.localeCompare(b.parent.contentType);
         case "created_at":
           return direction * (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         case "completed_at": {
@@ -53,9 +66,9 @@ export function ListView({ searchQuery }: ListViewProps) {
           return 0;
       }
     });
-  }, [tracks, sort, searchQuery]);
+  }, [items, sort, searchQuery]);
 
-  const isEmpty = !isLoading && sortedTracks.length === 0;
+  const isEmpty = !isLoading && rows.length === 0;
   const isSearchEmpty = isEmpty && searchQuery.trim().length > 0;
 
   if (isLoading) {
@@ -80,7 +93,7 @@ export function ListView({ searchQuery }: ListViewProps) {
 
   return (
     <div className="p-4">
-      <Table items={sortedTracks} sort={sort} onSortChange={setSort} />
+      <Table items={rows} sort={sort} onSortChange={setSort} />
     </div>
   );
 }

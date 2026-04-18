@@ -1,11 +1,18 @@
 "use client";
 
-import useAlbum from "@hooks/api/useAlbum";
-import { useRequestMutations } from "@hooks/api/mutations/useRequestMutations";
-import { ContentType, RequestStatus, type AlbumWithTracks } from "@api/__generated__/types";
+import {
+  useDeleteAlbum,
+  useDeletePlaylist,
+  useRetryAlbum,
+  useRetryPlaylist,
+  useCancelAlbum,
+  useCancelPlaylist,
+  useCancelTrack,
+  useRetryTrack,
+} from "@hooks/api";
+import { ContentType, RequestStatus, type RequestWithTracks } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { confirm } from "@utils/confirm";
-import { trpc } from "@utils/trpc";
 import { calculateAlbumStatus, isSingleTrackRequest } from "@utils/request-helpers";
 import { isProcessingStatus } from "@utils/status-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
@@ -16,38 +23,30 @@ import { CardHeader } from "./components/CardHeader";
 import { RequestProgress } from "./components/RequestProgress";
 import { TrackList } from "./components/TrackList";
 
-type RequestableContentType = typeof ContentType.enum.album | typeof ContentType.enum.playlist;
-
 interface RequestCardProps {
-  album: AlbumWithTracks;
-  contentType?: RequestableContentType;
+  request: RequestWithTracks;
 }
 
-export const RequestCard = memo(function RequestCard({
-  album,
-  contentType = ContentType.enum.album,
-}: RequestCardProps) {
+export const RequestCard = memo(function RequestCard({ request }: RequestCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const { getActions } = useAlbum();
-  const { handleRemove, handleRetryAlbum, handleCancelAlbum } = getActions(album.id);
-  const { getActions: getTrackActions } = useRequestMutations();
-  const utils = trpc.useUtils();
+  const deleteAlbum = useDeleteAlbum();
+  const deletePlaylist = useDeletePlaylist();
+  const retryAlbum = useRetryAlbum();
+  const retryPlaylist = useRetryPlaylist();
+  const cancelAlbum = useCancelAlbum();
+  const cancelPlaylist = useCancelPlaylist();
+  const cancelTrack = useCancelTrack();
+  const retryTrack = useRetryTrack();
 
-  const isPlaylist = contentType === ContentType.enum.playlist;
+  if (request.contentType !== ContentType.enum.album && request.contentType !== ContentType.enum.playlist) {
+    return null;
+  }
 
-  const deletePlaylist = trpc.requests.deletePlaylist.useMutation({
-    onSuccess: () => utils.requests.getAllPlaylists.invalidate(),
-  });
-  const retryPlaylist = trpc.requests.retryPlaylist.useMutation({
-    onSuccess: () => utils.requests.getAllPlaylists.invalidate(),
-  });
-  const cancelPlaylist = trpc.requests.cancelPlaylist.useMutation({
-    onSuccess: () => utils.requests.getAllPlaylists.invalidate(),
-  });
+  const isPlaylist = request.contentType === ContentType.enum.playlist;
 
-  const { newStatus: calculatedStatus, completedCount } = calculateAlbumStatus(album.tracks);
+  const { newStatus: calculatedStatus, completedCount } = calculateAlbumStatus(request.tracks);
   const statusConfig = REQUEST_STATUS_CONFIG[calculatedStatus];
-  const isSingleTrack = isSingleTrackRequest(album.tracks);
+  const isSingleTrack = isSingleTrackRequest(request.tracks);
 
   const canRetry =
     calculatedStatus === RequestStatus.enum.failed ||
@@ -61,44 +60,44 @@ export const RequestCard = memo(function RequestCard({
   const handleDelete = async () => {
     const confirmed = await confirm({
       title: `Remove ${label} Request`,
-      message: `Remove "${album.name}" by ${album.artist}? This action cannot be undone.`,
+      message: `Remove "${request.name}" by ${request.artist}? This action cannot be undone.`,
       variant: "danger",
       confirmText: `Remove ${label}`,
       cancelText: "Keep",
     });
 
-    if (confirmed) {
-      if (isPlaylist) {
-        deletePlaylist.mutate({ playlistId: album.id });
-      } else {
-        handleRemove();
-      }
+    if (!confirmed) return;
+
+    if (isPlaylist) {
+      deletePlaylist.mutate({ playlistId: request.id });
+    } else {
+      deleteAlbum.mutate({ albumId: request.id });
     }
   };
 
   const handleRetry = () => {
     if (isPlaylist) {
-      retryPlaylist.mutate({ playlistId: album.id });
+      retryPlaylist.mutate({ playlistId: request.id });
     } else {
-      handleRetryAlbum();
+      retryAlbum.mutate({ albumId: request.id });
     }
   };
 
   const handleCancel = async () => {
     const confirmed = await confirm({
       title: `Cancel ${label} Downloads`,
-      message: `Cancel all active downloads for "${album.name}" by ${album.artist}?`,
+      message: `Cancel all active downloads for "${request.name}" by ${request.artist}?`,
       variant: "danger",
       confirmText: "Cancel Downloads",
       cancelText: "Keep Downloading",
     });
 
-    if (confirmed) {
-      if (isPlaylist) {
-        cancelPlaylist.mutate({ playlistId: album.id });
-      } else {
-        handleCancelAlbum();
-      }
+    if (!confirmed) return;
+
+    if (isPlaylist) {
+      cancelPlaylist.mutate({ playlistId: request.id });
+    } else {
+      cancelAlbum.mutate({ albumId: request.id });
     }
   };
 
@@ -135,33 +134,33 @@ export const RequestCard = memo(function RequestCard({
 
       <div className="relative space-y-3">
         <CardHeader
-          imageUrl={album.album_art}
-          title={album.name}
-          subtitle={album.artist}
+          imageUrl={request.album_art}
+          title={request.name}
+          subtitle={request.artist}
           status={calculatedStatus}
           size="md"
           showMusicBadge
-          dataCyPrefix={contentType}
+          dataCyPrefix={request.contentType}
         />
 
         <RequestProgress
-          variant={contentType}
+          variant={request.contentType}
           completedTracks={completedCount}
-          totalTracks={album.total_tracks}
+          totalTracks={request.total_tracks}
           isSingleTrack={isSingleTrack}
           status={calculatedStatus}
-          createdAt={album.created_at}
-          dataCyPrefix={contentType}
+          createdAt={request.created_at}
+          dataCyPrefix={request.contentType}
         />
 
-        {album.tracks && album.tracks.length > 0 && (
+        {request.tracks && request.tracks.length > 0 && (
           <TrackList
-            request={album}
+            request={request}
             expanded={expanded}
             isSingleTrack={isSingleTrack}
             onToggleExpanded={() => setExpanded(!expanded)}
-            onCancelTrack={(trackId) => getTrackActions(trackId).handleCancelTrack()}
-            onRetryTrack={(trackId) => getTrackActions(trackId).handleRetryTrack()}
+            onCancelTrack={(trackId) => cancelTrack.mutate({ trackId })}
+            onRetryTrack={(trackId) => retryTrack.mutate({ trackId })}
           />
         )}
 
@@ -172,7 +171,7 @@ export const RequestCard = memo(function RequestCard({
           onCancel={handleCancel}
           onRemove={handleDelete}
           variant="with-label"
-          itemType={contentType}
+          itemType={request.contentType}
         />
       </div>
     </motion.div>

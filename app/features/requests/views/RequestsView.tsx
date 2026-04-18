@@ -1,6 +1,6 @@
 "use client";
 
-import useAlbum from "@hooks/api/useAlbum";
+import { useDeleteAll, useRetryAllFailed, useTrackRequests } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,7 +18,9 @@ interface RequestsViewProps {
 export function RequestsView({ viewMode }: RequestsViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { albums, retryAllFailed, deleteAll, isRetryingAll, isDeletingAll } = useAlbum();
+  const { data: items } = useTrackRequests();
+  const retryAllFailed = useRetryAllFailed();
+  const deleteAll = useDeleteAll();
 
   const sortParam = searchParams.get("sort");
   const validSortValues = Object.values(SortField);
@@ -30,18 +32,10 @@ export function RequestsView({ viewMode }: RequestsViewProps) {
 
   const debouncedSearchQuery = useDebounce(searchQuery, { delay: 300 });
 
-  const hasItems = (albums?.length ?? 0) > 0;
+  const hasItems = (items?.length ?? 0) > 0;
 
   const handleViewModeChange = (newViewMode: ViewMode) => {
     router.push(`/requests?view=${newViewMode}`);
-  };
-
-  const handleRetryAllFailed = () => {
-    retryAllFailed();
-  };
-
-  const handleDeleteAll = () => {
-    deleteAll();
   };
 
   return (
@@ -55,11 +49,11 @@ export function RequestsView({ viewMode }: RequestsViewProps) {
         onSortChange={setSort}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        onRetryAllFailed={handleRetryAllFailed}
-        onDeleteAll={handleDeleteAll}
+        onRetryAllFailed={() => retryAllFailed.mutate()}
+        onDeleteAll={() => deleteAll.mutate()}
         hasItems={hasItems}
-        isRetrying={isRetryingAll}
-        isDeleting={isDeletingAll}
+        isRetrying={retryAllFailed.isPending}
+        isDeleting={deleteAll.isPending}
       />
 
       <div className="flex-1 overflow-auto">

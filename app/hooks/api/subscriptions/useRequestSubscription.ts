@@ -1,9 +1,7 @@
 import { RequestStatus, type SubscriptionEvent } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
 import { useRef } from "react";
-import { updateTrackCache } from "./updaters/track";
-import { updateAlbumCache } from "./updaters/album";
-import { updatePlaylistCache } from "./updaters/playlist";
+import { updateContentCache } from "./updaters/content";
 
 const TERMINAL_STATUSES = new Set<string>([
   RequestStatus.enum.complete,
@@ -28,9 +26,7 @@ export function useRequestSubscription() {
     onData: (event: SubscriptionEvent) => {
       if (isDuplicate(event, lastEventRef.current)) return;
 
-      updateTrackCache(event, utils);
-      updateAlbumCache(event, utils);
-      updatePlaylistCache(event, utils);
+      updateContentCache(event, utils);
 
       if (TERMINAL_STATUSES.has(event.status)) {
         utils.requests.getLibrarySummary.invalidate();
@@ -44,8 +40,6 @@ export function useRequestSubscription() {
 
       if (reconnectAttemptsRef.current > MAX_RECONNECT_ATTEMPTS) {
         utils.requests.getAll.invalidate();
-        utils.requests.getAllAlbums.invalidate();
-        utils.requests.getAllPlaylists.invalidate();
         reconnectAttemptsRef.current = 0;
       }
     },
