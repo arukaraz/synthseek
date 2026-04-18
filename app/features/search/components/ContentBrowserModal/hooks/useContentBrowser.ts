@@ -1,7 +1,7 @@
 "use client";
 
 import useGetContents from "@hooks/api/queries/useGetContents";
-import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { ContentType, type MusicItem, type MusicPlaylistTrack } from "@api/__generated__/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ContentMetadata } from "../types";
 
@@ -34,8 +34,14 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
   const items = useMemo((): MusicItem[] => {
     if (!fetchedContent?.content) return [];
     const content = Array.isArray(fetchedContent.content) ? fetchedContent.content : [];
+
+    if (currentType === ContentType.enum.playlist) {
+      const playlistTracks = content as MusicPlaylistTrack[];
+      return playlistTracks.filter((item) => item?.track).map((item) => item.track);
+    }
+
     return content.filter(Boolean) as MusicItem[];
-  }, [fetchedContent]);
+  }, [fetchedContent, currentType]);
 
   const metadata: ContentMetadata = useMemo(() => {
     if (!currentData) {
@@ -98,7 +104,7 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
           subtitle: currentData.owner?.name || "Unknown",
           metadata: `${currentData.total_tracks} tracks`,
           thumbnail: currentData.images?.[0]?.url || "",
-          showRequestButton: false,
+          showRequestButton: true,
         };
       }
 

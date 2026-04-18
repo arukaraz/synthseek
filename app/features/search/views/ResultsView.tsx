@@ -93,7 +93,11 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
   };
 
   const handleRequestContentClick = (requestedItem: MusicItem, context?: RequestContext) => {
-    if (requestedItem.type === ContentType.enum.track || requestedItem.type === ContentType.enum.album) {
+    if (
+      requestedItem.type === ContentType.enum.track ||
+      requestedItem.type === ContentType.enum.album ||
+      requestedItem.type === ContentType.enum.playlist
+    ) {
       setSelectedContentToRequest(requestedItem);
       setParentAlbumFromContext(context?.parentAlbum ?? null);
       setShowConfigRequestModal(true);
@@ -197,7 +201,11 @@ export default function ResultsView({ query, initialFilter = "all" }: ResultsVie
 
         {availableTypes.size > 1 && (
           <div className="pb-4">
-            <FilterTabs activeFilter={activeFilter} onFilterChange={handleFilterChange} availableTypes={availableTypes} />
+            <FilterTabs
+              activeFilter={activeFilter}
+              onFilterChange={handleFilterChange}
+              availableTypes={availableTypes}
+            />
           </div>
         )}
       </div>

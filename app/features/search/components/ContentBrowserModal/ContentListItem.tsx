@@ -28,7 +28,7 @@ function getItemImage(item: MusicItem): string | undefined {
 
 export function ContentListItem({ item, parentType, onActionClick, onNavigate, isClickable }: ContentListItemProps) {
   const isArtistView = parentType === ContentType.enum.artist;
-  const isAlbumView = parentType === ContentType.enum.album;
+  const isAlbumView = parentType === ContentType.enum.album || parentType === ContentType.enum.playlist;
   const name = getItemName(item) || "Unknown";
   const imageUrl = getItemImage(item);
 

@@ -15,6 +15,7 @@ export interface Result {
   album?: string;
   image?: string;
   year?: string;
+  trackCount?: number;
 }
 
 export interface CardProps {

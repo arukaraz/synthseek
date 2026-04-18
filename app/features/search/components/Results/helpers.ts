@@ -51,6 +51,7 @@ export function transformResultForDisplay(item: MusicItem): Result {
         name,
         artist: item.owner?.name || "Unknown",
         image: item.images?.[0]?.url,
+        trackCount: item.total_tracks,
       };
   }
 }
@@ -64,7 +65,7 @@ export function getSecondaryInfo(result: Result): string {
     case ContentType.enum.artist:
       return result.year || "";
     case ContentType.enum.playlist:
-      return result.artist;
+      return `${result.artist} · ${result.trackCount} tracks`;
     default:
       return result.artist;
   }

@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@components/ui/Badge";
-import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { ContentType } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { scale } from "@utils/animations";
@@ -15,13 +14,8 @@ import { getSecondaryInfo, getTypeBadgeLabel, getTypeBadgeColors } from "./helpe
 
 export function Card({ result, onResultClick }: CardProps) {
   const [imageError, setImageError] = useState(false);
-  const [comingSoonPlaylistConfirmation, setComingSoonPlaylistConfirmation] = useState(false);
 
   const handleCardClick = () => {
-    if (result.type === ContentType.enum.playlist) {
-      setComingSoonPlaylistConfirmation(true);
-      return;
-    }
     onResultClick(result.id, result.type);
   };
 
@@ -76,17 +70,6 @@ export function Card({ result, onResultClick }: CardProps) {
 
         <div className={cardHoverBorder()} />
       </div>
-
-      <ConfirmationModal
-        isOpen={comingSoonPlaylistConfirmation}
-        onClose={() => setComingSoonPlaylistConfirmation(false)}
-        onConfirm={() => setComingSoonPlaylistConfirmation(false)}
-        title="Coming Soon"
-        message="Playlist requests will be available soon."
-        confirmText="Got it"
-        variant="info"
-        showCancel={false}
-      />
     </motion.div>
   );
 }
