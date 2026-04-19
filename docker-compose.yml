@@ -36,7 +36,6 @@ services:
       # OPTIONAL - Enrichment services (all optional, but recommended)
       # - LASTFM_API_KEY=your_lastfm_api_key
       # - FANART_API_KEY=your_fanart_api_key
-      # - SONGLINK_API_KEY=your_songlink_api_key
       # MusicBrainz requires a contact email so they can reach you instead of banning if you exceed rate limits
       # - MUSICBRAINZ_CONTACT_EMAIL=your@email.com
 
