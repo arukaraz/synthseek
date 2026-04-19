@@ -15,6 +15,7 @@ export { default as useDeletePlaylist } from "./mutations/requests/useDeletePlay
 export { default as useDeleteAll } from "./mutations/requests/useDeleteAll";
 export { default as useRetryAlbum } from "./mutations/requests/useRetryAlbum";
 export { default as useRetryPlaylist } from "./mutations/requests/useRetryPlaylist";
+export { default as useRetryPlexPlaylist } from "./mutations/requests/useRetryPlexPlaylist";
 export { default as useRetryTrack } from "./mutations/requests/useRetryTrack";
 export { default as useRetryAllFailed } from "./mutations/requests/useRetryAllFailed";
 export { default as useCancelAlbum } from "./mutations/requests/useCancelAlbum";

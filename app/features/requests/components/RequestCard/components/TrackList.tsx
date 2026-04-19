@@ -14,12 +14,13 @@ const STATUS_PRIORITY: Record<RequestStatus, number> = {
   pending_download: 3,
   searching: 4,
   in_progress: 5,
-  paused: 6,
-  queued: 7,
-  partially_complete: 8,
-  complete: 9,
-  failed: 10,
-  cancelled: 11,
+  syncing_plex: 6,
+  paused: 7,
+  queued: 8,
+  partially_complete: 9,
+  complete: 10,
+  failed: 11,
+  cancelled: 12,
 };
 
 interface TrackListProps {

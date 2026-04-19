@@ -5,6 +5,7 @@ import {
   useDeletePlaylist,
   useRetryAlbum,
   useRetryPlaylist,
+  useRetryPlexPlaylist,
   useCancelAlbum,
   useCancelPlaylist,
   useCancelTrack,
@@ -13,13 +14,14 @@ import {
 import { ContentType, RequestStatus, type RequestWithTracks } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { confirm } from "@utils/confirm";
-import { calculateAlbumStatus, isSingleTrackRequest } from "@utils/request-helpers";
+import { isSingleTrackRequest } from "@utils/request-helpers";
 import { isProcessingStatus } from "@utils/status-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { motion } from "framer-motion";
 import { memo, useState } from "react";
 import { CardActions } from "./components/CardActions";
 import { CardHeader } from "./components/CardHeader";
+import { PlexPlaylistStatus } from "./components/PlexPlaylistStatus";
 import { RequestProgress } from "./components/RequestProgress";
 import { TrackList } from "./components/TrackList";
 
@@ -33,6 +35,7 @@ export const RequestCard = memo(function RequestCard({ request }: RequestCardPro
   const deletePlaylist = useDeletePlaylist();
   const retryAlbum = useRetryAlbum();
   const retryPlaylist = useRetryPlaylist();
+  const retryPlexPlaylist = useRetryPlexPlaylist();
   const cancelAlbum = useCancelAlbum();
   const cancelPlaylist = useCancelPlaylist();
   const cancelTrack = useCancelTrack();
@@ -44,16 +47,15 @@ export const RequestCard = memo(function RequestCard({ request }: RequestCardPro
 
   const isPlaylist = request.contentType === ContentType.enum.playlist;
 
-  const { newStatus: calculatedStatus, completedCount } = calculateAlbumStatus(request.tracks);
-  const statusConfig = REQUEST_STATUS_CONFIG[calculatedStatus];
+  const statusConfig = REQUEST_STATUS_CONFIG[request.status];
   const isSingleTrack = isSingleTrackRequest(request.tracks);
 
   const canRetry =
-    calculatedStatus === RequestStatus.enum.failed ||
-    calculatedStatus === RequestStatus.enum.cancelled ||
-    calculatedStatus === RequestStatus.enum.partially_complete ||
-    calculatedStatus === RequestStatus.enum.paused;
-  const canCancel = isProcessingStatus(calculatedStatus);
+    request.status === RequestStatus.enum.failed ||
+    request.status === RequestStatus.enum.cancelled ||
+    request.status === RequestStatus.enum.partially_complete ||
+    request.status === RequestStatus.enum.paused;
+  const canCancel = isProcessingStatus(request.status);
 
   const label = isPlaylist ? "Playlist" : "Album";
 
@@ -113,7 +115,7 @@ export const RequestCard = memo(function RequestCard({ request }: RequestCardPro
         statusConfig.borderColor
       )}
       data-cy="content-card"
-      data-status={calculatedStatus}
+      data-status={request.status}
       data-testid="content-request-card"
     >
       <div
@@ -137,18 +139,29 @@ export const RequestCard = memo(function RequestCard({ request }: RequestCardPro
           imageUrl={request.album_art}
           title={request.name}
           subtitle={request.artist}
-          status={calculatedStatus}
+          status={request.status}
           size="md"
           showMusicBadge
+          contentType={isSingleTrack ? ContentType.enum.track : request.contentType}
           dataCyPrefix={request.contentType}
         />
 
+        {isPlaylist &&
+          (request.status === RequestStatus.enum.complete ||
+            request.status === RequestStatus.enum.partially_complete) && (
+            <PlexPlaylistStatus
+              plexPlaylistId={request.plex_playlist_id}
+              isPending={retryPlexPlaylist.isPending}
+              onSync={() => retryPlexPlaylist.mutate({ playlistId: request.id })}
+            />
+          )}
+
         <RequestProgress
           variant={request.contentType}
-          completedTracks={completedCount}
+          completedTracks={request.completed_tracks}
           totalTracks={request.total_tracks}
           isSingleTrack={isSingleTrack}
-          status={calculatedStatus}
+          status={request.status}
           createdAt={request.created_at}
           dataCyPrefix={request.contentType}
         />
