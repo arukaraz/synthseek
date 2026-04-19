@@ -4,7 +4,6 @@ import { EmptyState } from "@components/ui/EmptyState";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { RequestCard } from "@features/requests/components/RequestCard/RequestCard";
 import { useTrackRequests } from "@hooks/api";
-import { calculateAlbumStatus } from "@utils/request-helpers";
 import { motion } from "framer-motion";
 import { Inbox, Search } from "lucide-react";
 import { useMemo } from "react";
@@ -45,10 +44,7 @@ export function CompactView({ statusFilter, sort, searchQuery }: CompactViewProp
     let filtered =
       allowedStatuses === null
         ? all
-        : all.filter((item) => {
-            const { newStatus } = calculateAlbumStatus(item.tracks ?? []);
-            return (allowedStatuses as readonly string[]).includes(newStatus);
-          });
+        : all.filter((item) => (allowedStatuses as readonly string[]).includes(item.status));
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
