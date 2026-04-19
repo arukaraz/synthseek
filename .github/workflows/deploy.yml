@@ -92,6 +92,10 @@ jobs:
             fi
           fi
 
+          if [ -n "$PRERELEASE_LABEL" ]; then
+            VERSION="${VERSION%-$PRERELEASE_LABEL}"
+          fi
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "server_repo=$SERVER_REPO" >> $GITHUB_OUTPUT
