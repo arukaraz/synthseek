@@ -6,15 +6,15 @@
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/arukaraz)
 ![Codecov](https://img.shields.io/codecov/c/github/arukaraz/synthseek)
 
-Self-hosted Music discovery and library management.
+Self-hosted music library automation.
 
-Synthseek helps you discover music, connects with [slskd](https://github.com/slskd/slskd), and organizes your library with Beets.
+Synthseek connects to your [slskd](https://github.com/slskd/slskd) instance, matches metadata, and organizes your personal music library with Beets.
 
 ## Features
 
 - Modern, responsive Web UI (mobile and desktop friendly)
 - Search for tracks, albums, artists, and playlists
-- slskd integration for Soulseek network
+- slskd integration for Synthseek network
 - Metadata matching with MusicBrainz and AcoustID
 - Automatic file organization with Beets
 - Real-time progress tracking
