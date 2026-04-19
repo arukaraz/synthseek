@@ -1,0 +1,69 @@
+import { RequestStatus, SubscriptionEventType, type SubscriptionEvent } from "@api/__generated__/types";
+import { trpc } from "@utils/trpc";
+import { useRef } from "react";
+import {
+  handleAlbumUpdate,
+  handlePlaylistPlexCreated,
+  handlePlaylistUpdate,
+  handleTrackUpdate,
+} from "./handlers/requests";
+import { handleVersionUpdate } from "./handlers/system";
+import { isDuplicate } from "./shared/dedup";
+
+const TERMINAL_STATUSES = new Set<string>([
+  RequestStatus.enum.complete,
+  RequestStatus.enum.failed,
+  RequestStatus.enum.cancelled,
+]);
+
+const MAX_RECONNECT_ATTEMPTS = 3;
+
+export function useSubscriptions() {
+  const utils = trpc.useUtils();
+  const reconnectAttemptsRef = useRef(0);
+  const lastEventRef = useRef<Map<string, number>>(new Map());
+
+  trpc.subscriptionEvents.onEvent.useSubscription(undefined, {
+    onStarted: () => {
+      reconnectAttemptsRef.current = 0;
+    },
+
+    onData: (event: SubscriptionEvent) => {
+      if (isDuplicate(event, lastEventRef.current)) return;
+
+      switch (event.eventType) {
+        case SubscriptionEventType.TrackUpdate:
+          handleTrackUpdate(event, utils);
+          if (TERMINAL_STATUSES.has(event.status)) {
+            utils.requests.getLibrarySummary.invalidate();
+          }
+          break;
+        case SubscriptionEventType.AlbumUpdate:
+          handleAlbumUpdate(event, utils);
+          break;
+        case SubscriptionEventType.PlaylistUpdate:
+          handlePlaylistUpdate(event, utils);
+          break;
+        case SubscriptionEventType.PlaylistPlexCreated:
+          handlePlaylistPlexCreated(event, utils);
+          break;
+        case SubscriptionEventType.VersionUpdate:
+          handleVersionUpdate(event);
+          break;
+      }
+
+      reconnectAttemptsRef.current = 0;
+    },
+
+    onError: () => {
+      reconnectAttemptsRef.current++;
+
+      if (reconnectAttemptsRef.current > MAX_RECONNECT_ATTEMPTS) {
+        utils.requests.getAll.invalidate();
+        reconnectAttemptsRef.current = 0;
+      }
+    },
+  });
+
+  return null;
+}
