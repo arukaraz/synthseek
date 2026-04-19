@@ -14,11 +14,11 @@ Synthseek connects to your [slskd](https://github.com/slskd/slskd) instance, mat
 
 - Modern, responsive Web UI (mobile and desktop friendly)
 - Search for tracks, albums, artists, and playlists
-- slskd integration for Synthseek network
+- slskd integration for P2P downloads
 - Metadata matching with MusicBrainz and AcoustID
 - Automatic file organization with Beets
 - Real-time progress tracking
-- Optional Plex integration for library scanning
+- End-to-end playlist downloads with automatic Plex reconstruction
 
 <details>
 <summary><span style="font-size:1.25em; font-weight:bold">Screenshots</span></summary>
@@ -47,13 +47,19 @@ docker-compose up -d
 
 ## Roadmap
 
-Planned features and improvements:
+### Shipped
 
-- [ ] Playlist-to-Plex support
-- [ ] User authentication
-- [ ] Last.fm integration for library import
-- [ ] Personal library import functionality
+- [x] End-to-end playlist downloads with Plex reconstruction and incremental sync
+
+### In progress
+
+- [ ] Cross-platform playlist import
 - [ ] Lidarr integration
+- [ ] UI/UX Revamp
+
+### Planned
+
+- [ ] User authentication
 - [ ] Native mobile app
 
 ## Help

@@ -2,10 +2,9 @@
 
 ---
 
-## v1.2.0 — April 19, 2026
+# v1.2.0 — April 19, 2026
 
-> ## Important
->
+> [!IMPORTANT]
 > Two files are worth re-checking when you upgrade.
 >
 > **`config.yml`** has new sections in this release. After deploying,
@@ -21,10 +20,11 @@
 > though they're optional, they unlock higher-quality artist images,
 > album art, discovery, and metadata throughout the app, and the APIs
 > are free to register.
->
-> **Back up `db/`** before upgrading. This release ships a Prisma
-> schema change (new `syncing_plex` enum value) and it's good hygiene
-> to snapshot your SQLite file in case you need to roll back.
+
+> [!WARNING]
+> **Back up `db/`** before upgrading. This release ships a schema
+> change and it's good hygiene to snapshot your SQLite file in case
+> you need to roll back.
 
 ### Provider agnostic update (and more)
 
@@ -91,7 +91,7 @@ search, the request list, and the download pipeline.
 
 ---
 
-## v1.1.0 — March 26, 2026
+# v1.1.0 — March 26, 2026
 
 ### Spotify API Migration (Feb 2026 Breaking Changes)
 
