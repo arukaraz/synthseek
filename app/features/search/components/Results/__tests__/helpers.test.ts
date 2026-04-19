@@ -2,8 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   transformResultForDisplay,
   getSecondaryInfo,
-  getTypeBadgeLabel,
-  getTypeBadgeColors,
   transformPlaylistTrackForDisplay,
   MAX_RESULTS_DISPLAY,
 } from "../helpers";
@@ -140,36 +138,6 @@ describe("getSecondaryInfo", () => {
       artist: "Playlist Owner",
     });
     expect(result).toBe("Playlist Owner");
-  });
-});
-
-describe("getTypeBadgeLabel", () => {
-  it("capitalizes track", () => {
-    expect(getTypeBadgeLabel(ContentType.enum.track)).toBe("Track");
-  });
-  it("capitalizes album", () => {
-    expect(getTypeBadgeLabel(ContentType.enum.album)).toBe("Album");
-  });
-  it("capitalizes artist", () => {
-    expect(getTypeBadgeLabel(ContentType.enum.artist)).toBe("Artist");
-  });
-  it("capitalizes playlist", () => {
-    expect(getTypeBadgeLabel(ContentType.enum.playlist)).toBe("Playlist");
-  });
-});
-
-describe("getTypeBadgeColors", () => {
-  it("returns correct colors for album", () => {
-    expect(getTypeBadgeColors(ContentType.enum.album)).toContain("bg-primary-500");
-  });
-  it("returns correct colors for track", () => {
-    expect(getTypeBadgeColors(ContentType.enum.track)).toContain("bg-accent-500");
-  });
-  it("returns correct colors for artist", () => {
-    expect(getTypeBadgeColors(ContentType.enum.artist)).toContain("bg-secondary-500");
-  });
-  it("returns correct colors for playlist", () => {
-    expect(getTypeBadgeColors(ContentType.enum.playlist)).toContain("bg-emerald-500");
   });
 });
 

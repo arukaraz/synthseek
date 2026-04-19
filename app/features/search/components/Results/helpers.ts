@@ -71,26 +71,6 @@ export function getSecondaryInfo(result: Result): string {
   }
 }
 
-export function getTypeBadgeLabel(type: ContentType): string {
-  if (!type) return "Unknown";
-  return type.charAt(0).toUpperCase() + type.slice(1);
-}
-
-export function getTypeBadgeColors(type: ContentType): string {
-  switch (type) {
-    case ContentType.enum.album:
-      return "bg-primary-500 border-primary-400 text-primary-foreground";
-    case ContentType.enum.track:
-      return "bg-accent-500 border-accent-400 text-accent-foreground";
-    case ContentType.enum.artist:
-      return "bg-secondary-500 border-secondary-400 text-secondary-foreground";
-    case ContentType.enum.playlist:
-      return "bg-emerald-500 border-emerald-400 text-emerald-50";
-    default:
-      return "bg-primary-500 border-primary-400 text-primary-foreground";
-  }
-}
-
 export function transformPlaylistTrackForDisplay(playlistTrack: { track: MusicItem }): Result | null {
   const track = playlistTrack.track;
   if (!track) return null;

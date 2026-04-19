@@ -190,10 +190,10 @@ export const closeButton = cva("text-fg/40 hover:bg-fg/10 hover:text-fg rounded 
 
 export type CloseButtonProps = VariantProps<typeof closeButton>;
 
-export const musicBadge = cva("absolute rounded-full p-1 shadow-lg ring-1", {
+export const musicBadge = cva("absolute rounded-full p-2 shadow-lg ring-1", {
   variants: {
     position: {
-      bottomRight: "-right-1 -bottom-1",
+      bottomRight: "-right-2 -bottom-2",
     },
     color: {
       primary: "bg-surface/90 ring-primary-500/30",

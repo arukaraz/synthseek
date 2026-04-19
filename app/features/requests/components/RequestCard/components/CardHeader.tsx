@@ -3,10 +3,11 @@
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
 import { ImageGlow } from "@components/ui/ImageGlow/ImageGlow";
 import { StatusBadge } from "@components/ui/StatusBadge";
-import type { RequestStatus } from "@api/__generated__/types";
-import { type LucideIcon, Disc, Music } from "lucide-react";
+import { ContentType, type RequestStatus } from "@api/__generated__/types";
+import { type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@utils/cn";
+import { getContentTypeColor, getContentTypeIcon, getContentTypeLabel } from "@utils/content-type-helpers";
 import { musicBadge } from "../../styles";
 
 type CardSize = "sm" | "md";
@@ -20,6 +21,7 @@ interface CardHeaderProps {
   size?: CardSize;
   showGlow?: boolean;
   showMusicBadge?: boolean;
+  contentType?: ContentType;
   dataCyPrefix?: string;
 }
 
@@ -49,10 +51,14 @@ export function CardHeader({
   size = "sm",
   showGlow = true,
   showMusicBadge = false,
+  contentType = ContentType.enum.track,
   dataCyPrefix = "card",
 }: CardHeaderProps) {
   const config = sizeConfig[size];
-  const PlaceholderIcon = icon || (size === "md" ? Disc : Music);
+  const TypeIcon = getContentTypeIcon(contentType);
+  const typeLabel = getContentTypeLabel(contentType);
+  const typeColor = getContentTypeColor(contentType);
+  const PlaceholderIcon = icon ?? TypeIcon;
 
   return (
     <div className="flex items-center gap-3">
@@ -72,8 +78,8 @@ export function CardHeader({
         )}
 
         {showMusicBadge && (
-          <div className={musicBadge()}>
-            <Music className="text-primary-400 h-2.5 w-2.5" />
+          <div className={musicBadge()} aria-label={typeLabel} title={typeLabel} data-cy={`${dataCyPrefix}-type-badge`}>
+            <TypeIcon className={cn("h-3 w-3", typeColor)} />
           </div>
         )}
       </div>
