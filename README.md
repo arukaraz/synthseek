@@ -53,13 +53,12 @@ docker-compose up -d
 
 ### In progress
 
-- [ ] Cross-platform playlist import
-- [ ] Lidarr integration
+- [ ] User authentication
 - [ ] UI/UX Revamp
 
 ### Planned
 
-- [ ] User authentication
+- [ ] Lidarr integration
 - [ ] Native mobile app
 
 ## Help
