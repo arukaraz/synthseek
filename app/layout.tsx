@@ -1,6 +1,10 @@
 import { Toaster } from "@components/ui/Sonner";
+import { AuthProvider } from "@modules/providers/AuthProvider";
+import { ClientSessionIdProvider } from "@modules/providers/ClientSessionIdProvider";
 import { CountryProvider } from "@modules/providers/CountryProvider";
+import { SettingsModalProvider } from "@modules/providers/SettingsModalProvider";
 import { TRPCProvider } from "@modules/providers/TRPCProvider";
+import { SettingsModal } from "@features/settings/SettingsModal/SettingsModal";
 import { fontVariables } from "@theme/fonts";
 import "@theme/index.css";
 import { AVAILABLE_THEMES, ThemeProvider } from "@theme/ThemeProvider";
@@ -32,9 +36,16 @@ export default function RootLayout({
           themes={AVAILABLE_THEMES}
           disableTransitionOnChange
         >
-          <TRPCProvider>
-            <CountryProvider>{children}</CountryProvider>
-          </TRPCProvider>
+          <ClientSessionIdProvider>
+            <TRPCProvider>
+              <AuthProvider>
+                <SettingsModalProvider>
+                  <CountryProvider>{children}</CountryProvider>
+                  <SettingsModal />
+                </SettingsModalProvider>
+              </AuthProvider>
+            </TRPCProvider>
+          </ClientSessionIdProvider>
           <Toaster />
         </ThemeProvider>
       </body>

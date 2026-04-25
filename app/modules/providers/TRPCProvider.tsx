@@ -4,12 +4,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState, type ReactNode } from "react";
 import { trpc, getTRPCClientConfig } from "@utils/trpc";
+import { useClientSessionId } from "@modules/providers/ClientSessionIdProvider";
 
 interface TRPCProviderProps {
   children: ReactNode;
 }
 
 export function TRPCProvider({ children }: TRPCProviderProps) {
+  const clientSessionId = useClientSessionId();
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -29,7 +32,7 @@ export function TRPCProvider({ children }: TRPCProviderProps) {
       })
   );
 
-  const [trpcClient] = useState(() => trpc.createClient(getTRPCClientConfig()));
+  const [trpcClient] = useState(() => trpc.createClient(getTRPCClientConfig(clientSessionId)));
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

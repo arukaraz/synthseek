@@ -52,8 +52,31 @@ if [ -f "/app/server/data/config/beets-config.yaml" ]; then
     chown synthseek:nodejs /data/config/beets-config.example.yaml
 fi
 
-echo "[4/5] Running database migrations..."
+echo "[4/6] Backing up database..."
+if [ -f "/data/db/synthseek.db" ]; then
+    mkdir -p /data/backups
+    BACKUP_FILE="/data/backups/pre-migration-$(date +%Y%m%d-%H%M%S).db"
+    cp /data/db/synthseek.db "$BACKUP_FILE"
+    chown synthseek:nodejs "$BACKUP_FILE"
+    echo "      Snapshot saved to $BACKUP_FILE"
+else
+    echo "      No existing database — skipping backup"
+fi
+
+echo "[5/6] Preparing admin seed (if migration env vars present)..."
 cd /app/server
+if [ -n "${ADMIN_MIGRATION_EMAIL:-}" ] && [ -n "${ADMIN_MIGRATION_USERNAME:-}" ] && [ -n "${ADMIN_MIGRATION_PASSWORD:-}" ]; then
+    su-exec synthseek node dist/scripts/prepare-admin-seed.cjs
+    SEED_EXIT=$?
+    if [ $SEED_EXIT -ne 0 ]; then
+        echo "      prepare-admin-seed failed (exit $SEED_EXIT). Aborting startup."
+        exit $SEED_EXIT
+    fi
+else
+    echo "      No ADMIN_MIGRATION_* env vars — setup wizard path"
+fi
+
+echo "[6/6] Running database migrations..."
 if [ -f "db/schema.prisma" ]; then
     PRISMA_HIDE_UPDATE_MESSAGE=1 PRISMA_HIDE_DEPRECATION_WARNING=1 su-exec synthseek npx prisma migrate deploy --schema=db/schema.prisma 2>/dev/null
     echo "      Done"
@@ -73,7 +96,7 @@ shutdown() {
 
 trap shutdown SIGTERM SIGINT
 
-echo "[5/5] Starting services..."
+echo "Starting services..."
 
 cd /app/server
 su-exec synthseek node dist/index.cjs &

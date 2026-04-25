@@ -27,6 +27,7 @@ export function ListView({ searchQuery }: ListViewProps) {
           artist: item.artist,
           album_art: item.album_art,
           contentType: item.contentType,
+          requestedBy: item.requestedBy,
         },
       }))
     );
@@ -55,6 +56,8 @@ export function ListView({ searchQuery }: ListViewProps) {
           return direction * a.parent.name.localeCompare(b.parent.name);
         case "type":
           return direction * a.parent.contentType.localeCompare(b.parent.contentType);
+        case "requestedBy":
+          return direction * a.parent.requestedBy.username.localeCompare(b.parent.requestedBy.username);
         case "created_at":
           return direction * (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         case "completed_at": {

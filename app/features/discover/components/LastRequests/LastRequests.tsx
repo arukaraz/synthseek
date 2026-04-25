@@ -30,6 +30,7 @@ export function LastRequests() {
           artist: item.artist,
           album_art: item.album_art,
           contentType: item.contentType,
+          requestedBy: item.requestedBy,
         },
       }))
     );

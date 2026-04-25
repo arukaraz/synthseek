@@ -3,6 +3,7 @@
 import { ContentShell } from "@components/ContentShell";
 import TopHeader from "@components/TopHeader";
 import { UpdateBanner } from "@components/UpdateBanner";
+import { AuthGuard } from "@features/auth/components/AuthGuard";
 import { useSubscriptions, useVersionState } from "@hooks/api/subscriptions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -38,8 +39,10 @@ function MainLayoutContent({ children }: { children: React.ReactNode }) {
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense fallback={<div className="bg-surface min-h-screen" />}>
-      <MainLayoutContent>{children}</MainLayoutContent>
-    </Suspense>
+    <AuthGuard>
+      <Suspense fallback={<div className="bg-surface min-h-screen" />}>
+        <MainLayoutContent>{children}</MainLayoutContent>
+      </Suspense>
+    </AuthGuard>
   );
 }

@@ -3,6 +3,7 @@ import {
   ContentType,
   RequestStatus,
   UNRESOLVED_STATUSES,
+  type PublicUser,
   type TrackRequest,
 } from "@api/__generated__/types";
 
@@ -42,10 +43,19 @@ export interface FlatTrackRow extends TrackRequest {
     artist: string;
     album_art: string | null;
     contentType: ContentType;
+    requestedBy: PublicUser;
   };
 }
 
-export type TableSortField = "title" | "status" | "album" | "artist" | "type" | "created_at" | "completed_at";
+export type TableSortField =
+  | "title"
+  | "status"
+  | "album"
+  | "artist"
+  | "type"
+  | "created_at"
+  | "completed_at"
+  | "requestedBy";
 export type TableSortDirection = "asc" | "desc";
 
 export interface TableSortConfig {
@@ -71,6 +81,7 @@ export const COLUMNS: ColumnDef[] = [
   { field: "album", label: "Album", sortable: true },
   { field: "artist", label: "Artist", sortable: true },
   { field: "type", label: "Type", sortable: true },
+  { field: "requestedBy", label: "Requested by", sortable: true },
   { field: "created_at", label: "Added", sortable: true },
   { field: "completed_at", label: "Completed", sortable: true },
   { field: "actions", label: "", sortable: false },
