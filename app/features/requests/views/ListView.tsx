@@ -59,11 +59,11 @@ export function ListView({ searchQuery }: ListViewProps) {
         case "requestedBy":
           return direction * a.parent.requestedBy.username.localeCompare(b.parent.requestedBy.username);
         case "created_at":
-          return direction * (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+          return direction * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
         case "completed_at": {
           const aDate = a.completed_at ? new Date(a.completed_at).getTime() : 0;
           const bDate = b.completed_at ? new Date(b.completed_at).getTime() : 0;
-          return direction * (bDate - aDate);
+          return direction * (aDate - bDate);
         }
         default:
           return 0;

@@ -60,7 +60,7 @@ export function CompactView({ statusFilter, sort, searchQuery }: CompactViewProp
     return [...filtered].sort((a, b) => {
       switch (sort.field) {
         case SortField.RECENT:
-          return direction * (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+          return direction * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
         case SortField.ARTIST:
           return direction * a.artist.localeCompare(b.artist);
         case SortField.ALBUM:

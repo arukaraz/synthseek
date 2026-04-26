@@ -27,6 +27,10 @@ export function TrackItem({ track, albumArt, index, onCancel, onRetry }: TrackIt
   const showCancel = !isComplete && !isFailed && !isCancelled;
   const showRetry = isFailed || isCancelled;
 
+  const reasonConfig = isFailed && track.failure_reason ? statusConfig.reasons?.[track.failure_reason] : undefined;
+  const display = reasonConfig ?? statusConfig;
+  const ReasonIcon = reasonConfig?.icon;
+
   return (
     <motion.div
       className={trackItem({ size: "md", group: "none" })}
@@ -40,7 +44,10 @@ export function TrackItem({ track, albumArt, index, onCancel, onRetry }: TrackIt
         <p className={cn("truncate text-sm", isComplete ? "text-fg/70" : isFailed ? "text-fg/50" : "text-fg/80")}>
           {track.title}
         </p>
-        <p className={cn("text-xs", statusConfig.color)}>{statusConfig.label}</p>
+        <p className={cn("flex items-center gap-1 text-xs", statusConfig.color)} title={display.description}>
+          {ReasonIcon && <ReasonIcon className="h-3 w-3" aria-hidden />}
+          <span>{display.label}</span>
+        </p>
       </div>
 
       <div className="flex shrink-0 items-center gap-1">

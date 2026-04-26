@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { isProcessingStatus, isSpinningStatus } from "../status-helpers";
-import { RequestStatus } from "@api/__generated__/types";
+import { isProcessingStatus, isReimportableFailure, isSpinningStatus } from "../status-helpers";
+import { FailureReason, RequestStatus } from "@api/__generated__/types";
 
 describe("isProcessingStatus", () => {
   it("returns true for queued status", () => {
@@ -99,5 +99,28 @@ describe("isSpinningStatus", () => {
 
   it("returns false for partially_complete status", () => {
     expect(isSpinningStatus(RequestStatus.enum.partially_complete)).toBe(false);
+  });
+});
+
+describe("isReimportableFailure", () => {
+  it("returns true only when reason is import_rejected and a downloaded file is present", () => {
+    expect(isReimportableFailure(FailureReason.enum.import_rejected, "track.mp3")).toBe(true);
+  });
+
+  it("returns false when reason is import_rejected but no downloaded file", () => {
+    expect(isReimportableFailure(FailureReason.enum.import_rejected, null)).toBe(false);
+    expect(isReimportableFailure(FailureReason.enum.import_rejected, "")).toBe(false);
+    expect(isReimportableFailure(FailureReason.enum.import_rejected, undefined)).toBe(false);
+  });
+
+  it("returns false for any other reason", () => {
+    expect(isReimportableFailure(FailureReason.enum.not_found, "track.mp3")).toBe(false);
+    expect(isReimportableFailure(FailureReason.enum.p2p_failed, "track.mp3")).toBe(false);
+    expect(isReimportableFailure(FailureReason.enum.other, "track.mp3")).toBe(false);
+  });
+
+  it("returns false when reason is null/undefined", () => {
+    expect(isReimportableFailure(null, "track.mp3")).toBe(false);
+    expect(isReimportableFailure(undefined, "track.mp3")).toBe(false);
   });
 });

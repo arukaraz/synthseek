@@ -67,8 +67,9 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
             {name}
           </h3>
           <p className="text-fg/60 text-sm">
-            {releaseYear && `${releaseYear} • `}
-            {trackCount} {trackCount === 1 ? "song" : "songs"}
+            {[releaseYear, trackCount ? `${trackCount} ${trackCount === 1 ? "song" : "songs"}` : null]
+              .filter(Boolean)
+              .join(" • ")}
           </p>
         </div>
 

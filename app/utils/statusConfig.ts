@@ -1,5 +1,24 @@
-import { RequestStatus } from "@api/__generated__/types";
-import { CheckCircle, Clock, Download, Pause, PlayCircle, Search, XCircle, type LucideIcon } from "lucide-react";
+import { FailureReason, RequestStatus } from "@api/__generated__/types";
+import {
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Download,
+  FileQuestion,
+  FileX,
+  Pause,
+  PlayCircle,
+  Search,
+  Unplug,
+  XCircle,
+  type LucideIcon,
+} from "lucide-react";
+
+interface ReasonConfigItem {
+  icon: LucideIcon;
+  label: string;
+  description: string;
+}
 
 interface StatusConfigItem {
   icon: LucideIcon;
@@ -9,6 +28,7 @@ interface StatusConfigItem {
   glowColor: string;
   label: string;
   description: string;
+  reasons?: Record<FailureReason, ReasonConfigItem>;
 }
 
 export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
@@ -93,6 +113,28 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
     glowColor: "bg-red-500",
     label: "Failed",
     description: "Download failed",
+    reasons: {
+      [FailureReason.enum.not_found]: {
+        icon: FileQuestion,
+        label: "Not found",
+        description: "No matches found on Slskd. Other peers may have it later.",
+      },
+      [FailureReason.enum.import_rejected]: {
+        icon: FileX,
+        label: "Import rejected",
+        description: "File downloaded but metadata didn't match. Retry will re-import only.",
+      },
+      [FailureReason.enum.p2p_failed]: {
+        icon: Unplug,
+        label: "Transfer failed",
+        description: "Connection to peer dropped during download.",
+      },
+      [FailureReason.enum.other]: {
+        icon: AlertCircle,
+        label: "Failed",
+        description: "Unknown error. Check logs.",
+      },
+    },
   },
   [RequestStatus.enum.in_progress]: {
     icon: Download,
