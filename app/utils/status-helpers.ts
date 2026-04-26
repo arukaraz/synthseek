@@ -1,4 +1,4 @@
-import { ACTIVE_STATUSES, RequestStatus } from "@api/__generated__/types";
+import { ACTIVE_STATUSES, FailureReason, RequestStatus } from "@api/__generated__/types";
 
 export function isProcessingStatus(status: RequestStatus): boolean {
   return (ACTIVE_STATUSES as readonly RequestStatus[]).includes(status);
@@ -6,4 +6,11 @@ export function isProcessingStatus(status: RequestStatus): boolean {
 
 export function isSpinningStatus(status: RequestStatus): boolean {
   return isProcessingStatus(status) && status !== RequestStatus.enum.queued;
+}
+
+export function isReimportableFailure(
+  reason: FailureReason | null | undefined,
+  downloadedFile: string | null | undefined
+): boolean {
+  return reason === FailureReason.enum.import_rejected && !!downloadedFile;
 }

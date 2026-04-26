@@ -13,6 +13,8 @@ function applyEventToTrack<T extends TrackRequest>(track: T, event: TrackUpdateP
     status: event.status,
     progress: event.progress ?? track.progress,
     error: event.status === RequestStatus.enum.failed ? (event.error ?? null) : null,
+    failure_reason: event.failureReason !== undefined ? event.failureReason : track.failure_reason,
+    downloaded_file: event.downloadedFile !== undefined ? event.downloadedFile : track.downloaded_file,
     updated_at: new Date(),
   };
 }
