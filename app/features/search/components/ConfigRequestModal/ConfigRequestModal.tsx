@@ -138,7 +138,7 @@ export default function ConfigRequestModal({
   });
 
   const downloadPlaylistMutation = trpc.requests.playlistRequest.useMutation({
-    onSuccess: () => onMutationSuccess("Playlist", "/requests?view=compact&sort=playlist"),
+    onSuccess: () => onMutationSuccess("Playlist"),
     onError: (error) => toast.error("Playlist download failed", { description: error.message }),
   });
 
