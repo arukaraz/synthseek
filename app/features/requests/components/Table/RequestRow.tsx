@@ -4,12 +4,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { IconButton } from "@components/ui/IconButton";
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
 import { useCancelTrack, useRetryTrack } from "@hooks/api";
-import { RequestStatus } from "@api/__generated__/types";
-import { useCurrentUser } from "@modules/providers/AuthProvider";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { cn } from "@utils/cn";
 import { confirm } from "@utils/confirm";
 import { formatRelativeTime, titleCase } from "@utils/formatters";
 import { isOwnerOrAdminFE } from "@utils/authorization";
+import { isRetryableStatus } from "@utils/status-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { mobileActionsButton } from "../styles";
 import { FlatTrackRow } from "../../types";
@@ -22,12 +22,12 @@ interface RequestRowProps {
 }
 
 export function RequestRow({ item }: RequestRowProps) {
-  const currentUser = useCurrentUser();
+  const { currentUser } = useAuthContext();
   const retryTrack = useRetryTrack();
   const cancelTrack = useCancelTrack();
 
   const statusConfig = REQUEST_STATUS_CONFIG[item.status];
-  const canRetry = item.status === RequestStatus.enum.failed || item.status === RequestStatus.enum.cancelled;
+  const canRetry = isRetryableStatus(item.status);
   const canAct = isOwnerOrAdminFE({ id: item.parent.requestedBy.id }, currentUser);
 
   const handleDelete = async () => {

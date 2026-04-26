@@ -78,6 +78,7 @@ export function TrackList({
                   track={track}
                   albumArt={request.album_art}
                   index={index}
+                  parentOwnerId={request.requestedBy.id}
                   onCancel={() => onCancelTrack?.(track.id)}
                   onRetry={() => onRetryTrack?.(track.id)}
                 />

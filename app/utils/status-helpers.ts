@@ -1,4 +1,4 @@
-import { ACTIVE_STATUSES, FailureReason, RequestStatus } from "@api/__generated__/types";
+import { ACTIVE_STATUSES, FailureReason, RequestStatus, UNRESOLVED_STATUSES } from "@api/__generated__/types";
 
 export function isProcessingStatus(status: RequestStatus): boolean {
   return (ACTIVE_STATUSES as readonly RequestStatus[]).includes(status);
@@ -6,6 +6,10 @@ export function isProcessingStatus(status: RequestStatus): boolean {
 
 export function isSpinningStatus(status: RequestStatus): boolean {
   return isProcessingStatus(status) && status !== RequestStatus.enum.queued;
+}
+
+export function isRetryableStatus(status: RequestStatus): boolean {
+  return (UNRESOLVED_STATUSES as readonly RequestStatus[]).includes(status);
 }
 
 export function isReimportableFailure(

@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { trpc } from "@utils/trpc";
-import { useCurrentUser } from "@modules/providers/AuthProvider";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { LoginForm } from "./components/LoginForm";
 import { PlexLoginButton } from "./components/PlexLoginButton";
 import { authCard } from "../styles";
 
 export default function LoginPage() {
   const router = useRouter();
-  const currentUser = useCurrentUser();
+  const { currentUser } = useAuthContext();
   const setupQuery = trpc.auth.setupRequired.useQuery(undefined, {
     staleTime: 60 * 1000,
   });

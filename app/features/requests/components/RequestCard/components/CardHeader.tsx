@@ -8,6 +8,7 @@ import { type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@utils/cn";
 import { getContentTypeColor, getContentTypeIcon, getContentTypeLabel } from "@utils/content-type-helpers";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { musicBadge } from "../../styles";
 
 type CardSize = "sm" | "md";
@@ -23,6 +24,7 @@ interface CardHeaderProps {
   showMusicBadge?: boolean;
   contentType?: ContentType;
   dataCyPrefix?: string;
+  requestedBy?: { id: string; username: string };
 }
 
 const sizeConfig = {
@@ -53,12 +55,19 @@ export function CardHeader({
   showMusicBadge = false,
   contentType = ContentType.enum.track,
   dataCyPrefix = "card",
+  requestedBy,
 }: CardHeaderProps) {
   const config = sizeConfig[size];
   const TypeIcon = getContentTypeIcon(contentType);
   const typeLabel = getContentTypeLabel(contentType);
   const typeColor = getContentTypeColor(contentType);
   const PlaceholderIcon = icon ?? TypeIcon;
+  const { currentUser } = useAuthContext();
+  const requesterLabel = requestedBy
+    ? requestedBy.id === currentUser?.id
+      ? "you"
+      : requestedBy.username
+    : null;
 
   return (
     <div className="flex items-center gap-3">
@@ -97,6 +106,9 @@ export function CardHeader({
         >
           {subtitle}
         </p>
+        {requesterLabel && (
+          <p className="text-fg/40 truncate text-xs">Requested by {requesterLabel}</p>
+        )}
       </div>
 
       <StatusBadge

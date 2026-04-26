@@ -7,7 +7,7 @@ export { useLibrarySummary } from "./queries/useLibrarySummary";
 export { default as useSearchContent } from "./queries/useSearchContent";
 export { useTrendingTracks } from "./queries/useTrendingTracks";
 
-export { default as useCreateTrack } from "./mutations/requests/useCreateTrack";
+export { default as useRequest } from "./mutations/requests/useRequest";
 export { default as useBatchRequest } from "./mutations/requests/useBatchRequest";
 export { default as usePlaylistRequest } from "./mutations/requests/usePlaylistRequest";
 export { default as useDeleteAlbum } from "./mutations/requests/useDeleteAlbum";

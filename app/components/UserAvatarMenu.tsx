@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
 import { useLogout } from "@hooks/api/mutations/auth/useLogout";
-import { useCurrentUser } from "@modules/providers/AuthProvider";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useSettingsModal } from "@modules/providers/SettingsModalProvider";
 import { motion } from "framer-motion";
 import { LogOut, Settings, User } from "lucide-react";
@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { logoutItem, menuContent, menuItem, triggerButton, userInfoContainer } from "./UserAvatarMenu/styles";
 
 export function UserAvatarMenu() {
-  const currentUser = useCurrentUser();
+  const { currentUser } = useAuthContext();
   const settings = useSettingsModal();
   const logout = useLogout();
   const router = useRouter();

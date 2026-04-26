@@ -2,6 +2,7 @@
 
 import { SettingsSidebar } from "./SettingsSidebar";
 import { AppearancePanel, LanguageRegionPanel } from "./sections/GeneralSection/AppearancePanel";
+import { MembersSection } from "./sections/MembersSection/MembersSection";
 import { PlaceholderPanel } from "./sections/placeholders";
 import { contentRoot, layoutRoot } from "./styles";
 import type { SettingsSection } from "./types";
@@ -11,11 +12,6 @@ interface SettingsLayoutProps {
   onSectionChange: (section: SettingsSection) => void;
 }
 
-/**
- * Pure layout (sidebar + content). The modal wrapper is a thin layer in
- * SettingsModal.tsx — when the feature promotes to a route, render this
- * component directly in /settings/page.tsx.
- */
 export function SettingsLayout({ section, onSectionChange }: SettingsLayoutProps) {
   return (
     <div className={layoutRoot()}>
@@ -32,7 +28,7 @@ function renderSection(section: SettingsSection) {
     case "general.language":
       return <LanguageRegionPanel />;
     case "members":
-      return <PlaceholderPanel title="Members" description="Manage users and invitations." />;
+      return <MembersSection />;
     case "profile":
       return <PlaceholderPanel title="Profile" description="Account details and preferences." />;
     case "advanced.logs":

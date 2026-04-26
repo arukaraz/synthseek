@@ -144,6 +144,7 @@ export const RequestCard = memo(function RequestCard({ request }: RequestCardPro
           showMusicBadge
           contentType={isSingleTrack ? ContentType.enum.track : request.contentType}
           dataCyPrefix={request.contentType}
+          requestedBy={request.requestedBy}
         />
 
         {isPlaylist &&

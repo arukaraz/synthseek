@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isProcessingStatus, isReimportableFailure, isSpinningStatus } from "../status-helpers";
+import { isProcessingStatus, isReimportableFailure, isRetryableStatus, isSpinningStatus } from "../status-helpers";
 import { FailureReason, RequestStatus } from "@api/__generated__/types";
 
 describe("isProcessingStatus", () => {
@@ -99,6 +99,31 @@ describe("isSpinningStatus", () => {
 
   it("returns false for partially_complete status", () => {
     expect(isSpinningStatus(RequestStatus.enum.partially_complete)).toBe(false);
+  });
+});
+
+describe("isRetryableStatus", () => {
+  it("returns true for failed status", () => {
+    expect(isRetryableStatus(RequestStatus.enum.failed)).toBe(true);
+  });
+
+  it("returns true for cancelled status", () => {
+    expect(isRetryableStatus(RequestStatus.enum.cancelled)).toBe(true);
+  });
+
+  it("returns false for complete status", () => {
+    expect(isRetryableStatus(RequestStatus.enum.complete)).toBe(false);
+  });
+
+  it("returns false for partially_complete status", () => {
+    expect(isRetryableStatus(RequestStatus.enum.partially_complete)).toBe(false);
+  });
+
+  it("returns false for active statuses", () => {
+    expect(isRetryableStatus(RequestStatus.enum.queued)).toBe(false);
+    expect(isRetryableStatus(RequestStatus.enum.in_progress)).toBe(false);
+    expect(isRetryableStatus(RequestStatus.enum.downloading)).toBe(false);
+    expect(isRetryableStatus(RequestStatus.enum.importing)).toBe(false);
   });
 });
 

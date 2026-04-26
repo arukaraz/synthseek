@@ -39,20 +39,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-function useAuthContext(): AuthContextValue {
+export function useAuthContext(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuthContext must be used within AuthProvider");
   return ctx;
-}
-
-export function useCurrentUser(): PublicUser | null {
-  return useAuthContext().currentUser;
-}
-
-export function useIsAdmin(): boolean {
-  return useAuthContext().isAdmin;
-}
-
-export function useAuthLoading(): boolean {
-  return useAuthContext().isLoading;
 }

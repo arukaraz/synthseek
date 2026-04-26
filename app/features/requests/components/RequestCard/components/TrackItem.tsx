@@ -3,6 +3,9 @@
 import { RequestStatus, type TrackRequest } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
+import { isOwnerOrAdminFE } from "@utils/authorization";
+import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { CircularLoadingImage } from "@components/ui/CircularLoadingImage";
 import { IconButton } from "@components/ui/IconButton";
 import { trackItem } from "../../styles";
@@ -13,21 +16,19 @@ interface TrackItemProps {
   track: TrackRequest;
   albumArt?: string | null;
   index: number;
+  parentOwnerId: string;
   onCancel?: () => void;
   onRetry?: () => void;
 }
 
-export function TrackItem({ track, albumArt, index, onCancel, onRetry }: TrackItemProps) {
+export function TrackItem({ track, albumArt, index, parentOwnerId, onCancel, onRetry }: TrackItemProps) {
   const statusConfig = REQUEST_STATUS_CONFIG[track.status];
+  const { currentUser } = useAuthContext();
+  const canAct = isOwnerOrAdminFE({ id: parentOwnerId }, currentUser);
+  const showCancel = canAct && isProcessingStatus(track.status);
+  const showRetry = canAct && isRetryableStatus(track.status);
 
-  const isComplete = track.status === RequestStatus.enum.complete;
-  const isFailed = track.status === RequestStatus.enum.failed;
-  const isCancelled = track.status === RequestStatus.enum.cancelled;
-
-  const showCancel = !isComplete && !isFailed && !isCancelled;
-  const showRetry = isFailed || isCancelled;
-
-  const reasonConfig = isFailed && track.failure_reason ? statusConfig.reasons?.[track.failure_reason] : undefined;
+  const reasonConfig = track.failure_reason ? statusConfig.reasons?.[track.failure_reason] : undefined;
   const display = reasonConfig ?? statusConfig;
   const ReasonIcon = reasonConfig?.icon;
 
@@ -41,7 +42,16 @@ export function TrackItem({ track, albumArt, index, onCancel, onRetry }: TrackIt
       <CircularLoadingImage src={albumArt} alt={track.title} status={track.status as RequestStatus} size="sm" />
 
       <div className="min-w-0 flex-1">
-        <p className={cn("truncate text-sm", isComplete ? "text-fg/70" : isFailed ? "text-fg/50" : "text-fg/80")}>
+        <p
+          className={cn(
+            "truncate text-sm",
+            track.status === RequestStatus.enum.complete
+              ? "text-fg/70"
+              : track.status === RequestStatus.enum.failed
+                ? "text-fg/50"
+                : "text-fg/80"
+          )}
+        >
           {track.title}
         </p>
         <p className={cn("flex items-center gap-1 text-xs", statusConfig.color)} title={display.description}>

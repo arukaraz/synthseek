@@ -2,6 +2,7 @@
 
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { useEffect, useState } from "react";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { SortConfig, SortDirection, SortField, StatusFilter, ViewMode } from "../../types";
 import { toolbarContainer } from "../styles";
 import { ActionsDropdown } from "./ActionsDropdown";
@@ -62,6 +63,7 @@ export function Toolbar({
   const [confirmModal, setConfirmModal] = useState<"retry" | "delete" | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { isAdmin } = useAuthContext();
 
   const showRetryFailed = statusFilter === "all" || statusFilter === "failed";
 
@@ -130,6 +132,7 @@ export function Toolbar({
           <div className="shrink-0">
             <ActionsDropdown
               showRetryFailed={showRetryFailed}
+              isAdmin={isAdmin}
               onRetryAllFailed={() => setConfirmModal("retry")}
               onDeleteAll={() => setConfirmModal("delete")}
             />

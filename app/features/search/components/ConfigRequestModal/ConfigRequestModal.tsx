@@ -10,10 +10,10 @@ import {
   type MusicTrack,
   type MusicPlaylistTrack,
 } from "@api/__generated__/types";
+import { useBatchRequest, usePlaylistRequest, useRequest } from "@hooks/api";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { titleCase } from "@utils/formatters";
 import { trpc } from "@utils/trpc";
-import { confirm } from "@utils/confirm";
 import { Download, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -71,8 +71,6 @@ export default function ConfigRequestModal({
   const router = useRouter();
   const utils = trpc.useUtils();
 
-  const deleteAlbumMutation = trpc.requests.deleteAlbum.useMutation();
-
   const metadata = useMemo(() => extractItemMetadata(item, parentAlbum), [item, parentAlbum]);
 
   const bitrateGridOptions: Option<number>[] = BITRATE_OPTIONS.map((opt) => ({
@@ -93,54 +91,16 @@ export default function ConfigRequestModal({
     description: opt.description,
   }));
 
-  const onMutationSuccess = async (label: string, route = "/requests?view=compact") => {
+  const handleMutationSuccess = () => {
     const itemName = getItemDisplayName(item);
-
-    toast.success(`${label} started`, { description: `${itemName} is being downloaded.` });
-
-    await utils.requests.getAll.refetch();
-
-    router.push(route);
+    router.push("/requests?view=compact");
     onSuccess?.(itemName);
     handleClose();
   };
 
-  const downloadMutation = trpc.requests.request.useMutation({
-    onSuccess: () => onMutationSuccess("Download"),
-    onError: (error) => toast.error("Download failed", { description: error.message }),
-  });
-
-  const downloadAlbumMutation = trpc.requests.batchRequest.useMutation({
-    onSuccess: () => onMutationSuccess("Album"),
-    onError: async (error) => {
-      if (error.data?.code === "CONFLICT") {
-        try {
-          const existing = JSON.parse(error.message);
-          const requestedDate = new Date(existing.created_at).toLocaleDateString();
-
-          const confirmed = await confirm({
-            title: "Album Already Requested",
-            message: `"${existing.name}" by ${existing.artist} was requested on ${requestedDate}.\n\nCurrent status: ${existing.status} (${existing.completed_tracks}/${existing.total_tracks} tracks)\n\nRe-requesting will delete the existing album and all its tracks. This action cannot be undone.`,
-            variant: "warning",
-            confirmText: "Replace Album",
-            cancelText: "Keep Existing",
-          });
-
-          if (confirmed) {
-            await deleteAlbumMutation.mutateAsync({ albumId: existing.id });
-            handleDownload();
-          }
-          return;
-        } catch {}
-      }
-      toast.error("Album download failed", { description: error.message });
-    },
-  });
-
-  const downloadPlaylistMutation = trpc.requests.playlistRequest.useMutation({
-    onSuccess: () => onMutationSuccess("Playlist"),
-    onError: (error) => toast.error("Playlist download failed", { description: error.message }),
-  });
+  const downloadMutation = useRequest();
+  const downloadAlbumMutation = useBatchRequest();
+  const downloadPlaylistMutation = usePlaylistRequest();
 
   const isLoading = downloadMutation.isPending || downloadAlbumMutation.isPending || downloadPlaylistMutation.isPending;
 
@@ -160,11 +120,14 @@ export default function ConfigRequestModal({
     };
 
     if (item.type === ContentType.enum.track) {
-      downloadMutation.mutate({
-        track: mapTrackFields(item),
-        config,
-        album_external_id: parentAlbum?.id ?? item.album.id ?? `single_${item.id}`,
-      });
+      downloadMutation.mutate(
+        {
+          track: mapTrackFields(item),
+          config,
+          album_external_id: parentAlbum?.id ?? item.album.id ?? `single_${item.id}`,
+        },
+        { onSuccess: handleMutationSuccess }
+      );
       return;
     }
 
@@ -177,36 +140,42 @@ export default function ConfigRequestModal({
       }
 
       if (item.type === ContentType.enum.album) {
-        downloadAlbumMutation.mutate({
-          external_id: item.id,
-          name: item.name,
-          artist: item.artists[0]?.name || item.artist,
-          album_art: item.images[0]?.url ?? null,
-          release_date: item.release_date || "1900-01-01",
-          total_tracks: item.total_tracks || trackList.length,
-          tracks: trackList.map(mapTrackFields),
-          config,
-        });
+        downloadAlbumMutation.mutate(
+          {
+            external_id: item.id,
+            name: item.name,
+            artist: item.artists[0]?.name || item.artist,
+            album_art: item.images[0]?.url ?? null,
+            release_date: item.release_date || "1900-01-01",
+            total_tracks: item.total_tracks || trackList.length,
+            tracks: trackList.map(mapTrackFields),
+            config,
+          },
+          { onSuccess: handleMutationSuccess }
+        );
         return;
       }
 
       if (item.type === ContentType.enum.playlist) {
-        downloadPlaylistMutation.mutate({
-          external_id: item.id,
-          name: item.name,
-          description: item.description ?? null,
-          owner: item.owner?.name ?? "Unknown",
-          image: item.images?.[0]?.url ?? null,
-          total_tracks: item.total_tracks || trackList.length,
-          tracks: trackList.map((t) => ({
-            ...mapTrackFields(t),
-            album_external_id: t.album.id,
-            album_name: t.album.name,
-            album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
-            album_image: t.album.images?.[0]?.url ?? null,
-          })),
-          config,
-        });
+        downloadPlaylistMutation.mutate(
+          {
+            external_id: item.id,
+            name: item.name,
+            description: item.description ?? null,
+            owner: item.owner?.name ?? "Unknown",
+            image: item.images?.[0]?.url ?? null,
+            total_tracks: item.total_tracks || trackList.length,
+            tracks: trackList.map((t) => ({
+              ...mapTrackFields(t),
+              album_external_id: t.album.id,
+              album_name: t.album.name,
+              album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
+              album_image: t.album.images?.[0]?.url ?? null,
+            })),
+            config,
+          },
+          { onSuccess: handleMutationSuccess }
+        );
         return;
       }
     } catch (error) {
