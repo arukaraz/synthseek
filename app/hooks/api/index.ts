@@ -12,7 +12,6 @@ export { default as useBatchRequest } from "./mutations/requests/useBatchRequest
 export { default as usePlaylistRequest } from "./mutations/requests/usePlaylistRequest";
 export { default as useDeleteAlbum } from "./mutations/requests/useDeleteAlbum";
 export { default as useDeletePlaylist } from "./mutations/requests/useDeletePlaylist";
-export { default as useDeleteAll } from "./mutations/requests/useDeleteAll";
 export { default as useRetryAlbum } from "./mutations/requests/useRetryAlbum";
 export { default as useRetryPlaylist } from "./mutations/requests/useRetryPlaylist";
 export { default as useRetryPlexPlaylist } from "./mutations/requests/useRetryPlexPlaylist";

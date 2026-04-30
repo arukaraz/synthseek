@@ -1,102 +1,95 @@
 "use client";
 
-import { EmptyState } from "@components/ui/EmptyState";
 import { SectionLoading } from "@components/ui/SectionLoading";
-import { useTrackRequests } from "@hooks/api";
-import { Inbox, Search } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Table } from "../components/Table/Table";
-import { FlatTrackRow, TableSortConfig } from "../types";
+import { DataTable, cycleSortDirection } from "@components/ui/Table";
+import { useCancelTrack, useRetryTrack, useTrackRequests } from "@hooks/api";
+import { useDebounce } from "@hooks/ui/useDebounce";
+import { useUrlParams } from "@hooks/ui/useUrlParam";
+import { useAuthContext } from "@modules/providers/AuthProvider";
+import { isOwnerOrAdminFE } from "@utils/authorization";
+import { confirm } from "@utils/confirm";
+import { useCallback, useMemo, useState } from "react";
+import { RequestsEmptyState } from "../components/RequestsEmptyState";
+import { buildFlatTrackColumns } from "../components/Table/columns";
+import { flattenRequestsToTrackRows, searchFlatTrackRows, sortFlatTrackRows } from "../components/Table/helpers";
+import { filterRequestsByStatus } from "../helpers";
+import { FlatTrackRow, REQUESTS_URL_PARAMS, TableSortConfig, TableSortField } from "../types";
 
-interface ListViewProps {
-  searchQuery: string;
-}
-
-export function ListView({ searchQuery }: ListViewProps) {
+export function ListView() {
   const { data: items, isLoading } = useTrackRequests();
+  const { values } = useUrlParams({
+    filter: REQUESTS_URL_PARAMS.filter,
+    q: REQUESTS_URL_PARAMS.q,
+  });
+  const searchQuery = useDebounce(values.q, { delay: 300 });
+  const statusFilter = values.filter;
 
   const [sort, setSort] = useState<TableSortConfig>({ field: "created_at", direction: "desc" });
 
+  const { currentUser } = useAuthContext();
+  const retryTrack = useRetryTrack();
+  const cancelTrack = useCancelTrack();
+
+  const handleCancel = useCallback(
+    async (item: FlatTrackRow) => {
+      const confirmed = await confirm({
+        title: "Cancel Track",
+        message: `Cancel "${item.title}" by ${item.artist}?`,
+        variant: "danger",
+        confirmText: "Cancel",
+        cancelText: "Keep",
+      });
+      if (confirmed) cancelTrack.mutate({ trackId: item.id });
+    },
+    [cancelTrack]
+  );
+
   const rows = useMemo<FlatTrackRow[]>(() => {
-    const flat: FlatTrackRow[] = (items ?? []).flatMap((item) =>
-      item.tracks.map((track) => ({
-        ...track,
-        parent: {
-          id: item.id,
-          name: item.name,
-          artist: item.artist,
-          album_art: item.album_art,
-          contentType: item.contentType,
-          requestedBy: item.requestedBy,
-        },
-      }))
-    );
+    const filteredItems = filterRequestsByStatus(items, statusFilter);
+    const flat = flattenRequestsToTrackRows(filteredItems);
+    const searched = searchFlatTrackRows(flat, searchQuery);
+    return sortFlatTrackRows(searched, sort);
+  }, [items, sort, searchQuery, statusFilter]);
 
-    const filtered = searchQuery.trim()
-      ? flat.filter((row) => {
-          const query = searchQuery.toLowerCase();
-          if (row.title.toLowerCase().includes(query)) return true;
-          if (row.artist.toLowerCase().includes(query)) return true;
-          if (row.parent.name.toLowerCase().includes(query)) return true;
-          return false;
-        })
-      : flat;
+  const columns = useMemo(
+    () =>
+      buildFlatTrackColumns({
+        currentUserId: currentUser?.id,
+        canActFor: (item) => isOwnerOrAdminFE({ id: item.parent.requestedBy.id }, currentUser),
+        onRetry: (item) => retryTrack.mutate({ trackId: item.id }),
+        onCancel: handleCancel,
+      }),
+    [currentUser, retryTrack, handleCancel]
+  );
 
-    const direction = sort.direction === "asc" ? 1 : -1;
-
-    return [...filtered].sort((a, b) => {
-      switch (sort.field) {
-        case "title":
-          return direction * a.title.localeCompare(b.title);
-        case "status":
-          return direction * a.status.localeCompare(b.status);
-        case "artist":
-          return direction * a.artist.localeCompare(b.artist);
-        case "album":
-          return direction * a.parent.name.localeCompare(b.parent.name);
-        case "type":
-          return direction * a.parent.contentType.localeCompare(b.parent.contentType);
-        case "requestedBy":
-          return direction * a.parent.requestedBy.username.localeCompare(b.parent.requestedBy.username);
-        case "created_at":
-          return direction * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-        case "completed_at": {
-          const aDate = a.completed_at ? new Date(a.completed_at).getTime() : 0;
-          const bDate = b.completed_at ? new Date(b.completed_at).getTime() : 0;
-          return direction * (aDate - bDate);
-        }
-        default:
-          return 0;
-      }
-    });
-  }, [items, sort, searchQuery]);
-
-  const isEmpty = !isLoading && rows.length === 0;
-  const isSearchEmpty = isEmpty && searchQuery.trim().length > 0;
+  const handleSort = (field: string) => {
+    const next = cycleSortDirection(sort, field);
+    setSort({ field: next.field as TableSortField, direction: next.direction });
+  };
 
   if (isLoading) {
     return <SectionLoading message="Loading requests..." />;
   }
 
-  if (isSearchEmpty) {
+  if (rows.length === 0) {
     return (
       <div className="flex h-full items-center justify-center">
-        <EmptyState icon={Search} title="No Results" description={`No requests match "${searchQuery}"`} />
-      </div>
-    );
-  }
-
-  if (isEmpty) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <EmptyState icon={Inbox} title="No Requests" description="Your download requests will appear here." />
+        <RequestsEmptyState searchQuery={searchQuery} />
       </div>
     );
   }
 
   return (
     <div className="p-4">
-      <Table items={rows} sort={sort} onSortChange={setSort} />
+      <DataTable
+        data={rows}
+        columns={columns}
+        getRowId={(item) => `${item.parent.id}:${item.id}`}
+        sortState={sort}
+        onSort={handleSort}
+        minWidth="600px"
+        rowAttrs={(item) => ({ "data-status": item.status })}
+      />
     </div>
   );
 }

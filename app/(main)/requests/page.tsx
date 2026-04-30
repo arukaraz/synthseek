@@ -1,11 +1,7 @@
 "use client";
 
-import { RequestsView, ViewMode } from "@features/requests";
-import { useSearchParams } from "next/navigation";
+import { RequestsView } from "@features/requests";
 
 export default function RequestsPage() {
-  const searchParams = useSearchParams();
-  const viewMode = (searchParams.get("view") as ViewMode) ?? "compact";
-
-  return <RequestsView viewMode={viewMode} />;
+  return <RequestsView />;
 }

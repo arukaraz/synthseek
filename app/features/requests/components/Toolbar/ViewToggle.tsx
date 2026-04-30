@@ -1,30 +1,28 @@
 "use client";
 
+import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
-import { Grid3X3, List } from "lucide-react";
-import { ViewMode } from "../../types";
+import { List, PanelLeft } from "lucide-react";
+import { REQUESTS_URL_PARAMS } from "../../types";
 
-interface ViewToggleProps {
-  viewMode: ViewMode;
-  onChange: (mode: ViewMode) => void;
-}
+export function ViewToggle() {
+  const [viewMode, setView] = useUrlParam("view", REQUESTS_URL_PARAMS.view);
 
-export function ViewToggle({ viewMode, onChange }: ViewToggleProps) {
   return (
     <div className="bg-fg/5 flex items-center gap-0.5 rounded-md p-0.5">
       <button
-        onClick={() => onChange("compact")}
+        onClick={() => setView("groups")}
         className={cn(
           "rounded p-1.5 transition-colors",
-          viewMode === "compact" ? "bg-fg/10 text-fg" : "text-fg/40 hover:text-fg/60"
+          viewMode === "groups" ? "bg-fg/10 text-fg" : "text-fg/40 hover:text-fg/60"
         )}
-        title="Grid view"
-        aria-label="Switch to grid view"
+        title="Groups view"
+        aria-label="Switch to groups view"
       >
-        <Grid3X3 className="size-4" />
+        <PanelLeft className="size-4" />
       </button>
       <button
-        onClick={() => onChange("list")}
+        onClick={() => setView("list")}
         className={cn(
           "rounded p-1.5 transition-colors",
           viewMode === "list" ? "bg-fg/10 text-fg" : "text-fg/40 hover:text-fg/60"

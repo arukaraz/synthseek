@@ -7,7 +7,7 @@ import {
   type TrackRequest,
 } from "@api/__generated__/types";
 
-export type ViewMode = "compact" | "list";
+export type ViewMode = "groups" | "list";
 export type StatusFilter = "all" | "active" | "done" | "failed";
 
 export enum SortField {
@@ -17,6 +17,20 @@ export enum SortField {
   ALBUM = "album",
 }
 export type SortDirection = "asc" | "desc";
+
+export const VIEW_MODES: readonly ViewMode[] = ["groups", "list"];
+export const STATUS_FILTERS: readonly StatusFilter[] = ["all", "active", "done", "failed"];
+export const SORT_FIELD_VALUES: readonly SortField[] = Object.values(SortField);
+export const SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"];
+
+export const REQUESTS_URL_PARAMS = {
+  view: { defaultValue: "groups" as ViewMode, validValues: VIEW_MODES },
+  filter: { defaultValue: "all" as StatusFilter, validValues: STATUS_FILTERS },
+  sort: { defaultValue: SortField.RECENT, validValues: SORT_FIELD_VALUES },
+  dir: { defaultValue: "desc" as SortDirection, validValues: SORT_DIRECTIONS },
+  q: { defaultValue: "" as string },
+  selected: {},
+} as const;
 
 export interface SortConfig {
   field: SortField;

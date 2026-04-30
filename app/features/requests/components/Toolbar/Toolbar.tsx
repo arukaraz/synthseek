@@ -1,162 +1,88 @@
 "use client";
 
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
+import { useTrackRequests, useRetryAllFailed } from "@hooks/api";
+import { useDebounce } from "@hooks/ui/useDebounce";
+import { useUrlParam } from "@hooks/ui/useUrlParam";
+import { cn } from "@utils/cn";
+import { primaryGradientButton } from "@theme/utilities/styles";
+import { motion } from "framer-motion";
+import { RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuthContext } from "@modules/providers/AuthProvider";
-import { SortConfig, SortDirection, SortField, StatusFilter, ViewMode } from "../../types";
 import { toolbarContainer } from "../styles";
-import { ActionsDropdown } from "./ActionsDropdown";
+import { REQUESTS_URL_PARAMS } from "../../types";
+import { FilterSortMenu } from "./FilterSortMenu";
 import { SearchInput } from "./SearchInput/SearchInput";
-import { SortDirectionButton } from "./SortDirectionButton";
-import { SortDropdown } from "./SortDropdown";
-import { StatusFilterDropdown } from "./StatusFilterDropdown";
 import { ViewToggle } from "./ViewToggle";
 
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+export function Toolbar() {
+  const { data: items } = useTrackRequests();
+  const retryAllFailed = useRetryAllFailed();
+  const [urlSearchQuery, setUrlSearchQuery] = useUrlParam("q", REQUESTS_URL_PARAMS.q);
+
+  const [searchInput, setSearchInput] = useState(urlSearchQuery);
+  const debouncedSearchInput = useDebounce(searchInput, { delay: 300 });
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
+    if (debouncedSearchInput !== urlSearchQuery) {
+      setUrlSearchQuery(debouncedSearchInput || null);
+    }
+  }, [debouncedSearchInput, urlSearchQuery, setUrlSearchQuery]);
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  return isMobile;
-}
-
-interface ToolbarProps {
-  viewMode: ViewMode;
-  onViewModeChange: (mode: ViewMode) => void;
-  statusFilter: StatusFilter;
-  onStatusFilterChange: (filter: StatusFilter) => void;
-  sort: SortConfig;
-  onSortChange: (sort: SortConfig) => void;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  onRetryAllFailed: () => void;
-  onDeleteAll: () => void;
-  hasItems: boolean;
-  isRetrying?: boolean;
-  isDeleting?: boolean;
-}
-
-export function Toolbar({
-  viewMode,
-  onViewModeChange,
-  statusFilter,
-  onStatusFilterChange,
-  sort,
-  onSortChange,
-  searchQuery,
-  onSearchChange,
-  onRetryAllFailed,
-  onDeleteAll,
-  hasItems,
-  isRetrying,
-  isDeleting,
-}: ToolbarProps) {
-  const showFiltersAndActions = viewMode === "compact";
-  const [confirmModal, setConfirmModal] = useState<"retry" | "delete" | null>(null);
+  const [confirmRetryOpen, setConfirmRetryOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const isMobile = useIsMobile();
-  const { isAdmin } = useAuthContext();
-
-  const showRetryFailed = statusFilter === "all" || statusFilter === "failed";
-
-  const handleSortFieldChange = (field: SortField) => {
-    onSortChange({ ...sort, field });
-  };
-
-  const handleSortDirectionToggle = () => {
-    const newDirection: SortDirection = sort.direction === "asc" ? "desc" : "asc";
-    onSortChange({ ...sort, direction: newDirection });
-  };
+  const hasItems = (items?.length ?? 0) > 0;
 
   const handleRetryConfirm = () => {
-    onRetryAllFailed();
-    setConfirmModal(null);
-  };
-
-  const handleDeleteConfirm = () => {
-    onDeleteAll();
-    setConfirmModal(null);
+    retryAllFailed.mutate();
+    setConfirmRetryOpen(false);
   };
 
   return (
     <>
       <div className={toolbarContainer()}>
         <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
-          <ViewToggle viewMode={viewMode} onChange={onViewModeChange} />
+          <ViewToggle />
 
-          {showFiltersAndActions && (
-            <>
-              <div className="bg-fg/10 h-4 w-px" />
+          <div className={cn("bg-fg/10 h-4 w-px", isSearchOpen && "hidden sm:block")} />
 
-              {isMobile && isSearchOpen ? (
-                <SearchInput
-                  value={searchQuery}
-                  onChange={onSearchChange}
-                  isOpen={isSearchOpen}
-                  onOpenChange={setIsSearchOpen}
-                  isMobile={true}
-                />
-              ) : (
-                <>
-                  <StatusFilterDropdown value={statusFilter} onChange={onStatusFilterChange} />
-                  <SortDropdown value={sort.field} onChange={handleSortFieldChange} />
-                  <SortDirectionButton direction={sort.direction} onToggle={handleSortDirectionToggle} />
-                </>
-              )}
-            </>
-          )}
+          <div className={cn("flex items-center gap-1.5 sm:gap-2", isSearchOpen && "hidden sm:flex")}>
+            <FilterSortMenu />
+          </div>
 
-          {!(showFiltersAndActions && isMobile && isSearchOpen) && (
-            <>
-              {!showFiltersAndActions && <div className="bg-fg/10 h-4 w-px" />}
-              <SearchInput
-                value={searchQuery}
-                onChange={onSearchChange}
-                isOpen={isSearchOpen}
-                onOpenChange={setIsSearchOpen}
-                isMobile={isMobile}
-              />
-            </>
-          )}
+          <SearchInput
+            value={searchInput}
+            onChange={setSearchInput}
+            isOpen={isSearchOpen}
+            onOpenChange={setIsSearchOpen}
+          />
         </div>
 
-        {showFiltersAndActions && hasItems && !(isMobile && isSearchOpen) && (
-          <div className="shrink-0">
-            <ActionsDropdown
-              showRetryFailed={showRetryFailed}
-              isAdmin={isAdmin}
-              onRetryAllFailed={() => setConfirmModal("retry")}
-              onDeleteAll={() => setConfirmModal("delete")}
-            />
+        {hasItems && (
+          <div className={cn("shrink-0", isSearchOpen && "hidden sm:block")}>
+            <motion.button
+              type="button"
+              onClick={() => setConfirmRetryOpen(true)}
+              className={primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" })}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              aria-label="Retry all failed requests"
+            >
+              <RefreshCw className="size-3.5" />
+              <span>Retry all</span>
+            </motion.button>
           </div>
         )}
       </div>
 
       <ConfirmationModal
-        isOpen={confirmModal === "retry"}
-        onClose={() => setConfirmModal(null)}
+        isOpen={confirmRetryOpen}
+        onClose={() => setConfirmRetryOpen(false)}
         onConfirm={handleRetryConfirm}
         title="Retry All Failed"
         message="This will retry all failed and partially completed downloads. Continue?"
         variant="warning"
-        confirmText={isRetrying ? "Retrying..." : "Retry All"}
-      />
-      <ConfirmationModal
-        isOpen={confirmModal === "delete"}
-        onClose={() => setConfirmModal(null)}
-        onConfirm={handleDeleteConfirm}
-        title="Delete All Requests"
-        message="This will permanently delete all album requests. This action cannot be undone."
-        variant="danger"
-        confirmText={isDeleting ? "Deleting..." : "Delete All"}
+        confirmText={retryAllFailed.isPending ? "Retrying..." : "Retry All"}
       />
     </>
   );
