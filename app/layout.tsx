@@ -1,4 +1,5 @@
 import { Toaster } from "@components/ui/Sonner";
+import { TooltipProvider } from "@components/ui/Tooltip";
 import { AuthProvider } from "@modules/providers/AuthProvider";
 import { ClientSessionIdProvider } from "@modules/providers/ClientSessionIdProvider";
 import { CountryProvider } from "@modules/providers/CountryProvider";
@@ -40,8 +41,10 @@ export default function RootLayout({
             <TRPCProvider>
               <AuthProvider>
                 <SettingsModalProvider>
-                  <CountryProvider>{children}</CountryProvider>
-                  <SettingsModal />
+                  <TooltipProvider delayDuration={150} skipDelayDuration={0}>
+                    <CountryProvider>{children}</CountryProvider>
+                    <SettingsModal />
+                  </TooltipProvider>
                 </SettingsModalProvider>
               </AuthProvider>
             </TRPCProvider>
