@@ -1,4 +1,4 @@
-import { ContentType } from "@api/__generated__/types";
+import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { Disc3, ListMusic, Music, type LucideIcon } from "lucide-react";
 
 export function getContentTypeIcon(type: ContentType): LucideIcon {
@@ -42,4 +42,14 @@ export function getContentTypeBadgeColors(type: ContentType): string {
     case ContentType.enum.playlist:
       return "bg-emerald-500 border-emerald-400 text-emerald-50";
   }
+}
+
+export function getMusicItemName(item: MusicItem): string {
+  return item.type === ContentType.enum.track ? item.title : item.name;
+}
+
+export function getMusicItemArtist(item: MusicItem): string {
+  if (item.type === ContentType.enum.artist) return item.name;
+  if (item.type === ContentType.enum.playlist) return item.owner?.name || "Unknown";
+  return item.artists?.[0]?.name || item.artist || "Unknown Artist";
 }

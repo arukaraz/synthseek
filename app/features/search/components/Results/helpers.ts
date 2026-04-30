@@ -1,21 +1,11 @@
 import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
 import type { Result } from "./types";
-
-function getDisplayName(item: MusicItem): string {
-  if (item.type === ContentType.enum.track) return item.title || "Unknown";
-  return item.name || "Unknown";
-}
-
-function getArtistName(item: MusicItem): string {
-  if (item.type === ContentType.enum.artist) return item.name;
-  if (item.type === ContentType.enum.playlist) return item.owner?.name || "Unknown";
-  return item.artists?.[0]?.name || item.artist || "Unknown Artist";
-}
 
 export function transformResultForDisplay(item: MusicItem): Result {
   const type = item.type;
-  const name = getDisplayName(item);
-  const artistName = getArtistName(item);
+  const name = getMusicItemName(item) || "Unknown";
+  const artistName = getMusicItemArtist(item);
 
   switch (type) {
     case ContentType.enum.track:
