@@ -1,44 +1,41 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { TableDataRow } from "./TableDataRow";
+import { AnimatePresence, motion } from "framer-motion";
+import { tableBody, tableEmptyCell } from "./styles";
+import { TableRow } from "./TableRow";
 import type { TableBodyProps } from "./types";
 
 export function TableBody<TData>({
   columns,
   data,
   getRowId,
-  selectable,
-  selectedIds,
-  onSelectRow,
+  emptyMessage,
+  rowAttrs,
+  staggerDelay,
   onRowClick,
   isRowClickable,
-  emptyMessage = "No items to display",
 }: TableBodyProps<TData>) {
   return (
-    <tbody data-cy="content-browser-table-body">
+    <tbody className={tableBody()}>
       <AnimatePresence mode="popLayout">
         {data.length === 0 ? (
           <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <td colSpan={columns.length + (selectable ? 1 : 0)} className="text-fg/50 px-4 py-12 text-center">
+            <td colSpan={columns.length} className={tableEmptyCell()}>
               {emptyMessage}
             </td>
           </motion.tr>
         ) : (
-          data.map((item) => {
-            const rowId = getRowId(item);
-            const isSelected = selectedIds?.has(rowId) || false;
-            const clickable = isRowClickable ? isRowClickable(item) : false;
-
+          data.map((item, index) => {
+            const clickable = isRowClickable ? isRowClickable(item) : !!onRowClick;
             return (
-              <TableDataRow
-                key={rowId}
+              <TableRow
+                key={getRowId(item)}
                 item={item}
                 columns={columns}
-                selectable={selectable}
-                isSelected={isSelected}
+                index={index}
+                staggerDelay={staggerDelay}
+                attrs={rowAttrs?.(item)}
                 clickable={clickable}
-                onSelect={() => onSelectRow?.(rowId)}
                 onClick={() => onRowClick?.(item)}
               />
             );
