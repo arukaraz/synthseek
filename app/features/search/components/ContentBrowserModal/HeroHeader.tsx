@@ -7,14 +7,7 @@ import { glassContainer, imagePlaceholder, primaryGradientButton } from "@theme/
 import { heroContentContainer } from "../styles";
 import { ArrowLeft, Download } from "lucide-react";
 import Image from "next/image";
-import type { ContentMetadata } from "./types";
-
-interface HeroHeaderProps {
-  metadata: ContentMetadata;
-  type: ContentType;
-  onRequestAll?: () => void;
-  onBack?: () => void;
-}
+import type { HeroHeaderProps } from "./types";
 
 export function HeroHeader({ metadata, type, onRequestAll, onBack }: HeroHeaderProps) {
   const { title, subtitle, metadata: metadataText, thumbnail, showRequestButton } = metadata;

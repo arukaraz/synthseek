@@ -3,21 +3,7 @@
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-
-export interface Option<T extends string | number> {
-  value: T;
-  label: string;
-  description: string;
-}
-
-interface OptionGridProps<T extends string | number> {
-  label: string;
-  options: Option<T>[];
-  value: T;
-  onChange: (value: T) => void;
-  columns?: 2 | 4;
-  showCheckmark?: boolean;
-}
+import type { OptionGridProps } from "./types";
 
 export function OptionGrid<T extends string | number>({
   label,

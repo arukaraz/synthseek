@@ -15,20 +15,33 @@ export interface BitrateOption {
   description: string;
 }
 
-export const BITRATE_OPTIONS: BitrateOption[] = [
-  { value: 320, label: "320 kbps", description: "Best" },
-  { value: 256, label: "256 kbps", description: "High" },
-  { value: 192, label: "192 kbps", description: "Good" },
-  { value: 128, label: "128 kbps", description: "Low" },
-];
-
 export interface MatchingOption {
   value: "strict" | "flexible";
   label: string;
   description: string;
 }
 
-export const MATCHING_OPTIONS: MatchingOption[] = [
-  { value: "strict", label: "Strict", description: "Exact match required" },
-  { value: "flexible", label: "Flexible", description: "Best available match" },
-];
+export interface ConfigHeaderProps {
+  name: string;
+  artist?: string;
+  image?: string;
+  year?: string;
+  itemType: ContentType;
+  totalTracks?: number;
+  albumName?: string;
+}
+
+export interface Option<T extends string | number> {
+  value: T;
+  label: string;
+  description: string;
+}
+
+export interface OptionGridProps<T extends string | number> {
+  label: string;
+  options: Option<T>[];
+  value: T;
+  onChange: (value: T) => void;
+  columns?: 2 | 4;
+  showCheckmark?: boolean;
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isAlbum, isTrack, isAnyTrack, getItemDisplayName, extractItemMetadata } from "../helpers";
+import { isAlbum, isTrack, getItemDisplayName, extractItemMetadata } from "../helpers";
 import { createMockTrackFull, createMockAlbumSimplified } from "@test/factories";
 
 describe("isAlbum", () => {
@@ -35,20 +35,6 @@ describe("isTrack", () => {
 
   it("returns false for null", () => {
     expect(isTrack(null)).toBe(false);
-  });
-});
-
-describe("isAnyTrack", () => {
-  it("returns true for full track", () => {
-    expect(isAnyTrack(createMockTrackFull())).toBe(true);
-  });
-
-  it("returns false for album", () => {
-    expect(isAnyTrack(createMockAlbumSimplified())).toBe(false);
-  });
-
-  it("returns false for null", () => {
-    expect(isAnyTrack(null)).toBe(false);
   });
 });
 

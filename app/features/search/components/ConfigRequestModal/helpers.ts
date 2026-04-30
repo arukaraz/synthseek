@@ -1,4 +1,5 @@
-import { ContentType, type MusicItem, type MusicTrack, type MusicAlbum } from "@api/__generated__/types";
+import { ContentType, type MusicAlbum, type MusicItem, type MusicTrack } from "@api/__generated__/types";
+import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
 
 export function isAlbum(item: unknown): item is MusicAlbum {
   return !!item && typeof item === "object" && "type" in item && (item as MusicItem).type === ContentType.enum.album;
@@ -14,27 +15,12 @@ export function isTrack(item: unknown): item is MusicTrack {
   );
 }
 
-export function isAnyTrack(item: unknown): item is MusicTrack {
-  return isTrack(item);
-}
-
-function getDisplayName(item: MusicItem): string {
-  if (item.type === ContentType.enum.track) return item.title;
-  return item.name;
-}
-
-function getArtistName(item: MusicItem): string {
-  if (item.type === ContentType.enum.artist) return item.name;
-  if (item.type === ContentType.enum.playlist) return item.owner?.name || "Unknown";
-  return item.artists?.[0]?.name || item.artist || "Unknown Artist";
-}
-
 export function getItemDisplayName(item: MusicItem | null): string {
   if (!item) return "";
-  const name = getDisplayName(item);
+  const name = getMusicItemName(item);
   if (!name) return "";
   if (item.type === ContentType.enum.artist) return name;
-  return `${getArtistName(item)} - ${name}`;
+  return `${getMusicItemArtist(item)} - ${name}`;
 }
 
 export function extractItemMetadata(item: MusicItem | null, parentAlbum?: MusicItem | null) {
@@ -49,8 +35,8 @@ export function extractItemMetadata(item: MusicItem | null, parentAlbum?: MusicI
     };
   }
 
-  const name = getDisplayName(item);
-  const artist = getArtistName(item);
+  const name = getMusicItemName(item);
+  const artist = getMusicItemArtist(item);
 
   let image: string | undefined;
   let year: string | undefined;
@@ -84,3 +70,17 @@ export function extractItemMetadata(item: MusicItem | null, parentAlbum?: MusicI
 
   return { name, artist, image, year, totalTracks, albumName };
 }
+
+export function mapTrackFields(t: MusicTrack) {
+  return {
+    external_id: t.id,
+    title: t.title,
+    artist: getMusicItemArtist(t),
+    track_number: t.track_number,
+    disc_number: t.disc_number,
+    duration_ms: t.duration_ms,
+    explicit: t.explicit,
+    isrc: t.isrc,
+  };
+}
+

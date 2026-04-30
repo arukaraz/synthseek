@@ -1,35 +1,20 @@
 "use client";
 
 import { Button } from "@components/ui/Button";
-import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { ContentType } from "@api/__generated__/types";
 import { Download, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@utils/cn";
 import { itemImage, trackListContainer } from "../styles";
+import { getMusicItemName } from "@utils/content-type-helpers";
 import { formatTrackDuration, formatYear } from "@utils/formatters";
-
-interface ContentListItemProps {
-  item: MusicItem;
-  parentType: ContentType;
-  onActionClick: (item: MusicItem) => void;
-  onNavigate?: (item: MusicItem) => void;
-  isClickable?: boolean;
-}
-
-function getItemName(item: MusicItem): string {
-  return item.type === ContentType.enum.track ? item.title : item.name;
-}
-
-function getItemImage(item: MusicItem): string | undefined {
-  if (item.type === ContentType.enum.track && "images" in item) return item.images?.[0]?.url;
-  if ("images" in item) return item.images?.[0]?.url;
-  return undefined;
-}
+import { getItemImage } from "./helpers";
+import type { ContentListItemProps } from "./types";
 
 export function ContentListItem({ item, parentType, onActionClick, onNavigate, isClickable }: ContentListItemProps) {
   const isArtistView = parentType === ContentType.enum.artist;
   const isAlbumView = parentType === ContentType.enum.album || parentType === ContentType.enum.playlist;
-  const name = getItemName(item) || "Unknown";
+  const name = getMusicItemName(item) || "Unknown";
   const imageUrl = getItemImage(item);
 
   const handleClick = () => {

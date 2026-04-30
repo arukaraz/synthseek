@@ -1,23 +1,15 @@
 "use client";
 
-import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { ContentType } from "@api/__generated__/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { Disc3, Music } from "lucide-react";
 import { loadingSpinner } from "../styles";
 import { ContentListItem } from "./ContentListItem";
 import { EmptyState } from "@components/ui/EmptyState";
-
-interface ContentListProps {
-  type: ContentType;
-  items: MusicItem[];
-  isLoading: boolean;
-  onActionClick: (item: MusicItem) => void;
-  onNavigate?: (item: MusicItem) => void;
-}
+import type { ContentListProps } from "./types";
 
 export function ContentList({ type, items, isLoading, onActionClick, onNavigate }: ContentListProps) {
   const isArtistView = type === ContentType.enum.artist;
-  const _isAlbumView = type === ContentType.enum.album;
 
   const sectionTitle = isArtistView ? "Albums" : "Tracks";
   const isClickable = isArtistView;

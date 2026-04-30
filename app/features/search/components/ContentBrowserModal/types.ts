@@ -21,3 +21,26 @@ export interface ContentBrowserModalProps {
   onClose: () => void;
   onRequestClick: (item: MusicItem, context?: RequestContext) => void;
 }
+
+export interface HeroHeaderProps {
+  metadata: ContentMetadata;
+  type: ContentType;
+  onRequestAll?: () => void;
+  onBack?: () => void;
+}
+
+export interface ContentListProps {
+  type: ContentType;
+  items: MusicItem[];
+  isLoading: boolean;
+  onActionClick: (item: MusicItem) => void;
+  onNavigate?: (item: MusicItem) => void;
+}
+
+export interface ContentListItemProps {
+  item: MusicItem;
+  parentType: ContentType;
+  onActionClick: (item: MusicItem) => void;
+  onNavigate?: (item: MusicItem) => void;
+  isClickable?: boolean;
+}

@@ -3,23 +3,18 @@
 import { Badge } from "@components/ui/Badge";
 import { ContentType } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
+import {
+  getContentTypeBadgeColors,
+  getContentTypeIcon,
+  getContentTypeLabel,
+} from "@utils/content-type-helpers";
 import { configHeader } from "../styles";
-import { Disc, Music } from "lucide-react";
 import Image from "next/image";
-
-interface ConfigHeaderProps {
-  name: string;
-  artist?: string;
-  image?: string;
-  year?: string;
-  itemType: ContentType;
-  totalTracks?: number;
-  albumName?: string;
-}
+import type { ConfigHeaderProps } from "./types";
 
 export function ConfigHeader({ name, artist, image, year, itemType, totalTracks, albumName }: ConfigHeaderProps) {
-  const isAlbum = itemType === ContentType.enum.album;
   const isTrack = itemType === ContentType.enum.track;
+  const PlaceholderIcon = getContentTypeIcon(itemType);
 
   return (
     <div className="h-config-header-responsive relative overflow-hidden rounded-t-2xl" data-cy="config-header">
@@ -27,11 +22,7 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
         <Image src={image} alt={name} fill className="object-cover object-center" priority />
       ) : (
         <div className={configHeader()}>
-          {isAlbum ? (
-            <Disc className="text-primary-400/50 h-16 w-16" />
-          ) : (
-            <Music className="text-primary-400/50 h-16 w-16" />
-          )}
+          <PlaceholderIcon className="text-primary-400/50 h-16 w-16" />
         </div>
       )}
 
@@ -40,13 +31,8 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
       <div className="absolute right-0 bottom-0 left-0 z-10 p-4">
         <div className="flex items-end gap-3">
           <div className="min-w-0 flex-1 space-y-0.5">
-            <Badge
-              className={cn(
-                "text-overlay-fg mb-1 border-0",
-                isAlbum ? "bg-primary-500" : isTrack ? "bg-accent-500" : "bg-secondary-500"
-              )}
-            >
-              {isAlbum ? "Album" : isTrack ? "Track" : itemType}
+            <Badge className={cn("text-overlay-fg mb-1 border-0", getContentTypeBadgeColors(itemType))}>
+              {getContentTypeLabel(itemType)}
             </Badge>
 
             <h2

@@ -7,53 +7,21 @@ import {
   RequestFormat,
   RequestMatchingMode,
   FORMAT_OPTIONS,
-  type MusicTrack,
   type MusicPlaylistTrack,
+  type MusicTrack,
 } from "@api/__generated__/types";
-import { useBatchRequest, usePlaylistRequest, useRequest } from "@hooks/api";
+import { useBatchRequest, useGetContents, usePlaylistRequest, useRequest } from "@hooks/api";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { titleCase } from "@utils/formatters";
-import { trpc } from "@utils/trpc";
 import { Download, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ConfigHeader } from "./ConfigHeader";
-import { OptionGrid, Option } from "./OptionGrid";
-import { extractItemMetadata, getItemDisplayName } from "./helpers";
-import { BITRATE_OPTIONS, MATCHING_OPTIONS, ConfigRequestModalProps } from "./types";
-
-function mapTrackFields(t: MusicTrack) {
-  return {
-    external_id: t.id,
-    title: t.title,
-    artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
-    track_number: t.track_number,
-    disc_number: t.disc_number,
-    duration_ms: t.duration_ms,
-    explicit: t.explicit,
-    isrc: t.isrc,
-  };
-}
-
-async function fetchContentTracks(
-  fetchFn: typeof trpc.useUtils.prototype.music.getContents.fetch,
-  parentId: string,
-  parentType: ContentType
-): Promise<MusicTrack[] | null> {
-  const response = await fetchFn({ parentId, parentType });
-
-  if (!response?.success || !response.content) return null;
-
-  const content = Array.isArray(response.content) ? response.content : [];
-
-  if (parentType === ContentType.enum.playlist) {
-    const playlistTracks = content as MusicPlaylistTrack[];
-    return playlistTracks.filter((pt) => pt?.track).map((pt) => pt.track);
-  }
-
-  return content as MusicTrack[];
-}
+import { OptionGrid } from "./OptionGrid";
+import { BITRATE_OPTIONS, MATCHING_OPTIONS } from "./consts";
+import { extractItemMetadata, getItemDisplayName, mapTrackFields } from "./helpers";
+import type { ConfigRequestModalProps, Option } from "./types";
 
 export default function ConfigRequestModal({
   isOpen,
@@ -69,7 +37,23 @@ export default function ConfigRequestModal({
   const formatMatching = RequestMatchingMode.enum.flexible;
 
   const router = useRouter();
-  const utils = trpc.useUtils();
+
+  const needsTrackList = !!item && item.type !== ContentType.enum.track;
+  const { data: contentResponse, isLoading: isLoadingTracks } = useGetContents(
+    item?.id ?? "",
+    needsTrackList,
+    item?.type ?? ContentType.enum.album
+  );
+
+  const trackList = useMemo<MusicTrack[]>(() => {
+    if (!contentResponse?.success || !contentResponse.content) return [];
+    const content = Array.isArray(contentResponse.content) ? contentResponse.content : [];
+    if (item?.type === ContentType.enum.playlist) {
+      const playlistTracks = content as MusicPlaylistTrack[];
+      return playlistTracks.filter((pt) => pt?.track).map((pt) => pt.track);
+    }
+    return content as MusicTrack[];
+  }, [contentResponse, item?.type]);
 
   const metadata = useMemo(() => extractItemMetadata(item, parentAlbum), [item, parentAlbum]);
 
@@ -92,8 +76,14 @@ export default function ConfigRequestModal({
   }));
 
   const handleMutationSuccess = () => {
+    if (!item) return;
     const itemName = getItemDisplayName(item);
-    router.push("/requests?view=compact");
+    const selectedExternalId =
+      item.type === ContentType.enum.track ? (parentAlbum?.id ?? item.album.id) : item.id;
+    const query = selectedExternalId
+      ? `?view=groups&selected=${encodeURIComponent(selectedExternalId)}`
+      : "?view=groups";
+    router.push(`/requests${query}`);
     onSuccess?.(itemName);
     handleClose();
   };
@@ -102,13 +92,14 @@ export default function ConfigRequestModal({
   const downloadAlbumMutation = useBatchRequest();
   const downloadPlaylistMutation = usePlaylistRequest();
 
-  const isLoading = downloadMutation.isPending || downloadAlbumMutation.isPending || downloadPlaylistMutation.isPending;
+  const isMutating = downloadMutation.isPending || downloadAlbumMutation.isPending || downloadPlaylistMutation.isPending;
+  const isLoading = isMutating || (needsTrackList && isLoadingTracks);
 
   const handleClose = () => {
     if (!isLoading) onClose();
   };
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     if (!item) {
       toast.error("Invalid item");
       return;
@@ -131,57 +122,48 @@ export default function ConfigRequestModal({
       return;
     }
 
-    try {
-      const trackList = await fetchContentTracks(utils.music.getContents.fetch, item.id, item.type);
+    if (trackList.length === 0) {
+      toast.error(`Failed to fetch ${titleCase(item.type)} tracks`);
+      return;
+    }
 
-      if (!trackList) {
-        toast.error(`Failed to fetch ${titleCase(item.type)} tracks`);
-        return;
-      }
+    if (item.type === ContentType.enum.album) {
+      downloadAlbumMutation.mutate(
+        {
+          external_id: item.id,
+          name: item.name,
+          artist: item.artists[0]?.name || item.artist,
+          album_art: item.images[0]?.url ?? null,
+          release_date: item.release_date || "1900-01-01",
+          total_tracks: item.total_tracks || trackList.length,
+          tracks: trackList.map(mapTrackFields),
+          config,
+        },
+        { onSuccess: handleMutationSuccess }
+      );
+      return;
+    }
 
-      if (item.type === ContentType.enum.album) {
-        downloadAlbumMutation.mutate(
-          {
-            external_id: item.id,
-            name: item.name,
-            artist: item.artists[0]?.name || item.artist,
-            album_art: item.images[0]?.url ?? null,
-            release_date: item.release_date || "1900-01-01",
-            total_tracks: item.total_tracks || trackList.length,
-            tracks: trackList.map(mapTrackFields),
-            config,
-          },
-          { onSuccess: handleMutationSuccess }
-        );
-        return;
-      }
-
-      if (item.type === ContentType.enum.playlist) {
-        downloadPlaylistMutation.mutate(
-          {
-            external_id: item.id,
-            name: item.name,
-            description: item.description ?? null,
-            owner: item.owner?.name ?? "Unknown",
-            image: item.images?.[0]?.url ?? null,
-            total_tracks: item.total_tracks || trackList.length,
-            tracks: trackList.map((t) => ({
-              ...mapTrackFields(t),
-              album_external_id: t.album.id,
-              album_name: t.album.name,
-              album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
-              album_image: t.album.images?.[0]?.url ?? null,
-            })),
-            config,
-          },
-          { onSuccess: handleMutationSuccess }
-        );
-        return;
-      }
-    } catch (error) {
-      toast.error(`Failed to process ${titleCase(item.type)}`, {
-        description: error instanceof Error ? error.message : "Unknown error",
-      });
+    if (item.type === ContentType.enum.playlist) {
+      downloadPlaylistMutation.mutate(
+        {
+          external_id: item.id,
+          name: item.name,
+          description: item.description ?? null,
+          owner: item.owner?.name ?? "Unknown",
+          image: item.images?.[0]?.url ?? null,
+          total_tracks: item.total_tracks || trackList.length,
+          tracks: trackList.map((t) => ({
+            ...mapTrackFields(t),
+            album_external_id: t.album.id,
+            album_name: t.album.name,
+            album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
+            album_image: t.album.images?.[0]?.url ?? null,
+          })),
+          config,
+        },
+        { onSuccess: handleMutationSuccess }
+      );
     }
   };
 
@@ -255,12 +237,12 @@ export default function ConfigRequestModal({
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Downloading...
+                  Requesting please wait...
                 </>
               ) : (
                 <>
                   <Download className="mr-2 h-4 w-4" />
-                  Start Download
+                  Request
                 </>
               )}
             </Button>
