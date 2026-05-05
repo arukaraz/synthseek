@@ -19,7 +19,7 @@ RUN pip3 install --break-system-packages --no-cache-dir \
     && beet version
 
 RUN addgroup --system --gid 1001 nodejs \
-    && adduser --system --uid 1001 synthseek \
+    && adduser --system --uid 1001 --ingroup nodejs synthseek \
     && mkdir -p /data/db /data/config /data/logs /data/artwork-cache /downloads /music \
     && chown -R synthseek:nodejs /data /data/artwork-cache /downloads /music
 
