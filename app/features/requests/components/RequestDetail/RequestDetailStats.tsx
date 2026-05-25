@@ -24,12 +24,7 @@ export function RequestDetailStats({ request }: RequestDetailStatsProps) {
         sublabel="downloaded"
         valueClassName="text-green-400"
       />
-      <RequestDetailStatsCard
-        label="Failed"
-        value={failedCount}
-        sublabel="errored"
-        valueClassName="text-red-400"
-      />
+      <RequestDetailStatsCard label="Failed" value={failedCount} sublabel="errored" valueClassName="text-red-400" />
       <RequestDetailStatsCard
         label="Active"
         value={activeCount}

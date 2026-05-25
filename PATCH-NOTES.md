@@ -26,7 +26,7 @@ path for cleaner import diagnostics.
 ### Fixes and improvements
 
 - Container no longer crashes at boot with `chown: /music: Operation
-  not permitted` when the music library lives on a USB / exFAT / NTFS
+not permitted` when the music library lives on a USB / exFAT / NTFS
   drive. The recursive `chown` on user volumes is replaced by a
   runtime access probe that emits a clear diagnostic instead of
   crashing. Boot is also instant on multi-TB libraries since there's

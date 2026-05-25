@@ -11,6 +11,28 @@ vi.mock("next-themes", () => ({
   }),
 }));
 
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({
+    currentUser: {
+      id: "user_1",
+      username: "test-user",
+      email: "test@example.com",
+      role: "admin",
+      avatar_url: null,
+    },
+    isAdmin: true,
+    isLoading: false,
+  }),
+}));
+
+vi.mock("@hooks/api/mutations/auth/useLogout", () => ({
+  useLogout: () => ({ mutateAsync: vi.fn(), isPending: false }),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace: vi.fn(), push: vi.fn() }),
+}));
+
 vi.mock("framer-motion", async () => {
   const actual = await vi.importActual("framer-motion");
   return {

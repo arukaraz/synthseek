@@ -33,14 +33,7 @@ export function TrackActionsCell({ track, canAct, onRetry, onCancel }: TrackActi
         />
       )}
       {showCancel && (
-        <IconButton
-          icon={X}
-          variant="red"
-          size="sm"
-          aria-label="Cancel track"
-          title="Cancel"
-          onClick={onCancel}
-        />
+        <IconButton icon={X} variant="red" size="sm" aria-label="Cancel track" title="Cancel" onClick={onCancel} />
       )}
       {!showRetry && !showCancel && <span className="text-fg/20 text-xs">—</span>}
     </div>

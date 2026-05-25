@@ -30,32 +30,18 @@ export const decorativeLine = cva(
 
 export type DecorativeLineProps = VariantProps<typeof decorativeLine>;
 
-export const headerContent = cva("relative flex w-full items-center justify-between px-4", {
+export const headerContent = cva("relative flex w-full items-center gap-3 px-4 sm:gap-6 sm:px-6", {
   variants: {
     height: {
       default: "h-16 sm:h-20",
     },
-    padding: {
-      responsive: "sm:px-6",
-    },
   },
   defaultVariants: {
     height: "default",
-    padding: "responsive",
   },
 });
 
 export type HeaderContentProps = VariantProps<typeof headerContent>;
-
-export const searchInput = cva(
-  "text-fg placeholder-fg/30 w-full rounded-xl bg-transparent py-2.5 pr-8 pl-10 text-sm outline-none",
-  {
-    variants: {},
-    defaultVariants: {},
-  }
-);
-
-export type SearchInputProps = VariantProps<typeof searchInput>;
 
 export const searchGlow = cva(
   "absolute -inset-0.5 -z-10 hidden rounded-xl bg-gradient-to-r opacity-20 blur-sm sm:block",
@@ -82,3 +68,38 @@ export const clearButton = cva(
 );
 
 export type ClearButtonProps = VariantProps<typeof clearButton>;
+
+export const headerTab = cva(
+  "relative flex h-9 items-center gap-2 rounded-md px-3 text-sm transition-colors [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      active: {
+        true: "text-fg",
+        false: "text-fg/55 hover:text-fg/85 hover:bg-fg/5",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);
+
+export const headerTabUnderline = cva("absolute -bottom-[3px] left-3 right-3 h-[2px] rounded-full bg-primary-500");
+
+export const headerTabBadge = cva(
+  "ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent-500/20 px-1.5 text-[10px] font-semibold text-accent-200"
+);
+
+export const searchShell = cva("relative flex w-full items-center rounded-xl border transition-all", {
+  variants: {
+    focused: {
+      true: "border-primary-500/50 bg-primary-500/5 shadow-primary-500/20 shadow-lg",
+      false: "border-fg/10 bg-fg/5",
+    },
+  },
+  defaultVariants: { focused: false },
+});
+
+export const searchInput = cva("text-fg placeholder-fg/35 h-10 w-full bg-transparent pr-20 pl-10 text-sm outline-none");
+
+export const searchKbdHint = cva(
+  "pointer-events-none absolute right-3 hidden items-center gap-1 rounded-md border border-fg/10 bg-fg/5 px-1.5 py-0.5 font-mono text-[10px] text-fg/45 sm:inline-flex"
+);

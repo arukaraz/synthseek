@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { UpdateBanner } from "../UpdateBanner";
+import { UpdateBanner } from "../UpdateBanner/UpdateBanner";
 
 vi.mock("framer-motion", async () => {
   const actual = await vi.importActual("framer-motion");
@@ -17,6 +17,11 @@ vi.mock("framer-motion", async () => {
         <button className={className} {...props}>
           {children}
         </button>
+      ),
+      span: ({ children, className, ...props }: React.ComponentProps<"span">) => (
+        <span className={className} {...props}>
+          {children}
+        </span>
       ),
     },
   };
@@ -71,5 +76,28 @@ describe("UpdateBanner", () => {
 
     expect(screen.getByText("Version 3.2.1")).toBeInTheDocument();
     expect(screen.getByText("(current: 1.5.0)")).toBeInTheDocument();
+  });
+
+  describe("breaking-update variant", () => {
+    it("does not render the MAJOR UPDATE label for a minor bump", () => {
+      render(<UpdateBanner latestVersion="1.5.0" currentVersion="1.4.2" />);
+      expect(screen.queryByText(/major update/i)).not.toBeInTheDocument();
+    });
+
+    it("renders the MAJOR UPDATE label when major version bumps", () => {
+      render(<UpdateBanner latestVersion="2.0.0" currentVersion="1.4.2" />);
+      expect(screen.getByText(/major update/i)).toBeInTheDocument();
+      expect(screen.getByText(/review patch notes before upgrading/i)).toBeInTheDocument();
+    });
+
+    it("renders MAJOR UPDATE for 2.x → 3.0", () => {
+      render(<UpdateBanner latestVersion="3.0.0" currentVersion="2.4.1" />);
+      expect(screen.getByText(/major update/i)).toBeInTheDocument();
+    });
+
+    it("falls back to normal variant on unparseable versions", () => {
+      render(<UpdateBanner latestVersion="dev" currentVersion="1.0.0" />);
+      expect(screen.queryByText(/major update/i)).not.toBeInTheDocument();
+    });
   });
 });

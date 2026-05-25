@@ -78,8 +78,7 @@ export default function ConfigRequestModal({
   const handleMutationSuccess = () => {
     if (!item) return;
     const itemName = getItemDisplayName(item);
-    const selectedExternalId =
-      item.type === ContentType.enum.track ? (parentAlbum?.id ?? item.album.id) : item.id;
+    const selectedExternalId = item.type === ContentType.enum.track ? (parentAlbum?.id ?? item.album.id) : item.id;
     const query = selectedExternalId
       ? `?view=groups&selected=${encodeURIComponent(selectedExternalId)}`
       : "?view=groups";
@@ -92,7 +91,8 @@ export default function ConfigRequestModal({
   const downloadAlbumMutation = useBatchRequest();
   const downloadPlaylistMutation = usePlaylistRequest();
 
-  const isMutating = downloadMutation.isPending || downloadAlbumMutation.isPending || downloadPlaylistMutation.isPending;
+  const isMutating =
+    downloadMutation.isPending || downloadAlbumMutation.isPending || downloadPlaylistMutation.isPending;
   const isLoading = isMutating || (needsTrackList && isLoadingTracks);
 
   const handleClose = () => {

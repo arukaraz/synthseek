@@ -29,12 +29,7 @@ export function TableHeaderCell<TData>({ column, isActive, direction, onSort }: 
       >
         <span>{content}</span>
         {isActive && direction && (
-          <motion.div
-            variants={TABLE_HEADER_SORT_INDICATOR_VARIANTS}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
+          <motion.div variants={TABLE_HEADER_SORT_INDICATOR_VARIANTS} initial="initial" animate="animate" exit="exit">
             {direction === "asc" ? <ArrowUp className="size-3.5" /> : <ArrowDown className="size-3.5" />}
           </motion.div>
         )}

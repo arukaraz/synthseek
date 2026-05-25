@@ -29,7 +29,8 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
       data-testid="sidebar-request-item"
       className={cn(
         sidebarItem(),
-        isSelected && "bg-primary-500/10 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-primary-500"
+        isSelected &&
+          "bg-primary-500/10 before:bg-primary-500 before:absolute before:inset-y-0 before:left-0 before:w-0.5"
       )}
     >
       <div className="flex items-center justify-between gap-2">
@@ -40,7 +41,7 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
             aria-label={statusConfig.label}
           />
         </div>
-        <span className="text-fg/40 shrink-0 text-xs font-mono">
+        <span className="text-fg/40 shrink-0 font-mono text-xs">
           {request.completed_tracks}/{request.total_tracks}
         </span>
       </div>

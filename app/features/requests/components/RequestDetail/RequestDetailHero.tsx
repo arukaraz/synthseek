@@ -1,12 +1,7 @@
 "use client";
 
 import { Button } from "@components/ui/Button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@components/ui/DropdownMenu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { IconButton } from "@components/ui/IconButton";
 import { StatusBadge } from "@components/ui/StatusBadge";
 import { cn } from "@utils/cn";

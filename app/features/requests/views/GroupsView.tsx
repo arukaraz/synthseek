@@ -70,12 +70,7 @@ export function GroupsView() {
         searchQuery={debouncedSearchQuery}
         className={cn("h-full w-full md:w-72 md:shrink-0", selectedRequestId ? "hidden md:flex" : "flex")}
       />
-      <div
-        className={cn(
-          "h-full flex-1 flex-col overflow-hidden",
-          selectedRequestId ? "flex" : "hidden md:flex"
-        )}
-      >
+      <div className={cn("h-full flex-1 flex-col overflow-hidden", selectedRequestId ? "flex" : "hidden md:flex")}>
         <RequestDetail request={selected} onBack={handleBack} />
       </div>
     </div>

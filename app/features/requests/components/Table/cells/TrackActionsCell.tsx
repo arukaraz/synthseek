@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@components/ui/DropdownMenu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { IconButton } from "@components/ui/IconButton";
 import { isRetryableStatus } from "@utils/status-helpers";
 import { MoreVertical, RefreshCw, Trash2 } from "lucide-react";
@@ -37,14 +32,7 @@ export function TrackActionsCell({ item, canAct, onRetry, onCancel }: TrackActio
             title="Retry"
           />
         )}
-        <IconButton
-          icon={Trash2}
-          variant="red"
-          size="sm"
-          onClick={onCancel}
-          aria-label="Cancel track"
-          title="Cancel"
-        />
+        <IconButton icon={Trash2} variant="red" size="sm" onClick={onCancel} aria-label="Cancel track" title="Cancel" />
       </div>
 
       <div className="sm:hidden">

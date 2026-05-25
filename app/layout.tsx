@@ -3,9 +3,7 @@ import { TooltipProvider } from "@components/ui/Tooltip";
 import { AuthProvider } from "@modules/providers/AuthProvider";
 import { ClientSessionIdProvider } from "@modules/providers/ClientSessionIdProvider";
 import { CountryProvider } from "@modules/providers/CountryProvider";
-import { SettingsModalProvider } from "@modules/providers/SettingsModalProvider";
 import { TRPCProvider } from "@modules/providers/TRPCProvider";
-import { SettingsModal } from "@features/settings/SettingsModal/SettingsModal";
 import { fontVariables } from "@theme/fonts";
 import "@theme/index.css";
 import { AVAILABLE_THEMES, ThemeProvider } from "@theme/ThemeProvider";
@@ -40,12 +38,9 @@ export default function RootLayout({
           <ClientSessionIdProvider>
             <TRPCProvider>
               <AuthProvider>
-                <SettingsModalProvider>
-                  <TooltipProvider delayDuration={150} skipDelayDuration={0}>
-                    <CountryProvider>{children}</CountryProvider>
-                    <SettingsModal />
-                  </TooltipProvider>
-                </SettingsModalProvider>
+                <TooltipProvider delayDuration={150} skipDelayDuration={0}>
+                  <CountryProvider>{children}</CountryProvider>
+                </TooltipProvider>
               </AuthProvider>
             </TRPCProvider>
           </ClientSessionIdProvider>

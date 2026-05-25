@@ -46,8 +46,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const canSyncPlex =
     isPlaylist &&
     request.plex_playlist_id === null &&
-    (request.status === RequestStatus.enum.complete ||
-      request.status === RequestStatus.enum.partially_complete);
+    (request.status === RequestStatus.enum.complete || request.status === RequestStatus.enum.partially_complete);
 
   const retry = () => {
     if (isPlaylist) retryPlaylist.mutate({ playlistId: request.id });

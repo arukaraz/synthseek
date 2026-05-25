@@ -11,16 +11,8 @@ export function RequestsEmptyState({ searchQuery }: RequestsEmptyStateProps) {
   const hasSearch = !!searchQuery && searchQuery.trim().length > 0;
 
   if (hasSearch) {
-    return (
-      <EmptyState
-        icon={Search}
-        title="No Results"
-        description={`No requests match "${searchQuery}"`}
-      />
-    );
+    return <EmptyState icon={Search} title="No Results" description={`No requests match "${searchQuery}"`} />;
   }
 
-  return (
-    <EmptyState icon={Inbox} title="No Requests" description="Your download requests will appear here." />
-  );
+  return <EmptyState icon={Inbox} title="No Requests" description="Your download requests will appear here." />;
 }

@@ -29,11 +29,7 @@ export function RequestSidebar({ items, selectedId, onSelect, searchQuery, class
       <ul className={sidebarList()}>
         {items.map((item) => (
           <li key={item.id}>
-            <RequestSidebarItem
-              request={item}
-              isSelected={item.id === selectedId}
-              onSelect={() => onSelect(item.id)}
-            />
+            <RequestSidebarItem request={item} isSelected={item.id === selectedId} onSelect={() => onSelect(item.id)} />
           </li>
         ))}
       </ul>

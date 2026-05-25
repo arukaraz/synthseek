@@ -3,11 +3,7 @@
 import { Badge } from "@components/ui/Badge";
 import { ContentType } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
-import {
-  getContentTypeBadgeColors,
-  getContentTypeIcon,
-  getContentTypeLabel,
-} from "@utils/content-type-helpers";
+import { getContentTypeBadgeColors, getContentTypeIcon, getContentTypeLabel } from "@utils/content-type-helpers";
 import { configHeader } from "../styles";
 import Image from "next/image";
 import type { ConfigHeaderProps } from "./types";

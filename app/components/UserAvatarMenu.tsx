@@ -10,15 +10,13 @@ import {
 } from "@components/ui/DropdownMenu";
 import { useLogout } from "@hooks/api/mutations/auth/useLogout";
 import { useAuthContext } from "@modules/providers/AuthProvider";
-import { useSettingsModal } from "@modules/providers/SettingsModalProvider";
 import { motion } from "framer-motion";
-import { LogOut, Settings, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { logoutItem, menuContent, menuItem, triggerButton, userInfoContainer } from "./UserAvatarMenu/styles";
+import { logoutItem, menuContent, triggerButton, userInfoContainer } from "./UserAvatarMenu/styles";
 
 export function UserAvatarMenu() {
   const { currentUser } = useAuthContext();
-  const settings = useSettingsModal();
   const logout = useLogout();
   const router = useRouter();
 
@@ -58,13 +56,6 @@ export function UserAvatarMenu() {
             <span className="text-fg/50 truncate text-xs">{currentUser.email}</span>
           </div>
         </div>
-
-        <DropdownMenuSeparator className="bg-fg/10 my-1.5" />
-
-        <DropdownMenuItem onClick={() => settings.open()} className={menuItem()}>
-          <Settings className="text-fg/70 h-4 w-4" />
-          <span className="text-sm">Settings</span>
-        </DropdownMenuItem>
 
         <DropdownMenuSeparator className="bg-fg/10 my-1.5" />
 

@@ -6,11 +6,7 @@ import { isProcessingStatus, isSpinningStatus } from "@utils/status-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import {
-  TRACK_STATUS_ICON_CONTAINER_SIZE,
-  TRACK_STATUS_ICON_RADIUS,
-  TRACK_STATUS_ICON_STROKE_WIDTH,
-} from "./consts";
+import { TRACK_STATUS_ICON_CONTAINER_SIZE, TRACK_STATUS_ICON_RADIUS, TRACK_STATUS_ICON_STROKE_WIDTH } from "./consts";
 import type { TrackStatusIconProps } from "./types";
 
 export function TrackStatusIcon({ status }: TrackStatusIconProps) {

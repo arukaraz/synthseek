@@ -2,7 +2,7 @@
 
 import { ContentShell } from "@components/ContentShell";
 import TopHeader from "@components/TopHeader";
-import { UpdateBanner } from "@components/UpdateBanner";
+import { UpdateBanner } from "@components/UpdateBanner/UpdateBanner";
 import { AuthGuard } from "@features/auth/components/AuthGuard";
 import { useSubscriptions, useVersionState } from "@hooks/api/subscriptions";
 import { useRouter, useSearchParams } from "next/navigation";
