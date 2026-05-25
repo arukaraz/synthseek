@@ -16,6 +16,7 @@ interface SearchCardProps {
     maxVariations: number;
     historyCleanupEnabled: boolean;
     maxHistorySearches: number;
+    banAfterFailedAttempts: number;
   };
 }
 
@@ -90,6 +91,19 @@ export function SearchCard({ initial }: SearchCardProps) {
             min={5}
             max={100}
             ariaLabel="Max history searches"
+          />
+        }
+      />
+      <EngineRow
+        label="Auto-ban after N failures"
+        description="Auto-add an uploader to the Slskd banlist after this many failed downloads. 0 disables."
+        control={
+          <SettingsNumberInput
+            value={draft.banAfterFailedAttempts}
+            onChange={(v) => setField("banAfterFailedAttempts", v)}
+            min={0}
+            max={20}
+            ariaLabel="Auto-ban after N failed attempts"
           />
         }
       />

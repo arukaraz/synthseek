@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, FileText, ListOrdered, Plug, Settings2, Type, User, Users } from "lucide-react";
+import { Blocks, ChevronDown, FileText, ListOrdered, Settings2, User, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
@@ -23,9 +23,8 @@ const TOP_LEVEL: NavItem[] = [
 ];
 
 const ADVANCED_ITEMS: NavItem[] = [
-  { href: "/settings/connections", label: "Connections", icon: <Plug /> },
+  { href: "/settings/integrations", label: "Integrations", icon: <Blocks /> },
   { href: "/settings/engine", label: "Engine", icon: <ListOrdered /> },
-  { href: "/settings/formatting", label: "Formatting", icon: <Type /> },
   { href: "/settings/logs", label: "Logs", icon: <FileText /> },
 ];
 

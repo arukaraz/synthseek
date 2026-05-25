@@ -58,7 +58,9 @@ export const cardTitle = cva("text-fg text-lg font-semibold");
 
 export const cardDescription = cva("text-fg/60 text-sm");
 
-export const cardDivider = cva("bg-fg/10 -mx-6 my-1 h-px");
+export const cardDivider = cva("bg-fg/10 -mx-4 my-1 h-px sm:-mx-6");
+
+export const cardSectionHeader = cva("text-fg/70 text-sm font-semibold");
 
 export const fieldLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tracking-wider");
 
@@ -66,25 +68,34 @@ export const fieldHelper = cva("text-fg/45 text-xs");
 
 export const fieldRow = cva("flex flex-col gap-1.5");
 
-export const toggleRow = cva("flex items-start justify-between gap-4 sm:gap-6");
-
 export const engineRow = cva("flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6");
-
-export const toggleLabel = cva("text-fg text-sm font-medium");
-
-export const toggleDescription = cva("text-fg/55 text-xs");
 
 export const emptyPanel = cva(
   "border-fg/10 bg-fg/5 flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center"
 );
 
-export const statusBadge = cva("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium", {
+export const statusBadge = cva(
+  "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+  {
+    variants: {
+      tone: {
+        success: "bg-emerald-500/10 text-emerald-300 ring-1 ring-emerald-500/30",
+        muted: "bg-fg/5 text-fg/60 ring-1 ring-fg/10",
+        warning: "bg-amber-500/10 text-amber-300 ring-1 ring-amber-500/30",
+        danger: "bg-red-500/10 text-red-300 ring-1 ring-red-500/30",
+      },
+    },
+    defaultVariants: { tone: "muted" },
+  }
+);
+
+export const statusDot = cva("inline-block size-1.5 rounded-full", {
   variants: {
     tone: {
-      success: "bg-emerald-500/10 text-emerald-300 ring-1 ring-emerald-500/30",
-      muted: "bg-fg/5 text-fg/60 ring-1 ring-fg/10",
-      warning: "bg-amber-500/10 text-amber-300 ring-1 ring-amber-500/30",
-      danger: "bg-red-500/10 text-red-300 ring-1 ring-red-500/30",
+      success: "bg-emerald-400",
+      muted: "bg-fg/40",
+      warning: "bg-amber-400",
+      danger: "bg-red-400",
     },
   },
   defaultVariants: { tone: "muted" },
@@ -130,4 +141,45 @@ export const segmentedOption = cva("rounded-md px-3 py-1 text-xs font-medium tra
 
 export const formattingPreview = cva(
   "border-fg/10 bg-fg/[0.04] text-fg/70 mt-1 inline-flex items-center gap-2 rounded-md border px-3 py-1.5 font-mono text-xs"
+);
+
+export const integrationTabsBar = cva(
+  "border-fg/10 bg-surface/80 sticky top-0 z-10 -mx-4 flex h-11 gap-1 overflow-x-auto overflow-y-hidden border-b px-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10"
+);
+
+export const integrationTab = cva(
+  "relative flex h-10 shrink-0 items-center gap-2 px-3 text-sm font-medium transition-colors",
+  {
+    variants: {
+      active: {
+        true: "text-fg",
+        false: "text-fg/55 hover:text-fg/85",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);
+
+export const integrationTabUnderline = cva("absolute -bottom-px left-2 right-2 h-[2px] rounded-full bg-primary-500");
+
+export const listManagerCount = cva("text-fg/45 text-[11px] font-semibold uppercase tracking-wider");
+
+export const listManagerAddRow = cva("flex items-center gap-2");
+
+export const listManagerListWrap = cva(
+  "custom-scrollbar border-fg/10 bg-fg/[0.02] flex max-h-64 min-h-[3rem] flex-col overflow-y-auto rounded-lg border"
+);
+
+export const listManagerRow = cva(
+  "border-fg/5 group flex items-center justify-between gap-2 border-b px-3 py-1.5 text-sm last:border-b-0"
+);
+
+export const listManagerRemove = cva(
+  "text-fg/40 hover:text-red-300 hover:bg-red-500/10 flex h-6 w-6 shrink-0 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/40"
+);
+
+export const listManagerEmpty = cva("text-fg/40 px-3 py-4 text-center text-xs");
+
+export const listManagerFilterIcon = cva(
+  "text-fg/40 pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2"
 );

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
 
+import { ListManager } from "../../components/ListManager";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
@@ -15,7 +16,7 @@ import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 
 interface SlskdCardProps {
-  initial: { apiUrl: string; apiKey: string };
+  initial: { apiUrl: string; apiKey: string; bannedUsers: string[] };
 }
 
 export function SlskdCard({ initial }: SlskdCardProps) {
@@ -58,6 +59,18 @@ export function SlskdCard({ initial }: SlskdCardProps) {
           {testing ? "Testing..." : "Test connection"}
         </Button>
       </div>
+
+      <SettingsField label="Banned uploaders">
+        <ListManager
+          value={draft.bannedUsers}
+          onChange={(v) => setField("bannedUsers", v)}
+          addPlaceholder="e.g. spammer123"
+          filterPlaceholder="Filter banlist..."
+          emptyLabel="No banned uploaders yet."
+          countLabel={(n) => `${n} banned`}
+          helper="Skip these slskd users when picking download candidates. Auto-ban threshold lives under Engine → Search."
+        />
+      </SettingsField>
 
       <SaveBar
         isDirty={isDirty}
