@@ -22,7 +22,7 @@ export function ImportCard({ initial }: ImportCardProps) {
     <SettingsCard title="Import">
       <EngineRow
         label="Metadata confidence threshold"
-        description="Minimum match score for downloaded files to be auto-imported."
+        description="Minimum match (0-100) between a downloaded file's embedded audio tags and the requested artist/title/album/ISRC. Files below this score are rejected with 'import_rejected' and can be retried (retries use a relaxed threshold of 40)."
         control={
           <SettingsNumberInput
             value={draft.metadataConfidenceThreshold}

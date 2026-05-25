@@ -30,7 +30,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
     <SettingsCard title="Timeouts">
       <EngineRow
         label="Download phase"
-        description="Time allowed for the actual file transfer per track."
+        description="Total budget for the full download phase per track (every search variation, every peer attempt, plus the actual transfer). The track is marked failed if this elapses."
         control={
           <SettingsNumberInput
             value={Math.round(draft.downloadPhase / MS)}
@@ -44,7 +44,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
       />
       <EngineRow
         label="Import phase"
-        description="Time allowed for Beets matching and library import."
+        description="Total budget for the import phase per track (Beets matching, metadata enrichment, library move). Marked failed if exceeded."
         control={
           <SettingsNumberInput
             value={Math.round(draft.importPhase / MS)}
@@ -58,7 +58,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
       />
       <EngineRow
         label="Peer unresponsive"
-        description="Move on if a peer doesn't acknowledge the request."
+        description="Max time a download can sit in slskd's Queued / Queued Locally / Initializing / Requested state before we cancel and try the next peer."
         control={
           <SettingsNumberInput
             value={Math.round(draft.peerUnresponsive / MS)}
@@ -72,7 +72,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
       />
       <EngineRow
         label="Queue wait (active peer)"
-        description="How long to wait in queue when the peer is currently uploading."
+        description="Max wait in slskd's 'Queued, Remotely' state when the peer is already actively serving another download to us (likely to give this one its turn)."
         control={
           <SettingsNumberInput
             value={Math.round(draft.queueWaitActivePeer / MS)}
@@ -86,7 +86,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
       />
       <EngineRow
         label="Queue wait (idle peer)"
-        description="How long to wait in queue when the peer is idle."
+        description="Max wait in slskd's 'Queued, Remotely' state when the peer is not currently serving us anything (may be offline or ignoring the request)."
         control={
           <SettingsNumberInput
             value={Math.round(draft.queueWaitIdlePeer / MS)}

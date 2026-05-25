@@ -24,7 +24,7 @@ export function SmartSearchCard({ initial }: SmartSearchCardProps) {
     <SettingsCard title="Smart search">
       <EngineRow
         label="Community patterns"
-        description="Sync anonymous mood/genre keywords with other Synthseek instances."
+        description="Opt in: a daily cron shares your anonymized mood/genre keywords with the Synthseek API and pulls back community-contributed ones to improve smart-search classification."
         control={
           <Switch
             checked={draft.communityPatternsEnabled}
@@ -35,7 +35,7 @@ export function SmartSearchCard({ initial }: SmartSearchCardProps) {
       />
       <SettingsField
         label="Custom mood keywords"
-        helper="Press Enter or comma to add. Matched as substrings inside user queries."
+        helper="Substrings tested against user search queries to classify them as mood/genre searches (vs specific artist/track). Press Enter or comma to add."
       >
         <ChipsInput
           value={draft.customMoodKeywords}

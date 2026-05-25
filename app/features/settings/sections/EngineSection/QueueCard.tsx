@@ -22,7 +22,7 @@ export function QueueCard({ initial }: QueueCardProps) {
     <SettingsCard title="Queue & concurrency">
       <EngineRow
         label="Max size"
-        description="Hard cap on the total number of pending requests in the queue."
+        description="Hard cap on total jobs the queue holds at once (queued + active). New requests are rejected when full."
         control={
           <SettingsNumberInput
             value={draft.maxSize}
@@ -35,7 +35,7 @@ export function QueueCard({ initial }: QueueCardProps) {
       />
       <EngineRow
         label="Max concurrent searches"
-        description="How many search jobs can run in parallel."
+        description="How many tracks can be in the search phase simultaneously."
         control={
           <SettingsNumberInput
             value={draft.maxConcurrentSearches}
@@ -48,7 +48,7 @@ export function QueueCard({ initial }: QueueCardProps) {
       />
       <EngineRow
         label="Max pending imports"
-        description="Tracks waiting for metadata extraction and library import."
+        description="Backpressure: when this many downloaded tracks are waiting to import, the engine pauses starting new searches until imports drain."
         control={
           <SettingsNumberInput
             value={draft.maxPendingImports}

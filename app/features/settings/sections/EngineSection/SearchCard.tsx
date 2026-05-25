@@ -32,7 +32,7 @@ export function SearchCard({ initial }: SearchCardProps) {
     <SettingsCard title="Search">
       <EngineRow
         label="Timeout"
-        description="Give up on a search after this many seconds with no results."
+        description="How long slskd keeps each search request open on the Soulseek network before stopping collection of new results."
         control={
           <SettingsNumberInput
             value={timeoutSeconds}
@@ -46,7 +46,7 @@ export function SearchCard({ initial }: SearchCardProps) {
       />
       <EngineRow
         label="Max peer attempts"
-        description="How many sources to try before marking a track as failed."
+        description="How many slskd uploaders to try downloading from per track before marking it failed."
         control={
           <SettingsNumberInput
             value={draft.maxPeerAttempts}
@@ -59,7 +59,7 @@ export function SearchCard({ initial }: SearchCardProps) {
       />
       <EngineRow
         label="Max variations"
-        description="Title variations to try (acoustic, remix, etc.) per query."
+        description="How many query-string combinations (artist+title, with/without album, with/without featuring) to try per track."
         control={
           <SettingsNumberInput
             value={draft.maxVariations}
@@ -72,7 +72,7 @@ export function SearchCard({ initial }: SearchCardProps) {
       />
       <EngineRow
         label="History cleanup enabled"
-        description="Periodically prune stale search history."
+        description="Hourly cron deletes old slskd searches so its search list does not grow unbounded."
         control={
           <Switch
             checked={draft.historyCleanupEnabled}
@@ -83,7 +83,7 @@ export function SearchCard({ initial }: SearchCardProps) {
       />
       <EngineRow
         label="Max history searches"
-        description="Cap on stored past searches before older ones are deleted."
+        description="How many of the most recent searches to retain in slskd. Older ones are removed by the cleanup job above."
         control={
           <SettingsNumberInput
             value={draft.maxHistorySearches}
@@ -96,7 +96,7 @@ export function SearchCard({ initial }: SearchCardProps) {
       />
       <EngineRow
         label="Auto-ban after N failures"
-        description="Auto-add an uploader to the Slskd banlist after this many failed downloads. 0 disables."
+        description="Add an uploader to the banlist after this many download failures (counted in-memory, resets on restart). 0 disables."
         control={
           <SettingsNumberInput
             value={draft.banAfterFailedAttempts}
