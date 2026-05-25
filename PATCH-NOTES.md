@@ -2,6 +2,49 @@
 
 ---
 
+# v1.2.1 — May 4, 2026
+
+### Track failures now tell you why
+
+When a track fails, the request card surfaces a typed failure reason
+with an icon and tooltip instead of a generic error. Reasons are
+classified into:
+
+- **Not found** — no source matched the requested track.
+- **Import rejected** — Beets / Plex declined the file (metadata,
+  format, or duplicate).
+- **P2P failed** — Soulseek peers errored out or never delivered.
+- **Other** — fallback for unclassified failures.
+
+The retry path bifurcates accordingly so retries do the right thing
+for each kind of failure instead of blindly repeating the same
+attempt. Each `TrackRequest` also stores the resolved `downloaded_file`
+path for cleaner import diagnostics.
+
+---
+
+### Fixes and improvements
+
+- Container no longer crashes at boot with `chown: /music: Operation
+  not permitted` when the music library lives on a USB / exFAT / NTFS
+  drive. The recursive `chown` on user volumes is replaced by a
+  runtime access probe that emits a clear diagnostic instead of
+  crashing. Boot is also instant on multi-TB libraries since there's
+  no inode traversal, and the host's file ownership is no longer
+  mutated by the container
+  ([#2](https://github.com/arukaraz/synthseek/issues/2)).
+- Malformed ISRC tags no longer break post-download metadata
+  validation — they're ignored instead.
+- Music cache warmup runs every 6 hours instead of every 25 minutes,
+  reducing background load.
+- Track count is hidden in the artist album list when unavailable
+  instead of showing a placeholder.
+- The sort filter is dropped from playlist navigation after submitting
+  a request so you land on the freshly-added item.
+- Date sort is inverted so the newest items appear first.
+
+---
+
 # v1.2.0 — April 19, 2026
 
 > [!IMPORTANT]
