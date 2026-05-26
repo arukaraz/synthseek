@@ -15,6 +15,8 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.playlistId}:${event.plexPlaylistId}`;
     case SubscriptionEventType.VersionUpdate:
       return `${event.eventType}:${event.latestVersion}`;
+    case SubscriptionEventType.SettingsUpdate:
+      return `${event.eventType}:${event.changedKey}`;
   }
 }
 

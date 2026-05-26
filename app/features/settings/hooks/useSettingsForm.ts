@@ -1,20 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function useSettingsForm<T extends object>(initial: T | undefined) {
   const [draft, setDraft] = useState<T | null>(initial ?? null);
   const [isSaving, setIsSaving] = useState(false);
+  const lastInitialRef = useRef<T | undefined>(initial);
 
   useEffect(() => {
     if (!initial) return;
-    setDraft((current) => (current === null ? initial : current));
+    const prevInitial = lastInitialRef.current;
+    lastInitialRef.current = initial;
+
+    setDraft((current) => {
+      if (current === null) return initial;
+      if (prevInitial !== undefined && JSON.stringify(current) === JSON.stringify(prevInitial)) {
+        return initial;
+      }
+      return current;
+    });
   }, [initial]);
 
   const isDirty = draft !== null && initial !== undefined && JSON.stringify(draft) !== JSON.stringify(initial);
 
   const setField = <K extends keyof T>(key: K, value: T[K]) => {
     setDraft((prev) => (prev === null ? prev : { ...prev, [key]: value }));
+  };
+
+  const setAll = (value: T) => {
+    setDraft(value);
   };
 
   const reset = () => {
@@ -31,5 +45,5 @@ export function useSettingsForm<T extends object>(initial: T | undefined) {
     }
   };
 
-  return { draft, setField, reset, save, isDirty, isSaving };
+  return { draft, setField, setAll, reset, save, isDirty, isSaving };
 }

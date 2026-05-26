@@ -7,7 +7,7 @@ import {
   handlePlaylistUpdate,
   handleTrackUpdate,
 } from "./handlers/requests";
-import { handleVersionUpdate } from "./handlers/system";
+import { handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
 
 const TERMINAL_STATUSES = new Set<string>([
@@ -49,6 +49,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.VersionUpdate:
           handleVersionUpdate(event);
+          break;
+        case SubscriptionEventType.SettingsUpdate:
+          handleSettingsUpdate(event, utils);
           break;
       }
 

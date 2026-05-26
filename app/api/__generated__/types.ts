@@ -136,6 +136,7 @@ export enum SubscriptionEventType {
   PlaylistUpdate = "PlaylistUpdate",
   PlaylistPlexCreated = "PlaylistPlexCreated",
   VersionUpdate = "VersionUpdate",
+  SettingsUpdate = "SettingsUpdate",
 }
 
 export interface CorrelatedEvent {
@@ -190,12 +191,18 @@ export interface VersionUpdatePayload {
   message: string;
 }
 
+export interface SettingsUpdatePayload extends CorrelatedEvent {
+  eventType: SubscriptionEventType.SettingsUpdate;
+  changedKey: string;
+}
+
 export type SubscriptionEvent =
   | TrackUpdatePayload
   | AlbumUpdatePayload
   | PlaylistUpdatePayload
   | PlaylistPlexCreatedPayload
-  | VersionUpdatePayload;
+  | VersionUpdatePayload
+  | SettingsUpdatePayload;
 
 // ============================================================================
 // CONSTANTS
@@ -1300,7 +1307,6 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 						maxPendingImports: number;
 					};
 					search: {
-						timeout: number;
 						maxPeerAttempts: number;
 						maxVariations: number;
 						historyCleanupEnabled: boolean;
@@ -1308,6 +1314,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 						banAfterFailedAttempts: number;
 					};
 					timeouts: {
+						searchPhase: number;
 						downloadPhase: number;
 						importPhase: number;
 						peerUnresponsive: number;
@@ -1384,7 +1391,6 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 		}>;
 		updateEngineSearch: import("@trpc/server").TRPCMutationProcedure<{
 			input: {
-				timeout: number;
 				maxPeerAttempts: number;
 				maxVariations: number;
 				historyCleanupEnabled: boolean;
@@ -1398,6 +1404,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 		}>;
 		updateEngineTimeouts: import("@trpc/server").TRPCMutationProcedure<{
 			input: {
+				searchPhase?: number | undefined;
 				downloadPhase: number;
 				importPhase: number;
 				peerUnresponsive: number;
