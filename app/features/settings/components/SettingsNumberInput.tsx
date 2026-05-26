@@ -28,6 +28,13 @@ export function SettingsNumberInput({
   id,
   ariaLabel,
 }: SettingsNumberInputProps) {
+  const clamp = (n: number): number => {
+    let clamped = n;
+    if (typeof min === "number" && clamped < min) clamped = min;
+    if (typeof max === "number" && clamped > max) clamped = max;
+    return clamped;
+  };
+
   return (
     <div className={cn("relative inline-flex w-32 items-center", className)}>
       <Input
@@ -43,6 +50,15 @@ export function SettingsNumberInput({
         onChange={(e) => {
           const next = e.target.valueAsNumber;
           if (Number.isFinite(next)) onChange(next);
+        }}
+        onBlur={(e) => {
+          const raw = e.target.valueAsNumber;
+          if (!Number.isFinite(raw)) {
+            if (typeof min === "number") onChange(min);
+            return;
+          }
+          const clamped = clamp(raw);
+          if (clamped !== raw) onChange(clamped);
         }}
         className={cn("text-right tabular-nums", suffix ? "pr-8" : undefined)}
       />

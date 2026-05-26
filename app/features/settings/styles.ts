@@ -16,6 +16,27 @@ export const sectionGrid = cva("grid grid-cols-1 items-stretch gap-5 sm:gap-6 lg
 
 export const pageTitle = cva("text-fg text-2xl font-semibold");
 
+export const pageIntro = cva("text-fg/60 -mt-2 flex flex-col gap-0 text-sm [&_p]:text-fg/60");
+
+export const pageIntroCollapseRegion = cva(
+  "grid transition-[grid-template-rows] duration-300 ease-out md:grid-rows-[1fr]",
+  {
+    variants: {
+      expanded: {
+        true: "grid-rows-[1fr]",
+        false: "grid-rows-[0fr]",
+      },
+    },
+    defaultVariants: { expanded: false },
+  }
+);
+
+export const pageIntroCollapseInner = cva("flex min-h-0 flex-col gap-0 overflow-hidden");
+
+export const pageIntroExpandToggle = cva(
+  "text-primary-400 hover:text-primary-300 mt-1.5 inline-flex items-center gap-1 self-start text-xs font-medium md:hidden"
+);
+
 export const backToSections = cva(
   "text-fg/55 hover:text-fg hover:bg-fg/5 flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:hidden"
 );
@@ -74,6 +95,22 @@ export const emptyPanel = cva(
   "border-fg/10 bg-fg/5 flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center"
 );
 
+export const pill = cva(
+  "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
+  {
+    variants: {
+      tone: {
+        experimental: "bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30",
+        info: "bg-primary-500/15 text-primary-300 ring-1 ring-primary-500/30",
+        success: "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30",
+        danger: "bg-red-500/15 text-red-300 ring-1 ring-red-500/30",
+        muted: "bg-fg/10 text-fg/60 ring-fg/10 ring-1",
+      },
+    },
+    defaultVariants: { tone: "muted" },
+  }
+);
+
 export const statusBadge = cva(
   "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
   {
@@ -120,7 +157,24 @@ export const chipsInputInputField = cva(
 export const serverPickerCard = cva("border-fg/10 bg-fg/[0.04] flex flex-col gap-2 rounded-xl border p-3");
 
 export const serverPickerButton = cva(
-  "border-fg/10 hover:bg-fg/5 flex items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors"
+  "border-fg/10 hover:bg-fg/5 hover:border-fg/20 group flex w-full min-w-0 items-center gap-3 rounded-lg border px-3 py-2 text-left transition-colors"
+);
+
+export const serverPickerName = cva("text-fg truncate text-sm font-medium");
+
+export const serverPickerUri = cva("text-fg/45 truncate font-mono text-[11px]");
+
+export const serverPickerLocationBadge = cva(
+  "shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
+  {
+    variants: {
+      local: {
+        true: "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30",
+        false: "bg-fg/10 text-fg/55 ring-fg/10 ring-1",
+      },
+    },
+    defaultVariants: { local: false },
+  }
 );
 
 export const memberRow = cva("bg-bg-soft/40 ring-fg/10 flex items-center gap-3 rounded-lg p-3 ring-1");

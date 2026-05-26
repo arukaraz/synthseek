@@ -3,10 +3,12 @@
 import { useUpdateEngineQueue } from "@hooks/api/mutations/settings/useUpdateEngine";
 
 import { EngineRow } from "../../components/EngineRow";
+import { ResetDefaultsButton } from "../../components/ResetDefaultsButton";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
+import { ENGINE_DEFAULTS } from "./defaults";
 
 interface QueueCardProps {
   initial: { maxSize: number; maxConcurrentSearches: number; maxPendingImports: number };
@@ -14,12 +16,15 @@ interface QueueCardProps {
 
 export function QueueCard({ initial }: QueueCardProps) {
   const update = useUpdateEngineQueue();
-  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial);
+  const { draft, setField, setAll, save, reset, isDirty, isSaving } = useSettingsForm(initial);
 
   if (!draft) return null;
 
   return (
-    <SettingsCard title="Queue & concurrency">
+    <SettingsCard
+      title="Queue & concurrency"
+      trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.queue })} disabled={isSaving} />}
+    >
       <EngineRow
         label="Max size"
         description="Hard cap on total jobs the queue holds at once (queued + active). New requests are rejected when full."

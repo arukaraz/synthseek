@@ -4,10 +4,10 @@ import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
+import { EngineIntro } from "./EngineIntro";
 import { ImportCard } from "./ImportCard";
 import { QueueCard } from "./QueueCard";
 import { SearchCard } from "./SearchCard";
-import { SmartSearchCard } from "./SmartSearchCard";
 import { TimeoutsCard } from "./TimeoutsCard";
 
 export function EngineSection() {
@@ -38,12 +38,12 @@ export function EngineSection() {
   return (
     <div className={contentRoot()}>
       <SettingsPageHeader title="Engine" />
+      <EngineIntro />
       <div className={sectionGrid()}>
-        <QueueCard initial={data.engine.queue} />
-        <SearchCard initial={data.engine.search} />
+        <SearchCard initial={{ search: data.engine.search, smartSearch: data.engine.smartSearch }} />
         <TimeoutsCard initial={data.engine.timeouts} />
+        <QueueCard initial={data.engine.queue} />
         <ImportCard initial={data.engine.import} />
-        <SmartSearchCard initial={data.engine.smartSearch} />
       </div>
     </div>
   );
