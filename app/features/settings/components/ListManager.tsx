@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus, Search, X } from "lucide-react";
-import { useMemo, useState, type KeyboardEvent } from "react";
+import { useMemo, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
@@ -26,7 +26,7 @@ interface ListManagerProps {
   filterPlaceholder?: string;
   emptyLabel?: string;
   countLabel?: (count: number) => string;
-  helper?: string;
+  helper?: ReactNode;
   disabled?: boolean;
 }
 

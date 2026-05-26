@@ -5,11 +5,13 @@ import TopHeader from "@components/TopHeader";
 import { UpdateBanner } from "@components/UpdateBanner/UpdateBanner";
 import { AuthGuard } from "@features/auth/components/AuthGuard";
 import { useSubscriptions, useVersionState } from "@hooks/api/subscriptions";
+import { useHashTargetGlow } from "@hooks/ui/useHashTargetGlow";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 function MainLayoutContent({ children }: { children: React.ReactNode }) {
   useSubscriptions();
+  useHashTargetGlow();
   const { updateAvailable, latestVersion, currentVersion } = useVersionState();
 
   const router = useRouter();
