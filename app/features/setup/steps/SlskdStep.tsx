@@ -5,10 +5,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
-import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { SettingsField } from "@features/settings/components/SettingsField";
 import { SettingsSecretInput } from "@features/settings/components/SettingsSecretInput";
 import { SettingsTextInput } from "@features/settings/components/SettingsTextInput";
+import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 
 import { StepShell } from "./StepShell";
 
@@ -62,7 +62,7 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
       <SettingsField label="API URL">
         <SettingsTextInput value={apiUrl} onChange={setApiUrl} placeholder="http://localhost:5030" type="url" />
       </SettingsField>
-      <SettingsField label="API Key" helper="Stored on the server.">
+      <SettingsField label="API Key">
         <SettingsSecretInput value={apiKey} onChange={setApiKey} />
       </SettingsField>
 
