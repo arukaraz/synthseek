@@ -6,12 +6,12 @@ import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
 import { Switch } from "@components/ui/Switch";
-import { cn } from "@utils/cn";
+import { usePlexConnect } from "@hooks/api/mutations/settings/usePlexConnect";
 import { useUpdateConnectionsPlex } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { useUpdateEnginePlexBehavior } from "@hooks/api/mutations/settings/useUpdateEngine";
-import { usePlexConnect } from "@hooks/api/mutations/settings/usePlexConnect";
 import { useUpdateFormatting } from "@hooks/api/mutations/settings/useUpdateFormatting";
 import { useAuthContext } from "@modules/providers/AuthProvider";
+import { cn } from "@utils/cn";
 
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
@@ -25,6 +25,9 @@ import {
   formattingPreview,
   serverPickerButton,
   serverPickerCard,
+  serverPickerLocationBadge,
+  serverPickerName,
+  serverPickerUri,
   settingsCard,
   statusBadge,
   statusDot,
@@ -106,7 +109,6 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
   return (
     <section className={settingsCard()}>
       <div className="flex items-start justify-between gap-3">
-        <p className="text-fg/60 text-sm">Library scans, playlist sync, and playlist naming for this Plex install.</p>
         <span className={cn(statusBadge({ tone: connected ? "success" : "muted" }))}>
           <span className={statusDot({ tone: connected ? "success" : "muted" })} />
           {connected ? "Connected" : "Not connected"}
@@ -134,10 +136,15 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
                   onClick={() => handlePickServer(server.uri)}
                   className={serverPickerButton()}
                 >
-                  <span className="text-fg text-sm">{server.name}</span>
-                  <span className="text-fg/40 text-xs">
-                    {server.local ? "local" : "remote"} · {server.uri}
-                  </span>
+                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className={serverPickerName()}>{server.name}</span>
+                      <span className={serverPickerLocationBadge({ local: server.local })}>
+                        {server.local ? "local" : "remote"}
+                      </span>
+                    </div>
+                    <span className={serverPickerUri()}>{server.uri}</span>
+                  </div>
                 </button>
               ))
             )}
@@ -163,7 +170,7 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
       <span className={cardSectionHeader()}>Library</span>
       <EngineRow
         label="Library scan"
-        description="Trigger a Plex library scan after each successful import."
+        description="After each successful import, ask Plex to scan the folder of the new file."
         control={
           <Switch
             checked={behaviorForm.draft.libraryScan}
@@ -174,7 +181,7 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
       />
       <EngineRow
         label="Playlist sync"
-        description="Mirror Synthseek playlist requests into Plex collections."
+        description="When a Synthseek playlist request completes (or grows), create / update a matching Plex playlist with the imported tracks."
         control={
           <Switch
             checked={behaviorForm.draft.playlistSync}

@@ -1,10 +1,11 @@
 "use client";
 
-import { useSettings } from "@hooks/api/queries/useSettings";
+import { ArtworkCard } from "@features/settings/sections/IntegrationsSection/ArtworkCard";
 import { EnrichmentSingleFieldCard } from "@features/settings/sections/IntegrationsSection/EnrichmentSingleFieldCard";
 import { emptyPanel, sectionGrid } from "@features/settings/styles";
+import { useSettings } from "@hooks/api/queries/useSettings";
 
-export default function AcoustidIntegrationPage() {
+export default function MetadataIntegrationPage() {
   const { data, isLoading, error } = useSettings();
 
   if (isLoading)
@@ -22,11 +23,13 @@ export default function AcoustidIntegrationPage() {
 
   return (
     <div className={sectionGrid()}>
+      <ArtworkCard initial={data.connections.enrichment} />
       <EnrichmentSingleFieldCard
         initial={data.connections.enrichment}
         field="acoustidApiKey"
         title="AcoustID"
-        description="Audio fingerprint lookups for the second-tier metadata import path. Requires fpcalc on the server."
+        optional
+        description="Fallback track identification."
         fieldLabel="API key"
       />
     </div>

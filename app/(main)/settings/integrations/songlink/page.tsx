@@ -1,8 +1,8 @@
 "use client";
 
-import { useSettings } from "@hooks/api/queries/useSettings";
 import { EnrichmentSingleFieldCard } from "@features/settings/sections/IntegrationsSection/EnrichmentSingleFieldCard";
 import { emptyPanel, sectionGrid } from "@features/settings/styles";
+import { useSettings } from "@hooks/api/queries/useSettings";
 
 export default function SonglinkIntegrationPage() {
   const { data, isLoading, error } = useSettings();
@@ -26,7 +26,8 @@ export default function SonglinkIntegrationPage() {
         initial={data.connections.enrichment}
         field="songlinkApiKey"
         title="Songlink"
-        description="Cross-platform URL resolution (Apple Music, Spotify, etc.) for playlist imports."
+        optional
+        description="Resolves track URLs from any platform (Spotify, Apple Music, YouTube, etc.) into searchable metadata for cross-platform playlist imports. Without a key, public quota is ~10 req/min."
         fieldLabel="API key"
       />
     </div>

@@ -26,7 +26,8 @@ export default function LastfmIntegrationPage() {
         initial={data.connections.enrichment}
         field="lastfmApiKey"
         title="Last.fm"
-        description="Discovery hints (similar artists, top tracks) for smart search and recommendations."
+        optional
+        description="Powers similar-artists, global trending charts, and genre tag lookups used by discovery and smart search. Falls back to empty results silently if unset."
         fieldLabel="API key"
       />
     </div>

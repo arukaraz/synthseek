@@ -1,19 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import { Plug } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
 
+import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { ListManager } from "../../components/ListManager";
+import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
-import { SaveBar } from "../../components/SaveBar";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
-import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 
 interface SlskdCardProps {
   initial: { apiUrl: string; apiKey: string; bannedUsers: string[] };
@@ -39,7 +40,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
   };
 
   return (
-    <SettingsCard title="slskd" description="Soulseek daemon. Required for downloads.">
+    <SettingsCard title="slskd" description="Required for downloads.">
       <SettingsField label="API URL" helper="Where Synthseek can reach your slskd daemon.">
         <SettingsTextInput
           value={draft.apiUrl}
@@ -49,7 +50,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         />
       </SettingsField>
 
-      <SettingsField label="API Key" helper="Stored on the server.">
+      <SettingsField label="API Key">
         <SettingsSecretInput value={draft.apiKey} onChange={(v) => setField("apiKey", v)} />
       </SettingsField>
 
@@ -68,7 +69,17 @@ export function SlskdCard({ initial }: SlskdCardProps) {
           filterPlaceholder="Filter banlist..."
           emptyLabel="No banned uploaders yet."
           countLabel={(n) => `${n} banned`}
-          helper="Skip these slskd users when picking download candidates. Auto-ban threshold lives under Engine → Search."
+          helper={
+            <>
+              Skip these slskd users/peers when picking download candidates.{" "}
+              <Link
+                href="/settings/engine#ban-threshold"
+                className="text-primary-400 hover:text-primary-300 underline-offset-2 hover:underline"
+              >
+                Configure threshold
+              </Link>
+            </>
+          }
         />
       </SettingsField>
 

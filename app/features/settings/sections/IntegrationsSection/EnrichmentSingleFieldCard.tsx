@@ -21,6 +21,7 @@ interface EnrichmentSingleFieldCardProps {
   initial: EnrichmentSection;
   field: keyof EnrichmentSection;
   title: string;
+  optional?: boolean;
   description: string;
   fieldLabel: string;
   helper?: string;
@@ -32,6 +33,7 @@ export function EnrichmentSingleFieldCard({
   initial,
   field,
   title,
+  optional,
   description,
   fieldLabel,
   helper,
@@ -44,7 +46,7 @@ export function EnrichmentSingleFieldCard({
   if (!draft) return null;
 
   return (
-    <SettingsCard title={title} description={description}>
+    <SettingsCard title={title} optional={optional} description={description}>
       <SettingsField label={fieldLabel} helper={helper}>
         {inputType === "secret" ? (
           <SettingsSecretInput value={draft[field]} onChange={(v) => setField(field, v)} placeholder={placeholder} />
