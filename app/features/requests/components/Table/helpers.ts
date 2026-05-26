@@ -1,4 +1,5 @@
 import type { RequestWithTracks } from "@api/__generated__/types";
+import { compareByStatus } from "../../helpers";
 import type { FlatTrackRow, TableSortConfig } from "../../types";
 
 export function flattenRequestsToTrackRows(items: RequestWithTracks[]): FlatTrackRow[] {
@@ -35,7 +36,7 @@ export function sortFlatTrackRows(rows: FlatTrackRow[], sort: TableSortConfig): 
       case "title":
         return direction * a.title.localeCompare(b.title);
       case "status":
-        return direction * a.status.localeCompare(b.status);
+        return direction * compareByStatus(a.status, b.status);
       case "artist":
         return direction * a.artist.localeCompare(b.artist);
       case "album":

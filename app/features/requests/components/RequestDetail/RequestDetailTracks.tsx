@@ -8,6 +8,7 @@ import { isOwnerOrAdminFE } from "@utils/authorization";
 import { useCancelTrack, useRetryTrack } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useCallback, useMemo } from "react";
+import { compareByStatus } from "../../helpers";
 import { TrackActionsCell } from "./TrackActionsCell";
 import { TrackStatusCell } from "./TrackStatusCell";
 import { TrackTitleCell } from "./TrackTitleCell";
@@ -78,9 +79,14 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
     [canAct, retryTrack, handleCancel]
   );
 
+  const sortedTracks = useMemo(
+    () => [...request.tracks].sort((a, b) => compareByStatus(a.status, b.status)),
+    [request.tracks]
+  );
+
   return (
     <DataTable
-      data={request.tracks}
+      data={sortedTracks}
       columns={columns}
       getRowId={(track) => track.id}
       containerClassName="mx-3 mb-3 sm:mx-4 sm:mb-4"
