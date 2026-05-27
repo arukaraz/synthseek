@@ -9,79 +9,99 @@ import { SEARCH_CLEAR_BUTTON_VARIANTS, SEARCH_INPUT_VARIANTS } from "../consts";
 import type { SearchInputProps } from "../types";
 
 export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInputProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
+    if (isOpen && mobileInputRef.current) {
       const timer = setTimeout(() => {
-        inputRef.current?.focus();
+        mobileInputRef.current?.focus();
       }, 50);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
-  const handleClose = useCallback(() => {
+  const handleClear = useCallback(() => {
+    onChange("");
+  }, [onChange]);
+
+  const handleCloseMobile = useCallback(() => {
     onChange("");
     onOpenChange(false);
   }, [onChange, onOpenChange]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === "Escape") handleClose();
+      if (e.key === "Escape") handleCloseMobile();
     },
-    [handleClose]
+    [handleCloseMobile]
   );
 
   return (
-    <div className={cn("flex items-center", isOpen && "flex-1 sm:flex-initial")}>
-      <button
-        onClick={() => onOpenChange(true)}
-        className={cn(
-          "text-fg/40 hover:bg-fg/10 hover:text-fg/80 rounded-lg p-1.5 transition-colors",
-          isOpen && "text-fg/80",
-          isOpen && "hidden sm:inline-flex"
+    <>
+      <div className="relative hidden items-center sm:flex">
+        <Search className="text-fg/40 pointer-events-none absolute left-3 size-4" />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Filter..."
+          className={searchInput()}
+        />
+        {value && (
+          <button type="button" onClick={handleClear} className={closeButton()} aria-label="Clear filter">
+            <X className="size-3" />
+          </button>
         )}
-        title="Search requests"
-        aria-label="Open search"
-      >
-        <Search className="size-3.5" />
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="relative flex flex-1 items-center overflow-hidden sm:flex-initial"
-            variants={SEARCH_INPUT_VARIANTS}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+      </div>
+
+      <div className={cn("flex items-center sm:hidden", isOpen && "flex-1")}>
+        {!isOpen && (
+          <button
+            onClick={() => onOpenChange(true)}
+            className="text-fg/40 hover:bg-fg/10 hover:text-fg/80 flex h-9 w-9 items-center justify-center rounded-lg transition-colors"
+            title="Filter requests"
+            aria-label="Open filter"
           >
-            <Search className="text-fg/40 pointer-events-none absolute left-3 size-4 sm:hidden" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Search..."
-              className={searchInput()}
-            />
-            <motion.button
-              type="button"
-              onClick={handleClose}
-              className={closeButton()}
-              variants={SEARCH_CLEAR_BUTTON_VARIANTS}
+            <Search className="size-4" />
+          </button>
+        )}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              className="relative flex flex-1 items-center overflow-hidden"
+              variants={SEARCH_INPUT_VARIANTS}
               initial="hidden"
               animate="visible"
               exit="exit"
-              whileHover={{ scale: 1.1, rotate: 90 }}
-              whileTap={{ scale: 0.9 }}
-              aria-label="Close search"
             >
-              <X className="size-3" />
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+              <Search className="text-fg/40 pointer-events-none absolute left-3 size-4" />
+              <input
+                ref={mobileInputRef}
+                type="text"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Filter..."
+                className={searchInput()}
+              />
+              <motion.button
+                type="button"
+                onClick={handleCloseMobile}
+                className={closeButton()}
+                variants={SEARCH_CLEAR_BUTTON_VARIANTS}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                aria-label="Close filter"
+              >
+                <X className="size-3" />
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }

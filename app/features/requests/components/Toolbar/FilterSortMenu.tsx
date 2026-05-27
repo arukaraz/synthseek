@@ -11,6 +11,7 @@ import {
 } from "@components/ui/DropdownMenu";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { titleCase } from "@utils/formatters";
+import { cn } from "@utils/cn";
 import { ghostButton } from "@theme/utilities/styles";
 import { ArrowDown, ArrowUp, ChevronDown, Filter, SlidersHorizontal } from "lucide-react";
 import { REQUESTS_URL_PARAMS, SORT_FIELD_VALUES, SortField, StatusFilter } from "../../types";
@@ -31,18 +32,18 @@ export function FilterSortMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className={ghostButton({ size: "sm", hover: "default" })}
+          className={cn(ghostButton({ size: "sm", hover: "default" }), "h-9 px-3 text-sm")}
           aria-label="Filter and sort requests"
           data-cy="filter-sort-trigger"
         >
-          <SlidersHorizontal className="size-3.5 sm:size-3" />
+          <SlidersHorizontal className="size-4" />
           <span className="hidden sm:inline">{triggerLabel}</span>
           {values.dir === "asc" ? (
-            <ArrowUp className="hidden size-3 opacity-60 sm:inline" />
+            <ArrowUp className="hidden size-3.5 opacity-60 sm:inline" />
           ) : (
-            <ArrowDown className="hidden size-3 opacity-60 sm:inline" />
+            <ArrowDown className="hidden size-3.5 opacity-60 sm:inline" />
           )}
-          <ChevronDown className="size-3 opacity-50" />
+          <ChevronDown className="size-3.5 opacity-50" />
         </button>
       </DropdownMenuTrigger>
 

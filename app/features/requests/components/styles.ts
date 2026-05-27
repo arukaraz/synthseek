@@ -35,7 +35,7 @@ export const mobileActionsButton = cva("flex items-center justify-center rounded
 
 export type MobileActionsButtonProps = VariantProps<typeof mobileActionsButton>;
 
-export const toolbarContainer = cva("border-fg/5 flex items-center justify-between gap-3 border-b px-3 py-2 sm:px-4", {
+export const toolbarContainer = cva("border-fg/5 flex items-center justify-between gap-3 border-b px-3 py-2.5 sm:px-4", {
   variants: {},
   defaultVariants: {},
 });
@@ -43,7 +43,7 @@ export const toolbarContainer = cva("border-fg/5 flex items-center justify-betwe
 export type ToolbarContainerProps = VariantProps<typeof toolbarContainer>;
 
 export const searchInput = cva(
-  "text-fg placeholder-fg/30 border-fg/10 bg-fg/5 rounded-lg border py-1.5 text-sm outline-none transition-colors focus:border-primary-500/50 focus:bg-primary-500/5 w-full pr-8 pl-9 sm:w-40 sm:pl-3 lg:w-48",
+  "text-fg placeholder-fg/30 border-fg/10 bg-fg/5 h-9 rounded-lg border text-sm outline-none transition-colors focus:border-primary-500/50 focus:bg-primary-500/5 w-full pr-8 pl-9 sm:w-44 lg:w-56",
   {
     variants: {},
     defaultVariants: {},

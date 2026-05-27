@@ -13,7 +13,7 @@ export function ViewToggle() {
       <button
         onClick={() => setView("groups")}
         className={cn(
-          "rounded p-1.5 transition-colors",
+          "flex h-8 w-8 items-center justify-center rounded transition-colors",
           viewMode === "groups" ? "bg-fg/10 text-fg" : "text-fg/40 hover:text-fg/60"
         )}
         title="Groups view"
@@ -24,7 +24,7 @@ export function ViewToggle() {
       <button
         onClick={() => setView("list")}
         className={cn(
-          "rounded p-1.5 transition-colors",
+          "flex h-8 w-8 items-center justify-center rounded transition-colors",
           viewMode === "list" ? "bg-fg/10 text-fg" : "text-fg/40 hover:text-fg/60"
         )}
         title="List view"
