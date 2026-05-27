@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { trpc, getTRPCClientConfig } from "@utils/trpc";
+import { ErrorBoundaryProvider } from "@modules/errors";
 import { useClientSessionId } from "@modules/providers/ClientSessionIdProvider";
 import type { TRPCProviderProps } from "./types";
 
@@ -34,7 +35,7 @@ export function TRPCProvider({ children }: TRPCProviderProps) {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        {children}
+        <ErrorBoundaryProvider queryClient={queryClient}>{children}</ErrorBoundaryProvider>
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </trpc.Provider>
