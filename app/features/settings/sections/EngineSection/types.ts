@@ -17,7 +17,7 @@ export interface SearchCardProps {
     };
     smartSearch: {
       customMoodKeywords: string[];
-      communityPatternsEnabled: boolean;
+      federatedPatternsEnabled: boolean;
     };
   };
 }

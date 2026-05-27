@@ -128,14 +128,14 @@ export function SearchCard({ initial }: SearchCardProps) {
       </SettingsField>
 
       <EngineRow
-        label="Community patterns"
+        label="Federated patterns"
         labelTrailing={<Pill tone="experimental">Experimental</Pill>}
-        description="Opt in: a daily cron shares your anonymized mood/genre keywords with the Synthseek API and pulls back community-contributed ones to improve smart-search classification."
+        description="Opt in: a daily cron federates your anonymized mood/genre keywords with the Synthseek federation API and pulls back consensus-approved ones to improve smart-search classification."
         control={
           <Switch
-            checked={smartForm.draft.communityPatternsEnabled}
-            onCheckedChange={(v) => smartForm.setField("communityPatternsEnabled", v)}
-            aria-label="Community patterns"
+            checked={smartForm.draft.federatedPatternsEnabled}
+            onCheckedChange={(v) => smartForm.setField("federatedPatternsEnabled", v)}
+            aria-label="Federated patterns"
           />
         }
       />

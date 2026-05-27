@@ -24,6 +24,6 @@ export const ENGINE_DEFAULTS = {
   },
   smartSearch: {
     customMoodKeywords: [] as string[],
-    communityPatternsEnabled: false,
+    federatedPatternsEnabled: false,
   },
 } as const;

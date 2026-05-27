@@ -1340,7 +1340,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 					};
 					smartSearch: {
 						customMoodKeywords: string[];
-						communityPatternsEnabled: boolean;
+						federatedPatternsEnabled: boolean;
 					};
 				};
 				formatting: {
@@ -1350,6 +1350,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 				system: {
 					wizardCompleted: boolean;
 					migrationCompleted: boolean;
+					instanceId: string;
 				};
 			};
 			meta: object;
@@ -1448,7 +1449,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 		updateEngineSmartSearch: import("@trpc/server").TRPCMutationProcedure<{
 			input: {
 				customMoodKeywords: string[];
-				communityPatternsEnabled: boolean;
+				federatedPatternsEnabled: boolean;
 			};
 			output: {
 				ok: boolean;
