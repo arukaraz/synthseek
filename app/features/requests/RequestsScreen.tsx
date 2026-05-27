@@ -2,13 +2,13 @@
 
 import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { AnimatePresence, motion } from "framer-motion";
-import { Toolbar } from "../components/Toolbar/Toolbar";
-import { requestsView } from "../components/styles";
-import { REQUESTS_URL_PARAMS } from "../types";
-import { GroupsView } from "./GroupsView";
-import { ListView } from "./ListView";
+import { GroupsViewMode } from "./components/GroupsViewMode";
+import { ListViewMode } from "./components/ListViewMode";
+import { Toolbar } from "./components/Toolbar/Toolbar";
+import { requestsView } from "./components/styles";
+import { REQUESTS_URL_PARAMS } from "./types";
 
-export function RequestsView() {
+export function RequestsScreen() {
   const [viewMode] = useUrlParam("view", REQUESTS_URL_PARAMS.view);
 
   return (
@@ -25,7 +25,7 @@ export function RequestsView() {
             transition={{ duration: 0.2 }}
             className="h-full"
           >
-            {viewMode === "groups" ? <GroupsView /> : <ListView />}
+            {viewMode === "groups" ? <GroupsViewMode /> : <ListViewMode />}
           </motion.div>
         </AnimatePresence>
       </div>

@@ -1,0 +1,1 @@
+export { SettingsIndexScreen } from "./SettingsIndexScreen";

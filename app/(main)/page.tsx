@@ -1,5 +1,5 @@
-import { DiscoverView } from "@features/discover";
+import { DiscoverScreen } from "@features/discover";
 
 export default function RootPage() {
-  return <DiscoverView />;
+  return <DiscoverScreen />;
 }

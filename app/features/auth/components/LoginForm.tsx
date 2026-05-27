@@ -5,7 +5,7 @@ import { useState, type FormEvent } from "react";
 
 import { Button } from "@components/ui/Button";
 import { useLocalLogin } from "@hooks/api/mutations/auth/useLocalLogin";
-import { authInput } from "../../styles";
+import { authInput } from "../styles";
 
 export function LoginForm() {
   const router = useRouter();

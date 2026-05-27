@@ -1,7 +1,7 @@
 "use client";
 
-import { SetupWizard } from "@features/setup/SetupWizard";
+import { SetupScreen } from "@features/setup";
 
 export default function SetupPage() {
-  return <SetupWizard />;
+  return <SetupScreen />;
 }

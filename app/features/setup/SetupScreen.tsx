@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useAuthContext } from "@modules/providers/AuthProvider";
-import { trpc } from "@utils/trpc";
+import { useSetupRequired } from "@hooks/api/queries/useSetupRequired";
 
 import { STEPS } from "./constants";
 import { AdminStep } from "./steps/AdminStep";
@@ -14,9 +14,9 @@ import { PlexStep } from "./steps/PlexStep";
 import { SlskdStep } from "./steps/SlskdStep";
 import type { WizardStep } from "./types";
 
-export function SetupWizard() {
+export function SetupScreen() {
   const router = useRouter();
-  const setupQuery = trpc.auth.setupRequired.useQuery();
+  const setupQuery = useSetupRequired();
   const { currentUser } = useAuthContext();
 
   const initialStep: WizardStep = currentUser ? "slskd" : "admin";

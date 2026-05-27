@@ -58,10 +58,7 @@ export function ContentShell({ children }: ContentShellProps) {
         />
       </div>
 
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.02]"
-        style={gridBackgroundStyle}
-      />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.02]" style={gridBackgroundStyle} />
 
       <motion.main
         className={cn(glassContainer({ blur: "none", rounded: "none", responsive: "blur" }), "flex flex-1 flex-col")}

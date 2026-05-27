@@ -3,15 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 
-import { trpc } from "@utils/trpc";
+import { useSetupRequired } from "@hooks/api/queries/useSetupRequired";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
 export function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { currentUser, isLoading } = useAuthContext();
-  const setupQuery = trpc.auth.setupRequired.useQuery(undefined, {
-    staleTime: 60 * 1000,
-  });
+  const setupQuery = useSetupRequired();
 
   useEffect(() => {
     if (isLoading || setupQuery.isLoading) return;

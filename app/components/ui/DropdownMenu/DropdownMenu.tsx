@@ -85,7 +85,13 @@ export function DropdownMenuItem({ className, inset, ref, ...props }: DropdownMe
   );
 }
 
-export function DropdownMenuCheckboxItem({ className, children, checked, ref, ...props }: DropdownMenuCheckboxItemProps) {
+export function DropdownMenuCheckboxItem({
+  className,
+  children,
+  checked,
+  ref,
+  ...props
+}: DropdownMenuCheckboxItemProps) {
   return (
     <DropdownMenuPrimitive.CheckboxItem
       ref={ref}

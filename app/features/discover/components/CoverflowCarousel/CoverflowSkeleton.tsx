@@ -5,6 +5,7 @@ import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { SKELETON_CARDS } from "./constants";
 import { getPulseAnimation } from "./helpers";
+import { carouselPerspectiveStyle } from "./styles";
 
 export function CoverflowSkeleton() {
   return (
@@ -16,7 +17,7 @@ export function CoverflowSkeleton() {
     >
       <div
         className="relative mx-auto aspect-square w-full sm:aspect-4/3 lg:aspect-16/5"
-        style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+        style={carouselPerspectiveStyle}
       >
         {SKELETON_CARDS.map((card, index) => (
           <motion.div

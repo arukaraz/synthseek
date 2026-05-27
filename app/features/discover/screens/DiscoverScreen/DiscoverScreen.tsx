@@ -1,12 +1,12 @@
 "use client";
 
-import { ArtistSpotlight } from "../components/ArtistSpotlight/ArtistSpotlight";
-import { CategoriesGrid } from "../components/CategoriesGrid/CategoriesGrid";
-import { LibraryLeaderboard } from "../components/LibraryLeaderboard/LibraryLeaderboard";
-import { RecentRequests } from "../components/RecentRequests/RecentRequests";
-import { TrendingHero } from "../components/TrendingHero/TrendingHero";
+import { ArtistSpotlight } from "../../components/ArtistSpotlight/ArtistSpotlight";
+import { CategoriesGrid } from "../../components/CategoriesGrid/CategoriesGrid";
+import { LibraryLeaderboard } from "../../components/LibraryLeaderboard/LibraryLeaderboard";
+import { RecentRequests } from "../../components/RecentRequests/RecentRequests";
+import { TrendingHero } from "../../components/TrendingHero/TrendingHero";
 
-export function DiscoverView() {
+export function DiscoverScreen() {
   return (
     <div className="custom-scrollbar relative h-full overflow-auto">
       <div className="flex flex-col gap-6 p-4 sm:p-6 lg:p-8">

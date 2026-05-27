@@ -9,13 +9,13 @@ import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { useCallback, useMemo, useState } from "react";
-import { RequestsEmptyState } from "../components/RequestsEmptyState";
-import { buildFlatTrackColumns } from "../components/Table/columns";
-import { flattenRequestsToTrackRows, searchFlatTrackRows, sortFlatTrackRows } from "../components/Table/helpers";
+import { RequestsEmptyState } from "./RequestsEmptyState";
+import { buildFlatTrackColumns } from "./Table/columns";
+import { flattenRequestsToTrackRows, searchFlatTrackRows, sortFlatTrackRows } from "./Table/helpers";
 import { filterRequestsByStatus } from "../helpers";
 import { FlatTrackRow, REQUESTS_URL_PARAMS, TableSortConfig, TableSortField } from "../types";
 
-export function ListView() {
+export function ListViewMode() {
   const { data: items, isLoading } = useTrackRequests();
   const { values } = useUrlParams({
     filter: REQUESTS_URL_PARAMS.filter,

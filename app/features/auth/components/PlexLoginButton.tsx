@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@components/ui/Button";
-import { usePlexLogin } from "@features/auth/hooks/usePlexLogin";
+import { usePlexLogin } from "../hooks/usePlexLogin";
 
 export function PlexLoginButton() {
   const { startLogin, isPending } = usePlexLogin();

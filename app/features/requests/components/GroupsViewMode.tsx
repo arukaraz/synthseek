@@ -6,12 +6,12 @@ import { useDebounce } from "@hooks/ui/useDebounce";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
 import { useEffect, useState } from "react";
-import { RequestDetail } from "../components/RequestDetail/RequestDetail";
-import { RequestSidebar } from "../components/RequestSidebar/RequestSidebar";
+import { RequestDetail } from "./RequestDetail/RequestDetail";
+import { RequestSidebar } from "./RequestSidebar/RequestSidebar";
 import { useFilteredRequests } from "../hooks/useFilteredRequests";
 import { REQUESTS_URL_PARAMS } from "../types";
 
-export function GroupsView() {
+export function GroupsViewMode() {
   const { data: items, isLoading } = useTrackRequests();
   const { values, set } = useUrlParams(REQUESTS_URL_PARAMS);
 

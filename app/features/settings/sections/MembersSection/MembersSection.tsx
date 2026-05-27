@@ -5,7 +5,7 @@ import { ShieldCheck, User as UserIcon } from "lucide-react";
 import { Role } from "@api/__generated__/types";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { cn } from "@utils/cn";
-import { trpc } from "@utils/trpc";
+import { useUsers } from "@hooks/api/queries/useUsers";
 
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
@@ -13,7 +13,7 @@ import { contentRoot, emptyPanel, memberAvatar, memberRow } from "../../styles";
 
 export function MembersSection() {
   const { isAdmin } = useAuthContext();
-  const usersQuery = trpc.users.list.useQuery(undefined, { enabled: isAdmin });
+  const usersQuery = useUsers({ enabled: isAdmin });
 
   if (!isAdmin) {
     return (
