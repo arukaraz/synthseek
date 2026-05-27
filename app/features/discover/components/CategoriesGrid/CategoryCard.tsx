@@ -5,26 +5,8 @@ import { Music } from "lucide-react";
 import Image from "next/image";
 import { categoryPlaceholder } from "../styles";
 import { useState } from "react";
-
-export type CardSize = "small" | "medium" | "large";
-
-interface GenreItem {
-  id: string;
-  name: string;
-  images?: { url: string }[];
-}
-
-interface CategoryCardProps {
-  category: GenreItem;
-  size?: CardSize;
-  onClick?: (categoryId: string, categoryName: string) => void;
-}
-
-const sizeClasses: Record<CardSize, string> = {
-  small: "row-span-1",
-  medium: "row-span-2",
-  large: "row-span-2 sm:col-span-2",
-};
+import { sizeClasses } from "./styles";
+import type { CategoryCardProps } from "./types";
 
 export function CategoryCard({ category, size = "small", onClick }: CategoryCardProps) {
   const [imageError, setImageError] = useState(false);

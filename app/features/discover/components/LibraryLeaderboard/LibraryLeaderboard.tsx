@@ -6,41 +6,14 @@ import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Crown, Music } from "lucide-react";
 import { useMemo, useState } from "react";
+import { TOP_LIMIT } from "./constants";
 import { LeaderboardHero } from "./LeaderboardHero";
 import { LeaderboardRows } from "./LeaderboardRows";
+import { LeaderboardSkeleton } from "./LeaderboardSkeleton";
 import { LeaderboardTabs } from "./LeaderboardTabs";
 import { LibraryStatsRow } from "./LibraryStatsRow";
-import { errorFrame, panelFrame, sectionHeaderLabel, sectionHeaderRow, skeletonFrame } from "./styles";
+import { errorFrame, panelFrame, sectionHeaderLabel, sectionHeaderRow } from "./styles";
 import type { LeaderboardEntry, LeaderboardMode } from "./types";
-
-const TOP_LIMIT = 5;
-
-function LeaderboardSkeleton() {
-  return (
-    <div className={skeletonFrame()}>
-      <div className="border-fg/10 grid grid-cols-3 border-b">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="py-3 text-center">
-            <div className="bg-fg/10 mx-auto h-5 w-10 rounded" />
-            <div className="bg-fg/10 mx-auto mt-1.5 h-2.5 w-14 rounded" />
-          </div>
-        ))}
-      </div>
-      <div className={sectionHeaderRow()}>
-        <div className="bg-fg/10 h-3 w-24 rounded" />
-        <div className="bg-fg/10 h-6 w-32 rounded" />
-      </div>
-      <div className="border-fg/10 border-b p-3">
-        <div className="bg-fg/10 h-16 w-full rounded" />
-      </div>
-      <div className="space-y-2 px-4 py-3">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-fg/10 h-4 w-full rounded" />
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export function LibraryLeaderboard() {
   const { data, isLoading, isError } = useLibrarySummary();

@@ -1,12 +1,7 @@
 "use client";
 
 import { rowCount, rowGrid, rowName, rowProgressFill, rowProgressTrack, rowRank, rowsContainer } from "./styles";
-import type { LeaderboardEntry } from "./types";
-
-interface LeaderboardRowsProps {
-  entries: LeaderboardEntry[];
-  maxCount: number;
-}
+import type { LeaderboardRowsProps } from "./types";
 
 export function LeaderboardRows({ entries, maxCount }: LeaderboardRowsProps) {
   if (entries.length === 0) return null;

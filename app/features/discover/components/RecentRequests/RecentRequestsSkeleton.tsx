@@ -1,8 +1,7 @@
 "use client";
 
+import { SKELETON_CELLS } from "./constants";
 import { skeletonCell, skeletonStrip } from "./styles";
-
-const SKELETON_CELLS = 5;
 
 export function RecentRequestsSkeleton() {
   return (

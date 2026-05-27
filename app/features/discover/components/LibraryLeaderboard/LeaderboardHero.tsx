@@ -13,12 +13,7 @@ import {
   heroThumbOverlay,
   heroUnit,
 } from "./styles";
-import type { LeaderboardEntry, LeaderboardMode } from "./types";
-
-interface LeaderboardHeroProps {
-  entry: LeaderboardEntry;
-  mode: LeaderboardMode;
-}
+import type { LeaderboardHeroProps } from "./types";
 
 export function LeaderboardHero({ entry, mode }: LeaderboardHeroProps) {
   const unitLabel = mode === "artists" ? "tracks" : "albums";

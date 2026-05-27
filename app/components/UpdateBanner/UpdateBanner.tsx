@@ -6,14 +6,9 @@ import { useCallback, useState } from "react";
 
 import { isBreakingUpdate } from "@utils/version";
 
+import { PATCH_NOTES_URL } from "./constants";
 import { bannerContainer, bannerContent, breakingPrefix, dismissButton } from "./styles";
-
-interface UpdateBannerProps {
-  latestVersion: string;
-  currentVersion: string;
-}
-
-const PATCH_NOTES_URL = "https://github.com/arukaraz/synthseek/blob/main/PATCH-NOTES.md";
+import type { UpdateBannerProps } from "./types";
 
 export function UpdateBanner({ latestVersion, currentVersion }: UpdateBannerProps) {
   const [dismissed, setDismissed] = useState(false);

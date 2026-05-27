@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentType, type MusicTrack } from "@api/__generated__/types";
+import { ContentType } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
 import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
@@ -18,13 +18,7 @@ import {
   heroTitle,
   heroTrendingBadge,
 } from "./styles";
-
-interface TrendingHeroSlideProps {
-  item: { track: MusicTrack; addedAt: string };
-  currentIndex: number;
-  total: number;
-  onIndexChange: (index: number) => void;
-}
+import type { TrendingHeroSlideProps } from "./types";
 
 export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
   const [showModal, setShowModal] = useState(false);

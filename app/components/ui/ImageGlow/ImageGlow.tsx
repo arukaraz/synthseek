@@ -2,11 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@utils/cn";
-
-interface ImageGlowProps {
-  className?: string;
-  opacity?: number;
-}
+import type { ImageGlowProps } from "./types";
 
 export function ImageGlow({ className, opacity = 0.4 }: ImageGlowProps) {
   return (

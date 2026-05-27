@@ -1,0 +1,1 @@
+export const ARTIST_SPOTLIGHT_COUNT = 4;

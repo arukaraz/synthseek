@@ -3,27 +3,8 @@
 import { staggerItem } from "@utils/animations";
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
-
-const SKELETON_CARDS = [
-  { x: "-38vw", rotate: 50, scale: 0.65, opacity: 0.3, z: 95, hideOnMobile: true },
-  { x: "-28vw", rotate: 45, scale: 0.7, opacity: 0.5, z: 96, hideOnMobile: true },
-  { x: "-18vw", rotate: 35, scale: 0.8, opacity: 0.7, z: 97 },
-  { x: "-9vw", rotate: 20, scale: 0.9, opacity: 0.85, z: 98 },
-  { x: "0", rotate: 0, scale: 1, opacity: 1, z: 100, isCenter: true },
-  { x: "9vw", rotate: -20, scale: 0.9, opacity: 0.85, z: 98 },
-  { x: "18vw", rotate: -35, scale: 0.8, opacity: 0.7, z: 97 },
-  { x: "28vw", rotate: -45, scale: 0.7, opacity: 0.5, z: 96, hideOnMobile: true },
-  { x: "38vw", rotate: -50, scale: 0.65, opacity: 0.3, z: 95, hideOnMobile: true },
-];
-
-const getPulseAnimation = (baseOpacity: number) => ({
-  opacity: [baseOpacity * 0.6, baseOpacity, baseOpacity * 0.6],
-  transition: {
-    duration: 1.5,
-    repeat: Infinity,
-    ease: "easeInOut" as const,
-  },
-});
+import { SKELETON_CARDS } from "./constants";
+import { getPulseAnimation } from "./helpers";
 
 export function CoverflowSkeleton() {
   return (

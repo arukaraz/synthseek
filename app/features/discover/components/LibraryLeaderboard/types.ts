@@ -11,3 +11,27 @@ export interface LeaderboardSummary {
   hours: number;
   queued: number;
 }
+
+export interface LeaderboardTabsProps {
+  mode: LeaderboardMode;
+  onChange: (mode: LeaderboardMode) => void;
+}
+
+export interface LeaderboardHeroProps {
+  entry: LeaderboardEntry;
+  mode: LeaderboardMode;
+}
+
+export interface LeaderboardRowsProps {
+  entries: LeaderboardEntry[];
+  maxCount: number;
+}
+
+export interface LibraryStatsRowProps {
+  summary: LeaderboardSummary;
+}
+
+export interface TabOption {
+  id: LeaderboardMode;
+  label: string;
+}

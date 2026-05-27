@@ -5,49 +5,13 @@ import { useCategories } from "@hooks/api/queries/useCategories";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { glassPanelCard } from "../styles";
 import { fadeIn } from "@utils/animations";
-import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { AlertCircle, Grid3X3 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { CategoryCard, type CardSize } from "./CategoryCard";
-
-const CATEGORIES_LIMIT = 8;
-
-const SIZE_PATTERN: CardSize[] = ["medium", "small", "medium", "medium", "small", "small", "medium", "small"];
-
-function getCardSize(index: number): CardSize {
-  return SIZE_PATTERN[index] ?? "small";
-}
-
-function GenresGridSkeleton() {
-  return (
-    <div className={glassPanelCard()}>
-      <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
-
-      <div className="relative flex flex-1 flex-col">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="space-y-2">
-            <div className="bg-fg/10 h-5 w-20 animate-pulse rounded" />
-            <div className="bg-fg/10 h-3 w-32 animate-pulse rounded" />
-          </div>
-          <div className="bg-fg/10 h-4 w-14 animate-pulse rounded" />
-        </div>
-        <div className="grid grid-flow-dense auto-rows-[100px] grid-cols-2 gap-3">
-          {SIZE_PATTERN.map((size, i) => (
-            <div
-              key={i}
-              className={cn(
-                "bg-fg/5 animate-pulse rounded-lg",
-                size === "medium" && "row-span-2",
-                size === "small" && "row-span-1"
-              )}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+import { CategoriesGridSkeleton } from "./CategoriesGridSkeleton";
+import { CategoryCard } from "./CategoryCard";
+import { CATEGORIES_LIMIT } from "./constants";
+import { getCardSize } from "./helpers";
 
 export function CategoriesGrid() {
   const router = useRouter();
@@ -63,7 +27,7 @@ export function CategoriesGrid() {
   };
 
   if (isLoading) {
-    return <GenresGridSkeleton />;
+    return <CategoriesGridSkeleton />;
   }
 
   if (isError) {

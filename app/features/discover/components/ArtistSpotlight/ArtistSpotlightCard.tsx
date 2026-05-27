@@ -8,22 +8,7 @@ import { motion } from "framer-motion";
 import { Play, User, Music } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-
-interface ArtistSpotlightCardProps {
-  artist: {
-    id: string;
-    name: string;
-    images: { url: string; width?: number | null; height?: number | null }[];
-    genres?: string[];
-  };
-  latestAlbum: {
-    id: string;
-    name: string;
-    images: { url: string; width?: number | null; height?: number | null }[];
-    total_tracks: number;
-  } | null;
-  onClick?: () => void;
-}
+import type { ArtistSpotlightCardProps } from "./types";
 
 export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpotlightCardProps) {
   const [imageError, setImageError] = useState(false);

@@ -6,12 +6,11 @@ import { staggerItem } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AUTO_ROTATE_INTERVAL } from "./constants";
 import { errorFrame, heroFrame } from "./styles";
 import { TrendingHeroNav } from "./TrendingHeroNav";
 import { TrendingHeroSkeleton } from "./TrendingHeroSkeleton";
 import { TrendingHeroSlide } from "./TrendingHeroSlide";
-
-const AUTO_ROTATE_INTERVAL = 10000;
 
 export function TrendingHero() {
   const { data, isLoading, isError } = useTrendingTracks();

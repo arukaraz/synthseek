@@ -1,17 +1,9 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { MAX_DOTS } from "./constants";
 import { dotBase, dotsRow, navArrow, navContainer } from "./styles";
-
-interface TrendingHeroNavProps {
-  total: number;
-  currentIndex: number;
-  onSelect: (index: number) => void;
-  onPrev: () => void;
-  onNext: () => void;
-}
-
-const MAX_DOTS = 6;
+import type { TrendingHeroNavProps } from "./types";
 
 export function TrendingHeroNav({ total, currentIndex, onSelect, onPrev, onNext }: TrendingHeroNavProps) {
   if (total <= 1) return null;

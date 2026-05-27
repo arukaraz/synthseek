@@ -1,6 +1,5 @@
 "use client";
 
-import type { MusicTrack } from "@api/__generated__/types";
 import { EmptyState } from "@components/ui/EmptyState";
 import { staggerItem } from "@utils/animations";
 import { cn } from "@utils/cn";
@@ -8,25 +7,11 @@ import { motion } from "framer-motion";
 import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { NAV_BUTTON_CLASSES } from "../styles";
+import { COVERFLOW_CONFIG } from "./constants";
 import { CoverflowCard } from "./CoverflowCard";
 import { CoverflowSkeleton } from "./CoverflowSkeleton";
-import { calculateAllTransforms, COVERFLOW_CONFIG, getCircularOffset } from "./utils/transforms";
-
-interface TrendingTrackItem {
-  track: MusicTrack;
-  addedAt: string;
-}
-
-interface CoverflowCarouselProps {
-  tracks: TrendingTrackItem[];
-  currentIndex: number;
-  onPrev: () => void;
-  onNext: () => void;
-  onIndexChange: (index: number) => void;
-  setIsAutoPlaying: (value: boolean) => void;
-  isLoading: boolean;
-  isError: boolean;
-}
+import { calculateAllTransforms, getCircularOffset } from "./helpers";
+import type { CoverflowCarouselProps } from "./types";
 
 export function CoverflowCarousel({
   tracks,

@@ -2,15 +2,11 @@
 
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
 import { StatusBadge } from "@components/ui/StatusBadge";
-import type { FlatTrackRow } from "@features/requests/types";
 import { formatRelativeTime } from "@utils/formatters";
 import { Disc } from "lucide-react";
 import Image from "next/image";
 import { cardBase } from "./styles";
-
-interface RecentRequestCardProps {
-  request: FlatTrackRow;
-}
+import type { RecentRequestCardProps } from "./types";
 
 export function RecentRequestCard({ request }: RecentRequestCardProps) {
   const parentArt = request.parent.album_art;

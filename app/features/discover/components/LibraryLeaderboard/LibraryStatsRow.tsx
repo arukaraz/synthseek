@@ -1,11 +1,7 @@
 "use client";
 
 import { statsLabel, statsRow, statsValue } from "./styles";
-import type { LeaderboardSummary } from "./types";
-
-interface LibraryStatsRowProps {
-  summary: LeaderboardSummary;
-}
+import type { LibraryStatsRowProps } from "./types";
 
 export function LibraryStatsRow({ summary }: LibraryStatsRowProps) {
   const cells = [

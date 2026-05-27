@@ -1,17 +1,8 @@
 "use client";
 
+import { OPTIONS } from "./constants";
 import { tabActive, tabInactive, tabsContainer } from "./styles";
-import type { LeaderboardMode } from "./types";
-
-interface LeaderboardTabsProps {
-  mode: LeaderboardMode;
-  onChange: (mode: LeaderboardMode) => void;
-}
-
-const OPTIONS: { id: LeaderboardMode; label: string }[] = [
-  { id: "artists", label: "Artists" },
-  { id: "genres", label: "Genres" },
-];
+import type { LeaderboardTabsProps } from "./types";
 
 export function LeaderboardTabs({ mode, onChange }: LeaderboardTabsProps) {
   return (

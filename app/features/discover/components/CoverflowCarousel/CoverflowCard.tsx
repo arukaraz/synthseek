@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentType, type MusicTrack } from "@api/__generated__/types";
+import { ContentType } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
 import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
@@ -11,17 +11,7 @@ import { motion } from "framer-motion";
 import { Download, TrendingUp } from "lucide-react";
 import { memo, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
-import type { CardTransform } from "./utils/transforms";
-
-interface CoverflowCardProps {
-  imageUrl: string | null | undefined;
-  track: MusicTrack;
-  transform: CardTransform;
-  isCenter: boolean;
-  index: number;
-  onClick: (index: number) => void;
-  priority?: boolean;
-}
+import type { CoverflowCardProps } from "./types";
 
 export const CoverflowCard = memo(function CoverflowCard({
   imageUrl,

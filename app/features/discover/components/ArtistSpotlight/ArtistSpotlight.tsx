@@ -17,18 +17,8 @@ import { AlertCircle, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
-
-const ARTIST_SPOTLIGHT_COUNT = 4;
-
-function ArtistSpotlightSkeleton() {
-  return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-      {Array.from({ length: ARTIST_SPOTLIGHT_COUNT }).map((_, i) => (
-        <div key={i} className="bg-fg/5 aspect-3/4 animate-pulse rounded-lg" />
-      ))}
-    </div>
-  );
-}
+import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
+import { ARTIST_SPOTLIGHT_COUNT } from "./constants";
 
 export function ArtistSpotlight() {
   const router = useRouter();
