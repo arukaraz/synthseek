@@ -5,8 +5,8 @@ export function useLocalLogin() {
   const utils = trpc.useUtils();
 
   return trpc.auth.loginLocal.useMutation({
-    onSuccess: () => {
-      utils.auth.me.invalidate();
+    onSuccess: (user) => {
+      utils.auth.me.setData(undefined, user);
     },
     onError: (error) => {
       toast.error(error.message || "Login failed");

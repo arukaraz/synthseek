@@ -51,7 +51,7 @@ export function usePlexLogin() {
           const result = await completeMutation.mutateAsync({ pinId });
           if (result.status === "authenticated") {
             cleanup();
-            utils.auth.me.invalidate();
+            utils.auth.me.setData(undefined, result.user);
             setState("completed");
           }
         } catch (error) {
