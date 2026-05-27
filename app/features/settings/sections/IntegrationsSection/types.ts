@@ -41,3 +41,7 @@ export interface PlexIntegrationCardProps {
 export interface SlskdCardProps {
   initial: { apiUrl: string; apiKey: string; bannedUsers: string[] };
 }
+
+export interface SpotifyAppCardProps {
+  initial: { clientId: string; publicBaseUrl: string };
+}

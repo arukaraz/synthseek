@@ -8,7 +8,7 @@ import { cn } from "@utils/cn";
 import { getContentTypeBadgeColors, getContentTypeIcon } from "@utils/content-type-helpers";
 import { formatTimestamp } from "@utils/formatters";
 import Image from "next/image";
-import { ArrowLeft, MoreVertical, RefreshCw, Square, Trash2, Upload } from "lucide-react";
+import { ArrowLeft, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
 import { useRequestActions } from "../../hooks/useRequestActions";
 import {
   heroAvatar,
@@ -23,8 +23,20 @@ import type { RequestDetailHeroProps } from "./types";
 
 export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
   const FallbackIcon = getContentTypeIcon(request.contentType);
-  const { retry, remove, cancel, syncPlex, canRetry, canCancel, canSyncPlex, syncPlexPending, label } =
-    useRequestActions(request);
+  const {
+    retry,
+    remove,
+    cancel,
+    syncPlex,
+    syncSourceNow,
+    canRetry,
+    canCancel,
+    canSyncPlex,
+    canSyncSource,
+    syncPlexPending,
+    syncSourcePending,
+    label,
+  } = useRequestActions(request);
 
   return (
     <div className="relative">
@@ -91,7 +103,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                 )}
               >
                 <RefreshCw className="mr-1.5 size-3.5" />
-                Retry
+                Retry Failed
               </Button>
             )}
 
@@ -116,6 +128,16 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     Cancel downloads
                   </DropdownMenuItem>
                 )}
+                {canSyncSource && (
+                  <DropdownMenuItem
+                    onClick={syncSourceNow}
+                    disabled={syncSourcePending}
+                    className="text-emerald-400 focus:text-emerald-300"
+                  >
+                    <RefreshCcw className="size-3.5" />
+                    {syncSourcePending ? "Syncing…" : "Sync from Spotify"}
+                  </DropdownMenuItem>
+                )}
                 {canSyncPlex && (
                   <DropdownMenuItem
                     onClick={syncPlex}
@@ -126,7 +148,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     {syncPlexPending ? "Syncing…" : "Sync to Plex"}
                   </DropdownMenuItem>
                 )}
-                {!canCancel && !canSyncPlex && (
+                {!canCancel && !canSyncPlex && !canSyncSource && (
                   <DropdownMenuItem disabled className="text-fg/40">
                     No additional actions
                   </DropdownMenuItem>

@@ -10,6 +10,7 @@ import {
   useRetryPlaylist,
   useRetryPlexPlaylist,
 } from "@hooks/api";
+import { useSpotifySyncPlaylistNow } from "@hooks/api/mutations/spotify/useSpotifyImport";
 import { confirm } from "@utils/confirm";
 import { isProcessingStatus } from "@utils/status-helpers";
 
@@ -18,10 +19,13 @@ interface UseRequestActions {
   remove: () => Promise<void>;
   cancel: () => Promise<void>;
   syncPlex: () => void;
+  syncSourceNow: () => void;
   canRetry: boolean;
   canCancel: boolean;
   canSyncPlex: boolean;
+  canSyncSource: boolean;
   syncPlexPending: boolean;
+  syncSourcePending: boolean;
   label: "Album" | "Playlist";
 }
 
@@ -36,6 +40,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const deletePlaylist = useDeletePlaylist();
   const cancelAlbum = useCancelAlbum();
   const cancelPlaylist = useCancelPlaylist();
+  const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
 
   const canRetry =
     request.status === RequestStatus.enum.failed ||
@@ -47,6 +52,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     isPlaylist &&
     request.plex_playlist_id === null &&
     (request.status === RequestStatus.enum.complete || request.status === RequestStatus.enum.partially_complete);
+  const canSyncSource = isPlaylist && request.source_provider === "spotify";
 
   const retry = () => {
     if (isPlaylist) retryPlaylist.mutate({ playlistId: request.id });
@@ -83,15 +89,22 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     retryPlex.mutate({ playlistId: request.id });
   };
 
+  const syncSourceNow = () => {
+    syncSpotifyPlaylist.mutate({ playlistId: request.id });
+  };
+
   return {
     retry,
     remove,
     cancel,
     syncPlex,
+    syncSourceNow,
     canRetry,
     canCancel,
     canSyncPlex,
+    canSyncSource,
     syncPlexPending: retryPlex.isPending,
+    syncSourcePending: syncSpotifyPlaylist.isPending,
     label,
   };
 }

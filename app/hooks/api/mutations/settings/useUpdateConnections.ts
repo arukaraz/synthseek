@@ -38,3 +38,14 @@ export function useUpdateConnectionsEnrichment() {
 export function useTestSlskd() {
   return trpc.settings.testSlskd.useMutation();
 }
+
+export function useUpdateConnectionsSpotify() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateConnectionsSpotify.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      toast.success("Spotify app settings updated");
+    },
+    onError: (error) => toast.error(error.message || "Failed to update Spotify settings"),
+  });
+}
