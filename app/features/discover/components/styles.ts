@@ -1,4 +1,11 @@
+import { cn } from "@utils/cn";
 import { cva, type VariantProps } from "class-variance-authority";
+
+export const NAV_BUTTON_CLASSES = cn(
+  "absolute top-1/2 z-20 -translate-y-1/2",
+  "bg-surface/80 hover:bg-surface flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm sm:h-12 sm:w-12",
+  "border-fg/10 border shadow-lg"
+);
 
 export const glassPanelCard = cva("glass-panel relative flex flex-col rounded-xl p-4", {
   variants: {

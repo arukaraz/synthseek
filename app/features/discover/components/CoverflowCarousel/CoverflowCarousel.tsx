@@ -7,6 +7,7 @@ import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { NAV_BUTTON_CLASSES } from "../styles";
 import { CoverflowCard } from "./CoverflowCard";
 import { CoverflowSkeleton } from "./CoverflowSkeleton";
 import { calculateAllTransforms, COVERFLOW_CONFIG, getCircularOffset } from "./utils/transforms";
@@ -26,12 +27,6 @@ interface CoverflowCarouselProps {
   isLoading: boolean;
   isError: boolean;
 }
-
-const NAV_BUTTON_CLASSES = cn(
-  "absolute top-1/2 z-20 -translate-y-1/2",
-  "bg-surface/80 hover:bg-surface flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm sm:h-12 sm:w-12",
-  "border-fg/10 border shadow-lg"
-);
 
 export function CoverflowCarousel({
   tracks,
