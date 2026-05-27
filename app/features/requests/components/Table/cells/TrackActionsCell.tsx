@@ -5,14 +5,7 @@ import { IconButton } from "@components/ui/IconButton";
 import { isRetryableStatus } from "@utils/status-helpers";
 import { MoreVertical, RefreshCw, Trash2 } from "lucide-react";
 import { mobileActionsButton } from "../../styles";
-import type { FlatTrackRow } from "../../../types";
-
-interface TrackActionsCellProps {
-  item: FlatTrackRow;
-  canAct: boolean;
-  onRetry: () => void;
-  onCancel: () => void;
-}
+import type { TrackActionsCellProps } from "../types";
 
 export function TrackActionsCell({ item, canAct, onRetry, onCancel }: TrackActionsCellProps) {
   if (!canAct) return null;

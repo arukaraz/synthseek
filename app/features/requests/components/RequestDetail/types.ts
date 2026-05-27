@@ -1,8 +1,23 @@
-import type { RequestStatus, RequestWithTracks } from "@api/__generated__/types";
+import type { RequestStatus, RequestWithTracks, TrackRequest } from "@api/__generated__/types";
 
 export interface RequestDetailProps {
   request: RequestWithTracks | null;
   onBack: () => void;
+}
+
+export interface TrackActionsCellProps {
+  track: TrackRequest;
+  canAct: boolean;
+  onRetry: () => void;
+  onCancel: () => void;
+}
+
+export interface TrackTitleCellProps {
+  track: TrackRequest;
+}
+
+export interface TrackStatusCellProps {
+  track: TrackRequest;
 }
 
 export interface RequestDetailHeroProps {

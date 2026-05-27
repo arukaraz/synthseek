@@ -9,10 +9,7 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { ENGINE_DEFAULTS } from "./defaults";
-
-interface QueueCardProps {
-  initial: { maxSize: number; maxConcurrentSearches: number; maxPendingImports: number };
-}
+import type { QueueCardProps } from "./types";
 
 export function QueueCard({ initial }: QueueCardProps) {
   const update = useUpdateEngineQueue();

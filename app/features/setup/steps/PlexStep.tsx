@@ -6,14 +6,7 @@ import { usePlexConnect } from "@hooks/api/mutations/settings/usePlexConnect";
 
 import { wizardPickerButton, wizardPickerCard } from "../styles";
 import { StepShell } from "./StepShell";
-
-interface PlexStepProps {
-  stepIndex: number;
-  totalSteps: number;
-  onComplete: () => void;
-  onBack: () => void;
-  onSkip: () => void;
-}
+import type { PlexStepProps } from "../types";
 
 export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: PlexStepProps) {
   const plex = usePlexConnect();

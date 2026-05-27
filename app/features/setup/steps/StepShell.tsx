@@ -1,26 +1,9 @@
 "use client";
 
-import type { ReactNode } from "react";
-
 import { Button } from "@components/ui/Button";
 
 import { stepEyebrow, stepIndicator, stepShellRoot } from "../styles";
-
-interface StepShellProps {
-  stepIndex: number;
-  totalSteps: number;
-  title: string;
-  description?: string;
-  primaryLabel: string;
-  primaryDisabled?: boolean;
-  primaryLoading?: boolean;
-  onPrimary?: () => void;
-  secondaryLabel?: string;
-  onSecondary?: () => void;
-  showBack?: boolean;
-  onBack?: () => void;
-  children: ReactNode;
-}
+import type { StepShellProps } from "../types";
 
 export function StepShell({
   stepIndex,

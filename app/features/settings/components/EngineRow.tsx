@@ -1,16 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
-
 import { engineRow } from "../styles";
-
-interface EngineRowProps {
-  label: string;
-  labelTrailing?: ReactNode;
-  description: string;
-  control: ReactNode;
-  anchor?: string;
-}
+import type { EngineRowProps } from "./types";
 
 export function EngineRow({ label, labelTrailing, description, control, anchor }: EngineRowProps) {
   return (

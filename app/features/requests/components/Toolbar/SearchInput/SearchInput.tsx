@@ -6,13 +6,7 @@ import { Search, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { closeButton, searchInput } from "../../styles";
 import { SEARCH_CLEAR_BUTTON_VARIANTS, SEARCH_INPUT_VARIANTS } from "../consts";
-
-interface SearchInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-}
+import type { SearchInputProps } from "../types";
 
 export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);

@@ -8,26 +8,7 @@ import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
-
-type EnrichmentSection = {
-  lastfmApiKey: string;
-  fanartApiKey: string;
-  songlinkApiKey: string;
-  acoustidApiKey: string;
-  musicbrainzEmail: string;
-};
-
-interface EnrichmentSingleFieldCardProps {
-  initial: EnrichmentSection;
-  field: keyof EnrichmentSection;
-  title: string;
-  optional?: boolean;
-  description: string;
-  fieldLabel: string;
-  helper?: string;
-  inputType?: "secret" | "email";
-  placeholder?: string;
-}
+import type { EnrichmentSingleFieldCardProps } from "./types";
 
 export function EnrichmentSingleFieldCard({
   initial,

@@ -33,28 +33,9 @@ import {
   statusDot,
 } from "../../styles";
 
-type Affix = "off" | "prefix" | "suffix";
-
-const AFFIX_OPTIONS: ReadonlyArray<{ value: Affix; label: string }> = [
-  { value: "off", label: "Off" },
-  { value: "prefix", label: "Prefix" },
-  { value: "suffix", label: "Suffix" },
-];
-
-interface PlexIntegrationCardProps {
-  initial: {
-    connection: { url: string; token: string };
-    behavior: { libraryScan: boolean; playlistSync: boolean };
-    naming: { plexPlaylistUsernameAffix: Affix; plexPlaylistUsernameSeparator: string };
-  };
-}
-
-function previewName(affix: Affix, separator: string, username: string): string {
-  const base = "Discover Weekly";
-  if (affix === "off" || !username) return base;
-  if (affix === "prefix") return `${username}${separator}${base}`;
-  return `${base}${separator}${username}`;
-}
+import { AFFIX_OPTIONS } from "./constants";
+import { previewName } from "./helpers";
+import type { Affix, PlexIntegrationCardProps } from "./types";
 
 export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
   const { currentUser } = useAuthContext();

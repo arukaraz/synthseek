@@ -1,17 +1,13 @@
 "use client";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
-import { type TrackRequest } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { HelpCircle } from "lucide-react";
 import { useState } from "react";
 import { tracksReasonButton } from "./styles";
 import { TrackStatusIcon } from "./TrackStatusIcon";
-
-interface TrackStatusCellProps {
-  track: TrackRequest;
-}
+import type { TrackStatusCellProps } from "./types";
 
 export function TrackStatusCell({ track }: TrackStatusCellProps) {
   const statusConfig = REQUEST_STATUS_CONFIG[track.status];

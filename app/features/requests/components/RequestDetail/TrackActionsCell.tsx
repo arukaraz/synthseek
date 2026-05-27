@@ -1,16 +1,9 @@
 "use client";
 
 import { IconButton } from "@components/ui/IconButton";
-import { type TrackRequest } from "@api/__generated__/types";
 import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
 import { RefreshCw, X } from "lucide-react";
-
-interface TrackActionsCellProps {
-  track: TrackRequest;
-  canAct: boolean;
-  onRetry: () => void;
-  onCancel: () => void;
-}
+import type { TrackActionsCellProps } from "./types";
 
 export function TrackActionsCell({ track, canAct, onRetry, onCancel }: TrackActionsCellProps) {
   const showRetry = canAct && isRetryableStatus(track.status);

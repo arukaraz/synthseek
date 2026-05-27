@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Moon, Sparkles, Sun, Waves } from "lucide-react";
+import { Check } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -9,13 +9,7 @@ import { cn } from "@utils/cn";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot } from "../../styles";
-
-const THEME_OPTIONS = [
-  { value: "light", label: "Light", icon: Sun },
-  { value: "dark", label: "Dark", icon: Moon },
-  { value: "midnight", label: "Midnight", icon: Sparkles },
-  { value: "ocean", label: "Ocean", icon: Waves },
-] as const;
+import { THEME_OPTIONS } from "./constants";
 
 export function GeneralSection() {
   const { theme, setTheme } = useTheme();

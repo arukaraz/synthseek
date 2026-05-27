@@ -15,10 +15,7 @@ import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
-
-interface SlskdCardProps {
-  initial: { apiUrl: string; apiKey: string; bannedUsers: string[] };
-}
+import type { SlskdCardProps } from "./types";
 
 export function SlskdCard({ initial }: SlskdCardProps) {
   const update = useUpdateConnectionsSlskd();

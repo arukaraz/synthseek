@@ -2,19 +2,7 @@
 
 import { Input } from "@components/ui/Input";
 import { cn } from "@utils/cn";
-
-interface SettingsNumberInputProps {
-  value: number;
-  onChange: (next: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-  suffix?: string;
-  disabled?: boolean;
-  className?: string;
-  id?: string;
-  ariaLabel?: string;
-}
+import type { SettingsNumberInputProps } from "./types";
 
 export function SettingsNumberInput({
   value,

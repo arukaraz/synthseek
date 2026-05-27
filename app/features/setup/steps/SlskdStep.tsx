@@ -11,13 +11,7 @@ import { SettingsTextInput } from "@features/settings/components/SettingsTextInp
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 
 import { StepShell } from "./StepShell";
-
-interface SlskdStepProps {
-  stepIndex: number;
-  totalSteps: number;
-  onComplete: () => void;
-  onBack: () => void;
-}
+import type { SlskdStepProps } from "../types";
 
 export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdStepProps) {
   const update = useUpdateConnectionsSlskd();

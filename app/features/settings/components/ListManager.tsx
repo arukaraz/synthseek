@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus, Search, X } from "lucide-react";
-import { useMemo, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useMemo, useState, type KeyboardEvent } from "react";
 
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
@@ -16,19 +16,8 @@ import {
   listManagerRemove,
   listManagerRow,
 } from "../styles";
-
-const FILTER_THRESHOLD = 5;
-
-interface ListManagerProps {
-  value: string[];
-  onChange: (next: string[]) => void;
-  addPlaceholder?: string;
-  filterPlaceholder?: string;
-  emptyLabel?: string;
-  countLabel?: (count: number) => string;
-  helper?: ReactNode;
-  disabled?: boolean;
-}
+import { FILTER_THRESHOLD } from "./constants";
+import type { ListManagerProps } from "./types";
 
 export function ListManager({
   value,

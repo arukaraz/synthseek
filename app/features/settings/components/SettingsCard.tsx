@@ -1,19 +1,9 @@
 "use client";
 
-import type { ReactNode } from "react";
-
 import { cn } from "@utils/cn";
 
 import { cardDescription, cardHeader, cardTitle, settingsCard } from "../styles";
-
-interface SettingsCardProps {
-  title: string;
-  optional?: boolean;
-  description?: string;
-  trailing?: ReactNode;
-  className?: string;
-  children: ReactNode;
-}
+import type { SettingsCardProps } from "./types";
 
 export function SettingsCard({ title, optional, description, trailing, className, children }: SettingsCardProps) {
   return (

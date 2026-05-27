@@ -1,11 +1,8 @@
 "use client";
 
-import { RequestStatus, type TrackRequest } from "@api/__generated__/types";
+import { RequestStatus } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
-
-interface TrackTitleCellProps {
-  track: TrackRequest;
-}
+import type { TrackTitleCellProps } from "./types";
 
 export function TrackTitleCell({ track }: TrackTitleCellProps) {
   return (

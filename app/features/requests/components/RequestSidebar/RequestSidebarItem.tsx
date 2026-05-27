@@ -1,17 +1,12 @@
 "use client";
 
 import { ProgressBar } from "@components/ui/ProgressBar";
-import { ACTIVE_STATUSES, type RequestWithTracks } from "@api/__generated__/types";
+import { ACTIVE_STATUSES } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { getContentTypeLabel } from "@utils/content-type-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { sidebarItem } from "./styles";
-
-interface RequestSidebarItemProps {
-  request: RequestWithTracks;
-  isSelected: boolean;
-  onSelect: () => void;
-}
+import type { RequestSidebarItemProps } from "./types";
 
 export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSidebarItemProps) {
   const statusConfig = REQUEST_STATUS_CONFIG[request.status];

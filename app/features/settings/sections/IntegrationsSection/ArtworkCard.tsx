@@ -8,16 +8,7 @@ import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
-
-interface ArtworkCardProps {
-  initial: {
-    lastfmApiKey: string;
-    fanartApiKey: string;
-    songlinkApiKey: string;
-    acoustidApiKey: string;
-    musicbrainzEmail: string;
-  };
-}
+import type { ArtworkCardProps } from "./types";
 
 export function ArtworkCard({ initial }: ArtworkCardProps) {
   const update = useUpdateConnectionsEnrichment();

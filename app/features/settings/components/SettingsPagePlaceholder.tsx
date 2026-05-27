@@ -2,11 +2,7 @@
 
 import { contentRoot, emptyPanel } from "../styles";
 import { SettingsPageHeader } from "./SettingsPageHeader";
-
-interface SettingsPagePlaceholderProps {
-  title: string;
-  message?: string;
-}
+import type { SettingsPagePlaceholderProps } from "./types";
 
 export function SettingsPagePlaceholder({ title, message }: SettingsPagePlaceholderProps) {
   return (

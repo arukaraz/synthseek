@@ -6,13 +6,7 @@ import type { FlatTrackRow } from "../../types";
 import { TrackActionsCell } from "./cells/TrackActionsCell";
 import { TrackStatusCell } from "./cells/TrackStatusCell";
 import { TrackTitleCell } from "./cells/TrackTitleCell";
-
-interface BuildColumnsArgs {
-  currentUserId: string | undefined;
-  canActFor: (item: FlatTrackRow) => boolean;
-  onRetry: (item: FlatTrackRow) => void;
-  onCancel: (item: FlatTrackRow) => void;
-}
+import type { BuildColumnsArgs } from "./types";
 
 export function buildFlatTrackColumns({
   currentUserId,

@@ -1,12 +1,8 @@
 "use client";
 
-import { type RequestStatus } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
-
-interface TrackStatusCellProps {
-  status: RequestStatus;
-}
+import type { TrackStatusCellProps } from "../types";
 
 export function TrackStatusCell({ status }: TrackStatusCellProps) {
   const statusConfig = REQUEST_STATUS_CONFIG[status];

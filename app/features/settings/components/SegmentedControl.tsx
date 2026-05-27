@@ -1,19 +1,7 @@
 "use client";
 
 import { segmentedControl, segmentedOption } from "../styles";
-
-interface SegmentedOption<T extends string> {
-  value: T;
-  label: string;
-}
-
-interface SegmentedControlProps<T extends string> {
-  value: T;
-  options: ReadonlyArray<SegmentedOption<T>>;
-  onChange: (next: T) => void;
-  disabled?: boolean;
-  ariaLabel?: string;
-}
+import type { SegmentedControlProps } from "./types";
 
 export function SegmentedControl<T extends string>({
   value,

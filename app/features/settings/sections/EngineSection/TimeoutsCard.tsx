@@ -9,19 +9,8 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { ENGINE_DEFAULTS } from "./defaults";
-
-interface TimeoutsCardProps {
-  initial: {
-    searchPhase: number;
-    downloadPhase: number;
-    importPhase: number;
-    peerUnresponsive: number;
-    queueWaitActivePeer: number;
-    queueWaitIdlePeer: number;
-  };
-}
-
-const MS = 1000;
+import { MS } from "./constants";
+import type { TimeoutsCardProps } from "./types";
 
 export function TimeoutsCard({ initial }: TimeoutsCardProps) {
   const update = useUpdateEngineTimeouts();

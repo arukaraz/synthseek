@@ -9,10 +9,7 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { ENGINE_DEFAULTS } from "./defaults";
-
-interface ImportCardProps {
-  initial: { metadataConfidenceThreshold: number };
-}
+import type { ImportCardProps } from "./types";
 
 export function ImportCard({ initial }: ImportCardProps) {
   const update = useUpdateEngineImport();

@@ -3,13 +3,7 @@
 import { Button } from "@components/ui/Button";
 
 import { saveBar } from "../styles";
-
-interface SaveBarProps {
-  isDirty: boolean;
-  isSaving: boolean;
-  onSave: () => void;
-  onCancel: () => void;
-}
+import type { SaveBarProps } from "./types";
 
 export function SaveBar({ isDirty, isSaving, onSave, onCancel }: SaveBarProps) {
   if (!isDirty && !isSaving) return null;

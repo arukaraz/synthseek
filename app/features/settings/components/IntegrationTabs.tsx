@@ -1,21 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { integrationTab, integrationTabUnderline, integrationTabsBar } from "../styles";
-
-interface IntegrationTabItem {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-}
-
-interface IntegrationTabsProps {
-  items: ReadonlyArray<IntegrationTabItem>;
-}
+import type { IntegrationTabsProps } from "./types";
 
 export function IntegrationTabs({ items }: IntegrationTabsProps) {
   const pathname = usePathname();

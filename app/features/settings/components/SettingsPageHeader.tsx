@@ -4,10 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 import { backToSections, pageTitle } from "../styles";
-
-interface SettingsPageHeaderProps {
-  title: string;
-}
+import type { SettingsPageHeaderProps } from "./types";
 
 export function SettingsPageHeader({ title }: SettingsPageHeaderProps) {
   return (

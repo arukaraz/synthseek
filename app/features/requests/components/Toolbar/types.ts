@@ -13,3 +13,10 @@ export interface StatusFilterOption {
   label: string;
   icon: LucideIcon;
 }
+
+export interface SearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+}

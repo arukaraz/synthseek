@@ -6,12 +6,7 @@ import { useSetupBootstrap } from "@hooks/api/mutations/auth/useSetupBootstrap";
 
 import { wizardShell as authInput } from "../styles";
 import { StepShell } from "./StepShell";
-
-interface AdminStepProps {
-  stepIndex: number;
-  totalSteps: number;
-  onComplete: () => void;
-}
+import type { AdminStepProps } from "../types";
 
 export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps) {
   const bootstrap = useSetupBootstrap();

@@ -1,17 +1,9 @@
 "use client";
 
-import type { ReactNode } from "react";
-
 import { cn } from "@utils/cn";
 
 import { fieldHelper, fieldLabel, fieldRow } from "../styles";
-
-interface SettingsFieldProps {
-  label: string;
-  helper?: ReactNode;
-  className?: string;
-  children: ReactNode;
-}
+import type { SettingsFieldProps } from "./types";
 
 export function SettingsField({ label, helper, className, children }: SettingsFieldProps) {
   return (

@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { SettingsSidebar } from "@features/settings/Sidebar/SettingsSidebar";
+import { SettingsSidebar } from "@features/settings/components/SettingsSidebar";
 import { contentScroll, layoutRoot } from "@features/settings/styles";
 import { cn } from "@utils/cn";
 

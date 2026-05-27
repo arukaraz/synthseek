@@ -6,15 +6,13 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { trpc } from "@utils/trpc";
 
+import { STEPS } from "./constants";
 import { AdminStep } from "./steps/AdminStep";
 import { DoneStep } from "./steps/DoneStep";
 import { EnrichmentStep } from "./steps/EnrichmentStep";
 import { PlexStep } from "./steps/PlexStep";
 import { SlskdStep } from "./steps/SlskdStep";
-
-type WizardStep = "admin" | "slskd" | "plex" | "enrichment" | "done";
-
-const STEPS: WizardStep[] = ["admin", "slskd", "plex", "enrichment", "done"];
+import type { WizardStep } from "./types";
 
 export function SetupWizard() {
   const router = useRouter();

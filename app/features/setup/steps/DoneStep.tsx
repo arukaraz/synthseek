@@ -7,12 +7,7 @@ import { useFinishWizard } from "@hooks/api/mutations/settings/useFinishWizard";
 
 import { doneCard, doneCheckBadge } from "../styles";
 import { StepShell } from "./StepShell";
-
-interface DoneStepProps {
-  stepIndex: number;
-  totalSteps: number;
-  onFinish: () => void;
-}
+import type { DoneStepProps } from "../types";
 
 export function DoneStep({ stepIndex, totalSteps, onFinish }: DoneStepProps) {
   const finish = useFinishWizard();

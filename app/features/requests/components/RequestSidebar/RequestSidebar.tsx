@@ -1,17 +1,9 @@
 "use client";
 
-import type { RequestWithTracks } from "@api/__generated__/types";
 import { RequestsEmptyState } from "../RequestsEmptyState";
 import { RequestSidebarItem } from "./RequestSidebarItem";
 import { sidebarContainer, sidebarList } from "./styles";
-
-interface RequestSidebarProps {
-  items: RequestWithTracks[];
-  selectedId: string | null;
-  onSelect: (id: string) => void;
-  searchQuery?: string;
-  className?: string;
-}
+import type { RequestSidebarProps } from "./types";
 
 export function RequestSidebar({ items, selectedId, onSelect, searchQuery, className }: RequestSidebarProps) {
   if (items.length === 0) {

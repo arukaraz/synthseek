@@ -5,15 +5,7 @@ import { useState } from "react";
 
 import { Input } from "@components/ui/Input";
 import { cn } from "@utils/cn";
-
-interface SettingsSecretInputProps {
-  value: string;
-  onChange: (next: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  id?: string;
-  ariaLabel?: string;
-}
+import type { SettingsSecretInputProps } from "./types";
 
 export function SettingsSecretInput({
   value,

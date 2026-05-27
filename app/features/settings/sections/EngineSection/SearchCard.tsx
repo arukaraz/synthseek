@@ -14,22 +14,7 @@ import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
 import { ENGINE_DEFAULTS } from "./defaults";
-
-interface SearchCardProps {
-  initial: {
-    search: {
-      maxPeerAttempts: number;
-      maxVariations: number;
-      historyCleanupEnabled: boolean;
-      maxHistorySearches: number;
-      banAfterFailedAttempts: number;
-    };
-    smartSearch: {
-      customMoodKeywords: string[];
-      communityPatternsEnabled: boolean;
-    };
-  };
-}
+import type { SearchCardProps } from "./types";
 
 export function SearchCard({ initial }: SearchCardProps) {
   const updateSearch = useUpdateEngineSearch();

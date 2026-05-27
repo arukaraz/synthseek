@@ -2,10 +2,7 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { Inbox, Search } from "lucide-react";
-
-interface RequestsEmptyStateProps {
-  searchQuery?: string;
-}
+import type { RequestsEmptyStateProps } from "./types";
 
 export function RequestsEmptyState({ searchQuery }: RequestsEmptyStateProps) {
   const hasSearch = !!searchQuery && searchQuery.trim().length > 0;

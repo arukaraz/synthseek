@@ -7,13 +7,7 @@ import { Input } from "@components/ui/Input";
 import { cn } from "@utils/cn";
 
 import { chipsInputChip, chipsInputInputField, chipsInputRoot } from "../styles";
-
-interface ChipsInputProps {
-  value: string[];
-  onChange: (next: string[]) => void;
-  placeholder?: string;
-  disabled?: boolean;
-}
+import type { ChipsInputProps } from "./types";
 
 export function ChipsInput({ value, onChange, placeholder, disabled }: ChipsInputProps) {
   const [draft, setDraft] = useState("");

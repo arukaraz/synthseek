@@ -8,14 +8,7 @@ import { SettingsSecretInput } from "@features/settings/components/SettingsSecre
 import { SettingsTextInput } from "@features/settings/components/SettingsTextInput";
 
 import { StepShell } from "./StepShell";
-
-interface EnrichmentStepProps {
-  stepIndex: number;
-  totalSteps: number;
-  onComplete: () => void;
-  onBack: () => void;
-  onSkip: () => void;
-}
+import type { EnrichmentStepProps } from "../types";
 
 export function EnrichmentStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: EnrichmentStepProps) {
   const update = useUpdateConnectionsEnrichment();

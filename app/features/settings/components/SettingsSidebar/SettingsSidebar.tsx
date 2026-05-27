@@ -1,38 +1,16 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Blocks, ChevronDown, FileText, ListOrdered, Settings2, User, Users } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 
 import { cn } from "@utils/cn";
 
-import { sidebar, sidebarFooter, sidebarGroupButton, sidebarGroupLabel, sidebarItem } from "../styles";
-
-interface NavItem {
-  href: string;
-  label: string;
-  icon: ReactNode;
-}
-
-const TOP_LEVEL: NavItem[] = [
-  { href: "/settings/general", label: "General", icon: <Settings2 /> },
-  { href: "/settings/members", label: "Members", icon: <Users /> },
-  { href: "/settings/profile", label: "Profile", icon: <User /> },
-];
-
-const ADVANCED_ITEMS: NavItem[] = [
-  { href: "/settings/integrations", label: "Integrations", icon: <Blocks /> },
-  { href: "/settings/engine", label: "Engine", icon: <ListOrdered /> },
-  { href: "/settings/logs", label: "Logs", icon: <FileText /> },
-];
-
-const BUILD_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.0.0";
-
-interface SettingsSidebarProps {
-  className?: string;
-}
+import { sidebar, sidebarFooter, sidebarGroupButton, sidebarGroupLabel, sidebarItem } from "../../styles";
+import { ADVANCED_ITEMS, BUILD_VERSION, TOP_LEVEL } from "./constants";
+import type { SettingsSidebarProps } from "./types";
 
 export function SettingsSidebar({ className }: SettingsSidebarProps) {
   const pathname = usePathname();

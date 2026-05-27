@@ -3,11 +3,7 @@
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
 import { Music } from "lucide-react";
 import Image from "next/image";
-import type { FlatTrackRow } from "../../../types";
-
-interface TrackTitleCellProps {
-  item: FlatTrackRow;
-}
+import type { TrackTitleCellProps } from "../types";
 
 export function TrackTitleCell({ item }: TrackTitleCellProps) {
   return (

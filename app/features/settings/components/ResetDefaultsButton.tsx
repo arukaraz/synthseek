@@ -3,11 +3,7 @@
 import { RotateCcw } from "lucide-react";
 
 import { Button } from "@components/ui/Button";
-
-interface ResetDefaultsButtonProps {
-  onReset: () => void;
-  disabled?: boolean;
-}
+import type { ResetDefaultsButtonProps } from "./types";
 
 export function ResetDefaultsButton({ onReset, disabled }: ResetDefaultsButtonProps) {
   return (
