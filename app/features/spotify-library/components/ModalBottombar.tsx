@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@components/ui/Button";
-import { ArrowRight } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
-import { bbStat, bbStatStrong, bottombar } from "../styles";
+import { bbStat, bbStatStrong, bottombar, bottombarLeft, bottombarRight } from "../styles";
 
 import { AutoWatchToggles } from "./AutoWatchToggles";
 import { SelectionBulkActions } from "./SelectionBulkActions";
@@ -22,12 +22,14 @@ export function ModalBottombar({
   hasChanges,
   autoWatch,
   onWatchChange,
+  onRefresh,
+  isRefreshing,
 }: ModalBottombarProps) {
   const showSelectionMode = selectedCount > 0;
 
   return (
     <div className={bottombar()}>
-      <div className="flex flex-wrap items-center gap-3">
+      <div className={bottombarLeft()}>
         {showSelectionMode ? (
           <SelectionBulkActions
             selectedCount={selectedCount}
@@ -48,17 +50,27 @@ export function ModalBottombar({
             <span className={bbStat()}>
               <span className={bbStatStrong()}>{totalTracks}</span> tracks total
             </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onRefresh}
+              disabled={isRefreshing}
+              title="Pull the latest list of items from your library"
+              className="ml-auto sm:ml-0"
+            >
+              <RefreshCw className={`size-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
+              <span className="hidden sm:inline">{isRefreshing ? "Refreshing…" : "Refresh list"}</span>
+            </Button>
           </>
         )}
       </div>
-      <div className="ml-auto flex flex-wrap items-center gap-3">
+      <div className={bottombarRight()}>
         <AutoWatchToggles value={autoWatch} onChange={onWatchChange} />
         <Button variant="ghost" size="sm" onClick={onCancel} disabled={isSaving}>
           Cancel
         </Button>
         <Button onClick={onSave} disabled={!hasChanges || isSaving} size="sm">
           {isSaving ? "Saving…" : "Save changes"}
-          {hasChanges && !isSaving && <ArrowRight className="ml-1 size-3.5" />}
         </Button>
       </div>
     </div>

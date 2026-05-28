@@ -17,6 +17,5 @@ export interface SpotifyLibraryModalProps {
 
 export interface AutoWatchState {
   playlists: boolean;
-  liked: boolean;
   savedAlbums: boolean;
 }

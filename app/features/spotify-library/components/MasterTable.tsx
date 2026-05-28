@@ -6,13 +6,13 @@ import { MasterTableHeader } from "./MasterTableHeader";
 import { MasterTableRow } from "./MasterTableRow";
 import type { MasterTableProps } from "./types";
 
-export function MasterTable({ items, isLoading, draft }: MasterTableProps) {
+export function MasterTable({ items, isLoading, draft, hiddenOnMobile }: MasterTableProps) {
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) draft.setFocus(null);
   };
 
   return (
-    <div className={masterScroll()} onClick={handleBackgroundClick}>
+    <div className={masterScroll({ hiddenOnMobile })} onClick={handleBackgroundClick}>
       {isLoading ? (
         <div className={masterEmpty()}>Loading library…</div>
       ) : items.length === 0 ? (

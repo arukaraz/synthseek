@@ -6,13 +6,12 @@ export function useSpotifyRunSyncNow() {
   const utils = trpc.useUtils();
   return trpc.librarySource.spotify.runSyncNow.useMutation({
     onSuccess: (summary) => {
-      const total = summary.newPlaylists + summary.updatedPlaylists + summary.newLikedTracks + summary.newSavedAlbums;
+      const total = summary.newPlaylists + summary.updatedPlaylists + summary.newSavedAlbums;
       if (total > 0) {
         toast.success(`Sync complete: ${total} change${total === 1 ? "" : "s"}`, {
           description: [
             summary.newPlaylists && `${summary.newPlaylists} new playlist${summary.newPlaylists === 1 ? "" : "s"}`,
             summary.updatedPlaylists && `${summary.updatedPlaylists} updated`,
-            summary.newLikedTracks && `${summary.newLikedTracks} liked song${summary.newLikedTracks === 1 ? "" : "s"}`,
             summary.newSavedAlbums && `${summary.newSavedAlbums} saved album${summary.newSavedAlbums === 1 ? "" : "s"}`,
           ]
             .filter(Boolean)

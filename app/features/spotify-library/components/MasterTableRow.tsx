@@ -37,9 +37,9 @@ export function MasterTableRow({
   const importedLabel = imported ? "Enabled" : "Disabled";
 
   return (
-    <tr className={tableRow({ selected, focused })} onClick={onClick}>
+    <tr className={tableRow({ selected, focused })} onClick={onClick} data-master-row-id={item.id}>
       <td
-        className="pl-4 pr-2 py-2"
+        className="py-2 pr-2 pl-4"
         onClick={(e) => {
           e.stopPropagation();
           onToggleSelect();
@@ -62,17 +62,17 @@ export function MasterTableRow({
         )}
         <span className="truncate">{item.name}</span>
       </td>
-      <td className={tableCell()}>
+      <td className={cn(tableCell(), "hidden sm:table-cell")}>
         <span className={typeTag({ tone: libraryTypeTone(item.type) })}>{libraryTypeLabel(item.type)}</span>
       </td>
-      <td className={tableCellMono()}>{item.totalTracks}</td>
-      <td className={tableCell()}>
+      <td className={cn(tableCellMono(), "hidden md:table-cell")}>{item.totalTracks}</td>
+      <td className={cn(tableCell(), "hidden lg:table-cell")}>
         <span className={stPill({ tone: importedTone })}>
           <span className={stDot({ tone: importedTone })} />
           {importedLabel}
         </span>
       </td>
-      <td className={imported && item.lastSyncedAt ? tableCellMono() : tableCellMonoDim()}>
+      <td className={cn(imported && item.lastSyncedAt ? tableCellMono() : tableCellMonoDim(), "hidden lg:table-cell")}>
         {imported ? formatLastSync(item.lastSyncedAt) : "—"}
       </td>
       <td className="px-3 py-2 text-center">

@@ -4,9 +4,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
-import { SpotifyLibraryModal } from "@features/spotify-library";
+import { SpotifyLibraryModal, SpotifyMark } from "@features/spotify-library";
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { useSettings } from "@hooks/api/queries/useSettings";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -14,11 +15,16 @@ import { cn } from "@utils/cn";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ExternalLink, Library, Music2 } from "lucide-react";
+import { ExternalLink, Library } from "lucide-react";
 import { useState } from "react";
 
 import { deriveSpotifyState, tooltipForState } from "./helpers";
-import { importProviderMenuItem, importProviderMenuTrigger, importProviderSpotifyChip, importProviderTooltip } from "./styles";
+import {
+  importProviderMenuItem,
+  importProviderMenuTrigger,
+  importProviderSpotifyChip,
+  importProviderTooltip,
+} from "./styles";
 
 export function ImportProviderMenu() {
   const [open, setOpen] = useState(false);
@@ -46,15 +52,16 @@ export function ImportProviderMenu() {
             )}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            title="Manage external content"
-            aria-label="Manage external content"
+            title="Import library"
+            aria-label="Import library"
           >
             <Library className="size-3.5" />
-            <span className="hidden sm:inline">Manage external content</span>
+            <span className="hidden sm:inline">Import library</span>
           </motion.button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="min-w-64">
+          <DropdownMenuLabel>Sources</DropdownMenuLabel>
           <DropdownMenuItem
             disabled={spotifyDisabled}
             onSelect={() => {
@@ -63,7 +70,7 @@ export function ImportProviderMenu() {
             className={importProviderMenuItem()}
           >
             <span className={importProviderSpotifyChip()}>
-              <Music2 className="size-3.5" />
+              <SpotifyMark />
             </span>
             <div className="flex flex-1 flex-col">
               <span>Spotify</span>
@@ -75,7 +82,7 @@ export function ImportProviderMenu() {
               <Link
                 href="/settings/integrations/spotify"
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-1 text-[11px] text-primary-300 hover:text-primary-200"
+                className="text-primary-300 hover:text-primary-200 inline-flex items-center gap-1 text-[11px]"
               >
                 Configure
                 <ExternalLink className="size-3" />

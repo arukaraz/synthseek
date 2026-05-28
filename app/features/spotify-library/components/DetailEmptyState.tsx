@@ -30,7 +30,7 @@ export function DetailEmptyState() {
           <span className={detailEmptyCardLine()} />
           <span className={detailEmptyCardLine({ short: true })} />
         </span>
-        <MousePointer2 className="absolute -bottom-2 -right-2 size-5 text-primary-300 opacity-90" />
+        <MousePointer2 className="text-primary-300 absolute -right-2 -bottom-2 size-5 opacity-90" />
       </div>
       <h3 className={detailEmptyTitle()}>Inspect an item</h3>
       <p className={detailEmptyBody()}>

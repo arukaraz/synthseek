@@ -1,8 +1,8 @@
 import type { LibraryDraft } from "../hooks/useLibraryDraftState";
 import type { AutoWatchState, LibraryFilter, LibraryItem, LibraryItemType, LibrarySort } from "../types";
 
-export interface ModalTopbarProps {
-  onClose: () => void;
+export interface SpotifyMarkProps {
+  size?: number;
 }
 
 export interface ModalToolbarProps {
@@ -20,6 +20,7 @@ export interface MasterTableProps {
   items: LibraryItem[];
   isLoading: boolean;
   draft: LibraryDraft;
+  hiddenOnMobile?: boolean;
 }
 
 export interface MasterTableRowProps {
@@ -36,6 +37,7 @@ export interface MasterTableRowProps {
 export interface DetailPanelProps {
   focusedItem: LibraryItem | null;
   draft: LibraryDraft;
+  onBack?: () => void;
 }
 
 export interface DetailHeroProps {
@@ -48,6 +50,7 @@ export interface DetailHeroProps {
   crumb: string;
   byline: string;
   image: string | null;
+  onBack?: () => void;
 }
 
 export interface DetailSyncConfigProps {
@@ -84,6 +87,8 @@ export interface ModalBottombarProps {
   hasChanges: boolean;
   autoWatch: AutoWatchState;
   onWatchChange: (next: Partial<AutoWatchState>) => void;
+  onRefresh: () => void;
+  isRefreshing: boolean;
 }
 
 export interface AutoWatchTogglesProps {

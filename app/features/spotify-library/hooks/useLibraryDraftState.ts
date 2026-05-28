@@ -18,7 +18,7 @@ function emptyDraft(): DraftState {
     focusedId: null,
     importOverrides: new Map(),
     syncOverrides: new Map(),
-    autoWatch: { playlists: false, liked: false, savedAlbums: false },
+    autoWatch: { playlists: false, savedAlbums: false },
   };
 }
 
@@ -98,7 +98,7 @@ export function useLibraryDraftState(initialAutoWatch?: AutoWatchState) {
   const reset = useCallback((nextWatch?: AutoWatchState) => {
     setState({
       ...emptyDraft(),
-      autoWatch: nextWatch ?? { playlists: false, liked: false, savedAlbums: false },
+      autoWatch: nextWatch ?? { playlists: false, savedAlbums: false },
     });
   }, []);
 

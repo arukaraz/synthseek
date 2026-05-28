@@ -1793,7 +1793,6 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 				output: {
 					newPlaylists: number;
 					updatedPlaylists: number;
-					newLikedTracks: number;
 					newSavedAlbums: number;
 					errors: number;
 				};
@@ -1876,7 +1875,6 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 					}[] | undefined;
 					subscription?: {
 						watch_new_playlists?: boolean | undefined;
-						watch_liked?: boolean | undefined;
 						watch_saved_albums?: boolean | undefined;
 					} | undefined;
 				};
@@ -1913,7 +1911,6 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 				output: {
 					provider: "spotify";
 					watch_new_playlists: boolean;
-					watch_liked: boolean;
 					watch_saved_albums: boolean;
 					enabled_since: Date;
 					last_checked_at: Date | null;
@@ -1923,13 +1920,11 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 			update: import("@trpc/server").TRPCMutationProcedure<{
 				input: {
 					watch_new_playlists?: boolean | undefined;
-					watch_liked?: boolean | undefined;
 					watch_saved_albums?: boolean | undefined;
 				};
 				output: {
 					provider: "spotify";
 					watch_new_playlists: boolean;
-					watch_liked: boolean;
 					watch_saved_albums: boolean;
 					enabled_since: Date;
 					last_checked_at: Date | null;

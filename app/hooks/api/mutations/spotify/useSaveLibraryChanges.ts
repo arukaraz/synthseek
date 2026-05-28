@@ -10,8 +10,7 @@ export function useSaveLibraryChanges() {
   return trpc.librarySource.spotify.saveLibraryChanges.useMutation({
     meta: SPOTIFY_META,
     onSuccess: async (result) => {
-      const queuedImports =
-        result.playlistsImported + result.savedAlbumsImported + (result.likedSongsImported ? 1 : 0);
+      const queuedImports = result.playlistsImported + result.savedAlbumsImported + (result.likedSongsImported ? 1 : 0);
       const parts: string[] = [];
       if (queuedImports > 0) parts.push(`${queuedImports} import${queuedImports === 1 ? "" : "s"} queued`);
       if (result.syncToggled > 0) parts.push(`${result.syncToggled} sync update${result.syncToggled === 1 ? "" : "s"}`);

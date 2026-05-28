@@ -22,14 +22,14 @@ export function DetailTracklist({ totalTracks, preview, externalUrl, hasMore }: 
       <h3 className={detailSectionTitle()}>
         Tracklist preview <span className={detailSectionTitleLine()} />
         {totalTracks > 0 && preview.length > 0 && (
-          <span className="text-[10px] normal-case tracking-normal text-fg/40">
+          <span className="text-fg/40 text-[10px] tracking-normal normal-case">
             first {preview.length} of {totalTracks}
           </span>
         )}
       </h3>
       <div className={trackList()}>
         {preview.length === 0 ? (
-          <div className="py-3 text-center text-xs text-fg/40">No tracks to preview.</div>
+          <div className="text-fg/40 py-3 text-center text-xs">No tracks to preview.</div>
         ) : (
           preview.map((t) => (
             <div key={t.position} className={trackRow()}>

@@ -1,8 +1,16 @@
 "use client";
 
-import { RefreshCcw, Upload } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@components/ui/DropdownMenu";
+import { ChevronDown, RefreshCcw, RefreshCwOff, Upload, UploadCloud, X } from "lucide-react";
 
-import { inlineAct, selChip, selChipDot, selChipNum, selDivider } from "../styles";
+import { bulkMenuItem, bulkTrigger, inlineAct, selChip, selChipDot, selChipNum } from "../styles";
 import type { SelectionBulkActionsProps } from "./types";
 
 export function SelectionBulkActions({
@@ -19,24 +27,37 @@ export function SelectionBulkActions({
         <span className={selChipDot()} />
         <span className={selChipNum()}>{selectedCount}</span> selected
       </span>
-      <span className={selDivider()} />
-      <button type="button" className={inlineAct()} onClick={onEnableSync}>
-        <RefreshCcw className="size-3" />
-        Enable sync
-      </button>
-      <button type="button" className={inlineAct()} onClick={onDisableSync}>
-        Disable
-      </button>
-      <span className={selDivider()} />
-      <button type="button" className={inlineAct()} onClick={onEnableImport}>
-        <Upload className="size-3" />
-        Enable import
-      </button>
-      <button type="button" className={inlineAct()} onClick={onDisableImport}>
-        Disable import
-      </button>
-      <button type="button" className={inlineAct({ danger: true })} onClick={onClear}>
-        Clear
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button type="button" className={bulkTrigger()}>
+            Bulk actions
+            <ChevronDown className="size-3" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" side="top" className="min-w-[200px]">
+          <DropdownMenuLabel>Sync</DropdownMenuLabel>
+          <DropdownMenuItem className={bulkMenuItem()} onSelect={onEnableSync}>
+            <RefreshCcw className="size-3.5" />
+            Enable sync
+          </DropdownMenuItem>
+          <DropdownMenuItem className={bulkMenuItem()} onSelect={onDisableSync}>
+            <RefreshCwOff className="size-3.5" />
+            Disable sync
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel>Import</DropdownMenuLabel>
+          <DropdownMenuItem className={bulkMenuItem()} onSelect={onEnableImport}>
+            <UploadCloud className="size-3.5" />
+            Enable import
+          </DropdownMenuItem>
+          <DropdownMenuItem className={bulkMenuItem()} onSelect={onDisableImport}>
+            <Upload className="size-3.5 rotate-180" />
+            Disable import
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <button type="button" className={inlineAct()} onClick={onClear} aria-label="Clear selection">
+        <X className="size-3.5" />
       </button>
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, ExternalLink, Heart } from "lucide-react";
+import { IconButton } from "@components/ui/IconButton";
+import { ArrowLeft, Check, ExternalLink, Heart } from "lucide-react";
 
 import {
   detailAct,
@@ -26,6 +27,7 @@ export function DetailHero({
   crumb,
   byline,
   image,
+  onBack,
 }: DetailHeroProps) {
   const primaryLabel = imported
     ? importedTarget
@@ -37,6 +39,16 @@ export function DetailHero({
 
   return (
     <div className={detailHero()}>
+      {onBack && (
+        <IconButton
+          icon={ArrowLeft}
+          variant="default"
+          size="md"
+          aria-label="Back to library list"
+          onClick={onBack}
+          className="absolute top-3 left-3 z-10 md:hidden"
+        />
+      )}
       <div className={detailCrumb()}>{crumb}</div>
       <div className={detailCoverRow()}>
         {itemType === "liked" ? (

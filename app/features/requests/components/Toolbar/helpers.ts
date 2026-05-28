@@ -1,10 +1,6 @@
 import type { ImportProviderState } from "./types";
 
-export function deriveSpotifyState(
-  configured: boolean,
-  connected: boolean,
-  pending: boolean
-): ImportProviderState {
+export function deriveSpotifyState(configured: boolean, connected: boolean, pending: boolean): ImportProviderState {
   if (!configured) return "not_configured";
   if (pending) return "pending";
   if (!connected) return "not_connected";

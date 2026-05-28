@@ -47,7 +47,7 @@ export function formatLastSync(value: Date | string | null): string {
 }
 
 export function pluralize(n: number, singular: string, plural?: string): string {
-  return `${n} ${n === 1 ? singular : plural ?? `${singular}s`}`;
+  return `${n} ${n === 1 ? singular : (plural ?? `${singular}s`)}`;
 }
 
 export function libraryTypeTone(type: LibraryItem["type"]): "playlist" | "album" | "liked" {

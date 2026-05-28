@@ -1,41 +1,57 @@
 import { cva } from "class-variance-authority";
 
 export const modalRoot = cva(
-  "flex h-[min(820px,94vh)] w-[min(1380px,97vw)] max-w-none flex-col gap-0 overflow-hidden rounded-2xl border border-fg/10 bg-surface/95 p-0 sm:bg-surface/90 sm:backdrop-blur-2xl"
+  [
+    "glass-intense !flex w-full flex-col gap-0 overflow-hidden p-0 shadow-2xl !border-0",
+    "h-[100dvh] !max-h-[100dvh] !rounded-none !top-0 !left-0 !translate-x-0",
+    "sm:!top-[50%] sm:!left-[50%] sm:!translate-x-[-50%] sm:!translate-y-[-50%]",
+    "sm:h-modal-max sm:!max-h-[90vh] sm:max-w-[1380px] sm:!rounded-2xl",
+  ].join(" ")
 );
 
 export const modalGrid = cva("grid h-full min-h-0 grid-rows-[auto_auto_1fr_auto]");
 
-export const topbar = cva(
-  "flex items-center gap-3 border-b border-fg/10 bg-surface/60 px-4 py-3 text-sm"
-);
+export const topbar = cva("flex items-center gap-3 border-b border-fg/10 bg-surface/60 px-4 py-3 text-sm");
 
-export const brandChip = cva(
-  "inline-flex items-center gap-2 rounded-lg bg-fg/5 px-2 py-1 text-sm font-medium text-fg"
-);
+export const brandChip = cva("inline-flex items-center gap-2 rounded-lg bg-fg/5 px-2 py-1 text-sm font-medium text-fg");
 
-export const brandIcon = cva(
-  "flex size-5 items-center justify-center rounded text-[#1ed760]",
-  { variants: { tone: { spotify: "bg-[#1ed760]/15" } }, defaultVariants: { tone: "spotify" } }
-);
-
-export const closeBtn = cva(
-  "ml-auto inline-flex size-7 items-center justify-center rounded-md text-fg/60 transition-colors hover:bg-fg/10 hover:text-fg"
-);
+export const brandIcon = cva("flex size-5 items-center justify-center rounded text-[#1ed760]", {
+  variants: { tone: { spotify: "bg-[#1ed760]/15" } },
+  defaultVariants: { tone: "spotify" },
+});
 
 export const toolbar = cva("flex items-center gap-2 border-b border-fg/10 bg-fg/[0.015] px-4 py-2");
 
-export const searchBox = cva("relative min-w-[260px] flex-1");
+export const searchBox = cva("relative min-w-0 flex-1");
 
 export const searchInput = cva(
   "h-9 w-full rounded-lg border border-fg/10 bg-fg/[0.03] px-9 text-sm text-fg outline-none placeholder:text-fg/40 focus:border-primary-500/40"
 );
 
-export const split = cva("grid h-full min-h-0 grid-cols-1 md:grid-cols-[1fr_380px]");
+export const split = cva("flex h-full min-h-0 flex-col md:flex-row");
 
 export const masterScroll = cva(
-  "flex h-full min-h-0 flex-col overflow-y-auto bg-surface/40 md:border-r md:border-fg/10"
+  "h-full min-h-0 w-full flex-1 flex-col overflow-y-auto bg-surface/40 md:border-r md:border-fg/10",
+  {
+    variants: {
+      hiddenOnMobile: {
+        true: "hidden md:flex",
+        false: "flex",
+      },
+    },
+    defaultVariants: { hiddenOnMobile: false },
+  }
 );
+
+export const detailPaneWrapper = cva("h-full min-h-0 w-full flex-col md:w-[380px] md:shrink-0", {
+  variants: {
+    hiddenOnMobile: {
+      true: "hidden md:flex",
+      false: "flex",
+    },
+  },
+  defaultVariants: { hiddenOnMobile: false },
+});
 
 export const masterEmpty = cva("flex flex-1 items-center justify-center p-12 text-sm text-fg/40");
 export const detailLoading = cva("flex h-full items-center justify-center p-12 text-sm text-fg/40");
@@ -46,17 +62,14 @@ export const tableHead = cva(
   "sticky top-0 z-10 bg-surface px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-wider text-fg/40"
 );
 
-export const tableRow = cva(
-  "cursor-pointer border-b border-fg/[0.04] transition-colors hover:bg-fg/[0.015]",
-  {
-    variants: {
-      selected: { true: "bg-primary-500/[0.06]", false: "" },
-      focused: { true: "bg-primary-500/[0.14] shadow-[inset_2px_0_0_var(--color-primary-300)]", false: "" },
-    },
-    defaultVariants: { selected: false, focused: false },
-    compoundVariants: [{ selected: true, focused: true, className: "bg-primary-500/[0.14]" }],
-  }
-);
+export const tableRow = cva("cursor-pointer border-b border-fg/[0.04] transition-colors hover:bg-fg/[0.015]", {
+  variants: {
+    selected: { true: "bg-primary-500/[0.06]", false: "" },
+    focused: { true: "bg-primary-500/[0.14] shadow-[inset_2px_0_0_var(--color-primary-300)]", false: "" },
+  },
+  defaultVariants: { selected: false, focused: false },
+  compoundVariants: [{ selected: true, focused: true, className: "bg-primary-500/[0.14]" }],
+});
 
 export const tableCell = cva("px-3 py-2 text-fg/70");
 export const tableCellName = cva("flex items-center gap-2.5 px-3 py-2 text-fg font-medium");
@@ -73,30 +86,24 @@ export const coverPlaceholder = cva(
   "size-7 shrink-0 rounded bg-gradient-to-br from-primary-700 to-cyan-500/40 bg-[length:8px_8px] [background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05)_0_1px,transparent_1px_8px)]"
 );
 
-export const typeTag = cva(
-  "inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-medium",
-  {
-    variants: {
-      tone: {
-        playlist: "bg-primary-500/15 text-primary-200",
-        album: "bg-cyan-500/15 text-cyan-300",
-        liked: "bg-rose-500/15 text-rose-300",
-      },
+export const typeTag = cva("inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-medium", {
+  variants: {
+    tone: {
+      playlist: "bg-primary-500/15 text-primary-200",
+      album: "bg-cyan-500/15 text-cyan-300",
+      liked: "bg-rose-500/15 text-rose-300",
     },
-  }
-);
+  },
+});
 
-export const stPill = cva(
-  "inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-[11px] font-medium",
-  {
-    variants: {
-      tone: {
-        imported: "bg-emerald-500/10 text-emerald-400",
-        disabled: "bg-fg/5 text-fg/50",
-      },
+export const stPill = cva("inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-[11px] font-medium", {
+  variants: {
+    tone: {
+      imported: "bg-emerald-500/10 text-emerald-400",
+      disabled: "bg-fg/5 text-fg/50",
     },
-  }
-);
+  },
+});
 
 export const stDot = cva("size-1.5 rounded-full", {
   variants: {
@@ -135,12 +142,10 @@ export const checkBox = cva(
 export const detailPane = cva("flex h-full min-h-0 flex-col overflow-y-auto bg-surface");
 
 export const detailHero = cva(
-  "border-b border-fg/[0.06] bg-[radial-gradient(400px_200px_at_100%_0%,var(--color-primary-700)/12,transparent_60%)] px-5 py-5"
+  "relative border-b border-fg/[0.06] bg-[radial-gradient(400px_200px_at_100%_0%,var(--color-primary-700)/12,transparent_60%)] px-5 py-5"
 );
 
-export const detailCrumb = cva(
-  "mb-3 font-mono text-[10px] uppercase tracking-[0.1em] text-fg/40"
-);
+export const detailCrumb = cva("mb-3 pl-10 mb-5 font-mono text-[10px] uppercase tracking-[0.1em] text-fg/40 md:pl-0");
 
 export const detailCoverRow = cva("flex items-start gap-3.5");
 
@@ -196,7 +201,9 @@ export const metaVal = cva("font-mono text-fg");
 export const metaValText = cva("text-fg");
 
 export const trackList = cva("-mx-5 flex flex-col");
-export const trackRow = cva("grid grid-cols-[24px_1fr_50px] items-center gap-2.5 px-5 py-1.5 text-xs hover:bg-fg/[0.025]");
+export const trackRow = cva(
+  "grid grid-cols-[24px_1fr_50px] items-center gap-2.5 px-5 py-1.5 text-xs hover:bg-fg/[0.025]"
+);
 export const trackPos = cva("text-center font-mono text-[11px] text-fg/40");
 export const trackTitle = cva("truncate font-medium text-fg");
 export const trackArtist = cva("block truncate text-[11px] font-normal text-fg/50");
@@ -229,7 +236,11 @@ export const detailEmptyKbd = cva(
   "rounded border border-fg/10 bg-fg/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-fg/70"
 );
 
-export const bottombar = cva("flex flex-wrap items-center gap-3 border-t border-fg/10 bg-surface/60 px-4 py-3");
+export const bottombar = cva(
+  "flex flex-col items-stretch gap-3 border-t border-fg/10 bg-surface/60 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:flex-row sm:flex-wrap sm:items-center sm:pb-3"
+);
+export const bottombarLeft = cva("flex flex-wrap items-center gap-3");
+export const bottombarRight = cva("flex flex-wrap items-center gap-3 sm:ml-auto");
 
 export const bbStat = cva("text-xs text-fg/60");
 export const bbStatStrong = cva("font-mono font-semibold text-fg");
@@ -251,8 +262,41 @@ export const inlineAct = cva(
 );
 export const selDivider = cva("mx-0.5 h-3.5 w-px bg-fg/10");
 
-export const watchGroup = cva(
-  "inline-flex items-center gap-3 rounded-md border border-fg/[0.06] bg-fg/[0.03] px-3 py-1 text-[11px] text-fg/60"
+export const bulkTrigger = cva(
+  "inline-flex items-center gap-1.5 rounded-md border border-fg/[0.08] bg-fg/[0.03] px-2.5 py-1 text-[11px] font-medium text-fg/70 transition-colors hover:bg-fg/[0.06] hover:text-fg"
 );
-export const watchLabel = cva("font-medium text-fg");
-export const watchToggle = cva("inline-flex items-center gap-1");
+
+export const bulkMenuItem = cva("gap-2 text-xs");
+
+export const autoImportTrigger = cva(
+  "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[11px] font-medium transition-colors hover:text-fg",
+  {
+    variants: {
+      active: {
+        true: "border-primary-500/30 bg-primary-500/10 text-fg",
+        false: "border-fg/[0.08] bg-fg/[0.03] text-fg/60",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);
+
+export const autoImportBadge = cva("rounded px-1 font-mono text-[10px]", {
+  variants: {
+    active: {
+      true: "bg-primary-500/20 text-primary-200",
+      false: "bg-fg/[0.06] text-fg/50",
+    },
+  },
+  defaultVariants: { active: false },
+});
+
+export const autoImportPopover = cva("w-[280px] !max-w-[calc(100vw-2rem)] p-3");
+export const autoImportTitle = cva(
+  "mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-fg/50"
+);
+export const autoImportRow = cva(
+  "flex items-center justify-between gap-3 rounded-md border border-transparent px-2 py-1.5 text-xs hover:bg-fg/[0.025]"
+);
+export const autoImportRowLabel = cva("flex flex-col text-fg");
+export const autoImportRowSub = cva("text-[10.5px] text-fg/45");

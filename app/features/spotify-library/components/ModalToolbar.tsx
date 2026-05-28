@@ -25,7 +25,7 @@ export function ModalToolbar({
         direction={{ value: direction, onChange: onDirectionChange }}
       />
       <div className={searchBox()}>
-        <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-fg/40" />
+        <Search className="text-fg/40 absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
         <input
           type="search"
           value={search}

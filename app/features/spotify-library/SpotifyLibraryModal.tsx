@@ -14,7 +14,7 @@ import { DetailPanel } from "./components/DetailPanel";
 import { DEFAULT_IMPORT_CONFIG } from "./constants";
 import { useFilteredItems } from "./hooks/useFilteredItems";
 import { useLibraryDraftState } from "./hooks/useLibraryDraftState";
-import { modalGrid, modalRoot, split } from "./styles";
+import { detailPaneWrapper, modalGrid, modalRoot, split } from "./styles";
 import type { LibraryFilter, LibrarySort, SpotifyLibraryModalProps } from "./types";
 
 export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalProps) {
@@ -25,7 +25,6 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
   const initialWatch = useMemo(
     () => ({
       playlists: subscription.data?.watch_new_playlists ?? false,
-      liked: subscription.data?.watch_liked ?? false,
       savedAlbums: subscription.data?.watch_saved_albums ?? false,
     }),
     [subscription.data]
@@ -51,6 +50,47 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
     [sourceItems, draft.state.focusedId]
   );
 
+  const { setFocus, toggleSelect } = draft;
+  const focusedId = draft.state.focusedId;
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      const target = e.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)
+      ) {
+        return;
+      }
+      if (filteredItems.length === 0) return;
+      const currentIdx = focusedId ? filteredItems.findIndex((i) => i.id === focusedId) : -1;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        const nextIdx = currentIdx < 0 ? 0 : Math.min(currentIdx + 1, filteredItems.length - 1);
+        setFocus(filteredItems[nextIdx].id);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        const nextIdx = currentIdx < 0 ? 0 : Math.max(currentIdx - 1, 0);
+        setFocus(filteredItems[nextIdx].id);
+      } else if (e.key === " " || e.code === "Space") {
+        if (focusedId) {
+          e.preventDefault();
+          toggleSelect(focusedId);
+        }
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open, filteredItems, focusedId, setFocus, toggleSelect]);
+
+  useEffect(() => {
+    if (!focusedId) return;
+    const row = document.querySelector<HTMLElement>(`[data-master-row-id="${focusedId}"]`);
+    row?.scrollIntoView({ block: "nearest" });
+  }, [focusedId]);
+
   const totalRows = sourceItems.length;
   const totalTracks = sourceItems.reduce((s, i) => s + i.totalTracks, 0);
 
@@ -59,7 +99,6 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
     if (draft.state.syncOverrides.size > 0) return true;
     if (
       draft.state.autoWatch.playlists !== initialWatch.playlists ||
-      draft.state.autoWatch.liked !== initialWatch.liked ||
       draft.state.autoWatch.savedAlbums !== initialWatch.savedAlbums
     ) {
       return true;
@@ -94,7 +133,6 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
 
     const subscriptionChanged =
       draft.state.autoWatch.playlists !== initialWatch.playlists ||
-      draft.state.autoWatch.liked !== initialWatch.liked ||
       draft.state.autoWatch.savedAlbums !== initialWatch.savedAlbums;
 
     await save.mutateAsync({
@@ -103,7 +141,6 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
       subscription: subscriptionChanged
         ? {
             watch_new_playlists: draft.state.autoWatch.playlists,
-            watch_liked: draft.state.autoWatch.liked,
             watch_saved_albums: draft.state.autoWatch.savedAlbums,
           }
         : undefined,
@@ -115,13 +152,21 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={modalRoot()}>
+      <DialogContent
+        className={modalRoot()}
+        onEscapeKeyDown={(e) => {
+          if (focusedId) {
+            e.preventDefault();
+            setFocus(null);
+          }
+        }}
+      >
         <DialogTitle className="sr-only">Spotify library</DialogTitle>
         <DialogDescription className="sr-only">
           Browse your Spotify library, import items into Synthseek, and configure ongoing sync.
         </DialogDescription>
         <div className={modalGrid()}>
-          <ModalTopbar onClose={() => onOpenChange(false)} />
+          <ModalTopbar />
           <ModalToolbar
             filter={filter}
             onFilterChange={setFilter}
@@ -133,8 +178,15 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
             onSearchChange={setSearch}
           />
           <div className={split()}>
-            <MasterTable items={filteredItems} isLoading={items.isLoading} draft={draft} />
-            <DetailPanel focusedItem={focusedItem} draft={draft} />
+            <MasterTable
+              items={filteredItems}
+              isLoading={items.isLoading}
+              draft={draft}
+              hiddenOnMobile={Boolean(focusedItem)}
+            />
+            <div className={detailPaneWrapper({ hiddenOnMobile: !focusedItem })}>
+              <DetailPanel focusedItem={focusedItem} draft={draft} onBack={() => draft.setFocus(null)} />
+            </div>
           </div>
           <ModalBottombar
             totalRows={totalRows}
@@ -150,6 +202,8 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
             hasChanges={hasChanges}
             autoWatch={draft.state.autoWatch}
             onWatchChange={draft.setWatch}
+            onRefresh={() => void items.refetch()}
+            isRefreshing={items.isFetching}
           />
         </div>
       </DialogContent>

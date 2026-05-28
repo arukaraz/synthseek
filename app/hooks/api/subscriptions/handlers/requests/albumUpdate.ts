@@ -5,9 +5,7 @@ type Utils = ReturnType<typeof trpc.useUtils>;
 
 export function handleAlbumUpdate(event: AlbumUpdatePayload, utils: Utils): void {
   const current = utils.requests.getAll.getData();
-  const exists = current?.some(
-    (item) => item.contentType === ContentType.enum.album && item.id === event.albumId
-  );
+  const exists = current?.some((item) => item.contentType === ContentType.enum.album && item.id === event.albumId);
   if (!exists) {
     void utils.requests.getAll.invalidate();
     return;
