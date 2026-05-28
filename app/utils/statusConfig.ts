@@ -124,6 +124,11 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
         label: "Import rejected",
         description: "File downloaded but metadata didn't match. Retry will re-import only.",
       },
+      [FailureReason.enum.wrong_file]: {
+        icon: FileX,
+        label: "Wrong file",
+        description: "Downloaded file didn't match the requested track. Deleted and will re-search on retry.",
+      },
       [FailureReason.enum.p2p_failed]: {
         icon: Unplug,
         label: "Transfer failed",

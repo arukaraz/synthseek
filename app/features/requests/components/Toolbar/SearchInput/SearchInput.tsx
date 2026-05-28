@@ -4,7 +4,7 @@ import { cn } from "@utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
-import { closeButton, searchInput } from "../../styles";
+import { closeButton, mobileSearchOpenButton, searchInput } from "../../styles";
 import { SEARCH_CLEAR_BUTTON_VARIANTS, SEARCH_INPUT_VARIANTS } from "../consts";
 import type { SearchInputProps } from "../types";
 
@@ -58,7 +58,7 @@ export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInp
         {!isOpen && (
           <button
             onClick={() => onOpenChange(true)}
-            className="text-fg/40 hover:bg-fg/10 hover:text-fg/80 flex h-9 w-9 items-center justify-center rounded-lg transition-colors"
+            className={mobileSearchOpenButton()}
             title="Filter requests"
             aria-label="Open filter"
           >

@@ -2,18 +2,16 @@
 
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
-import { ImportFromProvidersModal } from "@features/import-from-providers";
 import { useTrackRequests, useRetryAllFailed } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
-import { primaryGradientButton } from "@theme/utilities/styles";
-import { motion } from "framer-motion";
-import { Plus, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toolbarContainer } from "../styles";
 import { REQUESTS_URL_PARAMS } from "../../types";
 import { FilterSortMenu } from "./FilterSortMenu";
+import { ImportProviderMenu } from "./ImportProviderMenu";
 import { SearchInput } from "./SearchInput/SearchInput";
 import { ViewToggle } from "./ViewToggle";
 
@@ -33,7 +31,6 @@ export function Toolbar() {
 
   const [confirmRetryOpen, setConfirmRetryOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isImportOpen, setIsImportOpen] = useState(false);
   const hasItems = (items?.length ?? 0) > 0;
 
   const handleRetryConfirm = () => {
@@ -77,20 +74,7 @@ export function Toolbar() {
               Retry All Failed
             </Button>
           )}
-          <motion.button
-            type="button"
-            onClick={() => setIsImportOpen(true)}
-            className={cn(
-              primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" }),
-              "size-9! justify-center! p-0!"
-            )}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            title="Import from providers"
-            aria-label="Import from providers"
-          >
-            <Plus className="size-4" />
-          </motion.button>
+          <ImportProviderMenu />
         </div>
       </div>
 
@@ -103,8 +87,6 @@ export function Toolbar() {
         variant="warning"
         confirmText={retryAllFailed.isPending ? "Retrying..." : "Retry All"}
       />
-
-      <ImportFromProvidersModal open={isImportOpen} onOpenChange={setIsImportOpen} />
     </>
   );
 }

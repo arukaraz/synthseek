@@ -35,10 +35,13 @@ export const mobileActionsButton = cva("flex items-center justify-center rounded
 
 export type MobileActionsButtonProps = VariantProps<typeof mobileActionsButton>;
 
-export const toolbarContainer = cva("border-fg/5 flex items-center justify-between gap-3 border-b px-3 py-2.5 sm:px-4", {
-  variants: {},
-  defaultVariants: {},
-});
+export const toolbarContainer = cva(
+  "border-fg/5 flex items-center justify-between gap-3 border-b px-3 py-2.5 sm:px-4",
+  {
+    variants: {},
+    defaultVariants: {},
+  }
+);
 
 export type ToolbarContainerProps = VariantProps<typeof toolbarContainer>;
 
@@ -65,3 +68,7 @@ export const closeButton = cva("text-fg/40 hover:bg-fg/10 hover:text-fg rounded 
 });
 
 export type CloseButtonProps = VariantProps<typeof closeButton>;
+
+export const mobileSearchOpenButton = cva(
+  "text-fg/40 hover:bg-fg/10 hover:text-fg/80 flex h-9 w-9 items-center justify-center rounded-lg transition-colors"
+);

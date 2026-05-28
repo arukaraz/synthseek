@@ -1,6 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import type { StatusFilter } from "../../types";
 
+export type ImportProviderState = "not_configured" | "not_connected" | "pending" | "ready";
+
 export interface OrderToggleProps {
   isActive: boolean;
   label: string;

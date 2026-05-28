@@ -2,22 +2,6 @@ import { toast } from "sonner";
 
 import { trpc } from "@utils/trpc";
 
-export function useSpotifyImport() {
-  const utils = trpc.useUtils();
-  return trpc.librarySource.spotify.importSelection.useMutation({
-    onSuccess: (report) => {
-      const total = report.playlists.imported + report.likedSongs.imported + report.savedAlbums.imported;
-      if (total > 0) {
-        toast.success(`Imported ${total} item${total === 1 ? "" : "s"} from Spotify`);
-      } else {
-        toast.info("Nothing to import — items may already exist");
-      }
-      utils.requests.invalidate();
-    },
-    onError: (error) => toast.error(error.message || "Spotify import failed"),
-  });
-}
-
 export function useSpotifyRunSyncNow() {
   const utils = trpc.useUtils();
   return trpc.librarySource.spotify.runSyncNow.useMutation({
