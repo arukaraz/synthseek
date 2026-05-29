@@ -99,6 +99,7 @@ export interface SettingsNumberInputProps {
 
 export interface SettingsPageHeaderProps {
   title: string;
+  description?: string;
 }
 
 export interface SettingsPagePlaceholderProps {

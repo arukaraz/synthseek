@@ -1,14 +1,4 @@
-export interface ArtworkCardProps {
-  initial: {
-    lastfmApiKey: string;
-    fanartApiKey: string;
-    songlinkApiKey: string;
-    acoustidApiKey: string;
-    musicbrainzEmail: string;
-  };
-}
-
-export type EnrichmentSection = {
+export type ConnectionsEnrichment = {
   lastfmApiKey: string;
   fanartApiKey: string;
   songlinkApiKey: string;
@@ -16,16 +6,10 @@ export type EnrichmentSection = {
   musicbrainzEmail: string;
 };
 
-export interface EnrichmentSingleFieldCardProps {
-  initial: EnrichmentSection;
-  field: keyof EnrichmentSection;
-  title: string;
-  optional?: boolean;
-  description: string;
-  fieldLabel: string;
-  helper?: string;
-  inputType?: "secret" | "email";
-  placeholder?: string;
+export interface ConnectionsSpotify {
+  enabled: boolean;
+  clientId: string;
+  publicBaseUrl: string;
 }
 
 export type Affix = "off" | "prefix" | "suffix";
@@ -42,6 +26,11 @@ export interface SlskdCardProps {
   initial: { apiUrl: string; apiKey: string; bannedUsers: string[] };
 }
 
-export interface SpotifyAppCardProps {
-  initial: { clientId: string; publicBaseUrl: string };
+export interface EnrichmentCardProps {
+  initial: ConnectionsEnrichment;
+}
+
+export interface LibrarySourcesCardProps {
+  spotify: ConnectionsSpotify;
+  enrichment: ConnectionsEnrichment;
 }

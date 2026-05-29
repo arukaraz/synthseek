@@ -1,13 +1,16 @@
 "use client";
 
+import { DiscoveryCard } from "@features/discovery-integrations";
 import { useSettings } from "@hooks/api/queries/useSettings";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { emptyPanel, sectionGrid } from "../../styles";
-import { ArtworkCard } from "./ArtworkCard";
-import { EnrichmentSingleFieldCard } from "./EnrichmentSingleFieldCard";
+import { EnrichmentCard } from "./EnrichmentCard";
+import { LibrarySourcesCard } from "./LibrarySourcesCard";
 
 export function MetadataSection() {
   const { data, isLoading, error } = useSettings();
+  const { isAdmin } = useAuthContext();
 
   if (isLoading) {
     return (
@@ -27,15 +30,13 @@ export function MetadataSection() {
 
   return (
     <div className={sectionGrid()}>
-      <ArtworkCard initial={data.connections.enrichment} />
-      <EnrichmentSingleFieldCard
-        initial={data.connections.enrichment}
-        field="acoustidApiKey"
-        title="AcoustID"
-        optional
-        description="Fallback track identification."
-        fieldLabel="API key"
-      />
+      <DiscoveryCard className="lg:col-span-2" />
+      {isAdmin ? (
+        <>
+          <EnrichmentCard initial={data.connections.enrichment} />
+          <LibrarySourcesCard spotify={data.connections.spotify} enrichment={data.connections.enrichment} />
+        </>
+      ) : null}
     </div>
   );
 }

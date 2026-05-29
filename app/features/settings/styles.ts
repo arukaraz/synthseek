@@ -16,27 +16,6 @@ export const sectionGrid = cva("grid grid-cols-1 items-stretch gap-5 sm:gap-6 lg
 
 export const pageTitle = cva("text-fg text-2xl font-semibold");
 
-export const pageIntro = cva("text-fg/60 -mt-2 flex flex-col gap-0 text-sm [&_p]:text-fg/60");
-
-export const pageIntroCollapseRegion = cva(
-  "grid transition-[grid-template-rows] duration-300 ease-out md:grid-rows-[1fr]",
-  {
-    variants: {
-      expanded: {
-        true: "grid-rows-[1fr]",
-        false: "grid-rows-[0fr]",
-      },
-    },
-    defaultVariants: { expanded: false },
-  }
-);
-
-export const pageIntroCollapseInner = cva("flex min-h-0 flex-col gap-0 overflow-hidden");
-
-export const pageIntroExpandToggle = cva(
-  "text-primary-400 hover:text-primary-300 mt-1.5 inline-flex items-center gap-1 self-start text-xs font-medium md:hidden"
-);
-
 export const backToSections = cva(
   "text-fg/55 hover:text-fg hover:bg-fg/5 flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:hidden"
 );

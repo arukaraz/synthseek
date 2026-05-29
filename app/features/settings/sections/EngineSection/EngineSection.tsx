@@ -4,7 +4,7 @@ import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
-import { EngineIntro } from "./EngineIntro";
+import { ENGINE_DESCRIPTION } from "./constants";
 import { ImportCard } from "./ImportCard";
 import { QueueCard } from "./QueueCard";
 import { SearchCard } from "./SearchCard";
@@ -16,7 +16,7 @@ export function EngineSection() {
   if (isLoading) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title="Engine" />
+        <SettingsPageHeader title="Engine" description={ENGINE_DESCRIPTION} />
         <div className={emptyPanel()}>
           <span className="text-fg/60 text-sm">Loading settings…</span>
         </div>
@@ -27,7 +27,7 @@ export function EngineSection() {
   if (error || !data) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title="Engine" />
+        <SettingsPageHeader title="Engine" description={ENGINE_DESCRIPTION} />
         <div className={emptyPanel()}>
           <span className="text-sm text-red-400">Failed to load settings: {error?.message ?? "Unknown error"}</span>
         </div>
@@ -37,8 +37,7 @@ export function EngineSection() {
 
   return (
     <div className={contentRoot()}>
-      <SettingsPageHeader title="Engine" />
-      <EngineIntro />
+      <SettingsPageHeader title="Engine" description={ENGINE_DESCRIPTION} />
       <div className={sectionGrid()}>
         <SearchCard initial={{ search: data.engine.search, smartSearch: data.engine.smartSearch }} />
         <TimeoutsCard initial={data.engine.timeouts} />

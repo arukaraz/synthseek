@@ -32,6 +32,7 @@ export function ImportProviderMenu() {
   const status = useSpotifyConnectionStatus();
   const { isAdmin } = useAuthContext();
 
+  const spotifyEnabled = settings.data?.connections.spotify.enabled ?? false;
   const configured = Boolean(
     settings.data?.connections.spotify.clientId && settings.data?.connections.spotify.publicBaseUrl
   );
@@ -62,33 +63,56 @@ export function ImportProviderMenu() {
 
         <DropdownMenuContent align="end" className="min-w-64">
           <DropdownMenuLabel>Sources</DropdownMenuLabel>
-          <DropdownMenuItem
-            disabled={spotifyDisabled}
-            onSelect={() => {
-              if (!spotifyDisabled) setOpen(true);
-            }}
-            className={importProviderMenuItem()}
-          >
-            <span className={importProviderSpotifyChip()}>
-              <SpotifyMark />
-            </span>
-            <div className="flex flex-1 flex-col">
-              <span>Spotify</span>
-              {spotifyDisabled && (
-                <span className={importProviderTooltip()}>{tooltipForState(spotifyState, isAdmin)}</span>
+          {spotifyEnabled ? (
+            <DropdownMenuItem
+              disabled={spotifyDisabled}
+              onSelect={() => {
+                if (!spotifyDisabled) setOpen(true);
+              }}
+              className={importProviderMenuItem()}
+            >
+              <span className={importProviderSpotifyChip()}>
+                <SpotifyMark />
+              </span>
+              <div className="flex flex-1 flex-col">
+                <span>Spotify</span>
+                {spotifyDisabled && (
+                  <span className={importProviderTooltip()}>{tooltipForState(spotifyState, isAdmin)}</span>
+                )}
+              </div>
+              {spotifyDisabled && isAdmin && (
+                <Link
+                  href="/settings/integrations/metadata"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-primary-300 hover:text-primary-200 inline-flex items-center gap-1 text-[11px]"
+                >
+                  Configure
+                  <ExternalLink className="size-3" />
+                </Link>
               )}
-            </div>
-            {spotifyDisabled && isAdmin && (
-              <Link
-                href="/settings/integrations/spotify"
-                onClick={(e) => e.stopPropagation()}
-                className="text-primary-300 hover:text-primary-200 inline-flex items-center gap-1 text-[11px]"
-              >
-                Configure
-                <ExternalLink className="size-3" />
-              </Link>
-            )}
-          </DropdownMenuItem>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem disabled className={importProviderMenuItem()}>
+              <div className="flex flex-1 flex-col">
+                <span>No sources enabled</span>
+                {isAdmin && (
+                  <span className={importProviderTooltip()}>
+                    Enable a source in Settings → Metadata → Library Sources
+                  </span>
+                )}
+              </div>
+              {isAdmin && (
+                <Link
+                  href="/settings/integrations/metadata"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-primary-300 hover:text-primary-200 inline-flex items-center gap-1 text-[11px]"
+                >
+                  Configure
+                  <ExternalLink className="size-3" />
+                </Link>
+              )}
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
