@@ -91,6 +91,16 @@ export const subSectionHeader = cva("flex items-start justify-between gap-3");
 
 export const subSectionTitle = cva("text-fg text-sm font-semibold");
 
+export const autoRequestRow = cva(
+  "border-fg/10 bg-fg/[0.02] flex items-start justify-between gap-3 rounded-lg border p-3"
+);
+
+export const autoRequestText = cva("flex flex-col gap-0.5");
+
+export const autoRequestLabel = cva("text-fg text-sm font-medium");
+
+export const autoRequestHelper = cva("text-fg/55 text-xs");
+
 export const scheduleHourChip = cva(
   "inline-flex h-8 cursor-pointer items-center justify-center rounded-md border text-[11px] font-medium transition-colors",
   {

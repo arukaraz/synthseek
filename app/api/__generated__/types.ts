@@ -1964,6 +1964,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 				enabled?: boolean | undefined;
 				username?: string | null | undefined;
 				selectedKinds?: ("cf-recommendations" | "weekly-exploration" | "weekly-jams" | "daily-jams")[] | undefined;
+				autoRequest?: boolean | undefined;
 			};
 			output: DiscoveryConfig;
 			meta: object;

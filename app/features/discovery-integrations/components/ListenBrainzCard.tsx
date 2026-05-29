@@ -11,6 +11,10 @@ import { useUpdateListenBrainz } from "@hooks/api/mutations/discovery/useUpdateL
 
 import { LB_PLAYLIST_KIND_OPTIONS } from "../constants";
 import {
+  autoRequestHelper,
+  autoRequestLabel,
+  autoRequestRow,
+  autoRequestText,
   disabledOverlay,
   playlistChip,
   playlistChipsGrid,
@@ -26,10 +30,12 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
   const [enabled, setEnabled] = useState(config.enabled);
   const [username, setUsername] = useState(config.username ?? "");
   const [kinds, setKinds] = useState<LbPlaylistKind[]>(config.selectedKinds);
+  const [autoRequest, setAutoRequest] = useState(config.autoRequest ?? false);
 
   const isDirty =
     enabled !== config.enabled ||
     username !== (config.username ?? "") ||
+    autoRequest !== (config.autoRequest ?? false) ||
     kinds.length !== config.selectedKinds.length ||
     kinds.some((k, i) => k !== config.selectedKinds[i]);
 
@@ -42,6 +48,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
       enabled,
       username: username.trim() || null,
       selectedKinds: kinds,
+      autoRequest,
     });
   };
 
@@ -49,6 +56,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
     setEnabled(config.enabled);
     setUsername(config.username ?? "");
     setKinds(config.selectedKinds);
+    setAutoRequest(config.autoRequest ?? false);
   };
 
   return (
@@ -83,6 +91,16 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
             ))}
           </div>
         </SettingsField>
+
+        <div className={autoRequestRow()}>
+          <div className={autoRequestText()}>
+            <span className={autoRequestLabel()}>Auto-request as playlists</span>
+            <span className={autoRequestHelper()}>
+              When a feed refreshes, automatically request and import as a new playlist.
+            </span>
+          </div>
+          <Switch checked={autoRequest} onCheckedChange={setAutoRequest} aria-label="Auto-request playlists" />
+        </div>
       </div>
 
       <div className={subSectionSaveBar()}>
