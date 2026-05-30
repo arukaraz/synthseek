@@ -21,9 +21,9 @@ import {
 } from "./styles";
 import type { TopTrackHeroProps } from "./types";
 
-export function TopTrackHero({ candidate }: TopTrackHeroProps) {
-  const cover = candidate.albumImage;
-  const fallbackBg = tileGradient(candidate.catalogTrackId);
+export function TopTrackHero({ track }: TopTrackHeroProps) {
+  const cover = track.albumImage;
+  const fallbackBg = tileGradient(track.catalogTrackId);
 
   return (
     <div className={hero()}>
@@ -40,10 +40,10 @@ export function TopTrackHero({ candidate }: TopTrackHeroProps) {
       </div>
       <div className={heroBody()}>
         <div className={heroRank()}>1</div>
-        <h3 className={heroTitle()}>{candidate.title}</h3>
-        <p className={heroBy()}>{candidate.artist}</p>
-        {candidate.playcount != null ? (
-          <p className={heroPlays()}>{formatPlaycount(candidate.playcount)} plays</p>
+        <h3 className={heroTitle()}>{track.title}</h3>
+        <p className={heroBy()}>{track.artist}</p>
+        {track.playcount != null ? (
+          <p className={heroPlays()}>{formatPlaycount(track.playcount)} plays</p>
         ) : null}
       </div>
     </div>

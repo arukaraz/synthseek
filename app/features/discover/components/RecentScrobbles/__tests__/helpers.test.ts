@@ -8,12 +8,12 @@ const HOUR = 60 * MIN;
 const DAY = 24 * HOUR;
 
 describe("describeScrobbleAge", () => {
-  it("returns 'now' when playedAt is null", () => {
-    expect(describeScrobbleAge(null, NOW)).toBe("now");
+  it("returns empty string when playedAt is null", () => {
+    expect(describeScrobbleAge(null, NOW)).toBe("");
   });
 
-  it("returns 'now' when playedAt is undefined", () => {
-    expect(describeScrobbleAge(undefined, NOW)).toBe("now");
+  it("returns empty string when playedAt is undefined", () => {
+    expect(describeScrobbleAge(undefined, NOW)).toBe("");
   });
 
   it("returns 'just now' for under a minute", () => {

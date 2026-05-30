@@ -11,7 +11,7 @@ export type LbPlaylistKind = "cf-recommendations" | "weekly-exploration" | "week
 export type LfmFeedKind = "recent-tracks" | "top-tracks-overall";
 export type LfmInterval = "5m" | "10m" | "15m" | "30m" | "1h" | "daily" | "weekly";
 
-export interface LastfmCandidate {
+export interface LastfmTrack {
   catalogTrackId: string;
   title: string;
   artist: string;
@@ -30,9 +30,16 @@ export interface LastfmCandidate {
   playcount?: number | null;
 }
 
-export type LastfmFeed =
-  | { status: "ready"; candidates: LastfmCandidate[]; generatedAt: string }
-  | { status: "empty"; candidates: []; reason?: string; generatedAt?: string };
+export type LastfmScrobble = LastfmTrack;
+export type LastfmTopTrack = LastfmTrack;
+
+export type LastfmScrobblesFeed =
+  | { status: "ready"; scrobbles: LastfmScrobble[]; generatedAt: string }
+  | { status: "empty"; scrobbles: []; reason?: string; generatedAt?: string };
+
+export type LastfmTopTracksFeed =
+  | { status: "ready"; tracks: LastfmTopTrack[]; generatedAt: string }
+  | { status: "empty"; tracks: []; reason?: string; generatedAt?: string };
 export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6 | "daily";
 export interface ScheduleSpec {
   dayOfWeek: DayOfWeek;

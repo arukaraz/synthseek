@@ -8,10 +8,10 @@ import { describeScrobbleAge } from "./helpers";
 import { node, nodeArtist, nodeCover, nodeDot, nodeFallback, nodeTime, nodeTitle } from "./styles";
 import type { RecentScrobbleNodeProps } from "./types";
 
-export function RecentScrobbleNode({ candidate }: RecentScrobbleNodeProps) {
-  const age = describeScrobbleAge(candidate.playedAt, Date.now());
-  const cover = candidate.albumImage;
-  const fallbackBg = tileGradient(candidate.catalogTrackId);
+export function RecentScrobbleNode({ scrobble }: RecentScrobbleNodeProps) {
+  const age = describeScrobbleAge(scrobble.playedAt, Date.now());
+  const cover = scrobble.albumImage;
+  const fallbackBg = tileGradient(scrobble.catalogTrackId);
 
   return (
     <div className={node()}>
@@ -24,8 +24,8 @@ export function RecentScrobbleNode({ candidate }: RecentScrobbleNodeProps) {
           <div style={{ background: fallbackBg }} className={nodeFallback()} />
         )}
       </div>
-      <p className={nodeTitle()}>{candidate.title}</p>
-      <p className={nodeArtist()}>{candidate.artist}</p>
+      <p className={nodeTitle()}>{scrobble.title}</p>
+      <p className={nodeArtist()}>{scrobble.artist}</p>
     </div>
   );
 }

@@ -28,7 +28,12 @@ export function RecentScrobbles() {
   if (isError) return <RecentScrobblesEmpty reason="error" />;
   if (!lfmConfig || !lfmConfig.enabled) return <RecentScrobblesEmpty reason="disabled" />;
   if (!lfmConfig.username) return <RecentScrobblesEmpty reason="no-username" />;
-  if (!recentScrobbles || recentScrobbles.status !== "ready" || recentScrobbles.candidates.length === 0) {
+  if (!recentScrobbles || recentScrobbles.status !== "ready") {
+    return <RecentScrobblesEmpty reason="no-data" />;
+  }
+
+  const scrobbles = recentScrobbles.scrobbles.filter((s) => s.playedAt != null);
+  if (scrobbles.length === 0) {
     return <RecentScrobblesEmpty reason="no-data" />;
   }
 
@@ -50,7 +55,7 @@ export function RecentScrobbles() {
           See more <ArrowRight className="size-3" />
         </a>
       </header>
-      <RecentScrobblesRail candidates={recentScrobbles.candidates} />
+      <RecentScrobblesRail scrobbles={scrobbles} />
     </motion.section>
   );
 }

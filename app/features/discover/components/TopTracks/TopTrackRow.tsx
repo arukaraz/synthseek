@@ -8,9 +8,9 @@ import { formatPlaycount } from "./helpers";
 import { item, itemArtist, itemCover, itemMeta, itemPlays, itemRank, itemTitle } from "./styles";
 import type { TopTrackRowProps } from "./types";
 
-export function TopTrackRow({ candidate, rank }: TopTrackRowProps) {
-  const cover = candidate.albumImage;
-  const fallbackBg = tileGradient(candidate.catalogTrackId);
+export function TopTrackRow({ track, rank }: TopTrackRowProps) {
+  const cover = track.albumImage;
+  const fallbackBg = tileGradient(track.catalogTrackId);
 
   return (
     <div className={item()}>
@@ -23,10 +23,10 @@ export function TopTrackRow({ candidate, rank }: TopTrackRowProps) {
         )}
       </div>
       <div className={itemMeta()}>
-        <p className={itemTitle()}>{candidate.title}</p>
-        <p className={itemArtist()}>{candidate.artist}</p>
+        <p className={itemTitle()}>{track.title}</p>
+        <p className={itemArtist()}>{track.artist}</p>
       </div>
-      {candidate.playcount != null ? <span className={itemPlays()}>{formatPlaycount(candidate.playcount)}</span> : null}
+      {track.playcount != null ? <span className={itemPlays()}>{formatPlaycount(track.playcount)}</span> : null}
     </div>
   );
 }

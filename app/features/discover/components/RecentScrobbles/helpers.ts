@@ -1,5 +1,5 @@
 export function describeScrobbleAge(playedAt: string | null | undefined, nowMs: number): string {
-  if (!playedAt) return "now";
+  if (!playedAt) return "";
   const diffMs = nowMs - new Date(playedAt).getTime();
   if (diffMs < 60_000) return "just now";
   const minutes = Math.floor(diffMs / 60_000);

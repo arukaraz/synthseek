@@ -1,4 +1,4 @@
-import type { LastfmCandidate } from "@features/discovery-integrations/types";
+import type { LastfmTopTrack } from "@features/discovery-integrations/types";
 
 export type EmptyReason = "error" | "disabled" | "no-username" | "no-data";
 
@@ -7,15 +7,15 @@ export interface TopTracksEmptyProps {
 }
 
 export interface TopTrackHeroProps {
-  candidate: LastfmCandidate;
+  track: LastfmTopTrack;
 }
 
 export interface TopTracksListProps {
-  candidates: LastfmCandidate[];
+  tracks: LastfmTopTrack[];
   startRank: number;
 }
 
 export interface TopTrackRowProps {
-  candidate: LastfmCandidate;
+  track: LastfmTopTrack;
   rank: number;
 }
