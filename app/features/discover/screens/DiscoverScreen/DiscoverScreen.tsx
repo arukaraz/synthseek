@@ -28,10 +28,11 @@ export function DiscoverScreen() {
           <div className="flex min-w-0 flex-col gap-6">
             <ArtistSpotlight />
             <RecentRequests />
-            <RecentScrobbles />
           </div>
           <CategoriesGrid />
         </div>
+
+        <RecentScrobbles />
       </div>
     </div>
   );
