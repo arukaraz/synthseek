@@ -47,7 +47,7 @@ export function UpdateBanner({ latestVersion, currentVersion }: UpdateBannerProp
             <p className="text-fg/90">
               {breaking ? <span className={breakingPrefix()}>Major update</span> : null}
               <span className="font-medium">Version {latestVersion}</span> is available
-              {breaking ? <span className="text-fg/70 ml-1">— review patch notes before upgrading</span> : null}
+              {breaking ? <span className="text-fg/70 ml-1">, review patch notes before upgrading</span> : null}
               <span className="text-fg/50 ml-1.5 text-xs">(current: {currentVersion})</span>
               <a
                 href={PATCH_NOTES_URL}

@@ -64,7 +64,7 @@ export function LibraryLeaderboard() {
   const emptyDescription =
     mode === "artists"
       ? "Complete some downloads to see your top artists."
-      : "Genres are tracked on new downloads — they will populate as your library grows.";
+      : "Genres are tracked on new downloads, they will populate as your library grows.";
 
   return (
     <motion.div variants={fadeIn} initial="hidden" animate="visible" className={panelFrame()}>

@@ -20,7 +20,7 @@ const CORRELATION_ID_HEADER = "x-correlation-id";
 
 /**
  * Adds `x-correlation-id: ${clientSessionId}/${randomUUID()}` to every mutation.
- * Queries and subscriptions do not receive the header — they carry no user
+ * Queries and subscriptions do not receive the header, they carry no user
  * action to attribute back to this tab.
  */
 function correlationIdLink(clientSessionId: string): TRPCLink<AppRouter> {
