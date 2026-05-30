@@ -14,7 +14,7 @@ import type { SettingsSidebarProps } from "./types";
 
 export function SettingsSidebar({ className }: SettingsSidebarProps) {
   const pathname = usePathname();
-  const [advancedOpen, setAdvancedOpen] = useState(() => ADVANCED_ITEMS.some((item) => pathname.startsWith(item.href)));
+  const [advancedOpen, setAdvancedOpen] = useState(true);
 
   return (
     <nav aria-label="Settings sections" className={cn(sidebar(), className)}>
