@@ -1,4 +1,4 @@
-import { Blocks, FileText, ListOrdered, Settings2, User, Users } from "lucide-react";
+import { Blocks, FileText, ListOrdered, Settings2, Timer, User, Users } from "lucide-react";
 import type { NavItem } from "./types";
 
 export const TOP_LEVEL: NavItem[] = [
@@ -10,6 +10,7 @@ export const TOP_LEVEL: NavItem[] = [
 export const ADVANCED_ITEMS: NavItem[] = [
   { href: "/settings/integrations", label: "Integrations", icon: <Blocks /> },
   { href: "/settings/engine", label: "Engine", icon: <ListOrdered /> },
+  { href: "/settings/jobs", label: "Jobs", icon: <Timer /> },
   { href: "/settings/logs", label: "Logs", icon: <FileText /> },
 ];
 

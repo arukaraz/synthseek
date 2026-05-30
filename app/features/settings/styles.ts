@@ -216,3 +216,31 @@ export const listManagerEmpty = cva("text-fg/40 px-3 py-4 text-center text-xs");
 export const listManagerFilterIcon = cva(
   "text-fg/40 pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2"
 );
+
+export const jobList = cva("flex flex-col");
+
+export const jobRow = cva(
+  "border-fg/10 flex items-center justify-between gap-4 border-b py-3.5 first:pt-0 last:border-b-0 last:pb-0"
+);
+
+export const jobInfo = cva("flex min-w-0 flex-col gap-0.5");
+
+export const jobName = cva("text-fg text-sm font-medium");
+
+export const jobDescription = cva("text-fg/55 text-xs");
+
+export const jobRight = cva("flex shrink-0 items-center gap-3");
+
+export const jobNextRun = cva("flex flex-col items-end gap-0.5 text-right");
+
+export const jobNextRunLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tracking-wider");
+
+export const jobNextRunValue = cva("text-fg text-sm font-medium tabular-nums");
+
+export const jobNextRunUnit = cva("text-fg/55 ml-0.5 text-xs");
+
+export const jobInProgress = cva("text-fg/70 inline-flex items-center gap-1.5 text-sm font-medium");
+
+export const jobPlayButton = cva(
+  "border-primary-500/30 bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 focus-visible:ring-ring flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-3.5 [&_svg]:shrink-0"
+);
