@@ -21,6 +21,7 @@
 @import "./tokens/primitives.css";
 @import "./tokens/semantic.css";
 @import "./tokens/shadows.css";
+@import "./tokens/discovery-mixes.css";
 
 @import "./themes/light.css";
 @import "./themes/dark.css";

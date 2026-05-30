@@ -30,6 +30,7 @@ export default function ConfigRequestModal({
   itemType,
   onSuccess,
   parentAlbum,
+  preloadedTracks,
 }: ConfigRequestModalProps) {
   const [bitrate, setBitrate] = useState(320);
   const [format, setFormat] = useState<RequestFormat>(RequestFormat.enum.mp3);
@@ -38,7 +39,7 @@ export default function ConfigRequestModal({
 
   const router = useRouter();
 
-  const needsTrackList = !!item && item.type !== ContentType.enum.track;
+  const needsTrackList = !!item && item.type !== ContentType.enum.track && !preloadedTracks;
   const { data: contentResponse, isLoading: isLoadingTracks } = useGetContents(
     item?.id ?? "",
     needsTrackList,
@@ -46,6 +47,7 @@ export default function ConfigRequestModal({
   );
 
   const trackList = useMemo<MusicTrack[]>(() => {
+    if (preloadedTracks) return preloadedTracks;
     if (!contentResponse?.success || !contentResponse.content) return [];
     const content = Array.isArray(contentResponse.content) ? contentResponse.content : [];
     if (item?.type === ContentType.enum.playlist) {
@@ -53,7 +55,7 @@ export default function ConfigRequestModal({
       return playlistTracks.filter((pt) => pt?.track).map((pt) => pt.track);
     }
     return content as MusicTrack[];
-  }, [contentResponse, item?.type]);
+  }, [preloadedTracks, contentResponse, item?.type]);
 
   const metadata = useMemo(() => extractItemMetadata(item, parentAlbum), [item, parentAlbum]);
 

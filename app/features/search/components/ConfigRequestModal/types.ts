@@ -1,4 +1,4 @@
-import type { ContentType, MusicItem } from "@api/__generated__/types";
+import type { ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
 
 export interface ConfigRequestModalProps {
   isOpen: boolean;
@@ -7,6 +7,7 @@ export interface ConfigRequestModalProps {
   itemType: ContentType;
   onSuccess?: (itemName: string) => void;
   parentAlbum?: MusicItem | null;
+  preloadedTracks?: MusicTrack[];
 }
 
 export interface BitrateOption {

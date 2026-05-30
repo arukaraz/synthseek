@@ -3,13 +3,21 @@
 import { Button } from "@components/ui/Button";
 import { Badge } from "@components/ui/Badge";
 import { ContentType } from "@api/__generated__/types";
-import { glassContainer, imagePlaceholder, primaryGradientButton } from "@theme/utilities/styles";
+import { glassContainer, imagePlaceholder } from "@theme/utilities/styles";
 import { heroContentContainer } from "../styles";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import { RequestAllButton } from "./RequestAllButton";
 import type { HeroHeaderProps } from "./types";
 
-export function HeroHeader({ metadata, type, onRequestAll, onBack }: HeroHeaderProps) {
+export function HeroHeader({
+  metadata,
+  type,
+  onRequestAll,
+  onBack,
+  requestButtonDisabled,
+  requestButtonTooltip,
+}: HeroHeaderProps) {
   const { title, subtitle, metadata: metadataText, thumbnail, showRequestButton } = metadata;
 
   const isArtist = type === ContentType.enum.artist;
@@ -67,17 +75,13 @@ export function HeroHeader({ metadata, type, onRequestAll, onBack }: HeroHeaderP
             {metadataText && <p className="text-overlay-fg/60 text-sm">{metadataText}</p>}
           </div>
 
-          {showRequestButton && onRequestAll && (
-            <Button
-              onClick={onRequestAll}
-              size="lg"
-              className={`${primaryGradientButton({ size: "lg", glow: "primary", hover: "lighten" })} text-overlay-fg shrink-0 font-semibold`}
-              data-cy="content-browser-request-all-btn"
-            >
-              <Download className="h-5 w-5 sm:mr-2" />
-              <span className="hidden sm:inline">Request</span>
-            </Button>
-          )}
+          {showRequestButton && onRequestAll ? (
+            <RequestAllButton
+              onRequestAll={onRequestAll}
+              disabled={requestButtonDisabled}
+              tooltip={requestButtonTooltip}
+            />
+          ) : null}
         </div>
       </div>
     </div>

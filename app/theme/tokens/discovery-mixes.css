@@ -1,0 +1,22 @@
+@layer base {
+  :root {
+    --mix-daily: oklch(0.74 0.155 350);
+    --mix-weekly: oklch(0.74 0.155 292);
+    --mix-explore: oklch(0.78 0.13 205);
+    --mix-cf: oklch(0.8 0.16 150);
+    --mix-acc: var(--mix-weekly);
+  }
+
+  [data-acc="daily"] {
+    --mix-acc: var(--mix-daily);
+  }
+  [data-acc="weekly"] {
+    --mix-acc: var(--mix-weekly);
+  }
+  [data-acc="explore"] {
+    --mix-acc: var(--mix-explore);
+  }
+  [data-acc="cf"] {
+    --mix-acc: var(--mix-cf);
+  }
+}

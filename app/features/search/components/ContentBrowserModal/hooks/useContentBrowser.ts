@@ -8,9 +8,10 @@ import type { ContentMetadata } from "../types";
 interface UseContentBrowserProps {
   initialType: ContentType;
   initialData: MusicItem;
+  preloadedItems?: MusicItem[];
 }
 
-export function useContentBrowser({ initialType, initialData }: UseContentBrowserProps) {
+export function useContentBrowser({ initialType, initialData, preloadedItems }: UseContentBrowserProps) {
   const [navigationStack, setNavigationStack] = useState<
     Array<{
       type: ContentType;
@@ -29,9 +30,11 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
 
   const id = currentData?.id || "";
 
-  const { data: fetchedContent, isLoading } = useGetContents(id, !!id && !!currentType, currentType);
+  const usePreloaded = !!preloadedItems && !!id && id === initialData.id;
+  const { data: fetchedContent, isLoading } = useGetContents(id, !usePreloaded && !!id && !!currentType, currentType);
 
   const items = useMemo((): MusicItem[] => {
+    if (usePreloaded && preloadedItems) return preloadedItems;
     if (!fetchedContent?.content) return [];
     const content = Array.isArray(fetchedContent.content) ? fetchedContent.content : [];
 
@@ -41,7 +44,7 @@ export function useContentBrowser({ initialType, initialData }: UseContentBrowse
     }
 
     return content.filter(Boolean) as MusicItem[];
-  }, [fetchedContent, currentType]);
+  }, [usePreloaded, preloadedItems, fetchedContent, currentType]);
 
   const metadata: ContentMetadata = useMemo(() => {
     if (!currentData) {

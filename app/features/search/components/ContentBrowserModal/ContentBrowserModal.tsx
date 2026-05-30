@@ -9,11 +9,21 @@ import { ContentList } from "./ContentList";
 import { useContentBrowser } from "./hooks/useContentBrowser";
 import type { ContentBrowserModalProps, RequestContext } from "./types";
 
-export function ContentBrowserModal({ type, data, open, onClose, onRequestClick }: ContentBrowserModalProps) {
+export function ContentBrowserModal({
+  type,
+  data,
+  open,
+  onClose,
+  onRequestClick,
+  preloadedItems,
+  requestButtonDisabled,
+  requestButtonTooltip,
+}: ContentBrowserModalProps) {
   const { metadata, items, isLoading, canGoBack, currentType, currentData, handleRowClick, handleBack } =
     useContentBrowser({
       initialType: type,
       initialData: data,
+      preloadedItems,
     });
 
   const handleRequestWithContext = useCallback(
@@ -52,6 +62,8 @@ export function ContentBrowserModal({ type, data, open, onClose, onRequestClick 
             type={currentType}
             onRequestAll={() => handleRequestWithContext(currentData)}
             onBack={canGoBack ? handleBack : undefined}
+            requestButtonDisabled={requestButtonDisabled}
+            requestButtonTooltip={requestButtonTooltip}
           />
         </div>
 
