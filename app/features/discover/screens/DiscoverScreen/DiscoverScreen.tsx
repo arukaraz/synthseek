@@ -5,6 +5,8 @@ import { CategoriesGrid } from "../../components/CategoriesGrid/CategoriesGrid";
 import { DiscoveryMixes } from "../../components/DiscoveryMixes";
 import { LibraryLeaderboard } from "../../components/LibraryLeaderboard/LibraryLeaderboard";
 import { RecentRequests } from "../../components/RecentRequests/RecentRequests";
+import { RecentScrobbles } from "../../components/RecentScrobbles";
+import { TopTracks } from "../../components/TopTracks";
 import { TrendingHero } from "../../components/TrendingHero/TrendingHero";
 
 export function DiscoverScreen() {
@@ -16,13 +18,17 @@ export function DiscoverScreen() {
             <TrendingHero />
             <DiscoveryMixes />
           </div>
-          <LibraryLeaderboard />
+          <div className="flex min-w-0 flex-col gap-6">
+            <LibraryLeaderboard />
+            <TopTracks />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
           <div className="flex min-w-0 flex-col gap-6">
             <ArtistSpotlight />
             <RecentRequests />
+            <RecentScrobbles />
           </div>
           <CategoriesGrid />
         </div>
