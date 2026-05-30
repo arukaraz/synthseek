@@ -60,7 +60,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
   };
 
   return (
-    <section className={subSection()}>
+    <section className={subSection()} data-anchor-target="listenbrainz">
       <header className={subSectionHeader()}>
         <h3 className={subSectionTitle()}>
           <span className="inline-flex items-center gap-1.5">

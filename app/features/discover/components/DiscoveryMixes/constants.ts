@@ -42,7 +42,7 @@ export const EMPTY_REASON_LABELS: Record<string, string> = {
   "fetch-error": "Sync failed, will retry",
 };
 
-export const DISCOVERY_SETTINGS_HREF = "/settings/integrations/metadata";
+export const DISCOVERY_SETTINGS_HREF = "/settings/integrations/metadata#listenbrainz";
 
 export const AUTO_REQUEST_TOOLTIP =
   "Auto-request is enabled, playlists are created automatically when the feed refreshes.";

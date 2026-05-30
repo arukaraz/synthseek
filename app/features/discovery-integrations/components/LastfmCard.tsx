@@ -60,7 +60,7 @@ export function LastfmCard({ config }: LastfmCardProps) {
   };
 
   return (
-    <section className={subSection()}>
+    <section className={subSection()} data-anchor-target="lastfm">
       <header className={subSectionHeader()}>
         <h3 className={subSectionTitle()}>
           <span className="inline-flex items-center gap-1.5">
