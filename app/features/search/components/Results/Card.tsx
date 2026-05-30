@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { CardProps } from "./types";
 import { getSecondaryInfo } from "./helpers";
-import { getContentTypeBadgeColors, getContentTypeLabel } from "@utils/content-type-helpers";
+import { getContentTypeLabel } from "@utils/content-type-helpers";
 
 export function Card({ result, onResultClick }: CardProps) {
   const [imageError, setImageError] = useState(false);
@@ -52,7 +52,7 @@ export function Card({ result, onResultClick }: CardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
         <div className="absolute top-2 left-2 z-10 sm:top-3 sm:left-3">
-          <Badge className={cn("border font-semibold shadow-lg", getContentTypeBadgeColors(result.type))}>
+          <Badge className={`type-badge type-badge-${result.type} shadow-lg`}>
             {getContentTypeLabel(result.type)}
           </Badge>
         </div>

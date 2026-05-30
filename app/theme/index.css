@@ -33,6 +33,7 @@
 
 @import "./utilities/glass.css";
 @import "./utilities/status.css";
+@import "./utilities/content-type.css";
 @import "./utilities/layout.css";
 @import "./utilities/animations.css";
 @import "./utilities/toast.css";

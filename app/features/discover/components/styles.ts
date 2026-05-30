@@ -312,19 +312,6 @@ export const sidebarContainer = cva("flex flex-col gap-4 sm:pl-4", {
 
 export type SidebarContainerProps = VariantProps<typeof sidebarContainer>;
 
-export const artistBadge = cva("border font-semibold uppercase shadow-lg", {
-  variants: {
-    color: {
-      secondary: "bg-secondary-500 border-secondary-400 text-secondary-foreground",
-    },
-  },
-  defaultVariants: {
-    color: "secondary",
-  },
-});
-
-export type ArtistBadgeProps = VariantProps<typeof artistBadge>;
-
 export const playIcon = cva("text-primary-400 shrink-0 fill-current h-3 w-3 sm:h-3.5 sm:w-3.5", {
   variants: {},
   defaultVariants: {},

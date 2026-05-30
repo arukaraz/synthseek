@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { IconButton } from "@components/ui/IconButton";
 import { StatusBadge } from "@components/ui/StatusBadge";
 import { cn } from "@utils/cn";
-import { getContentTypeBadgeColors, getContentTypeIcon } from "@utils/content-type-helpers";
+import { getContentTypeIcon } from "@utils/content-type-helpers";
 import { formatTimestamp } from "@utils/formatters";
 import Image from "next/image";
 import { ArrowLeft, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
@@ -71,7 +71,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     sizes="(max-width: 640px) 96px, 112px"
                     className="object-cover"
                   />
-                  <span className={cn(heroAvatarTypeBadge(), getContentTypeBadgeColors(request.contentType))}>
+                  <span className={cn(heroAvatarTypeBadge(), `type-text-${request.contentType}`)}>
                     <FallbackIcon className="size-3.5" aria-hidden />
                   </span>
                 </>

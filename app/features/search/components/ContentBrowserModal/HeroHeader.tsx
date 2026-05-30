@@ -57,7 +57,7 @@ export function HeroHeader({
       <div className={heroContentContainer()}>
         <div className="flex items-end justify-between gap-3 sm:gap-4">
           <div className="min-w-0 flex-1 space-y-1">
-            {isArtist && <Badge className="bg-primary-500 text-overlay-fg mb-2 border-0">Artist</Badge>}
+            {isArtist && <Badge className="type-badge type-badge-artist mb-2">Artist</Badge>}
 
             <h1
               className="text-overlay-fg text-2xl font-bold drop-shadow-lg sm:text-3xl lg:text-4xl"

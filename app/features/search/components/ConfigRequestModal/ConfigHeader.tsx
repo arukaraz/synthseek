@@ -2,8 +2,7 @@
 
 import { Badge } from "@components/ui/Badge";
 import { ContentType } from "@api/__generated__/types";
-import { cn } from "@utils/cn";
-import { getContentTypeBadgeColors, getContentTypeIcon, getContentTypeLabel } from "@utils/content-type-helpers";
+import { getContentTypeIcon, getContentTypeLabel } from "@utils/content-type-helpers";
 import { configHeader } from "../styles";
 import Image from "next/image";
 import type { ConfigHeaderProps } from "./types";
@@ -27,7 +26,7 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
       <div className="absolute right-0 bottom-0 left-0 z-10 p-4">
         <div className="flex items-end gap-3">
           <div className="min-w-0 flex-1 space-y-0.5">
-            <Badge className={cn("text-overlay-fg mb-1 border-0", getContentTypeBadgeColors(itemType))}>
+            <Badge className={`type-badge type-badge-${itemType} mb-1`}>
               {getContentTypeLabel(itemType)}
             </Badge>
 

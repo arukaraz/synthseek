@@ -3,7 +3,7 @@
 import { Badge } from "@components/ui/Badge";
 import { cn } from "@utils/cn";
 import { scale } from "@utils/animations";
-import { categoryPlaceholder, cardBottomContent, albumThumbnail, hoverBorder, artistBadge, playIcon } from "../styles";
+import { categoryPlaceholder, cardBottomContent, albumThumbnail, hoverBorder, playIcon } from "../styles";
 import { motion } from "framer-motion";
 import { Play, User, Music } from "lucide-react";
 import Image from "next/image";
@@ -49,7 +49,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
 
         <div className="absolute top-2 left-2 z-10 sm:top-3 sm:left-3">
-          <Badge className={artistBadge()}>Artist</Badge>
+          <Badge className="type-badge type-badge-artist shadow-lg">Artist</Badge>
         </div>
 
         <div className={cardBottomContent()}>
