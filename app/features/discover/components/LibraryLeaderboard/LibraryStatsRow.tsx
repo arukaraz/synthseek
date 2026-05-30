@@ -6,7 +6,7 @@ import type { LibraryStatsRowProps } from "./types";
 export function LibraryStatsRow({ summary }: LibraryStatsRowProps) {
   const cells = [
     { value: summary.tracks.toLocaleString(), label: "Tracks" },
-    { value: `${summary.hours}h`, label: "Listened" },
+    { value: `${summary.hours}h`, label: "Library" },
     { value: summary.queued.toLocaleString(), label: "Queued" },
   ];
 
