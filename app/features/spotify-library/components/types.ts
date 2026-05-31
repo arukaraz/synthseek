@@ -5,6 +5,11 @@ export interface SpotifyMarkProps {
   size?: number;
 }
 
+export interface SpotifyConnectPromptProps {
+  pending: boolean;
+  statusLoading: boolean;
+}
+
 export interface ModalToolbarProps {
   filter: LibraryFilter;
   onFilterChange: (v: LibraryFilter) => void;

@@ -9,7 +9,7 @@ import {
 } from "@components/ui/DropdownMenu";
 import { SpotifyLibraryModal, SpotifyMark } from "@features/spotify-library";
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
-import { useSettings } from "@hooks/api/queries/useSettings";
+import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { cn } from "@utils/cn";
 import { primaryGradientButton } from "@theme/utilities/styles";
@@ -28,18 +28,17 @@ import {
 
 export function ImportProviderMenu() {
   const [open, setOpen] = useState(false);
-  const settings = useSettings();
+  const config = usePublicConfig();
   const status = useSpotifyConnectionStatus();
   const { isAdmin } = useAuthContext();
 
-  const spotifyEnabled = settings.data?.connections.spotify.enabled ?? false;
-  const configured = Boolean(
-    settings.data?.connections.spotify.clientId && settings.data?.connections.spotify.publicBaseUrl
-  );
+  const spotifyEnabled = config.data?.spotify.enabled ?? false;
+  const configured = config.data?.spotify.configured ?? false;
   const connected = status.data?.connected ?? false;
   const pending = status.data?.pending ?? false;
   const spotifyState = deriveSpotifyState(configured, connected, pending);
-  const spotifyDisabled = spotifyState !== "ready";
+  const spotifyDisabled = spotifyState === "not_configured";
+  const showSpotifyHint = spotifyDisabled || spotifyState === "pending";
 
   return (
     <>
@@ -76,7 +75,7 @@ export function ImportProviderMenu() {
               </span>
               <div className="flex flex-1 flex-col">
                 <span>Spotify</span>
-                {spotifyDisabled && (
+                {showSpotifyHint && (
                   <span className={importProviderTooltip()}>{tooltipForState(spotifyState, isAdmin)}</span>
                 )}
               </div>

@@ -72,6 +72,9 @@ function classifyUpstreamError(payload: string): string {
   if (/Active premium subscription required for the owner/i.test(payload)) {
     return "premium_propagation";
   }
+  if (/not registered for this application/i.test(payload) || /user is not registered/i.test(payload)) {
+    return "user_not_registered";
+  }
   if (/Spotify is not configured/i.test(payload) || /not configured by the admin/i.test(payload)) {
     return "not_configured";
   }

@@ -3,6 +3,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { useSaveLibraryChanges } from "@hooks/api/mutations/spotify/useSaveLibraryChanges";
 import { useLibrarySubscription } from "@hooks/api/queries/spotify/useLibrarySubscription";
+import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { useSpotifyLibraryItems } from "@hooks/api/queries/spotify/useSpotifyLibraryItems";
 import { useEffect, useMemo, useState } from "react";
 
@@ -11,6 +12,7 @@ import { ModalToolbar } from "./components/ModalToolbar";
 import { ModalTopbar } from "./components/ModalTopbar";
 import { MasterTable } from "./components/MasterTable";
 import { DetailPanel } from "./components/DetailPanel";
+import { SpotifyConnectPrompt } from "./components/SpotifyConnectPrompt";
 import { DEFAULT_IMPORT_CONFIG } from "./constants";
 import { useFilteredItems } from "./hooks/useFilteredItems";
 import { useLibraryDraftState } from "./hooks/useLibraryDraftState";
@@ -18,7 +20,9 @@ import { detailPaneWrapper, modalGrid, modalRoot, split } from "./styles";
 import type { LibraryFilter, LibrarySort, SpotifyLibraryModalProps } from "./types";
 
 export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalProps) {
-  const items = useSpotifyLibraryItems(open);
+  const status = useSpotifyConnectionStatus();
+  const connected = status.data?.connected ?? false;
+  const items = useSpotifyLibraryItems(open && connected);
   const subscription = useLibrarySubscription();
   const save = useSaveLibraryChanges();
 
@@ -165,47 +169,51 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
         <DialogDescription className="sr-only">
           Browse your Spotify library, import items into Synthseek, and configure ongoing sync.
         </DialogDescription>
-        <div className={modalGrid()}>
-          <ModalTopbar />
-          <ModalToolbar
-            filter={filter}
-            onFilterChange={setFilter}
-            sort={sort}
-            onSortChange={setSort}
-            direction={direction}
-            onDirectionChange={setDirection}
-            search={search}
-            onSearchChange={setSearch}
-          />
-          <div className={split()}>
-            <MasterTable
-              items={filteredItems}
-              isLoading={items.isLoading}
-              draft={draft}
-              hiddenOnMobile={Boolean(focusedItem)}
+        {connected ? (
+          <div className={modalGrid()}>
+            <ModalTopbar />
+            <ModalToolbar
+              filter={filter}
+              onFilterChange={setFilter}
+              sort={sort}
+              onSortChange={setSort}
+              direction={direction}
+              onDirectionChange={setDirection}
+              search={search}
+              onSearchChange={setSearch}
             />
-            <div className={detailPaneWrapper({ hiddenOnMobile: !focusedItem })}>
-              <DetailPanel focusedItem={focusedItem} draft={draft} onBack={() => draft.setFocus(null)} />
+            <div className={split()}>
+              <MasterTable
+                items={filteredItems}
+                isLoading={items.isLoading}
+                draft={draft}
+                hiddenOnMobile={Boolean(focusedItem)}
+              />
+              <div className={detailPaneWrapper({ hiddenOnMobile: !focusedItem })}>
+                <DetailPanel focusedItem={focusedItem} draft={draft} onBack={() => draft.setFocus(null)} />
+              </div>
             </div>
+            <ModalBottombar
+              totalRows={totalRows}
+              totalTracks={totalTracks}
+              selectedCount={draft.state.selectedIds.size}
+              draft={draft}
+              onBulkSync={handleBulkSync}
+              onBulkImport={handleBulkImport}
+              onClearSelection={draft.clearSelection}
+              onSave={handleSave}
+              onCancel={() => onOpenChange(false)}
+              isSaving={save.isPending}
+              hasChanges={hasChanges}
+              autoWatch={draft.state.autoWatch}
+              onWatchChange={draft.setWatch}
+              onRefresh={() => void items.refetch()}
+              isRefreshing={items.isFetching}
+            />
           </div>
-          <ModalBottombar
-            totalRows={totalRows}
-            totalTracks={totalTracks}
-            selectedCount={draft.state.selectedIds.size}
-            draft={draft}
-            onBulkSync={handleBulkSync}
-            onBulkImport={handleBulkImport}
-            onClearSelection={draft.clearSelection}
-            onSave={handleSave}
-            onCancel={() => onOpenChange(false)}
-            isSaving={save.isPending}
-            hasChanges={hasChanges}
-            autoWatch={draft.state.autoWatch}
-            onWatchChange={draft.setWatch}
-            onRefresh={() => void items.refetch()}
-            isRefreshing={items.isFetching}
-          />
-        </div>
+        ) : (
+          <SpotifyConnectPrompt pending={status.data?.pending ?? false} statusLoading={status.isLoading} />
+        )}
       </DialogContent>
     </Dialog>
   );

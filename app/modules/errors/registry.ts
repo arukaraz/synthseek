@@ -16,6 +16,14 @@ export const ERROR_REGISTRY: Record<ErrorCategory, Record<string, ErrorEntry>> =
       severity: "warning",
       matches: [/Spotify is not configured/i, /not configured by the admin/i],
     },
+    user_not_registered: {
+      title: "Your Spotify account isn't allowed yet",
+      description:
+        "This Spotify app is in development mode, so it only works for accounts on its user list. Ask your administrator to add your Spotify account (your login email) to the app in the Spotify Developer Dashboard, then connect again.",
+      duration: 12000,
+      severity: "warning",
+      matches: [/not registered for this application/i, /user is not registered/i],
+    },
     state_expired: {
       title: "Authorization link expired",
       description: "The OAuth state expired before you finished the handshake. Click Connect Spotify again.",

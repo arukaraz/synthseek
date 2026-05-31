@@ -11,6 +11,16 @@ export const modalRoot = cva(
 
 export const modalGrid = cva("grid h-full min-h-0 grid-rows-[auto_auto_1fr_auto]");
 
+export const connectPrompt = cva("flex h-full flex-col items-center justify-center gap-4 px-6 py-12 text-center");
+
+export const connectPromptIcon = cva(
+  "flex size-16 items-center justify-center rounded-full bg-[#1ed760]/15 text-[#1ed760]"
+);
+
+export const connectPromptTitle = cva("text-fg text-lg font-semibold");
+
+export const connectPromptBody = cva("text-fg/60 max-w-sm text-sm");
+
 export const topbar = cva("flex items-center gap-3 border-b border-fg/10 bg-surface/60 px-4 py-3 text-sm");
 
 export const brandChip = cva("inline-flex items-center gap-2 rounded-lg bg-fg/5 px-2 py-1 text-sm font-medium text-fg");
