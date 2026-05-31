@@ -30,6 +30,27 @@ export interface EnrichmentCardProps {
   initial: ConnectionsEnrichment;
 }
 
+export interface DownloadSourceSlskd {
+  enabled: boolean;
+  priority: number;
+}
+
+export interface DownloadSourceYtdlp {
+  enabled: boolean;
+  priority: number;
+  searchResults: number;
+  maxDurationDeltaSec: number;
+}
+
+export interface DownloadSourcesConfig {
+  slskd: DownloadSourceSlskd;
+  ytdlp: DownloadSourceYtdlp;
+}
+
+export interface YtdlpCardProps {
+  initial: DownloadSourcesConfig;
+}
+
 export interface LibrarySourcesCardProps {
   spotify: ConnectionsSpotify;
   enrichment: ConnectionsEnrichment;

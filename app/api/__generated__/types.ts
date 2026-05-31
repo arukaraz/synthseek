@@ -1378,6 +1378,18 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 				library: {
 					syncIntervalMinutes: number;
 				};
+				downloadSources: {
+					slskd: {
+						enabled: boolean;
+						priority: number;
+					};
+					ytdlp: {
+						enabled: boolean;
+						priority: number;
+						searchResults: number;
+						maxDurationDeltaSec: number;
+					};
+				};
 				system: {
 					wizardCompleted: boolean;
 					migrationCompleted: boolean;
@@ -1434,6 +1446,24 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
 		updateLibrary: import("@trpc/server").TRPCMutationProcedure<{
 			input: {
 				syncIntervalMinutes?: number | undefined;
+			};
+			output: {
+				ok: boolean;
+			};
+			meta: object;
+		}>;
+		updateDownloadSources: import("@trpc/server").TRPCMutationProcedure<{
+			input: {
+				slskd: {
+					enabled?: boolean | undefined;
+					priority?: number | undefined;
+				};
+				ytdlp: {
+					enabled?: boolean | undefined;
+					priority?: number | undefined;
+					searchResults?: number | undefined;
+					maxDurationDeltaSec?: number | undefined;
+				};
 			};
 			output: {
 				ok: boolean;
