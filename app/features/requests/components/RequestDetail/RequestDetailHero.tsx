@@ -30,6 +30,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     syncPlex,
     syncSourceNow,
     canRetry,
+    canRemove,
     canCancel,
     canSyncPlex,
     canSyncSource,
@@ -37,6 +38,8 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     syncSourcePending,
     label,
   } = useRequestActions(request);
+
+  const hasMoreActions = canCancel || canSyncPlex || canSyncSource;
 
   return (
     <div className="relative">
@@ -86,6 +89,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               </p>
               <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
+              <p className="text-fg/40 truncate text-xs">Requested by {request.requestedBy.username}</p>
             </div>
           </div>
 
@@ -107,54 +111,53 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               </Button>
             )}
 
-            <IconButton
-              icon={Trash2}
-              variant="red"
-              size="md"
-              aria-label={`Remove ${label.toLowerCase()}`}
-              onClick={remove}
-            />
+            {canRemove && (
+              <IconButton
+                icon={Trash2}
+                variant="red"
+                size="md"
+                aria-label={`Remove ${label.toLowerCase()}`}
+                onClick={remove}
+              />
+            )}
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button type="button" className={heroMoreButton()} aria-label="More actions">
-                  <MoreVertical className="size-3.5" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-44">
-                {canCancel && (
-                  <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
-                    <Square className="size-3.5" />
-                    Cancel downloads
-                  </DropdownMenuItem>
-                )}
-                {canSyncSource && (
-                  <DropdownMenuItem
-                    onClick={syncSourceNow}
-                    disabled={syncSourcePending}
-                    className="text-emerald-400 focus:text-emerald-300"
-                  >
-                    <RefreshCcw className="size-3.5" />
-                    {syncSourcePending ? "Syncing…" : "Sync from Spotify"}
-                  </DropdownMenuItem>
-                )}
-                {canSyncPlex && (
-                  <DropdownMenuItem
-                    onClick={syncPlex}
-                    disabled={syncPlexPending}
-                    className="text-primary-400 focus:text-primary-300"
-                  >
-                    <Upload className="size-3.5" />
-                    {syncPlexPending ? "Syncing…" : "Sync to Plex"}
-                  </DropdownMenuItem>
-                )}
-                {!canCancel && !canSyncPlex && !canSyncSource && (
-                  <DropdownMenuItem disabled className="text-fg/40">
-                    No additional actions
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {hasMoreActions && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button type="button" className={heroMoreButton()} aria-label="More actions">
+                    <MoreVertical className="size-3.5" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-44">
+                  {canCancel && (
+                    <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
+                      <Square className="size-3.5" />
+                      Cancel downloads
+                    </DropdownMenuItem>
+                  )}
+                  {canSyncSource && (
+                    <DropdownMenuItem
+                      onClick={syncSourceNow}
+                      disabled={syncSourcePending}
+                      className="text-emerald-400 focus:text-emerald-300"
+                    >
+                      <RefreshCcw className="size-3.5" />
+                      {syncSourcePending ? "Syncing…" : "Sync from Spotify"}
+                    </DropdownMenuItem>
+                  )}
+                  {canSyncPlex && (
+                    <DropdownMenuItem
+                      onClick={syncPlex}
+                      disabled={syncPlexPending}
+                      className="text-primary-400 focus:text-primary-300"
+                    >
+                      <Upload className="size-3.5" />
+                      {syncPlexPending ? "Syncing…" : "Sync to Plex"}
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         </div>
       </div>

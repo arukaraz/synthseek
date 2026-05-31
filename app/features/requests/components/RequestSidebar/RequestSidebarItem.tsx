@@ -30,7 +30,9 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="text-fg/40 truncate text-[10px] font-semibold tracking-wider">{typeLabel}</span>
+          <span className="text-fg/40 truncate text-[10px] font-semibold tracking-wider">
+            {typeLabel} · {request.requestedBy.username}
+          </span>
           <span
             className={cn("h-1.5 w-1.5 shrink-0 rounded-full", statusConfig.glowColor)}
             aria-label={statusConfig.label}

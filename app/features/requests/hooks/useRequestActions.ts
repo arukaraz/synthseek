@@ -11,6 +11,8 @@ import {
   useRetryPlexPlaylist,
 } from "@hooks/api";
 import { useSpotifySyncPlaylistNow } from "@hooks/api/mutations/spotify/useSpotifyImport";
+import { useAuthContext } from "@modules/providers/AuthProvider";
+import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { isProcessingStatus } from "@utils/status-helpers";
 
@@ -20,7 +22,9 @@ interface UseRequestActions {
   cancel: () => Promise<void>;
   syncPlex: () => void;
   syncSourceNow: () => void;
+  canManage: boolean;
   canRetry: boolean;
+  canRemove: boolean;
   canCancel: boolean;
   canSyncPlex: boolean;
   canSyncSource: boolean;
@@ -30,6 +34,8 @@ interface UseRequestActions {
 }
 
 export function useRequestActions(request: RequestWithTracks): UseRequestActions {
+  const { currentUser } = useAuthContext();
+  const canManage = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
   const isPlaylist = request.contentType === ContentType.enum.playlist;
   const label: "Album" | "Playlist" = isPlaylist ? "Playlist" : "Album";
 
@@ -43,16 +49,18 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
 
   const canRetry =
-    request.status === RequestStatus.enum.failed ||
-    request.status === RequestStatus.enum.cancelled ||
-    request.status === RequestStatus.enum.partially_complete ||
-    request.status === RequestStatus.enum.paused;
-  const canCancel = isProcessingStatus(request.status);
+    canManage &&
+    (request.status === RequestStatus.enum.failed ||
+      request.status === RequestStatus.enum.cancelled ||
+      request.status === RequestStatus.enum.partially_complete ||
+      request.status === RequestStatus.enum.paused);
+  const canCancel = canManage && isProcessingStatus(request.status);
   const canSyncPlex =
+    canManage &&
     isPlaylist &&
     request.plex_playlist_id === null &&
     (request.status === RequestStatus.enum.complete || request.status === RequestStatus.enum.partially_complete);
-  const canSyncSource = isPlaylist && request.source_provider === "spotify";
+  const canSyncSource = canManage && isPlaylist && request.source_provider === "spotify";
 
   const retry = () => {
     if (isPlaylist) retryPlaylist.mutate({ playlistId: request.id });
@@ -99,7 +107,9 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     cancel,
     syncPlex,
     syncSourceNow,
+    canManage,
     canRetry,
+    canRemove: canManage,
     canCancel,
     canSyncPlex,
     canSyncSource,
