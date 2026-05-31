@@ -34,81 +34,81 @@ describe("SearchInput", () => {
     vi.clearAllMocks();
   });
 
-  it("renders search trigger button when closed", () => {
+  it("renders the filter trigger button when closed", () => {
     render(<SearchInput {...defaultProps} isOpen={false} />);
 
-    expect(screen.getByLabelText("Open search")).toBeInTheDocument();
+    expect(screen.getByLabelText("Open filter")).toBeInTheDocument();
   });
 
   it("calls onOpenChange when trigger is clicked", () => {
     const onOpenChange = vi.fn();
     render(<SearchInput {...defaultProps} onOpenChange={onOpenChange} isOpen={false} />);
 
-    fireEvent.click(screen.getByLabelText("Open search"));
+    fireEvent.click(screen.getByLabelText("Open filter"));
 
     expect(onOpenChange).toHaveBeenCalledWith(true);
   });
 
-  it("shows input field when open", () => {
-    render(<SearchInput {...defaultProps} isOpen={true} />);
+  it("renders the desktop filter input", () => {
+    render(<SearchInput {...defaultProps} isOpen={false} />);
 
-    expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Filter...")).toBeInTheDocument();
   });
 
-  it("calls onChange when input value changes", () => {
+  it("calls onChange when the input value changes", () => {
     const onChange = vi.fn();
-    render(<SearchInput {...defaultProps} onChange={onChange} isOpen={true} />);
+    render(<SearchInput {...defaultProps} onChange={onChange} isOpen={false} />);
 
-    fireEvent.change(screen.getByPlaceholderText("Search..."), { target: { value: "test" } });
+    fireEvent.change(screen.getByPlaceholderText("Filter..."), { target: { value: "test" } });
 
     expect(onChange).toHaveBeenCalledWith("test");
   });
 
-  it("shows close button when open", () => {
+  it("shows the close button when open", () => {
     render(<SearchInput {...defaultProps} isOpen={true} />);
 
-    expect(screen.getByLabelText("Close search")).toBeInTheDocument();
+    expect(screen.getByLabelText("Close filter")).toBeInTheDocument();
   });
 
-  it("clears value and closes when close button clicked", () => {
+  it("hides the trigger button when open", () => {
+    render(<SearchInput {...defaultProps} isOpen={true} />);
+
+    expect(screen.queryByLabelText("Open filter")).not.toBeInTheDocument();
+  });
+
+  it("clears value and closes when the close button is clicked", () => {
     const onChange = vi.fn();
     const onOpenChange = vi.fn();
     render(<SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} />);
 
-    fireEvent.click(screen.getByLabelText("Close search"));
+    fireEvent.click(screen.getByLabelText("Close filter"));
 
     expect(onChange).toHaveBeenCalledWith("");
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("closes on Escape key press", () => {
+  it("closes on Escape key press in the mobile input", () => {
     const onChange = vi.fn();
     const onOpenChange = vi.fn();
     render(<SearchInput {...defaultProps} onChange={onChange} onOpenChange={onOpenChange} isOpen={true} />);
 
-    fireEvent.keyDown(screen.getByPlaceholderText("Search..."), { key: "Escape" });
+    const inputs = screen.getAllByPlaceholderText("Filter...");
+    fireEvent.keyDown(inputs[inputs.length - 1], { key: "Escape" });
 
     expect(onChange).toHaveBeenCalledWith("");
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("displays current value in input", () => {
-    render(<SearchInput {...defaultProps} value="my search" isOpen={true} />);
+  it("displays the current value in the input", () => {
+    render(<SearchInput {...defaultProps} value="my filter" isOpen={false} />);
 
-    expect(screen.getByPlaceholderText("Search...")).toHaveValue("my search");
+    expect(screen.getByPlaceholderText("Filter...")).toHaveValue("my filter");
   });
 
-  it("hides trigger button on mobile when open (sm:inline-flex)", () => {
-    render(<SearchInput {...defaultProps} isOpen={true} />);
-
-    const trigger = screen.getByLabelText("Open search");
-    expect(trigger).toHaveClass("hidden", "sm:inline-flex");
-  });
-
-  it("has correct title on search trigger", () => {
+  it("has the correct title on the filter trigger", () => {
     render(<SearchInput {...defaultProps} isOpen={false} />);
 
-    expect(screen.getByTitle("Search requests")).toBeInTheDocument();
+    expect(screen.getByTitle("Filter requests")).toBeInTheDocument();
   });
 
   describe("focus timer cleanup", () => {
