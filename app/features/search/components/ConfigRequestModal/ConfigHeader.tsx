@@ -26,9 +26,7 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
       <div className="absolute right-0 bottom-0 left-0 z-10 p-4">
         <div className="flex items-end gap-3">
           <div className="min-w-0 flex-1 space-y-0.5">
-            <Badge className={`type-badge type-badge-${itemType} mb-1`}>
-              {getContentTypeLabel(itemType)}
-            </Badge>
+            <Badge className={`type-badge type-badge-${itemType} mb-1`}>{getContentTypeLabel(itemType)}</Badge>
 
             <h2
               className="text-overlay-fg truncate text-xl font-bold drop-shadow-lg sm:text-2xl"

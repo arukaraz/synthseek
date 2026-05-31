@@ -19,7 +19,7 @@ export function useSaveLibraryChanges() {
         toast.info("No changes applied");
       } else if (queuedImports > 0) {
         toast.success("Spotify library updated", {
-          description: `${parts.join(" · ")} — importing in background, items will appear in Requests as they finish.`,
+          description: `${parts.join(" · ")}. Importing in background, items will appear in Requests as they finish.`,
         });
       } else {
         toast.success("Spotify library updated", { description: parts.join(" · ") });

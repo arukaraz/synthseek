@@ -18,8 +18,7 @@ export const ERROR_REGISTRY: Record<ErrorCategory, Record<string, ErrorEntry>> =
     },
     state_expired: {
       title: "Authorization link expired",
-      description:
-        "The OAuth state expired before you finished the handshake. Click Connect Spotify again.",
+      description: "The OAuth state expired before you finished the handshake. Click Connect Spotify again.",
       severity: "warning",
       matches: [/state expired/i],
     },
@@ -41,8 +40,7 @@ export const ERROR_REGISTRY: Record<ErrorCategory, Record<string, ErrorEntry>> =
     },
     missing_params: {
       title: "Spotify didn't return an authorization code",
-      description:
-        "Try again. If it keeps happening, check the Redirect URI in your Spotify App settings.",
+      description: "Try again. If it keeps happening, check the Redirect URI in your Spotify App settings.",
       severity: "warning",
     },
     access_denied: {

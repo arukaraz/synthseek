@@ -52,7 +52,12 @@ export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
         ))}
       </div>
       <div className={railEdge({ side: "left", visible: canScrollLeft })}>
-        <button type="button" onClick={() => scrollByPage("left")} className={railEdgeButton()} aria-label="Scroll left">
+        <button
+          type="button"
+          onClick={() => scrollByPage("left")}
+          className={railEdgeButton()}
+          aria-label="Scroll left"
+        >
           <ChevronLeft className="size-4" />
         </button>
       </div>

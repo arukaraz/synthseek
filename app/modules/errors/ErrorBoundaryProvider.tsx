@@ -38,8 +38,7 @@ export function ErrorBoundaryProvider({ children, queryClient }: ErrorBoundaryPr
   const value = useMemo<ErrorBoundaryContextValue>(
     () => ({
       notify: (error, options) => emitFriendlyToast(resolveFriendlyError(error, options)),
-      notifyById: (category, id, options) =>
-        emitFriendlyToast(resolveFriendlyErrorById(category, id, options)),
+      notifyById: (category, id, options) => emitFriendlyToast(resolveFriendlyErrorById(category, id, options)),
       notifySuccess: (category, id) => emitFriendlyToast(resolveFriendlyErrorById(category, id)),
     }),
     []

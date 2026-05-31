@@ -6,15 +6,7 @@ import type { LucideIcon } from "lucide-react";
 
 import { cn } from "@utils/cn";
 
-import {
-  noticeBody,
-  noticeChevron,
-  noticeHeader,
-  noticeIcon,
-  noticeRoot,
-  noticeTitle,
-  noticeTrigger,
-} from "./styles";
+import { noticeBody, noticeChevron, noticeHeader, noticeIcon, noticeRoot, noticeTitle, noticeTrigger } from "./styles";
 import type { NoticeProps, NoticeVariant } from "./types";
 
 const DEFAULT_ICONS: Record<NoticeVariant, LucideIcon> = {

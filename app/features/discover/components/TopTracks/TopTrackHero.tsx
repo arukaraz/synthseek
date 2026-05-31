@@ -42,9 +42,7 @@ export function TopTrackHero({ track }: TopTrackHeroProps) {
         <div className={heroRank()}>1</div>
         <h3 className={heroTitle()}>{track.title}</h3>
         <p className={heroBy()}>{track.artist}</p>
-        {track.playcount != null ? (
-          <p className={heroPlays()}>{formatPlaycount(track.playcount)} plays</p>
-        ) : null}
+        {track.playcount != null ? <p className={heroPlays()}>{formatPlaycount(track.playcount)} plays</p> : null}
       </div>
     </div>
   );
