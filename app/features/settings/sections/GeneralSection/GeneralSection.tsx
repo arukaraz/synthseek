@@ -9,7 +9,9 @@ import { cn } from "@utils/cn";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot } from "../../styles";
+import { ApiCard } from "./ApiCard";
 import { THEME_OPTIONS } from "./constants";
+import { PublicUrlCard } from "./PublicUrlCard";
 
 export function GeneralSection() {
   const { theme, setTheme } = useTheme();
@@ -46,6 +48,10 @@ export function GeneralSection() {
           })}
         </div>
       </SettingsCard>
+
+      <PublicUrlCard />
+
+      <ApiCard />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import { trpc } from "@utils/trpc";
 
-export function useSettings() {
+export function useSettings(options?: { enabled?: boolean }) {
   return trpc.settings.get.useQuery(undefined, {
     staleTime: 30 * 1000,
+    enabled: options?.enabled ?? true,
   });
 }

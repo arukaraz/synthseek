@@ -244,3 +244,15 @@ export const jobInProgress = cva("text-fg/70 inline-flex items-center gap-1.5 te
 export const jobPlayButton = cva(
   "border-primary-500/30 bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 focus-visible:ring-ring flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-3.5 [&_svg]:shrink-0"
 );
+
+export const subSection = cva("flex flex-col gap-4 border-t border-fg/10 pt-5");
+
+export const subSectionHeader = cva("flex items-start justify-between gap-3");
+
+export const subSectionHeaderText = cva("flex flex-col gap-0.5");
+
+export const subSectionTitle = cva("text-fg text-sm font-semibold");
+
+export const subSectionDescription = cva("text-fg/60 text-xs");
+
+export const copyRow = cva("flex items-stretch gap-2");

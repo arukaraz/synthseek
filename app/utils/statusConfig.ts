@@ -134,6 +134,11 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
         label: "Transfer failed",
         description: "Connection to peer dropped during download.",
       },
+      [FailureReason.enum.download_failed]: {
+        icon: Download,
+        label: "Download failed",
+        description: "The transfer started but failed or timed out before completing. Retry to try again.",
+      },
       [FailureReason.enum.other]: {
         icon: AlertCircle,
         label: "Failed",

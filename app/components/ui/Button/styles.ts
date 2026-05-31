@@ -10,6 +10,7 @@ export const buttonVariants = cva(
         outline:
           "border-4 border-primary/60 bg-background text-primary hover:border-primary hover:bg-accent/60 focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-primary",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        accent: "border border-accent-500/30 bg-accent-500/10 text-accent-400 hover:bg-accent-500/20",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

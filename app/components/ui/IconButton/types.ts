@@ -4,7 +4,7 @@ import type { Ref } from "react";
 
 export interface IconButtonProps extends Omit<HTMLMotionProps<"button">, "children"> {
   icon: LucideIcon;
-  variant?: "secondary" | "red" | "green" | "primary" | "default";
+  variant?: "secondary" | "red" | "green" | "primary" | "accent" | "default";
   size?: "sm" | "md";
   animated?: boolean;
   "aria-label": string;

@@ -16,18 +16,17 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
-import { buildRedirectUri } from "./helpers";
-import { SpotifyRequirementsNotice } from "./SpotifyRequirementsNotice";
 import {
   copyRow,
-  disabledOverlay,
   subSection,
   subSectionDescription,
   subSectionHeader,
   subSectionHeaderText,
   subSectionTitle,
-  validationError,
-} from "./styles";
+} from "../../styles";
+import { buildRedirectUri } from "./helpers";
+import { SpotifyRequirementsNotice } from "./SpotifyRequirementsNotice";
+import { disabledOverlay, validationError } from "./styles";
 import type { LibrarySourcesCardProps } from "./types";
 
 export function LibrarySourcesCard({ spotify, enrichment }: LibrarySourcesCardProps) {
@@ -146,7 +145,7 @@ export function LibrarySourcesCard({ spotify, enrichment }: LibrarySourcesCardPr
               </div>
               <IconButton
                 icon={copied ? Check : Copy}
-                variant={copied ? "green" : "default"}
+                variant="accent"
                 size="md"
                 onClick={handleCopyRedirect}
                 disabled={!redirectUri}
