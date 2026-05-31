@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@test/test-utils";
-import { SkeletonCard, SkeletonGrid, SkeletonSection } from "../Skeleton";
+import { SkeletonCard } from "../SkeletonCard";
+import { SkeletonGrid } from "../SkeletonGrid";
+import { SkeletonSection } from "../SkeletonSection";
 
 describe("SkeletonCard", () => {
   it("renders a skeleton card container", () => {

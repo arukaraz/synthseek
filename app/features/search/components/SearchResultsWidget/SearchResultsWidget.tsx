@@ -15,7 +15,8 @@ import { useContentRequestFlow } from "../ContentRequestFlow/ContentRequestFlow"
 import { AllResults } from "../Results/AllResults";
 import { FilterTabs } from "../Results/FilterTabs";
 import { Results } from "../Results/Results";
-import { SkeletonGrid, SkeletonSection } from "../Results/Skeleton";
+import { SkeletonGrid } from "../Results/SkeletonGrid";
+import { SkeletonSection } from "../Results/SkeletonSection";
 import { filterTabsContainer } from "../styles";
 import { getActiveFilter, getAvailableTypes, getFilteredResults, getFlatResults } from "./helpers";
 
