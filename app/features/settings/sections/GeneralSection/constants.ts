@@ -7,17 +7,9 @@ export const THEME_OPTIONS = [
   { value: "ocean", label: "Ocean", icon: Waves },
 ] as const;
 
-export const PUBLIC_URL_CARD = {
-  title: "Public URL",
-  description: "The public address this instance is reached at. Used to build external links like the MCP endpoint.",
-  label: "Public base URL",
-  helper: "Leave empty to use the address you are currently browsing from.",
-  placeholder: "https://synthseek.example.com",
-} as const;
-
 export const API_CARD = {
   title: "API",
-  description: "",
+  description: "Programmatic access to Synthseek: create keys for your apps and connect AI assistants over MCP.",
 } as const;
 
 export const API_KEYS_SUB = {
@@ -50,6 +42,13 @@ export const MCP_SUB = {
   title: "MCP",
   description: "Connect an AI assistant (Claude, Cursor...) to Synthseek over the Model Context Protocol.",
   endpointLabel: "MCP endpoint",
-  auth: "Send your key as: Authorization: Bearer <your key>",
+  endpointHelper: "Add this URL as a custom connector or MCP server in your assistant.",
   copied: "Endpoint copied",
+  connectTitle: "Two ways to connect",
+  oauthLabel: "Sign in (OAuth)",
+  oauthBody:
+    "For claude.ai web and native connectors. Add the endpoint as a custom connector and sign in with your Synthseek account. No key needed, and access follows your role.",
+  keyLabel: "API key",
+  keyBody:
+    "For Claude Code, Cursor, or Claude Desktop (via mcp-remote). Create a key above and send it as the bearer token: Authorization: Bearer <your key>.",
 } as const;

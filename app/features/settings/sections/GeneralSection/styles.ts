@@ -5,3 +5,7 @@ export const apiKeyRow = cva(
 );
 
 export const tokenBox = cva("bg-bg-soft/40 ring-fg/10 text-fg block break-all rounded-lg p-3 font-mono text-xs ring-1");
+
+export const connectList = cva("flex flex-col gap-2");
+
+export const connectLabel = cva("text-fg font-semibold");

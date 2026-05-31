@@ -4,6 +4,10 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { version } = require("./package.json") as { version: string };
 
+// Backend (Express) origin. Next proxies the API + OAuth endpoints to it so the
+// whole instance is reachable on a single public host (e.g. behind a tunnel).
+const API_URL = process.env.API_URL || "http://localhost:15997";
+
 const nextConfig: NextConfig = {
   output: "standalone",
 
@@ -67,6 +71,20 @@ const nextConfig: NextConfig = {
       };
     }
     return config;
+  },
+
+  async rewrites() {
+    // Proxy the backend API and the OAuth Authorization Server endpoints (which
+    // live at the Express root) to the backend, so a single public host serves
+    // both the web UI and the API/OAuth surface.
+    return [
+      { source: "/api/:path*", destination: `${API_URL}/api/:path*` },
+      { source: "/.well-known/:path*", destination: `${API_URL}/.well-known/:path*` },
+      { source: "/authorize", destination: `${API_URL}/authorize` },
+      { source: "/token", destination: `${API_URL}/token` },
+      { source: "/register", destination: `${API_URL}/register` },
+      { source: "/revoke", destination: `${API_URL}/revoke` },
+    ];
   },
 
   async headers() {

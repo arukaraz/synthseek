@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { IconButton } from "@components/ui/IconButton";
+import { Notice } from "@components/ui/Notice";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 
 import { SettingsField } from "../../components/SettingsField";
@@ -19,6 +20,7 @@ import {
 } from "../../styles";
 import { MCP_SUB } from "./constants";
 import { mcpEndpoint } from "./helpers";
+import { connectLabel, connectList } from "./styles";
 
 export function McpSubsection() {
   const { data: publicConfig } = usePublicConfig();
@@ -50,7 +52,7 @@ export function McpSubsection() {
         </div>
       </header>
 
-      <SettingsField label={MCP_SUB.endpointLabel} helper={MCP_SUB.auth}>
+      <SettingsField label={MCP_SUB.endpointLabel} helper={MCP_SUB.endpointHelper}>
         <div className={copyRow()}>
           <div className="flex-1">
             <SettingsTextInput value={endpoint} onChange={() => undefined} disabled />
@@ -67,6 +69,17 @@ export function McpSubsection() {
           />
         </div>
       </SettingsField>
+
+      <Notice variant="info" title={MCP_SUB.connectTitle} collapsible defaultOpen={false}>
+        <ul className={connectList()}>
+          <li>
+            <span className={connectLabel()}>{MCP_SUB.oauthLabel}.</span> {MCP_SUB.oauthBody}
+          </li>
+          <li>
+            <span className={connectLabel()}>{MCP_SUB.keyLabel}.</span> {MCP_SUB.keyBody}
+          </li>
+        </ul>
+      </Notice>
     </section>
   );
 }
