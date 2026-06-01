@@ -1,7 +1,7 @@
 "use client";
 
-import { SettingsPagePlaceholder } from "@features/settings/components/SettingsPagePlaceholder";
+import { LogsSection } from "@features/settings/sections/LogsSection";
 
 export default function LogsPage() {
-  return <SettingsPagePlaceholder title="Logs" message="Live server log tail will live here." />;
+  return <LogsSection />;
 }
