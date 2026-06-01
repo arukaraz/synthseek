@@ -1,7 +1,7 @@
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useClearCompleted() {
+export function useClearCompleted() {
   const utils = trpc.useUtils();
 
   return trpc.requests.clearCompleted.useMutation({

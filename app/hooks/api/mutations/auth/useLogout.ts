@@ -5,7 +5,7 @@ export function useLogout() {
 
   return trpc.auth.logout.useMutation({
     onSuccess: async () => {
-      // Drop every cached query — the new user (or anonymous) should not see it.
+      // Drop every cached query, the new user (or anonymous) should not see it.
       utils.invalidate();
       utils.auth.me.setData(undefined, null);
     },

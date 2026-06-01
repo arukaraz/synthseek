@@ -1,6 +1,6 @@
 "use client";
 
-import useGetContents from "@hooks/api/queries/useGetContents";
+import { useGetContents } from "@hooks/api/queries/useGetContents";
 import { ContentType, type MusicItem, type MusicPlaylistTrack } from "@api/__generated__/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ContentMetadata } from "../types";

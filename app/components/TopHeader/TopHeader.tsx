@@ -22,9 +22,9 @@ import {
   searchKbdHint,
   searchShell,
 } from "./styles";
-import type { AppHeaderProps } from "./types";
+import type { TopHeaderProps } from "./types";
 
-export default function AppHeader({ onSearch, initialQuery = "" }: AppHeaderProps) {
+export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [isFocused, setIsFocused] = useState(false);
   const pathname = usePathname();

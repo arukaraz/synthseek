@@ -1,7 +1,7 @@
 "use client";
 
 import { ContentShell } from "@components/ContentShell";
-import TopHeader from "@components/TopHeader";
+import { TopHeader } from "@components/TopHeader";
 import { UpdateBanner } from "@components/UpdateBanner/UpdateBanner";
 import { useSubscriptions, useVersionState } from "@hooks/api/subscriptions";
 import { useHashTargetGlow } from "@hooks/ui/useHashTargetGlow";

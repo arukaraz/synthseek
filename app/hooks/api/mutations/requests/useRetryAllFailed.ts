@@ -1,7 +1,7 @@
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useRetryAllFailed() {
+export function useRetryAllFailed() {
   const utils = trpc.useUtils();
 
   return trpc.requests.retryAllFailed.useMutation({

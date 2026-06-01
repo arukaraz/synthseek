@@ -1,7 +1,7 @@
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useRetryAlbum() {
+export function useRetryAlbum() {
   const utils = trpc.useUtils();
 
   return trpc.requests.retryAlbum.useMutation({

@@ -2,7 +2,7 @@ import { RequestStatus } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useCancelPlaylist() {
+export function useCancelPlaylist() {
   const utils = trpc.useUtils();
 
   return trpc.requests.cancelPlaylist.useMutation({

@@ -1,7 +1,7 @@
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useDeletePlaylist() {
+export function useDeletePlaylist() {
   const utils = trpc.useUtils();
 
   return trpc.requests.deletePlaylist.useMutation({

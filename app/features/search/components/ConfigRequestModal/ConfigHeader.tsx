@@ -38,7 +38,7 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
             {artist && <p className="text-overlay-fg/80 truncate text-sm">{artist}</p>}
 
             <div className="text-overlay-fg/60 flex items-center gap-2 text-xs">
-              {isTrack && albumName && <span className="text-primary-400/80 truncate">{albumName}</span>}
+              {isTrack && albumName && <span className="type-text-album truncate">{albumName}</span>}
               {year && <span>{year}</span>}
               {totalTracks && (
                 <span>

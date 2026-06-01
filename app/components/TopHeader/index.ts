@@ -1,2 +1,2 @@
-export { default } from "./TopHeader";
-export type { AppHeaderProps } from "./types";
+export { TopHeader } from "./TopHeader";
+export type { TopHeaderProps } from "./types";

@@ -5,7 +5,7 @@ import { Library } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { ContentType, type MusicItem } from "@api/__generated__/types";
-import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
+import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
 import { useDiscoveryMixes } from "@hooks/api/queries/discovery/useDiscoveryMixes";
 import { fadeIn } from "@utils/animations";

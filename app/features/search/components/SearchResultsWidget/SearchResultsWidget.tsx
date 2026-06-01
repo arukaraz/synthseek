@@ -2,7 +2,7 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { ContentType, type FilterType } from "@api/__generated__/types";
-import useSearch from "@hooks/api/queries/useSearchContent";
+import { useSearchContent as useSearch } from "@hooks/api/queries/useSearchContent";
 import { fadeIn } from "@utils/animations";
 import { titleCase } from "@utils/formatters";
 import { AnimatePresence, motion } from "framer-motion";

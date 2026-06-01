@@ -1,7 +1,7 @@
 import type { ContentType } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
 
-export default function useSearchContent(
+export function useSearchContent(
   query: string,
   types: ContentType[],
   options?: {

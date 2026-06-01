@@ -29,7 +29,7 @@ import {
 import { extractItemMetadata, getItemDisplayName, mapTrackFields } from "./helpers";
 import type { AvailabilityMode, ConfigRequestModalProps, Option, QualityMode } from "./types";
 
-export default function ConfigRequestModal({
+export function ConfigRequestModal({
   isOpen,
   onClose,
   item,

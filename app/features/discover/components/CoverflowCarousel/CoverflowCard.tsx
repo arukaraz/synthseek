@@ -3,7 +3,7 @@
 import { ContentType } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
-import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
+import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { trendingBadgeContainer, cardBottomContentLg } from "../styles";
 import { cn } from "@utils/cn";

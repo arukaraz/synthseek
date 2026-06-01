@@ -2,7 +2,7 @@ import { trpc } from "@utils/trpc";
 import { notifyReclaimOutcome } from "@utils/request-helpers";
 import { toast } from "sonner";
 
-export default function usePlaylistRequest() {
+export function usePlaylistRequest() {
   const utils = trpc.useUtils();
 
   return trpc.requests.playlistRequest.useMutation({

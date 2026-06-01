@@ -1,7 +1,7 @@
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useDeleteAlbum() {
+export function useDeleteAlbum() {
   const utils = trpc.useUtils();
 
   return trpc.requests.deleteAlbum.useMutation({

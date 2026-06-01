@@ -1,7 +1,7 @@
 "use client";
 
 import { EmptyState } from "@components/ui/EmptyState";
-import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
+import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
 import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
 import type { MusicItem } from "@api/__generated__/types";

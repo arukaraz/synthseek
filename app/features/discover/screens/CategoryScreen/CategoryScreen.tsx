@@ -4,7 +4,7 @@ import { EmptyState } from "@components/ui/EmptyState";
 import { useCategoryPlaylists } from "@hooks/api/queries/useCategoryPlaylists";
 import { Results } from "@features/search/components/Results/Results";
 import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
-import ConfigRequestModal from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
+import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentType, type MusicItem } from "@api/__generated__/types";
 import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
 import { backButton } from "@features/search/components/styles";

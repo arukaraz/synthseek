@@ -2,7 +2,7 @@ import { RequestStatus } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useCancelAlbum() {
+export function useCancelAlbum() {
   const utils = trpc.useUtils();
 
   return trpc.requests.cancelAlbum.useMutation({

@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useState } from "react";
 
 import { ContentType, type MusicItem } from "@api/__generated__/types";
-import ConfigRequestModal from "../ConfigRequestModal/ConfigRequestModal";
+import { ConfigRequestModal } from "../ConfigRequestModal/ConfigRequestModal";
 import { ContentBrowserModal } from "../ContentBrowserModal/ContentBrowserModal";
 import type { RequestContext } from "../ContentBrowserModal/types";
 import type { ContentRequestFlowProps, FlowContextValue, FlowState } from "./types";

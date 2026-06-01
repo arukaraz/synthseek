@@ -1,7 +1,7 @@
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
-export default function useRetryPlaylist() {
+export function useRetryPlaylist() {
   const utils = trpc.useUtils();
 
   return trpc.requests.retryPlaylist.useMutation({
