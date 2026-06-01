@@ -22,6 +22,28 @@ export interface MatchingOption {
   description: string;
 }
 
+export type QualityMode = "standard" | "lossless";
+
+export interface QualityModeOption {
+  value: QualityMode;
+  label: string;
+  description: string;
+}
+
+export interface UploadSpeedOption {
+  value: number;
+  label: string;
+  description: string;
+}
+
+export type AvailabilityMode = "any" | "free";
+
+export interface AvailabilityOption {
+  value: AvailabilityMode;
+  label: string;
+  description: string;
+}
+
 export interface ConfigHeaderProps {
   name: string;
   artist?: string;
@@ -45,4 +67,5 @@ export interface OptionGridProps<T extends string | number> {
   onChange: (value: T) => void;
   columns?: 2 | 4;
   showCheckmark?: boolean;
+  disabled?: boolean;
 }

@@ -19,9 +19,15 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ConfigHeader } from "./ConfigHeader";
 import { OptionGrid } from "./OptionGrid";
-import { BITRATE_OPTIONS, MATCHING_OPTIONS } from "./consts";
+import {
+  AVAILABILITY_OPTIONS,
+  BITRATE_OPTIONS,
+  MATCHING_OPTIONS,
+  QUALITY_MODE_OPTIONS,
+  UPLOAD_SPEED_OPTIONS,
+} from "./consts";
 import { extractItemMetadata, getItemDisplayName, mapTrackFields } from "./helpers";
-import type { ConfigRequestModalProps, Option } from "./types";
+import type { AvailabilityMode, ConfigRequestModalProps, Option, QualityMode } from "./types";
 
 export default function ConfigRequestModal({
   isOpen,
@@ -35,7 +41,11 @@ export default function ConfigRequestModal({
   const [bitrate, setBitrate] = useState(320);
   const [format, setFormat] = useState<RequestFormat>(RequestFormat.enum.mp3);
   const [bitrateMatching, setBitrateMatching] = useState<RequestMatchingMode>(RequestMatchingMode.enum.flexible);
-  const formatMatching = RequestMatchingMode.enum.flexible;
+  const [formatMatching, setFormatMatching] = useState<RequestMatchingMode>(RequestMatchingMode.enum.flexible);
+  const [qualityMode, setQualityMode] = useState<QualityMode>("standard");
+  const [minUploadSpeed, setMinUploadSpeed] = useState(0);
+  const [availability, setAvailability] = useState<AvailabilityMode>("any");
+  const losslessActive = qualityMode === "lossless";
 
   const router = useRouter();
 
@@ -77,6 +87,24 @@ export default function ConfigRequestModal({
     description: opt.description,
   }));
 
+  const qualityGridOptions: Option<QualityMode>[] = QUALITY_MODE_OPTIONS.map((opt) => ({
+    value: opt.value,
+    label: opt.label,
+    description: opt.description,
+  }));
+
+  const uploadSpeedGridOptions: Option<number>[] = UPLOAD_SPEED_OPTIONS.map((opt) => ({
+    value: opt.value,
+    label: opt.label,
+    description: opt.description,
+  }));
+
+  const availabilityGridOptions: Option<AvailabilityMode>[] = AVAILABILITY_OPTIONS.map((opt) => ({
+    value: opt.value,
+    label: opt.label,
+    description: opt.description,
+  }));
+
   const handleMutationSuccess = () => {
     if (!item) return;
     const itemName = getItemDisplayName(item);
@@ -109,7 +137,11 @@ export default function ConfigRequestModal({
 
     const config = {
       bitrate: { value: bitrate, matching: bitrateMatching },
-      format: { value: format, matching: formatMatching },
+      format: losslessActive
+        ? { value: RequestFormat.enum.flac, matching: RequestMatchingMode.enum.strict }
+        : { value: format, matching: formatMatching },
+      minUploadSpeed,
+      requireFreeSlot: availability === "free",
     };
 
     if (item.type === ContentType.enum.track) {
@@ -201,13 +233,28 @@ export default function ConfigRequestModal({
           <div className="space-y-3 sm:space-y-4">
             <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">Quality Settings</h3>
             <OptionGrid
+              label="Quality"
+              options={qualityGridOptions}
+              value={qualityMode}
+              onChange={setQualityMode}
+              columns={2}
+              showCheckmark
+            />
+            <OptionGrid
               label="Bitrate"
               options={bitrateGridOptions}
               value={bitrate}
               onChange={setBitrate}
               columns={4}
             />
-            <OptionGrid label="Format" options={formatGridOptions} value={format} onChange={setFormat} columns={4} />
+            <OptionGrid
+              label="Format"
+              options={formatGridOptions}
+              value={format}
+              onChange={setFormat}
+              columns={4}
+              disabled={losslessActive}
+            />
           </div>
 
           <div className="space-y-3 sm:space-y-4">
@@ -217,6 +264,34 @@ export default function ConfigRequestModal({
               options={matchingGridOptions}
               value={bitrateMatching}
               onChange={setBitrateMatching}
+              columns={2}
+              showCheckmark
+            />
+            <OptionGrid
+              label="Format Matching"
+              options={matchingGridOptions}
+              value={formatMatching}
+              onChange={setFormatMatching}
+              columns={2}
+              showCheckmark
+              disabled={losslessActive}
+            />
+          </div>
+
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">Peer Preferences</h3>
+            <OptionGrid
+              label="Min Upload Speed"
+              options={uploadSpeedGridOptions}
+              value={minUploadSpeed}
+              onChange={setMinUploadSpeed}
+              columns={4}
+            />
+            <OptionGrid
+              label="Availability"
+              options={availabilityGridOptions}
+              value={availability}
+              onChange={setAvailability}
               columns={2}
               showCheckmark
             />
