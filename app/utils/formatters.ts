@@ -43,6 +43,14 @@ export function formatTimestamp(date: Date): string {
   });
 }
 
+export function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 export function formatTrackDuration(durationMs: number): string {
   const minutes = Math.floor(durationMs / 60000);
   const seconds = Math.floor((durationMs % 60000) / 1000);

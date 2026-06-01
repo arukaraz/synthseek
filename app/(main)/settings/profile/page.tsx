@@ -1,7 +1,7 @@
 "use client";
 
-import { SettingsPagePlaceholder } from "@features/settings/components/SettingsPagePlaceholder";
+import { ProfileSection } from "@features/settings/sections/ProfileSection/ProfileSection";
 
 export default function ProfilePage() {
-  return <SettingsPagePlaceholder title="Profile" message="Account details and preferences." />;
+  return <ProfileSection />;
 }
