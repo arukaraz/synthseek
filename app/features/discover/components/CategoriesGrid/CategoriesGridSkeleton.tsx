@@ -1,22 +1,19 @@
 import { gradientOverlay } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
+
+import { WidgetHeaderSkeleton } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { SIZE_PATTERN } from "./constants";
+import { panelBody, skeletonMosaic } from "./styles";
 
 export function CategoriesGridSkeleton() {
   return (
-    <div className={glassPanelCard()}>
+    <div className={glassPanelCard({ width: "full" })} aria-label="Genres">
       <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
 
-      <div className="relative flex flex-1 flex-col">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="space-y-2">
-            <div className="bg-fg/10 h-5 w-20 animate-pulse rounded" />
-            <div className="bg-fg/10 h-3 w-32 animate-pulse rounded" />
-          </div>
-          <div className="bg-fg/10 h-4 w-14 animate-pulse rounded" />
-        </div>
-        <div className="grid grid-flow-dense auto-rows-[100px] grid-cols-2 gap-3">
+      <div className={panelBody()}>
+        <WidgetHeaderSkeleton />
+        <div className={skeletonMosaic()}>
           {SIZE_PATTERN.map((size, i) => (
             <div
               key={i}

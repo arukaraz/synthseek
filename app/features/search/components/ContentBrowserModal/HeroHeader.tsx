@@ -60,19 +60,19 @@ export function HeroHeader({
             {isArtist && <Badge className="type-badge type-badge-artist mb-2">Artist</Badge>}
 
             <h1
-              className="text-overlay-fg text-2xl font-bold drop-shadow-lg sm:text-3xl lg:text-4xl"
+              className="text-overlay-fg text-xl font-bold drop-shadow-lg sm:text-2xl lg:text-3xl"
               data-cy="content-browser-title"
             >
               {title}
             </h1>
 
             {subtitle && (
-              <p className="text-overlay-fg/80 text-sm" data-cy="content-browser-subtitle">
+              <p className="text-overlay-fg/80 text-xs" data-cy="content-browser-subtitle">
                 {subtitle}
               </p>
             )}
 
-            {metadataText && <p className="text-overlay-fg/60 text-sm">{metadataText}</p>}
+            {metadataText && <p className="text-overlay-fg/60 text-xs">{metadataText}</p>}
           </div>
 
           {showRequestButton && onRequestAll ? (

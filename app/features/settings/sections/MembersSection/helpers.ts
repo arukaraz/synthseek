@@ -1,4 +1,5 @@
 import { Role } from "@api/__generated__/types";
+import type { RoleTone } from "@components/ui/RoleChip";
 
 import type { MemberListItem, MemberSort } from "./types";
 
@@ -11,7 +12,7 @@ export function roleLabel(member: MemberListItem): string {
   return member.role === Role.enum.admin ? "Admin" : "User";
 }
 
-export function roleTone(member: MemberListItem): "owner" | "admin" | "member" {
+export function roleTone(member: MemberListItem): RoleTone {
   if (member.isOwner) return "owner";
   return member.role === Role.enum.admin ? "admin" : "member";
 }

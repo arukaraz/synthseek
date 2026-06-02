@@ -42,7 +42,9 @@ export function Toolbar() {
     <>
       <div className={toolbarContainer()}>
         <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
-          <ViewToggle />
+          <div className={cn(isSearchOpen && "hidden sm:block")}>
+            <ViewToggle />
+          </div>
 
           <div className={cn("bg-fg/10 h-4 w-px", isSearchOpen && "hidden sm:block")} />
 
@@ -68,10 +70,11 @@ export function Toolbar() {
                 "border-primary-500/30 bg-primary-500/10 text-primary-300",
                 "hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200"
               )}
-              aria-label="Retry all failed requests"
+              aria-label="Retry all failed"
+              title="Retry all failed"
             >
-              <RefreshCw className="mr-1.5 size-3.5" />
-              Retry All Failed
+              <RefreshCw className="size-3.5" />
+              <span className="hidden sm:inline">Retry all failed</span>
             </Button>
           )}
           <ImportProviderMenu />

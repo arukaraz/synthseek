@@ -1,9 +1,9 @@
 "use client";
 
 import { ContentType } from "@api/__generated__/types";
-import { Button } from "@components/ui/Button";
 import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
+import { primaryGradientButton } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { Download, Zap } from "lucide-react";
@@ -73,10 +73,17 @@ export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
             <div className={heroEyebrow()}>Latest release</div>
             <h2 className={heroTitle()}>{trackName}</h2>
             <p className={heroSubtitle()}>{artistName}</p>
-            <Button size="sm" variant="default" onClick={handleRequest} aria-label={`Request ${trackName}`}>
-              <Download className="mr-1.5 h-3.5 w-3.5" />
+            <motion.button
+              type="button"
+              className={primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" })}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleRequest}
+              aria-label={`Request ${trackName}`}
+            >
+              <Download className="h-3.5 w-3.5" />
               Request
-            </Button>
+            </motion.button>
           </motion.div>
         </AnimatePresence>
       </div>

@@ -1,16 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const sectionFrame = cva("flex min-w-0 flex-col gap-4");
-
-export const headerRow = cva("flex items-end justify-between");
-
-export const headerLink = cva(
-  "text-primary-400 hover:text-primary-300 inline-flex items-center gap-1 text-[11px] font-medium transition-colors"
-);
-
-export const stripFrame = cva(
-  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 relative overflow-hidden rounded-xl border bg-linear-to-br"
-);
+export const stripFrame = cva("relative -mx-1 overflow-hidden rounded-lg");
 
 export const stripScroller = cva(
   "no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -38,7 +28,7 @@ export const stripEdgeButton = cva(
   "text-fg/80 hover:text-fg pointer-events-auto rounded-full p-1.5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fg/40 disabled:pointer-events-none"
 );
 
-export const skeletonStrip = cva("border-fg/10 bg-surface/40 flex animate-pulse overflow-hidden rounded-xl border");
+export const skeletonStrip = cva("-mx-1 flex animate-pulse overflow-hidden rounded-lg");
 
 export const skeletonCell = cva(
   "border-fg/5 flex w-full shrink-0 flex-col gap-2 border-r p-4 sm:w-1/2 md:w-1/3 xl:w-1/5 last:border-r-0"

@@ -1,27 +1,24 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const closeButton = cva(
-  "absolute z-20 rounded-lg p-1.5 transition-all focus:outline-none disabled:pointer-events-none",
+  "absolute z-30 flex size-9 items-center justify-center rounded-full outline-none transition-[background-color,color,border-color] before:absolute before:-inset-1.5 before:content-[''] disabled:pointer-events-none",
   {
     variants: {
       position: {
-        topRight: "top-4 right-4",
+        topRight: "top-[max(1rem,env(safe-area-inset-top,0px))] right-[max(1rem,env(safe-area-inset-right,0px))]",
       },
-      color: {
-        muted: "text-fg/40 hover:bg-fg/10 hover:text-fg",
+      surface: {
+        frosted:
+          "border border-fg/15 bg-black/40 text-overlay-fg/70 backdrop-blur-md hover:border-fg/25 hover:bg-black/55 hover:text-overlay-fg active:bg-black/70 active:text-overlay-fg",
       },
       focus: {
-        primary: "ring-offset-background focus:ring-primary-500/50 focus:ring-2 focus:ring-offset-2",
-      },
-      state: {
-        openBg: "data-[state=open]:bg-fg/5",
+        accent: "focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 ring-offset-background",
       },
     },
     defaultVariants: {
       position: "topRight",
-      color: "muted",
-      focus: "primary",
-      state: "openBg",
+      surface: "frosted",
+      focus: "accent",
     },
   }
 );

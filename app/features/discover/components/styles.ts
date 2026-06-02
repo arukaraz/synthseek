@@ -232,7 +232,7 @@ export const topArtistsContainer = cva("mt-6 flex flex-1 flex-col border-t borde
 
 export type TopArtistsContainerProps = VariantProps<typeof topArtistsContainer>;
 
-export const scrollableGrid = cva("custom-scrollbar grid flex-1 content-start overflow-y-auto", {
+export const scrollableGrid = cva("grid flex-1 content-start overflow-y-auto", {
   variants: {
     cols: {
       2: "grid-cols-2 gap-x-6 gap-y-3",

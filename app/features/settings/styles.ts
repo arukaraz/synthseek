@@ -3,10 +3,10 @@ import { cva } from "class-variance-authority";
 export const layoutRoot = cva("flex h-full min-h-0");
 
 export const sidebar = cva(
-  "border-fg/10 bg-surface/30 h-full w-full shrink-0 flex-col gap-0.5 overflow-y-auto border-r p-3 md:w-60"
+  "border-fg/10 bg-surface/30 flex h-full w-full shrink-0 flex-col gap-0.5 overflow-y-auto border-r p-3 md:w-60"
 );
 
-export const sidebarFooter = cva("text-fg/40 mt-auto px-3 py-3 font-mono text-[11px]");
+export const sidebarFooter = cva("text-fg/70 mt-auto px-3 py-3 font-mono text-[11px] font-medium");
 
 export const contentScroll = cva("flex h-full min-h-0 flex-1 flex-col overflow-y-auto");
 
@@ -200,7 +200,7 @@ export const listManagerCount = cva("text-fg/45 text-[11px] font-semibold upperc
 export const listManagerAddRow = cva("flex items-center gap-2");
 
 export const listManagerListWrap = cva(
-  "custom-scrollbar border-fg/10 bg-fg/[0.02] flex max-h-64 min-h-[3rem] flex-col overflow-y-auto rounded-lg border"
+  "border-fg/10 bg-fg/[0.02] flex max-h-64 min-h-[3rem] flex-col overflow-y-auto rounded-lg border"
 );
 
 export const listManagerRow = cva(

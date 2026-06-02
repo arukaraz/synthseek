@@ -51,7 +51,7 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
           <h3 className="text-fg truncate font-medium" data-cy="content-item-name">
             {name}
           </h3>
-          <p className="text-fg/60 text-sm">
+          <p className="text-fg/60 text-xs">
             {[releaseYear, trackCount ? `${trackCount} ${trackCount === 1 ? "song" : "songs"}` : null]
               .filter(Boolean)
               .join(" • ")}
@@ -73,16 +73,16 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
 
     return (
       <div className={trackListContainer()} data-cy="content-list-item">
-        <div className="text-fg/50 w-8 shrink-0 text-center text-sm font-medium">{item.track_number}</div>
+        <div className="text-fg/50 w-8 shrink-0 text-center text-xs font-medium">{item.track_number}</div>
 
         <div className="min-w-0 flex-1">
           <h3 className="text-fg truncate font-medium" data-cy="content-item-name">
             {name}
           </h3>
-          {artistNames && <p className="text-fg/60 truncate text-sm">{artistNames}</p>}
+          {artistNames && <p className="text-fg/60 truncate text-xs">{artistNames}</p>}
         </div>
 
-        <div className="text-fg/50 hidden shrink-0 text-sm sm:block">{duration}</div>
+        <div className="text-fg/50 hidden shrink-0 text-xs sm:block">{duration}</div>
 
         <div className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
           <Button

@@ -9,19 +9,18 @@ import { useArtistSpotlight } from "@hooks/api/queries/useArtistSpotlight";
 import { useCountry } from "@modules/providers/CountryProvider";
 import { ContentType } from "@api/__generated__/types";
 import { gradientOverlay } from "@theme/utilities/styles";
+import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { fadeIn } from "@utils/animations";
 import { getCountryByCode } from "@utils/countries";
 import { motion } from "framer-motion";
 import { AlertCircle, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
 import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
 import { ARTIST_SPOTLIGHT_COUNT } from "./constants";
 
 export function ArtistSpotlight() {
-  const router = useRouter();
   const { country } = useCountry();
   const countryData = getCountryByCode(country);
   const countryName = countryData?.name || "United States";
@@ -34,11 +33,6 @@ export function ArtistSpotlight() {
   const [showConfigRequestModal, setShowConfigRequestModal] = useState(false);
   const [selectedContentToRequest, setSelectedContentToRequest] = useState<MusicItem | null>(null);
   const [parentAlbumFromContext, setParentAlbumFromContext] = useState<MusicItem | null>(null);
-
-  const handleSeeMore = () => {
-    const query = `top artists in ${countryName}`;
-    router.push(`/search?q=${encodeURIComponent(query)}&filter=artist`);
-  };
 
   const handleArtistClick = (artist: MusicItem) => {
     setSelectedArtist(artist);
@@ -67,23 +61,22 @@ export function ArtistSpotlight() {
 
   return (
     <>
-      <motion.div variants={fadeIn} initial="hidden" animate="visible" className={glassPanelCard({ height: "auto" })}>
+      <motion.section
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+        className={glassPanelCard({ height: "auto" })}
+        aria-labelledby="artist-spotlight-heading"
+      >
         <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
 
         <div className="relative flex flex-1 flex-col">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <h3 className="text-fg text-lg font-semibold">Artist Spotlight</h3>
-              <p className="text-fg/60 text-xs">Top artists in your region</p>
-            </div>
-            <button
-              onClick={handleSeeMore}
-              aria-label="View all artists"
-              className="text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors"
-            >
-              See more →
-            </button>
-          </div>
+          <WidgetHeader
+            icon={Users}
+            title="Artist Spotlight"
+            subtitle="Top artists in your region"
+            titleId="artist-spotlight-heading"
+          />
 
           {isLoading && <ArtistSpotlightSkeleton />}
 
@@ -112,7 +105,7 @@ export function ArtistSpotlight() {
             </div>
           )}
         </div>
-      </motion.div>
+      </motion.section>
 
       {selectedArtist && (
         <ContentBrowserModal

@@ -5,6 +5,7 @@ import { Download } from "lucide-react";
 import { Button } from "@components/ui/Button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/Tooltip";
 import { primaryGradientButton } from "@theme/utilities/styles";
+import { cn } from "@utils/cn";
 
 import type { RequestAllButtonProps } from "./types";
 
@@ -14,10 +15,13 @@ export function RequestAllButton({ onRequestAll, disabled, tooltip }: RequestAll
       onClick={onRequestAll}
       disabled={disabled}
       size="lg"
-      className={`${primaryGradientButton({ size: "lg", glow: "primary", hover: "lighten" })} text-overlay-fg shrink-0 font-semibold`}
+      className={cn(
+        primaryGradientButton({ size: "lg", glow: "primary", hover: "lighten" }),
+        "text-overlay-fg shrink-0 text-sm font-semibold"
+      )}
       data-cy="content-browser-request-all-btn"
     >
-      <Download className="h-5 w-5 sm:mr-2" />
+      <Download className="h-4 w-4 sm:mr-2" />
       <span className="hidden sm:inline">Request</span>
     </Button>
   );

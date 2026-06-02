@@ -26,7 +26,7 @@ export const toolbarActions = cva("flex items-center gap-2");
 export const exportActions = cva("flex flex-wrap items-center gap-3");
 
 export const logTerminal = cva(
-  "custom-scrollbar border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] overflow-auto rounded-lg border bg-black/40 p-3 font-mono text-xs leading-relaxed"
+  "border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] overflow-auto rounded-lg border bg-black/40 p-3 font-mono text-xs leading-relaxed"
 );
 
 export const logLine = cva("whitespace-pre-wrap break-words");

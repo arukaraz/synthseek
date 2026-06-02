@@ -70,17 +70,31 @@ export const clearButton = cva(
 export type ClearButtonProps = VariantProps<typeof clearButton>;
 
 export const headerTab = cva(
-  "relative flex h-9 items-center gap-2 rounded-md px-3 text-sm transition-colors [&_svg]:size-4 [&_svg]:shrink-0",
+  "relative h-9 items-center gap-2 rounded-md px-3 text-sm transition-colors [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       active: {
         true: "text-fg",
         false: "text-fg/55 hover:text-fg/85 hover:bg-fg/5",
       },
+      mobile: {
+        show: "flex",
+        hide: "hidden sm:flex",
+      },
     },
-    defaultVariants: { active: false },
+    defaultVariants: { active: false, mobile: "show" },
   }
 );
+
+export const headerTabLabel = cva("font-medium", {
+  variants: {
+    mobile: {
+      show: "inline",
+      hide: "hidden md:inline",
+    },
+  },
+  defaultVariants: { mobile: "hide" },
+});
 
 export const headerTabUnderline = cva("absolute -bottom-[3px] left-3 right-3 h-[2px] rounded-full bg-primary-500");
 
@@ -88,7 +102,9 @@ export const headerTabBadge = cva(
   "ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent-500/20 px-1.5 text-[10px] font-semibold text-accent-200"
 );
 
-export const searchShell = cva("relative flex w-full items-center rounded-xl border transition-all", {
+export const searchForm = cva("mx-auto w-full min-w-0 max-w-md flex-1 sm:max-w-lg lg:max-w-xl");
+
+export const searchShell = cva("relative flex w-full min-w-0 items-center rounded-xl border transition-all", {
   variants: {
     focused: {
       true: "border-primary-500/50 bg-primary-500/5 shadow-primary-500/20 shadow-lg",
@@ -98,7 +114,9 @@ export const searchShell = cva("relative flex w-full items-center rounded-xl bor
   defaultVariants: { focused: false },
 });
 
-export const searchInput = cva("text-fg placeholder-fg/35 h-10 w-full bg-transparent pr-20 pl-10 text-sm outline-none");
+export const searchInput = cva(
+  "text-fg placeholder-fg/35 h-10 w-full min-w-0 bg-transparent pr-10 pl-10 text-sm outline-none sm:pr-20"
+);
 
 export const searchKbdHint = cva(
   "pointer-events-none absolute right-3 hidden items-center gap-1 rounded-md border border-fg/10 bg-fg/5 px-1.5 py-0.5 font-mono text-[10px] text-fg/45 sm:inline-flex"

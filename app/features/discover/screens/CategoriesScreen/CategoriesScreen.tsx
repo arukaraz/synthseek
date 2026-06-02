@@ -31,7 +31,7 @@ export function CategoriesScreen() {
         </div>
       </div>
 
-      <div className="custom-scrollbar flex-1 overflow-auto p-4 sm:p-6">
+      <div className="flex-1 overflow-auto p-4 sm:p-6">
         {isLoading ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 12 }).map((_, i) => (

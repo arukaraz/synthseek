@@ -1,36 +1,14 @@
 "use client";
 
-import { Trophy } from "lucide-react";
-
+import { WidgetHeaderSkeleton } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { SKELETON_LIST_PLACEHOLDERS } from "./constants";
-import {
-  body,
-  headerTitleRow,
-  headerTitleStack,
-  list,
-  sectionIcon,
-  skeletonHero,
-  skeletonRow,
-  widgetHeader,
-  widgetSub,
-  widgetTitle,
-} from "./styles";
+import { body, list, skeletonHero, skeletonRow } from "./styles";
 
 export function TopTracksSkeleton() {
   return (
-    <section className={glassPanelCard({ height: "auto" })}>
-      <header className={widgetHeader()}>
-        <div className={headerTitleStack()}>
-          <div className={headerTitleRow()}>
-            <span className={sectionIcon()}>
-              <Trophy className="size-4" />
-            </span>
-            <h2 className={widgetTitle()}>Top Tracks</h2>
-          </div>
-          <p className={widgetSub()}>Most played · all time · Last.fm</p>
-        </div>
-      </header>
+    <section className={glassPanelCard({ height: "auto" })} aria-label="Top Tracks">
+      <WidgetHeaderSkeleton />
       <div className={body()}>
         <div className={skeletonHero()} />
         <div className={list()}>

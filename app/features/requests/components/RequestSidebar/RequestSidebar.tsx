@@ -2,7 +2,7 @@
 
 import { RequestsEmptyState } from "../RequestsEmptyState";
 import { RequestSidebarItem } from "./RequestSidebarItem";
-import { sidebarContainer, sidebarList } from "./styles";
+import { sidebarContainer, sidebarList, sidebarListItem } from "./styles";
 import type { RequestSidebarProps } from "./types";
 
 export function RequestSidebar({ items, selectedId, onSelect, searchQuery, className }: RequestSidebarProps) {
@@ -20,7 +20,7 @@ export function RequestSidebar({ items, selectedId, onSelect, searchQuery, class
     <div className={`${sidebarContainer()} ${className ?? ""}`} data-cy="requests-sidebar">
       <ul className={sidebarList()}>
         {items.map((item) => (
-          <li key={item.id}>
+          <li key={item.id} className={sidebarListItem()}>
             <RequestSidebarItem request={item} isSelected={item.id === selectedId} onSelect={() => onSelect(item.id)} />
           </li>
         ))}

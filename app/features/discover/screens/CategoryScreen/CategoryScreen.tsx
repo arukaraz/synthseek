@@ -84,7 +84,7 @@ export function CategoryScreen() {
         </div>
       </div>
 
-      <div className="custom-scrollbar flex-1 overflow-auto p-4 sm:p-6">
+      <div className="flex-1 overflow-auto p-4 sm:p-6">
         {isLoading ? (
           <ContentSkeleton />
         ) : isError ? (

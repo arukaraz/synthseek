@@ -94,7 +94,7 @@ export function SearchResultsWidget() {
           </div>
         </div>
 
-        <div className="custom-scrollbar flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto">
           <div className="p-4 sm:p-6">
             <div className="space-y-6 sm:space-y-8">
               {["Playlists", "Artists", "Albums", "Songs"].map((section) => (
@@ -132,7 +132,7 @@ export function SearchResultsWidget() {
         )}
       </div>
 
-      <div className="custom-scrollbar flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto">
         <AnimatePresence mode="wait">
           {isFilterTransitioning ? (
             <motion.div

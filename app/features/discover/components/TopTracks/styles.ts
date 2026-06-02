@@ -1,19 +1,5 @@
 import { cva } from "class-variance-authority";
 
-export const widgetHeader = cva("mb-4 flex items-start justify-between gap-3");
-
-export const headerTitleStack = cva("flex flex-col gap-0.5");
-
-export const headerTitleRow = cva("flex items-center gap-2");
-
-export const widgetTitle = cva("text-fg text-base font-semibold sm:text-lg");
-
-export const widgetSub = cva("text-fg/55 text-xs");
-
-export const sectionIcon = cva(
-  "bg-primary-500/15 text-primary-400 flex size-7 items-center justify-center rounded-lg border border-primary-500/25"
-);
-
 export const body = cva("flex flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-5");
 
 export const hero = cva(

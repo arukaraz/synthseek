@@ -4,11 +4,6 @@ export interface RecentRequestCardProps {
   request: FlatTrackRow;
 }
 
-export interface RecentRequestsHeaderProps {
-  onOpen: () => void;
-  limit: number;
-}
-
 export interface RecentRequestsStripProps {
   items: FlatTrackRow[];
 }

@@ -123,16 +123,19 @@ export const resultsView = cva("from-primary-500/5 via-primary-400/0 relative fl
 
 export type ResultsViewProps = VariantProps<typeof resultsView>;
 
-export const modalContainer = cva("h-modal-max !flex flex-col gap-0 overflow-hidden p-0 shadow-2xl", {
-  variants: {
-    size: {
-      lg: "max-w-4xl",
+export const modalContainer = cva(
+  "h-modal-max bg-surface/95 sm:bg-surface/90 sm:backdrop-blur-2xl !flex flex-col gap-0 overflow-hidden p-0 shadow-2xl",
+  {
+    variants: {
+      size: {
+        lg: "max-w-4xl",
+      },
     },
-  },
-  defaultVariants: {
-    size: "lg",
-  },
-});
+    defaultVariants: {
+      size: "lg",
+    },
+  }
+);
 
 export type ModalContainerProps = VariantProps<typeof modalContainer>;
 

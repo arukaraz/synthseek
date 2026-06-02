@@ -27,6 +27,7 @@ import {
   UPLOAD_SPEED_OPTIONS,
 } from "./consts";
 import { extractItemMetadata, getItemDisplayName, mapTrackFields } from "./helpers";
+import { configDialogContent } from "./styles";
 import type { AvailabilityMode, ConfigRequestModalProps, Option, QualityMode } from "./types";
 
 export function ConfigRequestModal({
@@ -208,7 +209,7 @@ export function ConfigRequestModal({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
         data-cy="download-config-modal"
-        className="max-w-[95vw] gap-0 p-0 shadow-2xl sm:max-w-lg"
+        className={configDialogContent()}
         aria-describedby="config-modal-description"
       >
         <DialogTitle className="sr-only">

@@ -6,4 +6,6 @@ export interface HeaderTabProps {
   label: string;
   isActive: boolean;
   badge?: number;
+  hideOnMobile?: boolean;
+  labelOnMobile?: boolean;
 }

@@ -1,5 +1,10 @@
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
+
+export type AvatarSize = "sm" | "md" | "lg";
 
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
-  size?: "sm" | "md" | "lg";
+  size?: AvatarSize;
+  imageUrl?: string | null;
+  username?: string;
+  children?: ReactNode;
 }

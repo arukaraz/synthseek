@@ -2,8 +2,7 @@
 
 import { ContentShell } from "@components/ContentShell";
 import { TopHeader } from "@components/TopHeader";
-import { UpdateBanner } from "@components/UpdateBanner/UpdateBanner";
-import { useSubscriptions, useVersionState } from "@hooks/api/subscriptions";
+import { useSubscriptions } from "@hooks/api/subscriptions";
 import { useHashTargetGlow } from "@hooks/ui/useHashTargetGlow";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -12,7 +11,6 @@ import type { MainLayoutContentProps } from "./types";
 export function MainLayoutContent({ children }: MainLayoutContentProps) {
   useSubscriptions();
   useHashTargetGlow();
-  const { updateAvailable, latestVersion, currentVersion } = useVersionState();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,9 +28,6 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
 
   return (
     <div className="bg-surface min-h-screen overflow-hidden">
-      {updateAvailable && latestVersion && (
-        <UpdateBanner latestVersion={latestVersion} currentVersion={currentVersion} />
-      )}
       <TopHeader onSearch={handleSearch} initialQuery={searchQuery} />
       <ContentShell>{children}</ContentShell>
     </div>

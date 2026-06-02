@@ -10,12 +10,19 @@ export const sidebarContainer = cva(
 
 export type SidebarContainerProps = VariantProps<typeof sidebarContainer>;
 
-export const sidebarList = cva("custom-scrollbar flex-1 overflow-y-auto", {
+export const sidebarList = cva("flex-1 overflow-y-auto", {
   variants: {},
   defaultVariants: {},
 });
 
 export type SidebarListProps = VariantProps<typeof sidebarList>;
+
+export const sidebarListItem = cva("even:bg-fg/[0.03]", {
+  variants: {},
+  defaultVariants: {},
+});
+
+export type SidebarListItemProps = VariantProps<typeof sidebarListItem>;
 
 export const sidebarItem = cva(
   "group/sidebar-item border-fg/5 hover:bg-fg/5 relative flex w-full flex-col gap-1.5 border-b px-4 py-3 text-left transition-colors active:bg-primary-500/10",

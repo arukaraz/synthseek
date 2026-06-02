@@ -6,13 +6,14 @@ import { Trophy } from "lucide-react";
 import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
 
+import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { HERO_LIMIT, LIST_LIMIT } from "./constants";
 import { TopTrackHero } from "./TopTrackHero";
 import { TopTracksEmpty } from "./TopTracksEmpty";
 import { TopTracksList } from "./TopTracksList";
 import { TopTracksSkeleton } from "./TopTracksSkeleton";
-import { body, headerTitleRow, headerTitleStack, sectionIcon, widgetHeader, widgetSub, widgetTitle } from "./styles";
+import { body } from "./styles";
 
 export function TopTracks() {
   const { lfmConfig, topTracks, isLoading, isError } = useLastfmFeeds();
@@ -29,18 +30,19 @@ export function TopTracks() {
   const rest = topTracks.tracks.slice(HERO_LIMIT, HERO_LIMIT + LIST_LIMIT);
 
   return (
-    <motion.section variants={fadeIn} initial="hidden" animate="visible" className={glassPanelCard({ height: "auto" })}>
-      <header className={widgetHeader()}>
-        <div className={headerTitleStack()}>
-          <div className={headerTitleRow()}>
-            <span className={sectionIcon()}>
-              <Trophy className="size-4" />
-            </span>
-            <h2 className={widgetTitle()}>Top Tracks</h2>
-          </div>
-          <p className={widgetSub()}>Most played · all time · Last.fm</p>
-        </div>
-      </header>
+    <motion.section
+      variants={fadeIn}
+      initial="hidden"
+      animate="visible"
+      className={glassPanelCard({ height: "auto" })}
+      aria-labelledby="top-tracks-heading"
+    >
+      <WidgetHeader
+        icon={Trophy}
+        title="Top Tracks"
+        subtitle="Most played · all time · Last.fm"
+        titleId="top-tracks-heading"
+      />
       <div className={body()}>
         <TopTrackHero track={hero} />
         <TopTracksList tracks={rest} startRank={HERO_LIMIT + 1} />

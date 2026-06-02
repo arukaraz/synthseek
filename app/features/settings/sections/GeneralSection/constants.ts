@@ -1,11 +1,27 @@
-import { Moon, Sparkles, Sun, Waves } from "lucide-react";
+import { Moon, Sparkles, Waves } from "lucide-react";
 
-export const THEME_OPTIONS = [
-  { value: "light", label: "Light", icon: Sun },
-  { value: "dark", label: "Dark", icon: Moon },
-  { value: "midnight", label: "Midnight", icon: Sparkles },
-  { value: "ocean", label: "Ocean", icon: Waves },
-] as const;
+import type { RovingNavKey, ThemeOption } from "./types";
+
+export const THEME_CARD = {
+  title: "Theme",
+  description: "Pick the theme that matches your environment.",
+  groupLabel: "Color theme",
+} as const;
+
+export const THEME_OPTIONS: ReadonlyArray<ThemeOption> = [
+  { value: "dark", label: "Synthseek", icon: Moon, preview: "dark" },
+  { value: "midnight", label: "Midnight", icon: Sparkles, preview: "midnight" },
+  { value: "ocean", label: "Ocean", icon: Waves, preview: "ocean" },
+];
+
+export const ROVING_KEYS: ReadonlyArray<RovingNavKey> = [
+  "ArrowRight",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowUp",
+  "Home",
+  "End",
+];
 
 export const API_CARD = {
   title: "API",

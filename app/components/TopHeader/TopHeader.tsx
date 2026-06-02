@@ -17,6 +17,7 @@ import {
   decorativeLine,
   headerContainer,
   headerContent,
+  searchForm,
   searchGlow,
   searchInput,
   searchKbdHint,
@@ -83,16 +84,12 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
 
           <nav aria-label="Primary" className="flex items-center gap-0.5">
             <HeaderTab href="/" icon={Sparkles} label="Discover" isActive={isDiscoverActive} />
-            <HeaderTab href="/requests" icon={Menu} label="Requests" isActive={isRequestsActive} />
-            <HeaderTab href="/settings" icon={SettingsIcon} label="Settings" isActive={isSettingsActive} />
+            <HeaderTab href="/requests" icon={Menu} label="Requests" isActive={isRequestsActive} labelOnMobile />
+            <HeaderTab href="/settings" icon={SettingsIcon} label="Settings" isActive={isSettingsActive} hideOnMobile />
           </nav>
         </div>
 
-        <form
-          onSubmit={handleSearchSubmit}
-          className="mx-auto w-full max-w-md flex-1 sm:max-w-lg lg:max-w-xl"
-          data-cy="search-form"
-        >
+        <form onSubmit={handleSearchSubmit} className={searchForm()} data-cy="search-form">
           <motion.div
             className={searchShell({ focused: isFocused })}
             animate={{ scale: isFocused ? 1.01 : 1 }}

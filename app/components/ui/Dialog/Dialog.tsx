@@ -46,7 +46,7 @@ export function DialogContent({ className, children, ref, ...props }: DialogCont
         <div className="relative z-10 flex h-full flex-col">{children}</div>
 
         <DialogPrimitive.Close className={closeButton()}>
-          <X className="size-4" />
+          <X className="relative size-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>

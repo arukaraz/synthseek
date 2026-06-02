@@ -29,9 +29,6 @@ export const pill = cva("inline-flex items-center gap-1 rounded-full px-2 py-0.5
     tone: {
       plex: "bg-amber-500/15 text-amber-300 ring-amber-500/30",
       local: "ring-fg/10 bg-fg/5 text-fg/60",
-      owner: "bg-primary-500/15 text-primary-300 ring-primary-500/30",
-      admin: "bg-secondary-500/15 text-secondary-300 ring-secondary-500/30",
-      member: "ring-fg/10 bg-fg/5 text-fg/60",
     },
   },
 });

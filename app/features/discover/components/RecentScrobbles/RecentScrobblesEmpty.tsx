@@ -3,36 +3,17 @@
 import { Activity } from "lucide-react";
 import Link from "next/link";
 
+import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { EMPTY_COPY, SETTINGS_HREF } from "./constants";
-import {
-  emptyLink,
-  emptyPanel,
-  emptyText,
-  headerTitleRow,
-  headerTitleStack,
-  sectionIcon,
-  widgetHeader,
-  widgetSub,
-  widgetTitle,
-} from "./styles";
+import { emptyLink, emptyPanel, emptyText } from "./styles";
 import type { RecentScrobblesEmptyProps } from "./types";
 
 export function RecentScrobblesEmpty({ reason }: RecentScrobblesEmptyProps) {
   const copy = EMPTY_COPY[reason];
   return (
-    <section className={glassPanelCard({ height: "auto" })}>
-      <header className={widgetHeader()}>
-        <div className={headerTitleStack()}>
-          <div className={headerTitleRow()}>
-            <span className={sectionIcon()}>
-              <Activity className="size-4" />
-            </span>
-            <h2 className={widgetTitle()}>Recent Scrobbles</h2>
-          </div>
-          <p className={widgetSub()}>Last.FM</p>
-        </div>
-      </header>
+    <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-scrobbles-heading">
+      <WidgetHeader icon={Activity} title="Recent Scrobbles" subtitle="Last.fm" titleId="recent-scrobbles-heading" />
       <div className={emptyPanel()}>
         <p className={emptyText()}>{copy.text}</p>
         {copy.cta ? (

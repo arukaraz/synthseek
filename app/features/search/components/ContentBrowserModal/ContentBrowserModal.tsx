@@ -67,7 +67,7 @@ export function ContentBrowserModal({
           />
         </div>
 
-        <div className="custom-scrollbar min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
+        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
           <ContentList
             type={currentType}
             items={items}

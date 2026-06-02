@@ -2,15 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { UserAvatarMenu } from "../UserAvatarMenu";
 
-const mockSetTheme = vi.fn();
-
-vi.mock("next-themes", () => ({
-  useTheme: () => ({
-    theme: "dark",
-    setTheme: mockSetTheme,
-  }),
-}));
-
 vi.mock("@modules/providers/AuthProvider", () => ({
   useAuthContext: () => ({
     currentUser: {
@@ -22,6 +13,14 @@ vi.mock("@modules/providers/AuthProvider", () => ({
     },
     isAdmin: true,
     isLoading: false,
+  }),
+}));
+
+vi.mock("@hooks/api/subscriptions", () => ({
+  useVersionState: () => ({
+    latestVersion: null,
+    currentVersion: "1.0.0",
+    updateAvailable: false,
   }),
 }));
 
@@ -47,6 +46,11 @@ vi.mock("framer-motion", async () => {
         <div className={className} {...props}>
           {children}
         </div>
+      ),
+      span: ({ children, className, ...props }: React.ComponentProps<"span">) => (
+        <span className={className} {...props}>
+          {children}
+        </span>
       ),
     },
   };
@@ -91,12 +95,10 @@ describe("UserAvatarMenu", () => {
     expect(trigger).toHaveAttribute("data-state", "closed");
   });
 
-  it("renders user icon inside avatar", () => {
+  it("renders the username initial in the trigger avatar", () => {
     render(<UserAvatarMenu />);
 
     const trigger = screen.getByLabelText("User menu");
-    const svg = trigger.querySelector("svg");
-    expect(svg).toBeInTheDocument();
-    expect(svg).toHaveClass("lucide-user");
+    expect(trigger.textContent).toContain("T");
   });
 });

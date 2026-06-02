@@ -71,9 +71,10 @@
     --status-failed: var(--color-error);
     --status-cancelled: var(--color-gray-400);
 
-    --scrollbar-thumb: oklch(var(--neon-primary) / 0.4);
-    --scrollbar-thumb-hover: oklch(var(--neon-primary) / 0.6);
-    --scrollbar-track: oklch(0 0 0 / 0.3);
+    --scrollbar-thumb: oklch(var(--muted-foreground) / 0.32);
+    --scrollbar-thumb-hover: oklch(var(--muted-foreground) / 0.48);
+    --scrollbar-thumb-active: oklch(var(--muted-foreground) / 0.64);
+    --scrollbar-track: transparent;
 
     --selection-bg: oklch(var(--neon-primary) / 0.3);
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar } from "@components/ui/Avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,20 +8,33 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
 import { useLogout } from "@hooks/api/mutations/auth/useLogout";
+import { useVersionState } from "@hooks/api/subscriptions";
 import { useAuthContext } from "@modules/providers/AuthProvider";
+import { isBreakingUpdate } from "@utils/version";
 import { motion } from "framer-motion";
-import { LogOut, User } from "lucide-react";
+import { Loader2, LogOut, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { logoutItem, menuContent, triggerButton, userInfoContainer } from "./styles";
+
+import { MenuHeaderBlock } from "./components/MenuHeaderBlock";
+import { MenuUpdateSection } from "./components/MenuUpdateSection";
+import { TriggerAvatar } from "./components/TriggerAvatar";
+import { MENU_COPY, MENU_ROUTES } from "./constants";
+import { menuRoleLabel, menuRoleTone } from "./helpers";
+import { logoutItem, menuContent, navItem, triggerButton } from "./styles";
 
 export function UserAvatarMenu() {
-  const { currentUser } = useAuthContext();
+  const { currentUser, isAdmin } = useAuthContext();
+  const { updateAvailable, latestVersion, currentVersion } = useVersionState();
   const logout = useLogout();
   const router = useRouter();
 
   if (!currentUser) return null;
 
+  const showUpdate = updateAvailable && latestVersion !== null;
+  const breaking = isBreakingUpdate(currentVersion, latestVersion);
+
   const handleLogout = async () => {
+    if (logout.isPending) return;
     try {
       await logout.mutateAsync();
     } finally {
@@ -34,34 +46,64 @@ export function UserAvatarMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <motion.button
+          type="button"
           className={triggerButton()}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           aria-label="User menu"
         >
-          <Avatar size="md">
-            <User className="text-fg/70 h-4 w-4" />
-          </Avatar>
+          <TriggerAvatar
+            username={currentUser.username}
+            avatarUrl={currentUser.avatar_url}
+            updateAvailable={updateAvailable}
+          />
         </motion.button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" sideOffset={8} className={menuContent()}>
-        <div className={userInfoContainer()}>
-          <Avatar size="lg" className="shrink-0">
-            <User className="text-fg/70 h-5 w-5" />
-          </Avatar>
+        <MenuHeaderBlock
+          username={currentUser.username}
+          email={currentUser.email}
+          avatarUrl={currentUser.avatar_url}
+          roleTone={menuRoleTone(currentUser.role)}
+          roleLabel={menuRoleLabel(currentUser.role)}
+        />
 
-          <div className="flex min-w-0 flex-col">
-            <span className="text-fg truncate text-sm font-semibold">{currentUser.username}</span>
-            <span className="text-fg/50 truncate text-xs">{currentUser.email}</span>
-          </div>
-        </div>
+        {showUpdate ? (
+          <MenuUpdateSection latestVersion={latestVersion} currentVersion={currentVersion} breaking={breaking} />
+        ) : null}
 
-        <DropdownMenuSeparator className="bg-fg/10 my-1.5" />
+        <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={handleLogout} disabled={logout.isPending} className={logoutItem()}>
-          <LogOut className="h-4 w-4" />
-          <span className="text-sm">{logout.isPending ? "Signing out..." : "Log out"}</span>
+        <DropdownMenuItem className={navItem()} onSelect={() => router.push(MENU_ROUTES.settings)}>
+          <SettingsIcon />
+          <span>{MENU_COPY.settings}</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem className={navItem()} onSelect={() => router.push(MENU_ROUTES.profile)}>
+          <User />
+          <span>{MENU_COPY.profile}</span>
+        </DropdownMenuItem>
+
+        {isAdmin ? (
+          <DropdownMenuItem className={navItem()} onSelect={() => router.push(MENU_ROUTES.members)}>
+            <Users />
+            <span>{MENU_COPY.members}</span>
+          </DropdownMenuItem>
+        ) : null}
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          className={logoutItem()}
+          disabled={logout.isPending}
+          onSelect={(event) => {
+            event.preventDefault();
+            void handleLogout();
+          }}
+        >
+          {logout.isPending ? <Loader2 className="animate-spin" /> : <LogOut />}
+          <span>{logout.isPending ? MENU_COPY.loggingOut : MENU_COPY.logout}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

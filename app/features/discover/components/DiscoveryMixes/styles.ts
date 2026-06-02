@@ -1,15 +1,5 @@
 import { cva } from "class-variance-authority";
 
-export const widgetHeader = cva("mb-4 flex items-center gap-3");
-
-export const widgetIcon = cva(
-  "bg-primary-500/15 text-primary-300 flex size-8 shrink-0 items-center justify-center rounded-lg"
-);
-
-export const widgetTitle = cva("text-fg text-base font-semibold sm:text-lg");
-
-export const widgetSubtitle = cva("text-fg/55 text-xs");
-
 export const mixGrid = cva("grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4");
 
 export const mixCard = cva(

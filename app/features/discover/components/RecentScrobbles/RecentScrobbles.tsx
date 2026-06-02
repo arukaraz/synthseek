@@ -1,25 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Activity, ArrowRight } from "lucide-react";
+import { Activity } from "lucide-react";
 
 import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
 
+import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { LASTFM_USER_URL_BASE } from "./constants";
 import { RecentScrobblesEmpty } from "./RecentScrobblesEmpty";
 import { RecentScrobblesRail } from "./RecentScrobblesRail";
 import { RecentScrobblesSkeleton } from "./RecentScrobblesSkeleton";
-import {
-  headerTitleRow,
-  headerTitleStack,
-  sectionIcon,
-  seeMoreLink,
-  widgetHeader,
-  widgetSub,
-  widgetTitle,
-} from "./styles";
 
 export function RecentScrobbles() {
   const { lfmConfig, recentScrobbles, isLoading, isError } = useLastfmFeeds();
@@ -40,21 +32,20 @@ export function RecentScrobbles() {
   const seeMoreHref = `${LASTFM_USER_URL_BASE}/${encodeURIComponent(lfmConfig.username)}`;
 
   return (
-    <motion.section variants={fadeIn} initial="hidden" animate="visible" className={glassPanelCard({ height: "auto" })}>
-      <header className={widgetHeader()}>
-        <div className={headerTitleStack()}>
-          <div className={headerTitleRow()}>
-            <span className={sectionIcon()}>
-              <Activity className="size-4" />
-            </span>
-            <h2 className={widgetTitle()}>Recent Scrobbles</h2>
-          </div>
-          <p className={widgetSub()}>Last.FM</p>
-        </div>
-        <a href={seeMoreHref} target="_blank" rel="noopener noreferrer" className={seeMoreLink()}>
-          See more <ArrowRight className="size-3" />
-        </a>
-      </header>
+    <motion.section
+      variants={fadeIn}
+      initial="hidden"
+      animate="visible"
+      className={glassPanelCard({ height: "auto" })}
+      aria-labelledby="recent-scrobbles-heading"
+    >
+      <WidgetHeader
+        icon={Activity}
+        title="Recent Scrobbles"
+        subtitle="Last.fm"
+        titleId="recent-scrobbles-heading"
+        action={{ label: "See more", ariaLabel: "Open Last.fm profile", href: seeMoreHref, external: true }}
+      />
       <RecentScrobblesRail scrobbles={scrobbles} />
     </motion.section>
   );

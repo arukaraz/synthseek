@@ -5,11 +5,12 @@ import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { WidgetHeader } from "../WidgetHeader";
+import { glassPanelCard } from "../styles";
 import { useRecentRequests } from "../../hooks/useRecentRequests";
-import { RecentRequestsHeader } from "./RecentRequestsHeader";
 import { RecentRequestsSkeleton } from "./RecentRequestsSkeleton";
 import { RecentRequestsStrip } from "./RecentRequestsStrip";
-import { sectionFrame } from "./styles";
 
 export function RecentRequests() {
   const router = useRouter();
@@ -19,10 +20,20 @@ export function RecentRequests() {
     router.push("/requests");
   };
 
+  const header = (
+    <WidgetHeader
+      icon={Download}
+      title="Recent requests"
+      subtitle={`Last ${limit} downloads`}
+      titleId="recent-requests-heading"
+      action={{ label: "Open Requests", ariaLabel: "Open requests page", onClick: handleOpenRequests }}
+    />
+  );
+
   if (isLoading) {
     return (
-      <section className={sectionFrame()}>
-        <RecentRequestsHeader onOpen={handleOpenRequests} limit={limit} />
+      <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-requests-heading">
+        {header}
         <RecentRequestsSkeleton />
       </section>
     );
@@ -30,8 +41,8 @@ export function RecentRequests() {
 
   if (isError) {
     return (
-      <section className={sectionFrame()}>
-        <RecentRequestsHeader onOpen={handleOpenRequests} limit={limit} />
+      <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-requests-heading">
+        {header}
         <EmptyState
           icon={AlertCircle}
           title="Failed to load requests"
@@ -43,8 +54,8 @@ export function RecentRequests() {
 
   if (recent.length === 0) {
     return (
-      <section className={sectionFrame()}>
-        <RecentRequestsHeader onOpen={handleOpenRequests} limit={limit} />
+      <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-requests-heading">
+        {header}
         <EmptyState
           icon={Download}
           title="No requests yet"
@@ -59,10 +70,10 @@ export function RecentRequests() {
       variants={fadeIn}
       initial="hidden"
       animate="visible"
-      className={sectionFrame()}
-      aria-label="Recent requests"
+      className={glassPanelCard({ height: "auto" })}
+      aria-labelledby="recent-requests-heading"
     >
-      <RecentRequestsHeader onOpen={handleOpenRequests} limit={limit} />
+      {header}
       <RecentRequestsStrip items={recent} />
     </motion.section>
   );

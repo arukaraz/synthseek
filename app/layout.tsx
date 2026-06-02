@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={`${fontVariables} antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="data-theme"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           themes={AVAILABLE_THEMES}
           disableTransitionOnChange

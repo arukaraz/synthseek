@@ -3,15 +3,18 @@
 import { EmptyState } from "@components/ui/EmptyState";
 import { useCategories } from "@hooks/api/queries/useCategories";
 import { gradientOverlay } from "@theme/utilities/styles";
-import { glassPanelCard } from "../styles";
 import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Grid3X3 } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { WidgetHeader } from "../WidgetHeader";
+import { glassPanelCard } from "../styles";
 import { CategoriesGridSkeleton } from "./CategoriesGridSkeleton";
 import { CategoryCard } from "./CategoryCard";
 import { CATEGORIES_LIMIT } from "./constants";
 import { getCardSize } from "./helpers";
+import { mosaicGrid, panelBody, emptyWrap } from "./styles";
 
 export function CategoriesGrid() {
   const router = useRouter();
@@ -32,49 +35,68 @@ export function CategoriesGrid() {
 
   if (isError) {
     return (
-      <div className={glassPanelCard()}>
+      <section className={glassPanelCard({ width: "full" })} aria-labelledby="genres-heading">
         <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
-        <div className="relative">
-          <EmptyState
-            icon={AlertCircle}
-            title="Failed to load genres"
-            description="Unable to fetch genres. Please try again later."
+        <div className={panelBody()}>
+          <WidgetHeader
+            icon={Grid3X3}
+            title="Genres"
+            subtitle="Explore music by category"
+            titleId="genres-heading"
+            action={{ label: "See all", ariaLabel: "See all genres", onClick: handleSeeAll }}
           />
+          <div className={emptyWrap()}>
+            <EmptyState
+              icon={AlertCircle}
+              title="Failed to load genres"
+              description="Unable to fetch genres. Please try again later."
+            />
+          </div>
         </div>
-      </div>
+      </section>
     );
   }
 
   if (categories.length === 0) {
     return (
-      <div className={glassPanelCard()}>
+      <section className={glassPanelCard({ width: "full" })} aria-labelledby="genres-heading">
         <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
-        <div className="relative">
-          <EmptyState icon={Grid3X3} title="No Genres" description="No browse categories available at this time." />
+        <div className={panelBody()}>
+          <WidgetHeader
+            icon={Grid3X3}
+            title="Genres"
+            subtitle="Explore music by category"
+            titleId="genres-heading"
+            action={{ label: "See all", ariaLabel: "See all genres", onClick: handleSeeAll }}
+          />
+          <div className={emptyWrap()}>
+            <EmptyState icon={Grid3X3} title="No Genres" description="No browse categories available at this time." />
+          </div>
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <motion.div variants={fadeIn} initial="hidden" animate="visible" className={glassPanelCard()}>
+    <motion.section
+      variants={fadeIn}
+      initial="hidden"
+      animate="visible"
+      className={glassPanelCard({ width: "full" })}
+      aria-labelledby="genres-heading"
+    >
       <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
 
-      <div className="relative flex flex-1 flex-col">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-fg text-lg font-semibold">Genres</h3>
-            <p className="text-fg/60 text-xs">Explore music by category</p>
-          </div>
-          <button
-            onClick={handleSeeAll}
-            className="text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors"
-          >
-            See all
-          </button>
-        </div>
+      <div className={panelBody()}>
+        <WidgetHeader
+          icon={Grid3X3}
+          title="Genres"
+          subtitle="Explore music by category"
+          titleId="genres-heading"
+          action={{ label: "See all", ariaLabel: "See all genres", onClick: handleSeeAll }}
+        />
 
-        <div className="grid grid-flow-dense auto-rows-[100px] grid-cols-2 gap-3">
+        <div className={mosaicGrid()}>
           {categories.slice(0, CATEGORIES_LIMIT).map((category, index) => (
             <CategoryCard
               key={category.id}
@@ -85,6 +107,6 @@ export function CategoriesGrid() {
           ))}
         </div>
       </div>
-    </motion.div>
+    </motion.section>
   );
 }

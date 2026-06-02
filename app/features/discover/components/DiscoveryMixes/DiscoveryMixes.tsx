@@ -10,6 +10,7 @@ import { ContentBrowserModal } from "@features/search/components/ContentBrowserM
 import { useDiscoveryMixes } from "@hooks/api/queries/discovery/useDiscoveryMixes";
 import { fadeIn } from "@utils/animations";
 
+import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { DiscoveryMixCard } from "./DiscoveryMixCard";
 import { DiscoveryMixCardEmpty } from "./DiscoveryMixCardEmpty";
@@ -17,7 +18,7 @@ import { DiscoveryMixesEmpty } from "./DiscoveryMixesEmpty";
 import { DiscoveryMixesSkeleton } from "./DiscoveryMixesSkeleton";
 import { AUTO_REQUEST_TOOLTIP, LB_KIND_METADATA } from "./constants";
 import { synthesizePlaylist, synthesizeTrack } from "./helpers";
-import { mixGrid, widgetHeader, widgetIcon, widgetSubtitle, widgetTitle } from "./styles";
+import { mixGrid } from "./styles";
 import type { ReadyMix } from "./types";
 
 export function DiscoveryMixes() {
@@ -74,16 +75,9 @@ export function DiscoveryMixes() {
         initial="hidden"
         animate="visible"
         className={glassPanelCard({ height: "auto" })}
+        aria-labelledby="discover-mixes-heading"
       >
-        <header className={widgetHeader()}>
-          <span className={widgetIcon()}>
-            <Library className="size-4" />
-          </span>
-          <div>
-            <h2 className={widgetTitle()}>Discover Mixes</h2>
-            <p className={widgetSubtitle()}>ListenBrainz</p>
-          </div>
-        </header>
+        <WidgetHeader icon={Library} title="Discover Mixes" subtitle="ListenBrainz" titleId="discover-mixes-heading" />
         <div className={mixGrid()}>
           {mixes.map((mix) =>
             mix.status === "ready" ? (

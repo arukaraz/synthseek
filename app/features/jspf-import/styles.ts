@@ -43,9 +43,7 @@ export const urlInput = cva(
 
 export const errorText = cva("text-destructive text-xs");
 
-export const coverageList = cva(
-  "custom-scrollbar flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto sm:max-h-[22rem] sm:flex-none"
-);
+export const coverageList = cva("flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto sm:max-h-[22rem] sm:flex-none");
 
 export const coverageHeader = cva("flex flex-wrap items-center gap-x-4 gap-y-1");
 

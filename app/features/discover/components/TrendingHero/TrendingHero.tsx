@@ -2,6 +2,7 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { useTrendingTracks } from "@hooks/api/queries/useTrendingTracks";
+import { useSwipe } from "@hooks/ui/useSwipe";
 import { staggerItem } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
@@ -52,6 +53,8 @@ export function TrendingHero() {
     [handlePrev, handleNext]
   );
 
+  const swipeHandlers = useSwipe({ onSwipeLeft: handleNext, onSwipeRight: handlePrev });
+
   if (isError) {
     return (
       <div className={errorFrame()}>
@@ -79,6 +82,9 @@ export function TrendingHero() {
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
       onKeyDown={handleKeyDown}
+      onTouchStart={swipeHandlers.onTouchStart}
+      onTouchMove={swipeHandlers.onTouchMove}
+      onTouchEnd={swipeHandlers.onTouchEnd}
       tabIndex={0}
       role="region"
       aria-label="Trending tracks hero"

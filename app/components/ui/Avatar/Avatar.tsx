@@ -1,29 +1,54 @@
 import { cn } from "@utils/cn";
-import { forwardRef } from "react";
-import { innerSizeClasses, sizeClasses } from "./styles";
+import { forwardRef, useEffect, useState } from "react";
+
+import { firstInitial } from "./helpers";
+import {
+  avatarFallbackGradient,
+  avatarImage,
+  avatarInitial,
+  avatarInner,
+  avatarRing,
+  initialSizeClasses,
+  innerSizeClasses,
+  sizeClasses,
+} from "./styles";
 import type { AvatarProps } from "./types";
 
-export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({ className, size = "md", children, ...props }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "from-primary-500 to-accent-500 relative rounded-full bg-gradient-to-br p-0.5",
-        sizeClasses[size],
-        className
-      )}
-      {...props}
-    >
-      <div
-        className={cn(
-          "bg-surface/80 flex h-full w-full items-center justify-center rounded-full",
-          innerSizeClasses[size]
-        )}
-      >
-        {children}
+export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
+  ({ className, size = "md", imageUrl, username, children, ...props }, ref) => {
+    const [imageFailed, setImageFailed] = useState(false);
+
+    useEffect(() => {
+      setImageFailed(false);
+    }, [imageUrl]);
+
+    const showImage = Boolean(imageUrl) && !imageFailed;
+    const initial = firstInitial(username);
+    const showInitial = !showImage && initial.length > 0;
+
+    return (
+      <div ref={ref} className={cn(avatarRing, sizeClasses[size], className)} {...props}>
+        <div
+          className={cn(
+            avatarInner,
+            innerSizeClasses[size],
+            showInitial ? avatarFallbackGradient : showImage ? null : "bg-surface/80"
+          )}
+        >
+          {showImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={imageUrl ?? ""} alt="" className={avatarImage} onError={() => setImageFailed(true)} />
+          ) : showInitial ? (
+            <span aria-hidden className={cn(avatarInitial, initialSizeClasses[size])}>
+              {initial}
+            </span>
+          ) : (
+            children
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 Avatar.displayName = "Avatar";

@@ -19,7 +19,7 @@ export function ContentList({ type, items, isLoading, onActionClick, onNavigate 
       <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center gap-4">
           <div className={loadingSpinner()} />
-          <p className="text-fg/50 text-sm">Loading {sectionTitle.toLowerCase()}...</p>
+          <p className="text-fg/50 text-xs">Loading {sectionTitle.toLowerCase()}...</p>
         </div>
       </div>
     );
@@ -41,9 +41,9 @@ export function ContentList({ type, items, isLoading, onActionClick, onNavigate 
   return (
     <div className="space-y-4">
       <div className="border-fg/10 border-b px-6 pt-6 pb-2">
-        <h2 className="text-fg text-xl font-bold">
+        <h2 className="text-fg text-lg font-bold">
           {sectionTitle}
-          <span className="text-fg/50 ml-2 text-sm font-normal">({items.length})</span>
+          <span className="text-fg/50 ml-2 text-xs font-normal">({items.length})</span>
         </h2>
       </div>
 
