@@ -17,6 +17,16 @@ export function compareByStatus(a: RequestStatus, b: RequestStatus): number {
   return STATUS_ORDER.indexOf(a) - STATUS_ORDER.indexOf(b);
 }
 
+export function exportFilename(name: string): string {
+  const slug =
+    name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "playlist";
+  return `${slug}.jspf`;
+}
+
 export function filterRequestsByStatus(
   items: RequestWithTracks[] | undefined,
   statusFilter: StatusFilter

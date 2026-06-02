@@ -5,6 +5,7 @@ import {
   handleAlbumUpdate,
   handlePlaylistPlexCreated,
   handlePlaylistUpdate,
+  handlePortabilityProgress,
   handleTrackUpdate,
 } from "./handlers/requests";
 import { handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
@@ -52,6 +53,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.SettingsUpdate:
           handleSettingsUpdate(event, utils);
+          break;
+        case SubscriptionEventType.PortabilityProgress:
+          handlePortabilityProgress(event);
           break;
       }
 

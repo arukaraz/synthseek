@@ -25,6 +25,12 @@ export interface RequestDetailHeroProps {
   onBack: () => void;
 }
 
+export interface JspfExportDialogProps {
+  request: RequestWithTracks;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
 export interface RequestDetailStatsProps {
   request: RequestWithTracks;
 }

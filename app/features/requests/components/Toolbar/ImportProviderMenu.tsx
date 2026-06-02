@@ -7,6 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
+import { JspfImportModal } from "@features/jspf-import";
 import { SpotifyLibraryModal, SpotifyMark } from "@features/spotify-library";
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
@@ -15,11 +16,12 @@ import { cn } from "@utils/cn";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ExternalLink, Library } from "lucide-react";
+import { ExternalLink, FileJson, Library } from "lucide-react";
 import { useState } from "react";
 
 import { deriveSpotifyState, tooltipForState } from "./helpers";
 import {
+  importProviderFileChip,
   importProviderMenuItem,
   importProviderMenuTrigger,
   importProviderSpotifyChip,
@@ -28,6 +30,7 @@ import {
 
 export function ImportProviderMenu() {
   const [open, setOpen] = useState(false);
+  const [jspfOpen, setJspfOpen] = useState(false);
   const config = usePublicConfig();
   const status = useSpotifyConnectionStatus();
   const { isAdmin } = useAuthContext();
@@ -112,10 +115,20 @@ export function ImportProviderMenu() {
               )}
             </DropdownMenuItem>
           )}
+          <DropdownMenuLabel>File</DropdownMenuLabel>
+          <DropdownMenuItem onSelect={() => setJspfOpen(true)} className={importProviderMenuItem()}>
+            <span className={importProviderFileChip()}>
+              <FileJson className="size-3.5" />
+            </span>
+            <div className="flex flex-1 flex-col">
+              <span>From file (JSPF)</span>
+            </div>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       <SpotifyLibraryModal open={open} onOpenChange={setOpen} />
+      <JspfImportModal open={jspfOpen} onOpenChange={setJspfOpen} />
     </>
   );
 }

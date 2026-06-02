@@ -17,6 +17,8 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.latestVersion}`;
     case SubscriptionEventType.SettingsUpdate:
       return `${event.eventType}:${event.changedKey}`;
+    case SubscriptionEventType.PortabilityProgress:
+      return `${event.eventType}:${event.jobId}:${event.processed}`;
   }
 }
 

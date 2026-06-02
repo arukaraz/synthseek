@@ -11,10 +11,15 @@ import {
   useRetryPlexPlaylist,
 } from "@hooks/api";
 import { useSpotifySyncPlaylistNow } from "@hooks/api/mutations/spotify/useSpotifyImport";
+import { useExportCollection } from "@hooks/api/queries/portability/useExportCollection";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
+import { downloadText } from "@utils/download";
 import { isProcessingStatus } from "@utils/status-helpers";
+import { toast } from "sonner";
+
+import { exportFilename } from "../helpers";
 
 interface UseRequestActions {
   retry: () => void;
@@ -22,12 +27,14 @@ interface UseRequestActions {
   cancel: () => Promise<void>;
   syncPlex: () => void;
   syncSourceNow: () => void;
+  exportJspf: () => Promise<void>;
   canManage: boolean;
   canRetry: boolean;
   canRemove: boolean;
   canCancel: boolean;
   canSyncPlex: boolean;
   canSyncSource: boolean;
+  canExport: boolean;
   syncPlexPending: boolean;
   syncSourcePending: boolean;
   label: "Album" | "Playlist";
@@ -47,6 +54,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const cancelAlbum = useCancelAlbum();
   const cancelPlaylist = useCancelPlaylist();
   const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
+  const { exportCollection } = useExportCollection();
 
   const canRetry =
     canManage &&
@@ -101,18 +109,29 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     syncSpotifyPlaylist.mutate({ playlistId: request.id });
   };
 
+  const exportJspf = async () => {
+    try {
+      const doc = await exportCollection({ id: request.id, type: isPlaylist ? "playlist" : "album" });
+      downloadText(exportFilename(request.name), JSON.stringify(doc, null, 2));
+    } catch {
+      toast.error("Export failed");
+    }
+  };
+
   return {
     retry,
     remove,
     cancel,
     syncPlex,
     syncSourceNow,
+    exportJspf,
     canManage,
     canRetry,
     canRemove: canManage,
     canCancel,
     canSyncPlex,
     canSyncSource,
+    canExport: canManage,
     syncPlexPending: retryPlex.isPending,
     syncSourcePending: syncSpotifyPlaylist.isPending,
     label,

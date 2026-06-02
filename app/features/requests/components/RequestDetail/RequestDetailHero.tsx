@@ -8,8 +8,10 @@ import { cn } from "@utils/cn";
 import { getContentTypeIcon } from "@utils/content-type-helpers";
 import { formatTimestamp } from "@utils/formatters";
 import Image from "next/image";
-import { ArrowLeft, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
+import { ArrowLeft, Download, Globe, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
+import { useState } from "react";
 import { useRequestActions } from "../../hooks/useRequestActions";
+import { JspfExportDialog } from "./JspfExportDialog";
 import {
   heroAvatar,
   heroAvatarTypeBadge,
@@ -29,17 +31,20 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     cancel,
     syncPlex,
     syncSourceNow,
+    exportJspf,
     canRetry,
     canRemove,
     canCancel,
     canSyncPlex,
     canSyncSource,
+    canExport,
     syncPlexPending,
     syncSourcePending,
     label,
   } = useRequestActions(request);
 
-  const hasMoreActions = canCancel || canSyncPlex || canSyncSource;
+  const [exportFullOpen, setExportFullOpen] = useState(false);
+  const hasMoreActions = canCancel || canSyncPlex || canSyncSource || canExport;
 
   return (
     <div className="relative">
@@ -90,6 +95,11 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
               <p className="text-fg/40 truncate text-xs">Requested by {request.requestedBy.username}</p>
+              {canExport && request.tracks.length > 0 && (
+                <p className="text-fg/40 truncate text-xs">
+                  Portable IDs {request.tracks.filter((track) => track.mbid).length}/{request.tracks.length}
+                </p>
+              )}
             </div>
           </div>
 
@@ -155,12 +165,26 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                       {syncPlexPending ? "Syncing…" : "Sync to Plex"}
                     </DropdownMenuItem>
                   )}
+                  {canExport && (
+                    <DropdownMenuItem onClick={() => void exportJspf()}>
+                      <Download className="size-3.5" />
+                      Export (.jspf)
+                    </DropdownMenuItem>
+                  )}
+                  {canExport && (
+                    <DropdownMenuItem onClick={() => setExportFullOpen(true)}>
+                      <Globe className="size-3.5" />
+                      Export (full portability)
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
           </div>
         </div>
       </div>
+
+      <JspfExportDialog request={request} open={exportFullOpen} onOpenChange={setExportFullOpen} />
     </div>
   );
 }
