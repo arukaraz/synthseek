@@ -208,7 +208,7 @@ export function ConfigRequestModal({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
         data-cy="download-config-modal"
-        className="glass-intense max-w-[95vw] gap-0 p-0 shadow-2xl sm:max-w-lg"
+        className="max-w-[95vw] gap-0 p-0 shadow-2xl sm:max-w-lg"
         aria-describedby="config-modal-description"
       >
         <DialogTitle className="sr-only">

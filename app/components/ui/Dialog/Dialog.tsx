@@ -33,7 +33,7 @@ export function DialogContent({ className, children, ref, ...props }: DialogCont
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          "border-fg/10 bg-surface/95 sm:bg-surface/90 fixed left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] gap-6 rounded-2xl border p-6 shadow-2xl duration-200 sm:backdrop-blur-2xl",
+          "border-fg/10 bg-surface/95 sm:bg-surface/90 from-primary-600/15 to-accent-600/15 fixed left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] gap-6 rounded-2xl border bg-linear-to-br p-6 shadow-2xl duration-200 sm:backdrop-blur-2xl",
           "top-4 max-h-[calc(100dvh-1rem-env(safe-area-inset-bottom,0px))] overflow-y-auto",
           "sm:top-[50%] sm:max-h-[90vh] sm:translate-y-[-50%]",
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",

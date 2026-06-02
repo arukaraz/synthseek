@@ -8,7 +8,9 @@ export const headerLink = cva(
   "text-primary-400 hover:text-primary-300 inline-flex items-center gap-1 text-[11px] font-medium transition-colors"
 );
 
-export const stripFrame = cva("border-fg/10 bg-surface/40 relative overflow-hidden rounded-xl border");
+export const stripFrame = cva(
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 relative overflow-hidden rounded-xl border bg-linear-to-br"
+);
 
 export const stripScroller = cva(
   "no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"

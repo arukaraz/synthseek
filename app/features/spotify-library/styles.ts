@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 
 export const modalRoot = cva(
   [
-    "glass-intense !flex w-full flex-col gap-0 overflow-hidden p-0 shadow-2xl !border-0",
+    "!flex w-full flex-col gap-0 overflow-hidden p-0 shadow-2xl !border-0",
     "h-[100dvh] !max-h-[100dvh] !rounded-none !top-0 !left-0 !translate-x-0",
     "sm:!top-[50%] sm:!left-[50%] sm:!translate-x-[-50%] sm:!translate-y-[-50%]",
     "sm:h-modal-max sm:!max-h-[90vh] sm:max-w-[1380px] sm:!rounded-2xl",

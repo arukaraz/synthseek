@@ -178,28 +178,31 @@ export const modalBackdrop = cva("fixed inset-0 z-50", {
 
 export type ModalBackdropProps = VariantProps<typeof modalBackdrop>;
 
-export const modalContent = cva("relative overflow-hidden border shadow-2xl", {
-  variants: {
-    blur: {
-      none: "bg-surface/95",
-      xl: "bg-surface/90 backdrop-blur-xl",
-      "2xl": "bg-surface/90 backdrop-blur-2xl",
+export const modalContent = cva(
+  "from-primary-600/15 to-accent-600/15 relative overflow-hidden border bg-linear-to-br shadow-2xl",
+  {
+    variants: {
+      blur: {
+        none: "bg-surface/95",
+        xl: "bg-surface/90 backdrop-blur-xl",
+        "2xl": "bg-surface/90 backdrop-blur-2xl",
+      },
+      rounded: {
+        xl: "rounded-xl",
+        "2xl": "rounded-2xl",
+      },
+      responsive: {
+        none: "",
+        blur: "sm:backdrop-blur-2xl sm:bg-surface/90",
+      },
     },
-    rounded: {
-      xl: "rounded-xl",
-      "2xl": "rounded-2xl",
+    defaultVariants: {
+      blur: "none",
+      rounded: "2xl",
+      responsive: "blur",
     },
-    responsive: {
-      none: "",
-      blur: "sm:backdrop-blur-2xl sm:bg-surface/90",
-    },
-  },
-  defaultVariants: {
-    blur: "none",
-    rounded: "2xl",
-    responsive: "blur",
-  },
-});
+  }
+);
 
 export type ModalContentProps = VariantProps<typeof modalContent>;
 

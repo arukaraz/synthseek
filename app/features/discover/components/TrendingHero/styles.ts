@@ -2,7 +2,9 @@ import { cva } from "class-variance-authority";
 
 export const heroFrame = cva("group/hero relative w-full overflow-hidden rounded-2xl");
 
-export const errorFrame = cva("glass-panel relative flex h-full items-center justify-center rounded-2xl p-8");
+export const errorFrame = cva(
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 relative flex h-full items-center justify-center rounded-2xl border bg-linear-to-br p-8"
+);
 
 export const heroCanvas = cva(
   "relative aspect-video w-full overflow-hidden rounded-2xl sm:aspect-2/1 md:h-70 md:aspect-auto lg:h-90"

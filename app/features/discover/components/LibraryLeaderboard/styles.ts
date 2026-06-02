@@ -1,13 +1,15 @@
 import { cva } from "class-variance-authority";
 
-export const panelFrame = cva("border-fg/10 bg-surface/40 flex h-full flex-col overflow-hidden rounded-2xl border");
+export const panelFrame = cva(
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 flex h-full flex-col overflow-hidden rounded-2xl border bg-linear-to-br"
+);
 
 export const errorFrame = cva(
-  "border-fg/10 bg-surface/40 flex h-full items-center justify-center rounded-2xl border p-6"
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 flex h-full items-center justify-center rounded-2xl border bg-linear-to-br p-6"
 );
 
 export const skeletonFrame = cva(
-  "border-fg/10 bg-surface/40 flex h-full animate-pulse flex-col overflow-hidden rounded-2xl border"
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 flex h-full animate-pulse flex-col overflow-hidden rounded-2xl border bg-linear-to-br"
 );
 
 export const tabsContainer = cva(

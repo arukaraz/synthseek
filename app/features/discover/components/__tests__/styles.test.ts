@@ -17,7 +17,8 @@ import {
 describe("glassPanelCard", () => {
   it("returns base classes", () => {
     const result = glassPanelCard();
-    expect(result).toContain("glass-panel");
+    expect(result).toContain("bg-surface/40");
+    expect(result).toContain("bg-linear-to-br");
     expect(result).toContain("flex");
     expect(result).toContain("flex-col");
     expect(result).toContain("rounded-xl");

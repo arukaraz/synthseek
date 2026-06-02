@@ -7,22 +7,25 @@ export const NAV_BUTTON_CLASSES = cn(
   "border-fg/10 border shadow-lg"
 );
 
-export const glassPanelCard = cva("glass-panel relative flex flex-col rounded-xl p-4", {
-  variants: {
-    height: {
-      full: "h-full",
-      auto: "",
+export const glassPanelCard = cva(
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 relative flex flex-col rounded-xl border bg-linear-to-br p-4",
+  {
+    variants: {
+      height: {
+        full: "h-full",
+        auto: "",
+      },
+      width: {
+        full: "w-full",
+        auto: "",
+      },
     },
-    width: {
-      full: "w-full",
-      auto: "",
+    defaultVariants: {
+      height: "full",
+      width: "auto",
     },
-  },
-  defaultVariants: {
-    height: "full",
-    width: "auto",
-  },
-});
+  }
+);
 
 export type GlassPanelCardProps = VariantProps<typeof glassPanelCard>;
 
