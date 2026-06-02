@@ -1,19 +1,28 @@
 "use client";
 
+import { Pagination } from "@components/ui/Pagination";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { DataTable, cycleSortDirection } from "@components/ui/Table";
 import { useCancelTrack, useRetryTrack, useTrackRequests } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
-import { useUrlParams } from "@hooks/ui/useUrlParam";
+import { useUrlParam, useUrlParams } from "@hooks/ui/useUrlParam";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ActiveSourceChips } from "./ActiveSourceChips";
 import { RequestsEmptyState } from "./RequestsEmptyState";
 import { buildFlatTrackColumns } from "./Table/columns";
 import { flattenRequestsToTrackRows, searchFlatTrackRows, sortFlatTrackRows } from "./Table/helpers";
-import { filterRequestsByStatus } from "../helpers";
-import { FlatTrackRow, REQUESTS_URL_PARAMS, TableSortConfig, TableSortField } from "../types";
+import {
+  filterRequestsByStatus,
+  parsePage,
+  parsePerPage,
+  parseSourceIds,
+  serializeSourceIds,
+  toggleSourceId,
+} from "../helpers";
+import { FlatTrackRow, PER_PAGE_OPTIONS, REQUESTS_URL_PARAMS, TableSortConfig, TableSortField } from "../types";
 
 export function ListViewMode() {
   const { data: items, isLoading } = useTrackRequests();
@@ -21,8 +30,12 @@ export function ListViewMode() {
     filter: REQUESTS_URL_PARAMS.filter,
     q: REQUESTS_URL_PARAMS.q,
   });
+  const [sourceRaw, setSource] = useUrlParam("source", REQUESTS_URL_PARAMS.source);
+  const [pageRaw, setPage] = useUrlParam("page", REQUESTS_URL_PARAMS.page);
+  const [perPageRaw, setPerPage] = useUrlParam("perPage", REQUESTS_URL_PARAMS.perPage);
   const searchQuery = useDebounce(values.q, { delay: 300 });
   const statusFilter = values.filter;
+  const perPage = parsePerPage(perPageRaw);
 
   const [sort, setSort] = useState<TableSortConfig>({ field: "created_at", direction: "desc" });
 
@@ -44,12 +57,40 @@ export function ListViewMode() {
     [cancelTrack]
   );
 
+  const handleSelectSource = useCallback(
+    (parentId: string) => setSource(serializeSourceIds(toggleSourceId(parseSourceIds(sourceRaw), parentId))),
+    [setSource, sourceRaw]
+  );
+
   const rows = useMemo<FlatTrackRow[]>(() => {
     const filteredItems = filterRequestsByStatus(items, statusFilter);
     const flat = flattenRequestsToTrackRows(filteredItems);
-    const searched = searchFlatTrackRows(flat, searchQuery);
+    const selectedIds = new Set(parseSourceIds(sourceRaw));
+    const bySource = selectedIds.size > 0 ? flat.filter((row) => selectedIds.has(row.parent.id)) : flat;
+    const searched = searchFlatTrackRows(bySource, searchQuery);
     return sortFlatTrackRows(searched, sort);
-  }, [items, sort, searchQuery, statusFilter]);
+  }, [items, sort, searchQuery, statusFilter, sourceRaw]);
+
+  const pageCount = Math.max(1, Math.ceil(rows.length / perPage));
+  const currentPage = Math.min(Math.max(1, parsePage(pageRaw)), pageCount);
+  const pageRows = useMemo(
+    () => rows.slice((currentPage - 1) * perPage, currentPage * perPage),
+    [rows, currentPage, perPage]
+  );
+
+  useEffect(() => {
+    if (parsePage(pageRaw) !== currentPage) setPage(currentPage === 1 ? null : String(currentPage));
+  }, [pageRaw, currentPage, setPage]);
+
+  const prevFilterKey = useRef<string | null>(null);
+  useEffect(() => {
+    const key = `${statusFilter}|${sourceRaw}|${searchQuery}|${perPage}`;
+    if (prevFilterKey.current !== null && prevFilterKey.current !== key) setPage(null);
+    prevFilterKey.current = key;
+  }, [statusFilter, sourceRaw, searchQuery, perPage, setPage]);
+
+  const handlePageChange = (next: number) => setPage(next <= 1 ? null : String(next));
+  const handlePageSizeChange = (size: number) => setPerPage(String(size));
 
   const columns = useMemo(
     () =>
@@ -58,8 +99,9 @@ export function ListViewMode() {
         canActFor: (item) => isOwnerOrAdminFE({ id: item.parent.requestedBy.id }, currentUser),
         onRetry: (item) => retryTrack.mutate({ trackId: item.id }),
         onCancel: handleCancel,
+        onSelectSource: handleSelectSource,
       }),
-    [currentUser, retryTrack, handleCancel]
+    [currentUser, retryTrack, handleCancel, handleSelectSource]
   );
 
   const handleSort = (field: string) => {
@@ -71,25 +113,35 @@ export function ListViewMode() {
     return <SectionLoading message="Loading requests..." />;
   }
 
-  if (rows.length === 0) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <RequestsEmptyState searchQuery={searchQuery} />
-      </div>
-    );
-  }
-
   return (
     <div className="p-4">
-      <DataTable
-        data={rows}
-        columns={columns}
-        getRowId={(item) => `${item.parent.id}:${item.id}`}
-        sortState={sort}
-        onSort={handleSort}
-        minWidth="600px"
-        rowAttrs={(item) => ({ "data-status": item.status })}
-      />
+      <ActiveSourceChips />
+      {rows.length === 0 ? (
+        <div className="flex min-h-[40vh] items-center justify-center">
+          <RequestsEmptyState searchQuery={searchQuery} />
+        </div>
+      ) : (
+        <>
+          <DataTable
+            data={pageRows}
+            columns={columns}
+            getRowId={(item) => `${item.parent.id}:${item.id}`}
+            sortState={sort}
+            onSort={handleSort}
+            minWidth="600px"
+            rowAttrs={(item) => ({ "data-status": item.status })}
+          />
+          <Pagination
+            page={currentPage}
+            pageCount={pageCount}
+            pageSize={perPage}
+            totalItems={rows.length}
+            pageSizeOptions={PER_PAGE_OPTIONS}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        </>
+      )}
     </div>
   );
 }

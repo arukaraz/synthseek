@@ -3,6 +3,7 @@
 import { type ColumnDef } from "@components/ui/Table";
 import { formatRelativeTime, titleCase } from "@utils/formatters";
 import type { FlatTrackRow } from "../../types";
+import { SourceCell } from "./cells/SourceCell";
 import { TrackActionsCell } from "./cells/TrackActionsCell";
 import { TrackStatusCell } from "./cells/TrackStatusCell";
 import { TrackTitleCell } from "./cells/TrackTitleCell";
@@ -13,6 +14,7 @@ export function buildFlatTrackColumns({
   canActFor,
   onRetry,
   onCancel,
+  onSelectSource,
 }: BuildColumnsArgs): ColumnDef<FlatTrackRow>[] {
   return [
     {
@@ -29,8 +31,8 @@ export function buildFlatTrackColumns({
     },
     {
       key: "album",
-      header: "Album",
-      cell: (item) => <span className="text-fg/60 truncate text-sm">{item.parent.name}</span>,
+      header: "Album/Playlist",
+      cell: (item) => <SourceCell item={item} onSelect={onSelectSource} />,
       sortable: true,
     },
     {

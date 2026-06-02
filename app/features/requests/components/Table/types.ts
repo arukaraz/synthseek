@@ -6,6 +6,12 @@ export interface BuildColumnsArgs {
   canActFor: (item: FlatTrackRow) => boolean;
   onRetry: (item: FlatTrackRow) => void;
   onCancel: (item: FlatTrackRow) => void;
+  onSelectSource: (parentId: string) => void;
+}
+
+export interface SourceCellProps {
+  item: FlatTrackRow;
+  onSelect: (parentId: string) => void;
 }
 
 export interface TrackActionsCellProps {

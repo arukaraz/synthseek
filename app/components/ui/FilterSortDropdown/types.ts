@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 export interface FilterSortFilterOption<F extends string> {
   value: F;
@@ -12,7 +13,7 @@ export interface FilterSortSortOption<S extends string> {
   label: string;
 }
 
-export interface FilterSortDropdownProps<F extends string, S extends string> {
+export interface FilterSortDropdownProps<F extends string, S extends string = string> {
   filter: {
     value: F;
     onChange: (v: F) => void;
@@ -20,17 +21,18 @@ export interface FilterSortDropdownProps<F extends string, S extends string> {
     sectionLabel?: string;
     sectionIcon?: LucideIcon;
   };
-  sort: {
+  sort?: {
     value: S;
     onChange: (v: S) => void;
     options: ReadonlyArray<FilterSortSortOption<S>>;
     sectionLabel?: string;
     sectionIcon?: LucideIcon;
   };
-  direction: {
+  direction?: {
     value: "asc" | "desc";
     onChange: (v: "asc" | "desc") => void;
   };
+  children?: ReactNode;
   triggerIcon?: LucideIcon;
   triggerClassName?: string;
   triggerLabel?: string;

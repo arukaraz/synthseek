@@ -16,10 +16,11 @@ import { ArrowDown, ArrowUp, ChevronDown, Filter, SlidersHorizontal } from "luci
 import { filterSortCount, filterSortOrderBtn, filterSortOrderRow, filterSortTriggerDefault } from "./styles";
 import type { FilterSortDropdownProps } from "./types";
 
-export function FilterSortDropdown<F extends string, S extends string>({
+export function FilterSortDropdown<F extends string, S extends string = string>({
   filter,
   sort,
   direction,
+  children,
   triggerIcon: TriggerIcon = SlidersHorizontal,
   triggerClassName,
   triggerLabel,
@@ -28,10 +29,10 @@ export function FilterSortDropdown<F extends string, S extends string>({
   dataCy,
 }: FilterSortDropdownProps<F, S>) {
   const FilterSectionIcon = filter.sectionIcon ?? Filter;
-  const SortSectionIcon = sort.sectionIcon ?? SlidersHorizontal;
+  const SortSectionIcon = sort?.sectionIcon ?? SlidersHorizontal;
   const activeFilterOption = filter.options.find((o) => o.value === filter.value);
-  const activeSortOption = sort.options.find((o) => o.value === sort.value);
-  const label = triggerLabel ?? `${activeFilterOption?.label ?? ""} · ${activeSortOption?.label ?? ""}`;
+  const activeSortOption = sort?.options.find((o) => o.value === sort.value);
+  const label = triggerLabel ?? [activeFilterOption?.label, activeSortOption?.label].filter(Boolean).join(" · ");
 
   return (
     <DropdownMenu>
@@ -44,11 +45,12 @@ export function FilterSortDropdown<F extends string, S extends string>({
         >
           <TriggerIcon className="size-4" />
           <span className={cn("hidden sm:inline", triggerLabelClassName)}>{label}</span>
-          {direction.value === "asc" ? (
-            <ArrowUp className="hidden size-3.5 opacity-60 sm:inline" />
-          ) : (
-            <ArrowDown className="hidden size-3.5 opacity-60 sm:inline" />
-          )}
+          {direction &&
+            (direction.value === "asc" ? (
+              <ArrowUp className="hidden size-3.5 opacity-60 sm:inline" />
+            ) : (
+              <ArrowDown className="hidden size-3.5 opacity-60 sm:inline" />
+            ))}
           <ChevronDown className="size-3.5 opacity-50" />
         </button>
       </DropdownMenuTrigger>
@@ -71,43 +73,56 @@ export function FilterSortDropdown<F extends string, S extends string>({
           })}
         </DropdownMenuRadioGroup>
 
-        <DropdownMenuSeparator />
+        {sort && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="flex items-center gap-2">
+              <SortSectionIcon className="size-3" />
+              {sort.sectionLabel ?? "Sort by"}
+            </DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={sort.value} onValueChange={(v) => sort.onChange(v as S)}>
+              {sort.options.map((option) => (
+                <DropdownMenuRadioItem key={option.value} value={option.value}>
+                  {option.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </>
+        )}
 
-        <DropdownMenuLabel className="flex items-center gap-2">
-          <SortSectionIcon className="size-3" />
-          {sort.sectionLabel ?? "Sort by"}
-        </DropdownMenuLabel>
-        <DropdownMenuRadioGroup value={sort.value} onValueChange={(v) => sort.onChange(v as S)}>
-          {sort.options.map((option) => (
-            <DropdownMenuRadioItem key={option.value} value={option.value}>
-              {option.label}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
+        {direction && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Order</DropdownMenuLabel>
+            <div className={filterSortOrderRow()}>
+              <button
+                type="button"
+                aria-pressed={direction.value === "asc"}
+                onClick={() => direction.onChange("asc")}
+                className={filterSortOrderBtn({ active: direction.value === "asc" })}
+              >
+                <ArrowUp className="size-3" />
+                Ascending
+              </button>
+              <button
+                type="button"
+                aria-pressed={direction.value === "desc"}
+                onClick={() => direction.onChange("desc")}
+                className={filterSortOrderBtn({ active: direction.value === "desc" })}
+              >
+                <ArrowDown className="size-3" />
+                Descending
+              </button>
+            </div>
+          </>
+        )}
 
-        <DropdownMenuSeparator />
-
-        <DropdownMenuLabel>Order</DropdownMenuLabel>
-        <div className={filterSortOrderRow()}>
-          <button
-            type="button"
-            aria-pressed={direction.value === "asc"}
-            onClick={() => direction.onChange("asc")}
-            className={filterSortOrderBtn({ active: direction.value === "asc" })}
-          >
-            <ArrowUp className="size-3" />
-            Ascending
-          </button>
-          <button
-            type="button"
-            aria-pressed={direction.value === "desc"}
-            onClick={() => direction.onChange("desc")}
-            className={filterSortOrderBtn({ active: direction.value === "desc" })}
-          >
-            <ArrowDown className="size-3" />
-            Descending
-          </button>
-        </div>
+        {children && (
+          <>
+            <DropdownMenuSeparator />
+            {children}
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

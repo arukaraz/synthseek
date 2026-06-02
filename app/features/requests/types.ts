@@ -23,14 +23,28 @@ export const STATUS_FILTERS: readonly StatusFilter[] = ["all", "active", "done",
 export const SORT_FIELD_VALUES: readonly SortField[] = Object.values(SortField);
 export const SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"];
 
+export const SOURCE_SEARCH_THRESHOLD = 6;
+
+export const PER_PAGE_OPTIONS = [25, 50, 100] as const;
+export const DEFAULT_PER_PAGE = 50;
+
 export const REQUESTS_URL_PARAMS = {
   view: { defaultValue: "groups" as ViewMode, validValues: VIEW_MODES },
   filter: { defaultValue: "all" as StatusFilter, validValues: STATUS_FILTERS },
   sort: { defaultValue: SortField.RECENT, validValues: SORT_FIELD_VALUES },
   dir: { defaultValue: "desc" as SortDirection, validValues: SORT_DIRECTIONS },
   q: { defaultValue: "" as string },
+  source: { defaultValue: "" as string },
+  page: { defaultValue: "1" as string },
+  perPage: { defaultValue: "50" as string },
   selected: {},
 } as const;
+
+export interface SourceOption {
+  id: string;
+  name: string;
+  contentType: ContentType;
+}
 
 export interface SortConfig {
   field: SortField;
@@ -92,7 +106,7 @@ export interface ColumnDef {
 export const COLUMNS: ColumnDef[] = [
   { field: "title", label: "Title", sortable: true },
   { field: "status", label: "Status", sortable: true },
-  { field: "album", label: "Album", sortable: true },
+  { field: "album", label: "Album/Playlist", sortable: true },
   { field: "artist", label: "Artist", sortable: true },
   { field: "type", label: "Type", sortable: true },
   { field: "requestedBy", label: "Requested by", sortable: true },
