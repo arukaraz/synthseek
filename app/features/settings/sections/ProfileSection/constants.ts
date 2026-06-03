@@ -29,4 +29,10 @@ export const PROFILE_COPY = {
   connect: "Connect",
   disconnect: "Disconnect",
   spotifyNotConfigured: "Ask an admin to configure Spotify first.",
+
+  plexName: "Plex",
+  plexLinked: "Linked",
+  plexNotLinked: "Not linked",
+  plexConnecting: "Waiting for Plex...",
+  plexNeedsPassword: "Set a password before unlinking, otherwise you would be locked out.",
 } as const;
