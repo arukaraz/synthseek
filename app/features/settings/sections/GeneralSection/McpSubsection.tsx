@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { IconButton } from "@components/ui/IconButton";
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Notice } from "@components/ui/Notice";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 
@@ -47,7 +48,16 @@ export function McpSubsection() {
     <section className={subSection()}>
       <header className={subSectionHeader()}>
         <div className={subSectionHeaderText()}>
-          <h3 className={subSectionTitle()}>{MCP_SUB.title}</h3>
+          <div className="flex items-center gap-1.5">
+            <h3 className={subSectionTitle()}>{MCP_SUB.title}</h3>
+            <InfoTooltip
+              trigger="click"
+              side="bottom"
+              title={MCP_SUB.toolsTitle}
+              description={MCP_SUB.toolsDescription}
+              points={[...MCP_SUB.tools]}
+            />
+          </div>
           <p className={subSectionDescription()}>{MCP_SUB.description}</p>
         </div>
       </header>

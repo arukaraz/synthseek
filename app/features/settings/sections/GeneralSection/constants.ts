@@ -67,4 +67,14 @@ export const MCP_SUB = {
   keyLabel: "API key",
   keyBody:
     "For Claude Code, Cursor, or Claude Desktop (via mcp-remote). Create a key above and send it as the bearer token: Authorization: Bearer <your key>.",
+  toolsTitle: "Available tools",
+  toolsDescription: "What a connected assistant can do. Exact availability depends on your role.",
+  tools: [
+    "Discovery: search_music, get_music_details, get_artist_overview, get_trending, browse_genres, get_recommendations, resolve_url",
+    "Downloads: download_track, download_album, download_playlist, retry_request, cancel_request, retry_all_failed",
+    "Requests: list_requests, get_request",
+    "Library: get_library_summary, search_library",
+    "Settings: get_settings, update_setting",
+    "Operations (admin): get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health",
+  ],
 } as const;
