@@ -41,7 +41,7 @@ export const EDIT_USER_COPY = {
 
 export const IMPORT_PLEX_COPY = {
   title: "Import Plex users",
-  description: "Users with access to your Plex server. Already-imported users are disabled.",
+  description: "",
   loading: "Loading Plex users...",
   empty: "No Plex users with access to this server were found.",
   selectAll: "Select all",

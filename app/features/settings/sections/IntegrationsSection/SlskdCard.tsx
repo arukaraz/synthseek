@@ -16,8 +16,8 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
-import { fieldError, fieldWarning } from "../../styles";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
+import { fieldError, fieldWarning } from "../../styles";
 import { SlskdStatusBadge } from "./SlskdStatusBadge";
 import type { SlskdCardProps } from "./types";
 
@@ -52,9 +52,14 @@ export function SlskdCard({ initial }: SlskdCardProps) {
 
   return (
     <SettingsCard title="slskd" description="Required for downloads.">
-      {status.data ? <SlskdStatusBadge status={status.data.status} message={status.data.message} /> : null}
+      {status.data ? (
+        <SlskdStatusBadge
+          status={status.data.status}
+          message={status.data.message !== "Connected" ? status.data.message : undefined}
+        />
+      ) : null}
 
-      <SettingsField label="API URL" helper="Where Synthseek can reach your slskd daemon.">
+      <SettingsField label="API URL" helper="">
         <SettingsTextInput
           value={draft.apiUrl}
           onChange={(v) => setField("apiUrl", v)}
@@ -90,7 +95,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         <ListManager
           value={draft.bannedUsers}
           onChange={(v) => setField("bannedUsers", v)}
-          addPlaceholder="e.g. spammer123"
+          addPlaceholder="e.g. user123"
           filterPlaceholder="Filter banlist..."
           emptyLabel="No banned uploaders yet."
           countLabel={(n) => `${n} banned`}
