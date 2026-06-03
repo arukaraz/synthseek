@@ -70,6 +70,10 @@ export const fieldLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tr
 
 export const fieldHelper = cva("text-fg/45 text-xs");
 
+export const fieldError = cva("text-red-400 text-xs");
+
+export const fieldWarning = cva("text-amber-400 text-xs");
+
 export const fieldRow = cva("flex flex-col gap-1.5");
 
 export const engineRow = cva("flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6");

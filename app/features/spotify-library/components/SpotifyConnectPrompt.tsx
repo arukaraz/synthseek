@@ -30,7 +30,6 @@ export function SpotifyConnectPrompt({ pending, statusLoading }: SpotifyConnectP
           : "Authorize Synthseek to browse and import your Spotify playlists and saved albums."}
       </p>
       <Button onClick={() => connect.mutate()} disabled={connect.isPending}>
-        <SpotifyMark size={14} />
         {pending ? "Reconnect Spotify" : "Connect Spotify"}
       </Button>
     </div>

@@ -8,27 +8,36 @@ import { toast } from "sonner";
 import { Button } from "@components/ui/Button";
 
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
+import { useSlskdStatus } from "@hooks/api/queries/useSlskdStatus";
+import { validateSlskdApiUrl } from "@utils/slskd-url";
 import { ListManager } from "../../components/ListManager";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
+import { fieldError, fieldWarning } from "../../styles";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
+import { SlskdStatusBadge } from "./SlskdStatusBadge";
 import type { SlskdCardProps } from "./types";
 
 export function SlskdCard({ initial }: SlskdCardProps) {
   const update = useUpdateConnectionsSlskd();
   const testConnection = useTestSlskd();
+  const status = useSlskdStatus();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial);
   const [testing, setTesting] = useState(false);
 
   if (!draft) return null;
 
+  const urlCheck = validateSlskdApiUrl(draft.apiUrl);
+  const urlError = draft.apiUrl.length > 0 && !urlCheck.ok ? urlCheck.error : undefined;
+  const urlWarning = urlCheck.ok ? urlCheck.warning : undefined;
+
   const handleTest = async () => {
     setTesting(true);
     try {
-      const result = await testConnection.mutateAsync({ apiUrl: draft.apiUrl, apiKey: draft.apiKey });
+      const result = await testConnection.mutateAsync({ apiUrl: urlCheck.normalized, apiKey: draft.apiKey });
       if (result.ok) toast.success(result.message ?? "Connected");
       else toast.error(result.message ?? "Connection failed");
     } finally {
@@ -36,8 +45,15 @@ export function SlskdCard({ initial }: SlskdCardProps) {
     }
   };
 
+  const handleSave = () => {
+    setField("apiUrl", urlCheck.normalized);
+    return save((payload) => update.mutateAsync({ ...payload, apiUrl: urlCheck.normalized }));
+  };
+
   return (
     <SettingsCard title="slskd" description="Required for downloads.">
+      {status.data ? <SlskdStatusBadge status={status.data.status} message={status.data.message} /> : null}
+
       <SettingsField label="API URL" helper="Where Synthseek can reach your slskd daemon.">
         <SettingsTextInput
           value={draft.apiUrl}
@@ -45,6 +61,13 @@ export function SlskdCard({ initial }: SlskdCardProps) {
           placeholder="http://localhost:5030"
           type="url"
         />
+        {urlError ? (
+          <p role="alert" className={fieldError()}>
+            {urlError}
+          </p>
+        ) : urlWarning ? (
+          <p className={fieldWarning()}>{urlWarning}</p>
+        ) : null}
       </SettingsField>
 
       <SettingsField label="API Key">
@@ -52,7 +75,12 @@ export function SlskdCard({ initial }: SlskdCardProps) {
       </SettingsField>
 
       <div className="flex items-center gap-3">
-        <Button variant="outline" size="sm" onClick={handleTest} disabled={testing || !draft.apiUrl || !draft.apiKey}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleTest}
+          disabled={testing || !draft.apiUrl || !draft.apiKey || Boolean(urlError)}
+        >
           <Plug className="size-4" />
           {testing ? "Testing..." : "Test connection"}
         </Button>
@@ -83,7 +111,8 @@ export function SlskdCard({ initial }: SlskdCardProps) {
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}
-        onSave={() => save((payload) => update.mutateAsync(payload))}
+        saveDisabled={Boolean(urlError)}
+        onSave={handleSave}
         onCancel={reset}
       />
     </SettingsCard>

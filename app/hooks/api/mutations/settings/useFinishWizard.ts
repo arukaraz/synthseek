@@ -6,6 +6,7 @@ export function useFinishWizard() {
   const utils = trpc.useUtils();
   return trpc.settings.finishWizard.useMutation({
     onSuccess: () => {
+      utils.auth.setupRequired.setData(undefined, false);
       utils.auth.setupRequired.invalidate();
     },
     onError: (error) => toast.error(error.message || "Could not finish setup"),

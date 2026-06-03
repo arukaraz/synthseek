@@ -8,7 +8,7 @@ export const PROFILE_COPY = {
   localAccount: "Local account",
 
   editTitle: "Edit profile",
-  editDescription: "Update how you appear in Synthseek.",
+  editDescription: "",
   usernameLabel: "Username",
   emailLabel: "Email",
   avatarLabel: "Avatar URL",
@@ -16,7 +16,7 @@ export const PROFILE_COPY = {
   emailManagedByPlex: "Your email is managed by Plex.",
 
   passwordTitle: "Password",
-  passwordDescription: "Change the password you use to sign in.",
+  passwordDescription: "",
   currentPasswordLabel: "Current password",
   newPasswordLabel: "New password",
   newPasswordPlaceholder: "At least 8 characters",
@@ -24,7 +24,7 @@ export const PROFILE_COPY = {
   passwordManagedByPlex: "Your password is managed by Plex.",
 
   connectedTitle: "Connected accounts",
-  connectedDescription: "Link your streaming accounts to import your library.",
+  connectedDescription: "",
   noConnected: "No connected sources are available right now.",
   connect: "Connect",
   disconnect: "Disconnect",

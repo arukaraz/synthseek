@@ -1,31 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-
-import { useSetupRequired } from "@hooks/api/queries/useSetupRequired";
-import { useAuthContext } from "@modules/providers/AuthProvider";
+import { useSetupRedirect } from "@hooks/ui/useSetupRedirect";
 
 import { LoginForm } from "./components/LoginForm";
 import { PlexLoginButton } from "./components/PlexLoginButton";
 import { authCard } from "./styles";
 
 export function LoginScreen() {
-  const router = useRouter();
-  const { currentUser } = useAuthContext();
-  const setupQuery = useSetupRequired();
+  const gate = useSetupRedirect("login");
 
-  useEffect(() => {
-    if (setupQuery.data === true) {
-      router.replace("/setup");
-      return;
-    }
-    if (currentUser) {
-      router.replace("/");
-    }
-  }, [currentUser, router, setupQuery.data]);
-
-  if (setupQuery.isLoading) return null;
+  if (gate.status !== "ready") return null;
 
   return (
     <div className={authCard()}>

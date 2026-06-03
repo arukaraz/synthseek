@@ -7,7 +7,7 @@ export function useSetupBootstrap() {
   return trpc.auth.setupBootstrap.useMutation({
     onSuccess: (user) => {
       utils.auth.me.setData(undefined, user);
-      utils.auth.setupRequired.setData(undefined, false);
+      utils.auth.setupRequired.invalidate();
     },
     onError: (error) => {
       toast.error(error.message || "Setup failed");

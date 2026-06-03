@@ -16,6 +16,25 @@
 
   --color-border: var(--border-default);
   --color-border-subtle: var(--border-subtle);
+
+  --color-primary: var(--color-primary-500);
+  --color-primary-foreground: oklch(var(--primary-foreground));
+  --color-secondary: oklch(var(--secondary));
+  --color-secondary-foreground: oklch(var(--secondary-foreground));
+  --color-destructive: oklch(var(--destructive));
+  --color-destructive-foreground: oklch(var(--destructive-foreground));
+  --color-muted: oklch(var(--muted));
+  --color-muted-foreground: oklch(var(--muted-foreground));
+  --color-accent: oklch(var(--accent));
+  --color-accent-foreground: oklch(var(--accent-foreground));
+  --color-popover: oklch(var(--popover));
+  --color-popover-foreground: oklch(var(--popover-foreground));
+  --color-card: oklch(var(--card));
+  --color-card-foreground: oklch(var(--card-foreground));
+  --color-background: oklch(var(--background));
+  --color-foreground: oklch(var(--foreground));
+  --color-input: oklch(var(--input));
+  --color-ring: oklch(var(--ring));
 }
 
 @import "./tokens/primitives.css";
@@ -33,6 +52,7 @@
 
 @import "./utilities/glass.css";
 @import "./utilities/status.css";
+@import "./utilities/status-strip.css";
 @import "./utilities/content-type.css";
 @import "./utilities/layout.css";
 @import "./utilities/animations.css";

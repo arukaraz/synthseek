@@ -20,7 +20,7 @@ export function YtdlpCard({ initial }: YtdlpCardProps) {
     <SettingsCard
       title="yt-dlp"
       optional
-      description="Fallback source used when slskd cannot deliver a track. Format and quality follow each request's own config. Requires yt-dlp and ffmpeg in the container."
+      description="Fallback source used when slskd cannot deliver a track. Format and quality follow each request's own config."
     >
       <EngineRow
         label="Enable"

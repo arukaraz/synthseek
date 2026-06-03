@@ -7,6 +7,7 @@ export function useUpdateConnectionsSlskd() {
   return trpc.settings.updateConnectionsSlskd.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
+      utils.settings.slskdStatus.invalidate();
       toast.success("Slskd connection updated");
     },
     onError: (error) => toast.error(error.message || "Failed to update Slskd settings"),

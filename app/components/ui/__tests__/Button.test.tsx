@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { FormEvent } from "react";
 import { Button } from "../Button";
 
 describe("Button", () => {
@@ -103,5 +104,48 @@ describe("Button", () => {
   it("spreads additional props", () => {
     render(<Button data-testid="test-button">Test</Button>);
     expect(screen.getByTestId("test-button")).toBeInTheDocument();
+  });
+
+  it("defaults to type button so it never submits a form implicitly", () => {
+    render(<Button>Default type</Button>);
+    expect(screen.getByRole("button")).toHaveAttribute("type", "button");
+  });
+
+  it("lets an explicit type override the default", () => {
+    render(<Button type="submit">Submit</Button>);
+    expect(screen.getByRole("button")).toHaveAttribute("type", "submit");
+  });
+
+  it("does not trigger a form submit by default when clicked", async () => {
+    const handleSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+    const user = userEvent.setup();
+    render(
+      <form onSubmit={handleSubmit}>
+        <Button>Action</Button>
+      </form>
+    );
+    await user.click(screen.getByRole("button", { name: "Action" }));
+    expect(handleSubmit).not.toHaveBeenCalled();
+  });
+
+  it("triggers a form submit when type is submit", async () => {
+    const handleSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+    const user = userEvent.setup();
+    render(
+      <form onSubmit={handleSubmit}>
+        <Button type="submit">Save</Button>
+      </form>
+    );
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    expect(handleSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not inject a type when rendering asChild", () => {
+    render(
+      <Button asChild>
+        <a href="/test">Link Button</a>
+      </Button>
+    );
+    expect(screen.getByRole("link", { name: "Link Button" })).not.toHaveAttribute("type");
   });
 });

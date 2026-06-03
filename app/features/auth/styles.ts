@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const authCard = cva(
-  "bg-surface/70 border-fg/10 flex flex-col gap-6 rounded-2xl border p-8 shadow-2xl backdrop-blur-xl"
+  "bg-surface/70 border-fg/10 flex w-full max-w-sm flex-col gap-6 rounded-2xl border p-8 shadow-2xl backdrop-blur-xl"
 );
 
 export const authInput = cva(

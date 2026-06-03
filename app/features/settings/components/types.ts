@@ -51,6 +51,7 @@ export interface ResetDefaultsButtonProps {
 export interface SaveBarProps {
   isDirty: boolean;
   isSaving: boolean;
+  saveDisabled?: boolean;
   onSave: () => void;
   onCancel: () => void;
 }
@@ -79,6 +80,7 @@ export interface SettingsCardProps {
 
 export interface SettingsFieldProps {
   label: string;
+  htmlFor?: string;
   helper?: ReactNode;
   className?: string;
   children: ReactNode;

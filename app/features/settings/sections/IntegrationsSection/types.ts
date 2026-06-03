@@ -26,6 +26,15 @@ export interface SlskdCardProps {
   initial: { apiUrl: string; apiKey: string; bannedUsers: string[] };
 }
 
+export type SlskdHealth = "healthy" | "unhealthy" | "not_configured";
+
+export type SlskdStatusTone = "success" | "danger" | "muted";
+
+export interface SlskdStatusBadgeProps {
+  status: SlskdHealth;
+  message?: string;
+}
+
 export interface EnrichmentCardProps {
   initial: ConnectionsEnrichment;
 }

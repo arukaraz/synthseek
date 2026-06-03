@@ -42,8 +42,7 @@
     --popover: light-dark(1 0 0, 0.145 0.05 265);
     --popover-foreground: light-dark(0.145 0.05 265, 0.985 0.015 250);
 
-    --primary: light-dark(0.205 0.05 265, 0.985 0.015 250);
-    --primary-foreground: light-dark(0.985 0.015 250, 0.205 0.05 265);
+    --primary-foreground: 0.985 0.015 250;
 
     --secondary: light-dark(0.97 0.015 250, 0.25 0.04 260);
     --secondary-foreground: light-dark(0.205 0.05 265, 0.985 0.015 250);

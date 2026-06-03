@@ -1,0 +1,44 @@
+@layer utilities {
+  .status-strip {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.625rem;
+    border: 1px solid transparent;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+  }
+
+  .status-strip-success {
+    background-color: oklch(var(--neon-success) / 0.12);
+    border-color: oklch(var(--neon-success) / 0.32);
+    color: oklch(var(--neon-success));
+  }
+
+  .status-strip-error {
+    background-color: oklch(var(--neon-error) / 0.12);
+    border-color: oklch(var(--neon-error) / 0.32);
+    color: oklch(var(--neon-error));
+  }
+
+  .status-strip-neutral {
+    background-color: oklch(var(--muted-foreground) / 0.1);
+    border-color: oklch(var(--muted-foreground) / 0.28);
+    color: var(--surface-fg-muted);
+  }
+
+  .status-strip-glyph {
+    flex-shrink: 0;
+    margin-top: 0.0625rem;
+  }
+
+  .status-strip-body {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
