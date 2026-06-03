@@ -26,7 +26,7 @@ export function DialogOverlay({ className, ref, ...props }: DialogOverlayProps) 
   );
 }
 
-export function DialogContent({ className, children, ref, ...props }: DialogContentProps) {
+export function DialogContent({ className, children, ref, showClose = true, ...props }: DialogContentProps) {
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -45,10 +45,12 @@ export function DialogContent({ className, children, ref, ...props }: DialogCont
 
         <div className="relative z-10 flex h-full flex-col">{children}</div>
 
-        <DialogPrimitive.Close className={closeButton()}>
-          <X className="relative size-4" />
-          <span className="sr-only">Close</span>
-        </DialogPrimitive.Close>
+        {showClose && (
+          <DialogPrimitive.Close className={closeButton()}>
+            <X className="relative size-4" />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        )}
       </DialogPrimitive.Content>
     </DialogPortal>
   );
