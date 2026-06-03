@@ -26,6 +26,7 @@ export interface ThemeSelectorProps {
 export interface ThemeCardOptionProps {
   option: ThemeOption;
   selected: boolean;
+  featured: boolean;
   tabbable: boolean;
   onSelect: (value: Theme) => void;
   registerRef: (value: Theme, node: HTMLButtonElement | null) => void;

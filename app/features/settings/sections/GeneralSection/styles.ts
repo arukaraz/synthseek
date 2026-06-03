@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const themeGrid = cva("grid grid-cols-1 gap-3 sm:flex sm:flex-wrap");
+export const themeGrid = cva("grid grid-cols-2 gap-3 sm:flex sm:flex-wrap");
 
 export const themeCard = cva(
   "group focus-visible:ring-ring relative flex min-w-0 flex-1 basis-40 cursor-pointer flex-col overflow-hidden rounded-xl border text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100",
@@ -10,8 +10,12 @@ export const themeCard = cva(
         true: "border-primary-500/60 bg-primary-500/10 hover:bg-primary-500/15",
         false: "border-fg/10 hover:border-fg/20 hover:bg-fg/[0.03]",
       },
+      featured: {
+        true: "col-span-2 sm:col-span-1",
+        false: "",
+      },
     },
-    defaultVariants: { selected: false },
+    defaultVariants: { selected: false, featured: false },
   }
 );
 

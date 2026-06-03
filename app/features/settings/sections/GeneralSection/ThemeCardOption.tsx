@@ -14,7 +14,15 @@ import {
 import { ThemePreview } from "./ThemePreview";
 import type { ThemeCardOptionProps } from "./types";
 
-export function ThemeCardOption({ option, selected, tabbable, onSelect, registerRef, onKeyNav }: ThemeCardOptionProps) {
+export function ThemeCardOption({
+  option,
+  selected,
+  featured,
+  tabbable,
+  onSelect,
+  registerRef,
+  onKeyNav,
+}: ThemeCardOptionProps) {
   const accessibleName = option.hint ? `${option.label} (${option.hint})` : option.label;
 
   return (
@@ -27,7 +35,7 @@ export function ThemeCardOption({ option, selected, tabbable, onSelect, register
       ref={(node) => registerRef(option.value, node)}
       onClick={() => onSelect(option.value)}
       onKeyDown={(event) => onKeyNav(event, option.value)}
-      className={themeCard({ selected })}
+      className={themeCard({ selected, featured })}
     >
       <ThemePreview preview={option.preview} />
       <span className={themeCardFooter()}>

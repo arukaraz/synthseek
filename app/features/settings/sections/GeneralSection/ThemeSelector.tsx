@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 
 import type { Theme } from "@theme/ThemeProvider";
 
-import { THEME_OPTIONS } from "./constants";
+import { FEATURED_THEME, THEME_OPTIONS } from "./constants";
 import { isRovingKey, nextRovingIndex } from "./helpers";
 import { themeGrid } from "./styles";
 import { ThemeCardOption } from "./ThemeCardOption";
@@ -40,6 +40,7 @@ export function ThemeSelector({ value, onSelect, ariaLabel }: ThemeSelectorProps
           key={option.value}
           option={option}
           selected={value === option.value}
+          featured={option.value === FEATURED_THEME}
           tabbable={option.value === tabbableValue}
           onSelect={onSelect}
           registerRef={registerRef}
