@@ -3,7 +3,7 @@
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { cn } from "@utils/cn";
 
-import { cardDescription, cardHeader, cardTitle, settingsCard } from "../styles";
+import { cardDescription, cardHeader, cardHeaderText, cardHeaderTrailing, cardTitle, settingsCard } from "../styles";
 import { DESCRIPTION_INLINE_LIMIT } from "./constants";
 import type { SettingsCardProps } from "./types";
 
@@ -14,7 +14,7 @@ export function SettingsCard({ title, optional, description, trailing, className
   return (
     <section className={cn(settingsCard(), className)}>
       <header className={cardHeader()}>
-        <div className="flex flex-col gap-1">
+        <div className={cardHeaderText()}>
           <h2 className={cardTitle()}>
             <span className="inline-flex items-center gap-1.5">
               {title}
@@ -24,7 +24,7 @@ export function SettingsCard({ title, optional, description, trailing, className
           </h2>
           {hasDescription && !collapseAsTooltip ? <p className={cardDescription()}>{description}</p> : null}
         </div>
-        {trailing ? <div className="shrink-0">{trailing}</div> : null}
+        {trailing ? <div className={cardHeaderTrailing()}>{trailing}</div> : null}
       </header>
       <div className="flex flex-col gap-4">{children}</div>
     </section>

@@ -8,7 +8,7 @@ export const sidebar = cva(
 
 export const sidebarFooter = cva("text-fg/70 mt-auto px-3 py-3 font-mono text-[11px] font-medium");
 
-export const contentScroll = cva("flex h-full min-h-0 flex-1 flex-col overflow-y-auto");
+export const contentScroll = cva("flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-y-auto");
 
 export const contentRoot = cva("mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:gap-6 sm:p-6 lg:max-w-6xl lg:p-10");
 
@@ -52,7 +52,11 @@ export const sidebarGroupHeader = cva("text-fg/40 px-3 pt-3 pb-1 text-[11px] fon
 
 export const settingsCard = cva("border-fg/10 bg-fg/[0.02] flex flex-col gap-4 rounded-2xl border p-4 sm:p-6");
 
-export const cardHeader = cva("flex items-start justify-between gap-3");
+export const cardHeader = cva("flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap");
+
+export const cardHeaderText = cva("flex min-w-0 flex-1 flex-col gap-1");
+
+export const cardHeaderTrailing = cva("w-full shrink-0 sm:w-auto");
 
 export const cardTitle = cva("text-fg text-lg font-semibold");
 

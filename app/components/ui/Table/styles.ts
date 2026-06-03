@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const tableContainer = cva(
-  "border-fg/10 bg-surface/30 overflow-hidden rounded-xl border sm:bg-surface/20 sm:backdrop-blur-sm",
+  "border-fg/10 bg-surface/30 min-w-0 overflow-hidden rounded-xl border sm:bg-surface/20 sm:backdrop-blur-sm",
   {
     variants: {},
     defaultVariants: {},

@@ -19,14 +19,14 @@ export const logChip = cva(
   }
 );
 
-export const searchWrap = cva("min-w-[12rem] flex-1");
+export const searchWrap = cva("min-w-0 basis-full sm:min-w-[12rem] sm:flex-1 sm:basis-auto");
 
-export const toolbarActions = cva("flex items-center gap-2");
+export const toolbarActions = cva("flex flex-wrap items-center gap-2");
 
 export const exportActions = cva("flex flex-wrap items-center gap-3");
 
 export const logTerminal = cva(
-  "border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] overflow-auto rounded-lg border bg-black/40 p-3 font-mono text-xs leading-relaxed"
+  "border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] w-full min-w-0 overflow-auto rounded-lg border bg-black/40 p-3 font-mono text-xs leading-relaxed"
 );
 
 export const logLine = cva("whitespace-pre-wrap break-words");

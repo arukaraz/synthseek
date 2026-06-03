@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const toolbarActions = cva("flex flex-wrap items-center justify-end gap-2");
+export const toolbarActions = cva("flex flex-wrap items-center justify-start gap-2 sm:justify-end");
 
 export const bulkBar = cva("border-fg/10 bg-fg/5 mb-3 flex flex-wrap items-center gap-3 rounded-lg border px-3 py-2");
 
