@@ -3,12 +3,13 @@
 import { Button } from "@components/ui/Button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { IconButton } from "@components/ui/IconButton";
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { StatusBadge } from "@components/ui/StatusBadge";
 import { cn } from "@utils/cn";
 import { getContentTypeIcon } from "@utils/content-type-helpers";
 import { formatTimestamp } from "@utils/formatters";
-import Image from "next/image";
 import { ArrowLeft, Download, Globe, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 import { useRequestActions } from "../../hooks/useRequestActions";
 import { JspfExportDialog } from "./JspfExportDialog";
@@ -95,91 +96,98 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
               <p className="text-fg/40 truncate text-xs">Requested by {request.requestedBy.username}</p>
-              {canExport && request.tracks.length > 0 && (
-                <p className="text-fg/40 truncate text-xs">
-                  Portable IDs {request.tracks.filter((track) => track.mbid).length}/{request.tracks.length}
-                </p>
-              )}
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-2">
             <StatusBadge status={request.status} size="md" showIcon />
 
-            {canRetry && (
-              <Button
-                onClick={retry}
-                variant="outline"
-                size="sm"
-                className={cn(
-                  "border-primary-500/30 bg-primary-500/10 text-primary-300",
-                  "hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200"
-                )}
-              >
-                <RefreshCw className="mr-1.5 size-3.5" />
-                Retry Failed
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {canRetry && (
+                <Button
+                  onClick={retry}
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    "border-primary-500/30 bg-primary-500/10 text-primary-300",
+                    "hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200"
+                  )}
+                >
+                  <RefreshCw className="mr-1.5 size-3.5" />
+                  Retry Failed
+                </Button>
+              )}
 
-            {canRemove && (
-              <IconButton
-                icon={Trash2}
-                variant="red"
-                size="md"
-                aria-label={`Remove ${label.toLowerCase()}`}
-                onClick={remove}
-              />
-            )}
+              {canRemove && (
+                <IconButton
+                  icon={Trash2}
+                  variant="red"
+                  size="md"
+                  aria-label={`Remove ${label.toLowerCase()}`}
+                  onClick={remove}
+                />
+              )}
 
-            {hasMoreActions && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button type="button" className={heroMoreButton()} aria-label="More actions">
-                    <MoreVertical className="size-3.5" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="min-w-44">
-                  {canCancel && (
-                    <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
-                      <Square className="size-3.5" />
-                      Cancel downloads
-                    </DropdownMenuItem>
-                  )}
-                  {canSyncSource && (
-                    <DropdownMenuItem
-                      onClick={syncSourceNow}
-                      disabled={syncSourcePending}
-                      className="text-emerald-400 focus:text-emerald-300"
-                    >
-                      <RefreshCcw className="size-3.5" />
-                      {syncSourcePending ? "Syncing…" : "Sync from Spotify"}
-                    </DropdownMenuItem>
-                  )}
-                  {canSyncPlex && (
-                    <DropdownMenuItem
-                      onClick={syncPlex}
-                      disabled={syncPlexPending}
-                      className="text-primary-400 focus:text-primary-300"
-                    >
-                      <Upload className="size-3.5" />
-                      {syncPlexPending ? "Syncing…" : "Sync to Plex"}
-                    </DropdownMenuItem>
-                  )}
-                  {canExport && (
-                    <DropdownMenuItem onClick={() => void exportJspf()}>
-                      <Download className="size-3.5" />
-                      Export (.jspf)
-                    </DropdownMenuItem>
-                  )}
-                  {canExport && (
-                    <DropdownMenuItem onClick={() => setExportFullOpen(true)}>
-                      <Globe className="size-3.5" />
-                      Export (full portability)
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+              {hasMoreActions && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button type="button" className={heroMoreButton()} aria-label="More actions">
+                      <MoreVertical className="size-3.5" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="min-w-44">
+                    {canCancel && (
+                      <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
+                        <Square className="size-3.5" />
+                        Cancel downloads
+                      </DropdownMenuItem>
+                    )}
+                    {canSyncSource && (
+                      <DropdownMenuItem
+                        onClick={syncSourceNow}
+                        disabled={syncSourcePending}
+                        className="text-emerald-400 focus:text-emerald-300"
+                      >
+                        <RefreshCcw className="size-3.5" />
+                        {syncSourcePending ? "Syncing…" : "Sync from Spotify"}
+                      </DropdownMenuItem>
+                    )}
+                    {canSyncPlex && (
+                      <DropdownMenuItem
+                        onClick={syncPlex}
+                        disabled={syncPlexPending}
+                        className="text-primary-400 focus:text-primary-300"
+                      >
+                        <Upload className="size-3.5" />
+                        {syncPlexPending ? "Syncing…" : "Sync to Plex"}
+                      </DropdownMenuItem>
+                    )}
+                    {canExport && (
+                      <DropdownMenuItem onClick={() => void exportJspf()}>
+                        <Download className="size-3.5" />
+                        <span className="flex-1">Export</span>
+                        <InfoTooltip
+                          trigger="click"
+                          side="left"
+                          description="Downloads a .jspf file now, using the IDs already in your library."
+                        />
+                      </DropdownMenuItem>
+                    )}
+                    {canExport && (
+                      <DropdownMenuItem onClick={() => setExportFullOpen(true)}>
+                        <Globe className="size-3.5" />
+                        <span className="flex-1">Export (max compatibility)</span>
+                        <InfoTooltip
+                          trigger="click"
+                          side="left"
+                          description="Resolves every track's MusicBrainz ID first (slower) so the file matches in any app, then downloads."
+                        />
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
         </div>
       </div>

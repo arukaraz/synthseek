@@ -22,9 +22,9 @@ export function JspfExportDialog({ request, open, onOpenChange }: JspfExportDial
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={jspfExportDialogContent()}>
-        <DialogTitle>Export (full portability)</DialogTitle>
+        <DialogTitle>Export (max compatibility)</DialogTitle>
         <DialogDescription>
-          Resolving MusicBrainz IDs so this collection matches on any instance, then downloading.
+          Resolving every track&apos;s MusicBrainz ID so the file matches in any app, then downloading.
         </DialogDescription>
         <div className="flex flex-col gap-2 py-2">
           <ProgressBar progress={isExporting ? percent : 100} isActive={isExporting} />

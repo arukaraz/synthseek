@@ -20,8 +20,6 @@ export const heroTrendingBadge = cva(
 
 export const heroContent = cva("absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6");
 
-export const heroEyebrow = cva("text-fg-muted mb-2 text-[11px] font-mono uppercase tracking-widest");
-
 export const heroTitle = cva("text-fg mb-1 line-clamp-2 text-2xl font-semibold leading-tight sm:text-3xl md:text-4xl");
 
 export const heroSubtitle = cva("text-fg-muted mb-4 text-sm");

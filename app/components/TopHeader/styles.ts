@@ -102,7 +102,25 @@ export const headerTabBadge = cva(
   "ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent-500/20 px-1.5 text-[10px] font-semibold text-accent-200"
 );
 
-export const searchForm = cva("mx-auto w-full min-w-0 max-w-md flex-1 sm:max-w-lg lg:max-w-xl");
+export const searchForm = cva("mx-auto w-full min-w-0 max-w-md flex-1 sm:max-w-lg lg:max-w-xl", {
+  variants: {
+    open: {
+      true: "flex",
+      false: "hidden sm:block",
+    },
+  },
+  defaultVariants: { open: false },
+});
+
+export type SearchFormProps = VariantProps<typeof searchForm>;
+
+export const mobileSearchTrigger = cva(
+  "text-fg/45 hover:bg-fg/10 hover:text-fg/80 ml-auto flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors sm:hidden"
+);
+
+export const mobileSearchClose = cva(
+  "text-fg/45 hover:bg-fg/10 hover:text-fg absolute right-2.5 rounded p-1 transition-colors sm:hidden"
+);
 
 export const searchShell = cva("relative flex w-full min-w-0 items-center rounded-xl border transition-all", {
   variants: {
@@ -116,8 +134,4 @@ export const searchShell = cva("relative flex w-full min-w-0 items-center rounde
 
 export const searchInput = cva(
   "text-fg placeholder-fg/35 h-10 w-full min-w-0 bg-transparent pr-10 pl-10 text-sm outline-none sm:pr-20"
-);
-
-export const searchKbdHint = cva(
-  "pointer-events-none absolute right-3 hidden items-center gap-1 rounded-md border border-fg/10 bg-fg/5 px-1.5 py-0.5 font-mono text-[10px] text-fg/45 sm:inline-flex"
 );

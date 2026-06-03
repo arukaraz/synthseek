@@ -3,4 +3,5 @@ export interface InfoTooltipProps {
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
   className?: string;
+  trigger?: "hover" | "click";
 }

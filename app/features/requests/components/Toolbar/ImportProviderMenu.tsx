@@ -115,13 +115,12 @@ export function ImportProviderMenu() {
               )}
             </DropdownMenuItem>
           )}
-          <DropdownMenuLabel>File</DropdownMenuLabel>
           <DropdownMenuItem onSelect={() => setJspfOpen(true)} className={importProviderMenuItem()}>
             <span className={importProviderFileChip()}>
               <FileJson className="size-3.5" />
             </span>
             <div className="flex flex-1 flex-col">
-              <span>From file (JSPF)</span>
+              <span>From file</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

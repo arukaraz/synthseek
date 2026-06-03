@@ -56,7 +56,7 @@ export const REVOKE_KEY_DIALOG = {
 
 export const MCP_SUB = {
   title: "MCP",
-  description: "Connect an AI assistant (Claude, Cursor...) to Synthseek over the Model Context Protocol.",
+  description: "Connect an AI assistant to Synthseek over the Model Context Protocol.",
   endpointLabel: "MCP endpoint",
   endpointHelper: "Add this URL as a custom connector or MCP server in your assistant.",
   copied: "Endpoint copied",

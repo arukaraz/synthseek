@@ -11,7 +11,6 @@ import { useCallback, useState } from "react";
 import {
   heroCanvas,
   heroContent,
-  heroEyebrow,
   heroImageOverlayBottom,
   heroImageOverlayLeft,
   heroSubtitle,
@@ -70,7 +69,6 @@ export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
             exit="hidden"
             className={heroContent()}
           >
-            <div className={heroEyebrow()}>Latest release</div>
             <h2 className={heroTitle()}>{trackName}</h2>
             <p className={heroSubtitle()}>{artistName}</p>
             <motion.button

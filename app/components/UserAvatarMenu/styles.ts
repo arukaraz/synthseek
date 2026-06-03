@@ -23,16 +23,19 @@ export const triggerBadge = cva(
   "ring-surface bg-secondary-500 text-secondary-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full ring-2 motion-safe:animate-pulse"
 );
 
-export const menuContent = cva("w-64 rounded-xl bg-gradient-to-b p-1.5 shadow-2xl shadow-surface/50", {
-  variants: {
-    gradient: {
-      primary: "from-primary-600/5 via-primary-600/5 to-accent-600/5",
+export const menuContent = cva(
+  "bg-surface-elevated/98 sm:bg-surface-elevated/95 w-64 rounded-xl bg-gradient-to-b p-1.5 shadow-2xl shadow-surface/50",
+  {
+    variants: {
+      gradient: {
+        primary: "from-primary-600/5 via-primary-600/5 to-accent-600/5",
+      },
     },
-  },
-  defaultVariants: {
-    gradient: "primary",
-  },
-});
+    defaultVariants: {
+      gradient: "primary",
+    },
+  }
+);
 
 export type MenuContentProps = VariantProps<typeof menuContent>;
 
