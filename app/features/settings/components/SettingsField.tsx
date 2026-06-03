@@ -2,13 +2,32 @@
 
 import { cn } from "@utils/cn";
 
-import { fieldHelper, fieldLabel, fieldRow } from "../styles";
+import { fieldHelper, fieldLabel, fieldLabelRow, fieldRow } from "../styles";
 import type { SettingsFieldProps } from "./types";
 
-export function SettingsField({ label, htmlFor, helper, className, children }: SettingsFieldProps) {
+export function SettingsField({
+  label,
+  labelTrailing,
+  htmlFor,
+  helper,
+  className,
+  contentSpacing,
+  children,
+}: SettingsFieldProps) {
   return (
-    <div className={cn(fieldRow(), className)}>
-      {htmlFor ? (
+    <div className={cn(fieldRow({ spacing: contentSpacing }), className)}>
+      {labelTrailing ? (
+        <div className={fieldLabelRow()}>
+          {htmlFor ? (
+            <label htmlFor={htmlFor} className={fieldLabel()}>
+              {label}
+            </label>
+          ) : (
+            <span className={fieldLabel()}>{label}</span>
+          )}
+          {labelTrailing}
+        </div>
+      ) : htmlFor ? (
         <label htmlFor={htmlFor} className={fieldLabel()}>
           {label}
         </label>

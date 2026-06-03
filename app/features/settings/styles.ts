@@ -68,13 +68,23 @@ export const cardSectionHeader = cva("text-fg/70 text-sm font-semibold");
 
 export const fieldLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tracking-wider");
 
+export const fieldLabelRow = cva("flex items-center gap-1.5");
+
 export const fieldHelper = cva("text-fg/45 text-xs");
 
 export const fieldError = cva("text-red-400 text-xs");
 
 export const fieldWarning = cva("text-amber-400 text-xs");
 
-export const fieldRow = cva("flex flex-col gap-1.5");
+export const fieldRow = cva("flex flex-col", {
+  variants: {
+    spacing: {
+      default: "gap-1.5",
+      loose: "gap-3",
+    },
+  },
+  defaultVariants: { spacing: "default" },
+});
 
 export const engineRow = cva("flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6");
 

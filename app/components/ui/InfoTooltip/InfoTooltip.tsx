@@ -18,7 +18,9 @@ import type { InfoTooltipProps } from "./types";
 
 export function InfoTooltip({
   description,
+  secondary,
   title,
+  triggerLabel = "More information",
   points,
   learnMore,
   side = "top",
@@ -30,6 +32,7 @@ export function InfoTooltip({
     <div className={infoTooltipBody()}>
       {title ? <p className={infoTooltipTitle()}>{title}</p> : null}
       <p className={infoTooltipText()}>{description}</p>
+      {secondary ? <p className={infoTooltipText()}>{secondary}</p> : null}
       {points && points.length > 0 ? (
         <ul className={infoTooltipList()}>
           {points.map((point) => (
@@ -47,7 +50,7 @@ export function InfoTooltip({
           <button
             type="button"
             className={infoTooltipTrigger({ className })}
-            aria-label="More information"
+            aria-label={triggerLabel}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
             onPointerUp={(e) => e.stopPropagation()}
@@ -80,7 +83,7 @@ export function InfoTooltip({
           <button
             type="button"
             className={infoTooltipTrigger({ className })}
-            aria-label="More information"
+            aria-label={triggerLabel}
             onClick={(e) => e.preventDefault()}
           >
             <Info className="size-3.5" />

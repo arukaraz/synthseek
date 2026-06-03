@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { useSlskdStatus } from "@hooks/api/queries/useSlskdStatus";
@@ -17,7 +18,12 @@ import { SettingsField } from "../../components/SettingsField";
 import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
-import { fieldError, fieldWarning } from "../../styles";
+import { cardDivider, fieldError, fieldWarning } from "../../styles";
+import {
+  BANNED_UPLOADERS_TOOLTIP_AUTO,
+  BANNED_UPLOADERS_TOOLTIP_TRIGGER_LABEL,
+  BANNED_UPLOADERS_TOOLTIP_WHAT,
+} from "./constants";
 import { SlskdStatusBadge } from "./SlskdStatusBadge";
 import type { SlskdCardProps } from "./types";
 
@@ -51,14 +57,18 @@ export function SlskdCard({ initial }: SlskdCardProps) {
   };
 
   return (
-    <SettingsCard title="slskd" description="Required for downloads.">
-      {status.data ? (
-        <SlskdStatusBadge
-          status={status.data.status}
-          message={status.data.message !== "Connected" ? status.data.message : undefined}
-        />
-      ) : null}
-
+    <SettingsCard
+      title="Slskd"
+      description="Required for downloads."
+      trailing={
+        status.data ? (
+          <SlskdStatusBadge
+            status={status.data.status}
+            message={status.data.message !== "Connected" ? status.data.message : undefined}
+          />
+        ) : null
+      }
+    >
       <SettingsField label="API URL" helper="">
         <SettingsTextInput
           value={draft.apiUrl}
@@ -91,7 +101,19 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         </Button>
       </div>
 
-      <SettingsField label="Banned uploaders">
+      <div role="separator" className={cardDivider()} />
+
+      <SettingsField
+        label="Banned uploaders"
+        contentSpacing="loose"
+        labelTrailing={
+          <InfoTooltip
+            description={BANNED_UPLOADERS_TOOLTIP_WHAT}
+            secondary={BANNED_UPLOADERS_TOOLTIP_AUTO}
+            triggerLabel={BANNED_UPLOADERS_TOOLTIP_TRIGGER_LABEL}
+          />
+        }
+      >
         <ListManager
           value={draft.bannedUsers}
           onChange={(v) => setField("bannedUsers", v)}

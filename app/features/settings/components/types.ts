@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
 import type { KeyboardEvent, ReactNode } from "react";
-import type { pill } from "../styles";
+import type { fieldRow, pill } from "../styles";
 
 export interface ChipsInputProps {
   value: string[];
@@ -80,9 +80,11 @@ export interface SettingsCardProps {
 
 export interface SettingsFieldProps {
   label: string;
+  labelTrailing?: ReactNode;
   htmlFor?: string;
   helper?: ReactNode;
   className?: string;
+  contentSpacing?: VariantProps<typeof fieldRow>["spacing"];
   children: ReactNode;
 }
 

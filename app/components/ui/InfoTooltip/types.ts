@@ -1,6 +1,8 @@
 export interface InfoTooltipProps {
   description: string;
+  secondary?: string;
   title?: string;
+  triggerLabel?: string;
   points?: string[];
   learnMore?: { label: string; href: string };
   side?: "top" | "right" | "bottom" | "left";

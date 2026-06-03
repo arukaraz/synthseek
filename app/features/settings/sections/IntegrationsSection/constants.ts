@@ -17,3 +17,11 @@ export const SLSKD_STATUS_TONE: Record<SlskdHealth, SlskdStatusTone> = {
   unhealthy: "danger",
   not_configured: "muted",
 };
+
+export const BANNED_UPLOADERS_TOOLTIP_TRIGGER_LABEL = "About banned uploaders";
+
+export const BANNED_UPLOADERS_TOOLTIP_WHAT =
+  "Soulseek usernames added here are blocked as download sources. Synthseek skips their files and downloads from another source instead. Add anyone who keeps sending bad files or failing to deliver.";
+
+export const BANNED_UPLOADERS_TOOLTIP_AUTO =
+  "Synthseek can also add uploaders here for you. When a user's transfers fail too many times in a row they are banned automatically. Only real transfer failures count, not filename mismatches, and the limit is configured in Engine > Search (set it to 0 to turn auto-ban off).";
