@@ -1,20 +1,45 @@
 "use client";
 
-import { Info } from "lucide-react";
+import { ExternalLink, Info } from "lucide-react";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 
-import { infoTooltipContent, infoTooltipTrigger } from "./styles";
+import {
+  infoTooltipBody,
+  infoTooltipContent,
+  infoTooltipLink,
+  infoTooltipList,
+  infoTooltipText,
+  infoTooltipTitle,
+  infoTooltipTrigger,
+} from "./styles";
 import type { InfoTooltipProps } from "./types";
 
 export function InfoTooltip({
   description,
+  title,
+  points,
+  learnMore,
   side = "top",
   align = "start",
   className,
   trigger = "hover",
 }: InfoTooltipProps) {
+  const content = (
+    <div className={infoTooltipBody()}>
+      {title ? <p className={infoTooltipTitle()}>{title}</p> : null}
+      <p className={infoTooltipText()}>{description}</p>
+      {points && points.length > 0 ? (
+        <ul className={infoTooltipList()}>
+          {points.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+
   if (trigger === "click") {
     return (
       <Popover>
@@ -36,7 +61,13 @@ export function InfoTooltip({
           className={infoTooltipContent()}
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
-          {description}
+          {content}
+          {learnMore ? (
+            <a href={learnMore.href} target="_blank" rel="noreferrer" className={infoTooltipLink()}>
+              {learnMore.label}
+              <ExternalLink className="size-3" />
+            </a>
+          ) : null}
         </PopoverContent>
       </Popover>
     );
@@ -56,7 +87,7 @@ export function InfoTooltip({
           </button>
         </TooltipTrigger>
         <TooltipContent side={side} align={align} className={infoTooltipContent()}>
-          {description}
+          {content}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

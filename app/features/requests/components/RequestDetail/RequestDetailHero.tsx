@@ -169,7 +169,13 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                         <InfoTooltip
                           trigger="click"
                           side="left"
-                          description="Downloads a .jspf file now, using the IDs already in your library."
+                          title="Export"
+                          description="Downloads a .jspf file now, using the IDs already saved on each track."
+                          points={[
+                            "ISRC and Deezer ID for every track",
+                            "MusicBrainz ID only where already resolved",
+                            "Other apps use these IDs to re-find each song",
+                          ]}
                         />
                       </DropdownMenuItem>
                     )}
@@ -180,7 +186,13 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                         <InfoTooltip
                           trigger="click"
                           side="left"
-                          description="Resolves every track's MusicBrainz ID first (slower) so the file matches in any app, then downloads."
+                          title="Export (max compatibility)"
+                          description="Looks up the missing MusicBrainz ID for every track first, then downloads."
+                          points={[
+                            "Might be slower: resolves each ID online if any is missing",
+                            "Best for ListenBrainz and MusicBrainz apps",
+                            "The file then matches in more apps",
+                          ]}
                         />
                       </DropdownMenuItem>
                     )}
