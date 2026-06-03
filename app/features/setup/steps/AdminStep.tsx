@@ -1,8 +1,11 @@
 "use client";
 
+import { AtSign, User } from "lucide-react";
 import { useId, useState, type FormEvent } from "react";
 
-import { Input } from "@components/ui/Input";
+import { PasswordField } from "@components/ui/PasswordField";
+import { authInputControl, authInputIcon, authInputRow } from "@components/ui/styles";
+
 import { useSetupBootstrap } from "@hooks/api/mutations/auth/useSetupBootstrap";
 
 import { StatusStrip } from "../components/StatusStrip";
@@ -72,18 +75,24 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
           <label htmlFor={emailId} className={fieldLabel()}>
             Email
           </label>
-          <Input
-            id={emailId}
-            type="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              clearError();
-            }}
-            required
-            aria-describedby={emailInvalid ? emailErrorId : undefined}
-            aria-invalid={emailInvalid || undefined}
-          />
+          <div className={authInputRow({ invalid: emailInvalid })}>
+            <AtSign className={authInputIcon()} aria-hidden="true" />
+            <input
+              id={emailId}
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearError();
+              }}
+              required
+              autoComplete="email"
+              placeholder="you@domain.com"
+              aria-describedby={emailInvalid ? emailErrorId : undefined}
+              aria-invalid={emailInvalid || undefined}
+              className={authInputControl()}
+            />
+          </div>
           {emailInvalid ? (
             <p id={emailErrorId} className={fieldError()}>
               {ADMIN_COPY.emailError}
@@ -94,40 +103,42 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
           <label htmlFor={usernameId} className={fieldLabel()}>
             Username
           </label>
-          <Input
-            id={usernameId}
-            type="text"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-              clearError();
-            }}
-            required
-            minLength={ADMIN_FIELD_RULES.usernameMin}
-            maxLength={ADMIN_FIELD_RULES.usernameMax}
-            aria-describedby={usernameHintId}
-            aria-invalid={usernameInvalid || undefined}
-          />
+          <div className={authInputRow({ invalid: usernameInvalid })}>
+            <User className={authInputIcon()} aria-hidden="true" />
+            <input
+              id={usernameId}
+              type="text"
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                clearError();
+              }}
+              required
+              minLength={ADMIN_FIELD_RULES.usernameMin}
+              maxLength={ADMIN_FIELD_RULES.usernameMax}
+              autoComplete="username"
+              placeholder="admin"
+              aria-describedby={usernameHintId}
+              aria-invalid={usernameInvalid || undefined}
+              className={authInputControl()}
+            />
+          </div>
           <p id={usernameHintId} className={usernameInvalid ? fieldError() : fieldHint()}>
             {usernameInvalid ? ADMIN_COPY.usernameError : ADMIN_COPY.usernameHint}
           </p>
         </div>
         <div className={fieldGroup()}>
-          <label htmlFor={passwordId} className={fieldLabel()}>
-            Password
-          </label>
-          <Input
+          <PasswordField
             id={passwordId}
-            type="password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
+            onChange={(value) => {
+              setPassword(value);
               clearError();
             }}
-            required
+            invalid={passwordInvalid}
+            autoComplete="new-password"
             minLength={ADMIN_FIELD_RULES.passwordMin}
-            aria-describedby={passwordHintId}
-            aria-invalid={passwordInvalid || undefined}
+            describedBy={passwordHintId}
           />
           <p id={passwordHintId} className={passwordInvalid ? fieldError() : fieldHint()}>
             {passwordInvalid ? ADMIN_COPY.passwordError : ADMIN_COPY.passwordHint}

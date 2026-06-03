@@ -1,24 +1,30 @@
 "use client";
 
+import { Mail } from "lucide-react";
 import { useId, useState } from "react";
 
+import { PasswordField } from "@components/ui/PasswordField";
+import { authInputControl, authInputIcon, authInputRow } from "@components/ui/styles";
 import { useUpdateConnectionsEnrichment } from "@hooks/api/mutations/settings/useUpdateConnections";
-import { SettingsField } from "@features/settings/components/SettingsField";
-import { SettingsSecretInput } from "@features/settings/components/SettingsSecretInput";
-import { SettingsTextInput } from "@features/settings/components/SettingsTextInput";
 
 import { StatusStrip } from "../components/StatusStrip";
 import { ENRICHMENT_COPY, ENRICHMENT_FIELD_DESCRIPTIONS, SETUP_HEADING_IDS } from "../constants";
+import { fieldGroup, fieldHint, fieldLabel } from "../styles";
 import { StepShell } from "./StepShell";
 import type { EnrichmentStepProps } from "../types";
 
 export function EnrichmentStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: EnrichmentStepProps) {
   const update = useUpdateConnectionsEnrichment();
   const lastfmId = useId();
+  const lastfmHintId = useId();
   const fanartId = useId();
+  const fanartHintId = useId();
   const songlinkId = useId();
+  const songlinkHintId = useId();
   const acoustidId = useId();
+  const acoustidHintId = useId();
   const musicbrainzId = useId();
+  const musicbrainzHintId = useId();
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState({
     lastfmApiKey: "",
@@ -59,39 +65,79 @@ export function EnrichmentStep({ stepIndex, totalSteps, onComplete, onBack, onSk
       onBack={onBack}
       footerError={error ? <StatusStrip tone="error" message={error} /> : undefined}
     >
-      <SettingsField label="Last.fm API key" htmlFor={lastfmId} helper={ENRICHMENT_FIELD_DESCRIPTIONS.lastfm}>
-        <SettingsSecretInput id={lastfmId} value={draft.lastfmApiKey} onChange={(v) => update1("lastfmApiKey", v)} />
-      </SettingsField>
-      <SettingsField label="FanART API key" htmlFor={fanartId} helper={ENRICHMENT_FIELD_DESCRIPTIONS.fanart}>
-        <SettingsSecretInput id={fanartId} value={draft.fanartApiKey} onChange={(v) => update1("fanartApiKey", v)} />
-      </SettingsField>
-      <SettingsField label="Songlink API key" htmlFor={songlinkId} helper={ENRICHMENT_FIELD_DESCRIPTIONS.songlink}>
-        <SettingsSecretInput
+      <div className={fieldGroup()}>
+        <PasswordField
+          id={lastfmId}
+          value={draft.lastfmApiKey}
+          onChange={(v) => update1("lastfmApiKey", v)}
+          label="Last.fm API key"
+          autoComplete="off"
+          describedBy={lastfmHintId}
+        />
+        <p id={lastfmHintId} className={fieldHint()}>
+          {ENRICHMENT_FIELD_DESCRIPTIONS.lastfm}
+        </p>
+      </div>
+      <div className={fieldGroup()}>
+        <PasswordField
+          id={fanartId}
+          value={draft.fanartApiKey}
+          onChange={(v) => update1("fanartApiKey", v)}
+          label="FanART API key"
+          autoComplete="off"
+          describedBy={fanartHintId}
+        />
+        <p id={fanartHintId} className={fieldHint()}>
+          {ENRICHMENT_FIELD_DESCRIPTIONS.fanart}
+        </p>
+      </div>
+      <div className={fieldGroup()}>
+        <PasswordField
           id={songlinkId}
           value={draft.songlinkApiKey}
           onChange={(v) => update1("songlinkApiKey", v)}
+          label="Songlink API key"
+          autoComplete="off"
+          describedBy={songlinkHintId}
         />
-      </SettingsField>
-      <SettingsField label="AcoustID API key" htmlFor={acoustidId} helper={ENRICHMENT_FIELD_DESCRIPTIONS.acoustid}>
-        <SettingsSecretInput
+        <p id={songlinkHintId} className={fieldHint()}>
+          {ENRICHMENT_FIELD_DESCRIPTIONS.songlink}
+        </p>
+      </div>
+      <div className={fieldGroup()}>
+        <PasswordField
           id={acoustidId}
           value={draft.acoustidApiKey}
           onChange={(v) => update1("acoustidApiKey", v)}
+          label="AcoustID API key"
+          autoComplete="off"
+          describedBy={acoustidHintId}
         />
-      </SettingsField>
-      <SettingsField
-        label="MusicBrainz contact email"
-        htmlFor={musicbrainzId}
-        helper={ENRICHMENT_FIELD_DESCRIPTIONS.musicbrainzEmail}
-      >
-        <SettingsTextInput
-          id={musicbrainzId}
-          value={draft.musicbrainzEmail}
-          onChange={(v) => update1("musicbrainzEmail", v)}
-          placeholder="you@example.com"
-          type="email"
-        />
-      </SettingsField>
+        <p id={acoustidHintId} className={fieldHint()}>
+          {ENRICHMENT_FIELD_DESCRIPTIONS.acoustid}
+        </p>
+      </div>
+      <div className={fieldGroup()}>
+        <label htmlFor={musicbrainzId} className={fieldLabel()}>
+          MusicBrainz contact email
+        </label>
+        <div className={authInputRow()}>
+          <Mail className={authInputIcon()} aria-hidden="true" />
+          <input
+            id={musicbrainzId}
+            type="email"
+            value={draft.musicbrainzEmail}
+            onChange={(e) => update1("musicbrainzEmail", e.target.value)}
+            placeholder="you@example.com"
+            autoComplete="off"
+            aria-describedby={musicbrainzHintId}
+            className={authInputControl()}
+          />
+        </div>
+        <p id={musicbrainzHintId} className={fieldHint()}>
+          {ENRICHMENT_FIELD_DESCRIPTIONS.musicbrainzEmail}
+        </p>
+      </div>
     </StepShell>
   );
 }

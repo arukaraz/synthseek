@@ -46,6 +46,11 @@ export const PLEX_COPY = {
   noServers: "No Plex servers were found on this account. You can skip and add one later.",
   connected: "Plex connected. Continue to the next step.",
   intro: "A popup will open for you to sign in to plex.tv.",
+  connect: "Login with Plex",
+  connecting: "Waiting for Plex...",
+  saving: "Saving...",
+  serverPickerIntro: "Pick the Plex server Synthseek should target:",
+  blockedHint: "Connect Plex or skip this step to continue",
 } as const;
 
 export const ENRICHMENT_COPY = {
@@ -73,3 +78,5 @@ export const DONE_COPY = {
 } as const;
 
 export const SETUP_LOADING_LABEL = "Loading setup";
+
+export const SETUP_EYEBROW = "First-run setup";

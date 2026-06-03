@@ -7,7 +7,7 @@ import { useFinishWizard } from "@hooks/api/mutations/settings/useFinishWizard";
 
 import { StatusStrip } from "../components/StatusStrip";
 import { DONE_COPY, SETUP_HEADING_IDS } from "../constants";
-import { doneCard, doneCheckBadge } from "../styles";
+import { doneCard, doneCardBody, doneCardHeading, doneCheckBadge } from "../styles";
 import { StepShell } from "./StepShell";
 import type { DoneState, DoneStepProps } from "../types";
 
@@ -51,8 +51,8 @@ export function DoneStep({ stepIndex, totalSteps, onFinish }: DoneStepProps) {
           <Check className="size-5" />
         </span>
         <div className="flex flex-col">
-          <span className="text-fg text-sm font-medium">{DONE_COPY.cardHeading}</span>
-          <span className="text-fg/55 text-xs">{DONE_COPY.cardBody}</span>
+          <span className={doneCardHeading()}>{DONE_COPY.cardHeading}</span>
+          <span className={doneCardBody()}>{DONE_COPY.cardBody}</span>
         </div>
       </div>
     </StepShell>

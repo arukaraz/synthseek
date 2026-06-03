@@ -1,14 +1,18 @@
 "use client";
 
-import { Plug } from "lucide-react";
+import { Link2, Loader2, Plug } from "lucide-react";
 
+import { authPlexButton, authPlexIcon, authPlexWord } from "@components/ui/styles";
 import { usePlexConnect } from "@hooks/api/mutations/settings/usePlexConnect";
+import { cn } from "@utils/cn";
 
 import { StatusStrip } from "../components/StatusStrip";
 import { PLEX_COPY, SETUP_HEADING_IDS } from "../constants";
 import { isPlexTimeoutMessage } from "../helpers";
 import {
+  plexIntro,
   serverPickerCard,
+  serverPickerIntro,
   serverPickerLocation,
   serverPickerName,
   serverPickerUri,
@@ -23,15 +27,10 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
   const isDone = plex.state.kind === "done";
   const isPending = plex.state.kind === "pending";
   const isSaving = plex.state.kind === "saving";
+  const connectBusy = isPending || isSaving;
 
-  const primaryAction = isDone ? onComplete : plex.start;
-  const primaryLabel = isDone
-    ? "Continue"
-    : isPending
-      ? "Waiting for Plex..."
-      : isSaving
-        ? "Saving..."
-        : "Login with Plex";
+  const connectLabel = isPending ? PLEX_COPY.connecting : isSaving ? PLEX_COPY.saving : PLEX_COPY.connect;
+  const connectPhase = plex.state.kind === "error" ? "error" : connectBusy ? "pending" : "idle";
 
   const footerError =
     plex.state.kind === "error" ? (
@@ -48,22 +47,24 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
       headingId={SETUP_HEADING_IDS.plex}
       title="Connect Plex (optional)"
       description="Lets Synthseek scan your library after each import and mirror playlists. You can do this later from Settings."
-      primaryLabel={primaryLabel}
-      primaryDisabled={isSaving}
-      primaryLoading={isPending || isSaving}
-      onPrimary={primaryAction}
+      primaryLabel="Continue"
+      primaryDisabled={!isDone}
+      primaryHint={PLEX_COPY.blockedHint}
+      onPrimary={onComplete}
       secondaryLabel="Skip"
       onSecondary={onSkip}
       showBack
       onBack={onBack}
       footerError={footerError}
     >
-      {plex.state.kind === "picking" ? (
+      {plex.state.kind === "done" ? (
+        <StatusStrip tone="success" message={PLEX_COPY.connected} />
+      ) : plex.state.kind === "picking" ? (
         plex.state.servers.length === 0 ? (
           <StatusStrip tone="neutral" message={PLEX_COPY.noServers} />
         ) : (
           <div className={serverPickerCard()}>
-            <span className="text-fg/70 text-xs">Pick the Plex server Synthseek should target:</span>
+            <span className={serverPickerIntro()}>{PLEX_COPY.serverPickerIntro}</span>
             {plex.state.servers.map((server) => (
               <button
                 key={`${server.clientIdentifier}-${server.uri}`}
@@ -80,12 +81,33 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
             ))}
           </div>
         )
-      ) : isDone ? (
-        <StatusStrip tone="success" message={PLEX_COPY.connected} />
       ) : (
-        <p className="text-fg/55 flex items-center gap-2 text-sm">
-          <Plug className="size-4" /> {PLEX_COPY.intro}
-        </p>
+        <>
+          <p className={plexIntro()}>
+            <Plug className="size-4 shrink-0" aria-hidden="true" /> {PLEX_COPY.intro}
+          </p>
+          <button
+            type="button"
+            onClick={plex.start}
+            disabled={connectBusy}
+            aria-busy={connectBusy || undefined}
+            data-error={plex.state.kind === "error"}
+            className={authPlexButton({ phase: connectPhase })}
+          >
+            {connectBusy ? (
+              <Loader2 className={cn(authPlexIcon({ phase: connectPhase }), "animate-spin")} aria-hidden="true" />
+            ) : (
+              <Link2 className={authPlexIcon({ phase: connectPhase })} aria-hidden="true" />
+            )}
+            {connectBusy ? (
+              connectLabel
+            ) : (
+              <span>
+                Login with <span className={authPlexWord()}>Plex</span>
+              </span>
+            )}
+          </button>
+        </>
       )}
     </StepShell>
   );

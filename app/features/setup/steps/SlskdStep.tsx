@@ -1,18 +1,24 @@
 "use client";
 
-import { Plug } from "lucide-react";
+import { Plug, Server } from "lucide-react";
 import { useId, useState } from "react";
 
-import { Button } from "@components/ui/Button";
-import { SettingsField } from "@features/settings/components/SettingsField";
-import { SettingsSecretInput } from "@features/settings/components/SettingsSecretInput";
-import { SettingsTextInput } from "@features/settings/components/SettingsTextInput";
+import { PasswordField } from "@components/ui/PasswordField";
+import { authInputControl, authInputIcon, authInputRow } from "@components/ui/styles";
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { validateSlskdApiUrl } from "@utils/slskd-url";
 
 import { StatusStrip } from "../components/StatusStrip";
 import { SETUP_HEADING_IDS, SLSKD_COPY } from "../constants";
-import { fieldError, fieldWarning, slskdTestRow, statusStripAction } from "../styles";
+import {
+  fieldError,
+  fieldGroup,
+  fieldLabel,
+  fieldWarning,
+  slskdTestButton,
+  slskdTestRow,
+  statusStripAction,
+} from "../styles";
 import { StepShell } from "./StepShell";
 import type { SlskdConnectState, SlskdStepProps } from "../types";
 
@@ -119,14 +125,22 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
       onBack={onBack}
       footerError={footerError}
     >
-      <SettingsField label="API URL" htmlFor={apiUrlId}>
-        <SettingsTextInput
-          id={apiUrlId}
-          value={apiUrl}
-          onChange={handleUrlChange}
-          placeholder="http://localhost:5030"
-          type="url"
-        />
+      <div className={fieldGroup()}>
+        <label htmlFor={apiUrlId} className={fieldLabel()}>
+          API URL
+        </label>
+        <div className={authInputRow({ invalid: Boolean(urlError) })}>
+          <Server className={authInputIcon()} aria-hidden="true" />
+          <input
+            id={apiUrlId}
+            type="url"
+            value={apiUrl}
+            onChange={(e) => handleUrlChange(e.target.value)}
+            placeholder="http://localhost:5030"
+            aria-invalid={Boolean(urlError) || undefined}
+            className={authInputControl()}
+          />
+        </div>
         {urlError ? (
           <p role="alert" className={fieldError()}>
             {urlError}
@@ -134,16 +148,15 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
         ) : urlWarning ? (
           <p className={fieldWarning()}>{urlWarning}</p>
         ) : null}
-      </SettingsField>
-      <SettingsField label="API Key" htmlFor={apiKeyId}>
-        <SettingsSecretInput id={apiKeyId} value={apiKey} onChange={handleKeyChange} />
-      </SettingsField>
+      </div>
+
+      <PasswordField id={apiKeyId} value={apiKey} onChange={handleKeyChange} label="API Key" autoComplete="off" />
 
       <div className={slskdTestRow()}>
-        <Button variant="outline" size="sm" onClick={handleTest} disabled={!fieldsFilled || isTesting}>
-          <Plug className="size-4" />
+        <button type="button" onClick={handleTest} disabled={!fieldsFilled || isTesting} className={slskdTestButton()}>
+          <Plug className="size-4" aria-hidden="true" />
           {isTesting ? SLSKD_COPY.testBusy : SLSKD_COPY.testIdle}
-        </Button>
+        </button>
       </div>
 
       {statusStripNode}

@@ -1,0 +1,82 @@
+@layer utilities {
+  .auth-stage {
+    background-color: oklch(0.05 0.03 280);
+  }
+
+  .auth-grid {
+    background-image:
+      linear-gradient(to right, oklch(1 0 0 / 0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(1 0 0 / 0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, oklch(0 0 0) 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 70% 60% at center, oklch(0 0 0) 30%, transparent 80%);
+  }
+
+  @media (min-width: 640px) {
+    .auth-grid {
+      background-size: 48px 48px;
+    }
+  }
+
+  .auth-orb {
+    background-image:
+      radial-gradient(circle at 35% 35%, oklch(var(--neon-secondary) / 0.6) 0%, transparent 55%),
+      radial-gradient(circle at 70% 60%, oklch(var(--neon-accent) / 0.5) 0%, transparent 55%),
+      radial-gradient(circle at 50% 50%, oklch(var(--neon-primary) / 0.8) 0%, transparent 60%);
+    opacity: var(--auth-orb-opacity, 0.72);
+    filter: blur(80px);
+    transform: translate(-50%, -50%);
+    animation: auth-orb-float 14s ease-in-out infinite alternate;
+  }
+
+  [data-theme="light"] .auth-orb {
+    --auth-orb-opacity: 0.82;
+  }
+
+  @keyframes auth-orb-float {
+    from {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+      transform: translate(-48%, -52%) scale(1.06);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .auth-orb {
+      animation: none;
+    }
+  }
+
+  .branded-loader-ring {
+    border-top-color: oklch(var(--neon-secondary) / 0.85);
+    border-right-color: oklch(var(--neon-accent) / 0.55);
+    box-shadow:
+      0 0 24px -6px oklch(var(--neon-primary) / 0.55),
+      inset 0 0 18px -8px oklch(var(--neon-secondary) / 0.4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .branded-loader-ring {
+      border-top-color: oklch(var(--neon-secondary) / 0.55);
+      border-right-color: oklch(var(--neon-secondary) / 0.55);
+      border-bottom-color: oklch(var(--neon-secondary) / 0.55);
+      border-left-color: oklch(var(--neon-secondary) / 0.55);
+    }
+  }
+
+  .auth-card {
+    background-image: linear-gradient(to bottom, oklch(0.18 0.07 285 / 0.82), oklch(0.12 0.05 285 / 0.94));
+    box-shadow:
+      0 50px 100px -30px oklch(0 0 0 / 0.85),
+      inset 0 0 0 1px oklch(1 0 0 / 0.03),
+      0 0 80px -20px oklch(var(--neon-primary) / 0.45);
+  }
+
+  @media (max-width: 639px) {
+    .auth-card {
+      background-image: linear-gradient(to bottom, oklch(0.15 0.06 285 / 0.97), oklch(0.1 0.04 285 / 0.99));
+      backdrop-filter: none;
+    }
+  }
+}

@@ -2,24 +2,25 @@
 
 import { useEffect, useRef } from "react";
 
-import { Button } from "@components/ui/Button";
+import { AppLogo } from "@components/ui/AppLogo";
+import { authForwardButton, authQuietButton } from "@components/ui/styles";
 import { cn } from "@utils/cn";
 
+import { SETUP_EYEBROW } from "../constants";
 import {
-  stepBackButton,
   stepBody,
   stepDescription,
-  stepEyebrow,
   stepFooter,
   stepFooterTrailing,
   stepHeader,
   stepIndicator,
-  stepPrimaryButton,
   stepProgress,
-  stepSecondaryButton,
-  stepShellRoot,
-  stepShellScroll,
   stepTitle,
+  wizardBody,
+  wizardBrand,
+  wizardCard,
+  wizardEyebrow,
+  wizardHead,
 } from "../styles";
 import type { StepShellProps } from "../types";
 
@@ -52,8 +53,13 @@ export function StepShell({
   const showHint = Boolean(primaryDisabled && primaryHint);
 
   return (
-    <div className={stepShellRoot()}>
-      <div className={stepShellScroll()}>
+    <div className={wizardCard()}>
+      <div className={wizardHead()}>
+        <header className={wizardBrand()}>
+          <AppLogo iconClassName="h-9 w-auto sm:h-10" />
+          <p className={wizardEyebrow()}>{SETUP_EYEBROW}</p>
+        </header>
+
         <div
           role="progressbar"
           aria-valuemin={1}
@@ -66,15 +72,16 @@ export function StepShell({
             <span
               key={i}
               aria-hidden="true"
-              className={stepIndicator({ state: i <= stepIndex ? "filled" : "empty" })}
+              className={stepIndicator({
+                state: i < stepIndex ? "completed" : i === stepIndex ? "current" : "upcoming",
+              })}
             />
           ))}
         </div>
+      </div>
 
+      <div className={wizardBody()}>
         <header className={stepHeader()}>
-          <span className={stepEyebrow()}>
-            Step {stepIndex + 1} of {totalSteps}
-          </span>
           <h1 ref={headingRef} id={headingId} tabIndex={-1} className={stepTitle()}>
             {title}
           </h1>
@@ -88,31 +95,31 @@ export function StepShell({
 
       <footer className={stepFooter()}>
         <div className={stepFooterTrailing()}>
-          <Button
+          <button
             type={primaryType}
             onClick={onPrimary}
             disabled={primaryDisabled || primaryLoading}
+            aria-busy={primaryLoading || undefined}
             aria-describedby={showHint ? hintId : undefined}
-            className={cn(stepPrimaryButton({ blocked: Boolean(primaryDisabled) && !primaryLoading }))}
+            className={authForwardButton({ blocked: Boolean(primaryDisabled) && !primaryLoading })}
           >
             {primaryLabel}
-          </Button>
+          </button>
           {secondaryLabel ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onSecondary}
-              disabled={primaryLoading}
-              className={stepSecondaryButton()}
-            >
+            <button type="button" onClick={onSecondary} disabled={primaryLoading} className={authQuietButton()}>
               {secondaryLabel}
-            </Button>
+            </button>
           ) : null}
         </div>
         {showBack ? (
-          <Button variant="ghost" size="sm" onClick={onBack} disabled={primaryLoading} className={stepBackButton()}>
+          <button
+            type="button"
+            onClick={onBack}
+            disabled={primaryLoading}
+            className={cn(authQuietButton(), "sm:order-first")}
+          >
             Back
-          </Button>
+          </button>
         ) : (
           <span className="hidden sm:order-first sm:block" />
         )}
