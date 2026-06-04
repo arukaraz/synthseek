@@ -73,8 +73,8 @@
   },
   "detail": {
     "backToList": "Volver a la lista de solicitudes",
-    "requestedBy": "Solicitado por {{username}}",
-    "delegatedTo": "Delegado a: {{name}}",
+    "requestedBy": "Solicitado por <value>{{username}}</value>",
+    "delegatedTo": "Delegado a: <value>{{name}}</value>",
     "moreActions": "Más acciones",
     "removeAction": "Quitar {{label}}",
     "retryFailed": "Reintentar fallidas",

@@ -11,7 +11,7 @@ import { formatTimestamp } from "@utils/formatters";
 import { ArrowLeft, Download, Globe, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useRequestActions } from "../../hooks/useRequestActions";
 import { formatDelegatedTo } from "./helpers";
 import { JspfExportDialog } from "./JspfExportDialog";
@@ -22,6 +22,7 @@ import {
   heroBannerImage,
   heroBannerOverlay,
   heroContent,
+  heroMetaValue,
   heroMoreButton,
 } from "./styles";
 import type { RequestDetailHeroProps } from "./types";
@@ -94,18 +95,32 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               )}
             </div>
 
-            <div className="min-w-0 space-y-0.5">
+            <div className="min-w-0">
               <p className="text-fg/50 text-[10px] font-semibold tracking-wider uppercase">
                 {label} · {formatTimestamp(new Date(request.created_at))}
               </p>
               <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
-              <p className="text-fg/40 truncate text-xs">
-                {t("detail.requestedBy", { username: request.requestedBy.username })}
-              </p>
-              {delegatedTo && (
-                <p className="text-fg/40 truncate text-xs">{t("detail.delegatedTo", { name: delegatedTo })}</p>
-              )}
+              <div className="mt-2 space-y-0.5">
+                <p className="text-fg/40 truncate text-xs">
+                  <Trans
+                    t={t}
+                    i18nKey="detail.requestedBy"
+                    values={{ username: request.requestedBy.username }}
+                    components={{ value: <span className={heroMetaValue()} /> }}
+                  />
+                </p>
+                {delegatedTo && (
+                  <p className="text-fg/40 truncate text-xs">
+                    <Trans
+                      t={t}
+                      i18nKey="detail.delegatedTo"
+                      values={{ name: delegatedTo }}
+                      components={{ value: <span className={heroMetaValue()} /> }}
+                    />
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 

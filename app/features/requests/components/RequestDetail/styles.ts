@@ -91,6 +91,10 @@ export const detailStatsGrid = cva("grid grid-cols-2 gap-3 px-3 pb-4 sm:px-4 md:
 
 export type DetailStatsGridProps = VariantProps<typeof detailStatsGrid>;
 
+export const heroMetaValue = cva("text-primary-300");
+
+export type HeroMetaValueProps = VariantProps<typeof heroMetaValue>;
+
 export const tracksReasonButton = cva(
   "text-fg/40 hover:text-fg/70 focus-visible:text-fg/70 shrink-0 rounded transition-colors outline-none",
   {
