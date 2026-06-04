@@ -90,5 +90,5 @@ export const patchNotesLink = cva(
 export const navItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2.5");
 
 export const logoutItem = cva(
-  "text-destructive hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive active:bg-destructive/15 gap-2.5 py-2.5"
+  "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2.5"
 );

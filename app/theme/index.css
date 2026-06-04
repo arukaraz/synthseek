@@ -23,6 +23,7 @@
   --color-secondary-foreground: oklch(var(--secondary-foreground));
   --color-destructive: oklch(var(--destructive));
   --color-destructive-foreground: oklch(var(--destructive-foreground));
+  --color-destructive-vivid: oklch(var(--destructive-vivid));
   --color-muted: oklch(var(--muted));
   --color-muted-foreground: oklch(var(--muted-foreground));
   --color-accent: oklch(var(--accent));

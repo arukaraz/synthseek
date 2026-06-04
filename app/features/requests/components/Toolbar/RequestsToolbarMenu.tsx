@@ -8,7 +8,7 @@ import { MoreVertical, RefreshCw, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { toolbarMenuDeleteItem, toolbarMenuTrigger } from "./styles";
+import { toolbarMenuContent, toolbarMenuDeleteItem, toolbarMenuTrigger } from "./styles";
 import type { RequestsToolbarMenuProps } from "./types";
 
 export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
@@ -30,7 +30,7 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
             <MoreVertical className="size-3.5" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="min-w-52">
+        <DropdownMenuContent align="end" className={toolbarMenuContent()}>
           {hasItems && (
             <DropdownMenuItem onSelect={() => setConfirmRetryOpen(true)}>
               <RefreshCw className="size-3.5" />

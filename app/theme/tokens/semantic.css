@@ -55,6 +55,7 @@
 
     --destructive: light-dark(0.6 0.25 25, 0.4 0.2 25);
     --destructive-foreground: 0.985 0.015 250;
+    --destructive-vivid: 0.704 0.191 22.216;
 
     --border: light-dark(0.93 0.02 250, 0.25 0.04 260);
     --input: light-dark(0.93 0.02 250, 0.25 0.04 260);

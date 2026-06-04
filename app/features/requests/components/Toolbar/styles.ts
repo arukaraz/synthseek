@@ -20,6 +20,8 @@ export const toolbarMenuTrigger = cva(
   "border-fg/10 bg-fg/5 text-fg/60 hover:bg-fg/10 hover:text-fg/90 flex items-center justify-center rounded-lg border p-1.5 transition-colors"
 );
 
+export const toolbarMenuContent = cva("min-w-52 bg-gradient-to-b from-primary-600/5 via-primary-600/5 to-accent-600/5");
+
 export const toolbarMenuDeleteItem = cva(
-  "text-destructive hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive active:bg-destructive/15 gap-2.5 py-2.5"
+  "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2.5"
 );
