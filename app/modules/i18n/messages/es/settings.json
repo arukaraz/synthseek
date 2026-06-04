@@ -243,9 +243,9 @@
       "tooltipAuto": "Synthseek también puede añadir subidores aquí por ti. Cuando las transferencias de un usuario fallan demasiadas veces seguidas, se bloquea automáticamente. Solo cuentan los fallos reales de transferencia, no las discrepancias de nombre de archivo, y el límite se configura en Engine > Search (ponlo a 0 para desactivar el bloqueo automático)."
     },
     "status": {
-      "healthy": "Saludable",
-      "unhealthy": "No saludable",
-      "notConfigured": "No configurado"
+      "healthy": "Sin problemas",
+      "unhealthy": "Con problemas",
+      "notConfigured": "Sin configurar"
     }
   },
   "ytdlp": {
