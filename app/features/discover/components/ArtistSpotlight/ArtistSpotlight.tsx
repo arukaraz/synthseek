@@ -3,9 +3,9 @@
 import { EmptyState } from "@components/ui/EmptyState";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
-import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
 import type { MusicItem } from "@api/__generated__/types";
 import { useArtistSpotlight } from "@hooks/api/queries/useArtistSpotlight";
+import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
 import { useCountry } from "@modules/providers/CountryProvider";
 import { ContentType } from "@api/__generated__/types";
 import { gradientOverlay } from "@theme/utilities/styles";
@@ -15,7 +15,6 @@ import { fadeIn } from "@utils/animations";
 import { DEFAULT_COUNTRY, getCountryByCode } from "@utils/countries";
 import { motion } from "framer-motion";
 import { AlertCircle, Users } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
 import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
@@ -30,35 +29,10 @@ export function ArtistSpotlight() {
   const { data, isLoading, isError } = useArtistSpotlight(countryName, ARTIST_SPOTLIGHT_COUNT);
   const artists = data?.data?.artists ?? [];
 
-  const [selectedArtist, setSelectedArtist] = useState<MusicItem | null>(null);
-  const [showContentBrowserModal, setShowContentBrowserModal] = useState(false);
-  const [showConfigRequestModal, setShowConfigRequestModal] = useState(false);
-  const [selectedContentToRequest, setSelectedContentToRequest] = useState<MusicItem | null>(null);
-  const [parentAlbumFromContext, setParentAlbumFromContext] = useState<MusicItem | null>(null);
+  const flow = useContentRequestModals();
 
   const handleArtistClick = (artist: MusicItem) => {
-    setSelectedArtist(artist);
-    setShowContentBrowserModal(true);
-  };
-
-  const handleCloseContentBrowserModal = () => {
-    setSelectedArtist(null);
-    setShowContentBrowserModal(false);
-  };
-
-  const handleRequestContentClick = (requestedItem: MusicItem, context?: RequestContext) => {
-    if (requestedItem.type === ContentType.enum.track || requestedItem.type === ContentType.enum.album) {
-      setSelectedContentToRequest(requestedItem);
-      setParentAlbumFromContext(context?.parentAlbum ?? null);
-      setShowConfigRequestModal(true);
-      setShowContentBrowserModal(false);
-    }
-  };
-
-  const handleConfigModalClose = () => {
-    setShowConfigRequestModal(false);
-    setSelectedContentToRequest(null);
-    setParentAlbumFromContext(null);
+    flow.openForResult(artist);
   };
 
   return (
@@ -113,25 +87,11 @@ export function ArtistSpotlight() {
         </div>
       </motion.section>
 
-      {selectedArtist && (
-        <ContentBrowserModal
-          type={ContentType.enum.artist}
-          data={selectedArtist}
-          onClose={handleCloseContentBrowserModal}
-          open={showContentBrowserModal}
-          onRequestClick={handleRequestContentClick}
-        />
+      {flow.selectedResult && (
+        <ContentBrowserModal {...flow.browserModalProps} type={ContentType.enum.artist} data={flow.selectedResult} />
       )}
 
-      {selectedContentToRequest && (
-        <ConfigRequestModal
-          isOpen={showConfigRequestModal}
-          item={selectedContentToRequest}
-          itemType={selectedContentToRequest.type}
-          onClose={handleConfigModalClose}
-          parentAlbum={parentAlbumFromContext}
-        />
-      )}
+      {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} />}
     </>
   );
 }

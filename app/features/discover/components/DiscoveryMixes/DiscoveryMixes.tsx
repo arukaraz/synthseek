@@ -5,10 +5,11 @@ import { Library } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { ContentType } from "@api/__generated__/types";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
 import { useDiscoveryMixes } from "@hooks/api/queries/discovery/useDiscoveryMixes";
+import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
 import { fadeIn } from "@utils/animations";
 
 import { WidgetHeader } from "../WidgetHeader";
@@ -26,10 +27,8 @@ export function DiscoveryMixes() {
   const { t } = useTranslation("discover");
   const { mixes, lbConfig, isLoading, isError } = useDiscoveryMixes();
 
+  const flow = useContentRequestModals();
   const [selectedMix, setSelectedMix] = useState<ReadyMix | null>(null);
-  const [showBrowser, setShowBrowser] = useState(false);
-  const [pendingRequest, setPendingRequest] = useState<MusicItem | null>(null);
-  const [showConfig, setShowConfig] = useState(false);
 
   const syntheticTracks = useMemo(
     () => (selectedMix ? selectedMix.candidates.map(synthesizeTrack) : []),
@@ -41,26 +40,19 @@ export function DiscoveryMixes() {
   );
 
   const handleCardClick = (mix: ReadyMix) => {
+    const tracks = mix.candidates.map(synthesizeTrack);
+    const playlist = synthesizePlaylist(mix, LB_KIND_METADATA[mix.kind], tracks);
     setSelectedMix(mix);
-    setShowBrowser(true);
+    flow.openForResult(playlist);
   };
 
   const handleCloseBrowser = () => {
-    setShowBrowser(false);
+    flow.browserModalProps.onClose();
     setSelectedMix(null);
   };
 
-  const handleRequestClick = (item: MusicItem) => {
-    if (item.type === ContentType.enum.track || item.type === ContentType.enum.playlist) {
-      setPendingRequest(item);
-      setShowConfig(true);
-      setShowBrowser(false);
-    }
-  };
-
   const handleCloseConfig = () => {
-    setShowConfig(false);
-    setPendingRequest(null);
+    flow.configModalProps.onClose();
     setSelectedMix(null);
   };
 
@@ -96,25 +88,24 @@ export function DiscoveryMixes() {
         </div>
       </motion.section>
 
-      {selectedMix && syntheticPlaylist ? (
+      {selectedMix && syntheticPlaylist && flow.selectedResult ? (
         <ContentBrowserModal
+          {...flow.browserModalProps}
           type={ContentType.enum.playlist}
           data={syntheticPlaylist}
           preloadedItems={syntheticTracks}
           requestButtonDisabled={lbConfig.autoRequest}
           requestButtonTooltip={lbConfig.autoRequest ? t("mixes.autoRequestTooltip") : undefined}
-          open={showBrowser}
           onClose={handleCloseBrowser}
-          onRequestClick={handleRequestClick}
         />
       ) : null}
 
-      {pendingRequest ? (
+      {flow.selectedContentToRequest ? (
         <ConfigRequestModal
-          isOpen={showConfig}
-          item={pendingRequest}
-          itemType={pendingRequest.type}
-          preloadedTracks={pendingRequest.type === ContentType.enum.playlist ? syntheticTracks : undefined}
+          {...flow.configModalProps}
+          preloadedTracks={
+            flow.selectedContentToRequest.type === ContentType.enum.playlist ? syntheticTracks : undefined
+          }
           onClose={handleCloseConfig}
         />
       ) : null}

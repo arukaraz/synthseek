@@ -1,3 +1,41 @@
+import type { ContentType, MusicItem } from "@api/__generated__/types";
+import type { ConfigRequestMode } from "@features/search/components/ConfigRequestModal/types";
+import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
+
+export interface FlowState {
+  selectedResult: MusicItem | null;
+  showContentBrowserModal: boolean;
+  showConfigRequestModal: boolean;
+  selectedContentToRequest: MusicItem | null;
+  parentAlbumFromContext: MusicItem | null;
+  configRequestMode: ConfigRequestMode;
+}
+
+export interface ContentBrowserModalFlowProps {
+  open: boolean;
+  onClose: () => void;
+  onRequestClick: (item: MusicItem, context?: RequestContext) => void;
+  onRequestArtistLidarr: (artist: MusicItem) => void;
+}
+
+export interface ConfigRequestModalFlowProps {
+  isOpen: boolean;
+  item: MusicItem | null;
+  itemType: ContentType;
+  mode: ConfigRequestMode;
+  onClose: () => void;
+  parentAlbum: MusicItem | null;
+}
+
+export interface UseContentRequestModalsResult {
+  selectedResult: MusicItem | null;
+  selectedContentToRequest: MusicItem | null;
+  openForResult: (result: MusicItem) => void;
+  requestArtistLidarr: (artist: MusicItem) => void;
+  browserModalProps: ContentBrowserModalFlowProps;
+  configModalProps: ConfigRequestModalFlowProps;
+}
+
 export type SetupRedirectContext = "app" | "login" | "setup";
 
 export type SetupGate = { status: "resolving" } | { status: "error" } | { status: "redirecting" } | { status: "ready" };

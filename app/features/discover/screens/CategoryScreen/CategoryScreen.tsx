@@ -2,11 +2,11 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { useCategoryPlaylists } from "@hooks/api/queries/useCategoryPlaylists";
+import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
 import { Results } from "@features/search/components/Results/Results";
 import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentType, type MusicItem } from "@api/__generated__/types";
-import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
 import { backButton } from "@features/search/components/styles";
 import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
@@ -28,12 +28,8 @@ export function CategoryScreen() {
 
   const { data, isLoading, isError } = useCategoryPlaylists(categoryId, categoryName, CONTENT_LIMIT);
 
-  const [selectedItem, setSelectedItem] = useState<MusicItem | null>(null);
+  const flow = useContentRequestModals();
   const [selectedItemType, setSelectedItemType] = useState<ContentType>(ContentType.enum.artist);
-  const [showContentBrowserModal, setShowContentBrowserModal] = useState(false);
-  const [showConfigRequestModal, setShowConfigRequestModal] = useState(false);
-  const [selectedContentToRequest, setSelectedContentToRequest] = useState<MusicItem | null>(null);
-  const [parentAlbumFromContext, setParentAlbumFromContext] = useState<MusicItem | null>(null);
 
   const genreContent = data?.data;
   const albums = useMemo(() => (genreContent?.albums ?? []) as MusicItem[], [genreContent]);
@@ -43,30 +39,9 @@ export function CategoryScreen() {
     const allItems = [...albums, ...playlists];
     const item = allItems.find((i) => i.id === itemId);
     if (item) {
-      setSelectedItem(item);
       setSelectedItemType(type);
-      setShowContentBrowserModal(true);
+      flow.openForResult(item);
     }
-  };
-
-  const handleCloseContentBrowserModal = () => {
-    setSelectedItem(null);
-    setShowContentBrowserModal(false);
-  };
-
-  const handleRequestContentClick = (requestedItem: MusicItem, context?: RequestContext) => {
-    if (requestedItem.type === ContentType.enum.track || requestedItem.type === ContentType.enum.album) {
-      setSelectedContentToRequest(requestedItem);
-      setParentAlbumFromContext(context?.parentAlbum ?? null);
-      setShowConfigRequestModal(true);
-      setShowContentBrowserModal(false);
-    }
-  };
-
-  const handleConfigModalClose = () => {
-    setShowConfigRequestModal(false);
-    setSelectedContentToRequest(null);
-    setParentAlbumFromContext(null);
   };
 
   const hasContent = albums.length > 0 || playlists.length > 0;
@@ -117,25 +92,11 @@ export function CategoryScreen() {
         )}
       </div>
 
-      {selectedItem && (
-        <ContentBrowserModal
-          type={selectedItemType}
-          data={selectedItem}
-          onClose={handleCloseContentBrowserModal}
-          open={showContentBrowserModal}
-          onRequestClick={handleRequestContentClick}
-        />
+      {flow.selectedResult && (
+        <ContentBrowserModal {...flow.browserModalProps} type={selectedItemType} data={flow.selectedResult} />
       )}
 
-      {selectedContentToRequest && (
-        <ConfigRequestModal
-          isOpen={showConfigRequestModal}
-          item={selectedContentToRequest}
-          itemType={selectedContentToRequest.type}
-          onClose={handleConfigModalClose}
-          parentAlbum={parentAlbumFromContext}
-        />
-      )}
+      {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} />}
     </div>
   );
 }
