@@ -1,3 +1,5 @@
+import i18n from "@locale";
+
 export function formatYear(dateString: string | null | undefined): string {
   if (!dateString) return "";
   return dateString.split("-")[0] || "";
@@ -14,13 +16,13 @@ export function formatRelativeTime(date: Date): string {
   const months = Math.floor(days / 30);
   const years = Math.floor(days / 365);
 
-  if (years > 0) return `${years}y ago`;
-  if (months > 0) return `${months}mo ago`;
-  if (weeks > 0) return `${weeks}w ago`;
-  if (days > 0) return `${days}d ago`;
-  if (hours > 0) return `${hours}h ago`;
-  if (minutes > 0) return `${minutes}m ago`;
-  return "Just now";
+  if (years > 0) return i18n.t("common:relativeTime.yearsAgo", { count: years });
+  if (months > 0) return i18n.t("common:relativeTime.monthsAgo", { count: months });
+  if (weeks > 0) return i18n.t("common:relativeTime.weeksAgo", { count: weeks });
+  if (days > 0) return i18n.t("common:relativeTime.daysAgo", { count: days });
+  if (hours > 0) return i18n.t("common:relativeTime.hoursAgo", { count: hours });
+  if (minutes > 0) return i18n.t("common:relativeTime.minutesAgo", { count: minutes });
+  return i18n.t("common:relativeTime.justNow");
 }
 
 export function formatDuration(start: Date, end?: Date): string | null {
@@ -37,14 +39,14 @@ export function formatDuration(start: Date, end?: Date): string | null {
 }
 
 export function formatTimestamp(date: Date): string {
-  return date.toLocaleTimeString("en-US", {
+  return date.toLocaleTimeString(i18n.language, {
     hour: "2-digit",
     minute: "2-digit",
   });
 }
 
 export function formatDate(date: Date): string {
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(i18n.language, {
     year: "numeric",
     month: "long",
     day: "numeric",

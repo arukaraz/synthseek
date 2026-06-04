@@ -1,5 +1,6 @@
 import type { ParseKeys } from "i18next";
 
+import i18n from "@locale";
 import type { MusicImage, MusicPlaylist, MusicTrack } from "@api/__generated__/types";
 import type { LbPlaylistKind } from "@features/discovery-integrations/types";
 
@@ -69,14 +70,21 @@ export function formatFreshness(generatedAt: string | undefined, kind: LbPlaylis
   if (diffDays < 0) return null;
 
   if (kind === "cf-recommendations") {
-    return diffDays === 0 ? "Synced today" : `Synced ${diffDays}d ago`;
+    return diffDays === 0
+      ? i18n.t("discover:mixes.freshness.syncedToday")
+      : i18n.t("discover:mixes.freshness.syncedDaysAgo", { count: diffDays });
   }
   if (kind === "daily-jams") {
-    return diffDays === 0 ? "Updated today" : `Updated ${diffDays}d ago`;
+    return diffDays === 0
+      ? i18n.t("discover:mixes.freshness.updatedToday")
+      : i18n.t("discover:mixes.freshness.updatedDaysAgo", { count: diffDays });
   }
-  if (diffDays === 0) return "Updated today";
-  if (diffDays < 7) return `Updated ${date.toLocaleDateString("en-US", { weekday: "short" })}`;
-  return `Updated ${diffDays}d ago`;
+  if (diffDays === 0) return i18n.t("discover:mixes.freshness.updatedToday");
+  if (diffDays < 7) {
+    const weekday = date.toLocaleDateString(i18n.language, { weekday: "short" });
+    return i18n.t("discover:mixes.freshness.updatedWeekday", { weekday });
+  }
+  return i18n.t("discover:mixes.freshness.updatedDaysAgo", { count: diffDays });
 }
 
 export function describeEmptyReason(mix: DiscoveryMix): string {

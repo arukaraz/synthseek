@@ -1,4 +1,13 @@
 {
   "save": "Guardar",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "relativeTime": {
+    "justNow": "Ahora mismo",
+    "yearsAgo": "hace {{count}} a",
+    "monthsAgo": "hace {{count}} mes",
+    "weeksAgo": "hace {{count}} sem",
+    "daysAgo": "hace {{count}} d",
+    "hoursAgo": "hace {{count}} h",
+    "minutesAgo": "hace {{count}} min"
+  }
 }
