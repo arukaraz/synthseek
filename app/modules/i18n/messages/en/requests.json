@@ -14,6 +14,17 @@
       "trigger": "Import library",
       "sourcesLabel": "Sources",
       "fromFile": "From file"
+    },
+    "menu": {
+      "trigger": "More actions",
+      "deleteAll": {
+        "label": "Delete all requests",
+        "confirmTitle": "Delete All Requests",
+        "confirmMessage": "This permanently deletes every request, album, playlist and track, cancels all queued downloads and clears the queue history. This cannot be undone.",
+        "confirmPending": "Deleting...",
+        "confirmAction": "Delete All",
+        "cancel": "Cancel"
+      }
     }
   },
   "viewToggle": {

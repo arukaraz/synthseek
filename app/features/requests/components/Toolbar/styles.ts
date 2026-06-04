@@ -15,3 +15,9 @@ export const sourceSearchInput = cva(
 );
 
 export const sourceFilterCount = cva("bg-fg/10 text-fg/60 ml-auto rounded-full px-1.5 text-[10px] font-medium");
+
+export const toolbarMenuTrigger = cva(
+  "border-fg/10 bg-fg/5 text-fg/60 hover:bg-fg/10 hover:text-fg/90 flex items-center justify-center rounded-lg border p-1.5 transition-colors"
+);
+
+export const toolbarMenuDeleteItem = cva("text-destructive focus:text-destructive hover:text-destructive");

@@ -21,3 +21,4 @@ export { useCancelAlbum } from "./mutations/requests/useCancelAlbum";
 export { useCancelPlaylist } from "./mutations/requests/useCancelPlaylist";
 export { useCancelTrack } from "./mutations/requests/useCancelTrack";
 export { useClearCompleted } from "./mutations/requests/useClearCompleted";
+export { useDeleteAllRequests } from "./mutations/requests/useDeleteAllRequests";

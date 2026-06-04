@@ -19,3 +19,7 @@ export interface SearchInputProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+export interface RequestsToolbarMenuProps {
+  hasItems: boolean;
+}

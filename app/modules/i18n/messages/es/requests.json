@@ -14,6 +14,17 @@
       "trigger": "Importar biblioteca",
       "sourcesLabel": "Fuentes",
       "fromFile": "Desde archivo"
+    },
+    "menu": {
+      "trigger": "Más acciones",
+      "deleteAll": {
+        "label": "Eliminar todas las solicitudes",
+        "confirmTitle": "Eliminar todas las solicitudes",
+        "confirmMessage": "Esto elimina de forma permanente todas las solicitudes, álbumes, listas de reproducción y pistas, cancela todas las descargas en cola y borra el historial de la cola. Esta acción no se puede deshacer.",
+        "confirmPending": "Eliminando...",
+        "confirmAction": "Eliminar todas",
+        "cancel": "Cancelar"
+      }
     }
   },
   "viewToggle": {
