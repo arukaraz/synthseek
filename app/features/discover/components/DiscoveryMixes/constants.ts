@@ -44,14 +44,11 @@ export const EMPTY_REASON_LABELS: Record<string, string> = {
 
 export const DISCOVERY_SETTINGS_HREF = "/settings/integrations/metadata#listenbrainz";
 
-export const AUTO_REQUEST_TOOLTIP =
-  "Auto-request is enabled, playlists are created automatically when the feed refreshes.";
-
 export const SKELETON_PLACEHOLDERS = [0, 1, 2, 3] as const;
 
-export const EMPTY_STATE_COPY = {
-  error: { text: "Couldn't load your discovery mixes.", cta: null },
-  disabled: { text: "Enable ListenBrainz to see your weekly mixes here.", cta: "Open settings" },
-  "no-username": { text: "Add your ListenBrainz username to start syncing mixes.", cta: "Configure ListenBrainz" },
-  "no-kinds": { text: "Pick which playlists to fetch in settings.", cta: "Choose playlists" },
+export const EMPTY_CTA = {
+  error: null,
+  disabled: "open-settings",
+  "no-username": "configure",
+  "no-kinds": "choose-playlists",
 } as const;

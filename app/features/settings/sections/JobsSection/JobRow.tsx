@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2, Play } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { LoadingDots } from "@components/ui/LoadingDots";
 import { useTriggerJob } from "@hooks/api/mutations/jobs/useTriggerJob";
@@ -19,11 +20,11 @@ import {
   jobRight,
   jobRow,
 } from "../../styles";
-import { IN_PROGRESS_LABEL } from "./constants";
 import { describeInterval, formatNextRun } from "./helpers";
 import type { JobRowProps } from "./types";
 
 export function JobRow({ job }: JobRowProps) {
+  const { t } = useTranslation("settings");
   const trigger = useTriggerJob();
   const now = useNow();
   const isRunning = trigger.isPending;
@@ -40,7 +41,7 @@ export function JobRow({ job }: JobRowProps) {
           <span className={jobNextRunLabel()}>{describeInterval(job.intervalMs)}</span>
           {isRunning ? (
             <span className={jobInProgress()}>
-              {IN_PROGRESS_LABEL}
+              {t("jobs.row.inProgress")}
               <LoadingDots size="sm" />
             </span>
           ) : (
@@ -55,7 +56,7 @@ export function JobRow({ job }: JobRowProps) {
           className={jobPlayButton()}
           onClick={() => trigger.mutate({ id: job.id })}
           disabled={isRunning}
-          aria-label={isRunning ? `Running ${job.name}` : `Run ${job.name} now`}
+          aria-label={isRunning ? t("jobs.row.running", { name: job.name }) : t("jobs.row.runNow", { name: job.name })}
           aria-busy={isRunning}
         >
           {isRunning ? <Loader2 className="animate-spin" /> : <Play className="fill-current" />}

@@ -12,18 +12,20 @@ import { gradientOverlay } from "@theme/utilities/styles";
 import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { fadeIn } from "@utils/animations";
-import { getCountryByCode } from "@utils/countries";
+import { DEFAULT_COUNTRY, getCountryByCode } from "@utils/countries";
 import { motion } from "framer-motion";
 import { AlertCircle, Users } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
 import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
 import { ARTIST_SPOTLIGHT_COUNT } from "./constants";
 
 export function ArtistSpotlight() {
+  const { t } = useTranslation("discover");
   const { country } = useCountry();
-  const countryData = getCountryByCode(country);
-  const countryName = countryData?.name || "United States";
+  const countryData = getCountryByCode(country) ?? getCountryByCode(DEFAULT_COUNTRY);
+  const countryName = countryData?.name ?? "";
 
   const { data, isLoading, isError } = useArtistSpotlight(countryName, ARTIST_SPOTLIGHT_COUNT);
   const artists = data?.data?.artists ?? [];
@@ -73,8 +75,8 @@ export function ArtistSpotlight() {
         <div className="relative flex flex-1 flex-col">
           <WidgetHeader
             icon={Users}
-            title="Artist Spotlight"
-            subtitle="Top artists in your region"
+            title={t("artistSpotlight.title")}
+            subtitle={t("artistSpotlight.subtitle")}
             titleId="artist-spotlight-heading"
           />
 
@@ -83,13 +85,17 @@ export function ArtistSpotlight() {
           {isError && (
             <EmptyState
               icon={AlertCircle}
-              title="Failed to load artists"
-              description="Unable to fetch top artists. Please try again later."
+              title={t("artistSpotlight.errorTitle")}
+              description={t("artistSpotlight.errorDescription")}
             />
           )}
 
           {!isLoading && !isError && artists.length === 0 && (
-            <EmptyState icon={Users} title="No Artists Found" description="No top artists found for this region." />
+            <EmptyState
+              icon={Users}
+              title={t("artistSpotlight.emptyTitle")}
+              description={t("artistSpotlight.emptyDescription")}
+            />
           )}
 
           {!isLoading && !isError && artists.length > 0 && (

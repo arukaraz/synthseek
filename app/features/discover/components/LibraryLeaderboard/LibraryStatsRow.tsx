@@ -1,13 +1,17 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { statsLabel, statsRow, statsValue } from "./styles";
 import type { LibraryStatsRowProps } from "./types";
 
 export function LibraryStatsRow({ summary }: LibraryStatsRowProps) {
+  const { t } = useTranslation("discover");
+
   const cells = [
-    { value: summary.tracks.toLocaleString(), label: "Tracks" },
-    { value: `${summary.hours}h`, label: "Library" },
-    { value: summary.queued.toLocaleString(), label: "Queued" },
+    { value: summary.tracks.toLocaleString(), label: t("leaderboard.statsTracks") },
+    { value: `${summary.hours}h`, label: t("leaderboard.statsLibrary") },
+    { value: summary.queued.toLocaleString(), label: t("leaderboard.statsQueued") },
   ];
 
   return (

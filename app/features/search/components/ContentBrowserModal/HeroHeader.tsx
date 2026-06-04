@@ -7,6 +7,7 @@ import { glassContainer, imagePlaceholder } from "@theme/utilities/styles";
 import { heroContentContainer } from "../styles";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import { RequestAllButton } from "./RequestAllButton";
 import type { HeroHeaderProps } from "./types";
 
@@ -18,6 +19,7 @@ export function HeroHeader({
   requestButtonDisabled,
   requestButtonTooltip,
 }: HeroHeaderProps) {
+  const { t } = useTranslation("search");
   const { title, subtitle, metadata: metadataText, thumbnail, showRequestButton } = metadata;
 
   const isArtist = type === ContentType.enum.artist;
@@ -49,7 +51,7 @@ export function HeroHeader({
             data-cy="content-browser-back-btn"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">Back</span>
+            <span className="ml-2 hidden sm:inline">{t("browser.back")}</span>
           </Button>
         </div>
       )}
@@ -57,7 +59,7 @@ export function HeroHeader({
       <div className={heroContentContainer()}>
         <div className="flex items-end justify-between gap-3 sm:gap-4">
           <div className="min-w-0 flex-1 space-y-1">
-            {isArtist && <Badge className="type-badge type-badge-artist mb-2">Artist</Badge>}
+            {isArtist && <Badge className="type-badge type-badge-artist mb-2">{t("browser.artistBadge")}</Badge>}
 
             <h1
               className="text-overlay-fg text-xl font-bold drop-shadow-lg sm:text-2xl lg:text-3xl"

@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateFormatting() {
@@ -7,8 +9,8 @@ export function useUpdateFormatting() {
   return trpc.settings.updateFormatting.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Formatting saved");
+      toast.success(i18n.t("mutations:settings.formattingSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save formatting"),
+    onError: (error) => errorToast(error, "settings.formattingFailed"),
   });
 }

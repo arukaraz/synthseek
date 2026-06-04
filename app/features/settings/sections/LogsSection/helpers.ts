@@ -1,8 +1,8 @@
-import { REFRESH_INTERVAL_OPTIONS } from "./constants";
+import { REFRESH_INTERVAL_VALUES } from "./constants";
 import type { LogEntry } from "./types";
 
 export function isRefreshOption(raw: string): boolean {
-  return REFRESH_INTERVAL_OPTIONS.some((option) => option.value === raw);
+  return REFRESH_INTERVAL_VALUES.some((value) => value === raw);
 }
 
 export function filterEntries(entries: LogEntry[], activeLevels: ReadonlySet<string>, search: string): LogEntry[] {

@@ -1,13 +1,14 @@
 "use client";
 
 import { Link2, Loader2, Plug } from "lucide-react";
+import { Trans, useTranslation } from "react-i18next";
 
 import { authPlexButton, authPlexIcon, authPlexWord } from "@components/ui/styles";
 import { usePlexConnect } from "@hooks/api/mutations/settings/usePlexConnect";
 import { cn } from "@utils/cn";
 
 import { StatusStrip } from "../components/StatusStrip";
-import { PLEX_COPY, SETUP_HEADING_IDS } from "../constants";
+import { SETUP_HEADING_IDS } from "../constants";
 import { isPlexTimeoutMessage } from "../helpers";
 import {
   plexIntro,
@@ -22,6 +23,7 @@ import { StepShell } from "./StepShell";
 import type { PlexStepProps } from "../types";
 
 export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: PlexStepProps) {
+  const { t } = useTranslation("setup");
   const plex = usePlexConnect();
 
   const isDone = plex.state.kind === "done";
@@ -29,14 +31,14 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
   const isSaving = plex.state.kind === "saving";
   const connectBusy = isPending || isSaving;
 
-  const connectLabel = isPending ? PLEX_COPY.connecting : isSaving ? PLEX_COPY.saving : PLEX_COPY.connect;
+  const connectLabel = isPending ? t("plex.connecting") : t("plex.saving");
   const connectPhase = plex.state.kind === "error" ? "error" : connectBusy ? "pending" : "idle";
 
   const footerError =
     plex.state.kind === "error" ? (
       <StatusStrip
         tone="error"
-        message={isPlexTimeoutMessage(plex.state.message) ? PLEX_COPY.timeout : PLEX_COPY.popupUnfinished}
+        message={isPlexTimeoutMessage(plex.state.message) ? t("plex.timeout") : t("plex.popupUnfinished")}
       />
     ) : undefined;
 
@@ -45,26 +47,26 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
       stepIndex={stepIndex}
       totalSteps={totalSteps}
       headingId={SETUP_HEADING_IDS.plex}
-      title="Connect Plex (optional)"
-      description="Lets Synthseek scan your library after each import and mirror playlists. You can do this later from Settings."
-      primaryLabel="Continue"
+      title={t("plex.title")}
+      description={t("plex.description")}
+      primaryLabel={t("actions.continue")}
       primaryDisabled={!isDone}
-      primaryHint={PLEX_COPY.blockedHint}
+      primaryHint={t("plex.blockedHint")}
       onPrimary={onComplete}
-      secondaryLabel="Skip"
+      secondaryLabel={t("actions.skip")}
       onSecondary={onSkip}
       showBack
       onBack={onBack}
       footerError={footerError}
     >
       {plex.state.kind === "done" ? (
-        <StatusStrip tone="success" message={PLEX_COPY.connected} />
+        <StatusStrip tone="success" message={t("plex.connected")} />
       ) : plex.state.kind === "picking" ? (
         plex.state.servers.length === 0 ? (
-          <StatusStrip tone="neutral" message={PLEX_COPY.noServers} />
+          <StatusStrip tone="neutral" message={t("plex.noServers")} />
         ) : (
           <div className={serverPickerCard()}>
-            <span className={serverPickerIntro()}>{PLEX_COPY.serverPickerIntro}</span>
+            <span className={serverPickerIntro()}>{t("plex.serverPickerIntro")}</span>
             {plex.state.servers.map((server) => (
               <button
                 key={`${server.clientIdentifier}-${server.uri}`}
@@ -76,7 +78,9 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
                   <span className={serverPickerName()}>{server.name}</span>
                   <span className={serverPickerUri()}>{server.uri}</span>
                 </span>
-                <span className={serverPickerLocation()}>{server.local ? "local" : "remote"}</span>
+                <span className={serverPickerLocation()}>
+                  {server.local ? t("plex.serverLocal") : t("plex.serverRemote")}
+                </span>
               </button>
             ))}
           </div>
@@ -84,7 +88,7 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
       ) : (
         <>
           <p className={plexIntro()}>
-            <Plug className="size-4 shrink-0" aria-hidden="true" /> {PLEX_COPY.intro}
+            <Plug className="size-4 shrink-0" aria-hidden="true" /> {t("plex.intro")}
           </p>
           <button
             type="button"
@@ -103,7 +107,7 @@ export function PlexStep({ stepIndex, totalSteps, onComplete, onBack, onSkip }: 
               connectLabel
             ) : (
               <span>
-                Login with <span className={authPlexWord()}>Plex</span>
+                <Trans i18nKey="plex.connect" t={t} components={[<span key="word" className={authPlexWord()} />]} />
               </span>
             )}
           </button>

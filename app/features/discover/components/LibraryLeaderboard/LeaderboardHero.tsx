@@ -2,6 +2,7 @@
 
 import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
 import { Crown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   heroContent,
   heroCount,
@@ -16,7 +17,8 @@ import {
 import type { LeaderboardHeroProps } from "./types";
 
 export function LeaderboardHero({ entry, mode }: LeaderboardHeroProps) {
-  const unitLabel = mode === "artists" ? "tracks" : "albums";
+  const { t } = useTranslation("discover");
+  const unitLabel = mode === "artists" ? t("leaderboard.unitTracks") : t("leaderboard.unitAlbums");
 
   return (
     <div className={heroFrame()}>

@@ -1,0 +1,82 @@
+{
+  "request": {
+    "queued": {
+      "label": "En cola",
+      "description": "Esperando en la cola"
+    },
+    "searching": {
+      "label": "Buscando",
+      "description": "Buscando fuentes"
+    },
+    "pending_download": {
+      "label": "Descarga pendiente",
+      "description": "Esperando la descarga"
+    },
+    "downloading": {
+      "label": "Descargando",
+      "description": "En progreso"
+    },
+    "paused": {
+      "label": "En pausa",
+      "description": "Descarga en pausa"
+    },
+    "pending_import": {
+      "label": "Importación pendiente",
+      "description": "Esperando la importación"
+    },
+    "importing": {
+      "label": "Importando",
+      "description": "Procesando el archivo"
+    },
+    "complete": {
+      "label": "Completada",
+      "description": "Descarga completada"
+    },
+    "failed": {
+      "label": "Fallida",
+      "description": "La descarga falló"
+    },
+    "in_progress": {
+      "label": "En progreso",
+      "description": "Descargando pistas"
+    },
+    "syncing_plex": {
+      "label": "Sincronizando con Plex",
+      "description": "Sincronizando con Plex..."
+    },
+    "partially_complete": {
+      "label": "Parcialmente completada",
+      "description": "Algunas pistas fallaron"
+    },
+    "cancelled": {
+      "label": "Cancelada",
+      "description": "Descarga cancelada"
+    }
+  },
+  "failureReason": {
+    "not_found": {
+      "label": "No encontrada",
+      "description": "No se encontraron coincidencias en Slskd. Otros pares pueden tenerla más adelante."
+    },
+    "import_rejected": {
+      "label": "Importación rechazada",
+      "description": "El archivo se descargó pero los metadatos no coincidieron. El reintento solo volverá a importar."
+    },
+    "wrong_file": {
+      "label": "Archivo incorrecto",
+      "description": "El archivo descargado no coincidió con la pista solicitada. Se eliminó y se volverá a buscar al reintentar."
+    },
+    "p2p_failed": {
+      "label": "Transferencia fallida",
+      "description": "La conexión con el par se interrumpió durante la descarga."
+    },
+    "download_failed": {
+      "label": "Descarga fallida",
+      "description": "La transferencia empezó pero falló o expiró antes de completarse. Reintenta para volver a intentarlo."
+    },
+    "other": {
+      "label": "Fallida",
+      "description": "Error desconocido. Revisa los registros."
+    }
+  }
+}

@@ -1,12 +1,16 @@
 "use client";
 
-import { STEPS, SETUP_LOADING_LABEL } from "../constants";
+import { useTranslation } from "react-i18next";
+
+import { STEPS } from "../constants";
 import { skeletonBlock, stepFooter, stepProgress, wizardBody, wizardBrand, wizardCard, wizardHead } from "../styles";
 
 export function SetupSkeleton() {
+  const { t } = useTranslation("setup");
+
   return (
     <div role="status" aria-busy="true" className={wizardCard()}>
-      <span className="sr-only">{SETUP_LOADING_LABEL}</span>
+      <span className="sr-only">{t("shell.loading")}</span>
 
       <div className={wizardHead()}>
         <div aria-hidden="true" className={wizardBrand()}>

@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { cn } from "@utils/cn";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -14,6 +15,7 @@ import { ADVANCED_ITEMS, BUILD_VERSION, TOP_LEVEL } from "./constants";
 import type { SettingsSidebarProps } from "./types";
 
 export function SettingsSidebar({ className }: SettingsSidebarProps) {
+  const { t } = useTranslation("settings");
   const pathname = usePathname();
   const { isAdmin } = useAuthContext();
   const [advancedOpen, setAdvancedOpen] = useState(true);
@@ -22,7 +24,7 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
   const advancedItems = ADVANCED_ITEMS.filter((item) => !item.adminOnly || isAdmin);
 
   return (
-    <nav aria-label="Settings sections" className={cn(sidebar(), className)}>
+    <nav aria-label={t("shell.sidebar.ariaLabel")} className={cn(sidebar(), className)}>
       {topItems.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
@@ -32,7 +34,7 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
             className={cn(sidebarGroupButton({ active }), "[&_svg]:size-4 [&_svg]:shrink-0")}
           >
             {item.icon}
-            <span className={sidebarGroupLabel()}>{item.label}</span>
+            <span className={sidebarGroupLabel()}>{t(item.labelKey)}</span>
           </Link>
         );
       })}
@@ -47,7 +49,7 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
               "text-fg/40 hover:text-fg/60 mt-3 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-semibold tracking-wider uppercase transition-colors"
             )}
           >
-            <span className="flex-1 text-left">Advanced</span>
+            <span className="flex-1 text-left">{t("shell.sidebar.advanced")}</span>
             <motion.span animate={{ rotate: advancedOpen ? 180 : 0 }} transition={{ duration: 0.15 }}>
               <ChevronDown className="size-3.5" />
             </motion.span>
@@ -72,7 +74,7 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
                       className={cn(sidebarItem({ active }), "[&_svg]:size-3.5 [&_svg]:shrink-0")}
                     >
                       {item.icon}
-                      {item.label}
+                      {t(item.labelKey)}
                     </Link>
                   );
                 })}
@@ -82,7 +84,7 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
         </>
       ) : null}
 
-      <span className={sidebarFooter()}>synthseek v{BUILD_VERSION}</span>
+      <span className={sidebarFooter()}>{t("shell.sidebar.version", { version: BUILD_VERSION })}</span>
     </nav>
   );
 }

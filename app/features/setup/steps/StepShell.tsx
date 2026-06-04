@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AppLogo } from "@components/ui/AppLogo";
 import { authForwardButton, authQuietButton } from "@components/ui/styles";
 import { cn } from "@utils/cn";
 
-import { SETUP_EYEBROW } from "../constants";
 import {
   stepBody,
   stepDescription,
@@ -43,6 +43,7 @@ export function StepShell({
   footerError,
   children,
 }: StepShellProps) {
+  const { t } = useTranslation("setup");
   const headingRef = useRef<HTMLHeadingElement | null>(null);
 
   useEffect(() => {
@@ -57,7 +58,7 @@ export function StepShell({
       <div className={wizardHead()}>
         <header className={wizardBrand()}>
           <AppLogo iconClassName="h-9 w-auto sm:h-10" />
-          <p className={wizardEyebrow()}>{SETUP_EYEBROW}</p>
+          <p className={wizardEyebrow()}>{t("shell.eyebrow")}</p>
         </header>
 
         <div
@@ -65,7 +66,7 @@ export function StepShell({
           aria-valuemin={1}
           aria-valuemax={totalSteps}
           aria-valuenow={stepIndex + 1}
-          aria-valuetext={`Step ${stepIndex + 1} of ${totalSteps}`}
+          aria-valuetext={t("shell.progress", { current: stepIndex + 1, total: totalSteps })}
           className={stepProgress()}
         >
           {Array.from({ length: totalSteps }).map((_, i) => (
@@ -118,7 +119,7 @@ export function StepShell({
             disabled={primaryLoading}
             className={cn(authQuietButton(), "sm:order-first")}
           >
-            Back
+            {t("shell.back")}
           </button>
         ) : (
           <span className="hidden sm:order-first sm:block" />

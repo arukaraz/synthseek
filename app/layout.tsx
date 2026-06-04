@@ -1,17 +1,20 @@
 import { Toaster } from "@components/ui/Sonner";
 import { TooltipProvider } from "@components/ui/Tooltip";
+import { DEFAULT_LOCALE, isLocale, LANG_COOKIE } from "@locale/config";
 import { AuthProvider } from "@modules/providers/AuthProvider";
 import { ClientSessionIdProvider } from "@modules/providers/ClientSessionIdProvider";
 import { CountryProvider } from "@modules/providers/CountryProvider";
+import { I18nProvider } from "@modules/providers/I18nProvider";
 import { TRPCProvider } from "@modules/providers/TRPCProvider";
 import { fontVariables } from "@theme/fonts";
 import "@theme/index.css";
 import { AVAILABLE_THEMES, ThemeProvider } from "@theme/ThemeProvider";
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Synthseek",
-  description: "Next.js 15 with App Router, TypeScript, Tailwind CSS 4.x, and shadcn/ui",
+  description: "Intelligent music download and library management.",
 };
 
 export const viewport: Viewport = {
@@ -20,13 +23,17 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get(LANG_COOKIE)?.value;
+  const locale = isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={`${fontVariables} antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="data-theme"
@@ -39,7 +46,9 @@ export default function RootLayout({
             <TRPCProvider>
               <AuthProvider>
                 <TooltipProvider delayDuration={150} skipDelayDuration={0}>
-                  <CountryProvider>{children}</CountryProvider>
+                  <I18nProvider locale={locale}>
+                    <CountryProvider>{children}</CountryProvider>
+                  </I18nProvider>
                 </TooltipProvider>
               </AuthProvider>
             </TRPCProvider>

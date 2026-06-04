@@ -1,5 +1,7 @@
-import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
+
+import { errorToast } from "@modules/errors";
+import { trpc } from "@utils/trpc";
 
 export function useImportCommit() {
   const utils = trpc.useUtils();
@@ -14,6 +16,6 @@ export function useImportCommit() {
             : undefined,
       });
     },
-    onError: (error) => toast.error(error.message || "Import failed"),
+    onError: (error) => errorToast(error, "portability.importFailed"),
   });
 }

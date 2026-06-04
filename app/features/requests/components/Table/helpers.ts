@@ -1,6 +1,20 @@
-import type { RequestWithTracks } from "@api/__generated__/types";
+import { ContentType, type RequestWithTracks } from "@api/__generated__/types";
+import i18n from "@locale";
 import { compareByStatus } from "../../helpers";
 import type { FlatTrackRow, TableSortConfig } from "../../types";
+
+export function contentTypeLabel(type: ContentType): string {
+  switch (type) {
+    case ContentType.enum.track:
+      return i18n.t("requests:table.contentTypeTrack");
+    case ContentType.enum.album:
+      return i18n.t("requests:table.contentTypeAlbum");
+    case ContentType.enum.playlist:
+      return i18n.t("requests:table.contentTypePlaylist");
+    case ContentType.enum.artist:
+      return i18n.t("requests:table.contentTypeArtist");
+  }
+}
 
 export function flattenRequestsToTrackRows(items: RequestWithTracks[]): FlatTrackRow[] {
   return items.flatMap((item) =>

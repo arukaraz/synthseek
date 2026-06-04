@@ -1,0 +1,82 @@
+{
+  "request": {
+    "queued": {
+      "label": "Queued",
+      "description": "Waiting in queue"
+    },
+    "searching": {
+      "label": "Searching",
+      "description": "Finding sources"
+    },
+    "pending_download": {
+      "label": "Pending Download",
+      "description": "Awaiting download"
+    },
+    "downloading": {
+      "label": "Downloading",
+      "description": "In progress"
+    },
+    "paused": {
+      "label": "Paused",
+      "description": "Download paused"
+    },
+    "pending_import": {
+      "label": "Pending Import",
+      "description": "Awaiting import"
+    },
+    "importing": {
+      "label": "Importing",
+      "description": "Processing file"
+    },
+    "complete": {
+      "label": "Complete",
+      "description": "Download complete"
+    },
+    "failed": {
+      "label": "Failed",
+      "description": "Download failed"
+    },
+    "in_progress": {
+      "label": "In Progress",
+      "description": "Downloading tracks"
+    },
+    "syncing_plex": {
+      "label": "Syncing to Plex",
+      "description": "Syncing to Plex..."
+    },
+    "partially_complete": {
+      "label": "Partially Complete",
+      "description": "Some tracks failed"
+    },
+    "cancelled": {
+      "label": "Cancelled",
+      "description": "Download cancelled"
+    }
+  },
+  "failureReason": {
+    "not_found": {
+      "label": "Not found",
+      "description": "No matches found on Slskd. Other peers may have it later."
+    },
+    "import_rejected": {
+      "label": "Import rejected",
+      "description": "File downloaded but metadata didn't match. Retry will re-import only."
+    },
+    "wrong_file": {
+      "label": "Wrong file",
+      "description": "Downloaded file didn't match the requested track. Deleted and will re-search on retry."
+    },
+    "p2p_failed": {
+      "label": "Transfer failed",
+      "description": "Connection to peer dropped during download."
+    },
+    "download_failed": {
+      "label": "Download failed",
+      "description": "The transfer started but failed or timed out before completing. Retry to try again."
+    },
+    "other": {
+      "label": "Failed",
+      "description": "Unknown error. Check logs."
+    }
+  }
+}

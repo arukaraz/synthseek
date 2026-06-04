@@ -2,6 +2,7 @@
 
 import { AlertCircle, Check, Copy } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { IconButton } from "@components/ui/IconButton";
@@ -30,6 +31,7 @@ import { disabledOverlay, validationError } from "./styles";
 import type { LibrarySourcesCardProps } from "./types";
 
 export function LibrarySourcesCard({ spotify, enrichment }: LibrarySourcesCardProps) {
+  const { t } = useTranslation("settings");
   const updateSpotify = useUpdateConnectionsSpotify();
   const updateEnrichment = useUpdateConnectionsEnrichment();
 
@@ -50,9 +52,7 @@ export function LibrarySourcesCard({ spotify, enrichment }: LibrarySourcesCardPr
 
   const handleSave = async () => {
     if (spotifyEnabled && (!clientId.trim() || !publicBaseUrl.trim())) {
-      setValidationMessage(
-        "Spotify is enabled but missing required fields. Fill in Client ID and Public Base URL, or disable the toggle."
-      );
+      setValidationMessage(t("metadata.librarySources.spotify.validationMissingFields"));
       return;
     }
     setValidationMessage(null);
@@ -90,22 +90,22 @@ export function LibrarySourcesCard({ spotify, enrichment }: LibrarySourcesCardPr
     try {
       await navigator.clipboard.writeText(redirectUri);
       setCopied(true);
-      toast.success("Redirect URI copied");
+      toast.success(t("metadata.librarySources.spotify.copied"));
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Failed to copy redirect URI");
+      toast.error(t("metadata.librarySources.spotify.copyFailed"));
     }
   };
 
   return (
     <SettingsCard
-      title="Library Sources"
+      title={t("metadata.librarySources.title")}
       optional
-      description="Streaming platforms that Synthseek can import playlists and saved albums from."
+      description={t("metadata.librarySources.description")}
     >
       <SettingsField
-        label="Songlink API key (optional)"
-        helper="Resolves track URLs across platforms for cross-platform playlist imports. Synthseek uses the public endpoint by default. Leave blank unless you have a key."
+        label={t("metadata.librarySources.songlinkKey.label")}
+        helper={t("metadata.librarySources.songlinkKey.helper")}
       >
         <SettingsSecretInput value={songlinkApiKey} onChange={setSonglinkApiKey} />
       </SettingsField>
@@ -113,31 +113,42 @@ export function LibrarySourcesCard({ spotify, enrichment }: LibrarySourcesCardPr
       <section className={subSection()}>
         <header className={subSectionHeader()}>
           <div className={subSectionHeaderText()}>
-            <h3 className={subSectionTitle()}>Spotify</h3>
-            <p className={subSectionDescription()}>Developer&apos;s app configuration</p>
+            <h3 className={subSectionTitle()}>{t("metadata.librarySources.spotify.title")}</h3>
+            <p className={subSectionDescription()}>{t("metadata.librarySources.spotify.subtitle")}</p>
           </div>
-          <Switch checked={spotifyEnabled} onCheckedChange={handleSpotifyEnabledChange} aria-label="Enable Spotify" />
+          <Switch
+            checked={spotifyEnabled}
+            onCheckedChange={handleSpotifyEnabledChange}
+            aria-label={t("metadata.librarySources.spotify.toggleAriaLabel")}
+          />
         </header>
 
         <div className={disabledOverlay({ disabled: !spotifyEnabled })}>
           <SpotifyRequirementsNotice />
 
-          <SettingsField label="Client ID">
-            <SettingsTextInput value={clientId} onChange={setClientId} placeholder="e.g. 3a1b6c5d7e8f4a..." />
+          <SettingsField label={t("metadata.librarySources.spotify.clientIdLabel")}>
+            <SettingsTextInput
+              value={clientId}
+              onChange={setClientId}
+              placeholder={t("metadata.librarySources.spotify.clientIdPlaceholder")}
+            />
           </SettingsField>
 
-          <SettingsField label="Public Base URL" helper="Your Synthseek URL (no trailing slash).">
+          <SettingsField
+            label={t("metadata.librarySources.spotify.publicBaseUrlLabel")}
+            helper={t("metadata.librarySources.spotify.publicBaseUrlHelper")}
+          >
             <SettingsTextInput
               value={publicBaseUrl}
               onChange={setPublicBaseUrl}
-              placeholder="https://synthseek.example.com"
+              placeholder={t("metadata.librarySources.spotify.publicBaseUrlPlaceholder")}
               type="url"
             />
           </SettingsField>
 
           <SettingsField
-            label="Redirect URI"
-            helper="Paste this URI exactly into your Spotify App's 'Redirect URIs' list."
+            label={t("metadata.librarySources.spotify.redirectUriLabel")}
+            helper={t("metadata.librarySources.spotify.redirectUriHelper")}
           >
             <div className={copyRow()}>
               <div className="flex-1">
@@ -149,8 +160,8 @@ export function LibrarySourcesCard({ spotify, enrichment }: LibrarySourcesCardPr
                 size="md"
                 onClick={handleCopyRedirect}
                 disabled={!redirectUri}
-                aria-label="Copy redirect URI"
-                title="Copy redirect URI"
+                aria-label={t("metadata.librarySources.spotify.copyAriaLabel")}
+                title={t("metadata.librarySources.spotify.copyTitle")}
                 animated={false}
               />
             </div>

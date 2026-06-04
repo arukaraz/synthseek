@@ -1,14 +1,16 @@
 "use client";
 
 import { cn } from "@utils/cn";
+import { useTranslation } from "react-i18next";
 import type { LogoIconProps } from "./types";
 
 export function LogoIcon({ className }: LogoIconProps) {
+  const { t } = useTranslation("components");
   return (
     <svg
       viewBox="0 0 155.5029585798817 300"
       className={cn("h-12 w-auto sm:h-14", className)}
-      aria-label="Synthseek Logo"
+      aria-label={t("logo.ariaLabel")}
     >
       <defs>
         <linearGradient

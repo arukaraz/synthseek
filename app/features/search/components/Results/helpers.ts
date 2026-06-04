@@ -1,5 +1,6 @@
 import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
+import i18n from "@locale";
 import type { Result } from "./types";
 
 export function transformResultForDisplay(item: MusicItem): Result {
@@ -55,7 +56,9 @@ export function getSecondaryInfo(result: Result): string {
     case ContentType.enum.artist:
       return result.year || "";
     case ContentType.enum.playlist:
-      return result.trackCount ? `${result.artist} · ${result.trackCount} tracks` : result.artist;
+      return result.trackCount
+        ? `${result.artist} · ${i18n.t("search:browser.trackCount", { count: result.trackCount })}`
+        : result.artist;
     default:
       return result.artist;
   }

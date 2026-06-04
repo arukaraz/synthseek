@@ -1,34 +1,43 @@
 "use client";
 
 import { ACTIVE_STATUSES, RequestStatus, UNRESOLVED_STATUSES } from "@api/__generated__/types";
+import { useTranslation } from "react-i18next";
 import { RequestDetailStatsCard } from "./RequestDetailStatsCard";
 import { detailStatsGrid } from "./styles";
 import type { RequestDetailStatsProps } from "./types";
 
 export function RequestDetailStats({ request }: RequestDetailStatsProps) {
+  const { t } = useTranslation("requests");
   const tracks = request.tracks ?? [];
-  const completeCount = tracks.filter((t) => t.status === RequestStatus.enum.complete).length;
-  const failedCount = tracks.filter((t) => (UNRESOLVED_STATUSES as readonly string[]).includes(t.status)).length;
-  const activeCount = tracks.filter((t) => (ACTIVE_STATUSES as readonly string[]).includes(t.status)).length;
+  const completeCount = tracks.filter((track) => track.status === RequestStatus.enum.complete).length;
+  const failedCount = tracks.filter((track) =>
+    (UNRESOLVED_STATUSES as readonly string[]).includes(track.status)
+  ).length;
+  const activeCount = tracks.filter((track) => (ACTIVE_STATUSES as readonly string[]).includes(track.status)).length;
 
   return (
     <div className={detailStatsGrid()}>
       <RequestDetailStatsCard
-        label="Tracks"
+        label={t("stats.tracksLabel")}
         value={`${request.completed_tracks}/${request.total_tracks}`}
-        sublabel="requested"
+        sublabel={t("stats.tracksSublabel")}
       />
       <RequestDetailStatsCard
-        label="Complete"
+        label={t("stats.completeLabel")}
         value={completeCount}
-        sublabel="downloaded"
+        sublabel={t("stats.completeSublabel")}
         valueClassName="text-green-400"
       />
-      <RequestDetailStatsCard label="Failed" value={failedCount} sublabel="errored" valueClassName="text-red-400" />
       <RequestDetailStatsCard
-        label="Active"
+        label={t("stats.failedLabel")}
+        value={failedCount}
+        sublabel={t("stats.failedSublabel")}
+        valueClassName="text-red-400"
+      />
+      <RequestDetailStatsCard
+        label={t("stats.activeLabel")}
         value={activeCount}
-        sublabel="in progress"
+        sublabel={t("stats.activeSublabel")}
         valueClassName="text-primary-400"
       />
     </div>

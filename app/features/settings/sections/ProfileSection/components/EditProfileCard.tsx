@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useUpdateProfile } from "@hooks/api/mutations/auth/useUpdateProfile";
 
@@ -9,10 +10,10 @@ import { SettingsField } from "../../../components/SettingsField";
 import { SettingsTextInput } from "../../../components/SettingsTextInput";
 import { SaveBar } from "../../../components/SaveBar";
 import { useSettingsForm } from "../../../hooks/useSettingsForm";
-import { PROFILE_COPY } from "../constants";
 import type { ProfileCardProps } from "../types";
 
 export function EditProfileCard({ user }: ProfileCardProps) {
+  const { t } = useTranslation("settings");
   const isLocal = user.plex_username === null;
   const update = useUpdateProfile();
 
@@ -37,27 +38,34 @@ export function EditProfileCard({ user }: ProfileCardProps) {
     });
 
   return (
-    <SettingsCard title={PROFILE_COPY.editTitle} description={PROFILE_COPY.editDescription}>
-      <SettingsField label={PROFILE_COPY.usernameLabel}>
-        <SettingsTextInput value={draft.username} onChange={(v) => form.setField("username", v)} ariaLabel="Username" />
+    <SettingsCard title={t("profile.edit.title")}>
+      <SettingsField label={t("profile.edit.usernameLabel")}>
+        <SettingsTextInput
+          value={draft.username}
+          onChange={(v) => form.setField("username", v)}
+          ariaLabel={t("profile.edit.usernameAriaLabel")}
+        />
       </SettingsField>
 
-      <SettingsField label={PROFILE_COPY.emailLabel} helper={isLocal ? undefined : PROFILE_COPY.emailManagedByPlex}>
+      <SettingsField
+        label={t("profile.edit.emailLabel")}
+        helper={isLocal ? undefined : t("profile.edit.emailManagedByPlex")}
+      >
         <SettingsTextInput
           type="email"
           value={draft.email}
           onChange={(v) => form.setField("email", v)}
           disabled={!isLocal}
-          ariaLabel="Email"
+          ariaLabel={t("profile.edit.emailAriaLabel")}
         />
       </SettingsField>
 
-      <SettingsField label={PROFILE_COPY.avatarLabel}>
+      <SettingsField label={t("profile.edit.avatarLabel")}>
         <SettingsTextInput
           value={draft.avatar_url}
           onChange={(v) => form.setField("avatar_url", v)}
-          placeholder={PROFILE_COPY.avatarPlaceholder}
-          ariaLabel="Avatar URL"
+          placeholder={t("profile.edit.avatarPlaceholder")}
+          ariaLabel={t("profile.edit.avatarAriaLabel")}
         />
       </SettingsField>
 

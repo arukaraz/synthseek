@@ -1,0 +1,69 @@
+{
+  "pagination": {
+    "summary": "Mostrando {{start}}-{{end}} de {{total}}",
+    "rowsPerPage": "Filas por página",
+    "perPage": "{{size}} por página",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente",
+    "mobilePage": "Página {{page}} de {{pageCount}}",
+    "goToPage": "Página {{page}}"
+  },
+  "confirmation": {
+    "confirm": "Confirmar",
+    "cancel": "Cancelar"
+  },
+  "dialog": {
+    "close": "Cerrar"
+  },
+  "filterSort": {
+    "trigger": "Filtrar y ordenar",
+    "filterLabel": "Filtrar",
+    "sortLabel": "Ordenar por",
+    "orderLabel": "Orden",
+    "ascending": "Ascendente",
+    "descending": "Descendente"
+  },
+  "passwordField": {
+    "label": "Contraseña",
+    "show": "Mostrar contraseña",
+    "hide": "Ocultar contraseña"
+  },
+  "logo": {
+    "ariaLabel": "Logo de Synthseek"
+  },
+  "table": {
+    "empty": "No hay elementos que mostrar"
+  },
+  "loading": {
+    "section": "Cargando...",
+    "dots": "Cargando"
+  },
+  "infoTooltip": {
+    "trigger": "Más información"
+  },
+  "header": {
+    "primaryNav": "Principal",
+    "search": "Buscar",
+    "searchPlaceholder": "Busca canciones, artistas, álbumes...",
+    "closeSearch": "Cerrar búsqueda",
+    "clearSearch": "Limpiar búsqueda",
+    "discover": "Descubrir",
+    "requests": "Solicitudes",
+    "settings": "Ajustes"
+  },
+  "userMenu": {
+    "trigger": "Menú de usuario",
+    "settings": "Ajustes",
+    "profile": "Perfil",
+    "members": "Miembros",
+    "logout": "Cerrar sesión",
+    "loggingOut": "Cerrando sesión...",
+    "patchNotes": "Notas de la versión",
+    "majorUpdate": "Actualización importante",
+    "updateAvailable": "Actualización disponible",
+    "updateTo": "Actualizar a {{version}}",
+    "currentVersion": "Actual {{version}}",
+    "roleAdmin": "Administrador",
+    "roleUser": "Usuario"
+  }
+}

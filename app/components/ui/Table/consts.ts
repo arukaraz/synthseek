@@ -14,6 +14,4 @@ export const TABLE_HEADER_SORT_INDICATOR_VARIANTS: Variants = {
   exit: { scale: 0 },
 };
 
-export const DEFAULT_EMPTY_MESSAGE = "No items to display";
-
 export const DEFAULT_STAGGER_DELAY = 0;

@@ -1,0 +1,160 @@
+{
+  "loading": {
+    "requests": "Cargando solicitudes..."
+  },
+  "toolbar": {
+    "retryAllFailed": {
+      "label": "Reintentar fallidas",
+      "confirmTitle": "Reintentar todas las fallidas",
+      "confirmMessage": "Esto reintentará todas las descargas fallidas y parcialmente completadas. ¿Continuar?",
+      "confirmPending": "Reintentando...",
+      "confirmAction": "Reintentar todas"
+    },
+    "import": {
+      "trigger": "Importar biblioteca",
+      "sourcesLabel": "Fuentes",
+      "fromFile": "Desde archivo"
+    }
+  },
+  "viewToggle": {
+    "groupsTitle": "Vista de grupos",
+    "groupsAriaLabel": "Cambiar a vista de grupos",
+    "listTitle": "Vista de lista",
+    "listAriaLabel": "Cambiar a vista de lista"
+  },
+  "searchInput": {
+    "placeholder": "Filtrar...",
+    "clear": "Limpiar filtro",
+    "openTitle": "Filtrar solicitudes",
+    "open": "Abrir filtro",
+    "close": "Cerrar filtro"
+  },
+  "sourceFilter": {
+    "label": "Álbum / Lista de reproducción",
+    "searchPlaceholder": "Buscar fuente...",
+    "noMatches": "Sin coincidencias",
+    "clearSelection": "Limpiar selección"
+  },
+  "statusFilter": {
+    "all": "Todas",
+    "active": "Activas",
+    "done": "Completadas",
+    "failed": "Fallidas"
+  },
+  "sort": {
+    "recent": "Reciente",
+    "playlist": "Lista de reproducción",
+    "artist": "Artista",
+    "album": "Álbum"
+  },
+  "activeSourceChips": {
+    "filteredTo": "Filtrado por",
+    "remove": "Quitar {{name}}",
+    "clearAll": "Limpiar todo"
+  },
+  "emptyState": {
+    "noResultsTitle": "Sin resultados",
+    "noResultsDescription": "Ninguna solicitud coincide con \"{{query}}\"",
+    "noRequestsTitle": "Sin solicitudes",
+    "noRequestsDescription": "Tus solicitudes de descarga aparecerán aquí.",
+    "selectTitle": "Selecciona una solicitud",
+    "selectDescription": "Elige una solicitud de la lista para ver sus detalles."
+  },
+  "detail": {
+    "backToList": "Volver a la lista de solicitudes",
+    "requestedBy": "Solicitado por {{username}}",
+    "moreActions": "Más acciones",
+    "removeAction": "Quitar {{label}}",
+    "retryFailed": "Reintentar fallidas",
+    "cancelDownloads": "Cancelar descargas",
+    "syncFromSource": "Sincronizar desde Spotify",
+    "syncing": "Sincronizando...",
+    "syncToPlex": "Sincronizar con Plex",
+    "export": "Exportar",
+    "exportTooltipTitle": "Exportar",
+    "exportTooltipDescription": "Descarga ahora un archivo .jspf, usando los IDs ya guardados en cada pista.",
+    "exportTooltipPointIds": "ISRC e ID de Deezer para cada pista",
+    "exportTooltipPointMusicBrainz": "ID de MusicBrainz solo donde ya esté resuelto",
+    "exportTooltipPointRefind": "Otras aplicaciones usan estos IDs para volver a encontrar cada canción",
+    "exportMax": "Exportar (máxima compatibilidad)",
+    "exportMaxTooltipTitle": "Exportar (máxima compatibilidad)",
+    "exportMaxTooltipDescription": "Primero busca el ID de MusicBrainz que falta en cada pista y luego descarga.",
+    "exportMaxTooltipPointSlower": "Puede ser más lento: resuelve cada ID en línea si falta alguno",
+    "exportMaxTooltipPointBest": "Ideal para aplicaciones de ListenBrainz y MusicBrainz",
+    "exportMaxTooltipPointMatches": "Así el archivo coincide en más aplicaciones"
+  },
+  "stats": {
+    "tracksLabel": "Pistas",
+    "tracksSublabel": "solicitadas",
+    "completeLabel": "Completadas",
+    "completeSublabel": "descargadas",
+    "failedLabel": "Fallidas",
+    "failedSublabel": "con error",
+    "activeLabel": "Activas",
+    "activeSublabel": "en progreso"
+  },
+  "tracks": {
+    "trackHeader": "Pista",
+    "artistHeader": "Artista",
+    "statusHeader": "Estado",
+    "completedHeader": "Completada",
+    "actionsHeader": "Acciones",
+    "empty": "Sin pistas",
+    "moreInfo": "Más información: {{label}}",
+    "retry": "Reintentar pista",
+    "retryTitle": "Reintentar",
+    "cancel": "Cancelar pista",
+    "cancelTitle": "Cancelar"
+  },
+  "table": {
+    "titleHeader": "Título",
+    "statusHeader": "Estado",
+    "albumHeader": "Álbum/Lista",
+    "artistHeader": "Artista",
+    "typeHeader": "Tipo",
+    "requestedByHeader": "Solicitado por",
+    "addedHeader": "Añadida",
+    "completedHeader": "Completada",
+    "contentTypeTrack": "Pista",
+    "contentTypeAlbum": "Álbum",
+    "contentTypePlaylist": "Lista de reproducción",
+    "contentTypeArtist": "Artista",
+    "requestedByYou": "tú",
+    "showOnlyFrom": "Mostrar solo las pistas de {{name}}",
+    "retry": "Reintentar descarga",
+    "retryTitle": "Reintentar",
+    "cancel": "Cancelar pista",
+    "cancelTitle": "Cancelar",
+    "actionsMenu": "Menú de acciones",
+    "retryMenuItem": "Reintentar descarga",
+    "cancelMenuItem": "Cancelar pista"
+  },
+  "export": {
+    "dialogTitle": "Exportar (máxima compatibilidad)",
+    "dialogDescription": "Resolviendo el ID de MusicBrainz de cada pista para que el archivo coincida en cualquier aplicación, y luego descargando.",
+    "resolving": "Resolviendo {{processed}}/{{total}}",
+    "preparing": "Preparando exportación...",
+    "failed": "Error al exportar"
+  },
+  "confirm": {
+    "cancelTrackTitle": "Cancelar pista",
+    "cancelTrackMessage": "¿Cancelar \"{{title}}\" de {{artist}}?",
+    "cancelConfirm": "Cancelar",
+    "cancelKeep": "Mantener",
+    "removeTitle": "Quitar solicitud de {{label}}",
+    "removeMessage": "¿Quitar \"{{name}}\" de {{artist}}? Esta acción no se puede deshacer.",
+    "removeConfirm": "Quitar {{label}}",
+    "removeKeep": "Mantener",
+    "cancelDownloadsTitle": "Cancelar descargas de {{label}}",
+    "cancelDownloadsMessage": "¿Cancelar todas las descargas activas de \"{{name}}\" de {{artist}}?",
+    "cancelDownloadsConfirm": "Cancelar descargas",
+    "cancelDownloadsKeep": "Seguir descargando"
+  },
+  "labels": {
+    "album": "Álbum",
+    "playlist": "Lista de reproducción"
+  },
+  "spotifyCallback": {
+    "connectionFailed": "Error de conexión con Spotify"
+  }
+}

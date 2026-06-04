@@ -1,8 +1,5 @@
-import type { TabOption } from "./types";
+import type { LeaderboardMode } from "./types";
 
 export const TOP_LIMIT = 5;
 
-export const OPTIONS: TabOption[] = [
-  { id: "artists", label: "Artists" },
-  { id: "genres", label: "Genres" },
-];
+export const TAB_MODES: LeaderboardMode[] = ["artists", "genres"];

@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Inbox, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { MAX_RESULTS_DISPLAY } from "../../constants";
 import { useContentRequestFlow } from "../ContentRequestFlow/ContentRequestFlow";
@@ -21,6 +22,7 @@ import { filterTabsContainer } from "../styles";
 import { getActiveFilter, getAvailableTypes, getFilteredResults, getFlatResults } from "./helpers";
 
 export function SearchResultsWidget() {
+  const { t } = useTranslation("search");
   const router = useRouter();
   const searchParams = useSearchParams();
   const { openForResult } = useContentRequestFlow();
@@ -72,8 +74,8 @@ export function SearchResultsWidget() {
     return (
       <EmptyState
         icon={Search}
-        title="Start Searching"
-        description="Use the search bar above to find tracks, albums, or artists"
+        title={t("results.emptyState.start.title")}
+        description={t("results.emptyState.start.description")}
       />
     );
   }
@@ -97,7 +99,7 @@ export function SearchResultsWidget() {
         <div className="flex-1 overflow-auto">
           <div className="p-4 sm:p-6">
             <div className="space-y-6 sm:space-y-8">
-              {["Playlists", "Artists", "Albums", "Songs"].map((section) => (
+              {[0, 1, 2, 3].map((section) => (
                 <SkeletonSection key={section} />
               ))}
             </div>
@@ -108,16 +110,22 @@ export function SearchResultsWidget() {
   }
 
   if (flatResults.length === 0) {
-    return <EmptyState icon={Inbox} title="No Results Found" description="Try searching for something else" />;
+    return (
+      <EmptyState
+        icon={Inbox}
+        title={t("results.emptyState.noResults.title")}
+        description={t("results.emptyState.noResults.description")}
+      />
+    );
   }
 
   return (
     <div className="flex h-full flex-col" data-cy="search-results">
       <div className="border-fg/10 flex-shrink-0 border-b">
         <div className="p-4 pb-3 sm:p-6 sm:pb-4">
-          <h3 className="text-fg mb-1 text-base font-semibold sm:text-lg">Search Results</h3>
+          <h3 className="text-fg mb-1 text-base font-semibold sm:text-lg">{t("results.heading")}</h3>
           <p className="text-fg/60 text-sm" data-cy="result-count">
-            Found {flatResults.length} result{flatResults.length === 1 ? "" : "s"} for &quot;{query}&quot;
+            {t("results.count", { count: flatResults.length, query })}
           </p>
         </div>
 
@@ -145,7 +153,7 @@ export function SearchResultsWidget() {
             >
               {activeFilter === "all" ? (
                 <div className="space-y-6 sm:space-y-8">
-                  {["Playlists", "Artists", "Albums", "Songs"].map((section) => (
+                  {[0, 1, 2, 3].map((section) => (
                     <SkeletonSection key={section} />
                   ))}
                 </div>

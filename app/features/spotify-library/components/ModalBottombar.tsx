@@ -2,6 +2,7 @@
 
 import { Button } from "@components/ui/Button";
 import { RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { bbStat, bbStatStrong, bottombar, bottombarLeft, bottombarRight } from "../styles";
 
@@ -25,6 +26,7 @@ export function ModalBottombar({
   onRefresh,
   isRefreshing,
 }: ModalBottombarProps) {
+  const { t } = useTranslation("library");
   const showSelectionMode = selectedCount > 0;
 
   return (
@@ -45,21 +47,25 @@ export function ModalBottombar({
         ) : (
           <>
             <span className={bbStat()}>
-              <span className={bbStatStrong()}>{totalRows}</span> rows
+              <span className={bbStatStrong()}>{totalRows}</span>{" "}
+              {t("spotifyLibrary.bottombar.rows", { count: totalRows })}
             </span>
             <span className={bbStat()}>
-              <span className={bbStatStrong()}>{totalTracks}</span> tracks total
+              <span className={bbStatStrong()}>{totalTracks}</span>{" "}
+              {t("spotifyLibrary.bottombar.tracksTotal", { count: totalTracks })}
             </span>
             <Button
               variant="ghost"
               size="sm"
               onClick={onRefresh}
               disabled={isRefreshing}
-              title="Pull the latest list of items from your library"
+              title={t("spotifyLibrary.bottombar.refreshTitle")}
               className="ml-auto sm:ml-0"
             >
               <RefreshCw className={`size-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
-              <span className="hidden sm:inline">{isRefreshing ? "Refreshing…" : "Refresh list"}</span>
+              <span className="hidden sm:inline">
+                {isRefreshing ? t("spotifyLibrary.bottombar.refreshing") : t("spotifyLibrary.bottombar.refreshList")}
+              </span>
             </Button>
           </>
         )}
@@ -67,10 +73,10 @@ export function ModalBottombar({
       <div className={bottombarRight()}>
         <AutoWatchToggles value={autoWatch} onChange={onWatchChange} />
         <Button variant="ghost" size="sm" onClick={onCancel} disabled={isSaving}>
-          Cancel
+          {t("spotifyLibrary.bottombar.cancel")}
         </Button>
         <Button onClick={onSave} disabled={!hasChanges || isSaving} size="sm">
-          {isSaving ? "Saving…" : "Save changes"}
+          {isSaving ? t("spotifyLibrary.bottombar.saving") : t("spotifyLibrary.bottombar.saveChanges")}
         </Button>
       </div>
     </div>

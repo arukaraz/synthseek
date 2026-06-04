@@ -10,6 +10,7 @@ import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ActiveSourceChips } from "./ActiveSourceChips";
 import { RequestsEmptyState } from "./RequestsEmptyState";
 import { buildFlatTrackColumns } from "./Table/columns";
@@ -25,6 +26,7 @@ import {
 import { FlatTrackRow, PER_PAGE_OPTIONS, REQUESTS_URL_PARAMS, TableSortConfig, TableSortField } from "../types";
 
 export function ListViewMode() {
+  const { t } = useTranslation("requests");
   const { data: items, isLoading } = useTrackRequests();
   const { values } = useUrlParams({
     filter: REQUESTS_URL_PARAMS.filter,
@@ -46,15 +48,15 @@ export function ListViewMode() {
   const handleCancel = useCallback(
     async (item: FlatTrackRow) => {
       const confirmed = await confirm({
-        title: "Cancel Track",
-        message: `Cancel "${item.title}" by ${item.artist}?`,
+        title: t("confirm.cancelTrackTitle"),
+        message: t("confirm.cancelTrackMessage", { title: item.title, artist: item.artist }),
         variant: "danger",
-        confirmText: "Cancel",
-        cancelText: "Keep",
+        confirmText: t("confirm.cancelConfirm"),
+        cancelText: t("confirm.cancelKeep"),
       });
       if (confirmed) cancelTrack.mutate({ trackId: item.id });
     },
-    [cancelTrack]
+    [cancelTrack, t]
   );
 
   const handleSelectSource = useCallback(
@@ -110,7 +112,7 @@ export function ListViewMode() {
   };
 
   if (isLoading) {
-    return <SectionLoading message="Loading requests..." />;
+    return <SectionLoading message={t("loading.requests")} />;
   }
 
   return (

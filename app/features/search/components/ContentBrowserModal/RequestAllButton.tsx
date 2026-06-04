@@ -1,6 +1,7 @@
 "use client";
 
 import { Download } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/Tooltip";
@@ -10,6 +11,7 @@ import { cn } from "@utils/cn";
 import type { RequestAllButtonProps } from "./types";
 
 export function RequestAllButton({ onRequestAll, disabled, tooltip }: RequestAllButtonProps) {
+  const { t } = useTranslation("search");
   const button = (
     <Button
       onClick={onRequestAll}
@@ -22,7 +24,7 @@ export function RequestAllButton({ onRequestAll, disabled, tooltip }: RequestAll
       data-cy="content-browser-request-all-btn"
     >
       <Download className="h-4 w-4 sm:mr-2" />
-      <span className="hidden sm:inline">Request</span>
+      <span className="hidden sm:inline">{t("browser.request")}</span>
     </Button>
   );
 

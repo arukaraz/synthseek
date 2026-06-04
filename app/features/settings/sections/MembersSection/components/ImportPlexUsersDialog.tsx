@@ -2,17 +2,11 @@
 
 import { User as UserIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Checkbox } from "@components/ui/Checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@components/ui/Dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
 import { Notice } from "@components/ui/Notice";
 import { Role } from "@api/__generated__/types";
 import { usePlexImportableUsers } from "@hooks/api/queries/usePlexImportableUsers";
@@ -20,11 +14,13 @@ import { useImportPlexUsers } from "@hooks/api/mutations/users/useImportPlexUser
 
 import { SettingsField } from "../../../components/SettingsField";
 import { SegmentedControl } from "../../../components/SegmentedControl";
-import { IMPORT_PLEX_COPY, ROLE_OPTIONS } from "../constants";
+import { buildRoleOptions } from "../helpers";
 import { importEmpty, importList, importRow, pill, userAvatar, userEmail, userName } from "../styles";
 import type { ImportPlexUsersDialogProps, RoleValue } from "../types";
 
 export function ImportPlexUsersDialog({ open, onOpenChange }: ImportPlexUsersDialogProps) {
+  const { t } = useTranslation("settings");
+  const roleOptions = buildRoleOptions(t);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [role, setRole] = useState<RoleValue>(Role.enum.member);
   const importable = usePlexImportableUsers({ enabled: open });
@@ -66,16 +62,15 @@ export function ImportPlexUsersDialog({ open, onOpenChange }: ImportPlexUsersDia
       <DialogContent className="sm:max-w-lg">
         <div className="flex flex-col gap-4">
           <DialogHeader>
-            <DialogTitle>{IMPORT_PLEX_COPY.title}</DialogTitle>
-            <DialogDescription>{IMPORT_PLEX_COPY.description}</DialogDescription>
+            <DialogTitle>{t("members.import.title")}</DialogTitle>
           </DialogHeader>
 
           {importable.isLoading ? (
-            <div className={importEmpty()}>{IMPORT_PLEX_COPY.loading}</div>
+            <div className={importEmpty()}>{t("members.import.loading")}</div>
           ) : importable.error ? (
             <Notice variant="warning" title={importable.error.message} />
           ) : users.length === 0 ? (
-            <div className={importEmpty()}>{IMPORT_PLEX_COPY.empty}</div>
+            <div className={importEmpty()}>{t("members.import.empty")}</div>
           ) : (
             <>
               <label className="flex cursor-pointer items-center gap-2">
@@ -83,9 +78,9 @@ export function ImportPlexUsersDialog({ open, onOpenChange }: ImportPlexUsersDia
                   checked={allSelected}
                   onCheckedChange={toggleAll}
                   disabled={selectableIds.length === 0}
-                  aria-label={IMPORT_PLEX_COPY.selectAll}
+                  aria-label={t("members.import.selectAll")}
                 />
-                <span className="text-fg/70 text-sm">{IMPORT_PLEX_COPY.selectAll}</span>
+                <span className="text-fg/70 text-sm">{t("members.import.selectAll")}</span>
               </label>
 
               <div className={importList()}>
@@ -99,7 +94,7 @@ export function ImportPlexUsersDialog({ open, onOpenChange }: ImportPlexUsersDia
                       checked={selected.has(user.plexId)}
                       disabled={user.alreadyImported}
                       onCheckedChange={() => toggle(user.plexId)}
-                      aria-label={`Select ${user.username}`}
+                      aria-label={t("members.import.selectUser", { username: user.username })}
                     />
                     <div className={userAvatar()}>
                       {user.thumb ? (
@@ -114,18 +109,18 @@ export function ImportPlexUsersDialog({ open, onOpenChange }: ImportPlexUsersDia
                       <p className={userEmail()}>{user.email}</p>
                     </div>
                     {user.alreadyImported ? (
-                      <span className={pill({ tone: "local" })}>{IMPORT_PLEX_COPY.imported}</span>
+                      <span className={pill({ tone: "local" })}>{t("members.import.imported")}</span>
                     ) : null}
                   </div>
                 ))}
               </div>
 
-              <SettingsField label={IMPORT_PLEX_COPY.roleLabel}>
+              <SettingsField label={t("members.import.roleLabel")}>
                 <SegmentedControl<RoleValue>
                   value={role}
-                  options={ROLE_OPTIONS}
+                  options={roleOptions}
                   onChange={setRole}
-                  ariaLabel="Role for imported users"
+                  ariaLabel={t("members.import.roleAriaLabel")}
                 />
               </SettingsField>
             </>
@@ -133,7 +128,7 @@ export function ImportPlexUsersDialog({ open, onOpenChange }: ImportPlexUsersDia
 
           <DialogFooter>
             <Button size="sm" onClick={handleImport} disabled={selected.size === 0 || importUsers.isPending}>
-              {IMPORT_PLEX_COPY.submit}
+              {t("members.import.submit")}
               {selected.size > 0 ? ` (${selected.size})` : ""}
             </Button>
           </DialogFooter>

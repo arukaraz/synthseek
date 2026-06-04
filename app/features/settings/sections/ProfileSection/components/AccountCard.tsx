@@ -1,21 +1,22 @@
 "use client";
 
 import { ShieldCheck, User as UserIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Role } from "@api/__generated__/types";
 import { formatDate } from "@utils/formatters";
 
 import { SettingsCard } from "../../../components/SettingsCard";
-import { PROFILE_COPY } from "../constants";
 import { accountAvatar, accountMeta } from "../styles";
 import type { ProfileCardProps } from "../types";
 
 export function AccountCard({ user }: ProfileCardProps) {
+  const { t } = useTranslation("settings");
   const isPlex = user.plex_username !== null;
   const isAdmin = user.role === Role.enum.admin;
 
   return (
-    <SettingsCard title={PROFILE_COPY.accountTitle}>
+    <SettingsCard title={t("profile.account.title")}>
       <div className="flex items-center gap-4">
         <div className={accountAvatar()}>
           {user.avatar_url ? (
@@ -34,10 +35,10 @@ export function AccountCard({ user }: ProfileCardProps) {
               {user.role}
             </span>
             <span className="text-fg/30">·</span>
-            <span>{isPlex ? PROFILE_COPY.plexAccount : PROFILE_COPY.localAccount}</span>
+            <span>{isPlex ? t("profile.account.plexAccount") : t("profile.account.localAccount")}</span>
             <span className="text-fg/30">·</span>
             <span>
-              {PROFILE_COPY.memberSince} {formatDate(new Date(user.created_at))}
+              {t("profile.account.memberSince")} {formatDate(new Date(user.created_at))}
             </span>
           </div>
         </div>

@@ -1,5 +1,4 @@
-import { toast } from "sonner";
-
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useFinishWizard() {
@@ -9,6 +8,6 @@ export function useFinishWizard() {
       utils.auth.setupRequired.setData(undefined, false);
       utils.auth.setupRequired.invalidate();
     },
-    onError: (error) => toast.error(error.message || "Could not finish setup"),
+    onError: (error) => errorToast(error, "settings.finishWizardFailed"),
   });
 }

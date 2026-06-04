@@ -1,26 +1,41 @@
 "use client";
 
+import { Trans, useTranslation } from "react-i18next";
+
 import { Notice } from "@components/ui/Notice";
 
 import { noticeLink, noticeList } from "./styles";
 
 export function SpotifyRequirementsNotice() {
+  const { t } = useTranslation("settings");
+
   return (
-    <Notice variant="warning" title="Spotify Development Mode requirements" collapsible defaultOpen={false}>
+    <Notice variant="warning" title={t("metadata.spotifyRequirements.title")} collapsible defaultOpen={false}>
       <ul className={noticeList()}>
         <li>
-          • The Spotify account that <strong>owns the app</strong> in the{" "}
-          <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noreferrer" className={noticeLink()}>
-            Developer Dashboard
-          </a>{" "}
-          must have an active Premium subscription.
+          •{" "}
+          <Trans
+            t={t}
+            i18nKey="metadata.spotifyRequirements.ownerPremium"
+            components={{
+              strong: <strong />,
+              dashboard: (
+                <a
+                  href="https://developer.spotify.com/dashboard"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={noticeLink()}
+                />
+              ),
+            }}
+          />
         </li>
         <li>
-          • Every Synthseek user who wants to connect must be added to the app&apos;s{" "}
-          <strong>Settings → User Management</strong> list (using their Spotify email).
+          • <Trans t={t} i18nKey="metadata.spotifyRequirements.userManagement" components={{ strong: <strong /> }} />
         </li>
         <li>
-          • Connecting users do <strong>not</strong> need Premium themselves, only the app owner does.
+          •{" "}
+          <Trans t={t} i18nKey="metadata.spotifyRequirements.connectorsNoPremium" components={{ strong: <strong /> }} />
         </li>
       </ul>
     </Notice>

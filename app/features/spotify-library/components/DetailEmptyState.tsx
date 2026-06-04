@@ -1,6 +1,7 @@
 "use client";
 
 import { MousePointer2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import {
   detailEmpty,
@@ -15,6 +16,8 @@ import {
 } from "../styles";
 
 export function DetailEmptyState() {
+  const { t } = useTranslation("library");
+
   return (
     <div className={detailEmpty()}>
       <div className={detailEmptyArt()}>
@@ -32,19 +35,19 @@ export function DetailEmptyState() {
         </span>
         <MousePointer2 className="text-primary-300 absolute -right-2 -bottom-2 size-5 opacity-90" />
       </div>
-      <h3 className={detailEmptyTitle()}>Inspect an item</h3>
-      <p className={detailEmptyBody()}>
-        Click any row to see its tracks, full metadata and per-item sync configuration here.
-      </p>
+      <h3 className={detailEmptyTitle()}>{t("spotifyLibrary.emptyState.title")}</h3>
+      <p className={detailEmptyBody()}>{t("spotifyLibrary.emptyState.body")}</p>
       <div className={detailEmptyHints()}>
         <span className={detailEmptyHint()}>
-          <kbd className={detailEmptyKbd()}>↑↓</kbd> navigate
+          <kbd className={detailEmptyKbd()}>↑↓</kbd> {t("spotifyLibrary.emptyState.navigate")}
         </span>
         <span className={detailEmptyHint()}>
-          <kbd className={detailEmptyKbd()}>Space</kbd> select
+          <kbd className={detailEmptyKbd()}>{t("spotifyLibrary.emptyState.keySpace")}</kbd>{" "}
+          {t("spotifyLibrary.emptyState.select")}
         </span>
         <span className={detailEmptyHint()}>
-          <kbd className={detailEmptyKbd()}>Esc</kbd> clear
+          <kbd className={detailEmptyKbd()}>{t("spotifyLibrary.emptyState.keyEsc")}</kbd>{" "}
+          {t("spotifyLibrary.emptyState.clear")}
         </span>
       </div>
     </div>

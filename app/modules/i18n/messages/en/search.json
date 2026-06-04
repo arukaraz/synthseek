@@ -1,0 +1,136 @@
+{
+  "results": {
+    "emptyState": {
+      "start": {
+        "title": "Start Searching",
+        "description": "Use the search bar above to find tracks, albums, or artists"
+      },
+      "noResults": {
+        "title": "No Results Found",
+        "description": "Try searching for something else"
+      }
+    },
+    "heading": "Search Results",
+    "count_one": "Found {{count}} result for \"{{query}}\"",
+    "count_other": "Found {{count}} results for \"{{query}}\"",
+    "seeAll": "See all {{total}} {{label}}",
+    "filters": {
+      "all": "All",
+      "playlist": "Playlists",
+      "artist": "Artists",
+      "album": "Albums",
+      "track": "Songs"
+    }
+  },
+  "browser": {
+    "section": {
+      "albums": "Albums",
+      "tracks": "Tracks"
+    },
+    "dialogTitle": "{{title}} - {{section}}",
+    "dialogDescription": "Browse and request {{section}} from {{title}}",
+    "loading": "Loading {{section}}...",
+    "empty": {
+      "title": "No {{section}} found",
+      "description": "This {{type}} doesn't have any {{section}} yet."
+    },
+    "back": "Back",
+    "artistBadge": "Artist",
+    "request": "Request",
+    "requestTrack": "Request track",
+    "songCount_one": "{{count}} song",
+    "songCount_other": "{{count}} songs",
+    "trackCount_one": "{{count}} track",
+    "trackCount_other": "{{count}} tracks",
+    "albumCount_one": "{{count}} album",
+    "albumCount_other": "{{count}} albums",
+    "followers_one": "{{value}} follower",
+    "followers_other": "{{value}} followers",
+    "unknownArtist": "Unknown Artist",
+    "unknown": "Unknown"
+  },
+  "config": {
+    "dialogTitle": "Download {{type}} - {{name}}",
+    "dialogDescription": "Configure download quality settings for {{name}}",
+    "header": {
+      "trackCount_one": "{{count}} track",
+      "trackCount_other": "{{count}} tracks"
+    },
+    "sections": {
+      "quality": "Quality Settings",
+      "matching": "Matching Mode",
+      "peer": "Peer Preferences"
+    },
+    "fields": {
+      "quality": "Quality",
+      "bitrate": "Bitrate",
+      "format": "Format",
+      "bitrateMatching": "Bitrate Matching",
+      "formatMatching": "Format Matching",
+      "minUploadSpeed": "Min Upload Speed",
+      "availability": "Availability"
+    },
+    "options": {
+      "bitrate": {
+        "best": "Best",
+        "high": "High",
+        "good": "Good",
+        "low": "Low"
+      },
+      "matching": {
+        "strict": {
+          "label": "Strict",
+          "description": "Exact match required"
+        },
+        "flexible": {
+          "label": "Flexible",
+          "description": "Best available match"
+        }
+      },
+      "qualityMode": {
+        "standard": {
+          "label": "Standard",
+          "description": "Pick bitrate and format"
+        },
+        "lossless": {
+          "label": "Lossless",
+          "description": "FLAC only, exact match"
+        }
+      },
+      "uploadSpeed": {
+        "any": {
+          "label": "Any",
+          "description": "No minimum"
+        },
+        "kb100": {
+          "description": "Skip slow"
+        },
+        "kb500": {
+          "description": "Fast"
+        },
+        "mb1": {
+          "description": "Fastest"
+        }
+      },
+      "availability": {
+        "any": {
+          "label": "Any peer",
+          "description": "Queue if busy"
+        },
+        "free": {
+          "label": "Available now",
+          "description": "Free slot only"
+        }
+      }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "request": "Request",
+      "requesting": "Requesting please wait..."
+    },
+    "errors": {
+      "invalidItem": "Invalid item",
+      "fetchFailed": "Failed to fetch {{type}} tracks"
+    }
+  }
+}

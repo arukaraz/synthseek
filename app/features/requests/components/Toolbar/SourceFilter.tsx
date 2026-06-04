@@ -12,11 +12,13 @@ import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
 import { Disc, ListMusic, Search } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { deriveSourceOptions, parseSourceIds, serializeSourceIds, toggleSourceId } from "../../helpers";
 import { REQUESTS_URL_PARAMS, SOURCE_SEARCH_THRESHOLD } from "../../types";
 import { sourceFilterCount, sourceSearchInput } from "./styles";
 
 export function SourceFilter() {
+  const { t } = useTranslation("requests");
   const { data: items } = useTrackRequests();
   const [raw, setSource] = useUrlParam("source", REQUESTS_URL_PARAMS.source);
   const [query, setQuery] = useState("");
@@ -33,7 +35,7 @@ export function SourceFilter() {
     <>
       <DropdownMenuLabel className="flex items-center gap-2">
         <ListMusic className="size-3" />
-        Album / Playlist
+        {t("sourceFilter.label")}
         {selectedIds.length > 0 && <span className={sourceFilterCount()}>{selectedIds.length}</span>}
       </DropdownMenuLabel>
 
@@ -45,7 +47,7 @@ export function SourceFilter() {
               type="text"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search source..."
+              placeholder={t("sourceFilter.searchPlaceholder")}
               className={sourceSearchInput()}
             />
           </div>
@@ -68,14 +70,14 @@ export function SourceFilter() {
             </DropdownMenuCheckboxItem>
           );
         })}
-        {filtered.length === 0 && <p className="text-fg/40 px-3 py-2 text-xs">No matches</p>}
+        {filtered.length === 0 && <p className="text-fg/40 px-3 py-2 text-xs">{t("sourceFilter.noMatches")}</p>}
       </div>
 
       {selectedIds.length > 0 && (
         <>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="text-fg/50 justify-center text-xs" onSelect={() => setSource(null)}>
-            Clear selection
+            {t("sourceFilter.clearSelection")}
           </DropdownMenuItem>
         </>
       )}

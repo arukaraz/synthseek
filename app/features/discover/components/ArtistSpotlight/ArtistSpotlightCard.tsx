@@ -8,9 +8,11 @@ import { motion } from "framer-motion";
 import { Play, User, Music } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { ArtistSpotlightCardProps } from "./types";
 
 export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpotlightCardProps) {
+  const { t } = useTranslation("discover");
   const [imageError, setImageError] = useState(false);
   const [albumImageError, setAlbumImageError] = useState(false);
 
@@ -49,7 +51,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
 
         <div className="absolute top-2 left-2 z-10 sm:top-3 sm:left-3">
-          <Badge className="type-badge type-badge-artist shadow-lg">Artist</Badge>
+          <Badge className="type-badge type-badge-artist shadow-lg">{t("artistSpotlight.artistBadge")}</Badge>
         </div>
 
         <div className={cardBottomContent()}>
@@ -76,19 +78,21 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="text-overlay-fg-muted text-[10px] tracking-wide uppercase sm:text-xs">Latest Release:</p>
+                <p className="text-overlay-fg-muted text-[10px] tracking-wide uppercase sm:text-xs">
+                  {t("artistSpotlight.latestRelease")}
+                </p>
                 <div className="flex items-center gap-1.5">
                   <Play className={playIcon()} />
                   <p className="text-overlay-fg line-clamp-1 text-xs font-medium sm:text-sm">{latestAlbum.name}</p>
                 </div>
                 <p className="text-overlay-fg-muted text-[10px] sm:text-xs">
-                  {latestAlbum.total_tracks} {latestAlbum.total_tracks === 1 ? "Song" : "Songs"}
+                  {t("artistSpotlight.songs", { count: latestAlbum.total_tracks })}
                 </p>
               </div>
             </div>
           )}
 
-          {!latestAlbum && <p className="text-overlay-fg-muted text-xs">No albums available</p>}
+          {!latestAlbum && <p className="text-overlay-fg-muted text-xs">{t("artistSpotlight.noAlbums")}</p>}
         </div>
 
         <div className={hoverBorder()} />

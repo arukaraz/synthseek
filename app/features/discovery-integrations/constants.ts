@@ -1,34 +1,32 @@
-import type { LbPlaylistKind, LfmInterval } from "./types";
+import type { ParseKeys } from "i18next";
 
-export const LFM_INTERVAL_OPTIONS: { value: LfmInterval; label: string }[] = [
-  { value: "5m", label: "Every 5 minutes" },
-  { value: "10m", label: "Every 10 minutes" },
-  { value: "15m", label: "Every 15 minutes" },
-  { value: "30m", label: "Every 30 minutes" },
-  { value: "1h", label: "Every hour" },
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-];
+import type { LbPlaylistKind } from "./types";
 
-export const LB_PLAYLIST_KIND_OPTIONS: { value: LbPlaylistKind; label: string; description: string }[] = [
-  {
-    value: "cf-recommendations",
-    label: "CF Recommendations",
-    description: "Raw collaborative filtering output. Available immediately, less curated.",
+export const LB_PLAYLIST_KIND_LABEL_KEYS: Record<
+  LbPlaylistKind,
+  { label: ParseKeys<"library">; description: ParseKeys<"library"> }
+> = {
+  "cf-recommendations": {
+    label: "discoveryIntegrations.playlistKind.cfRecommendationsLabel",
+    description: "discoveryIntegrations.playlistKind.cfRecommendationsDesc",
   },
-  {
-    value: "weekly-exploration",
-    label: "Weekly Exploration",
-    description: "LB's Discover Weekly equivalent. Refreshes Mondays.",
+  "weekly-exploration": {
+    label: "discoveryIntegrations.playlistKind.weeklyExplorationLabel",
+    description: "discoveryIntegrations.playlistKind.weeklyExplorationDesc",
   },
-  {
-    value: "weekly-jams",
-    label: "Weekly Jams",
-    description: "Curated remix of your favorites. Refreshes Mondays.",
+  "weekly-jams": {
+    label: "discoveryIntegrations.playlistKind.weeklyJamsLabel",
+    description: "discoveryIntegrations.playlistKind.weeklyJamsDesc",
   },
-  {
-    value: "daily-jams",
-    label: "Daily Jams",
-    description: "Daily rotation from your listening history.",
+  "daily-jams": {
+    label: "discoveryIntegrations.playlistKind.dailyJamsLabel",
+    description: "discoveryIntegrations.playlistKind.dailyJamsDesc",
   },
+};
+
+export const LB_PLAYLIST_KINDS: ReadonlyArray<LbPlaylistKind> = [
+  "cf-recommendations",
+  "weekly-exploration",
+  "weekly-jams",
+  "daily-jams",
 ];

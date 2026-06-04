@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { DiscoveryMixMosaic } from "./DiscoveryMixMosaic";
 import { LB_KIND_METADATA } from "./constants";
 import { formatFreshness } from "./helpers";
@@ -20,6 +22,7 @@ import {
 import type { DiscoveryMixCardProps } from "./types";
 
 export function DiscoveryMixCard({ mix, onClick }: DiscoveryMixCardProps) {
+  const { t } = useTranslation("discover");
   const meta = LB_KIND_METADATA[mix.kind];
   const Icon = meta.icon;
   const freshness = formatFreshness(mix.generatedAt, mix.kind, Date.now());
@@ -41,7 +44,7 @@ export function DiscoveryMixCard({ mix, onClick }: DiscoveryMixCardProps) {
         <h3 className={mixTitle()}>{meta.label}</h3>
         <p className={mixBlurb()}>{meta.blurb}</p>
         <div className={mixFoot()}>
-          <span className={mixCount()}>{mix.candidates.length} tracks</span>
+          <span className={mixCount()}>{t("mixes.trackCount", { count: mix.candidates.length })}</span>
         </div>
       </div>
     </button>

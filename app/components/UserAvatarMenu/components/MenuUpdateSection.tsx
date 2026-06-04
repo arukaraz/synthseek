@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { AlertTriangle, ArrowUpCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { PATCH_NOTES_URL } from "@utils/version";
 
-import { MENU_COPY } from "../constants";
 import {
   patchNotesLink,
   updateBreakingPrefix,
@@ -18,6 +18,7 @@ import {
 import type { MenuUpdateSectionProps } from "../types";
 
 export function MenuUpdateSection({ latestVersion, currentVersion, breaking }: MenuUpdateSectionProps) {
+  const { t } = useTranslation("components");
   const tone = breaking ? "breaking" : "info";
 
   return (
@@ -37,21 +38,21 @@ export function MenuUpdateSection({ latestVersion, currentVersion, breaking }: M
         )}
 
         <span className={updateTitle()}>
-          {breaking ? <span className={updateBreakingPrefix()}>{MENU_COPY.majorUpdate}</span> : null}
-          Update to {latestVersion}
+          {breaking ? <span className={updateBreakingPrefix()}>{t("userMenu.majorUpdate")}</span> : null}
+          {t("userMenu.updateTo", { version: latestVersion })}
         </span>
 
-        <span className={updateCurrent()}>Current {currentVersion}</span>
+        <span className={updateCurrent()}>{t("userMenu.currentVersion", { version: currentVersion })}</span>
       </div>
 
       <a
         href={PATCH_NOTES_URL}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={MENU_COPY.patchNotes}
+        aria-label={t("userMenu.patchNotes")}
         className={patchNotesLink()}
       >
-        {MENU_COPY.patchNotes}
+        {t("userMenu.patchNotes")}
       </a>
     </div>
   );

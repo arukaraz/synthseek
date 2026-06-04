@@ -2,18 +2,20 @@
 
 import { Button } from "@components/ui/Button";
 import { useSpotifyConnect } from "@hooks/api/mutations/spotify/useSpotifyConnect";
+import { useTranslation } from "react-i18next";
 
 import { connectPrompt, connectPromptBody, connectPromptIcon, connectPromptTitle } from "../styles";
 import { SpotifyMark } from "./SpotifyMark";
 import type { SpotifyConnectPromptProps } from "./types";
 
 export function SpotifyConnectPrompt({ pending, statusLoading }: SpotifyConnectPromptProps) {
+  const { t } = useTranslation("library");
   const connect = useSpotifyConnect();
 
   if (statusLoading) {
     return (
       <div className={connectPrompt()}>
-        <span className="text-fg/60 text-sm">Checking your Spotify connection...</span>
+        <span className="text-fg/60 text-sm">{t("spotifyLibrary.connect.checking")}</span>
       </div>
     );
   }
@@ -23,14 +25,12 @@ export function SpotifyConnectPrompt({ pending, statusLoading }: SpotifyConnectP
       <span className={connectPromptIcon()}>
         <SpotifyMark size={28} />
       </span>
-      <h2 className={connectPromptTitle()}>Connect your Spotify account</h2>
+      <h2 className={connectPromptTitle()}>{t("spotifyLibrary.connect.title")}</h2>
       <p className={connectPromptBody()}>
-        {pending
-          ? "Spotify is still authorizing your account. Try connecting again if it does not finish in a moment."
-          : "Authorize Synthseek to browse and import your Spotify playlists and saved albums."}
+        {pending ? t("spotifyLibrary.connect.bodyPending") : t("spotifyLibrary.connect.bodyDefault")}
       </p>
       <Button onClick={() => connect.mutate()} disabled={connect.isPending}>
-        {pending ? "Reconnect Spotify" : "Connect Spotify"}
+        {pending ? t("spotifyLibrary.connect.reconnect") : t("spotifyLibrary.connect.connect")}
       </Button>
     </div>
   );

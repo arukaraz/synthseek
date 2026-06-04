@@ -2,6 +2,7 @@
 
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
@@ -18,11 +19,11 @@ import { useCreateApiKey } from "@hooks/api/mutations/api-keys/useCreateApiKey";
 
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
-import { CREATE_KEY_DIALOG } from "./constants";
 import { tokenBox } from "./styles";
 import type { CreateApiKeyDialogProps, CreatedApiKey } from "./types";
 
 export function CreateApiKeyDialog({ open, onOpenChange }: CreateApiKeyDialogProps) {
+  const { t } = useTranslation("settings");
   const [name, setName] = useState("");
   const [created, setCreated] = useState<CreatedApiKey | null>(null);
   const [copied, setCopied] = useState(false);
@@ -48,10 +49,10 @@ export function CreateApiKeyDialog({ open, onOpenChange }: CreateApiKeyDialogPro
     try {
       await navigator.clipboard.writeText(created.token);
       setCopied(true);
-      toast.success(CREATE_KEY_DIALOG.copied);
+      toast.success(t("api.create.copied"));
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Failed to copy key");
+      toast.error(t("api.create.copyFailed"));
     }
   };
 
@@ -66,42 +67,42 @@ export function CreateApiKeyDialog({ open, onOpenChange }: CreateApiKeyDialogPro
         {created ? (
           <div className="flex flex-col gap-4">
             <DialogHeader>
-              <DialogTitle>{CREATE_KEY_DIALOG.revealTitle}</DialogTitle>
+              <DialogTitle>{t("api.create.revealTitle")}</DialogTitle>
             </DialogHeader>
 
-            <Notice variant="warning" title={CREATE_KEY_DIALOG.revealWarning} />
+            <Notice variant="warning" title={t("api.create.revealWarning")} />
 
             <code className={tokenBox()}>{created.token}</code>
 
             <DialogFooter className="gap-2">
               <Button variant="accent" size="sm" onClick={handleCopy}>
                 {copied ? <Check /> : <Copy />}
-                {copied ? CREATE_KEY_DIALOG.copied : CREATE_KEY_DIALOG.copy}
+                {copied ? t("api.create.copied") : t("api.create.copy")}
               </Button>
               <Button size="sm" onClick={handleClose}>
-                {CREATE_KEY_DIALOG.done}
+                {t("api.create.done")}
               </Button>
             </DialogFooter>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <DialogHeader>
-              <DialogTitle>{CREATE_KEY_DIALOG.title}</DialogTitle>
-              <DialogDescription>{CREATE_KEY_DIALOG.description}</DialogDescription>
+              <DialogTitle>{t("api.create.title")}</DialogTitle>
+              <DialogDescription>{t("api.create.description")}</DialogDescription>
             </DialogHeader>
 
-            <SettingsField label="Name">
+            <SettingsField label={t("api.create.nameLabel")}>
               <SettingsTextInput
                 value={name}
                 onChange={setName}
-                placeholder={CREATE_KEY_DIALOG.namePlaceholder}
-                ariaLabel="API key name"
+                placeholder={t("api.create.namePlaceholder")}
+                ariaLabel={t("api.create.nameAriaLabel")}
               />
             </SettingsField>
 
             <DialogFooter>
               <Button type="submit" size="sm" disabled={!canCreate}>
-                {CREATE_KEY_DIALOG.create}
+                {t("api.create.create")}
               </Button>
             </DialogFooter>
           </form>

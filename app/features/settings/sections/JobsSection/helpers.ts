@@ -1,22 +1,26 @@
-import { NEXT_RUN_FALLBACK } from "./constants";
+import i18n from "@locale";
 
-const MINUTE_MS = 60_000;
-const HOUR_MS = 60 * MINUTE_MS;
-const DAY_MS = 24 * HOUR_MS;
+import { DAY_MS, HOUR_MS, MINUTE_MS } from "./constants";
 
 export function describeInterval(intervalMs: number): string {
   if (intervalMs < HOUR_MS) {
     const minutes = Math.round(intervalMs / MINUTE_MS);
-    return minutes <= 1 ? "Every minute" : `Every ${minutes} minutes`;
+    return minutes <= 1
+      ? i18n.t("settings:jobs.interval.everyMinute")
+      : i18n.t("settings:jobs.interval.everyMinutes", { count: minutes });
   }
 
   if (intervalMs < DAY_MS) {
     const hours = Math.round(intervalMs / HOUR_MS);
-    return hours <= 1 ? "Every hour" : `Every ${hours} hours`;
+    return hours <= 1
+      ? i18n.t("settings:jobs.interval.everyHour")
+      : i18n.t("settings:jobs.interval.everyHours", { count: hours });
   }
 
   const days = Math.round(intervalMs / DAY_MS);
-  return days <= 1 ? "Every day" : `Every ${days} days`;
+  return days <= 1
+    ? i18n.t("settings:jobs.interval.everyDay")
+    : i18n.t("settings:jobs.interval.everyDays", { count: days });
 }
 
 export interface NextRunParts {
@@ -25,10 +29,10 @@ export interface NextRunParts {
 }
 
 export function formatNextRun(date: Date | null, now: number): NextRunParts {
-  if (!date) return { value: NEXT_RUN_FALLBACK };
+  if (!date) return { value: i18n.t("settings:jobs.row.nextRunFallback") };
 
   const diffMs = date.getTime() - now;
-  if (diffMs <= 0) return { value: "now" };
+  if (diffMs <= 0) return { value: i18n.t("settings:jobs.nextRun.now") };
 
   const seconds = Math.round(diffMs / 1000);
   if (seconds < 60) return { value: String(seconds), unit: "s" };

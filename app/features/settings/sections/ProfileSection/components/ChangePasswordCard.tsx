@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Notice } from "@components/ui/Notice";
@@ -9,10 +10,10 @@ import { useChangePassword } from "@hooks/api/mutations/auth/useChangePassword";
 import { SettingsCard } from "../../../components/SettingsCard";
 import { SettingsField } from "../../../components/SettingsField";
 import { SettingsSecretInput } from "../../../components/SettingsSecretInput";
-import { PROFILE_COPY } from "../constants";
 import type { ProfileCardProps } from "../types";
 
 export function ChangePasswordCard({ user }: ProfileCardProps) {
+  const { t } = useTranslation("settings");
   const isLocal = user.plex_username === null;
   const change = useChangePassword();
   const [current, setCurrent] = useState("");
@@ -35,28 +36,32 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
   };
 
   return (
-    <SettingsCard title={PROFILE_COPY.passwordTitle} description={PROFILE_COPY.passwordDescription}>
+    <SettingsCard title={t("profile.password.title")}>
       {isLocal ? (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <SettingsField label={PROFILE_COPY.currentPasswordLabel}>
-            <SettingsSecretInput value={current} onChange={setCurrent} ariaLabel="Current password" />
+          <SettingsField label={t("profile.password.currentLabel")}>
+            <SettingsSecretInput
+              value={current}
+              onChange={setCurrent}
+              ariaLabel={t("profile.password.currentAriaLabel")}
+            />
           </SettingsField>
-          <SettingsField label={PROFILE_COPY.newPasswordLabel}>
+          <SettingsField label={t("profile.password.newLabel")}>
             <SettingsSecretInput
               value={next}
               onChange={setNext}
-              placeholder={PROFILE_COPY.newPasswordPlaceholder}
-              ariaLabel="New password"
+              placeholder={t("profile.password.newPlaceholder")}
+              ariaLabel={t("profile.password.newAriaLabel")}
             />
           </SettingsField>
           <div className="flex justify-end">
             <Button type="submit" size="sm" disabled={!canSubmit}>
-              {PROFILE_COPY.changePassword}
+              {t("profile.password.submit")}
             </Button>
           </div>
         </form>
       ) : (
-        <Notice variant="info" title={PROFILE_COPY.passwordManagedByPlex} />
+        <Notice variant="info" title={t("profile.password.managedByPlex")} />
       )}
     </SettingsCard>
   );

@@ -6,6 +6,7 @@ import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NAV_BUTTON_CLASSES } from "../styles";
 import { COVERFLOW_CONFIG } from "./constants";
 import { CoverflowCard } from "./CoverflowCard";
@@ -23,6 +24,7 @@ export function CoverflowCarousel({
   isLoading,
   isError,
 }: CoverflowCarouselProps) {
+  const { t } = useTranslation("discover");
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
 
@@ -63,8 +65,8 @@ export function CoverflowCarousel({
       <motion.div variants={staggerItem} initial="hidden" animate="visible" className="p-8">
         <EmptyState
           icon={AlertCircle}
-          title="Failed to load trending tracks"
-          description="Unable to fetch trending content. Please try again later."
+          title={t("coverflow.errorTitle")}
+          description={t("coverflow.errorDescription")}
         />
       </motion.div>
     );
@@ -82,7 +84,7 @@ export function CoverflowCarousel({
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="region"
-      aria-label="Trending tracks carousel"
+      aria-label={t("coverflow.regionAriaLabel")}
     >
       {showSkeleton ? (
         <CoverflowSkeleton />
@@ -90,8 +92,8 @@ export function CoverflowCarousel({
         <>
           <div className="w0-full relative mx-auto h-[80vw] sm:h-70 lg:h-[550px]" style={{ perspective: "100vw" }}>
             <div className="md:inherit hidden px-3 pt-15 sm:block">
-              <h3 className="text-fg text-lg font-semibold">Random Trending Picks</h3>
-              <p className="text-fg/60 text-xs">Fresh hits updated daily</p>
+              <h3 className="text-fg text-lg font-semibold">{t("coverflow.title")}</h3>
+              <p className="text-fg/60 text-xs">{t("coverflow.subtitle")}</p>
             </div>
             {tracks.map((trackItem, index) => {
               const offset = Math.abs(getCircularOffset(index, currentIndex, tracks.length));
@@ -118,7 +120,7 @@ export function CoverflowCarousel({
           <motion.button
             onClick={onPrev}
             className={cn(NAV_BUTTON_CLASSES, "left-2 sm:left-4 lg:left-6")}
-            aria-label="Previous track"
+            aria-label={t("coverflow.prevAriaLabel")}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "tween", duration: 0.15 }}
@@ -129,7 +131,7 @@ export function CoverflowCarousel({
           <motion.button
             onClick={onNext}
             className={cn(NAV_BUTTON_CLASSES, "right-2 sm:right-4 lg:right-6")}
-            aria-label="Next track"
+            aria-label={t("coverflow.nextAriaLabel")}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "tween", duration: 0.15 }}

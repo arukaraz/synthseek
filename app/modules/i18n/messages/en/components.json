@@ -1,0 +1,69 @@
+{
+  "pagination": {
+    "summary": "Showing {{start}}-{{end}} of {{total}}",
+    "rowsPerPage": "Rows per page",
+    "perPage": "{{size}} / page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "mobilePage": "Page {{page}} of {{pageCount}}",
+    "goToPage": "Page {{page}}"
+  },
+  "confirmation": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "dialog": {
+    "close": "Close"
+  },
+  "filterSort": {
+    "trigger": "Filter and sort",
+    "filterLabel": "Filter",
+    "sortLabel": "Sort by",
+    "orderLabel": "Order",
+    "ascending": "Ascending",
+    "descending": "Descending"
+  },
+  "passwordField": {
+    "label": "Password",
+    "show": "Show password",
+    "hide": "Hide password"
+  },
+  "logo": {
+    "ariaLabel": "Synthseek Logo"
+  },
+  "table": {
+    "empty": "No items to display"
+  },
+  "loading": {
+    "section": "Loading...",
+    "dots": "Loading"
+  },
+  "infoTooltip": {
+    "trigger": "More information"
+  },
+  "header": {
+    "primaryNav": "Primary",
+    "search": "Search",
+    "searchPlaceholder": "Search tracks, artists, albums...",
+    "closeSearch": "Close search",
+    "clearSearch": "Clear search",
+    "discover": "Discover",
+    "requests": "Requests",
+    "settings": "Settings"
+  },
+  "userMenu": {
+    "trigger": "User menu",
+    "settings": "Settings",
+    "profile": "Profile",
+    "members": "Members",
+    "logout": "Logout",
+    "loggingOut": "Signing out...",
+    "patchNotes": "Patch notes",
+    "majorUpdate": "Major update",
+    "updateAvailable": "Update available",
+    "updateTo": "Update to {{version}}",
+    "currentVersion": "Current {{version}}",
+    "roleAdmin": "Admin",
+    "roleUser": "User"
+  }
+}

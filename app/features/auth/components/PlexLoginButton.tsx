@@ -2,6 +2,7 @@
 
 import { Check, Link2, Loader2 } from "lucide-react";
 import { useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import { cn } from "@utils/cn";
 import { usePlexLogin } from "../hooks/usePlexLogin";
@@ -9,6 +10,7 @@ import { useAuthTransition } from "../hooks/useAuthTransition";
 import { authPlexButton, authPlexIcon, authPlexWord } from "../styles";
 
 export function PlexLoginButton() {
+  const { t } = useTranslation("auth");
   const { startLogin, phase } = usePlexLogin();
   const { markNavigating } = useAuthTransition();
 
@@ -35,16 +37,16 @@ export function PlexLoginButton() {
         <Link2 className={authPlexIcon({ phase })} aria-hidden="true" />
       )}
       {phase === "pending" ? (
-        "Waiting for Plex..."
+        t("auth.plex.waiting")
       ) : phase === "completed" ? (
-        "Signed in"
+        t("auth.plex.signedIn")
       ) : phase === "error" ? (
         <span>
-          Try <span className={authPlexWord()}>Plex</span> again
+          <Trans t={t} i18nKey="auth.plex.retry" components={[<span key="word" className={authPlexWord()} />]} />
         </span>
       ) : (
         <span>
-          Continue with <span className={authPlexWord()}>Plex</span>
+          <Trans t={t} i18nKey="auth.plex.continue" components={[<span key="word" className={authPlexWord()} />]} />
         </span>
       )}
     </button>

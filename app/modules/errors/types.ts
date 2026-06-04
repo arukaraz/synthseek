@@ -9,10 +9,6 @@ export interface FriendlyError {
   duration?: number;
 }
 
-export interface ErrorEntry extends FriendlyError {
-  matches?: ReadonlyArray<RegExp>;
-}
-
 export interface ResolveErrorOptions {
   category?: ErrorCategory;
   fallback?: { title: string; description?: string };

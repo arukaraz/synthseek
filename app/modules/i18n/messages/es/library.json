@@ -1,0 +1,246 @@
+{
+  "spotifyLibrary": {
+    "dialog": {
+      "title": "Biblioteca de Spotify",
+      "description": "Explora tu biblioteca de Spotify, importa elementos a Synthseek y configura la sincronización continua."
+    },
+    "connect": {
+      "checking": "Comprobando tu conexión con Spotify...",
+      "title": "Conecta tu cuenta de Spotify",
+      "bodyPending": "Spotify todavía está autorizando tu cuenta. Intenta conectarte de nuevo si no termina en un momento.",
+      "bodyDefault": "Autoriza a Synthseek para explorar e importar tus listas de reproducción y álbumes guardados de Spotify.",
+      "reconnect": "Reconectar Spotify",
+      "connect": "Conectar Spotify"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Buscar elementos…"
+    },
+    "filter": {
+      "all": "Todos",
+      "playlists": "Listas",
+      "albums": "Álbumes",
+      "liked": "Favoritos"
+    },
+    "sort": {
+      "name": "Nombre",
+      "type": "Tipo",
+      "tracks": "Pistas",
+      "imported": "Estado de importación",
+      "lastSync": "Última sincronización",
+      "syncStatus": "Estado de sincronización"
+    },
+    "table": {
+      "loading": "Cargando biblioteca…",
+      "empty": "Ningún elemento coincide con el filtro o la búsqueda actuales.",
+      "columnName": "Nombre",
+      "columnType": "Tipo",
+      "columnTracks": "Pistas",
+      "columnImported": "Importado",
+      "columnLastSync": "Última sincronización",
+      "columnSync": "Sincronización"
+    },
+    "row": {
+      "select": "Seleccionar",
+      "deselect": "Anular selección",
+      "enabled": "Activada",
+      "disabled": "Desactivada"
+    },
+    "type": {
+      "playlist": "Lista",
+      "album": "Álbum",
+      "liked": "Favoritos",
+      "playlistLower": "lista",
+      "albumLower": "álbum",
+      "likedLower": "canciones favoritas"
+    },
+    "detail": {
+      "loading": "Cargando…",
+      "back": "Volver a la lista de la biblioteca",
+      "imported": "Importado · seleccionado",
+      "importedUnselect": "Importado · quitar selección",
+      "selectedForImport": "Seleccionado para importar",
+      "selectForImport": "Seleccionar para importar",
+      "openInSpotify": "Abrir en Spotify",
+      "lastSyncNever": "Nunca",
+      "tracksByline_one": "{{count}} pista",
+      "tracksByline_other": "{{count}} pistas"
+    },
+    "syncConfig": {
+      "title": "Configuración de sincronización",
+      "keepInSync": "Mantener sincronizado",
+      "keepInSyncDesc": "Refleja la lista de pistas de este {{type}} en Synthseek cuando cambie"
+    },
+    "metadata": {
+      "title": "Detalles",
+      "sourceId": "ID de origen",
+      "released": "Lanzamiento",
+      "label": "Sello",
+      "lastSync": "Última sincronización"
+    },
+    "tracklist": {
+      "title": "Vista previa de la lista de pistas",
+      "firstOf": "primeras {{shown}} de {{total}}",
+      "empty": "No hay pistas para previsualizar.",
+      "viewAll": "Ver las {{total}} pistas →"
+    },
+    "emptyState": {
+      "title": "Inspecciona un elemento",
+      "body": "Haz clic en cualquier fila para ver aquí sus pistas, todos los metadatos y la configuración de sincronización por elemento.",
+      "navigate": "navegar",
+      "select": "seleccionar",
+      "clear": "limpiar",
+      "keySpace": "Espacio",
+      "keyEsc": "Esc"
+    },
+    "bottombar": {
+      "rows_one": "fila",
+      "rows_other": "filas",
+      "tracksTotal_one": "pista en total",
+      "tracksTotal_other": "pistas en total",
+      "refreshTitle": "Obtén la lista más reciente de elementos de tu biblioteca",
+      "refreshing": "Actualizando…",
+      "refreshList": "Actualizar lista",
+      "cancel": "Cancelar",
+      "saving": "Guardando…",
+      "saveChanges": "Guardar cambios"
+    },
+    "autoWatch": {
+      "off": "desactivado",
+      "configureAria": "Configurar opciones de importación automática",
+      "trigger": "Importación automática",
+      "title": "Importar nuevos automáticamente",
+      "howAria": "¿Cómo funciona la importación automática?",
+      "help": "Los elementos que añadas a tu biblioteca de Spotify después de activarlo se importan automáticamente mediante la sincronización en segundo plano. Los elementos existentes no se tocan. Desactívalo cuando quieras, los elementos ya importados se conservan.",
+      "newPlaylists": "Nuevas listas",
+      "newPlaylistsSub": "Listas añadidas a tu biblioteca",
+      "newPlaylistsAria": "Importar automáticamente las nuevas listas",
+      "savedAlbums": "Álbumes guardados",
+      "savedAlbumsSub": "Álbumes que guardas en Spotify",
+      "savedAlbumsAria": "Importar automáticamente los nuevos álbumes guardados"
+    },
+    "bulk": {
+      "selected": "seleccionados",
+      "actions": "Acciones masivas",
+      "syncGroup": "Sincronización",
+      "enableSync": "Activar sincronización",
+      "disableSync": "Desactivar sincronización",
+      "importGroup": "Importación",
+      "enableImport": "Activar importación",
+      "disableImport": "Desactivar importación",
+      "clearAria": "Limpiar selección"
+    }
+  },
+  "jspfImport": {
+    "modal": {
+      "title": "Importar lista de reproducción",
+      "description": "Importa una lista de reproducción o un álbum desde un archivo JSPF, XSPF o CSV. Las pistas se comparan con tu biblioteca antes de descargar nada."
+    },
+    "source": {
+      "uploadAria": "Subir un archivo de lista de reproducción",
+      "dropTitle": "Suelta un archivo .jspf / .xspf / .csv o haz clic para explorar",
+      "dropHint": "JSPF de Synthseek o ListenBrainz, exportaciones XSPF o CSV de otras herramientas",
+      "orFromUrl": "o desde una URL",
+      "urlPlaceholder": "https://gist.githubusercontent.com/.../raw/flow.jspf",
+      "fetching": "Obteniendo...",
+      "fetch": "Obtener",
+      "errorWrongFile": "Usa un archivo .jspf, .xspf o .csv",
+      "errorReadFile": "No se pudo leer el archivo",
+      "errorWrongUrl": "La URL debe apuntar a un archivo .jspf, .xspf o .csv",
+      "errorFetchUrl": "No se pudo obtener la URL"
+    },
+    "preview": {
+      "creatingRequests": "Creando solicitudes",
+      "matchingTracks": "Emparejando pistas",
+      "matchingTracksDots": "Emparejando pistas...",
+      "matchedHeader": "{{matched}}/{{total}} emparejadas",
+      "newDownloads": "{{count}} descargas nuevas",
+      "selectedDuration": "{{duration}} seleccionados",
+      "filterPlaceholder": "Filtrar pistas...",
+      "back": "Atrás",
+      "import_one": "Importar {{count}} pista",
+      "import_other": "Importar {{count}} pistas"
+    },
+    "coverage": {
+      "matched": "{{matched}}/{{total}} emparejadas",
+      "alreadyInLibrary": "{{count}} ya en la biblioteca",
+      "unmatched": "{{count}} sin emparejar"
+    },
+    "track": {
+      "selectAria": "Seleccionar {{title}}",
+      "notFound": "No encontrada",
+      "inLibrary": "En la biblioteca",
+      "willDownload": "Se descargará",
+      "approxMatch": "≈ coincidencia",
+      "exactMatch": "exacta"
+    },
+    "errors": {
+      "fileTooLarge": "El archivo es demasiado grande para importarlo",
+      "fetchFailed": "No se pudo obtener la URL (HTTP {{status}})"
+    },
+    "duration": {
+      "minutes": "{{count}} min",
+      "hoursMinutes": "{{hours}} h {{minutes}} m"
+    }
+  },
+  "discoveryIntegrations": {
+    "card": {
+      "title": "Descubrimiento",
+      "loading": "Cargando…",
+      "loadError": "No se pudo cargar la configuración de descubrimiento.",
+      "description": "Obtén recomendaciones y feeds de escuchas recientes de servicios externos. Cada uno se puede activar de forma independiente, los feeds alimentan los widgets de tu página de Descubrir."
+    },
+    "lastfm": {
+      "enableAria": "Activar Last.fm",
+      "tooltip": "Scrobbles recientes y pistas más escuchadas de toda tu vida en tu cuenta de Last.fm. Los feeds son fijos.",
+      "apiKeyWarning": "La clave de API de Last.fm no está configurada. Pide a tu administrador que la configure antes de activar esta integración.",
+      "apiKeyLabel": "Clave de API",
+      "apiKeyHelper": "Clave de API de Last.fm para todo el sistema. Compartida entre todos los usuarios.",
+      "usernameLabel": "Nombre de usuario",
+      "usernameHelper": "Tu nombre de usuario público de Last.fm.",
+      "usernamePlaceholder": "p. ej. tunombre"
+    },
+    "listenbrainz": {
+      "enableAria": "Activar ListenBrainz",
+      "tooltip": "Recomendaciones y listas de reproducción seleccionadas de tu cuenta de ListenBrainz. Solo se necesita el nombre de usuario público.",
+      "usernameLabel": "Nombre de usuario",
+      "usernameHelper": "Tu nombre de usuario público de ListenBrainz (distingue mayúsculas y minúsculas).",
+      "usernamePlaceholder": "p. ej. tunombre",
+      "playlistsLabel": "Listas que obtener",
+      "playlistsHelper": "{{count}} seleccionadas. Cada una genera un feed independiente.",
+      "autoRequestLabel": "Solicitar automáticamente como listas",
+      "autoRequestHelper": "Cuando un feed se actualiza, solicita e importa automáticamente como una lista nueva.",
+      "autoRequestAria": "Solicitar listas automáticamente"
+    },
+    "playlistKind": {
+      "cfRecommendationsLabel": "Recomendaciones CF",
+      "cfRecommendationsDesc": "Salida bruta del filtrado colaborativo. Disponible de inmediato, menos seleccionada.",
+      "weeklyExplorationLabel": "Exploración semanal",
+      "weeklyExplorationDesc": "Equivalente de Discover Weekly de LB. Se actualiza los lunes.",
+      "weeklyJamsLabel": "Joyas semanales",
+      "weeklyJamsDesc": "Remezcla seleccionada de tus favoritos. Se actualiza los lunes.",
+      "dailyJamsLabel": "Joyas diarias",
+      "dailyJamsDesc": "Rotación diaria de tu historial de escuchas."
+    },
+    "schedule": {
+      "day": "Día",
+      "hour": "Hora",
+      "summary": "{{day}} a las {{hour}}:00",
+      "dailyShort": "Diario",
+      "dailyFull": "Todos los días",
+      "monShort": "Lun",
+      "monFull": "Lunes",
+      "tueShort": "Mar",
+      "tueFull": "Martes",
+      "wedShort": "Mié",
+      "wedFull": "Miércoles",
+      "thuShort": "Jue",
+      "thuFull": "Jueves",
+      "friShort": "Vie",
+      "friFull": "Viernes",
+      "satShort": "Sáb",
+      "satFull": "Sábados",
+      "sunShort": "Dom",
+      "sunFull": "Domingos"
+    }
+  }
+}

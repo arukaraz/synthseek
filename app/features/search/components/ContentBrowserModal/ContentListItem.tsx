@@ -8,13 +8,15 @@ import { cn } from "@utils/cn";
 import { itemImage, trackListContainer } from "../styles";
 import { getMusicItemName } from "@utils/content-type-helpers";
 import { formatTrackDuration, formatYear } from "@utils/formatters";
+import { useTranslation } from "react-i18next";
 import { getItemImage } from "./helpers";
 import type { ContentListItemProps } from "./types";
 
 export function ContentListItem({ item, parentType, onActionClick, onNavigate, isClickable }: ContentListItemProps) {
+  const { t } = useTranslation("search");
   const isArtistView = parentType === ContentType.enum.artist;
   const isAlbumView = parentType === ContentType.enum.album || parentType === ContentType.enum.playlist;
-  const name = getMusicItemName(item) || "Unknown";
+  const name = getMusicItemName(item) || t("browser.unknown");
   const imageUrl = getItemImage(item);
 
   const handleClick = () => {
@@ -52,7 +54,7 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
             {name}
           </h3>
           <p className="text-fg/60 text-xs">
-            {[releaseYear, trackCount ? `${trackCount} ${trackCount === 1 ? "song" : "songs"}` : null]
+            {[releaseYear, trackCount ? t("browser.songCount", { count: trackCount }) : null]
               .filter(Boolean)
               .join(" • ")}
           </p>
@@ -91,7 +93,7 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
             variant="ghost"
             className="text-fg/70 hover:text-fg hover:bg-fg/10 h-8 w-8"
             data-cy="content-item-action-btn"
-            aria-label="Request track"
+            aria-label={t("browser.requestTrack")}
           >
             <Download className="h-4 w-4" />
           </Button>

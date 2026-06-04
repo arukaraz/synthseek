@@ -1,3 +1,5 @@
+import i18n from "@locale";
+
 import { MAX_FILE_BYTES } from "./constants";
 import type { CollectionCoverage, ImportFormat, ImportPreviewResult, TrackCoverage } from "./types";
 
@@ -32,7 +34,7 @@ export function generateJobId(): string {
 
 export async function readFileAsText(file: File): Promise<string> {
   if (file.size > MAX_FILE_BYTES) {
-    throw new Error("File is too large to import");
+    throw new Error(i18n.t("library:jspfImport.errors.fileTooLarge"));
   }
   return file.text();
 }
@@ -40,15 +42,21 @@ export async function readFileAsText(file: File): Promise<string> {
 export async function fetchTextFromUrl(url: string): Promise<string> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Could not fetch URL (HTTP ${response.status})`);
+    throw new Error(i18n.t("library:jspfImport.errors.fetchFailed", { status: response.status }));
   }
   return response.text();
 }
 
 export function coverageLabel(collection: CollectionCoverage): string {
-  const parts = [`${collection.matched}/${collection.total} matched`];
-  if (collection.alreadyInLibrary > 0) parts.push(`${collection.alreadyInLibrary} already in library`);
-  if (collection.unmatched > 0) parts.push(`${collection.unmatched} unmatched`);
+  const parts = [
+    i18n.t("library:jspfImport.coverage.matched", { matched: collection.matched, total: collection.total }),
+  ];
+  if (collection.alreadyInLibrary > 0) {
+    parts.push(i18n.t("library:jspfImport.coverage.alreadyInLibrary", { count: collection.alreadyInLibrary }));
+  }
+  if (collection.unmatched > 0) {
+    parts.push(i18n.t("library:jspfImport.coverage.unmatched", { count: collection.unmatched }));
+  }
   return parts.join(" · ");
 }
 
@@ -122,8 +130,8 @@ export function selectedDurationMs(preview: ImportPreviewResult, selected: Set<s
 
 export function formatDurationMs(ms: number): string {
   const totalMinutes = Math.round(ms / 60000);
-  if (totalMinutes < 60) return `${totalMinutes} min`;
+  if (totalMinutes < 60) return i18n.t("library:jspfImport.duration.minutes", { count: totalMinutes });
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  return `${hours}h ${minutes}m`;
+  return i18n.t("library:jspfImport.duration.hoursMinutes", { hours, minutes });
 }

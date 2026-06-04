@@ -2,6 +2,7 @@
 
 import { AtSign, User } from "lucide-react";
 import { useId, useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 import { PasswordField } from "@components/ui/PasswordField";
 import { authInputControl, authInputIcon, authInputRow } from "@components/ui/styles";
@@ -9,13 +10,14 @@ import { authInputControl, authInputIcon, authInputRow } from "@components/ui/st
 import { useSetupBootstrap } from "@hooks/api/mutations/auth/useSetupBootstrap";
 
 import { StatusStrip } from "../components/StatusStrip";
-import { ADMIN_COPY, ADMIN_FIELD_RULES, SETUP_HEADING_IDS } from "../constants";
+import { ADMIN_FIELD_RULES, SETUP_HEADING_IDS } from "../constants";
 import { isValidAdminEmail } from "../helpers";
 import { fieldError, fieldGroup, fieldHint, fieldLabel } from "../styles";
 import { StepShell } from "./StepShell";
 import type { AdminStepProps } from "../types";
 
 export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps) {
+  const { t } = useTranslation("setup");
   const bootstrap = useSetupBootstrap();
   const emailId = useId();
   const emailErrorId = useId();
@@ -34,7 +36,7 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
       await bootstrap.mutateAsync({ email, username, password });
       onComplete();
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not create the admin account. Please try again.");
+      setError(caught instanceof Error ? caught.message : t("admin.createError"));
     }
   };
 
@@ -63,9 +65,9 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
         stepIndex={stepIndex}
         totalSteps={totalSteps}
         headingId={SETUP_HEADING_IDS.admin}
-        title="Create your admin account"
-        description="This is the first account on this Synthseek install. You can invite others later."
-        primaryLabel={bootstrap.isPending ? "Creating admin..." : "Create admin"}
+        title={t("admin.title")}
+        description={t("admin.description")}
+        primaryLabel={bootstrap.isPending ? t("admin.creating") : t("admin.submit")}
         primaryDisabled={disabled}
         primaryLoading={bootstrap.isPending}
         primaryType="submit"
@@ -73,7 +75,7 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
       >
         <div className={fieldGroup()}>
           <label htmlFor={emailId} className={fieldLabel()}>
-            Email
+            {t("admin.emailLabel")}
           </label>
           <div className={authInputRow({ invalid: emailInvalid })}>
             <AtSign className={authInputIcon()} aria-hidden="true" />
@@ -87,7 +89,7 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
               }}
               required
               autoComplete="email"
-              placeholder="you@domain.com"
+              placeholder={t("admin.emailPlaceholder")}
               aria-describedby={emailInvalid ? emailErrorId : undefined}
               aria-invalid={emailInvalid || undefined}
               className={authInputControl()}
@@ -95,13 +97,13 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
           </div>
           {emailInvalid ? (
             <p id={emailErrorId} className={fieldError()}>
-              {ADMIN_COPY.emailError}
+              {t("admin.emailError")}
             </p>
           ) : null}
         </div>
         <div className={fieldGroup()}>
           <label htmlFor={usernameId} className={fieldLabel()}>
-            Username
+            {t("admin.usernameLabel")}
           </label>
           <div className={authInputRow({ invalid: usernameInvalid })}>
             <User className={authInputIcon()} aria-hidden="true" />
@@ -117,14 +119,14 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
               minLength={ADMIN_FIELD_RULES.usernameMin}
               maxLength={ADMIN_FIELD_RULES.usernameMax}
               autoComplete="username"
-              placeholder="admin"
+              placeholder={t("admin.usernamePlaceholder")}
               aria-describedby={usernameHintId}
               aria-invalid={usernameInvalid || undefined}
               className={authInputControl()}
             />
           </div>
           <p id={usernameHintId} className={usernameInvalid ? fieldError() : fieldHint()}>
-            {usernameInvalid ? ADMIN_COPY.usernameError : ADMIN_COPY.usernameHint}
+            {usernameInvalid ? t("admin.usernameError") : t("admin.usernameHint")}
           </p>
         </div>
         <div className={fieldGroup()}>
@@ -141,7 +143,7 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
             describedBy={passwordHintId}
           />
           <p id={passwordHintId} className={passwordInvalid ? fieldError() : fieldHint()}>
-            {passwordInvalid ? ADMIN_COPY.passwordError : ADMIN_COPY.passwordHint}
+            {passwordInvalid ? t("admin.passwordError") : t("admin.passwordHint")}
           </p>
         </div>
       </StepShell>

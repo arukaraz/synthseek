@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+
 const REVOKE_DELAY_MS = 1000;
 const FILENAME_PATTERN = /filename="?([^"]+)"?/;
 
@@ -28,13 +30,17 @@ export async function triggerDownload(url: string, fallbackName: string): Promis
   try {
     const response = await fetch(url, { credentials: "include" });
     if (!response.ok) {
-      toast.error(response.status === 403 ? "Admin access required" : "Download failed");
+      toast.error(
+        response.status === 403
+          ? i18n.t("mutations:requests.adminRequired")
+          : i18n.t("mutations:requests.downloadFailed")
+      );
       return;
     }
     const blob = await response.blob();
     const filename = filenameFromDisposition(response.headers.get("content-disposition")) ?? fallbackName;
     triggerBlobDownload(blob, filename);
   } catch {
-    toast.error("Download failed");
+    toast.error(i18n.t("mutations:requests.downloadFailed"));
   }
 }

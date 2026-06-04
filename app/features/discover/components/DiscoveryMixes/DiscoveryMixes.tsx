@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Library } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
@@ -16,12 +17,13 @@ import { DiscoveryMixCard } from "./DiscoveryMixCard";
 import { DiscoveryMixCardEmpty } from "./DiscoveryMixCardEmpty";
 import { DiscoveryMixesEmpty } from "./DiscoveryMixesEmpty";
 import { DiscoveryMixesSkeleton } from "./DiscoveryMixesSkeleton";
-import { AUTO_REQUEST_TOOLTIP, LB_KIND_METADATA } from "./constants";
+import { LB_KIND_METADATA } from "./constants";
 import { synthesizePlaylist, synthesizeTrack } from "./helpers";
 import { mixGrid } from "./styles";
 import type { ReadyMix } from "./types";
 
 export function DiscoveryMixes() {
+  const { t } = useTranslation("discover");
   const { mixes, lbConfig, isLoading, isError } = useDiscoveryMixes();
 
   const [selectedMix, setSelectedMix] = useState<ReadyMix | null>(null);
@@ -77,7 +79,12 @@ export function DiscoveryMixes() {
         className={glassPanelCard({ height: "auto" })}
         aria-labelledby="discover-mixes-heading"
       >
-        <WidgetHeader icon={Library} title="Discover Mixes" subtitle="ListenBrainz" titleId="discover-mixes-heading" />
+        <WidgetHeader
+          icon={Library}
+          title={t("mixes.title")}
+          subtitle={t("mixes.subtitle")}
+          titleId="discover-mixes-heading"
+        />
         <div className={mixGrid()}>
           {mixes.map((mix) =>
             mix.status === "ready" ? (
@@ -95,7 +102,7 @@ export function DiscoveryMixes() {
           data={syntheticPlaylist}
           preloadedItems={syntheticTracks}
           requestButtonDisabled={lbConfig.autoRequest}
-          requestButtonTooltip={lbConfig.autoRequest ? AUTO_REQUEST_TOOLTIP : undefined}
+          requestButtonTooltip={lbConfig.autoRequest ? t("mixes.autoRequestTooltip") : undefined}
           open={showBrowser}
           onClose={handleCloseBrowser}
           onRequestClick={handleRequestClick}

@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { AdminStep } from "../AdminStep";
-import { ADMIN_COPY } from "../../constants";
 
 interface BootstrapInput {
   email: string;
@@ -81,15 +80,15 @@ describe("AdminStep", () => {
     const username = screen.getByLabelText("Username");
     const password = screen.getByLabelText("Password");
 
-    expect(screen.getByText(ADMIN_COPY.usernameHint)).toBeInTheDocument();
-    expect(screen.getByText(ADMIN_COPY.passwordHint)).toBeInTheDocument();
+    expect(screen.getByText("Min 3 characters")).toBeInTheDocument();
+    expect(screen.getByText("At least 8 characters")).toBeInTheDocument();
 
     const usernameHintId = username.getAttribute("aria-describedby");
     const passwordHintId = password.getAttribute("aria-describedby");
     expect(usernameHintId).toBeTruthy();
     expect(passwordHintId).toBeTruthy();
-    expect(document.getElementById(usernameHintId!)).toHaveTextContent(ADMIN_COPY.usernameHint);
-    expect(document.getElementById(passwordHintId!)).toHaveTextContent(ADMIN_COPY.passwordHint);
+    expect(document.getElementById(usernameHintId!)).toHaveTextContent("Min 3 characters");
+    expect(document.getElementById(passwordHintId!)).toHaveTextContent("At least 8 characters");
   });
 
   it("keeps the primary disabled and shows an accessible error for an invalid email, clearing it once valid", () => {
@@ -101,16 +100,16 @@ describe("AdminStep", () => {
 
     const email = screen.getByLabelText("Email");
     expect(email).toHaveAttribute("aria-invalid", "true");
-    expect(screen.getByText(ADMIN_COPY.emailError)).toBeInTheDocument();
+    expect(screen.getByText("Enter a valid email address.")).toBeInTheDocument();
     expect(createButton()).toBeDisabled();
 
     const emailErrorId = email.getAttribute("aria-describedby");
     expect(emailErrorId).toBeTruthy();
-    expect(document.getElementById(emailErrorId!)).toHaveTextContent(ADMIN_COPY.emailError);
+    expect(document.getElementById(emailErrorId!)).toHaveTextContent("Enter a valid email address.");
 
     fireEvent.change(screen.getByLabelText("Email"), { target: { value: "admin@example.com" } });
 
-    expect(screen.queryByText(ADMIN_COPY.emailError)).not.toBeInTheDocument();
+    expect(screen.queryByText("Enter a valid email address.")).not.toBeInTheDocument();
     expect(screen.getByLabelText("Email")).not.toHaveAttribute("aria-invalid");
     expect(createButton()).toBeEnabled();
   });

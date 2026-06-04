@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateConnectionsSlskd() {
@@ -8,9 +10,9 @@ export function useUpdateConnectionsSlskd() {
     onSuccess: () => {
       utils.settings.get.invalidate();
       utils.settings.slskdStatus.invalidate();
-      toast.success("Slskd connection updated");
+      toast.success(i18n.t("mutations:settings.slskdSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to update Slskd settings"),
+    onError: (error) => errorToast(error, "settings.slskdFailed"),
   });
 }
 
@@ -21,7 +23,7 @@ export function useUpdateConnectionsPlex() {
       utils.settings.get.invalidate();
       utils.settings.plexStatus.invalidate();
     },
-    onError: (error) => toast.error(error.message || "Failed to update Plex settings"),
+    onError: (error) => errorToast(error, "settings.plexFailed"),
   });
 }
 
@@ -30,9 +32,9 @@ export function useUpdateConnectionsEnrichment() {
   return trpc.settings.updateConnectionsEnrichment.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Enrichment settings updated");
+      toast.success(i18n.t("mutations:settings.enrichmentSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to update enrichment settings"),
+    onError: (error) => errorToast(error, "settings.enrichmentFailed"),
   });
 }
 
@@ -45,8 +47,8 @@ export function useUpdateConnectionsSpotify() {
   return trpc.settings.updateConnectionsSpotify.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Spotify app settings updated");
+      toast.success(i18n.t("mutations:settings.spotifySaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to update Spotify settings"),
+    onError: (error) => errorToast(error, "settings.spotifyFailed"),
   });
 }

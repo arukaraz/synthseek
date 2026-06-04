@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
 import type { ErrorMutationMeta } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
@@ -23,7 +24,7 @@ export function useSpotifyDisconnect() {
   return trpc.librarySource.spotify.disconnect.useMutation({
     meta: SPOTIFY_META,
     onSuccess: () => {
-      toast.success("Spotify disconnected");
+      toast.success(i18n.t("mutations:spotify.disconnected"));
       utils.librarySource.spotify.getConnectionStatus.invalidate();
       utils.librarySource.spotify.listPlaylists.invalidate();
       utils.librarySource.spotify.listSavedAlbums.invalidate();

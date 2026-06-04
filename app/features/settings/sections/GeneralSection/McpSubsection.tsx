@@ -2,6 +2,7 @@
 
 import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { IconButton } from "@components/ui/IconButton";
@@ -19,11 +20,11 @@ import {
   subSectionHeaderText,
   subSectionTitle,
 } from "../../styles";
-import { MCP_SUB } from "./constants";
 import { mcpEndpoint } from "./helpers";
 import { connectLabel, connectList } from "./styles";
 
 export function McpSubsection() {
+  const { t } = useTranslation("settings");
   const { data: publicConfig } = usePublicConfig();
   const [endpoint, setEndpoint] = useState("/api/v1/mcp");
   const [copied, setCopied] = useState(false);
@@ -37,32 +38,41 @@ export function McpSubsection() {
     try {
       await navigator.clipboard.writeText(endpoint);
       setCopied(true);
-      toast.success(MCP_SUB.copied);
+      toast.success(t("mcp.copied"));
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Failed to copy endpoint");
+      toast.error(t("mcp.copyFailed"));
     }
   };
+
+  const tools = [
+    t("mcp.tools.discovery"),
+    t("mcp.tools.downloads"),
+    t("mcp.tools.requests"),
+    t("mcp.tools.library"),
+    t("mcp.tools.settings"),
+    t("mcp.tools.operations"),
+  ];
 
   return (
     <section className={subSection()}>
       <header className={subSectionHeader()}>
         <div className={subSectionHeaderText()}>
           <div className="flex items-center gap-1.5">
-            <h3 className={subSectionTitle()}>{MCP_SUB.title}</h3>
+            <h3 className={subSectionTitle()}>{t("mcp.title")}</h3>
             <InfoTooltip
               trigger="click"
               side="bottom"
-              title={MCP_SUB.toolsTitle}
-              description={MCP_SUB.toolsDescription}
-              points={[...MCP_SUB.tools]}
+              title={t("mcp.toolsTitle")}
+              description={t("mcp.toolsDescription")}
+              points={tools}
             />
           </div>
-          <p className={subSectionDescription()}>{MCP_SUB.description}</p>
+          <p className={subSectionDescription()}>{t("mcp.description")}</p>
         </div>
       </header>
 
-      <SettingsField label={MCP_SUB.endpointLabel} helper={MCP_SUB.endpointHelper}>
+      <SettingsField label={t("mcp.endpointLabel")} helper={t("mcp.endpointHelper")}>
         <div className={copyRow()}>
           <div className="flex-1">
             <SettingsTextInput value={endpoint} onChange={() => undefined} disabled />
@@ -73,20 +83,20 @@ export function McpSubsection() {
             size="md"
             onClick={handleCopy}
             disabled={!endpoint}
-            aria-label="Copy MCP endpoint"
-            title="Copy MCP endpoint"
+            aria-label={t("mcp.copyEndpointLabel")}
+            title={t("mcp.copyEndpointLabel")}
             animated={false}
           />
         </div>
       </SettingsField>
 
-      <Notice variant="info" title={MCP_SUB.connectTitle} collapsible defaultOpen={false}>
+      <Notice variant="info" title={t("mcp.connectTitle")} collapsible defaultOpen={false}>
         <ul className={connectList()}>
           <li>
-            <span className={connectLabel()}>{MCP_SUB.oauthLabel}.</span> {MCP_SUB.oauthBody}
+            <span className={connectLabel()}>{t("mcp.oauthLabel")}.</span> {t("mcp.oauthBody")}
           </li>
           <li>
-            <span className={connectLabel()}>{MCP_SUB.keyLabel}.</span> {MCP_SUB.keyBody}
+            <span className={connectLabel()}>{t("mcp.keyLabel")}.</span> {t("mcp.keyBody")}
           </li>
         </ul>
       </Notice>

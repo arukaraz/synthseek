@@ -30,8 +30,3 @@ export interface LeaderboardRowsProps {
 export interface LibraryStatsRowProps {
   summary: LeaderboardSummary;
 }
-
-export interface TabOption {
-  id: LeaderboardMode;
-  label: string;
-}

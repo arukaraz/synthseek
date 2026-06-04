@@ -1,11 +1,14 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { MAX_DOTS } from "./constants";
 import { dotBase, dotsRow, navArrow, navContainer } from "./styles";
 import type { TrendingHeroNavProps } from "./types";
 
 export function TrendingHeroNav({ total, currentIndex, onSelect, onPrev, onNext }: TrendingHeroNavProps) {
+  const { t } = useTranslation("discover");
+
   if (total <= 1) return null;
 
   const dotCount = Math.min(total, MAX_DOTS);
@@ -13,7 +16,7 @@ export function TrendingHeroNav({ total, currentIndex, onSelect, onPrev, onNext 
 
   return (
     <div className={navContainer()}>
-      <button type="button" onClick={onPrev} aria-label="Previous trending track" className={navArrow()}>
+      <button type="button" onClick={onPrev} aria-label={t("trendingHero.prevAriaLabel")} className={navArrow()}>
         <ChevronLeft className="h-5 w-5" />
       </button>
 
@@ -26,14 +29,14 @@ export function TrendingHeroNav({ total, currentIndex, onSelect, onPrev, onNext 
               key={index}
               type="button"
               onClick={() => onSelect(realIndex)}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={t("trendingHero.slideAriaLabel", { number: index + 1 })}
               className={dotBase({ active: isActive })}
             />
           );
         })}
       </div>
 
-      <button type="button" onClick={onNext} aria-label="Next trending track" className={navArrow()}>
+      <button type="button" onClick={onNext} aria-label={t("trendingHero.nextAriaLabel")} className={navArrow()}>
         <ChevronRight className="h-5 w-5" />
       </button>
     </div>

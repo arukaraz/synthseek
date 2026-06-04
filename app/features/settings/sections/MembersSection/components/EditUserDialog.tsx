@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import {
@@ -18,10 +19,12 @@ import { SettingsField } from "../../../components/SettingsField";
 import { SettingsTextInput } from "../../../components/SettingsTextInput";
 import { SettingsSecretInput } from "../../../components/SettingsSecretInput";
 import { SegmentedControl } from "../../../components/SegmentedControl";
-import { EDIT_USER_COPY, ROLE_OPTIONS } from "../constants";
+import { buildRoleOptions } from "../helpers";
 import type { EditUserDialogProps, RoleValue } from "../types";
 
 export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogProps) {
+  const { t } = useTranslation("settings");
+  const roleOptions = buildRoleOptions(t);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<RoleValue>("member");
@@ -60,42 +63,51 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <DialogHeader>
-            <DialogTitle>{EDIT_USER_COPY.title}</DialogTitle>
-            <DialogDescription>{EDIT_USER_COPY.description}</DialogDescription>
+            <DialogTitle>{t("members.edit.title")}</DialogTitle>
+            <DialogDescription>{t("members.edit.description")}</DialogDescription>
           </DialogHeader>
 
-          <SettingsField label="Username">
-            <SettingsTextInput value={username} onChange={setUsername} ariaLabel="Username" />
-          </SettingsField>
-
-          <SettingsField label="Email">
-            <SettingsTextInput type="email" value={email} onChange={setEmail} ariaLabel="User email" />
-          </SettingsField>
-
-          <SettingsField label="Role">
-            <SegmentedControl<RoleValue>
-              value={role}
-              options={ROLE_OPTIONS}
-              onChange={setRole}
-              disabled={member.isOwner}
-              ariaLabel="User role"
+          <SettingsField label={t("members.edit.usernameLabel")}>
+            <SettingsTextInput
+              value={username}
+              onChange={setUsername}
+              ariaLabel={t("members.edit.usernameAriaLabel")}
             />
           </SettingsField>
 
-          {member.isOwner ? <Notice variant="info" title={EDIT_USER_COPY.ownerRoleNote} /> : null}
+          <SettingsField label={t("members.edit.emailLabel")}>
+            <SettingsTextInput
+              type="email"
+              value={email}
+              onChange={setEmail}
+              ariaLabel={t("members.edit.emailAriaLabel")}
+            />
+          </SettingsField>
 
-          <SettingsField label="Password">
+          <SettingsField label={t("members.edit.roleLabel")}>
+            <SegmentedControl<RoleValue>
+              value={role}
+              options={roleOptions}
+              onChange={setRole}
+              disabled={member.isOwner}
+              ariaLabel={t("members.edit.roleAriaLabel")}
+            />
+          </SettingsField>
+
+          {member.isOwner ? <Notice variant="info" title={t("members.edit.ownerRoleNote")} /> : null}
+
+          <SettingsField label={t("members.edit.passwordLabel")}>
             <SettingsSecretInput
               value={password}
               onChange={setPassword}
-              placeholder={EDIT_USER_COPY.passwordPlaceholder}
-              ariaLabel="New password"
+              placeholder={t("members.edit.passwordPlaceholder")}
+              ariaLabel={t("members.edit.passwordAriaLabel")}
             />
           </SettingsField>
 
           <DialogFooter>
             <Button type="submit" size="sm" disabled={!canSubmit}>
-              {EDIT_USER_COPY.submit}
+              {t("members.edit.submit")}
             </Button>
           </DialogFooter>
         </form>

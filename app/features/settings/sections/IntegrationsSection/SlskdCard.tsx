@@ -3,6 +3,7 @@
 import { Plug } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
@@ -19,15 +20,11 @@ import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, fieldError, fieldWarning } from "../../styles";
-import {
-  BANNED_UPLOADERS_TOOLTIP_AUTO,
-  BANNED_UPLOADERS_TOOLTIP_TRIGGER_LABEL,
-  BANNED_UPLOADERS_TOOLTIP_WHAT,
-} from "./constants";
 import { SlskdStatusBadge } from "./SlskdStatusBadge";
 import type { SlskdCardProps } from "./types";
 
 export function SlskdCard({ initial }: SlskdCardProps) {
+  const { t } = useTranslation("settings");
   const update = useUpdateConnectionsSlskd();
   const testConnection = useTestSlskd();
   const status = useSlskdStatus();
@@ -44,8 +41,8 @@ export function SlskdCard({ initial }: SlskdCardProps) {
     setTesting(true);
     try {
       const result = await testConnection.mutateAsync({ apiUrl: urlCheck.normalized, apiKey: draft.apiKey });
-      if (result.ok) toast.success(result.message ?? "Connected");
-      else toast.error(result.message ?? "Connection failed");
+      if (result.ok) toast.success(result.message ?? t("slskd.connected"));
+      else toast.error(result.message ?? t("slskd.connectionFailed"));
     } finally {
       setTesting(false);
     }
@@ -58,22 +55,24 @@ export function SlskdCard({ initial }: SlskdCardProps) {
 
   return (
     <SettingsCard
-      title="Slskd"
-      description="Required for downloads."
+      title={t("slskd.title")}
+      description={t("slskd.description")}
       trailing={
         status.data ? (
           <SlskdStatusBadge
             status={status.data.status}
             message={status.data.message !== "Connected" ? status.data.message : undefined}
+            messageCode={status.data.messageCode !== "SLSKD_CONNECTED" ? status.data.messageCode : undefined}
+            messageParams={status.data.messageParams}
           />
         ) : null
       }
     >
-      <SettingsField label="API URL" helper="">
+      <SettingsField label={t("slskd.apiUrl.label")} helper="">
         <SettingsTextInput
           value={draft.apiUrl}
           onChange={(v) => setField("apiUrl", v)}
-          placeholder="http://localhost:5030"
+          placeholder={t("slskd.apiUrl.placeholder")}
           type="url"
         />
         {urlError ? (
@@ -85,7 +84,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         ) : null}
       </SettingsField>
 
-      <SettingsField label="API Key">
+      <SettingsField label={t("slskd.apiKey.label")}>
         <SettingsSecretInput value={draft.apiKey} onChange={(v) => setField("apiKey", v)} />
       </SettingsField>
 
@@ -97,40 +96,43 @@ export function SlskdCard({ initial }: SlskdCardProps) {
           disabled={testing || !draft.apiUrl || !draft.apiKey || Boolean(urlError)}
         >
           <Plug className="size-4" />
-          {testing ? "Testing..." : "Test connection"}
+          {testing ? t("slskd.testing") : t("slskd.testConnection")}
         </Button>
       </div>
 
       <div role="separator" className={cardDivider()} />
 
       <SettingsField
-        label="Banned uploaders"
+        label={t("slskd.bannedUploaders.label")}
         contentSpacing="loose"
         labelTrailing={
           <InfoTooltip
-            description={BANNED_UPLOADERS_TOOLTIP_WHAT}
-            secondary={BANNED_UPLOADERS_TOOLTIP_AUTO}
-            triggerLabel={BANNED_UPLOADERS_TOOLTIP_TRIGGER_LABEL}
+            description={t("slskd.bannedUploaders.tooltipWhat")}
+            secondary={t("slskd.bannedUploaders.tooltipAuto")}
+            triggerLabel={t("slskd.bannedUploaders.tooltipTriggerLabel")}
           />
         }
       >
         <ListManager
           value={draft.bannedUsers}
           onChange={(v) => setField("bannedUsers", v)}
-          addPlaceholder="e.g. user123"
-          filterPlaceholder="Filter banlist..."
-          emptyLabel="No banned uploaders yet."
-          countLabel={(n) => `${n} banned`}
+          addPlaceholder={t("slskd.bannedUploaders.addPlaceholder")}
+          filterPlaceholder={t("slskd.bannedUploaders.filterPlaceholder")}
+          emptyLabel={t("slskd.bannedUploaders.empty")}
+          countLabel={(n) => t("slskd.bannedUploaders.count", { count: n })}
           helper={
-            <>
-              Skip these slskd users/peers when picking download candidates.{" "}
-              <Link
-                href="/settings/engine#ban-threshold"
-                className="text-primary-400 hover:text-primary-300 underline-offset-2 hover:underline"
-              >
-                Configure threshold
-              </Link>
-            </>
+            <Trans
+              t={t}
+              i18nKey="slskd.bannedUploaders.helper"
+              components={{
+                link: (
+                  <Link
+                    href="/settings/engine#ban-threshold"
+                    className="text-primary-400 hover:text-primary-300 underline-offset-2 hover:underline"
+                  />
+                ),
+              }}
+            />
           }
         />
       </SettingsField>

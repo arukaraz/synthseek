@@ -4,11 +4,13 @@ import { cn } from "@utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { closeButton, mobileSearchOpenButton, searchInput } from "../../styles";
 import { SEARCH_CLEAR_BUTTON_VARIANTS, SEARCH_INPUT_VARIANTS } from "../consts";
 import type { SearchInputProps } from "../types";
 
 export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInputProps) {
+  const { t } = useTranslation("requests");
   const mobileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -44,11 +46,11 @@ export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInp
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Filter..."
+          placeholder={t("searchInput.placeholder")}
           className={searchInput()}
         />
         {value && (
-          <button type="button" onClick={handleClear} className={closeButton()} aria-label="Clear filter">
+          <button type="button" onClick={handleClear} className={closeButton()} aria-label={t("searchInput.clear")}>
             <X className="size-3" />
           </button>
         )}
@@ -59,8 +61,8 @@ export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInp
           <button
             onClick={() => onOpenChange(true)}
             className={mobileSearchOpenButton()}
-            title="Filter requests"
-            aria-label="Open filter"
+            title={t("searchInput.openTitle")}
+            aria-label={t("searchInput.open")}
           >
             <Search className="size-4" />
           </button>
@@ -81,7 +83,7 @@ export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInp
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Filter..."
+                placeholder={t("searchInput.placeholder")}
                 className={searchInput()}
               />
               <motion.button
@@ -94,7 +96,7 @@ export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInp
                 exit="exit"
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                aria-label="Close filter"
+                aria-label={t("searchInput.close")}
               >
                 <X className="size-3" />
               </motion.button>

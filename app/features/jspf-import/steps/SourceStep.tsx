@@ -4,6 +4,7 @@ import { Button } from "@components/ui/Button";
 import { cn } from "@utils/cn";
 import { Upload } from "lucide-react";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { ACCEPTED_FILE_TYPES } from "../constants";
 import { fetchTextFromUrl, filenameFromUrl, formatFromName, formatFromUrl, readFileAsText } from "../helpers";
@@ -21,6 +22,7 @@ import {
 import type { SourceStepProps } from "../types";
 
 export function SourceStep({ onLoaded }: SourceStepProps) {
+  const { t } = useTranslation("library");
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +33,7 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
     if (!file) return;
     const format = formatFromName(file.name);
     if (!format) {
-      setError("Use a .jspf, .xspf or .csv file");
+      setError(t("jspfImport.source.errorWrongFile"));
       return;
     }
     setError(null);
@@ -39,7 +41,7 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
       const content = await readFileAsText(file);
       onLoaded(content, format, file.name);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not read file");
+      setError(e instanceof Error ? e.message : t("jspfImport.source.errorReadFile"));
     }
   };
 
@@ -48,7 +50,7 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
     if (!target) return;
     const format = formatFromUrl(target);
     if (!format) {
-      setError("The URL must point to a .jspf, .xspf or .csv file");
+      setError(t("jspfImport.source.errorWrongUrl"));
       return;
     }
     setFetching(true);
@@ -57,7 +59,7 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
       const content = await fetchTextFromUrl(target);
       onLoaded(content, format, filenameFromUrl(target));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not fetch URL");
+      setError(e instanceof Error ? e.message : t("jspfImport.source.errorFetchUrl"));
     } finally {
       setFetching(false);
     }
@@ -69,7 +71,7 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
         className={cn(dropzone({ active: dragActive }))}
         role="button"
         tabIndex={0}
-        aria-label="Upload a playlist file"
+        aria-label={t("jspfImport.source.uploadAria")}
         onClick={() => inputRef.current?.click()}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
@@ -86,10 +88,8 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
         }}
       >
         <Upload className="text-fg/40 size-6" />
-        <span className={dropzoneTitle()}>Drop a .jspf / .xspf / .csv file or click to browse</span>
-        <span className={dropzoneHint()}>
-          JSPF from Synthseek or ListenBrainz, XSPF or CSV exports from other tools
-        </span>
+        <span className={dropzoneTitle()}>{t("jspfImport.source.dropTitle")}</span>
+        <span className={dropzoneHint()}>{t("jspfImport.source.dropHint")}</span>
         <input
           ref={inputRef}
           type="file"
@@ -101,7 +101,7 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
 
       <div className={sectionDivider()}>
         <span className={dividerLine()} />
-        or from URL
+        {t("jspfImport.source.orFromUrl")}
         <span className={dividerLine()} />
       </div>
 
@@ -109,12 +109,12 @@ export function SourceStep({ onLoaded }: SourceStepProps) {
         <input
           className={urlInput()}
           type="url"
-          placeholder="https://gist.githubusercontent.com/.../raw/flow.jspf"
+          placeholder={t("jspfImport.source.urlPlaceholder")}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
         <Button variant="secondary" size="sm" disabled={!url.trim() || fetching} onClick={() => void handleUrl()}>
-          {fetching ? "Fetching..." : "Fetch"}
+          {fetching ? t("jspfImport.source.fetching") : t("jspfImport.source.fetch")}
         </Button>
       </div>
 

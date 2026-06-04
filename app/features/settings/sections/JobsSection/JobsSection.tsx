@@ -1,14 +1,17 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot } from "../../styles";
-import { JOBS_DESCRIPTION } from "./constants";
 import { JobsCard } from "./JobsCard";
 
 export function JobsSection() {
+  const { t } = useTranslation("settings");
+
   return (
     <div className={contentRoot()}>
-      <SettingsPageHeader title="Jobs" description={JOBS_DESCRIPTION} />
+      <SettingsPageHeader title={t("jobs.page.title")} description={t("jobs.page.description")} />
       <JobsCard />
     </div>
   );

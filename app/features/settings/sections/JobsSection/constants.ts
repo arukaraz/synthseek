@@ -1,7 +1,3 @@
-export const JOBS_DESCRIPTION = "Background tasks Synthseek runs on a schedule. Trigger any job to run it immediately.";
-
-export const JOBS_CARD_DESCRIPTION = "Each job shows its schedule and next run. Press play to run it now.";
-
-export const NEXT_RUN_FALLBACK = "Idle";
-
-export const IN_PROGRESS_LABEL = "In progress";
+export const MINUTE_MS = 60_000;
+export const HOUR_MS = 60 * MINUTE_MS;
+export const DAY_MS = 24 * HOUR_MS;

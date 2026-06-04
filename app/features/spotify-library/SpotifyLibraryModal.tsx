@@ -6,6 +6,7 @@ import { useLibrarySubscription } from "@hooks/api/queries/spotify/useLibrarySub
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { useSpotifyLibraryItems } from "@hooks/api/queries/spotify/useSpotifyLibraryItems";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { ModalBottombar } from "./components/ModalBottombar";
 import { ModalToolbar } from "./components/ModalToolbar";
@@ -20,6 +21,7 @@ import { detailPaneWrapper, modalGrid, modalRoot, split } from "./styles";
 import type { LibraryFilter, LibrarySort, SpotifyLibraryModalProps } from "./types";
 
 export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalProps) {
+  const { t } = useTranslation("library");
   const status = useSpotifyConnectionStatus();
   const connected = status.data?.connected ?? false;
   const items = useSpotifyLibraryItems(open && connected);
@@ -165,10 +167,8 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
           }
         }}
       >
-        <DialogTitle className="sr-only">Spotify library</DialogTitle>
-        <DialogDescription className="sr-only">
-          Browse your Spotify library, import items into Synthseek, and configure ongoing sync.
-        </DialogDescription>
+        <DialogTitle className="sr-only">{t("spotifyLibrary.dialog.title")}</DialogTitle>
+        <DialogDescription className="sr-only">{t("spotifyLibrary.dialog.description")}</DialogDescription>
         {connected ? (
           <div className={modalGrid()}>
             <ModalTopbar />

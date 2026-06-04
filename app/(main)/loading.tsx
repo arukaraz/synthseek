@@ -1,5 +1,5 @@
-import { BrandedLoader } from "@components/ui/BrandedLoader";
+import { LibraryLoader } from "@components/LibraryLoader";
 
 export default function MainLoading() {
-  return <BrandedLoader label="Loading your library" />;
+  return <LibraryLoader />;
 }

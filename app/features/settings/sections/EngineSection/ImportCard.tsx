@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { useUpdateEngineImport } from "@hooks/api/mutations/settings/useUpdateEngine";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -12,6 +14,7 @@ import { ENGINE_DEFAULTS } from "./defaults";
 import type { ImportCardProps } from "./types";
 
 export function ImportCard({ initial }: ImportCardProps) {
+  const { t } = useTranslation("settings");
   const update = useUpdateEngineImport();
   const { draft, setField, setAll, save, reset, isDirty, isSaving } = useSettingsForm(initial);
 
@@ -19,19 +22,19 @@ export function ImportCard({ initial }: ImportCardProps) {
 
   return (
     <SettingsCard
-      title="Import"
+      title={t("import.title")}
       trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.import })} disabled={isSaving} />}
     >
       <EngineRow
-        label="Metadata confidence threshold"
-        description="Minimum match (0-100) between a downloaded file's embedded audio tags. Files below this score are rejected with and can be retried."
+        label={t("import.metadataConfidence.label")}
+        description={t("import.metadataConfidence.description")}
         control={
           <SettingsNumberInput
             value={draft.metadataConfidenceThreshold}
             onChange={(v) => setField("metadataConfidenceThreshold", v)}
             min={0}
             max={100}
-            ariaLabel="Metadata confidence threshold"
+            ariaLabel={t("import.metadataConfidence.ariaLabel")}
           />
         }
       />

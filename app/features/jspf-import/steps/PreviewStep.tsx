@@ -4,6 +4,7 @@ import { Button } from "@components/ui/Button";
 import { ProgressBar } from "@components/ui/ProgressBar";
 import { usePortabilityProgress } from "@hooks/api/subscriptions/usePortabilityProgress";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { TrackCoverageRow } from "../components/TrackCoverageRow";
 import {
@@ -42,6 +43,7 @@ export function PreviewStep({
   onConfirm,
   onBack,
 }: PreviewStepProps) {
+  const { t } = useTranslation("library");
   const progress = usePortabilityProgress(jobId);
   const [search, setSearch] = useState("");
   const busy = isPreviewing || isCommitting;
@@ -52,7 +54,7 @@ export function PreviewStep({
       <div className={progressWrap()}>
         <ProgressBar progress={percent} isActive />
         <span className={progressLabel()}>
-          {isCommitting ? "Creating requests" : "Matching tracks"}
+          {isCommitting ? t("jspfImport.preview.creatingRequests") : t("jspfImport.preview.matchingTracks")}
           {progress ? ` · ${progress.processed}/${progress.total}` : "..."}
         </span>
       </div>
@@ -65,7 +67,7 @@ export function PreviewStep({
         <span className={errorText()}>{errorMessage}</span>
         <div className={footerRow()}>
           <Button variant="ghost" size="sm" onClick={onBack}>
-            Back
+            {t("jspfImport.preview.back")}
           </Button>
         </div>
       </div>
@@ -76,7 +78,7 @@ export function PreviewStep({
     return (
       <div className={progressWrap()}>
         <ProgressBar progress={percent} isActive />
-        <span className={progressLabel()}>Matching tracks...</span>
+        <span className={progressLabel()}>{t("jspfImport.preview.matchingTracksDots")}</span>
       </div>
     );
   }
@@ -90,17 +92,15 @@ export function PreviewStep({
   return (
     <div className={stepContainer()}>
       <div className={coverageHeader()}>
-        <span className={coverageHeaderStrong()}>
-          {matched}/{total} matched
-        </span>
-        <span className={coverageHeaderStat()}>{downloads} new downloads</span>
-        <span className={coverageHeaderStat()}>{duration} selected</span>
+        <span className={coverageHeaderStrong()}>{t("jspfImport.preview.matchedHeader", { matched, total })}</span>
+        <span className={coverageHeaderStat()}>{t("jspfImport.preview.newDownloads", { count: downloads })}</span>
+        <span className={coverageHeaderStat()}>{t("jspfImport.preview.selectedDuration", { duration })}</span>
       </div>
 
       <input
         className={searchInput()}
         type="search"
-        placeholder="Filter tracks..."
+        placeholder={t("jspfImport.preview.filterPlaceholder")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
@@ -131,10 +131,10 @@ export function PreviewStep({
 
       <div className={footerRow()}>
         <Button variant="ghost" size="sm" onClick={onBack}>
-          Back
+          {t("jspfImport.preview.back")}
         </Button>
         <Button variant="default" size="sm" disabled={chosen === 0} onClick={onConfirm}>
-          Import {chosen} track{chosen === 1 ? "" : "s"}
+          {t("jspfImport.preview.import", { count: chosen })}
         </Button>
       </div>
     </div>

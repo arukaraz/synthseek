@@ -2,6 +2,7 @@
 
 import { Plug, Server } from "lucide-react";
 import { useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { PasswordField } from "@components/ui/PasswordField";
 import { authInputControl, authInputIcon, authInputRow } from "@components/ui/styles";
@@ -9,7 +10,7 @@ import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/se
 import { validateSlskdApiUrl } from "@utils/slskd-url";
 
 import { StatusStrip } from "../components/StatusStrip";
-import { SETUP_HEADING_IDS, SLSKD_COPY } from "../constants";
+import { SETUP_HEADING_IDS } from "../constants";
 import {
   fieldError,
   fieldGroup,
@@ -23,6 +24,7 @@ import { StepShell } from "./StepShell";
 import type { SlskdConnectState, SlskdStepProps } from "../types";
 
 export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdStepProps) {
+  const { t } = useTranslation("setup");
   const update = useUpdateConnectionsSlskd();
   const testConn = useTestSlskd();
   const apiUrlId = useId();
@@ -84,42 +86,42 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
 
   const statusStripNode = (() => {
     if (state.kind === "passed") {
-      return <StatusStrip tone="success" message={SLSKD_COPY.passed} />;
+      return <StatusStrip tone="success" message={t("slskd.passed")} />;
     }
     if (state.kind === "failed") {
-      const message = state.reason ? SLSKD_COPY.failedReason(state.reason) : SLSKD_COPY.failed;
+      const message = state.reason ? t("slskd.failedReason", { reason: state.reason }) : t("slskd.failed");
       return (
         <StatusStrip
           tone="error"
           message={message}
           action={
             <button type="button" onClick={armOverride} className={statusStripAction()}>
-              {SLSKD_COPY.overrideLink}
+              {t("slskd.overrideLink")}
             </button>
           }
         />
       );
     }
     if (state.kind === "override-armed") {
-      return <StatusStrip tone="neutral" message={SLSKD_COPY.overrideArmed} />;
+      return <StatusStrip tone="neutral" message={t("slskd.overrideArmed")} />;
     }
     return null;
   })();
 
   const footerError =
-    state.kind === "save-failed" ? <StatusStrip tone="error" message={SLSKD_COPY.saveFailed} /> : undefined;
+    state.kind === "save-failed" ? <StatusStrip tone="error" message={t("slskd.saveFailed")} /> : undefined;
 
   return (
     <StepShell
       stepIndex={stepIndex}
       totalSteps={totalSteps}
       headingId={SETUP_HEADING_IDS.slskd}
-      title="Connect to slskd"
-      description="Synthseek talks to the Soulseek network through your slskd daemon. This step is required."
-      primaryLabel={isSaving ? "Saving..." : "Continue"}
+      title={t("slskd.title")}
+      description={t("slskd.description")}
+      primaryLabel={isSaving ? t("actions.saving") : t("actions.continue")}
       primaryDisabled={!canContinue}
       primaryLoading={isSaving}
-      primaryHint={SLSKD_COPY.blockedHint}
+      primaryHint={t("slskd.blockedHint")}
       onPrimary={handleContinue}
       showBack={Boolean(onBack)}
       onBack={onBack}
@@ -127,7 +129,7 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
     >
       <div className={fieldGroup()}>
         <label htmlFor={apiUrlId} className={fieldLabel()}>
-          API URL
+          {t("slskd.apiUrlLabel")}
         </label>
         <div className={authInputRow({ invalid: Boolean(urlError) })}>
           <Server className={authInputIcon()} aria-hidden="true" />
@@ -136,7 +138,7 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
             type="url"
             value={apiUrl}
             onChange={(e) => handleUrlChange(e.target.value)}
-            placeholder="http://localhost:5030"
+            placeholder={t("slskd.apiUrlPlaceholder")}
             aria-invalid={Boolean(urlError) || undefined}
             className={authInputControl()}
           />
@@ -150,12 +152,18 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
         ) : null}
       </div>
 
-      <PasswordField id={apiKeyId} value={apiKey} onChange={handleKeyChange} label="API Key" autoComplete="off" />
+      <PasswordField
+        id={apiKeyId}
+        value={apiKey}
+        onChange={handleKeyChange}
+        label={t("slskd.apiKeyLabel")}
+        autoComplete="off"
+      />
 
       <div className={slskdTestRow()}>
         <button type="button" onClick={handleTest} disabled={!fieldsFilled || isTesting} className={slskdTestButton()}>
           <Plug className="size-4" aria-hidden="true" />
-          {isTesting ? SLSKD_COPY.testBusy : SLSKD_COPY.testIdle}
+          {isTesting ? t("slskd.testBusy") : t("slskd.testIdle")}
         </button>
       </div>
 

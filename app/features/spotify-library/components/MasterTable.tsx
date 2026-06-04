@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { masterEmpty, masterScroll, table } from "../styles";
 
 import { MasterTableHeader } from "./MasterTableHeader";
@@ -7,6 +9,8 @@ import { MasterTableRow } from "./MasterTableRow";
 import type { MasterTableProps } from "./types";
 
 export function MasterTable({ items, isLoading, draft, hiddenOnMobile }: MasterTableProps) {
+  const { t } = useTranslation("library");
+
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) draft.setFocus(null);
   };
@@ -14,9 +18,9 @@ export function MasterTable({ items, isLoading, draft, hiddenOnMobile }: MasterT
   return (
     <div className={masterScroll({ hiddenOnMobile })} onClick={handleBackgroundClick}>
       {isLoading ? (
-        <div className={masterEmpty()}>Loading library…</div>
+        <div className={masterEmpty()}>{t("spotifyLibrary.table.loading")}</div>
       ) : items.length === 0 ? (
-        <div className={masterEmpty()}>No items match the current filter or search.</div>
+        <div className={masterEmpty()}>{t("spotifyLibrary.table.empty")}</div>
       ) : (
         <table className={table()}>
           <MasterTableHeader />

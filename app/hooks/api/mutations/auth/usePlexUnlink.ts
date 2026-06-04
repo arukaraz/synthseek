@@ -2,6 +2,8 @@
 
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function usePlexUnlink() {
@@ -10,10 +12,10 @@ export function usePlexUnlink() {
   return trpc.auth.unlinkPlex.useMutation({
     onSuccess: async () => {
       await utils.auth.me.invalidate();
-      toast.success("Plex account disconnected");
+      toast.success(i18n.t("mutations:auth.plexUnlinked"));
     },
     onError: (error) => {
-      toast.error(error.message || "Failed to disconnect Plex");
+      errorToast(error, "auth.plexUnlinkFailed");
     },
   });
 }

@@ -1,5 +1,5 @@
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
-import { toast } from "sonner";
 
 export function useLocalLogin() {
   const utils = trpc.useUtils();
@@ -9,7 +9,7 @@ export function useLocalLogin() {
       utils.auth.me.setData(undefined, user);
     },
     onError: (error) => {
-      toast.error(error.message || "Login failed");
+      errorToast(error, "auth.loginFailed");
     },
   });
 }

@@ -1,3 +1,5 @@
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
@@ -11,11 +13,11 @@ export function useDeletePlaylist() {
       utils.requests.getAll.setData(undefined, (old) => old?.filter((item) => item.id !== playlistId));
       return { previous };
     },
-    onError: (_err, _vars, context) => {
+    onError: (err, _vars, context) => {
       if (context?.previous) utils.requests.getAll.setData(undefined, context.previous);
-      toast.error("Failed to delete playlist");
+      errorToast(err, "requests.deletePlaylistFailed");
     },
-    onSuccess: () => toast.success("Playlist deleted"),
+    onSuccess: () => toast.success(i18n.t("mutations:requests.playlistDeleted")),
     onSettled: () => utils.requests.getAll.invalidate(),
   });
 }

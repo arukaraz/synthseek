@@ -1,5 +1,4 @@
-import { toast } from "sonner";
-
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateLibrarySubscription() {
@@ -8,6 +7,6 @@ export function useUpdateLibrarySubscription() {
     onSuccess: () => {
       utils.librarySource.subscription.get.invalidate();
     },
-    onError: (error) => toast.error(error.message || "Failed to update library watcher"),
+    onError: (error) => errorToast(error, "spotify.libraryWatcherFailed"),
   });
 }

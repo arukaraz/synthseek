@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink, Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
@@ -20,7 +21,7 @@ export function InfoTooltip({
   description,
   secondary,
   title,
-  triggerLabel = "More information",
+  triggerLabel,
   points,
   learnMore,
   side = "top",
@@ -28,6 +29,8 @@ export function InfoTooltip({
   className,
   trigger = "hover",
 }: InfoTooltipProps) {
+  const { t } = useTranslation("components");
+  const resolvedTriggerLabel = triggerLabel ?? t("infoTooltip.trigger");
   const content = (
     <div className={infoTooltipBody()}>
       {title ? <p className={infoTooltipTitle()}>{title}</p> : null}
@@ -50,7 +53,7 @@ export function InfoTooltip({
           <button
             type="button"
             className={infoTooltipTrigger({ className })}
-            aria-label={triggerLabel}
+            aria-label={resolvedTriggerLabel}
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
             onPointerUp={(e) => e.stopPropagation()}
@@ -83,7 +86,7 @@ export function InfoTooltip({
           <button
             type="button"
             className={infoTooltipTrigger({ className })}
-            aria-label={triggerLabel}
+            aria-label={resolvedTriggerLabel}
             onClick={(e) => e.preventDefault()}
           >
             <Info className="size-3.5" />

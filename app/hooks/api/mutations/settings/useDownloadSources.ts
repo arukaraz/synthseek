@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateDownloadSources() {
@@ -7,8 +9,8 @@ export function useUpdateDownloadSources() {
   return trpc.settings.updateDownloadSources.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Download sources updated");
+      toast.success(i18n.t("mutations:settings.downloadSourcesSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to update download sources"),
+    onError: (error) => errorToast(error, "settings.downloadSourcesFailed"),
   });
 }

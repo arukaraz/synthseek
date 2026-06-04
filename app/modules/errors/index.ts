@@ -1,9 +1,10 @@
 export { ErrorBoundaryProvider, useErrorBoundary } from "./ErrorBoundaryProvider";
-export { resolveFriendlyError, resolveFriendlyErrorById } from "./helpers";
-export { ERROR_REGISTRY } from "./registry";
+export { extractAppCode } from "./appCode";
+export type { AppErrorCode } from "./appCode";
+export { errorToast, errorToastDetailed, resolveFriendlyError, resolveFriendlyErrorById } from "./helpers";
+export { resolveByCode, resolveByMessage } from "./registry";
 export type {
   ErrorCategory,
-  ErrorEntry,
   ErrorMutationMeta,
   ErrorQueryMeta,
   ErrorSeverity,

@@ -1,5 +1,4 @@
-import { toast } from "sonner";
-
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useCreateApiKey() {
@@ -8,6 +7,6 @@ export function useCreateApiKey() {
     onSuccess: () => {
       utils.apiKeys.list.invalidate();
     },
-    onError: (error) => toast.error(error.message || "Failed to create API key"),
+    onError: (error) => errorToast(error, "apiKeys.createFailed"),
   });
 }

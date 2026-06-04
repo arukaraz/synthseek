@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { ProgressBar } from "@components/ui/ProgressBar";
 import { ACTIVE_STATUSES } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
@@ -9,6 +11,7 @@ import { sidebarItem } from "./styles";
 import type { RequestSidebarItemProps } from "./types";
 
 export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSidebarItemProps) {
+  const { t } = useTranslation("status");
   const statusConfig = REQUEST_STATUS_CONFIG[request.status];
   const isActive = ACTIVE_STATUSES.includes(request.status as (typeof ACTIVE_STATUSES)[number]);
   const typeLabel = getContentTypeLabel(request.contentType).toUpperCase();
@@ -35,7 +38,7 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
           </span>
           <span
             className={cn("h-1.5 w-1.5 shrink-0 rounded-full", statusConfig.glowColor)}
-            aria-label={statusConfig.label}
+            aria-label={t(`request.${request.status}.label`)}
           />
         </div>
         <span className="text-fg/40 shrink-0 font-mono text-xs">

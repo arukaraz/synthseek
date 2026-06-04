@@ -27,12 +27,12 @@ export function nextRovingIndex(current: number, count: number, key: RovingNavKe
   }
 }
 
-export function formatLastUsed(date: Date | null): string {
-  return date ? `last used ${formatRelativeTime(date)}` : "never used";
+export function lastUsedTime(date: Date | null): string | null {
+  return date ? formatRelativeTime(date) : null;
 }
 
-export function formatCreated(date: Date): string {
-  return `created ${formatTimestamp(date)}`;
+export function createdTime(date: Date): string {
+  return formatTimestamp(date);
 }
 
 function stripTrailingSlashes(url: string): string {

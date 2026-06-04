@@ -1,0 +1,136 @@
+{
+  "results": {
+    "emptyState": {
+      "start": {
+        "title": "Empieza a buscar",
+        "description": "Usa la barra de búsqueda de arriba para encontrar canciones, álbumes o artistas"
+      },
+      "noResults": {
+        "title": "No se encontraron resultados",
+        "description": "Prueba a buscar otra cosa"
+      }
+    },
+    "heading": "Resultados de búsqueda",
+    "count_one": "Se encontró {{count}} resultado para \"{{query}}\"",
+    "count_other": "Se encontraron {{count}} resultados para \"{{query}}\"",
+    "seeAll": "Ver todos los {{total}} {{label}}",
+    "filters": {
+      "all": "Todos",
+      "playlist": "Listas de reproducción",
+      "artist": "Artistas",
+      "album": "Álbumes",
+      "track": "Canciones"
+    }
+  },
+  "browser": {
+    "section": {
+      "albums": "Álbumes",
+      "tracks": "Canciones"
+    },
+    "dialogTitle": "{{title}} - {{section}}",
+    "dialogDescription": "Explora y solicita {{section}} de {{title}}",
+    "loading": "Cargando {{section}}...",
+    "empty": {
+      "title": "No se encontraron {{section}}",
+      "description": "Este {{type}} todavía no tiene {{section}}."
+    },
+    "back": "Atrás",
+    "artistBadge": "Artista",
+    "request": "Solicitar",
+    "requestTrack": "Solicitar canción",
+    "songCount_one": "{{count}} canción",
+    "songCount_other": "{{count}} canciones",
+    "trackCount_one": "{{count}} canción",
+    "trackCount_other": "{{count}} canciones",
+    "albumCount_one": "{{count}} álbum",
+    "albumCount_other": "{{count}} álbumes",
+    "followers_one": "{{value}} seguidor",
+    "followers_other": "{{value}} seguidores",
+    "unknownArtist": "Artista desconocido",
+    "unknown": "Desconocido"
+  },
+  "config": {
+    "dialogTitle": "Descargar {{type}} - {{name}}",
+    "dialogDescription": "Configura los ajustes de calidad de descarga para {{name}}",
+    "header": {
+      "trackCount_one": "{{count}} canción",
+      "trackCount_other": "{{count}} canciones"
+    },
+    "sections": {
+      "quality": "Ajustes de calidad",
+      "matching": "Modo de coincidencia",
+      "peer": "Preferencias de pares"
+    },
+    "fields": {
+      "quality": "Calidad",
+      "bitrate": "Tasa de bits",
+      "format": "Formato",
+      "bitrateMatching": "Coincidencia de tasa de bits",
+      "formatMatching": "Coincidencia de formato",
+      "minUploadSpeed": "Velocidad mínima de subida",
+      "availability": "Disponibilidad"
+    },
+    "options": {
+      "bitrate": {
+        "best": "La mejor",
+        "high": "Alta",
+        "good": "Buena",
+        "low": "Baja"
+      },
+      "matching": {
+        "strict": {
+          "label": "Estricta",
+          "description": "Se requiere coincidencia exacta"
+        },
+        "flexible": {
+          "label": "Flexible",
+          "description": "Mejor coincidencia disponible"
+        }
+      },
+      "qualityMode": {
+        "standard": {
+          "label": "Estándar",
+          "description": "Elige tasa de bits y formato"
+        },
+        "lossless": {
+          "label": "Sin pérdida",
+          "description": "Solo FLAC, coincidencia exacta"
+        }
+      },
+      "uploadSpeed": {
+        "any": {
+          "label": "Cualquiera",
+          "description": "Sin mínimo"
+        },
+        "kb100": {
+          "description": "Omitir lentos"
+        },
+        "kb500": {
+          "description": "Rápida"
+        },
+        "mb1": {
+          "description": "La más rápida"
+        }
+      },
+      "availability": {
+        "any": {
+          "label": "Cualquier par",
+          "description": "Encolar si está ocupado"
+        },
+        "free": {
+          "label": "Disponible ahora",
+          "description": "Solo espacio libre"
+        }
+      }
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "request": "Solicitar",
+      "requesting": "Solicitando, espera por favor..."
+    },
+    "errors": {
+      "invalidItem": "Elemento no válido",
+      "fetchFailed": "No se pudieron obtener las canciones de {{type}}"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
@@ -13,6 +14,7 @@ import { RecentRequestsSkeleton } from "./RecentRequestsSkeleton";
 import { RecentRequestsStrip } from "./RecentRequestsStrip";
 
 export function RecentRequests() {
+  const { t } = useTranslation("discover");
   const router = useRouter();
   const { recent, isLoading, isError, limit } = useRecentRequests();
 
@@ -23,10 +25,14 @@ export function RecentRequests() {
   const header = (
     <WidgetHeader
       icon={Download}
-      title="Recent requests"
-      subtitle={`Last ${limit} downloads`}
+      title={t("recentRequests.title")}
+      subtitle={t("recentRequests.subtitle", { count: limit })}
       titleId="recent-requests-heading"
-      action={{ label: "Open Requests", ariaLabel: "Open requests page", onClick: handleOpenRequests }}
+      action={{
+        label: t("recentRequests.open"),
+        ariaLabel: t("recentRequests.openAriaLabel"),
+        onClick: handleOpenRequests,
+      }}
     />
   );
 
@@ -45,8 +51,8 @@ export function RecentRequests() {
         {header}
         <EmptyState
           icon={AlertCircle}
-          title="Failed to load requests"
-          description="Unable to fetch recent requests. Please try again."
+          title={t("recentRequests.errorTitle")}
+          description={t("recentRequests.errorDescription")}
         />
       </section>
     );
@@ -58,8 +64,8 @@ export function RecentRequests() {
         {header}
         <EmptyState
           icon={Download}
-          title="No requests yet"
-          description="Start requesting music to see your recent downloads here."
+          title={t("recentRequests.emptyTitle")}
+          description={t("recentRequests.emptyDescription")}
         />
       </section>
     );

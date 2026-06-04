@@ -1,22 +1,25 @@
 "use client";
 
 import { Switch } from "@components/ui/Switch";
+import { useTranslation } from "react-i18next";
 
-import { libraryTypeLowerLabel } from "../helpers";
+import { libraryTypeLowerLabelKey } from "../helpers";
 import { cfgRow, cfgRowDesc, cfgRowLabel, detailSection, detailSectionTitle, detailSectionTitleLine } from "../styles";
 import type { DetailSyncConfigProps } from "./types";
 
 export function DetailSyncConfig({ itemType, syncEnabled, onToggle }: DetailSyncConfigProps) {
+  const { t } = useTranslation("library");
+
   return (
     <div className={detailSection()}>
       <h3 className={detailSectionTitle()}>
-        Sync configuration <span className={detailSectionTitleLine()} />
+        {t("spotifyLibrary.syncConfig.title")} <span className={detailSectionTitleLine()} />
       </h3>
       <div className={cfgRow()}>
         <div>
-          <div className={cfgRowLabel()}>Keep in sync</div>
+          <div className={cfgRowLabel()}>{t("spotifyLibrary.syncConfig.keepInSync")}</div>
           <div className={cfgRowDesc()}>
-            Mirror this {libraryTypeLowerLabel(itemType)}&apos;s tracklist into Synthseek when it changes
+            {t("spotifyLibrary.syncConfig.keepInSyncDesc", { type: t(libraryTypeLowerLabelKey(itemType)) })}
           </div>
         </div>
         <Switch checked={syncEnabled} onCheckedChange={onToggle} />

@@ -8,6 +8,7 @@ import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
 import { RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toolbarContainer } from "../styles";
 import { REQUESTS_URL_PARAMS } from "../../types";
 import { FilterSortMenu } from "./FilterSortMenu";
@@ -16,6 +17,7 @@ import { SearchInput } from "./SearchInput/SearchInput";
 import { ViewToggle } from "./ViewToggle";
 
 export function Toolbar() {
+  const { t } = useTranslation("requests");
   const { data: items } = useTrackRequests();
   const retryAllFailed = useRetryAllFailed();
   const [urlSearchQuery, setUrlSearchQuery] = useUrlParam("q", REQUESTS_URL_PARAMS.q);
@@ -70,11 +72,11 @@ export function Toolbar() {
                 "border-primary-500/30 bg-primary-500/10 text-primary-300",
                 "hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200"
               )}
-              aria-label="Retry all failed"
-              title="Retry all failed"
+              aria-label={t("toolbar.retryAllFailed.label")}
+              title={t("toolbar.retryAllFailed.label")}
             >
               <RefreshCw className="size-3.5" />
-              <span className="hidden sm:inline">Retry all failed</span>
+              <span className="hidden sm:inline">{t("toolbar.retryAllFailed.label")}</span>
             </Button>
           )}
           <ImportProviderMenu />
@@ -85,10 +87,14 @@ export function Toolbar() {
         isOpen={confirmRetryOpen}
         onClose={() => setConfirmRetryOpen(false)}
         onConfirm={handleRetryConfirm}
-        title="Retry All Failed"
-        message="This will retry all failed and partially completed downloads. Continue?"
+        title={t("toolbar.retryAllFailed.confirmTitle")}
+        message={t("toolbar.retryAllFailed.confirmMessage")}
         variant="warning"
-        confirmText={retryAllFailed.isPending ? "Retrying..." : "Retry All"}
+        confirmText={
+          retryAllFailed.isPending
+            ? t("toolbar.retryAllFailed.confirmPending")
+            : t("toolbar.retryAllFailed.confirmAction")
+        }
       />
     </>
   );

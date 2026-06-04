@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
@@ -9,7 +10,7 @@ import { SettingsField } from "@features/settings/components/SettingsField";
 import { SettingsTextInput } from "@features/settings/components/SettingsTextInput";
 import { useUpdateListenBrainz } from "@hooks/api/mutations/discovery/useUpdateListenBrainz";
 
-import { LB_PLAYLIST_KIND_OPTIONS } from "../constants";
+import { LB_PLAYLIST_KIND_LABEL_KEYS, LB_PLAYLIST_KINDS } from "../constants";
 import {
   autoRequestHelper,
   autoRequestLabel,
@@ -26,6 +27,7 @@ import {
 import type { LbPlaylistKind, ListenBrainzCardProps } from "../types";
 
 export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
+  const { t } = useTranslation("library");
   const update = useUpdateListenBrainz();
   const [enabled, setEnabled] = useState(config.enabled);
   const [username, setUsername] = useState(config.username ?? "");
@@ -65,28 +67,42 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
         <h3 className={subSectionTitle()}>
           <span className="inline-flex items-center gap-1.5">
             ListenBrainz
-            <InfoTooltip description="Recommendations and curated playlists from your ListenBrainz account. Only the public username is needed." />
+            <InfoTooltip description={t("discoveryIntegrations.listenbrainz.tooltip")} />
           </span>
         </h3>
-        <Switch checked={enabled} onCheckedChange={setEnabled} aria-label="Enable ListenBrainz" />
+        <Switch
+          checked={enabled}
+          onCheckedChange={setEnabled}
+          aria-label={t("discoveryIntegrations.listenbrainz.enableAria")}
+        />
       </header>
 
       <div className={disabledOverlay({ disabled: !enabled })}>
-        <SettingsField label="Username" helper="Your public ListenBrainz username (case-sensitive).">
-          <SettingsTextInput value={username} onChange={setUsername} placeholder="e.g. yourname" />
+        <SettingsField
+          label={t("discoveryIntegrations.listenbrainz.usernameLabel")}
+          helper={t("discoveryIntegrations.listenbrainz.usernameHelper")}
+        >
+          <SettingsTextInput
+            value={username}
+            onChange={setUsername}
+            placeholder={t("discoveryIntegrations.listenbrainz.usernamePlaceholder")}
+          />
         </SettingsField>
 
-        <SettingsField label="Playlists to fetch" helper={`${kinds.length} selected. Each generates a separate feed.`}>
+        <SettingsField
+          label={t("discoveryIntegrations.listenbrainz.playlistsLabel")}
+          helper={t("discoveryIntegrations.listenbrainz.playlistsHelper", { count: kinds.length })}
+        >
           <div className={playlistChipsGrid()}>
-            {LB_PLAYLIST_KIND_OPTIONS.map((opt) => (
+            {LB_PLAYLIST_KINDS.map((kind) => (
               <button
-                key={opt.value}
+                key={kind}
                 type="button"
-                className={playlistChip({ selected: kinds.includes(opt.value) })}
-                onClick={() => toggleKind(opt.value)}
-                title={opt.description}
+                className={playlistChip({ selected: kinds.includes(kind) })}
+                onClick={() => toggleKind(kind)}
+                title={t(LB_PLAYLIST_KIND_LABEL_KEYS[kind].description)}
               >
-                {opt.label}
+                {t(LB_PLAYLIST_KIND_LABEL_KEYS[kind].label)}
               </button>
             ))}
           </div>
@@ -94,12 +110,14 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
 
         <div className={autoRequestRow()}>
           <div className={autoRequestText()}>
-            <span className={autoRequestLabel()}>Auto-request as playlists</span>
-            <span className={autoRequestHelper()}>
-              When a feed refreshes, automatically request and import as a new playlist.
-            </span>
+            <span className={autoRequestLabel()}>{t("discoveryIntegrations.listenbrainz.autoRequestLabel")}</span>
+            <span className={autoRequestHelper()}>{t("discoveryIntegrations.listenbrainz.autoRequestHelper")}</span>
           </div>
-          <Switch checked={autoRequest} onCheckedChange={setAutoRequest} aria-label="Auto-request playlists" />
+          <Switch
+            checked={autoRequest}
+            onCheckedChange={setAutoRequest}
+            aria-label={t("discoveryIntegrations.listenbrainz.autoRequestAria")}
+          />
         </div>
       </div>
 

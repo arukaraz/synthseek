@@ -1,4 +1,6 @@
 import { FlatCompat } from "@eslint/eslintrc";
+import i18next from "eslint-plugin-i18next";
+import htmlEntities from "eslint-plugin-i18next/lib/options/htmlEntities.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -58,12 +60,44 @@ const customPlugin = {
   },
 };
 
+const brandNouns = [
+  "Synthseek",
+  "Plex",
+  "Spotify",
+  "Deezer",
+  "Slskd",
+  "Soulseek",
+  "Beets",
+  "Lidarr",
+  "AcoustID",
+  "MusicBrainz",
+  "ListenBrainz",
+  "FLAC",
+  "MP3",
+  "JSPF",
+  "MCP",
+  "OAuth",
+  "Last\\.fm",
+  "ynthseek",
+];
+
+const noLiteralStringOptions = {
+  mode: "jsx-only",
+  "jsx-attributes": {
+    include: ["placeholder", "title", "aria-label", "alt"],
+  },
+  words: {
+    exclude: ["[0-9!-/:-@[-`{-~]+", "[A-Z_-]+", htmlEntities, /^\p{Emoji}+$/u, ...brandNouns],
+  },
+};
+
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
 
   {
     plugins: {
       custom: customPlugin,
+      i18next,
     },
   },
   {
@@ -110,6 +144,14 @@ const eslintConfig = [
     files: ["cypress.config.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+
+  {
+    files: ["app/**/*.tsx"],
+    ignores: ["app/modules/i18n/**", "app/**/*.test.tsx", "app/**/__tests__/**", "app/**/styles.ts"],
+    rules: {
+      "i18next/no-literal-string": ["error", noLiteralStringOptions],
     },
   },
 

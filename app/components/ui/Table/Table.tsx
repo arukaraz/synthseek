@@ -1,7 +1,8 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { DEFAULT_EMPTY_MESSAGE, DEFAULT_STAGGER_DELAY } from "./consts";
+import { useTranslation } from "react-i18next";
+import { DEFAULT_STAGGER_DELAY } from "./consts";
 import { table, tableContainer, tableScroll } from "./styles";
 import { TableBody } from "./TableBody";
 import { TableHeader } from "./TableHeader";
@@ -15,12 +16,13 @@ export function DataTable<TData>({
   onSort,
   containerClassName,
   minWidth,
-  emptyMessage = DEFAULT_EMPTY_MESSAGE,
+  emptyMessage,
   rowAttrs,
   staggerDelay = DEFAULT_STAGGER_DELAY,
   onRowClick,
   isRowClickable,
 }: DataTableProps<TData>) {
+  const { t } = useTranslation("components");
   return (
     <div className={cn(tableContainer(), containerClassName)}>
       <div className={tableScroll()}>
@@ -30,7 +32,7 @@ export function DataTable<TData>({
             columns={columns}
             data={data}
             getRowId={getRowId}
-            emptyMessage={emptyMessage}
+            emptyMessage={emptyMessage ?? t("table.empty")}
             rowAttrs={rowAttrs}
             staggerDelay={staggerDelay}
             onRowClick={onRowClick}

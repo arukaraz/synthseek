@@ -7,6 +7,7 @@ import { staggerItem } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AUTO_ROTATE_INTERVAL } from "./constants";
 import { errorFrame, heroFrame } from "./styles";
 import { TrendingHeroNav } from "./TrendingHeroNav";
@@ -14,6 +15,7 @@ import { TrendingHeroSkeleton } from "./TrendingHeroSkeleton";
 import { TrendingHeroSlide } from "./TrendingHeroSlide";
 
 export function TrendingHero() {
+  const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useTrendingTracks();
   const tracks = useMemo(() => data?.data?.tracks ?? [], [data?.data?.tracks]);
 
@@ -60,8 +62,8 @@ export function TrendingHero() {
       <div className={errorFrame()}>
         <EmptyState
           icon={AlertCircle}
-          title="Failed to load trending tracks"
-          description="Unable to fetch trending content. Please try again later."
+          title={t("trendingHero.errorTitle")}
+          description={t("trendingHero.errorDescription")}
         />
       </div>
     );
@@ -87,7 +89,7 @@ export function TrendingHero() {
       onTouchEnd={swipeHandlers.onTouchEnd}
       tabIndex={0}
       role="region"
-      aria-label="Trending tracks hero"
+      aria-label={t("trendingHero.regionAriaLabel")}
     >
       <TrendingHeroSlide
         item={active}

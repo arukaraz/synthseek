@@ -2,11 +2,13 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RecentRequestCard } from "./RecentRequestCard";
 import { stripCard, stripEdgeBase, stripEdgeButton, stripFrame, stripScroller } from "./styles";
 import type { RecentRequestsStripProps } from "./types";
 
 export function RecentRequestsStrip({ items }: RecentRequestsStripProps) {
+  const { t } = useTranslation("discover");
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -56,7 +58,7 @@ export function RecentRequestsStrip({ items }: RecentRequestsStripProps) {
         <button
           type="button"
           onClick={() => scrollByOne("left")}
-          aria-label="Scroll to previous requests"
+          aria-label={t("recentRequests.scrollPrevAriaLabel")}
           disabled={!canScrollLeft}
           className={stripEdgeButton()}
         >
@@ -68,7 +70,7 @@ export function RecentRequestsStrip({ items }: RecentRequestsStripProps) {
         <button
           type="button"
           onClick={() => scrollByOne("right")}
-          aria-label="Scroll to next requests"
+          aria-label={t("recentRequests.scrollNextAriaLabel")}
           disabled={!canScrollRight}
           className={stripEdgeButton()}
         >

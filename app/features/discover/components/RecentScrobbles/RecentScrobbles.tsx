@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Activity } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
@@ -14,6 +15,7 @@ import { RecentScrobblesRail } from "./RecentScrobblesRail";
 import { RecentScrobblesSkeleton } from "./RecentScrobblesSkeleton";
 
 export function RecentScrobbles() {
+  const { t } = useTranslation("discover");
   const { lfmConfig, recentScrobbles, isLoading, isError } = useLastfmFeeds();
 
   if (isLoading) return <RecentScrobblesSkeleton />;
@@ -41,10 +43,15 @@ export function RecentScrobbles() {
     >
       <WidgetHeader
         icon={Activity}
-        title="Recent Scrobbles"
-        subtitle="Last.fm"
+        title={t("recentScrobbles.title")}
+        subtitle={t("recentScrobbles.subtitle")}
         titleId="recent-scrobbles-heading"
-        action={{ label: "See more", ariaLabel: "Open Last.fm profile", href: seeMoreHref, external: true }}
+        action={{
+          label: t("recentScrobbles.seeMore"),
+          ariaLabel: t("recentScrobbles.seeMoreAriaLabel"),
+          href: seeMoreHref,
+          external: true,
+        }}
       />
       <RecentScrobblesRail scrobbles={scrobbles} />
     </motion.section>

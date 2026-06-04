@@ -2,6 +2,7 @@
 
 import { Plus, Search, X } from "lucide-react";
 import { useMemo, useState, type KeyboardEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
@@ -22,15 +23,18 @@ import type { ListManagerProps } from "./types";
 export function ListManager({
   value,
   onChange,
-  addPlaceholder = "Add item...",
-  filterPlaceholder = "Filter...",
-  emptyLabel = "No items yet.",
-  countLabel = (n) => `${n} item${n === 1 ? "" : "s"}`,
+  addPlaceholder,
+  filterPlaceholder,
+  emptyLabel,
+  countLabel,
   helper,
   disabled,
 }: ListManagerProps) {
+  const { t } = useTranslation("settings");
   const [draft, setDraft] = useState("");
   const [filter, setFilter] = useState("");
+
+  const resolvedCountLabel = countLabel ?? ((n: number) => t("shell.listManager.count", { count: n }));
 
   const commitAdd = () => {
     const next = draft.trim();
@@ -55,7 +59,10 @@ export function ListManager({
     return value.filter((v) => v.toLowerCase().includes(needle));
   }, [value, filter]);
 
-  const countText = showFilter && filter ? `${filtered.length} of ${value.length}` : countLabel(value.length);
+  const countText =
+    showFilter && filter
+      ? t("shell.listManager.filteredCount", { shown: filtered.length, total: value.length })
+      : resolvedCountLabel(value.length);
 
   return (
     <div className="flex flex-col gap-2">
@@ -68,13 +75,13 @@ export function ListManager({
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={onAddKeyDown}
-          placeholder={addPlaceholder}
+          placeholder={addPlaceholder ?? t("shell.listManager.addPlaceholder")}
           disabled={disabled}
           size="sm"
         />
         <Button type="button" size="sm" variant="outline" onClick={commitAdd} disabled={disabled || !draft.trim()}>
           <Plus className="size-4" />
-          Add
+          {t("shell.listManager.add")}
         </Button>
       </div>
 
@@ -84,7 +91,7 @@ export function ListManager({
           <Input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder={filterPlaceholder}
+            placeholder={filterPlaceholder ?? t("shell.listManager.filterPlaceholder")}
             disabled={disabled}
             size="sm"
             className="pl-9"
@@ -94,9 +101,9 @@ export function ListManager({
 
       <div className={listManagerListWrap()}>
         {value.length === 0 ? (
-          <p className={listManagerEmpty()}>{emptyLabel}</p>
+          <p className={listManagerEmpty()}>{emptyLabel ?? t("shell.listManager.empty")}</p>
         ) : filtered.length === 0 ? (
-          <p className={listManagerEmpty()}>No matches for &ldquo;{filter}&rdquo;.</p>
+          <p className={listManagerEmpty()}>{t("shell.listManager.noMatches", { query: filter })}</p>
         ) : (
           filtered.map((item) => (
             <div key={item} className={listManagerRow()}>
@@ -105,7 +112,7 @@ export function ListManager({
                 type="button"
                 disabled={disabled}
                 onClick={() => remove(item)}
-                aria-label={`Remove ${item}`}
+                aria-label={t("shell.listManager.removeLabel", { item })}
                 className={listManagerRemove()}
               >
                 <X className="size-3.5" />

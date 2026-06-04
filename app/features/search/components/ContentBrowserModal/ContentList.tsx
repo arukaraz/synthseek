@@ -3,15 +3,18 @@
 import { ContentType } from "@api/__generated__/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { Disc3, Music } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { loadingSpinner } from "../styles";
 import { ContentListItem } from "./ContentListItem";
 import { EmptyState } from "@components/ui/EmptyState";
 import type { ContentListProps } from "./types";
 
 export function ContentList({ type, items, isLoading, onActionClick, onNavigate }: ContentListProps) {
+  const { t } = useTranslation("search");
   const isArtistView = type === ContentType.enum.artist;
 
-  const sectionTitle = isArtistView ? "Albums" : "Tracks";
+  const sectionTitle = isArtistView ? t("browser.section.albums") : t("browser.section.tracks");
+  const sectionLower = sectionTitle.toLowerCase();
   const isClickable = isArtistView;
 
   if (isLoading) {
@@ -19,7 +22,7 @@ export function ContentList({ type, items, isLoading, onActionClick, onNavigate 
       <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center gap-4">
           <div className={loadingSpinner()} />
-          <p className="text-fg/50 text-xs">Loading {sectionTitle.toLowerCase()}...</p>
+          <p className="text-fg/50 text-xs">{t("browser.loading", { section: sectionLower })}</p>
         </div>
       </div>
     );
@@ -31,8 +34,8 @@ export function ContentList({ type, items, isLoading, onActionClick, onNavigate 
       <div className="py-12">
         <EmptyState
           icon={emptyIcon}
-          title={`No ${sectionTitle.toLowerCase()} found`}
-          description={`This ${type} doesn't have any ${sectionTitle.toLowerCase()} yet.`}
+          title={t("browser.empty.title", { section: sectionLower })}
+          description={t("browser.empty.description", { type, section: sectionLower })}
         />
       </div>
     );

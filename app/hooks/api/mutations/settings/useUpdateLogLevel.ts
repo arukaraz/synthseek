@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateLogLevel() {
@@ -7,8 +9,8 @@ export function useUpdateLogLevel() {
   return trpc.settings.updateSystemLogLevel.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Log level updated");
+      toast.success(i18n.t("mutations:settings.logLevelSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to update log level"),
+    onError: (error) => errorToast(error, "settings.logLevelFailed"),
   });
 }

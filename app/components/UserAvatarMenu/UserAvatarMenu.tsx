@@ -14,15 +14,17 @@ import { isBreakingUpdate } from "@utils/version";
 import { motion } from "framer-motion";
 import { Loader2, LogOut, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import { MenuHeaderBlock } from "./components/MenuHeaderBlock";
 import { MenuUpdateSection } from "./components/MenuUpdateSection";
 import { TriggerAvatar } from "./components/TriggerAvatar";
-import { MENU_COPY, MENU_ROUTES } from "./constants";
+import { MENU_ROUTES } from "./constants";
 import { menuRoleLabel, menuRoleTone } from "./helpers";
 import { logoutItem, menuContent, navItem, triggerButton } from "./styles";
 
 export function UserAvatarMenu() {
+  const { t } = useTranslation("components");
   const { currentUser, isAdmin } = useAuthContext();
   const { updateAvailable, latestVersion, currentVersion } = useVersionState();
   const logout = useLogout();
@@ -50,7 +52,7 @@ export function UserAvatarMenu() {
           className={triggerButton()}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          aria-label="User menu"
+          aria-label={t("userMenu.trigger")}
         >
           <TriggerAvatar
             username={currentUser.username}
@@ -77,18 +79,18 @@ export function UserAvatarMenu() {
 
         <DropdownMenuItem className={navItem()} onSelect={() => router.push(MENU_ROUTES.settings)}>
           <SettingsIcon />
-          <span>{MENU_COPY.settings}</span>
+          <span>{t("userMenu.settings")}</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem className={navItem()} onSelect={() => router.push(MENU_ROUTES.profile)}>
           <User />
-          <span>{MENU_COPY.profile}</span>
+          <span>{t("userMenu.profile")}</span>
         </DropdownMenuItem>
 
         {isAdmin ? (
           <DropdownMenuItem className={navItem()} onSelect={() => router.push(MENU_ROUTES.members)}>
             <Users />
-            <span>{MENU_COPY.members}</span>
+            <span>{t("userMenu.members")}</span>
           </DropdownMenuItem>
         ) : null}
 
@@ -103,7 +105,7 @@ export function UserAvatarMenu() {
           }}
         >
           {logout.isPending ? <Loader2 className="animate-spin" /> : <LogOut />}
-          <span>{logout.isPending ? MENU_COPY.loggingOut : MENU_COPY.logout}</span>
+          <span>{logout.isPending ? t("userMenu.loggingOut") : t("userMenu.logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

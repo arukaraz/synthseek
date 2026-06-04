@@ -1,3 +1,5 @@
+import type { ParseKeys } from "i18next";
+
 export type ConnectionsEnrichment = {
   lastfmApiKey: string;
   fanartApiKey: string;
@@ -33,6 +35,8 @@ export type SlskdStatusTone = "success" | "danger" | "muted";
 export interface SlskdStatusBadgeProps {
   status: SlskdHealth;
   message?: string;
+  messageCode?: ParseKeys<"health">;
+  messageParams?: Record<string, string>;
 }
 
 export interface EnrichmentCardProps {

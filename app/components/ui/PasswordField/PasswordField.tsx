@@ -2,6 +2,7 @@
 
 import { Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { authEyeToggle, authFieldLabel, authInputControl, authInputIcon, authInputRow } from "../styles";
 import type { PasswordFieldProps } from "./types";
@@ -11,18 +12,19 @@ export function PasswordField({
   value,
   onChange,
   invalid = false,
-  label = "Password",
+  label,
   placeholder = "••••••••",
   autoComplete = "current-password",
   minLength,
   describedBy,
 }: PasswordFieldProps) {
+  const { t } = useTranslation("components");
   const [visible, setVisible] = useState(false);
 
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className={authFieldLabel()}>
-        {label}
+        {label ?? t("passwordField.label")}
       </label>
       <div className={authInputRow({ invalid })}>
         <Lock className={authInputIcon()} aria-hidden="true" />
@@ -42,7 +44,7 @@ export function PasswordField({
         <button
           type="button"
           onClick={() => setVisible((prev) => !prev)}
-          aria-label={visible ? "Hide password" : "Show password"}
+          aria-label={visible ? t("passwordField.hide") : t("passwordField.show")}
           aria-pressed={visible}
           className={authEyeToggle()}
         >

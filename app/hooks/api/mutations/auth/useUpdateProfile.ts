@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateProfile() {
@@ -8,8 +10,8 @@ export function useUpdateProfile() {
     onSuccess: (user) => {
       utils.auth.me.setData(undefined, user);
       utils.auth.me.invalidate();
-      toast.success("Profile updated");
+      toast.success(i18n.t("mutations:auth.profileUpdated"));
     },
-    onError: (error) => toast.error(error.message || "Failed to update profile"),
+    onError: (error) => errorToast(error, "auth.updateProfileFailed"),
   });
 }

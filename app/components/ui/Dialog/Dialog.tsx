@@ -5,6 +5,7 @@ import { gradientOverlay } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { X } from "lucide-react";
 import type { HTMLAttributes } from "react";
+import { useTranslation } from "react-i18next";
 import { closeButton } from "../styles";
 import type { DialogContentProps, DialogDescriptionProps, DialogOverlayProps, DialogTitleProps } from "./types";
 
@@ -27,6 +28,7 @@ export function DialogOverlay({ className, ref, ...props }: DialogOverlayProps) 
 }
 
 export function DialogContent({ className, children, ref, showClose = true, ...props }: DialogContentProps) {
+  const { t } = useTranslation("components");
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -48,7 +50,7 @@ export function DialogContent({ className, children, ref, showClose = true, ...p
         {showClose && (
           <DialogPrimitive.Close className={closeButton()}>
             <X className="relative size-4" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{t("dialog.close")}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>

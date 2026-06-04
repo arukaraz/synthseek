@@ -7,6 +7,7 @@ import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Grid3X3 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
@@ -17,6 +18,7 @@ import { getCardSize } from "./helpers";
 import { mosaicGrid, panelBody, emptyWrap } from "./styles";
 
 export function CategoriesGrid() {
+  const { t } = useTranslation("discover");
   const router = useRouter();
   const { data, isLoading, isError } = useCategories(CATEGORIES_LIMIT);
   const categories = data?.data?.items ?? [];
@@ -40,16 +42,20 @@ export function CategoriesGrid() {
         <div className={panelBody()}>
           <WidgetHeader
             icon={Grid3X3}
-            title="Genres"
-            subtitle="Explore music by category"
+            title={t("categories.grid.title")}
+            subtitle={t("categories.grid.subtitle")}
             titleId="genres-heading"
-            action={{ label: "See all", ariaLabel: "See all genres", onClick: handleSeeAll }}
+            action={{
+              label: t("categories.grid.seeAll"),
+              ariaLabel: t("categories.grid.seeAllAriaLabel"),
+              onClick: handleSeeAll,
+            }}
           />
           <div className={emptyWrap()}>
             <EmptyState
               icon={AlertCircle}
-              title="Failed to load genres"
-              description="Unable to fetch genres. Please try again later."
+              title={t("categories.grid.errorTitle")}
+              description={t("categories.grid.errorDescription")}
             />
           </div>
         </div>
@@ -64,13 +70,21 @@ export function CategoriesGrid() {
         <div className={panelBody()}>
           <WidgetHeader
             icon={Grid3X3}
-            title="Genres"
-            subtitle="Explore music by category"
+            title={t("categories.grid.title")}
+            subtitle={t("categories.grid.subtitle")}
             titleId="genres-heading"
-            action={{ label: "See all", ariaLabel: "See all genres", onClick: handleSeeAll }}
+            action={{
+              label: t("categories.grid.seeAll"),
+              ariaLabel: t("categories.grid.seeAllAriaLabel"),
+              onClick: handleSeeAll,
+            }}
           />
           <div className={emptyWrap()}>
-            <EmptyState icon={Grid3X3} title="No Genres" description="No browse categories available at this time." />
+            <EmptyState
+              icon={Grid3X3}
+              title={t("categories.grid.emptyTitle")}
+              description={t("categories.grid.emptyDescription")}
+            />
           </div>
         </div>
       </section>
@@ -90,10 +104,14 @@ export function CategoriesGrid() {
       <div className={panelBody()}>
         <WidgetHeader
           icon={Grid3X3}
-          title="Genres"
-          subtitle="Explore music by category"
+          title={t("categories.grid.title")}
+          subtitle={t("categories.grid.subtitle")}
           titleId="genres-heading"
-          action={{ label: "See all", ariaLabel: "See all genres", onClick: handleSeeAll }}
+          action={{
+            label: t("categories.grid.seeAll"),
+            ariaLabel: t("categories.grid.seeAllAriaLabel"),
+            onClick: handleSeeAll,
+          }}
         />
 
         <div className={mosaicGrid()}>

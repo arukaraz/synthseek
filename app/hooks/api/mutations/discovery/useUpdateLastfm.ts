@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateLastfm() {
@@ -7,8 +9,8 @@ export function useUpdateLastfm() {
   return trpc.discovery.updateLastfm.useMutation({
     onSuccess: () => {
       utils.discovery.getConfig.invalidate();
-      toast.success("Last.fm discovery settings saved");
+      toast.success(i18n.t("mutations:discovery.lastfmSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save Last.fm settings"),
+    onError: (error) => errorToast(error, "discovery.lastfmFailed"),
   });
 }

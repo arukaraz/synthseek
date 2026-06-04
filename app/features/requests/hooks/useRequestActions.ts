@@ -17,6 +17,7 @@ import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { downloadText } from "@utils/download";
 import { isProcessingStatus } from "@utils/status-helpers";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { exportFilename } from "../helpers";
@@ -41,10 +42,12 @@ interface UseRequestActions {
 }
 
 export function useRequestActions(request: RequestWithTracks): UseRequestActions {
+  const { t } = useTranslation("requests");
   const { currentUser } = useAuthContext();
   const canManage = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
   const isPlaylist = request.contentType === ContentType.enum.playlist;
   const label: "Album" | "Playlist" = isPlaylist ? "Playlist" : "Album";
+  const typeLabel = isPlaylist ? t("labels.playlist") : t("labels.album");
 
   const retryAlbum = useRetryAlbum();
   const retryPlaylist = useRetryPlaylist();
@@ -77,11 +80,11 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
 
   const remove = async () => {
     const confirmed = await confirm({
-      title: `Remove ${label} Request`,
-      message: `Remove "${request.name}" by ${request.artist}? This action cannot be undone.`,
+      title: t("confirm.removeTitle", { label: typeLabel }),
+      message: t("confirm.removeMessage", { name: request.name, artist: request.artist }),
       variant: "danger",
-      confirmText: `Remove ${label}`,
-      cancelText: "Keep",
+      confirmText: t("confirm.removeConfirm", { label: typeLabel }),
+      cancelText: t("confirm.removeKeep"),
     });
     if (!confirmed) return;
     if (isPlaylist) deletePlaylist.mutate({ playlistId: request.id });
@@ -90,11 +93,11 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
 
   const cancel = async () => {
     const confirmed = await confirm({
-      title: `Cancel ${label} Downloads`,
-      message: `Cancel all active downloads for "${request.name}" by ${request.artist}?`,
+      title: t("confirm.cancelDownloadsTitle", { label: typeLabel }),
+      message: t("confirm.cancelDownloadsMessage", { name: request.name, artist: request.artist }),
       variant: "danger",
-      confirmText: "Cancel Downloads",
-      cancelText: "Keep Downloading",
+      confirmText: t("confirm.cancelDownloadsConfirm"),
+      cancelText: t("confirm.cancelDownloadsKeep"),
     });
     if (!confirmed) return;
     if (isPlaylist) cancelPlaylist.mutate({ playlistId: request.id });
@@ -114,7 +117,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
       const doc = await exportCollection({ id: request.id, type: isPlaylist ? "playlist" : "album" });
       downloadText(exportFilename(request.name), JSON.stringify(doc, null, 2));
     } catch {
-      toast.error("Export failed");
+      toast.error(t("export.failed"));
     }
   };
 

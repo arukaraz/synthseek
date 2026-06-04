@@ -6,6 +6,7 @@ import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Crown, Music } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { TOP_LIMIT } from "./constants";
 import { LeaderboardHero } from "./LeaderboardHero";
 import { LeaderboardRows } from "./LeaderboardRows";
@@ -16,6 +17,7 @@ import { errorFrame, panelFrame, sectionHeaderLabel, sectionHeaderRow } from "./
 import type { LeaderboardEntry, LeaderboardMode } from "./types";
 
 export function LibraryLeaderboard() {
+  const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useLibrarySummary();
   const [mode, setMode] = useState<LeaderboardMode>("artists");
 
@@ -42,8 +44,8 @@ export function LibraryLeaderboard() {
       <div className={errorFrame()}>
         <EmptyState
           icon={AlertCircle}
-          title="Failed to load library"
-          description="Unable to fetch library statistics. Please try again."
+          title={t("leaderboard.errorTitle")}
+          description={t("leaderboard.errorDescription")}
         />
       </div>
     );
@@ -60,18 +62,18 @@ export function LibraryLeaderboard() {
   const maxCount = top?.count ?? 0;
 
   const emptyIcon = mode === "artists" ? Music : Crown;
-  const emptyTitle = mode === "artists" ? "No artists yet" : "No genres yet";
+  const emptyTitle = mode === "artists" ? t("leaderboard.emptyArtistsTitle") : t("leaderboard.emptyGenresTitle");
   const emptyDescription =
-    mode === "artists"
-      ? "Complete some downloads to see your top artists."
-      : "Genres are tracked on new downloads, they will populate as your library grows.";
+    mode === "artists" ? t("leaderboard.emptyArtistsDescription") : t("leaderboard.emptyGenresDescription");
 
   return (
     <motion.div variants={fadeIn} initial="hidden" animate="visible" className={panelFrame()}>
       <LibraryStatsRow summary={summary} />
 
       <div className={sectionHeaderRow()}>
-        <div className={sectionHeaderLabel()}>Top {mode}</div>
+        <div className={sectionHeaderLabel()}>
+          {mode === "artists" ? t("leaderboard.topArtists") : t("leaderboard.topGenres")}
+        </div>
         <LeaderboardTabs mode={mode} onChange={setMode} />
       </div>
 

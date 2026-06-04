@@ -8,6 +8,7 @@ import { isOwnerOrAdminFE } from "@utils/authorization";
 import { useCancelTrack, useRetryTrack } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { compareByStatus } from "../../helpers";
 import { TrackActionsCell } from "./TrackActionsCell";
 import { TrackStatusCell } from "./TrackStatusCell";
@@ -15,6 +16,7 @@ import { TrackTitleCell } from "./TrackTitleCell";
 import type { RequestDetailTracksProps } from "./types";
 
 export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
+  const { t } = useTranslation("requests");
   const { currentUser } = useAuthContext();
   const retryTrack = useRetryTrack();
   const cancelTrack = useCancelTrack();
@@ -23,48 +25,48 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
   const handleCancel = useCallback(
     async (track: TrackRequest) => {
       const confirmed = await confirm({
-        title: "Cancel Track",
-        message: `Cancel "${track.title}" by ${track.artist}?`,
+        title: t("confirm.cancelTrackTitle"),
+        message: t("confirm.cancelTrackMessage", { title: track.title, artist: track.artist }),
         variant: "danger",
-        confirmText: "Cancel",
-        cancelText: "Keep",
+        confirmText: t("confirm.cancelConfirm"),
+        cancelText: t("confirm.cancelKeep"),
       });
       if (confirmed) cancelTrack.mutate({ trackId: track.id });
     },
-    [cancelTrack]
+    [cancelTrack, t]
   );
 
   const columns = useMemo<ColumnDef<TrackRequest>[]>(
     () => [
       {
         key: "title",
-        header: "Track",
+        header: t("tracks.trackHeader"),
         cell: (track) => <TrackTitleCell track={track} />,
       },
       {
         key: "artist",
-        header: "Artist",
+        header: t("tracks.artistHeader"),
         cell: (track) => <span className="truncate">{track.artist}</span>,
         className: "hidden lg:table-cell",
       },
       {
         key: "status",
-        header: "Status",
+        header: t("tracks.statusHeader"),
         cell: (track) => <TrackStatusCell track={track} />,
       },
       {
         key: "completed",
-        header: "Completed",
+        header: t("tracks.completedHeader"),
         cell: (track) => (
           <span className="text-fg/40 text-xs">
-            {track.completed_at ? formatRelativeTime(new Date(track.completed_at)) : "—"}
+            {track.completed_at ? formatRelativeTime(new Date(track.completed_at)) : "-"}
           </span>
         ),
         className: "hidden md:table-cell",
       },
       {
         key: "actions",
-        header: "Actions",
+        header: t("tracks.actionsHeader"),
         cell: (track) => (
           <TrackActionsCell
             track={track}
@@ -76,7 +78,7 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
         className: "w-20 text-right",
       },
     ],
-    [canAct, retryTrack, handleCancel]
+    [canAct, retryTrack, handleCancel, t]
   );
 
   const sortedTracks = useMemo(
@@ -93,7 +95,7 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
       minWidth="480px"
       rowAttrs={(track) => ({ "data-status": track.status })}
       staggerDelay={0.01}
-      emptyMessage="No tracks"
+      emptyMessage={t("tracks.empty")}
     />
   );
 }

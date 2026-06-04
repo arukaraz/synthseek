@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { DataTable } from "@components/ui/Table";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -22,10 +23,10 @@ import { buildMemberColumns } from "./columns";
 import { sortMembers } from "./helpers";
 import { useMemberSelection } from "./hooks/useMemberSelection";
 import { useMemberSort } from "./hooks/useMemberSort";
-import { BULK_COPY, DELETE_USER_COPY, MEMBERS_COPY } from "./constants";
 import type { MemberListItem, RoleValue } from "./types";
 
 export function MembersSection() {
+  const { t } = useTranslation("settings");
   const { isAdmin, currentUser } = useAuthContext();
   const usersQuery = useUsers({ enabled: isAdmin });
   const { selected, toggle, selectAll, clear } = useMemberSelection();
@@ -54,14 +55,14 @@ export function MembersSection() {
   const handleDelete = useCallback(
     async (member: MemberListItem) => {
       const confirmed = await confirm({
-        title: DELETE_USER_COPY.title,
-        message: `Delete ${member.username}? ${DELETE_USER_COPY.message}`,
+        title: t("members.delete.title"),
+        message: t("members.delete.message", { username: member.username }),
         variant: "danger",
-        confirmText: DELETE_USER_COPY.confirm,
+        confirmText: t("members.delete.confirm"),
       });
       if (confirmed) deleteUser.mutate({ id: member.id });
     },
-    [deleteUser]
+    [deleteUser, t]
   );
 
   const handleBulkRole = useCallback(
@@ -75,17 +76,18 @@ export function MembersSection() {
   const handleBulkDelete = useCallback(async () => {
     if (selectedIds.length === 0) return;
     const confirmed = await confirm({
-      title: BULK_COPY.deleteTitle,
-      message: BULK_COPY.deleteMessage,
+      title: t("members.bulk.deleteTitle"),
+      message: t("members.bulk.deleteMessage"),
       variant: "danger",
-      confirmText: DELETE_USER_COPY.confirm,
+      confirmText: t("members.delete.confirm"),
     });
     if (confirmed) bulkDelete.mutate({ ids: selectedIds }, { onSuccess: clear });
-  }, [bulkDelete, clear, selectedIds]);
+  }, [bulkDelete, clear, selectedIds, t]);
 
   const columns = useMemo(
     () =>
       buildMemberColumns({
+        t,
         currentUserId: currentUser?.id,
         selectedIds: selected,
         allSelected,
@@ -95,16 +97,16 @@ export function MembersSection() {
         onEdit: setEditMember,
         onDelete: handleDelete,
       }),
-    [currentUser?.id, selected, allSelected, someSelected, toggle, toggleAll, handleDelete]
+    [t, currentUser?.id, selected, allSelected, someSelected, toggle, toggleAll, handleDelete]
   );
 
   if (!isAdmin) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title={MEMBERS_COPY.pageTitle} />
-        <SettingsCard title={MEMBERS_COPY.cardTitle}>
+        <SettingsPageHeader title={t("members.pageTitle")} />
+        <SettingsCard title={t("members.cardTitle")}>
           <div className={emptyPanel()}>
-            <span className="text-fg/60 text-sm">{MEMBERS_COPY.adminOnly}</span>
+            <span className="text-fg/60 text-sm">{t("members.adminOnly")}</span>
           </div>
         </SettingsCard>
       </div>
@@ -113,10 +115,10 @@ export function MembersSection() {
 
   return (
     <div className={contentRoot()}>
-      <SettingsPageHeader title={MEMBERS_COPY.pageTitle} />
+      <SettingsPageHeader title={t("members.pageTitle")} />
       <SettingsCard
-        title={MEMBERS_COPY.cardTitle}
-        description={MEMBERS_COPY.cardDescription}
+        title={t("members.cardTitle")}
+        description={t("members.cardDescription")}
         trailing={<MembersToolbar onCreate={() => setCreateOpen(true)} onImport={() => setImportOpen(true)} />}
       >
         {selectedIds.length > 0 ? (
@@ -131,15 +133,17 @@ export function MembersSection() {
 
         {usersQuery.isLoading ? (
           <div className={emptyPanel()}>
-            <span className="text-fg/60 text-sm">{MEMBERS_COPY.loading}</span>
+            <span className="text-fg/60 text-sm">{t("members.loading")}</span>
           </div>
         ) : usersQuery.error ? (
           <div className={emptyPanel()}>
-            <span className="text-sm text-red-400">Failed to load members: {usersQuery.error.message}</span>
+            <span className="text-sm text-red-400">
+              {t("members.loadError", { message: usersQuery.error.message })}
+            </span>
           </div>
         ) : rows.length === 0 ? (
           <div className={emptyPanel()}>
-            <span className="text-fg/60 text-sm">{MEMBERS_COPY.empty}</span>
+            <span className="text-fg/60 text-sm">{t("members.empty")}</span>
           </div>
         ) : (
           <DataTable

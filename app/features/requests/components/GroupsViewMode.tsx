@@ -6,12 +6,14 @@ import { useDebounce } from "@hooks/ui/useDebounce";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { RequestDetail } from "./RequestDetail/RequestDetail";
 import { RequestSidebar } from "./RequestSidebar/RequestSidebar";
 import { useFilteredRequests } from "../hooks/useFilteredRequests";
 import { REQUESTS_URL_PARAMS } from "../types";
 
 export function GroupsViewMode() {
+  const { t } = useTranslation("requests");
   const { data: items, isLoading } = useTrackRequests();
   const { values, set } = useUrlParams(REQUESTS_URL_PARAMS);
 
@@ -41,7 +43,7 @@ export function GroupsViewMode() {
   };
 
   if (isLoading) {
-    return <SectionLoading message="Loading requests..." />;
+    return <SectionLoading message={t("loading.requests")} />;
   }
 
   return (

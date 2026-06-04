@@ -1,15 +1,25 @@
+import type { TFunction } from "i18next";
+
 import { Role } from "@api/__generated__/types";
 import type { RoleTone } from "@components/ui/RoleChip";
+import i18n from "@locale";
 
-import type { MemberListItem, MemberSort } from "./types";
+import type { MemberListItem, MemberSort, RoleOption } from "./types";
 
 export function formatJoinedDate(date: Date): string {
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  return date.toLocaleDateString(i18n.language, { year: "numeric", month: "long", day: "numeric" });
 }
 
 export function roleLabel(member: MemberListItem): string {
-  if (member.isOwner) return "Owner";
-  return member.role === Role.enum.admin ? "Admin" : "User";
+  if (member.isOwner) return i18n.t("settings:members.role.owner");
+  return member.role === Role.enum.admin ? i18n.t("settings:members.role.admin") : i18n.t("settings:members.role.user");
+}
+
+export function buildRoleOptions(t: TFunction<"settings">): RoleOption[] {
+  return [
+    { value: Role.enum.member, label: t("members.roleOptions.user") },
+    { value: Role.enum.admin, label: t("members.roleOptions.admin") },
+  ];
 }
 
 export function roleTone(member: MemberListItem): RoleTone {

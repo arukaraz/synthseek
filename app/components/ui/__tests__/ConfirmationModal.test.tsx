@@ -3,7 +3,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { ConfirmationModal } from "../ConfirmationModal";
-import { DEFAULT_CANCEL_TEXT, DEFAULT_CONFIRM_TEXT } from "../ConfirmationModal/constants";
+
+const DEFAULT_CONFIRM_TEXT = "Confirm";
+const DEFAULT_CANCEL_TEXT = "Cancel";
 
 const baseProps = {
   onClose: vi.fn(),

@@ -1,0 +1,87 @@
+{
+  "shell": {
+    "eyebrow": "First-run setup",
+    "loading": "Loading setup",
+    "progress": "Step {{current}} of {{total}}",
+    "back": "Back"
+  },
+  "actions": {
+    "continue": "Continue",
+    "skip": "Skip",
+    "saving": "Saving..."
+  },
+  "admin": {
+    "title": "Create your admin account",
+    "description": "This is the first account on this Synthseek install. You can invite others later.",
+    "creating": "Creating admin...",
+    "submit": "Create admin",
+    "createError": "Could not create the admin account. Please try again.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@domain.com",
+    "emailError": "Enter a valid email address.",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "admin",
+    "usernameHint": "Min 3 characters",
+    "usernameError": "Use between 3 and 32 characters.",
+    "passwordHint": "At least 8 characters",
+    "passwordError": "Use at least 8 characters."
+  },
+  "slskd": {
+    "title": "Connect to slskd",
+    "description": "Synthseek talks to the Soulseek network through your slskd daemon. This step is required.",
+    "apiUrlLabel": "API URL",
+    "apiUrlPlaceholder": "http://localhost:5030",
+    "apiKeyLabel": "API Key",
+    "testIdle": "Test connection",
+    "testBusy": "Testing...",
+    "passed": "Connection verified.",
+    "failed": "Could not reach slskd. Check the URL and API key.",
+    "failedReason": "Connection failed: {{reason}}",
+    "overrideLink": "Continue without a verified connection",
+    "overrideArmed": "Continuing without a verified connection. You can fix this later in Settings.",
+    "saveFailed": "Could not save the slskd connection. Confirm the URL and API key, then try again.",
+    "blockedHint": "Test the connection before continuing"
+  },
+  "plex": {
+    "title": "Connect Plex (optional)",
+    "description": "Lets Synthseek scan your library after each import and mirror playlists. You can do this later from Settings.",
+    "blockedHint": "Connect Plex or skip this step to continue",
+    "intro": "A popup will open for you to sign in to plex.tv.",
+    "connect": "Login with <0>Plex</0>",
+    "connecting": "Waiting for Plex...",
+    "saving": "Saving...",
+    "connected": "Plex connected. Continue to the next step.",
+    "noServers": "No Plex servers were found on this account. You can skip and add one later.",
+    "timeout": "Plex sign-in timed out. Try again, or skip and connect Plex later from Settings.",
+    "popupUnfinished": "Plex sign-in did not finish. Reopen the popup and approve access, or skip this step.",
+    "serverPickerIntro": "Pick the Plex server Synthseek should target:",
+    "serverLocal": "local",
+    "serverRemote": "remote"
+  },
+  "enrichment": {
+    "title": "Metadata enrichment (optional)",
+    "description": "Improves how Synthseek labels, scores, and recommends tracks. All keys are optional but recommended.",
+    "saveFailed": "Could not save your settings. Check the details and try again.",
+    "lastfmLabel": "Last.fm API key",
+    "lastfmHint": "System-wide Last.fm API key. Shared across all users.",
+    "fanartLabel": "FanART API key",
+    "fanartHint": "Artwork sourcing.",
+    "songlinkLabel": "Songlink API key",
+    "songlinkHint": "Resolves track URLs across platforms for cross-platform playlist imports. Synthseek uses the public endpoint by default. Leave blank unless you have a key.",
+    "acoustidLabel": "AcoustID API key",
+    "acoustidHint": "Audio fingerprinting fallback for tracks without reliable tag metadata.",
+    "musicbrainzLabel": "MusicBrainz contact email",
+    "musicbrainzPlaceholder": "you@example.com",
+    "musicbrainzHint": "Required. Without it, Synthseek shares rate-limited email."
+  },
+  "done": {
+    "title": "You're all set",
+    "description": "Synthseek is ready to go. You can adjust everything later under Settings.",
+    "cardHeading": "Setup complete",
+    "cardBody": "Slskd is wired up. Plex and metadata enrichment can be added or edited any time.",
+    "primaryRest": "Go to dashboard",
+    "primaryBusy": "Finishing...",
+    "primaryRetry": "Retry",
+    "failed": "Could not finish setup. Please try again."
+  }
+}

@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { RAIL_SCROLL_STEP } from "./constants";
 import { RecentScrobbleNode } from "./RecentScrobbleNode";
@@ -9,6 +10,7 @@ import { axisLine, rail, railEdge, railEdgeButton, railWrap } from "./styles";
 import type { RecentScrobblesRailProps } from "./types";
 
 export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
+  const { t } = useTranslation("discover");
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -56,7 +58,7 @@ export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
           type="button"
           onClick={() => scrollByPage("left")}
           className={railEdgeButton()}
-          aria-label="Scroll left"
+          aria-label={t("recentScrobbles.scrollLeftAriaLabel")}
         >
           <ChevronLeft className="size-4" />
         </button>
@@ -66,7 +68,7 @@ export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
           type="button"
           onClick={() => scrollByPage("right")}
           className={railEdgeButton()}
-          aria-label="Scroll right"
+          aria-label={t("recentScrobbles.scrollRightAriaLabel")}
         >
           <ChevronRight className="size-4" />
         </button>

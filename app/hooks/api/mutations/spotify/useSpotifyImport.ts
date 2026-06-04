@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useSpotifyRunSyncNow() {
@@ -8,21 +10,21 @@ export function useSpotifyRunSyncNow() {
     onSuccess: (summary) => {
       const total = summary.newPlaylists + summary.updatedPlaylists + summary.newSavedAlbums;
       if (total > 0) {
-        toast.success(`Sync complete: ${total} change${total === 1 ? "" : "s"}`, {
-          description: [
-            summary.newPlaylists && `${summary.newPlaylists} new playlist${summary.newPlaylists === 1 ? "" : "s"}`,
-            summary.updatedPlaylists && `${summary.updatedPlaylists} updated`,
-            summary.newSavedAlbums && `${summary.newSavedAlbums} saved album${summary.newSavedAlbums === 1 ? "" : "s"}`,
-          ]
-            .filter(Boolean)
-            .join(" · "),
-        });
+        const description = [
+          summary.newPlaylists && i18n.t("mutations:spotify.syncNewPlaylists", { count: summary.newPlaylists }),
+          summary.updatedPlaylists &&
+            i18n.t("mutations:spotify.syncUpdatedPlaylists", { count: summary.updatedPlaylists }),
+          summary.newSavedAlbums && i18n.t("mutations:spotify.syncSavedAlbums", { count: summary.newSavedAlbums }),
+        ]
+          .filter(Boolean)
+          .join(" · ");
+        toast.success(i18n.t("mutations:spotify.syncComplete", { count: total }), { description });
         utils.requests.invalidate();
       } else {
-        toast.info("Library is up to date");
+        toast.info(i18n.t("mutations:spotify.libraryUpToDate"));
       }
     },
-    onError: (error) => toast.error(error.message || "Sync failed"),
+    onError: (error) => errorToast(error, "spotify.syncFailed"),
   });
 }
 
@@ -31,17 +33,17 @@ export function useSpotifySyncPlaylistNow() {
   return trpc.librarySource.spotify.syncPlaylistNow.useMutation({
     onSuccess: (result) => {
       if (result.status === "synced") {
-        toast.success("Playlist sync queued new tracks");
+        toast.success(i18n.t("mutations:spotify.playlistSyncQueued"));
         utils.requests.invalidate();
       } else if (result.status === "no_change") {
-        toast.info("Playlist is already up to date");
+        toast.info(i18n.t("mutations:spotify.playlistUpToDate"));
       } else if (result.status === "not_synced_provider") {
-        toast.error("Playlist isn't linked to a Spotify source");
+        toast.error(i18n.t("mutations:spotify.playlistNotLinked"));
       } else {
-        toast.error("Playlist not found");
+        toast.error(i18n.t("mutations:spotify.playlistNotFound"));
       }
     },
-    onError: (error) => toast.error(error.message || "Sync failed"),
+    onError: (error) => errorToast(error, "spotify.syncFailed"),
   });
 }
 
@@ -50,16 +52,18 @@ export function useSpotifyProbeProfile() {
   return trpc.librarySource.spotify.probeProfile.useMutation({
     onSuccess: (result) => {
       if (result.status === "ok") {
-        toast.success("Spotify is ready", {
-          description: `Connected as ${result.externalUsername ?? result.externalUserId ?? "Spotify user"}.`,
+        const username =
+          result.externalUsername ?? result.externalUserId ?? i18n.t("mutations:spotify.readyFallbackUser");
+        toast.success(i18n.t("mutations:spotify.ready"), {
+          description: i18n.t("mutations:spotify.readyDescription", { username }),
         });
       } else if (result.status === "still_restricted") {
-        toast.warning("Spotify restricted", {
-          description: "Try again in a few minutes.",
+        toast.warning(i18n.t("mutations:spotify.restricted"), {
+          description: i18n.t("mutations:spotify.restrictedDescription"),
           duration: 8000,
         });
       } else {
-        toast.error("No Spotify connection found");
+        toast.error(i18n.t("mutations:spotify.noConnection"));
       }
       utils.librarySource.spotify.getConnectionStatus.invalidate();
     },

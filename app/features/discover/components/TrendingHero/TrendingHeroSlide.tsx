@@ -8,6 +8,7 @@ import { fadeIn } from "@utils/animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { Download, Zap } from "lucide-react";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   heroCanvas,
   heroContent,
@@ -20,10 +21,11 @@ import {
 import type { TrendingHeroSlideProps } from "./types";
 
 export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
+  const { t } = useTranslation("discover");
   const [showModal, setShowModal] = useState(false);
   const track = item.track;
-  const trackName = track.title ?? "Unknown Track";
-  const artistName = track.artists?.[0]?.name ?? track.artist ?? "Unknown Artist";
+  const trackName = track.title ?? t("trendingHero.unknownTrack");
+  const artistName = track.artists?.[0]?.name ?? track.artist ?? t("trendingHero.unknownArtist");
   const imageUrl = track.images?.[0]?.url ?? null;
 
   const handleRequest = useCallback((event: React.MouseEvent) => {
@@ -45,7 +47,7 @@ export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
           >
             <ImageWithFallback
               src={imageUrl}
-              alt={`${trackName} by ${artistName}`}
+              alt={t("trendingHero.coverAlt", { title: trackName, artist: artistName })}
               fill
               sizes="(max-width: 768px) 100vw, 60vw"
               className="rounded-2xl object-cover"
@@ -57,7 +59,7 @@ export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
         </AnimatePresence>
 
         <div className={heroTrendingBadge()}>
-          <Zap className="h-3 w-3" /> Trending now
+          <Zap className="h-3 w-3" /> {t("trendingHero.badge")}
         </div>
 
         <AnimatePresence mode="wait">
@@ -77,10 +79,10 @@ export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleRequest}
-              aria-label={`Request ${trackName}`}
+              aria-label={t("trendingHero.requestAriaLabel", { title: trackName })}
             >
               <Download className="h-3.5 w-3.5" />
-              Request
+              {t("trendingHero.request")}
             </motion.button>
           </motion.div>
         </AnimatePresence>

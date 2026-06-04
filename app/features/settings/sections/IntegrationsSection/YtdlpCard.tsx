@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { Switch } from "@components/ui/Switch";
 
 import { useUpdateDownloadSources } from "@hooks/api/mutations/settings/useDownloadSources";
@@ -11,25 +13,22 @@ import { useSettingsForm } from "../../hooks/useSettingsForm";
 import type { YtdlpCardProps } from "./types";
 
 export function YtdlpCard({ initial }: YtdlpCardProps) {
+  const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.ytdlp);
 
   if (!draft) return null;
 
   return (
-    <SettingsCard
-      title="yt-dlp"
-      optional
-      description="Fallback source used when slskd cannot deliver a track. Format and quality follow each request's own config."
-    >
+    <SettingsCard title={t("ytdlp.title")} optional description={t("ytdlp.description")}>
       <EngineRow
-        label="Enable"
-        description="When on, tracks that fail on higher-priority sources are retried via yt-dlp within the same job."
+        label={t("ytdlp.enable.label")}
+        description={t("ytdlp.enable.description")}
         control={
           <Switch
             checked={draft.enabled}
             onCheckedChange={(v) => setField("enabled", v)}
-            aria-label="Enable yt-dlp fallback"
+            aria-label={t("ytdlp.enable.ariaLabel")}
           />
         }
       />
@@ -51,22 +50,22 @@ export function YtdlpCard({ initial }: YtdlpCardProps) {
       */}
 
       <EngineRow
-        label="Search results"
-        description="How many YouTube candidates to fetch per track before scoring by duration and title."
+        label={t("ytdlp.searchResults.label")}
+        description={t("ytdlp.searchResults.description")}
         control={
           <SettingsNumberInput
             value={draft.searchResults}
             onChange={(v) => setField("searchResults", v)}
             min={1}
             max={20}
-            ariaLabel="Search results"
+            ariaLabel={t("ytdlp.searchResults.ariaLabel")}
           />
         }
       />
 
       <EngineRow
-        label="Max duration delta"
-        description="Reject candidates whose length differs from the expected track by more than this many seconds."
+        label={t("ytdlp.maxDurationDelta.label")}
+        description={t("ytdlp.maxDurationDelta.description")}
         control={
           <SettingsNumberInput
             value={draft.maxDurationDeltaSec}
@@ -74,7 +73,7 @@ export function YtdlpCard({ initial }: YtdlpCardProps) {
             min={0}
             max={120}
             suffix="s"
-            ariaLabel="Max duration delta seconds"
+            ariaLabel={t("ytdlp.maxDurationDelta.ariaLabel")}
           />
         }
       />

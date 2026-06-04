@@ -3,6 +3,7 @@
 import { useGetContents } from "@hooks/api/queries/useGetContents";
 import { ContentType, type MusicItem, type MusicPlaylistTrack } from "@api/__generated__/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { ContentMetadata } from "../types";
 
 interface UseContentBrowserProps {
@@ -12,6 +13,7 @@ interface UseContentBrowserProps {
 }
 
 export function useContentBrowser({ initialType, initialData, preloadedItems }: UseContentBrowserProps) {
+  const { t } = useTranslation("search");
   const [navigationStack, setNavigationStack] = useState<
     Array<{
       type: ContentType;
@@ -63,19 +65,19 @@ export function useContentBrowser({ initialType, initialData, preloadedItems }: 
       case ContentType.enum.album: {
         const releaseYear = currentData.release_date?.split("-")[0];
         const artistNames =
-          currentData.artists?.map((a) => a.name).join(", ") || currentData.artist || "Unknown Artist";
+          currentData.artists?.map((a) => a.name).join(", ") || currentData.artist || t("browser.unknownArtist");
         const trackCount = currentData.total_tracks || items.length || 0;
         return {
           title: currentData.name,
           subtitle: artistNames,
-          metadata: [releaseYear, `${trackCount} tracks`].filter(Boolean).join(" • "),
+          metadata: [releaseYear, t("browser.trackCount", { count: trackCount })].filter(Boolean).join(" • "),
           thumbnail: currentData.images?.[0]?.url || "",
           showRequestButton: true,
         };
       }
 
       case ContentType.enum.track: {
-        const artistNames = currentData.artists?.[0]?.name || currentData.artist || "Unknown Artist";
+        const artistNames = currentData.artists?.[0]?.name || currentData.artist || t("browser.unknownArtist");
         return {
           title: currentData.title,
           subtitle: artistNames,
@@ -87,14 +89,17 @@ export function useContentBrowser({ initialType, initialData, preloadedItems }: 
 
       case ContentType.enum.artist: {
         const genres = currentData.genres?.slice(0, 2).join(", ") || "";
-        const followersText = currentData.followers ? `${currentData.followers.toLocaleString()} followers` : "";
+        const followersText = currentData.followers
+          ? t("browser.followers", {
+              count: currentData.followers,
+              value: currentData.followers.toLocaleString(),
+            })
+          : "";
         const albumCount = items.length || 0;
         return {
           title: currentData.name,
-          subtitle: genres || "Artist",
-          metadata: [followersText, `${albumCount} ${albumCount === 1 ? "album" : "albums"}`]
-            .filter(Boolean)
-            .join(" • "),
+          subtitle: genres || t("browser.artistBadge"),
+          metadata: [followersText, t("browser.albumCount", { count: albumCount })].filter(Boolean).join(" • "),
           thumbnail: currentData.images?.[0]?.url || "",
           showRequestButton: false,
           albumCount,
@@ -104,8 +109,8 @@ export function useContentBrowser({ initialType, initialData, preloadedItems }: 
       case ContentType.enum.playlist: {
         return {
           title: currentData.name,
-          subtitle: currentData.owner?.name || "Unknown",
-          metadata: `${currentData.total_tracks} tracks`,
+          subtitle: currentData.owner?.name || t("browser.unknown"),
+          metadata: t("browser.trackCount", { count: currentData.total_tracks }),
           thumbnail: currentData.images?.[0]?.url || "",
           showRequestButton: true,
         };
@@ -122,7 +127,7 @@ export function useContentBrowser({ initialType, initialData, preloadedItems }: 
           albumCount: 0,
         };
     }
-  }, [currentData, items.length]);
+  }, [currentData, items.length, t]);
 
   const handleRowClick = useCallback(
     (item: MusicItem) => {

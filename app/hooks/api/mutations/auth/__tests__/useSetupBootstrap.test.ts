@@ -19,7 +19,7 @@ const spies = vi.hoisted(() => {
     meSetData: vi.fn(),
     setupRequiredSetData: vi.fn(),
     setupRequiredInvalidate: vi.fn(),
-    toastError: vi.fn(),
+    errorToast: vi.fn(),
     captured,
   };
 });
@@ -43,8 +43,8 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-vi.mock("sonner", () => ({
-  toast: { error: spies.toastError },
+vi.mock("@modules/errors", () => ({
+  errorToast: spies.errorToast,
 }));
 
 const buildUser = (): PublicUser => ({
@@ -74,19 +74,21 @@ describe("useSetupBootstrap", () => {
     expect(spies.setupRequiredSetData).not.toHaveBeenCalled();
   });
 
-  it("on error surfaces the error message via toast", () => {
+  it("on error delegates to errorToast with the error and the setup fallback key", () => {
     renderHook(() => useSetupBootstrap());
 
-    spies.captured.options?.onError?.({ message: "Username taken" });
+    const error = { message: "Username taken" };
+    spies.captured.options?.onError?.(error);
 
-    expect(spies.toastError).toHaveBeenCalledWith("Username taken");
+    expect(spies.errorToast).toHaveBeenCalledWith(error, "auth.setupFailed");
   });
 
-  it("on error falls back to a default message when none is provided", () => {
+  it("on error still delegates to errorToast when no message is provided", () => {
     renderHook(() => useSetupBootstrap());
 
-    spies.captured.options?.onError?.({ message: undefined });
+    const error = { message: undefined };
+    spies.captured.options?.onError?.(error);
 
-    expect(spies.toastError).toHaveBeenCalledWith("Setup failed");
+    expect(spies.errorToast).toHaveBeenCalledWith(error, "auth.setupFailed");
   });
 });

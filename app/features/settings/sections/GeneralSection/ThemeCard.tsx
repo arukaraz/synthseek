@@ -2,13 +2,14 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { SettingsCard } from "../../components/SettingsCard";
-import { THEME_CARD } from "./constants";
 import { isThemeValue } from "./helpers";
 import { ThemeSelector } from "./ThemeSelector";
 
 export function ThemeCard() {
+  const { t } = useTranslation("settings");
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -19,8 +20,8 @@ export function ThemeCard() {
   const selected = mounted && isThemeValue(theme) ? theme : undefined;
 
   return (
-    <SettingsCard title={THEME_CARD.title} description={THEME_CARD.description}>
-      <ThemeSelector value={selected} onSelect={setTheme} ariaLabel={THEME_CARD.groupLabel} />
+    <SettingsCard title={t("general.theme.title")} description={t("general.theme.description")}>
+      <ThemeSelector value={selected} onSelect={setTheme} ariaLabel={t("general.theme.groupLabel")} />
     </SettingsCard>
   );
 }

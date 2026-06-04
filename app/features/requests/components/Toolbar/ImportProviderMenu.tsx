@@ -14,6 +14,7 @@ import { primaryGradientButton } from "@theme/utilities/styles";
 import { motion } from "framer-motion";
 import { FileJson, Library } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   importProviderFileChip,
@@ -23,6 +24,7 @@ import {
 } from "./styles";
 
 export function ImportProviderMenu() {
+  const { t } = useTranslation("requests");
   const [spotifyOpen, setSpotifyOpen] = useState(false);
   const [jspfOpen, setJspfOpen] = useState(false);
 
@@ -38,16 +40,16 @@ export function ImportProviderMenu() {
             )}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            title="Import library"
-            aria-label="Import library"
+            title={t("toolbar.import.trigger")}
+            aria-label={t("toolbar.import.trigger")}
           >
             <Library className="size-3.5" />
-            <span className="hidden sm:inline">Import library</span>
+            <span className="hidden sm:inline">{t("toolbar.import.trigger")}</span>
           </motion.button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="min-w-64">
-          <DropdownMenuLabel>Sources</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("toolbar.import.sourcesLabel")}</DropdownMenuLabel>
           <DropdownMenuItem onSelect={() => setSpotifyOpen(true)} className={importProviderMenuItem()}>
             <span className={importProviderSpotifyChip()}>
               <SpotifyMark />
@@ -61,7 +63,7 @@ export function ImportProviderMenu() {
               <FileJson className="size-3.5" />
             </span>
             <div className="flex flex-1 flex-col">
-              <span>From file</span>
+              <span>{t("toolbar.import.fromFile")}</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

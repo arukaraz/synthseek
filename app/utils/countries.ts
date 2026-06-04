@@ -1,123 +1,149 @@
+import type { ParseKeys } from "i18next";
+
+import i18n from "@locale";
+
 export interface Country {
   code: string;
   name: string;
   flag: string;
 }
 
-export const COUNTRIES: Country[] = [
-  { code: "US", name: "United States", flag: "🇺🇸" },
-  { code: "CA", name: "Canada", flag: "🇨🇦" },
-  { code: "MX", name: "Mexico", flag: "🇲🇽" },
+interface CountryData {
+  code: ParseKeys<"countries">;
+  flag: string;
+}
 
-  { code: "CR", name: "Costa Rica", flag: "🇨🇷" },
-  { code: "GT", name: "Guatemala", flag: "🇬🇹" },
-  { code: "HN", name: "Honduras", flag: "🇭🇳" },
-  { code: "NI", name: "Nicaragua", flag: "🇳🇮" },
-  { code: "PA", name: "Panama", flag: "🇵🇦" },
-  { code: "SV", name: "El Salvador", flag: "🇸🇻" },
-  { code: "DO", name: "Dominican Republic", flag: "🇩🇴" },
+const COUNTRY_DATA: CountryData[] = [
+  { code: "US", flag: "🇺🇸" },
+  { code: "CA", flag: "🇨🇦" },
+  { code: "MX", flag: "🇲🇽" },
 
-  { code: "AR", name: "Argentina", flag: "🇦🇷" },
-  { code: "BO", name: "Bolivia", flag: "🇧🇴" },
-  { code: "BR", name: "Brazil", flag: "🇧🇷" },
-  { code: "CL", name: "Chile", flag: "🇨🇱" },
-  { code: "CO", name: "Colombia", flag: "🇨🇴" },
-  { code: "EC", name: "Ecuador", flag: "🇪🇨" },
-  { code: "GY", name: "Guyana", flag: "🇬🇾" },
-  { code: "PY", name: "Paraguay", flag: "🇵🇾" },
-  { code: "PE", name: "Peru", flag: "🇵🇪" },
-  { code: "SR", name: "Suriname", flag: "🇸🇷" },
-  { code: "UY", name: "Uruguay", flag: "🇺🇾" },
-  { code: "VE", name: "Venezuela", flag: "🇻🇪" },
+  { code: "CR", flag: "🇨🇷" },
+  { code: "GT", flag: "🇬🇹" },
+  { code: "HN", flag: "🇭🇳" },
+  { code: "NI", flag: "🇳🇮" },
+  { code: "PA", flag: "🇵🇦" },
+  { code: "SV", flag: "🇸🇻" },
+  { code: "DO", flag: "🇩🇴" },
 
-  { code: "AT", name: "Austria", flag: "🇦🇹" },
-  { code: "BE", name: "Belgium", flag: "🇧🇪" },
-  { code: "CH", name: "Switzerland", flag: "🇨🇭" },
-  { code: "DE", name: "Germany", flag: "🇩🇪" },
-  { code: "FR", name: "France", flag: "🇫🇷" },
-  { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
-  { code: "IE", name: "Ireland", flag: "🇮🇪" },
-  { code: "LU", name: "Luxembourg", flag: "🇱🇺" },
-  { code: "NL", name: "Netherlands", flag: "🇳🇱" },
+  { code: "AR", flag: "🇦🇷" },
+  { code: "BO", flag: "🇧🇴" },
+  { code: "BR", flag: "🇧🇷" },
+  { code: "CL", flag: "🇨🇱" },
+  { code: "CO", flag: "🇨🇴" },
+  { code: "EC", flag: "🇪🇨" },
+  { code: "GY", flag: "🇬🇾" },
+  { code: "PY", flag: "🇵🇾" },
+  { code: "PE", flag: "🇵🇪" },
+  { code: "SR", flag: "🇸🇷" },
+  { code: "UY", flag: "🇺🇾" },
+  { code: "VE", flag: "🇻🇪" },
 
-  { code: "AD", name: "Andorra", flag: "🇦🇩" },
-  { code: "CY", name: "Cyprus", flag: "🇨🇾" },
-  { code: "ES", name: "Spain", flag: "🇪🇸" },
-  { code: "GR", name: "Greece", flag: "🇬🇷" },
-  { code: "IT", name: "Italy", flag: "🇮🇹" },
-  { code: "MT", name: "Malta", flag: "🇲🇹" },
-  { code: "PT", name: "Portugal", flag: "🇵🇹" },
+  { code: "AT", flag: "🇦🇹" },
+  { code: "BE", flag: "🇧🇪" },
+  { code: "CH", flag: "🇨🇭" },
+  { code: "DE", flag: "🇩🇪" },
+  { code: "FR", flag: "🇫🇷" },
+  { code: "GB", flag: "🇬🇧" },
+  { code: "IE", flag: "🇮🇪" },
+  { code: "LU", flag: "🇱🇺" },
+  { code: "NL", flag: "🇳🇱" },
 
-  { code: "DK", name: "Denmark", flag: "🇩🇰" },
-  { code: "EE", name: "Estonia", flag: "🇪🇪" },
-  { code: "FI", name: "Finland", flag: "🇫🇮" },
-  { code: "IS", name: "Iceland", flag: "🇮🇸" },
-  { code: "LT", name: "Lithuania", flag: "🇱🇹" },
-  { code: "LV", name: "Latvia", flag: "🇱🇻" },
-  { code: "NO", name: "Norway", flag: "🇳🇴" },
-  { code: "SE", name: "Sweden", flag: "🇸🇪" },
+  { code: "AD", flag: "🇦🇩" },
+  { code: "CY", flag: "🇨🇾" },
+  { code: "ES", flag: "🇪🇸" },
+  { code: "GR", flag: "🇬🇷" },
+  { code: "IT", flag: "🇮🇹" },
+  { code: "MT", flag: "🇲🇹" },
+  { code: "PT", flag: "🇵🇹" },
 
-  { code: "BG", name: "Bulgaria", flag: "🇧🇬" },
-  { code: "CZ", name: "Czech Republic", flag: "🇨🇿" },
-  { code: "HU", name: "Hungary", flag: "🇭🇺" },
-  { code: "MD", name: "Moldova", flag: "🇲🇩" },
-  { code: "PL", name: "Poland", flag: "🇵🇱" },
-  { code: "RO", name: "Romania", flag: "🇷🇴" },
-  { code: "RU", name: "Russia", flag: "🇷🇺" },
-  { code: "SK", name: "Slovakia", flag: "🇸🇰" },
-  { code: "UA", name: "Ukraine", flag: "🇺🇦" },
+  { code: "DK", flag: "🇩🇰" },
+  { code: "EE", flag: "🇪🇪" },
+  { code: "FI", flag: "🇫🇮" },
+  { code: "IS", flag: "🇮🇸" },
+  { code: "LT", flag: "🇱🇹" },
+  { code: "LV", flag: "🇱🇻" },
+  { code: "NO", flag: "🇳🇴" },
+  { code: "SE", flag: "🇸🇪" },
 
-  { code: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
-  { code: "BH", name: "Bahrain", flag: "🇧🇭" },
-  { code: "IL", name: "Israel", flag: "🇮🇱" },
-  { code: "JO", name: "Jordan", flag: "🇯🇴" },
-  { code: "KW", name: "Kuwait", flag: "🇰🇼" },
-  { code: "LB", name: "Lebanon", flag: "🇱🇧" },
-  { code: "OM", name: "Oman", flag: "🇴🇲" },
-  { code: "QA", name: "Qatar", flag: "🇶🇦" },
-  { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
-  { code: "TR", name: "Turkey", flag: "🇹🇷" },
+  { code: "BG", flag: "🇧🇬" },
+  { code: "CZ", flag: "🇨🇿" },
+  { code: "HU", flag: "🇭🇺" },
+  { code: "MD", flag: "🇲🇩" },
+  { code: "PL", flag: "🇵🇱" },
+  { code: "RO", flag: "🇷🇴" },
+  { code: "RU", flag: "🇷🇺" },
+  { code: "SK", flag: "🇸🇰" },
+  { code: "UA", flag: "🇺🇦" },
 
-  { code: "DZ", name: "Algeria", flag: "🇩🇿" },
-  { code: "EG", name: "Egypt", flag: "🇪🇬" },
-  { code: "KE", name: "Kenya", flag: "🇰🇪" },
-  { code: "MA", name: "Morocco", flag: "🇲🇦" },
-  { code: "NG", name: "Nigeria", flag: "🇳🇬" },
-  { code: "TN", name: "Tunisia", flag: "🇹🇳" },
-  { code: "ZA", name: "South Africa", flag: "🇿🇦" },
+  { code: "AE", flag: "🇦🇪" },
+  { code: "BH", flag: "🇧🇭" },
+  { code: "IL", flag: "🇮🇱" },
+  { code: "JO", flag: "🇯🇴" },
+  { code: "KW", flag: "🇰🇼" },
+  { code: "LB", flag: "🇱🇧" },
+  { code: "OM", flag: "🇴🇲" },
+  { code: "QA", flag: "🇶🇦" },
+  { code: "SA", flag: "🇸🇦" },
+  { code: "TR", flag: "🇹🇷" },
 
-  { code: "BD", name: "Bangladesh", flag: "🇧🇩" },
-  { code: "CN", name: "China", flag: "🇨🇳" },
-  { code: "HK", name: "Hong Kong", flag: "🇭🇰" },
-  { code: "ID", name: "Indonesia", flag: "🇮🇩" },
-  { code: "IN", name: "India", flag: "🇮🇳" },
-  { code: "JP", name: "Japan", flag: "🇯🇵" },
-  { code: "KH", name: "Cambodia", flag: "🇰🇭" },
-  { code: "KR", name: "South Korea", flag: "🇰🇷" },
-  { code: "LA", name: "Laos", flag: "🇱🇦" },
-  { code: "MM", name: "Myanmar", flag: "🇲🇲" },
-  { code: "MN", name: "Mongolia", flag: "🇲🇳" },
-  { code: "MY", name: "Malaysia", flag: "🇲🇾" },
-  { code: "PH", name: "Philippines", flag: "🇵🇭" },
-  { code: "PK", name: "Pakistan", flag: "🇵🇰" },
-  { code: "SG", name: "Singapore", flag: "🇸🇬" },
-  { code: "TH", name: "Thailand", flag: "🇹🇭" },
-  { code: "TW", name: "Taiwan", flag: "🇹🇼" },
-  { code: "VN", name: "Vietnam", flag: "🇻🇳" },
+  { code: "DZ", flag: "🇩🇿" },
+  { code: "EG", flag: "🇪🇬" },
+  { code: "KE", flag: "🇰🇪" },
+  { code: "MA", flag: "🇲🇦" },
+  { code: "NG", flag: "🇳🇬" },
+  { code: "TN", flag: "🇹🇳" },
+  { code: "ZA", flag: "🇿🇦" },
 
-  { code: "AU", name: "Australia", flag: "🇦🇺" },
-  { code: "FJ", name: "Fiji", flag: "🇫🇯" },
-  { code: "NZ", name: "New Zealand", flag: "🇳🇿" },
+  { code: "BD", flag: "🇧🇩" },
+  { code: "CN", flag: "🇨🇳" },
+  { code: "HK", flag: "🇭🇰" },
+  { code: "ID", flag: "🇮🇩" },
+  { code: "IN", flag: "🇮🇳" },
+  { code: "JP", flag: "🇯🇵" },
+  { code: "KH", flag: "🇰🇭" },
+  { code: "KR", flag: "🇰🇷" },
+  { code: "LA", flag: "🇱🇦" },
+  { code: "MM", flag: "🇲🇲" },
+  { code: "MN", flag: "🇲🇳" },
+  { code: "MY", flag: "🇲🇾" },
+  { code: "PH", flag: "🇵🇭" },
+  { code: "PK", flag: "🇵🇰" },
+  { code: "SG", flag: "🇸🇬" },
+  { code: "TH", flag: "🇹🇭" },
+  { code: "TW", flag: "🇹🇼" },
+  { code: "VN", flag: "🇻🇳" },
+
+  { code: "AU", flag: "🇦🇺" },
+  { code: "FJ", flag: "🇫🇯" },
+  { code: "NZ", flag: "🇳🇿" },
 ];
 
 export const DEFAULT_COUNTRY = "US";
 
+export function getCountryName(code: ParseKeys<"countries">): string {
+  return i18n.t(`countries:${code}`);
+}
+
+function toCountry(data: CountryData): Country {
+  return {
+    code: data.code,
+    get name() {
+      return getCountryName(data.code);
+    },
+    flag: data.flag,
+  };
+}
+
+export const COUNTRIES: Country[] = COUNTRY_DATA.map(toCountry);
+
 export function getCountryByCode(code: string): Country | undefined {
-  return COUNTRIES.find((c) => c.code === code);
+  const data = COUNTRY_DATA.find((c) => c.code === code);
+  return data ? toCountry(data) : undefined;
 }
 
 export function isValidCountryCode(code: string): boolean {
-  return COUNTRIES.some((c) => c.code === code);
+  return COUNTRY_DATA.some((c) => c.code === code);
 }
 
 export function getValidCountryOrFallback(code: string | undefined | null): string {
@@ -133,7 +159,7 @@ export function detectBrowserCountry(): string {
   const locale = navigator.language || navigator.languages?.[0] || "";
   const countryCode = locale.split("-")[1]?.toUpperCase();
 
-  if (countryCode && COUNTRIES.some((c) => c.code === countryCode)) {
+  if (countryCode && COUNTRY_DATA.some((c) => c.code === countryCode)) {
     return countryCode;
   }
   return DEFAULT_COUNTRY;

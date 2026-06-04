@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@components/ui/Button";
 import { SpotifyMark } from "@features/spotify-library";
 import { usePlexUnlink } from "@hooks/api/mutations/auth/usePlexUnlink";
@@ -9,12 +11,12 @@ import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { SettingsCard } from "../../../components/SettingsCard";
-import { PROFILE_COPY } from "../constants";
 import { usePlexLink } from "../hooks/usePlexLink";
 import { connectedRow, plexChip, spotifyChip } from "../styles";
 import { PlexMark } from "./PlexMark";
 
 export function ConnectedAccountsCard() {
+  const { t } = useTranslation("settings");
   const { currentUser } = useAuthContext();
   const config = usePublicConfig();
   const status = useSpotifyConnectionStatus();
@@ -32,29 +34,29 @@ export function ConnectedAccountsCard() {
   const canUnlinkPlex = plexLinked && (currentUser?.hasPassword ?? false);
 
   return (
-    <SettingsCard title={PROFILE_COPY.connectedTitle} description={PROFILE_COPY.connectedDescription}>
+    <SettingsCard title={t("profile.connected.title")}>
       {spotifyEnabled ? (
         <div className={connectedRow()}>
           <span className={spotifyChip()}>
             <SpotifyMark size={18} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-fg text-sm font-medium">Spotify</p>
+            <p className="text-fg text-sm font-medium">{t("profile.connected.spotify.name")}</p>
             <p className="text-fg/50 truncate text-xs">
               {connected
-                ? (externalUsername ?? "Connected")
+                ? (externalUsername ?? t("profile.connected.spotify.connected"))
                 : configured
-                  ? "Not connected"
-                  : PROFILE_COPY.spotifyNotConfigured}
+                  ? t("profile.connected.spotify.notConnected")
+                  : t("profile.connected.spotify.notConfigured")}
             </p>
           </div>
           {connected ? (
             <Button variant="outline" size="sm" onClick={() => disconnect.mutate()} disabled={disconnect.isPending}>
-              {PROFILE_COPY.disconnect}
+              {t("profile.connected.disconnect")}
             </Button>
           ) : (
             <Button size="sm" onClick={() => connect.mutate()} disabled={!configured || connect.isPending}>
-              {PROFILE_COPY.connect}
+              {t("profile.connected.connect")}
             </Button>
           )}
         </div>
@@ -66,16 +68,16 @@ export function ConnectedAccountsCard() {
             <PlexMark size={18} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-fg text-sm font-medium">{PROFILE_COPY.plexName}</p>
+            <p className="text-fg text-sm font-medium">{t("profile.connected.plex.name")}</p>
             <p className="text-fg/50 truncate text-xs">
               {plexLinked
-                ? (currentUser.plex_username ?? PROFILE_COPY.plexLinked)
+                ? (currentUser.plex_username ?? t("profile.connected.plex.linked"))
                 : plexLink.isPending
-                  ? PROFILE_COPY.plexConnecting
-                  : PROFILE_COPY.plexNotLinked}
+                  ? t("profile.connected.plex.connecting")
+                  : t("profile.connected.plex.notLinked")}
             </p>
             {plexLinked && !canUnlinkPlex ? (
-              <p className="text-fg/40 mt-1 text-xs">{PROFILE_COPY.plexNeedsPassword}</p>
+              <p className="text-fg/40 mt-1 text-xs">{t("profile.connected.plex.needsPassword")}</p>
             ) : null}
           </div>
           {plexLinked ? (
@@ -85,17 +87,17 @@ export function ConnectedAccountsCard() {
               onClick={() => plexUnlink.mutate()}
               disabled={!canUnlinkPlex || plexUnlink.isPending}
             >
-              {PROFILE_COPY.disconnect}
+              {t("profile.connected.disconnect")}
             </Button>
           ) : (
             <Button size="sm" onClick={() => plexLink.start()} disabled={plexLink.isPending}>
-              {PROFILE_COPY.connect}
+              {t("profile.connected.connect")}
             </Button>
           )}
         </div>
       ) : null}
 
-      {!spotifyEnabled && !currentUser ? <p className="text-fg/60 text-sm">{PROFILE_COPY.noConnected}</p> : null}
+      {!spotifyEnabled && !currentUser ? <p className="text-fg/60 text-sm">{t("profile.connected.empty")}</p> : null}
     </SettingsCard>
   );
 }

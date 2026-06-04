@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useUpdateEngineQueue() {
@@ -7,9 +9,9 @@ export function useUpdateEngineQueue() {
   return trpc.settings.updateEngineQueue.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Queue settings saved");
+      toast.success(i18n.t("mutations:settings.queueSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save queue settings"),
+    onError: (error) => errorToast(error, "settings.queueFailed"),
   });
 }
 
@@ -18,9 +20,9 @@ export function useUpdateEngineSearch() {
   return trpc.settings.updateEngineSearch.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Search settings saved");
+      toast.success(i18n.t("mutations:settings.searchSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save search settings"),
+    onError: (error) => errorToast(error, "settings.searchFailed"),
   });
 }
 
@@ -29,9 +31,9 @@ export function useUpdateEngineTimeouts() {
   return trpc.settings.updateEngineTimeouts.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Timeouts saved");
+      toast.success(i18n.t("mutations:settings.timeoutsSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save timeouts"),
+    onError: (error) => errorToast(error, "settings.timeoutsFailed"),
   });
 }
 
@@ -40,9 +42,9 @@ export function useUpdateEngineImport() {
   return trpc.settings.updateEngineImport.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Import settings saved");
+      toast.success(i18n.t("mutations:settings.importSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save import settings"),
+    onError: (error) => errorToast(error, "settings.importFailed"),
   });
 }
 
@@ -51,9 +53,9 @@ export function useUpdateEnginePlexBehavior() {
   return trpc.settings.updateEnginePlexBehavior.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Plex behavior saved");
+      toast.success(i18n.t("mutations:settings.plexBehaviorSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save Plex behavior"),
+    onError: (error) => errorToast(error, "settings.plexBehaviorFailed"),
   });
 }
 
@@ -62,8 +64,8 @@ export function useUpdateEngineSmartSearch() {
   return trpc.settings.updateEngineSmartSearch.useMutation({
     onSuccess: () => {
       utils.settings.get.invalidate();
-      toast.success("Smart search settings saved");
+      toast.success(i18n.t("mutations:settings.smartSearchSaved"));
     },
-    onError: (error) => toast.error(error.message || "Failed to save smart search settings"),
+    onError: (error) => errorToast(error, "settings.smartSearchFailed"),
   });
 }

@@ -2,6 +2,7 @@
 
 import { AlertTriangle } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
@@ -25,6 +26,7 @@ import {
 import type { LastfmCardProps } from "../types";
 
 export function LastfmCard({ config }: LastfmCardProps) {
+  const { t } = useTranslation("library");
   const update = useUpdateLastfm();
   const updateEnrichment = useUpdateConnectionsEnrichment();
   const { data: settings } = useSettings();
@@ -65,30 +67,42 @@ export function LastfmCard({ config }: LastfmCardProps) {
         <h3 className={subSectionTitle()}>
           <span className="inline-flex items-center gap-1.5">
             Last.fm
-            <InfoTooltip description="Recent scrobbles and lifetime top tracks from your Last.fm account. Feeds are fixed." />
+            <InfoTooltip description={t("discoveryIntegrations.lastfm.tooltip")} />
           </span>
         </h3>
-        <Switch checked={enabled} onCheckedChange={setEnabled} aria-label="Enable Last.fm" />
+        <Switch
+          checked={enabled}
+          onCheckedChange={setEnabled}
+          aria-label={t("discoveryIntegrations.lastfm.enableAria")}
+        />
       </header>
 
       {!hasApiKey && !isAdmin ? (
         <div className={apiKeyWarningBox()}>
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>
-            Last.fm API key is not configured. Ask your administrator to set it before enabling this integration.
-          </span>
+          <span>{t("discoveryIntegrations.lastfm.apiKeyWarning")}</span>
         </div>
       ) : null}
 
       <div className={disabledOverlay({ disabled: !enabled })}>
         {isAdmin ? (
-          <SettingsField label="API key" helper="System-wide Last.fm API key. Shared across all users.">
+          <SettingsField
+            label={t("discoveryIntegrations.lastfm.apiKeyLabel")}
+            helper={t("discoveryIntegrations.lastfm.apiKeyHelper")}
+          >
             <SettingsSecretInput value={apiKey} onChange={setApiKey} />
           </SettingsField>
         ) : null}
 
-        <SettingsField label="Username" helper="Your public Last.fm username.">
-          <SettingsTextInput value={username} onChange={setUsername} placeholder="e.g. yourname" />
+        <SettingsField
+          label={t("discoveryIntegrations.lastfm.usernameLabel")}
+          helper={t("discoveryIntegrations.lastfm.usernameHelper")}
+        >
+          <SettingsTextInput
+            value={username}
+            onChange={setUsername}
+            placeholder={t("discoveryIntegrations.lastfm.usernamePlaceholder")}
+          />
         </SettingsField>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { IconButton } from "@components/ui/IconButton";
 import { ArrowLeft, Check, ExternalLink, Heart } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import {
   detailAct,
@@ -29,13 +30,14 @@ export function DetailHero({
   image,
   onBack,
 }: DetailHeroProps) {
+  const { t } = useTranslation("library");
   const primaryLabel = imported
     ? importedTarget
-      ? "Imported · selected"
-      : "Imported · unselect"
+      ? t("spotifyLibrary.detail.imported")
+      : t("spotifyLibrary.detail.importedUnselect")
     : importedTarget
-      ? "Selected for import"
-      : "Select for import";
+      ? t("spotifyLibrary.detail.selectedForImport")
+      : t("spotifyLibrary.detail.selectForImport");
 
   return (
     <div className={detailHero()}>
@@ -44,7 +46,7 @@ export function DetailHero({
           icon={ArrowLeft}
           variant="default"
           size="md"
-          aria-label="Back to library list"
+          aria-label={t("spotifyLibrary.detail.back")}
           onClick={onBack}
           className="absolute top-3 left-3 z-10 md:hidden"
         />
@@ -79,7 +81,7 @@ export function DetailHero({
           onClick={(e) => e.stopPropagation()}
         >
           <ExternalLink className="size-3.5" />
-          Open in Spotify
+          {t("spotifyLibrary.detail.openInSpotify")}
         </a>
       </div>
     </div>

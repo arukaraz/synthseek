@@ -1,0 +1,615 @@
+{
+  "general": {
+    "pageTitle": "General",
+    "language": {
+      "title": "Language",
+      "description": "Choose the language used across the interface.",
+      "selectorLabel": "Interface language",
+      "updated": "Language updated",
+      "updateFailed": "Could not update language"
+    },
+    "theme": {
+      "title": "Theme",
+      "description": "Pick the theme that matches your environment.",
+      "groupLabel": "Color theme"
+    }
+  },
+  "header": {
+    "title": "Engine",
+    "description": "Advanced controls for the search to download to import pipeline. Defaults are tuned to a balanced sweet spot that works well for most setups, change them only if you know what you are doing. When in doubt, leave them as-is or hit Reset to defaults on the affected card if tracks start failing after a change.",
+    "loading": "Loading settings…",
+    "loadError": "Failed to load settings: {{message}}",
+    "unknownError": "Unknown error"
+  },
+  "search": {
+    "title": "Search",
+    "maxPeerAttempts": {
+      "label": "Max peer attempts",
+      "description": "How many slskd uploaders to try downloading from per track before marking it failed."
+    },
+    "maxVariations": {
+      "label": "Max variations",
+      "description": "How many query-string combinations (artist+title, with/without album, with/without featuring) to try per track."
+    },
+    "historyCleanup": {
+      "label": "History cleanup enabled",
+      "description": "Hourly cron deletes old slskd searches so its search list does not grow unbounded."
+    },
+    "maxHistorySearches": {
+      "label": "Max history searches",
+      "description": "How many of the most recent searches to retain in slskd. Older ones are removed by the cleanup job above."
+    },
+    "smartSearchHeader": "Smart search",
+    "autoBan": {
+      "label": "Auto-ban after N failures",
+      "description": "Add an uploader/peer to the banlist after this many download failures (counted in-memory, resets on restart). 0 disables.",
+      "ariaLabel": "Auto-ban after N failed attempts"
+    },
+    "customMoodKeywords": {
+      "label": "Custom mood keywords",
+      "helper": "Substrings tested against user search queries to classify them as mood/genre searches (vs specific artist/track). Press Enter or comma to add.",
+      "placeholder": "e.g. block party, my favorites"
+    },
+    "federatedPatterns": {
+      "label": "Federated patterns",
+      "experimental": "Experimental",
+      "description": "Opt in: a daily cron federates your anonymized mood/genre keywords with the Synthseek federation API and pulls back consensus-approved ones to improve smart-search classification."
+    }
+  },
+  "timeouts": {
+    "title": "Timeouts",
+    "searchPhase": {
+      "label": "Search phase",
+      "description": "How long slskd keeps each search request open on the Soulseek network before stopping collection of new results.",
+      "ariaLabel": "Search phase timeout"
+    },
+    "downloadPhase": {
+      "label": "Download phase",
+      "description": "Total budget for the full download phase per track. The track is marked failed if this elapses.",
+      "ariaLabel": "Download phase timeout"
+    },
+    "importPhase": {
+      "label": "Import phase",
+      "description": "Total budget for the import phase per track. Marked failed if exceeded.",
+      "ariaLabel": "Import phase timeout"
+    },
+    "peerUnresponsive": {
+      "label": "Peer unresponsive",
+      "description": "Max time a download can sit in slskd's unresponsive states before we cancel and try the next peer.",
+      "ariaLabel": "Peer unresponsive timeout"
+    },
+    "queueWaitActivePeer": {
+      "label": "Queue wait (active peer)",
+      "description": "Max wait in slskd's Queued states when the peer is already actively serving another download to us (likely to give this one its turn).",
+      "ariaLabel": "Queue wait active peer timeout"
+    },
+    "queueWaitIdlePeer": {
+      "label": "Queue wait (idle peer)",
+      "description": "Max wait in slskd's queued states when the peer is not currently serving us anything (may be offline or ignoring the request).",
+      "ariaLabel": "Queue wait idle peer timeout"
+    }
+  },
+  "queue": {
+    "title": "Queue & concurrency",
+    "maxSize": {
+      "label": "Max size",
+      "description": "Hard cap on total jobs the queue holds at once (queued + active). New requests are rejected when full.",
+      "ariaLabel": "Max queue size"
+    },
+    "maxConcurrentSearches": {
+      "label": "Max concurrent searches",
+      "description": "How many tracks can be in the search phase simultaneously.",
+      "ariaLabel": "Max concurrent searches"
+    },
+    "maxPendingImports": {
+      "label": "Max pending imports",
+      "description": "Backpressure: when this many downloaded tracks are waiting to import, the engine pauses starting new searches until imports drain.",
+      "ariaLabel": "Max pending imports"
+    }
+  },
+  "import": {
+    "title": "Import",
+    "metadataConfidence": {
+      "label": "Metadata confidence threshold",
+      "description": "Minimum match (0-100) between a downloaded file's embedded audio tags. Files below this score are rejected with and can be retried.",
+      "ariaLabel": "Metadata confidence threshold"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "loadFailedWithReason": "Failed to load settings: {{reason}}",
+    "loadFailed": "Failed to load settings.",
+    "unknownError": "Unknown error"
+  },
+  "metadata": {
+    "enrichment": {
+      "title": "Metadata Enrichment",
+      "description": "External services that enrich your library with artwork, fingerprinting fallbacks, and tagging data. All optional but recommended, leave empty to fall back to public defaults or skip the feature.",
+      "fanartKey": {
+        "label": "FanART API key",
+        "helper": "Artwork sourcing."
+      },
+      "musicbrainzEmail": {
+        "label": "MusicBrainz contact email",
+        "helper": "Required. Without it, Synthseek shares rate-limited email.",
+        "placeholder": "you@example.com"
+      },
+      "acoustidKey": {
+        "label": "AcoustID API key",
+        "helper": "Audio fingerprinting fallback for tracks without reliable tag metadata."
+      }
+    },
+    "librarySources": {
+      "title": "Library Sources",
+      "description": "Streaming platforms that Synthseek can import playlists and saved albums from.",
+      "songlinkKey": {
+        "label": "Songlink API key (optional)",
+        "helper": "Resolves track URLs across platforms for cross-platform playlist imports. Synthseek uses the public endpoint by default. Leave blank unless you have a key."
+      },
+      "spotify": {
+        "title": "Spotify",
+        "subtitle": "Developer's app configuration",
+        "toggleAriaLabel": "Enable Spotify",
+        "clientIdLabel": "Client ID",
+        "clientIdPlaceholder": "e.g. 3a1b6c5d7e8f4a...",
+        "publicBaseUrlLabel": "Public Base URL",
+        "publicBaseUrlHelper": "Your Synthseek URL (no trailing slash).",
+        "publicBaseUrlPlaceholder": "https://synthseek.example.com",
+        "redirectUriLabel": "Redirect URI",
+        "redirectUriHelper": "Paste this URI exactly into your Spotify App's 'Redirect URIs' list.",
+        "copyAriaLabel": "Copy redirect URI",
+        "copyTitle": "Copy redirect URI",
+        "copied": "Redirect URI copied",
+        "copyFailed": "Failed to copy redirect URI",
+        "validationMissingFields": "Spotify is enabled but missing required fields. Fill in Client ID and Public Base URL, or disable the toggle."
+      }
+    },
+    "spotifyRequirements": {
+      "title": "Spotify Development Mode requirements",
+      "ownerPremium": "The Spotify account that <strong>owns the app</strong> in the <dashboard>Developer Dashboard</dashboard> must have an active Premium subscription.",
+      "userManagement": "Every Synthseek user who wants to connect must be added to the app's <strong>Settings → User Management</strong> list (using their Spotify email).",
+      "connectorsNoPremium": "Connecting users do <strong>not</strong> need Premium themselves, only the app owner does."
+    }
+  },
+  "plex": {
+    "statusConnected": "Connected",
+    "statusNotConnected": "Not connected",
+    "serverUrl": {
+      "label": "Server URL",
+      "helperConnected": "Detected via OAuth. Edit by reconnecting.",
+      "helperDisconnected": "Click Reconnect to link a Plex server."
+    },
+    "serverPicker": {
+      "prompt": "Pick the Plex server Synthseek should target:",
+      "empty": "No servers found on this Plex account.",
+      "badgeLocal": "local",
+      "badgeRemote": "remote"
+    },
+    "reconnectWaiting": "Waiting for Plex...",
+    "reconnect": "Reconnect",
+    "disconnect": "Disconnect",
+    "disconnected": "Plex disconnected",
+    "libraryHeader": "Library",
+    "libraryScan": {
+      "label": "Library scan",
+      "description": "After each successful import, ask Plex to scan the folder of the new file."
+    },
+    "playlistSync": {
+      "label": "Playlist sync",
+      "description": "When a Synthseek playlist request completes (or grows), create / update a matching Plex playlist with the imported tracks."
+    },
+    "namingHeader": "Playlist naming",
+    "usernameAffix": {
+      "label": "Username affix",
+      "description": "Prefix or suffix Plex playlist names with the requester's username so multi-user playlists do not collide."
+    },
+    "affix": {
+      "off": "Off",
+      "prefix": "Prefix",
+      "suffix": "Suffix"
+    },
+    "separator": {
+      "label": "Separator",
+      "helper": "Character(s) between the name and username. Common: _, -, ·",
+      "placeholder": "_"
+    },
+    "previewHeader": "Preview",
+    "previewSampleName": "Discover Weekly",
+    "sampleUsernameFallback": "alice"
+  },
+  "slskd": {
+    "title": "Slskd",
+    "description": "Required for downloads.",
+    "apiUrl": {
+      "label": "API URL",
+      "placeholder": "http://localhost:5030"
+    },
+    "apiKey": {
+      "label": "API Key"
+    },
+    "testing": "Testing...",
+    "testConnection": "Test connection",
+    "connected": "Connected",
+    "connectionFailed": "Connection failed",
+    "bannedUploaders": {
+      "label": "Banned uploaders",
+      "addPlaceholder": "e.g. user123",
+      "filterPlaceholder": "Filter banlist...",
+      "empty": "No banned uploaders yet.",
+      "count": "{{count}} banned",
+      "helper": "Skip these slskd users/peers when picking download candidates. <link>Configure threshold</link>",
+      "tooltipTriggerLabel": "About banned uploaders",
+      "tooltipWhat": "Soulseek usernames added here are blocked as download sources. Synthseek skips their files and downloads from another source instead. Add anyone who keeps sending bad files or failing to deliver.",
+      "tooltipAuto": "Synthseek can also add uploaders here for you. When a user's transfers fail too many times in a row they are banned automatically. Only real transfer failures count, not filename mismatches, and the limit is configured in Engine > Search (set it to 0 to turn auto-ban off)."
+    },
+    "status": {
+      "healthy": "Healthy",
+      "unhealthy": "Unhealthy",
+      "notConfigured": "Not configured"
+    }
+  },
+  "ytdlp": {
+    "title": "yt-dlp",
+    "description": "Fallback source used when slskd cannot deliver a track. Format and quality follow each request's own config.",
+    "enable": {
+      "label": "Enable",
+      "description": "When on, tracks that fail on higher-priority sources are retried via yt-dlp within the same job.",
+      "ariaLabel": "Enable yt-dlp fallback"
+    },
+    "searchResults": {
+      "label": "Search results",
+      "description": "How many YouTube candidates to fetch per track before scoring by duration and title.",
+      "ariaLabel": "Search results"
+    },
+    "maxDurationDelta": {
+      "label": "Max duration delta",
+      "description": "Reject candidates whose length differs from the expected track by more than this many seconds.",
+      "ariaLabel": "Max duration delta seconds"
+    }
+  },
+  "members": {
+    "pageTitle": "Members",
+    "cardTitle": "User list",
+    "cardDescription": "Users that share this Synthseek instance.",
+    "adminOnly": "Only administrators can view members.",
+    "loading": "Loading members...",
+    "empty": "No members yet.",
+    "loadError": "Failed to load members: {{message}}",
+    "toolbar": {
+      "createLocal": "Create Local User",
+      "importPlex": "Import Plex Users"
+    },
+    "columns": {
+      "user": "User",
+      "requests": "Requests",
+      "type": "Type",
+      "role": "Role",
+      "joined": "Joined",
+      "selectAll": "Select all members",
+      "selectMember": "Select {{username}}"
+    },
+    "type": {
+      "plex": "Plex User",
+      "local": "Local User"
+    },
+    "role": {
+      "owner": "Owner",
+      "admin": "Admin",
+      "user": "User"
+    },
+    "roleOptions": {
+      "user": "User",
+      "admin": "Admin"
+    },
+    "actions": {
+      "edit": "Edit {{username}}",
+      "delete": "Delete {{username}}"
+    },
+    "bulk": {
+      "selected": "{{count}} selected",
+      "makeUser": "Make User",
+      "makeAdmin": "Make Admin",
+      "delete": "Delete selected",
+      "clear": "Clear",
+      "deleteTitle": "Delete users",
+      "deleteMessage": "This removes the selected accounts and reassigns their request history to the owner. Downloaded files in Plex are not affected."
+    },
+    "delete": {
+      "title": "Delete user",
+      "message": "Delete {{username}}? This removes the user account and reassigns their request history to the owner. Downloaded files in Plex are not affected.",
+      "confirm": "Delete"
+    },
+    "create": {
+      "title": "Create local user",
+      "description": "Local users sign in with their email and password.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "user@example.com",
+      "emailAriaLabel": "User email",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "username",
+      "usernameAriaLabel": "Username",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "passwordAriaLabel": "Password",
+      "roleLabel": "Role",
+      "roleAriaLabel": "User role",
+      "submit": "Create user"
+    },
+    "edit": {
+      "title": "Edit user",
+      "description": "Update this member's details. Leave the password blank to keep it unchanged.",
+      "usernameLabel": "Username",
+      "usernameAriaLabel": "Username",
+      "emailLabel": "Email",
+      "emailAriaLabel": "User email",
+      "roleLabel": "Role",
+      "roleAriaLabel": "User role",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Leave blank to keep current password",
+      "passwordAriaLabel": "New password",
+      "ownerRoleNote": "The owner account must stay an admin.",
+      "submit": "Save changes"
+    },
+    "import": {
+      "title": "Import Plex users",
+      "loading": "Loading Plex users...",
+      "empty": "No Plex users with access to this server were found.",
+      "selectAll": "Select all",
+      "selectUser": "Select {{username}}",
+      "imported": "Imported",
+      "roleLabel": "Role for imported users",
+      "roleAriaLabel": "Role for imported users",
+      "submit": "Import selected"
+    }
+  },
+  "profile": {
+    "pageTitle": "Profile",
+    "account": {
+      "title": "Account",
+      "memberSince": "Member since",
+      "plexAccount": "Plex account",
+      "localAccount": "Local account"
+    },
+    "edit": {
+      "title": "Edit profile",
+      "usernameLabel": "Username",
+      "usernameAriaLabel": "Username",
+      "emailLabel": "Email",
+      "emailAriaLabel": "Email",
+      "emailManagedByPlex": "Your email is managed by Plex.",
+      "avatarLabel": "Avatar URL",
+      "avatarPlaceholder": "https://...",
+      "avatarAriaLabel": "Avatar URL"
+    },
+    "password": {
+      "title": "Password",
+      "currentLabel": "Current password",
+      "currentAriaLabel": "Current password",
+      "newLabel": "New password",
+      "newPlaceholder": "At least 8 characters",
+      "newAriaLabel": "New password",
+      "submit": "Change password",
+      "managedByPlex": "Your password is managed by Plex."
+    },
+    "connected": {
+      "title": "Connected accounts",
+      "empty": "No connected sources are available right now.",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "spotify": {
+        "name": "Spotify",
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "notConfigured": "Ask an admin to configure Spotify first."
+      },
+      "plex": {
+        "name": "Plex",
+        "linked": "Linked",
+        "notLinked": "Not linked",
+        "connecting": "Waiting for Plex...",
+        "needsPassword": "Set a password before unlinking, otherwise you would be locked out.",
+        "linkedAs": "Plex linked as {{username}}",
+        "linkedFallback": "Plex account linked",
+        "linkTimedOut": "Plex linking timed out",
+        "linkFailed": "Failed to link Plex"
+      }
+    }
+  },
+  "api": {
+    "card": {
+      "title": "API",
+      "description": "Programmatic access to Synthseek: create keys for your apps and connect AI assistants over MCP."
+    },
+    "keys": {
+      "title": "API Keys",
+      "empty": "No API keys yet. Create one to connect an app or assistant.",
+      "loading": "Loading keys…",
+      "newKey": "New key",
+      "loadError": "Failed to load keys: {{message}}"
+    },
+    "row": {
+      "lastUsed": "last used {{time}}",
+      "neverUsed": "never used",
+      "created": "created {{time}}",
+      "revokeLabel": "Revoke {{name}}"
+    },
+    "create": {
+      "title": "Create API key",
+      "description": "Give it a name so you can recognize it later (for example, the device or app it lives on).",
+      "nameLabel": "Name",
+      "nameAriaLabel": "API key name",
+      "namePlaceholder": "Claude Desktop",
+      "create": "Create key",
+      "revealTitle": "Key created",
+      "revealWarning": "Copy it now. For your security, you will not be able to see it again.",
+      "copy": "Copy key",
+      "copied": "Copied",
+      "copyFailed": "Failed to copy key",
+      "done": "Done"
+    },
+    "revoke": {
+      "title": "Revoke API key",
+      "message": "Any assistant using this key will immediately lose access. This cannot be undone.",
+      "confirm": "Revoke"
+    }
+  },
+  "mcp": {
+    "title": "MCP",
+    "description": "Connect an AI assistant to Synthseek over the Model Context Protocol.",
+    "endpointLabel": "MCP endpoint",
+    "endpointHelper": "Add this URL as a custom connector or MCP server in your assistant.",
+    "copyEndpointLabel": "Copy MCP endpoint",
+    "copied": "Endpoint copied",
+    "copyFailed": "Failed to copy endpoint",
+    "connectTitle": "Two ways to connect",
+    "oauthLabel": "Sign in (OAuth)",
+    "oauthBody": "For claude.ai web and native connectors. Add the endpoint as a custom connector and sign in with your Synthseek account. No key needed, and access follows your role.",
+    "keyLabel": "API key",
+    "keyBody": "For Claude Code, Cursor, or Claude Desktop (via mcp-remote). Create a key above and send it as the bearer token: Authorization: Bearer <your key>.",
+    "toolsTitle": "Available tools",
+    "toolsDescription": "What a connected assistant can do. Exact availability depends on your role.",
+    "tools": {
+      "discovery": "Discovery: search_music, get_music_details, get_artist_overview, get_trending, browse_genres, get_recommendations, resolve_url",
+      "downloads": "Downloads: download_track, download_album, download_playlist, retry_request, cancel_request, retry_all_failed",
+      "requests": "Requests: list_requests, get_request",
+      "library": "Library: get_library_summary, search_library",
+      "settings": "Settings: get_settings, update_setting",
+      "operations": "Operations (admin): get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health"
+    }
+  },
+  "logs": {
+    "page": {
+      "title": "Logs",
+      "description": "Recent server logs in the same format as the console. Filter by level, search, copy, or export."
+    },
+    "level": {
+      "title": "Level",
+      "description": "Set logging verbosity level.",
+      "loading": "Loading…",
+      "ariaLabel": "Server log level",
+      "options": {
+        "debug": "Debug",
+        "info": "Info",
+        "warn": "Warn",
+        "error": "Error"
+      }
+    },
+    "viewer": {
+      "title": "Logs",
+      "description": "The most recent lines from the active log file.",
+      "searchPlaceholder": "Search logs",
+      "searchAriaLabel": "Search logs",
+      "linesAriaLabel": "Lines to load",
+      "refreshAriaLabel": "Auto-refresh interval",
+      "refresh": "Refresh",
+      "copy": "Copy",
+      "exportRecent": "Export recent",
+      "copied": "Logs copied to clipboard",
+      "copyFailed": "Failed to copy logs",
+      "loading": "Loading logs…",
+      "loadError": "Failed to load logs: {{message}}",
+      "empty": "No log lines to show.",
+      "refreshOptions": {
+        "off": "Off",
+        "seconds5": "5s",
+        "seconds10": "10s",
+        "seconds30": "30s",
+        "seconds60": "60s"
+      }
+    },
+    "export": {
+      "title": "Export all logs",
+      "description": "Bundle all server log files into a single zip.",
+      "download": "Download all logs (zip)",
+      "preparing": "Preparing zip…"
+    }
+  },
+  "jobs": {
+    "page": {
+      "title": "Jobs",
+      "description": "Background tasks Synthseek runs on a schedule. Trigger any job to run it immediately."
+    },
+    "card": {
+      "title": "Scheduled jobs",
+      "description": "Each job shows its schedule and next run. Press play to run it now.",
+      "loading": "Loading jobs…",
+      "loadError": "Failed to load jobs: {{message}}",
+      "unknownError": "Unknown error"
+    },
+    "row": {
+      "inProgress": "In progress",
+      "nextRunFallback": "Idle",
+      "running": "Running {{name}}",
+      "runNow": "Run {{name}} now"
+    },
+    "interval": {
+      "everyMinute": "Every minute",
+      "everyMinutes": "Every {{count}} minutes",
+      "everyHour": "Every hour",
+      "everyHours": "Every {{count}} hours",
+      "everyDay": "Every day",
+      "everyDays": "Every {{count}} days"
+    },
+    "nextRun": {
+      "now": "now"
+    }
+  },
+  "shell": {
+    "card": {
+      "optional": "(Optional)"
+    },
+    "sidebar": {
+      "ariaLabel": "Settings sections",
+      "advanced": "Advanced",
+      "version": "synthseek v{{version}}",
+      "items": {
+        "general": "General",
+        "members": "Members",
+        "profile": "Profile",
+        "integrations": "Integrations",
+        "engine": "Engine",
+        "jobs": "Jobs",
+        "logs": "Logs"
+      }
+    },
+    "integrationTabs": {
+      "ariaLabel": "Integrations"
+    },
+    "pageHeader": {
+      "backToSections": "Back to sections"
+    },
+    "placeholder": {
+      "comingSoon": "Coming soon."
+    },
+    "accessDenied": {
+      "title": "Restricted",
+      "message": "Only administrators can access this section."
+    },
+    "saveBar": {
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "saving": "Saving..."
+    },
+    "resetDefaults": {
+      "label": "Reset to defaults"
+    },
+    "secretInput": {
+      "reveal": "Reveal value",
+      "hide": "Hide value"
+    },
+    "listManager": {
+      "addPlaceholder": "Add item...",
+      "filterPlaceholder": "Filter...",
+      "empty": "No items yet.",
+      "add": "Add",
+      "count_one": "{{count}} item",
+      "count_other": "{{count}} items",
+      "filteredCount": "{{shown}} of {{total}}",
+      "noMatches": "No matches for “{{query}}”.",
+      "removeLabel": "Remove {{item}}"
+    },
+    "chipsInput": {
+      "removeLabel": "Remove {{chip}}"
+    }
+  }
+}

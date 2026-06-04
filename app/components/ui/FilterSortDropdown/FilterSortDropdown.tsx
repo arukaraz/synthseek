@@ -12,6 +12,7 @@ import {
 import { ghostButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { ArrowDown, ArrowUp, ChevronDown, Filter, SlidersHorizontal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { filterSortCount, filterSortOrderBtn, filterSortOrderRow, filterSortTriggerDefault } from "./styles";
 import type { FilterSortDropdownProps } from "./types";
@@ -28,6 +29,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
   align = "start",
   dataCy,
 }: FilterSortDropdownProps<F, S>) {
+  const { t } = useTranslation("components");
   const FilterSectionIcon = filter.sectionIcon ?? Filter;
   const SortSectionIcon = sort?.sectionIcon ?? SlidersHorizontal;
   const activeFilterOption = filter.options.find((o) => o.value === filter.value);
@@ -40,7 +42,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
         <button
           type="button"
           className={cn(filterSortTriggerDefault(), triggerClassName)}
-          aria-label="Filter and sort"
+          aria-label={t("filterSort.trigger")}
           data-cy={dataCy}
         >
           <TriggerIcon className="size-4" />
@@ -58,7 +60,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
       <DropdownMenuContent align={align} className="min-w-52">
         <DropdownMenuLabel className="flex items-center gap-2">
           <FilterSectionIcon className="size-3" />
-          {filter.sectionLabel ?? "Filter"}
+          {filter.sectionLabel ?? t("filterSort.filterLabel")}
         </DropdownMenuLabel>
         <DropdownMenuRadioGroup value={filter.value} onValueChange={(v) => filter.onChange(v as F)}>
           {filter.options.map((option) => {
@@ -78,7 +80,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="flex items-center gap-2">
               <SortSectionIcon className="size-3" />
-              {sort.sectionLabel ?? "Sort by"}
+              {sort.sectionLabel ?? t("filterSort.sortLabel")}
             </DropdownMenuLabel>
             <DropdownMenuRadioGroup value={sort.value} onValueChange={(v) => sort.onChange(v as S)}>
               {sort.options.map((option) => (
@@ -93,7 +95,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
         {direction && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel>Order</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("filterSort.orderLabel")}</DropdownMenuLabel>
             <div className={filterSortOrderRow()}>
               <button
                 type="button"
@@ -102,7 +104,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                 className={filterSortOrderBtn({ active: direction.value === "asc" })}
               >
                 <ArrowUp className="size-3" />
-                Ascending
+                {t("filterSort.ascending")}
               </button>
               <button
                 type="button"
@@ -111,7 +113,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                 className={filterSortOrderBtn({ active: direction.value === "desc" })}
               >
                 <ArrowDown className="size-3" />
-                Descending
+                {t("filterSort.descending")}
               </button>
             </div>
           </>

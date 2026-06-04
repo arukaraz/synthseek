@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from "@components/ui/Dialog";
 import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { modalContainer } from "../styles";
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { HeroHeader } from "./HeroHeader";
 import { ContentList } from "./ContentList";
 import { useContentBrowser } from "./hooks/useContentBrowser";
@@ -19,6 +20,7 @@ export function ContentBrowserModal({
   requestButtonDisabled,
   requestButtonTooltip,
 }: ContentBrowserModalProps) {
+  const { t } = useTranslation("search");
   const { metadata, items, isLoading, canGoBack, currentType, currentData, handleRowClick, handleBack } =
     useContentBrowser({
       initialType: type,
@@ -39,7 +41,8 @@ export function ContentBrowserModal({
     [currentType, currentData, onRequestClick]
   );
 
-  const sectionTitle = currentType === ContentType.enum.artist ? "Albums" : "Tracks";
+  const sectionTitle =
+    currentType === ContentType.enum.artist ? t("browser.section.albums") : t("browser.section.tracks");
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -49,11 +52,11 @@ export function ContentBrowserModal({
         aria-describedby="content-browser-description"
       >
         <DialogTitle className="sr-only">
-          {metadata.title} - {sectionTitle}
+          {t("browser.dialogTitle", { title: metadata.title, section: sectionTitle })}
         </DialogTitle>
 
         <div id="content-browser-description" className="sr-only">
-          Browse and request {sectionTitle.toLowerCase()} from {metadata.title}
+          {t("browser.dialogDescription", { section: sectionTitle.toLowerCase(), title: metadata.title })}
         </div>
 
         <div className="flex-shrink-0">

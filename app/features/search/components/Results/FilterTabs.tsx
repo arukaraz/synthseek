@@ -1,18 +1,14 @@
 "use client";
 
-import { ContentType } from "@api/__generated__/types";
-import { cn } from "@utils/cn";
-import type { FilterTabsProps, FilterType } from "./types";
+import { useTranslation } from "react-i18next";
 
-const FILTER_TABS: Array<{ value: FilterType; label: string }> = [
-  { value: "all", label: "All" },
-  { value: ContentType.enum.playlist, label: "Playlists" },
-  { value: ContentType.enum.artist, label: "Artists" },
-  { value: ContentType.enum.album, label: "Albums" },
-  { value: ContentType.enum.track, label: "Songs" },
-];
+import { cn } from "@utils/cn";
+import { FILTER_TABS } from "./constants";
+import type { FilterTabsProps } from "./types";
 
 export function FilterTabs({ activeFilter, onFilterChange, availableTypes }: FilterTabsProps) {
+  const { t } = useTranslation("search");
+
   const visibleTabs = availableTypes
     ? FILTER_TABS.filter((tab) => tab.value === "all" || availableTypes.has(tab.value))
     : FILTER_TABS;
@@ -29,7 +25,7 @@ export function FilterTabs({ activeFilter, onFilterChange, availableTypes }: Fil
             activeFilter === tab.value ? "bg-fg text-surface" : "bg-fg/5 text-fg/70 hover:bg-fg/10 hover:text-fg"
           )}
         >
-          {tab.label}
+          {t(tab.labelKey)}
         </button>
       ))}
     </div>

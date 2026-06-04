@@ -3,6 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import type { KeyboardEvent } from "react";
 
 import type { AppRouter } from "@api/__generated__/types";
+import type { Locale } from "@locale/config";
 import type { Theme } from "@theme/ThemeProvider";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
@@ -51,4 +52,10 @@ export interface ApiKeyRowProps {
 export interface CreateApiKeyDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+}
+
+export interface LanguageSelectorProps {
+  value: Locale;
+  onSelect: (locale: Locale) => void;
+  ariaLabel: string;
 }

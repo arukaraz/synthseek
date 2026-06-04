@@ -1,5 +1,5 @@
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
-import { toast } from "sonner";
 
 export function useSetupBootstrap() {
   const utils = trpc.useUtils();
@@ -10,7 +10,7 @@ export function useSetupBootstrap() {
       utils.auth.setupRequired.invalidate();
     },
     onError: (error) => {
-      toast.error(error.message || "Setup failed");
+      errorToast(error, "auth.setupFailed");
     },
   });
 }

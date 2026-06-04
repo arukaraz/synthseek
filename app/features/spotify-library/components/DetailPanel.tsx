@@ -2,8 +2,8 @@
 
 import { useSpotifyLibraryItemDetail } from "@hooks/api/queries/spotify/useSpotifyLibraryItemDetail";
 import { cn } from "@utils/cn";
+import { useTranslation } from "react-i18next";
 
-import { pluralize } from "../helpers";
 import { detailLoading, detailPane } from "../styles";
 
 import { DetailEmptyState } from "./DetailEmptyState";
@@ -14,6 +14,7 @@ import { DetailTracklist } from "./DetailTracklist";
 import type { DetailPanelProps } from "./types";
 
 export function DetailPanel({ focusedItem, draft, onBack }: DetailPanelProps) {
+  const { t } = useTranslation("library");
   const detail = useSpotifyLibraryItemDetail(focusedItem?.id ?? null, focusedItem?.type ?? null, Boolean(focusedItem));
 
   if (!focusedItem) {
@@ -27,7 +28,7 @@ export function DetailPanel({ focusedItem, draft, onBack }: DetailPanelProps) {
   if (detail.isLoading || !detail.data) {
     return (
       <div className={detailPane()}>
-        <div className={detailLoading()}>Loading…</div>
+        <div className={detailLoading()}>{t("spotifyLibrary.detail.loading")}</div>
       </div>
     );
   }
@@ -37,7 +38,7 @@ export function DetailPanel({ focusedItem, draft, onBack }: DetailPanelProps) {
   const d = detail.data;
   const byParts: string[] = [];
   if (d.subtitle) byParts.push(d.subtitle);
-  byParts.push(pluralize(d.totalTracks, "track"));
+  byParts.push(t("spotifyLibrary.detail.tracksByline", { count: d.totalTracks }));
   const byline = byParts.join(" · ");
 
   const importedTarget = draft.selectors.targetImported(focusedItem);

@@ -1,5 +1,8 @@
+"use client";
+
 import { gradientOverlay } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
+import { useTranslation } from "react-i18next";
 
 import { WidgetHeaderSkeleton } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
@@ -7,8 +10,10 @@ import { SIZE_PATTERN } from "./constants";
 import { panelBody, skeletonMosaic } from "./styles";
 
 export function CategoriesGridSkeleton() {
+  const { t } = useTranslation("discover");
+
   return (
-    <div className={glassPanelCard({ width: "full" })} aria-label="Genres">
+    <div className={glassPanelCard({ width: "full" })} aria-label={t("categories.grid.skeletonAriaLabel")}>
       <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
 
       <div className={panelBody()}>

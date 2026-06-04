@@ -2,6 +2,7 @@
 
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Input } from "@components/ui/Input";
 import { cn } from "@utils/cn";
@@ -15,6 +16,7 @@ export function SettingsSecretInput({
   id,
   ariaLabel,
 }: SettingsSecretInputProps) {
+  const { t } = useTranslation("settings");
   const [revealed, setRevealed] = useState(false);
   return (
     <div className="relative">
@@ -31,7 +33,7 @@ export function SettingsSecretInput({
       <button
         type="button"
         onClick={() => setRevealed((p) => !p)}
-        aria-label={revealed ? "Hide value" : "Reveal value"}
+        aria-label={revealed ? t("shell.secretInput.hide") : t("shell.secretInput.reveal")}
         className={cn(
           "text-fg/50 hover:text-fg/80 absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1 transition-colors",
           "focus-visible:ring-primary-500/40 focus-visible:ring-2 focus-visible:outline-none"

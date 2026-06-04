@@ -1,4 +1,5 @@
 import type { ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
+import type { ParseKeys } from "i18next";
 
 export interface ConfigRequestModalProps {
   isOpen: boolean;
@@ -13,35 +14,36 @@ export interface ConfigRequestModalProps {
 export interface BitrateOption {
   value: number;
   label: string;
-  description: string;
+  descriptionKey: ParseKeys<"search">;
 }
 
 export interface MatchingOption {
   value: "strict" | "flexible";
-  label: string;
-  description: string;
+  labelKey: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
 }
 
 export type QualityMode = "standard" | "lossless";
 
 export interface QualityModeOption {
   value: QualityMode;
-  label: string;
-  description: string;
+  labelKey: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
 }
 
 export interface UploadSpeedOption {
   value: number;
-  label: string;
-  description: string;
+  label?: string;
+  labelKey?: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
 }
 
 export type AvailabilityMode = "any" | "free";
 
 export interface AvailabilityOption {
   value: AvailabilityMode;
-  label: string;
-  description: string;
+  labelKey: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
 }
 
 export interface ConfigHeaderProps {

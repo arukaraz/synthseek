@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { DoneStep } from "../DoneStep";
-import { DONE_COPY } from "../../constants";
 
 const finishMutateAsync = vi.fn<() => Promise<unknown>>();
 
@@ -14,7 +13,7 @@ const onFinish = vi.fn();
 
 const renderStep = () => render(<DoneStep stepIndex={4} totalSteps={5} onFinish={onFinish} />);
 
-const dashboardButton = () => screen.getByRole("button", { name: DONE_COPY.primaryRest });
+const dashboardButton = () => screen.getByRole("button", { name: "Go to dashboard" });
 
 describe("DoneStep", () => {
   beforeEach(() => {
@@ -44,8 +43,8 @@ describe("DoneStep", () => {
 
     fireEvent.click(dashboardButton());
 
-    await waitFor(() => expect(screen.getByText(DONE_COPY.failed)).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: DONE_COPY.primaryRetry })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText("Could not finish setup. Please try again.")).toBeInTheDocument());
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
     expect(onFinish).not.toHaveBeenCalled();
   });
 
@@ -61,7 +60,7 @@ describe("DoneStep", () => {
 
     fireEvent.click(dashboardButton());
 
-    await waitFor(() => expect(screen.getByRole("button", { name: DONE_COPY.primaryBusy })).toBeDisabled());
+    await waitFor(() => expect(screen.getByRole("button", { name: "Finishing..." })).toBeDisabled());
 
     resolveFinish?.();
     await waitFor(() => expect(onFinish).toHaveBeenCalledTimes(1));

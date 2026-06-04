@@ -1,0 +1,218 @@
+{
+  "AUTHENTICATION_REQUIRED": {
+    "title": "Autenticación requerida",
+    "description": "Vuelve a iniciar sesión y reintenta."
+  },
+  "ADMIN_ROLE_REQUIRED": {
+    "title": "Se requiere rol de administrador",
+    "description": "Necesitas un rol de administrador para hacer eso."
+  },
+  "INVALID_CREDENTIALS": {
+    "title": "Credenciales inválidas",
+    "description": "Revisa tu usuario y contraseña e inténtalo de nuevo."
+  },
+  "CURRENT_PASSWORD_INCORRECT": {
+    "title": "Contraseña actual incorrecta",
+    "description": "La contraseña actual que introdujiste es incorrecta."
+  },
+  "ACCOUNT_HAS_NO_PASSWORD": {
+    "title": "La cuenta no tiene contraseña",
+    "description": "Esta cuenta no usa contraseña."
+  },
+  "SETUP_ALREADY_COMPLETED": {
+    "title": "Configuración ya completada",
+    "description": "La configuración inicial ya se completó."
+  },
+  "PLEX_USER_NOT_LINKED": {
+    "title": "Usuario de Plex no vinculado",
+    "description": "No hay ninguna cuenta vinculada a este usuario de Plex. Pide al administrador que te registre."
+  },
+  "CAN_ONLY_MODIFY_OWN_REQUESTS": {
+    "title": "Solo puedes modificar tus propias solicitudes",
+    "description": "Solo puedes modificar tus propias solicitudes."
+  },
+  "EMAIL_MANAGED_BY_PLEX": {
+    "title": "El correo lo gestiona Plex",
+    "description": "Tu correo electrónico lo gestiona Plex."
+  },
+  "PLEX_ALREADY_LINKED": {
+    "title": "Cuenta de Plex ya vinculada",
+    "description": "Esta cuenta de Plex ya está vinculada a otro usuario."
+  },
+  "PASSWORD_REQUIRED_BEFORE_UNLINK": {
+    "title": "Se requiere contraseña antes de desvincular Plex",
+    "description": "Establece una contraseña antes de desvincular Plex, de lo contrario quedarías bloqueado."
+  },
+  "OWNER_MUST_REMAIN_ADMIN": {
+    "title": "El propietario debe seguir siendo administrador",
+    "description": "El propietario debe seguir siendo administrador."
+  },
+  "AT_LEAST_ONE_ADMIN_REQUIRED": {
+    "title": "Se requiere al menos un administrador",
+    "description": "Debe haber al menos un administrador."
+  },
+  "CANNOT_DELETE_OWN_ACCOUNT": {
+    "title": "No puedes eliminar tu propia cuenta",
+    "description": "No puedes eliminar tu propia cuenta."
+  },
+  "OWNER_CANNOT_BE_DELETED": {
+    "title": "El propietario no puede ser eliminado",
+    "description": "La cuenta del propietario no puede ser eliminada."
+  },
+  "NO_OWNER_ACCOUNT": {
+    "title": "No hay cuenta de propietario",
+    "description": "No se encontró ninguna cuenta de propietario."
+  },
+  "USER_NOT_FOUND": {
+    "title": "Usuario no encontrado",
+    "description": "No se pudo encontrar ese usuario."
+  },
+  "EMAIL_TAKEN": {
+    "title": "Correo ya en uso",
+    "description": "Ya existe un usuario con este correo electrónico."
+  },
+  "USERNAME_TAKEN": {
+    "title": "Nombre de usuario ya en uso",
+    "description": "Este nombre de usuario ya está en uso."
+  },
+  "PLEX_NOT_CONFIGURED": {
+    "title": "Plex no configurado",
+    "description": "Plex no está configurado. Añade una URL de servidor y un token en Ajustes."
+  },
+  "PLEX_UNREACHABLE": {
+    "title": "Plex no accesible",
+    "description": "No se pudo contactar con el servidor de Plex para identificarlo."
+  },
+  "ALBUM_NOT_FOUND": {
+    "title": "Álbum no encontrado",
+    "description": "No se pudo encontrar ese álbum."
+  },
+  "PLAYLIST_NOT_FOUND": {
+    "title": "Lista de reproducción no encontrada",
+    "description": "No se pudo encontrar esa lista de reproducción."
+  },
+  "TRACK_NOT_FOUND": {
+    "title": "Pista no encontrada",
+    "description": "No se pudo encontrar esa pista."
+  },
+  "COLLECTION_NOT_FOUND": {
+    "title": "Colección no encontrada",
+    "description": "No se pudo encontrar esa colección."
+  },
+  "REQUEST_NOT_FOUND": {
+    "title": "Solicitud no encontrada",
+    "description": "No se pudo encontrar esa solicitud."
+  },
+  "API_KEY_NOT_FOUND": {
+    "title": "Clave de API no encontrada",
+    "description": "No se pudo encontrar esa clave de API."
+  },
+  "OAUTH_REQUEST_NOT_FOUND": {
+    "title": "Solicitud de autorización no encontrada",
+    "description": "Solicitud de autorización no encontrada o expirada."
+  },
+  "DOWNLOAD_FAILED": {
+    "title": "Descarga fallida",
+    "description": "No se pudo completar la descarga. Revisa los registros e inténtalo de nuevo."
+  },
+  "BATCH_DOWNLOAD_FAILED": {
+    "title": "Descarga en lote fallida",
+    "description": "No se pudo completar la descarga en lote. Revisa los registros e inténtalo de nuevo."
+  },
+  "INVALID_CONTENT_TYPES": {
+    "title": "Tipos de contenido inválidos",
+    "description": "Se proporcionaron tipos de contenido inválidos."
+  },
+  "LIBRARY_SOURCE_NOT_CONFIGURED": {
+    "title": "Fuente de biblioteca no configurada",
+    "description": "El administrador aún no ha configurado esta integración."
+  },
+  "LIBRARY_SOURCE_CALLBACK_FAILED": {
+    "title": "Fallo en la respuesta de la fuente de biblioteca",
+    "description": "La respuesta de la fuente de biblioteca falló. Inténtalo de nuevo."
+  },
+  "LIDARR_CONNECTION_FAILED": {
+    "title": "Fallo de conexión con Lidarr",
+    "description": "No se pudo conectar con Lidarr. Revisa la URL y la clave de API en Ajustes."
+  },
+  "LIDARR_PROFILES_FAILED": {
+    "title": "Fallo al obtener perfiles de Lidarr",
+    "description": "No se pudieron obtener los perfiles de Lidarr."
+  },
+  "LIDARR_SEARCH_FAILED": {
+    "title": "Fallo de búsqueda en Lidarr",
+    "description": "No se pudieron buscar artistas en Lidarr."
+  },
+  "LIDARR_ADD_ARTIST_FAILED": {
+    "title": "Fallo al añadir artista en Lidarr",
+    "description": "No se pudo añadir el artista a Lidarr."
+  },
+  "LIDARR_CHECK_ARTIST_FAILED": {
+    "title": "Fallo al comprobar artista en Lidarr",
+    "description": "No se pudo comprobar el artista en Lidarr."
+  },
+  "LIDARR_ARTIST_EXISTS": {
+    "title": "El artista ya existe en Lidarr",
+    "description": "Este artista ya existe en Lidarr."
+  },
+  "VALUE_ALREADY_IN_USE": {
+    "title": "Valor ya en uso",
+    "description": "Ese valor ya está en uso."
+  },
+  "GENERIC_FALLBACK": {
+    "title": "Algo salió mal",
+    "description": "Inténtalo de nuevo. Si sigue fallando, revisa los registros."
+  },
+  "NETWORK_ERROR": {
+    "title": "Error de red",
+    "description": "No se pudo contactar con el servidor. Comprueba tu conexión e inténtalo de nuevo."
+  },
+  "SIGNED_OUT": {
+    "title": "Has cerrado sesión",
+    "description": "Por favor, vuelve a iniciar sesión."
+  },
+  "FORBIDDEN": {
+    "title": "No permitido",
+    "description": "No tienes permiso para esa acción."
+  },
+  "SPOTIFY_PREMIUM_PROPAGATION": {
+    "title": "Spotify está rechazando las llamadas a la API del propietario de la app",
+    "description": "Spotify requiere que la cuenta del propietario de la app tenga una suscripción Premium activa. Si Premium se acaba de activar, los cambios pueden tardar unas horas en propagarse. Synthseek conservará tus tokens y reintentará automáticamente."
+  },
+  "SPOTIFY_NOT_CONFIGURED": {
+    "title": "Spotify no está configurado",
+    "description": "Pide a tu administrador que establezca el Client ID y la URL base pública en Ajustes."
+  },
+  "SPOTIFY_USER_NOT_REGISTERED": {
+    "title": "Tu cuenta de Spotify aún no está permitida",
+    "description": "Esta app de Spotify está en modo de desarrollo, así que solo funciona con las cuentas de su lista de usuarios. Pide a tu administrador que añada tu cuenta de Spotify (tu correo de inicio de sesión) a la app en el Panel de Desarrolladores de Spotify, y vuelve a conectar."
+  },
+  "SPOTIFY_STATE_EXPIRED": {
+    "title": "El enlace de autorización expiró",
+    "description": "El estado de OAuth expiró antes de que terminaras el proceso. Pulsa Conectar Spotify de nuevo."
+  },
+  "SPOTIFY_SESSION_EXPIRED": {
+    "title": "La sesión de Synthseek expiró",
+    "description": "Vuelve a iniciar sesión y reintenta conectar Spotify."
+  },
+  "SPOTIFY_EXCHANGE_FAILED": {
+    "title": "Fallo de conexión con Spotify",
+    "description": "Synthseek no pudo completar el intercambio de OAuth. Revisa los registros del servidor y reintenta."
+  },
+  "SPOTIFY_PROXY_ERROR": {
+    "title": "No se pudo contactar con el backend de Synthseek",
+    "description": "La respuesta no pudo comunicarse con la API. Comprueba que el backend está en marcha e inténtalo de nuevo."
+  },
+  "SPOTIFY_MISSING_PARAMS": {
+    "title": "Spotify no devolvió un código de autorización",
+    "description": "Inténtalo de nuevo. Si sigue ocurriendo, revisa la Redirect URI en los ajustes de tu app de Spotify."
+  },
+  "SPOTIFY_ACCESS_DENIED": {
+    "title": "Rechazaste la autorización de Spotify",
+    "description": "Pulsa Conectar Spotify de nuevo cuando estés listo."
+  },
+  "SPOTIFY_CONNECTED": {
+    "title": "Spotify conectado",
+    "description": "Abre Importar desde proveedores para empezar a importar tu biblioteca."
+  }
+}

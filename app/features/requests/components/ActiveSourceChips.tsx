@@ -5,11 +5,13 @@ import { useTrackRequests } from "@hooks/api";
 import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
 import { Disc, ListMusic, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { deriveSourceOptions, parseSourceIds, serializeSourceIds } from "../helpers";
 import { REQUESTS_URL_PARAMS } from "../types";
 import { activeSourceChip, activeSourceChipClear, activeSourceClearAll } from "./styles";
 
 export function ActiveSourceChips() {
+  const { t } = useTranslation("requests");
   const { data: items } = useTrackRequests();
   const [raw, setSource] = useUrlParam("source", REQUESTS_URL_PARAMS.source);
 
@@ -23,7 +25,7 @@ export function ActiveSourceChips() {
 
   return (
     <div className="mb-3 flex flex-wrap items-center gap-2">
-      <span className="text-fg/40 text-xs">Filtered to</span>
+      <span className="text-fg/40 text-xs">{t("activeSourceChips.filteredTo")}</span>
       {selected.map((option) => {
         const isAlbum = option.contentType === ContentType.enum.album;
         const Icon = isAlbum ? Disc : ListMusic;
@@ -34,7 +36,7 @@ export function ActiveSourceChips() {
             <button
               type="button"
               onClick={() => remove(option.id)}
-              aria-label={`Remove ${option.name}`}
+              aria-label={t("activeSourceChips.remove", { name: option.name })}
               className={activeSourceChipClear()}
             >
               <X className="size-3" />
@@ -44,7 +46,7 @@ export function ActiveSourceChips() {
       })}
       {selected.length > 1 && (
         <button type="button" onClick={() => setSource(null)} className={activeSourceClearAll()}>
-          Clear all
+          {t("activeSourceChips.clearAll")}
         </button>
       )}
     </div>

@@ -4,10 +4,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { IconButton } from "@components/ui/IconButton";
 import { isRetryableStatus } from "@utils/status-helpers";
 import { MoreVertical, RefreshCw, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { mobileActionsButton } from "../../styles";
 import type { TrackActionsCellProps } from "../types";
 
 export function TrackActionsCell({ item, canAct, onRetry, onCancel }: TrackActionsCellProps) {
+  const { t } = useTranslation("requests");
+
   if (!canAct) return null;
 
   const canRetry = isRetryableStatus(item.status);
@@ -21,17 +24,24 @@ export function TrackActionsCell({ item, canAct, onRetry, onCancel }: TrackActio
             variant="green"
             size="sm"
             onClick={onRetry}
-            aria-label="Retry download"
-            title="Retry"
+            aria-label={t("table.retry")}
+            title={t("table.retryTitle")}
           />
         )}
-        <IconButton icon={Trash2} variant="red" size="sm" onClick={onCancel} aria-label="Cancel track" title="Cancel" />
+        <IconButton
+          icon={Trash2}
+          variant="red"
+          size="sm"
+          onClick={onCancel}
+          aria-label={t("table.cancel")}
+          title={t("table.cancelTitle")}
+        />
       </div>
 
       <div className="sm:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className={mobileActionsButton()} aria-label="Actions menu">
+            <button className={mobileActionsButton()} aria-label={t("table.actionsMenu")}>
               <MoreVertical className="size-4" />
             </button>
           </DropdownMenuTrigger>
@@ -39,12 +49,12 @@ export function TrackActionsCell({ item, canAct, onRetry, onCancel }: TrackActio
             {canRetry && (
               <DropdownMenuItem onClick={onRetry} className="text-green-400 hover:text-green-300">
                 <RefreshCw className="size-4" />
-                Retry download
+                {t("table.retryMenuItem")}
               </DropdownMenuItem>
             )}
             <DropdownMenuItem onClick={onCancel} className="text-red-400 hover:text-red-300">
               <Trash2 className="size-4" />
-              Cancel track
+              {t("table.cancelMenuItem")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

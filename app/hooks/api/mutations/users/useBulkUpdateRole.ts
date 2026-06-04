@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useBulkUpdateRole() {
@@ -9,6 +10,6 @@ export function useBulkUpdateRole() {
       utils.users.list.invalidate();
       toast.success(`Updated ${result.updated} ${result.updated === 1 ? "user" : "users"}`);
     },
-    onError: (error) => toast.error(error.message || "Failed to update users"),
+    onError: (error) => errorToast(error, "users.updateRoleFailed"),
   });
 }

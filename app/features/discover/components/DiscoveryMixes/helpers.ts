@@ -1,8 +1,21 @@
+import type { ParseKeys } from "i18next";
+
 import type { MusicImage, MusicPlaylist, MusicTrack } from "@api/__generated__/types";
 import type { LbPlaylistKind } from "@features/discovery-integrations/types";
 
 import { EMPTY_REASON_LABELS } from "./constants";
-import type { DiscoveryMix, FeedCandidate, LbKindMeta } from "./types";
+import type { DiscoveryMix, DiscoveryMixesEmptyReason, FeedCandidate, LbKindMeta } from "./types";
+
+const EMPTY_TEXT_KEYS: Record<DiscoveryMixesEmptyReason, ParseKeys<"discover">> = {
+  error: "mixes.empty.error",
+  disabled: "mixes.empty.disabled",
+  "no-username": "mixes.empty.noUsername",
+  "no-kinds": "mixes.empty.noKinds",
+};
+
+export function emptyTextKey(reason: DiscoveryMixesEmptyReason): ParseKeys<"discover"> {
+  return EMPTY_TEXT_KEYS[reason];
+}
 
 function albumImagesOf(candidate: FeedCandidate): MusicImage[] {
   return candidate.albumImage ? [{ url: candidate.albumImage, width: null, height: null }] : [];

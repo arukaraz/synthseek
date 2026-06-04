@@ -1,0 +1,204 @@
+{
+  "screen": {
+    "srHeading": "Discover"
+  },
+  "categories": {
+    "screen": {
+      "back": "Back",
+      "title": "All Genres",
+      "loading": "Loading...",
+      "count_one": "{{count}} genre",
+      "count_other": "{{count}} genres",
+      "errorTitle": "Failed to load genres",
+      "errorDescription": "Please try again later.",
+      "emptyTitle": "No Genres",
+      "emptyDescription": "No genres available."
+    },
+    "grid": {
+      "title": "Genres",
+      "subtitle": "Explore music by category",
+      "seeAll": "See all",
+      "seeAllAriaLabel": "See all genres",
+      "errorTitle": "Failed to load genres",
+      "errorDescription": "Unable to fetch genres. Please try again later.",
+      "emptyTitle": "No Genres",
+      "emptyDescription": "No browse categories available at this time.",
+      "skeletonAriaLabel": "Genres"
+    }
+  },
+  "category": {
+    "fallbackName": "Category",
+    "back": "Back to Discover",
+    "loading": "Loading...",
+    "counts": "{{albums}} albums · {{playlists}} playlists",
+    "errorTitle": "Failed to load content",
+    "errorDescription": "Unable to fetch content for this genre. Please try again later.",
+    "emptyTitle": "No Content",
+    "emptyDescription": "No content found for this genre.",
+    "albumsHeading": "Albums",
+    "playlistsHeading": "Playlists"
+  },
+  "trendingHero": {
+    "regionAriaLabel": "Trending tracks hero",
+    "errorTitle": "Failed to load trending tracks",
+    "errorDescription": "Unable to fetch trending content. Please try again later.",
+    "prevAriaLabel": "Previous trending track",
+    "nextAriaLabel": "Next trending track",
+    "slideAriaLabel": "Go to slide {{number}}",
+    "badge": "Trending now",
+    "request": "Request",
+    "requestAriaLabel": "Request {{title}}",
+    "coverAlt": "{{title}} by {{artist}}",
+    "unknownTrack": "Unknown Track",
+    "unknownArtist": "Unknown Artist"
+  },
+  "coverflow": {
+    "regionAriaLabel": "Trending tracks carousel",
+    "errorTitle": "Failed to load trending tracks",
+    "errorDescription": "Unable to fetch trending content. Please try again later.",
+    "title": "Random Trending Picks",
+    "subtitle": "Fresh hits updated daily",
+    "prevAriaLabel": "Previous track",
+    "nextAriaLabel": "Next track",
+    "badge": "Trending",
+    "download": "Download",
+    "coverAlt": "{{title}} by {{artist}}",
+    "unknownTrack": "Unknown Track",
+    "unknownArtist": "Unknown Artist"
+  },
+  "artistSpotlight": {
+    "title": "Artist Spotlight",
+    "subtitle": "Top artists in your region",
+    "errorTitle": "Failed to load artists",
+    "errorDescription": "Unable to fetch top artists. Please try again later.",
+    "emptyTitle": "No Artists Found",
+    "emptyDescription": "No top artists found for this region.",
+    "artistBadge": "Artist",
+    "latestRelease": "Latest Release:",
+    "songs_one": "{{count}} Song",
+    "songs_other": "{{count}} Songs",
+    "noAlbums": "No albums available"
+  },
+  "leaderboard": {
+    "errorTitle": "Failed to load library",
+    "errorDescription": "Unable to fetch library statistics. Please try again.",
+    "tabsAriaLabel": "Library leaderboard mode",
+    "tabArtists": "Artists",
+    "tabGenres": "Genres",
+    "topArtists": "Top artists",
+    "topGenres": "Top genres",
+    "statsTracks": "Tracks",
+    "statsLibrary": "Library",
+    "statsQueued": "Queued",
+    "unitTracks": "tracks",
+    "unitAlbums": "albums",
+    "emptyArtistsTitle": "No artists yet",
+    "emptyArtistsDescription": "Complete some downloads to see your top artists.",
+    "emptyGenresTitle": "No genres yet",
+    "emptyGenresDescription": "Genres are tracked on new downloads, they will populate as your library grows."
+  },
+  "topTracks": {
+    "title": "Top Tracks",
+    "subtitle": "Most played · all time · Last.fm",
+    "heroBadge": "#1 most played",
+    "plays": "{{count}} plays",
+    "empty": {
+      "error": "Couldn't load Last.fm data.",
+      "disabled": "Enable Last.fm to see your most played tracks here.",
+      "noUsername": "Add your Last.fm username to start syncing top tracks.",
+      "noData": "No top tracks yet, scrobble some music to see them ranked.",
+      "ctaOpenSettings": "Open settings",
+      "ctaConfigure": "Configure Last.fm"
+    }
+  },
+  "recentScrobbles": {
+    "title": "Recent Scrobbles",
+    "subtitle": "Last.fm",
+    "seeMore": "See more",
+    "seeMoreAriaLabel": "Open Last.fm profile",
+    "scrollLeftAriaLabel": "Scroll left",
+    "scrollRightAriaLabel": "Scroll right",
+    "ageJustNow": "just now",
+    "ageMinutes": "{{count}}m ago",
+    "ageHours": "{{count}}h ago",
+    "ageDays": "{{count}}d ago",
+    "empty": {
+      "error": "Couldn't load Last.fm data.",
+      "disabled": "Enable Last.fm to see your recent scrobbles here.",
+      "noUsername": "Add your Last.fm username to start syncing scrobbles.",
+      "noData": "No scrobbles yet, your timeline will appear here.",
+      "ctaOpenSettings": "Open settings",
+      "ctaConfigure": "Configure Last.fm"
+    }
+  },
+  "recentRequests": {
+    "title": "Recent requests",
+    "subtitle": "Last {{count}} downloads",
+    "open": "Open Requests",
+    "openAriaLabel": "Open requests page",
+    "errorTitle": "Failed to load requests",
+    "errorDescription": "Unable to fetch recent requests. Please try again.",
+    "emptyTitle": "No requests yet",
+    "emptyDescription": "Start requesting music to see your recent downloads here.",
+    "albumArtAlt": "Album art for {{name}}",
+    "scrollPrevAriaLabel": "Scroll to previous requests",
+    "scrollNextAriaLabel": "Scroll to next requests"
+  },
+  "mixes": {
+    "title": "Discover Mixes",
+    "subtitle": "ListenBrainz",
+    "cardAriaLabel": "Open {{label}} mix, {{count}} tracks",
+    "trackCount": "{{count}} tracks",
+    "autoRequestTooltip": "Auto-request is enabled, playlists are created automatically when the feed refreshes.",
+    "playlistName": "{{label}} ({{date}})",
+    "playlistDescription": "Generated by Discovery · listenbrainz:{{kind}}",
+    "playlistNoSync": "no sync",
+    "playlistOwner": "ListenBrainz",
+    "kinds": {
+      "dailyJams": {
+        "label": "Daily Jams",
+        "tag": "Refreshes daily",
+        "blurb": "A comfortable background mix of recordings you already love, regenerated every morning."
+      },
+      "weeklyJams": {
+        "label": "Weekly Jams",
+        "tag": "Refreshes Mondays",
+        "blurb": "Songs you've listened to before, arranged into a playlist that doesn't require active listening."
+      },
+      "weeklyExploration": {
+        "label": "Weekly Exploration",
+        "tag": "Refreshes Mondays",
+        "blurb": "Discover new music. Tracks you haven't heard before, selected by the collaborative-filtering algorithm."
+      },
+      "cfRecommendations": {
+        "label": "CF Recommendations",
+        "tag": "Raw recording pool",
+        "blurb": "Your raw collaborative-filtering output recording MBIDs ranked by score."
+      }
+    },
+    "freshness": {
+      "syncedToday": "Synced today",
+      "syncedDaysAgo": "Synced {{count}}d ago",
+      "updatedToday": "Updated today",
+      "updatedDaysAgo": "Updated {{count}}d ago",
+      "updatedWeekday": "Updated {{weekday}}"
+    },
+    "emptyReason": {
+      "noData": "No data yet",
+      "noResolved": "Couldn't match recordings",
+      "notGenerated": "Waiting for ListenBrainz",
+      "fetchError": "Sync failed, will retry",
+      "waitingFirstSync": "Waiting for first sync",
+      "feedEmpty": "Feed empty"
+    },
+    "empty": {
+      "error": "Couldn't load your discovery mixes.",
+      "disabled": "Enable ListenBrainz to see your weekly mixes here.",
+      "noUsername": "Add your ListenBrainz username to start syncing mixes.",
+      "noKinds": "Pick which playlists to fetch in settings.",
+      "ctaOpenSettings": "Open settings",
+      "ctaConfigure": "Configure ListenBrainz",
+      "ctaChoosePlaylists": "Choose playlists"
+    }
+  }
+}

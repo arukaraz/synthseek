@@ -4,7 +4,6 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { validateSlskdApiUrl } from "@utils/slskd-url";
 
 import { SlskdStep } from "../SlskdStep";
-import { SLSKD_COPY } from "../../constants";
 
 interface TestResult {
   ok: boolean;
@@ -29,7 +28,7 @@ const fillFields = () => {
 };
 
 const continueButton = () => screen.getByRole("button", { name: "Continue" });
-const testButton = () => screen.getByRole("button", { name: SLSKD_COPY.testIdle });
+const testButton = () => screen.getByRole("button", { name: "Test connection" });
 
 const runTest = async (result: TestResult) => {
   testMutateAsync.mockResolvedValueOnce(result);
@@ -55,7 +54,7 @@ describe("SlskdStep", () => {
     fillFields();
     await runTest({ ok: true });
 
-    await waitFor(() => expect(screen.getByText(SLSKD_COPY.passed)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("Connection verified.")).toBeInTheDocument());
     expect(continueButton()).toBeEnabled();
   });
 
@@ -64,8 +63,10 @@ describe("SlskdStep", () => {
     fillFields();
     await runTest({ ok: false });
 
-    await waitFor(() => expect(screen.getByText(SLSKD_COPY.failed)).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: SLSKD_COPY.overrideLink })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText("Could not reach slskd. Check the URL and API key.")).toBeInTheDocument()
+    );
+    expect(screen.getByRole("button", { name: "Continue without a verified connection" })).toBeInTheDocument();
     expect(continueButton()).toBeDisabled();
   });
 
@@ -74,9 +75,13 @@ describe("SlskdStep", () => {
     fillFields();
     await runTest({ ok: false });
 
-    fireEvent.click(screen.getByRole("button", { name: SLSKD_COPY.overrideLink }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue without a verified connection" }));
 
-    await waitFor(() => expect(screen.getByText(SLSKD_COPY.overrideArmed)).toBeInTheDocument());
+    await waitFor(() =>
+      expect(
+        screen.getByText("Continuing without a verified connection. You can fix this later in Settings.")
+      ).toBeInTheDocument()
+    );
     expect(continueButton()).toBeEnabled();
     expect(updateMutateAsync).not.toHaveBeenCalled();
     expect(onComplete).not.toHaveBeenCalled();
@@ -86,11 +91,11 @@ describe("SlskdStep", () => {
     renderStep();
     fillFields();
     await runTest({ ok: true });
-    await waitFor(() => expect(screen.getByText(SLSKD_COPY.passed)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("Connection verified.")).toBeInTheDocument());
 
     fireEvent.change(screen.getByLabelText("API URL"), { target: { value: "http://localhost:9999" } });
 
-    expect(screen.queryByText(SLSKD_COPY.passed)).not.toBeInTheDocument();
+    expect(screen.queryByText("Connection verified.")).not.toBeInTheDocument();
     expect(continueButton()).toBeDisabled();
   });
 
@@ -98,12 +103,18 @@ describe("SlskdStep", () => {
     renderStep();
     fillFields();
     await runTest({ ok: false });
-    fireEvent.click(screen.getByRole("button", { name: SLSKD_COPY.overrideLink }));
-    await waitFor(() => expect(screen.getByText(SLSKD_COPY.overrideArmed)).toBeInTheDocument());
+    fireEvent.click(screen.getByRole("button", { name: "Continue without a verified connection" }));
+    await waitFor(() =>
+      expect(
+        screen.getByText("Continuing without a verified connection. You can fix this later in Settings.")
+      ).toBeInTheDocument()
+    );
 
     fireEvent.change(screen.getByLabelText("API Key"), { target: { value: "another-key" } });
 
-    expect(screen.queryByText(SLSKD_COPY.overrideArmed)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Continuing without a verified connection. You can fix this later in Settings.")
+    ).not.toBeInTheDocument();
     expect(continueButton()).toBeDisabled();
   });
 
@@ -165,7 +176,11 @@ describe("SlskdStep", () => {
     updateMutateAsync.mockRejectedValueOnce(new Error("save failed"));
     fireEvent.click(continueButton());
 
-    await waitFor(() => expect(screen.getByText(SLSKD_COPY.saveFailed)).toBeInTheDocument());
+    await waitFor(() =>
+      expect(
+        screen.getByText("Could not save the slskd connection. Confirm the URL and API key, then try again.")
+      ).toBeInTheDocument()
+    );
     expect(continueButton()).toBeEnabled();
     expect(onComplete).not.toHaveBeenCalled();
 

@@ -1,10 +1,11 @@
 import type { ContentType, MusicItem } from "@api/__generated__/types";
+import type { ParseKeys } from "i18next";
 
 export type FilterType = ContentType | "all";
 
 export interface FilterTab {
   value: FilterType;
-  label: string;
+  labelKey: ParseKeys<"search">;
 }
 
 export interface Result {

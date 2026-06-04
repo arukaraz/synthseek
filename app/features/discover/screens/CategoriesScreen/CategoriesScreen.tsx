@@ -8,8 +8,10 @@ import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { ArrowLeft, AlertCircle, Grid3X3 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export function CategoriesScreen() {
+  const { t } = useTranslation("discover");
   const router = useRouter();
   const { data, isLoading, isError } = useCategories(50);
   const genres = data?.data?.items ?? [];
@@ -24,10 +26,12 @@ export function CategoriesScreen() {
         <div className="p-4 sm:p-6">
           <button onClick={() => router.back()} className={backButton()}>
             <ArrowLeft className="h-4 w-4" />
-            Back
+            {t("categories.screen.back")}
           </button>
-          <h1 className="text-fg text-xl font-bold sm:text-2xl">All Genres</h1>
-          <p className="text-fg/60 mt-1 text-sm">{isLoading ? "Loading..." : `${genres.length} genres`}</p>
+          <h1 className="text-fg text-xl font-bold sm:text-2xl">{t("categories.screen.title")}</h1>
+          <p className="text-fg/60 mt-1 text-sm">
+            {isLoading ? t("categories.screen.loading") : t("categories.screen.count", { count: genres.length })}
+          </p>
         </div>
       </div>
 
@@ -39,9 +43,17 @@ export function CategoriesScreen() {
             ))}
           </div>
         ) : isError ? (
-          <EmptyState icon={AlertCircle} title="Failed to load genres" description="Please try again later." />
+          <EmptyState
+            icon={AlertCircle}
+            title={t("categories.screen.errorTitle")}
+            description={t("categories.screen.errorDescription")}
+          />
         ) : genres.length === 0 ? (
-          <EmptyState icon={Grid3X3} title="No Genres" description="No genres available." />
+          <EmptyState
+            icon={Grid3X3}
+            title={t("categories.screen.emptyTitle")}
+            description={t("categories.screen.emptyDescription")}
+          />
         ) : (
           <motion.div variants={fadeIn} initial="hidden" animate="visible">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">

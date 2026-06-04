@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Download, TrendingUp } from "lucide-react";
 import { memo, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import type { CoverflowCardProps } from "./types";
 
 export const CoverflowCard = memo(function CoverflowCard({
@@ -22,12 +23,13 @@ export const CoverflowCard = memo(function CoverflowCard({
   onClick,
   priority = false,
 }: CoverflowCardProps) {
+  const { t } = useTranslation("discover");
   const { translateX, rotateY, scale, opacity, zIndex } = transform;
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const trackName = track?.title ?? "Unknown Track";
-  const artistName = track?.artists?.[0]?.name ?? "Unknown Artist";
+  const trackName = track?.title ?? t("coverflow.unknownTrack");
+  const artistName = track?.artists?.[0]?.name ?? t("coverflow.unknownArtist");
 
   const handleDownload = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -77,7 +79,7 @@ export const CoverflowCard = memo(function CoverflowCard({
       >
         <ImageWithFallback
           src={imageUrl}
-          alt={`${trackName} by ${artistName}`}
+          alt={t("coverflow.coverAlt", { title: trackName, artist: artistName })}
           fill
           sizes="(max-width: 640px) 55vw, (max-width: 1024px) 40vw, 35vw"
           className="rounded-xl sm:rounded-2xl"
@@ -89,7 +91,7 @@ export const CoverflowCard = memo(function CoverflowCard({
         {isCenter && (
           <div className={trendingBadgeContainer()}>
             <TrendingUp className="text-accent-400 h-5 w-5" />
-            <span className="text-overlay-fg/90 text-lg font-medium">Trending</span>
+            <span className="text-overlay-fg/90 text-lg font-medium">{t("coverflow.badge")}</span>
           </div>
         )}
 
@@ -118,7 +120,7 @@ export const CoverflowCard = memo(function CoverflowCard({
               className={`${primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" })} text-overlay-fg mt-2 font-semibold sm:mt-3`}
             >
               <Download className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-4 sm:w-4" />
-              Download
+              {t("coverflow.download")}
             </Button>
           )}
         </div>

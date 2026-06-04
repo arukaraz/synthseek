@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useDeleteUser() {
@@ -7,8 +9,8 @@ export function useDeleteUser() {
   return trpc.users.delete.useMutation({
     onSuccess: () => {
       utils.users.list.invalidate();
-      toast.success("User deleted");
+      toast.success(i18n.t("mutations:users.deleted"));
     },
-    onError: (error) => toast.error(error.message || "Failed to delete user"),
+    onError: (error) => errorToast(error, "users.deleteFailed"),
   });
 }

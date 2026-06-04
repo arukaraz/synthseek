@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { useUpdateConnectionsEnrichment } from "@hooks/api/mutations/settings/useUpdateConnections";
 
 import { SaveBar } from "../../components/SaveBar";
@@ -11,36 +13,36 @@ import { useSettingsForm } from "../../hooks/useSettingsForm";
 import type { EnrichmentCardProps } from "./types";
 
 export function EnrichmentCard({ initial }: EnrichmentCardProps) {
+  const { t } = useTranslation("settings");
   const update = useUpdateConnectionsEnrichment();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial);
 
   if (!draft) return null;
 
   return (
-    <SettingsCard
-      title="Metadata Enrichment"
-      optional
-      description="External services that enrich your library with artwork, fingerprinting fallbacks, and tagging data. All optional but recommended, leave empty to fall back to public defaults or skip the feature."
-    >
-      <SettingsField label="FanART API key" helper="Artwork sourcing.">
+    <SettingsCard title={t("metadata.enrichment.title")} optional description={t("metadata.enrichment.description")}>
+      <SettingsField
+        label={t("metadata.enrichment.fanartKey.label")}
+        helper={t("metadata.enrichment.fanartKey.helper")}
+      >
         <SettingsSecretInput value={draft.fanartApiKey} onChange={(v) => setField("fanartApiKey", v)} />
       </SettingsField>
 
       <SettingsField
-        label="MusicBrainz contact email"
-        helper="Required. Without it, Synthseek shares rate-limited email."
+        label={t("metadata.enrichment.musicbrainzEmail.label")}
+        helper={t("metadata.enrichment.musicbrainzEmail.helper")}
       >
         <SettingsTextInput
           value={draft.musicbrainzEmail}
           onChange={(v) => setField("musicbrainzEmail", v)}
           type="email"
-          placeholder="you@example.com"
+          placeholder={t("metadata.enrichment.musicbrainzEmail.placeholder")}
         />
       </SettingsField>
 
       <SettingsField
-        label="AcoustID API key"
-        helper="Audio fingerprinting fallback for tracks without reliable tag metadata."
+        label={t("metadata.enrichment.acoustidKey.label")}
+        helper={t("metadata.enrichment.acoustidKey.helper")}
       >
         <SettingsSecretInput value={draft.acoustidApiKey} onChange={(v) => setField("acoustidApiKey", v)} />
       </SettingsField>

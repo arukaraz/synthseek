@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useCreateLocalUser() {
@@ -9,6 +10,6 @@ export function useCreateLocalUser() {
       utils.users.list.invalidate();
       toast.success(`User ${user.username} created`);
     },
-    onError: (error) => toast.error(error.message || "Failed to create user"),
+    onError: (error) => errorToast(error, "users.createFailed"),
   });
 }

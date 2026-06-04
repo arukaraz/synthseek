@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { useState, type KeyboardEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Input } from "@components/ui/Input";
 import { cn } from "@utils/cn";
@@ -10,6 +11,7 @@ import { chipsInputChip, chipsInputInputField, chipsInputRoot } from "../styles"
 import type { ChipsInputProps } from "./types";
 
 export function ChipsInput({ value, onChange, placeholder, disabled }: ChipsInputProps) {
+  const { t } = useTranslation("settings");
   const [draft, setDraft] = useState("");
 
   const commit = (raw: string) => {
@@ -43,7 +45,7 @@ export function ChipsInput({ value, onChange, placeholder, disabled }: ChipsInpu
             type="button"
             disabled={disabled}
             onClick={() => remove(chip)}
-            aria-label={`Remove ${chip}`}
+            aria-label={t("shell.chipsInput.removeLabel", { chip })}
             className="hover:text-primary-100"
           >
             <X className="h-3 w-3" />

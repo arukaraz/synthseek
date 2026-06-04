@@ -1,24 +1,26 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
-import { ENGINE_DESCRIPTION } from "./constants";
 import { ImportCard } from "./ImportCard";
 import { QueueCard } from "./QueueCard";
 import { SearchCard } from "./SearchCard";
 import { TimeoutsCard } from "./TimeoutsCard";
 
 export function EngineSection() {
+  const { t } = useTranslation("settings");
   const { data, isLoading, error } = useSettings();
 
   if (isLoading) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title="Engine" description={ENGINE_DESCRIPTION} />
+        <SettingsPageHeader title={t("header.title")} description={t("header.description")} />
         <div className={emptyPanel()}>
-          <span className="text-fg/60 text-sm">Loading settings…</span>
+          <span className="text-fg/60 text-sm">{t("header.loading")}</span>
         </div>
       </div>
     );
@@ -27,9 +29,11 @@ export function EngineSection() {
   if (error || !data) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title="Engine" description={ENGINE_DESCRIPTION} />
+        <SettingsPageHeader title={t("header.title")} description={t("header.description")} />
         <div className={emptyPanel()}>
-          <span className="text-sm text-red-400">Failed to load settings: {error?.message ?? "Unknown error"}</span>
+          <span className="text-sm text-red-400">
+            {t("header.loadError", { message: error?.message ?? t("header.unknownError") })}
+          </span>
         </div>
       </div>
     );
@@ -37,7 +41,7 @@ export function EngineSection() {
 
   return (
     <div className={contentRoot()}>
-      <SettingsPageHeader title="Engine" description={ENGINE_DESCRIPTION} />
+      <SettingsPageHeader title={t("header.title")} description={t("header.description")} />
       <div className={sectionGrid()}>
         <SearchCard initial={{ search: data.engine.search, smartSearch: data.engine.smartSearch }} />
         <TimeoutsCard initial={data.engine.timeouts} />

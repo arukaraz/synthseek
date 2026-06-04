@@ -8,9 +8,8 @@ export interface OrderToggleProps {
   onClick: () => void;
 }
 
-export interface StatusFilterOption {
+export interface StatusFilterIcon {
   value: StatusFilter;
-  label: string;
   icon: LucideIcon;
 }
 

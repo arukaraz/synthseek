@@ -5,9 +5,11 @@ import { ContentType } from "@api/__generated__/types";
 import { getContentTypeIcon, getContentTypeLabel } from "@utils/content-type-helpers";
 import { configHeader } from "../styles";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import type { ConfigHeaderProps } from "./types";
 
 export function ConfigHeader({ name, artist, image, year, itemType, totalTracks, albumName }: ConfigHeaderProps) {
+  const { t } = useTranslation("search");
   const isTrack = itemType === ContentType.enum.track;
   const PlaceholderIcon = getContentTypeIcon(itemType);
 
@@ -40,11 +42,7 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
             <div className="text-overlay-fg/60 flex items-center gap-2 text-xs">
               {isTrack && albumName && <span className="type-text-album truncate">{albumName}</span>}
               {year && <span>{year}</span>}
-              {totalTracks && (
-                <span>
-                  {totalTracks} {totalTracks === 1 ? "track" : "tracks"}
-                </span>
-              )}
+              {totalTracks && <span>{t("config.header.trackCount", { count: totalTracks })}</span>}
             </div>
           </div>
         </div>

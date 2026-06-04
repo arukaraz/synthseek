@@ -16,6 +16,7 @@ import { titleCase } from "@utils/formatters";
 import { Download, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { ConfigHeader } from "./ConfigHeader";
 import { OptionGrid } from "./OptionGrid";
@@ -48,6 +49,7 @@ export function ConfigRequestModal({
   const [availability, setAvailability] = useState<AvailabilityMode>("any");
   const losslessActive = qualityMode === "lossless";
 
+  const { t } = useTranslation("search");
   const router = useRouter();
 
   const needsTrackList = !!item && item.type !== ContentType.enum.track && !preloadedTracks;
@@ -73,7 +75,7 @@ export function ConfigRequestModal({
   const bitrateGridOptions: Option<number>[] = BITRATE_OPTIONS.map((opt) => ({
     value: opt.value,
     label: opt.label,
-    description: opt.description,
+    description: t(opt.descriptionKey),
   }));
 
   const formatGridOptions: Option<RequestFormat>[] = FORMAT_OPTIONS.map((opt) => ({
@@ -84,26 +86,26 @@ export function ConfigRequestModal({
 
   const matchingGridOptions: Option<RequestMatchingMode>[] = MATCHING_OPTIONS.map((opt) => ({
     value: RequestMatchingMode.enum[opt.value],
-    label: opt.label,
-    description: opt.description,
+    label: t(opt.labelKey),
+    description: t(opt.descriptionKey),
   }));
 
   const qualityGridOptions: Option<QualityMode>[] = QUALITY_MODE_OPTIONS.map((opt) => ({
     value: opt.value,
-    label: opt.label,
-    description: opt.description,
+    label: t(opt.labelKey),
+    description: t(opt.descriptionKey),
   }));
 
   const uploadSpeedGridOptions: Option<number>[] = UPLOAD_SPEED_OPTIONS.map((opt) => ({
     value: opt.value,
-    label: opt.label,
-    description: opt.description,
+    label: opt.labelKey ? t(opt.labelKey) : (opt.label ?? ""),
+    description: t(opt.descriptionKey),
   }));
 
   const availabilityGridOptions: Option<AvailabilityMode>[] = AVAILABILITY_OPTIONS.map((opt) => ({
     value: opt.value,
-    label: opt.label,
-    description: opt.description,
+    label: t(opt.labelKey),
+    description: t(opt.descriptionKey),
   }));
 
   const handleMutationSuccess = () => {
@@ -132,7 +134,7 @@ export function ConfigRequestModal({
 
   const handleDownload = () => {
     if (!item) {
-      toast.error("Invalid item");
+      toast.error(t("config.errors.invalidItem"));
       return;
     }
 
@@ -158,7 +160,7 @@ export function ConfigRequestModal({
     }
 
     if (trackList.length === 0) {
-      toast.error(`Failed to fetch ${titleCase(item.type)} tracks`);
+      toast.error(t("config.errors.fetchFailed", { type: titleCase(item.type) }));
       return;
     }
 
@@ -213,11 +215,11 @@ export function ConfigRequestModal({
         aria-describedby="config-modal-description"
       >
         <DialogTitle className="sr-only">
-          Download {titleCase(itemType)} - {metadata.name}
+          {t("config.dialogTitle", { type: titleCase(itemType), name: metadata.name })}
         </DialogTitle>
 
         <div id="config-modal-description" className="sr-only">
-          Configure download quality settings for {metadata.name}
+          {t("config.dialogDescription", { name: metadata.name })}
         </div>
 
         <ConfigHeader
@@ -232,9 +234,11 @@ export function ConfigRequestModal({
 
         <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
           <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">Quality Settings</h3>
+            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+              {t("config.sections.quality")}
+            </h3>
             <OptionGrid
-              label="Quality"
+              label={t("config.fields.quality")}
               options={qualityGridOptions}
               value={qualityMode}
               onChange={setQualityMode}
@@ -242,14 +246,14 @@ export function ConfigRequestModal({
               showCheckmark
             />
             <OptionGrid
-              label="Bitrate"
+              label={t("config.fields.bitrate")}
               options={bitrateGridOptions}
               value={bitrate}
               onChange={setBitrate}
               columns={4}
             />
             <OptionGrid
-              label="Format"
+              label={t("config.fields.format")}
               options={formatGridOptions}
               value={format}
               onChange={setFormat}
@@ -259,9 +263,11 @@ export function ConfigRequestModal({
           </div>
 
           <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">Matching Mode</h3>
+            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+              {t("config.sections.matching")}
+            </h3>
             <OptionGrid
-              label="Bitrate Matching"
+              label={t("config.fields.bitrateMatching")}
               options={matchingGridOptions}
               value={bitrateMatching}
               onChange={setBitrateMatching}
@@ -269,7 +275,7 @@ export function ConfigRequestModal({
               showCheckmark
             />
             <OptionGrid
-              label="Format Matching"
+              label={t("config.fields.formatMatching")}
               options={matchingGridOptions}
               value={formatMatching}
               onChange={setFormatMatching}
@@ -280,16 +286,18 @@ export function ConfigRequestModal({
           </div>
 
           <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">Peer Preferences</h3>
+            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+              {t("config.sections.peer")}
+            </h3>
             <OptionGrid
-              label="Min Upload Speed"
+              label={t("config.fields.minUploadSpeed")}
               options={uploadSpeedGridOptions}
               value={minUploadSpeed}
               onChange={setMinUploadSpeed}
               columns={4}
             />
             <OptionGrid
-              label="Availability"
+              label={t("config.fields.availability")}
               options={availabilityGridOptions}
               value={availability}
               onChange={setAvailability}
@@ -305,7 +313,7 @@ export function ConfigRequestModal({
               className="border-fg/20 bg-fg/5 text-fg hover:bg-fg/10 flex-1"
               disabled={isLoading}
             >
-              Cancel
+              {t("config.actions.cancel")}
             </Button>
             <Button
               onClick={handleDownload}
@@ -316,12 +324,12 @@ export function ConfigRequestModal({
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Requesting please wait...
+                  {t("config.actions.requesting")}
                 </>
               ) : (
                 <>
                   <Download className="mr-2 h-4 w-4" />
-                  Request
+                  {t("config.actions.request")}
                 </>
               )}
             </Button>

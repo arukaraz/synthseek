@@ -12,8 +12,9 @@ import {
   DialogTitle,
 } from "@components/ui/Dialog";
 import { cn } from "@utils/cn";
+import { useTranslation } from "react-i18next";
 
-import { DEFAULT_CANCEL_TEXT, DEFAULT_CONFIRM_TEXT, VARIANT_ICONS } from "./constants";
+import { VARIANT_ICONS } from "./constants";
 import { confirmActionButton, confirmDialogContent, confirmFooter, confirmIconBadge } from "./styles";
 import type { ConfirmationModalProps } from "./types";
 
@@ -23,13 +24,16 @@ export function ConfirmationModal({
   onConfirm,
   title,
   message,
-  confirmText = DEFAULT_CONFIRM_TEXT,
-  cancelText = DEFAULT_CANCEL_TEXT,
+  confirmText,
+  cancelText,
   variant = "danger",
   showCancel = true,
 }: ConfirmationModalProps) {
+  const { t } = useTranslation("components");
   const Icon = VARIANT_ICONS[variant];
   const safeActionRef = useRef<HTMLButtonElement>(null);
+  const resolvedConfirmText = confirmText ?? t("confirmation.confirm");
+  const resolvedCancelText = cancelText ?? t("confirmation.cancel");
 
   const handleConfirm = () => {
     onConfirm();
@@ -64,7 +68,7 @@ export function ConfirmationModal({
         <DialogFooter className={confirmFooter}>
           {showCancel && (
             <Button ref={safeActionRef} variant="outline" size="sm" onClick={onClose} className="flex-1 sm:flex-none">
-              {cancelText}
+              {resolvedCancelText}
             </Button>
           )}
           <Button
@@ -73,7 +77,7 @@ export function ConfirmationModal({
             onClick={handleConfirm}
             className={cn(confirmActionButton({ variant }), showCancel ? "flex-1 sm:flex-none" : "w-full")}
           >
-            {confirmText}
+            {resolvedConfirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -106,6 +106,7 @@ export default defineConfig({
       "@utils": path.resolve(__dirname, "./app/utils"),
       "@hooks": path.resolve(__dirname, "./app/hooks"),
       "@modules": path.resolve(__dirname, "./app/modules"),
+      "@locale": path.resolve(__dirname, "./app/modules/i18n"),
       "@theme": path.resolve(__dirname, "./app/theme"),
       "@api": path.resolve(__dirname, "./app/api"),
       "@test": path.resolve(__dirname, "./__tests__"),

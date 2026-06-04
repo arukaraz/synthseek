@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useJspfImportFlow } from "./hooks/useJspfImportFlow";
 import { PreviewStep } from "./steps/PreviewStep";
@@ -10,6 +11,7 @@ import { modalBody, modalContent, modalHeader } from "./styles";
 import type { JspfImportModalProps } from "./types";
 
 export function JspfImportModal({ open, onOpenChange }: JspfImportModalProps) {
+  const { t } = useTranslation("library");
   const flow = useJspfImportFlow(onOpenChange);
 
   useEffect(() => {
@@ -22,11 +24,8 @@ export function JspfImportModal({ open, onOpenChange }: JspfImportModalProps) {
       <DialogContent className={modalContent()}>
         <div className={modalBody()}>
           <div className={modalHeader()}>
-            <DialogTitle>Import playlist</DialogTitle>
-            <DialogDescription>
-              Import a playlist or album from a JSPF, XSPF or CSV file. Tracks are matched against your library before
-              anything downloads.
-            </DialogDescription>
+            <DialogTitle>{t("jspfImport.modal.title")}</DialogTitle>
+            <DialogDescription>{t("jspfImport.modal.description")}</DialogDescription>
           </div>
           {flow.step === "source" ? (
             <SourceStep onLoaded={flow.loadPayload} />

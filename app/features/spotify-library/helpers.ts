@@ -1,3 +1,6 @@
+import type { ParseKeys } from "i18next";
+
+import i18n from "@locale";
 import { formatTimestamp } from "@utils/formatters";
 
 import type { LibraryFilter, LibraryItem, LibrarySort } from "./types";
@@ -42,26 +45,16 @@ export function compareItems(a: LibraryItem, b: LibraryItem, sort: LibrarySort, 
 }
 
 export function formatLastSync(value: Date | string | null): string {
-  if (!value) return "—";
+  if (!value) return i18n.t("library:spotifyLibrary.detail.lastSyncNever");
   return formatTimestamp(new Date(value));
-}
-
-export function pluralize(n: number, singular: string, plural?: string): string {
-  return `${n} ${n === 1 ? singular : (plural ?? `${singular}s`)}`;
 }
 
 export function libraryTypeTone(type: LibraryItem["type"]): "playlist" | "album" | "liked" {
   return type;
 }
 
-export function libraryTypeLabel(type: LibraryItem["type"]): string {
-  if (type === "playlist") return "Playlist";
-  if (type === "album") return "Album";
-  return "Liked";
-}
-
-export function libraryTypeLowerLabel(type: LibraryItem["type"]): string {
-  if (type === "playlist") return "playlist";
-  if (type === "album") return "album";
-  return "liked songs";
+export function libraryTypeLowerLabelKey(type: LibraryItem["type"]): ParseKeys<"library"> {
+  if (type === "playlist") return "spotifyLibrary.type.playlistLower";
+  if (type === "album") return "spotifyLibrary.type.albumLower";
+  return "spotifyLibrary.type.likedLower";
 }

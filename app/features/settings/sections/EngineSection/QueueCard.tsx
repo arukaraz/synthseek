@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { useUpdateEngineQueue } from "@hooks/api/mutations/settings/useUpdateEngine";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -12,6 +14,7 @@ import { ENGINE_DEFAULTS } from "./defaults";
 import type { QueueCardProps } from "./types";
 
 export function QueueCard({ initial }: QueueCardProps) {
+  const { t } = useTranslation("settings");
   const update = useUpdateEngineQueue();
   const { draft, setField, setAll, save, reset, isDirty, isSaving } = useSettingsForm(initial);
 
@@ -19,45 +22,45 @@ export function QueueCard({ initial }: QueueCardProps) {
 
   return (
     <SettingsCard
-      title="Queue & concurrency"
+      title={t("queue.title")}
       trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.queue })} disabled={isSaving} />}
     >
       <EngineRow
-        label="Max size"
-        description="Hard cap on total jobs the queue holds at once (queued + active). New requests are rejected when full."
+        label={t("queue.maxSize.label")}
+        description={t("queue.maxSize.description")}
         control={
           <SettingsNumberInput
             value={draft.maxSize}
             onChange={(v) => setField("maxSize", v)}
             min={10}
             max={10000}
-            ariaLabel="Max queue size"
+            ariaLabel={t("queue.maxSize.ariaLabel")}
           />
         }
       />
       <EngineRow
-        label="Max concurrent searches"
-        description="How many tracks can be in the search phase simultaneously."
+        label={t("queue.maxConcurrentSearches.label")}
+        description={t("queue.maxConcurrentSearches.description")}
         control={
           <SettingsNumberInput
             value={draft.maxConcurrentSearches}
             onChange={(v) => setField("maxConcurrentSearches", v)}
             min={1}
             max={10}
-            ariaLabel="Max concurrent searches"
+            ariaLabel={t("queue.maxConcurrentSearches.ariaLabel")}
           />
         }
       />
       <EngineRow
-        label="Max pending imports"
-        description="Backpressure: when this many downloaded tracks are waiting to import, the engine pauses starting new searches until imports drain."
+        label={t("queue.maxPendingImports.label")}
+        description={t("queue.maxPendingImports.description")}
         control={
           <SettingsNumberInput
             value={draft.maxPendingImports}
             onChange={(v) => setField("maxPendingImports", v)}
             min={1}
             max={20}
-            ariaLabel="Max pending imports"
+            ariaLabel={t("queue.maxPendingImports.ariaLabel")}
           />
         }
       />

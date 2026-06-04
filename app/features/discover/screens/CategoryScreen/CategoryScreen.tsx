@@ -13,16 +13,18 @@ import { motion } from "framer-motion";
 import { ArrowLeft, AlertCircle, ListMusic } from "lucide-react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ContentSkeleton } from "./components/ContentSkeleton";
 import { CONTENT_LIMIT } from "./constants";
 
 export function CategoryScreen() {
+  const { t } = useTranslation("discover");
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const categoryId = params.categoryId as string;
-  const categoryName = searchParams.get("name") ?? "Category";
+  const categoryName = searchParams.get("name") ?? t("category.fallbackName");
 
   const { data, isLoading, isError } = useCategoryPlaylists(categoryId, categoryName, CONTENT_LIMIT);
 
@@ -75,11 +77,13 @@ export function CategoryScreen() {
         <div className="p-4 sm:p-6">
           <button onClick={() => router.back()} className={backButton()}>
             <ArrowLeft className="h-4 w-4" />
-            Back to Discover
+            {t("category.back")}
           </button>
           <h1 className="text-fg text-xl font-bold sm:text-2xl">{categoryName}</h1>
           <p className="text-fg/60 mt-1 text-sm">
-            {isLoading ? "Loading..." : `${albums.length} albums • ${playlists.length} playlists`}
+            {isLoading
+              ? t("category.loading")
+              : t("category.counts", { albums: albums.length, playlists: playlists.length })}
           </p>
         </div>
       </div>
@@ -90,22 +94,22 @@ export function CategoryScreen() {
         ) : isError ? (
           <EmptyState
             icon={AlertCircle}
-            title="Failed to load content"
-            description="Unable to fetch content for this genre. Please try again later."
+            title={t("category.errorTitle")}
+            description={t("category.errorDescription")}
           />
         ) : !hasContent ? (
-          <EmptyState icon={ListMusic} title="No Content" description="No content found for this genre." />
+          <EmptyState icon={ListMusic} title={t("category.emptyTitle")} description={t("category.emptyDescription")} />
         ) : (
           <motion.div variants={fadeIn} initial="hidden" animate="visible" className="space-y-8">
             {albums.length > 0 && (
               <div>
-                <h2 className="text-fg mb-4 text-lg font-semibold">Albums</h2>
+                <h2 className="text-fg mb-4 text-lg font-semibold">{t("category.albumsHeading")}</h2>
                 <Results results={albums} onResultClick={handleItemClick} />
               </div>
             )}
             {playlists.length > 0 && (
               <div>
-                <h2 className="text-fg mb-4 text-lg font-semibold">Playlists</h2>
+                <h2 className="text-fg mb-4 text-lg font-semibold">{t("category.playlistsHeading")}</h2>
                 <Results results={playlists} onResultClick={handleItemClick} />
               </div>
             )}

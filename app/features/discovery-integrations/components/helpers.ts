@@ -1,4 +1,6 @@
-import type { DayOfWeek, ScheduleSpec } from "../types";
+import i18n from "@locale";
+
+import type { ScheduleSpec } from "../types";
 import { DAY_OPTIONS } from "./constants";
 
 export function pad(n: number): string {
@@ -7,10 +9,7 @@ export function pad(n: number): string {
 
 export function describeSchedule(value: ScheduleSpec): string {
   const day = DAY_OPTIONS.find((o) => o.value === value.dayOfWeek);
-  const dayLabel = day?.full ?? "Mondays";
-  return `${dayLabel} at ${pad(value.hour)}:00`;
-}
-
-export function getDayLabel(value: DayOfWeek): string {
-  return DAY_OPTIONS.find((o) => o.value === value)?.label ?? "Mon";
+  const fullKey = day?.fullKey ?? "discoveryIntegrations.schedule.monFull";
+  const dayLabel = i18n.t(`library:${fullKey}`);
+  return i18n.t("library:discoveryIntegrations.schedule.summary", { day: dayLabel, hour: pad(value.hour) });
 }

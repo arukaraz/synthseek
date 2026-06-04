@@ -1,0 +1,18 @@
+{
+  "appShell": {
+    "loader": {
+      "library": "Loading your library"
+    },
+    "settings": {
+      "integrations": {
+        "title": "Integrations",
+        "tabs": {
+          "slskd": "Slskd",
+          "downloadSources": "Download Sources",
+          "plex": "Plex",
+          "metadata": "Metadata"
+        }
+      }
+    }
+  }
+}

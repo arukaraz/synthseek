@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useBulkDeleteUsers() {
@@ -9,6 +10,6 @@ export function useBulkDeleteUsers() {
       utils.users.list.invalidate();
       toast.success(`Deleted ${result.deleted} ${result.deleted === 1 ? "user" : "users"}`);
     },
-    onError: (error) => toast.error(error.message || "Failed to delete users"),
+    onError: (error) => errorToast(error, "users.deleteManyFailed"),
   });
 }

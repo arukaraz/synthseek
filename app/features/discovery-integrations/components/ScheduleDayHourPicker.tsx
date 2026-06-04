@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Calendar, ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
 
@@ -19,6 +20,7 @@ import { DAY_OPTIONS, HOUR_OPTIONS } from "./constants";
 import { describeSchedule, pad } from "./helpers";
 
 export function ScheduleDayHourPicker({ value, onChange, disabled }: ScheduleDayHourPickerProps) {
+  const { t } = useTranslation("library");
   const [open, setOpen] = useState(false);
 
   const setDay = (dayOfWeek: DayOfWeek) => {
@@ -40,7 +42,7 @@ export function ScheduleDayHourPicker({ value, onChange, disabled }: ScheduleDay
       </PopoverTrigger>
       <PopoverContent align="start" className={schedulePickerContent()}>
         <div className={schedulePickerSection()}>
-          <span className={schedulePickerSectionLabel()}>Day</span>
+          <span className={schedulePickerSectionLabel()}>{t("discoveryIntegrations.schedule.day")}</span>
           <div className="grid grid-cols-4 gap-1.5">
             {DAY_OPTIONS.map((opt) => (
               <button
@@ -49,14 +51,14 @@ export function ScheduleDayHourPicker({ value, onChange, disabled }: ScheduleDay
                 className={scheduleDayChip({ selected: value.dayOfWeek === opt.value })}
                 onClick={() => setDay(opt.value)}
               >
-                {opt.label}
+                {t(opt.labelKey)}
               </button>
             ))}
           </div>
         </div>
 
         <div className={schedulePickerSection()}>
-          <span className={schedulePickerSectionLabel()}>Hour</span>
+          <span className={schedulePickerSectionLabel()}>{t("discoveryIntegrations.schedule.hour")}</span>
           <div className={scheduleHourGrid()}>
             {HOUR_OPTIONS.map((h) => (
               <button

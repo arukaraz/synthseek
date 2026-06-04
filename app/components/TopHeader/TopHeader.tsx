@@ -8,6 +8,7 @@ import { Menu, Search, Settings as SettingsIcon, Sparkles, X } from "lucide-reac
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { HeaderTab } from "../HeaderTab";
 import { AppLogo } from "../ui/AppLogo";
@@ -27,6 +28,7 @@ import {
 import type { TopHeaderProps } from "./types";
 
 export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
+  const { t } = useTranslation("components");
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [isFocused, setIsFocused] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -95,10 +97,25 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
             </motion.div>
           </Link>
 
-          <nav aria-label="Primary" className={cn("flex items-center gap-0.5", isSearchOpen && "hidden sm:flex")}>
-            <HeaderTab href="/" icon={Sparkles} label="Discover" isActive={isDiscoverActive} />
-            <HeaderTab href="/requests" icon={Menu} label="Requests" isActive={isRequestsActive} labelOnMobile />
-            <HeaderTab href="/settings" icon={SettingsIcon} label="Settings" isActive={isSettingsActive} hideOnMobile />
+          <nav
+            aria-label={t("header.primaryNav")}
+            className={cn("flex items-center gap-0.5", isSearchOpen && "hidden sm:flex")}
+          >
+            <HeaderTab href="/" icon={Sparkles} label={t("header.discover")} isActive={isDiscoverActive} />
+            <HeaderTab
+              href="/requests"
+              icon={Menu}
+              label={t("header.requests")}
+              isActive={isRequestsActive}
+              labelOnMobile
+            />
+            <HeaderTab
+              href="/settings"
+              icon={SettingsIcon}
+              label={t("header.settings")}
+              isActive={isSettingsActive}
+              hideOnMobile
+            />
           </nav>
         </div>
 
@@ -107,8 +124,8 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
             type="button"
             onClick={() => setIsSearchOpen(true)}
             className={mobileSearchTrigger()}
-            aria-label="Search"
-            title="Search"
+            aria-label={t("header.search")}
+            title={t("header.search")}
           >
             <Search className="size-4" />
           </button>
@@ -132,7 +149,7 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
               type="submit"
               data-cy="search-button"
               className="absolute left-3 cursor-pointer border-0 bg-transparent p-0"
-              aria-label="Search"
+              aria-label={t("header.search")}
             >
               <Search className={cn("h-4 w-4 transition-colors", isFocused ? "text-primary-400" : "text-fg/40")} />
             </button>
@@ -140,7 +157,7 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
             <input
               ref={mobileInputRef}
               type="text"
-              placeholder="Search tracks, artists, albums..."
+              placeholder={t("header.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsFocused(true)}
@@ -154,7 +171,7 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
               type="button"
               onClick={handleCloseMobileSearch}
               className={mobileSearchClose()}
-              aria-label="Close search"
+              aria-label={t("header.closeSearch")}
             >
               <X className="size-3.5" />
             </button>
@@ -171,7 +188,7 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
                     exit={{ opacity: 0, scale: 0.8 }}
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
-                    aria-label="Clear search"
+                    aria-label={t("header.clearSearch")}
                   >
                     <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

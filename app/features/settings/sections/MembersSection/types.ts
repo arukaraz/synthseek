@@ -1,4 +1,5 @@
 import type { inferRouterOutputs } from "@trpc/server";
+import type { TFunction } from "i18next";
 
 import type { AppRouter } from "@api/__generated__/types";
 import type { ColumnDef, SortState } from "@components/ui/Table";
@@ -9,9 +10,15 @@ export type MemberListItem = RouterOutputs["users"]["list"][number];
 export type PlexImportableUser = RouterOutputs["users"]["plexImportable"][number];
 export type RoleValue = MemberListItem["role"];
 
+export interface RoleOption {
+  value: RoleValue;
+  label: string;
+}
+
 export type MemberSort = SortState;
 
 export interface BuildMemberColumnsArgs {
+  t: TFunction<"settings">;
   currentUserId: string | undefined;
   selectedIds: Set<string>;
   allSelected: boolean;

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { Switch } from "@components/ui/Switch";
 import { useUpdateEngineSearch, useUpdateEngineSmartSearch } from "@hooks/api/mutations/settings/useUpdateEngine";
 
@@ -17,6 +19,7 @@ import { ENGINE_DEFAULTS } from "./defaults";
 import type { SearchCardProps } from "./types";
 
 export function SearchCard({ initial }: SearchCardProps) {
+  const { t } = useTranslation("settings");
   const updateSearch = useUpdateEngineSearch();
   const updateSmartSearch = useUpdateEngineSmartSearch();
   const searchForm = useSettingsForm(initial.search);
@@ -45,97 +48,97 @@ export function SearchCard({ initial }: SearchCardProps) {
   };
 
   return (
-    <SettingsCard title="Search" trailing={<ResetDefaultsButton onReset={handleResetAll} disabled={isSaving} />}>
+    <SettingsCard
+      title={t("search.title")}
+      trailing={<ResetDefaultsButton onReset={handleResetAll} disabled={isSaving} />}
+    >
       <EngineRow
-        label="Max peer attempts"
-        description="How many slskd uploaders to try downloading from per track before marking it failed."
+        label={t("search.maxPeerAttempts.label")}
+        description={t("search.maxPeerAttempts.description")}
         control={
           <SettingsNumberInput
             value={searchForm.draft.maxPeerAttempts}
             onChange={(v) => searchForm.setField("maxPeerAttempts", v)}
             min={1}
             max={50}
-            ariaLabel="Max peer attempts"
+            ariaLabel={t("search.maxPeerAttempts.label")}
           />
         }
       />
       <EngineRow
-        label="Max variations"
-        description="How many query-string combinations (artist+title, with/without album, with/without featuring) to try per track."
+        label={t("search.maxVariations.label")}
+        description={t("search.maxVariations.description")}
         control={
           <SettingsNumberInput
             value={searchForm.draft.maxVariations}
             onChange={(v) => searchForm.setField("maxVariations", v)}
             min={1}
             max={20}
-            ariaLabel="Max variations"
+            ariaLabel={t("search.maxVariations.label")}
           />
         }
       />
 
       <EngineRow
-        label="History cleanup enabled"
-        description="Hourly cron deletes old slskd searches so its search list does not grow unbounded."
+        label={t("search.historyCleanup.label")}
+        description={t("search.historyCleanup.description")}
         control={
           <Switch
             checked={searchForm.draft.historyCleanupEnabled}
             onCheckedChange={(v) => searchForm.setField("historyCleanupEnabled", v)}
-            aria-label="History cleanup enabled"
+            aria-label={t("search.historyCleanup.label")}
           />
         }
       />
       <EngineRow
-        label="Max history searches"
-        description="How many of the most recent searches to retain in slskd. Older ones are removed by the cleanup job above."
+        label={t("search.maxHistorySearches.label")}
+        description={t("search.maxHistorySearches.description")}
         control={
           <SettingsNumberInput
             value={searchForm.draft.maxHistorySearches}
             onChange={(v) => searchForm.setField("maxHistorySearches", v)}
             min={5}
             max={100}
-            ariaLabel="Max history searches"
+            ariaLabel={t("search.maxHistorySearches.label")}
           />
         }
       />
 
       <div className={cardDivider()} />
-      <span className={cardSectionHeader()}>Smart search</span>
+      <span className={cardSectionHeader()}>{t("search.smartSearchHeader")}</span>
 
       <EngineRow
-        label="Auto-ban after N failures"
+        label={t("search.autoBan.label")}
         anchor="ban-threshold"
-        description="Add an uploader/peer to the banlist after this many download failures (counted in-memory, resets on restart). 0 disables."
+        description={t("search.autoBan.description")}
         control={
           <SettingsNumberInput
             value={searchForm.draft.banAfterFailedAttempts}
             onChange={(v) => searchForm.setField("banAfterFailedAttempts", v)}
             min={0}
             max={20}
-            ariaLabel="Auto-ban after N failed attempts"
+            ariaLabel={t("search.autoBan.ariaLabel")}
           />
         }
       />
 
-      <SettingsField
-        label="Custom mood keywords"
-        helper="Substrings tested against user search queries to classify them as mood/genre searches (vs specific artist/track). Press Enter or comma to add."
-      >
+      <SettingsField label={t("search.customMoodKeywords.label")} helper={t("search.customMoodKeywords.helper")}>
         <ChipsInput
           value={smartForm.draft.customMoodKeywords}
           onChange={(v) => smartForm.setField("customMoodKeywords", v)}
-          placeholder="e.g. block party, my favorites"
+          placeholder={t("search.customMoodKeywords.placeholder")}
         />
       </SettingsField>
 
       <EngineRow
-        label="Federated patterns"
-        labelTrailing={<Pill tone="experimental">Experimental</Pill>}
-        description="Opt in: a daily cron federates your anonymized mood/genre keywords with the Synthseek federation API and pulls back consensus-approved ones to improve smart-search classification."
+        label={t("search.federatedPatterns.label")}
+        labelTrailing={<Pill tone="experimental">{t("search.federatedPatterns.experimental")}</Pill>}
+        description={t("search.federatedPatterns.description")}
         control={
           <Switch
             checked={smartForm.draft.federatedPatternsEnabled}
             onCheckedChange={(v) => smartForm.setField("federatedPatternsEnabled", v)}
-            aria-label="Federated patterns"
+            aria-label={t("search.federatedPatterns.label")}
           />
         }
       />

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
@@ -16,6 +17,7 @@ import { TopTracksSkeleton } from "./TopTracksSkeleton";
 import { body } from "./styles";
 
 export function TopTracks() {
+  const { t } = useTranslation("discover");
   const { lfmConfig, topTracks, isLoading, isError } = useLastfmFeeds();
 
   if (isLoading) return <TopTracksSkeleton />;
@@ -39,8 +41,8 @@ export function TopTracks() {
     >
       <WidgetHeader
         icon={Trophy}
-        title="Top Tracks"
-        subtitle="Most played · all time · Last.fm"
+        title={t("topTracks.title")}
+        subtitle={t("topTracks.subtitle")}
         titleId="top-tracks-heading"
       />
       <div className={body()}>

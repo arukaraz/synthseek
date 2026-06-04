@@ -3,12 +3,13 @@
 import { Avatar } from "@components/ui/Avatar";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-import { MENU_COPY } from "../constants";
 import { triggerAvatarWrapper, triggerBadge } from "../styles";
 import type { TriggerAvatarProps } from "../types";
 
 export function TriggerAvatar({ username, avatarUrl, updateAvailable }: TriggerAvatarProps) {
+  const { t } = useTranslation("components");
   return (
     <span className={triggerAvatarWrapper()}>
       <Avatar size="md" imageUrl={avatarUrl} username={username} />
@@ -23,7 +24,7 @@ export function TriggerAvatar({ username, avatarUrl, updateAvailable }: TriggerA
             exit={{ opacity: 0, scale: 0.6 }}
             transition={{ duration: 0.2 }}
           >
-            <span className="sr-only">{MENU_COPY.updateAvailable}</span>
+            <span className="sr-only">{t("userMenu.updateAvailable")}</span>
             <ArrowUpCircle aria-hidden className="h-3.5 w-3.5" />
           </motion.span>
         ) : null}

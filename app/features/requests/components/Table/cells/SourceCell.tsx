@@ -1,10 +1,12 @@
 "use client";
 
 import { ContentType } from "@api/__generated__/types";
+import { useTranslation } from "react-i18next";
 import { sourceCellButton } from "../styles";
 import type { SourceCellProps } from "../types";
 
 export function SourceCell({ item, onSelect }: SourceCellProps) {
+  const { t } = useTranslation("requests");
   const { id, name, contentType } = item.parent;
   const selectable = contentType === ContentType.enum.album || contentType === ContentType.enum.playlist;
 
@@ -19,7 +21,7 @@ export function SourceCell({ item, onSelect }: SourceCellProps) {
         event.stopPropagation();
         onSelect(id);
       }}
-      title={`Show only tracks from ${name}`}
+      title={t("table.showOnlyFrom", { name })}
       className={sourceCellButton()}
     >
       {name}

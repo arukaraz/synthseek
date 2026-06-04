@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useRevokeApiKey() {
@@ -7,8 +9,8 @@ export function useRevokeApiKey() {
   return trpc.apiKeys.revoke.useMutation({
     onSuccess: () => {
       utils.apiKeys.list.invalidate();
-      toast.success("API key revoked");
+      toast.success(i18n.t("mutations:apiKeys.revoked"));
     },
-    onError: (error) => toast.error(error.message || "Failed to revoke API key"),
+    onError: (error) => errorToast(error, "apiKeys.revokeFailed"),
   });
 }

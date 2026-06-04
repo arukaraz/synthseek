@@ -1,4 +1,6 @@
 import { RequestStatus } from "@api/__generated__/types";
+import i18n from "@locale";
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
@@ -21,11 +23,11 @@ export function useCancelTrack() {
 
       return { previous };
     },
-    onError: (_err, _vars, context) => {
+    onError: (err, _vars, context) => {
       if (context?.previous) utils.requests.getAll.setData(undefined, context.previous);
-      toast.error("Failed to cancel track");
+      errorToast(err, "requests.cancelTrackFailed");
     },
-    onSuccess: () => toast.success("Track cancelled"),
+    onSuccess: () => toast.success(i18n.t("mutations:requests.trackCancelled")),
     onSettled: () => utils.requests.getAll.invalidate(),
   });
 }

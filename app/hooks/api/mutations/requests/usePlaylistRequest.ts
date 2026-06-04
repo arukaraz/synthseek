@@ -1,12 +1,12 @@
+import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyReclaimOutcome } from "@utils/request-helpers";
-import { toast } from "sonner";
 
 export function usePlaylistRequest() {
   const utils = trpc.useUtils();
 
   return trpc.requests.playlistRequest.useMutation({
-    onError: (err) => toast.error("Playlist download failed", { description: err.message }),
+    onError: (err) => errorToastDetailed(err, "requests.playlistDownloadFailed"),
     onSuccess: ({ outcome, data }) => {
       notifyReclaimOutcome({ outcome, label: "Playlist", itemName: data?.name ?? "Playlist" });
     },

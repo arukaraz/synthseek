@@ -11,6 +11,7 @@ import { formatTimestamp } from "@utils/formatters";
 import { ArrowLeft, Download, Globe, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useRequestActions } from "../../hooks/useRequestActions";
 import { JspfExportDialog } from "./JspfExportDialog";
 import {
@@ -25,6 +26,7 @@ import {
 import type { RequestDetailHeroProps } from "./types";
 
 export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
+  const { t } = useTranslation("requests");
   const FallbackIcon = getContentTypeIcon(request.contentType);
   const {
     retry,
@@ -46,6 +48,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
 
   const [exportFullOpen, setExportFullOpen] = useState(false);
   const hasMoreActions = canCancel || canSyncPlex || canSyncSource || canExport;
+  const typeLabel = label === "Playlist" ? t("labels.playlist") : t("labels.album");
 
   return (
     <div className="relative">
@@ -62,7 +65,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
         icon={ArrowLeft}
         variant="default"
         size="md"
-        aria-label="Back to requests list"
+        aria-label={t("detail.backToList")}
         onClick={onBack}
         className="absolute top-3 left-3 z-10 md:hidden"
       />
@@ -95,7 +98,9 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               </p>
               <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
-              <p className="text-fg/40 truncate text-xs">Requested by {request.requestedBy.username}</p>
+              <p className="text-fg/40 truncate text-xs">
+                {t("detail.requestedBy", { username: request.requestedBy.username })}
+              </p>
             </div>
           </div>
 
@@ -114,7 +119,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                   )}
                 >
                   <RefreshCw className="mr-1.5 size-3.5" />
-                  Retry Failed
+                  {t("detail.retryFailed")}
                 </Button>
               )}
 
@@ -123,7 +128,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                   icon={Trash2}
                   variant="red"
                   size="md"
-                  aria-label={`Remove ${label.toLowerCase()}`}
+                  aria-label={t("detail.removeAction", { label: typeLabel })}
                   onClick={remove}
                 />
               )}
@@ -131,7 +136,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               {hasMoreActions && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button type="button" className={heroMoreButton()} aria-label="More actions">
+                    <button type="button" className={heroMoreButton()} aria-label={t("detail.moreActions")}>
                       <MoreVertical className="size-3.5" />
                     </button>
                   </DropdownMenuTrigger>
@@ -139,7 +144,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     {canCancel && (
                       <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
                         <Square className="size-3.5" />
-                        Cancel downloads
+                        {t("detail.cancelDownloads")}
                       </DropdownMenuItem>
                     )}
                     {canSyncSource && (
@@ -149,7 +154,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                         className="text-emerald-400 focus:text-emerald-300"
                       >
                         <RefreshCcw className="size-3.5" />
-                        {syncSourcePending ? "Syncing…" : "Sync from Spotify"}
+                        {syncSourcePending ? t("detail.syncing") : t("detail.syncFromSource")}
                       </DropdownMenuItem>
                     )}
                     {canSyncPlex && (
@@ -159,22 +164,22 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                         className="text-primary-400 focus:text-primary-300"
                       >
                         <Upload className="size-3.5" />
-                        {syncPlexPending ? "Syncing…" : "Sync to Plex"}
+                        {syncPlexPending ? t("detail.syncing") : t("detail.syncToPlex")}
                       </DropdownMenuItem>
                     )}
                     {canExport && (
                       <DropdownMenuItem onClick={() => void exportJspf()}>
                         <Download className="size-3.5" />
-                        <span className="flex-1">Export</span>
+                        <span className="flex-1">{t("detail.export")}</span>
                         <InfoTooltip
                           trigger="click"
                           side="left"
-                          title="Export"
-                          description="Downloads a .jspf file now, using the IDs already saved on each track."
+                          title={t("detail.exportTooltipTitle")}
+                          description={t("detail.exportTooltipDescription")}
                           points={[
-                            "ISRC and Deezer ID for every track",
-                            "MusicBrainz ID only where already resolved",
-                            "Other apps use these IDs to re-find each song",
+                            t("detail.exportTooltipPointIds"),
+                            t("detail.exportTooltipPointMusicBrainz"),
+                            t("detail.exportTooltipPointRefind"),
                           ]}
                         />
                       </DropdownMenuItem>
@@ -182,16 +187,16 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     {canExport && (
                       <DropdownMenuItem onClick={() => setExportFullOpen(true)}>
                         <Globe className="size-3.5" />
-                        <span className="flex-1">Export (max compatibility)</span>
+                        <span className="flex-1">{t("detail.exportMax")}</span>
                         <InfoTooltip
                           trigger="click"
                           side="left"
-                          title="Export (max compatibility)"
-                          description="Looks up the missing MusicBrainz ID for every track first, then downloads."
+                          title={t("detail.exportMaxTooltipTitle")}
+                          description={t("detail.exportMaxTooltipDescription")}
                           points={[
-                            "Might be slower: resolves each ID online if any is missing",
-                            "Best for ListenBrainz and MusicBrainz apps",
-                            "The file then matches in more apps",
+                            t("detail.exportMaxTooltipPointSlower"),
+                            t("detail.exportMaxTooltipPointBest"),
+                            t("detail.exportMaxTooltipPointMatches"),
                           ]}
                         />
                       </DropdownMenuItem>

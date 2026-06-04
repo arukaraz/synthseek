@@ -2,11 +2,13 @@ import { ContentType, type RequestWithTracks } from "@api/__generated__/types";
 import { useExportFullPortability } from "@hooks/api/mutations/portability/useExportFullPortability";
 import { downloadText } from "@utils/download";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { exportFilename } from "../helpers";
 
 export function useJspfExportFull(request: RequestWithTracks, onOpenChange: (open: boolean) => void) {
+  const { t } = useTranslation("requests");
   const [jobId, setJobId] = useState<string>("");
   const mutation = useExportFullPortability();
 
@@ -21,10 +23,10 @@ export function useJspfExportFull(request: RequestWithTracks, onOpenChange: (ope
           downloadText(exportFilename(request.name), JSON.stringify(doc, null, 2));
           onOpenChange(false);
         },
-        onError: () => toast.error("Export failed"),
+        onError: () => toast.error(t("export.failed")),
       }
     );
-  }, [mutation, request, onOpenChange]);
+  }, [mutation, request, onOpenChange, t]);
 
   return { jobId, start, isExporting: mutation.isPending };
 }

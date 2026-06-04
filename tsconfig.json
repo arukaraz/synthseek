@@ -25,6 +25,8 @@
       "@utils/*": ["app/utils/*"],
       "@hooks/*": ["app/hooks/*"],
       "@modules/*": ["app/modules/*"],
+      "@locale": ["app/modules/i18n"],
+      "@locale/*": ["app/modules/i18n/*"],
       "@theme/*": ["app/theme/*"],
       "@api/*": ["app/api/*"],
       "@server/*": ["../server/*"]

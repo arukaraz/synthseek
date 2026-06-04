@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import { SetupScreen } from "../SetupScreen";
-import { SETUP_LOADING_LABEL } from "../constants";
 import type { SetupGate } from "@hooks/ui/types";
 
 let gate: SetupGate;
@@ -15,7 +14,7 @@ vi.mock("../components/SetupWizard", () => ({
   SetupWizard: () => <div data-testid="setup-wizard" />,
 }));
 
-const skeleton = () => screen.queryByText(SETUP_LOADING_LABEL);
+const skeleton = () => screen.queryByText("Loading setup");
 const wizard = () => screen.queryByTestId("setup-wizard");
 
 describe("SetupScreen", () => {

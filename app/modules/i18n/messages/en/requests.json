@@ -1,0 +1,160 @@
+{
+  "loading": {
+    "requests": "Loading requests..."
+  },
+  "toolbar": {
+    "retryAllFailed": {
+      "label": "Retry all failed",
+      "confirmTitle": "Retry All Failed",
+      "confirmMessage": "This will retry all failed and partially completed downloads. Continue?",
+      "confirmPending": "Retrying...",
+      "confirmAction": "Retry All"
+    },
+    "import": {
+      "trigger": "Import library",
+      "sourcesLabel": "Sources",
+      "fromFile": "From file"
+    }
+  },
+  "viewToggle": {
+    "groupsTitle": "Groups view",
+    "groupsAriaLabel": "Switch to groups view",
+    "listTitle": "List view",
+    "listAriaLabel": "Switch to list view"
+  },
+  "searchInput": {
+    "placeholder": "Filter...",
+    "clear": "Clear filter",
+    "openTitle": "Filter requests",
+    "open": "Open filter",
+    "close": "Close filter"
+  },
+  "sourceFilter": {
+    "label": "Album / Playlist",
+    "searchPlaceholder": "Search source...",
+    "noMatches": "No matches",
+    "clearSelection": "Clear selection"
+  },
+  "statusFilter": {
+    "all": "All",
+    "active": "Active",
+    "done": "Done",
+    "failed": "Failed"
+  },
+  "sort": {
+    "recent": "Recent",
+    "playlist": "Playlist",
+    "artist": "Artist",
+    "album": "Album"
+  },
+  "activeSourceChips": {
+    "filteredTo": "Filtered to",
+    "remove": "Remove {{name}}",
+    "clearAll": "Clear all"
+  },
+  "emptyState": {
+    "noResultsTitle": "No Results",
+    "noResultsDescription": "No requests match \"{{query}}\"",
+    "noRequestsTitle": "No Requests",
+    "noRequestsDescription": "Your download requests will appear here.",
+    "selectTitle": "Select a request",
+    "selectDescription": "Choose a request from the list to see its details."
+  },
+  "detail": {
+    "backToList": "Back to requests list",
+    "requestedBy": "Requested by {{username}}",
+    "moreActions": "More actions",
+    "removeAction": "Remove {{label}}",
+    "retryFailed": "Retry Failed",
+    "cancelDownloads": "Cancel downloads",
+    "syncFromSource": "Sync from Spotify",
+    "syncing": "Syncing...",
+    "syncToPlex": "Sync to Plex",
+    "export": "Export",
+    "exportTooltipTitle": "Export",
+    "exportTooltipDescription": "Downloads a .jspf file now, using the IDs already saved on each track.",
+    "exportTooltipPointIds": "ISRC and Deezer ID for every track",
+    "exportTooltipPointMusicBrainz": "MusicBrainz ID only where already resolved",
+    "exportTooltipPointRefind": "Other apps use these IDs to re-find each song",
+    "exportMax": "Export (max compatibility)",
+    "exportMaxTooltipTitle": "Export (max compatibility)",
+    "exportMaxTooltipDescription": "Looks up the missing MusicBrainz ID for every track first, then downloads.",
+    "exportMaxTooltipPointSlower": "Might be slower: resolves each ID online if any is missing",
+    "exportMaxTooltipPointBest": "Best for ListenBrainz and MusicBrainz apps",
+    "exportMaxTooltipPointMatches": "The file then matches in more apps"
+  },
+  "stats": {
+    "tracksLabel": "Tracks",
+    "tracksSublabel": "requested",
+    "completeLabel": "Complete",
+    "completeSublabel": "downloaded",
+    "failedLabel": "Failed",
+    "failedSublabel": "errored",
+    "activeLabel": "Active",
+    "activeSublabel": "in progress"
+  },
+  "tracks": {
+    "trackHeader": "Track",
+    "artistHeader": "Artist",
+    "statusHeader": "Status",
+    "completedHeader": "Completed",
+    "actionsHeader": "Actions",
+    "empty": "No tracks",
+    "moreInfo": "More info: {{label}}",
+    "retry": "Retry track",
+    "retryTitle": "Retry",
+    "cancel": "Cancel track",
+    "cancelTitle": "Cancel"
+  },
+  "table": {
+    "titleHeader": "Title",
+    "statusHeader": "Status",
+    "albumHeader": "Album/Playlist",
+    "artistHeader": "Artist",
+    "typeHeader": "Type",
+    "requestedByHeader": "Requested by",
+    "addedHeader": "Added",
+    "completedHeader": "Completed",
+    "contentTypeTrack": "Track",
+    "contentTypeAlbum": "Album",
+    "contentTypePlaylist": "Playlist",
+    "contentTypeArtist": "Artist",
+    "requestedByYou": "you",
+    "showOnlyFrom": "Show only tracks from {{name}}",
+    "retry": "Retry download",
+    "retryTitle": "Retry",
+    "cancel": "Cancel track",
+    "cancelTitle": "Cancel",
+    "actionsMenu": "Actions menu",
+    "retryMenuItem": "Retry download",
+    "cancelMenuItem": "Cancel track"
+  },
+  "export": {
+    "dialogTitle": "Export (max compatibility)",
+    "dialogDescription": "Resolving every track's MusicBrainz ID so the file matches in any app, then downloading.",
+    "resolving": "Resolving {{processed}}/{{total}}",
+    "preparing": "Preparing export...",
+    "failed": "Export failed"
+  },
+  "confirm": {
+    "cancelTrackTitle": "Cancel Track",
+    "cancelTrackMessage": "Cancel \"{{title}}\" by {{artist}}?",
+    "cancelConfirm": "Cancel",
+    "cancelKeep": "Keep",
+    "removeTitle": "Remove {{label}} Request",
+    "removeMessage": "Remove \"{{name}}\" by {{artist}}? This action cannot be undone.",
+    "removeConfirm": "Remove {{label}}",
+    "removeKeep": "Keep",
+    "cancelDownloadsTitle": "Cancel {{label}} Downloads",
+    "cancelDownloadsMessage": "Cancel all active downloads for \"{{name}}\" by {{artist}}?",
+    "cancelDownloadsConfirm": "Cancel Downloads",
+    "cancelDownloadsKeep": "Keep Downloading"
+  },
+  "labels": {
+    "album": "Album",
+    "playlist": "Playlist"
+  },
+  "spotifyCallback": {
+    "connectionFailed": "Spotify connection failed"
+  }
+}

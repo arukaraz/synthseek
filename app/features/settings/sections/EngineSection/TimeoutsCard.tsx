@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 import { useUpdateEngineTimeouts } from "@hooks/api/mutations/settings/useUpdateEngine";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -13,6 +15,7 @@ import { MS } from "./constants";
 import type { TimeoutsCardProps } from "./types";
 
 export function TimeoutsCard({ initial }: TimeoutsCardProps) {
+  const { t } = useTranslation("settings");
   const update = useUpdateEngineTimeouts();
   const { draft, setField, setAll, save, reset, isDirty, isSaving } = useSettingsForm(initial);
 
@@ -20,12 +23,12 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
 
   return (
     <SettingsCard
-      title="Timeouts"
+      title={t("timeouts.title")}
       trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.timeouts })} disabled={isSaving} />}
     >
       <EngineRow
-        label="Search phase"
-        description="How long slskd keeps each search request open on the Soulseek network before stopping collection of new results."
+        label={t("timeouts.searchPhase.label")}
+        description={t("timeouts.searchPhase.description")}
         control={
           <SettingsNumberInput
             value={Math.round(draft.searchPhase / MS)}
@@ -33,13 +36,13 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
             min={5}
             max={120}
             suffix="s"
-            ariaLabel="Search phase timeout"
+            ariaLabel={t("timeouts.searchPhase.ariaLabel")}
           />
         }
       />
       <EngineRow
-        label="Download phase"
-        description="Total budget for the full download phase per track. The track is marked failed if this elapses."
+        label={t("timeouts.downloadPhase.label")}
+        description={t("timeouts.downloadPhase.description")}
         control={
           <SettingsNumberInput
             value={Math.round(draft.downloadPhase / MS)}
@@ -47,13 +50,13 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
             min={60}
             max={3600}
             suffix="s"
-            ariaLabel="Download phase timeout"
+            ariaLabel={t("timeouts.downloadPhase.ariaLabel")}
           />
         }
       />
       <EngineRow
-        label="Import phase"
-        description="Total budget for the import phase per track. Marked failed if exceeded."
+        label={t("timeouts.importPhase.label")}
+        description={t("timeouts.importPhase.description")}
         control={
           <SettingsNumberInput
             value={Math.round(draft.importPhase / MS)}
@@ -61,13 +64,13 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
             min={30}
             max={3600}
             suffix="s"
-            ariaLabel="Import phase timeout"
+            ariaLabel={t("timeouts.importPhase.ariaLabel")}
           />
         }
       />
       <EngineRow
-        label="Peer unresponsive"
-        description="Max time a download can sit in slskd's unresponsive states before we cancel and try the next peer."
+        label={t("timeouts.peerUnresponsive.label")}
+        description={t("timeouts.peerUnresponsive.description")}
         control={
           <SettingsNumberInput
             value={Math.round(draft.peerUnresponsive / MS)}
@@ -75,13 +78,13 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
             min={15}
             max={900}
             suffix="s"
-            ariaLabel="Peer unresponsive timeout"
+            ariaLabel={t("timeouts.peerUnresponsive.ariaLabel")}
           />
         }
       />
       <EngineRow
-        label="Queue wait (active peer)"
-        description="Max wait in slskd's Queued states when the peer is already actively serving another download to us (likely to give this one its turn)."
+        label={t("timeouts.queueWaitActivePeer.label")}
+        description={t("timeouts.queueWaitActivePeer.description")}
         control={
           <SettingsNumberInput
             value={Math.round(draft.queueWaitActivePeer / MS)}
@@ -89,13 +92,13 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
             min={30}
             max={1800}
             suffix="s"
-            ariaLabel="Queue wait active peer timeout"
+            ariaLabel={t("timeouts.queueWaitActivePeer.ariaLabel")}
           />
         }
       />
       <EngineRow
-        label="Queue wait (idle peer)"
-        description="Max wait in slskd's queued states when the peer is not currently serving us anything (may be offline or ignoring the request)."
+        label={t("timeouts.queueWaitIdlePeer.label")}
+        description={t("timeouts.queueWaitIdlePeer.description")}
         control={
           <SettingsNumberInput
             value={Math.round(draft.queueWaitIdlePeer / MS)}
@@ -103,7 +106,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
             min={30}
             max={3600}
             suffix="s"
-            ariaLabel="Queue wait idle peer timeout"
+            ariaLabel={t("timeouts.queueWaitIdlePeer.ariaLabel")}
           />
         }
       />

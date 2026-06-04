@@ -1,0 +1,218 @@
+{
+  "AUTHENTICATION_REQUIRED": {
+    "title": "Authentication required",
+    "description": "Log in again, then retry."
+  },
+  "ADMIN_ROLE_REQUIRED": {
+    "title": "Admin role required",
+    "description": "You need an admin role to do that."
+  },
+  "INVALID_CREDENTIALS": {
+    "title": "Invalid credentials",
+    "description": "Check your username and password and try again."
+  },
+  "CURRENT_PASSWORD_INCORRECT": {
+    "title": "Current password incorrect",
+    "description": "The current password you entered is incorrect."
+  },
+  "ACCOUNT_HAS_NO_PASSWORD": {
+    "title": "Account has no password",
+    "description": "This account does not use a password."
+  },
+  "SETUP_ALREADY_COMPLETED": {
+    "title": "Setup already completed",
+    "description": "Initial setup has already been completed."
+  },
+  "PLEX_USER_NOT_LINKED": {
+    "title": "Plex user not linked",
+    "description": "No account linked to this Plex user. Ask the admin to register you."
+  },
+  "CAN_ONLY_MODIFY_OWN_REQUESTS": {
+    "title": "Can only modify own requests",
+    "description": "You can only modify your own requests."
+  },
+  "EMAIL_MANAGED_BY_PLEX": {
+    "title": "Email managed by Plex",
+    "description": "Your email is managed by Plex."
+  },
+  "PLEX_ALREADY_LINKED": {
+    "title": "Plex account already linked",
+    "description": "This Plex account is already linked to another user."
+  },
+  "PASSWORD_REQUIRED_BEFORE_UNLINK": {
+    "title": "Password required before unlinking Plex",
+    "description": "Set a password before unlinking Plex, otherwise you would be locked out."
+  },
+  "OWNER_MUST_REMAIN_ADMIN": {
+    "title": "Owner must remain an admin",
+    "description": "The owner must remain an admin."
+  },
+  "AT_LEAST_ONE_ADMIN_REQUIRED": {
+    "title": "At least one admin required",
+    "description": "There must be at least one admin."
+  },
+  "CANNOT_DELETE_OWN_ACCOUNT": {
+    "title": "Cannot delete own account",
+    "description": "You cannot delete your own account."
+  },
+  "OWNER_CANNOT_BE_DELETED": {
+    "title": "Owner cannot be deleted",
+    "description": "The owner account cannot be deleted."
+  },
+  "NO_OWNER_ACCOUNT": {
+    "title": "No owner account",
+    "description": "No owner account found."
+  },
+  "USER_NOT_FOUND": {
+    "title": "User not found",
+    "description": "That user could not be found."
+  },
+  "EMAIL_TAKEN": {
+    "title": "Email already in use",
+    "description": "A user with this email already exists."
+  },
+  "USERNAME_TAKEN": {
+    "title": "Username already taken",
+    "description": "This username is already taken."
+  },
+  "PLEX_NOT_CONFIGURED": {
+    "title": "Plex not configured",
+    "description": "Plex is not configured. Add a server URL and token in Settings."
+  },
+  "PLEX_UNREACHABLE": {
+    "title": "Plex unreachable",
+    "description": "Could not reach the Plex server to identify it."
+  },
+  "ALBUM_NOT_FOUND": {
+    "title": "Album not found",
+    "description": "That album could not be found."
+  },
+  "PLAYLIST_NOT_FOUND": {
+    "title": "Playlist not found",
+    "description": "That playlist could not be found."
+  },
+  "TRACK_NOT_FOUND": {
+    "title": "Track not found",
+    "description": "That track could not be found."
+  },
+  "COLLECTION_NOT_FOUND": {
+    "title": "Collection not found",
+    "description": "That collection could not be found."
+  },
+  "REQUEST_NOT_FOUND": {
+    "title": "Request not found",
+    "description": "That request could not be found."
+  },
+  "API_KEY_NOT_FOUND": {
+    "title": "API key not found",
+    "description": "That API key could not be found."
+  },
+  "OAUTH_REQUEST_NOT_FOUND": {
+    "title": "Authorization request not found",
+    "description": "Authorization request not found or expired."
+  },
+  "DOWNLOAD_FAILED": {
+    "title": "Download failed",
+    "description": "The download could not be completed. Check the logs and try again."
+  },
+  "BATCH_DOWNLOAD_FAILED": {
+    "title": "Batch download failed",
+    "description": "The batch download could not be completed. Check the logs and try again."
+  },
+  "INVALID_CONTENT_TYPES": {
+    "title": "Invalid content types",
+    "description": "Invalid content types provided."
+  },
+  "LIBRARY_SOURCE_NOT_CONFIGURED": {
+    "title": "Library source not configured",
+    "description": "This integration is not configured by the admin yet."
+  },
+  "LIBRARY_SOURCE_CALLBACK_FAILED": {
+    "title": "Library source callback failed",
+    "description": "The library source callback failed. Try again."
+  },
+  "LIDARR_CONNECTION_FAILED": {
+    "title": "Lidarr connection failed",
+    "description": "Failed to connect to Lidarr. Check the URL and API key in Settings."
+  },
+  "LIDARR_PROFILES_FAILED": {
+    "title": "Lidarr profiles failed",
+    "description": "Failed to get Lidarr profiles."
+  },
+  "LIDARR_SEARCH_FAILED": {
+    "title": "Lidarr search failed",
+    "description": "Failed to search artists in Lidarr."
+  },
+  "LIDARR_ADD_ARTIST_FAILED": {
+    "title": "Lidarr add artist failed",
+    "description": "Failed to add the artist to Lidarr."
+  },
+  "LIDARR_CHECK_ARTIST_FAILED": {
+    "title": "Lidarr check artist failed",
+    "description": "Failed to check the artist in Lidarr."
+  },
+  "LIDARR_ARTIST_EXISTS": {
+    "title": "Artist already exists in Lidarr",
+    "description": "This artist already exists in Lidarr."
+  },
+  "VALUE_ALREADY_IN_USE": {
+    "title": "Value already in use",
+    "description": "That value is already in use."
+  },
+  "GENERIC_FALLBACK": {
+    "title": "Something went wrong",
+    "description": "Please try again. If it keeps failing, check the logs."
+  },
+  "NETWORK_ERROR": {
+    "title": "Network error",
+    "description": "Could not reach the server. Check your connection and try again."
+  },
+  "SIGNED_OUT": {
+    "title": "You are signed out",
+    "description": "Please log in again."
+  },
+  "FORBIDDEN": {
+    "title": "Not allowed",
+    "description": "You do not have permission for that action."
+  },
+  "SPOTIFY_PREMIUM_PROPAGATION": {
+    "title": "Spotify is rejecting API calls for the app owner",
+    "description": "Spotify requires the app owner's account to have an active Premium subscription. If Premium was just enabled, changes can take a few hours to propagate. Synthseek will keep your tokens and retry automatically."
+  },
+  "SPOTIFY_NOT_CONFIGURED": {
+    "title": "Spotify is not configured",
+    "description": "Ask your administrator to set the Client ID and Public Base URL in Settings."
+  },
+  "SPOTIFY_USER_NOT_REGISTERED": {
+    "title": "Your Spotify account is not allowed yet",
+    "description": "This Spotify app is in development mode, so it only works for accounts on its user list. Ask your administrator to add your Spotify account (your login email) to the app in the Spotify Developer Dashboard, then connect again."
+  },
+  "SPOTIFY_STATE_EXPIRED": {
+    "title": "Authorization link expired",
+    "description": "The OAuth state expired before you finished the handshake. Click Connect Spotify again."
+  },
+  "SPOTIFY_SESSION_EXPIRED": {
+    "title": "Synthseek session expired",
+    "description": "Log in again, then retry connecting Spotify."
+  },
+  "SPOTIFY_EXCHANGE_FAILED": {
+    "title": "Spotify connection failed",
+    "description": "Synthseek could not complete the OAuth exchange. Check the server logs and retry."
+  },
+  "SPOTIFY_PROXY_ERROR": {
+    "title": "Could not reach Synthseek backend",
+    "description": "The callback could not talk to the API. Check that the backend is running and try again."
+  },
+  "SPOTIFY_MISSING_PARAMS": {
+    "title": "Spotify did not return an authorization code",
+    "description": "Try again. If it keeps happening, check the Redirect URI in your Spotify App settings."
+  },
+  "SPOTIFY_ACCESS_DENIED": {
+    "title": "You declined the Spotify authorization",
+    "description": "Click Connect Spotify again whenever you are ready."
+  },
+  "SPOTIFY_CONNECTED": {
+    "title": "Spotify connected",
+    "description": "Open Import from providers to start importing your library."
+  }
+}

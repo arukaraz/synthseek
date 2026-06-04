@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useTriggerJob() {
@@ -9,6 +10,6 @@ export function useTriggerJob() {
       utils.jobs.list.invalidate();
       toast.success(result.message);
     },
-    onError: (error) => toast.error(error.message || "Failed to run job"),
+    onError: (error) => errorToast(error, "jobs.runFailed"),
   });
 }

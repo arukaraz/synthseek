@@ -1,0 +1,246 @@
+{
+  "spotifyLibrary": {
+    "dialog": {
+      "title": "Spotify library",
+      "description": "Browse your Spotify library, import items into Synthseek, and configure ongoing sync."
+    },
+    "connect": {
+      "checking": "Checking your Spotify connection...",
+      "title": "Connect your Spotify account",
+      "bodyPending": "Spotify is still authorizing your account. Try connecting again if it does not finish in a moment.",
+      "bodyDefault": "Authorize Synthseek to browse and import your Spotify playlists and saved albums.",
+      "reconnect": "Reconnect Spotify",
+      "connect": "Connect Spotify"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Search items…"
+    },
+    "filter": {
+      "all": "All",
+      "playlists": "Playlists",
+      "albums": "Albums",
+      "liked": "Liked"
+    },
+    "sort": {
+      "name": "Name",
+      "type": "Type",
+      "tracks": "Tracks",
+      "imported": "Imported status",
+      "lastSync": "Last sync",
+      "syncStatus": "Sync status"
+    },
+    "table": {
+      "loading": "Loading library…",
+      "empty": "No items match the current filter or search.",
+      "columnName": "Name",
+      "columnType": "Type",
+      "columnTracks": "Tracks",
+      "columnImported": "Imported",
+      "columnLastSync": "Last sync",
+      "columnSync": "Sync"
+    },
+    "row": {
+      "select": "Select",
+      "deselect": "Deselect",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "type": {
+      "playlist": "Playlist",
+      "album": "Album",
+      "liked": "Liked",
+      "playlistLower": "playlist",
+      "albumLower": "album",
+      "likedLower": "liked songs"
+    },
+    "detail": {
+      "loading": "Loading…",
+      "back": "Back to library list",
+      "imported": "Imported · selected",
+      "importedUnselect": "Imported · unselect",
+      "selectedForImport": "Selected for import",
+      "selectForImport": "Select for import",
+      "openInSpotify": "Open in Spotify",
+      "lastSyncNever": "Never",
+      "tracksByline_one": "{{count}} track",
+      "tracksByline_other": "{{count}} tracks"
+    },
+    "syncConfig": {
+      "title": "Sync configuration",
+      "keepInSync": "Keep in sync",
+      "keepInSyncDesc": "Mirror this {{type}}'s tracklist into Synthseek when it changes"
+    },
+    "metadata": {
+      "title": "Details",
+      "sourceId": "Source ID",
+      "released": "Released",
+      "label": "Label",
+      "lastSync": "Last sync"
+    },
+    "tracklist": {
+      "title": "Tracklist preview",
+      "firstOf": "first {{shown}} of {{total}}",
+      "empty": "No tracks to preview.",
+      "viewAll": "View all {{total}} tracks →"
+    },
+    "emptyState": {
+      "title": "Inspect an item",
+      "body": "Click any row to see its tracks, full metadata and per-item sync configuration here.",
+      "navigate": "navigate",
+      "select": "select",
+      "clear": "clear",
+      "keySpace": "Space",
+      "keyEsc": "Esc"
+    },
+    "bottombar": {
+      "rows_one": "row",
+      "rows_other": "rows",
+      "tracksTotal_one": "track total",
+      "tracksTotal_other": "tracks total",
+      "refreshTitle": "Pull the latest list of items from your library",
+      "refreshing": "Refreshing…",
+      "refreshList": "Refresh list",
+      "cancel": "Cancel",
+      "saving": "Saving…",
+      "saveChanges": "Save changes"
+    },
+    "autoWatch": {
+      "off": "off",
+      "configureAria": "Configure auto-import settings",
+      "trigger": "Auto-import",
+      "title": "Auto-import new",
+      "howAria": "How does auto-import work?",
+      "help": "Items added to your Spotify library after enabling get imported automatically by the background sync. Existing items are not touched. Disable any time, already-imported items stay.",
+      "newPlaylists": "New playlists",
+      "newPlaylistsSub": "Playlists added to your library",
+      "newPlaylistsAria": "Auto-import new playlists",
+      "savedAlbums": "Saved albums",
+      "savedAlbumsSub": "Albums you save in Spotify",
+      "savedAlbumsAria": "Auto-import new saved albums"
+    },
+    "bulk": {
+      "selected": "selected",
+      "actions": "Bulk actions",
+      "syncGroup": "Sync",
+      "enableSync": "Enable sync",
+      "disableSync": "Disable sync",
+      "importGroup": "Import",
+      "enableImport": "Enable import",
+      "disableImport": "Disable import",
+      "clearAria": "Clear selection"
+    }
+  },
+  "jspfImport": {
+    "modal": {
+      "title": "Import playlist",
+      "description": "Import a playlist or album from a JSPF, XSPF or CSV file. Tracks are matched against your library before anything downloads."
+    },
+    "source": {
+      "uploadAria": "Upload a playlist file",
+      "dropTitle": "Drop a .jspf / .xspf / .csv file or click to browse",
+      "dropHint": "JSPF from Synthseek or ListenBrainz, XSPF or CSV exports from other tools",
+      "orFromUrl": "or from URL",
+      "urlPlaceholder": "https://gist.githubusercontent.com/.../raw/flow.jspf",
+      "fetching": "Fetching...",
+      "fetch": "Fetch",
+      "errorWrongFile": "Use a .jspf, .xspf or .csv file",
+      "errorReadFile": "Could not read file",
+      "errorWrongUrl": "The URL must point to a .jspf, .xspf or .csv file",
+      "errorFetchUrl": "Could not fetch URL"
+    },
+    "preview": {
+      "creatingRequests": "Creating requests",
+      "matchingTracks": "Matching tracks",
+      "matchingTracksDots": "Matching tracks...",
+      "matchedHeader": "{{matched}}/{{total}} matched",
+      "newDownloads": "{{count}} new downloads",
+      "selectedDuration": "{{duration}} selected",
+      "filterPlaceholder": "Filter tracks...",
+      "back": "Back",
+      "import_one": "Import {{count}} track",
+      "import_other": "Import {{count}} tracks"
+    },
+    "coverage": {
+      "matched": "{{matched}}/{{total}} matched",
+      "alreadyInLibrary": "{{count}} already in library",
+      "unmatched": "{{count}} unmatched"
+    },
+    "track": {
+      "selectAria": "Select {{title}}",
+      "notFound": "Not found",
+      "inLibrary": "In library",
+      "willDownload": "Will download",
+      "approxMatch": "≈ match",
+      "exactMatch": "exact"
+    },
+    "errors": {
+      "fileTooLarge": "File is too large to import",
+      "fetchFailed": "Could not fetch URL (HTTP {{status}})"
+    },
+    "duration": {
+      "minutes": "{{count}} min",
+      "hoursMinutes": "{{hours}}h {{minutes}}m"
+    }
+  },
+  "discoveryIntegrations": {
+    "card": {
+      "title": "Discovery",
+      "loading": "Loading…",
+      "loadError": "Failed to load discovery config.",
+      "description": "Pull recommendations and recent listening feeds from external services. Each can be toggled independently, feeds populate widgets on your Discover page."
+    },
+    "lastfm": {
+      "enableAria": "Enable Last.fm",
+      "tooltip": "Recent scrobbles and lifetime top tracks from your Last.fm account. Feeds are fixed.",
+      "apiKeyWarning": "Last.fm API key is not configured. Ask your administrator to set it before enabling this integration.",
+      "apiKeyLabel": "API key",
+      "apiKeyHelper": "System-wide Last.fm API key. Shared across all users.",
+      "usernameLabel": "Username",
+      "usernameHelper": "Your public Last.fm username.",
+      "usernamePlaceholder": "e.g. yourname"
+    },
+    "listenbrainz": {
+      "enableAria": "Enable ListenBrainz",
+      "tooltip": "Recommendations and curated playlists from your ListenBrainz account. Only the public username is needed.",
+      "usernameLabel": "Username",
+      "usernameHelper": "Your public ListenBrainz username (case-sensitive).",
+      "usernamePlaceholder": "e.g. yourname",
+      "playlistsLabel": "Playlists to fetch",
+      "playlistsHelper": "{{count}} selected. Each generates a separate feed.",
+      "autoRequestLabel": "Auto-request as playlists",
+      "autoRequestHelper": "When a feed refreshes, automatically request and import as a new playlist.",
+      "autoRequestAria": "Auto-request playlists"
+    },
+    "playlistKind": {
+      "cfRecommendationsLabel": "CF Recommendations",
+      "cfRecommendationsDesc": "Raw collaborative filtering output. Available immediately, less curated.",
+      "weeklyExplorationLabel": "Weekly Exploration",
+      "weeklyExplorationDesc": "LB's Discover Weekly equivalent. Refreshes Mondays.",
+      "weeklyJamsLabel": "Weekly Jams",
+      "weeklyJamsDesc": "Curated remix of your favorites. Refreshes Mondays.",
+      "dailyJamsLabel": "Daily Jams",
+      "dailyJamsDesc": "Daily rotation from your listening history."
+    },
+    "schedule": {
+      "day": "Day",
+      "hour": "Hour",
+      "summary": "{{day}} at {{hour}}:00",
+      "dailyShort": "Daily",
+      "dailyFull": "Every day",
+      "monShort": "Mon",
+      "monFull": "Mondays",
+      "tueShort": "Tue",
+      "tueFull": "Tuesdays",
+      "wedShort": "Wed",
+      "wedFull": "Wednesdays",
+      "thuShort": "Thu",
+      "thuFull": "Thursdays",
+      "friShort": "Fri",
+      "friFull": "Fridays",
+      "satShort": "Sat",
+      "satFull": "Saturdays",
+      "sunShort": "Sun",
+      "sunFull": "Sundays"
+    }
+  }
+}
