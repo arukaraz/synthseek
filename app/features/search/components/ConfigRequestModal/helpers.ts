@@ -85,6 +85,7 @@ export function buildAlbumDelegate(selection: LidarrSelection): AlbumDelegate | 
     qualityProfileId: selection.qualityProfileId,
     metadataProfileId: selection.metadataProfileId,
     monitor: selection.monitor,
+    tags: selection.tags,
   };
 }
 
@@ -106,6 +107,7 @@ export function buildArtistDelegate(
     qualityProfileId: selection.qualityProfileId,
     metadataProfileId: selection.metadataProfileId,
     monitor: selection.monitor,
+    tags: selection.tags,
     ...(artistMbid ? { artistMbid } : {}),
   };
 }
@@ -215,6 +217,34 @@ export function buildRootFolderOptions(
 
 export function buildQualityProfileOptions(profiles: LidarrQualityProfile[]): LidarrSelectOption<number>[] {
   return profiles.map((profile) => ({ value: profile.id, label: profile.name }));
+}
+
+export function normalizeTag(raw: string): string {
+  return raw.trim();
+}
+
+export function hasTag(tags: string[], candidate: string): boolean {
+  const target = candidate.toLowerCase();
+  return tags.some((tag) => tag.toLowerCase() === target);
+}
+
+export function addTag(tags: string[], raw: string): string[] {
+  const next = normalizeTag(raw);
+  if (next.length === 0 || hasTag(tags, next)) return tags;
+  return [...tags, next];
+}
+
+export function removeTag(tags: string[], target: string): string[] {
+  return tags.filter((tag) => tag !== target);
+}
+
+export function filterTagSuggestions(suggestions: string[], selected: string[], query: string): string[] {
+  const trimmed = query.trim().toLowerCase();
+  return suggestions.filter((suggestion) => {
+    if (hasTag(selected, suggestion)) return false;
+    if (trimmed.length === 0) return true;
+    return suggestion.toLowerCase().includes(trimmed);
+  });
 }
 
 export function buildMetadataProfileOptions(profiles: LidarrMetadataProfile[]): LidarrSelectOption<number>[] {

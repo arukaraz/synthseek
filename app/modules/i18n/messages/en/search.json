@@ -76,7 +76,9 @@
       "lidarrRootFolder": "Root Folder",
       "lidarrQualityProfile": "Quality Profile",
       "lidarrMetadataProfile": "Metadata Profile",
-      "lidarrMonitor": "Monitor Scope"
+      "lidarrMonitor": "Monitor Scope",
+      "lidarrArtistScope": "Artist scope",
+      "lidarrTags": "Tags"
     },
     "options": {
       "bitrate": {
@@ -192,6 +194,10 @@
         "rootFolder": "Select a root folder",
         "qualityProfile": "Select a quality profile",
         "metadataProfile": "Select a metadata profile"
+      },
+      "tags": {
+        "placeholder": "Add a tag and press Enter",
+        "remove": "Remove tag {{tag}}"
       }
     },
     "actions": {

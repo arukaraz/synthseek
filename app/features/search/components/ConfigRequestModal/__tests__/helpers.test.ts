@@ -1,16 +1,21 @@
 import { describe, it, expect } from "vitest";
 import {
+  addTag,
   buildAlbumDelegate,
   buildArtistDelegate,
   buildSourceChain,
   extractItemMetadata,
+  filterTagSuggestions,
   getAvailableAcquisitionOptions,
   getItemDisplayName,
+  hasTag,
   isAcquisitionMethod,
   isAlbum,
   isLidarrMethod,
   isLidarrSelectionComplete,
   isTrack,
+  normalizeTag,
+  removeTag,
   showsSlskdControls,
 } from "../helpers";
 import { createMockTrackFull, createMockAlbumSimplified } from "@test/factories";
@@ -26,6 +31,7 @@ const COMPLETE_SELECTION: LidarrSelection = {
   qualityProfileId: 1,
   metadataProfileId: 2,
   monitor: "album",
+  tags: [],
 };
 
 describe("isAlbum", () => {
@@ -268,12 +274,25 @@ describe("buildAlbumDelegate", () => {
       qualityProfileId: 1,
       metadataProfileId: 2,
       monitor: "album",
+      tags: [],
     });
   });
 
-  it("preserves the artist monitor scope", () => {
-    const delegate = buildAlbumDelegate({ ...COMPLETE_SELECTION, monitor: "artist" });
-    expect(delegate?.monitor).toBe("artist");
+  it("passes the selected tag labels through to the delegate", () => {
+    const delegate = buildAlbumDelegate({ ...COMPLETE_SELECTION, tags: ["hi-fi", "favorites"] });
+    expect(delegate?.tags).toEqual(["hi-fi", "favorites"]);
+  });
+
+  it("preserves the this-album-only scope", () => {
+    const delegate = buildAlbumDelegate({ ...COMPLETE_SELECTION, monitor: "album" });
+    expect(delegate?.monitor).toBe("album");
+  });
+
+  it("preserves each entire-artist scope on the album delegate", () => {
+    for (const monitor of ["all", "future", "missing", "none"] as const) {
+      const delegate = buildAlbumDelegate({ ...COMPLETE_SELECTION, monitor });
+      expect(delegate?.monitor).toBe(monitor);
+    }
   });
 
   it("returns undefined when the selection is incomplete", () => {
@@ -286,6 +305,7 @@ const COMPLETE_ARTIST_SELECTION: LidarrArtistSelection = {
   qualityProfileId: 1,
   metadataProfileId: 2,
   monitor: "all",
+  tags: [],
 };
 
 describe("buildArtistDelegate", () => {
@@ -296,7 +316,13 @@ describe("buildArtistDelegate", () => {
       qualityProfileId: 1,
       metadataProfileId: 2,
       monitor: "all",
+      tags: [],
     });
+  });
+
+  it("passes the selected tag labels through to the delegate", () => {
+    const delegate = buildArtistDelegate("Aphex Twin", { ...COMPLETE_ARTIST_SELECTION, tags: ["watched"] });
+    expect(delegate?.tags).toEqual(["watched"]);
   });
 
   it("omits artistMbid when not provided", () => {
@@ -320,5 +346,57 @@ describe("buildArtistDelegate", () => {
     expect(
       buildArtistDelegate("Artist", { ...COMPLETE_ARTIST_SELECTION, metadataProfileId: undefined })
     ).toBeUndefined();
+  });
+});
+
+describe("normalizeTag", () => {
+  it("trims surrounding whitespace", () => {
+    expect(normalizeTag("  hi-fi  ")).toBe("hi-fi");
+  });
+});
+
+describe("hasTag", () => {
+  it("matches case-insensitively", () => {
+    expect(hasTag(["Hi-Fi"], "hi-fi")).toBe(true);
+  });
+
+  it("returns false when the tag is absent", () => {
+    expect(hasTag(["hi-fi"], "favorites")).toBe(false);
+  });
+});
+
+describe("addTag", () => {
+  it("appends a trimmed tag", () => {
+    expect(addTag(["hi-fi"], "  favorites  ")).toEqual(["hi-fi", "favorites"]);
+  });
+
+  it("ignores an empty or whitespace-only tag and returns the same reference", () => {
+    const tags = ["hi-fi"];
+    expect(addTag(tags, "   ")).toBe(tags);
+  });
+
+  it("ignores a case-insensitive duplicate and returns the same reference", () => {
+    const tags = ["Hi-Fi"];
+    expect(addTag(tags, "hi-fi")).toBe(tags);
+  });
+});
+
+describe("removeTag", () => {
+  it("removes the exact tag", () => {
+    expect(removeTag(["hi-fi", "favorites"], "hi-fi")).toEqual(["favorites"]);
+  });
+});
+
+describe("filterTagSuggestions", () => {
+  it("excludes already selected tags case-insensitively", () => {
+    expect(filterTagSuggestions(["Hi-Fi", "favorites"], ["hi-fi"], "")).toEqual(["favorites"]);
+  });
+
+  it("matches a substring query case-insensitively", () => {
+    expect(filterTagSuggestions(["Hi-Fi", "favorites"], [], "fav")).toEqual(["favorites"]);
+  });
+
+  it("returns all unselected suggestions for an empty query", () => {
+    expect(filterTagSuggestions(["a", "b"], [], "")).toEqual(["a", "b"]);
   });
 });

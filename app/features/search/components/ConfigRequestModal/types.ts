@@ -1,6 +1,7 @@
 import type { AppRouter, ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { ParseKeys } from "i18next";
+import type { ReactNode } from "react";
 
 type RouterInputs = inferRouterInputs<AppRouter>;
 type RouterOutputs = inferRouterOutputs<AppRouter>;
@@ -47,6 +48,7 @@ export interface LidarrSelectionBase<M extends string> {
   qualityProfileId: number | undefined;
   metadataProfileId: number | undefined;
   monitor: M;
+  tags: string[];
 }
 
 export type LidarrSelection = LidarrSelectionBase<MonitorScope>;
@@ -59,10 +61,35 @@ export interface MonitorOption<M extends string> {
   descriptionKey: ParseKeys<"search">;
 }
 
-export interface LidarrInputsProps<M extends string> {
+export interface AlbumScopeChoice {
+  value: "album" | "entireArtist";
+  labelKey: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
+}
+
+export type LidarrInputsProps =
+  | {
+      monitorMode: "album";
+      value: LidarrSelection;
+      onChange: (value: LidarrSelection) => void;
+    }
+  | {
+      monitorMode: "artist";
+      value: LidarrArtistSelection;
+      onChange: (value: LidarrArtistSelection) => void;
+    };
+
+export interface LidarrProfileFieldsProps<M extends string> {
   value: LidarrSelectionBase<M>;
   onChange: (value: LidarrSelectionBase<M>) => void;
-  monitorOptions: ReadonlyArray<MonitorOption<M>>;
+  monitorSlot: ReactNode;
+}
+
+export interface LidarrTagsInputProps {
+  label: string;
+  value: string[];
+  onChange: (value: string[]) => void;
+  suggestions: string[];
 }
 
 export interface LidarrSelectOption<T extends string | number> {
@@ -79,8 +106,6 @@ export interface LidarrSelectProps<T extends string | number> {
   onChange: (value: T) => void;
   disabled?: boolean;
 }
-
-export type MonitorScopeOption = MonitorOption<MonitorScope>;
 
 export type ArtistMonitorScopeOption = MonitorOption<ArtistMonitorScope>;
 

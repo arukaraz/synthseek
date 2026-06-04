@@ -7,6 +7,7 @@ export { useGetContents } from "./queries/useGetContents";
 export { useLibrarySummary } from "./queries/useLibrarySummary";
 export { useLidarrAvailable } from "./queries/useLidarrAvailable";
 export { useLidarrProfiles } from "./queries/useLidarrProfiles";
+export { useLidarrTags } from "./queries/useLidarrTags";
 export { useSearchContent } from "./queries/useSearchContent";
 export { useSettings } from "./queries/useSettings";
 export { useTrendingTracks } from "./queries/useTrendingTracks";

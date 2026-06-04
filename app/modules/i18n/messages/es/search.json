@@ -76,7 +76,9 @@
       "lidarrRootFolder": "Carpeta raíz",
       "lidarrQualityProfile": "Perfil de calidad",
       "lidarrMetadataProfile": "Perfil de metadatos",
-      "lidarrMonitor": "Alcance de seguimiento"
+      "lidarrMonitor": "Alcance de seguimiento",
+      "lidarrArtistScope": "Alcance del artista",
+      "lidarrTags": "Etiquetas"
     },
     "options": {
       "bitrate": {
@@ -192,6 +194,10 @@
         "rootFolder": "Selecciona una carpeta raíz",
         "qualityProfile": "Selecciona un perfil de calidad",
         "metadataProfile": "Selecciona un perfil de metadatos"
+      },
+      "tags": {
+        "placeholder": "Añade una etiqueta y pulsa Enter",
+        "remove": "Quitar etiqueta {{tag}}"
       }
     },
     "actions": {

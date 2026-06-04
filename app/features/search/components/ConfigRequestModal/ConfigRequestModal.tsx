@@ -31,13 +31,11 @@ import { ConfigHeader } from "./ConfigHeader";
 import { LidarrInputs } from "./LidarrInputs";
 import { OptionGrid } from "./OptionGrid";
 import {
-  ARTIST_MONITOR_SCOPE_OPTIONS,
   AVAILABILITY_OPTIONS,
   BITRATE_OPTIONS,
   DEFAULT_ARTIST_MONITOR_SCOPE,
   DEFAULT_MONITOR_SCOPE,
   MATCHING_OPTIONS,
-  MONITOR_SCOPE_OPTIONS,
   QUALITY_MODE_OPTIONS,
   UPLOAD_SPEED_OPTIONS,
 } from "./consts";
@@ -86,12 +84,14 @@ export function ConfigRequestModal({
     qualityProfileId: undefined,
     metadataProfileId: undefined,
     monitor: DEFAULT_MONITOR_SCOPE,
+    tags: [],
   });
   const [lidarrArtistSelection, setLidarrArtistSelection] = useState<LidarrArtistSelection>({
     rootFolderPath: undefined,
     qualityProfileId: undefined,
     metadataProfileId: undefined,
     monitor: DEFAULT_ARTIST_MONITOR_SCOPE,
+    tags: [],
   });
   const losslessActive = qualityMode === "lossless";
 
@@ -346,11 +346,7 @@ export function ConfigRequestModal({
                 {t("config.sections.lidarr")}
               </h3>
               <p className="text-fg/60 text-sm">{t("config.artistLidarr.description")}</p>
-              <LidarrInputs
-                value={lidarrArtistSelection}
-                onChange={setLidarrArtistSelection}
-                monitorOptions={ARTIST_MONITOR_SCOPE_OPTIONS}
-              />
+              <LidarrInputs monitorMode="artist" value={lidarrArtistSelection} onChange={setLidarrArtistSelection} />
             </div>
           ) : (
             <>
@@ -427,11 +423,7 @@ export function ConfigRequestModal({
                   <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
                     {t("config.sections.lidarr")}
                   </h3>
-                  <LidarrInputs
-                    value={lidarrSelection}
-                    onChange={setLidarrSelection}
-                    monitorOptions={MONITOR_SCOPE_OPTIONS}
-                  />
+                  <LidarrInputs monitorMode="album" value={lidarrSelection} onChange={setLidarrSelection} />
                 </div>
               )}
 

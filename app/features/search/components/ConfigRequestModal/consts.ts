@@ -1,10 +1,10 @@
 import type {
   AcquisitionMethodOption,
+  AlbumScopeChoice,
   ArtistMonitorScopeOption,
   AvailabilityOption,
   BitrateOption,
   MatchingOption,
-  MonitorScopeOption,
   QualityModeOption,
   UploadSpeedOption,
 } from "./types";
@@ -43,20 +43,22 @@ export const LIDARR_ACQUISITION_OPTION: AcquisitionMethodOption = {
   requires: [],
 };
 
-export const MONITOR_SCOPE_OPTIONS: MonitorScopeOption[] = [
+export const ALBUM_SCOPE_CHOICES: AlbumScopeChoice[] = [
   {
     value: "album",
     labelKey: "config.options.monitor.album.label",
     descriptionKey: "config.options.monitor.album.description",
   },
   {
-    value: "artist",
+    value: "entireArtist",
     labelKey: "config.options.monitor.artist.label",
     descriptionKey: "config.options.monitor.artist.description",
   },
 ];
 
 export const DEFAULT_MONITOR_SCOPE = "album" as const;
+
+export const DEFAULT_ALBUM_ARTIST_SCOPE = "all" as const;
 
 export const ARTIST_MONITOR_SCOPE_OPTIONS: ArtistMonitorScopeOption[] = [
   {
