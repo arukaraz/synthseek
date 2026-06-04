@@ -9,12 +9,15 @@ import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { RequestAllButton } from "./RequestAllButton";
+import { RequestArtistLidarrButton } from "./RequestArtistLidarrButton";
 import type { HeroHeaderProps } from "./types";
 
 export function HeroHeader({
   metadata,
   type,
   onRequestAll,
+  onRequestArtistLidarr,
+  showArtistLidarrButton,
   onBack,
   requestButtonDisabled,
   requestButtonTooltip,
@@ -77,7 +80,9 @@ export function HeroHeader({
             {metadataText && <p className="text-overlay-fg/60 text-xs">{metadataText}</p>}
           </div>
 
-          {showRequestButton && onRequestAll ? (
+          {showArtistLidarrButton && onRequestArtistLidarr ? (
+            <RequestArtistLidarrButton onRequest={onRequestArtistLidarr} />
+          ) : showRequestButton && onRequestAll ? (
             <RequestAllButton
               onRequestAll={onRequestAll}
               disabled={requestButtonDisabled}

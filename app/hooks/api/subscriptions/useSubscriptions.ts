@@ -15,6 +15,7 @@ const TERMINAL_STATUSES = new Set<string>([
   RequestStatus.enum.complete,
   RequestStatus.enum.failed,
   RequestStatus.enum.cancelled,
+  RequestStatus.enum.delegated,
 ]);
 
 const MAX_RECONNECT_ATTEMPTS = 3;

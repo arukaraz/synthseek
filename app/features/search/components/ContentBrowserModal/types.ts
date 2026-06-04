@@ -20,6 +20,7 @@ export interface ContentBrowserModalProps {
   open: boolean;
   onClose: () => void;
   onRequestClick: (item: MusicItem, context?: RequestContext) => void;
+  onRequestArtistLidarr?: (artist: MusicItem) => void;
   preloadedItems?: MusicItem[];
   requestButtonDisabled?: boolean;
   requestButtonTooltip?: string;
@@ -29,6 +30,8 @@ export interface HeroHeaderProps {
   metadata: ContentMetadata;
   type: ContentType;
   onRequestAll?: () => void;
+  onRequestArtistLidarr?: () => void;
+  showArtistLidarrButton?: boolean;
   onBack?: () => void;
   requestButtonDisabled?: boolean;
   requestButtonTooltip?: string;
@@ -38,6 +41,10 @@ export interface RequestAllButtonProps {
   onRequestAll: () => void;
   disabled?: boolean;
   tooltip?: string;
+}
+
+export interface RequestArtistLidarrButtonProps {
+  onRequest: () => void;
 }
 
 export interface ContentListProps {

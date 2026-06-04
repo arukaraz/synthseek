@@ -39,6 +39,21 @@ export interface SlskdStatusBadgeProps {
   messageParams?: Record<string, string>;
 }
 
+export interface LidarrCardProps {
+  initial: { url: string; apiKey: string };
+}
+
+export type LidarrHealth = SlskdHealth;
+
+export type LidarrStatusTone = SlskdStatusTone;
+
+export interface LidarrStatusBadgeProps {
+  status: LidarrHealth;
+  message?: string;
+  messageCode?: ParseKeys<"health">;
+  messageParams?: Record<string, string>;
+}
+
 export interface EnrichmentCardProps {
   initial: ConnectionsEnrichment;
 }

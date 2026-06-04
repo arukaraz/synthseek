@@ -8,6 +8,11 @@ import type { RequestDetailStatsProps } from "./types";
 
 export function RequestDetailStats({ request }: RequestDetailStatsProps) {
   const { t } = useTranslation("requests");
+
+  if (request.status === RequestStatus.enum.delegated) {
+    return null;
+  }
+
   const tracks = request.tracks ?? [];
   const completeCount = tracks.filter((track) => track.status === RequestStatus.enum.complete).length;
   const failedCount = tracks.filter((track) =>

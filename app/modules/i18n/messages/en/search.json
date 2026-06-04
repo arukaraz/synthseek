@@ -37,6 +37,7 @@
     "back": "Back",
     "artistBadge": "Artist",
     "request": "Request",
+    "requestToLidarr": "Request to Lidarr",
     "requestTrack": "Request track",
     "songCount_one": "{{count}} song",
     "songCount_other": "{{count}} songs",
@@ -59,7 +60,9 @@
     "sections": {
       "quality": "Quality Settings",
       "matching": "Matching Mode",
-      "peer": "Peer Preferences"
+      "acquisition": "Acquisition Method",
+      "peer": "Peer Preferences",
+      "lidarr": "Lidarr Handoff"
     },
     "fields": {
       "quality": "Quality",
@@ -67,8 +70,13 @@
       "format": "Format",
       "bitrateMatching": "Bitrate Matching",
       "formatMatching": "Format Matching",
+      "acquisition": "Source",
       "minUploadSpeed": "Min Upload Speed",
-      "availability": "Availability"
+      "availability": "Availability",
+      "lidarrRootFolder": "Root Folder",
+      "lidarrQualityProfile": "Quality Profile",
+      "lidarrMetadataProfile": "Metadata Profile",
+      "lidarrMonitor": "Monitor Scope"
     },
     "options": {
       "bitrate": {
@@ -121,16 +129,81 @@
           "label": "Available now",
           "description": "Free slot only"
         }
+      },
+      "acquisition": {
+        "auto": {
+          "label": "Auto",
+          "description": "Use the configured source order"
+        },
+        "slskd": {
+          "label": "Soulseek",
+          "description": "slskd only, no lossy fallback"
+        },
+        "ytdlp": {
+          "label": "YouTube",
+          "description": "yt-dlp only, always lossy"
+        },
+        "slskdThenYtdlp": {
+          "label": "Soulseek, then YouTube",
+          "description": "Try slskd first, fall back to yt-dlp"
+        },
+        "lidarr": {
+          "label": "Lidarr",
+          "description": "Hand this album to your Lidarr instance"
+        }
+      },
+      "monitor": {
+        "album": {
+          "label": "This album only",
+          "description": "Monitor and search just this album"
+        },
+        "artist": {
+          "label": "Entire artist",
+          "description": "Monitor the full artist and search all albums"
+        }
+      },
+      "artistMonitor": {
+        "all": {
+          "label": "All albums",
+          "description": "Monitor every album by this artist"
+        },
+        "future": {
+          "label": "Future only",
+          "description": "Monitor only albums released from now on"
+        },
+        "missing": {
+          "label": "Missing only",
+          "description": "Monitor only albums not yet in your library"
+        },
+        "none": {
+          "label": "None",
+          "description": "Add the artist without monitoring any albums"
+        }
+      }
+    },
+    "artistLidarr": {
+      "description": "Add this artist to Lidarr and let it manage the downloads."
+    },
+    "lidarr": {
+      "loading": "Loading Lidarr profiles...",
+      "error": "Could not load Lidarr profiles. Check your Lidarr connection.",
+      "freeSuffix": "free",
+      "placeholders": {
+        "rootFolder": "Select a root folder",
+        "qualityProfile": "Select a quality profile",
+        "metadataProfile": "Select a metadata profile"
       }
     },
     "actions": {
       "cancel": "Cancel",
       "request": "Request",
+      "addToLidarr": "Add to Lidarr",
       "requesting": "Requesting please wait..."
     },
     "errors": {
       "invalidItem": "Invalid item",
-      "fetchFailed": "Failed to fetch {{type}} tracks"
+      "fetchFailed": "Failed to fetch {{type}} tracks",
+      "lidarrIncomplete": "Select a root folder, quality profile, and metadata profile"
     }
   }
 }

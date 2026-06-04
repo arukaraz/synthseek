@@ -16,6 +16,22 @@ export function useUpdateConnectionsSlskd() {
   });
 }
 
+export function useUpdateConnectionsLidarr() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateConnectionsLidarr.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      utils.settings.lidarrStatus.invalidate();
+      toast.success(i18n.t("mutations:settings.lidarrSaved"));
+    },
+    onError: (error) => errorToast(error, "settings.lidarrFailed"),
+  });
+}
+
+export function useTestLidarr() {
+  return trpc.settings.testLidarr.useMutation();
+}
+
 export function useUpdateConnectionsPlex() {
   const utils = trpc.useUtils();
   return trpc.settings.updateConnectionsPlex.useMutation({

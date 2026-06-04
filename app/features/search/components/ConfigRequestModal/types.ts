@@ -1,11 +1,97 @@
-import type { ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
+import type { AppRouter, ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { ParseKeys } from "i18next";
+
+type RouterInputs = inferRouterInputs<AppRouter>;
+type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+export type DownloadSourceKey = NonNullable<RouterInputs["requests"]["batchRequest"]["config"]["sourceChain"]>[number];
+
+export type AlbumDelegate = NonNullable<RouterInputs["requests"]["batchRequest"]["delegate"]>;
+
+export type MonitorScope = AlbumDelegate["monitor"];
+
+export type ArtistDelegateInput = RouterInputs["lidarr"]["delegateArtist"];
+
+export type ArtistMonitorScope = ArtistDelegateInput["monitor"];
+
+export type LidarrProfiles = RouterOutputs["lidarr"]["getProfiles"];
+
+export type LidarrQualityProfile = LidarrProfiles["qualityProfiles"][number];
+
+export type LidarrMetadataProfile = LidarrProfiles["metadataProfiles"][number];
+
+export type LidarrRootFolder = LidarrProfiles["rootFolders"][number];
+
+export type AcquisitionMethod = "auto" | "slskd" | "ytdlp" | "slskdThenYtdlp" | "lidarr";
+
+export interface EnabledDownloadSources {
+  slskd: boolean;
+  ytdlp: boolean;
+}
+
+export interface AcquisitionOptionContext {
+  isAlbum: boolean;
+  lidarrAvailable: boolean;
+}
+
+export interface AcquisitionMethodOption {
+  value: AcquisitionMethod;
+  labelKey: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
+  requires: DownloadSourceKey[];
+}
+
+export interface LidarrSelectionBase<M extends string> {
+  rootFolderPath: string | undefined;
+  qualityProfileId: number | undefined;
+  metadataProfileId: number | undefined;
+  monitor: M;
+}
+
+export type LidarrSelection = LidarrSelectionBase<MonitorScope>;
+
+export type LidarrArtistSelection = LidarrSelectionBase<ArtistMonitorScope>;
+
+export interface MonitorOption<M extends string> {
+  value: M;
+  labelKey: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
+}
+
+export interface LidarrInputsProps<M extends string> {
+  value: LidarrSelectionBase<M>;
+  onChange: (value: LidarrSelectionBase<M>) => void;
+  monitorOptions: ReadonlyArray<MonitorOption<M>>;
+}
+
+export interface LidarrSelectOption<T extends string | number> {
+  value: T;
+  label: string;
+  description?: string;
+}
+
+export interface LidarrSelectProps<T extends string | number> {
+  label: string;
+  placeholder: string;
+  options: LidarrSelectOption<T>[];
+  value: T | undefined;
+  onChange: (value: T) => void;
+  disabled?: boolean;
+}
+
+export type MonitorScopeOption = MonitorOption<MonitorScope>;
+
+export type ArtistMonitorScopeOption = MonitorOption<ArtistMonitorScope>;
+
+export type ConfigRequestMode = "download" | "lidarr-artist";
 
 export interface ConfigRequestModalProps {
   isOpen: boolean;
   onClose: () => void;
   item: MusicItem | null;
   itemType: ContentType;
+  mode?: ConfigRequestMode;
   onSuccess?: (itemName: string) => void;
   parentAlbum?: MusicItem | null;
   preloadedTracks?: MusicTrack[];
@@ -44,6 +130,13 @@ export interface AvailabilityOption {
   value: AvailabilityMode;
   labelKey: ParseKeys<"search">;
   descriptionKey: ParseKeys<"search">;
+}
+
+export interface AcquisitionDropdownProps {
+  label: string;
+  value: AcquisitionMethod;
+  options: AcquisitionMethodOption[];
+  onChange: (value: AcquisitionMethod) => void;
 }
 
 export interface ConfigHeaderProps {

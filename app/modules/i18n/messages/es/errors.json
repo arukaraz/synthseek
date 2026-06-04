@@ -155,6 +155,18 @@
     "title": "El artista ya existe en Lidarr",
     "description": "Este artista ya existe en Lidarr."
   },
+  "LIDARR_ALBUM_NOT_IN_CATALOG": {
+    "title": "No se encontró el álbum en Lidarr para encolarlo",
+    "description": "Lidarr no pudo encontrar este álbum para encolarlo. Prueba con otro download source (slskd o yt-dlp)."
+  },
+  "LIDARR_ARTIST_NOT_IN_CATALOG": {
+    "title": "No se encontró el artista en Lidarr",
+    "description": "Lidarr no pudo encontrar este artista para añadirlo."
+  },
+  "LIDARR_HANDOFF_FAILED": {
+    "title": "Falló la entrega a Lidarr",
+    "description": "No se pudo entregar el álbum a Lidarr."
+  },
   "VALUE_ALREADY_IN_USE": {
     "title": "Valor ya en uso",
     "description": "Ese valor ya está en uso."

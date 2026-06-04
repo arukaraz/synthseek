@@ -60,7 +60,7 @@ export interface RequestsViewState {
 export const STATUS_FILTER_MAP = {
   all: null,
   active: ACTIVE_STATUSES,
-  done: [RequestStatus.enum.complete],
+  done: [RequestStatus.enum.complete, RequestStatus.enum.delegated],
   failed: [...UNRESOLVED_STATUSES, RequestStatus.enum.partially_complete],
 } as const;
 

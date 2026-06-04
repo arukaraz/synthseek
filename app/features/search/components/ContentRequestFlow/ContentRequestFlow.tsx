@@ -23,6 +23,7 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
     showConfigRequestModal: false,
     selectedContentToRequest: null,
     parentAlbumFromContext: null,
+    configRequestMode: "download",
   });
 
   const openForResult = useCallback((result: MusicItem) => {
@@ -58,8 +59,21 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
         parentAlbumFromContext: context?.parentAlbum ?? null,
         showConfigRequestModal: true,
         showContentBrowserModal: false,
+        configRequestMode: "download",
       }));
     }
+  }, []);
+
+  const handleRequestArtistLidarr = useCallback((artist: MusicItem) => {
+    if (artist.type !== ContentType.enum.artist) return;
+    setState((prev) => ({
+      ...prev,
+      selectedContentToRequest: artist,
+      parentAlbumFromContext: null,
+      showConfigRequestModal: true,
+      showContentBrowserModal: false,
+      configRequestMode: "lidarr-artist",
+    }));
   }, []);
 
   const handleConfigModalClose = useCallback(() => {
@@ -68,6 +82,7 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
       showConfigRequestModal: false,
       selectedContentToRequest: null,
       parentAlbumFromContext: null,
+      configRequestMode: "download",
     }));
   }, []);
 
@@ -81,6 +96,7 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
           onClose={handleCloseContentBrowserModal}
           open={state.showContentBrowserModal}
           onRequestClick={handleRequestContentClick}
+          onRequestArtistLidarr={handleRequestArtistLidarr}
         />
       )}
       {state.selectedContentToRequest && (
@@ -88,6 +104,7 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
           isOpen={state.showConfigRequestModal}
           item={state.selectedContentToRequest}
           itemType={state.selectedContentToRequest.type}
+          mode={state.configRequestMode}
           onClose={handleConfigModalClose}
           onSuccess={() => {}}
           parentAlbum={state.parentAlbumFromContext}

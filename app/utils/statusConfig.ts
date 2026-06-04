@@ -4,6 +4,7 @@ import {
   CheckCircle,
   Clock,
   Download,
+  ExternalLink,
   FileQuestion,
   FileX,
   Pause,
@@ -138,5 +139,12 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
     bgGradient: "from-gray-500/10 to-gray-600/5",
     borderColor: "border-gray-500/20",
     glowColor: "bg-gray-500",
+  },
+  [RequestStatus.enum.delegated]: {
+    icon: ExternalLink,
+    color: "text-secondary-400",
+    bgGradient: "from-secondary-500/10 to-secondary-600/5",
+    borderColor: "border-secondary-500/20",
+    glowColor: "bg-secondary-500",
   },
 };

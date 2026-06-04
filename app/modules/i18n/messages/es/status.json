@@ -51,6 +51,10 @@
     "cancelled": {
       "label": "Cancelada",
       "description": "Descarga cancelada"
+    },
+    "delegated": {
+      "label": "Delegado",
+      "description": "Entregado a un gestor de biblioteca externo"
     }
   },
   "failureReason": {

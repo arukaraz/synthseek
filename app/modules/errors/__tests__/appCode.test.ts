@@ -37,4 +37,12 @@ describe("extractAppCode", () => {
     });
     expect(extractAppCode(error)).toBe("ALBUM_NOT_FOUND");
   });
+
+  it("recognizes the Lidarr not-in-catalog code so its delegate failure resolves to translated copy", () => {
+    expect(extractAppCode({ data: { appCode: "LIDARR_ALBUM_NOT_IN_CATALOG" } })).toBe("LIDARR_ALBUM_NOT_IN_CATALOG");
+  });
+
+  it("no longer recognizes the retired Lidarr MBID resolution code", () => {
+    expect(extractAppCode({ data: { appCode: "LIDARR_MBID_RESOLUTION_FAILED" } })).toBeNull();
+  });
 });

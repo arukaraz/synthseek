@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRequestActions } from "../../hooks/useRequestActions";
+import { formatDelegatedTo } from "./helpers";
 import { JspfExportDialog } from "./JspfExportDialog";
 import {
   heroAvatar,
@@ -49,6 +50,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
   const [exportFullOpen, setExportFullOpen] = useState(false);
   const hasMoreActions = canCancel || canSyncPlex || canSyncSource || canExport;
   const typeLabel = label === "Playlist" ? t("labels.playlist") : t("labels.album");
+  const delegatedTo = formatDelegatedTo(request.delegated_to);
 
   return (
     <div className="relative">
@@ -101,6 +103,9 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
               <p className="text-fg/40 truncate text-xs">
                 {t("detail.requestedBy", { username: request.requestedBy.username })}
               </p>
+              {delegatedTo && (
+                <p className="text-fg/40 truncate text-xs">{t("detail.delegatedTo", { name: delegatedTo })}</p>
+              )}
             </div>
           </div>
 

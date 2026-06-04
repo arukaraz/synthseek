@@ -248,6 +248,26 @@
       "notConfigured": "Not configured"
     }
   },
+  "lidarr": {
+    "title": "Lidarr",
+    "description": "Optional. Hand off albums to an existing Lidarr instance.",
+    "url": {
+      "label": "URL",
+      "placeholder": "http://localhost:8686"
+    },
+    "apiKey": {
+      "label": "API Key"
+    },
+    "testing": "Testing...",
+    "testConnection": "Test connection",
+    "connected": "Connected",
+    "connectionFailed": "Connection failed",
+    "status": {
+      "healthy": "Healthy",
+      "unhealthy": "Unhealthy",
+      "notConfigured": "Not configured"
+    }
+  },
   "ytdlp": {
     "title": "yt-dlp",
     "description": "Fallback source used when slskd cannot deliver a track. Format and quality follow each request's own config.",

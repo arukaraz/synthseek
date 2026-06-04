@@ -1,4 +1,87 @@
-import type { AvailabilityOption, BitrateOption, MatchingOption, QualityModeOption, UploadSpeedOption } from "./types";
+import type {
+  AcquisitionMethodOption,
+  ArtistMonitorScopeOption,
+  AvailabilityOption,
+  BitrateOption,
+  MatchingOption,
+  MonitorScopeOption,
+  QualityModeOption,
+  UploadSpeedOption,
+} from "./types";
+
+export const ACQUISITION_METHOD_OPTIONS: AcquisitionMethodOption[] = [
+  {
+    value: "auto",
+    labelKey: "config.options.acquisition.auto.label",
+    descriptionKey: "config.options.acquisition.auto.description",
+    requires: [],
+  },
+  {
+    value: "slskd",
+    labelKey: "config.options.acquisition.slskd.label",
+    descriptionKey: "config.options.acquisition.slskd.description",
+    requires: ["slskd"],
+  },
+  {
+    value: "ytdlp",
+    labelKey: "config.options.acquisition.ytdlp.label",
+    descriptionKey: "config.options.acquisition.ytdlp.description",
+    requires: ["ytdlp"],
+  },
+  {
+    value: "slskdThenYtdlp",
+    labelKey: "config.options.acquisition.slskdThenYtdlp.label",
+    descriptionKey: "config.options.acquisition.slskdThenYtdlp.description",
+    requires: ["slskd", "ytdlp"],
+  },
+];
+
+export const LIDARR_ACQUISITION_OPTION: AcquisitionMethodOption = {
+  value: "lidarr",
+  labelKey: "config.options.acquisition.lidarr.label",
+  descriptionKey: "config.options.acquisition.lidarr.description",
+  requires: [],
+};
+
+export const MONITOR_SCOPE_OPTIONS: MonitorScopeOption[] = [
+  {
+    value: "album",
+    labelKey: "config.options.monitor.album.label",
+    descriptionKey: "config.options.monitor.album.description",
+  },
+  {
+    value: "artist",
+    labelKey: "config.options.monitor.artist.label",
+    descriptionKey: "config.options.monitor.artist.description",
+  },
+];
+
+export const DEFAULT_MONITOR_SCOPE = "album" as const;
+
+export const ARTIST_MONITOR_SCOPE_OPTIONS: ArtistMonitorScopeOption[] = [
+  {
+    value: "all",
+    labelKey: "config.options.artistMonitor.all.label",
+    descriptionKey: "config.options.artistMonitor.all.description",
+  },
+  {
+    value: "future",
+    labelKey: "config.options.artistMonitor.future.label",
+    descriptionKey: "config.options.artistMonitor.future.description",
+  },
+  {
+    value: "missing",
+    labelKey: "config.options.artistMonitor.missing.label",
+    descriptionKey: "config.options.artistMonitor.missing.description",
+  },
+  {
+    value: "none",
+    labelKey: "config.options.artistMonitor.none.label",
+    descriptionKey: "config.options.artistMonitor.none.description",
+  },
+];
+
+export const DEFAULT_ARTIST_MONITOR_SCOPE = "all" as const;
 
 export const BITRATE_OPTIONS: BitrateOption[] = [
   { value: 320, label: "320 kbps", descriptionKey: "config.options.bitrate.best" },

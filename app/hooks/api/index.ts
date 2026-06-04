@@ -2,9 +2,13 @@ export { useTrackRequests } from "./queries/useTrackRequests";
 export { useArtistSpotlight } from "./queries/useArtistSpotlight";
 export { useCategories } from "./queries/useCategories";
 export { useCategoryPlaylists } from "./queries/useCategoryPlaylists";
+export { useDownloadSourcesAvailability } from "./queries/useDownloadSourcesAvailability";
 export { useGetContents } from "./queries/useGetContents";
 export { useLibrarySummary } from "./queries/useLibrarySummary";
+export { useLidarrAvailable } from "./queries/useLidarrAvailable";
+export { useLidarrProfiles } from "./queries/useLidarrProfiles";
 export { useSearchContent } from "./queries/useSearchContent";
+export { useSettings } from "./queries/useSettings";
 export { useTrendingTracks } from "./queries/useTrendingTracks";
 
 export { useRequest } from "./mutations/requests/useRequest";
@@ -22,3 +26,4 @@ export { useCancelPlaylist } from "./mutations/requests/useCancelPlaylist";
 export { useCancelTrack } from "./mutations/requests/useCancelTrack";
 export { useClearCompleted } from "./mutations/requests/useClearCompleted";
 export { useDeleteAllRequests } from "./mutations/requests/useDeleteAllRequests";
+export { useDelegateArtist } from "./mutations/lidarr/useDelegateArtist";

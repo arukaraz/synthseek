@@ -1,5 +1,114 @@
 import { ContentType, type MusicAlbum, type MusicItem, type MusicTrack } from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
+import { ACQUISITION_METHOD_OPTIONS, LIDARR_ACQUISITION_OPTION } from "./consts";
+import type {
+  AcquisitionMethod,
+  AcquisitionMethodOption,
+  AcquisitionOptionContext,
+  AlbumDelegate,
+  ArtistDelegateInput,
+  DownloadSourceKey,
+  EnabledDownloadSources,
+  LidarrArtistSelection,
+  LidarrMetadataProfile,
+  LidarrQualityProfile,
+  LidarrRootFolder,
+  LidarrSelectOption,
+  LidarrSelection,
+} from "./types";
+
+const SOURCE_CHAIN_BY_METHOD: Record<AcquisitionMethod, DownloadSourceKey[]> = {
+  auto: [],
+  slskd: ["slskd"],
+  ytdlp: ["ytdlp"],
+  slskdThenYtdlp: ["slskd", "ytdlp"],
+  lidarr: [],
+};
+
+export function buildSourceChain(
+  method: AcquisitionMethod,
+  enabledSources: EnabledDownloadSources
+): DownloadSourceKey[] | undefined {
+  const chain = SOURCE_CHAIN_BY_METHOD[method].filter((key) => enabledSources[key]);
+  return chain.length > 0 ? chain : undefined;
+}
+
+export function getAvailableAcquisitionOptions(
+  enabledSources: EnabledDownloadSources,
+  context: AcquisitionOptionContext
+): AcquisitionMethodOption[] {
+  const chainOptions = ACQUISITION_METHOD_OPTIONS.filter((option) =>
+    option.requires.every((key) => enabledSources[key])
+  );
+  if (context.isAlbum && context.lidarrAvailable) return [...chainOptions, LIDARR_ACQUISITION_OPTION];
+  return chainOptions;
+}
+
+export function isAcquisitionMethod(value: string): value is AcquisitionMethod {
+  if (value === LIDARR_ACQUISITION_OPTION.value) return true;
+  return ACQUISITION_METHOD_OPTIONS.some((option) => option.value === value);
+}
+
+export function isLidarrMethod(method: AcquisitionMethod): boolean {
+  return method === "lidarr";
+}
+
+export function showsSlskdControls(method: AcquisitionMethod): boolean {
+  if (method === "lidarr") return false;
+  if (method === "auto") return true;
+  return SOURCE_CHAIN_BY_METHOD[method].includes("slskd");
+}
+
+export function isLidarrSelectionComplete(selection: {
+  rootFolderPath: string | undefined;
+  qualityProfileId: number | undefined;
+  metadataProfileId: number | undefined;
+}): boolean {
+  return (
+    selection.rootFolderPath !== undefined &&
+    selection.qualityProfileId !== undefined &&
+    selection.metadataProfileId !== undefined
+  );
+}
+
+export function buildAlbumDelegate(selection: LidarrSelection): AlbumDelegate | undefined {
+  if (
+    selection.rootFolderPath === undefined ||
+    selection.qualityProfileId === undefined ||
+    selection.metadataProfileId === undefined
+  ) {
+    return undefined;
+  }
+  return {
+    manager: "lidarr",
+    rootFolderPath: selection.rootFolderPath,
+    qualityProfileId: selection.qualityProfileId,
+    metadataProfileId: selection.metadataProfileId,
+    monitor: selection.monitor,
+  };
+}
+
+export function buildArtistDelegate(
+  artistName: string,
+  selection: LidarrArtistSelection,
+  artistMbid?: string
+): ArtistDelegateInput | undefined {
+  if (
+    selection.rootFolderPath === undefined ||
+    selection.qualityProfileId === undefined ||
+    selection.metadataProfileId === undefined
+  ) {
+    return undefined;
+  }
+  return {
+    artistName,
+    rootFolderPath: selection.rootFolderPath,
+    qualityProfileId: selection.qualityProfileId,
+    metadataProfileId: selection.metadataProfileId,
+    monitor: selection.monitor,
+    ...(artistMbid ? { artistMbid } : {}),
+  };
+}
 
 export function isAlbum(item: unknown): item is MusicAlbum {
   return !!item && typeof item === "object" && "type" in item && (item as MusicItem).type === ContentType.enum.album;
@@ -82,4 +191,32 @@ export function mapTrackFields(t: MusicTrack) {
     explicit: t.explicit,
     isrc: t.isrc,
   };
+}
+
+const BYTES_PER_GB = 1024 ** 3;
+
+export function formatFreeSpace(freeSpace: number, suffix: string): string | undefined {
+  if (!Number.isFinite(freeSpace) || freeSpace <= 0) return undefined;
+  const gb = freeSpace / BYTES_PER_GB;
+  const value = gb >= 100 ? Math.round(gb) : Math.round(gb * 10) / 10;
+  return `${value} GB ${suffix}`;
+}
+
+export function buildRootFolderOptions(
+  rootFolders: LidarrRootFolder[],
+  freeSuffix: string
+): LidarrSelectOption<string>[] {
+  return rootFolders.map((folder) => ({
+    value: folder.path,
+    label: folder.path,
+    description: formatFreeSpace(folder.freeSpace, freeSuffix),
+  }));
+}
+
+export function buildQualityProfileOptions(profiles: LidarrQualityProfile[]): LidarrSelectOption<number>[] {
+  return profiles.map((profile) => ({ value: profile.id, label: profile.name }));
+}
+
+export function buildMetadataProfileOptions(profiles: LidarrMetadataProfile[]): LidarrSelectOption<number>[] {
+  return profiles.map((profile) => ({ value: profile.id, label: profile.name }));
 }

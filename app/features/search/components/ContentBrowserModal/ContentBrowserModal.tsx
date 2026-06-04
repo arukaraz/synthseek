@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogTitle } from "@components/ui/Dialog";
 import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { useLidarrAvailable } from "@hooks/api";
 import { modalContainer } from "../styles";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,6 +17,7 @@ export function ContentBrowserModal({
   open,
   onClose,
   onRequestClick,
+  onRequestArtistLidarr,
   preloadedItems,
   requestButtonDisabled,
   requestButtonTooltip,
@@ -27,6 +29,10 @@ export function ContentBrowserModal({
       initialData: data,
       preloadedItems,
     });
+
+  const isArtistView = currentType === ContentType.enum.artist;
+  const { data: lidarrAvailability } = useLidarrAvailable({ enabled: isArtistView });
+  const showArtistLidarrButton = isArtistView && !!onRequestArtistLidarr && (lidarrAvailability?.available ?? false);
 
   const handleRequestWithContext = useCallback(
     (item: MusicItem) => {
@@ -40,6 +46,11 @@ export function ContentBrowserModal({
     },
     [currentType, currentData, onRequestClick]
   );
+
+  const handleRequestArtistLidarr = useCallback(() => {
+    if (currentType !== ContentType.enum.artist) return;
+    onRequestArtistLidarr?.(currentData);
+  }, [currentType, currentData, onRequestArtistLidarr]);
 
   const sectionTitle =
     currentType === ContentType.enum.artist ? t("browser.section.albums") : t("browser.section.tracks");
@@ -64,6 +75,8 @@ export function ContentBrowserModal({
             metadata={metadata}
             type={currentType}
             onRequestAll={() => handleRequestWithContext(currentData)}
+            onRequestArtistLidarr={handleRequestArtistLidarr}
+            showArtistLidarrButton={showArtistLidarrButton}
             onBack={canGoBack ? handleBack : undefined}
             requestButtonDisabled={requestButtonDisabled}
             requestButtonTooltip={requestButtonTooltip}

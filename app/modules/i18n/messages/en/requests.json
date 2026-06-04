@@ -74,6 +74,7 @@
   "detail": {
     "backToList": "Back to requests list",
     "requestedBy": "Requested by {{username}}",
+    "delegatedTo": "Delegated to: {{name}}",
     "moreActions": "More actions",
     "removeAction": "Remove {{label}}",
     "retryFailed": "Retry Failed",

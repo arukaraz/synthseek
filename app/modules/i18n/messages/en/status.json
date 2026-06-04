@@ -51,6 +51,10 @@
     "cancelled": {
       "label": "Cancelled",
       "description": "Download cancelled"
+    },
+    "delegated": {
+      "label": "Delegated",
+      "description": "Handed off to an external library manager"
     }
   },
   "failureReason": {

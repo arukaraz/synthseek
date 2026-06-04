@@ -37,6 +37,7 @@
     "back": "Atrás",
     "artistBadge": "Artista",
     "request": "Solicitar",
+    "requestToLidarr": "Solicitar a Lidarr",
     "requestTrack": "Solicitar canción",
     "songCount_one": "{{count}} canción",
     "songCount_other": "{{count}} canciones",
@@ -59,7 +60,9 @@
     "sections": {
       "quality": "Ajustes de calidad",
       "matching": "Modo de coincidencia",
-      "peer": "Preferencias de pares"
+      "acquisition": "Método de adquisición",
+      "peer": "Preferencias de pares",
+      "lidarr": "Delegar a Lidarr"
     },
     "fields": {
       "quality": "Calidad",
@@ -67,8 +70,13 @@
       "format": "Formato",
       "bitrateMatching": "Coincidencia de tasa de bits",
       "formatMatching": "Coincidencia de formato",
+      "acquisition": "Fuente",
       "minUploadSpeed": "Velocidad mínima de subida",
-      "availability": "Disponibilidad"
+      "availability": "Disponibilidad",
+      "lidarrRootFolder": "Carpeta raíz",
+      "lidarrQualityProfile": "Perfil de calidad",
+      "lidarrMetadataProfile": "Perfil de metadatos",
+      "lidarrMonitor": "Alcance de seguimiento"
     },
     "options": {
       "bitrate": {
@@ -121,16 +129,81 @@
           "label": "Disponible ahora",
           "description": "Solo espacio libre"
         }
+      },
+      "acquisition": {
+        "auto": {
+          "label": "Automático",
+          "description": "Usar el orden de fuentes configurado"
+        },
+        "slskd": {
+          "label": "Soulseek",
+          "description": "Solo slskd, sin alternativa con pérdida"
+        },
+        "ytdlp": {
+          "label": "YouTube",
+          "description": "Solo yt-dlp, siempre con pérdida"
+        },
+        "slskdThenYtdlp": {
+          "label": "Soulseek y luego YouTube",
+          "description": "Probar slskd primero y recurrir a yt-dlp"
+        },
+        "lidarr": {
+          "label": "Lidarr",
+          "description": "Entregar este álbum a tu instancia de Lidarr"
+        }
+      },
+      "monitor": {
+        "album": {
+          "label": "Solo este álbum",
+          "description": "Seguir y buscar únicamente este álbum"
+        },
+        "artist": {
+          "label": "Artista completo",
+          "description": "Seguir al artista completo y buscar todos los álbumes"
+        }
+      },
+      "artistMonitor": {
+        "all": {
+          "label": "Todos los álbumes",
+          "description": "Seguir todos los álbumes de este artista"
+        },
+        "future": {
+          "label": "Solo futuros",
+          "description": "Seguir solo los álbumes publicados a partir de ahora"
+        },
+        "missing": {
+          "label": "Solo faltantes",
+          "description": "Seguir solo los álbumes que aún no están en tu biblioteca"
+        },
+        "none": {
+          "label": "Ninguno",
+          "description": "Añadir el artista sin seguir ningún álbum"
+        }
+      }
+    },
+    "artistLidarr": {
+      "description": "Añade este artista a Lidarr y deja que gestione las descargas."
+    },
+    "lidarr": {
+      "loading": "Cargando perfiles de Lidarr...",
+      "error": "No se pudieron cargar los perfiles de Lidarr. Revisa tu conexión con Lidarr.",
+      "freeSuffix": "libres",
+      "placeholders": {
+        "rootFolder": "Selecciona una carpeta raíz",
+        "qualityProfile": "Selecciona un perfil de calidad",
+        "metadataProfile": "Selecciona un perfil de metadatos"
       }
     },
     "actions": {
       "cancel": "Cancelar",
       "request": "Solicitar",
+      "addToLidarr": "Añadir a Lidarr",
       "requesting": "Solicitando, espera por favor..."
     },
     "errors": {
       "invalidItem": "Elemento no válido",
-      "fetchFailed": "No se pudieron obtener las canciones de {{type}}"
+      "fetchFailed": "No se pudieron obtener las canciones de {{type}}",
+      "lidarrIncomplete": "Selecciona una carpeta raíz, un perfil de calidad y un perfil de metadatos"
     }
   }
 }

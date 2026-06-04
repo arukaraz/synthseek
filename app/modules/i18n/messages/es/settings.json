@@ -248,6 +248,26 @@
       "notConfigured": "Sin configurar"
     }
   },
+  "lidarr": {
+    "title": "Lidarr",
+    "description": "Opcional. Entrega álbumes a una instancia de Lidarr existente.",
+    "url": {
+      "label": "URL",
+      "placeholder": "http://localhost:8686"
+    },
+    "apiKey": {
+      "label": "Clave de API"
+    },
+    "testing": "Probando...",
+    "testConnection": "Probar conexión",
+    "connected": "Conectado",
+    "connectionFailed": "La conexión falló",
+    "status": {
+      "healthy": "Sin problemas",
+      "unhealthy": "Con problemas",
+      "notConfigured": "Sin configurar"
+    }
+  },
   "ytdlp": {
     "title": "yt-dlp",
     "description": "Fuente alternativa que se usa cuando slskd no puede entregar una pista. El formato y la calidad siguen la configuración propia de cada solicitud.",

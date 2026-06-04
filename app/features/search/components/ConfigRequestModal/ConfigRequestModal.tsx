@@ -10,32 +10,65 @@ import {
   type MusicPlaylistTrack,
   type MusicTrack,
 } from "@api/__generated__/types";
-import { useBatchRequest, useGetContents, usePlaylistRequest, useRequest } from "@hooks/api";
+import {
+  useBatchRequest,
+  useDelegateArtist,
+  useDownloadSourcesAvailability,
+  useGetContents,
+  useLidarrAvailable,
+  usePlaylistRequest,
+  useRequest,
+} from "@hooks/api";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { titleCase } from "@utils/formatters";
 import { Download, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { AcquisitionDropdown } from "./AcquisitionDropdown";
 import { ConfigHeader } from "./ConfigHeader";
+import { LidarrInputs } from "./LidarrInputs";
 import { OptionGrid } from "./OptionGrid";
 import {
+  ARTIST_MONITOR_SCOPE_OPTIONS,
   AVAILABILITY_OPTIONS,
   BITRATE_OPTIONS,
+  DEFAULT_ARTIST_MONITOR_SCOPE,
+  DEFAULT_MONITOR_SCOPE,
   MATCHING_OPTIONS,
+  MONITOR_SCOPE_OPTIONS,
   QUALITY_MODE_OPTIONS,
   UPLOAD_SPEED_OPTIONS,
 } from "./consts";
-import { extractItemMetadata, getItemDisplayName, mapTrackFields } from "./helpers";
+import {
+  buildAlbumDelegate,
+  buildArtistDelegate,
+  buildSourceChain,
+  extractItemMetadata,
+  getAvailableAcquisitionOptions,
+  getItemDisplayName,
+  isLidarrMethod,
+  mapTrackFields,
+  showsSlskdControls,
+} from "./helpers";
 import { configDialogContent } from "./styles";
-import type { AvailabilityMode, ConfigRequestModalProps, Option, QualityMode } from "./types";
+import type {
+  AcquisitionMethod,
+  AvailabilityMode,
+  ConfigRequestModalProps,
+  LidarrArtistSelection,
+  LidarrSelection,
+  Option,
+  QualityMode,
+} from "./types";
 
 export function ConfigRequestModal({
   isOpen,
   onClose,
   item,
   itemType,
+  mode = "download",
   onSuccess,
   parentAlbum,
   preloadedTracks,
@@ -47,12 +80,59 @@ export function ConfigRequestModal({
   const [qualityMode, setQualityMode] = useState<QualityMode>("standard");
   const [minUploadSpeed, setMinUploadSpeed] = useState(0);
   const [availability, setAvailability] = useState<AvailabilityMode>("any");
+  const [acquisitionMethod, setAcquisitionMethod] = useState<AcquisitionMethod>("auto");
+  const [lidarrSelection, setLidarrSelection] = useState<LidarrSelection>({
+    rootFolderPath: undefined,
+    qualityProfileId: undefined,
+    metadataProfileId: undefined,
+    monitor: DEFAULT_MONITOR_SCOPE,
+  });
+  const [lidarrArtistSelection, setLidarrArtistSelection] = useState<LidarrArtistSelection>({
+    rootFolderPath: undefined,
+    qualityProfileId: undefined,
+    metadataProfileId: undefined,
+    monitor: DEFAULT_ARTIST_MONITOR_SCOPE,
+  });
   const losslessActive = qualityMode === "lossless";
+
+  const isLidarrArtistMode = mode === "lidarr-artist";
 
   const { t } = useTranslation("search");
   const router = useRouter();
 
-  const needsTrackList = !!item && item.type !== ContentType.enum.track && !preloadedTracks;
+  const isAlbumItem = item?.type === ContentType.enum.album;
+
+  const { data: sourcesAvailability } = useDownloadSourcesAvailability();
+  const { data: lidarrAvailability } = useLidarrAvailable({ enabled: isAlbumItem });
+  const enabledSources = useMemo(
+    () => ({
+      slskd: sourcesAvailability?.slskd ?? false,
+      ytdlp: sourcesAvailability?.ytdlp ?? false,
+    }),
+    [sourcesAvailability]
+  );
+  const acquisitionOptions = useMemo(
+    () =>
+      getAvailableAcquisitionOptions(enabledSources, {
+        isAlbum: isAlbumItem,
+        lidarrAvailable: lidarrAvailability?.available ?? false,
+      }),
+    [enabledSources, isAlbumItem, lidarrAvailability?.available]
+  );
+
+  useEffect(() => {
+    if (!acquisitionOptions.some((option) => option.value === acquisitionMethod)) setAcquisitionMethod("auto");
+  }, [acquisitionOptions, acquisitionMethod]);
+
+  const lidarrSelected = isLidarrMethod(acquisitionMethod);
+  const showSlskdControls = !lidarrSelected && showsSlskdControls(acquisitionMethod);
+
+  const needsTrackList =
+    !isLidarrArtistMode &&
+    !!item &&
+    item.type !== ContentType.enum.track &&
+    item.type !== ContentType.enum.artist &&
+    !preloadedTracks;
   const { data: contentResponse, isLoading: isLoadingTracks } = useGetContents(
     item?.id ?? "",
     needsTrackList,
@@ -123,13 +203,32 @@ export function ConfigRequestModal({
   const downloadMutation = useRequest();
   const downloadAlbumMutation = useBatchRequest();
   const downloadPlaylistMutation = usePlaylistRequest();
+  const delegateArtistMutation = useDelegateArtist();
 
   const isMutating =
-    downloadMutation.isPending || downloadAlbumMutation.isPending || downloadPlaylistMutation.isPending;
-  const isLoading = isMutating || (needsTrackList && isLoadingTracks);
+    downloadMutation.isPending ||
+    downloadAlbumMutation.isPending ||
+    downloadPlaylistMutation.isPending ||
+    delegateArtistMutation.isPending;
+  const isLoading = isMutating || (!isLidarrArtistMode && needsTrackList && isLoadingTracks);
 
   const handleClose = () => {
     if (!isLoading) onClose();
+  };
+
+  const handleDelegateArtist = () => {
+    if (!item || item.type !== ContentType.enum.artist) return;
+    const delegate = buildArtistDelegate(item.name, lidarrArtistSelection);
+    if (!delegate) {
+      toast.error(t("config.errors.lidarrIncomplete"));
+      return;
+    }
+    delegateArtistMutation.mutate(delegate, {
+      onSuccess: () => {
+        onSuccess?.(item.name);
+        onClose();
+      },
+    });
   };
 
   const handleDownload = () => {
@@ -138,6 +237,7 @@ export function ConfigRequestModal({
       return;
     }
 
+    const sourceChain = buildSourceChain(acquisitionMethod, enabledSources);
     const config = {
       bitrate: { value: bitrate, matching: bitrateMatching },
       format: losslessActive
@@ -145,6 +245,7 @@ export function ConfigRequestModal({
         : { value: format, matching: formatMatching },
       minUploadSpeed,
       requireFreeSlot: availability === "free",
+      ...(sourceChain ? { sourceChain } : {}),
     };
 
     if (item.type === ContentType.enum.track) {
@@ -165,6 +266,11 @@ export function ConfigRequestModal({
     }
 
     if (item.type === ContentType.enum.album) {
+      const delegate = lidarrSelected ? buildAlbumDelegate(lidarrSelection) : undefined;
+      if (lidarrSelected && !delegate) {
+        toast.error(t("config.errors.lidarrIncomplete"));
+        return;
+      }
       downloadAlbumMutation.mutate(
         {
           external_id: item.id,
@@ -176,6 +282,7 @@ export function ConfigRequestModal({
           genres: item.genres,
           tracks: trackList.map(mapTrackFields),
           config,
+          ...(delegate ? { delegate } : {}),
         },
         { onSuccess: handleMutationSuccess }
       );
@@ -233,78 +340,125 @@ export function ConfigRequestModal({
         />
 
         <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-              {t("config.sections.quality")}
-            </h3>
-            <OptionGrid
-              label={t("config.fields.quality")}
-              options={qualityGridOptions}
-              value={qualityMode}
-              onChange={setQualityMode}
-              columns={2}
-              showCheckmark
-            />
-            <OptionGrid
-              label={t("config.fields.bitrate")}
-              options={bitrateGridOptions}
-              value={bitrate}
-              onChange={setBitrate}
-              columns={4}
-            />
-            <OptionGrid
-              label={t("config.fields.format")}
-              options={formatGridOptions}
-              value={format}
-              onChange={setFormat}
-              columns={4}
-              disabled={losslessActive}
-            />
-          </div>
+          {isLidarrArtistMode ? (
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                {t("config.sections.lidarr")}
+              </h3>
+              <p className="text-fg/60 text-sm">{t("config.artistLidarr.description")}</p>
+              <LidarrInputs
+                value={lidarrArtistSelection}
+                onChange={setLidarrArtistSelection}
+                monitorOptions={ARTIST_MONITOR_SCOPE_OPTIONS}
+              />
+            </div>
+          ) : (
+            <>
+              {!lidarrSelected && (
+                <>
+                  <div className="space-y-3 sm:space-y-4">
+                    <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                      {t("config.sections.quality")}
+                    </h3>
+                    <OptionGrid
+                      label={t("config.fields.quality")}
+                      options={qualityGridOptions}
+                      value={qualityMode}
+                      onChange={setQualityMode}
+                      columns={2}
+                      showCheckmark
+                    />
+                    <OptionGrid
+                      label={t("config.fields.bitrate")}
+                      options={bitrateGridOptions}
+                      value={bitrate}
+                      onChange={setBitrate}
+                      columns={4}
+                    />
+                    <OptionGrid
+                      label={t("config.fields.format")}
+                      options={formatGridOptions}
+                      value={format}
+                      onChange={setFormat}
+                      columns={4}
+                      disabled={losslessActive}
+                    />
+                  </div>
 
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-              {t("config.sections.matching")}
-            </h3>
-            <OptionGrid
-              label={t("config.fields.bitrateMatching")}
-              options={matchingGridOptions}
-              value={bitrateMatching}
-              onChange={setBitrateMatching}
-              columns={2}
-              showCheckmark
-            />
-            <OptionGrid
-              label={t("config.fields.formatMatching")}
-              options={matchingGridOptions}
-              value={formatMatching}
-              onChange={setFormatMatching}
-              columns={2}
-              showCheckmark
-              disabled={losslessActive}
-            />
-          </div>
+                  <div className="space-y-3 sm:space-y-4">
+                    <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                      {t("config.sections.matching")}
+                    </h3>
+                    <OptionGrid
+                      label={t("config.fields.bitrateMatching")}
+                      options={matchingGridOptions}
+                      value={bitrateMatching}
+                      onChange={setBitrateMatching}
+                      columns={2}
+                      showCheckmark
+                    />
+                    <OptionGrid
+                      label={t("config.fields.formatMatching")}
+                      options={matchingGridOptions}
+                      value={formatMatching}
+                      onChange={setFormatMatching}
+                      columns={2}
+                      showCheckmark
+                      disabled={losslessActive}
+                    />
+                  </div>
+                </>
+              )}
 
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-              {t("config.sections.peer")}
-            </h3>
-            <OptionGrid
-              label={t("config.fields.minUploadSpeed")}
-              options={uploadSpeedGridOptions}
-              value={minUploadSpeed}
-              onChange={setMinUploadSpeed}
-              columns={4}
-            />
-            <OptionGrid
-              label={t("config.fields.availability")}
-              options={availabilityGridOptions}
-              value={availability}
-              onChange={setAvailability}
-              columns={2}
-              showCheckmark
-            />
-          </div>
+              <div className="space-y-3 sm:space-y-4">
+                <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                  {t("config.sections.acquisition")}
+                </h3>
+                <AcquisitionDropdown
+                  label={t("config.fields.acquisition")}
+                  value={acquisitionMethod}
+                  options={acquisitionOptions}
+                  onChange={setAcquisitionMethod}
+                />
+              </div>
+
+              {lidarrSelected && (
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                    {t("config.sections.lidarr")}
+                  </h3>
+                  <LidarrInputs
+                    value={lidarrSelection}
+                    onChange={setLidarrSelection}
+                    monitorOptions={MONITOR_SCOPE_OPTIONS}
+                  />
+                </div>
+              )}
+
+              {showSlskdControls && (
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                    {t("config.sections.peer")}
+                  </h3>
+                  <OptionGrid
+                    label={t("config.fields.minUploadSpeed")}
+                    options={uploadSpeedGridOptions}
+                    value={minUploadSpeed}
+                    onChange={setMinUploadSpeed}
+                    columns={4}
+                  />
+                  <OptionGrid
+                    label={t("config.fields.availability")}
+                    options={availabilityGridOptions}
+                    value={availability}
+                    onChange={setAvailability}
+                    columns={2}
+                    showCheckmark
+                  />
+                </div>
+              )}
+            </>
+          )}
 
           <div className="flex gap-3 pt-2">
             <Button
@@ -316,7 +470,7 @@ export function ConfigRequestModal({
               {t("config.actions.cancel")}
             </Button>
             <Button
-              onClick={handleDownload}
+              onClick={isLidarrArtistMode ? handleDelegateArtist : handleDownload}
               disabled={isLoading}
               className={`${primaryGradientButton({ size: "md", glow: "primary", hover: "lighten" })} flex-1 font-semibold disabled:cursor-not-allowed disabled:opacity-50`}
               data-cy="confirm-download-btn"
@@ -329,7 +483,7 @@ export function ConfigRequestModal({
               ) : (
                 <>
                   <Download className="mr-2 h-4 w-4" />
-                  {t("config.actions.request")}
+                  {isLidarrArtistMode ? t("config.actions.addToLidarr") : t("config.actions.request")}
                 </>
               )}
             </Button>

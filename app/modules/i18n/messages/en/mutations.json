@@ -23,6 +23,7 @@
     "plexBehaviorFailed": "Failed to save Plex behavior",
     "smartSearchFailed": "Failed to save smart search settings",
     "slskdFailed": "Failed to update Slskd settings",
+    "lidarrFailed": "Failed to update Lidarr settings",
     "plexFailed": "Failed to update Plex settings",
     "enrichmentFailed": "Failed to update enrichment settings",
     "spotifyFailed": "Failed to update Spotify settings",
@@ -37,6 +38,7 @@
     "plexBehaviorSaved": "Plex behavior saved",
     "smartSearchSaved": "Smart search settings saved",
     "slskdSaved": "Slskd connection updated",
+    "lidarrSaved": "Lidarr connection updated",
     "enrichmentSaved": "Enrichment settings updated",
     "spotifySaved": "Spotify app settings updated"
   },
@@ -139,6 +141,8 @@
     "retrying_one": "Retrying {{count}} request",
     "retrying_other": "Retrying {{count}} requests",
     "adminRequired": "Admin access required",
-    "exportFailed": "Export failed"
+    "exportFailed": "Export failed",
+    "artistDelegated": "Artist added to Lidarr",
+    "artistDelegateFailed": "Failed to add artist to Lidarr"
   }
 }
