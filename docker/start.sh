@@ -24,6 +24,8 @@ echo "      Done"
 echo "[2/5] Creating directories..."
 mkdir -p /data/db /data/config /data/logs /data/artwork-cache /downloads /music
 chown -R synthseek:nodejs /data
+mkdir -p /app/web/.next/cache
+chown -R synthseek:nodejs /app/web/.next/cache
 for dir in /downloads /music; do
     if su-exec synthseek test -w "$dir" 2>/dev/null; then
         continue
@@ -50,13 +52,18 @@ fi
 
 echo "[4/6] Backing up database..."
 if [ -f "/data/db/synthseek.db" ]; then
-    mkdir -p /data/backups
-    BACKUP_FILE="/data/backups/pre-migration-$(date +%Y%m%d-%H%M%S).db"
-    cp /data/db/synthseek.db "$BACKUP_FILE"
-    chown synthseek:nodejs "$BACKUP_FILE"
-    echo "      Snapshot saved to $BACKUP_FILE"
+    if su-exec synthseek sh -c "cd /app/server && PRISMA_HIDE_UPDATE_MESSAGE=1 PRISMA_HIDE_DEPRECATION_WARNING=1 npx prisma migrate status --schema=db/schema.prisma 2>/dev/null" | grep -q "have not yet been applied"; then
+        mkdir -p /data/backups
+        BACKUP_FILE="/data/backups/pre-migration-$(date +%Y%m%d-%H%M%S).db"
+        cp /data/db/synthseek.db "$BACKUP_FILE"
+        chown synthseek:nodejs "$BACKUP_FILE"
+        echo "      Pending migrations detected, snapshot saved to $BACKUP_FILE"
+        ls -1t /data/backups/pre-migration-*.db | tail -n +11 | xargs -r rm -f
+    else
+        echo "      No pending migrations, skipping backup"
+    fi
 else
-    echo "      No existing database — skipping backup"
+    echo "      No existing database, skipping backup"
 fi
 
 echo "[5/6] Preparing admin seed..."
