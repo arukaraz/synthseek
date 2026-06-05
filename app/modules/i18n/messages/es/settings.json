@@ -487,14 +487,14 @@
     "keyLabel": "Clave de API",
     "keyBody": "Para Claude Code, Cursor o Claude Desktop (mediante mcp-remote). Crea una clave arriba y envíala como token bearer: Authorization: Bearer <tu clave>.",
     "toolsTitle": "Herramientas disponibles",
-    "toolsDescription": "Lo que puede hacer un asistente conectado. La disponibilidad exacta depende de tu rol.",
+    "toolsDescription": "Lo que puede hacer un asistente conectado: buscar en el catálogo, encolar y gestionar descargas, explorar tu biblioteca, leer y actualizar ajustes y (para administradores) controlar la cola, lanzar trabajos, comprobar el estado del sistema y leer los registros del servidor para diagnóstico. La disponibilidad exacta depende de tu rol.",
     "tools": {
       "discovery": "Descubrimiento: search_music, get_music_details, get_artist_overview, get_trending, browse_genres, get_recommendations, resolve_url",
       "downloads": "Descargas: download_track, download_album, download_playlist, retry_request, cancel_request, retry_all_failed",
       "requests": "Solicitudes: list_requests, get_request",
       "library": "Biblioteca: get_library_summary, search_library",
       "settings": "Ajustes: get_settings, update_setting",
-      "operations": "Operaciones (admin): get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health"
+      "operations": "Operaciones (admin): get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health, y leer los registros del servidor para diagnóstico (list_log_files, read_logs)"
     }
   },
   "logs": {

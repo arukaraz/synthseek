@@ -487,14 +487,14 @@
     "keyLabel": "API key",
     "keyBody": "For Claude Code, Cursor, or Claude Desktop (via mcp-remote). Create a key above and send it as the bearer token: Authorization: Bearer <your key>.",
     "toolsTitle": "Available tools",
-    "toolsDescription": "What a connected assistant can do. Exact availability depends on your role.",
+    "toolsDescription": "What a connected assistant can do: search the catalog, queue and manage downloads, browse your library, read and update settings, and (for admins) control the queue, trigger jobs, check system health, and read server logs for diagnostics. Exact availability depends on your role.",
     "tools": {
       "discovery": "Discovery: search_music, get_music_details, get_artist_overview, get_trending, browse_genres, get_recommendations, resolve_url",
       "downloads": "Downloads: download_track, download_album, download_playlist, retry_request, cancel_request, retry_all_failed",
       "requests": "Requests: list_requests, get_request",
       "library": "Library: get_library_summary, search_library",
       "settings": "Settings: get_settings, update_setting",
-      "operations": "Operations (admin): get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health"
+      "operations": "Operations (admin): get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health, and read server logs for diagnostics (list_log_files, read_logs)"
     }
   },
   "logs": {
