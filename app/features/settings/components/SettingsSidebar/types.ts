@@ -7,7 +7,8 @@ export type SidebarItemKey =
   | "shell.sidebar.items.integrations"
   | "shell.sidebar.items.engine"
   | "shell.sidebar.items.jobs"
-  | "shell.sidebar.items.logs";
+  | "shell.sidebar.items.logs"
+  | "shell.sidebar.items.updates";
 
 export interface NavItem {
   href: string;

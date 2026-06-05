@@ -546,6 +546,68 @@
       "preparing": "Preparing zip…"
     }
   },
+  "updates": {
+    "versionTag": "v{{version}}",
+    "header": {
+      "currentVersion": "Current version",
+      "checked": "Checked {{time}}",
+      "checkNow": "Check now",
+      "checking": "Checking…"
+    },
+    "badge": {
+      "new": "New",
+      "current": "Current"
+    },
+    "youAreHere": "You are here →",
+    "page": {
+      "title": "Updates",
+      "description": "See your current version, check for new releases, and browse patch notes for every version."
+    },
+    "version": {
+      "title": "Current version",
+      "description": "The version of Synthseek this instance is currently running.",
+      "loading": "Loading…"
+    },
+    "check": {
+      "title": "Check for updates",
+      "description": "Look for a newer release published to the container registry.",
+      "cta": "Check for updates",
+      "checking": "Checking…",
+      "loading": "Checking for updates…",
+      "unknown": "Could not check for updates right now",
+      "available": "Version {{version}} is available",
+      "upToDate": "You are on the latest version",
+      "lastChecked": "Last checked {{time}}"
+    },
+    "notes": {
+      "title": "Patch notes",
+      "description": "Browse the release notes for each version.",
+      "loading": "Loading patch notes…",
+      "empty": "Patch notes are not available right now.",
+      "navAriaLabel": "Select a version",
+      "resolves": "Resolves",
+      "olderOnGitHub": "View older releases on GitHub",
+      "expand": "Show details",
+      "collapse": "Hide details",
+      "type": {
+        "major": "Major",
+        "minor": "Minor",
+        "patch": "Patch"
+      },
+      "callout": {
+        "important": "Important",
+        "warning": "Warning",
+        "note": "Note"
+      },
+      "category": {
+        "feature": "Feature",
+        "fix": "Fix",
+        "improvement": "Improvement",
+        "breaking": "Breaking",
+        "chore": "Chore"
+      }
+    }
+  },
   "jobs": {
     "page": {
       "title": "Jobs",
@@ -591,7 +653,8 @@
         "integrations": "Integrations",
         "engine": "Engine",
         "jobs": "Jobs",
-        "logs": "Logs"
+        "logs": "Logs",
+        "updates": "Updates"
       }
     },
     "integrationTabs": {

@@ -546,6 +546,68 @@
       "preparing": "Preparando zip…"
     }
   },
+  "updates": {
+    "versionTag": "v{{version}}",
+    "header": {
+      "currentVersion": "Versión actual",
+      "checked": "Comprobado {{time}}",
+      "checkNow": "Buscar ahora",
+      "checking": "Buscando…"
+    },
+    "badge": {
+      "new": "Nuevo",
+      "current": "Actual"
+    },
+    "youAreHere": "Estás aquí →",
+    "page": {
+      "title": "Actualizaciones",
+      "description": "Consulta tu versión actual, busca nuevas versiones y revisa las notas de cada versión."
+    },
+    "version": {
+      "title": "Versión actual",
+      "description": "La versión de Synthseek que está ejecutando esta instancia.",
+      "loading": "Cargando…"
+    },
+    "check": {
+      "title": "Buscar actualizaciones",
+      "description": "Busca una versión más reciente publicada en el registro de contenedores.",
+      "cta": "Buscar actualizaciones",
+      "checking": "Buscando…",
+      "loading": "Buscando actualizaciones…",
+      "unknown": "No se pudo buscar actualizaciones en este momento",
+      "available": "La versión {{version}} está disponible",
+      "upToDate": "Estás en la última versión",
+      "lastChecked": "Última comprobación {{time}}"
+    },
+    "notes": {
+      "title": "Notas de la versión",
+      "description": "Revisa las notas de cada versión.",
+      "loading": "Cargando notas de la versión…",
+      "empty": "Las notas de la versión no están disponibles en este momento.",
+      "navAriaLabel": "Selecciona una versión",
+      "resolves": "Resuelve",
+      "olderOnGitHub": "Ver versiones anteriores en GitHub",
+      "expand": "Ver detalles",
+      "collapse": "Ocultar detalles",
+      "type": {
+        "major": "Mayor",
+        "minor": "Menor",
+        "patch": "Parche"
+      },
+      "callout": {
+        "important": "Importante",
+        "warning": "Advertencia",
+        "note": "Nota"
+      },
+      "category": {
+        "feature": "Función",
+        "fix": "Corrección",
+        "improvement": "Mejora",
+        "breaking": "Cambio importante",
+        "chore": "Mantenimiento"
+      }
+    }
+  },
   "jobs": {
     "page": {
       "title": "Tareas",
@@ -591,7 +653,8 @@
         "integrations": "Integraciones",
         "engine": "Motor",
         "jobs": "Tareas",
-        "logs": "Registros"
+        "logs": "Registros",
+        "updates": "Actualizaciones"
       }
     },
     "integrationTabs": {

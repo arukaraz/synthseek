@@ -37,20 +37,6 @@ done
 echo "      Done"
 
 echo "[3/5] Loading configuration..."
-if [ ! -f "/data/config/config.yml" ] && [ -f "/app/server/data/config/config.yml" ]; then
-    cp /app/server/data/config/config.yml /data/config/
-    chown synthseek:nodejs /data/config/config.yml
-    echo "      Created default config.yml"
-else
-    echo "      Using existing config.yml"
-fi
-
-if [ -f "/app/server/data/config/config.yml" ]; then
-    cp /app/server/data/config/config.yml /data/config/config.example.yml
-    chown synthseek:nodejs /data/config/config.example.yml
-    echo "      Refreshed config.example.yml"
-fi
-
 if [ ! -f "/data/config/beets-config.yaml" ] && [ -f "/app/server/data/config/beets-config.yaml" ]; then
     cp /app/server/data/config/beets-config.yaml /data/config/
     chown synthseek:nodejs /data/config/beets-config.yaml

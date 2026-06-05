@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "versions": [
+    {
+      "version": "1.2.1",
+      "date": "2026-05-04",
+      "type": "patch",
+      "title": "Track failures now tell you why",
+      "sections": [
+        {
+          "body": "When a track fails, the request card surfaces a typed failure reason\nwith an icon and tooltip instead of a generic error. Reasons are\nclassified into:",
+          "items": [
+            "**Not found** — no source matched the requested track.",
+            "**Import rejected** — Beets / Plex declined the file (metadata,\n  format, or duplicate).",
+            "**P2P failed** — Soulseek peers errored out or never delivered.",
+            "**Other** — fallback for unclassified failures."
+          ]
+        },
+        {
+          "body": "The retry path bifurcates accordingly so retries do the right thing\nfor each kind of failure instead of blindly repeating the same\nattempt. Each `TrackRequest` also stores the resolved `downloaded_file`\npath for cleaner import diagnostics."
+        },
+        {
+          "heading": "Fixes and improvements",
+          "category": "fix",
+          "items": [
+            "Container no longer crashes at boot with `chown: /music: Operation\nnot permitted` when the music library lives on a USB / exFAT / NTFS\n  drive. The recursive `chown` on user volumes is replaced by a\n  runtime access probe that emits a clear diagnostic instead of\n  crashing. Boot is also instant on multi-TB libraries since there's\n  no inode traversal, and the host's file ownership is no longer\n  mutated by the container\n  ([#2](https://github.com/arukaraz/synthseek/issues/2)).",
+            "Malformed ISRC tags no longer break post-download metadata\n  validation — they're ignored instead.",
+            "Music cache warmup runs every 6 hours instead of every 25 minutes,\n  reducing background load.",
+            "Track count is hidden in the artist album list when unavailable\n  instead of showing a placeholder.",
+            "The sort filter is dropped from playlist navigation after submitting\n  a request so you land on the freshly-added item.",
+            "Date sort is inverted so the newest items appear first."
+          ]
+        }
+      ],
+      "issues": [2]
+    },
+    {
+      "version": "1.2.0",
+      "date": "2026-04-19",
+      "type": "minor",
+      "title": "Provider agnostic update (and more)",
+      "callouts": [
+        {
+          "level": "important",
+          "body": "Two files are worth re-checking when you upgrade.\n\n**`config.yml`** has new sections in this release. After deploying,\ncheck the refreshed `config.example.yml` sitting next to your\n`config.yml` — diff them side-by-side and copy over the new flags\nyou want. Your existing `config.yml` is left untouched on upgrade.\n\n**`docker-compose.yml`** no longer needs the `SPOTIFY_CLIENT_ID` /\n`SPOTIFY_CLIENT_SECRET` env vars (Deezer needs no auth) and adds\noptional enrichment knobs (`LASTFM_API_KEY`, `FANART_API_KEY`,\n`MUSICBRAINZ_CONTACT_EMAIL`). Stale Spotify vars are harmless but\ncan be removed. The enrichment keys are strongly encouraged even\nthough they're optional, they unlock higher-quality artist images,\nalbum art, discovery, and metadata throughout the app, and the APIs\nare free to register."
+        },
+        {
+          "level": "warning",
+          "body": "**Back up `db/`** before upgrading. This release ships a schema\nchange and it's good hygiene to snapshot your SQLite file in case\nyou need to roll back."
+        }
+      ],
+      "sections": [
+        {
+          "body": "Completed the migration off Spotify's restricted API and rebuilt the\nmusic metadata layer around a provider-agnostic facade. Deezer is the\ndefault adapter today — no authentication required, no rate-limit\nsurprises, no Premium gatekeeping. The facade exposes the same shape\n(tracks / albums / artists / playlists / genres) regardless of the\nunderlying provider, so future providers can be added without touching\nthe UI or the download pipeline.\n\nContent search now runs a smart multi-layer intent classifier (genre rules →\nlearned patterns → post-search heuristics) to route ambiguous queries\nlike \"workout energy\" or \"chill sunday\" to genre or mood endpoints\ninstead of plain text search, surfacing better results for natural-\nlanguage queries.\nThis can be disabled in the `config.yml` file to fall back to legacy search.\n\nA support to integrate an LLM-assisted classifier is also in the works as a final fallback for\nqueries the rule-based layers can't resolve on their own, with adapters\nfor Ollama (local), OpenAI, Anthropic, and Groq already scaffolded in\nthe codebase. The feature is parked as **Work in progress**."
+        },
+        {
+          "heading": "Playlist Downloads End-to-End - Plex",
+          "body": "You can now request a full playlist from search or discover — Synthseek\nwill download every track individually, preserve the original ordering,\nand reconstruct the playlist inside Plex when the download finishes. If\nsome tracks resolve late (retries, slow peers), the Plex playlist is\nsynced incrementally as each new track arrives instead of waiting for\nall of them.\n\nA new playlist status badge shows where each playlist is in its life\ncycle — **Syncing to Plex…** while the reconstruction is in flight,\nthen **In Plex ✓** or **Not in Plex** with a retry button if the Plex\nside failed. The status is a first-class value in the canonical request\nstate, so the card visuals (border, gradient, description) transition\nnaturally without a flash of \"partially complete\" before the sync\nfinishes.\n\nI am also working on a workflow to import existing playlists from\nmultiple music providers directly into Synthseek so you can mirror your current\nlibraries without having to rebuild them by hand. Parked as **Work in\nprogress**."
+        },
+        {
+          "heading": "Plex Integration Update",
+          "body": "Plex actions are now each individually controllable from `config.yml`:\n`library_scan` (toggles the post-import library refresh) and\n`playlist_sync` (toggles playlist creation and incremental sync). Both\ndefault to on. After metadata enforcement, the Plex library is now\nrescanned with `force=1` so newly tagged files show up immediately."
+        },
+        {
+          "heading": "Minor fixes and improvements",
+          "category": "improvement",
+          "body": "Various small bug fixes, UX polish, and performance tweaks across\nsearch, the request list, and the download pipeline."
+        }
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-03-26",
+      "type": "minor",
+      "title": "Spotify API Migration (Feb 2026 Breaking Changes)",
+      "sections": [
+        {
+          "body": "Adapted to Spotify's February 2026 API restrictions that require Premium\naccounts for API access and impose stricter rate limits. Search and album\ntrack limits reduced to 10, trending tracks rewritten to use direct search\ninstead of playlist endpoints (now requiring user OAuth), and browse\ncategories replaced with a static genre list.\n\nCurrently working on a more reliable metadata provider integration\n\nReference: https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security"
+        },
+        {
+          "heading": "Version Update Notifications",
+          "category": "feature",
+          "body": "Added automatic detection of new releases published to GitHub Container Registry.\nA dismissable ribbon banner appears at the top of the page when a newer version is available."
+        }
+      ]
+    }
+  ]
+}

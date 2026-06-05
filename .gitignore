@@ -57,6 +57,9 @@ Thumbs.db
 
 /scripts/*
 !/scripts/smoke-multiarch.sh
+!/scripts/build-changelog.ts
+!/scripts/changelog/
+!/scripts/__tests__/
 cypress.config.ts
 
 # Documentation

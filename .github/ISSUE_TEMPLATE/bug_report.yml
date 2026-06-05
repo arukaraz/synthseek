@@ -81,7 +81,7 @@ body:
       label: Logs
       description: |
         Relevant logs from `docker logs synthseek` or browser console.
-        For detailed logs, set `logging.level: DEBUG` in your config.yml and reproduce the issue.
+        For detailed logs, set the log level to DEBUG under Settings, the Logs section, then reproduce the issue.
       render: shell
 
   - type: textarea

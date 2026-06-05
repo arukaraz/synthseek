@@ -21,6 +21,7 @@
     "build": "next build",
     "start": "next start",
     "generate": "dotenv -- tsx scripts/generate-types.ts",
+    "changelog:build": "tsx scripts/build-changelog.ts",
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",
     "typecheck": "tsc --noEmit",
