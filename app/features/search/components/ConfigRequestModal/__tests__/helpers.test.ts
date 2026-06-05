@@ -4,9 +4,13 @@ import {
   allowsLossless,
   buildAlbumDelegate,
   buildArtistDelegate,
+  buildMetadataProfileOptions,
+  buildQualityProfileOptions,
+  buildRootFolderOptions,
   buildSourceChain,
   extractItemMetadata,
   filterTagSuggestions,
+  formatFreeSpace,
   getAvailableAcquisitionOptions,
   getItemDisplayName,
   hasTag,
@@ -15,6 +19,7 @@ import {
   isLidarrMethod,
   isLidarrSelectionComplete,
   isTrack,
+  mapTrackFields,
   normalizeTag,
   removeTag,
   showsSlskdControls,
@@ -97,6 +102,16 @@ describe("getItemDisplayName", () => {
     const album = createMockAlbumSimplified({ name: "Album", artists: [] });
     expect(getItemDisplayName(album)).toBe("Unknown Artist - Album");
   });
+
+  it("returns only the name for an artist item", () => {
+    const artist = { id: "ar1", type: "artist", name: "Solo Artist", images: [] };
+    expect(getItemDisplayName(artist)).toBe("Solo Artist");
+  });
+
+  it("returns an empty string when the item has no name", () => {
+    const album = createMockAlbumSimplified({ name: "", artists: [] });
+    expect(getItemDisplayName(album)).toBe("");
+  });
 });
 
 describe("extractItemMetadata", () => {
@@ -139,6 +154,26 @@ describe("extractItemMetadata", () => {
     expect(metadata.name).toBe("");
     expect(metadata.artist).toBeUndefined();
     expect(metadata.image).toBeUndefined();
+  });
+
+  it("falls back to the parent album for image, year and name when the item lacks them", () => {
+    const track = createMockTrackFull({
+      title: "Bare Track",
+      name: "Bare Track",
+      images: [],
+      album: { name: "", images: [], release_date: "" },
+    });
+    const parentAlbum = createMockAlbumSimplified({
+      name: "Parent Album",
+      images: [{ url: "https://parent.image", height: 300, width: 300 }],
+      release_date: "2021-05-10",
+    });
+
+    const metadata = extractItemMetadata(track, parentAlbum);
+
+    expect(metadata.image).toBe("https://parent.image");
+    expect(metadata.year).toBe("2021");
+    expect(metadata.albumName).toBe("Parent Album");
   });
 });
 
@@ -411,5 +446,72 @@ describe("filterTagSuggestions", () => {
 
   it("returns all unselected suggestions for an empty query", () => {
     expect(filterTagSuggestions(["a", "b"], [], "")).toEqual(["a", "b"]);
+  });
+});
+
+describe("mapTrackFields", () => {
+  it("flattens the track to the request shape", () => {
+    const track = createMockTrackFull({
+      id: "track-9",
+      title: "Nine",
+      artists: [{ id: "a", name: "Composer" }],
+      track_number: 3,
+      disc_number: 1,
+      duration_ms: 210000,
+      explicit: true,
+      isrc: "USABC0000001",
+    });
+    expect(mapTrackFields(track)).toEqual({
+      external_id: "track-9",
+      title: "Nine",
+      artist: "Composer",
+      track_number: 3,
+      disc_number: 1,
+      duration_ms: 210000,
+      explicit: true,
+      isrc: "USABC0000001",
+    });
+  });
+});
+
+describe("formatFreeSpace", () => {
+  it("returns undefined for non-finite or non-positive values", () => {
+    expect(formatFreeSpace(Number.NaN, "free")).toBeUndefined();
+    expect(formatFreeSpace(0, "free")).toBeUndefined();
+    expect(formatFreeSpace(-5, "free")).toBeUndefined();
+  });
+
+  it("rounds to a tenth of a GB below 100 GB", () => {
+    expect(formatFreeSpace(5.55 * 1024 ** 3, "free")).toBe("5.6 GB free");
+  });
+
+  it("rounds to a whole GB at or above 100 GB", () => {
+    expect(formatFreeSpace(123.7 * 1024 ** 3, "free")).toBe("124 GB free");
+  });
+});
+
+describe("buildRootFolderOptions", () => {
+  it("maps each root folder to a labeled option with free space", () => {
+    const options = buildRootFolderOptions(
+      [
+        { path: "/music", freeSpace: 50 * 1024 ** 3, accessible: true, id: 1 },
+        { path: "/archive", freeSpace: 0, accessible: true, id: 2 },
+      ],
+      "free"
+    );
+    expect(options[0]).toEqual({ value: "/music", label: "/music", description: "50 GB free" });
+    expect(options[1].description).toBeUndefined();
+  });
+});
+
+describe("buildQualityProfileOptions", () => {
+  it("maps each profile to a numeric option", () => {
+    expect(buildQualityProfileOptions([{ id: 7, name: "Lossless" }])).toEqual([{ value: 7, label: "Lossless" }]);
+  });
+});
+
+describe("buildMetadataProfileOptions", () => {
+  it("maps each profile to a numeric option", () => {
+    expect(buildMetadataProfileOptions([{ id: 4, name: "Standard" }])).toEqual([{ value: 4, label: "Standard" }]);
   });
 });
