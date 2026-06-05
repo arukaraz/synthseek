@@ -59,17 +59,11 @@ else
     echo "      No existing database — skipping backup"
 fi
 
-echo "[5/6] Preparing admin seed (if migration env vars present)..."
+echo "[5/6] Preparing admin seed..."
 cd /app/server
-if [ -n "${ADMIN_MIGRATION_EMAIL:-}" ] && [ -n "${ADMIN_MIGRATION_USERNAME:-}" ] && [ -n "${ADMIN_MIGRATION_PASSWORD:-}" ]; then
-    su-exec synthseek node dist/scripts/prepare-admin-seed.cjs
-    SEED_EXIT=$?
-    if [ $SEED_EXIT -ne 0 ]; then
-        echo "      prepare-admin-seed failed (exit $SEED_EXIT). Aborting startup."
-        exit $SEED_EXIT
-    fi
-else
-    echo "      No ADMIN_MIGRATION_* env vars — setup wizard path"
+if ! su-exec synthseek node dist/scripts/prepare-admin-seed.cjs; then
+    echo "      Aborting startup (see message above)."
+    exit 1
 fi
 
 echo "[6/6] Running database migrations..."
