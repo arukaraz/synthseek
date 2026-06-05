@@ -6,7 +6,9 @@ export const sidebar = cva(
   "border-fg/10 bg-surface/30 flex h-full w-full shrink-0 flex-col gap-0.5 overflow-y-auto border-r p-3 md:w-60"
 );
 
-export const sidebarFooter = cva("text-fg/70 mt-auto px-3 py-3 font-mono text-[11px] font-medium");
+export const sidebarFooter = cva(
+  "text-fg/60 bg-fg/5 ring-fg/10 mt-auto inline-flex w-fit items-center self-start rounded-full px-2.5 py-1 font-mono text-[11px] font-medium ring-1"
+);
 
 export const contentScroll = cva("flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-y-auto");
 
