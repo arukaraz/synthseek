@@ -103,7 +103,7 @@
           "description": "Elige tasa de bits y formato"
         },
         "lossless": {
-          "label": "Sin pérdida",
+          "label": "Lossless",
           "description": "Solo FLAC, coincidencia exacta"
         }
       },
@@ -139,11 +139,11 @@
         },
         "slskd": {
           "label": "Soulseek",
-          "description": "Solo slskd, sin alternativa con pérdida"
+          "description": "Solo slskd, sin alternativa lossy"
         },
         "ytdlp": {
           "label": "YouTube",
-          "description": "Solo yt-dlp, siempre con pérdida"
+          "description": "Solo yt-dlp, siempre lossy"
         },
         "slskdThenYtdlp": {
           "label": "Soulseek y luego YouTube",
@@ -151,7 +151,7 @@
         },
         "lidarr": {
           "label": "Lidarr",
-          "description": "Entregar este álbum a tu instancia de Lidarr"
+          "description": "Delega este álbum a tu instancia de Lidarr"
         }
       },
       "monitor": {

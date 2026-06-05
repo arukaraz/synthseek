@@ -16,7 +16,7 @@
   },
   "header": {
     "title": "Motor",
-    "description": "Controles avanzados para la canalización de búsqueda, descarga e importación. Los valores predeterminados están ajustados a un punto equilibrado que funciona bien en la mayoría de las configuraciones, cámbialos solo si sabes lo que haces. Ante la duda, déjalos como están o pulsa Restablecer predeterminados en la tarjeta afectada si las pistas empiezan a fallar tras un cambio.",
+    "description": "Controles avanzados para la canalización de búsqueda, descarga e importación. Los valores predeterminados están ajustados a un punto equilibrado que funciona bien en la mayoría de las configuraciones, cámbialos solo si sabes lo que haces. Ante la duda, déjalos como están o pulsa Restablecer valores por defecto en la tarjeta afectada si las canciones empiezan a fallar tras un cambio.",
     "loading": "Cargando ajustes…",
     "loadError": "No se pudieron cargar los ajustes: {{message}}",
     "unknownError": "Error desconocido"
@@ -25,11 +25,11 @@
     "title": "Búsqueda",
     "maxPeerAttempts": {
       "label": "Máximo de intentos por par",
-      "description": "Cuántos uploaders de Slskd se intentan para descargar por pista antes de marcarla como fallida."
+      "description": "Cuántos subidores de Slskd se intentan para descargar por canción antes de marcarla como fallida."
     },
     "maxVariations": {
       "label": "Máximo de variaciones",
-      "description": "Cuántas combinaciones de cadena de consulta (artista+título, con/sin álbum, con/sin colaboración) se prueban por pista."
+      "description": "Cuántas combinaciones de cadena de consulta (artista+título, con/sin álbum, con/sin colaboración) se prueban por canción."
     },
     "historyCleanup": {
       "label": "Limpieza de historial activada",
@@ -42,12 +42,12 @@
     "smartSearchHeader": "Búsqueda inteligente",
     "autoBan": {
       "label": "Bloquear automáticamente tras N fallos",
-      "description": "Añade un uploader o par a la lista de bloqueos tras esta cantidad de fallos de descarga (contados en memoria, se reinician al reiniciar). 0 lo desactiva.",
+      "description": "Añade un subidor o par a la lista de bloqueos tras esta cantidad de fallos de descarga (contados en memoria, se reinician al reiniciar). 0 lo desactiva.",
       "ariaLabel": "Bloquear automáticamente tras N intentos fallidos"
     },
     "customMoodKeywords": {
       "label": "Palabras clave de estado de ánimo personalizadas",
-      "helper": "Subcadenas que se comparan con las consultas de búsqueda del usuario para clasificarlas como búsquedas de estado de ánimo o género (frente a artista o pista específicos). Pulsa Enter o coma para añadir.",
+      "helper": "Subcadenas que se comparan con las consultas de búsqueda del usuario para clasificarlas como búsquedas de estado de ánimo o género (frente a artista o canción específicos). Pulsa Enter o coma para añadir.",
       "placeholder": "p. ej. fiesta, mis favoritas"
     },
     "federatedPatterns": {
@@ -65,12 +65,12 @@
     },
     "downloadPhase": {
       "label": "Fase de descarga",
-      "description": "Presupuesto total para toda la fase de descarga por pista. La pista se marca como fallida si transcurre este tiempo.",
+      "description": "Presupuesto total para toda la fase de descarga por canción. La canción se marca como fallida si transcurre este tiempo.",
       "ariaLabel": "Tiempo de espera de la fase de descarga"
     },
     "importPhase": {
       "label": "Fase de importación",
-      "description": "Presupuesto total para la fase de importación por pista. Se marca como fallida si se supera.",
+      "description": "Presupuesto total para la fase de importación por canción. Se marca como fallida si se supera.",
       "ariaLabel": "Tiempo de espera de la fase de importación"
     },
     "peerUnresponsive": {
@@ -98,12 +98,12 @@
     },
     "maxConcurrentSearches": {
       "label": "Máximo de búsquedas simultáneas",
-      "description": "Cuántas pistas pueden estar en la fase de búsqueda al mismo tiempo.",
+      "description": "Cuántas canciones pueden estar en la fase de búsqueda al mismo tiempo.",
       "ariaLabel": "Máximo de búsquedas simultáneas"
     },
     "maxPendingImports": {
       "label": "Máximo de importaciones pendientes",
-      "description": "Contrapresión: cuando esta cantidad de pistas descargadas están esperando a importarse, el motor pausa el inicio de nuevas búsquedas hasta que se vacíen las importaciones.",
+      "description": "Contrapresión: cuando esta cantidad de canciones descargadas están esperando a importarse, el motor pausa el inicio de nuevas búsquedas hasta que se vacíen las importaciones.",
       "ariaLabel": "Máximo de importaciones pendientes"
     }
   },
@@ -131,12 +131,12 @@
       },
       "musicbrainzEmail": {
         "label": "Correo de contacto de MusicBrainz",
-        "helper": "Obligatorio. Sin él, Synthseek comparte un correo con límite de peticiones.",
+        "helper": "Obligatorio. Sin él, Synthseek comparte un correo con límite de frecuencia.",
         "placeholder": "tu@ejemplo.com"
       },
       "acoustidKey": {
         "label": "Clave de API de AcoustID",
-        "helper": "Alternativa de huella digital de audio para pistas sin metadatos de etiqueta fiables."
+        "helper": "Alternativa de huella digital de audio para canciones sin metadatos de etiqueta fiables."
       }
     },
     "librarySources": {
@@ -144,7 +144,7 @@
       "description": "Plataformas de streaming desde las que Synthseek puede importar listas de reproducción y álbumes guardados.",
       "songlinkKey": {
         "label": "Clave de API de Songlink (opcional)",
-        "helper": "Resuelve las URL de las pistas entre plataformas para importar listas de reproducción entre plataformas. Synthseek usa el endpoint público por defecto. Déjalo en blanco a menos que tengas una clave."
+        "helper": "Resuelve las URL de las canciones en distintas plataformas para importar listas multiplataforma. Synthseek usa el endpoint público por defecto. Déjalo en blanco a menos que tengas una clave."
       },
       "spotify": {
         "title": "Spotify",
@@ -192,11 +192,11 @@
     "libraryHeader": "Biblioteca",
     "libraryScan": {
       "label": "Escaneo de biblioteca",
-      "description": "Después de cada importación exitosa, pide a Plex que escanee la carpeta del nuevo archivo."
+      "description": "Después de cada importación correcta, pide a Plex que escanee la carpeta del nuevo archivo."
     },
     "playlistSync": {
       "label": "Sincronización de listas",
-      "description": "Cuando una solicitud de lista de reproducción de Synthseek se completa (o crece), crea o actualiza una lista de Plex equivalente con las pistas importadas."
+      "description": "Cuando una solicitud de lista de reproducción de Synthseek se completa (o crece), crea o actualiza una lista de Plex equivalente con las canciones importadas."
     },
     "namingHeader": "Nomenclatura de listas",
     "usernameAffix": {
@@ -250,7 +250,7 @@
   },
   "lidarr": {
     "title": "Lidarr",
-    "description": "Opcional. Entrega álbumes a una instancia de Lidarr existente.",
+    "description": "Opcional. Delega álbumes a una instancia de Lidarr existente.",
     "url": {
       "label": "URL",
       "placeholder": "http://localhost:8686"
@@ -261,7 +261,7 @@
     "testing": "Probando...",
     "testConnection": "Probar conexión",
     "connected": "Conectado",
-    "connectionFailed": "La conexión falló",
+    "connectionFailed": "Conexión fallida",
     "status": {
       "healthy": "Sin problemas",
       "unhealthy": "Con problemas",
@@ -270,20 +270,20 @@
   },
   "ytdlp": {
     "title": "yt-dlp",
-    "description": "Fuente alternativa que se usa cuando slskd no puede entregar una pista. El formato y la calidad siguen la configuración propia de cada solicitud.",
+    "description": "Fuente alternativa que se usa cuando slskd no puede entregar una canción. El formato y la calidad siguen la configuración propia de cada solicitud.",
     "enable": {
       "label": "Activar",
-      "description": "Cuando está activo, las pistas que fallan en fuentes de mayor prioridad se reintentan con yt-dlp dentro del mismo trabajo.",
+      "description": "Cuando está activo, las canciones que fallan en fuentes de mayor prioridad se reintentan con yt-dlp dentro del mismo trabajo.",
       "ariaLabel": "Activar la fuente alternativa yt-dlp"
     },
     "searchResults": {
       "label": "Resultados de búsqueda",
-      "description": "Cuántos candidatos de YouTube obtener por pista antes de puntuarlos por duración y título.",
+      "description": "Cuántos candidatos de YouTube obtener por canción antes de puntuarlos por duración y título.",
       "ariaLabel": "Resultados de búsqueda"
     },
     "maxDurationDelta": {
       "label": "Delta máximo de duración",
-      "description": "Rechaza candidatos cuya duración difiera de la pista esperada en más de esta cantidad de segundos.",
+      "description": "Rechaza candidatos cuya duración difiera de la canción esperada en más de esta cantidad de segundos.",
       "ariaLabel": "Delta máximo de duración en segundos"
     }
   },
@@ -520,7 +520,9 @@
       "searchPlaceholder": "Buscar en registros",
       "searchAriaLabel": "Buscar en registros",
       "linesAriaLabel": "Líneas a cargar",
+      "linesLabel": "Líneas a cargar",
       "refreshAriaLabel": "Intervalo de actualización automática",
+      "refreshLabel": "Intervalo de actualización automática",
       "refresh": "Actualizar",
       "copy": "Copiar",
       "exportRecent": "Exportar recientes",

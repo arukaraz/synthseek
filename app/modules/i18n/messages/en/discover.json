@@ -184,12 +184,12 @@
       "updatedWeekday": "Updated {{weekday}}"
     },
     "emptyReason": {
-      "noData": "No data yet",
-      "noResolved": "Couldn't match recordings",
-      "notGenerated": "Waiting for ListenBrainz",
-      "fetchError": "Sync failed, will retry",
-      "waitingFirstSync": "Waiting for first sync",
-      "feedEmpty": "Feed empty"
+      "noData": "ListenBrainz hasn't computed collaborative recommendations for your account yet.",
+      "noResolved": "ListenBrainz built this mix, but its songs couldn't be matched in the catalog yet.",
+      "notGenerated": "ListenBrainz hasn't built this mix yet. It appears once your listening history is enough to generate it.",
+      "fetchError": "Couldn't reach ListenBrainz. It will retry on the next sync.",
+      "waitingFirstSync": "Waiting for the first ListenBrainz sync.",
+      "feedEmpty": "ListenBrainz returned no songs for this mix yet."
     },
     "empty": {
       "error": "Couldn't load your discovery mixes.",

@@ -38,7 +38,7 @@
     },
     "in_progress": {
       "label": "En progreso",
-      "description": "Descargando pistas"
+      "description": "Descargando canciones"
     },
     "syncing_plex": {
       "label": "Sincronizando con Plex",
@@ -46,15 +46,15 @@
     },
     "partially_complete": {
       "label": "Parcialmente completada",
-      "description": "Algunas pistas fallaron"
+      "description": "Algunas canciones fallaron"
     },
     "cancelled": {
       "label": "Cancelada",
       "description": "Descarga cancelada"
     },
     "delegated": {
-      "label": "Delegado",
-      "description": "Entregado a un gestor de biblioteca externo"
+      "label": "Delegada",
+      "description": "Entregada a un gestor de biblioteca externo"
     }
   },
   "failureReason": {
@@ -68,7 +68,7 @@
     },
     "wrong_file": {
       "label": "Archivo incorrecto",
-      "description": "El archivo descargado no coincidió con la pista solicitada. Se eliminó y se volverá a buscar al reintentar."
+      "description": "El archivo descargado no coincidió con la canción solicitada. Se eliminó y se volverá a buscar al reintentar."
     },
     "p2p_failed": {
       "label": "Transferencia fallida",

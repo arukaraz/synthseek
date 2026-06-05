@@ -156,12 +156,12 @@
     "playlistOwner": "ListenBrainz",
     "kinds": {
       "dailyJams": {
-        "label": "Ritmos diarios",
+        "label": "Daily Jams",
         "tag": "Se actualiza a diario",
         "blurb": "Una mezcla de fondo cómoda con grabaciones que ya te encantan, regenerada cada mañana."
       },
       "weeklyJams": {
-        "label": "Ritmos semanales",
+        "label": "Weekly Jams",
         "tag": "Se actualiza los lunes",
         "blurb": "Canciones que ya has escuchado antes, organizadas en una lista que no requiere atención activa."
       },
@@ -173,7 +173,7 @@
       "cfRecommendations": {
         "label": "Recomendaciones CF",
         "tag": "Conjunto bruto de grabaciones",
-        "blurb": "Los MBID de grabaciones de tu salida bruta de filtrado colaborativo, ordenados por puntuación."
+        "blurb": "Los MBID de grabaciones de tu filtrado colaborativo sin procesar, ordenados por puntuación."
       }
     },
     "freshness": {
@@ -184,12 +184,12 @@
       "updatedWeekday": "Actualizado el {{weekday}}"
     },
     "emptyReason": {
-      "noData": "Aún no hay datos",
-      "noResolved": "No se pudieron emparejar las grabaciones",
-      "notGenerated": "Esperando a ListenBrainz",
-      "fetchError": "La sincronización falló, se reintentará",
-      "waitingFirstSync": "Esperando la primera sincronización",
-      "feedEmpty": "Feed vacío"
+      "noData": "ListenBrainz aún no ha calculado recomendaciones colaborativas para tu cuenta.",
+      "noResolved": "ListenBrainz generó esta mezcla, pero sus canciones todavía no se pudieron emparejar en el catálogo.",
+      "notGenerated": "ListenBrainz aún no ha generado esta mezcla. Aparecerá cuando tu historial de escucha sea suficiente para crearla.",
+      "fetchError": "No se pudo conectar con ListenBrainz. Se reintentará en la próxima sincronización.",
+      "waitingFirstSync": "Esperando la primera sincronización con ListenBrainz.",
+      "feedEmpty": "ListenBrainz todavía no ha devuelto canciones para esta mezcla."
     },
     "empty": {
       "error": "No se pudieron cargar tus mezclas para descubrir.",

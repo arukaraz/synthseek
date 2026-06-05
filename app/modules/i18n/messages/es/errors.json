@@ -92,8 +92,8 @@
     "description": "No se pudo encontrar esa lista de reproducción."
   },
   "TRACK_NOT_FOUND": {
-    "title": "Pista no encontrada",
-    "description": "No se pudo encontrar esa pista."
+    "title": "Canción no encontrada",
+    "description": "No se pudo encontrar esa canción."
   },
   "COLLECTION_NOT_FOUND": {
     "title": "Colección no encontrada",
@@ -128,8 +128,8 @@
     "description": "El administrador aún no ha configurado esta integración."
   },
   "LIBRARY_SOURCE_CALLBACK_FAILED": {
-    "title": "Fallo en la respuesta de la fuente de biblioteca",
-    "description": "La respuesta de la fuente de biblioteca falló. Inténtalo de nuevo."
+    "title": "Fallo en la llamada de retorno de la fuente de biblioteca",
+    "description": "La llamada de retorno (callback) de la fuente de biblioteca falló. Inténtalo de nuevo."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Fallo de conexión con Lidarr",
@@ -157,15 +157,15 @@
   },
   "LIDARR_ALBUM_NOT_IN_CATALOG": {
     "title": "No se encontró el álbum en Lidarr para encolarlo",
-    "description": "Lidarr no pudo encontrar este álbum para encolarlo. Prueba con otro download source (slskd o yt-dlp)."
+    "description": "Lidarr no pudo encontrar este álbum para encolarlo. Prueba con otra fuente de descarga."
   },
   "LIDARR_ARTIST_NOT_IN_CATALOG": {
     "title": "No se encontró el artista en Lidarr",
     "description": "Lidarr no pudo encontrar este artista para añadirlo."
   },
   "LIDARR_HANDOFF_FAILED": {
-    "title": "Falló la entrega a Lidarr",
-    "description": "No se pudo entregar el álbum a Lidarr."
+    "title": "Falló la delegación a Lidarr",
+    "description": "No se pudo delegar el álbum a Lidarr."
   },
   "VALUE_ALREADY_IN_USE": {
     "title": "Valor ya en uso",
@@ -213,7 +213,7 @@
   },
   "SPOTIFY_PROXY_ERROR": {
     "title": "No se pudo contactar con el backend de Synthseek",
-    "description": "La respuesta no pudo comunicarse con la API. Comprueba que el backend está en marcha e inténtalo de nuevo."
+    "description": "La llamada de retorno (callback) no pudo comunicarse con la API. Comprueba que el backend está en marcha e inténtalo de nuevo."
   },
   "SPOTIFY_MISSING_PARAMS": {
     "title": "Spotify no devolvió un código de autorización",
