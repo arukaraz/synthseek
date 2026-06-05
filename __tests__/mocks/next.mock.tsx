@@ -27,13 +27,26 @@ export const mockSearchParams = createMockSearchParams();
 
 export const mockPathname = "/";
 
-export const setupNextNavigationMocks = () => {
-  vi.mock("next/navigation", () => ({
-    useRouter: () => mockRouter,
-    useSearchParams: () => mockSearchParams,
-    usePathname: () => mockPathname,
-  }));
-};
+vi.mock("next/navigation", () => ({
+  useRouter: () => mockRouter,
+  useSearchParams: () => mockSearchParams,
+  usePathname: () => mockPathname,
+}));
+
+vi.mock("next/image", () => ({
+  default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={alt} {...props} />;
+  },
+}));
+
+vi.mock("next/link", () => ({
+  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}));
 
 export const resetNextMocks = () => {
   mockRouter.push.mockClear();
@@ -42,23 +55,4 @@ export const resetNextMocks = () => {
   mockRouter.forward.mockClear();
   mockRouter.refresh.mockClear();
   mockRouter.prefetch.mockClear();
-};
-
-export const mockNextImage = () => {
-  vi.mock("next/image", () => ({
-    default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => {
-      // eslint-disable-next-line @next/next/no-img-element
-      return <img src={src} alt={alt} {...props} />;
-    },
-  }));
-};
-
-export const mockNextLink = () => {
-  vi.mock("next/link", () => ({
-    default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    ),
-  }));
 };
