@@ -27,9 +27,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "gen:i18n": "node scripts/gen-i18n.mjs",
-    "predev": "node scripts/gen-i18n.mjs",
-    "prebuild": "node scripts/gen-i18n.mjs"
+    "gen:i18n": "node scripts/gen-i18n.mjs"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.2",
