@@ -279,6 +279,7 @@ jobs:
             cp -r public docker-context/web/public
           else
             mkdir -p docker-context/web/public
+            touch docker-context/web/public/.keep
           fi
 
           cp docker/start.sh docker-context/docker/
