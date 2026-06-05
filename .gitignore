@@ -55,7 +55,8 @@ Thumbs.db
 # Vercel
 .vercel
 
-/scripts/
+/scripts/*
+!/scripts/smoke-multiarch.sh
 cypress.config.ts
 
 # Documentation

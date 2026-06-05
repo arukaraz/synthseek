@@ -40,8 +40,17 @@ env:
   NODE_VERSION: "22"
 
 jobs:
-  build-and-push:
+  prepare:
     runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      commit_sha: ${{ steps.version.outputs.commit_sha }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      prerelease_label: ${{ steps.version.outputs.prerelease_label }}
+      image_tags: ${{ steps.tags.outputs.image_tags }}
+      skip_cache: ${{ steps.tags.outputs.skip_cache }}
 
     steps:
       - name: Checkout repository
@@ -105,6 +114,29 @@ jobs:
           echo "prerelease_label=$PRERELEASE_LABEL" >> $GITHUB_OUTPUT
 
           echo "Building Docker image for server version: $VERSION (prerelease: $PRERELEASE, label: '$PRERELEASE_LABEL')"
+
+      - name: Compute image tag list
+        id: tags
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PRERELEASE="${{ steps.version.outputs.prerelease }}"
+          LABEL="${{ steps.version.outputs.prerelease_label }}"
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+
+          if [ "$PRERELEASE" = "true" ]; then
+            TAGS="${IMAGE}:v${VERSION}-${LABEL} ${IMAGE}:${LABEL}"
+          else
+            TAGS="${IMAGE}:v${VERSION} ${IMAGE}:${VERSION} ${IMAGE}:latest"
+          fi
+
+          echo "image_tags=$TAGS" >> $GITHUB_OUTPUT
+          echo "Manifest tags: $TAGS"
+
+          if [ "${{ github.event.inputs.skip_cache }}" = "true" ]; then
+            echo "skip_cache=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip_cache=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -171,11 +203,11 @@ jobs:
           fi
           echo "  [OK] db/schema.prisma exists"
 
-          if [ ! -d "./server-build/node_modules/.prisma" ]; then
-            echo "Error: Prisma client not found"
+          if [ ! -f "./server-build/package-lock.json" ]; then
+            echo "Error: package-lock.json not found (needed to rebuild native deps per arch)"
             exit 1
           fi
-          echo "  [OK] Prisma client exists"
+          echo "  [OK] package-lock.json exists"
 
           if [ -f "./server-build/VERSION" ]; then
             echo ""
@@ -231,9 +263,9 @@ jobs:
           git diff --staged --quiet || git commit -m "chore: sync version to $VERSION [skip ci]"
           git push
 
-      - name: Prepare Docker build context
+      - name: Assemble Docker build context
         run: |
-          echo "Preparing Docker build context..."
+          echo "Assembling Docker build context..."
 
           mkdir -p docker-context/server
           mkdir -p docker-context/web
@@ -252,15 +284,44 @@ jobs:
           cp docker/start.sh docker-context/docker/
           chmod +x docker-context/docker/start.sh
 
-          # Copiar Dockerfile al contexto
           cp Dockerfile docker-context/Dockerfile
 
           echo ""
           echo "Docker context structure:"
-          find docker-context -type f | head -30
+          find docker-context -maxdepth 2 -type d | head -30
 
-      - name: Set up QEMU (for multi-platform)
-        uses: docker/setup-qemu-action@v3
+      - name: Upload Docker build context
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-context
+          path: docker-context
+          retention-days: 1
+          include-hidden-files: true
+
+  build:
+    needs: [prepare]
+    runs-on: ${{ matrix.runner }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+            arch: amd64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            arch: arm64
+
+    steps:
+      - name: Download Docker build context
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-context
+          path: docker-context
+
+      - name: Restore start.sh permissions
+        run: chmod +x docker-context/docker/start.sh
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -272,36 +333,180 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=v${{ steps.version.outputs.version }}-${{ steps.version.outputs.prerelease_label }},enable=${{ steps.version.outputs.prerelease == 'true' }}
-            type=raw,value=${{ steps.version.outputs.prerelease_label }},enable=${{ steps.version.outputs.prerelease == 'true' }}
-            type=raw,value=v${{ steps.version.outputs.version }},enable=${{ steps.version.outputs.prerelease != 'true' }}
-            type=raw,value=${{ steps.version.outputs.version }},enable=${{ steps.version.outputs.prerelease != 'true' }}
-            type=raw,value=latest,enable=${{ steps.version.outputs.prerelease != 'true' }}
-
-      - name: Build and push Docker image
+      - name: Build image for smoke test
         uses: docker/build-push-action@v5
         with:
           context: docker-context
           file: docker-context/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
-          cache-from: ${{ github.event.inputs.skip_cache != 'true' && 'type=gha' || '' }}
-          cache-to: type=gha,mode=max
+          platforms: ${{ matrix.platform }}
+          load: true
+          tags: synthseek-smoke:${{ matrix.arch }}
+          cache-from: ${{ needs.prepare.outputs.skip_cache != 'true' && format('type=gha,scope={0}', matrix.arch) || '' }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.arch }}
           provenance: false
+
+      - name: Smoke test (health + arch assertion)
+        run: |
+          ARCH="${{ matrix.arch }}"
+          IMAGE="synthseek-smoke:${ARCH}"
+
+          echo "Starting container from $IMAGE"
+          CID="$(docker run -d -p 4401:4401 "$IMAGE")"
+
+          cleanup() {
+            echo "--- container logs ---"
+            docker logs "$CID" 2>&1 | tail -50 || true
+            docker rm -f "$CID" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          echo "Waiting for /api/health to report healthy..."
+          HEALTH_JSON=""
+          READY="false"
+          for i in $(seq 1 60); do
+            if HEALTH_JSON="$(curl -fsS http://localhost:4401/api/health 2>/dev/null)"; then
+              READY="true"
+              break
+            fi
+            sleep 2
+          done
+
+          if [ "$READY" != "true" ]; then
+            echo "Error: server never became healthy within timeout"
+            exit 1
+          fi
+
+          echo "Health response: $HEALTH_JSON"
+
+          REPORTED_ARCH="$(echo "$HEALTH_JSON" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s).runtime.arch))")"
+          echo "Reported runtime.arch: $REPORTED_ARCH"
+
+          EXPECTED_ARCH="${ARCH}"
+          if [ "$ARCH" = "amd64" ]; then EXPECTED_ARCH="x64"; fi
+
+          if [ "$REPORTED_ARCH" != "$EXPECTED_ARCH" ]; then
+            echo "Error: arch mismatch. Expected $EXPECTED_ARCH (matrix $ARCH), got $REPORTED_ARCH"
+            exit 1
+          fi
+
+          echo "Smoke test passed: healthy and arch is $REPORTED_ARCH"
+
+      - name: Push image by digest
+        id: push
+        uses: docker/build-push-action@v5
+        with:
+          context: docker-context
+          file: docker-context/Dockerfile
+          platforms: ${{ matrix.platform }}
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.arch }}
+          provenance: false
+
+      - name: Export digest
+        run: |
+          mkdir -p digests
+          DIGEST="${{ steps.push.outputs.digest }}"
+          echo "${DIGEST}" > "digests/${{ matrix.arch }}.txt"
+          echo "Digest for ${{ matrix.arch }}: ${DIGEST}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.arch }}
+          path: digests/${{ matrix.arch }}.txt
+          retention-days: 1
+
+  merge:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all digests
+        uses: actions/download-artifact@v4
+        with:
+          pattern: digests-*
+          path: digests
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create manifest list
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+
+          AMD64_DIGEST="$(cat digests/amd64.txt)"
+          ARM64_DIGEST="$(cat digests/arm64.txt)"
+
+          echo "amd64 digest: $AMD64_DIGEST"
+          echo "arm64 digest: $ARM64_DIGEST"
+
+          read -ra TAGS <<< "${{ needs.prepare.outputs.image_tags }}"
+          TAG_ARGS=()
+          for TAG in "${TAGS[@]}"; do
+            TAG_ARGS+=(-t "$TAG")
+          done
+
+          echo "Creating manifest list with tags: ${{ needs.prepare.outputs.image_tags }}"
+          docker buildx imagetools create "${TAG_ARGS[@]}" \
+            "${IMAGE}@${AMD64_DIGEST}" \
+            "${IMAGE}@${ARM64_DIGEST}"
+
+      - name: Publish per-arch debug tags
+        if: needs.prepare.outputs.prerelease != 'true'
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          VERSION="${{ needs.prepare.outputs.version }}"
+
+          AMD64_DIGEST="$(cat digests/amd64.txt)"
+          ARM64_DIGEST="$(cat digests/arm64.txt)"
+
+          echo "Publishing per-arch debug tags"
+          docker buildx imagetools create -t "${IMAGE}:v${VERSION}-amd64" "${IMAGE}@${AMD64_DIGEST}"
+          docker buildx imagetools create -t "${IMAGE}:v${VERSION}-arm64" "${IMAGE}@${ARM64_DIGEST}"
+
+      - name: Verify manifest platforms
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          VERSION="${{ needs.prepare.outputs.version }}"
+          PRERELEASE="${{ needs.prepare.outputs.prerelease }}"
+          LABEL="${{ needs.prepare.outputs.prerelease_label }}"
+
+          if [ "$PRERELEASE" = "true" ]; then
+            INSPECT_TAG="v${VERSION}-${LABEL}"
+          else
+            INSPECT_TAG="v${VERSION}"
+          fi
+
+          echo "Inspecting ${IMAGE}:${INSPECT_TAG}"
+          INSPECT="$(docker buildx imagetools inspect "${IMAGE}:${INSPECT_TAG}")"
+          echo "$INSPECT"
+
+          if ! echo "$INSPECT" | grep -q "linux/amd64"; then
+            echo "Error: linux/amd64 missing from manifest"
+            exit 1
+          fi
+          if ! echo "$INSPECT" | grep -q "linux/arm64"; then
+            echo "Error: linux/arm64 missing from manifest"
+            exit 1
+          fi
+          echo "Manifest verified: linux/amd64 and linux/arm64 both present"
 
       - name: Create deployment summary
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          PRERELEASE="${{ steps.version.outputs.prerelease }}"
-          LABEL="${{ steps.version.outputs.prerelease_label }}"
+          VERSION="${{ needs.prepare.outputs.version }}"
+          PRERELEASE="${{ needs.prepare.outputs.prerelease }}"
+          LABEL="${{ needs.prepare.outputs.prerelease_label }}"
+          AMD64_DIGEST="$(cat digests/amd64.txt)"
+          ARM64_DIGEST="$(cat digests/arm64.txt)"
 
           if [ "$PRERELEASE" = "true" ]; then
             PRIMARY_TAG="v${VERSION}-${LABEL}"
@@ -322,7 +527,12 @@ jobs:
           |-----|-----------|
           $(printf '%b\n' "$TAG_ROWS")
 
+          | Arch | Digest |
+          |------|--------|
+          | linux/amd64 | \`${AMD64_DIGEST}\` |
+          | linux/arm64 | \`${ARM64_DIGEST}\` |
+
           ---
 
-          **Version**: v${VERSION} | **Commit**: \`${{ steps.version.outputs.commit_sha }}\` | **Prerelease**: ${PRERELEASE}
+          **Version**: v${VERSION} | **Commit**: \`${{ needs.prepare.outputs.commit_sha }}\` | **Prerelease**: ${PRERELEASE}
           EOF

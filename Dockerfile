@@ -1,4 +1,20 @@
-FROM node:22-alpine
+FROM node:22-alpine AS server-deps
+
+RUN apk add --no-cache build-base python3
+
+WORKDIR /build
+
+COPY server/package.json server/package-lock.json ./
+COPY server/db ./db
+
+RUN npm ci --omit=dev
+
+RUN PRISMA_VERSION="$(node -p "(require('./package.json').devDependencies?.prisma || require('./package.json').dependencies['@prisma/client']).replace(/^[\^~]/,'')")" \
+    && npm install --no-save prisma@${PRISMA_VERSION} \
+    && npx prisma generate --schema=db/schema.prisma
+
+
+FROM node:22-alpine AS runtime
 
 RUN apk add --no-cache \
     libc6-compat \
@@ -29,7 +45,12 @@ RUN addgroup --system --gid 1001 nodejs \
 
 WORKDIR /app
 
-COPY --chown=synthseek:nodejs server/ ./server/
+COPY --chown=synthseek:nodejs server/dist ./server/dist/
+COPY --chown=synthseek:nodejs server/db ./server/db/
+COPY --chown=synthseek:nodejs server/data ./server/data/
+COPY --chown=synthseek:nodejs server/package.json server/package-lock.json ./server/
+
+COPY --chown=synthseek:nodejs --from=server-deps /build/node_modules ./server/node_modules/
 
 COPY --chown=synthseek:nodejs web/standalone ./web/
 COPY --chown=synthseek:nodejs web/static ./web/.next/static/
