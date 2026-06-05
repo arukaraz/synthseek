@@ -352,7 +352,7 @@ jobs:
           IMAGE="synthseek-smoke:${ARCH}"
 
           echo "Starting container from $IMAGE"
-          CID="$(docker run -d -p 4401:4401 -e AUTH_SECRET=ci_smoke_test_dummy_secret_at_least_32_chars_long_0000 -e SKIP_HEALTH_CHECKS=true "$IMAGE")"
+          CID="$(docker run -d -p 4401:4401 -e AUTH_SECRET=ci_smoke_test_dummy_secret_at_least_32_chars_long_0000 -e SKIP_HEALTH_CHECKS=true -e PUBLIC_BASE_URL=https://smoke-test.invalid "$IMAGE")"
 
           cleanup() {
             echo "--- container logs ---"

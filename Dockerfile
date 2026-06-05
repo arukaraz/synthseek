@@ -73,6 +73,7 @@ ENV NODE_ENV=production \
     MUSIC_LIBRARY_PATH=/music \
     BEETS_CONFIG=/data/config/beets-config.yaml \
     ARTWORK_CACHE_PATH=/data/artwork-cache \
+    LOGS_PATH=/data/logs \
     NEXT_TELEMETRY_DISABLED=1
 
 
