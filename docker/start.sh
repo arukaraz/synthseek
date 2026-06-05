@@ -23,7 +23,7 @@ echo "      Done"
 
 echo "[2/5] Creating directories..."
 mkdir -p /data/db /data/config /data/logs /data/artwork-cache /downloads /music
-chown -R synthseek:nodejs /data /app
+chown -R synthseek:nodejs /data
 for dir in /downloads /music; do
     if su-exec synthseek test -w "$dir" 2>/dev/null; then
         continue
