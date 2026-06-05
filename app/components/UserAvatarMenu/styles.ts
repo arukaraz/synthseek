@@ -24,7 +24,7 @@ export const triggerBadge = cva(
 );
 
 export const menuContent = cva(
-  "bg-surface-elevated/98 sm:bg-surface-elevated/95 w-64 rounded-xl bg-gradient-to-b p-1.5 shadow-2xl shadow-surface/50",
+  "bg-surface-overlay/98 sm:bg-surface-overlay/95 w-64 rounded-xl bg-gradient-to-b p-1.5 shadow-2xl shadow-surface/50",
   {
     variants: {
       gradient: {

@@ -6,6 +6,7 @@ import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { addTag, filterTagSuggestions, removeTag } from "./helpers";
 import {
+  fieldGroup,
   lidarrTagChip,
   lidarrTagChipRemove,
   lidarrTagInputField,
@@ -43,7 +44,7 @@ export function LidarrTagsInput({ label, value, onChange, suggestions }: LidarrT
   };
 
   return (
-    <div className="space-y-2">
+    <div className={fieldGroup()}>
       <label htmlFor={inputId} className="text-fg/90 text-sm font-medium">
         {label}
       </label>

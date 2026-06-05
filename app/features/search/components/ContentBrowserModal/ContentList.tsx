@@ -9,7 +9,14 @@ import { ContentListItem } from "./ContentListItem";
 import { EmptyState } from "@components/ui/EmptyState";
 import type { ContentListProps } from "./types";
 
-export function ContentList({ type, items, isLoading, onActionClick, onNavigate }: ContentListProps) {
+export function ContentList({
+  type,
+  items,
+  isLoading,
+  isOrderedTracklist,
+  onActionClick,
+  onNavigate,
+}: ContentListProps) {
   const { t } = useTranslation("search");
   const isArtistView = type === ContentType.enum.artist;
 
@@ -70,6 +77,7 @@ export function ContentList({ type, items, isLoading, onActionClick, onNavigate 
                 <ContentListItem
                   item={item}
                   parentType={type}
+                  isOrderedTracklist={isOrderedTracklist}
                   onActionClick={onActionClick}
                   onNavigate={onNavigate}
                   isClickable={isClickable}

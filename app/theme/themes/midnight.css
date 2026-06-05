@@ -4,6 +4,7 @@
 
     --surface-bg: oklch(0.08 0.03 280);
     --surface-bg-elevated: oklch(0.12 0.035 280);
+    --surface-bg-overlay: oklch(0.17 0.035 280);
     --surface-bg-sunken: oklch(0.05 0.025 280);
     --surface-fg: oklch(0.92 0.02 280);
     --surface-fg-muted: oklch(0.65 0.02 280);

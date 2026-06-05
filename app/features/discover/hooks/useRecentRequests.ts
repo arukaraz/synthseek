@@ -1,5 +1,6 @@
 "use client";
 
+import { flattenRequestsToTrackRows } from "@features/requests/components/Table/helpers";
 import type { FlatTrackRow } from "@features/requests/types";
 import { useTrackRequests } from "@hooks/api";
 import { useMemo } from "react";
@@ -19,21 +20,7 @@ export function useRecentRequests(): UseRecentRequestsResult {
   const recent = useMemo<FlatTrackRow[]>(() => {
     if (!items) return [];
 
-    const flat: FlatTrackRow[] = items.flatMap((item) =>
-      item.tracks.map((track) => ({
-        ...track,
-        parent: {
-          id: item.id,
-          name: item.name,
-          artist: item.artist,
-          album_art: item.album_art,
-          contentType: item.contentType,
-          requestedBy: item.requestedBy,
-        },
-      }))
-    );
-
-    return flat
+    return flattenRequestsToTrackRows(items)
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
       .slice(0, RECENT_REQUESTS_LIMIT);
   }, [items]);

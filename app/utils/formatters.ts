@@ -53,6 +53,14 @@ export function formatDate(date: Date): string {
   });
 }
 
+export function formatShortDate(date: Date): string {
+  return date.toLocaleDateString(i18n.language, {
+    year: "2-digit",
+    month: "numeric",
+    day: "numeric",
+  });
+}
+
 export function formatTrackDuration(durationMs: number): string {
   const minutes = Math.floor(durationMs / 60000);
   const seconds = Math.floor((durationMs % 60000) / 1000);

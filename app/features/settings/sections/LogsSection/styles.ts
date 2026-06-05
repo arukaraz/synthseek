@@ -21,7 +21,9 @@ export const logChip = cva(
 
 export const searchWrap = cva("min-w-0 basis-full sm:min-w-[12rem] sm:flex-1 sm:basis-auto");
 
-export const toolbarActions = cva("flex flex-wrap items-center gap-2");
+export const selectorGroups = cva("flex w-full flex-wrap items-end gap-x-6 gap-y-3");
+
+export const toolbarActions = cva("flex w-full flex-wrap items-center gap-2 sm:w-auto");
 
 export const exportActions = cva("flex flex-wrap items-center gap-3");
 

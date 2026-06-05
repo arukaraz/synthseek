@@ -7,23 +7,25 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
+import { useTapToOpen } from "@hooks/ui/useTapToOpen";
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { isAcquisitionMethod } from "./helpers";
-import { acquisitionRadioItem, acquisitionTrigger } from "./styles";
+import { acquisitionRadioItem, acquisitionTrigger, fieldGroup } from "./styles";
 import type { AcquisitionDropdownProps } from "./types";
 
 export function AcquisitionDropdown({ label, value, options, onChange }: AcquisitionDropdownProps) {
   const { t } = useTranslation("search");
+  const tap = useTapToOpen();
   const activeOption = options.find((option) => option.value === value) ?? options[0];
 
   return (
-    <div className="space-y-2">
+    <div className={fieldGroup()}>
       <label className="text-fg/90 text-sm font-medium" id="acquisition-method-label">
         {label}
       </label>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <DropdownMenu open={tap.open} onOpenChange={tap.onOpenChange}>
+        <DropdownMenuTrigger asChild tapToOpen={tap.triggerProps}>
           <button
             type="button"
             className={acquisitionTrigger()}
@@ -48,7 +50,7 @@ export function AcquisitionDropdown({ label, value, options, onChange }: Acquisi
             {options.map((option) => (
               <DropdownMenuRadioItem key={option.value} value={option.value} className={acquisitionRadioItem()}>
                 <span className="text-sm font-medium">{t(option.labelKey)}</span>
-                <span className="text-fg/50 text-xs">{t(option.descriptionKey)}</span>
+                {option.value === "auto" && <span className="text-fg/50 text-xs">{t(option.descriptionKey)}</span>}
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuRadioGroup>

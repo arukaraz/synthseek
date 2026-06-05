@@ -40,6 +40,7 @@ import {
   UPLOAD_SPEED_OPTIONS,
 } from "./consts";
 import {
+  allowsLossless,
   buildAlbumDelegate,
   buildArtistDelegate,
   buildSourceChain,
@@ -124,8 +125,14 @@ export function ConfigRequestModal({
     if (!acquisitionOptions.some((option) => option.value === acquisitionMethod)) setAcquisitionMethod("auto");
   }, [acquisitionOptions, acquisitionMethod]);
 
+  useEffect(() => {
+    if (!allowsLossless(acquisitionMethod) && qualityMode === "lossless") setQualityMode("standard");
+  }, [acquisitionMethod, qualityMode]);
+
   const lidarrSelected = isLidarrMethod(acquisitionMethod);
   const showSlskdControls = !lidarrSelected && showsSlskdControls(acquisitionMethod);
+  const losslessAvailable = allowsLossless(acquisitionMethod);
+  const showMatchingControls = !lidarrSelected && losslessAvailable;
 
   const needsTrackList =
     !isLidarrArtistMode &&
@@ -170,7 +177,9 @@ export function ConfigRequestModal({
     description: t(opt.descriptionKey),
   }));
 
-  const qualityGridOptions: Option<QualityMode>[] = QUALITY_MODE_OPTIONS.map((opt) => ({
+  const qualityGridOptions: Option<QualityMode>[] = QUALITY_MODE_OPTIONS.filter(
+    (opt) => losslessAvailable || opt.value !== "lossless"
+  ).map((opt) => ({
     value: opt.value,
     label: t(opt.labelKey),
     description: t(opt.descriptionKey),
@@ -350,62 +359,6 @@ export function ConfigRequestModal({
             </div>
           ) : (
             <>
-              {!lidarrSelected && (
-                <>
-                  <div className="space-y-3 sm:space-y-4">
-                    <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                      {t("config.sections.quality")}
-                    </h3>
-                    <OptionGrid
-                      label={t("config.fields.quality")}
-                      options={qualityGridOptions}
-                      value={qualityMode}
-                      onChange={setQualityMode}
-                      columns={2}
-                      showCheckmark
-                    />
-                    <OptionGrid
-                      label={t("config.fields.bitrate")}
-                      options={bitrateGridOptions}
-                      value={bitrate}
-                      onChange={setBitrate}
-                      columns={4}
-                    />
-                    <OptionGrid
-                      label={t("config.fields.format")}
-                      options={formatGridOptions}
-                      value={format}
-                      onChange={setFormat}
-                      columns={4}
-                      disabled={losslessActive}
-                    />
-                  </div>
-
-                  <div className="space-y-3 sm:space-y-4">
-                    <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                      {t("config.sections.matching")}
-                    </h3>
-                    <OptionGrid
-                      label={t("config.fields.bitrateMatching")}
-                      options={matchingGridOptions}
-                      value={bitrateMatching}
-                      onChange={setBitrateMatching}
-                      columns={2}
-                      showCheckmark
-                    />
-                    <OptionGrid
-                      label={t("config.fields.formatMatching")}
-                      options={matchingGridOptions}
-                      value={formatMatching}
-                      onChange={setFormatMatching}
-                      columns={2}
-                      showCheckmark
-                      disabled={losslessActive}
-                    />
-                  </div>
-                </>
-              )}
-
               <div className="space-y-3 sm:space-y-4">
                 <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
                   {t("config.sections.acquisition")}
@@ -417,6 +370,62 @@ export function ConfigRequestModal({
                   onChange={setAcquisitionMethod}
                 />
               </div>
+
+              {!lidarrSelected && (
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                    {t("config.sections.quality")}
+                  </h3>
+                  <OptionGrid
+                    label={t("config.fields.quality")}
+                    options={qualityGridOptions}
+                    value={qualityMode}
+                    onChange={setQualityMode}
+                    columns={2}
+                    showCheckmark
+                  />
+                  <OptionGrid
+                    label={t("config.fields.bitrate")}
+                    options={bitrateGridOptions}
+                    value={bitrate}
+                    onChange={setBitrate}
+                    columns={4}
+                  />
+                  <OptionGrid
+                    label={t("config.fields.format")}
+                    options={formatGridOptions}
+                    value={format}
+                    onChange={setFormat}
+                    columns={4}
+                    disabled={losslessActive}
+                  />
+                </div>
+              )}
+
+              {showMatchingControls && (
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
+                    {t("config.sections.matching")}
+                  </h3>
+                  <OptionGrid
+                    label={t("config.fields.bitrateMatching")}
+                    options={matchingGridOptions}
+                    value={bitrateMatching}
+                    onChange={setBitrateMatching}
+                    columns={2}
+                    showCheckmark
+                  />
+                  <OptionGrid
+                    label={t("config.fields.formatMatching")}
+                    options={matchingGridOptions}
+                    value={formatMatching}
+                    onChange={setFormatMatching}
+                    columns={2}
+                    showCheckmark
+                    disabled={losslessActive}
+                  />
+                </div>
+              )}
 
               {lidarrSelected && (
                 <div className="space-y-3 sm:space-y-4">

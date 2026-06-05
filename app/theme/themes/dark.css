@@ -3,6 +3,7 @@
     color-scheme: dark;
     --surface-bg: oklch(0.145 0.05 265);
     --surface-bg-elevated: oklch(0.16 0.05 265);
+    --surface-bg-overlay: oklch(0.21 0.05 265);
     --surface-bg-sunken: oklch(0.08 0.03 265);
     --surface-fg: oklch(0.985 0.015 250);
     --surface-fg-muted: oklch(0.7 0.03 250);

@@ -13,6 +13,7 @@ import { downloadText } from "@utils/download";
 
 import { SegmentedControl } from "../../components/SegmentedControl";
 import { SettingsCard } from "../../components/SettingsCard";
+import { SettingsField } from "../../components/SettingsField";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import {
   DEFAULT_LINE_COUNT,
@@ -28,6 +29,7 @@ import {
   logChip,
   logTerminal,
   searchWrap,
+  selectorGroups,
   toolbarActions,
   viewerToolbar,
   LOG_LEVEL_STYLES,
@@ -105,19 +107,25 @@ export function LogViewerCard() {
             ariaLabel={t("logs.viewer.searchAriaLabel")}
           />
         </div>
-        <SegmentedControl
-          value={lines}
-          options={LINE_COUNT_OPTIONS}
-          onChange={setLines}
-          ariaLabel={t("logs.viewer.linesAriaLabel")}
-        />
+        <div className={selectorGroups()}>
+          <SettingsField label={t("logs.viewer.linesLabel")}>
+            <SegmentedControl
+              value={lines}
+              options={LINE_COUNT_OPTIONS}
+              onChange={setLines}
+              ariaLabel={t("logs.viewer.linesAriaLabel")}
+            />
+          </SettingsField>
+          <SettingsField label={t("logs.viewer.refreshLabel")}>
+            <SegmentedControl
+              value={refresh}
+              options={refreshOptions}
+              onChange={setRefresh}
+              ariaLabel={t("logs.viewer.refreshAriaLabel")}
+            />
+          </SettingsField>
+        </div>
         <div className={toolbarActions()}>
-          <SegmentedControl
-            value={refresh}
-            options={refreshOptions}
-            onChange={setRefresh}
-            ariaLabel={t("logs.viewer.refreshAriaLabel")}
-          />
           <Button variant="outline" size="sm" onClick={() => void refetch()} disabled={isFetching}>
             <RefreshCw className={isFetching ? "animate-spin" : undefined} />
             {t("logs.viewer.refresh")}

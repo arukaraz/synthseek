@@ -3,6 +3,7 @@
 @theme inline {
   --color-surface: var(--surface-bg);
   --color-surface-elevated: var(--surface-bg-elevated);
+  --color-surface-overlay: var(--surface-bg-overlay);
   --color-surface-sunken: var(--surface-bg-sunken);
 
   --color-fg: var(--surface-fg);

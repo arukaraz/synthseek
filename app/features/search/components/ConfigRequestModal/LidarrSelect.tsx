@@ -7,8 +7,9 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
+import { useTapToOpen } from "@hooks/ui/useTapToOpen";
 import { ChevronDown } from "lucide-react";
-import { lidarrSelectRadioItem, lidarrSelectTrigger } from "./styles";
+import { fieldGroup, lidarrSelectRadioItem, lidarrSelectTrigger } from "./styles";
 import type { LidarrSelectProps } from "./types";
 
 export function LidarrSelect<T extends string | number>({
@@ -19,13 +20,14 @@ export function LidarrSelect<T extends string | number>({
   onChange,
   disabled = false,
 }: LidarrSelectProps<T>) {
+  const tap = useTapToOpen();
   const activeOption = options.find((option) => String(option.value) === String(value));
 
   return (
-    <div className="space-y-2">
+    <div className={fieldGroup()}>
       <label className="text-fg/90 text-sm font-medium">{label}</label>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <DropdownMenu open={tap.open} onOpenChange={tap.onOpenChange}>
+        <DropdownMenuTrigger asChild tapToOpen={tap.triggerProps}>
           <button type="button" className={lidarrSelectTrigger()} disabled={disabled} aria-label={label}>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-bold">

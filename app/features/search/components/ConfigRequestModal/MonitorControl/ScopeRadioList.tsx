@@ -2,11 +2,11 @@
 
 import { cn } from "@utils/cn";
 import { useId, useRef } from "react";
+import { fieldGroup } from "../styles";
 import { nextRadioIndex } from "./helpers";
 import {
   scopeRadioDescription,
   scopeRadioDot,
-  scopeRadioGroup,
   scopeRadioIndicator,
   scopeRadioList,
   scopeRadioRow,
@@ -31,7 +31,7 @@ export function ScopeRadioList<T extends string>({ label, options, value, onChan
   };
 
   return (
-    <div className={scopeRadioGroup()} role="radiogroup" aria-labelledby={`${groupId}-label`}>
+    <div className={fieldGroup()} role="radiogroup" aria-labelledby={`${groupId}-label`}>
       <span id={`${groupId}-label`} className="text-fg/90 text-sm font-medium">
         {label}
       </span>

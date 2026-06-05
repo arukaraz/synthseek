@@ -72,6 +72,7 @@ export interface FlatTrackRow extends TrackRequest {
     album_art: string | null;
     contentType: ContentType;
     requestedBy: PublicUser;
+    status: RequestStatus;
   };
 }
 

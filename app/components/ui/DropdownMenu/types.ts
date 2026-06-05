@@ -1,5 +1,10 @@
 import type * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import type { ComponentProps } from "react";
+import type { TapToOpenTriggerProps } from "@hooks/ui/types";
+
+export interface DropdownMenuTriggerProps extends ComponentProps<typeof DropdownMenuPrimitive.Trigger> {
+  tapToOpen?: TapToOpenTriggerProps;
+}
 
 export interface DropdownMenuSubTriggerProps extends ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> {
   inset?: boolean;

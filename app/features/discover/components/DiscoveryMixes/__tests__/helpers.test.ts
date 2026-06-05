@@ -125,19 +125,38 @@ describe("formatFreshness", () => {
 });
 
 describe("describeEmptyReason", () => {
-  it("returns the waiting label for status none", () => {
-    expect(describeEmptyReason({ kind: "weekly-jams", status: "none", candidates: [] })).toBe("Waiting for first sync");
+  it("returns the first-sync label for status none", () => {
+    expect(describeEmptyReason({ kind: "weekly-jams", status: "none", candidates: [] })).toBe(
+      "Waiting for the first ListenBrainz sync."
+    );
   });
 
-  it("maps a known reason to a friendly label", () => {
+  it("explains an upstream fetch error for fetch-error", () => {
     expect(
       describeEmptyReason({ kind: "weekly-jams", status: "empty", candidates: [], emptyReason: "fetch-error" })
-    ).toBe("Sync failed, will retry");
+    ).toBe("Couldn't reach ListenBrainz. It will retry on the next sync.");
   });
 
-  it("falls back to 'Feed empty' for unknown reasons", () => {
+  it("explains upstream generation for playlist-not-generated-yet", () => {
+    expect(
+      describeEmptyReason({
+        kind: "daily-jams",
+        status: "empty",
+        candidates: [],
+        emptyReason: "playlist-not-generated-yet",
+      })
+    ).toBe("ListenBrainz hasn't built this mix yet. It appears once your listening history is enough to generate it.");
+  });
+
+  it("explains no collaborative recommendations for no-data", () => {
+    expect(
+      describeEmptyReason({ kind: "cf-recommendations", status: "empty", candidates: [], emptyReason: "no-data" })
+    ).toBe("ListenBrainz hasn't computed collaborative recommendations for your account yet.");
+  });
+
+  it("falls back to the feed-empty label for unknown reasons", () => {
     expect(describeEmptyReason({ kind: "weekly-jams", status: "empty", candidates: [], emptyReason: "weird" })).toBe(
-      "Feed empty"
+      "ListenBrainz returned no songs for this mix yet."
     );
   });
 });

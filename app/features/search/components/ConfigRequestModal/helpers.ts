@@ -59,6 +59,10 @@ export function showsSlskdControls(method: AcquisitionMethod): boolean {
   return SOURCE_CHAIN_BY_METHOD[method].includes("slskd");
 }
 
+export function allowsLossless(method: AcquisitionMethod): boolean {
+  return showsSlskdControls(method);
+}
+
 export function isLidarrSelectionComplete(selection: {
   rootFolderPath: string | undefined;
   qualityProfileId: number | undefined;

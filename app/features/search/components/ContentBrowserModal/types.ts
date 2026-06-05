@@ -51,6 +51,7 @@ export interface ContentListProps {
   type: ContentType;
   items: MusicItem[];
   isLoading: boolean;
+  isOrderedTracklist: boolean;
   onActionClick: (item: MusicItem) => void;
   onNavigate?: (item: MusicItem) => void;
 }
@@ -58,6 +59,7 @@ export interface ContentListProps {
 export interface ContentListItemProps {
   item: MusicItem;
   parentType: ContentType;
+  isOrderedTracklist: boolean;
   onActionClick: (item: MusicItem) => void;
   onNavigate?: (item: MusicItem) => void;
   isClickable?: boolean;

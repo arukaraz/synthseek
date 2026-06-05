@@ -150,6 +150,7 @@ export function useContentBrowser({ initialType, initialData, preloadedItems }: 
   }, [navigationStack]);
 
   const canGoBack = navigationStack.length > 0;
+  const isOrderedTracklist = !usePreloaded;
 
   return {
     metadata,
@@ -158,6 +159,7 @@ export function useContentBrowser({ initialType, initialData, preloadedItems }: 
     canGoBack,
     currentType,
     currentData,
+    isOrderedTracklist,
     handleRowClick,
     handleBack,
   };

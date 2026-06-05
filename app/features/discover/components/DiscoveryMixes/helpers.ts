@@ -4,7 +4,7 @@ import i18n from "@locale";
 import type { MusicImage, MusicPlaylist, MusicTrack } from "@api/__generated__/types";
 import type { LbPlaylistKind } from "@features/discovery-integrations/types";
 
-import { EMPTY_REASON_LABELS } from "./constants";
+import { EMPTY_REASON_FALLBACK_KEY, EMPTY_REASON_KEYS, WAITING_FIRST_SYNC_KEY } from "./constants";
 import type { DiscoveryMix, DiscoveryMixesEmptyReason, FeedCandidate, LbKindMeta } from "./types";
 
 const EMPTY_TEXT_KEYS: Record<DiscoveryMixesEmptyReason, ParseKeys<"discover">> = {
@@ -88,8 +88,9 @@ export function formatFreshness(generatedAt: string | undefined, kind: LbPlaylis
 }
 
 export function describeEmptyReason(mix: DiscoveryMix): string {
-  if (mix.status === "none") return "Waiting for first sync";
-  return EMPTY_REASON_LABELS[mix.emptyReason ?? ""] ?? "Feed empty";
+  if (mix.status === "none") return i18n.t(`discover:${WAITING_FIRST_SYNC_KEY}`);
+  const key = EMPTY_REASON_KEYS[mix.emptyReason ?? ""] ?? EMPTY_REASON_FALLBACK_KEY;
+  return i18n.t(`discover:${key}`);
 }
 
 export function tileGradient(seed: string): string {

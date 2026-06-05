@@ -1,3 +1,4 @@
+import type { ParseKeys } from "i18next";
 import { Compass, Repeat, Sparkles, Sun } from "lucide-react";
 
 import type { LbPlaylistKind } from "@features/discovery-integrations/types";
@@ -35,12 +36,16 @@ export const LB_KIND_METADATA = {
   },
 } as const satisfies Record<LbPlaylistKind, LbKindMeta>;
 
-export const EMPTY_REASON_LABELS: Record<string, string> = {
-  "no-data": "No data yet",
-  "no-resolved": "Couldn't match recordings",
-  "playlist-not-generated-yet": "Waiting for ListenBrainz",
-  "fetch-error": "Sync failed, will retry",
+export const EMPTY_REASON_KEYS: Record<string, ParseKeys<"discover">> = {
+  "no-data": "mixes.emptyReason.noData",
+  "no-resolved": "mixes.emptyReason.noResolved",
+  "playlist-not-generated-yet": "mixes.emptyReason.notGenerated",
+  "fetch-error": "mixes.emptyReason.fetchError",
 };
+
+export const EMPTY_REASON_FALLBACK_KEY: ParseKeys<"discover"> = "mixes.emptyReason.feedEmpty";
+
+export const WAITING_FIRST_SYNC_KEY: ParseKeys<"discover"> = "mixes.emptyReason.waitingFirstSync";
 
 export const DISCOVERY_SETTINGS_HREF = "/settings/integrations/metadata#listenbrainz";
 

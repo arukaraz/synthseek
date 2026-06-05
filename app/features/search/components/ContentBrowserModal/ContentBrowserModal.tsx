@@ -23,12 +23,21 @@ export function ContentBrowserModal({
   requestButtonTooltip,
 }: ContentBrowserModalProps) {
   const { t } = useTranslation("search");
-  const { metadata, items, isLoading, canGoBack, currentType, currentData, handleRowClick, handleBack } =
-    useContentBrowser({
-      initialType: type,
-      initialData: data,
-      preloadedItems,
-    });
+  const {
+    metadata,
+    items,
+    isLoading,
+    canGoBack,
+    currentType,
+    currentData,
+    isOrderedTracklist,
+    handleRowClick,
+    handleBack,
+  } = useContentBrowser({
+    initialType: type,
+    initialData: data,
+    preloadedItems,
+  });
 
   const isArtistView = currentType === ContentType.enum.artist;
   const { data: lidarrAvailability } = useLidarrAvailable({ enabled: isArtistView });
@@ -88,6 +97,7 @@ export function ContentBrowserModal({
             type={currentType}
             items={items}
             isLoading={isLoading}
+            isOrderedTracklist={isOrderedTracklist}
             onActionClick={handleRequestWithContext}
             onNavigate={handleRowClick}
           />

@@ -4,7 +4,7 @@ import { Button } from "@components/ui/Button";
 import { RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { bbStat, bbStatStrong, bottombar, bottombarLeft, bottombarRight } from "../styles";
+import { bbStat, bbStatStrong, bottombar, bottombarButtons, bottombarLeft, bottombarRight } from "../styles";
 
 import { AutoWatchToggles } from "./AutoWatchToggles";
 import { SelectionBulkActions } from "./SelectionBulkActions";
@@ -72,12 +72,14 @@ export function ModalBottombar({
       </div>
       <div className={bottombarRight()}>
         <AutoWatchToggles value={autoWatch} onChange={onWatchChange} />
-        <Button variant="ghost" size="sm" onClick={onCancel} disabled={isSaving}>
-          {t("spotifyLibrary.bottombar.cancel")}
-        </Button>
-        <Button onClick={onSave} disabled={!hasChanges || isSaving} size="sm">
-          {isSaving ? t("spotifyLibrary.bottombar.saving") : t("spotifyLibrary.bottombar.saveChanges")}
-        </Button>
+        <div className={bottombarButtons()}>
+          <Button variant="ghost" size="sm" onClick={onCancel} disabled={isSaving} className="flex-1 sm:flex-none">
+            {t("spotifyLibrary.bottombar.cancel")}
+          </Button>
+          <Button onClick={onSave} disabled={!hasChanges || isSaving} size="sm" className="flex-1 sm:flex-none">
+            {isSaving ? t("spotifyLibrary.bottombar.saving") : t("spotifyLibrary.bottombar.saveChanges")}
+          </Button>
+        </div>
       </div>
     </div>
   );

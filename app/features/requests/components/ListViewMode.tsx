@@ -1,5 +1,6 @@
 "use client";
 
+import { RequestStatus } from "@api/__generated__/types";
 import { Pagination } from "@components/ui/Pagination";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { DataTable, cycleSortDirection } from "@components/ui/Table";
@@ -98,7 +99,9 @@ export function ListViewMode() {
     () =>
       buildFlatTrackColumns({
         currentUserId: currentUser?.id,
-        canActFor: (item) => isOwnerOrAdminFE({ id: item.parent.requestedBy.id }, currentUser),
+        canActFor: (item) =>
+          item.parent.status !== RequestStatus.enum.delegated &&
+          isOwnerOrAdminFE({ id: item.parent.requestedBy.id }, currentUser),
         onRetry: (item) => retryTrack.mutate({ trackId: item.id }),
         onCancel: handleCancel,
         onSelectSource: handleSelectSource,

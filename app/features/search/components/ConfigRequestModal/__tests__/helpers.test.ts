@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   addTag,
+  allowsLossless,
   buildAlbumDelegate,
   buildArtistDelegate,
   buildSourceChain,
@@ -224,6 +225,18 @@ describe("showsSlskdControls", () => {
 
   it("hides slskd-only controls for lidarr", () => {
     expect(showsSlskdControls("lidarr")).toBe(false);
+  });
+});
+
+describe("allowsLossless", () => {
+  it("allows lossless for sources that can yield a peer-sourced lossless file", () => {
+    expect(allowsLossless("auto")).toBe(true);
+    expect(allowsLossless("slskd")).toBe(true);
+    expect(allowsLossless("slskdThenYtdlp")).toBe(true);
+  });
+
+  it("disallows lossless for a YouTube-only source", () => {
+    expect(allowsLossless("ytdlp")).toBe(false);
   });
 });
 

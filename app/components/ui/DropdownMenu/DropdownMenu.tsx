@@ -5,6 +5,7 @@ import { Check, ChevronRight, Circle } from "lucide-react";
 import type { HTMLAttributes } from "react";
 
 import { cn } from "@utils/cn";
+import { composePointerHandlers } from "./helpers";
 import type {
   DropdownMenuCheckboxItemProps,
   DropdownMenuContentProps,
@@ -14,14 +15,27 @@ import type {
   DropdownMenuSeparatorProps,
   DropdownMenuSubContentProps,
   DropdownMenuSubTriggerProps,
+  DropdownMenuTriggerProps,
 } from "./types";
 
 export const DropdownMenu = DropdownMenuPrimitive.Root;
-export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 export const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
+
+export function DropdownMenuTrigger({ tapToOpen, ref, ...props }: DropdownMenuTriggerProps) {
+  if (!tapToOpen) return <DropdownMenuPrimitive.Trigger ref={ref} {...props} />;
+  return (
+    <DropdownMenuPrimitive.Trigger
+      ref={ref}
+      {...props}
+      onPointerDown={composePointerHandlers(props.onPointerDown, tapToOpen.onPointerDown)}
+      onPointerUp={composePointerHandlers(props.onPointerUp, tapToOpen.onPointerUp)}
+      onPointerCancel={composePointerHandlers(props.onPointerCancel, tapToOpen.onPointerCancel)}
+    />
+  );
+}
 
 export function DropdownMenuSubTrigger({ className, inset, children, ref, ...props }: DropdownMenuSubTriggerProps) {
   return (
@@ -46,7 +60,7 @@ export function DropdownMenuSubContent({ className, ref, ...props }: DropdownMen
       <DropdownMenuPrimitive.SubContent
         ref={ref}
         className={cn(
-          "border-fg/15 bg-surface-elevated/98 sm:bg-surface-elevated/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
+          "border-fg/20 bg-surface-overlay/98 sm:bg-surface-overlay/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
           className
         )}
         {...props}
@@ -62,7 +76,7 @@ export function DropdownMenuContent({ className, sideOffset = 8, ref, ...props }
         ref={ref}
         sideOffset={sideOffset}
         className={cn(
-          "border-fg/15 bg-surface-elevated/98 sm:bg-surface-elevated/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[180px] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
+          "border-fg/20 bg-surface-overlay/98 sm:bg-surface-overlay/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[180px] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
           className
         )}
         {...props}

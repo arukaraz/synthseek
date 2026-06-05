@@ -9,7 +9,7 @@ import { IconButton } from "@components/ui/IconButton";
 import { useRevokeApiKey } from "@hooks/api/mutations/api-keys/useRevokeApiKey";
 
 import { createdTime, lastUsedTime } from "./helpers";
-import { apiKeyRow } from "./styles";
+import { apiKeyInfo, apiKeyMeta, apiKeyMetaSeparator, apiKeyName, apiKeyRow } from "./styles";
 import type { ApiKeyRowProps } from "./types";
 
 export function ApiKeyRow({ apiKey }: ApiKeyRowProps) {
@@ -27,14 +27,13 @@ export function ApiKeyRow({ apiKey }: ApiKeyRowProps) {
 
   return (
     <div className={apiKeyRow()}>
-      <div className="flex min-w-0 items-center gap-2">
-        <span className="text-fg truncate text-sm font-medium">{apiKey.name}</span>
-        <span className="text-fg/30 shrink-0 text-xs">·</span>
-        <span className="text-fg/50 shrink-0 text-xs">
-          {t("api.row.created", { time: createdTime(apiKey.created_at) })}
-        </span>
-        <span className="text-fg/30 shrink-0 text-xs">·</span>
-        <span className="text-fg/50 shrink-0 text-xs">{lastUsedLabel}</span>
+      <div className={apiKeyInfo()}>
+        <span className={apiKeyName()}>{apiKey.name}</span>
+        <div className={apiKeyMeta()}>
+          <span>{t("api.row.created", { time: createdTime(apiKey.created_at) })}</span>
+          <span className={apiKeyMetaSeparator()}>·</span>
+          <span>{lastUsedLabel}</span>
+        </div>
       </div>
 
       <IconButton

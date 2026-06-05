@@ -3,6 +3,7 @@
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import { fieldGroup } from "./styles";
 import type { OptionGridProps } from "./types";
 
 export function OptionGrid<T extends string | number>({
@@ -17,7 +18,7 @@ export function OptionGrid<T extends string | number>({
   const gridCols = columns === 4 ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-2";
 
   return (
-    <div className={cn("space-y-2", disabled && "pointer-events-none opacity-40")} aria-disabled={disabled}>
+    <div className={cn(fieldGroup(), disabled && "pointer-events-none opacity-40")} aria-disabled={disabled}>
       <label className="text-fg/90 text-sm font-medium">{label}</label>
       <div className={cn("grid gap-3 sm:gap-4", gridCols)}>
         {options.map((option) => {

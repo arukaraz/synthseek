@@ -3,6 +3,7 @@ import {
   formatYear,
   formatRelativeTime,
   formatDuration,
+  formatShortDate,
   formatTimestamp,
   formatTrackDuration,
   titleCase,
@@ -144,6 +145,22 @@ describe("formatTimestamp", () => {
     const date = new Date("2024-01-01T12:00:00");
     const result = formatTimestamp(date);
     expect(result).toMatch(/12:00/);
+  });
+});
+
+describe("formatShortDate", () => {
+  it("renders a numeric date with the day, month, and two-digit year", () => {
+    const date = new Date("2026-06-04T04:15:00");
+    const result = formatShortDate(date);
+    expect(result).toContain("6");
+    expect(result).toContain("4");
+    expect(result).toContain("26");
+  });
+
+  it("does not render an hour-and-minute time", () => {
+    const date = new Date("2026-06-04T04:15:00");
+    const result = formatShortDate(date);
+    expect(result).not.toMatch(/\d{1,2}:\d{2}/);
   });
 });
 

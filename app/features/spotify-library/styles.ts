@@ -250,7 +250,10 @@ export const bottombar = cva(
   "flex flex-col items-stretch gap-3 border-t border-fg/10 bg-surface/60 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:flex-row sm:flex-wrap sm:items-center sm:pb-3"
 );
 export const bottombarLeft = cva("flex flex-wrap items-center gap-3");
-export const bottombarRight = cva("flex flex-wrap items-center gap-3 sm:ml-auto");
+export const bottombarRight = cva(
+  "flex flex-col items-stretch gap-3 sm:ml-auto sm:flex-row sm:flex-wrap sm:items-center"
+);
+export const bottombarButtons = cva("flex items-center gap-3");
 
 export const bbStat = cva("text-xs text-fg/60");
 export const bbStatStrong = cva("font-mono font-semibold text-fg");

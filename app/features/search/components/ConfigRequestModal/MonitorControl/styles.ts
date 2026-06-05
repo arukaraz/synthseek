@@ -2,8 +2,6 @@ import { cva } from "class-variance-authority";
 
 export const monitorSubGrid = cva("pl-3 sm:pl-4");
 
-export const scopeRadioGroup = cva("space-y-2");
-
 export const scopeRadioList = cva("space-y-0.5");
 
 export const scopeRadioRow = cva(

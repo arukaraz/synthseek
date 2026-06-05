@@ -25,4 +25,5 @@ export type {
   DropdownMenuRadioItemProps,
   DropdownMenuLabelProps,
   DropdownMenuSeparatorProps,
+  DropdownMenuTriggerProps,
 } from "./types";

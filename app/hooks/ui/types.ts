@@ -1,6 +1,7 @@
 import type { ContentType, MusicItem } from "@api/__generated__/types";
 import type { ConfigRequestMode } from "@features/search/components/ConfigRequestModal/types";
 import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
+import type { PointerEventHandler } from "react";
 
 export interface FlowState {
   selectedResult: MusicItem | null;
@@ -61,4 +62,22 @@ export interface UsePlexPinPopupResult {
   reset: () => void;
   phase: PlexPinPhase;
   isPending: boolean;
+}
+
+export interface UseTapToOpenOptions {
+  moveThreshold?: number;
+  tapTimeout?: number;
+}
+
+export interface TapToOpenTriggerProps {
+  onPointerDown: PointerEventHandler;
+  onPointerUp: PointerEventHandler;
+  onPointerCancel: PointerEventHandler;
+}
+
+export interface TapToOpenResult {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onOpenChange: (open: boolean) => void;
+  triggerProps: TapToOpenTriggerProps;
 }

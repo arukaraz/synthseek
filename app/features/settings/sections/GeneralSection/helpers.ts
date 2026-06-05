@@ -1,5 +1,5 @@
 import type { Theme } from "@theme/ThemeProvider";
-import { formatRelativeTime, formatTimestamp } from "@utils/formatters";
+import { formatRelativeTime, formatShortDate } from "@utils/formatters";
 
 import { ROVING_KEYS, THEME_OPTIONS } from "./constants";
 import type { RovingNavKey } from "./types";
@@ -32,7 +32,7 @@ export function lastUsedTime(date: Date | null): string | null {
 }
 
 export function createdTime(date: Date): string {
-  return formatTimestamp(date);
+  return formatShortDate(date);
 }
 
 function stripTrailingSlashes(url: string): string {

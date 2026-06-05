@@ -81,8 +81,16 @@ export const themePreviewBarRow = cva("flex flex-col gap-1.5");
 export const themePreviewChip = cva("bg-primary-500 mt-auto h-2.5 w-1/3 rounded-full");
 
 export const apiKeyRow = cva(
-  "border-fg/10 flex items-center justify-between gap-3 border-b py-3.5 first:pt-0 last:border-b-0 last:pb-0"
+  "border-fg/10 flex items-start justify-between gap-3 border-b py-3.5 first:pt-0 last:border-b-0 last:pb-0"
 );
+
+export const apiKeyInfo = cva("flex min-w-[3ch] flex-1 flex-col gap-0.5");
+
+export const apiKeyName = cva("text-fg break-words text-sm font-medium");
+
+export const apiKeyMeta = cva("text-fg/50 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs");
+
+export const apiKeyMetaSeparator = cva("text-fg/30");
 
 export const tokenBox = cva("bg-bg-soft/40 ring-fg/10 text-fg block break-all rounded-lg p-3 font-mono text-xs ring-1");
 

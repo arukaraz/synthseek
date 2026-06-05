@@ -12,7 +12,14 @@ import { useTranslation } from "react-i18next";
 import { getItemImage } from "./helpers";
 import type { ContentListItemProps } from "./types";
 
-export function ContentListItem({ item, parentType, onActionClick, onNavigate, isClickable }: ContentListItemProps) {
+export function ContentListItem({
+  item,
+  parentType,
+  isOrderedTracklist,
+  onActionClick,
+  onNavigate,
+  isClickable,
+}: ContentListItemProps) {
   const { t } = useTranslation("search");
   const isArtistView = parentType === ContentType.enum.artist;
   const isAlbumView = parentType === ContentType.enum.album || parentType === ContentType.enum.playlist;
@@ -75,7 +82,9 @@ export function ContentListItem({ item, parentType, onActionClick, onNavigate, i
 
     return (
       <div className={trackListContainer()} data-cy="content-list-item">
-        <div className="text-fg/50 w-8 shrink-0 text-center text-xs font-medium">{item.track_number}</div>
+        {isOrderedTracklist && (
+          <div className="text-fg/50 w-8 shrink-0 text-center text-xs font-medium">{item.track_number}</div>
+        )}
 
         <div className="min-w-0 flex-1">
           <h3 className="text-fg truncate font-medium" data-cy="content-item-name">

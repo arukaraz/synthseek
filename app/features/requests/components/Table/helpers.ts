@@ -27,6 +27,7 @@ export function flattenRequestsToTrackRows(items: RequestWithTracks[]): FlatTrac
         album_art: item.album_art,
         contentType: item.contentType,
         requestedBy: item.requestedBy,
+        status: item.status,
       },
     }))
   );
