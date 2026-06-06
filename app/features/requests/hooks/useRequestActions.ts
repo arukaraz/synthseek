@@ -69,7 +69,6 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const canSyncPlex =
     canManage &&
     isPlaylist &&
-    request.plex_playlist_id === null &&
     (request.status === RequestStatus.enum.complete || request.status === RequestStatus.enum.partially_complete);
   const canSyncSource = canManage && isPlaylist && request.source_provider === "spotify";
 
