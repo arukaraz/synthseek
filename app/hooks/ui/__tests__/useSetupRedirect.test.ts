@@ -10,15 +10,21 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace, push: vi.fn() }),
 }));
 
+const setupRefetch = vi.fn();
+const authRefetch = vi.fn();
+
 interface SetupQueryShape {
   data: boolean | undefined;
   isLoading: boolean;
   isError: boolean;
+  refetch: () => void;
 }
 
 interface AuthShape {
   currentUser: { id: string } | null;
   isLoading: boolean;
+  isError: boolean;
+  refetch: () => void;
 }
 
 let setupQueryState: SetupQueryShape;
@@ -36,35 +42,62 @@ const resolvedSetup = (value: boolean): SetupQueryShape => ({
   data: value,
   isLoading: false,
   isError: false,
+  refetch: setupRefetch,
 });
 
 const loadingSetup = (): SetupQueryShape => ({
   data: undefined,
   isLoading: true,
   isError: false,
+  refetch: setupRefetch,
 });
 
 const undefinedSetup = (): SetupQueryShape => ({
   data: undefined,
   isLoading: false,
   isError: false,
+  refetch: setupRefetch,
 });
 
 const erroredSetup = (): SetupQueryShape => ({
   data: undefined,
   isLoading: false,
   isError: true,
+  refetch: setupRefetch,
 });
 
-const withUser = (): AuthShape => ({ currentUser: { id: "user_1" }, isLoading: false });
-const withoutUser = (): AuthShape => ({ currentUser: null, isLoading: false });
-const loadingAuth = (): AuthShape => ({ currentUser: null, isLoading: true });
+const withUser = (): AuthShape => ({
+  currentUser: { id: "user_1" },
+  isLoading: false,
+  isError: false,
+  refetch: authRefetch,
+});
+const withoutUser = (): AuthShape => ({
+  currentUser: null,
+  isLoading: false,
+  isError: false,
+  refetch: authRefetch,
+});
+const loadingAuth = (): AuthShape => ({
+  currentUser: null,
+  isLoading: true,
+  isError: false,
+  refetch: authRefetch,
+});
+const erroredAuth = (): AuthShape => ({
+  currentUser: null,
+  isLoading: false,
+  isError: true,
+  refetch: authRefetch,
+});
 
 const renderGate = (context: SetupRedirectContext) => renderHook(() => useSetupRedirect(context));
 
 describe("useSetupRedirect", () => {
   beforeEach(() => {
     replace.mockClear();
+    setupRefetch.mockClear();
+    authRefetch.mockClear();
     setupQueryState = resolvedSetup(false);
     authState = withoutUser();
   });
@@ -130,14 +163,37 @@ describe("useSetupRedirect", () => {
       expect(replace).not.toHaveBeenCalled();
     });
 
-    it("reports error and does not redirect on query error", () => {
+    it("reports error and does not redirect on setup query error", () => {
       setupQueryState = erroredSetup();
       authState = withoutUser();
 
       const { result } = renderGate("app");
 
-      expect(result.current).toEqual({ status: "error" });
+      expect(result.current.status).toBe("error");
       expect(replace).not.toHaveBeenCalled();
+    });
+
+    it("reports error when the auth me query errors", () => {
+      setupQueryState = resolvedSetup(false);
+      authState = erroredAuth();
+
+      const { result } = renderGate("app");
+
+      expect(result.current.status).toBe("error");
+      expect(replace).not.toHaveBeenCalled();
+    });
+
+    it("retry refetches both the setup and auth queries", () => {
+      setupQueryState = erroredSetup();
+      authState = withoutUser();
+
+      const { result } = renderGate("app");
+
+      if (result.current.status !== "error") throw new Error("expected error gate");
+      result.current.retry();
+
+      expect(setupRefetch).toHaveBeenCalledTimes(1);
+      expect(authRefetch).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -188,7 +244,17 @@ describe("useSetupRedirect", () => {
 
       const { result } = renderGate("login");
 
-      expect(result.current).toEqual({ status: "error" });
+      expect(result.current.status).toBe("error");
+      expect(replace).not.toHaveBeenCalled();
+    });
+
+    it("does not enter error from an auth me error in the login context", () => {
+      setupQueryState = resolvedSetup(false);
+      authState = erroredAuth();
+
+      const { result } = renderGate("login");
+
+      expect(result.current.status).toBe("ready");
       expect(replace).not.toHaveBeenCalled();
     });
   });
@@ -220,7 +286,7 @@ describe("useSetupRedirect", () => {
 
       const { result } = renderGate("setup");
 
-      expect(result.current).toEqual({ status: "error" });
+      expect(result.current.status).toBe("error");
       expect(replace).not.toHaveBeenCalled();
     });
 

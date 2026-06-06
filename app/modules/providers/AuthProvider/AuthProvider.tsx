@@ -21,7 +21,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         currentUser,
         isLoading: meQuery.isLoading,
+        isError: meQuery.isError,
         isAdmin: isAdminFE(currentUser),
+        refetch: () => {
+          void meQuery.refetch();
+        },
       }}
     >
       {children}

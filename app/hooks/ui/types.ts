@@ -39,7 +39,11 @@ export interface UseContentRequestModalsResult {
 
 export type SetupRedirectContext = "app" | "login" | "setup";
 
-export type SetupGate = { status: "resolving" } | { status: "error" } | { status: "redirecting" } | { status: "ready" };
+export type SetupGate =
+  | { status: "resolving" }
+  | { status: "error"; retry: () => void }
+  | { status: "redirecting" }
+  | { status: "ready" };
 
 export type PlexPinPhase = "idle" | "pending" | "completed" | "error";
 
@@ -62,6 +66,17 @@ export interface UsePlexPinPopupResult {
   reset: () => void;
   phase: PlexPinPhase;
   isPending: boolean;
+}
+
+export interface UseAutoRetryOptions {
+  onRetry: () => void;
+  baseDelayMs?: number;
+  maxDelayMs?: number;
+}
+
+export interface UseAutoRetryResult {
+  retryNow: () => void;
+  isRetrying: boolean;
 }
 
 export interface UseTapToOpenOptions {

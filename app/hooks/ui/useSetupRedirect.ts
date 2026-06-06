@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { useSetupRequired } from "@hooks/api/queries/useSetupRequired";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -10,7 +10,7 @@ import type { SetupGate, SetupRedirectContext } from "./types";
 
 export function useSetupRedirect(context: SetupRedirectContext): SetupGate {
   const router = useRouter();
-  const { currentUser, isLoading: isAuthLoading } = useAuthContext();
+  const { currentUser, isLoading: isAuthLoading, isError: isAuthError, refetch: refetchAuth } = useAuthContext();
   const setupQuery = useSetupRequired();
 
   const isResolving =
@@ -20,7 +20,14 @@ export function useSetupRedirect(context: SetupRedirectContext): SetupGate {
 
   const setupRequired = setupQuery.data === true;
 
-  const shouldHold = isResolving || setupQuery.isError;
+  const isBootstrapError = setupQuery.isError || (context === "app" && isAuthError);
+
+  const shouldHold = isResolving || isBootstrapError;
+
+  const retry = useCallback(() => {
+    void setupQuery.refetch();
+    refetchAuth();
+  }, [setupQuery, refetchAuth]);
 
   useEffect(() => {
     if (shouldHold) return;
@@ -47,7 +54,7 @@ export function useSetupRedirect(context: SetupRedirectContext): SetupGate {
   }, [context, currentUser, shouldHold, router, setupRequired]);
 
   if (isResolving) return { status: "resolving" };
-  if (setupQuery.isError) return { status: "error" };
+  if (isBootstrapError) return { status: "error", retry };
 
   if (context === "app") {
     if (setupRequired) return { status: "redirecting" };

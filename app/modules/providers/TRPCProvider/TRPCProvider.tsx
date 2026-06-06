@@ -6,6 +6,7 @@ import { useState } from "react";
 import { trpc, getTRPCClientConfig } from "@utils/trpc";
 import { ErrorBoundaryProvider } from "@modules/errors";
 import { useClientSessionId } from "@modules/providers/ClientSessionIdProvider";
+import { retryUnlessClientError } from "./helpers";
 import type { TRPCProviderProps } from "./types";
 
 export function TRPCProvider({ children }: TRPCProviderProps) {
@@ -19,12 +20,12 @@ export function TRPCProvider({ children }: TRPCProviderProps) {
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
             refetchOnMount: false,
-            retry: 1,
+            retry: retryUnlessClientError,
             staleTime: 5 * 60 * 1000,
             gcTime: 10 * 60 * 1000,
           },
           mutations: {
-            retry: 1,
+            retry: retryUnlessClientError,
           },
         },
       })
