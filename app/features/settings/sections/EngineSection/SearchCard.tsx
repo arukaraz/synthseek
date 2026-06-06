@@ -7,7 +7,6 @@ import { useUpdateEngineSearch, useUpdateEngineSmartSearch } from "@hooks/api/mu
 
 import { ChipsInput } from "../../components/ChipsInput";
 import { EngineRow } from "../../components/EngineRow";
-import { Pill } from "../../components/Pill";
 import { ResetDefaultsButton } from "../../components/ResetDefaultsButton";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
@@ -129,19 +128,6 @@ export function SearchCard({ initial }: SearchCardProps) {
           placeholder={t("search.customMoodKeywords.placeholder")}
         />
       </SettingsField>
-
-      <EngineRow
-        label={t("search.federatedPatterns.label")}
-        labelTrailing={<Pill tone="experimental">{t("search.federatedPatterns.experimental")}</Pill>}
-        description={t("search.federatedPatterns.description")}
-        control={
-          <Switch
-            checked={smartForm.draft.federatedPatternsEnabled}
-            onCheckedChange={(v) => smartForm.setField("federatedPatternsEnabled", v)}
-            aria-label={t("search.federatedPatterns.label")}
-          />
-        }
-      />
 
       <SaveBar isDirty={isDirty} isSaving={isSaving} onSave={handleSave} onCancel={handleCancel} />
     </SettingsCard>
