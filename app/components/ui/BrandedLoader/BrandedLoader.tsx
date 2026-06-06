@@ -1,4 +1,5 @@
 import { AppLogo } from "@components/ui/AppLogo";
+import { Spinner } from "@components/ui/Spinner";
 import { cn } from "@utils/cn";
 
 import {
@@ -6,7 +7,6 @@ import {
   brandedLoaderLabel,
   brandedLoaderMark,
   brandedLoaderOrb,
-  brandedLoaderRing,
   brandedLoaderRoot,
 } from "./styles";
 import type { BrandedLoaderProps } from "./types";
@@ -18,7 +18,7 @@ export function BrandedLoader({ label = "Loading", className }: BrandedLoaderPro
       <div aria-hidden="true" className={brandedLoaderOrb()} />
 
       <div className={brandedLoaderMark()}>
-        <span aria-hidden="true" className={brandedLoaderRing()} />
+        <Spinner size="fill" decorative />
         <AppLogo iconClassName="h-11 w-auto sm:h-12" wordmarkClassName="sr-only" />
       </div>
 

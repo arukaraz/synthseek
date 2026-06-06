@@ -3,13 +3,14 @@
 import { ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { Spinner } from "@components/ui/Spinner";
 import { useCurrentVersion } from "@hooks/api/queries/useCurrentVersion";
 import { usePatchNotes } from "@hooks/api/queries/usePatchNotes";
 import { PATCH_NOTES_URL } from "@utils/version";
 
 import { TimelineEntry } from "./TimelineEntry";
 import { entryVariant } from "./helpers";
-import { emptyState, endLink, endNode, endWrap, stateText, timeline, timelineLine } from "./styles";
+import { emptyState, endLink, endNode, endWrap, loadingState, timeline, timelineLine } from "./styles";
 
 export function PatchNotesTimeline() {
   const { t } = useTranslation("settings");
@@ -20,7 +21,11 @@ export function PatchNotesTimeline() {
   const currentVersion = current.data?.currentVersion ?? null;
 
   if (patchNotes.isLoading) {
-    return <div className={stateText()}>{t("updates.notes.loading")}</div>;
+    return (
+      <div className={loadingState()}>
+        <Spinner size="lg" label={t("updates.notes.loading")} />
+      </div>
+    );
   }
 
   if (versions.length === 0) {

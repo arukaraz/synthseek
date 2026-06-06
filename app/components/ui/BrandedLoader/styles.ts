@@ -12,10 +12,6 @@ export const brandedLoaderOrb = cva(
 
 export const brandedLoaderMark = cva("relative z-10 flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28");
 
-export const brandedLoaderRing = cva(
-  "branded-loader-ring animate-loading-ring absolute inset-0 rounded-full border-2 border-transparent"
-);
-
 export const brandedLoaderLabel = cva(
   "relative z-10 text-fg-muted text-[0.6875rem] font-bold uppercase tracking-[0.18em]"
 );

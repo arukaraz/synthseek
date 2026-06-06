@@ -36,7 +36,8 @@
   },
   "loading": {
     "section": "Cargando...",
-    "dots": "Cargando"
+    "dots": "Cargando",
+    "spinner": "Cargando"
   },
   "infoTooltip": {
     "trigger": "Más información"

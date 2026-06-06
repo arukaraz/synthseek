@@ -36,7 +36,8 @@
   },
   "loading": {
     "section": "Loading...",
-    "dots": "Loading"
+    "dots": "Loading",
+    "spinner": "Loading"
   },
   "infoTooltip": {
     "trigger": "More information"

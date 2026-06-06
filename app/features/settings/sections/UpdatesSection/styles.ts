@@ -146,7 +146,7 @@ export const endLink = cva(
   "text-primary-300 hover:text-primary-200 inline-flex items-center gap-1.5 pl-3.5 text-[13px] font-semibold hover:underline"
 );
 
-export const stateText = cva("text-fg/60 py-2 text-sm");
+export const loadingState = cva("flex items-center justify-center py-10");
 export const emptyState = cva(
   "border-fg/10 bg-fg/5 text-fg/55 flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center text-sm"
 );
