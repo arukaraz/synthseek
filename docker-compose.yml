@@ -16,35 +16,39 @@ services:
       - PUID=1000
       - PGID=1000
 
-      # REQUIRED - Slskd (Settings > Options > Web)
-      - SLSKD_API_URL=http://slskd:5030
-      - SLSKD_API_KEY=your_slskd_api_key
+      # Session signing secret. Generate once with: openssl rand -base64 48
+      # Changing this value invalidates all active login sessions.
+      - AUTH_SECRET=your_generated_secret_here
 
-      # OPTIONAL - Plex (https://support.plex.tv/articles/204059436)
+      # HTTPS URL of your instance.
+      - PUBLIC_BASE_URL=https://synthseek.yourdomain.com
+
+      # Disable Beets post-download import (default: true)
+      # - ENABLE_BEETS_IMPORT=false
+
+      # Override the web UI port (default: 4400). Also update the ports mapping above.
+      # - WEB_UI_PORT=4400
+
+      # Upgrading from v1.x to v2.0.0? You MUST add your existing integration values below for the
+      # first boot only. Synthseek will migrate them into the Settings database automatically.
+      # After the first successful boot you can remove them — everything lives in Settings from then on.
+      # New installs can ignore this section entirely and configure everything from the Settings UI.
+
+      # - ADMIN_MIGRATION_EMAIL=you@example.com
+      # - ADMIN_MIGRATION_USERNAME=admin
+      # - ADMIN_MIGRATION_PASSWORD=choose-a-strong-password
+      # - SLSKD_API_URL=http://slskd:5030
+      # - SLSKD_API_KEY=your_slskd_api_key
       # - PLEX_URL=http://plex:32400
       # - PLEX_TOKEN=your_plex_token
-
-      # OPTIONAL - Beets Import
-      - ENABLE_BEETS_IMPORT=true
-      - USE_MUSIC_BRAINZ=true
-
-      # OPTIONAL but recommended - AcoustID (https://acoustid.org/api-key)
-      # Audio fingerprinting for better track identification
-      # - USE_ACOUSTIC_ID=false
-      # - ACOUSTID_API_KEY=your_acoustid_api_key
-
-      # OPTIONAL - Enrichment services (all optional, but recommended)
       # - LASTFM_API_KEY=your_lastfm_api_key
       # - FANART_API_KEY=your_fanart_api_key
-      # MusicBrainz requires a contact email so they can reach you instead of banning if you exceed rate limits
+      # - ACOUSTID_API_KEY=your_acoustid_api_key
       # - MUSICBRAINZ_CONTACT_EMAIL=your@email.com
-
-      # Internal Port override
-      # - WEB_UI_PORT=4400
 
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:4401/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
+      start_period: 120s

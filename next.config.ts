@@ -4,8 +4,6 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { version } = require("./package.json") as { version: string };
 
-// Backend (Express) origin. Next proxies the API + OAuth endpoints to it so the
-// whole instance is reachable on a single public host (e.g. behind a tunnel).
 const API_URL = process.env.API_URL || "http://localhost:4401";
 
 const nextConfig: NextConfig = {
