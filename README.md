@@ -28,7 +28,6 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 - Localization (more languages are on the way...)
 - Real-time progress tracking, logs viewer, and in-app update notifications
 
-
 ## Installation
 
 ### Prerequisites
