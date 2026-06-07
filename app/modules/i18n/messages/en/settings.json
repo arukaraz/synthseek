@@ -237,7 +237,7 @@
       "filterPlaceholder": "Filter banlist...",
       "empty": "No banned uploaders yet.",
       "count": "{{count}} banned",
-      "helper": "Skip these slskd users/peers when picking download candidates. <link>Configure threshold</link>",
+      "helper": "Skip these slskd users/peers when picking download candidates. <threshold>Configure threshold</threshold>",
       "tooltipTriggerLabel": "About banned uploaders",
       "tooltipWhat": "Soulseek usernames added here are blocked as download sources. Synthseek skips their files and downloads from another source instead. Add anyone who keeps sending bad files or failing to deliver.",
       "tooltipAuto": "Synthseek can also add uploaders here for you. When a user's transfers fail too many times in a row they are banned automatically. Only real transfer failures count, not filename mismatches, and the limit is configured in Engine > Search (set it to 0 to turn auto-ban off)."

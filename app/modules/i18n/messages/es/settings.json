@@ -237,7 +237,7 @@
       "filterPlaceholder": "Filtrar lista de bloqueados...",
       "empty": "Aún no hay subidores bloqueados.",
       "count": "{{count}} bloqueados",
-      "helper": "Omite a estos usuarios o pares de slskd al elegir candidatos de descarga. <link>Configurar umbral</link>",
+      "helper": "Omite a estos usuarios o pares de slskd al elegir candidatos de descarga. <threshold>Configurar umbral</threshold>",
       "tooltipTriggerLabel": "Acerca de los subidores bloqueados",
       "tooltipWhat": "Los nombres de usuario de Soulseek añadidos aquí se bloquean como fuentes de descarga. Synthseek omite sus archivos y descarga desde otra fuente en su lugar. Añade a cualquiera que siga enviando archivos defectuosos o que no llegue a entregar.",
       "tooltipAuto": "Synthseek también puede añadir subidores aquí por ti. Cuando las transferencias de un usuario fallan demasiadas veces seguidas, se bloquea automáticamente. Solo cuentan los fallos reales de transferencia, no las discrepancias de nombre de archivo, y el límite se configura en Engine > Search (ponlo a 0 para desactivar el bloqueo automático)."

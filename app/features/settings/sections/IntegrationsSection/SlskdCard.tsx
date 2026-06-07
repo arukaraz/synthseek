@@ -125,7 +125,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
               t={t}
               i18nKey="slskd.bannedUploaders.helper"
               components={{
-                link: (
+                threshold: (
                   <Link
                     href="/settings/engine#ban-threshold"
                     className="text-primary-400 hover:text-primary-300 underline-offset-2 hover:underline"
