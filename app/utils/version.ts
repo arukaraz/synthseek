@@ -1,4 +1,4 @@
-export const PATCH_NOTES_URL = "https://github.com/arukaraz/synthseek/blob/main/PATCH-NOTES.md";
+export const PATCH_NOTES_URL = "https://github.com/arukaraz/synthseek/blob/main/CHANGELOG.md";
 
 interface SemverParts {
   major: number;

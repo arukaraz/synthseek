@@ -2,6 +2,131 @@
   "schemaVersion": 1,
   "versions": [
     {
+      "version": "2.0.0",
+      "date": "2026-06-05",
+      "type": "major",
+      "title": "Synthseek 2.0: multi-user, MCP-ready, and provider-independent, with Lidarr delegation, Spotify library import, and file-based playlist import and export",
+      "callouts": [
+        {
+          "level": "important",
+          "body": "Synthseek is now multi-user. On first launch you create an admin account through a new setup wizard, and existing single-user installs run a one-time reclaim flow to take ownership of the instance. From there you can add members with local accounts or import them from Plex, and admin-only settings stay hidden from regular members."
+        },
+        {
+          "level": "important",
+          "body": "Runtime configuration has moved out of config.yml and into the database, managed from a new Settings page. After upgrading, open Settings and review your configuration."
+        },
+        {
+          "level": "important",
+          "body": "Upgrading from v1.x? Keep your existing integration values (SLSKD_API_URL, SLSKD_API_KEY, PLEX_URL, PLEX_TOKEN, LASTFM_API_KEY, FANART_API_KEY, ACOUSTID_API_KEY, MUSICBRAINZ_CONTACT_EMAIL) in docker-compose.yml for the first boot. Synthseek will migrate them into the Settings database automatically. If you have existing data, you must also set ADMIN_MIGRATION_EMAIL, ADMIN_MIGRATION_USERNAME, and ADMIN_MIGRATION_PASSWORD on the first boot so your existing library gets an owner. The container refuses to start with a clear message if data exists and these are missing. Once the instance is up you can remove all of these from the compose file and manage everything from Settings. Fresh installs can ignore all of this and configure from the UI. Check docker-composer.yml file for an example. "
+        },
+        {
+          "level": "warning",
+          "body": "Back up db/ before upgrading. This release ships twelve schema migrations. They run automatically on first boot, so snapshot your SQLite file in case you need to roll back."
+        }
+      ],
+      "sections": [
+        {
+          "body": "Version 2.0 turns Synthseek from a single-user downloader into a self-managed, multi-user music service. It adds first-class accounts and member management, a built-in MCP server so assistants can drive your library, end-to-end localization, and a Settings UI that replaces hand-edited config files. The catalog and download layers are now fully provider-agnostic, and discovery, playlist import and export, and the Soulseek engine all grew substantially."
+        },
+        {
+          "heading": "Multi-user and accounts",
+          "category": "feature",
+          "items": [
+            "Multi-user authentication with local accounts and Plex OAuth, replacing the single-user model.",
+            "A first-run setup wizard to create the admin account, with a one-time reclaim flow for existing installs.",
+            "Member management: add local users or import them from Plex, with admin-only sections hidden from members.",
+            "Per-user Plex account linking and a Connected Accounts area, with hardened Plex login.",
+            "Members can connect and import their own Spotify library.",
+            "A self-service profile page to update your profile and change your password.",
+            "Requests are scoped to their owner and show who made them."
+          ]
+        },
+        {
+          "heading": "MCP server and API access",
+          "category": "feature",
+          "items": [
+            "A built-in MCP server so assistants like Claude can search, request downloads, inspect your library, tune up settings and read Synthseek logs.",
+            "API keys and a public URL setting, managed from a new MCP settings section.",
+            "An OAuth 2.1 authorization server with a consent screen and connection guidance for MCP clients."
+          ]
+        },
+        {
+          "heading": "Provider-agnostic library and downloads",
+          "category": "feature",
+          "items": [
+            "Per-request download-source selection, with an automatic yt-dlp fallback when Soulseek peers cannot deliver.",
+            "Spotify library integration: browse, import, and sync your Spotify library from a new power-table with bulk actions.",
+            "More library providers are on the way.",
+            "Cover art from the active provider is embedded into downloads and Plex playlists."
+          ]
+        },
+        {
+          "heading": "Discovery",
+          "category": "feature",
+          "items": [
+            "ListenBrainz and Last.fm discovery integrations that surface recent scrobbles, top tracks, and discovery mixes on the Discover page.",
+            "Optional auto-request of playlists from your ListenBrainz discovery feeds.",
+            "A revamped Discover page with a hero, a library leaderboard, and recent requests."
+          ]
+        },
+        {
+          "heading": "Playlist import and export",
+          "category": "feature",
+          "items": [
+            "Import playlists from JSPF, XSPF, and CSV, and export to JSPF, from search and a dedicated import UI."
+          ]
+        },
+        {
+          "heading": "Localization",
+          "category": "feature",
+          "items": [
+            "The interface is now available in English and Spanish, with a localized error contract end-to-end and localized relative dates.",
+            "More languages are on the way"
+          ]
+        },
+        {
+          "heading": "Soulseek and the download engine",
+          "category": "improvement",
+          "items": [
+            "A Soulseek user banlist with manual and automatic banning.",
+            "Per-request minimum upload speed and free-slot filters, plus quality and peer options in the download modal.",
+            "Per-job peer dedupe across bitrate fallback tiers and match-accuracy scoring improvements.",
+            "Configurable search timeouts and a more resilient slskd startup."
+          ]
+        },
+        {
+          "heading": "Lidarr",
+          "category": "feature",
+          "items": [
+            "Delegate artist additions to Lidarr with tag selection and progressive monitor scopes, selectable per request."
+          ]
+        },
+        {
+          "heading": "Library, metadata, and operations",
+          "category": "improvement",
+          "items": [
+            "Album genres and a library leaderboard.",
+            "A managed jobs section with manual triggers.",
+            "A logs viewer with export, level filtering, and auto-refresh, backed by a server logs API with a runtime log level.",
+            "A warning when the AcoustID identity differs from the requested track.",
+            "In-app updates: a new Updates section in Settings shows this patch-notes timeline and flags when a newer version is available."
+          ]
+        },
+        {
+          "heading": "Fixes and hardening",
+          "category": "fix",
+          "items": [
+            "arm64 images now ship native binaries for the server bundle and the Prisma engine.",
+            "Tolerant Plex track matching for playlist sync.",
+            "The queue engine emits a searching status for every source.",
+            "Malformed ISRC tags are ignored during post-download validation.",
+            "A batch of UI and behavior fixes across search, discover, settings, requests, and theme.",
+            "Next.js and test tooling updated for security advisories."
+          ]
+        }
+      ]
+    },
+    {
       "version": "1.2.1",
       "date": "2026-05-04",
       "type": "patch",

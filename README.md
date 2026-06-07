@@ -6,29 +6,28 @@
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/arukaraz)
 ![Codecov](https://img.shields.io/codecov/c/github/arukaraz/synthseek)
 
-Self-hosted music library automation.
+Self-hosted, multi-user music library automation.
 
-Synthseek connects to your [slskd](https://github.com/slskd/slskd) instance, matches metadata, and organizes your personal music library with Beets.
+Synthseek searches across music providers, downloads through your [slskd](https://github.com/slskd/slskd) instance, matches metadata, and organizes your personal library with Beets. It is multi-user, provider-agnostic, and ships a built-in MCP server so assistants can drive your library.
 
 ## Features
 
-- Modern, responsive Web UI (mobile and desktop friendly)
+- Modern, responsive web UI (mobile and desktop friendly)
+- Multi-user: local accounts and Plex OAuth, with member management and per-user libraries
+- Provider-agnostic catalog (Deezer by default, no API keys required)
 - Search for tracks, albums, artists, and playlists
-- slskd integration for P2P downloads
+- slskd integration for P2P downloads, with an automatic or optional yt-dlp fallback
+- Per-request download-source and quality selection
+- Spotify library import, and playlist import and export (JSPF, XSPF, CSV)
+- Discovery integrations with Last.fm and ListenBrainz
+- Lidarr delegation with tag and monitor-scope selection
 - Metadata matching with MusicBrainz and AcoustID
 - Automatic file organization with Beets
-- Real-time progress tracking
 - End-to-end playlist downloads with automatic Plex reconstruction
+- Built-in MCP server, so assistants can search and manage your library
+- Localization (more languages are on the way...)
+- Real-time progress tracking, logs viewer, and in-app update notifications
 
-<details>
-<summary><span style="font-size:1.25em; font-weight:bold">Screenshots</span></summary>
-
-<img src="https://github.com/user-attachments/assets/6511d640-69ee-4742-adb7-fe5b9f380eac" width="100%" alt="home">
-<img src="https://github.com/user-attachments/assets/50051f74-b915-45f8-aa09-db106b45703c" width="100%" alt="search">
-<img src="https://github.com/user-attachments/assets/74adc87d-c381-4a94-a9ee-3d613a7f9e5e" width="100%" alt="config">
-<img src="https://github.com/user-attachments/assets/990ca52a-a4b6-46b7-a587-62ff38531f22" width="100%" alt="listview">
-
-</details>
 
 ## Installation
 
@@ -45,29 +44,13 @@ Use the provided [docker-compose.yml](docker-compose.yml) as a starting point:
 docker-compose up -d
 ```
 
-## Roadmap
-
-### Shipped
-
-- [x] End-to-end playlist downloads with Plex reconstruction and incremental sync
-
-### In progress
-
-- [ ] User authentication
-- [ ] UI/UX Revamp
-
-### Planned
-
-- [ ] Lidarr integration
-- [ ] Native mobile app
-
 ## Help
 
 For bugs or questions, [open an issue](https://github.com/arukaraz/synthseek/issues).
 
 ## Support
 
-If this project saved you clicks, a coffee goes a long way:
+If this project saved you some clicks, a beer always helps:
 
 <a href="https://github.com/sponsors/arukaraz"><img src="https://img.shields.io/badge/Sponsor_❤-EA4AAA?style=for-the-badge&logo=GitHub-Sponsors&logoColor=white" alt="Sponsor on GitHub" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ko-fi.com/arukaraz"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support on Ko-fi" /></a>
 
