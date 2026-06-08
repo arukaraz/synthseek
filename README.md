@@ -21,8 +21,8 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 - Spotify library import, and playlist import and export (JSPF, XSPF, CSV)
 - Discovery integrations with Last.fm and ListenBrainz
 - Lidarr delegation with tag and monitor-scope selection
-- Metadata matching with MusicBrainz and AcoustID
-- Automatic file organization with Beets
+- Metadata matching
+- Automatic file organization
 - End-to-end playlist downloads with automatic Plex reconstruction
 - Built-in MCP server, so assistants can search and manage your library
 - Localization (more languages are on the way...)

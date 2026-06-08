@@ -22,6 +22,10 @@ vi.mock("@hooks/api", () => ({
   useDeletePlaylist: () => idleMutation,
   useCancelAlbum: () => idleMutation,
   useCancelPlaylist: () => idleMutation,
+  usePauseAlbum: () => idleMutation,
+  usePausePlaylist: () => idleMutation,
+  useResumeAlbum: () => idleMutation,
+  useResumePlaylist: () => idleMutation,
   usePrioritizeAlbum: () => idleMutation,
   usePrioritizePlaylist: () => idleMutation,
 }));
@@ -159,6 +163,60 @@ describe("useRequestActions canSyncPlex", () => {
     const { result } = renderHook(() => useRequestActions(request));
 
     expect(result.current.canSyncPlex).toBe(false);
+  });
+});
+
+describe("useRequestActions pause and resume", () => {
+  it("offers resume and not pause for a paused group", () => {
+    currentUser = owner;
+    const request = makePlaylist({ status: RequestStatus.enum.paused });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.isPaused).toBe(true);
+    expect(result.current.canResume).toBe(true);
+    expect(result.current.canPause).toBe(false);
+  });
+
+  it("offers pause and not resume for an active group", () => {
+    currentUser = owner;
+    const request = makePlaylist({ status: RequestStatus.enum.downloading });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.isPaused).toBe(false);
+    expect(result.current.canPause).toBe(true);
+    expect(result.current.canResume).toBe(false);
+  });
+
+  it("does not offer pause for a complete group", () => {
+    currentUser = owner;
+    const request = makePlaylist({ status: RequestStatus.enum.complete });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.canPause).toBe(false);
+    expect(result.current.canResume).toBe(false);
+  });
+
+  it("does not offer retry failed for a paused group", () => {
+    currentUser = owner;
+    const request = makePlaylist({ status: RequestStatus.enum.paused });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.canRetry).toBe(false);
+    expect(result.current.canResume).toBe(true);
+  });
+
+  it("hides pause and resume for a user who cannot manage the request", () => {
+    currentUser = null;
+    const request = makePlaylist({ status: RequestStatus.enum.paused });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.canPause).toBe(false);
+    expect(result.current.canResume).toBe(false);
   });
 });
 

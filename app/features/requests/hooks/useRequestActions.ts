@@ -6,8 +6,12 @@ import {
   useCancelPlaylist,
   useDeleteAlbum,
   useDeletePlaylist,
+  usePauseAlbum,
+  usePausePlaylist,
   usePrioritizeAlbum,
   usePrioritizePlaylist,
+  useResumeAlbum,
+  useResumePlaylist,
   useRetryAlbum,
   useRetryPlaylist,
   useRetryPlexPlaylist,
@@ -28,6 +32,8 @@ interface UseRequestActions {
   retry: () => void;
   remove: () => Promise<void>;
   cancel: () => Promise<void>;
+  pause: () => void;
+  resume: () => void;
   prioritize: () => void;
   syncPlex: () => void;
   syncSourceNow: () => void;
@@ -36,6 +42,9 @@ interface UseRequestActions {
   canRetry: boolean;
   canRemove: boolean;
   canCancel: boolean;
+  canPause: boolean;
+  canResume: boolean;
+  isPaused: boolean;
   canPrioritize: boolean;
   canSyncPlex: boolean;
   canSyncSource: boolean;
@@ -61,6 +70,10 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const deletePlaylist = useDeletePlaylist();
   const cancelAlbum = useCancelAlbum();
   const cancelPlaylist = useCancelPlaylist();
+  const pauseAlbum = usePauseAlbum();
+  const pausePlaylist = usePausePlaylist();
+  const resumeAlbum = useResumeAlbum();
+  const resumePlaylist = useResumePlaylist();
   const prioritizeAlbum = usePrioritizeAlbum();
   const prioritizePlaylist = usePrioritizePlaylist();
   const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
@@ -70,9 +83,11 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     canManage &&
     (request.status === RequestStatus.enum.failed ||
       request.status === RequestStatus.enum.cancelled ||
-      request.status === RequestStatus.enum.partially_complete ||
-      request.status === RequestStatus.enum.paused);
+      request.status === RequestStatus.enum.partially_complete);
   const canCancel = canManage && isProcessingStatus(request.status);
+  const isPaused = request.status === RequestStatus.enum.paused;
+  const canPause = canManage && isProcessingStatus(request.status) && !isPaused;
+  const canResume = canManage && isPaused;
   const canPrioritize =
     canManage && request.tracks.some((track) => track.status === RequestStatus.enum.queued && track.priority === 0);
   const canSyncPlex =
@@ -119,6 +134,16 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     else cancelAlbum.mutate({ albumId: request.id });
   };
 
+  const pause = () => {
+    if (isPlaylist) pausePlaylist.mutate({ playlistId: request.id });
+    else pauseAlbum.mutate({ albumId: request.id });
+  };
+
+  const resume = () => {
+    if (isPlaylist) resumePlaylist.mutate({ playlistId: request.id });
+    else resumeAlbum.mutate({ albumId: request.id });
+  };
+
   const syncPlex = () => {
     retryPlex.mutate({ playlistId: request.id });
   };
@@ -140,6 +165,8 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     retry,
     remove,
     cancel,
+    pause,
+    resume,
     prioritize,
     syncPlex,
     syncSourceNow,
@@ -148,6 +175,9 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     canRetry,
     canRemove: canManage,
     canCancel,
+    canPause,
+    canResume,
+    isPaused,
     canPrioritize,
     canSyncPlex,
     canSyncSource,

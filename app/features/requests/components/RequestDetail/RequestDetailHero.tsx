@@ -15,6 +15,8 @@ import {
   Globe,
   Loader2,
   MoreVertical,
+  Pause,
+  Play,
   RefreshCcw,
   RefreshCw,
   Square,
@@ -46,6 +48,8 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     retry,
     remove,
     cancel,
+    pause,
+    resume,
     prioritize,
     syncPlex,
     syncSourceNow,
@@ -53,6 +57,8 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     canRetry,
     canRemove,
     canCancel,
+    canPause,
+    canResume,
     canPrioritize,
     canSyncPlex,
     canSyncSource,
@@ -64,7 +70,8 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
   } = useRequestActions(request);
 
   const [exportFullOpen, setExportFullOpen] = useState(false);
-  const hasMoreActions = canCancel || canPrioritize || canSyncPlex || canSyncSource || canExport;
+  const hasMoreActions =
+    canCancel || canPause || canResume || canPrioritize || canSyncPlex || canSyncSource || canExport;
   const typeLabel = label === "Playlist" ? t("labels.playlist") : t("labels.album");
   const delegatedTo = formatDelegatedTo(request.delegated_to);
 
@@ -181,6 +188,19 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="min-w-44">
+                    {canResume ? (
+                      <DropdownMenuItem onClick={resume} className="text-primary-400 focus:text-primary-300">
+                        <Play className="size-3.5" />
+                        {t("detail.resume")}
+                      </DropdownMenuItem>
+                    ) : (
+                      canPause && (
+                        <DropdownMenuItem onClick={pause} className="text-yellow-400 focus:text-yellow-300">
+                          <Pause className="size-3.5" />
+                          {t("detail.pause")}
+                        </DropdownMenuItem>
+                      )
+                    )}
                     {canCancel && (
                       <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
                         <Square className="size-3.5" />

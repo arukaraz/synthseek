@@ -3,6 +3,8 @@
     "requests": "Loading requests..."
   },
   "toolbar": {
+    "pauseAll": "Pause all downloads",
+    "resumeAll": "Resume all downloads",
     "retryAllFailed": {
       "label": "Retry all failed",
       "confirmTitle": "Retry All Failed",
@@ -80,6 +82,8 @@
     "retryFailed": "Retry Failed",
     "jumpTheQueue": "Jump the queue",
     "cancelDownloads": "Cancel downloads",
+    "pause": "Pause",
+    "resume": "Resume",
     "syncFromSource": "Sync from Spotify",
     "syncing": "Syncing...",
     "syncToPlex": "Sync to Plex",

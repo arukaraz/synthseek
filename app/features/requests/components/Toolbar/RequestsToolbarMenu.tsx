@@ -2,9 +2,9 @@
 
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
-import { useDeleteAllRequests, useRetryAllFailed } from "@hooks/api";
+import { useDeleteAllRequests, usePauseAll, useQueueStatus, useResumeAll, useRetryAllFailed } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
-import { MoreVertical, RefreshCw, Trash2 } from "lucide-react";
+import { MoreVertical, Pause, Play, RefreshCw, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -16,6 +16,10 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
   const { isAdmin } = useAuthContext();
   const retryAllFailed = useRetryAllFailed();
   const deleteAll = useDeleteAllRequests();
+  const pauseAll = usePauseAll();
+  const resumeAll = useResumeAll();
+  const { data: queueStatus } = useQueueStatus();
+  const isQueuePaused = queueStatus?.isPaused ?? false;
 
   const [confirmRetryOpen, setConfirmRetryOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -37,6 +41,18 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
               {t("toolbar.retryAllFailed.label")}
             </DropdownMenuItem>
           )}
+          {isAdmin &&
+            (isQueuePaused ? (
+              <DropdownMenuItem onSelect={() => resumeAll.mutate()}>
+                <Play className="size-3.5" />
+                {t("toolbar.resumeAll")}
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem onSelect={() => pauseAll.mutate()}>
+                <Pause className="size-3.5" />
+                {t("toolbar.pauseAll")}
+              </DropdownMenuItem>
+            ))}
           {isAdmin && (
             <DropdownMenuItem onSelect={() => setConfirmDeleteOpen(true)} className={toolbarMenuDeleteItem()}>
               <Trash2 className="size-3.5" />
