@@ -9,7 +9,7 @@ export interface ArtistSpotlightCardProps {
     id: string;
     name: string;
     images: { url: string; width?: number | null; height?: number | null }[];
-    total_tracks: number;
+    total_tracks?: number;
   } | null;
   onClick?: () => void;
 }

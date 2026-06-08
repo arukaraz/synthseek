@@ -18,6 +18,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
 
   const artistImage = artist.images[0]?.url;
   const albumImage = latestAlbum?.images[0]?.url;
+  const trackCount = latestAlbum?.total_tracks ?? 0;
 
   return (
     <motion.div
@@ -85,9 +86,11 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
                   <Play className={playIcon()} />
                   <p className="text-overlay-fg line-clamp-1 text-xs font-medium sm:text-sm">{latestAlbum.name}</p>
                 </div>
-                <p className="text-overlay-fg-muted text-[10px] sm:text-xs">
-                  {t("artistSpotlight.songs", { count: latestAlbum.total_tracks })}
-                </p>
+                {trackCount > 0 && (
+                  <p className="text-overlay-fg-muted text-[10px] sm:text-xs">
+                    {t("artistSpotlight.songs", { count: trackCount })}
+                  </p>
+                )}
               </div>
             </div>
           )}
