@@ -72,8 +72,6 @@ Use the provided [docker-compose.yml](docker-compose.yml) as a starting point:
 docker-compose up -d
 ```
 
-## [Roadmap](https://github.com/users/arukaraz/projects/4/views/2)
-
 ## Help
 
 For bugs or questions, [open an issue](https://github.com/arukaraz/synthseek/issues).
