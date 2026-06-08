@@ -1,7 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 
-import { ContentType, type PublicUser, RequestStatus, type RequestWithTracks, Role } from "@api/__generated__/types";
+import {
+  ContentType,
+  type PublicUser,
+  RequestStatus,
+  type RequestWithTracks,
+  Role,
+  type TrackRequest,
+} from "@api/__generated__/types";
 
 import { useRequestActions } from "../useRequestActions";
 
@@ -15,6 +22,8 @@ vi.mock("@hooks/api", () => ({
   useDeletePlaylist: () => idleMutation,
   useCancelAlbum: () => idleMutation,
   useCancelPlaylist: () => idleMutation,
+  usePrioritizeAlbum: () => idleMutation,
+  usePrioritizePlaylist: () => idleMutation,
 }));
 
 vi.mock("@hooks/api/mutations/spotify/useSpotifyImport", () => ({
@@ -49,6 +58,40 @@ const owner: PublicUser = {
   hasPassword: true,
   created_at: new Date(),
 };
+
+function makeTrack(overrides: Partial<TrackRequest> = {}): TrackRequest {
+  return {
+    id: "track-1",
+    slskd_request_id: "slskd-1",
+    external_id: "ext-track-1",
+    user_id: ownerId,
+    title: "A Song",
+    artist: "An Artist",
+    request_type: ContentType.enum.track,
+    isrc: null,
+    mbid: null,
+    track_number: 1,
+    disc_number: 1,
+    duration_ms: 180000,
+    status: RequestStatus.enum.queued,
+    progress: 0,
+    priority: 0,
+    bitrate: 320,
+    format: "mp3",
+    format_matching: "flexible",
+    bitrate_matching: "flexible",
+    album_id: "album-1",
+    error: null,
+    explicit: false,
+    source: "deezer",
+    failure_reason: null,
+    downloaded_file: null,
+    created_at: new Date(),
+    completed_at: null,
+    updated_at: new Date(),
+    ...overrides,
+  };
+}
 
 function makePlaylist(overrides: Partial<RequestWithTracks> = {}): RequestWithTracks {
   return {
@@ -116,5 +159,58 @@ describe("useRequestActions canSyncPlex", () => {
     const { result } = renderHook(() => useRequestActions(request));
 
     expect(result.current.canSyncPlex).toBe(false);
+  });
+});
+
+describe("useRequestActions canPrioritize", () => {
+  it("is available when at least one track is queued with no priority", () => {
+    currentUser = owner;
+    const request = makePlaylist({
+      status: RequestStatus.enum.downloading,
+      tracks: [
+        makeTrack({ id: "t1", status: RequestStatus.enum.complete, priority: 0 }),
+        makeTrack({ id: "t2", status: RequestStatus.enum.queued, priority: 0 }),
+      ],
+    });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.canPrioritize).toBe(true);
+  });
+
+  it("is unavailable when every queued track is already prioritized", () => {
+    currentUser = owner;
+    const request = makePlaylist({
+      status: RequestStatus.enum.downloading,
+      tracks: [makeTrack({ id: "t1", status: RequestStatus.enum.queued, priority: 1 })],
+    });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.canPrioritize).toBe(false);
+  });
+
+  it("is unavailable when no track is queued", () => {
+    currentUser = owner;
+    const request = makePlaylist({
+      status: RequestStatus.enum.downloading,
+      tracks: [makeTrack({ id: "t1", status: RequestStatus.enum.downloading, priority: 0 })],
+    });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.canPrioritize).toBe(false);
+  });
+
+  it("is unavailable for a user who cannot manage the request", () => {
+    currentUser = null;
+    const request = makePlaylist({
+      status: RequestStatus.enum.downloading,
+      tracks: [makeTrack({ id: "t1", status: RequestStatus.enum.queued, priority: 0 })],
+    });
+
+    const { result } = renderHook(() => useRequestActions(request));
+
+    expect(result.current.canPrioritize).toBe(false);
   });
 });

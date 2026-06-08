@@ -78,6 +78,7 @@
     "moreActions": "Más acciones",
     "removeAction": "Quitar {{label}}",
     "retryFailed": "Reintentar fallidas",
+    "jumpTheQueue": "Saltar la cola",
     "cancelDownloads": "Cancelar descargas",
     "syncFromSource": "Sincronizar desde Spotify",
     "syncing": "Sincronizando...",
@@ -111,12 +112,17 @@
     "statusHeader": "Estado",
     "completedHeader": "Completada",
     "actionsHeader": "Acciones",
+    "priorityHeader": "Prioridad",
     "empty": "Sin canciones",
     "moreInfo": "Más información: {{label}}",
     "retry": "Reintentar canción",
     "retryTitle": "Reintentar",
     "cancel": "Cancelar canción",
-    "cancelTitle": "Cancelar"
+    "cancelTitle": "Cancelar",
+    "actionsMenu": "Acciones de la canción",
+    "jumpTheQueue": "Saltar la cola",
+    "jumpTheQueueTitle": "Mover esta canción al frente de la cola",
+    "prioritized": "Priorizado"
   },
   "table": {
     "titleHeader": "Título",
@@ -139,7 +145,8 @@
     "cancelTitle": "Cancelar",
     "actionsMenu": "Menú de acciones",
     "retryMenuItem": "Reintentar descarga",
-    "cancelMenuItem": "Cancelar canción"
+    "cancelMenuItem": "Cancelar canción",
+    "prioritizeMenuItem": "Saltar la cola"
   },
   "export": {
     "dialogTitle": "Exportar (máxima compatibilidad)",

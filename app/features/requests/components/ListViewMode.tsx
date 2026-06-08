@@ -4,7 +4,7 @@ import { RequestStatus } from "@api/__generated__/types";
 import { Pagination } from "@components/ui/Pagination";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { DataTable, cycleSortDirection } from "@components/ui/Table";
-import { useCancelTrack, useRetryTrack, useTrackRequests } from "@hooks/api";
+import { useCancelTrack, usePrioritizeTrack, useRetryTrack, useTrackRequests } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { useUrlParam, useUrlParams } from "@hooks/ui/useUrlParam";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -45,6 +45,7 @@ export function ListViewMode() {
   const { currentUser } = useAuthContext();
   const retryTrack = useRetryTrack();
   const cancelTrack = useCancelTrack();
+  const prioritizeTrack = usePrioritizeTrack();
 
   const handleCancel = useCallback(
     async (item: FlatTrackRow) => {
@@ -104,9 +105,10 @@ export function ListViewMode() {
           isOwnerOrAdminFE({ id: item.parent.requestedBy.id }, currentUser),
         onRetry: (item) => retryTrack.mutate({ trackId: item.id }),
         onCancel: handleCancel,
+        onPrioritize: (item) => prioritizeTrack.mutate({ trackId: item.id }),
         onSelectSource: handleSelectSource,
       }),
-    [currentUser, retryTrack, handleCancel, handleSelectSource]
+    [currentUser, retryTrack, prioritizeTrack, handleCancel, handleSelectSource]
   );
 
   const handleSort = (field: string) => {

@@ -6,6 +6,8 @@ import {
   useCancelPlaylist,
   useDeleteAlbum,
   useDeletePlaylist,
+  usePrioritizeAlbum,
+  usePrioritizePlaylist,
   useRetryAlbum,
   useRetryPlaylist,
   useRetryPlexPlaylist,
@@ -26,6 +28,7 @@ interface UseRequestActions {
   retry: () => void;
   remove: () => Promise<void>;
   cancel: () => Promise<void>;
+  prioritize: () => void;
   syncPlex: () => void;
   syncSourceNow: () => void;
   exportJspf: () => Promise<void>;
@@ -33,9 +36,11 @@ interface UseRequestActions {
   canRetry: boolean;
   canRemove: boolean;
   canCancel: boolean;
+  canPrioritize: boolean;
   canSyncPlex: boolean;
   canSyncSource: boolean;
   canExport: boolean;
+  isRetrying: boolean;
   syncPlexPending: boolean;
   syncSourcePending: boolean;
   label: "Album" | "Playlist";
@@ -56,6 +61,8 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const deletePlaylist = useDeletePlaylist();
   const cancelAlbum = useCancelAlbum();
   const cancelPlaylist = useCancelPlaylist();
+  const prioritizeAlbum = usePrioritizeAlbum();
+  const prioritizePlaylist = usePrioritizePlaylist();
   const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
   const { exportCollection } = useExportCollection();
 
@@ -66,15 +73,24 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
       request.status === RequestStatus.enum.partially_complete ||
       request.status === RequestStatus.enum.paused);
   const canCancel = canManage && isProcessingStatus(request.status);
+  const canPrioritize =
+    canManage && request.tracks.some((track) => track.status === RequestStatus.enum.queued && track.priority === 0);
   const canSyncPlex =
     canManage &&
     isPlaylist &&
     (request.status === RequestStatus.enum.complete || request.status === RequestStatus.enum.partially_complete);
   const canSyncSource = canManage && isPlaylist && request.source_provider === "spotify";
 
+  const isRetrying = isPlaylist ? retryPlaylist.isPending : retryAlbum.isPending;
+
   const retry = () => {
     if (isPlaylist) retryPlaylist.mutate({ playlistId: request.id });
     else retryAlbum.mutate({ albumId: request.id });
+  };
+
+  const prioritize = () => {
+    if (isPlaylist) prioritizePlaylist.mutate({ playlistId: request.id });
+    else prioritizeAlbum.mutate({ albumId: request.id });
   };
 
   const remove = async () => {
@@ -124,6 +140,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     retry,
     remove,
     cancel,
+    prioritize,
     syncPlex,
     syncSourceNow,
     exportJspf,
@@ -131,9 +148,11 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     canRetry,
     canRemove: canManage,
     canCancel,
+    canPrioritize,
     canSyncPlex,
     canSyncSource,
     canExport: canManage,
+    isRetrying,
     syncPlexPending: retryPlex.isPending,
     syncSourcePending: syncSpotifyPlaylist.isPending,
     label,

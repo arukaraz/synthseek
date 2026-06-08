@@ -78,6 +78,7 @@
     "moreActions": "More actions",
     "removeAction": "Remove {{label}}",
     "retryFailed": "Retry Failed",
+    "jumpTheQueue": "Jump the queue",
     "cancelDownloads": "Cancel downloads",
     "syncFromSource": "Sync from Spotify",
     "syncing": "Syncing...",
@@ -111,12 +112,17 @@
     "statusHeader": "Status",
     "completedHeader": "Completed",
     "actionsHeader": "Actions",
+    "priorityHeader": "Priority",
     "empty": "No tracks",
     "moreInfo": "More info: {{label}}",
     "retry": "Retry track",
     "retryTitle": "Retry",
     "cancel": "Cancel track",
-    "cancelTitle": "Cancel"
+    "cancelTitle": "Cancel",
+    "actionsMenu": "Track actions",
+    "jumpTheQueue": "Jump the queue",
+    "jumpTheQueueTitle": "Move this track to the front of the queue",
+    "prioritized": "Prioritized"
   },
   "table": {
     "titleHeader": "Title",
@@ -139,7 +145,8 @@
     "cancelTitle": "Cancel",
     "actionsMenu": "Actions menu",
     "retryMenuItem": "Retry download",
-    "cancelMenuItem": "Cancel track"
+    "cancelMenuItem": "Cancel track",
+    "prioritizeMenuItem": "Jump the queue"
   },
   "export": {
     "dialogTitle": "Export (max compatibility)",

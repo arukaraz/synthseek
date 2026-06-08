@@ -6,6 +6,7 @@ export interface BuildColumnsArgs {
   canActFor: (item: FlatTrackRow) => boolean;
   onRetry: (item: FlatTrackRow) => void;
   onCancel: (item: FlatTrackRow) => void;
+  onPrioritize: (item: FlatTrackRow) => void;
   onSelectSource: (parentId: string) => void;
 }
 
@@ -19,6 +20,11 @@ export interface TrackActionsCellProps {
   canAct: boolean;
   onRetry: () => void;
   onCancel: () => void;
+  onPrioritize: () => void;
+}
+
+export interface PriorityCellProps {
+  item: FlatTrackRow;
 }
 
 export interface TrackTitleCellProps {

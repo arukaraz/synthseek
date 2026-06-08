@@ -5,11 +5,12 @@ import { type TrackRequest } from "@api/__generated__/types";
 import { confirm } from "@utils/confirm";
 import { formatRelativeTime } from "@utils/formatters";
 import { isOwnerOrAdminFE } from "@utils/authorization";
-import { useCancelTrack, useRetryTrack } from "@hooks/api";
+import { useCancelTrack, usePrioritizeTrack, useRetryTrack } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { compareByStatus } from "../../helpers";
+import { PriorityCell } from "./PriorityCell";
 import { TrackActionsCell } from "./TrackActionsCell";
 import { TrackStatusCell } from "./TrackStatusCell";
 import { TrackTitleCell } from "./TrackTitleCell";
@@ -20,6 +21,7 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
   const { currentUser } = useAuthContext();
   const retryTrack = useRetryTrack();
   const cancelTrack = useCancelTrack();
+  const prioritizeTrack = usePrioritizeTrack();
   const canAct = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
 
   const handleCancel = useCallback(
@@ -65,6 +67,12 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
         className: "hidden md:table-cell",
       },
       {
+        key: "priority",
+        header: t("tracks.priorityHeader"),
+        cell: (track) => <PriorityCell track={track} />,
+        className: "w-24",
+      },
+      {
         key: "actions",
         header: t("tracks.actionsHeader"),
         cell: (track) => (
@@ -73,12 +81,13 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
             canAct={canAct}
             onRetry={() => retryTrack.mutate({ trackId: track.id })}
             onCancel={() => handleCancel(track)}
+            onPrioritize={() => prioritizeTrack.mutate({ trackId: track.id })}
           />
         ),
         className: "w-20 text-right",
       },
     ],
-    [canAct, retryTrack, handleCancel, t]
+    [canAct, retryTrack, prioritizeTrack, handleCancel, t]
   );
 
   const sortedTracks = useMemo(

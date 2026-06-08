@@ -4,6 +4,7 @@ import { type ColumnDef } from "@components/ui/Table";
 import i18n from "@locale";
 import { formatRelativeTime } from "@utils/formatters";
 import type { FlatTrackRow } from "../../types";
+import { PriorityCell } from "./cells/PriorityCell";
 import { SourceCell } from "./cells/SourceCell";
 import { TrackActionsCell } from "./cells/TrackActionsCell";
 import { TrackStatusCell } from "./cells/TrackStatusCell";
@@ -16,6 +17,7 @@ export function buildFlatTrackColumns({
   canActFor,
   onRetry,
   onCancel,
+  onPrioritize,
   onSelectSource,
 }: BuildColumnsArgs): ColumnDef<FlatTrackRow>[] {
   return [
@@ -78,6 +80,12 @@ export function buildFlatTrackColumns({
       sortable: true,
     },
     {
+      key: "priority",
+      header: i18n.t("requests:tracks.priorityHeader"),
+      cell: (item) => <PriorityCell item={item} />,
+      className: "w-24",
+    },
+    {
       key: "actions",
       header: "",
       cell: (item) => (
@@ -86,6 +94,7 @@ export function buildFlatTrackColumns({
           canAct={canActFor(item)}
           onRetry={() => onRetry(item)}
           onCancel={() => onCancel(item)}
+          onPrioritize={() => onPrioritize(item)}
         />
       ),
       className: "w-20",

@@ -104,3 +104,9 @@ export const tracksReasonButton = cva(
 );
 
 export type TracksReasonButtonProps = VariantProps<typeof tracksReasonButton>;
+
+export const priorityChip = cva(
+  "border-primary-500/30 bg-primary-500/10 text-primary-300 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
+);
+
+export type PriorityChipProps = VariantProps<typeof priorityChip>;

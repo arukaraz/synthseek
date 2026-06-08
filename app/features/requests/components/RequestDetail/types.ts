@@ -10,9 +10,14 @@ export interface TrackActionsCellProps {
   canAct: boolean;
   onRetry: () => void;
   onCancel: () => void;
+  onPrioritize: () => void;
 }
 
 export interface TrackTitleCellProps {
+  track: TrackRequest;
+}
+
+export interface TrackPriorityCellProps {
   track: TrackRequest;
 }
 

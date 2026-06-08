@@ -8,7 +8,19 @@ import { StatusBadge } from "@components/ui/StatusBadge";
 import { cn } from "@utils/cn";
 import { getContentTypeIcon } from "@utils/content-type-helpers";
 import { formatTimestamp } from "@utils/formatters";
-import { ArrowLeft, Download, Globe, MoreVertical, RefreshCcw, RefreshCw, Square, Trash2, Upload } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronsUp,
+  Download,
+  Globe,
+  Loader2,
+  MoreVertical,
+  RefreshCcw,
+  RefreshCw,
+  Square,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -34,22 +46,25 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     retry,
     remove,
     cancel,
+    prioritize,
     syncPlex,
     syncSourceNow,
     exportJspf,
     canRetry,
     canRemove,
     canCancel,
+    canPrioritize,
     canSyncPlex,
     canSyncSource,
     canExport,
+    isRetrying,
     syncPlexPending,
     syncSourcePending,
     label,
   } = useRequestActions(request);
 
   const [exportFullOpen, setExportFullOpen] = useState(false);
-  const hasMoreActions = canCancel || canSyncPlex || canSyncSource || canExport;
+  const hasMoreActions = canCancel || canPrioritize || canSyncPlex || canSyncSource || canExport;
   const typeLabel = label === "Playlist" ? t("labels.playlist") : t("labels.album");
   const delegatedTo = formatDelegatedTo(request.delegated_to);
 
@@ -133,12 +148,17 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                   onClick={retry}
                   variant="outline"
                   size="sm"
+                  disabled={isRetrying}
                   className={cn(
                     "border-primary-500/30 bg-primary-500/10 text-primary-300",
                     "hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200"
                   )}
                 >
-                  <RefreshCw className="mr-1.5 size-3.5" />
+                  {isRetrying ? (
+                    <Loader2 className="mr-1.5 size-3.5 animate-spin" />
+                  ) : (
+                    <RefreshCw className="mr-1.5 size-3.5" />
+                  )}
                   {t("detail.retryFailed")}
                 </Button>
               )}
@@ -165,6 +185,12 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                       <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
                         <Square className="size-3.5" />
                         {t("detail.cancelDownloads")}
+                      </DropdownMenuItem>
+                    )}
+                    {canPrioritize && (
+                      <DropdownMenuItem onClick={prioritize} className="text-primary-400 focus:text-primary-300">
+                        <ChevronsUp className="size-3.5" />
+                        {t("detail.jumpTheQueue")}
                       </DropdownMenuItem>
                     )}
                     {canSyncSource && (
