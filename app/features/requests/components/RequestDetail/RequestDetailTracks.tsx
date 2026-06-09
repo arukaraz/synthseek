@@ -97,6 +97,7 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
 
   return (
     <DataTable
+      key={request.id}
       data={sortedTracks}
       columns={columns}
       getRowId={(track) => track.id}
