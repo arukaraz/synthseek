@@ -2,6 +2,32 @@
 
 ---
 
+# v2.1.0 — June 8, 2026
+
+### Queue controls: priority, pause and resume, a queue stability fix, and Plex matching improvements
+
+Version 2.1 gives you direct control over the download queue. Downloads now run one album or playlist at a time in order, you can jump any track or group to the front, and you can pause and resume individual albums and playlists or the whole queue. It also fixes a queue stability bug that could stall downloads and sharpens Plex matching.
+
+---
+
+### Queue controls
+
+- Downloads are ordered by album and playlist: every track in a group finishes before the next group starts.
+- Jump the queue: move any track, album, or playlist to the front from its actions menu, with a Prioritized badge so you can see it took effect. Retried tracks are prioritized automatically.
+- Pause and resume individual albums and playlists, or Pause all and Resume all for the whole queue, from the toolbar.
+
+---
+
+### Fixes
+
+- Fixed a queue stability issue where finished jobs were never cleared from memory, which could fill the queue and stall all new downloads. The queue now drains completed work and resumes pending downloads automatically after a restart.
+- Hardened Plex track matching for missed library tracks, with album-position hydration, corrected playlist membership, parenthesized featuring-suffix handling, and tolerant fuzzy matching.
+- Excluded live event-stream connections from the API rate limiter so the UI stays connected under load.
+- Collapsed duplicate tracks within a playlist import so a song that appears twice no longer fails the import.
+- Hid the Artist Spotlight song count when an artist's track total is unknown.
+
+---
+
 # v2.0.0 — June 5, 2026
 
 > [!IMPORTANT]
