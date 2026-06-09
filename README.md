@@ -28,6 +28,35 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 - Localization (more languages are on the way...)
 - Real-time progress tracking, logs viewer, and in-app update notifications
 
+## Demos
+
+<details open>
+<summary><b>Discover</b></summary>
+  
+https://github.com/user-attachments/assets/74a399fa-3fda-4341-9486-1e214e9a90b7
+
+
+
+</details>
+
+<details>
+<summary><b>Request content</b></summary>
+  
+https://github.com/user-attachments/assets/f44d9dc2-bf2a-401d-a6c0-564e261123d1
+
+</details>
+
+<details>
+<summary><b>Import your library</b></summary>
+  
+https://github.com/user-attachments/assets/9dfe699f-b320-4974-87f0-293a0e97a0a5
+
+</details>
+
+
+
+
+
 ## Installation
 
 ### Prerequisites
