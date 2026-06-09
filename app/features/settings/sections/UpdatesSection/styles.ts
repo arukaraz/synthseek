@@ -120,7 +120,7 @@ export const kind = cva(
     variants: {
       category: {
         feature: "bg-emerald-500/15 text-emerald-300",
-        fix: "bg-cyan-500/15 text-cyan-300",
+        fix: "bg-red-500/15 text-red-300",
         improvement: "bg-amber-500/15 text-amber-300",
         breaking: "bg-red-500/15 text-red-300",
         chore: "text-fg/55 bg-fg/8",
