@@ -22,9 +22,11 @@ export function JobsCard() {
         </span>
       ) : (
         <div className={jobList()}>
-          {data.map((job) => (
-            <JobRow key={job.id} job={job} />
-          ))}
+          {data
+            .filter((job) => job.id !== "pattern-sync")
+            .map((job) => (
+              <JobRow key={job.id} job={job} />
+            ))}
         </div>
       )}
     </SettingsCard>
