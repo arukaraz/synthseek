@@ -2,6 +2,27 @@
 
 ---
 
+# v2.1.1 — June 8, 2026
+
+### Sync all playlists to Plex, plus detail-table and changelog fixes
+
+A small follow-up to 2.1: send every eligible playlist to Plex in one action, and fix a couple of UI rough edges.
+
+---
+
+### Improvements
+
+- Sync all playlists to Plex at once from the toolbar menu, alongside the existing per-playlist sync.
+
+---
+
+### Fixes
+
+- Fixed stale rows and empty gaps in the request detail table when switching between playlists or albums.
+- The changelog fix badge now renders in red.
+
+---
+
 # v2.1.0 — June 8, 2026
 
 ### Queue controls: priority, pause and resume, a queue stability fix, and Plex matching improvements

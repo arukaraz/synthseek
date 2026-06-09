@@ -2,6 +2,32 @@
   "schemaVersion": 1,
   "versions": [
     {
+      "version": "2.1.1",
+      "date": "2026-06-08",
+      "type": "patch",
+      "title": "Sync all playlists to Plex, plus detail-table and changelog fixes",
+      "sections": [
+        {
+          "body": "A small follow-up to 2.1: send every eligible playlist to Plex in one action, and fix a couple of UI rough edges."
+        },
+        {
+          "heading": "Improvements",
+          "category": "feature",
+          "items": [
+            "Sync all playlists to Plex at once from the toolbar menu, alongside the existing per-playlist sync."
+          ]
+        },
+        {
+          "heading": "Fixes",
+          "category": "fix",
+          "items": [
+            "Fixed stale rows and empty gaps in the request detail table when switching between playlists or albums.",
+            "The changelog fix badge now renders in red."
+          ]
+        }
+      ]
+    },
+    {
       "version": "2.1.0",
       "date": "2026-06-08",
       "type": "minor",
