@@ -21,6 +21,7 @@ export { useDeletePlaylist } from "./mutations/requests/useDeletePlaylist";
 export { useRetryAlbum } from "./mutations/requests/useRetryAlbum";
 export { useRetryPlaylist } from "./mutations/requests/useRetryPlaylist";
 export { useRetryPlexPlaylist } from "./mutations/requests/useRetryPlexPlaylist";
+export { useSyncAllPlaylistsToPlex } from "./mutations/requests/useSyncAllPlaylistsToPlex";
 export { useRetryTrack } from "./mutations/requests/useRetryTrack";
 export { useRetryAllFailed } from "./mutations/requests/useRetryAllFailed";
 export { useCancelAlbum } from "./mutations/requests/useCancelAlbum";

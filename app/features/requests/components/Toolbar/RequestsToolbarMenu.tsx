@@ -2,9 +2,16 @@
 
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
-import { useDeleteAllRequests, usePauseAll, useQueueStatus, useResumeAll, useRetryAllFailed } from "@hooks/api";
+import {
+  useDeleteAllRequests,
+  usePauseAll,
+  useQueueStatus,
+  useResumeAll,
+  useRetryAllFailed,
+  useSyncAllPlaylistsToPlex,
+} from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
-import { MoreVertical, Pause, Play, RefreshCw, Trash2 } from "lucide-react";
+import { MoreVertical, Pause, Play, RefreshCw, Trash2, Upload } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -15,6 +22,7 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
   const { t } = useTranslation("requests");
   const { isAdmin } = useAuthContext();
   const retryAllFailed = useRetryAllFailed();
+  const syncAllPlex = useSyncAllPlaylistsToPlex();
   const deleteAll = useDeleteAllRequests();
   const pauseAll = usePauseAll();
   const resumeAll = useResumeAll();
@@ -22,6 +30,7 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
   const isQueuePaused = queueStatus?.isPaused ?? false;
 
   const [confirmRetryOpen, setConfirmRetryOpen] = useState(false);
+  const [confirmSyncPlexOpen, setConfirmSyncPlexOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   if (!hasItems && !isAdmin) return null;
@@ -39,6 +48,12 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
             <DropdownMenuItem onSelect={() => setConfirmRetryOpen(true)}>
               <RefreshCw className="size-3.5" />
               {t("toolbar.retryAllFailed.label")}
+            </DropdownMenuItem>
+          )}
+          {hasItems && (
+            <DropdownMenuItem onSelect={() => setConfirmSyncPlexOpen(true)}>
+              <Upload className="size-3.5" />
+              {t("toolbar.syncAllPlex.label")}
             </DropdownMenuItem>
           )}
           {isAdmin &&
@@ -73,6 +88,18 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
           retryAllFailed.isPending
             ? t("toolbar.retryAllFailed.confirmPending")
             : t("toolbar.retryAllFailed.confirmAction")
+        }
+      />
+
+      <ConfirmationModal
+        isOpen={confirmSyncPlexOpen}
+        onClose={() => setConfirmSyncPlexOpen(false)}
+        onConfirm={() => syncAllPlex.mutate()}
+        title={t("toolbar.syncAllPlex.confirmTitle")}
+        message={t("toolbar.syncAllPlex.confirmMessage")}
+        variant="warning"
+        confirmText={
+          syncAllPlex.isPending ? t("toolbar.syncAllPlex.confirmPending") : t("toolbar.syncAllPlex.confirmAction")
         }
       />
 

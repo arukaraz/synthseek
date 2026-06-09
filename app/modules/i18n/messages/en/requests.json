@@ -12,6 +12,13 @@
       "confirmPending": "Retrying...",
       "confirmAction": "Retry All"
     },
+    "syncAllPlex": {
+      "label": "Sync all playlists to Plex",
+      "confirmTitle": "Sync All Playlists to Plex",
+      "confirmMessage": "This will sync every eligible playlist to Plex. Continue?",
+      "confirmPending": "Syncing...",
+      "confirmAction": "Sync All"
+    },
     "import": {
       "trigger": "Import library",
       "sourcesLabel": "Sources",

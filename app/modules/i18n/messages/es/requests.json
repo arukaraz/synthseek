@@ -12,6 +12,13 @@
       "confirmPending": "Reintentando...",
       "confirmAction": "Reintentar todas"
     },
+    "syncAllPlex": {
+      "label": "Sincronizar todas las listas con Plex",
+      "confirmTitle": "Sincronizar todas las listas con Plex",
+      "confirmMessage": "Esto sincronizará todas las listas de reproducción elegibles con Plex. ¿Continuar?",
+      "confirmPending": "Sincronizando...",
+      "confirmAction": "Sincronizar todas"
+    },
     "import": {
       "trigger": "Importar biblioteca",
       "sourcesLabel": "Fuentes",
