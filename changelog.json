@@ -2,6 +2,23 @@
   "schemaVersion": 1,
   "versions": [
     {
+      "version": "2.1.2",
+      "date": "2026-06-10",
+      "type": "patch",
+      "title": "",
+      "sections": [
+        {
+          "heading": "Fixes",
+          "category": "fix",
+          "items": [
+            "Tracks that were wrongly skipped as not found now download correctly.",
+            "Searches that come up empty are retried automatically, so more songs are found.",
+            "More results are checked for each track, so the right match is less likely to be missed."
+          ]
+        }
+      ]
+    },
+    {
       "version": "2.1.1",
       "date": "2026-06-08",
       "type": "patch",

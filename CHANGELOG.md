@@ -2,6 +2,14 @@
 
 ---
 
+# v2.1.2 — June 10, 2026
+
+- Tracks that were wrongly skipped as not found now download correctly.
+- Searches that come up empty are retried automatically, so more songs are found.
+- More results are checked for each track, so the right match is less likely to be missed.
+
+---
+
 # v2.1.1 — June 8, 2026
 
 ### Sync all playlists to Plex, plus detail-table and changelog fixes
