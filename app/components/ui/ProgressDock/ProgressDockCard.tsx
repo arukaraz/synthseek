@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { DOCK_BODY_MAX_HEIGHT } from "./constants";
 import { DockItemRow } from "./DockItemRow";
 import { DockRing } from "./DockRing";
-import { itemStateKey } from "./helpers";
+import { failureReasonKey, itemStateKey } from "./helpers";
 import {
   dockBody,
   dockButtons,
@@ -87,7 +87,12 @@ export function ProgressDockCard({
             <ul className={dockBody()} style={{ maxHeight: DOCK_BODY_MAX_HEIGHT }}>
               {job.items.map((item) => (
                 <li key={item.key}>
-                  <DockItemRow item={item} reduced={reduced} label={t(itemStateKey(item.state))} />
+                  <DockItemRow
+                    item={item}
+                    reduced={reduced}
+                    label={t(itemStateKey(item.state))}
+                    reasonLabel={t(failureReasonKey(item.reason))}
+                  />
                 </li>
               ))}
             </ul>

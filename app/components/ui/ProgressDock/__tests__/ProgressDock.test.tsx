@@ -1,7 +1,7 @@
 import { render, screen, within, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-import { buildDockItems, markDockItem, seedDockJob, setDockJobStatus } from "@hooks/api/subscriptions";
+import { buildDockItems, finalizeDockJob, markDockItem, seedDockJob, setDockJobStatus } from "@hooks/api/subscriptions";
 import { resetDockStore } from "@hooks/api/subscriptions/shared/progressDock";
 
 import { ProgressDock } from "../ProgressDock";
@@ -88,6 +88,38 @@ describe("ProgressDock", () => {
     });
     expect(screen.getByText("failed")).toBeInTheDocument();
     expect(screen.getByText("1")).toBeInTheDocument();
+  });
+
+  it("renders the localized failure reason on a failed row", () => {
+    render(<ProgressDock />);
+    act(() => {
+      seedLibrary();
+      markDockItem("dock-test", "a", "failed", "notInLibrary");
+      setDockJobStatus("dock-test", "partial");
+    });
+    expect(screen.getByText("Not in your library")).toBeInTheDocument();
+  });
+
+  it("falls back to a generic failed label when a failed item has no reason", () => {
+    render(<ProgressDock />);
+    act(() => {
+      seedLibrary();
+      markDockItem("dock-test", "a", "failed");
+      setDockJobStatus("dock-test", "partial");
+    });
+    expect(screen.getAllByText("Failed").length).toBeGreaterThan(0);
+  });
+
+  it("shows complete for an all-skipped job once finalized", () => {
+    render(<ProgressDock />);
+    act(() => {
+      seedLibrary();
+      markDockItem("dock-test", "a", "skipped");
+      markDockItem("dock-test", "b", "skipped");
+      markDockItem("dock-test", "c", "skipped");
+      finalizeDockJob("dock-test");
+    });
+    expect(screen.getAllByText("Import complete").length).toBeGreaterThan(0);
   });
 
   it("hides the body list when minimized", () => {

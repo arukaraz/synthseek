@@ -3,10 +3,10 @@
 import { Spinner } from "@components/ui/Spinner";
 import { Check, Circle, X } from "lucide-react";
 
-import { dockItemIcon, dockItemName, dockItemRow } from "./styles";
+import { dockItemIcon, dockItemName, dockItemNameBlock, dockItemReason, dockItemRow } from "./styles";
 import type { DockItemRowProps } from "./types";
 
-export function DockItemRow({ item, reduced, label }: DockItemRowProps) {
+export function DockItemRow({ item, reduced, label, reasonLabel }: DockItemRowProps) {
   return (
     <div className={dockItemRow({ importing: item.state === "importing" })}>
       <span className={dockItemIcon()} aria-hidden="true">
@@ -22,8 +22,15 @@ export function DockItemRow({ item, reduced, label }: DockItemRowProps) {
           )
         ) : null}
       </span>
-      <span className={dockItemName()} title={item.name}>
-        {item.name}
+      <span className={dockItemNameBlock()}>
+        <span className={dockItemName()} title={item.name}>
+          {item.name}
+        </span>
+        {item.state === "failed" ? (
+          <span className={dockItemReason()} title={reasonLabel}>
+            {reasonLabel}
+          </span>
+        ) : null}
       </span>
       <span className="sr-only">{label}</span>
     </div>

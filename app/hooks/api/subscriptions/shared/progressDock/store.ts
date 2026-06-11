@@ -1,7 +1,8 @@
 import { useSyncExternalStore } from "react";
 
 import { DOCK_AUTO_DISMISS_MS } from "./constants";
-import type { DockItem, DockItemState, DockJob, DockJobStatus } from "./types";
+import { countDockItems, deriveTerminalStatus } from "./helpers";
+import type { DockItem, DockItemState, DockJob, DockJobStatus, LibraryImportFailureReason } from "./types";
 
 const jobs = new Map<string, DockJob>();
 const dismissed = new Set<string>();
@@ -50,11 +51,16 @@ export function seedDockJob(job: Omit<DockJob, "updatedAt">): void {
   publish();
 }
 
-export function markDockItem(jobId: string, key: string, state: DockItemState): void {
+export function markDockItem(
+  jobId: string,
+  key: string,
+  state: DockItemState,
+  reason?: LibraryImportFailureReason
+): void {
   if (dismissed.has(jobId)) return;
   const job = jobs.get(jobId);
   if (!job) return;
-  const items = job.items.map((item) => (item.key === key ? { ...item, state } : item));
+  const items = job.items.map((item) => (item.key === key ? { ...item, state, reason } : item));
   jobs.set(jobId, { ...job, items, updatedAt: Date.now() });
   publish();
 }
@@ -66,6 +72,14 @@ export function setDockJobStatus(jobId: string, status: DockJobStatus): void {
   jobs.set(jobId, { ...job, status, updatedAt: Date.now() });
   if (status !== "running") scheduleAutoDismiss(jobId);
   publish();
+}
+
+export function finalizeDockJob(jobId: string): void {
+  if (dismissed.has(jobId)) return;
+  const job = jobs.get(jobId);
+  if (!job) return;
+  const counts = countDockItems(job.items);
+  setDockJobStatus(jobId, deriveTerminalStatus(counts.done, counts.failed));
 }
 
 export function dismissDockJob(jobId: string): void {

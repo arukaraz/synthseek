@@ -1,7 +1,13 @@
 import type { ParseKeys } from "i18next";
 import type { CSSProperties } from "react";
 
-import type { DockItemState, DockJob, DockJobKind, DockJobStatus } from "@hooks/api/subscriptions";
+import type {
+  DockItemState,
+  DockJob,
+  DockJobKind,
+  DockJobStatus,
+  LibraryImportFailureReason,
+} from "@hooks/api/subscriptions";
 
 import { DOCK_RING_GAP_DEGREES } from "./constants";
 
@@ -41,6 +47,18 @@ const ITEM_STATE_KEYS: Record<DockItemState, AppShellKey> = {
 
 export function itemStateKey(state: DockItemState): AppShellKey {
   return ITEM_STATE_KEYS[state];
+}
+
+const FAILURE_REASON_KEYS: Record<LibraryImportFailureReason, AppShellKey> = {
+  notInLibrary: "progressDock.failureReason.notInLibrary",
+  noMatchableTracks: "progressDock.failureReason.noMatchableTracks",
+  sourceHasNoTracks: "progressDock.failureReason.sourceHasNoTracks",
+  importError: "progressDock.failureReason.importError",
+};
+
+export function failureReasonKey(reason: LibraryImportFailureReason | undefined): AppShellKey {
+  const key = reason ? FAILURE_REASON_KEYS[reason] : undefined;
+  return key ?? "progressDock.itemState.failed";
 }
 
 const PROVIDER_LABEL_KEYS: Record<string, AppShellKey> = {

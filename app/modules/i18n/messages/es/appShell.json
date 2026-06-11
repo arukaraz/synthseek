@@ -37,6 +37,12 @@
       "failed": "Con error",
       "skipped": "Omitido"
     },
+    "failureReason": {
+      "notInLibrary": "No está en tu biblioteca",
+      "noMatchableTracks": "Sin coincidencias para sus pistas",
+      "sourceHasNoTracks": "El origen no tiene pistas",
+      "importError": "Fallo al importar"
+    },
     "provider": {
       "spotify": "Spotify",
       "generic": "tu biblioteca"

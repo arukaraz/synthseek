@@ -64,39 +64,81 @@ beforeEach(() => {
   resetDockStore();
 });
 
+function markItem(state: LibraryImportProgressPayload["item"], utils: ReturnType<typeof trpc.useUtils>): void {
+  handleLibraryImportProgress(makeEvent({ phase: "progress", item: state }), utils);
+}
+
 describe("handleLibraryImportProgress", () => {
   it("marks the seeded item by key on a progress event", () => {
     seedLib();
     const utils = trpc.useUtils();
-    handleLibraryImportProgress(makeEvent({ phase: "progress", item: { key: "a", state: "done" } }), utils);
+    markItem({ key: "a", state: "done" }, utils);
     expect(libJob()?.items.find((item) => item.key === "a")?.state).toBe("done");
   });
 
   it("ignores a progress event for a job that was never seeded", () => {
     const utils = trpc.useUtils();
-    handleLibraryImportProgress(makeEvent({ phase: "progress", item: { key: "a", state: "done" } }), utils);
+    markItem({ key: "a", state: "done" }, utils);
     expect(libJob()).toBeUndefined();
   });
 
-  it("sets a complete status and invalidates caches when nothing failed", () => {
+  it("carries the failure reason into the store on a failed item", () => {
     seedLib();
     const utils = trpc.useUtils();
+    markItem({ key: "a", state: "failed", reason: "notInLibrary" }, utils);
+    expect(libJob()?.items.find((item) => item.key === "a")?.reason).toBe("notInLibrary");
+  });
+
+  it("invalidates getAll when an item reaches done so it lands in the list", () => {
+    seedLib();
+    const utils = trpc.useUtils();
+    markItem({ key: "a", state: "done" }, utils);
+    expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not invalidate getAll for a non-done item state", () => {
+    seedLib();
+    const utils = trpc.useUtils();
+    markItem({ key: "a", state: "failed", reason: "importError" }, utils);
+    markItem({ key: "b", state: "skipped" }, utils);
+    expect(spies.invalidateAll).not.toHaveBeenCalled();
+  });
+
+  it("finalizes a complete status from the items and invalidates caches when nothing failed", () => {
+    seedLib();
+    const utils = trpc.useUtils();
+    markItem({ key: "a", state: "done" }, utils);
+    markItem({ key: "b", state: "done" }, utils);
+    spies.invalidateAll.mockReset();
     handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils);
     expect(libJob()?.status).toBe("complete");
     expect(spies.invalidateSummary).toHaveBeenCalledTimes(1);
     expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
   });
 
-  it("sets a partial status when some imported and some failed", () => {
+  it("finalizes complete for an all-skipped job (everything already present)", () => {
     seedLib();
     const utils = trpc.useUtils();
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 1, failed: 1, total: 2 }), utils);
+    markItem({ key: "a", state: "skipped" }, utils);
+    markItem({ key: "b", state: "skipped" }, utils);
+    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 0, total: 2 }), utils);
+    expect(libJob()?.status).toBe("complete");
+  });
+
+  it("finalizes partial from the items when one item failed, ignoring the event counts", () => {
+    seedLib();
+    const utils = trpc.useUtils();
+    markItem({ key: "a", state: "done" }, utils);
+    markItem({ key: "b", state: "failed", reason: "noMatchableTracks" }, utils);
+    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils);
     expect(libJob()?.status).toBe("partial");
   });
 
-  it("sets a failed status when none imported", () => {
+  it("finalizes failed from the items when every item failed", () => {
     seedLib();
     const utils = trpc.useUtils();
+    markItem({ key: "a", state: "failed", reason: "importError" }, utils);
+    markItem({ key: "b", state: "failed", reason: "sourceHasNoTracks" }, utils);
     handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 2, total: 2 }), utils);
     expect(libJob()?.status).toBe("failed");
   });

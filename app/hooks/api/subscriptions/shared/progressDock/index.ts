@@ -2,6 +2,7 @@ export {
   seedDockJob,
   markDockItem,
   setDockJobStatus,
+  finalizeDockJob,
   dismissDockJob,
   isDockJobDismissed,
   hasDockJob,
@@ -10,4 +11,4 @@ export {
   useDockJobs,
 } from "./store";
 export { countDockItems, deriveTerminalStatus, terminalStatusFromCounts } from "./helpers";
-export type { DockItem, DockItemState, DockJob, DockJobKind, DockJobStatus } from "./types";
+export type { DockItem, DockItemState, DockJob, DockJobKind, DockJobStatus, LibraryImportFailureReason } from "./types";

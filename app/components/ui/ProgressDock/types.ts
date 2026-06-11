@@ -36,6 +36,7 @@ export interface DockItemRowProps {
   item: DockItem;
   reduced: boolean;
   label: string;
+  reasonLabel: string;
 }
 
 export type { DockItem, DockItemState, DockJob, DockJobKind, DockJobStatus };

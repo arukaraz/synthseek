@@ -4,10 +4,18 @@ export {
   seedDockJob,
   markDockItem,
   setDockJobStatus,
+  finalizeDockJob,
   dismissDockJob,
   buildDockItems,
   countDockItems,
   deriveTerminalStatus,
   useDockJobs,
 } from "./shared/progressDock";
-export type { DockItem, DockItemState, DockJob, DockJobKind, DockJobStatus } from "./shared/progressDock";
+export type {
+  DockItem,
+  DockItemState,
+  DockJob,
+  DockJobKind,
+  DockJobStatus,
+  LibraryImportFailureReason,
+} from "./shared/progressDock";

@@ -37,6 +37,12 @@
       "failed": "Failed",
       "skipped": "Skipped"
     },
+    "failureReason": {
+      "notInLibrary": "Not in your library",
+      "noMatchableTracks": "No matches for its tracks",
+      "sourceHasNoTracks": "The source has no tracks",
+      "importError": "Failed to import"
+    },
     "provider": {
       "spotify": "Spotify",
       "generic": "your library"
