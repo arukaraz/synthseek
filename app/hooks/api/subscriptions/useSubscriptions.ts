@@ -5,6 +5,7 @@ import {
   handleAlbumUpdate,
   handlePlaylistPlexCreated,
   handlePlaylistUpdate,
+  handlePlexSyncAllProgress,
   handlePortabilityProgress,
   handleTrackUpdate,
 } from "./handlers/requests";
@@ -48,6 +49,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.PlaylistPlexCreated:
           handlePlaylistPlexCreated(event, utils);
+          break;
+        case SubscriptionEventType.PlexSyncAllProgress:
+          handlePlexSyncAllProgress(event, utils);
           break;
         case SubscriptionEventType.VersionUpdate:
           handleVersionUpdate(event);

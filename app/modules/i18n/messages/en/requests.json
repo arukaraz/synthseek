@@ -14,6 +14,7 @@
     },
     "syncAllPlex": {
       "label": "Sync all playlists to Plex",
+      "labelRunning": "Syncing all playlists to Plex...",
       "confirmTitle": "Sync All Playlists to Plex",
       "confirmMessage": "This will sync every eligible playlist to Plex. Continue?",
       "confirmPending": "Syncing...",
@@ -186,5 +187,12 @@
   },
   "spotifyCallback": {
     "connectionFailed": "Spotify connection failed"
+  },
+  "activity": {
+    "plexSyncLabel": "Syncing all playlists to Plex",
+    "plexSyncLabelShort": "Syncing to Plex",
+    "plexSyncAnnounceStart": "Started syncing all playlists to Plex",
+    "plexSyncAnnounceProgress": "Synced {{synced}} of {{total}} playlists to Plex",
+    "plexSyncAnnounceComplete": "Finished syncing playlists to Plex, {{synced}} of {{total}} synced"
   }
 }

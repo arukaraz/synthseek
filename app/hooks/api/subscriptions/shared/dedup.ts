@@ -13,6 +13,8 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.playlistId}:${event.status}:${event.completedTracks}`;
     case SubscriptionEventType.PlaylistPlexCreated:
       return `${event.eventType}:${event.playlistId}:${event.plexPlaylistId}`;
+    case SubscriptionEventType.PlexSyncAllProgress:
+      return `${event.eventType}:${event.phase}:${event.synced}`;
     case SubscriptionEventType.VersionUpdate:
       return `${event.eventType}:${event.latestVersion}`;
     case SubscriptionEventType.SettingsUpdate:

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Suspense } from "react";
 import { GroupsViewMode } from "./components/GroupsViewMode";
 import { ListViewMode } from "./components/ListViewMode";
+import { RequestsActivityDivider } from "./components/RequestsActivityDivider";
 import { SpotifyCallbackToast } from "./components/SpotifyCallbackToast";
 import { Toolbar } from "./components/Toolbar/Toolbar";
 import { requestsView } from "./components/styles";
@@ -18,7 +19,10 @@ export function RequestsScreen() {
       <Suspense fallback={null}>
         <SpotifyCallbackToast />
       </Suspense>
-      <Toolbar />
+      <div className="relative">
+        <RequestsActivityDivider />
+        <Toolbar />
+      </div>
 
       <div className="flex-1 overflow-auto">
         <AnimatePresence mode="wait">

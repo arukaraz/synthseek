@@ -2,9 +2,12 @@
 
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
+import { Spinner } from "@components/ui/Spinner";
 import {
   useDeleteAllRequests,
+  useGetPlexSyncAllState,
   usePauseAll,
+  usePlexSyncAllProgress,
   useQueueStatus,
   useResumeAll,
   useRetryAllFailed,
@@ -27,7 +30,12 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
   const pauseAll = usePauseAll();
   const resumeAll = useResumeAll();
   const { data: queueStatus } = useQueueStatus();
+  const { data: plexSyncState } = useGetPlexSyncAllState();
+  const plexSyncProgress = usePlexSyncAllProgress();
   const isQueuePaused = queueStatus?.isPaused ?? false;
+  const isSyncingPlex = plexSyncProgress
+    ? plexSyncProgress.phase !== "complete"
+    : (plexSyncState?.running ?? false) || syncAllPlex.isPending;
 
   const [confirmRetryOpen, setConfirmRetryOpen] = useState(false);
   const [confirmSyncPlexOpen, setConfirmSyncPlexOpen] = useState(false);
@@ -51,9 +59,9 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
             </DropdownMenuItem>
           )}
           {hasItems && (
-            <DropdownMenuItem onSelect={() => setConfirmSyncPlexOpen(true)}>
-              <Upload className="size-3.5" />
-              {t("toolbar.syncAllPlex.label")}
+            <DropdownMenuItem disabled={isSyncingPlex} onSelect={() => setConfirmSyncPlexOpen(true)}>
+              {isSyncingPlex ? <Spinner size="sm" decorative /> : <Upload className="size-3.5" />}
+              {isSyncingPlex ? t("toolbar.syncAllPlex.labelRunning") : t("toolbar.syncAllPlex.label")}
             </DropdownMenuItem>
           )}
           {isAdmin &&
@@ -94,13 +102,13 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
       <ConfirmationModal
         isOpen={confirmSyncPlexOpen}
         onClose={() => setConfirmSyncPlexOpen(false)}
-        onConfirm={() => syncAllPlex.mutate()}
+        onConfirm={() => {
+          if (!isSyncingPlex) syncAllPlex.mutate();
+        }}
         title={t("toolbar.syncAllPlex.confirmTitle")}
         message={t("toolbar.syncAllPlex.confirmMessage")}
         variant="warning"
-        confirmText={
-          syncAllPlex.isPending ? t("toolbar.syncAllPlex.confirmPending") : t("toolbar.syncAllPlex.confirmAction")
-        }
+        confirmText={isSyncingPlex ? t("toolbar.syncAllPlex.confirmPending") : t("toolbar.syncAllPlex.confirmAction")}
       />
 
       <ConfirmationModal

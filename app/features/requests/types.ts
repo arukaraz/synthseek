@@ -64,6 +64,15 @@ export const STATUS_FILTER_MAP = {
   failed: [...UNRESOLVED_STATUSES, RequestStatus.enum.partially_complete],
 } as const;
 
+export const DOWNLOAD_ACTIVE_STATUSES: readonly RequestStatus[] = [
+  RequestStatus.enum.searching,
+  RequestStatus.enum.pending_download,
+  RequestStatus.enum.downloading,
+  RequestStatus.enum.pending_import,
+  RequestStatus.enum.importing,
+  RequestStatus.enum.in_progress,
+];
+
 export interface FlatTrackRow extends TrackRequest {
   parent: {
     id: string;

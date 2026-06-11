@@ -32,6 +32,7 @@
     --neon-success: 0.55 0.178 145;
     --neon-warning: 0.85 0.176 85;
     --neon-error: 0.55 0.225 27;
+    --neon-plex: light-dark(0.66 0.16 70, 0.8 0.15 75);
     --neon-glow-opacity: light-dark(0.2, 0.4);
 
     --background: light-dark(1 0 0, 0.145 0.05 265);
@@ -68,6 +69,7 @@
     --status-downloading: var(--color-primary-500);
     --status-paused: var(--color-warning);
     --status-importing: oklch(0.6 0.2 280);
+    --status-syncing-plex: oklch(var(--neon-plex));
     --status-complete: var(--color-success);
     --status-failed: var(--color-error);
     --status-cancelled: var(--color-gray-400);

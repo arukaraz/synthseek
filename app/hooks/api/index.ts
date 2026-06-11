@@ -12,6 +12,9 @@ export { useSearchContent } from "./queries/useSearchContent";
 export { useSettings } from "./queries/useSettings";
 export { useTrendingTracks } from "./queries/useTrendingTracks";
 export { useQueueStatus } from "./queries/useQueueStatus";
+export { useGetPlexSyncAllState } from "./queries/useGetPlexSyncAllState";
+
+export { usePlexSyncAllProgress } from "./subscriptions/usePlexSyncAllProgress";
 
 export { useRequest } from "./mutations/requests/useRequest";
 export { useBatchRequest } from "./mutations/requests/useBatchRequest";

@@ -1,12 +1,19 @@
 import {
   ACTIVE_STATUSES,
   ContentType,
+  RequestStatus,
   RESOLVED_STATUSES,
   UNRESOLVED_STATUSES,
-  type RequestStatus,
   type RequestWithTracks,
 } from "@api/__generated__/types";
-import { DEFAULT_PER_PAGE, PER_PAGE_OPTIONS, STATUS_FILTER_MAP, StatusFilter, type SourceOption } from "./types";
+import {
+  DEFAULT_PER_PAGE,
+  DOWNLOAD_ACTIVE_STATUSES,
+  PER_PAGE_OPTIONS,
+  STATUS_FILTER_MAP,
+  StatusFilter,
+  type SourceOption,
+} from "./types";
 
 export const STATUS_ORDER: readonly RequestStatus[] = [
   ...[...ACTIVE_STATUSES].reverse(),
@@ -16,6 +23,14 @@ export const STATUS_ORDER: readonly RequestStatus[] = [
 
 export function compareByStatus(a: RequestStatus, b: RequestStatus): number {
   return STATUS_ORDER.indexOf(a) - STATUS_ORDER.indexOf(b);
+}
+
+export function hasActiveDownload(items: RequestWithTracks[] | undefined): boolean {
+  return (items ?? []).some(
+    (item) =>
+      (item.contentType === ContentType.enum.album || item.contentType === ContentType.enum.playlist) &&
+      DOWNLOAD_ACTIVE_STATUSES.includes(item.status)
+  );
 }
 
 export function exportFilename(name: string): string {

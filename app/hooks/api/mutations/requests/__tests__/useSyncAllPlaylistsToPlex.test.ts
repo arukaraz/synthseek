@@ -4,14 +4,21 @@ import { renderHook } from "@testing-library/react";
 import { useSyncAllPlaylistsToPlex } from "../useSyncAllPlaylistsToPlex";
 
 interface SyncResult {
+  started: boolean;
+  running: boolean;
   synced: number;
-  failed: number;
+  total: number;
+}
+
+interface PlexSyncState {
+  running: boolean;
+  synced: number;
+  total: number;
 }
 
 interface MutationOptions {
   onSuccess?: (data: SyncResult) => void;
   onError?: (error: { message?: string }) => void;
-  onSettled?: () => void;
 }
 
 interface CapturedOptions {
@@ -21,11 +28,8 @@ interface CapturedOptions {
 const spies = vi.hoisted(() => {
   const captured: CapturedOptions = {};
   return {
-    getAllInvalidate: vi.fn(),
+    setData: vi.fn(),
     errorToast: vi.fn(),
-    toastSuccess: vi.fn(),
-    toastInfo: vi.fn(),
-    translate: vi.fn((key: string, vars?: Record<string, unknown>) => (vars ? `${key}:${JSON.stringify(vars)}` : key)),
     captured,
   };
 });
@@ -34,7 +38,7 @@ vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: {
-        getAll: { invalidate: spies.getAllInvalidate },
+        getPlexSyncAllState: { setData: spies.setData },
       },
     }),
     requests: {
@@ -52,38 +56,30 @@ vi.mock("@modules/errors", () => ({
   errorToast: spies.errorToast,
 }));
 
-vi.mock("@locale", () => ({
-  default: { t: spies.translate },
-}));
-
-vi.mock("sonner", () => ({
-  toast: { success: spies.toastSuccess, info: spies.toastInfo },
-}));
-
 describe("useSyncAllPlaylistsToPlex", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     spies.captured.options = undefined;
   });
 
-  it("on success with synced playlists shows a success toast carrying count and failed", () => {
+  it("on a fresh start seeds the running sync state", () => {
     renderHook(() => useSyncAllPlaylistsToPlex());
 
-    spies.captured.options?.onSuccess?.({ synced: 3, failed: 1 });
+    spies.captured.options?.onSuccess?.({ started: true, running: true, synced: 0, total: 8 });
 
-    expect(spies.translate).toHaveBeenCalledWith("mutations:requests.playlistsSyncedPlex", { count: 3, failed: 1 });
-    expect(spies.toastSuccess).toHaveBeenCalledTimes(1);
-    expect(spies.toastInfo).not.toHaveBeenCalled();
+    const setCall = spies.setData.mock.calls[0];
+    const seeded: PlexSyncState = setCall[1];
+    expect(seeded).toEqual({ running: true, synced: 0, total: 8 });
   });
 
-  it("on success with nothing synced shows the empty info toast", () => {
+  it("when a run was already active does not surface a failure toast", () => {
     renderHook(() => useSyncAllPlaylistsToPlex());
 
-    spies.captured.options?.onSuccess?.({ synced: 0, failed: 0 });
+    spies.captured.options?.onSuccess?.({ started: false, running: true, synced: 3, total: 8 });
 
-    expect(spies.translate).toHaveBeenCalledWith("mutations:requests.noPlaylistsToSyncPlex");
-    expect(spies.toastInfo).toHaveBeenCalledTimes(1);
-    expect(spies.toastSuccess).not.toHaveBeenCalled();
+    expect(spies.errorToast).not.toHaveBeenCalled();
+    const seeded: PlexSyncState = spies.setData.mock.calls[0][1];
+    expect(seeded.running).toBe(true);
   });
 
   it("on error delegates to errorToast with the sync fallback key", () => {
@@ -93,13 +89,5 @@ describe("useSyncAllPlaylistsToPlex", () => {
     spies.captured.options?.onError?.(error);
 
     expect(spies.errorToast).toHaveBeenCalledWith(error, "requests.syncAllPlexFailed");
-  });
-
-  it("on settled invalidates the requests getAll cache", () => {
-    renderHook(() => useSyncAllPlaylistsToPlex());
-
-    spies.captured.options?.onSettled?.();
-
-    expect(spies.getAllInvalidate).toHaveBeenCalledTimes(1);
   });
 });

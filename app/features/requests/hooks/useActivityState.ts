@@ -1,0 +1,60 @@
+import type { ActivityDividerAnnouncements, ActivityDividerState } from "@components/ui/ActivityDivider";
+import { useGetPlexSyncAllState, usePlexSyncAllProgress, useTrackRequests } from "@hooks/api";
+import i18n from "@locale";
+import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+
+import { hasActiveDownload } from "../helpers";
+
+interface ActivityStateResult {
+  state: ActivityDividerState;
+  synced: number;
+  total: number;
+  label: string;
+  labelShort: string;
+  announcements: ActivityDividerAnnouncements;
+}
+
+export function useActivityState(): ActivityStateResult {
+  const { t } = useTranslation("requests");
+  const { data: items } = useTrackRequests();
+  const { data: syncState } = useGetPlexSyncAllState();
+  const progress = usePlexSyncAllProgress();
+
+  const isSyncing = progress ? progress.phase !== "complete" : (syncState?.running ?? false);
+  const synced = progress?.synced ?? syncState?.synced ?? 0;
+  const total = progress?.total ?? syncState?.total ?? 0;
+  const downloading = hasActiveDownload(items);
+
+  const completedRef = useRef(false);
+  useEffect(() => {
+    if (progress?.phase === "complete" && !completedRef.current) {
+      completedRef.current = true;
+      const failed = progress.failed ?? 0;
+      if (progress.synced > 0) {
+        toast.success(i18n.t("mutations:requests.playlistsSyncedPlex", { count: progress.synced, failed }));
+      } else {
+        toast.info(i18n.t("mutations:requests.noPlaylistsToSyncPlex"));
+      }
+    }
+    if (progress?.phase === "start") {
+      completedRef.current = false;
+    }
+  }, [progress]);
+
+  const state: ActivityDividerState = isSyncing ? "plex-sync" : downloading ? "in-progress" : "idle";
+
+  return {
+    state,
+    synced,
+    total,
+    label: t("activity.plexSyncLabel"),
+    labelShort: t("activity.plexSyncLabelShort"),
+    announcements: {
+      start: t("activity.plexSyncAnnounceStart"),
+      progress: t("activity.plexSyncAnnounceProgress", { synced, total }),
+      complete: t("activity.plexSyncAnnounceComplete", { synced, total }),
+    },
+  };
+}

@@ -14,6 +14,7 @@
     },
     "syncAllPlex": {
       "label": "Sincronizar todas las listas con Plex",
+      "labelRunning": "Sincronizando todas las listas con Plex...",
       "confirmTitle": "Sincronizar todas las listas con Plex",
       "confirmMessage": "Esto sincronizará todas las listas de reproducción elegibles con Plex. ¿Continuar?",
       "confirmPending": "Sincronizando...",
@@ -186,5 +187,12 @@
   },
   "spotifyCallback": {
     "connectionFailed": "Error de conexión con Spotify"
+  },
+  "activity": {
+    "plexSyncLabel": "Sincronizando todas las listas con Plex",
+    "plexSyncLabelShort": "Sincronizando con Plex",
+    "plexSyncAnnounceStart": "Se inició la sincronización de todas las listas con Plex",
+    "plexSyncAnnounceProgress": "Se sincronizaron {{synced}} de {{total}} listas con Plex",
+    "plexSyncAnnounceComplete": "Finalizó la sincronización de listas con Plex, {{synced}} de {{total}} sincronizadas"
   }
 }
