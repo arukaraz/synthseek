@@ -19,10 +19,9 @@ export function RequestsScreen() {
       <Suspense fallback={null}>
         <SpotifyCallbackToast />
       </Suspense>
-      <div className="relative">
-        <RequestsActivityDivider />
+      <RequestsActivityDivider>
         <Toolbar />
-      </div>
+      </RequestsActivityDivider>
 
       <div className="flex-1 overflow-auto">
         <AnimatePresence mode="wait">

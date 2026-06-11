@@ -121,10 +121,10 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
   },
   [RequestStatus.enum.syncing_plex]: {
     icon: PlayCircle,
-    color: "text-plex",
-    bgGradient: "from-plex/10 to-plex/5",
-    borderColor: "border-plex/20",
-    glowColor: "bg-plex",
+    color: "text-sync",
+    bgGradient: "from-sync/10 to-sync/5",
+    borderColor: "border-sync/20",
+    glowColor: "bg-sync",
   },
   [RequestStatus.enum.partially_complete]: {
     icon: CheckCircle,

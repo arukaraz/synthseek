@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type ActivityDividerState = "idle" | "in-progress" | "plex-sync";
 
 export interface ActivityDividerAnnouncements {
@@ -13,5 +15,6 @@ export interface ActivityDividerProps {
   label?: string;
   labelShort?: string;
   announcements?: ActivityDividerAnnouncements;
+  children?: ReactNode;
   className?: string;
 }

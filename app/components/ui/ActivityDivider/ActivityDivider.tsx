@@ -16,6 +16,7 @@ import {
   activityRail,
   activityRailStatic,
   activityRailTravel,
+  activityToolbarSlot,
 } from "./styles";
 import type { ActivityDividerProps } from "./types";
 
@@ -26,6 +27,7 @@ export function ActivityDivider({
   label,
   labelShort,
   announcements,
+  children,
   className,
 }: ActivityDividerProps) {
   const reduced = useReducedMotion() ?? false;
@@ -62,16 +64,20 @@ export function ActivityDivider({
         {showStaticFill ? <span className={activityRailStatic()} style={fillStyle(ratio)} /> : null}
       </div>
 
-      {isPlexSync && label ? (
-        <div className={activityLabelWrap({ visible: true })}>
-          <div className={activityLabelScrim()}>
-            <span className={activityLabelText()}>{label}</span>
-            <span className={activityLabelCount()}>
-              {value}/{max}
-            </span>
+      <div className={activityToolbarSlot()}>
+        {children}
+
+        {isPlexSync && label ? (
+          <div className={activityLabelWrap({ visible: true })}>
+            <div className={activityLabelScrim()}>
+              <span className={activityLabelText()}>{label}</span>
+              <span className={activityLabelCount()}>
+                {value}/{max}
+              </span>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
       {isPlexSync && labelShort ? (
         <div className={activityLabelRowNarrow({ visible: true })}>

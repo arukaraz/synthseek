@@ -35,7 +35,7 @@ describe("ActivityDivider", () => {
     expect(screen.queryByText("Syncing all playlists to Plex")).not.toBeInTheDocument();
   });
 
-  it("renders the plex-sync amber rail, the label, and the X/Y count", () => {
+  it("renders the plex-sync azure rail, the label, and the X/Y count", () => {
     const { container } = render(
       <ActivityDivider
         state="plex-sync"
@@ -51,6 +51,34 @@ describe("ActivityDivider", () => {
     expect(screen.getAllByText("Syncing all playlists to Plex").length).toBeGreaterThan(0);
     expect(screen.getAllByText("3/8").length).toBeGreaterThan(0);
     expect(container.querySelector(".activity-rail-travel")).toBeInTheDocument();
+  });
+
+  it("renders toolbar children and centers the plex-sync label as a non-blocking overlay over them", () => {
+    const { container } = render(
+      <ActivityDivider
+        state="plex-sync"
+        value={3}
+        max={8}
+        label="Syncing all playlists to Plex"
+        announcements={announcements}
+      >
+        <button type="button">Import library</button>
+      </ActivityDivider>
+    );
+    expect(screen.getByRole("button", { name: "Import library" })).toBeInTheDocument();
+    const overlay = container.querySelector(".pointer-events-none.absolute.inset-0");
+    expect(overlay).toBeInTheDocument();
+    expect(overlay).toHaveClass("items-center", "justify-center");
+  });
+
+  it("renders toolbar children without an overlay when idle", () => {
+    const { container } = render(
+      <ActivityDivider state="idle">
+        <button type="button">Import library</button>
+      </ActivityDivider>
+    );
+    expect(screen.getByRole("button", { name: "Import library" })).toBeInTheDocument();
+    expect(container.querySelector(".pointer-events-none.absolute.inset-0")).not.toBeInTheDocument();
   });
 
   it("announces the start of a plex sync in the live region", () => {

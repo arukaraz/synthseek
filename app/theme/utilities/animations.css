@@ -251,7 +251,7 @@
   }
 
   .activity-rail-plex {
-    animation: activity-rail-plex-pulse 1.6s ease-in-out infinite;
+    animation: activity-rail-plex-pulse 1.1s ease-in-out infinite;
     box-shadow: 0 0 14px -2px oklch(var(--activity-rail-color) / 0.55);
   }
 
@@ -260,7 +260,7 @@
     inset-block: 0;
     inline-size: 40%;
     background-image: linear-gradient(to right, transparent, oklch(var(--activity-rail-color) / 0.95), transparent);
-    animation: activity-rail-travel 1.4s linear infinite;
+    animation: activity-rail-travel 1s linear infinite;
   }
 
   .activity-rail-static {
