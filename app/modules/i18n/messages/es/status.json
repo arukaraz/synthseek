@@ -60,27 +60,27 @@
   "failureReason": {
     "not_found": {
       "label": "No encontrada",
-      "description": "No se encontraron coincidencias en Slskd. Otros pares pueden tenerla más adelante."
+      "description": "Esta canción no se encontró en Soulseek ni en YouTube. La disponibilidad cambia con el tiempo, así que reintentar más tarde podría encontrarla."
     },
     "import_rejected": {
       "label": "Importación rechazada",
-      "description": "El archivo se descargó pero los metadatos no coincidieron. El reintento solo volverá a importar."
+      "description": "El archivo se descargó pero sus datos no coincidían con la canción solicitada, así que no se añadió. Al reintentar solo se vuelve a importar el mismo archivo."
     },
     "wrong_file": {
       "label": "Archivo incorrecto",
-      "description": "El archivo descargado no coincidió con la canción solicitada. Se eliminó y se volverá a buscar al reintentar."
+      "description": "El archivo descargado no coincidía con la canción solicitada, así que se eliminó. Al reintentar se busca de nuevo una mejor coincidencia."
     },
     "p2p_failed": {
-      "label": "Transferencia fallida",
-      "description": "La conexión con el par se interrumpió durante la descarga."
+      "label": "Conexión interrumpida",
+      "description": "La conexión con el par de Soulseek se interrumpió antes de terminar la descarga. Reintentar podría funcionar mejor."
     },
     "download_failed": {
       "label": "Descarga fallida",
-      "description": "La transferencia empezó pero falló o expiró antes de completarse. Reintenta para volver a intentarlo."
+      "description": "La canción se encontró, pero la descarga no terminó. La fuente pudo bloquear la petición o la conexión se detuvo. Reintentar podría ayudar."
     },
     "other": {
       "label": "Fallida",
-      "description": "Error desconocido. Revisa los registros."
+      "description": "La descarga falló por un motivo inesperado. Reintentar podría ayudar."
     }
   }
 }

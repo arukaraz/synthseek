@@ -60,27 +60,27 @@
   "failureReason": {
     "not_found": {
       "label": "Not found",
-      "description": "No matches found on Slskd. Other peers may have it later."
+      "description": "This track wasn't found on Soulseek or YouTube. Availability changes over time, so a retry later may find it."
     },
     "import_rejected": {
       "label": "Import rejected",
-      "description": "File downloaded but metadata didn't match. Retry will re-import only."
+      "description": "The file downloaded but its details didn't match the requested track, so it wasn't added. A retry re-imports the same file only."
     },
     "wrong_file": {
       "label": "Wrong file",
-      "description": "Downloaded file didn't match the requested track. Deleted and will re-search on retry."
+      "description": "The downloaded file didn't match the requested track, so it was removed. A retry searches again for a better match."
     },
     "p2p_failed": {
-      "label": "Transfer failed",
-      "description": "Connection to peer dropped during download."
+      "label": "Connection dropped",
+      "description": "The connection to the Soulseek peer dropped before the download finished. A retry may work better."
     },
     "download_failed": {
       "label": "Download failed",
-      "description": "The transfer started but failed or timed out before completing. Retry to try again."
+      "description": "The track was found, but the download didn't finish. The source may have blocked the request or the connection stalled. A retry may help."
     },
     "other": {
       "label": "Failed",
-      "description": "Unknown error. Check logs."
+      "description": "The download failed for an unexpected reason. A retry may help."
     }
   }
 }
