@@ -81,6 +81,7 @@
   },
   "spotify": {
     "syncFailed": "Sync failed",
+    "saveFailed": "Failed to save library changes",
     "playlistNotLinked": "Playlist is not linked to a Spotify source",
     "playlistNotFound": "Playlist not found",
     "noConnection": "No Spotify connection found",

@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { useSaveLibraryChanges } from "@hooks/api/mutations/spotify/useSaveLibraryChanges";
+import { buildDockItems, seedDockJob } from "@hooks/api/subscriptions";
 import { useLibrarySubscription } from "@hooks/api/queries/spotify/useLibrarySubscription";
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { useSpotifyLibraryItems } from "@hooks/api/queries/spotify/useSpotifyLibraryItems";
@@ -141,7 +142,21 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
       draft.state.autoWatch.playlists !== initialWatch.playlists ||
       draft.state.autoWatch.savedAlbums !== initialWatch.savedAlbums;
 
+    const jobId = crypto.randomUUID();
+
+    if (toImport.length > 0) {
+      const nameById = new Map(sourceItems.map((item) => [item.id, item.name]));
+      seedDockJob({
+        id: jobId,
+        kind: "library-import",
+        provider: "spotify",
+        items: buildDockItems(toImport.map((item) => ({ key: item.id, name: nameById.get(item.id) ?? item.id }))),
+        status: "running",
+      });
+    }
+
     await save.mutateAsync({
+      jobId,
       toImport,
       toToggleSync,
       subscription: subscriptionChanged

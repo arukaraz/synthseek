@@ -1,0 +1,42 @@
+import { describe, expect, it } from "vitest";
+
+import { countDockItems, deriveTerminalStatus, terminalStatusFromCounts } from "../helpers";
+import type { DockItem } from "../types";
+
+function item(state: DockItem["state"]): DockItem {
+  return { key: state, name: state, state };
+}
+
+describe("progressDock helpers", () => {
+  describe("countDockItems", () => {
+    it("counts done and skipped as resolved, failed separately, and the total", () => {
+      const counts = countDockItems([item("done"), item("skipped"), item("failed"), item("pending")]);
+      expect(counts).toEqual({ done: 2, failed: 1, total: 4 });
+    });
+
+    it("treats importing as not yet resolved", () => {
+      const counts = countDockItems([item("importing"), item("pending")]);
+      expect(counts).toEqual({ done: 0, failed: 0, total: 2 });
+    });
+  });
+
+  describe("deriveTerminalStatus", () => {
+    it("is complete when nothing failed", () => {
+      expect(deriveTerminalStatus(5, 0)).toBe("complete");
+    });
+
+    it("is failed when nothing succeeded", () => {
+      expect(deriveTerminalStatus(0, 3)).toBe("failed");
+    });
+
+    it("is partial when some succeeded and some failed", () => {
+      expect(deriveTerminalStatus(4, 2)).toBe("partial");
+    });
+  });
+
+  it("terminalStatusFromCounts mirrors deriveTerminalStatus", () => {
+    expect(terminalStatusFromCounts(3, 0)).toBe("complete");
+    expect(terminalStatusFromCounts(0, 1)).toBe("failed");
+    expect(terminalStatusFromCounts(2, 1)).toBe("partial");
+  });
+});

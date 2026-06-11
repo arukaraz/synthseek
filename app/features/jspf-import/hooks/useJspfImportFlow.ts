@@ -1,5 +1,6 @@
 import { useImportCommit } from "@hooks/api/mutations/portability/useImportCommit";
 import { useImportPreview } from "@hooks/api/mutations/portability/useImportPreview";
+import { buildDockItems, deriveTerminalStatus, seedDockJob, setDockJobStatus } from "@hooks/api/subscriptions";
 import { useCallback, useEffect, useState } from "react";
 
 import { buildSelectionArray, generateJobId, trackKey } from "../helpers";
@@ -56,7 +57,24 @@ export function useJspfImportFlow(onOpenChange: (open: boolean) => void) {
     const data = preview.data;
     if (!source || !data) return;
     const selection = buildSelectionArray(data, selected);
-    commit.mutate({ ...source, jobId, selection }, { onSuccess: () => onOpenChange(false) });
+
+    seedDockJob({
+      id: jobId,
+      kind: "file-import",
+      items: buildDockItems(
+        data.collections.map((collection, index) => ({ key: String(index), name: collection.name }))
+      ),
+      status: "running",
+    });
+    onOpenChange(false);
+
+    commit.mutate(
+      { ...source, jobId, selection },
+      {
+        onSuccess: (report) => setDockJobStatus(jobId, deriveTerminalStatus(report.imported, report.failed)),
+        onError: () => setDockJobStatus(jobId, "failed"),
+      }
+    );
   }, [commit, source, jobId, onOpenChange, preview.data, selected]);
 
   const back = useCallback(() => {

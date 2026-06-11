@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import { ActivityDivider } from "../ActivityDivider";
-import type { ActivityDividerAnnouncements } from "../types";
 
 const reducedMotion = vi.hoisted(() => ({ value: false }));
 
@@ -10,101 +9,48 @@ vi.mock("framer-motion", () => ({
   useReducedMotion: () => reducedMotion.value,
 }));
 
-const announcements: ActivityDividerAnnouncements = {
-  start: "Started syncing",
-  progress: "Synced 5 of 8",
-  complete: "Finished, 8 of 8",
-};
-
 describe("ActivityDivider", () => {
   beforeEach(() => {
     reducedMotion.value = false;
   });
 
-  it("renders an idle rail with no label or live announcement", () => {
+  it("renders an idle rail", () => {
     const { container } = render(<ActivityDivider state="idle" />);
     const rail = container.querySelector(".activity-rail");
     expect(rail).toHaveClass("activity-rail-idle");
-    expect(screen.getByRole("status")).toHaveTextContent("");
   });
 
-  it("renders the in-progress rail with faster motion and no label", () => {
+  it("renders the in-progress rail with faster motion", () => {
     const { container } = render(<ActivityDivider state="in-progress" />);
     const rail = container.querySelector(".activity-rail");
     expect(rail).toHaveClass("activity-rail-progress");
-    expect(screen.queryByText("Syncing all playlists to Plex")).not.toBeInTheDocument();
   });
 
-  it("renders the plex-sync azure rail, the label, and the X/Y count", () => {
-    const { container } = render(
-      <ActivityDivider
-        state="plex-sync"
-        value={3}
-        max={8}
-        label="Syncing all playlists to Plex"
-        labelShort="Syncing to Plex"
-        announcements={announcements}
-      />
-    );
+  it("renders the plex-sync azure rail and its travel sweep", () => {
+    const { container } = render(<ActivityDivider state="plex-sync" value={3} max={8} />);
     const rail = container.querySelector(".activity-rail");
     expect(rail).toHaveClass("activity-rail-plex");
-    expect(screen.getAllByText("Syncing all playlists to Plex").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("3/8").length).toBeGreaterThan(0);
     expect(container.querySelector(".activity-rail-travel")).toBeInTheDocument();
   });
 
-  it("renders toolbar children and centers the plex-sync label as a non-blocking overlay over them", () => {
-    const { container } = render(
-      <ActivityDivider
-        state="plex-sync"
-        value={3}
-        max={8}
-        label="Syncing all playlists to Plex"
-        announcements={announcements}
-      >
-        <button type="button">Import library</button>
-      </ActivityDivider>
-    );
-    expect(screen.getByRole("button", { name: "Import library" })).toBeInTheDocument();
-    const overlay = container.querySelector(".pointer-events-none.absolute.inset-0");
-    expect(overlay).toBeInTheDocument();
-    expect(overlay).toHaveClass("items-center", "justify-center");
+  it("no longer renders the inline plex-sync chip, label, or live region", () => {
+    render(<ActivityDivider state="plex-sync" value={3} max={8} />);
+    expect(screen.queryByText("3/8")).not.toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
-  it("renders toolbar children without an overlay when idle", () => {
-    const { container } = render(
-      <ActivityDivider state="idle">
-        <button type="button">Import library</button>
-      </ActivityDivider>
-    );
-    expect(screen.getByRole("button", { name: "Import library" })).toBeInTheDocument();
-    expect(container.querySelector(".pointer-events-none.absolute.inset-0")).not.toBeInTheDocument();
-  });
-
-  it("announces the start of a plex sync in the live region", () => {
+  it("renders toolbar children", () => {
     render(
-      <ActivityDivider
-        state="plex-sync"
-        value={0}
-        max={8}
-        label="Syncing all playlists to Plex"
-        announcements={announcements}
-      />
+      <ActivityDivider state="plex-sync" value={3} max={8}>
+        <button type="button">Import library</button>
+      </ActivityDivider>
     );
-    expect(screen.getByRole("status")).toHaveTextContent("Started syncing");
+    expect(screen.getByRole("button", { name: "Import library" })).toBeInTheDocument();
   });
 
   it("substitutes a static determinate fill under reduced motion", () => {
     reducedMotion.value = true;
-    const { container } = render(
-      <ActivityDivider
-        state="plex-sync"
-        value={4}
-        max={8}
-        label="Syncing all playlists to Plex"
-        announcements={announcements}
-      />
-    );
+    const { container } = render(<ActivityDivider state="plex-sync" value={4} max={8} />);
     expect(container.querySelector(".activity-rail-travel")).not.toBeInTheDocument();
     const fill = container.querySelector(".activity-rail-static");
     expect(fill).toBeInTheDocument();

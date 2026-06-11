@@ -1,2 +1,2 @@
 export { ActivityDivider } from "./ActivityDivider";
-export type { ActivityDividerProps, ActivityDividerState, ActivityDividerAnnouncements } from "./types";
+export type { ActivityDividerProps, ActivityDividerState } from "./types";

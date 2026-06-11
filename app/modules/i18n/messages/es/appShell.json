@@ -15,5 +15,37 @@
         }
       }
     }
+  },
+  "progressDock": {
+    "title": {
+      "plexSyncRunning": "Sincronizando con Plex",
+      "plexSyncDone": "Todas las listas sincronizadas",
+      "libraryImportRunning": "Importando desde {{provider}}",
+      "libraryImportDone": "Importación completa",
+      "fileImportRunning": "Importando lista",
+      "fileImportDone": "Importación completa"
+    },
+    "subtitle": {
+      "ofTotal": "de {{total}}",
+      "failed": "con error"
+    },
+    "mobileMeta": "{{done}} de {{total}} · {{current}}",
+    "itemState": {
+      "pending": "Pendiente",
+      "importing": "Importando",
+      "done": "Listo",
+      "failed": "Con error",
+      "skipped": "Omitido"
+    },
+    "provider": {
+      "spotify": "Spotify",
+      "generic": "tu biblioteca"
+    },
+    "announce": {
+      "progress": "{{done}} de {{total}} listos"
+    },
+    "minimize": "Minimizar",
+    "expand": "Expandir",
+    "dismiss": "Descartar"
   }
 }

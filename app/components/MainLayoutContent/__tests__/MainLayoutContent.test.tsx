@@ -40,6 +40,10 @@ vi.mock("@components/ContentShell", () => ({
   ContentShell: ({ children }: { children: React.ReactNode }) => <main data-testid="content-shell">{children}</main>,
 }));
 
+vi.mock("@components/ui/ProgressDock", () => ({
+  ProgressDock: () => null,
+}));
+
 describe("MainLayoutContent", () => {
   afterEach(() => {
     vi.clearAllMocks();

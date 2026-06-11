@@ -21,6 +21,8 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.changedKey}`;
     case SubscriptionEventType.PortabilityProgress:
       return `${event.eventType}:${event.jobId}:${event.processed}`;
+    case SubscriptionEventType.LibraryImportProgress:
+      return `${event.eventType}:${event.jobId}:${event.item?.key ?? event.phase}:${event.item?.state ?? ""}`;
   }
 }
 

@@ -58,6 +58,7 @@
 @import "./utilities/status-strip.css";
 @import "./utilities/auth-scene.css";
 @import "./utilities/content-type.css";
+@import "./utilities/progress-dock.css";
 @import "./utilities/layout.css";
 @import "./utilities/animations.css";
 @import "./utilities/toast.css";

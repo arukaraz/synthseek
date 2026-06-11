@@ -189,12 +189,5 @@
   },
   "spotifyCallback": {
     "connectionFailed": "Spotify connection failed"
-  },
-  "activity": {
-    "plexSyncLabel": "Syncing all playlists to Plex",
-    "plexSyncLabelShort": "Syncing to Plex",
-    "plexSyncAnnounceStart": "Started syncing all playlists to Plex",
-    "plexSyncAnnounceProgress": "Synced {{synced}} of {{total}} playlists to Plex",
-    "plexSyncAnnounceComplete": "Finished syncing playlists to Plex, {{synced}} of {{total}} synced"
   }
 }

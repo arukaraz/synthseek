@@ -81,6 +81,7 @@
   },
   "spotify": {
     "syncFailed": "Error de sincronización",
+    "saveFailed": "No se pudieron guardar los cambios de la biblioteca",
     "playlistNotLinked": "La lista de reproducción no está vinculada a una fuente de Spotify",
     "playlistNotFound": "Lista de reproducción no encontrada",
     "noConnection": "No se encontró ninguna conexión con Spotify",

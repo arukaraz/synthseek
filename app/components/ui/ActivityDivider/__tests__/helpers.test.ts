@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { clampRatio, fillStyle, isAnnounceMilestone } from "../helpers";
+import { clampRatio, fillStyle } from "../helpers";
 
 describe("ActivityDivider helpers", () => {
   describe("clampRatio", () => {
@@ -25,25 +25,6 @@ describe("ActivityDivider helpers", () => {
       expect(fillStyle(0.5)).toEqual({ inlineSize: "50%" });
       expect(fillStyle(0)).toEqual({ inlineSize: "0%" });
       expect(fillStyle(1)).toEqual({ inlineSize: "100%" });
-    });
-  });
-
-  describe("isAnnounceMilestone", () => {
-    it("never announces a non-positive value", () => {
-      expect(isAnnounceMilestone(0, 10)).toBe(false);
-      expect(isAnnounceMilestone(-1, 10)).toBe(false);
-    });
-
-    it("always announces completion", () => {
-      expect(isAnnounceMilestone(10, 10)).toBe(true);
-      expect(isAnnounceMilestone(11, 10)).toBe(true);
-    });
-
-    it("announces only every fifth increment in between", () => {
-      expect(isAnnounceMilestone(1, 20)).toBe(false);
-      expect(isAnnounceMilestone(4, 20)).toBe(false);
-      expect(isAnnounceMilestone(5, 20)).toBe(true);
-      expect(isAnnounceMilestone(10, 20)).toBe(true);
     });
   });
 });

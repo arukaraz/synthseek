@@ -1,0 +1,38 @@
+@layer utilities {
+  .dock-ring {
+    --dock-ring-fill: 0deg;
+    border-radius: 9999px;
+    background: conic-gradient(
+      oklch(var(--neon-sync)) var(--dock-ring-fill),
+      oklch(var(--muted-foreground) / 0.2) var(--dock-ring-fill)
+    );
+  }
+
+  .dock-ring-complete {
+    background: conic-gradient(
+      var(--color-success) var(--dock-ring-fill),
+      oklch(var(--muted-foreground) / 0.2) var(--dock-ring-fill)
+    );
+  }
+
+  .dock-ring-partial {
+    background: conic-gradient(
+      var(--color-warning) var(--dock-ring-fill),
+      oklch(var(--muted-foreground) / 0.2) var(--dock-ring-fill)
+    );
+  }
+
+  .dock-ring-failed {
+    background: conic-gradient(
+      var(--color-error) var(--dock-ring-fill),
+      oklch(var(--muted-foreground) / 0.2) var(--dock-ring-fill)
+    );
+  }
+
+  .dock-ring-disc {
+    position: absolute;
+    inset: 3px;
+    border-radius: 9999px;
+    background-color: var(--surface-bg);
+  }
+}

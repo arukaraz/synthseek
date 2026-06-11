@@ -1,1 +1,0 @@
-export const ANNOUNCE_MILESTONE_STEP = 5;

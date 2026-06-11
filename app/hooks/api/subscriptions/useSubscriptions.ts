@@ -3,6 +3,7 @@ import { trpc } from "@utils/trpc";
 import { useRef } from "react";
 import {
   handleAlbumUpdate,
+  handleLibraryImportProgress,
   handlePlaylistPlexCreated,
   handlePlaylistUpdate,
   handlePlexSyncAllProgress,
@@ -61,6 +62,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.PortabilityProgress:
           handlePortabilityProgress(event);
+          break;
+        case SubscriptionEventType.LibraryImportProgress:
+          handleLibraryImportProgress(event, utils);
           break;
       }
 

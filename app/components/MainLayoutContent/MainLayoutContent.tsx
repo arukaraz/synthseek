@@ -1,6 +1,7 @@
 "use client";
 
 import { ContentShell } from "@components/ContentShell";
+import { ProgressDock } from "@components/ui/ProgressDock";
 import { TopHeader } from "@components/TopHeader";
 import { useSubscriptions } from "@hooks/api/subscriptions";
 import { useHashTargetGlow } from "@hooks/ui/useHashTargetGlow";
@@ -30,6 +31,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
     <div className="bg-surface min-h-screen overflow-hidden">
       <TopHeader onSearch={handleSearch} initialQuery={searchQuery} />
       <ContentShell>{children}</ContentShell>
+      <ProgressDock />
     </div>
   );
 }

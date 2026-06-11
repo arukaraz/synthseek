@@ -15,5 +15,37 @@
         }
       }
     }
+  },
+  "progressDock": {
+    "title": {
+      "plexSyncRunning": "Syncing to Plex",
+      "plexSyncDone": "All playlists synced",
+      "libraryImportRunning": "Importing from {{provider}}",
+      "libraryImportDone": "Import complete",
+      "fileImportRunning": "Importing playlist",
+      "fileImportDone": "Import complete"
+    },
+    "subtitle": {
+      "ofTotal": "of {{total}}",
+      "failed": "failed"
+    },
+    "mobileMeta": "{{done}} of {{total}} · {{current}}",
+    "itemState": {
+      "pending": "Pending",
+      "importing": "Importing",
+      "done": "Done",
+      "failed": "Failed",
+      "skipped": "Skipped"
+    },
+    "provider": {
+      "spotify": "Spotify",
+      "generic": "your library"
+    },
+    "announce": {
+      "progress": "{{done}} of {{total}} done"
+    },
+    "minimize": "Minimize",
+    "expand": "Expand",
+    "dismiss": "Dismiss"
   }
 }
