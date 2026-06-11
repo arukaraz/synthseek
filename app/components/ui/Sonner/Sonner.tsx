@@ -4,6 +4,8 @@ import { useDockJobs } from "@hooks/api/subscriptions";
 import { useTheme } from "next-themes";
 import { Toaster as Sonner } from "sonner";
 import { resolveSonnerTheme, resolveToastMobileOffset, resolveToastOffset } from "./helpers";
+import { TOAST_ICONS } from "./icons";
+import { TOAST_CLASS_NAMES } from "./styles";
 import type { ToasterProps } from "./types";
 
 export function Toaster({ ...props }: ToasterProps) {
@@ -13,9 +15,10 @@ export function Toaster({ ...props }: ToasterProps) {
     <Sonner
       theme={resolveSonnerTheme(theme)}
       position="bottom-right"
-      richColors
       closeButton
       gap={12}
+      icons={TOAST_ICONS}
+      toastOptions={{ classNames: TOAST_CLASS_NAMES }}
       offset={resolveToastOffset(dockVisible)}
       mobileOffset={resolveToastMobileOffset(dockVisible)}
       {...props}
