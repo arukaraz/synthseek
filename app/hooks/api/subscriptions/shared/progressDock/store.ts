@@ -1,12 +1,10 @@
 import { useSyncExternalStore } from "react";
 
-import { DOCK_AUTO_DISMISS_MS } from "./constants";
 import { countDockItems, deriveTerminalStatus } from "./helpers";
 import type { DockItem, DockItemState, DockJob, DockJobStatus, LibraryImportFailureReason } from "./types";
 
 const jobs = new Map<string, DockJob>();
 const dismissed = new Set<string>();
-const dismissTimers = new Map<string, ReturnType<typeof setTimeout>>();
 const listeners = new Set<() => void>();
 
 let snapshot: DockJob[] = [];
@@ -27,25 +25,10 @@ function getSnapshot(): DockJob[] {
   return snapshot;
 }
 
-function clearDismissTimer(jobId: string): void {
-  const timer = dismissTimers.get(jobId);
-  if (timer) {
-    clearTimeout(timer);
-    dismissTimers.delete(jobId);
-  }
-}
-
-function scheduleAutoDismiss(jobId: string): void {
-  clearDismissTimer(jobId);
-  const timer = setTimeout(() => {
-    dismissTimers.delete(jobId);
-    dismissDockJob(jobId);
-  }, DOCK_AUTO_DISMISS_MS);
-  dismissTimers.set(jobId, timer);
-}
-
 export function seedDockJob(job: Omit<DockJob, "updatedAt">): void {
-  clearDismissTimer(job.id);
+  for (const [existingId, existingJob] of jobs) {
+    if (existingJob.status !== "running") jobs.delete(existingId);
+  }
   dismissed.delete(job.id);
   jobs.set(job.id, { ...job, updatedAt: Date.now() });
   publish();
@@ -70,7 +53,6 @@ export function setDockJobStatus(jobId: string, status: DockJobStatus): void {
   const job = jobs.get(jobId);
   if (!job) return;
   jobs.set(jobId, { ...job, status, updatedAt: Date.now() });
-  if (status !== "running") scheduleAutoDismiss(jobId);
   publish();
 }
 
@@ -83,7 +65,6 @@ export function finalizeDockJob(jobId: string): void {
 }
 
 export function dismissDockJob(jobId: string): void {
-  clearDismissTimer(jobId);
   dismissed.add(jobId);
   if (jobs.delete(jobId)) publish();
 }
@@ -97,8 +78,6 @@ export function hasDockJob(jobId: string): boolean {
 }
 
 export function resetDockStore(): void {
-  dismissTimers.forEach((timer) => clearTimeout(timer));
-  dismissTimers.clear();
   jobs.clear();
   dismissed.clear();
   publish();

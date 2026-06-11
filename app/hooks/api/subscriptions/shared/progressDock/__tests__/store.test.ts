@@ -1,7 +1,6 @@
 import { renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { DOCK_AUTO_DISMISS_MS } from "../constants";
 import {
   buildDockItems,
   dismissDockJob,
@@ -31,13 +30,11 @@ function seedLibrary(id: string, names: string[]): void {
 }
 
 beforeEach(() => {
-  vi.useFakeTimers();
   resetDockStore();
 });
 
 afterEach(() => {
   resetDockStore();
-  vi.useRealTimers();
 });
 
 describe("progressDock store", () => {
@@ -103,21 +100,39 @@ describe("progressDock store", () => {
     expect(readJobs()).toHaveLength(1);
   });
 
-  it("auto-dismisses a job after the constant once it reaches a terminal status", () => {
-    seedLibrary("job-f", ["Alpha"]);
-    setDockJobStatus("job-f", "complete");
-    expect(readJobs()).toHaveLength(1);
-    vi.advanceTimersByTime(DOCK_AUTO_DISMISS_MS + 1);
-    expect(readJobs()).toHaveLength(0);
+  it.each(["complete", "partial", "failed"] as const)(
+    "keeps a %s job in the store indefinitely until it is dismissed",
+    (status) => {
+      seedLibrary("job-f", ["Alpha"]);
+      setDockJobStatus("job-f", status);
+      expect(readJobs()).toHaveLength(1);
+      expect(readJobs()[0].status).toBe(status);
+      dismissDockJob("job-f");
+      expect(readJobs()).toHaveLength(0);
+      expect(isDockJobDismissed("job-f")).toBe(true);
+    }
+  );
+
+  it("seeding a new job removes a prior terminal job but leaves a running one", () => {
+    seedLibrary("job-terminal", ["Alpha"]);
+    setDockJobStatus("job-terminal", "complete");
+    seedLibrary("job-running", ["Beta"]);
+    seedLibrary("job-new", ["Gamma"]);
+    const jobs = readJobs();
+    const ids = jobs.map((job) => job.id);
+    expect(ids).toContain("job-running");
+    expect(ids).toContain("job-new");
+    expect(ids).not.toContain("job-terminal");
+    expect(isDockJobDismissed("job-terminal")).toBe(false);
   });
 
-  it("clears a pending auto-dismiss when a new job re-seeds the same id", () => {
-    seedLibrary("job-g", ["Alpha"]);
-    setDockJobStatus("job-g", "complete");
-    seedLibrary("job-g", ["Beta"]);
-    vi.advanceTimersByTime(DOCK_AUTO_DISMISS_MS + 1);
-    expect(readJobs()).toHaveLength(1);
-    expect(readJobs()[0].status).toBe("running");
+  it("does not re-add a dismissed terminal job from a late finalize", () => {
+    seedLibrary("job-late", ["Alpha"]);
+    markDockItem("job-late", "0", "done");
+    dismissDockJob("job-late");
+    finalizeDockJob("job-late");
+    expect(hasDockJob("job-late")).toBe(false);
+    expect(readJobs()).toHaveLength(0);
   });
 
   describe("finalizeDockJob", () => {
