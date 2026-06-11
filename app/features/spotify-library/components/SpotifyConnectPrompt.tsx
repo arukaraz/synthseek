@@ -8,7 +8,7 @@ import { connectPrompt, connectPromptBody, connectPromptIcon, connectPromptTitle
 import { SpotifyMark } from "./SpotifyMark";
 import type { SpotifyConnectPromptProps } from "./types";
 
-export function SpotifyConnectPrompt({ pending, statusLoading }: SpotifyConnectPromptProps) {
+export function SpotifyConnectPrompt({ pending, statusLoading, expired = false }: SpotifyConnectPromptProps) {
   const { t } = useTranslation("library");
   const connect = useSpotifyConnect();
 
@@ -20,17 +20,23 @@ export function SpotifyConnectPrompt({ pending, statusLoading }: SpotifyConnectP
     );
   }
 
+  const title = expired ? t("spotifyLibrary.connect.expiredTitle") : t("spotifyLibrary.connect.title");
+  const body = expired
+    ? t("spotifyLibrary.connect.bodyExpired")
+    : pending
+      ? t("spotifyLibrary.connect.bodyPending")
+      : t("spotifyLibrary.connect.bodyDefault");
+  const action = expired || pending ? t("spotifyLibrary.connect.reconnect") : t("spotifyLibrary.connect.connect");
+
   return (
     <div className={connectPrompt()}>
       <span className={connectPromptIcon()}>
         <SpotifyMark size={28} />
       </span>
-      <h2 className={connectPromptTitle()}>{t("spotifyLibrary.connect.title")}</h2>
-      <p className={connectPromptBody()}>
-        {pending ? t("spotifyLibrary.connect.bodyPending") : t("spotifyLibrary.connect.bodyDefault")}
-      </p>
+      <h2 className={connectPromptTitle()}>{title}</h2>
+      <p className={connectPromptBody()}>{body}</p>
       <Button onClick={() => connect.mutate()} disabled={connect.isPending}>
-        {pending ? t("spotifyLibrary.connect.reconnect") : t("spotifyLibrary.connect.connect")}
+        {action}
       </Button>
     </div>
   );

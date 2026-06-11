@@ -6,6 +6,13 @@ import { createMockLibraryItem } from "@test/mocks/feature-hooks.mock";
 
 const saveMutateAsync = vi.fn().mockResolvedValue(undefined);
 const refetch = vi.fn().mockResolvedValue(undefined);
+const invalidateConnectionStatus = vi.fn();
+
+const toastMocks = vi.hoisted(() => ({
+  error: vi.fn(),
+  warning: vi.fn(),
+  success: vi.fn(),
+}));
 
 let connectionStatus: {
   data: { connected: boolean; pending: boolean } | undefined;
@@ -15,10 +22,16 @@ let libraryItems: {
   data: LibraryItem[] | undefined;
   isLoading: boolean;
   isFetching: boolean;
+  isError: boolean;
+  error: unknown;
   refetch: typeof refetch;
 };
 let subscriptionData: { watch_new_playlists: boolean; watch_saved_albums: boolean } | undefined;
 let savePending: boolean;
+
+vi.mock("sonner", () => ({
+  toast: { error: toastMocks.error, warning: toastMocks.warning, success: toastMocks.success },
+}));
 
 vi.mock("@hooks/api/queries/spotify/useSpotifyConnectionStatus", () => ({
   useSpotifyConnectionStatus: () => connectionStatus,
@@ -26,6 +39,10 @@ vi.mock("@hooks/api/queries/spotify/useSpotifyConnectionStatus", () => ({
 
 vi.mock("@hooks/api/queries/spotify/useSpotifyLibraryItems", () => ({
   useSpotifyLibraryItems: () => libraryItems,
+}));
+
+vi.mock("@hooks/api/queries/spotify/useInvalidateSpotifyConnectionStatus", () => ({
+  useInvalidateSpotifyConnectionStatus: () => invalidateConnectionStatus,
 }));
 
 vi.mock("@hooks/api/queries/spotify/useLibrarySubscription", () => ({
@@ -88,8 +105,13 @@ vi.mock("../components/ModalBottombar", () => ({
 }));
 
 vi.mock("../components/SpotifyConnectPrompt", () => ({
-  SpotifyConnectPrompt: (props: { pending: boolean; statusLoading: boolean }) => (
-    <div data-testid="connect-prompt" data-pending={String(props.pending)} data-loading={String(props.statusLoading)} />
+  SpotifyConnectPrompt: (props: { pending: boolean; statusLoading: boolean; expired?: boolean }) => (
+    <div
+      data-testid="connect-prompt"
+      data-pending={String(props.pending)}
+      data-loading={String(props.statusLoading)}
+      data-expired={String(Boolean(props.expired))}
+    />
   ),
 }));
 
@@ -113,6 +135,8 @@ function resetState() {
     ],
     isLoading: false,
     isFetching: false,
+    isError: false,
+    error: null,
     refetch,
   };
   subscriptionData = { watch_new_playlists: false, watch_saved_albums: false };
@@ -326,7 +350,7 @@ describe("SpotifyLibraryModal", () => {
   });
 
   it("does not navigate when there are no rows", () => {
-    libraryItems = { data: [], isLoading: false, isFetching: false, refetch };
+    libraryItems = { data: [], isLoading: false, isFetching: false, isError: false, error: null, refetch };
 
     render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
 
@@ -345,5 +369,59 @@ describe("SpotifyLibraryModal", () => {
     });
 
     expect(screen.queryByTestId("detail-panel")).not.toBeInTheDocument();
+  });
+
+  it("flips to the reconnect prompt on a reauth-required library error", () => {
+    libraryItems = {
+      data: undefined,
+      isLoading: false,
+      isFetching: false,
+      isError: true,
+      error: { data: { appCode: "LIBRARY_SOURCE_REAUTH_REQUIRED" } },
+      refetch,
+    };
+
+    render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+
+    const prompt = screen.getByTestId("connect-prompt");
+    expect(prompt).toHaveAttribute("data-expired", "true");
+    expect(screen.queryByTestId("topbar")).not.toBeInTheDocument();
+  });
+
+  it("fires the reauth toast once and invalidates the connection status", () => {
+    libraryItems = {
+      data: undefined,
+      isLoading: false,
+      isFetching: false,
+      isError: true,
+      error: { data: { appCode: "LIBRARY_SOURCE_REAUTH_REQUIRED" } },
+      refetch,
+    };
+
+    const { rerender } = render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+    rerender(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+
+    expect(toastMocks.error).toHaveBeenCalledTimes(1);
+    expect(toastMocks.error).toHaveBeenCalledWith("Spotify connection expired", expect.anything());
+    expect(invalidateConnectionStatus).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the connected view on a generic library error and fires a generic toast", () => {
+    libraryItems = {
+      data: [],
+      isLoading: false,
+      isFetching: false,
+      isError: true,
+      error: { message: "boom" },
+      refetch,
+    };
+
+    render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+
+    expect(screen.getByTestId("topbar")).toBeInTheDocument();
+    expect(screen.queryByTestId("connect-prompt")).not.toBeInTheDocument();
+    expect(toastMocks.error).toHaveBeenCalledTimes(1);
+    expect(toastMocks.error).toHaveBeenCalledWith("Could not load your Spotify library", expect.anything());
+    expect(invalidateConnectionStatus).not.toHaveBeenCalled();
   });
 });

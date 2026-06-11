@@ -8,6 +8,7 @@ export interface SpotifyMarkProps {
 export interface SpotifyConnectPromptProps {
   pending: boolean;
   statusLoading: boolean;
+  expired?: boolean;
 }
 
 export interface ModalToolbarProps {

@@ -3,9 +3,11 @@
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { useSaveLibraryChanges } from "@hooks/api/mutations/spotify/useSaveLibraryChanges";
 import { buildDockItems, seedDockJob } from "@hooks/api/subscriptions";
+import { useInvalidateSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useInvalidateSpotifyConnectionStatus";
 import { useLibrarySubscription } from "@hooks/api/queries/spotify/useLibrarySubscription";
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { useSpotifyLibraryItems } from "@hooks/api/queries/spotify/useSpotifyLibraryItems";
+import { emitFriendlyToast, extractAppCode, resolveFriendlyError } from "@modules/errors";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -28,6 +30,28 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
   const items = useSpotifyLibraryItems(open && connected);
   const subscription = useLibrarySubscription();
   const save = useSaveLibraryChanges();
+  const invalidateConnectionStatus = useInvalidateSpotifyConnectionStatus();
+
+  const reauthNeeded = items.isError && extractAppCode(items.error) === "LIBRARY_SOURCE_REAUTH_REQUIRED";
+
+  useEffect(() => {
+    if (!items.isError) return;
+    if (reauthNeeded) {
+      emitFriendlyToast(resolveFriendlyError(items.error));
+      invalidateConnectionStatus();
+      return;
+    }
+    emitFriendlyToast(
+      resolveFriendlyError(items.error, {
+        category: "spotify",
+        fallback: {
+          title: t("spotifyLibrary.loadFailed.title"),
+          description: t("spotifyLibrary.loadFailed.description"),
+        },
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items.error, reauthNeeded]);
 
   const initialWatch = useMemo(
     () => ({
@@ -184,7 +208,7 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
       >
         <DialogTitle className="sr-only">{t("spotifyLibrary.dialog.title")}</DialogTitle>
         <DialogDescription className="sr-only">{t("spotifyLibrary.dialog.description")}</DialogDescription>
-        {connected ? (
+        {connected && !reauthNeeded ? (
           <div className={modalGrid()}>
             <ModalTopbar />
             <ModalToolbar
@@ -227,7 +251,11 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
             />
           </div>
         ) : (
-          <SpotifyConnectPrompt pending={status.data?.pending ?? false} statusLoading={status.isLoading} />
+          <SpotifyConnectPrompt
+            pending={status.data?.pending ?? false}
+            statusLoading={status.isLoading}
+            expired={reauthNeeded}
+          />
         )}
       </DialogContent>
     </Dialog>

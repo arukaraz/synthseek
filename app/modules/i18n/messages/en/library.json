@@ -7,10 +7,16 @@
     "connect": {
       "checking": "Checking your Spotify connection...",
       "title": "Connect your Spotify account",
+      "expiredTitle": "Your Spotify connection expired",
       "bodyPending": "Spotify is still authorizing your account. Try connecting again if it does not finish in a moment.",
       "bodyDefault": "Authorize Synthseek to browse and import your Spotify playlists and saved albums.",
+      "bodyExpired": "Your Spotify connection expired or was revoked. Reconnect to load your library again.",
       "reconnect": "Reconnect Spotify",
       "connect": "Connect Spotify"
+    },
+    "loadFailed": {
+      "title": "Could not load your Spotify library",
+      "description": "Something went wrong loading your library. Try again in a moment."
     },
     "toolbar": {
       "searchPlaceholder": "Search items…"

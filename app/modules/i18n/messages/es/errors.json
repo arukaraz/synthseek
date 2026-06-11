@@ -131,6 +131,10 @@
     "title": "Fallo en la llamada de retorno de la fuente de biblioteca",
     "description": "La llamada de retorno (callback) de la fuente de biblioteca falló. Inténtalo de nuevo."
   },
+  "LIBRARY_SOURCE_REAUTH_REQUIRED": {
+    "title": "Tu conexión de Spotify expiró",
+    "description": "Reconecta tu cuenta de Spotify para cargar tu biblioteca."
+  },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Fallo de conexión con Lidarr",
     "description": "No se pudo conectar con Lidarr. Revisa la URL y la clave de API en Ajustes."
