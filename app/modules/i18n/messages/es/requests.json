@@ -116,7 +116,9 @@
     "failedLabel": "Fallidas",
     "failedSublabel": "con error",
     "activeLabel": "Activas",
-    "activeSublabel": "en progreso"
+    "activeSublabel": "en progreso",
+    "duplicatesLabel": "Duplicados",
+    "duplicatesSublabel": "ignorados"
   },
   "tracks": {
     "trackHeader": "Canción",

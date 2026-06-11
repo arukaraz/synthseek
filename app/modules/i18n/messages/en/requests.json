@@ -116,7 +116,9 @@
     "failedLabel": "Failed",
     "failedSublabel": "errored",
     "activeLabel": "Active",
-    "activeSublabel": "in progress"
+    "activeSublabel": "in progress",
+    "duplicatesLabel": "Duplicates",
+    "duplicatesSublabel": "ignored"
   },
   "tracks": {
     "trackHeader": "Track",

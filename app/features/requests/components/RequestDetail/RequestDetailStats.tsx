@@ -19,9 +19,10 @@ export function RequestDetailStats({ request }: RequestDetailStatsProps) {
     (UNRESOLVED_STATUSES as readonly string[]).includes(track.status)
   ).length;
   const activeCount = tracks.filter((track) => (ACTIVE_STATUSES as readonly string[]).includes(track.status)).length;
+  const hasDuplicates = request.duplicateCount > 0;
 
   return (
-    <div className={detailStatsGrid()}>
+    <div className={detailStatsGrid({ columns: hasDuplicates ? 5 : 4 })}>
       <RequestDetailStatsCard
         label={t("stats.tracksLabel")}
         value={`${request.completed_tracks}/${request.total_tracks}`}
@@ -45,6 +46,14 @@ export function RequestDetailStats({ request }: RequestDetailStatsProps) {
         sublabel={t("stats.activeSublabel")}
         valueClassName="text-primary-400"
       />
+      {hasDuplicates && (
+        <RequestDetailStatsCard
+          label={t("stats.duplicatesLabel")}
+          value={request.duplicateCount}
+          sublabel={t("stats.duplicatesSublabel")}
+          valueClassName="text-fg/60"
+        />
+      )}
     </div>
   );
 }

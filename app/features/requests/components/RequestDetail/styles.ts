@@ -84,9 +84,16 @@ export const heroMoreButton = cva(
 
 export type HeroMoreButtonProps = VariantProps<typeof heroMoreButton>;
 
-export const detailStatsGrid = cva("grid grid-cols-2 gap-3 px-3 pb-4 sm:px-4 md:grid-cols-4", {
-  variants: {},
-  defaultVariants: {},
+export const detailStatsGrid = cva("grid grid-cols-2 gap-3 px-3 pb-4 sm:px-4", {
+  variants: {
+    columns: {
+      4: "md:grid-cols-4",
+      5: "md:grid-cols-5",
+    },
+  },
+  defaultVariants: {
+    columns: 4,
+  },
 });
 
 export type DetailStatsGridProps = VariantProps<typeof detailStatsGrid>;
