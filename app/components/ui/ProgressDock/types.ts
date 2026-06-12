@@ -2,6 +2,7 @@ import type { DockItem, DockItemState, DockJob, DockJobKind, DockJobStatus } fro
 
 export interface DockCounts {
   done: number;
+  skipped: number;
   failed: number;
   total: number;
 }
@@ -37,6 +38,7 @@ export interface DockItemRowProps {
   reduced: boolean;
   label: string;
   reasonLabel: string;
+  skippedLabel: string;
 }
 
 export type { DockItem, DockItemState, DockJob, DockJobKind, DockJobStatus };

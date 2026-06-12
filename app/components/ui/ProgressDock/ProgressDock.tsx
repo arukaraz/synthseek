@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { clampRatio, currentItemName, providerLabelKey, selectActiveJob, titleKey } from "./helpers";
+import { buildSubtitle, clampRatio, currentItemName, providerLabelKey, selectActiveJob, titleKey } from "./helpers";
 import { ProgressDockCard } from "./ProgressDockCard";
 import { dockViewport } from "./styles";
 
@@ -21,8 +21,9 @@ export function ProgressDock() {
   const lastJobIdRef = useRef<string | null>(null);
   const lastDoneRef = useRef(0);
 
-  const counts = useMemo(() => (job ? countDockItems(job.items) : { done: 0, failed: 0, total: 0 }), [job]);
-  const ratio = clampRatio(counts.done + counts.failed, counts.total);
+  const counts = useMemo(() => (job ? countDockItems(job.items) : { done: 0, skipped: 0, failed: 0, total: 0 }), [job]);
+  const resolved = counts.done + counts.skipped + counts.failed;
+  const ratio = clampRatio(resolved, counts.total);
   const percent = Math.round(ratio * 100);
 
   useEffect(() => {
@@ -45,7 +46,6 @@ export function ProgressDock() {
       return;
     }
 
-    const resolved = counts.done + counts.failed;
     if (resolved > 0 && resolved !== lastDoneRef.current) {
       lastDoneRef.current = resolved;
       setAnnouncement(t("progressDock.announce.progress", { done: counts.done, total: counts.total }));
@@ -55,7 +55,7 @@ export function ProgressDock() {
     if (isNewJob) {
       setAnnouncement(t(titleKey(job.kind, "running"), { provider }));
     }
-  }, [job, counts.done, counts.failed, counts.total, t]);
+  }, [job, counts.done, counts.total, resolved, t]);
 
   const onDismiss = useCallback(() => {
     if (job) dismissDockJob(job.id);
@@ -74,14 +74,8 @@ export function ProgressDock() {
   }
 
   const title = t(titleKey(job.kind, job.status), { provider: t(providerLabelKey(job.provider)) });
-  const subtitle =
-    counts.failed > 0
-      ? { accent: String(counts.failed), accentTone: "error" as const, rest: t("progressDock.subtitle.failed") }
-      : {
-          accent: String(counts.done),
-          accentTone: "sync" as const,
-          rest: t("progressDock.subtitle.ofTotal", { total: counts.total }),
-        };
+  const isTerminal = job.status !== "running";
+  const subtitle = buildSubtitle(counts, isTerminal, t);
   const mobileMeta = t("progressDock.mobileMeta", {
     done: counts.done,
     total: counts.total,

@@ -27,8 +27,10 @@
     },
     "subtitle": {
       "ofTotal": "de {{total}}",
-      "failed": "con error"
+      "failed": "con error",
+      "skippedBreakdown": "importados, {{skipped}} ya en tu biblioteca"
     },
+    "itemSkippedReason": "Ya en tu biblioteca",
     "mobileMeta": "{{done}} de {{total}} · {{current}}",
     "itemState": {
       "pending": "Pendiente",

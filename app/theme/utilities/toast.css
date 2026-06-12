@@ -77,10 +77,12 @@
 }
 
 [data-sonner-toaster] [data-sonner-toast][data-styled="true"] [data-icon] svg {
+  display: block;
   height: 1.0625rem;
   width: 1.0625rem;
   margin: 0;
   color: var(--color-white);
+  transform: translate(0.5px, 0.5px);
 }
 
 [data-sonner-toaster] [data-sonner-toast][data-styled="true"] [data-content] {

@@ -61,7 +61,7 @@ export function finalizeDockJob(jobId: string): void {
   const job = jobs.get(jobId);
   if (!job) return;
   const counts = countDockItems(job.items);
-  setDockJobStatus(jobId, deriveTerminalStatus(counts.done, counts.failed));
+  setDockJobStatus(jobId, deriveTerminalStatus(counts.done + counts.skipped, counts.failed));
 }
 
 export function dismissDockJob(jobId: string): void {

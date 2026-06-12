@@ -35,4 +35,9 @@
     border-radius: 9999px;
     background-color: var(--surface-bg);
   }
+
+  .dock-item-glyph svg {
+    display: block;
+    transform: translate(0.5px, 0.5px);
+  }
 }

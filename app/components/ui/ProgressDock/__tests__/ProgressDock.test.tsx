@@ -122,6 +122,32 @@ describe("ProgressDock", () => {
     expect(screen.getAllByText("Import complete").length).toBeGreaterThan(0);
   });
 
+  it("labels every skipped row as already in library", () => {
+    render(<ProgressDock />);
+    act(() => {
+      seedLibrary();
+      markDockItem("dock-test", "a", "skipped");
+      markDockItem("dock-test", "b", "skipped");
+      markDockItem("dock-test", "c", "skipped");
+      finalizeDockJob("dock-test");
+    });
+    expect(screen.getAllByText("Already in library")).toHaveLength(3);
+  });
+
+  it("breaks the subtitle into imported vs already in library on a partial-skip job", () => {
+    render(<ProgressDock />);
+    act(() => {
+      seedLibrary();
+      markDockItem("dock-test", "a", "done");
+      markDockItem("dock-test", "b", "done");
+      markDockItem("dock-test", "c", "skipped");
+      finalizeDockJob("dock-test");
+    });
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText(/imported, 1 already in library/)).toBeInTheDocument();
+    expect(screen.getByText("Already in library")).toBeInTheDocument();
+  });
+
   it("hides the body list when minimized", () => {
     render(<ProgressDock />);
     act(() => {

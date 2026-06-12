@@ -1,4 +1,4 @@
-import type { ParseKeys } from "i18next";
+import type { ParseKeys, TFunction } from "i18next";
 import type { CSSProperties } from "react";
 
 import type {
@@ -9,7 +9,7 @@ import type {
   LibraryImportFailureReason,
 } from "@hooks/api/subscriptions";
 
-import { DOCK_RING_GAP_DEGREES } from "./constants";
+import type { DockCounts, DockSubtitle } from "./types";
 
 type AppShellKey = ParseKeys<"appShell">;
 
@@ -19,7 +19,7 @@ export function selectActiveJob(jobs: ReadonlyArray<DockJob>): DockJob | null {
 }
 
 export function ringStyle(ratio: number): CSSProperties {
-  const filled = Math.round(ratio * (360 - DOCK_RING_GAP_DEGREES));
+  const filled = Math.round(ratio * 360);
   return { "--dock-ring-fill": `${filled}deg` } as CSSProperties;
 }
 
@@ -83,4 +83,22 @@ export function currentItemName(job: DockJob): string {
   if (active && active.name) return active.name;
   const pending = job.items.find((item) => item.state === "pending");
   return pending?.name ?? "";
+}
+
+export function buildSubtitle(counts: DockCounts, isTerminal: boolean, t: TFunction<"appShell">): DockSubtitle {
+  if (counts.failed > 0) {
+    return { accent: String(counts.failed), accentTone: "error", rest: t("progressDock.subtitle.failed") };
+  }
+  if (isTerminal && counts.skipped > 0) {
+    return {
+      accent: String(counts.done),
+      accentTone: "sync",
+      rest: t("progressDock.subtitle.skippedBreakdown", { skipped: counts.skipped }),
+    };
+  }
+  return {
+    accent: String(counts.done),
+    accentTone: "sync",
+    rest: t("progressDock.subtitle.ofTotal", { total: counts.total }),
+  };
 }

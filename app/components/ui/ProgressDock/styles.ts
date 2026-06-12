@@ -65,12 +65,20 @@ export const dockItemRow = cva("flex items-center gap-2 rounded-lg px-2 py-1.5",
   defaultVariants: { importing: false },
 });
 
-export const dockItemIcon = cva("grid size-4 shrink-0 place-items-center");
+export const dockItemIcon = cva("dock-item-glyph grid size-4 shrink-0 place-items-center");
 
 export const dockItemNameBlock = cva("flex min-w-0 flex-1 flex-col");
 
 export const dockItemName = cva("text-fg/80 min-w-0 truncate text-xs");
 
-export const dockItemReason = cva("text-error/80 min-w-0 truncate text-[11px] leading-tight");
+export const dockItemReason = cva("min-w-0 truncate text-[11px] leading-tight", {
+  variants: {
+    tone: {
+      error: "text-error/80",
+      muted: "text-fg-muted",
+    },
+  },
+  defaultVariants: { tone: "error" },
+});
 
 export const dockMobileMeta = cva("text-fg-muted truncate text-[11px]");

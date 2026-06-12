@@ -92,6 +92,7 @@ export function ProgressDockCard({
                     reduced={reduced}
                     label={t(itemStateKey(item.state))}
                     reasonLabel={t(failureReasonKey(item.reason))}
+                    skippedLabel={t("progressDock.itemSkippedReason")}
                   />
                 </li>
               ))}
