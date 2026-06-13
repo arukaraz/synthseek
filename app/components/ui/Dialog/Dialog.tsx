@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import type { HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import { closeButton } from "../styles";
+import { dialogContent } from "./styles";
 import type { DialogContentProps, DialogDescriptionProps, DialogOverlayProps, DialogTitleProps } from "./types";
 
 export const Dialog = DialogPrimitive.Root;
@@ -27,22 +28,12 @@ export function DialogOverlay({ className, ref, ...props }: DialogOverlayProps) 
   );
 }
 
-export function DialogContent({ className, children, ref, showClose = true, ...props }: DialogContentProps) {
+export function DialogContent({ className, children, ref, showClose = true, animation, ...props }: DialogContentProps) {
   const { t } = useTranslation("components");
   return (
     <DialogPortal>
       <DialogOverlay />
-      <DialogPrimitive.Content
-        ref={ref}
-        className={cn(
-          "border-fg/10 bg-surface/95 sm:bg-surface/90 from-primary-600/15 to-accent-600/15 fixed left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] gap-6 rounded-2xl border bg-linear-to-br p-6 shadow-2xl duration-200 sm:backdrop-blur-2xl",
-          "top-4 max-h-[calc(100dvh-1rem-env(safe-area-inset-bottom,0px))] overflow-y-auto",
-          "sm:top-[50%] sm:max-h-[90vh] sm:translate-y-[-50%]",
-          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-          className
-        )}
-        {...props}
-      >
+      <DialogPrimitive.Content ref={ref} className={cn(dialogContent({ animation }), className)} {...props}>
         <div className={gradientOverlay({ direction: "toBr", intensity: "mixed", rounded: "2xl" })} />
 
         <div className="relative z-10 flex h-full flex-col">{children}</div>

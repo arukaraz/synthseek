@@ -13,7 +13,7 @@ export function LibraryFilterSheet({ open, onOpenChange, ...sidebarProps }: Libr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={sheetContent()} showClose={false}>
+      <DialogContent className={sheetContent()} animation="sheet" showClose={false}>
         <div className={sheetHeader()}>
           <DialogTitle className={sheetTitle()}>{t("page.filters.title")}</DialogTitle>
         </div>

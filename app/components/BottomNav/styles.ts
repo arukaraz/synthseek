@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const bottomNavContainer = cva(
-  "border-fg/5 bg-surface/95 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur-2xl sm:hidden"
+  "border-fg/5 bg-surface/95 fixed inset-x-0 bottom-0 z-30 border-t backdrop-blur-2xl sm:hidden"
 );
 
 export const bottomNavList = cva("flex items-stretch justify-around px-2 pt-1.5");
