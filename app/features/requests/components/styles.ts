@@ -72,15 +72,3 @@ export type CloseButtonProps = VariantProps<typeof closeButton>;
 export const mobileSearchOpenButton = cva(
   "text-fg/40 hover:bg-fg/10 hover:text-fg/80 flex h-9 w-9 items-center justify-center rounded-lg transition-colors"
 );
-
-export const activeSourceChip = cva(
-  "border-fg/10 bg-fg/5 inline-flex items-center gap-1.5 rounded-full border py-1 pr-1 pl-2.5 text-xs"
-);
-
-export const activeSourceChipClear = cva(
-  "hover:bg-fg/10 text-fg/50 hover:text-fg ml-0.5 rounded-full p-0.5 transition-colors"
-);
-
-export const activeSourceClearAll = cva(
-  "text-fg/40 hover:text-fg text-xs underline-offset-2 transition-colors hover:underline"
-);

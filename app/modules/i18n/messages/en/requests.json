@@ -37,24 +37,12 @@
       }
     }
   },
-  "viewToggle": {
-    "groupsTitle": "Groups view",
-    "groupsAriaLabel": "Switch to groups view",
-    "listTitle": "List view",
-    "listAriaLabel": "Switch to list view"
-  },
   "searchInput": {
     "placeholder": "Filter...",
     "clear": "Clear filter",
     "openTitle": "Filter requests",
     "open": "Open filter",
     "close": "Close filter"
-  },
-  "sourceFilter": {
-    "label": "Album / Playlist",
-    "searchPlaceholder": "Search source...",
-    "noMatches": "No matches",
-    "clearSelection": "Clear selection"
   },
   "statusFilter": {
     "all": "All",
@@ -67,11 +55,6 @@
     "playlist": "Playlist",
     "artist": "Artist",
     "album": "Album"
-  },
-  "activeSourceChips": {
-    "filteredTo": "Filtered to",
-    "remove": "Remove {{name}}",
-    "clearAll": "Clear all"
   },
   "emptyState": {
     "noResultsTitle": "No Results",
@@ -137,30 +120,6 @@
     "jumpTheQueue": "Jump the queue",
     "jumpTheQueueTitle": "Move this track to the front of the queue",
     "prioritized": "Prioritized"
-  },
-  "table": {
-    "titleHeader": "Title",
-    "statusHeader": "Status",
-    "albumHeader": "Album/Playlist",
-    "artistHeader": "Artist",
-    "typeHeader": "Type",
-    "requestedByHeader": "Requested by",
-    "addedHeader": "Added",
-    "completedHeader": "Completed",
-    "contentTypeTrack": "Track",
-    "contentTypeAlbum": "Album",
-    "contentTypePlaylist": "Playlist",
-    "contentTypeArtist": "Artist",
-    "requestedByYou": "you",
-    "showOnlyFrom": "Show only tracks from {{name}}",
-    "retry": "Retry download",
-    "retryTitle": "Retry",
-    "cancel": "Cancel track",
-    "cancelTitle": "Cancel",
-    "actionsMenu": "Actions menu",
-    "retryMenuItem": "Retry download",
-    "cancelMenuItem": "Cancel track",
-    "prioritizeMenuItem": "Jump the queue"
   },
   "export": {
     "dialogTitle": "Export (max compatibility)",

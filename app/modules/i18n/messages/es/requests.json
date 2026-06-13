@@ -37,24 +37,12 @@
       }
     }
   },
-  "viewToggle": {
-    "groupsTitle": "Vista de grupos",
-    "groupsAriaLabel": "Cambiar a vista de grupos",
-    "listTitle": "Vista de lista",
-    "listAriaLabel": "Cambiar a vista de lista"
-  },
   "searchInput": {
     "placeholder": "Filtrar...",
     "clear": "Limpiar filtro",
     "openTitle": "Filtrar solicitudes",
     "open": "Abrir filtro",
     "close": "Cerrar filtro"
-  },
-  "sourceFilter": {
-    "label": "Álbum / Lista de reproducción",
-    "searchPlaceholder": "Buscar fuente...",
-    "noMatches": "Sin coincidencias",
-    "clearSelection": "Limpiar selección"
   },
   "statusFilter": {
     "all": "Todas",
@@ -67,11 +55,6 @@
     "playlist": "Lista de reproducción",
     "artist": "Artista",
     "album": "Álbum"
-  },
-  "activeSourceChips": {
-    "filteredTo": "Filtrado por",
-    "remove": "Quitar {{name}}",
-    "clearAll": "Limpiar todo"
   },
   "emptyState": {
     "noResultsTitle": "Sin resultados",
@@ -137,30 +120,6 @@
     "jumpTheQueue": "Saltar la cola",
     "jumpTheQueueTitle": "Mover esta canción al frente de la cola",
     "prioritized": "Priorizado"
-  },
-  "table": {
-    "titleHeader": "Título",
-    "statusHeader": "Estado",
-    "albumHeader": "Álbum / Lista",
-    "artistHeader": "Artista",
-    "typeHeader": "Tipo",
-    "requestedByHeader": "Solicitado por",
-    "addedHeader": "Añadida",
-    "completedHeader": "Completada",
-    "contentTypeTrack": "Canción",
-    "contentTypeAlbum": "Álbum",
-    "contentTypePlaylist": "Lista de reproducción",
-    "contentTypeArtist": "Artista",
-    "requestedByYou": "tú",
-    "showOnlyFrom": "Mostrar solo las canciones de {{name}}",
-    "retry": "Reintentar descarga",
-    "retryTitle": "Reintentar",
-    "cancel": "Cancelar canción",
-    "cancelTitle": "Cancelar",
-    "actionsMenu": "Menú de acciones",
-    "retryMenuItem": "Reintentar descarga",
-    "cancelMenuItem": "Cancelar canción",
-    "prioritizeMenuItem": "Saltar la cola"
   },
   "export": {
     "dialogTitle": "Exportar (máxima compatibilidad)",

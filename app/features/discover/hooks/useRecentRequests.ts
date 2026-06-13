@@ -1,6 +1,6 @@
 "use client";
 
-import { flattenRequestsToTrackRows } from "@features/requests/components/Table/helpers";
+import { flattenRequestsToTrackRows } from "@features/requests/helpers";
 import type { FlatTrackRow } from "@features/requests/types";
 import { useTrackRequests } from "@hooks/api";
 import { useMemo } from "react";

@@ -6,14 +6,7 @@ import {
   UNRESOLVED_STATUSES,
   type RequestWithTracks,
 } from "@api/__generated__/types";
-import {
-  DEFAULT_PER_PAGE,
-  DOWNLOAD_ACTIVE_STATUSES,
-  PER_PAGE_OPTIONS,
-  STATUS_FILTER_MAP,
-  StatusFilter,
-  type SourceOption,
-} from "./types";
+import { DOWNLOAD_ACTIVE_STATUSES, STATUS_FILTER_MAP, StatusFilter, type FlatTrackRow } from "./types";
 
 export const STATUS_ORDER: readonly RequestStatus[] = [
   ...[...ACTIVE_STATUSES].reverse(),
@@ -23,6 +16,23 @@ export const STATUS_ORDER: readonly RequestStatus[] = [
 
 export function compareByStatus(a: RequestStatus, b: RequestStatus): number {
   return STATUS_ORDER.indexOf(a) - STATUS_ORDER.indexOf(b);
+}
+
+export function flattenRequestsToTrackRows(items: RequestWithTracks[]): FlatTrackRow[] {
+  return items.flatMap((item) =>
+    item.tracks.map((track) => ({
+      ...track,
+      parent: {
+        id: item.id,
+        name: item.name,
+        artist: item.artist,
+        album_art: item.album_art,
+        contentType: item.contentType,
+        requestedBy: item.requestedBy,
+        status: item.status,
+      },
+    }))
+  );
 }
 
 export function hasActiveDownload(items: RequestWithTracks[] | undefined): boolean {
@@ -51,38 +61,4 @@ export function filterRequestsByStatus(
   const allowed = STATUS_FILTER_MAP[statusFilter];
   if (allowed === null) return all;
   return all.filter((item) => (allowed as readonly string[]).includes(item.status));
-}
-
-export function deriveSourceOptions(items: RequestWithTracks[] | undefined): SourceOption[] {
-  const byId = new Map<string, SourceOption>();
-  for (const item of items ?? []) {
-    if (item.contentType !== ContentType.enum.album && item.contentType !== ContentType.enum.playlist) continue;
-    if (!byId.has(item.id)) {
-      byId.set(item.id, { id: item.id, name: item.name, contentType: item.contentType });
-    }
-  }
-  return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name));
-}
-
-export function parseSourceIds(raw: string | undefined): string[] {
-  if (!raw) return [];
-  return raw.split(",").filter(Boolean);
-}
-
-export function serializeSourceIds(ids: string[]): string | null {
-  return ids.length > 0 ? ids.join(",") : null;
-}
-
-export function toggleSourceId(ids: string[], id: string): string[] {
-  return ids.includes(id) ? ids.filter((entry) => entry !== id) : [...ids, id];
-}
-
-export function parsePage(raw: string | undefined): number {
-  const value = Number(raw);
-  return Number.isInteger(value) && value > 0 ? value : 1;
-}
-
-export function parsePerPage(raw: string | undefined): number {
-  const value = Number(raw);
-  return PER_PAGE_OPTIONS.some((option) => option === value) ? value : DEFAULT_PER_PAGE;
 }

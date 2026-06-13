@@ -11,7 +11,6 @@ import { FilterSortMenu } from "./FilterSortMenu";
 import { ImportProviderMenu } from "./ImportProviderMenu";
 import { RequestsToolbarMenu } from "./RequestsToolbarMenu";
 import { SearchInput } from "./SearchInput/SearchInput";
-import { ViewToggle } from "./ViewToggle";
 
 export function Toolbar() {
   const { data: items } = useTrackRequests();
@@ -32,12 +31,6 @@ export function Toolbar() {
   return (
     <div className={toolbarContainer()}>
       <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
-        <div className={cn(isSearchOpen && "hidden sm:block")}>
-          <ViewToggle />
-        </div>
-
-        <div className={cn("bg-fg/10 h-4 w-px", isSearchOpen && "hidden sm:block")} />
-
         <div className={cn("flex items-center gap-1.5 sm:gap-2", isSearchOpen && "hidden sm:flex")}>
           <FilterSortMenu />
         </div>
