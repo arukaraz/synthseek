@@ -9,7 +9,9 @@ export const modalRoot = cva(
   ].join(" ")
 );
 
-export const modalGrid = cva("grid h-full min-h-0 grid-rows-[auto_auto_1fr_auto]");
+export const modalGrid = cva(
+  "grid h-full min-h-0 w-full min-w-0 grid-cols-[minmax(0,1fr)] grid-rows-[auto_auto_1fr_auto]"
+);
 
 export const connectPrompt = cva("flex h-full flex-col items-center justify-center gap-4 px-6 py-12 text-center");
 
@@ -30,18 +32,18 @@ export const brandIcon = cva("flex size-5 items-center justify-center rounded te
   defaultVariants: { tone: "spotify" },
 });
 
-export const toolbar = cva("flex items-center gap-2 border-b border-fg/10 bg-fg/[0.015] px-4 py-2");
+export const toolbar = cva("flex w-full min-w-0 items-center gap-2 border-b border-fg/10 bg-fg/[0.015] px-4 py-2");
 
 export const searchBox = cva("relative min-w-0 flex-1");
 
 export const searchInput = cva(
-  "h-9 w-full rounded-lg border border-fg/10 bg-fg/[0.03] px-9 text-sm text-fg outline-none placeholder:text-fg/40 focus:border-primary-500/40"
+  "h-9 w-full min-w-0 rounded-lg border border-fg/10 bg-fg/[0.03] px-9 text-sm text-fg outline-none placeholder:text-fg/40 focus:border-primary-500/40"
 );
 
-export const split = cva("flex h-full min-h-0 flex-col md:flex-row");
+export const split = cva("flex h-full min-h-0 w-full min-w-0 flex-col md:flex-row");
 
 export const masterScroll = cva(
-  "h-full min-h-0 w-full flex-1 flex-col overflow-y-auto bg-surface/40 md:border-r md:border-fg/10",
+  "h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-y-auto bg-surface/40 md:border-r md:border-fg/10",
   {
     variants: {
       hiddenOnMobile: {
@@ -63,10 +65,13 @@ export const detailPaneWrapper = cva("h-full min-h-0 w-full flex-col md:w-[380px
   defaultVariants: { hiddenOnMobile: false },
 });
 
+export const masterControls = cva("px-3 pt-3");
+export const masterXScroll = cva("w-full min-w-0 max-w-full overflow-x-auto");
+
 export const masterEmpty = cva("flex flex-1 items-center justify-center p-12 text-sm text-fg/40");
 export const detailLoading = cva("flex h-full items-center justify-center p-12 text-sm text-fg/40");
 
-export const table = cva("w-full table-fixed border-collapse text-sm");
+export const table = cva("w-full min-w-[680px] table-fixed border-collapse text-sm");
 
 export const tableHead = cva(
   "sticky top-0 z-10 bg-surface px-3 py-2 text-left text-[10px] font-semibold uppercase tracking-wider text-fg/40"
@@ -136,6 +141,8 @@ export const syncPill = cva(
 export const syncDot = cva("size-1 rounded-full", {
   variants: { on: { true: "bg-primary-300 shadow-[0_0_5px_var(--color-primary-300)]", false: "bg-fg/40" } },
 });
+
+export const syncDash = cva("text-fg/30 font-mono text-xs select-none");
 
 export const checkBox = cva(
   "inline-flex size-[18px] shrink-0 items-center justify-center rounded border transition-colors",
@@ -208,6 +215,7 @@ export const cfgRowDesc = cva("mt-0.5 text-[11px] leading-tight text-fg/40");
 export const metaGrid = cva("grid grid-cols-[110px_1fr] gap-x-3.5 gap-y-1.5 text-xs");
 export const metaKey = cva("text-fg/40");
 export const metaVal = cva("font-mono text-fg");
+export const metaValFull = cva("text-fg/40 ml-2 text-[10.5px]");
 export const metaValText = cva("text-fg");
 
 export const trackList = cva("-mx-5 flex flex-col");
@@ -247,42 +255,19 @@ export const detailEmptyKbd = cva(
 );
 
 export const bottombar = cva(
-  "flex flex-col items-stretch gap-3 border-t border-fg/10 bg-surface/60 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:flex-row sm:flex-wrap sm:items-center sm:pb-3"
+  "flex w-full min-w-0 flex-col items-stretch gap-3 border-t border-fg/10 bg-surface/60 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:flex-row sm:flex-wrap sm:items-center sm:pb-3"
 );
-export const bottombarLeft = cva("flex flex-wrap items-center gap-3");
+export const bottombarLeft = cva("flex min-w-0 flex-wrap items-center gap-3");
 export const bottombarRight = cva(
-  "flex flex-col items-stretch gap-3 sm:ml-auto sm:flex-row sm:flex-wrap sm:items-center"
+  "flex min-w-0 flex-col items-stretch gap-3 sm:ml-auto sm:flex-row sm:flex-wrap sm:items-center"
 );
-export const bottombarButtons = cva("flex items-center gap-3");
+export const bottombarButtons = cva("flex min-w-0 items-center gap-3");
 
 export const bbStat = cva("text-xs text-fg/60");
 export const bbStatStrong = cva("font-mono font-semibold text-fg");
 
-export const selChip = cva(
-  "inline-flex items-center gap-1.5 rounded-full border border-primary-500/30 bg-primary-500/15 px-2.5 py-1 text-[11px] font-medium text-fg"
-);
-export const selChipDot = cva("size-[5px] rounded-full bg-primary-300 shadow-[0_0_6px_var(--color-primary-300)]");
-export const selChipNum = cva("font-mono font-semibold text-primary-300");
-
-export const inlineAct = cva(
-  "inline-flex cursor-pointer items-center gap-1.5 rounded px-2 py-1 text-[11px] text-fg/60 transition-colors hover:bg-fg/5 hover:text-fg",
-  {
-    variants: {
-      danger: { true: "hover:bg-rose-500/10 hover:text-rose-300", false: "" },
-    },
-    defaultVariants: { danger: false },
-  }
-);
-export const selDivider = cva("mx-0.5 h-3.5 w-px bg-fg/10");
-
-export const bulkTrigger = cva(
-  "inline-flex items-center gap-1.5 rounded-md border border-fg/[0.08] bg-fg/[0.03] px-2.5 py-1 text-[11px] font-medium text-fg/70 transition-colors hover:bg-fg/[0.06] hover:text-fg"
-);
-
-export const bulkMenuItem = cva("gap-2 text-xs");
-
 export const autoImportTrigger = cva(
-  "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[11px] font-medium transition-colors hover:text-fg",
+  "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-medium transition-colors hover:text-fg",
   {
     variants: {
       active: {
@@ -292,6 +277,12 @@ export const autoImportTrigger = cva(
     },
     defaultVariants: { active: false },
   }
+);
+
+export const autoImportTriggerLabel = cva("hidden lg:inline");
+export const autoImportTriggerIcon = cva("relative inline-flex size-4 items-center justify-center");
+export const autoImportTriggerCue = cva(
+  "bg-surface absolute -right-1.5 -bottom-1.5 inline-flex items-center justify-center rounded-full p-px"
 );
 
 export const autoImportBadge = cva("rounded px-1 font-mono text-[10px]", {
@@ -313,3 +304,53 @@ export const autoImportRow = cva(
 );
 export const autoImportRowLabel = cva("flex flex-col text-fg");
 export const autoImportRowSub = cva("text-[10.5px] text-fg/45");
+
+export const selectionBar = cva(
+  "border-fg/10 bg-surface/95 sticky top-0 z-20 mb-2 flex w-full min-w-0 flex-nowrap items-center gap-1.5 rounded-xl border px-3 py-2.5 sm:gap-2 sm:py-2 sm:bg-surface/85 sm:backdrop-blur-md"
+);
+export const selectionBarChip = cva(
+  "border-primary-500/30 bg-primary-500/15 text-fg inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
+);
+export const selectionBarChipDot = cva("bg-primary-300 size-1.5 rounded-full");
+export const selectionBarChipNum = cva("text-primary-300 font-mono font-semibold");
+export const selectionBarClear = cva(
+  "text-fg/60 hover:bg-fg/5 hover:text-fg ml-auto inline-flex shrink-0 items-center gap-1.5 rounded px-2 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+);
+export const selectionBarToggles = cva("flex shrink-0 items-center gap-2 sm:gap-3");
+export const selectionBarSyncHint = cva("text-fg/40 hidden text-[10.5px] font-medium sm:inline");
+
+export const triToggle = cva("inline-flex items-center gap-2 text-xs font-medium select-none", {
+  variants: {
+    disabled: { true: "cursor-not-allowed opacity-50", false: "cursor-pointer" },
+  },
+  defaultVariants: { disabled: false },
+});
+export const triToggleGlyph = cva("text-fg/60 size-3.5 shrink-0");
+export const triToggleLabel = cva("text-fg/80 hidden sm:inline");
+export const triToggleTrack = cva(
+  "focus-visible:ring-primary-500/40 relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border border-transparent transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+  {
+    variants: {
+      state: {
+        on: "bg-primary-500",
+        off: "bg-fg/15",
+        mixed: "bg-fg/25",
+      },
+    },
+    defaultVariants: { state: "off" },
+  }
+);
+export const triToggleThumb = cva(
+  "pointer-events-none flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-lg ring-0 transition-transform",
+  {
+    variants: {
+      state: {
+        on: "translate-x-[22px]",
+        off: "translate-x-0.5",
+        mixed: "translate-x-[11px]",
+      },
+    },
+    defaultVariants: { state: "off" },
+  }
+);
+export const triToggleThumbMark = cva("bg-fg/50 h-0.5 w-2 rounded-full");

@@ -2,7 +2,7 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
 import { Switch } from "@components/ui/Switch";
-import { Info, Settings2 } from "lucide-react";
+import { DownloadCloud, Info, RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -13,6 +13,9 @@ import {
   autoImportRowSub,
   autoImportTitle,
   autoImportTrigger,
+  autoImportTriggerCue,
+  autoImportTriggerIcon,
+  autoImportTriggerLabel,
 } from "../styles";
 import type { AutoWatchTogglesProps } from "./types";
 
@@ -30,12 +33,22 @@ export function AutoWatchToggles({ value, onChange }: AutoWatchTogglesProps) {
           className={autoImportTrigger({ active })}
           aria-label={t("spotifyLibrary.autoWatch.configureAria")}
         >
-          <Settings2 className="size-3.5" />
-          <span>{t("spotifyLibrary.autoWatch.trigger")}</span>
+          <span className={autoImportTriggerIcon()}>
+            <DownloadCloud className="size-4" />
+            <span className={autoImportTriggerCue()} aria-hidden>
+              <RefreshCw className="size-2.5" />
+            </span>
+          </span>
+          <span className={autoImportTriggerLabel()}>{t("spotifyLibrary.autoWatch.trigger")}</span>
           <span className={autoImportBadge({ active })}>{badgeLabel}</span>
         </button>
       </PopoverTrigger>
-      <PopoverContent align="end" side="top" className={autoImportPopover()}>
+      <PopoverContent
+        align="end"
+        side="bottom"
+        className={autoImportPopover()}
+        onEscapeKeyDown={(e) => e.stopPropagation()}
+      >
         <div className={autoImportTitle()}>
           {t("spotifyLibrary.autoWatch.title")}
           <Popover>
@@ -48,7 +61,12 @@ export function AutoWatchToggles({ value, onChange }: AutoWatchTogglesProps) {
                 <Info className="size-3" />
               </button>
             </PopoverTrigger>
-            <PopoverContent side="top" align="start" className="max-w-[260px] text-[11px] leading-relaxed">
+            <PopoverContent
+              side="bottom"
+              align="start"
+              className="max-w-65 text-[11px] leading-relaxed"
+              onEscapeKeyDown={(e) => e.stopPropagation()}
+            >
               {t("spotifyLibrary.autoWatch.help")}
             </PopoverContent>
           </Popover>

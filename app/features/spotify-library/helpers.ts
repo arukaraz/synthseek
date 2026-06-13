@@ -1,9 +1,10 @@
 import type { ParseKeys } from "i18next";
 
 import i18n from "@locale";
-import { formatTimestamp } from "@utils/formatters";
+import { formatDate, formatRelativeTime, formatShortDate, formatTimestamp } from "@utils/formatters";
 
-import type { LibraryFilter, LibraryItem, LibrarySort } from "./types";
+import { RELATIVE_SYNC_WINDOW_MS } from "./constants";
+import type { LibraryFilter, LibraryItem, LibrarySort, ToggleAggregateState } from "./types";
 
 export function matchesFilter(item: LibraryItem, filter: LibraryFilter): boolean {
   if (filter === "all") return true;
@@ -46,7 +47,29 @@ export function compareItems(a: LibraryItem, b: LibraryItem, sort: LibrarySort, 
 
 export function formatLastSync(value: Date | string | null): string {
   if (!value) return i18n.t("library:spotifyLibrary.detail.lastSyncNever");
-  return formatTimestamp(new Date(value));
+  const date = new Date(value);
+  const elapsed = Date.now() - date.getTime();
+  if (elapsed >= 0 && elapsed < RELATIVE_SYNC_WINDOW_MS) return formatRelativeTime(date);
+  return formatShortDate(date);
+}
+
+export function formatLastSyncFull(value: Date | string | null): string | undefined {
+  if (!value) return undefined;
+  const date = new Date(value);
+  return `${formatDate(date)} ${formatTimestamp(date)}`;
+}
+
+export function aggregateToggleState(values: ReadonlyArray<boolean>): ToggleAggregateState {
+  if (values.length === 0) return "off";
+  const allOn = values.every(Boolean);
+  if (allOn) return "on";
+  const allOff = values.every((value) => !value);
+  if (allOff) return "off";
+  return "mixed";
+}
+
+export function resolveToggleTarget(state: ToggleAggregateState): boolean {
+  return state !== "on";
 }
 
 export function libraryTypeTone(type: LibraryItem["type"]): "playlist" | "album" | "liked" {

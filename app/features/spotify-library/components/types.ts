@@ -1,5 +1,15 @@
+import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+
 import type { LibraryDraft } from "../hooks/useLibraryDraftState";
-import type { AutoWatchState, LibraryFilter, LibraryItem, LibraryItemType, LibrarySort } from "../types";
+import type {
+  AutoWatchState,
+  LibraryFilter,
+  LibraryItem,
+  LibraryItemType,
+  LibrarySort,
+  ToggleAggregateState,
+} from "../types";
 
 export interface SpotifyMarkProps {
   size?: number;
@@ -20,6 +30,8 @@ export interface ModalToolbarProps {
   onDirectionChange: (v: "asc" | "desc") => void;
   search: string;
   onSearchChange: (v: string) => void;
+  autoWatch: AutoWatchState;
+  onWatchChange: (next: Partial<AutoWatchState>) => void;
 }
 
 export interface MasterTableProps {
@@ -27,6 +39,30 @@ export interface MasterTableProps {
   isLoading: boolean;
   draft: LibraryDraft;
   hiddenOnMobile?: boolean;
+  selectionBar: ReactNode;
+}
+
+export interface TriStateToggleProps {
+  state: ToggleAggregateState;
+  onActivate: () => void;
+  label: string;
+  glyph: LucideIcon;
+  ariaLabel: string;
+  disabled?: boolean;
+  description?: string;
+  descriptionId?: string;
+}
+
+export interface SelectionBulkBarProps {
+  selectedCount: number;
+  syncState: ToggleAggregateState;
+  importState: ToggleAggregateState;
+  hasPlaylists: boolean;
+  isMixedType: boolean;
+  onActivateSync: () => void;
+  onActivateImport: () => void;
+  onClear: () => void;
+  disabled: boolean;
 }
 
 export interface MasterTableRowProps {
@@ -35,6 +71,7 @@ export interface MasterTableRowProps {
   focused: boolean;
   imported: boolean;
   syncEnabled: boolean;
+  syncAvailable: boolean;
   onClick: () => void;
   onToggleSelect: () => void;
   onToggleSync: () => void;
@@ -82,17 +119,10 @@ export interface DetailTracklistProps {
 export interface ModalBottombarProps {
   totalRows: number;
   totalTracks: number;
-  selectedCount: number;
-  draft: LibraryDraft;
-  onBulkSync: (enabled: boolean) => void;
-  onBulkImport: (enabled: boolean) => void;
-  onClearSelection: () => void;
   onSave: () => void;
   onCancel: () => void;
   isSaving: boolean;
   hasChanges: boolean;
-  autoWatch: AutoWatchState;
-  onWatchChange: (next: Partial<AutoWatchState>) => void;
   onRefresh: () => void;
   isRefreshing: boolean;
 }
@@ -100,13 +130,4 @@ export interface ModalBottombarProps {
 export interface AutoWatchTogglesProps {
   value: AutoWatchState;
   onChange: (next: Partial<AutoWatchState>) => void;
-}
-
-export interface SelectionBulkActionsProps {
-  selectedCount: number;
-  onEnableSync: () => void;
-  onDisableSync: () => void;
-  onEnableImport: () => void;
-  onDisableImport: () => void;
-  onClear: () => void;
 }

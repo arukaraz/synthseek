@@ -10,6 +10,8 @@ export type LibraryItemType = LibraryItem["type"];
 export type LibraryFilter = "all" | "playlists" | "albums" | "liked";
 export type LibrarySort = "name" | "type" | "tracks" | "imported" | "lastSync" | "syncStatus";
 
+export type ToggleAggregateState = "on" | "off" | "mixed";
+
 export interface SpotifyLibraryModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;

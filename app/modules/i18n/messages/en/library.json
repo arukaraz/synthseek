@@ -49,7 +49,8 @@
       "select": "Select",
       "deselect": "Deselect",
       "enabled": "Enabled",
-      "disabled": "Disabled"
+      "disabled": "Disabled",
+      "syncUnavailable": "Sync not available for albums"
     },
     "type": {
       "playlist": "Playlist",
@@ -124,16 +125,19 @@
       "savedAlbumsSub": "Albums you save in Spotify",
       "savedAlbumsAria": "Auto-import new saved albums"
     },
-    "bulk": {
+    "selection": {
+      "regionLabel_one": "Bulk actions for {{count}} selected item",
+      "regionLabel_other": "Bulk actions for {{count}} selected items",
       "selected": "selected",
-      "actions": "Bulk actions",
-      "syncGroup": "Sync",
-      "enableSync": "Enable sync",
-      "disableSync": "Disable sync",
-      "importGroup": "Import",
-      "enableImport": "Enable import",
-      "disableImport": "Disable import",
-      "clearAria": "Clear selection"
+      "announce_one": "{{count}} item selected",
+      "announce_other": "{{count}} items selected",
+      "sync": "Sync",
+      "syncAria": "Set sync for selected items",
+      "syncPlaylistsOnly": "Sync applies to playlists only",
+      "playlistsOnlyHint": "Playlists only",
+      "import": "Import",
+      "importAria": "Set import for selected items",
+      "clear": "Clear"
     }
   },
   "jspfImport": {

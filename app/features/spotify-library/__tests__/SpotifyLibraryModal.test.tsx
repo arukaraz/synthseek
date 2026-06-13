@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 import type { LibraryItem } from "../types";
@@ -56,20 +57,34 @@ vi.mock("@hooks/api/mutations/spotify/useSaveLibraryChanges", () => ({
 interface BottombarCapture {
   onSave: () => void;
   onCancel: () => void;
-  onBulkSync: (enabled: boolean) => void;
-  onBulkImport: (enabled: boolean) => void;
-  onClearSelection: () => void;
-  onWatchChange: (next: Partial<{ playlists: boolean; savedAlbums: boolean }>) => void;
   onRefresh: () => void;
   hasChanges: boolean;
   isSaving: boolean;
   isRefreshing: boolean;
   totalRows: number;
   totalTracks: number;
+}
+
+interface ToolbarCapture {
+  onSearchChange: (value: string) => void;
+  onWatchChange: (next: Partial<{ playlists: boolean; savedAlbums: boolean }>) => void;
+}
+
+interface SelectionBarCapture {
   selectedCount: number;
+  syncState: "on" | "off" | "mixed";
+  importState: "on" | "off" | "mixed";
+  hasPlaylists: boolean;
+  isMixedType: boolean;
+  onActivateSync: () => void;
+  onActivateImport: () => void;
+  onClear: () => void;
+  disabled: boolean;
 }
 
 let bottombarProps: BottombarCapture | null = null;
+let toolbarProps: ToolbarCapture | null = null;
+let selectionBarProps: SelectionBarCapture | null = null;
 let capturedDraft: LibraryDraft | null = null;
 
 vi.mock("../components/ModalTopbar", () => ({
@@ -77,17 +92,40 @@ vi.mock("../components/ModalTopbar", () => ({
 }));
 
 vi.mock("../components/ModalToolbar", () => ({
-  ModalToolbar: (props: { onSearchChange: (value: string) => void }) => (
-    <button type="button" data-testid="toolbar-search" onClick={() => props.onSearchChange("alpha")}>
-      search
-    </button>
-  ),
+  ModalToolbar: (props: ToolbarCapture) => {
+    toolbarProps = props;
+    return (
+      <button type="button" data-testid="toolbar-search" onClick={() => props.onSearchChange("alpha")}>
+        search
+      </button>
+    );
+  },
+}));
+
+vi.mock("../components/SelectionBulkBar", () => ({
+  SelectionBulkBar: (props: SelectionBarCapture) => {
+    selectionBarProps = props;
+    return (
+      <div
+        data-testid="selection-bar"
+        data-count={props.selectedCount}
+        data-sync-state={props.syncState}
+        data-import-state={props.importState}
+        data-has-playlists={String(props.hasPlaylists)}
+        data-mixed-type={String(props.isMixedType)}
+      />
+    );
+  },
 }));
 
 vi.mock("../components/MasterTable", () => ({
-  MasterTable: (props: { items: LibraryItem[]; draft: LibraryDraft }) => {
+  MasterTable: (props: { items: LibraryItem[]; draft: LibraryDraft; selectionBar: ReactNode }) => {
     capturedDraft = props.draft;
-    return <div data-testid="master-table" data-count={props.items.length} />;
+    return (
+      <div data-testid="master-table" data-count={props.items.length}>
+        {props.selectionBar}
+      </div>
+    );
   },
 }));
 
@@ -142,6 +180,8 @@ function resetState() {
   subscriptionData = { watch_new_playlists: false, watch_saved_albums: false };
   savePending = false;
   bottombarProps = null;
+  toolbarProps = null;
+  selectionBarProps = null;
   capturedDraft = null;
 }
 
@@ -190,13 +230,13 @@ describe("SpotifyLibraryModal", () => {
     render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
 
     act(() => {
-      bottombarProps?.onWatchChange({ playlists: true });
+      toolbarProps?.onWatchChange({ playlists: true });
     });
 
     expect(screen.getByTestId("bottombar")).toHaveAttribute("data-haschanges", "true");
   });
 
-  it("flags changes after a bulk import override and saves the imports", async () => {
+  it("flags changes after a bulk import activation and saves the imports", async () => {
     const onOpenChange = vi.fn();
     render(<SpotifyLibraryModal open onOpenChange={onOpenChange} />);
 
@@ -204,7 +244,7 @@ describe("SpotifyLibraryModal", () => {
       capturedDraft?.toggleSelect("a");
     });
     act(() => {
-      bottombarProps?.onBulkImport(true);
+      selectionBarProps?.onActivateImport();
     });
     expect(screen.getByTestId("bottombar")).toHaveAttribute("data-haschanges", "true");
 
@@ -218,7 +258,7 @@ describe("SpotifyLibraryModal", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("includes a sync toggle for already imported items on save", async () => {
+  it("writes sync only to playlists in the selection on a sync activation", async () => {
     render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
 
     act(() => {
@@ -226,7 +266,7 @@ describe("SpotifyLibraryModal", () => {
       capturedDraft?.toggleSelect("b");
     });
     act(() => {
-      bottombarProps?.onBulkSync(true);
+      selectionBarProps?.onActivateSync();
     });
 
     await act(async () => {
@@ -234,8 +274,104 @@ describe("SpotifyLibraryModal", () => {
     });
 
     const payload = saveMutateAsync.mock.calls[0][0];
-    expect(payload.toToggleSync).toEqual([{ localId: "loc-b", syncEnabled: true }]);
+    expect(payload.toToggleSync).toEqual([]);
     expect(payload.toImport).toHaveLength(0);
+    expect(capturedDraft?.state.syncOverrides.has("a")).toBe(true);
+    expect(capturedDraft?.state.syncOverrides.has("b")).toBe(false);
+  });
+
+  it("toggles sync on an already imported playlist and emits it on save", async () => {
+    libraryItems = {
+      data: [
+        createMockLibraryItem({ id: "a", type: "playlist", name: "Alpha", totalTracks: 3, imported: false }),
+        createMockLibraryItem({
+          id: "p",
+          type: "playlist",
+          name: "Imported Playlist",
+          totalTracks: 8,
+          imported: true,
+          localId: "loc-p",
+          syncEnabled: false,
+        }),
+      ],
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      refetch,
+    };
+
+    render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+
+    act(() => {
+      capturedDraft?.toggleSelect("p");
+    });
+    act(() => {
+      selectionBarProps?.onActivateSync();
+    });
+
+    await act(async () => {
+      await bottombarProps?.onSave();
+    });
+
+    const payload = saveMutateAsync.mock.calls[0][0];
+    expect(payload.toToggleSync).toEqual([{ localId: "loc-p", syncEnabled: true }]);
+  });
+
+  it("disables the sync toggle and marks no playlists when only albums are selected", () => {
+    render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+
+    act(() => {
+      capturedDraft?.toggleSelect("b");
+    });
+
+    expect(screen.getByTestId("selection-bar")).toHaveAttribute("data-has-playlists", "false");
+  });
+
+  it("flags a mixed-type selection when playlists and albums are both selected", () => {
+    render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+
+    act(() => {
+      capturedDraft?.toggleSelect("a");
+      capturedDraft?.toggleSelect("b");
+    });
+
+    expect(screen.getByTestId("selection-bar")).toHaveAttribute("data-mixed-type", "true");
+    expect(screen.getByTestId("selection-bar")).toHaveAttribute("data-has-playlists", "true");
+  });
+
+  it("clears sync when import is turned off for the selection", () => {
+    libraryItems = {
+      data: [
+        createMockLibraryItem({
+          id: "p",
+          type: "playlist",
+          name: "Imported Playlist",
+          totalTracks: 8,
+          imported: true,
+          localId: "loc-p",
+          syncEnabled: true,
+        }),
+      ],
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      error: null,
+      refetch,
+    };
+
+    render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
+
+    act(() => {
+      capturedDraft?.toggleSelect("p");
+    });
+    expect(screen.getByTestId("selection-bar")).toHaveAttribute("data-import-state", "on");
+    act(() => {
+      selectionBarProps?.onActivateImport();
+    });
+
+    expect(capturedDraft?.state.importOverrides.get("p")).toBe(false);
+    expect(capturedDraft?.state.syncOverrides.get("p")).toBe(false);
   });
 
   it("carries the sync intent into the import payload when both overrides are set", async () => {
@@ -245,8 +381,8 @@ describe("SpotifyLibraryModal", () => {
       capturedDraft?.toggleSelect("a");
     });
     act(() => {
-      bottombarProps?.onBulkImport(true);
-      bottombarProps?.onBulkSync(true);
+      selectionBarProps?.onActivateImport();
+      selectionBarProps?.onActivateSync();
     });
 
     await act(async () => {
@@ -261,7 +397,7 @@ describe("SpotifyLibraryModal", () => {
     render(<SpotifyLibraryModal open onOpenChange={vi.fn()} />);
 
     act(() => {
-      bottombarProps?.onWatchChange({ savedAlbums: true });
+      toolbarProps?.onWatchChange({ savedAlbums: true });
     });
 
     await act(async () => {

@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
-import { formatLastSync } from "../helpers";
+import { formatLastSync, formatLastSyncFull } from "../helpers";
 import {
   detailSection,
   detailSectionTitle,
@@ -10,12 +10,14 @@ import {
   metaGrid,
   metaKey,
   metaVal,
+  metaValFull,
   metaValText,
 } from "../styles";
 import type { DetailMetadataProps } from "./types";
 
 export function DetailMetadata({ sourceId, released, label, lastSyncedAt }: DetailMetadataProps) {
   const { t } = useTranslation("library");
+  const lastSyncFull = formatLastSyncFull(lastSyncedAt);
 
   return (
     <div className={detailSection()}>
@@ -38,7 +40,10 @@ export function DetailMetadata({ sourceId, released, label, lastSyncedAt }: Deta
           </>
         )}
         <div className={metaKey()}>{t("spotifyLibrary.metadata.lastSync")}</div>
-        <div className={metaVal()}>{formatLastSync(lastSyncedAt)}</div>
+        <div className={metaVal()}>
+          {formatLastSync(lastSyncedAt)}
+          {lastSyncFull ? <span className={metaValFull()}>{lastSyncFull}</span> : null}
+        </div>
       </div>
     </div>
   );

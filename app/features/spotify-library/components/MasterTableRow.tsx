@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { cn } from "@utils/cn";
 
-import { formatLastSync, libraryTypeTone } from "../helpers";
+import { formatLastSync, formatLastSyncFull, libraryTypeTone } from "../helpers";
 import {
   checkBox,
   coverPlaceholder,
@@ -13,6 +13,7 @@ import {
   heartThumb,
   stDot,
   stPill,
+  syncDash,
   syncDot,
   syncPill,
   tableCell,
@@ -30,6 +31,7 @@ export function MasterTableRow({
   focused,
   imported,
   syncEnabled,
+  syncAvailable,
   onClick,
   onToggleSelect,
   onToggleSync,
@@ -37,6 +39,7 @@ export function MasterTableRow({
   const { t } = useTranslation("library");
   const importedTone = imported ? "imported" : "disabled";
   const importedLabel = imported ? t("spotifyLibrary.row.enabled") : t("spotifyLibrary.row.disabled");
+  const lastSyncFull = imported ? formatLastSyncFull(item.lastSyncedAt) : undefined;
 
   return (
     <tr className={tableRow({ selected, focused })} onClick={onClick} data-master-row-id={item.id}>
@@ -77,22 +80,34 @@ export function MasterTableRow({
           {importedLabel}
         </span>
       </td>
-      <td className={cn(imported && item.lastSyncedAt ? tableCellMono() : tableCellMonoDim(), "hidden lg:table-cell")}>
-        {imported ? formatLastSync(item.lastSyncedAt) : "—"}
+      <td
+        className={cn(
+          imported && item.lastSyncedAt ? tableCellMono() : tableCellMonoDim(),
+          "hidden truncate lg:table-cell"
+        )}
+        title={lastSyncFull}
+      >
+        {imported ? formatLastSync(item.lastSyncedAt) : "-"}
       </td>
       <td className="px-3 py-2 text-center">
-        <button
-          type="button"
-          className={syncPill({ on: syncEnabled })}
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleSync();
-          }}
-          aria-pressed={syncEnabled}
-        >
-          <span className={syncDot({ on: syncEnabled })} />
-          {syncEnabled ? t("spotifyLibrary.row.enabled") : t("spotifyLibrary.row.disabled")}
-        </button>
+        {syncAvailable ? (
+          <button
+            type="button"
+            className={syncPill({ on: syncEnabled })}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleSync();
+            }}
+            aria-pressed={syncEnabled}
+          >
+            <span className={syncDot({ on: syncEnabled })} />
+            {syncEnabled ? t("spotifyLibrary.row.enabled") : t("spotifyLibrary.row.disabled")}
+          </button>
+        ) : (
+          <span className={syncDash()} role="img" aria-label={t("spotifyLibrary.row.syncUnavailable")}>
+            -
+          </span>
+        )}
       </td>
     </tr>
   );

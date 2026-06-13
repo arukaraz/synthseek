@@ -16,8 +16,10 @@ import { ModalToolbar } from "./components/ModalToolbar";
 import { ModalTopbar } from "./components/ModalTopbar";
 import { MasterTable } from "./components/MasterTable";
 import { DetailPanel } from "./components/DetailPanel";
+import { SelectionBulkBar } from "./components/SelectionBulkBar";
 import { SpotifyConnectPrompt } from "./components/SpotifyConnectPrompt";
 import { DEFAULT_IMPORT_CONFIG } from "./constants";
+import { aggregateToggleState, resolveToggleTarget } from "./helpers";
 import { useFilteredItems } from "./hooks/useFilteredItems";
 import { useLibraryDraftState } from "./hooks/useLibraryDraftState";
 import { detailPaneWrapper, modalGrid, modalRoot, split } from "./styles";
@@ -137,14 +139,31 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
     return false;
   }, [draft.state, initialWatch]);
 
-  const handleBulkSync = (enabled: boolean) => {
-    const selected = sourceItems.filter((i) => draft.state.selectedIds.has(i.id));
-    draft.setSyncForItems(selected, enabled);
+  const selectedItems = useMemo(
+    () => sourceItems.filter((item) => draft.state.selectedIds.has(item.id)),
+    [sourceItems, draft.state.selectedIds]
+  );
+  const selectedPlaylists = useMemo(() => selectedItems.filter((item) => item.type === "playlist"), [selectedItems]);
+  const hasPlaylists = selectedPlaylists.length > 0;
+  const isMixedType = hasPlaylists && selectedPlaylists.length < selectedItems.length;
+
+  const syncState = useMemo(
+    () => aggregateToggleState(selectedPlaylists.map((item) => draft.selectors.targetSyncEnabled(item))),
+    [selectedPlaylists, draft.selectors]
+  );
+  const importState = useMemo(
+    () => aggregateToggleState(selectedItems.map((item) => draft.selectors.targetImported(item))),
+    [selectedItems, draft.selectors]
+  );
+
+  const handleActivateSync = () => {
+    draft.setSyncForItems(selectedPlaylists, resolveToggleTarget(syncState));
   };
 
-  const handleBulkImport = (enabled: boolean) => {
-    const selected = sourceItems.filter((i) => draft.state.selectedIds.has(i.id));
-    draft.setImportForItems(selected, enabled);
+  const handleActivateImport = () => {
+    const target = resolveToggleTarget(importState);
+    draft.setImportForItems(selectedItems, target);
+    if (!target) draft.setSyncForItems(selectedItems, false);
   };
 
   const handleSave = async () => {
@@ -220,6 +239,8 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
               onDirectionChange={setDirection}
               search={search}
               onSearchChange={setSearch}
+              autoWatch={draft.state.autoWatch}
+              onWatchChange={draft.setWatch}
             />
             <div className={split()}>
               <MasterTable
@@ -227,6 +248,21 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
                 isLoading={items.isLoading}
                 draft={draft}
                 hiddenOnMobile={Boolean(focusedItem)}
+                selectionBar={
+                  draft.state.selectedIds.size > 0 ? (
+                    <SelectionBulkBar
+                      selectedCount={draft.state.selectedIds.size}
+                      syncState={syncState}
+                      importState={importState}
+                      hasPlaylists={hasPlaylists}
+                      isMixedType={isMixedType}
+                      onActivateSync={handleActivateSync}
+                      onActivateImport={handleActivateImport}
+                      onClear={draft.clearSelection}
+                      disabled={save.isPending}
+                    />
+                  ) : null
+                }
               />
               <div className={detailPaneWrapper({ hiddenOnMobile: !focusedItem })}>
                 <DetailPanel focusedItem={focusedItem} draft={draft} onBack={() => draft.setFocus(null)} />
@@ -235,17 +271,10 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
             <ModalBottombar
               totalRows={totalRows}
               totalTracks={totalTracks}
-              selectedCount={draft.state.selectedIds.size}
-              draft={draft}
-              onBulkSync={handleBulkSync}
-              onBulkImport={handleBulkImport}
-              onClearSelection={draft.clearSelection}
               onSave={handleSave}
               onCancel={() => onOpenChange(false)}
               isSaving={save.isPending}
               hasChanges={hasChanges}
-              autoWatch={draft.state.autoWatch}
-              onWatchChange={draft.setWatch}
               onRefresh={() => void items.refetch()}
               isRefreshing={items.isFetching}
             />

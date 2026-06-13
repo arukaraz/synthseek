@@ -15,9 +15,13 @@ export const SORT_VALUES: ReadonlyArray<LibrarySort> = ["name", "type", "tracks"
 
 export { Album };
 
+export const RELATIVE_SYNC_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
 export const DEFAULT_IMPORT_CONFIG = {
   bitrate: { value: 320, matching: "flexible" as const },
   format: { value: "mp3" as const, matching: "flexible" as const },
 };
 
 export const TRACK_PREVIEW_LIMIT = 5;
+
+export const TRI_TOGGLE_ARIA_CHECKED = { on: true, off: false, mixed: "mixed" } as const;

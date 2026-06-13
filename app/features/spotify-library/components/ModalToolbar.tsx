@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 import { FILTER_ICONS, FILTER_VALUES, SORT_VALUES } from "../constants";
 import { searchBox, searchInput, toolbar } from "../styles";
 import type { LibraryFilter, LibrarySort } from "../types";
+
+import { AutoWatchToggles } from "./AutoWatchToggles";
 import type { ModalToolbarProps } from "./types";
 
 export function ModalToolbar({
@@ -19,6 +21,8 @@ export function ModalToolbar({
   onDirectionChange,
   search,
   onSearchChange,
+  autoWatch,
+  onWatchChange,
 }: ModalToolbarProps) {
   const { t } = useTranslation("library");
 
@@ -36,6 +40,7 @@ export function ModalToolbar({
   return (
     <div className={toolbar()}>
       <FilterSortDropdown
+        triggerClassName="shrink-0"
         filter={{ value: filter, onChange: onFilterChange, options: filterOptions }}
         sort={{ value: sort, onChange: onSortChange, options: sortOptions }}
         direction={{ value: direction, onChange: onDirectionChange }}
@@ -50,6 +55,7 @@ export function ModalToolbar({
           className={searchInput()}
         />
       </div>
+      <AutoWatchToggles value={autoWatch} onChange={onWatchChange} />
     </div>
   );
 }

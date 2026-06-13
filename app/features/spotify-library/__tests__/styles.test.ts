@@ -16,8 +16,6 @@ import {
   bottombarRight,
   brandChip,
   brandIcon,
-  bulkMenuItem,
-  bulkTrigger,
   cfgRow,
   cfgRowDesc,
   cfgRowLabel,
@@ -55,24 +53,30 @@ import {
   detailSectionTitle,
   detailSectionTitleLine,
   heartThumb,
-  inlineAct,
+  masterControls,
   masterEmpty,
   masterScroll,
+  masterXScroll,
   metaGrid,
   metaKey,
   metaVal,
+  metaValFull,
   metaValText,
   modalGrid,
   modalRoot,
   searchBox,
   searchInput,
-  selChip,
-  selChipDot,
-  selChipNum,
-  selDivider,
+  selectionBar,
+  selectionBarChip,
+  selectionBarChipDot,
+  selectionBarChipNum,
+  selectionBarClear,
+  selectionBarSyncHint,
+  selectionBarToggles,
   split,
   stDot,
   stPill,
+  syncDash,
   syncDot,
   syncPill,
   table,
@@ -91,6 +95,11 @@ import {
   trackPos,
   trackRow,
   trackTitle,
+  triToggle,
+  triToggleLabel,
+  triToggleThumb,
+  triToggleThumbMark,
+  triToggleTrack,
   typeTag,
 } from "../styles";
 
@@ -108,6 +117,12 @@ describe("layout shells", () => {
   it("split stacks on mobile and rows on desktop", () => {
     expect(split()).toContain("flex-col");
     expect(split()).toContain("md:flex-row");
+  });
+
+  it("modalGrid and split shrink below their content so the table can scroll", () => {
+    expect(modalGrid()).toContain("min-w-0");
+    expect(modalGrid()).toContain("grid-cols-[minmax(0,1fr)]");
+    expect(split()).toContain("min-w-0");
   });
 });
 
@@ -142,6 +157,12 @@ describe("chrome bars", () => {
     expect(searchBox()).toContain("flex-1");
     expect(searchInput()).toContain("focus:border-primary-500/40");
   });
+
+  it("the toolbar and search input yield width so the auto-import control stays visible", () => {
+    expect(toolbar()).toContain("min-w-0");
+    expect(searchBox()).toContain("min-w-0");
+    expect(searchInput()).toContain("min-w-0");
+  });
 });
 
 describe("master scroll panes", () => {
@@ -158,6 +179,17 @@ describe("master scroll panes", () => {
   it("master and detail empty states are muted and centered", () => {
     expect(masterEmpty()).toContain("justify-center");
     expect(detailLoading()).toContain("justify-center");
+  });
+
+  it("master controls sit outside the horizontal scroll region", () => {
+    expect(masterControls()).toContain("pt-3");
+    expect(masterXScroll()).toContain("overflow-x-auto");
+  });
+
+  it("the scroll column can be narrower than the table content", () => {
+    expect(masterScroll({ hiddenOnMobile: false })).toContain("min-w-0");
+    expect(masterXScroll()).toContain("min-w-0");
+    expect(masterXScroll()).toContain("max-w-full");
   });
 });
 
@@ -212,6 +244,11 @@ describe("type and status tags", () => {
     expect(syncDot({ on: false })).toContain("bg-fg/40");
   });
 
+  it("sync dash reads as an absent dimmed-mono control", () => {
+    expect(syncDash()).toContain("text-fg/30");
+    expect(syncDash()).toContain("font-mono");
+  });
+
   it("checkBox fills when on", () => {
     expect(checkBox({ on: true })).toContain("bg-gradient-to-br");
     expect(checkBox({ on: false })).toContain("border-fg/20");
@@ -260,6 +297,7 @@ describe("detail pane", () => {
     expect(metaGrid()).toContain("grid");
     expect(metaKey()).toContain("text-fg/40");
     expect(metaVal()).toContain("font-mono");
+    expect(metaValFull()).toContain("text-fg/40");
     expect(metaValText()).toContain("text-fg");
   });
 
@@ -301,21 +339,15 @@ describe("bottombar", () => {
     expect(bbStatStrong()).toContain("font-semibold");
   });
 
-  it("selection chips highlight the primary token", () => {
-    expect(selChip()).toContain("border-primary-500/30");
-    expect(selChipDot()).toContain("bg-primary-300");
-    expect(selChipNum()).toContain("text-primary-300");
-    expect(selDivider()).toContain("bg-fg/10");
+  it("fits within the modal width on mobile so the save button is not clipped", () => {
+    expect(bottombar()).toContain("w-full");
+    expect(bottombar()).toContain("min-w-0");
+    expect(bottombar()).toContain("pb-[max(0.75rem,env(safe-area-inset-bottom))]");
+    expect(bottombarButtons()).toContain("min-w-0");
   });
 
-  it("inline actions flag the danger variant", () => {
-    expect(inlineAct({ danger: true })).toContain("hover:text-rose-300");
-    expect(inlineAct({ danger: false })).toContain("text-fg/60");
-  });
-
-  it("bulk and auto-import triggers reflect active state", () => {
-    expect(bulkTrigger()).toContain("rounded-md");
-    expect(bulkMenuItem()).toContain("text-xs");
+  it("auto-import trigger reflects active state", () => {
+    expect(toolbar()).toContain("flex");
     expect(autoImportTrigger({ active: true })).toContain("border-primary-500/30");
     expect(autoImportTrigger({ active: false })).toContain("text-fg/60");
     expect(autoImportBadge({ active: true })).toContain("text-primary-200");
@@ -325,5 +357,74 @@ describe("bottombar", () => {
     expect(autoImportRow()).toContain("justify-between");
     expect(autoImportRowLabel()).toContain("flex-col");
     expect(autoImportRowSub()).toContain("text-fg/45");
+  });
+});
+
+describe("selection bulk bar", () => {
+  it("pins to the top of the scroll region as a single non-wrapping row", () => {
+    expect(selectionBar()).toContain("sticky");
+    expect(selectionBar()).toContain("top-0");
+    expect(selectionBar()).toContain("flex-nowrap");
+  });
+
+  it("selection chip highlights the primary token", () => {
+    expect(selectionBarChip()).toContain("border-primary-500/30");
+    expect(selectionBarChipDot()).toContain("bg-primary-300");
+    expect(selectionBarChipNum()).toContain("text-primary-300");
+  });
+
+  it("clear pushes to the trailing edge and disables", () => {
+    expect(selectionBarClear()).toContain("ml-auto");
+    expect(selectionBarClear()).toContain("disabled:opacity-50");
+  });
+
+  it("keeps every element on one row with no reflow ordering or full-width toggles", () => {
+    const reflow = /(?:^|\s|:)order-/;
+    expect(selectionBar()).not.toContain("flex-wrap");
+    expect(selectionBarChip()).not.toMatch(reflow);
+    expect(selectionBarClear()).not.toMatch(reflow);
+    expect(selectionBarToggles()).not.toMatch(reflow);
+    expect(selectionBarToggles()).not.toContain("w-full");
+    expect(selectionBarToggles()).not.toContain("flex-wrap");
+  });
+
+  it("prevents the row items from shrinking so nothing is clipped at narrow widths", () => {
+    expect(selectionBarChip()).toContain("shrink-0");
+    expect(selectionBarClear()).toContain("shrink-0");
+    expect(selectionBarToggles()).toContain("shrink-0");
+  });
+
+  it("tightens the inter-element gap on mobile and relaxes it on desktop", () => {
+    expect(selectionBar()).toContain("gap-1.5");
+    expect(selectionBar()).toContain("sm:gap-2");
+    expect(selectionBarToggles()).toContain("gap-2");
+    expect(selectionBarToggles()).toContain("sm:gap-3");
+  });
+
+  it("hides the playlists-only hint on mobile where space is scarce", () => {
+    expect(selectionBarSyncHint()).toContain("text-fg/40");
+    expect(selectionBarSyncHint()).toContain("hidden");
+    expect(selectionBarSyncHint()).toContain("sm:inline");
+  });
+
+  it("keeps the desktop selection layout as a single padded row", () => {
+    expect(selectionBar()).toContain("sm:py-2");
+    expect(selectionBar()).toContain("sm:gap-2");
+  });
+
+  it("drops the toggle text label on mobile and restores it on desktop", () => {
+    expect(triToggleLabel()).toContain("hidden");
+    expect(triToggleLabel()).toContain("sm:inline");
+  });
+
+  it("tri-state toggle track and thumb position by state", () => {
+    expect(triToggle({ disabled: true })).toContain("cursor-not-allowed");
+    expect(triToggleTrack({ state: "on" })).toContain("bg-primary-500");
+    expect(triToggleTrack({ state: "off" })).toContain("bg-fg/15");
+    expect(triToggleTrack({ state: "mixed" })).toContain("bg-fg/25");
+    expect(triToggleThumb({ state: "on" })).toContain("translate-x-[22px]");
+    expect(triToggleThumb({ state: "off" })).toContain("translate-x-0.5");
+    expect(triToggleThumb({ state: "mixed" })).toContain("translate-x-[11px]");
+    expect(triToggleThumbMark()).toContain("bg-fg/50");
   });
 });

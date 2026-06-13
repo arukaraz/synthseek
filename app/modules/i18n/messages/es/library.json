@@ -49,7 +49,8 @@
       "select": "Seleccionar",
       "deselect": "Quitar selección",
       "enabled": "Activada",
-      "disabled": "Desactivada"
+      "disabled": "Desactivada",
+      "syncUnavailable": "La sincronización no está disponible para álbumes"
     },
     "type": {
       "playlist": "Lista",
@@ -124,16 +125,19 @@
       "savedAlbumsSub": "Álbumes que guardas en Spotify",
       "savedAlbumsAria": "Importar automáticamente los nuevos álbumes guardados"
     },
-    "bulk": {
+    "selection": {
+      "regionLabel_one": "Acciones masivas para {{count}} elemento seleccionado",
+      "regionLabel_other": "Acciones masivas para {{count}} elementos seleccionados",
       "selected": "seleccionados",
-      "actions": "Acciones masivas",
-      "syncGroup": "Sincronización",
-      "enableSync": "Activar sincronización",
-      "disableSync": "Desactivar sincronización",
-      "importGroup": "Importación",
-      "enableImport": "Activar importación",
-      "disableImport": "Desactivar importación",
-      "clearAria": "Limpiar selección"
+      "announce_one": "{{count}} elemento seleccionado",
+      "announce_other": "{{count}} elementos seleccionados",
+      "sync": "Sincronizar",
+      "syncAria": "Configurar la sincronización de los elementos seleccionados",
+      "syncPlaylistsOnly": "La sincronización solo se aplica a las listas",
+      "playlistsOnlyHint": "Solo listas",
+      "import": "Importar",
+      "importAria": "Configurar la importación de los elementos seleccionados",
+      "clear": "Limpiar"
     }
   },
   "jspfImport": {

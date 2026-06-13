@@ -1,15 +1,18 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
+import enCommon from "@modules/i18n/messages/en/common.json";
 import enLibrary from "@modules/i18n/messages/en/library.json";
 import { createMockLibraryItem } from "@test/mocks/feature-hooks.mock";
 
 import {
+  aggregateToggleState,
   compareItems,
   formatLastSync,
   libraryTypeLowerLabelKey,
   libraryTypeTone,
   matchesFilter,
   matchesSearch,
+  resolveToggleTarget,
 } from "../helpers";
 
 describe("matchesFilter", () => {
@@ -123,12 +126,64 @@ describe("compareItems", () => {
 });
 
 describe("formatLastSync", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("returns the never label for null", () => {
     expect(formatLastSync(null)).toBe(enLibrary.spotifyLibrary.detail.lastSyncNever);
   });
 
   it("formats a provided date", () => {
     expect(formatLastSync(new Date("2024-01-01T00:00:00Z"))).not.toBe(enLibrary.spotifyLibrary.detail.lastSyncNever);
+  });
+
+  it("uses a relative phrase for a value within the last week", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2024-06-10T12:00:00Z"));
+    const twoHoursAgo = new Date("2024-06-10T10:00:00Z");
+    expect(formatLastSync(twoHoursAgo)).toBe(enCommon.relativeTime.hoursAgo.replace("{{count}}", "2"));
+  });
+
+  it("falls back to a short date for a value older than a week", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2024-06-10T12:00:00Z"));
+    const older = new Date("2024-05-01T12:00:00Z");
+    const result = formatLastSync(older);
+    expect(result).not.toContain("ago");
+    expect(result).toMatch(/\d/);
+  });
+});
+
+describe("aggregateToggleState", () => {
+  it("returns off for an empty selection", () => {
+    expect(aggregateToggleState([])).toBe("off");
+  });
+
+  it("returns on when every value is on", () => {
+    expect(aggregateToggleState([true, true])).toBe("on");
+  });
+
+  it("returns off when every value is off", () => {
+    expect(aggregateToggleState([false, false])).toBe("off");
+  });
+
+  it("returns mixed when values disagree", () => {
+    expect(aggregateToggleState([true, false])).toBe("mixed");
+  });
+});
+
+describe("resolveToggleTarget", () => {
+  it("turns an all-on toggle off", () => {
+    expect(resolveToggleTarget("on")).toBe(false);
+  });
+
+  it("turns an all-off toggle on", () => {
+    expect(resolveToggleTarget("off")).toBe(true);
+  });
+
+  it("resolves a mixed toggle to on first", () => {
+    expect(resolveToggleTarget("mixed")).toBe(true);
   });
 });
 
