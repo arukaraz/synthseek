@@ -1,4 +1,4 @@
-import { Toaster } from "@components/ui/Sonner";
+import { Toaster } from "@components/ui/Toaster";
 import { TooltipProvider } from "@components/ui/Tooltip";
 import { DEFAULT_LOCALE, isLocale, LANG_COOKIE } from "@locale/config";
 import { AuthProvider } from "@modules/providers/AuthProvider";

@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { toast } from "sonner";
 
-import { Toaster } from "../Sonner";
+import { Toaster } from "../Toaster";
 
 afterEach(() => {
   toast.dismiss();

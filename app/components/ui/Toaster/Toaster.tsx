@@ -21,6 +21,7 @@ export function Toaster({ ...props }: ToasterProps) {
       toastOptions={{ classNames: TOAST_CLASS_NAMES }}
       offset={resolveToastOffset(dockVisible)}
       mobileOffset={resolveToastMobileOffset(dockVisible)}
+      duration={200000}
       {...props}
     />
   );
