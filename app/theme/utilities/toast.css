@@ -82,7 +82,7 @@
   width: 1.0625rem;
   margin: 0;
   color: var(--color-white);
-  transform: translate(0.5px, 0.5px);
+  transform: translateY(-1px);
 }
 
 [data-sonner-toaster] [data-sonner-toast][data-styled="true"] [data-content] {
