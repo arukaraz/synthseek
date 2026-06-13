@@ -31,15 +31,12 @@ export function SelectionBulkBar({
         {t("page.selection.selected")}
       </span>
 
-      <button
-        type="button"
-        className={selectionAction()}
-        onClick={onRetryFailed}
-        disabled={failedCount === 0 || isRetrying}
-      >
-        <RefreshCcw className="size-3.5" />
-        {t("page.selection.retryFailed", { count: failedCount })}
-      </button>
+      {failedCount > 0 ? (
+        <button type="button" className={selectionAction()} onClick={onRetryFailed} disabled={isRetrying}>
+          <RefreshCcw className="size-3.5" />
+          {t("page.selection.retryFailed", { count: failedCount })}
+        </button>
+      ) : null}
 
       <button type="button" className={selectionAction()} onClick={onAddToPlaylist}>
         <ListPlus className="size-3.5" />

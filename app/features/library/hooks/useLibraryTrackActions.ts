@@ -1,22 +1,21 @@
 "use client";
 
-import { useRetryTrack } from "@hooks/api";
+import { useRetryTracks } from "@hooks/api";
 import { useCallback } from "react";
 
 export function useLibraryTrackActions() {
-  const retryTrack = useRetryTrack();
+  const retryTracks = useRetryTracks();
 
   const retryFailed = useCallback(
     (trackIds: string[]) => {
-      for (const trackId of trackIds) {
-        retryTrack.mutate({ trackId });
-      }
+      if (trackIds.length === 0) return;
+      retryTracks.mutate({ trackIds });
     },
-    [retryTrack]
+    [retryTracks]
   );
 
   return {
     retryFailed,
-    isRetrying: retryTrack.isPending,
+    isRetrying: retryTracks.isPending,
   };
 }
