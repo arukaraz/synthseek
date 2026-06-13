@@ -11,8 +11,6 @@ import {
   headerTabUnderline,
   headerTabBadge,
   searchForm,
-  mobileSearchTrigger,
-  mobileSearchClose,
   searchShell,
   searchInput,
 } from "../styles";
@@ -59,14 +57,9 @@ describe("TopHeader styles", () => {
     expect(headerTabBadge()).toContain("rounded-full");
   });
 
-  it("toggles the search form layout when open", () => {
-    expect(searchForm({ open: true })).toContain("flex");
-    expect(searchForm({ open: false })).toContain("hidden");
-  });
-
-  it("renders the mobile-only search trigger and close affordances", () => {
-    expect(mobileSearchTrigger()).toContain("sm:hidden");
-    expect(mobileSearchClose()).toContain("sm:hidden");
+  it("renders the search form expanded on mobile and inline on desktop", () => {
+    expect(searchForm()).toContain("flex");
+    expect(searchForm()).toContain("sm:block");
   });
 
   it("highlights the search shell when focused", () => {

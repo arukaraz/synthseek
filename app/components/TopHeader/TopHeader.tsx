@@ -1,13 +1,13 @@
 "use client";
 
+import { usePrimaryNav } from "@hooks/ui/usePrimaryNav";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
 import { cn } from "@utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
-import { Disc3, Menu, Search, Sparkles, X } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { HeaderTab } from "../HeaderTab";
@@ -18,8 +18,6 @@ import {
   decorativeLine,
   headerContainer,
   headerContent,
-  mobileSearchClose,
-  mobileSearchTrigger,
   searchForm,
   searchGlow,
   searchInput,
@@ -31,39 +29,17 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
   const { t } = useTranslation("components");
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [isFocused, setIsFocused] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const mobileInputRef = useRef<HTMLInputElement>(null);
-  const pathname = usePathname();
-
-  const isDiscoverActive = pathname === "/" || pathname === "";
-  const isRequestsActive = pathname.startsWith("/requests");
-  const isLibraryActive = pathname.startsWith("/library");
+  const navItems = usePrimaryNav();
 
   useEffect(() => {
     setSearchQuery(initialQuery);
   }, [initialQuery]);
-
-  useEffect(() => {
-    if (isSearchOpen && mobileInputRef.current) {
-      const timer = setTimeout(() => mobileInputRef.current?.focus(), 50);
-      return () => clearTimeout(timer);
-    }
-  }, [isSearchOpen]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim() && onSearch) {
       onSearch(searchQuery.trim());
     }
-  };
-
-  const handleCloseMobileSearch = () => {
-    setSearchQuery("");
-    setIsSearchOpen(false);
-  };
-
-  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") handleCloseMobileSearch();
   };
 
   return (
@@ -97,41 +73,21 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
             </motion.div>
           </Link>
 
-          <nav
-            aria-label={t("header.primaryNav")}
-            className={cn("flex items-center gap-0.5", isSearchOpen && "hidden sm:flex")}
-          >
-            <HeaderTab href="/" icon={Sparkles} label={t("header.discover")} isActive={isDiscoverActive} />
-            <HeaderTab
-              href="/requests"
-              icon={Menu}
-              label={t("header.requests")}
-              isActive={isRequestsActive}
-              labelOnMobile
-            />
-            <HeaderTab
-              href="/library"
-              icon={Disc3}
-              label={t("header.library")}
-              isActive={isLibraryActive}
-              labelOnMobile
-            />
+          <nav aria-label={t("header.primaryNav")} className="hidden items-center gap-0.5 sm:flex">
+            {navItems.map((item) => (
+              <HeaderTab
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={item.label}
+                isActive={item.isActive}
+                labelOnMobile
+              />
+            ))}
           </nav>
         </div>
 
-        {!isSearchOpen && (
-          <button
-            type="button"
-            onClick={() => setIsSearchOpen(true)}
-            className={mobileSearchTrigger()}
-            aria-label={t("header.search")}
-            title={t("header.search")}
-          >
-            <Search className="size-4" />
-          </button>
-        )}
-
-        <form onSubmit={handleSearchSubmit} className={searchForm({ open: isSearchOpen })} data-cy="search-form">
+        <form onSubmit={handleSearchSubmit} className={searchForm()} data-cy="search-form">
           <motion.div
             className={searchShell({ focused: isFocused })}
             animate={{ scale: isFocused ? 1.01 : 1 }}
@@ -155,26 +111,15 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
             </button>
 
             <input
-              ref={mobileInputRef}
               type="text"
               placeholder={t("header.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              onKeyDown={handleSearchKeyDown}
               className={searchInput()}
               data-cy="search-input"
             />
-
-            <button
-              type="button"
-              onClick={handleCloseMobileSearch}
-              className={mobileSearchClose()}
-              aria-label={t("header.closeSearch")}
-            >
-              <X className="size-3.5" />
-            </button>
 
             <div className="hidden sm:block">
               <AnimatePresence>
@@ -200,7 +145,7 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
           </motion.div>
         </form>
 
-        <div className="flex shrink-0 items-center">
+        <div className="hidden shrink-0 items-center sm:flex">
           <UserAvatarMenu />
         </div>
       </div>

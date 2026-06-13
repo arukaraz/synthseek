@@ -47,6 +47,7 @@
   },
   "header": {
     "primaryNav": "Primary",
+    "mobileNav": "Mobile",
     "search": "Search",
     "searchPlaceholder": "Search tracks, artists, albums...",
     "closeSearch": "Close search",

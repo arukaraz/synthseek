@@ -40,6 +40,10 @@ vi.mock("@components/ContentShell", () => ({
   ContentShell: ({ children }: { children: React.ReactNode }) => <main data-testid="content-shell">{children}</main>,
 }));
 
+vi.mock("@components/BottomNav", () => ({
+  BottomNav: () => <nav data-testid="bottom-nav" />,
+}));
+
 vi.mock("@components/ui/ProgressDock", () => ({
   ProgressDock: () => null,
 }));

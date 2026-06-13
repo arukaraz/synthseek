@@ -202,4 +202,13 @@ describe("ProgressDock", () => {
     expect(screen.getAllByText("Importing from Spotify").length).toBeGreaterThan(0);
     void within;
   });
+
+  it("floats above the bottom nav on mobile and sits at the corner on desktop", () => {
+    const { container } = render(<ProgressDock />);
+    const viewport = container.firstElementChild;
+    expect(viewport).toHaveClass("bottom-[var(--height-bottom-nav)]");
+    expect(viewport).toHaveClass("sm:bottom-5");
+    expect(viewport).toHaveClass("inset-x-0");
+    expect(viewport).toHaveClass("z-50");
+  });
 });

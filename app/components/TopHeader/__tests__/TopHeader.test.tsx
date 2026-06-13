@@ -104,29 +104,31 @@ describe("TopHeader", () => {
     expect(input).toHaveValue("");
   });
 
-  it("opens the mobile search and closes it via the close button", async () => {
-    const { user } = renderWithProviders(<TopHeader />);
+  it("renders the search input expanded by default without a mobile search toggle", () => {
+    renderWithProviders(<TopHeader />);
 
-    const triggerButton = screen.getByTitle("Search");
-    await user.click(triggerButton);
-
-    const input = screen.getByPlaceholderText("Search tracks, artists, albums...");
-    await user.type(input, "boards");
-
-    await user.click(screen.getByRole("button", { name: "Close search" }));
-
-    expect(input).toHaveValue("");
-    expect(screen.getByTitle("Search")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Search tracks, artists, albums...")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Close search" })).not.toBeInTheDocument();
   });
 
-  it("closes the mobile search when Escape is pressed", async () => {
-    const { user } = renderWithProviders(<TopHeader />);
+  it("keeps the logo visible on mobile alongside the expanded search", () => {
+    renderWithProviders(<TopHeader />);
 
-    const input = screen.getByPlaceholderText("Search tracks, artists, albums...");
-    await user.type(input, "aphex");
-    await user.type(input, "{Escape}");
+    const logo = screen.getByLabelText("Synthseek Logo");
+    expect(logo).toBeInTheDocument();
 
-    expect(input).toHaveValue("");
+    const logoGroup = logo.closest("div.shrink-0");
+    expect(logoGroup).not.toBeNull();
+    expect(logoGroup?.className).not.toContain("hidden");
+    expect(logoGroup?.className).toContain("flex");
+  });
+
+  it("gates the primary nav destinations to desktop while the logo stays on mobile", () => {
+    renderWithProviders(<TopHeader />);
+
+    const nav = screen.getByRole("navigation", { name: "Primary" });
+    expect(nav.className).toContain("hidden");
+    expect(nav.className).toContain("sm:flex");
   });
 
   it("applies focus styling when the input is focused and removes it on blur", async () => {

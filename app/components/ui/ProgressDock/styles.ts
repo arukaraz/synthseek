@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const dockViewport = cva(
-  "pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col items-stretch px-3 pb-3 sm:inset-x-auto sm:bottom-5 sm:right-5 sm:items-end sm:px-0 sm:pb-0"
+  "pointer-events-none fixed inset-x-0 bottom-[var(--height-bottom-nav)] z-50 flex flex-col items-stretch px-3 pb-3 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:items-end sm:px-0 sm:pb-0"
 );
 
 export const dockCard = cva(

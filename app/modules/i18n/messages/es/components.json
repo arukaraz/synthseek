@@ -47,6 +47,7 @@
   },
   "header": {
     "primaryNav": "Principal",
+    "mobileNav": "Móvil",
     "search": "Buscar",
     "searchPlaceholder": "Busca canciones, artistas, álbumes...",
     "closeSearch": "Cerrar búsqueda",

@@ -1,7 +1,15 @@
 import type { ContentType, MusicItem } from "@api/__generated__/types";
 import type { ConfigRequestMode } from "@features/search/components/ConfigRequestModal/types";
 import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
+import type { LucideIcon } from "lucide-react";
 import type { PointerEventHandler } from "react";
+
+export interface PrimaryNavItem {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  isActive: boolean;
+}
 
 export interface FlowState {
   selectedResult: MusicItem | null;

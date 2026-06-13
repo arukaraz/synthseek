@@ -1,5 +1,6 @@
 "use client";
 
+import { BottomNav } from "@components/BottomNav";
 import { ContentShell } from "@components/ContentShell";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { TopHeader } from "@components/TopHeader";
@@ -31,6 +32,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
     <div className="bg-surface min-h-screen overflow-hidden">
       <TopHeader onSearch={handleSearch} initialQuery={searchQuery} />
       <ContentShell>{children}</ContentShell>
+      <BottomNav />
       <ProgressDock />
     </div>
   );

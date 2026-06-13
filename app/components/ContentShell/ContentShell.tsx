@@ -10,7 +10,7 @@ import type { ContentShellProps } from "./types";
 export function ContentShell({ children }: ContentShellProps) {
   return (
     <motion.div
-      className="h-screen-minus-header relative flex overflow-hidden"
+      className="h-screen-minus-header-and-nav sm:h-screen-minus-header relative flex overflow-hidden"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
