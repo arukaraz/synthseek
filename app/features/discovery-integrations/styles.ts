@@ -101,6 +101,19 @@ export const autoRequestLabel = cva("text-fg text-sm font-medium");
 
 export const autoRequestHelper = cva("text-fg/55 text-xs");
 
+export const replacePlaylistRow = cva(
+  "border-fg/10 bg-fg/[0.02] flex items-start justify-between gap-3 rounded-lg border p-3 transition-opacity",
+  {
+    variants: {
+      disabled: {
+        true: "opacity-40",
+        false: "opacity-100",
+      },
+    },
+    defaultVariants: { disabled: false },
+  }
+);
+
 export const scheduleHourChip = cva(
   "inline-flex h-8 cursor-pointer items-center justify-center rounded-md border text-[11px] font-medium transition-colors",
   {

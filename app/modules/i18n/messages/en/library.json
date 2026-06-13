@@ -215,7 +215,10 @@
       "playlistsHelper": "{{count}} selected. Each generates a separate feed.",
       "autoRequestLabel": "Auto-request as playlists",
       "autoRequestHelper": "When a feed refreshes, automatically request and import as a new playlist.",
-      "autoRequestAria": "Auto-request playlists"
+      "autoRequestAria": "Auto-request playlists",
+      "replacePlaylistLabel": "Keep a single updated playlist",
+      "replacePlaylistHelper": "Replace the same playlist on each refresh instead of creating a new dated one.",
+      "replacePlaylistAria": "Keep a single updated playlist"
     },
     "playlistKind": {
       "cfRecommendationsLabel": "CF Recommendations",
@@ -285,6 +288,7 @@
       "track": "Track",
       "artistAlbum": "Artist · Album",
       "status": "Status",
+      "requestedAt": "Requested at",
       "length": "Length",
       "album": "Album",
       "artist": "Artist",

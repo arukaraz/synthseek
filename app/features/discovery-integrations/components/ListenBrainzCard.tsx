@@ -19,6 +19,7 @@ import {
   disabledOverlay,
   playlistChip,
   playlistChipsGrid,
+  replacePlaylistRow,
   subSection,
   subSectionHeader,
   subSectionSaveBar,
@@ -33,11 +34,13 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
   const [username, setUsername] = useState(config.username ?? "");
   const [kinds, setKinds] = useState<LbPlaylistKind[]>(config.selectedKinds);
   const [autoRequest, setAutoRequest] = useState(config.autoRequest ?? false);
+  const [replaceExistingPlaylist, setReplaceExistingPlaylist] = useState(config.replaceExistingPlaylist ?? false);
 
   const isDirty =
     enabled !== config.enabled ||
     username !== (config.username ?? "") ||
     autoRequest !== (config.autoRequest ?? false) ||
+    replaceExistingPlaylist !== (config.replaceExistingPlaylist ?? false) ||
     kinds.length !== config.selectedKinds.length ||
     kinds.some((k, i) => k !== config.selectedKinds[i]);
 
@@ -51,6 +54,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
       username: username.trim() || null,
       selectedKinds: kinds,
       autoRequest,
+      replaceExistingPlaylist,
     });
   };
 
@@ -59,6 +63,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
     setUsername(config.username ?? "");
     setKinds(config.selectedKinds);
     setAutoRequest(config.autoRequest ?? false);
+    setReplaceExistingPlaylist(config.replaceExistingPlaylist ?? false);
   };
 
   return (
@@ -117,6 +122,19 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
             checked={autoRequest}
             onCheckedChange={setAutoRequest}
             aria-label={t("discoveryIntegrations.listenbrainz.autoRequestAria")}
+          />
+        </div>
+
+        <div className={replacePlaylistRow({ disabled: !autoRequest })}>
+          <div className={autoRequestText()}>
+            <span className={autoRequestLabel()}>{t("discoveryIntegrations.listenbrainz.replacePlaylistLabel")}</span>
+            <span className={autoRequestHelper()}>{t("discoveryIntegrations.listenbrainz.replacePlaylistHelper")}</span>
+          </div>
+          <Switch
+            checked={replaceExistingPlaylist}
+            onCheckedChange={setReplaceExistingPlaylist}
+            disabled={!autoRequest}
+            aria-label={t("discoveryIntegrations.listenbrainz.replacePlaylistAria")}
           />
         </div>
       </div>

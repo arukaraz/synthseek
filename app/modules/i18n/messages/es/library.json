@@ -215,7 +215,10 @@
       "playlistsHelper": "{{count}} seleccionadas. Cada una genera un feed independiente.",
       "autoRequestLabel": "Solicitar automáticamente como listas",
       "autoRequestHelper": "Cuando un feed se actualiza, solicita e importa automáticamente como una lista nueva.",
-      "autoRequestAria": "Solicitar listas automáticamente"
+      "autoRequestAria": "Solicitar listas automáticamente",
+      "replacePlaylistLabel": "Mantener una sola playlist actualizada",
+      "replacePlaylistHelper": "Reemplaza la misma playlist en cada actualización en vez de crear una nueva con la fecha.",
+      "replacePlaylistAria": "Mantener una sola playlist actualizada"
     },
     "playlistKind": {
       "cfRecommendationsLabel": "Recomendaciones CF",
@@ -285,6 +288,7 @@
       "track": "Canción",
       "artistAlbum": "Artista · Álbum",
       "status": "Estado",
+      "requestedAt": "Solicitada",
       "length": "Duración",
       "album": "Álbum",
       "artist": "Artista",
