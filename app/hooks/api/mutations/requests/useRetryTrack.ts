@@ -28,6 +28,10 @@ export function useRetryTrack() {
       errorToast(err, "requests.retryTrackFailed");
     },
     onSuccess: () => toast.success(i18n.t("mutations:requests.trackRetryQueued")),
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.library.getTracks.invalidate();
+      void utils.library.getCounts.invalidate();
+    },
   });
 }
