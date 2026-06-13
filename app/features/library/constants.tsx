@@ -1,4 +1,4 @@
-import { ContentType } from "@api/__generated__/types";
+import { ContentType, RequestStatus } from "@api/__generated__/types";
 import { Disc3, ListMusic, Music, User } from "lucide-react";
 
 import { AlbumCard, ArtistCard, PlaylistCard } from "./components/LibraryCard";
@@ -20,6 +20,16 @@ export const LIBRARY_DEFAULT_PAGE_SIZE = "50";
 export const LIBRARY_DEFAULT_PAGE = "1";
 
 export const LIBRARY_FACET_TOP_N = 8;
+
+export const LIBRARY_STATUS_FACET_VALUES = RequestStatus.options;
+
+const STATUS_FACET_DEF = {
+  key: "status",
+  labelKey: "page.facets.status",
+  searchable: false,
+  staticValues: LIBRARY_STATUS_FACET_VALUES,
+  labelNs: "status",
+} as const;
 
 export const INFINITE_SCROLL_ROOT_MARGIN = "200px";
 
@@ -73,7 +83,7 @@ const TRACKS_CONFIG: TracksViewConfig = {
   ],
   filterParamKeys: ["status", "source", "format", "artist", "requestedBy", "genre", "playlist", "albumId", "orphan"],
   facets: [
-    { key: "status", labelKey: "page.facets.status", searchable: false },
+    STATUS_FACET_DEF,
     { key: "source", labelKey: "page.facets.source", searchable: false },
     { key: "format", labelKey: "page.facets.format", searchable: false },
     { key: "genre", labelKey: "page.facets.genre", searchable: true, facetSearchKey: "genre" },
@@ -105,7 +115,7 @@ const ALBUMS_CONFIG: AlbumsViewConfig = {
   ],
   filterParamKeys: ["status", "artist", "genre", "year", "source"],
   facets: [
-    { key: "status", labelKey: "page.facets.status", searchable: false },
+    STATUS_FACET_DEF,
     { key: "source", labelKey: "page.facets.source", searchable: false },
     { key: "genre", labelKey: "page.facets.genre", searchable: true, facetSearchKey: "genre" },
     { key: "artist", labelKey: "page.facets.artist", searchable: true, facetSearchKey: "artist" },
@@ -135,7 +145,7 @@ const ARTISTS_CONFIG: ArtistsViewConfig = {
   facets: [
     { key: "genre", labelKey: "page.facets.genre", searchable: true, facetSearchKey: "genre" },
     { key: "source", labelKey: "page.facets.source", searchable: false },
-    { key: "status", labelKey: "page.facets.status", searchable: false },
+    STATUS_FACET_DEF,
   ],
 };
 
@@ -161,7 +171,7 @@ const PLAYLISTS_CONFIG: PlaylistsViewConfig = {
   facets: [
     { key: "source", labelKey: "page.facets.source", searchable: false },
     { key: "owner", labelKey: "page.facets.owner", searchable: true, facetSearchKey: "owner" },
-    { key: "status", labelKey: "page.facets.status", searchable: false },
+    STATUS_FACET_DEF,
   ],
 };
 

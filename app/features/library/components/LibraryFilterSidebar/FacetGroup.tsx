@@ -7,14 +7,20 @@ import { useTranslation } from "react-i18next";
 import { LIBRARY_FACET_TOP_N } from "../../constants";
 import { topFacetValues } from "../../helpers";
 import { FacetSearchInput } from "./FacetSearchInput";
+import { staticFacetValues } from "./helpers";
 import { facetCount, facetLabel, facetRow, group, groupEmpty, groupLabel, groupList, groupMore } from "./styles";
 import type { FacetGroupProps } from "./types";
 
 export function FacetGroup({ def, values, selected, searchTerm, onToggle, onSearch }: FacetGroupProps) {
   const { t } = useTranslation("library");
+  const { t: tStatus } = useTranslation("status");
   const hasSearch = def.searchable && searchTerm.trim().length > 0;
-  const visible = def.searchable ? topFacetValues(values, LIBRARY_FACET_TOP_N, hasSearch) : values;
-  const hiddenCount = values.length - visible.length;
+  const visible = def.staticValues
+    ? staticFacetValues(def.staticValues, values, tStatus)
+    : def.searchable
+      ? topFacetValues(values, LIBRARY_FACET_TOP_N, hasSearch)
+      : values;
+  const hiddenCount = def.staticValues ? 0 : values.length - visible.length;
 
   return (
     <div className={group()}>

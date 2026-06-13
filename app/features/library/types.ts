@@ -38,6 +38,8 @@ export interface FacetDef {
   labelKey: LibraryKey;
   searchable: boolean;
   facetSearchKey?: "artist" | "genre" | "playlist" | "owner";
+  staticValues?: readonly string[];
+  labelNs?: "status";
 }
 
 export interface SortOptionDef {
