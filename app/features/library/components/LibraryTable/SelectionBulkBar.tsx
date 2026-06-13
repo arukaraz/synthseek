@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 
 import {
   selectionAction,
+  selectionActionCount,
+  selectionActionLabel,
   selectionBar,
   selectionChip,
   selectionChipDot,
@@ -32,20 +34,40 @@ export function SelectionBulkBar({
       </span>
 
       {failedCount > 0 ? (
-        <button type="button" className={selectionAction()} onClick={onRetryFailed} disabled={isRetrying}>
-          <RefreshCcw className="size-3.5" />
-          {t("page.selection.retryFailed", { count: failedCount })}
+        <button
+          type="button"
+          className={selectionAction()}
+          onClick={onRetryFailed}
+          disabled={isRetrying}
+          aria-label={t("page.selection.retryFailed", { count: failedCount })}
+        >
+          <RefreshCcw className="size-3.5 shrink-0" aria-hidden />
+          <span className={selectionActionCount()} aria-hidden>
+            {failedCount}
+          </span>
+          <span className={selectionActionLabel()} aria-hidden>
+            {t("page.selection.retryFailed", { count: failedCount })}
+          </span>
         </button>
       ) : null}
 
-      <button type="button" className={selectionAction()} onClick={onAddToPlaylist}>
-        <ListPlus className="size-3.5" />
-        {t("page.selection.addToPlaylist")}
+      <button
+        type="button"
+        className={selectionAction()}
+        onClick={onAddToPlaylist}
+        aria-label={t("page.selection.addToPlaylist")}
+      >
+        <ListPlus className="size-3.5 shrink-0" aria-hidden />
+        <span className={selectionActionLabel()} aria-hidden>
+          {t("page.selection.addToPlaylist")}
+        </span>
       </button>
 
-      <button type="button" className={selectionClear()} onClick={onClear}>
-        <X className="size-3.5" />
-        {t("page.selection.clear")}
+      <button type="button" className={selectionClear()} onClick={onClear} aria-label={t("page.selection.clear")}>
+        <X className="size-3.5 shrink-0" aria-hidden />
+        <span className={selectionActionLabel()} aria-hidden>
+          {t("page.selection.clear")}
+        </span>
       </button>
     </div>
   );
