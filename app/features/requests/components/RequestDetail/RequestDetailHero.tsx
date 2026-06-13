@@ -6,7 +6,6 @@ import { IconButton } from "@components/ui/IconButton";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { StatusBadge } from "@components/ui/StatusBadge";
 import { cn } from "@utils/cn";
-import { getContentTypeIcon } from "@utils/content-type-helpers";
 import { formatTimestamp } from "@utils/formatters";
 import {
   ArrowLeft,
@@ -31,7 +30,6 @@ import { formatDelegatedTo } from "./helpers";
 import { JspfExportDialog } from "./JspfExportDialog";
 import {
   heroAvatar,
-  heroAvatarTypeBadge,
   heroBanner,
   heroBannerImage,
   heroBannerOverlay,
@@ -43,7 +41,6 @@ import type { RequestDetailHeroProps } from "./types";
 
 export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
   const { t } = useTranslation("requests");
-  const FallbackIcon = getContentTypeIcon(request.contentType);
   const {
     retry,
     remove,
@@ -98,24 +95,17 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
       <div className={heroContent()}>
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="flex items-end gap-3 sm:gap-4">
-            <div className={heroAvatar({ size: "lg" })}>
-              {request.album_art ? (
-                <>
-                  <Image
-                    src={request.album_art}
-                    alt={request.name}
-                    fill
-                    sizes="(max-width: 640px) 96px, 112px"
-                    className="object-cover"
-                  />
-                  <span className={cn(heroAvatarTypeBadge(), `type-text-${request.contentType}`)}>
-                    <FallbackIcon className="size-3.5" aria-hidden />
-                  </span>
-                </>
-              ) : (
-                <FallbackIcon className="text-primary-300 size-8" aria-hidden />
-              )}
-            </div>
+            {request.album_art && (
+              <div className={heroAvatar({ size: "lg" })}>
+                <Image
+                  src={request.album_art}
+                  alt={request.name}
+                  fill
+                  sizes="(max-width: 640px) 96px, 112px"
+                  className="object-cover"
+                />
+              </div>
+            )}
 
             <div className="min-w-0">
               <p className="text-fg/50 text-[10px] font-semibold tracking-wider uppercase">
