@@ -38,10 +38,13 @@ export const tableHeaderRow = cva("border-fg/10 hover:bg-transparent", {
 
 export type TableHeaderRowProps = VariantProps<typeof tableHeaderRow>;
 
-export const tableHead = cva("text-fg/40 px-3 py-2 text-xs font-medium tracking-wider uppercase sm:px-4 sm:py-3", {
-  variants: {},
-  defaultVariants: {},
-});
+export const tableHead = cva(
+  "text-fg/40 px-3 py-2 text-left text-xs font-medium tracking-wider uppercase sm:px-4 sm:py-3",
+  {
+    variants: {},
+    defaultVariants: {},
+  }
+);
 
 export type TableHeadStyleProps = VariantProps<typeof tableHead>;
 
