@@ -2,6 +2,35 @@
 
 ---
 
+# v2.2.0 — June 13, 2026
+
+### A new Library to browse your whole collection
+
+- A new Library section to browse everything you have, tracks, albums, artists, and playlists, with filters, search, sorting, and smooth scrolling. Exploring Artists and Albums metadata is a WIP.
+- A floating progress panel that shows live progress while syncing to Plex or importing playlists.
+- ListenBrainz can now optionally keep one playlist updated with fresh recommendations on every refresh, instead of creating a new dated playlist each time.
+- Requesting an album now shows it even when you already have its songs from a playlist, reusing what you already have.
+- Redesigned notifications with a cleaner, more readable look.
+
+---
+
+### Improvements
+
+- Better Plex matching, so more of your tracks are found and fewer are dropped from playlists (try resyncing your existing playlists to plex).
+- Duplicate songs in an imported playlist are now collapsed, with a count of how many were skipped.
+- Downloads are more resilient to temporary YouTube failures.
+
+---
+
+### Fixes
+
+- Empty album leftovers are no longer kept when a playlist or track is deleted.
+- You are now prompted to reconnect when a Spotify connection expires.
+- Imports no longer fail on songs you already have, and failures now show a clear, accurate reason.
+- Various visual fixes to the loading spinner, the notification icon, and more.
+
+---
+
 # v2.1.2 — June 10, 2026
 
 - Tracks that were wrongly skipped as not found now download correctly.

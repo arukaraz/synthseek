@@ -2,6 +2,44 @@
   "schemaVersion": 1,
   "versions": [
     {
+      "version": "2.2.0",
+      "date": "2026-06-13",
+      "type": "minor",
+      "title": "A new Library to browse your whole collection",
+      "sections": [
+        {
+          "heading": "New",
+          "category": "feature",
+          "items": [
+            "A new Library section to browse everything you have, tracks, albums, artists, and playlists, with filters, search, sorting, and smooth scrolling. Exploring Artists and Albums metadata is a WIP.",
+            "A floating progress panel that shows live progress while syncing to Plex or importing playlists.",
+            "ListenBrainz can now optionally keep one playlist updated with fresh recommendations on every refresh, instead of creating a new dated playlist each time.",
+            "Requesting an album now shows it even when you already have its songs from a playlist, reusing what you already have.",
+            "Redesigned notifications with a cleaner, more readable look."
+          ]
+        },
+        {
+          "heading": "Improvements",
+          "category": "improvement",
+          "items": [
+            "Better Plex matching, so more of your tracks are found and fewer are dropped from playlists (try resyncing your existing playlists to plex).",
+            "Duplicate songs in an imported playlist are now collapsed, with a count of how many were skipped.",
+            "Downloads are more resilient to temporary YouTube failures."
+          ]
+        },
+        {
+          "heading": "Fixes",
+          "category": "fix",
+          "items": [
+            "Empty album leftovers are no longer kept when a playlist or track is deleted.",
+            "You are now prompted to reconnect when a Spotify connection expires.",
+            "Imports no longer fail on songs you already have, and failures now show a clear, accurate reason.",
+            "Various visual fixes to the loading spinner, the notification icon, and more."
+          ]
+        }
+      ]
+    },
+    {
       "version": "2.1.2",
       "date": "2026-06-10",
       "type": "patch",
