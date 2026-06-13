@@ -102,16 +102,6 @@ export const heroMetaValue = cva("text-primary-300");
 
 export type HeroMetaValueProps = VariantProps<typeof heroMetaValue>;
 
-export const tracksReasonButton = cva(
-  "text-fg/40 hover:text-fg/70 focus-visible:text-fg/70 shrink-0 rounded transition-colors outline-none",
-  {
-    variants: {},
-    defaultVariants: {},
-  }
-);
-
-export type TracksReasonButtonProps = VariantProps<typeof tracksReasonButton>;
-
 export const priorityChip = cva(
   "border-primary-500/30 bg-primary-500/10 text-primary-300 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
 );

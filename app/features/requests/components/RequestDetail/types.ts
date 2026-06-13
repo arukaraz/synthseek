@@ -1,4 +1,4 @@
-import type { RequestStatus, RequestWithTracks, TrackRequest } from "@api/__generated__/types";
+import type { RequestWithTracks, TrackRequest } from "@api/__generated__/types";
 
 export interface RequestDetailProps {
   request: RequestWithTracks | null;
@@ -49,8 +49,4 @@ export interface RequestDetailStatsCardProps {
 
 export interface RequestDetailTracksProps {
   request: RequestWithTracks;
-}
-
-export interface TrackStatusIconProps {
-  status: RequestStatus;
 }
