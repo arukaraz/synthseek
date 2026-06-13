@@ -1,0 +1,39 @@
+"use client";
+
+import type { ColumnDef } from "@components/ui/Table";
+import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
+import i18n from "@locale";
+
+import { TrackStatusIndicator } from "@components/ui/TrackStatusIndicator";
+
+import { LibraryDurationCell } from "./cells/LibraryDurationCell";
+import { TrackMetaCell } from "./cells/TrackMetaCell";
+import { TrackPrimaryCell } from "./cells/TrackPrimaryCell";
+
+export function buildTrackColumns(): ColumnDef<LibraryTrackItem>[] {
+  return [
+    {
+      key: "title",
+      header: i18n.t("library:page.columns.track"),
+      cell: (item) => <TrackPrimaryCell item={item} />,
+    },
+    {
+      key: "meta",
+      header: i18n.t("library:page.columns.artistAlbum"),
+      cell: (item) => <TrackMetaCell artist={item.artist} albumName={item.albumName} />,
+      className: "hidden sm:table-cell",
+    },
+    {
+      key: "status",
+      header: i18n.t("library:page.columns.status"),
+      cell: (item) => <TrackStatusIndicator status={item.status} />,
+      className: "hidden md:table-cell",
+    },
+    {
+      key: "length",
+      header: i18n.t("library:page.columns.length"),
+      cell: (item) => <LibraryDurationCell durationMs={item.duration_ms} />,
+      className: "w-20 text-right",
+    },
+  ];
+}

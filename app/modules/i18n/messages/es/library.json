@@ -248,5 +248,107 @@
       "sunShort": "Dom",
       "sunFull": "Domingos"
     }
+  },
+  "page": {
+    "loading": "Cargando tu biblioteca…",
+    "tabs": {
+      "label": "Vistas de la biblioteca",
+      "tracks": "Canciones",
+      "albums": "Álbumes",
+      "artists": "Artistas",
+      "playlists": "Listas"
+    },
+    "toolbar": {
+      "searchTracks": "Buscar canciones…",
+      "searchAlbums": "Buscar álbumes…",
+      "searchArtists": "Buscar artistas…",
+      "searchPlaylists": "Buscar listas…",
+      "searchAria": "Buscar en la biblioteca",
+      "sort": "Ordenar",
+      "sortAria": "Ordenar resultados",
+      "openFilters": "Filtros"
+    },
+    "sort": {
+      "newest": "Más recientes",
+      "oldest": "Más antiguos",
+      "artist": "Artista",
+      "album": "Álbum",
+      "title": "Título",
+      "duration": "Duración",
+      "status": "Estado",
+      "name": "Nombre",
+      "year": "Año",
+      "tracks": "Canciones",
+      "albums": "Álbumes"
+    },
+    "columns": {
+      "track": "Canción",
+      "artistAlbum": "Artista · Álbum",
+      "status": "Estado",
+      "length": "Duración",
+      "album": "Álbum",
+      "artist": "Artista",
+      "playlist": "Lista",
+      "tracks": "Canciones",
+      "albums": "Álbumes",
+      "year": "Año",
+      "owner": "Propietario",
+      "source": "Origen"
+    },
+    "counts": {
+      "tracks_one": "{{count}} canción",
+      "tracks_other": "{{count}} canciones",
+      "albums_one": "{{count}} álbum",
+      "albums_other": "{{count}} álbumes"
+    },
+    "origin": {
+      "imported": "Importada",
+      "createdHere": "Creada aquí"
+    },
+    "facets": {
+      "status": "Estado",
+      "source": "Origen",
+      "format": "Formato",
+      "genre": "Género",
+      "artist": "Artista",
+      "requestedBy": "Solicitado por",
+      "playlist": "Lista",
+      "year": "Año",
+      "owner": "Propietario",
+      "searchPlaceholder": "Escribe para buscar…",
+      "noValues": "Sin opciones",
+      "moreHint_one": "{{count}} más, escribe para buscar",
+      "moreHint_other": "{{count}} más, escribe para buscar",
+      "orphan": "Canciones sueltas",
+      "orphanOnly": "Solo canciones que no están en una lista"
+    },
+    "filters": {
+      "title": "Filtros",
+      "clear": "Limpiar",
+      "done": "Listo"
+    },
+    "selection": {
+      "selected": "seleccionadas",
+      "retryFailed_one": "Reintentar {{count}} fallida",
+      "retryFailed_other": "Reintentar {{count}} fallidas",
+      "addToPlaylist": "Añadir a lista",
+      "clear": "Limpiar",
+      "selectAll": "Seleccionar todo en esta página",
+      "selectRow": "Seleccionar canción"
+    },
+    "empty": {
+      "tracksTitle": "No se encontraron canciones",
+      "tracksDescription": "Nada coincide con los filtros o la búsqueda actuales. Prueba a quitar un filtro.",
+      "albumsTitle": "No se encontraron álbumes",
+      "albumsDescription": "Nada coincide con los filtros o la búsqueda actuales. Prueba a quitar un filtro.",
+      "artistsTitle": "No se encontraron artistas",
+      "artistsDescription": "Nada coincide con los filtros o la búsqueda actuales. Prueba a quitar un filtro.",
+      "playlistsTitle": "No se encontraron listas",
+      "playlistsDescription": "Nada coincide con los filtros o la búsqueda actuales. Prueba a quitar un filtro."
+    },
+    "error": {
+      "title": "No se pudo cargar la biblioteca",
+      "description": "Algo salió mal al cargar esta vista. Inténtalo de nuevo en un momento."
+    }
   }
 }

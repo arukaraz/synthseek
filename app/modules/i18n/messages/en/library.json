@@ -248,5 +248,107 @@
       "sunShort": "Sun",
       "sunFull": "Sundays"
     }
+  },
+  "page": {
+    "loading": "Loading your library…",
+    "tabs": {
+      "label": "Library views",
+      "tracks": "Tracks",
+      "albums": "Albums",
+      "artists": "Artists",
+      "playlists": "Playlists"
+    },
+    "toolbar": {
+      "searchTracks": "Search tracks…",
+      "searchAlbums": "Search albums…",
+      "searchArtists": "Search artists…",
+      "searchPlaylists": "Search playlists…",
+      "searchAria": "Search the library",
+      "sort": "Sort",
+      "sortAria": "Sort results",
+      "openFilters": "Filters"
+    },
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "artist": "Artist",
+      "album": "Album",
+      "title": "Title",
+      "duration": "Duration",
+      "status": "Status",
+      "name": "Name",
+      "year": "Year",
+      "tracks": "Tracks",
+      "albums": "Albums"
+    },
+    "columns": {
+      "track": "Track",
+      "artistAlbum": "Artist · Album",
+      "status": "Status",
+      "length": "Length",
+      "album": "Album",
+      "artist": "Artist",
+      "playlist": "Playlist",
+      "tracks": "Tracks",
+      "albums": "Albums",
+      "year": "Year",
+      "owner": "Owner",
+      "source": "Source"
+    },
+    "counts": {
+      "tracks_one": "{{count}} track",
+      "tracks_other": "{{count}} tracks",
+      "albums_one": "{{count}} album",
+      "albums_other": "{{count}} albums"
+    },
+    "origin": {
+      "imported": "Imported",
+      "createdHere": "Created here"
+    },
+    "facets": {
+      "status": "Status",
+      "source": "Source",
+      "format": "Format",
+      "genre": "Genre",
+      "artist": "Artist",
+      "requestedBy": "Requested by",
+      "playlist": "Playlist",
+      "year": "Year",
+      "owner": "Owner",
+      "searchPlaceholder": "Type to search…",
+      "noValues": "No options",
+      "moreHint_one": "{{count}} more, type to search",
+      "moreHint_other": "{{count}} more, type to search",
+      "orphan": "Loose tracks",
+      "orphanOnly": "Only tracks not in a playlist"
+    },
+    "filters": {
+      "title": "Filters",
+      "clear": "Clear",
+      "done": "Done"
+    },
+    "selection": {
+      "selected": "selected",
+      "retryFailed_one": "Retry {{count}} failed",
+      "retryFailed_other": "Retry {{count}} failed",
+      "addToPlaylist": "Add to playlist",
+      "clear": "Clear",
+      "selectAll": "Select all on this page",
+      "selectRow": "Select track"
+    },
+    "empty": {
+      "tracksTitle": "No tracks found",
+      "tracksDescription": "Nothing matches the current filters or search. Try clearing a filter.",
+      "albumsTitle": "No albums found",
+      "albumsDescription": "Nothing matches the current filters or search. Try clearing a filter.",
+      "artistsTitle": "No artists found",
+      "artistsDescription": "Nothing matches the current filters or search. Try clearing a filter.",
+      "playlistsTitle": "No playlists found",
+      "playlistsDescription": "Nothing matches the current filters or search. Try clearing a filter."
+    },
+    "error": {
+      "title": "Could not load the library",
+      "description": "Something went wrong loading this view. Try again in a moment."
+    }
   }
 }

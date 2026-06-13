@@ -4,7 +4,7 @@ import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
 import { cn } from "@utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Search, Settings as SettingsIcon, Sparkles, X } from "lucide-react";
+import { Disc3, Menu, Search, Settings as SettingsIcon, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -37,6 +37,7 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
 
   const isDiscoverActive = pathname === "/" || pathname === "";
   const isRequestsActive = pathname.startsWith("/requests");
+  const isLibraryActive = pathname.startsWith("/library");
   const isSettingsActive = pathname.startsWith("/settings");
 
   useEffect(() => {
@@ -107,6 +108,13 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
               icon={Menu}
               label={t("header.requests")}
               isActive={isRequestsActive}
+              labelOnMobile
+            />
+            <HeaderTab
+              href="/library"
+              icon={Disc3}
+              label={t("header.library")}
+              isActive={isLibraryActive}
               labelOnMobile
             />
             <HeaderTab

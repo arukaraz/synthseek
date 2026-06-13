@@ -42,6 +42,9 @@
   "infoTooltip": {
     "trigger": "Más información"
   },
+  "trackStatus": {
+    "moreInfo": "Más información: {{label}}"
+  },
   "header": {
     "primaryNav": "Principal",
     "search": "Buscar",
@@ -50,6 +53,7 @@
     "clearSearch": "Limpiar búsqueda",
     "discover": "Descubrir",
     "requests": "Solicitudes",
+    "library": "Biblioteca",
     "settings": "Ajustes"
   },
   "userMenu": {

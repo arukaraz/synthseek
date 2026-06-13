@@ -14,6 +14,13 @@ export { useTrendingTracks } from "./queries/useTrendingTracks";
 export { useQueueStatus } from "./queries/useQueueStatus";
 export { useGetPlexSyncAllState } from "./queries/useGetPlexSyncAllState";
 
+export { useLibraryTracks } from "./queries/library/useLibraryTracks";
+export { useLibraryTracksPrefetch } from "./queries/library/useLibraryTracksPrefetch";
+export { useLibraryAlbums } from "./queries/library/useLibraryAlbums";
+export { useLibraryArtists } from "./queries/library/useLibraryArtists";
+export { useLibraryPlaylists } from "./queries/library/useLibraryPlaylists";
+export { useLibraryCounts } from "./queries/library/useLibraryCounts";
+
 export { usePlexSyncAllProgress } from "./subscriptions/usePlexSyncAllProgress";
 
 export { useRequest } from "./mutations/requests/useRequest";
