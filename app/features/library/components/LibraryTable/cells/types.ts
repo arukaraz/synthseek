@@ -12,3 +12,7 @@ export interface TrackMetaCellProps {
 export interface LibraryDurationCellProps {
   durationMs: number;
 }
+
+export interface LibraryRequestedAtCellProps {
+  createdAt: Date;
+}

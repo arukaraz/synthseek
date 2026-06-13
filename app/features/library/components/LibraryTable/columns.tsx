@@ -7,6 +7,7 @@ import i18n from "@locale";
 import { TrackStatusIndicator } from "@components/ui/TrackStatusIndicator";
 
 import { LibraryDurationCell } from "./cells/LibraryDurationCell";
+import { LibraryRequestedAtCell } from "./cells/LibraryRequestedAtCell";
 import { TrackMetaCell } from "./cells/TrackMetaCell";
 import { TrackPrimaryCell } from "./cells/TrackPrimaryCell";
 
@@ -28,6 +29,12 @@ export function buildTrackColumns(): ColumnDef<LibraryTrackItem>[] {
       header: i18n.t("library:page.columns.status"),
       cell: (item) => <TrackStatusIndicator status={item.status} />,
       className: "hidden md:table-cell",
+    },
+    {
+      key: "requestedAt",
+      header: i18n.t("library:page.columns.requestedAt"),
+      cell: (item) => <LibraryRequestedAtCell createdAt={item.created_at} />,
+      className: "hidden lg:table-cell",
     },
     {
       key: "length",
