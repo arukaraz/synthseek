@@ -4,7 +4,7 @@ import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
 import { cn } from "@utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
-import { Disc3, Menu, Search, Settings as SettingsIcon, Sparkles, X } from "lucide-react";
+import { Disc3, Menu, Search, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -38,7 +38,6 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
   const isDiscoverActive = pathname === "/" || pathname === "";
   const isRequestsActive = pathname.startsWith("/requests");
   const isLibraryActive = pathname.startsWith("/library");
-  const isSettingsActive = pathname.startsWith("/settings");
 
   useEffect(() => {
     setSearchQuery(initialQuery);
@@ -116,13 +115,6 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
               label={t("header.library")}
               isActive={isLibraryActive}
               labelOnMobile
-            />
-            <HeaderTab
-              href="/settings"
-              icon={SettingsIcon}
-              label={t("header.settings")}
-              isActive={isSettingsActive}
-              hideOnMobile
             />
           </nav>
         </div>

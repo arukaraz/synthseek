@@ -53,8 +53,7 @@
     "clearSearch": "Clear search",
     "discover": "Discover",
     "requests": "Requests",
-    "library": "Library",
-    "settings": "Settings"
+    "library": "Library"
   },
   "userMenu": {
     "trigger": "User menu",

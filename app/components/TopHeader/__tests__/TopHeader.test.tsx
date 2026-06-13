@@ -48,12 +48,20 @@ describe("TopHeader", () => {
     expect(screen.getByRole("link", { name: "Requests" })).toHaveAttribute("aria-current", "page");
   });
 
-  it("marks the settings tab active on a settings path", () => {
+  it("marks the library tab active on a library path", () => {
+    pathnameMock.mockReturnValue("/library");
+
+    renderWithProviders(<TopHeader />);
+
+    expect(screen.getByRole("link", { name: "Library" })).toHaveAttribute("aria-current", "page");
+  });
+
+  it("does not render a settings tab in the primary nav", () => {
     pathnameMock.mockReturnValue("/settings/general");
 
     renderWithProviders(<TopHeader />);
 
-    expect(screen.getByRole("link", { name: "Settings" })).toHaveAttribute("aria-current", "page");
+    expect(screen.queryByRole("link", { name: "Settings" })).not.toBeInTheDocument();
   });
 
   it("seeds the search input with the initial query", () => {
