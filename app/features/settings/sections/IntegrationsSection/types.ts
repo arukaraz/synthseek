@@ -24,8 +24,29 @@ export interface PlexIntegrationCardProps {
   };
 }
 
+export interface SlskdEngineSearch {
+  maxPeerAttempts: number;
+  maxVariations: number;
+  historyCleanupEnabled: boolean;
+  maxHistorySearches: number;
+  banAfterFailedAttempts: number;
+}
+
+export interface EngineTimeouts {
+  searchPhase: number;
+  downloadPhase: number;
+  importPhase: number;
+  peerUnresponsive: number;
+  queueWaitActivePeer: number;
+  queueWaitIdlePeer: number;
+}
+
 export interface SlskdCardProps {
-  initial: { apiUrl: string; apiKey: string; bannedUsers: string[] };
+  initial: {
+    connection: { apiUrl: string; apiKey: string; bannedUsers: string[] };
+    search: SlskdEngineSearch;
+    timeouts: EngineTimeouts;
+  };
 }
 
 export type SlskdHealth = "healthy" | "unhealthy" | "not_configured";
@@ -68,6 +89,7 @@ export interface DownloadSourceYtdlp {
   priority: number;
   searchResults: number;
   maxDurationDeltaSec: number;
+  searchTimeout: number;
 }
 
 export interface DownloadSourcesConfig {

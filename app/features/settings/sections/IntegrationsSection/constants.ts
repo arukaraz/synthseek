@@ -1,5 +1,7 @@
 import type { Affix, LidarrHealth, LidarrStatusTone, SlskdHealth, SlskdStatusTone } from "./types";
 
+export const MS = 1000;
+
 export const AFFIX_VALUES: ReadonlyArray<Affix> = ["off", "prefix", "suffix"];
 
 export const SLSKD_STATUS_TONE: Record<SlskdHealth, SlskdStatusTone> = {

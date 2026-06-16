@@ -8,7 +8,7 @@ import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
 import { ImportCard } from "./ImportCard";
 import { QueueCard } from "./QueueCard";
-import { SearchCard } from "./SearchCard";
+import { SmartSearchCard } from "./SmartSearchCard";
 import { TimeoutsCard } from "./TimeoutsCard";
 
 export function EngineSection() {
@@ -43,7 +43,7 @@ export function EngineSection() {
     <div className={contentRoot()}>
       <SettingsPageHeader title={t("header.title")} description={t("header.description")} />
       <div className={sectionGrid()}>
-        <SearchCard initial={{ search: data.engine.search, smartSearch: data.engine.smartSearch }} />
+        <SmartSearchCard initial={data.engine.smartSearch} />
         <TimeoutsCard initial={data.engine.timeouts} />
         <QueueCard initial={data.engine.queue} />
         <ImportCard initial={data.engine.import} />

@@ -21,25 +21,19 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
 
   if (!draft) return null;
 
+  const handleReset = () => {
+    setAll({
+      ...draft,
+      downloadPhase: ENGINE_DEFAULTS.timeouts.downloadPhase,
+      importPhase: ENGINE_DEFAULTS.timeouts.importPhase,
+    });
+  };
+
   return (
     <SettingsCard
       title={t("timeouts.title")}
-      trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.timeouts })} disabled={isSaving} />}
+      trailing={<ResetDefaultsButton onReset={handleReset} disabled={isSaving} />}
     >
-      <EngineRow
-        label={t("timeouts.searchPhase.label")}
-        description={t("timeouts.searchPhase.description")}
-        control={
-          <SettingsNumberInput
-            value={Math.round(draft.searchPhase / MS)}
-            onChange={(v) => setField("searchPhase", v * MS)}
-            min={5}
-            max={120}
-            suffix="s"
-            ariaLabel={t("timeouts.searchPhase.ariaLabel")}
-          />
-        }
-      />
       <EngineRow
         label={t("timeouts.downloadPhase.label")}
         description={t("timeouts.downloadPhase.description")}
@@ -65,48 +59,6 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
             max={3600}
             suffix="s"
             ariaLabel={t("timeouts.importPhase.ariaLabel")}
-          />
-        }
-      />
-      <EngineRow
-        label={t("timeouts.peerUnresponsive.label")}
-        description={t("timeouts.peerUnresponsive.description")}
-        control={
-          <SettingsNumberInput
-            value={Math.round(draft.peerUnresponsive / MS)}
-            onChange={(v) => setField("peerUnresponsive", v * MS)}
-            min={15}
-            max={900}
-            suffix="s"
-            ariaLabel={t("timeouts.peerUnresponsive.ariaLabel")}
-          />
-        }
-      />
-      <EngineRow
-        label={t("timeouts.queueWaitActivePeer.label")}
-        description={t("timeouts.queueWaitActivePeer.description")}
-        control={
-          <SettingsNumberInput
-            value={Math.round(draft.queueWaitActivePeer / MS)}
-            onChange={(v) => setField("queueWaitActivePeer", v * MS)}
-            min={30}
-            max={1800}
-            suffix="s"
-            ariaLabel={t("timeouts.queueWaitActivePeer.ariaLabel")}
-          />
-        }
-      />
-      <EngineRow
-        label={t("timeouts.queueWaitIdlePeer.label")}
-        description={t("timeouts.queueWaitIdlePeer.description")}
-        control={
-          <SettingsNumberInput
-            value={Math.round(draft.queueWaitIdlePeer / MS)}
-            onChange={(v) => setField("queueWaitIdlePeer", v * MS)}
-            min={30}
-            max={3600}
-            suffix="s"
-            ariaLabel={t("timeouts.queueWaitIdlePeer.ariaLabel")}
           />
         }
       />

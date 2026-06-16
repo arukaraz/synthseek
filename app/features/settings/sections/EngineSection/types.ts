@@ -6,19 +6,10 @@ export interface QueueCardProps {
   initial: { maxSize: number; maxConcurrentSearches: number; maxPendingImports: number };
 }
 
-export interface SearchCardProps {
+export interface SmartSearchCardProps {
   initial: {
-    search: {
-      maxPeerAttempts: number;
-      maxVariations: number;
-      historyCleanupEnabled: boolean;
-      maxHistorySearches: number;
-      banAfterFailedAttempts: number;
-    };
-    smartSearch: {
-      customMoodKeywords: string[];
-      federatedPatternsEnabled: boolean;
-    };
+    customMoodKeywords: string[];
+    federatedPatternsEnabled: boolean;
   };
 }
 

@@ -285,6 +285,11 @@
       "label": "Delta máximo de duración",
       "description": "Rechaza candidatos cuya duración difiera de la canción esperada en más de esta cantidad de segundos.",
       "ariaLabel": "Delta máximo de duración en segundos"
+    },
+    "searchTimeout": {
+      "label": "Tiempo de espera de búsqueda",
+      "description": "Cuánto tiempo puede dedicar yt-dlp a buscar una canción en YouTube. La búsqueda en YouTube es más lenta que slskd, por eso tiene un valor predeterminado más amplio.",
+      "ariaLabel": "Tiempo de espera de búsqueda de yt-dlp en segundos"
     }
   },
   "members": {

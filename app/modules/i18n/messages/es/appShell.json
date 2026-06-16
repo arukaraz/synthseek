@@ -7,7 +7,6 @@
       "integrations": {
         "title": "Integraciones",
         "tabs": {
-          "slskd": "Slskd",
           "downloadSources": "Fuentes de descarga",
           "plex": "Plex",
           "lidarr": "Lidarr",

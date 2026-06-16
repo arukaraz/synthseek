@@ -10,6 +10,7 @@ import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
+import { MS } from "./constants";
 import type { YtdlpCardProps } from "./types";
 
 export function YtdlpCard({ initial }: YtdlpCardProps) {
@@ -74,6 +75,21 @@ export function YtdlpCard({ initial }: YtdlpCardProps) {
             max={120}
             suffix="s"
             ariaLabel={t("ytdlp.maxDurationDelta.ariaLabel")}
+          />
+        }
+      />
+
+      <EngineRow
+        label={t("ytdlp.searchTimeout.label")}
+        description={t("ytdlp.searchTimeout.description")}
+        control={
+          <SettingsNumberInput
+            value={Math.round(draft.searchTimeout / MS)}
+            onChange={(v) => setField("searchTimeout", v * MS)}
+            min={5}
+            max={120}
+            suffix="s"
+            ariaLabel={t("ytdlp.searchTimeout.ariaLabel")}
           />
         }
       />

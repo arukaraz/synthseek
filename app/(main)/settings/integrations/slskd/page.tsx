@@ -1,7 +1,5 @@
-"use client";
-
-import { SlskdSection } from "@features/settings/sections/IntegrationsSection/SlskdSection";
+import { redirect } from "next/navigation";
 
 export default function SlskdIntegrationPage() {
-  return <SlskdSection />;
+  redirect("/settings/integrations/download-sources");
 }

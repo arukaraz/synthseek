@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { emptyPanel, sectionGrid } from "../../styles";
+import { SlskdCard } from "./SlskdCard";
 import { YtdlpCard } from "./YtdlpCard";
 
 export function DownloadSourcesSection() {
@@ -31,6 +32,13 @@ export function DownloadSourcesSection() {
 
   return (
     <div className={sectionGrid()}>
+      <SlskdCard
+        initial={{
+          connection: data.connections.slskd,
+          search: data.engine.search,
+          timeouts: data.engine.timeouts,
+        }}
+      />
       <YtdlpCard initial={data.downloadSources} />
     </div>
   );

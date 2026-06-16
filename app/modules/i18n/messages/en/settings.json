@@ -285,6 +285,11 @@
       "label": "Max duration delta",
       "description": "Reject candidates whose length differs from the expected track by more than this many seconds.",
       "ariaLabel": "Max duration delta seconds"
+    },
+    "searchTimeout": {
+      "label": "Search timeout",
+      "description": "How long yt-dlp can spend searching YouTube for a track. YouTube search is slower than slskd, so it gets a wider default.",
+      "ariaLabel": "yt-dlp search timeout seconds"
     }
   },
   "members": {
