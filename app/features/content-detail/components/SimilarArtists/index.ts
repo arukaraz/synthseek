@@ -1,0 +1,1 @@
+export { SimilarArtists } from "./SimilarArtists";

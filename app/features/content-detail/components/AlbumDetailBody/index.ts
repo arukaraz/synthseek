@@ -1,0 +1,1 @@
+export { AlbumDetailBody } from "./AlbumDetailBody";

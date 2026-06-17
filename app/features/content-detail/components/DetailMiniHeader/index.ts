@@ -1,0 +1,1 @@
+export { DetailMiniHeader } from "./DetailMiniHeader";

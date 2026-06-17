@@ -1,0 +1,1 @@
+export { DetailBackButton } from "./DetailBackButton";

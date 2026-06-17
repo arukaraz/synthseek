@@ -1,0 +1,1 @@
+export { ArtistDetailBody } from "./ArtistDetailBody";

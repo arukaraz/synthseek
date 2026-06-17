@@ -2,7 +2,7 @@ import type { ContentType, MusicItem } from "@api/__generated__/types";
 import type { ConfigRequestMode } from "@features/search/components/ConfigRequestModal/types";
 import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
 import type { LucideIcon } from "lucide-react";
-import type { PointerEventHandler } from "react";
+import type { PointerEventHandler, RefObject } from "react";
 
 export interface PrimaryNavItem {
   href: string;
@@ -103,4 +103,11 @@ export interface TapToOpenResult {
   setOpen: (open: boolean) => void;
   onOpenChange: (open: boolean) => void;
   triggerProps: TapToOpenTriggerProps;
+}
+
+export interface UseDismissableResult<TElement extends HTMLElement> {
+  open: boolean;
+  toggle: () => void;
+  close: () => void;
+  containerRef: RefObject<TElement | null>;
 }

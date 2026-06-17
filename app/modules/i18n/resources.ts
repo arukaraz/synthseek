@@ -3,6 +3,7 @@ import en_appShell from "./messages/en/appShell.json";
 import en_auth from "./messages/en/auth.json";
 import en_common from "./messages/en/common.json";
 import en_components from "./messages/en/components.json";
+import en_contentDetail from "./messages/en/contentDetail.json";
 import en_countries from "./messages/en/countries.json";
 import en_discover from "./messages/en/discover.json";
 import en_errors from "./messages/en/errors.json";
@@ -18,6 +19,7 @@ import es_appShell from "./messages/es/appShell.json";
 import es_auth from "./messages/es/auth.json";
 import es_common from "./messages/es/common.json";
 import es_components from "./messages/es/components.json";
+import es_contentDetail from "./messages/es/contentDetail.json";
 import es_countries from "./messages/es/countries.json";
 import es_discover from "./messages/es/discover.json";
 import es_errors from "./messages/es/errors.json";
@@ -36,6 +38,7 @@ export const resources = {
     auth: en_auth,
     common: en_common,
     components: en_components,
+    contentDetail: en_contentDetail,
     countries: en_countries,
     discover: en_discover,
     errors: en_errors,
@@ -53,6 +56,7 @@ export const resources = {
     auth: es_auth,
     common: es_common,
     components: es_components,
+    contentDetail: es_contentDetail,
     countries: es_countries,
     discover: es_discover,
     errors: es_errors,

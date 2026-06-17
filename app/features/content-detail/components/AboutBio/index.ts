@@ -1,0 +1,1 @@
+export { AboutBio } from "./AboutBio";

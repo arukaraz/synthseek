@@ -1,0 +1,58 @@
+:root {
+  --brand-spotify: oklch(0.74 0.2 145);
+  --brand-apple-music: oklch(0.66 0.22 12);
+  --brand-youtube: oklch(0.61 0.24 27);
+  --brand-instagram: oklch(0.6 0.24 5);
+  --brand-website: var(--color-secondary-400);
+}
+
+@layer utilities {
+  .social-spotify {
+    color: var(--brand-spotify);
+  }
+
+  .social-apple-music {
+    color: var(--brand-apple-music);
+  }
+
+  .social-youtube {
+    color: var(--brand-youtube);
+  }
+
+  .social-instagram {
+    color: var(--brand-instagram);
+  }
+
+  .social-website {
+    color: var(--brand-website);
+  }
+
+  .share-fan-item {
+    border: 1px solid color-mix(in oklch, var(--lc, var(--color-fg)) 55%, transparent);
+    transform: translate(-50%, -50%) translate(var(--share-tx, 0), var(--share-ty, 0)) scale(var(--share-scale, 1));
+    opacity: var(--share-opacity, 1);
+    transition:
+      transform 0.44s cubic-bezier(0.2, 0.9, 0.3, 1.25),
+      opacity 0.32s ease;
+    transition-delay: var(--share-delay, 0ms);
+  }
+
+  .share-fan-item-collapsed {
+    --share-tx: 0px;
+    --share-ty: 0px;
+    --share-scale: 0.2;
+    --share-opacity: 0;
+    pointer-events: none;
+  }
+
+  .share-fan-item-open:hover {
+    --share-scale: 1.16;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .share-fan-item {
+    transition: opacity 0.18s ease;
+    transition-delay: 0ms;
+  }
+}

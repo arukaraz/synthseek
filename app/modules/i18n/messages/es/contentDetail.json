@@ -1,0 +1,82 @@
+{
+  "dialogTitle": "Detalles de {{name}}",
+  "dialogDescription": "Informacion detallada sobre {{name}}",
+  "back": "Volver a {{name}}",
+  "backFallback": "Volver",
+  "close": "Cerrar",
+  "request": "Solicitar",
+  "requestMissing": "Solicitar faltantes",
+  "alreadyInLibrary": "Ya en la biblioteca",
+  "shareExpand": "Mostrar enlaces sociales",
+  "shareCollapse": "Ocultar enlaces sociales",
+  "badge": {
+    "artist": "Artista",
+    "album": "Album"
+  },
+  "social": {
+    "spotify": "Spotify",
+    "appleMusic": "Apple Music",
+    "youtube": "YouTube",
+    "instagram": "Instagram",
+    "website": "Sitio web oficial"
+  },
+  "recordType": {
+    "album": "Albumes",
+    "ep": "EPs",
+    "single": "Sencillos",
+    "live": "En vivo",
+    "compilation": "Recopilatorios"
+  },
+  "rail": {
+    "prev": "Desplazar atras",
+    "next": "Desplazar adelante"
+  },
+  "bio": {
+    "more": "Ver mas",
+    "less": "Ver menos"
+  },
+  "stats": {
+    "listeners": "Oyentes",
+    "scrobbles": "Scrobbles",
+    "lbListens": "Escuchas en ListenBrainz",
+    "inLibrary": "En biblioteca",
+    "tracks": "Pistas"
+  },
+  "sections": {
+    "topTracks": "Mejores pistas",
+    "discography": "Discografia",
+    "about": "Acerca de",
+    "details": "Detalles",
+    "similar": "Artistas similares",
+    "moreFrom": "Mas de {{name}}",
+    "tracklist": "Lista de pistas",
+    "credits": "Creditos"
+  },
+  "details": {
+    "type": "Tipo",
+    "country": "Pais",
+    "formed": "Formado",
+    "realName": "Nombre real",
+    "born": "Nacimiento",
+    "members": "Miembros",
+    "awards": "Premios",
+    "albumsInLibrary": "Albumes en biblioteca",
+    "released": "Publicado",
+    "label": "Sello",
+    "producer": "Productor",
+    "studio": "Estudio",
+    "certification": "Certificacion",
+    "length": "Duracion"
+  },
+  "tracklistCount": "{{inLibrary}} / {{total}}",
+  "trackPlays_one": "{{plays}} reproduccion",
+  "trackPlays_other": "{{plays}} reproducciones",
+  "libraryTrackCount": "{{count}} / {{total}}",
+  "empty": {
+    "topTracks": "No hay pistas destacadas disponibles.",
+    "discography": "No hay lanzamientos disponibles.",
+    "similar": "No hay artistas similares disponibles.",
+    "tracklist": "No hay pistas disponibles.",
+    "moreFrom": "No hay otros lanzamientos disponibles."
+  }
+}

@@ -5,6 +5,7 @@ import appShell from "./messages/en/appShell.json";
 import auth from "./messages/en/auth.json";
 import common from "./messages/en/common.json";
 import components from "./messages/en/components.json";
+import contentDetail from "./messages/en/contentDetail.json";
 import countries from "./messages/en/countries.json";
 import discover from "./messages/en/discover.json";
 import errors from "./messages/en/errors.json";
@@ -25,6 +26,7 @@ declare module "i18next" {
       auth: typeof auth;
       common: typeof common;
       components: typeof components;
+      contentDetail: typeof contentDetail;
       countries: typeof countries;
       discover: typeof discover;
       errors: typeof errors;

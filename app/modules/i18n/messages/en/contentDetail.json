@@ -1,0 +1,82 @@
+{
+  "dialogTitle": "{{name}} details",
+  "dialogDescription": "Detailed information about {{name}}",
+  "back": "Back to {{name}}",
+  "backFallback": "Back",
+  "close": "Close",
+  "request": "Request",
+  "requestMissing": "Request missing",
+  "alreadyInLibrary": "Already in library",
+  "shareExpand": "Show social links",
+  "shareCollapse": "Hide social links",
+  "badge": {
+    "artist": "Artist",
+    "album": "Album"
+  },
+  "social": {
+    "spotify": "Spotify",
+    "appleMusic": "Apple Music",
+    "youtube": "YouTube",
+    "instagram": "Instagram",
+    "website": "Official website"
+  },
+  "recordType": {
+    "album": "Albums",
+    "ep": "EPs",
+    "single": "Singles",
+    "live": "Live",
+    "compilation": "Compilations"
+  },
+  "rail": {
+    "prev": "Scroll back",
+    "next": "Scroll forward"
+  },
+  "bio": {
+    "more": "Show more",
+    "less": "Show less"
+  },
+  "stats": {
+    "listeners": "Listeners",
+    "scrobbles": "Scrobbles",
+    "lbListens": "ListenBrainz listens",
+    "inLibrary": "In library",
+    "tracks": "Tracks"
+  },
+  "sections": {
+    "topTracks": "Top tracks",
+    "discography": "Discography",
+    "about": "About",
+    "details": "Details",
+    "similar": "Similar artists",
+    "moreFrom": "More from {{name}}",
+    "tracklist": "Tracklist",
+    "credits": "Credits"
+  },
+  "details": {
+    "type": "Type",
+    "country": "Country",
+    "formed": "Formed",
+    "realName": "Real name",
+    "born": "Born",
+    "members": "Members",
+    "awards": "Awards",
+    "albumsInLibrary": "Albums in library",
+    "released": "Released",
+    "label": "Label",
+    "producer": "Producer",
+    "studio": "Studio",
+    "certification": "Certification",
+    "length": "Length"
+  },
+  "tracklistCount": "{{inLibrary}} / {{total}}",
+  "trackPlays_one": "{{plays}} play",
+  "trackPlays_other": "{{plays}} plays",
+  "libraryTrackCount": "{{count}} / {{total}}",
+  "empty": {
+    "topTracks": "No top tracks available.",
+    "discography": "No releases available.",
+    "similar": "No similar artists available.",
+    "tracklist": "No tracks available.",
+    "moreFrom": "No other releases available."
+  }
+}
