@@ -6,6 +6,8 @@ const { version } = require("./package.json") as { version: string };
 
 const API_URL = process.env.API_URL || "http://localhost:4401";
 
+const IMAGE_CACHE_TTL_SECONDS = 30 * 24 * 60 * 60;
+
 const nextConfig: NextConfig = {
   output: "standalone",
 
@@ -22,6 +24,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
+    minimumCacheTTL: IMAGE_CACHE_TTL_SECONDS,
     remotePatterns: [
       {
         protocol: "https",

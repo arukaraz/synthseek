@@ -46,6 +46,10 @@ export const heroContent = cva("absolute bottom-3 left-[92px] right-4 top-3 flex
 
 export const heroName = cva("text-fg truncate text-xl font-bold leading-tight sm:text-[22px]");
 
+export const heroNameButton = cva(
+  "text-fg hover:text-primary-400 truncate text-left text-xl font-bold leading-tight transition-colors sm:text-[22px]"
+);
+
 export const heroCount = cva("text-fg text-base font-bold tabular-nums leading-none");
 
 export const heroUnit = cva("text-fg/60 text-[10px] font-mono");
@@ -70,6 +74,8 @@ export const rowGrid = cva("grid grid-cols-[20px_1fr_70px_38px] items-center gap
 export const rowRank = cva("text-fg/60 text-right text-[11px] font-mono tabular-nums");
 
 export const rowName = cva("text-fg/80 truncate text-[13px]");
+
+export const rowNameButton = cva("text-fg/80 hover:text-primary-400 truncate text-left text-[13px] transition-colors");
 
 export const rowProgressTrack = cva("bg-fg/5 h-1 overflow-hidden rounded-full");
 

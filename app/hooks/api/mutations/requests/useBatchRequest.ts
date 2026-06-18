@@ -10,6 +10,11 @@ export function useBatchRequest() {
     onSuccess: ({ outcome, data }) => {
       notifyReclaimOutcome({ outcome, label: "Album", itemName: data.name });
     },
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.contentDetail.albumDetail.invalidate();
+      void utils.contentDetail.artistTopTracks.invalidate();
+      void utils.contentDetail.playlistDetail.invalidate();
+    },
   });
 }

@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 
+import { artworkProxySrc } from "@utils/artworkProxy";
+
 import { detailInitials } from "../../helpers";
 import {
   railTrack,
@@ -23,7 +25,7 @@ export function SimilarArtists({ artists, onSelect, trackRef }: SimilarArtistsPr
             <>
               <div className={similarAvatar()}>
                 {artist.image ? (
-                  <Image src={artist.image} alt="" fill sizes="96px" className={similarImage()} />
+                  <Image src={artworkProxySrc(artist.image)} alt="" fill sizes="96px" className={similarImage()} />
                 ) : (
                   <span aria-hidden className={similarInitials()}>
                     {detailInitials(artist.name)}

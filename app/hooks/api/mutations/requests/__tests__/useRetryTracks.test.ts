@@ -27,6 +27,9 @@ const spies = vi.hoisted(() => {
     requestsInvalidate: vi.fn(),
     libraryTracksInvalidate: vi.fn(),
     libraryCountsInvalidate: vi.fn(),
+    albumDetailInvalidate: vi.fn(),
+    artistTopTracksInvalidate: vi.fn(),
+    playlistDetailInvalidate: vi.fn(),
     toastSuccess: vi.fn(),
     toastWarning: vi.fn(),
     toastInfo: vi.fn(),
@@ -40,6 +43,11 @@ vi.mock("@utils/trpc", () => ({
       library: {
         getTracks: { invalidate: spies.libraryTracksInvalidate },
         getCounts: { invalidate: spies.libraryCountsInvalidate },
+      },
+      contentDetail: {
+        albumDetail: { invalidate: spies.albumDetailInvalidate },
+        artistTopTracks: { invalidate: spies.artistTopTracksInvalidate },
+        playlistDetail: { invalidate: spies.playlistDetailInvalidate },
       },
     }),
     requests: {
@@ -79,6 +87,9 @@ describe("useRetryTracks", () => {
     expect(spies.requestsInvalidate).toHaveBeenCalledTimes(1);
     expect(spies.libraryTracksInvalidate).toHaveBeenCalledTimes(1);
     expect(spies.libraryCountsInvalidate).toHaveBeenCalledTimes(1);
+    expect(spies.albumDetailInvalidate).toHaveBeenCalledTimes(1);
+    expect(spies.artistTopTracksInvalidate).toHaveBeenCalledTimes(1);
+    expect(spies.playlistDetailInvalidate).toHaveBeenCalledTimes(1);
   });
 
   it("toasts the retried count on a clean success", () => {

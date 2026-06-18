@@ -47,6 +47,9 @@ export function useRetryTracks() {
       void utils.requests.getAll.invalidate();
       void utils.library.getTracks.invalidate();
       void utils.library.getCounts.invalidate();
+      void utils.contentDetail.albumDetail.invalidate();
+      void utils.contentDetail.artistTopTracks.invalidate();
+      void utils.contentDetail.playlistDetail.invalidate();
     },
   });
 }

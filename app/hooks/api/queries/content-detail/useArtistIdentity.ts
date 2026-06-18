@@ -1,5 +1,7 @@
 import { trpc } from "@utils/trpc";
 
+import { CONTENT_DETAIL_GC_TIME } from "./constants";
+
 interface UseArtistIdentityArgs {
   deezerArtistId: string;
   artistName: string;
@@ -12,6 +14,7 @@ export function useArtistIdentity({ deezerArtistId, artistName, enabled = true }
     {
       enabled: enabled && !!deezerArtistId,
       staleTime: 60 * 60 * 1000,
+      gcTime: CONTENT_DETAIL_GC_TIME,
       trpc: { context: { skipBatch: true } },
     }
   );

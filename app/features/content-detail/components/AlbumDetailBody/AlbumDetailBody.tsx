@@ -1,20 +1,27 @@
 "use client";
 
 import { useAlbumDetail } from "@hooks/api/queries/content-detail";
+import { memo, useCallback, useMemo } from "react";
 
+import { useContentDetailActions } from "../../ContentDetailActionsContext";
+import { EMPTY_GENRES, EMPTY_SOCIALS } from "../../constants";
+import { artistTarget } from "../../helpers";
 import { AlbumCreditsWidget, AlbumDetailWidget, AlbumStatsWidget, MoreFromArtistWidget } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
 import type { AlbumDetailBodyProps } from "./types";
 
-export function AlbumDetailBody({ target, onNavigate }: AlbumDetailBodyProps) {
+function AlbumDetailBodyComponent({ target, onNavigate }: AlbumDetailBodyProps) {
   const { data: album } = useAlbumDetail({ deezerAlbumId: target.id });
+  const { requestAlbum } = useContentDetailActions();
 
   const artistName = album?.artist ?? target.artistName;
-  const genres = album?.genres ?? [];
+  const artistExternalId = album?.artistExternalId ?? null;
+  const genres = useMemo(() => album?.genres ?? EMPTY_GENRES, [album?.genres]);
   const trackCount = album?.totalTracks ?? null;
   const totalTracks = album?.totalTracks ?? 0;
   const libraryTrackCount = album?.libraryTrackCount ?? 0;
+  const cover = album?.cover ?? target.cover;
   const requestState =
     totalTracks > 0 && libraryTrackCount >= totalTracks
       ? "inLibrary"
@@ -22,19 +29,42 @@ export function AlbumDetailBody({ target, onNavigate }: AlbumDetailBodyProps) {
         ? "requestMissing"
         : "request";
 
+  const handleRequest = useCallback(() => {
+    requestAlbum({
+      id: target.id,
+      name: target.name,
+      artistName,
+      cover,
+      genres,
+    });
+  }, [requestAlbum, target.id, target.name, artistName, cover, genres]);
+
+  const handleArtistNavigate = useMemo(
+    () =>
+      artistExternalId
+        ? () => onNavigate(artistTarget({ id: artistExternalId, name: artistName, cover: null }))
+        : undefined,
+    [artistExternalId, artistName, onNavigate]
+  );
+
+  const statsSlot = useMemo(
+    () => <AlbumStatsWidget artistName={artistName} albumName={target.name} trackCount={trackCount} slot="stats" />,
+    [artistName, target.name, trackCount]
+  );
+
   return (
     <div className={modalLayout()}>
       <DetailHero
         mode="album"
         name={target.name}
         subtitle={artistName}
-        cover={album?.cover ?? target.cover}
+        cover={cover}
         genres={genres}
         requestState={requestState}
-        socials={[]}
-        statsSlot={
-          <AlbumStatsWidget artistName={artistName} albumName={target.name} trackCount={trackCount} slot="stats" />
-        }
+        onRequest={handleRequest}
+        onSubtitleClick={handleArtistNavigate}
+        socials={EMPTY_SOCIALS}
+        statsSlot={statsSlot}
       />
 
       <div className={modalScrollArea()}>
@@ -67,3 +97,5 @@ export function AlbumDetailBody({ target, onNavigate }: AlbumDetailBodyProps) {
     </div>
   );
 }
+
+export const AlbumDetailBody = memo(AlbumDetailBodyComponent);

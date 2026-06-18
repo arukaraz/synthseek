@@ -19,12 +19,23 @@ export interface LibraryInfiniteGridProps<TItem> {
 
 export interface AlbumCardProps {
   item: LibraryAlbumItem;
+  onOpen?: () => void;
 }
 
 export interface ArtistCardProps {
   item: LibraryArtistItem;
+  image?: string | null;
+  isResolving?: boolean;
+  onOpen?: () => void;
+}
+
+export interface LibraryArtistCardProps {
+  item: LibraryArtistItem;
+  resolveEnabled: boolean;
+  onOpen?: () => void;
 }
 
 export interface PlaylistCardProps {
   item: LibraryPlaylistItem;
+  onOpen?: () => void;
 }

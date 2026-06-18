@@ -89,6 +89,10 @@ export const heroName = cva(
 
 export const heroSubtitle = cva("text-fg/60 text-sm");
 
+export const heroSubtitleButton = cva(
+  "text-fg/60 hover:text-accent-400 cursor-pointer text-sm underline-offset-2 transition-colors hover:underline"
+);
+
 export const heroTags = cva("flex flex-wrap items-center justify-center gap-2 sm:justify-start");
 
 export const heroActions = cva("mt-3 flex flex-wrap items-center justify-center gap-3 sm:mt-5 sm:justify-start");
@@ -141,7 +145,17 @@ export const trackArtist = cva("text-fg/50 truncate text-xs");
 
 export const trackMeta = cva("text-fg/50 flex shrink-0 items-center gap-4 text-xs tabular-nums");
 
-export const trackStatusCell = cva("flex w-32 shrink-0 justify-end");
+export const trackStatusCell = cva("flex w-32 shrink-0 items-center justify-end");
+
+export const trackDownloadButton = cva(
+  "text-fg/30 hover:text-fg flex size-7 items-center justify-center rounded-full transition-colors hover:bg-fg/10"
+);
+
+export const trackRetryButton = cva(
+  "text-fg/50 hover:text-fg hidden size-7 items-center justify-center rounded-full transition-colors hover:bg-fg/10 group-hover:flex"
+);
+
+export const trackStatusReveal = cva("flex items-center group-hover:hidden");
 
 export const cardGridRow = cva("grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5");
 
@@ -164,7 +178,7 @@ export const cardScrimBottom = cva(
 export const cardInitials = cva("text-fg/70 flex h-full w-full items-center justify-center text-2xl font-bold");
 
 export const cardMarker = cva(
-  "border-fg/25 bg-black/45 text-fg group-hover:bg-fg group-hover:text-surface absolute top-1.5 right-1.5 grid size-6 place-items-center rounded-full border backdrop-blur-sm transition-colors"
+  "border-accent-500 bg-accent-500/10 text-accent-400 group-hover:bg-accent-500 group-hover:text-accent-foreground absolute top-1.5 right-1.5 grid size-6 place-items-center rounded-full border backdrop-blur-sm transition-colors"
 );
 
 export const cardMarkerDownload = cva("size-3.5");

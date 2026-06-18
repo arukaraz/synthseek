@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@utils/cn";
+import { artworkProxySrc } from "@utils/artworkProxy";
 import { Check, Download } from "lucide-react";
 import Image from "next/image";
 
@@ -35,7 +36,13 @@ export function ContentCard({ item, onSelect }: ContentCardProps) {
     <button type="button" className={cardButton()} onClick={() => onSelect(item)}>
       <div className={cardCover()}>
         {item.image ? (
-          <Image src={item.image} alt="" fill sizes="(max-width: 640px) 50vw, 20vw" className={cardImage()} />
+          <Image
+            src={artworkProxySrc(item.image)}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 50vw, 20vw"
+            className={cardImage()}
+          />
         ) : (
           <span aria-hidden className={cardInitials()}>
             {detailInitials(item.title)}

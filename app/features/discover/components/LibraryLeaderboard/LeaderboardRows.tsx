@@ -1,9 +1,18 @@
 "use client";
 
-import { rowCount, rowGrid, rowName, rowProgressFill, rowProgressTrack, rowRank, rowsContainer } from "./styles";
+import {
+  rowCount,
+  rowGrid,
+  rowName,
+  rowNameButton,
+  rowProgressFill,
+  rowProgressTrack,
+  rowRank,
+  rowsContainer,
+} from "./styles";
 import type { LeaderboardRowsProps } from "./types";
 
-export function LeaderboardRows({ entries, maxCount }: LeaderboardRowsProps) {
+export function LeaderboardRows({ entries, maxCount, onSelect }: LeaderboardRowsProps) {
   if (entries.length === 0) return null;
 
   return (
@@ -15,7 +24,13 @@ export function LeaderboardRows({ entries, maxCount }: LeaderboardRowsProps) {
         return (
           <div key={entry.name} className={rowGrid({ last: isLast })}>
             <span className={rowRank()}>{rank}</span>
-            <span className={rowName()}>{entry.name}</span>
+            {onSelect ? (
+              <button type="button" className={rowNameButton()} onClick={() => onSelect(entry.name)}>
+                {entry.name}
+              </button>
+            ) : (
+              <span className={rowName()}>{entry.name}</span>
+            )}
             <div className={rowProgressTrack()}>
               <div
                 className={rowProgressFill()}

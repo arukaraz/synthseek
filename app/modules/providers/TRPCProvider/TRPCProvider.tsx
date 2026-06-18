@@ -1,12 +1,15 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useState } from "react";
 import { trpc, getTRPCClientConfig } from "@utils/trpc";
 import { ErrorBoundaryProvider } from "@modules/errors";
 import { useClientSessionId } from "@modules/providers/ClientSessionIdProvider";
 import { retryUnlessClientError } from "./helpers";
+import { createQueryPersister, shouldDehydrateQuery } from "./persistence";
+import { PERSIST_MAX_AGE, PERSIST_BUSTER } from "./constants";
 import type { TRPCProviderProps } from "./types";
 
 export function TRPCProvider({ children }: TRPCProviderProps) {
@@ -33,12 +36,22 @@ export function TRPCProvider({ children }: TRPCProviderProps) {
 
   const [trpcClient] = useState(() => trpc.createClient(getTRPCClientConfig(clientSessionId)));
 
+  const [persister] = useState(() => createQueryPersister());
+
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{
+          persister,
+          maxAge: PERSIST_MAX_AGE,
+          buster: PERSIST_BUSTER,
+          dehydrateOptions: { shouldDehydrateQuery },
+        }}
+      >
         <ErrorBoundaryProvider queryClient={queryClient}>{children}</ErrorBoundaryProvider>
         {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </trpc.Provider>
   );
 }

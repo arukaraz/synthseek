@@ -1,16 +1,29 @@
 "use client";
 
 import { TrackStatusIndicator } from "@components/ui/TrackStatusIndicator";
+import { isRetryableStatus } from "@utils/status-helpers";
 import { formatTrackDuration } from "@utils/formatters";
-import { Download } from "lucide-react";
+import { Download, Loader2, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { formatStat } from "../../helpers";
-import { trackArtist, trackInfo, trackMeta, trackRank, trackRow, trackStatusCell, trackTitle } from "../../styles";
+import {
+  trackArtist,
+  trackDownloadButton,
+  trackInfo,
+  trackMeta,
+  trackRank,
+  trackRetryButton,
+  trackRow,
+  trackStatusCell,
+  trackStatusReveal,
+  trackTitle,
+} from "../../styles";
 import type { TrackRowProps } from "./types";
 
-export function TrackRow({ track, rank, showArtist }: TrackRowProps) {
+export function TrackRow({ track, rank, showArtist, onRequest, onRetry, isRetrying }: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
+  const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
 
   return (
     <li className={trackRow()}>
@@ -30,9 +43,35 @@ export function TrackRow({ track, rank, showArtist }: TrackRowProps) {
 
       <div className={trackStatusCell()}>
         {track.status ? (
-          <TrackStatusIndicator status={track.status} failureReason={track.failureReason} />
+          <>
+            <span className={canRetry ? trackStatusReveal() : "flex items-center"}>
+              <TrackStatusIndicator status={track.status} failureReason={track.failureReason} />
+            </span>
+            {canRetry ? (
+              <button
+                type="button"
+                className={trackRetryButton()}
+                onClick={onRetry}
+                disabled={isRetrying}
+                aria-label={t("retryTrack", { title: track.title })}
+              >
+                {isRetrying ? (
+                  <Loader2 className="size-4 animate-spin" aria-hidden />
+                ) : (
+                  <RotateCcw className="size-4" aria-hidden />
+                )}
+              </button>
+            ) : null}
+          </>
         ) : (
-          <Download className="text-fg/30 size-4" aria-hidden />
+          <button
+            type="button"
+            className={trackDownloadButton()}
+            onClick={onRequest}
+            aria-label={t("requestTrack", { title: track.title })}
+          >
+            <Download className="size-4" aria-hidden />
+          </button>
         )}
       </div>
     </li>

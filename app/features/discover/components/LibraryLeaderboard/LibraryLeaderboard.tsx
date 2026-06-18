@@ -2,6 +2,7 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { useLibrarySummary } from "@hooks/api/queries/useLibrarySummary";
+import { useResolveArtistAndOpen } from "@hooks/ui/useResolveArtistAndOpen";
 import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { AlertCircle, Crown, Music } from "lucide-react";
@@ -20,6 +21,9 @@ export function LibraryLeaderboard() {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useLibrarySummary();
   const [mode, setMode] = useState<LeaderboardMode>("artists");
+  const openArtistByName = useResolveArtistAndOpen();
+
+  const onSelectArtist = mode === "artists" ? openArtistByName : undefined;
 
   const entries = useMemo<LeaderboardEntry[]>(() => {
     if (!data) return [];
@@ -79,8 +83,8 @@ export function LibraryLeaderboard() {
 
       {top ? (
         <>
-          <LeaderboardHero entry={top} mode={mode} />
-          <LeaderboardRows entries={rest} maxCount={maxCount} />
+          <LeaderboardHero entry={top} mode={mode} onSelect={onSelectArtist} />
+          <LeaderboardRows entries={rest} maxCount={maxCount} onSelect={onSelectArtist} />
         </>
       ) : (
         <div className="flex flex-1 items-center justify-center p-6">

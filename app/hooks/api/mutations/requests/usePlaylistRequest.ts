@@ -10,6 +10,9 @@ export function usePlaylistRequest() {
     onSuccess: ({ outcome, data }) => {
       notifyReclaimOutcome({ outcome, label: "Playlist", itemName: data?.name ?? "Playlist" });
     },
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.contentDetail.playlistDetail.invalidate();
+    },
   });
 }

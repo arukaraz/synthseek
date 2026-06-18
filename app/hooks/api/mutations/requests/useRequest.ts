@@ -10,6 +10,11 @@ export function useRequest() {
     onSuccess: ({ outcome, data }) => {
       notifyReclaimOutcome({ outcome, label: "Download", itemName: `${data.artist} - ${data.track}` });
     },
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.contentDetail.albumDetail.invalidate();
+      void utils.contentDetail.artistTopTracks.invalidate();
+      void utils.contentDetail.playlistDetail.invalidate();
+    },
   });
 }

@@ -2,6 +2,7 @@
 
 import { Badge } from "@components/ui/Badge";
 import { cn } from "@utils/cn";
+import { artworkProxySrc } from "@utils/artworkProxy";
 import { scale } from "@utils/animations";
 import { categoryPlaceholder, cardBottomContent, albumThumbnail, hoverBorder, playIcon } from "../styles";
 import { motion } from "framer-motion";
@@ -35,7 +36,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
       <div className="relative aspect-3/4">
         {artistImage && !imageError ? (
           <Image
-            src={artistImage}
+            src={artworkProxySrc(artistImage)}
             alt={artist.name}
             fill
             className="object-cover"
@@ -63,7 +64,7 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
               <div className={albumThumbnail()}>
                 {albumImage && !albumImageError ? (
                   <Image
-                    src={albumImage}
+                    src={artworkProxySrc(albumImage)}
                     alt={latestAlbum.name}
                     fill
                     className="object-cover"

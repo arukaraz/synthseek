@@ -2,12 +2,15 @@
 
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import { memo } from "react";
+
+import { artworkProxySrc } from "@utils/artworkProxy";
 
 import { detailInitials } from "../../helpers";
 import { miniBack, miniBar, miniImage, miniInitials, miniName, miniStickyRoot, miniThumb } from "../../styles";
 import type { DetailMiniHeaderProps } from "./types";
 
-export function DetailMiniHeader({
+function DetailMiniHeaderComponent({
   name,
   cover,
   mode,
@@ -27,7 +30,7 @@ export function DetailMiniHeader({
 
         <div className={miniThumb({ shape: mode === "artist" ? "round" : "square" })}>
           {cover ? (
-            <Image src={cover} alt="" fill sizes="36px" className={miniImage()} />
+            <Image src={artworkProxySrc(cover)} alt="" fill sizes="36px" className={miniImage()} />
           ) : (
             <span aria-hidden className={miniInitials()}>
               {detailInitials(name)}
@@ -40,3 +43,5 @@ export function DetailMiniHeader({
     </div>
   );
 }
+
+export const DetailMiniHeader = memo(DetailMiniHeaderComponent);

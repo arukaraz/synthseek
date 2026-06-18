@@ -1,11 +1,20 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 import { ContentType } from "@api/__generated__/types";
+import {
+  ContentDetailModal,
+  albumRequestItem,
+  artistRequestItem,
+  detailTargetFromMusicItem,
+  playlistRequestPayload,
+  trackRequestItem,
+  type ContentDetailActions,
+} from "@features/content-detail";
+import { usePlaylistRequest } from "@hooks/api";
 import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
 import { ConfigRequestModal } from "../ConfigRequestModal/ConfigRequestModal";
-import { ContentBrowserModal } from "../ContentBrowserModal/ContentBrowserModal";
 import type { ContentRequestFlowProps, FlowContextValue } from "./types";
 
 const ContentRequestFlowContext = createContext<FlowContextValue | null>(null);
@@ -18,13 +27,35 @@ export function useContentRequestFlow(): FlowContextValue {
 
 export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
   const flow = useContentRequestModals();
+  const playlistRequest = usePlaylistRequest();
+
+  const detailTarget =
+    flow.directTarget ??
+    (flow.selectedResult && flow.selectedResult.type !== ContentType.enum.track
+      ? detailTargetFromMusicItem(flow.selectedResult)
+      : null);
+
+  const detailActions = useMemo<ContentDetailActions>(
+    () => ({
+      requestAlbum: (input) => flow.requestContent(albumRequestItem(input)),
+      requestArtist: (input) => flow.requestArtistLidarr(artistRequestItem(input)),
+      requestTrack: (input) => flow.requestContent(trackRequestItem(input)),
+      requestPlaylist: (input) => playlistRequest.mutate(playlistRequestPayload(input)),
+    }),
+    [flow, playlistRequest]
+  );
 
   return (
-    <ContentRequestFlowContext.Provider value={{ openForResult: flow.openForResult }}>
+    <ContentRequestFlowContext.Provider
+      value={{ openForResult: flow.openForResult, openForTarget: flow.openForTarget }}
+    >
       {children}
-      {flow.selectedResult && flow.selectedResult.type !== ContentType.enum.track && (
-        <ContentBrowserModal {...flow.browserModalProps} type={flow.selectedResult.type} data={flow.selectedResult} />
-      )}
+      <ContentDetailModal
+        open={flow.contentDetailModalProps.open}
+        onClose={flow.contentDetailModalProps.onClose}
+        target={detailTarget}
+        actions={detailActions}
+      />
       {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} onSuccess={() => {}} />}
     </ContentRequestFlowContext.Provider>
   );

@@ -1,13 +1,10 @@
 "use client";
 
 import { EmptyState } from "@components/ui/EmptyState";
-import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
-import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
 import type { MusicItem } from "@api/__generated__/types";
+import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useArtistSpotlight } from "@hooks/api/queries/useArtistSpotlight";
-import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
 import { useCountry } from "@modules/providers/CountryProvider";
-import { ContentType } from "@api/__generated__/types";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
@@ -29,69 +26,61 @@ export function ArtistSpotlight() {
   const { data, isLoading, isError } = useArtistSpotlight(countryName, ARTIST_SPOTLIGHT_COUNT);
   const artists = data?.data?.artists ?? [];
 
-  const flow = useContentRequestModals();
+  const { openForResult } = useContentRequestFlow();
 
   const handleArtistClick = (artist: MusicItem) => {
-    flow.openForResult(artist);
+    openForResult(artist);
   };
 
   return (
-    <>
-      <motion.section
-        variants={fadeIn}
-        initial="hidden"
-        animate="visible"
-        className={glassPanelCard({ height: "auto" })}
-        aria-labelledby="artist-spotlight-heading"
-      >
-        <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
+    <motion.section
+      variants={fadeIn}
+      initial="hidden"
+      animate="visible"
+      className={glassPanelCard({ height: "auto" })}
+      aria-labelledby="artist-spotlight-heading"
+    >
+      <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
 
-        <div className="relative flex flex-1 flex-col">
-          <WidgetHeader
-            icon={Users}
-            title={t("artistSpotlight.title")}
-            subtitle={t("artistSpotlight.subtitle")}
-            titleId="artist-spotlight-heading"
+      <div className="relative flex flex-1 flex-col">
+        <WidgetHeader
+          icon={Users}
+          title={t("artistSpotlight.title")}
+          subtitle={t("artistSpotlight.subtitle")}
+          titleId="artist-spotlight-heading"
+        />
+
+        {isLoading && <ArtistSpotlightSkeleton />}
+
+        {isError && (
+          <EmptyState
+            icon={AlertCircle}
+            title={t("artistSpotlight.errorTitle")}
+            description={t("artistSpotlight.errorDescription")}
           />
+        )}
 
-          {isLoading && <ArtistSpotlightSkeleton />}
+        {!isLoading && !isError && artists.length === 0 && (
+          <EmptyState
+            icon={Users}
+            title={t("artistSpotlight.emptyTitle")}
+            description={t("artistSpotlight.emptyDescription")}
+          />
+        )}
 
-          {isError && (
-            <EmptyState
-              icon={AlertCircle}
-              title={t("artistSpotlight.errorTitle")}
-              description={t("artistSpotlight.errorDescription")}
-            />
-          )}
-
-          {!isLoading && !isError && artists.length === 0 && (
-            <EmptyState
-              icon={Users}
-              title={t("artistSpotlight.emptyTitle")}
-              description={t("artistSpotlight.emptyDescription")}
-            />
-          )}
-
-          {!isLoading && !isError && artists.length > 0 && (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-              {artists.map((item) => (
-                <ArtistSpotlightCard
-                  key={item.artist.id}
-                  artist={item.artist}
-                  latestAlbum={item.latestAlbum}
-                  onClick={() => handleArtistClick(item.artist)}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </motion.section>
-
-      {flow.selectedResult && (
-        <ContentBrowserModal {...flow.browserModalProps} type={ContentType.enum.artist} data={flow.selectedResult} />
-      )}
-
-      {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} />}
-    </>
+        {!isLoading && !isError && artists.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+            {artists.map((item) => (
+              <ArtistSpotlightCard
+                key={item.artist.id}
+                artist={item.artist}
+                latestAlbum={item.latestAlbum}
+                onClick={() => handleArtistClick(item.artist)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </motion.section>
   );
 }

@@ -20,11 +20,13 @@ export interface LeaderboardTabsProps {
 export interface LeaderboardHeroProps {
   entry: LeaderboardEntry;
   mode: LeaderboardMode;
+  onSelect?: (name: string) => void;
 }
 
 export interface LeaderboardRowsProps {
   entries: LeaderboardEntry[];
   maxCount: number;
+  onSelect?: (name: string) => void;
 }
 
 export interface LibraryStatsRowProps {

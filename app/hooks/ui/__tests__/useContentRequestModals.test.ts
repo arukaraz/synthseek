@@ -64,7 +64,7 @@ describe("useContentRequestModals", () => {
 
     act(() => result.current.openForResult(track));
 
-    expect(result.current.browserModalProps.open).toBe(false);
+    expect(result.current.contentDetailModalProps.open).toBe(false);
     expect(result.current.configModalProps.isOpen).toBe(true);
     expect(result.current.selectedResult).toEqual(track);
     expect(result.current.selectedContentToRequest).toEqual(track);
@@ -79,7 +79,7 @@ describe("useContentRequestModals", () => {
 
     act(() => result.current.openForResult(artist));
 
-    expect(result.current.browserModalProps.open).toBe(true);
+    expect(result.current.contentDetailModalProps.open).toBe(true);
     expect(result.current.configModalProps.isOpen).toBe(false);
     expect(result.current.selectedResult).toEqual(artist);
     expect(result.current.selectedContentToRequest).toBeNull();
@@ -90,10 +90,10 @@ describe("useContentRequestModals", () => {
     const album = makeAlbum("al1");
     const parent = makeAlbum("parent");
 
-    act(() => result.current.browserModalProps.onRequestClick(album, { parentAlbum: parent }));
+    act(() => result.current.contentDetailModalProps.onRequestClick(album, { parentAlbum: parent }));
 
     expect(result.current.configModalProps.isOpen).toBe(true);
-    expect(result.current.browserModalProps.open).toBe(false);
+    expect(result.current.contentDetailModalProps.open).toBe(false);
     expect(result.current.selectedContentToRequest).toEqual(album);
     expect(result.current.configModalProps.itemType).toBe("album");
     expect(result.current.configModalProps.parentAlbum).toEqual(parent);
@@ -104,7 +104,7 @@ describe("useContentRequestModals", () => {
     const { result } = renderHook(() => useContentRequestModals());
     const playlist = makePlaylist("p1");
 
-    act(() => result.current.browserModalProps.onRequestClick(playlist));
+    act(() => result.current.contentDetailModalProps.onRequestClick(playlist));
 
     expect(result.current.configModalProps.isOpen).toBe(true);
     expect(result.current.selectedContentToRequest).toEqual(playlist);
@@ -115,7 +115,7 @@ describe("useContentRequestModals", () => {
     const { result } = renderHook(() => useContentRequestModals());
     const artist = makeArtist("ar1");
 
-    act(() => result.current.browserModalProps.onRequestClick(artist));
+    act(() => result.current.contentDetailModalProps.onRequestClick(artist));
 
     expect(result.current.configModalProps.isOpen).toBe(false);
     expect(result.current.selectedContentToRequest).toBeNull();
@@ -128,7 +128,7 @@ describe("useContentRequestModals", () => {
     act(() => result.current.requestArtistLidarr(artist));
 
     expect(result.current.configModalProps.isOpen).toBe(true);
-    expect(result.current.browserModalProps.open).toBe(false);
+    expect(result.current.contentDetailModalProps.open).toBe(false);
     expect(result.current.selectedContentToRequest).toEqual(artist);
     expect(result.current.configModalProps.mode).toBe("lidarr-artist");
   });
@@ -148,9 +148,9 @@ describe("useContentRequestModals", () => {
     const artist = makeArtist("ar1");
 
     act(() => result.current.openForResult(artist));
-    act(() => result.current.browserModalProps.onClose());
+    act(() => result.current.contentDetailModalProps.onClose());
 
-    expect(result.current.browserModalProps.open).toBe(false);
+    expect(result.current.contentDetailModalProps.open).toBe(false);
     expect(result.current.selectedResult).toBeNull();
   });
 

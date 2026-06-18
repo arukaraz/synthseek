@@ -1,16 +1,19 @@
 "use client";
 
-import { useArtistIdentity } from "@hooks/api/queries/content-detail";
+import { useArtistDiscography, useArtistIdentity } from "@hooks/api/queries/content-detail";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DetailSection } from "../components/DetailSection";
 import { DetailsFacts } from "../components/DetailsFacts";
-import { formatBorn, visibleFacts } from "../helpers";
+import { countAlbumsInLibrary, formatBorn, visibleFacts } from "../helpers";
 import type { ArtistIdentityWidgetProps, FactItem } from "../types";
 
-export function ArtistIdentityWidget({ deezerArtistId, artistName, albumsInLibrary }: ArtistIdentityWidgetProps) {
+function ArtistIdentityWidgetComponent({ deezerArtistId, artistName }: ArtistIdentityWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useArtistIdentity({ deezerArtistId, artistName });
+  const { data: discography } = useArtistDiscography({ deezerArtistId });
+  const albumsInLibrary = countAlbumsInLibrary(discography);
 
   const facts: FactItem[] = [
     { label: t("details.type"), value: data?.type ?? null },
@@ -33,3 +36,5 @@ export function ArtistIdentityWidget({ deezerArtistId, artistName, albumsInLibra
     </DetailSection>
   );
 }
+
+export const ArtistIdentityWidget = memo(ArtistIdentityWidgetComponent);

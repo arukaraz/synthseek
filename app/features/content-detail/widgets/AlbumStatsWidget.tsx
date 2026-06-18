@@ -1,6 +1,7 @@
 "use client";
 
 import { useAlbumStats } from "@hooks/api/queries/content-detail";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AboutBio } from "../components/AboutBio";
@@ -8,7 +9,7 @@ import { DetailSection } from "../components/DetailSection";
 import { StatRow } from "../components/StatRow";
 import type { AlbumStatsWidgetProps, StatItem } from "../types";
 
-export function AlbumStatsWidget({ artistName, albumName, trackCount, slot }: AlbumStatsWidgetProps) {
+function AlbumStatsWidgetComponent({ artistName, albumName, trackCount, slot }: AlbumStatsWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useAlbumStats({ artistName, albumName, mbid: null });
 
@@ -33,3 +34,5 @@ export function AlbumStatsWidget({ artistName, albumName, trackCount, slot }: Al
 
   return <StatRow stats={stats} />;
 }
+
+export const AlbumStatsWidget = memo(AlbumStatsWidgetComponent);

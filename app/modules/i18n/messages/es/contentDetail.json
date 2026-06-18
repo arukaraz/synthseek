@@ -3,15 +3,21 @@
   "dialogDescription": "Informacion detallada sobre {{name}}",
   "back": "Volver a {{name}}",
   "backFallback": "Volver",
+  "openDetail": "Abrir detalles de {{name}}",
+  "viewArtist": "Ver artista {{name}}",
+  "resolveArtistFailed": "No pudimos encontrar este artista.",
   "close": "Cerrar",
   "request": "Solicitar",
   "requestMissing": "Solicitar faltantes",
+  "requestTrack": "Solicitar {{title}}",
+  "retryTrack": "Reintentar {{title}}",
   "alreadyInLibrary": "Ya en la biblioteca",
   "shareExpand": "Mostrar enlaces sociales",
   "shareCollapse": "Ocultar enlaces sociales",
   "badge": {
     "artist": "Artista",
-    "album": "Album"
+    "album": "Album",
+    "playlist": "Lista de reproduccion"
   },
   "social": {
     "spotify": "Spotify",
@@ -66,8 +72,12 @@
     "producer": "Productor",
     "studio": "Estudio",
     "certification": "Certificacion",
-    "length": "Duracion"
+    "length": "Duracion",
+    "showMore": "Ver mas ({{count}})",
+    "showLess": "Ver menos"
   },
+  "playlistTrackCount_one": "{{count}} pista",
+  "playlistTrackCount_other": "{{count}} pistas",
   "tracklistCount": "{{inLibrary}} / {{total}}",
   "trackPlays_one": "{{plays}} reproduccion",
   "trackPlays_other": "{{plays}} reproducciones",

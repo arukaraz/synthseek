@@ -1,7 +1,14 @@
-import type { MusicAlbum, MusicArtist } from "@api/__generated__/types";
+import type { AppRouter, MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
+import type { inferRouterInputs } from "@trpc/server";
 import type { ReactNode } from "react";
 
-export type DetailMode = "artist" | "album";
+import type { TracklistTrack } from "./components/Tracklist/types";
+
+export type PlaylistRequestPayload = inferRouterInputs<AppRouter>["requests"]["playlistRequest"];
+
+export type DetailMode = "artist" | "album" | "playlist";
+
+export type PlaylistSource = "library" | "catalog" | "preloaded";
 
 export interface DetailTarget {
   mode: DetailMode;
@@ -9,12 +16,17 @@ export interface DetailTarget {
   name: string;
   artistName: string;
   cover: string | null;
+  playlistSource?: PlaylistSource;
+  preloadedTracks?: TracklistTrack[];
+  requestDisabled?: boolean;
+  requestDisabledTooltip?: string | null;
 }
 
 export interface ContentDetailModalProps {
   open: boolean;
   onClose: () => void;
   target: DetailTarget | null;
+  actions: ContentDetailActions;
 }
 
 export interface DetailSectionProps {
@@ -35,15 +47,14 @@ export interface DetailEmptyProps {
 export interface ArtistIdentityWidgetProps {
   deezerArtistId: string;
   artistName: string;
-  albumsInLibrary: number | null;
 }
 
 export type StatsWidgetSlot = "stats" | "about";
 
 export interface ArtistStatsWidgetProps {
+  deezerArtistId: string;
   artistName: string;
   mbid: string | null;
-  inLibraryCount: number | null;
   slot: StatsWidgetSlot;
 }
 
@@ -64,6 +75,10 @@ export interface ArtistDiscographyWidgetProps {
 
 export interface AlbumDetailWidgetProps {
   deezerAlbumId: string;
+}
+
+export interface PlaylistDetailWidgetProps {
+  playlistId: string;
 }
 
 export interface AlbumStatsWidgetProps {
@@ -117,3 +132,55 @@ export interface ContentCardProps {
 }
 
 export type MusicCollectionItem = MusicArtist | MusicAlbum;
+
+export interface AlbumRequestInput {
+  id: string;
+  name: string;
+  artistName: string;
+  cover: string | null;
+  genres?: string[];
+}
+
+export interface ArtistRequestInput {
+  id: string;
+  name: string;
+}
+
+export interface PlaylistRequestInput {
+  id: string;
+  name: string;
+  cover: string | null;
+  totalTracks: number;
+  tracks: TracklistTrack[];
+}
+
+export interface PlaylistPreloadedTargetInput {
+  id: string;
+  name: string;
+  cover: string | null;
+  tracks: MusicTrack[];
+  requestDisabled?: boolean;
+  requestDisabledTooltip?: string | null;
+}
+
+export interface TrackRequestInput {
+  id: string;
+  title: string;
+  artistName: string;
+  durationMs: number;
+  trackNumber: number;
+  isrc: string | null;
+  album?: { id: string; name: string; cover: string | null };
+}
+
+export interface ContentDetailActions {
+  requestAlbum: (input: AlbumRequestInput) => void;
+  requestArtist: (input: ArtistRequestInput) => void;
+  requestTrack: (input: TrackRequestInput) => void;
+  requestPlaylist: (input: PlaylistRequestInput) => void;
+}
+
+export interface ContentDetailActionsProviderProps {
+  actions: ContentDetailActions;
+  children: ReactNode;
+}

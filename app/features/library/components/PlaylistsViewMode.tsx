@@ -1,15 +1,20 @@
 "use client";
 
+import { playlistLibraryTarget } from "@features/content-detail";
+import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useLibraryPlaylists } from "@hooks/api";
 import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
-import { useMemo } from "react";
+import type { LibraryPlaylistItem } from "@hooks/api/queries/library/types";
+import { useCallback, useMemo } from "react";
 
 import { VIEW_CONFIG } from "../constants";
 import { buildPlaylistsInput } from "../helpers";
 import type { LibraryViewModeProps } from "../types";
+import { PlaylistCard } from "./LibraryCard";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
 export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
+  const { openForTarget } = useContentRequestFlow();
   const input = useMemo(
     () =>
       buildPlaylistsInput({
@@ -26,6 +31,24 @@ export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange
 
   const query = useLibraryPlaylists(input, controller.view === "playlists");
 
+  const renderCard = useCallback(
+    (item: LibraryPlaylistItem) => (
+      <PlaylistCard
+        item={item}
+        onOpen={() =>
+          openForTarget(
+            playlistLibraryTarget({
+              id: item.id,
+              name: item.name,
+              cover: item.image ?? item.images[0] ?? null,
+            })
+          )
+        }
+      />
+    ),
+    [openForTarget]
+  );
+
   return (
     <LibraryViewLayout
       controller={controller}
@@ -36,7 +59,7 @@ export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange
       isError={query.isError}
       content={{
         layout: "grid",
-        renderCard: VIEW_CONFIG.playlists.renderCard,
+        renderCard,
         getCardId: VIEW_CONFIG.playlists.getCardId,
         hasNextPage: query.hasNextPage,
         isFetchingNextPage: query.isFetchingNextPage,

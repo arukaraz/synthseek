@@ -2,14 +2,19 @@
 
 import { useLibraryArtists } from "@hooks/api";
 import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
-import { useMemo } from "react";
+import type { LibraryArtistItem } from "@hooks/api/queries/library/types";
+import { useResolveArtistAndOpen } from "@hooks/ui/useResolveArtistAndOpen";
+import { useCallback, useMemo } from "react";
 
 import { VIEW_CONFIG } from "../constants";
 import { buildArtistsInput } from "../helpers";
 import type { LibraryViewModeProps } from "../types";
+import { LibraryArtistCard } from "./LibraryCard";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
 export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
+  const openArtistByName = useResolveArtistAndOpen();
+
   const input = useMemo(
     () =>
       buildArtistsInput({
@@ -24,7 +29,15 @@ export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }
     [controller.search, controller.sort, controller.direction, controller.filters, controller.facetSearch]
   );
 
-  const query = useLibraryArtists(input, controller.view === "artists");
+  const isArtistsView = controller.view === "artists";
+  const query = useLibraryArtists(input, isArtistsView);
+
+  const renderCard = useCallback(
+    (item: LibraryArtistItem) => (
+      <LibraryArtistCard item={item} resolveEnabled={isArtistsView} onOpen={() => openArtistByName(item.artist)} />
+    ),
+    [openArtistByName, isArtistsView]
+  );
 
   return (
     <LibraryViewLayout
@@ -36,7 +49,7 @@ export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }
       isError={query.isError}
       content={{
         layout: "grid",
-        renderCard: VIEW_CONFIG.artists.renderCard,
+        renderCard,
         getCardId: VIEW_CONFIG.artists.getCardId,
         hasNextPage: query.hasNextPage,
         isFetchingNextPage: query.isFetchingNextPage,

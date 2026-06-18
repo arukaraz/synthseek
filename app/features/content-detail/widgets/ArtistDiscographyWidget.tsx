@@ -3,7 +3,7 @@
 import { SegmentTabs } from "@components/ui/SegmentTabs";
 import type { SegmentTabItem } from "@components/ui/SegmentTabs";
 import { useArtistDiscography } from "@hooks/api/queries/content-detail";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RECORD_TYPE_LABEL_KEY } from "../components/Discography/constants";
@@ -14,7 +14,7 @@ import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { albumTarget } from "../helpers";
 import type { ArtistDiscographyWidgetProps, ContentCardItem } from "../types";
 
-export function ArtistDiscographyWidget({ deezerArtistId, artistName, onSelectAlbum }: ArtistDiscographyWidgetProps) {
+function ArtistDiscographyWidgetComponent({ deezerArtistId, artistName, onSelectAlbum }: ArtistDiscographyWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useArtistDiscography({ deezerArtistId });
 
@@ -73,3 +73,5 @@ export function ArtistDiscographyWidget({ deezerArtistId, artistName, onSelectAl
     </DetailSection>
   );
 }
+
+export const ArtistDiscographyWidget = memo(ArtistDiscographyWidgetComponent);

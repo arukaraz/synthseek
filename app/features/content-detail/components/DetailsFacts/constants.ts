@@ -1,0 +1,1 @@
+export const FACT_LIST_COLLAPSED_LIMIT = 3;

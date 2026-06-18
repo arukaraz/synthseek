@@ -2,7 +2,7 @@
 
 import { useArtistSimilar } from "@hooks/api/queries/content-detail";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DetailEmpty, DetailSection } from "../components/DetailSection";
@@ -13,7 +13,7 @@ import { artistTarget } from "../helpers";
 import { railNav } from "../styles";
 import type { ArtistSimilarWidgetProps } from "../types";
 
-export function ArtistSimilarWidget({ artistName, onSelectArtist }: ArtistSimilarWidgetProps) {
+function ArtistSimilarWidgetComponent({ artistName, onSelectArtist }: ArtistSimilarWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const trackRef = useRef<HTMLDivElement | null>(null);
   const { data, isLoading } = useArtistSimilar({ artistName });
@@ -57,3 +57,5 @@ export function ArtistSimilarWidget({ artistName, onSelectArtist }: ArtistSimila
     </DetailSection>
   );
 }
+
+export const ArtistSimilarWidget = memo(ArtistSimilarWidgetComponent);

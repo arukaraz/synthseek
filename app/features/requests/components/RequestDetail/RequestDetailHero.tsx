@@ -6,6 +6,7 @@ import { IconButton } from "@components/ui/IconButton";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { StatusBadge } from "@components/ui/StatusBadge";
 import { cn } from "@utils/cn";
+import { artworkProxySrc } from "@utils/artworkProxy";
 import { formatTimestamp } from "@utils/formatters";
 import {
   ArrowLeft,
@@ -76,7 +77,14 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     <div className="relative">
       <div className={heroBanner()} aria-hidden="true">
         {request.album_art ? (
-          <Image src={request.album_art} alt="" fill sizes="100vw" className={heroBannerImage()} priority />
+          <Image
+            src={artworkProxySrc(request.album_art)}
+            alt=""
+            fill
+            sizes="100vw"
+            className={heroBannerImage()}
+            priority
+          />
         ) : (
           <div className="from-primary-500/20 to-accent-500/20 absolute inset-0 bg-linear-to-br" />
         )}
@@ -98,7 +106,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
             {request.album_art && (
               <div className={heroAvatar({ size: "lg" })}>
                 <Image
-                  src={request.album_art}
+                  src={artworkProxySrc(request.album_art)}
                   alt={request.name}
                   fill
                   sizes="(max-width: 640px) 96px, 112px"

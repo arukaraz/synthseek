@@ -19,6 +19,11 @@ export interface DetailHeroProps {
   requestState: HeroRequestState;
   socials: SocialLink[];
   statsSlot?: ReactNode;
+  onRequest?: () => void;
+  onSubtitleClick?: () => void;
+  showRequest?: boolean;
+  requestDisabled?: boolean;
+  requestDisabledTooltip?: string | null;
 }
 
 export interface ShareFanProps {

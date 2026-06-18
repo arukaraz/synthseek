@@ -1,13 +1,14 @@
 "use client";
 
 import { useArtistTopTracks } from "@hooks/api/queries/content-detail";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { Tracklist } from "../components/Tracklist";
 import type { ArtistTopTracksWidgetProps } from "../types";
 
-export function ArtistTopTracksWidget({ deezerArtistId }: ArtistTopTracksWidgetProps) {
+function ArtistTopTracksWidgetComponent({ deezerArtistId }: ArtistTopTracksWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useArtistTopTracks({ deezerArtistId });
 
@@ -19,3 +20,5 @@ export function ArtistTopTracksWidget({ deezerArtistId }: ArtistTopTracksWidgetP
     </DetailSection>
   );
 }
+
+export const ArtistTopTracksWidget = memo(ArtistTopTracksWidgetComponent);

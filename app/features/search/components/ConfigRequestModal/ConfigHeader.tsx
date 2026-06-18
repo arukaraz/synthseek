@@ -3,6 +3,7 @@
 import { Badge } from "@components/ui/Badge";
 import { ContentType } from "@api/__generated__/types";
 import { getContentTypeIcon, getContentTypeLabel } from "@utils/content-type-helpers";
+import { artworkProxySrc } from "@utils/artworkProxy";
 import { configHeader } from "../styles";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -16,7 +17,7 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
   return (
     <div className="h-config-header-responsive relative overflow-hidden rounded-t-2xl" data-cy="config-header">
       {image ? (
-        <Image src={image} alt={name} fill className="object-cover object-center" priority />
+        <Image src={artworkProxySrc(image)} alt={name} fill className="object-cover object-center" priority />
       ) : (
         <div className={configHeader()}>
           <PlaceholderIcon className="text-primary-400/50 h-16 w-16" />

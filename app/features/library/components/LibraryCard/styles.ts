@@ -4,7 +4,15 @@ export const cardGrid = cva(
   "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
 );
 
-export const cardRoot = cva("group flex min-w-0 flex-col gap-2");
+export const cardRoot = cva("group flex min-w-0 flex-col gap-2", {
+  variants: {
+    interactive: {
+      true: "focus-visible:ring-primary-500/60 cursor-pointer rounded-lg outline-none focus-visible:ring-2",
+      false: "",
+    },
+  },
+  defaultVariants: { interactive: false },
+});
 
 export const cardCover = cva(
   "from-primary-500/20 to-accent-500/20 ring-fg/10 relative aspect-square w-full overflow-hidden rounded-lg bg-gradient-to-br ring-1"

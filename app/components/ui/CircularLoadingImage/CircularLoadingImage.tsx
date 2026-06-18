@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Music } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@utils/cn";
+import { artworkProxySrc } from "@utils/artworkProxy";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { isSpinningStatus, isProcessingStatus } from "@utils/status-helpers";
 import { circularImagePlaceholder } from "../styles";
@@ -44,7 +45,7 @@ export function CircularLoadingImage({ src, alt, status, size = "sm", className 
       >
         {src ? (
           <Image
-            src={src}
+            src={artworkProxySrc(src)}
             alt={alt}
             width={config.image}
             height={config.image}

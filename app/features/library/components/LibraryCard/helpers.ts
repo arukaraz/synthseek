@@ -1,5 +1,13 @@
 import type { RequestStatus } from "@api/__generated__/types";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
+import type { KeyboardEvent } from "react";
+
+export function handleCardActivationKey(event: KeyboardEvent<HTMLElement>, onOpen: () => void): void {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    onOpen();
+  }
+}
 
 export function cardInitials(name: string): string {
   const words = name

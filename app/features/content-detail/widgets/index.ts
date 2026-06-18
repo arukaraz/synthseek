@@ -7,3 +7,4 @@ export { ArtistSimilarWidget } from "./ArtistSimilarWidget";
 export { ArtistStatsWidget } from "./ArtistStatsWidget";
 export { ArtistTopTracksWidget } from "./ArtistTopTracksWidget";
 export { MoreFromArtistWidget } from "./MoreFromArtistWidget";
+export { PlaylistDetailWidget } from "./PlaylistDetailWidget";

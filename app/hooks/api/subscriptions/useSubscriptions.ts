@@ -1,4 +1,5 @@
 import { RequestStatus, SubscriptionEventType, type SubscriptionEvent } from "@api/__generated__/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
 import { useRef } from "react";
 import {
@@ -24,6 +25,7 @@ const MAX_RECONNECT_ATTEMPTS = 3;
 
 export function useSubscriptions() {
   const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
   const reconnectAttemptsRef = useRef(0);
   const lastEventRef = useRef<Map<string, number>>(new Map());
 
@@ -37,7 +39,7 @@ export function useSubscriptions() {
 
       switch (event.eventType) {
         case SubscriptionEventType.TrackUpdate:
-          handleTrackUpdate(event, utils);
+          handleTrackUpdate(event, utils, queryClient);
           if (TERMINAL_STATUSES.has(event.status)) {
             utils.requests.getLibrarySummary.invalidate();
           }

@@ -1,8 +1,12 @@
 import type { ContentType, MusicItem } from "@api/__generated__/types";
 import type { ConfigRequestMode } from "@features/search/components/ConfigRequestModal/types";
-import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
+import type { DetailTarget } from "@features/content-detail";
 import type { LucideIcon } from "lucide-react";
 import type { PointerEventHandler, RefObject } from "react";
+
+export interface RequestContext {
+  parentAlbum?: MusicItem;
+}
 
 export interface PrimaryNavItem {
   href: string;
@@ -13,14 +17,15 @@ export interface PrimaryNavItem {
 
 export interface FlowState {
   selectedResult: MusicItem | null;
-  showContentBrowserModal: boolean;
+  directTarget: DetailTarget | null;
+  showContentDetailModal: boolean;
   showConfigRequestModal: boolean;
   selectedContentToRequest: MusicItem | null;
   parentAlbumFromContext: MusicItem | null;
   configRequestMode: ConfigRequestMode;
 }
 
-export interface ContentBrowserModalFlowProps {
+export interface ContentDetailModalFlowProps {
   open: boolean;
   onClose: () => void;
   onRequestClick: (item: MusicItem, context?: RequestContext) => void;
@@ -38,10 +43,13 @@ export interface ConfigRequestModalFlowProps {
 
 export interface UseContentRequestModalsResult {
   selectedResult: MusicItem | null;
+  directTarget: DetailTarget | null;
   selectedContentToRequest: MusicItem | null;
   openForResult: (result: MusicItem) => void;
+  openForTarget: (target: DetailTarget) => void;
+  requestContent: (requestedItem: MusicItem, context?: RequestContext) => void;
   requestArtistLidarr: (artist: MusicItem) => void;
-  browserModalProps: ContentBrowserModalFlowProps;
+  contentDetailModalProps: ContentDetailModalFlowProps;
   configModalProps: ConfigRequestModalFlowProps;
 }
 

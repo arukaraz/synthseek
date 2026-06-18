@@ -48,6 +48,10 @@ vi.mock("@components/ui/ProgressDock", () => ({
   ProgressDock: () => null,
 }));
 
+vi.mock("@features/search/components/ContentRequestFlow", () => ({
+  ContentRequestFlow: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 describe("MainLayoutContent", () => {
   afterEach(() => {
     vi.clearAllMocks();

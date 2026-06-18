@@ -2,6 +2,7 @@
 
 import { useAlbumCredits } from "@hooks/api/queries/content-detail";
 import { formatYear } from "@utils/formatters";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DetailSection } from "../components/DetailSection";
@@ -9,7 +10,13 @@ import { DetailsFacts } from "../components/DetailsFacts";
 import { visibleFacts } from "../helpers";
 import type { AlbumCreditsWidgetProps, FactItem } from "../types";
 
-export function AlbumCreditsWidget({ deezerAlbumId, releaseDate, label, recordType, length }: AlbumCreditsWidgetProps) {
+function AlbumCreditsWidgetComponent({
+  deezerAlbumId,
+  releaseDate,
+  label,
+  recordType,
+  length,
+}: AlbumCreditsWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useAlbumCredits({ deezerAlbumId, barcode: null });
 
@@ -29,3 +36,5 @@ export function AlbumCreditsWidget({ deezerAlbumId, releaseDate, label, recordTy
     </DetailSection>
   );
 }
+
+export const AlbumCreditsWidget = memo(AlbumCreditsWidgetComponent);

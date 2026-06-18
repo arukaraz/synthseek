@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 
+import { artworkProxySrc } from "@utils/artworkProxy";
+
 import { tileGradient } from "./helpers";
 import { mosaicFallback, mosaicGrid, mosaicImage, mosaicTile } from "./styles";
 import type { DiscoveryMixMosaicProps } from "./types";
@@ -24,7 +26,7 @@ export function DiscoveryMixMosaic({ candidates, fallbackSeed }: DiscoveryMixMos
         if (url) {
           return (
             <div key={key} className={mosaicTile()}>
-              <Image src={url} alt="" fill sizes="120px" className={mosaicImage()} unoptimized />
+              <Image src={artworkProxySrc(url)} alt="" fill sizes="120px" className={mosaicImage()} unoptimized />
             </div>
           );
         }

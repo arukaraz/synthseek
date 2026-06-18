@@ -8,7 +8,9 @@ const flowState = vi.hoisted(() => ({
   selectedResult: null as { type: string; id: string; name?: string } | null,
   selectedContentToRequest: null as { type: string; id: string; name?: string } | null,
   openForResult: vi.fn(),
-  browserModalProps: { open: false },
+  requestContent: vi.fn(),
+  requestArtistLidarr: vi.fn(),
+  contentDetailModalProps: { open: false, onClose: vi.fn() },
   configModalProps: { isOpen: false },
 }));
 
@@ -16,8 +18,18 @@ vi.mock("@hooks/ui/useContentRequestModals", () => ({
   useContentRequestModals: () => flowState,
 }));
 
-vi.mock("../../ContentBrowserModal/ContentBrowserModal", () => ({
-  ContentBrowserModal: ({ type }: { type: string }) => <div data-testid="browser-modal">{type}</div>,
+vi.mock("@features/content-detail", () => ({
+  ContentDetailModal: ({ open, target }: { open: boolean; target: { id: string } | null }) =>
+    open && target ? <div data-testid="detail-modal">{target.id}</div> : null,
+  albumRequestItem: vi.fn(),
+  artistRequestItem: vi.fn(),
+  trackRequestItem: vi.fn(),
+  playlistRequestPayload: vi.fn(),
+  detailTargetFromMusicItem: (item: { id: string }) => ({ id: item.id }),
+}));
+
+vi.mock("@hooks/api", () => ({
+  usePlaylistRequest: () => ({ mutate: vi.fn() }),
 }));
 
 vi.mock("../../ConfigRequestModal/ConfigRequestModal", () => ({
@@ -36,6 +48,7 @@ describe("ContentRequestFlow", () => {
   beforeEach(() => {
     flowState.selectedResult = null;
     flowState.selectedContentToRequest = null;
+    flowState.contentDetailModalProps.open = false;
   });
 
   afterEach(() => {
@@ -59,12 +72,13 @@ describe("ContentRequestFlow", () => {
       </ContentRequestFlow>
     );
 
-    expect(screen.queryByTestId("browser-modal")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("detail-modal")).not.toBeInTheDocument();
     expect(screen.queryByTestId("config-modal")).not.toBeInTheDocument();
   });
 
-  it("renders the browser modal for a non-track selection", () => {
+  it("opens the detail modal for a non-track selection", () => {
     flowState.selectedResult = { type: "album", id: "al1" };
+    flowState.contentDetailModalProps.open = true;
 
     renderWithProviders(
       <ContentRequestFlow>
@@ -72,12 +86,13 @@ describe("ContentRequestFlow", () => {
       </ContentRequestFlow>
     );
 
-    expect(screen.getByTestId("browser-modal")).toHaveTextContent("album");
+    expect(screen.getByTestId("detail-modal")).toHaveTextContent("al1");
     expect(screen.queryByTestId("config-modal")).not.toBeInTheDocument();
   });
 
-  it("does not render the browser modal for a track selection", () => {
+  it("does not open the detail modal for a track selection", () => {
     flowState.selectedResult = { type: "track", id: "t1" };
+    flowState.contentDetailModalProps.open = true;
 
     renderWithProviders(
       <ContentRequestFlow>
@@ -85,7 +100,7 @@ describe("ContentRequestFlow", () => {
       </ContentRequestFlow>
     );
 
-    expect(screen.queryByTestId("browser-modal")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("detail-modal")).not.toBeInTheDocument();
   });
 
   it("renders the config modal when there is content to request", () => {

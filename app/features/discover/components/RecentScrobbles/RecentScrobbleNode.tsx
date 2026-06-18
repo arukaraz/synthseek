@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import { tileGradient } from "@features/discover/components/DiscoveryMixes/helpers";
+import { artworkProxySrc } from "@utils/artworkProxy";
 
 import { describeScrobbleAge } from "./helpers";
 import { node, nodeArtist, nodeCover, nodeDot, nodeFallback, nodeTime, nodeTitle } from "./styles";
@@ -19,7 +20,7 @@ export function RecentScrobbleNode({ scrobble }: RecentScrobbleNodeProps) {
       <span className={nodeDot()} aria-hidden />
       <div className={nodeCover()}>
         {cover ? (
-          <Image src={cover} alt="" fill sizes="120px" className="object-cover" unoptimized />
+          <Image src={artworkProxySrc(cover)} alt="" fill sizes="120px" className="object-cover" unoptimized />
         ) : (
           <div style={{ background: fallbackBg }} className={nodeFallback()} />
         )}

@@ -1,16 +1,19 @@
 "use client";
 
-import { useArtistStats } from "@hooks/api/queries/content-detail";
+import { useArtistDiscography, useArtistStats } from "@hooks/api/queries/content-detail";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AboutBio } from "../components/AboutBio";
 import { DetailSection } from "../components/DetailSection";
 import { StatRow } from "../components/StatRow";
+import { countAlbumsInLibrary } from "../helpers";
 import type { ArtistStatsWidgetProps, StatItem } from "../types";
 
-export function ArtistStatsWidget({ artistName, mbid, inLibraryCount, slot }: ArtistStatsWidgetProps) {
+function ArtistStatsWidgetComponent({ deezerArtistId, artistName, mbid, slot }: ArtistStatsWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useArtistStats({ artistName, mbid });
+  const { data: discography } = useArtistDiscography({ deezerArtistId, enabled: slot === "stats" });
 
   if (slot === "about") {
     return (
@@ -24,7 +27,7 @@ export function ArtistStatsWidget({ artistName, mbid, inLibraryCount, slot }: Ar
     { label: t("stats.listeners"), value: data?.listeners ?? null },
     { label: t("stats.scrobbles"), value: data?.scrobbles ?? null },
     { label: t("stats.lbListens"), value: data?.lbListens ?? null },
-    { label: t("stats.inLibrary"), value: inLibraryCount },
+    { label: t("stats.inLibrary"), value: countAlbumsInLibrary(discography) },
   ];
 
   if (isLoading) {
@@ -33,3 +36,5 @@ export function ArtistStatsWidget({ artistName, mbid, inLibraryCount, slot }: Ar
 
   return <StatRow stats={stats} />;
 }
+
+export const ArtistStatsWidget = memo(ArtistStatsWidgetComponent);

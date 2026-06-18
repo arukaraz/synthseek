@@ -3,13 +3,14 @@
 import { useCallback, useState } from "react";
 
 import { ContentType, type MusicItem } from "@api/__generated__/types";
-import type { RequestContext } from "@features/search/components/ContentBrowserModal/types";
-import type { FlowState, UseContentRequestModalsResult } from "./types";
+import type { DetailTarget } from "@features/content-detail";
+import type { FlowState, RequestContext, UseContentRequestModalsResult } from "./types";
 
 export function useContentRequestModals(): UseContentRequestModalsResult {
   const [state, setState] = useState<FlowState>({
     selectedResult: null,
-    showContentBrowserModal: false,
+    directTarget: null,
+    showContentDetailModal: false,
     showConfigRequestModal: false,
     selectedContentToRequest: null,
     parentAlbumFromContext: null,
@@ -21,6 +22,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       setState((prev) => ({
         ...prev,
         selectedResult: result,
+        directTarget: null,
         selectedContentToRequest: result,
         showConfigRequestModal: true,
       }));
@@ -28,13 +30,23 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       setState((prev) => ({
         ...prev,
         selectedResult: result,
-        showContentBrowserModal: true,
+        directTarget: null,
+        showContentDetailModal: true,
       }));
     }
   }, []);
 
-  const closeBrowser = useCallback(() => {
-    setState((prev) => ({ ...prev, selectedResult: null, showContentBrowserModal: false }));
+  const openForTarget = useCallback((target: DetailTarget) => {
+    setState((prev) => ({
+      ...prev,
+      selectedResult: null,
+      directTarget: target,
+      showContentDetailModal: true,
+    }));
+  }, []);
+
+  const closeDetail = useCallback(() => {
+    setState((prev) => ({ ...prev, selectedResult: null, directTarget: null, showContentDetailModal: false }));
   }, []);
 
   const requestContent = useCallback((requestedItem: MusicItem, context?: RequestContext) => {
@@ -48,7 +60,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
         selectedContentToRequest: requestedItem,
         parentAlbumFromContext: context?.parentAlbum ?? null,
         showConfigRequestModal: true,
-        showContentBrowserModal: false,
+        showContentDetailModal: false,
         configRequestMode: "download",
       }));
     }
@@ -61,7 +73,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       selectedContentToRequest: artist,
       parentAlbumFromContext: null,
       showConfigRequestModal: true,
-      showContentBrowserModal: false,
+      showContentDetailModal: false,
       configRequestMode: "lidarr-artist",
     }));
   }, []);
@@ -78,12 +90,15 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
 
   return {
     selectedResult: state.selectedResult,
+    directTarget: state.directTarget,
     selectedContentToRequest: state.selectedContentToRequest,
     openForResult,
+    openForTarget,
+    requestContent,
     requestArtistLidarr,
-    browserModalProps: {
-      open: state.showContentBrowserModal,
-      onClose: closeBrowser,
+    contentDetailModalProps: {
+      open: state.showContentDetailModal,
+      onClose: closeDetail,
       onRequestClick: requestContent,
       onRequestArtistLidarr: requestArtistLidarr,
     },

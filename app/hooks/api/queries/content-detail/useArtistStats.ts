@@ -1,4 +1,8 @@
+import { keepPreviousData } from "@tanstack/react-query";
+
 import { trpc } from "@utils/trpc";
+
+import { CONTENT_DETAIL_GC_TIME } from "./constants";
 
 interface UseArtistStatsArgs {
   artistName: string;
@@ -12,6 +16,8 @@ export function useArtistStats({ artistName, mbid, enabled = true }: UseArtistSt
     {
       enabled: enabled && !!artistName,
       staleTime: 60 * 60 * 1000,
+      gcTime: CONTENT_DETAIL_GC_TIME,
+      placeholderData: keepPreviousData,
       trpc: { context: { skipBatch: true } },
     }
   );

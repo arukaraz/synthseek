@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@utils/cn";
+import { artworkProxySrc } from "@utils/artworkProxy";
 import { Music } from "lucide-react";
 import Image from "next/image";
 import { categoryPlaceholder } from "../styles";
@@ -28,7 +29,7 @@ export function CategoryCard({ category, size = "small", onClick }: CategoryCard
     >
       {imageUrl && !imageError ? (
         <Image
-          src={imageUrl}
+          src={artworkProxySrc(imageUrl)}
           alt={category.name}
           fill
           className="object-cover"

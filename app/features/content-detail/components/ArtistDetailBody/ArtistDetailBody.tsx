@@ -1,7 +1,11 @@
 "use client";
 
-import { useArtistDiscography, useArtistIdentity, useArtistStats } from "@hooks/api/queries/content-detail";
+import { useArtistIdentity, useArtistStats } from "@hooks/api/queries/content-detail";
+import { useLidarrAvailable } from "@hooks/api/queries/useLidarrAvailable";
+import { memo, useCallback, useMemo } from "react";
 
+import { useContentDetailActions } from "../../ContentDetailActionsContext";
+import { EMPTY_GENRES } from "../../constants";
 import {
   ArtistDiscographyWidget,
   ArtistIdentityWidget,
@@ -14,17 +18,26 @@ import { buildSocialLinks } from "../DetailHero/helpers";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
 import type { ArtistDetailBodyProps } from "./types";
 
-export function ArtistDetailBody({ target, onNavigate }: ArtistDetailBodyProps) {
+function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps) {
   const { data: identity } = useArtistIdentity({ deezerArtistId: target.id, artistName: target.artistName });
   const { data: stats } = useArtistStats({ artistName: target.artistName, mbid: identity?.mbid ?? null });
-  const { data: discography } = useArtistDiscography({ deezerArtistId: target.id });
+  const { data: lidarr } = useLidarrAvailable();
+  const { requestArtist } = useContentDetailActions();
 
   const mbid = identity?.mbid ?? null;
-  const albumsInLibrary =
-    discography?.groups.reduce((total, group) => total + group.albums.filter((album) => album.inLibrary).length, 0) ??
-    null;
-  const genres = stats?.genres ?? [];
-  const socials = buildSocialLinks(identity?.socials);
+  const genres = useMemo(() => stats?.genres ?? EMPTY_GENRES, [stats?.genres]);
+  const socials = useMemo(() => buildSocialLinks(identity?.socials), [identity?.socials]);
+
+  const handleRequest = useCallback(() => {
+    requestArtist({ id: target.id, name: target.name });
+  }, [requestArtist, target.id, target.name]);
+
+  const statsSlot = useMemo(
+    () => <ArtistStatsWidget deezerArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="stats" />,
+    [target.id, target.artistName, mbid]
+  );
+
+  const showRequest = lidarr?.available === true;
 
   return (
     <div className={modalLayout()}>
@@ -35,10 +48,10 @@ export function ArtistDetailBody({ target, onNavigate }: ArtistDetailBodyProps) 
         cover={identity?.image ?? target.cover}
         genres={genres}
         requestState="request"
+        onRequest={handleRequest}
+        showRequest={showRequest}
         socials={socials}
-        statsSlot={
-          <ArtistStatsWidget artistName={target.artistName} mbid={mbid} inLibraryCount={albumsInLibrary} slot="stats" />
-        }
+        statsSlot={statsSlot}
       />
 
       <div className={modalScrollArea()}>
@@ -48,17 +61,8 @@ export function ArtistDetailBody({ target, onNavigate }: ArtistDetailBodyProps) 
           </div>
 
           <div className={modalSide()}>
-            <ArtistStatsWidget
-              artistName={target.artistName}
-              mbid={mbid}
-              inLibraryCount={albumsInLibrary}
-              slot="about"
-            />
-            <ArtistIdentityWidget
-              deezerArtistId={target.id}
-              artistName={target.artistName}
-              albumsInLibrary={albumsInLibrary}
-            />
+            <ArtistStatsWidget deezerArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="about" />
+            <ArtistIdentityWidget deezerArtistId={target.id} artistName={target.artistName} />
           </div>
         </div>
 
@@ -74,3 +78,5 @@ export function ArtistDetailBody({ target, onNavigate }: ArtistDetailBodyProps) 
     </div>
   );
 }
+
+export const ArtistDetailBody = memo(ArtistDetailBodyComponent);

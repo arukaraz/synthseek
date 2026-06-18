@@ -2,17 +2,15 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { useCategoryPlaylists } from "@hooks/api/queries/useCategoryPlaylists";
-import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
+import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { Results } from "@features/search/components/Results/Results";
-import { ContentBrowserModal } from "@features/search/components/ContentBrowserModal/ContentBrowserModal";
-import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { ContentType, type MusicItem } from "@api/__generated__/types";
 import { backButton } from "@features/search/components/styles";
 import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
 import { ArrowLeft, AlertCircle, ListMusic } from "lucide-react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ContentSkeleton } from "./components/ContentSkeleton";
 import { CONTENT_LIMIT } from "./constants";
@@ -28,20 +26,17 @@ export function CategoryScreen() {
 
   const { data, isLoading, isError } = useCategoryPlaylists(categoryId, categoryName, CONTENT_LIMIT);
 
-  const flow = useContentRequestModals();
-  const [selectedItemType, setSelectedItemType] = useState<ContentType>(ContentType.enum.artist);
+  const { openForResult } = useContentRequestFlow();
 
   const genreContent = data?.data;
   const albums = useMemo(() => (genreContent?.albums ?? []) as MusicItem[], [genreContent]);
   const playlists = useMemo(() => (genreContent?.playlists?.items ?? []) as MusicItem[], [genreContent]);
 
-  const handleItemClick = (itemId: string, type: ContentType) => {
+  const handleItemClick = (itemId: string, _type: ContentType) => {
     const allItems = [...albums, ...playlists];
     const item = allItems.find((i) => i.id === itemId);
-    if (item) {
-      setSelectedItemType(type);
-      flow.openForResult(item);
-    }
+    if (!item) return;
+    openForResult(item);
   };
 
   const hasContent = albums.length > 0 || playlists.length > 0;
@@ -91,12 +86,6 @@ export function CategoryScreen() {
           </motion.div>
         )}
       </div>
-
-      {flow.selectedResult && (
-        <ContentBrowserModal {...flow.browserModalProps} type={selectedItemType} data={flow.selectedResult} />
-      )}
-
-      {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} />}
     </div>
   );
 }

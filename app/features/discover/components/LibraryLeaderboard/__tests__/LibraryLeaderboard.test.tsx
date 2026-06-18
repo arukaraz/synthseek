@@ -11,9 +11,18 @@ import { LibraryLeaderboard } from "../LibraryLeaderboard";
 type LibrarySummary = inferRouterOutputs<AppRouter>["requests"]["getLibrarySummary"];
 
 const useLibrarySummaryMock = vi.fn();
+const openForResultMock = vi.fn();
 
 vi.mock("@hooks/api/queries/useLibrarySummary", () => ({
   useLibrarySummary: () => useLibrarySummaryMock(),
+}));
+
+vi.mock("@features/search/components/ContentRequestFlow", () => ({
+  useContentRequestFlow: () => ({ openForResult: openForResultMock, openForTarget: vi.fn() }),
+}));
+
+vi.mock("@utils/trpc", () => ({
+  trpc: { useUtils: () => ({ contentDetail: { resolveArtist: { fetch: vi.fn() } } }) },
 }));
 
 function buildSummary(overrides: Partial<LibrarySummary> = {}): LibrarySummary {
