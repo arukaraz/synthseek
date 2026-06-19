@@ -8,8 +8,10 @@
  * whether the tab originated the event.
  */
 
+import { generateUuid } from "./uuid";
+
 export function generateCorrelationId(clientSessionId: string): string {
-  return `${clientSessionId}/${crypto.randomUUID()}`;
+  return `${clientSessionId}/${generateUuid()}`;
 }
 
 export function isOwnSession(correlationId: string | null | undefined, clientSessionId: string): boolean {

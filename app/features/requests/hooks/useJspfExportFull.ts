@@ -1,6 +1,7 @@
 import { ContentType, type RequestWithTracks } from "@api/__generated__/types";
 import { useExportFullPortability } from "@hooks/api/mutations/portability/useExportFullPortability";
 import { downloadText } from "@utils/download";
+import { generateUuid } from "@utils/uuid";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -13,7 +14,7 @@ export function useJspfExportFull(request: RequestWithTracks, onOpenChange: (ope
   const mutation = useExportFullPortability();
 
   const start = useCallback(() => {
-    const id = crypto.randomUUID();
+    const id = generateUuid();
     setJobId(id);
     const type = request.contentType === ContentType.enum.playlist ? "playlist" : "album";
     mutation.mutate(

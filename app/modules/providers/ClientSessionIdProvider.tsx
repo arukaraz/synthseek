@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react";
 
+import { generateUuid } from "@utils/uuid";
+
 const ClientSessionIdContext = createContext<string | null>(null);
 
 /**
@@ -10,7 +12,7 @@ const ClientSessionIdContext = createContext<string | null>(null);
  * the tab can later identify its own events.
  */
 export function ClientSessionIdProvider({ children }: { children: ReactNode }) {
-  const [clientSessionId] = useState(() => crypto.randomUUID());
+  const [clientSessionId] = useState(() => generateUuid());
   return <ClientSessionIdContext.Provider value={clientSessionId}>{children}</ClientSessionIdContext.Provider>;
 }
 

@@ -1,4 +1,5 @@
 import i18n from "@locale";
+import { generateUuid } from "@utils/uuid";
 
 import { MAX_FILE_BYTES } from "./constants";
 import type { CollectionCoverage, ImportFormat, ImportPreviewResult, TrackCoverage } from "./types";
@@ -29,7 +30,7 @@ export function filenameFromUrl(url: string): string {
 }
 
 export function generateJobId(): string {
-  return crypto.randomUUID();
+  return generateUuid();
 }
 
 export async function readFileAsText(file: File): Promise<string> {

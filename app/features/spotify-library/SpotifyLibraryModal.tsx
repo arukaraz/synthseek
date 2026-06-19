@@ -8,6 +8,7 @@ import { useLibrarySubscription } from "@hooks/api/queries/spotify/useLibrarySub
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { useSpotifyLibraryItems } from "@hooks/api/queries/spotify/useSpotifyLibraryItems";
 import { emitFriendlyToast, extractAppCode, resolveFriendlyError } from "@modules/errors";
+import { generateUuid } from "@utils/uuid";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -185,7 +186,7 @@ export function SpotifyLibraryModal({ open, onOpenChange }: SpotifyLibraryModalP
       draft.state.autoWatch.playlists !== initialWatch.playlists ||
       draft.state.autoWatch.savedAlbums !== initialWatch.savedAlbums;
 
-    const jobId = crypto.randomUUID();
+    const jobId = generateUuid();
 
     if (toImport.length > 0) {
       const nameById = new Map(sourceItems.map((item) => [item.id, item.name]));
