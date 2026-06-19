@@ -11,6 +11,12 @@
   "requestMissing": "Request missing",
   "requestTrack": "Request {{title}}",
   "retryTrack": "Retry {{title}}",
+  "selectTrack": "Select {{title}}",
+  "selection": {
+    "selected": "selected",
+    "selectAll": "Select all",
+    "clear": "Clear"
+  },
   "alreadyInLibrary": "Already in library",
   "shareExpand": "Show social links",
   "shareCollapse": "Hide social links",

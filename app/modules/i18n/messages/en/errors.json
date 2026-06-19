@@ -91,6 +91,14 @@
     "title": "Playlist not found",
     "description": "That playlist could not be found."
   },
+  "PLAYLIST_SYNCED_NOT_EDITABLE": {
+    "title": "Playlist is syncing",
+    "description": "Turn off sync to edit this playlist."
+  },
+  "PLAYLIST_TRACK_IN_FLIGHT": {
+    "title": "Track still downloading",
+    "description": "Only completed or failed tracks can be removed from a playlist."
+  },
   "TRACK_NOT_FOUND": {
     "title": "Track not found",
     "description": "That track could not be found."

@@ -68,6 +68,8 @@ export const subSectionSaveBar = cva("mt-auto");
 
 export const playlistChipsGrid = cva("grid grid-cols-4 gap-1.5");
 
+export const playlistRenameGroup = cva("flex flex-col gap-3");
+
 export const playlistChip = cva(
   "inline-flex h-8 w-full cursor-pointer items-center justify-center truncate rounded-md border px-2 text-[11px] font-medium transition-colors",
   {

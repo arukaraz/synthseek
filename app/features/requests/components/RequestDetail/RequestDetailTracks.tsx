@@ -48,13 +48,14 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
       {
         key: "artist",
         header: t("tracks.artistHeader"),
-        cell: (track) => <span className="truncate">{track.artist}</span>,
+        cell: (track) => <span className="block truncate">{track.artist}</span>,
         className: "hidden lg:table-cell",
       },
       {
         key: "status",
         header: t("tracks.statusHeader"),
         cell: (track) => <TrackStatusCell track={track} />,
+        className: "w-44",
       },
       {
         key: "completed",
@@ -64,7 +65,7 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
             {track.completed_at ? formatRelativeTime(new Date(track.completed_at)) : "-"}
           </span>
         ),
-        className: "hidden md:table-cell",
+        className: "hidden w-28 md:table-cell",
       },
       {
         key: "priority",
@@ -103,6 +104,7 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
       getRowId={(track) => track.id}
       containerClassName="mx-3 mb-3 sm:mx-4 sm:mb-4"
       minWidth="480px"
+      fixedLayout
       rowAttrs={(track) => ({ "data-status": track.status })}
       staggerDelay={0.01}
       emptyMessage={t("tracks.empty")}

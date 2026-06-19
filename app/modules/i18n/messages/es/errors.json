@@ -91,6 +91,14 @@
     "title": "Lista de reproducción no encontrada",
     "description": "No se pudo encontrar esa lista de reproducción."
   },
+  "PLAYLIST_SYNCED_NOT_EDITABLE": {
+    "title": "La playlist está sincronizando",
+    "description": "Desactiva la sincronización para editar esta playlist."
+  },
+  "PLAYLIST_TRACK_IN_FLIGHT": {
+    "title": "La canción aún se está descargando",
+    "description": "Solo se pueden quitar de una playlist las canciones completadas o fallidas."
+  },
   "TRACK_NOT_FOUND": {
     "title": "Canción no encontrada",
     "description": "No se pudo encontrar esa canción."

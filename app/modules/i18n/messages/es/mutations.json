@@ -180,5 +180,19 @@
     "exportFailed": "Error al exportar",
     "artistDelegated": "Artista añadido a Lidarr",
     "artistDelegateFailed": "No se pudo añadir el artista a Lidarr"
+  },
+  "playlists": {
+    "created": "Playlist creada",
+    "createFailed": "No se pudo crear la playlist",
+    "renamed": "Playlist renombrada",
+    "renameFailed": "No se pudo renombrar la playlist",
+    "deleted": "Playlist eliminada",
+    "deleteFailed": "No se pudo eliminar la playlist",
+    "tracksAdded": "Canciones añadidas a la playlist",
+    "tracksAddedFailed": "No se pudieron añadir las canciones a la playlist",
+    "tracksRemoved": "Canciones quitadas de la playlist",
+    "tracksRemovedFailed": "No se pudieron quitar las canciones de la playlist",
+    "syncUpdated": "Sincronización actualizada",
+    "syncUpdatedFailed": "No se pudo actualizar la sincronización"
   }
 }

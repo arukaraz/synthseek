@@ -39,3 +39,7 @@ export interface PlaylistCardProps {
   item: LibraryPlaylistItem;
   onOpen?: () => void;
 }
+
+export interface PlaylistCardMenuProps {
+  item: LibraryPlaylistItem;
+}

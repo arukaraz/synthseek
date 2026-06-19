@@ -13,10 +13,11 @@ import {
   detailInitials,
   detailTargetFromMusicItem,
   formatStat,
+  isRemovableTrack,
   playlistLibraryTarget,
   playlistOpenItem,
   playlistPreloadedTarget,
-  playlistRequestPayload,
+  playlistRequestTracks,
   playlistTarget,
   preloadedTrack,
   trackRequestItem,
@@ -378,20 +379,41 @@ describe("content-detail helpers", () => {
       expect(item.tracks).toEqual([]);
     });
 
-    it("builds a playlist request payload mapping every library track", () => {
-      const payload = playlistRequestPayload({
-        id: "pl1",
-        name: "Road Trip",
-        cover: "c.jpg",
-        totalTracks: 2,
-        tracks: [createTracklistTrack({ externalId: "a" }), createTracklistTrack({ externalId: "b" })],
-      });
-      expect(payload.external_id).toBe("pl1");
-      expect(payload.total_tracks).toBe(2);
-      expect(payload.tracks).toHaveLength(2);
-      expect(payload.tracks[0].external_id).toBe("a");
-      expect(payload.tracks[0].album_artist).toBe("Daft Punk");
-      expect(payload.config.format.value).toBe("mp3");
+    it("maps tracklist tracks to MusicTracks for the config modal", () => {
+      const tracks = playlistRequestTracks([
+        createTracklistTrack({ externalId: "a" }),
+        createTracklistTrack({ externalId: "b" }),
+      ]);
+      expect(tracks).toHaveLength(2);
+      expect(tracks[0].type).toBe("track");
+      expect(tracks[0].id).toBe("a");
+      expect(tracks[0].artist).toBe("Daft Punk");
+      expect(tracks[0].artists[0]?.name).toBe("Daft Punk");
+      expect(tracks[0].album.id).toBe("");
+    });
+  });
+
+  describe("isRemovableTrack", () => {
+    it("treats a complete track with a requestId as removable", () => {
+      expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: "complete" }))).toBe(true);
+    });
+
+    it("treats a failed track with a requestId as removable", () => {
+      expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: "failed" }))).toBe(true);
+    });
+
+    it("rejects in-flight statuses", () => {
+      expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: "downloading" }))).toBe(false);
+      expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: "queued" }))).toBe(false);
+      expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: "importing" }))).toBe(false);
+    });
+
+    it("rejects a track with no requestId even when complete", () => {
+      expect(isRemovableTrack(createTracklistTrack({ requestId: null, status: "complete" }))).toBe(false);
+    });
+
+    it("rejects a track with no status (catalog/preloaded)", () => {
+      expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: null }))).toBe(false);
     });
   });
 });

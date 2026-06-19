@@ -8,11 +8,11 @@ import {
   albumRequestItem,
   artistRequestItem,
   detailTargetFromMusicItem,
-  playlistRequestPayload,
+  playlistOpenItem,
+  playlistRequestTracks,
   trackRequestItem,
   type ContentDetailActions,
 } from "@features/content-detail";
-import { usePlaylistRequest } from "@hooks/api";
 import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
 import { ConfigRequestModal } from "../ConfigRequestModal/ConfigRequestModal";
 import type { ContentRequestFlowProps, FlowContextValue } from "./types";
@@ -27,7 +27,6 @@ export function useContentRequestFlow(): FlowContextValue {
 
 export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
   const flow = useContentRequestModals();
-  const playlistRequest = usePlaylistRequest();
 
   const detailTarget =
     flow.directTarget ??
@@ -40,9 +39,13 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
       requestAlbum: (input) => flow.requestContent(albumRequestItem(input)),
       requestArtist: (input) => flow.requestArtistLidarr(artistRequestItem(input)),
       requestTrack: (input) => flow.requestContent(trackRequestItem(input)),
-      requestPlaylist: (input) => playlistRequest.mutate(playlistRequestPayload(input)),
+      requestPlaylist: (input) =>
+        flow.requestPlaylistConfig(
+          playlistOpenItem({ id: input.id, name: input.name, cover: input.cover, totalTracks: input.totalTracks }),
+          playlistRequestTracks(input.tracks)
+        ),
     }),
-    [flow, playlistRequest]
+    [flow]
   );
 
   return (

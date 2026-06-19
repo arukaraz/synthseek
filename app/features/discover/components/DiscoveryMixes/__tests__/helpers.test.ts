@@ -95,6 +95,28 @@ describe("synthesizePlaylist", () => {
     const playlist = synthesizePlaylist(mix, LB_KIND_METADATA["daily-jams"], []);
     expect(playlist.id).toBe("discovery:listenbrainz:daily-jams:unsynced");
   });
+
+  it("prefers a non-empty custom name over the default meta label", () => {
+    const mix = {
+      kind: "cf-recommendations" as const,
+      status: "ready" as const,
+      candidates: [candidate()],
+      generatedAt: "2026-05-25T07:00:00.000Z",
+    };
+    const playlist = synthesizePlaylist(mix, LB_KIND_METADATA["cf-recommendations"], [], "My Daily Picks");
+    expect(playlist.name).toBe("My Daily Picks (May 25 2026)");
+  });
+
+  it("falls back to the default label when the custom name is empty or whitespace", () => {
+    const mix = {
+      kind: "cf-recommendations" as const,
+      status: "ready" as const,
+      candidates: [candidate()],
+      generatedAt: "2026-05-25T07:00:00.000Z",
+    };
+    const playlist = synthesizePlaylist(mix, LB_KIND_METADATA["cf-recommendations"], [], "   ");
+    expect(playlist.name).toBe("CF Recommendations (May 25 2026)");
+  });
 });
 
 describe("formatFreshness", () => {

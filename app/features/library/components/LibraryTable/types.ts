@@ -16,15 +16,6 @@ export interface TrackSelectionConfig {
   selection: LibrarySelection;
 }
 
-export interface SelectionBulkBarProps {
-  selectedCount: number;
-  failedCount: number;
-  onRetryFailed: () => void;
-  onAddToPlaylist: () => void;
-  onClear: () => void;
-  isRetrying: boolean;
-}
-
 export interface SelectHeaderProps {
   checked: boolean;
   indeterminate: boolean;

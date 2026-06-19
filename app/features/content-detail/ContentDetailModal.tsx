@@ -87,7 +87,7 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
             {current.mode === "artist" ? (
               <ArtistDetailBody key={current.id} target={current} onNavigate={navigateTo} />
             ) : current.mode === "playlist" ? (
-              <PlaylistDetailBody key={current.id} target={current} />
+              <PlaylistDetailBody key={current.id} target={current} onClose={() => handleOpenChange(false, onClose)} />
             ) : (
               <AlbumDetailBody key={current.id} target={current} onNavigate={navigateTo} />
             )}

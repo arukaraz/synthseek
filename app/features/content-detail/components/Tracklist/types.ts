@@ -24,6 +24,9 @@ export interface TracklistProps {
   tracks: TracklistTrack[];
   showArtist?: boolean;
   albumContext?: TrackAlbumContext;
+  selectable?: boolean;
+  isSelected?: (requestId: string) => boolean;
+  onToggleSelect?: (requestId: string) => void;
 }
 
 export interface TrackRowProps {
@@ -33,4 +36,7 @@ export interface TrackRowProps {
   onRequest: () => void;
   onRetry: () => void;
   isRetrying: boolean;
+  selectable?: boolean;
+  isSelected?: boolean;
+  onToggleSelect?: () => void;
 }

@@ -111,6 +111,32 @@ describe("useContentRequestModals", () => {
     expect(result.current.configModalProps.itemType).toBe("playlist");
   });
 
+  it("requestPlaylistConfig opens the config modal with preloaded tracks for a playlist", () => {
+    const { result } = renderHook(() => useContentRequestModals());
+    const playlist = makePlaylist("p1");
+    const tracks = [makeTrack("t1"), makeTrack("t2")];
+
+    act(() => result.current.requestPlaylistConfig(playlist, tracks));
+
+    expect(result.current.configModalProps.isOpen).toBe(true);
+    expect(result.current.contentDetailModalProps.open).toBe(false);
+    expect(result.current.selectedContentToRequest).toEqual(playlist);
+    expect(result.current.configModalProps.itemType).toBe("playlist");
+    expect(result.current.configModalProps.mode).toBe("download");
+    expect(result.current.configModalProps.preloadedTracks).toEqual(tracks);
+  });
+
+  it("requestPlaylistConfig is a no-op for a non-playlist item", () => {
+    const { result } = renderHook(() => useContentRequestModals());
+    const album = makeAlbum("al1");
+
+    act(() => result.current.requestPlaylistConfig(album, [makeTrack("t1")]));
+
+    expect(result.current.configModalProps.isOpen).toBe(false);
+    expect(result.current.selectedContentToRequest).toBeNull();
+    expect(result.current.configModalProps.preloadedTracks).toBeUndefined();
+  });
+
   it("ignores requestContent for an artist", () => {
     const { result } = renderHook(() => useContentRequestModals());
     const artist = makeArtist("ar1");

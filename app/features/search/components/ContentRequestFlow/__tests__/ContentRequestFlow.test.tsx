@@ -10,6 +10,7 @@ const flowState = vi.hoisted(() => ({
   openForResult: vi.fn(),
   requestContent: vi.fn(),
   requestArtistLidarr: vi.fn(),
+  requestPlaylistConfig: vi.fn(),
   contentDetailModalProps: { open: false, onClose: vi.fn() },
   configModalProps: { isOpen: false },
 }));
@@ -24,12 +25,9 @@ vi.mock("@features/content-detail", () => ({
   albumRequestItem: vi.fn(),
   artistRequestItem: vi.fn(),
   trackRequestItem: vi.fn(),
-  playlistRequestPayload: vi.fn(),
+  playlistOpenItem: vi.fn(),
+  playlistRequestTracks: vi.fn(),
   detailTargetFromMusicItem: (item: { id: string }) => ({ id: item.id }),
-}));
-
-vi.mock("@hooks/api", () => ({
-  usePlaylistRequest: () => ({ mutate: vi.fn() }),
 }));
 
 vi.mock("../../ConfigRequestModal/ConfigRequestModal", () => ({

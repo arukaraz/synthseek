@@ -11,6 +11,7 @@ import { SettingsTextInput } from "@features/settings/components/SettingsTextInp
 import { useUpdateListenBrainz } from "@hooks/api/mutations/discovery/useUpdateListenBrainz";
 
 import { LB_PLAYLIST_KIND_LABEL_KEYS, LB_PLAYLIST_KINDS } from "../constants";
+import { playlistNamesDirty, playlistNamesDraft, playlistNamesPatch } from "../helpers";
 import {
   autoRequestHelper,
   autoRequestLabel,
@@ -19,6 +20,7 @@ import {
   disabledOverlay,
   playlistChip,
   playlistChipsGrid,
+  playlistRenameGroup,
   replacePlaylistRow,
   subSection,
   subSectionHeader,
@@ -35,6 +37,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
   const [kinds, setKinds] = useState<LbPlaylistKind[]>(config.selectedKinds);
   const [autoRequest, setAutoRequest] = useState(config.autoRequest ?? false);
   const [replaceExistingPlaylist, setReplaceExistingPlaylist] = useState(config.replaceExistingPlaylist ?? false);
+  const [playlistNames, setPlaylistNames] = useState(() => playlistNamesDraft(config.playlistNames));
 
   const isDirty =
     enabled !== config.enabled ||
@@ -42,10 +45,15 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
     autoRequest !== (config.autoRequest ?? false) ||
     replaceExistingPlaylist !== (config.replaceExistingPlaylist ?? false) ||
     kinds.length !== config.selectedKinds.length ||
-    kinds.some((k, i) => k !== config.selectedKinds[i]);
+    kinds.some((k, i) => k !== config.selectedKinds[i]) ||
+    playlistNamesDirty(playlistNames, config.playlistNames);
 
   const toggleKind = (kind: LbPlaylistKind) => {
     setKinds((prev) => (prev.includes(kind) ? prev.filter((k) => k !== kind) : [...prev, kind]));
+  };
+
+  const setPlaylistName = (kind: LbPlaylistKind, value: string) => {
+    setPlaylistNames((prev) => ({ ...prev, [kind]: value }));
   };
 
   const handleSave = () => {
@@ -55,6 +63,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
       selectedKinds: kinds,
       autoRequest,
       replaceExistingPlaylist,
+      playlistNames: playlistNamesPatch(playlistNames),
     });
   };
 
@@ -64,6 +73,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
     setKinds(config.selectedKinds);
     setAutoRequest(config.autoRequest ?? false);
     setReplaceExistingPlaylist(config.replaceExistingPlaylist ?? false);
+    setPlaylistNames(playlistNamesDraft(config.playlistNames));
   };
 
   return (
@@ -112,6 +122,25 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
             ))}
           </div>
         </SettingsField>
+
+        {kinds.length > 0 ? (
+          <SettingsField
+            label={t("discoveryIntegrations.listenbrainz.renamePlaylistLabel")}
+            helper={t("discoveryIntegrations.listenbrainz.renamePlaylistHelper")}
+          >
+            <div className={playlistRenameGroup()}>
+              {LB_PLAYLIST_KINDS.filter((kind) => kinds.includes(kind)).map((kind) => (
+                <SettingsTextInput
+                  key={kind}
+                  value={playlistNames[kind]}
+                  onChange={(value) => setPlaylistName(kind, value)}
+                  placeholder={t(LB_PLAYLIST_KIND_LABEL_KEYS[kind].label)}
+                  ariaLabel={t(LB_PLAYLIST_KIND_LABEL_KEYS[kind].label)}
+                />
+              ))}
+            </div>
+          </SettingsField>
+        ) : null}
 
         <div className={autoRequestRow()}>
           <div className={autoRequestText()}>

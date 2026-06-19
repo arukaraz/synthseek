@@ -6,7 +6,7 @@ export {
   playlistLibraryTarget,
   playlistOpenItem,
   playlistPreloadedTarget,
-  playlistRequestPayload,
+  playlistRequestTracks,
   trackRequestItem,
 } from "./helpers";
 export type { ContentDetailActions, ContentDetailModalProps, DetailMode, DetailTarget, PlaylistSource } from "./types";

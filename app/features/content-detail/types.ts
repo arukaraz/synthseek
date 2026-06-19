@@ -1,10 +1,7 @@
-import type { AppRouter, MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
-import type { inferRouterInputs } from "@trpc/server";
+import type { MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
 import type { ReactNode } from "react";
 
 import type { TracklistTrack } from "./components/Tracklist/types";
-
-export type PlaylistRequestPayload = inferRouterInputs<AppRouter>["requests"]["playlistRequest"];
 
 export type DetailMode = "artist" | "album" | "playlist";
 
@@ -75,10 +72,6 @@ export interface ArtistDiscographyWidgetProps {
 
 export interface AlbumDetailWidgetProps {
   deezerAlbumId: string;
-}
-
-export interface PlaylistDetailWidgetProps {
-  playlistId: string;
 }
 
 export interface AlbumStatsWidgetProps {

@@ -11,6 +11,12 @@
   "requestMissing": "Solicitar faltantes",
   "requestTrack": "Solicitar {{title}}",
   "retryTrack": "Reintentar {{title}}",
+  "selectTrack": "Seleccionar {{title}}",
+  "selection": {
+    "selected": "seleccionadas",
+    "selectAll": "Seleccionar todo",
+    "clear": "Limpiar"
+  },
   "alreadyInLibrary": "Ya en la biblioteca",
   "shareExpand": "Mostrar enlaces sociales",
   "shareCollapse": "Ocultar enlaces sociales",

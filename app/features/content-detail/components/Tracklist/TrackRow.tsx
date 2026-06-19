@@ -1,12 +1,13 @@
 "use client";
 
+import { Checkbox } from "@components/ui/Checkbox";
 import { TrackStatusIndicator } from "@components/ui/TrackStatusIndicator";
 import { isRetryableStatus } from "@utils/status-helpers";
 import { formatTrackDuration } from "@utils/formatters";
 import { Download, Loader2, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { formatStat } from "../../helpers";
+import { formatStat, isRemovableTrack } from "../../helpers";
 import {
   trackArtist,
   trackDownloadButton,
@@ -15,19 +16,43 @@ import {
   trackRank,
   trackRetryButton,
   trackRow,
+  trackSelectCell,
   trackStatusCell,
   trackStatusReveal,
   trackTitle,
 } from "../../styles";
 import type { TrackRowProps } from "./types";
 
-export function TrackRow({ track, rank, showArtist, onRequest, onRetry, isRetrying }: TrackRowProps) {
+export function TrackRow({
+  track,
+  rank,
+  showArtist,
+  onRequest,
+  onRetry,
+  isRetrying,
+  selectable = false,
+  isSelected = false,
+  onToggleSelect,
+}: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
   const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
+  const showCheckbox = selectable && isRemovableTrack(track);
 
   return (
     <li className={trackRow()}>
-      <span className={trackRank()}>{rank}</span>
+      {selectable ? (
+        <span className={trackSelectCell()}>
+          {showCheckbox ? (
+            <Checkbox
+              checked={isSelected}
+              onCheckedChange={() => onToggleSelect?.()}
+              aria-label={t("selectTrack", { title: track.title })}
+            />
+          ) : null}
+        </span>
+      ) : (
+        <span className={trackRank()}>{rank}</span>
+      )}
 
       <div className={trackInfo()}>
         <span className={trackTitle()}>{track.title}</span>

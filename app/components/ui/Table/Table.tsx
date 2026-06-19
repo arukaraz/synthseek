@@ -16,6 +16,7 @@ export function DataTable<TData>({
   onSort,
   containerClassName,
   minWidth,
+  fixedLayout = false,
   emptyMessage,
   rowAttrs,
   staggerDelay = DEFAULT_STAGGER_DELAY,
@@ -26,7 +27,10 @@ export function DataTable<TData>({
   return (
     <div className={cn(tableContainer(), containerClassName)}>
       <div className={tableScroll()}>
-        <table className={table()} style={minWidth ? { minWidth } : undefined}>
+        <table
+          className={table({ layout: fixedLayout ? "fixed" : "auto" })}
+          style={minWidth ? { minWidth } : undefined}
+        >
           <TableHeader columns={columns} sortState={sortState} onSort={onSort} />
           <TableBody
             columns={columns}

@@ -95,3 +95,72 @@ describe("ListenBrainzCard replace-playlist switch", () => {
     }
   });
 });
+
+const playlistKind = enLibrary.discoveryIntegrations.playlistKind;
+
+describe("ListenBrainzCard playlist rename inputs", () => {
+  it("reveals a rename input only for each enabled kind", () => {
+    render(<ListenBrainzCard config={makeConfig({ selectedKinds: ["weekly-jams"] })} />);
+
+    expect(screen.getByRole("textbox", { name: playlistKind.weeklyJamsLabel })).toBeInTheDocument();
+    expect(screen.queryByRole("textbox", { name: playlistKind.cfRecommendationsLabel })).toBeNull();
+    expect(screen.queryByRole("textbox", { name: playlistKind.dailyJamsLabel })).toBeNull();
+  });
+
+  it("hides the rename section entirely when no kind is enabled", () => {
+    render(<ListenBrainzCard config={makeConfig({ selectedKinds: [] })} />);
+
+    expect(screen.queryByText(lb.renamePlaylistLabel)).toBeNull();
+  });
+
+  it("reveals a kind's rename input the moment its chip is enabled", async () => {
+    render(<ListenBrainzCard config={makeConfig({ selectedKinds: ["weekly-jams"] })} />);
+
+    expect(screen.queryByRole("textbox", { name: playlistKind.cfRecommendationsLabel })).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: playlistKind.cfRecommendationsLabel }));
+
+    expect(screen.getByRole("textbox", { name: playlistKind.cfRecommendationsLabel })).toBeInTheDocument();
+  });
+
+  it("seeds the input from the saved custom name", () => {
+    render(
+      <ListenBrainzCard
+        config={makeConfig({ selectedKinds: ["weekly-jams"], playlistNames: { "weekly-jams": "My Jams" } })}
+      />
+    );
+
+    expect(screen.getByRole("textbox", { name: playlistKind.weeklyJamsLabel })).toHaveValue("My Jams");
+  });
+
+  it("uses the default kind label as the input placeholder", () => {
+    render(<ListenBrainzCard config={makeConfig({ selectedKinds: ["cf-recommendations"] })} />);
+
+    expect(screen.getByRole("textbox", { name: playlistKind.cfRecommendationsLabel })).toHaveAttribute(
+      "placeholder",
+      playlistKind.cfRecommendationsLabel
+    );
+  });
+
+  it("includes the typed custom name in the save payload, trimmed and keyed by kind", async () => {
+    render(<ListenBrainzCard config={makeConfig({ selectedKinds: ["weekly-jams"] })} />);
+
+    await userEvent.type(screen.getByRole("textbox", { name: playlistKind.weeklyJamsLabel }), "  Road Trip  ");
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    expect(mutation.mutate).toHaveBeenCalledWith(
+      expect.objectContaining({ playlistNames: { "weekly-jams": "Road Trip" } })
+    );
+  });
+
+  it("omits an empty input from the playlistNames patch", async () => {
+    render(<ListenBrainzCard config={makeConfig({ selectedKinds: ["weekly-jams"] })} />);
+
+    await userEvent.click(screen.getByRole("button", { name: playlistKind.dailyJamsLabel }));
+    await userEvent.type(screen.getByRole("textbox", { name: playlistKind.weeklyJamsLabel }), "Keepers");
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    expect(mutation.mutate).toHaveBeenCalledWith(
+      expect.objectContaining({ playlistNames: { "weekly-jams": "Keepers" } })
+    );
+  });
+});

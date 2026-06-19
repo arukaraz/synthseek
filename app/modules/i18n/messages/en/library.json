@@ -222,7 +222,9 @@
       "autoRequestAria": "Auto-request playlists",
       "replacePlaylistLabel": "Keep a single updated playlist",
       "replacePlaylistHelper": "Replace the same playlist on each refresh instead of creating a new dated one.",
-      "replacePlaylistAria": "Keep a single updated playlist"
+      "replacePlaylistAria": "Keep a single updated playlist",
+      "renamePlaylistLabel": "Rename playlist",
+      "renamePlaylistHelper": "Leave empty to use the default name."
     },
     "playlistKind": {
       "cfRecommendationsLabel": "CF Recommendations",
@@ -311,7 +313,7 @@
     },
     "origin": {
       "imported": "Imported",
-      "createdHere": "Created here"
+      "createdHere": "Local"
     },
     "facets": {
       "status": "Status",
@@ -358,5 +360,35 @@
       "title": "Could not load the library",
       "description": "Something went wrong loading this view. Try again in a moment."
     }
+  },
+  "playlists": {
+    "actions": {
+      "rename": "Rename",
+      "delete": "Delete",
+      "menu": "Playlist actions for {{name}}"
+    },
+    "renameDialog": {
+      "title": "Rename playlist",
+      "placeholder": "Playlist name",
+      "confirm": "Save",
+      "cancel": "Cancel"
+    },
+    "deleteDialog": {
+      "title": "Delete playlist?",
+      "description": "This removes it from your library. This cannot be undone.",
+      "confirm": "Delete"
+    },
+    "bulk": {
+      "remove": "Remove",
+      "removeCount": "Remove {{count}}"
+    },
+    "dropdown": {
+      "addToPlaylist": "Add to playlist",
+      "newPlaceholder": "New playlist name",
+      "create": "Create",
+      "empty": "No playlists yet"
+    },
+    "keepInSync": "Keep in sync",
+    "syncedReadonly": "Turn off sync to edit"
   }
 }

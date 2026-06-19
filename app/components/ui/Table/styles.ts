@@ -18,8 +18,15 @@ export const tableScroll = cva("overflow-x-auto", {
 export type TableScrollProps = VariantProps<typeof tableScroll>;
 
 export const table = cva("w-full caption-bottom text-sm", {
-  variants: {},
-  defaultVariants: {},
+  variants: {
+    layout: {
+      auto: "table-auto",
+      fixed: "table-fixed",
+    },
+  },
+  defaultVariants: {
+    layout: "auto",
+  },
 });
 
 export type TableProps = VariantProps<typeof table>;

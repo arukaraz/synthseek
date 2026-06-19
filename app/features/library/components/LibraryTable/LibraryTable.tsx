@@ -1,11 +1,13 @@
 "use client";
 
+import { BulkActionBar, selectionAction, selectionActionLabel, type BulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox } from "@components/ui/Checkbox";
 import { DataTable, type ColumnDef } from "@components/ui/Table";
+import { ListPlus, RefreshCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { AddToPlaylistDropdown } from "../AddToPlaylistDropdown";
 import { useLibraryTrackActions } from "../../hooks/useLibraryTrackActions";
-import { SelectionBulkBar } from "./SelectionBulkBar";
 import { selectCell, tableWrap } from "./styles";
 import type { LibraryTableProps } from "./types";
 
@@ -49,16 +51,44 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
 
   const tableColumns = selectColumn ? [selectColumn, ...columns] : columns;
 
+  const bulkActions: BulkAction[] =
+    sel && failedIds.length > 0
+      ? [
+          {
+            icon: RefreshCcw,
+            label: t("page.selection.retryFailed", { count: failedIds.length }),
+            onClick: () => actions.retryFailed(failedIds),
+            count: failedIds.length,
+            disabled: actions.isRetrying,
+          },
+        ]
+      : [];
+
+  const addToPlaylistLabel = t("page.selection.addToPlaylist");
+
   return (
     <div className={tableWrap()}>
       {sel && sel.selectedCount > 0 ? (
-        <SelectionBulkBar
-          selectedCount={sel.selectedCount}
-          failedCount={failedIds.length}
-          onRetryFailed={() => actions.retryFailed(failedIds)}
-          onAddToPlaylist={() => {}}
+        <BulkActionBar
+          count={sel.selectedCount}
+          countLabel={t("page.selection.selected")}
+          actions={bulkActions}
+          clearLabel={t("page.selection.clear")}
           onClear={sel.clear}
-          isRetrying={actions.isRetrying}
+          trailing={
+            <AddToPlaylistDropdown
+              trackIds={[...sel.selectedIds]}
+              onDone={sel.clear}
+              trigger={
+                <button type="button" className={selectionAction()} aria-label={addToPlaylistLabel}>
+                  <ListPlus className="size-3.5 shrink-0" aria-hidden />
+                  <span className={selectionActionLabel()} aria-hidden>
+                    {addToPlaylistLabel}
+                  </span>
+                </button>
+              }
+            />
+          }
         />
       ) : null}
 

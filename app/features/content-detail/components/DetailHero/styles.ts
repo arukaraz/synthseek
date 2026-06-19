@@ -44,3 +44,21 @@ export const heroSocialLink = cva(
 export const genreOverflowChip = cva(
   "border-fg/10 bg-fg/5 text-fg/70 rounded-full border px-3 py-1 text-xs font-medium tabular-nums"
 );
+
+export const heroPlaylistControls = cva("mt-3 flex flex-col items-center gap-3 sm:items-start");
+
+export const heroEditActions = cva("flex items-center gap-2");
+
+export const heroEditButton = cva(
+  "border-fg/15 bg-fg/5 text-fg/70 hover:bg-fg/10 hover:text-fg inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+);
+
+export const heroDeleteButton = cva(
+  "text-destructive-vivid hover:bg-destructive-vivid/10 active:bg-destructive-vivid/15 inline-flex items-center gap-2 rounded-full border border-destructive-vivid/30 px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+);
+
+export const heroSyncToggle = cva(
+  "border-fg/10 bg-fg/5 flex w-full items-center justify-between gap-4 rounded-xl border px-4 py-2.5 sm:w-auto"
+);
+
+export const heroSyncLabel = cva("text-fg/80 text-sm font-medium");

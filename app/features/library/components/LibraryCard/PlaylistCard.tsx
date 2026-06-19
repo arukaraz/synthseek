@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { cardInitials, handleCardActivationKey, mosaicTiles, statusDotClass } from "./helpers";
+import { PlaylistCardMenu } from "./PlaylistCardMenu";
 import {
   cardBody,
   cardCover,
@@ -70,6 +71,7 @@ export function PlaylistCard({ item, onOpen }: PlaylistCardProps) {
           <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
+        <PlaylistCardMenu item={item} />
       </div>
 
       <div className={cardBody()}>

@@ -180,5 +180,19 @@
     "exportFailed": "Export failed",
     "artistDelegated": "Artist added to Lidarr",
     "artistDelegateFailed": "Failed to add artist to Lidarr"
+  },
+  "playlists": {
+    "created": "Playlist created",
+    "createFailed": "Failed to create playlist",
+    "renamed": "Playlist renamed",
+    "renameFailed": "Failed to rename playlist",
+    "deleted": "Playlist deleted",
+    "deleteFailed": "Failed to delete playlist",
+    "tracksAdded": "Tracks added to playlist",
+    "tracksAddedFailed": "Failed to add tracks to playlist",
+    "tracksRemoved": "Tracks removed from playlist",
+    "tracksRemovedFailed": "Failed to remove tracks from playlist",
+    "syncUpdated": "Sync setting updated",
+    "syncUpdatedFailed": "Failed to update sync setting"
   }
 }

@@ -27,7 +27,8 @@ export function DiscoveryMixes() {
 
   const handleCardClick = (mix: ReadyMix) => {
     const tracks = mix.candidates.map(synthesizeTrack);
-    const playlist = synthesizePlaylist(mix, LB_KIND_METADATA[mix.kind], tracks);
+    const customName = lbConfig?.playlistNames?.[mix.kind];
+    const playlist = synthesizePlaylist(mix, LB_KIND_METADATA[mix.kind], tracks, customName);
     const autoRequest = lbConfig?.autoRequest ?? false;
     openForTarget(
       playlistPreloadedTarget({

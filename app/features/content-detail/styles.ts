@@ -135,6 +135,10 @@ export const trackRow = cva(
   "group border-fg/5 hover:bg-fg/5 flex items-center gap-3 rounded-lg border-b px-2 py-2.5 transition-colors last:border-b-0"
 );
 
+export const trackSelectCell = cva("flex w-6 shrink-0 items-center justify-center");
+
+export const selectAllControl = cva("text-fg/60 flex items-center gap-2 text-xs font-medium");
+
 export const trackRank = cva("text-fg/40 w-6 shrink-0 text-center text-sm tabular-nums");
 
 export const trackInfo = cva("flex min-w-0 flex-1 flex-col");

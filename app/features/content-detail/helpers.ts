@@ -1,12 +1,13 @@
-import type {
-  AppRouter,
-  MusicAlbum,
-  MusicArtist,
-  MusicImage,
-  MusicItem,
-  MusicPlaylist,
-  MusicPlaylistTrack,
-  MusicTrack,
+import {
+  type AppRouter,
+  type MusicAlbum,
+  type MusicArtist,
+  type MusicImage,
+  type MusicItem,
+  type MusicPlaylist,
+  type MusicPlaylistTrack,
+  type MusicTrack,
+  RequestStatus,
 } from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
 import i18n from "@locale";
@@ -14,15 +15,12 @@ import { formatDate } from "@utils/formatters";
 import type { CSSProperties } from "react";
 
 import type { TracklistTrack } from "./components/Tracklist/types";
-import { PLAYLIST_REQUEST_CONFIG } from "./constants";
 import type {
   AlbumRequestInput,
   ArtistRequestInput,
   DetailTarget,
   FactItem,
   PlaylistPreloadedTargetInput,
-  PlaylistRequestInput,
-  PlaylistRequestPayload,
   TrackRequestInput,
 } from "./types";
 
@@ -35,6 +33,12 @@ export function formatBorn(bornDate: string | null, bornPlace: string | null): s
 export function cardRingFillStyle(libraryTrackCount: number, totalTracks: number): CSSProperties {
   const ratio = totalTracks > 0 ? Math.min(1, libraryTrackCount / totalTracks) : 0;
   return { "--dock-ring-fill": `${Math.round(ratio * 360)}deg` } as CSSProperties;
+}
+
+export function isRemovableTrack(track: TracklistTrack): track is TracklistTrack & { requestId: string } {
+  return (
+    !!track.requestId && (track.status === RequestStatus.enum.complete || track.status === RequestStatus.enum.failed)
+  );
 }
 
 export function detailInitials(name: string): string {
@@ -224,36 +228,23 @@ export function playlistOpenItem(args: {
   };
 }
 
-export function playlistRequestPayload({
-  id,
-  name,
-  cover,
-  totalTracks,
-  tracks,
-}: PlaylistRequestInput): PlaylistRequestPayload {
-  return {
-    external_id: id,
-    name,
-    owner: "",
-    image: cover,
-    total_tracks: totalTracks,
-    tracks: tracks.map((track) => ({
-      external_id: track.externalId,
-      artist: track.artist,
-      title: track.title,
-      isrc: null,
-      track_number: track.trackNumber,
-      duration_ms: track.durationMs,
-      explicit: false,
-      album_external_id: "",
-      album_name: "",
-      album_artist: track.artist,
-    })),
-    config: {
-      bitrate: { value: PLAYLIST_REQUEST_CONFIG.bitrate.value, matching: PLAYLIST_REQUEST_CONFIG.bitrate.matching },
-      format: { value: PLAYLIST_REQUEST_CONFIG.format.value, matching: PLAYLIST_REQUEST_CONFIG.format.matching },
-    },
-  };
+export function playlistRequestTracks(tracks: TracklistTrack[]): MusicTrack[] {
+  return tracks.map((track) => ({
+    type: "track",
+    id: track.externalId,
+    title: track.title,
+    artist: track.artist,
+    artists: track.artist ? [{ id: "", name: track.artist }] : [],
+    album: { id: "", name: "", images: [] },
+    duration_ms: track.durationMs,
+    track_number: track.trackNumber,
+    disc_number: 1,
+    isrc: null,
+    explicit: false,
+    popularity: null,
+    preview_url: null,
+    images: [],
+  }));
 }
 
 export function artistRequestItem({ id, name }: ArtistRequestInput): MusicArtist {

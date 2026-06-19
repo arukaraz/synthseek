@@ -222,7 +222,9 @@
       "autoRequestAria": "Solicitar listas automáticamente",
       "replacePlaylistLabel": "Mantener una sola playlist actualizada",
       "replacePlaylistHelper": "Reemplaza la misma playlist en cada actualización en vez de crear una nueva con la fecha.",
-      "replacePlaylistAria": "Mantener una sola playlist actualizada"
+      "replacePlaylistAria": "Mantener una sola playlist actualizada",
+      "renamePlaylistLabel": "Renombrar playlist",
+      "renamePlaylistHelper": "Déjalo vacío para usar el nombre predeterminado."
     },
     "playlistKind": {
       "cfRecommendationsLabel": "Recomendaciones CF",
@@ -311,7 +313,7 @@
     },
     "origin": {
       "imported": "Importada",
-      "createdHere": "Creada aquí"
+      "createdHere": "Local"
     },
     "facets": {
       "status": "Estado",
@@ -358,5 +360,35 @@
       "title": "No se pudo cargar la biblioteca",
       "description": "Algo salió mal al cargar esta vista. Inténtalo de nuevo en un momento."
     }
+  },
+  "playlists": {
+    "actions": {
+      "rename": "Renombrar",
+      "delete": "Eliminar",
+      "menu": "Acciones de la lista {{name}}"
+    },
+    "renameDialog": {
+      "title": "Renombrar playlist",
+      "placeholder": "Nombre de la playlist",
+      "confirm": "Guardar",
+      "cancel": "Cancelar"
+    },
+    "deleteDialog": {
+      "title": "¿Eliminar playlist?",
+      "description": "Se quita de tu biblioteca. No se puede deshacer.",
+      "confirm": "Eliminar"
+    },
+    "bulk": {
+      "remove": "Quitar",
+      "removeCount": "Quitar {{count}}"
+    },
+    "dropdown": {
+      "addToPlaylist": "Agregar a playlist",
+      "newPlaceholder": "Nueva playlist",
+      "create": "Crear",
+      "empty": "Aún no hay playlists"
+    },
+    "keepInSync": "Mantener sincronizada",
+    "syncedReadonly": "Desactiva la sincronización para editar"
   }
 }

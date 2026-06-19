@@ -32,6 +32,16 @@ export const cardStatusBadge = cva(
 
 export const cardStatusDot = cva("size-1.5 shrink-0 rounded-full");
 
+export const cardKebab = cva(
+  "absolute top-1.5 right-1.5 grid size-7 place-items-center rounded-md bg-black/55 text-white backdrop-blur-sm transition-opacity hover:bg-black/70 focus-visible:opacity-100 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
+);
+
+export const cardMenuItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2");
+
+export const cardMenuItemDanger = cva(
+  "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2"
+);
+
 export const cardBody = cva("flex min-w-0 flex-col gap-0.5 px-0.5");
 
 export const cardTitle = cva("text-fg truncate text-sm font-semibold");

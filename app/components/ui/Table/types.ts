@@ -23,6 +23,7 @@ export interface DataTableProps<TData> {
   onSort?: (field: string) => void;
   containerClassName?: string;
   minWidth?: string;
+  fixedLayout?: boolean;
   emptyMessage?: string;
   rowAttrs?: (item: TData) => RowAttrs;
   staggerDelay?: number;

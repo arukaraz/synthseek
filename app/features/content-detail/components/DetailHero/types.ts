@@ -10,6 +10,14 @@ export interface SocialLink {
 
 export type HeroRequestState = "request" | "requestMissing" | "inLibrary";
 
+export interface PlaylistHeroControls {
+  canEdit: boolean;
+  disabledTooltip: string;
+  onRename: () => void;
+  onDelete: () => void;
+  syncSlot?: ReactNode;
+}
+
 export interface DetailHeroProps {
   mode: DetailMode;
   name: string;
@@ -24,6 +32,13 @@ export interface DetailHeroProps {
   showRequest?: boolean;
   requestDisabled?: boolean;
   requestDisabledTooltip?: string | null;
+  playlistControls?: PlaylistHeroControls;
+}
+
+export interface PlaylistSyncToggleProps {
+  syncEnabled: boolean;
+  onToggle: (next: boolean) => void;
+  disabled?: boolean;
 }
 
 export interface ShareFanProps {

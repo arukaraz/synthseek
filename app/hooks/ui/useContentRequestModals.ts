@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 
-import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { ContentType, type MusicItem, type MusicTrack } from "@api/__generated__/types";
 import type { DetailTarget } from "@features/content-detail";
 import type { FlowState, RequestContext, UseContentRequestModalsResult } from "./types";
 
@@ -14,6 +14,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
     showConfigRequestModal: false,
     selectedContentToRequest: null,
     parentAlbumFromContext: null,
+    preloadedTracks: null,
     configRequestMode: "download",
   });
 
@@ -59,6 +60,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
         ...prev,
         selectedContentToRequest: requestedItem,
         parentAlbumFromContext: context?.parentAlbum ?? null,
+        preloadedTracks: null,
         showConfigRequestModal: true,
         showContentDetailModal: false,
         configRequestMode: "download",
@@ -72,9 +74,23 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       ...prev,
       selectedContentToRequest: artist,
       parentAlbumFromContext: null,
+      preloadedTracks: null,
       showConfigRequestModal: true,
       showContentDetailModal: false,
       configRequestMode: "lidarr-artist",
+    }));
+  }, []);
+
+  const requestPlaylistConfig = useCallback((playlist: MusicItem, preloadedTracks: MusicTrack[]) => {
+    if (playlist.type !== ContentType.enum.playlist) return;
+    setState((prev) => ({
+      ...prev,
+      selectedContentToRequest: playlist,
+      parentAlbumFromContext: null,
+      preloadedTracks,
+      showConfigRequestModal: true,
+      showContentDetailModal: false,
+      configRequestMode: "download",
     }));
   }, []);
 
@@ -84,6 +100,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       showConfigRequestModal: false,
       selectedContentToRequest: null,
       parentAlbumFromContext: null,
+      preloadedTracks: null,
       configRequestMode: "download",
     }));
   }, []);
@@ -96,6 +113,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
     openForTarget,
     requestContent,
     requestArtistLidarr,
+    requestPlaylistConfig,
     contentDetailModalProps: {
       open: state.showContentDetailModal,
       onClose: closeDetail,
@@ -109,6 +127,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
       mode: state.configRequestMode,
       onClose: closeConfig,
       parentAlbum: state.parentAlbumFromContext,
+      preloadedTracks: state.preloadedTracks ?? undefined,
     },
   };
 }
