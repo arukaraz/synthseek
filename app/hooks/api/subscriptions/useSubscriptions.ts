@@ -13,6 +13,7 @@ import {
 } from "./handlers/requests";
 import { handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
+import { invalidateLibraryViews } from "./shared/libraryInvalidation";
 
 const TERMINAL_STATUSES = new Set<string>([
   RequestStatus.enum.complete,
@@ -42,6 +43,9 @@ export function useSubscriptions() {
           handleTrackUpdate(event, utils, queryClient);
           if (TERMINAL_STATUSES.has(event.status)) {
             utils.requests.getLibrarySummary.invalidate();
+          }
+          if (event.status === RequestStatus.enum.complete) {
+            invalidateLibraryViews(utils);
           }
           break;
         case SubscriptionEventType.AlbumUpdate:

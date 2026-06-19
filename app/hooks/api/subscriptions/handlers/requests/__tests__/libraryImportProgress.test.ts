@@ -10,6 +10,11 @@ import type { DockJob } from "../../../shared/progressDock";
 const spies = vi.hoisted(() => ({
   invalidateSummary: vi.fn(),
   invalidateAll: vi.fn(),
+  invalidateAlbums: vi.fn(),
+  invalidateArtists: vi.fn(),
+  invalidatePlaylists: vi.fn(),
+  invalidateTracks: vi.fn(),
+  invalidateCounts: vi.fn(),
 }));
 
 vi.mock("@utils/trpc", () => ({
@@ -18,6 +23,13 @@ vi.mock("@utils/trpc", () => ({
       requests: {
         getLibrarySummary: { invalidate: spies.invalidateSummary },
         getAll: { invalidate: spies.invalidateAll },
+      },
+      library: {
+        getAlbums: { invalidate: spies.invalidateAlbums },
+        getArtists: { invalidate: spies.invalidateArtists },
+        getPlaylists: { invalidate: spies.invalidatePlaylists },
+        getTracks: { invalidate: spies.invalidateTracks },
+        getCounts: { invalidate: spies.invalidateCounts },
       },
     }),
   },
@@ -61,8 +73,21 @@ function seedLib(): void {
 beforeEach(() => {
   spies.invalidateSummary.mockReset();
   spies.invalidateAll.mockReset();
+  spies.invalidateAlbums.mockReset();
+  spies.invalidateArtists.mockReset();
+  spies.invalidatePlaylists.mockReset();
+  spies.invalidateTracks.mockReset();
+  spies.invalidateCounts.mockReset();
   resetDockStore();
 });
+
+function expectLibraryViewsInvalidated(times: number): void {
+  expect(spies.invalidateAlbums).toHaveBeenCalledTimes(times);
+  expect(spies.invalidateArtists).toHaveBeenCalledTimes(times);
+  expect(spies.invalidatePlaylists).toHaveBeenCalledTimes(times);
+  expect(spies.invalidateTracks).toHaveBeenCalledTimes(times);
+  expect(spies.invalidateCounts).toHaveBeenCalledTimes(times);
+}
 
 function markItem(state: LibraryImportProgressPayload["item"], utils: ReturnType<typeof trpc.useUtils>): void {
   handleLibraryImportProgress(makeEvent({ phase: "progress", item: state }), utils);
@@ -89,19 +114,21 @@ describe("handleLibraryImportProgress", () => {
     expect(libJob()?.items.find((item) => item.key === "a")?.reason).toBe("notInLibrary");
   });
 
-  it("invalidates getAll when an item reaches done so it lands in the list", () => {
+  it("invalidates getAll and the library views when an item reaches done so it lands in the list", () => {
     seedLib();
     const utils = trpc.useUtils();
     markItem({ key: "a", state: "done" }, utils);
     expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
+    expectLibraryViewsInvalidated(1);
   });
 
-  it("does not invalidate getAll for a non-done item state", () => {
+  it("does not invalidate getAll or the library views for a non-done item state", () => {
     seedLib();
     const utils = trpc.useUtils();
     markItem({ key: "a", state: "failed", reason: "importError" }, utils);
     markItem({ key: "b", state: "skipped" }, utils);
     expect(spies.invalidateAll).not.toHaveBeenCalled();
+    expectLibraryViewsInvalidated(0);
   });
 
   it("finalizes a complete status from the items and invalidates caches when nothing failed", () => {
@@ -110,10 +137,16 @@ describe("handleLibraryImportProgress", () => {
     markItem({ key: "a", state: "done" }, utils);
     markItem({ key: "b", state: "done" }, utils);
     spies.invalidateAll.mockReset();
+    spies.invalidateAlbums.mockReset();
+    spies.invalidateArtists.mockReset();
+    spies.invalidatePlaylists.mockReset();
+    spies.invalidateTracks.mockReset();
+    spies.invalidateCounts.mockReset();
     handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils);
     expect(libJob()?.status).toBe("complete");
     expect(spies.invalidateSummary).toHaveBeenCalledTimes(1);
     expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
+    expectLibraryViewsInvalidated(1);
   });
 
   it("finalizes complete for an all-skipped job (everything already present)", () => {

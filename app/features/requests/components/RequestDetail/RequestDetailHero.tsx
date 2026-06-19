@@ -124,23 +124,10 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                   <Trans
                     t={t}
                     i18nKey="detail.requestedBy"
-                    values={{ username: request.requestedBy.username }}
-                    components={{ value: <span className={heroMetaValue()} /> }}
-                  />
-                </p>
-                <p className="text-fg/40 truncate text-xs">
-                  <Trans
-                    t={t}
-                    i18nKey="detail.requestedAt"
-                    values={{ date: formatDateTime(new Date(request.requested_at)) }}
-                    components={{ value: <span className={heroMetaValue()} /> }}
-                  />
-                </p>
-                <p className="text-fg/40 truncate text-xs">
-                  <Trans
-                    t={t}
-                    i18nKey="detail.lastUpdated"
-                    values={{ date: formatDateTime(new Date(request.updated_at)) }}
+                    values={{
+                      username: request.requestedBy.username,
+                      date: formatDateTime(new Date(request.requested_at)),
+                    }}
                     components={{ value: <span className={heroMetaValue()} /> }}
                   />
                 </p>
@@ -158,130 +145,141 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-end gap-2">
-            <StatusBadge status={request.status} size="md" showIcon />
+          <div className="flex flex-col items-end gap-3">
+            <p className="text-fg/40 text-right text-xs">
+              <Trans
+                t={t}
+                i18nKey="detail.lastUpdated"
+                values={{ date: formatDateTime(new Date(request.updated_at)) }}
+                components={{ value: <span className={heroMetaValue()} /> }}
+              />
+            </p>
 
-            <div className="flex items-center gap-2">
-              {canRetry && (
-                <Button
-                  onClick={retry}
-                  variant="outline"
-                  size="sm"
-                  disabled={isRetrying}
-                  className={cn(
-                    "border-primary-500/30 bg-primary-500/10 text-primary-300",
-                    "hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200"
-                  )}
-                >
-                  {isRetrying ? (
-                    <Loader2 className="mr-1.5 size-3.5 animate-spin" />
-                  ) : (
-                    <RefreshCw className="mr-1.5 size-3.5" />
-                  )}
-                  {t("detail.retryFailed")}
-                </Button>
-              )}
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <StatusBadge status={request.status} size="md" showIcon />
 
-              {canRemove && (
-                <IconButton
-                  icon={Trash2}
-                  variant="red"
-                  size="md"
-                  aria-label={t("detail.removeAction", { label: typeLabel })}
-                  onClick={remove}
-                />
-              )}
-
-              {hasMoreActions && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button type="button" className={heroMoreButton()} aria-label={t("detail.moreActions")}>
-                      <MoreVertical className="size-3.5" />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="min-w-44">
-                    {canResume ? (
-                      <DropdownMenuItem onClick={resume} className="text-primary-400 focus:text-primary-300">
-                        <Play className="size-3.5" />
-                        {t("detail.resume")}
-                      </DropdownMenuItem>
+              <div className="flex items-center gap-2">
+                {canRetry && (
+                  <Button
+                    onClick={retry}
+                    variant="outline"
+                    size="sm"
+                    disabled={isRetrying}
+                    className={cn(
+                      "border-primary-500/30 bg-primary-500/10 text-primary-300",
+                      "hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200"
+                    )}
+                  >
+                    {isRetrying ? (
+                      <Loader2 className="mr-1.5 size-3.5 animate-spin" />
                     ) : (
-                      canPause && (
-                        <DropdownMenuItem onClick={pause} className="text-yellow-400 focus:text-yellow-300">
-                          <Pause className="size-3.5" />
-                          {t("detail.pause")}
+                      <RefreshCw className="mr-1.5 size-3.5" />
+                    )}
+                    {t("detail.retryFailed")}
+                  </Button>
+                )}
+
+                {canRemove && (
+                  <IconButton
+                    icon={Trash2}
+                    variant="red"
+                    size="md"
+                    aria-label={t("detail.removeAction", { label: typeLabel })}
+                    onClick={remove}
+                  />
+                )}
+
+                {hasMoreActions && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button type="button" className={heroMoreButton()} aria-label={t("detail.moreActions")}>
+                        <MoreVertical className="size-3.5" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="min-w-44">
+                      {canResume ? (
+                        <DropdownMenuItem onClick={resume} className="text-primary-400 focus:text-primary-300">
+                          <Play className="size-3.5" />
+                          {t("detail.resume")}
                         </DropdownMenuItem>
-                      )
-                    )}
-                    {canCancel && (
-                      <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
-                        <Square className="size-3.5" />
-                        {t("detail.cancelDownloads")}
-                      </DropdownMenuItem>
-                    )}
-                    {canPrioritize && (
-                      <DropdownMenuItem onClick={prioritize} className="text-primary-400 focus:text-primary-300">
-                        <ChevronsUp className="size-3.5" />
-                        {t("detail.jumpTheQueue")}
-                      </DropdownMenuItem>
-                    )}
-                    {canSyncSource && (
-                      <DropdownMenuItem
-                        onClick={syncSourceNow}
-                        disabled={syncSourcePending}
-                        className="text-emerald-400 focus:text-emerald-300"
-                      >
-                        <RefreshCcw className="size-3.5" />
-                        {syncSourcePending ? t("detail.syncing") : t("detail.syncFromSource")}
-                      </DropdownMenuItem>
-                    )}
-                    {canSyncPlex && (
-                      <DropdownMenuItem
-                        onClick={syncPlex}
-                        disabled={syncPlexPending}
-                        className="text-primary-400 focus:text-primary-300"
-                      >
-                        <Upload className="size-3.5" />
-                        {syncPlexPending ? t("detail.syncing") : t("detail.syncToPlex")}
-                      </DropdownMenuItem>
-                    )}
-                    {canExport && (
-                      <DropdownMenuItem onClick={() => void exportJspf()}>
-                        <Download className="size-3.5" />
-                        <span className="flex-1">{t("detail.export")}</span>
-                        <InfoTooltip
-                          trigger="click"
-                          side="left"
-                          title={t("detail.exportTooltipTitle")}
-                          description={t("detail.exportTooltipDescription")}
-                          points={[
-                            t("detail.exportTooltipPointIds"),
-                            t("detail.exportTooltipPointMusicBrainz"),
-                            t("detail.exportTooltipPointRefind"),
-                          ]}
-                        />
-                      </DropdownMenuItem>
-                    )}
-                    {canExport && (
-                      <DropdownMenuItem onClick={() => setExportFullOpen(true)}>
-                        <Globe className="size-3.5" />
-                        <span className="flex-1">{t("detail.exportMax")}</span>
-                        <InfoTooltip
-                          trigger="click"
-                          side="left"
-                          title={t("detail.exportMaxTooltipTitle")}
-                          description={t("detail.exportMaxTooltipDescription")}
-                          points={[
-                            t("detail.exportMaxTooltipPointSlower"),
-                            t("detail.exportMaxTooltipPointBest"),
-                            t("detail.exportMaxTooltipPointMatches"),
-                          ]}
-                        />
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+                      ) : (
+                        canPause && (
+                          <DropdownMenuItem onClick={pause} className="text-yellow-400 focus:text-yellow-300">
+                            <Pause className="size-3.5" />
+                            {t("detail.pause")}
+                          </DropdownMenuItem>
+                        )
+                      )}
+                      {canCancel && (
+                        <DropdownMenuItem onClick={cancel} className="text-yellow-400 focus:text-yellow-300">
+                          <Square className="size-3.5" />
+                          {t("detail.cancelDownloads")}
+                        </DropdownMenuItem>
+                      )}
+                      {canPrioritize && (
+                        <DropdownMenuItem onClick={prioritize} className="text-primary-400 focus:text-primary-300">
+                          <ChevronsUp className="size-3.5" />
+                          {t("detail.jumpTheQueue")}
+                        </DropdownMenuItem>
+                      )}
+                      {canSyncSource && (
+                        <DropdownMenuItem
+                          onClick={syncSourceNow}
+                          disabled={syncSourcePending}
+                          className="text-emerald-400 focus:text-emerald-300"
+                        >
+                          <RefreshCcw className="size-3.5" />
+                          {syncSourcePending ? t("detail.syncing") : t("detail.syncFromSource")}
+                        </DropdownMenuItem>
+                      )}
+                      {canSyncPlex && (
+                        <DropdownMenuItem
+                          onClick={syncPlex}
+                          disabled={syncPlexPending}
+                          className="text-primary-400 focus:text-primary-300"
+                        >
+                          <Upload className="size-3.5" />
+                          {syncPlexPending ? t("detail.syncing") : t("detail.syncToPlex")}
+                        </DropdownMenuItem>
+                      )}
+                      {canExport && (
+                        <DropdownMenuItem onClick={() => void exportJspf()}>
+                          <Download className="size-3.5" />
+                          <span className="flex-1">{t("detail.export")}</span>
+                          <InfoTooltip
+                            trigger="click"
+                            side="left"
+                            title={t("detail.exportTooltipTitle")}
+                            description={t("detail.exportTooltipDescription")}
+                            points={[
+                              t("detail.exportTooltipPointIds"),
+                              t("detail.exportTooltipPointMusicBrainz"),
+                              t("detail.exportTooltipPointRefind"),
+                            ]}
+                          />
+                        </DropdownMenuItem>
+                      )}
+                      {canExport && (
+                        <DropdownMenuItem onClick={() => setExportFullOpen(true)}>
+                          <Globe className="size-3.5" />
+                          <span className="flex-1">{t("detail.exportMax")}</span>
+                          <InfoTooltip
+                            trigger="click"
+                            side="left"
+                            title={t("detail.exportMaxTooltipTitle")}
+                            description={t("detail.exportMaxTooltipDescription")}
+                            points={[
+                              t("detail.exportMaxTooltipPointSlower"),
+                              t("detail.exportMaxTooltipPointBest"),
+                              t("detail.exportMaxTooltipPointMatches"),
+                            ]}
+                          />
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
             </div>
           </div>
         </div>

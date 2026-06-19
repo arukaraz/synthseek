@@ -66,9 +66,8 @@
   },
   "detail": {
     "backToList": "Volver a la lista de solicitudes",
-    "requestedBy": "Solicitado por <value>{{username}}</value>",
-    "requestedAt": "Solicitado el <value>{{date}}</value>",
-    "lastUpdated": "Última actualización: <value>{{date}}</value>",
+    "requestedBy": "Solicitado por <value>{{username}}</value> · <value>{{date}}</value>",
+    "lastUpdated": "Última actualización <value>{{date}}</value>",
     "delegatedTo": "Delegado a: <value>{{name}}</value>",
     "moreActions": "Más acciones",
     "removeAction": "Quitar {{label}}",
