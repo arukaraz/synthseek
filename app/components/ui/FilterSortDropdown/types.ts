@@ -14,7 +14,7 @@ export interface FilterSortSortOption<S extends string> {
 }
 
 export interface FilterSortDropdownProps<F extends string, S extends string = string> {
-  filter: {
+  filter?: {
     value: F;
     onChange: (v: F) => void;
     options: ReadonlyArray<FilterSortFilterOption<F>>;

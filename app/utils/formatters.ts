@@ -45,6 +45,16 @@ export function formatTimestamp(date: Date): string {
   });
 }
 
+export function formatDateTime(date: Date): string {
+  return date.toLocaleString(i18n.language, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export function formatDate(date: Date): string {
   return date.toLocaleDateString(i18n.language, {
     year: "numeric",

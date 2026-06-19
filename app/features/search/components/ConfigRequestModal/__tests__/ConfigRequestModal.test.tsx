@@ -238,6 +238,39 @@ describe("ConfigRequestModal", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
+  it("shows a neutral loading label, not the submitting label, while the track list is still fetching on open", () => {
+    isLoadingTracks = true;
+    contentResponse = undefined;
+
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+    expect(confirmButton()).toBeDisabled();
+    expect(confirmButton()).toHaveTextContent(/loading tracks/i);
+    expect(confirmButton()).not.toHaveTextContent(/requesting/i);
+  });
+
+  it("allows cancel while the track list is still loading on open", async () => {
+    const onClose = vi.fn();
+    const user = userEvent.setup();
+    isLoadingTracks = true;
+    contentResponse = undefined;
+
+    render(<ConfigRequestModal isOpen onClose={onClose} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+    await user.click(screen.getByText(/cancel/i));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows the submitting label while a mutation is pending", () => {
+    pendingFlags = { request: true, batch: false, playlist: false, delegate: false };
+
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+    expect(confirmButton()).toBeDisabled();
+    expect(confirmButton()).toHaveTextContent(/requesting/i);
+  });
+
   it("closes on cancel when idle", async () => {
     const onClose = vi.fn();
     const user = userEvent.setup();

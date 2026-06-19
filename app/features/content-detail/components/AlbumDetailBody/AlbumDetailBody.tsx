@@ -4,14 +4,14 @@ import { useAlbumDetail } from "@hooks/api/queries/content-detail";
 import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
-import { EMPTY_GENRES, EMPTY_SOCIALS } from "../../constants";
-import { artistTarget } from "../../helpers";
+import { EMPTY_GENRES, EMPTY_SOCIALS, EMPTY_TRACKS } from "../../constants";
+import { artistTarget, computeRequestState, deriveTrackStatusCounts } from "../../helpers";
 import { AlbumCreditsWidget, AlbumDetailWidget, AlbumStatsWidget, MoreFromArtistWidget } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
 import type { AlbumDetailBodyProps } from "./types";
 
-function AlbumDetailBodyComponent({ target, onNavigate }: AlbumDetailBodyProps) {
+function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
   const { data: album } = useAlbumDetail({ deezerAlbumId: target.id });
   const { requestAlbum } = useContentDetailActions();
 
@@ -19,15 +19,15 @@ function AlbumDetailBodyComponent({ target, onNavigate }: AlbumDetailBodyProps) 
   const artistExternalId = album?.artistExternalId ?? null;
   const genres = useMemo(() => album?.genres ?? EMPTY_GENRES, [album?.genres]);
   const trackCount = album?.totalTracks ?? null;
-  const totalTracks = album?.totalTracks ?? 0;
-  const libraryTrackCount = album?.libraryTrackCount ?? 0;
   const cover = album?.cover ?? target.cover;
-  const requestState =
-    totalTracks > 0 && libraryTrackCount >= totalTracks
-      ? "inLibrary"
-      : libraryTrackCount > 0
-        ? "requestMissing"
-        : "request";
+  const tracks = album?.tracks ?? EMPTY_TRACKS;
+  const counts = useMemo(() => deriveTrackStatusCounts(tracks), [tracks]);
+  const requestState = computeRequestState({
+    requestedTrackCount: counts.requestedCount,
+    failedTrackCount: counts.failedCount,
+    libraryTrackCount: counts.completeCount,
+    totalTracks: tracks.length,
+  });
 
   const handleRequest = useCallback(() => {
     requestAlbum({
@@ -61,6 +61,7 @@ function AlbumDetailBodyComponent({ target, onNavigate }: AlbumDetailBodyProps) 
         cover={cover}
         genres={genres}
         requestState={requestState}
+        showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
         onSubtitleClick={handleArtistNavigate}
         socials={EMPTY_SOCIALS}

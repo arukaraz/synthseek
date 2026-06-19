@@ -1,4 +1,5 @@
 import { ContentType, type MusicItem } from "@api/__generated__/types";
+import { capitalize } from "@utils/string";
 import { Disc3, ListMusic, Music, type LucideIcon } from "lucide-react";
 
 export function getContentTypeIcon(type: ContentType): LucideIcon {
@@ -15,7 +16,7 @@ export function getContentTypeIcon(type: ContentType): LucideIcon {
 }
 
 export function getContentTypeLabel(type: ContentType): string {
-  return type.charAt(0).toUpperCase() + type.slice(1);
+  return capitalize(type);
 }
 
 export function getMusicItemName(item: MusicItem): string {

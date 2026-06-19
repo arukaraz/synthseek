@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { useAlbumDetail, useArtistIdentity, usePlaylistDetail } from "@hooks/api/queries/content-detail";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -19,6 +20,8 @@ import type { ContentDetailModalProps } from "./types";
 export function ContentDetailModal({ open, onClose, target, actions }: ContentDetailModalProps) {
   const { t } = useTranslation("contentDetail");
   const { current, previous, canGoBack, navigateTo, goBack, handleOpenChange } = useContentDetail({ open, target });
+  const pathname = usePathname();
+  const isLibraryRoute = pathname.startsWith("/library");
   const shellRef = useRef<HTMLDivElement | null>(null);
   const [miniVisible, setMiniVisible] = useState(false);
 
@@ -87,9 +90,19 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
             {current.mode === "artist" ? (
               <ArtistDetailBody key={current.id} target={current} onNavigate={navigateTo} />
             ) : current.mode === "playlist" ? (
-              <PlaylistDetailBody key={current.id} target={current} onClose={() => handleOpenChange(false, onClose)} />
+              <PlaylistDetailBody
+                key={current.id}
+                target={current}
+                onClose={() => handleOpenChange(false, onClose)}
+                showInLibraryPill={!isLibraryRoute}
+              />
             ) : (
-              <AlbumDetailBody key={current.id} target={current} onNavigate={navigateTo} />
+              <AlbumDetailBody
+                key={current.id}
+                target={current}
+                onNavigate={navigateTo}
+                showInLibraryPill={!isLibraryRoute}
+              />
             )}
           </div>
         </ContentDetailActionsProvider>

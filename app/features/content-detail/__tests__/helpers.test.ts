@@ -9,7 +9,9 @@ import {
   artistTarget,
   cardRingFillStyle,
   catalogPlaylistTracks,
+  computeRequestState,
   countAlbumsInLibrary,
+  deriveTrackStatusCounts,
   detailInitials,
   detailTargetFromMusicItem,
   formatStat,
@@ -103,6 +105,210 @@ describe("content-detail helpers", () => {
 
     it("fills nothing when the total is unknown", () => {
       expect(cardRingFillStyle(0, 0)).toEqual({ "--dock-ring-fill": "0deg" });
+    });
+  });
+
+  describe("computeRequestState", () => {
+    it("returns request when nothing has been requested yet", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 0,
+          failedTrackCount: 0,
+          libraryTrackCount: 0,
+          totalTracks: 12,
+        })
+      ).toBe("request");
+    });
+
+    it("returns inLibrary while every requested track is still in progress", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 12,
+          failedTrackCount: 0,
+          libraryTrackCount: 0,
+          totalTracks: 12,
+        })
+      ).toBe("inLibrary");
+    });
+
+    it("returns requestMissing once it settles with failures and nothing in flight", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 9,
+          failedTrackCount: 3,
+          libraryTrackCount: 9,
+          totalTracks: 12,
+        })
+      ).toBe("requestMissing");
+    });
+
+    it("returns inLibrary when every track is complete", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 12,
+          failedTrackCount: 0,
+          libraryTrackCount: 12,
+          totalTracks: 12,
+        })
+      ).toBe("inLibrary");
+    });
+
+    it("returns inLibrary while some are complete and the rest are still in flight", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 12,
+          failedTrackCount: 0,
+          libraryTrackCount: 5,
+          totalTracks: 12,
+        })
+      ).toBe("inLibrary");
+    });
+
+    it("returns inLibrary when failures coexist with in-flight tracks", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 8,
+          failedTrackCount: 2,
+          libraryTrackCount: 5,
+          totalTracks: 12,
+        })
+      ).toBe("inLibrary");
+    });
+
+    it("returns request when nothing has been attempted on a fresh album", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 0,
+          failedTrackCount: 0,
+          libraryTrackCount: 0,
+          totalTracks: 9,
+        })
+      ).toBe("request");
+    });
+
+    it("returns requestMissing when settled with never-requested gaps and no failures", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 5,
+          failedTrackCount: 0,
+          libraryTrackCount: 5,
+          totalTracks: 9,
+        })
+      ).toBe("requestMissing");
+    });
+
+    it("returns inLibrary when every track of a partial album is complete", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 9,
+          failedTrackCount: 0,
+          libraryTrackCount: 9,
+          totalTracks: 9,
+        })
+      ).toBe("inLibrary");
+    });
+
+    it("returns inLibrary while some are complete and the remainder are in flight", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 9,
+          failedTrackCount: 0,
+          libraryTrackCount: 5,
+          totalTracks: 9,
+        })
+      ).toBe("inLibrary");
+    });
+
+    it("returns requestMissing when settled with some complete and the rest failed", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 5,
+          failedTrackCount: 4,
+          libraryTrackCount: 5,
+          totalTracks: 9,
+        })
+      ).toBe("requestMissing");
+    });
+
+    it("returns requestMissing when every attempted track failed", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 0,
+          failedTrackCount: 9,
+          libraryTrackCount: 0,
+          totalTracks: 9,
+        })
+      ).toBe("requestMissing");
+    });
+  });
+
+  describe("deriveTrackStatusCounts", () => {
+    it("counts a settled album with one failed track and feeds requestMissing", () => {
+      const tracks = [
+        ...Array.from({ length: 21 }, () => createTracklistTrack({ status: "complete" })),
+        createTracklistTrack({ status: "failed" }),
+      ];
+      const counts = deriveTrackStatusCounts(tracks);
+      expect(counts).toEqual({ completeCount: 21, failedCount: 1, requestedCount: 21 });
+      expect(
+        computeRequestState({
+          requestedTrackCount: counts.requestedCount,
+          failedTrackCount: counts.failedCount,
+          libraryTrackCount: counts.completeCount,
+          totalTracks: tracks.length,
+        })
+      ).toBe("requestMissing");
+    });
+
+    it("counts an all-complete album and feeds inLibrary", () => {
+      const tracks = Array.from({ length: 12 }, () => createTracklistTrack({ status: "complete" }));
+      const counts = deriveTrackStatusCounts(tracks);
+      expect(counts).toEqual({ completeCount: 12, failedCount: 0, requestedCount: 12 });
+      expect(
+        computeRequestState({
+          requestedTrackCount: counts.requestedCount,
+          failedTrackCount: counts.failedCount,
+          libraryTrackCount: counts.completeCount,
+          totalTracks: tracks.length,
+        })
+      ).toBe("inLibrary");
+    });
+
+    it("counts a catalog tracklist with null statuses and feeds request", () => {
+      const tracks = Array.from({ length: 10 }, () => createTracklistTrack({ status: null }));
+      const counts = deriveTrackStatusCounts(tracks);
+      expect(counts).toEqual({ completeCount: 0, failedCount: 0, requestedCount: 0 });
+      expect(
+        computeRequestState({
+          requestedTrackCount: counts.requestedCount,
+          failedTrackCount: counts.failedCount,
+          libraryTrackCount: counts.completeCount,
+          totalTracks: tracks.length,
+        })
+      ).toBe("request");
+    });
+
+    it("counts in-flight tracks as requested but not complete or failed", () => {
+      const tracks = [
+        createTracklistTrack({ status: "downloading" }),
+        createTracklistTrack({ status: "queued" }),
+        createTracklistTrack({ status: "complete" }),
+        createTracklistTrack({ status: "failed" }),
+      ];
+      expect(deriveTrackStatusCounts(tracks)).toEqual({
+        completeCount: 1,
+        failedCount: 1,
+        requestedCount: 3,
+      });
+    });
+
+    it("excludes cancelled tracks from the requested count", () => {
+      const tracks = [createTracklistTrack({ status: "cancelled" }), createTracklistTrack({ status: "complete" })];
+      expect(deriveTrackStatusCounts(tracks)).toEqual({
+        completeCount: 1,
+        failedCount: 0,
+        requestedCount: 1,
+      });
     });
   });
 

@@ -75,6 +75,13 @@ function runUpdater<T>(queryKeyTag: string, value: T): T {
   return updater(value);
 }
 
+function runGetAllUpdater<T>(value: T): T {
+  const call = spies.getAllSetData.mock.calls.at(-1);
+  if (!call) throw new Error("no requests.getAll.setData call");
+  const updater = call[1];
+  return updater(value);
+}
+
 describe("handleTrackUpdate content-detail patches", () => {
   beforeEach(() => {
     spies.getAllSetData.mockReset();
@@ -163,5 +170,51 @@ describe("handleTrackUpdate content-detail patches", () => {
     const next = runUpdater("artistTopTracks", [row]);
 
     expect(next[0]).toBe(row);
+  });
+});
+
+describe("handleTrackUpdate requests.getAll cache patch", () => {
+  beforeEach(() => {
+    spies.getAllSetData.mockReset();
+    spies.setQueriesData.mockReset();
+  });
+
+  function makeListItem(id: string, trackRequestId: string, updatedAt: Date) {
+    return {
+      id,
+      contentType: "album",
+      updated_at: updatedAt,
+      tracks: [{ id: trackRequestId, slskd_request_id: trackRequestId, status: RequestStatus.enum.downloading }],
+    };
+  }
+
+  it("bumps updated_at on the matched request so the RECENT sort floats it to the top", () => {
+    const utils = trpc.useUtils();
+    const stale = new Date("2020-01-01T00:00:00.000Z");
+    const before = Date.now();
+
+    handleTrackUpdate(makeEvent({ requestId: "track-1", status: RequestStatus.enum.complete }), utils, queryClient);
+
+    const matched = makeListItem("req-1", "track-1", stale);
+    const untouched = makeListItem("req-2", "track-2", stale);
+    const next = runGetAllUpdater([matched, untouched]);
+
+    expect(next[0].updated_at.getTime()).toBeGreaterThanOrEqual(before);
+    expect(next[0].tracks[0].status).toBe(RequestStatus.enum.complete);
+    expect(next[1]).toBe(untouched);
+    expect(next[1].updated_at).toBe(stale);
+  });
+
+  it("leaves the list reference contents untouched when no request matches", () => {
+    const utils = trpc.useUtils();
+    const stale = new Date("2020-01-01T00:00:00.000Z");
+
+    handleTrackUpdate(makeEvent({ requestId: "no-match" }), utils, queryClient);
+
+    const item = makeListItem("req-1", "track-1", stale);
+    const next = runGetAllUpdater([item]);
+
+    expect(next[0]).toBe(item);
+    expect(next[0].updated_at).toBe(stale);
   });
 });

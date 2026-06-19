@@ -2,6 +2,7 @@
 
 import { cn } from "@utils/cn";
 import { artworkProxySrc } from "@utils/artworkProxy";
+import { playlistOriginLabel } from "@utils/playlist";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
@@ -27,7 +28,7 @@ export function PlaylistCard({ item, onOpen }: PlaylistCardProps) {
   const { t } = useTranslation("library");
   const { t: tDetail } = useTranslation("contentDetail");
   const tiles = mosaicTiles(item.images, item.image);
-  const origin = item.source_provider ? t("page.origin.imported") : t("page.origin.createdHere");
+  const origin = playlistOriginLabel(item.source_provider, t);
   const openLabel = onOpen ? tDetail("openDetail", { name: item.name }) : undefined;
 
   return (

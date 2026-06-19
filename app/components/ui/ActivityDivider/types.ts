@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type ActivityDividerState = "idle" | "in-progress" | "plex-sync";
+export type ActivityDividerState = "idle" | "in-progress" | "plex-sync" | "paused";
 
 export interface ActivityDividerProps {
   state: ActivityDividerState;

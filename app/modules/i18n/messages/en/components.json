@@ -1,4 +1,7 @@
 {
+  "activity": {
+    "paused": "Paused"
+  },
   "pagination": {
     "summary": "Showing {{start}}-{{end}} of {{total}}",
     "rowsPerPage": "Rows per page",

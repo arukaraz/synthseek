@@ -1,4 +1,7 @@
 {
+  "activity": {
+    "paused": "En pausa"
+  },
   "pagination": {
     "summary": "Mostrando {{start}}-{{end}} de {{total}}",
     "rowsPerPage": "Filas por página",

@@ -39,6 +39,33 @@ describe("ActivityDivider", () => {
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
+  it("renders a static paused rail with the warning color and no travel sweep", () => {
+    const { container } = render(<ActivityDivider state="paused" />);
+    const rail = container.querySelector(".activity-rail");
+    expect(rail).toHaveClass("activity-rail-paused");
+    expect(rail).toHaveClass("[--activity-rail-color:var(--neon-warning)]");
+    expect(container.querySelector(".activity-rail-travel")).not.toBeInTheDocument();
+    expect(container.querySelector(".activity-rail-static")).not.toBeInTheDocument();
+  });
+
+  it("renders a centered Paused label on the paused rail", () => {
+    render(<ActivityDivider state="paused" />);
+    expect(screen.getByText("Paused")).toBeInTheDocument();
+  });
+
+  it("shows no Paused label in the non-paused states", () => {
+    render(<ActivityDivider state="in-progress" />);
+    expect(screen.queryByText("Paused")).not.toBeInTheDocument();
+  });
+
+  it("keeps the paused rail static under reduced motion", () => {
+    reducedMotion.value = true;
+    const { container } = render(<ActivityDivider state="paused" />);
+    const rail = container.querySelector(".activity-rail");
+    expect(rail).toHaveClass("activity-rail-paused");
+    expect(container.querySelector(".activity-rail-travel")).not.toBeInTheDocument();
+  });
+
   it("renders toolbar children", () => {
     render(
       <ActivityDivider state="plex-sync" value={3} max={8}>

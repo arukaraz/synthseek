@@ -34,7 +34,7 @@ export function albumMetaLine(year: number | null, quality: string | null): stri
 }
 
 export function mosaicTiles(images: string[], image: string | null): string[] {
-  if (images.length > 0) return images.slice(0, 4);
   if (image) return [image];
+  if (images.length > 0) return images.slice(0, 4);
   return [];
 }

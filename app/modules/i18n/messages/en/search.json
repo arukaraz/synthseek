@@ -204,7 +204,8 @@
       "cancel": "Cancel",
       "request": "Request",
       "addToLidarr": "Add to Lidarr",
-      "requesting": "Requesting please wait..."
+      "requesting": "Requesting please wait...",
+      "loadingTracks": "Loading tracks..."
     },
     "errors": {
       "invalidItem": "Invalid item",

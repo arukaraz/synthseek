@@ -214,15 +214,16 @@ export function ConfigRequestModal({
   const downloadPlaylistMutation = usePlaylistRequest();
   const delegateArtistMutation = useDelegateArtist();
 
-  const isMutating =
+  const isSubmitting =
     downloadMutation.isPending ||
     downloadAlbumMutation.isPending ||
     downloadPlaylistMutation.isPending ||
     delegateArtistMutation.isPending;
-  const isLoading = isMutating || (!isLidarrArtistMode && needsTrackList && isLoadingTracks);
+  const isLoadingData = !isLidarrArtistMode && needsTrackList && isLoadingTracks;
+  const isBusy = isSubmitting || isLoadingData;
 
   const handleClose = () => {
-    if (!isLoading) onClose();
+    if (!isSubmitting) onClose();
   };
 
   const handleDelegateArtist = () => {
@@ -466,20 +467,25 @@ export function ConfigRequestModal({
               onClick={handleClose}
               variant="outline"
               className="border-fg/20 bg-fg/5 text-fg hover:bg-fg/10 flex-1"
-              disabled={isLoading}
+              disabled={isSubmitting}
             >
               {t("config.actions.cancel")}
             </Button>
             <Button
               onClick={isLidarrArtistMode ? handleDelegateArtist : handleDownload}
-              disabled={isLoading}
+              disabled={isBusy}
               className={`${primaryGradientButton({ size: "md", glow: "primary", hover: "lighten" })} flex-1 font-semibold disabled:cursor-not-allowed disabled:opacity-50`}
               data-cy="confirm-download-btn"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {t("config.actions.requesting")}
+                </>
+              ) : isLoadingData ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t("config.actions.loadingTracks")}
                 </>
               ) : (
                 <>

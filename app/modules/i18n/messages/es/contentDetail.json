@@ -17,6 +17,14 @@
     "selectAll": "Seleccionar todo",
     "clear": "Limpiar"
   },
+  "sort": {
+    "label": "Ordenar",
+    "name": "Nombre",
+    "status": "Estado",
+    "length": "Duración",
+    "ascending": "Ascendente",
+    "descending": "Descendente"
+  },
   "alreadyInLibrary": "Ya en la biblioteca",
   "shareExpand": "Mostrar enlaces sociales",
   "shareCollapse": "Ocultar enlaces sociales",

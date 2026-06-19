@@ -2,26 +2,32 @@
 
 import { BulkActionBar, type BulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox } from "@components/ui/Checkbox";
+import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { DeletePlaylistDialog } from "@components/DeletePlaylistDialog";
-import { RenamePlaylistDialog } from "@components/RenamePlaylistDialog";
 import { useCatalogPlaylistTracks, usePlaylistDetail } from "@hooks/api/queries/content-detail";
 import { useRemoveTracksFromPlaylist } from "@hooks/api/mutations/playlists/useRemoveTracksFromPlaylist";
+import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlaylist";
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
+import { useInlineRename } from "@hooks/ui/useInlineRename";
 import { useSelection } from "@hooks/ui/useSelection";
+import { playlistOriginLabel } from "@utils/playlist";
 import { Trash2 } from "lucide-react";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES, EMPTY_SOCIALS, EMPTY_TRACKS } from "../../constants";
-import { catalogPlaylistTracks, isRemovableTrack } from "../../helpers";
+import { catalogPlaylistTracks, computeRequestState, deriveTrackStatusCounts, isRemovableTrack } from "../../helpers";
 import { DetailHero, PlaylistSyncToggle } from "../DetailHero";
 import { DetailEmpty, DetailSection } from "../DetailSection";
 import { Tracklist } from "../Tracklist";
 import { modalLayout, modalMain, modalScrollArea, selectAllControl } from "../../styles";
-import type { PlaylistDetailBodyProps } from "./types";
+import { DEFAULT_SORT_KEY } from "./constants";
+import { sortTracklist } from "./helpers";
+import { TracklistSort } from "./TracklistSort";
+import type { PlaylistDetailBodyProps, SortDirection, TracklistSortKey } from "./types";
 
-function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProps) {
+function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true }: PlaylistDetailBodyProps) {
   const { t } = useTranslation("contentDetail");
   const { t: tLibrary } = useTranslation("library");
   const source = target.playlistSource ?? (target.preloadedTracks ? "preloaded" : "library");
@@ -37,10 +43,13 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
   const { requestPlaylist } = useContentDetailActions();
 
   const removeTracks = useRemoveTracksFromPlaylist();
+  const renamePlaylist = useRenamePlaylist();
   const setSync = useSetPlaylistSync();
   const selection = useSelection<{ id: string }>();
-  const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
+  const [sortKey, setSortKey] = useState<TracklistSortKey>(DEFAULT_SORT_KEY);
+  const [direction, setDirection] = useState<SortDirection>("asc");
 
   const catalogTracks = useMemo(
     () => (isCatalog ? catalogPlaylistTracks(catalogContent?.content) : EMPTY_TRACKS),
@@ -57,23 +66,44 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
     [isPreloaded, isCatalog, target.preloadedTracks, catalogTracks, playlist?.tracks]
   );
 
+  const sortedTracks = useMemo(
+    () => sortTracklist(displayTracks, sortKey, direction),
+    [displayTracks, sortKey, direction]
+  );
+
   const totalTracks = isLibrary ? (playlist?.totalTracks ?? 0) : displayTracks.length;
-  const libraryTrackCount = isLibrary ? (playlist?.libraryTrackCount ?? 0) : 0;
   const hasMeta = isLibrary ? !!playlist : true;
-  const subtitle = hasMeta ? t("playlistTrackCount", { count: totalTracks }) : null;
-  const requestState =
-    totalTracks > 0 && libraryTrackCount >= totalTracks
-      ? "inLibrary"
-      : libraryTrackCount > 0
-        ? "requestMissing"
-        : "request";
+  const sourceProvider = playlist?.sourceProvider ?? null;
+  const subtitle = !hasMeta
+    ? null
+    : isLibrary
+      ? playlistOriginLabel(sourceProvider, tLibrary, { withProvider: true })
+      : t("playlistTrackCount", { count: totalTracks });
+  const counts = useMemo(() => deriveTrackStatusCounts(displayTracks), [displayTracks]);
+  const requestState = isLibrary
+    ? computeRequestState({
+        requestedTrackCount: counts.requestedCount,
+        failedTrackCount: counts.failedCount,
+        libraryTrackCount: counts.completeCount,
+        totalTracks: displayTracks.length,
+      })
+    : "request";
 
   const heroCover = isLibrary ? (playlist?.cover ?? target.cover) : target.cover;
 
-  const sourceProvider = playlist?.sourceProvider ?? null;
   const syncEnabled = playlist?.syncEnabled ?? false;
   const isImported = sourceProvider != null;
   const canEdit = isLibrary && !!playlist && (sourceProvider == null || !syncEnabled);
+  const playlistName = isLibrary && playlist ? playlist.name : target.name;
+
+  const handleSaveName = useCallback(
+    (nextName: string) => {
+      renamePlaylist.mutate({ playlistId: target.id, name: nextName });
+    },
+    [renamePlaylist, target.id]
+  );
+
+  const rename = useInlineRename({ value: playlistName, onSave: handleSaveName });
 
   const handleRequest = useCallback(() => {
     if (target.requestDisabled) return;
@@ -87,10 +117,9 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
     });
   }, [requestPlaylist, target.requestDisabled, target.id, target.name, isLibrary, playlist, heroCover, displayTracks]);
 
-  const inLibraryCount = displayTracks.filter((track) => track.inLibrary).length;
   const tracklistCount =
     displayTracks.length > 0
-      ? t("tracklistCount", { inLibrary: inLibraryCount, total: displayTracks.length })
+      ? t("tracklistCount", { inLibrary: counts.completeCount, total: displayTracks.length })
       : undefined;
 
   const removableIds = useMemo(
@@ -100,7 +129,7 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
   const allRemovableSelected = removableIds.length > 0 && removableIds.every((id) => selection.isSelected(id));
   const someRemovableSelected = removableIds.some((id) => selection.isSelected(id));
 
-  const handleRemove = useCallback(() => {
+  const handleConfirmRemove = useCallback(() => {
     const trackIds = removableIds.filter((id) => selection.isSelected(id));
     if (trackIds.length === 0) return;
     removeTracks.mutate({ playlistId: target.id, trackIds }, { onSuccess: () => selection.clear() });
@@ -118,19 +147,32 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
     {
       icon: Trash2,
       label: tLibrary("playlists.bulk.removeCount", { count: selection.selectedCount }),
-      onClick: handleRemove,
+      onClick: () => setConfirmRemoveOpen(true),
       disabled: removeTracks.isPending,
     },
   ];
+
+  const removeDialogTitle = tLibrary("playlists.removeDialog.title", { count: selection.selectedCount });
 
   const playlistControls =
     isLibrary && playlist
       ? {
           canEdit,
-          disabledTooltip: tLibrary("playlists.syncedReadonly"),
-          onRename: () => setRenameOpen(true),
+          onRename: rename.start,
           onDelete: () => setDeleteOpen(true),
-          syncSlot: isImported ? (
+          isEditing: rename.isEditing,
+          editValue: rename.draft,
+          onEditChange: rename.setDraft,
+          onEditSave: rename.save,
+          onEditCancel: rename.cancel,
+          labels: {
+            menu: tLibrary("playlists.actions.menu", { name: playlistName }),
+            rename: tLibrary("playlists.actions.rename"),
+            delete: tLibrary("playlists.actions.delete"),
+            nameField: tLibrary("playlists.renameDialog.placeholder"),
+            save: tLibrary("playlists.renameDialog.confirm"),
+          },
+          syncBadge: isImported ? (
             <PlaylistSyncToggle syncEnabled={syncEnabled} onToggle={handleSyncToggle} disabled={setSync.isPending} />
           ) : undefined,
         }
@@ -140,11 +182,12 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
     <div className={modalLayout()}>
       <DetailHero
         mode="playlist"
-        name={target.name}
+        name={playlistName}
         subtitle={subtitle}
         cover={heroCover}
         genres={EMPTY_GENRES}
         requestState={requestState}
+        showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
         requestDisabled={target.requestDisabled}
         requestDisabledTooltip={target.requestDisabledTooltip}
@@ -164,14 +207,22 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
             />
           ) : null}
 
-          {isLibrary ? (
-            <DetailSection
-              title={t("sections.tracklist")}
-              isLoading={!playlist}
-              skeletonHeight="h-72"
-              count={tracklistCount}
-              trailingSlot={
-                canEdit && removableIds.length > 0 ? (
+          <DetailSection
+            title={t("sections.tracklist")}
+            isLoading={isLibrary ? !playlist : isCatalog ? isCatalogLoading : false}
+            skeletonHeight="h-72"
+            count={tracklistCount}
+            trailingSlot={
+              <div className="flex items-center gap-2">
+                {displayTracks.length > 1 ? (
+                  <TracklistSort
+                    sortKey={sortKey}
+                    direction={direction}
+                    onSortKeyChange={setSortKey}
+                    onDirectionChange={setDirection}
+                  />
+                ) : null}
+                {isLibrary && canEdit && removableIds.length > 0 ? (
                   <label className={selectAllControl()}>
                     <Checkbox
                       checked={allRemovableSelected ? true : someRemovableSelected ? "indeterminate" : false}
@@ -180,45 +231,35 @@ function PlaylistDetailBodyComponent({ target, onClose }: PlaylistDetailBodyProp
                     />
                     {t("selection.selectAll")}
                   </label>
-                ) : undefined
-              }
-            >
-              {displayTracks.length > 0 ? (
-                <Tracklist
-                  tracks={displayTracks}
-                  showArtist
-                  selectable={canEdit}
-                  isSelected={selection.isSelected}
-                  onToggleSelect={selection.toggle}
-                />
-              ) : (
-                <DetailEmpty message={t("empty.tracklist")} />
-              )}
-            </DetailSection>
-          ) : (
-            <DetailSection
-              title={t("sections.tracklist")}
-              isLoading={isCatalog ? isCatalogLoading : false}
-              skeletonHeight="h-72"
-              count={tracklistCount}
-            >
-              {displayTracks.length > 0 ? (
-                <Tracklist tracks={displayTracks} showArtist />
-              ) : (
-                <DetailEmpty message={t("empty.tracklist")} />
-              )}
-            </DetailSection>
-          )}
+                ) : null}
+              </div>
+            }
+          >
+            {sortedTracks.length > 0 ? (
+              <Tracklist
+                tracks={sortedTracks}
+                showArtist
+                selectable={isLibrary && canEdit}
+                isSelected={selection.isSelected}
+                onToggleSelect={selection.toggle}
+              />
+            ) : (
+              <DetailEmpty message={t("empty.tracklist")} />
+            )}
+          </DetailSection>
         </div>
       </div>
 
       {isLibrary && playlist ? (
         <>
-          <RenamePlaylistDialog
-            open={renameOpen}
-            onOpenChange={setRenameOpen}
-            playlistId={target.id}
-            currentName={playlist.name}
+          <ConfirmationModal
+            isOpen={confirmRemoveOpen}
+            onClose={() => setConfirmRemoveOpen(false)}
+            onConfirm={handleConfirmRemove}
+            title={removeDialogTitle}
+            message={tLibrary("playlists.removeDialog.description")}
+            confirmText={tLibrary("playlists.removeDialog.confirm")}
+            variant="danger"
           />
           <DeletePlaylistDialog
             open={deleteOpen}

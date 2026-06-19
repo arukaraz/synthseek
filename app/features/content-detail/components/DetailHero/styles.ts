@@ -45,20 +45,43 @@ export const genreOverflowChip = cva(
   "border-fg/10 bg-fg/5 text-fg/70 rounded-full border px-3 py-1 text-xs font-medium tabular-nums"
 );
 
-export const heroPlaylistControls = cva("mt-3 flex flex-col items-center gap-3 sm:items-start");
+export const heroNameRow = cva("flex items-center justify-center gap-1.5 sm:justify-start");
 
-export const heroEditActions = cva("flex items-center gap-2");
-
-export const heroEditButton = cva(
-  "border-fg/15 bg-fg/5 text-fg/70 hover:bg-fg/10 hover:text-fg inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+export const heroKebab = cva(
+  "text-fg/60 hover:bg-fg/10 hover:text-fg data-[state=open]:bg-fg/10 grid size-8 shrink-0 place-items-center rounded-full transition-colors"
 );
 
-export const heroDeleteButton = cva(
-  "text-destructive-vivid hover:bg-destructive-vivid/10 active:bg-destructive-vivid/15 inline-flex items-center gap-2 rounded-full border border-destructive-vivid/30 px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+export const heroMenuItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2");
+
+export const heroMenuItemDanger = cva(
+  "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2"
 );
 
-export const heroSyncToggle = cva(
-  "border-fg/10 bg-fg/5 flex w-full items-center justify-between gap-4 rounded-xl border px-4 py-2.5 sm:w-auto"
+export const heroEditRow = cva("flex w-full items-center gap-2 sm:w-auto");
+
+export const heroEditInput = cva(
+  "border-fg/15 bg-surface/60 text-fg focus:border-primary-500/60 focus:ring-primary-500/30 min-w-0 flex-1 rounded-xl border px-3 py-2 text-2xl font-bold tracking-tight outline-none focus:ring-2 sm:flex-none"
 );
 
-export const heroSyncLabel = cva("text-fg/80 text-sm font-medium");
+export const heroEditSave = cva(
+  "border-primary-500/40 bg-primary-500/15 text-primary-300 hover:bg-primary-500/25 grid size-9 shrink-0 place-items-center rounded-full border transition-colors"
+);
+
+export const heroBadgeRow = cva("flex items-center gap-2");
+
+export const heroBadgeDivider = cva("bg-fg/15 h-4 w-px shrink-0");
+
+export const heroSyncToggle = cva("flex shrink-0 items-center gap-1.5");
+
+export const heroSyncToggleIcon = cva(
+  "size-4 transition-[transform,color] duration-[850ms] ease-in-out motion-reduce:transition-colors",
+  {
+    variants: {
+      active: {
+        true: "text-primary-400",
+        false: "text-fg/50",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);

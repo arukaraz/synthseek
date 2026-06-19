@@ -1,5 +1,6 @@
 import { RequestStatus } from "@api/__generated__/types";
 import type { LibraryFacetValue } from "@hooks/api/queries/library/types";
+import { capitalize } from "@utils/string";
 import type { TFunction } from "i18next";
 
 import type { FacetSearchState } from "../../types";
@@ -13,9 +14,7 @@ export function facetSearchTerm(facetSearch: FacetSearchState, key: string | und
 }
 
 function sentenceCaseValue(value: string): string {
-  const spaced = value.split("_").join(" ");
-  if (spaced.length === 0) return spaced;
-  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+  return capitalize(value.split("_").join(" "));
 }
 
 function statusFacetLabel(value: string, t: TFunction<"status">): string {

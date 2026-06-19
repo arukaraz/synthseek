@@ -26,7 +26,7 @@ export function useFilteredRequests(
     return [...filtered].sort((a, b) => {
       switch (sort.field) {
         case SortField.RECENT:
-          return direction * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+          return direction * (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime());
         case SortField.ARTIST:
           return direction * a.artist.localeCompare(b.artist);
         case SortField.ALBUM:

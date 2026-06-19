@@ -30,9 +30,9 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
   dataCy,
 }: FilterSortDropdownProps<F, S>) {
   const { t } = useTranslation("components");
-  const FilterSectionIcon = filter.sectionIcon ?? Filter;
+  const FilterSectionIcon = filter?.sectionIcon ?? Filter;
   const SortSectionIcon = sort?.sectionIcon ?? SlidersHorizontal;
-  const activeFilterOption = filter.options.find((o) => o.value === filter.value);
+  const activeFilterOption = filter?.options.find((o) => o.value === filter.value);
   const activeSortOption = sort?.options.find((o) => o.value === sort.value);
   const label = triggerLabel ?? [activeFilterOption?.label, activeSortOption?.label].filter(Boolean).join(" · ");
 
@@ -58,26 +58,30 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align={align} className="min-w-52">
-        <DropdownMenuLabel className="flex items-center gap-2">
-          <FilterSectionIcon className="size-3" />
-          {filter.sectionLabel ?? t("filterSort.filterLabel")}
-        </DropdownMenuLabel>
-        <DropdownMenuRadioGroup value={filter.value} onValueChange={(v) => filter.onChange(v as F)}>
-          {filter.options.map((option) => {
-            const Icon = option.icon;
-            return (
-              <DropdownMenuRadioItem key={option.value} value={option.value}>
-                {Icon && <Icon className="mr-2 size-3.5" />}
-                <span className="flex-1">{option.label}</span>
-                {option.count !== undefined && <span className={filterSortCount()}>{option.count}</span>}
-              </DropdownMenuRadioItem>
-            );
-          })}
-        </DropdownMenuRadioGroup>
+        {filter && (
+          <>
+            <DropdownMenuLabel className="flex items-center gap-2">
+              <FilterSectionIcon className="size-3" />
+              {filter.sectionLabel ?? t("filterSort.filterLabel")}
+            </DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={filter.value} onValueChange={(v) => filter.onChange(v as F)}>
+              {filter.options.map((option) => {
+                const Icon = option.icon;
+                return (
+                  <DropdownMenuRadioItem key={option.value} value={option.value}>
+                    {Icon && <Icon className="mr-2 size-3.5" />}
+                    <span className="flex-1">{option.label}</span>
+                    {option.count !== undefined && <span className={filterSortCount()}>{option.count}</span>}
+                  </DropdownMenuRadioItem>
+                );
+              })}
+            </DropdownMenuRadioGroup>
+          </>
+        )}
 
         {sort && (
           <>
-            <DropdownMenuSeparator />
+            {filter && <DropdownMenuSeparator />}
             <DropdownMenuLabel className="flex items-center gap-2">
               <SortSectionIcon className="size-3" />
               {sort.sectionLabel ?? t("filterSort.sortLabel")}

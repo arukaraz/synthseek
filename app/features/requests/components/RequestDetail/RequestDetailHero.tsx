@@ -7,7 +7,7 @@ import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { StatusBadge } from "@components/ui/StatusBadge";
 import { cn } from "@utils/cn";
 import { artworkProxySrc } from "@utils/artworkProxy";
-import { formatTimestamp } from "@utils/formatters";
+import { formatDateTime } from "@utils/formatters";
 import {
   ArrowLeft,
   ChevronsUp,
@@ -116,9 +116,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
             )}
 
             <div className="min-w-0">
-              <p className="text-fg/50 text-[10px] font-semibold tracking-wider uppercase">
-                {label} · {formatTimestamp(new Date(request.created_at))}
-              </p>
+              <p className="text-fg/50 text-[10px] font-semibold tracking-wider uppercase">{label}</p>
               <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
               <div className="mt-2 space-y-0.5">
@@ -127,6 +125,22 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     t={t}
                     i18nKey="detail.requestedBy"
                     values={{ username: request.requestedBy.username }}
+                    components={{ value: <span className={heroMetaValue()} /> }}
+                  />
+                </p>
+                <p className="text-fg/40 truncate text-xs">
+                  <Trans
+                    t={t}
+                    i18nKey="detail.requestedAt"
+                    values={{ date: formatDateTime(new Date(request.requested_at)) }}
+                    components={{ value: <span className={heroMetaValue()} /> }}
+                  />
+                </p>
+                <p className="text-fg/40 truncate text-xs">
+                  <Trans
+                    t={t}
+                    i18nKey="detail.lastUpdated"
+                    values={{ date: formatDateTime(new Date(request.updated_at)) }}
                     components={{ value: <span className={heroMetaValue()} /> }}
                   />
                 </p>

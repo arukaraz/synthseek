@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { isProcessingStatus, isReimportableFailure, isRetryableStatus, isSpinningStatus } from "../status-helpers";
+import {
+  isProcessingStatus,
+  isReimportableFailure,
+  isRequestedStatus,
+  isRetryableStatus,
+  isSpinningStatus,
+} from "../status-helpers";
 import { FailureReason, RequestStatus } from "@api/__generated__/types";
 
 describe("isProcessingStatus", () => {
@@ -124,6 +130,28 @@ describe("isRetryableStatus", () => {
     expect(isRetryableStatus(RequestStatus.enum.in_progress)).toBe(false);
     expect(isRetryableStatus(RequestStatus.enum.downloading)).toBe(false);
     expect(isRetryableStatus(RequestStatus.enum.importing)).toBe(false);
+  });
+});
+
+describe("isRequestedStatus", () => {
+  it("returns false for a null status (catalog/preloaded)", () => {
+    expect(isRequestedStatus(null)).toBe(false);
+  });
+
+  it("returns false for failed and cancelled", () => {
+    expect(isRequestedStatus(RequestStatus.enum.failed)).toBe(false);
+    expect(isRequestedStatus(RequestStatus.enum.cancelled)).toBe(false);
+  });
+
+  it("returns true for complete", () => {
+    expect(isRequestedStatus(RequestStatus.enum.complete)).toBe(true);
+  });
+
+  it("returns true for in-flight statuses", () => {
+    expect(isRequestedStatus(RequestStatus.enum.queued)).toBe(true);
+    expect(isRequestedStatus(RequestStatus.enum.downloading)).toBe(true);
+    expect(isRequestedStatus(RequestStatus.enum.importing)).toBe(true);
+    expect(isRequestedStatus(RequestStatus.enum.partially_complete)).toBe(true);
   });
 });
 

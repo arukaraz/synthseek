@@ -12,9 +12,11 @@ import {
 import type { inferRouterOutputs } from "@trpc/server";
 import i18n from "@locale";
 import { formatDate } from "@utils/formatters";
+import { isRequestedStatus } from "@utils/status-helpers";
 import type { CSSProperties } from "react";
 
 import type { TracklistTrack } from "./components/Tracklist/types";
+import type { HeroRequestState } from "./components/DetailHero/types";
 import type {
   AlbumRequestInput,
   ArtistRequestInput,
@@ -28,6 +30,44 @@ export function formatBorn(bornDate: string | null, bornPlace: string | null): s
   if (!bornDate) return null;
   const date = formatDate(new Date(bornDate));
   return bornPlace ? `${date} · ${bornPlace}` : date;
+}
+
+export interface TrackStatusCounts {
+  completeCount: number;
+  failedCount: number;
+  requestedCount: number;
+}
+
+export function deriveTrackStatusCounts(tracks: TracklistTrack[]): TrackStatusCounts {
+  let completeCount = 0;
+  let failedCount = 0;
+  let requestedCount = 0;
+  for (const track of tracks) {
+    if (track.status === RequestStatus.enum.complete) completeCount += 1;
+    if (track.status === RequestStatus.enum.failed) failedCount += 1;
+    if (isRequestedStatus(track.status)) requestedCount += 1;
+  }
+  return { completeCount, failedCount, requestedCount };
+}
+
+export function computeRequestState({
+  requestedTrackCount,
+  failedTrackCount,
+  libraryTrackCount,
+  totalTracks,
+}: {
+  requestedTrackCount: number;
+  failedTrackCount: number;
+  libraryTrackCount: number;
+  totalTracks: number;
+}): HeroRequestState {
+  const inProgressCount = requestedTrackCount - libraryTrackCount;
+  const exists = requestedTrackCount > 0 || failedTrackCount > 0;
+  if (!exists) return "request";
+  if (inProgressCount > 0) return "inLibrary";
+  const missingCount = totalTracks - libraryTrackCount;
+  if (missingCount > 0) return "requestMissing";
+  return "inLibrary";
 }
 
 export function cardRingFillStyle(libraryTrackCount: number, totalTracks: number): CSSProperties {

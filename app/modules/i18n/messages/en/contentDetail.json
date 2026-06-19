@@ -17,6 +17,14 @@
     "selectAll": "Select all",
     "clear": "Clear"
   },
+  "sort": {
+    "label": "Sort",
+    "name": "Name",
+    "status": "Status",
+    "length": "Length",
+    "ascending": "Ascending",
+    "descending": "Descending"
+  },
   "alreadyInLibrary": "Already in library",
   "shareExpand": "Show social links",
   "shareCollapse": "Hide social links",

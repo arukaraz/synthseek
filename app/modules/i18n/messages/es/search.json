@@ -204,7 +204,8 @@
       "cancel": "Cancelar",
       "request": "Solicitar",
       "addToLidarr": "Añadir a Lidarr",
-      "requesting": "Solicitando, espera por favor..."
+      "requesting": "Solicitando, espera por favor...",
+      "loadingTracks": "Cargando pistas..."
     },
     "errors": {
       "invalidItem": "Elemento no válido",

@@ -1,9 +1,43 @@
 import { describe, expect, it } from "vitest";
 
 import { SHARE_FAN_STAGGER_MS } from "../constants";
-import { buildSocialLinks, shareFanItemCss, shareFanItemStyle } from "../helpers";
+import { buildSocialLinks, heroPillVisibility, shareFanItemCss, shareFanItemStyle } from "../helpers";
 
 describe("DetailHero helpers", () => {
+  describe("heroPillVisibility", () => {
+    it("hides the already-in-library pill on /library even when the entity is in library", () => {
+      const result = heroPillVisibility({
+        requestState: "inLibrary",
+        showRequest: true,
+        showInLibraryPill: false,
+      });
+      expect(result.showInLibrary).toBe(false);
+      expect(result.showRequestButton).toBe(false);
+      expect(result.showActions).toBe(false);
+    });
+
+    it("shows the already-in-library pill on search and discover", () => {
+      const result = heroPillVisibility({
+        requestState: "inLibrary",
+        showRequest: true,
+        showInLibraryPill: true,
+      });
+      expect(result.showInLibrary).toBe(true);
+      expect(result.showActions).toBe(true);
+    });
+
+    it("shows the request button while not in library, regardless of the pill flag", () => {
+      const onLibrary = heroPillVisibility({
+        requestState: "requestMissing",
+        showRequest: true,
+        showInLibraryPill: false,
+      });
+      expect(onLibrary.showRequestButton).toBe(true);
+      expect(onLibrary.showActions).toBe(true);
+      expect(onLibrary.showInLibrary).toBe(false);
+    });
+  });
+
   describe("buildSocialLinks", () => {
     it("returns an empty list when socials is null", () => {
       expect(buildSocialLinks(null)).toEqual([]);

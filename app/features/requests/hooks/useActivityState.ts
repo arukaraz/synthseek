@@ -1,5 +1,5 @@
 import type { ActivityDividerState } from "@components/ui/ActivityDivider";
-import { useGetPlexSyncAllState, usePlexSyncAllProgress, useTrackRequests } from "@hooks/api";
+import { useGetPlexSyncAllState, usePlexSyncAllProgress, useQueueStatus, useTrackRequests } from "@hooks/api";
 import i18n from "@locale";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ interface ActivityStateResult {
 export function useActivityState(): ActivityStateResult {
   const { data: items } = useTrackRequests();
   const { data: syncState } = useGetPlexSyncAllState();
+  const { data: queueState } = useQueueStatus();
   const progress = usePlexSyncAllProgress();
 
   const isSyncing = progress ? progress.phase !== "complete" : (syncState?.running ?? false);
@@ -38,7 +39,14 @@ export function useActivityState(): ActivityStateResult {
     }
   }, [progress]);
 
-  const state: ActivityDividerState = isSyncing ? "plex-sync" : downloading ? "in-progress" : "idle";
+  const isPaused = queueState?.isPaused ?? false;
+  const state: ActivityDividerState = isSyncing
+    ? "plex-sync"
+    : isPaused
+      ? "paused"
+      : downloading
+        ? "in-progress"
+        : "idle";
 
   return { state, synced, total };
 }

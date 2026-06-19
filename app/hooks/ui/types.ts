@@ -122,3 +122,17 @@ export interface UseDismissableResult<TElement extends HTMLElement> {
   close: () => void;
   containerRef: RefObject<TElement | null>;
 }
+
+export interface UseInlineRenameOptions {
+  value: string;
+  onSave: (name: string) => void;
+}
+
+export interface UseInlineRenameResult {
+  isEditing: boolean;
+  draft: string;
+  setDraft: (value: string) => void;
+  start: () => void;
+  save: () => void;
+  cancel: () => void;
+}

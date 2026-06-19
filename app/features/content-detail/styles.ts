@@ -83,9 +83,15 @@ export const heroInitials = cva("text-fg/70 flex h-full w-full items-center just
 
 export const heroInfo = cva("flex min-w-0 flex-col items-center gap-3 sm:items-start");
 
-export const heroName = cva(
-  "text-fg text-3xl font-bold tracking-tight sm:text-[clamp(2rem,3vw,2.875rem)] sm:leading-[1.05]"
-);
+export const heroName = cva("text-fg font-bold tracking-tight sm:leading-[1.05]", {
+  variants: {
+    size: {
+      default: "text-3xl sm:text-[clamp(2rem,3vw,2.875rem)]",
+      compact: "text-2xl sm:text-[clamp(1.5rem,2.2vw,2rem)]",
+    },
+  },
+  defaultVariants: { size: "default" },
+});
 
 export const heroSubtitle = cva("text-fg/60 text-sm");
 

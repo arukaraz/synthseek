@@ -1,10 +1,11 @@
 "use client";
 
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { SocialIcon } from "@components/ui/SocialIcon";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { artworkProxySrc } from "@utils/artworkProxy";
-import { CheckCircle, Download, Pencil, Trash2 } from "lucide-react";
+import { Check, CheckCircle, Download, EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,16 +25,22 @@ import {
   heroSubtitleButton,
 } from "../../styles";
 import { GenreChips } from "./GenreChips";
+import { heroPillVisibility } from "./helpers";
 import { ShareFan } from "./ShareFan";
 import {
   avatarWrap,
   heroBackdrop,
   heroBackdropImage,
   heroBackdropVeil,
-  heroDeleteButton,
-  heroEditActions,
-  heroEditButton,
-  heroPlaylistControls,
+  heroEditInput,
+  heroEditRow,
+  heroBadgeDivider,
+  heroBadgeRow,
+  heroEditSave,
+  heroKebab,
+  heroMenuItem,
+  heroMenuItemDanger,
+  heroNameRow,
   heroSocialLink,
   heroSocials,
 } from "./styles";
@@ -51,16 +58,21 @@ function DetailHeroComponent({
   onRequest,
   onSubtitleClick,
   showRequest = true,
+  showInLibraryPill = true,
   requestDisabled,
   requestDisabledTooltip,
   playlistControls,
 }: DetailHeroProps) {
   const { t } = useTranslation("contentDetail");
-  const { t: tLibrary } = useTranslation("library");
   const badgeType = mode;
   const isArtist = mode === "artist";
-  const renameLabel = tLibrary("playlists.actions.rename");
-  const deleteLabel = tLibrary("playlists.actions.delete");
+  const canEdit = playlistControls?.canEdit ?? false;
+  const isEditing = playlistControls?.isEditing ?? false;
+  const { showInLibrary, showRequestButton, showActions } = heroPillVisibility({
+    requestState,
+    showRequest,
+    showInLibraryPill,
+  });
 
   return (
     <header className={hero()}>
@@ -85,8 +97,59 @@ function DetailHeroComponent({
       </div>
 
       <div className={heroInfo()}>
-        <span className={`type-badge type-badge-${badgeType}`}>{t(`badge.${badgeType}`)}</span>
-        <h2 className={heroName()}>{name}</h2>
+        <div className={heroBadgeRow()}>
+          <span className={`type-badge type-badge-${badgeType}`}>{t(`badge.${badgeType}`)}</span>
+          {playlistControls?.syncBadge ? <span aria-hidden className={heroBadgeDivider()} /> : null}
+          {playlistControls?.syncBadge}
+        </div>
+
+        {playlistControls && isEditing ? (
+          <div className={heroEditRow()}>
+            <input
+              autoFocus
+              className={heroEditInput()}
+              value={playlistControls.editValue}
+              onChange={(event) => playlistControls.onEditChange(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") playlistControls.onEditSave();
+                if (event.key === "Escape") playlistControls.onEditCancel();
+              }}
+              aria-label={playlistControls.labels.nameField}
+            />
+            <button
+              type="button"
+              className={heroEditSave()}
+              onClick={playlistControls.onEditSave}
+              aria-label={playlistControls.labels.save}
+            >
+              <Check className="size-4" aria-hidden />
+            </button>
+          </div>
+        ) : playlistControls ? (
+          <div className={heroNameRow()}>
+            <h2 className={heroName({ size: "compact" })}>{name}</h2>
+            <DropdownMenu>
+              <DropdownMenuTrigger className={heroKebab()} aria-label={playlistControls.labels.menu}>
+                <EllipsisVertical className="size-4" aria-hidden />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {canEdit ? (
+                  <DropdownMenuItem className={heroMenuItem()} onSelect={playlistControls.onRename}>
+                    <Pencil className="size-4" aria-hidden />
+                    {playlistControls.labels.rename}
+                  </DropdownMenuItem>
+                ) : null}
+                <DropdownMenuItem className={heroMenuItemDanger()} onSelect={playlistControls.onDelete}>
+                  <Trash2 className="size-4" aria-hidden />
+                  {playlistControls.labels.delete}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ) : (
+          <h2 className={heroName({ size: mode === "playlist" ? "compact" : "default" })}>{name}</h2>
+        )}
+
         {subtitle ? (
           onSubtitleClick ? (
             <button
@@ -106,14 +169,14 @@ function DetailHeroComponent({
 
         {statsSlot ? <div className={heroStats()}>{statsSlot}</div> : null}
 
-        {showRequest ? (
+        {showActions ? (
           <div className={heroActions()}>
-            {requestState === "inLibrary" ? (
+            {showInLibrary ? (
               <span className={alreadyInLibrary()}>
                 <CheckCircle className="size-4" aria-hidden />
                 {t("alreadyInLibrary")}
               </span>
-            ) : (
+            ) : showRequestButton ? (
               <button
                 type="button"
                 className={cn(
@@ -127,34 +190,7 @@ function DetailHeroComponent({
                 <Download className="size-4" />
                 {requestState === "requestMissing" ? t("requestMissing") : t("request")}
               </button>
-            )}
-          </div>
-        ) : null}
-
-        {playlistControls ? (
-          <div className={heroPlaylistControls()}>
-            {playlistControls.syncSlot}
-            <div className={heroEditActions()}>
-              <button
-                type="button"
-                className={heroEditButton()}
-                onClick={playlistControls.onRename}
-                disabled={!playlistControls.canEdit}
-                title={playlistControls.canEdit ? undefined : playlistControls.disabledTooltip}
-              >
-                <Pencil className="size-4" aria-hidden />
-                {renameLabel}
-              </button>
-              <button
-                type="button"
-                className={heroDeleteButton()}
-                onClick={playlistControls.onDelete}
-                title={deleteLabel}
-              >
-                <Trash2 className="size-4" aria-hidden />
-                {deleteLabel}
-              </button>
-            </div>
+            ) : null}
           </div>
         ) : null}
 

@@ -378,6 +378,12 @@
       "description": "Se quita de tu biblioteca. No se puede deshacer.",
       "confirm": "Eliminar"
     },
+    "removeDialog": {
+      "title_one": "¿Quitar {{count}} pista?",
+      "title_other": "¿Quitar {{count}} pistas?",
+      "description": "Quita las pistas seleccionadas de esta playlist. Los archivos descargados se quedan en tu biblioteca.",
+      "confirm": "Quitar"
+    },
     "bulk": {
       "remove": "Quitar",
       "removeCount": "Quitar {{count}}"
@@ -387,6 +393,9 @@
       "newPlaceholder": "Nueva playlist",
       "create": "Crear",
       "empty": "Aún no hay playlists"
+    },
+    "origin": {
+      "imported": "Importada: {{provider}}"
     },
     "keepInSync": "Mantener sincronizada",
     "syncedReadonly": "Desactiva la sincronización para editar"

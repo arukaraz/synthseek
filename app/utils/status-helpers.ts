@@ -12,6 +12,10 @@ export function isRetryableStatus(status: RequestStatus): boolean {
   return (UNRESOLVED_STATUSES as readonly RequestStatus[]).includes(status);
 }
 
+export function isRequestedStatus(status: RequestStatus | null): boolean {
+  return status !== null && !isRetryableStatus(status);
+}
+
 export function isReimportableFailure(
   reason: FailureReason | null | undefined,
   downloadedFile: string | null | undefined

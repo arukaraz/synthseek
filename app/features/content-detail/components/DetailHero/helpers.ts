@@ -2,7 +2,22 @@ import type { SocialBrand } from "@components/ui/SocialIcon";
 import type { CSSProperties } from "react";
 
 import { SHARE_FAN_ARC_END_DEG, SHARE_FAN_ARC_START_DEG, SHARE_FAN_RADIUS, SHARE_FAN_STAGGER_MS } from "./constants";
-import type { ShareFanItemStyle, SocialLink } from "./types";
+import type { HeroRequestState, ShareFanItemStyle, SocialLink } from "./types";
+
+export function heroPillVisibility({
+  requestState,
+  showRequest,
+  showInLibraryPill,
+}: {
+  requestState: HeroRequestState;
+  showRequest: boolean;
+  showInLibraryPill: boolean;
+}): { showInLibrary: boolean; showRequestButton: boolean; showActions: boolean } {
+  const showInLibrary = requestState === "inLibrary" && showInLibraryPill;
+  const showRequestButton = showRequest && requestState !== "inLibrary";
+  const showActions = showRequest && (showInLibrary || showRequestButton);
+  return { showInLibrary, showRequestButton, showActions };
+}
 
 interface ArtistSocials {
   instagram: string | null;
