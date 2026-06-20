@@ -33,23 +33,36 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 <details open>
 <summary><b>Discover</b></summary>
   
-https://github.com/user-attachments/assets/74a399fa-3fda-4341-9486-1e214e9a90b7
+
+
+https://github.com/user-attachments/assets/4a320ff1-4176-4860-8125-b6fb3325c6a2
+
+
 
 </details>
 
 <details>
 <summary><b>Request content</b></summary>
   
-https://github.com/user-attachments/assets/f44d9dc2-bf2a-401d-a6c0-564e261123d1
+
+
+https://github.com/user-attachments/assets/80186e94-e060-4dd7-85d4-df7a594206e9
+
+
 
 </details>
 
 <details>
-<summary><b>Import your library</b></summary>
+<summary><b>Browse and import your library</b></summary>
   
-https://github.com/user-attachments/assets/9dfe699f-b320-4974-87f0-293a0e97a0a5
 
-</details>
+
+
+
+https://github.com/user-attachments/assets/7ebcecba-680d-4ca9-9a66-c8a760df7a57
+
+https://github.com/user-attachments/assets/50c3988e-7ec1-41dc-9a9e-a8407043b552
+
 
 ## Installation
 
