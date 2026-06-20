@@ -1,7 +1,6 @@
 "use client";
 
 import { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useState } from "react";
 import { trpc, getTRPCClientConfig } from "@utils/trpc";
@@ -50,7 +49,6 @@ export function TRPCProvider({ children }: TRPCProviderProps) {
         }}
       >
         <ErrorBoundaryProvider queryClient={queryClient}>{children}</ErrorBoundaryProvider>
-        {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
       </PersistQueryClientProvider>
     </trpc.Provider>
   );

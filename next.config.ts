@@ -11,6 +11,8 @@ const IMAGE_CACHE_TTL_SECONDS = 30 * 24 * 60 * 60;
 const nextConfig: NextConfig = {
   output: "standalone",
 
+  devIndicators: false,
+
   env: {
     NEXT_PUBLIC_APP_VERSION: version,
   },
