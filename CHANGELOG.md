@@ -2,6 +2,38 @@
 
 ---
 
+# v2.3.0 — June 19, 2026
+
+### Content detail, playlist management, and a smarter requests view
+
+- A rich detail view for artists, albums, and playlists with artwork, bios, related content, and live per-track status, opening in place so you can dig in without losing your spot.
+- Full playlist management: create, rename, and delete your own playlists, add or remove tracks, and pick several at once. Imported Spotify playlists get a Keep in sync switch that guards them while they sync.
+- A mobile bottom navigation bar for easier use on phones.
+- A redesigned Spotify import with clearer selection and optional auto-import.
+- Retry several failed tracks at once from the library.
+
+---
+
+### Improvements
+
+- The Requests page now orders by most recent activity, so anything you just requested or re-requested jumps to the top, and each row shows when it was requested and last updated.
+- Library views now refresh on their own as downloads finish, no manual reload needed.
+- Sorting library tracks by status now follows the real download pipeline order.
+- The queue bar shows a clear Paused state when you pause downloads.
+- Faster, steadier metadata thanks to consolidated caching and per-source search timeouts.
+
+---
+
+### Fixes
+
+- Discovery mix refreshes (Weekly Jams, Weekly Exploration, and friends) are now atomic, so a mix is never left empty in the middle of a refresh.
+- Requesting a playlist or album no longer errors or leaves an empty playlist when several tracks share the same album.
+- Fixed an interactivity glitch when opening the app over a plain local HTTP address.
+- ListenBrainz discovery playlists stay as one playlist across refreshes instead of duplicating.
+- Quieter startup logs and a smoother first run.
+
+---
+
 # v2.2.0 — June 13, 2026
 
 ### A new Library to browse your whole collection
