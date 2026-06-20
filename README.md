@@ -63,6 +63,7 @@ https://github.com/user-attachments/assets/7ebcecba-680d-4ca9-9a66-c8a760df7a57
 
 https://github.com/user-attachments/assets/50c3988e-7ec1-41dc-9a9e-a8407043b552
 
+</details>
 
 ## Installation
 
