@@ -365,7 +365,9 @@
     "actions": {
       "rename": "Renombrar",
       "delete": "Eliminar",
-      "menu": "Acciones de la lista {{name}}"
+      "menu": "Acciones de la lista {{name}}",
+      "syncToPlex": "Sincronizar con Plex",
+      "syncing": "Sincronizando..."
     },
     "renameDialog": {
       "title": "Renombrar playlist",

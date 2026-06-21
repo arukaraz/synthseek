@@ -8,6 +8,7 @@ import { useCatalogPlaylistTracks, usePlaylistDetail } from "@hooks/api/queries/
 import { useRemoveTracksFromPlaylist } from "@hooks/api/mutations/playlists/useRemoveTracksFromPlaylist";
 import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlaylist";
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
+import { useRetryPlexPlaylist } from "@hooks/api/mutations/requests/useRetryPlexPlaylist";
 import { useInlineRename } from "@hooks/ui/useInlineRename";
 import { useSelection } from "@hooks/ui/useSelection";
 import { playlistOriginLabel } from "@utils/playlist";
@@ -45,6 +46,7 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
   const removeTracks = useRemoveTracksFromPlaylist();
   const renamePlaylist = useRenamePlaylist();
   const setSync = useSetPlaylistSync();
+  const syncToPlex = useRetryPlexPlaylist();
   const selection = useSelection<{ id: string }>();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
@@ -143,6 +145,10 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
     [selection, setSync, target.id]
   );
 
+  const handleSyncToPlex = useCallback(() => {
+    syncToPlex.mutate({ playlistId: target.id });
+  }, [syncToPlex, target.id]);
+
   const bulkActions: BulkAction[] = [
     {
       icon: Trash2,
@@ -160,6 +166,8 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
           canEdit,
           onRename: rename.start,
           onDelete: () => setDeleteOpen(true),
+          onSyncToPlex: handleSyncToPlex,
+          isSyncing: syncToPlex.isPending,
           isEditing: rename.isEditing,
           editValue: rename.draft,
           onEditChange: rename.setDraft,
@@ -171,6 +179,8 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
             delete: tLibrary("playlists.actions.delete"),
             nameField: tLibrary("playlists.renameDialog.placeholder"),
             save: tLibrary("playlists.renameDialog.confirm"),
+            syncToPlex: tLibrary("playlists.actions.syncToPlex"),
+            syncing: tLibrary("playlists.actions.syncing"),
           },
           syncBadge: isImported ? (
             <PlaylistSyncToggle syncEnabled={syncEnabled} onToggle={handleSyncToggle} disabled={setSync.isPending} />

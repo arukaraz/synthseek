@@ -5,7 +5,7 @@ import { SocialIcon } from "@components/ui/SocialIcon";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { artworkProxySrc } from "@utils/artworkProxy";
-import { Check, CheckCircle, Download, EllipsisVertical, Pencil, Trash2 } from "lucide-react";
+import { Check, CheckCircle, Download, EllipsisVertical, Pencil, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
@@ -137,6 +137,16 @@ function DetailHeroComponent({
                   <DropdownMenuItem className={heroMenuItem()} onSelect={playlistControls.onRename}>
                     <Pencil className="size-4" aria-hidden />
                     {playlistControls.labels.rename}
+                  </DropdownMenuItem>
+                ) : null}
+                {playlistControls.onSyncToPlex ? (
+                  <DropdownMenuItem
+                    className={heroMenuItem()}
+                    onSelect={playlistControls.onSyncToPlex}
+                    disabled={playlistControls.isSyncing}
+                  >
+                    <Upload className="size-4" aria-hidden />
+                    {playlistControls.isSyncing ? playlistControls.labels.syncing : playlistControls.labels.syncToPlex}
                   </DropdownMenuItem>
                 ) : null}
                 <DropdownMenuItem className={heroMenuItemDanger()} onSelect={playlistControls.onDelete}>

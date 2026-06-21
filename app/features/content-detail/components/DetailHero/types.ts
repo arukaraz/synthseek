@@ -16,12 +16,16 @@ export interface PlaylistHeroLabels {
   delete: string;
   nameField: string;
   save: string;
+  syncToPlex: string;
+  syncing: string;
 }
 
 export interface PlaylistHeroControls {
   canEdit: boolean;
   onRename: () => void;
   onDelete: () => void;
+  onSyncToPlex?: () => void;
+  isSyncing: boolean;
   isEditing: boolean;
   editValue: string;
   onEditChange: (value: string) => void;

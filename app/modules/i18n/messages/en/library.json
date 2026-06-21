@@ -365,7 +365,9 @@
     "actions": {
       "rename": "Rename",
       "delete": "Delete",
-      "menu": "Playlist actions for {{name}}"
+      "menu": "Playlist actions for {{name}}",
+      "syncToPlex": "Sync to Plex",
+      "syncing": "Syncing..."
     },
     "renameDialog": {
       "title": "Rename playlist",
