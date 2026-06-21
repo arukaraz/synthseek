@@ -8,6 +8,7 @@ const removeMutate = vi.fn();
 const setSyncMutate = vi.fn();
 const renameMutate = vi.fn();
 const deleteMutate = vi.fn();
+const syncToPlexMutate = vi.fn();
 let setSyncPending = false;
 
 vi.mock("@hooks/api", () => ({
@@ -33,6 +34,10 @@ vi.mock("@hooks/api/mutations/playlists/useRenamePlaylist", () => ({
 
 vi.mock("@hooks/api/mutations/playlists/useDeletePlaylist", () => ({
   useDeletePlaylist: () => ({ mutate: deleteMutate, isPending: false }),
+}));
+
+vi.mock("@hooks/api/mutations/requests/useRetryPlexPlaylist", () => ({
+  useRetryPlexPlaylist: () => ({ mutate: syncToPlexMutate, isPending: false }),
 }));
 
 vi.mock("../../../ContentDetailActionsContext", () => ({
