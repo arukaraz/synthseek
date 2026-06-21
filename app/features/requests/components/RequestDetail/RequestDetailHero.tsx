@@ -116,7 +116,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
             )}
 
             <div className="min-w-0">
-              <p className="text-fg/50 text-[10px] font-semibold tracking-wider uppercase">{label}</p>
+              <p className="text-fg/50 text-[10px] font-semibold tracking-wider uppercase">{typeLabel}</p>
               <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
               <div className="mt-2 space-y-0.5">

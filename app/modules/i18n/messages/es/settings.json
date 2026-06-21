@@ -641,6 +641,20 @@
     },
     "nextRun": {
       "now": "ahora"
+    },
+    "registry": {
+      "library-sync": {
+        "name": "Sincronización de biblioteca externa",
+        "description": "Importa canciones desde las bibliotecas externas conectadas."
+      },
+      "discovery-sweep": {
+        "name": "Barrido de descubrimiento",
+        "description": "Evalúa los feeds de descubrimiento y dispara las integraciones."
+      },
+      "pattern-sync": {
+        "name": "Sincronización de patrones de búsqueda inteligente",
+        "description": "Sincroniza los patrones federados de búsqueda inteligente."
+      }
     }
   },
   "shell": {

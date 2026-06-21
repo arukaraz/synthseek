@@ -1,0 +1,242 @@
+{
+  "AUTHENTICATION_REQUIRED": {
+    "title": "Authentifizierung erforderlich",
+    "description": "Melde dich erneut an und versuche es dann noch einmal."
+  },
+  "ADMIN_ROLE_REQUIRED": {
+    "title": "Administratorrolle erforderlich",
+    "description": "Du benötigst eine Administratorrolle, um das zu tun."
+  },
+  "INVALID_CREDENTIALS": {
+    "title": "Ungültige Anmeldedaten",
+    "description": "Überprüfe deinen Benutzernamen und dein Passwort und versuche es erneut."
+  },
+  "CURRENT_PASSWORD_INCORRECT": {
+    "title": "Aktuelles Passwort falsch",
+    "description": "Das von dir eingegebene aktuelle Passwort ist falsch."
+  },
+  "ACCOUNT_HAS_NO_PASSWORD": {
+    "title": "Konto hat kein Passwort",
+    "description": "Dieses Konto verwendet kein Passwort."
+  },
+  "SETUP_ALREADY_COMPLETED": {
+    "title": "Einrichtung bereits abgeschlossen",
+    "description": "Die Ersteinrichtung wurde bereits abgeschlossen."
+  },
+  "PLEX_USER_NOT_LINKED": {
+    "title": "Plex-Benutzer nicht verknüpft",
+    "description": "Mit diesem Plex-Benutzer ist kein Konto verknüpft. Bitte den Administrator, dich zu registrieren."
+  },
+  "CAN_ONLY_MODIFY_OWN_REQUESTS": {
+    "title": "Nur eigene Anfragen änderbar",
+    "description": "Du kannst nur deine eigenen Anfragen ändern."
+  },
+  "EMAIL_MANAGED_BY_PLEX": {
+    "title": "E-Mail wird von Plex verwaltet",
+    "description": "Deine E-Mail wird von Plex verwaltet."
+  },
+  "PLEX_ALREADY_LINKED": {
+    "title": "Plex-Konto bereits verknüpft",
+    "description": "Dieses Plex-Konto ist bereits mit einem anderen Benutzer verknüpft."
+  },
+  "PASSWORD_REQUIRED_BEFORE_UNLINK": {
+    "title": "Passwort erforderlich vor dem Trennen von Plex",
+    "description": "Lege ein Passwort fest, bevor du Plex trennst, sonst würdest du ausgesperrt."
+  },
+  "OWNER_MUST_REMAIN_ADMIN": {
+    "title": "Eigentümer muss Administrator bleiben",
+    "description": "Der Eigentümer muss ein Administrator bleiben."
+  },
+  "AT_LEAST_ONE_ADMIN_REQUIRED": {
+    "title": "Mindestens ein Administrator erforderlich",
+    "description": "Es muss mindestens einen Administrator geben."
+  },
+  "CANNOT_DELETE_OWN_ACCOUNT": {
+    "title": "Eigenes Konto kann nicht gelöscht werden",
+    "description": "Du kannst dein eigenes Konto nicht löschen."
+  },
+  "OWNER_CANNOT_BE_DELETED": {
+    "title": "Eigentümer kann nicht gelöscht werden",
+    "description": "Das Eigentümerkonto kann nicht gelöscht werden."
+  },
+  "NO_OWNER_ACCOUNT": {
+    "title": "Kein Eigentümerkonto",
+    "description": "Es wurde kein Eigentümerkonto gefunden."
+  },
+  "USER_NOT_FOUND": {
+    "title": "Benutzer nicht gefunden",
+    "description": "Dieser Benutzer konnte nicht gefunden werden."
+  },
+  "EMAIL_TAKEN": {
+    "title": "E-Mail bereits in Verwendung",
+    "description": "Ein Benutzer mit dieser E-Mail existiert bereits."
+  },
+  "USERNAME_TAKEN": {
+    "title": "Benutzername bereits vergeben",
+    "description": "Dieser Benutzername ist bereits vergeben."
+  },
+  "PLEX_NOT_CONFIGURED": {
+    "title": "Plex nicht konfiguriert",
+    "description": "Plex ist nicht konfiguriert. Füge in den Einstellungen eine Server-URL und ein Token hinzu."
+  },
+  "PLEX_UNREACHABLE": {
+    "title": "Plex nicht erreichbar",
+    "description": "Der Plex-Server konnte zur Identifizierung nicht erreicht werden."
+  },
+  "ALBUM_NOT_FOUND": {
+    "title": "Album nicht gefunden",
+    "description": "Dieses Album konnte nicht gefunden werden."
+  },
+  "PLAYLIST_NOT_FOUND": {
+    "title": "Playlist nicht gefunden",
+    "description": "Diese Playlist konnte nicht gefunden werden."
+  },
+  "PLAYLIST_SYNCED_NOT_EDITABLE": {
+    "title": "Playlist wird synchronisiert",
+    "description": "Schalte die Synchronisierung aus, um diese Playlist zu bearbeiten."
+  },
+  "PLAYLIST_TRACK_IN_FLIGHT": {
+    "title": "Titel wird noch heruntergeladen",
+    "description": "Nur abgeschlossene oder fehlgeschlagene Titel können aus einer Playlist entfernt werden."
+  },
+  "TRACK_NOT_FOUND": {
+    "title": "Titel nicht gefunden",
+    "description": "Dieser Titel konnte nicht gefunden werden."
+  },
+  "COLLECTION_NOT_FOUND": {
+    "title": "Sammlung nicht gefunden",
+    "description": "Diese Sammlung konnte nicht gefunden werden."
+  },
+  "REQUEST_NOT_FOUND": {
+    "title": "Anfrage nicht gefunden",
+    "description": "Diese Anfrage konnte nicht gefunden werden."
+  },
+  "API_KEY_NOT_FOUND": {
+    "title": "API-Schlüssel nicht gefunden",
+    "description": "Dieser API-Schlüssel konnte nicht gefunden werden."
+  },
+  "OAUTH_REQUEST_NOT_FOUND": {
+    "title": "Autorisierungsanfrage nicht gefunden",
+    "description": "Autorisierungsanfrage nicht gefunden oder abgelaufen."
+  },
+  "DOWNLOAD_FAILED": {
+    "title": "Download fehlgeschlagen",
+    "description": "Der Download konnte nicht abgeschlossen werden. Überprüfe die Protokolle und versuche es erneut."
+  },
+  "BATCH_DOWNLOAD_FAILED": {
+    "title": "Stapel-Download fehlgeschlagen",
+    "description": "Der Stapel-Download konnte nicht abgeschlossen werden. Überprüfe die Protokolle und versuche es erneut."
+  },
+  "INVALID_CONTENT_TYPES": {
+    "title": "Ungültige Inhaltstypen",
+    "description": "Es wurden ungültige Inhaltstypen angegeben."
+  },
+  "LIBRARY_SOURCE_NOT_CONFIGURED": {
+    "title": "Bibliotheksquelle nicht konfiguriert",
+    "description": "Diese Integration wurde vom Administrator noch nicht konfiguriert."
+  },
+  "LIBRARY_SOURCE_CALLBACK_FAILED": {
+    "title": "Rückruf der Bibliotheksquelle fehlgeschlagen",
+    "description": "Der Rückruf der Bibliotheksquelle ist fehlgeschlagen. Versuche es erneut."
+  },
+  "LIBRARY_SOURCE_REAUTH_REQUIRED": {
+    "title": "Spotify-Verbindung abgelaufen",
+    "description": "Verbinde dein Spotify-Konto erneut, um deine Bibliothek zu laden."
+  },
+  "LIDARR_CONNECTION_FAILED": {
+    "title": "Lidarr-Verbindung fehlgeschlagen",
+    "description": "Verbindung zu Lidarr fehlgeschlagen. Überprüfe die URL und den API-Schlüssel in den Einstellungen."
+  },
+  "LIDARR_PROFILES_FAILED": {
+    "title": "Lidarr-Profile fehlgeschlagen",
+    "description": "Lidarr-Profile konnten nicht abgerufen werden."
+  },
+  "LIDARR_SEARCH_FAILED": {
+    "title": "Lidarr-Suche fehlgeschlagen",
+    "description": "Künstler konnten in Lidarr nicht gesucht werden."
+  },
+  "LIDARR_ADD_ARTIST_FAILED": {
+    "title": "Künstler in Lidarr hinzufügen fehlgeschlagen",
+    "description": "Der Künstler konnte nicht zu Lidarr hinzugefügt werden."
+  },
+  "LIDARR_CHECK_ARTIST_FAILED": {
+    "title": "Künstlerprüfung in Lidarr fehlgeschlagen",
+    "description": "Der Künstler konnte in Lidarr nicht geprüft werden."
+  },
+  "LIDARR_ARTIST_EXISTS": {
+    "title": "Künstler existiert bereits in Lidarr",
+    "description": "Dieser Künstler existiert bereits in Lidarr."
+  },
+  "LIDARR_ALBUM_NOT_IN_CATALOG": {
+    "title": "Album zum Einreihen in Lidarr nicht gefunden",
+    "description": "Lidarr konnte dieses Album zum Einreihen nicht finden. Probiere eine andere Download-Quelle."
+  },
+  "LIDARR_ARTIST_NOT_IN_CATALOG": {
+    "title": "Künstler in Lidarr nicht gefunden",
+    "description": "Lidarr konnte diesen Künstler zum Hinzufügen nicht finden."
+  },
+  "LIDARR_HANDOFF_FAILED": {
+    "title": "Übergabe an Lidarr fehlgeschlagen",
+    "description": "Das Album konnte nicht an Lidarr übergeben werden."
+  },
+  "VALUE_ALREADY_IN_USE": {
+    "title": "Wert bereits in Verwendung",
+    "description": "Dieser Wert ist bereits in Verwendung."
+  },
+  "GENERIC_FALLBACK": {
+    "title": "Etwas ist schiefgelaufen",
+    "description": "Bitte versuche es erneut. Wenn es weiterhin fehlschlägt, überprüfe die Protokolle."
+  },
+  "NETWORK_ERROR": {
+    "title": "Netzwerkfehler",
+    "description": "Der Server konnte nicht erreicht werden. Überprüfe deine Verbindung und versuche es erneut."
+  },
+  "SIGNED_OUT": {
+    "title": "Du bist abgemeldet",
+    "description": "Bitte melde dich erneut an."
+  },
+  "FORBIDDEN": {
+    "title": "Nicht erlaubt",
+    "description": "Du hast keine Berechtigung für diese Aktion."
+  },
+  "SPOTIFY_PREMIUM_PROPAGATION": {
+    "title": "Spotify lehnt API-Aufrufe für den App-Eigentümer ab",
+    "description": "Spotify verlangt, dass das Konto des App-Eigentümers ein aktives Premium-Abonnement hat. Wenn Premium gerade erst aktiviert wurde, kann es einige Stunden dauern, bis sich die Änderungen ausbreiten. Synthseek behält deine Tokens und versucht es automatisch erneut."
+  },
+  "SPOTIFY_NOT_CONFIGURED": {
+    "title": "Spotify ist nicht konfiguriert",
+    "description": "Bitte deinen Administrator, die Client-ID und die öffentliche Basis-URL in den Einstellungen festzulegen."
+  },
+  "SPOTIFY_USER_NOT_REGISTERED": {
+    "title": "Dein Spotify-Konto ist noch nicht zugelassen",
+    "description": "Diese Spotify-App befindet sich im Entwicklungsmodus, sie funktioniert daher nur für Konten auf ihrer Benutzerliste. Bitte deinen Administrator, dein Spotify-Konto (deine Login-E-Mail) im Spotify Developer Dashboard zur App hinzuzufügen, und verbinde dich dann erneut."
+  },
+  "SPOTIFY_STATE_EXPIRED": {
+    "title": "Autorisierungslink abgelaufen",
+    "description": "Der OAuth-Status ist abgelaufen, bevor du den Vorgang abgeschlossen hast. Klicke erneut auf Spotify verbinden."
+  },
+  "SPOTIFY_SESSION_EXPIRED": {
+    "title": "Synthseek-Sitzung abgelaufen",
+    "description": "Melde dich erneut an und versuche dann erneut, Spotify zu verbinden."
+  },
+  "SPOTIFY_EXCHANGE_FAILED": {
+    "title": "Spotify-Verbindung fehlgeschlagen",
+    "description": "Synthseek konnte den OAuth-Austausch nicht abschließen. Überprüfe die Serverprotokolle und versuche es erneut."
+  },
+  "SPOTIFY_PROXY_ERROR": {
+    "title": "Synthseek-Backend konnte nicht erreicht werden",
+    "description": "Der Rückruf konnte nicht mit der API kommunizieren. Stelle sicher, dass das Backend läuft, und versuche es erneut."
+  },
+  "SPOTIFY_MISSING_PARAMS": {
+    "title": "Spotify hat keinen Autorisierungscode zurückgegeben",
+    "description": "Versuche es erneut. Wenn es weiterhin passiert, überprüfe die Redirect-URI in den Einstellungen deiner Spotify-App."
+  },
+  "SPOTIFY_ACCESS_DENIED": {
+    "title": "Du hast die Spotify-Autorisierung abgelehnt",
+    "description": "Klicke erneut auf Spotify verbinden, wann immer du bereit bist."
+  },
+  "SPOTIFY_CONNECTED": {
+    "title": "Spotify verbunden",
+    "description": "Öffne Von Anbietern importieren, um deine Bibliothek zu importieren."
+  }
+}

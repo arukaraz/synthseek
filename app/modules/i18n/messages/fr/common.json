@@ -1,0 +1,13 @@
+{
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "relativeTime": {
+    "justNow": "À l'instant",
+    "yearsAgo": "il y a {{count}} ans",
+    "monthsAgo": "il y a {{count}} mois",
+    "weeksAgo": "il y a {{count}} sem",
+    "daysAgo": "il y a {{count}} j",
+    "hoursAgo": "il y a {{count}} h",
+    "minutesAgo": "il y a {{count}} min"
+  }
+}

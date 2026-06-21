@@ -1,0 +1,153 @@
+{
+  "loading": {
+    "requests": "Chargement des demandes..."
+  },
+  "toolbar": {
+    "pauseAll": "Mettre en pause tous les téléchargements",
+    "resumeAll": "Reprendre tous les téléchargements",
+    "retryAllFailed": {
+      "label": "Réessayer tous les échecs",
+      "confirmTitle": "Réessayer tous les échecs",
+      "confirmMessage": "Cela réessaiera tous les téléchargements en échec et partiellement terminés. Continuer ?",
+      "confirmPending": "Nouvelle tentative...",
+      "confirmAction": "Tout réessayer"
+    },
+    "syncAllPlex": {
+      "label": "Synchroniser toutes les playlists vers Plex",
+      "labelRunning": "Synchronisation de toutes les playlists vers Plex...",
+      "confirmTitle": "Synchroniser toutes les playlists vers Plex",
+      "confirmMessage": "Cela synchronisera toutes les playlists éligibles vers Plex. Continuer ?",
+      "confirmPending": "Synchronisation...",
+      "confirmAction": "Tout synchroniser"
+    },
+    "import": {
+      "trigger": "Importer la bibliothèque",
+      "sourcesLabel": "Sources",
+      "fromFile": "Depuis un fichier"
+    },
+    "menu": {
+      "trigger": "Plus d'actions",
+      "deleteAll": {
+        "label": "Supprimer toutes les demandes",
+        "confirmTitle": "Supprimer toutes les demandes",
+        "confirmMessage": "Cela supprime définitivement toutes les demandes, albums, playlists et pistes, annule tous les téléchargements en file et efface l'historique de la file. Cette action est irréversible.",
+        "confirmPending": "Suppression...",
+        "confirmAction": "Tout supprimer",
+        "cancel": "Annuler"
+      }
+    }
+  },
+  "searchInput": {
+    "placeholder": "Filtrer...",
+    "clear": "Effacer le filtre",
+    "openTitle": "Filtrer les demandes",
+    "open": "Ouvrir le filtre",
+    "close": "Fermer le filtre"
+  },
+  "statusFilter": {
+    "all": "Toutes",
+    "active": "Actives",
+    "done": "Terminées",
+    "failed": "En échec"
+  },
+  "sort": {
+    "recent": "Récentes",
+    "playlist": "Playlist",
+    "artist": "Artiste",
+    "album": "Album"
+  },
+  "emptyState": {
+    "noResultsTitle": "Aucun résultat",
+    "noResultsDescription": "Aucune demande ne correspond à \"{{query}}\"",
+    "noRequestsTitle": "Aucune demande",
+    "noRequestsDescription": "Vos demandes de téléchargement apparaîtront ici.",
+    "selectTitle": "Sélectionnez une demande",
+    "selectDescription": "Choisissez une demande dans la liste pour voir ses détails."
+  },
+  "detail": {
+    "backToList": "Retour à la liste des demandes",
+    "requestedBy": "Demandé par <value>{{username}}</value> · <value>{{date}}</value>",
+    "lastUpdated": "Dernière mise à jour <value>{{date}}</value>",
+    "delegatedTo": "Délégué à : <value>{{name}}</value>",
+    "moreActions": "Plus d'actions",
+    "removeAction": "Retirer {{label}}",
+    "retryFailed": "Réessayer les échecs",
+    "jumpTheQueue": "Passer devant la file",
+    "cancelDownloads": "Annuler les téléchargements",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "syncFromSource": "Synchroniser depuis Spotify",
+    "syncing": "Synchronisation...",
+    "syncToPlex": "Synchroniser vers Plex",
+    "export": "Exporter",
+    "exportTooltipTitle": "Exporter",
+    "exportTooltipDescription": "Télécharge un fichier .jspf maintenant, en utilisant les identifiants déjà enregistrés sur chaque piste.",
+    "exportTooltipPointIds": "ISRC et identifiant Deezer pour chaque piste",
+    "exportTooltipPointMusicBrainz": "Identifiant MusicBrainz uniquement là où il est déjà résolu",
+    "exportTooltipPointRefind": "D'autres applications utilisent ces identifiants pour retrouver chaque chanson",
+    "exportMax": "Exporter (compatibilité maximale)",
+    "exportMaxTooltipTitle": "Exporter (compatibilité maximale)",
+    "exportMaxTooltipDescription": "Recherche d'abord l'identifiant MusicBrainz manquant de chaque piste, puis télécharge.",
+    "exportMaxTooltipPointSlower": "Peut être plus lent : résout chaque identifiant en ligne s'il en manque",
+    "exportMaxTooltipPointBest": "Idéal pour les applications ListenBrainz et MusicBrainz",
+    "exportMaxTooltipPointMatches": "Le fichier correspond alors dans davantage d'applications"
+  },
+  "stats": {
+    "tracksLabel": "Pistes",
+    "tracksSublabel": "demandées",
+    "completeLabel": "Terminées",
+    "completeSublabel": "téléchargées",
+    "failedLabel": "En échec",
+    "failedSublabel": "en erreur",
+    "activeLabel": "Actives",
+    "activeSublabel": "en cours",
+    "duplicatesLabel": "Doublons",
+    "duplicatesSublabel": "ignorés"
+  },
+  "tracks": {
+    "trackHeader": "Piste",
+    "artistHeader": "Artiste",
+    "statusHeader": "Statut",
+    "completedHeader": "Terminée",
+    "actionsHeader": "Actions",
+    "priorityHeader": "Priorité",
+    "empty": "Aucune piste",
+    "moreInfo": "Plus d'infos : {{label}}",
+    "retry": "Réessayer la piste",
+    "retryTitle": "Réessayer",
+    "cancel": "Annuler la piste",
+    "cancelTitle": "Annuler",
+    "actionsMenu": "Actions de la piste",
+    "jumpTheQueue": "Passer devant la file",
+    "jumpTheQueueTitle": "Déplacer cette piste en tête de la file",
+    "prioritized": "Priorisée"
+  },
+  "export": {
+    "dialogTitle": "Exporter (compatibilité maximale)",
+    "dialogDescription": "Résolution de l'identifiant MusicBrainz de chaque piste pour que le fichier corresponde dans toute application, puis téléchargement.",
+    "resolving": "Résolution {{processed}}/{{total}}",
+    "preparing": "Préparation de l'export...",
+    "failed": "Échec de l'export"
+  },
+  "confirm": {
+    "cancelTrackTitle": "Annuler la piste",
+    "cancelTrackMessage": "Annuler \"{{title}}\" de {{artist}} ?",
+    "cancelConfirm": "Annuler",
+    "cancelKeep": "Conserver",
+    "removeTitle": "Retirer la demande {{label}}",
+    "removeMessage": "Retirer \"{{name}}\" de {{artist}} ? Cette action est irréversible.",
+    "removeConfirm": "Retirer {{label}}",
+    "removeKeep": "Conserver",
+    "cancelDownloadsTitle": "Annuler les téléchargements {{label}}",
+    "cancelDownloadsMessage": "Annuler tous les téléchargements actifs pour \"{{name}}\" de {{artist}} ?",
+    "cancelDownloadsConfirm": "Annuler les téléchargements",
+    "cancelDownloadsKeep": "Continuer le téléchargement"
+  },
+  "labels": {
+    "album": "Album",
+    "playlist": "Playlist"
+  },
+  "spotifyCallback": {
+    "connectionFailed": "Échec de la connexion à Spotify"
+  }
+}

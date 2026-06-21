@@ -1,0 +1,87 @@
+{
+  "shell": {
+    "eyebrow": "Ersteinrichtung",
+    "loading": "Einrichtung wird geladen",
+    "progress": "Schritt {{current}} von {{total}}",
+    "back": "Zurück"
+  },
+  "actions": {
+    "continue": "Weiter",
+    "skip": "Überspringen",
+    "saving": "Wird gespeichert..."
+  },
+  "admin": {
+    "title": "Erstelle dein Administratorkonto",
+    "description": "Dies ist das erste Konto auf dieser Synthseek-Installation. Du kannst später weitere Personen einladen.",
+    "creating": "Administrator wird erstellt...",
+    "submit": "Administrator erstellen",
+    "createError": "Das Administratorkonto konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "du@domain.com",
+    "emailError": "Gib eine gültige E-Mail-Adresse ein.",
+    "usernameLabel": "Benutzername",
+    "usernamePlaceholder": "admin",
+    "usernameHint": "Mind. 3 Zeichen",
+    "usernameError": "Verwende zwischen 3 und 32 Zeichen.",
+    "passwordHint": "Mindestens 8 Zeichen",
+    "passwordError": "Verwende mindestens 8 Zeichen."
+  },
+  "slskd": {
+    "title": "Mit slskd verbinden",
+    "description": "Synthseek kommuniziert über deinen slskd-Daemon mit dem Soulseek-Netzwerk. Dieser Schritt ist erforderlich.",
+    "apiUrlLabel": "API-URL",
+    "apiUrlPlaceholder": "http://localhost:5030",
+    "apiKeyLabel": "API-Schlüssel",
+    "testIdle": "Verbindung testen",
+    "testBusy": "Wird getestet...",
+    "passed": "Verbindung verifiziert.",
+    "failed": "slskd konnte nicht erreicht werden. Überprüfe die URL und den API-Schlüssel.",
+    "failedReason": "Verbindung fehlgeschlagen: {{reason}}",
+    "overrideLink": "Ohne verifizierte Verbindung fortfahren",
+    "overrideArmed": "Es wird ohne verifizierte Verbindung fortgefahren. Du kannst dies später in den Einstellungen beheben.",
+    "saveFailed": "Die slskd-Verbindung konnte nicht gespeichert werden. Bestätige die URL und den API-Schlüssel und versuche es erneut.",
+    "blockedHint": "Teste die Verbindung, bevor du fortfährst"
+  },
+  "plex": {
+    "title": "Plex verbinden (optional)",
+    "description": "Erlaubt Synthseek, deine Bibliothek nach jedem Import zu scannen und Playlists zu spiegeln. Du kannst dies später in den Einstellungen tun.",
+    "blockedHint": "Verbinde Plex oder überspringe diesen Schritt, um fortzufahren",
+    "intro": "Es öffnet sich ein Pop-up, in dem du dich bei plex.tv anmelden kannst.",
+    "connect": "Mit <0>Plex</0> anmelden",
+    "connecting": "Warte auf Plex...",
+    "saving": "Wird gespeichert...",
+    "connected": "Plex verbunden. Fahre mit dem nächsten Schritt fort.",
+    "noServers": "In diesem Konto wurden keine Plex-Server gefunden. Du kannst überspringen und später einen hinzufügen.",
+    "timeout": "Die Plex-Anmeldung hat das Zeitlimit überschritten. Versuche es erneut, oder überspringe und verbinde Plex später in den Einstellungen.",
+    "popupUnfinished": "Die Plex-Anmeldung wurde nicht abgeschlossen. Öffne das Pop-up erneut und genehmige den Zugriff, oder überspringe diesen Schritt.",
+    "serverPickerIntro": "Wähle den Plex-Server, den Synthseek verwenden soll:",
+    "serverLocal": "lokal",
+    "serverRemote": "remote"
+  },
+  "enrichment": {
+    "title": "Metadaten-Anreicherung (optional)",
+    "description": "Verbessert, wie Synthseek Titel kennzeichnet, bewertet und empfiehlt. Alle Schlüssel sind optional, aber empfohlen.",
+    "saveFailed": "Deine Einstellungen konnten nicht gespeichert werden. Überprüfe die Angaben und versuche es erneut.",
+    "lastfmLabel": "Last.fm-API-Schlüssel",
+    "lastfmHint": "Systemweiter Last.fm-API-Schlüssel. Wird von allen Benutzern gemeinsam genutzt.",
+    "fanartLabel": "FanART-API-Schlüssel",
+    "fanartHint": "Bezug von Coverbildern.",
+    "songlinkLabel": "Songlink-API-Schlüssel",
+    "songlinkHint": "Löst Titel-URLs plattformübergreifend für plattformübergreifende Playlist-Importe auf. Synthseek verwendet standardmäßig den öffentlichen Endpunkt. Lass es leer, es sei denn, du hast einen Schlüssel.",
+    "acoustidLabel": "AcoustID-API-Schlüssel",
+    "acoustidHint": "Audio-Fingerprinting-Ausweichweg für Titel ohne zuverlässige Tag-Metadaten.",
+    "musicbrainzLabel": "MusicBrainz-Kontakt-E-Mail",
+    "musicbrainzPlaceholder": "du@beispiel.com",
+    "musicbrainzHint": "Erforderlich. Ohne sie teilt Synthseek eine ratenbegrenzte E-Mail."
+  },
+  "done": {
+    "title": "Alles bereit",
+    "description": "Synthseek ist startklar. Du kannst alles später in den Einstellungen anpassen.",
+    "cardHeading": "Einrichtung abgeschlossen",
+    "cardBody": "Slskd ist eingerichtet. Plex und die Metadaten-Anreicherung können jederzeit hinzugefügt oder bearbeitet werden.",
+    "primaryRest": "Zum Dashboard",
+    "primaryBusy": "Wird abgeschlossen...",
+    "primaryRetry": "Erneut versuchen",
+    "failed": "Die Einrichtung konnte nicht abgeschlossen werden. Bitte versuche es erneut."
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "results": {
+    "emptyState": {
+      "start": {
+        "title": "Lancer une recherche",
+        "description": "Utilisez la barre de recherche ci-dessus pour trouver des pistes, albums ou artistes"
+      },
+      "noResults": {
+        "title": "Aucun résultat trouvé",
+        "description": "Essayez de rechercher autre chose"
+      }
+    },
+    "heading": "Résultats de recherche",
+    "count_one": "{{count}} résultat trouvé pour \"{{query}}\"",
+    "count_other": "{{count}} résultats trouvés pour \"{{query}}\"",
+    "seeAll": "Voir les {{total}} {{label}}",
+    "filters": {
+      "all": "Tout",
+      "playlist": "Playlists",
+      "artist": "Artistes",
+      "album": "Albums",
+      "track": "Chansons"
+    }
+  },
+  "browser": {
+    "section": {
+      "albums": "Albums",
+      "tracks": "Pistes"
+    },
+    "dialogTitle": "{{title}} - {{section}}",
+    "dialogDescription": "Parcourez et demandez {{section}} de {{title}}",
+    "loading": "Chargement de {{section}}...",
+    "empty": {
+      "title": "Aucun {{section}} trouvé",
+      "description": "Ce {{type}} n'a pas encore de {{section}}."
+    },
+    "back": "Retour",
+    "artistBadge": "Artiste",
+    "request": "Demander",
+    "requestToLidarr": "Demander à Lidarr",
+    "requestTrack": "Demander la piste",
+    "songCount_one": "{{count}} chanson",
+    "songCount_other": "{{count}} chansons",
+    "trackCount_one": "{{count}} piste",
+    "trackCount_other": "{{count}} pistes",
+    "albumCount_one": "{{count}} album",
+    "albumCount_other": "{{count}} albums",
+    "followers_one": "{{value}} abonné",
+    "followers_other": "{{value}} abonnés",
+    "unknownArtist": "Artiste inconnu",
+    "unknown": "Inconnu"
+  },
+  "config": {
+    "dialogTitle": "Télécharger {{type}} - {{name}}",
+    "dialogDescription": "Configurez les réglages de qualité de téléchargement pour {{name}}",
+    "header": {
+      "trackCount_one": "{{count}} piste",
+      "trackCount_other": "{{count}} pistes"
+    },
+    "sections": {
+      "quality": "Réglages de qualité",
+      "matching": "Mode de correspondance",
+      "acquisition": "Méthode d'acquisition",
+      "peer": "Préférences de pairs",
+      "lidarr": "Transfert vers Lidarr"
+    },
+    "fields": {
+      "quality": "Qualité",
+      "bitrate": "Débit",
+      "format": "Format",
+      "bitrateMatching": "Correspondance du débit",
+      "formatMatching": "Correspondance du format",
+      "acquisition": "Source",
+      "minUploadSpeed": "Vitesse d'envoi min",
+      "availability": "Disponibilité",
+      "lidarrRootFolder": "Dossier racine",
+      "lidarrQualityProfile": "Profil de qualité",
+      "lidarrMetadataProfile": "Profil de métadonnées",
+      "lidarrMonitor": "Portée de surveillance",
+      "lidarrArtistScope": "Portée de l'artiste",
+      "lidarrTags": "Étiquettes"
+    },
+    "options": {
+      "bitrate": {
+        "best": "Meilleur",
+        "high": "Élevé",
+        "good": "Bon",
+        "low": "Bas"
+      },
+      "matching": {
+        "strict": {
+          "label": "Strict",
+          "description": "Correspondance exacte requise"
+        },
+        "flexible": {
+          "label": "Flexible",
+          "description": "Meilleure correspondance disponible"
+        }
+      },
+      "qualityMode": {
+        "standard": {
+          "label": "Standard",
+          "description": "Choisir le débit et le format"
+        },
+        "lossless": {
+          "label": "Sans perte",
+          "description": "FLAC uniquement, correspondance exacte"
+        }
+      },
+      "uploadSpeed": {
+        "any": {
+          "label": "Toutes",
+          "description": "Aucun minimum"
+        },
+        "kb100": {
+          "description": "Ignorer les lentes"
+        },
+        "kb500": {
+          "description": "Rapide"
+        },
+        "mb1": {
+          "description": "La plus rapide"
+        }
+      },
+      "availability": {
+        "any": {
+          "label": "Tout pair",
+          "description": "Mettre en file si occupé"
+        },
+        "free": {
+          "label": "Disponible maintenant",
+          "description": "Emplacement libre uniquement"
+        }
+      },
+      "acquisition": {
+        "auto": {
+          "label": "Auto",
+          "description": "Utiliser l'ordre des sources configuré"
+        },
+        "slskd": {
+          "label": "Soulseek",
+          "description": "slskd uniquement, pas de repli avec perte"
+        },
+        "ytdlp": {
+          "label": "YouTube",
+          "description": "yt-dlp uniquement, toujours avec perte"
+        },
+        "slskdThenYtdlp": {
+          "label": "Soulseek, puis YouTube",
+          "description": "Essayer slskd d'abord, se rabattre sur yt-dlp"
+        },
+        "lidarr": {
+          "label": "Lidarr",
+          "description": "Confier cet album à votre instance Lidarr"
+        }
+      },
+      "monitor": {
+        "album": {
+          "label": "Cet album uniquement",
+          "description": "Surveiller et rechercher uniquement cet album"
+        },
+        "artist": {
+          "label": "Tout l'artiste",
+          "description": "Surveiller l'artiste complet et rechercher tous les albums"
+        }
+      },
+      "artistMonitor": {
+        "all": {
+          "label": "Tous les albums",
+          "description": "Surveiller tous les albums de cet artiste"
+        },
+        "future": {
+          "label": "Futurs uniquement",
+          "description": "Surveiller uniquement les albums sortis à partir de maintenant"
+        },
+        "missing": {
+          "label": "Manquants uniquement",
+          "description": "Surveiller uniquement les albums absents de votre bibliothèque"
+        },
+        "none": {
+          "label": "Aucun",
+          "description": "Ajouter l'artiste sans surveiller aucun album"
+        }
+      }
+    },
+    "artistLidarr": {
+      "description": "Ajoutez cet artiste à Lidarr et laissez-le gérer les téléchargements."
+    },
+    "lidarr": {
+      "loading": "Chargement des profils Lidarr...",
+      "error": "Impossible de charger les profils Lidarr. Vérifiez votre connexion Lidarr.",
+      "freeSuffix": "libre",
+      "placeholders": {
+        "rootFolder": "Sélectionnez un dossier racine",
+        "qualityProfile": "Sélectionnez un profil de qualité",
+        "metadataProfile": "Sélectionnez un profil de métadonnées"
+      },
+      "tags": {
+        "placeholder": "Ajoutez une étiquette et appuyez sur Entrée",
+        "remove": "Retirer l'étiquette {{tag}}"
+      }
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "request": "Demander",
+      "addToLidarr": "Ajouter à Lidarr",
+      "requesting": "Demande en cours, veuillez patienter...",
+      "loadingTracks": "Chargement des pistes..."
+    },
+    "errors": {
+      "invalidItem": "Élément invalide",
+      "fetchFailed": "Échec de récupération des pistes de {{type}}",
+      "lidarrIncomplete": "Sélectionnez un dossier racine, un profil de qualité et un profil de métadonnées"
+    }
+  }
+}

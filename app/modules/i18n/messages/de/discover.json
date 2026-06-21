@@ -1,0 +1,204 @@
+{
+  "screen": {
+    "srHeading": "Entdecken"
+  },
+  "categories": {
+    "screen": {
+      "back": "Zurück",
+      "title": "Alle Genres",
+      "loading": "Wird geladen...",
+      "count_one": "{{count}} Genre",
+      "count_other": "{{count}} Genres",
+      "errorTitle": "Genres konnten nicht geladen werden",
+      "errorDescription": "Bitte versuche es später erneut.",
+      "emptyTitle": "Keine Genres",
+      "emptyDescription": "Keine Genres verfügbar."
+    },
+    "grid": {
+      "title": "Genres",
+      "subtitle": "Musik nach Kategorie entdecken",
+      "seeAll": "Alle ansehen",
+      "seeAllAriaLabel": "Alle Genres ansehen",
+      "errorTitle": "Genres konnten nicht geladen werden",
+      "errorDescription": "Genres konnten nicht abgerufen werden. Bitte versuche es später erneut.",
+      "emptyTitle": "Keine Genres",
+      "emptyDescription": "Derzeit sind keine Kategorien zum Durchsuchen verfügbar.",
+      "skeletonAriaLabel": "Genres"
+    }
+  },
+  "category": {
+    "fallbackName": "Kategorie",
+    "back": "Zurück zu Entdecken",
+    "loading": "Wird geladen...",
+    "counts": "{{albums}} Alben · {{playlists}} Playlists",
+    "errorTitle": "Inhalt konnte nicht geladen werden",
+    "errorDescription": "Der Inhalt für dieses Genre konnte nicht abgerufen werden. Bitte versuche es später erneut.",
+    "emptyTitle": "Kein Inhalt",
+    "emptyDescription": "Für dieses Genre wurde kein Inhalt gefunden.",
+    "albumsHeading": "Alben",
+    "playlistsHeading": "Playlists"
+  },
+  "trendingHero": {
+    "regionAriaLabel": "Highlight der angesagten Titel",
+    "errorTitle": "Angesagte Titel konnten nicht geladen werden",
+    "errorDescription": "Angesagte Inhalte konnten nicht abgerufen werden. Bitte versuche es später erneut.",
+    "prevAriaLabel": "Vorheriger angesagter Titel",
+    "nextAriaLabel": "Nächster angesagter Titel",
+    "slideAriaLabel": "Zu Folie {{number}} springen",
+    "badge": "Gerade angesagt",
+    "request": "Anfordern",
+    "requestAriaLabel": "{{title}} anfordern",
+    "coverAlt": "{{title}} von {{artist}}",
+    "unknownTrack": "Unbekannter Titel",
+    "unknownArtist": "Unbekannter Künstler"
+  },
+  "coverflow": {
+    "regionAriaLabel": "Karussell der angesagten Titel",
+    "errorTitle": "Angesagte Titel konnten nicht geladen werden",
+    "errorDescription": "Angesagte Inhalte konnten nicht abgerufen werden. Bitte versuche es später erneut.",
+    "title": "Zufällige angesagte Auswahl",
+    "subtitle": "Frische Hits, täglich aktualisiert",
+    "prevAriaLabel": "Vorheriger Titel",
+    "nextAriaLabel": "Nächster Titel",
+    "badge": "Angesagt",
+    "download": "Herunterladen",
+    "coverAlt": "{{title}} von {{artist}}",
+    "unknownTrack": "Unbekannter Titel",
+    "unknownArtist": "Unbekannter Künstler"
+  },
+  "artistSpotlight": {
+    "title": "Künstler im Rampenlicht",
+    "subtitle": "Top-Künstler in deiner Region",
+    "errorTitle": "Künstler konnten nicht geladen werden",
+    "errorDescription": "Top-Künstler konnten nicht abgerufen werden. Bitte versuche es später erneut.",
+    "emptyTitle": "Keine Künstler gefunden",
+    "emptyDescription": "Für diese Region wurden keine Top-Künstler gefunden.",
+    "artistBadge": "Künstler",
+    "latestRelease": "Neueste Veröffentlichung:",
+    "songs_one": "{{count}} Song",
+    "songs_other": "{{count}} Songs",
+    "noAlbums": "Keine Alben verfügbar"
+  },
+  "leaderboard": {
+    "errorTitle": "Bibliothek konnte nicht geladen werden",
+    "errorDescription": "Bibliotheksstatistiken konnten nicht abgerufen werden. Bitte versuche es erneut.",
+    "tabsAriaLabel": "Bibliotheks-Bestenlisten-Modus",
+    "tabArtists": "Künstler",
+    "tabGenres": "Genres",
+    "topArtists": "Top-Künstler",
+    "topGenres": "Top-Genres",
+    "statsTracks": "Titel",
+    "statsLibrary": "Bibliothek",
+    "statsQueued": "In Warteschlange",
+    "unitTracks": "Titel",
+    "unitAlbums": "Alben",
+    "emptyArtistsTitle": "Noch keine Künstler",
+    "emptyArtistsDescription": "Schließe einige Downloads ab, um deine Top-Künstler zu sehen.",
+    "emptyGenresTitle": "Noch keine Genres",
+    "emptyGenresDescription": "Genres werden bei neuen Downloads erfasst, sie füllen sich, während deine Bibliothek wächst."
+  },
+  "topTracks": {
+    "title": "Top-Titel",
+    "subtitle": "Meistgespielt · aller Zeiten · Last.fm",
+    "heroBadge": "Nr. 1 meistgespielt",
+    "plays": "{{count}} Wiedergaben",
+    "empty": {
+      "error": "Last.fm-Daten konnten nicht geladen werden.",
+      "disabled": "Aktiviere Last.fm, um hier deine meistgespielten Titel zu sehen.",
+      "noUsername": "Füge deinen Last.fm-Benutzernamen hinzu, um die Top-Titel zu synchronisieren.",
+      "noData": "Noch keine Top-Titel, scrobble etwas Musik, um sie nach Rang zu sehen.",
+      "ctaOpenSettings": "Einstellungen öffnen",
+      "ctaConfigure": "Last.fm konfigurieren"
+    }
+  },
+  "recentScrobbles": {
+    "title": "Letzte Scrobbles",
+    "subtitle": "Last.fm",
+    "seeMore": "Mehr ansehen",
+    "seeMoreAriaLabel": "Last.fm-Profil öffnen",
+    "scrollLeftAriaLabel": "Nach links scrollen",
+    "scrollRightAriaLabel": "Nach rechts scrollen",
+    "ageJustNow": "gerade eben",
+    "ageMinutes": "vor {{count}} Min",
+    "ageHours": "vor {{count}} Std",
+    "ageDays": "vor {{count}} T",
+    "empty": {
+      "error": "Last.fm-Daten konnten nicht geladen werden.",
+      "disabled": "Aktiviere Last.fm, um hier deine letzten Scrobbles zu sehen.",
+      "noUsername": "Füge deinen Last.fm-Benutzernamen hinzu, um Scrobbles zu synchronisieren.",
+      "noData": "Noch keine Scrobbles, deine Chronik erscheint hier.",
+      "ctaOpenSettings": "Einstellungen öffnen",
+      "ctaConfigure": "Last.fm konfigurieren"
+    }
+  },
+  "recentRequests": {
+    "title": "Letzte Anfragen",
+    "subtitle": "Letzte {{count}} Downloads",
+    "open": "Anfragen öffnen",
+    "openAriaLabel": "Anfragenseite öffnen",
+    "errorTitle": "Anfragen konnten nicht geladen werden",
+    "errorDescription": "Letzte Anfragen konnten nicht abgerufen werden. Bitte versuche es erneut.",
+    "emptyTitle": "Noch keine Anfragen",
+    "emptyDescription": "Beginne, Musik anzufordern, um hier deine letzten Downloads zu sehen.",
+    "albumArtAlt": "Albumcover für {{name}}",
+    "scrollPrevAriaLabel": "Zu vorherigen Anfragen scrollen",
+    "scrollNextAriaLabel": "Zu nächsten Anfragen scrollen"
+  },
+  "mixes": {
+    "title": "Mixe zum Entdecken",
+    "subtitle": "ListenBrainz",
+    "cardAriaLabel": "Mix {{label}} öffnen, {{count}} Titel",
+    "trackCount": "{{count}} Titel",
+    "autoRequestTooltip": "Die automatische Anforderung ist aktiviert, Playlists werden automatisch erstellt, wenn der Feed aktualisiert wird.",
+    "playlistName": "{{label}} ({{date}})",
+    "playlistDescription": "Erstellt von Discovery · listenbrainz:{{kind}}",
+    "playlistNoSync": "keine Synchronisierung",
+    "playlistOwner": "ListenBrainz",
+    "kinds": {
+      "dailyJams": {
+        "label": "Daily Jams",
+        "tag": "Aktualisiert sich täglich",
+        "blurb": "Ein angenehmer Hintergrundmix aus Aufnahmen, die du bereits liebst, jeden Morgen neu generiert."
+      },
+      "weeklyJams": {
+        "label": "Weekly Jams",
+        "tag": "Aktualisiert sich montags",
+        "blurb": "Songs, die du bereits gehört hast, zu einer Playlist arrangiert, die kein aktives Zuhören erfordert."
+      },
+      "weeklyExploration": {
+        "label": "Weekly Exploration",
+        "tag": "Aktualisiert sich montags",
+        "blurb": "Entdecke neue Musik. Titel, die du noch nicht gehört hast, ausgewählt vom Collaborative-Filtering-Algorithmus."
+      },
+      "cfRecommendations": {
+        "label": "CF-Empfehlungen",
+        "tag": "Roher Aufnahmenpool",
+        "blurb": "Deine rohen Collaborative-Filtering-Aufnahmen-MBIDs, nach Punktzahl sortiert."
+      }
+    },
+    "freshness": {
+      "syncedToday": "Heute synchronisiert",
+      "syncedDaysAgo": "Vor {{count}} T synchronisiert",
+      "updatedToday": "Heute aktualisiert",
+      "updatedDaysAgo": "Vor {{count}} T aktualisiert",
+      "updatedWeekday": "Aktualisiert am {{weekday}}"
+    },
+    "emptyReason": {
+      "noData": "ListenBrainz hat für dein Konto noch keine kollaborativen Empfehlungen berechnet.",
+      "noResolved": "ListenBrainz hat diesen Mix erstellt, aber seine Songs konnten im Katalog noch nicht zugeordnet werden.",
+      "notGenerated": "ListenBrainz hat diesen Mix noch nicht erstellt. Er erscheint, sobald dein Hörverlauf ausreicht, um ihn zu generieren.",
+      "fetchError": "ListenBrainz konnte nicht erreicht werden. Bei der nächsten Synchronisierung wird es erneut versucht.",
+      "waitingFirstSync": "Warte auf die erste ListenBrainz-Synchronisierung.",
+      "feedEmpty": "ListenBrainz hat für diesen Mix noch keine Songs zurückgegeben."
+    },
+    "empty": {
+      "error": "Deine Entdeckungs-Mixe konnten nicht geladen werden.",
+      "disabled": "Aktiviere ListenBrainz, um hier deine wöchentlichen Mixe zu sehen.",
+      "noUsername": "Füge deinen ListenBrainz-Benutzernamen hinzu, um Mixe zu synchronisieren.",
+      "noKinds": "Wähle in den Einstellungen aus, welche Playlists abgerufen werden sollen.",
+      "ctaOpenSettings": "Einstellungen öffnen",
+      "ctaConfigure": "ListenBrainz konfigurieren",
+      "ctaChoosePlaylists": "Playlists auswählen"
+    }
+  }
+}

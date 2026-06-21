@@ -1,0 +1,77 @@
+{
+  "activity": {
+    "paused": "En pause"
+  },
+  "pagination": {
+    "summary": "Affichage de {{start}}-{{end}} sur {{total}}",
+    "rowsPerPage": "Lignes par page",
+    "perPage": "{{size}} / page",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "mobilePage": "Page {{page}} sur {{pageCount}}",
+    "goToPage": "Page {{page}}"
+  },
+  "confirmation": {
+    "confirm": "Confirmer",
+    "cancel": "Annuler"
+  },
+  "dialog": {
+    "close": "Fermer"
+  },
+  "filterSort": {
+    "trigger": "Filtrer et trier",
+    "filterLabel": "Filtrer",
+    "sortLabel": "Trier par",
+    "orderLabel": "Ordre",
+    "ascending": "Croissant",
+    "descending": "Décroissant"
+  },
+  "passwordField": {
+    "label": "Mot de passe",
+    "show": "Afficher le mot de passe",
+    "hide": "Masquer le mot de passe"
+  },
+  "logo": {
+    "ariaLabel": "Logo Synthseek"
+  },
+  "table": {
+    "empty": "Aucun élément à afficher"
+  },
+  "loading": {
+    "section": "Chargement...",
+    "dots": "Chargement",
+    "spinner": "Chargement"
+  },
+  "infoTooltip": {
+    "trigger": "Plus d'informations"
+  },
+  "trackStatus": {
+    "moreInfo": "Plus d'infos : {{label}}"
+  },
+  "header": {
+    "primaryNav": "Principal",
+    "mobileNav": "Mobile",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher pistes, artistes, albums...",
+    "closeSearch": "Fermer la recherche",
+    "clearSearch": "Effacer la recherche",
+    "discover": "Découvrir",
+    "requests": "Demandes",
+    "library": "Bibliothèque"
+  },
+  "userMenu": {
+    "trigger": "Menu utilisateur",
+    "settings": "Réglages",
+    "profile": "Profil",
+    "members": "Membres",
+    "logout": "Déconnexion",
+    "loggingOut": "Déconnexion...",
+    "patchNotes": "Notes de version",
+    "majorUpdate": "Mise à jour majeure",
+    "updateAvailable": "Mise à jour disponible",
+    "updateTo": "Mettre à jour vers {{version}}",
+    "currentVersion": "Actuelle {{version}}",
+    "roleAdmin": "Administrateur",
+    "roleUser": "Utilisateur"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "appShell": {
+    "loader": {
+      "library": "Deine Bibliothek wird geladen"
+    },
+    "settings": {
+      "integrations": {
+        "title": "Integrationen",
+        "tabs": {
+          "downloadSources": "Download-Quellen",
+          "plex": "Plex",
+          "lidarr": "Lidarr",
+          "metadata": "Metadaten"
+        }
+      }
+    }
+  },
+  "progressDock": {
+    "title": {
+      "plexSyncRunning": "Wird mit Plex synchronisiert",
+      "plexSyncDone": "Alle Playlists synchronisiert",
+      "libraryImportRunning": "Import von {{provider}}",
+      "libraryImportDone": "Import abgeschlossen",
+      "fileImportRunning": "Playlist wird importiert",
+      "fileImportDone": "Import abgeschlossen"
+    },
+    "subtitle": {
+      "ofTotal": "von {{total}}",
+      "failed": "fehlgeschlagen",
+      "skippedBreakdown": "importiert, {{skipped}} bereits in der Bibliothek"
+    },
+    "itemSkippedReason": "Bereits in der Bibliothek",
+    "mobileMeta": "{{done}} von {{total}} · {{current}}",
+    "itemState": {
+      "pending": "Ausstehend",
+      "importing": "Wird importiert",
+      "done": "Fertig",
+      "failed": "Fehlgeschlagen",
+      "skipped": "Übersprungen"
+    },
+    "failureReason": {
+      "notInLibrary": "Nicht in deiner Bibliothek",
+      "noMatchableTracks": "Keine Treffer für die Titel",
+      "sourceHasNoTracks": "Die Quelle enthält keine Titel",
+      "importError": "Import fehlgeschlagen"
+    },
+    "provider": {
+      "spotify": "Spotify",
+      "generic": "deine Bibliothek"
+    },
+    "announce": {
+      "progress": "{{done}} von {{total}} fertig"
+    },
+    "minimize": "Minimieren",
+    "expand": "Erweitern",
+    "dismiss": "Schließen"
+  }
+}

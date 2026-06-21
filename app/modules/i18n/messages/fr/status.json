@@ -1,0 +1,86 @@
+{
+  "request": {
+    "queued": {
+      "label": "En file d'attente",
+      "description": "En attente dans la file"
+    },
+    "searching": {
+      "label": "Recherche",
+      "description": "Recherche de sources"
+    },
+    "pending_download": {
+      "label": "Téléchargement en attente",
+      "description": "En attente de téléchargement"
+    },
+    "downloading": {
+      "label": "Téléchargement",
+      "description": "En cours"
+    },
+    "paused": {
+      "label": "En pause",
+      "description": "Téléchargement en pause"
+    },
+    "pending_import": {
+      "label": "Importation en attente",
+      "description": "En attente d'importation"
+    },
+    "importing": {
+      "label": "Importation",
+      "description": "Traitement du fichier"
+    },
+    "complete": {
+      "label": "Terminé",
+      "description": "Téléchargement terminé"
+    },
+    "failed": {
+      "label": "Échec",
+      "description": "Échec du téléchargement"
+    },
+    "in_progress": {
+      "label": "En cours",
+      "description": "Téléchargement des pistes"
+    },
+    "syncing_plex": {
+      "label": "Synchronisation avec Plex",
+      "description": "Synchronisation avec Plex..."
+    },
+    "partially_complete": {
+      "label": "Partiellement terminé",
+      "description": "Certaines pistes ont échoué"
+    },
+    "cancelled": {
+      "label": "Annulé",
+      "description": "Téléchargement annulé"
+    },
+    "delegated": {
+      "label": "Délégué",
+      "description": "Transféré à un gestionnaire de bibliothèque externe"
+    }
+  },
+  "failureReason": {
+    "not_found": {
+      "label": "Introuvable",
+      "description": "Cette piste n'a pas été trouvée sur Soulseek ou YouTube. La disponibilité évolue avec le temps, une nouvelle tentative plus tard pourrait la trouver."
+    },
+    "import_rejected": {
+      "label": "Importation rejetée",
+      "description": "Le fichier a été téléchargé mais ses détails ne correspondaient pas à la piste demandée, il n'a donc pas été ajouté. Une nouvelle tentative réimporte uniquement le même fichier."
+    },
+    "wrong_file": {
+      "label": "Mauvais fichier",
+      "description": "Le fichier téléchargé ne correspondait pas à la piste demandée, il a donc été supprimé. Une nouvelle tentative recherche une meilleure correspondance."
+    },
+    "p2p_failed": {
+      "label": "Connexion interrompue",
+      "description": "La connexion au pair Soulseek s'est interrompue avant la fin du téléchargement. Une nouvelle tentative peut mieux fonctionner."
+    },
+    "download_failed": {
+      "label": "Échec du téléchargement",
+      "description": "La piste a été trouvée, mais le téléchargement ne s'est pas terminé. La source a peut-être bloqué la requête ou la connexion a calé. Une nouvelle tentative peut aider."
+    },
+    "other": {
+      "label": "Échec",
+      "description": "Le téléchargement a échoué pour une raison inattendue. Une nouvelle tentative peut aider."
+    }
+  }
+}

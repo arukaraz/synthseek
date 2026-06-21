@@ -2,7 +2,23 @@
 
 ---
 
-# v2.3.0 — June 19, 2026
+# v2.3.1, June 21, 2026
+
+### Sync library playlists to Plex, plus AI playlist building from Last.fm
+
+- Sync a playlist to Plex straight from your library: the three-dot menu on any library playlist now has a Sync to Plex action, the same one already on the requests page.
+- MCP tools extended to read your Last.fm listening history (top tracks, recent tracks, top artists) and to build or refresh a playlist from a set of songs in one step, so a connected AI assistant can curate playlists for you. [See the full list of MCP tools and examples](https://github.com/arukaraz/synthseek/blob/main/MCP-TOOLS.md).
+- The interface is now available in German and French, in addition to English and Spanish.
+
+---
+
+### Fixes
+
+- Refreshed playlists now show the correct status based on how their tracks downloaded.
+
+---
+
+# v2.3.0, June 19, 2026
 
 ### Content detail, playlist management, and a smarter requests view
 
@@ -34,7 +50,7 @@
 
 ---
 
-# v2.2.0 — June 13, 2026
+# v2.2.0, June 13, 2026
 
 ### A new Library to browse your whole collection
 
@@ -63,7 +79,7 @@
 
 ---
 
-# v2.1.2 — June 10, 2026
+# v2.1.2, June 10, 2026
 
 - Tracks that were wrongly skipped as not found now download correctly.
 - Searches that come up empty are retried automatically, so more songs are found.
@@ -71,7 +87,7 @@
 
 ---
 
-# v2.1.1 — June 8, 2026
+# v2.1.1, June 8, 2026
 
 ### Sync all playlists to Plex, plus detail-table and changelog fixes
 
@@ -92,7 +108,7 @@ A small follow-up to 2.1: send every eligible playlist to Plex in one action, an
 
 ---
 
-# v2.1.0 — June 8, 2026
+# v2.1.0, June 8, 2026
 
 ### Queue controls: priority, pause and resume, a queue stability fix, and Plex matching improvements
 
@@ -118,7 +134,7 @@ Version 2.1 gives you direct control over the download queue. Downloads now run 
 
 ---
 
-# v2.0.0 — June 5, 2026
+# v2.0.0, June 5, 2026
 
 > [!IMPORTANT]
 > Synthseek is now multi-user. On first launch you create an admin account through a new setup wizard, and existing single-user installs run a one-time reclaim flow to take ownership of the instance. From there you can add members with local accounts or import them from Plex, and admin-only settings stay hidden from regular members.
@@ -224,7 +240,7 @@ Version 2.0 turns Synthseek from a single-user downloader into a self-managed, m
 
 ---
 
-# v1.2.1 — May 4, 2026
+# v1.2.1, May 4, 2026
 
 ### Track failures now tell you why
 
@@ -232,11 +248,11 @@ When a track fails, the request card surfaces a typed failure reason
 with an icon and tooltip instead of a generic error. Reasons are
 classified into:
 
-- **Not found** — no source matched the requested track.
-- **Import rejected** — Beets / Plex declined the file (metadata,
+- **Not found**, no source matched the requested track.
+- **Import rejected**, Beets / Plex declined the file (metadata,
   format, or duplicate).
-- **P2P failed** — Soulseek peers errored out or never delivered.
-- **Other** — fallback for unclassified failures.
+- **P2P failed**, Soulseek peers errored out or never delivered.
+- **Other**, fallback for unclassified failures.
 
 The retry path bifurcates accordingly so retries do the right thing
 for each kind of failure instead of blindly repeating the same
@@ -256,7 +272,7 @@ not permitted` when the music library lives on a USB / exFAT / NTFS
   mutated by the container
   ([#2](https://github.com/arukaraz/synthseek/issues/2)).
 - Malformed ISRC tags no longer break post-download metadata
-  validation — they're ignored instead.
+  validation, they're ignored instead.
 - Music cache warmup runs every 6 hours instead of every 25 minutes,
   reducing background load.
 - Track count is hidden in the artist album list when unavailable
@@ -267,14 +283,14 @@ not permitted` when the music library lives on a USB / exFAT / NTFS
 
 ---
 
-# v1.2.0 — April 19, 2026
+# v1.2.0, April 19, 2026
 
 > [!IMPORTANT]
 > Two files are worth re-checking when you upgrade.
 >
 > **`config.yml`** has new sections in this release. After deploying,
 > check the refreshed `config.example.yml` sitting next to your
-> `config.yml` — diff them side-by-side and copy over the new flags
+> `config.yml`, diff them side-by-side and copy over the new flags
 > you want. Your existing `config.yml` is left untouched on upgrade.
 >
 > **`docker-compose.yml`** no longer needs the `SPOTIFY_CLIENT_ID` /
@@ -295,7 +311,7 @@ not permitted` when the music library lives on a USB / exFAT / NTFS
 
 Completed the migration off Spotify's restricted API and rebuilt the
 music metadata layer around a provider-agnostic facade. Deezer is the
-default adapter today — no authentication required, no rate-limit
+default adapter today, no authentication required, no rate-limit
 surprises, no Premium gatekeeping. The facade exposes the same shape
 (tracks / albums / artists / playlists / genres) regardless of the
 underlying provider, so future providers can be added without touching
@@ -317,7 +333,7 @@ the codebase. The feature is parked as **Work in progress**.
 
 ### Playlist Downloads End-to-End - Plex
 
-You can now request a full playlist from search or discover — Synthseek
+You can now request a full playlist from search or discover, Synthseek
 will download every track individually, preserve the original ordering,
 and reconstruct the playlist inside Plex when the download finishes. If
 some tracks resolve late (retries, slow peers), the Plex playlist is
@@ -325,7 +341,7 @@ synced incrementally as each new track arrives instead of waiting for
 all of them.
 
 A new playlist status badge shows where each playlist is in its life
-cycle — **Syncing to Plex…** while the reconstruction is in flight,
+cycle, **Syncing to Plex…** while the reconstruction is in flight,
 then **In Plex ✓** or **Not in Plex** with a retry button if the Plex
 side failed. The status is a first-class value in the canonical request
 state, so the card visuals (border, gradient, description) transition
@@ -356,7 +372,7 @@ search, the request list, and the download pipeline.
 
 ---
 
-# v1.1.0 — March 26, 2026
+# v1.1.0, March 26, 2026
 
 ### Spotify API Migration (Feb 2026 Breaking Changes)
 

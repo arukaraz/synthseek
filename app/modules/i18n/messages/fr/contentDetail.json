@@ -1,0 +1,106 @@
+{
+  "dialogTitle": "Détails de {{name}}",
+  "dialogDescription": "Informations détaillées sur {{name}}",
+  "back": "Retour à {{name}}",
+  "backFallback": "Retour",
+  "openDetail": "Ouvrir les détails de {{name}}",
+  "viewArtist": "Voir l'artiste {{name}}",
+  "resolveArtistFailed": "Nous n'avons pas trouvé cet artiste.",
+  "close": "Fermer",
+  "request": "Demander",
+  "requestMissing": "Demander les manquantes",
+  "requestTrack": "Demander {{title}}",
+  "retryTrack": "Réessayer {{title}}",
+  "selectTrack": "Sélectionner {{title}}",
+  "selection": {
+    "selected": "sélectionnées",
+    "selectAll": "Tout sélectionner",
+    "clear": "Effacer"
+  },
+  "sort": {
+    "label": "Trier",
+    "name": "Nom",
+    "status": "Statut",
+    "length": "Durée",
+    "ascending": "Croissant",
+    "descending": "Décroissant"
+  },
+  "alreadyInLibrary": "Déjà dans la bibliothèque",
+  "shareExpand": "Afficher les liens sociaux",
+  "shareCollapse": "Masquer les liens sociaux",
+  "badge": {
+    "artist": "Artiste",
+    "album": "Album",
+    "playlist": "Playlist"
+  },
+  "social": {
+    "spotify": "Spotify",
+    "appleMusic": "Apple Music",
+    "youtube": "YouTube",
+    "instagram": "Instagram",
+    "website": "Site officiel"
+  },
+  "recordType": {
+    "album": "Albums",
+    "ep": "EP",
+    "single": "Singles",
+    "live": "Live",
+    "compilation": "Compilations"
+  },
+  "rail": {
+    "prev": "Défiler en arrière",
+    "next": "Défiler en avant"
+  },
+  "bio": {
+    "more": "Voir plus",
+    "less": "Voir moins"
+  },
+  "stats": {
+    "listeners": "Auditeurs",
+    "scrobbles": "Scrobbles",
+    "lbListens": "Écoutes ListenBrainz",
+    "inLibrary": "Dans la bibliothèque",
+    "tracks": "Pistes"
+  },
+  "sections": {
+    "topTracks": "Meilleures pistes",
+    "discography": "Discographie",
+    "about": "À propos",
+    "details": "Détails",
+    "similar": "Artistes similaires",
+    "moreFrom": "Plus de {{name}}",
+    "tracklist": "Liste des pistes",
+    "credits": "Crédits"
+  },
+  "details": {
+    "type": "Type",
+    "country": "Pays",
+    "formed": "Formé",
+    "realName": "Vrai nom",
+    "born": "Naissance",
+    "members": "Membres",
+    "awards": "Récompenses",
+    "albumsInLibrary": "Albums dans la bibliothèque",
+    "released": "Sorti",
+    "label": "Label",
+    "producer": "Producteur",
+    "studio": "Studio",
+    "certification": "Certification",
+    "length": "Durée",
+    "showMore": "Voir plus ({{count}})",
+    "showLess": "Voir moins"
+  },
+  "playlistTrackCount_one": "{{count}} piste",
+  "playlistTrackCount_other": "{{count}} pistes",
+  "tracklistCount": "{{inLibrary}} / {{total}}",
+  "trackPlays_one": "{{plays}} écoute",
+  "trackPlays_other": "{{plays}} écoutes",
+  "libraryTrackCount": "{{count}} / {{total}}",
+  "empty": {
+    "topTracks": "Aucune piste populaire disponible.",
+    "discography": "Aucune sortie disponible.",
+    "similar": "Aucun artiste similaire disponible.",
+    "tracklist": "Aucune piste disponible.",
+    "moreFrom": "Aucune autre sortie disponible."
+  }
+}

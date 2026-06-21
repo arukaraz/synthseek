@@ -1,3 +1,4 @@
+import i18n from "@locale";
 import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyReclaimOutcome } from "@utils/request-helpers";
@@ -8,7 +9,11 @@ export function usePlaylistRequest() {
   return trpc.requests.playlistRequest.useMutation({
     onError: (err) => errorToastDetailed(err, "requests.playlistDownloadFailed"),
     onSuccess: ({ outcome, data }) => {
-      notifyReclaimOutcome({ outcome, label: "Playlist", itemName: data?.name ?? "Playlist" });
+      notifyReclaimOutcome({
+        outcome,
+        kind: "playlist",
+        itemName: data?.name ?? i18n.t("mutations:requests.reclaim.playlist"),
+      });
     },
     onSettled: () => {
       void utils.requests.getAll.invalidate();

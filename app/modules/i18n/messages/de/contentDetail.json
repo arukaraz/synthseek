@@ -1,0 +1,106 @@
+{
+  "dialogTitle": "Details zu {{name}}",
+  "dialogDescription": "Detaillierte Informationen zu {{name}}",
+  "back": "Zurück zu {{name}}",
+  "backFallback": "Zurück",
+  "openDetail": "Details zu {{name}} öffnen",
+  "viewArtist": "Künstler {{name}} ansehen",
+  "resolveArtistFailed": "Dieser Künstler konnte nicht gefunden werden.",
+  "close": "Schließen",
+  "request": "Anfordern",
+  "requestMissing": "Fehlende anfordern",
+  "requestTrack": "{{title}} anfordern",
+  "retryTrack": "{{title}} erneut versuchen",
+  "selectTrack": "{{title}} auswählen",
+  "selection": {
+    "selected": "ausgewählt",
+    "selectAll": "Alle auswählen",
+    "clear": "Leeren"
+  },
+  "sort": {
+    "label": "Sortieren",
+    "name": "Name",
+    "status": "Status",
+    "length": "Länge",
+    "ascending": "Aufsteigend",
+    "descending": "Absteigend"
+  },
+  "alreadyInLibrary": "Bereits in der Bibliothek",
+  "shareExpand": "Social-Media-Links anzeigen",
+  "shareCollapse": "Social-Media-Links verbergen",
+  "badge": {
+    "artist": "Künstler",
+    "album": "Album",
+    "playlist": "Playlist"
+  },
+  "social": {
+    "spotify": "Spotify",
+    "appleMusic": "Apple Music",
+    "youtube": "YouTube",
+    "instagram": "Instagram",
+    "website": "Offizielle Website"
+  },
+  "recordType": {
+    "album": "Alben",
+    "ep": "EPs",
+    "single": "Singles",
+    "live": "Live",
+    "compilation": "Kompilationen"
+  },
+  "rail": {
+    "prev": "Zurück blättern",
+    "next": "Vorwärts blättern"
+  },
+  "bio": {
+    "more": "Mehr anzeigen",
+    "less": "Weniger anzeigen"
+  },
+  "stats": {
+    "listeners": "Hörer",
+    "scrobbles": "Scrobbles",
+    "lbListens": "ListenBrainz-Wiedergaben",
+    "inLibrary": "In der Bibliothek",
+    "tracks": "Titel"
+  },
+  "sections": {
+    "topTracks": "Top-Titel",
+    "discography": "Diskografie",
+    "about": "Über",
+    "details": "Details",
+    "similar": "Ähnliche Künstler",
+    "moreFrom": "Mehr von {{name}}",
+    "tracklist": "Titelliste",
+    "credits": "Mitwirkende"
+  },
+  "details": {
+    "type": "Typ",
+    "country": "Land",
+    "formed": "Gegründet",
+    "realName": "Echter Name",
+    "born": "Geboren",
+    "members": "Mitglieder",
+    "awards": "Auszeichnungen",
+    "albumsInLibrary": "Alben in der Bibliothek",
+    "released": "Veröffentlicht",
+    "label": "Label",
+    "producer": "Produzent",
+    "studio": "Studio",
+    "certification": "Zertifizierung",
+    "length": "Länge",
+    "showMore": "Mehr anzeigen ({{count}})",
+    "showLess": "Weniger anzeigen"
+  },
+  "playlistTrackCount_one": "{{count}} Titel",
+  "playlistTrackCount_other": "{{count}} Titel",
+  "tracklistCount": "{{inLibrary}} / {{total}}",
+  "trackPlays_one": "{{plays}} Wiedergabe",
+  "trackPlays_other": "{{plays}} Wiedergaben",
+  "libraryTrackCount": "{{count}} / {{total}}",
+  "empty": {
+    "topTracks": "Keine Top-Titel verfügbar.",
+    "discography": "Keine Veröffentlichungen verfügbar.",
+    "similar": "Keine ähnlichen Künstler verfügbar.",
+    "tracklist": "Keine Titel verfügbar.",
+    "moreFrom": "Keine weiteren Veröffentlichungen verfügbar."
+  }
+}

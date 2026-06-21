@@ -179,7 +179,18 @@
     "adminRequired": "Se requiere acceso de administrador",
     "exportFailed": "Error al exportar",
     "artistDelegated": "Artista añadido a Lidarr",
-    "artistDelegateFailed": "No se pudo añadir el artista a Lidarr"
+    "artistDelegateFailed": "No se pudo añadir el artista a Lidarr",
+    "reclaim": {
+      "download": "Descarga",
+      "album": "Álbum",
+      "playlist": "Lista",
+      "startedTitle": "{{kind}} iniciada",
+      "startedDescription": "{{itemName}} se está descargando.",
+      "alreadyCompleteTitle": "{{kind}} ya está en tu biblioteca",
+      "alreadyInProgressTitle": "{{kind}} ya se está descargando",
+      "requeuedTitle": "{{kind}} vuelta a encolar",
+      "requeuedDescription": "{{itemName}} se está reintentando."
+    }
   },
   "playlists": {
     "created": "Playlist creada",

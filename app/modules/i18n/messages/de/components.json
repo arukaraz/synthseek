@@ -1,0 +1,77 @@
+{
+  "activity": {
+    "paused": "Pausiert"
+  },
+  "pagination": {
+    "summary": "{{start}}-{{end}} von {{total}} werden angezeigt",
+    "rowsPerPage": "Zeilen pro Seite",
+    "perPage": "{{size}} pro Seite",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "mobilePage": "Seite {{page}} von {{pageCount}}",
+    "goToPage": "Seite {{page}}"
+  },
+  "confirmation": {
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen"
+  },
+  "dialog": {
+    "close": "Schließen"
+  },
+  "filterSort": {
+    "trigger": "Filtern und sortieren",
+    "filterLabel": "Filtern",
+    "sortLabel": "Sortieren nach",
+    "orderLabel": "Reihenfolge",
+    "ascending": "Aufsteigend",
+    "descending": "Absteigend"
+  },
+  "passwordField": {
+    "label": "Passwort",
+    "show": "Passwort anzeigen",
+    "hide": "Passwort verbergen"
+  },
+  "logo": {
+    "ariaLabel": "Synthseek-Logo"
+  },
+  "table": {
+    "empty": "Keine Einträge zum Anzeigen"
+  },
+  "loading": {
+    "section": "Wird geladen...",
+    "dots": "Wird geladen",
+    "spinner": "Wird geladen"
+  },
+  "infoTooltip": {
+    "trigger": "Weitere Informationen"
+  },
+  "trackStatus": {
+    "moreInfo": "Mehr Infos: {{label}}"
+  },
+  "header": {
+    "primaryNav": "Haupt",
+    "mobileNav": "Mobil",
+    "search": "Suchen",
+    "searchPlaceholder": "Titel, Künstler, Alben suchen...",
+    "closeSearch": "Suche schließen",
+    "clearSearch": "Suche leeren",
+    "discover": "Entdecken",
+    "requests": "Anfragen",
+    "library": "Bibliothek"
+  },
+  "userMenu": {
+    "trigger": "Benutzermenü",
+    "settings": "Einstellungen",
+    "profile": "Profil",
+    "members": "Mitglieder",
+    "logout": "Abmelden",
+    "loggingOut": "Abmeldung läuft...",
+    "patchNotes": "Versionshinweise",
+    "majorUpdate": "Großes Update",
+    "updateAvailable": "Update verfügbar",
+    "updateTo": "Auf {{version}} aktualisieren",
+    "currentVersion": "Aktuell {{version}}",
+    "roleAdmin": "Administrator",
+    "roleUser": "Benutzer"
+  }
+}

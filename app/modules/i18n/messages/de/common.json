@@ -1,0 +1,13 @@
+{
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "relativeTime": {
+    "justNow": "Gerade eben",
+    "yearsAgo": "vor {{count}} J",
+    "monthsAgo": "vor {{count}} Mon",
+    "weeksAgo": "vor {{count}} Wo",
+    "daysAgo": "vor {{count}} T",
+    "hoursAgo": "vor {{count}} Std",
+    "minutesAgo": "vor {{count}} Min"
+  }
+}

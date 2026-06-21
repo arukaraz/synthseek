@@ -1,0 +1,204 @@
+{
+  "screen": {
+    "srHeading": "Découvrir"
+  },
+  "categories": {
+    "screen": {
+      "back": "Retour",
+      "title": "Tous les genres",
+      "loading": "Chargement...",
+      "count_one": "{{count}} genre",
+      "count_other": "{{count}} genres",
+      "errorTitle": "Échec du chargement des genres",
+      "errorDescription": "Veuillez réessayer plus tard.",
+      "emptyTitle": "Aucun genre",
+      "emptyDescription": "Aucun genre disponible."
+    },
+    "grid": {
+      "title": "Genres",
+      "subtitle": "Explorez la musique par catégorie",
+      "seeAll": "Voir tout",
+      "seeAllAriaLabel": "Voir tous les genres",
+      "errorTitle": "Échec du chargement des genres",
+      "errorDescription": "Impossible de récupérer les genres. Veuillez réessayer plus tard.",
+      "emptyTitle": "Aucun genre",
+      "emptyDescription": "Aucune catégorie de navigation disponible pour le moment.",
+      "skeletonAriaLabel": "Genres"
+    }
+  },
+  "category": {
+    "fallbackName": "Catégorie",
+    "back": "Retour à Découvrir",
+    "loading": "Chargement...",
+    "counts": "{{albums}} albums · {{playlists}} playlists",
+    "errorTitle": "Échec du chargement du contenu",
+    "errorDescription": "Impossible de récupérer le contenu de ce genre. Veuillez réessayer plus tard.",
+    "emptyTitle": "Aucun contenu",
+    "emptyDescription": "Aucun contenu trouvé pour ce genre.",
+    "albumsHeading": "Albums",
+    "playlistsHeading": "Playlists"
+  },
+  "trendingHero": {
+    "regionAriaLabel": "Pistes tendance à la une",
+    "errorTitle": "Échec du chargement des pistes tendance",
+    "errorDescription": "Impossible de récupérer le contenu tendance. Veuillez réessayer plus tard.",
+    "prevAriaLabel": "Piste tendance précédente",
+    "nextAriaLabel": "Piste tendance suivante",
+    "slideAriaLabel": "Aller à la diapositive {{number}}",
+    "badge": "Tendance actuelle",
+    "request": "Demander",
+    "requestAriaLabel": "Demander {{title}}",
+    "coverAlt": "{{title}} de {{artist}}",
+    "unknownTrack": "Piste inconnue",
+    "unknownArtist": "Artiste inconnu"
+  },
+  "coverflow": {
+    "regionAriaLabel": "Carrousel de pistes tendance",
+    "errorTitle": "Échec du chargement des pistes tendance",
+    "errorDescription": "Impossible de récupérer le contenu tendance. Veuillez réessayer plus tard.",
+    "title": "Sélections tendance aléatoires",
+    "subtitle": "Des hits frais mis à jour chaque jour",
+    "prevAriaLabel": "Piste précédente",
+    "nextAriaLabel": "Piste suivante",
+    "badge": "Tendance",
+    "download": "Télécharger",
+    "coverAlt": "{{title}} de {{artist}}",
+    "unknownTrack": "Piste inconnue",
+    "unknownArtist": "Artiste inconnu"
+  },
+  "artistSpotlight": {
+    "title": "Artiste à l'honneur",
+    "subtitle": "Meilleurs artistes de votre région",
+    "errorTitle": "Échec du chargement des artistes",
+    "errorDescription": "Impossible de récupérer les meilleurs artistes. Veuillez réessayer plus tard.",
+    "emptyTitle": "Aucun artiste trouvé",
+    "emptyDescription": "Aucun artiste populaire trouvé pour cette région.",
+    "artistBadge": "Artiste",
+    "latestRelease": "Dernière sortie :",
+    "songs_one": "{{count}} chanson",
+    "songs_other": "{{count}} chansons",
+    "noAlbums": "Aucun album disponible"
+  },
+  "leaderboard": {
+    "errorTitle": "Échec du chargement de la bibliothèque",
+    "errorDescription": "Impossible de récupérer les statistiques de la bibliothèque. Veuillez réessayer.",
+    "tabsAriaLabel": "Mode du classement de la bibliothèque",
+    "tabArtists": "Artistes",
+    "tabGenres": "Genres",
+    "topArtists": "Meilleurs artistes",
+    "topGenres": "Meilleurs genres",
+    "statsTracks": "Pistes",
+    "statsLibrary": "Bibliothèque",
+    "statsQueued": "En file",
+    "unitTracks": "pistes",
+    "unitAlbums": "albums",
+    "emptyArtistsTitle": "Aucun artiste pour l'instant",
+    "emptyArtistsDescription": "Terminez quelques téléchargements pour voir vos meilleurs artistes.",
+    "emptyGenresTitle": "Aucun genre pour l'instant",
+    "emptyGenresDescription": "Les genres sont suivis lors des nouveaux téléchargements, ils se rempliront à mesure que votre bibliothèque grandit."
+  },
+  "topTracks": {
+    "title": "Meilleures pistes",
+    "subtitle": "Les plus écoutées · de tous les temps · Last.fm",
+    "heroBadge": "N°1 la plus écoutée",
+    "plays": "{{count}} écoutes",
+    "empty": {
+      "error": "Impossible de charger les données Last.fm.",
+      "disabled": "Activez Last.fm pour voir vos pistes les plus écoutées ici.",
+      "noUsername": "Ajoutez votre nom d'utilisateur Last.fm pour commencer à synchroniser vos meilleures pistes.",
+      "noData": "Aucune piste populaire pour l'instant, scrobblez de la musique pour les voir classées.",
+      "ctaOpenSettings": "Ouvrir les réglages",
+      "ctaConfigure": "Configurer Last.fm"
+    }
+  },
+  "recentScrobbles": {
+    "title": "Scrobbles récents",
+    "subtitle": "Last.fm",
+    "seeMore": "Voir plus",
+    "seeMoreAriaLabel": "Ouvrir le profil Last.fm",
+    "scrollLeftAriaLabel": "Défiler à gauche",
+    "scrollRightAriaLabel": "Défiler à droite",
+    "ageJustNow": "à l'instant",
+    "ageMinutes": "il y a {{count}} min",
+    "ageHours": "il y a {{count}} h",
+    "ageDays": "il y a {{count}} j",
+    "empty": {
+      "error": "Impossible de charger les données Last.fm.",
+      "disabled": "Activez Last.fm pour voir vos scrobbles récents ici.",
+      "noUsername": "Ajoutez votre nom d'utilisateur Last.fm pour commencer à synchroniser les scrobbles.",
+      "noData": "Aucun scrobble pour l'instant, votre historique apparaîtra ici.",
+      "ctaOpenSettings": "Ouvrir les réglages",
+      "ctaConfigure": "Configurer Last.fm"
+    }
+  },
+  "recentRequests": {
+    "title": "Demandes récentes",
+    "subtitle": "{{count}} derniers téléchargements",
+    "open": "Ouvrir les demandes",
+    "openAriaLabel": "Ouvrir la page des demandes",
+    "errorTitle": "Échec du chargement des demandes",
+    "errorDescription": "Impossible de récupérer les demandes récentes. Veuillez réessayer.",
+    "emptyTitle": "Aucune demande pour l'instant",
+    "emptyDescription": "Commencez à demander de la musique pour voir vos téléchargements récents ici.",
+    "albumArtAlt": "Pochette de l'album {{name}}",
+    "scrollPrevAriaLabel": "Défiler vers les demandes précédentes",
+    "scrollNextAriaLabel": "Défiler vers les demandes suivantes"
+  },
+  "mixes": {
+    "title": "Mixs de découverte",
+    "subtitle": "ListenBrainz",
+    "cardAriaLabel": "Ouvrir le mix {{label}}, {{count}} pistes",
+    "trackCount": "{{count}} pistes",
+    "autoRequestTooltip": "La demande automatique est activée, les playlists sont créées automatiquement lorsque le flux se rafraîchit.",
+    "playlistName": "{{label}} ({{date}})",
+    "playlistDescription": "Généré par Découverte · listenbrainz:{{kind}}",
+    "playlistNoSync": "pas de synchro",
+    "playlistOwner": "ListenBrainz",
+    "kinds": {
+      "dailyJams": {
+        "label": "Daily Jams",
+        "tag": "Rafraîchi chaque jour",
+        "blurb": "Un mix de fond agréable composé d'enregistrements que vous aimez déjà, régénéré chaque matin."
+      },
+      "weeklyJams": {
+        "label": "Weekly Jams",
+        "tag": "Rafraîchi le lundi",
+        "blurb": "Des chansons que vous avez déjà écoutées, organisées en une playlist qui ne demande pas une écoute active."
+      },
+      "weeklyExploration": {
+        "label": "Weekly Exploration",
+        "tag": "Rafraîchi le lundi",
+        "blurb": "Découvrez de nouvelles musiques. Des pistes que vous n'avez jamais entendues, sélectionnées par l'algorithme de filtrage collaboratif."
+      },
+      "cfRecommendations": {
+        "label": "Recommandations CF",
+        "tag": "Pool d'enregistrements bruts",
+        "blurb": "La sortie brute de votre filtrage collaboratif, MBID d'enregistrements classés par score."
+      }
+    },
+    "freshness": {
+      "syncedToday": "Synchronisé aujourd'hui",
+      "syncedDaysAgo": "Synchronisé il y a {{count}} j",
+      "updatedToday": "Mis à jour aujourd'hui",
+      "updatedDaysAgo": "Mis à jour il y a {{count}} j",
+      "updatedWeekday": "Mis à jour {{weekday}}"
+    },
+    "emptyReason": {
+      "noData": "ListenBrainz n'a pas encore calculé de recommandations collaboratives pour votre compte.",
+      "noResolved": "ListenBrainz a créé ce mix, mais ses chansons n'ont pas encore pu être trouvées dans le catalogue.",
+      "notGenerated": "ListenBrainz n'a pas encore créé ce mix. Il apparaît dès que votre historique d'écoute suffit à le générer.",
+      "fetchError": "Impossible de joindre ListenBrainz. Une nouvelle tentative aura lieu à la prochaine synchronisation.",
+      "waitingFirstSync": "En attente de la première synchronisation ListenBrainz.",
+      "feedEmpty": "ListenBrainz n'a pas encore renvoyé de chansons pour ce mix."
+    },
+    "empty": {
+      "error": "Impossible de charger vos mixs de découverte.",
+      "disabled": "Activez ListenBrainz pour voir vos mixs hebdomadaires ici.",
+      "noUsername": "Ajoutez votre nom d'utilisateur ListenBrainz pour commencer à synchroniser les mixs.",
+      "noKinds": "Choisissez les playlists à récupérer dans les réglages.",
+      "ctaOpenSettings": "Ouvrir les réglages",
+      "ctaConfigure": "Configurer ListenBrainz",
+      "ctaChoosePlaylists": "Choisir les playlists"
+    }
+  }
+}

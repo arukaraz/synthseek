@@ -1,0 +1,153 @@
+{
+  "loading": {
+    "requests": "Anfragen werden geladen..."
+  },
+  "toolbar": {
+    "pauseAll": "Alle Downloads pausieren",
+    "resumeAll": "Alle Downloads fortsetzen",
+    "retryAllFailed": {
+      "label": "Alle fehlgeschlagenen erneut versuchen",
+      "confirmTitle": "Alle fehlgeschlagenen erneut versuchen",
+      "confirmMessage": "Dadurch werden alle fehlgeschlagenen und teilweise abgeschlossenen Downloads erneut versucht. Fortfahren?",
+      "confirmPending": "Wird erneut versucht...",
+      "confirmAction": "Alle erneut versuchen"
+    },
+    "syncAllPlex": {
+      "label": "Alle Playlists mit Plex synchronisieren",
+      "labelRunning": "Alle Playlists werden mit Plex synchronisiert...",
+      "confirmTitle": "Alle Playlists mit Plex synchronisieren",
+      "confirmMessage": "Dadurch wird jede infrage kommende Playlist mit Plex synchronisiert. Fortfahren?",
+      "confirmPending": "Wird synchronisiert...",
+      "confirmAction": "Alle synchronisieren"
+    },
+    "import": {
+      "trigger": "Bibliothek importieren",
+      "sourcesLabel": "Quellen",
+      "fromFile": "Aus Datei"
+    },
+    "menu": {
+      "trigger": "Weitere Aktionen",
+      "deleteAll": {
+        "label": "Alle Anfragen löschen",
+        "confirmTitle": "Alle Anfragen löschen",
+        "confirmMessage": "Dadurch werden alle Anfragen, Alben, Playlists und Titel dauerhaft gelöscht, alle eingereihten Downloads abgebrochen und der Warteschlangenverlauf geleert. Dies kann nicht rückgängig gemacht werden.",
+        "confirmPending": "Wird gelöscht...",
+        "confirmAction": "Alle löschen",
+        "cancel": "Abbrechen"
+      }
+    }
+  },
+  "searchInput": {
+    "placeholder": "Filtern...",
+    "clear": "Filter leeren",
+    "openTitle": "Anfragen filtern",
+    "open": "Filter öffnen",
+    "close": "Filter schließen"
+  },
+  "statusFilter": {
+    "all": "Alle",
+    "active": "Aktiv",
+    "done": "Fertig",
+    "failed": "Fehlgeschlagen"
+  },
+  "sort": {
+    "recent": "Aktuell",
+    "playlist": "Playlist",
+    "artist": "Künstler",
+    "album": "Album"
+  },
+  "emptyState": {
+    "noResultsTitle": "Keine Ergebnisse",
+    "noResultsDescription": "Keine Anfragen passen zu \"{{query}}\"",
+    "noRequestsTitle": "Keine Anfragen",
+    "noRequestsDescription": "Deine Download-Anfragen erscheinen hier.",
+    "selectTitle": "Wähle eine Anfrage",
+    "selectDescription": "Wähle eine Anfrage aus der Liste, um ihre Details zu sehen."
+  },
+  "detail": {
+    "backToList": "Zurück zur Anfragenliste",
+    "requestedBy": "Angefordert von <value>{{username}}</value> · <value>{{date}}</value>",
+    "lastUpdated": "Zuletzt aktualisiert <value>{{date}}</value>",
+    "delegatedTo": "Delegiert an: <value>{{name}}</value>",
+    "moreActions": "Weitere Aktionen",
+    "removeAction": "{{label}} entfernen",
+    "retryFailed": "Fehlgeschlagene erneut versuchen",
+    "jumpTheQueue": "Vordrängeln",
+    "cancelDownloads": "Downloads abbrechen",
+    "pause": "Pausieren",
+    "resume": "Fortsetzen",
+    "syncFromSource": "Von Spotify synchronisieren",
+    "syncing": "Wird synchronisiert...",
+    "syncToPlex": "Mit Plex synchronisieren",
+    "export": "Exportieren",
+    "exportTooltipTitle": "Exportieren",
+    "exportTooltipDescription": "Lädt jetzt eine .jspf-Datei herunter, unter Verwendung der bereits zu jedem Titel gespeicherten IDs.",
+    "exportTooltipPointIds": "ISRC und Deezer-ID für jeden Titel",
+    "exportTooltipPointMusicBrainz": "MusicBrainz-ID nur dort, wo bereits aufgelöst",
+    "exportTooltipPointRefind": "Andere Apps verwenden diese IDs, um jeden Song wiederzufinden",
+    "exportMax": "Exportieren (max. Kompatibilität)",
+    "exportMaxTooltipTitle": "Exportieren (max. Kompatibilität)",
+    "exportMaxTooltipDescription": "Sucht zuerst die fehlende MusicBrainz-ID für jeden Titel und lädt dann herunter.",
+    "exportMaxTooltipPointSlower": "Kann langsamer sein: löst jede ID online auf, falls eine fehlt",
+    "exportMaxTooltipPointBest": "Ideal für ListenBrainz- und MusicBrainz-Apps",
+    "exportMaxTooltipPointMatches": "Die Datei passt dann in mehr Apps"
+  },
+  "stats": {
+    "tracksLabel": "Titel",
+    "tracksSublabel": "angefordert",
+    "completeLabel": "Abgeschlossen",
+    "completeSublabel": "heruntergeladen",
+    "failedLabel": "Fehlgeschlagen",
+    "failedSublabel": "mit Fehler",
+    "activeLabel": "Aktiv",
+    "activeSublabel": "in Bearbeitung",
+    "duplicatesLabel": "Duplikate",
+    "duplicatesSublabel": "ignoriert"
+  },
+  "tracks": {
+    "trackHeader": "Titel",
+    "artistHeader": "Künstler",
+    "statusHeader": "Status",
+    "completedHeader": "Abgeschlossen",
+    "actionsHeader": "Aktionen",
+    "priorityHeader": "Priorität",
+    "empty": "Keine Titel",
+    "moreInfo": "Mehr Infos: {{label}}",
+    "retry": "Titel erneut versuchen",
+    "retryTitle": "Erneut versuchen",
+    "cancel": "Titel abbrechen",
+    "cancelTitle": "Abbrechen",
+    "actionsMenu": "Titelaktionen",
+    "jumpTheQueue": "Vordrängeln",
+    "jumpTheQueueTitle": "Diesen Titel an den Anfang der Warteschlange verschieben",
+    "prioritized": "Priorisiert"
+  },
+  "export": {
+    "dialogTitle": "Exportieren (max. Kompatibilität)",
+    "dialogDescription": "Die MusicBrainz-ID jedes Titels wird aufgelöst, damit die Datei in jeder App passt, und dann heruntergeladen.",
+    "resolving": "Wird aufgelöst {{processed}}/{{total}}",
+    "preparing": "Export wird vorbereitet...",
+    "failed": "Export fehlgeschlagen"
+  },
+  "confirm": {
+    "cancelTrackTitle": "Titel abbrechen",
+    "cancelTrackMessage": "\"{{title}}\" von {{artist}} abbrechen?",
+    "cancelConfirm": "Abbrechen",
+    "cancelKeep": "Behalten",
+    "removeTitle": "{{label}}-Anfrage entfernen",
+    "removeMessage": "\"{{name}}\" von {{artist}} entfernen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "removeConfirm": "{{label}} entfernen",
+    "removeKeep": "Behalten",
+    "cancelDownloadsTitle": "{{label}}-Downloads abbrechen",
+    "cancelDownloadsMessage": "Alle aktiven Downloads für \"{{name}}\" von {{artist}} abbrechen?",
+    "cancelDownloadsConfirm": "Downloads abbrechen",
+    "cancelDownloadsKeep": "Weiter herunterladen"
+  },
+  "labels": {
+    "album": "Album",
+    "playlist": "Playlist"
+  },
+  "spotifyCallback": {
+    "connectionFailed": "Spotify-Verbindung fehlgeschlagen"
+  }
+}

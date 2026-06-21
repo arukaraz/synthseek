@@ -16,16 +16,20 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 - Multi-user: local accounts and Plex OAuth, with member management and per-user libraries
 - Provider-agnostic catalog (Deezer by default, no API keys required)
 - Search for tracks, albums, artists, and playlists
+- A full music library to browse and manage everything you have downloaded, organized by albums, artists, playlists, and tracks
+- Playlist management: create, rename, and delete your own playlists, and add or remove tracks
+- Sync playlists to Plex, one at a time or all at once
 - slskd integration for P2P downloads, with an automatic or optional yt-dlp fallback
+- Download queue controls, with priority, pause, and resume
 - Per-request download-source and quality selection
 - Spotify library import, and playlist import and export (JSPF, XSPF, CSV)
-- Discovery integrations with Last.fm and ListenBrainz
+- Discovery integrations with Last.fm and ListenBrainz, with discovery mixes on a dedicated Discover page
 - Lidarr delegation with tag and monitor-scope selection
 - Metadata matching
 - Automatic file organization
 - End-to-end playlist downloads with automatic Plex reconstruction
-- Built-in MCP server, so assistants can search and manage your library
-- Localization (more languages are on the way...)
+- Built-in MCP server, so assistants can search and manage your library ([see the full list and examples of MCP tools](./MCP-TOOLS.md))
+- Localization in English, Espanol, Deutsch, and Francais
 - Real-time progress tracking, logs viewer, and in-app update notifications
 
 ## Demos

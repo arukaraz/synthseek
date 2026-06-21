@@ -8,33 +8,46 @@ import type { LbKindMeta } from "./types";
 export const LB_KIND_METADATA = {
   "daily-jams": {
     label: "Daily Jams",
-    tag: "Refreshes daily",
-    blurb: "A comfortable background mix of recordings you already love, regenerated every morning.",
     icon: Sun,
     acc: "daily",
   },
   "weekly-jams": {
     label: "Weekly Jams",
-    tag: "Refreshes Mondays",
-    blurb: "Songs you've listened to before, arranged into a playlist that doesn't require active listening.",
     icon: Repeat,
     acc: "weekly",
   },
   "weekly-exploration": {
     label: "Weekly Exploration",
-    tag: "Refreshes Mondays",
-    blurb: "Discover new music. Tracks you haven't heard before, selected by the collaborative-filtering algorithm.",
     icon: Compass,
     acc: "explore",
   },
   "cf-recommendations": {
     label: "CF Recommendations",
-    tag: "Raw recording pool",
-    blurb: "Your raw collaborative-filtering output recording MBIDs ranked by score.",
     icon: Sparkles,
     acc: "cf",
   },
 } as const satisfies Record<LbPlaylistKind, LbKindMeta>;
+
+export const LB_KIND_LABEL_KEYS: Record<LbPlaylistKind, ParseKeys<"discover">> = {
+  "daily-jams": "mixes.kinds.dailyJams.label",
+  "weekly-jams": "mixes.kinds.weeklyJams.label",
+  "weekly-exploration": "mixes.kinds.weeklyExploration.label",
+  "cf-recommendations": "mixes.kinds.cfRecommendations.label",
+};
+
+export const LB_KIND_TAG_KEYS: Record<LbPlaylistKind, ParseKeys<"discover">> = {
+  "daily-jams": "mixes.kinds.dailyJams.tag",
+  "weekly-jams": "mixes.kinds.weeklyJams.tag",
+  "weekly-exploration": "mixes.kinds.weeklyExploration.tag",
+  "cf-recommendations": "mixes.kinds.cfRecommendations.tag",
+};
+
+export const LB_KIND_BLURB_KEYS: Record<LbPlaylistKind, ParseKeys<"discover">> = {
+  "daily-jams": "mixes.kinds.dailyJams.blurb",
+  "weekly-jams": "mixes.kinds.weeklyJams.blurb",
+  "weekly-exploration": "mixes.kinds.weeklyExploration.blurb",
+  "cf-recommendations": "mixes.kinds.cfRecommendations.blurb",
+};
 
 export const EMPTY_REASON_KEYS: Record<string, ParseKeys<"discover">> = {
   "no-data": "mixes.emptyReason.noData",

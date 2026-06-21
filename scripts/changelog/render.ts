@@ -37,7 +37,7 @@ function renderSection(section: ChangelogSection, heading: string | undefined): 
 }
 
 function renderVersion(version: ChangelogVersion): string {
-  const blocks: string[] = [`# v${version.version} — ${formatDate(version.date)}`];
+  const blocks: string[] = [`# v${version.version}, ${formatDate(version.date)}`];
 
   if (version.callouts && version.callouts.length > 0) {
     blocks.push(version.callouts.map(renderCallout).join(BLOCK_GAP));

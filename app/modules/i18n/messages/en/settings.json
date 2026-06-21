@@ -641,6 +641,20 @@
     },
     "nextRun": {
       "now": "now"
+    },
+    "registry": {
+      "library-sync": {
+        "name": "External Library Sync",
+        "description": "Imports tracks from connected external libraries."
+      },
+      "discovery-sweep": {
+        "name": "Discovery Sweep",
+        "description": "Evaluates discovery feeds and triggers integrations."
+      },
+      "pattern-sync": {
+        "name": "Smart Search Pattern Sync",
+        "description": "Syncs federated smart-search patterns."
+      }
     }
   },
   "shell": {

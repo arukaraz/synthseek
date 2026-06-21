@@ -1,0 +1,87 @@
+{
+  "shell": {
+    "eyebrow": "Configuration initiale",
+    "loading": "Chargement de la configuration",
+    "progress": "Étape {{current}} sur {{total}}",
+    "back": "Retour"
+  },
+  "actions": {
+    "continue": "Continuer",
+    "skip": "Ignorer",
+    "saving": "Enregistrement..."
+  },
+  "admin": {
+    "title": "Créez votre compte administrateur",
+    "description": "C'est le premier compte de cette installation Synthseek. Vous pourrez inviter d'autres personnes plus tard.",
+    "creating": "Création de l'administrateur...",
+    "submit": "Créer l'administrateur",
+    "createError": "Impossible de créer le compte administrateur. Veuillez réessayer.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "vous@domaine.com",
+    "emailError": "Saisissez une adresse e-mail valide.",
+    "usernameLabel": "Nom d'utilisateur",
+    "usernamePlaceholder": "admin",
+    "usernameHint": "Min 3 caractères",
+    "usernameError": "Utilisez entre 3 et 32 caractères.",
+    "passwordHint": "Au moins 8 caractères",
+    "passwordError": "Utilisez au moins 8 caractères."
+  },
+  "slskd": {
+    "title": "Se connecter à slskd",
+    "description": "Synthseek communique avec le réseau Soulseek via votre démon slskd. Cette étape est requise.",
+    "apiUrlLabel": "URL de l'API",
+    "apiUrlPlaceholder": "http://localhost:5030",
+    "apiKeyLabel": "Clé API",
+    "testIdle": "Tester la connexion",
+    "testBusy": "Test en cours...",
+    "passed": "Connexion vérifiée.",
+    "failed": "Impossible de joindre slskd. Vérifiez l'URL et la clé API.",
+    "failedReason": "Échec de la connexion : {{reason}}",
+    "overrideLink": "Continuer sans connexion vérifiée",
+    "overrideArmed": "Poursuite sans connexion vérifiée. Vous pourrez corriger cela plus tard dans les Réglages.",
+    "saveFailed": "Impossible d'enregistrer la connexion slskd. Confirmez l'URL et la clé API, puis réessayez.",
+    "blockedHint": "Testez la connexion avant de continuer"
+  },
+  "plex": {
+    "title": "Connecter Plex (facultatif)",
+    "description": "Permet à Synthseek d'analyser votre bibliothèque après chaque importation et de répliquer les playlists. Vous pourrez le faire plus tard depuis les Réglages.",
+    "blockedHint": "Connectez Plex ou ignorez cette étape pour continuer",
+    "intro": "Une fenêtre s'ouvrira pour vous connecter à plex.tv.",
+    "connect": "Se connecter avec <0>Plex</0>",
+    "connecting": "En attente de Plex...",
+    "saving": "Enregistrement...",
+    "connected": "Plex connecté. Passez à l'étape suivante.",
+    "noServers": "Aucun serveur Plex trouvé sur ce compte. Vous pouvez ignorer et en ajouter un plus tard.",
+    "timeout": "La connexion à Plex a expiré. Réessayez, ou ignorez et connectez Plex plus tard depuis les Réglages.",
+    "popupUnfinished": "La connexion à Plex ne s'est pas terminée. Rouvrez la fenêtre et approuvez l'accès, ou ignorez cette étape.",
+    "serverPickerIntro": "Choisissez le serveur Plex que Synthseek doit cibler :",
+    "serverLocal": "local",
+    "serverRemote": "distant"
+  },
+  "enrichment": {
+    "title": "Enrichissement des métadonnées (facultatif)",
+    "description": "Améliore la façon dont Synthseek étiquette, évalue et recommande les pistes. Toutes les clés sont facultatives mais recommandées.",
+    "saveFailed": "Impossible d'enregistrer vos réglages. Vérifiez les informations et réessayez.",
+    "lastfmLabel": "Clé API Last.fm",
+    "lastfmHint": "Clé API Last.fm pour tout le système. Partagée entre tous les utilisateurs.",
+    "fanartLabel": "Clé API FanART",
+    "fanartHint": "Source des illustrations.",
+    "songlinkLabel": "Clé API Songlink",
+    "songlinkHint": "Résout les URL de pistes entre plateformes pour les importations de playlists multi-plateformes. Synthseek utilise le point de terminaison public par défaut. Laissez vide sauf si vous avez une clé.",
+    "acoustidLabel": "Clé API AcoustID",
+    "acoustidHint": "Solution de repli par empreinte audio pour les pistes sans métadonnées de tags fiables.",
+    "musicbrainzLabel": "E-mail de contact MusicBrainz",
+    "musicbrainzPlaceholder": "vous@exemple.com",
+    "musicbrainzHint": "Requis. Sans cela, Synthseek partage un e-mail à débit limité."
+  },
+  "done": {
+    "title": "Tout est prêt",
+    "description": "Synthseek est prêt à l'emploi. Vous pourrez tout ajuster plus tard dans les Réglages.",
+    "cardHeading": "Configuration terminée",
+    "cardBody": "Slskd est connecté. Plex et l'enrichissement des métadonnées peuvent être ajoutés ou modifiés à tout moment.",
+    "primaryRest": "Aller au tableau de bord",
+    "primaryBusy": "Finalisation...",
+    "primaryRetry": "Réessayer",
+    "failed": "Impossible de terminer la configuration. Veuillez réessayer."
+  }
+}

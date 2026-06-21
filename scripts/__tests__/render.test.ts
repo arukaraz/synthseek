@@ -63,9 +63,9 @@ describe("renderChangelog", () => {
     expect(markdown.startsWith("# Patch Notes\n\n---\n\n")).toBe(true);
   });
 
-  it("renders version headings with em-dash dated titles", () => {
-    expect(markdown).toContain("# v2.0.0 — June 5, 2026");
-    expect(markdown).toContain("# v1.9.0 — January 9, 2026");
+  it("renders version headings with comma dated titles", () => {
+    expect(markdown).toContain("# v2.0.0, June 5, 2026");
+    expect(markdown).toContain("# v1.9.0, January 9, 2026");
   });
 
   it("renders the version title as the lead section heading", () => {

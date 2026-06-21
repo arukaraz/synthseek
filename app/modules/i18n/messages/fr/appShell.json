@@ -1,0 +1,58 @@
+{
+  "appShell": {
+    "loader": {
+      "library": "Chargement de votre bibliothèque"
+    },
+    "settings": {
+      "integrations": {
+        "title": "Intégrations",
+        "tabs": {
+          "downloadSources": "Sources de téléchargement",
+          "plex": "Plex",
+          "lidarr": "Lidarr",
+          "metadata": "Métadonnées"
+        }
+      }
+    }
+  },
+  "progressDock": {
+    "title": {
+      "plexSyncRunning": "Synchronisation avec Plex",
+      "plexSyncDone": "Toutes les playlists synchronisées",
+      "libraryImportRunning": "Importation depuis {{provider}}",
+      "libraryImportDone": "Importation terminée",
+      "fileImportRunning": "Importation de la playlist",
+      "fileImportDone": "Importation terminée"
+    },
+    "subtitle": {
+      "ofTotal": "sur {{total}}",
+      "failed": "en échec",
+      "skippedBreakdown": "importées, {{skipped}} déjà dans la bibliothèque"
+    },
+    "itemSkippedReason": "Déjà dans la bibliothèque",
+    "mobileMeta": "{{done}} sur {{total}} · {{current}}",
+    "itemState": {
+      "pending": "En attente",
+      "importing": "Importation",
+      "done": "Terminé",
+      "failed": "En échec",
+      "skipped": "Ignoré"
+    },
+    "failureReason": {
+      "notInLibrary": "Pas dans votre bibliothèque",
+      "noMatchableTracks": "Aucune correspondance pour ses pistes",
+      "sourceHasNoTracks": "La source ne contient aucune piste",
+      "importError": "Échec de l'importation"
+    },
+    "provider": {
+      "spotify": "Spotify",
+      "generic": "votre bibliothèque"
+    },
+    "announce": {
+      "progress": "{{done}} sur {{total}} terminées"
+    },
+    "minimize": "Réduire",
+    "expand": "Agrandir",
+    "dismiss": "Ignorer"
+  }
+}

@@ -1,0 +1,719 @@
+{
+  "general": {
+    "pageTitle": "Général",
+    "language": {
+      "title": "Langue",
+      "description": "Choisissez la langue utilisée dans toute l'interface.",
+      "selectorLabel": "Langue de l'interface",
+      "updated": "Langue mise à jour",
+      "updateFailed": "Impossible de mettre à jour la langue"
+    },
+    "theme": {
+      "title": "Thème",
+      "description": "Choisissez le thème adapté à votre environnement.",
+      "groupLabel": "Thème de couleur"
+    }
+  },
+  "header": {
+    "title": "Moteur",
+    "description": "Contrôles avancés pour le pipeline de la recherche au téléchargement puis à l'importation. Les valeurs par défaut sont réglées sur un équilibre qui convient à la plupart des configurations, ne les modifiez que si vous savez ce que vous faites. En cas de doute, laissez-les telles quelles ou appuyez sur Réinitialiser aux valeurs par défaut sur la carte concernée si des pistes commencent à échouer après une modification.",
+    "loading": "Chargement des réglages…",
+    "loadError": "Échec du chargement des réglages : {{message}}",
+    "unknownError": "Erreur inconnue"
+  },
+  "search": {
+    "title": "Recherche",
+    "maxPeerAttempts": {
+      "label": "Tentatives de pairs max",
+      "description": "Nombre d'envoyeurs slskd à essayer pour chaque piste avant de la marquer comme en échec."
+    },
+    "maxVariations": {
+      "label": "Variations max",
+      "description": "Nombre de combinaisons de requête (artiste+titre, avec/sans album, avec/sans featuring) à essayer par piste."
+    },
+    "historyCleanup": {
+      "label": "Nettoyage de l'historique activé",
+      "description": "Un cron horaire supprime les anciennes recherches slskd afin que sa liste de recherches ne grandisse pas indéfiniment."
+    },
+    "maxHistorySearches": {
+      "label": "Recherches d'historique max",
+      "description": "Nombre de recherches les plus récentes à conserver dans slskd. Les plus anciennes sont supprimées par la tâche de nettoyage ci-dessus."
+    },
+    "smartSearchHeader": "Recherche intelligente",
+    "autoBan": {
+      "label": "Bannissement automatique après N échecs",
+      "description": "Ajouter un envoyeur/pair à la liste de bannissement après ce nombre d'échecs de téléchargement (compté en mémoire, réinitialisé au redémarrage). 0 désactive.",
+      "ariaLabel": "Bannir automatiquement après N tentatives échouées"
+    },
+    "customMoodKeywords": {
+      "label": "Mots-clés d'ambiance personnalisés",
+      "helper": "Fragments testés sur les requêtes de recherche des utilisateurs pour les classer comme recherches d'ambiance/genre (par opposition à un artiste/piste précis). Appuyez sur Entrée ou virgule pour ajouter.",
+      "placeholder": "ex. soirée, mes favoris"
+    },
+    "federatedPatterns": {
+      "label": "Motifs fédérés",
+      "experimental": "Expérimental",
+      "description": "Adhésion : un cron quotidien fédère vos mots-clés d'ambiance/genre anonymisés avec l'API de fédération Synthseek et récupère ceux approuvés par consensus pour améliorer la classification de la recherche intelligente."
+    }
+  },
+  "timeouts": {
+    "title": "Délais d'attente",
+    "searchPhase": {
+      "label": "Phase de recherche",
+      "description": "Durée pendant laquelle slskd garde chaque requête de recherche ouverte sur le réseau Soulseek avant d'arrêter la collecte de nouveaux résultats.",
+      "ariaLabel": "Délai de la phase de recherche"
+    },
+    "downloadPhase": {
+      "label": "Phase de téléchargement",
+      "description": "Budget total pour toute la phase de téléchargement par piste. La piste est marquée comme en échec si ce délai s'écoule.",
+      "ariaLabel": "Délai de la phase de téléchargement"
+    },
+    "importPhase": {
+      "label": "Phase d'importation",
+      "description": "Budget total pour la phase d'importation par piste. Marquée comme en échec si dépassé.",
+      "ariaLabel": "Délai de la phase d'importation"
+    },
+    "peerUnresponsive": {
+      "label": "Pair non réactif",
+      "description": "Durée maximale pendant laquelle un téléchargement peut rester dans les états non réactifs de slskd avant que nous annulions et essayions le pair suivant.",
+      "ariaLabel": "Délai pour pair non réactif"
+    },
+    "queueWaitActivePeer": {
+      "label": "Attente en file (pair actif)",
+      "description": "Attente maximale dans les états En file de slskd lorsque le pair nous sert déjà activement un autre téléchargement (susceptible de donner son tour à celui-ci).",
+      "ariaLabel": "Délai d'attente en file pour pair actif"
+    },
+    "queueWaitIdlePeer": {
+      "label": "Attente en file (pair inactif)",
+      "description": "Attente maximale dans les états En file de slskd lorsque le pair ne nous sert rien actuellement (peut être hors ligne ou ignorer la requête).",
+      "ariaLabel": "Délai d'attente en file pour pair inactif"
+    }
+  },
+  "queue": {
+    "title": "File et concurrence",
+    "maxSize": {
+      "label": "Taille max",
+      "description": "Plafond strict du nombre total de tâches que la file conserve à la fois (en file + actives). Les nouvelles demandes sont rejetées une fois pleine.",
+      "ariaLabel": "Taille max de la file"
+    },
+    "maxConcurrentSearches": {
+      "label": "Recherches simultanées max",
+      "description": "Nombre de pistes pouvant être dans la phase de recherche simultanément.",
+      "ariaLabel": "Recherches simultanées max"
+    },
+    "maxPendingImports": {
+      "label": "Importations en attente max",
+      "description": "Contre-pression : lorsque ce nombre de pistes téléchargées attend d'être importé, le moteur suspend le démarrage de nouvelles recherches jusqu'à ce que les importations s'écoulent.",
+      "ariaLabel": "Importations en attente max"
+    }
+  },
+  "import": {
+    "title": "Importation",
+    "metadataConfidence": {
+      "label": "Seuil de confiance des métadonnées",
+      "description": "Correspondance minimale (0-100) entre les tags audio intégrés d'un fichier téléchargé. Les fichiers en dessous de ce score sont rejetés et peuvent être réessayés.",
+      "ariaLabel": "Seuil de confiance des métadonnées"
+    }
+  },
+  "common": {
+    "loading": "Chargement…",
+    "loadFailedWithReason": "Échec du chargement des réglages : {{reason}}",
+    "loadFailed": "Échec du chargement des réglages.",
+    "unknownError": "Erreur inconnue"
+  },
+  "metadata": {
+    "enrichment": {
+      "title": "Enrichissement des métadonnées",
+      "description": "Services externes qui enrichissent votre bibliothèque avec des illustrations, des solutions de repli par empreinte et des données de tags. Tous facultatifs mais recommandés, laissez vide pour utiliser les valeurs publiques par défaut ou ignorer la fonctionnalité.",
+      "fanartKey": {
+        "label": "Clé API FanART",
+        "helper": "Source des illustrations."
+      },
+      "musicbrainzEmail": {
+        "label": "E-mail de contact MusicBrainz",
+        "helper": "Requis. Sans cela, Synthseek partage un e-mail à débit limité.",
+        "placeholder": "vous@exemple.com"
+      },
+      "acoustidKey": {
+        "label": "Clé API AcoustID",
+        "helper": "Solution de repli par empreinte audio pour les pistes sans métadonnées de tags fiables."
+      }
+    },
+    "librarySources": {
+      "title": "Sources de bibliothèque",
+      "description": "Plateformes de streaming depuis lesquelles Synthseek peut importer des playlists et des albums enregistrés.",
+      "songlinkKey": {
+        "label": "Clé API Songlink (facultatif)",
+        "helper": "Résout les URL de pistes entre plateformes pour les importations de playlists multi-plateformes. Synthseek utilise le point de terminaison public par défaut. Laissez vide sauf si vous avez une clé."
+      },
+      "spotify": {
+        "title": "Spotify",
+        "subtitle": "Configuration de l'application du développeur",
+        "toggleAriaLabel": "Activer Spotify",
+        "clientIdLabel": "Client ID",
+        "clientIdPlaceholder": "ex. 3a1b6c5d7e8f4a...",
+        "publicBaseUrlLabel": "URL de base publique",
+        "publicBaseUrlHelper": "Votre URL Synthseek (sans barre oblique finale).",
+        "publicBaseUrlPlaceholder": "https://synthseek.example.com",
+        "redirectUriLabel": "URI de redirection",
+        "redirectUriHelper": "Collez cette URI exactement dans la liste « Redirect URIs » de votre application Spotify.",
+        "copyAriaLabel": "Copier l'URI de redirection",
+        "copyTitle": "Copier l'URI de redirection",
+        "copied": "URI de redirection copiée",
+        "copyFailed": "Échec de la copie de l'URI de redirection",
+        "validationMissingFields": "Spotify est activé mais des champs requis manquent. Renseignez le Client ID et l'URL de base publique, ou désactivez le commutateur."
+      }
+    },
+    "spotifyRequirements": {
+      "title": "Exigences du mode développement Spotify",
+      "ownerPremium": "Le compte Spotify qui <strong>possède l'application</strong> dans le <dashboard>Developer Dashboard</dashboard> doit disposer d'un abonnement Premium actif.",
+      "userManagement": "Chaque utilisateur Synthseek qui souhaite se connecter doit être ajouté à la liste <strong>Settings → User Management</strong> de l'application (avec son e-mail Spotify).",
+      "connectorsNoPremium": "Les utilisateurs qui se connectent n'ont <strong>pas</strong> besoin de Premium eux-mêmes, seul le propriétaire de l'application en a besoin."
+    }
+  },
+  "plex": {
+    "statusConnected": "Connecté",
+    "statusNotConnected": "Non connecté",
+    "serverUrl": {
+      "label": "URL du serveur",
+      "helperConnected": "Détectée via OAuth. Modifiez en vous reconnectant.",
+      "helperDisconnected": "Cliquez sur Reconnecter pour lier un serveur Plex."
+    },
+    "serverPicker": {
+      "prompt": "Choisissez le serveur Plex que Synthseek doit cibler :",
+      "empty": "Aucun serveur trouvé sur ce compte Plex.",
+      "badgeLocal": "local",
+      "badgeRemote": "distant"
+    },
+    "reconnectWaiting": "En attente de Plex...",
+    "reconnect": "Reconnecter",
+    "disconnect": "Déconnecter",
+    "disconnected": "Plex déconnecté",
+    "libraryHeader": "Bibliothèque",
+    "libraryScan": {
+      "label": "Analyse de la bibliothèque",
+      "description": "Après chaque importation réussie, demander à Plex d'analyser le dossier du nouveau fichier."
+    },
+    "playlistSync": {
+      "label": "Synchronisation des playlists",
+      "description": "Lorsqu'une demande de playlist Synthseek se termine (ou grandit), créer / mettre à jour une playlist Plex correspondante avec les pistes importées."
+    },
+    "namingHeader": "Nommage des playlists",
+    "usernameAffix": {
+      "label": "Affixe du nom d'utilisateur",
+      "description": "Préfixer ou suffixer les noms de playlists Plex avec le nom d'utilisateur du demandeur afin que les playlists multi-utilisateurs n'entrent pas en collision."
+    },
+    "affix": {
+      "off": "Désactivé",
+      "prefix": "Préfixe",
+      "suffix": "Suffixe"
+    },
+    "separator": {
+      "label": "Séparateur",
+      "helper": "Caractère(s) entre le nom et le nom d'utilisateur. Courants : _, -, ·",
+      "placeholder": "_"
+    },
+    "previewHeader": "Aperçu",
+    "previewSampleName": "Discover Weekly",
+    "sampleUsernameFallback": "alice"
+  },
+  "slskd": {
+    "title": "Slskd",
+    "description": "Requis pour les téléchargements.",
+    "apiUrl": {
+      "label": "URL de l'API",
+      "placeholder": "http://localhost:5030"
+    },
+    "apiKey": {
+      "label": "Clé API"
+    },
+    "testing": "Test en cours...",
+    "testConnection": "Tester la connexion",
+    "connected": "Connecté",
+    "connectionFailed": "Échec de la connexion",
+    "bannedUploaders": {
+      "label": "Envoyeurs bannis",
+      "addPlaceholder": "ex. user123",
+      "filterPlaceholder": "Filtrer la liste de bannissement...",
+      "empty": "Aucun envoyeur banni pour l'instant.",
+      "count": "{{count}} bannis",
+      "helper": "Ignorer ces utilisateurs/pairs slskd lors du choix des candidats au téléchargement. <threshold>Configurer le seuil</threshold>",
+      "tooltipTriggerLabel": "À propos des envoyeurs bannis",
+      "tooltipWhat": "Les noms d'utilisateur Soulseek ajoutés ici sont bloqués comme sources de téléchargement. Synthseek ignore leurs fichiers et télécharge depuis une autre source à la place. Ajoutez toute personne qui continue d'envoyer de mauvais fichiers ou de ne pas livrer.",
+      "tooltipAuto": "Synthseek peut aussi ajouter des envoyeurs ici pour vous. Lorsque les transferts d'un utilisateur échouent trop de fois de suite, il est banni automatiquement. Seuls les vrais échecs de transfert comptent, pas les non-correspondances de nom de fichier, et la limite est configurée dans Moteur > Recherche (réglez-la sur 0 pour désactiver le bannissement automatique)."
+    },
+    "status": {
+      "healthy": "Opérationnel",
+      "unhealthy": "Indisponible",
+      "notConfigured": "Non configuré"
+    }
+  },
+  "lidarr": {
+    "title": "Lidarr",
+    "description": "Facultatif. Confiez des albums à une instance Lidarr existante.",
+    "url": {
+      "label": "URL",
+      "placeholder": "http://localhost:8686"
+    },
+    "apiKey": {
+      "label": "Clé API"
+    },
+    "testing": "Test en cours...",
+    "testConnection": "Tester la connexion",
+    "connected": "Connecté",
+    "connectionFailed": "Échec de la connexion",
+    "status": {
+      "healthy": "Opérationnel",
+      "unhealthy": "Indisponible",
+      "notConfigured": "Non configuré"
+    }
+  },
+  "ytdlp": {
+    "title": "yt-dlp",
+    "description": "Source de repli utilisée lorsque slskd ne peut pas fournir une piste. Le format et la qualité suivent la configuration propre à chaque demande.",
+    "enable": {
+      "label": "Activer",
+      "description": "Lorsque c'est activé, les pistes qui échouent sur les sources prioritaires sont réessayées via yt-dlp dans la même tâche.",
+      "ariaLabel": "Activer le repli yt-dlp"
+    },
+    "searchResults": {
+      "label": "Résultats de recherche",
+      "description": "Nombre de candidats YouTube à récupérer par piste avant l'évaluation par durée et titre.",
+      "ariaLabel": "Résultats de recherche"
+    },
+    "maxDurationDelta": {
+      "label": "Écart de durée max",
+      "description": "Rejeter les candidats dont la durée diffère de la piste attendue de plus de ce nombre de secondes.",
+      "ariaLabel": "Écart de durée max en secondes"
+    },
+    "searchTimeout": {
+      "label": "Délai de recherche",
+      "description": "Durée pendant laquelle yt-dlp peut rechercher une piste sur YouTube. La recherche YouTube est plus lente que slskd, elle bénéficie donc d'une valeur par défaut plus large.",
+      "ariaLabel": "Délai de recherche yt-dlp en secondes"
+    }
+  },
+  "members": {
+    "pageTitle": "Membres",
+    "cardTitle": "Liste des utilisateurs",
+    "cardDescription": "Utilisateurs qui partagent cette instance Synthseek.",
+    "adminOnly": "Seuls les administrateurs peuvent voir les membres.",
+    "loading": "Chargement des membres...",
+    "empty": "Aucun membre pour l'instant.",
+    "loadError": "Échec du chargement des membres : {{message}}",
+    "toolbar": {
+      "createLocal": "Créer un utilisateur local",
+      "importPlex": "Importer des utilisateurs Plex"
+    },
+    "columns": {
+      "user": "Utilisateur",
+      "requests": "Demandes",
+      "type": "Type",
+      "role": "Rôle",
+      "joined": "Inscrit le",
+      "selectAll": "Sélectionner tous les membres",
+      "selectMember": "Sélectionner {{username}}"
+    },
+    "type": {
+      "plex": "Utilisateur Plex",
+      "local": "Utilisateur local"
+    },
+    "role": {
+      "owner": "Propriétaire",
+      "admin": "Administrateur",
+      "user": "Utilisateur"
+    },
+    "roleOptions": {
+      "user": "Utilisateur",
+      "admin": "Administrateur"
+    },
+    "actions": {
+      "edit": "Modifier {{username}}",
+      "delete": "Supprimer {{username}}"
+    },
+    "bulk": {
+      "selected": "{{count}} sélectionnés",
+      "makeUser": "Définir comme utilisateur",
+      "makeAdmin": "Définir comme administrateur",
+      "delete": "Supprimer la sélection",
+      "clear": "Effacer",
+      "deleteTitle": "Supprimer des utilisateurs",
+      "deleteMessage": "Cela supprime les comptes sélectionnés et réattribue leur historique de demandes au propriétaire. Les fichiers téléchargés dans Plex ne sont pas affectés."
+    },
+    "delete": {
+      "title": "Supprimer l'utilisateur",
+      "message": "Supprimer {{username}} ? Cela supprime le compte utilisateur et réattribue son historique de demandes au propriétaire. Les fichiers téléchargés dans Plex ne sont pas affectés.",
+      "confirm": "Supprimer"
+    },
+    "create": {
+      "title": "Créer un utilisateur local",
+      "description": "Les utilisateurs locaux se connectent avec leur e-mail et leur mot de passe.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "user@example.com",
+      "emailAriaLabel": "E-mail de l'utilisateur",
+      "usernameLabel": "Nom d'utilisateur",
+      "usernamePlaceholder": "nom d'utilisateur",
+      "usernameAriaLabel": "Nom d'utilisateur",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Au moins 8 caractères",
+      "passwordAriaLabel": "Mot de passe",
+      "roleLabel": "Rôle",
+      "roleAriaLabel": "Rôle de l'utilisateur",
+      "submit": "Créer l'utilisateur"
+    },
+    "edit": {
+      "title": "Modifier l'utilisateur",
+      "description": "Mettez à jour les détails de ce membre. Laissez le mot de passe vide pour le conserver inchangé.",
+      "usernameLabel": "Nom d'utilisateur",
+      "usernameAriaLabel": "Nom d'utilisateur",
+      "emailLabel": "E-mail",
+      "emailAriaLabel": "E-mail de l'utilisateur",
+      "roleLabel": "Rôle",
+      "roleAriaLabel": "Rôle de l'utilisateur",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Laissez vide pour conserver le mot de passe actuel",
+      "passwordAriaLabel": "Nouveau mot de passe",
+      "ownerRoleNote": "Le compte propriétaire doit rester administrateur.",
+      "submit": "Enregistrer les modifications"
+    },
+    "import": {
+      "title": "Importer des utilisateurs Plex",
+      "loading": "Chargement des utilisateurs Plex...",
+      "empty": "Aucun utilisateur Plex ayant accès à ce serveur n'a été trouvé.",
+      "selectAll": "Tout sélectionner",
+      "selectUser": "Sélectionner {{username}}",
+      "imported": "Importé",
+      "roleLabel": "Rôle pour les utilisateurs importés",
+      "roleAriaLabel": "Rôle pour les utilisateurs importés",
+      "submit": "Importer la sélection"
+    }
+  },
+  "profile": {
+    "pageTitle": "Profil",
+    "account": {
+      "title": "Compte",
+      "memberSince": "Membre depuis",
+      "plexAccount": "Compte Plex",
+      "localAccount": "Compte local"
+    },
+    "edit": {
+      "title": "Modifier le profil",
+      "usernameLabel": "Nom d'utilisateur",
+      "usernameAriaLabel": "Nom d'utilisateur",
+      "emailLabel": "E-mail",
+      "emailAriaLabel": "E-mail",
+      "emailManagedByPlex": "Votre e-mail est géré par Plex.",
+      "avatarLabel": "URL de l'avatar",
+      "avatarPlaceholder": "https://...",
+      "avatarAriaLabel": "URL de l'avatar"
+    },
+    "password": {
+      "title": "Mot de passe",
+      "currentLabel": "Mot de passe actuel",
+      "currentAriaLabel": "Mot de passe actuel",
+      "newLabel": "Nouveau mot de passe",
+      "newPlaceholder": "Au moins 8 caractères",
+      "newAriaLabel": "Nouveau mot de passe",
+      "submit": "Changer le mot de passe",
+      "managedByPlex": "Votre mot de passe est géré par Plex."
+    },
+    "connected": {
+      "title": "Comptes connectés",
+      "empty": "Aucune source connectée n'est disponible pour le moment.",
+      "connect": "Connecter",
+      "disconnect": "Déconnecter",
+      "spotify": {
+        "name": "Spotify",
+        "connected": "Connecté",
+        "notConnected": "Non connecté",
+        "notConfigured": "Demandez d'abord à un administrateur de configurer Spotify."
+      },
+      "plex": {
+        "name": "Plex",
+        "linked": "Lié",
+        "notLinked": "Non lié",
+        "connecting": "En attente de Plex...",
+        "needsPassword": "Définissez un mot de passe avant de dissocier, sinon vous seriez bloqué hors de votre compte.",
+        "linkedAs": "Plex lié en tant que {{username}}",
+        "linkedFallback": "Compte Plex lié",
+        "linkTimedOut": "Délai de liaison Plex dépassé",
+        "linkFailed": "Échec de la liaison de Plex"
+      }
+    }
+  },
+  "api": {
+    "card": {
+      "title": "API",
+      "description": "Accès programmatique à Synthseek : créez des clés pour vos applications et connectez des assistants IA via MCP."
+    },
+    "keys": {
+      "title": "Clés API",
+      "empty": "Aucune clé API pour l'instant. Créez-en une pour connecter une application ou un assistant.",
+      "loading": "Chargement des clés…",
+      "newKey": "Nouvelle clé",
+      "loadError": "Échec du chargement des clés : {{message}}"
+    },
+    "row": {
+      "lastUsed": "dernière utilisation {{time}}",
+      "neverUsed": "jamais utilisée",
+      "created": "créée {{time}}",
+      "revokeLabel": "Révoquer {{name}}"
+    },
+    "create": {
+      "title": "Créer une clé API",
+      "description": "Donnez-lui un nom pour la reconnaître plus tard (par exemple, l'appareil ou l'application qui l'héberge).",
+      "nameLabel": "Nom",
+      "nameAriaLabel": "Nom de la clé API",
+      "namePlaceholder": "Claude Desktop",
+      "create": "Créer la clé",
+      "revealTitle": "Clé créée",
+      "revealWarning": "Copiez-la maintenant. Pour votre sécurité, vous ne pourrez plus la revoir.",
+      "copy": "Copier la clé",
+      "copied": "Copiée",
+      "copyFailed": "Échec de la copie de la clé",
+      "done": "Terminé"
+    },
+    "revoke": {
+      "title": "Révoquer la clé API",
+      "message": "Tout assistant utilisant cette clé perdra immédiatement l'accès. Cette action est irréversible.",
+      "confirm": "Révoquer"
+    }
+  },
+  "mcp": {
+    "title": "MCP",
+    "description": "Connectez un assistant IA à Synthseek via le Model Context Protocol.",
+    "endpointLabel": "Point de terminaison MCP",
+    "endpointHelper": "Ajoutez cette URL comme connecteur personnalisé ou serveur MCP dans votre assistant.",
+    "copyEndpointLabel": "Copier le point de terminaison MCP",
+    "copied": "Point de terminaison copié",
+    "copyFailed": "Échec de la copie du point de terminaison",
+    "connectTitle": "Deux façons de se connecter",
+    "oauthLabel": "Se connecter (OAuth)",
+    "oauthBody": "Pour les connecteurs web et natifs de claude.ai. Ajoutez le point de terminaison comme connecteur personnalisé et connectez-vous avec votre compte Synthseek. Aucune clé nécessaire, et l'accès suit votre rôle.",
+    "keyLabel": "Clé API",
+    "keyBody": "Pour Claude Code, Cursor ou Claude Desktop (via mcp-remote). Créez une clé ci-dessus et envoyez-la comme jeton porteur : Authorization: Bearer <votre clé>.",
+    "toolsTitle": "Outils disponibles",
+    "toolsDescription": "Ce qu'un assistant connecté peut faire : rechercher dans le catalogue, mettre en file et gérer les téléchargements, parcourir votre bibliothèque, lire et mettre à jour les réglages, et (pour les administrateurs) contrôler la file, déclencher des tâches, vérifier l'état du système et lire les journaux du serveur pour le diagnostic. La disponibilité exacte dépend de votre rôle.",
+    "tools": {
+      "discovery": "Découverte : search_music, get_music_details, get_artist_overview, get_trending, browse_genres, get_recommendations, resolve_url",
+      "downloads": "Téléchargements : download_track, download_album, download_playlist, retry_request, cancel_request, retry_all_failed",
+      "requests": "Demandes : list_requests, get_request",
+      "library": "Bibliothèque : get_library_summary, search_library",
+      "settings": "Réglages : get_settings, update_setting",
+      "operations": "Opérations (administrateur) : get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health, et lecture des journaux du serveur pour le diagnostic (list_log_files, read_logs)"
+    }
+  },
+  "logs": {
+    "page": {
+      "title": "Journaux",
+      "description": "Journaux récents du serveur dans le même format que la console. Filtrez par niveau, recherchez, copiez ou exportez."
+    },
+    "level": {
+      "title": "Niveau",
+      "description": "Définir le niveau de verbosité de la journalisation.",
+      "loading": "Chargement…",
+      "ariaLabel": "Niveau de journalisation du serveur",
+      "options": {
+        "debug": "Débogage",
+        "info": "Info",
+        "warn": "Avertissement",
+        "error": "Erreur"
+      }
+    },
+    "viewer": {
+      "title": "Journaux",
+      "description": "Les lignes les plus récentes du fichier journal actif.",
+      "searchPlaceholder": "Rechercher dans les journaux",
+      "searchAriaLabel": "Rechercher dans les journaux",
+      "linesAriaLabel": "Lignes à charger",
+      "linesLabel": "Lignes à charger",
+      "refreshAriaLabel": "Intervalle d'actualisation automatique",
+      "refreshLabel": "Intervalle d'actualisation automatique",
+      "refresh": "Actualiser",
+      "copy": "Copier",
+      "exportRecent": "Exporter les récents",
+      "copied": "Journaux copiés dans le presse-papiers",
+      "copyFailed": "Échec de la copie des journaux",
+      "loading": "Chargement des journaux…",
+      "loadError": "Échec du chargement des journaux : {{message}}",
+      "empty": "Aucune ligne de journal à afficher.",
+      "refreshOptions": {
+        "off": "Désactivé",
+        "seconds5": "5 s",
+        "seconds10": "10 s",
+        "seconds30": "30 s",
+        "seconds60": "60 s"
+      }
+    },
+    "export": {
+      "title": "Exporter tous les journaux",
+      "description": "Regrouper tous les fichiers journaux du serveur dans un seul zip.",
+      "download": "Télécharger tous les journaux (zip)",
+      "preparing": "Préparation du zip…"
+    }
+  },
+  "updates": {
+    "versionTag": "v{{version}}",
+    "header": {
+      "currentVersion": "Version actuelle",
+      "checked": "Vérifié {{time}}",
+      "checkNow": "Vérifier maintenant",
+      "checking": "Vérification…"
+    },
+    "badge": {
+      "new": "Nouvelle",
+      "current": "Actuelle"
+    },
+    "youAreHere": "Vous êtes ici →",
+    "page": {
+      "title": "Mises à jour",
+      "description": "Consultez votre version actuelle, recherchez de nouvelles versions et parcourez les notes de version pour chaque version."
+    },
+    "version": {
+      "title": "Version actuelle",
+      "description": "La version de Synthseek que cette instance exécute actuellement.",
+      "loading": "Chargement…"
+    },
+    "check": {
+      "title": "Rechercher des mises à jour",
+      "description": "Rechercher une version plus récente publiée sur le registre de conteneurs.",
+      "cta": "Rechercher des mises à jour",
+      "checking": "Vérification…",
+      "loading": "Recherche de mises à jour…",
+      "unknown": "Impossible de rechercher des mises à jour pour le moment",
+      "available": "La version {{version}} est disponible",
+      "upToDate": "Vous êtes sur la dernière version",
+      "lastChecked": "Dernière vérification {{time}}"
+    },
+    "notes": {
+      "title": "Notes de version",
+      "description": "Parcourez les notes de version de chaque version.",
+      "loading": "Chargement des notes de version…",
+      "empty": "Les notes de version ne sont pas disponibles pour le moment.",
+      "navAriaLabel": "Sélectionner une version",
+      "resolves": "Résout",
+      "olderOnGitHub": "Voir les versions plus anciennes sur GitHub",
+      "expand": "Afficher les détails",
+      "collapse": "Masquer les détails",
+      "type": {
+        "major": "Majeure",
+        "minor": "Mineure",
+        "patch": "Correctif"
+      },
+      "callout": {
+        "important": "Important",
+        "warning": "Avertissement",
+        "note": "Note"
+      },
+      "category": {
+        "feature": "Fonctionnalité",
+        "fix": "Correctif",
+        "improvement": "Amélioration",
+        "breaking": "Rupture",
+        "chore": "Maintenance"
+      }
+    }
+  },
+  "jobs": {
+    "page": {
+      "title": "Tâches",
+      "description": "Tâches en arrière-plan que Synthseek exécute selon un calendrier. Déclenchez une tâche pour l'exécuter immédiatement."
+    },
+    "card": {
+      "title": "Tâches planifiées",
+      "description": "Chaque tâche affiche son calendrier et sa prochaine exécution. Appuyez sur lecture pour l'exécuter maintenant.",
+      "loading": "Chargement des tâches…",
+      "loadError": "Échec du chargement des tâches : {{message}}",
+      "unknownError": "Erreur inconnue"
+    },
+    "row": {
+      "inProgress": "En cours",
+      "nextRunFallback": "Inactive",
+      "running": "Exécution de {{name}}",
+      "runNow": "Exécuter {{name}} maintenant"
+    },
+    "interval": {
+      "everyMinute": "Chaque minute",
+      "everyMinutes": "Toutes les {{count}} minutes",
+      "everyHour": "Chaque heure",
+      "everyHours": "Toutes les {{count}} heures",
+      "everyDay": "Chaque jour",
+      "everyDays": "Tous les {{count}} jours"
+    },
+    "nextRun": {
+      "now": "maintenant"
+    },
+    "registry": {
+      "library-sync": {
+        "name": "Synchronisation de bibliothèque externe",
+        "description": "Importe les pistes depuis les bibliothèques externes connectées."
+      },
+      "discovery-sweep": {
+        "name": "Balayage de découverte",
+        "description": "Évalue les flux de découverte et déclenche les intégrations."
+      },
+      "pattern-sync": {
+        "name": "Synchronisation des motifs de recherche intelligente",
+        "description": "Synchronise les motifs de recherche intelligente fédérés."
+      }
+    }
+  },
+  "shell": {
+    "card": {
+      "optional": "(Facultatif)"
+    },
+    "sidebar": {
+      "ariaLabel": "Sections des réglages",
+      "advanced": "Avancé",
+      "version": "synthseek v{{version}}",
+      "items": {
+        "general": "Général",
+        "members": "Membres",
+        "profile": "Profil",
+        "integrations": "Intégrations",
+        "engine": "Moteur",
+        "jobs": "Tâches",
+        "logs": "Journaux",
+        "updates": "Mises à jour"
+      }
+    },
+    "integrationTabs": {
+      "ariaLabel": "Intégrations"
+    },
+    "pageHeader": {
+      "backToSections": "Retour aux sections"
+    },
+    "placeholder": {
+      "comingSoon": "Bientôt disponible."
+    },
+    "accessDenied": {
+      "title": "Restreint",
+      "message": "Seuls les administrateurs peuvent accéder à cette section."
+    },
+    "saveBar": {
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement..."
+    },
+    "resetDefaults": {
+      "label": "Réinitialiser aux valeurs par défaut"
+    },
+    "secretInput": {
+      "reveal": "Révéler la valeur",
+      "hide": "Masquer la valeur"
+    },
+    "listManager": {
+      "addPlaceholder": "Ajouter un élément...",
+      "filterPlaceholder": "Filtrer...",
+      "empty": "Aucun élément pour l'instant.",
+      "add": "Ajouter",
+      "count_one": "{{count}} élément",
+      "count_other": "{{count}} éléments",
+      "filteredCount": "{{shown}} sur {{total}}",
+      "noMatches": "Aucune correspondance pour « {{query}} ».",
+      "removeLabel": "Retirer {{item}}"
+    },
+    "chipsInput": {
+      "removeLabel": "Retirer {{chip}}"
+    }
+  }
+}

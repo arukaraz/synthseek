@@ -179,7 +179,18 @@
     "adminRequired": "Admin access required",
     "exportFailed": "Export failed",
     "artistDelegated": "Artist added to Lidarr",
-    "artistDelegateFailed": "Failed to add artist to Lidarr"
+    "artistDelegateFailed": "Failed to add artist to Lidarr",
+    "reclaim": {
+      "download": "Download",
+      "album": "Album",
+      "playlist": "Playlist",
+      "startedTitle": "{{kind}} started",
+      "startedDescription": "{{itemName}} is being downloaded.",
+      "alreadyCompleteTitle": "{{kind}} already in your library",
+      "alreadyInProgressTitle": "{{kind}} already being downloaded",
+      "requeuedTitle": "{{kind}} re-queued",
+      "requeuedDescription": "{{itemName}} is being retried."
+    }
   },
   "playlists": {
     "created": "Playlist created",

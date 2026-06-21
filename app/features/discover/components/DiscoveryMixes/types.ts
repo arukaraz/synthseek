@@ -27,8 +27,6 @@ export type DiscoveryMix = ReadyMix | EmptyMix;
 
 export interface LbKindMeta {
   label: string;
-  tag: string;
-  blurb: string;
   icon: LucideIcon;
   acc: MixAccent;
 }

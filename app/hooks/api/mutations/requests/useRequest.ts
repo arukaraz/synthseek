@@ -8,7 +8,7 @@ export function useRequest() {
   return trpc.requests.request.useMutation({
     onError: (err) => errorToastDetailed(err, "requests.downloadFailed"),
     onSuccess: ({ outcome, data }) => {
-      notifyReclaimOutcome({ outcome, label: "Download", itemName: `${data.artist} - ${data.track}` });
+      notifyReclaimOutcome({ outcome, kind: "download", itemName: `${data.artist} - ${data.track}` });
     },
     onSettled: () => {
       void utils.requests.getAll.invalidate();

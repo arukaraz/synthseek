@@ -3,8 +3,10 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import deErrors from "@locale/messages/de/errors.json";
 import enErrors from "@locale/messages/en/errors.json";
 import esErrors from "@locale/messages/es/errors.json";
+import frErrors from "@locale/messages/fr/errors.json";
 
 const serverAppCodesPath = resolve(process.cwd(), "../server/utils/errors/app-codes.ts");
 const serverSourcePresent = existsSync(serverAppCodesPath);
@@ -25,9 +27,11 @@ describe.skipIf(!serverSourcePresent)("appCode parity (server -> FE errors catal
   });
 
   for (const code of codes) {
-    it(`errors.${code} exists in en and es`, () => {
+    it(`errors.${code} exists in en, es, de, and fr`, () => {
       expect(Object.prototype.hasOwnProperty.call(enErrors, code), `missing en errors.${code}`).toBe(true);
       expect(Object.prototype.hasOwnProperty.call(esErrors, code), `missing es errors.${code}`).toBe(true);
+      expect(Object.prototype.hasOwnProperty.call(deErrors, code), `missing de errors.${code}`).toBe(true);
+      expect(Object.prototype.hasOwnProperty.call(frErrors, code), `missing fr errors.${code}`).toBe(true);
     });
   }
 });

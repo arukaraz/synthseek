@@ -1,0 +1,86 @@
+{
+  "request": {
+    "queued": {
+      "label": "In Warteschlange",
+      "description": "Wartet in der Warteschlange"
+    },
+    "searching": {
+      "label": "Suche läuft",
+      "description": "Quellen werden gesucht"
+    },
+    "pending_download": {
+      "label": "Download ausstehend",
+      "description": "Wartet auf Download"
+    },
+    "downloading": {
+      "label": "Wird heruntergeladen",
+      "description": "In Bearbeitung"
+    },
+    "paused": {
+      "label": "Pausiert",
+      "description": "Download pausiert"
+    },
+    "pending_import": {
+      "label": "Import ausstehend",
+      "description": "Wartet auf Import"
+    },
+    "importing": {
+      "label": "Wird importiert",
+      "description": "Datei wird verarbeitet"
+    },
+    "complete": {
+      "label": "Abgeschlossen",
+      "description": "Download abgeschlossen"
+    },
+    "failed": {
+      "label": "Fehlgeschlagen",
+      "description": "Download fehlgeschlagen"
+    },
+    "in_progress": {
+      "label": "In Bearbeitung",
+      "description": "Titel werden heruntergeladen"
+    },
+    "syncing_plex": {
+      "label": "Wird mit Plex synchronisiert",
+      "description": "Wird mit Plex synchronisiert..."
+    },
+    "partially_complete": {
+      "label": "Teilweise abgeschlossen",
+      "description": "Einige Titel sind fehlgeschlagen"
+    },
+    "cancelled": {
+      "label": "Abgebrochen",
+      "description": "Download abgebrochen"
+    },
+    "delegated": {
+      "label": "Delegiert",
+      "description": "An einen externen Bibliotheksmanager übergeben"
+    }
+  },
+  "failureReason": {
+    "not_found": {
+      "label": "Nicht gefunden",
+      "description": "Dieser Titel wurde weder auf Soulseek noch auf YouTube gefunden. Die Verfügbarkeit ändert sich mit der Zeit, ein späterer Versuch könnte ihn finden."
+    },
+    "import_rejected": {
+      "label": "Import abgelehnt",
+      "description": "Die Datei wurde heruntergeladen, ihre Angaben passten aber nicht zum angeforderten Titel, daher wurde sie nicht hinzugefügt. Ein erneuter Versuch importiert nur dieselbe Datei erneut."
+    },
+    "wrong_file": {
+      "label": "Falsche Datei",
+      "description": "Die heruntergeladene Datei passte nicht zum angeforderten Titel und wurde entfernt. Ein erneuter Versuch sucht erneut nach einem besseren Treffer."
+    },
+    "p2p_failed": {
+      "label": "Verbindung abgebrochen",
+      "description": "Die Verbindung zum Soulseek-Peer brach ab, bevor der Download abgeschlossen war. Ein erneuter Versuch könnte besser funktionieren."
+    },
+    "download_failed": {
+      "label": "Download fehlgeschlagen",
+      "description": "Der Titel wurde gefunden, aber der Download wurde nicht abgeschlossen. Die Quelle hat die Anfrage möglicherweise blockiert oder die Verbindung ist ins Stocken geraten. Ein erneuter Versuch könnte helfen."
+    },
+    "other": {
+      "label": "Fehlgeschlagen",
+      "description": "Der Download ist aus einem unerwarteten Grund fehlgeschlagen. Ein erneuter Versuch könnte helfen."
+    }
+  }
+}

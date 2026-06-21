@@ -1,0 +1,405 @@
+{
+  "spotifyLibrary": {
+    "dialog": {
+      "title": "Spotify-Bibliothek",
+      "description": "Durchsuche deine Spotify-Bibliothek, importiere Einträge in Synthseek und konfiguriere die laufende Synchronisierung."
+    },
+    "connect": {
+      "checking": "Deine Spotify-Verbindung wird überprüft...",
+      "title": "Verbinde dein Spotify-Konto",
+      "expiredTitle": "Deine Spotify-Verbindung ist abgelaufen",
+      "bodyPending": "Spotify autorisiert dein Konto noch. Versuche es erneut zu verbinden, wenn es nicht gleich fertig wird.",
+      "bodyDefault": "Autorisiere Synthseek, deine Spotify-Playlists und gespeicherten Alben zu durchsuchen und zu importieren.",
+      "bodyExpired": "Deine Spotify-Verbindung ist abgelaufen oder wurde widerrufen. Verbinde dich erneut, um deine Bibliothek wieder zu laden.",
+      "reconnect": "Spotify erneut verbinden",
+      "connect": "Spotify verbinden"
+    },
+    "loadFailed": {
+      "title": "Deine Spotify-Bibliothek konnte nicht geladen werden",
+      "description": "Beim Laden deiner Bibliothek ist etwas schiefgelaufen. Versuche es gleich erneut."
+    },
+    "toolbar": {
+      "searchPlaceholder": "Einträge suchen…"
+    },
+    "filter": {
+      "all": "Alle",
+      "playlists": "Playlists",
+      "albums": "Alben",
+      "liked": "Favoriten"
+    },
+    "sort": {
+      "name": "Name",
+      "type": "Typ",
+      "tracks": "Titel",
+      "imported": "Importstatus",
+      "lastSync": "Letzte Synchronisierung",
+      "syncStatus": "Synchronisierungsstatus"
+    },
+    "table": {
+      "loading": "Bibliothek wird geladen…",
+      "empty": "Kein Eintrag passt zum aktuellen Filter oder zur Suche.",
+      "columnName": "Name",
+      "columnType": "Typ",
+      "columnTracks": "Titel",
+      "columnImported": "Importiert",
+      "columnLastSync": "Letzte Synchronisierung",
+      "columnSync": "Synchronisierung"
+    },
+    "row": {
+      "select": "Auswählen",
+      "deselect": "Abwählen",
+      "enabled": "Aktiviert",
+      "disabled": "Deaktiviert",
+      "syncUnavailable": "Synchronisierung für Alben nicht verfügbar"
+    },
+    "type": {
+      "playlist": "Playlist",
+      "album": "Album",
+      "liked": "Favoriten",
+      "playlistLower": "Playlist",
+      "albumLower": "Album",
+      "likedLower": "Lieblingssongs"
+    },
+    "detail": {
+      "loading": "Wird geladen…",
+      "back": "Zurück zur Bibliotheksliste",
+      "imported": "Importiert · ausgewählt",
+      "importedUnselect": "Importiert · abwählen",
+      "selectedForImport": "Zum Import ausgewählt",
+      "selectForImport": "Zum Import auswählen",
+      "openInSpotify": "In Spotify öffnen",
+      "lastSyncNever": "Nie",
+      "tracksByline_one": "{{count}} Titel",
+      "tracksByline_other": "{{count}} Titel"
+    },
+    "syncConfig": {
+      "title": "Synchronisierungskonfiguration",
+      "keepInSync": "Synchron halten",
+      "keepInSyncDesc": "Die Titelliste dieses {{type}} in Synthseek spiegeln, wenn sie sich ändert"
+    },
+    "metadata": {
+      "title": "Details",
+      "sourceId": "Quell-ID",
+      "released": "Veröffentlicht",
+      "label": "Label",
+      "lastSync": "Letzte Synchronisierung"
+    },
+    "tracklist": {
+      "title": "Titellisten-Vorschau",
+      "firstOf": "erste {{shown}} von {{total}}",
+      "empty": "Keine Titel für die Vorschau.",
+      "viewAll": "Alle {{total}} Titel ansehen →"
+    },
+    "emptyState": {
+      "title": "Einen Eintrag inspizieren",
+      "body": "Klicke auf eine beliebige Zeile, um hier ihre Titel, alle Metadaten und die Synchronisierungskonfiguration pro Eintrag zu sehen.",
+      "navigate": "navigieren",
+      "select": "auswählen",
+      "clear": "leeren",
+      "keySpace": "Leertaste",
+      "keyEsc": "Esc"
+    },
+    "bottombar": {
+      "rows_one": "Zeile",
+      "rows_other": "Zeilen",
+      "tracksTotal_one": "Titel insgesamt",
+      "tracksTotal_other": "Titel insgesamt",
+      "refreshTitle": "Die aktuellste Liste der Einträge aus deiner Bibliothek abrufen",
+      "refreshing": "Wird aktualisiert…",
+      "refreshList": "Liste aktualisieren",
+      "cancel": "Abbrechen",
+      "saving": "Wird gespeichert…",
+      "saveChanges": "Änderungen speichern"
+    },
+    "autoWatch": {
+      "off": "aus",
+      "configureAria": "Einstellungen für den automatischen Import konfigurieren",
+      "trigger": "Automatischer Import",
+      "title": "Neue automatisch importieren",
+      "howAria": "Wie funktioniert der automatische Import?",
+      "help": "Einträge, die du nach der Aktivierung zu deiner Spotify-Bibliothek hinzufügst, werden von der Hintergrundsynchronisierung automatisch importiert. Vorhandene Einträge werden nicht angetastet. Deaktiviere ihn jederzeit, bereits importierte Einträge bleiben erhalten.",
+      "newPlaylists": "Neue Playlists",
+      "newPlaylistsSub": "Zu deiner Bibliothek hinzugefügte Playlists",
+      "newPlaylistsAria": "Neue Playlists automatisch importieren",
+      "savedAlbums": "Gespeicherte Alben",
+      "savedAlbumsSub": "Alben, die du in Spotify speicherst",
+      "savedAlbumsAria": "Neue gespeicherte Alben automatisch importieren"
+    },
+    "selection": {
+      "regionLabel_one": "Massenaktionen für {{count}} ausgewählten Eintrag",
+      "regionLabel_other": "Massenaktionen für {{count}} ausgewählte Einträge",
+      "selected": "ausgewählt",
+      "announce_one": "{{count}} Eintrag ausgewählt",
+      "announce_other": "{{count}} Einträge ausgewählt",
+      "sync": "Synchronisieren",
+      "syncAria": "Synchronisierung für ausgewählte Einträge festlegen",
+      "syncPlaylistsOnly": "Synchronisierung gilt nur für Playlists",
+      "playlistsOnlyHint": "Nur Playlists",
+      "import": "Importieren",
+      "importAria": "Import für ausgewählte Einträge festlegen",
+      "clear": "Leeren"
+    }
+  },
+  "jspfImport": {
+    "modal": {
+      "title": "Playlist importieren",
+      "description": "Importiere eine Playlist oder ein Album aus einer JSPF-, XSPF- oder CSV-Datei. Die Titel werden mit deiner Bibliothek abgeglichen, bevor irgendetwas heruntergeladen wird."
+    },
+    "source": {
+      "uploadAria": "Eine Playlist-Datei hochladen",
+      "dropTitle": "Lege eine .jspf-/.xspf-/.csv-Datei ab oder klicke zum Durchsuchen",
+      "dropHint": "JSPF von Synthseek oder ListenBrainz, XSPF- oder CSV-Exporte aus anderen Tools",
+      "orFromUrl": "oder von einer URL",
+      "urlPlaceholder": "https://gist.githubusercontent.com/.../raw/flow.jspf",
+      "fetching": "Wird abgerufen...",
+      "fetch": "Abrufen",
+      "errorWrongFile": "Verwende eine .jspf-, .xspf- oder .csv-Datei",
+      "errorReadFile": "Datei konnte nicht gelesen werden",
+      "errorWrongUrl": "Die URL muss auf eine .jspf-, .xspf- oder .csv-Datei verweisen",
+      "errorFetchUrl": "URL konnte nicht abgerufen werden"
+    },
+    "preview": {
+      "creatingRequests": "Anfragen werden erstellt",
+      "matchingTracks": "Titel werden abgeglichen",
+      "matchingTracksDots": "Titel werden abgeglichen...",
+      "matchedHeader": "{{matched}}/{{total}} abgeglichen",
+      "newDownloads": "{{count}} neue Downloads",
+      "selectedDuration": "{{duration}} ausgewählt",
+      "filterPlaceholder": "Titel filtern...",
+      "back": "Zurück",
+      "import_one": "{{count}} Titel importieren",
+      "import_other": "{{count}} Titel importieren"
+    },
+    "coverage": {
+      "matched": "{{matched}}/{{total}} abgeglichen",
+      "alreadyInLibrary": "{{count}} bereits in der Bibliothek",
+      "unmatched": "{{count}} nicht abgeglichen"
+    },
+    "track": {
+      "selectAria": "{{title}} auswählen",
+      "notFound": "Nicht gefunden",
+      "inLibrary": "In der Bibliothek",
+      "willDownload": "Wird heruntergeladen",
+      "approxMatch": "≈ Treffer",
+      "exactMatch": "exakt"
+    },
+    "errors": {
+      "fileTooLarge": "Die Datei ist zu groß für den Import",
+      "fetchFailed": "URL konnte nicht abgerufen werden (HTTP {{status}})"
+    },
+    "duration": {
+      "minutes": "{{count}} Min",
+      "hoursMinutes": "{{hours}} Std {{minutes}} Min"
+    }
+  },
+  "discoveryIntegrations": {
+    "card": {
+      "title": "Entdeckung",
+      "loading": "Wird geladen…",
+      "loadError": "Entdeckungskonfiguration konnte nicht geladen werden.",
+      "description": "Rufe Empfehlungen und Feeds zum kürzlich Gehörten von externen Diensten ab. Jeder lässt sich unabhängig aktivieren, die Feeds füllen die Widgets auf deiner Entdecken-Seite."
+    },
+    "lastfm": {
+      "enableAria": "Last.fm aktivieren",
+      "tooltip": "Letzte Scrobbles und meistgespielte Titel aller Zeiten von deinem Last.fm-Konto. Die Feeds sind fest.",
+      "apiKeyWarning": "Der Last.fm-API-Schlüssel ist nicht konfiguriert. Bitte deinen Administrator, ihn festzulegen, bevor du diese Integration aktivierst.",
+      "apiKeyLabel": "API-Schlüssel",
+      "apiKeyHelper": "Systemweiter Last.fm-API-Schlüssel. Wird von allen Benutzern gemeinsam genutzt.",
+      "usernameLabel": "Benutzername",
+      "usernameHelper": "Dein öffentlicher Last.fm-Benutzername.",
+      "usernamePlaceholder": "z. B. deinname"
+    },
+    "listenbrainz": {
+      "enableAria": "ListenBrainz aktivieren",
+      "tooltip": "Empfehlungen und kuratierte Playlists von deinem ListenBrainz-Konto. Es wird nur der öffentliche Benutzername benötigt.",
+      "usernameLabel": "Benutzername",
+      "usernameHelper": "Dein öffentlicher ListenBrainz-Benutzername (Groß-/Kleinschreibung beachten).",
+      "usernamePlaceholder": "z. B. deinname",
+      "playlistsLabel": "Abzurufende Playlists",
+      "playlistsHelper": "{{count}} ausgewählt. Jede erzeugt einen eigenen Feed.",
+      "autoRequestLabel": "Automatisch als Playlists anfordern",
+      "autoRequestHelper": "Wenn ein Feed aktualisiert wird, automatisch als neue Playlist anfordern und importieren.",
+      "autoRequestAria": "Playlists automatisch anfordern",
+      "replacePlaylistLabel": "Eine einzige aktualisierte Playlist behalten",
+      "replacePlaylistHelper": "Bei jeder Aktualisierung dieselbe Playlist ersetzen, statt eine neue mit Datum zu erstellen.",
+      "replacePlaylistAria": "Eine einzige aktualisierte Playlist behalten",
+      "renamePlaylistLabel": "Playlist umbenennen",
+      "renamePlaylistHelper": "Leer lassen, um den Standardnamen zu verwenden."
+    },
+    "playlistKind": {
+      "cfRecommendationsLabel": "CF-Empfehlungen",
+      "cfRecommendationsDesc": "Rohe Ausgabe des Collaborative Filterings. Sofort verfügbar, weniger kuratiert.",
+      "weeklyExplorationLabel": "Weekly Exploration",
+      "weeklyExplorationDesc": "LBs Pendant zu Discover Weekly. Aktualisiert sich montags.",
+      "weeklyJamsLabel": "Weekly Jams",
+      "weeklyJamsDesc": "Kuratierte Neuauflage deiner Favoriten. Aktualisiert sich montags.",
+      "dailyJamsLabel": "Daily Jams",
+      "dailyJamsDesc": "Tägliche Rotation aus deinem Hörverlauf."
+    },
+    "schedule": {
+      "day": "Tag",
+      "hour": "Stunde",
+      "summary": "{{day}} um {{hour}}:00",
+      "dailyShort": "Täglich",
+      "dailyFull": "Jeden Tag",
+      "monShort": "Mo",
+      "monFull": "Montags",
+      "tueShort": "Di",
+      "tueFull": "Dienstags",
+      "wedShort": "Mi",
+      "wedFull": "Mittwochs",
+      "thuShort": "Do",
+      "thuFull": "Donnerstags",
+      "friShort": "Fr",
+      "friFull": "Freitags",
+      "satShort": "Sa",
+      "satFull": "Samstags",
+      "sunShort": "So",
+      "sunFull": "Sonntags"
+    }
+  },
+  "page": {
+    "loading": "Deine Bibliothek wird geladen…",
+    "tabs": {
+      "label": "Bibliotheksansichten",
+      "tracks": "Titel",
+      "albums": "Alben",
+      "artists": "Künstler",
+      "playlists": "Playlists"
+    },
+    "toolbar": {
+      "searchTracks": "Titel suchen…",
+      "searchAlbums": "Alben suchen…",
+      "searchArtists": "Künstler suchen…",
+      "searchPlaylists": "Playlists suchen…",
+      "searchAria": "In der Bibliothek suchen",
+      "sort": "Sortieren",
+      "sortAria": "Ergebnisse sortieren",
+      "openFilters": "Filter"
+    },
+    "sort": {
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "artist": "Künstler",
+      "album": "Album",
+      "title": "Titel",
+      "duration": "Dauer",
+      "status": "Status",
+      "name": "Name",
+      "year": "Jahr",
+      "tracks": "Titel",
+      "albums": "Alben"
+    },
+    "columns": {
+      "track": "Titel",
+      "artistAlbum": "Künstler · Album",
+      "status": "Status",
+      "requestedAt": "Angefordert am",
+      "length": "Länge",
+      "album": "Album",
+      "artist": "Künstler",
+      "playlist": "Playlist",
+      "tracks": "Titel",
+      "albums": "Alben",
+      "year": "Jahr",
+      "owner": "Eigentümer",
+      "source": "Quelle"
+    },
+    "counts": {
+      "tracks_one": "{{count}} Titel",
+      "tracks_other": "{{count}} Titel",
+      "albums_one": "{{count}} Album",
+      "albums_other": "{{count}} Alben"
+    },
+    "origin": {
+      "imported": "Importiert",
+      "createdHere": "Lokal"
+    },
+    "facets": {
+      "status": "Status",
+      "source": "Quelle",
+      "format": "Format",
+      "genre": "Genre",
+      "artist": "Künstler",
+      "requestedBy": "Angefordert von",
+      "playlist": "Playlist",
+      "year": "Jahr",
+      "owner": "Eigentümer",
+      "searchPlaceholder": "Tippen, um zu suchen…",
+      "noValues": "Keine Optionen",
+      "moreHint_one": "{{count}} weitere, tippen zum Suchen",
+      "moreHint_other": "{{count}} weitere, tippen zum Suchen",
+      "orphan": "Lose Titel",
+      "orphanOnly": "Nur Titel, die in keiner Playlist sind"
+    },
+    "filters": {
+      "title": "Filter",
+      "clear": "Leeren",
+      "done": "Fertig"
+    },
+    "selection": {
+      "selected": "ausgewählt",
+      "retryFailed_one": "{{count}} fehlgeschlagene erneut versuchen",
+      "retryFailed_other": "{{count}} fehlgeschlagene erneut versuchen",
+      "addToPlaylist": "Zur Playlist hinzufügen",
+      "clear": "Leeren",
+      "selectAll": "Alle auf dieser Seite auswählen",
+      "selectRow": "Titel auswählen"
+    },
+    "empty": {
+      "tracksTitle": "Keine Titel gefunden",
+      "tracksDescription": "Nichts passt zu den aktuellen Filtern oder zur Suche. Versuche, einen Filter zu entfernen.",
+      "albumsTitle": "Keine Alben gefunden",
+      "albumsDescription": "Nichts passt zu den aktuellen Filtern oder zur Suche. Versuche, einen Filter zu entfernen.",
+      "artistsTitle": "Keine Künstler gefunden",
+      "artistsDescription": "Nichts passt zu den aktuellen Filtern oder zur Suche. Versuche, einen Filter zu entfernen.",
+      "playlistsTitle": "Keine Playlists gefunden",
+      "playlistsDescription": "Nichts passt zu den aktuellen Filtern oder zur Suche. Versuche, einen Filter zu entfernen."
+    },
+    "error": {
+      "title": "Die Bibliothek konnte nicht geladen werden",
+      "description": "Beim Laden dieser Ansicht ist etwas schiefgelaufen. Versuche es gleich erneut."
+    }
+  },
+  "playlists": {
+    "actions": {
+      "rename": "Umbenennen",
+      "delete": "Löschen",
+      "menu": "Playlist-Aktionen für {{name}}",
+      "syncToPlex": "Mit Plex synchronisieren",
+      "syncing": "Wird synchronisiert..."
+    },
+    "renameDialog": {
+      "title": "Playlist umbenennen",
+      "placeholder": "Playlist-Name",
+      "confirm": "Speichern",
+      "cancel": "Abbrechen"
+    },
+    "deleteDialog": {
+      "title": "Playlist löschen?",
+      "description": "Dadurch wird sie aus deiner Bibliothek entfernt. Dies kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen"
+    },
+    "removeDialog": {
+      "title_one": "{{count}} Titel entfernen?",
+      "title_other": "{{count}} Titel entfernen?",
+      "description": "Dadurch werden die ausgewählten Titel aus dieser Playlist entfernt. Die heruntergeladenen Dateien bleiben in deiner Bibliothek.",
+      "confirm": "Entfernen"
+    },
+    "bulk": {
+      "remove": "Entfernen",
+      "removeCount": "{{count}} entfernen"
+    },
+    "dropdown": {
+      "addToPlaylist": "Zur Playlist hinzufügen",
+      "newPlaceholder": "Neuer Playlist-Name",
+      "create": "Erstellen",
+      "empty": "Noch keine Playlists"
+    },
+    "origin": {
+      "imported": "Importiert: {{provider}}"
+    },
+    "keepInSync": "Synchron halten",
+    "syncedReadonly": "Synchronisierung ausschalten, um zu bearbeiten"
+  }
+}

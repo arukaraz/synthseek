@@ -1,0 +1,23 @@
+{
+  "ACOUSTID_NOT_CONFIGURED": "ACOUSTID_API_KEY nicht gesetzt (optional)",
+  "ACOUSTID_FPCALC_MISSING": "fpcalc-Binärdatei nicht gefunden (chromaprint-tools installieren)",
+  "ACOUSTID_READY": "API-Schlüssel konfiguriert, fpcalc verfügbar",
+  "BEETS_DISABLED": "ENABLE_BEETS_IMPORT ist deaktiviert",
+  "BEETS_CLI_MISSING": "Befehl beet nicht gefunden oder nicht zugänglich",
+  "BEETS_AVAILABLE": "Verfügbar ({{version}})",
+  "LIDARR_NOT_CONFIGURED": "LIDARR_URL und LIDARR_API_KEY nicht gesetzt (optional)",
+  "LIDARR_CONNECTION_FAILED": "Verbindungstest fehlgeschlagen",
+  "LIDARR_CONNECTED": "Verbunden (v{{version}})",
+  "MUSIC_PROVIDER_UNAVAILABLE": "Musikanbieter nicht verfügbar",
+  "MUSIC_PROVIDER_REACHABLE": "Deezer-API erreichbar",
+  "MUSIC_PROVIDER_UNREACHABLE": "Musikanbieter nicht erreichbar",
+  "PLEX_NOT_CONFIGURED": "Plex nicht verbunden, unter Einstellungen, Verbindungen konfigurieren (optional)",
+  "PLEX_UNREACHABLE": "Server nicht erreichbar",
+  "PLEX_CONNECTED": "Verbunden (Musikbibliothek gefunden)",
+  "PLEX_CONNECTED_NO_LIBRARY": "Verbunden (keine Musikbibliothek gefunden)",
+  "SLSKD_NOT_CONFIGURED": "SLSKD_API_URL und SLSKD_API_KEY nicht gesetzt (optional)",
+  "SLSKD_API_ERROR": "API hat Status {{status}} zurückgegeben",
+  "SLSKD_NETWORK_UNKNOWN": "API OK, Netzwerkstatus unbekannt",
+  "SLSKD_NETWORK_DISCONNECTED": "API OK, aber nicht mit dem Synthseek-Netzwerk verbunden",
+  "SLSKD_CONNECTED": "Verbunden"
+}
