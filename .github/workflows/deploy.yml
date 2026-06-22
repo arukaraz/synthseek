@@ -461,19 +461,6 @@ jobs:
             "${IMAGE}@${AMD64_DIGEST}" \
             "${IMAGE}@${ARM64_DIGEST}"
 
-      - name: Publish per-arch debug tags
-        if: needs.prepare.outputs.prerelease != 'true'
-        run: |
-          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
-          VERSION="${{ needs.prepare.outputs.version }}"
-
-          AMD64_DIGEST="$(cat digests/amd64.txt)"
-          ARM64_DIGEST="$(cat digests/arm64.txt)"
-
-          echo "Publishing per-arch debug tags"
-          docker buildx imagetools create -t "${IMAGE}:v${VERSION}-amd64" "${IMAGE}@${AMD64_DIGEST}"
-          docker buildx imagetools create -t "${IMAGE}:v${VERSION}-arm64" "${IMAGE}@${ARM64_DIGEST}"
-
       - name: Verify manifest platforms
         run: |
           IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
@@ -500,6 +487,17 @@ jobs:
             exit 1
           fi
           echo "Manifest verified: linux/amd64 and linux/arm64 both present"
+
+      - name: Cleanup orphaned untagged images
+        if: needs.prepare.outputs.prerelease != 'true'
+        continue-on-error: true
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          packages: synthseek
+          delete-untagged: true
+          validate: true
 
       - name: Create deployment summary
         run: |
