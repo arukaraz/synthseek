@@ -2,6 +2,7 @@ import { ContentType, RequestStatus, Role, type RequestWithTracks } from "@api/_
 import { render, screen } from "@test/test-utils";
 import { describe, expect, it } from "vitest";
 
+import { makeRequestsTrack as makeTrack } from "../../../__tests__/factories";
 import { RequestDetailStats } from "../RequestDetailStats";
 
 function makeRequest(overrides: Partial<RequestWithTracks> = {}): RequestWithTracks {
@@ -58,5 +59,34 @@ describe("RequestDetailStats duplicates card", () => {
 
     expect(screen.queryByText("Duplicates")).not.toBeInTheDocument();
     expect(screen.queryByText("ignored")).not.toBeInTheDocument();
+  });
+});
+
+describe("RequestDetailStats status branches", () => {
+  it("renders nothing for a delegated request", () => {
+    const { container } = render(
+      <RequestDetailStats request={makeRequest({ status: RequestStatus.enum.delegated })} />
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("counts complete, failed, and active tracks from the request", () => {
+    render(
+      <RequestDetailStats
+        request={makeRequest({
+          tracks: [
+            makeTrack({ id: "c1", status: RequestStatus.enum.complete }),
+            makeTrack({ id: "f1", status: RequestStatus.enum.failed }),
+            makeTrack({ id: "f2", status: RequestStatus.enum.cancelled }),
+            makeTrack({ id: "a1", status: RequestStatus.enum.downloading }),
+          ],
+        })}
+      />
+    );
+
+    expect(screen.getByText("Complete").parentElement).toHaveTextContent("1");
+    expect(screen.getByText("Failed").parentElement).toHaveTextContent("2");
+    expect(screen.getByText("Active").parentElement).toHaveTextContent("1");
   });
 });

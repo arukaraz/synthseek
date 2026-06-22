@@ -3,8 +3,17 @@ import { render, screen, fireEvent } from "@test/test-utils";
 import { ArtistSpotlightCard } from "../ArtistSpotlightCard";
 import type { ArtistSpotlightCardProps } from "../types";
 
+vi.mock("next/image", () => ({
+  default: ({ src, alt, onError }: { src: string; alt: string; onError?: () => void }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt} onError={onError} />
+  ),
+}));
+
 type Artist = ArtistSpotlightCardProps["artist"];
 type LatestAlbum = NonNullable<ArtistSpotlightCardProps["latestAlbum"]>;
+
+const IMAGE = { url: "https://img/cover.jpg", width: null, height: null };
 
 const createArtist = (overrides: Partial<Artist> = {}): Artist => ({
   id: "artist-1",
@@ -64,5 +73,44 @@ describe("ArtistSpotlightCard", () => {
     fireEvent.click(screen.getByText("Clickable"));
 
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders the artist artwork when an image is available", () => {
+    render(<ArtistSpotlightCard artist={createArtist({ name: "Pictured", images: [IMAGE] })} latestAlbum={null} />);
+
+    expect(screen.getByAltText("Pictured")).toBeInTheDocument();
+  });
+
+  it("falls back to the user placeholder when the artist image fails to load", () => {
+    render(<ArtistSpotlightCard artist={createArtist({ name: "Broken", images: [IMAGE] })} latestAlbum={null} />);
+
+    fireEvent.error(screen.getByAltText("Broken"));
+
+    expect(screen.queryByAltText("Broken")).not.toBeInTheDocument();
+  });
+
+  it("renders the album thumbnail and the latest release label when album artwork is present", () => {
+    render(
+      <ArtistSpotlightCard
+        artist={createArtist()}
+        latestAlbum={createAlbum({ name: "Cover Album", images: [IMAGE] })}
+      />
+    );
+
+    expect(screen.getByAltText("Cover Album")).toBeInTheDocument();
+    expect(screen.getByText("Latest Release:")).toBeInTheDocument();
+  });
+
+  it("falls back to the music glyph when the album image fails to load", () => {
+    render(
+      <ArtistSpotlightCard
+        artist={createArtist()}
+        latestAlbum={createAlbum({ name: "Broken Album", images: [IMAGE] })}
+      />
+    );
+
+    fireEvent.error(screen.getByAltText("Broken Album"));
+
+    expect(screen.queryByAltText("Broken Album")).not.toBeInTheDocument();
   });
 });

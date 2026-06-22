@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+import { act } from "react";
 import { render, screen, fireEvent } from "@test/test-utils";
 import { SearchInput } from "../SearchInput";
 
@@ -109,6 +110,47 @@ describe("SearchInput", () => {
     render(<SearchInput {...defaultProps} isOpen={false} />);
 
     expect(screen.getByTitle("Filter requests")).toBeInTheDocument();
+  });
+
+  it("clears the desktop value from the inline clear button", () => {
+    const onChange = vi.fn();
+    render(<SearchInput {...defaultProps} value="rock" onChange={onChange} isOpen={false} />);
+
+    fireEvent.click(screen.getByLabelText("Clear filter"));
+
+    expect(onChange).toHaveBeenCalledWith("");
+  });
+
+  it("hides the inline clear button when the desktop value is empty", () => {
+    render(<SearchInput {...defaultProps} value="" isOpen={false} />);
+
+    expect(screen.queryByLabelText("Clear filter")).not.toBeInTheDocument();
+  });
+
+  it("calls onChange when the mobile input value changes", () => {
+    const onChange = vi.fn();
+    render(<SearchInput {...defaultProps} onChange={onChange} isOpen={true} />);
+
+    const inputs = screen.getAllByPlaceholderText("Filter...");
+    fireEvent.change(inputs[inputs.length - 1], { target: { value: "synth" } });
+
+    expect(onChange).toHaveBeenCalledWith("synth");
+  });
+
+  it("focuses the mobile input shortly after opening", () => {
+    vi.useFakeTimers();
+
+    render(<SearchInput {...defaultProps} isOpen={true} />);
+    const inputs = screen.getAllByPlaceholderText("Filter...");
+    const mobileInput = inputs[inputs.length - 1];
+
+    act(() => {
+      vi.advanceTimersByTime(60);
+    });
+
+    expect(mobileInput).toHaveFocus();
+
+    vi.useRealTimers();
   });
 
   describe("focus timer cleanup", () => {

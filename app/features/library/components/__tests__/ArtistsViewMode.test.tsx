@@ -12,7 +12,7 @@ const fetchMock = vi.hoisted(() => vi.fn());
 const openForResultMock = vi.hoisted(() => vi.fn());
 const toastErrorMock = vi.hoisted(() => vi.fn());
 const artistRequestItemMock = vi.hoisted(() =>
-  vi.fn((input: { id: string; name: string }) => ({ type: "artist", ...input }))
+  vi.fn((input: { id: string; name: string; cover: string | null }) => ({ type: "artist", ...input }))
 );
 
 vi.mock("@utils/trpc", () => ({
@@ -90,7 +90,7 @@ describe("ArtistsViewMode", () => {
 
     await waitFor(() => expect(openForResultMock).toHaveBeenCalledTimes(1));
     expect(fetchMock).toHaveBeenCalledWith({ name: "Daft Punk" });
-    expect(artistRequestItemMock).toHaveBeenCalledWith({ id: "dz-1", name: "Daft Punk" });
+    expect(artistRequestItemMock).toHaveBeenCalledWith({ id: "dz-1", name: "Daft Punk", cover: null });
     expect(toastErrorMock).not.toHaveBeenCalled();
   });
 

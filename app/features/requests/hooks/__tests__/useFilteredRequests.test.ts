@@ -1,4 +1,11 @@
-import { ContentType, type PublicUser, RequestStatus, type RequestWithTracks, Role } from "@api/__generated__/types";
+import {
+  ContentType,
+  type PublicUser,
+  RequestStatus,
+  type RequestWithTracks,
+  Role,
+  type TrackRequest,
+} from "@api/__generated__/types";
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
@@ -45,6 +52,40 @@ function makeRequest(overrides: Partial<RequestWithTracks> = {}): RequestWithTra
     plex_playlist_id: null,
     duplicateCount: 0,
     requestedBy: owner,
+    ...overrides,
+  };
+}
+
+function makeTrack(overrides: Partial<TrackRequest> = {}): TrackRequest {
+  return {
+    id: "track-1",
+    slskd_request_id: "slskd-1",
+    external_id: "ext-track-1",
+    user_id: ownerId,
+    title: "A Song",
+    artist: "An Artist",
+    request_type: ContentType.enum.track,
+    isrc: null,
+    mbid: null,
+    track_number: 1,
+    disc_number: 1,
+    duration_ms: 180000,
+    status: RequestStatus.enum.queued,
+    progress: 0,
+    priority: 0,
+    bitrate: 320,
+    format: "mp3",
+    format_matching: "flexible",
+    bitrate_matching: "flexible",
+    album_id: "album-1",
+    error: null,
+    explicit: false,
+    source: "deezer",
+    failure_reason: null,
+    downloaded_file: null,
+    created_at: new Date(),
+    completed_at: null,
+    updated_at: new Date(),
     ...overrides,
   };
 }
@@ -98,5 +139,109 @@ describe("useFilteredRequests default recency sort", () => {
     const { result } = renderHook(() => useFilteredRequests([second, first], "all", ascending, ""));
 
     expect(result.current.map((item) => item.id)).toEqual(["first", "second"]);
+  });
+});
+
+describe("useFilteredRequests sort by field", () => {
+  const artistDesc: SortConfig = { field: SortField.ARTIST, direction: "desc" };
+  const artistAsc: SortConfig = { field: SortField.ARTIST, direction: "asc" };
+  const albumAsc: SortConfig = { field: SortField.ALBUM, direction: "asc" };
+  const playlistAsc: SortConfig = { field: SortField.PLAYLIST, direction: "asc" };
+
+  it("orders by artist ascending", () => {
+    const zed = makeRequest({ id: "zed", artist: "Zed" });
+    const ada = makeRequest({ id: "ada", artist: "Ada" });
+
+    const { result } = renderHook(() => useFilteredRequests([zed, ada], "all", artistAsc, ""));
+
+    expect(result.current.map((item) => item.id)).toEqual(["ada", "zed"]);
+  });
+
+  it("orders by artist descending", () => {
+    const zed = makeRequest({ id: "zed", artist: "Zed" });
+    const ada = makeRequest({ id: "ada", artist: "Ada" });
+
+    const { result } = renderHook(() => useFilteredRequests([ada, zed], "all", artistDesc, ""));
+
+    expect(result.current.map((item) => item.id)).toEqual(["zed", "ada"]);
+  });
+
+  it("orders by name for the album field", () => {
+    const beta = makeRequest({ id: "beta", name: "Beta" });
+    const alpha = makeRequest({ id: "alpha", name: "Alpha" });
+
+    const { result } = renderHook(() => useFilteredRequests([beta, alpha], "all", albumAsc, ""));
+
+    expect(result.current.map((item) => item.id)).toEqual(["alpha", "beta"]);
+  });
+
+  it("orders by name for the playlist field", () => {
+    const second = makeRequest({ id: "second", name: "Second" });
+    const first = makeRequest({ id: "first", name: "First" });
+
+    const { result } = renderHook(() => useFilteredRequests([second, first], "all", playlistAsc, ""));
+
+    expect(result.current.map((item) => item.id)).toEqual(["first", "second"]);
+  });
+});
+
+describe("useFilteredRequests search filter", () => {
+  it("matches on the request name", () => {
+    const match = makeRequest({ id: "match", name: "Midnight Drive", artist: "Nobody" });
+    const other = makeRequest({ id: "other", name: "Sunrise", artist: "Nobody" });
+
+    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "midnight"));
+
+    expect(result.current.map((item) => item.id)).toEqual(["match"]);
+  });
+
+  it("matches on the artist name", () => {
+    const match = makeRequest({ id: "match", name: "Untitled", artist: "Daft Punk" });
+    const other = makeRequest({ id: "other", name: "Untitled", artist: "Air" });
+
+    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "daft"));
+
+    expect(result.current.map((item) => item.id)).toEqual(["match"]);
+  });
+
+  it("matches on a track title inside the request", () => {
+    const match = makeRequest({
+      id: "match",
+      name: "Album",
+      artist: "Artist",
+      tracks: [makeTrack({ id: "t1", title: "Hidden Gem" })],
+    });
+    const other = makeRequest({
+      id: "other",
+      name: "Album",
+      artist: "Artist",
+      tracks: [makeTrack({ id: "t2", title: "Plain" })],
+    });
+
+    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "hidden"));
+
+    expect(result.current.map((item) => item.id)).toEqual(["match"]);
+  });
+
+  it("drops items that match neither name, artist, nor any track", () => {
+    const item = makeRequest({
+      id: "item",
+      name: "Album",
+      artist: "Artist",
+      tracks: [makeTrack({ id: "t1", title: "Song" })],
+    });
+
+    const { result } = renderHook(() => useFilteredRequests([item], "all", recentDesc, "zzz-no-match"));
+
+    expect(result.current).toEqual([]);
+  });
+
+  it("ignores a whitespace-only query and keeps every item", () => {
+    const a = makeRequest({ id: "a" });
+    const b = makeRequest({ id: "b" });
+
+    const { result } = renderHook(() => useFilteredRequests([a, b], "all", recentDesc, "   "));
+
+    expect(result.current).toHaveLength(2);
   });
 });

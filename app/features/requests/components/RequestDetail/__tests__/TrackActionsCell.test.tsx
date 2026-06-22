@@ -111,6 +111,35 @@ describe("RequestDetail TrackActionsCell", () => {
     expect(screen.queryByRole("menuitem", { name: "Jump the queue" })).not.toBeInTheDocument();
   });
 
+  it("renders a placeholder dash when no action applies to the track", () => {
+    const { container } = render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.complete, priority: 0 })}
+        canAct
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+      />
+    );
+
+    expect(screen.queryByRole("button", { name: "Track actions" })).not.toBeInTheDocument();
+    expect(container).toHaveTextContent("-");
+  });
+
+  it("renders a placeholder dash when the user cannot act", () => {
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.queued, priority: 0 })}
+        canAct={false}
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+      />
+    );
+
+    expect(screen.queryByRole("button", { name: "Track actions" })).not.toBeInTheDocument();
+  });
+
   it("calls onPrioritize when Jump the queue is clicked", async () => {
     const user = userEvent.setup();
     const onPrioritize = vi.fn();

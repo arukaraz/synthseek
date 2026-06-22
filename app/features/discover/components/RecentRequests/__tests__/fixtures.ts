@@ -1,0 +1,58 @@
+import { ContentType, type PublicUser, RequestStatus, Role } from "@api/__generated__/types";
+import type { FlatTrackRow } from "@features/requests/types";
+
+const owner: PublicUser = {
+  id: "user-1",
+  email: "owner@example.com",
+  username: "owner",
+  avatar_url: null,
+  role: Role.enum.member,
+  language: "en",
+  plex_username: null,
+  plexLinked: false,
+  hasPassword: true,
+  created_at: new Date("2024-01-01T00:00:00Z"),
+};
+
+export function createFlatTrackRow(overrides: Partial<FlatTrackRow> = {}): FlatTrackRow {
+  return {
+    id: "track-1",
+    slskd_request_id: "slskd-1",
+    external_id: "ext-1",
+    user_id: owner.id,
+    title: "Avril 14th",
+    artist: "Aphex Twin",
+    request_type: ContentType.enum.track,
+    isrc: null,
+    mbid: null,
+    track_number: 1,
+    disc_number: 1,
+    duration_ms: 120000,
+    status: RequestStatus.enum.complete,
+    progress: 100,
+    priority: 0,
+    bitrate: 320,
+    format: "mp3",
+    format_matching: "flexible",
+    bitrate_matching: "flexible",
+    album_id: "album-1",
+    error: null,
+    explicit: false,
+    source: "deezer",
+    failure_reason: null,
+    downloaded_file: null,
+    created_at: new Date("2024-01-01T00:00:00Z"),
+    completed_at: null,
+    updated_at: new Date("2024-01-01T00:00:00Z"),
+    parent: {
+      id: "album-1",
+      name: "Drukqs",
+      artist: "Aphex Twin",
+      album_art: "https://img/drukqs.jpg",
+      contentType: ContentType.enum.album,
+      requestedBy: owner,
+      status: RequestStatus.enum.complete,
+    },
+    ...overrides,
+  };
+}

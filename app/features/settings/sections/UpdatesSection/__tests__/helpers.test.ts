@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { compareSemver, deriveNotes, entryVariant, normalizeWhitespace, tokenizeInline } from "../helpers";
+import {
+  compareSemver,
+  deriveNotes,
+  entryVariant,
+  formatEntryDate,
+  normalizeWhitespace,
+  tokenizeInline,
+} from "../helpers";
 import type { ChangelogSection } from "../types";
 
 describe("tokenizeInline", () => {
@@ -44,6 +51,22 @@ describe("tokenizeInline", () => {
       { type: "link", value: "c", href: "u" },
     ]);
   });
+
+  it("treats an unterminated code marker as text", () => {
+    expect(tokenizeInline("run `npm")).toEqual([{ type: "text", value: "run `npm" }]);
+  });
+
+  it("treats a bracket without a following parenthesis as text", () => {
+    expect(tokenizeInline("a [label] b")).toEqual([{ type: "text", value: "a [label] b" }]);
+  });
+
+  it("treats a bracket with no closing bracket as text", () => {
+    expect(tokenizeInline("a [label")).toEqual([{ type: "text", value: "a [label" }]);
+  });
+
+  it("treats a link with an unterminated href as text", () => {
+    expect(tokenizeInline("a [label](href")).toEqual([{ type: "text", value: "a [label](href" }]);
+  });
 });
 
 describe("normalizeWhitespace", () => {
@@ -70,6 +93,12 @@ describe("compareSemver", () => {
 
   it("treats a missing segment as zero", () => {
     expect(compareSemver("1.2", "1.2.0")).toBe(0);
+    expect(compareSemver("1.2", "1.2")).toBe(0);
+  });
+
+  it("treats a non-numeric segment as zero", () => {
+    expect(compareSemver("1.x", "1.0.0")).toBe(0);
+    expect(compareSemver("1.2.0", "1.x.0")).toBe(1);
   });
 });
 
@@ -109,5 +138,19 @@ describe("deriveNotes", () => {
   it("skips sections with neither items nor body", () => {
     const sections: ChangelogSection[] = [{ heading: "Empty" }];
     expect(deriveNotes(sections)).toEqual([]);
+  });
+});
+
+describe("formatEntryDate", () => {
+  it("formats a valid ISO date with the requested locale", () => {
+    expect(formatEntryDate("2026-06-22", "en-US")).toBe("Jun 22, 2026");
+  });
+
+  it("respects a non-English locale", () => {
+    expect(formatEntryDate("2026-01-05", "es-ES")).toBe("5 ene 2026");
+  });
+
+  it("returns the raw string when the date is unparseable", () => {
+    expect(formatEntryDate("not-a-date", "en-US")).toBe("not-a-date");
   });
 });
