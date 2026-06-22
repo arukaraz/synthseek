@@ -53,7 +53,9 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent" />
 
         <div className="absolute top-2 left-2 z-10 sm:top-3 sm:left-3">
-          <Badge className="type-badge type-badge-artist shadow-lg">{t("artistSpotlight.artistBadge")}</Badge>
+          <Badge className="type-badge type-badge-overlay type-badge-artist shadow-lg">
+            {t("artistSpotlight.artistBadge")}
+          </Badge>
         </div>
 
         <div className={cardBottomContent()}>

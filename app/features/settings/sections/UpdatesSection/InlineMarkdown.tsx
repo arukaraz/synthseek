@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import { normalizeWhitespace, tokenizeInline } from "./helpers";
-import { inlineCode } from "./styles";
+import { inlineCode, inlineLink } from "./styles";
 import type { InlineMarkdownProps } from "./types";
 
 export function InlineMarkdown({ text }: InlineMarkdownProps) {
@@ -27,13 +27,7 @@ export function InlineMarkdown({ text }: InlineMarkdownProps) {
         }
         if (token.type === "link") {
           return (
-            <a
-              key={key}
-              href={token.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary-300 hover:underline"
-            >
+            <a key={key} href={token.href} target="_blank" rel="noopener noreferrer" className={inlineLink()}>
               {normalizeWhitespace(token.value)}
             </a>
           );

@@ -20,7 +20,7 @@ export type TriggerButtonProps = VariantProps<typeof triggerButton>;
 export const triggerAvatarWrapper = cva("relative inline-flex");
 
 export const triggerBadge = cva(
-  "ring-surface bg-secondary-500 text-secondary-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full ring-2 motion-safe:animate-pulse"
+  "ring-surface border-secondary-400 bg-secondary-600 text-secondary-foreground shadow-secondary-500/50 absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full border shadow-md ring-2 motion-safe:animate-pulse"
 );
 
 export const menuContent = cva(

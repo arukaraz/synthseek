@@ -2,6 +2,10 @@ import { cva } from "class-variance-authority";
 
 export const inlineCode = cva("bg-fg/10 text-fg/85 rounded px-1 py-0.5 font-mono text-[0.85em]");
 
+export const inlineLink = cva(
+  "text-accent-400 hover:text-accent-500 decoration-accent-400/50 hover:decoration-accent-400 font-medium underline underline-offset-2 transition-colors"
+);
+
 export const pageRoot = cva("mx-auto flex w-full max-w-3xl flex-col p-4 sm:p-6 lg:p-10");
 
 export const headerRoot = cva("mb-7 flex flex-col gap-4 sm:mb-9 sm:flex-row sm:items-start sm:justify-between");
@@ -21,7 +25,7 @@ export const checkButton = cva(
 
 export const timeline = cva("relative mt-2 pl-9");
 export const timelineLine = cva(
-  "pointer-events-none absolute top-2 bottom-4 left-3.5 w-0.5 rounded bg-gradient-to-b from-cyan-400/80 via-primary-500/50 to-fg/10"
+  "pointer-events-none absolute top-2 bottom-4 left-4 w-0.5 rounded bg-gradient-to-b from-cyan-400/80 via-primary-500/50 to-fg/10"
 );
 export const entry = cva("relative mb-7 last:mb-3.5");
 
@@ -91,13 +95,6 @@ export const headline = cva("font-bold tracking-tight", {
   defaultVariants: { variant: "past" },
 });
 
-export const youHereInline = cva(
-  "text-primary-300 inline-flex items-center gap-1 font-mono text-[9.5px] font-bold tracking-[0.14em] uppercase lg:hidden"
-);
-export const youHereAbs = cva(
-  "text-primary-300 absolute top-2 -left-[58px] hidden font-mono text-[9.5px] font-bold tracking-[0.14em] whitespace-nowrap uppercase lg:block"
-);
-
 export const calloutBox = cva("mb-3 flex flex-col gap-1 rounded-xl border px-3.5 py-2.5 text-sm", {
   variants: {
     tone: {
@@ -140,7 +137,7 @@ export const issueLink = cva("text-primary-300 font-mono hover:underline");
 
 export const endWrap = cva("relative mt-1");
 export const endNode = cva(
-  "border-fg/40 bg-background absolute top-0 -left-6 size-3 rounded-full border border-dashed"
+  "border-fg/40 bg-background absolute top-0 -left-6 size-2.5 rounded-full border border-dashed"
 );
 export const endLink = cva(
   "text-primary-300 hover:text-primary-200 inline-flex items-center gap-1.5 pl-3.5 text-[13px] font-semibold hover:underline"

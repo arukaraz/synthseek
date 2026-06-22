@@ -137,6 +137,7 @@ export interface AlbumRequestInput {
 export interface ArtistRequestInput {
   id: string;
   name: string;
+  cover: string | null;
 }
 
 export interface PlaylistRequestInput {

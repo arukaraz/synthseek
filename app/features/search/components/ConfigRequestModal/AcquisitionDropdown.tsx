@@ -11,7 +11,7 @@ import { useTapToOpen } from "@hooks/ui/useTapToOpen";
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { isAcquisitionMethod } from "./helpers";
-import { acquisitionRadioItem, acquisitionTrigger, fieldGroup } from "./styles";
+import { acquisitionRadioItem, acquisitionTrigger, fieldGroup, fieldLabel } from "./styles";
 import type { AcquisitionDropdownProps } from "./types";
 
 export function AcquisitionDropdown({ label, value, options, onChange }: AcquisitionDropdownProps) {
@@ -21,7 +21,7 @@ export function AcquisitionDropdown({ label, value, options, onChange }: Acquisi
 
   return (
     <div className={fieldGroup()}>
-      <label className="text-fg/90 text-sm font-medium" id="acquisition-method-label">
+      <label className={fieldLabel()} id="acquisition-method-label">
         {label}
       </label>
       <DropdownMenu open={tap.open} onOpenChange={tap.onOpenChange}>

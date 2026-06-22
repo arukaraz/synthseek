@@ -14,6 +14,7 @@ import { isBreakingUpdate } from "@utils/version";
 import { motion } from "framer-motion";
 import { Loader2, LogOut, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { MenuHeaderBlock } from "./components/MenuHeaderBlock";
@@ -29,11 +30,17 @@ export function UserAvatarMenu() {
   const { updateAvailable, latestVersion, currentVersion } = useVersionState();
   const logout = useLogout();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   if (!currentUser) return null;
 
   const showUpdate = updateAvailable && latestVersion !== null;
   const breaking = isBreakingUpdate(currentVersion, latestVersion);
+
+  const handleUpdatesNavigate = () => {
+    setOpen(false);
+    router.push(MENU_ROUTES.updates);
+  };
 
   const handleLogout = async () => {
     if (logout.isPending) return;
@@ -45,7 +52,7 @@ export function UserAvatarMenu() {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <motion.button
           type="button"
@@ -72,7 +79,12 @@ export function UserAvatarMenu() {
         />
 
         {showUpdate ? (
-          <MenuUpdateSection latestVersion={latestVersion} currentVersion={currentVersion} breaking={breaking} />
+          <MenuUpdateSection
+            latestVersion={latestVersion}
+            currentVersion={currentVersion}
+            breaking={breaking}
+            onNavigate={handleUpdatesNavigate}
+          />
         ) : null}
 
         <DropdownMenuSeparator />

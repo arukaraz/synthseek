@@ -57,6 +57,33 @@ describe("DetailHero helpers", () => {
         { brand: "spotify", url: "https://open.spotify.com/x" },
       ]);
     });
+
+    it("expands raw platform identifiers into absolute platform urls", () => {
+      const links = buildSocialLinks({
+        instagram: "taylorswift",
+        youtube: "UCHIv0QHRLwTqWTPYoh_5ppQ",
+        appleMusic: "159260351",
+        spotify: "06HL4z0CvFAxyc27GXpf02",
+      });
+
+      expect(links).toEqual([
+        { brand: "instagram", url: "https://www.instagram.com/taylorswift" },
+        { brand: "youtube", url: "https://www.youtube.com/channel/UCHIv0QHRLwTqWTPYoh_5ppQ" },
+        { brand: "appleMusic", url: "https://music.apple.com/artist/159260351" },
+        { brand: "spotify", url: "https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02" },
+      ]);
+    });
+
+    it("leaves values that are already absolute urls untouched", () => {
+      const links = buildSocialLinks({
+        instagram: null,
+        youtube: "https://www.youtube.com/channel/UCHIv0QHRLwTqWTPYoh_5ppQ",
+        appleMusic: null,
+        spotify: null,
+      });
+
+      expect(links).toEqual([{ brand: "youtube", url: "https://www.youtube.com/channel/UCHIv0QHRLwTqWTPYoh_5ppQ" }]);
+    });
   });
 
   describe("shareFanItemStyle", () => {

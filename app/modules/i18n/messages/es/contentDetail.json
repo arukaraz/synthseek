@@ -74,6 +74,10 @@
   },
   "details": {
     "type": "Tipo",
+    "typeValue": {
+      "soloArtist": "Artista solista",
+      "band": "Banda"
+    },
     "country": "Pais",
     "formed": "Formado",
     "realName": "Nombre real",

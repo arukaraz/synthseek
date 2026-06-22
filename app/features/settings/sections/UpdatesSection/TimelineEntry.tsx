@@ -24,8 +24,6 @@ import {
   version,
   vRow,
   vRowPast,
-  youHereAbs,
-  youHereInline,
 } from "./styles";
 import type { TimelineEntryProps } from "./types";
 
@@ -72,7 +70,6 @@ export function TimelineEntry({ entry, variant }: TimelineEntryProps) {
 
   return (
     <div className={entryStyle()}>
-      {variant === "current" ? <span className={youHereAbs()}>{t("updates.youAreHere")}</span> : null}
       <div className={node({ variant })}>
         {variant === "latest" ? <span className={nodePing()} /> : null}
         {variant === "current" ? <Check className={nodeCheck()} /> : null}
@@ -84,7 +81,6 @@ export function TimelineEntry({ entry, variant }: TimelineEntryProps) {
           {variant === "current" ? (
             <span className={badge({ tone: "current" })}>{t("updates.badge.current")}</span>
           ) : null}
-          {variant === "current" ? <span className={youHereInline()}>{t("updates.youAreHere")}</span> : null}
           <span className={date()}>{formattedDate}</span>
         </div>
         <div className={headline({ variant })}>{entry.title}</div>

@@ -52,7 +52,9 @@ export function Card({ result, onResultClick }: CardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
         <div className="absolute top-2 left-2 z-10 sm:top-3 sm:left-3">
-          <Badge className={`type-badge type-badge-${result.type} shadow-lg`}>{getContentTypeLabel(result.type)}</Badge>
+          <Badge className={`type-badge type-badge-overlay type-badge-${result.type} shadow-lg`}>
+            {getContentTypeLabel(result.type)}
+          </Badge>
         </div>
 
         <div className={cardInfo()}>

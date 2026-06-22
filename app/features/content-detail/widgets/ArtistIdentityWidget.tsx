@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { DetailSection } from "../components/DetailSection";
 import { DetailsFacts } from "../components/DetailsFacts";
-import { countAlbumsInLibrary, formatBorn, visibleFacts } from "../helpers";
+import { countAlbumsInLibrary, formatBorn, humanizeArtistType, visibleFacts } from "../helpers";
 import type { ArtistIdentityWidgetProps, FactItem } from "../types";
 
 function ArtistIdentityWidgetComponent({ deezerArtistId, artistName }: ArtistIdentityWidgetProps) {
@@ -16,7 +16,7 @@ function ArtistIdentityWidgetComponent({ deezerArtistId, artistName }: ArtistIde
   const albumsInLibrary = countAlbumsInLibrary(discography);
 
   const facts: FactItem[] = [
-    { label: t("details.type"), value: data?.type ?? null },
+    { label: t("details.type"), value: humanizeArtistType(data?.type ?? null, t) },
     { label: t("details.country"), value: data?.country ?? null },
     { label: t("details.formed"), value: data?.formedYear ? String(data.formedYear) : null },
     { label: t("details.realName"), value: data?.realName ?? null },

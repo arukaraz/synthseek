@@ -67,6 +67,21 @@ describe("StatusBadge", () => {
     expect(screen.queryByText("Queued")).not.toBeInTheDocument();
   });
 
+  it("keeps the label text when hideLabelOnMobile is set", () => {
+    render(<StatusBadge status={RequestStatus.enum.queued} hideLabelOnMobile />);
+    expect(screen.getByText("Queued")).toBeInTheDocument();
+  });
+
+  it("hides the label on mobile via responsive utility when hideLabelOnMobile is set", () => {
+    render(<StatusBadge status={RequestStatus.enum.queued} hideLabelOnMobile />);
+    expect(screen.getByText("Queued")).toHaveClass("hidden", "md:inline");
+  });
+
+  it("shows the label on all breakpoints by default", () => {
+    render(<StatusBadge status={RequestStatus.enum.queued} />);
+    expect(screen.getByText("Queued")).not.toHaveClass("hidden");
+  });
+
   it("has data-status attribute", () => {
     render(<StatusBadge status={RequestStatus.enum.complete} />);
     const badge = screen.getByTestId("status-badge");

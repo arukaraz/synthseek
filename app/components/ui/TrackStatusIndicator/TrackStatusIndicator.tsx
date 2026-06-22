@@ -11,7 +11,7 @@ import { indicatorLabel, indicatorRow, reasonButton } from "./styles";
 import { TrackStatusIcon } from "./TrackStatusIcon";
 import type { TrackStatusIndicatorProps } from "./types";
 
-export function TrackStatusIndicator({ status, failureReason }: TrackStatusIndicatorProps) {
+export function TrackStatusIndicator({ status, failureReason, hideLabel = false }: TrackStatusIndicatorProps) {
   const { t } = useTranslation("components");
   const { t: tStatus } = useTranslation("status");
   const statusConfig = REQUEST_STATUS_CONFIG[status];
@@ -30,7 +30,7 @@ export function TrackStatusIndicator({ status, failureReason }: TrackStatusIndic
   return (
     <div className={indicatorRow()}>
       <TrackStatusIcon status={status} />
-      <span className={cn(indicatorLabel(), statusConfig.color)}>{label}</span>
+      <span className={cn(indicatorLabel({ hidden: hideLabel }), statusConfig.color)}>{label}</span>
       {reasonConfig && (
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>

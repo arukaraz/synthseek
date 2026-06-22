@@ -24,14 +24,17 @@ export const joinedDate = cva("text-fg/50 text-xs");
 
 export const actionsCell = cva("flex items-center justify-end gap-1.5");
 
-export const pill = cva("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ring-1", {
-  variants: {
-    tone: {
-      plex: "bg-amber-500/15 text-amber-300 ring-amber-500/30",
-      local: "ring-fg/10 bg-fg/5 text-fg/60",
+export const pill = cva(
+  "inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ring-1",
+  {
+    variants: {
+      tone: {
+        plex: "bg-amber-500/15 text-amber-300 ring-amber-500/30",
+        local: "ring-fg/10 bg-fg/5 text-fg/60",
+      },
     },
-  },
-});
+  }
+);
 
 export const importList = cva("flex max-h-80 flex-col gap-1 overflow-y-auto");
 

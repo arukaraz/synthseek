@@ -158,4 +158,16 @@ describe("UserAvatarMenu", () => {
 
     expect(await screen.findByText("Update to 2.0.0")).toBeInTheDocument();
   });
+
+  it("navigates in-app to the updates section when the changelog link is selected", async () => {
+    versionState.updateAvailable = true;
+    versionState.latestVersion = "2.0.0";
+
+    const { user } = renderWithProviders(<UserAvatarMenu />);
+
+    await user.click(screen.getByLabelText("User menu"));
+    await user.click(await screen.findByText("Changelog"));
+
+    expect(pushMock).toHaveBeenCalledWith("/settings/updates");
+  });
 });

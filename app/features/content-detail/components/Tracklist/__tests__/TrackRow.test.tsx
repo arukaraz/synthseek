@@ -29,7 +29,6 @@ describe("TrackRow selection", () => {
     renderWithProviders(
       <TrackRow
         track={createTrack({ requestId: "r1", status: "complete" })}
-        rank={1}
         showArtist
         onRequest={noop}
         onRetry={noop}
@@ -44,7 +43,6 @@ describe("TrackRow selection", () => {
     renderWithProviders(
       <TrackRow
         track={createTrack({ requestId: "r1", status: "complete" })}
-        rank={1}
         showArtist
         onRequest={noop}
         onRetry={noop}
@@ -62,7 +60,6 @@ describe("TrackRow selection", () => {
     renderWithProviders(
       <TrackRow
         track={createTrack({ requestId: "r1", status: "failed" })}
-        rank={1}
         showArtist
         onRequest={noop}
         onRetry={noop}
@@ -80,7 +77,6 @@ describe("TrackRow selection", () => {
     renderWithProviders(
       <TrackRow
         track={createTrack({ requestId: "r1", status: "downloading" })}
-        rank={1}
         showArtist
         onRequest={noop}
         onRetry={noop}
@@ -99,7 +95,6 @@ describe("TrackRow selection", () => {
     const { user } = renderWithProviders(
       <TrackRow
         track={createTrack({ requestId: "r1", status: "complete" })}
-        rank={1}
         showArtist
         onRequest={noop}
         onRetry={noop}

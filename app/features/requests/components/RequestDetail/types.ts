@@ -1,5 +1,14 @@
 import type { RequestWithTracks, TrackRequest } from "@api/__generated__/types";
 
+import type { useRequestActions } from "../../hooks/useRequestActions";
+
+export interface RequestDetailHeroMenuProps {
+  actions: ReturnType<typeof useRequestActions>;
+  typeLabel: string;
+  onExportFull: () => void;
+  triggerClassName: string;
+}
+
 export interface RequestDetailProps {
   request: RequestWithTracks | null;
   onBack: () => void;

@@ -12,6 +12,7 @@ export interface MenuUpdateSectionProps {
   latestVersion: string;
   currentVersion: string;
   breaking: boolean;
+  onNavigate: () => void;
 }
 
 export interface TriggerAvatarProps {

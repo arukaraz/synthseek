@@ -66,7 +66,7 @@
     "members": "Membres",
     "logout": "Déconnexion",
     "loggingOut": "Déconnexion...",
-    "patchNotes": "Notes de version",
+    "patchNotes": "Journal des modifications",
     "majorUpdate": "Mise à jour majeure",
     "updateAvailable": "Mise à jour disponible",
     "updateTo": "Mettre à jour vers {{version}}",

@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import { AlertTriangle, ArrowUpCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { PATCH_NOTES_URL } from "@utils/version";
-
 import {
   patchNotesLink,
   updateBreakingPrefix,
@@ -17,7 +15,7 @@ import {
 } from "../styles";
 import type { MenuUpdateSectionProps } from "../types";
 
-export function MenuUpdateSection({ latestVersion, currentVersion, breaking }: MenuUpdateSectionProps) {
+export function MenuUpdateSection({ latestVersion, currentVersion, breaking, onNavigate }: MenuUpdateSectionProps) {
   const { t } = useTranslation("components");
   const tone = breaking ? "breaking" : "info";
 
@@ -45,15 +43,9 @@ export function MenuUpdateSection({ latestVersion, currentVersion, breaking }: M
         <span className={updateCurrent()}>{t("userMenu.currentVersion", { version: currentVersion })}</span>
       </div>
 
-      <a
-        href={PATCH_NOTES_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={t("userMenu.patchNotes")}
-        className={patchNotesLink()}
-      >
+      <button type="button" onClick={onNavigate} className={patchNotesLink()}>
         {t("userMenu.patchNotes")}
-      </a>
+      </button>
     </div>
   );
 }

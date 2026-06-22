@@ -1,3 +1,4 @@
+import type { TFunction } from "i18next";
 import { describe, expect, it } from "vitest";
 
 import type { MusicAlbum, MusicArtist, MusicPlaylist, MusicTrack } from "@api/__generated__/types";
@@ -14,7 +15,9 @@ import {
   deriveTrackStatusCounts,
   detailInitials,
   detailTargetFromMusicItem,
+  formatPlays,
   formatStat,
+  humanizeArtistType,
   isRemovableTrack,
   playlistLibraryTarget,
   playlistOpenItem,
@@ -26,6 +29,17 @@ import {
   visibleFacts,
 } from "../helpers";
 import type { TracklistTrack } from "../components/Tracklist/types";
+
+const typeLabels: Record<string, string> = {
+  "details.typeValue.soloArtist": "Solo artist",
+  "details.typeValue.band": "Band",
+};
+
+function fakeContentDetailT(key: string): string {
+  return typeLabels[key] ?? key;
+}
+
+const contentDetailT = fakeContentDetailT as unknown as TFunction<"contentDetail">;
 
 function createMusicTrack(overrides?: Partial<MusicTrack>): MusicTrack {
   return {
@@ -87,6 +101,28 @@ describe("content-detail helpers", () => {
     it("compacts large values instead of writing every digit", () => {
       const formatted = formatStat(1_500_000);
       expect(formatted.length).toBeLessThan("1,500,000".length);
+    });
+  });
+
+  describe("formatPlays", () => {
+    it("renders a dash for a missing value", () => {
+      expect(formatPlays(null)).toBe("-");
+    });
+
+    it("floors to the nearest hundred-thousand with a plus suffix", () => {
+      expect(formatPlays(404_100)).toBe("400K+");
+      expect(formatPlays(392_200)).toBe("300K+");
+      expect(formatPlays(316_100)).toBe("300K+");
+    });
+
+    it("floors to whole millions without a plus suffix", () => {
+      expect(formatPlays(1_000_000)).toBe("1M");
+      expect(formatPlays(2_900_000)).toBe("2M");
+    });
+
+    it("falls back to the compact format below one hundred thousand", () => {
+      expect(formatPlays(66_700)).not.toContain("0K+");
+      expect(formatPlays(66_700)).not.toBe("-");
     });
   });
 
@@ -542,10 +578,16 @@ describe("content-detail helpers", () => {
       expect(item.artists[0]?.name).toBe("Daft Punk");
     });
 
-    it("builds an artist MusicItem for the lidarr delegate path", () => {
-      const item = artistRequestItem({ id: "ar1", name: "Adele" });
+    it("builds an artist MusicItem carrying the cover image for the lidarr delegate path", () => {
+      const item = artistRequestItem({ id: "ar1", name: "Adele", cover: "photo.jpg" });
       expect(item.type).toBe("artist");
       expect(item.name).toBe("Adele");
+      expect(item.images[0]?.url).toBe("photo.jpg");
+    });
+
+    it("builds an artist MusicItem with no images when cover is null", () => {
+      const item = artistRequestItem({ id: "ar1", name: "Adele", cover: null });
+      expect(item.images).toHaveLength(0);
     });
 
     it("builds a track MusicItem that carries album context when provided", () => {
@@ -620,6 +662,31 @@ describe("content-detail helpers", () => {
 
     it("rejects a track with no status (catalog/preloaded)", () => {
       expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: null }))).toBe(false);
+    });
+  });
+
+  describe("humanizeArtistType", () => {
+    it("maps the human instance-of token to the solo artist label", () => {
+      expect(humanizeArtistType("human", contentDetailT)).toBe("Solo artist");
+    });
+
+    it("maps the musical group instance-of token to the band label", () => {
+      expect(humanizeArtistType("musical group", contentDetailT)).toBe("Band");
+    });
+
+    it("matches the known tokens case-insensitively and trims surrounding whitespace", () => {
+      expect(humanizeArtistType("Human", contentDetailT)).toBe("Solo artist");
+      expect(humanizeArtistType("  MUSICAL GROUP  ", contentDetailT)).toBe("Band");
+    });
+
+    it("capitalizes an unknown raw type instead of localizing it", () => {
+      expect(humanizeArtistType("duo", contentDetailT)).toBe("Duo");
+    });
+
+    it("returns null for null, empty, or whitespace-only values", () => {
+      expect(humanizeArtistType(null, contentDetailT)).toBeNull();
+      expect(humanizeArtistType("", contentDetailT)).toBeNull();
+      expect(humanizeArtistType("   ", contentDetailT)).toBeNull();
     });
   });
 });

@@ -13,8 +13,11 @@ import type { inferRouterOutputs } from "@trpc/server";
 import i18n from "@locale";
 import { formatDate } from "@utils/formatters";
 import { isRequestedStatus } from "@utils/status-helpers";
+import { capitalize } from "@utils/string";
+import type { TFunction } from "i18next";
 import type { CSSProperties } from "react";
 
+import { ARTIST_TYPE_LABEL_KEYS, PLAYS_HUNDRED_K, PLAYS_MILLION } from "./constants";
 import type { TracklistTrack } from "./components/Tracklist/types";
 import type { HeroRequestState } from "./components/DetailHero/types";
 import type {
@@ -25,6 +28,25 @@ import type {
   PlaylistPreloadedTargetInput,
   TrackRequestInput,
 } from "./types";
+
+function artistTypeMessageKey(
+  normalized: string
+): (typeof ARTIST_TYPE_LABEL_KEYS)[keyof typeof ARTIST_TYPE_LABEL_KEYS] | null {
+  const lowered = normalized.toLowerCase();
+  for (const [rawValue, messageKey] of Object.entries(ARTIST_TYPE_LABEL_KEYS)) {
+    if (rawValue === lowered) return messageKey;
+  }
+  return null;
+}
+
+export function humanizeArtistType(rawType: string | null, t: TFunction<"contentDetail">): string | null {
+  if (!rawType) return null;
+  const normalized = rawType.trim();
+  if (normalized.length === 0) return null;
+  const messageKey = artistTypeMessageKey(normalized);
+  if (messageKey) return t(messageKey);
+  return capitalize(normalized);
+}
 
 export function formatBorn(bornDate: string | null, bornPlace: string | null): string | null {
   if (!bornDate) return null;
@@ -97,6 +119,19 @@ export function formatStat(value: number | null): string {
   if (value === null) return "-";
   if (value < 10000) return value.toLocaleString(i18n.language);
   return new Intl.NumberFormat(i18n.language, { notation: "compact", maximumFractionDigits: 1 }).format(value);
+}
+
+export function formatPlays(value: number | null): string {
+  if (value === null) return "-";
+  if (value >= PLAYS_MILLION) {
+    const millions = Math.floor(value / PLAYS_MILLION);
+    return `${millions.toLocaleString(i18n.language)}M`;
+  }
+  if (value >= PLAYS_HUNDRED_K) {
+    const hundredKs = Math.floor(value / PLAYS_HUNDRED_K);
+    return `${hundredKs.toLocaleString(i18n.language)}00K+`;
+  }
+  return formatStat(value);
 }
 
 type ArtistDiscography = inferRouterOutputs<AppRouter>["contentDetail"]["artistDiscography"];
@@ -287,12 +322,12 @@ export function playlistRequestTracks(tracks: TracklistTrack[]): MusicTrack[] {
   }));
 }
 
-export function artistRequestItem({ id, name }: ArtistRequestInput): MusicArtist {
+export function artistRequestItem({ id, name, cover }: ArtistRequestInput): MusicArtist {
   return {
     type: "artist",
     id,
     name,
-    images: [],
+    images: coverImages(cover),
     genres: [],
     followers: null,
   };

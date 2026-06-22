@@ -4,9 +4,11 @@ export const modalContainer = cva(
   "bg-surface/95 sm:bg-surface/90 sm:backdrop-blur-2xl !top-0 !left-1/2 !flex !h-[100dvh] !max-h-[100dvh] !w-[min(1040px,100%)] !max-w-none !-translate-x-1/2 !translate-y-0 !flex-col !gap-0 !rounded-none !border-0 !overflow-hidden !p-0 shadow-2xl sm:!top-0 sm:!max-h-[100dvh] sm:!translate-y-0"
 );
 
-export const modalShell = cva("relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto sm:overflow-hidden");
+export const modalShell = cva(
+  "relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto sm:overflow-hidden"
+);
 
-export const modalLayout = cva("flex flex-col sm:min-h-0 sm:flex-1");
+export const modalLayout = cva("flex min-w-0 flex-col sm:min-h-0 sm:flex-1");
 
 export const modalScrollArea = cva(
   "flex flex-col gap-8 overflow-x-hidden px-5 pt-6 pb-8 sm:min-h-0 sm:flex-1 sm:overflow-y-auto sm:px-8 sm:pt-8"
@@ -59,7 +61,7 @@ export const backButton = cva(
 );
 
 export const hero = cva(
-  "relative isolate flex shrink-0 flex-col items-center gap-5 rounded-2xl p-5 pt-7 text-center sm:flex-row sm:items-center sm:gap-10 sm:p-7 sm:text-left lg:gap-14"
+  "relative isolate flex min-w-0 shrink-0 flex-col items-center gap-5 rounded-2xl p-5 pt-7 text-center sm:flex-row sm:items-center sm:gap-10 sm:p-7 sm:text-left lg:gap-14"
 );
 
 export const heroCover = cva(
@@ -138,14 +140,12 @@ export const sectionSkeleton = cva("bg-fg/5 w-full animate-pulse rounded-xl");
 export const sectionEmpty = cva("text-fg/50 text-sm");
 
 export const trackRow = cva(
-  "group border-fg/5 hover:bg-fg/5 flex items-center gap-3 rounded-lg border-b px-2 py-2.5 transition-colors last:border-b-0"
+  "group border-fg/5 hover:bg-fg/5 flex items-center gap-2 rounded-lg border-b px-2 py-2.5 transition-colors last:border-b-0"
 );
 
 export const trackSelectCell = cva("flex w-6 shrink-0 items-center justify-center");
 
 export const selectAllControl = cva("text-fg/60 flex items-center gap-2 text-xs font-medium");
-
-export const trackRank = cva("text-fg/40 w-6 shrink-0 text-center text-sm tabular-nums");
 
 export const trackInfo = cva("flex min-w-0 flex-1 flex-col");
 
@@ -153,9 +153,9 @@ export const trackTitle = cva("text-fg truncate text-sm font-medium");
 
 export const trackArtist = cva("text-fg/50 truncate text-xs");
 
-export const trackMeta = cva("text-fg/50 flex shrink-0 items-center gap-4 text-xs tabular-nums");
+export const trackMeta = cva("text-fg/50 flex shrink-0 items-center gap-2.5 text-xs tabular-nums");
 
-export const trackStatusCell = cva("flex w-32 shrink-0 items-center justify-end");
+export const trackStatusCell = cva("flex w-16 shrink-0 items-center justify-end");
 
 export const trackDownloadButton = cva(
   "text-fg/30 hover:text-fg flex size-7 items-center justify-center rounded-full transition-colors hover:bg-fg/10"

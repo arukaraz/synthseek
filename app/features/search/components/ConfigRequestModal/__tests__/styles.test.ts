@@ -5,6 +5,7 @@ import {
   acquisitionTrigger,
   configDialogContent,
   fieldGroup,
+  fieldLabel,
   lidarrSelectRadioItem,
   lidarrSelectTrigger,
   lidarrTagChip,
@@ -25,6 +26,13 @@ describe("configDialogContent", () => {
 describe("fieldGroup", () => {
   it("stacks fields with vertical spacing", () => {
     expect(fieldGroup()).toContain("space-y-3");
+  });
+});
+
+describe("fieldLabel", () => {
+  it("separates the label from its control with a small bottom margin", () => {
+    expect(fieldLabel()).toContain("mb-1.5");
+    expect(fieldLabel()).toContain("block");
   });
 });
 

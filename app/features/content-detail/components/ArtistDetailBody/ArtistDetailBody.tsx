@@ -25,12 +25,13 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
   const { requestArtist } = useContentDetailActions();
 
   const mbid = identity?.mbid ?? null;
+  const cover = identity?.image ?? target.cover;
   const genres = useMemo(() => stats?.genres ?? EMPTY_GENRES, [stats?.genres]);
   const socials = useMemo(() => buildSocialLinks(identity?.socials), [identity?.socials]);
 
   const handleRequest = useCallback(() => {
-    requestArtist({ id: target.id, name: target.name });
-  }, [requestArtist, target.id, target.name]);
+    requestArtist({ id: target.id, name: target.name, cover });
+  }, [requestArtist, target.id, target.name, cover]);
 
   const statsSlot = useMemo(
     () => <ArtistStatsWidget deezerArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="stats" />,
@@ -45,7 +46,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
         mode="artist"
         name={target.name}
         subtitle={null}
-        cover={identity?.image ?? target.cover}
+        cover={cover}
         genres={genres}
         requestState="request"
         onRequest={handleRequest}

@@ -7,13 +7,12 @@ import { formatTrackDuration } from "@utils/formatters";
 import { Download, Loader2, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { formatStat, isRemovableTrack } from "../../helpers";
+import { formatPlays, isRemovableTrack } from "../../helpers";
 import {
   trackArtist,
   trackDownloadButton,
   trackInfo,
   trackMeta,
-  trackRank,
   trackRetryButton,
   trackRow,
   trackSelectCell,
@@ -25,7 +24,6 @@ import type { TrackRowProps } from "./types";
 
 export function TrackRow({
   track,
-  rank,
   showArtist,
   onRequest,
   onRetry,
@@ -50,9 +48,7 @@ export function TrackRow({
             />
           ) : null}
         </span>
-      ) : (
-        <span className={trackRank()}>{rank}</span>
-      )}
+      ) : null}
 
       <div className={trackInfo()}>
         <span className={trackTitle()}>{track.title}</span>
@@ -61,7 +57,7 @@ export function TrackRow({
 
       <div className={trackMeta()}>
         {track.plays !== null ? (
-          <span>{t("trackPlays", { count: track.plays, plays: formatStat(track.plays) })}</span>
+          <span>{t("trackPlays", { count: track.plays, plays: formatPlays(track.plays) })}</span>
         ) : null}
         <span>{formatTrackDuration(track.durationMs)}</span>
       </div>
@@ -70,7 +66,7 @@ export function TrackRow({
         {track.status ? (
           <>
             <span className={canRetry ? trackStatusReveal() : "flex items-center"}>
-              <TrackStatusIndicator status={track.status} failureReason={track.failureReason} />
+              <TrackStatusIndicator status={track.status} failureReason={track.failureReason} hideLabel />
             </span>
             {canRetry ? (
               <button

@@ -21,11 +21,10 @@ export function Tracklist({
 
   return (
     <ul>
-      {tracks.map((track, index) => (
+      {tracks.map((track) => (
         <TrackRow
           key={track.externalId}
           track={track}
-          rank={track.trackNumber || index + 1}
           showArtist={showArtist}
           isRetrying={retryingId === track.requestId}
           selectable={selectable}

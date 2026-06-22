@@ -74,6 +74,10 @@
   },
   "details": {
     "type": "Typ",
+    "typeValue": {
+      "soloArtist": "Solokünstler",
+      "band": "Band"
+    },
     "country": "Land",
     "formed": "Gegründet",
     "realName": "Echter Name",

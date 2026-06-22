@@ -98,7 +98,7 @@ function DetailHeroComponent({
 
       <div className={heroInfo()}>
         <div className={heroBadgeRow()}>
-          <span className={`type-badge type-badge-${badgeType}`}>{t(`badge.${badgeType}`)}</span>
+          <span className={`type-badge type-badge-overlay type-badge-${badgeType}`}>{t(`badge.${badgeType}`)}</span>
           {playlistControls?.syncBadge ? <span aria-hidden className={heroBadgeDivider()} /> : null}
           {playlistControls?.syncBadge}
         </div>

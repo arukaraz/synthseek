@@ -40,6 +40,11 @@ describe("MembersSection styles", () => {
     expect(pill({ tone: "local" })).toContain("text-fg/60");
   });
 
+  it("keeps the pill on a single line", () => {
+    expect(pill({ tone: "plex" })).toContain("whitespace-nowrap");
+    expect(pill({ tone: "plex" })).toContain("shrink-0");
+  });
+
   it("maps the importRow disabled variants", () => {
     expect(importRow({ disabled: true })).toContain("opacity-50");
     expect(importRow({ disabled: false })).toContain("cursor-pointer");

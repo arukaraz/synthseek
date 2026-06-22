@@ -25,7 +25,7 @@ export function TriggerAvatar({ username, avatarUrl, updateAvailable }: TriggerA
             transition={{ duration: 0.2 }}
           >
             <span className="sr-only">{t("userMenu.updateAvailable")}</span>
-            <ArrowUpCircle aria-hidden className="h-3.5 w-3.5" />
+            <ArrowUpCircle aria-hidden strokeWidth={2.5} className="h-3.5 w-3.5" />
           </motion.span>
         ) : null}
       </AnimatePresence>

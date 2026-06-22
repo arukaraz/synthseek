@@ -31,7 +31,6 @@ export interface TracklistProps {
 
 export interface TrackRowProps {
   track: TracklistTrack;
-  rank: number;
   showArtist: boolean;
   onRequest: () => void;
   onRetry: () => void;

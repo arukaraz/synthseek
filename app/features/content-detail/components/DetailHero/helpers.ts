@@ -1,7 +1,13 @@
 import type { SocialBrand } from "@components/ui/SocialIcon";
 import type { CSSProperties } from "react";
 
-import { SHARE_FAN_ARC_END_DEG, SHARE_FAN_ARC_START_DEG, SHARE_FAN_RADIUS, SHARE_FAN_STAGGER_MS } from "./constants";
+import {
+  SHARE_FAN_ARC_END_DEG,
+  SHARE_FAN_ARC_START_DEG,
+  SHARE_FAN_RADIUS,
+  SHARE_FAN_STAGGER_MS,
+  SOCIAL_BASE_URL,
+} from "./constants";
 import type { HeroRequestState, ShareFanItemStyle, SocialLink } from "./types";
 
 export function heroPillVisibility({
@@ -26,12 +32,19 @@ interface ArtistSocials {
   spotify: string | null;
 }
 
-const SOCIAL_ORDER: { brand: SocialBrand; key: keyof ArtistSocials }[] = [
+type SocialKey = keyof typeof SOCIAL_BASE_URL;
+
+const SOCIAL_ORDER: { brand: SocialBrand; key: SocialKey }[] = [
   { brand: "instagram", key: "instagram" },
   { brand: "youtube", key: "youtube" },
   { brand: "appleMusic", key: "appleMusic" },
   { brand: "spotify", key: "spotify" },
 ];
+
+function socialHref(key: SocialKey, value: string): string {
+  if (value.startsWith("http://") || value.startsWith("https://")) return value;
+  return `${SOCIAL_BASE_URL[key]}${value}`;
+}
 
 export const SOCIAL_BRAND_VAR: Record<SocialBrand, string> = {
   instagram: "var(--brand-instagram)",
@@ -45,8 +58,8 @@ export function buildSocialLinks(socials: ArtistSocials | null | undefined): Soc
   if (!socials) return [];
   const links: SocialLink[] = [];
   for (const { brand, key } of SOCIAL_ORDER) {
-    const url = socials[key];
-    if (url) links.push({ brand, url });
+    const value = socials[key];
+    if (value) links.push({ brand, url: socialHref(key, value) });
   }
   return links;
 }

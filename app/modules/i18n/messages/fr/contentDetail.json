@@ -74,6 +74,10 @@
   },
   "details": {
     "type": "Type",
+    "typeValue": {
+      "soloArtist": "Artiste solo",
+      "band": "Groupe"
+    },
     "country": "Pays",
     "formed": "Formé",
     "realName": "Vrai nom",

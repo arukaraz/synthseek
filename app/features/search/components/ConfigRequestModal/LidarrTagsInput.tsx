@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { addTag, filterTagSuggestions, removeTag } from "./helpers";
 import {
   fieldGroup,
+  fieldLabel,
   lidarrTagChip,
   lidarrTagChipRemove,
   lidarrTagInputField,
@@ -45,7 +46,7 @@ export function LidarrTagsInput({ label, value, onChange, suggestions }: LidarrT
 
   return (
     <div className={fieldGroup()}>
-      <label htmlFor={inputId} className="text-fg/90 text-sm font-medium">
+      <label htmlFor={inputId} className={fieldLabel()}>
         {label}
       </label>
       <Popover open={open && filteredSuggestions.length > 0} onOpenChange={setOpen}>

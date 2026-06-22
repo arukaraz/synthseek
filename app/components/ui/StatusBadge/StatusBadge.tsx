@@ -4,10 +4,17 @@ import { useTranslation } from "react-i18next";
 
 import { cn } from "@utils/cn";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
-import { iconSizes, sizeClasses } from "./styles";
+import { iconSizes, sizeClasses, statusBadgeLabel } from "./styles";
 import type { StatusBadgeProps } from "./types";
 
-export function StatusBadge({ status, size = "sm", showIcon = false, showLabel = true, className }: StatusBadgeProps) {
+export function StatusBadge({
+  status,
+  size = "sm",
+  showIcon = false,
+  showLabel = true,
+  hideLabelOnMobile = false,
+  className,
+}: StatusBadgeProps) {
   const { t } = useTranslation("status");
   const statusInfo = REQUEST_STATUS_CONFIG[status];
   const Icon = statusInfo.icon;
@@ -25,7 +32,9 @@ export function StatusBadge({ status, size = "sm", showIcon = false, showLabel =
       )}
     >
       {showIcon && <Icon className={iconSizes[size]} />}
-      {showLabel && t(`request.${status}.label`)}
+      {showLabel && (
+        <span className={statusBadgeLabel({ hideOnMobile: hideLabelOnMobile })}>{t(`request.${status}.label`)}</span>
+      )}
     </span>
   );
 }

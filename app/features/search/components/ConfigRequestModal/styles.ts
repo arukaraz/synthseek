@@ -6,6 +6,8 @@ export const configDialogContent = cva(
 
 export const fieldGroup = cva("space-y-3");
 
+export const fieldLabel = cva("text-fg/90 mb-1.5 block text-sm font-medium");
+
 export const acquisitionTrigger = cva(
   "border-fg/10 bg-fg/5 text-fg/80 hover:bg-fg/10 hover:border-primary-500/30 flex w-full items-center justify-between gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors"
 );
