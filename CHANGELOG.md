@@ -2,6 +2,12 @@
 
 ---
 
+# v2.3.2, June 22, 2026
+
+- Polished the content detail and settings screens, with a better request detail layout on mobile.
+
+---
+
 # v2.3.1, June 21, 2026
 
 ### Sync library playlists to Plex, plus AI playlist building from Last.fm

@@ -2,6 +2,18 @@
   "schemaVersion": 1,
   "versions": [
     {
+      "version": "2.3.2",
+      "date": "2026-06-22",
+      "type": "patch",
+      "title": "",
+      "sections": [
+        {
+          "category": "improvement",
+          "items": ["Polished the content detail and settings screens, with a better request detail layout on mobile."]
+        }
+      ]
+    },
+    {
       "version": "2.3.1",
       "date": "2026-06-21",
       "type": "patch",
