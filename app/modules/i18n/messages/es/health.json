@@ -19,5 +19,9 @@
   "SLSKD_API_ERROR": "La API devolvió el estado {{status}}",
   "SLSKD_NETWORK_UNKNOWN": "API correcta, estado de red desconocido",
   "SLSKD_NETWORK_DISCONNECTED": "API correcta pero sin conexión a la red de Synthseek",
-  "SLSKD_CONNECTED": "Conectado"
+  "SLSKD_CONNECTED": "Conectado",
+  "PATHS_ACCESSIBLE": "Rutas de descargas y biblioteca accesibles",
+  "DOWNLOADS_NOT_WRITABLE": "La ruta de descargas no permite escritura: {{path}}",
+  "LIBRARY_NOT_ACCESSIBLE": "La ruta de la biblioteca no es accesible: {{path}}",
+  "LIBRARY_READ_ONLY": "Descargas con escritura, biblioteca solo lectura (degradado): {{path}}"
 }

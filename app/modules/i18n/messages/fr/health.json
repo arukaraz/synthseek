@@ -19,5 +19,9 @@
   "SLSKD_API_ERROR": "L'API a renvoyé le statut {{status}}",
   "SLSKD_NETWORK_UNKNOWN": "API OK, état du réseau inconnu",
   "SLSKD_NETWORK_DISCONNECTED": "API OK mais non connecté au réseau Synthseek",
-  "SLSKD_CONNECTED": "Connecté"
+  "SLSKD_CONNECTED": "Connecté",
+  "PATHS_ACCESSIBLE": "Chemins des téléchargements et de la bibliothèque accessibles",
+  "DOWNLOADS_NOT_WRITABLE": "Le chemin des téléchargements n'est pas accessible en écriture : {{path}}",
+  "LIBRARY_NOT_ACCESSIBLE": "Le chemin de la bibliothèque n'est pas accessible : {{path}}",
+  "LIBRARY_READ_ONLY": "Téléchargements en écriture, bibliothèque en lecture seule (dégradé) : {{path}}"
 }
