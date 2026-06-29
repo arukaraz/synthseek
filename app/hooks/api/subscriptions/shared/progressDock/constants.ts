@@ -1,0 +1,1 @@
+export const REQUEST_DOCK_AUTO_DISMISS_MS = 5000;

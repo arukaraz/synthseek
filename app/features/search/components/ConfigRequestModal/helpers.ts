@@ -134,8 +134,9 @@ export function getItemDisplayName(item: MusicItem | null): string {
   if (!item) return "";
   const name = getMusicItemName(item);
   if (!name) return "";
-  if (item.type === ContentType.enum.artist) return name;
-  return `${getMusicItemArtist(item)} - ${name}`;
+  if (item.type === ContentType.enum.artist || item.type === ContentType.enum.playlist) return name;
+  const artist = item.artists?.[0]?.name || item.artist;
+  return artist ? `${artist} - ${name}` : name;
 }
 
 export function extractItemMetadata(item: MusicItem | null, parentAlbum?: MusicItem | null) {

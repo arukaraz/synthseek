@@ -22,12 +22,23 @@
       "libraryImportRunning": "Importando desde {{provider}}",
       "libraryImportDone": "Importación completa",
       "fileImportRunning": "Importando lista",
-      "fileImportDone": "Importación completa"
+      "fileImportDone": "Importación completa",
+      "queueing": "Encolando {{name}}",
+      "queued": "{{name}} en cola",
+      "queueFailed": "No se pudo encolar {{name}}"
     },
     "subtitle": {
       "ofTotal": "de {{total}}",
       "failed": "con error",
-      "skippedBreakdown": "importados, {{skipped}} ya en tu biblioteca"
+      "skippedBreakdown": "importados, {{skipped}} ya en tu biblioteca",
+      "processingTracks_one": "Procesando {{count}} pista, espera un momento…",
+      "processingTracks_other": "Procesando {{count}} pistas, espera un momento…",
+      "processingTracksLong_one": "Procesando {{count}} pista, esto puede tardar un poco, espera un momento…",
+      "processingTracksLong_other": "Procesando {{count}} pistas, esto puede tardar un poco, espera un momento…",
+      "requestComplete_one": "{{count}} pista en cola",
+      "requestComplete_other": "{{count}} pistas en cola",
+      "requestPartial": "Algunas pistas no estaban disponibles",
+      "requestFailed": "La solicitud falló"
     },
     "itemSkippedReason": "Ya en tu biblioteca",
     "mobileMeta": "{{done}} de {{total}} · {{current}}",

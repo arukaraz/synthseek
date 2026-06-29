@@ -134,11 +134,10 @@ describe("ConfigRequestModal", () => {
     expect(screen.getByTestId("acquisition-dropdown")).toBeInTheDocument();
   });
 
-  it("submits a single track download and navigates to the request groups view", async () => {
+  it("fires the track mutation without per-call dock callbacks and closes immediately", async () => {
     const onSuccess = vi.fn();
     const onClose = vi.fn();
     const user = userEvent.setup();
-    requestMutate.mockImplementation((_payload, opts) => opts.onSuccess?.());
 
     render(
       <ConfigRequestModal
@@ -153,9 +152,10 @@ describe("ConfigRequestModal", () => {
     await user.click(confirmButton());
 
     expect(requestMutate).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith(expect.stringContaining("/requests?view=groups"));
+    expect(requestMutate.mock.calls[0][1]).toBeUndefined();
+    expect(mockRouter.push).not.toHaveBeenCalled();
     expect(onSuccess).toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("submits an album batch download", async () => {
@@ -168,6 +168,7 @@ describe("ConfigRequestModal", () => {
 
     expect(batchMutate).toHaveBeenCalledTimes(1);
     expect(batchMutate.mock.calls[0][0].external_id).toBe("al1");
+    expect(batchMutate.mock.calls[0][1]).toBeUndefined();
   });
 
   it("warns and aborts when the album track list is empty", async () => {
@@ -199,6 +200,7 @@ describe("ConfigRequestModal", () => {
 
     expect(playlistMutate).toHaveBeenCalledTimes(1);
     expect(playlistMutate.mock.calls[0][0].external_id).toBe("pl1");
+    expect(playlistMutate.mock.calls[0][1]).toBeUndefined();
   });
 
   it("renders the artist lidarr delegation flow and submits a complete delegate", async () => {

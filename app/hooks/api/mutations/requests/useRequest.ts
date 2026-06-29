@@ -2,12 +2,25 @@ import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyReclaimOutcome } from "@utils/request-helpers";
 
+import { seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
+
 export function useRequest() {
   const utils = trpc.useUtils();
 
   return trpc.requests.request.useMutation({
-    onError: (err) => errorToastDetailed(err, "requests.downloadFailed"),
-    onSuccess: ({ outcome, data }) => {
+    onMutate: ({ track }) => {
+      const dockJobId = seedRequestDockJob({
+        name: track.artist ? `${track.artist} - ${track.title}` : track.title,
+        trackCount: 1,
+      });
+      return { dockJobId };
+    },
+    onError: (err, _vars, context) => {
+      if (context) settleRequestDockJob(context.dockJobId, "failed", true);
+      errorToastDetailed(err, "requests.downloadFailed");
+    },
+    onSuccess: ({ outcome, data }, _vars, context) => {
+      if (context) settleRequestDockJob(context.dockJobId, "complete", true);
       notifyReclaimOutcome({ outcome, kind: "download", itemName: `${data.artist} - ${data.track}` });
     },
     onSettled: () => {

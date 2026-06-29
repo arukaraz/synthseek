@@ -19,10 +19,10 @@ import {
   usePlaylistRequest,
   useRequest,
 } from "@hooks/api";
+import { Spinner } from "@components/ui/Spinner";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { titleCase } from "@utils/formatters";
-import { Download, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Download } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -99,7 +99,6 @@ export function ConfigRequestModal({
   const isLidarrArtistMode = mode === "lidarr-artist";
 
   const { t } = useTranslation("search");
-  const router = useRouter();
 
   const isAlbumItem = item?.type === ContentType.enum.album;
 
@@ -197,18 +196,6 @@ export function ConfigRequestModal({
     description: t(opt.descriptionKey),
   }));
 
-  const handleMutationSuccess = () => {
-    if (!item) return;
-    const itemName = getItemDisplayName(item);
-    const selectedExternalId = item.type === ContentType.enum.track ? (parentAlbum?.id ?? item.album.id) : item.id;
-    const query = selectedExternalId
-      ? `?view=groups&selected=${encodeURIComponent(selectedExternalId)}`
-      : "?view=groups";
-    router.push(`/requests${query}`);
-    onSuccess?.(itemName);
-    handleClose();
-  };
-
   const downloadMutation = useRequest();
   const downloadAlbumMutation = useBatchRequest();
   const downloadPlaylistMutation = usePlaylistRequest();
@@ -258,15 +245,16 @@ export function ConfigRequestModal({
       ...(sourceChain ? { sourceChain } : {}),
     };
 
+    const itemName = getItemDisplayName(item);
+
     if (item.type === ContentType.enum.track) {
-      downloadMutation.mutate(
-        {
-          track: mapTrackFields(item),
-          config,
-          album_external_id: parentAlbum?.id ?? item.album.id ?? `single_${item.id}`,
-        },
-        { onSuccess: handleMutationSuccess }
-      );
+      downloadMutation.mutate({
+        track: mapTrackFields(item),
+        config,
+        album_external_id: parentAlbum?.id ?? item.album.id ?? `single_${item.id}`,
+      });
+      onSuccess?.(itemName);
+      onClose();
       return;
     }
 
@@ -281,44 +269,42 @@ export function ConfigRequestModal({
         toast.error(t("config.errors.lidarrIncomplete"));
         return;
       }
-      downloadAlbumMutation.mutate(
-        {
-          external_id: item.id,
-          name: item.name,
-          artist: item.artists[0]?.name || item.artist,
-          album_art: item.images[0]?.url ?? null,
-          release_date: item.release_date || "1900-01-01",
-          total_tracks: item.total_tracks || trackList.length,
-          genres: item.genres,
-          tracks: trackList.map(mapTrackFields),
-          config,
-          ...(delegate ? { delegate } : {}),
-        },
-        { onSuccess: handleMutationSuccess }
-      );
+      downloadAlbumMutation.mutate({
+        external_id: item.id,
+        name: item.name,
+        artist: item.artists[0]?.name || item.artist,
+        album_art: item.images[0]?.url ?? null,
+        release_date: item.release_date || "1900-01-01",
+        total_tracks: item.total_tracks || trackList.length,
+        genres: item.genres,
+        tracks: trackList.map(mapTrackFields),
+        config,
+        ...(delegate ? { delegate } : {}),
+      });
+      onSuccess?.(itemName);
+      onClose();
       return;
     }
 
     if (item.type === ContentType.enum.playlist) {
-      downloadPlaylistMutation.mutate(
-        {
-          external_id: item.id,
-          name: item.name,
-          description: item.description ?? null,
-          owner: item.owner?.name ?? "Unknown",
-          image: item.images?.[0]?.url ?? null,
-          total_tracks: item.total_tracks || trackList.length,
-          tracks: trackList.map((t) => ({
-            ...mapTrackFields(t),
-            album_external_id: t.album.id,
-            album_name: t.album.name,
-            album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
-            album_image: t.album.images?.[0]?.url ?? null,
-          })),
-          config,
-        },
-        { onSuccess: handleMutationSuccess }
-      );
+      downloadPlaylistMutation.mutate({
+        external_id: item.id,
+        name: item.name,
+        description: item.description ?? null,
+        owner: item.owner?.name ?? "Unknown",
+        image: item.images?.[0]?.url ?? null,
+        total_tracks: item.total_tracks || trackList.length,
+        tracks: trackList.map((t) => ({
+          ...mapTrackFields(t),
+          album_external_id: t.album.id,
+          album_name: t.album.name,
+          album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
+          album_image: t.album.images?.[0]?.url ?? null,
+        })),
+        config,
+      });
+      onSuccess?.(itemName);
+      onClose();
     }
   };
 
@@ -479,12 +465,12 @@ export function ConfigRequestModal({
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Spinner size="sm" decorative className="mr-2" />
                   {t("config.actions.requesting")}
                 </>
               ) : isLoadingData ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Spinner size="sm" decorative className="mr-2" />
                   {t("config.actions.loadingTracks")}
                 </>
               ) : (

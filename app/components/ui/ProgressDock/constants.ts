@@ -1,1 +1,3 @@
 export const DOCK_BODY_MAX_HEIGHT = 170;
+
+export const REQUEST_LONG_RUN_TRACK_THRESHOLD = 40;

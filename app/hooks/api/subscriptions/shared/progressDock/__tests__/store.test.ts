@@ -1,18 +1,23 @@
 import { renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
+  autoDismiss,
   buildDockItems,
+  correlateDockJob,
   dismissDockJob,
   finalizeDockJob,
+  findRunningRequestJobId,
   hasDockJob,
   isDockJobDismissed,
   markDockItem,
   resetDockStore,
   seedDockJob,
   setDockJobStatus,
+  stashPendingTerminal,
   useDockJobs,
 } from "../store";
+import { settleRequestDockJobByRequestId } from "../requestDock";
 import type { DockJob } from "../types";
 
 function readJobs(): DockJob[] {
@@ -25,6 +30,15 @@ function seedLibrary(id: string, names: string[]): void {
     id,
     kind: "library-import",
     items: buildDockItems(names.map((name, index) => ({ key: String(index), name }))),
+    status: "running",
+  });
+}
+
+function seedRequest(id: string, name: string): void {
+  seedDockJob({
+    id,
+    kind: "request",
+    items: buildDockItems([{ key: "track-0", name }]),
     status: "running",
   });
 }
@@ -171,6 +185,159 @@ describe("progressDock store", () => {
       markDockItem("job-fin-d", "0", "done");
       finalizeDockJob("job-fin-d");
       expect(hasDockJob("job-fin-d")).toBe(false);
+    });
+  });
+
+  describe("request job correlation", () => {
+    it("records the requestId and finds the running request job by it", () => {
+      seedRequest("req-a", "Album One");
+      correlateDockJob("req-a", "pl_async");
+      expect(findRunningRequestJobId("pl_async")).toBe("req-a");
+    });
+
+    it("does not find a non-request job that happens to carry the same requestId", () => {
+      seedLibrary("lib-a", ["Alpha"]);
+      correlateDockJob("lib-a", "pl_async");
+      expect(findRunningRequestJobId("pl_async")).toBeNull();
+    });
+
+    it("does not find a request job once it is no longer running", () => {
+      seedRequest("req-b", "Album One");
+      correlateDockJob("req-b", "pl_done");
+      setDockJobStatus("req-b", "complete");
+      expect(findRunningRequestJobId("pl_done")).toBeNull();
+    });
+  });
+
+  describe("terminal-before-correlation rendezvous", () => {
+    function statusOf(id: string): string | undefined {
+      return readJobs().find((job) => job.id === id)?.status;
+    }
+
+    it("stashes a terminal that arrives before correlation, then applies it on correlate (job ends terminal, not stuck running)", () => {
+      seedRequest("rendezvous-a", "Tiny Playlist");
+
+      settleRequestDockJobByRequestId("pl_fast", "complete");
+      expect(statusOf("rendezvous-a")).toBe("running");
+
+      correlateDockJob("rendezvous-a", "pl_fast");
+      expect(statusOf("rendezvous-a")).toBe("complete");
+    });
+
+    it("carries the partial and failed terminal phases through the rendezvous", () => {
+      seedRequest("rendezvous-partial", "Tiny Playlist");
+      settleRequestDockJobByRequestId("pl_partial", "partial");
+      correlateDockJob("rendezvous-partial", "pl_partial");
+      expect(statusOf("rendezvous-partial")).toBe("partial");
+
+      seedRequest("rendezvous-failed", "Tiny Playlist");
+      settleRequestDockJobByRequestId("pl_failed", "failed");
+      correlateDockJob("rendezvous-failed", "pl_failed");
+      expect(statusOf("rendezvous-failed")).toBe("failed");
+    });
+
+    it("leaves the normal order (correlate then settle) unchanged", () => {
+      seedRequest("rendezvous-b", "Normal Playlist");
+      correlateDockJob("rendezvous-b", "pl_normal");
+      expect(statusOf("rendezvous-b")).toBe("running");
+
+      settleRequestDockJobByRequestId("pl_normal", "complete");
+      expect(statusOf("rendezvous-b")).toBe("complete");
+    });
+
+    it("consumes the pending entry so a later re-correlation does not re-apply a stale terminal", () => {
+      seedRequest("rendezvous-c", "Tiny Playlist");
+      settleRequestDockJobByRequestId("pl_consume", "failed");
+      correlateDockJob("rendezvous-c", "pl_consume");
+      expect(statusOf("rendezvous-c")).toBe("failed");
+
+      seedRequest("rendezvous-c2", "Another Playlist");
+      correlateDockJob("rendezvous-c2", "pl_consume");
+      expect(statusOf("rendezvous-c2")).toBe("running");
+    });
+
+    it("clears a pending terminal on dismiss so a later job reusing the requestId is not falsely settled", () => {
+      seedRequest("rendezvous-d", "Tiny Playlist");
+      correlateDockJob("rendezvous-d", "pl_dismiss");
+      stashPendingTerminal("pl_dismiss", "complete");
+
+      dismissDockJob("rendezvous-d");
+
+      seedRequest("rendezvous-d2", "Reused Id");
+      correlateDockJob("rendezvous-d2", "pl_dismiss");
+      expect(statusOf("rendezvous-d2")).toBe("running");
+    });
+
+    it("clears a pending terminal when the correlated job is re-seeded", () => {
+      stashPendingTerminal("pl_reseed", "failed");
+      seedRequest("rendezvous-e", "Fresh Job");
+      correlateDockJob("rendezvous-e", "pl_reseed");
+      expect(statusOf("rendezvous-e")).toBe("failed");
+
+      seedDockJob({
+        id: "rendezvous-e2",
+        kind: "request",
+        requestId: "pl_reseed",
+        items: buildDockItems([{ key: "track-0", name: "Re-seeded" }]),
+        status: "running",
+      });
+      correlateDockJob("rendezvous-e2", "pl_reseed");
+      expect(statusOf("rendezvous-e2")).toBe("running");
+    });
+  });
+
+  describe("autoDismiss", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    });
+
+    it("dismisses the job exactly once after the delay elapses", () => {
+      seedRequest("auto-a", "Track One");
+      setDockJobStatus("auto-a", "complete");
+      autoDismiss("auto-a", 5000);
+
+      expect(hasDockJob("auto-a")).toBe(true);
+      vi.advanceTimersByTime(4999);
+      expect(hasDockJob("auto-a")).toBe(true);
+      vi.advanceTimersByTime(1);
+      expect(hasDockJob("auto-a")).toBe(false);
+      expect(isDockJobDismissed("auto-a")).toBe(true);
+    });
+
+    it("does not fire after a manual dismiss clears the pending timer", () => {
+      seedRequest("auto-b", "Track One");
+      setDockJobStatus("auto-b", "complete");
+      autoDismiss("auto-b", 5000);
+      dismissDockJob("auto-b");
+
+      expect(() => vi.advanceTimersByTime(10000)).not.toThrow();
+      expect(hasDockJob("auto-b")).toBe(false);
+    });
+
+    it("clears a pending timer when the same id is re-seeded so a stale timer cannot dismiss the fresh job", () => {
+      seedRequest("auto-c", "Track One");
+      setDockJobStatus("auto-c", "complete");
+      autoDismiss("auto-c", 5000);
+
+      seedRequest("auto-c", "Track Two");
+      vi.advanceTimersByTime(5000);
+
+      expect(hasDockJob("auto-c")).toBe(true);
+    });
+
+    it("supersedes an earlier timer when re-armed for the same id", () => {
+      seedRequest("auto-d", "Track One");
+      setDockJobStatus("auto-d", "complete");
+      autoDismiss("auto-d", 5000);
+      autoDismiss("auto-d", 1000);
+
+      vi.advanceTimersByTime(1000);
+      expect(hasDockJob("auto-d")).toBe(false);
     });
   });
 });

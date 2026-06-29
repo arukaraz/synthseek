@@ -22,12 +22,23 @@
       "libraryImportRunning": "Importation depuis {{provider}}",
       "libraryImportDone": "Importation terminée",
       "fileImportRunning": "Importation de la playlist",
-      "fileImportDone": "Importation terminée"
+      "fileImportDone": "Importation terminée",
+      "queueing": "Mise en file de {{name}}",
+      "queued": "{{name}} en file d'attente",
+      "queueFailed": "Impossible de mettre {{name}} en file"
     },
     "subtitle": {
       "ofTotal": "sur {{total}}",
       "failed": "en échec",
-      "skippedBreakdown": "importées, {{skipped}} déjà dans la bibliothèque"
+      "skippedBreakdown": "importées, {{skipped}} déjà dans la bibliothèque",
+      "processingTracks_one": "Traitement de {{count}} titre, veuillez patienter…",
+      "processingTracks_other": "Traitement de {{count}} titres, veuillez patienter…",
+      "processingTracksLong_one": "Traitement de {{count}} titre, cela peut prendre un moment, veuillez patienter…",
+      "processingTracksLong_other": "Traitement de {{count}} titres, cela peut prendre un moment, veuillez patienter…",
+      "requestComplete_one": "{{count}} titre en file d'attente",
+      "requestComplete_other": "{{count}} titres en file d'attente",
+      "requestPartial": "Certains titres étaient indisponibles",
+      "requestFailed": "Échec de la demande"
     },
     "itemSkippedReason": "Déjà dans la bibliothèque",
     "mobileMeta": "{{done}} sur {{total}} · {{current}}",

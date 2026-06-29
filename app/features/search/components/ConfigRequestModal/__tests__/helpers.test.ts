@@ -24,7 +24,7 @@ import {
   removeTag,
   showsSlskdControls,
 } from "../helpers";
-import { createMockTrackFull, createMockAlbumSimplified } from "@test/factories";
+import { createMockTrackFull, createMockAlbumSimplified, createMockPlaylistSimplified } from "@test/factories";
 import type { LidarrArtistSelection, LidarrSelection } from "../types";
 
 const BOTH_ENABLED = { slskd: true, ytdlp: true };
@@ -98,14 +98,19 @@ describe("getItemDisplayName", () => {
     expect(getItemDisplayName(null)).toBe("");
   });
 
-  it("handles missing artist name", () => {
+  it("returns the album name alone when the artist is unknown, never an Unknown prefix", () => {
     const album = createMockAlbumSimplified({ name: "Album", artists: [] });
-    expect(getItemDisplayName(album)).toBe("Unknown Artist - Album");
+    expect(getItemDisplayName(album)).toBe("Album");
   });
 
   it("returns only the name for an artist item", () => {
     const artist = { id: "ar1", type: "artist", name: "Solo Artist", images: [] };
     expect(getItemDisplayName(artist)).toBe("Solo Artist");
+  });
+
+  it("returns the playlist name alone, never an owner or Unknown prefix", () => {
+    const playlist = createMockPlaylistSimplified({ name: "MYX PHILIPPINES", owner: { id: "u1", name: "" } });
+    expect(getItemDisplayName(playlist)).toBe("MYX PHILIPPINES");
   });
 
   it("returns an empty string when the item has no name", () => {

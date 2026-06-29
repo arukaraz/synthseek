@@ -4,6 +4,10 @@ export const dockViewport = cva(
   "pointer-events-none fixed inset-x-0 bottom-[var(--height-bottom-nav)] z-50 flex flex-col items-stretch px-3 pb-3 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:items-end sm:px-0 sm:pb-0"
 );
 
+export const dockStack = cva(
+  "pointer-events-none flex max-h-[calc(100svh-var(--height-bottom-nav)-2rem)] flex-col items-stretch gap-2 overflow-y-auto sm:max-h-[calc(100svh-6rem)] sm:items-end"
+);
+
 export const dockCard = cva(
   "pointer-events-auto border-fg/15 bg-surface/90 w-full overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl sm:w-[320px]",
   {
@@ -37,11 +41,33 @@ export const dockRing = cva("dock-ring absolute inset-0", {
 
 export const dockRingText = cva("text-fg relative z-10 text-[10px] font-semibold tabular-nums");
 
+export const dockHeaderIndicator = cva("grid size-8 shrink-0 place-items-center");
+
+export const dockStatusIcon = cva("dock-status-glyph size-7", {
+  variants: {
+    status: {
+      running: "text-[var(--color-success)]",
+      complete: "text-[var(--color-success)]",
+      partial: "text-[var(--color-warning)]",
+      failed: "text-[var(--color-error)]",
+    },
+  },
+  defaultVariants: { status: "complete" },
+});
+
 export const dockTitleBlock = cva("min-w-0 flex-1");
 
 export const dockTitle = cva("text-fg truncate text-[13px] font-bold leading-tight");
 
-export const dockSubtitle = cva("text-fg-muted truncate text-[11px] leading-tight");
+export const dockSubtitle = cva("text-fg-muted text-[11px] leading-tight", {
+  variants: {
+    wrap: {
+      true: "whitespace-normal",
+      false: "truncate",
+    },
+  },
+  defaultVariants: { wrap: false },
+});
 
 export const dockSubtitleCount = cva("text-sync font-semibold tabular-nums");
 

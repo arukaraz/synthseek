@@ -13,13 +13,34 @@ export interface DockSubtitle {
   rest: string;
 }
 
+export type DockPresentation =
+  | { indicator: "ring"; ratio: number; percent: number }
+  | { indicator: "spinner" }
+  | { indicator: "status-icon"; status: DockJobStatus };
+
+export interface DockControls {
+  toggle: boolean;
+  close: boolean;
+}
+
+export interface DockCardModel {
+  counts: DockCounts;
+  presentation: DockPresentation;
+  controls: DockControls;
+  title: string;
+  subtitle: DockSubtitle;
+  wrapSubtitle: boolean;
+  mobileMeta: string;
+}
+
 export interface ProgressDockCardProps {
   job: DockJob;
   counts: DockCounts;
-  ratio: number;
-  percent: number;
+  presentation: DockPresentation;
+  controls: DockControls;
   title: string;
   subtitle: DockSubtitle;
+  wrapSubtitle: boolean;
   mobileMeta: string;
   minimized: boolean;
   reduced: boolean;

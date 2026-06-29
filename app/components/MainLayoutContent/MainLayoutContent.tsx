@@ -5,7 +5,7 @@ import { ContentShell } from "@components/ContentShell";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { TopHeader } from "@components/TopHeader";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
-import { useSubscriptions } from "@hooks/api/subscriptions";
+import { useRehydrateRequestDock, useSubscriptions } from "@hooks/api/subscriptions";
 import { useHashTargetGlow } from "@hooks/ui/useHashTargetGlow";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -13,6 +13,7 @@ import type { MainLayoutContentProps } from "./types";
 
 export function MainLayoutContent({ children }: MainLayoutContentProps) {
   useSubscriptions();
+  useRehydrateRequestDock();
   useHashTargetGlow();
 
   const router = useRouter();

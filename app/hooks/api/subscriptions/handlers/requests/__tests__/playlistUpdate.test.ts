@@ -8,6 +8,14 @@ import {
   type RequestWithTracks,
 } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
+import {
+  buildDockItems,
+  correlateDockJob,
+  resetDockStore,
+  seedDockJob,
+  useDockJobs,
+} from "../../../shared/progressDock";
+import { renderHook } from "@testing-library/react";
 import { handlePlaylistUpdate } from "../playlistUpdate";
 
 const spies = vi.hoisted(() => ({
@@ -138,5 +146,102 @@ describe("handlePlaylistUpdate", () => {
 
     expect(spies.invalidate).toHaveBeenCalledTimes(1);
     expect(spies.setData).not.toHaveBeenCalled();
+  });
+
+  describe("request dock finalization", () => {
+    beforeEach(() => {
+      resetDockStore();
+      spies.getData.mockReturnValue(undefined);
+    });
+
+    function seedCorrelatedRequest(playlistId: string): void {
+      seedDockJob({
+        id: "req-dock",
+        kind: "request",
+        items: buildDockItems([{ key: "track-0", name: "Async Playlist" }]),
+        status: "running",
+      });
+      correlateDockJob("req-dock", playlistId);
+    }
+
+    function readStatus(): string | undefined {
+      const { result } = renderHook(() => useDockJobs());
+      return result.current.find((job) => job.id === "req-dock")?.status;
+    }
+
+    function populateEvent(
+      playlistId: string,
+      populatePhase: NonNullable<PlaylistUpdatePayload["populatePhase"]>
+    ): PlaylistUpdatePayload {
+      return {
+        eventType: SubscriptionEventType.PlaylistUpdate,
+        playlistId,
+        status: RequestStatus.enum.in_progress,
+        completedTracks: 0,
+        totalTracks: 1,
+        populatePhase,
+      };
+    }
+
+    function downloadTickEvent(playlistId: string, status: RequestStatus): PlaylistUpdatePayload {
+      return {
+        eventType: SubscriptionEventType.PlaylistUpdate,
+        playlistId,
+        status,
+        completedTracks: 1,
+        totalTracks: 1,
+      };
+    }
+
+    it("finalizes the matching running request job to complete on populatePhase complete", () => {
+      seedCorrelatedRequest("pl_async");
+      handlePlaylistUpdate(populateEvent("pl_async", "complete"), trpc.useUtils());
+      expect(readStatus()).toBe("complete");
+    });
+
+    it("finalizes to partial on populatePhase partial", () => {
+      seedCorrelatedRequest("pl_async");
+      handlePlaylistUpdate(populateEvent("pl_async", "partial"), trpc.useUtils());
+      expect(readStatus()).toBe("partial");
+    });
+
+    it("finalizes to failed on populatePhase failed", () => {
+      seedCorrelatedRequest("pl_async");
+      handlePlaylistUpdate(populateEvent("pl_async", "failed"), trpc.useUtils());
+      expect(readStatus()).toBe("failed");
+    });
+
+    it("leaves the request job running for an event without populatePhase", () => {
+      seedCorrelatedRequest("pl_async");
+      handlePlaylistUpdate(downloadTickEvent("pl_async", RequestStatus.enum.in_progress), trpc.useUtils());
+      expect(readStatus()).toBe("running");
+    });
+
+    it("does not finalize the request dock off a terminal download status without populatePhase", () => {
+      seedCorrelatedRequest("pl_async");
+      handlePlaylistUpdate(downloadTickEvent("pl_async", RequestStatus.enum.complete), trpc.useUtils());
+      expect(readStatus()).toBe("running");
+    });
+
+    it("does not finalize a request job correlated to a different playlist id", () => {
+      seedCorrelatedRequest("pl_other");
+      handlePlaylistUpdate(populateEvent("pl_async", "complete"), trpc.useUtils());
+      expect(readStatus()).toBe("running");
+    });
+
+    it("settles a request job when the terminal populatePhase beats correlation (stash, then correlate applies it)", () => {
+      seedDockJob({
+        id: "req-dock",
+        kind: "request",
+        items: buildDockItems([{ key: "track-0", name: "Cached Playlist" }]),
+        status: "running",
+      });
+
+      handlePlaylistUpdate(populateEvent("pl_fast", "complete"), trpc.useUtils());
+      expect(readStatus()).toBe("running");
+
+      correlateDockJob("req-dock", "pl_fast");
+      expect(readStatus()).toBe("complete");
+    });
   });
 });

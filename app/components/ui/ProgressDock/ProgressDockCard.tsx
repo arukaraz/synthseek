@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@components/ui/Spinner";
 import { cn } from "@utils/cn";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,14 +9,16 @@ import { useTranslation } from "react-i18next";
 import { DOCK_BODY_MAX_HEIGHT } from "./constants";
 import { DockItemRow } from "./DockItemRow";
 import { DockRing } from "./DockRing";
-import { failureReasonKey, itemStateKey } from "./helpers";
+import { failureReasonKey, itemStateKey, statusIconGlyph } from "./helpers";
 import {
   dockBody,
   dockButtons,
   dockCard,
   dockHeader,
+  dockHeaderIndicator,
   dockIconButton,
   dockMobileMeta,
+  dockStatusIcon,
   dockSubtitle,
   dockSubtitleCount,
   dockSubtitleCountFailed,
@@ -27,10 +30,11 @@ import type { ProgressDockCardProps } from "./types";
 export function ProgressDockCard({
   job,
   counts,
-  ratio,
-  percent,
+  presentation,
+  controls,
   title,
   subtitle,
+  wrapSubtitle,
   mobileMeta,
   minimized,
   reduced,
@@ -38,20 +42,37 @@ export function ProgressDockCard({
   onDismiss,
 }: ProgressDockCardProps) {
   const { t } = useTranslation("appShell");
-  const showBody = !minimized && counts.total > 0;
+  const showBody = controls.toggle && !minimized && counts.total > 0;
+  const StatusIcon = presentation.indicator === "status-icon" ? statusIconGlyph(presentation.status) : null;
 
   return (
     <div className={dockCard({ status: job.status })}>
       <div className={dockHeader()}>
-        <DockRing ratio={ratio} percent={percent} status={job.status} />
+        {presentation.indicator === "ring" ? (
+          <DockRing ratio={presentation.ratio} percent={presentation.percent} status={job.status} />
+        ) : null}
+        {presentation.indicator === "spinner" ? (
+          <span className={dockHeaderIndicator()} aria-hidden="true">
+            <Spinner size="md" decorative />
+          </span>
+        ) : null}
+        {presentation.indicator === "status-icon" && StatusIcon ? (
+          <span className={dockHeaderIndicator()} aria-hidden="true">
+            <StatusIcon className={dockStatusIcon({ status: presentation.status })} />
+          </span>
+        ) : null}
 
         <div className={dockTitleBlock()}>
           <p className={dockTitle()}>{title}</p>
-          <p className={dockSubtitle()}>
+          <p className={dockSubtitle({ wrap: wrapSubtitle })}>
             <span className="hidden sm:inline">
-              <span className={subtitle.accentTone === "error" ? dockSubtitleCountFailed() : dockSubtitleCount()}>
-                {subtitle.accent}
-              </span>{" "}
+              {subtitle.accent ? (
+                <>
+                  <span className={subtitle.accentTone === "error" ? dockSubtitleCountFailed() : dockSubtitleCount()}>
+                    {subtitle.accent}
+                  </span>{" "}
+                </>
+              ) : null}
               {subtitle.rest}
             </span>
             <span className={cn(dockMobileMeta(), "sm:hidden")}>{mobileMeta}</span>
@@ -59,18 +80,27 @@ export function ProgressDockCard({
         </div>
 
         <div className={dockButtons()}>
-          <button
-            type="button"
-            className={dockIconButton()}
-            onClick={onToggleMinimize}
-            aria-label={minimized ? t("progressDock.expand") : t("progressDock.minimize")}
-            aria-expanded={!minimized}
-          >
-            {minimized ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
-          </button>
-          <button type="button" className={dockIconButton()} onClick={onDismiss} aria-label={t("progressDock.dismiss")}>
-            <X className="size-4" />
-          </button>
+          {controls.toggle ? (
+            <button
+              type="button"
+              className={dockIconButton()}
+              onClick={onToggleMinimize}
+              aria-label={minimized ? t("progressDock.expand") : t("progressDock.minimize")}
+              aria-expanded={!minimized}
+            >
+              {minimized ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+            </button>
+          ) : null}
+          {controls.close ? (
+            <button
+              type="button"
+              className={dockIconButton()}
+              onClick={onDismiss}
+              aria-label={t("progressDock.dismiss")}
+            >
+              <X className="size-4" />
+            </button>
+          ) : null}
         </div>
       </div>
 

@@ -22,12 +22,23 @@
       "libraryImportRunning": "Importing from {{provider}}",
       "libraryImportDone": "Import complete",
       "fileImportRunning": "Importing playlist",
-      "fileImportDone": "Import complete"
+      "fileImportDone": "Import complete",
+      "queueing": "Queueing {{name}}",
+      "queued": "Queued {{name}}",
+      "queueFailed": "Couldn't queue {{name}}"
     },
     "subtitle": {
       "ofTotal": "of {{total}}",
       "failed": "failed",
-      "skippedBreakdown": "imported, {{skipped}} already in library"
+      "skippedBreakdown": "imported, {{skipped}} already in library",
+      "processingTracks_one": "Processing {{count}} track, please wait…",
+      "processingTracks_other": "Processing {{count}} tracks, please wait…",
+      "processingTracksLong_one": "Processing {{count}} track, this might take a while, please wait…",
+      "processingTracksLong_other": "Processing {{count}} tracks, this might take a while, please wait…",
+      "requestComplete_one": "{{count}} track queued",
+      "requestComplete_other": "{{count}} tracks queued",
+      "requestPartial": "Some tracks were unavailable",
+      "requestFailed": "Request failed"
     },
     "itemSkippedReason": "Already in library",
     "mobileMeta": "{{done}} of {{total}} · {{current}}",

@@ -10,7 +10,7 @@ function eventKey(event: SubscriptionEvent): string {
     case SubscriptionEventType.AlbumUpdate:
       return `${event.eventType}:${event.albumId}:${event.status}:${event.completedTracks}`;
     case SubscriptionEventType.PlaylistUpdate:
-      return `${event.eventType}:${event.playlistId}:${event.status}:${event.completedTracks}`;
+      return `${event.eventType}:${event.playlistId}:${event.status}:${event.completedTracks}:${event.populatePhase ?? ""}`;
     case SubscriptionEventType.PlaylistPlexCreated:
       return `${event.eventType}:${event.playlistId}:${event.plexPlaylistId}`;
     case SubscriptionEventType.PlexSyncAllProgress:

@@ -40,4 +40,9 @@
     display: block;
     transform: translate(0.5px, 0.5px);
   }
+
+  .dock-status-glyph {
+    display: block;
+    transform: translate(0.5px, 0.5px);
+  }
 }
