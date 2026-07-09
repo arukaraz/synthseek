@@ -7,6 +7,7 @@ import { MainLayoutContent } from "../MainLayoutContent";
 const pushMock = vi.fn();
 const getParamMock = vi.fn<(key: string) => string | null>(() => null);
 const useSubscriptionsMock = vi.fn();
+const useRehydrateRequestDockMock = vi.fn();
 const useHashTargetGlowMock = vi.fn();
 
 vi.mock("next/navigation", () => ({
@@ -16,6 +17,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@hooks/api/subscriptions", () => ({
   useSubscriptions: () => useSubscriptionsMock(),
+  useRehydrateRequestDock: () => useRehydrateRequestDockMock(),
 }));
 
 vi.mock("@hooks/ui/useHashTargetGlow", () => ({
@@ -66,6 +68,7 @@ describe("MainLayoutContent", () => {
     );
 
     expect(useSubscriptionsMock).toHaveBeenCalledTimes(1);
+    expect(useRehydrateRequestDockMock).toHaveBeenCalledTimes(1);
     expect(useHashTargetGlowMock).toHaveBeenCalledTimes(1);
   });
 
