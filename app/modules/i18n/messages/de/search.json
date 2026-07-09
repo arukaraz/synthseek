@@ -78,7 +78,8 @@
       "lidarrMetadataProfile": "Metadatenprofil",
       "lidarrMonitor": "Überwachungsumfang",
       "lidarrArtistScope": "Künstlerumfang",
-      "lidarrTags": "Tags"
+      "lidarrTags": "Tags",
+      "renamePlaylist": "Playlist umbenennen (optional)"
     },
     "options": {
       "bitrate": {

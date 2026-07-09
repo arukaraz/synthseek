@@ -19,6 +19,7 @@ import {
   usePlaylistRequest,
   useRequest,
 } from "@hooks/api";
+import { Input } from "@components/ui/Input";
 import { Spinner } from "@components/ui/Spinner";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { titleCase } from "@utils/formatters";
@@ -51,7 +52,7 @@ import {
   mapTrackFields,
   showsSlskdControls,
 } from "./helpers";
-import { configDialogContent } from "./styles";
+import { configDialogContent, fieldGroup, fieldLabel } from "./styles";
 import type {
   AcquisitionMethod,
   AvailabilityMode,
@@ -94,9 +95,14 @@ export function ConfigRequestModal({
     monitor: DEFAULT_ARTIST_MONITOR_SCOPE,
     tags: [],
   });
+  const [renameValue, setRenameValue] = useState("");
   const losslessActive = qualityMode === "lossless";
 
   const isLidarrArtistMode = mode === "lidarr-artist";
+
+  useEffect(() => {
+    setRenameValue("");
+  }, [item?.id, isOpen]);
 
   const { t } = useTranslation("search");
 
@@ -287,9 +293,10 @@ export function ConfigRequestModal({
     }
 
     if (item.type === ContentType.enum.playlist) {
+      const effectiveName = renameValue.trim() || item.name;
       downloadPlaylistMutation.mutate({
         external_id: item.id,
-        name: item.name,
+        name: effectiveName,
         description: item.description ?? null,
         owner: item.owner?.name ?? "Unknown",
         image: item.images?.[0]?.url ?? null,
@@ -303,7 +310,7 @@ export function ConfigRequestModal({
         })),
         config,
       });
-      onSuccess?.(itemName);
+      onSuccess?.(effectiveName);
       onClose();
     }
   };
@@ -346,6 +353,21 @@ export function ConfigRequestModal({
             </div>
           ) : (
             <>
+              {item.type === ContentType.enum.playlist && (
+                <div className={fieldGroup()}>
+                  <label className={fieldLabel()} htmlFor="playlist-rename-input">
+                    {t("config.fields.renamePlaylist")}
+                  </label>
+                  <Input
+                    id="playlist-rename-input"
+                    value={renameValue}
+                    onChange={(event) => setRenameValue(event.target.value)}
+                    placeholder={item.name}
+                    data-cy="playlist-rename-input"
+                  />
+                </div>
+              )}
+
               <div className="space-y-3 sm:space-y-4">
                 <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
                   {t("config.sections.acquisition")}

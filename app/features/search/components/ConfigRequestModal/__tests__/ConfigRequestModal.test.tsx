@@ -203,6 +203,89 @@ describe("ConfigRequestModal", () => {
     expect(playlistMutate.mock.calls[0][1]).toBeUndefined();
   });
 
+  it("shows the rename input only for playlist items with the playlist name as placeholder", () => {
+    const { unmount } = render(
+      <ConfigRequestModal
+        isOpen
+        onClose={vi.fn()}
+        item={makePlaylist()}
+        itemType={ContentType.enum.playlist}
+        preloadedTracks={[makeTrack()]}
+      />
+    );
+
+    const input = screen.getByLabelText(/rename playlist/i);
+    expect(input).toHaveAttribute("placeholder", "Playlist One");
+    unmount();
+
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+    expect(screen.queryByLabelText(/rename playlist/i)).not.toBeInTheDocument();
+  });
+
+  it("hides the rename input for album items and lidarr-artist mode", () => {
+    const { unmount } = render(
+      <ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />
+    );
+    expect(screen.queryByLabelText(/rename playlist/i)).not.toBeInTheDocument();
+    unmount();
+
+    render(
+      <ConfigRequestModal
+        isOpen
+        onClose={vi.fn()}
+        item={makeArtist()}
+        itemType={ContentType.enum.artist}
+        mode="lidarr-artist"
+      />
+    );
+    expect(screen.queryByLabelText(/rename playlist/i)).not.toBeInTheDocument();
+  });
+
+  it("overrides the playlist name with the trimmed rename value in the mutation payload", async () => {
+    const onSuccess = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <ConfigRequestModal
+        isOpen
+        onClose={vi.fn()}
+        item={makePlaylist()}
+        itemType={ContentType.enum.playlist}
+        preloadedTracks={[makeTrack()]}
+        onSuccess={onSuccess}
+      />
+    );
+
+    await user.type(screen.getByLabelText(/rename playlist/i), "  My Renamed List  ");
+    await user.click(confirmButton());
+
+    expect(playlistMutate).toHaveBeenCalledTimes(1);
+    expect(playlistMutate.mock.calls[0][0].name).toBe("My Renamed List");
+    expect(onSuccess).toHaveBeenCalledWith("My Renamed List");
+  });
+
+  it("keeps the original playlist name when the rename input is left empty", async () => {
+    const onSuccess = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <ConfigRequestModal
+        isOpen
+        onClose={vi.fn()}
+        item={makePlaylist()}
+        itemType={ContentType.enum.playlist}
+        preloadedTracks={[makeTrack()]}
+        onSuccess={onSuccess}
+      />
+    );
+
+    await user.click(confirmButton());
+
+    expect(playlistMutate).toHaveBeenCalledTimes(1);
+    expect(playlistMutate.mock.calls[0][0].name).toBe("Playlist One");
+    expect(onSuccess).toHaveBeenCalledWith("Playlist One");
+  });
+
   it("renders the artist lidarr delegation flow and submits a complete delegate", async () => {
     const user = userEvent.setup();
     delegateMutate.mockImplementation((_payload, opts) => opts.onSuccess?.());

@@ -78,7 +78,8 @@
       "lidarrMetadataProfile": "Perfil de metadatos",
       "lidarrMonitor": "Alcance de seguimiento",
       "lidarrArtistScope": "Alcance del artista",
-      "lidarrTags": "Etiquetas"
+      "lidarrTags": "Etiquetas",
+      "renamePlaylist": "Renombrar playlist (opcional)"
     },
     "options": {
       "bitrate": {

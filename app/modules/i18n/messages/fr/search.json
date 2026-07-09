@@ -78,7 +78,8 @@
       "lidarrMetadataProfile": "Profil de métadonnées",
       "lidarrMonitor": "Portée de surveillance",
       "lidarrArtistScope": "Portée de l'artiste",
-      "lidarrTags": "Étiquettes"
+      "lidarrTags": "Étiquettes",
+      "renamePlaylist": "Renommer la playlist (optionnel)"
     },
     "options": {
       "bitrate": {

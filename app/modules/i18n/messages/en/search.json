@@ -78,7 +78,8 @@
       "lidarrMetadataProfile": "Metadata Profile",
       "lidarrMonitor": "Monitor Scope",
       "lidarrArtistScope": "Artist scope",
-      "lidarrTags": "Tags"
+      "lidarrTags": "Tags",
+      "renamePlaylist": "Rename playlist (optional)"
     },
     "options": {
       "bitrate": {
