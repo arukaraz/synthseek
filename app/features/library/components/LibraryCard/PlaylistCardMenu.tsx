@@ -18,7 +18,7 @@ export function PlaylistCardMenu({ item }: PlaylistCardMenuProps) {
   const canEdit = item.source_provider == null || !item.sync_enabled;
 
   return (
-    <div onClick={(event) => event.stopPropagation()}>
+    <div onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
       <DropdownMenu>
         <DropdownMenuTrigger className={cardKebab()} aria-label={t("playlists.actions.menu", { name: item.name })}>
           <MoreVertical className="size-4" aria-hidden />

@@ -3,6 +3,12 @@ import { describe, it, expect, vi } from "vitest";
 import { renderWithProviders, screen } from "@test/test-utils";
 import type { LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 
+const renameMutate = vi.fn();
+
+vi.mock("@hooks/api/mutations/playlists/useRenamePlaylist", () => ({
+  useRenamePlaylist: () => ({ mutate: renameMutate, isPending: false }),
+}));
+
 import { PlaylistCard } from "../PlaylistCard";
 
 function createLibraryPlaylist(overrides?: Partial<LibraryPlaylistItem>): LibraryPlaylistItem {
@@ -74,6 +80,34 @@ describe("PlaylistCard", () => {
 
     expect(screen.getByRole("menuitem", { name: /Rename/i })).toHaveAttribute("aria-disabled", "true");
     expect(screen.getByRole("menuitem", { name: /Delete/i })).not.toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("keeps Space keystrokes inside the rename dialog input without opening the detail", async () => {
+    const onOpen = vi.fn();
+    const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} onOpen={onOpen} />);
+
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+    await user.click(screen.getByRole("menuitem", { name: /Rename/i }));
+
+    const input = screen.getByRole("textbox", { name: /Playlist name/i });
+    await user.clear(input);
+    await user.type(input, "Road Trip 2");
+
+    expect(input).toHaveValue("Road Trip 2");
+    expect(onOpen).not.toHaveBeenCalled();
+  });
+
+  it("does not open the detail when Enter is pressed inside the rename dialog input", async () => {
+    const onOpen = vi.fn();
+    const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} onOpen={onOpen} />);
+
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+    await user.click(screen.getByRole("menuitem", { name: /Rename/i }));
+
+    const input = screen.getByRole("textbox", { name: /Playlist name/i });
+    await user.type(input, "{Enter}");
+
+    expect(onOpen).not.toHaveBeenCalled();
   });
 
   it("enables rename for an imported playlist with sync disabled", async () => {
