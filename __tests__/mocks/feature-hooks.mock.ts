@@ -52,7 +52,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
       },
       import: { metadataConfidenceThreshold: 0.8 },
       plexBehavior: { libraryScan: true, playlistSync: true },
-      smartSearch: { customMoodKeywords: [], federatedPatternsEnabled: false },
+      smartSearch: { customMoodKeywords: [] },
     },
     formatting: {
       plexPlaylistUsernameAffix: "prefix",

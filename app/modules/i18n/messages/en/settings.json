@@ -49,11 +49,6 @@
       "label": "Custom mood keywords",
       "helper": "Substrings tested against user search queries to classify them as mood/genre searches (vs specific artist/track). Press Enter or comma to add.",
       "placeholder": "e.g. block party, my favorites"
-    },
-    "federatedPatterns": {
-      "label": "Federated patterns",
-      "experimental": "Experimental",
-      "description": "Opt in: a daily cron federates your anonymized mood/genre keywords with the Synthseek federation API and pulls back consensus-approved ones to improve smart-search classification."
     }
   },
   "timeouts": {
@@ -650,9 +645,9 @@
         "name": "Discovery Sweep",
         "description": "Evaluates discovery feeds and triggers integrations."
       },
-      "pattern-sync": {
-        "name": "Smart Search Pattern Sync",
-        "description": "Syncs federated smart-search patterns."
+      "media-server-sync": {
+        "name": "Media Server Sync",
+        "description": "Keeps your media server's playlists in sync."
       }
     }
   },

@@ -23,7 +23,7 @@ export function JobsCard() {
       ) : (
         <div className={jobList()}>
           {data
-            .filter((job) => job.id !== "pattern-sync")
+            .filter((job) => job.enabled)
             .map((job) => (
               <JobRow key={job.id} job={job} />
             ))}

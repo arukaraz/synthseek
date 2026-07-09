@@ -30,7 +30,17 @@ afterEach(() => {
   jobsQuery = createMockQuery<JobSummary[] | undefined>(undefined);
 });
 
-const makeJob = (id: JobSummary["id"]): JobSummary => ({ id, intervalMs: 60_000, nextRun: null });
+const makeJob = (id: JobSummary["id"], overrides: Partial<JobSummary> = {}): JobSummary => ({
+  id,
+  name: id,
+  description: "",
+  intervalMs: 60_000,
+  enabled: true,
+  nextRun: null,
+  lastRun: null,
+  lastStatus: null,
+  ...overrides,
+});
 
 describe("JobsCard", () => {
   it("renders the card title and description", () => {
@@ -52,17 +62,30 @@ describe("JobsCard", () => {
     expect(screen.getByText(enSettings.jobs.card.loadError.replace("{{message}}", "boom"))).toBeInTheDocument();
   });
 
-  it("renders one row per job and filters out pattern-sync", () => {
+  it("renders one row per enabled job", () => {
     jobsQuery = createMockQuery<JobSummary[] | undefined>([
       makeJob("library-sync"),
       makeJob("discovery-sweep"),
-      makeJob("pattern-sync"),
+      makeJob("media-server-sync"),
     ]);
     render(<JobsCard />);
 
     const rows = screen.getAllByTestId("job-row");
-    expect(rows).toHaveLength(2);
+    expect(rows).toHaveLength(3);
     const ids = rows.map((row) => row.getAttribute("data-job-id"));
-    expect(ids).toEqual(["library-sync", "discovery-sweep"]);
+    expect(ids).toEqual(["library-sync", "discovery-sweep", "media-server-sync"]);
+  });
+
+  it("hides disabled jobs", () => {
+    jobsQuery = createMockQuery<JobSummary[] | undefined>([
+      makeJob("library-sync", { enabled: false }),
+      makeJob("discovery-sweep"),
+      makeJob("media-server-sync", { enabled: false }),
+    ]);
+    render(<JobsCard />);
+
+    const rows = screen.getAllByTestId("job-row");
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.getAttribute("data-job-id")).toBe("discovery-sweep");
   });
 });

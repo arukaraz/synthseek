@@ -30,7 +30,6 @@ afterEach(() => {
 
 const initial: SmartSearchCardProps["initial"] = {
   customMoodKeywords: ["party"],
-  federatedPatternsEnabled: false,
 };
 
 describe("SmartSearchCard", () => {
@@ -41,7 +40,7 @@ describe("SmartSearchCard", () => {
   });
 
   it("shows the placeholder when there are no keywords yet", () => {
-    render(<SmartSearchCard initial={{ customMoodKeywords: [], federatedPatternsEnabled: false }} />);
+    render(<SmartSearchCard initial={{ customMoodKeywords: [] }} />);
     expect(screen.getByPlaceholderText(enSettings.search.customMoodKeywords.placeholder)).toBeInTheDocument();
   });
 
@@ -55,7 +54,6 @@ describe("SmartSearchCard", () => {
     await waitFor(() => {
       expect(update.mutateAsync).toHaveBeenCalledWith({
         customMoodKeywords: ["party", "chill"],
-        federatedPatternsEnabled: false,
       });
     });
   });

@@ -9,7 +9,7 @@ import { createMockQuery, createLoadingQuery, createErrorQuery, type MockQueryRe
 
 interface SettingsData {
   engine: {
-    smartSearch: { customMoodKeywords: string[]; federatedPatternsEnabled: boolean };
+    smartSearch: { customMoodKeywords: string[] };
     timeouts: unknown;
     queue: unknown;
     import: unknown;
@@ -40,7 +40,7 @@ afterEach(() => {
 
 const data: SettingsData = {
   engine: {
-    smartSearch: { customMoodKeywords: [], federatedPatternsEnabled: false },
+    smartSearch: { customMoodKeywords: [] },
     timeouts: {},
     queue: {},
     import: {},

@@ -49,11 +49,6 @@
       "label": "Eigene Stimmungs-Schlüsselwörter",
       "helper": "Teilzeichenfolgen, die mit den Suchanfragen der Benutzer abgeglichen werden, um sie als Stimmungs-/Genre-Suchen (gegenüber einem bestimmten Künstler/Titel) einzustufen. Enter oder Komma zum Hinzufügen drücken.",
       "placeholder": "z. B. Party, meine Favoriten"
-    },
-    "federatedPatterns": {
-      "label": "Föderierte Muster",
-      "experimental": "Experimentell",
-      "description": "Opt-in: Ein täglicher Cron föderiert deine anonymisierten Stimmungs-/Genre-Schlüsselwörter mit der Synthseek-Föderations-API und ruft die per Konsens genehmigten zurück, um die Klassifizierung der intelligenten Suche zu verbessern."
     }
   },
   "timeouts": {
@@ -650,9 +645,9 @@
         "name": "Discovery-Durchlauf",
         "description": "Wertet die Discovery-Feeds aus und löst Integrationen aus."
       },
-      "pattern-sync": {
-        "name": "Synchronisierung der Smart-Search-Muster",
-        "description": "Synchronisiert die föderierten Smart-Search-Muster."
+      "media-server-sync": {
+        "name": "Media-Server-Synchronisierung",
+        "description": "Hält die Playlists deines Media-Servers synchron."
       }
     }
   },

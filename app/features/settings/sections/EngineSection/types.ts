@@ -9,7 +9,6 @@ export interface QueueCardProps {
 export interface SmartSearchCardProps {
   initial: {
     customMoodKeywords: string[];
-    federatedPatternsEnabled: boolean;
   };
 }
 

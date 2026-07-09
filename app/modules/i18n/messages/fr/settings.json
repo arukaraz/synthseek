@@ -49,11 +49,6 @@
       "label": "Mots-clés d'ambiance personnalisés",
       "helper": "Fragments testés sur les requêtes de recherche des utilisateurs pour les classer comme recherches d'ambiance/genre (par opposition à un artiste/piste précis). Appuyez sur Entrée ou virgule pour ajouter.",
       "placeholder": "ex. soirée, mes favoris"
-    },
-    "federatedPatterns": {
-      "label": "Motifs fédérés",
-      "experimental": "Expérimental",
-      "description": "Adhésion : un cron quotidien fédère vos mots-clés d'ambiance/genre anonymisés avec l'API de fédération Synthseek et récupère ceux approuvés par consensus pour améliorer la classification de la recherche intelligente."
     }
   },
   "timeouts": {
@@ -650,9 +645,9 @@
         "name": "Balayage de découverte",
         "description": "Évalue les flux de découverte et déclenche les intégrations."
       },
-      "pattern-sync": {
-        "name": "Synchronisation des motifs de recherche intelligente",
-        "description": "Synchronise les motifs de recherche intelligente fédérés."
+      "media-server-sync": {
+        "name": "Synchronisation du serveur multimédia",
+        "description": "Maintient les playlists de votre serveur multimédia synchronisées."
       }
     }
   },

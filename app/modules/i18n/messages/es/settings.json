@@ -49,11 +49,6 @@
       "label": "Palabras clave de estado de ánimo personalizadas",
       "helper": "Subcadenas que se comparan con las consultas de búsqueda del usuario para clasificarlas como búsquedas de estado de ánimo o género (frente a artista o canción específicos). Pulsa Enter o coma para añadir.",
       "placeholder": "p. ej. fiesta, mis favoritas"
-    },
-    "federatedPatterns": {
-      "label": "Patrones federados",
-      "experimental": "Experimental",
-      "description": "Suscripción opcional: un cron diario federa tus palabras clave anonimizadas de estado de ánimo o género con la API de federación de Synthseek y recupera las aprobadas por consenso para mejorar la clasificación de la búsqueda inteligente."
     }
   },
   "timeouts": {
@@ -650,9 +645,9 @@
         "name": "Barrido de descubrimiento",
         "description": "Evalúa los feeds de descubrimiento y dispara las integraciones."
       },
-      "pattern-sync": {
-        "name": "Sincronización de patrones de búsqueda inteligente",
-        "description": "Sincroniza los patrones federados de búsqueda inteligente."
+      "media-server-sync": {
+        "name": "Media Server Sync",
+        "description": "Mantiene los playlists de tu media server sincronizados."
       }
     }
   },
