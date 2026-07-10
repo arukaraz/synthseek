@@ -2,6 +2,22 @@
 
 ---
 
+# v2.3.3, July 9, 2026
+
+- Rename a playlist at request time: the request window now has an optional name field, so it lands in your library with the name you want.
+- Playlist renames now sync both ways with Plex: rename in Synthseek and Plex follows in seconds, rename in Plex and Synthseek picks it up automatically.
+- A new Media Server Sync job keeps your Plex playlists named right and topped up with any tracks they are missing, with its own Run now button in Settings, Jobs. The Jobs screen now only shows jobs relevant to your setup.
+- Requesting a big playlist no longer blocks you: it is accepted instantly, tracks fill in the background, and a progress dock keeps you posted.
+
+---
+
+### Fixes
+
+- Typing spaces while renaming a playlist from its card menu works again.
+- Synthseek now starts with a clear error message when a Docker folder is mounted read-only, instead of failing without explanation.
+
+---
+
 # v2.3.2, June 22, 2026
 
 - Polished the content detail and settings screens, with a better request detail layout on mobile.
