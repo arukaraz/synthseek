@@ -110,6 +110,61 @@
       "ariaLabel": "Seuil de confiance des métadonnées"
     }
   },
+  "quarantine": {
+    "title": "Quarantaine",
+    "description": "Les fichiers ayant échoué à la vérification sont mémorisés ici, pour qu'une nouvelle tentative ne retélécharge jamais le même mauvais fichier depuis la même source.",
+    "identityGate": {
+      "label": "Contrôle d'identité AcoustID",
+      "description": "Bloque l'importation lorsque l'empreinte audio identifie une chanson différente de celle demandée. Le fichier est mis en quarantaine et une nouvelle tentative cherche un autre candidat."
+    },
+    "list": {
+      "title": "Fichiers en quarantaine",
+      "loading": "Chargement des fichiers en quarantaine...",
+      "loadError": "Impossible de charger les fichiers en quarantaine",
+      "clearAll": "Tout effacer",
+      "remove": "Retirer l'entrée de quarantaine",
+      "youtube": "YouTube",
+      "columns": {
+        "source": "Source",
+        "peer": "Pair",
+        "file": "Fichier",
+        "reason": "Motif",
+        "age": "Ancienneté",
+        "track": "Piste"
+      },
+      "trackDisplay": "{{title}} - {{artist}}",
+      "empty": {
+        "title": "Aucun fichier en quarantaine",
+        "description": "Quand un fichier téléchargé échoue à la vérification, le fichier exact et sa source apparaissent ici et sont ignorés lors des nouvelles tentatives."
+      },
+      "confirmClear": {
+        "title": "Vider la quarantaine ?",
+        "message": "Toutes les entrées seront supprimées. De nouvelles tentatives pourraient retélécharger exactement ces fichiers depuis les mêmes sources.",
+        "confirm": "Tout effacer"
+      }
+    },
+    "source": {
+      "slskd": "Soulseek",
+      "ytdlp": "YouTube"
+    },
+    "reason": {
+      "wrong_file": "Mauvais fichier",
+      "verify_failed": "Échec de la vérification"
+    },
+    "sourceTrust": {
+      "title": "Confiance des sources",
+      "manage": "Les envoyeurs bannis et le seuil de bannissement automatique se gèrent dans les <slskd>paramètres Soulseek</slskd>.",
+      "bannedUploaders": {
+        "label": "Envoyeurs bannis",
+        "description": "Envoyeurs exclus de toutes les recherches."
+      },
+      "autoBan": {
+        "label": "Seuil de bannissement automatique",
+        "description": "Échecs de téléchargement avant qu'un envoyeur soit banni automatiquement.",
+        "off": "Désactivé"
+      }
+    }
+  },
   "common": {
     "loading": "Chargement…",
     "loadFailedWithReason": "Échec du chargement des réglages : {{reason}}",

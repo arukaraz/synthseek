@@ -23,7 +23,14 @@ export function ImportCard({ initial }: ImportCardProps) {
   return (
     <SettingsCard
       title={t("import.title")}
-      trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.import })} disabled={isSaving} />}
+      trailing={
+        <ResetDefaultsButton
+          onReset={() =>
+            setAll({ ...draft, metadataConfidenceThreshold: ENGINE_DEFAULTS.import.metadataConfidenceThreshold })
+          }
+          disabled={isSaving}
+        />
+      }
     >
       <EngineRow
         label={t("import.metadataConfidence.label")}

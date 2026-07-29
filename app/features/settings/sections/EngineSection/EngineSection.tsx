@@ -7,6 +7,7 @@ import { useSettings } from "@hooks/api/queries/useSettings";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
 import { ImportCard } from "./ImportCard";
+import { QuarantineCard } from "./QuarantineCard";
 import { QueueCard } from "./QueueCard";
 import { SmartSearchCard } from "./SmartSearchCard";
 import { TimeoutsCard } from "./TimeoutsCard";
@@ -47,6 +48,13 @@ export function EngineSection() {
         <TimeoutsCard initial={data.engine.timeouts} />
         <QueueCard initial={data.engine.queue} />
         <ImportCard initial={data.engine.import} />
+        <QuarantineCard
+          initial={data.engine.import}
+          sourceTrust={{
+            bannedUsersCount: data.connections.slskd.bannedUsers.length,
+            banAfterFailedAttempts: data.engine.search.banAfterFailedAttempts,
+          }}
+        />
       </div>
     </div>
   );

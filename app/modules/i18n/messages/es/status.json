@@ -78,6 +78,10 @@
       "label": "Descarga fallida",
       "description": "La canción se encontró, pero la descarga no terminó. La fuente pudo bloquear la petición o la conexión se detuvo. Reintentar podría ayudar."
     },
+    "environment": {
+      "label": "Problema de almacenamiento",
+      "description": "Un problema de almacenamiento local detuvo esta descarga, como un disco lleno o una carpeta de descargas o de biblioteca que falta o no se puede escribir. Corrige el almacenamiento y reintenta."
+    },
     "other": {
       "label": "Fallida",
       "description": "La descarga falló por un motivo inesperado. Reintentar podría ayudar."

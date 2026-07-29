@@ -78,6 +78,10 @@
       "label": "Download failed",
       "description": "The track was found, but the download didn't finish. The source may have blocked the request or the connection stalled. A retry may help."
     },
+    "environment": {
+      "label": "Storage problem",
+      "description": "A local storage problem stopped this download, like a full disk or a downloads or library folder that is missing or not writable. Fix the storage and retry."
+    },
     "other": {
       "label": "Failed",
       "description": "The download failed for an unexpected reason. A retry may help."

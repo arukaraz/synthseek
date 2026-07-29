@@ -110,6 +110,61 @@
       "ariaLabel": "Schwellenwert der Metadaten-Zuverlässigkeit"
     }
   },
+  "quarantine": {
+    "title": "Quarantäne",
+    "description": "Dateien, die die Überprüfung nicht bestanden haben, werden hier gemerkt, damit ein erneuter Versuch nie wieder dieselbe falsche Datei aus derselben Quelle lädt.",
+    "identityGate": {
+      "label": "AcoustID-Identitätsprüfung",
+      "description": "Blockiert den Import, wenn der Audio-Fingerabdruck einen anderen Titel als den angeforderten identifiziert. Die Datei kommt in Quarantäne und ein erneuter Versuch sucht einen anderen Kandidaten."
+    },
+    "list": {
+      "title": "Dateien in Quarantäne",
+      "loading": "Dateien in Quarantäne werden geladen...",
+      "loadError": "Dateien in Quarantäne konnten nicht geladen werden",
+      "clearAll": "Alle entfernen",
+      "remove": "Quarantäne-Eintrag entfernen",
+      "youtube": "YouTube",
+      "columns": {
+        "source": "Quelle",
+        "peer": "Peer",
+        "file": "Datei",
+        "reason": "Grund",
+        "age": "Alter",
+        "track": "Titel"
+      },
+      "trackDisplay": "{{title}} - {{artist}}",
+      "empty": {
+        "title": "Keine Dateien in Quarantäne",
+        "description": "Wenn eine heruntergeladene Datei die Überprüfung nicht besteht, erscheinen die genaue Datei und ihre Quelle hier und werden bei erneuten Versuchen übersprungen."
+      },
+      "confirmClear": {
+        "title": "Quarantäne leeren?",
+        "message": "Alle Einträge werden entfernt. Erneute Versuche können genau diese Dateien wieder aus denselben Quellen laden.",
+        "confirm": "Alle entfernen"
+      }
+    },
+    "source": {
+      "slskd": "Soulseek",
+      "ytdlp": "YouTube"
+    },
+    "reason": {
+      "wrong_file": "Falsche Datei",
+      "verify_failed": "Überprüfung fehlgeschlagen"
+    },
+    "sourceTrust": {
+      "title": "Quellenvertrauen",
+      "manage": "Gesperrte Uploader und die Auto-Sperr-Schwelle werden in den <slskd>Soulseek-Einstellungen</slskd> verwaltet.",
+      "bannedUploaders": {
+        "label": "Gesperrte Uploader",
+        "description": "Uploader, die von allen Suchen ausgeschlossen sind."
+      },
+      "autoBan": {
+        "label": "Auto-Sperr-Schwelle",
+        "description": "Download-Fehler, bevor ein Uploader automatisch gesperrt wird.",
+        "off": "Aus"
+      }
+    }
+  },
   "common": {
     "loading": "Wird geladen…",
     "loadFailedWithReason": "Einstellungen konnten nicht geladen werden: {{reason}}",

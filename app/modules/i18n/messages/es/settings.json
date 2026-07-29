@@ -110,6 +110,61 @@
       "ariaLabel": "Umbral de confianza de metadatos"
     }
   },
+  "quarantine": {
+    "title": "Cuarentena",
+    "description": "Los archivos que no superan la verificación se recuerdan aquí, para que un reintento nunca vuelva a descargar el mismo archivo incorrecto de la misma fuente.",
+    "identityGate": {
+      "label": "Filtro de identidad AcoustID",
+      "description": "Bloquea la importación cuando la huella de audio identifica una canción distinta a la solicitada. El archivo se pone en cuarentena y el reintento busca otro candidato."
+    },
+    "list": {
+      "title": "Archivos en cuarentena",
+      "loading": "Cargando archivos en cuarentena...",
+      "loadError": "No se pudieron cargar los archivos en cuarentena",
+      "clearAll": "Vaciar todo",
+      "remove": "Quitar entrada de cuarentena",
+      "youtube": "YouTube",
+      "columns": {
+        "source": "Fuente",
+        "peer": "Par",
+        "file": "Archivo",
+        "reason": "Motivo",
+        "age": "Antigüedad",
+        "track": "Canción"
+      },
+      "trackDisplay": "{{title}} - {{artist}}",
+      "empty": {
+        "title": "No hay archivos en cuarentena",
+        "description": "Cuando un archivo descargado no supera la verificación, el archivo exacto y su fuente aparecen aquí y se omiten en los reintentos."
+      },
+      "confirmClear": {
+        "title": "¿Vaciar la cuarentena?",
+        "message": "Se eliminarán todas las entradas. Los reintentos podrían volver a descargar estos mismos archivos de las mismas fuentes.",
+        "confirm": "Vaciar todo"
+      }
+    },
+    "source": {
+      "slskd": "Soulseek",
+      "ytdlp": "YouTube"
+    },
+    "reason": {
+      "wrong_file": "Archivo incorrecto",
+      "verify_failed": "Verificación fallida"
+    },
+    "sourceTrust": {
+      "title": "Confianza en las fuentes",
+      "manage": "Los subidores bloqueados y el umbral de bloqueo automático se gestionan en los <slskd>ajustes de Soulseek</slskd>.",
+      "bannedUploaders": {
+        "label": "Subidores bloqueados",
+        "description": "Subidores excluidos de todas las búsquedas."
+      },
+      "autoBan": {
+        "label": "Umbral de bloqueo automático",
+        "description": "Fallos de descarga antes de bloquear a un subidor automáticamente.",
+        "off": "Desactivado"
+      }
+    }
+  },
   "common": {
     "loading": "Cargando…",
     "loadFailedWithReason": "No se pudo cargar la configuración: {{reason}}",

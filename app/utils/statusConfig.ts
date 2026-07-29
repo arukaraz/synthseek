@@ -7,6 +7,7 @@ import {
   ExternalLink,
   FileQuestion,
   FileX,
+  HardDrive,
   Pause,
   PlayCircle,
   Search,
@@ -106,6 +107,9 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
       },
       [FailureReason.enum.download_failed]: {
         icon: Download,
+      },
+      [FailureReason.enum.environment]: {
+        icon: HardDrive,
       },
       [FailureReason.enum.other]: {
         icon: AlertCircle,

@@ -78,6 +78,10 @@
       "label": "Download fehlgeschlagen",
       "description": "Der Titel wurde gefunden, aber der Download wurde nicht abgeschlossen. Die Quelle hat die Anfrage möglicherweise blockiert oder die Verbindung ist ins Stocken geraten. Ein erneuter Versuch könnte helfen."
     },
+    "environment": {
+      "label": "Speicherproblem",
+      "description": "Ein lokales Speicherproblem hat diesen Download gestoppt, etwa eine volle Festplatte oder ein fehlender bzw. nicht beschreibbarer Download- oder Bibliotheksordner. Nach Behebung des Problems erneut versuchen."
+    },
     "other": {
       "label": "Fehlgeschlagen",
       "description": "Der Download ist aus einem unerwarteten Grund fehlgeschlagen. Ein erneuter Versuch könnte helfen."

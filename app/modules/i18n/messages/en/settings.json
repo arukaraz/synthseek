@@ -110,6 +110,61 @@
       "ariaLabel": "Metadata confidence threshold"
     }
   },
+  "quarantine": {
+    "title": "Quarantine",
+    "description": "Files that failed verification are remembered here, so a retry never downloads the same wrong file from the same source again.",
+    "identityGate": {
+      "label": "AcoustID identity gate",
+      "description": "Block the import when the audio fingerprint identifies a different song than the requested one. The file is quarantined and a retry looks for another candidate."
+    },
+    "list": {
+      "title": "Quarantined files",
+      "loading": "Loading quarantined files...",
+      "loadError": "Failed to load quarantined files",
+      "clearAll": "Clear all",
+      "remove": "Remove quarantine entry",
+      "youtube": "YouTube",
+      "columns": {
+        "source": "Source",
+        "peer": "Peer",
+        "file": "File",
+        "reason": "Reason",
+        "age": "Age",
+        "track": "Track"
+      },
+      "trackDisplay": "{{title}} - {{artist}}",
+      "empty": {
+        "title": "No quarantined files",
+        "description": "When a downloaded file fails verification, the exact file and its source appear here and are skipped on retries."
+      },
+      "confirmClear": {
+        "title": "Clear the quarantine?",
+        "message": "All entries will be removed. Retries may download these exact files from the same sources again.",
+        "confirm": "Clear all"
+      }
+    },
+    "source": {
+      "slskd": "Soulseek",
+      "ytdlp": "YouTube"
+    },
+    "reason": {
+      "wrong_file": "Wrong file",
+      "verify_failed": "Verification failed"
+    },
+    "sourceTrust": {
+      "title": "Source trust",
+      "manage": "Banned uploaders and the auto-ban threshold are managed in the <slskd>Soulseek settings</slskd>.",
+      "bannedUploaders": {
+        "label": "Banned uploaders",
+        "description": "Uploaders excluded from every search."
+      },
+      "autoBan": {
+        "label": "Auto-ban threshold",
+        "description": "Failed downloads before an uploader is banned automatically.",
+        "off": "Off"
+      }
+    }
+  },
   "common": {
     "loading": "Loading…",
     "loadFailedWithReason": "Failed to load settings: {{reason}}",

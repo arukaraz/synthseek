@@ -78,6 +78,10 @@
       "label": "Échec du téléchargement",
       "description": "La piste a été trouvée, mais le téléchargement ne s'est pas terminé. La source a peut-être bloqué la requête ou la connexion a calé. Une nouvelle tentative peut aider."
     },
+    "environment": {
+      "label": "Problème de stockage",
+      "description": "Un problème de stockage local a interrompu ce téléchargement, comme un disque plein ou un dossier de téléchargements ou de bibliothèque manquant ou non accessible en écriture. Corrigez le stockage puis réessayez."
+    },
     "other": {
       "label": "Échec",
       "description": "Le téléchargement a échoué pour une raison inattendue. Une nouvelle tentative peut aider."

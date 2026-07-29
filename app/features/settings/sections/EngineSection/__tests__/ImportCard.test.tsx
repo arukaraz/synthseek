@@ -28,7 +28,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-const initial: ImportCardProps["initial"] = { metadataConfidenceThreshold: 50 };
+const initial: ImportCardProps["initial"] = { metadataConfidenceThreshold: 50, acoustidIdentityGate: true };
 
 describe("ImportCard", () => {
   it("renders the card title and the confidence control", () => {
@@ -46,17 +46,26 @@ describe("ImportCard", () => {
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith({ metadataConfidenceThreshold: 75 });
+      expect(update.mutateAsync).toHaveBeenCalledWith({ metadataConfidenceThreshold: 75, acoustidIdentityGate: true });
     });
   });
 
-  it("resets the threshold to the engine default", async () => {
-    render(<ImportCard initial={{ metadataConfidenceThreshold: 90 }} />);
+  it("resets the threshold to the engine default while preserving the identity gate", async () => {
+    render(<ImportCard initial={{ metadataConfidenceThreshold: 90, acoustidIdentityGate: false }} />);
 
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.resetDefaults.label }));
 
     expect(screen.getByLabelText(enSettings.import.metadataConfidence.ariaLabel)).toHaveValue(
       ENGINE_DEFAULTS.import.metadataConfidenceThreshold
     );
+
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith({
+        metadataConfidenceThreshold: ENGINE_DEFAULTS.import.metadataConfidenceThreshold,
+        acoustidIdentityGate: false,
+      });
+    });
   });
 });

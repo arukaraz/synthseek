@@ -21,6 +21,7 @@ export const ENGINE_DEFAULTS = {
   },
   import: {
     metadataConfidenceThreshold: 50,
+    acoustidIdentityGate: true,
   },
   smartSearch: {
     customMoodKeywords: [] as string[],
