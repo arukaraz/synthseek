@@ -45,6 +45,10 @@
       "description": "Ajouter un envoyeur/pair à la liste de bannissement après ce nombre d'échecs de téléchargement (compté en mémoire, réinitialisé au redémarrage). 0 désactive.",
       "ariaLabel": "Bannir automatiquement après N tentatives échouées"
     },
+    "strictTierOrdering": {
+      "label": "Ordre strict par niveau de qualité",
+      "description": "Essaie d'abord les sources sans perte, puis celles à débit élevé, puis le reste. Au sein de chaque niveau, le score combiné habituel décide toujours de l'ordre."
+    },
     "customMoodKeywords": {
       "label": "Mots-clés d'ambiance personnalisés",
       "helper": "Fragments testés sur les requêtes de recherche des utilisateurs pour les classer comme recherches d'ambiance/genre (par opposition à un artiste/piste précis). Appuyez sur Entrée ou virgule pour ajouter.",
@@ -163,6 +167,24 @@
         "description": "Échecs de téléchargement avant qu'un envoyeur soit banni automatiquement.",
         "off": "Désactivé"
       }
+    }
+  },
+  "wanted": {
+    "title": "Balayage de suivi",
+    "description": "Surveille les pistes en échec et les réessaie périodiquement, espacées selon l'âge de la sortie.",
+    "enabled": {
+      "label": "Activer le balayage de suivi",
+      "description": "Réessaie périodiquement les pistes en échec qui sont suivies."
+    },
+    "perRunCap": {
+      "label": "Pistes par balayage",
+      "description": "Nombre maximal de pistes suivies réessayées à chaque balayage.",
+      "ariaLabel": "Pistes par balayage"
+    },
+    "maxAttempts": {
+      "label": "Tentatives maximales de balayage",
+      "description": "Arrête de suivre une piste après ce nombre de tentatives de balayage infructueuses.",
+      "ariaLabel": "Tentatives maximales de balayage"
     }
   },
   "common": {
@@ -703,6 +725,10 @@
       "media-server-sync": {
         "name": "Synchronisation du serveur multimédia",
         "description": "Maintient les playlists de votre serveur multimédia synchronisées."
+      },
+      "wanted-sweep": {
+        "name": "Balayage de suivi",
+        "description": "Réessaie les pistes en échec suivies selon un calendrier basé sur l'âge de la sortie."
       }
     }
   },

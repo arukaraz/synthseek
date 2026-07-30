@@ -5,7 +5,7 @@ import { type TrackRequest } from "@api/__generated__/types";
 import { confirm } from "@utils/confirm";
 import { formatRelativeTime } from "@utils/formatters";
 import { isOwnerOrAdminFE } from "@utils/authorization";
-import { useCancelTrack, usePrioritizeTrack, useRetryTrack } from "@hooks/api";
+import { useCancelTrack, usePrioritizeTrack, useRetryTrack, useSetWatch } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,6 +22,7 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
   const retryTrack = useRetryTrack();
   const cancelTrack = useCancelTrack();
   const prioritizeTrack = usePrioritizeTrack();
+  const setWatch = useSetWatch();
   const canAct = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
 
   const handleCancel = useCallback(
@@ -83,12 +84,13 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
             onRetry={() => retryTrack.mutate({ trackId: track.id })}
             onCancel={() => handleCancel(track)}
             onPrioritize={() => prioritizeTrack.mutate({ trackId: track.id })}
+            onSetWatch={(enabled) => setWatch.mutate({ trackId: track.id, enabled })}
           />
         ),
         className: "w-20 text-right",
       },
     ],
-    [canAct, retryTrack, prioritizeTrack, handleCancel, t]
+    [canAct, retryTrack, prioritizeTrack, setWatch, handleCancel, t]
   );
 
   const sortedTracks = useMemo(

@@ -184,6 +184,17 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        label={t("search.strictTierOrdering.label")}
+        description={t("search.strictTierOrdering.description")}
+        control={
+          <Switch
+            checked={search.strictTierOrdering}
+            onCheckedChange={(v) => searchForm.setField("strictTierOrdering", v)}
+            aria-label={t("search.strictTierOrdering.label")}
+          />
+        }
+      />
+      <EngineRow
         label={t("search.autoBan.label")}
         anchor="ban-threshold"
         description={t("search.autoBan.description")}

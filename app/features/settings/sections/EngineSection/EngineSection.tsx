@@ -11,6 +11,7 @@ import { QuarantineCard } from "./QuarantineCard";
 import { QueueCard } from "./QueueCard";
 import { SmartSearchCard } from "./SmartSearchCard";
 import { TimeoutsCard } from "./TimeoutsCard";
+import { WantedCard } from "./WantedCard";
 
 export function EngineSection() {
   const { t } = useTranslation("settings");
@@ -48,6 +49,7 @@ export function EngineSection() {
         <TimeoutsCard initial={data.engine.timeouts} />
         <QueueCard initial={data.engine.queue} />
         <ImportCard initial={data.engine.import} />
+        <WantedCard initial={data.engine.wanted} />
         <QuarantineCard
           initial={data.engine.import}
           sourceTrust={{

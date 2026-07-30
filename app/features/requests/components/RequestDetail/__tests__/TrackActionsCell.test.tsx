@@ -32,6 +32,10 @@ function makeTrack(overrides: Partial<TrackRequest> = {}): TrackRequest {
     source: "deezer",
     failure_reason: null,
     downloaded_file: null,
+    retry_count: 0,
+    next_retry_at: null,
+    watch_enabled: true,
+    source_peer: null,
     created_at: new Date(),
     completed_at: null,
     updated_at: new Date(),
@@ -65,6 +69,7 @@ describe("RequestDetail TrackActionsCell", () => {
         onRetry={noop}
         onCancel={noop}
         onPrioritize={noop}
+        onSetWatch={noop}
       />
     );
 
@@ -84,6 +89,7 @@ describe("RequestDetail TrackActionsCell", () => {
         onRetry={noop}
         onCancel={noop}
         onPrioritize={noop}
+        onSetWatch={noop}
       />
     );
 
@@ -102,6 +108,7 @@ describe("RequestDetail TrackActionsCell", () => {
         onRetry={noop}
         onCancel={noop}
         onPrioritize={noop}
+        onSetWatch={noop}
       />
     );
 
@@ -119,6 +126,7 @@ describe("RequestDetail TrackActionsCell", () => {
         onRetry={noop}
         onCancel={noop}
         onPrioritize={noop}
+        onSetWatch={noop}
       />
     );
 
@@ -134,6 +142,7 @@ describe("RequestDetail TrackActionsCell", () => {
         onRetry={noop}
         onCancel={noop}
         onPrioritize={noop}
+        onSetWatch={noop}
       />
     );
 
@@ -150,6 +159,7 @@ describe("RequestDetail TrackActionsCell", () => {
         onRetry={noop}
         onCancel={noop}
         onPrioritize={onPrioritize}
+        onSetWatch={noop}
       />
     );
 
@@ -157,5 +167,68 @@ describe("RequestDetail TrackActionsCell", () => {
     await user.click(screen.getByRole("menuitem", { name: "Jump the queue" }));
 
     expect(onPrioritize).toHaveBeenCalledOnce();
+  });
+
+  it("offers Stop watching on a failed watched track and calls onSetWatch(false)", async () => {
+    const user = userEvent.setup();
+    const onSetWatch = vi.fn();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.failed, watch_enabled: true })}
+        canAct
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={onSetWatch}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+
+    expect(screen.queryByRole("menuitem", { name: "Resume watching" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("menuitem", { name: "Stop watching" }));
+
+    expect(onSetWatch).toHaveBeenCalledExactlyOnceWith(false);
+  });
+
+  it("offers Resume watching on a failed unwatched track and calls onSetWatch(true)", async () => {
+    const user = userEvent.setup();
+    const onSetWatch = vi.fn();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.failed, watch_enabled: false })}
+        canAct
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={onSetWatch}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+
+    expect(screen.queryByRole("menuitem", { name: "Stop watching" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("menuitem", { name: "Resume watching" }));
+
+    expect(onSetWatch).toHaveBeenCalledExactlyOnceWith(true);
+  });
+
+  it("offers no watch action for a non-failed track", async () => {
+    const user = userEvent.setup();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.queued, watch_enabled: true })}
+        canAct
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+
+    expect(screen.queryByRole("menuitem", { name: "Stop watching" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Resume watching" })).not.toBeInTheDocument();
   });
 });

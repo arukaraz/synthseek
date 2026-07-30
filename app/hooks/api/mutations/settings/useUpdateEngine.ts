@@ -59,6 +59,17 @@ export function useUpdateEnginePlexBehavior() {
   });
 }
 
+export function useUpdateEngineWanted() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateEngineWanted.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      toast.success(i18n.t("mutations:settings.wantedSaved"));
+    },
+    onError: (error) => errorToast(error, "settings.wantedFailed"),
+  });
+}
+
 export function useUpdateEngineSmartSearch() {
   const utils = trpc.useUtils();
   return trpc.settings.updateEngineSmartSearch.useMutation({

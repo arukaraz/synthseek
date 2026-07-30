@@ -20,6 +20,11 @@ export interface TrackActionsCellProps {
   onRetry: () => void;
   onCancel: () => void;
   onPrioritize: () => void;
+  onSetWatch: (enabled: boolean) => void;
+}
+
+export interface TrackWatchHintProps {
+  track: TrackRequest;
 }
 
 export interface TrackTitleCellProps {

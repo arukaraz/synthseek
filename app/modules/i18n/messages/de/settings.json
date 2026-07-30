@@ -45,6 +45,10 @@
       "description": "Fügt einen Uploader/Peer nach so vielen Download-Fehlern zur Sperrliste hinzu (im Arbeitsspeicher gezählt, beim Neustart zurückgesetzt). 0 deaktiviert dies.",
       "ariaLabel": "Automatisch sperren nach N fehlgeschlagenen Versuchen"
     },
+    "strictTierOrdering": {
+      "label": "Strikte Reihenfolge nach Qualitätsstufe",
+      "description": "Versucht zuerst verlustfreie Quellen, dann verlustbehaftete mit hoher Bitrate und danach den Rest. Innerhalb jeder Stufe entscheidet weiterhin die übliche kombinierte Bewertung."
+    },
     "customMoodKeywords": {
       "label": "Eigene Stimmungs-Schlüsselwörter",
       "helper": "Teilzeichenfolgen, die mit den Suchanfragen der Benutzer abgeglichen werden, um sie als Stimmungs-/Genre-Suchen (gegenüber einem bestimmten Künstler/Titel) einzustufen. Enter oder Komma zum Hinzufügen drücken.",
@@ -163,6 +167,24 @@
         "description": "Download-Fehler, bevor ein Uploader automatisch gesperrt wird.",
         "off": "Aus"
       }
+    }
+  },
+  "wanted": {
+    "title": "Wanted-Durchlauf",
+    "description": "Beobachtet fehlgeschlagene Titel und versucht sie regelmäßig erneut, gestaffelt nach dem Alter der Veröffentlichung.",
+    "enabled": {
+      "label": "Wanted-Durchlauf aktivieren",
+      "description": "Beobachtete fehlgeschlagene Titel regelmäßig erneut versuchen."
+    },
+    "perRunCap": {
+      "label": "Titel pro Durchlauf",
+      "description": "Maximale Anzahl beobachteter Titel, die pro Durchlauf erneut versucht werden.",
+      "ariaLabel": "Titel pro Durchlauf"
+    },
+    "maxAttempts": {
+      "label": "Maximale Durchlauf-Versuche",
+      "description": "Beendet die Beobachtung eines Titels nach dieser Anzahl erfolgloser Durchlauf-Versuche.",
+      "ariaLabel": "Maximale Durchlauf-Versuche"
     }
   },
   "common": {
@@ -703,6 +725,10 @@
       "media-server-sync": {
         "name": "Media-Server-Synchronisierung",
         "description": "Hält die Playlists deines Media-Servers synchron."
+      },
+      "wanted-sweep": {
+        "name": "Wanted-Durchlauf",
+        "description": "Versucht beobachtete fehlgeschlagene Titel nach einem Zeitplan auf Basis des Veröffentlichungsalters erneut."
       }
     }
   },

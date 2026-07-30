@@ -64,6 +64,7 @@ const initial: SlskdCardProps["initial"] = {
     historyCleanupEnabled: true,
     maxHistorySearches: 20,
     banAfterFailedAttempts: 3,
+    strictTierOrdering: false,
   },
   timeouts: {
     searchPhase: 30000,
@@ -138,6 +139,21 @@ describe("SlskdCard", () => {
       });
       expect(updateTimeouts.mutateAsync).not.toHaveBeenCalled();
       expect(updateConnection.mutateAsync).not.toHaveBeenCalled();
+    });
+  });
+
+  it("submits the full engine.search group including strictTierOrdering when the tier toggle changes", async () => {
+    render(<SlskdCard initial={initial} />);
+
+    await userEvent.click(screen.getByRole("switch", { name: enSettings.search.strictTierOrdering.label }));
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(updateSearch.mutateAsync).toHaveBeenCalledWith({
+        ...initial.search,
+        strictTierOrdering: true,
+      });
+      expect(updateTimeouts.mutateAsync).not.toHaveBeenCalled();
     });
   });
 

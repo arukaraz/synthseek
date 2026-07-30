@@ -44,7 +44,9 @@
     "slskdSaved": "Connexion Slskd mise à jour",
     "lidarrSaved": "Connexion Lidarr mise à jour",
     "enrichmentSaved": "Réglages d'enrichissement mis à jour",
-    "spotifySaved": "Réglages de l'application Spotify mis à jour"
+    "spotifySaved": "Réglages de l'application Spotify mis à jour",
+    "wantedSaved": "Réglages du balayage de suivi enregistrés",
+    "wantedFailed": "Échec de l'enregistrement des réglages du balayage de suivi"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",
@@ -194,7 +196,10 @@
       "alreadyInProgressTitle": "{{kind}} déjà en cours de téléchargement",
       "requeuedTitle": "{{kind}} remis en file",
       "requeuedDescription": "{{itemName}} fait l'objet d'une nouvelle tentative."
-    }
+    },
+    "watchResumed": "Suivi repris",
+    "watchStopped": "Suivi arrêté",
+    "setWatchFailed": "Échec de la mise à jour du suivi"
   },
   "playlists": {
     "created": "Playlist créée",

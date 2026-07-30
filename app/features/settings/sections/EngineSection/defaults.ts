@@ -10,6 +10,7 @@ export const ENGINE_DEFAULTS = {
     historyCleanupEnabled: true,
     maxHistorySearches: 30,
     banAfterFailedAttempts: 0,
+    strictTierOrdering: false,
   },
   timeouts: {
     searchPhase: 15000,
@@ -25,5 +26,10 @@ export const ENGINE_DEFAULTS = {
   },
   smartSearch: {
     customMoodKeywords: [] as string[],
+  },
+  wanted: {
+    enabled: false,
+    perRunCap: 10,
+    maxAttempts: 8,
   },
 } as const;

@@ -45,6 +45,10 @@
       "description": "Add an uploader/peer to the banlist after this many download failures (counted in-memory, resets on restart). 0 disables.",
       "ariaLabel": "Auto-ban after N failed attempts"
     },
+    "strictTierOrdering": {
+      "label": "Strict quality tier ordering",
+      "description": "Always try lossless sources first, then high-bitrate lossy, then the rest. Within each tier the usual blended score still decides the order."
+    },
     "customMoodKeywords": {
       "label": "Custom mood keywords",
       "helper": "Substrings tested against user search queries to classify them as mood/genre searches (vs specific artist/track). Press Enter or comma to add.",
@@ -163,6 +167,24 @@
         "description": "Failed downloads before an uploader is banned automatically.",
         "off": "Off"
       }
+    }
+  },
+  "wanted": {
+    "title": "Wanted sweep",
+    "description": "Watches failed tracks and retries them periodically, spaced out by release age.",
+    "enabled": {
+      "label": "Enable wanted sweep",
+      "description": "Periodically retry failed tracks that are being watched."
+    },
+    "perRunCap": {
+      "label": "Tracks per sweep",
+      "description": "Maximum number of watched tracks retried on each sweep run.",
+      "ariaLabel": "Tracks per sweep"
+    },
+    "maxAttempts": {
+      "label": "Max sweep attempts",
+      "description": "Stop watching a track after this many unsuccessful sweep retries.",
+      "ariaLabel": "Max sweep attempts"
     }
   },
   "common": {
@@ -703,6 +725,10 @@
       "media-server-sync": {
         "name": "Media Server Sync",
         "description": "Keeps your media server's playlists in sync."
+      },
+      "wanted-sweep": {
+        "name": "Wanted Sweep",
+        "description": "Retries watched failed tracks on a release-age schedule."
       }
     }
   },

@@ -45,6 +45,10 @@
       "description": "Añade un subidor o par a la lista de bloqueos tras esta cantidad de fallos de descarga (contados en memoria, se reinician al reiniciar). 0 lo desactiva.",
       "ariaLabel": "Bloquear automáticamente tras N intentos fallidos"
     },
+    "strictTierOrdering": {
+      "label": "Orden estricto por nivel de calidad",
+      "description": "Prueba primero las fuentes sin pérdida, luego las de alta tasa de bits y después el resto. Dentro de cada nivel sigue decidiendo la puntuación combinada habitual."
+    },
     "customMoodKeywords": {
       "label": "Palabras clave de estado de ánimo personalizadas",
       "helper": "Subcadenas que se comparan con las consultas de búsqueda del usuario para clasificarlas como búsquedas de estado de ánimo o género (frente a artista o canción específicos). Pulsa Enter o coma para añadir.",
@@ -163,6 +167,24 @@
         "description": "Fallos de descarga antes de bloquear a un subidor automáticamente.",
         "off": "Desactivado"
       }
+    }
+  },
+  "wanted": {
+    "title": "Barrido de seguimiento",
+    "description": "Vigila las canciones fallidas y las reintenta periódicamente, espaciadas según la antigüedad del lanzamiento.",
+    "enabled": {
+      "label": "Activar barrido de seguimiento",
+      "description": "Reintenta periódicamente las canciones fallidas que están en seguimiento."
+    },
+    "perRunCap": {
+      "label": "Canciones por barrido",
+      "description": "Número máximo de canciones en seguimiento reintentadas en cada barrido.",
+      "ariaLabel": "Canciones por barrido"
+    },
+    "maxAttempts": {
+      "label": "Intentos máximos de barrido",
+      "description": "Deja de seguir una canción tras esta cantidad de reintentos de barrido sin éxito.",
+      "ariaLabel": "Intentos máximos de barrido"
     }
   },
   "common": {
@@ -703,6 +725,10 @@
       "media-server-sync": {
         "name": "Media Server Sync",
         "description": "Mantiene los playlists de tu media server sincronizados."
+      },
+      "wanted-sweep": {
+        "name": "Barrido de seguimiento",
+        "description": "Reintenta las canciones fallidas en seguimiento según la antigüedad del lanzamiento."
       }
     }
   },

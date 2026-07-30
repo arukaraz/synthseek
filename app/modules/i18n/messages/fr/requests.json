@@ -149,5 +149,12 @@
   },
   "spotifyCallback": {
     "connectionFailed": "Échec de la connexion à Spotify"
+  },
+  "watch": {
+    "watchingNextRetry": "Sous surveillance, prochain essai {{time}}",
+    "retryCount_one": "{{count}} nouvel essai de suivi pour l'instant",
+    "retryCount_other": "{{count}} nouveaux essais de suivi pour l'instant",
+    "stop": "Arrêter le suivi",
+    "resume": "Reprendre le suivi"
   }
 }

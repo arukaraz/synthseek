@@ -190,3 +190,7 @@ export const priorityChip = cva(
 );
 
 export type PriorityChipProps = VariantProps<typeof priorityChip>;
+
+export const watchHint = cva("text-fg/45 inline-flex min-w-0 items-center gap-1 text-[11px]");
+
+export type WatchHintProps = VariantProps<typeof watchHint>;

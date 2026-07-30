@@ -44,7 +44,9 @@
     "slskdSaved": "Slskd connection updated",
     "lidarrSaved": "Lidarr connection updated",
     "enrichmentSaved": "Enrichment settings updated",
-    "spotifySaved": "Spotify app settings updated"
+    "spotifySaved": "Spotify app settings updated",
+    "wantedSaved": "Wanted sweep settings saved",
+    "wantedFailed": "Failed to save wanted sweep settings"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",
@@ -194,7 +196,10 @@
       "alreadyInProgressTitle": "{{kind}} already being downloaded",
       "requeuedTitle": "{{kind}} re-queued",
       "requeuedDescription": "{{itemName}} is being retried."
-    }
+    },
+    "watchResumed": "Watch resumed",
+    "watchStopped": "Watch stopped",
+    "setWatchFailed": "Failed to update watch"
   },
   "playlists": {
     "created": "Playlist created",

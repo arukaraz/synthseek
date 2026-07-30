@@ -149,5 +149,12 @@
   },
   "spotifyCallback": {
     "connectionFailed": "Spotify connection failed"
+  },
+  "watch": {
+    "watchingNextRetry": "Watching, next retry {{time}}",
+    "retryCount_one": "{{count}} watch retry so far",
+    "retryCount_other": "{{count}} watch retries so far",
+    "stop": "Stop watching",
+    "resume": "Resume watching"
   }
 }

@@ -44,7 +44,9 @@
     "slskdSaved": "Slskd-Verbindung aktualisiert",
     "lidarrSaved": "Lidarr-Verbindung aktualisiert",
     "enrichmentSaved": "Anreicherungseinstellungen aktualisiert",
-    "spotifySaved": "Spotify-App-Einstellungen aktualisiert"
+    "spotifySaved": "Spotify-App-Einstellungen aktualisiert",
+    "wantedSaved": "Wanted-Durchlauf-Einstellungen gespeichert",
+    "wantedFailed": "Wanted-Durchlauf-Einstellungen konnten nicht gespeichert werden"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",
@@ -194,7 +196,10 @@
       "alreadyInProgressTitle": "{{kind}} wird bereits heruntergeladen",
       "requeuedTitle": "{{kind}} erneut eingereiht",
       "requeuedDescription": "{{itemName}} wird erneut versucht."
-    }
+    },
+    "watchResumed": "Beobachtung fortgesetzt",
+    "watchStopped": "Beobachtung beendet",
+    "setWatchFailed": "Beobachtung konnte nicht aktualisiert werden"
   },
   "playlists": {
     "created": "Playlist erstellt",

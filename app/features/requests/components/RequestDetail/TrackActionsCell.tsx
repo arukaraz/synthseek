@@ -3,12 +3,19 @@
 import { RequestStatus } from "@api/__generated__/types";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
-import { ChevronsUp, MoreVertical, RefreshCw, X } from "lucide-react";
+import { ChevronsUp, Eye, EyeOff, MoreVertical, RefreshCw, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { mobileActionsButton } from "../styles";
 import type { TrackActionsCellProps } from "./types";
 
-export function TrackActionsCell({ track, canAct, onRetry, onCancel, onPrioritize }: TrackActionsCellProps) {
+export function TrackActionsCell({
+  track,
+  canAct,
+  onRetry,
+  onCancel,
+  onPrioritize,
+  onSetWatch,
+}: TrackActionsCellProps) {
   const { t } = useTranslation("requests");
 
   if (!canAct) {
@@ -18,8 +25,11 @@ export function TrackActionsCell({ track, canAct, onRetry, onCancel, onPrioritiz
   const showRetry = isRetryableStatus(track.status);
   const showPrioritize = track.status === RequestStatus.enum.queued && track.priority === 0;
   const showCancel = isProcessingStatus(track.status);
+  const isFailed = track.status === RequestStatus.enum.failed;
+  const showStopWatch = isFailed && track.watch_enabled;
+  const showResumeWatch = isFailed && !track.watch_enabled;
 
-  if (!showRetry && !showPrioritize && !showCancel) {
+  if (!showRetry && !showPrioritize && !showCancel && !showStopWatch && !showResumeWatch) {
     return <span className="text-fg/20 block text-right text-xs">-</span>;
   }
 
@@ -46,6 +56,18 @@ export function TrackActionsCell({ track, canAct, onRetry, onCancel, onPrioritiz
             >
               <ChevronsUp className="size-4" />
               {t("tracks.jumpTheQueue")}
+            </DropdownMenuItem>
+          )}
+          {showStopWatch && (
+            <DropdownMenuItem onClick={() => onSetWatch(false)}>
+              <EyeOff className="size-4" />
+              {t("watch.stop")}
+            </DropdownMenuItem>
+          )}
+          {showResumeWatch && (
+            <DropdownMenuItem onClick={() => onSetWatch(true)}>
+              <Eye className="size-4" />
+              {t("watch.resume")}
             </DropdownMenuItem>
           )}
           {showCancel && (

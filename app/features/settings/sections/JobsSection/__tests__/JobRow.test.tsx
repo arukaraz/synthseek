@@ -48,6 +48,12 @@ describe("JobRow", () => {
     expect(screen.getByText(enSettings.jobs.registry["library-sync"].description)).toBeInTheDocument();
   });
 
+  it("renders the localized name and description for the wanted-sweep job", () => {
+    render(<JobRow job={{ ...job, id: "wanted-sweep" }} />);
+    expect(screen.getByText(enSettings.jobs.registry["wanted-sweep"].name)).toBeInTheDocument();
+    expect(screen.getByText(enSettings.jobs.registry["wanted-sweep"].description)).toBeInTheDocument();
+  });
+
   it("renders the interval label and the formatted next run", () => {
     render(<JobRow job={job} />);
     expect(screen.getByText(enSettings.jobs.interval.everyHour)).toBeInTheDocument();

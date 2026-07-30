@@ -25,6 +25,24 @@ export function formatRelativeTime(date: Date): string {
   return i18n.t("common:relativeTime.justNow");
 }
 
+export function formatTimeUntil(date: Date): string {
+  const diff = date.getTime() - Date.now();
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (years > 0) return i18n.t("common:relativeTime.inYears", { count: years });
+  if (months > 0) return i18n.t("common:relativeTime.inMonths", { count: months });
+  if (weeks > 0) return i18n.t("common:relativeTime.inWeeks", { count: weeks });
+  if (days > 0) return i18n.t("common:relativeTime.inDays", { count: days });
+  if (hours > 0) return i18n.t("common:relativeTime.inHours", { count: hours });
+  if (minutes > 0) return i18n.t("common:relativeTime.inMinutes", { count: minutes });
+  return i18n.t("common:relativeTime.soon");
+}
+
 export function formatDuration(start: Date, end?: Date): string | null {
   if (!end) return null;
 

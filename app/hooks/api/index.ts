@@ -45,6 +45,7 @@ export { useResumePlaylist } from "./mutations/requests/useResumePlaylist";
 export { usePauseAll } from "./mutations/requests/usePauseAll";
 export { useResumeAll } from "./mutations/requests/useResumeAll";
 export { usePrioritizeTrack } from "./mutations/requests/usePrioritizeTrack";
+export { useSetWatch } from "./mutations/requests/useSetWatch";
 export { usePrioritizeAlbum } from "./mutations/requests/usePrioritizeAlbum";
 export { usePrioritizePlaylist } from "./mutations/requests/usePrioritizePlaylist";
 export { useClearCompleted } from "./mutations/requests/useClearCompleted";

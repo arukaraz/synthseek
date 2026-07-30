@@ -8,6 +8,13 @@
     "weeksAgo": "vor {{count}} Wo",
     "daysAgo": "vor {{count}} T",
     "hoursAgo": "vor {{count}} Std",
-    "minutesAgo": "vor {{count}} Min"
+    "minutesAgo": "vor {{count}} Min",
+    "inYears": "in {{count}} J",
+    "inMonths": "in {{count}} Mon",
+    "inWeeks": "in {{count}} Wo",
+    "inDays": "in {{count}} T",
+    "inHours": "in {{count}} Std",
+    "inMinutes": "in {{count}} Min",
+    "soon": "bald"
   }
 }

@@ -30,6 +30,7 @@ export interface SlskdEngineSearch {
   historyCleanupEnabled: boolean;
   maxHistorySearches: number;
   banAfterFailedAttempts: number;
+  strictTierOrdering: boolean;
 }
 
 export interface EngineTimeouts {

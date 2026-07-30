@@ -17,6 +17,16 @@ export interface QuarantineCardProps {
   sourceTrust: QuarantineSourceTrust;
 }
 
+export interface EngineWantedSettings {
+  enabled: boolean;
+  perRunCap: number;
+  maxAttempts: number;
+}
+
+export interface WantedCardProps {
+  initial: EngineWantedSettings;
+}
+
 export interface QueueCardProps {
   initial: { maxSize: number; maxConcurrentSearches: number; maxPendingImports: number };
 }

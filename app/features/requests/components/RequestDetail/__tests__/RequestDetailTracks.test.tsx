@@ -8,6 +8,7 @@ import { RequestDetailTracks } from "../RequestDetailTracks";
 const retryTrack = vi.fn();
 const cancelTrack = vi.fn();
 const prioritizeTrack = vi.fn();
+const setWatch = vi.fn();
 const confirmMock = vi.fn();
 
 const authState = { canAct: true };
@@ -28,6 +29,7 @@ vi.mock("@hooks/api", () => ({
   useRetryTrack: () => ({ mutate: retryTrack }),
   useCancelTrack: () => ({ mutate: cancelTrack }),
   usePrioritizeTrack: () => ({ mutate: prioritizeTrack }),
+  useSetWatch: () => ({ mutate: setWatch }),
 }));
 
 describe("RequestDetailTracks", () => {
@@ -101,6 +103,32 @@ describe("RequestDetailTracks", () => {
 
     expect(confirmMock).toHaveBeenCalledOnce();
     expect(cancelTrack).not.toHaveBeenCalled();
+  });
+
+  it("stops the watch on a failed watched track from the row actions", async () => {
+    const user = userEvent.setup();
+    const request = makeRequestWithTracks({
+      tracks: [makeRequestsTrack({ id: "t5", status: RequestStatus.enum.failed, watch_enabled: true })],
+    });
+
+    render(<RequestDetailTracks request={request} />);
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Stop watching" }));
+
+    expect(setWatch).toHaveBeenCalledWith({ trackId: "t5", enabled: false });
+  });
+
+  it("resumes the watch on a failed unwatched track from the row actions", async () => {
+    const user = userEvent.setup();
+    const request = makeRequestWithTracks({
+      tracks: [makeRequestsTrack({ id: "t6", status: RequestStatus.enum.failed, watch_enabled: false })],
+    });
+
+    render(<RequestDetailTracks request={request} />);
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Resume watching" }));
+
+    expect(setWatch).toHaveBeenCalledWith({ trackId: "t6", enabled: true });
   });
 
   it("prioritizes a queued track from the jump-the-queue action", async () => {
