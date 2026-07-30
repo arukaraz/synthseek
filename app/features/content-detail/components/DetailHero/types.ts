@@ -51,6 +51,7 @@ export interface DetailHeroProps {
   requestDisabled?: boolean;
   requestDisabledTooltip?: string | null;
   playlistControls?: PlaylistHeroControls;
+  degradedSources?: string[];
 }
 
 export interface PlaylistSyncToggleProps {

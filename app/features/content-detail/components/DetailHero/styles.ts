@@ -67,7 +67,7 @@ export const heroEditSave = cva(
   "border-primary-500/40 bg-primary-500/15 text-primary-300 hover:bg-primary-500/25 grid size-9 shrink-0 place-items-center rounded-full border transition-colors"
 );
 
-export const heroBadgeRow = cva("flex items-center gap-2");
+export const heroBadgeRow = cva("flex flex-wrap items-center justify-center gap-2 sm:justify-start");
 
 export const heroBadgeDivider = cva("bg-fg/15 h-4 w-px shrink-0");
 

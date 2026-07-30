@@ -48,6 +48,14 @@ export function humanizeArtistType(rawType: string | null, t: TFunction<"content
   return capitalize(normalized);
 }
 
+export function collectDegradedSources(lists: Array<string[] | undefined>): string[] {
+  const seen = new Set<string>();
+  for (const list of lists) {
+    for (const source of list ?? []) seen.add(source);
+  }
+  return [...seen].sort();
+}
+
 export function formatBorn(bornDate: string | null, bornPlace: string | null): string | null {
   if (!bornDate) return null;
   const date = formatDate(new Date(bornDate));

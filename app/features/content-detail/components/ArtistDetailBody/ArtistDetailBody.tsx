@@ -6,6 +6,7 @@ import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES } from "../../constants";
+import { collectDegradedSources } from "../../helpers";
 import {
   ArtistDiscographyWidget,
   ArtistIdentityWidget,
@@ -28,6 +29,10 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
   const cover = identity?.image ?? target.cover;
   const genres = useMemo(() => stats?.genres ?? EMPTY_GENRES, [stats?.genres]);
   const socials = useMemo(() => buildSocialLinks(identity?.socials), [identity?.socials]);
+  const degradedSources = useMemo(
+    () => collectDegradedSources([identity?.degraded, stats?.degraded]),
+    [identity?.degraded, stats?.degraded]
+  );
 
   const handleRequest = useCallback(() => {
     requestArtist({ id: target.id, name: target.name, cover });
@@ -53,6 +58,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
         showRequest={showRequest}
         socials={socials}
         statsSlot={statsSlot}
+        degradedSources={degradedSources}
       />
 
       <div className={modalScrollArea()}>

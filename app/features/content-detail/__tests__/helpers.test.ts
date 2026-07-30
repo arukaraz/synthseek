@@ -10,6 +10,7 @@ import {
   artistTarget,
   cardRingFillStyle,
   catalogPlaylistTracks,
+  collectDegradedSources,
   computeRequestState,
   countAlbumsInLibrary,
   deriveTrackStatusCounts,
@@ -687,6 +688,29 @@ describe("content-detail helpers", () => {
       expect(humanizeArtistType(null, contentDetailT)).toBeNull();
       expect(humanizeArtistType("", contentDetailT)).toBeNull();
       expect(humanizeArtistType("   ", contentDetailT)).toBeNull();
+    });
+  });
+
+  describe("collectDegradedSources", () => {
+    it("collects sources from a single query result", () => {
+      expect(collectDegradedSources([["lastfm"]])).toEqual(["lastfm"]);
+    });
+
+    it("dedupes sources repeated across query results and sorts them", () => {
+      expect(
+        collectDegradedSources([
+          ["wikidata", "lastfm"],
+          ["lastfm", "discogs"],
+        ])
+      ).toEqual(["discogs", "lastfm", "wikidata"]);
+    });
+
+    it("ignores missing degraded fields", () => {
+      expect(collectDegradedSources([undefined, ["musicbrainz"], undefined])).toEqual(["musicbrainz"]);
+    });
+
+    it("returns an empty list when nothing degraded", () => {
+      expect(collectDegradedSources([undefined, [], undefined])).toEqual([]);
     });
   });
 });

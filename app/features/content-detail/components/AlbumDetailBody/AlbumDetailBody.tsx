@@ -1,11 +1,11 @@
 "use client";
 
-import { useAlbumDetail } from "@hooks/api/queries/content-detail";
+import { useAlbumCredits, useAlbumDetail, useAlbumStats } from "@hooks/api/queries/content-detail";
 import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES, EMPTY_SOCIALS, EMPTY_TRACKS } from "../../constants";
-import { artistTarget, computeRequestState, deriveTrackStatusCounts } from "../../helpers";
+import { artistTarget, collectDegradedSources, computeRequestState, deriveTrackStatusCounts } from "../../helpers";
 import { AlbumCreditsWidget, AlbumDetailWidget, AlbumStatsWidget, MoreFromArtistWidget } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
@@ -16,12 +16,18 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
   const { requestAlbum } = useContentDetailActions();
 
   const artistName = album?.artist ?? target.artistName;
+  const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, mbid: null });
+  const { data: albumCredits } = useAlbumCredits({ deezerAlbumId: target.id, barcode: null });
   const artistExternalId = album?.artistExternalId ?? null;
   const genres = useMemo(() => album?.genres ?? EMPTY_GENRES, [album?.genres]);
   const trackCount = album?.totalTracks ?? null;
   const cover = album?.cover ?? target.cover;
   const tracks = album?.tracks ?? EMPTY_TRACKS;
   const counts = useMemo(() => deriveTrackStatusCounts(tracks), [tracks]);
+  const degradedSources = useMemo(
+    () => collectDegradedSources([album?.degraded, albumStats?.degraded, albumCredits?.degraded]),
+    [album?.degraded, albumStats?.degraded, albumCredits?.degraded]
+  );
   const requestState = computeRequestState({
     requestedTrackCount: counts.requestedCount,
     failedTrackCount: counts.failedCount,
@@ -66,6 +72,7 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
         onSubtitleClick={handleArtistNavigate}
         socials={EMPTY_SOCIALS}
         statsSlot={statsSlot}
+        degradedSources={degradedSources}
       />
 
       <div className={modalScrollArea()}>

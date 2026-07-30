@@ -106,5 +106,19 @@
     "similar": "No hay artistas similares disponibles.",
     "tracklist": "No hay pistas disponibles.",
     "moreFrom": "No hay otros lanzamientos disponibles."
+  },
+  "degraded": {
+    "label": "Algunas fuentes no disponibles",
+    "tooltipIntro": "No se pudo contactar con estas fuentes:",
+    "providers": {
+      "lastfm": "Last.fm",
+      "listenbrainz": "ListenBrainz",
+      "musicbrainz": "MusicBrainz",
+      "wikidata": "Wikidata",
+      "discogs": "Discogs",
+      "songlink": "Songlink",
+      "fanart": "fanart.tv",
+      "coverartarchive": "Cover Art Archive"
+    }
   }
 }
