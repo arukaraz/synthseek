@@ -23,5 +23,7 @@
   "PATHS_ACCESSIBLE": "Downloads and library paths accessible",
   "DOWNLOADS_NOT_WRITABLE": "Downloads path is not writable: {{path}}",
   "LIBRARY_NOT_ACCESSIBLE": "Library path is not accessible: {{path}}",
-  "LIBRARY_READ_ONLY": "Downloads writable, library read-only (degraded): {{path}}"
+  "LIBRARY_READ_ONLY": "Downloads writable, library read-only (degraded): {{path}}",
+  "STORAGE_SAME_FILESYSTEM": "Downloads ({{downloadsPath}}) and library ({{libraryPath}}) share a filesystem, imports move files atomically",
+  "STORAGE_CROSS_FILESYSTEM": "Downloads ({{downloadsPath}}) and library ({{libraryPath}}) are on different filesystems, imports copy then delete and temporarily need space for both copies"
 }

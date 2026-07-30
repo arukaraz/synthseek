@@ -23,5 +23,7 @@
   "PATHS_ACCESSIBLE": "Chemins des téléchargements et de la bibliothèque accessibles",
   "DOWNLOADS_NOT_WRITABLE": "Le chemin des téléchargements n'est pas accessible en écriture : {{path}}",
   "LIBRARY_NOT_ACCESSIBLE": "Le chemin de la bibliothèque n'est pas accessible : {{path}}",
-  "LIBRARY_READ_ONLY": "Téléchargements en écriture, bibliothèque en lecture seule (dégradé) : {{path}}"
+  "LIBRARY_READ_ONLY": "Téléchargements en écriture, bibliothèque en lecture seule (dégradé) : {{path}}",
+  "STORAGE_SAME_FILESYSTEM": "Les téléchargements ({{downloadsPath}}) et la bibliothèque ({{libraryPath}}) partagent le même système de fichiers, les imports déplacent les fichiers de manière atomique",
+  "STORAGE_CROSS_FILESYSTEM": "Les téléchargements ({{downloadsPath}}) et la bibliothèque ({{libraryPath}}) sont sur des systèmes de fichiers différents, les imports copient puis suppriment et nécessitent temporairement de l'espace pour les deux copies"
 }

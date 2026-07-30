@@ -23,5 +23,7 @@
   "PATHS_ACCESSIBLE": "Downloads- und Bibliothekspfade zugänglich",
   "DOWNLOADS_NOT_WRITABLE": "Downloads-Pfad ist nicht beschreibbar: {{path}}",
   "LIBRARY_NOT_ACCESSIBLE": "Bibliothekspfad ist nicht zugänglich: {{path}}",
-  "LIBRARY_READ_ONLY": "Downloads beschreibbar, Bibliothek schreibgeschützt (eingeschränkt): {{path}}"
+  "LIBRARY_READ_ONLY": "Downloads beschreibbar, Bibliothek schreibgeschützt (eingeschränkt): {{path}}",
+  "STORAGE_SAME_FILESYSTEM": "Downloads ({{downloadsPath}}) und Bibliothek ({{libraryPath}}) teilen sich ein Dateisystem, Importe verschieben Dateien atomar",
+  "STORAGE_CROSS_FILESYSTEM": "Downloads ({{downloadsPath}}) und Bibliothek ({{libraryPath}}) liegen auf unterschiedlichen Dateisystemen, Importe kopieren und löschen anschließend und benötigen vorübergehend Platz für beide Kopien"
 }

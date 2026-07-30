@@ -124,7 +124,8 @@ jobs:
           IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
 
           if [ "$PRERELEASE" = "true" ]; then
-            TAGS="${IMAGE}:v${VERSION}-${LABEL} ${IMAGE}:${LABEL}"
+            SHORT_SHA="$(echo "${{ github.sha }}" | cut -c1-7)"
+            TAGS="${IMAGE}:v${VERSION}-${LABEL} ${IMAGE}:${LABEL} ${IMAGE}:pre-release-${SHORT_SHA}"
           else
             TAGS="${IMAGE}:v${VERSION} ${IMAGE}:${VERSION} ${IMAGE}:latest"
           fi
@@ -499,6 +500,18 @@ jobs:
           delete-untagged: true
           validate: true
 
+      - name: Cleanup old prerelease sha tags
+        if: needs.prepare.outputs.prerelease == 'true'
+        continue-on-error: true
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          packages: synthseek
+          delete-tags: pre-release-*
+          keep-n-tagged: 3
+          validate: true
+
       - name: Create deployment summary
         run: |
           VERSION="${{ needs.prepare.outputs.version }}"
@@ -508,8 +521,9 @@ jobs:
           ARM64_DIGEST="$(cat digests/arm64.txt)"
 
           if [ "$PRERELEASE" = "true" ]; then
+            SHORT_SHA="$(echo "${{ github.sha }}" | cut -c1-7)"
             PRIMARY_TAG="v${VERSION}-${LABEL}"
-            TAG_ROWS="| \`v${VERSION}-${LABEL}\` | linux/amd64, linux/arm64 |\n| \`${LABEL}\` | linux/amd64, linux/arm64 |"
+            TAG_ROWS="| \`v${VERSION}-${LABEL}\` | linux/amd64, linux/arm64 |\n| \`${LABEL}\` | linux/amd64, linux/arm64 |\n| \`pre-release-${SHORT_SHA}\` | linux/amd64, linux/arm64 |"
           else
             PRIMARY_TAG="v${VERSION}"
             TAG_ROWS="| \`v${VERSION}\` | linux/amd64, linux/arm64 |\n| \`${VERSION}\` | linux/amd64, linux/arm64 |\n| \`latest\` | linux/amd64, linux/arm64 |"
