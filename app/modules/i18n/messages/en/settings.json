@@ -392,11 +392,13 @@
     "role": {
       "owner": "Owner",
       "admin": "Admin",
-      "user": "User"
+      "user": "User",
+      "trusted": "Trusted"
     },
     "roleOptions": {
       "user": "User",
-      "admin": "Admin"
+      "admin": "Admin",
+      "trusted": "Trusted"
     },
     "actions": {
       "edit": "Edit {{username}}",
@@ -409,7 +411,8 @@
       "delete": "Delete selected",
       "clear": "Clear",
       "deleteTitle": "Delete users",
-      "deleteMessage": "This removes the selected accounts and reassigns their request history to the owner. Downloaded files in Plex are not affected."
+      "deleteMessage": "This removes the selected accounts and reassigns their request history to the owner. Downloaded files in Plex are not affected.",
+      "makeTrusted": "Make Trusted"
     },
     "delete": {
       "title": "Delete user",
@@ -457,6 +460,17 @@
       "roleLabel": "Role for imported users",
       "roleAriaLabel": "Role for imported users",
       "submit": "Import selected"
+    },
+    "roleDescriptions": {
+      "trusted": "Trusted members' requests skip the approval queue."
+    },
+    "approval": {
+      "cardTitle": "Request approval",
+      "cardDescription": "Control whether member requests need an admin's approval before they start.",
+      "requireForMembers": {
+        "label": "Require approval for members",
+        "description": "New requests from members wait for an admin. Trusted members and admins skip the queue."
+      }
     }
   },
   "profile": {

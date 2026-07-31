@@ -2,6 +2,7 @@
 
 import { ContentType, RequestStatus, type RequestWithTracks } from "@api/__generated__/types";
 import {
+  useApproveTracks,
   useCancelAlbum,
   useCancelPlaylist,
   useDeleteAlbum,
@@ -10,6 +11,7 @@ import {
   usePausePlaylist,
   usePrioritizeAlbum,
   usePrioritizePlaylist,
+  useRejectTracks,
   useResumeAlbum,
   useResumePlaylist,
   useRetryAlbum,
@@ -35,10 +37,15 @@ interface UseRequestActions {
   pause: () => void;
   resume: () => void;
   prioritize: () => void;
+  approve: () => void;
+  reject: (reason?: string) => void;
   syncPlex: () => void;
   syncSourceNow: () => void;
   exportJspf: () => Promise<void>;
   canManage: boolean;
+  canApprove: boolean;
+  pendingApprovalCount: number;
+  isApproving: boolean;
   canRetry: boolean;
   canRemove: boolean;
   canCancel: boolean;
@@ -57,7 +64,7 @@ interface UseRequestActions {
 
 export function useRequestActions(request: RequestWithTracks): UseRequestActions {
   const { t } = useTranslation("requests");
-  const { currentUser } = useAuthContext();
+  const { currentUser, isAdmin } = useAuthContext();
   const canManage = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
   const isPlaylist = request.contentType === ContentType.enum.playlist;
   const label: "Album" | "Playlist" = isPlaylist ? "Playlist" : "Album";
@@ -76,8 +83,15 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const resumePlaylist = useResumePlaylist();
   const prioritizeAlbum = usePrioritizeAlbum();
   const prioritizePlaylist = usePrioritizePlaylist();
+  const approveTracks = useApproveTracks();
+  const rejectTracks = useRejectTracks();
   const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
   const { exportCollection } = useExportCollection();
+
+  const pendingApprovalTrackIds = request.tracks
+    .filter((track) => track.status === RequestStatus.enum.pending_approval)
+    .map((track) => track.id);
+  const canApprove = isAdmin && pendingApprovalTrackIds.length > 0;
 
   const canRetry =
     canManage &&
@@ -106,6 +120,16 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const prioritize = () => {
     if (isPlaylist) prioritizePlaylist.mutate({ playlistId: request.id });
     else prioritizeAlbum.mutate({ albumId: request.id });
+  };
+
+  const approve = () => {
+    if (pendingApprovalTrackIds.length === 0) return;
+    approveTracks.mutate({ trackIds: pendingApprovalTrackIds });
+  };
+
+  const reject = (reason?: string) => {
+    if (pendingApprovalTrackIds.length === 0) return;
+    rejectTracks.mutate({ trackIds: pendingApprovalTrackIds, reason });
   };
 
   const remove = async () => {
@@ -168,10 +192,15 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
     pause,
     resume,
     prioritize,
+    approve,
+    reject,
     syncPlex,
     syncSourceNow,
     exportJspf,
     canManage,
+    canApprove,
+    pendingApprovalCount: pendingApprovalTrackIds.length,
+    isApproving: approveTracks.isPending || rejectTracks.isPending,
     canRetry,
     canRemove: canManage,
     canCancel,

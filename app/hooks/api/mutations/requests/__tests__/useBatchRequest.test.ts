@@ -17,6 +17,7 @@ const spies = vi.hoisted(() => {
     captured,
     invalidate: vi.fn(),
     notifyReclaimOutcome: vi.fn(),
+    notifyPendingApproval: vi.fn(),
     errorToastDetailed: vi.fn(),
   };
 });
@@ -43,7 +44,10 @@ vi.mock("@utils/trpc", () => ({
 }));
 
 vi.mock("@modules/errors", () => ({ errorToastDetailed: spies.errorToastDetailed }));
-vi.mock("@utils/request-helpers", () => ({ notifyReclaimOutcome: spies.notifyReclaimOutcome }));
+vi.mock("@utils/request-helpers", () => ({
+  notifyReclaimOutcome: spies.notifyReclaimOutcome,
+  notifyPendingApproval: spies.notifyPendingApproval,
+}));
 
 function albumVars() {
   return { name: "Discovery", artist: "Daft Punk", tracks: [{}, {}, {}] };
@@ -78,6 +82,21 @@ describe("useBatchRequest dock lifecycle", () => {
 
     if (context) expect(readStatus(context.dockJobId)).toBe("complete");
     expect(spies.notifyReclaimOutcome).toHaveBeenCalledTimes(1);
+    expect(spies.notifyPendingApproval).not.toHaveBeenCalled();
+  });
+
+  it("toasts awaiting approval instead of started when pendingApproval is true", () => {
+    renderHook(() => useBatchRequest());
+
+    const context = spies.captured.options?.onMutate?.(albumVars());
+    spies.captured.options?.onSuccess?.(
+      { outcome: "created", pendingApproval: true, data: { name: "Discovery" } },
+      albumVars(),
+      context
+    );
+
+    expect(spies.notifyPendingApproval).toHaveBeenCalledWith("Discovery");
+    expect(spies.notifyReclaimOutcome).not.toHaveBeenCalled();
   });
 
   it("finalizes the seeded job to failed on hook-level error", () => {

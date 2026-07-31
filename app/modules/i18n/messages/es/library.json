@@ -401,5 +401,82 @@
     },
     "keepInSync": "Mantener sincronizada",
     "syncedReadonly": "Desactiva la sincronización para editar"
+  },
+  "dropImport": {
+    "modal": {
+      "title": "Importar archivos",
+      "description": "Sube tus propios archivos de audio (o un .zip). Synthseek identifica cada archivo y lo añade a tu biblioteca."
+    },
+    "upload": {
+      "aria": "Subir archivos de audio",
+      "dropTitle": "Arrastra y suelta archivos de audio aquí",
+      "dropHint": "o haz clic para buscar. Compatibles: MP3, FLAC, M4A, OGG, WAV, OPUS, AAC, WMA, ZIP",
+      "uploading": "Subiendo... {{percent}}%"
+    },
+    "rejected": {
+      "title_one": "{{count}} archivo no fue aceptado",
+      "title_other": "{{count}} archivos no fueron aceptados",
+      "reason": {
+        "unsupportedType": "Tipo de archivo no compatible",
+        "zipSlip": "Archivo comprimido rechazado por rutas inseguras",
+        "nestedArchive": "No se admiten archivos comprimidos anidados",
+        "batchCap": "Se alcanzó el límite de archivos por lote",
+        "extractionError": "No se pudo extraer el archivo comprimido"
+      }
+    },
+    "batches": {
+      "title": "Subidas recientes",
+      "empty": "Aún no hay subidas.",
+      "loadError": "No se pudieron cargar las subidas.",
+      "files_one": "{{count}} archivo",
+      "files_other": "{{count}} archivos",
+      "summary": "{{processed}}/{{total}} procesados, {{time}}",
+      "openAria_one": "Abrir lote de {{count}} archivo",
+      "openAria_other": "Abrir lote de {{count}} archivos",
+      "delete": "Eliminar lote",
+      "confirmDelete": {
+        "title": "Eliminar lote",
+        "message": "Esto elimina el lote y los archivos que sigan esperando una coincidencia. Las canciones importadas permanecen en tu biblioteca.",
+        "confirm": "Eliminar"
+      }
+    },
+    "batchStatus": {
+      "queued": "En cola",
+      "processing": "Procesando",
+      "completed": "Completado",
+      "partial": "Parcial",
+      "failed": "Fallido"
+    },
+    "fileStatus": {
+      "received": "Recibido",
+      "identified": "Identificado",
+      "importing": "Importando",
+      "imported": "Importado",
+      "pending_match": "Necesita coincidencia",
+      "discarded": "Descartado",
+      "failed": "Fallido"
+    },
+    "detail": {
+      "back": "Volver a las subidas",
+      "loadError": "No se pudo cargar este lote.",
+      "title": "{{processed}}/{{total}} archivos procesados",
+      "imported_one": "{{count}} importado",
+      "imported_other": "{{count}} importados",
+      "pending_one": "{{count}} necesita coincidencia",
+      "pending_other": "{{count}} necesitan coincidencia",
+      "failed_one": "{{count}} fallido",
+      "failed_other": "{{count}} fallidos",
+      "discarded_one": "{{count}} descartado",
+      "discarded_other": "{{count}} descartados"
+    },
+    "match": {
+      "findAria": "Buscar una coincidencia para {{name}}",
+      "discardAria": "Descartar {{name}}",
+      "searchPlaceholder": "Buscar en el catálogo...",
+      "searchError": "La búsqueda falló. Inténtalo de nuevo.",
+      "noResults": "Sin resultados.",
+      "pick": "Usar coincidencia",
+      "close": "Cerrar"
+    }
   }
 }

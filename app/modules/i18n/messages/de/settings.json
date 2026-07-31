@@ -392,11 +392,13 @@
     "role": {
       "owner": "Eigentümer",
       "admin": "Administrator",
-      "user": "Benutzer"
+      "user": "Benutzer",
+      "trusted": "Vertraut"
     },
     "roleOptions": {
       "user": "Benutzer",
-      "admin": "Administrator"
+      "admin": "Administrator",
+      "trusted": "Vertraut"
     },
     "actions": {
       "edit": "{{username}} bearbeiten",
@@ -409,7 +411,8 @@
       "delete": "Ausgewählte löschen",
       "clear": "Leeren",
       "deleteTitle": "Benutzer löschen",
-      "deleteMessage": "Dadurch werden die ausgewählten Konten entfernt und ihr Anfragenverlauf dem Eigentümer neu zugewiesen. Heruntergeladene Dateien in Plex sind nicht betroffen."
+      "deleteMessage": "Dadurch werden die ausgewählten Konten entfernt und ihr Anfragenverlauf dem Eigentümer neu zugewiesen. Heruntergeladene Dateien in Plex sind nicht betroffen.",
+      "makeTrusted": "Vertraut machen"
     },
     "delete": {
       "title": "Benutzer löschen",
@@ -457,6 +460,17 @@
       "roleLabel": "Rolle für importierte Benutzer",
       "roleAriaLabel": "Rolle für importierte Benutzer",
       "submit": "Ausgewählte importieren"
+    },
+    "roleDescriptions": {
+      "trusted": "Anfragen vertrauter Mitglieder überspringen die Freigabewarteschlange."
+    },
+    "approval": {
+      "cardTitle": "Anfragen-Freigabe",
+      "cardDescription": "Lege fest, ob Anfragen von Mitgliedern vor dem Start von einem Administrator freigegeben werden müssen.",
+      "requireForMembers": {
+        "label": "Freigabe für Mitglieder erforderlich",
+        "description": "Neue Anfragen von Mitgliedern warten auf einen Administrator. Vertraute Mitglieder und Administratoren überspringen die Warteschlange."
+      }
     }
   },
   "profile": {

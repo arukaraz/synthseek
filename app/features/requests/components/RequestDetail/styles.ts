@@ -194,3 +194,9 @@ export type PriorityChipProps = VariantProps<typeof priorityChip>;
 export const watchHint = cva("text-fg/45 inline-flex min-w-0 items-center gap-1 text-[11px]");
 
 export type WatchHintProps = VariantProps<typeof watchHint>;
+
+export const rejectReasonInput = cva(
+  "border-fg/10 bg-fg/5 text-fg placeholder:text-fg/35 focus:border-primary-500/50 w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none"
+);
+
+export type RejectReasonInputProps = VariantProps<typeof rejectReasonInput>;

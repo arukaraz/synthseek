@@ -23,6 +23,19 @@ export { useLibraryCounts } from "./queries/library/useLibraryCounts";
 
 export { usePlexSyncAllProgress } from "./subscriptions/usePlexSyncAllProgress";
 
+export { useDropImportBatches } from "./queries/import/useDropImportBatches";
+export { useDropImportBatch } from "./queries/import/useDropImportBatch";
+export { useMatchDropImportFile } from "./mutations/import/useMatchDropImportFile";
+export { useDiscardDropImportFile } from "./mutations/import/useDiscardDropImportFile";
+export { useDeleteDropImportBatch } from "./mutations/import/useDeleteDropImportBatch";
+export { useDropImportUpload } from "./mutations/import/useDropImportUpload";
+export type {
+  DropImportRejectedEntry,
+  DropImportRejectedReason,
+  DropImportUploadErrorCode,
+  DropImportUploadResult,
+} from "./mutations/import/useDropImportUpload";
+
 export { useRequest } from "./mutations/requests/useRequest";
 export { useBatchRequest } from "./mutations/requests/useBatchRequest";
 export { usePlaylistRequest } from "./mutations/requests/usePlaylistRequest";
@@ -34,6 +47,8 @@ export { useRetryPlexPlaylist } from "./mutations/requests/useRetryPlexPlaylist"
 export { useSyncAllPlaylistsToPlex } from "./mutations/requests/useSyncAllPlaylistsToPlex";
 export { useRetryTrack } from "./mutations/requests/useRetryTrack";
 export { useRetryTracks } from "./mutations/requests/useRetryTracks";
+export { useApproveTracks } from "./mutations/requests/useApproveTracks";
+export { useRejectTracks } from "./mutations/requests/useRejectTracks";
 export { useRetryAllFailed } from "./mutations/requests/useRetryAllFailed";
 export { useCancelAlbum } from "./mutations/requests/useCancelAlbum";
 export { useCancelPlaylist } from "./mutations/requests/useCancelPlaylist";

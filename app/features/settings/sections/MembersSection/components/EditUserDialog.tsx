@@ -95,6 +95,9 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
           </SettingsField>
 
           {member.isOwner ? <Notice variant="info" title={t("members.edit.ownerRoleNote")} /> : null}
+          {!member.isOwner && role === "trusted" ? (
+            <Notice variant="info" title={t("members.roleDescriptions.trusted")} />
+          ) : null}
 
           <SettingsField label={t("members.edit.passwordLabel")}>
             <SettingsSecretInput

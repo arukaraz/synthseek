@@ -23,7 +23,8 @@
     "import": {
       "trigger": "Import library",
       "sourcesLabel": "Sources",
-      "fromFile": "From file"
+      "fromFile": "From file",
+      "importFiles": "Import files"
     },
     "menu": {
       "trigger": "More actions",
@@ -156,5 +157,24 @@
     "retryCount_other": "{{count}} watch retries so far",
     "stop": "Stop watching",
     "resume": "Resume watching"
+  },
+  "approval": {
+    "approvePending_one": "Approve pending track",
+    "approvePending_other": "Approve {{count}} pending tracks",
+    "rejectPending_one": "Reject pending track",
+    "rejectPending_other": "Reject {{count}} pending tracks",
+    "approveTrack": "Approve",
+    "rejectTrack": "Reject",
+    "rejectDialog": {
+      "title_one": "Reject pending track",
+      "title_other": "Reject {{count}} pending tracks",
+      "description_one": "The track will be cancelled. You can add an optional reason for the requester.",
+      "description_other": "The tracks will be cancelled. You can add an optional reason for the requester.",
+      "reasonLabel": "Reason (optional)",
+      "reasonPlaceholder": "Why is this being rejected?",
+      "cancel": "Keep waiting",
+      "confirm_one": "Reject track",
+      "confirm_other": "Reject {{count}} tracks"
+    }
   }
 }

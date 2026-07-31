@@ -4,6 +4,10 @@
       "label": "En cola",
       "description": "Esperando en la cola"
     },
+    "pending_approval": {
+      "label": "Esperando aprobación",
+      "description": "Un administrador debe aprobar esta solicitud"
+    },
     "searching": {
       "label": "Buscando",
       "description": "Buscando fuentes"

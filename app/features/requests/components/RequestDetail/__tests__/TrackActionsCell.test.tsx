@@ -232,3 +232,74 @@ describe("RequestDetail TrackActionsCell", () => {
     expect(screen.queryByRole("menuitem", { name: "Resume watching" })).not.toBeInTheDocument();
   });
 });
+
+describe("RequestDetail TrackActionsCell approval", () => {
+  it("offers Approve and Reject to an admin on a pending_approval track", async () => {
+    const user = userEvent.setup();
+    const onApprove = vi.fn();
+    const onReject = vi.fn();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.pending_approval })}
+        canAct
+        canApprove
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+        onApprove={onApprove}
+        onReject={onReject}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+
+    await user.click(screen.getByRole("menuitem", { name: "Approve" }));
+    expect(onApprove).toHaveBeenCalledTimes(1);
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Reject" }));
+    expect(onReject).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows only the waiting placeholder to a non-admin owner on a pending_approval track", () => {
+    const { container } = render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.pending_approval })}
+        canAct
+        canApprove={false}
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+        onApprove={noop}
+        onReject={noop}
+      />
+    );
+
+    expect(screen.queryByRole("button", { name: "Track actions" })).not.toBeInTheDocument();
+    expect(container).toHaveTextContent("-");
+  });
+
+  it("does not offer Approve on a track that is not pending approval", async () => {
+    const user = userEvent.setup();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.queued })}
+        canAct
+        canApprove
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+        onApprove={noop}
+        onReject={noop}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+
+    expect(screen.queryByRole("menuitem", { name: "Approve" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Reject" })).not.toBeInTheDocument();
+  });
+});

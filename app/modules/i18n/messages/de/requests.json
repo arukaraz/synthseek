@@ -23,7 +23,8 @@
     "import": {
       "trigger": "Bibliothek importieren",
       "sourcesLabel": "Quellen",
-      "fromFile": "Aus Datei"
+      "fromFile": "Aus Datei",
+      "importFiles": "Dateien importieren"
     },
     "menu": {
       "trigger": "Weitere Aktionen",
@@ -156,5 +157,24 @@
     "retryCount_other": "Bisher {{count}} Beobachtungs-Versuche",
     "stop": "Beobachtung beenden",
     "resume": "Beobachtung fortsetzen"
+  },
+  "approval": {
+    "approvePending_one": "Wartenden Titel freigeben",
+    "approvePending_other": "{{count}} wartende Titel freigeben",
+    "rejectPending_one": "Wartenden Titel ablehnen",
+    "rejectPending_other": "{{count}} wartende Titel ablehnen",
+    "approveTrack": "Freigeben",
+    "rejectTrack": "Ablehnen",
+    "rejectDialog": {
+      "title_one": "Wartenden Titel ablehnen",
+      "title_other": "{{count}} wartende Titel ablehnen",
+      "description_one": "Der Titel wird storniert. Du kannst optional einen Grund für den Anfragenden angeben.",
+      "description_other": "Die Titel werden storniert. Du kannst optional einen Grund für den Anfragenden angeben.",
+      "reasonLabel": "Grund (optional)",
+      "reasonPlaceholder": "Warum wird dies abgelehnt?",
+      "cancel": "Warten lassen",
+      "confirm_one": "Titel ablehnen",
+      "confirm_other": "{{count}} Titel ablehnen"
+    }
   }
 }

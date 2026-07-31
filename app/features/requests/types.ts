@@ -36,7 +36,7 @@ export interface SortConfig {
 
 export const STATUS_FILTER_MAP = {
   all: null,
-  active: ACTIVE_STATUSES,
+  active: [RequestStatus.enum.pending_approval, ...ACTIVE_STATUSES],
   done: [RequestStatus.enum.complete, RequestStatus.enum.delegated],
   failed: [...UNRESOLVED_STATUSES, RequestStatus.enum.partially_complete],
 } as const;

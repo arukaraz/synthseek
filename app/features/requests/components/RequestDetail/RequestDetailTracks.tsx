@@ -5,12 +5,20 @@ import { type TrackRequest } from "@api/__generated__/types";
 import { confirm } from "@utils/confirm";
 import { formatRelativeTime } from "@utils/formatters";
 import { isOwnerOrAdminFE } from "@utils/authorization";
-import { useCancelTrack, usePrioritizeTrack, useRetryTrack, useSetWatch } from "@hooks/api";
+import {
+  useApproveTracks,
+  useCancelTrack,
+  usePrioritizeTrack,
+  useRejectTracks,
+  useRetryTrack,
+  useSetWatch,
+} from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { compareByStatus } from "../../helpers";
 import { PriorityCell } from "./PriorityCell";
+import { RejectApprovalDialog } from "./RejectApprovalDialog";
 import { TrackActionsCell } from "./TrackActionsCell";
 import { TrackStatusCell } from "./TrackStatusCell";
 import { TrackTitleCell } from "./TrackTitleCell";
@@ -18,11 +26,14 @@ import type { RequestDetailTracksProps } from "./types";
 
 export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
   const { t } = useTranslation("requests");
-  const { currentUser } = useAuthContext();
+  const { currentUser, isAdmin } = useAuthContext();
   const retryTrack = useRetryTrack();
   const cancelTrack = useCancelTrack();
   const prioritizeTrack = usePrioritizeTrack();
   const setWatch = useSetWatch();
+  const approveTracks = useApproveTracks();
+  const rejectTracks = useRejectTracks();
+  const [rejectTrackId, setRejectTrackId] = useState<string | null>(null);
   const canAct = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
 
   const handleCancel = useCallback(
@@ -81,16 +92,19 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
           <TrackActionsCell
             track={track}
             canAct={canAct}
+            canApprove={isAdmin}
             onRetry={() => retryTrack.mutate({ trackId: track.id })}
             onCancel={() => handleCancel(track)}
             onPrioritize={() => prioritizeTrack.mutate({ trackId: track.id })}
             onSetWatch={(enabled) => setWatch.mutate({ trackId: track.id, enabled })}
+            onApprove={() => approveTracks.mutate({ trackIds: [track.id] })}
+            onReject={() => setRejectTrackId(track.id)}
           />
         ),
         className: "w-20 text-right",
       },
     ],
-    [canAct, retryTrack, prioritizeTrack, setWatch, handleCancel, t]
+    [canAct, isAdmin, retryTrack, prioritizeTrack, setWatch, approveTracks, handleCancel, t]
   );
 
   const sortedTracks = useMemo(
@@ -99,17 +113,29 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
   );
 
   return (
-    <DataTable
-      key={request.id}
-      data={sortedTracks}
-      columns={columns}
-      getRowId={(track) => track.id}
-      containerClassName="mx-3 mb-3 sm:mx-4 sm:mb-4"
-      minWidth="480px"
-      fixedLayout
-      rowAttrs={(track) => ({ "data-status": track.status })}
-      staggerDelay={0.01}
-      emptyMessage={t("tracks.empty")}
-    />
+    <>
+      <DataTable
+        key={request.id}
+        data={sortedTracks}
+        columns={columns}
+        getRowId={(track) => track.id}
+        containerClassName="mx-3 mb-3 sm:mx-4 sm:mb-4"
+        minWidth="480px"
+        fixedLayout
+        rowAttrs={(track) => ({ "data-status": track.status })}
+        staggerDelay={0.01}
+        emptyMessage={t("tracks.empty")}
+      />
+      <RejectApprovalDialog
+        open={rejectTrackId !== null}
+        onOpenChange={(open) => {
+          if (!open) setRejectTrackId(null);
+        }}
+        count={1}
+        onConfirm={(reason) => {
+          if (rejectTrackId) rejectTracks.mutate({ trackIds: [rejectTrackId], reason });
+        }}
+      />
+    </>
   );
 }

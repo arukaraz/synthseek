@@ -14,6 +14,7 @@ import { useBulkDeleteUsers } from "@hooks/api/mutations/users/useBulkDeleteUser
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot, emptyPanel } from "../../styles";
+import { ApprovalCard } from "./components/ApprovalCard";
 import { BulkEditBar } from "./components/BulkEditBar";
 import { CreateLocalUserDialog } from "./components/CreateLocalUserDialog";
 import { EditUserDialog } from "./components/EditUserDialog";
@@ -156,6 +157,8 @@ export function MembersSection() {
           />
         )}
       </SettingsCard>
+
+      <ApprovalCard />
 
       <CreateLocalUserDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ImportPlexUsersDialog open={importOpen} onOpenChange={setImportOpen} />

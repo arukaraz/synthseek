@@ -392,11 +392,13 @@
     "role": {
       "owner": "Propriétaire",
       "admin": "Administrateur",
-      "user": "Utilisateur"
+      "user": "Utilisateur",
+      "trusted": "De confiance"
     },
     "roleOptions": {
       "user": "Utilisateur",
-      "admin": "Administrateur"
+      "admin": "Administrateur",
+      "trusted": "De confiance"
     },
     "actions": {
       "edit": "Modifier {{username}}",
@@ -409,7 +411,8 @@
       "delete": "Supprimer la sélection",
       "clear": "Effacer",
       "deleteTitle": "Supprimer des utilisateurs",
-      "deleteMessage": "Cela supprime les comptes sélectionnés et réattribue leur historique de demandes au propriétaire. Les fichiers téléchargés dans Plex ne sont pas affectés."
+      "deleteMessage": "Cela supprime les comptes sélectionnés et réattribue leur historique de demandes au propriétaire. Les fichiers téléchargés dans Plex ne sont pas affectés.",
+      "makeTrusted": "Rendre de confiance"
     },
     "delete": {
       "title": "Supprimer l'utilisateur",
@@ -457,6 +460,17 @@
       "roleLabel": "Rôle pour les utilisateurs importés",
       "roleAriaLabel": "Rôle pour les utilisateurs importés",
       "submit": "Importer la sélection"
+    },
+    "roleDescriptions": {
+      "trusted": "Les demandes des membres de confiance passent sans file d'approbation."
+    },
+    "approval": {
+      "cardTitle": "Approbation des demandes",
+      "cardDescription": "Contrôlez si les demandes des membres doivent être approuvées par un administrateur avant de démarrer.",
+      "requireForMembers": {
+        "label": "Exiger l'approbation pour les membres",
+        "description": "Les nouvelles demandes des membres attendent un administrateur. Les membres de confiance et les administrateurs passent directement."
+      }
     }
   },
   "profile": {

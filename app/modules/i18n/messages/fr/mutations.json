@@ -46,7 +46,9 @@
     "enrichmentSaved": "Réglages d'enrichissement mis à jour",
     "spotifySaved": "Réglages de l'application Spotify mis à jour",
     "wantedSaved": "Réglages du balayage de suivi enregistrés",
-    "wantedFailed": "Échec de l'enregistrement des réglages du balayage de suivi"
+    "wantedFailed": "Échec de l'enregistrement des réglages du balayage de suivi",
+    "usersSaved": "Paramètres des membres enregistrés",
+    "usersFailed": "Impossible d'enregistrer les paramètres des membres"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",
@@ -199,7 +201,17 @@
     },
     "watchResumed": "Suivi repris",
     "watchStopped": "Suivi arrêté",
-    "setWatchFailed": "Échec de la mise à jour du suivi"
+    "setWatchFailed": "Échec de la mise à jour du suivi",
+    "approveFailed": "Impossible d'approuver les titres",
+    "rejectFailed": "Impossible de rejeter les titres",
+    "tracksApproved_one": "{{count}} titre approuvé",
+    "tracksApproved_other": "{{count}} titres approuvés",
+    "tracksRejected_one": "{{count}} titre rejeté",
+    "tracksRejected_other": "{{count}} titres rejetés",
+    "approveAllSkipped": "Rien à approuver, ces titres ne sont plus en attente",
+    "rejectAllSkipped": "Rien à rejeter, ces titres ne sont plus en attente",
+    "awaitingApprovalTitle": "Demande envoyée pour approbation",
+    "awaitingApprovalDescription": "{{itemName}} démarrera dès qu'un administrateur l'aura approuvée."
   },
   "playlists": {
     "created": "Playlist créée",
@@ -214,5 +226,24 @@
     "tracksRemovedFailed": "Échec du retrait des pistes de la playlist",
     "syncUpdated": "Réglage de synchronisation mis à jour",
     "syncUpdatedFailed": "Échec de la mise à jour du réglage de synchronisation"
+  },
+  "dropImport": {
+    "fileMatched": "Fichier associé et mis en file pour l'import",
+    "matchFailed": "Impossible d'associer le fichier",
+    "fileDiscarded": "Fichier écarté",
+    "discardFailed": "Impossible d'écarter le fichier",
+    "batchDeleted": "Lot supprimé",
+    "deleteFailed": "Impossible de supprimer le lot",
+    "uploadComplete_one": "Téléversement terminé, {{count}} fichier reçu",
+    "uploadComplete_other": "Téléversement terminé, {{count}} fichiers reçus",
+    "uploadError": {
+      "unsupportedMediaType": "Le téléversement doit être envoyé sous forme de fichiers",
+      "tooManyFiles": "Trop de fichiers dans un même lot",
+      "batchTooLarge": "Le lot dépasse la taille maximale",
+      "malformedUpload": "Le téléversement n'a pas pu être lu",
+      "unexpectedField": "Le téléversement contenait des données inattendues",
+      "noAcceptedFiles": "Aucun fichier audio pris en charge n'a été trouvé",
+      "uploadFailed": "Le téléversement a échoué. Réessayez."
+    }
   }
 }

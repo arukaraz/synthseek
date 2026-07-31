@@ -30,6 +30,8 @@ vi.mock("@hooks/api", () => ({
   useCancelTrack: () => ({ mutate: cancelTrack }),
   usePrioritizeTrack: () => ({ mutate: prioritizeTrack }),
   useSetWatch: () => ({ mutate: setWatch }),
+  useApproveTracks: () => ({ mutate: vi.fn(), isPending: false }),
+  useRejectTracks: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
 describe("RequestDetailTracks", () => {

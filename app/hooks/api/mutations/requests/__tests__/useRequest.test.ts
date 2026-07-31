@@ -22,6 +22,7 @@ const spies = vi.hoisted(() => {
     captured,
     invalidate: vi.fn(),
     notifyReclaimOutcome: vi.fn(),
+    notifyPendingApproval: vi.fn(),
     errorToastDetailed: vi.fn(),
   };
 });
@@ -48,7 +49,10 @@ vi.mock("@utils/trpc", () => ({
 }));
 
 vi.mock("@modules/errors", () => ({ errorToastDetailed: spies.errorToastDetailed }));
-vi.mock("@utils/request-helpers", () => ({ notifyReclaimOutcome: spies.notifyReclaimOutcome }));
+vi.mock("@utils/request-helpers", () => ({
+  notifyReclaimOutcome: spies.notifyReclaimOutcome,
+  notifyPendingApproval: spies.notifyPendingApproval,
+}));
 
 function trackVars() {
   return { track: { artist: "Daft Punk", title: "One More Time" } };
@@ -87,6 +91,25 @@ describe("useRequest dock lifecycle", () => {
 
     if (context) expect(readStatus(context.dockJobId)).toBe("complete");
     expect(spies.notifyReclaimOutcome).toHaveBeenCalledTimes(1);
+    expect(spies.notifyPendingApproval).not.toHaveBeenCalled();
+  });
+
+  it("toasts awaiting approval instead of started when pendingApproval is true", () => {
+    renderHook(() => useRequest());
+
+    const context = spies.captured.options?.onMutate?.(trackVars());
+    spies.captured.options?.onSuccess?.(
+      {
+        outcome: "created",
+        pendingApproval: true,
+        data: { artist: "Daft Punk", track: "One More Time" },
+      },
+      trackVars(),
+      context
+    );
+
+    expect(spies.notifyPendingApproval).toHaveBeenCalledWith("Daft Punk - One More Time");
+    expect(spies.notifyReclaimOutcome).not.toHaveBeenCalled();
   });
 
   it("finalizes the seeded job to failed on hook-level error", () => {

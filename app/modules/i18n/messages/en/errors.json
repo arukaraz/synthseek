@@ -238,5 +238,29 @@
   "SPOTIFY_CONNECTED": {
     "title": "Spotify connected",
     "description": "Open Import from providers to start importing your library."
+  },
+  "DROP_IMPORT_BATCH_NOT_FOUND": {
+    "title": "Upload batch not found",
+    "description": "The batch no longer exists. Refresh and try again."
+  },
+  "DROP_IMPORT_FILE_NOT_FOUND": {
+    "title": "File not found",
+    "description": "The file no longer exists in this batch."
+  },
+  "DROP_IMPORT_FILE_NOT_MATCHABLE": {
+    "title": "File cannot be matched",
+    "description": "Only files waiting for a match can be assigned a track."
+  },
+  "DROP_IMPORT_FILE_IN_FLIGHT": {
+    "title": "File is importing",
+    "description": "Wait for the import to finish, then retry."
+  },
+  "DROP_IMPORT_BATCH_BUSY": {
+    "title": "Batch is busy",
+    "description": "A file in this batch is still importing. Try again shortly."
+  },
+  "RECYCLE_BIN_BUSY": {
+    "title": "Recycle bin is busy",
+    "description": "A quality upgrade replacement is in flight. Try again in a moment."
   }
 }

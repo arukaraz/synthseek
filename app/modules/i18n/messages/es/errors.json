@@ -238,5 +238,29 @@
   "SPOTIFY_CONNECTED": {
     "title": "Spotify conectado",
     "description": "Abre Importar desde proveedores para empezar a importar tu biblioteca."
+  },
+  "DROP_IMPORT_BATCH_NOT_FOUND": {
+    "title": "Lote de subida no encontrado",
+    "description": "El lote ya no existe. Actualiza e inténtalo de nuevo."
+  },
+  "DROP_IMPORT_FILE_NOT_FOUND": {
+    "title": "Archivo no encontrado",
+    "description": "El archivo ya no existe en este lote."
+  },
+  "DROP_IMPORT_FILE_NOT_MATCHABLE": {
+    "title": "El archivo no se puede emparejar",
+    "description": "Solo los archivos en espera de coincidencia pueden asignarse a una canción."
+  },
+  "DROP_IMPORT_FILE_IN_FLIGHT": {
+    "title": "El archivo se está importando",
+    "description": "Espera a que termine la importación y vuelve a intentarlo."
+  },
+  "DROP_IMPORT_BATCH_BUSY": {
+    "title": "El lote está ocupado",
+    "description": "Un archivo de este lote todavía se está importando. Inténtalo de nuevo en un momento."
+  },
+  "RECYCLE_BIN_BUSY": {
+    "title": "La papelera está ocupada",
+    "description": "Hay un reemplazo por mejora de calidad en curso. Inténtalo de nuevo en un momento."
   }
 }

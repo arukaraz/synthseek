@@ -46,7 +46,9 @@
     "enrichmentSaved": "Anreicherungseinstellungen aktualisiert",
     "spotifySaved": "Spotify-App-Einstellungen aktualisiert",
     "wantedSaved": "Wanted-Durchlauf-Einstellungen gespeichert",
-    "wantedFailed": "Wanted-Durchlauf-Einstellungen konnten nicht gespeichert werden"
+    "wantedFailed": "Wanted-Durchlauf-Einstellungen konnten nicht gespeichert werden",
+    "usersSaved": "Mitgliedereinstellungen gespeichert",
+    "usersFailed": "Mitgliedereinstellungen konnten nicht gespeichert werden"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",
@@ -199,7 +201,17 @@
     },
     "watchResumed": "Beobachtung fortgesetzt",
     "watchStopped": "Beobachtung beendet",
-    "setWatchFailed": "Beobachtung konnte nicht aktualisiert werden"
+    "setWatchFailed": "Beobachtung konnte nicht aktualisiert werden",
+    "approveFailed": "Titel konnten nicht freigegeben werden",
+    "rejectFailed": "Titel konnten nicht abgelehnt werden",
+    "tracksApproved_one": "{{count}} Titel freigegeben",
+    "tracksApproved_other": "{{count}} Titel freigegeben",
+    "tracksRejected_one": "{{count}} Titel abgelehnt",
+    "tracksRejected_other": "{{count}} Titel abgelehnt",
+    "approveAllSkipped": "Nichts freizugeben, diese Titel warten nicht mehr",
+    "rejectAllSkipped": "Nichts abzulehnen, diese Titel warten nicht mehr",
+    "awaitingApprovalTitle": "Anfrage zur Freigabe gesendet",
+    "awaitingApprovalDescription": "{{itemName}} startet, sobald ein Administrator sie freigibt."
   },
   "playlists": {
     "created": "Playlist erstellt",
@@ -214,5 +226,24 @@
     "tracksRemovedFailed": "Titel konnten nicht aus der Playlist entfernt werden",
     "syncUpdated": "Synchronisierungseinstellung aktualisiert",
     "syncUpdatedFailed": "Synchronisierungseinstellung konnte nicht aktualisiert werden"
+  },
+  "dropImport": {
+    "fileMatched": "Datei zugeordnet und zum Import eingereiht",
+    "matchFailed": "Datei konnte nicht zugeordnet werden",
+    "fileDiscarded": "Datei verworfen",
+    "discardFailed": "Datei konnte nicht verworfen werden",
+    "batchDeleted": "Stapel gelöscht",
+    "deleteFailed": "Stapel konnte nicht gelöscht werden",
+    "uploadComplete_one": "Upload abgeschlossen, {{count}} Datei empfangen",
+    "uploadComplete_other": "Upload abgeschlossen, {{count}} Dateien empfangen",
+    "uploadError": {
+      "unsupportedMediaType": "Der Upload muss als Dateien gesendet werden",
+      "tooManyFiles": "Zu viele Dateien in einem Stapel",
+      "batchTooLarge": "Der Stapel überschreitet das Größenlimit",
+      "malformedUpload": "Der Upload konnte nicht gelesen werden",
+      "unexpectedField": "Der Upload enthielt unerwartete Daten",
+      "noAcceptedFiles": "Keine unterstützten Audiodateien gefunden",
+      "uploadFailed": "Upload fehlgeschlagen. Versuche es erneut."
+    }
   }
 }

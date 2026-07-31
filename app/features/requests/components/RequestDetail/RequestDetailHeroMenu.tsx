@@ -3,6 +3,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import {
+  Check,
   ChevronsUp,
   Download,
   Globe,
@@ -14,6 +15,7 @@ import {
   Square,
   Trash2,
   Upload,
+  X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -24,6 +26,7 @@ export function RequestDetailHeroMenu({
   actions,
   typeLabel,
   onExportFull,
+  onRejectPending,
   triggerClassName,
 }: RequestDetailHeroMenuProps) {
   const { t } = useTranslation("requests");
@@ -34,9 +37,13 @@ export function RequestDetailHeroMenu({
     pause,
     resume,
     prioritize,
+    approve,
     syncPlex,
     syncSourceNow,
     exportJspf,
+    canApprove,
+    isApproving,
+    pendingApprovalCount,
     canRetry,
     canRemove,
     canCancel,
@@ -59,6 +66,18 @@ export function RequestDetailHeroMenu({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
+        {canApprove && (
+          <DropdownMenuItem onClick={approve} disabled={isApproving} className={heroSuccessMenuItem()}>
+            <Check className="size-3.5" />
+            {t("approval.approvePending", { count: pendingApprovalCount })}
+          </DropdownMenuItem>
+        )}
+        {canApprove && (
+          <DropdownMenuItem onClick={onRejectPending} disabled={isApproving} className={heroWarningMenuItem()}>
+            <X className="size-3.5" />
+            {t("approval.rejectPending", { count: pendingApprovalCount })}
+          </DropdownMenuItem>
+        )}
         {canRetry && (
           <DropdownMenuItem onClick={retry} disabled={isRetrying} className={heroRetryMenuItem()}>
             <RefreshCw className="size-3.5" />

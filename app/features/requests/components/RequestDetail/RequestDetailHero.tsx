@@ -12,6 +12,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { useRequestActions } from "../../hooks/useRequestActions";
 import { formatDelegatedTo } from "./helpers";
 import { JspfExportDialog } from "./JspfExportDialog";
+import { RejectApprovalDialog } from "./RejectApprovalDialog";
 import { RequestDetailHeroMenu } from "./RequestDetailHeroMenu";
 import {
   heroAvatar,
@@ -42,6 +43,9 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
   const actions = useRequestActions(request);
   const {
     retry,
+    reject,
+    canApprove,
+    pendingApprovalCount,
     canRetry,
     canRemove,
     canCancel,
@@ -56,7 +60,9 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
   } = actions;
 
   const [exportFullOpen, setExportFullOpen] = useState(false);
+  const [rejectPendingOpen, setRejectPendingOpen] = useState(false);
   const showKebab =
+    canApprove ||
     canRetry ||
     canCancel ||
     canPause ||
@@ -137,6 +143,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                       actions={actions}
                       typeLabel={typeLabel}
                       onExportFull={() => setExportFullOpen(true)}
+                      onRejectPending={() => setRejectPendingOpen(true)}
                       triggerClassName={heroMoreButtonMobile()}
                     />
                   )}
@@ -205,6 +212,7 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                     actions={actions}
                     typeLabel={typeLabel}
                     onExportFull={() => setExportFullOpen(true)}
+                    onRejectPending={() => setRejectPendingOpen(true)}
                     triggerClassName={heroMoreButtonDesktop()}
                   />
                 )}
@@ -215,6 +223,12 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
       </div>
 
       <JspfExportDialog request={request} open={exportFullOpen} onOpenChange={setExportFullOpen} />
+      <RejectApprovalDialog
+        open={rejectPendingOpen}
+        onOpenChange={setRejectPendingOpen}
+        count={pendingApprovalCount}
+        onConfirm={reject}
+      />
     </div>
   );
 }

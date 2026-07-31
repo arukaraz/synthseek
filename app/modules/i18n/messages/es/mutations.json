@@ -46,7 +46,9 @@
     "enrichmentSaved": "Configuración de enriquecimiento actualizada",
     "spotifySaved": "Configuración de la app de Spotify actualizada",
     "wantedSaved": "Configuración del barrido de seguimiento guardada",
-    "wantedFailed": "No se pudo guardar la configuración del barrido de seguimiento"
+    "wantedFailed": "No se pudo guardar la configuración del barrido de seguimiento",
+    "usersSaved": "Configuración de miembros guardada",
+    "usersFailed": "No se pudo guardar la configuración de miembros"
   },
   "plexConnect": {
     "timedOut": "El inicio de sesión de Plex agotó el tiempo de espera",
@@ -199,7 +201,17 @@
     },
     "watchResumed": "Seguimiento reanudado",
     "watchStopped": "Seguimiento detenido",
-    "setWatchFailed": "No se pudo actualizar el seguimiento"
+    "setWatchFailed": "No se pudo actualizar el seguimiento",
+    "approveFailed": "No se pudieron aprobar las canciones",
+    "rejectFailed": "No se pudieron rechazar las canciones",
+    "tracksApproved_one": "{{count}} canción aprobada",
+    "tracksApproved_other": "{{count}} canciones aprobadas",
+    "tracksRejected_one": "{{count}} canción rechazada",
+    "tracksRejected_other": "{{count}} canciones rechazadas",
+    "approveAllSkipped": "Nada que aprobar, esas canciones ya no están en espera",
+    "rejectAllSkipped": "Nada que rechazar, esas canciones ya no están en espera",
+    "awaitingApprovalTitle": "Solicitud enviada para aprobación",
+    "awaitingApprovalDescription": "{{itemName}} comenzará cuando un administrador la apruebe."
   },
   "playlists": {
     "created": "Playlist creada",
@@ -214,5 +226,24 @@
     "tracksRemovedFailed": "No se pudieron quitar las canciones de la playlist",
     "syncUpdated": "Sincronización actualizada",
     "syncUpdatedFailed": "No se pudo actualizar la sincronización"
+  },
+  "dropImport": {
+    "fileMatched": "Archivo emparejado y en cola para importar",
+    "matchFailed": "No se pudo emparejar el archivo",
+    "fileDiscarded": "Archivo descartado",
+    "discardFailed": "No se pudo descartar el archivo",
+    "batchDeleted": "Lote eliminado",
+    "deleteFailed": "No se pudo eliminar el lote",
+    "uploadComplete_one": "Subida completada, {{count}} archivo recibido",
+    "uploadComplete_other": "Subida completada, {{count}} archivos recibidos",
+    "uploadError": {
+      "unsupportedMediaType": "La subida debe enviarse como archivos",
+      "tooManyFiles": "Demasiados archivos en un solo lote",
+      "batchTooLarge": "El lote supera el límite de tamaño",
+      "malformedUpload": "No se pudo leer la subida",
+      "unexpectedField": "La subida contenía datos inesperados",
+      "noAcceptedFiles": "No se encontraron archivos de audio compatibles",
+      "uploadFailed": "La subida falló. Inténtalo de nuevo."
+    }
   }
 }

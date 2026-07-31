@@ -392,11 +392,13 @@
     "role": {
       "owner": "Propietario",
       "admin": "Administrador",
-      "user": "Usuario"
+      "user": "Usuario",
+      "trusted": "De confianza"
     },
     "roleOptions": {
       "user": "Usuario",
-      "admin": "Administrador"
+      "admin": "Administrador",
+      "trusted": "De confianza"
     },
     "actions": {
       "edit": "Editar a {{username}}",
@@ -409,7 +411,8 @@
       "delete": "Eliminar seleccionados",
       "clear": "Limpiar",
       "deleteTitle": "Eliminar usuarios",
-      "deleteMessage": "Esto elimina las cuentas seleccionadas y reasigna su historial de solicitudes al propietario. Los archivos descargados en Plex no se ven afectados."
+      "deleteMessage": "Esto elimina las cuentas seleccionadas y reasigna su historial de solicitudes al propietario. Los archivos descargados en Plex no se ven afectados.",
+      "makeTrusted": "Hacer de confianza"
     },
     "delete": {
       "title": "Eliminar usuario",
@@ -457,6 +460,17 @@
       "roleLabel": "Rol para los usuarios importados",
       "roleAriaLabel": "Rol para los usuarios importados",
       "submit": "Importar seleccionados"
+    },
+    "roleDescriptions": {
+      "trusted": "Las solicitudes de los miembros de confianza omiten la cola de aprobación."
+    },
+    "approval": {
+      "cardTitle": "Aprobación de solicitudes",
+      "cardDescription": "Controla si las solicitudes de los miembros necesitan la aprobación de un administrador antes de comenzar.",
+      "requireForMembers": {
+        "label": "Requerir aprobación para miembros",
+        "description": "Las nuevas solicitudes de los miembros esperan a un administrador. Los miembros de confianza y los administradores omiten la cola."
+      }
     }
   },
   "profile": {

@@ -23,7 +23,8 @@
     "import": {
       "trigger": "Importar biblioteca",
       "sourcesLabel": "Fuentes",
-      "fromFile": "Desde archivo"
+      "fromFile": "Desde archivo",
+      "importFiles": "Importar archivos"
     },
     "menu": {
       "trigger": "Más acciones",
@@ -156,5 +157,24 @@
     "retryCount_other": "{{count}} reintentos de seguimiento hasta ahora",
     "stop": "Dejar de seguir",
     "resume": "Reanudar seguimiento"
+  },
+  "approval": {
+    "approvePending_one": "Aprobar canción pendiente",
+    "approvePending_other": "Aprobar {{count}} canciones pendientes",
+    "rejectPending_one": "Rechazar canción pendiente",
+    "rejectPending_other": "Rechazar {{count}} canciones pendientes",
+    "approveTrack": "Aprobar",
+    "rejectTrack": "Rechazar",
+    "rejectDialog": {
+      "title_one": "Rechazar canción pendiente",
+      "title_other": "Rechazar {{count}} canciones pendientes",
+      "description_one": "La canción se cancelará. Puedes añadir un motivo opcional para quien la solicitó.",
+      "description_other": "Las canciones se cancelarán. Puedes añadir un motivo opcional para quien las solicitó.",
+      "reasonLabel": "Motivo (opcional)",
+      "reasonPlaceholder": "¿Por qué se rechaza?",
+      "cancel": "Seguir en espera",
+      "confirm_one": "Rechazar canción",
+      "confirm_other": "Rechazar {{count}} canciones"
+    }
   }
 }

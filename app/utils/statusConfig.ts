@@ -8,6 +8,7 @@ import {
   FileQuestion,
   FileX,
   HardDrive,
+  Hourglass,
   Pause,
   PlayCircle,
   Search,
@@ -36,6 +37,13 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
     bgGradient: "from-orange-500/10 to-orange-600/5",
     borderColor: "border-orange-500/20",
     glowColor: "bg-orange-500",
+  },
+  [RequestStatus.enum.pending_approval]: {
+    icon: Hourglass,
+    color: "text-teal-400",
+    bgGradient: "from-teal-500/10 to-teal-600/5",
+    borderColor: "border-teal-500/20",
+    glowColor: "bg-teal-500",
   },
   [RequestStatus.enum.searching]: {
     icon: Search,

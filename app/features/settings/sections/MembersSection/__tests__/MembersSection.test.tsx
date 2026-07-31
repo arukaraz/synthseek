@@ -39,6 +39,20 @@ vi.mock("@hooks/api/mutations/users/useDeleteUser", () => ({ useDeleteUser: () =
 vi.mock("@hooks/api/mutations/users/useBulkUpdateRole", () => ({ useBulkUpdateRole: () => bulkRole }));
 vi.mock("@hooks/api/mutations/users/useBulkDeleteUsers", () => ({ useBulkDeleteUsers: () => bulkDelete }));
 
+const settingsQuery = vi.hoisted(() => ({
+  data: { users: { requireApprovalForMembers: false } },
+  isLoading: false,
+  isError: false,
+}));
+const updateUsers = vi.hoisted(() => ({ mutateAsync: vi.fn(), isPending: false }));
+
+vi.mock("@hooks/api/queries/useSettings", () => ({
+  useSettings: () => settingsQuery,
+}));
+vi.mock("@hooks/api/mutations/settings/useUpdateUsers", () => ({
+  useUpdateUsers: () => updateUsers,
+}));
+
 vi.mock("../components/CreateLocalUserDialog", () => ({
   CreateLocalUserDialog: ({ open }: { open: boolean }) => (open ? <div data-testid="create-dialog" /> : null),
 }));

@@ -238,5 +238,29 @@
   "SPOTIFY_CONNECTED": {
     "title": "Spotify verbunden",
     "description": "Öffne Von Anbietern importieren, um deine Bibliothek zu importieren."
+  },
+  "DROP_IMPORT_BATCH_NOT_FOUND": {
+    "title": "Upload-Stapel nicht gefunden",
+    "description": "Der Stapel existiert nicht mehr. Aktualisiere und versuche es erneut."
+  },
+  "DROP_IMPORT_FILE_NOT_FOUND": {
+    "title": "Datei nicht gefunden",
+    "description": "Die Datei existiert in diesem Stapel nicht mehr."
+  },
+  "DROP_IMPORT_FILE_NOT_MATCHABLE": {
+    "title": "Datei kann nicht zugeordnet werden",
+    "description": "Nur Dateien, die auf eine Zuordnung warten, können einem Titel zugewiesen werden."
+  },
+  "DROP_IMPORT_FILE_IN_FLIGHT": {
+    "title": "Datei wird importiert",
+    "description": "Warte, bis der Import abgeschlossen ist, und versuche es erneut."
+  },
+  "DROP_IMPORT_BATCH_BUSY": {
+    "title": "Stapel ist beschäftigt",
+    "description": "Eine Datei in diesem Stapel wird noch importiert. Versuche es gleich noch einmal."
+  },
+  "RECYCLE_BIN_BUSY": {
+    "title": "Papierkorb ist beschäftigt",
+    "description": "Ein Qualitäts-Upgrade-Austausch läuft gerade. Versuche es gleich noch einmal."
   }
 }

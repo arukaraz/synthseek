@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck, Trash2, User as UserIcon } from "lucide-react";
+import { BadgeCheck, ShieldCheck, Trash2, User as UserIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -18,6 +18,10 @@ export function BulkEditBar({ count, isPending, onSetRole, onDelete, onClear }: 
       <Button size="sm" variant="outline" onClick={() => onSetRole(Role.enum.member)} disabled={isPending}>
         <UserIcon />
         {t("members.bulk.makeUser")}
+      </Button>
+      <Button size="sm" variant="outline" onClick={() => onSetRole(Role.enum.trusted)} disabled={isPending}>
+        <BadgeCheck />
+        {t("members.bulk.makeTrusted")}
       </Button>
       <Button size="sm" variant="outline" onClick={() => onSetRole(Role.enum.admin)} disabled={isPending}>
         <ShieldCheck />

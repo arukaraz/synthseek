@@ -401,5 +401,82 @@
     },
     "keepInSync": "Keep in sync",
     "syncedReadonly": "Turn off sync to edit"
+  },
+  "dropImport": {
+    "modal": {
+      "title": "Import files",
+      "description": "Upload your own audio files (or a .zip). Synthseek identifies each file and adds it to your library."
+    },
+    "upload": {
+      "aria": "Upload audio files",
+      "dropTitle": "Drag & drop audio files here",
+      "dropHint": "or click to browse. Supported: MP3, FLAC, M4A, OGG, WAV, OPUS, AAC, WMA, ZIP",
+      "uploading": "Uploading... {{percent}}%"
+    },
+    "rejected": {
+      "title_one": "{{count}} file was not accepted",
+      "title_other": "{{count}} files were not accepted",
+      "reason": {
+        "unsupportedType": "Unsupported file type",
+        "zipSlip": "Archive rejected for unsafe paths",
+        "nestedArchive": "Nested archives are not supported",
+        "batchCap": "Batch file limit reached",
+        "extractionError": "Could not extract the archive"
+      }
+    },
+    "batches": {
+      "title": "Recent uploads",
+      "empty": "No uploads yet.",
+      "loadError": "Failed to load uploads.",
+      "files_one": "{{count}} file",
+      "files_other": "{{count}} files",
+      "summary": "{{processed}}/{{total}} processed, {{time}}",
+      "openAria_one": "Open batch of {{count}} file",
+      "openAria_other": "Open batch of {{count}} files",
+      "delete": "Delete batch",
+      "confirmDelete": {
+        "title": "Delete batch",
+        "message": "This removes the batch and any files still waiting for a match. Imported tracks stay in your library.",
+        "confirm": "Delete"
+      }
+    },
+    "batchStatus": {
+      "queued": "Queued",
+      "processing": "Processing",
+      "completed": "Completed",
+      "partial": "Partial",
+      "failed": "Failed"
+    },
+    "fileStatus": {
+      "received": "Received",
+      "identified": "Identified",
+      "importing": "Importing",
+      "imported": "Imported",
+      "pending_match": "Needs match",
+      "discarded": "Discarded",
+      "failed": "Failed"
+    },
+    "detail": {
+      "back": "Back to uploads",
+      "loadError": "Failed to load this batch.",
+      "title": "{{processed}}/{{total}} files processed",
+      "imported_one": "{{count}} imported",
+      "imported_other": "{{count}} imported",
+      "pending_one": "{{count}} needs a match",
+      "pending_other": "{{count}} need a match",
+      "failed_one": "{{count}} failed",
+      "failed_other": "{{count}} failed",
+      "discarded_one": "{{count}} discarded",
+      "discarded_other": "{{count}} discarded"
+    },
+    "match": {
+      "findAria": "Find a match for {{name}}",
+      "discardAria": "Discard {{name}}",
+      "searchPlaceholder": "Search the catalog...",
+      "searchError": "Search failed. Try again.",
+      "noResults": "No results.",
+      "pick": "Use match",
+      "close": "Close"
+    }
   }
 }

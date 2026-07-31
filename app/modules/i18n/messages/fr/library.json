@@ -401,5 +401,82 @@
     },
     "keepInSync": "Maintenir synchronisé",
     "syncedReadonly": "Désactivez la synchro pour modifier"
+  },
+  "dropImport": {
+    "modal": {
+      "title": "Importer des fichiers",
+      "description": "Téléversez vos propres fichiers audio (ou un .zip). Synthseek identifie chaque fichier et l'ajoute à votre bibliothèque."
+    },
+    "upload": {
+      "aria": "Téléverser des fichiers audio",
+      "dropTitle": "Glissez-déposez vos fichiers audio ici",
+      "dropHint": "ou cliquez pour parcourir. Formats pris en charge : MP3, FLAC, M4A, OGG, WAV, OPUS, AAC, WMA, ZIP",
+      "uploading": "Téléversement... {{percent}}%"
+    },
+    "rejected": {
+      "title_one": "{{count}} fichier n'a pas été accepté",
+      "title_other": "{{count}} fichiers n'ont pas été acceptés",
+      "reason": {
+        "unsupportedType": "Type de fichier non pris en charge",
+        "zipSlip": "Archive rejetée pour chemins dangereux",
+        "nestedArchive": "Les archives imbriquées ne sont pas prises en charge",
+        "batchCap": "Limite de fichiers par lot atteinte",
+        "extractionError": "Impossible d'extraire l'archive"
+      }
+    },
+    "batches": {
+      "title": "Téléversements récents",
+      "empty": "Aucun téléversement pour l'instant.",
+      "loadError": "Impossible de charger les téléversements.",
+      "files_one": "{{count}} fichier",
+      "files_other": "{{count}} fichiers",
+      "summary": "{{processed}}/{{total}} traités, {{time}}",
+      "openAria_one": "Ouvrir le lot de {{count}} fichier",
+      "openAria_other": "Ouvrir le lot de {{count}} fichiers",
+      "delete": "Supprimer le lot",
+      "confirmDelete": {
+        "title": "Supprimer le lot",
+        "message": "Cela supprime le lot et les fichiers en attente de correspondance. Les titres importés restent dans votre bibliothèque.",
+        "confirm": "Supprimer"
+      }
+    },
+    "batchStatus": {
+      "queued": "En file d'attente",
+      "processing": "En cours",
+      "completed": "Terminé",
+      "partial": "Partiel",
+      "failed": "Échoué"
+    },
+    "fileStatus": {
+      "received": "Reçu",
+      "identified": "Identifié",
+      "importing": "Importation",
+      "imported": "Importé",
+      "pending_match": "Correspondance requise",
+      "discarded": "Écarté",
+      "failed": "Échoué"
+    },
+    "detail": {
+      "back": "Retour aux téléversements",
+      "loadError": "Impossible de charger ce lot.",
+      "title": "{{processed}}/{{total}} fichiers traités",
+      "imported_one": "{{count}} importé",
+      "imported_other": "{{count}} importés",
+      "pending_one": "{{count}} en attente de correspondance",
+      "pending_other": "{{count}} en attente de correspondance",
+      "failed_one": "{{count}} échoué",
+      "failed_other": "{{count}} échoués",
+      "discarded_one": "{{count}} écarté",
+      "discarded_other": "{{count}} écartés"
+    },
+    "match": {
+      "findAria": "Trouver une correspondance pour {{name}}",
+      "discardAria": "Écarter {{name}}",
+      "searchPlaceholder": "Rechercher dans le catalogue...",
+      "searchError": "La recherche a échoué. Réessayez.",
+      "noResults": "Aucun résultat.",
+      "pick": "Utiliser",
+      "close": "Fermer"
+    }
   }
 }

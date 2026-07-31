@@ -31,12 +31,16 @@ describe("roleLabel", () => {
   it("returns the user label for a member", () => {
     expect(roleLabel(createMockUser({ role: Role.enum.member }))).toBe(enSettings.members.role.user);
   });
+
+  it("returns the trusted label for a trusted member", () => {
+    expect(roleLabel(createMockUser({ role: Role.enum.trusted }))).toBe(enSettings.members.role.trusted);
+  });
 });
 
 describe("buildRoleOptions", () => {
-  it("returns the member and admin role values in order", () => {
+  it("returns the member, trusted, and admin role values in order", () => {
     const options = buildRoleOptions(tIdentity);
-    expect(options.map((option) => option.value)).toEqual([Role.enum.member, Role.enum.admin]);
+    expect(options.map((option) => option.value)).toEqual([Role.enum.member, Role.enum.trusted, Role.enum.admin]);
   });
 });
 
@@ -51,6 +55,10 @@ describe("roleTone", () => {
 
   it("returns member tone for a member", () => {
     expect(roleTone(createMockUser({ role: Role.enum.member }))).toBe("member");
+  });
+
+  it("returns trusted tone for a trusted member", () => {
+    expect(roleTone(createMockUser({ role: Role.enum.trusted }))).toBe("trusted");
   });
 });
 

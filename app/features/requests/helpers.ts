@@ -9,6 +9,7 @@ import {
 import { DOWNLOAD_ACTIVE_STATUSES, STATUS_FILTER_MAP, StatusFilter, type FlatTrackRow } from "./types";
 
 export const STATUS_ORDER: readonly RequestStatus[] = [
+  RequestStatus.enum.pending_approval,
   ...[...ACTIVE_STATUSES].reverse(),
   ...RESOLVED_STATUSES,
   ...UNRESOLVED_STATUSES,

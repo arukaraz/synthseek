@@ -21,6 +21,12 @@ export function isSingleTrackRequest(tracks: TrackRequest[]): boolean {
   return track.request_type === ContentType.enum.track;
 }
 
+export function notifyPendingApproval(itemName: string) {
+  toast.info(i18n.t("mutations:requests.awaitingApprovalTitle"), {
+    description: i18n.t("mutations:requests.awaitingApprovalDescription", { itemName }),
+  });
+}
+
 export function notifyReclaimOutcome(args: { outcome: ReclaimOutcome; kind: ReclaimKind; itemName: string }) {
   const { outcome, kind, itemName } = args;
   const noun = i18n.t(`mutations:${RECLAIM_KIND_KEYS[kind]}`);

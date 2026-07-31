@@ -4,6 +4,10 @@
       "label": "Queued",
       "description": "Waiting in queue"
     },
+    "pending_approval": {
+      "label": "Waiting for Approval",
+      "description": "An admin needs to approve this request"
+    },
     "searching": {
       "label": "Searching",
       "description": "Finding sources"

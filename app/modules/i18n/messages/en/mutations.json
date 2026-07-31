@@ -46,7 +46,9 @@
     "enrichmentSaved": "Enrichment settings updated",
     "spotifySaved": "Spotify app settings updated",
     "wantedSaved": "Wanted sweep settings saved",
-    "wantedFailed": "Failed to save wanted sweep settings"
+    "wantedFailed": "Failed to save wanted sweep settings",
+    "usersSaved": "Member settings saved",
+    "usersFailed": "Failed to save member settings"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",
@@ -199,7 +201,17 @@
     },
     "watchResumed": "Watch resumed",
     "watchStopped": "Watch stopped",
-    "setWatchFailed": "Failed to update watch"
+    "setWatchFailed": "Failed to update watch",
+    "approveFailed": "Could not approve the tracks",
+    "rejectFailed": "Could not reject the tracks",
+    "tracksApproved_one": "{{count}} track approved",
+    "tracksApproved_other": "{{count}} tracks approved",
+    "tracksRejected_one": "{{count}} track rejected",
+    "tracksRejected_other": "{{count}} tracks rejected",
+    "approveAllSkipped": "Nothing to approve, those tracks are no longer waiting",
+    "rejectAllSkipped": "Nothing to reject, those tracks are no longer waiting",
+    "awaitingApprovalTitle": "Request sent for approval",
+    "awaitingApprovalDescription": "{{itemName}} will start once an admin approves it."
   },
   "playlists": {
     "created": "Playlist created",
@@ -214,5 +226,24 @@
     "tracksRemovedFailed": "Failed to remove tracks from playlist",
     "syncUpdated": "Sync setting updated",
     "syncUpdatedFailed": "Failed to update sync setting"
+  },
+  "dropImport": {
+    "fileMatched": "File matched and queued for import",
+    "matchFailed": "Could not match the file",
+    "fileDiscarded": "File discarded",
+    "discardFailed": "Could not discard the file",
+    "batchDeleted": "Batch deleted",
+    "deleteFailed": "Could not delete the batch",
+    "uploadComplete_one": "Upload complete, {{count}} file received",
+    "uploadComplete_other": "Upload complete, {{count}} files received",
+    "uploadError": {
+      "unsupportedMediaType": "The upload must be sent as files",
+      "tooManyFiles": "Too many files in one batch",
+      "batchTooLarge": "The batch exceeds the size limit",
+      "malformedUpload": "The upload could not be read",
+      "unexpectedField": "The upload contained unexpected data",
+      "noAcceptedFiles": "No supported audio files were found",
+      "uploadFailed": "Upload failed. Try again."
+    }
   }
 }

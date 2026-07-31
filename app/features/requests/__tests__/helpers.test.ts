@@ -129,3 +129,18 @@ describe("compareByStatus", () => {
     expect(compareByStatus(RequestStatus.enum.complete, RequestStatus.enum.complete)).toBe(0);
   });
 });
+
+describe("pending_approval placement", () => {
+  it("is kept by the active filter and excluded from done and failed", () => {
+    const pending = makeRequestWithTracks({ id: "pending", status: RequestStatus.enum.pending_approval });
+
+    expect(filterRequestsByStatus([pending], "active").map((item) => item.id)).toEqual(["pending"]);
+    expect(filterRequestsByStatus([pending], "done")).toEqual([]);
+    expect(filterRequestsByStatus([pending], "failed")).toEqual([]);
+  });
+
+  it("sorts ahead of every other status", () => {
+    expect(compareByStatus(RequestStatus.enum.pending_approval, RequestStatus.enum.downloading)).toBeLessThan(0);
+    expect(compareByStatus(RequestStatus.enum.pending_approval, RequestStatus.enum.failed)).toBeLessThan(0);
+  });
+});

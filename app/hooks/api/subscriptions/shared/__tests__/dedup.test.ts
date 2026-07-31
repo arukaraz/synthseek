@@ -57,3 +57,55 @@ describe("isDuplicate PlaylistUpdate", () => {
     expect(isDuplicate(playlistUpdate({ populatePhase: "failed" }), cache)).toBe(false);
   });
 });
+
+function dropImportUpdate(
+  overrides: Partial<Extract<SubscriptionEvent, { eventType: SubscriptionEventType.DropImportUpdate }>>
+): SubscriptionEvent {
+  return {
+    eventType: SubscriptionEventType.DropImportUpdate,
+    batchId: "batch-1",
+    status: "processing",
+    totalFiles: 3,
+    importedFiles: 1,
+    pendingFiles: 0,
+    failedFiles: 0,
+    discardedFiles: 0,
+    ...overrides,
+  };
+}
+
+describe("isDuplicate DropImportUpdate", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("dedupes two identical batch ticks within the window", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(dropImportUpdate({}), cache)).toBe(false);
+    vi.advanceTimersByTime(10);
+    expect(isDuplicate(dropImportUpdate({}), cache)).toBe(true);
+  });
+
+  it("keeps events for different files distinct", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(dropImportUpdate({ file: { id: "f1", name: "a.mp3", status: "imported" } }), cache)).toBe(false);
+    vi.advanceTimersByTime(10);
+    expect(isDuplicate(dropImportUpdate({ file: { id: "f2", name: "b.mp3", status: "imported" } }), cache)).toBe(false);
+  });
+
+  it("keeps a file status change distinct from the previous status", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(dropImportUpdate({ file: { id: "f1", name: "a.mp3", status: "importing" } }), cache)).toBe(
+      false
+    );
+    vi.advanceTimersByTime(10);
+    expect(isDuplicate(dropImportUpdate({ file: { id: "f1", name: "a.mp3", status: "imported" } }), cache)).toBe(false);
+  });
+});

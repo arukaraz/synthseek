@@ -4,6 +4,10 @@
       "label": "In Warteschlange",
       "description": "Wartet in der Warteschlange"
     },
+    "pending_approval": {
+      "label": "Wartet auf Freigabe",
+      "description": "Ein Administrator muss diese Anfrage freigeben"
+    },
     "searching": {
       "label": "Suche läuft",
       "description": "Quellen werden gesucht"

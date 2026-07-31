@@ -23,7 +23,8 @@
     "import": {
       "trigger": "Importer la bibliothèque",
       "sourcesLabel": "Sources",
-      "fromFile": "Depuis un fichier"
+      "fromFile": "Depuis un fichier",
+      "importFiles": "Importer des fichiers"
     },
     "menu": {
       "trigger": "Plus d'actions",
@@ -156,5 +157,24 @@
     "retryCount_other": "{{count}} nouveaux essais de suivi pour l'instant",
     "stop": "Arrêter le suivi",
     "resume": "Reprendre le suivi"
+  },
+  "approval": {
+    "approvePending_one": "Approuver le titre en attente",
+    "approvePending_other": "Approuver {{count}} titres en attente",
+    "rejectPending_one": "Rejeter le titre en attente",
+    "rejectPending_other": "Rejeter {{count}} titres en attente",
+    "approveTrack": "Approuver",
+    "rejectTrack": "Rejeter",
+    "rejectDialog": {
+      "title_one": "Rejeter le titre en attente",
+      "title_other": "Rejeter {{count}} titres en attente",
+      "description_one": "Le titre sera annulé. Vous pouvez ajouter un motif facultatif pour le demandeur.",
+      "description_other": "Les titres seront annulés. Vous pouvez ajouter un motif facultatif pour le demandeur.",
+      "reasonLabel": "Motif (facultatif)",
+      "reasonPlaceholder": "Pourquoi ce rejet ?",
+      "cancel": "Laisser en attente",
+      "confirm_one": "Rejeter le titre",
+      "confirm_other": "Rejeter {{count}} titres"
+    }
   }
 }

@@ -4,6 +4,10 @@
       "label": "En file d'attente",
       "description": "En attente dans la file"
     },
+    "pending_approval": {
+      "label": "En attente d'approbation",
+      "description": "Un administrateur doit approuver cette demande"
+    },
     "searching": {
       "label": "Recherche",
       "description": "Recherche de sources"

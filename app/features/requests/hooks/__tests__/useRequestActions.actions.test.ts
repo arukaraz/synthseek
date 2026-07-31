@@ -41,6 +41,8 @@ vi.mock("@hooks/api", () => ({
   useResumePlaylist: () => ({ mutate: mutations.resumePlaylist, isPending: false }),
   usePrioritizeAlbum: () => ({ mutate: mutations.prioritizeAlbum, isPending: false }),
   usePrioritizePlaylist: () => ({ mutate: mutations.prioritizePlaylist, isPending: false }),
+  useApproveTracks: () => ({ mutate: vi.fn(), isPending: false }),
+  useRejectTracks: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
 vi.mock("@hooks/api/mutations/spotify/useSpotifyImport", () => ({

@@ -238,5 +238,29 @@
   "SPOTIFY_CONNECTED": {
     "title": "Spotify connecté",
     "description": "Ouvrez Importer depuis les fournisseurs pour commencer à importer votre bibliothèque."
+  },
+  "DROP_IMPORT_BATCH_NOT_FOUND": {
+    "title": "Lot de téléversement introuvable",
+    "description": "Le lot n'existe plus. Actualisez et réessayez."
+  },
+  "DROP_IMPORT_FILE_NOT_FOUND": {
+    "title": "Fichier introuvable",
+    "description": "Le fichier n'existe plus dans ce lot."
+  },
+  "DROP_IMPORT_FILE_NOT_MATCHABLE": {
+    "title": "Fichier impossible à associer",
+    "description": "Seuls les fichiers en attente de correspondance peuvent être associés à un titre."
+  },
+  "DROP_IMPORT_FILE_IN_FLIGHT": {
+    "title": "Fichier en cours d'import",
+    "description": "Attendez la fin de l'import, puis réessayez."
+  },
+  "DROP_IMPORT_BATCH_BUSY": {
+    "title": "Lot occupé",
+    "description": "Un fichier de ce lot est encore en cours d'import. Réessayez dans un instant."
+  },
+  "RECYCLE_BIN_BUSY": {
+    "title": "La corbeille est occupée",
+    "description": "Un remplacement pour montée en qualité est en cours. Réessayez dans un instant."
   }
 }

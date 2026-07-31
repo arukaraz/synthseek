@@ -1,6 +1,6 @@
 import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
-import { notifyReclaimOutcome } from "@utils/request-helpers";
+import { notifyPendingApproval, notifyReclaimOutcome } from "@utils/request-helpers";
 
 import { seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
@@ -19,8 +19,12 @@ export function useBatchRequest() {
       if (context) settleRequestDockJob(context.dockJobId, "failed", true);
       errorToastDetailed(err, "requests.albumDownloadFailed");
     },
-    onSuccess: ({ outcome, data }, _vars, context) => {
+    onSuccess: ({ outcome, data, pendingApproval }, _vars, context) => {
       if (context) settleRequestDockJob(context.dockJobId, "complete", true);
+      if (pendingApproval) {
+        notifyPendingApproval(data.name);
+        return;
+      }
       notifyReclaimOutcome({ outcome, kind: "album", itemName: data.name });
     },
     onSettled: () => {

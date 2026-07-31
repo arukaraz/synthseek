@@ -28,6 +28,8 @@ vi.mock("@hooks/api", () => ({
   useResumePlaylist: () => idleMutation,
   usePrioritizeAlbum: () => idleMutation,
   usePrioritizePlaylist: () => idleMutation,
+  useApproveTracks: () => idleMutation,
+  useRejectTracks: () => idleMutation,
 }));
 
 vi.mock("@hooks/api/mutations/spotify/useSpotifyImport", () => ({

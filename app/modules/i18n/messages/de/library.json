@@ -401,5 +401,82 @@
     },
     "keepInSync": "Synchron halten",
     "syncedReadonly": "Synchronisierung ausschalten, um zu bearbeiten"
+  },
+  "dropImport": {
+    "modal": {
+      "title": "Dateien importieren",
+      "description": "Lade eigene Audiodateien (oder eine .zip) hoch. Synthseek identifiziert jede Datei und fügt sie deiner Bibliothek hinzu."
+    },
+    "upload": {
+      "aria": "Audiodateien hochladen",
+      "dropTitle": "Audiodateien hierher ziehen",
+      "dropHint": "oder klicken zum Auswählen. Unterstützt: MP3, FLAC, M4A, OGG, WAV, OPUS, AAC, WMA, ZIP",
+      "uploading": "Wird hochgeladen... {{percent}}%"
+    },
+    "rejected": {
+      "title_one": "{{count}} Datei wurde nicht akzeptiert",
+      "title_other": "{{count}} Dateien wurden nicht akzeptiert",
+      "reason": {
+        "unsupportedType": "Nicht unterstützter Dateityp",
+        "zipSlip": "Archiv wegen unsicherer Pfade abgelehnt",
+        "nestedArchive": "Verschachtelte Archive werden nicht unterstützt",
+        "batchCap": "Dateilimit pro Stapel erreicht",
+        "extractionError": "Archiv konnte nicht entpackt werden"
+      }
+    },
+    "batches": {
+      "title": "Letzte Uploads",
+      "empty": "Noch keine Uploads.",
+      "loadError": "Uploads konnten nicht geladen werden.",
+      "files_one": "{{count}} Datei",
+      "files_other": "{{count}} Dateien",
+      "summary": "{{processed}}/{{total}} verarbeitet, {{time}}",
+      "openAria_one": "Stapel mit {{count}} Datei öffnen",
+      "openAria_other": "Stapel mit {{count}} Dateien öffnen",
+      "delete": "Stapel löschen",
+      "confirmDelete": {
+        "title": "Stapel löschen",
+        "message": "Dies entfernt den Stapel und alle Dateien, die noch auf eine Zuordnung warten. Importierte Titel bleiben in deiner Bibliothek.",
+        "confirm": "Löschen"
+      }
+    },
+    "batchStatus": {
+      "queued": "In Warteschlange",
+      "processing": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "partial": "Teilweise",
+      "failed": "Fehlgeschlagen"
+    },
+    "fileStatus": {
+      "received": "Empfangen",
+      "identified": "Identifiziert",
+      "importing": "Wird importiert",
+      "imported": "Importiert",
+      "pending_match": "Zuordnung nötig",
+      "discarded": "Verworfen",
+      "failed": "Fehlgeschlagen"
+    },
+    "detail": {
+      "back": "Zurück zu den Uploads",
+      "loadError": "Dieser Stapel konnte nicht geladen werden.",
+      "title": "{{processed}}/{{total}} Dateien verarbeitet",
+      "imported_one": "{{count}} importiert",
+      "imported_other": "{{count}} importiert",
+      "pending_one": "{{count}} braucht eine Zuordnung",
+      "pending_other": "{{count}} brauchen eine Zuordnung",
+      "failed_one": "{{count}} fehlgeschlagen",
+      "failed_other": "{{count}} fehlgeschlagen",
+      "discarded_one": "{{count}} verworfen",
+      "discarded_other": "{{count}} verworfen"
+    },
+    "match": {
+      "findAria": "Zuordnung für {{name}} finden",
+      "discardAria": "{{name}} verwerfen",
+      "searchPlaceholder": "Katalog durchsuchen...",
+      "searchError": "Suche fehlgeschlagen. Versuche es erneut.",
+      "noResults": "Keine Ergebnisse.",
+      "pick": "Zuordnung verwenden",
+      "close": "Schließen"
+    }
   }
 }

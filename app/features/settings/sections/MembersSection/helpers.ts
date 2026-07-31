@@ -12,24 +12,30 @@ export function formatJoinedDate(date: Date): string {
 
 export function roleLabel(member: MemberListItem): string {
   if (member.isOwner) return i18n.t("settings:members.role.owner");
-  return member.role === Role.enum.admin ? i18n.t("settings:members.role.admin") : i18n.t("settings:members.role.user");
+  if (member.role === Role.enum.admin) return i18n.t("settings:members.role.admin");
+  if (member.role === Role.enum.trusted) return i18n.t("settings:members.role.trusted");
+  return i18n.t("settings:members.role.user");
 }
 
 export function buildRoleOptions(t: TFunction<"settings">): RoleOption[] {
   return [
     { value: Role.enum.member, label: t("members.roleOptions.user") },
+    { value: Role.enum.trusted, label: t("members.roleOptions.trusted") },
     { value: Role.enum.admin, label: t("members.roleOptions.admin") },
   ];
 }
 
 export function roleTone(member: MemberListItem): RoleTone {
   if (member.isOwner) return "owner";
-  return member.role === Role.enum.admin ? "admin" : "member";
+  if (member.role === Role.enum.admin) return "admin";
+  if (member.role === Role.enum.trusted) return "trusted";
+  return "member";
 }
 
 function roleRank(member: MemberListItem): number {
-  if (member.isOwner) return 2;
-  return member.role === Role.enum.admin ? 1 : 0;
+  if (member.isOwner) return 3;
+  if (member.role === Role.enum.admin) return 2;
+  return member.role === Role.enum.trusted ? 1 : 0;
 }
 
 function compareByField(a: MemberListItem, b: MemberListItem, field: string): number {

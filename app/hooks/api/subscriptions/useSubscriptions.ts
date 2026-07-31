@@ -4,6 +4,7 @@ import { trpc } from "@utils/trpc";
 import { useRef } from "react";
 import {
   handleAlbumUpdate,
+  handleDropImportUpdate,
   handleLibraryImportProgress,
   handlePlaylistPlexCreated,
   handlePlaylistUpdate,
@@ -71,6 +72,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.LibraryImportProgress:
           handleLibraryImportProgress(event, utils);
+          break;
+        case SubscriptionEventType.DropImportUpdate:
+          handleDropImportUpdate(event, utils);
           break;
       }
 

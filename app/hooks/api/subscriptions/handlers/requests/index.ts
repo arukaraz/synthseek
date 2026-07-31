@@ -5,3 +5,4 @@ export { handlePlaylistPlexCreated } from "./playlistPlexCreated";
 export { handlePlexSyncAllProgress } from "./plexSyncAllProgress";
 export { handlePortabilityProgress } from "./portabilityProgress";
 export { handleLibraryImportProgress } from "./libraryImportProgress";
+export { handleDropImportUpdate } from "./dropImportUpdate";

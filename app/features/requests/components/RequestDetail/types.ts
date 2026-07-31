@@ -6,7 +6,15 @@ export interface RequestDetailHeroMenuProps {
   actions: ReturnType<typeof useRequestActions>;
   typeLabel: string;
   onExportFull: () => void;
+  onRejectPending: () => void;
   triggerClassName: string;
+}
+
+export interface RejectApprovalDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  count: number;
+  onConfirm: (reason?: string) => void;
 }
 
 export interface RequestDetailProps {
@@ -17,10 +25,13 @@ export interface RequestDetailProps {
 export interface TrackActionsCellProps {
   track: TrackRequest;
   canAct: boolean;
+  canApprove: boolean;
   onRetry: () => void;
   onCancel: () => void;
   onPrioritize: () => void;
   onSetWatch: (enabled: boolean) => void;
+  onApprove: () => void;
+  onReject: () => void;
 }
 
 export interface TrackWatchHintProps {
