@@ -1,6 +1,6 @@
 import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
-import { notifyPendingApproval, notifyReclaimOutcome } from "@utils/request-helpers";
+import { notifyPendingApproval, notifyReclaimOutcome, notifyUpgradeOutcome } from "@utils/request-helpers";
 
 import { seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
@@ -19,13 +19,18 @@ export function useRequest() {
       if (context) settleRequestDockJob(context.dockJobId, "failed", true);
       errorToastDetailed(err, "requests.downloadFailed");
     },
-    onSuccess: ({ outcome, data, pendingApproval }, _vars, context) => {
+    onSuccess: ({ outcome, data, pendingApproval }, vars, context) => {
       if (context) settleRequestDockJob(context.dockJobId, "complete", true);
+      const itemName = `${data.artist} - ${data.track}`;
       if (pendingApproval) {
-        notifyPendingApproval(`${data.artist} - ${data.track}`);
+        notifyPendingApproval(itemName);
         return;
       }
-      notifyReclaimOutcome({ outcome, kind: "download", itemName: `${data.artist} - ${data.track}` });
+      if (vars.config.upgrade === true) {
+        notifyUpgradeOutcome({ outcome, itemName });
+        return;
+      }
+      notifyReclaimOutcome({ outcome, kind: "download", itemName });
     },
     onSettled: () => {
       void utils.requests.getAll.invalidate();

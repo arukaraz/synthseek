@@ -3,7 +3,7 @@
 import { RequestStatus } from "@api/__generated__/types";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
-import { Check, ChevronsUp, Eye, EyeOff, MoreVertical, RefreshCw, X } from "lucide-react";
+import { Check, ChevronsUp, Eye, EyeOff, MoreVertical, RefreshCw, Sparkles, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { mobileActionsButton } from "../styles";
 import type { TrackActionsCellProps } from "./types";
@@ -18,6 +18,7 @@ export function TrackActionsCell({
   onSetWatch,
   onApprove,
   onReject,
+  onUpgrade,
 }: TrackActionsCellProps) {
   const { t } = useTranslation("requests");
 
@@ -33,8 +34,17 @@ export function TrackActionsCell({
   const isFailed = track.status === RequestStatus.enum.failed;
   const showStopWatch = isFailed && track.watch_enabled;
   const showResumeWatch = isFailed && !track.watch_enabled;
+  const showUpgrade = track.status === RequestStatus.enum.complete;
 
-  if (!showApproval && !showRetry && !showPrioritize && !showCancel && !showStopWatch && !showResumeWatch) {
+  if (
+    !showApproval &&
+    !showRetry &&
+    !showPrioritize &&
+    !showCancel &&
+    !showStopWatch &&
+    !showResumeWatch &&
+    !showUpgrade
+  ) {
     return <span className="text-fg/20 block text-right text-xs">-</span>;
   }
 
@@ -73,6 +83,12 @@ export function TrackActionsCell({
             >
               <ChevronsUp className="size-4" />
               {t("tracks.jumpTheQueue")}
+            </DropdownMenuItem>
+          )}
+          {showUpgrade && (
+            <DropdownMenuItem onClick={onUpgrade}>
+              <Sparkles className="size-4" />
+              {t("tracks.upgrade")}
             </DropdownMenuItem>
           )}
           {showStopWatch && (

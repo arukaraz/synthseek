@@ -32,4 +32,7 @@ export const ENGINE_DEFAULTS = {
     perRunCap: 10,
     maxAttempts: 8,
   },
+  quality: {
+    upgradeEnabled: true,
+  },
 } as const;

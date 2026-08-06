@@ -15,9 +15,13 @@ interface SettingsData {
     import: unknown;
     search: { banAfterFailedAttempts: number };
     wanted: unknown;
+    quality: unknown;
   };
   connections: {
     slskd: { bannedUsers: string[] };
+  };
+  library: {
+    recycleBin: unknown;
   };
 }
 
@@ -33,6 +37,7 @@ vi.mock("../QueueCard", () => ({ QueueCard: () => <div data-testid="queue-card" 
 vi.mock("../ImportCard", () => ({ ImportCard: () => <div data-testid="import-card" /> }));
 vi.mock("../QuarantineCard", () => ({ QuarantineCard: () => <div data-testid="quarantine-card" /> }));
 vi.mock("../WantedCard", () => ({ WantedCard: () => <div data-testid="wanted-card" /> }));
+vi.mock("../QualityCard", () => ({ QualityCard: () => <div data-testid="quality-card" /> }));
 
 import { EngineSection } from "../EngineSection";
 
@@ -53,9 +58,13 @@ const data: SettingsData = {
     import: {},
     search: { banAfterFailedAttempts: 0 },
     wanted: {},
+    quality: {},
   },
   connections: {
     slskd: { bannedUsers: [] },
+  },
+  library: {
+    recycleBin: {},
   },
 };
 
@@ -80,7 +89,7 @@ describe("EngineSection", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the six engine cards when data is present", () => {
+  it("renders the seven engine cards when data is present", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<EngineSection />);
     expect(screen.getByTestId("smart-search-card")).toBeInTheDocument();
@@ -89,5 +98,6 @@ describe("EngineSection", () => {
     expect(screen.getByTestId("import-card")).toBeInTheDocument();
     expect(screen.getByTestId("quarantine-card")).toBeInTheDocument();
     expect(screen.getByTestId("wanted-card")).toBeInTheDocument();
+    expect(screen.getByTestId("quality-card")).toBeInTheDocument();
   });
 });

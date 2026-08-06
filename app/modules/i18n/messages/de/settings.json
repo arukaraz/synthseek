@@ -187,6 +187,45 @@
       "ariaLabel": "Maximale Durchlauf-Versuche"
     }
   },
+  "quality": {
+    "title": "Qualität",
+    "description": "Ersetzt bereits heruntergeladene Titel direkt, wenn du ausdrücklich eine bessere Kopie anforderst.",
+    "upgradeEnabled": {
+      "label": "Qualitäts-Upgrades erlauben",
+      "description": "Eine ausdrückliche erneute Anfrage kann eine vorhandene Datei ersetzen, wenn die neue Kopie eindeutig besser ist."
+    },
+    "recycleBin": {
+      "sectionTitle": "Papierkorb",
+      "retentionDays": {
+        "label": "Aufbewahrungsdauer",
+        "description": "Anzahl der Tage, die ersetzte Dateien vor der Bereinigung im Papierkorb bleiben.",
+        "ariaLabel": "Aufbewahrungstage",
+        "suffix": "Tage"
+      },
+      "status": {
+        "loading": "Papierkorb-Status wird geladen...",
+        "loadError": "Papierkorb-Status konnte nicht geladen werden",
+        "size": {
+          "label": "Gesamtgröße",
+          "description": "Aktuell vom Papierkorb belegter Speicherplatz."
+        },
+        "entries": {
+          "label": "Dateien",
+          "description": "Ersetzte Dateien, die derzeit im Papierkorb aufbewahrt werden."
+        },
+        "oldest": {
+          "label": "Ältester Eintrag",
+          "description": "Datum der ältesten Datei im Papierkorb."
+        }
+      },
+      "empty": {
+        "action": "Papierkorb leeren",
+        "confirmTitle": "Papierkorb leeren?",
+        "confirmMessage": "Alle im Papierkorb aufbewahrten ersetzten Dateien werden endgültig entfernt. Dies kann nicht rückgängig gemacht werden.",
+        "confirm": "Papierkorb leeren"
+      }
+    }
+  },
   "common": {
     "loading": "Wird geladen…",
     "loadFailedWithReason": "Einstellungen konnten nicht geladen werden: {{reason}}",

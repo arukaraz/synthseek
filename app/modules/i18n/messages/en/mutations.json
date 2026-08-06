@@ -48,7 +48,14 @@
     "wantedSaved": "Wanted sweep settings saved",
     "wantedFailed": "Failed to save wanted sweep settings",
     "usersSaved": "Member settings saved",
-    "usersFailed": "Failed to save member settings"
+    "usersFailed": "Failed to save member settings",
+    "qualitySaved": "Quality settings saved",
+    "qualityFailed": "Failed to save quality settings",
+    "recycleBinSaved": "Recycle bin settings saved",
+    "recycleBinSaveFailed": "Failed to save recycle bin settings",
+    "recycleBinEmptied_one": "Recycle bin emptied, {{count}} file removed",
+    "recycleBinEmptied_other": "Recycle bin emptied, {{count}} files removed",
+    "recycleBinEmptyFailed": "Failed to empty recycle bin"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",
@@ -211,7 +218,11 @@
     "approveAllSkipped": "Nothing to approve, those tracks are no longer waiting",
     "rejectAllSkipped": "Nothing to reject, those tracks are no longer waiting",
     "awaitingApprovalTitle": "Request sent for approval",
-    "awaitingApprovalDescription": "{{itemName}} will start once an admin approves it."
+    "awaitingApprovalDescription": "{{itemName}} will start once an admin approves it.",
+    "upgradeStartedTitle": "Searching for a better copy",
+    "upgradeStartedDescription": "{{itemName}} will be replaced if a strictly better copy is found.",
+    "upgradeDisabledTitle": "Quality upgrades are disabled",
+    "upgradeDisabledDescription": "An admin has turned off quality upgrades, so {{itemName}} was left untouched."
   },
   "playlists": {
     "created": "Playlist created",

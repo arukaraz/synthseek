@@ -1,4 +1,4 @@
-import { RequestStatus } from "@api/__generated__/types";
+import { ContentType, RequestStatus } from "@api/__generated__/types";
 import { render, screen, userEvent } from "@test/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -9,6 +9,7 @@ const retryTrack = vi.fn();
 const cancelTrack = vi.fn();
 const prioritizeTrack = vi.fn();
 const setWatch = vi.fn();
+const upgradeRequest = vi.fn();
 const confirmMock = vi.fn();
 
 const authState = { canAct: true };
@@ -32,6 +33,7 @@ vi.mock("@hooks/api", () => ({
   useSetWatch: () => ({ mutate: setWatch }),
   useApproveTracks: () => ({ mutate: vi.fn(), isPending: false }),
   useRejectTracks: () => ({ mutate: vi.fn(), isPending: false }),
+  useRequest: () => ({ mutate: upgradeRequest, isPending: false }),
 }));
 
 describe("RequestDetailTracks", () => {
@@ -144,6 +146,64 @@ describe("RequestDetailTracks", () => {
     await user.click(screen.getByRole("menuitem", { name: "Jump the queue" }));
 
     expect(prioritizeTrack).toHaveBeenCalledWith({ trackId: "t7" });
+  });
+
+  it("dispatches an upgrade request with the track identity and its persisted config plus the upgrade flag", async () => {
+    const user = userEvent.setup();
+    const request = makeRequestWithTracks({
+      contentType: ContentType.enum.album,
+      external_id: "album-ext-1",
+      tracks: [
+        makeRequestsTrack({
+          id: "t8",
+          external_id: "track-ext-8",
+          status: RequestStatus.enum.complete,
+          isrc: "USRC17607839",
+          bitrate: 256,
+          format: "flac",
+          format_matching: "strict",
+          bitrate_matching: "flexible",
+        }),
+      ],
+    });
+
+    render(<RequestDetailTracks request={request} />);
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
+
+    expect(upgradeRequest).toHaveBeenCalledWith({
+      track: {
+        external_id: "track-ext-8",
+        artist: "An Artist",
+        title: "A Song",
+        isrc: "USRC17607839",
+        track_number: 1,
+        disc_number: 1,
+        duration_ms: 180000,
+        explicit: false,
+      },
+      config: {
+        bitrate: { value: 256, matching: "flexible" },
+        format: { value: "flac", matching: "strict" },
+        upgrade: true,
+      },
+      album_external_id: "album-ext-1",
+    });
+  });
+
+  it("uses a synthetic single album id when upgrading a playlist track", async () => {
+    const user = userEvent.setup();
+    const request = makeRequestWithTracks({
+      contentType: ContentType.enum.playlist,
+      external_id: "playlist-ext-1",
+      tracks: [makeRequestsTrack({ id: "t9", external_id: "track-ext-9", status: RequestStatus.enum.complete })],
+    });
+
+    render(<RequestDetailTracks request={request} />);
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
+
+    expect(upgradeRequest).toHaveBeenCalledWith(expect.objectContaining({ album_external_id: "single_track-ext-9" }));
   });
 
   it("hides the actions trigger when the user cannot act", () => {

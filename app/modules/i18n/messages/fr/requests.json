@@ -121,7 +121,8 @@
     "actionsMenu": "Actions de la piste",
     "jumpTheQueue": "Passer devant la file",
     "jumpTheQueueTitle": "Déplacer cette piste en tête de la file",
-    "prioritized": "Priorisée"
+    "prioritized": "Priorisée",
+    "upgrade": "Rechercher une meilleure qualité"
   },
   "export": {
     "dialogTitle": "Exporter (compatibilité maximale)",

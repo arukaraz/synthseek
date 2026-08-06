@@ -187,6 +187,45 @@
       "ariaLabel": "Tentatives maximales de balayage"
     }
   },
+  "quality": {
+    "title": "Qualité",
+    "description": "Remplace les pistes déjà téléchargées lorsque vous demandez explicitement une meilleure copie.",
+    "upgradeEnabled": {
+      "label": "Autoriser les mises à niveau de qualité",
+      "description": "Une nouvelle demande explicite peut remplacer un fichier existant lorsque la nouvelle copie est strictement meilleure."
+    },
+    "recycleBin": {
+      "sectionTitle": "Corbeille",
+      "retentionDays": {
+        "label": "Durée de rétention",
+        "description": "Nombre de jours pendant lesquels les fichiers remplacés restent dans la corbeille avant nettoyage.",
+        "ariaLabel": "Jours de rétention",
+        "suffix": "jours"
+      },
+      "status": {
+        "loading": "Chargement de l'état de la corbeille...",
+        "loadError": "Impossible de charger l'état de la corbeille",
+        "size": {
+          "label": "Taille totale",
+          "description": "Espace disque actuellement occupé par la corbeille."
+        },
+        "entries": {
+          "label": "Fichiers",
+          "description": "Fichiers remplacés actuellement conservés dans la corbeille."
+        },
+        "oldest": {
+          "label": "Entrée la plus ancienne",
+          "description": "Date du fichier recyclé le plus ancien."
+        }
+      },
+      "empty": {
+        "action": "Vider la corbeille",
+        "confirmTitle": "Vider la corbeille ?",
+        "confirmMessage": "Tous les fichiers remplacés conservés dans la corbeille seront définitivement supprimés. Cette action est irréversible.",
+        "confirm": "Vider la corbeille"
+      }
+    }
+  },
   "common": {
     "loading": "Chargement…",
     "loadFailedWithReason": "Échec du chargement des réglages : {{reason}}",

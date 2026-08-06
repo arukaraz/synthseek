@@ -121,7 +121,8 @@
     "actionsMenu": "Titelaktionen",
     "jumpTheQueue": "Vordrängeln",
     "jumpTheQueueTitle": "Diesen Titel an den Anfang der Warteschlange verschieben",
-    "prioritized": "Priorisiert"
+    "prioritized": "Priorisiert",
+    "upgrade": "Bessere Qualität suchen"
   },
   "export": {
     "dialogTitle": "Exportieren (max. Kompatibilität)",

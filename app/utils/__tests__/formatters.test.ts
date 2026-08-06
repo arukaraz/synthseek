@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   formatYear,
   formatRelativeTime,
+  formatBytes,
   formatDuration,
   formatShortDate,
   formatTimestamp,
@@ -191,6 +192,35 @@ describe("formatTrackDuration", () => {
 
   it("formats typical track duration", () => {
     expect(formatTrackDuration(213000)).toBe("3:33");
+  });
+});
+
+describe("formatBytes", () => {
+  it("returns 0 B for zero", () => {
+    expect(formatBytes(0)).toBe("0 B");
+  });
+
+  it("returns 0 B for negative and non-finite input", () => {
+    expect(formatBytes(-10)).toBe("0 B");
+    expect(formatBytes(Number.NaN)).toBe("0 B");
+  });
+
+  it("renders values under a kilobyte as whole bytes", () => {
+    expect(formatBytes(512)).toBe("512 B");
+  });
+
+  it("renders kilobytes with one decimal", () => {
+    expect(formatBytes(1536)).toBe("1.5 KB");
+  });
+
+  it("renders megabytes and gigabytes", () => {
+    expect(formatBytes(5 * 1024 * 1024)).toBe("5.0 MB");
+    expect(formatBytes(2.5 * 1024 * 1024 * 1024)).toBe("2.5 GB");
+  });
+
+  it("caps at terabytes", () => {
+    expect(formatBytes(3 * 1024 ** 4)).toBe("3.0 TB");
+    expect(formatBytes(1024 ** 5)).toBe("1024.0 TB");
   });
 });
 

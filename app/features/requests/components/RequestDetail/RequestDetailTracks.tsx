@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable, type ColumnDef } from "@components/ui/Table";
-import { type TrackRequest } from "@api/__generated__/types";
+import { ContentType, type TrackRequest } from "@api/__generated__/types";
 import { confirm } from "@utils/confirm";
 import { formatRelativeTime } from "@utils/formatters";
 import { isOwnerOrAdminFE } from "@utils/authorization";
@@ -10,6 +10,7 @@ import {
   useCancelTrack,
   usePrioritizeTrack,
   useRejectTracks,
+  useRequest,
   useRetryTrack,
   useSetWatch,
 } from "@hooks/api";
@@ -33,8 +34,35 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
   const setWatch = useSetWatch();
   const approveTracks = useApproveTracks();
   const rejectTracks = useRejectTracks();
+  const upgradeRequest = useRequest();
   const [rejectTrackId, setRejectTrackId] = useState<string | null>(null);
   const canAct = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
+  const isAlbum = request.contentType === ContentType.enum.album;
+  const albumExternalId = request.external_id;
+
+  const handleUpgrade = useCallback(
+    (track: TrackRequest) => {
+      upgradeRequest.mutate({
+        track: {
+          external_id: track.external_id,
+          artist: track.artist,
+          title: track.title,
+          isrc: track.isrc,
+          track_number: track.track_number,
+          disc_number: track.disc_number,
+          duration_ms: track.duration_ms,
+          explicit: track.explicit,
+        },
+        config: {
+          bitrate: { value: track.bitrate, matching: track.bitrate_matching },
+          format: { value: track.format, matching: track.format_matching },
+          upgrade: true,
+        },
+        album_external_id: isAlbum ? albumExternalId : `single_${track.external_id}`,
+      });
+    },
+    [upgradeRequest, isAlbum, albumExternalId]
+  );
 
   const handleCancel = useCallback(
     async (track: TrackRequest) => {
@@ -99,12 +127,13 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
             onSetWatch={(enabled) => setWatch.mutate({ trackId: track.id, enabled })}
             onApprove={() => approveTracks.mutate({ trackIds: [track.id] })}
             onReject={() => setRejectTrackId(track.id)}
+            onUpgrade={() => handleUpgrade(track)}
           />
         ),
         className: "w-20 text-right",
       },
     ],
-    [canAct, isAdmin, retryTrack, prioritizeTrack, setWatch, approveTracks, handleCancel, t]
+    [canAct, isAdmin, retryTrack, prioritizeTrack, setWatch, approveTracks, handleCancel, handleUpgrade, t]
   );
 
   const sortedTracks = useMemo(

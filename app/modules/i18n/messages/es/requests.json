@@ -121,7 +121,8 @@
     "actionsMenu": "Acciones de la canción",
     "jumpTheQueue": "Saltar la cola",
     "jumpTheQueueTitle": "Mover esta canción al frente de la cola",
-    "prioritized": "Priorizado"
+    "prioritized": "Priorizado",
+    "upgrade": "Buscar mejor calidad"
   },
   "export": {
     "dialogTitle": "Exportar (máxima compatibilidad)",

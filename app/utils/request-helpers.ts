@@ -27,6 +27,23 @@ export function notifyPendingApproval(itemName: string) {
   });
 }
 
+export function notifyUpgradeOutcome(args: { outcome: ReclaimOutcome; itemName: string }) {
+  const { outcome, itemName } = args;
+  if (outcome === ReclaimOutcome.enum.requeued) {
+    toast.success(i18n.t("mutations:requests.upgradeStartedTitle"), {
+      description: i18n.t("mutations:requests.upgradeStartedDescription", { itemName }),
+    });
+    return;
+  }
+  if (outcome === ReclaimOutcome.enum.already_complete) {
+    toast.info(i18n.t("mutations:requests.upgradeDisabledTitle"), {
+      description: i18n.t("mutations:requests.upgradeDisabledDescription", { itemName }),
+    });
+    return;
+  }
+  notifyReclaimOutcome({ outcome, kind: "download", itemName });
+}
+
 export function notifyReclaimOutcome(args: { outcome: ReclaimOutcome; kind: ReclaimKind; itemName: string }) {
   const { outcome, kind, itemName } = args;
   const noun = i18n.t(`mutations:${RECLAIM_KIND_KEYS[kind]}`);

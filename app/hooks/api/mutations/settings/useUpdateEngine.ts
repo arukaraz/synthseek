@@ -70,6 +70,17 @@ export function useUpdateEngineWanted() {
   });
 }
 
+export function useUpdateEngineQuality() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateEngineQuality.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      toast.success(i18n.t("mutations:settings.qualitySaved"));
+    },
+    onError: (error) => errorToast(error, "settings.qualityFailed"),
+  });
+}
+
 export function useUpdateEngineSmartSearch() {
   const utils = trpc.useUtils();
   return trpc.settings.updateEngineSmartSearch.useMutation({

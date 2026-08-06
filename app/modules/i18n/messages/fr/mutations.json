@@ -48,7 +48,14 @@
     "wantedSaved": "Réglages du balayage de suivi enregistrés",
     "wantedFailed": "Échec de l'enregistrement des réglages du balayage de suivi",
     "usersSaved": "Paramètres des membres enregistrés",
-    "usersFailed": "Impossible d'enregistrer les paramètres des membres"
+    "usersFailed": "Impossible d'enregistrer les paramètres des membres",
+    "qualitySaved": "Réglages de qualité enregistrés",
+    "qualityFailed": "Échec de l'enregistrement des réglages de qualité",
+    "recycleBinSaved": "Réglages de la corbeille enregistrés",
+    "recycleBinSaveFailed": "Échec de l'enregistrement des réglages de la corbeille",
+    "recycleBinEmptied_one": "Corbeille vidée, {{count}} fichier supprimé",
+    "recycleBinEmptied_other": "Corbeille vidée, {{count}} fichiers supprimés",
+    "recycleBinEmptyFailed": "Impossible de vider la corbeille"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",
@@ -211,7 +218,11 @@
     "approveAllSkipped": "Rien à approuver, ces titres ne sont plus en attente",
     "rejectAllSkipped": "Rien à rejeter, ces titres ne sont plus en attente",
     "awaitingApprovalTitle": "Demande envoyée pour approbation",
-    "awaitingApprovalDescription": "{{itemName}} démarrera dès qu'un administrateur l'aura approuvée."
+    "awaitingApprovalDescription": "{{itemName}} démarrera dès qu'un administrateur l'aura approuvée.",
+    "upgradeStartedTitle": "Recherche d'une meilleure copie",
+    "upgradeStartedDescription": "{{itemName}} sera remplacé si une copie strictement meilleure est trouvée.",
+    "upgradeDisabledTitle": "Les mises à niveau de qualité sont désactivées",
+    "upgradeDisabledDescription": "Un administrateur a désactivé les mises à niveau de qualité, {{itemName}} n'a pas été modifié."
   },
   "playlists": {
     "created": "Playlist créée",

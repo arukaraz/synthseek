@@ -187,6 +187,45 @@
       "ariaLabel": "Intentos máximos de barrido"
     }
   },
+  "quality": {
+    "title": "Calidad",
+    "description": "Mejora pistas ya descargadas reemplazándolas cuando pidas explícitamente una copia mejor.",
+    "upgradeEnabled": {
+      "label": "Permitir mejoras de calidad",
+      "description": "Una nueva petición explícita puede reemplazar un archivo existente cuando la nueva copia es estrictamente mejor."
+    },
+    "recycleBin": {
+      "sectionTitle": "Papelera",
+      "retentionDays": {
+        "label": "Periodo de retención",
+        "description": "Días que los archivos reemplazados permanecen en la papelera antes de la limpieza.",
+        "ariaLabel": "Días de retención",
+        "suffix": "días"
+      },
+      "status": {
+        "loading": "Cargando el estado de la papelera...",
+        "loadError": "No se pudo cargar el estado de la papelera",
+        "size": {
+          "label": "Tamaño total",
+          "description": "Espacio en disco que ocupa actualmente la papelera."
+        },
+        "entries": {
+          "label": "Archivos",
+          "description": "Archivos reemplazados que se conservan actualmente en la papelera."
+        },
+        "oldest": {
+          "label": "Entrada más antigua",
+          "description": "Fecha del archivo reciclado más antiguo."
+        }
+      },
+      "empty": {
+        "action": "Vaciar papelera",
+        "confirmTitle": "¿Vaciar la papelera?",
+        "confirmMessage": "Todos los archivos reemplazados guardados en la papelera se eliminarán permanentemente. Esto no se puede deshacer.",
+        "confirm": "Vaciar papelera"
+      }
+    }
+  },
   "common": {
     "loading": "Cargando…",
     "loadFailedWithReason": "No se pudo cargar la configuración: {{reason}}",

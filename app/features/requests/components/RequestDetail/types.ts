@@ -32,6 +32,7 @@ export interface TrackActionsCellProps {
   onSetWatch: (enabled: boolean) => void;
   onApprove: () => void;
   onReject: () => void;
+  onUpgrade: () => void;
 }
 
 export interface TrackWatchHintProps {

@@ -48,7 +48,14 @@
     "wantedSaved": "Wanted-Durchlauf-Einstellungen gespeichert",
     "wantedFailed": "Wanted-Durchlauf-Einstellungen konnten nicht gespeichert werden",
     "usersSaved": "Mitgliedereinstellungen gespeichert",
-    "usersFailed": "Mitgliedereinstellungen konnten nicht gespeichert werden"
+    "usersFailed": "Mitgliedereinstellungen konnten nicht gespeichert werden",
+    "qualitySaved": "Qualitätseinstellungen gespeichert",
+    "qualityFailed": "Qualitätseinstellungen konnten nicht gespeichert werden",
+    "recycleBinSaved": "Papierkorb-Einstellungen gespeichert",
+    "recycleBinSaveFailed": "Papierkorb-Einstellungen konnten nicht gespeichert werden",
+    "recycleBinEmptied_one": "Papierkorb geleert, {{count}} Datei entfernt",
+    "recycleBinEmptied_other": "Papierkorb geleert, {{count}} Dateien entfernt",
+    "recycleBinEmptyFailed": "Papierkorb konnte nicht geleert werden"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",
@@ -211,7 +218,11 @@
     "approveAllSkipped": "Nichts freizugeben, diese Titel warten nicht mehr",
     "rejectAllSkipped": "Nichts abzulehnen, diese Titel warten nicht mehr",
     "awaitingApprovalTitle": "Anfrage zur Freigabe gesendet",
-    "awaitingApprovalDescription": "{{itemName}} startet, sobald ein Administrator sie freigibt."
+    "awaitingApprovalDescription": "{{itemName}} startet, sobald ein Administrator sie freigibt.",
+    "upgradeStartedTitle": "Suche nach einer besseren Kopie",
+    "upgradeStartedDescription": "{{itemName}} wird ersetzt, wenn eine eindeutig bessere Kopie gefunden wird.",
+    "upgradeDisabledTitle": "Qualitäts-Upgrades sind deaktiviert",
+    "upgradeDisabledDescription": "Ein Administrator hat Qualitäts-Upgrades deaktiviert, {{itemName}} bleibt unverändert."
   },
   "playlists": {
     "created": "Playlist erstellt",

@@ -187,6 +187,45 @@
       "ariaLabel": "Max sweep attempts"
     }
   },
+  "quality": {
+    "title": "Quality",
+    "description": "Upgrade already-downloaded tracks in place when you explicitly request a better copy.",
+    "upgradeEnabled": {
+      "label": "Allow quality upgrades",
+      "description": "An explicit re-request can replace an owned file when the new copy is strictly better."
+    },
+    "recycleBin": {
+      "sectionTitle": "Recycle bin",
+      "retentionDays": {
+        "label": "Retention period",
+        "description": "How many days replaced files stay in the recycle bin before cleanup.",
+        "ariaLabel": "Retention days",
+        "suffix": "days"
+      },
+      "status": {
+        "loading": "Loading recycle bin status...",
+        "loadError": "Failed to load recycle bin status",
+        "size": {
+          "label": "Total size",
+          "description": "Disk space currently used by the recycle bin."
+        },
+        "entries": {
+          "label": "Files",
+          "description": "Replaced files currently kept in the recycle bin."
+        },
+        "oldest": {
+          "label": "Oldest entry",
+          "description": "Date of the oldest recycled file."
+        }
+      },
+      "empty": {
+        "action": "Empty recycle bin",
+        "confirmTitle": "Empty the recycle bin?",
+        "confirmMessage": "All replaced files kept in the recycle bin will be permanently removed. This cannot be undone.",
+        "confirm": "Empty recycle bin"
+      }
+    }
+  },
   "common": {
     "loading": "Loading…",
     "loadFailedWithReason": "Failed to load settings: {{reason}}",

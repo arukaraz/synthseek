@@ -121,7 +121,8 @@
     "actionsMenu": "Track actions",
     "jumpTheQueue": "Jump the queue",
     "jumpTheQueueTitle": "Move this track to the front of the queue",
-    "prioritized": "Prioritized"
+    "prioritized": "Prioritized",
+    "upgrade": "Search better quality"
   },
   "export": {
     "dialogTitle": "Export (max compatibility)",

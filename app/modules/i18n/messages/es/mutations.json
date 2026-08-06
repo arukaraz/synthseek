@@ -48,7 +48,14 @@
     "wantedSaved": "Configuración del barrido de seguimiento guardada",
     "wantedFailed": "No se pudo guardar la configuración del barrido de seguimiento",
     "usersSaved": "Configuración de miembros guardada",
-    "usersFailed": "No se pudo guardar la configuración de miembros"
+    "usersFailed": "No se pudo guardar la configuración de miembros",
+    "qualitySaved": "Ajustes de calidad guardados",
+    "qualityFailed": "No se pudieron guardar los ajustes de calidad",
+    "recycleBinSaved": "Ajustes de la papelera guardados",
+    "recycleBinSaveFailed": "No se pudieron guardar los ajustes de la papelera",
+    "recycleBinEmptied_one": "Papelera vaciada, {{count}} archivo eliminado",
+    "recycleBinEmptied_other": "Papelera vaciada, {{count}} archivos eliminados",
+    "recycleBinEmptyFailed": "No se pudo vaciar la papelera"
   },
   "plexConnect": {
     "timedOut": "El inicio de sesión de Plex agotó el tiempo de espera",
@@ -211,7 +218,11 @@
     "approveAllSkipped": "Nada que aprobar, esas canciones ya no están en espera",
     "rejectAllSkipped": "Nada que rechazar, esas canciones ya no están en espera",
     "awaitingApprovalTitle": "Solicitud enviada para aprobación",
-    "awaitingApprovalDescription": "{{itemName}} comenzará cuando un administrador la apruebe."
+    "awaitingApprovalDescription": "{{itemName}} comenzará cuando un administrador la apruebe.",
+    "upgradeStartedTitle": "Buscando una copia mejor",
+    "upgradeStartedDescription": "{{itemName}} se reemplazará si se encuentra una copia estrictamente mejor.",
+    "upgradeDisabledTitle": "Las mejoras de calidad están desactivadas",
+    "upgradeDisabledDescription": "Un administrador ha desactivado las mejoras de calidad, así que {{itemName}} se dejó intacto."
   },
   "playlists": {
     "created": "Playlist creada",

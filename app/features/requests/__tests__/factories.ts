@@ -54,6 +54,7 @@ export function makeRequestsTrack(overrides: Partial<TrackRequest> = {}): TrackR
     next_retry_at: null,
     watch_enabled: true,
     source_peer: null,
+    upgrade: false,
     created_at: new Date(),
     completed_at: null,
     updated_at: new Date(),

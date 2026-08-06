@@ -61,6 +61,7 @@ function makeTrack(id: string, createdAt: string, overrides: Partial<TrackReques
     next_retry_at: null,
     watch_enabled: true,
     source_peer: null,
+    upgrade: false,
     created_at: new Date(createdAt),
     completed_at: null,
     updated_at: new Date(createdAt),

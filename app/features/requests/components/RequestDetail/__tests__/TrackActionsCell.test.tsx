@@ -36,6 +36,7 @@ function makeTrack(overrides: Partial<TrackRequest> = {}): TrackRequest {
     next_retry_at: null,
     watch_enabled: true,
     source_peer: null,
+    upgrade: false,
     created_at: new Date(),
     completed_at: null,
     updated_at: new Date(),
@@ -121,7 +122,7 @@ describe("RequestDetail TrackActionsCell", () => {
   it("renders a placeholder dash when no action applies to the track", () => {
     const { container } = render(
       <TrackActionsCell
-        track={makeTrack({ status: RequestStatus.enum.complete, priority: 0 })}
+        track={makeTrack({ status: RequestStatus.enum.delegated, priority: 0 })}
         canAct
         onRetry={noop}
         onCancel={noop}
@@ -132,6 +133,82 @@ describe("RequestDetail TrackActionsCell", () => {
 
     expect(screen.queryByRole("button", { name: "Track actions" })).not.toBeInTheDocument();
     expect(container).toHaveTextContent("-");
+  });
+
+  it("offers only Search better quality for a complete track", async () => {
+    const user = userEvent.setup();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.complete })}
+        canAct
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+        onUpgrade={noop}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+
+    expect(screen.getByRole("menuitem", { name: "Search better quality" })).toBeInTheDocument();
+    expect(screen.getAllByRole("menuitem")).toHaveLength(1);
+  });
+
+  it("does not offer Search better quality on a non-complete track", async () => {
+    const user = userEvent.setup();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.failed })}
+        canAct
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+        onUpgrade={noop}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+
+    expect(screen.queryByRole("menuitem", { name: "Search better quality" })).not.toBeInTheDocument();
+  });
+
+  it("calls onUpgrade when Search better quality is clicked", async () => {
+    const user = userEvent.setup();
+    const onUpgrade = vi.fn();
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.complete })}
+        canAct
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+        onUpgrade={onUpgrade}
+      />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
+
+    expect(onUpgrade).toHaveBeenCalledOnce();
+  });
+
+  it("hides the actions trigger on a complete track when the user cannot act", () => {
+    render(
+      <TrackActionsCell
+        track={makeTrack({ status: RequestStatus.enum.complete })}
+        canAct={false}
+        onRetry={noop}
+        onCancel={noop}
+        onPrioritize={noop}
+        onSetWatch={noop}
+        onUpgrade={noop}
+      />
+    );
+
+    expect(screen.queryByRole("button", { name: "Track actions" })).not.toBeInTheDocument();
   });
 
   it("renders a placeholder dash when the user cannot act", () => {

@@ -17,6 +17,19 @@ export interface QuarantineCardProps {
   sourceTrust: QuarantineSourceTrust;
 }
 
+export interface EngineQualitySettings {
+  upgradeEnabled: boolean;
+}
+
+export interface LibraryRecycleBinSettings {
+  retentionDays: number;
+}
+
+export interface QualityCardProps {
+  initial: EngineQualitySettings;
+  recycleBin: LibraryRecycleBinSettings;
+}
+
 export interface EngineWantedSettings {
   enabled: boolean;
   perRunCap: number;

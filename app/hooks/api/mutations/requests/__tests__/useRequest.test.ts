@@ -23,6 +23,7 @@ const spies = vi.hoisted(() => {
     invalidate: vi.fn(),
     notifyReclaimOutcome: vi.fn(),
     notifyPendingApproval: vi.fn(),
+    notifyUpgradeOutcome: vi.fn(),
     errorToastDetailed: vi.fn(),
   };
 });
@@ -52,10 +53,11 @@ vi.mock("@modules/errors", () => ({ errorToastDetailed: spies.errorToastDetailed
 vi.mock("@utils/request-helpers", () => ({
   notifyReclaimOutcome: spies.notifyReclaimOutcome,
   notifyPendingApproval: spies.notifyPendingApproval,
+  notifyUpgradeOutcome: spies.notifyUpgradeOutcome,
 }));
 
-function trackVars() {
-  return { track: { artist: "Daft Punk", title: "One More Time" } };
+function trackVars(config: Record<string, unknown> = {}) {
+  return { track: { artist: "Daft Punk", title: "One More Time" }, config };
 }
 
 function readStatus(jobId: string): string | undefined {
@@ -109,6 +111,43 @@ describe("useRequest dock lifecycle", () => {
     );
 
     expect(spies.notifyPendingApproval).toHaveBeenCalledWith("Daft Punk - One More Time");
+    expect(spies.notifyReclaimOutcome).not.toHaveBeenCalled();
+  });
+
+  it("toasts the upgrade outcome instead of the reclaim outcome when the vars carry the upgrade flag", () => {
+    renderHook(() => useRequest());
+
+    const context = spies.captured.options?.onMutate?.(trackVars({ upgrade: true }));
+    spies.captured.options?.onSuccess?.(
+      { outcome: "requeued", data: { artist: "Daft Punk", track: "One More Time" } },
+      trackVars({ upgrade: true }),
+      context
+    );
+
+    expect(spies.notifyUpgradeOutcome).toHaveBeenCalledWith({
+      outcome: "requeued",
+      itemName: "Daft Punk - One More Time",
+    });
+    expect(spies.notifyReclaimOutcome).not.toHaveBeenCalled();
+    if (context) expect(readStatus(context.dockJobId)).toBe("complete");
+  });
+
+  it("prefers the pending-approval toast over the upgrade toast for gated members", () => {
+    renderHook(() => useRequest());
+
+    const context = spies.captured.options?.onMutate?.(trackVars({ upgrade: true }));
+    spies.captured.options?.onSuccess?.(
+      {
+        outcome: "requeued",
+        pendingApproval: true,
+        data: { artist: "Daft Punk", track: "One More Time" },
+      },
+      trackVars({ upgrade: true }),
+      context
+    );
+
+    expect(spies.notifyPendingApproval).toHaveBeenCalledWith("Daft Punk - One More Time");
+    expect(spies.notifyUpgradeOutcome).not.toHaveBeenCalled();
     expect(spies.notifyReclaimOutcome).not.toHaveBeenCalled();
   });
 
