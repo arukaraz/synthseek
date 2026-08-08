@@ -47,6 +47,7 @@
   },
   "statusFilter": {
     "all": "Toutes",
+    "pending_approval": "En attente d'approbation",
     "active": "Actives",
     "done": "Terminées",
     "failed": "En échec"

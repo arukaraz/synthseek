@@ -47,6 +47,7 @@
   },
   "statusFilter": {
     "all": "Todas",
+    "pending_approval": "Esperando aprobación",
     "active": "Activas",
     "done": "Completadas",
     "failed": "Fallidas"

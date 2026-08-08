@@ -104,12 +104,13 @@ describe("QuarantineCard", () => {
     expect(screen.getByTitle(slskdEntry.filename)).toBeInTheDocument();
   });
 
-  it("labels an empty-username ytdlp row as YouTube and shows the video URL", () => {
+  it("shows a ytdlp row as its source and video URL without a peer label", () => {
     listQuery = createMockQuery<QuarantineEntry[]>([ytdlpEntry]);
     render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
 
-    expect(screen.getAllByText(enSettings.quarantine.list.youtube).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(enSettings.quarantine.source.ytdlp).length).toBe(1);
     expect(screen.getByText(ytdlpEntry.filename)).toBeInTheDocument();
+    expect(screen.queryByTitle(enSettings.quarantine.list.columns.peer)).not.toBeInTheDocument();
   });
 
   it("removes a single entry", async () => {

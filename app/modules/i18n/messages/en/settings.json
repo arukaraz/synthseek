@@ -127,7 +127,6 @@
       "loadError": "Failed to load quarantined files",
       "clearAll": "Clear all",
       "remove": "Remove quarantine entry",
-      "youtube": "YouTube",
       "columns": {
         "source": "Source",
         "peer": "Peer",

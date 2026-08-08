@@ -47,6 +47,7 @@
   },
   "statusFilter": {
     "all": "Alle",
+    "pending_approval": "Wartet auf Freigabe",
     "active": "Aktiv",
     "done": "Fertig",
     "failed": "Fehlgeschlagen"

@@ -102,9 +102,9 @@ export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
                   </span>
                   <div className={quarantineMeta()}>
                     <span title={t("quarantine.list.columns.source")}>{sourceKey ? t(sourceKey) : entry.source}</span>
-                    <span title={t("quarantine.list.columns.peer")}>
-                      {entry.username.length > 0 ? entry.username : t("quarantine.list.youtube")}
-                    </span>
+                    {entry.username.length > 0 ? (
+                      <span title={t("quarantine.list.columns.peer")}>{entry.username}</span>
+                    ) : null}
                     <span className={quarantineReasonBadge()} title={t("quarantine.list.columns.reason")}>
                       {t(`quarantine.reason.${entry.reason}`)}
                     </span>

@@ -98,13 +98,22 @@ describe("exportFilename", () => {
   });
 });
 
+const complete = makeRequestWithTracks({ id: "complete", status: RequestStatus.enum.complete });
+const failed = makeRequestWithTracks({ id: "failed", status: RequestStatus.enum.failed });
+const downloading = makeRequestWithTracks({ id: "downloading", status: RequestStatus.enum.downloading });
+const pending = makeRequestWithTracks({ id: "pending", status: RequestStatus.enum.pending_approval });
+
 describe("filterRequestsByStatus", () => {
-  const complete = makeRequestWithTracks({ id: "complete", status: RequestStatus.enum.complete });
-  const failed = makeRequestWithTracks({ id: "failed", status: RequestStatus.enum.failed });
   const items: RequestWithTracks[] = [complete, failed];
 
   it("returns every item for the all filter", () => {
     expect(filterRequestsByStatus(items, "all").map((item) => item.id)).toEqual(["complete", "failed"]);
+  });
+
+  it("keeps only in-flight items for the active filter", () => {
+    expect(filterRequestsByStatus([downloading, complete, failed], "active").map((item) => item.id)).toEqual([
+      "downloading",
+    ]);
   });
 
   it("keeps only resolved items for the done filter", () => {
@@ -131,12 +140,22 @@ describe("compareByStatus", () => {
 });
 
 describe("pending_approval placement", () => {
-  it("is kept by the active filter and excluded from done and failed", () => {
-    const pending = makeRequestWithTracks({ id: "pending", status: RequestStatus.enum.pending_approval });
+  it("keeps only the waiting items for the pending_approval filter", () => {
+    const mixed = [pending, downloading, complete, failed];
 
-    expect(filterRequestsByStatus([pending], "active").map((item) => item.id)).toEqual(["pending"]);
+    expect(filterRequestsByStatus(mixed, "pending_approval").map((item) => item.id)).toEqual(["pending"]);
+  });
+
+  it("is excluded from the active filter so active means moving", () => {
+    const mixed = [pending, downloading];
+
+    expect(filterRequestsByStatus(mixed, "active").map((item) => item.id)).toEqual(["downloading"]);
+  });
+
+  it("is excluded from done and failed and still included in all", () => {
     expect(filterRequestsByStatus([pending], "done")).toEqual([]);
     expect(filterRequestsByStatus([pending], "failed")).toEqual([]);
+    expect(filterRequestsByStatus([pending], "all").map((item) => item.id)).toEqual(["pending"]);
   });
 
   it("sorts ahead of every other status", () => {

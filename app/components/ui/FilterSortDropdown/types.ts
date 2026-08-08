@@ -5,6 +5,7 @@ export interface FilterSortFilterOption<F extends string> {
   value: F;
   label: string;
   icon?: LucideIcon;
+  iconClassName?: string;
   count?: number;
 }
 

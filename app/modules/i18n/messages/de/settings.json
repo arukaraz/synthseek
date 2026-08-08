@@ -127,7 +127,6 @@
       "loadError": "Dateien in Quarantäne konnten nicht geladen werden",
       "clearAll": "Alle entfernen",
       "remove": "Quarantäne-Eintrag entfernen",
-      "youtube": "YouTube",
       "columns": {
         "source": "Quelle",
         "peer": "Peer",

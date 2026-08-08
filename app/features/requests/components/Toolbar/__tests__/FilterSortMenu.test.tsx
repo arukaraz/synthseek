@@ -30,9 +30,20 @@ describe("FilterSortMenu", () => {
     await user.click(screen.getByRole("button"));
 
     expect(screen.getByRole("menuitemradio", { name: "Active" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitemradio", { name: "Waiting for Approval" })).toBeInTheDocument();
     expect(screen.getByRole("menuitemradio", { name: "Failed" })).toBeInTheDocument();
     expect(screen.getByRole("menuitemradio", { name: "Recent" })).toBeInTheDocument();
     expect(screen.getByRole("menuitemradio", { name: "Artist" })).toBeInTheDocument();
+  });
+
+  it("writes the pending approval status filter to the url", async () => {
+    const user = userEvent.setup();
+    render(<FilterSortMenu />);
+
+    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("menuitemradio", { name: "Waiting for Approval" }));
+
+    expect(replace).toHaveBeenCalledWith("/requests?filter=pending_approval", { scroll: false });
   });
 
   it("writes the selected status filter to the url", async () => {

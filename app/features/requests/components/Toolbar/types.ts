@@ -11,6 +11,7 @@ export interface OrderToggleProps {
 export interface StatusFilterIcon {
   value: StatusFilter;
   icon: LucideIcon;
+  iconClassName?: string;
 }
 
 export interface SearchInputProps {

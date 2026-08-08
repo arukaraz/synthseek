@@ -1,9 +1,18 @@
+import { RequestStatus } from "@api/__generated__/types";
+import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import type { Variants } from "framer-motion";
 import { Activity, CheckCircle, Layers, XCircle } from "lucide-react";
 import type { StatusFilterIcon } from "./types";
 
+const PENDING_APPROVAL_CONFIG = REQUEST_STATUS_CONFIG[RequestStatus.enum.pending_approval];
+
 export const STATUS_FILTER_ICONS: StatusFilterIcon[] = [
   { value: "all", icon: Layers },
+  {
+    value: "pending_approval",
+    icon: PENDING_APPROVAL_CONFIG.icon,
+    iconClassName: PENDING_APPROVAL_CONFIG.color,
+  },
   { value: "active", icon: Activity },
   { value: "done", icon: CheckCircle },
   { value: "failed", icon: XCircle },

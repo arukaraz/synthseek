@@ -7,7 +7,7 @@ import {
   type TrackRequest,
 } from "@api/__generated__/types";
 
-export type StatusFilter = "all" | "active" | "done" | "failed";
+export type StatusFilter = "all" | "pending_approval" | "active" | "done" | "failed";
 
 export enum SortField {
   RECENT = "recent",
@@ -17,7 +17,7 @@ export enum SortField {
 }
 export type SortDirection = "asc" | "desc";
 
-export const STATUS_FILTERS: readonly StatusFilter[] = ["all", "active", "done", "failed"];
+export const STATUS_FILTERS: readonly StatusFilter[] = ["all", "pending_approval", "active", "done", "failed"];
 export const SORT_FIELD_VALUES: readonly SortField[] = Object.values(SortField);
 export const SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"];
 
@@ -36,7 +36,8 @@ export interface SortConfig {
 
 export const STATUS_FILTER_MAP = {
   all: null,
-  active: [RequestStatus.enum.pending_approval, ...ACTIVE_STATUSES],
+  pending_approval: [RequestStatus.enum.pending_approval],
+  active: [...ACTIVE_STATUSES],
   done: [RequestStatus.enum.complete, RequestStatus.enum.delegated],
   failed: [...UNRESOLVED_STATUSES, RequestStatus.enum.partially_complete],
 } as const;

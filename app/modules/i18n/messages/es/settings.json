@@ -127,7 +127,6 @@
       "loadError": "No se pudieron cargar los archivos en cuarentena",
       "clearAll": "Vaciar todo",
       "remove": "Quitar entrada de cuarentena",
-      "youtube": "YouTube",
       "columns": {
         "source": "Fuente",
         "peer": "Par",

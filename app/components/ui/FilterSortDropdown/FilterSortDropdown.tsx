@@ -69,7 +69,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                 const Icon = option.icon;
                 return (
                   <DropdownMenuRadioItem key={option.value} value={option.value}>
-                    {Icon && <Icon className="mr-2 size-3.5" />}
+                    {Icon && <Icon className={cn("mr-2 size-3.5", option.iconClassName)} />}
                     <span className="flex-1">{option.label}</span>
                     {option.count !== undefined && <span className={filterSortCount()}>{option.count}</span>}
                   </DropdownMenuRadioItem>
