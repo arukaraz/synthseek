@@ -152,7 +152,11 @@
     },
     "reason": {
       "wrong_file": "Mauvais fichier",
-      "verify_failed": "Échec de la vérification"
+      "verify_failed": "Échec de la vérification",
+      "fingerprint_mismatch": "Empreinte différente",
+      "tag_mismatch": "Les tags ne correspondent pas",
+      "duration_mismatch": "Durée différente",
+      "tags_unreadable": "Tags illisibles"
     },
     "sourceTrust": {
       "title": "Confiance des sources",

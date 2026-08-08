@@ -152,7 +152,11 @@
     },
     "reason": {
       "wrong_file": "Wrong file",
-      "verify_failed": "Verification failed"
+      "verify_failed": "Verification failed",
+      "fingerprint_mismatch": "Fingerprint mismatch",
+      "tag_mismatch": "Tags do not match",
+      "duration_mismatch": "Duration mismatch",
+      "tags_unreadable": "Tags unreadable"
     },
     "sourceTrust": {
       "title": "Source trust",
