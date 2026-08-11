@@ -175,12 +175,12 @@ export type ResponsiveFallbackIconProps = VariantProps<typeof responsiveFallback
 export const authFieldLabel = cva("text-fg-muted text-xs font-semibold");
 
 export const authInputRow = cva(
-  "border-fg/15 bg-fg/[0.04] focus-within:border-primary-500 focus-within:ring-primary-500/30 flex h-11 items-center gap-2 rounded-[0.6875rem] border px-3 transition-colors focus-within:ring-4",
+  "bg-fg/[0.04] flex h-11 items-center gap-2 rounded-[0.6875rem] border px-3 transition-colors focus-within:ring-4",
   {
     variants: {
       invalid: {
         true: "border-destructive focus-within:border-destructive focus-within:ring-destructive/30",
-        false: "",
+        false: "border-fg/15 focus-within:border-primary-500 focus-within:ring-primary-500/30",
       },
     },
     defaultVariants: { invalid: false },
@@ -202,12 +202,12 @@ export const authEmailButton = cva(
 );
 
 export const authPlexButton = cva(
-  "border-plex-500/35 text-fg shadow-[0_0_28px_-8px_var(--color-plex-500),inset_0_1px_0_oklch(1_0_0/0.12)] hover:border-plex-500/55 focus-visible:ring-primary-500 flex h-[3.125rem] w-full items-center justify-center gap-2 rounded-[0.8125rem] border bg-plex-500/15 text-[0.9375rem] font-bold outline-none transition-all hover:-translate-y-px hover:bg-plex-500/25 focus-visible:ring-2 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70",
+  "text-fg shadow-[0_0_28px_-8px_var(--color-plex-500),inset_0_1px_0_oklch(1_0_0/0.12)] focus-visible:ring-primary-500 flex h-[3.125rem] w-full items-center justify-center gap-2 rounded-[0.8125rem] border bg-plex-500/15 text-[0.9375rem] font-bold outline-none transition-all hover:-translate-y-px hover:bg-plex-500/25 focus-visible:ring-2 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70",
   {
     variants: {
       phase: {
-        idle: "",
-        pending: "",
+        idle: "border-plex-500/35 hover:border-plex-500/55",
+        pending: "border-plex-500/35 hover:border-plex-500/55",
         completed: "border-[oklch(var(--neon-success)/0.55)]",
         error: "border-destructive/60",
       },
@@ -216,11 +216,11 @@ export const authPlexButton = cva(
   }
 );
 
-export const authPlexIcon = cva("text-plex-400 size-[1.125rem] shrink-0", {
+export const authPlexIcon = cva("size-[1.125rem] shrink-0", {
   variants: {
     phase: {
-      idle: "",
-      pending: "",
+      idle: "text-plex-400",
+      pending: "text-plex-400",
       completed: "text-[oklch(var(--neon-success))]",
       error: "text-destructive",
     },

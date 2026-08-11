@@ -281,6 +281,10 @@ describe("detail pane", () => {
     expect(detailAct({ primary: false })).toContain("text-fg/70");
   });
 
+  it("the primary detail action drops the dimmed label of its sibling", () => {
+    expect(detailAct({ primary: true })).not.toContain("text-fg/70");
+  });
+
   it("detail sections use bordered blocks", () => {
     expect(detailSection()).toContain("border-b");
     expect(detailSectionTitle()).toContain("uppercase");
@@ -319,6 +323,9 @@ describe("detail empty state", () => {
     expect(detailEmptyCard({ pos: "left" })).toContain("-rotate-[9deg]");
     expect(detailEmptyCard({ pos: "center" })).toContain("z-10");
     expect(detailEmptyCard({ pos: "right" })).toContain("rotate-[9deg]");
+    expect(detailEmptyCard({ pos: "left" })).toContain("bg-fg/[0.015]");
+    expect(detailEmptyCard({ pos: "right" })).toContain("bg-fg/[0.015]");
+    expect(detailEmptyCard({ pos: "center" })).not.toContain("bg-fg/[0.015]");
     expect(detailEmptyCardLine({ short: true })).toContain("w-3/5");
     expect(detailEmptyCardLine({ short: false })).toContain("bg-fg/10");
     expect(detailEmptyTitle()).toContain("font-semibold");

@@ -23,12 +23,12 @@ export const backToSections = cva(
 );
 
 export const sidebarGroupButton = cva(
-  "text-fg/80 hover:bg-fg/5 flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors [&_svg]:size-4 [&_svg]:shrink-0",
+  "hover:bg-fg/5 flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       active: {
         true: "bg-fg/10 text-fg",
-        false: "",
+        false: "text-fg/80",
       },
     },
     defaultVariants: { active: false },
@@ -38,12 +38,12 @@ export const sidebarGroupButton = cva(
 export const sidebarGroupLabel = cva("flex-1 truncate text-left");
 
 export const sidebarItem = cva(
-  "text-fg/60 hover:bg-fg/5 hover:text-fg/90 flex w-full items-center gap-2 rounded-lg py-1.5 pr-3 pl-9 text-sm transition-colors",
+  "hover:bg-fg/5 flex w-full items-center gap-2 rounded-lg py-1.5 pr-3 pl-9 text-sm transition-colors",
   {
     variants: {
       active: {
         true: "bg-primary-500/10 text-fg font-medium",
-        false: "",
+        false: "text-fg/60 hover:text-fg/90",
       },
     },
     defaultVariants: { active: false },

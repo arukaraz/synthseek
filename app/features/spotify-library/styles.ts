@@ -185,12 +185,12 @@ export const detailByDot = cva("size-[2px] rounded-full bg-fg/30");
 export const detailActions = cva("mt-4 flex gap-2");
 
 export const detailAct = cva(
-  "flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-fg/10 bg-fg/5 px-3 py-2 text-xs font-medium text-fg/70 transition-colors hover:border-fg/20 hover:text-fg",
+  "flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-fg/10 bg-fg/5 px-3 py-2 text-xs font-medium transition-colors hover:border-fg/20 hover:text-fg",
   {
     variants: {
       primary: {
         true: "border-transparent bg-linear-to-br from-primary-500 to-primary-700 text-fg shadow-[0_2px_10px_color-mix(in_oklch,var(--color-primary-700)_35%,transparent)] hover:border-transparent hover:text-fg",
-        false: "",
+        false: "text-fg/70",
       },
     },
     defaultVariants: { primary: false },
@@ -231,13 +231,13 @@ export const trackMore = cva("cursor-pointer px-5 pt-2 text-[11px] text-primary-
 export const detailEmpty = cva("flex h-full flex-col items-center justify-center gap-3.5 p-12 text-center");
 export const detailEmptyArt = cva("relative inline-flex size-24 items-center justify-center text-fg/40");
 export const detailEmptyCard = cva(
-  "absolute flex w-14 h-16 flex-col justify-end gap-1 rounded-lg border border-dashed border-fg/20 bg-fg/[0.015] p-2",
+  "absolute flex w-14 h-16 flex-col justify-end gap-1 rounded-lg border border-dashed border-fg/20 p-2",
   {
     variants: {
       pos: {
-        left: "-translate-x-[18px] translate-y-[6px] -rotate-[9deg]",
+        left: "-translate-x-[18px] translate-y-[6px] -rotate-[9deg] bg-fg/[0.015]",
         center: "z-10 border-solid border-fg/20 bg-fg/[0.04]",
-        right: "translate-x-[18px] translate-y-[6px] rotate-[9deg]",
+        right: "translate-x-[18px] translate-y-[6px] rotate-[9deg] bg-fg/[0.015]",
       },
     },
   }
