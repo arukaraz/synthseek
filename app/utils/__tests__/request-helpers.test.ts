@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { isSingleTrackRequest, notifyUpgradeOutcome } from "../request-helpers";
+import {
+  isSingleTrackRequest,
+  notifyBulkUpgradeLimit,
+  notifyBulkUpgradeOutcome,
+  notifyUpgradeOutcome,
+  type UpgradeTrackResult,
+} from "../request-helpers";
 import { ContentType, ReclaimOutcome } from "@api/__generated__/types";
 import { createTrackRequest } from "@test/factories";
 
@@ -78,5 +84,106 @@ describe("notifyUpgradeOutcome", () => {
       enMutations.requests.reclaim.alreadyInProgressTitle.replace("{{kind}}", enMutations.requests.reclaim.download),
       { description: "Artist - Song" }
     );
+  });
+});
+
+describe("notifyBulkUpgradeOutcome", () => {
+  const queued = (trackId: string): UpgradeTrackResult => ({ outcome: "queued", trackId });
+  const pending = (trackId: string): UpgradeTrackResult => ({ outcome: "pendingApproval", trackId });
+  const skipped = (
+    trackId: string,
+    reason: "notFound" | "forbidden" | "notComplete" | "upgradesDisabled"
+  ): UpgradeTrackResult => ({
+    outcome: "skipped",
+    trackId,
+    reason,
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("reports only the queued count when every track was queued", () => {
+    notifyBulkUpgradeOutcome([queued("a"), queued("b"), queued("c")]);
+
+    expect(toastSpies.success).toHaveBeenCalledWith(
+      enMutations.requests.tracksUpgrading_other.replace("{{count}}", "3"),
+      { description: undefined }
+    );
+  });
+
+  it("keeps the queued count honest and lists the skips when the batch partially succeeded", () => {
+    notifyBulkUpgradeOutcome([
+      queued("a"),
+      skipped("b", "notComplete"),
+      skipped("c", "notComplete"),
+      skipped("d", "forbidden"),
+    ]);
+
+    expect(toastSpies.success).toHaveBeenCalledTimes(1);
+    const [title, options] = toastSpies.success.mock.calls[0];
+    expect(title).toBe(enMutations.requests.tracksUpgrading_one.replace("{{count}}", "1"));
+    expect(options.description).toContain("3 skipped");
+    expect(options.description).toContain("2 not complete");
+    expect(options.description).toContain("1 not allowed");
+  });
+
+  it("surfaces the tracks parked for approval alongside the queued ones", () => {
+    notifyBulkUpgradeOutcome([queued("a"), pending("b"), pending("c")]);
+
+    const [, options] = toastSpies.success.mock.calls[0];
+    expect(options.description).toContain(enMutations.requests.tracksUpgradePending_other.replace("{{count}}", "2"));
+  });
+
+  it("titles the toast for approval when nothing was queued but tracks were held", () => {
+    notifyBulkUpgradeOutcome([pending("a"), pending("b")]);
+
+    expect(toastSpies.info).toHaveBeenCalledWith(
+      enMutations.requests.tracksUpgradeSentForApproval_other.replace("{{count}}", "2"),
+      { description: undefined }
+    );
+    expect(toastSpies.success).not.toHaveBeenCalled();
+  });
+
+  it("says upgrades are disabled, not that anything was queued, when the whole set was gated off", () => {
+    notifyBulkUpgradeOutcome([skipped("a", "upgradesDisabled"), skipped("b", "upgradesDisabled")]);
+
+    expect(toastSpies.info).toHaveBeenCalledWith(enMutations.requests.upgradeDisabledTitle, {
+      description: enMutations.requests.upgradeDisabledBulkDescription_other.replace("{{count}}", "2"),
+    });
+    expect(toastSpies.success).not.toHaveBeenCalled();
+    expect(toastSpies.warning).not.toHaveBeenCalled();
+  });
+
+  it("warns with the grouped reasons when every track was skipped for mixed reasons", () => {
+    notifyBulkUpgradeOutcome([skipped("a", "notFound"), skipped("b", "upgradesDisabled")]);
+
+    expect(toastSpies.warning).toHaveBeenCalledTimes(1);
+    const [title, options] = toastSpies.warning.mock.calls[0];
+    expect(title).toBe(enMutations.requests.tracksUpgradeAllSkipped);
+    expect(options.description).toContain("1 not found");
+    expect(options.description).toContain("1 with upgrades disabled");
+    expect(toastSpies.info).not.toHaveBeenCalled();
+  });
+
+  it("does not claim upgrades are disabled when at least one track was queued", () => {
+    notifyBulkUpgradeOutcome([queued("a"), skipped("b", "upgradesDisabled")]);
+
+    expect(toastSpies.success).toHaveBeenCalledTimes(1);
+    expect(toastSpies.info).not.toHaveBeenCalled();
+  });
+});
+
+describe("notifyBulkUpgradeLimit", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("warns with the cap and says nothing was submitted", () => {
+    notifyBulkUpgradeLimit(500);
+
+    expect(toastSpies.warning).toHaveBeenCalledWith(enMutations.requests.upgradeTooManyTitle, {
+      description: enMutations.requests.upgradeTooManyDescription.replace("{{max}}", "500"),
+    });
   });
 });

@@ -51,6 +51,7 @@ export { useRetryPlexPlaylist } from "./mutations/requests/useRetryPlexPlaylist"
 export { useSyncAllPlaylistsToPlex } from "./mutations/requests/useSyncAllPlaylistsToPlex";
 export { useRetryTrack } from "./mutations/requests/useRetryTrack";
 export { useRetryTracks } from "./mutations/requests/useRetryTracks";
+export { MAX_BULK_UPGRADE_TRACKS, useUpgradeTracks } from "./mutations/requests/useUpgradeTracks";
 export { useApproveTracks } from "./mutations/requests/useApproveTracks";
 export { useRejectTracks } from "./mutations/requests/useRejectTracks";
 export { useRetryAllFailed } from "./mutations/requests/useRetryAllFailed";

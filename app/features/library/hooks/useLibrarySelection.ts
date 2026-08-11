@@ -14,6 +14,8 @@ export function useLibrarySelection() {
       ...selectors,
       selectedFailedIds: (items: LibraryTrackItem[]) =>
         selectors.filterSelected(items, (item) => item.status === RequestStatus.enum.failed),
+      selectedUpgradableIds: (items: LibraryTrackItem[]) =>
+        selectors.filterSelected(items, (item) => item.status === RequestStatus.enum.complete),
     }),
     [selectors]
   );

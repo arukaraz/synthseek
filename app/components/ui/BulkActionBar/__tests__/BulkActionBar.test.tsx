@@ -24,11 +24,11 @@ function renderBar(overrides: Partial<BulkActionBarProps> = {}) {
 }
 
 describe("BulkActionBar", () => {
-  it("keeps the bar on a single non-wrapping row", () => {
+  it("wraps onto a second row instead of pushing the clear button past the bar", () => {
     const { container } = renderBar();
     const bar = container.firstElementChild;
-    expect(bar?.className).toContain("flex-nowrap");
-    expect(bar?.className).not.toContain("flex-wrap");
+    expect(bar?.className).toContain("flex-wrap");
+    expect(bar?.className).not.toContain("flex-nowrap");
   });
 
   it("preserves the full accessible name on every action button", () => {

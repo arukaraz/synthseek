@@ -74,6 +74,26 @@ describe("useLibrarySelection", () => {
     expect(result.current.selectors.selectedFailedIds(items)).toEqual(["a"]);
   });
 
+  it("derives only the selected complete ids as upgradable", () => {
+    const items = [
+      makeTrack("a", RequestStatus.enum.complete),
+      makeTrack("b", RequestStatus.enum.failed),
+      makeTrack("c", RequestStatus.enum.downloading),
+      makeTrack("d", RequestStatus.enum.complete),
+    ];
+    const { result } = renderHook(() => useLibrarySelection());
+
+    act(() => result.current.setMany(["a", "b", "c"], true));
+    expect(result.current.selectors.selectedUpgradableIds(items)).toEqual(["a"]);
+  });
+
+  it("ignores complete rows that are not selected", () => {
+    const items = [makeTrack("a", RequestStatus.enum.complete), makeTrack("b", RequestStatus.enum.complete)];
+    const { result } = renderHook(() => useLibrarySelection());
+
+    expect(result.current.selectors.selectedUpgradableIds(items)).toEqual([]);
+  });
+
   it("reports all and some selected on the page", () => {
     const items = [makeTrack("a", RequestStatus.enum.complete), makeTrack("b", RequestStatus.enum.complete)];
     const { result } = renderHook(() => useLibrarySelection());

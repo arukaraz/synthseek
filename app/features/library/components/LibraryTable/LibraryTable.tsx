@@ -3,7 +3,7 @@
 import { BulkActionBar, selectionAction, selectionActionLabel, type BulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox } from "@components/ui/Checkbox";
 import { DataTable, type ColumnDef } from "@components/ui/Table";
-import { ListPlus, RefreshCcw } from "lucide-react";
+import { ListPlus, RefreshCcw, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { AddToPlaylistDropdown } from "../AddToPlaylistDropdown";
@@ -20,6 +20,7 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
   const allSelected = sel?.selectors.allSelectedOnPage(trackItems) ?? false;
   const someSelected = sel?.selectors.someSelectedOnPage(trackItems) ?? false;
   const failedIds = sel?.selectors.selectedFailedIds(trackItems) ?? [];
+  const upgradableIds = sel?.selectors.selectedUpgradableIds(trackItems) ?? [];
 
   const selectColumn: ColumnDef<TItem> | null = sel
     ? {
@@ -51,18 +52,25 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
 
   const tableColumns = selectColumn ? [selectColumn, ...columns] : columns;
 
-  const bulkActions: BulkAction[] =
-    sel && failedIds.length > 0
-      ? [
-          {
-            icon: RefreshCcw,
-            label: t("page.selection.retryFailed", { count: failedIds.length }),
-            onClick: () => actions.retryFailed(failedIds),
-            count: failedIds.length,
-            disabled: actions.isRetrying,
-          },
-        ]
-      : [];
+  const bulkActions: BulkAction[] = [];
+  if (failedIds.length > 0) {
+    bulkActions.push({
+      icon: RefreshCcw,
+      label: t("page.selection.retryFailed", { count: failedIds.length }),
+      onClick: () => actions.retryFailed(failedIds),
+      count: failedIds.length,
+      disabled: actions.isRetrying,
+    });
+  }
+  if (upgradableIds.length > 0) {
+    bulkActions.push({
+      icon: Sparkles,
+      label: t("page.selection.searchBetterQuality", { count: upgradableIds.length }),
+      onClick: () => actions.searchBetterQuality(upgradableIds),
+      count: upgradableIds.length,
+      disabled: actions.isUpgrading,
+    });
+  }
 
   const addToPlaylistLabel = t("page.selection.addToPlaylist");
 

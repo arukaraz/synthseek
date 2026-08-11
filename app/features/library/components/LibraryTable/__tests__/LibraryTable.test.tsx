@@ -11,6 +11,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 const retryFailedMock = vi.hoisted(() => vi.fn());
+const searchBetterQualityMock = vi.hoisted(() => vi.fn());
 const useLibraryTrackActionsMock = vi.hoisted(() => vi.fn());
 
 vi.mock("../../../hooks/useLibraryTrackActions", () => ({
@@ -70,6 +71,7 @@ function makeSelection(overrides?: Partial<LibrarySelection>): LibrarySelection 
       someSelectedOnPage: () => false,
       filterSelected: () => [],
       selectedFailedIds: () => [],
+      selectedUpgradableIds: () => [],
     },
     ...overrides,
   } as unknown as LibrarySelection;
@@ -82,7 +84,13 @@ function selectionConfig(selection: LibrarySelection, items: LibraryTrackItem[])
 describe("LibraryTable", () => {
   beforeEach(() => {
     retryFailedMock.mockReset();
-    useLibraryTrackActionsMock.mockReturnValue({ retryFailed: retryFailedMock, isRetrying: false });
+    searchBetterQualityMock.mockReset();
+    useLibraryTrackActionsMock.mockReturnValue({
+      retryFailed: retryFailedMock,
+      isRetrying: false,
+      searchBetterQuality: searchBetterQualityMock,
+      isUpgrading: false,
+    });
   });
 
   it("renders the data rows without a select column when no selection is provided", () => {
@@ -160,6 +168,7 @@ describe("LibraryTable", () => {
         someSelectedOnPage: () => true,
         filterSelected: () => ["trk-1"],
         selectedFailedIds: () => ["trk-1"],
+        selectedUpgradableIds: () => [],
       } as unknown as LibrarySelection["selectors"],
     });
 
@@ -177,6 +186,125 @@ describe("LibraryTable", () => {
     await user.click(retryButton);
 
     expect(retryFailedMock).toHaveBeenCalledWith(["trk-1"]);
+  });
+
+  it("labels the better-quality action with the eligible count, not the selected count, and submits only those ids", async () => {
+    const items = [createTrack({ id: "trk-1" }), createTrack({ id: "trk-2" })];
+    const selection = makeSelection({
+      selectedCount: 5,
+      selectedIds: new Set(["trk-1", "trk-2", "trk-3", "trk-4", "trk-5"]),
+      selectors: {
+        allSelectedOnPage: () => false,
+        someSelectedOnPage: () => true,
+        filterSelected: () => [],
+        selectedFailedIds: () => [],
+        selectedUpgradableIds: () => ["trk-1", "trk-2"],
+      } as unknown as LibrarySelection["selectors"],
+    });
+
+    const { user } = renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    const upgradeButton = screen.getByText("page.selection.searchBetterQuality:2");
+    await user.click(upgradeButton);
+
+    expect(searchBetterQualityMock).toHaveBeenCalledWith(["trk-1", "trk-2"]);
+  });
+
+  it("hides the better-quality action when no selected row is complete", () => {
+    const items = [createTrack({ status: "failed" })];
+    const selection = makeSelection({
+      selectedCount: 1,
+      selectedIds: new Set(["trk-1"]),
+      selectors: {
+        allSelectedOnPage: () => true,
+        someSelectedOnPage: () => true,
+        filterSelected: () => [],
+        selectedFailedIds: () => ["trk-1"],
+        selectedUpgradableIds: () => [],
+      } as unknown as LibrarySelection["selectors"],
+    });
+
+    renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    expect(screen.getByText("page.selection.retryFailed:1")).toBeInTheDocument();
+    expect(screen.queryByText("page.selection.searchBetterQuality:0")).not.toBeInTheDocument();
+  });
+
+  it("offers retry and better quality side by side for a mixed selection", () => {
+    const items = [createTrack({ id: "trk-1", status: "failed" }), createTrack({ id: "trk-2" })];
+    const selection = makeSelection({
+      selectedCount: 2,
+      selectedIds: new Set(["trk-1", "trk-2"]),
+      selectors: {
+        allSelectedOnPage: () => true,
+        someSelectedOnPage: () => true,
+        filterSelected: () => [],
+        selectedFailedIds: () => ["trk-1"],
+        selectedUpgradableIds: () => ["trk-2"],
+      } as unknown as LibrarySelection["selectors"],
+    });
+
+    renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    expect(screen.getByText("page.selection.retryFailed:1")).toBeInTheDocument();
+    expect(screen.getByText("page.selection.searchBetterQuality:1")).toBeInTheDocument();
+  });
+
+  it("disables the better-quality action while an upgrade is in flight", () => {
+    useLibraryTrackActionsMock.mockReturnValue({
+      retryFailed: retryFailedMock,
+      isRetrying: false,
+      searchBetterQuality: searchBetterQualityMock,
+      isUpgrading: true,
+    });
+    const items = [createTrack({ id: "trk-1" })];
+    const selection = makeSelection({
+      selectedCount: 1,
+      selectedIds: new Set(["trk-1"]),
+      selectors: {
+        allSelectedOnPage: () => true,
+        someSelectedOnPage: () => true,
+        filterSelected: () => [],
+        selectedFailedIds: () => [],
+        selectedUpgradableIds: () => ["trk-1"],
+      } as unknown as LibrarySelection["selectors"],
+    });
+
+    renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    expect(screen.getByLabelText("page.selection.searchBetterQuality:1")).toBeDisabled();
   });
 
   it("renders the add-to-playlist trigger with the selected ids when a selection is active", () => {
