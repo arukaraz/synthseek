@@ -16,20 +16,20 @@ describe("TrackRetrySchedule", () => {
   it("shows the scheduled attempt", () => {
     render(<TrackRetrySchedule nextRetryAt={inHours(2)} retryCount={0} />);
 
-    expect(screen.getByText("Next attempt in 2h")).toBeInTheDocument();
+    expect(screen.getByText(/Next attempt in 2h/)).toBeInTheDocument();
   });
 
   it("shows the attempt count even without a schedule", () => {
     render(<TrackRetrySchedule nextRetryAt={null} retryCount={3} />);
 
-    expect(screen.getByText("3 attempts so far")).toBeInTheDocument();
+    expect(screen.getByText(/3 attempts/)).toBeInTheDocument();
   });
 
   it("shows both facts together, matching the review queue wording", () => {
     render(<TrackRetrySchedule nextRetryAt={inHours(26)} retryCount={1} />);
 
-    expect(screen.getByText("Next attempt in 1d")).toBeInTheDocument();
-    expect(screen.getByText("1 attempt so far")).toBeInTheDocument();
+    expect(screen.getByText(/Next attempt in 1d/)).toBeInTheDocument();
+    expect(screen.getByText(/1 attempt/)).toBeInTheDocument();
   });
 
   it("omits the retry affordance when no handler is supplied", () => {

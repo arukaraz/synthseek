@@ -76,8 +76,8 @@
   },
   "trackRetrySchedule": {
     "nextAttempt": "Next attempt {{time}}",
-    "attempts_one": "{{count}} attempt so far",
-    "attempts_other": "{{count}} attempts so far",
+    "attempts_one": "{{count}} attempt",
+    "attempts_other": "{{count}} attempts",
     "retryNow": "Retry now",
     "watching": "The automatic retry sweep is watching this track"
   }

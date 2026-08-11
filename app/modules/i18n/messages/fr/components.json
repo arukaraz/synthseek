@@ -76,8 +76,8 @@
   },
   "trackRetrySchedule": {
     "nextAttempt": "Prochaine tentative {{time}}",
-    "attempts_one": "{{count}} tentative jusqu'ici",
-    "attempts_other": "{{count}} tentatives jusqu'ici",
+    "attempts_one": "{{count}} tentative",
+    "attempts_other": "{{count}} tentatives",
     "retryNow": "Réessayer maintenant",
     "watching": "Le balayage de reprise automatique surveille ce morceau"
   }

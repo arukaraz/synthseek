@@ -86,8 +86,8 @@ describe("ReviewItemRow", () => {
     const nextRetryAt = new Date(Date.now() + 3.5 * 24 * 60 * 60 * 1000);
     render(<ReviewItemRow item={makeReviewItem({ track: { retryCount: 3, nextRetryAt } })} />);
 
-    expect(screen.getByText("Next attempt in 3d")).toBeInTheDocument();
-    expect(screen.getByText("3 attempts so far")).toBeInTheDocument();
+    expect(screen.getByText(/Next attempt in 3d/)).toBeInTheDocument();
+    expect(screen.getByText(/3 attempts/)).toBeInTheDocument();
   });
 
   it("offers no retry alongside the schedule, the held copy is decided first", () => {

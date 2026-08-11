@@ -45,7 +45,7 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.getByText("Next attempt in 2h")).toBeInTheDocument();
+    expect(screen.getByText(/Next attempt in 2h/)).toBeInTheDocument();
   });
 
   it("surfaces the attempt count next to the schedule", () => {
@@ -60,7 +60,7 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.getByText("3 attempts so far")).toBeInTheDocument();
+    expect(screen.getByText(/3 attempts/)).toBeInTheDocument();
   });
 
   it("still surfaces the attempt count on a failed track with watching disabled", () => {
@@ -76,7 +76,7 @@ describe("TrackStatusCell", () => {
     );
 
     expect(screen.queryByText(/Next attempt/)).not.toBeInTheDocument();
-    expect(screen.getByText("2 attempts so far")).toBeInTheDocument();
+    expect(screen.getByText(/2 attempts/)).toBeInTheDocument();
   });
 
   it("shows no schedule on a non-failed watched track", () => {

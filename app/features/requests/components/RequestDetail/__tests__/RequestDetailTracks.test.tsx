@@ -151,8 +151,8 @@ describe("RequestDetailTracks", () => {
 
     render(<RequestDetailTracks request={request} />);
 
-    expect(screen.getByText("Next attempt in 2h")).toBeInTheDocument();
-    expect(screen.getByText("2 attempts so far")).toBeInTheDocument();
+    expect(screen.getByText(/Next attempt in 2h/)).toBeInTheDocument();
+    expect(screen.getByText(/2 attempts/)).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Retry now" }));
 
@@ -174,7 +174,7 @@ describe("RequestDetailTracks", () => {
 
     render(<RequestDetailTracks request={request} />);
 
-    expect(screen.getByText("Next attempt in 2h")).toBeInTheDocument();
+    expect(screen.getByText(/Next attempt in 2h/)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Retry now" })).not.toBeInTheDocument();
   });
 

@@ -13,11 +13,13 @@ export function TrackStatusCell({ track, onRetryNow }: TrackStatusCellProps) {
     <div className="flex min-w-0 flex-col gap-0.5">
       <TrackStatusIndicator status={track.status} failureReason={track.failure_reason} />
       {isFailed ? (
-        <TrackRetrySchedule
-          nextRetryAt={track.watch_enabled ? track.next_retry_at : null}
-          retryCount={track.retry_count}
-          onRetryNow={onRetryNow}
-        />
+        <div className="pl-4">
+          <TrackRetrySchedule
+            nextRetryAt={track.watch_enabled ? track.next_retry_at : null}
+            retryCount={track.retry_count}
+            onRetryNow={onRetryNow}
+          />
+        </div>
       ) : null}
     </div>
   );
