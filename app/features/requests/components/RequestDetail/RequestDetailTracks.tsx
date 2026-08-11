@@ -94,7 +94,12 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
       {
         key: "status",
         header: t("tracks.statusHeader"),
-        cell: (track) => <TrackStatusCell track={track} />,
+        cell: (track) => (
+          <TrackStatusCell
+            track={track}
+            onRetryNow={canAct ? () => retryTrack.mutate({ trackId: track.id }) : undefined}
+          />
+        ),
         className: "w-44",
       },
       {

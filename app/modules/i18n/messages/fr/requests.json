@@ -154,11 +154,9 @@
     "connectionFailed": "Échec de la connexion à Spotify"
   },
   "watch": {
-    "watchingNextRetry": "Sous surveillance, prochain essai {{time}}",
-    "retryCount_one": "{{count}} nouvel essai de suivi pour l'instant",
-    "retryCount_other": "{{count}} nouveaux essais de suivi pour l'instant",
     "stop": "Arrêter le suivi",
-    "resume": "Reprendre le suivi"
+    "resume": "Reprendre le suivi, réinitialiser la planification",
+    "resumeTitle": "Efface le nombre de tentatives et l'heure planifiée, le prochain balayage réessaie donc ce morceau."
   },
   "approval": {
     "approvePending_one": "Approuver le titre en attente",
@@ -177,6 +175,69 @@
       "cancel": "Laisser en attente",
       "confirm_one": "Rejeter le titre",
       "confirm_other": "Rejeter {{count}} titres"
+    }
+  },
+  "review": {
+    "trigger": "Révision des imports",
+    "triggerAria_one": "Révision des imports, {{count}} fichier en attente de décision",
+    "triggerAria_other": "Révision des imports, {{count}} fichiers en attente de décision",
+    "triggerAriaHeld_one": "Révision des imports, {{count}} fichier conservé nécessite votre attention",
+    "triggerAriaHeld_other": "Révision des imports, {{count}} fichiers conservés nécessitent votre attention",
+    "modal": {
+      "title": "Révision des imports",
+      "description": "Les téléchargements refusés par une vérification sont conservés ici. Écoutez le fichier, puis validez-le avec les métadonnées demandées, ou rejetez-le."
+    },
+    "loadError": "Impossible de charger la file de révision",
+    "empty": {
+      "title": "Rien à réviser",
+      "description": "Quand une vérification refuse un téléchargement, l'audio est conservé ici jusqu'à ce que vous le validiez ou le rejetiez."
+    },
+    "columns": {
+      "source": "Source",
+      "peer": "Pair",
+      "size": "Taille",
+      "age": "Ancienneté"
+    },
+    "trackDisplay": "{{title}} - {{artist}}",
+    "evidence": {
+      "fingerprintMismatch": "L'empreinte audio identifie {{artist}} - {{title}}, soit {{score}} sur 100 de similarité avec la piste demandée.",
+      "tagMismatch": "Les tags du fichier ont obtenu {{observed}} sur 100 de confiance, en dessous des {{expected}} exigés par cette vérification.",
+      "durationMismatch": "L'audio dure {{observed}} alors que la piste demandée dure {{expected}}.",
+      "tagsUnreadable": "Les tags du fichier n'ont pas pu être lus, il n'y avait donc rien à comparer avec la demande.",
+      "legacy": "Ce fichier a été refusé avant que les vérifications détaillées n'enregistrent des preuves.",
+      "unavailable": "Aucune preuve n'a été enregistrée pour ce refus.",
+      "unknownTitle": "un enregistrement sans nom"
+    },
+    "failedNotice": "La copie conservée n'existe plus, il ne reste donc qu'à rejeter cette entrée.",
+    "error": {
+      "heldFileMissingAfterRestart": "Un redémarrage a interrompu l'import et le fichier conservé n'est plus sur le disque.",
+      "heldFileMissing": "Le fichier conservé n'est plus sur le disque, il ne peut donc pas être importé.",
+      "importFailedBeforeMove": "L'import s'est arrêté avant le déplacement du fichier. La copie conservée est intacte, vous pouvez réessayer.",
+      "importFailedAfterMove": "L'import a échoué après le déplacement du fichier vers la bibliothèque, la copie conservée n'existe donc plus.",
+      "unknown": "La dernière tentative a échoué pour une raison qui n'a pas été enregistrée."
+    },
+    "actions": {
+      "play": "Lire {{name}}",
+      "stop": "Arrêter la lecture de {{name}}",
+      "previewLabel": "Aperçu audio de {{name}}",
+      "approve": "Valider",
+      "discard": "Rejeter"
+    },
+    "confirmDiscard": {
+      "title": "Rejeter ce fichier ?",
+      "message": "La copie conservée est supprimée et la source reste bloquée. La piste reste en échec, la surveillance continuera donc à la chercher ailleurs.",
+      "confirm": "Rejeter le fichier"
+    },
+    "footer": {
+      "summary_one": "{{count}} import conservé au total, {{size}} encore sur le disque",
+      "summary_other": "{{count}} imports conservés au total, {{size}} encore sur le disque",
+      "retention": {
+        "label": "Conserver pendant",
+        "suffix": "jours",
+        "save": "Enregistrer",
+        "saving": "Enregistrement...",
+        "range": "Saisissez un nombre entier de jours entre {{min}} et {{max}}"
+      }
     }
   }
 }

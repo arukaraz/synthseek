@@ -262,5 +262,21 @@
   "RECYCLE_BIN_BUSY": {
     "title": "Papierkorb ist beschäftigt",
     "description": "Ein Qualitäts-Upgrade-Austausch läuft gerade. Versuche es gleich noch einmal."
+  },
+  "HELD_IMPORT_NOT_FOUND": {
+    "title": "Zurückgehaltene Datei nicht gefunden",
+    "description": "Dieser Prüfeintrag existiert nicht mehr. Er wurde vermutlich entschieden oder ist abgelaufen."
+  },
+  "HELD_IMPORT_FILE_MISSING": {
+    "title": "Zurückgehaltene Datei fehlt",
+    "description": "Das aufbewahrte Audio liegt nicht mehr auf der Festplatte und kann weder importiert noch abgespielt werden."
+  },
+  "HELD_IMPORT_IN_FLIGHT": {
+    "title": "Wird bereits importiert",
+    "description": "Diese zurückgehaltene Datei wird gerade importiert. Warte, bis der Vorgang abgeschlossen ist."
+  },
+  "HELD_IMPORT_NOT_APPROVABLE": {
+    "title": "Freigabe nicht möglich",
+    "description": "Dieser Eintrag ist bereits gescheitert, nachdem seine Datei verschoben wurde. Er lässt sich nur noch verwerfen."
   }
 }

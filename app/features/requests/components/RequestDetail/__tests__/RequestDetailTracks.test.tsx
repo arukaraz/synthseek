@@ -130,9 +130,52 @@ describe("RequestDetailTracks", () => {
 
     render(<RequestDetailTracks request={request} />);
     await user.click(screen.getByRole("button", { name: "Track actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Resume watching" }));
+    await user.click(screen.getByRole("menuitem", { name: "Resume watching, reset the schedule" }));
 
     expect(setWatch).toHaveBeenCalledWith({ trackId: "t6", enabled: true });
+  });
+
+  it("retries a scheduled failed track from the Retry now affordance on the row", async () => {
+    const user = userEvent.setup();
+    const request = makeRequestWithTracks({
+      tracks: [
+        makeRequestsTrack({
+          id: "t10",
+          status: RequestStatus.enum.failed,
+          watch_enabled: true,
+          retry_count: 2,
+          next_retry_at: new Date(Date.now() + 2 * 60 * 60 * 1000 + 5 * 60 * 1000),
+        }),
+      ],
+    });
+
+    render(<RequestDetailTracks request={request} />);
+
+    expect(screen.getByText("Next attempt in 2h")).toBeInTheDocument();
+    expect(screen.getByText("2 attempts so far")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Retry now" }));
+
+    expect(retryTrack).toHaveBeenCalledWith({ trackId: "t10" });
+  });
+
+  it("hides the Retry now affordance when the user cannot act, keeping the schedule visible", () => {
+    authState.canAct = false;
+    const request = makeRequestWithTracks({
+      tracks: [
+        makeRequestsTrack({
+          id: "t11",
+          status: RequestStatus.enum.failed,
+          watch_enabled: true,
+          next_retry_at: new Date(Date.now() + 2 * 60 * 60 * 1000 + 5 * 60 * 1000),
+        }),
+      ],
+    });
+
+    render(<RequestDetailTracks request={request} />);
+
+    expect(screen.getByText("Next attempt in 2h")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Retry now" })).not.toBeInTheDocument();
   });
 
   it("prioritizes a queued track from the jump-the-queue action", async () => {

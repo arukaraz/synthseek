@@ -55,7 +55,9 @@
     "recycleBinSaveFailed": "Papierkorb-Einstellungen konnten nicht gespeichert werden",
     "recycleBinEmptied_one": "Papierkorb geleert, {{count}} Datei entfernt",
     "recycleBinEmptied_other": "Papierkorb geleert, {{count}} Dateien entfernt",
-    "recycleBinEmptyFailed": "Papierkorb konnte nicht geleert werden"
+    "recycleBinEmptyFailed": "Papierkorb konnte nicht geleert werden",
+    "reviewSaved": "Einstellungen der Import-Prüfung gespeichert",
+    "reviewFailed": "Einstellungen der Import-Prüfung konnten nicht gespeichert werden"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",
@@ -256,5 +258,34 @@
       "noAcceptedFiles": "Keine unterstützten Audiodateien gefunden",
       "uploadFailed": "Upload fehlgeschlagen. Versuche es erneut."
     }
+  },
+  "review": {
+    "imported": {
+      "title": "Freigegeben und importiert",
+      "description": "Die zurückgehaltene Datei wurde mit dem angeforderten Interpreten und Titel importiert und ihre Quelle wurde entsperrt."
+    },
+    "alreadyInLibrary": {
+      "title": "Schon in deiner Bibliothek",
+      "description": "Deine Bibliothek hatte diesen Titel bereits, es wurde also nichts importiert. Der Eintrag ist verschwunden und seine Quelle wurde entsperrt."
+    },
+    "alreadyInProgress": {
+      "title": "Wird bereits importiert",
+      "description": "Eine andere Freigabe dieser Datei läuft noch. Es wurde nichts doppelt gestartet."
+    },
+    "retryable": {
+      "title": "Import kam nicht durch",
+      "description": "Er stoppte vor dem Verschieben der Datei, die zurückgehaltene Kopie ist also unversehrt und du kannst sie erneut freigeben."
+    },
+    "failed": {
+      "title": "Import nach dem Verschieben gescheitert",
+      "description": "Die Datei hatte den Aufbewahrungsbereich vor dem Fehler verlassen, dieser Eintrag lässt sich jetzt nur noch verwerfen."
+    },
+    "discarded": {
+      "title": "Verworfen",
+      "fileRemoved": "Die zurückgehaltene Datei wurde gelöscht. Die Quelle bleibt gesperrt und der Titel bleibt fehlgeschlagen.",
+      "fileAlreadyGone": "Der Eintrag wurde entfernt. Seine zurückgehaltene Datei war bereits von der Festplatte verschwunden."
+    },
+    "approveFailed": "Die zurückgehaltene Datei konnte nicht freigegeben werden",
+    "discardFailed": "Die zurückgehaltene Datei konnte nicht verworfen werden"
   }
 }

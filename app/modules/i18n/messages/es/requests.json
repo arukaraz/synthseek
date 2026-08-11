@@ -154,11 +154,9 @@
     "connectionFailed": "Error de conexión con Spotify"
   },
   "watch": {
-    "watchingNextRetry": "En seguimiento, próximo reintento {{time}}",
-    "retryCount_one": "{{count}} reintento de seguimiento hasta ahora",
-    "retryCount_other": "{{count}} reintentos de seguimiento hasta ahora",
     "stop": "Dejar de seguir",
-    "resume": "Reanudar seguimiento"
+    "resume": "Reanudar seguimiento, reiniciar la programación",
+    "resumeTitle": "Borra el número de intentos y la hora programada, así el próximo barrido reintenta esta canción."
   },
   "approval": {
     "approvePending_one": "Aprobar canción pendiente",
@@ -177,6 +175,69 @@
       "cancel": "Seguir en espera",
       "confirm_one": "Rechazar canción",
       "confirm_other": "Rechazar {{count}} canciones"
+    }
+  },
+  "review": {
+    "trigger": "Revisión de importaciones",
+    "triggerAria_one": "Revisión de importaciones, {{count}} archivo esperando una decisión",
+    "triggerAria_other": "Revisión de importaciones, {{count}} archivos esperando una decisión",
+    "triggerAriaHeld_one": "Revisión de importaciones, {{count}} archivo retenido necesita atención",
+    "triggerAriaHeld_other": "Revisión de importaciones, {{count}} archivos retenidos necesitan atención",
+    "modal": {
+      "title": "Revisión de importaciones",
+      "description": "Las descargas que una comprobación de verificación rechazó se guardan aquí. Escucha el archivo y luego apruébalo con los metadatos que pediste, o descártalo."
+    },
+    "loadError": "No se pudo cargar la cola de revisión",
+    "empty": {
+      "title": "No hay nada pendiente de revisión",
+      "description": "Cuando una comprobación de verificación rechaza una descarga, el audio se guarda aquí hasta que lo apruebes o lo descartes."
+    },
+    "columns": {
+      "source": "Fuente",
+      "peer": "Par",
+      "size": "Tamaño",
+      "age": "Antigüedad"
+    },
+    "trackDisplay": "{{title}} - {{artist}}",
+    "evidence": {
+      "fingerprintMismatch": "La huella acústica identifica {{artist}} - {{title}}, con {{score}} sobre 100 de parecido con la canción que pediste.",
+      "tagMismatch": "Las etiquetas del archivo obtuvieron {{observed}} sobre 100 de confianza, por debajo de los {{expected}} que exige esta comprobación.",
+      "durationMismatch": "El audio dura {{observed}} mientras que la canción pedida dura {{expected}}.",
+      "tagsUnreadable": "No se pudieron leer las etiquetas del archivo, así que no hubo nada que comparar con la petición.",
+      "legacy": "Este archivo se rechazó antes de que las comprobaciones detalladas empezaran a registrar pruebas.",
+      "unavailable": "No se registró ninguna prueba para este rechazo.",
+      "unknownTitle": "una grabación sin nombre"
+    },
+    "failedNotice": "La copia retenida ya no existe, así que lo único que queda es descartar esta entrada.",
+    "error": {
+      "heldFileMissingAfterRestart": "Un reinicio interrumpió la importación y el archivo retenido ya no está en el disco.",
+      "heldFileMissing": "El archivo retenido ya no está en el disco, así que no se puede importar.",
+      "importFailedBeforeMove": "La importación se detuvo antes de mover el archivo. La copia retenida sigue intacta, puedes volver a intentarlo.",
+      "importFailedAfterMove": "La importación falló después de mover el archivo a la biblioteca, así que la copia retenida ya no existe.",
+      "unknown": "El último intento falló por un motivo que no se registró."
+    },
+    "actions": {
+      "play": "Reproducir {{name}}",
+      "stop": "Detener la reproducción de {{name}}",
+      "previewLabel": "Vista previa de audio de {{name}}",
+      "approve": "Aprobar",
+      "discard": "Descartar"
+    },
+    "confirmDiscard": {
+      "title": "¿Descartar este archivo?",
+      "message": "Se borra la copia retenida y la fuente sigue bloqueada. La canción sigue fallida, así que la vigilancia la seguirá buscando en otro sitio.",
+      "confirm": "Descartar archivo"
+    },
+    "footer": {
+      "summary_one": "{{count}} importación retenida en total, {{size}} aún en disco",
+      "summary_other": "{{count}} importaciones retenidas en total, {{size}} aún en disco",
+      "retention": {
+        "label": "Conservar durante",
+        "suffix": "días",
+        "save": "Guardar",
+        "saving": "Guardando...",
+        "range": "Introduce un número entero de días entre {{min}} y {{max}}"
+      }
     }
   }
 }

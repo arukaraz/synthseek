@@ -1,10 +1,10 @@
 "use client";
 
 import { ShieldCheck, Trash2, X } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
+import { HashLink } from "@components/HashLink";
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { EmptyState } from "@components/ui/EmptyState";
@@ -14,6 +14,7 @@ import { Switch } from "@components/ui/Switch";
 import { useClearQuarantine, useRemoveQuarantineEntry } from "@hooks/api/mutations/settings/useQuarantine";
 import { useUpdateEngineImport } from "@hooks/api/mutations/settings/useUpdateEngine";
 import { useQuarantineList } from "@hooks/api/queries/useQuarantine";
+import { downloadSourceLabelKey } from "@utils/download-source";
 import { formatRelativeTime } from "@utils/formatters";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -22,7 +23,7 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
 import { QUARANTINE_FILENAME_MAX } from "./constants";
-import { quarantineSourceKey, truncateMiddle } from "./helpers";
+import { truncateMiddle } from "./helpers";
 import {
   quarantineFilename,
   quarantineLink,
@@ -93,7 +94,7 @@ export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
       ) : (
         <ul className={quarantineList()}>
           {entries.data?.map((entry) => {
-            const sourceKey = quarantineSourceKey(entry.source);
+            const sourceKey = downloadSourceLabelKey(entry.source);
             return (
               <li key={entry.id} className={quarantineRow()}>
                 <div className={quarantineRowBody()}>
@@ -139,7 +140,9 @@ export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
           t={t}
           i18nKey="quarantine.sourceTrust.manage"
           components={{
-            slskd: <Link href="/settings/integrations/download-sources#ban-threshold" className={quarantineLink()} />,
+            slskd: (
+              <HashLink href="/settings/integrations/download-sources#ban-threshold" className={quarantineLink()} />
+            ),
           }}
         />
       </p>

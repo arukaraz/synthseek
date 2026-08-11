@@ -36,6 +36,10 @@ export type {
   DropImportUploadResult,
 } from "./mutations/import/useDropImportUpload";
 
+export { useImportReview } from "./queries/review/useImportReview";
+export { useApproveHeldImport } from "./mutations/review/useApproveHeldImport";
+export { useDiscardHeldImport } from "./mutations/review/useDiscardHeldImport";
+
 export { useRequest } from "./mutations/requests/useRequest";
 export { useBatchRequest } from "./mutations/requests/useBatchRequest";
 export { usePlaylistRequest } from "./mutations/requests/usePlaylistRequest";

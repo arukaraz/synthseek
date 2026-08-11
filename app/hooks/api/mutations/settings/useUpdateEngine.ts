@@ -81,6 +81,17 @@ export function useUpdateEngineQuality() {
   });
 }
 
+export function useUpdateEngineReview() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateEngineReview.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      toast.success(i18n.t("mutations:settings.reviewSaved"));
+    },
+    onError: (error) => errorToast(error, "settings.reviewFailed"),
+  });
+}
+
 export function useUpdateEngineSmartSearch() {
   const utils = trpc.useUtils();
   return trpc.settings.updateEngineSmartSearch.useMutation({

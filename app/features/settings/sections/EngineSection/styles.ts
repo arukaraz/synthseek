@@ -14,6 +14,6 @@ export const quarantineMeta = cva("text-fg/55 flex flex-wrap items-center gap-x-
 
 export const quarantineReasonBadge = cva("bg-fg/10 text-fg/70 rounded-full px-2 py-0.5 text-[11px] font-medium");
 
-export const quarantineLink = cva("text-primary-400 hover:text-primary-300 underline-offset-2 hover:underline");
+export const quarantineLink = cva("text-primary-400 underline-offset-2 hover:underline");
 
 export const quarantineValue = cva("text-fg text-sm font-medium");

@@ -55,7 +55,9 @@
     "recycleBinSaveFailed": "Failed to save recycle bin settings",
     "recycleBinEmptied_one": "Recycle bin emptied, {{count}} file removed",
     "recycleBinEmptied_other": "Recycle bin emptied, {{count}} files removed",
-    "recycleBinEmptyFailed": "Failed to empty recycle bin"
+    "recycleBinEmptyFailed": "Failed to empty recycle bin",
+    "reviewSaved": "Import review settings saved",
+    "reviewFailed": "Failed to save import review settings"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",
@@ -256,5 +258,34 @@
       "noAcceptedFiles": "No supported audio files were found",
       "uploadFailed": "Upload failed. Try again."
     }
+  },
+  "review": {
+    "imported": {
+      "title": "Approved and imported",
+      "description": "The held file was imported with the artist and title you requested, and its source was unblocked."
+    },
+    "alreadyInLibrary": {
+      "title": "Already in your library",
+      "description": "Your library already had this track, so nothing was imported. The entry is gone and its source was unblocked."
+    },
+    "alreadyInProgress": {
+      "title": "Already importing",
+      "description": "Another approval for this file is still running. Nothing was started twice."
+    },
+    "retryable": {
+      "title": "Import did not go through",
+      "description": "It stopped before the file was moved, so the held copy is intact and you can approve it again."
+    },
+    "failed": {
+      "title": "Import failed after the move",
+      "description": "The file left the held area before the failure, so this entry can only be discarded now."
+    },
+    "discarded": {
+      "title": "Discarded",
+      "fileRemoved": "The held file was deleted. The source stays blocked and the track stays failed.",
+      "fileAlreadyGone": "The entry was removed. Its held file was already gone from disk."
+    },
+    "approveFailed": "Failed to approve the held file",
+    "discardFailed": "Failed to discard the held file"
   }
 }

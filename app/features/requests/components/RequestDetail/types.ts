@@ -35,10 +35,6 @@ export interface TrackActionsCellProps {
   onUpgrade: () => void;
 }
 
-export interface TrackWatchHintProps {
-  track: TrackRequest;
-}
-
 export interface TrackTitleCellProps {
   track: TrackRequest;
 }
@@ -49,6 +45,7 @@ export interface TrackPriorityCellProps {
 
 export interface TrackStatusCellProps {
   track: TrackRequest;
+  onRetryNow?: () => void;
 }
 
 export interface RequestDetailHeroProps {

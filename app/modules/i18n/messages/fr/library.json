@@ -452,6 +452,7 @@
       "identified": "Identifié",
       "importing": "Importation",
       "imported": "Importé",
+      "already_in_library": "Déjà dans la bibliothèque",
       "pending_match": "Correspondance requise",
       "discarded": "Écarté",
       "failed": "Échoué"
@@ -462,6 +463,8 @@
       "title": "{{processed}}/{{total}} fichiers traités",
       "imported_one": "{{count}} importé",
       "imported_other": "{{count}} importés",
+      "alreadyInLibrary_one": "{{count}} déjà dans votre bibliothèque",
+      "alreadyInLibrary_other": "{{count}} déjà dans votre bibliothèque",
       "pending_one": "{{count}} en attente de correspondance",
       "pending_other": "{{count}} en attente de correspondance",
       "failed_one": "{{count}} échoué",

@@ -154,11 +154,9 @@
     "connectionFailed": "Spotify connection failed"
   },
   "watch": {
-    "watchingNextRetry": "Watching, next retry {{time}}",
-    "retryCount_one": "{{count}} watch retry so far",
-    "retryCount_other": "{{count}} watch retries so far",
     "stop": "Stop watching",
-    "resume": "Resume watching"
+    "resume": "Resume watching, reset the schedule",
+    "resumeTitle": "Clears the attempt count and the scheduled time, so the next sweep retries this track."
   },
   "approval": {
     "approvePending_one": "Approve pending track",
@@ -177,6 +175,69 @@
       "cancel": "Keep waiting",
       "confirm_one": "Reject track",
       "confirm_other": "Reject {{count}} tracks"
+    }
+  },
+  "review": {
+    "trigger": "Import review",
+    "triggerAria_one": "Import review, {{count}} file waiting for a decision",
+    "triggerAria_other": "Import review, {{count}} files waiting for a decision",
+    "triggerAriaHeld_one": "Import review, {{count}} held file needs attention",
+    "triggerAriaHeld_other": "Import review, {{count}} held files need attention",
+    "modal": {
+      "title": "Import review",
+      "description": "Downloads a verification check rejected are kept here. Listen to the file, then approve it with the metadata you asked for, or discard it."
+    },
+    "loadError": "Failed to load the review queue",
+    "empty": {
+      "title": "Nothing waiting for review",
+      "description": "When a download is rejected by a verification check, the audio is kept here until you approve or discard it."
+    },
+    "columns": {
+      "source": "Source",
+      "peer": "Peer",
+      "size": "Size",
+      "age": "Held for"
+    },
+    "trackDisplay": "{{title}} - {{artist}}",
+    "evidence": {
+      "fingerprintMismatch": "The audio fingerprints as {{artist}} - {{title}}, which scores {{score}} out of 100 for similarity against the track you requested.",
+      "tagMismatch": "The file tags scored {{observed}} out of 100 for confidence, below the {{expected}} this check requires.",
+      "durationMismatch": "The audio runs {{observed}} while the requested track runs {{expected}}.",
+      "tagsUnreadable": "The file tags could not be read, so nothing could be compared against the request.",
+      "legacy": "This file was rejected before the granular checks started recording evidence.",
+      "unavailable": "No evidence was recorded for this rejection.",
+      "unknownTitle": "an unnamed recording"
+    },
+    "failedNotice": "The held copy is gone, so discarding this entry is the only action left.",
+    "error": {
+      "heldFileMissingAfterRestart": "The import was interrupted by a restart and the held file is no longer on disk.",
+      "heldFileMissing": "The held file is no longer on disk, so it cannot be imported.",
+      "importFailedBeforeMove": "The import stopped before the file was moved. The held copy is intact, so you can try again.",
+      "importFailedAfterMove": "The import failed after the file was moved into the library, so the held copy no longer exists.",
+      "unknown": "The last attempt failed for a reason that was not recorded."
+    },
+    "actions": {
+      "play": "Play {{name}}",
+      "stop": "Stop playing {{name}}",
+      "previewLabel": "Audio preview of {{name}}",
+      "approve": "Approve",
+      "discard": "Discard"
+    },
+    "confirmDiscard": {
+      "title": "Discard this file?",
+      "message": "The held copy is deleted and the source stays blocked. The track stays failed, so the watch keeps looking for it elsewhere.",
+      "confirm": "Discard file"
+    },
+    "footer": {
+      "summary_one": "{{count}} held import in total, {{size}} still on disk",
+      "summary_other": "{{count}} held imports in total, {{size}} still on disk",
+      "retention": {
+        "label": "Keep for",
+        "suffix": "days",
+        "save": "Save",
+        "saving": "Saving...",
+        "range": "Enter a whole number of days between {{min}} and {{max}}"
+      }
     }
   }
 }

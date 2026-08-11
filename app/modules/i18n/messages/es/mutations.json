@@ -55,7 +55,9 @@
     "recycleBinSaveFailed": "No se pudieron guardar los ajustes de la papelera",
     "recycleBinEmptied_one": "Papelera vaciada, {{count}} archivo eliminado",
     "recycleBinEmptied_other": "Papelera vaciada, {{count}} archivos eliminados",
-    "recycleBinEmptyFailed": "No se pudo vaciar la papelera"
+    "recycleBinEmptyFailed": "No se pudo vaciar la papelera",
+    "reviewSaved": "Ajustes de revisión de importaciones guardados",
+    "reviewFailed": "No se pudieron guardar los ajustes de revisión de importaciones"
   },
   "plexConnect": {
     "timedOut": "El inicio de sesión de Plex agotó el tiempo de espera",
@@ -256,5 +258,34 @@
       "noAcceptedFiles": "No se encontraron archivos de audio compatibles",
       "uploadFailed": "La subida falló. Inténtalo de nuevo."
     }
+  },
+  "review": {
+    "imported": {
+      "title": "Aprobado e importado",
+      "description": "El archivo retenido se importó con el artista y el título que pediste, y su fuente se desbloqueó."
+    },
+    "alreadyInLibrary": {
+      "title": "Ya estaba en tu biblioteca",
+      "description": "Tu biblioteca ya tenía esta canción, así que no se importó nada. La entrada ha desaparecido y su fuente se desbloqueó."
+    },
+    "alreadyInProgress": {
+      "title": "Ya se está importando",
+      "description": "Otra aprobación de este archivo sigue en curso. No se ha iniciado nada dos veces."
+    },
+    "retryable": {
+      "title": "La importación no salió adelante",
+      "description": "Se detuvo antes de mover el archivo, así que la copia retenida sigue intacta y puedes volver a aprobarla."
+    },
+    "failed": {
+      "title": "La importación falló tras mover el archivo",
+      "description": "El archivo salió del área de retención antes del fallo, así que esta entrada solo se puede descartar."
+    },
+    "discarded": {
+      "title": "Descartado",
+      "fileRemoved": "Se borró el archivo retenido. La fuente sigue bloqueada y la canción sigue fallida.",
+      "fileAlreadyGone": "Se eliminó la entrada. Su archivo retenido ya no estaba en el disco."
+    },
+    "approveFailed": "No se pudo aprobar el archivo retenido",
+    "discardFailed": "No se pudo descartar el archivo retenido"
   }
 }

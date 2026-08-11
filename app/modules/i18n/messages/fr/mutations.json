@@ -55,7 +55,9 @@
     "recycleBinSaveFailed": "Échec de l'enregistrement des réglages de la corbeille",
     "recycleBinEmptied_one": "Corbeille vidée, {{count}} fichier supprimé",
     "recycleBinEmptied_other": "Corbeille vidée, {{count}} fichiers supprimés",
-    "recycleBinEmptyFailed": "Impossible de vider la corbeille"
+    "recycleBinEmptyFailed": "Impossible de vider la corbeille",
+    "reviewSaved": "Réglages de la révision des imports enregistrés",
+    "reviewFailed": "Impossible d'enregistrer les réglages de la révision des imports"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",
@@ -256,5 +258,34 @@
       "noAcceptedFiles": "Aucun fichier audio pris en charge n'a été trouvé",
       "uploadFailed": "Le téléversement a échoué. Réessayez."
     }
+  },
+  "review": {
+    "imported": {
+      "title": "Validé et importé",
+      "description": "Le fichier conservé a été importé avec l'artiste et le titre demandés, et sa source a été débloquée."
+    },
+    "alreadyInLibrary": {
+      "title": "Déjà dans votre bibliothèque",
+      "description": "Votre bibliothèque possédait déjà cette piste, rien n'a donc été importé. L'entrée a disparu et sa source a été débloquée."
+    },
+    "alreadyInProgress": {
+      "title": "Importation déjà en cours",
+      "description": "Une autre validation de ce fichier est encore en cours. Rien n'a été lancé deux fois."
+    },
+    "retryable": {
+      "title": "L'import n'a pas abouti",
+      "description": "Il s'est arrêté avant le déplacement du fichier, la copie conservée est donc intacte et vous pouvez la valider à nouveau."
+    },
+    "failed": {
+      "title": "Import échoué après le déplacement",
+      "description": "Le fichier avait quitté la zone de conservation avant l'échec, cette entrée ne peut donc plus qu'être rejetée."
+    },
+    "discarded": {
+      "title": "Rejeté",
+      "fileRemoved": "Le fichier conservé a été supprimé. La source reste bloquée et la piste reste en échec.",
+      "fileAlreadyGone": "L'entrée a été supprimée. Son fichier conservé avait déjà disparu du disque."
+    },
+    "approveFailed": "Impossible de valider le fichier conservé",
+    "discardFailed": "Impossible de rejeter le fichier conservé"
   }
 }

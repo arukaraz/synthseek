@@ -12,7 +12,7 @@ export function OrderToggle({ isActive, label, icon: Icon, onClick }: OrderToggl
       className={cn(
         "flex flex-1 items-center justify-center gap-1.5 rounded-md border px-2 py-1.5 text-xs transition-colors",
         isActive
-          ? "border-primary-500/40 bg-primary-500/15 text-primary-200"
+          ? "border-primary-500/40 bg-primary-500/15 text-primary-400"
           : "border-fg/10 bg-fg/5 text-fg/60 hover:bg-fg/10 hover:text-fg"
       )}
     >

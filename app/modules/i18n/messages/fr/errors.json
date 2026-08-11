@@ -262,5 +262,21 @@
   "RECYCLE_BIN_BUSY": {
     "title": "La corbeille est occupée",
     "description": "Un remplacement pour montée en qualité est en cours. Réessayez dans un instant."
+  },
+  "HELD_IMPORT_NOT_FOUND": {
+    "title": "Fichier conservé introuvable",
+    "description": "Cette entrée de révision n'existe plus. Elle a sans doute été traitée ou a expiré."
+  },
+  "HELD_IMPORT_FILE_MISSING": {
+    "title": "Fichier conservé manquant",
+    "description": "L'audio conservé n'est plus sur le disque, il ne peut donc être ni importé ni lu."
+  },
+  "HELD_IMPORT_IN_FLIGHT": {
+    "title": "Importation déjà en cours",
+    "description": "Ce fichier conservé est en cours d'importation. Attendez la fin de l'opération."
+  },
+  "HELD_IMPORT_NOT_APPROVABLE": {
+    "title": "Approbation impossible",
+    "description": "Cette entrée a déjà échoué après le déplacement de son fichier. Seul le rejet reste possible."
   }
 }

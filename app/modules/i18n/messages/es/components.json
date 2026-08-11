@@ -73,5 +73,12 @@
     "currentVersion": "Actual {{version}}",
     "roleAdmin": "Administrador",
     "roleUser": "Usuario"
+  },
+  "trackRetrySchedule": {
+    "nextAttempt": "Próximo intento {{time}}",
+    "attempts_one": "{{count}} intento hasta ahora",
+    "attempts_other": "{{count}} intentos hasta ahora",
+    "retryNow": "Reintentar ahora",
+    "watching": "El barrido de reintentos automáticos vigila esta canción"
   }
 }

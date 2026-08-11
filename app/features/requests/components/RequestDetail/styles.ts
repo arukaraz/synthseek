@@ -37,7 +37,7 @@ export const heroBannerImage = cva("scale-110 object-cover object-center opacity
 export type HeroBannerImageProps = VariantProps<typeof heroBannerImage>;
 
 export const heroAvatar = cva(
-  "from-primary-500/30 to-accent-500/30 ring-fg/10 relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br shadow-xl ring-1",
+  "from-primary-500/30 to-accent-500/30 ring-fg/10 relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-linear-to-br shadow-xl ring-1",
   {
     variants: {
       size: {
@@ -114,12 +114,12 @@ export const heroSuccessMenuItem = cva(
 export type HeroSuccessMenuItemProps = VariantProps<typeof heroSuccessMenuItem>;
 
 export const heroRetryButton = cva(
-  "border-primary-500/30 bg-primary-500/10 text-primary-300 hover:border-primary-500/50 hover:bg-primary-500/20 hover:text-primary-200 hidden md:inline-flex"
+  "border-primary-500/30 bg-primary-500/10 text-primary-400 hover:border-primary-500/50 hover:bg-primary-500/20 hidden md:inline-flex"
 );
 
 export type HeroRetryButtonProps = VariantProps<typeof heroRetryButton>;
 
-export const heroRetryMenuItem = cva("text-primary-400 focus:text-primary-300 md:hidden");
+export const heroRetryMenuItem = cva("text-primary-400 md:hidden");
 
 export type HeroRetryMenuItemProps = VariantProps<typeof heroRetryMenuItem>;
 
@@ -137,7 +137,7 @@ export const detailStatsGrid = cva("grid grid-cols-2 gap-3 px-3 pb-4 sm:px-4", {
 
 export type DetailStatsGridProps = VariantProps<typeof detailStatsGrid>;
 
-export const heroMetaValue = cva("text-primary-300");
+export const heroMetaValue = cva("text-primary-400");
 
 export type HeroMetaValueProps = VariantProps<typeof heroMetaValue>;
 
@@ -186,14 +186,10 @@ export const heroBackButton = cva("shrink-0");
 export type HeroBackButtonProps = VariantProps<typeof heroBackButton>;
 
 export const priorityChip = cva(
-  "border-primary-500/30 bg-primary-500/10 text-primary-300 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
+  "border-primary-500/30 bg-primary-500/10 text-primary-400 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
 );
 
 export type PriorityChipProps = VariantProps<typeof priorityChip>;
-
-export const watchHint = cva("text-fg/45 inline-flex min-w-0 items-center gap-1 text-[11px]");
-
-export type WatchHintProps = VariantProps<typeof watchHint>;
 
 export const rejectReasonInput = cva(
   "border-fg/10 bg-fg/5 text-fg placeholder:text-fg/35 focus:border-primary-500/50 w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none"

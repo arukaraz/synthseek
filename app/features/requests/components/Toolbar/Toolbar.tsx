@@ -10,6 +10,7 @@ import { REQUESTS_URL_PARAMS } from "../../types";
 import { FilterSortMenu } from "./FilterSortMenu";
 import { ImportProviderMenu } from "./ImportProviderMenu";
 import { RequestsToolbarMenu } from "./RequestsToolbarMenu";
+import { ReviewQueueButton } from "./ReviewQueueButton";
 import { SearchInput } from "./SearchInput/SearchInput";
 
 export function Toolbar() {
@@ -44,6 +45,7 @@ export function Toolbar() {
       </div>
 
       <div className={cn("flex shrink-0 items-center gap-1.5 sm:gap-2", isSearchOpen && "hidden sm:flex")}>
+        <ReviewQueueButton />
         <ImportProviderMenu />
         <RequestsToolbarMenu hasItems={hasItems} />
       </div>

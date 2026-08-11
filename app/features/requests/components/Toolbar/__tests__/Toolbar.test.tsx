@@ -29,6 +29,10 @@ vi.mock("../ImportProviderMenu", () => ({
   ImportProviderMenu: () => <div>import provider</div>,
 }));
 
+vi.mock("../ReviewQueueButton", () => ({
+  ReviewQueueButton: () => <div>review queue</div>,
+}));
+
 vi.mock("../RequestsToolbarMenu", () => ({
   RequestsToolbarMenu: ({ hasItems }: { hasItems: boolean }) => {
     toolbarMenuSpy(hasItems);
@@ -46,10 +50,11 @@ describe("Toolbar", () => {
     vi.clearAllMocks();
   });
 
-  it("composes the filter, search, import and overflow controls", () => {
+  it("composes the filter, search, review, import and overflow controls", () => {
     render(<Toolbar />);
 
     expect(screen.getByText("filter sort")).toBeInTheDocument();
+    expect(screen.getByText("review queue")).toBeInTheDocument();
     expect(screen.getByText("import provider")).toBeInTheDocument();
     expect(screen.getByText("toolbar menu")).toBeInTheDocument();
   });

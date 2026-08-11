@@ -85,7 +85,7 @@ export function RequestDetailHeroMenu({
           </DropdownMenuItem>
         )}
         {canResume ? (
-          <DropdownMenuItem onClick={resume} className="text-primary-400 focus:text-primary-300">
+          <DropdownMenuItem onClick={resume} className="text-primary-400">
             <Play className="size-3.5" />
             {t("detail.resume")}
           </DropdownMenuItem>
@@ -104,7 +104,7 @@ export function RequestDetailHeroMenu({
           </DropdownMenuItem>
         )}
         {canPrioritize && (
-          <DropdownMenuItem onClick={prioritize} className="text-primary-400 focus:text-primary-300">
+          <DropdownMenuItem onClick={prioritize} className="text-primary-400">
             <ChevronsUp className="size-3.5" />
             {t("detail.jumpTheQueue")}
           </DropdownMenuItem>
@@ -116,11 +116,7 @@ export function RequestDetailHeroMenu({
           </DropdownMenuItem>
         )}
         {canSyncPlex && (
-          <DropdownMenuItem
-            onClick={syncPlex}
-            disabled={syncPlexPending}
-            className="text-primary-400 focus:text-primary-300"
-          >
+          <DropdownMenuItem onClick={syncPlex} disabled={syncPlexPending} className="text-primary-400">
             <Upload className="size-3.5" />
             {syncPlexPending ? t("detail.syncing") : t("detail.syncToPlex")}
           </DropdownMenuItem>

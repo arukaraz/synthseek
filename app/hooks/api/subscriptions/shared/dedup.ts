@@ -24,7 +24,7 @@ function eventKey(event: SubscriptionEvent): string {
     case SubscriptionEventType.LibraryImportProgress:
       return `${event.eventType}:${event.jobId}:${event.item?.key ?? event.phase}:${event.item?.state ?? ""}`;
     case SubscriptionEventType.DropImportUpdate:
-      return `${event.eventType}:${event.batchId}:${event.status}:${event.importedFiles}:${event.pendingFiles}:${event.failedFiles}:${event.discardedFiles}:${event.file?.id ?? ""}:${event.file?.status ?? ""}`;
+      return `${event.eventType}:${event.batchId}:${event.status}:${event.importedFiles}:${event.alreadyInLibraryFiles}:${event.pendingFiles}:${event.failedFiles}:${event.discardedFiles}:${event.file?.id ?? ""}:${event.file?.status ?? ""}`;
   }
 }
 

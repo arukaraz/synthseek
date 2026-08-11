@@ -73,5 +73,12 @@
     "currentVersion": "Aktuell {{version}}",
     "roleAdmin": "Administrator",
     "roleUser": "Benutzer"
+  },
+  "trackRetrySchedule": {
+    "nextAttempt": "Nächster Versuch {{time}}",
+    "attempts_one": "{{count}} Versuch bisher",
+    "attempts_other": "{{count}} Versuche bisher",
+    "retryNow": "Jetzt wiederholen",
+    "watching": "Der automatische Wiederholungslauf beobachtet diesen Titel"
   }
 }

@@ -23,6 +23,7 @@ function makeBatch(overrides: Partial<DropImportBatch> = {}): DropImportBatch {
     status: "completed",
     total_files: 4,
     imported_files: 4,
+    already_in_library_files: 0,
     pending_files: 0,
     failed_files: 0,
     discarded_files: 0,

@@ -73,5 +73,12 @@
     "currentVersion": "Actuelle {{version}}",
     "roleAdmin": "Administrateur",
     "roleUser": "Utilisateur"
+  },
+  "trackRetrySchedule": {
+    "nextAttempt": "Prochaine tentative {{time}}",
+    "attempts_one": "{{count}} tentative jusqu'ici",
+    "attempts_other": "{{count}} tentatives jusqu'ici",
+    "retryNow": "Réessayer maintenant",
+    "watching": "Le balayage de reprise automatique surveille ce morceau"
   }
 }

@@ -67,6 +67,7 @@ function dropImportUpdate(
     status: "processing",
     totalFiles: 3,
     importedFiles: 1,
+    alreadyInLibraryFiles: 0,
     pendingFiles: 0,
     failedFiles: 0,
     discardedFiles: 0,
@@ -107,5 +108,13 @@ describe("isDuplicate DropImportUpdate", () => {
     );
     vi.advanceTimersByTime(10);
     expect(isDuplicate(dropImportUpdate({ file: { id: "f1", name: "a.mp3", status: "imported" } }), cache)).toBe(false);
+  });
+
+  it("keeps ticks that differ only in the already-in-library count distinct", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(dropImportUpdate({ alreadyInLibraryFiles: 1 }), cache)).toBe(false);
+    vi.advanceTimersByTime(10);
+    expect(isDuplicate(dropImportUpdate({ alreadyInLibraryFiles: 2 }), cache)).toBe(false);
   });
 });

@@ -76,11 +76,7 @@ export function TrackActionsCell({
             </DropdownMenuItem>
           )}
           {showPrioritize && (
-            <DropdownMenuItem
-              onClick={onPrioritize}
-              title={t("tracks.jumpTheQueueTitle")}
-              className="text-primary-400 hover:text-primary-300"
-            >
+            <DropdownMenuItem onClick={onPrioritize} title={t("tracks.jumpTheQueueTitle")} className="text-primary-400">
               <ChevronsUp className="size-4" />
               {t("tracks.jumpTheQueue")}
             </DropdownMenuItem>
@@ -98,7 +94,7 @@ export function TrackActionsCell({
             </DropdownMenuItem>
           )}
           {showResumeWatch && (
-            <DropdownMenuItem onClick={() => onSetWatch(true)}>
+            <DropdownMenuItem onClick={() => onSetWatch(true)} title={t("watch.resumeTitle")}>
               <Eye className="size-4" />
               {t("watch.resume")}
             </DropdownMenuItem>

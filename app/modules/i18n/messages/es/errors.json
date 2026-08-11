@@ -262,5 +262,21 @@
   "RECYCLE_BIN_BUSY": {
     "title": "La papelera está ocupada",
     "description": "Hay un reemplazo por mejora de calidad en curso. Inténtalo de nuevo en un momento."
+  },
+  "HELD_IMPORT_NOT_FOUND": {
+    "title": "Archivo retenido no encontrado",
+    "description": "Esta entrada de revisión ya no existe. Puede que se haya resuelto o caducado."
+  },
+  "HELD_IMPORT_FILE_MISSING": {
+    "title": "Falta el archivo retenido",
+    "description": "El audio guardado ya no está en el disco, así que no se puede importar ni reproducir."
+  },
+  "HELD_IMPORT_IN_FLIGHT": {
+    "title": "Ya se está importando",
+    "description": "Este archivo retenido se está importando ahora mismo. Espera a que termine."
+  },
+  "HELD_IMPORT_NOT_APPROVABLE": {
+    "title": "No se puede aprobar",
+    "description": "Esta entrada ya falló después de mover su archivo. Solo se puede descartar."
   }
 }

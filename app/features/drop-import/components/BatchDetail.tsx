@@ -58,6 +58,7 @@ export function BatchDetail({ batchId, rejected, onBack }: BatchDetailProps) {
 
       <div className={detailCounts()}>
         <span>{t("dropImport.detail.imported", { count: data.imported_files })}</span>
+        <span>{t("dropImport.detail.alreadyInLibrary", { count: data.already_in_library_files })}</span>
         <span>{t("dropImport.detail.pending", { count: data.pending_files })}</span>
         <span>{t("dropImport.detail.failed", { count: data.failed_files })}</span>
         <span>{t("dropImport.detail.discarded", { count: data.discarded_files })}</span>

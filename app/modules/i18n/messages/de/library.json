@@ -452,6 +452,7 @@
       "identified": "Identifiziert",
       "importing": "Wird importiert",
       "imported": "Importiert",
+      "already_in_library": "Bereits in der Bibliothek",
       "pending_match": "Zuordnung nötig",
       "discarded": "Verworfen",
       "failed": "Fehlgeschlagen"
@@ -462,6 +463,8 @@
       "title": "{{processed}}/{{total}} Dateien verarbeitet",
       "imported_one": "{{count}} importiert",
       "imported_other": "{{count}} importiert",
+      "alreadyInLibrary_one": "{{count}} bereits in deiner Bibliothek",
+      "alreadyInLibrary_other": "{{count}} bereits in deiner Bibliothek",
       "pending_one": "{{count}} braucht eine Zuordnung",
       "pending_other": "{{count}} brauchen eine Zuordnung",
       "failed_one": "{{count}} fehlgeschlagen",

@@ -262,5 +262,21 @@
   "RECYCLE_BIN_BUSY": {
     "title": "Recycle bin is busy",
     "description": "A quality upgrade replacement is in flight. Try again in a moment."
+  },
+  "HELD_IMPORT_NOT_FOUND": {
+    "title": "Held file not found",
+    "description": "This review entry no longer exists. It may have been decided or expired."
+  },
+  "HELD_IMPORT_FILE_MISSING": {
+    "title": "Held file missing",
+    "description": "The retained audio is no longer on disk, so it cannot be imported or played."
+  },
+  "HELD_IMPORT_IN_FLIGHT": {
+    "title": "Already importing",
+    "description": "This held file is being imported right now. Wait for it to finish."
+  },
+  "HELD_IMPORT_NOT_APPROVABLE": {
+    "title": "Cannot be approved",
+    "description": "This entry already failed after its file was moved. Only discarding it is possible."
   }
 }

@@ -452,6 +452,7 @@
       "identified": "Identificado",
       "importing": "Importando",
       "imported": "Importado",
+      "already_in_library": "Ya en la biblioteca",
       "pending_match": "Necesita coincidencia",
       "discarded": "Descartado",
       "failed": "Fallido"
@@ -462,6 +463,8 @@
       "title": "{{processed}}/{{total}} archivos procesados",
       "imported_one": "{{count}} importado",
       "imported_other": "{{count}} importados",
+      "alreadyInLibrary_one": "{{count}} ya en tu biblioteca",
+      "alreadyInLibrary_other": "{{count}} ya en tu biblioteca",
       "pending_one": "{{count}} necesita coincidencia",
       "pending_other": "{{count}} necesitan coincidencia",
       "failed_one": "{{count}} fallido",

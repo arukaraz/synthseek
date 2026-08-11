@@ -18,7 +18,13 @@ export function fileDisplayTags(file: DropImportFile): string | null {
 }
 
 export function batchProcessedCount(batch: DropImportBatch): number {
-  return batch.imported_files + batch.pending_files + batch.failed_files + batch.discarded_files;
+  return (
+    batch.imported_files +
+    batch.already_in_library_files +
+    batch.pending_files +
+    batch.failed_files +
+    batch.discarded_files
+  );
 }
 
 export function batchProgressPercent(batch: DropImportBatch): number {

@@ -47,6 +47,7 @@ function makeEvent(overrides: Partial<DropImportUpdatePayload>): DropImportUpdat
     status: "processing",
     totalFiles: 3,
     importedFiles: 0,
+    alreadyInLibraryFiles: 0,
     pendingFiles: 0,
     failedFiles: 0,
     discardedFiles: 0,
@@ -71,6 +72,17 @@ describe("handleDropImportUpdate", () => {
   it("invalidates requests and library views when a file lands imported", () => {
     handleDropImportUpdate(
       makeEvent({ importedFiles: 1, file: { id: "f1", name: "a.mp3", status: "imported" } }),
+      utils()
+    );
+
+    expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
+    expect(spies.invalidateTracks).toHaveBeenCalledTimes(1);
+    expect(spies.invalidateCounts).toHaveBeenCalledTimes(1);
+  });
+
+  it("invalidates requests and library views when a file lands already in library", () => {
+    handleDropImportUpdate(
+      makeEvent({ alreadyInLibraryFiles: 1, file: { id: "f1", name: "a.mp3", status: "already_in_library" } }),
       utils()
     );
 

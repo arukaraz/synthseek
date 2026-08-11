@@ -154,11 +154,9 @@
     "connectionFailed": "Spotify-Verbindung fehlgeschlagen"
   },
   "watch": {
-    "watchingNextRetry": "Wird beobachtet, nächster Versuch {{time}}",
-    "retryCount_one": "Bisher {{count}} Beobachtungs-Versuch",
-    "retryCount_other": "Bisher {{count}} Beobachtungs-Versuche",
     "stop": "Beobachtung beenden",
-    "resume": "Beobachtung fortsetzen"
+    "resume": "Beobachtung fortsetzen, Zeitplan zurücksetzen",
+    "resumeTitle": "Setzt die Versuchszahl und die geplante Zeit zurück, damit der nächste Durchlauf diesen Titel erneut versucht."
   },
   "approval": {
     "approvePending_one": "Wartenden Titel freigeben",
@@ -177,6 +175,69 @@
       "cancel": "Warten lassen",
       "confirm_one": "Titel ablehnen",
       "confirm_other": "{{count}} Titel ablehnen"
+    }
+  },
+  "review": {
+    "trigger": "Import-Prüfung",
+    "triggerAria_one": "Import-Prüfung, {{count}} Datei wartet auf eine Entscheidung",
+    "triggerAria_other": "Import-Prüfung, {{count}} Dateien warten auf eine Entscheidung",
+    "triggerAriaHeld_one": "Import-Prüfung, {{count}} zurückgehaltene Datei erfordert Aufmerksamkeit",
+    "triggerAriaHeld_other": "Import-Prüfung, {{count}} zurückgehaltene Dateien erfordern Aufmerksamkeit",
+    "modal": {
+      "title": "Import-Prüfung",
+      "description": "Downloads, die eine Überprüfung abgelehnt hat, werden hier aufbewahrt. Höre die Datei an und übernimm sie dann mit den angeforderten Metadaten, oder verwirf sie."
+    },
+    "loadError": "Die Prüfliste konnte nicht geladen werden",
+    "empty": {
+      "title": "Nichts zu prüfen",
+      "description": "Wenn eine Überprüfung einen Download ablehnt, bleibt das Audio hier liegen, bis du es freigibst oder verwirfst."
+    },
+    "columns": {
+      "source": "Quelle",
+      "peer": "Peer",
+      "size": "Größe",
+      "age": "Alter"
+    },
+    "trackDisplay": "{{title}} - {{artist}}",
+    "evidence": {
+      "fingerprintMismatch": "Der Fingerabdruck erkennt {{artist}} - {{title}}, mit {{score}} von 100 Punkten Ähnlichkeit zum angeforderten Titel.",
+      "tagMismatch": "Die Datei-Tags erreichten {{observed}} von 100 Punkten Konfidenz und damit weniger als die von dieser Prüfung verlangten {{expected}}.",
+      "durationMismatch": "Das Audio läuft {{observed}}, der angeforderte Titel dagegen {{expected}}.",
+      "tagsUnreadable": "Die Datei-Tags waren nicht lesbar, es gab also nichts, was mit der Anfrage verglichen werden konnte.",
+      "legacy": "Diese Datei wurde abgelehnt, bevor die detaillierten Prüfungen Belege aufgezeichnet haben.",
+      "unavailable": "Für diese Ablehnung wurden keine Belege aufgezeichnet.",
+      "unknownTitle": "eine unbenannte Aufnahme"
+    },
+    "failedNotice": "Die zurückgehaltene Kopie existiert nicht mehr, dieser Eintrag lässt sich also nur noch verwerfen.",
+    "error": {
+      "heldFileMissingAfterRestart": "Ein Neustart hat den Import unterbrochen und die zurückgehaltene Datei liegt nicht mehr auf der Festplatte.",
+      "heldFileMissing": "Die zurückgehaltene Datei liegt nicht mehr auf der Festplatte und kann daher nicht importiert werden.",
+      "importFailedBeforeMove": "Der Import stoppte, bevor die Datei verschoben wurde. Die zurückgehaltene Kopie ist unversehrt, du kannst es erneut versuchen.",
+      "importFailedAfterMove": "Der Import scheiterte, nachdem die Datei in die Bibliothek verschoben wurde, die zurückgehaltene Kopie existiert also nicht mehr.",
+      "unknown": "Der letzte Versuch schlug aus einem nicht aufgezeichneten Grund fehl."
+    },
+    "actions": {
+      "play": "{{name}} abspielen",
+      "stop": "Wiedergabe von {{name}} stoppen",
+      "previewLabel": "Hörprobe von {{name}}",
+      "approve": "Freigeben",
+      "discard": "Verwerfen"
+    },
+    "confirmDiscard": {
+      "title": "Diese Datei verwerfen?",
+      "message": "Die zurückgehaltene Kopie wird gelöscht und die Quelle bleibt gesperrt. Der Titel bleibt fehlgeschlagen, die Überwachung sucht also anderswo weiter.",
+      "confirm": "Datei verwerfen"
+    },
+    "footer": {
+      "summary_one": "{{count}} zurückgehaltener Import insgesamt, {{size}} noch auf der Festplatte",
+      "summary_other": "{{count}} zurückgehaltene Importe insgesamt, {{size}} noch auf der Festplatte",
+      "retention": {
+        "label": "Aufbewahren für",
+        "suffix": "Tage",
+        "save": "Speichern",
+        "saving": "Wird gespeichert...",
+        "range": "Gib eine ganze Zahl von Tagen zwischen {{min}} und {{max}} ein"
+      }
     }
   }
 }

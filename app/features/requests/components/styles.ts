@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-export const requestsView = cva("from-primary-500/5 via-primary-400/0 relative flex h-full flex-col bg-gradient-to-t", {
+export const requestsView = cva("from-primary-500/5 via-primary-400/0 relative flex h-full flex-col bg-linear-to-t", {
   variants: {},
   defaultVariants: {},
 });

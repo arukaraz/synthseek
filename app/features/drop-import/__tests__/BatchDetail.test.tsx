@@ -18,7 +18,10 @@ vi.mock("@hooks/api", () => ({
   useSearchContent: () => spies.searchQuery,
 }));
 
+import i18n from "@locale";
+
 import { BatchDetail } from "../components/BatchDetail";
+import { statusChip } from "../styles";
 
 function makeFile(overrides: Partial<DropImportFile> = {}): DropImportFile {
   return {
@@ -45,6 +48,7 @@ function makeBatch(overrides: Partial<DropImportBatchWithFiles> = {}): DropImpor
     status: "partial",
     total_files: 3,
     imported_files: 1,
+    already_in_library_files: 0,
     pending_files: 1,
     failed_files: 1,
     discarded_files: 0,
@@ -85,6 +89,7 @@ describe("BatchDetail", () => {
     expect(screen.getByText("1 needs a match")).toBeInTheDocument();
     expect(screen.getByText("1 failed")).toBeInTheDocument();
     expect(screen.getByText("0 discarded")).toBeInTheDocument();
+    expect(screen.getByText(i18n.t("library:dropImport.detail.alreadyInLibrary", { count: 0 }))).toBeInTheDocument();
     expect(screen.getByTestId("progress-bar")).toHaveAttribute("data-progress", "100");
 
     expect(screen.getByText("song.mp3")).toBeInTheDocument();
@@ -92,6 +97,35 @@ describe("BatchDetail", () => {
     expect(screen.getByText("Needs match")).toBeInTheDocument();
     expect(screen.getByText("Failed")).toBeInTheDocument();
     expect(screen.getByText("identification failed")).toBeInTheDocument();
+  });
+
+  it("counts already-in-library files as processed and surfaces them in the summary", () => {
+    spies.batchQuery.data = makeBatch({
+      status: "completed",
+      total_files: 1,
+      imported_files: 0,
+      already_in_library_files: 1,
+      pending_files: 0,
+      failed_files: 0,
+      files: [makeFile({ original_name: "held.mp3", status: "already_in_library" })],
+    });
+    render(<BatchDetail batchId="batch-1" rejected={[]} onBack={vi.fn()} />);
+
+    expect(screen.getByText(i18n.t("library:dropImport.detail.title", { processed: 1, total: 1 }))).toBeInTheDocument();
+    expect(screen.getByTestId("progress-bar")).toHaveAttribute("data-progress", "100");
+    expect(screen.getByText(i18n.t("library:dropImport.detail.alreadyInLibrary", { count: 1 }))).toBeInTheDocument();
+  });
+
+  it("renders the already-in-library file status with its own tone", () => {
+    spies.batchQuery.data = makeBatch({
+      files: [makeFile({ original_name: "held.mp3", status: "already_in_library" })],
+    });
+    render(<BatchDetail batchId="batch-1" rejected={[]} onBack={vi.fn()} />);
+
+    const badge = screen.getByText(i18n.t("library:dropImport.fileStatus.already_in_library"));
+
+    expect(badge).toBeInTheDocument();
+    expect(badge).toHaveClass(...statusChip({ tone: "info" }).split(" "));
   });
 
   it("discards a pending-match file", async () => {
