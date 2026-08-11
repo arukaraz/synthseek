@@ -5,12 +5,13 @@ import { SubscriptionEventType, type PlexSyncAllProgressPayload } from "@api/__g
 import { trpc } from "@utils/trpc";
 import { handlePlexSyncAllProgress } from "../plexSyncAllProgress";
 import { subscribePlexSyncAll, type PlexSyncAllUpdate } from "../../../shared/plexSyncAll";
-import { resetDockStore, useDockJobs } from "../../../shared/progressDock";
+import { dismissDockJob, resetDockStore, seedPlexSyncDockJob, useDockJobs } from "../../../shared/progressDock";
 import type { DockJob } from "../../../shared/progressDock";
 
 const spies = vi.hoisted(() => ({
   setData: vi.fn(),
   invalidate: vi.fn(),
+  invalidateItems: vi.fn(),
 }));
 
 vi.mock("@utils/trpc", () => ({
@@ -18,6 +19,7 @@ vi.mock("@utils/trpc", () => ({
     useUtils: () => ({
       requests: {
         getPlexSyncAllState: { setData: spies.setData },
+        getPlexSyncAllItems: { invalidate: spies.invalidateItems },
         getAll: { invalidate: spies.invalidate },
       },
     }),
@@ -46,6 +48,7 @@ function plexJob(): DockJob | undefined {
 beforeEach(() => {
   spies.setData.mockReset();
   spies.invalidate.mockReset();
+  spies.invalidateItems.mockReset();
   resetDockStore();
 });
 
@@ -146,15 +149,74 @@ describe("handlePlexSyncAllProgress", () => {
     expect(plexJob()?.status).toBe("partial");
   });
 
-  it("falls back to a count-only job for a late-joining tab (no prior start)", () => {
+  it("advances the rehydrated row a progress event names after a late join", () => {
     const utils = trpc.useUtils();
+    seedPlexSyncDockJob([
+      { id: "pl_1", name: "Road Trip", state: "done" },
+      { id: "pl_2", name: "Focus", state: "pending" },
+      { id: "pl_3", name: "Chill", state: "pending" },
+    ]);
+
     handlePlexSyncAllProgress(
-      makeEvent({ phase: "progress", synced: 1, total: 3, current: { id: "x", ok: true } }),
+      makeEvent({ phase: "progress", synced: 2, total: 3, current: { id: "pl_2", ok: true } }),
       utils
     );
 
     const job = plexJob();
-    expect(job).toBeDefined();
-    expect(job?.items).toHaveLength(3);
+    expect(job?.items.find((item) => item.key === "pl_1")?.state).toBe("done");
+    expect(job?.items.find((item) => item.key === "pl_2")?.state).toBe("done");
+    expect(job?.items.find((item) => item.key === "pl_3")?.state).toBe("pending");
+  });
+
+  it("does not fabricate placeholder rows for a late-joining tab with no rehydrated job", () => {
+    const utils = trpc.useUtils();
+    handlePlexSyncAllProgress(
+      makeEvent({ phase: "progress", synced: 1, total: 3, current: { id: "pl_1", ok: true } }),
+      utils
+    );
+
+    expect(plexJob()).toBeUndefined();
+  });
+
+  it("asks the server for the in-flight rows when a progress event finds no dock job", () => {
+    const utils = trpc.useUtils();
+    handlePlexSyncAllProgress(
+      makeEvent({ phase: "progress", synced: 1, total: 3, current: { id: "pl_1", ok: true } }),
+      utils
+    );
+
+    expect(spies.invalidateItems).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not ask again once the dock job is seeded", () => {
+    const utils = trpc.useUtils();
+    seedPlexSyncDockJob([{ id: "pl_1", name: "Road Trip" }]);
+
+    handlePlexSyncAllProgress(
+      makeEvent({ phase: "progress", synced: 1, total: 1, current: { id: "pl_1", ok: true } }),
+      utils
+    );
+
+    expect(spies.invalidateItems).not.toHaveBeenCalled();
+  });
+
+  it("does not ask for rows the user already dismissed", () => {
+    const utils = trpc.useUtils();
+    seedPlexSyncDockJob([{ id: "pl_1", name: "Road Trip" }]);
+    dismissDockJob("plex-sync");
+
+    handlePlexSyncAllProgress(
+      makeEvent({ phase: "progress", synced: 1, total: 1, current: { id: "pl_1", ok: true } }),
+      utils
+    );
+
+    expect(spies.invalidateItems).not.toHaveBeenCalled();
+  });
+
+  it("does not resurrect a job as complete for a tab that only saw the completion event", () => {
+    const utils = trpc.useUtils();
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 3, total: 3, failed: 0 }), utils);
+
+    expect(plexJob()).toBeUndefined();
   });
 });

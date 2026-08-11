@@ -21,5 +21,14 @@ export {
   settleRequestDockJob,
   settleRequestDockJobByRequestId,
 } from "./requestDock";
-export { REQUEST_DOCK_AUTO_DISMISS_MS } from "./constants";
-export type { DockItem, DockItemState, DockJob, DockJobKind, DockJobStatus, LibraryImportFailureReason } from "./types";
+export { seedPlexSyncDockJob } from "./plexSyncDock";
+export { PLEX_SYNC_DOCK_ID, REQUEST_DOCK_AUTO_DISMISS_MS } from "./constants";
+export type {
+  DockItem,
+  DockItemState,
+  DockJob,
+  DockJobKind,
+  DockJobStatus,
+  LibraryImportFailureReason,
+  PlexSyncSeedItem,
+} from "./types";

@@ -8,6 +8,7 @@ const pushMock = vi.fn();
 const getParamMock = vi.fn<(key: string) => string | null>(() => null);
 const useSubscriptionsMock = vi.fn();
 const useRehydrateRequestDockMock = vi.fn();
+const useRehydratePlexSyncDockMock = vi.fn();
 const useHashTargetGlowMock = vi.fn();
 
 vi.mock("next/navigation", () => ({
@@ -18,6 +19,7 @@ vi.mock("next/navigation", () => ({
 vi.mock("@hooks/api/subscriptions", () => ({
   useSubscriptions: () => useSubscriptionsMock(),
   useRehydrateRequestDock: () => useRehydrateRequestDockMock(),
+  useRehydratePlexSyncDock: () => useRehydratePlexSyncDockMock(),
 }));
 
 vi.mock("@hooks/ui/useHashTargetGlow", () => ({
@@ -60,7 +62,7 @@ describe("MainLayoutContent", () => {
     getParamMock.mockReturnValue(null);
   });
 
-  it("wires the page subscriptions and the hash glow effect", () => {
+  it("wires the page subscriptions, both dock rehydrations, and the hash glow effect", () => {
     render(
       <MainLayoutContent>
         <p>child</p>
@@ -69,6 +71,7 @@ describe("MainLayoutContent", () => {
 
     expect(useSubscriptionsMock).toHaveBeenCalledTimes(1);
     expect(useRehydrateRequestDockMock).toHaveBeenCalledTimes(1);
+    expect(useRehydratePlexSyncDockMock).toHaveBeenCalledTimes(1);
     expect(useHashTargetGlowMock).toHaveBeenCalledTimes(1);
   });
 

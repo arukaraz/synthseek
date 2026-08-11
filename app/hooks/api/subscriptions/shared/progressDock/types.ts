@@ -13,6 +13,12 @@ export interface DockItem {
   reason?: LibraryImportFailureReason;
 }
 
+export interface PlexSyncSeedItem {
+  id: string;
+  name: string;
+  state?: DockItemState;
+}
+
 export interface DockJob {
   id: string;
   kind: DockJobKind;

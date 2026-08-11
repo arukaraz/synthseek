@@ -3,58 +3,27 @@ import type { trpc } from "@utils/trpc";
 
 import { emitPlexSyncAll } from "../../shared/plexSyncAll";
 import {
-  buildDockItems,
   hasDockJob,
   isDockJobDismissed,
   markDockItem,
-  seedDockJob,
+  PLEX_SYNC_DOCK_ID,
+  seedPlexSyncDockJob,
   setDockJobStatus,
   terminalStatusFromCounts,
 } from "../../shared/progressDock";
-import type { DockItem } from "../../shared/progressDock";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
-const PLEX_SYNC_DOCK_ID = "plex-sync";
-
-function anonymousItems(total: number): DockItem[] {
-  return Array.from({ length: Math.max(total, 0) }, (_, index) => ({
-    key: `plex-${index}`,
-    name: "",
-    state: "pending",
-  }));
-}
-
-function seedFromStart(event: PlexSyncAllProgressPayload): void {
-  seedDockJob({
-    id: PLEX_SYNC_DOCK_ID,
-    kind: "plex-sync",
-    items: buildDockItems((event.items ?? []).map((item) => ({ key: item.id, name: item.name }))),
-    status: "running",
-  });
-}
-
-function seedFromLateJoin(event: PlexSyncAllProgressPayload): void {
-  seedDockJob({
-    id: PLEX_SYNC_DOCK_ID,
-    kind: "plex-sync",
-    items: anonymousItems(event.total),
-    status: "running",
-  });
-}
-
-function driveDock(event: PlexSyncAllProgressPayload): void {
+function driveDock(event: PlexSyncAllProgressPayload, utils: Utils): void {
   if (event.phase === "start") {
-    seedFromStart(event);
+    seedPlexSyncDockJob(event.items ?? []);
     return;
   }
 
-  if (!hasDockJob(PLEX_SYNC_DOCK_ID)) {
-    if (isDockJobDismissed(PLEX_SYNC_DOCK_ID)) return;
-    seedFromLateJoin(event);
-  }
-
   if (event.phase === "progress") {
+    if (!hasDockJob(PLEX_SYNC_DOCK_ID) && !isDockJobDismissed(PLEX_SYNC_DOCK_ID)) {
+      void utils.requests.getPlexSyncAllItems.invalidate();
+    }
     if (event.current) {
       markDockItem(PLEX_SYNC_DOCK_ID, event.current.id, event.current.ok ? "done" : "failed");
     }
@@ -78,7 +47,7 @@ export function handlePlexSyncAllProgress(event: PlexSyncAllProgressPayload, uti
     total: event.total,
   });
 
-  driveDock(event);
+  driveDock(event, utils);
 
   if (event.phase === "complete") {
     void utils.requests.getAll.invalidate();
