@@ -72,7 +72,7 @@ describe("ImagePlaceholder", () => {
     const { container } = render(<ImagePlaceholder />);
 
     const wrapper = container.firstChild;
-    expect(wrapper).toHaveClass("bg-gradient-to-br");
+    expect(wrapper).toHaveClass("bg-linear-to-br");
   });
 
   it("has rounded corners", () => {

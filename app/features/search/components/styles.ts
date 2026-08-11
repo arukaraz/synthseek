@@ -14,7 +14,7 @@ export const resultCard = cva("group relative cursor-pointer overflow-hidden rou
 
 export type ResultCardProps = VariantProps<typeof resultCard>;
 
-export const cardImagePlaceholder = cva("flex h-full w-full items-center justify-center bg-gradient-to-br", {
+export const cardImagePlaceholder = cva("flex h-full w-full items-center justify-center bg-linear-to-br", {
   variants: {
     gradient: {
       primary: "from-primary-500/30 to-accent-500/30",
@@ -31,7 +31,7 @@ export type CardImagePlaceholderProps = VariantProps<typeof cardImagePlaceholder
 export const cardInfo = cva("absolute inset-x-0 bottom-0 p-3", {
   variants: {
     gradient: {
-      dark: "bg-gradient-to-t from-black/90 via-black/60 to-transparent",
+      dark: "bg-linear-to-t from-black/90 via-black/60 to-transparent",
     },
   },
   defaultVariants: {
@@ -57,7 +57,7 @@ export const cardHoverBorder = cva(
 
 export type CardHoverBorderProps = VariantProps<typeof cardHoverBorder>;
 
-export const configHeader = cva("absolute inset-0 flex items-center justify-center rounded-t-2xl bg-gradient-to-br", {
+export const configHeader = cva("absolute inset-0 flex items-center justify-center rounded-t-2xl bg-linear-to-br", {
   variants: {
     gradient: {
       primary: "from-primary-500/30 to-accent-500/30",

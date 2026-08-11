@@ -17,18 +17,18 @@ export const heroShade = cva(
 export const heroTop = cva("absolute left-3 right-3 top-3 z-10 flex items-center justify-between");
 
 export const heroCrown = cva(
-  "border-accent-400/50 text-accent-400 inline-flex items-center gap-1.5 rounded-full border bg-black/45 px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm"
+  "border-overlay-fg-accent/50 text-overlay-fg-accent inline-flex items-center gap-1.5 rounded-full border bg-black/70 px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm"
 );
 
 export const heroBody = cva("relative z-10 p-4 sm:p-5");
 
-export const heroRank = cva("type-text-track text-[56px] font-bold leading-none sm:text-[64px]");
+export const heroRank = cva("type-text-track type-text-overlay text-[56px] font-bold leading-none sm:text-[64px]");
 
 export const heroTitle = cva("text-overlay-fg mt-2 text-lg font-semibold sm:text-xl");
 
 export const heroBy = cva("text-overlay-fg/80 text-sm");
 
-export const heroPlays = cva("type-text-track mt-2 font-mono text-xs");
+export const heroPlays = cva("type-text-track type-text-overlay mt-2 font-mono text-xs");
 
 export const list = cva("flex min-w-0 flex-1 flex-col gap-1");
 
@@ -54,7 +54,9 @@ export const emptyPanel = cva(
 
 export const emptyText = cva("text-fg/60 text-sm");
 
-export const emptyLink = cva("text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors");
+export const emptyLink = cva(
+  "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
+);
 
 export const skeletonHero = cva(
   "bg-fg/5 aspect-[4/5] w-full shrink-0 animate-pulse rounded-2xl sm:aspect-auto sm:h-72 sm:w-[200px] md:w-[220px] lg:w-[240px]"

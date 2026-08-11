@@ -64,14 +64,14 @@ export const fieldLabel = cva("text-fg-muted text-xs font-semibold");
 
 export const fieldHint = cva("text-fg-muted text-xs");
 
-export const fieldError = cva("text-[oklch(var(--neon-error))] text-xs");
+export const fieldError = cva("text-destructive-vivid text-xs");
 
-export const fieldWarning = cva("text-plex-500 text-xs");
+export const fieldWarning = cva("text-plex-400 text-xs");
 
 export const slskdTestRow = cva("flex flex-wrap items-center gap-3");
 
 export const slskdTestButton = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500/50 inline-flex min-h-11 items-center justify-center gap-2 rounded-[0.6875rem] border px-4 text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 inline-flex min-h-11 items-center justify-center gap-2 rounded-[0.6875rem] border px-4 text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
 );
 
 export const doneCard = cva("flex items-center gap-3 rounded-2xl border p-4 transition-opacity", {
@@ -85,7 +85,7 @@ export const doneCard = cva("flex items-center gap-3 rounded-2xl border p-4 tran
 });
 
 export const doneCheckBadge = cva(
-  "bg-primary-500/15 text-primary-300 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+  "bg-primary-500/15 text-primary-400 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
 );
 
 export const doneCardHeading = cva("text-fg text-sm font-medium");
@@ -97,7 +97,7 @@ export const serverPickerCard = cva("border-fg/15 bg-fg/[0.04] flex flex-col gap
 export const serverPickerIntro = cva("text-fg-muted text-xs");
 
 export const wizardPickerButton = cva(
-  "border-fg/15 bg-fg/[0.03] hover:bg-fg/[0.07] hover:border-fg/25 focus-visible:ring-primary-500/50 flex min-h-11 items-center justify-between gap-3 rounded-[0.6875rem] border px-3 py-2 text-left transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
+  "border-fg/15 bg-fg/[0.03] hover:bg-fg/[0.07] hover:border-fg/25 focus-visible:ring-primary-500 flex min-h-11 items-center justify-between gap-3 rounded-[0.6875rem] border px-3 py-2 text-left transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
 );
 
 export const serverPickerName = cva("text-fg truncate text-sm font-medium");

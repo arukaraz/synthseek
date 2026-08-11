@@ -100,7 +100,7 @@ export const pill = cva(
     variants: {
       tone: {
         experimental: "bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30",
-        info: "bg-primary-500/15 text-primary-300 ring-1 ring-primary-500/30",
+        info: "bg-primary-500/15 text-primary-400 ring-1 ring-primary-500/30",
         success: "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30",
         danger: "bg-red-500/15 text-red-300 ring-1 ring-red-500/30",
         muted: "bg-fg/10 text-fg/60 ring-fg/10 ring-1",
@@ -146,7 +146,7 @@ export const chipsInputRoot = cva(
 );
 
 export const chipsInputChip = cva(
-  "bg-primary-500/15 text-primary-300 inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium"
+  "bg-primary-500/15 text-primary-400 inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium"
 );
 
 export const chipsInputInputField = cva(
@@ -176,8 +176,6 @@ export const serverPickerLocationBadge = cva(
   }
 );
 
-export const memberRow = cva("bg-bg-soft/40 ring-fg/10 flex items-center gap-3 rounded-lg p-3 ring-1");
-
 export const memberAvatar = cva("bg-fg/10 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full");
 
 export const segmentedControl = cva("border-fg/15 bg-fg/5 inline-flex rounded-lg border p-0.5");
@@ -185,7 +183,7 @@ export const segmentedControl = cva("border-fg/15 bg-fg/5 inline-flex rounded-lg
 export const segmentedOption = cva("rounded-md px-3 py-1 text-xs font-medium transition-colors", {
   variants: {
     active: {
-      true: "bg-primary-500/20 text-primary-200",
+      true: "bg-primary-500/20 text-primary-400",
       false: "text-fg/55 hover:text-fg/85",
     },
   },

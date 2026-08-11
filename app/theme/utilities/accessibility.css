@@ -17,16 +17,7 @@
     backdrop-filter: none !important;
   }
 
-  .glass-panel,
-  .glass-panel-hover,
-  .glass-subtle,
-  .glass-intense,
-  .modal-backdrop {
-    backdrop-filter: none !important;
-  }
-
-  .hover-lift:hover,
-  .glass-panel-hover:hover {
+  .hover-lift:hover {
     transform: none !important;
   }
 
@@ -83,11 +74,5 @@
     --border-default: oklch(0.5 0 0);
     --border-subtle: oklch(0.4 0 0);
     --glass-border: oklch(0.5 0 0 / 0.5);
-  }
-
-  .glass-panel,
-  .glass-subtle,
-  .glass-intense {
-    border-width: 2px;
   }
 }

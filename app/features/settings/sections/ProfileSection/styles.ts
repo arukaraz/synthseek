@@ -13,5 +13,5 @@ export const spotifyChip = cva(
 );
 
 export const plexChip = cva(
-  "bg-plex-500/15 text-plex-500 flex size-9 shrink-0 items-center justify-center rounded-full"
+  "bg-plex-500/15 text-plex-400 flex size-9 shrink-0 items-center justify-center rounded-full"
 );

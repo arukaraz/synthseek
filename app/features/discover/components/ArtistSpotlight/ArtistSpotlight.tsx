@@ -40,7 +40,7 @@ export function ArtistSpotlight() {
       className={glassPanelCard({ height: "auto" })}
       aria-labelledby="artist-spotlight-heading"
     >
-      <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
+      <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
 
       <div className="relative flex flex-1 flex-col">
         <WidgetHeader

@@ -76,7 +76,7 @@ export const trackChips = cva("flex shrink-0 items-center gap-1");
 export const statusChip = cva("rounded px-1.5 py-0.5 text-[10px] font-medium", {
   variants: {
     status: {
-      matched: "bg-emerald-500/15 text-emerald-300",
+      matched: "bg-success-vivid/15 text-success-vivid",
       already: "bg-fg/10 text-fg/50",
       unmatched: "bg-destructive/15 text-destructive",
     },
@@ -86,8 +86,8 @@ export const statusChip = cva("rounded px-1.5 py-0.5 text-[10px] font-medium", {
 export const confidenceBadge = cva("rounded px-1.5 py-0.5 text-[10px]", {
   variants: {
     kind: {
-      exact: "bg-primary-500/10 text-primary-300",
-      approx: "bg-yellow-500/15 text-yellow-300",
+      exact: "bg-primary-500/10 text-primary-400",
+      approx: "bg-warning-vivid/15 text-warning-vivid",
     },
   },
 });

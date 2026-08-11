@@ -15,7 +15,7 @@ export const cardRoot = cva("group flex min-w-0 flex-col gap-2", {
 });
 
 export const cardCover = cva(
-  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative aspect-square w-full overflow-hidden rounded-lg bg-gradient-to-br ring-1"
+  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative aspect-square w-full overflow-hidden rounded-lg bg-linear-to-br ring-1"
 );
 
 export const cardImage = cva("h-full w-full object-cover");

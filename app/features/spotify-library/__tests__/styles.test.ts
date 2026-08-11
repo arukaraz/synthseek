@@ -219,13 +219,13 @@ describe("table primitives", () => {
   it("cover thumbnails fall back to gradients", () => {
     expect(coverThumb()).toContain("rounded");
     expect(heartThumb()).toContain("text-rose-400");
-    expect(coverPlaceholder()).toContain("bg-gradient-to-br");
+    expect(coverPlaceholder()).toContain("bg-linear-to-br");
   });
 });
 
 describe("type and status tags", () => {
   it("typeTag colors each content type by tone", () => {
-    expect(typeTag({ tone: "playlist" })).toContain("text-primary-200");
+    expect(typeTag({ tone: "playlist" })).toContain("text-primary-400");
     expect(typeTag({ tone: "album" })).toContain("text-cyan-300");
     expect(typeTag({ tone: "liked" })).toContain("text-rose-300");
   });
@@ -238,9 +238,9 @@ describe("type and status tags", () => {
   });
 
   it("sync pill and dot toggle on the primary token", () => {
-    expect(syncPill({ on: true })).toContain("text-primary-200");
+    expect(syncPill({ on: true })).toContain("text-primary-400");
     expect(syncPill({ on: false })).toContain("text-fg/40");
-    expect(syncDot({ on: true })).toContain("bg-primary-300");
+    expect(syncDot({ on: true })).toContain("bg-primary-400");
     expect(syncDot({ on: false })).toContain("bg-fg/40");
   });
 
@@ -250,7 +250,7 @@ describe("type and status tags", () => {
   });
 
   it("checkBox fills when on", () => {
-    expect(checkBox({ on: true })).toContain("bg-gradient-to-br");
+    expect(checkBox({ on: true })).toContain("bg-linear-to-br");
     expect(checkBox({ on: false })).toContain("border-fg/20");
   });
 });
@@ -266,7 +266,7 @@ describe("detail pane", () => {
     expect(detailCoverRow()).toContain("items-start");
     expect(detailCoverImg()).toContain("rounded-lg");
     expect(detailHeartImg()).toContain("text-rose-300");
-    expect(detailCoverPlaceholderLg()).toContain("bg-gradient-to-br");
+    expect(detailCoverPlaceholderLg()).toContain("bg-linear-to-br");
   });
 
   it("detail headings and byline use foreground tints", () => {
@@ -277,7 +277,7 @@ describe("detail pane", () => {
 
   it("detail actions distinguish the primary action", () => {
     expect(detailActions()).toContain("flex");
-    expect(detailAct({ primary: true })).toContain("bg-gradient-to-br");
+    expect(detailAct({ primary: true })).toContain("bg-linear-to-br");
     expect(detailAct({ primary: false })).toContain("text-fg/70");
   });
 
@@ -308,7 +308,7 @@ describe("detail pane", () => {
     expect(trackTitle()).toContain("truncate");
     expect(trackArtist()).toContain("truncate");
     expect(trackDur()).toContain("text-right");
-    expect(trackMore()).toContain("text-primary-300");
+    expect(trackMore()).toContain("text-primary-400");
   });
 });
 
@@ -350,7 +350,7 @@ describe("bottombar", () => {
     expect(toolbar()).toContain("flex");
     expect(autoImportTrigger({ active: true })).toContain("border-primary-500/30");
     expect(autoImportTrigger({ active: false })).toContain("text-fg/60");
-    expect(autoImportBadge({ active: true })).toContain("text-primary-200");
+    expect(autoImportBadge({ active: true })).toContain("text-primary-400");
     expect(autoImportBadge({ active: false })).toContain("text-fg/50");
     expect(autoImportPopover()).toContain("w-[280px]");
     expect(autoImportTitle()).toContain("uppercase");
@@ -369,8 +369,8 @@ describe("selection bulk bar", () => {
 
   it("selection chip highlights the primary token", () => {
     expect(selectionBarChip()).toContain("border-primary-500/30");
-    expect(selectionBarChipDot()).toContain("bg-primary-300");
-    expect(selectionBarChipNum()).toContain("text-primary-300");
+    expect(selectionBarChipDot()).toContain("bg-primary-400");
+    expect(selectionBarChipNum()).toContain("text-primary-400");
   });
 
   it("clear pushes to the trailing edge and disables", () => {

@@ -20,14 +20,14 @@ export function ProgressBar({
       data-loading={isActive}
     >
       <motion.div
-        className={cn("relative h-full bg-gradient-to-r", gradient)}
+        className={cn("relative h-full bg-linear-to-r", gradient)}
         initial={{ width: 0 }}
         animate={{ width: `${progress}%` }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         {isActive && (
           <motion.div
-            className="via-fg/20 absolute inset-0 bg-gradient-to-r from-transparent to-transparent"
+            className="via-fg/20 absolute inset-0 bg-linear-to-r from-transparent to-transparent"
             animate={{ x: ["-100%", "100%"] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
           />

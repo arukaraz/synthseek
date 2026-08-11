@@ -33,7 +33,7 @@ export function DetailEmptyState() {
           <span className={detailEmptyCardLine()} />
           <span className={detailEmptyCardLine({ short: true })} />
         </span>
-        <MousePointer2 className="text-primary-300 absolute -right-2 -bottom-2 size-5 opacity-90" />
+        <MousePointer2 className="text-primary-400 absolute -right-2 -bottom-2 size-5 opacity-90" />
       </div>
       <h3 className={detailEmptyTitle()}>{t("spotifyLibrary.emptyState.title")}</h3>
       <p className={detailEmptyBody()}>{t("spotifyLibrary.emptyState.body")}</p>

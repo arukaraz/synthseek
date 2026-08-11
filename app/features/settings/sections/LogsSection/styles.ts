@@ -33,13 +33,13 @@ export const logTerminal = cva(
 
 export const logLine = cva("whitespace-pre-wrap break-words");
 
-export const logRequestId = cva("text-secondary-300");
+export const logRequestId = cva("text-secondary-400");
 
 export const LOG_LEVEL_DEFAULT_CLASS = "text-fg/70";
 
 export const LOG_LEVEL_STYLES: Record<LogLevelName, string> = {
   DEBUG: "text-fg/50",
-  INFO: "text-primary-300",
+  INFO: "text-primary-400",
   WARN: "text-amber-300",
   ERROR: "text-red-400",
   SUCCESS: "text-emerald-300",

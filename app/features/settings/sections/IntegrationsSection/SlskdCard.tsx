@@ -1,11 +1,11 @@
 "use client";
 
 import { Plug } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
+import { HashLink } from "@components/HashLink";
 import { Button } from "@components/ui/Button";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
@@ -233,9 +233,9 @@ export function SlskdCard({ initial }: SlskdCardProps) {
               i18nKey="slskd.bannedUploaders.helper"
               components={{
                 threshold: (
-                  <Link
+                  <HashLink
                     href="/settings/integrations/download-sources#ban-threshold"
-                    className="text-primary-400 hover:text-primary-300 underline-offset-2 hover:underline"
+                    className="text-primary-400 underline-offset-2 hover:underline"
                   />
                 ),
               }}

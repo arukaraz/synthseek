@@ -39,7 +39,7 @@ export const scopeRadioDot = cva("size-2 rounded-full bg-primary-400");
 export const scopeRadioTitle = cva("text-sm leading-snug transition-colors", {
   variants: {
     selected: {
-      true: "text-primary-300 font-semibold",
+      true: "text-primary-400 font-semibold",
       false: "text-fg/80 font-medium group-hover:text-fg",
     },
   },
@@ -51,7 +51,7 @@ export const scopeRadioTitle = cva("text-sm leading-snug transition-colors", {
 export const scopeRadioDescription = cva("text-xs leading-snug", {
   variants: {
     selected: {
-      true: "text-primary-300/80",
+      true: "text-primary-400/80",
       false: "text-fg/50",
     },
   },

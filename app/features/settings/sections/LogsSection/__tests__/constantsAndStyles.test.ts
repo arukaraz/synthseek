@@ -51,7 +51,7 @@ describe("LogsSection styles", () => {
     expect(exportActions()).toContain("gap-3");
     expect(logTerminal()).toContain("font-mono");
     expect(logLine()).toContain("break-words");
-    expect(logRequestId()).toContain("text-secondary-300");
+    expect(logRequestId()).toContain("text-secondary-400");
   });
 
   it("maps logChip active variants", () => {
@@ -61,7 +61,7 @@ describe("LogsSection styles", () => {
 
   it("provides level color styles and a default", () => {
     expect(LOG_LEVEL_STYLES.ERROR).toBe("text-red-400");
-    expect(LOG_LEVEL_STYLES.INFO).toBe("text-primary-300");
+    expect(LOG_LEVEL_STYLES.INFO).toBe("text-primary-400");
     expect(LOG_LEVEL_DEFAULT_CLASS).toBe("text-fg/70");
   });
 });

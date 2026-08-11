@@ -9,7 +9,7 @@ export function ImagePlaceholder({ size = "md", icon: Icon = Music, className }:
   return (
     <div
       className={cn(
-        "from-primary-500/20 to-accent-500/20 ring-fg/10 relative flex items-center justify-center rounded-lg bg-gradient-to-br ring-1",
+        "from-primary-500/20 to-accent-500/20 ring-fg/10 relative flex items-center justify-center rounded-lg bg-linear-to-br ring-1",
         sizeClasses[size],
         className
       )}

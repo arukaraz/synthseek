@@ -18,7 +18,7 @@ describe("LogLineRow", () => {
     const { container } = render(<LogLineRow entry={entry()} />);
     const line = container.firstElementChild;
     expect(line).toHaveTextContent("[INFO] application started");
-    expect(line?.querySelector(`.${CSS.escape("text-secondary-300")}`)).toBeNull();
+    expect(line?.querySelector(`.${CSS.escape("text-secondary-400")}`)).toBeNull();
   });
 
   it("applies the level color class for a known level", () => {

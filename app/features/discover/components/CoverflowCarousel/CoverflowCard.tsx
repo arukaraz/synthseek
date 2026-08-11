@@ -86,11 +86,11 @@ export const CoverflowCard = memo(function CoverflowCard({
           priority={priority}
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/30 to-black/20" />
 
         {isCenter && (
           <div className={trendingBadgeContainer()}>
-            <TrendingUp className="text-accent-400 h-5 w-5" />
+            <TrendingUp className="text-overlay-fg-accent h-5 w-5" />
             <span className="text-overlay-fg/90 text-lg font-medium">{t("coverflow.badge")}</span>
           </div>
         )}

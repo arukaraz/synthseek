@@ -93,7 +93,7 @@ describe("seeAllLink", () => {
   it("applies primary color variant", () => {
     const result = seeAllLink({ color: "primary" });
     expect(result).toContain("text-primary-400");
-    expect(result).toContain("hover:text-primary-300");
+    expect(result).toContain("hover:underline");
   });
 });
 

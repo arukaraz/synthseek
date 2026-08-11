@@ -14,7 +14,7 @@ export function CategoriesGridSkeleton() {
 
   return (
     <div className={glassPanelCard({ width: "full" })} aria-label={t("categories.grid.skeletonAriaLabel")}>
-      <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
+      <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
 
       <div className={panelBody()}>
         <WidgetHeaderSkeleton />

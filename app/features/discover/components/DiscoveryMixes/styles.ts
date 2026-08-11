@@ -57,6 +57,8 @@ export const emptyPanel = cva(
 
 export const emptyPanelText = cva("text-fg/60 text-sm");
 
-export const emptyPanelLink = cva("text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors");
+export const emptyPanelLink = cva(
+  "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
+);
 
 export const skeletonCard = cva("bg-fg/5 aspect-[3/4] animate-pulse rounded-2xl");

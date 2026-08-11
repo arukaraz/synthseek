@@ -15,15 +15,39 @@
     --glass-bg: oklch(0.12 0.03 220 / 0.7);
     --glass-border: oklch(0.5 0.1 200 / 0.2);
 
+    --color-primary-400: oklch(0.75 0.15 200);
     --color-primary-500: oklch(0.65 0.15 200);
     --color-primary-600: oklch(0.55 0.15 200);
+    --color-primary-700: oklch(0.45 0.15 200);
+    --color-secondary-400: oklch(0.85 0.14 var(--color-secondary-h));
     --color-secondary-500: oklch(0.7 0.12 160);
+    --color-accent-400: oklch(0.75 0.28 var(--color-accent-h));
+    --color-playlist-400: oklch(0.78 0.17 var(--color-playlist-h));
+    --color-plex-400: var(--color-plex-500);
+
+    --overlay-fg-primary: var(--color-primary-400);
+    --overlay-fg-secondary: var(--color-secondary-400);
+    --overlay-fg-accent: var(--color-accent-400);
+    --overlay-fg-playlist: var(--color-playlist-400);
+
     --neon-primary: 0.65 0.15 200;
     --neon-accent: 0.65 0.15 200;
     --neon-secondary: 0.7 0.12 160;
     --neon-sync: 0.71 0.17 240;
 
-    --neon-glow-opacity: 0.45;
+    --auth-stage-bg: oklch(0.05 0.03 280);
+    --auth-grid-line: oklch(1 0 0 / 0.025);
+    --auth-orb-opacity: 0.72;
+    --auth-card-bg: linear-gradient(to bottom, oklch(0.18 0.07 285 / 0.82), oklch(0.12 0.05 285 / 0.94));
+    --auth-card-bg-compact: linear-gradient(to bottom, oklch(0.15 0.06 285 / 0.97), oklch(0.1 0.04 285 / 0.99));
+    --auth-card-shadow:
+      0 50px 100px -30px oklch(0 0 0 / 0.85), inset 0 0 0 1px oklch(1 0 0 / 0.03),
+      0 0 80px -20px oklch(var(--neon-primary) / 0.45);
+    --auth-ring-lead: oklch(var(--neon-secondary) / 0.85);
+    --auth-ring-trail: oklch(var(--neon-accent) / 0.55);
+    --auth-ring-calm: oklch(var(--neon-secondary) / 0.55);
+    --auth-ring-glow:
+      0 0 24px -6px oklch(var(--neon-primary) / 0.55), inset 0 0 18px -8px oklch(var(--neon-secondary) / 0.4);
 
     --background: 0.1 0.02 220;
     --foreground: 0.92 0.01 200;
@@ -31,7 +55,7 @@
     --card-foreground: 0.92 0.01 200;
     --popover: 0.14 0.025 220;
     --popover-foreground: 0.92 0.01 200;
-    --primary-foreground: 0.985 0.015 250;
+    --primary-foreground: 0.1 0.02 220;
     --secondary: 0.17 0.02 220;
     --secondary-foreground: 0.92 0.01 200;
     --muted: 0.17 0.02 220;
@@ -39,6 +63,9 @@
     --accent: 0.17 0.02 220;
     --accent-foreground: 0.92 0.01 200;
     --destructive: 0.4 0.2 25;
+    --destructive-vivid: oklch(0.704 0.191 22.216);
+    --warning-vivid: oklch(0.852 0.199 91.936);
+    --success-vivid: oklch(0.765 0.177 163.223);
     --border: 0.22 0.03 220;
     --input: 0.22 0.03 220;
     --ring: 0.65 0.15 200;

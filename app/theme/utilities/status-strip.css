@@ -12,15 +12,15 @@
   }
 
   .status-strip-success {
-    background-color: oklch(var(--neon-success) / 0.12);
-    border-color: oklch(var(--neon-success) / 0.32);
-    color: oklch(var(--neon-success));
+    background-color: color-mix(in oklch, var(--success-vivid) 12%, transparent);
+    border-color: color-mix(in oklch, var(--success-vivid) 32%, transparent);
+    color: var(--success-vivid);
   }
 
   .status-strip-error {
-    background-color: oklch(var(--neon-error) / 0.12);
-    border-color: oklch(var(--neon-error) / 0.32);
-    color: oklch(var(--neon-error));
+    background-color: color-mix(in oklch, var(--destructive-vivid) 12%, transparent);
+    border-color: color-mix(in oklch, var(--destructive-vivid) 32%, transparent);
+    color: var(--destructive-vivid);
   }
 
   .status-strip-neutral {

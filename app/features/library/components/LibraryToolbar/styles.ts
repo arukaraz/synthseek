@@ -10,5 +10,5 @@ export const controlButton = cva(
 );
 
 export const filtersBadge = cva(
-  "bg-primary-500/20 text-primary-200 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-[10px] font-semibold"
+  "bg-primary-500/20 text-primary-400 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-[10px] font-semibold"
 );

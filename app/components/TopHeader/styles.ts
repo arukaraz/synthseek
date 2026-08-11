@@ -15,7 +15,7 @@ export const headerContainer = cva("sticky top-0 z-50 w-full border-b border-fg/
 export type HeaderContainerProps = VariantProps<typeof headerContainer>;
 
 export const decorativeLine = cva(
-  "decorative-animation absolute right-0 bottom-0 left-0 h-px bg-gradient-to-r from-transparent to-transparent",
+  "decorative-animation absolute right-0 bottom-0 left-0 h-px bg-linear-to-r from-transparent to-transparent",
   {
     variants: {
       color: {
@@ -44,7 +44,7 @@ export const headerContent = cva("relative flex w-full items-center gap-3 px-4 s
 export type HeaderContentProps = VariantProps<typeof headerContent>;
 
 export const searchGlow = cva(
-  "absolute -inset-0.5 -z-10 hidden rounded-xl bg-gradient-to-r opacity-20 blur-sm sm:block",
+  "absolute -inset-0.5 -z-10 hidden rounded-xl bg-linear-to-r opacity-20 blur-sm sm:block",
   {
     variants: {
       color: {
@@ -99,7 +99,7 @@ export const headerTabLabel = cva("font-medium", {
 export const headerTabUnderline = cva("absolute -bottom-[3px] left-3 right-3 h-[2px] rounded-full bg-primary-500");
 
 export const headerTabBadge = cva(
-  "ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent-500/20 px-1.5 text-[10px] font-semibold text-accent-200"
+  "ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent-500/20 px-1.5 text-[10px] font-semibold text-accent-400"
 );
 
 export const searchForm = cva("mx-auto flex w-full min-w-0 max-w-md flex-1 sm:block sm:max-w-lg lg:max-w-xl");

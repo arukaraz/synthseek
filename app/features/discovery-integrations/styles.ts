@@ -34,7 +34,7 @@ export const fixedFeedLabel = cva("text-fg font-medium");
 export const fixedFeedDescription = cva("text-fg/60 text-xs");
 
 export const apiKeyWarningBox = cva(
-  "flex items-start gap-2 rounded-md border border-yellow-500/30 bg-yellow-500/10 p-3 text-xs text-yellow-200"
+  "flex items-start gap-2 rounded-md border border-warning-vivid/30 bg-warning-vivid/10 p-3 text-xs text-warning-vivid"
 );
 
 export const schedulePickerTrigger = cva(

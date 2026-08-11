@@ -12,6 +12,9 @@
 
   --color-overlay-fg: var(--overlay-fg);
   --color-overlay-fg-muted: var(--overlay-fg-muted);
+  --color-overlay-fg-primary: var(--overlay-fg-primary);
+  --color-overlay-fg-secondary: var(--overlay-fg-secondary);
+  --color-overlay-fg-accent: var(--overlay-fg-accent);
 
   --color-glass: var(--glass-bg);
   --color-glass-border: var(--glass-border);
@@ -25,9 +28,9 @@
   --color-secondary-foreground: oklch(var(--secondary-foreground));
   --color-destructive: oklch(var(--destructive));
   --color-destructive-foreground: oklch(var(--destructive-foreground));
-  --color-destructive-vivid: oklch(var(--destructive-vivid));
-  --color-warning-vivid: oklch(var(--warning-vivid));
-  --color-success-vivid: oklch(var(--success-vivid));
+  --color-destructive-vivid: var(--destructive-vivid);
+  --color-warning-vivid: var(--warning-vivid);
+  --color-success-vivid: var(--success-vivid);
   --color-sync: oklch(var(--neon-sync));
   --color-muted: oklch(var(--muted));
   --color-muted-foreground: oklch(var(--muted-foreground));
@@ -56,8 +59,6 @@
 @import "./base/reset.css";
 @import "./base/typography.css";
 
-@import "./utilities/glass.css";
-@import "./utilities/status.css";
 @import "./utilities/status-strip.css";
 @import "./utilities/auth-scene.css";
 @import "./utilities/content-type.css";

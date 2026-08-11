@@ -65,7 +65,7 @@ export const hero = cva(
 );
 
 export const heroCover = cva(
-  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative shrink-0 overflow-hidden bg-gradient-to-br ring-1",
+  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative shrink-0 overflow-hidden bg-linear-to-br ring-1",
   {
     variants: {
       shape: {
@@ -172,23 +172,23 @@ export const cardGridRow = cva("grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 l
 export const cardButton = cva("group flex w-full min-w-0 flex-col gap-2 text-left");
 
 export const cardCover = cva(
-  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative aspect-square w-full overflow-hidden rounded-lg bg-gradient-to-br ring-1"
+  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative aspect-square w-full overflow-hidden rounded-lg bg-linear-to-br ring-1"
 );
 
 export const cardImage = cva("h-full w-full object-cover transition-transform group-hover:scale-[1.03]");
 
 export const cardScrim = cva(
-  "pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-black/15 to-transparent"
+  "pointer-events-none absolute inset-0 bg-linear-to-b from-black/60 via-black/15 to-transparent"
 );
 
 export const cardScrimBottom = cva(
-  "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent"
+  "pointer-events-none absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent"
 );
 
 export const cardInitials = cva("text-fg/70 flex h-full w-full items-center justify-center text-2xl font-bold");
 
 export const cardMarker = cva(
-  "border-accent-500 bg-accent-500/10 text-accent-400 group-hover:bg-accent-500 group-hover:text-accent-foreground absolute top-1.5 right-1.5 grid size-6 place-items-center rounded-full border backdrop-blur-sm transition-colors"
+  "border-accent-500 bg-accent-500/10 text-overlay-fg-accent group-hover:bg-accent-500 group-hover:text-accent-foreground absolute top-1.5 right-1.5 grid size-6 place-items-center rounded-full border backdrop-blur-sm transition-colors"
 );
 
 export const cardMarkerDownload = cva("size-3.5");
@@ -227,7 +227,7 @@ export const cardSubtitle = cva("text-fg/60 truncate text-xs");
 export const similarCard = cva("flex w-24 shrink-0 flex-col items-center gap-2 text-center");
 
 export const similarAvatar = cva(
-  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative size-24 overflow-hidden rounded-full bg-gradient-to-br ring-1"
+  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative size-24 overflow-hidden rounded-full bg-linear-to-br ring-1"
 );
 
 export const similarImage = cva("h-full w-full object-cover");

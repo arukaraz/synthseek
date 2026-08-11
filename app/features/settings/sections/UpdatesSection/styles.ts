@@ -25,7 +25,7 @@ export const checkButton = cva(
 
 export const timeline = cva("relative mt-2 pl-9");
 export const timelineLine = cva(
-  "pointer-events-none absolute top-2 bottom-4 left-4 w-0.5 rounded bg-gradient-to-b from-cyan-400/80 via-primary-500/50 to-fg/10"
+  "pointer-events-none absolute top-2 bottom-4 left-4 w-0.5 rounded bg-linear-to-b from-cyan-400/80 via-primary-500/50 to-fg/10"
 );
 export const entry = cva("relative mb-7 last:mb-3.5");
 
@@ -47,9 +47,9 @@ export const card = cva("rounded-2xl border", {
   variants: {
     variant: {
       latest:
-        "border-cyan-400/30 from-cyan-400/[0.06] to-primary-500/[0.04] bg-gradient-to-b p-5 shadow-[0_0_32px_-12px_var(--color-cyan-400)] sm:p-6",
+        "border-cyan-400/30 from-cyan-400/[0.06] to-primary-500/[0.04] bg-linear-to-b p-5 shadow-[0_0_32px_-12px_var(--color-cyan-400)] sm:p-6",
       new: "border-cyan-400/20 bg-fg/[0.02] p-4 sm:p-5",
-      current: "border-fg/10 from-fg/[0.025] to-fg/[0.006] bg-gradient-to-b p-4 sm:p-5",
+      current: "border-fg/10 from-fg/[0.025] to-fg/[0.006] bg-linear-to-b p-4 sm:p-5",
       past: "border-fg/10 bg-fg/[0.013] p-3.5 sm:p-4",
     },
   },
@@ -76,7 +76,7 @@ export const badge = cva("rounded px-1.5 py-0.5 font-mono text-[9.5px] font-bold
   variants: {
     tone: {
       new: "bg-cyan-400/20 text-cyan-100 ring-1 ring-cyan-400/40",
-      current: "bg-primary-500/18 text-primary-200 ring-primary-500/40 ring-1",
+      current: "bg-primary-500/18 text-primary-400 ring-primary-500/40 ring-1",
     },
   },
 });
@@ -98,7 +98,7 @@ export const headline = cva("font-bold tracking-tight", {
 export const calloutBox = cva("mb-3 flex flex-col gap-1 rounded-xl border px-3.5 py-2.5 text-sm", {
   variants: {
     tone: {
-      important: "border-primary-500/30 bg-primary-500/10 text-primary-100",
+      important: "border-primary-500/30 bg-primary-500/10 text-fg/75",
       warning: "border-amber-500/30 bg-amber-500/10 text-amber-100",
       note: "border-fg/15 bg-fg/5 text-fg/75",
     },
@@ -133,14 +133,14 @@ export const expandIcon = cva("size-3.5 transition-transform");
 export const pastBody = cva("mt-3");
 
 export const issuesRow = cva("text-fg/45 mt-3 flex flex-wrap items-center gap-2 text-xs");
-export const issueLink = cva("text-primary-300 font-mono hover:underline");
+export const issueLink = cva("text-primary-400 font-mono hover:underline");
 
 export const endWrap = cva("relative mt-1");
 export const endNode = cva(
   "border-fg/40 bg-background absolute top-0 -left-6 size-2.5 rounded-full border border-dashed"
 );
 export const endLink = cva(
-  "text-primary-300 hover:text-primary-200 inline-flex items-center gap-1.5 pl-3.5 text-[13px] font-semibold hover:underline"
+  "text-primary-400 inline-flex items-center gap-1.5 pl-3.5 text-[13px] font-semibold hover:underline"
 );
 
 export const loadingState = cva("flex items-center justify-center py-10");

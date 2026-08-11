@@ -64,7 +64,7 @@ describe("Avatar", () => {
   it("has gradient border styling", () => {
     render(<Avatar data-testid="avatar">Test</Avatar>);
     const avatar = screen.getByTestId("avatar");
-    expect(avatar).toHaveClass("bg-gradient-to-br", "rounded-full");
+    expect(avatar).toHaveClass("bg-linear-to-br", "rounded-full");
   });
 
   it("renders the uppercased first initial when given a username and no image", () => {

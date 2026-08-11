@@ -1,12 +1,4 @@
 @layer base {
-  body {
-    font-family:
-      var(--font-space-grotesk),
-      var(--font-exo-2),
-      system-ui,
-      -apple-system,
-      sans-serif;
-  }
   h1,
   h2,
   h3,
@@ -64,11 +56,6 @@
     color: oklch(var(--foreground));
   }
 
-  code,
-  pre {
-    font-family: var(--font-space-mono), ui-monospace, "SF Mono", "Cascadia Code", monospace;
-  }
-
   code {
     font-size: 0.875em;
     padding: 0.125rem 0.25rem;
@@ -113,45 +100,5 @@
 
   .font-courgette {
     font-family: var(--font-courgette), cursive;
-  }
-
-  .font-space-grotesk {
-    font-family: var(--font-space-grotesk), sans-serif;
-  }
-
-  .font-rajdhani {
-    font-family: var(--font-rajdhani), sans-serif;
-  }
-
-  .font-chakra-petch {
-    font-family: var(--font-chakra-petch), sans-serif;
-  }
-
-  .font-exo-2 {
-    font-family: var(--font-exo-2), sans-serif;
-  }
-
-  .font-orbitron {
-    font-family: var(--font-orbitron), sans-serif;
-  }
-
-  .font-audiowide {
-    font-family: var(--font-audiowide), sans-serif;
-  }
-
-  .font-oxanium {
-    font-family: var(--font-oxanium), sans-serif;
-  }
-
-  .font-teko {
-    font-family: var(--font-teko), sans-serif;
-  }
-
-  .font-russo-one {
-    font-family: var(--font-russo-one), sans-serif;
-  }
-
-  .font-space-mono {
-    font-family: var(--font-space-mono), monospace;
   }
 }

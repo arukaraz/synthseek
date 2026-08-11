@@ -20,11 +20,11 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
         <Image src={artworkProxySrc(image)} alt={name} fill className="object-cover object-center" priority />
       ) : (
         <div className={configHeader()}>
-          <PlaceholderIcon className="text-primary-400/50 h-16 w-16" />
+          <PlaceholderIcon className="text-overlay-fg-primary/50 h-16 w-16" />
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40" />
+      <div className="absolute inset-0 bg-linear-to-t from-black via-black/80 to-black/40" />
 
       <div className="absolute right-0 bottom-0 left-0 z-10 p-4">
         <div className="flex items-end gap-3">
@@ -43,7 +43,7 @@ export function ConfigHeader({ name, artist, image, year, itemType, totalTracks,
             {artist && <p className="text-overlay-fg/80 truncate text-sm">{artist}</p>}
 
             <div className="text-overlay-fg/60 flex items-center gap-2 text-xs">
-              {isTrack && albumName && <span className="type-text-album truncate">{albumName}</span>}
+              {isTrack && albumName && <span className="type-text-album type-text-overlay truncate">{albumName}</span>}
               {year && <span>{year}</span>}
               {totalTracks && <span>{t("config.header.trackCount", { count: totalTracks })}</span>}
             </div>

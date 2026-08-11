@@ -74,7 +74,7 @@ export const seeAllLink = cva("font-medium transition-colors", {
       xs: "text-xs",
     },
     color: {
-      primary: "text-primary-400 hover:text-primary-300",
+      primary: "text-primary-400 underline-offset-2 hover:underline",
     },
   },
   defaultVariants: {
@@ -164,8 +164,8 @@ export type CategoryCardProps = VariantProps<typeof categoryCard>;
 export const cardOverlay = cva("absolute inset-0", {
   variants: {
     gradient: {
-      dark: "bg-gradient-to-t from-black/80 via-black/40 to-transparent",
-      light: "bg-gradient-to-t from-black/60 to-transparent",
+      dark: "bg-linear-to-t from-black/80 via-black/40 to-transparent",
+      light: "bg-linear-to-t from-black/60 to-transparent",
     },
   },
   defaultVariants: {
@@ -315,7 +315,7 @@ export const sidebarContainer = cva("flex flex-col gap-4 sm:pl-4", {
 
 export type SidebarContainerProps = VariantProps<typeof sidebarContainer>;
 
-export const playIcon = cva("text-primary-400 shrink-0 fill-current h-3 w-3 sm:h-3.5 sm:w-3.5", {
+export const playIcon = cva("text-overlay-fg-primary shrink-0 fill-current h-3 w-3 sm:h-3.5 sm:w-3.5", {
   variants: {},
   defaultVariants: {},
 });

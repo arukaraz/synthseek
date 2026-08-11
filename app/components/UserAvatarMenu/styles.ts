@@ -24,7 +24,7 @@ export const triggerBadge = cva(
 );
 
 export const menuContent = cva(
-  "bg-surface-overlay/98 sm:bg-surface-overlay/95 w-64 rounded-xl bg-gradient-to-b p-1.5 shadow-2xl shadow-surface/50",
+  "bg-surface-overlay/98 sm:bg-surface-overlay/95 w-64 rounded-xl bg-linear-to-b p-1.5 shadow-2xl shadow-surface/50",
   {
     variants: {
       gradient: {
@@ -67,7 +67,7 @@ export const updateGlyph = cva("h-4 w-4 shrink-0", {
   variants: {
     tone: {
       info: "text-secondary-400",
-      breaking: "text-accent-300",
+      breaking: "text-accent-400",
     },
   },
   defaultVariants: { tone: "info" },
@@ -78,13 +78,13 @@ export type UpdateGlyphProps = VariantProps<typeof updateGlyph>;
 export const updateTitle = cva("text-fg/90 text-sm font-medium");
 
 export const updateBreakingPrefix = cva(
-  "bg-accent-500/20 text-accent-200 mr-1.5 rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase"
+  "bg-accent-500/20 text-accent-400 mr-1.5 rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase"
 );
 
 export const updateCurrent = cva("text-fg/50 ml-auto shrink-0 text-xs");
 
 export const patchNotesLink = cva(
-  "text-primary-400 hover:text-primary-300 focus-visible:ring-primary-500/50 ml-6 w-fit rounded text-xs underline-offset-2 transition-colors hover:underline focus-visible:ring-2 focus-visible:outline-none"
+  "text-primary-400 focus-visible:ring-primary-500/50 ml-6 w-fit rounded text-xs underline-offset-2 transition-colors hover:underline focus-visible:ring-2 focus-visible:outline-none"
 );
 
 export const navItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2.5");

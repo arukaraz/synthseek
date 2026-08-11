@@ -9,7 +9,7 @@ export const heroBackdropImage = cva(
 );
 
 export const heroBackdropVeil = cva(
-  "from-surface/40 via-surface/10 absolute inset-0 bg-gradient-to-b to-transparent via-55%"
+  "from-surface/40 via-surface/10 absolute inset-0 bg-linear-to-b to-transparent via-55%"
 );
 
 export const avatarWrap = cva("relative shrink-0");
@@ -17,7 +17,7 @@ export const avatarWrap = cva("relative shrink-0");
 export const shareFanRoot = cva("absolute inset-0 hidden sm:block");
 
 export const shareFab = cva(
-  "border-fg/10 from-primary-600 to-accent-600 text-fg absolute right-0 bottom-0 z-20 grid size-8 place-items-center rounded-full border bg-gradient-to-br shadow-lg transition-transform",
+  "border-fg/10 from-primary-600 to-accent-600 text-fg absolute right-0 bottom-0 z-20 grid size-8 place-items-center rounded-full border bg-linear-to-br shadow-lg transition-transform",
   {
     variants: {
       open: {
@@ -64,7 +64,7 @@ export const heroEditInput = cva(
 );
 
 export const heroEditSave = cva(
-  "border-primary-500/40 bg-primary-500/15 text-primary-300 hover:bg-primary-500/25 grid size-9 shrink-0 place-items-center rounded-full border transition-colors"
+  "border-primary-500/40 bg-primary-500/15 text-primary-400 hover:bg-primary-500/25 grid size-9 shrink-0 place-items-center rounded-full border transition-colors"
 );
 
 export const heroBadgeRow = cva("flex flex-wrap items-center justify-center gap-2 sm:justify-start");

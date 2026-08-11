@@ -49,7 +49,7 @@ export function Card({ result, onResultClick }: CardProps) {
           </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent" />
 
         <div className="absolute top-2 left-2 z-10 sm:top-3 sm:left-3">
           <Badge className={`type-badge type-badge-overlay type-badge-${result.type} shadow-lg`}>

@@ -36,7 +36,7 @@ describe("widgetHeaderIcon", () => {
   it("renders a neutral primary-tinted chip, not a content-type color", () => {
     const result = widgetHeaderIcon();
     expect(result).toContain("bg-primary-500/15");
-    expect(result).toContain("text-primary-300");
+    expect(result).toContain("text-primary-400");
     expect(result).toContain("rounded-lg");
     expect(result).toContain("shrink-0");
     expect(result).not.toContain("type-text");
@@ -72,7 +72,7 @@ describe("widgetHeaderActionLink", () => {
   it("is a quiet primary-tint link with a visible focus ring", () => {
     const result = widgetHeaderActionLink();
     expect(result).toContain("text-primary-400");
-    expect(result).toContain("hover:text-primary-300");
+    expect(result).toContain("hover:underline");
     expect(result).toContain("focus-visible:ring-1");
   });
 });

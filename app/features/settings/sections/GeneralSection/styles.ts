@@ -92,7 +92,7 @@ export const apiKeyMeta = cva("text-fg/50 flex flex-wrap items-center gap-x-2 ga
 
 export const apiKeyMetaSeparator = cva("text-fg/30");
 
-export const tokenBox = cva("bg-bg-soft/40 ring-fg/10 text-fg block break-all rounded-lg p-3 font-mono text-xs ring-1");
+export const tokenBox = cva("bg-fg/5 ring-fg/10 text-fg block break-all rounded-lg p-3 font-mono text-xs ring-1");
 
 export const connectList = cva("flex flex-col gap-2");
 

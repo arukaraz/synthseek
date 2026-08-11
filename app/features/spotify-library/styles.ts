@@ -80,7 +80,7 @@ export const tableHead = cva(
 export const tableRow = cva("cursor-pointer border-b border-fg/[0.04] transition-colors hover:bg-fg/[0.015]", {
   variants: {
     selected: { true: "bg-primary-500/[0.06]", false: "" },
-    focused: { true: "bg-primary-500/[0.14] shadow-[inset_2px_0_0_var(--color-primary-300)]", false: "" },
+    focused: { true: "bg-primary-500/[0.14] shadow-[inset_2px_0_0_var(--color-primary-400)]", false: "" },
   },
   defaultVariants: { selected: false, focused: false },
   compoundVariants: [{ selected: true, focused: true, className: "bg-primary-500/[0.14]" }],
@@ -94,17 +94,17 @@ export const tableCellMonoDim = cva("px-3 py-2 text-fg/40 font-mono text-xs");
 export const coverThumb = cva("size-7 shrink-0 overflow-hidden rounded bg-fg/10");
 
 export const heartThumb = cva(
-  "flex size-7 shrink-0 items-center justify-center rounded bg-gradient-to-br from-rose-500/20 to-fuchsia-500/20 text-rose-400"
+  "flex size-7 shrink-0 items-center justify-center rounded bg-linear-to-br from-rose-500/20 to-fuchsia-500/20 text-rose-400"
 );
 
 export const coverPlaceholder = cva(
-  "size-7 shrink-0 rounded bg-gradient-to-br from-primary-700 to-cyan-500/40 bg-[length:8px_8px] [background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05)_0_1px,transparent_1px_8px)]"
+  "size-7 shrink-0 rounded bg-linear-to-br from-primary-700 to-cyan-500/40 bg-[length:8px_8px] [background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05)_0_1px,transparent_1px_8px)]"
 );
 
 export const typeTag = cva("inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-medium", {
   variants: {
     tone: {
-      playlist: "bg-primary-500/15 text-primary-200",
+      playlist: "bg-primary-500/15 text-primary-400",
       album: "bg-cyan-500/15 text-cyan-300",
       liked: "bg-rose-500/15 text-rose-300",
     },
@@ -131,7 +131,7 @@ export const syncPill = cva(
   {
     variants: {
       on: {
-        true: "border-primary-500/30 bg-primary-500/15 text-primary-200 hover:border-primary-500/45 hover:text-fg",
+        true: "border-primary-500/30 bg-primary-500/15 text-primary-400 hover:border-primary-500/45 hover:text-fg",
         false: "border-fg/10 bg-fg/[0.03] text-fg/40 hover:border-fg/20 hover:text-fg/60",
       },
     },
@@ -139,7 +139,7 @@ export const syncPill = cva(
 );
 
 export const syncDot = cva("size-1 rounded-full", {
-  variants: { on: { true: "bg-primary-300 shadow-[0_0_5px_var(--color-primary-300)]", false: "bg-fg/40" } },
+  variants: { on: { true: "bg-primary-400 shadow-[0_0_5px_var(--color-primary-400)]", false: "bg-fg/40" } },
 });
 
 export const syncDash = cva("text-fg/30 font-mono text-xs select-none");
@@ -149,7 +149,7 @@ export const checkBox = cva(
   {
     variants: {
       on: {
-        true: "border-transparent bg-gradient-to-br from-primary-500 to-primary-700 text-fg",
+        true: "border-transparent bg-linear-to-br from-primary-500 to-primary-700 text-fg",
         false: "border-fg/20 bg-fg/[0.02] hover:border-primary-500/50",
       },
     },
@@ -159,7 +159,7 @@ export const checkBox = cva(
 export const detailPane = cva("flex h-full min-h-0 flex-col overflow-y-auto bg-surface");
 
 export const detailHero = cva(
-  "relative border-b border-fg/[0.06] bg-[radial-gradient(400px_200px_at_100%_0%,var(--color-primary-700)/12,transparent_60%)] px-5 py-5"
+  "relative border-b border-fg/[0.06] bg-[radial-gradient(400px_200px_at_100%_0%,color-mix(in_oklch,var(--color-primary-700)_12%,transparent),transparent_60%)] px-5 py-5"
 );
 
 export const detailCrumb = cva("mb-3 pl-10 mb-5 font-mono text-[10px] uppercase tracking-[0.1em] text-fg/40 md:pl-0");
@@ -169,11 +169,11 @@ export const detailCoverRow = cva("flex items-start gap-3.5");
 export const detailCoverImg = cva("size-20 shrink-0 overflow-hidden rounded-lg shadow-xl");
 
 export const detailHeartImg = cva(
-  "flex size-20 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500/35 to-fuchsia-500/25 text-rose-300 shadow-xl"
+  "flex size-20 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-rose-500/35 to-fuchsia-500/25 text-rose-300 shadow-xl"
 );
 
 export const detailCoverPlaceholderLg = cva(
-  "size-20 shrink-0 rounded-lg bg-gradient-to-br from-primary-700 to-cyan-500/40 bg-[length:8px_8px] shadow-xl [background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05)_0_1px,transparent_1px_8px)]"
+  "size-20 shrink-0 rounded-lg bg-linear-to-br from-primary-700 to-cyan-500/40 bg-[length:8px_8px] shadow-xl [background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05)_0_1px,transparent_1px_8px)]"
 );
 
 export const detailH2 = cva("text-lg font-bold leading-tight tracking-tight text-fg");
@@ -189,7 +189,7 @@ export const detailAct = cva(
   {
     variants: {
       primary: {
-        true: "border-transparent bg-gradient-to-br from-primary-500 to-primary-700 text-fg shadow-[0_2px_10px_var(--color-primary-700)/35] hover:border-transparent hover:text-fg",
+        true: "border-transparent bg-linear-to-br from-primary-500 to-primary-700 text-fg shadow-[0_2px_10px_color-mix(in_oklch,var(--color-primary-700)_35%,transparent)] hover:border-transparent hover:text-fg",
         false: "",
       },
     },
@@ -226,7 +226,7 @@ export const trackPos = cva("text-center font-mono text-[11px] text-fg/40");
 export const trackTitle = cva("truncate font-medium text-fg");
 export const trackArtist = cva("block truncate text-[11px] font-normal text-fg/50");
 export const trackDur = cva("text-right font-mono text-[11px] text-fg/40");
-export const trackMore = cva("cursor-pointer px-5 pt-2 text-[11px] text-primary-300 hover:text-fg");
+export const trackMore = cva("cursor-pointer px-5 pt-2 text-[11px] text-primary-400 hover:text-fg");
 
 export const detailEmpty = cva("flex h-full flex-col items-center justify-center gap-3.5 p-12 text-center");
 export const detailEmptyArt = cva("relative inline-flex size-24 items-center justify-center text-fg/40");
@@ -288,7 +288,7 @@ export const autoImportTriggerCue = cva(
 export const autoImportBadge = cva("rounded px-1 font-mono text-[10px]", {
   variants: {
     active: {
-      true: "bg-primary-500/20 text-primary-200",
+      true: "bg-primary-500/20 text-primary-400",
       false: "bg-fg/[0.06] text-fg/50",
     },
   },
@@ -311,8 +311,8 @@ export const selectionBar = cva(
 export const selectionBarChip = cva(
   "border-primary-500/30 bg-primary-500/15 text-fg inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
 );
-export const selectionBarChipDot = cva("bg-primary-300 size-1.5 rounded-full");
-export const selectionBarChipNum = cva("text-primary-300 font-mono font-semibold");
+export const selectionBarChipDot = cva("bg-primary-400 size-1.5 rounded-full");
+export const selectionBarChipNum = cva("text-primary-400 font-mono font-semibold");
 export const selectionBarClear = cva(
   "text-fg/60 hover:bg-fg/5 hover:text-fg ml-auto inline-flex shrink-0 items-center gap-1.5 rounded px-2 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50"
 );

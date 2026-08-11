@@ -20,7 +20,7 @@ export const segmentTabCount = cva(
   {
     variants: {
       active: {
-        true: "bg-primary-500/20 text-primary-200",
+        true: "bg-primary-500/20 text-primary-400",
         false: "",
       },
     },

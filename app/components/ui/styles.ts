@@ -139,7 +139,7 @@ export const modalCenterContainer = cva("pointer-events-none fixed inset-0 flex 
 export type ModalCenterContainerProps = VariantProps<typeof modalCenterContainer>;
 
 export const circularImagePlaceholder = cva(
-  "flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-primary-500/50 to-accent-500/50",
+  "flex h-full w-full items-center justify-center rounded-full bg-linear-to-br from-primary-500/50 to-accent-500/50",
   {
     variants: {},
     defaultVariants: {},
@@ -194,15 +194,15 @@ export const authInputControl = cva(
 );
 
 export const authEyeToggle = cva(
-  "text-fg-muted hover:text-fg focus-visible:ring-primary-500/50 -mr-1 flex size-7 shrink-0 items-center justify-center rounded-md outline-none transition-colors focus-visible:ring-2"
+  "text-fg-muted hover:text-fg focus-visible:ring-primary-500 -mr-1 flex size-7 shrink-0 items-center justify-center rounded-md outline-none transition-colors focus-visible:ring-2"
 );
 
 export const authEmailButton = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500/50 flex h-11 w-full items-center justify-center rounded-[0.6875rem] border text-sm font-bold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
+  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center rounded-[0.6875rem] border text-sm font-bold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60"
 );
 
 export const authPlexButton = cva(
-  "border-plex-500/35 text-fg shadow-[0_0_28px_-8px_var(--color-plex-500),inset_0_1px_0_oklch(1_0_0/0.12)] hover:border-plex-500/55 focus-visible:ring-primary-500/60 flex h-[3.125rem] w-full items-center justify-center gap-2 rounded-[0.8125rem] border bg-plex-500/15 text-[0.9375rem] font-bold outline-none transition-all hover:-translate-y-px hover:bg-plex-500/25 focus-visible:ring-2 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70",
+  "border-plex-500/35 text-fg shadow-[0_0_28px_-8px_var(--color-plex-500),inset_0_1px_0_oklch(1_0_0/0.12)] hover:border-plex-500/55 focus-visible:ring-primary-500 flex h-[3.125rem] w-full items-center justify-center gap-2 rounded-[0.8125rem] border bg-plex-500/15 text-[0.9375rem] font-bold outline-none transition-all hover:-translate-y-px hover:bg-plex-500/25 focus-visible:ring-2 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70",
   {
     variants: {
       phase: {
@@ -216,7 +216,7 @@ export const authPlexButton = cva(
   }
 );
 
-export const authPlexIcon = cva("text-plex-500 size-[1.125rem] shrink-0", {
+export const authPlexIcon = cva("text-plex-400 size-[1.125rem] shrink-0", {
   variants: {
     phase: {
       idle: "",
@@ -228,15 +228,16 @@ export const authPlexIcon = cva("text-plex-500 size-[1.125rem] shrink-0", {
   defaultVariants: { phase: "idle" },
 });
 
-export const authPlexWord = cva("text-plex-500 font-extrabold");
+export const authPlexWord = cva("text-plex-400 font-extrabold");
 
 export const authForwardButton = cva(
-  "border-primary-500/40 text-fg shadow-[0_0_28px_-8px_var(--color-primary-500),inset_0_1px_0_oklch(1_0_0/0.12)] hover:border-primary-500/60 focus-visible:ring-primary-500/60 flex h-11 w-full items-center justify-center gap-2 rounded-[0.6875rem] border bg-primary-500/20 text-sm font-bold outline-none transition-all hover:-translate-y-px hover:bg-primary-500/30 focus-visible:ring-2 sm:w-auto sm:px-6",
+  "focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center gap-2 rounded-[0.6875rem] border text-sm font-bold outline-none transition-all focus-visible:ring-2 sm:w-auto sm:px-6",
   {
     variants: {
       blocked: {
-        true: "border-fg/20 bg-fg/[0.06] text-fg-muted cursor-not-allowed shadow-none hover:translate-y-0 hover:bg-fg/[0.06]",
-        false: "",
+        true: "border-fg/20 bg-fg/[0.06] text-fg-muted cursor-not-allowed",
+        false:
+          "border-primary-500/40 bg-primary-500/20 text-fg shadow-[0_0_28px_-8px_var(--color-primary-500),inset_0_1px_0_oklch(1_0_0/0.12)] hover:border-primary-500/60 hover:-translate-y-px hover:bg-primary-500/30",
       },
     },
     defaultVariants: { blocked: false },
@@ -244,5 +245,5 @@ export const authForwardButton = cva(
 );
 
 export const authQuietButton = cva(
-  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500/50 flex h-11 w-full items-center justify-center rounded-[0.6875rem] border text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-5"
+  "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center rounded-[0.6875rem] border text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-5"
 );

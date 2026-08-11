@@ -5,8 +5,8 @@ export const roleChip = cva(
   {
     variants: {
       tone: {
-        owner: "bg-primary-500/15 text-primary-300 ring-primary-500/30",
-        admin: "bg-secondary-500/15 text-secondary-300 ring-secondary-500/30",
+        owner: "bg-primary-500/15 text-primary-400 ring-primary-500/30",
+        admin: "bg-secondary-500/15 text-secondary-400 ring-secondary-500/30",
         trusted: "bg-accent-500/15 text-accent-400 ring-accent-500/30",
         member: "ring-fg/10 bg-fg/5 text-fg/60",
       },

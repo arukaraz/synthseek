@@ -3,12 +3,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const gradientOverlay = cva("pointer-events-none absolute inset-0", {
   variants: {
     direction: {
-      toR: "bg-gradient-to-r",
-      toBr: "bg-gradient-to-br",
-      toBl: "bg-gradient-to-bl",
-      toT: "bg-gradient-to-t",
-      toB: "bg-gradient-to-b",
-      linearToR: "bg-linear-to-r",
+      toR: "bg-linear-to-r",
+      toBr: "bg-linear-to-br",
+      toBl: "bg-linear-to-bl",
+      toT: "bg-linear-to-t",
+      toB: "bg-linear-to-b",
     },
     intensity: {
       subtle: "from-primary-600/5 via-transparent to-primary-500/10",
@@ -60,10 +59,7 @@ export type DecorativeBlobProps = VariantProps<typeof decorativeBlob>;
 export const primaryGradientButton = cva("flex items-center transition-all", {
   variants: {
     variant: {
-      primary: "from-primary-600 to-accent-600 bg-gradient-to-r text-fg",
-      danger: "from-red-600 to-red-500 bg-gradient-to-r text-fg",
-      success: "from-green-600 to-green-500 bg-gradient-to-r text-fg",
-      warning: "from-yellow-600 to-yellow-500 bg-gradient-to-r text-fg",
+      primary: "from-primary-600 to-accent-600 bg-linear-to-r text-fg",
     },
     size: {
       xs: "gap-1 rounded-lg px-2 py-1 text-xs",
@@ -72,13 +68,9 @@ export const primaryGradientButton = cva("flex items-center transition-all", {
       lg: "gap-2 rounded-xl px-6 py-3 text-base",
     },
     glow: {
-      none: "",
       primary: "shadow-lg shadow-primary-500/20",
-      danger: "shadow-lg shadow-red-500/30",
-      success: "shadow-lg shadow-green-500/30",
     },
     hover: {
-      none: "",
       lighten: "hover:from-primary-500 hover:to-accent-500",
     },
   },
@@ -209,9 +201,9 @@ export type ModalContentProps = VariantProps<typeof modalContent>;
 export const imagePlaceholder = cva("flex items-center justify-center", {
   variants: {
     gradient: {
-      primary: "from-primary-500/20 to-accent-500/20 bg-gradient-to-br",
-      subtle: "from-primary-500/30 to-accent-500/30 bg-gradient-to-br",
-      muted: "from-fg/10 to-fg/5 bg-gradient-to-br",
+      primary: "from-primary-500/20 to-accent-500/20 bg-linear-to-br",
+      subtle: "from-primary-500/30 to-accent-500/30 bg-linear-to-br",
+      muted: "from-fg/10 to-fg/5 bg-linear-to-br",
     },
     size: {
       full: "h-full w-full",
@@ -265,34 +257,6 @@ export const interactiveCard = cva("group transition-all", {
 });
 
 export type InteractiveCardProps = VariantProps<typeof interactiveCard>;
-
-export const actionIconButton = cva("flex items-center justify-center rounded-lg transition-colors", {
-  variants: {
-    variant: {
-      ghost: "text-fg/40 hover:bg-fg/10 hover:text-fg",
-      danger: "text-fg/30 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-400",
-      success: "border-secondary-500/30 bg-secondary-500/10 text-secondary-400",
-      warning: "border-yellow-500/30 bg-yellow-500/10 text-yellow-400",
-      primary: "border-primary-500/30 bg-primary-500/10 text-primary-300",
-    },
-    size: {
-      sm: "size-7 p-1",
-      md: "size-8 p-1.5",
-    },
-    border: {
-      none: "",
-      transparent: "border border-transparent",
-      colored: "border",
-    },
-  },
-  defaultVariants: {
-    variant: "ghost",
-    size: "md",
-    border: "none",
-  },
-});
-
-export type ActionIconButtonProps = VariantProps<typeof actionIconButton>;
 
 export const inputField = cva("w-full outline-none transition-colors", {
   variants: {

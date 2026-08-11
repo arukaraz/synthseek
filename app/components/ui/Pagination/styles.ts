@@ -27,7 +27,7 @@ export const paginationPageButton = cva(
   {
     variants: {
       active: {
-        true: "border-primary-500/40 bg-primary-500/15 text-primary-200",
+        true: "border-primary-500/40 bg-primary-500/15 text-primary-400",
         false: "border-fg/10 bg-fg/5 text-fg/60 hover:bg-fg/10 hover:text-fg",
       },
     },

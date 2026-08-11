@@ -46,7 +46,7 @@ export function ChipsInput({ value, onChange, placeholder, disabled }: ChipsInpu
             disabled={disabled}
             onClick={() => remove(chip)}
             aria-label={t("shell.chipsInput.removeLabel", { chip })}
-            className="hover:text-primary-100"
+            className="hover:text-fg transition-colors"
           >
             <X className="h-3 w-3" />
           </button>

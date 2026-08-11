@@ -38,7 +38,7 @@ export function CategoriesGrid() {
   if (isError) {
     return (
       <section className={glassPanelCard({ width: "full" })} aria-labelledby="genres-heading">
-        <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
+        <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
         <div className={panelBody()}>
           <WidgetHeader
             icon={Grid3X3}
@@ -66,7 +66,7 @@ export function CategoriesGrid() {
   if (categories.length === 0) {
     return (
       <section className={glassPanelCard({ width: "full" })} aria-labelledby="genres-heading">
-        <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
+        <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
         <div className={panelBody()}>
           <WidgetHeader
             icon={Grid3X3}
@@ -99,7 +99,7 @@ export function CategoriesGrid() {
       className={glassPanelCard({ width: "full" })}
       aria-labelledby="genres-heading"
     >
-      <div className={gradientOverlay({ direction: "linearToR", intensity: "subtle" })} />
+      <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
 
       <div className={panelBody()}>
         <WidgetHeader

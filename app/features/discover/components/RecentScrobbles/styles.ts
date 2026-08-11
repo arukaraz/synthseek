@@ -55,6 +55,8 @@ export const emptyPanel = cva(
 
 export const emptyText = cva("text-fg/60 text-sm");
 
-export const emptyLink = cva("text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors");
+export const emptyLink = cva(
+  "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
+);
 
 export const skeletonNode = cva("bg-fg/5 h-[152px] w-[112px] shrink-0 animate-pulse rounded-lg sm:w-[120px]");
