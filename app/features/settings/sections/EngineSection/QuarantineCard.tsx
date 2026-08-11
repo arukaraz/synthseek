@@ -70,6 +70,16 @@ export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
         onCancel={reset}
       />
 
+      <p className="text-fg/55 text-xs">
+        <Trans
+          t={t}
+          i18nKey="quarantine.reviewQueue.hint"
+          components={{
+            review: <HashLink href="/requests#review" className={quarantineLink()} />,
+          }}
+        />
+      </p>
+
       <div role="separator" className={cardDivider()} />
       <div className={quarantineListHeader()}>
         <span className={cardSectionHeader()}>{t("quarantine.list.title")}</span>

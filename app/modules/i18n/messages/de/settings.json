@@ -170,6 +170,9 @@
         "description": "Download-Fehler, bevor ein Uploader automatisch gesperrt wird.",
         "off": "Aus"
       }
+    },
+    "reviewQueue": {
+      "hint": "Eine abgelehnte Datei bleibt zur Beurteilung erhalten. Öffne die <review>Prüfliste</review> unter Anfragen, um sie zu genehmigen oder zu verwerfen."
     }
   },
   "wanted": {

@@ -170,6 +170,9 @@
         "description": "Fallos de descarga antes de bloquear a un subidor automáticamente.",
         "off": "Desactivado"
       }
+    },
+    "reviewQueue": {
+      "hint": "Un archivo rechazado se conserva para que lo juzgues tú. Abre la <review>cola de revisión</review> en Peticiones para aprobarlo o descartarlo."
     }
   },
   "wanted": {

@@ -170,6 +170,9 @@
         "description": "Échecs de téléchargement avant qu'un envoyeur soit banni automatiquement.",
         "off": "Désactivé"
       }
+    },
+    "reviewQueue": {
+      "hint": "Un fichier rejeté est conservé pour que vous en jugiez. Ouvrez la <review>file de révision</review> dans Requêtes pour l'approuver ou le rejeter."
     }
   },
   "wanted": {

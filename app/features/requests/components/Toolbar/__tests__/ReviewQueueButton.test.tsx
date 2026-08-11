@@ -62,12 +62,39 @@ describe("ReviewQueueButton", () => {
     expect(trigger).not.toHaveTextContent("0");
   });
 
-  it("renders nothing when the queue holds nothing at all", () => {
+  it("stays reachable on an empty queue, so the feature is discoverable before it ever fires", () => {
     spies.pendingCount = 0;
     spies.totalCount = 0;
     render(<ReviewQueueButton />);
 
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    const trigger = screen.getByRole("button", { name: "Import review" });
+    expect(trigger).toBeInTheDocument();
+    expect(trigger).not.toHaveTextContent("0");
+  });
+
+  it("opens itself when the page is reached at the review hash", () => {
+    window.location.hash = "#review";
+    render(<ReviewQueueButton />);
+
+    expect(screen.getByText("review modal")).toBeInTheDocument();
+    window.location.hash = "";
+  });
+
+  it("ignores an unrelated hash", () => {
+    window.location.hash = "#ban-threshold";
+    render(<ReviewQueueButton />);
+
+    expect(screen.queryByText("review modal")).not.toBeInTheDocument();
+    window.location.hash = "";
+  });
+
+  it("does not open from the hash for a member", () => {
+    spies.isAdmin = false;
+    window.location.hash = "#review";
+    render(<ReviewQueueButton />);
+
+    expect(screen.queryByText("review modal")).not.toBeInTheDocument();
+    window.location.hash = "";
   });
 
   it("renders nothing for a member", () => {
@@ -115,6 +142,5 @@ describe("ReviewQueueButton", () => {
     rerender(<ReviewQueueButton />);
 
     expect(screen.getByText("review modal")).toBeInTheDocument();
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });

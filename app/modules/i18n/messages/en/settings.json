@@ -170,6 +170,9 @@
         "description": "Failed downloads before an uploader is banned automatically.",
         "off": "Off"
       }
+    },
+    "reviewQueue": {
+      "hint": "A rejected file is kept for you to judge. Open the <review>review queue</review> in Requests to approve or discard it."
     }
   },
   "wanted": {
