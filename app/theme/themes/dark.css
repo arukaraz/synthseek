@@ -15,6 +15,7 @@
     --glass-border: oklch(1 0 0 / 0.1);
 
     --color-primary-400: oklch(0.7 0.24 var(--color-primary-h));
+    --color-primary-500: oklch(0.6 0.28 var(--color-primary-h));
     --color-secondary-400: oklch(0.85 0.14 var(--color-secondary-h));
     --color-accent-400: oklch(0.75 0.28 var(--color-accent-h));
     --color-playlist-400: oklch(0.78 0.17 var(--color-playlist-h));
@@ -25,6 +26,8 @@
     --overlay-fg-accent: var(--color-accent-400);
     --overlay-fg-playlist: var(--color-playlist-400);
 
+    --neon-primary: 0.6 0.28 285;
+    --neon-accent: 0.7 0.32 328;
     --neon-sync: 0.7 0.17 240;
 
     --auth-stage-bg: oklch(0.05 0.03 280);
