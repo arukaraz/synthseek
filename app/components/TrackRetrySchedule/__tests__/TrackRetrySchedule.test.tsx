@@ -13,10 +13,17 @@ describe("TrackRetrySchedule", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("shows the scheduled attempt", () => {
+  it("carries the schedule in the popover behind the clock", async () => {
+    const user = userEvent.setup();
     render(<TrackRetrySchedule nextRetryAt={inHours(2)} retryCount={0} />);
 
-    expect(screen.getByText(/Next attempt in 2h/)).toBeInTheDocument();
+    const trigger = screen.getByRole("button", { name: /watching this track/i });
+    expect(screen.queryByText(/Next attempt in 2h/)).not.toBeInTheDocument();
+
+    await user.click(trigger);
+
+    expect(await screen.findByText(/Next attempt in 2h/)).toBeInTheDocument();
+    expect(screen.getByText(/watching this track/i)).toBeInTheDocument();
   });
 
   it("shows the attempt count even without a schedule", () => {
@@ -25,11 +32,11 @@ describe("TrackRetrySchedule", () => {
     expect(screen.getByText(/3 attempts/)).toBeInTheDocument();
   });
 
-  it("shows both facts together, matching the review queue wording", () => {
+  it("shows the attempt count inline beside the clock", () => {
     render(<TrackRetrySchedule nextRetryAt={inHours(26)} retryCount={1} />);
 
-    expect(screen.getByText(/Next attempt in 1d/)).toBeInTheDocument();
-    expect(screen.getByText(/1 attempt/)).toBeInTheDocument();
+    expect(screen.getByText("1 attempt")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
   });
 
   it("omits the retry affordance when no handler is supplied", () => {

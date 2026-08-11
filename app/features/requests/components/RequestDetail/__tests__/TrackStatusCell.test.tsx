@@ -45,7 +45,7 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.getByText(/Next attempt in 2h/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
   });
 
   it("surfaces the attempt count next to the schedule", () => {
