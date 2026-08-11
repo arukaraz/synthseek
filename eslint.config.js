@@ -54,9 +54,43 @@ const maxClassNameRule = {
   },
 };
 
+const LEGACY_GRADIENT_ALIAS = "bg-gradient-to-";
+
+const noLegacyGradientAliasRule = {
+  meta: {
+    type: "problem",
+    docs: {
+      description: "Ban the legacy bg-gradient-to-* alias, which tailwind-merge misclassifies as a background color",
+      category: "Best Practices",
+      recommended: true,
+    },
+    schema: [],
+  },
+  create(context) {
+    const check = (node, value) => {
+      if (typeof value !== "string" || !value.includes(LEGACY_GRADIENT_ALIAS)) return;
+
+      context.report({
+        node,
+        message: `Use bg-linear-to-* instead of ${LEGACY_GRADIENT_ALIAS}*. Tailwind v4 renamed this utility and tailwind-merge v3 sorts the legacy alias into the background-color group, so cn() silently deletes the bg-* color it is merged with and the surface renders transparent.`,
+      });
+    };
+
+    return {
+      Literal(node) {
+        check(node, node.value);
+      },
+      TemplateElement(node) {
+        check(node, node.value.cooked);
+      },
+    };
+  },
+};
+
 const customPlugin = {
   rules: {
     "max-classname-classes": maxClassNameRule,
+    "no-legacy-gradient-alias": noLegacyGradientAliasRule,
   },
 };
 
@@ -127,6 +161,13 @@ const eslintConfig = [
           skipComments: true,
         },
       ],
+    },
+  },
+
+  {
+    files: ["app/**/*.ts", "app/**/*.tsx"],
+    rules: {
+      "custom/no-legacy-gradient-alias": "error",
     },
   },
 
