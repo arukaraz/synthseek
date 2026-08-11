@@ -1,6 +1,7 @@
 export { ContentDetailModal } from "./ContentDetailModal";
 export {
   albumRequestItem,
+  albumTarget,
   artistRequestItem,
   detailTargetFromMusicItem,
   playlistLibraryTarget,

@@ -1,3 +1,4 @@
+import { ContentType } from "@api/__generated__/types";
 import { render, screen, userEvent } from "@test/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -7,9 +8,9 @@ import { RequestDetailHero } from "../RequestDetailHero";
 
 type Actions = RequestDetailHeroMenuProps["actions"];
 
-const { actionsRef, retry } = vi.hoisted(() => {
+const { actionsRef, retry, openForTarget } = vi.hoisted(() => {
   const actionsRef: { current: Actions | null } = { current: null };
-  return { actionsRef, retry: vi.fn() };
+  return { actionsRef, retry: vi.fn(), openForTarget: vi.fn() };
 });
 
 function makeActions(overrides: Partial<Actions> = {}): Actions {
@@ -44,6 +45,10 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
 
 vi.mock("../../../hooks/useRequestActions", () => ({
   useRequestActions: () => actionsRef.current ?? makeActions(),
+}));
+
+vi.mock("@features/search/components/ContentRequestFlow", () => ({
+  useContentRequestFlow: () => ({ openForTarget }),
 }));
 
 vi.mock("../RequestDetailHeroMenu", () => ({
@@ -156,5 +161,89 @@ describe("RequestDetailHero", () => {
     await user.click(screen.getByRole("button", { name: "Back to requests list" }));
 
     expect(onBack).toHaveBeenCalledOnce();
+  });
+
+  it("opens the album detail from the title of an album request", async () => {
+    const user = userEvent.setup();
+    renderHero(
+      { label: "Album" },
+      {
+        contentType: ContentType.enum.album,
+        id: "album-row-1",
+        external_id: "123456",
+        name: "Discovery",
+        artist: "Daft Punk",
+      }
+    );
+
+    await user.click(screen.getByRole("button", { name: "Discovery" }));
+
+    expect(openForTarget).toHaveBeenCalledWith({
+      mode: "album",
+      id: "123456",
+      name: "Discovery",
+      artistName: "Daft Punk",
+      cover: null,
+    });
+  });
+
+  it("opens the same detail from the artwork of an album request", async () => {
+    const user = userEvent.setup();
+    renderHero(
+      { label: "Album" },
+      {
+        contentType: ContentType.enum.album,
+        external_id: "123456",
+        name: "Discovery",
+        artist: "Daft Punk",
+        album_art: "https://example.com/cover.jpg",
+      }
+    );
+
+    await user.click(screen.getByRole("button", { name: "Open details for Discovery" }));
+
+    expect(openForTarget).toHaveBeenCalledWith(
+      expect.objectContaining({ mode: "album", id: "123456", cover: "https://example.com/cover.jpg" })
+    );
+  });
+
+  it("opens the local playlist detail from a playlist request", async () => {
+    const user = userEvent.setup();
+    renderHero(
+      {},
+      {
+        contentType: ContentType.enum.playlist,
+        id: "playlist-row-1",
+        external_id: "local_abc123",
+        name: "Summer Mix",
+      }
+    );
+
+    await user.click(screen.getByRole("button", { name: "Summer Mix" }));
+
+    expect(openForTarget).toHaveBeenCalledWith(
+      expect.objectContaining({ mode: "playlist", id: "playlist-row-1", playlistSource: "library" })
+    );
+  });
+
+  it("keeps the heading readable as the plain request name", () => {
+    renderHero({ label: "Album" }, { contentType: ContentType.enum.album, name: "Discovery" });
+
+    expect(screen.getByRole("heading", { name: "Discovery" })).toBeInTheDocument();
+  });
+
+  it("renders no interactive title or artwork for a content type with no detail destination", () => {
+    renderHero(
+      {},
+      {
+        contentType: ContentType.enum.artist,
+        name: "Daft Punk",
+        album_art: "https://example.com/cover.jpg",
+      }
+    );
+
+    expect(screen.getByRole("heading", { name: "Daft Punk" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Daft Punk" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Open details for Daft Punk" })).not.toBeInTheDocument();
   });
 });

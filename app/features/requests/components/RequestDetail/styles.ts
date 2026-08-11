@@ -53,6 +53,32 @@ export const heroAvatar = cva(
 
 export type HeroAvatarProps = VariantProps<typeof heroAvatar>;
 
+export const heroAvatarButton = cva(
+  "hover:ring-primary-500/60 focus-visible:ring-primary-500/60 cursor-pointer outline-none transition-shadow hover:ring-2 focus-visible:ring-2"
+);
+
+export type HeroAvatarButtonProps = VariantProps<typeof heroAvatarButton>;
+
+export const heroTitle = cva("text-fg text-xl font-bold drop-shadow-sm sm:text-2xl", {
+  variants: {
+    interactive: {
+      true: "",
+      false: "truncate",
+    },
+  },
+  defaultVariants: {
+    interactive: false,
+  },
+});
+
+export type HeroTitleProps = VariantProps<typeof heroTitle>;
+
+export const heroTitleButton = cva(
+  "hover:text-primary-400 focus-visible:ring-primary-500/60 block w-fit max-w-full cursor-pointer truncate rounded-sm text-left underline-offset-4 transition-colors outline-none hover:underline focus-visible:ring-2"
+);
+
+export type HeroTitleButtonProps = VariantProps<typeof heroTitleButton>;
+
 export const heroAvatarTypeBadge = cva(
   "bg-surface/80 ring-fg/20 absolute bottom-1 left-1 flex size-6 items-center justify-center rounded-md ring-1 backdrop-blur-sm",
   {

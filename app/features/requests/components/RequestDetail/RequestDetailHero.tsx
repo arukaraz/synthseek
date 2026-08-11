@@ -3,19 +3,22 @@
 import { Button } from "@components/ui/Button";
 import { IconButton } from "@components/ui/IconButton";
 import { StatusBadge } from "@components/ui/StatusBadge";
+import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { artworkProxySrc } from "@utils/artworkProxy";
+import { cn } from "@utils/cn";
 import { formatDateTime } from "@utils/formatters";
 import { ArrowLeft, Loader2, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useRequestActions } from "../../hooks/useRequestActions";
-import { formatDelegatedTo } from "./helpers";
+import { formatDelegatedTo, requestDetailTarget } from "./helpers";
 import { JspfExportDialog } from "./JspfExportDialog";
 import { RejectApprovalDialog } from "./RejectApprovalDialog";
 import { RequestDetailHeroMenu } from "./RequestDetailHeroMenu";
 import {
   heroAvatar,
+  heroAvatarButton,
   heroBackButton,
   heroBanner,
   heroBannerImage,
@@ -34,12 +37,15 @@ import {
   heroMoreButtonDesktop,
   heroMoreButtonMobile,
   heroRetryButton,
+  heroTitle,
+  heroTitleButton,
   heroTypeRow,
 } from "./styles";
 import type { RequestDetailHeroProps } from "./types";
 
 export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
-  const { t } = useTranslation("requests");
+  const { t } = useTranslation(["requests", "contentDetail"]);
+  const { openForTarget } = useContentRequestFlow();
   const actions = useRequestActions(request);
   const {
     retry,
@@ -74,6 +80,17 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
     canRemove;
   const typeLabel = label === "Playlist" ? t("labels.playlist") : t("labels.album");
   const delegatedTo = formatDelegatedTo(request.delegated_to);
+  const detailTarget = requestDetailTarget(request);
+  const openDetail = detailTarget ? () => openForTarget(detailTarget) : null;
+  const artwork = request.album_art ? (
+    <Image
+      src={artworkProxySrc(request.album_art)}
+      alt={request.name}
+      fill
+      sizes="(max-width: 640px) 96px, 112px"
+      className="object-cover"
+    />
+  ) : null;
 
   return (
     <div className="relative">
@@ -115,17 +132,19 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
 
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className={heroIdentityBlock()}>
-            {request.album_art && (
-              <div className={heroAvatar({ size: "lg" })}>
-                <Image
-                  src={artworkProxySrc(request.album_art)}
-                  alt={request.name}
-                  fill
-                  sizes="(max-width: 640px) 96px, 112px"
-                  className="object-cover"
-                />
-              </div>
-            )}
+            {artwork &&
+              (openDetail ? (
+                <button
+                  type="button"
+                  onClick={openDetail}
+                  aria-label={t("contentDetail:openDetail", { name: request.name })}
+                  className={cn(heroAvatar({ size: "lg" }), heroAvatarButton())}
+                >
+                  {artwork}
+                </button>
+              ) : (
+                <div className={heroAvatar({ size: "lg" })}>{artwork}</div>
+              ))}
 
             <div className="min-w-0 flex-1">
               <div className={heroTypeRow()}>
@@ -149,7 +168,15 @@ export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
                   )}
                 </div>
               </div>
-              <h1 className="text-fg truncate text-xl font-bold drop-shadow-sm sm:text-2xl">{request.name}</h1>
+              <h1 className={heroTitle({ interactive: !!openDetail })}>
+                {openDetail ? (
+                  <button type="button" onClick={openDetail} className={heroTitleButton()}>
+                    {request.name}
+                  </button>
+                ) : (
+                  request.name
+                )}
+              </h1>
               <p className="text-fg/60 truncate text-sm">{request.artist}</p>
               <div className="mt-2 space-y-0.5">
                 <p className="text-fg/40 truncate text-xs">
