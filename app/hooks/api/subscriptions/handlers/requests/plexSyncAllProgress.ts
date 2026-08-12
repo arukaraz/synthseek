@@ -6,6 +6,7 @@ import { emitPlexSyncAll } from "../../shared/plexSyncAll";
 import {
   hasDockJob,
   isDockJobDismissed,
+  isDockJobRunning,
   markDockItem,
   PLEX_SYNC_DOCK_ID,
   seedPlexSyncDockJob,
@@ -27,11 +28,13 @@ function driveDock(event: PlexSyncAllProgressPayload, utils: Utils, viewerId: st
     if (!isForeignRun && !hasDockJob(PLEX_SYNC_DOCK_ID) && !isDockJobDismissed(PLEX_SYNC_DOCK_ID)) {
       void utils.requests.getPlexSyncAllItems.invalidate();
     }
-    if (event.current) {
+    if (event.current && isDockJobRunning(PLEX_SYNC_DOCK_ID)) {
       markDockItem(PLEX_SYNC_DOCK_ID, event.current.id, event.current.ok ? "done" : "failed");
     }
     return;
   }
+
+  if (!isDockJobRunning(PLEX_SYNC_DOCK_ID)) return;
 
   setDockJobStatus(PLEX_SYNC_DOCK_ID, terminalStatusFromCounts(event.synced, event.failed ?? 0));
 }

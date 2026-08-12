@@ -288,6 +288,66 @@ describe("handlePlexSyncAllProgress", () => {
     expect(plexJob()?.status).toBe("complete");
   });
 
+  it("does not rewrite a settled card with another user's outcome", () => {
+    const utils = trpc.useUtils();
+    seedPlexSyncDockJob([{ id: "pl_1", name: "Road Trip", state: "done" }]);
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 1, failed: 0 }), utils, VIEWER_ID);
+    expect(plexJob()?.status).toBe("complete");
+
+    handlePlexSyncAllProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "complete", synced: 0, total: 4, failed: 4 }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(plexJob()?.status).toBe("complete");
+  });
+
+  it("does not mark a row on a settled card from another user's run", () => {
+    const utils = trpc.useUtils();
+    seedPlexSyncDockJob([
+      { id: "pl_1", name: "Road Trip", state: "done" },
+      { id: "pl_2", name: "Focus", state: "pending" },
+    ]);
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 2, failed: 0 }), utils, VIEWER_ID);
+
+    handlePlexSyncAllProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "progress", synced: 1, total: 4, current: { id: "pl_2", ok: false } }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(plexJob()?.items.find((item) => item.key === "pl_2")?.state).toBe("pending");
+  });
+
+  it("does not rewrite a settled card from a late event of the viewer's own earlier run", () => {
+    const utils = trpc.useUtils();
+    seedPlexSyncDockJob([{ id: "pl_1", name: "Road Trip", state: "done" }]);
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 1, failed: 0 }), utils, VIEWER_ID);
+
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 0, total: 1, failed: 1 }), utils, VIEWER_ID);
+
+    expect(plexJob()?.status).toBe("complete");
+  });
+
+  it("still marks a row and settles while the card is running", () => {
+    const utils = trpc.useUtils();
+    seedPlexSyncDockJob([
+      { id: "pl_1", name: "Road Trip", state: "pending" },
+      { id: "pl_2", name: "Focus", state: "pending" },
+    ]);
+
+    handlePlexSyncAllProgress(
+      makeEvent({ phase: "progress", synced: 1, total: 2, current: { id: "pl_2", ok: false } }),
+      utils,
+      VIEWER_ID
+    );
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 2, failed: 1 }), utils, VIEWER_ID);
+
+    expect(plexJob()?.items.find((item) => item.key === "pl_2")?.state).toBe("failed");
+    expect(plexJob()?.status).toBe("partial");
+  });
+
   it("keeps the instance-wide run state live for another user's run", () => {
     const utils = trpc.useUtils();
     handlePlexSyncAllProgress(

@@ -1,4 +1,8 @@
+function isFromServerWithoutEventOwners(jobUserId: string): boolean {
+  return !jobUserId;
+}
+
 export function isForeignJobEvent(jobUserId: string, viewerId: string | null): boolean {
-  if (!jobUserId || viewerId === null) return false;
+  if (isFromServerWithoutEventOwners(jobUserId) || viewerId === null) return false;
   return jobUserId !== viewerId;
 }

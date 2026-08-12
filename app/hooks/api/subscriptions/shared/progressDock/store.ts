@@ -122,6 +122,10 @@ export function hasDockJob(jobId: string): boolean {
   return jobs.has(jobId);
 }
 
+export function isDockJobRunning(jobId: string): boolean {
+  return jobs.get(jobId)?.status === "running";
+}
+
 export function resetDockStore(): void {
   for (const handle of dismissTimers.values()) clearTimeout(handle);
   dismissTimers.clear();

@@ -79,6 +79,10 @@ export function useSubscriptions() {
         case SubscriptionEventType.DropImportUpdate:
           handleDropImportUpdate(event, utils);
           break;
+        default: {
+          const _unhandledEventType: never = event;
+          break;
+        }
       }
 
       reconnectAttemptsRef.current = 0;

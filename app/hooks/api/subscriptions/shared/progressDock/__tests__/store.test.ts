@@ -10,6 +10,7 @@ import {
   findRunningRequestJobId,
   hasDockJob,
   isDockJobDismissed,
+  isDockJobRunning,
   markDockItem,
   resetDockStore,
   seedDockJob,
@@ -138,6 +139,23 @@ describe("progressDock store", () => {
     expect(ids).toContain("job-new");
     expect(ids).not.toContain("job-terminal");
     expect(isDockJobDismissed("job-terminal")).toBe(false);
+  });
+
+  describe("isDockJobRunning", () => {
+    it("reports a freshly seeded job as running", () => {
+      seedLibrary("job-run-a", ["Alpha"]);
+      expect(isDockJobRunning("job-run-a")).toBe(true);
+    });
+
+    it.each(["complete", "partial", "failed"] as const)("reports a %s job as no longer running", (status) => {
+      seedLibrary("job-run-b", ["Alpha"]);
+      setDockJobStatus("job-run-b", status);
+      expect(isDockJobRunning("job-run-b")).toBe(false);
+    });
+
+    it("reports an unknown job as not running", () => {
+      expect(isDockJobRunning("job-run-ghost")).toBe(false);
+    });
   });
 
   it("does not re-add a dismissed terminal job from a late finalize", () => {

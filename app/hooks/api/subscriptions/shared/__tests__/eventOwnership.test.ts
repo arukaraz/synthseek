@@ -11,11 +11,13 @@ describe("isForeignJobEvent", () => {
     expect(isForeignJobEvent("u_other", "u_self")).toBe(true);
   });
 
-  it("does not call a job foreign while the viewer is unknown", () => {
+  it("does not call a job foreign while the viewer is unknown, unreachable behind the app's auth gate", () => {
     expect(isForeignJobEvent("u_other", null)).toBe(false);
   });
 
-  it("does not call a job foreign when the event names no owner", () => {
-    expect(isForeignJobEvent("", "u_self")).toBe(false);
+  describe("shim while a server at 2.3.3 or older, which sends no owner on job events, can still be in the field", () => {
+    it("does not call a job foreign when the event names no owner", () => {
+      expect(isForeignJobEvent("", "u_self")).toBe(false);
+    });
   });
 });

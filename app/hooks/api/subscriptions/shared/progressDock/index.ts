@@ -6,6 +6,7 @@ export {
   dismissDockJob,
   isDockJobDismissed,
   hasDockJob,
+  isDockJobRunning,
   resetDockStore,
   buildDockItems,
   autoDismiss,
