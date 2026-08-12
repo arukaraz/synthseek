@@ -65,7 +65,7 @@ export function ImportProviderMenu() {
               <FileJson className="size-3.5" />
             </span>
             <div className="flex flex-1 flex-col">
-              <span>{t("toolbar.import.fromFile")}</span>
+              <span>{t("toolbar.import.playlistFile")}</span>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => setDropImportOpen(true)} className={importProviderMenuItem()}>
@@ -73,7 +73,7 @@ export function ImportProviderMenu() {
               <FileUp className="size-3.5" />
             </span>
             <div className="flex flex-1 flex-col">
-              <span>{t("toolbar.import.importFiles")}</span>
+              <span>{t("toolbar.import.audioFiles")}</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

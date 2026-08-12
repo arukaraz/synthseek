@@ -23,8 +23,8 @@
     "import": {
       "trigger": "Importer la bibliothèque",
       "sourcesLabel": "Sources",
-      "fromFile": "Depuis un fichier",
-      "importFiles": "Importer des fichiers"
+      "playlistFile": "Fichier de playlist",
+      "audioFiles": "Fichiers audio"
     },
     "menu": {
       "trigger": "Plus d'actions",

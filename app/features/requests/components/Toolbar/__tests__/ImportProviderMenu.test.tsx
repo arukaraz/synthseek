@@ -24,12 +24,12 @@ describe("ImportProviderMenu", () => {
     vi.clearAllMocks();
   });
 
-  it("always shows the Spotify and From file sources", async () => {
+  it("always shows the Spotify and playlist-file sources", async () => {
     render(<ImportProviderMenu />);
     await openMenu();
 
     expect(screen.getByRole("menuitem", { name: /Spotify/ })).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: /From file/ })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /Playlist file/ })).toBeInTheDocument();
     expect(screen.queryByText("No sources enabled")).not.toBeInTheDocument();
   });
 
@@ -42,11 +42,11 @@ describe("ImportProviderMenu", () => {
     expect(await screen.findByTestId("spotify-modal")).toBeInTheDocument();
   });
 
-  it("opens the file import modal when the From file source is selected", async () => {
+  it("opens the playlist import modal when the playlist-file source is selected", async () => {
     render(<ImportProviderMenu />);
     const user = await openMenu();
 
-    await user.click(screen.getByRole("menuitem", { name: /From file/ }));
+    await user.click(screen.getByRole("menuitem", { name: /Playlist file/ }));
 
     expect(await screen.findByTestId("jspf-modal")).toBeInTheDocument();
   });
