@@ -4,11 +4,12 @@ import { ArrowLeft } from "lucide-react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { DropImportBatchStatus, DropImportFileStatus } from "@api/__generated__/types";
+import { DropImportFileStatus } from "@api/__generated__/types";
 import { IconButton } from "@components/ui/IconButton";
 import { ProgressBar } from "@components/ui/ProgressBar";
 import { Spinner } from "@components/ui/Spinner";
 import { useDropImportBatch } from "@hooks/api";
+import { isDropImportBatchInFlight } from "@utils/status-helpers";
 
 import { batchProcessedCount, batchProgressPercent } from "../helpers";
 import { detailCounts, detailHeader, errorText, fileList } from "../styles";
@@ -41,8 +42,7 @@ export function BatchDetail({ batchId, rejected, onBack }: BatchDetailProps) {
   }
 
   const data = batch.data;
-  const isProcessing =
-    data.status === DropImportBatchStatus.enum.queued || data.status === DropImportBatchStatus.enum.processing;
+  const isProcessing = isDropImportBatchInFlight(data.status);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">

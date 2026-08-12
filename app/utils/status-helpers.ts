@@ -1,4 +1,10 @@
-import { ACTIVE_STATUSES, FailureReason, RequestStatus, UNRESOLVED_STATUSES } from "@api/__generated__/types";
+import {
+  ACTIVE_STATUSES,
+  DropImportBatchStatus,
+  FailureReason,
+  RequestStatus,
+  UNRESOLVED_STATUSES,
+} from "@api/__generated__/types";
 
 export function isProcessingStatus(status: RequestStatus): boolean {
   return (ACTIVE_STATUSES as readonly RequestStatus[]).includes(status);
@@ -14,6 +20,18 @@ export function isRetryableStatus(status: RequestStatus): boolean {
 
 export function isRequestedStatus(status: RequestStatus | null): boolean {
   return status !== null && !isRetryableStatus(status);
+}
+
+const DROP_IMPORT_BATCH_SETTLED: Record<DropImportBatchStatus, boolean> = {
+  [DropImportBatchStatus.enum.queued]: false,
+  [DropImportBatchStatus.enum.processing]: false,
+  [DropImportBatchStatus.enum.completed]: true,
+  [DropImportBatchStatus.enum.partial]: true,
+  [DropImportBatchStatus.enum.failed]: true,
+};
+
+export function isDropImportBatchInFlight(status: DropImportBatchStatus): boolean {
+  return DROP_IMPORT_BATCH_SETTLED[status] !== true;
 }
 
 export function isReimportableFailure(

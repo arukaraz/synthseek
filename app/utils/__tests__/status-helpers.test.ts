@@ -1,12 +1,13 @@
 import { describe, it, expect } from "vitest";
 import {
+  isDropImportBatchInFlight,
   isProcessingStatus,
   isReimportableFailure,
   isRequestedStatus,
   isRetryableStatus,
   isSpinningStatus,
 } from "../status-helpers";
-import { FailureReason, RequestStatus } from "@api/__generated__/types";
+import { DropImportBatchStatus, FailureReason, RequestStatus } from "@api/__generated__/types";
 
 describe("isProcessingStatus", () => {
   it("returns true for queued status", () => {
@@ -152,6 +153,35 @@ describe("isRequestedStatus", () => {
     expect(isRequestedStatus(RequestStatus.enum.downloading)).toBe(true);
     expect(isRequestedStatus(RequestStatus.enum.importing)).toBe(true);
     expect(isRequestedStatus(RequestStatus.enum.partially_complete)).toBe(true);
+  });
+});
+
+describe("isDropImportBatchInFlight", () => {
+  it("returns true while the server is still working the batch", () => {
+    expect(isDropImportBatchInFlight(DropImportBatchStatus.enum.queued)).toBe(true);
+    expect(isDropImportBatchInFlight(DropImportBatchStatus.enum.processing)).toBe(true);
+  });
+
+  it("returns false for every terminal status, partial included", () => {
+    expect(isDropImportBatchInFlight(DropImportBatchStatus.enum.completed)).toBe(false);
+    expect(isDropImportBatchInFlight(DropImportBatchStatus.enum.partial)).toBe(false);
+    expect(isDropImportBatchInFlight(DropImportBatchStatus.enum.failed)).toBe(false);
+  });
+
+  it("splits the whole batch-status enum into exactly the two known partitions", () => {
+    const inFlight = DropImportBatchStatus.options.filter(isDropImportBatchInFlight);
+    const settled = DropImportBatchStatus.options.filter((status) => !isDropImportBatchInFlight(status));
+
+    expect(new Set(inFlight)).toEqual(
+      new Set([DropImportBatchStatus.enum.queued, DropImportBatchStatus.enum.processing])
+    );
+    expect(new Set(settled)).toEqual(
+      new Set([
+        DropImportBatchStatus.enum.completed,
+        DropImportBatchStatus.enum.partial,
+        DropImportBatchStatus.enum.failed,
+      ])
+    );
   });
 });
 

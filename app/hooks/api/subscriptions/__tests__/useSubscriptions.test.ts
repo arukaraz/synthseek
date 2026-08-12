@@ -13,7 +13,10 @@ import { useSubscriptions } from "../useSubscriptions";
 
 const auth = vi.hoisted(() => ({ currentUser: null as { id: string } | null }));
 
-const captured = vi.hoisted(() => ({ onData: null as ((event: SubscriptionEvent) => void) | null }));
+const captured = vi.hoisted(() => ({
+  onData: null as ((event: SubscriptionEvent) => void) | null,
+  onStarted: null as (() => void) | null,
+}));
 
 const handlers = vi.hoisted(() => ({
   plexSyncAll: vi.fn(),
@@ -25,8 +28,39 @@ const utilsStub = vi.hoisted(() => ({
   requests: {
     getAll: { invalidate: vi.fn() },
     getLibrarySummary: { invalidate: vi.fn() },
+    getPlexSyncAllItems: { invalidate: vi.fn() },
+    getPlexSyncAllState: { invalidate: vi.fn() },
+  },
+  settings: {
+    get: { invalidate: vi.fn() },
+  },
+  import: {
+    listBatches: { invalidate: vi.fn() },
+    getBatch: { invalidate: vi.fn() },
+  },
+  library: {
+    getAlbums: { invalidate: vi.fn() },
+    getArtists: { invalidate: vi.fn() },
+    getPlaylists: { invalidate: vi.fn() },
+    getTracks: { invalidate: vi.fn() },
+    getCounts: { invalidate: vi.fn() },
   },
 }));
+
+const everyPushFedInvalidate = [
+  utilsStub.requests.getAll.invalidate,
+  utilsStub.requests.getLibrarySummary.invalidate,
+  utilsStub.requests.getPlexSyncAllItems.invalidate,
+  utilsStub.requests.getPlexSyncAllState.invalidate,
+  utilsStub.settings.get.invalidate,
+  utilsStub.import.listBatches.invalidate,
+  utilsStub.import.getBatch.invalidate,
+  utilsStub.library.getAlbums.invalidate,
+  utilsStub.library.getArtists.invalidate,
+  utilsStub.library.getPlaylists.invalidate,
+  utilsStub.library.getTracks.invalidate,
+  utilsStub.library.getCounts.invalidate,
+];
 
 vi.mock("@modules/providers/AuthProvider", () => ({
   useAuthContext: () => ({
@@ -43,8 +77,12 @@ vi.mock("@utils/trpc", () => ({
     useUtils: () => utilsStub,
     subscriptionEvents: {
       onEvent: {
-        useSubscription: (_input: undefined, opts: { onData: (event: SubscriptionEvent) => void }) => {
+        useSubscription: (
+          _input: undefined,
+          opts: { onData: (event: SubscriptionEvent) => void; onStarted: () => void }
+        ) => {
           captured.onData = opts.onData;
+          captured.onStarted = opts.onStarted;
         },
       },
     },
@@ -105,9 +143,11 @@ function emitAll(): void {
 beforeEach(() => {
   auth.currentUser = null;
   captured.onData = null;
+  captured.onStarted = null;
   handlers.plexSyncAll.mockReset();
   handlers.portability.mockReset();
   handlers.libraryImport.mockReset();
+  for (const invalidate of everyPushFedInvalidate) invalidate.mockReset();
 });
 
 describe("useSubscriptions", () => {
@@ -129,5 +169,32 @@ describe("useSubscriptions", () => {
     expect(handlers.plexSyncAll).toHaveBeenCalledWith(plexEvent, utilsStub, null);
     expect(handlers.portability).toHaveBeenCalledWith(portabilityEvent, null);
     expect(handlers.libraryImport).toHaveBeenCalledWith(libraryEvent, utilsStub, null);
+  });
+
+  it("leaves a cold cache alone on the first connect", () => {
+    renderHookWithProviders(() => useSubscriptions());
+
+    captured.onStarted?.();
+
+    for (const invalidate of everyPushFedInvalidate) expect(invalidate).not.toHaveBeenCalled();
+  });
+
+  it("resyncs every push-fed query when the stream reconnects", () => {
+    renderHookWithProviders(() => useSubscriptions());
+
+    captured.onStarted?.();
+    captured.onStarted?.();
+
+    for (const invalidate of everyPushFedInvalidate) expect(invalidate).toHaveBeenCalledTimes(1);
+  });
+
+  it("resyncs again on every further reconnect, not only the first one", () => {
+    renderHookWithProviders(() => useSubscriptions());
+
+    captured.onStarted?.();
+    captured.onStarted?.();
+    captured.onStarted?.();
+
+    for (const invalidate of everyPushFedInvalidate) expect(invalidate).toHaveBeenCalledTimes(2);
   });
 });

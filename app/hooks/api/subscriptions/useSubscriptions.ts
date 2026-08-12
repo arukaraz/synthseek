@@ -16,6 +16,7 @@ import {
 import { handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
 import { invalidateLibraryViews } from "./shared/libraryInvalidation";
+import { resyncPushFedQueries } from "./shared/pushFedResync";
 
 const TERMINAL_STATUSES = new Set<string>([
   RequestStatus.enum.complete,
@@ -32,11 +33,17 @@ export function useSubscriptions() {
   const { currentUser } = useAuthContext();
   const viewerId = currentUser?.id ?? null;
   const reconnectAttemptsRef = useRef(0);
+  const hasStreamConnectedRef = useRef(false);
   const lastEventRef = useRef<Map<string, number>>(new Map());
 
   trpc.subscriptionEvents.onEvent.useSubscription(undefined, {
     onStarted: () => {
       reconnectAttemptsRef.current = 0;
+
+      if (hasStreamConnectedRef.current) {
+        resyncPushFedQueries(utils);
+      }
+      hasStreamConnectedRef.current = true;
     },
 
     onData: (event: SubscriptionEvent) => {

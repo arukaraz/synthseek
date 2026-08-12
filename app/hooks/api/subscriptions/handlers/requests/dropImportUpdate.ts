@@ -1,11 +1,10 @@
 import { DropImportFileStatus, type DropImportUpdatePayload } from "@api/__generated__/types";
+import { isDropImportBatchInFlight } from "@utils/status-helpers";
 import type { trpc } from "@utils/trpc";
 
 import { invalidateLibraryViews } from "../../shared/libraryInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
-
-const TERMINAL_BATCH_STATUSES = new Set(["completed", "partial", "failed"]);
 
 const SETTLED_FILE_STATUSES = new Set<DropImportFileStatus>([
   DropImportFileStatus.enum.imported,
@@ -17,7 +16,7 @@ export function handleDropImportUpdate(event: DropImportUpdatePayload, utils: Ut
   void utils.import.listBatches.invalidate();
 
   const fileSettled = event.file !== undefined && SETTLED_FILE_STATUSES.has(event.file.status);
-  if (fileSettled || TERMINAL_BATCH_STATUSES.has(event.status)) {
+  if (fileSettled || !isDropImportBatchInFlight(event.status)) {
     void utils.requests.getAll.invalidate();
     invalidateLibraryViews(utils);
   }

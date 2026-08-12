@@ -1,0 +1,1 @@
+export const DROP_IMPORT_POLL_INTERVAL = 5 * 1000;
