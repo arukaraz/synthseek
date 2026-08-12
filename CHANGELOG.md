@@ -2,6 +2,66 @@
 
 ---
 
+# v2.4.0, August 12, 2026
+
+> [!IMPORTANT]
+> Back up your data folder before updating. Nothing is deleted and your files are not touched, but the database changes and a few entries are repaired automatically.
+
+> [!WARNING]
+> Checking that a download really is the song you asked for needs a free AcoustID key. Without one nothing is checked. Register at acoustid.org/api-key and set ACOUSTID_API_KEY.
+
+> [!NOTE]
+> Three new settings start off, so nothing changes until you want it to: retrying failed tracks on its own, approving what members request, and preferring lossless over a higher bitrate. Quality upgrades and the review queue are already on.
+
+> [!NOTE]
+> Duplicate artists in your library fix themselves when you update. The same flattened names are also inside your file tags, which only matters if a media server reads them. Synthseek will not rewrite your files unless you ask: set RUN_LIBRARY_TAG_REPAIR environment variable to see what would change, then LIBRARY_TAG_REPAIR_APPLY to let it write.
+
+> [!NOTE]
+> If an old bug left a pile of tracks on one empty album, set RUN_PHANTOM_ALBUM_BACKFILL to move them to their real albums. It stays off because it looks up every affected track and most libraries never had the problem.
+
+### Decide what enters your library, and bring in music you already have
+
+- Synthseek can now check that a downloaded file really is the song you asked for, by listening to it rather than trusting its name. A file that turns out to be something else is blocked instead of landing in your library.
+- A blocked file is no longer thrown away. It waits in a review queue where you can see exactly why it was rejected, listen to it, and either approve it or discard it. Approving imports it straight away, with no second download.
+- Sources that keep sending you the wrong thing can be quarantined, and you can see which uploaders have been set aside and why.
+- If you want to approve what other members request before anything downloads, you can turn that on, with a trusted role for the people you would rather not review.
+
+---
+
+### Music you already have
+
+- Drag your own files in, even zipped. Synthseek identifies each track, and if it matches something you had already asked for, it closes that request for you.
+- Already have a song in poor quality? Ask for a better copy and Synthseek replaces it in place. The old file goes to a recycle bin rather than being deleted, and empties itself after a while.
+- You can now ask for better copies of several tracks at once from your library, and Synthseek tells you honestly what it did with each one.
+
+---
+
+### It keeps trying for you
+
+- Anything that could not be found is retried on its own, spacing the attempts out when a track stays missing, so you are not left checking by hand.
+- Under a failed track you can see when the next attempt is due, how many there have been, and start one right away.
+
+---
+
+### Getting around
+
+- Click the artwork or the name of a request to open the album or playlist behind it, the same way you already could from your library.
+- When a source of information is unavailable, Synthseek says so instead of quietly showing you an incomplete page.
+
+---
+
+### Fixes
+
+- Artists no longer show up twice in your library. A past bug saved names in a simplified form, so one artist could appear as two cards. Updating merges them for you.
+- Dialogs on a phone had no solid background and the content behind them showed through.
+- The progress panel could freeze mid-sync, showing a list of grey dots with no names that never advanced. On a phone its collapse button did nothing at all.
+- A field with the wrong details on the sign-in screen now turns red instead of giving no sign at all.
+- Several things that were meant to stand out did not: selection marks, the active item in the settings menu, and badges that showed grey instead of their colour.
+- A song that is in your library is no longer recorded as cancelled after a failed attempt to upgrade it.
+- Search results no longer store a simplified version of a song's details in your library.
+
+---
+
 # v2.3.3, July 9, 2026
 
 - Rename a playlist at request time: the request window now has an optional name field, so it lands in your library with the name you want.
