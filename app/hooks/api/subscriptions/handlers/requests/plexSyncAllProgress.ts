@@ -1,6 +1,7 @@
 import type { PlexSyncAllProgressPayload } from "@api/__generated__/types";
 import type { trpc } from "@utils/trpc";
 
+import { isForeignJobEvent } from "../../shared/eventOwnership";
 import { emitPlexSyncAll } from "../../shared/plexSyncAll";
 import {
   hasDockJob,
@@ -14,14 +15,16 @@ import {
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
-function driveDock(event: PlexSyncAllProgressPayload, utils: Utils): void {
+function driveDock(event: PlexSyncAllProgressPayload, utils: Utils, viewerId: string | null): void {
+  const isForeignRun = isForeignJobEvent(event.userId, viewerId);
+
   if (event.phase === "start") {
-    seedPlexSyncDockJob(event.items ?? []);
+    if (!isForeignRun) seedPlexSyncDockJob(event.items ?? []);
     return;
   }
 
   if (event.phase === "progress") {
-    if (!hasDockJob(PLEX_SYNC_DOCK_ID) && !isDockJobDismissed(PLEX_SYNC_DOCK_ID)) {
+    if (!isForeignRun && !hasDockJob(PLEX_SYNC_DOCK_ID) && !isDockJobDismissed(PLEX_SYNC_DOCK_ID)) {
       void utils.requests.getPlexSyncAllItems.invalidate();
     }
     if (event.current) {
@@ -33,7 +36,11 @@ function driveDock(event: PlexSyncAllProgressPayload, utils: Utils): void {
   setDockJobStatus(PLEX_SYNC_DOCK_ID, terminalStatusFromCounts(event.synced, event.failed ?? 0));
 }
 
-export function handlePlexSyncAllProgress(event: PlexSyncAllProgressPayload, utils: Utils): void {
+export function handlePlexSyncAllProgress(
+  event: PlexSyncAllProgressPayload,
+  utils: Utils,
+  viewerId: string | null
+): void {
   emitPlexSyncAll({
     phase: event.phase,
     synced: event.synced,
@@ -47,7 +54,7 @@ export function handlePlexSyncAllProgress(event: PlexSyncAllProgressPayload, uti
     total: event.total,
   });
 
-  driveDock(event, utils);
+  driveDock(event, utils, viewerId);
 
   if (event.phase === "complete") {
     void utils.requests.getAll.invalidate();

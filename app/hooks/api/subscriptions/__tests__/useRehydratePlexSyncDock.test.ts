@@ -39,9 +39,12 @@ function plexJob(): DockJob | undefined {
   return result.current.find((job) => job.id === "plex-sync");
 }
 
-function progressEvent(current: { id: string; ok: boolean }): PlexSyncAllProgressPayload {
+const VIEWER_ID = "u_self";
+
+function progressEvent(current: { id: string; ok: boolean }, userId = VIEWER_ID): PlexSyncAllProgressPayload {
   return {
     eventType: SubscriptionEventType.PlexSyncAllProgress,
+    userId,
     phase: "progress",
     synced: 2,
     total: 3,
@@ -88,13 +91,40 @@ describe("useRehydratePlexSyncDock", () => {
     ];
 
     renderHook(() => useRehydratePlexSyncDock());
-    handlePlexSyncAllProgress(progressEvent({ id: "pl_b", ok: true }), {
-      requests: {
-        getPlexSyncAllState: { setData: spies.setData },
-        getPlexSyncAllItems: { invalidate: spies.invalidateItems },
-        getAll: { invalidate: spies.invalidate },
+    handlePlexSyncAllProgress(
+      progressEvent({ id: "pl_b", ok: true }),
+      {
+        requests: {
+          getPlexSyncAllState: { setData: spies.setData },
+          getPlexSyncAllItems: { invalidate: spies.invalidateItems },
+          getAll: { invalidate: spies.invalidate },
+        },
       },
-    });
+      VIEWER_ID
+    );
+
+    expect(plexJob()?.items.find((item) => item.key === "pl_b")?.state).toBe("done");
+  });
+
+  it("lets another user's run advance the rows it rehydrated for this session", () => {
+    queryState.data = [
+      { id: "pl_a", name: "Road Trip", state: "done" },
+      { id: "pl_b", name: "Focus", state: "pending" },
+      { id: "pl_c", name: "Chill", state: "pending" },
+    ];
+
+    renderHook(() => useRehydratePlexSyncDock());
+    handlePlexSyncAllProgress(
+      progressEvent({ id: "pl_b", ok: true }, "u_other"),
+      {
+        requests: {
+          getPlexSyncAllState: { setData: spies.setData },
+          getPlexSyncAllItems: { invalidate: spies.invalidateItems },
+          getAll: { invalidate: spies.invalidate },
+        },
+      },
+      VIEWER_ID
+    );
 
     expect(plexJob()?.items.find((item) => item.key === "pl_b")?.state).toBe("done");
   });

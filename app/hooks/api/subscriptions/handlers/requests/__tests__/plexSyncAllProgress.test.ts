@@ -26,9 +26,13 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
+const VIEWER_ID = "u_self";
+const OTHER_USER_ID = "u_other";
+
 function makeEvent(overrides: Partial<PlexSyncAllProgressPayload>): PlexSyncAllProgressPayload {
   return {
     eventType: SubscriptionEventType.PlexSyncAllProgress,
+    userId: VIEWER_ID,
     phase: "progress",
     synced: 2,
     total: 8,
@@ -58,7 +62,7 @@ describe("handlePlexSyncAllProgress", () => {
     const unsubscribe = subscribePlexSyncAll((u) => received.push(u));
     const utils = trpc.useUtils();
 
-    handlePlexSyncAllProgress(makeEvent({ phase: "progress", synced: 3, total: 8 }), utils);
+    handlePlexSyncAllProgress(makeEvent({ phase: "progress", synced: 3, total: 8 }), utils, VIEWER_ID);
 
     expect(received).toEqual([{ phase: "progress", synced: 3, total: 8, failed: undefined }]);
     unsubscribe();
@@ -67,7 +71,7 @@ describe("handlePlexSyncAllProgress", () => {
   it("seeds the query state as running while in progress", () => {
     const utils = trpc.useUtils();
 
-    handlePlexSyncAllProgress(makeEvent({ phase: "progress", synced: 4, total: 10 }), utils);
+    handlePlexSyncAllProgress(makeEvent({ phase: "progress", synced: 4, total: 10 }), utils, VIEWER_ID);
 
     expect(spies.setData).toHaveBeenCalledWith(undefined, { running: true, synced: 4, total: 10 });
     expect(spies.invalidate).not.toHaveBeenCalled();
@@ -76,7 +80,7 @@ describe("handlePlexSyncAllProgress", () => {
   it("marks not running and invalidates the list on completion", () => {
     const utils = trpc.useUtils();
 
-    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 8, total: 8, failed: 1 }), utils);
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 8, total: 8, failed: 1 }), utils, VIEWER_ID);
 
     expect(spies.setData).toHaveBeenCalledWith(undefined, { running: false, synced: 8, total: 8 });
     expect(spies.invalidate).toHaveBeenCalledTimes(1);
@@ -94,7 +98,8 @@ describe("handlePlexSyncAllProgress", () => {
           { id: "p2", name: "Focus" },
         ],
       }),
-      utils
+      utils,
+      VIEWER_ID
     );
 
     const job = plexJob();
@@ -114,15 +119,18 @@ describe("handlePlexSyncAllProgress", () => {
           { id: "p2", name: "Focus" },
         ],
       }),
-      utils
+      utils,
+      VIEWER_ID
     );
     handlePlexSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 2, current: { id: "p1", ok: true } }),
-      utils
+      utils,
+      VIEWER_ID
     );
     handlePlexSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 2, current: { id: "p2", ok: false } }),
-      utils
+      utils,
+      VIEWER_ID
     );
 
     const job = plexJob();
@@ -142,9 +150,10 @@ describe("handlePlexSyncAllProgress", () => {
           { id: "p2", name: "B" },
         ],
       }),
-      utils
+      utils,
+      VIEWER_ID
     );
-    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 2, failed: 1 }), utils);
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 1, total: 2, failed: 1 }), utils, VIEWER_ID);
 
     expect(plexJob()?.status).toBe("partial");
   });
@@ -159,7 +168,8 @@ describe("handlePlexSyncAllProgress", () => {
 
     handlePlexSyncAllProgress(
       makeEvent({ phase: "progress", synced: 2, total: 3, current: { id: "pl_2", ok: true } }),
-      utils
+      utils,
+      VIEWER_ID
     );
 
     const job = plexJob();
@@ -172,7 +182,8 @@ describe("handlePlexSyncAllProgress", () => {
     const utils = trpc.useUtils();
     handlePlexSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 3, current: { id: "pl_1", ok: true } }),
-      utils
+      utils,
+      VIEWER_ID
     );
 
     expect(plexJob()).toBeUndefined();
@@ -182,7 +193,8 @@ describe("handlePlexSyncAllProgress", () => {
     const utils = trpc.useUtils();
     handlePlexSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 3, current: { id: "pl_1", ok: true } }),
-      utils
+      utils,
+      VIEWER_ID
     );
 
     expect(spies.invalidateItems).toHaveBeenCalledTimes(1);
@@ -194,7 +206,8 @@ describe("handlePlexSyncAllProgress", () => {
 
     handlePlexSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 1, current: { id: "pl_1", ok: true } }),
-      utils
+      utils,
+      VIEWER_ID
     );
 
     expect(spies.invalidateItems).not.toHaveBeenCalled();
@@ -207,7 +220,8 @@ describe("handlePlexSyncAllProgress", () => {
 
     handlePlexSyncAllProgress(
       makeEvent({ phase: "progress", synced: 1, total: 1, current: { id: "pl_1", ok: true } }),
-      utils
+      utils,
+      VIEWER_ID
     );
 
     expect(spies.invalidateItems).not.toHaveBeenCalled();
@@ -215,8 +229,91 @@ describe("handlePlexSyncAllProgress", () => {
 
   it("does not resurrect a job as complete for a tab that only saw the completion event", () => {
     const utils = trpc.useUtils();
-    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 3, total: 3, failed: 0 }), utils);
+    handlePlexSyncAllProgress(makeEvent({ phase: "complete", synced: 3, total: 3, failed: 0 }), utils, VIEWER_ID);
 
     expect(plexJob()).toBeUndefined();
+  });
+
+  it("does not put another user's run in the dock", () => {
+    const utils = trpc.useUtils();
+    handlePlexSyncAllProgress(
+      makeEvent({
+        userId: OTHER_USER_ID,
+        phase: "start",
+        synced: 0,
+        total: 2,
+        items: [
+          { id: "p1", name: "Their Road Trip" },
+          { id: "p2", name: "Their Focus" },
+        ],
+      }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(plexJob()).toBeUndefined();
+  });
+
+  it("does not ask the server for in-flight rows on another user's progress event", () => {
+    const utils = trpc.useUtils();
+    handlePlexSyncAllProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "progress", synced: 1, total: 3, current: { id: "p1", ok: true } }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(spies.invalidateItems).not.toHaveBeenCalled();
+    expect(plexJob()).toBeUndefined();
+  });
+
+  it("still drives a card seeded from this session's own rows when another user started the run", () => {
+    const utils = trpc.useUtils();
+    seedPlexSyncDockJob([
+      { id: "pl_1", name: "Road Trip", state: "pending" },
+      { id: "pl_2", name: "Focus", state: "pending" },
+    ]);
+
+    handlePlexSyncAllProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "progress", synced: 1, total: 2, current: { id: "pl_1", ok: true } }),
+      utils,
+      VIEWER_ID
+    );
+    handlePlexSyncAllProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "complete", synced: 2, total: 2, failed: 0 }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(plexJob()?.items.find((item) => item.key === "pl_1")?.state).toBe("done");
+    expect(plexJob()?.status).toBe("complete");
+  });
+
+  it("keeps the instance-wide run state live for another user's run", () => {
+    const utils = trpc.useUtils();
+    handlePlexSyncAllProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "complete", synced: 5, total: 5, failed: 0 }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(spies.setData).toHaveBeenCalledWith(undefined, { running: false, synced: 5, total: 5 });
+    expect(spies.invalidate).toHaveBeenCalledTimes(1);
+  });
+
+  it("drives the dock for every event while the viewer is unknown", () => {
+    const utils = trpc.useUtils();
+    handlePlexSyncAllProgress(
+      makeEvent({
+        userId: OTHER_USER_ID,
+        phase: "start",
+        synced: 0,
+        total: 1,
+        items: [{ id: "p1", name: "Road Trip" }],
+      }),
+      utils,
+      null
+    );
+
+    expect(plexJob()?.items.map((item) => item.name)).toEqual(["Road Trip"]);
   });
 });

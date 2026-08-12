@@ -1,4 +1,5 @@
 import { RequestStatus, SubscriptionEventType, type SubscriptionEvent } from "@api/__generated__/types";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
 import { useRef } from "react";
@@ -28,6 +29,8 @@ const MAX_RECONNECT_ATTEMPTS = 3;
 export function useSubscriptions() {
   const utils = trpc.useUtils();
   const queryClient = useQueryClient();
+  const { currentUser } = useAuthContext();
+  const viewerId = currentUser?.id ?? null;
   const reconnectAttemptsRef = useRef(0);
   const lastEventRef = useRef<Map<string, number>>(new Map());
 
@@ -59,7 +62,7 @@ export function useSubscriptions() {
           handlePlaylistPlexCreated(event, utils);
           break;
         case SubscriptionEventType.PlexSyncAllProgress:
-          handlePlexSyncAllProgress(event, utils);
+          handlePlexSyncAllProgress(event, utils, viewerId);
           break;
         case SubscriptionEventType.VersionUpdate:
           handleVersionUpdate(event);
@@ -68,10 +71,10 @@ export function useSubscriptions() {
           handleSettingsUpdate(event, utils);
           break;
         case SubscriptionEventType.PortabilityProgress:
-          handlePortabilityProgress(event);
+          handlePortabilityProgress(event, viewerId);
           break;
         case SubscriptionEventType.LibraryImportProgress:
-          handleLibraryImportProgress(event, utils);
+          handleLibraryImportProgress(event, utils, viewerId);
           break;
         case SubscriptionEventType.DropImportUpdate:
           handleDropImportUpdate(event, utils);

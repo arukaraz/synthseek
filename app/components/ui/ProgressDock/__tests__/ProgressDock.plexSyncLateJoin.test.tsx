@@ -20,9 +20,12 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
+const VIEWER_ID = "u_self";
+
 function progressEvent(current: { id: string; ok: boolean }, synced: number): PlexSyncAllProgressPayload {
   return {
     eventType: SubscriptionEventType.PlexSyncAllProgress,
+    userId: VIEWER_ID,
     phase: "progress",
     synced,
     total: 3,
@@ -80,13 +83,13 @@ describe("ProgressDock, Plex sync-all late join", () => {
       },
     };
     act(() => {
-      handlePlexSyncAllProgress(progressEvent({ id: "pl_b", ok: true }, 2), utils);
+      handlePlexSyncAllProgress(progressEvent({ id: "pl_b", ok: true }, 2), utils, VIEWER_ID);
     });
 
     expect(stateOf("Focus")).toBe("Done");
 
     act(() => {
-      handlePlexSyncAllProgress(progressEvent({ id: "pl_c", ok: false }, 2), utils);
+      handlePlexSyncAllProgress(progressEvent({ id: "pl_c", ok: false }, 2), utils, VIEWER_ID);
     });
 
     expect(stateOf("Chill")).toBe("Failed");

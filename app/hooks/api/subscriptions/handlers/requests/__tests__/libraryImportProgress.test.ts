@@ -35,9 +35,13 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
+const VIEWER_ID = "u_self";
+const OTHER_USER_ID = "u_other";
+
 function makeEvent(overrides: Partial<LibraryImportProgressPayload>): LibraryImportProgressPayload {
   return {
     eventType: SubscriptionEventType.LibraryImportProgress,
+    userId: VIEWER_ID,
     jobId: "lib-1",
     provider: "spotify",
     phase: "progress",
@@ -89,35 +93,39 @@ function expectLibraryViewsInvalidated(times: number): void {
   expect(spies.invalidateCounts).toHaveBeenCalledTimes(times);
 }
 
-function markItem(state: LibraryImportProgressPayload["item"], utils: ReturnType<typeof trpc.useUtils>): void {
-  handleLibraryImportProgress(makeEvent({ phase: "progress", item: state }), utils);
+function markItem(
+  state: LibraryImportProgressPayload["item"],
+  utils: ReturnType<typeof trpc.useUtils>,
+  viewerId: string | null
+): void {
+  handleLibraryImportProgress(makeEvent({ phase: "progress", item: state }), utils, viewerId);
 }
 
 describe("handleLibraryImportProgress", () => {
   it("marks the seeded item by key on a progress event", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "done" }, utils);
+    markItem({ key: "a", state: "done" }, utils, VIEWER_ID);
     expect(libJob()?.items.find((item) => item.key === "a")?.state).toBe("done");
   });
 
   it("ignores a progress event for a job that was never seeded", () => {
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "done" }, utils);
+    markItem({ key: "a", state: "done" }, utils, VIEWER_ID);
     expect(libJob()).toBeUndefined();
   });
 
   it("carries the failure reason into the store on a failed item", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "failed", reason: "notInLibrary" }, utils);
+    markItem({ key: "a", state: "failed", reason: "notInLibrary" }, utils, VIEWER_ID);
     expect(libJob()?.items.find((item) => item.key === "a")?.reason).toBe("notInLibrary");
   });
 
   it("invalidates getAll and the library views when an item reaches done so it lands in the list", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "done" }, utils);
+    markItem({ key: "a", state: "done" }, utils, VIEWER_ID);
     expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
     expectLibraryViewsInvalidated(1);
   });
@@ -125,8 +133,8 @@ describe("handleLibraryImportProgress", () => {
   it("does not invalidate getAll or the library views for a non-done item state", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "failed", reason: "importError" }, utils);
-    markItem({ key: "b", state: "skipped" }, utils);
+    markItem({ key: "a", state: "failed", reason: "importError" }, utils, VIEWER_ID);
+    markItem({ key: "b", state: "skipped" }, utils, VIEWER_ID);
     expect(spies.invalidateAll).not.toHaveBeenCalled();
     expectLibraryViewsInvalidated(0);
   });
@@ -134,15 +142,15 @@ describe("handleLibraryImportProgress", () => {
   it("finalizes a complete status from the items and invalidates caches when nothing failed", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "done" }, utils);
-    markItem({ key: "b", state: "done" }, utils);
+    markItem({ key: "a", state: "done" }, utils, VIEWER_ID);
+    markItem({ key: "b", state: "done" }, utils, VIEWER_ID);
     spies.invalidateAll.mockReset();
     spies.invalidateAlbums.mockReset();
     spies.invalidateArtists.mockReset();
     spies.invalidatePlaylists.mockReset();
     spies.invalidateTracks.mockReset();
     spies.invalidateCounts.mockReset();
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils);
+    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils, VIEWER_ID);
     expect(libJob()?.status).toBe("complete");
     expect(spies.invalidateSummary).toHaveBeenCalledTimes(1);
     expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
@@ -152,27 +160,69 @@ describe("handleLibraryImportProgress", () => {
   it("finalizes complete for an all-skipped job (everything already present)", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "skipped" }, utils);
-    markItem({ key: "b", state: "skipped" }, utils);
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 0, total: 2 }), utils);
+    markItem({ key: "a", state: "skipped" }, utils, VIEWER_ID);
+    markItem({ key: "b", state: "skipped" }, utils, VIEWER_ID);
+    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 0, total: 2 }), utils, VIEWER_ID);
     expect(libJob()?.status).toBe("complete");
   });
 
   it("finalizes partial from the items when one item failed, ignoring the event counts", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "done" }, utils);
-    markItem({ key: "b", state: "failed", reason: "noMatchableTracks" }, utils);
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils);
+    markItem({ key: "a", state: "done" }, utils, VIEWER_ID);
+    markItem({ key: "b", state: "failed", reason: "noMatchableTracks" }, utils, VIEWER_ID);
+    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 2, failed: 0, total: 2 }), utils, VIEWER_ID);
     expect(libJob()?.status).toBe("partial");
   });
 
   it("finalizes failed from the items when every item failed", () => {
     seedLib();
     const utils = trpc.useUtils();
-    markItem({ key: "a", state: "failed", reason: "importError" }, utils);
-    markItem({ key: "b", state: "failed", reason: "sourceHasNoTracks" }, utils);
-    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 2, total: 2 }), utils);
+    markItem({ key: "a", state: "failed", reason: "importError" }, utils, VIEWER_ID);
+    markItem({ key: "b", state: "failed", reason: "sourceHasNoTracks" }, utils, VIEWER_ID);
+    handleLibraryImportProgress(makeEvent({ phase: "complete", imported: 0, failed: 2, total: 2 }), utils, VIEWER_ID);
     expect(libJob()?.status).toBe("failed");
+  });
+
+  it("leaves the dock untouched for another user's import", () => {
+    seedLib();
+    const utils = trpc.useUtils();
+
+    handleLibraryImportProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "progress", item: { key: "a", state: "done" } }),
+      utils,
+      VIEWER_ID
+    );
+    handleLibraryImportProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "complete", imported: 2, failed: 0, total: 2 }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(libJob()?.items.find((item) => item.key === "a")?.state).toBe("pending");
+    expect(libJob()?.status).toBe("running");
+  });
+
+  it("still refreshes the shared lists for another user's import", () => {
+    const utils = trpc.useUtils();
+
+    handleLibraryImportProgress(
+      makeEvent({ userId: OTHER_USER_ID, phase: "complete", imported: 2, failed: 0, total: 2 }),
+      utils,
+      VIEWER_ID
+    );
+
+    expect(spies.invalidateSummary).toHaveBeenCalledTimes(1);
+    expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
+    expectLibraryViewsInvalidated(1);
+  });
+
+  it("marks the dock while the viewer is unknown", () => {
+    seedLib();
+    const utils = trpc.useUtils();
+
+    markItem({ key: "a", state: "done" }, utils, null);
+
+    expect(libJob()?.items.find((item) => item.key === "a")?.state).toBe("done");
   });
 });
