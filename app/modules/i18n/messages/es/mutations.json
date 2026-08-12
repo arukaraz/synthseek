@@ -247,8 +247,8 @@
     "upgradeSkipUpgradesDisabled_other": "{{count}} con mejoras desactivadas",
     "upgradeSkipUpgradeError_one": "{{count}} no se pudo encolar",
     "upgradeSkipUpgradeError_other": "{{count}} no se pudieron encolar",
-    "upgradeTooManyTitle": "Demasiadas canciones seleccionadas",
-    "upgradeTooManyDescription": "Las búsquedas de mejor calidad admiten hasta {{max}} canciones a la vez. No se envió nada."
+    "bulkTracksTooManyTitle": "Demasiadas canciones seleccionadas",
+    "bulkTracksTooManyDescription": "Las acciones en lote admiten hasta {{max}} canciones a la vez. No se envió nada."
   },
   "playlists": {
     "created": "Playlist creada",

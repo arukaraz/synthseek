@@ -3,7 +3,7 @@ import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import { describe, expect, it } from "vitest";
 
 import { STATUS_FILTERS } from "../../../types";
-import { STATUS_FILTER_ICONS } from "../consts";
+import { STATUS_FILTER_ICONS } from "../constants";
 
 describe("STATUS_FILTER_ICONS", () => {
   it("offers an icon for every selectable status filter", () => {

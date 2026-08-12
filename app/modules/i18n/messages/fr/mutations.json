@@ -247,8 +247,8 @@
     "upgradeSkipUpgradesDisabled_other": "{{count}} avec mises à niveau désactivées",
     "upgradeSkipUpgradeError_one": "{{count}} n'a pas pu être mise en file",
     "upgradeSkipUpgradeError_other": "{{count}} n'ont pas pu être mises en file",
-    "upgradeTooManyTitle": "Trop de pistes sélectionnées",
-    "upgradeTooManyDescription": "Les recherches de meilleure qualité traitent jusqu'à {{max}} pistes à la fois. Rien n'a été envoyé."
+    "bulkTracksTooManyTitle": "Trop de pistes sélectionnées",
+    "bulkTracksTooManyDescription": "Les actions groupées traitent jusqu'à {{max}} pistes à la fois. Rien n'a été envoyé."
   },
   "playlists": {
     "created": "Playlist créée",

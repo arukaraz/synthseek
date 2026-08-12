@@ -42,8 +42,8 @@ export function useApproveHeldImport() {
     },
     onError: (error) => errorToast(error, "review.approveFailed"),
     onSettled: () => {
-      utils.requests.review.list.invalidate();
-      utils.requests.getAll.invalidate();
+      void utils.requests.review.list.invalidate();
+      void utils.requests.getAll.invalidate();
     },
   });
 }

@@ -58,13 +58,20 @@ export function notifyUpgradeOutcome(args: { outcome: ReclaimOutcome; itemName: 
   notifyReclaimOutcome({ outcome, kind: "download", itemName });
 }
 
-function summarizeUpgradeSkips(reasons: UpgradeSkipReason[]): string {
-  const counts = new Map<UpgradeSkipReason, number>();
+function describeUpgradeSkip(reason: UpgradeSkipReason, count: number): string {
+  return i18n.t(`mutations:${UPGRADE_SKIP_REASON_KEYS[reason]}`, { count });
+}
+
+export function summarizeSkipReasons<TReason extends string>(
+  reasons: TReason[],
+  describe: (reason: TReason, count: number) => string
+): string {
+  const counts = new Map<TReason, number>();
   for (const reason of reasons) {
     counts.set(reason, (counts.get(reason) ?? 0) + 1);
   }
   return Array.from(counts.entries())
-    .map(([reason, count]) => i18n.t(`mutations:${UPGRADE_SKIP_REASON_KEYS[reason]}`, { count }))
+    .map(([reason, count]) => describe(reason, count))
     .join(" · ");
 }
 
@@ -81,7 +88,7 @@ export function notifyBulkUpgradeOutcome(results: UpgradeTrackResult[]) {
       return;
     }
     toast.warning(i18n.t("mutations:requests.tracksUpgradeAllSkipped"), {
-      description: skipped.length > 0 ? summarizeUpgradeSkips(skipped) : undefined,
+      description: skipped.length > 0 ? summarizeSkipReasons(skipped, describeUpgradeSkip) : undefined,
     });
     return;
   }
@@ -91,7 +98,7 @@ export function notifyBulkUpgradeOutcome(results: UpgradeTrackResult[]) {
     skipped.length > 0
       ? i18n.t("mutations:requests.tracksUpgradeSkipped", {
           count: skipped.length,
-          reasons: summarizeUpgradeSkips(skipped),
+          reasons: summarizeSkipReasons(skipped, describeUpgradeSkip),
         })
       : null,
   ].filter((part) => part !== null);
@@ -104,9 +111,9 @@ export function notifyBulkUpgradeOutcome(results: UpgradeTrackResult[]) {
   toast.success(i18n.t("mutations:requests.tracksUpgrading", { count: queued }), { description });
 }
 
-export function notifyBulkUpgradeLimit(max: number) {
-  toast.warning(i18n.t("mutations:requests.upgradeTooManyTitle"), {
-    description: i18n.t("mutations:requests.upgradeTooManyDescription", { max }),
+export function notifyBulkTrackLimit(max: number) {
+  toast.warning(i18n.t("mutations:requests.bulkTracksTooManyTitle"), {
+    description: i18n.t("mutations:requests.bulkTracksTooManyDescription", { max }),
   });
 }
 

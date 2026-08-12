@@ -6,7 +6,7 @@ import { Search, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { closeButton, mobileSearchOpenButton, searchInput } from "../../styles";
-import { SEARCH_CLEAR_BUTTON_VARIANTS, SEARCH_INPUT_VARIANTS } from "../consts";
+import { SEARCH_CLEAR_BUTTON_VARIANTS, SEARCH_INPUT_VARIANTS } from "../constants";
 import type { SearchInputProps } from "../types";
 
 export function SearchInput({ value, onChange, isOpen, onOpenChange }: SearchInputProps) {

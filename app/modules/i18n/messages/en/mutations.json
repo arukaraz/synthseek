@@ -247,8 +247,8 @@
     "upgradeSkipUpgradesDisabled_other": "{{count}} with upgrades disabled",
     "upgradeSkipUpgradeError_one": "{{count}} failed to queue",
     "upgradeSkipUpgradeError_other": "{{count}} failed to queue",
-    "upgradeTooManyTitle": "Too many tracks selected",
-    "upgradeTooManyDescription": "Better-quality searches run up to {{max}} tracks at a time. Nothing was submitted."
+    "bulkTracksTooManyTitle": "Too many tracks selected",
+    "bulkTracksTooManyDescription": "Bulk track actions run up to {{max}} tracks at a time. Nothing was submitted."
   },
   "playlists": {
     "created": "Playlist created",

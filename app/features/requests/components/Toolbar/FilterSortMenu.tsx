@@ -4,7 +4,7 @@ import { FilterSortDropdown } from "@components/ui/FilterSortDropdown";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { useTranslation } from "react-i18next";
 import { REQUESTS_URL_PARAMS, SORT_FIELD_VALUES } from "../../types";
-import { STATUS_FILTER_ICONS } from "./consts";
+import { STATUS_FILTER_ICONS } from "./constants";
 
 export function FilterSortMenu() {
   const { t } = useTranslation("requests");

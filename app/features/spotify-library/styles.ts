@@ -306,7 +306,7 @@ export const autoImportRowLabel = cva("flex flex-col text-fg");
 export const autoImportRowSub = cva("text-[10.5px] text-fg/45");
 
 export const selectionBar = cva(
-  "border-fg/10 bg-surface/95 sticky top-0 z-20 mb-2 flex w-full min-w-0 flex-nowrap items-center gap-1.5 rounded-xl border px-3 py-2.5 sm:gap-2 sm:py-2 sm:bg-surface/85 sm:backdrop-blur-md"
+  "border-fg/10 bg-surface/95 sticky top-0 z-20 mb-2 flex w-full min-w-0 flex-wrap items-center gap-1.5 rounded-xl border px-3 py-2.5 sm:gap-2 sm:py-2 sm:bg-surface/85 sm:backdrop-blur-md"
 );
 export const selectionBarChip = cva(
   "border-primary-500/30 bg-primary-500/15 text-fg inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"

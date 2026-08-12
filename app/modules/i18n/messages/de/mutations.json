@@ -247,8 +247,8 @@
     "upgradeSkipUpgradesDisabled_other": "{{count}} mit deaktivierten Upgrades",
     "upgradeSkipUpgradeError_one": "{{count}} konnte nicht eingereiht werden",
     "upgradeSkipUpgradeError_other": "{{count}} konnten nicht eingereiht werden",
-    "upgradeTooManyTitle": "Zu viele Titel ausgewählt",
-    "upgradeTooManyDescription": "Die Suche nach besserer Qualität verarbeitet bis zu {{max}} Titel auf einmal. Es wurde nichts gesendet."
+    "bulkTracksTooManyTitle": "Zu viele Titel ausgewählt",
+    "bulkTracksTooManyDescription": "Sammelaktionen verarbeiten bis zu {{max}} Titel auf einmal. Es wurde nichts gesendet."
   },
   "playlists": {
     "created": "Playlist erstellt",

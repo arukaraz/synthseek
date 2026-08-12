@@ -15,7 +15,7 @@ export const reviewQueueTrigger = cva(
 );
 
 export const reviewQueueBadge = cva(
-  "bg-accent-500 text-overlay-fg absolute -top-1.5 -right-1.5 min-w-4 rounded-full px-1 text-[10px] leading-4 font-semibold tabular-nums"
+  "bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 min-w-4 rounded-full px-1 text-[10px] leading-4 font-semibold tabular-nums"
 );
 
 export const toolbarMenuTrigger = cva(

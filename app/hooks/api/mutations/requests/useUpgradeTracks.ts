@@ -2,8 +2,6 @@ import { errorToast } from "@modules/errors";
 import { notifyBulkUpgradeOutcome } from "@utils/request-helpers";
 import { trpc } from "@utils/trpc";
 
-export const MAX_BULK_UPGRADE_TRACKS = 500;
-
 export function useUpgradeTracks() {
   const utils = trpc.useUtils();
 

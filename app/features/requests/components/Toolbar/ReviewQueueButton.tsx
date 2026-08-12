@@ -9,12 +9,8 @@ import { ImportReviewModal } from "@features/import-review";
 import { useImportReview } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
-import { REVIEW_QUEUE_HASH } from "./constants";
+import { hashRequestsReview } from "./helpers";
 import { reviewQueueBadge, reviewQueueTrigger } from "./styles";
-
-function hashRequestsReview(): boolean {
-  return window.location.hash.slice(1) === REVIEW_QUEUE_HASH;
-}
 
 export function ReviewQueueButton() {
   const { t } = useTranslation("requests");

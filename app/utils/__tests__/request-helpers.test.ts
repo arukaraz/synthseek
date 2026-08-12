@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   isSingleTrackRequest,
-  notifyBulkUpgradeLimit,
+  notifyBulkTrackLimit,
   notifyBulkUpgradeOutcome,
   notifyUpgradeOutcome,
   type UpgradeTrackResult,
@@ -174,16 +174,16 @@ describe("notifyBulkUpgradeOutcome", () => {
   });
 });
 
-describe("notifyBulkUpgradeLimit", () => {
+describe("notifyBulkTrackLimit", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("warns with the cap and says nothing was submitted", () => {
-    notifyBulkUpgradeLimit(500);
+    notifyBulkTrackLimit(500);
 
-    expect(toastSpies.warning).toHaveBeenCalledWith(enMutations.requests.upgradeTooManyTitle, {
-      description: enMutations.requests.upgradeTooManyDescription.replace("{{max}}", "500"),
+    expect(toastSpies.warning).toHaveBeenCalledWith(enMutations.requests.bulkTracksTooManyTitle, {
+      description: enMutations.requests.bulkTracksTooManyDescription.replace("{{max}}", "500"),
     });
   });
 });

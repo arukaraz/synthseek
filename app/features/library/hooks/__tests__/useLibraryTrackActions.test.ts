@@ -4,20 +4,20 @@ import { renderHook } from "@test/test-utils";
 
 const mutateMock = vi.hoisted(() => vi.fn());
 const upgradeMutateMock = vi.hoisted(() => vi.fn());
-const notifyBulkUpgradeLimitMock = vi.hoisted(() => vi.fn());
+const notifyBulkTrackLimitMock = vi.hoisted(() => vi.fn());
 const useRetryTracksMock = vi.hoisted(() => vi.fn());
 const useUpgradeTracksMock = vi.hoisted(() => vi.fn());
 
-const MAX_BULK_UPGRADE_TRACKS = vi.hoisted(() => 500);
+const MAX_BULK_TRACK_IDS = vi.hoisted(() => 500);
 
 vi.mock("@hooks/api", () => ({
-  MAX_BULK_UPGRADE_TRACKS,
+  MAX_BULK_TRACK_IDS,
   useRetryTracks: useRetryTracksMock,
   useUpgradeTracks: useUpgradeTracksMock,
 }));
 
 vi.mock("@utils/request-helpers", () => ({
-  notifyBulkUpgradeLimit: notifyBulkUpgradeLimitMock,
+  notifyBulkTrackLimit: notifyBulkTrackLimitMock,
 }));
 
 import { useLibraryTrackActions } from "../useLibraryTrackActions";
@@ -26,7 +26,7 @@ describe("useLibraryTrackActions", () => {
   beforeEach(() => {
     mutateMock.mockReset();
     upgradeMutateMock.mockReset();
-    notifyBulkUpgradeLimitMock.mockReset();
+    notifyBulkTrackLimitMock.mockReset();
     useRetryTracksMock.mockReset();
     useUpgradeTracksMock.mockReset();
     useRetryTracksMock.mockReturnValue({ mutate: mutateMock, isPending: false });
@@ -64,7 +64,7 @@ describe("useLibraryTrackActions", () => {
     result.current.searchBetterQuality(["a", "b"]);
 
     expect(upgradeMutateMock).toHaveBeenCalledWith({ trackIds: ["a", "b"] });
-    expect(notifyBulkUpgradeLimitMock).not.toHaveBeenCalled();
+    expect(notifyBulkTrackLimitMock).not.toHaveBeenCalled();
   });
 
   it("does not fire the upgrade mutation for an empty id list", () => {
@@ -76,7 +76,7 @@ describe("useLibraryTrackActions", () => {
   });
 
   it("submits a selection sitting exactly on the server cap", () => {
-    const ids = Array.from({ length: MAX_BULK_UPGRADE_TRACKS }, (_, index) => `trk-${index}`);
+    const ids = Array.from({ length: MAX_BULK_TRACK_IDS }, (_, index) => `trk-${index}`);
     const { result } = renderHook(() => useLibraryTrackActions());
 
     result.current.searchBetterQuality(ids);
@@ -85,13 +85,13 @@ describe("useLibraryTrackActions", () => {
   });
 
   it("refuses a selection over the server cap instead of truncating it", () => {
-    const ids = Array.from({ length: MAX_BULK_UPGRADE_TRACKS + 1 }, (_, index) => `trk-${index}`);
+    const ids = Array.from({ length: MAX_BULK_TRACK_IDS + 1 }, (_, index) => `trk-${index}`);
     const { result } = renderHook(() => useLibraryTrackActions());
 
     result.current.searchBetterQuality(ids);
 
     expect(upgradeMutateMock).not.toHaveBeenCalled();
-    expect(notifyBulkUpgradeLimitMock).toHaveBeenCalledWith(MAX_BULK_UPGRADE_TRACKS);
+    expect(notifyBulkTrackLimitMock).toHaveBeenCalledWith(MAX_BULK_TRACK_IDS);
   });
 
   it("exposes the upgrade pending state as isUpgrading", () => {

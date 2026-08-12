@@ -368,10 +368,10 @@ describe("bottombar", () => {
 });
 
 describe("selection bulk bar", () => {
-  it("pins to the top of the scroll region as a single non-wrapping row", () => {
+  it("pins to the top of the scroll region and wraps rather than overflowing", () => {
     expect(selectionBar()).toContain("sticky");
     expect(selectionBar()).toContain("top-0");
-    expect(selectionBar()).toContain("flex-nowrap");
+    expect(selectionBar()).toContain("flex-wrap");
   });
 
   it("selection chip highlights the primary token", () => {
@@ -385,9 +385,9 @@ describe("selection bulk bar", () => {
     expect(selectionBarClear()).toContain("disabled:opacity-50");
   });
 
-  it("keeps every element on one row with no reflow ordering or full-width toggles", () => {
+  it("wraps without reordering or stretching, so nothing is pushed out of reach", () => {
     const reflow = /(?:^|\s|:)order-/;
-    expect(selectionBar()).not.toContain("flex-wrap");
+    expect(selectionBar()).toContain("flex-wrap");
     expect(selectionBarChip()).not.toMatch(reflow);
     expect(selectionBarClear()).not.toMatch(reflow);
     expect(selectionBarToggles()).not.toMatch(reflow);

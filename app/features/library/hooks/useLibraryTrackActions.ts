@@ -1,7 +1,7 @@
 "use client";
 
-import { MAX_BULK_UPGRADE_TRACKS, useRetryTracks, useUpgradeTracks } from "@hooks/api";
-import { notifyBulkUpgradeLimit } from "@utils/request-helpers";
+import { MAX_BULK_TRACK_IDS, useRetryTracks, useUpgradeTracks } from "@hooks/api";
+import { notifyBulkTrackLimit } from "@utils/request-helpers";
 import { useCallback } from "react";
 
 export function useLibraryTrackActions() {
@@ -11,6 +11,10 @@ export function useLibraryTrackActions() {
   const retryFailed = useCallback(
     (trackIds: string[]) => {
       if (trackIds.length === 0) return;
+      if (trackIds.length > MAX_BULK_TRACK_IDS) {
+        notifyBulkTrackLimit(MAX_BULK_TRACK_IDS);
+        return;
+      }
       retryTracks.mutate({ trackIds });
     },
     [retryTracks]
@@ -19,8 +23,8 @@ export function useLibraryTrackActions() {
   const searchBetterQuality = useCallback(
     (trackIds: string[]) => {
       if (trackIds.length === 0) return;
-      if (trackIds.length > MAX_BULK_UPGRADE_TRACKS) {
-        notifyBulkUpgradeLimit(MAX_BULK_UPGRADE_TRACKS);
+      if (trackIds.length > MAX_BULK_TRACK_IDS) {
+        notifyBulkTrackLimit(MAX_BULK_TRACK_IDS);
         return;
       }
       upgradeTracks.mutate({ trackIds });
