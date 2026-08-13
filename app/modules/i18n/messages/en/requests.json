@@ -66,6 +66,16 @@
     "selectTitle": "Select a request",
     "selectDescription": "Choose a request from the list to see its details."
   },
+  "storageFailure": {
+    "title_one": "{{count}} track failed because of local storage",
+    "title_other": "{{count}} tracks failed because of local storage",
+    "stillBroken": "The downloads folder is missing or not writable right now. Fix the storage before retrying.",
+    "pathReachable": "The downloads folder is reachable. If the disk was full, free up space before retrying.",
+    "cappedBatch_one": "Only {{count}} is retried per attempt, run it again for the rest.",
+    "cappedBatch_other": "Only {{count}} are retried per attempt, run it again for the rest.",
+    "retryAction_one": "Retry {{count}} track",
+    "retryAction_other": "Retry {{count}} tracks"
+  },
   "detail": {
     "backToList": "Back to requests list",
     "requestedBy": "Requested by <value>{{username}}</value> · <value>{{date}}</value>",

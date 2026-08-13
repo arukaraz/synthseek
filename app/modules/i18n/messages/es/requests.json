@@ -66,6 +66,16 @@
     "selectTitle": "Selecciona una solicitud",
     "selectDescription": "Elige una solicitud de la lista para ver sus detalles."
   },
+  "storageFailure": {
+    "title_one": "{{count}} pista falló por el almacenamiento local",
+    "title_other": "{{count}} pistas fallaron por el almacenamiento local",
+    "stillBroken": "La carpeta de descargas no existe o no se puede escribir en ella. Arregla el almacenamiento antes de reintentar.",
+    "pathReachable": "La carpeta de descargas es accesible. Si el disco estaba lleno, libera espacio antes de reintentar.",
+    "cappedBatch_one": "Solo se reintenta {{count}} por tanda, vuelve a ejecutarlo para el resto.",
+    "cappedBatch_other": "Solo se reintentan {{count}} por tanda, vuelve a ejecutarlo para el resto.",
+    "retryAction_one": "Reintentar {{count}} pista",
+    "retryAction_other": "Reintentar {{count}} pistas"
+  },
   "detail": {
     "backToList": "Volver a la lista de solicitudes",
     "requestedBy": "Solicitado por <value>{{username}}</value> · <value>{{date}}</value>",

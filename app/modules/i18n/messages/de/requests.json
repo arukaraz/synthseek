@@ -66,6 +66,16 @@
     "selectTitle": "Wähle eine Anfrage",
     "selectDescription": "Wähle eine Anfrage aus der Liste, um ihre Details zu sehen."
   },
+  "storageFailure": {
+    "title_one": "{{count}} Titel ist am lokalen Speicher gescheitert",
+    "title_other": "{{count}} Titel sind am lokalen Speicher gescheitert",
+    "stillBroken": "Der Download-Ordner fehlt oder ist nicht beschreibbar. Behebe das Speicherproblem, bevor du es erneut versuchst.",
+    "pathReachable": "Der Download-Ordner ist erreichbar. Falls die Festplatte voll war, schaffe zuerst Platz.",
+    "cappedBatch_one": "Pro Durchgang wird nur {{count}} erneut versucht, starte es für den Rest noch einmal.",
+    "cappedBatch_other": "Pro Durchgang werden nur {{count}} erneut versucht, starte es für den Rest noch einmal.",
+    "retryAction_one": "{{count}} Titel erneut versuchen",
+    "retryAction_other": "{{count}} Titel erneut versuchen"
+  },
   "detail": {
     "backToList": "Zurück zur Anfragenliste",
     "requestedBy": "Angefordert von <value>{{username}}</value> · <value>{{date}}</value>",

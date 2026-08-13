@@ -66,6 +66,16 @@
     "selectTitle": "Sélectionnez une demande",
     "selectDescription": "Choisissez une demande dans la liste pour voir ses détails."
   },
+  "storageFailure": {
+    "title_one": "{{count}} piste a échoué à cause du stockage local",
+    "title_other": "{{count}} pistes ont échoué à cause du stockage local",
+    "stillBroken": "Le dossier de téléchargement est absent ou non accessible en écriture. Corrigez le stockage avant de réessayer.",
+    "pathReachable": "Le dossier de téléchargement est accessible. Si le disque était plein, libérez de l'espace avant de réessayer.",
+    "cappedBatch_one": "Seule {{count}} est réessayée par lot, relancez pour le reste.",
+    "cappedBatch_other": "Seules {{count}} sont réessayées par lot, relancez pour le reste.",
+    "retryAction_one": "Réessayer {{count}} piste",
+    "retryAction_other": "Réessayer {{count}} pistes"
+  },
   "detail": {
     "backToList": "Retour à la liste des demandes",
     "requestedBy": "Demandé par <value>{{username}}</value> · <value>{{date}}</value>",

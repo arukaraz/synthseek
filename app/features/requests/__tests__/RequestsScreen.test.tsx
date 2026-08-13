@@ -19,6 +19,10 @@ vi.mock("../components/GroupsViewMode", () => ({
   GroupsViewMode: () => <div>groups view</div>,
 }));
 
+vi.mock("../components/StorageFailureNotice", () => ({
+  StorageFailureNotice: () => <div>storage failure notice</div>,
+}));
+
 describe("RequestsScreen", () => {
   it("composes the toast, activity divider, toolbar and groups view", () => {
     render(<RequestsScreen />);
@@ -27,6 +31,15 @@ describe("RequestsScreen", () => {
     expect(screen.getByText(/activity divider/)).toBeInTheDocument();
     expect(screen.getByText("toolbar")).toBeInTheDocument();
     expect(screen.getByText("groups view")).toBeInTheDocument();
+    expect(screen.getByText("storage failure notice")).toBeInTheDocument();
+  });
+
+  it("keeps the storage failure notice outside the scrolling group list", () => {
+    render(<RequestsScreen />);
+
+    const notice = screen.getByText("storage failure notice");
+    const groups = screen.getByText("groups view");
+    expect(groups.closest(".overflow-auto")?.contains(notice)).toBe(false);
   });
 
   it("renders the toolbar inside the activity divider", () => {
