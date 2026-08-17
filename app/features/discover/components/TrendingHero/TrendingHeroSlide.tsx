@@ -1,7 +1,7 @@
 "use client";
 
 import { ContentType } from "@api/__generated__/types";
-import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
+import { ImageWithFallback } from "@components/ImageWithFallback/ImageWithFallback";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";

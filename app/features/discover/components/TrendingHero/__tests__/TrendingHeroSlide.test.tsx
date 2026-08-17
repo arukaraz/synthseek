@@ -18,7 +18,7 @@ vi.mock("@features/search/components/ConfigRequestModal/ConfigRequestModal", () 
   },
 }));
 
-vi.mock("@components/ui/ImageWithFallback/ImageWithFallback", () => ({
+vi.mock("@components/ImageWithFallback/ImageWithFallback", () => ({
   // eslint-disable-next-line @next/next/no-img-element
   ImageWithFallback: ({ alt }: { alt: string }) => <img alt={alt} />,
 }));

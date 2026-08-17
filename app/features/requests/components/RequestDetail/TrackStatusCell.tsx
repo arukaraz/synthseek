@@ -2,7 +2,7 @@
 
 import { RequestStatus } from "@api/__generated__/types";
 import { TrackRetrySchedule } from "@components/TrackRetrySchedule";
-import { TrackStatusIndicator } from "@components/ui/TrackStatusIndicator";
+import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 
 import type { TrackStatusCellProps } from "./types";
 

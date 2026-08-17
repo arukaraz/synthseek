@@ -4,7 +4,7 @@ import type { ColumnDef } from "@components/ui/Table";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 import i18n from "@locale";
 
-import { TrackStatusIndicator } from "@components/ui/TrackStatusIndicator";
+import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 
 import { LibraryDurationCell } from "./cells/LibraryDurationCell";
 import { LibraryRequestedAtCell } from "./cells/LibraryRequestedAtCell";

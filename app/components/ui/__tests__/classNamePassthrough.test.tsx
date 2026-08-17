@@ -6,7 +6,7 @@ import { BulkActionBar } from "../BulkActionBar";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { PasswordField } from "../PasswordField";
 import { SegmentTabs } from "../SegmentTabs";
-import { TrackStatusIndicator } from "../TrackStatusIndicator";
+import { TrackStatusIndicator } from "../../TrackStatusIndicator";
 
 const MARKER = "ds-passthrough-marker";
 

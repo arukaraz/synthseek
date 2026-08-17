@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Music } from "lucide-react";
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
-import { circularImagePlaceholder } from "../styles";
+import { circularImagePlaceholder } from "../ui/styles";
 import { cn } from "@utils/cn";
 import { artworkProxySrc } from "@utils/artworkProxy";
 import { FallbackIcon } from "./FallbackIcon";

@@ -1,6 +1,6 @@
 "use client";
 
-import { responsiveFallbackIcon } from "../styles";
+import { responsiveFallbackIcon } from "../ui/styles";
 import type { FallbackIconProps } from "./types";
 
 export function FallbackIcon({ Icon, size }: FallbackIconProps) {

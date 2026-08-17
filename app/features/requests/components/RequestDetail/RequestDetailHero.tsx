@@ -2,7 +2,7 @@
 
 import { Button } from "@components/ui/Button";
 import { IconButton } from "@components/ui/IconButton";
-import { StatusBadge } from "@components/ui/StatusBadge";
+import { StatusBadge } from "@components/StatusBadge";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { artworkProxySrc } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";

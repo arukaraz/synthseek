@@ -1,7 +1,7 @@
 "use client";
 
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
-import { StatusBadge } from "@components/ui/StatusBadge";
+import { StatusBadge } from "@components/StatusBadge";
 import { formatRelativeTime } from "@utils/formatters";
 import { artworkProxySrc } from "@utils/artworkProxy";
 import { Disc } from "lucide-react";

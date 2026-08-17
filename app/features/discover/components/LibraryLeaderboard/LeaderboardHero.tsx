@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageWithFallback } from "@components/ui/ImageWithFallback/ImageWithFallback";
+import { ImageWithFallback } from "@components/ImageWithFallback/ImageWithFallback";
 import { Crown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {

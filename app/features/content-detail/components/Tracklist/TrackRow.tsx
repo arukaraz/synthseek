@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox } from "@components/ui/Checkbox";
-import { TrackStatusIndicator } from "@components/ui/TrackStatusIndicator";
+import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 import { isRetryableStatus } from "@utils/status-helpers";
 import { formatTrackDuration } from "@utils/formatters";
 import { Download, Loader2, RotateCcw } from "lucide-react";
