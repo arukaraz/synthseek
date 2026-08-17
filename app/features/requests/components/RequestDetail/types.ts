@@ -1,4 +1,4 @@
-import type { RequestWithTracks, TrackRequest } from "@api/__generated__/types";
+import type { RequestListItem, TrackRequest } from "@api/__generated__/types";
 
 import type { useRequestActions } from "../../hooks/useRequestActions";
 
@@ -18,7 +18,7 @@ export interface RejectApprovalDialogProps {
 }
 
 export interface RequestDetailProps {
-  request: RequestWithTracks | null;
+  request: RequestListItem | null;
   onBack: () => void;
 }
 
@@ -49,18 +49,21 @@ export interface TrackStatusCellProps {
 }
 
 export interface RequestDetailHeroProps {
-  request: RequestWithTracks;
+  request: RequestListItem;
+  tracks: TrackRequest[];
   onBack: () => void;
 }
 
 export interface JspfExportDialogProps {
-  request: RequestWithTracks;
+  request: RequestListItem;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 export interface RequestDetailStatsProps {
-  request: RequestWithTracks;
+  request: RequestListItem;
+  tracks: TrackRequest[];
+  isResolving: boolean;
 }
 
 export interface RequestDetailStatsCardProps {
@@ -71,5 +74,9 @@ export interface RequestDetailStatsCardProps {
 }
 
 export interface RequestDetailTracksProps {
-  request: RequestWithTracks;
+  request: RequestListItem;
+  tracks: TrackRequest[];
+  isResolving: boolean;
+  hasFailed: boolean;
+  onRetryLoad: () => void;
 }

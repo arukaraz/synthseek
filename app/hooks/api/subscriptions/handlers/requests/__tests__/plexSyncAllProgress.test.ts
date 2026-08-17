@@ -7,6 +7,7 @@ import { handlePlexSyncAllProgress } from "../plexSyncAllProgress";
 import { subscribePlexSyncAll, type PlexSyncAllUpdate } from "../../../shared/plexSyncAll";
 import { dismissDockJob, resetDockStore, seedPlexSyncDockJob, useDockJobs } from "../../../shared/progressDock";
 import type { DockJob } from "../../../shared/progressDock";
+import { resetRequestListInvalidation } from "../../../shared/requestListInvalidation";
 
 const spies = vi.hoisted(() => ({
   setData: vi.fn(),
@@ -21,6 +22,8 @@ vi.mock("@utils/trpc", () => ({
         getPlexSyncAllState: { setData: spies.setData },
         getPlexSyncAllItems: { invalidate: spies.invalidateItems },
         getAll: { invalidate: spies.invalidate },
+        getRecentTracks: { invalidate: vi.fn() },
+        getDetail: { invalidate: vi.fn() },
       },
     }),
   },
@@ -50,6 +53,7 @@ function plexJob(): DockJob | undefined {
 }
 
 beforeEach(() => {
+  resetRequestListInvalidation();
   spies.setData.mockReset();
   spies.invalidate.mockReset();
   spies.invalidateItems.mockReset();

@@ -1,11 +1,5 @@
-import {
-  ACTIVE_STATUSES,
-  ContentType,
-  RequestStatus,
-  UNRESOLVED_STATUSES,
-  type PublicUser,
-  type TrackRequest,
-} from "@api/__generated__/types";
+import { ACTIVE_STATUSES, RequestStatus, UNRESOLVED_STATUSES, type AppRouter } from "@api/__generated__/types";
+import type { inferRouterOutputs } from "@trpc/server";
 
 export type StatusFilter = "all" | "pending_approval" | "active" | "done" | "failed";
 
@@ -51,14 +45,4 @@ export const DOWNLOAD_ACTIVE_STATUSES: readonly RequestStatus[] = [
   RequestStatus.enum.in_progress,
 ];
 
-export interface FlatTrackRow extends TrackRequest {
-  parent: {
-    id: string;
-    name: string;
-    artist: string;
-    album_art: string | null;
-    contentType: ContentType;
-    requestedBy: PublicUser;
-    status: RequestStatus;
-  };
-}
+export type FlatTrackRow = inferRouterOutputs<AppRouter>["requests"]["getRecentTracks"][number];

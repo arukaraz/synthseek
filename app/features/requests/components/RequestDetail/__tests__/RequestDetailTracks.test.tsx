@@ -54,7 +54,15 @@ describe("RequestDetailTracks", () => {
       ],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
 
     expect(screen.getByText("First Song")).toBeInTheDocument();
     expect(screen.getByText("Second Song")).toBeInTheDocument();
@@ -62,7 +70,15 @@ describe("RequestDetailTracks", () => {
   });
 
   it("shows the empty message when there are no tracks", () => {
-    render(<RequestDetailTracks request={makeRequestWithTracks({ tracks: [] })} />);
+    render(
+      <RequestDetailTracks
+        request={makeRequestWithTracks({ tracks: [] })}
+        tracks={[]}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
 
     expect(screen.getByText("No tracks")).toBeInTheDocument();
   });
@@ -73,7 +89,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t9", status: RequestStatus.enum.failed })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Retry track" }));
 
@@ -86,7 +110,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t3", status: RequestStatus.enum.queued })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Cancel track" }));
 
@@ -101,7 +133,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t4", status: RequestStatus.enum.queued })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Cancel track" }));
 
@@ -115,7 +155,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t5", status: RequestStatus.enum.failed, watch_enabled: true })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Stop watching" }));
 
@@ -128,7 +176,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t6", status: RequestStatus.enum.failed, watch_enabled: false })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Resume watching, reset the schedule" }));
 
@@ -149,7 +205,15 @@ describe("RequestDetailTracks", () => {
       ],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
 
     expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
     expect(screen.getByText(/2 attempts/)).toBeInTheDocument();
@@ -172,7 +236,15 @@ describe("RequestDetailTracks", () => {
       ],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
 
     expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Retry now" })).not.toBeInTheDocument();
@@ -184,7 +256,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t7", status: RequestStatus.enum.queued, priority: 0 })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Jump the queue" }));
 
@@ -210,7 +290,15 @@ describe("RequestDetailTracks", () => {
       ],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
 
@@ -242,7 +330,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t9", external_id: "track-ext-9", status: RequestStatus.enum.complete })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
 
@@ -255,7 +351,15 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t5", status: RequestStatus.enum.failed })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
 
     expect(screen.queryByRole("button", { name: "Track actions" })).not.toBeInTheDocument();
   });
@@ -266,8 +370,79 @@ describe("RequestDetailTracks", () => {
       tracks: [makeRequestsTrack({ id: "t6" })],
     });
 
-    render(<RequestDetailTracks request={request} />);
+    render(
+      <RequestDetailTracks
+        request={request}
+        tracks={request.tracks}
+        isResolving={false}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
 
     expect(screen.getByText("A Song")).toBeInTheDocument();
+  });
+});
+
+describe("RequestDetailTracks loading and error branches", () => {
+  it("shows the loading state instead of an empty table while the detail is resolving", () => {
+    render(
+      <RequestDetailTracks
+        request={makeRequestWithTracks({ tracks: [] })}
+        tracks={[]}
+        isResolving={true}
+        hasFailed={false}
+        onRetryLoad={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("Loading tracks...")).toBeInTheDocument();
+    expect(screen.queryByText("No tracks")).not.toBeInTheDocument();
+  });
+
+  it("shows an actionable failure instead of spinning forever when the detail could not load", () => {
+    render(
+      <RequestDetailTracks
+        request={makeRequestWithTracks({ tracks: [] })}
+        tracks={[]}
+        isResolving={false}
+        hasFailed={true}
+        onRetryLoad={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("Could not load these tracks.")).toBeInTheDocument();
+    expect(screen.queryByText("Loading tracks...")).not.toBeInTheDocument();
+  });
+
+  it("retries the detail query when the failure branch's button is pressed", async () => {
+    const onRetryLoad = vi.fn();
+    render(
+      <RequestDetailTracks
+        request={makeRequestWithTracks({ tracks: [] })}
+        tracks={[]}
+        isResolving={false}
+        hasFailed={true}
+        onRetryLoad={onRetryLoad}
+      />
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "Try again" }));
+
+    expect(onRetryLoad).toHaveBeenCalledTimes(1);
+  });
+
+  it("prefers the failure branch over the loading branch when both are set", () => {
+    render(
+      <RequestDetailTracks
+        request={makeRequestWithTracks({ tracks: [] })}
+        tracks={[]}
+        isResolving={true}
+        hasFailed={true}
+        onRetryLoad={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("Could not load these tracks.")).toBeInTheDocument();
   });
 });

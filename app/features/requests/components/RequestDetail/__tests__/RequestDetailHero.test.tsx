@@ -1,16 +1,16 @@
-import { ContentType } from "@api/__generated__/types";
+import { ContentType, type TrackRequest } from "@api/__generated__/types";
 import { render, screen, userEvent } from "@test/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { makeRequestWithTracks, makeRequestsUser } from "../../../__tests__/factories";
+import { makeRequestListItem, makeRequestsTrack, makeRequestsUser } from "../../../__tests__/factories";
 import type { RequestDetailHeroMenuProps } from "../types";
 import { RequestDetailHero } from "../RequestDetailHero";
 
 type Actions = RequestDetailHeroMenuProps["actions"];
 
-const { actionsRef, retry, openForTarget } = vi.hoisted(() => {
+const { actionsRef, retry, openForTarget, actionsArgs } = vi.hoisted(() => {
   const actionsRef: { current: Actions | null } = { current: null };
-  return { actionsRef, retry: vi.fn(), openForTarget: vi.fn() };
+  return { actionsRef, retry: vi.fn(), openForTarget: vi.fn(), actionsArgs: vi.fn() };
 });
 
 function makeActions(overrides: Partial<Actions> = {}): Actions {
@@ -44,7 +44,10 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
 }
 
 vi.mock("../../../hooks/useRequestActions", () => ({
-  useRequestActions: () => actionsRef.current ?? makeActions(),
+  useRequestActions: (request: unknown, tracks: unknown) => {
+    actionsArgs(request, tracks);
+    return actionsRef.current ?? makeActions();
+  },
 }));
 
 vi.mock("@features/search/components/ContentRequestFlow", () => ({
@@ -63,10 +66,20 @@ vi.mock("../JspfExportDialog", () => ({
   JspfExportDialog: ({ open }: { open: boolean }) => (open ? <div>export dialog open</div> : null),
 }));
 
-function renderHero(overrides: Partial<Actions> = {}, requestOverrides = {}) {
+function renderHero(overrides: Partial<Actions> = {}, requestOverrides = {}, tracks: TrackRequest[] = []) {
   actionsRef.current = makeActions(overrides);
-  return render(<RequestDetailHero request={makeRequestWithTracks(requestOverrides)} onBack={vi.fn()} />);
+  return render(<RequestDetailHero request={makeRequestListItem(requestOverrides)} tracks={tracks} onBack={vi.fn()} />);
 }
+
+describe("RequestDetailHero track thread", () => {
+  it("hands its tracks to useRequestActions, which derives the approve and prioritize actions from them", () => {
+    const track = makeRequestsTrack({ id: "t1" });
+
+    renderHero({}, {}, [track]);
+
+    expect(actionsArgs).toHaveBeenCalledWith(expect.objectContaining({ id: "req-1" }), [track]);
+  });
+});
 
 describe("RequestDetailHero", () => {
   afterEach(() => {
@@ -116,12 +129,14 @@ describe("RequestDetailHero", () => {
 
   it("shows the delegated-to line only when the request is delegated", () => {
     const { rerender } = render(
-      <RequestDetailHero request={makeRequestWithTracks({ delegated_to: null })} onBack={vi.fn()} />
+      <RequestDetailHero request={makeRequestListItem({ delegated_to: null })} tracks={[]} onBack={vi.fn()} />
     );
     expect(screen.queryByText(/Delegated to/)).not.toBeInTheDocument();
 
     actionsRef.current = makeActions();
-    rerender(<RequestDetailHero request={makeRequestWithTracks({ delegated_to: "remote peer" })} onBack={vi.fn()} />);
+    rerender(
+      <RequestDetailHero request={makeRequestListItem({ delegated_to: "remote peer" })} tracks={[]} onBack={vi.fn()} />
+    );
     expect(screen.getByText(/Delegated to/)).toBeInTheDocument();
     expect(screen.getByText("Remote Peer")).toBeInTheDocument();
   });
@@ -156,7 +171,7 @@ describe("RequestDetailHero", () => {
     const user = userEvent.setup();
     const onBack = vi.fn();
     actionsRef.current = makeActions();
-    render(<RequestDetailHero request={makeRequestWithTracks()} onBack={onBack} />);
+    render(<RequestDetailHero request={makeRequestListItem()} tracks={[]} onBack={onBack} />);
 
     await user.click(screen.getByRole("button", { name: "Back to requests list" }));
 
@@ -230,20 +245,5 @@ describe("RequestDetailHero", () => {
     renderHero({ label: "Album" }, { contentType: ContentType.enum.album, name: "Discovery" });
 
     expect(screen.getByRole("heading", { name: "Discovery" })).toBeInTheDocument();
-  });
-
-  it("renders no interactive title or artwork for a content type with no detail destination", () => {
-    renderHero(
-      {},
-      {
-        contentType: ContentType.enum.artist,
-        name: "Daft Punk",
-        album_art: "https://example.com/cover.jpg",
-      }
-    );
-
-    expect(screen.getByRole("heading", { name: "Daft Punk" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Daft Punk" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Open details for Daft Punk" })).not.toBeInTheDocument();
   });
 });

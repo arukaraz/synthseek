@@ -3,6 +3,7 @@ import { isDropImportBatchInFlight } from "@utils/status-helpers";
 import type { trpc } from "@utils/trpc";
 
 import { invalidateLibraryViews } from "../../shared/libraryInvalidation";
+import { invalidateRequestList, invalidateRequestListNow } from "../../shared/requestListInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
@@ -15,9 +16,17 @@ export function handleDropImportUpdate(event: DropImportUpdatePayload, utils: Ut
   void utils.import.getBatch.invalidate({ batchId: event.batchId });
   void utils.import.listBatches.invalidate();
 
+  const batchSettled = !isDropImportBatchInFlight(event.status);
   const fileSettled = event.file !== undefined && SETTLED_FILE_STATUSES.has(event.file.status);
-  if (fileSettled || !isDropImportBatchInFlight(event.status)) {
-    void utils.requests.getAll.invalidate();
+
+  if (batchSettled) {
+    invalidateRequestListNow(utils);
+    invalidateLibraryViews(utils);
+    return;
+  }
+
+  if (fileSettled) {
+    invalidateRequestList(utils);
     invalidateLibraryViews(utils);
   }
 }

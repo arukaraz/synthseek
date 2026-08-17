@@ -23,9 +23,18 @@ import { RejectApprovalDialog } from "./RejectApprovalDialog";
 import { TrackActionsCell } from "./TrackActionsCell";
 import { TrackStatusCell } from "./TrackStatusCell";
 import { TrackTitleCell } from "./TrackTitleCell";
+import { Button } from "@components/ui/Button";
+import { SectionLoading } from "@components/ui/SectionLoading";
+import { tracksLoadFailed } from "./styles";
 import type { RequestDetailTracksProps } from "./types";
 
-export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
+export function RequestDetailTracks({
+  request,
+  tracks,
+  isResolving,
+  hasFailed,
+  onRetryLoad,
+}: RequestDetailTracksProps) {
   const { t } = useTranslation("requests");
   const { currentUser, isAdmin } = useAuthContext();
   const retryTrack = useRetryTrack();
@@ -141,10 +150,22 @@ export function RequestDetailTracks({ request }: RequestDetailTracksProps) {
     [canAct, isAdmin, retryTrack, prioritizeTrack, setWatch, approveTracks, handleCancel, handleUpgrade, t]
   );
 
-  const sortedTracks = useMemo(
-    () => [...request.tracks].sort((a, b) => compareByStatus(a.status, b.status)),
-    [request.tracks]
-  );
+  const sortedTracks = useMemo(() => [...tracks].sort((a, b) => compareByStatus(a.status, b.status)), [tracks]);
+
+  if (hasFailed) {
+    return (
+      <div className={tracksLoadFailed()}>
+        <p className="text-fg/60 text-sm">{t("tracks.loadFailed")}</p>
+        <Button variant="secondary" size="sm" onClick={onRetryLoad}>
+          {t("tracks.loadRetry")}
+        </Button>
+      </div>
+    );
+  }
+
+  if (isResolving) {
+    return <SectionLoading message={t("loading.tracks")} className="min-h-40" />;
+  }
 
   return (
     <>

@@ -1,6 +1,7 @@
 {
   "loading": {
-    "requests": "Cargando solicitudes..."
+    "requests": "Cargando solicitudes...",
+    "tracks": "Cargando pistas..."
   },
   "toolbar": {
     "pauseAll": "Pausar todas las descargas",
@@ -133,7 +134,9 @@
     "jumpTheQueue": "Saltar la cola",
     "jumpTheQueueTitle": "Mover esta canción al frente de la cola",
     "prioritized": "Priorizado",
-    "upgrade": "Buscar mejor calidad"
+    "upgrade": "Buscar mejor calidad",
+    "loadFailed": "No se pudieron cargar estas pistas.",
+    "loadRetry": "Reintentar"
   },
   "export": {
     "dialogTitle": "Exportar (máxima compatibilidad)",

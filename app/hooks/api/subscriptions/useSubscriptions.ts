@@ -17,6 +17,7 @@ import { handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
 import { invalidateLibraryViews } from "./shared/libraryInvalidation";
 import { resyncPushFedQueries } from "./shared/pushFedResync";
+import { invalidateRequestListNow } from "./shared/requestListInvalidation";
 
 const TERMINAL_STATUSES = new Set<string>([
   RequestStatus.enum.complete,
@@ -99,7 +100,7 @@ export function useSubscriptions() {
       reconnectAttemptsRef.current++;
 
       if (reconnectAttemptsRef.current > MAX_RECONNECT_ATTEMPTS) {
-        utils.requests.getAll.invalidate();
+        invalidateRequestListNow(utils);
         reconnectAttemptsRef.current = 0;
       }
     },

@@ -1,4 +1,4 @@
-import { ContentType, type RequestWithTracks } from "@api/__generated__/types";
+import { ContentType, type RequestContainerType, type RequestListItem } from "@api/__generated__/types";
 import { albumTarget, playlistLibraryTarget, type DetailTarget } from "@features/content-detail";
 import { titleCase } from "@utils/formatters";
 
@@ -8,7 +8,7 @@ export function formatDelegatedTo(delegatedTo: string | null): string | null {
   return titleCase(trimmed);
 }
 
-const DETAIL_TARGET_BY_CONTENT_TYPE: Record<ContentType, (request: RequestWithTracks) => DetailTarget | null> = {
+const DETAIL_TARGET_BY_CONTENT_TYPE: Record<RequestContainerType, (request: RequestListItem) => DetailTarget | null> = {
   [ContentType.enum.album]: (request) =>
     albumTarget({
       id: request.external_id,
@@ -22,10 +22,8 @@ const DETAIL_TARGET_BY_CONTENT_TYPE: Record<ContentType, (request: RequestWithTr
       name: request.name,
       cover: request.album_art,
     }),
-  [ContentType.enum.artist]: () => null,
-  [ContentType.enum.track]: () => null,
 };
 
-export function requestDetailTarget(request: RequestWithTracks): DetailTarget | null {
+export function requestDetailTarget(request: RequestListItem): DetailTarget | null {
   return DETAIL_TARGET_BY_CONTENT_TYPE[request.contentType](request);
 }

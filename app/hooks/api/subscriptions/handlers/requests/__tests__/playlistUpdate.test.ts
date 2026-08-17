@@ -17,6 +17,7 @@ import {
 } from "../../../shared/progressDock";
 import { renderHook } from "@testing-library/react";
 import { handlePlaylistUpdate } from "../playlistUpdate";
+import { resetRequestListInvalidation } from "../../../shared/requestListInvalidation";
 
 const spies = vi.hoisted(() => ({
   getData: vi.fn(),
@@ -29,6 +30,8 @@ vi.mock("@utils/trpc", () => ({
     useUtils: () => ({
       requests: {
         getAll: { getData: spies.getData, setData: spies.setData, invalidate: spies.invalidate },
+        getRecentTracks: { invalidate: vi.fn() },
+        getDetail: { invalidate: vi.fn() },
       },
     }),
   },
@@ -86,6 +89,7 @@ function makeInitialEvent(playlistId: string, totalTracks: number): PlaylistUpda
 
 describe("handlePlaylistUpdate", () => {
   beforeEach(() => {
+    resetRequestListInvalidation();
     spies.getData.mockReset();
     spies.setData.mockReset();
     spies.invalidate.mockReset();

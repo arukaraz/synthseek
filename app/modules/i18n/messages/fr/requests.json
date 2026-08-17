@@ -1,6 +1,7 @@
 {
   "loading": {
-    "requests": "Chargement des demandes..."
+    "requests": "Chargement des demandes...",
+    "tracks": "Chargement des titres..."
   },
   "toolbar": {
     "pauseAll": "Mettre en pause tous les téléchargements",
@@ -133,7 +134,9 @@
     "jumpTheQueue": "Passer devant la file",
     "jumpTheQueueTitle": "Déplacer cette piste en tête de la file",
     "prioritized": "Priorisée",
-    "upgrade": "Rechercher une meilleure qualité"
+    "upgrade": "Rechercher une meilleure qualité",
+    "loadFailed": "Impossible de charger ces titres.",
+    "loadRetry": "Réessayer"
   },
   "export": {
     "dialogTitle": "Exporter (compatibilité maximale)",

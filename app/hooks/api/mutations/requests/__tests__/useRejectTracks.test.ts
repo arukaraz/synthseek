@@ -10,12 +10,8 @@ interface RejectResult {
 }
 
 interface MutationOptions {
-  onMutate?: (vars: { trackIds: string[]; reason?: string }) => Promise<{ previous: unknown }>;
-  onError?: (
-    err: unknown,
-    vars: { trackIds: string[]; reason?: string },
-    context: { previous: unknown } | undefined
-  ) => void;
+  onMutate?: (vars: { trackIds: string[]; reason?: string }) => Promise<void>;
+  onError?: (err: unknown) => void;
   onSuccess?: (result: RejectResult) => void;
   onSettled?: () => void;
 }
@@ -24,9 +20,11 @@ const spies = vi.hoisted(() => {
   const captured: { options?: MutationOptions } = {};
   return {
     captured,
-    cancel: vi.fn(),
-    getData: vi.fn(),
-    setData: vi.fn(),
+    detailCancel: vi.fn(),
+    listCancel: vi.fn(),
+    detailInvalidate: vi.fn(),
+    setQueriesData: vi.fn(),
+    getQueriesData: vi.fn(() => []),
     invalidate: vi.fn(),
     toastSuccess: vi.fn(),
     toastWarning: vi.fn(),
@@ -34,19 +32,24 @@ const spies = vi.hoisted(() => {
   };
 });
 
+vi.mock("@tanstack/react-query", () => ({
+  useQueryClient: () => ({ setQueriesData: spies.setQueriesData, getQueriesData: spies.getQueriesData }),
+}));
+
+vi.mock("@trpc/react-query", () => ({
+  getQueryKey: () => ["requests", "getDetail"],
+}));
+
 vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: {
-        getAll: {
-          cancel: spies.cancel,
-          getData: spies.getData,
-          setData: spies.setData,
-          invalidate: spies.invalidate,
-        },
+        getAll: { invalidate: spies.invalidate, setData: vi.fn(), cancel: spies.listCancel },
+        getDetail: { cancel: spies.detailCancel, invalidate: spies.detailInvalidate },
       },
     }),
     requests: {
+      getDetail: {},
       reject: {
         useMutation: (options: MutationOptions) => {
           spies.captured.options = options;
@@ -85,28 +88,25 @@ describe("useRejectTracks", () => {
     spies.captured.options = undefined;
   });
 
-  it("optimistically flips the pending tracks to cancelled", async () => {
-    const previous = [makeItem()];
-    spies.getData.mockReturnValue(previous);
+  it("optimistically flips the pending tracks to cancelled in the cached detail", async () => {
     renderHook(() => useRejectTracks());
 
     await spies.captured.options?.onMutate?.({ trackIds: ["t1"], reason: "duplicate" });
 
-    const updater = spies.setData.mock.calls[0][1] as (old: unknown) => unknown;
-    const patched = updater(previous) as PatchItem[];
-    expect(patched[0].tracks[0].status).toBe("cancelled");
-    expect(patched[0].status).toBe("cancelled");
+    expect(spies.detailCancel).toHaveBeenCalledTimes(1);
+    expect(spies.listCancel).toHaveBeenCalledTimes(1);
+    const updater = spies.setQueriesData.mock.calls[0][1] as (old: unknown) => PatchItem;
+    const patched = updater(makeItem());
+    expect(patched.tracks[0].status).toBe("cancelled");
+    expect(patched.status).toBe("cancelled");
   });
 
-  it("rolls back and toasts on error", async () => {
-    const previous = [makeItem()];
-    spies.getData.mockReturnValue(previous);
+  it("refetches the detail and toasts on error", () => {
     renderHook(() => useRejectTracks());
 
-    const context = await spies.captured.options?.onMutate?.({ trackIds: ["t1"] });
-    spies.captured.options?.onError?.(new Error("boom"), { trackIds: ["t1"] }, context);
+    spies.captured.options?.onError?.(new Error("boom"));
 
-    expect(spies.setData).toHaveBeenLastCalledWith(undefined, previous);
+    expect(spies.detailInvalidate).toHaveBeenCalledTimes(1);
     expect(spies.errorToast).toHaveBeenCalledWith(expect.any(Error), "requests.rejectFailed");
   });
 

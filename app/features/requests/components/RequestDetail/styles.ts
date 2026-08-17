@@ -222,3 +222,7 @@ export const rejectReasonInput = cva(
 );
 
 export type RejectReasonInputProps = VariantProps<typeof rejectReasonInput>;
+
+export const tracksLoadFailed = cva("flex min-h-40 flex-col items-center justify-center gap-3 p-6 text-center");
+
+export type TracksLoadFailedProps = VariantProps<typeof tracksLoadFailed>;

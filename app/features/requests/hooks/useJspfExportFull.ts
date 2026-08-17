@@ -1,4 +1,4 @@
-import { ContentType, type RequestWithTracks } from "@api/__generated__/types";
+import { ContentType, type RequestListItem } from "@api/__generated__/types";
 import { useExportFullPortability } from "@hooks/api/mutations/portability/useExportFullPortability";
 import { downloadText } from "@utils/download";
 import { generateUuid } from "@utils/uuid";
@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 import { exportFilename } from "../helpers";
 
-export function useJspfExportFull(request: RequestWithTracks, onOpenChange: (open: boolean) => void) {
+export function useJspfExportFull(request: RequestListItem, onOpenChange: (open: boolean) => void) {
   const { t } = useTranslation("requests");
   const [jobId, setJobId] = useState<string>("");
   const mutation = useExportFullPortability();

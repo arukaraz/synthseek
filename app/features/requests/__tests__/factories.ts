@@ -3,6 +3,7 @@ import {
   RequestStatus,
   Role,
   type PublicUser,
+  type RequestListItem,
   type RequestWithTracks,
   type TrackRequest,
 } from "@api/__generated__/types";
@@ -62,7 +63,7 @@ export function makeRequestsTrack(overrides: Partial<TrackRequest> = {}): TrackR
   };
 }
 
-export function makeRequestWithTracks(overrides: Partial<RequestWithTracks> = {}): RequestWithTracks {
+export function makeRequestListItem(overrides: Partial<RequestListItem> = {}): RequestListItem {
   return {
     id: "req-1",
     external_id: "ext-req-1",
@@ -86,8 +87,11 @@ export function makeRequestWithTracks(overrides: Partial<RequestWithTracks> = {}
     contentType: ContentType.enum.playlist,
     plex_playlist_id: null,
     duplicateCount: 0,
-    tracks: [],
     requestedBy: makeRequestsUser(),
     ...overrides,
   };
+}
+
+export function makeRequestWithTracks(overrides: Partial<RequestWithTracks> = {}): RequestWithTracks {
+  return { ...makeRequestListItem(), tracks: [], ...overrides };
 }

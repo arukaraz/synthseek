@@ -112,7 +112,7 @@ describe("useFilteredRequests default recency sort", () => {
       updated_at: new Date("2024-06-01T00:00:00Z"),
     });
 
-    const { result } = renderHook(() => useFilteredRequests([oldUpdate, bumped], "all", recentDesc, ""));
+    const { result } = renderHook(() => useFilteredRequests([oldUpdate, bumped], "all", recentDesc, "", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["bumped", "old-update"]);
   });
@@ -130,7 +130,7 @@ describe("useFilteredRequests default recency sort", () => {
     });
 
     const { result } = renderHook(() =>
-      useFilteredRequests([newerCreatedStaleUpdate, olderCreatedFreshUpdate], "all", recentDesc, "")
+      useFilteredRequests([newerCreatedStaleUpdate, olderCreatedFreshUpdate], "all", recentDesc, "", undefined)
     );
 
     expect(result.current[0]?.id).toBe("older-created");
@@ -141,7 +141,7 @@ describe("useFilteredRequests default recency sort", () => {
     const second = makeRequest({ id: "second", updated_at: new Date("2024-06-01T00:00:00Z") });
 
     const ascending: SortConfig = { field: SortField.RECENT, direction: "asc" };
-    const { result } = renderHook(() => useFilteredRequests([second, first], "all", ascending, ""));
+    const { result } = renderHook(() => useFilteredRequests([second, first], "all", ascending, "", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["first", "second"]);
   });
@@ -157,7 +157,7 @@ describe("useFilteredRequests sort by field", () => {
     const zed = makeRequest({ id: "zed", artist: "Zed" });
     const ada = makeRequest({ id: "ada", artist: "Ada" });
 
-    const { result } = renderHook(() => useFilteredRequests([zed, ada], "all", artistAsc, ""));
+    const { result } = renderHook(() => useFilteredRequests([zed, ada], "all", artistAsc, "", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["ada", "zed"]);
   });
@@ -166,7 +166,7 @@ describe("useFilteredRequests sort by field", () => {
     const zed = makeRequest({ id: "zed", artist: "Zed" });
     const ada = makeRequest({ id: "ada", artist: "Ada" });
 
-    const { result } = renderHook(() => useFilteredRequests([ada, zed], "all", artistDesc, ""));
+    const { result } = renderHook(() => useFilteredRequests([ada, zed], "all", artistDesc, "", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["zed", "ada"]);
   });
@@ -175,7 +175,7 @@ describe("useFilteredRequests sort by field", () => {
     const beta = makeRequest({ id: "beta", name: "Beta" });
     const alpha = makeRequest({ id: "alpha", name: "Alpha" });
 
-    const { result } = renderHook(() => useFilteredRequests([beta, alpha], "all", albumAsc, ""));
+    const { result } = renderHook(() => useFilteredRequests([beta, alpha], "all", albumAsc, "", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["alpha", "beta"]);
   });
@@ -184,7 +184,7 @@ describe("useFilteredRequests sort by field", () => {
     const second = makeRequest({ id: "second", name: "Second" });
     const first = makeRequest({ id: "first", name: "First" });
 
-    const { result } = renderHook(() => useFilteredRequests([second, first], "all", playlistAsc, ""));
+    const { result } = renderHook(() => useFilteredRequests([second, first], "all", playlistAsc, "", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["first", "second"]);
   });
@@ -195,7 +195,7 @@ describe("useFilteredRequests search filter", () => {
     const match = makeRequest({ id: "match", name: "Midnight Drive", artist: "Nobody" });
     const other = makeRequest({ id: "other", name: "Sunrise", artist: "Nobody" });
 
-    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "midnight"));
+    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "midnight", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["match"]);
   });
@@ -204,28 +204,36 @@ describe("useFilteredRequests search filter", () => {
     const match = makeRequest({ id: "match", name: "Untitled", artist: "Daft Punk" });
     const other = makeRequest({ id: "other", name: "Untitled", artist: "Air" });
 
-    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "daft"));
+    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "daft", undefined));
 
     expect(result.current.map((item) => item.id)).toEqual(["match"]);
   });
 
-  it("matches on a track title inside the request", () => {
-    const match = makeRequest({
-      id: "match",
-      name: "Album",
-      artist: "Artist",
-      tracks: [makeTrack({ id: "t1", title: "Hidden Gem" })],
-    });
-    const other = makeRequest({
-      id: "other",
-      name: "Album",
-      artist: "Artist",
-      tracks: [makeTrack({ id: "t2", title: "Plain" })],
-    });
+  it("keeps a request whose id the server reported as a track-title match", () => {
+    const match = makeRequest({ id: "match", name: "Album", artist: "Artist" });
+    const other = makeRequest({ id: "other", name: "Album", artist: "Artist" });
 
-    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "hidden"));
+    const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "hidden", ["match"]));
 
     expect(result.current.map((item) => item.id)).toEqual(["match"]);
+  });
+
+  it("drops every request when the query matches no name, artist or reported track title", () => {
+    const first = makeRequest({ id: "first", name: "Album", artist: "Artist" });
+    const second = makeRequest({ id: "second", name: "Album", artist: "Artist" });
+
+    const { result } = renderHook(() => useFilteredRequests([first, second], "all", recentDesc, "hidden", []));
+
+    expect(result.current).toEqual([]);
+  });
+
+  it("still matches on name and artist while the track-title lookup is in flight", () => {
+    const byName = makeRequest({ id: "by-name", name: "Hidden Gem", artist: "Artist" });
+    const other = makeRequest({ id: "other", name: "Album", artist: "Artist" });
+
+    const { result } = renderHook(() => useFilteredRequests([byName, other], "all", recentDesc, "hidden", undefined));
+
+    expect(result.current.map((item) => item.id)).toEqual(["by-name"]);
   });
 
   it("drops items that match neither name, artist, nor any track", () => {
@@ -236,7 +244,7 @@ describe("useFilteredRequests search filter", () => {
       tracks: [makeTrack({ id: "t1", title: "Song" })],
     });
 
-    const { result } = renderHook(() => useFilteredRequests([item], "all", recentDesc, "zzz-no-match"));
+    const { result } = renderHook(() => useFilteredRequests([item], "all", recentDesc, "zzz-no-match", undefined));
 
     expect(result.current).toEqual([]);
   });
@@ -245,7 +253,7 @@ describe("useFilteredRequests search filter", () => {
     const a = makeRequest({ id: "a" });
     const b = makeRequest({ id: "b" });
 
-    const { result } = renderHook(() => useFilteredRequests([a, b], "all", recentDesc, "   "));
+    const { result } = renderHook(() => useFilteredRequests([a, b], "all", recentDesc, "   ", undefined));
 
     expect(result.current).toHaveLength(2);
   });

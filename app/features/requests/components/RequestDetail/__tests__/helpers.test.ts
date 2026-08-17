@@ -65,12 +65,4 @@ describe("requestDetailTarget", () => {
       playlistSource: "library",
     });
   });
-
-  it("returns no target for an artist request", () => {
-    expect(requestDetailTarget(makeRequestWithTracks({ contentType: ContentType.enum.artist }))).toBeNull();
-  });
-
-  it("returns no target for a track request", () => {
-    expect(requestDetailTarget(makeRequestWithTracks({ contentType: ContentType.enum.track }))).toBeNull();
-  });
 });

@@ -1,49 +1,25 @@
-import type { inferRouterOutputs } from "@trpc/server";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { RequestStatus, type AppRouter } from "@api/__generated__/types";
+import { RequestStatus } from "@api/__generated__/types";
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
-type RequestsGetAllOutput = inferRouterOutputs<AppRouter>["requests"]["getAll"];
-
-export function patchPendingApprovalTracks(
-  items: RequestsGetAllOutput | undefined,
-  trackIds: string[],
-  nextStatus: RequestStatus
-): RequestsGetAllOutput | undefined {
-  if (!items) return items;
-  const ids = new Set(trackIds);
-
-  return items.map((item) => {
-    const tracks = item.tracks.map((track) =>
-      ids.has(track.id) && track.status === RequestStatus.enum.pending_approval
-        ? { ...track, status: nextStatus }
-        : track
-    );
-    const stillPending = tracks.some((track) => track.status === RequestStatus.enum.pending_approval);
-    const status = item.status === RequestStatus.enum.pending_approval && !stillPending ? nextStatus : item.status;
-    return { ...item, tracks, status };
-  });
-}
+import { patchCachedApprovalDecision } from "./helpers";
 
 export function useApproveTracks() {
   const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
 
   return trpc.requests.approve.useMutation({
     onMutate: async ({ trackIds }) => {
-      await utils.requests.getAll.cancel();
-      const previous = utils.requests.getAll.getData();
+      await Promise.all([utils.requests.getAll.cancel(), utils.requests.getDetail.cancel()]);
 
-      utils.requests.getAll.setData(undefined, (old) =>
-        patchPendingApprovalTracks(old, trackIds, RequestStatus.enum.queued)
-      );
-
-      return { previous };
+      patchCachedApprovalDecision(queryClient, utils, trackIds, RequestStatus.enum.queued);
     },
-    onError: (err, _vars, context) => {
-      if (context?.previous) utils.requests.getAll.setData(undefined, context.previous);
+    onError: (err) => {
+      void utils.requests.getDetail.invalidate();
       errorToast(err, "requests.approveFailed");
     },
     onSuccess: ({ approved, skipped }) => {
@@ -53,6 +29,9 @@ export function useApproveTracks() {
         toast.warning(i18n.t("mutations:requests.approveAllSkipped"));
       }
     },
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.requests.getDetail.invalidate();
+    },
   });
 }

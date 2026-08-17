@@ -1,7 +1,7 @@
-import type { RequestWithTracks } from "@api/__generated__/types";
+import type { RequestListItem } from "@api/__generated__/types";
 
 export interface RequestSidebarProps {
-  items: RequestWithTracks[];
+  items: RequestListItem[];
   selectedId: string | null;
   onSelect: (id: string) => void;
   searchQuery?: string;
@@ -9,7 +9,7 @@ export interface RequestSidebarProps {
 }
 
 export interface RequestSidebarItemProps {
-  request: RequestWithTracks;
+  request: RequestListItem;
   isSelected: boolean;
   onSelect: () => void;
 }

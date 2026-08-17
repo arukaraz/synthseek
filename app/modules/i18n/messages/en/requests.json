@@ -1,6 +1,7 @@
 {
   "loading": {
-    "requests": "Loading requests..."
+    "requests": "Loading requests...",
+    "tracks": "Loading tracks..."
   },
   "toolbar": {
     "pauseAll": "Pause all downloads",
@@ -133,7 +134,9 @@
     "jumpTheQueue": "Jump the queue",
     "jumpTheQueueTitle": "Move this track to the front of the queue",
     "prioritized": "Prioritized",
-    "upgrade": "Search better quality"
+    "upgrade": "Search better quality",
+    "loadFailed": "Could not load these tracks.",
+    "loadRetry": "Try again"
   },
   "export": {
     "dialogTitle": "Export (max compatibility)",

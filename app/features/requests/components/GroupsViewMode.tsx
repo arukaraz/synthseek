@@ -1,7 +1,7 @@
 "use client";
 
 import { SectionLoading } from "@components/ui/SectionLoading";
-import { useTrackRequests } from "@hooks/api";
+import { useTrackRequests, useTrackTitleMatches } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
@@ -18,11 +18,13 @@ export function GroupsViewMode() {
   const { values, set } = useUrlParams(REQUESTS_URL_PARAMS);
 
   const debouncedSearchQuery = useDebounce(values.q, { delay: 300 });
+  const { data: trackTitleMatchIds } = useTrackTitleMatches(debouncedSearchQuery);
   const visibleItems = useFilteredRequests(
     items,
     values.filter,
     { field: values.sort, direction: values.dir },
-    debouncedSearchQuery
+    debouncedSearchQuery,
+    trackTitleMatchIds
   );
   const selected = visibleItems.find((it) => it.external_id === values.selected) ?? null;
 

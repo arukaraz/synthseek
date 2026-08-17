@@ -1,50 +1,13 @@
-import { ContentType, RequestStatus, type RequestWithTracks } from "@api/__generated__/types";
+import { ContentType, RequestStatus, type RequestListItem } from "@api/__generated__/types";
 import { describe, expect, it } from "vitest";
 
-import {
-  compareByStatus,
-  exportFilename,
-  filterRequestsByStatus,
-  flattenRequestsToTrackRows,
-  hasActiveDownload,
-} from "../helpers";
-import { makeRequestWithTracks, makeRequestsTrack } from "./factories";
-
-describe("flattenRequestsToTrackRows", () => {
-  it("emits one row per track carrying the parent identity", () => {
-    const request = makeRequestWithTracks({
-      id: "parent-1",
-      name: "Parent Name",
-      artist: "Parent Artist",
-      album_art: "art.jpg",
-      contentType: ContentType.enum.album,
-      status: RequestStatus.enum.downloading,
-      tracks: [makeRequestsTrack({ id: "t1", title: "One" }), makeRequestsTrack({ id: "t2", title: "Two" })],
-    });
-
-    const rows = flattenRequestsToTrackRows([request]);
-
-    expect(rows).toHaveLength(2);
-    expect(rows.map((row) => row.id)).toEqual(["t1", "t2"]);
-    expect(rows[0]?.parent).toMatchObject({
-      id: "parent-1",
-      name: "Parent Name",
-      artist: "Parent Artist",
-      album_art: "art.jpg",
-      contentType: ContentType.enum.album,
-      status: RequestStatus.enum.downloading,
-    });
-  });
-
-  it("returns no rows for a request without tracks", () => {
-    expect(flattenRequestsToTrackRows([makeRequestWithTracks({ tracks: [] })])).toEqual([]);
-  });
-});
+import { compareByStatus, exportFilename, filterRequestsByStatus, hasActiveDownload } from "../helpers";
+import { makeRequestListItem } from "./factories";
 
 describe("hasActiveDownload", () => {
   it("is true when an album is actively downloading", () => {
     const items = [
-      makeRequestWithTracks({
+      makeRequestListItem({
         contentType: ContentType.enum.album,
         status: RequestStatus.enum.downloading,
       }),
@@ -53,20 +16,9 @@ describe("hasActiveDownload", () => {
     expect(hasActiveDownload(items)).toBe(true);
   });
 
-  it("ignores a track-type request even while downloading", () => {
-    const items = [
-      makeRequestWithTracks({
-        contentType: ContentType.enum.track,
-        status: RequestStatus.enum.downloading,
-      }),
-    ];
-
-    expect(hasActiveDownload(items)).toBe(false);
-  });
-
   it("is false when an album has a terminal status", () => {
     const items = [
-      makeRequestWithTracks({
+      makeRequestListItem({
         contentType: ContentType.enum.album,
         status: RequestStatus.enum.complete,
       }),
@@ -98,13 +50,13 @@ describe("exportFilename", () => {
   });
 });
 
-const complete = makeRequestWithTracks({ id: "complete", status: RequestStatus.enum.complete });
-const failed = makeRequestWithTracks({ id: "failed", status: RequestStatus.enum.failed });
-const downloading = makeRequestWithTracks({ id: "downloading", status: RequestStatus.enum.downloading });
-const pending = makeRequestWithTracks({ id: "pending", status: RequestStatus.enum.pending_approval });
+const complete = makeRequestListItem({ id: "complete", status: RequestStatus.enum.complete });
+const failed = makeRequestListItem({ id: "failed", status: RequestStatus.enum.failed });
+const downloading = makeRequestListItem({ id: "downloading", status: RequestStatus.enum.downloading });
+const pending = makeRequestListItem({ id: "pending", status: RequestStatus.enum.pending_approval });
 
 describe("filterRequestsByStatus", () => {
-  const items: RequestWithTracks[] = [complete, failed];
+  const items: RequestListItem[] = [complete, failed];
 
   it("returns every item for the all filter", () => {
     expect(filterRequestsByStatus(items, "all").map((item) => item.id)).toEqual(["complete", "failed"]);

@@ -4,6 +4,7 @@ import type { trpc } from "@utils/trpc";
 import { isForeignJobEvent } from "../../shared/eventOwnership";
 import { invalidateLibraryViews } from "../../shared/libraryInvalidation";
 import { finalizeDockJob, markDockItem } from "../../shared/progressDock";
+import { invalidateRequestList, invalidateRequestListNow } from "../../shared/requestListInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
@@ -17,7 +18,7 @@ export function handleLibraryImportProgress(
   if (event.phase === "progress" && event.item) {
     if (!isForeignImport) markDockItem(event.jobId, event.item.key, event.item.state, event.item.reason);
     if (event.item.state === "done") {
-      void utils.requests.getAll.invalidate();
+      invalidateRequestList(utils);
       invalidateLibraryViews(utils);
     }
     return;
@@ -26,7 +27,7 @@ export function handleLibraryImportProgress(
   if (event.phase === "complete") {
     if (!isForeignImport) finalizeDockJob(event.jobId);
     void utils.requests.getLibrarySummary.invalidate();
-    void utils.requests.getAll.invalidate();
+    invalidateRequestListNow(utils);
     invalidateLibraryViews(utils);
   }
 }

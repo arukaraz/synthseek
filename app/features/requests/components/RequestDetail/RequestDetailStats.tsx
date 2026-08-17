@@ -6,14 +6,13 @@ import { RequestDetailStatsCard } from "./RequestDetailStatsCard";
 import { detailStatsGrid } from "./styles";
 import type { RequestDetailStatsProps } from "./types";
 
-export function RequestDetailStats({ request }: RequestDetailStatsProps) {
+export function RequestDetailStats({ request, tracks, isResolving }: RequestDetailStatsProps) {
   const { t } = useTranslation("requests");
 
   if (request.status === RequestStatus.enum.delegated) {
     return null;
   }
 
-  const tracks = request.tracks ?? [];
   const completeCount = tracks.filter((track) => track.status === RequestStatus.enum.complete).length;
   const failedCount = tracks.filter((track) =>
     (UNRESOLVED_STATUSES as readonly string[]).includes(track.status)
@@ -30,19 +29,19 @@ export function RequestDetailStats({ request }: RequestDetailStatsProps) {
       />
       <RequestDetailStatsCard
         label={t("stats.completeLabel")}
-        value={completeCount}
+        value={isResolving ? "-" : completeCount}
         sublabel={t("stats.completeSublabel")}
         valueClassName="text-green-400"
       />
       <RequestDetailStatsCard
         label={t("stats.failedLabel")}
-        value={failedCount}
+        value={isResolving ? "-" : failedCount}
         sublabel={t("stats.failedSublabel")}
         valueClassName="text-red-400"
       />
       <RequestDetailStatsCard
         label={t("stats.activeLabel")}
-        value={activeCount}
+        value={isResolving ? "-" : activeCount}
         sublabel={t("stats.activeSublabel")}
         valueClassName="text-primary-400"
       />

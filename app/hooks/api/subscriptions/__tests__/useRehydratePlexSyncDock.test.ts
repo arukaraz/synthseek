@@ -29,6 +29,8 @@ vi.mock("@utils/trpc", () => ({
         getPlexSyncAllState: { setData: spies.setData },
         getPlexSyncAllItems: { invalidate: spies.invalidateItems },
         getAll: { invalidate: spies.invalidate },
+        getRecentTracks: { invalidate: vi.fn() },
+        getDetail: { invalidate: vi.fn() },
       },
     }),
   },
@@ -98,6 +100,8 @@ describe("useRehydratePlexSyncDock", () => {
           getPlexSyncAllState: { setData: spies.setData },
           getPlexSyncAllItems: { invalidate: spies.invalidateItems },
           getAll: { invalidate: spies.invalidate },
+          getRecentTracks: { invalidate: vi.fn() },
+          getDetail: { invalidate: vi.fn() },
         },
       },
       VIEWER_ID
@@ -121,6 +125,8 @@ describe("useRehydratePlexSyncDock", () => {
           getPlexSyncAllState: { setData: spies.setData },
           getPlexSyncAllItems: { invalidate: spies.invalidateItems },
           getAll: { invalidate: spies.invalidate },
+          getRecentTracks: { invalidate: vi.fn() },
+          getDetail: { invalidate: vi.fn() },
         },
       },
       VIEWER_ID

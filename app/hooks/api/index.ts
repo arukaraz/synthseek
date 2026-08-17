@@ -1,4 +1,7 @@
 export { useTrackRequests } from "./queries/useTrackRequests";
+export { useRequestDetail } from "./queries/useRequestDetail";
+export { useRecentTracks } from "./queries/useRecentTracks";
+export { useTrackTitleMatches } from "./queries/useTrackTitleMatches";
 export { useArtistSpotlight } from "./queries/useArtistSpotlight";
 export { useCategories } from "./queries/useCategories";
 export { useCategoryPlaylists } from "./queries/useCategoryPlaylists";

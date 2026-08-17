@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { patchPendingApprovalTracks, useApproveTracks } from "../useApproveTracks";
+import { useApproveTracks } from "../useApproveTracks";
 
 interface ApproveResult {
   requested: number;
@@ -10,8 +10,8 @@ interface ApproveResult {
 }
 
 interface MutationOptions {
-  onMutate?: (vars: { trackIds: string[] }) => Promise<{ previous: unknown }>;
-  onError?: (err: unknown, vars: { trackIds: string[] }, context: { previous: unknown } | undefined) => void;
+  onMutate?: (vars: { trackIds: string[] }) => Promise<void>;
+  onError?: (err: unknown) => void;
   onSuccess?: (result: ApproveResult) => void;
   onSettled?: () => void;
 }
@@ -20,9 +20,11 @@ const spies = vi.hoisted(() => {
   const captured: { options?: MutationOptions } = {};
   return {
     captured,
-    cancel: vi.fn(),
-    getData: vi.fn(),
-    setData: vi.fn(),
+    detailCancel: vi.fn(),
+    listCancel: vi.fn(),
+    detailInvalidate: vi.fn(),
+    setQueriesData: vi.fn(),
+    getQueriesData: vi.fn(() => []),
     invalidate: vi.fn(),
     toastSuccess: vi.fn(),
     toastWarning: vi.fn(),
@@ -30,19 +32,24 @@ const spies = vi.hoisted(() => {
   };
 });
 
+vi.mock("@tanstack/react-query", () => ({
+  useQueryClient: () => ({ setQueriesData: spies.setQueriesData, getQueriesData: spies.getQueriesData }),
+}));
+
+vi.mock("@trpc/react-query", () => ({
+  getQueryKey: () => ["requests", "getDetail"],
+}));
+
 vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: {
-        getAll: {
-          cancel: spies.cancel,
-          getData: spies.getData,
-          setData: spies.setData,
-          invalidate: spies.invalidate,
-        },
+        getAll: { invalidate: spies.invalidate, setData: vi.fn(), cancel: spies.listCancel },
+        getDetail: { cancel: spies.detailCancel, invalidate: spies.detailInvalidate },
       },
     }),
     requests: {
+      getDetail: {},
       approve: {
         useMutation: (options: MutationOptions) => {
           spies.captured.options = options;
@@ -79,74 +86,30 @@ function makeItem(overrides: Partial<PatchItem> = {}): PatchItem {
   };
 }
 
-type PatchInput = Parameters<typeof patchPendingApprovalTracks>[0];
-
-describe("patchPendingApprovalTracks", () => {
-  it("flips the targeted pending tracks and the drained parent status", () => {
-    const items = [makeItem()] as unknown as NonNullable<PatchInput>;
-
-    const next = patchPendingApprovalTracks(items, ["t1", "t2"], "queued");
-
-    expect(next?.[0].tracks.map((t) => t.status)).toEqual(["queued", "queued"]);
-    expect(next?.[0].status).toBe("queued");
-  });
-
-  it("keeps the parent pending while some tracks still await approval", () => {
-    const items = [makeItem()] as unknown as NonNullable<PatchInput>;
-
-    const next = patchPendingApprovalTracks(items, ["t1"], "queued");
-
-    expect(next?.[0].tracks.map((t) => t.status)).toEqual(["queued", "pending_approval"]);
-    expect(next?.[0].status).toBe("pending_approval");
-  });
-
-  it("does not touch tracks that are not pending approval", () => {
-    const items = [
-      makeItem({ status: "in_progress", tracks: [{ id: "t1", status: "downloading" }] }),
-    ] as unknown as NonNullable<PatchInput>;
-
-    const next = patchPendingApprovalTracks(items, ["t1"], "queued");
-
-    expect(next?.[0].tracks[0].status).toBe("downloading");
-    expect(next?.[0].status).toBe("in_progress");
-  });
-
-  it("returns undefined for an empty cache", () => {
-    expect(patchPendingApprovalTracks(undefined, ["t1"], "queued")).toBeUndefined();
-  });
-});
-
 describe("useApproveTracks", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     spies.captured.options = undefined;
   });
 
-  it("optimistically patches the cache and snapshots the previous value", async () => {
-    const previous = [makeItem()];
-    spies.getData.mockReturnValue(previous);
+  it("optimistically patches the cached detail", async () => {
     renderHook(() => useApproveTracks());
 
-    const context = await spies.captured.options?.onMutate?.({ trackIds: ["t1"] });
+    await spies.captured.options?.onMutate?.({ trackIds: ["t1"] });
 
-    expect(spies.cancel).toHaveBeenCalledTimes(1);
-    expect(spies.setData).toHaveBeenCalledTimes(1);
-    expect(context?.previous).toBe(previous);
-
-    const updater = spies.setData.mock.calls[0][1] as (old: unknown) => unknown;
-    const patched = updater(previous) as PatchItem[];
-    expect(patched[0].tracks[0].status).toBe("queued");
+    expect(spies.detailCancel).toHaveBeenCalledTimes(1);
+    expect(spies.listCancel).toHaveBeenCalledTimes(1);
+    expect(spies.setQueriesData).toHaveBeenCalledTimes(1);
+    const updater = spies.setQueriesData.mock.calls[0][1] as (old: unknown) => PatchItem;
+    expect(updater(makeItem()).tracks[0].status).toBe("queued");
   });
 
-  it("rolls back the cache and toasts on error", async () => {
-    const previous = [makeItem()];
-    spies.getData.mockReturnValue(previous);
+  it("refetches the detail and toasts on error", () => {
     renderHook(() => useApproveTracks());
 
-    const context = await spies.captured.options?.onMutate?.({ trackIds: ["t1"] });
-    spies.captured.options?.onError?.(new Error("boom"), { trackIds: ["t1"] }, context);
+    spies.captured.options?.onError?.(new Error("boom"));
 
-    expect(spies.setData).toHaveBeenLastCalledWith(undefined, previous);
+    expect(spies.detailInvalidate).toHaveBeenCalledTimes(1);
     expect(spies.errorToast).toHaveBeenCalledWith(expect.any(Error), "requests.approveFailed");
   });
 
@@ -171,11 +134,12 @@ describe("useApproveTracks", () => {
     expect(spies.toastWarning).toHaveBeenCalledTimes(1);
   });
 
-  it("invalidates the requests list on settle", () => {
+  it("invalidates the requests list and the detail on settle", () => {
     renderHook(() => useApproveTracks());
 
     spies.captured.options?.onSettled?.();
 
     expect(spies.invalidate).toHaveBeenCalledTimes(1);
+    expect(spies.detailInvalidate).toHaveBeenCalledTimes(1);
   });
 });

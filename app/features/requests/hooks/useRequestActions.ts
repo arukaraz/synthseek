@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentType, RequestStatus, type RequestWithTracks } from "@api/__generated__/types";
+import { ContentType, RequestStatus, type RequestListItem, type TrackRequest } from "@api/__generated__/types";
 import {
   useApproveTracks,
   useCancelAlbum,
@@ -62,7 +62,7 @@ interface UseRequestActions {
   label: "Album" | "Playlist";
 }
 
-export function useRequestActions(request: RequestWithTracks): UseRequestActions {
+export function useRequestActions(request: RequestListItem, tracks: TrackRequest[]): UseRequestActions {
   const { t } = useTranslation("requests");
   const { currentUser, isAdmin } = useAuthContext();
   const canManage = isOwnerOrAdminFE({ id: request.requestedBy.id }, currentUser);
@@ -88,7 +88,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
   const { exportCollection } = useExportCollection();
 
-  const pendingApprovalTrackIds = request.tracks
+  const pendingApprovalTrackIds = tracks
     .filter((track) => track.status === RequestStatus.enum.pending_approval)
     .map((track) => track.id);
   const canApprove = isAdmin && pendingApprovalTrackIds.length > 0;
@@ -103,7 +103,7 @@ export function useRequestActions(request: RequestWithTracks): UseRequestActions
   const canPause = canManage && isProcessingStatus(request.status) && !isPaused;
   const canResume = canManage && isPaused;
   const canPrioritize =
-    canManage && request.tracks.some((track) => track.status === RequestStatus.enum.queued && track.priority === 0);
+    canManage && tracks.some((track) => track.status === RequestStatus.enum.queued && track.priority === 0);
   const canSyncPlex =
     canManage &&
     isPlaylist &&

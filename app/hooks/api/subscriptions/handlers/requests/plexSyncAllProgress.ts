@@ -13,6 +13,7 @@ import {
   setDockJobStatus,
   terminalStatusFromCounts,
 } from "../../shared/progressDock";
+import { invalidateRequestListNow } from "../../shared/requestListInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
@@ -60,6 +61,6 @@ export function handlePlexSyncAllProgress(
   driveDock(event, utils, viewerId);
 
   if (event.phase === "complete") {
-    void utils.requests.getAll.invalidate();
+    invalidateRequestListNow(utils);
   }
 }

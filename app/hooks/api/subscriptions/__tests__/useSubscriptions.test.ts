@@ -10,6 +10,7 @@ import {
 import { renderHookWithProviders } from "@test/test-utils";
 
 import { useSubscriptions } from "../useSubscriptions";
+import { resetRequestListInvalidation } from "../shared/requestListInvalidation";
 
 const auth = vi.hoisted(() => ({ currentUser: null as { id: string } | null }));
 
@@ -27,6 +28,8 @@ const handlers = vi.hoisted(() => ({
 const utilsStub = vi.hoisted(() => ({
   requests: {
     getAll: { invalidate: vi.fn() },
+    getRecentTracks: { invalidate: vi.fn() },
+    getDetail: { invalidate: vi.fn() },
     getLibrarySummary: { invalidate: vi.fn() },
     getPlexSyncAllItems: { invalidate: vi.fn() },
     getPlexSyncAllState: { invalidate: vi.fn() },
@@ -141,6 +144,7 @@ function emitAll(): void {
 }
 
 beforeEach(() => {
+  resetRequestListInvalidation();
   auth.currentUser = null;
   captured.onData = null;
   captured.onStarted = null;

@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { RequestStatus } from "@api/__generated__/types";
@@ -5,24 +6,20 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
-import { patchPendingApprovalTracks } from "./useApproveTracks";
+import { patchCachedApprovalDecision } from "./helpers";
 
 export function useRejectTracks() {
   const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
 
   return trpc.requests.reject.useMutation({
     onMutate: async ({ trackIds }) => {
-      await utils.requests.getAll.cancel();
-      const previous = utils.requests.getAll.getData();
+      await Promise.all([utils.requests.getAll.cancel(), utils.requests.getDetail.cancel()]);
 
-      utils.requests.getAll.setData(undefined, (old) =>
-        patchPendingApprovalTracks(old, trackIds, RequestStatus.enum.cancelled)
-      );
-
-      return { previous };
+      patchCachedApprovalDecision(queryClient, utils, trackIds, RequestStatus.enum.cancelled);
     },
-    onError: (err, _vars, context) => {
-      if (context?.previous) utils.requests.getAll.setData(undefined, context.previous);
+    onError: (err) => {
+      void utils.requests.getDetail.invalidate();
       errorToast(err, "requests.rejectFailed");
     },
     onSuccess: ({ rejected, skipped }) => {
@@ -32,6 +29,9 @@ export function useRejectTracks() {
         toast.warning(i18n.t("mutations:requests.rejectAllSkipped"));
       }
     },
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.requests.getDetail.invalidate();
+    },
   });
 }

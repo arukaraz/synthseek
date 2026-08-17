@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { SubscriptionEventType, type DropImportUpdatePayload } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
 import { handleDropImportUpdate } from "../dropImportUpdate";
+import { resetRequestListInvalidation } from "../../../shared/requestListInvalidation";
 
 const spies = vi.hoisted(() => ({
   invalidateGetBatch: vi.fn(),
@@ -24,6 +25,8 @@ vi.mock("@utils/trpc", () => ({
       },
       requests: {
         getAll: { invalidate: spies.invalidateAll },
+        getRecentTracks: { invalidate: vi.fn() },
+        getDetail: { invalidate: vi.fn() },
       },
       library: {
         getAlbums: { invalidate: spies.invalidateAlbums },
@@ -57,6 +60,7 @@ function makeEvent(overrides: Partial<DropImportUpdatePayload>): DropImportUpdat
 
 describe("handleDropImportUpdate", () => {
   beforeEach(() => {
+    resetRequestListInvalidation();
     vi.clearAllMocks();
   });
 

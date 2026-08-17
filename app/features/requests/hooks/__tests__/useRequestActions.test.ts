@@ -12,6 +12,10 @@ import {
 
 import { useRequestActions } from "../useRequestActions";
 
+function useRequestActionsFor(request: RequestWithTracks) {
+  return useRequestActions(request, request.tracks);
+}
+
 const idleMutation = { mutate: vi.fn(), isPending: false };
 
 vi.mock("@hooks/api", () => ({
@@ -137,7 +141,7 @@ describe("useRequestActions canSyncPlex", () => {
     currentUser = owner;
     const request = makePlaylist({ status: RequestStatus.enum.complete, plex_playlist_id: "plex-123" });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canSyncPlex).toBe(true);
   });
@@ -149,7 +153,7 @@ describe("useRequestActions canSyncPlex", () => {
       plex_playlist_id: "plex-123",
     });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canSyncPlex).toBe(true);
   });
@@ -158,7 +162,7 @@ describe("useRequestActions canSyncPlex", () => {
     currentUser = owner;
     const request = makePlaylist({ status: RequestStatus.enum.downloading, plex_playlist_id: null });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canSyncPlex).toBe(false);
   });
@@ -167,7 +171,7 @@ describe("useRequestActions canSyncPlex", () => {
     currentUser = owner;
     const request = makePlaylist({ contentType: ContentType.enum.album });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canSyncPlex).toBe(false);
   });
@@ -178,7 +182,7 @@ describe("useRequestActions pause and resume", () => {
     currentUser = owner;
     const request = makePlaylist({ status: RequestStatus.enum.paused });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.isPaused).toBe(true);
     expect(result.current.canResume).toBe(true);
@@ -189,7 +193,7 @@ describe("useRequestActions pause and resume", () => {
     currentUser = owner;
     const request = makePlaylist({ status: RequestStatus.enum.downloading });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.isPaused).toBe(false);
     expect(result.current.canPause).toBe(true);
@@ -200,7 +204,7 @@ describe("useRequestActions pause and resume", () => {
     currentUser = owner;
     const request = makePlaylist({ status: RequestStatus.enum.complete });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canPause).toBe(false);
     expect(result.current.canResume).toBe(false);
@@ -210,7 +214,7 @@ describe("useRequestActions pause and resume", () => {
     currentUser = owner;
     const request = makePlaylist({ status: RequestStatus.enum.paused });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canRetry).toBe(false);
     expect(result.current.canResume).toBe(true);
@@ -220,7 +224,7 @@ describe("useRequestActions pause and resume", () => {
     currentUser = null;
     const request = makePlaylist({ status: RequestStatus.enum.paused });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canPause).toBe(false);
     expect(result.current.canResume).toBe(false);
@@ -238,7 +242,7 @@ describe("useRequestActions canPrioritize", () => {
       ],
     });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canPrioritize).toBe(true);
   });
@@ -250,7 +254,7 @@ describe("useRequestActions canPrioritize", () => {
       tracks: [makeTrack({ id: "t1", status: RequestStatus.enum.queued, priority: 1 })],
     });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canPrioritize).toBe(false);
   });
@@ -262,7 +266,7 @@ describe("useRequestActions canPrioritize", () => {
       tracks: [makeTrack({ id: "t1", status: RequestStatus.enum.downloading, priority: 0 })],
     });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canPrioritize).toBe(false);
   });
@@ -274,7 +278,7 @@ describe("useRequestActions canPrioritize", () => {
       tracks: [makeTrack({ id: "t1", status: RequestStatus.enum.queued, priority: 0 })],
     });
 
-    const { result } = renderHook(() => useRequestActions(request));
+    const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canPrioritize).toBe(false);
   });

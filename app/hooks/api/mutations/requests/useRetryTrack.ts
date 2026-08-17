@@ -1,35 +1,32 @@
 import { RequestStatus } from "@api/__generated__/types";
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
+import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
+import { patchCachedDetailTracks } from "./helpers";
+
 export function useRetryTrack() {
   const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
 
   return trpc.requests.retryTrack.useMutation({
     onMutate: async ({ trackId }) => {
-      await utils.requests.getAll.cancel();
-      const previous = utils.requests.getAll.getData();
+      await utils.requests.getDetail.cancel();
 
-      utils.requests.getAll.setData(undefined, (old) =>
-        old?.map((item) => ({
-          ...item,
-          tracks: item.tracks.map((t) =>
-            t.id === trackId ? { ...t, status: RequestStatus.enum.queued, progress: 0, error: null } : t
-          ),
-        }))
+      patchCachedDetailTracks(queryClient, (track) =>
+        track.id === trackId ? { ...track, status: RequestStatus.enum.queued, progress: 0, error: null } : track
       );
-
-      return { previous };
     },
-    onError: (err, _vars, context) => {
-      if (context?.previous) utils.requests.getAll.setData(undefined, context.previous);
+    onError: (err) => {
+      void utils.requests.getDetail.invalidate();
       errorToast(err, "requests.retryTrackFailed");
     },
     onSuccess: () => toast.success(i18n.t("mutations:requests.trackRetryQueued")),
     onSettled: () => {
       void utils.requests.getAll.invalidate();
+      void utils.requests.getDetail.invalidate();
       void utils.library.getTracks.invalidate();
       void utils.library.getCounts.invalidate();
     },

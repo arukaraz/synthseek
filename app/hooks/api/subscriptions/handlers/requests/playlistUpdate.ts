@@ -3,6 +3,7 @@ import type { trpc } from "@utils/trpc";
 
 import { settleRequestDockJobByRequestId } from "../../shared/progressDock";
 import type { DockJobStatus } from "../../shared/progressDock";
+import { invalidateRequestList } from "../../shared/requestListInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
@@ -24,7 +25,7 @@ export function handlePlaylistUpdate(event: PlaylistUpdatePayload, utils: Utils)
     (item) => item.contentType === ContentType.enum.playlist && item.id === event.playlistId
   );
   if (!exists) {
-    void utils.requests.getAll.invalidate();
+    invalidateRequestList(utils);
     return;
   }
   utils.requests.getAll.setData(undefined, (old) => {

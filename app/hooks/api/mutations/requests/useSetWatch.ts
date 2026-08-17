@@ -1,40 +1,39 @@
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
+import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
+import { patchCachedDetailTracks } from "./helpers";
+
 export function useSetWatch() {
   const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
 
   return trpc.requests.setWatch.useMutation({
     onMutate: async ({ trackId, enabled }) => {
-      await utils.requests.getAll.cancel();
-      const previous = utils.requests.getAll.getData();
+      await utils.requests.getDetail.cancel();
 
-      utils.requests.getAll.setData(undefined, (old) =>
-        old?.map((item) => ({
-          ...item,
-          tracks: item.tracks.map((t) =>
-            t.id === trackId
-              ? {
-                  ...t,
-                  watch_enabled: enabled,
-                  next_retry_at: null,
-                  retry_count: enabled ? 0 : t.retry_count,
-                }
-              : t
-          ),
-        }))
+      patchCachedDetailTracks(queryClient, (track) =>
+        track.id === trackId
+          ? {
+              ...track,
+              watch_enabled: enabled,
+              next_retry_at: null,
+              retry_count: enabled ? 0 : track.retry_count,
+            }
+          : track
       );
-
-      return { previous };
     },
-    onError: (err, _vars, context) => {
-      if (context?.previous) utils.requests.getAll.setData(undefined, context.previous);
+    onError: (err) => {
+      void utils.requests.getDetail.invalidate();
       errorToast(err, "requests.setWatchFailed");
     },
     onSuccess: (data) =>
       toast.success(i18n.t(data.enabled ? "mutations:requests.watchResumed" : "mutations:requests.watchStopped")),
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.requests.getDetail.invalidate();
+    },
   });
 }

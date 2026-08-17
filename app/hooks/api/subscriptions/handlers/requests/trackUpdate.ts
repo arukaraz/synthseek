@@ -11,6 +11,7 @@ type ContentDetailOutputs = inferRouterOutputs<AppRouter>["contentDetail"];
 type AlbumDetail = ContentDetailOutputs["albumDetail"];
 type ArtistTopTracks = ContentDetailOutputs["artistTopTracks"];
 type PlaylistDetail = ContentDetailOutputs["playlistDetail"];
+type RequestDetail = inferRouterOutputs<AppRouter>["requests"]["getDetail"];
 type AlbumDetailTrack = AlbumDetail["tracks"][number];
 type ArtistTopTrack = ArtistTopTracks[number];
 
@@ -84,31 +85,24 @@ function patchPlaylistDetailCaches(event: TrackUpdatePayload, queryClient: Query
   });
 }
 
-export function handleTrackUpdate(event: TrackUpdatePayload, utils: Utils, queryClient: QueryClient): void {
-  utils.requests.getAll.setData(undefined, (old) => {
+function patchRequestDetailCaches(event: TrackUpdatePayload, queryClient: QueryClient): void {
+  queryClient.setQueriesData<RequestDetail>({ queryKey: getQueryKey(trpc.requests.getDetail) }, (old) => {
     if (!old) return old;
 
-    return old.map((item) => {
-      let updated = false;
-
-      const updatedTracks = item.tracks.map((track) => {
-        if (matchesTrack(track, event)) {
-          updated = true;
-          return applyEventToTrack(track, event);
-        }
-        return track;
-      });
-
-      if (!updated) return item;
-
-      return {
-        ...item,
-        tracks: updatedTracks,
-        updated_at: new Date(),
-      };
+    let updated = false;
+    const tracks = old.tracks.map((track) => {
+      if (!matchesTrack(track, event)) return track;
+      updated = true;
+      return applyEventToTrack(track, event);
     });
-  });
 
+    if (!updated) return old;
+    return { ...old, tracks, updated_at: new Date() };
+  });
+}
+
+export function handleTrackUpdate(event: TrackUpdatePayload, utils: Utils, queryClient: QueryClient): void {
+  patchRequestDetailCaches(event, queryClient);
   patchAlbumDetailCaches(event, queryClient);
   patchArtistTopTracksCaches(event, queryClient);
   patchPlaylistDetailCaches(event, queryClient);

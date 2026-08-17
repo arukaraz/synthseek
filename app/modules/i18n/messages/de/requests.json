@@ -1,6 +1,7 @@
 {
   "loading": {
-    "requests": "Anfragen werden geladen..."
+    "requests": "Anfragen werden geladen...",
+    "tracks": "Titel werden geladen..."
   },
   "toolbar": {
     "pauseAll": "Alle Downloads pausieren",
@@ -133,7 +134,9 @@
     "jumpTheQueue": "Vordrängeln",
     "jumpTheQueueTitle": "Diesen Titel an den Anfang der Warteschlange verschieben",
     "prioritized": "Priorisiert",
-    "upgrade": "Bessere Qualität suchen"
+    "upgrade": "Bessere Qualität suchen",
+    "loadFailed": "Diese Titel konnten nicht geladen werden.",
+    "loadRetry": "Erneut versuchen"
   },
   "export": {
     "dialogTitle": "Exportieren (max. Kompatibilität)",

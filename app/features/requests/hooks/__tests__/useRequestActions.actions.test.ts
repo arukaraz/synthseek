@@ -6,6 +6,10 @@ import { toast } from "sonner";
 
 import { useRequestActions } from "../useRequestActions";
 
+function useRequestActionsFor(request: RequestWithTracks) {
+  return useRequestActions(request, request.tracks);
+}
+
 const mutations = vi.hoisted(() => ({
   retryAlbum: vi.fn(),
   retryPlaylist: vi.fn(),
@@ -126,7 +130,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("retries the playlist by id", () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     act(() => result.current.retry());
 
@@ -135,7 +139,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("prioritizes the playlist by id", () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     act(() => result.current.prioritize());
 
@@ -143,7 +147,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("pauses and resumes the playlist by id", () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     act(() => result.current.pause());
     act(() => result.current.resume());
@@ -153,7 +157,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("syncs the playlist to Plex by id", () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     act(() => result.current.syncPlex());
 
@@ -161,7 +165,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("syncs the playlist from its source by id", () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     act(() => result.current.syncSourceNow());
 
@@ -169,7 +173,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("removes the playlist after the user confirms", async () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     await act(async () => {
       await result.current.remove();
@@ -181,7 +185,7 @@ describe("useRequestActions playlist actions", () => {
 
   it("does not remove the playlist when the user declines", async () => {
     confirmMock.mockResolvedValue(false);
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     await act(async () => {
       await result.current.remove();
@@ -191,7 +195,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("cancels the playlist downloads after the user confirms", async () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     await act(async () => {
       await result.current.cancel();
@@ -202,7 +206,7 @@ describe("useRequestActions playlist actions", () => {
 
   it("does not cancel the playlist downloads when the user declines", async () => {
     confirmMock.mockResolvedValue(false);
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     await act(async () => {
       await result.current.cancel();
@@ -212,7 +216,7 @@ describe("useRequestActions playlist actions", () => {
   });
 
   it("exports the playlist as a downloaded jspf document", async () => {
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     await act(async () => {
       await result.current.exportJspf();
@@ -227,7 +231,7 @@ describe("useRequestActions playlist actions", () => {
 
   it("toasts an export failure when the collection export rejects", async () => {
     exportCollectionMock.mockRejectedValue(new Error("boom"));
-    const { result } = renderHook(() => useRequestActions(makeRequest()));
+    const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
     await act(async () => {
       await result.current.exportJspf();
@@ -251,7 +255,7 @@ describe("useRequestActions album actions", () => {
     makeRequest({ contentType: ContentType.enum.album, ...overrides });
 
   it("retries the album by id", () => {
-    const { result } = renderHook(() => useRequestActions(album()));
+    const { result } = renderHook(() => useRequestActionsFor(album()));
 
     act(() => result.current.retry());
 
@@ -260,7 +264,7 @@ describe("useRequestActions album actions", () => {
   });
 
   it("prioritizes the album by id", () => {
-    const { result } = renderHook(() => useRequestActions(album()));
+    const { result } = renderHook(() => useRequestActionsFor(album()));
 
     act(() => result.current.prioritize());
 
@@ -268,7 +272,7 @@ describe("useRequestActions album actions", () => {
   });
 
   it("pauses and resumes the album by id", () => {
-    const { result } = renderHook(() => useRequestActions(album()));
+    const { result } = renderHook(() => useRequestActionsFor(album()));
 
     act(() => result.current.pause());
     act(() => result.current.resume());
@@ -278,7 +282,7 @@ describe("useRequestActions album actions", () => {
   });
 
   it("removes the album after the user confirms", async () => {
-    const { result } = renderHook(() => useRequestActions(album()));
+    const { result } = renderHook(() => useRequestActionsFor(album()));
 
     await act(async () => {
       await result.current.remove();
@@ -288,7 +292,7 @@ describe("useRequestActions album actions", () => {
   });
 
   it("cancels the album downloads after the user confirms", async () => {
-    const { result } = renderHook(() => useRequestActions(album()));
+    const { result } = renderHook(() => useRequestActionsFor(album()));
 
     await act(async () => {
       await result.current.cancel();
@@ -299,7 +303,7 @@ describe("useRequestActions album actions", () => {
 
   it("exports the album with the album type", async () => {
     exportCollectionMock.mockResolvedValue({ playlist: { title: "Album" } });
-    const { result } = renderHook(() => useRequestActions(album({ name: "Album" })));
+    const { result } = renderHook(() => useRequestActionsFor(album({ name: "Album" })));
 
     await act(async () => {
       await result.current.exportJspf();

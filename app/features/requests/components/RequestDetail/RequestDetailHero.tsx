@@ -43,10 +43,10 @@ import {
 } from "./styles";
 import type { RequestDetailHeroProps } from "./types";
 
-export function RequestDetailHero({ request, onBack }: RequestDetailHeroProps) {
+export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHeroProps) {
   const { t } = useTranslation(["requests", "contentDetail"]);
   const { openForTarget } = useContentRequestFlow();
-  const actions = useRequestActions(request);
+  const actions = useRequestActions(request, tracks);
   const {
     retry,
     reject,

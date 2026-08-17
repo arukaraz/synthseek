@@ -1,30 +1,29 @@
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
+import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
 import { toast } from "sonner";
 
+import { patchCachedDetailTracks } from "./helpers";
+
 export function usePrioritizeTrack() {
   const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
 
   return trpc.requests.prioritizeTrack.useMutation({
     onMutate: async ({ trackId }) => {
-      await utils.requests.getAll.cancel();
-      const previous = utils.requests.getAll.getData();
+      await utils.requests.getDetail.cancel();
 
-      utils.requests.getAll.setData(undefined, (old) =>
-        old?.map((item) => ({
-          ...item,
-          tracks: item.tracks.map((t) => (t.id === trackId ? { ...t, priority: 1 } : t)),
-        }))
-      );
-
-      return { previous };
+      patchCachedDetailTracks(queryClient, (track) => (track.id === trackId ? { ...track, priority: 1 } : track));
     },
-    onError: (err, _vars, context) => {
-      if (context?.previous) utils.requests.getAll.setData(undefined, context.previous);
+    onError: (err) => {
+      void utils.requests.getDetail.invalidate();
       errorToast(err, "requests.prioritizeTrackFailed");
     },
     onSuccess: () => toast.success(i18n.t("mutations:requests.trackPrioritized")),
-    onSettled: () => utils.requests.getAll.invalidate(),
+    onSettled: () => {
+      void utils.requests.getAll.invalidate();
+      void utils.requests.getDetail.invalidate();
+    },
   });
 }

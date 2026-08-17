@@ -10,8 +10,8 @@ interface SetWatchVars {
 }
 
 interface MutationOptions {
-  onMutate?: (vars: SetWatchVars) => Promise<{ previous: unknown }>;
-  onError?: (err: Error, vars: SetWatchVars, context?: { previous: unknown }) => void;
+  onMutate?: (vars: SetWatchVars) => Promise<void>;
+  onError?: (err: Error) => void;
   onSuccess?: (data: { success: boolean; trackId: string; enabled: boolean }) => void;
   onSettled?: () => void;
 }
@@ -24,26 +24,31 @@ const spies = vi.hoisted(() => {
   const captured: CapturedOptions = {};
   return {
     captured,
-    invalidate: vi.fn(),
-    cancel: vi.fn(),
-    getData: vi.fn(),
-    setData: vi.fn(),
+    invalidateAll: vi.fn(),
+    invalidateDetail: vi.fn(),
+    cancelDetail: vi.fn(),
+    setQueriesData: vi.fn(),
   };
 });
+
+vi.mock("@tanstack/react-query", () => ({
+  useQueryClient: () => ({ setQueriesData: spies.setQueriesData }),
+}));
+
+vi.mock("@trpc/react-query", () => ({
+  getQueryKey: () => ["requests", "getDetail"],
+}));
 
 vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: {
-        getAll: {
-          invalidate: spies.invalidate,
-          cancel: spies.cancel,
-          getData: spies.getData,
-          setData: spies.setData,
-        },
+        getAll: { invalidate: spies.invalidateAll },
+        getDetail: { invalidate: spies.invalidateDetail, cancel: spies.cancelDetail },
       },
     }),
     requests: {
+      getDetail: {},
       setWatch: {
         useMutation: (options: MutationOptions) => {
           spies.captured.options = options;
@@ -69,6 +74,11 @@ vi.mock("sonner", () => ({
 import { errorToast } from "@modules/errors";
 import { toast } from "sonner";
 
+function runDetailUpdater(detail: unknown) {
+  const updater = spies.setQueriesData.mock.calls[0][1];
+  return updater(detail);
+}
+
 describe("useSetWatch", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -80,14 +90,13 @@ describe("useSetWatch", () => {
 
     await spies.captured.options?.onMutate?.({ trackId: "track-1", enabled: false });
 
-    expect(spies.cancel).toHaveBeenCalledTimes(1);
-    const updater = spies.setData.mock.calls[0][1];
+    expect(spies.cancelDetail).toHaveBeenCalledTimes(1);
     const watched = makeRequestsTrack({ id: "track-1", watch_enabled: true, retry_count: 4 });
     const other = makeRequestsTrack({ id: "track-2", watch_enabled: true, retry_count: 2 });
-    const next = updater([makeRequestWithTracks({ tracks: [watched, other] })]);
+    const next = runDetailUpdater(makeRequestWithTracks({ tracks: [watched, other] }));
 
-    expect(next[0].tracks[0]).toMatchObject({ watch_enabled: false, next_retry_at: null, retry_count: 4 });
-    expect(next[0].tracks[1]).toMatchObject({ watch_enabled: true, retry_count: 2 });
+    expect(next.tracks[0]).toMatchObject({ watch_enabled: false, next_retry_at: null, retry_count: 4 });
+    expect(next.tracks[1]).toMatchObject({ watch_enabled: true, retry_count: 2 });
   });
 
   it("optimistically re-enables the watch and resets the retry counter", async () => {
@@ -95,20 +104,26 @@ describe("useSetWatch", () => {
 
     await spies.captured.options?.onMutate?.({ trackId: "track-1", enabled: true });
 
-    const updater = spies.setData.mock.calls[0][1];
     const stopped = makeRequestsTrack({ id: "track-1", watch_enabled: false, retry_count: 4 });
-    const next = updater([makeRequestWithTracks({ tracks: [stopped] })]);
+    const next = runDetailUpdater(makeRequestWithTracks({ tracks: [stopped] }));
 
-    expect(next[0].tracks[0]).toMatchObject({ watch_enabled: true, next_retry_at: null, retry_count: 0 });
+    expect(next.tracks[0]).toMatchObject({ watch_enabled: true, next_retry_at: null, retry_count: 0 });
   });
 
-  it("rolls back to the previous cache and toasts on error", () => {
+  it("leaves an empty detail cache entry alone", async () => {
     renderHook(() => useSetWatch());
 
-    const previous = [makeRequestWithTracks()];
-    spies.captured.options?.onError?.(new Error("boom"), { trackId: "track-1", enabled: false }, { previous });
+    await spies.captured.options?.onMutate?.({ trackId: "track-1", enabled: true });
 
-    expect(spies.setData).toHaveBeenCalledWith(undefined, previous);
+    expect(runDetailUpdater(null)).toBeNull();
+  });
+
+  it("refetches the detail and toasts on error", () => {
+    renderHook(() => useSetWatch());
+
+    spies.captured.options?.onError?.(new Error("boom"));
+
+    expect(spies.invalidateDetail).toHaveBeenCalledTimes(1);
     expect(errorToast).toHaveBeenCalledWith(expect.any(Error), "requests.setWatchFailed");
   });
 
@@ -128,11 +143,12 @@ describe("useSetWatch", () => {
     expect(toast.success).toHaveBeenCalledWith("mutations:requests.watchStopped");
   });
 
-  it("invalidates the requests list on settle", () => {
+  it("refetches both the list and the detail on settle", () => {
     renderHook(() => useSetWatch());
 
     spies.captured.options?.onSettled?.();
 
-    expect(spies.invalidate).toHaveBeenCalledTimes(1);
+    expect(spies.invalidateAll).toHaveBeenCalledTimes(1);
+    expect(spies.invalidateDetail).toHaveBeenCalledTimes(1);
   });
 });

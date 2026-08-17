@@ -7,7 +7,6 @@ import { trpc } from "@utils/trpc";
 import { handleTrackUpdate } from "../trackUpdate";
 
 const spies = vi.hoisted(() => ({
-  getAllSetData: vi.fn(),
   setQueriesData: vi.fn(),
 }));
 
@@ -18,11 +17,10 @@ vi.mock("@utils/trpc", () => ({
       artistTopTracks: {},
       playlistDetail: {},
     },
-    useUtils: () => ({
-      requests: {
-        getAll: { setData: spies.getAllSetData },
-      },
-    }),
+    requests: {
+      getDetail: {},
+    },
+    useUtils: () => ({}),
   },
 }));
 
@@ -33,6 +31,7 @@ vi.mock("@trpc/react-query", () => ({
     if (proc === trpc.contentDetail.albumDetail) return ["contentDetail", "albumDetail"];
     if (proc === trpc.contentDetail.artistTopTracks) return ["contentDetail", "artistTopTracks"];
     if (proc === trpc.contentDetail.playlistDetail) return ["contentDetail", "playlistDetail"];
+    if (proc === trpc.requests.getDetail) return ["requests", "getDetail"];
     return ["unknown"];
   },
 }));
@@ -75,16 +74,12 @@ function runUpdater<T>(queryKeyTag: string, value: T): T {
   return updater(value);
 }
 
-function runGetAllUpdater<T>(value: T): T {
-  const call = spies.getAllSetData.mock.calls.at(-1);
-  if (!call) throw new Error("no requests.getAll.setData call");
-  const updater = call[1];
-  return updater(value);
+function runRequestDetailUpdater<T>(value: T): T {
+  return runUpdater("getDetail", value);
 }
 
 describe("handleTrackUpdate content-detail patches", () => {
   beforeEach(() => {
-    spies.getAllSetData.mockReset();
     spies.setQueriesData.mockReset();
   });
 
@@ -173,13 +168,12 @@ describe("handleTrackUpdate content-detail patches", () => {
   });
 });
 
-describe("handleTrackUpdate requests.getAll cache patch", () => {
+describe("handleTrackUpdate requests.getDetail cache patch", () => {
   beforeEach(() => {
-    spies.getAllSetData.mockReset();
     spies.setQueriesData.mockReset();
   });
 
-  function makeListItem(id: string, trackRequestId: string, updatedAt: Date) {
+  function makeDetail(id: string, trackRequestId: string, updatedAt: Date) {
     return {
       id,
       contentType: "album",
@@ -188,33 +182,37 @@ describe("handleTrackUpdate requests.getAll cache patch", () => {
     };
   }
 
-  it("bumps updated_at on the matched request so the RECENT sort floats it to the top", () => {
+  it("patches the matched track and bumps updated_at on the cached detail", () => {
     const utils = trpc.useUtils();
     const stale = new Date("2020-01-01T00:00:00.000Z");
     const before = Date.now();
 
     handleTrackUpdate(makeEvent({ requestId: "track-1", status: RequestStatus.enum.complete }), utils, queryClient);
 
-    const matched = makeListItem("req-1", "track-1", stale);
-    const untouched = makeListItem("req-2", "track-2", stale);
-    const next = runGetAllUpdater([matched, untouched]);
+    const next = runRequestDetailUpdater(makeDetail("req-1", "track-1", stale));
 
-    expect(next[0].updated_at.getTime()).toBeGreaterThanOrEqual(before);
-    expect(next[0].tracks[0].status).toBe(RequestStatus.enum.complete);
-    expect(next[1]).toBe(untouched);
-    expect(next[1].updated_at).toBe(stale);
+    expect(next.tracks[0].status).toBe(RequestStatus.enum.complete);
+    expect(next.updated_at.getTime()).toBeGreaterThanOrEqual(before);
   });
 
-  it("leaves the list reference contents untouched when no request matches", () => {
+  it("returns the same detail reference when no track matches", () => {
     const utils = trpc.useUtils();
     const stale = new Date("2020-01-01T00:00:00.000Z");
 
     handleTrackUpdate(makeEvent({ requestId: "no-match" }), utils, queryClient);
 
-    const item = makeListItem("req-1", "track-1", stale);
-    const next = runGetAllUpdater([item]);
+    const detail = makeDetail("req-1", "track-1", stale);
+    const next = runRequestDetailUpdater(detail);
 
-    expect(next[0]).toBe(item);
-    expect(next[0].updated_at).toBe(stale);
+    expect(next).toBe(detail);
+    expect(next.updated_at).toBe(stale);
+  });
+
+  it("leaves an empty cache entry alone", () => {
+    const utils = trpc.useUtils();
+
+    handleTrackUpdate(makeEvent({ requestId: "track-1" }), utils, queryClient);
+
+    expect(runRequestDetailUpdater(null)).toBeNull();
   });
 });

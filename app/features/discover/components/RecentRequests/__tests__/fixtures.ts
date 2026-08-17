@@ -49,15 +49,7 @@ export function createFlatTrackRow(overrides: Partial<FlatTrackRow> = {}): FlatT
     created_at: new Date("2024-01-01T00:00:00Z"),
     completed_at: null,
     updated_at: new Date("2024-01-01T00:00:00Z"),
-    parent: {
-      id: "album-1",
-      name: "Drukqs",
-      artist: "Aphex Twin",
-      album_art: "https://img/drukqs.jpg",
-      contentType: ContentType.enum.album,
-      requestedBy: owner,
-      status: RequestStatus.enum.complete,
-    },
+    parent: { name: "Drukqs", album_art: "https://img/drukqs.jpg" },
     ...overrides,
   };
 }
