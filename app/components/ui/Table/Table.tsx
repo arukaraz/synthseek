@@ -36,7 +36,7 @@ export function DataTable<TData>({
             columns={columns}
             data={data}
             getRowId={getRowId}
-            emptyMessage={emptyMessage ?? t("table.empty")}
+            emptyMessage={emptyMessage ?? t("table.empty", { defaultValue: "No items to display" })}
             rowAttrs={rowAttrs}
             staggerDelay={staggerDelay}
             onRowClick={onRowClick}

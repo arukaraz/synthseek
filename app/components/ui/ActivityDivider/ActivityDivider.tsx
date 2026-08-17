@@ -32,7 +32,9 @@ export function ActivityDivider({ state, value = 0, max = 0, children, className
         {showStaticFill ? <span className={activityRailStatic()} style={fillStyle(ratio)} /> : null}
       </div>
 
-      {isPaused ? <span className={activityPausedLabel()}>{t("activity.paused")}</span> : null}
+      {isPaused ? (
+        <span className={activityPausedLabel()}>{t("activity.paused", { defaultValue: "Paused" })}</span>
+      ) : null}
 
       <div className={activityToolbarSlot()}>{children}</div>
     </div>

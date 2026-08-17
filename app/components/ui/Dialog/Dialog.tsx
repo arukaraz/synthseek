@@ -41,7 +41,7 @@ export function DialogContent({ className, children, ref, showClose = true, anim
         {showClose && (
           <DialogPrimitive.Close className={closeButton()}>
             <X className="relative size-4" />
-            <span className="sr-only">{t("dialog.close")}</span>
+            <span className="sr-only">{t("dialog.close", { defaultValue: "Close" })}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>

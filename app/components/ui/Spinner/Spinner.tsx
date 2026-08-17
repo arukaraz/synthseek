@@ -16,7 +16,7 @@ export function Spinner({ size, className, label, decorative = false }: SpinnerP
   return (
     <span role="status" aria-live="polite" aria-busy="true">
       <span aria-hidden="true" className={cn(spinnerRing({ size }), className)} />
-      <span className="sr-only">{label ?? t("loading.spinner")}</span>
+      <span className="sr-only">{label ?? t("loading.spinner", { defaultValue: "Loading" })}</span>
     </span>
   );
 }

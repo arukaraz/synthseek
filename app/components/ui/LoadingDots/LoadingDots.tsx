@@ -9,7 +9,11 @@ import type { LoadingDotsProps } from "./types";
 export function LoadingDots({ size, className, label }: LoadingDotsProps) {
   const { t } = useTranslation("components");
   return (
-    <span role="status" aria-label={label ?? t("loading.dots")} className={cn(loadingDots({ size }), className)}>
+    <span
+      role="status"
+      aria-label={label ?? t("loading.dots", { defaultValue: "Loading" })}
+      className={cn(loadingDots({ size }), className)}
+    >
       <span />
       <span />
       <span />

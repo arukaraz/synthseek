@@ -30,7 +30,7 @@ export function InfoTooltip({
   trigger = "hover",
 }: InfoTooltipProps) {
   const { t } = useTranslation("components");
-  const resolvedTriggerLabel = triggerLabel ?? t("infoTooltip.trigger");
+  const resolvedTriggerLabel = triggerLabel ?? t("infoTooltip.trigger", { defaultValue: "More information" });
   const content = (
     <div className={infoTooltipBody()}>
       {title ? <p className={infoTooltipTitle()}>{title}</p> : null}

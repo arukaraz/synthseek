@@ -27,7 +27,7 @@ export function PasswordField({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <label htmlFor={id} className={authFieldLabel()}>
-        {label ?? t("passwordField.label")}
+        {label ?? t("passwordField.label", { defaultValue: "Password" })}
       </label>
       <div className={authInputRow({ invalid })}>
         <Lock className={authInputIcon()} aria-hidden="true" />
@@ -47,7 +47,11 @@ export function PasswordField({
         <button
           type="button"
           onClick={() => setVisible((prev) => !prev)}
-          aria-label={visible ? t("passwordField.hide") : t("passwordField.show")}
+          aria-label={
+            visible
+              ? t("passwordField.hide", { defaultValue: "Hide password" })
+              : t("passwordField.show", { defaultValue: "Show password" })
+          }
           aria-pressed={visible}
           className={authEyeToggle()}
         >

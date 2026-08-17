@@ -43,6 +43,7 @@ export function Pagination({
     <div className={cn(paginationContainer(), className)}>
       <p className={paginationSummary()}>
         {t("pagination.summary", {
+          defaultValue: "Showing {{start}}-{{end}} of {{total}}",
           start: start.toLocaleString(),
           end: end.toLocaleString(),
           total: totalItems.toLocaleString(),
@@ -52,8 +53,12 @@ export function Pagination({
       <div className={paginationControls()}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button type="button" className={paginationSizeTrigger()} aria-label={t("pagination.rowsPerPage")}>
-              {t("pagination.perPage", { size: pageSize })}
+            <button
+              type="button"
+              className={paginationSizeTrigger()}
+              aria-label={t("pagination.rowsPerPage", { defaultValue: "Rows per page" })}
+            >
+              {t("pagination.perPage", { defaultValue: "{{size}} / page", size: pageSize })}
               <ChevronDown className="size-3.5 opacity-50" />
             </button>
           </DropdownMenuTrigger>
@@ -61,7 +66,7 @@ export function Pagination({
             <DropdownMenuRadioGroup value={String(pageSize)} onValueChange={(value) => onPageSizeChange(Number(value))}>
               {pageSizeOptions.map((size) => (
                 <DropdownMenuRadioItem key={size} value={String(size)}>
-                  {t("pagination.perPage", { size })}
+                  {t("pagination.perPage", { defaultValue: "{{size}} / page", size })}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
@@ -74,12 +79,14 @@ export function Pagination({
             className={paginationNavButton()}
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1}
-            aria-label={t("pagination.previousPage")}
+            aria-label={t("pagination.previousPage", { defaultValue: "Previous page" })}
           >
             <ChevronLeft className="size-4" />
           </button>
 
-          <span className={paginationMobilePage()}>{t("pagination.mobilePage", { page, pageCount })}</span>
+          <span className={paginationMobilePage()}>
+            {t("pagination.mobilePage", { defaultValue: "Page {{page}} of {{pageCount}}", page, pageCount })}
+          </span>
 
           <div className={paginationPages()}>
             {pages.map((item, index) =>
@@ -93,7 +100,7 @@ export function Pagination({
                   type="button"
                   className={paginationPageButton({ active: item === page })}
                   onClick={() => onPageChange(item)}
-                  aria-label={t("pagination.goToPage", { page: item })}
+                  aria-label={t("pagination.goToPage", { defaultValue: "Page {{page}}", page: item })}
                   aria-current={item === page ? "page" : undefined}
                 >
                   {item}
@@ -107,7 +114,7 @@ export function Pagination({
             className={paginationNavButton()}
             onClick={() => onPageChange(page + 1)}
             disabled={page >= pageCount}
-            aria-label={t("pagination.nextPage")}
+            aria-label={t("pagination.nextPage", { defaultValue: "Next page" })}
           >
             <ChevronRight className="size-4" />
           </button>

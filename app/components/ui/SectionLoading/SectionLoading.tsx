@@ -15,7 +15,7 @@ export function SectionLoading({ message, className }: SectionLoadingProps) {
       animate={{ opacity: 1 }}
     >
       <Loader2 className="text-primary-500 mb-4 h-8 w-8 animate-spin" />
-      <p className="text-fg/50 text-sm">{message ?? t("loading.section")}</p>
+      <p className="text-fg/50 text-sm">{message ?? t("loading.section", { defaultValue: "Loading..." })}</p>
     </motion.div>
   );
 }

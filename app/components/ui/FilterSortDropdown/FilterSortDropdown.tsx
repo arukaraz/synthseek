@@ -42,7 +42,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
         <button
           type="button"
           className={cn(filterSortTriggerDefault(), triggerClassName)}
-          aria-label={t("filterSort.trigger")}
+          aria-label={t("filterSort.trigger", { defaultValue: "Filter and sort" })}
           data-cy={dataCy}
         >
           <TriggerIcon className="size-4" />
@@ -62,7 +62,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
           <>
             <DropdownMenuLabel className="flex items-center gap-2">
               <FilterSectionIcon className="size-3" />
-              {filter.sectionLabel ?? t("filterSort.filterLabel")}
+              {filter.sectionLabel ?? t("filterSort.filterLabel", { defaultValue: "Filter" })}
             </DropdownMenuLabel>
             <DropdownMenuRadioGroup value={filter.value} onValueChange={(v) => filter.onChange(v as F)}>
               {filter.options.map((option) => {
@@ -84,7 +84,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
             {filter && <DropdownMenuSeparator />}
             <DropdownMenuLabel className="flex items-center gap-2">
               <SortSectionIcon className="size-3" />
-              {sort.sectionLabel ?? t("filterSort.sortLabel")}
+              {sort.sectionLabel ?? t("filterSort.sortLabel", { defaultValue: "Sort by" })}
             </DropdownMenuLabel>
             <DropdownMenuRadioGroup value={sort.value} onValueChange={(v) => sort.onChange(v as S)}>
               {sort.options.map((option) => (
@@ -99,7 +99,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
         {direction && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel>{t("filterSort.orderLabel")}</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("filterSort.orderLabel", { defaultValue: "Order" })}</DropdownMenuLabel>
             <div className={filterSortOrderRow()}>
               <button
                 type="button"
@@ -108,7 +108,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                 className={filterSortOrderBtn({ active: direction.value === "asc" })}
               >
                 <ArrowUp className="size-3" />
-                {t("filterSort.ascending")}
+                {t("filterSort.ascending", { defaultValue: "Ascending" })}
               </button>
               <button
                 type="button"
@@ -117,7 +117,7 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                 className={filterSortOrderBtn({ active: direction.value === "desc" })}
               >
                 <ArrowDown className="size-3" />
-                {t("filterSort.descending")}
+                {t("filterSort.descending", { defaultValue: "Descending" })}
               </button>
             </div>
           </>

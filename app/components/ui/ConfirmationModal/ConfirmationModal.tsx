@@ -33,8 +33,8 @@ export function ConfirmationModal({
   const { t } = useTranslation("components");
   const Icon = VARIANT_ICONS[variant];
   const safeActionRef = useRef<HTMLButtonElement>(null);
-  const resolvedConfirmText = confirmText ?? t("confirmation.confirm");
-  const resolvedCancelText = cancelText ?? t("confirmation.cancel");
+  const resolvedConfirmText = confirmText ?? t("confirmation.confirm", { defaultValue: "Confirm" });
+  const resolvedCancelText = cancelText ?? t("confirmation.cancel", { defaultValue: "Cancel" });
 
   const handleConfirm = () => {
     onConfirm();
