@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@compo
 import { CloudOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { degradedProviderLabel } from "./helpers";
+import { degradedSourceLine } from "./helpers";
 import { degradedChip, degradedTooltipIntro, degradedTooltipList } from "./styles";
 import type { DegradedSourcesChipProps } from "./types";
 
@@ -25,8 +25,8 @@ export function DegradedSourcesChip({ sources }: DegradedSourcesChipProps) {
         <TooltipContent side="bottom" align="start">
           <p className={degradedTooltipIntro()}>{t("degraded.tooltipIntro")}</p>
           <ul className={degradedTooltipList()}>
-            {sources.map((source) => (
-              <li key={source}>{degradedProviderLabel(source, t)}</li>
+            {sources.map((entry) => (
+              <li key={entry.source}>{degradedSourceLine(entry, t)}</li>
             ))}
           </ul>
         </TooltipContent>

@@ -119,6 +119,7 @@
       "songlink": "Songlink",
       "fanart": "fanart.tv",
       "coverartarchive": "Cover Art Archive"
-    }
+    },
+    "unavailableFor": "{{provider}} · hors service depuis {{duration}}"
   }
 }

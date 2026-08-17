@@ -1,3 +1,5 @@
+import type { DegradedSource } from "../../types";
+
 export interface DegradedSourcesChipProps {
-  sources: string[];
+  sources: DegradedSource[];
 }

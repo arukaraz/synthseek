@@ -1,7 +1,12 @@
-import type { MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
+import type { AppRouter, MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
+import type { inferRouterOutputs } from "@trpc/server";
 import type { ReactNode } from "react";
 
 import type { TracklistTrack } from "./components/Tracklist/types";
+
+export type DegradedSource = NonNullable<
+  inferRouterOutputs<AppRouter>["contentDetail"]["artistStats"]["degraded"]
+>[number];
 
 export type DetailMode = "artist" | "album" | "playlist";
 

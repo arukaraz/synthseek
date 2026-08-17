@@ -43,6 +43,16 @@ export function formatTimeUntil(date: Date): string {
   return i18n.t("common:relativeTime.soon");
 }
 
+export function formatElapsed(seconds: number): string {
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 1) return i18n.t("common:elapsed.seconds", { count: seconds });
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 1) return i18n.t("common:elapsed.minutes", { count: minutes });
+
+  return i18n.t("common:elapsed.hours", { count: hours });
+}
+
 export function formatDuration(start: Date, end?: Date): string | null {
   if (!end) return null;
 

@@ -1,6 +1,8 @@
+import { formatElapsed } from "@utils/formatters";
 import { capitalize } from "@utils/string";
 import type { TFunction } from "i18next";
 
+import type { DegradedSource } from "../../types";
 import { DEGRADED_PROVIDER_LABEL_KEYS } from "./constants";
 
 function providerLabelKey(
@@ -17,4 +19,14 @@ export function degradedProviderLabel(source: string, t: TFunction<"contentDetai
   const messageKey = providerLabelKey(source);
   if (messageKey) return t(messageKey);
   return capitalize(source);
+}
+
+export function degradedSourceLine(entry: DegradedSource, t: TFunction<"contentDetail">): string {
+  const provider = degradedProviderLabel(entry.source, t);
+  if (entry.unavailableForSeconds === null) return provider;
+
+  return t("degraded.unavailableFor", {
+    provider,
+    duration: formatElapsed(entry.unavailableForSeconds),
+  });
 }

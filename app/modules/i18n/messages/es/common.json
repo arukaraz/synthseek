@@ -16,5 +16,10 @@
     "inHours": "en {{count}} h",
     "inMinutes": "en {{count}} min",
     "soon": "pronto"
+  },
+  "elapsed": {
+    "seconds": "{{count}} s",
+    "minutes": "{{count}} min",
+    "hours": "{{count}} h"
   }
 }

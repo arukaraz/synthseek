@@ -23,6 +23,7 @@ import type { HeroRequestState } from "./components/DetailHero/types";
 import type {
   AlbumRequestInput,
   ArtistRequestInput,
+  DegradedSource,
   DetailTarget,
   FactItem,
   PlaylistPreloadedTargetInput,
@@ -48,12 +49,26 @@ export function humanizeArtistType(rawType: string | null, t: TFunction<"content
   return capitalize(normalized);
 }
 
-export function collectDegradedSources(lists: Array<string[] | undefined>): string[] {
-  const seen = new Set<string>();
+function longestOutage(a: number | null, b: number | null): number | null {
+  if (a === null) return b;
+  if (b === null) return a;
+  return Math.max(a, b);
+}
+
+export function collectDegradedSources(lists: Array<DegradedSource[] | undefined>): DegradedSource[] {
+  const seen = new Map<string, DegradedSource>();
   for (const list of lists) {
-    for (const source of list ?? []) seen.add(source);
+    for (const entry of list ?? []) {
+      const known = seen.get(entry.source);
+      seen.set(entry.source, {
+        source: entry.source,
+        unavailableForSeconds: known
+          ? longestOutage(known.unavailableForSeconds, entry.unavailableForSeconds)
+          : entry.unavailableForSeconds,
+      });
+    }
   }
-  return [...seen].sort();
+  return [...seen.values()].sort((a, b) => a.source.localeCompare(b.source));
 }
 
 export function formatBorn(bornDate: string | null, bornPlace: string | null): string | null {

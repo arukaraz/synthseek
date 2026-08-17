@@ -16,5 +16,10 @@
     "inHours": "in {{count}} Std",
     "inMinutes": "in {{count}} Min",
     "soon": "bald"
+  },
+  "elapsed": {
+    "seconds": "{{count}} Sek",
+    "minutes": "{{count}} Min",
+    "hours": "{{count}} Std"
   }
 }

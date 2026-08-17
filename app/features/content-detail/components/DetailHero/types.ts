@@ -1,7 +1,7 @@
 import type { SocialBrand } from "@components/ui/SocialIcon";
 import type { ReactNode } from "react";
 
-import type { DetailMode } from "../../types";
+import type { DegradedSource, DetailMode } from "../../types";
 
 export interface SocialLink {
   brand: SocialBrand;
@@ -51,7 +51,7 @@ export interface DetailHeroProps {
   requestDisabled?: boolean;
   requestDisabledTooltip?: string | null;
   playlistControls?: PlaylistHeroControls;
-  degradedSources?: string[];
+  degradedSources?: DegradedSource[];
 }
 
 export interface PlaylistSyncToggleProps {

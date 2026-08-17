@@ -693,20 +693,44 @@ describe("content-detail helpers", () => {
 
   describe("collectDegradedSources", () => {
     it("collects sources from a single query result", () => {
-      expect(collectDegradedSources([["lastfm"]])).toEqual(["lastfm"]);
+      expect(collectDegradedSources([[{ source: "lastfm", unavailableForSeconds: 60 }]])).toEqual([
+        { source: "lastfm", unavailableForSeconds: 60 },
+      ]);
     });
 
     it("dedupes sources repeated across query results and sorts them", () => {
       expect(
         collectDegradedSources([
-          ["wikidata", "lastfm"],
-          ["lastfm", "discogs"],
+          [
+            { source: "wikidata", unavailableForSeconds: null },
+            { source: "lastfm", unavailableForSeconds: null },
+          ],
+          [
+            { source: "lastfm", unavailableForSeconds: null },
+            { source: "discogs", unavailableForSeconds: null },
+          ],
         ])
-      ).toEqual(["discogs", "lastfm", "wikidata"]);
+      ).toEqual([
+        { source: "discogs", unavailableForSeconds: null },
+        { source: "lastfm", unavailableForSeconds: null },
+        { source: "wikidata", unavailableForSeconds: null },
+      ]);
+    });
+
+    it("keeps the longest reported outage when a source repeats", () => {
+      expect(
+        collectDegradedSources([
+          [{ source: "lastfm", unavailableForSeconds: null }],
+          [{ source: "lastfm", unavailableForSeconds: 120 }],
+          [{ source: "lastfm", unavailableForSeconds: 90 }],
+        ])
+      ).toEqual([{ source: "lastfm", unavailableForSeconds: 120 }]);
     });
 
     it("ignores missing degraded fields", () => {
-      expect(collectDegradedSources([undefined, ["musicbrainz"], undefined])).toEqual(["musicbrainz"]);
+      expect(
+        collectDegradedSources([undefined, [{ source: "musicbrainz", unavailableForSeconds: 5 }], undefined])
+      ).toEqual([{ source: "musicbrainz", unavailableForSeconds: 5 }]);
     });
 
     it("returns an empty list when nothing degraded", () => {
