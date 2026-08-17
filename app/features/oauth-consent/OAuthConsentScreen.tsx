@@ -30,7 +30,7 @@ export function OAuthConsentScreen() {
   return (
     <div className={consentFrame()}>
       <div className={consentColumn()}>
-        <LogoIcon />
+        <LogoIcon className="h-12 w-auto sm:h-14" />
         <div className={consentCard()}>
           {!grant ? (
             <p className="text-sm text-red-400">{t("oauthConsent.missing")}</p>

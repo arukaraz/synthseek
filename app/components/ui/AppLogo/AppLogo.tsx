@@ -7,12 +7,7 @@ export function AppLogo({ className, iconClassName, wordmarkClassName }: AppLogo
   return (
     <div className={cn("flex items-center", className)}>
       <LogoIcon className={iconClassName} />
-      <span
-        className={cn(
-          "gradient-text-primary font-courgette ml-px text-2xl leading-none sm:text-3xl",
-          wordmarkClassName
-        )}
-      >
+      <span className={cn("gradient-text-primary font-courgette ml-px text-2xl leading-none", wordmarkClassName)}>
         ynthseek
       </span>
     </div>

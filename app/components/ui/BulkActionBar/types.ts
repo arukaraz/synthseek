@@ -16,4 +16,5 @@ export interface BulkActionBarProps {
   clearLabel: string;
   onClear: () => void;
   trailing?: ReactNode;
+  className?: string;
 }

@@ -8,4 +8,5 @@ export interface PasswordFieldProps {
   autoComplete?: string;
   minLength?: number;
   describedBy?: string;
+  className?: string;
 }

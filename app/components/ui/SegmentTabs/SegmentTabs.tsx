@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 
+import { cn } from "@utils/cn";
+
 import { segmentTab, segmentTabCount, segmentTabUnderline, segmentTabsRoot } from "./styles";
 import type { SegmentTabsProps } from "./types";
 
@@ -11,9 +13,10 @@ export function SegmentTabs<TValue extends string>({
   onValueChange,
   layoutId,
   ariaLabel,
+  className,
 }: SegmentTabsProps<TValue>) {
   return (
-    <div role="tablist" aria-label={ariaLabel} className={segmentTabsRoot()}>
+    <div role="tablist" aria-label={ariaLabel} className={cn(segmentTabsRoot(), className)}>
       {items.map((item) => {
         const isActive = item.value === value;
         return (

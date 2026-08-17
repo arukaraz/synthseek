@@ -28,7 +28,7 @@ export function LoginScreenContent() {
     <div className={authCard()}>
       <header className={authHeader()}>
         <h1 className="sr-only">{t("auth.login.loadingTitle")}</h1>
-        <AppLogo iconClassName="h-11 w-auto sm:h-12" />
+        <AppLogo iconClassName="h-11 w-auto sm:h-12" wordmarkClassName="sm:text-3xl" />
         <p className={authEyebrow()}>{t("auth.login.eyebrow")}</p>
       </header>
 

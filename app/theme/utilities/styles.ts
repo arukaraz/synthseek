@@ -150,26 +150,6 @@ export const glassContainer = cva("relative overflow-hidden", {
 
 export type GlassContainerProps = VariantProps<typeof glassContainer>;
 
-export const modalBackdrop = cva("fixed inset-0 z-50", {
-  variants: {
-    blur: {
-      none: "bg-surface/90",
-      sm: "bg-surface/80 backdrop-blur-sm",
-      md: "bg-surface/80 backdrop-blur-md",
-    },
-    responsive: {
-      none: "",
-      blur: "sm:backdrop-blur-md sm:bg-surface/80",
-    },
-  },
-  defaultVariants: {
-    blur: "none",
-    responsive: "blur",
-  },
-});
-
-export type ModalBackdropProps = VariantProps<typeof modalBackdrop>;
-
 export const modalContent = cva(
   "from-primary-600/15 to-accent-600/15 relative overflow-hidden border bg-linear-to-br shadow-2xl",
   {
@@ -198,92 +178,6 @@ export const modalContent = cva(
 
 export type ModalContentProps = VariantProps<typeof modalContent>;
 
-export const imagePlaceholder = cva("flex items-center justify-center", {
-  variants: {
-    gradient: {
-      primary: "from-primary-500/20 to-accent-500/20 bg-linear-to-br",
-      subtle: "from-primary-500/30 to-accent-500/30 bg-linear-to-br",
-      muted: "from-fg/10 to-fg/5 bg-linear-to-br",
-    },
-    size: {
-      full: "h-full w-full",
-      fixed: "size-16",
-    },
-    rounded: {
-      none: "",
-      md: "rounded-md",
-      lg: "rounded-lg",
-      full: "rounded-full",
-    },
-    border: {
-      none: "",
-      subtle: "border border-primary-500/20",
-    },
-  },
-  defaultVariants: {
-    gradient: "primary",
-    size: "full",
-    rounded: "none",
-    border: "none",
-  },
-});
-
-export type ImagePlaceholderProps = VariantProps<typeof imagePlaceholder>;
-
-export const interactiveCard = cva("group transition-all", {
-  variants: {
-    variant: {
-      default: "border-fg/10 bg-surface/20",
-      hover: "border-fg/10 bg-surface/20 hover:bg-surface/30 hover:shadow-md",
-    },
-    padding: {
-      sm: "p-3",
-      md: "p-4",
-    },
-    rounded: {
-      lg: "rounded-lg",
-      xl: "rounded-xl",
-    },
-    border: {
-      default: "border",
-    },
-  },
-  defaultVariants: {
-    variant: "hover",
-    padding: "sm",
-    rounded: "lg",
-    border: "default",
-  },
-});
-
-export type InteractiveCardProps = VariantProps<typeof interactiveCard>;
-
-export const inputField = cva("w-full outline-none transition-colors", {
-  variants: {
-    variant: {
-      default: "text-fg placeholder-fg/30 border-fg/10 bg-fg/5",
-    },
-    size: {
-      sm: "rounded-lg py-1.5 text-sm",
-      md: "rounded-xl py-2 text-base",
-    },
-    focus: {
-      primary: "focus:border-primary-500/50 focus:bg-primary-500/5",
-    },
-    border: {
-      default: "border",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "sm",
-    focus: "primary",
-    border: "default",
-  },
-});
-
-export type InputFieldProps = VariantProps<typeof inputField>;
-
 export const checkbox = cva("cursor-pointer rounded bg-transparent", {
   variants: {
     size: {
@@ -303,5 +197,3 @@ export const checkbox = cva("cursor-pointer rounded bg-transparent", {
     focus: "ring",
   },
 });
-
-export type CheckboxProps = VariantProps<typeof checkbox>;

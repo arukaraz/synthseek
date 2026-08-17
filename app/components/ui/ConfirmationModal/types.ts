@@ -10,4 +10,5 @@ export interface ConfirmationModalProps {
   cancelText?: string;
   variant?: ConfirmationVariant;
   showCancel?: boolean;
+  className?: string;
 }

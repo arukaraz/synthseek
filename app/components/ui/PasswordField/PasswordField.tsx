@@ -1,6 +1,8 @@
 "use client";
 
 import { Eye, EyeOff, Lock } from "lucide-react";
+
+import { cn } from "@utils/cn";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -17,12 +19,13 @@ export function PasswordField({
   autoComplete = "current-password",
   minLength,
   describedBy,
+  className,
 }: PasswordFieldProps) {
   const { t } = useTranslation("components");
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className={cn("flex flex-col gap-1.5", className)}>
       <label htmlFor={id} className={authFieldLabel()}>
         {label ?? t("passwordField.label")}
       </label>

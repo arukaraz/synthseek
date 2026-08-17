@@ -2,6 +2,8 @@
 
 import { X } from "lucide-react";
 
+import { cn } from "@utils/cn";
+
 import {
   selectionAction,
   selectionActionCount,
@@ -14,9 +16,17 @@ import {
 } from "./styles";
 import type { BulkActionBarProps } from "./types";
 
-export function BulkActionBar({ count, countLabel, actions, clearLabel, onClear, trailing }: BulkActionBarProps) {
+export function BulkActionBar({
+  count,
+  countLabel,
+  actions,
+  clearLabel,
+  onClear,
+  trailing,
+  className,
+}: BulkActionBarProps) {
   return (
-    <div className={selectionBar()}>
+    <div className={cn(selectionBar(), className)}>
       <span className={selectionChip()}>
         <span className={selectionChipDot()} />
         <span className={selectionChipNum()}>{count}</span>

@@ -28,6 +28,7 @@ export function ConfirmationModal({
   cancelText,
   variant = "danger",
   showCancel = true,
+  className,
 }: ConfirmationModalProps) {
   const { t } = useTranslation("components");
   const Icon = VARIANT_ICONS[variant];
@@ -49,7 +50,7 @@ export function ConfirmationModal({
     >
       <DialogContent
         showClose={false}
-        className={confirmDialogContent}
+        className={cn(confirmDialogContent, className)}
         onOpenAutoFocus={(event) => {
           event.preventDefault();
           safeActionRef.current?.focus();

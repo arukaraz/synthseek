@@ -10,4 +10,5 @@ export interface SegmentTabsProps<TValue extends string> {
   onValueChange: (value: TValue) => void;
   layoutId: string;
   ariaLabel: string;
+  className?: string;
 }

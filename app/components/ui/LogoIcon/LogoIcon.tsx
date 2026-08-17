@@ -7,11 +7,7 @@ import type { LogoIconProps } from "./types";
 export function LogoIcon({ className }: LogoIconProps) {
   const { t } = useTranslation("components");
   return (
-    <svg
-      viewBox="0 0 155.5029585798817 300"
-      className={cn("h-12 w-auto sm:h-14", className)}
-      aria-label={t("logo.ariaLabel")}
-    >
+    <svg viewBox="0 0 155.5029585798817 300" className={cn("h-12 w-auto", className)} aria-label={t("logo.ariaLabel")}>
       <defs>
         <linearGradient
           id="logoGradient"

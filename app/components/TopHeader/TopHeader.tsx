@@ -69,7 +69,7 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
         <div className="flex shrink-0 items-center gap-3 sm:gap-5">
           <Link href="/">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <AppLogo wordmarkClassName="hidden sm:block" />
+              <AppLogo iconClassName="h-12 w-auto sm:h-14" wordmarkClassName="hidden sm:block sm:text-3xl" />
             </motion.div>
           </Link>
 

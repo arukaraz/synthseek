@@ -4,6 +4,7 @@ export interface TrackStatusIndicatorProps {
   status: RequestStatus;
   failureReason?: FailureReason | null;
   hideLabel?: boolean;
+  className?: string;
 }
 
 export interface TrackStatusIconProps {

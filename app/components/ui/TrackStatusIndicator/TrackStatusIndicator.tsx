@@ -11,7 +11,12 @@ import { indicatorLabel, indicatorRow, reasonButton } from "./styles";
 import { TrackStatusIcon } from "./TrackStatusIcon";
 import type { TrackStatusIndicatorProps } from "./types";
 
-export function TrackStatusIndicator({ status, failureReason, hideLabel = false }: TrackStatusIndicatorProps) {
+export function TrackStatusIndicator({
+  status,
+  failureReason,
+  hideLabel = false,
+  className,
+}: TrackStatusIndicatorProps) {
   const { t } = useTranslation("components");
   const { t: tStatus } = useTranslation("status");
   const statusConfig = REQUEST_STATUS_CONFIG[status];
@@ -28,7 +33,7 @@ export function TrackStatusIndicator({ status, failureReason, hideLabel = false 
       : tStatus(`request.${status}.description`);
 
   return (
-    <div className={indicatorRow()}>
+    <div className={cn(indicatorRow(), className)}>
       <TrackStatusIcon status={status} />
       <span className={cn(indicatorLabel({ hidden: hideLabel }), statusConfig.color)}>{label}</span>
       {reasonConfig && (

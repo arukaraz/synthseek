@@ -57,7 +57,7 @@ export function StepShell({
     <div className={wizardCard()}>
       <div className={wizardHead()}>
         <header className={wizardBrand()}>
-          <AppLogo iconClassName="h-9 w-auto sm:h-10" />
+          <AppLogo iconClassName="h-9 w-auto sm:h-10" wordmarkClassName="sm:text-3xl" />
           <p className={wizardEyebrow()}>{t("shell.eyebrow")}</p>
         </header>
 
