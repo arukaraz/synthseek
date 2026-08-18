@@ -1,0 +1,23 @@
+@theme {
+  --shadow-neon-primary:
+    0 0 20px oklch(0.6 0.28 285 / 0.3), 0 0 40px oklch(0.6 0.28 285 / 0.2), 0 0 60px oklch(0.6 0.28 285 / 0.1);
+
+  --shadow-neon-secondary:
+    0 0 20px oklch(0.8 0.16 195 / 0.3), 0 0 40px oklch(0.8 0.16 195 / 0.2), 0 0 60px oklch(0.8 0.16 195 / 0.1);
+
+  --shadow-neon-accent:
+    0 0 20px oklch(0.7 0.32 328 / 0.3), 0 0 40px oklch(0.7 0.32 328 / 0.2), 0 0 60px oklch(0.7 0.32 328 / 0.1);
+
+  --shadow-neon-success: 0 0 20px oklch(0.55 0.178 145 / 0.3), 0 0 40px oklch(0.55 0.178 145 / 0.2);
+
+  --shadow-neon-warning: 0 0 20px oklch(0.85 0.176 85 / 0.3), 0 0 40px oklch(0.85 0.176 85 / 0.2);
+
+  --shadow-neon-error: 0 0 20px oklch(0.55 0.225 27 / 0.3), 0 0 40px oklch(0.55 0.225 27 / 0.2);
+
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px oklch(0 0 0 / 0.15);
+  --shadow-lg: 0 10px 15px oklch(0 0 0 / 0.2);
+  --shadow-xl: 0 20px 25px oklch(0 0 0 / 0.25);
+
+  --shadow-glass: 0 8px 32px oklch(0 0 0 / 0.4), 0 2px 8px oklch(0 0 0 / 0.2);
+}

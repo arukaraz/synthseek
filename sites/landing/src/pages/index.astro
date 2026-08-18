@@ -1,0 +1,123 @@
+---
+import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
+import Badge from "@synthseek/sites-shared/components/Badge.astro";
+import GithubLink from "@synthseek/sites-shared/components/GithubLink.astro";
+import "../styles/landing.css";
+
+const DOCS_URL = "https://docs.synthseek.dev";
+
+const PILLARS = [
+  {
+    title: "Ask, and it arrives",
+    body: "Search a song, an album, an artist, a playlist, or a vague idea. Synthseek finds it, downloads it through your own client, and files it into your library.",
+  },
+  {
+    title: "Nothing wrong gets in",
+    body: "Every download is checked against what you asked for before it reaches your library. Anything that does not match waits for you to decide.",
+  },
+  {
+    title: "Built for a household",
+    body: "Local accounts or Plex sign-in, three roles, and per-member playlists and connected services. Everyone gets their own, nobody gets your settings.",
+  },
+  {
+    title: "Drive it by asking",
+    body: "A built-in MCP server lets an assistant search, request, and organise your library in plain language, scoped to one member.",
+  },
+];
+
+const FACTS = [
+  ["Runs on", "One Docker container"],
+  ["Needs", "Your own slskd instance"],
+  ["Stores", "SQLite, on your disk"],
+  ["Calls home", "Never"],
+];
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Synthseek · Self-hosted music library automation</title>
+    <meta
+      name="description"
+      content="Self-hosted, multi-user music library automation. Search, download through your own client, verify, tag, and file into a library you own."
+    />
+    <meta property="og:title" content="Synthseek" />
+    <meta property="og:description" content="Self-hosted, multi-user music library automation." />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://synthseek.dev/" />
+  </head>
+  <body>
+    <div class="mx-auto flex min-h-screen w-full max-w-[1080px] flex-col px-6 py-8 lg:px-10">
+      <header class="flex items-center gap-3">
+        <AppLogo iconClass="h-7 w-auto" wordmarkClass="text-[22px]" />
+        <nav class="ml-auto flex items-center gap-5 text-[14px]" aria-label="Primary">
+          <a href={DOCS_URL} class="text-fg-muted hover:text-fg no-underline transition-colors">Docs</a>
+          <a
+            href="https://github.com/arukaraz/synthseek"
+            rel="noopener noreferrer"
+            target="_blank"
+            class="text-fg-muted hover:text-fg no-underline transition-colors">GitHub</a
+          >
+        </nav>
+      </header>
+
+      <main class="flex-1">
+        <section class="pt-20 pb-16 lg:pt-28">
+          <Badge variant="outline" class="font-mono">Self-hosted</Badge>
+          <h1 class="text-fg mt-5 max-w-[18ch] text-[42px] leading-[1.08] font-[750] tracking-[-0.03em] lg:text-[58px]">
+            Your music library, <span class="gradient-text-primary">automated</span>.
+          </h1>
+          <p class="text-fg-muted mt-5 max-w-[62ch] text-[17px] leading-[1.65]">
+            Synthseek searches across music providers, downloads through your own client, checks that what arrived is
+            what you asked for, tags it, and files it into a library you own. Multi-user, provider-agnostic, and it
+            never phones home.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href={`${DOCS_URL}/getting-started`}
+              class="bg-primary focus-ring rounded-xl px-5 py-2.5 text-[14px] font-semibold text-white no-underline transition-opacity hover:opacity-90"
+            >
+              Get started
+            </a>
+            <a
+              href={DOCS_URL}
+              class="border-fg/15 hover:border-primary-500/50 text-fg focus-ring rounded-xl border px-5 py-2.5 text-[14px] font-semibold no-underline transition-colors"
+            >
+              Read the docs
+            </a>
+          </div>
+        </section>
+
+        <section class="grid gap-4 sm:grid-cols-2">
+          {
+            PILLARS.map((pillar) => (
+              <div class="border-fg/10 bg-surface-sunken/40 rounded-2xl border p-6">
+                <h2 class="text-fg text-[17px] font-semibold tracking-[-0.01em]">{pillar.title}</h2>
+                <p class="text-fg-muted mt-2 text-[14.5px] leading-[1.7]">{pillar.body}</p>
+              </div>
+            ))
+          }
+        </section>
+
+        <section class="border-fg/10 mt-16 grid gap-px overflow-hidden rounded-2xl border sm:grid-cols-4">
+          {
+            FACTS.map(([label, value]) => (
+              <div class="bg-surface-sunken/40 p-5">
+                <div class="dx-eyebrow">{label}</div>
+                <div class="text-fg mt-1.5 text-[14.5px] font-semibold">{value}</div>
+              </div>
+            ))
+          }
+        </section>
+      </main>
+
+      <footer class="border-fg/10 mt-20 flex flex-wrap items-center gap-4 border-t pt-6">
+        <GithubLink class="-ml-3" />
+        <a href={DOCS_URL} class="text-fg-muted hover:text-fg ml-auto text-[13px] no-underline">Documentation</a>
+      </footer>
+    </div>
+  </body>
+</html>

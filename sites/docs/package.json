@@ -1,0 +1,28 @@
+{
+  "name": "synthseek-docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^7.0.6",
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource/courgette": "^5.3.0",
+    "@synthseek/sites-shared": "*",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.3",
+    "tailwindcss": "^4.3.3",
+    "unist-util-visit": "^5.1.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "pagefind": "^1.5.2",
+    "typescript": "^5.9.3"
+  }
+}

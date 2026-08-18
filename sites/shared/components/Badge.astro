@@ -1,0 +1,25 @@
+---
+interface Props {
+  variant?: "default" | "secondary" | "outline" | "destructive";
+  class?: string;
+}
+
+const { variant = "default", class: className } = Astro.props;
+
+const VARIANTS: Record<NonNullable<Props["variant"]>, string> = {
+  default: "border-transparent bg-primary text-white",
+  secondary: "border-transparent bg-surface-overlay text-fg",
+  destructive: "border-transparent bg-destructive-vivid text-white",
+  outline: "text-fg border-glass-border",
+};
+---
+
+<div
+  class:list={[
+    "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors",
+    VARIANTS[variant],
+    className,
+  ]}
+>
+  <slot />
+</div>

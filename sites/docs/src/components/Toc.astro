@@ -1,0 +1,54 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const items = headings.filter((heading) => heading.depth === 2);
+---
+
+{
+  items.length > 0 && (
+    <aside class="dx-toc sticky top-10 hidden w-[210px] shrink-0 xl:block">
+      <div class="dx-eyebrow mb-2.5">On this page</div>
+      <div class="border-fg/10 flex flex-col border-l">
+        {items.map((heading) => (
+          <a class="dx-toclink" href={`#${heading.slug}`} data-dx-toc-link={heading.slug}>
+            {heading.text}
+          </a>
+        ))}
+      </div>
+    </aside>
+  )
+}
+
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-dx-toc-link]")];
+  if (links.length > 0) {
+    const bySlug = new Map(links.map((link) => [link.dataset.dxTocLink ?? "", link]));
+    const targets = [...bySlug.keys()]
+      .map((slug) => document.getElementById(slug))
+      .filter((element): element is HTMLElement => element !== null);
+
+    let active: HTMLAnchorElement | null = null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (!visible) return;
+        const next = bySlug.get(visible.target.id) ?? null;
+        if (next === active) return;
+        active?.removeAttribute("data-active");
+        next?.setAttribute("data-active", "true");
+        active = next;
+      },
+      { rootMargin: "-80px 0px -70% 0px", threshold: 0 },
+    );
+
+    targets.forEach((target) => observer.observe(target));
+  }
+</script>

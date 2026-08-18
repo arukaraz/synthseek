@@ -1,0 +1,39 @@
+---
+import type { NavEntry } from "../lib/nav";
+
+interface Props {
+  previous: NavEntry | null;
+  next: NavEntry | null;
+}
+
+const { previous, next } = Astro.props;
+---
+
+{
+  (previous || next) && (
+    <nav class="mt-15 flex gap-4" aria-label="Pagination">
+      {previous ? (
+        <a
+          href={previous.href}
+          class="border-fg/10 hover:border-primary-500/50 flex-1 rounded-xl border px-[18px] py-3.5 no-underline transition-colors"
+        >
+          <div class="dx-eyebrow">Previous</div>
+          <div class="text-fg mt-1 text-[14.5px] font-semibold">{previous.title}</div>
+        </a>
+      ) : (
+        <div class="flex-1" />
+      )}
+      {next ? (
+        <a
+          href={next.href}
+          class="border-fg/10 hover:border-primary-500/50 flex-1 rounded-xl border px-[18px] py-3.5 text-right no-underline transition-colors"
+        >
+          <div class="dx-eyebrow">Next</div>
+          <div class="text-fg mt-1 text-[14.5px] font-semibold">{next.title}</div>
+        </a>
+      ) : (
+        <div class="flex-1" />
+      )}
+    </nav>
+  )
+}

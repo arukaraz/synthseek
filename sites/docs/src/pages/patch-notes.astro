@@ -1,0 +1,81 @@
+---
+import DocsLayout from "../layouts/DocsLayout.astro";
+import Badge from "@synthseek/sites-shared/components/Badge.astro";
+import Notice from "@synthseek/sites-shared/components/Notice.astro";
+import InlineMarkdown from "../components/InlineMarkdown.astro";
+import { anchorFor, calloutVariant, categoryClass, categoryLabel, formatDate, getVersions } from "../lib/changelog";
+import { PATCH_NOTES } from "../lib/nav";
+
+const versions = getVersions();
+const headings = versions.map((release) => ({
+  depth: 2,
+  slug: anchorFor(release.version),
+  text: `${release.version} · ${formatDate(release.date)}`,
+}));
+---
+
+<DocsLayout
+  slug={PATCH_NOTES.slug}
+  title={PATCH_NOTES.title}
+  blurb={PATCH_NOTES.blurb}
+  group={PATCH_NOTES.group}
+  headings={headings}
+>
+  {
+    versions.map((release, index) => (
+      <section>
+        <h2 id={anchorFor(release.version)} class="flex flex-wrap items-baseline gap-3">
+          <span class="text-fg">v{release.version}</span>
+          <span class="text-fg-muted text-[14.5px] font-normal tracking-normal whitespace-nowrap">
+            {formatDate(release.date)}
+          </span>
+          {index === 0 ? <Badge>Latest</Badge> : null}
+        </h2>
+
+        {release.title ? (
+          <p class="text-fg text-[16.5px] leading-[1.5] font-semibold">
+            <InlineMarkdown text={release.title} />
+          </p>
+        ) : null}
+
+        {(release.callouts ?? []).map((callout) => (
+          <div class="my-[18px]">
+            <Notice variant={calloutVariant(callout.level)}>
+              <InlineMarkdown text={callout.body} />
+            </Notice>
+          </div>
+        ))}
+
+        {(release.sections ?? []).map((section) => (
+          <>
+            {section.heading ? <h3>{section.heading}</h3> : null}
+            {section.body ? (
+              <p>
+                <InlineMarkdown text={section.body} />
+              </p>
+            ) : null}
+            {section.items && section.items.length > 0 ? (
+              <ul class="list-none! pl-0!">
+                {section.items.map((item) => (
+                  <li class="flex items-start gap-3">
+                    <span
+                      class:list={[
+                        "font-mono mt-0.5 min-w-[62px] shrink-0 rounded px-1.5 py-0.5 text-center text-[10px] font-semibold tracking-wide uppercase",
+                        categoryClass(section.category),
+                      ]}
+                    >
+                      {categoryLabel(section.category)}
+                    </span>
+                    <span class="text-fg-muted text-[14.5px] leading-[1.65]">
+                      <InlineMarkdown text={item} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </>
+        ))}
+      </section>
+    ))
+  }
+</DocsLayout>

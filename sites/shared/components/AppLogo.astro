@@ -1,0 +1,20 @@
+---
+import LogoIcon from "./LogoIcon.astro";
+
+interface Props {
+  class?: string;
+  iconClass?: string;
+  wordmarkClass?: string;
+  href?: string;
+}
+
+const { class: className, iconClass, wordmarkClass, href } = Astro.props;
+const Tag = href ? "a" : "div";
+---
+
+<Tag class:list={["flex items-center", className]} href={href}>
+  <LogoIcon class={iconClass} />
+  <span class:list={["gradient-text-primary font-courgette ml-px text-2xl leading-none", wordmarkClass]}>
+    ynthseek
+  </span>
+</Tag>

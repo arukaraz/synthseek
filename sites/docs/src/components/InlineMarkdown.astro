@@ -1,0 +1,29 @@
+---
+import { normalizeWhitespace, tokenizeInline } from "../lib/inline-markdown";
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+const tokens = tokenizeInline(text);
+---
+
+{
+  tokens.map((token) => {
+    if (token.type === "bold")
+      return (
+        <strong>
+          <Astro.self text={token.value} />
+        </strong>
+      );
+    if (token.type === "code") return <code>{token.value}</code>;
+    if (token.type === "link")
+      return (
+        <a href={token.href} rel="noopener noreferrer" target="_blank">
+          {normalizeWhitespace(token.value)}
+        </a>
+      );
+    return <Fragment>{normalizeWhitespace(token.value)}</Fragment>;
+  })
+}

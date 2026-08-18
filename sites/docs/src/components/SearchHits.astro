@@ -1,0 +1,104 @@
+---
+
+---
+
+<script>
+  const HIT_CLASS = "dx-hit";
+  const MIN_WORD = 3;
+  const MAX_HITS = 200;
+
+  function escapeForRegex(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function buildPattern(term: string): RegExp | null {
+    const phrase = term.trim();
+    if (phrase.length < 2) return null;
+
+    const words = phrase
+      .split(/\s+/)
+      .filter((word) => word.length >= MIN_WORD)
+      .map(escapeForRegex);
+
+    const alternatives = [escapeForRegex(phrase), ...words];
+    const unique = [...new Set(alternatives)].sort((a, b) => b.length - a.length);
+    return new RegExp(`(${unique.join("|")})`, "gi");
+  }
+
+  function collectTextNodes(root: HTMLElement): Text[] {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        if (parent.closest("pre, code, script, style")) return NodeFilter.FILTER_REJECT;
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+
+    const nodes: Text[] = [];
+    let current = walker.nextNode();
+    while (current) {
+      if (current instanceof Text) nodes.push(current);
+      current = walker.nextNode();
+    }
+    return nodes;
+  }
+
+  function markNode(node: Text, pattern: RegExp, budget: { left: number }): HTMLElement[] {
+    const value = node.nodeValue ?? "";
+    pattern.lastIndex = 0;
+    if (!pattern.test(value)) return [];
+
+    pattern.lastIndex = 0;
+    const fragment = document.createDocumentFragment();
+    const marks: HTMLElement[] = [];
+    let cursor = 0;
+    let match = pattern.exec(value);
+
+    while (match && budget.left > 0) {
+      if (match.index > cursor) {
+        fragment.append(document.createTextNode(value.slice(cursor, match.index)));
+      }
+      const mark = document.createElement("mark");
+      mark.className = HIT_CLASS;
+      mark.textContent = match[0];
+      fragment.append(mark);
+      marks.push(mark);
+      budget.left -= 1;
+      cursor = match.index + match[0].length;
+      match = pattern.exec(value);
+    }
+
+    if (marks.length === 0) return [];
+    if (cursor < value.length) fragment.append(document.createTextNode(value.slice(cursor)));
+    node.replaceWith(fragment);
+    return marks;
+  }
+
+  function run() {
+    const term = new URLSearchParams(window.location.search).get("q");
+    if (!term) return;
+
+    const article = document.querySelector<HTMLElement>("article");
+    if (!article) return;
+
+    const pattern = buildPattern(term);
+    if (!pattern) return;
+
+    const budget = { left: MAX_HITS };
+    const all: HTMLElement[] = [];
+    for (const node of collectTextNodes(article)) {
+      if (budget.left <= 0) break;
+      all.push(...markNode(node, pattern, budget));
+    }
+
+    const first = all[0];
+    if (!first) return;
+
+    first.scrollIntoView({ behavior: "smooth", block: "center" });
+    first.setAttribute("data-first", "true");
+  }
+
+  run();
+</script>

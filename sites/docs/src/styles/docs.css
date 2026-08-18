@@ -1,0 +1,300 @@
+@import "@synthseek/sites-shared/tailwind.css";
+@import "@fontsource/courgette/400.css";
+@source "../../../shared/components/*.astro";
+
+@layer components {
+  .dx-prose {
+    color: var(--surface-fg-muted);
+  }
+
+  .dx-prose > section {
+    display: block;
+  }
+
+  .dx-prose h2 {
+    color: var(--surface-fg);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin: 44px 0 12px;
+    scroll-margin-top: 24px;
+  }
+
+  .dx-prose > h2:first-of-type {
+    margin-top: 30px;
+  }
+
+  .dx-prose h3 {
+    color: var(--surface-fg);
+    font-size: 17.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    margin: 30px 0 8px;
+    scroll-margin-top: 24px;
+  }
+
+  .dx-prose h4 {
+    color: var(--surface-fg);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 22px 0 6px;
+  }
+
+  .dx-prose p {
+    font-size: 15px;
+    line-height: 1.75;
+    margin: 0 0 14px;
+  }
+
+  .dx-prose strong {
+    color: var(--surface-fg);
+    font-weight: 600;
+  }
+
+  .dx-prose ul,
+  .dx-prose ol {
+    margin: 0 0 16px;
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .dx-prose ul {
+    list-style: disc;
+  }
+
+  .dx-prose ol {
+    list-style: decimal;
+  }
+
+  .dx-prose li::marker {
+    color: color-mix(in oklch, var(--surface-fg-muted) 55%, transparent);
+  }
+
+  .dx-prose a {
+    color: var(--color-primary-400);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklch, var(--color-primary-400) 35%, transparent);
+  }
+
+  .dx-prose a:hover {
+    color: var(--color-primary-500);
+    border-bottom-color: var(--color-primary-500);
+  }
+
+  .dx-prose :not(pre) > code {
+    font-family: var(--font-mono);
+    background: var(--surface-bg-sunken);
+    border: 1px solid var(--border-subtle);
+    color: var(--surface-fg);
+    padding: 1.5px 6px;
+    border-radius: 5px;
+    font-size: 0.855em;
+    white-space: nowrap;
+  }
+
+  .dx-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  .dx-prose thead th {
+    color: var(--surface-fg-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--surface-bg-sunken);
+    white-space: nowrap;
+  }
+
+  .dx-prose tbody td {
+    color: var(--surface-fg-muted);
+    padding: 11px 14px;
+    border-top: 1px solid var(--border-subtle);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+
+  .dx-prose tbody td:first-child {
+    color: var(--surface-fg);
+  }
+
+  .dx-prose blockquote {
+    border-left: 2px solid color-mix(in oklch, var(--color-primary-500) 50%, transparent);
+    padding-left: 14px;
+    margin: 0 0 14px;
+  }
+
+  .dx-prose hr {
+    border: 0;
+    border-top: 1px solid var(--border-subtle);
+    margin: 34px 0;
+  }
+
+  .dx-prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+}
+
+@layer components {
+  .dx-navlink {
+    color: var(--surface-fg-muted);
+    display: block;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 14px;
+    text-decoration: none;
+    transition:
+      background-color 120ms ease,
+      color 120ms ease;
+  }
+
+  .dx-navlink:hover {
+    background: color-mix(in oklch, var(--color-primary-500) 10%, transparent);
+  }
+
+  .dx-navlink[aria-current="page"] {
+    color: var(--color-primary-400);
+    background: color-mix(in oklch, var(--color-primary-500) 14%, transparent);
+    font-weight: 600;
+  }
+
+  .dx-toclink {
+    color: var(--surface-fg-muted);
+    font-size: 12.5px;
+    line-height: 1.4;
+    padding: 5px 0 5px 14px;
+    text-decoration: none;
+    margin-left: -1px;
+    border-left: 1px solid transparent;
+  }
+
+  .dx-toclink:hover,
+  .dx-toclink[data-active="true"] {
+    color: var(--color-primary-400);
+    border-left-color: var(--color-primary-500);
+  }
+
+  .dx-eyebrow {
+    color: var(--surface-fg-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}
+
+@layer components {
+  [data-dx-drawer] {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+  }
+
+  [data-dx-drawer][data-open="false"] {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    [data-dx-drawer],
+    [data-dx-drawer][data-open="false"] {
+      display: block;
+      position: sticky;
+      inset: auto;
+      z-index: 0;
+    }
+  }
+}
+
+@layer components {
+  .dx-code {
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 18px 0;
+  }
+
+  .dx-code-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    background: var(--surface-bg-sunken);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .dx-code-lang {
+    color: var(--surface-fg-muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .dx-code-copy {
+    color: var(--surface-fg-muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 120ms ease;
+  }
+
+  .dx-code-copy:hover {
+    color: var(--surface-fg);
+  }
+
+  .dx-code pre {
+    margin: 0;
+    padding: 16px 18px;
+    font-size: 13px;
+    line-height: 1.65;
+    overflow-x: auto;
+  }
+
+  .dx-prose > .dx-code,
+  .dx-prose section > .dx-code {
+    margin: 18px 0;
+  }
+}
+
+@layer components {
+  .dx-search mark {
+    background: color-mix(in oklch, var(--color-primary-500) 28%, transparent);
+    color: var(--surface-fg);
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+}
+
+@layer components {
+  .dx-hit {
+    background: color-mix(in oklch, var(--color-accent-400) 26%, transparent);
+    color: var(--surface-fg);
+    border-radius: 3px;
+    padding: 0 3px;
+    text-decoration: none;
+  }
+
+  .dx-hit[data-first="true"] {
+    background: color-mix(in oklch, var(--color-accent-400) 42%, transparent);
+  }
+}

@@ -1,0 +1,75 @@
+---
+title: "Download Sources"
+blurb: "Wire up slskd, and understand the yt-dlp fallback."
+group: "Core concepts"
+order: 5
+---
+
+## How sources work
+
+A download source is an adapter. Synthseek asks each enabled source, in priority order, whether it can supply a track, and takes the first one that delivers something that passes verification. Lower priority numbers are tried first.
+
+Two sources ship today.
+
+| Source | Priority | Enabled by default |
+| ------ | -------- | ------------------ |
+| slskd  | 0        | Yes                |
+| yt-dlp | 10       | Yes                |
+
+You can disable either one globally in Settings, or pick a specific source per request.
+
+## slskd
+
+slskd is a Soulseek daemon with an HTTP API. It is the primary download source, and Synthseek drives it entirely through that API. Synthseek never speaks the Soulseek protocol itself and holds no Soulseek credentials.
+
+### Setting up slskd
+
+1. Run slskd and complete its own setup, including your Soulseek account.
+2. In slskd, go to **Settings**, then **Options**, then **Web**, and note or generate an API key.
+3. Note the URL slskd's web interface is reachable at from inside the Synthseek container. On the same Docker network this is typically `http://slskd:5030`.
+4. In Synthseek, go to **Settings**, then **Integrations**, then the **slskd** card. Enter the URL and the API key, and test the connection.
+
+### The shared downloads folder
+
+slskd and Synthseek must agree on one folder.
+
+- In slskd, this is the **complete** downloads directory.
+- In Synthseek, this is the `/downloads` volume.
+
+Both must point at the same place on the host, and the user Synthseek runs as, set by `PUID` and `PGID`, must be able to write to it. This is the most common cause of a working slskd connection that still cannot import anything.
+
+### slskd settings
+
+| Setting                        | Default        | What it does                                                               |
+| ------------------------------ | -------------- | -------------------------------------------------------------------------- |
+| Maximum peer attempts          | 15             | How many peers to try per track before giving up.                          |
+| Maximum variations             | 6              | How many title and artist variations to search.                            |
+| Strict tier ordering           | Off            | Exhaust one quality tier fully before dropping to the next.                |
+| Search history cleanup         | On             | Have slskd discard finished searches.                                      |
+| Maximum history searches       | 30             | How many to retain before cleanup.                                         |
+| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures.                                       |
+| Banned users                   | Empty          | Peers excluded from all searches. You can add and remove entries manually. |
+
+## The yt-dlp fallback
+
+When slskd cannot deliver a track, Synthseek can fall back to yt-dlp. It is bundled in the container and enabled by default.
+
+The fallback is deliberately conservative, because a video platform holds a great deal that is not the recording you asked for. Candidates are ranked rather than taken in the order they arrive, and one has to resemble the track you asked for on more than one count before it is accepted. How many candidates are considered, and how much slack the matching is given, are settings.
+
+Everything downloaded through the fallback goes through exactly the same verification as anything else. It is not a trusted path.
+
+### yt-dlp settings
+
+| Setting                | Default    | What it does                                                       |
+| ---------------------- | ---------- | ------------------------------------------------------------------ |
+| Enabled                | On         | Whether the fallback is used at all.                               |
+| Priority               | 10         | Tried after slskd.                                                 |
+| Search results         | 15         | How many candidates are considered before one is chosen.           |
+| Maximum duration delta | 15 seconds | How much a candidate's length may differ from the expected length. |
+| Search timeout         | 60 seconds | How long to wait for results.                                      |
+
+## Delegating to Lidarr
+
+Rather than downloading through a source, a request can be handed to Lidarr, which then manages it in its own catalog. See the [Integrations page](/integrations).
+
+---

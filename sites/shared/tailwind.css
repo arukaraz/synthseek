@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-surface: var(--surface-bg);
+  --color-surface-elevated: var(--surface-bg-elevated);
+  --color-surface-overlay: var(--surface-bg-overlay);
+  --color-surface-sunken: var(--surface-bg-sunken);
+
+  --color-fg: var(--surface-fg);
+  --color-fg-muted: var(--surface-fg-muted);
+
+  --color-glass: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+
+  --color-border: var(--border-default);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-primary: var(--color-primary-500);
+  --color-destructive-vivid: var(--destructive-vivid);
+  --color-warning-vivid: var(--warning-vivid);
+  --color-success-vivid: var(--success-vivid);
+
+  --font-courgette: "Courgette", cursive;
+}
+
+@import "./tokens/primitives.css";
+@import "./tokens/semantic.css";
+@import "./tokens/shadows.css";
+@import "./tokens/theme-dark.css";
+
+@layer utilities {
+  .focus-ring {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid oklch(var(--neon-primary));
+    outline-offset: 2px;
+  }
+
+  .gradient-text-primary {
+    background: linear-gradient(to top right, oklch(var(--neon-primary)) 5%, oklch(var(--neon-secondary)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 500;
+  }
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  body {
+    background: var(--surface-bg);
+    color: var(--surface-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--color-primary-500) 35%, transparent);
+  }
+}

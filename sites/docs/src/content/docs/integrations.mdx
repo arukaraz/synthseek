@@ -1,0 +1,109 @@
+---
+title: "Integrations"
+blurb: "Plex, Lidarr, Beets, AcoustID, and the metadata providers."
+group: "Setup & admin"
+order: 8
+---
+
+## How integrations behave
+
+Every integration except the core catalog is optional and non-fatal. A misconfigured or unreachable service logs a warning and Synthseek boots anyway, then shows that integration as unhealthy in Settings.
+
+This is deliberate. An integration you can fix from the interface must never be able to stop the interface from starting, or a single wrong URL locks you out of the only place you could correct it.
+
+Each integration exposes a live status you can see from its settings card.
+
+## Plex
+
+Two independent things, each with its own switch.
+
+### Library scans
+
+After a successful import, Synthseek asks Plex to rescan the affected section so the new file appears without waiting for Plex's own schedule.
+
+### Playlist sync
+
+Playlists you request or create in Synthseek can be mirrored to Plex.
+
+- Push one playlist, or all eligible playlists at once, from either the requests screen or your library.
+- An hourly background job keeps mirrored playlists named correctly and topped up.
+- Renames flow both ways.
+- Optionally prefix or suffix mirrored playlist names with the owner's username, so a shared server stays legible.
+
+**Currently, sync only adds tracks. It never removes them.** The only path that removes anything from a mirrored playlist is a library sync you explicitly configured.
+
+### Why a Plex playlist can show fewer tracks
+
+A mirrored playlist reflects tracks that are complete in Synthseek **and** were found in Plex. There are three distinct reasons a track can be missing, and they need different responses:
+
+| Cause               | What it looks like                                                         | What fixes it                                                                    |
+| ------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Not yet scanned     | A cleanly titled track missing right after import.                         | Nothing. The next reconcile picks it up.                                         |
+| Not matched         | Titles differ by a featuring credit, a remaster suffix, or an accent.      | Improved matching, which has been hardened repeatedly. Sync again.               |
+| Different recording | Plex genuinely holds a different version than the one that was downloaded. | Nothing automatic. This is a real difference and forcing a match would be wrong. |
+
+## Lidarr
+
+Lidarr is a delegate target rather than a download source. Handing a request to Lidarr means Lidarr takes it over entirely and manages the download in its own catalog. Synthseek marks the request as delegated and stops working on it.
+
+- Choose Lidarr as the source when making a request.
+- Select which tags to apply.
+- Choose a monitor scope, from that album only through to the artist's full discography.
+
+The handoff is validated before anything is created. Synthseek resolves the artist and album in Lidarr's own catalog first, and if Lidarr cannot manage it, the request is rejected with a clear reason and no rows are created. Lidarr can only manage releases MusicBrainz knows about, so a brand new release cannot be delegated.
+
+## Beets
+
+Beets tags each downloaded file and files it into your library. It is bundled and on by default.
+
+A default configuration is created at `/data/config/beets-config.yaml` on first boot. An up-to-date example is written alongside it as `beets-config.example.yaml` on every boot, so you can diff yours against the current defaults after an upgrade.
+
+Turning Beets off leaves downloaded files in your downloads folder, untagged and unfiled. Synthseek will still track them as complete.
+
+## AcoustID
+
+AcoustID identifies a recording from the audio itself rather than from its filename or tags. Synthseek uses it for two different things:
+
+1. **Verification.** Checking that a downloaded file really is the recording you asked for. This is the identity gate described on the [Download Engine page](/download-engine).
+2. **Tagging.** Identifying a track so it can be tagged correctly when MusicBrainz alone cannot resolve it.
+
+The key is free from acoustid.org. Without it, neither of the above runs, and verification falls back to tag comparison alone.
+
+## Metadata providers
+
+The catalog provides the primary picture of a track, album, artist, or playlist. Deezer is the default adapter and needs no key, no account, and no authentication.
+
+Around it sit enrichment providers, each contributing something the catalog does not have:
+
+| Provider          | Contributes                                                   |
+| ----------------- | ------------------------------------------------------------- |
+| MusicBrainz       | Canonical identifiers, used for accurate tagging.             |
+| Cover Art Archive | Album artwork when the catalog has none.                      |
+| fanart.tv         | Artist images.                                                |
+| Last.fm           | Biographies, similar artists, charts, and your scrobbles.     |
+| ListenBrainz      | Recording metadata, recommendations, and generated mixes.     |
+| Discogs           | Additional detail on release pages.                           |
+| Wikidata          | Factual artist details.                                       |
+| Songlink          | Resolving links from other platforms into requestable tracks. |
+
+Enrichment never blocks anything. If a provider is unavailable, the page renders without it and tells you which source is degraded and for how long. A provider that fails repeatedly is stopped being called for a while, then probed once to see whether it has recovered.
+
+All artwork is served through a proxy on your own instance, with a disk cache, so your browser does not connect directly to third-party image hosts.
+
+## Library sources
+
+A library source is where your existing collection lives. Spotify is supported today.
+
+Connecting one is per member, over OAuth. Once connected you can browse your saved albums, saved tracks, and playlists, select what you want, and import it. An imported playlist can be kept in sync so later additions flow through.
+
+The Spotify connection needs a client ID and a public base URL, because the OAuth callback returns over the internet.
+
+## Discovery services
+
+**ListenBrainz** and **Last.fm**, both per member, both configured under discovery integrations.
+
+ListenBrainz provides four kinds of mix: collaborative filtering recommendations, weekly exploration, weekly jams, and daily jams. Choose which you want, name them, and decide whether Synthseek should request their tracks automatically. A mix can update a single playlist in place rather than creating a new one each refresh.
+
+Last.fm provides your recent scrobbles and top tracks, and powers similar-artist recommendations across the application.
+
+---

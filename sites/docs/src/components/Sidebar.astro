@@ -1,0 +1,50 @@
+---
+import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
+import Badge from "@synthseek/sites-shared/components/Badge.astro";
+import GithubLink from "@synthseek/sites-shared/components/GithubLink.astro";
+import Search from "./Search.astro";
+import { groupNav, type NavEntry } from "../lib/nav";
+import { APP_VERSION, LANDING_URL } from "../lib/site";
+
+interface Props {
+  entries: NavEntry[];
+  current: string;
+  id: string;
+}
+
+const { entries, current, id } = Astro.props;
+const groups = groupNav(entries);
+---
+
+<div id={id} class="bg-surface flex h-full w-full shrink-0 flex-col border-r border-fg/10">
+  <div class="px-6 pt-6 pb-4">
+    <div class="flex items-center gap-2">
+      <AppLogo href={LANDING_URL} iconClass="h-7 w-auto" wordmarkClass="text-[22px]" />
+      <Badge class="font-mono">v{APP_VERSION}</Badge>
+    </div>
+    <div class="dx-eyebrow mt-2">Documentation</div>
+  </div>
+
+  <div class="px-5 pb-4">
+    <Search />
+  </div>
+
+  <nav class="flex-1 overflow-y-auto px-5 pb-6" aria-label="Documentation" data-dx-nav>
+    {
+      groups.map((group) => (
+        <div class="mb-5">
+          <div class="dx-eyebrow mb-2 px-3">{group.label}</div>
+          {group.entries.map((entry) => (
+            <a class="dx-navlink" href={entry.href} aria-current={entry.slug === current ? "page" : undefined}>
+              {entry.title}
+            </a>
+          ))}
+        </div>
+      ))
+    }
+  </nav>
+
+  <div class="border-t border-fg/10 px-5 py-4">
+    <GithubLink />
+  </div>
+</div>

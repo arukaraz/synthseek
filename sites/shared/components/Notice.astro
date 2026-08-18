@@ -1,0 +1,59 @@
+---
+interface Props {
+  variant?: "info" | "warning" | "danger" | "success";
+  title?: string;
+  class?: string;
+}
+
+const { variant = "info", title, class: className } = Astro.props;
+
+const ROOT: Record<NonNullable<Props["variant"]>, string> = {
+  info: "border-secondary-400/30 bg-secondary-400/10 text-fg",
+  warning: "border-warning-vivid/30 bg-warning-vivid/10 text-fg",
+  danger: "border-destructive-vivid/30 bg-destructive-vivid/10 text-fg",
+  success: "border-success-vivid/30 bg-success-vivid/10 text-fg",
+};
+
+const ICON: Record<NonNullable<Props["variant"]>, string> = {
+  info: "text-secondary-400",
+  warning: "text-warning-vivid",
+  danger: "text-destructive-vivid",
+  success: "text-success-vivid",
+};
+
+const TITLE: Record<NonNullable<Props["variant"]>, string> = {
+  info: "text-secondary-400",
+  warning: "text-warning-vivid",
+  danger: "text-destructive-vivid",
+  success: "text-success-vivid",
+};
+
+const PATHS: Record<NonNullable<Props["variant"]>, string> = {
+  info: "M12 16v-4M12 8h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
+  warning: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3ZM12 9v4M12 17h.01",
+  danger: "M12 8v4M12 16h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
+  success: "M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3",
+};
+---
+
+<div
+  class:list={["flex flex-col gap-2 rounded-lg border p-2.5 text-xs sm:p-3 sm:text-[13px]", ROOT[variant], className]}
+  role={variant === "danger" ? "alert" : "status"}
+>
+  <div class="flex items-start gap-2 sm:gap-2.5">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class:list={["mt-0.5 size-4 shrink-0", ICON[variant]]}
+      aria-hidden="true"
+    >
+      <path d={PATHS[variant]}></path>
+    </svg>
+    {title ? <span class:list={["flex-1 text-xs font-semibold sm:text-[13px]", TITLE[variant]]}>{title}</span> : null}
+  </div>
+  <div class="leading-relaxed"><slot /></div>
+</div>

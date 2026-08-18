@@ -1,0 +1,71 @@
+---
+title: "Users and Permissions"
+blurb: "Accounts, roles, the approval queue, and per-user libraries."
+group: "Setup & admin"
+order: 7
+---
+
+## Accounts
+
+Synthseek supports two ways to sign in.
+
+**Local accounts.** An email, a username, and a password. Created by an administrator, or by you during first-run setup.
+
+**Plex.** Sign in with your Plex account. Administrators can also import members straight from their Plex server, which creates accounts for people who already have access to the media you are building.
+
+A member can link Plex to an existing local account, and sign in either way afterwards.
+
+## Roles
+
+| Role              | Can do                                                                                                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Administrator** | Everything. Manage members, all settings, integrations, engine tuning, jobs, logs, and the review and quarantine queues.                                          |
+| **Trusted**       | Everything a member can do, and requests are never held for approval.                                                                                             |
+| **Member**        | Search, request, manage their own library and playlists, connect their own discovery and library-source accounts, and set their own profile, theme, and language. |
+
+Administrator-only sections are hidden from members entirely, not shown and disabled. The first account created is the instance owner and cannot be demoted or deleted.
+
+## What is shared and what is not
+
+**Per member:**
+
+- Their own requests, which show who made them.
+- Their own playlists.
+- Their own connected accounts: Spotify, Last.fm, ListenBrainz, Plex.
+- Their own discovery mixes.
+- Their own profile, theme, and language.
+- Their own API keys and assistant connections.
+
+**Shared across the instance:**
+
+- The music library on disk. There is one library, and everyone's downloads go into it.
+- The download queue.
+- Every setting outside the profile section.
+
+## The approval queue
+
+Off by default. When **Require approval for members** is enabled, anything a plain member requests is held rather than downloaded.
+
+- Held requests sit in the `pending_approval` state and are not queued.
+- An administrator approves or rejects them.
+- Trusted members and administrators bypass the gate entirely.
+- The gate applies to every path a request can arrive through: a direct request, an album or playlist populate, a library sync, a discovery auto-request, and an assistant acting through MCP.
+
+Give the gate a purpose by promoting the people you do not want to review to trusted, rather than turning the gate off.
+
+## Managing members
+
+**Settings**, then **Members**, administrators only.
+
+- Add a local member, or import from Plex.
+- Change a member's role.
+- Remove a member.
+- See who owns what.
+
+## Sessions
+
+Sessions last thirty days by default and are stored server-side, so revoking one takes effect immediately. A background job clears expired sessions.
+
+Set `COOKIE_SECURE=true` when running behind an HTTPS reverse proxy.
+
+---

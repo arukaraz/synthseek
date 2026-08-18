@@ -1,0 +1,118 @@
+---
+
+---
+
+<div class="dx-search" data-dx-search>
+  <label class="sr-only" for="dx-search-input">Search docs</label>
+  <input
+    id="dx-search-input"
+    type="search"
+    placeholder="Search docs..."
+    autocomplete="off"
+    class="border-fg/15 bg-fg/5 text-fg placeholder:text-fg/30 focus:border-primary-500/50 focus:ring-primary-500/30 h-9 w-full rounded-lg px-3 py-2 text-[13px] outline-none focus:ring-2"
+    data-dx-search-input
+  />
+  <div class="mt-4 hidden flex-col gap-4" data-dx-search-results></div>
+  <p class="text-fg-muted mt-4 hidden text-[13px]" data-dx-search-empty>No page mentions that. Try a different term.</p>
+</div>
+
+<script is:inline>
+  (() => {
+    const host = document.querySelector("[data-dx-search]");
+    const input = host && host.querySelector("[data-dx-search-input]");
+    const results = host && host.querySelector("[data-dx-search-results]");
+    const empty = host && host.querySelector("[data-dx-search-empty]");
+    if (!input || !results || !empty) return;
+
+    let pagefind = null;
+    let token = 0;
+
+    async function loadPagefind() {
+      if (pagefind) return pagefind;
+      try {
+        pagefind = await import("/pagefind/pagefind.js");
+        return pagefind;
+      } catch {
+        return null;
+      }
+    }
+
+    function setMode(searching) {
+      const nav = document.querySelector("[data-dx-nav]");
+      if (nav) nav.classList.toggle("hidden", searching);
+      results.classList.toggle("hidden", !searching);
+    }
+
+    function stripUrl(url) {
+      return url.replace(/\.html$/, "").replace(/\/index$/, "/");
+    }
+
+    async function run(term) {
+      const current = ++token;
+
+      if (term.trim().length < 2) {
+        setMode(false);
+        empty.textContent = "No page mentions that. Try a different term.";
+        empty.classList.add("hidden");
+        results.replaceChildren();
+        return;
+      }
+
+      const engine = await loadPagefind();
+      if (current !== token) return;
+
+      if (!engine) {
+        setMode(true);
+        results.replaceChildren();
+        empty.textContent = "Search is unavailable right now. Try the navigation instead.";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      const found = await engine.search(term.trim());
+      if (current !== token) return;
+
+      const top = await Promise.all(found.results.slice(0, 8).map((entry) => entry.data()));
+      if (current !== token) return;
+
+      setMode(true);
+      results.replaceChildren();
+
+      if (top.length === 0) {
+        empty.textContent = "No page mentions that. Try a different term.";
+        empty.classList.remove("hidden");
+        return;
+      }
+      empty.classList.add("hidden");
+
+      for (const item of top) {
+        const link = document.createElement("a");
+        link.href = `${stripUrl(item.url)}?q=${encodeURIComponent(term.trim())}`;
+        link.className = "block no-underline";
+
+        const title = document.createElement("div");
+        title.className = "text-fg text-[14px] font-semibold";
+        title.textContent = item.meta && item.meta.title ? item.meta.title : "Untitled";
+
+        const excerpt = document.createElement("div");
+        excerpt.className = "text-fg-muted mt-1 text-[12.5px] leading-relaxed";
+        excerpt.innerHTML = item.excerpt;
+
+        link.append(title, excerpt);
+        results.append(link);
+      }
+    }
+
+    input.addEventListener("input", () => {
+      void run(input.value);
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        input.value = "";
+        void run("");
+        input.blur();
+      }
+    });
+  })();
+</script>

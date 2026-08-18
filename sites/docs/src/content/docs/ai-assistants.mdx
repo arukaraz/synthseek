@@ -1,0 +1,130 @@
+---
+title: "AI Assistants"
+blurb: "Connect an assistant over MCP and let it manage your library."
+group: "Setup & admin"
+order: 9
+---
+
+## What this gives you
+
+Synthseek ships an MCP server. Connect an assistant such as Claude, and you can manage your library by asking, in plain language, the way you would ask a person who looks after your music.
+
+Every connection belongs to one member. The assistant sees and acts on that member's account and library only, with access shaped by their role. Secret values are never returned, whatever is asked.
+
+## Connecting
+
+### What you need
+
+- A publicly reachable HTTPS address for your instance, set as `PUBLIC_BASE_URL`. Assistants that run in the cloud call back over the internet, so a local address will not work for them.
+- Either an API key created in **Settings**, then **General**, then **API keys**, or the OAuth flow, which most clients will use automatically.
+
+### The endpoint
+
+```
+POST https://your-instance/api/v1/mcp
+```
+
+It speaks Streamable HTTP and accepts either a Bearer API key or an OAuth 2.1 access token. Synthseek runs its own OAuth authorisation server with a consent screen, so a client that supports discovery needs nothing but the URL.
+
+### Example, Claude Code
+
+```bash
+claude mcp add --transport http synthseek https://your-instance/api/v1/mcp --scope user
+```
+
+Then run `/mcp` and complete the authorisation in your browser.
+
+## What you can ask for
+
+- **"Build me a playlist of upbeat 2000s pop punk."** The assistant finds the songs, downloads whatever you are missing, and saves the playlist.
+- **"Get me the latest album from that artist."** It looks it up and downloads the whole album.
+- **"Recommend some new music based on what I have been listening to, and grab a few tracks."** It reads your listening history, suggests songs, and adds them.
+- **"What is stuck in my queue?"** It reads the queue, and can explain why something failed.
+- **A weekly routine.** Have the assistant rebuild personal mixes each week from your recent listening, refreshing the same playlists rather than piling up duplicates, and downloading anything you do not have.
+
+## The tools
+
+### Search and discovery
+
+| Tool                  | What it does                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| `search_music`        | Find songs, albums, artists, and playlists to download. Understands moods and genres. |
+| `get_music_details`   | Full details of one specific item.                                                    |
+| `get_artist_overview` | An artist's profile, albums, top tracks, and similar artists in one call.             |
+| `get_trending`        | What is trending right now, from real charts.                                         |
+| `browse_genres`       | The genres available to explore.                                                      |
+| `get_recommendations` | Personalised picks from your connected ListenBrainz or Last.fm.                       |
+| `resolve_url`         | Turn a link from another platform into requestable songs.                             |
+
+### Downloads
+
+| Tool                | What it does                            |
+| ------------------- | --------------------------------------- |
+| `download_track`    | Download one song.                      |
+| `download_album`    | Download a full album.                  |
+| `download_playlist` | Download an entire catalog playlist.    |
+| `retry_request`     | Retry a failed download.                |
+| `cancel_request`    | Cancel something queued or in progress. |
+| `retry_all_failed`  | Retry every failed download at once.    |
+
+### Requests
+
+| Tool            | What it does                                                                   |
+| --------------- | ------------------------------------------------------------------------------ |
+| `list_requests` | Your requests and how far along they are.                                      |
+| `get_request`   | One download in detail, per track, with explanations for anything that failed. |
+
+### Playlists
+
+| Tool                          | What it does                                               |
+| ----------------------------- | ---------------------------------------------------------- |
+| `list_playlists`              | Your playlists, with track counts and sync status.         |
+| `get_playlist`                | One playlist in detail.                                    |
+| `create_playlist`             | Create one from tracks already in your library.            |
+| `add_tracks_to_playlist`      | Add tracks.                                                |
+| `replace_playlist_tracks`     | Set the complete track list, replacing what was there.     |
+| `remove_tracks_from_playlist` | Remove tracks.                                             |
+| `delete_playlist`             | Delete a playlist.                                         |
+| `update_playlist`             | Rename, or toggle keep-in-sync.                            |
+| `control_playlist`            | Prioritise, pause, resume, cancel, or retry its downloads. |
+| `sync_playlist_to_plex`       | Push one playlist, or all eligible ones, to Plex.          |
+
+### Library
+
+| Tool                  | What it does                                    |
+| --------------------- | ----------------------------------------------- |
+| `get_library_summary` | Totals, top artists and genres, and queue size. |
+| `search_library`      | Search what you already have.                   |
+
+### Listening history
+
+| Tool                   | What it does                                                     |
+| ---------------------- | ---------------------------------------------------------------- |
+| `get_lastfm_scrobbles` | Your top tracks, recent tracks, or top artists, over any period. |
+
+### Settings
+
+| Tool             | What it does                                                         |
+| ---------------- | -------------------------------------------------------------------- |
+| `get_settings`   | View the settings you are allowed to see. Secrets are always hidden. |
+| `update_setting` | Change a settings section you are allowed to manage.                 |
+
+### System and operations
+
+| Tool                | What it does                                           |
+| ------------------- | ------------------------------------------------------ |
+| `get_queue_stats`   | The queue at a glance, including whether it is paused. |
+| `pause_queue`       | Pause the queue and everything in progress.            |
+| `resume_queue`      | Resume.                                                |
+| `trigger_job`       | Run a background job now.                              |
+| `get_system_health` | Check Synthseek and its connected services.            |
+| `list_log_files`    | The available log files.                               |
+| `read_logs`         | Recent log entries, for troubleshooting.               |
+
+## Two things worth knowing
+
+**`retry_all_failed` is track-level.** It re-queues every failed track, including tracks under albums and playlists that themselves show as complete or partially complete. A container being complete does not mean it has no failed tracks.
+
+**Search results are not playlist-ready.** `search_music` returns catalog identifiers. The playlist tools take Synthseek's own track identifiers, which come from `download_track` and `search_library`. Assistants handle this themselves; it matters only if you are building against the tools directly.
+
+---

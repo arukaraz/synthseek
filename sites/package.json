@@ -1,0 +1,24 @@
+{
+  "name": "synthseek-sites",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "docs",
+    "landing"
+  ],
+  "scripts": {
+    "dev:docs": "npm run dev --workspace synthseek-docs",
+    "dev:landing": "npm run dev --workspace synthseek-landing",
+    "build": "npm run build --workspace synthseek-docs && npm run build --workspace synthseek-landing",
+    "build:docs": "npm run build --workspace synthseek-docs",
+    "build:landing": "npm run build --workspace synthseek-landing",
+    "check": "npm run format:check && npm run check --workspace synthseek-docs && npm run check --workspace synthseek-landing",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}

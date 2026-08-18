@@ -1,0 +1,10 @@
+{
+  "name": "@synthseek/sites-shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tailwind.css": "./tailwind.css",
+    "./components/*": "./components/*"
+  }
+}

@@ -1,0 +1,13 @@
+@import "@synthseek/sites-shared/tailwind.css";
+@import "@fontsource/courgette/400.css";
+@source "../../../shared/components/*.astro";
+
+@layer components {
+  .dx-eyebrow {
+    color: var(--surface-fg-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}

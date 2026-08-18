@@ -1,0 +1,119 @@
+---
+title: "FAQ and Troubleshooting"
+blurb: "Common questions, and how to read what went wrong."
+group: "Reference"
+order: 11
+---
+
+## Getting started
+
+**Do I need a Soulseek account?**
+You need slskd, and slskd needs a Soulseek account. Synthseek talks only to slskd's HTTP API and holds no Soulseek credentials of its own.
+
+**Do I need any API keys to start?**
+No. The music catalog needs none. Everything else is optional. An AcoustID key is free and is the one worth getting, because without it Synthseek cannot verify by listening that a downloaded file really is what you asked for.
+
+**Can I run it without slskd?**
+The yt-dlp fallback is enabled by default, so you can, but slskd is the primary source and Synthseek is designed around it.
+
+**Does it work on a Raspberry Pi?**
+There is an `arm64` image, built and smoke tested natively.
+
+## Permissions and paths
+
+**Startup warns that `/downloads` or `/music` is not accessible.**
+The user Synthseek runs as, set by `PUID` and `PGID`, does not own those folders on the host. The container log names the offending path and the ownership fix, above the line where the API stops. Synthseek takes ownership of its own `/data` volume at boot, and deliberately never touches your music and downloads volumes.
+
+**My library is on a NAS or an external drive and mounts read-only.**
+That is supported. Synthseek boots, browsing works, and importing is disabled. It will say so at startup.
+
+**The container used to crash with a `chown` error on `/music`.**
+Fixed in 1.2.1. Your music and downloads volumes are no longer chowned recursively; instead the folders are probed at boot and a clear diagnostic is emitted. Boot is also instant on large libraries, since nothing walks them.
+
+## Downloads
+
+**Everything is stuck at queued and nothing downloads.**
+Check whether the queue is paused first. Pausing is in memory, so a restart clears it, and pending work drains automatically on boot. If it is not paused, check that slskd is reachable from its settings card.
+
+**A track says "not found".**
+No enabled source had a candidate that passed scoring. Turn on the wanted sweep to have Synthseek keep trying on its own, with attempts spaced further apart the longer a track stays missing.
+
+**A track says "wrong file".**
+What arrived positively contradicted what you asked for, and Synthseek refused to put it in your library. The file is in the review queue where you can listen to it and decide, and that exact source and file pairing is excluded from future searches so the retry looks elsewhere.
+
+**A track failed with an environment error.**
+The problem is on your machine, not the source. Usually a full disk or a downloads folder that stopped being writable. These failures do not consume retry budget, so once you fix the underlying problem the tracks are still waiting.
+
+**Downloads were working and now nothing gets through.**
+Check the queue is not paused, then check the review queue. If verification is rejecting everything, something is systematically wrong with what is arriving. Each held file in the review queue shows why it was rejected, which will tell you what is going on.
+
+**Can I stop the yt-dlp fallback?**
+Yes. Settings, then Integrations, then download sources. You can also pick a source per request.
+
+## Library and imports
+
+**Files downloaded but nothing appears in my library.**
+Beets tagging may be disabled, in which case files stay in the downloads folder. Otherwise check the log for the import phase.
+
+**An artist appears twice in my library.**
+Two causes. A past bug stored names in a simplified form, and updating merges those. More often, two programs are writing into the same music root under different naming conventions, typically Lidarr using MusicBrainz spelling and Synthseek using the catalog's. Check which program created each folder before treating it as a bug.
+
+**Can I import music I already have?**
+Yes, three ways. Drag files or zip archives in. Connect a library source such as Spotify and import from it. Or import a playlist file in JSPF, XSPF, or Exportify CSV.
+
+**Does a quality upgrade delete my old file?**
+No. It is moved to a recycle bin under `/data`, after the replacement has been verified. The bin empties itself after thirty days by default.
+
+## Playlists and Plex
+
+**My Plex playlist has fewer tracks than Synthseek shows.**
+Three possible causes, covered in detail on the [Integrations page](/integrations): the tracks are not scanned into Plex yet, the titles did not match, or Plex genuinely holds a different version. Reconciling again fixes the first two.
+
+**Will syncing remove tracks I added to a Plex playlist by hand?**
+Currently, no. Sync only adds. It is a work in progress feature.
+
+**I renamed a playlist in Plex. Will Synthseek fight me?**
+No. Renames flow both ways. Whichever side changed most recently wins, and Synthseek tracks a baseline so it can tell a remote rename from a local one.
+
+## Users
+
+**How do I add my household?**
+Settings, then Members. Add local accounts, or import from your Plex server.
+
+**Can I stop people downloading anything they like?**
+Turn on approval for members. Their requests are held until an administrator approves them. Promote the people you trust to the trusted role so they bypass it.
+
+**Can members see each other's settings?**
+No. Administrator sections are hidden entirely.
+
+## Assistants
+
+**My assistant cannot connect.**
+It almost always needs `PUBLIC_BASE_URL` set to a public HTTPS address. Cloud-hosted assistants call back over the internet and cannot reach a local address.
+
+**Can an assistant see my API keys or passwords?**
+No. Secret values are masked at the boundary, on every surface, including the settings tools.
+
+**Can an assistant act on someone else's library?**
+No. A connection is scoped to the member who created it, with their role's permissions.
+
+## Upgrading
+
+**What should I do before a major upgrade?**
+Back up `/data`. Synthseek takes its own snapshot before any schema change and validates the migration on a copy first, but a backup you control is a different guarantee.
+
+**A migration failed. Is my data gone?**
+No. The live database is not modified until the migration has been applied to a copy and that copy has been validated. On failure you get the snapshot, the failed copy for inspection, and the last twenty lines of the migration log in the startup output.
+
+**I am on 1.x. What do I need to do?**
+See the upgrade notes at the top of the 2.0.0 entry on the [Patch Notes page](/patch-notes). In short: keep your integration environment variables for one boot so they migrate into Settings, and set the three `ADMIN_MIGRATION_*` variables so your existing data gets an owner.
+
+## Privacy
+
+**Does Synthseek call home?**
+No. It makes no requests to any Synthseek-operated service. Beyond the services you configured and the keyless ones it uses by default for catalog, artwork, and metadata, it checks the public container registry for new versions and fetches the public patch-notes file.
+
+**Where does my data live?**
+In SQLite, under `/data`, on your machine. Nothing is stored elsewhere.
+
+---

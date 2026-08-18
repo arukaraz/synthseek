@@ -1,0 +1,230 @@
+---
+title: "Configuration"
+blurb: "Every setting and environment variable, and where each one lives."
+group: "Setup & admin"
+order: 6
+---
+
+## Where configuration lives
+
+Synthseek has two configuration surfaces, and the split is deliberate.
+
+**Settings**, in the application, holds everything you might reasonably change: credentials, engine tuning, behaviour switches. It lives in the database, applies live without a restart, and is the source of truth.
+
+**Environment variables** hold bootstrap values only: where the database is, what port to listen on, which folders to use, the secret that signs sessions. These cannot live in the database, because they are needed before the database is open.
+
+## Settings, by section
+
+### General
+
+Available to every member.
+
+| Setting  | What it does                                                              |
+| -------- | ------------------------------------------------------------------------- |
+| Theme    | Light, dark, midnight, or ocean.                                          |
+| Language | English, Español, Deutsch, or Français. Switches in place.                |
+| API keys | Create and revoke keys for assistant connections. Shown once at creation. |
+| MCP      | The public URL of your instance, and connection guidance for assistants.  |
+
+### Members
+
+Administrators only. Covered on the [Users and Permissions page](/users-permissions).
+
+### Profile
+
+Your own account. Username, email, password, avatar, connected accounts.
+
+### Updates
+
+The patch notes timeline, and whether a newer version is available.
+
+### Integrations
+
+Administrators only.
+
+**slskd.** URL, API key, connection status, and the banned-peer list.
+
+**Download sources.** Enable, disable, and prioritise slskd and yt-dlp. The yt-dlp tuning is on the [Download Sources page](/download-sources).
+
+**Plex.** URL, token, connection status, and two independent behaviour switches:
+
+| Setting       | Default | What it does                            |
+| ------------- | ------- | --------------------------------------- |
+| Library scan  | On      | Ask Plex to rescan after an import.     |
+| Playlist sync | On      | Create and reconcile playlists on Plex. |
+
+**Lidarr.** URL, API key, and the quality and metadata profiles available for delegation.
+
+**Metadata and artwork.** All optional, all free:
+
+| Key                       | What it unlocks                                                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| AcoustID                  | Verifying a download by its audio, and identifying a track for tagging when other methods cannot. The most valuable one. |
+| Last.fm                   | Similar artists, global charts, and your scrobble history.                                                               |
+| fanart.tv                 | High quality artist images.                                                                                              |
+| MusicBrainz contact email | A higher rate limit against MusicBrainz.                                                                                 |
+| Songlink                  | A higher rate limit for cross-platform link imports.                                                                     |
+| Discogs                   | Additional metadata depth on the content detail views.                                                                   |
+
+**Library sources.** Connect Spotify to import your existing library. Requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet.
+
+### Engine
+
+Administrators only. Every card has a reset to defaults.
+
+**Queue**
+
+| Setting                    | Default | Range       |
+| -------------------------- | ------- | ----------- |
+| Maximum queue size         | 1000    | 10 to 10000 |
+| Concurrent searches        | 3       | 1 to 10     |
+| Concurrent pending imports | 6       | 1 to 20     |
+
+**Timeouts**
+
+| Setting                 | Default    | Range      |
+| ----------------------- | ---------- | ---------- |
+| Search phase            | 15 seconds | 5s to 120s |
+| Download phase          | 20 minutes | 1m to 60m  |
+| Import phase            | 5 minutes  | 30s to 60m |
+| Peer unresponsive       | 2 minutes  | 15s to 15m |
+| Queue wait, active peer | 8 minutes  | 30s to 30m |
+| Queue wait, idle peer   | 12 minutes | 30s to 60m |
+
+**Import**
+
+| Setting                       | Default | What it does                                                                                                                                                  |
+| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Metadata confidence threshold | 50      | How closely a file's tags must match your request before it is accepted. Raise it to reject more, lower it to accept more.                                    |
+| AcoustID identity gate        | On      | Fingerprint the audio and identify it before import, so a file whose tags look right but whose contents are something else is refused. Needs an AcoustID key. |
+
+The [Download Engine page](/download-engine) covers what happens to a file these checks refuse.
+
+**Quality**
+
+| Setting          | Default | What it does                                       |
+| ---------------- | ------- | -------------------------------------------------- |
+| Upgrades enabled | On      | Allow replacing a library file with a better copy. |
+
+**Quarantine**
+
+Tunables for how long a quarantined source and file pairing is excluded, plus the list of current entries with the reason for each. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
+
+**Wanted**
+
+| Setting                    | Default | Range   |
+| -------------------------- | ------- | ------- |
+| Enabled                    | Off     |         |
+| Attempts per run           | 10      | 1 to 50 |
+| Maximum attempts per track | 8       | 1 to 20 |
+
+**Review**
+
+| Setting        | Default | Range    |
+| -------------- | ------- | -------- |
+| Retention days | 14      | 1 to 365 |
+
+**Smart search**
+
+Custom mood keywords, which extend the built-in mood classification with terms of your own.
+
+### Jobs
+
+Administrators only. Covered on the [Operations page](/operations).
+
+### Logs
+
+Administrators only. Covered on the [Operations page](/operations).
+
+### Other settings
+
+**Library**
+
+| Setting               | Default    | Range     |
+| --------------------- | ---------- | --------- |
+| Sync interval         | 30 minutes | 5 to 1440 |
+| Recycle bin retention | 30 days    | 1 to 365  |
+
+**Formatting**
+
+| Setting                 | Default | What it does                                                        |
+| ----------------------- | ------- | ------------------------------------------------------------------- |
+| Playlist username affix | Off     | Prefix or suffix a media server playlist with its owner's username. |
+| Separator               | `_`     | The character between the name and the affix.                       |
+
+**Users**
+
+| Setting                      | Default | What it does                                                         |
+| ---------------------------- | ------- | -------------------------------------------------------------------- |
+| Require approval for members | Off     | Hold a plain member's requests until an administrator approves them. |
+
+**System**
+
+| Setting   | Default | What it does              |
+| --------- | ------- | ------------------------- |
+| Log level | INFO    | Applied live, no restart. |
+
+## Environment variables
+
+### Required
+
+| Variable      | What it is                                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------------------------- |
+| `AUTH_SECRET` | Signs sessions. At least 32 characters. Generate with `openssl rand -base64 48`. Changing it logs everyone out. |
+
+### Container identity and paths
+
+| Variable                  | Default                      | What it is                                                      |
+| ------------------------- | ---------------------------- | --------------------------------------------------------------- |
+| `PUID`                    | 1000                         | The user Synthseek runs as. Must own your mounted folders.      |
+| `PGID`                    | 1000                         | The group Synthseek runs as.                                    |
+| `WEB_UI_PORT`             | 4400                         | The port the web interface listens on.                          |
+| `DATABASE_URL`            | `file:/data/db/synthseek.db` | Where the database lives.                                       |
+| `DOWNLOADS_COMPLETE_PATH` | `/downloads`                 | Where slskd puts completed downloads. Must be writable.         |
+| `MUSIC_LIBRARY_PATH`      | `/music`                     | Your organised library. Read-only is a supported degraded mode. |
+| `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                         |
+| `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                              |
+| `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                        |
+| `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                 |
+
+### Sessions and cookies
+
+| Variable                 | Default             | What it is                                   |
+| ------------------------ | ------------------- | -------------------------------------------- |
+| `SESSION_DURATION_HOURS` | 720                 | Thirty days. Range 1 to 8760.                |
+| `COOKIE_NAME`            | `synthseek_session` | The session cookie name.                     |
+| `COOKIE_SECURE`          | false               | Set true when behind an HTTPS reverse proxy. |
+| `PLEX_CLIENT_IDENTIFIER` | `synthseek`         | Advertised during Plex sign-in.              |
+
+### Public reachability
+
+| Variable          | What it is                                                                                                                                                                                               |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_BASE_URL` | The public HTTPS address this instance is reachable at. Required for assistant connectors and for the Spotify OAuth callback, both of which call back over the internet. Leave empty for local-only use. |
+
+### Bootstrap credentials
+
+These are read once on first boot and migrated into Settings. After that, manage them in the application.
+
+`SLSKD_API_URL`, `SLSKD_API_KEY`, `PLEX_URL`, `PLEX_TOKEN`, `LASTFM_API_KEY`, `FANART_API_KEY`, `ACOUSTID_API_KEY`, `MUSICBRAINZ_CONTACT_EMAIL`, `SONGLINK_API_KEY`.
+
+### Tagging
+
+| Variable              | Default                          | What it is                                                                                                                         |
+| --------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `ENABLE_BEETS_IMPORT` | true                             | Whether to tag and file at all. False leaves files in the downloads folder.                                                        |
+| `USE_MUSIC_BRAINZ`    | true                             | Identify tracks against MusicBrainz when tagging.                                                                                  |
+| `USE_ACOUSTIC_ID`     | true                             | Identify tracks by their audio when tagging.                                                                                       |
+| `BEETS_COMMAND`       | `beet`                           | Path to the beets executable.                                                                                                      |
+| `BEETS_CONFIG`        | `/data/config/beets-config.yaml` | Path to the beets configuration. A default is created on first boot, and an updated example is written alongside it on every boot. |
+| `FPCALC_PATH`         | `fpcalc`                         | Path to the fingerprinting binary.                                                                                                 |
+
+### One-shot migration
+
+Only when upgrading an existing single-user 1.x instance. Set these on the first boot so your existing library gets an owner, then remove them.
+
+`ADMIN_MIGRATION_EMAIL`, `ADMIN_MIGRATION_USERNAME`, `ADMIN_MIGRATION_PASSWORD`.
+
+The container refuses to start with a clear message if existing data is present and these are missing.
+
+---

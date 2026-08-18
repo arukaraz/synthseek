@@ -1,0 +1,133 @@
+---
+title: "The Download Engine"
+blurb: "How a request becomes a verified, tagged file in your library."
+group: "Core concepts"
+order: 4
+---
+
+## Overview
+
+This page explains what happens between pressing request and the file appearing in your library. You do not need to read it to use Synthseek, but it is what you want when something did not work and you need to know why.
+
+The engine is source-agnostic. It owns the phases and their timing, and each download source is an adapter it drives. Adding a source does not change the pipeline.
+
+## The phases
+
+A request moves through a fixed sequence. The status you see on the requests screen is the phase it is currently in.
+
+| Status               | What is happening                                                 |
+| -------------------- | ----------------------------------------------------------------- |
+| `queued`             | Waiting its turn.                                                 |
+| `pending_approval`   | Held because a member's requests need administrator approval.     |
+| `searching`          | Querying the enabled download sources.                            |
+| `pending_download`   | A candidate was chosen, waiting for a download slot.              |
+| `downloading`        | Transferring.                                                     |
+| `paused`             | You parked it. It stays here until you resume.                    |
+| `pending_import`     | Downloaded, waiting for an import slot.                           |
+| `importing`          | Being verified, tagged, and filed.                                |
+| `syncing_plex`       | The playlist it belongs to is being rebuilt on your media server. |
+| `complete`           | In your library.                                                  |
+| `partially_complete` | Some tracks in the group made it, some did not.                   |
+| `failed`             | Did not make it. Carries a reason.                                |
+| `cancelled`          | You stopped it.                                                   |
+| `delegated`          | Handed to Lidarr, which now owns it.                              |
+| `in_progress`        | A group with work still moving.                                   |
+
+## Step 1, search
+
+For each track, the engine queries every enabled download source in priority order.
+
+Search is not a single query. Files on other people's machines are rarely named the way a catalog names them, so each track is searched several ways rather than once. How many variations it tries is a setting.
+
+Concurrency is bounded, and how many searches run at once is a setting too.
+
+## Step 2, scoring
+
+Every candidate returned is scored and ranked. The best one is taken, not the first one that looks acceptable.
+
+Much of what feeds that ranking is yours to set: the format and bitrate you asked for and how strictly you meant it, a minimum upload speed, and whether a peer has to have a free slot. Sources and peers you have quarantined or banned are excluded outright.
+
+When a candidate is discarded, the engine records why, so the interface can tell you what was rejected and on what grounds rather than only that nothing was found.
+
+## Step 3, download
+
+The chosen candidate is downloaded through the source adapter.
+
+Several timeouts guard this phase, all configurable:
+
+- A ceiling on the download itself.
+- A window after which a peer that has not started transferring is considered unresponsive.
+- Separate queue-wait budgets depending on whether the peer is actively transferring to someone else or simply idle.
+- A short window after which a transfer that never materialises fails fast rather than holding a slot.
+
+If a source cannot deliver, the engine moves to the next source in the chain. A failure caused by your own machine rather than the source short-circuits this, because another peer cannot fix a full disk.
+
+## Step 4, verification
+
+Before anything reaches your library, Synthseek checks that what arrived is what you asked for. Some checks read the file's own tags and compare them against your request. One listens to the audio itself.
+
+Not every failure means the same thing. Some simply stop the import. Others are treated as evidence that the source sent the wrong thing, and those put the file in the review queue and set that source and file pairing aside, so a retry looks elsewhere instead of fetching the same thing again.
+
+### What you control
+
+**Metadata confidence threshold.** How closely a file's tags must match your request before it is accepted. Raise it to reject more, lower it to accept more. A retry of a previously rejected import is judged more leniently, on the reasoning that you asked for the retry deliberately.
+
+**AcoustID identity gate.** Whether the audio is fingerprinted and identified before import. This is what catches a file whose tags look right but whose contents are something else. It needs a free AcoustID key, and without one it does not run and only the tag checks apply. It is the single most valuable optional key you can configure.
+
+### What identification can and cannot tell you
+
+Fingerprinting guards against a wholly different recording arriving. It is not a guarantee that every detail of a track is the exact version you had in mind.
+
+An inconclusive identification does not block the import. AcoustID's database is far from complete: obscure tracks, live recordings, regional music, and anything never released commercially routinely come back with nothing at all. Treating silence as guilt would fill the review queue with legitimate files and make it useless. The file still has to satisfy the tag checks.
+
+### What reaches the review queue
+
+A file lands there when something positively contradicted your request: tags that do not match, audio that identifies as something else, or a tag block that cannot be read at all. A file that merely could not be identified does not.
+
+For each held file you can see why it was rejected, listen to it, and then approve or discard it.
+
+## Step 5, tagging and import
+
+Verified files are tagged and filed by Beets. Synthseek identifies each track against MusicBrainz where it can, falls back to less certain methods where it cannot, and always ends with the metadata the catalog gave it, so a file is never left untagged.
+
+Cover art from the catalog is embedded into the file, and each track is written with its correct position within its album. That last detail matters more than it sounds: it is what stops a media server's own metadata agent from rebinding a single downloaded file to the wrong song.
+
+Imports are strictly serialised. One import runs at a time.
+
+## Step 6, media server
+
+After a successful import, your media server is asked to rescan the affected part of the library.
+
+If the track belongs to a playlist, that playlist is reconciled on the media server. Reconciliation is incremental: as more tracks of a playlist finish over time, they are added to the remote playlist as they arrive rather than waiting for the whole set.
+
+Currently, playlist reconciliation only adds. It never removes.
+
+## When a track fails
+
+Every failure carries a typed reason.
+
+| Reason            | Meaning                                                           | Retried automatically                |
+| ----------------- | ----------------------------------------------------------------- | ------------------------------------ |
+| `not_found`       | No source had a matching candidate.                               | Yes                                  |
+| `wrong_file`      | What arrived was a different recording.                           | Yes, with the bad candidate excluded |
+| `import_rejected` | The tagging and filing step refused the file.                     | No                                   |
+| `p2p_failed`      | Peers errored out or never delivered.                             | Yes                                  |
+| `download_failed` | The transfer itself failed.                                       | Yes                                  |
+| `environment`     | A problem on your own machine, such as a full or unwritable disk. | Yes, without spending retry budget   |
+| `other`           | Anything unclassified.                                            | No                                   |
+
+`wrong_file` being both quarantined and retryable is deliberate and is a single mechanism: the quarantine excludes the specific bad candidate, and the retry is what searches again without it.
+
+An `environment` failure is only ever assigned from unambiguous evidence, specific filesystem error codes plus a direct write test on the downloads folder. A disk error never overrides a verdict about what a peer actually sent.
+
+## Rate and concurrency limits
+
+| Limit                       | Default | Setting                              |
+| --------------------------- | ------- | ------------------------------------ |
+| Maximum queue size          | 1000    | `engine.queue.maxSize`               |
+| Concurrent searches         | 3       | `engine.queue.maxConcurrentSearches` |
+| Concurrent pending imports  | 6       | `engine.queue.maxPendingImports`     |
+| Peer attempts per track     | 15      | `engine.search.maxPeerAttempts`      |
+| Search variations per track | 6       | `engine.search.maxVariations`        |
+
+---

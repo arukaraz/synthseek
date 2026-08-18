@@ -1,0 +1,107 @@
+---
+import type { MarkdownHeading } from "astro";
+import Sidebar from "../components/Sidebar.astro";
+import MobileBar from "../components/MobileBar.astro";
+import Breadcrumb from "../components/Breadcrumb.astro";
+import Toc from "../components/Toc.astro";
+import TocInline from "../components/TocInline.astro";
+import Pager from "../components/Pager.astro";
+import SearchHits from "../components/SearchHits.astro";
+import { getNavEntries, siblingsOf } from "../lib/nav";
+import "../styles/docs.css";
+
+interface Props {
+  slug: string;
+  title: string;
+  blurb: string;
+  group: string;
+  headings?: MarkdownHeading[];
+}
+
+const { slug, title, blurb, group, headings = [] } = Astro.props;
+const entries = await getNavEntries();
+const { previous, next } = siblingsOf(entries, slug);
+const DRAWER_ID = "dx-drawer";
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} · Synthseek Docs</title>
+    <meta name="description" content={blurb} />
+    <meta property="og:title" content={`${title} · Synthseek Docs`} />
+    <meta property="og:description" content={blurb} />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+  </head>
+  <body>
+    <div class="flex min-h-screen">
+      <div id={DRAWER_ID} data-dx-drawer data-open="false" class="lg:sticky lg:top-0 lg:h-screen lg:shrink-0">
+        <div class="absolute inset-0 bg-black/60 lg:hidden" data-dx-drawer-backdrop></div>
+        <div class="relative flex h-full w-[268px] max-w-[85vw]" data-dx-drawer-panel>
+          <button
+            type="button"
+            class="text-fg-muted hover:text-fg focus-ring absolute top-4 right-4 z-10 rounded-lg p-1.5 lg:hidden"
+            aria-label="Close navigation"
+            data-dx-drawer-close
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              class="size-5"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+          <Sidebar entries={entries} current={slug} id="dx-sidebar" />
+        </div>
+      </div>
+
+      <div class="flex min-w-0 flex-1 flex-col">
+        <MobileBar controls={DRAWER_ID} />
+
+        <div class="mx-auto flex w-full max-w-[1180px] gap-14 px-6 py-8 lg:px-10 lg:py-10">
+          <main class="min-w-0 flex-1">
+            <Breadcrumb group={group} title={title} />
+            <h1 class="text-fg text-[35px] leading-[1.12] font-[750] tracking-[-0.025em]">{title}</h1>
+            <p class="text-fg-muted mt-2 mb-[26px] text-[16px] leading-[1.6]">{blurb}</p>
+            <div class="border-fg/10 border-t"></div>
+            <TocInline headings={headings} />
+            <article class="dx-prose" data-pagefind-body>
+              <slot />
+            </article>
+            <Pager previous={previous} next={next} />
+            <SearchHits />
+          </main>
+          <Toc headings={headings} />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const button = target.closest<HTMLButtonElement>("[data-dx-copy]");
+        if (!button) return;
+
+        const code = button.closest("[data-dx-code]")?.querySelector("pre");
+        if (!code) return;
+
+        void navigator.clipboard.writeText(code.innerText).then(() => {
+          button.textContent = "Copied";
+          window.setTimeout(() => {
+            button.textContent = "Copy";
+          }, 1600);
+        });
+      });
+    </script>
+  </body>
+</html>

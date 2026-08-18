@@ -1,0 +1,104 @@
+---
+import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
+import Badge from "@synthseek/sites-shared/components/Badge.astro";
+import { APP_VERSION, LANDING_URL } from "../lib/site";
+
+interface Props {
+  controls: string;
+}
+
+const { controls } = Astro.props;
+---
+
+<div
+  class="bg-glass border-fg/10 sticky top-0 z-30 flex items-center gap-3 border-b px-4 py-3 backdrop-blur-xl lg:hidden"
+>
+  <button
+    type="button"
+    class="text-fg-muted hover:text-fg focus-ring -ml-1 rounded-lg p-1.5 transition-colors"
+    aria-label="Open navigation"
+    aria-expanded="false"
+    aria-controls={controls}
+    data-dx-drawer-open
+  >
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      class="size-5"
+      aria-hidden="true"
+    >
+      <path d="M3 6h18M3 12h18M3 18h18"></path>
+    </svg>
+  </button>
+  <AppLogo href={LANDING_URL} iconClass="h-6 w-auto" wordmarkClass="text-[19px]" />
+  <Badge class="font-mono ml-auto">v{APP_VERSION}</Badge>
+</div>
+
+<script>
+  const openButton = document.querySelector<HTMLButtonElement>("[data-dx-drawer-open]");
+  const drawer = document.querySelector<HTMLElement>("[data-dx-drawer]");
+  const panel = drawer?.querySelector<HTMLElement>("[data-dx-drawer-panel]");
+  const backdrop = drawer?.querySelector<HTMLElement>("[data-dx-drawer-backdrop]");
+  const closeButton = drawer?.querySelector<HTMLButtonElement>("[data-dx-drawer-close]");
+
+  const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
+  let lastFocused: HTMLElement | null = null;
+
+  function isOpen(): boolean {
+    return drawer?.dataset.open === "true";
+  }
+
+  function open() {
+    if (!drawer) return;
+    lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    drawer.dataset.open = "true";
+    openButton?.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+    panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+  }
+
+  function close() {
+    if (!drawer) return;
+    drawer.dataset.open = "false";
+    openButton?.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+    lastFocused?.focus();
+  }
+
+  function trapFocus(event: KeyboardEvent) {
+    if (!panel) return;
+    const nodes = [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((node) => node.offsetParent !== null);
+    if (nodes.length === 0) return;
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  openButton?.addEventListener("click", open);
+  closeButton?.addEventListener("click", close);
+  backdrop?.addEventListener("click", close);
+
+  document.addEventListener("keydown", (event) => {
+    if (!isOpen()) return;
+    if (event.key === "Escape") close();
+    if (event.key === "Tab") trapFocus(event);
+  });
+
+  panel?.addEventListener("click", (event) => {
+    if (event.target instanceof HTMLElement && event.target.closest("a[href]")) close();
+  });
+
+  const desktop = window.matchMedia("(min-width: 1024px)");
+  desktop.addEventListener("change", (event) => {
+    if (event.matches && isOpen()) close();
+  });
+</script>

@@ -1,0 +1,25 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const items = headings.filter((heading) => heading.depth === 2);
+---
+
+{
+  items.length > 0 && (
+    <details class="border-fg/10 mt-6 rounded-xl border px-4 py-3 xl:hidden">
+      <summary class="dx-eyebrow cursor-pointer list-none">On this page</summary>
+      <div class="border-fg/10 mt-3 flex flex-col border-l">
+        {items.map((heading) => (
+          <a class="dx-toclink" href={`#${heading.slug}`}>
+            {heading.text}
+          </a>
+        ))}
+      </div>
+    </details>
+  )
+}
