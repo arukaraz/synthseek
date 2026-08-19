@@ -83,3 +83,5 @@ For bugs or questions, [open an issue](https://github.com/arukaraz/synthseek/iss
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+**[Website](https://synthseek.dev) · [Documentation](https://docs.synthseek.dev)**
