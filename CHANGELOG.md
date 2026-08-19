@@ -2,6 +2,36 @@
 
 ---
 
+# v2.5.0, August 19, 2026
+
+> [!NOTE]
+> The bundled YouTube downloader now updates itself when the container starts, and again if downloads start being refused while it is running. This needs outbound internet access. Without it Synthseek keeps the version it shipped with and says so in the startup log.
+
+- YouTube had changed in a way the bundled downloader could not keep up with, and every download through it was being refused. It now keeps itself up to date instead of staying frozen at the version it was built with, so a change on their side stops being something you have to wait out.
+- This is not a promise that it can never break again. When YouTube changes and no fix has been published yet, downloads can still fail for a while, and the log now says which of the two is happening.
+
+---
+
+### It tells you what went wrong
+
+- When nothing matched what you asked for, you now see why the candidates were turned down, instead of only being told that none were good enough.
+- A full disk or a drive that is not reachable is no longer counted against the track that happened to be downloading. It is shown for what it is, a storage problem on your machine, with a retry that covers just the tracks it stopped.
+- When an outside service Synthseek relies on is down, you can see how long it has been that way rather than guessing.
+- If the app cannot start, the reason now reaches you instead of the startup ending in silence.
+- Every failed track now keeps the reason it failed, so it is still there later instead of only in the log at the moment it happened.
+
+---
+
+### Less waiting
+
+- The requests list loads much faster. It was carrying every track of every request just to draw the list, and now it fetches the tracks only when you open one.
+- When several parts of the app ask for the same track or the same artwork at once, that is now a single lookup instead of one each.
+- A network drive that stops responding no longer freezes every other file operation behind it.
+
+- Artwork fetched from outside is re-checked at every redirect, not just once at the address it started from.
+
+---
+
 # v2.4.0, August 12, 2026
 
 > [!IMPORTANT]
