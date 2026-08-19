@@ -1,0 +1,49 @@
+---
+import { COMPARISON_ROWS } from "../data/content";
+---
+
+<div class="border-glass-border overflow-x-auto rounded-[14px] border">
+  <table class="w-full min-w-[520px] border-collapse text-sm">
+    <thead>
+      <tr class="bg-surface-sunken">
+        <th class="text-fg-muted px-4 py-3 text-left text-[11px] font-semibold tracking-[0.07em] uppercase">
+          What you get
+        </th>
+        <th class="text-fg px-4 py-3 text-center text-xs font-bold">Synthseek</th>
+        <th class="text-fg-muted px-4 py-3 text-center text-xs font-semibold">DIY stack</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        COMPARISON_ROWS.map((row) => (
+          <tr>
+            <td class="border-fg/10 border-t px-4 py-[11px]">{row.label}</td>
+            <td
+              class:list={[
+                "border-fg/10 border-t text-center",
+                row.synthseek === "yes" ? "text-success-vivid" : "text-fg text-[12.5px] font-semibold",
+              ]}
+            >
+              {row.synthseek === "yes" ? (
+                <span role="img" aria-label="yes">
+                  ✓
+                </span>
+              ) : (
+                row.synthseek
+              )}
+            </td>
+            <td class="border-fg/10 text-fg-muted border-t text-center text-[12.5px]">
+              {row.diy === "no" ? (
+                <span role="img" aria-label="no">
+                  ✕
+                </span>
+              ) : (
+                row.diy
+              )}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,39 @@
+---
+const CANDIDATES = [
+  { rank: "#1", width: "68%", tint: "30%", delay: "0s", winner: false },
+  { rank: "#2", width: "44%", tint: "22%", delay: "0.25s", winner: false },
+  { rank: "#3", width: "100%", tint: "34%", delay: "0.5s", winner: true },
+  { rank: "#4", width: "31%", tint: "15%", delay: "0.75s", winner: false },
+];
+---
+
+<div class="lp-fig flex flex-col justify-center gap-[18px] px-[38px] py-[34px]" data-fig data-play="true">
+  {
+    CANDIDATES.map((bar) => (
+      <div class="flex items-center gap-3.5">
+        <span class="text-fg-muted relative w-[22px] font-mono text-[11px]">
+          {bar.rank}
+          {bar.winner ? (
+            <span class="lp-rank-win lp-anim-win-fill" style={`animation-delay: ${bar.delay}`} aria-hidden="true">
+              {bar.rank}
+            </span>
+          ) : null}
+        </span>
+
+        <div class="lp-bar-track" style={`max-width: ${bar.width}`}>
+          <div
+            class="lp-bar lp-anim-bar"
+            style={`background: color-mix(in oklch, var(--surface-fg) ${bar.tint}, transparent); animation-delay: ${bar.delay}`}
+          >
+            {bar.winner ? (
+              <>
+                <span class="lp-bar-fill lp-anim-win-fill" style={`animation-delay: ${bar.delay}`} />
+                <span class="lp-bar-glow lp-anim-win" style={`animation-delay: ${bar.delay}`} />
+              </>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>

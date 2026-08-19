@@ -1,0 +1,65 @@
+---
+import manifest from "../data/collage.json";
+
+const POOL = manifest.map((entry) => entry.file);
+const ROWS = 4;
+---
+
+<div class="lp-collage" data-collage data-rows={ROWS} data-pool={JSON.stringify(POOL)} aria-hidden="true"></div>
+<div class="lp-scrim" aria-hidden="true"></div>
+
+<script>
+  const grid = document.querySelector<HTMLElement>("[data-collage]");
+
+  if (grid) {
+    const pool: string[] = JSON.parse(grid.dataset.pool ?? "[]");
+    const rows = Number(grid.dataset.rows) || 4;
+
+    const order = pool.slice();
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+
+    const layout = (): number => {
+      const width = grid.clientWidth;
+      const height = grid.clientHeight;
+      if (width === 0 || height === 0) return 0;
+
+      const columns = Math.max(1, Math.round((rows * width) / height));
+      grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+      return columns * rows;
+    };
+
+    const fit = (): void => {
+      if (order.length === 0) return;
+      const target = layout();
+
+      while (grid.childElementCount > target) {
+        grid.lastElementChild?.remove();
+      }
+
+      const fragment = document.createDocumentFragment();
+      for (let i = grid.childElementCount; i < target; i++) {
+        const image = new Image();
+        image.src = `/collage/${order[i % order.length]}`;
+        image.alt = "";
+        image.decoding = "async";
+        image.draggable = false;
+        fragment.append(image);
+      }
+      grid.append(fragment);
+    };
+
+    fit();
+
+    let lastWidth = window.innerWidth;
+    let timer = 0;
+    window.addEventListener("resize", () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(fit, 180);
+    });
+  }
+</script>

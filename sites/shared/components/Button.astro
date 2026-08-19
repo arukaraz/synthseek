@@ -1,0 +1,38 @@
+---
+interface Props {
+  variant?: "default" | "outline";
+  size?: "sm" | "default" | "lg";
+  href?: string;
+  class?: string;
+  rel?: string;
+  target?: string;
+}
+
+const { variant = "default", size = "default", href, class: className, rel, target } = Astro.props;
+
+const BASE =
+  "focus-ring inline-flex cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap no-underline transition-colors [&_svg]:size-4 [&_svg]:shrink-0";
+
+const VARIANTS: Record<NonNullable<Props["variant"]>, string> = {
+  default: "bg-primary text-fg hover:bg-primary/90",
+  outline: "border-4 border-primary/60 bg-surface text-primary hover:border-primary hover:bg-primary-500/10",
+};
+
+const SIZES: Record<NonNullable<Props["size"]>, string> = {
+  sm: "h-9 px-3",
+  default: "h-10 px-4 py-2",
+  lg: "h-11 px-8",
+};
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  class:list={[BASE, VARIANTS[variant], SIZES[size], className]}
+  href={href}
+  rel={rel}
+  target={target}
+  type={href ? undefined : "button"}
+>
+  <slot />
+</Tag>

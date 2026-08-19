@@ -1,0 +1,20 @@
+---
+const TRACKS = [
+  { name: "01 So What.flac", delay: "0s" },
+  { name: "02 Freddie Freeloader.flac", delay: "0.6s" },
+  { name: "03 Blue in Green.flac", delay: "1.2s" },
+];
+---
+
+<div class="lp-fig flex flex-col justify-center gap-[22px] px-10 py-[30px]" data-fig data-play="true">
+  {
+    TRACKS.map((track) => (
+      <div class="flex flex-col gap-1.5">
+        <span class="text-fg-muted font-mono text-[11px]">{track.name}</span>
+        <div class="bg-fg/12 h-2.5 overflow-hidden rounded-[5px]">
+          <div class="lp-fill lp-anim-fill" style={`animation-delay: ${track.delay}`} />
+        </div>
+      </div>
+    ))
+  }
+</div>

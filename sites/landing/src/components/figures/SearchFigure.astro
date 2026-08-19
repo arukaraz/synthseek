@@ -1,0 +1,27 @@
+---
+const CHIPS = [
+  { label: "source A", tone: "text-primary-400", delay: "0.2s" },
+  { label: "source B", tone: "text-secondary-400", delay: "0.7s" },
+  { label: "source C", tone: "text-primary-400", delay: "1.2s" },
+];
+---
+
+<div class="lp-fig flex flex-col items-center justify-center gap-[26px]" data-fig data-play="true">
+  <div class="border-fg/22 flex h-[46px] w-[260px] items-center gap-2.5 rounded-xl border px-3.5">
+    <svg viewBox="0 0 16 16" fill="none" class="text-fg-muted size-3.5 shrink-0" aria-hidden="true">
+      <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="2"></circle>
+      <path d="M10.5 10.5 L14.5 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <span class="lp-type lp-anim-type">kind of blue…</span>
+  </div>
+
+  <div class="flex gap-3">
+    {
+      CHIPS.map((chip) => (
+        <span class:list={["lp-chip lp-anim-chip", chip.tone]} style={`animation-delay: ${chip.delay}`}>
+          {chip.label}
+        </span>
+      ))
+    }
+  </div>
+</div>

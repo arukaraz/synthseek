@@ -1,0 +1,23 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  body: string;
+  reversed?: boolean;
+  last?: boolean;
+}
+
+const { eyebrow, title, body, reversed = false, last = false } = Astro.props;
+---
+
+<div class:list={["lp-pad lp-alt mx-auto max-w-[1020px] pt-[30px]", last ? "pb-[60px]" : "pb-[30px]"]}>
+  <div class:list={["lp-alt-copy", reversed && "order-2"]}>
+    <span class="lp-step-eyebrow">{eyebrow}</span>
+    <h3 class="mt-2 mb-2.5 text-2xl leading-tight font-[750] tracking-[-0.02em]">{title}</h3>
+    <p class="text-fg-muted text-[14.5px] leading-[1.7]">{body}</p>
+  </div>
+
+  <div class:list={["lp-alt-figure", reversed && "order-1"]}>
+    <slot />
+  </div>
+</div>

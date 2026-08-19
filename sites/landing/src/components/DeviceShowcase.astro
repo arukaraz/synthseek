@@ -1,0 +1,37 @@
+---
+const BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+---
+
+<div class="lp-pad lp-devices mx-auto max-w-[1140px] pt-10">
+  <div class="lp-desktopframe">
+    <picture>
+      <source media="(min-width: 641px)" srcset="/shots/discover-desktop.webp" />
+      <img
+        class="lp-shot"
+        src={BLANK}
+        width="1520"
+        height="880"
+        alt="The Synthseek Discover screen on a desktop browser, showing a trending carousel, library totals, top artists and generated mixes."
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+  </div>
+
+  <div class="lp-phone">
+    <div class="lp-phone-screen">
+      <picture>
+        <source media="(min-width: 941px)" srcset="/shots/discover-phone.webp" />
+        <source media="(max-width: 640px)" srcset="/shots/discover-phone.webp" />
+        <img
+          class="lp-shot"
+          src={BLANK}
+          width="828"
+          height="1584"
+          alt="The same Discover screen on a phone, with the trending card, library totals and top artists stacked."
+          decoding="async"
+        />
+      </picture>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,502 @@
+[
+  {
+    "file": "000.webp",
+    "artist": "Pink Floyd",
+    "album": "The Wall"
+  },
+  {
+    "file": "001.webp",
+    "artist": "Miles Davis",
+    "album": "The Complete Columbia Studio Recordings"
+  },
+  {
+    "file": "002.webp",
+    "artist": "Kendrick Lamar",
+    "album": "Black Panther The Album Music From And Inspired By"
+  },
+  {
+    "file": "003.webp",
+    "artist": "Daft Punk",
+    "album": "Random Access Memories"
+  },
+  {
+    "file": "004.webp",
+    "artist": "The Beatles",
+    "album": "Abbey Road (Remastered)"
+  },
+  {
+    "file": "005.webp",
+    "artist": "Nina Simone",
+    "album": "Feeling Good: The Very Best Of Nina Simone"
+  },
+  {
+    "file": "006.webp",
+    "artist": "Aphex Twin",
+    "album": "Drukqs"
+  },
+  {
+    "file": "007.webp",
+    "artist": "Talking Heads",
+    "album": "The Best of Talking Heads"
+  },
+  {
+    "file": "008.webp",
+    "artist": "Björk & Toffe",
+    "album": "Bad Today Good Tomorrow"
+  },
+  {
+    "file": "009.webp",
+    "artist": "Massive Attack",
+    "album": "Mezzanine"
+  },
+  {
+    "file": "010.webp",
+    "artist": "John Coltrane",
+    "album": "Duke Ellington & John Coltrane"
+  },
+  {
+    "file": "011.webp",
+    "artist": "Portishead",
+    "album": "Dummy"
+  },
+  {
+    "file": "012.webp",
+    "artist": "Led Zeppelin",
+    "album": "Led Zeppelin IV (Deluxe Edition)"
+  },
+  {
+    "file": "013.webp",
+    "artist": "Kraftwerk",
+    "album": "The Man-Machine (2009 Remaster)"
+  },
+  {
+    "file": "014.webp",
+    "artist": "David Bowie",
+    "album": "Past Talk"
+  },
+  {
+    "file": "015.webp",
+    "artist": "Stevie Wonder",
+    "album": "The Definitive Collection (Deluxe Edition)"
+  },
+  {
+    "file": "016.webp",
+    "artist": "The Velvet Underground",
+    "album": "The Velvet Underground & Nico 45th Anniversary"
+  },
+  {
+    "file": "017.webp",
+    "artist": "Joy Division",
+    "album": "The Best Of"
+  },
+  {
+    "file": "018.webp",
+    "artist": "Nirvana (UK)",
+    "album": "Secret Theatre"
+  },
+  {
+    "file": "019.webp",
+    "artist": "A Tribe Called Quest",
+    "album": "Discover A Tribe Called Quest"
+  },
+  {
+    "file": "020.webp",
+    "artist": "Bob Marley & The Wailers",
+    "album": "Uprising"
+  },
+  {
+    "file": "021.webp",
+    "artist": "Amy Winehouse",
+    "album": "Duets II"
+  },
+  {
+    "file": "022.webp",
+    "artist": "Burial",
+    "album": "Rejoice In Sin"
+  },
+  {
+    "file": "023.webp",
+    "artist": "Boards of Canada",
+    "album": "Inferno"
+  },
+  {
+    "file": "024.webp",
+    "artist": "The Clash",
+    "album": "Combat Rock (Remastered)"
+  },
+  {
+    "file": "025.webp",
+    "artist": "Curtis Mayfield",
+    "album": "Curtis (Expanded Edition)"
+  },
+  {
+    "file": "026.webp",
+    "artist": "my bloody valentine",
+    "album": "loveless"
+  },
+  {
+    "file": "027.webp",
+    "artist": "Sufjan Stevens",
+    "album": "Call Me By Your Name (Original Motion Picture Soundtrack)"
+  },
+  {
+    "file": "028.webp",
+    "artist": "Erykah Badu",
+    "album": "Oh yeah?"
+  },
+  {
+    "file": "029.webp",
+    "artist": "Wu-Tang Clan",
+    "album": "Loud Rocks"
+  },
+  {
+    "file": "030.webp",
+    "artist": "Sigur Rós",
+    "album": "Takk..."
+  },
+  {
+    "file": "031.webp",
+    "artist": "Beach House",
+    "album": "Depression Cherry"
+  },
+  {
+    "file": "032.webp",
+    "artist": "Frank Ocean",
+    "album": "Blonde"
+  },
+  {
+    "file": "033.webp",
+    "artist": "Tame Impala",
+    "album": "Deadbeat"
+  },
+  {
+    "file": "034.webp",
+    "artist": "New Order",
+    "album": "The Best of New Order"
+  },
+  {
+    "file": "035.webp",
+    "artist": "Bonobo",
+    "album": "Silent Conflict (Live @ The Hard Rock Cafe)"
+  },
+  {
+    "file": "036.webp",
+    "artist": "Four Tet",
+    "album": "DATA"
+  },
+  {
+    "file": "037.webp",
+    "artist": "Khruangbin",
+    "album": "A Calf Born in Winter"
+  },
+  {
+    "file": "038.webp",
+    "artist": "Thundercat",
+    "album": "No More Lies"
+  },
+  {
+    "file": "039.webp",
+    "artist": "Flying Lotus",
+    "album": "Yasuke"
+  },
+  {
+    "file": "040.webp",
+    "artist": "J Dilla (aka Jay Dee)",
+    "album": "Yancey Boys (Instrumentals)"
+  },
+  {
+    "file": "041.webp",
+    "artist": "Herbie Hancock",
+    "album": "Empyrean Isles (Expanded Edition)"
+  },
+  {
+    "file": "042.webp",
+    "artist": "Charles Mingus",
+    "album": "Mingus Ah Um"
+  },
+  {
+    "file": "043.webp",
+    "artist": "Bill Evans",
+    "album": "Push"
+  },
+  {
+    "file": "044.webp",
+    "artist": "Ella Fitzgerald",
+    "album": "What A Wonderful Duet"
+  },
+  {
+    "file": "045.webp",
+    "artist": "Etta James",
+    "album": "Gospel Blues"
+  },
+  {
+    "file": "046.webp",
+    "artist": "Marvin Gaye",
+    "album": "Love Songs #1's"
+  },
+  {
+    "file": "047.webp",
+    "artist": "Al Green",
+    "album": "Let's Stay Together"
+  },
+  {
+    "file": "048.webp",
+    "artist": "Sam Cooke",
+    "album": "A Change Is Gonna Come"
+  },
+  {
+    "file": "049.webp",
+    "artist": "Otis Redding",
+    "album": "Dock of the Bay Sessions"
+  },
+  {
+    "file": "050.webp",
+    "artist": "The Rolling Stones",
+    "album": "Tattoo You (2009 Re-Mastered)"
+  },
+  {
+    "file": "051.webp",
+    "artist": "Queen",
+    "album": "Cry No More"
+  },
+  {
+    "file": "052.webp",
+    "artist": "Prince",
+    "album": "Purple Rain (Deluxe Expanded Edition)"
+  },
+  {
+    "file": "053.webp",
+    "artist": "Michael Jackson",
+    "album": "Run It Up! (Remix)"
+  },
+  {
+    "file": "054.webp",
+    "artist": "Tears for Fears",
+    "album": "Songs From The Big Chair (Deluxe)"
+  },
+  {
+    "file": "055.webp",
+    "artist": "Depeche Mode",
+    "album": "The Singles 86-98"
+  },
+  {
+    "file": "056.webp",
+    "artist": "The Smiths",
+    "album": "The Sound of the Smiths (Deluxe; 2008 Remaster)"
+  },
+  {
+    "file": "057.webp",
+    "artist": "Pixies",
+    "album": "Doolittle"
+  },
+  {
+    "file": "058.webp",
+    "artist": "Sonic Youth",
+    "album": "Rather Ripped"
+  },
+  {
+    "file": "059.webp",
+    "artist": "Slow Dive.",
+    "album": "But I Love You So (Please Let Me Go)"
+  },
+  {
+    "file": "060.webp",
+    "artist": "Cocteau Twins",
+    "album": "Blue Bell Knoll"
+  },
+  {
+    "file": "061.webp",
+    "artist": "Mazzy Star",
+    "album": "Among My Swan"
+  },
+  {
+    "file": "062.webp",
+    "artist": "Arcade Fire",
+    "album": "The Suburbs"
+  },
+  {
+    "file": "063.webp",
+    "artist": "LCD Soundsystem",
+    "album": "This Is Happening"
+  },
+  {
+    "file": "064.webp",
+    "artist": "Vampire Weekend",
+    "album": "Vampire Weekend"
+  },
+  {
+    "file": "065.webp",
+    "artist": "The National",
+    "album": "I Need My Girl"
+  },
+  {
+    "file": "066.webp",
+    "artist": "Bon Iver",
+    "album": "Brat and it’s completely different but also still brat"
+  },
+  {
+    "file": "067.webp",
+    "artist": "Fleet Foxes",
+    "album": "Sun Giant EP"
+  },
+  {
+    "file": "068.webp",
+    "artist": "Grizzly Bear",
+    "album": "Veckatimest"
+  },
+  {
+    "file": "069.webp",
+    "artist": "alt-J",
+    "album": "An Awesome Wave"
+  },
+  {
+    "file": "070.webp",
+    "artist": "Glass Animals",
+    "album": "C-C (You Set The Fire In Me) (Dave Glass Animals Remix)"
+  },
+  {
+    "file": "071.webp",
+    "artist": "Jamiroquai",
+    "album": "High Times: Singles 1992-2006"
+  },
+  {
+    "file": "072.webp",
+    "artist": "Gorillaz",
+    "album": "Demon Days"
+  },
+  {
+    "file": "073.webp",
+    "artist": "Blur",
+    "album": "Blur: The Best Of"
+  },
+  {
+    "file": "074.webp",
+    "artist": "Oasis",
+    "album": "Need You"
+  },
+  {
+    "file": "075.webp",
+    "artist": "Pulp",
+    "album": "Berry."
+  },
+  {
+    "file": "076.webp",
+    "artist": "Manu Chao",
+    "album": "Próxima Estación: Esperanza"
+  },
+  {
+    "file": "077.webp",
+    "artist": "Buena Vista Social Club",
+    "album": "Buena Vista Social Club"
+  },
+  {
+    "file": "078.webp",
+    "artist": "Caetano Veloso",
+    "album": "Un Canto por México, Vol. II"
+  },
+  {
+    "file": "079.webp",
+    "artist": "Gilberto Gil",
+    "album": "Brasil"
+  },
+  {
+    "file": "080.webp",
+    "artist": "Antônio Carlos Jobim",
+    "album": "Inédito"
+  },
+  {
+    "file": "081.webp",
+    "artist": "Stan Getz",
+    "album": "Jazz Elite: Best Of (Stan Getz Collection)"
+  },
+  {
+    "file": "082.webp",
+    "artist": "Astor Piazzolla",
+    "album": "Adios Nonino"
+  },
+  {
+    "file": "083.webp",
+    "artist": "Rosalía",
+    "album": "В белой тишке"
+  },
+  {
+    "file": "084.webp",
+    "artist": "Bad Bunny",
+    "album": "DeBÍ TiRAR MáS FOToS"
+  },
+  {
+    "file": "085.webp",
+    "artist": "Mägo de Oz",
+    "album": "La Leyenda De La Mancha"
+  },
+  {
+    "file": "086.webp",
+    "artist": "Héroes del Silencio",
+    "album": "The Platinum Collection"
+  },
+  {
+    "file": "087.webp",
+    "artist": "Soda Stereo",
+    "album": "Me Verás Volver (Hits & Más)"
+  },
+  {
+    "file": "088.webp",
+    "artist": "Café Tacvba",
+    "album": "Cuatro Caminos"
+  },
+  {
+    "file": "089.webp",
+    "artist": "Los Fabulosos Cadillacs",
+    "album": "La Reina Y Sus Amigos"
+  },
+  {
+    "file": "090.webp",
+    "artist": "Fela Kuti",
+    "album": "The Best of The Black President"
+  },
+  {
+    "file": "091.webp",
+    "artist": "Ali Farka Toure",
+    "album": "Talking Timbuktu"
+  },
+  {
+    "file": "092.webp",
+    "artist": "Tinariwen",
+    "album": "Elwan"
+  },
+  {
+    "file": "093.webp",
+    "artist": "Ravi Shankar",
+    "album": "The Essential"
+  },
+  {
+    "file": "094.webp",
+    "artist": "Ryuichi Sakamoto",
+    "album": "D-DAY"
+  },
+  {
+    "file": "095.webp",
+    "artist": "Nils Frahm",
+    "album": "Encores 2"
+  },
+  {
+    "file": "096.webp",
+    "artist": "Max Richter",
+    "album": "Spring"
+  },
+  {
+    "file": "097.webp",
+    "artist": "Ólafur Arnalds",
+    "album": "re:member"
+  },
+  {
+    "file": "098.webp",
+    "artist": "Steve Reich",
+    "album": "Colin Currie & Steve Reich Live at Fondation Louis Vuitton (Live)"
+  },
+  {
+    "file": "099.webp",
+    "artist": "Philip Glass",
+    "album": "Mad Rush"
+  }
+]

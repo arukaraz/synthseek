@@ -1,36 +1,20 @@
 ---
-import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
-import Badge from "@synthseek/sites-shared/components/Badge.astro";
-import GithubLink from "@synthseek/sites-shared/components/GithubLink.astro";
+import Button from "@synthseek/sites-shared/components/Button.astro";
+import GithubIcon from "@synthseek/sites-shared/components/GithubIcon.astro";
+
+import ComparisonTable from "../components/ComparisonTable.astro";
+import DeviceShowcase from "../components/DeviceShowcase.astro";
+import HeroCollage from "../components/HeroCollage.astro";
+import PipelineRow from "../components/PipelineRow.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import DownloadFigure from "../components/figures/DownloadFigure.astro";
+import ImportFigure from "../components/figures/ImportFigure.astro";
+import ScoreFigure from "../components/figures/ScoreFigure.astro";
+import SearchFigure from "../components/figures/SearchFigure.astro";
+import VerifyFigure from "../components/figures/VerifyFigure.astro";
+import { DOCS_URL, FAQ_ITEMS, GITHUB_URL, SETUP_STEPS } from "../data/content";
 import "../styles/landing.css";
-
-const DOCS_URL = "https://docs.synthseek.dev";
-
-const PILLARS = [
-  {
-    title: "Ask, and it arrives",
-    body: "Search a song, an album, an artist, a playlist, or a vague idea. Synthseek finds it, downloads it through your own client, and files it into your library.",
-  },
-  {
-    title: "Nothing wrong gets in",
-    body: "Every download is checked against what you asked for before it reaches your library. Anything that does not match waits for you to decide.",
-  },
-  {
-    title: "Built for a household",
-    body: "Local accounts or Plex sign-in, three roles, and per-member playlists and connected services. Everyone gets their own, nobody gets your settings.",
-  },
-  {
-    title: "Drive it by asking",
-    body: "A built-in MCP server lets an assistant search, request, and organise your library in plain language, scoped to one member.",
-  },
-];
-
-const FACTS = [
-  ["Runs on", "One Docker container"],
-  ["Needs", "Your own slskd instance"],
-  ["Stores", "SQLite, on your disk"],
-  ["Calls home", "Never"],
-];
 ---
 
 <!doctype html>
@@ -42,82 +26,196 @@ const FACTS = [
     <title>Synthseek · Self-hosted music library automation</title>
     <meta
       name="description"
-      content="Self-hosted, multi-user music library automation. Search, download through your own client, verify, tag, and file into a library you own."
+      content="Self-hosted, multi-user music library automation. Your household requests music, and a step-by-step engine finds it, verifies it, tags it, and files it into a library you own."
     />
     <meta property="og:title" content="Synthseek" />
     <meta property="og:description" content="Self-hosted, multi-user music library automation." />
     <meta property="og:type" content="website" />
     <link rel="canonical" href="https://synthseek.dev/" />
   </head>
+
   <body>
-    <div class="mx-auto flex min-h-screen w-full max-w-[1080px] flex-col px-6 py-8 lg:px-10">
-      <header class="flex items-center gap-3">
-        <AppLogo iconClass="h-7 w-auto" wordmarkClass="text-[22px]" />
-        <nav class="ml-auto flex items-center gap-5 text-[14px]" aria-label="Primary">
-          <a href={DOCS_URL} class="text-fg-muted hover:text-fg no-underline transition-colors">Docs</a>
-          <a
-            href="https://github.com/arukaraz/synthseek"
-            rel="noopener noreferrer"
-            target="_blank"
-            class="text-fg-muted hover:text-fg no-underline transition-colors">GitHub</a
-          >
-        </nav>
-      </header>
+    <div class="relative overflow-hidden">
+      <HeroCollage />
+      <SiteHeader />
 
-      <main class="flex-1">
-        <section class="pt-20 pb-16 lg:pt-28">
-          <Badge variant="outline" class="font-mono">Self-hosted</Badge>
-          <h1 class="text-fg mt-5 max-w-[18ch] text-[42px] leading-[1.08] font-[750] tracking-[-0.03em] lg:text-[58px]">
-            Your music library, <span class="gradient-text-primary">automated</span>.
+      <section class="relative z-2">
+        <div class="lp-pad mx-auto flex max-w-[860px] flex-col items-center gap-[18px] pt-20 pb-[30px] text-center">
+          <h1 class="lp-hero-h1 leading-[1.04] font-extrabold tracking-[-0.035em]">
+            Your library<br />
+            <span class="gradient-text-primary">Automate the rest</span>
           </h1>
-          <p class="text-fg-muted mt-5 max-w-[62ch] text-[17px] leading-[1.65]">
-            Synthseek searches across music providers, downloads through your own client, checks that what arrived is
-            what you asked for, tags it, and files it into a library you own. Multi-user, provider-agnostic, and it
-            never phones home.
+          <p class="text-fg-muted max-w-[620px] text-[17.5px] leading-[1.65]">
+            Synthseek is a free, self-hosted app where your whole household requests music, and the engine finds it,
+            checks that it really is what was asked for, and files it into your library, tagged and complete.
           </p>
-          <div class="mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href={`${DOCS_URL}/getting-started`}
-              class="bg-primary focus-ring rounded-xl px-5 py-2.5 text-[14px] font-semibold text-white no-underline transition-opacity hover:opacity-90"
-            >
-              Get started
-            </a>
-            <a
-              href={DOCS_URL}
-              class="border-fg/15 hover:border-primary-500/50 text-fg focus-ring rounded-xl border px-5 py-2.5 text-[14px] font-semibold no-underline transition-colors"
-            >
-              Read the docs
-            </a>
+          <div class="flex flex-wrap justify-center gap-3">
+            <Button href={`${DOCS_URL}/getting-started`} size="lg">Get started</Button>
+            <Button href={GITHUB_URL} variant="outline" size="lg" rel="noopener noreferrer" target="_blank">
+              <GithubIcon />
+              View on GitHub
+            </Button>
           </div>
-        </section>
+        </div>
 
-        <section class="grid gap-4 sm:grid-cols-2">
-          {
-            PILLARS.map((pillar) => (
-              <div class="border-fg/10 bg-surface-sunken/40 rounded-2xl border p-6">
-                <h2 class="text-fg text-[17px] font-semibold tracking-[-0.01em]">{pillar.title}</h2>
-                <p class="text-fg-muted mt-2 text-[14.5px] leading-[1.7]">{pillar.body}</p>
-              </div>
-            ))
-          }
-        </section>
-
-        <section class="border-fg/10 mt-16 grid gap-px overflow-hidden rounded-2xl border sm:grid-cols-4">
-          {
-            FACTS.map(([label, value]) => (
-              <div class="bg-surface-sunken/40 p-5">
-                <div class="dx-eyebrow">{label}</div>
-                <div class="text-fg mt-1.5 text-[14.5px] font-semibold">{value}</div>
-              </div>
-            ))
-          }
-        </section>
-      </main>
-
-      <footer class="border-fg/10 mt-20 flex flex-wrap items-center gap-4 border-t pt-6">
-        <GithubLink class="-ml-3" />
-        <a href={DOCS_URL} class="text-fg-muted hover:text-fg ml-auto text-[13px] no-underline">Documentation</a>
-      </footer>
+        <DeviceShowcase />
+      </section>
     </div>
+
+    <section class="border-fg/10 border-t">
+      <div class="lp-pad mx-auto max-w-[1140px] py-[60px]">
+        <h2 class="mb-2 text-center text-[32px] font-[750] tracking-[-0.025em]">Up and running in four steps</h2>
+        <p class="text-fg-muted mb-9 text-center text-[15px]">
+          A setup wizard handles the configuration from the browser.
+        </p>
+
+        <div class="lp-steps4">
+          {
+            SETUP_STEPS.map((step, index) => (
+              <div class="border-glass-border bg-surface/40 flex flex-col gap-2 rounded-2xl border p-5">
+                <span class="gradient-text-primary text-[26px] font-extrabold">{index + 1}</span>
+                <span class="text-[15px] font-[650]">{step.title}</span>
+                <span class="text-fg-muted text-[13px] leading-[1.6]">{step.body}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="border-fg/10 border-t">
+      <div class="lp-pad mx-auto max-w-[1020px] pt-[60px] pb-2.5">
+        <h2 class="mb-2 text-center text-[32px] font-[750] tracking-[-0.025em]">
+          What happens after you press request
+        </h2>
+        <p class="text-fg-muted mb-5 text-center text-[15px]">
+          Every step reports back live, so you can watch it happen.
+        </p>
+      </div>
+
+      <PipelineRow
+        eyebrow="Step 1, Search"
+        title="It asks the question several ways"
+        body="Files on other people's machines are rarely named the way a catalog names them, so every enabled source is queried with several variants per track, in priority order."
+      >
+        <SearchFigure />
+      </PipelineRow>
+
+      <PipelineRow
+        eyebrow="Step 2, Score"
+        title="The best candidate wins, not the first"
+        body="Every result is ranked against your format, bitrate, and speed preferences. Quarantined sources are excluded outright, and the engine records why each loser lost."
+        reversed
+      >
+        <ScoreFigure />
+      </PipelineRow>
+
+      <PipelineRow
+        eyebrow="Step 3, Download"
+        title="Soulseek first, a careful fallback second"
+        body="Downloads run through your own slskd. When it can't deliver, a deliberately conservative yt-dlp fallback takes over, and nothing it fetches gets a shortcut through verification."
+      >
+        <DownloadFigure />
+      </PipelineRow>
+
+      <PipelineRow
+        eyebrow="Step 4, Verify"
+        title="Wrong files get caught, not filed"
+        body="Checks read the file's own tags against your request, and with a free AcoustID key the audio itself is identified by listening to it. A file that contradicts what you asked for is held in a review queue where you can listen and decide, and the source that sent it is set aside for that track."
+        reversed
+      >
+        <VerifyFigure />
+      </PipelineRow>
+
+      <PipelineRow
+        eyebrow="Step 5, Import"
+        title="Filed like a librarian did it"
+        body="Files are tagged and filed by Beets, identified against MusicBrainz where it can be and by less certain methods where it cannot, so nothing is left untagged. Cover art is embedded and album positions are written, so your media server has no reason to rebind a file to the wrong song."
+        last
+      >
+        <ImportFigure />
+      </PipelineRow>
+    </section>
+
+    <section class="lp-pad lp-alt mx-auto max-w-[1140px] py-[70px]">
+      <div class="flex flex-col gap-3">
+        <span class="lp-step-eyebrow">AI assistants</span>
+        <h2 class="text-[30px] font-[750] tracking-[-0.025em]">Tell Claude. It's queued.</h2>
+        <p class="text-fg-muted text-[15px] leading-[1.75]">
+          Synthseek ships a built-in MCP server. Point Claude or any MCP client at one URL and it can search your
+          library, check what a request is doing, and file new ones. It acts through your account, so it gets your
+          role's permissions and nothing more.
+        </p>
+      </div>
+
+      <div
+        class="border-glass-border bg-surface-sunken overflow-x-auto rounded-[14px] border px-[22px] py-5 font-mono text-[12.5px] leading-[2]"
+      >
+        <div class="text-fg-muted"># connect your assistant</div>
+        <div><span class="text-secondary-400">$</span> claude mcp add --transport http \</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;synthseek https://your-server/api/v1/mcp</div>
+        <div class="text-fg-muted mt-2"># then just ask</div>
+        <div>"queue the new Khruangbin album"</div>
+        <div class="text-success-vivid">✓ 12 tracks requested</div>
+      </div>
+    </section>
+
+    <section class="border-fg/10 bg-primary-600/4 border-t">
+      <div class="lp-pad mx-auto max-w-[860px] py-[60px]">
+        <h2 class="mb-2 text-center text-[32px] font-[750] tracking-[-0.025em]">All the bells. None of the glue.</h2>
+        <p class="text-fg-muted mb-[30px] text-center text-[15px]">
+          The pieces a hand-built stack bolts together, already working together.
+        </p>
+        <ComparisonTable />
+      </div>
+    </section>
+
+    <section class="border-fg/10 bg-primary-600/4 border-t">
+      <div class="lp-pad mx-auto max-w-[1020px] py-[60px]">
+        <h2 class="mb-[30px] text-center text-[30px] font-[750] tracking-[-0.025em]">Frequently asked questions</h2>
+
+        <div class="lp-faq">
+          {
+            FAQ_ITEMS.map((item) => (
+              <div class="flex flex-col gap-1.5">
+                <span class="text-[15px] font-[650]">{item.question}</span>
+                <span class="text-fg-muted text-[13.5px] leading-[1.65]">{item.answer}</span>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-[34px] flex justify-center">
+          <Button href={`${DOCS_URL}/faq`} variant="outline">See all FAQs in the docs</Button>
+        </div>
+      </div>
+    </section>
+
+    <section class="lp-pad mx-auto flex max-w-[720px] flex-col items-center gap-4 py-[76px] text-center">
+      <h2 class="text-[34px] font-extrabold tracking-[-0.03em]">Ready when you are.</h2>
+      <p class="text-fg-muted text-[15px]">
+        One container alongside your slskd, and a setup wizard. You'll request your first album in minutes.
+      </p>
+      <Button href={`${DOCS_URL}/getting-started`} size="lg">Get started</Button>
+    </section>
+
+    <SiteFooter />
+
+    <script>
+      const figures = document.querySelectorAll<HTMLElement>("[data-fig]");
+
+      if (figures.length > 0) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              entry.target.setAttribute("data-play", String(entry.isIntersecting));
+            }
+          },
+          { rootMargin: "120px 0px" },
+        );
+
+        for (const figure of figures) observer.observe(figure);
+      }
+    </script>
   </body>
 </html>

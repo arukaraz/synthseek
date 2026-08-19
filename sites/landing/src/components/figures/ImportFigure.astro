@@ -1,0 +1,43 @@
+---
+const TAGS = [
+  {
+    label: "tagged ✓",
+    top: "16px",
+    right: "-34px",
+    delay: "0s",
+    style: "background: var(--color-primary-500); color: white",
+  },
+  {
+    label: "art ✓",
+    top: "56px",
+    right: "-42px",
+    delay: "0.5s",
+    style: "background: var(--color-secondary-400); color: var(--surface-bg)",
+  },
+  {
+    label: "track 07 ✓",
+    top: "96px",
+    right: "-50px",
+    delay: "1s",
+    style: "background: color-mix(in oklch, var(--surface-fg) 85%, transparent); color: var(--surface-bg)",
+  },
+];
+---
+
+<div class="lp-fig flex items-center justify-center" data-fig data-play="true">
+  <div class="lp-art relative flex h-[150px] w-[120px] flex-col justify-end gap-1.5 rounded-xl p-3.5">
+    <span class="block h-[7px] w-[70%] rounded-[4px] bg-white/85"></span>
+    <span class="block h-1.5 w-[45%] rounded-[3px] bg-white/50"></span>
+
+    {
+      TAGS.map((tag) => (
+        <div
+          class="lp-tag lp-anim-tag"
+          style={`top: ${tag.top}; right: ${tag.right}; animation-delay: ${tag.delay}; ${tag.style}`}
+        >
+          {tag.label}
+        </div>
+      ))
+    }
+  </div>
+</div>

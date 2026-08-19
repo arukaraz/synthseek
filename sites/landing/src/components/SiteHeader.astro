@@ -1,0 +1,100 @@
+---
+import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
+import Button from "@synthseek/sites-shared/components/Button.astro";
+
+import { DOCS_URL, NAV_LINKS } from "../data/content";
+
+const DESKTOP_LINKS = NAV_LINKS.filter((link) => link.desktop);
+const NAV_LINK_CLASS =
+  "text-primary-400 hover:text-primary-500 text-[13.5px] whitespace-nowrap no-underline transition-colors";
+---
+
+<header class="relative z-2">
+  <div class="lp-pad lp-nav mx-auto max-w-[1140px]">
+    <AppLogo iconClass="h-[42px] w-auto" wordmarkClass="text-[31px]" />
+    <div class="flex-1"></div>
+
+    <nav class="lp-navlinks" aria-label="Primary">
+      {
+        DESKTOP_LINKS.map((link) => (
+          <a href={link.href} class={NAV_LINK_CLASS}>
+            {link.label}
+          </a>
+        ))
+      }
+      <Button href={`${DOCS_URL}/getting-started`} size="sm">Get started</Button>
+    </nav>
+
+    <button
+      type="button"
+      class="lp-burger text-fg focus-ring -mr-2 ml-auto cursor-pointer rounded-lg p-2"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="lp-menu"
+      data-menu-open
+    >
+      <span class="block h-[2px] w-[22px] rounded-[2px] bg-current"></span>
+      <span class="block h-[2px] w-[22px] rounded-[2px] bg-current"></span>
+      <span class="block h-[2px] w-[22px] rounded-[2px] bg-current"></span>
+    </button>
+  </div>
+</header>
+
+<div id="lp-menu" class="hidden" data-menu>
+  <div class="fixed inset-0 z-50 bg-black/55" data-menu-close></div>
+  <div
+    class="border-fg/10 bg-surface fixed top-0 right-0 left-0 z-51 rounded-b-[18px] border-b pb-5 shadow-[0_24px_60px_rgb(0_0_0/0.5)]"
+  >
+    <div class="lp-pad lp-nav mx-auto max-w-[1140px]">
+      <AppLogo iconClass="h-[42px] w-auto" wordmarkClass="text-[31px]" />
+      <button
+        type="button"
+        class="text-fg-muted hover:text-fg focus-ring ml-auto cursor-pointer rounded-lg p-2 text-[22px] leading-none"
+        aria-label="Close menu"
+        data-menu-close
+      >
+        ✕
+      </button>
+    </div>
+
+    <nav class="flex flex-col px-5 pt-1 pb-3.5" aria-label="Mobile">
+      {
+        NAV_LINKS.map((link) => (
+          <a
+            href={link.href}
+            class="text-primary-400 hover:bg-primary-500/10 rounded-[10px] px-3 py-3.5 text-[15px] no-underline transition-colors"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="px-6">
+      <Button href={`${DOCS_URL}/getting-started`} size="lg" class="w-full">Get started</Button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const menu = document.querySelector<HTMLElement>("[data-menu]");
+  const trigger = document.querySelector<HTMLButtonElement>("[data-menu-open]");
+
+  if (menu && trigger) {
+    const setOpen = (open: boolean): void => {
+      menu.classList.toggle("hidden", !open);
+      trigger.setAttribute("aria-expanded", String(open));
+      document.documentElement.style.overflow = open ? "hidden" : "";
+    };
+
+    trigger.addEventListener("click", () => setOpen(true));
+
+    for (const close of menu.querySelectorAll("[data-menu-close]")) {
+      close.addEventListener("click", () => setOpen(false));
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setOpen(false);
+    });
+  }
+</script>
