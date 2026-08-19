@@ -1,0 +1,33 @@
+---
+import AppLogo from "@synthseek/sites-shared/components/AppLogo.astro";
+import Button from "@synthseek/sites-shared/components/Button.astro";
+import "../styles/docs.css";
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Page not found · Synthseek Docs</title>
+    <meta name="description" content="That documentation page does not exist." />
+    <meta name="robots" content="noindex" />
+  </head>
+
+  <body>
+    <main class="mx-auto flex min-h-screen max-w-[560px] flex-col items-center justify-center gap-5 px-6 text-center">
+      <AppLogo href="https://synthseek.dev" />
+      <p class="gradient-text-primary text-[64px] leading-none font-extrabold tracking-[-0.04em]">404</p>
+      <h1 class="text-fg text-[27px] leading-[1.15] font-bold tracking-[-0.025em]">This page does not exist</h1>
+      <p class="text-fg-muted text-[16px] leading-[1.65]">
+        The link may be out of date, or the address may have a typo in it. Search from any documentation page to find
+        what you are after.
+      </p>
+      <div class="mt-1 flex flex-wrap justify-center gap-3">
+        <Button href="/">Back to the documentation</Button>
+        <Button href="/getting-started" variant="outline">Getting started</Button>
+      </div>
+    </main>
+  </body>
+</html>
