@@ -125,12 +125,12 @@ cleanup_old_snapshots() {
     done
 }
 
-echo "[1/6] Setting up user permissions..."
+echo "[1/7] Setting up user permissions..."
 groupmod -o -g "$PGID" nodejs 2>/dev/null || true
 usermod -o -u "$PUID" -g "$PGID" synthseek 2>/dev/null || true
 echo "      Done"
 
-echo "[2/6] Creating directories..."
+echo "[2/7] Creating directories..."
 mkdir -p /data/db /data/config /data/logs /data/artwork-cache /downloads /music
 chown -R synthseek:nodejs /data
 mkdir -p /app/web/.next/cache
@@ -151,7 +151,7 @@ if ! su-exec synthseek test -w /music 2>/dev/null; then
 fi
 echo "      Done"
 
-echo "[3/6] Loading configuration..."
+echo "[3/7] Loading configuration..."
 if [ ! -f "/data/config/beets-config.yaml" ] && [ -f "/app/server/data/config/beets-config.yaml" ]; then
     cp /app/server/data/config/beets-config.yaml /data/config/
     chown synthseek:nodejs /data/config/beets-config.yaml
@@ -163,7 +163,7 @@ if [ -f "/app/server/data/config/beets-config.yaml" ]; then
     chown synthseek:nodejs /data/config/beets-config.example.yaml
 fi
 
-echo "[4/6] Checking database migrations..."
+echo "[4/7] Checking database migrations..."
 UPGRADE_MODE="inplace"
 if [ -f "$DB_PATH" ]; then
     if has_pending_migrations; then
@@ -179,7 +179,7 @@ else
     echo "      No existing database, fresh install"
 fi
 
-echo "[5/6] Preparing admin seed..."
+echo "[5/7] Preparing admin seed..."
 cd /app/server
 SEED_TARGET_URL="$DB_URL"
 if [ "$UPGRADE_MODE" = "copy" ]; then
@@ -190,7 +190,7 @@ if ! DATABASE_URL="$SEED_TARGET_URL" su-exec synthseek node dist/scripts/prepare
     exit 1
 fi
 
-echo "[6/6] Running database migrations..."
+echo "[6/7] Running database migrations..."
 if [ -f "db/schema.prisma" ]; then
     if [ "$UPGRADE_MODE" = "copy" ]; then
         if ! apply_validated_upgrade; then
@@ -211,6 +211,32 @@ if [ -f "db/schema.prisma" ]; then
     cleanup_old_snapshots
 else
     echo "      Skipped (schema not found)"
+fi
+
+echo "[7/7] Refreshing yt-dlp..."
+YTDLP_VENV="/opt/ytdlp"
+YTDLP_BIN="$YTDLP_VENV/bin/yt-dlp"
+YTDLP_PIP="$YTDLP_VENV/bin/pip"
+YTDLP_UPDATE_LOG="/tmp/ytdlp-update.log"
+if [ -x "$YTDLP_PIP" ] && [ -x "$YTDLP_BIN" ]; then
+    YTDLP_BEFORE=$("$YTDLP_BIN" --version 2>/dev/null)
+    if "$YTDLP_PIP" install --no-cache-dir --disable-pip-version-check --timeout 15 --retries 1 --pre --upgrade yt-dlp >"$YTDLP_UPDATE_LOG" 2>&1; then
+        YTDLP_AFTER=$("$YTDLP_BIN" --version 2>/dev/null)
+        chown -R synthseek:nodejs "$YTDLP_VENV" 2>/dev/null || true
+        if [ "$YTDLP_BEFORE" != "$YTDLP_AFTER" ]; then
+            echo "      yt-dlp: $YTDLP_BEFORE -> $YTDLP_AFTER (updated)"
+        elif grep -q "connection broken by" "$YTDLP_UPDATE_LOG" 2>/dev/null; then
+            echo "      WARN yt-dlp: update skipped (could not reach the package index). Using the build baked into the image ($YTDLP_AFTER), YouTube downloads may fail until the next start with network access."
+        else
+            echo "      yt-dlp: $YTDLP_AFTER (already current)"
+        fi
+    else
+        YTDLP_REASON=$(tail -n 1 "$YTDLP_UPDATE_LOG" 2>/dev/null)
+        echo "      WARN yt-dlp: update skipped ($YTDLP_REASON). Using the build baked into the image ($YTDLP_BEFORE), YouTube downloads may fail until the next start with network access."
+    fi
+    rm -f "$YTDLP_UPDATE_LOG"
+else
+    echo "      WARN yt-dlp: update skipped (no yt-dlp virtualenv at $YTDLP_VENV). Using the build on PATH, YouTube downloads may fail until the next start with network access."
 fi
 
 shutdown() {

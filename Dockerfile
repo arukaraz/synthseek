@@ -28,20 +28,21 @@ RUN apk add --no-cache \
     shadow \
     su-exec
 
-# yt-dlp is intentionally unpinned: it must track YouTube changes, so each image
-# build pulls the current working release. Audio extraction (-x) uses ffmpeg (above).
 RUN pip3 install --break-system-packages --no-cache-dir \
     "beets==2.4.0" \
     requests \
     pylast \
-    yt-dlp \
-    && beet version \
-    && yt-dlp --version
+    && beet version
 
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 --ingroup nodejs synthseek \
     && mkdir -p /data/db /data/config /data/logs /data/artwork-cache /downloads /music \
     && chown -R synthseek:nodejs /data /data/artwork-cache /downloads /music
+
+RUN python3 -m venv /opt/ytdlp \
+    && /opt/ytdlp/bin/pip install --no-cache-dir --disable-pip-version-check --pre --upgrade yt-dlp \
+    && /opt/ytdlp/bin/yt-dlp --version \
+    && chown -R synthseek:nodejs /opt/ytdlp
 
 WORKDIR /app
 

@@ -54,6 +54,8 @@ Both must point at the same place on the host, and the user Synthseek runs as, s
 
 When slskd cannot deliver a track, Synthseek can fall back to yt-dlp. It is bundled in the container and enabled by default.
 
+Video platforms change often enough to break a downloader that stands still, so the bundled yt-dlp does not stand still. The container refreshes it on every start, and if downloads start being refused while it is running, it refreshes it again without waiting for a restart. Both refreshes need outbound network access and say what they did in the log, including when they could not reach the package index. A refresh cannot invent a fix that has not been published yet, so downloads can still fail for a while after a platform change.
+
 The fallback is deliberately conservative, because a video platform holds a great deal that is not the recording you asked for. Candidates are ranked rather than taken in the order they arrive, and one has to resemble the track you asked for on more than one count before it is accepted. How many candidates are considered, and how much slack the matching is given, are settings.
 
 Everything downloaded through the fallback goes through exactly the same verification as anything else. It is not a trusted path.
