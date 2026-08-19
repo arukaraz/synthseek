@@ -28,7 +28,7 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 - Metadata matching
 - Automatic file organization
 - End-to-end playlist downloads with automatic Plex reconstruction
-- Built-in MCP server, so assistants can search and manage your library ([see the full list and examples of MCP tools](./MCP-TOOLS.md))
+- Built-in MCP server, so assistants can search and manage your library ([see the full list and examples of MCP tools](https://docs.synthseek.dev/ai-assistants/))
 - Localization in English, Espanol, Deutsch, and Francais
 - Real-time progress tracking, logs viewer, and in-app update notifications
 
