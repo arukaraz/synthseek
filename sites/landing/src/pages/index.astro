@@ -6,7 +6,6 @@ import ComparisonTable from "../components/ComparisonTable.astro";
 import DeviceShowcase from "../components/DeviceShowcase.astro";
 import HeroCollage from "../components/HeroCollage.astro";
 import PipelineRow from "../components/PipelineRow.astro";
-import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import DownloadFigure from "../components/figures/DownloadFigure.astro";
 import ImportFigure from "../components/figures/ImportFigure.astro";
@@ -198,8 +197,6 @@ import "../styles/landing.css";
       </p>
       <Button href={`${DOCS_URL}/getting-started`} size="lg">Get started</Button>
     </section>
-
-    <SiteFooter />
 
     <script>
       const figures = document.querySelectorAll<HTMLElement>("[data-fig]");

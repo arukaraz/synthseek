@@ -1,5 +1,5 @@
 export const DOCS_URL = "https://docs.synthseek.dev";
-export const GITHUB_REPO = "arukaraz/synthseek";
+const GITHUB_REPO = "arukaraz/synthseek";
 export const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
 
 export const NAV_LINKS = [
