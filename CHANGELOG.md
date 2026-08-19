@@ -119,7 +119,7 @@
 ### Sync library playlists to Plex, plus AI playlist building from Last.fm
 
 - Sync a playlist to Plex straight from your library: the three-dot menu on any library playlist now has a Sync to Plex action, the same one already on the requests page.
-- MCP tools extended to read your Last.fm listening history (top tracks, recent tracks, top artists) and to build or refresh a playlist from a set of songs in one step, so a connected AI assistant can curate playlists for you. [See the full list of MCP tools and examples](https://github.com/arukaraz/synthseek/blob/main/MCP-TOOLS.md).
+- MCP tools extended to read your Last.fm listening history (top tracks, recent tracks, top artists) and to build or refresh a playlist from a set of songs in one step, so a connected AI assistant can curate playlists for you. [See the full list of MCP tools and examples](https://docs.synthseek.dev/ai-assistants/).
 - The interface is now available in German and French, in addition to English and Spanish.
 
 ---
