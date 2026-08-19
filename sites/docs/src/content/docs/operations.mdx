@@ -20,7 +20,7 @@ Listed under **Settings**, then **Jobs**, with what each does, when it last ran,
 | **Media Server Sync**     | Keeps media server playlists named right and topped up. | Hourly                              |
 | **Wanted Sweep**          | Retries watched failed tracks on a release-age cadence. | On a fixed interval, off by default |
 
-Running a job by hand forces it past its own internal throttles, so a manual run does what you expect rather than quietly doing nothing because a feed is not yet due. It does not permanently shift the schedule.
+Running the discovery sweep by hand forces it past its own due checks, so a manual run does what you expect rather than quietly doing nothing because a feed is not yet due. The other jobs do a normal pass, which still honours their own per-item cadence. Neither permanently shifts the schedule.
 
 ### Maintenance jobs
 
@@ -30,7 +30,6 @@ These run on a fixed schedule and are not user-triggerable.
 | ----------------------- | ------------------------------------------------------------------------------ |
 | Cache warmup            | Keeps commonly needed catalog data warm.                                       |
 | Search cleanup          | Clears finished searches out of slskd.                                         |
-| Download status sync    | Reconciles in-flight downloads against the download client.                    |
 | Version check           | Checks the container registry for a newer release.                             |
 | Session cleanup         | Removes expired sessions.                                                      |
 | Recording ID enrichment | Resolves MusicBrainz recording identifiers for tracks with an ISRC.            |
@@ -50,7 +49,7 @@ These run on a fixed schedule and are not user-triggerable.
 
 Logs are written to `/data/logs`, so they survive a container recreate and can be read from the host.
 
-Secrets never appear in logs. This is enforced by a test, not by convention.
+The credentials you enter in Settings are kept out of the logs, and a test asserts it on the paths that handle them.
 
 ## Health
 
@@ -59,7 +58,7 @@ Two endpoints, both unauthenticated and safe to point a monitor at.
 | Endpoint          | What it returns                                                                    |
 | ----------------- | ---------------------------------------------------------------------------------- |
 | `GET /api/health` | Liveness, plus runtime details including the architecture the image is running on. |
-| `GET /api/status` | A fuller status picture.                                                           |
+| `GET /api/status` | Process detail: platform, Node version, memory use, and uptime.                    |
 
 The compose health check uses the first one against the internal API port.
 
@@ -67,11 +66,11 @@ Inside the application, each integration shows a live status on its settings car
 
 ## Startup
 
-Boot only aborts for genuine prerequisites: the database, a required folder that is not usable, and the core music catalog. Everything else logs a warning and continues.
+Boot aborts for genuine prerequisites: the database and its migration, a required folder that is not usable, the core music catalog, and the one-shot 1.x migration seed. Every integration logs a warning and continues.
 
 When a required folder fails, the container log names the offending path and the ownership fix before the API stops with `Required service(s) failed: Paths`.
 
-A music library that is readable but not writable is a supported mode. Synthseek boots, browsing works, importing is disabled, and it says so.
+A music library that is readable but not writable does not stop the boot. Synthseek starts and says so, in the log and on the Paths entry of the health view. Browsing works, and imports into the library fail until it is writable.
 
 ## Updates
 
@@ -86,18 +85,18 @@ docker compose up -d
 
 ### What happens on an upgrade
 
-The container will not touch your live database until a migration has been proven to work.
+Where there is room, the container proves the migration on a copy before touching your live database.
 
 1. Pending schema changes are detected.
 2. A snapshot of your database is written to `/data/backups`.
-3. If there is room, the migration is applied to a **copy**, not to your database.
+3. If there is room and the database sits in its default location, the migration is applied to a **copy**, not to your database.
 4. The migrated copy is validated.
 5. Only if validation passes is the copy swapped into place.
-6. If anything fails, your live database is untouched, the snapshot is kept, and the failed copy is kept for inspection.
+6. If anything fails during a copy-validated upgrade, your live database is untouched, the snapshot is kept, and the failed copy is kept for inspection.
 
 The last ten snapshots are retained. Every migration run is logged to `/data/logs/migrate.log`.
 
-If there is not enough free space for a copy, Synthseek falls back to migrating in place and tells you, having already taken the snapshot.
+If there is not enough free space for a copy, or your database lives outside its default location, Synthseek falls back to migrating in place and tells you, having already taken the snapshot.
 
 ## Backups
 

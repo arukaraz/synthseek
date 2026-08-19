@@ -46,7 +46,7 @@ export const FAQ_ITEMS = [
   {
     question: "What happens when a download is wrong?",
     answer:
-      "It is held back instead of imported. The file waits in a review queue with the reason it was rejected, you can listen to it there, and the source that sent it is quarantined for that track.",
+      "It is held back instead of imported. The file waits in a review queue with the reason it was rejected, you can listen to it there, and that exact peer and file pairing is set aside so a retry looks elsewhere.",
   },
   {
     question: "Do I need any API keys?",

@@ -88,7 +88,7 @@ Around it sit enrichment providers, each contributing something the catalog does
 
 Enrichment never blocks anything. If a provider is unavailable, the page renders without it and tells you which source is degraded and for how long. A provider that fails repeatedly is stopped being called for a while, then probed once to see whether it has recovered.
 
-All artwork is served through a proxy on your own instance, with a disk cache, so your browser does not connect directly to third-party image hosts.
+Artwork from the catalog, Cover Art Archive, fanart.tv and the Spotify image CDN is served through a proxy on your own instance, with a disk cache. An image a different provider supplies is loaded by your browser directly from that provider.
 
 ## Library sources
 

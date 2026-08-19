@@ -35,7 +35,7 @@ From here you can retry a failed track, retry a whole group, cancel anything in 
 Downloads run one album or playlist at a time, in order. Every track in a group finishes before the next group starts, so you never end up with five half-finished albums.
 
 - **Jump the queue.** Move any track, album, or playlist to the front from its actions menu. A badge shows it took effect. Retried tracks are prioritised automatically.
-- **Pause and resume.** Pause an individual album or playlist, or the entire queue, from the toolbar. Paused work stays parked until you resume it, and survives a restart.
+- **Pause and resume.** Pause an individual album or playlist, or the entire queue, from the toolbar. A paused album or playlist stays parked until you resume it, including across a restart. Pausing the whole queue lasts until you resume it or the container restarts.
 - **Restart recovery.** If Synthseek restarts mid-queue, it rebuilds the queue from the database on boot and picks up where it left off. Paused work stays paused, and work already handed to Lidarr is left alone.
 
 ## Verified imports
@@ -76,7 +76,7 @@ Already have a song in poor quality? Ask for a better copy and Synthseek replace
 
 - The decision reads the actual files, not search result metadata, so a claimed bitrate cannot fool it.
 - The old file is moved to a recycle bin rather than deleted, and the move is verified before anything else happens.
-- If the replacement fails at any point, the original is restored.
+- If the replacement cannot be completed, the original is restored where possible, and otherwise stays recoverable in the recycle bin, with the log naming exactly where it is.
 - The recycle bin empties itself after a retention period, thirty days by default.
 
 You can upgrade a single track, or select several tracks in your library and upgrade them in one action. Synthseek reports back honestly on each one.
@@ -190,6 +190,6 @@ See the [AI Assistants page](/ai-assistants).
 - A jobs section listing every background job relevant to your setup, with what each one does, when it last ran, when it runs next, and a run-now button.
 - A log viewer with level filtering, auto-refresh, and export.
 - A live health view for each connected service.
-- Automatic database backups before any schema change, and a copy-validated upgrade that never touches your live database until the migration has been proven to work.
+- Automatic database backups before any schema change, and, where there is room, a copy-validated upgrade that proves the migration on a copy before touching your live database.
 
 ---

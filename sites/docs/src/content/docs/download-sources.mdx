@@ -40,15 +40,18 @@ Both must point at the same place on the host, and the user Synthseek runs as, s
 
 ### slskd settings
 
-| Setting                        | Default        | What it does                                                               |
-| ------------------------------ | -------------- | -------------------------------------------------------------------------- |
-| Maximum peer attempts          | 15             | How many peers to try per track before giving up.                          |
-| Maximum variations             | 6              | How many title and artist variations to search.                            |
-| Strict tier ordering           | Off            | Exhaust one quality tier fully before dropping to the next.                |
-| Search history cleanup         | On             | Have slskd discard finished searches.                                      |
-| Maximum history searches       | 30             | How many to retain before cleanup.                                         |
-| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures.                                       |
-| Banned users                   | Empty          | Peers excluded from all searches. You can add and remove entries manually. |
+On the slskd card, under **Settings**, then **Integrations**:
+
+| Setting                  | Default | What it does                                                               |
+| ------------------------ | ------- | -------------------------------------------------------------------------- |
+| Maximum peer attempts    | 15      | How many peers to try per track before giving up.                          |
+| Maximum variations       | 6       | How many title and artist variations to search.                            |
+| Strict tier ordering     | Off     | Exhaust one quality tier fully before dropping to the next.                |
+| Search history cleanup   | On      | Have slskd discard finished searches.                                      |
+| Maximum history searches | 30      | How many to retain before cleanup.                                         |
+| Banned users             | Empty   | Peers excluded from all searches. You can add and remove entries manually. |
+
+Banning a peer automatically after repeated failures is a separate switch, on the quarantine card under **Settings**, then **Engine**. See the [Configuration page](/configuration).
 
 ## The yt-dlp fallback
 

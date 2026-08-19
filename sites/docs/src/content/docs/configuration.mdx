@@ -1,6 +1,6 @@
 ---
 title: "Configuration"
-blurb: "Every setting and environment variable, and where each one lives."
+blurb: "The settings and environment variables you are meant to set, and where each one lives."
 group: "Setup & admin"
 order: 6
 ---
@@ -28,7 +28,11 @@ Available to every member.
 
 ### Members
 
-Administrators only. Covered on the [Users and Permissions page](/users-permissions).
+Administrators only. Covered on the [Users and Permissions page](/users-permissions). The approval gate lives here too:
+
+| Setting                      | Default | What it does                                                         |
+| ---------------------------- | ------- | -------------------------------------------------------------------- |
+| Require approval for members | Off     | Hold a plain member's requests until an administrator approves them. |
 
 ### Profile
 
@@ -46,12 +50,19 @@ Administrators only.
 
 **Download sources.** Enable, disable, and prioritise slskd and yt-dlp. The yt-dlp tuning is on the [Download Sources page](/download-sources).
 
-**Plex.** URL, token, connection status, and two independent behaviour switches:
+**Plex.** Connection status, a reconnect button that signs you in at plex.tv and lets you pick a server, and the server URL that sign-in resolved, shown read-only. Plus two independent behaviour switches:
 
 | Setting       | Default | What it does                            |
 | ------------- | ------- | --------------------------------------- |
 | Library scan  | On      | Ask Plex to rescan after an import.     |
 | Playlist sync | On      | Create and reconcile playlists on Plex. |
+
+And how mirrored playlists are named:
+
+| Setting                 | Default | What it does                                                        |
+| ----------------------- | ------- | ------------------------------------------------------------------- |
+| Playlist username affix | Off     | Prefix or suffix a media server playlist with its owner's username. |
+| Separator               | `_`     | The character between the name and the affix.                       |
 
 **Lidarr.** URL, API key, and the quality and metadata profiles available for delegation.
 
@@ -70,7 +81,7 @@ Administrators only.
 
 ### Engine
 
-Administrators only. Every card has a reset to defaults.
+Administrators only. Most cards have a reset to defaults.
 
 **Queue**
 
@@ -93,22 +104,29 @@ Administrators only. Every card has a reset to defaults.
 
 **Import**
 
-| Setting                       | Default | What it does                                                                                                                                                  |
-| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Metadata confidence threshold | 50      | How closely a file's tags must match your request before it is accepted. Raise it to reject more, lower it to accept more.                                    |
-| AcoustID identity gate        | On      | Fingerprint the audio and identify it before import, so a file whose tags look right but whose contents are something else is refused. Needs an AcoustID key. |
+| Setting                       | Default | What it does                                                                                                               |
+| ----------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Metadata confidence threshold | 50      | How closely a file's tags must match your request before it is accepted. Raise it to reject more, lower it to accept more. |
 
 The [Download Engine page](/download-engine) covers what happens to a file these checks refuse.
 
 **Quality**
 
-| Setting          | Default | What it does                                       |
-| ---------------- | ------- | -------------------------------------------------- |
-| Upgrades enabled | On      | Allow replacing a library file with a better copy. |
+| Setting               | Default | What it does                                          |
+| --------------------- | ------- | ----------------------------------------------------- |
+| Upgrades enabled      | On      | Allow replacing a library file with a better copy.    |
+| Recycle bin retention | 30 days | How long a replaced file stays recoverable. 1 to 365. |
+
+Alongside them, what the recycle bin currently holds, and a button to empty it.
 
 **Quarantine**
 
-Tunables for how long a quarantined source and file pairing is excluded, plus the list of current entries with the reason for each. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
+| Setting                        | Default        | What it does                                                                                                                                                  |
+| ------------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AcoustID identity gate         | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose contents are something else is refused. Needs an AcoustID key. |
+| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures.                                                                                                                          |
+
+Below them, the list of current entries with the reason for each, and a link to the banned-peer list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
 
 **Wanted**
 
@@ -117,12 +135,6 @@ Tunables for how long a quarantined source and file pairing is excluded, plus th
 | Enabled                    | Off     |         |
 | Attempts per run           | 10      | 1 to 50 |
 | Maximum attempts per track | 8       | 1 to 20 |
-
-**Review**
-
-| Setting        | Default | Range    |
-| -------------- | ------- | -------- |
-| Retention days | 14      | 1 to 365 |
 
 **Smart search**
 
@@ -134,35 +146,20 @@ Administrators only. Covered on the [Operations page](/operations).
 
 ### Logs
 
-Administrators only. Covered on the [Operations page](/operations).
-
-### Other settings
-
-**Library**
-
-| Setting               | Default    | Range     |
-| --------------------- | ---------- | --------- |
-| Sync interval         | 30 minutes | 5 to 1440 |
-| Recycle bin retention | 30 days    | 1 to 365  |
-
-**Formatting**
-
-| Setting                 | Default | What it does                                                        |
-| ----------------------- | ------- | ------------------------------------------------------------------- |
-| Playlist username affix | Off     | Prefix or suffix a media server playlist with its owner's username. |
-| Separator               | `_`     | The character between the name and the affix.                       |
-
-**Users**
-
-| Setting                      | Default | What it does                                                         |
-| ---------------------------- | ------- | -------------------------------------------------------------------- |
-| Require approval for members | Off     | Hold a plain member's requests until an administrator approves them. |
-
-**System**
+Administrators only. Covered on the [Operations page](/operations). The log level lives here:
 
 | Setting   | Default | What it does              |
 | --------- | ------- | ------------------------- |
 | Log level | INFO    | Applied live, no restart. |
+
+## Settings that live outside Settings
+
+Two live where you use them rather than in a settings section.
+
+| Setting                                              | Default                   | Where                                                            |
+| ---------------------------------------------------- | ------------------------- | ---------------------------------------------------------------- |
+| Review queue retention                               | 14 days                   | The footer of the review queue on the Requests screen. 1 to 365. |
+| Per-request format, bitrate, matching, speed, source | See [Features](/features) | The request window, stored on the request itself.                |
 
 ## Environment variables
 
@@ -204,7 +201,9 @@ Administrators only. Covered on the [Operations page](/operations).
 
 ### Bootstrap credentials
 
-These are read once on first boot and migrated into Settings. After that, manage them in the application.
+These exist for one situation: upgrading a 1.x instance, where environment variables were the only way to configure anything. On the first boot after the upgrade each one is copied into Settings, and from then on Settings is the source of truth and the variable is never read again. Keep them for that one boot, then remove them.
+
+A fresh install needs none of them. The setup wizard collects the same values and writes them to the same place. Leave them out, because setting either slskd variable also records the instance as an upgrade from before 2.0.0 rather than a new one.
 
 `SLSKD_API_URL`, `SLSKD_API_KEY`, `PLEX_URL`, `PLEX_TOKEN`, `LASTFM_API_KEY`, `FANART_API_KEY`, `ACOUSTID_API_KEY`, `MUSICBRAINZ_CONTACT_EMAIL`, `SONGLINK_API_KEY`.
 

@@ -35,8 +35,6 @@ services:
       - PUID=1000
       - PGID=1000
       - AUTH_SECRET=replace-with-a-long-random-string
-      - SLSKD_API_URL=http://slskd:5030
-      - SLSKD_API_KEY=your-slskd-api-key
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:4401/api/health"]
       interval: 30s
@@ -59,13 +57,15 @@ docker compose up -d
 
 Open `http://your-server:4400`.
 
+Your slskd address and API key are not set here. The setup wizard collects them on first run and stores them in the database, along with everything else you connect.
+
 ### What each volume is for
 
-| Container path | What goes there                                                                                      | Notes                                                                                     |
-| -------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `/data`        | The database, configuration, logs, artwork cache, backups, drop-import staging, and the recycle bin. | Back this up. Everything Synthseek knows lives here.                                      |
-| `/music`       | Your organised music library. Beets writes here.                                                     | Can be mounted read-only, in which case Synthseek boots and runs with importing disabled. |
-| `/downloads`   | The folder slskd writes completed downloads to.                                                      | Must be writable. This is the same folder slskd calls its "complete" directory.           |
+| Container path | What goes there                                                                                                             | Notes                                                                                                                               |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `/data`        | The database, configuration, logs, artwork cache, backups, drop-import staging, files held for review, and the recycle bin. | Back this up. Everything Synthseek knows lives here.                                                                                |
+| `/music`       | Your organised music library. Beets writes here.                                                                            | Can be mounted read-only, in which case Synthseek boots and browsing works, but imports into the library fail until it is writable. |
+| `/downloads`   | The folder slskd writes completed downloads to.                                                                             | Must be writable. This is the same folder slskd calls its "complete" directory.                                                     |
 
 ### Ports
 
@@ -78,7 +78,7 @@ Open `http://your-server:4400`.
 
 Synthseek runs as an unprivileged user inside the container. It takes ownership of its own `/data` volume at boot and never touches the ownership of your music and downloads folders. Set `PUID` and `PGID` to the user and group that own your downloads and music folders on the host.
 
-If a required folder is not usable, Synthseek stops at boot rather than starting broken. The container log names the offending path and the ownership fix, and the API then stops with `Required service(s) failed: Paths`. A music library that is readable but not writable is a supported mode: Synthseek boots, browsing works, importing is disabled.
+If a required folder is not usable, Synthseek stops at boot rather than starting broken. The container log names the offending path and the ownership fix, and the API then stops with `Required service(s) failed: Paths`. A music library that is readable but not writable does not stop the boot: Synthseek starts and browsing works, and imports into the library fail until you fix the ownership.
 
 ## First run
 
@@ -86,8 +86,8 @@ The first time you open Synthseek, a setup wizard walks you through five steps.
 
 1. **Administrator account.** Create the first account. This account is the instance owner and cannot be demoted or deleted.
 2. **slskd.** Enter the URL and API key of your slskd instance. Synthseek tests the connection and tells you what it found. You can continue past a failed test, and Synthseek will boot anyway and show the integration as unhealthy so you can fix it from Settings.
-3. **Plex.** Optional. Provide your server URL and token if you want library rescans and playlist sync.
-4. **Enrichment services.** Optional. API keys for AcoustID, Last.fm, fanart.tv, MusicBrainz, and Discogs. All are free, and each one improves a different thing: verification accuracy, discovery, artist images, and metadata depth.
+3. **Plex.** Optional. A popup opens for you to sign in at plex.tv, then you pick which of your servers Synthseek should target. This is what enables library rescans and playlist sync.
+4. **Enrichment services.** Optional. An AcoustID key, a Last.fm key, a fanart.tv key, a Songlink key, and a MusicBrainz contact email. All are free, and each one improves a different thing: verification accuracy, discovery, artist images, link imports, and rate limits. Discogs is added later, from Settings.
 5. **Done.** You land in the application.
 
 Every value the wizard collects lives in the database and can be changed later from Settings. Nothing is written to a configuration file you would have to edit by hand.

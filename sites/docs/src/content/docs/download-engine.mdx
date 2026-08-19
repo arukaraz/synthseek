@@ -120,6 +120,8 @@ Every failure carries a typed reason.
 
 An `environment` failure is only ever assigned from unambiguous evidence, specific filesystem error codes plus a direct write test on the downloads folder. A disk error never overrides a verdict about what a peer actually sent.
 
+When tracks are waiting on a storage problem, the requests page says so at the top, with how many are affected and whether the downloads folder is reachable again. While it is still missing or unwritable, the retry stays disabled, because retrying before you have fixed the storage only fails the same way. Once it is reachable the retry becomes available and covers the waiting tracks in one action, in batches if there are many, so running it again picks up the rest.
+
 ## Rate and concurrency limits
 
 | Limit                       | Default | Setting                              |
