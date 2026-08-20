@@ -72,17 +72,17 @@ Not every failure means the same thing. Some simply stop the import. Others are 
 
 **Metadata confidence threshold.** How closely a file's tags must match your request before it is accepted. Raise it to reject more, lower it to accept more. A retry of a previously rejected import is judged more leniently, on the reasoning that you asked for the retry deliberately.
 
-**AcoustID identity gate.** Whether the audio is fingerprinted and identified before import. This is what catches a file whose tags look right but whose contents are something else. It needs a free AcoustID key, and without one it does not run and only the tag checks apply. It is the single most valuable optional key you can configure.
+**AcoustID identity gate.** Whether the audio is fingerprinted and identified before import. This is what catches a file whose tags look right but whose audio is by a different artist. It needs a free AcoustID key, and without one it does not run and only the tag checks apply. It is the single most valuable optional key you can configure.
 
 ### What identification can and cannot tell you
 
-Fingerprinting guards against a wholly different recording arriving. It is not a guarantee that every detail of a track is the exact version you had in mind.
+Fingerprinting guards against a recording by a different artist arriving. It is not a guarantee that the track is the right one by that artist, nor that every detail is the exact version you had in mind.
 
 An inconclusive identification does not block the import. AcoustID's database is far from complete: obscure tracks, live recordings, regional music, and anything never released commercially routinely come back with nothing at all. Treating silence as guilt would fill the review queue with legitimate files and make it useless. The file still has to satisfy the tag checks.
 
 ### What reaches the review queue
 
-A file lands there when something positively contradicted your request: tags that do not match, audio that identifies as something else, or a tag block that cannot be read at all. A file that merely could not be identified does not.
+A file lands there when something positively contradicted your request: tags that do not match, audio that identifies as another artist, or a tag block that cannot be read at all. A file that merely could not be identified does not.
 
 For each held file you can see why it was rejected, listen to it, and then approve or discard it.
 

@@ -43,7 +43,7 @@ Downloads run one album or playlist at a time, in order. Every track in a group 
 Synthseek checks what arrived before it goes into your library.
 
 - The file's tags are checked against what you asked for, and a file that does not match closely enough is refused.
-- With an AcoustID key configured, the audio itself is fingerprinted and identified, so a file whose tags look right but whose contents are something else is refused. An identification that comes back inconclusive does not block anything; only positive evidence against the file does.
+- With an AcoustID key configured, the audio itself is fingerprinted and identified, so a file whose tags look right but whose audio is by a different artist is refused. An identification that comes back inconclusive does not block anything; only positive evidence against the file does.
 - A file whose tags cannot be read at all is refused rather than waved through.
 
 A refused file is not thrown away.

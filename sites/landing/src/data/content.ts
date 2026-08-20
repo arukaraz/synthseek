@@ -51,7 +51,7 @@ export const FAQ_ITEMS = [
   {
     question: "Do I need any API keys?",
     answer:
-      "None are required. One free AcoustID key is strongly recommended: it unlocks audio fingerprinting, the check that catches a file whose tags look right but whose contents are something else.",
+      "None are required. One free AcoustID key is strongly recommended: it unlocks audio fingerprinting, the check that catches a file whose tags look right but whose audio is by a different artist.",
   },
   {
     question: "Can I control what other users do?",
