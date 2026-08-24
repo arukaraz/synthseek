@@ -34,7 +34,6 @@ export function makeRequestsTrack(overrides: Partial<TrackRequest> = {}): TrackR
     artist: "An Artist",
     request_type: ContentType.enum.track,
     isrc: null,
-    mbid: null,
     track_number: 1,
     disc_number: 1,
     duration_ms: 180000,

@@ -24,7 +24,6 @@ export function createFlatTrackRow(overrides: Partial<FlatTrackRow> = {}): FlatT
     artist: "Aphex Twin",
     request_type: ContentType.enum.track,
     isrc: null,
-    mbid: null,
     track_number: 1,
     disc_number: 1,
     duration_ms: 120000,

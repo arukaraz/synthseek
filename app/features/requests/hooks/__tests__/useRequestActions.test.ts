@@ -79,7 +79,6 @@ function makeTrack(overrides: Partial<TrackRequest> = {}): TrackRequest {
     artist: "An Artist",
     request_type: ContentType.enum.track,
     isrc: null,
-    mbid: null,
     track_number: 1,
     disc_number: 1,
     duration_ms: 180000,
