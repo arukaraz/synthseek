@@ -57,7 +57,11 @@
     "recycleBinEmptied_other": "Papierkorb geleert, {{count}} Dateien entfernt",
     "recycleBinEmptyFailed": "Papierkorb konnte nicht geleert werden",
     "reviewSaved": "Einstellungen der Import-Prüfung gespeichert",
-    "reviewFailed": "Einstellungen der Import-Prüfung konnten nicht gespeichert werden"
+    "reviewFailed": "Einstellungen der Import-Prüfung konnten nicht gespeichert werden",
+    "stagedReleaseRemoved": "Release entfernt",
+    "stagedReleaseRemoveFailed": "Release konnte nicht entfernt werden",
+    "stagedReleasesCleared": "Zwischengespeicherte Releases entfernt",
+    "stagedReleasesClearFailed": "Zwischengespeicherte Releases konnten nicht entfernt werden"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",

@@ -15,6 +15,12 @@ vi.mock("@hooks/api/mutations/settings/useDownloadSources", () => ({
   useUpdateDownloadSources: () => update,
 }));
 
+vi.mock("../StagedReleaseList", () => ({
+  StagedReleaseList: ({ enabled }: { enabled: boolean }) => (
+    <div data-testid="staged-release-list" data-enabled={String(enabled)} />
+  ),
+}));
+
 import { UsenetCard } from "../UsenetCard";
 
 beforeAll(() => {
@@ -128,6 +134,21 @@ describe("UsenetCard", () => {
         usenet: { ...initial.usenet, singleTrackRequests: true },
       });
     });
+  });
+
+  it("shows the waiting-albums list only once single-track requests are on", async () => {
+    render(<UsenetCard initial={initial} />);
+    expect(screen.queryByTestId("staged-release-list")).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("switch", { name: t.singleTrackRequests.ariaLabel }));
+
+    expect(screen.getByTestId("staged-release-list")).toBeInTheDocument();
+  });
+
+  it("tells the list whether the source is enabled, so it does not query while off", () => {
+    render(<UsenetCard initial={optedIn} />);
+
+    expect(screen.getByTestId("staged-release-list")).toHaveAttribute("data-enabled", "false");
   });
 
   it("reverts the draft when cancel is pressed", async () => {

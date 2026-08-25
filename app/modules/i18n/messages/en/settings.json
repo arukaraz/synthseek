@@ -788,6 +788,10 @@
       "wanted-sweep": {
         "name": "Wanted Sweep",
         "description": "Retries watched failed tracks on a release-age schedule."
+      },
+      "usenet-staging-sweep": {
+        "name": "Usenet Staging Sweep",
+        "description": "Removes downloaded Usenet albums nobody asked another track from."
       }
     }
   },
@@ -899,6 +903,23 @@
       "description": "How long a downloaded album waits for another of its tracks to be requested before it is deleted.",
       "suffix": "h",
       "ariaLabel": "Keep unused albums for this many hours"
+    },
+    "stagedList": {
+      "title": "Albums waiting",
+      "empty": {
+        "title": "Nothing waiting",
+        "description": "Albums downloaded for a single track appear here until they expire."
+      },
+      "loading": "Loading...",
+      "loadError": "Could not load the waiting albums",
+      "clearAll": "Delete all",
+      "remove": "Delete this album",
+      "expiresIn": "expires {{when}}",
+      "confirmClear": {
+        "title": "Delete every waiting album?",
+        "message": "The downloaded folders are removed from disk. Any track requested from them later will download the album again.",
+        "confirm": "Delete all"
+      }
     }
   }
 }

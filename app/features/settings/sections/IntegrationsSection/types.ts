@@ -125,3 +125,7 @@ export interface LibrarySourcesCardProps {
   spotify: ConnectionsSpotify;
   enrichment: ConnectionsEnrichment;
 }
+
+export interface StagedReleaseListProps {
+  enabled: boolean;
+}

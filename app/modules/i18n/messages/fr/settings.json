@@ -788,6 +788,10 @@
       "wanted-sweep": {
         "name": "Balayage de suivi",
         "description": "Réessaie les pistes en échec suivies selon un calendrier basé sur l'âge de la sortie."
+      },
+      "usenet-staging-sweep": {
+        "name": "Nettoyage des albums Usenet",
+        "description": "Supprime les albums Usenet téléchargés dont personne n'a demandé un autre morceau."
       }
     }
   },
@@ -899,6 +903,23 @@
       "description": "Combien de temps un album téléchargé attend qu'un autre de ses morceaux soit demandé avant d'être supprimé.",
       "suffix": "h",
       "ariaLabel": "Heures de conservation des albums inutilisés"
+    },
+    "stagedList": {
+      "title": "Albums en attente",
+      "empty": {
+        "title": "Rien en attente",
+        "description": "Les albums téléchargés pour un seul morceau apparaissent ici jusqu'à leur expiration."
+      },
+      "loading": "Chargement...",
+      "loadError": "Impossible de charger les albums en attente",
+      "clearAll": "Tout supprimer",
+      "remove": "Supprimer cet album",
+      "expiresIn": "expire {{when}}",
+      "confirmClear": {
+        "title": "Supprimer tous les albums en attente ?",
+        "message": "Les dossiers téléchargés sont supprimés du disque. Tout morceau demandé ensuite retéléchargera l'album.",
+        "confirm": "Tout supprimer"
+      }
     }
   }
 }

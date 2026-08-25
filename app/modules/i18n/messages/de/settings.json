@@ -788,6 +788,10 @@
       "wanted-sweep": {
         "name": "Wanted-Durchlauf",
         "description": "Versucht beobachtete fehlgeschlagene Titel nach einem Zeitplan auf Basis des Veröffentlichungsalters erneut."
+      },
+      "usenet-staging-sweep": {
+        "name": "Usenet-Zwischenspeicher aufräumen",
+        "description": "Entfernt geladene Usenet-Alben, aus denen niemand einen weiteren Titel angefragt hat."
       }
     }
   },
@@ -899,6 +903,23 @@
       "description": "Wie lange ein geladenes Album darauf wartet, dass ein weiterer seiner Titel angefragt wird, bevor es gelöscht wird.",
       "suffix": "h",
       "ariaLabel": "Stunden, die ungenutzte Alben aufbewahrt werden"
+    },
+    "stagedList": {
+      "title": "Wartende Alben",
+      "empty": {
+        "title": "Nichts in Wartestellung",
+        "description": "Für einen einzelnen Titel geladene Alben erscheinen hier, bis sie ablaufen."
+      },
+      "loading": "Wird geladen...",
+      "loadError": "Wartende Alben konnten nicht geladen werden",
+      "clearAll": "Alle löschen",
+      "remove": "Dieses Album löschen",
+      "expiresIn": "läuft {{when}} ab",
+      "confirmClear": {
+        "title": "Alle wartenden Alben löschen?",
+        "message": "Die geladenen Ordner werden von der Festplatte entfernt. Ein später angefragter Titel lädt das Album erneut.",
+        "confirm": "Alle löschen"
+      }
     }
   }
 }

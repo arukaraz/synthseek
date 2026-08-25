@@ -57,7 +57,11 @@
     "recycleBinEmptied_other": "Recycle bin emptied, {{count}} files removed",
     "recycleBinEmptyFailed": "Failed to empty recycle bin",
     "reviewSaved": "Import review settings saved",
-    "reviewFailed": "Failed to save import review settings"
+    "reviewFailed": "Failed to save import review settings",
+    "stagedReleaseRemoved": "Release removed",
+    "stagedReleaseRemoveFailed": "Could not remove the release",
+    "stagedReleasesCleared": "Staged releases cleared",
+    "stagedReleasesClearFailed": "Could not clear the staged releases"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",

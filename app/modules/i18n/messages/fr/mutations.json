@@ -57,7 +57,11 @@
     "recycleBinEmptied_other": "Corbeille vidée, {{count}} fichiers supprimés",
     "recycleBinEmptyFailed": "Impossible de vider la corbeille",
     "reviewSaved": "Réglages de la révision des imports enregistrés",
-    "reviewFailed": "Impossible d'enregistrer les réglages de la révision des imports"
+    "reviewFailed": "Impossible d'enregistrer les réglages de la révision des imports",
+    "stagedReleaseRemoved": "Publication supprimée",
+    "stagedReleaseRemoveFailed": "Impossible de supprimer la publication",
+    "stagedReleasesCleared": "Publications en attente supprimées",
+    "stagedReleasesClearFailed": "Impossible de supprimer les publications en attente"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",

@@ -57,7 +57,11 @@
     "recycleBinEmptied_other": "Papelera vaciada, {{count}} archivos eliminados",
     "recycleBinEmptyFailed": "No se pudo vaciar la papelera",
     "reviewSaved": "Ajustes de revisión de importaciones guardados",
-    "reviewFailed": "No se pudieron guardar los ajustes de revisión de importaciones"
+    "reviewFailed": "No se pudieron guardar los ajustes de revisión de importaciones",
+    "stagedReleaseRemoved": "Disco eliminado",
+    "stagedReleaseRemoveFailed": "No se pudo eliminar el disco",
+    "stagedReleasesCleared": "Discos en espera eliminados",
+    "stagedReleasesClearFailed": "No se pudieron eliminar los discos en espera"
   },
   "plexConnect": {
     "timedOut": "El inicio de sesión de Plex agotó el tiempo de espera",

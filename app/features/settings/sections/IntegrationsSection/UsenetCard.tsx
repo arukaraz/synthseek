@@ -15,6 +15,7 @@ import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
+import { StagedReleaseList } from "./StagedReleaseList";
 import type { UsenetCardProps } from "./types";
 
 export function UsenetCard({ initial }: UsenetCardProps) {
@@ -142,6 +143,8 @@ export function UsenetCard({ initial }: UsenetCardProps) {
           }
         />
       ) : null}
+
+      {draft.singleTrackRequests ? <StagedReleaseList enabled={draft.enabled} /> : null}
 
       <SaveBar
         isDirty={isDirty}

@@ -788,6 +788,10 @@
       "wanted-sweep": {
         "name": "Barrido de seguimiento",
         "description": "Reintenta las canciones fallidas en seguimiento según la antigüedad del lanzamiento."
+      },
+      "usenet-staging-sweep": {
+        "name": "Barrido de discos en espera",
+        "description": "Elimina los discos de Usenet descargados a los que nadie pidió otra canción."
       }
     }
   },
@@ -899,6 +903,23 @@
       "description": "Cuánto espera un disco descargado a que le pidas otra de sus canciones antes de borrarse.",
       "suffix": "h",
       "ariaLabel": "Horas que se guardan los discos sin usar"
+    },
+    "stagedList": {
+      "title": "Discos en espera",
+      "empty": {
+        "title": "Nada en espera",
+        "description": "Los discos descargados por una sola canción aparecen aquí hasta que caducan."
+      },
+      "loading": "Cargando...",
+      "loadError": "No se pudieron cargar los discos en espera",
+      "clearAll": "Borrar todos",
+      "remove": "Borrar este disco",
+      "expiresIn": "caduca {{when}}",
+      "confirmClear": {
+        "title": "¿Borrar todos los discos en espera?",
+        "message": "Las carpetas descargadas se eliminan del disco. Cualquier canción que pidas de ellas después volverá a descargar el álbum.",
+        "confirm": "Borrar todos"
+      }
     }
   }
 }
