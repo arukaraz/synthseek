@@ -115,6 +115,14 @@
     "title": "API key not found",
     "description": "That API key could not be found."
   },
+  "SUBSONIC_CREDENTIAL_NOT_FOUND": {
+    "title": "Credential not found",
+    "description": "That music-app credential could not be found."
+  },
+  "SUBSONIC_CREDENTIAL_LIMIT_REACHED": {
+    "title": "Too many credentials",
+    "description": "Revoke one of your existing music-app credentials before creating another."
+  },
   "OAUTH_REQUEST_NOT_FOUND": {
     "title": "Authorization request not found",
     "description": "Authorization request not found or expired."

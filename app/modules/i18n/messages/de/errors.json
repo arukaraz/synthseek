@@ -115,6 +115,14 @@
     "title": "API-Schlüssel nicht gefunden",
     "description": "Dieser API-Schlüssel konnte nicht gefunden werden."
   },
+  "SUBSONIC_CREDENTIAL_NOT_FOUND": {
+    "title": "Zugangsdaten nicht gefunden",
+    "description": "Diese Zugangsdaten für Musik-Apps wurden nicht gefunden."
+  },
+  "SUBSONIC_CREDENTIAL_LIMIT_REACHED": {
+    "title": "Zu viele Zugangsdaten",
+    "description": "Widerrufe vorhandene Zugangsdaten für Musik-Apps, bevor du neue erstellst."
+  },
   "OAUTH_REQUEST_NOT_FOUND": {
     "title": "Autorisierungsanfrage nicht gefunden",
     "description": "Autorisierungsanfrage nicht gefunden oder abgelaufen."

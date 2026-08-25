@@ -28,6 +28,31 @@ vi.mock("@hooks/api/queries/usePublicConfig", () => ({
   usePublicConfig: () => createMockQuery({ publicBaseUrl: null }),
 }));
 
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { username: "arukaraz" }, isAdmin: true, isLoading: false }),
+}));
+
+vi.mock("@hooks/api/queries/useSubsonicStatus", () => ({
+  useSubsonicStatus: () =>
+    createMockQuery({ enabled: false, basePath: "/subsonic", streamableTracks: 0, tracksWithoutPath: 0 }),
+}));
+
+vi.mock("@hooks/api/queries/useSubsonicCredentials", () => ({
+  useSubsonicCredentials: () => createMockQuery([]),
+}));
+
+vi.mock("@hooks/api/mutations/subsonic/useCreateSubsonicCredential", () => ({
+  useCreateSubsonicCredential: () => createMockMutation(),
+}));
+
+vi.mock("@hooks/api/mutations/subsonic/useRevokeSubsonicCredential", () => ({
+  useRevokeSubsonicCredential: () => createMockMutation(),
+}));
+
+vi.mock("@hooks/api/mutations/settings/useUpdateConnectApps", () => ({
+  useUpdateConnectApps: () => createMockMutation(),
+}));
+
 vi.mock("@hooks/api/mutations/api-keys/useCreateApiKey", () => ({
   useCreateApiKey: () => createMockMutation(),
 }));
@@ -48,14 +73,15 @@ afterEach(() => {
 });
 
 describe("GeneralSection", () => {
-  it("composes the theme, language, and API cards under the page title", () => {
+  it("composes the theme, language, and connect-apps cards under the page title", () => {
     render(<GeneralSection />);
 
     expect(screen.getByText(enSettings.general.pageTitle)).toBeInTheDocument();
     expect(screen.getByText(enSettings.general.theme.title)).toBeInTheDocument();
     expect(screen.getByText(enSettings.general.language.title)).toBeInTheDocument();
-    expect(screen.getByText(enSettings.api.card.title)).toBeInTheDocument();
+    expect(screen.getByText(enSettings.connectApps.card.title)).toBeInTheDocument();
     expect(screen.getByText(enSettings.api.keys.title)).toBeInTheDocument();
     expect(screen.getByText(enSettings.mcp.title)).toBeInTheDocument();
+    expect(screen.getByText(enSettings.subsonic.title)).toBeInTheDocument();
   });
 });

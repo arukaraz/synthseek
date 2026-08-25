@@ -315,5 +315,12 @@
     },
     "approveFailed": "No se pudo aprobar el archivo retenido",
     "discardFailed": "No se pudo descartar el archivo retenido"
+  },
+  "subsonic": {
+    "revoked": "Credencial revocada",
+    "createFailed": "No se pudo crear la credencial",
+    "revokeFailed": "No se pudo revocar la credencial",
+    "settingsSaved": "Ajustes de aplicaciones de música guardados",
+    "settingsFailed": "No se pudieron guardar los ajustes"
   }
 }

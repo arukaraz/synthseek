@@ -572,16 +572,13 @@
     }
   },
   "api": {
-    "card": {
-      "title": "API",
-      "description": "Programmatic access to Synthseek: create keys for your apps and connect AI assistants over MCP."
-    },
     "keys": {
       "title": "API Keys",
       "empty": "No API keys yet. Create one to connect an app or assistant.",
       "loading": "Loading keys…",
       "newKey": "New key",
-      "loadError": "Failed to load keys: {{message}}"
+      "loadError": "Failed to load keys: {{message}}",
+      "description": "For scripts, and for assistants that cannot use OAuth."
     },
     "row": {
       "lastUsed": "last used {{time}}",
@@ -610,7 +607,7 @@
     }
   },
   "mcp": {
-    "title": "MCP",
+    "title": "AI assistants",
     "description": "Connect an AI assistant to Synthseek over the Model Context Protocol.",
     "endpointLabel": "MCP endpoint",
     "endpointHelper": "Add this URL as a custom connector or MCP server in your assistant.",
@@ -920,6 +917,69 @@
         "message": "The downloaded folders are removed from disk. Any track requested from them later will download the album again.",
         "confirm": "Delete all"
       }
+    }
+  },
+  "subsonic": {
+    "title": "Music players",
+    "description": "Listen to your library in Feishin, DSub, Symfonium and other Subsonic apps.",
+    "newCredential": "New credential",
+    "enable": {
+      "ariaLabel": "Enable music players"
+    },
+    "connect": {
+      "addressLabel": "Address",
+      "usernameLabel": "Username",
+      "passwordHelper": "The password is the credential you create below.",
+      "copyAddressLabel": "Copy the address",
+      "copyUsernameLabel": "Copy the username",
+      "addressCopied": "Address copied",
+      "usernameCopied": "Username copied",
+      "copyFailed": "Could not copy"
+    },
+    "coverage": {
+      "line": "{{streamable}} tracks playable · {{missing}} without a verified file"
+    },
+    "disabled": {
+      "admin": "Turn this on to let music apps reach your library.",
+      "member": "An admin has not turned this on yet."
+    },
+    "credentials": {
+      "loading": "Loading credentials...",
+      "loadError": "Could not load credentials: {{message}}",
+      "empty": "No credentials yet."
+    },
+    "row": {
+      "created": "Created {{time}}",
+      "lastUsed": "Last used {{time}}",
+      "neverUsed": "Never used",
+      "client": "via {{client}}",
+      "revokeLabel": "Revoke {{name}}"
+    },
+    "create": {
+      "title": "New music-app credential",
+      "description": "Use it as the password in any Subsonic client.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Feishin on my laptop",
+      "nameAriaLabel": "Credential name",
+      "create": "Create",
+      "revealTitle": "Credential created",
+      "revealDescription": "Use your Synthseek username with this as the password.",
+      "revealWarning": "This is the only time it is shown.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy",
+      "done": "Done"
+    },
+    "revoke": {
+      "title": "Revoke credential",
+      "message": "The app using it will stop connecting immediately.",
+      "confirm": "Revoke"
+    }
+  },
+  "connectApps": {
+    "card": {
+      "title": "Connect apps",
+      "description": "Apps and assistants that connect to your Synthseek."
     }
   }
 }

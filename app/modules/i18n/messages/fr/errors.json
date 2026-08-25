@@ -115,6 +115,14 @@
     "title": "Clé API introuvable",
     "description": "Cette clé API est introuvable."
   },
+  "SUBSONIC_CREDENTIAL_NOT_FOUND": {
+    "title": "Identifiant introuvable",
+    "description": "Cet identifiant d'application musicale est introuvable."
+  },
+  "SUBSONIC_CREDENTIAL_LIMIT_REACHED": {
+    "title": "Trop d'identifiants",
+    "description": "Révoquez un identifiant d'application musicale existant avant d'en créer un autre."
+  },
   "OAUTH_REQUEST_NOT_FOUND": {
     "title": "Demande d'autorisation introuvable",
     "description": "Demande d'autorisation introuvable ou expirée."

@@ -115,6 +115,14 @@
     "title": "Clave de API no encontrada",
     "description": "No se pudo encontrar esa clave de API."
   },
+  "SUBSONIC_CREDENTIAL_NOT_FOUND": {
+    "title": "Credencial no encontrada",
+    "description": "No se pudo encontrar esa credencial de aplicación de música."
+  },
+  "SUBSONIC_CREDENTIAL_LIMIT_REACHED": {
+    "title": "Demasiadas credenciales",
+    "description": "Revoca una de tus credenciales de aplicación de música antes de crear otra."
+  },
   "OAUTH_REQUEST_NOT_FOUND": {
     "title": "Solicitud de autorización no encontrada",
     "description": "Solicitud de autorización no encontrada o expirada."

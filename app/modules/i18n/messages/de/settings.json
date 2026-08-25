@@ -572,16 +572,13 @@
     }
   },
   "api": {
-    "card": {
-      "title": "API",
-      "description": "Programmatischer Zugriff auf Synthseek: Erstelle Schlüssel für deine Apps und verbinde KI-Assistenten über MCP."
-    },
     "keys": {
       "title": "API-Schlüssel",
       "empty": "Noch keine API-Schlüssel. Erstelle einen, um eine App oder einen Assistenten zu verbinden.",
       "loading": "Schlüssel werden geladen…",
       "newKey": "Neuer Schlüssel",
-      "loadError": "Schlüssel konnten nicht geladen werden: {{message}}"
+      "loadError": "Schlüssel konnten nicht geladen werden: {{message}}",
+      "description": "Für Skripte und für Assistenten, die kein OAuth nutzen können."
     },
     "row": {
       "lastUsed": "zuletzt verwendet {{time}}",
@@ -610,7 +607,7 @@
     }
   },
   "mcp": {
-    "title": "MCP",
+    "title": "KI-Assistenten",
     "description": "Verbinde einen KI-Assistenten über das Model Context Protocol mit Synthseek.",
     "endpointLabel": "MCP-Endpunkt",
     "endpointHelper": "Füge diese URL als benutzerdefinierten Connector oder MCP-Server in deinem Assistenten hinzu.",
@@ -920,6 +917,69 @@
         "message": "Die geladenen Ordner werden von der Festplatte entfernt. Ein später angefragter Titel lädt das Album erneut.",
         "confirm": "Alle löschen"
       }
+    }
+  },
+  "subsonic": {
+    "title": "Musik-Player",
+    "description": "Höre deine Bibliothek in Feishin, DSub, Symfonium und anderen Subsonic-Apps.",
+    "newCredential": "Neue Zugangsdaten",
+    "enable": {
+      "ariaLabel": "Musik-Player aktivieren"
+    },
+    "connect": {
+      "addressLabel": "Adresse",
+      "usernameLabel": "Benutzername",
+      "passwordHelper": "Das Passwort sind die Zugangsdaten, die du unten erstellst.",
+      "copyAddressLabel": "Adresse kopieren",
+      "copyUsernameLabel": "Benutzernamen kopieren",
+      "addressCopied": "Adresse kopiert",
+      "usernameCopied": "Benutzername kopiert",
+      "copyFailed": "Kopieren fehlgeschlagen"
+    },
+    "coverage": {
+      "line": "{{streamable}} Titel abspielbar · {{missing}} ohne geprüfte Datei"
+    },
+    "disabled": {
+      "admin": "Aktiviere dies, damit Musik-Apps deine Bibliothek erreichen.",
+      "member": "Ein Administrator hat dies noch nicht aktiviert."
+    },
+    "credentials": {
+      "loading": "Zugangsdaten werden geladen...",
+      "loadError": "Zugangsdaten konnten nicht geladen werden: {{message}}",
+      "empty": "Noch keine Zugangsdaten."
+    },
+    "row": {
+      "created": "Erstellt {{time}}",
+      "lastUsed": "Zuletzt genutzt {{time}}",
+      "neverUsed": "Nie genutzt",
+      "client": "über {{client}}",
+      "revokeLabel": "{{name}} widerrufen"
+    },
+    "create": {
+      "title": "Neue Zugangsdaten für Musik-Apps",
+      "description": "Als Passwort in jedem Subsonic-Client verwenden.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Feishin auf dem Laptop",
+      "nameAriaLabel": "Name der Zugangsdaten",
+      "create": "Erstellen",
+      "revealTitle": "Zugangsdaten erstellt",
+      "revealDescription": "Nutze deinen Synthseek-Benutzernamen und dies als Passwort.",
+      "revealWarning": "Dies wird nur dieses eine Mal angezeigt.",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "copyFailed": "Kopieren fehlgeschlagen",
+      "done": "Fertig"
+    },
+    "revoke": {
+      "title": "Zugangsdaten widerrufen",
+      "message": "Die App, die sie nutzt, verliert sofort die Verbindung.",
+      "confirm": "Widerrufen"
+    }
+  },
+  "connectApps": {
+    "card": {
+      "title": "Apps verbinden",
+      "description": "Apps und Assistenten, die sich mit deinem Synthseek verbinden."
     }
   }
 }

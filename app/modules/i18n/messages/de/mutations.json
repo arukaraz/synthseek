@@ -315,5 +315,12 @@
     },
     "approveFailed": "Die zurückgehaltene Datei konnte nicht freigegeben werden",
     "discardFailed": "Die zurückgehaltene Datei konnte nicht verworfen werden"
+  },
+  "subsonic": {
+    "revoked": "Zugangsdaten widerrufen",
+    "createFailed": "Zugangsdaten konnten nicht erstellt werden",
+    "revokeFailed": "Zugangsdaten konnten nicht widerrufen werden",
+    "settingsSaved": "Einstellungen für Musik-Apps gespeichert",
+    "settingsFailed": "Einstellungen konnten nicht gespeichert werden"
   }
 }

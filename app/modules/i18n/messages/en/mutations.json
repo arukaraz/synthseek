@@ -315,5 +315,12 @@
     },
     "approveFailed": "Failed to approve the held file",
     "discardFailed": "Failed to discard the held file"
+  },
+  "subsonic": {
+    "revoked": "Credential revoked",
+    "createFailed": "Could not create the credential",
+    "revokeFailed": "Could not revoke the credential",
+    "settingsSaved": "Music-app settings saved",
+    "settingsFailed": "Could not save the music-app settings"
   }
 }

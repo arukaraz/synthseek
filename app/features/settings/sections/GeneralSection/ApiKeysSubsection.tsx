@@ -7,9 +7,16 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { useApiKeys } from "@hooks/api/queries/useApiKeys";
 
-import { emptyPanel, subSection, subSectionHeader, subSectionHeaderText, subSectionTitle } from "../../styles";
+import {
+  subSection,
+  subSectionDescription,
+  subSectionHeader,
+  subSectionHeaderText,
+  subSectionTitle,
+} from "../../styles";
 import { ApiKeyRow } from "./ApiKeyRow";
 import { CreateApiKeyDialog } from "./CreateApiKeyDialog";
+import { connectionMeta } from "./styles";
 
 export function ApiKeysSubsection() {
   const { t } = useTranslation("settings");
@@ -21,28 +28,30 @@ export function ApiKeysSubsection() {
       <header className={subSectionHeader()}>
         <div className={subSectionHeaderText()}>
           <h3 className={subSectionTitle()}>{t("api.keys.title")}</h3>
+          <p className={subSectionDescription()}>{t("api.keys.description")}</p>
         </div>
-        <Button size="sm" onClick={() => setCreateOpen(true)}>
-          <Plus />
-          {t("api.keys.newKey")}
-        </Button>
       </header>
 
       {isLoading ? (
-        <span className="text-fg/60 text-sm">{t("api.keys.loading")}</span>
+        <span className={connectionMeta()}>{t("api.keys.loading")}</span>
       ) : error ? (
-        <span className="text-sm text-red-400">{t("api.keys.loadError", { message: error.message })}</span>
-      ) : !data || data.length === 0 ? (
-        <div className={emptyPanel()}>
-          <span className="text-fg/60 text-sm">{t("api.keys.empty")}</span>
-        </div>
-      ) : (
+        <span className="text-xs text-red-400">{t("api.keys.loadError", { message: error.message })}</span>
+      ) : data && data.length > 0 ? (
         <div className="flex flex-col">
           {data.map((apiKey) => (
             <ApiKeyRow key={apiKey.id} apiKey={apiKey} />
           ))}
         </div>
+      ) : (
+        <span className={connectionMeta()}>{t("api.keys.empty")}</span>
       )}
+
+      <div className="flex justify-end">
+        <Button size="sm" onClick={() => setCreateOpen(true)}>
+          <Plus />
+          {t("api.keys.newKey")}
+        </Button>
+      </div>
 
       <CreateApiKeyDialog open={createOpen} onOpenChange={setCreateOpen} />
     </section>

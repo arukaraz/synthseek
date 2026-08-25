@@ -54,6 +54,27 @@ export interface CreateApiKeyDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+export type SubsonicCredentialSummary = RouterOutputs["subsonic"]["listCredentials"][number];
+export type CreatedSubsonicCredential = RouterOutputs["subsonic"]["createCredential"];
+
+export interface SubsonicCredentialRowProps {
+  credential: SubsonicCredentialSummary;
+}
+
+export interface CreateSubsonicCredentialDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export interface ConnectionValueFieldProps {
+  label: string;
+  value: string;
+  helper?: string;
+  copyAriaLabel: string;
+  copiedMessage: string;
+  copyFailedMessage: string;
+}
+
 export interface LanguageSelectorProps {
   value: Locale;
   onSelect: (locale: Locale) => void;

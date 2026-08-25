@@ -315,5 +315,12 @@
     },
     "approveFailed": "Impossible de valider le fichier conservé",
     "discardFailed": "Impossible de rejeter le fichier conservé"
+  },
+  "subsonic": {
+    "revoked": "Identifiant révoqué",
+    "createFailed": "Impossible de créer l'identifiant",
+    "revokeFailed": "Impossible de révoquer l'identifiant",
+    "settingsSaved": "Paramètres des applications musicales enregistrés",
+    "settingsFailed": "Impossible d'enregistrer les paramètres"
   }
 }

@@ -572,16 +572,13 @@
     }
   },
   "api": {
-    "card": {
-      "title": "API",
-      "description": "Accès programmatique à Synthseek : créez des clés pour vos applications et connectez des assistants IA via MCP."
-    },
     "keys": {
       "title": "Clés API",
       "empty": "Aucune clé API pour l'instant. Créez-en une pour connecter une application ou un assistant.",
       "loading": "Chargement des clés…",
       "newKey": "Nouvelle clé",
-      "loadError": "Échec du chargement des clés : {{message}}"
+      "loadError": "Échec du chargement des clés : {{message}}",
+      "description": "Pour les scripts et les assistants qui ne peuvent pas utiliser OAuth."
     },
     "row": {
       "lastUsed": "dernière utilisation {{time}}",
@@ -610,7 +607,7 @@
     }
   },
   "mcp": {
-    "title": "MCP",
+    "title": "Assistants IA",
     "description": "Connectez un assistant IA à Synthseek via le Model Context Protocol.",
     "endpointLabel": "Point de terminaison MCP",
     "endpointHelper": "Ajoutez cette URL comme connecteur personnalisé ou serveur MCP dans votre assistant.",
@@ -920,6 +917,69 @@
         "message": "Les dossiers téléchargés sont supprimés du disque. Tout morceau demandé ensuite retéléchargera l'album.",
         "confirm": "Tout supprimer"
       }
+    }
+  },
+  "subsonic": {
+    "title": "Lecteurs de musique",
+    "description": "Écoutez votre bibliothèque dans Feishin, DSub, Symfonium et d'autres applications Subsonic.",
+    "newCredential": "Nouvel identifiant",
+    "enable": {
+      "ariaLabel": "Activer les lecteurs de musique"
+    },
+    "connect": {
+      "addressLabel": "Adresse",
+      "usernameLabel": "Nom d'utilisateur",
+      "passwordHelper": "Le mot de passe est l'identifiant que vous créez ci-dessous.",
+      "copyAddressLabel": "Copier l'adresse",
+      "copyUsernameLabel": "Copier le nom d'utilisateur",
+      "addressCopied": "Adresse copiée",
+      "usernameCopied": "Nom d'utilisateur copié",
+      "copyFailed": "Impossible de copier"
+    },
+    "coverage": {
+      "line": "{{streamable}} titres lisibles · {{missing}} sans fichier vérifié"
+    },
+    "disabled": {
+      "admin": "Activez ceci pour que les applications musicales atteignent votre bibliothèque.",
+      "member": "Un administrateur ne l'a pas encore activé."
+    },
+    "credentials": {
+      "loading": "Chargement des identifiants...",
+      "loadError": "Impossible de charger les identifiants : {{message}}",
+      "empty": "Aucun identifiant pour l'instant."
+    },
+    "row": {
+      "created": "Créé {{time}}",
+      "lastUsed": "Dernière utilisation {{time}}",
+      "neverUsed": "Jamais utilisé",
+      "client": "via {{client}}",
+      "revokeLabel": "Révoquer {{name}}"
+    },
+    "create": {
+      "title": "Nouvel identifiant d'application",
+      "description": "À utiliser comme mot de passe dans tout client Subsonic.",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Feishin sur mon portable",
+      "nameAriaLabel": "Nom de l'identifiant",
+      "create": "Créer",
+      "revealTitle": "Identifiant créé",
+      "revealDescription": "Utilisez votre nom d'utilisateur Synthseek avec ceci comme mot de passe.",
+      "revealWarning": "C'est la seule fois où il s'affiche.",
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyFailed": "Impossible de copier",
+      "done": "Terminé"
+    },
+    "revoke": {
+      "title": "Révoquer l'identifiant",
+      "message": "L'application qui l'utilise sera déconnectée immédiatement.",
+      "confirm": "Révoquer"
+    }
+  },
+  "connectApps": {
+    "card": {
+      "title": "Connecter des applications",
+      "description": "Applications et assistants qui se connectent à votre Synthseek."
     }
   }
 }
