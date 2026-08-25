@@ -60,3 +60,7 @@ jobs:
       - name: Run checks
         run: npm run check
         working-directory: sites
+
+      - name: Build both sites
+        run: npm run build
+        working-directory: sites

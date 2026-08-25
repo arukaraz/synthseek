@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
     paths:
-      - "sites/**"
       - "changelog.json"
       - ".github/workflows/sites.yml"
 
