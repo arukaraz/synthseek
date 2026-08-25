@@ -1,6 +1,6 @@
 ---
 title: "Download Sources"
-blurb: "Wire up slskd, and understand the yt-dlp fallback."
+blurb: "Wire up slskd and Usenet, and understand the yt-dlp fallback."
 group: "Core concepts"
 order: 5
 ---
@@ -9,14 +9,15 @@ order: 5
 
 A download source is an adapter. Synthseek asks each enabled source, in priority order, whether it can supply a track, and takes the first one that delivers something that passes verification. Lower priority numbers are tried first.
 
-Two sources ship today.
+Three sources ship today.
 
 | Source | Priority | Enabled by default |
 | ------ | -------- | ------------------ |
 | slskd  | 0        | Yes                |
+| Usenet | 5        | No                 |
 | yt-dlp | 10       | Yes                |
 
-You can disable either one globally in Settings, or pick a specific source per request.
+You can disable any of them globally in Settings, or pick a specific source per request.
 
 ## slskd
 
@@ -52,6 +53,71 @@ On the slskd card, under **Settings**, then **Integrations**:
 | Banned users             | Empty   | Peers excluded from all searches. You can add and remove entries manually. |
 
 Banning a peer automatically after repeated failures is a separate switch, on the quarantine card under **Settings**, then **Engine**. See the [Configuration page](/configuration).
+
+## Usenet
+
+Usenet is a second acquisition source, and it works differently enough from the other two to be worth
+a paragraph before the setup steps. Nobody publishes single tracks on Usenet: material is posted as a
+whole release, so a request fetches the entire album and takes the track it needs out of it.
+
+That has two consequences you will notice. Requesting an album downloads one release instead of
+hunting each track separately, which is where Usenet is at its best. And requesting a single track,
+if you allow it, downloads the album that track belongs to.
+
+Because of that, Usenet is offered only for album requests unless you say otherwise, and it is off
+until you configure it.
+
+### What you need
+
+Usenet needs two things Synthseek does not provide, the same way it does not provide your Soulseek
+account:
+
+- **A Usenet provider and an indexer.** The indexer is what Synthseek searches; it must speak the
+  Newznab API, which most do.
+- **SABnzbd**, reachable from the Synthseek container, doing the actual downloading.
+
+### Setting it up
+
+1. In your indexer, find your API key.
+2. In SABnzbd, go to **Config**, then **General**, and note the API key there.
+3. Point SABnzbd's completed-downloads folder at the same `/downloads` volume Synthseek uses. This is
+   the same requirement the slskd section describes above, and the same thing goes wrong when it is
+   missed: downloads succeed and nothing is ever imported.
+4. In Synthseek, go to **Settings**, then **Integrations**, then the **Usenet** card. Enter both
+   addresses and both keys.
+
+### Usenet settings
+
+| Setting                | Default | What it does                                                                      |
+| ---------------------- | ------- | --------------------------------------------------------------------------------- |
+| Maximum release size   | 1000 MB | Releases larger than this are skipped. 0 accepts any size.                        |
+| Minimum release age    | 1 hour  | Releases newer than this are skipped, because a fresh post can still be arriving. |
+| Single-track requests  | Off     | Allows Usenet outside album requests. See below.                                  |
+| Keep unused albums for | 24 h    | How long a downloaded album waits for another of its tracks before it is deleted. |
+
+### Single-track requests
+
+Off by default. While it is off, Usenet is offered only when you request an album.
+
+Turning it on lets Usenet serve any request, at the cost the section above describes: one song means
+downloading its album. To keep that from being pure waste, the downloaded album stays on disk for a
+while, so another track from it costs nothing. The **Usenet** card lists what is currently waiting,
+what each one will cost you in disk space, and when it expires, and lets you delete one or all of
+them at any time. An hourly job removes the ones nobody came back for.
+
+### When a release does not deliver
+
+Usenet does not always hand over what its name promised, and Synthseek treats the outcomes
+differently on purpose.
+
+A release that arrives with files but without the track you asked for is a bad release, and it is
+remembered so the same one is not tried again for that track. A release that arrives with nothing
+readable is NOT blamed: a very recent post can still be spreading between servers, and blaming it
+would rule out something that is merely early. Those are retried later instead. And when the
+downloads folder itself cannot be read, nothing is blamed at all, because that is a problem on your
+side rather than the release's.
+
+Whatever Usenet cannot deliver falls through to your other enabled sources in the usual order.
 
 ## The yt-dlp fallback
 
