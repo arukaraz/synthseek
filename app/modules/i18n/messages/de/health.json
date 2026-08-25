@@ -25,5 +25,9 @@
   "LIBRARY_NOT_ACCESSIBLE": "Bibliothekspfad ist nicht zugänglich: {{path}}",
   "LIBRARY_READ_ONLY": "Downloads beschreibbar, Bibliothek schreibgeschützt (eingeschränkt): {{path}}",
   "STORAGE_SAME_FILESYSTEM": "Downloads ({{downloadsPath}}) und Bibliothek ({{libraryPath}}) teilen sich ein Dateisystem, Importe verschieben Dateien atomar",
-  "STORAGE_CROSS_FILESYSTEM": "Downloads ({{downloadsPath}}) und Bibliothek ({{libraryPath}}) liegen auf unterschiedlichen Dateisystemen, Importe kopieren und löschen anschließend und benötigen vorübergehend Platz für beide Kopien"
+  "STORAGE_CROSS_FILESYSTEM": "Downloads ({{downloadsPath}}) und Bibliothek ({{libraryPath}}) liegen auf unterschiedlichen Dateisystemen, Importe kopieren und löschen anschließend und benötigen vorübergehend Platz für beide Kopien",
+  "USENET_NOT_CONFIGURED": "Usenet-Indexer und SABnzbd sind nicht konfiguriert (optional)",
+  "USENET_INDEXER_UNREACHABLE": "Indexer nicht erreichbar",
+  "USENET_DOWNLOADER_UNREACHABLE": "SABnzbd nicht erreichbar",
+  "USENET_CONNECTED": "Indexer und SABnzbd erreichbar"
 }

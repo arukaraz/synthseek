@@ -153,6 +153,10 @@
         "lidarr": {
           "label": "Lidarr",
           "description": "Delega este álbum a tu instancia de Lidarr"
+        },
+        "usenet": {
+          "label": "Usenet",
+          "description": "Se trae el disco entero desde tu indexador a través de SABnzbd."
         }
       },
       "monitor": {

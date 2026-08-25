@@ -35,6 +35,19 @@ const initial: YtdlpCardProps["initial"] = {
     maxDurationDeltaSec: 10,
     searchTimeout: 30000,
   },
+  usenet: {
+    enabled: false,
+    priority: 5,
+    indexerUrl: "",
+    indexerApiKey: "",
+    sabnzbdUrl: "",
+    sabnzbdApiKey: "",
+    maxSizeMb: 1000,
+    minAgeHours: 1,
+    searchTimeout: 30000,
+    singleTrackRequests: false,
+    stagingRetentionHours: 24,
+  },
 };
 
 describe("YtdlpCard", () => {
@@ -48,7 +61,7 @@ describe("YtdlpCard", () => {
     expect(screen.getByRole("switch", { name: enSettings.ytdlp.enable.ariaLabel })).not.toBeChecked();
   });
 
-  it("saves the ytdlp draft alongside the unchanged slskd source after an edit", async () => {
+  it("saves the ytdlp draft alongside every unchanged sibling source after an edit", async () => {
     render(<YtdlpCard initial={initial} />);
 
     await userEvent.click(screen.getByRole("switch", { name: enSettings.ytdlp.enable.ariaLabel }));
@@ -58,6 +71,7 @@ describe("YtdlpCard", () => {
       expect(update.mutateAsync).toHaveBeenCalledWith({
         slskd: initial.slskd,
         ytdlp: { ...initial.ytdlp, enabled: true },
+        usenet: initial.usenet,
       });
     });
   });

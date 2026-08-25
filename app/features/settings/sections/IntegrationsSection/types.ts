@@ -93,12 +93,31 @@ export interface DownloadSourceYtdlp {
   searchTimeout: number;
 }
 
+export interface DownloadSourceUsenet {
+  enabled: boolean;
+  priority: number;
+  indexerUrl: string;
+  indexerApiKey: string;
+  sabnzbdUrl: string;
+  sabnzbdApiKey: string;
+  maxSizeMb: number;
+  minAgeHours: number;
+  searchTimeout: number;
+  singleTrackRequests: boolean;
+  stagingRetentionHours: number;
+}
+
 export interface DownloadSourcesConfig {
   slskd: DownloadSourceSlskd;
   ytdlp: DownloadSourceYtdlp;
+  usenet: DownloadSourceUsenet;
 }
 
 export interface YtdlpCardProps {
+  initial: DownloadSourcesConfig;
+}
+
+export interface UsenetCardProps {
   initial: DownloadSourcesConfig;
 }
 

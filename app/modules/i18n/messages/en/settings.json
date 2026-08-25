@@ -849,5 +849,56 @@
     "chipsInput": {
       "removeLabel": "Remove {{chip}}"
     }
+  },
+  "usenet": {
+    "title": "Usenet",
+    "description": "Second acquisition source. Usenet publishes whole releases, so a request pulls the full album and takes the track it needs from it.",
+    "enable": {
+      "label": "Enable",
+      "description": "When on, album requests can be served from Usenet through your indexer and SABnzbd.",
+      "ariaLabel": "Enable Usenet source"
+    },
+    "indexerUrl": {
+      "label": "Indexer address",
+      "placeholder": "https://indexer.example.com"
+    },
+    "indexerApiKey": {
+      "label": "Indexer API key"
+    },
+    "sabnzbdUrl": {
+      "label": "SABnzbd address",
+      "placeholder": "http://localhost:8080"
+    },
+    "sabnzbdApiKey": {
+      "label": "SABnzbd API key"
+    },
+    "maxSize": {
+      "label": "Maximum release size",
+      "description": "Skip any release larger than this. Set to 0 to accept any size.",
+      "suffix": "MB",
+      "ariaLabel": "Maximum release size in megabytes"
+    },
+    "minAge": {
+      "label": "Minimum release age",
+      "description": "Skip releases newer than this, since a very recent post may still be spreading across servers and would arrive incomplete.",
+      "suffix": "h",
+      "ariaLabel": "Minimum release age in hours"
+    },
+    "singleTrackRequests": {
+      "title": "Single-track requests",
+      "label": "Use Usenet outside albums too",
+      "description": "Off by default. When off, Usenet is only offered for album requests.",
+      "ariaLabel": "Allow Usenet for single-track requests",
+      "tooltipTitle": "What this changes",
+      "tooltipWhat": "Usenet never publishes single tracks, only whole releases. Getting one song means downloading the entire album it belongs to.",
+      "tooltipCost": "The downloaded album is kept for a while in case another of its tracks is requested, then deleted. Turning this on trades disk space and bandwidth for finding songs that no peer is sharing.",
+      "tooltipTriggerLabel": "About single-track requests over Usenet"
+    },
+    "stagingRetention": {
+      "label": "Keep unused albums for",
+      "description": "How long a downloaded album waits for another of its tracks to be requested before it is deleted.",
+      "suffix": "h",
+      "ariaLabel": "Keep unused albums for this many hours"
+    }
   }
 }

@@ -25,5 +25,9 @@
   "LIBRARY_NOT_ACCESSIBLE": "La ruta de la biblioteca no es accesible: {{path}}",
   "LIBRARY_READ_ONLY": "Descargas con escritura, biblioteca solo lectura (degradado): {{path}}",
   "STORAGE_SAME_FILESYSTEM": "Las descargas ({{downloadsPath}}) y la biblioteca ({{libraryPath}}) comparten sistema de archivos, las importaciones mueven los archivos de forma atómica",
-  "STORAGE_CROSS_FILESYSTEM": "Las descargas ({{downloadsPath}}) y la biblioteca ({{libraryPath}}) están en sistemas de archivos distintos, las importaciones copian y luego eliminan, y necesitan temporalmente espacio para ambas copias"
+  "STORAGE_CROSS_FILESYSTEM": "Las descargas ({{downloadsPath}}) y la biblioteca ({{libraryPath}}) están en sistemas de archivos distintos, las importaciones copian y luego eliminan, y necesitan temporalmente espacio para ambas copias",
+  "USENET_NOT_CONFIGURED": "El indexador de Usenet y SABnzbd no están configurados (opcional)",
+  "USENET_INDEXER_UNREACHABLE": "No se puede contactar con el indexador",
+  "USENET_DOWNLOADER_UNREACHABLE": "No se puede contactar con SABnzbd",
+  "USENET_CONNECTED": "Indexador y SABnzbd accesibles"
 }

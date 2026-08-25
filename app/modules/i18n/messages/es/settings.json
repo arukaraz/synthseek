@@ -849,5 +849,56 @@
     "chipsInput": {
       "removeLabel": "Eliminar {{chip}}"
     }
+  },
+  "usenet": {
+    "title": "Usenet",
+    "description": "Segunda fuente de adquisición. Usenet publica discos completos, así que una petición se trae el álbum entero y saca de ahí la canción que necesita.",
+    "enable": {
+      "label": "Activar",
+      "description": "Al activarlo, las peticiones de álbum pueden servirse desde Usenet a través de tu indexador y SABnzbd.",
+      "ariaLabel": "Activar la fuente Usenet"
+    },
+    "indexerUrl": {
+      "label": "Dirección del indexador",
+      "placeholder": "https://indexador.ejemplo.com"
+    },
+    "indexerApiKey": {
+      "label": "Clave API del indexador"
+    },
+    "sabnzbdUrl": {
+      "label": "Dirección de SABnzbd",
+      "placeholder": "http://localhost:8080"
+    },
+    "sabnzbdApiKey": {
+      "label": "Clave API de SABnzbd"
+    },
+    "maxSize": {
+      "label": "Tamaño máximo del disco",
+      "description": "Descarta cualquier publicación más grande que esto. Ponlo a 0 para aceptar cualquier tamaño.",
+      "suffix": "MB",
+      "ariaLabel": "Tamaño máximo del disco en megabytes"
+    },
+    "minAge": {
+      "label": "Antigüedad mínima",
+      "description": "Descarta publicaciones más recientes que esto, porque una muy nueva puede seguir repartiéndose entre servidores y llegaría incompleta.",
+      "suffix": "h",
+      "ariaLabel": "Antigüedad mínima en horas"
+    },
+    "singleTrackRequests": {
+      "title": "Peticiones de una sola canción",
+      "label": "Usar Usenet también fuera de álbumes",
+      "description": "Apagado por defecto. Mientras esté apagado, Usenet solo se ofrece en peticiones de álbum.",
+      "ariaLabel": "Permitir Usenet en peticiones de una sola canción",
+      "tooltipTitle": "Qué cambia esto",
+      "tooltipWhat": "Usenet nunca publica canciones sueltas, solo discos enteros. Conseguir una canción significa descargar el álbum completo al que pertenece.",
+      "tooltipCost": "El disco descargado se guarda un rato por si pides otra de sus canciones, y después se borra. Activarlo cambia espacio en disco y ancho de banda por encontrar canciones que nadie está compartiendo.",
+      "tooltipTriggerLabel": "Sobre las peticiones de una sola canción por Usenet"
+    },
+    "stagingRetention": {
+      "label": "Guardar los discos sin usar",
+      "description": "Cuánto espera un disco descargado a que le pidas otra de sus canciones antes de borrarse.",
+      "suffix": "h",
+      "ariaLabel": "Horas que se guardan los discos sin usar"
+    }
   }
 }

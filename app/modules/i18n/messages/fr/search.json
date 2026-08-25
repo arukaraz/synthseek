@@ -153,6 +153,10 @@
         "lidarr": {
           "label": "Lidarr",
           "description": "Confier cet album à votre instance Lidarr"
+        },
+        "usenet": {
+          "label": "Usenet",
+          "description": "Récupère l'album entier depuis votre indexeur via SABnzbd."
         }
       },
       "monitor": {

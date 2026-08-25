@@ -153,6 +153,10 @@
         "lidarr": {
           "label": "Lidarr",
           "description": "Dieses Album an deine Lidarr-Instanz übergeben"
+        },
+        "usenet": {
+          "label": "Usenet",
+          "description": "Lädt das ganze Release über SABnzbd von deinem Indexer."
         }
       },
       "monitor": {

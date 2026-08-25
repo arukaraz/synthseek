@@ -849,5 +849,56 @@
     "chipsInput": {
       "removeLabel": "{{chip}} entfernen"
     }
+  },
+  "usenet": {
+    "title": "Usenet",
+    "description": "Zweite Bezugsquelle. Usenet veröffentlicht ganze Releases, eine Anfrage lädt also das komplette Album und nimmt sich daraus den benötigten Titel.",
+    "enable": {
+      "label": "Aktivieren",
+      "description": "Wenn aktiv, können Album-Anfragen über deinen Indexer und SABnzbd aus dem Usenet bedient werden.",
+      "ariaLabel": "Usenet-Quelle aktivieren"
+    },
+    "indexerUrl": {
+      "label": "Indexer-Adresse",
+      "placeholder": "https://indexer.beispiel.de"
+    },
+    "indexerApiKey": {
+      "label": "Indexer-API-Schlüssel"
+    },
+    "sabnzbdUrl": {
+      "label": "SABnzbd-Adresse",
+      "placeholder": "http://localhost:8080"
+    },
+    "sabnzbdApiKey": {
+      "label": "SABnzbd-API-Schlüssel"
+    },
+    "maxSize": {
+      "label": "Maximale Release-Größe",
+      "description": "Releases über dieser Größe werden übersprungen. 0 bedeutet keine Begrenzung.",
+      "suffix": "MB",
+      "ariaLabel": "Maximale Release-Größe in Megabyte"
+    },
+    "minAge": {
+      "label": "Mindestalter des Release",
+      "description": "Neuere Releases werden übersprungen, da eine sehr frische Veröffentlichung sich noch auf die Server verteilt und unvollständig ankäme.",
+      "suffix": "h",
+      "ariaLabel": "Mindestalter in Stunden"
+    },
+    "singleTrackRequests": {
+      "title": "Anfragen für einzelne Titel",
+      "label": "Usenet auch außerhalb von Alben nutzen",
+      "description": "Standardmäßig aus. Solange es aus ist, wird Usenet nur bei Album-Anfragen angeboten.",
+      "ariaLabel": "Usenet für Anfragen einzelner Titel erlauben",
+      "tooltipTitle": "Was sich dadurch ändert",
+      "tooltipWhat": "Usenet veröffentlicht nie einzelne Titel, sondern nur ganze Releases. Ein einzelner Titel bedeutet, das komplette zugehörige Album zu laden.",
+      "tooltipCost": "Das geladene Album bleibt eine Weile liegen, falls ein weiterer seiner Titel angefragt wird, und wird danach gelöscht. Aktivieren tauscht Speicherplatz und Bandbreite gegen Titel, die niemand teilt.",
+      "tooltipTriggerLabel": "Über Anfragen einzelner Titel via Usenet"
+    },
+    "stagingRetention": {
+      "label": "Ungenutzte Alben aufbewahren für",
+      "description": "Wie lange ein geladenes Album darauf wartet, dass ein weiterer seiner Titel angefragt wird, bevor es gelöscht wird.",
+      "suffix": "h",
+      "ariaLabel": "Stunden, die ungenutzte Alben aufbewahrt werden"
+    }
   }
 }

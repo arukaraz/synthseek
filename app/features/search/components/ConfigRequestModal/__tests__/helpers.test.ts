@@ -13,6 +13,7 @@ import {
   formatFreeSpace,
   getAvailableAcquisitionOptions,
   getItemDisplayName,
+  offersUsenet,
   hasTag,
   isAcquisitionMethod,
   isAlbum,
@@ -27,10 +28,12 @@ import {
 import { createMockTrackFull, createMockAlbumSimplified, createMockPlaylistSimplified } from "@test/factories";
 import type { LidarrArtistSelection, LidarrSelection } from "../types";
 
-const BOTH_ENABLED = { slskd: true, ytdlp: true };
-const NON_ALBUM_CONTEXT = { isAlbum: false, lidarrAvailable: false };
-const ALBUM_NO_LIDARR = { isAlbum: true, lidarrAvailable: false };
-const ALBUM_WITH_LIDARR = { isAlbum: true, lidarrAvailable: true };
+const BOTH_ENABLED = { slskd: true, ytdlp: true, usenet: false };
+const ALL_ENABLED = { slskd: true, ytdlp: true, usenet: true };
+const NON_ALBUM_CONTEXT = { isAlbum: false, lidarrAvailable: false, usenetAllowsSingleTracks: false };
+const ALBUM_NO_LIDARR = { isAlbum: true, lidarrAvailable: false, usenetAllowsSingleTracks: false };
+const ALBUM_WITH_LIDARR = { isAlbum: true, lidarrAvailable: true, usenetAllowsSingleTracks: false };
+const NON_ALBUM_OPTED_IN = { isAlbum: false, lidarrAvailable: false, usenetAllowsSingleTracks: true };
 
 const COMPLETE_SELECTION: LidarrSelection = {
   rootFolderPath: "/music",
@@ -210,18 +213,28 @@ describe("buildSourceChain", () => {
   it("returns undefined for lidarr so no sourceChain is sent", () => {
     expect(buildSourceChain("lidarr", BOTH_ENABLED)).toBeUndefined();
   });
+
+  it("builds a usenet-only chain when usenet is enabled", () => {
+    expect(buildSourceChain("usenet", ALL_ENABLED)).toEqual(["usenet"]);
+  });
+
+  it("returns undefined for usenet when the source is disabled", () => {
+    expect(buildSourceChain("usenet", BOTH_ENABLED)).toBeUndefined();
+  });
 });
 
 describe("getAvailableAcquisitionOptions", () => {
   it("always includes auto", () => {
-    const values = getAvailableAcquisitionOptions({ slskd: false, ytdlp: false }, NON_ALBUM_CONTEXT).map(
+    const values = getAvailableAcquisitionOptions({ slskd: false, ytdlp: false, usenet: false }, NON_ALBUM_CONTEXT).map(
       (o) => o.value
     );
     expect(values).toEqual(["auto"]);
   });
 
   it("offers slskd only when slskd is enabled", () => {
-    const values = getAvailableAcquisitionOptions({ slskd: true, ytdlp: false }, NON_ALBUM_CONTEXT).map((o) => o.value);
+    const values = getAvailableAcquisitionOptions({ slskd: true, ytdlp: false, usenet: false }, NON_ALBUM_CONTEXT).map(
+      (o) => o.value
+    );
     expect(values).toEqual(["auto", "slskd"]);
   });
 
@@ -244,8 +257,61 @@ describe("getAvailableAcquisitionOptions", () => {
     const values = getAvailableAcquisitionOptions(BOTH_ENABLED, {
       isAlbum: false,
       lidarrAvailable: true,
+      usenetAllowsSingleTracks: false,
     }).map((o) => o.value);
     expect(values).not.toContain("lidarr");
+  });
+
+  it("offers usenet for an album when the source is enabled", () => {
+    const values = getAvailableAcquisitionOptions(ALL_ENABLED, ALBUM_NO_LIDARR).map((o) => o.value);
+    expect(values).toEqual(["auto", "slskd", "ytdlp", "slskdThenYtdlp", "usenet"]);
+  });
+
+  it("omits usenet for a non-album request by default", () => {
+    const values = getAvailableAcquisitionOptions(ALL_ENABLED, NON_ALBUM_CONTEXT).map((o) => o.value);
+    expect(values).not.toContain("usenet");
+  });
+
+  it("offers usenet for a non-album request once single-track requests are opted in", () => {
+    const values = getAvailableAcquisitionOptions(ALL_ENABLED, NON_ALBUM_OPTED_IN).map((o) => o.value);
+    expect(values).toContain("usenet");
+  });
+
+  it("omits usenet when the source is disabled, even for an album", () => {
+    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, ALBUM_NO_LIDARR).map((o) => o.value);
+    expect(values).not.toContain("usenet");
+  });
+
+  it("omits usenet when the source is disabled, even with the opt-in on", () => {
+    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, NON_ALBUM_OPTED_IN).map((o) => o.value);
+    expect(values).not.toContain("usenet");
+  });
+
+  it("orders usenet before lidarr for an album that offers both", () => {
+    const values = getAvailableAcquisitionOptions(ALL_ENABLED, {
+      isAlbum: true,
+      lidarrAvailable: true,
+      usenetAllowsSingleTracks: false,
+    }).map((o) => o.value);
+    expect(values).toEqual(["auto", "slskd", "ytdlp", "slskdThenYtdlp", "usenet", "lidarr"]);
+  });
+});
+
+describe("offersUsenet", () => {
+  it("refuses when the source is disabled", () => {
+    expect(offersUsenet({ slskd: true, ytdlp: true, usenet: false }, ALBUM_NO_LIDARR)).toBe(false);
+  });
+
+  it("accepts an album request", () => {
+    expect(offersUsenet(ALL_ENABLED, ALBUM_NO_LIDARR)).toBe(true);
+  });
+
+  it("refuses a non-album request without the opt-in", () => {
+    expect(offersUsenet(ALL_ENABLED, NON_ALBUM_CONTEXT)).toBe(false);
+  });
+
+  it("accepts a non-album request with the opt-in", () => {
+    expect(offersUsenet(ALL_ENABLED, NON_ALBUM_OPTED_IN)).toBe(true);
   });
 });
 
@@ -265,6 +331,10 @@ describe("showsSlskdControls", () => {
 
   it("hides slskd-only controls for lidarr", () => {
     expect(showsSlskdControls("lidarr")).toBe(false);
+  });
+
+  it("hides slskd-only controls for usenet", () => {
+    expect(showsSlskdControls("usenet")).toBe(false);
   });
 });
 

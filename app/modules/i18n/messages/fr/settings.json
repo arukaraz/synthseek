@@ -849,5 +849,56 @@
     "chipsInput": {
       "removeLabel": "Retirer {{chip}}"
     }
+  },
+  "usenet": {
+    "title": "Usenet",
+    "description": "Deuxième source d'acquisition. Usenet publie des albums entiers, donc une demande récupère l'album complet et en extrait le morceau voulu.",
+    "enable": {
+      "label": "Activer",
+      "description": "Une fois activé, les demandes d'album peuvent être servies depuis Usenet via votre indexeur et SABnzbd.",
+      "ariaLabel": "Activer la source Usenet"
+    },
+    "indexerUrl": {
+      "label": "Adresse de l'indexeur",
+      "placeholder": "https://indexeur.exemple.com"
+    },
+    "indexerApiKey": {
+      "label": "Clé API de l'indexeur"
+    },
+    "sabnzbdUrl": {
+      "label": "Adresse de SABnzbd",
+      "placeholder": "http://localhost:8080"
+    },
+    "sabnzbdApiKey": {
+      "label": "Clé API de SABnzbd"
+    },
+    "maxSize": {
+      "label": "Taille maximale de la publication",
+      "description": "Ignorer toute publication plus grande que cela. Mettre 0 pour accepter n'importe quelle taille.",
+      "suffix": "Mo",
+      "ariaLabel": "Taille maximale de la publication en mégaoctets"
+    },
+    "minAge": {
+      "label": "Ancienneté minimale",
+      "description": "Ignorer les publications plus récentes que cela, car une publication très récente peut encore se propager entre les serveurs et arriverait incomplète.",
+      "suffix": "h",
+      "ariaLabel": "Ancienneté minimale en heures"
+    },
+    "singleTrackRequests": {
+      "title": "Demandes d'un seul morceau",
+      "label": "Utiliser Usenet aussi hors des albums",
+      "description": "Désactivé par défaut. Tant que c'est désactivé, Usenet n'est proposé que pour les demandes d'album.",
+      "ariaLabel": "Autoriser Usenet pour les demandes d'un seul morceau",
+      "tooltipTitle": "Ce que cela change",
+      "tooltipWhat": "Usenet ne publie jamais de morceaux isolés, seulement des albums entiers. Obtenir un morceau implique de télécharger l'album complet auquel il appartient.",
+      "tooltipCost": "L'album téléchargé est conservé un moment au cas où un autre de ses morceaux serait demandé, puis supprimé. L'activer échange de l'espace disque et de la bande passante contre des morceaux que personne ne partage.",
+      "tooltipTriggerLabel": "À propos des demandes d'un seul morceau via Usenet"
+    },
+    "stagingRetention": {
+      "label": "Conserver les albums inutilisés pendant",
+      "description": "Combien de temps un album téléchargé attend qu'un autre de ses morceaux soit demandé avant d'être supprimé.",
+      "suffix": "h",
+      "ariaLabel": "Heures de conservation des albums inutilisés"
+    }
   }
 }

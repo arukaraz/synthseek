@@ -36,6 +36,13 @@ export const ACQUISITION_METHOD_OPTIONS: AcquisitionMethodOption[] = [
   },
 ];
 
+export const USENET_ACQUISITION_OPTION: AcquisitionMethodOption = {
+  value: "usenet",
+  labelKey: "config.options.acquisition.usenet.label",
+  descriptionKey: "config.options.acquisition.usenet.description",
+  requires: ["usenet"],
+};
+
 export const LIDARR_ACQUISITION_OPTION: AcquisitionMethodOption = {
   value: "lidarr",
   labelKey: "config.options.acquisition.lidarr.label",

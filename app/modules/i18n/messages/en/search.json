@@ -153,6 +153,10 @@
         "lidarr": {
           "label": "Lidarr",
           "description": "Hand this album to your Lidarr instance"
+        },
+        "usenet": {
+          "label": "Usenet",
+          "description": "Pulls the whole release from your indexer via SABnzbd."
         }
       },
       "monitor": {

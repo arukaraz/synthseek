@@ -1,6 +1,6 @@
 import { ContentType, type MusicAlbum, type MusicItem, type MusicTrack } from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
-import { ACQUISITION_METHOD_OPTIONS, LIDARR_ACQUISITION_OPTION } from "./consts";
+import { ACQUISITION_METHOD_OPTIONS, LIDARR_ACQUISITION_OPTION, USENET_ACQUISITION_OPTION } from "./consts";
 import type {
   AcquisitionMethod,
   AcquisitionMethodOption,
@@ -22,6 +22,7 @@ const SOURCE_CHAIN_BY_METHOD: Record<AcquisitionMethod, DownloadSourceKey[]> = {
   slskd: ["slskd"],
   ytdlp: ["ytdlp"],
   slskdThenYtdlp: ["slskd", "ytdlp"],
+  usenet: ["usenet"],
   lidarr: [],
 };
 
@@ -33,6 +34,11 @@ export function buildSourceChain(
   return chain.length > 0 ? chain : undefined;
 }
 
+export function offersUsenet(enabledSources: EnabledDownloadSources, context: AcquisitionOptionContext): boolean {
+  if (!enabledSources.usenet) return false;
+  return context.isAlbum || context.usenetAllowsSingleTracks;
+}
+
 export function getAvailableAcquisitionOptions(
   enabledSources: EnabledDownloadSources,
   context: AcquisitionOptionContext
@@ -40,8 +46,11 @@ export function getAvailableAcquisitionOptions(
   const chainOptions = ACQUISITION_METHOD_OPTIONS.filter((option) =>
     option.requires.every((key) => enabledSources[key])
   );
-  if (context.isAlbum && context.lidarrAvailable) return [...chainOptions, LIDARR_ACQUISITION_OPTION];
-  return chainOptions;
+  const withUsenet = offersUsenet(enabledSources, context)
+    ? [...chainOptions, USENET_ACQUISITION_OPTION]
+    : chainOptions;
+  if (context.isAlbum && context.lidarrAvailable) return [...withUsenet, LIDARR_ACQUISITION_OPTION];
+  return withUsenet;
 }
 
 export function isAcquisitionMethod(value: string): value is AcquisitionMethod {

@@ -24,16 +24,18 @@ export type LidarrMetadataProfile = LidarrProfiles["metadataProfiles"][number];
 
 export type LidarrRootFolder = LidarrProfiles["rootFolders"][number];
 
-export type AcquisitionMethod = "auto" | "slskd" | "ytdlp" | "slskdThenYtdlp" | "lidarr";
+export type AcquisitionMethod = "auto" | "slskd" | "ytdlp" | "slskdThenYtdlp" | "usenet" | "lidarr";
 
 export interface EnabledDownloadSources {
   slskd: boolean;
   ytdlp: boolean;
+  usenet: boolean;
 }
 
 export interface AcquisitionOptionContext {
   isAlbum: boolean;
   lidarrAvailable: boolean;
+  usenetAllowsSingleTracks: boolean;
 }
 
 export interface AcquisitionMethodOption {

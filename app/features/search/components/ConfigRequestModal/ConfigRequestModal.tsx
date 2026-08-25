@@ -114,6 +114,7 @@ export function ConfigRequestModal({
     () => ({
       slskd: sourcesAvailability?.slskd ?? false,
       ytdlp: sourcesAvailability?.ytdlp ?? false,
+      usenet: sourcesAvailability?.usenet ?? false,
     }),
     [sourcesAvailability]
   );
@@ -122,8 +123,9 @@ export function ConfigRequestModal({
       getAvailableAcquisitionOptions(enabledSources, {
         isAlbum: isAlbumItem,
         lidarrAvailable: lidarrAvailability?.available ?? false,
+        usenetAllowsSingleTracks: sourcesAvailability?.usenetAllowsSingleTracks ?? false,
       }),
-    [enabledSources, isAlbumItem, lidarrAvailability?.available]
+    [enabledSources, isAlbumItem, lidarrAvailability?.available, sourcesAvailability?.usenetAllowsSingleTracks]
   );
 
   useEffect(() => {

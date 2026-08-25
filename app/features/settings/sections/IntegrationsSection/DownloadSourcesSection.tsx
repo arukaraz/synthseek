@@ -6,6 +6,7 @@ import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { emptyPanel, sectionGrid } from "../../styles";
 import { SlskdCard } from "./SlskdCard";
+import { UsenetCard } from "./UsenetCard";
 import { YtdlpCard } from "./YtdlpCard";
 
 export function DownloadSourcesSection() {
@@ -40,6 +41,7 @@ export function DownloadSourcesSection() {
         }}
       />
       <YtdlpCard initial={data.downloadSources} />
+      <UsenetCard initial={data.downloadSources} />
     </div>
   );
 }

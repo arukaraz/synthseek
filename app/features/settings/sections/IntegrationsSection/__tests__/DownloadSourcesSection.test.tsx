@@ -27,6 +27,10 @@ vi.mock("../YtdlpCard", () => ({
   YtdlpCard: () => <div data-testid="ytdlp-card" />,
 }));
 
+vi.mock("../UsenetCard", () => ({
+  UsenetCard: () => <div data-testid="usenet-card" />,
+}));
+
 import { DownloadSourcesSection } from "../DownloadSourcesSection";
 
 const data: SettingsData = {
@@ -57,10 +61,11 @@ describe("DownloadSourcesSection", () => {
     expect(screen.getByText(/boom/)).toBeInTheDocument();
   });
 
-  it("renders both source cards when data is present", () => {
+  it("renders every source card when data is present", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<DownloadSourcesSection />);
     expect(screen.getByTestId("slskd-card")).toBeInTheDocument();
     expect(screen.getByTestId("ytdlp-card")).toBeInTheDocument();
+    expect(screen.getByTestId("usenet-card")).toBeInTheDocument();
   });
 });
