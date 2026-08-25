@@ -38,3 +38,25 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  sites:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: sites/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: sites
+
+      - name: Run checks
+        run: npm run check
+        working-directory: sites
