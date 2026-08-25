@@ -98,15 +98,8 @@ export const connectList = cva("flex flex-col gap-2");
 
 export const connectLabel = cva("text-fg font-semibold");
 
-export const subsonicUrlBox = cva(
-  "bg-fg/5 ring-fg/10 text-fg flex items-center justify-between gap-2 break-all rounded-lg p-3 font-mono text-xs ring-1"
-);
 
-export const subsonicStat = cva("text-fg/60 text-xs");
 
-export const connectionBody = cva("flex flex-col gap-4", {
-  variants: { muted: { true: "opacity-50", false: "" } },
-  defaultVariants: { muted: false },
-});
+export const connectionBody = cva("flex flex-col gap-4");
 
 export const connectionMeta = cva("text-fg/50 text-xs");

@@ -974,6 +974,9 @@
       "title": "Revoke credential",
       "message": "The app using it will stop connecting immediately.",
       "confirm": "Revoke"
+    },
+    "rotation": {
+      "title": "{{count}} credential(s) can no longer be read and must be recreated. This happens when AUTH_SECRET changes."
     }
   },
   "connectApps": {

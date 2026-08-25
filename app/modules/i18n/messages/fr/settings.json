@@ -974,6 +974,9 @@
       "title": "Révoquer l'identifiant",
       "message": "L'application qui l'utilise sera déconnectée immédiatement.",
       "confirm": "Révoquer"
+    },
+    "rotation": {
+      "title": "{{count}} identifiant(s) ne peuvent plus être lus et doivent être recréés. Cela arrive quand AUTH_SECRET change."
     }
   },
   "connectApps": {

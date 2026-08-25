@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { Notice } from "@components/ui/Notice";
 import { Switch } from "@components/ui/Switch";
 import { useUpdateConnectApps } from "@hooks/api/mutations/settings/useUpdateConnectApps";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
@@ -91,6 +92,13 @@ export function SubsonicSubsection() {
           ) : (
             <span className={connectionMeta()}>{t("subsonic.credentials.empty")}</span>
           )}
+
+          {(status.data?.credentialsNeedingRotation ?? 0) > 0 ? (
+            <Notice
+              variant="warning"
+              title={t("subsonic.rotation.title", { count: status.data?.credentialsNeedingRotation ?? 0 })}
+            />
+          ) : null}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
             <span className={connectionMeta()}>

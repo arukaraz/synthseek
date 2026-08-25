@@ -974,6 +974,9 @@
       "title": "Zugangsdaten widerrufen",
       "message": "Die App, die sie nutzt, verliert sofort die Verbindung.",
       "confirm": "Widerrufen"
+    },
+    "rotation": {
+      "title": "{{count}} Zugangsdaten können nicht mehr gelesen werden und müssen neu erstellt werden. Das passiert, wenn sich AUTH_SECRET ändert."
     }
   },
   "connectApps": {

@@ -17,14 +17,18 @@ Synthseek has two configuration surfaces, and the split is deliberate.
 
 ### General
 
-Available to every member.
+Available to every member, except where a row says otherwise.
 
-| Setting  | What it does                                                              |
-| -------- | ------------------------------------------------------------------------- |
-| Theme    | Synthseek, Midnight, or Ocean.                                            |
-| Language | English, Español, Deutsch, or Français. Switches in place.                |
-| API keys | Create and revoke keys for assistant connections. Shown once at creation. |
-| MCP      | The public URL of your instance, and connection guidance for assistants.  |
+| Setting        | What it does                                                                                                          |
+| -------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Theme          | Synthseek, Midnight, or Ocean.                                                                                        |
+| Language       | English, Español, Deutsch, or Français. Switches in place.                                                            |
+| Music players  | Turns the Subsonic API on or off, **admin only**, and shows the address and username a music app needs. Off by default. |
+| AI assistants  | The public URL of your instance, and connection guidance for assistants.                                              |
+| API keys       | Create and revoke keys for assistant connections. Shown once at creation.                                             |
+
+The three connection rows share one card, **Connect apps**. Each member creates and revokes their own
+credentials there; only an admin can turn the Subsonic API on.
 
 ### Members
 
@@ -167,7 +171,7 @@ Two live where you use them rather than in a settings section.
 
 | Variable      | What it is                                                                                                      |
 | ------------- | --------------------------------------------------------------------------------------------------------------- |
-| `AUTH_SECRET` | Signs sessions. At least 32 characters. Generate with `openssl rand -base64 48`. Changing it logs everyone out. |
+| `AUTH_SECRET` | Signs sessions, and encrypts the credentials music apps use. At least 32 characters. Generate with `openssl rand -base64 48`. Changing it logs everyone out, and any music-app credential stops working in apps that use the older login scheme. Create a new credential after changing it. |
 
 ### Container identity and paths
 

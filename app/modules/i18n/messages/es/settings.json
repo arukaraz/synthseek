@@ -974,6 +974,9 @@
       "title": "Revocar credencial",
       "message": "La app que la use dejará de conectar de inmediato.",
       "confirm": "Revocar"
+    },
+    "rotation": {
+      "title": "{{count}} credencial(es) ya no se pueden leer y hay que volver a crearlas. Pasa cuando cambia AUTH_SECRET."
     }
   },
   "connectApps": {

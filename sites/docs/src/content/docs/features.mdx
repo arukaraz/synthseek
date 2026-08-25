@@ -137,6 +137,14 @@ Renames flow both ways. Rename in Synthseek and Plex follows within seconds; ren
 
 Currently, playlist sync only ever adds tracks to the remote playlist. It never removes them.
 
+### Play it in a music app
+
+Synthseek speaks the Subsonic API, so apps built for that ecosystem, Feishin, Symfonium, DSub and others, can browse and play your library directly, without a media server in between. Turn it on in **Settings**, then **General**, then **Connect apps**. It is off until you do.
+
+Each person creates their own credential and pastes it into their app along with the address and their username. A credential is shown once, works only for listening, and can be revoked at any time.
+
+Two limits worth knowing before you rely on it. Only tracks Synthseek imported and can still find on disk are offered, so music you added to the library folder by hand stays invisible for now. And files are served as they are, without conversion, so a large lossless file takes as long to start as it takes to travel your network.
+
 ## Discovery
 
 A dedicated Discover page with a trending hero, browsable genres, an artist spotlight, a leaderboard of what is most represented in your library, and your recent requests.

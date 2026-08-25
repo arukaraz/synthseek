@@ -75,6 +75,20 @@ Currently, no. Sync only adds. It is a work in progress feature.
 **I renamed a playlist in Plex. Will Synthseek fight me?**
 No. Renames flow both ways. Whichever side changed most recently wins, and Synthseek tracks a baseline so it can tell a remote rename from a local one.
 
+## Listening
+
+**How do I actually listen to my library?**
+Through your media server, or straight from Synthseek with any Subsonic-compatible app. Turn on **Music players** in Settings, then General, then Connect apps, create a credential, and paste the address, your username and that credential into the app.
+
+**Do I need Plex or Jellyfin for that?**
+No. That is the point of it. A media server remains useful for everything else it does, but it is no longer the only way to hear what Synthseek downloaded.
+
+**Some tracks do not show up in my music app.**
+Only tracks Synthseek imported and can still locate on disk are offered. Music you copied into the library folder yourself is not indexed yet, and a track whose file moved after import stays hidden until it is found again. The Connect apps card shows both counts.
+
+**Playback takes a while to start on some albums.**
+Files are served exactly as they are, with no conversion. A lossless track can be forty megabytes or more, so the wait is your network moving the file, not the server thinking. Smaller files start almost instantly.
+
 ## Users
 
 **How do I add my household?**
