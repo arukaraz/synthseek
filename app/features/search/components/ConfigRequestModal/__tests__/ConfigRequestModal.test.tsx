@@ -42,9 +42,13 @@ vi.mock("../ConfigHeader", () => ({
   ConfigHeader: (props: { name: string }) => <div data-testid="config-header">{props.name}</div>,
 }));
 
-vi.mock("../AcquisitionDropdown", () => ({
-  AcquisitionDropdown: (props: { value: string }) => (
-    <div data-testid="acquisition-dropdown" data-value={props.value} />
+vi.mock("../AcquisitionOrderList", () => ({
+  AcquisitionOrderList: (props: { selection: { mode: string; order: string[] } }) => (
+    <div
+      data-testid="acquisition-order-list"
+      data-mode={props.selection.mode}
+      data-order={props.selection.order.join(",")}
+    />
   ),
 }));
 
@@ -131,7 +135,7 @@ describe("ConfigRequestModal", () => {
     render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
 
     expect(screen.getByTestId("config-header")).toBeInTheDocument();
-    expect(screen.getByTestId("acquisition-dropdown")).toBeInTheDocument();
+    expect(screen.getByTestId("acquisition-order-list")).toBeInTheDocument();
   });
 
   it("fires the track mutation without per-call dock callbacks and closes immediately", async () => {

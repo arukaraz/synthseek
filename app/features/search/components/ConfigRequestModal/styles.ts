@@ -39,3 +39,29 @@ export const lidarrTagInputField = cva(
 export const lidarrTagSuggestion = cva(
   "text-fg/80 hover:bg-primary-500/15 hover:text-fg flex w-full items-center rounded-md px-2.5 py-1.5 text-left text-sm outline-none transition-colors focus-visible:bg-primary-500/15"
 );
+
+export const acquisitionAutoRow = cva("border-fg/10 bg-fg/5 flex items-center gap-3 rounded-lg border px-3 py-2.5");
+
+export const acquisitionRow = cva("flex items-center gap-2 rounded-lg border px-3 py-2 transition-colors", {
+  variants: {
+    active: {
+      true: "bg-primary-500/10 border-primary-500/40",
+      false: "bg-fg/5 border-fg/10 opacity-60",
+    },
+  },
+  defaultVariants: { active: false },
+});
+
+export const acquisitionRowBody = cva("flex min-w-0 flex-1 flex-col");
+
+export const acquisitionRowPosition = cva("text-fg/60 w-4 shrink-0 text-center text-xs font-semibold tabular-nums");
+
+export const acquisitionHint = cva("text-fg/50 text-xs", {
+  variants: {
+    interactive: {
+      true: "text-primary-400 self-start underline-offset-2 hover:underline",
+      false: "",
+    },
+  },
+  defaultVariants: { interactive: false },
+});

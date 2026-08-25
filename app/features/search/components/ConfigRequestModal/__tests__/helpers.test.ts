@@ -11,19 +11,22 @@ import {
   extractItemMetadata,
   filterTagSuggestions,
   formatFreeSpace,
-  getAvailableAcquisitionOptions,
+  defaultSelection,
   getItemDisplayName,
+  moveSource,
+  offeredSources,
   offersUsenet,
+  reconcileSelection,
+  toggleSource,
+  usesSlskd,
   hasTag,
   isAcquisitionMethod,
   isAlbum,
-  isLidarrMethod,
   isLidarrSelectionComplete,
   isTrack,
   mapTrackFields,
   normalizeTag,
   removeTag,
-  showsSlskdControls,
 } from "../helpers";
 import { createMockTrackFull, createMockAlbumSimplified, createMockPlaylistSimplified } from "@test/factories";
 import type { LidarrArtistSelection, LidarrSelection } from "../types";
@@ -185,189 +188,165 @@ describe("extractItemMetadata", () => {
   });
 });
 
+describe("offeredSources", () => {
+  it("keeps the canonical priority order regardless of the enabled map order", () => {
+    expect(offeredSources(ALL_ENABLED, ALBUM_NO_LIDARR)).toEqual(["slskd", "usenet", "ytdlp"]);
+  });
+
+  it("drops a disabled source", () => {
+    expect(offeredSources({ slskd: true, ytdlp: false, usenet: true }, ALBUM_NO_LIDARR)).toEqual(["slskd", "usenet"]);
+  });
+
+  it("withholds usenet from a non-album request by default", () => {
+    expect(offeredSources(ALL_ENABLED, NON_ALBUM_CONTEXT)).toEqual(["slskd", "ytdlp"]);
+  });
+
+  it("offers usenet outside albums once the opt-in is on", () => {
+    expect(offeredSources(ALL_ENABLED, NON_ALBUM_OPTED_IN)).toContain("usenet");
+  });
+});
+
+describe("defaultSelection", () => {
+  it("starts on automatic with every offered source active", () => {
+    expect(defaultSelection(["slskd", "usenet"])).toEqual({
+      mode: "auto",
+      order: ["slskd", "usenet"],
+      active: ["slskd", "usenet"],
+    });
+  });
+});
+
+describe("reconcileSelection", () => {
+  const manual = { mode: "manual" as const, order: ["ytdlp", "slskd"] as const, active: ["ytdlp"] as const };
+
+  it("keeps the order the user arranged", () => {
+    const next = reconcileSelection(
+      { ...manual, order: ["ytdlp", "slskd"], active: ["ytdlp"] },
+      ["slskd", "ytdlp"],
+      false
+    );
+    expect(next.order).toEqual(["ytdlp", "slskd"]);
+  });
+
+  it("appends a source that became available without disturbing the arranged ones", () => {
+    const next = reconcileSelection(
+      { mode: "manual", order: ["ytdlp", "slskd"], active: ["ytdlp"] },
+      ["slskd", "ytdlp", "usenet"],
+      false
+    );
+    expect(next.order).toEqual(["ytdlp", "slskd", "usenet"]);
+    expect(next.active).toContain("usenet");
+  });
+
+  it("drops a source that stopped being offered", () => {
+    const next = reconcileSelection(
+      { mode: "manual", order: ["ytdlp", "usenet", "slskd"], active: ["usenet"] },
+      ["slskd", "ytdlp"],
+      false
+    );
+    expect(next.order).toEqual(["ytdlp", "slskd"]);
+    expect(next.active).not.toContain("usenet");
+  });
+
+  it("leaves a deselected source deselected", () => {
+    const next = reconcileSelection(
+      { mode: "manual", order: ["slskd", "ytdlp"], active: ["slskd"] },
+      ["slskd", "ytdlp"],
+      false
+    );
+    expect(next.active).toEqual(["slskd"]);
+  });
+
+  it("falls back to automatic when lidarr stops being available", () => {
+    const next = reconcileSelection({ mode: "lidarr", order: ["slskd"], active: ["slskd"] }, ["slskd"], false);
+    expect(next.mode).toBe("auto");
+  });
+
+  it("keeps the lidarr mode while lidarr is still available", () => {
+    const next = reconcileSelection({ mode: "lidarr", order: ["slskd"], active: ["slskd"] }, ["slskd"], true);
+    expect(next.mode).toBe("lidarr");
+  });
+});
+
+describe("moveSource", () => {
+  const selection = { mode: "manual" as const, order: ["slskd", "usenet", "ytdlp"], active: ["slskd"] };
+
+  it("moves a source up", () => {
+    expect(moveSource(selection, "usenet", -1).order).toEqual(["usenet", "slskd", "ytdlp"]);
+  });
+
+  it("moves a source down", () => {
+    expect(moveSource(selection, "usenet", 1).order).toEqual(["slskd", "ytdlp", "usenet"]);
+  });
+
+  it("refuses to move the first one up", () => {
+    expect(moveSource(selection, "slskd", -1)).toBe(selection);
+  });
+
+  it("refuses to move the last one down", () => {
+    expect(moveSource(selection, "ytdlp", 1)).toBe(selection);
+  });
+
+  it("does not change which sources are active", () => {
+    expect(moveSource(selection, "usenet", -1).active).toEqual(["slskd"]);
+  });
+});
+
+describe("toggleSource", () => {
+  const selection = { mode: "manual" as const, order: ["slskd", "ytdlp"], active: ["slskd"] };
+
+  it("activates an inactive source", () => {
+    expect(toggleSource(selection, "ytdlp").active).toEqual(["slskd", "ytdlp"]);
+  });
+
+  it("deactivates an active source", () => {
+    expect(toggleSource(selection, "slskd").active).toEqual([]);
+  });
+
+  it("never changes the order, so a deselected source keeps its place", () => {
+    expect(toggleSource(selection, "slskd").order).toEqual(["slskd", "ytdlp"]);
+  });
+});
+
 describe("buildSourceChain", () => {
-  it("returns undefined for auto so global behavior is preserved", () => {
-    expect(buildSourceChain("auto", BOTH_ENABLED)).toBeUndefined();
+  it("sends nothing on automatic, so the server order applies", () => {
+    expect(buildSourceChain({ mode: "auto", order: ["slskd", "ytdlp"], active: ["slskd"] })).toBeUndefined();
   });
 
-  it("maps slskd to a single-source chain", () => {
-    expect(buildSourceChain("slskd", BOTH_ENABLED)).toEqual(["slskd"]);
+  it("sends nothing for lidarr", () => {
+    expect(buildSourceChain({ mode: "lidarr", order: ["slskd"], active: ["slskd"] })).toBeUndefined();
   });
 
-  it("maps ytdlp to a single-source chain", () => {
-    expect(buildSourceChain("ytdlp", BOTH_ENABLED)).toEqual(["ytdlp"]);
+  it("sends the active sources in the arranged order", () => {
+    expect(
+      buildSourceChain({ mode: "manual", order: ["usenet", "slskd", "ytdlp"], active: ["slskd", "usenet"] })
+    ).toEqual(["usenet", "slskd"]);
   });
 
-  it("preserves order for the combined chain", () => {
-    expect(buildSourceChain("slskdThenYtdlp", BOTH_ENABLED)).toEqual(["slskd", "ytdlp"]);
-  });
-
-  it("drops disabled sources and falls back to undefined when nothing remains", () => {
-    expect(buildSourceChain("slskd", { slskd: false, ytdlp: true })).toBeUndefined();
-  });
-
-  it("drops a disabled source from a combined chain", () => {
-    expect(buildSourceChain("slskdThenYtdlp", { slskd: true, ytdlp: false })).toEqual(["slskd"]);
-  });
-
-  it("returns undefined for lidarr so no sourceChain is sent", () => {
-    expect(buildSourceChain("lidarr", BOTH_ENABLED)).toBeUndefined();
-  });
-
-  it("builds a usenet-only chain when usenet is enabled", () => {
-    expect(buildSourceChain("usenet", ALL_ENABLED)).toEqual(["usenet"]);
-  });
-
-  it("returns undefined for usenet when the source is disabled", () => {
-    expect(buildSourceChain("usenet", BOTH_ENABLED)).toBeUndefined();
+  it("sends nothing when the user deselected everything", () => {
+    expect(buildSourceChain({ mode: "manual", order: ["slskd", "ytdlp"], active: [] })).toBeUndefined();
   });
 });
 
-describe("getAvailableAcquisitionOptions", () => {
-  it("always includes auto", () => {
-    const values = getAvailableAcquisitionOptions({ slskd: false, ytdlp: false, usenet: false }, NON_ALBUM_CONTEXT).map(
-      (o) => o.value
-    );
-    expect(values).toEqual(["auto"]);
+describe("usesSlskd", () => {
+  it("assumes slskd on automatic, since the server order may reach it", () => {
+    expect(usesSlskd({ mode: "auto", order: ["ytdlp"], active: ["ytdlp"] })).toBe(true);
   });
 
-  it("offers slskd only when slskd is enabled", () => {
-    const values = getAvailableAcquisitionOptions({ slskd: true, ytdlp: false, usenet: false }, NON_ALBUM_CONTEXT).map(
-      (o) => o.value
-    );
-    expect(values).toEqual(["auto", "slskd"]);
+  it("is false for lidarr", () => {
+    expect(usesSlskd({ mode: "lidarr", order: ["slskd"], active: ["slskd"] })).toBe(false);
   });
 
-  it("offers the combined chain only when both sources are enabled", () => {
-    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, NON_ALBUM_CONTEXT).map((o) => o.value);
-    expect(values).toEqual(["auto", "slskd", "ytdlp", "slskdThenYtdlp"]);
-  });
-
-  it("offers lidarr only for albums when Lidarr is available", () => {
-    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, ALBUM_WITH_LIDARR).map((o) => o.value);
-    expect(values).toEqual(["auto", "slskd", "ytdlp", "slskdThenYtdlp", "lidarr"]);
-  });
-
-  it("omits lidarr for albums when Lidarr is unavailable", () => {
-    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, ALBUM_NO_LIDARR).map((o) => o.value);
-    expect(values).not.toContain("lidarr");
-  });
-
-  it("omits lidarr for non-albums even when Lidarr is available", () => {
-    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, {
-      isAlbum: false,
-      lidarrAvailable: true,
-      usenetAllowsSingleTracks: false,
-    }).map((o) => o.value);
-    expect(values).not.toContain("lidarr");
-  });
-
-  it("offers usenet for an album when the source is enabled", () => {
-    const values = getAvailableAcquisitionOptions(ALL_ENABLED, ALBUM_NO_LIDARR).map((o) => o.value);
-    expect(values).toEqual(["auto", "slskd", "ytdlp", "slskdThenYtdlp", "usenet"]);
-  });
-
-  it("omits usenet for a non-album request by default", () => {
-    const values = getAvailableAcquisitionOptions(ALL_ENABLED, NON_ALBUM_CONTEXT).map((o) => o.value);
-    expect(values).not.toContain("usenet");
-  });
-
-  it("offers usenet for a non-album request once single-track requests are opted in", () => {
-    const values = getAvailableAcquisitionOptions(ALL_ENABLED, NON_ALBUM_OPTED_IN).map((o) => o.value);
-    expect(values).toContain("usenet");
-  });
-
-  it("omits usenet when the source is disabled, even for an album", () => {
-    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, ALBUM_NO_LIDARR).map((o) => o.value);
-    expect(values).not.toContain("usenet");
-  });
-
-  it("omits usenet when the source is disabled, even with the opt-in on", () => {
-    const values = getAvailableAcquisitionOptions(BOTH_ENABLED, NON_ALBUM_OPTED_IN).map((o) => o.value);
-    expect(values).not.toContain("usenet");
-  });
-
-  it("orders usenet before lidarr for an album that offers both", () => {
-    const values = getAvailableAcquisitionOptions(ALL_ENABLED, {
-      isAlbum: true,
-      lidarrAvailable: true,
-      usenetAllowsSingleTracks: false,
-    }).map((o) => o.value);
-    expect(values).toEqual(["auto", "slskd", "ytdlp", "slskdThenYtdlp", "usenet", "lidarr"]);
-  });
-});
-
-describe("offersUsenet", () => {
-  it("refuses when the source is disabled", () => {
-    expect(offersUsenet({ slskd: true, ytdlp: true, usenet: false }, ALBUM_NO_LIDARR)).toBe(false);
-  });
-
-  it("accepts an album request", () => {
-    expect(offersUsenet(ALL_ENABLED, ALBUM_NO_LIDARR)).toBe(true);
-  });
-
-  it("refuses a non-album request without the opt-in", () => {
-    expect(offersUsenet(ALL_ENABLED, NON_ALBUM_CONTEXT)).toBe(false);
-  });
-
-  it("accepts a non-album request with the opt-in", () => {
-    expect(offersUsenet(ALL_ENABLED, NON_ALBUM_OPTED_IN)).toBe(true);
-  });
-});
-
-describe("showsSlskdControls", () => {
-  it("keeps slskd-only controls visible for auto", () => {
-    expect(showsSlskdControls("auto")).toBe(true);
-  });
-
-  it("keeps slskd-only controls visible for slskd-containing chains", () => {
-    expect(showsSlskdControls("slskd")).toBe(true);
-    expect(showsSlskdControls("slskdThenYtdlp")).toBe(true);
-  });
-
-  it("hides slskd-only controls for ytdlp", () => {
-    expect(showsSlskdControls("ytdlp")).toBe(false);
-  });
-
-  it("hides slskd-only controls for lidarr", () => {
-    expect(showsSlskdControls("lidarr")).toBe(false);
-  });
-
-  it("hides slskd-only controls for usenet", () => {
-    expect(showsSlskdControls("usenet")).toBe(false);
+  it("follows the active set on manual", () => {
+    expect(usesSlskd({ mode: "manual", order: ["slskd", "ytdlp"], active: ["slskd"] })).toBe(true);
+    expect(usesSlskd({ mode: "manual", order: ["slskd", "ytdlp"], active: ["ytdlp"] })).toBe(false);
   });
 });
 
 describe("allowsLossless", () => {
-  it("allows lossless for sources that can yield a peer-sourced lossless file", () => {
-    expect(allowsLossless("auto")).toBe(true);
-    expect(allowsLossless("slskd")).toBe(true);
-    expect(allowsLossless("slskdThenYtdlp")).toBe(true);
-  });
-
-  it("disallows lossless for a YouTube-only source", () => {
-    expect(allowsLossless("ytdlp")).toBe(false);
-  });
-});
-
-describe("isAcquisitionMethod", () => {
-  it("accepts known methods", () => {
-    expect(isAcquisitionMethod("auto")).toBe(true);
-    expect(isAcquisitionMethod("slskdThenYtdlp")).toBe(true);
-    expect(isAcquisitionMethod("lidarr")).toBe(true);
-  });
-
-  it("rejects unknown values", () => {
-    expect(isAcquisitionMethod("plex")).toBe(false);
-    expect(isAcquisitionMethod("")).toBe(false);
-  });
-});
-
-describe("isLidarrMethod", () => {
-  it("returns true only for the lidarr method", () => {
-    expect(isLidarrMethod("lidarr")).toBe(true);
-    expect(isLidarrMethod("auto")).toBe(false);
-    expect(isLidarrMethod("slskd")).toBe(false);
+  it("tracks whether slskd is in play", () => {
+    expect(allowsLossless({ mode: "manual", order: ["slskd"], active: ["slskd"] })).toBe(true);
+    expect(allowsLossless({ mode: "manual", order: ["ytdlp"], active: ["ytdlp"] })).toBe(false);
   });
 });
 

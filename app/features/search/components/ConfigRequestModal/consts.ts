@@ -1,53 +1,30 @@
 import type {
-  AcquisitionMethodOption,
   AlbumScopeChoice,
   ArtistMonitorScopeOption,
   AvailabilityOption,
   BitrateOption,
   MatchingOption,
+  DownloadSourceKey,
   QualityModeOption,
+  SourceRowLabels,
   UploadSpeedOption,
 } from "./types";
 
-export const ACQUISITION_METHOD_OPTIONS: AcquisitionMethodOption[] = [
-  {
-    value: "auto",
-    labelKey: "config.options.acquisition.auto.label",
-    descriptionKey: "config.options.acquisition.auto.description",
-    requires: [],
-  },
-  {
-    value: "slskd",
+export const SOURCE_PRIORITY_ORDER: DownloadSourceKey[] = ["slskd", "usenet", "ytdlp"];
+
+export const SOURCE_ROW_LABELS: Record<DownloadSourceKey, SourceRowLabels> = {
+  slskd: {
     labelKey: "config.options.acquisition.slskd.label",
     descriptionKey: "config.options.acquisition.slskd.description",
-    requires: ["slskd"],
   },
-  {
-    value: "ytdlp",
+  usenet: {
+    labelKey: "config.options.acquisition.usenet.label",
+    descriptionKey: "config.options.acquisition.usenet.description",
+  },
+  ytdlp: {
     labelKey: "config.options.acquisition.ytdlp.label",
     descriptionKey: "config.options.acquisition.ytdlp.description",
-    requires: ["ytdlp"],
   },
-  {
-    value: "slskdThenYtdlp",
-    labelKey: "config.options.acquisition.slskdThenYtdlp.label",
-    descriptionKey: "config.options.acquisition.slskdThenYtdlp.description",
-    requires: ["slskd", "ytdlp"],
-  },
-];
-
-export const USENET_ACQUISITION_OPTION: AcquisitionMethodOption = {
-  value: "usenet",
-  labelKey: "config.options.acquisition.usenet.label",
-  descriptionKey: "config.options.acquisition.usenet.description",
-  requires: ["usenet"],
-};
-
-export const LIDARR_ACQUISITION_OPTION: AcquisitionMethodOption = {
-  value: "lidarr",
-  labelKey: "config.options.acquisition.lidarr.label",
-  descriptionKey: "config.options.acquisition.lidarr.description",
-  requires: [],
 };
 
 export const ALBUM_SCOPE_CHOICES: AlbumScopeChoice[] = [

@@ -136,7 +136,8 @@
       "acquisition": {
         "auto": {
           "label": "Auto",
-          "description": "Utiliser l'ordre des sources configuré"
+          "description": "Utiliser l'ordre des sources configuré",
+          "ariaLabel": "Choisir les sources automatiquement"
         },
         "slskd": {
           "label": "Soulseek",
@@ -146,18 +147,20 @@
           "label": "YouTube",
           "description": "yt-dlp uniquement, toujours avec perte"
         },
-        "slskdThenYtdlp": {
-          "label": "Soulseek, puis YouTube",
-          "description": "Essayer slskd d'abord, se rabattre sur yt-dlp"
-        },
         "lidarr": {
           "label": "Lidarr",
-          "description": "Confier cet album à votre instance Lidarr"
+          "description": "Confier cet album à votre instance Lidarr",
+          "switch": "Confier cet album à Lidarr à la place",
+          "active": "Cet album ira à Lidarr. Revenir aux sources"
         },
         "usenet": {
           "label": "Usenet",
           "description": "Récupère l'album entier depuis votre indexeur via SABnzbd."
-        }
+        },
+        "orderHint": "Les sources sont essayées de haut en bas. Décochez-en une pour l'ignorer.",
+        "moveUp": "Monter {{source}}",
+        "moveDown": "Descendre {{source}}",
+        "useSource": "Utiliser {{source}}"
       },
       "monitor": {
         "album": {

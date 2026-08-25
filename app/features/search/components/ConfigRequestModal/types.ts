@@ -24,7 +24,20 @@ export type LidarrMetadataProfile = LidarrProfiles["metadataProfiles"][number];
 
 export type LidarrRootFolder = LidarrProfiles["rootFolders"][number];
 
-export type AcquisitionMethod = "auto" | "slskd" | "ytdlp" | "slskdThenYtdlp" | "usenet" | "lidarr";
+export type AcquisitionMode = "auto" | "manual" | "lidarr";
+
+export interface AcquisitionSelection {
+  mode: AcquisitionMode;
+  order: DownloadSourceKey[];
+  active: DownloadSourceKey[];
+}
+
+export interface AcquisitionOrderListProps {
+  label: string;
+  selection: AcquisitionSelection;
+  lidarrAvailable: boolean;
+  onChange: (selection: AcquisitionSelection) => void;
+}
 
 export interface EnabledDownloadSources {
   slskd: boolean;
@@ -38,11 +51,9 @@ export interface AcquisitionOptionContext {
   usenetAllowsSingleTracks: boolean;
 }
 
-export interface AcquisitionMethodOption {
-  value: AcquisitionMethod;
+export interface SourceRowLabels {
   labelKey: ParseKeys<"search">;
   descriptionKey: ParseKeys<"search">;
-  requires: DownloadSourceKey[];
 }
 
 export interface LidarrSelectionBase<M extends string> {
@@ -157,13 +168,6 @@ export interface AvailabilityOption {
   value: AvailabilityMode;
   labelKey: ParseKeys<"search">;
   descriptionKey: ParseKeys<"search">;
-}
-
-export interface AcquisitionDropdownProps {
-  label: string;
-  value: AcquisitionMethod;
-  options: AcquisitionMethodOption[];
-  onChange: (value: AcquisitionMethod) => void;
 }
 
 export interface ConfigHeaderProps {

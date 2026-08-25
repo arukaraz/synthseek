@@ -27,7 +27,7 @@ import { Download } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { AcquisitionDropdown } from "./AcquisitionDropdown";
+import { AcquisitionOrderList } from "./AcquisitionOrderList";
 import { ConfigHeader } from "./ConfigHeader";
 import { LidarrInputs } from "./LidarrInputs";
 import { OptionGrid } from "./OptionGrid";
@@ -46,15 +46,17 @@ import {
   buildArtistDelegate,
   buildSourceChain,
   extractItemMetadata,
-  getAvailableAcquisitionOptions,
+  defaultSelection,
+  offeredSources,
+  reconcileSelection,
   getItemDisplayName,
-  isLidarrMethod,
+  isLidarrSelected,
   mapTrackFields,
-  showsSlskdControls,
+  usesSlskd,
 } from "./helpers";
 import { configDialogContent, fieldGroup, fieldLabel } from "./styles";
 import type {
-  AcquisitionMethod,
+  AcquisitionSelection,
   AvailabilityMode,
   ConfigRequestModalProps,
   LidarrArtistSelection,
@@ -80,7 +82,7 @@ export function ConfigRequestModal({
   const [qualityMode, setQualityMode] = useState<QualityMode>("standard");
   const [minUploadSpeed, setMinUploadSpeed] = useState(0);
   const [availability, setAvailability] = useState<AvailabilityMode>("any");
-  const [acquisitionMethod, setAcquisitionMethod] = useState<AcquisitionMethod>("auto");
+  const [acquisition, setAcquisition] = useState<AcquisitionSelection>({ mode: "auto", order: [], active: [] });
   const [lidarrSelection, setLidarrSelection] = useState<LidarrSelection>({
     rootFolderPath: undefined,
     qualityProfileId: undefined,
@@ -118,27 +120,30 @@ export function ConfigRequestModal({
     }),
     [sourcesAvailability]
   );
-  const acquisitionOptions = useMemo(
+  const offered = useMemo(
     () =>
-      getAvailableAcquisitionOptions(enabledSources, {
+      offeredSources(enabledSources, {
         isAlbum: isAlbumItem,
         lidarrAvailable: lidarrAvailability?.available ?? false,
         usenetAllowsSingleTracks: sourcesAvailability?.usenetAllowsSingleTracks ?? false,
       }),
-    [enabledSources, isAlbumItem, lidarrAvailability?.available, sourcesAvailability?.usenetAllowsSingleTracks]
+    [enabledSources, isAlbumItem, sourcesAvailability?.usenetAllowsSingleTracks]
   );
+  const lidarrOffered = isAlbumItem && (lidarrAvailability?.available ?? false);
 
   useEffect(() => {
-    if (!acquisitionOptions.some((option) => option.value === acquisitionMethod)) setAcquisitionMethod("auto");
-  }, [acquisitionOptions, acquisitionMethod]);
+    setAcquisition((current) =>
+      current.order.length === 0 ? defaultSelection(offered) : reconcileSelection(current, offered, lidarrOffered)
+    );
+  }, [offered, lidarrOffered]);
 
   useEffect(() => {
-    if (!allowsLossless(acquisitionMethod) && qualityMode === "lossless") setQualityMode("standard");
-  }, [acquisitionMethod, qualityMode]);
+    if (!allowsLossless(acquisition) && qualityMode === "lossless") setQualityMode("standard");
+  }, [acquisition, qualityMode]);
 
-  const lidarrSelected = isLidarrMethod(acquisitionMethod);
-  const showSlskdControls = !lidarrSelected && showsSlskdControls(acquisitionMethod);
-  const losslessAvailable = allowsLossless(acquisitionMethod);
+  const lidarrSelected = isLidarrSelected(acquisition);
+  const showSlskdControls = usesSlskd(acquisition);
+  const losslessAvailable = allowsLossless(acquisition);
   const showMatchingControls = !lidarrSelected && losslessAvailable;
 
   const needsTrackList =
@@ -242,7 +247,7 @@ export function ConfigRequestModal({
       return;
     }
 
-    const sourceChain = buildSourceChain(acquisitionMethod, enabledSources);
+    const sourceChain = buildSourceChain(acquisition);
     const config = {
       bitrate: { value: bitrate, matching: bitrateMatching },
       format: losslessActive
@@ -374,11 +379,11 @@ export function ConfigRequestModal({
                 <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
                   {t("config.sections.acquisition")}
                 </h3>
-                <AcquisitionDropdown
+                <AcquisitionOrderList
                   label={t("config.fields.acquisition")}
-                  value={acquisitionMethod}
-                  options={acquisitionOptions}
-                  onChange={setAcquisitionMethod}
+                  selection={acquisition}
+                  lidarrAvailable={lidarrOffered}
+                  onChange={setAcquisition}
                 />
               </div>
 

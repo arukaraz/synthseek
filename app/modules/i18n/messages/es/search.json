@@ -136,7 +136,8 @@
       "acquisition": {
         "auto": {
           "label": "Automático",
-          "description": "Usar el orden de fuentes configurado"
+          "description": "Usar el orden de fuentes configurado",
+          "ariaLabel": "Elegir las fuentes automáticamente"
         },
         "slskd": {
           "label": "Soulseek",
@@ -146,18 +147,20 @@
           "label": "YouTube",
           "description": "Solo yt-dlp, siempre lossy"
         },
-        "slskdThenYtdlp": {
-          "label": "Soulseek y luego YouTube",
-          "description": "Probar slskd primero y recurrir a yt-dlp"
-        },
         "lidarr": {
           "label": "Lidarr",
-          "description": "Delega este álbum a tu instancia de Lidarr"
+          "description": "Delega este álbum a tu instancia de Lidarr",
+          "switch": "Entregar este álbum a Lidarr en su lugar",
+          "active": "Se entregará a Lidarr. Volver a las fuentes"
         },
         "usenet": {
           "label": "Usenet",
           "description": "Se trae el disco entero desde tu indexador a través de SABnzbd."
-        }
+        },
+        "orderHint": "Las fuentes se intentan de arriba abajo. Desmarca una para saltártela.",
+        "moveUp": "Subir {{source}}",
+        "moveDown": "Bajar {{source}}",
+        "useSource": "Usar {{source}}"
       },
       "monitor": {
         "album": {

@@ -1,10 +1,9 @@
 import { ContentType, type MusicAlbum, type MusicItem, type MusicTrack } from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
-import { ACQUISITION_METHOD_OPTIONS, LIDARR_ACQUISITION_OPTION, USENET_ACQUISITION_OPTION } from "./consts";
+import { SOURCE_PRIORITY_ORDER } from "./consts";
 import type {
-  AcquisitionMethod,
-  AcquisitionMethodOption,
   AcquisitionOptionContext,
+  AcquisitionSelection,
   AlbumDelegate,
   ArtistDelegateInput,
   DownloadSourceKey,
@@ -17,59 +16,79 @@ import type {
   LidarrSelection,
 } from "./types";
 
-const SOURCE_CHAIN_BY_METHOD: Record<AcquisitionMethod, DownloadSourceKey[]> = {
-  auto: [],
-  slskd: ["slskd"],
-  ytdlp: ["ytdlp"],
-  slskdThenYtdlp: ["slskd", "ytdlp"],
-  usenet: ["usenet"],
-  lidarr: [],
-};
-
-export function buildSourceChain(
-  method: AcquisitionMethod,
-  enabledSources: EnabledDownloadSources
-): DownloadSourceKey[] | undefined {
-  const chain = SOURCE_CHAIN_BY_METHOD[method].filter((key) => enabledSources[key]);
-  return chain.length > 0 ? chain : undefined;
+export function offeredSources(
+  enabledSources: EnabledDownloadSources,
+  context: AcquisitionOptionContext
+): DownloadSourceKey[] {
+  return SOURCE_PRIORITY_ORDER.filter((key) => {
+    if (!enabledSources[key]) return false;
+    if (key === "usenet") return context.isAlbum || context.usenetAllowsSingleTracks;
+    return true;
+  });
 }
 
 export function offersUsenet(enabledSources: EnabledDownloadSources, context: AcquisitionOptionContext): boolean {
-  if (!enabledSources.usenet) return false;
-  return context.isAlbum || context.usenetAllowsSingleTracks;
+  return offeredSources(enabledSources, context).includes("usenet");
 }
 
-export function getAvailableAcquisitionOptions(
-  enabledSources: EnabledDownloadSources,
-  context: AcquisitionOptionContext
-): AcquisitionMethodOption[] {
-  const chainOptions = ACQUISITION_METHOD_OPTIONS.filter((option) =>
-    option.requires.every((key) => enabledSources[key])
-  );
-  const withUsenet = offersUsenet(enabledSources, context)
-    ? [...chainOptions, USENET_ACQUISITION_OPTION]
-    : chainOptions;
-  if (context.isAlbum && context.lidarrAvailable) return [...withUsenet, LIDARR_ACQUISITION_OPTION];
-  return withUsenet;
+export function defaultSelection(offered: DownloadSourceKey[]): AcquisitionSelection {
+  return { mode: "auto", order: [...offered], active: [...offered] };
 }
 
-export function isAcquisitionMethod(value: string): value is AcquisitionMethod {
-  if (value === LIDARR_ACQUISITION_OPTION.value) return true;
-  return ACQUISITION_METHOD_OPTIONS.some((option) => option.value === value);
+export function reconcileSelection(
+  selection: AcquisitionSelection,
+  offered: DownloadSourceKey[],
+  lidarrAvailable: boolean
+): AcquisitionSelection {
+  const order = [
+    ...selection.order.filter((key) => offered.includes(key)),
+    ...offered.filter((key) => !selection.order.includes(key)),
+  ];
+  const active = order.filter((key) => selection.active.includes(key) || !selection.order.includes(key));
+  const mode = selection.mode === "lidarr" && !lidarrAvailable ? "auto" : selection.mode;
+  return { mode, order, active };
 }
 
-export function isLidarrMethod(method: AcquisitionMethod): boolean {
-  return method === "lidarr";
+export function moveSource(
+  selection: AcquisitionSelection,
+  key: DownloadSourceKey,
+  direction: -1 | 1
+): AcquisitionSelection {
+  const index = selection.order.indexOf(key);
+  const target = index + direction;
+  if (index === -1 || target < 0 || target >= selection.order.length) return selection;
+
+  const order = [...selection.order];
+  const [moved] = order.splice(index, 1);
+  order.splice(target, 0, moved);
+  return { ...selection, order };
 }
 
-export function showsSlskdControls(method: AcquisitionMethod): boolean {
-  if (method === "lidarr") return false;
-  if (method === "auto") return true;
-  return SOURCE_CHAIN_BY_METHOD[method].includes("slskd");
+export function toggleSource(selection: AcquisitionSelection, key: DownloadSourceKey): AcquisitionSelection {
+  const active = selection.active.includes(key)
+    ? selection.active.filter((entry) => entry !== key)
+    : [...selection.active, key];
+  return { ...selection, active };
 }
 
-export function allowsLossless(method: AcquisitionMethod): boolean {
-  return showsSlskdControls(method);
+export function buildSourceChain(selection: AcquisitionSelection): DownloadSourceKey[] | undefined {
+  if (selection.mode !== "manual") return undefined;
+  const chain = selection.order.filter((key) => selection.active.includes(key));
+  return chain.length > 0 ? chain : undefined;
+}
+
+export function isLidarrSelected(selection: AcquisitionSelection): boolean {
+  return selection.mode === "lidarr";
+}
+
+export function usesSlskd(selection: AcquisitionSelection): boolean {
+  if (selection.mode === "lidarr") return false;
+  if (selection.mode === "auto") return true;
+  return selection.order.some((key) => key === "slskd" && selection.active.includes(key));
+}
+
+export function allowsLossless(selection: AcquisitionSelection): boolean {
+  return usesSlskd(selection);
 }
 
 export function isLidarrSelectionComplete(selection: {
