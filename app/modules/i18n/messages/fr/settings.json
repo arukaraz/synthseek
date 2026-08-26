@@ -977,6 +977,11 @@
     },
     "rotation": {
       "title": "{{count}} identifiant(s) ne peuvent plus être lus et doivent être recréés. Cela arrive quand AUTH_SECRET change."
+    },
+    "transcoding": {
+      "label": "Convertir a la volee",
+      "description": "Envoyer un flux plus leger quand une application le demande. Consomme du processeur pendant la lecture.",
+      "ariaLabel": "Convertir l audio a la volee"
     }
   },
   "connectApps": {

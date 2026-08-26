@@ -977,6 +977,11 @@
     },
     "rotation": {
       "title": "{{count}} Zugangsdaten können nicht mehr gelesen werden und müssen neu erstellt werden. Das passiert, wenn sich AUTH_SECRET ändert."
+    },
+    "transcoding": {
+      "label": "Beim Abspielen umwandeln",
+      "description": "Einen kleineren Stream senden, wenn eine App darum bittet. Kostet Rechenzeit waehrend der Wiedergabe.",
+      "ariaLabel": "Audio beim Abspielen umwandeln"
     }
   },
   "connectApps": {

@@ -977,6 +977,11 @@
     },
     "rotation": {
       "title": "{{count}} credential(s) can no longer be read and must be recreated. This happens when AUTH_SECRET changes."
+    },
+    "transcoding": {
+      "label": "Convert on the fly",
+      "description": "Send a smaller stream when an app asks for one. Costs processing time while it plays.",
+      "ariaLabel": "Convert audio on the fly"
     }
   },
   "connectApps": {

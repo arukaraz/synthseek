@@ -51,7 +51,12 @@ export function SubsonicSubsection() {
         {isAdmin ? (
           <Switch
             checked={enabled}
-            onCheckedChange={(next) => updateConnectApps.mutate({ subsonicEnabled: next })}
+            onCheckedChange={(next) =>
+              updateConnectApps.mutate({
+                subsonicEnabled: next,
+                subsonicTranscodingEnabled: status.data?.transcodingEnabled ?? true,
+              })
+            }
             disabled={status.isLoading || updateConnectApps.isPending}
             aria-label={t("subsonic.enable.ariaLabel")}
           />
@@ -105,6 +110,23 @@ export function SubsonicSubsection() {
             variant="warning"
             title={t("subsonic.rotation.title", { count: status.data?.credentialsNeedingRotation ?? 0 })}
           />
+        ) : null}
+
+        {enabled && isAdmin ? (
+          <div className={connectionFooterRow()}>
+            <div className={connectionBody()}>
+              <span className="text-fg text-sm font-medium">{t("subsonic.transcoding.label")}</span>
+              <span className={connectionMeta()}>{t("subsonic.transcoding.description")}</span>
+            </div>
+            <Switch
+              checked={status.data?.transcodingEnabled ?? true}
+              onCheckedChange={(next) =>
+                updateConnectApps.mutate({ subsonicEnabled: enabled, subsonicTranscodingEnabled: next })
+              }
+              disabled={status.isLoading || updateConnectApps.isPending}
+              aria-label={t("subsonic.transcoding.ariaLabel")}
+            />
+          </div>
         ) : null}
 
         {enabled ? (

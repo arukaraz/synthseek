@@ -977,6 +977,11 @@
     },
     "rotation": {
       "title": "{{count}} credencial(es) ya no se pueden leer y hay que volver a crearlas. Pasa cuando cambia AUTH_SECRET."
+    },
+    "transcoding": {
+      "label": "Convertir al vuelo",
+      "description": "Enviar un flujo mas pequeno cuando una aplicacion lo pida. Consume procesador mientras suena.",
+      "ariaLabel": "Convertir audio al vuelo"
     }
   },
   "connectApps": {
