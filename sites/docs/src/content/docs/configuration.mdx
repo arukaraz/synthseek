@@ -171,7 +171,7 @@ Two live where you use them rather than in a settings section.
 
 | Variable      | What it is                                                                                                      |
 | ------------- | --------------------------------------------------------------------------------------------------------------- |
-| `AUTH_SECRET` | Signs sessions, and encrypts the credentials music apps use. At least 32 characters. Generate with `openssl rand -base64 48`. Changing it logs everyone out, and any music-app credential stops working in apps that use the older login scheme. Create a new credential after changing it. |
+| `AUTH_SECRET` | Signs sessions, and encrypts the credentials music apps use. At least 32 characters. Generate with `openssl rand -base64 48`. Changing it logs everyone out, and any music-app credential stops working in apps that log in with the token-and-salt scheme, which most older ones do. Apps that send the credential directly keep working. Create a new credential after changing it. |
 
 ### Container identity and paths
 

@@ -35,7 +35,7 @@ export function ApiKeysSubsection() {
       {isLoading ? (
         <span className={connectionMeta()}>{t("api.keys.loading")}</span>
       ) : error ? (
-        <span className="text-xs text-red-400">{t("api.keys.loadError", { message: error.message })}</span>
+        <span className="text-destructive-vivid text-xs">{t("api.keys.loadError", { message: error.message })}</span>
       ) : data && data.length > 0 ? (
         <div className="flex flex-col">
           {data.map((apiKey) => (
