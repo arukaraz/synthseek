@@ -58,48 +58,56 @@ export function SubsonicSubsection() {
         ) : null}
       </header>
 
-      {enabled ? (
-        <div className={connectionBody()}>
-          <ConnectionValueField
-            label={t("subsonic.connect.addressLabel")}
-            value={address}
-            copyAriaLabel={t("subsonic.connect.copyAddressLabel")}
-            copiedMessage={t("subsonic.connect.addressCopied")}
-            copyFailedMessage={t("subsonic.connect.copyFailed")}
-          />
-
-          <ConnectionValueField
-            label={t("subsonic.connect.usernameLabel")}
-            value={currentUser?.username ?? ""}
-            helper={t("subsonic.connect.passwordHelper")}
-            copyAriaLabel={t("subsonic.connect.copyUsernameLabel")}
-            copiedMessage={t("subsonic.connect.usernameCopied")}
-            copyFailedMessage={t("subsonic.connect.copyFailed")}
-          />
-
-          {credentials.isLoading ? (
-            <span className={connectionMeta()}>{t("subsonic.credentials.loading")}</span>
-          ) : credentials.error ? (
-            <span className="text-xs text-red-400">
-              {t("subsonic.credentials.loadError", { message: credentials.error.message })}
-            </span>
-          ) : credentials.data && credentials.data.length > 0 ? (
-            <div className="flex flex-col">
-              {credentials.data.map((credential) => (
-                <SubsonicCredentialRow key={credential.id} credential={credential} />
-              ))}
-            </div>
-          ) : (
-            <span className={connectionMeta()}>{t("subsonic.credentials.empty")}</span>
-          )}
-
-          {(status.data?.credentialsNeedingRotation ?? 0) > 0 ? (
-            <Notice
-              variant="warning"
-              title={t("subsonic.rotation.title", { count: status.data?.credentialsNeedingRotation ?? 0 })}
+      <div className={connectionBody()}>
+        {enabled ? (
+          <>
+            <ConnectionValueField
+              label={t("subsonic.connect.addressLabel")}
+              value={address}
+              copyAriaLabel={t("subsonic.connect.copyAddressLabel")}
+              copiedMessage={t("subsonic.connect.addressCopied")}
+              copyFailedMessage={t("subsonic.connect.copyFailed")}
             />
-          ) : null}
 
+            <ConnectionValueField
+              label={t("subsonic.connect.usernameLabel")}
+              value={currentUser?.username ?? ""}
+              helper={t("subsonic.connect.passwordHelper")}
+              copyAriaLabel={t("subsonic.connect.copyUsernameLabel")}
+              copiedMessage={t("subsonic.connect.usernameCopied")}
+              copyFailedMessage={t("subsonic.connect.copyFailed")}
+            />
+          </>
+        ) : (
+          <span className={connectionMeta()}>
+            {isAdmin ? t("subsonic.disabled.admin") : t("subsonic.disabled.member")}
+          </span>
+        )}
+
+        {credentials.isLoading ? (
+          <span className={connectionMeta()}>{t("subsonic.credentials.loading")}</span>
+        ) : credentials.error ? (
+          <span className="text-xs text-red-400">
+            {t("subsonic.credentials.loadError", { message: credentials.error.message })}
+          </span>
+        ) : credentials.data && credentials.data.length > 0 ? (
+          <div className="flex flex-col">
+            {credentials.data.map((credential) => (
+              <SubsonicCredentialRow key={credential.id} credential={credential} />
+            ))}
+          </div>
+        ) : enabled ? (
+          <span className={connectionMeta()}>{t("subsonic.credentials.empty")}</span>
+        ) : null}
+
+        {(status.data?.credentialsNeedingRotation ?? 0) > 0 ? (
+          <Notice
+            variant="warning"
+            title={t("subsonic.rotation.title", { count: status.data?.credentialsNeedingRotation ?? 0 })}
+          />
+        ) : null}
+
+        {enabled ? (
           <div className="flex flex-wrap items-center justify-between gap-3">
             <span className={connectionMeta()}>
               {t("subsonic.coverage.line", {
@@ -112,12 +120,8 @@ export function SubsonicSubsection() {
               {t("subsonic.newCredential")}
             </Button>
           </div>
-        </div>
-      ) : (
-        <span className={connectionMeta()}>
-          {isAdmin ? t("subsonic.disabled.admin") : t("subsonic.disabled.member")}
-        </span>
-      )}
+        ) : null}
+      </div>
 
       <CreateSubsonicCredentialDialog open={createOpen} onOpenChange={setCreateOpen} />
     </section>
