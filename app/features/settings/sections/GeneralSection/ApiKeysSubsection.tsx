@@ -16,7 +16,7 @@ import {
 } from "../../styles";
 import { ApiKeyRow } from "./ApiKeyRow";
 import { CreateApiKeyDialog } from "./CreateApiKeyDialog";
-import { connectionMeta } from "./styles";
+import { connectionError, connectionList, connectionMeta } from "./styles";
 
 export function ApiKeysSubsection() {
   const { t } = useTranslation("settings");
@@ -35,9 +35,9 @@ export function ApiKeysSubsection() {
       {isLoading ? (
         <span className={connectionMeta()}>{t("api.keys.loading")}</span>
       ) : error ? (
-        <span className="text-destructive-vivid text-xs">{t("api.keys.loadError", { message: error.message })}</span>
+        <span className={connectionError()}>{t("api.keys.loadError", { message: error.message })}</span>
       ) : data && data.length > 0 ? (
-        <div className="flex flex-col">
+        <div className={connectionList()}>
           {data.map((apiKey) => (
             <ApiKeyRow key={apiKey.id} apiKey={apiKey} />
           ))}

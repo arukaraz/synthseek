@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Copy } from "lucide-react";
-import { useState } from "react";
+import { useCopiedFlag } from "@hooks/ui/useCopiedFlag";
 import { toast } from "sonner";
 
 import { IconButton } from "@components/ui/IconButton";
@@ -19,15 +19,14 @@ export function ConnectionValueField({
   copiedMessage,
   copyFailedMessage,
 }: ConnectionValueFieldProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, markCopied } = useCopiedFlag();
 
   const handleCopy = async () => {
     if (!value) return;
     try {
       await navigator.clipboard.writeText(value);
-      setCopied(true);
+      markCopied();
       toast.success(copiedMessage);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error(copyFailedMessage);
     }
@@ -37,7 +36,7 @@ export function ConnectionValueField({
     <SettingsField label={label} helper={helper}>
       <div className={copyRow()}>
         <div className="flex-1">
-          <SettingsTextInput value={value} onChange={() => undefined} disabled />
+          <SettingsTextInput value={value} readOnly />
         </div>
         <IconButton
           icon={copied ? Check : Copy}

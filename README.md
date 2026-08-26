@@ -8,7 +8,7 @@
 
 Self-hosted, multi-user music library automation.
 
-Synthseek searches across music providers, downloads through your [slskd](https://github.com/slskd/slskd) instance, matches metadata, and organizes your personal library with Beets. It is multi-user, provider-agnostic, and ships a built-in MCP server so assistants can drive your library.
+Synthseek searches across music providers, downloads through the sources you enable, [slskd](https://github.com/slskd/slskd), Usenet, or yt-dlp, matches metadata, and organizes your personal library with Beets. It is multi-user, provider-agnostic, and ships a built-in MCP server so assistants can drive your library.
 
 ## Features
 
@@ -19,9 +19,9 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 - A full music library to browse and manage everything you have downloaded, organized by albums, artists, playlists, and tracks
 - Playlist management: create, rename, and delete your own playlists, and add or remove tracks
 - Sync playlists to Plex, one at a time or all at once
-- slskd integration for P2P downloads, with an automatic or optional yt-dlp fallback
+- Download sources: slskd for peer-to-peer, Usenet through your own indexer and SABnzbd, and a yt-dlp fallback
 - Download queue controls, with priority, pause, and resume
-- Per-request download-source and quality selection
+- Per-request source order and quality selection
 - Spotify library import, and playlist import and export (JSPF, XSPF, CSV)
 - Discovery integrations with Last.fm and ListenBrainz, with discovery mixes on a dedicated Discover page
 - Lidarr delegation with tag and monitor-scope selection
@@ -29,6 +29,7 @@ Synthseek searches across music providers, downloads through your [slskd](https:
 - Automatic file organization
 - End-to-end playlist downloads with automatic Plex reconstruction
 - Built-in MCP server, so assistants can search and manage your library ([see the full list and examples of MCP tools](https://docs.synthseek.dev/ai-assistants/))
+- Play your library in any Subsonic-compatible music app, without a media server in between
 - Localization in English, Espanol, Deutsch, and Francais
 - Real-time progress tracking, logs viewer, and in-app update notifications
 

@@ -1,8 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  acquisitionRadioItem,
-  acquisitionTrigger,
   configDialogContent,
   fieldGroup,
   fieldLabel,
@@ -33,16 +31,6 @@ describe("fieldLabel", () => {
   it("separates the label from its control with a small bottom margin", () => {
     expect(fieldLabel()).toContain("mb-1.5");
     expect(fieldLabel()).toContain("block");
-  });
-});
-
-describe("acquisition controls", () => {
-  it("trigger hovers toward the primary token", () => {
-    expect(acquisitionTrigger()).toContain("hover:border-primary-500/30");
-  });
-
-  it("radio item stacks its label and description", () => {
-    expect(acquisitionRadioItem()).toContain("flex-col");
   });
 });
 

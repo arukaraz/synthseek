@@ -8,6 +8,7 @@ export function SettingsTextInput({
   onChange,
   placeholder,
   disabled,
+  readOnly,
   type = "text",
   id,
   ariaLabel,
@@ -19,8 +20,9 @@ export function SettingsTextInput({
       value={value}
       placeholder={placeholder}
       disabled={disabled}
+      readOnly={readOnly}
       aria-label={ariaLabel}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) => onChange?.(e.target.value)}
     />
   );
 }

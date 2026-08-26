@@ -27,7 +27,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { LidarrInputs } from "../LidarrInputs";
-import { DEFAULT_ARTIST_MONITOR_SCOPE, DEFAULT_MONITOR_SCOPE } from "../consts";
+import { DEFAULT_ARTIST_MONITOR_SCOPE, DEFAULT_MONITOR_SCOPE } from "../constants";
 
 const PROFILES: LidarrProfiles = {
   rootFolders: [{ path: "/music", freeSpace: 50 * 1024 ** 3, accessible: true, id: 1 }],

@@ -101,3 +101,9 @@ export const connectLabel = cva("text-fg font-semibold");
 export const connectionBody = cva("flex flex-col gap-4");
 
 export const connectionMeta = cva("text-fg/50 text-xs");
+
+export const connectionError = cva("text-destructive-vivid text-xs");
+
+export const connectionList = cva("flex flex-col");
+
+export const connectionFooterRow = cva("flex flex-wrap items-center justify-between gap-3");

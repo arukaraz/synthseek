@@ -8,12 +8,6 @@ export const fieldGroup = cva("space-y-3");
 
 export const fieldLabel = cva("text-fg/90 mb-1.5 block text-sm font-medium");
 
-export const acquisitionTrigger = cva(
-  "border-fg/10 bg-fg/5 text-fg/80 hover:bg-fg/10 hover:border-primary-500/30 flex w-full items-center justify-between gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors"
-);
-
-export const acquisitionRadioItem = cva("flex flex-col gap-0.5");
-
 export const lidarrSelectTrigger = cva(
   "border-fg/10 bg-fg/5 text-fg/80 hover:bg-fg/10 hover:border-primary-500/30 flex w-full items-center justify-between gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors disabled:pointer-events-none disabled:opacity-40"
 );
@@ -52,15 +46,23 @@ export const acquisitionRow = cva("flex items-center gap-2 rounded-lg border px-
   defaultVariants: { active: false },
 });
 
+export const acquisitionRowLabel = cva("text-fg text-sm font-medium");
+
+export const acquisitionRowLead = cva("text-fg text-sm font-bold");
+
+export const acquisitionRowDescription = cva("text-fg/50 text-xs");
+
+export const acquisitionSourceList = cva("flex flex-col gap-2");
+
 export const acquisitionRowBody = cva("flex min-w-0 flex-1 flex-col");
 
 export const acquisitionRowPosition = cva("text-fg/60 w-4 shrink-0 text-center text-xs font-semibold tabular-nums");
 
-export const acquisitionHint = cva("text-fg/50 text-xs", {
+export const acquisitionHint = cva("text-xs", {
   variants: {
     interactive: {
       true: "text-primary-400 self-start underline-offset-2 hover:underline",
-      false: "",
+      false: "text-fg/50",
     },
   },
   defaultVariants: { interactive: false },

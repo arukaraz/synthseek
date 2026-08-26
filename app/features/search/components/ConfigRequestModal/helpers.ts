@@ -1,6 +1,6 @@
 import { ContentType, type MusicAlbum, type MusicItem, type MusicTrack } from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
-import { SOURCE_PRIORITY_ORDER } from "./consts";
+import { SOURCE_PRIORITY_ORDER } from "./constants";
 import type {
   AcquisitionOptionContext,
   AcquisitionSelection,
@@ -25,10 +25,6 @@ export function offeredSources(
     if (key === "usenet") return context.isAlbum || context.usenetAllowsSingleTracks;
     return true;
   });
-}
-
-export function offersUsenet(enabledSources: EnabledDownloadSources, context: AcquisitionOptionContext): boolean {
-  return offeredSources(enabledSources, context).includes("usenet");
 }
 
 export function defaultSelection(offered: DownloadSourceKey[]): AcquisitionSelection {
@@ -64,7 +60,12 @@ export function moveSource(
   return { ...selection, order };
 }
 
+export function isLastActiveSource(selection: AcquisitionSelection, key: DownloadSourceKey): boolean {
+  return selection.active.length === 1 && selection.active[0] === key;
+}
+
 export function toggleSource(selection: AcquisitionSelection, key: DownloadSourceKey): AcquisitionSelection {
+  if (isLastActiveSource(selection, key)) return selection;
   const active = selection.active.includes(key)
     ? selection.active.filter((entry) => entry !== key)
     : [...selection.active, key];

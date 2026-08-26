@@ -3,6 +3,7 @@
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useCopiedFlag } from "@hooks/ui/useCopiedFlag";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
@@ -26,7 +27,7 @@ export function CreateSubsonicCredentialDialog({ open, onOpenChange }: CreateSub
   const { t } = useTranslation("settings");
   const [name, setName] = useState("");
   const [created, setCreated] = useState<CreatedSubsonicCredential | null>(null);
-  const [copied, setCopied] = useState(false);
+  const { copied, markCopied, resetCopied } = useCopiedFlag();
   const create = useCreateSubsonicCredential();
 
   const canCreate = name.trim().length > 0 && !create.isPending;
@@ -34,7 +35,7 @@ export function CreateSubsonicCredentialDialog({ open, onOpenChange }: CreateSub
   const handleClose = () => {
     setName("");
     setCreated(null);
-    setCopied(false);
+    resetCopied();
     onOpenChange(false);
   };
 
@@ -48,9 +49,8 @@ export function CreateSubsonicCredentialDialog({ open, onOpenChange }: CreateSub
     if (!created) return;
     try {
       await navigator.clipboard.writeText(created.secret);
-      setCopied(true);
+      markCopied();
       toast.success(t("subsonic.create.copied"));
-      setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error(t("subsonic.create.copyFailed"));
     }

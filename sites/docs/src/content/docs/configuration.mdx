@@ -160,10 +160,10 @@ Administrators only. Covered on the [Operations page](/operations). The log leve
 
 Two live where you use them rather than in a settings section.
 
-| Setting                                              | Default                   | Where                                                            |
-| ---------------------------------------------------- | ------------------------- | ---------------------------------------------------------------- |
-| Review queue retention                               | 14 days                   | The footer of the review queue on the Requests screen. 1 to 365. |
-| Per-request format, bitrate, matching, speed, source | See [Features](/features) | The request window, stored on the request itself.                |
+| Setting                                               | Default                   | Where                                                            |
+| ----------------------------------------------------- | ------------------------- | ---------------------------------------------------------------- |
+| Review queue retention                                | 14 days                   | The footer of the review queue on the Requests screen. 1 to 365. |
+| Per-request format, bitrate, matching, speed, sources | See [Features](/features) | The request window, stored on the request itself.                |
 
 ## Environment variables
 
@@ -175,18 +175,18 @@ Two live where you use them rather than in a settings section.
 
 ### Container identity and paths
 
-| Variable                  | Default                      | What it is                                                      |
-| ------------------------- | ---------------------------- | --------------------------------------------------------------- |
-| `PUID`                    | 1000                         | The user Synthseek runs as. Must own your mounted folders.      |
-| `PGID`                    | 1000                         | The group Synthseek runs as.                                    |
-| `WEB_UI_PORT`             | 4400                         | The port the web interface listens on.                          |
-| `DATABASE_URL`            | `file:/data/db/synthseek.db` | Where the database lives.                                       |
-| `DOWNLOADS_COMPLETE_PATH` | `/downloads`                 | Where slskd puts completed downloads. Must be writable.         |
-| `MUSIC_LIBRARY_PATH`      | `/music`                     | Your organised library. Read-only is a supported degraded mode. |
-| `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                         |
-| `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                              |
-| `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                        |
-| `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                 |
+| Variable                  | Default                      | What it is                                                             |
+| ------------------------- | ---------------------------- | ---------------------------------------------------------------------- |
+| `PUID`                    | 1000                         | The user Synthseek runs as. Must own your mounted folders.             |
+| `PGID`                    | 1000                         | The group Synthseek runs as.                                           |
+| `WEB_UI_PORT`             | 4400                         | The port the web interface listens on.                                 |
+| `DATABASE_URL`            | `file:/data/db/synthseek.db` | Where the database lives.                                              |
+| `DOWNLOADS_COMPLETE_PATH` | `/downloads`                 | Where your download clients put completed downloads. Must be writable. |
+| `MUSIC_LIBRARY_PATH`      | `/music`                     | Your organised library. Read-only is a supported degraded mode.        |
+| `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                                |
+| `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                                     |
+| `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                               |
+| `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                        |
 
 ### Sessions and cookies
 

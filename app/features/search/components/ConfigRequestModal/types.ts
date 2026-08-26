@@ -47,7 +47,6 @@ export interface EnabledDownloadSources {
 
 export interface AcquisitionOptionContext {
   isAlbum: boolean;
-  lidarrAvailable: boolean;
   usenetAllowsSingleTracks: boolean;
 }
 

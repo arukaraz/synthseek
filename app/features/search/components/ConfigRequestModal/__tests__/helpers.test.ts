@@ -15,13 +15,12 @@ import {
   getItemDisplayName,
   moveSource,
   offeredSources,
-  offersUsenet,
   reconcileSelection,
   toggleSource,
   usesSlskd,
   hasTag,
-  isAcquisitionMethod,
   isAlbum,
+  isLastActiveSource,
   isLidarrSelectionComplete,
   isTrack,
   mapTrackFields,
@@ -31,12 +30,10 @@ import {
 import { createMockTrackFull, createMockAlbumSimplified, createMockPlaylistSimplified } from "@test/factories";
 import type { LidarrArtistSelection, LidarrSelection } from "../types";
 
-const BOTH_ENABLED = { slskd: true, ytdlp: true, usenet: false };
 const ALL_ENABLED = { slskd: true, ytdlp: true, usenet: true };
-const NON_ALBUM_CONTEXT = { isAlbum: false, lidarrAvailable: false, usenetAllowsSingleTracks: false };
-const ALBUM_NO_LIDARR = { isAlbum: true, lidarrAvailable: false, usenetAllowsSingleTracks: false };
-const ALBUM_WITH_LIDARR = { isAlbum: true, lidarrAvailable: true, usenetAllowsSingleTracks: false };
-const NON_ALBUM_OPTED_IN = { isAlbum: false, lidarrAvailable: false, usenetAllowsSingleTracks: true };
+const NON_ALBUM_CONTEXT = { isAlbum: false, usenetAllowsSingleTracks: false };
+const ALBUM_CONTEXT = { isAlbum: true, usenetAllowsSingleTracks: false };
+const NON_ALBUM_OPTED_IN = { isAlbum: false, usenetAllowsSingleTracks: true };
 
 const COMPLETE_SELECTION: LidarrSelection = {
   rootFolderPath: "/music",
@@ -190,11 +187,11 @@ describe("extractItemMetadata", () => {
 
 describe("offeredSources", () => {
   it("keeps the canonical priority order regardless of the enabled map order", () => {
-    expect(offeredSources(ALL_ENABLED, ALBUM_NO_LIDARR)).toEqual(["slskd", "usenet", "ytdlp"]);
+    expect(offeredSources(ALL_ENABLED, ALBUM_CONTEXT)).toEqual(["slskd", "usenet", "ytdlp"]);
   });
 
   it("drops a disabled source", () => {
-    expect(offeredSources({ slskd: true, ytdlp: false, usenet: true }, ALBUM_NO_LIDARR)).toEqual(["slskd", "usenet"]);
+    expect(offeredSources({ slskd: true, ytdlp: false, usenet: true }, ALBUM_CONTEXT)).toEqual(["slskd", "usenet"]);
   });
 
   it("withholds usenet from a non-album request by default", () => {
@@ -299,12 +296,25 @@ describe("toggleSource", () => {
     expect(toggleSource(selection, "ytdlp").active).toEqual(["slskd", "ytdlp"]);
   });
 
-  it("deactivates an active source", () => {
-    expect(toggleSource(selection, "slskd").active).toEqual([]);
+  it("deactivates an active source while another one remains", () => {
+    const both = { ...selection, active: ["slskd", "ytdlp"] };
+    expect(toggleSource(both, "slskd").active).toEqual(["ytdlp"]);
   });
 
   it("never changes the order, so a deselected source keeps its place", () => {
-    expect(toggleSource(selection, "slskd").order).toEqual(["slskd", "ytdlp"]);
+    const both = { ...selection, active: ["slskd", "ytdlp"] };
+    expect(toggleSource(both, "slskd").order).toEqual(["slskd", "ytdlp"]);
+  });
+
+  it("refuses to deselect the last source, so a manual request never silently uses every source", () => {
+    expect(toggleSource(selection, "slskd")).toBe(selection);
+    expect(buildSourceChain(toggleSource(selection, "slskd"))).toEqual(["slskd"]);
+  });
+
+  it("reports which source is the last one standing, so the checkbox can say why it is locked", () => {
+    expect(isLastActiveSource(selection, "slskd")).toBe(true);
+    expect(isLastActiveSource(selection, "ytdlp")).toBe(false);
+    expect(isLastActiveSource({ ...selection, active: ["slskd", "ytdlp"] }, "slskd")).toBe(false);
   });
 });
 

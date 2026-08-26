@@ -39,7 +39,7 @@ import {
   MATCHING_OPTIONS,
   QUALITY_MODE_OPTIONS,
   UPLOAD_SPEED_OPTIONS,
-} from "./consts";
+} from "./constants";
 import {
   allowsLossless,
   buildAlbumDelegate,
@@ -124,7 +124,6 @@ export function ConfigRequestModal({
     () =>
       offeredSources(enabledSources, {
         isAlbum: isAlbumItem,
-        lidarrAvailable: lidarrAvailability?.available ?? false,
         usenetAllowsSingleTracks: sourcesAvailability?.usenetAllowsSingleTracks ?? false,
       }),
     [enabledSources, isAlbumItem, sourcesAvailability?.usenetAllowsSingleTracks]

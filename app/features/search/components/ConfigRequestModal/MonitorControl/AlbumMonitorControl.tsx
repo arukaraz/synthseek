@@ -3,7 +3,7 @@
 import { cn } from "@utils/cn";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { ALBUM_SCOPE_CHOICES, DEFAULT_ALBUM_ARTIST_SCOPE } from "../consts";
+import { ALBUM_SCOPE_CHOICES, DEFAULT_ALBUM_ARTIST_SCOPE } from "../constants";
 import { OptionGrid } from "../OptionGrid";
 import type { AlbumScopeChoice, Option } from "../types";
 import { ArtistMonitorControl } from "./ArtistMonitorControl";

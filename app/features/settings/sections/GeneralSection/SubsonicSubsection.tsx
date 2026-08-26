@@ -23,7 +23,7 @@ import {
 import { ConnectionValueField } from "./ConnectionValueField";
 import { CreateSubsonicCredentialDialog } from "./CreateSubsonicCredentialDialog";
 import { publicEndpoint } from "./helpers";
-import { connectionBody, connectionMeta } from "./styles";
+import { connectionBody, connectionError, connectionFooterRow, connectionList, connectionMeta } from "./styles";
 import { SubsonicCredentialRow } from "./SubsonicCredentialRow";
 
 export function SubsonicSubsection() {
@@ -87,11 +87,11 @@ export function SubsonicSubsection() {
         {credentials.isLoading ? (
           <span className={connectionMeta()}>{t("subsonic.credentials.loading")}</span>
         ) : credentials.error ? (
-          <span className="text-destructive-vivid text-xs">
+          <span className={connectionError()}>
             {t("subsonic.credentials.loadError", { message: credentials.error.message })}
           </span>
         ) : credentials.data && credentials.data.length > 0 ? (
-          <div className="flex flex-col">
+          <div className={connectionList()}>
             {credentials.data.map((credential) => (
               <SubsonicCredentialRow key={credential.id} credential={credential} />
             ))}
@@ -108,7 +108,7 @@ export function SubsonicSubsection() {
         ) : null}
 
         {enabled ? (
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className={connectionFooterRow()}>
             <span className={connectionMeta()}>
               {t("subsonic.coverage.line", {
                 streamable: status.data?.streamableTracks ?? 0,

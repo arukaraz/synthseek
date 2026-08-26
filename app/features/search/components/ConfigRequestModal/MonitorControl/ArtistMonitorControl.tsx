@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import { ARTIST_MONITOR_SCOPE_OPTIONS } from "../consts";
+import { ARTIST_MONITOR_SCOPE_OPTIONS } from "../constants";
 import type { Option } from "../types";
 import { ScopeRadioList } from "./ScopeRadioList";
 import type { ArtistMonitorControlProps } from "./types";

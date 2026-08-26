@@ -7,14 +7,18 @@ import { Checkbox } from "@components/ui/Checkbox";
 import { IconButton } from "@components/ui/IconButton";
 import { Switch } from "@components/ui/Switch";
 
-import { SOURCE_ROW_LABELS } from "./consts";
-import { moveSource, toggleSource } from "./helpers";
+import { SOURCE_ROW_LABELS } from "./constants";
+import { isLastActiveSource, moveSource, toggleSource } from "./helpers";
 import {
   acquisitionAutoRow,
   acquisitionHint,
   acquisitionRow,
   acquisitionRowBody,
+  acquisitionRowDescription,
+  acquisitionRowLabel,
+  acquisitionRowLead,
   acquisitionRowPosition,
+  acquisitionSourceList,
   fieldGroup,
   fieldLabel,
 } from "./styles";
@@ -32,8 +36,8 @@ export function AcquisitionOrderList({ label, selection, lidarrAvailable, onChan
 
       <div className={acquisitionAutoRow()}>
         <div className={acquisitionRowBody()}>
-          <span className="text-fg text-sm font-bold">{t("config.options.acquisition.auto.label")}</span>
-          <span className="text-fg/50 text-xs">{t("config.options.acquisition.auto.description")}</span>
+          <span className={acquisitionRowLead()}>{t("config.options.acquisition.auto.label")}</span>
+          <span className={acquisitionRowDescription()}>{t("config.options.acquisition.auto.description")}</span>
         </div>
         <Switch
           checked={selection.mode === "auto"}
@@ -45,7 +49,7 @@ export function AcquisitionOrderList({ label, selection, lidarrAvailable, onChan
       {manual ? (
         <>
           <p className={acquisitionHint()}>{t("config.options.acquisition.orderHint")}</p>
-          <ul aria-labelledby="acquisition-order-label" className="flex flex-col gap-2">
+          <ul aria-labelledby="acquisition-order-label" className={acquisitionSourceList()}>
             {selection.order.map((key, index) => {
               const labels = SOURCE_ROW_LABELS[key];
               const active = selection.active.includes(key);
@@ -53,8 +57,8 @@ export function AcquisitionOrderList({ label, selection, lidarrAvailable, onChan
                 <li key={key} className={acquisitionRow({ active })}>
                   <span className={acquisitionRowPosition()}>{index + 1}</span>
                   <div className={acquisitionRowBody()}>
-                    <span className="text-fg text-sm font-medium">{t(labels.labelKey)}</span>
-                    <span className="text-fg/50 text-xs">{t(labels.descriptionKey)}</span>
+                    <span className={acquisitionRowLabel()}>{t(labels.labelKey)}</span>
+                    <span className={acquisitionRowDescription()}>{t(labels.descriptionKey)}</span>
                   </div>
                   <IconButton
                     icon={ChevronUp}
@@ -72,6 +76,7 @@ export function AcquisitionOrderList({ label, selection, lidarrAvailable, onChan
                   />
                   <Checkbox
                     checked={active}
+                    disabled={isLastActiveSource(selection, key)}
                     onCheckedChange={() => onChange(toggleSource(selection, key))}
                     aria-label={t("config.options.acquisition.useSource", { source: t(labels.labelKey) })}
                   />
