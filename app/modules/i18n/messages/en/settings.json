@@ -937,7 +937,7 @@
       "copyFailed": "Could not copy"
     },
     "coverage": {
-      "line": "{{streamable}} tracks playable · {{missing}} without a verified file"
+      "line": "{{streamable}} tracks with a recorded file · {{missing}} without one"
     },
     "disabled": {
       "admin": "Turn this on to let music apps reach your library.",

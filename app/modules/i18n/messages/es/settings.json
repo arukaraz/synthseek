@@ -937,7 +937,7 @@
       "copyFailed": "No se pudo copiar"
     },
     "coverage": {
-      "line": "{{streamable}} canciones reproducibles · {{missing}} sin fichero verificado"
+      "line": "{{streamable}} canciones con fichero registrado · {{missing}} sin él"
     },
     "disabled": {
       "admin": "Actívalo para que las apps de música lleguen a tu biblioteca.",

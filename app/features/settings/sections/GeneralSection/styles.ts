@@ -98,8 +98,6 @@ export const connectList = cva("flex flex-col gap-2");
 
 export const connectLabel = cva("text-fg font-semibold");
 
-
-
 export const connectionBody = cva("flex flex-col gap-4");
 
 export const connectionMeta = cva("text-fg/50 text-xs");

@@ -937,7 +937,7 @@
       "copyFailed": "Kopieren fehlgeschlagen"
     },
     "coverage": {
-      "line": "{{streamable}} Titel abspielbar · {{missing}} ohne geprüfte Datei"
+      "line": "{{streamable}} Titel mit hinterlegter Datei · {{missing}} ohne"
     },
     "disabled": {
       "admin": "Aktiviere dies, damit Musik-Apps deine Bibliothek erreichen.",

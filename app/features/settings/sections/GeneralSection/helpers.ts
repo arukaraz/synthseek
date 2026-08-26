@@ -41,14 +41,6 @@ function stripTrailingSlashes(url: string): string {
   return result;
 }
 
-/**
- * Resolves an inbound endpoint shown to the user. Prefers the admin-configured
- * public base URL (the address the instance is reached at); falls back to the
- * browser origin so it still works before any public URL is configured. Every
- * inbound surface MUST derive its address here: a client pasted into a phone
- * outside the LAN needs the public address, not whichever origin the operator's
- * browser happens to be on.
- */
 export function publicEndpoint(path: string, publicBaseUrl?: string): string {
   if (publicBaseUrl) return `${stripTrailingSlashes(publicBaseUrl)}${path}`;
   if (typeof window === "undefined") return path;

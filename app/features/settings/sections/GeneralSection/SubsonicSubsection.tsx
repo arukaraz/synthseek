@@ -87,7 +87,7 @@ export function SubsonicSubsection() {
         {credentials.isLoading ? (
           <span className={connectionMeta()}>{t("subsonic.credentials.loading")}</span>
         ) : credentials.error ? (
-          <span className="text-xs text-red-400">
+          <span className="text-destructive-vivid text-xs">
             {t("subsonic.credentials.loadError", { message: credentials.error.message })}
           </span>
         ) : credentials.data && credentials.data.length > 0 ? (

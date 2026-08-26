@@ -34,7 +34,13 @@ vi.mock("@modules/providers/AuthProvider", () => ({
 
 vi.mock("@hooks/api/queries/useSubsonicStatus", () => ({
   useSubsonicStatus: () =>
-    createMockQuery({ enabled: false, basePath: "/subsonic", streamableTracks: 0, tracksWithoutPath: 0 }),
+    createMockQuery({
+      enabled: false,
+      basePath: "/api/v1/subsonic",
+      streamableTracks: 0,
+      tracksWithoutPath: 0,
+      credentialsNeedingRotation: 0,
+    }),
 }));
 
 vi.mock("@hooks/api/queries/useSubsonicCredentials", () => ({

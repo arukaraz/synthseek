@@ -937,7 +937,7 @@
       "copyFailed": "Impossible de copier"
     },
     "coverage": {
-      "line": "{{streamable}} titres lisibles · {{missing}} sans fichier vérifié"
+      "line": "{{streamable}} titres avec un fichier enregistré · {{missing}} sans"
     },
     "disabled": {
       "admin": "Activez ceci pour que les applications musicales atteignent votre bibliothèque.",
