@@ -10,6 +10,7 @@ export function useRevokeSubsonicCredential() {
   return trpc.subsonic.revokeCredential.useMutation({
     onSuccess: () => {
       utils.subsonic.listCredentials.invalidate();
+      utils.subsonic.status.invalidate();
       toast.success(i18n.t("mutations:subsonic.revoked"));
     },
     onError: (error) => errorToast(error, "subsonic.revokeFailed"),

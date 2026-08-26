@@ -43,7 +43,7 @@ export function StagedReleaseList({ enabled }: StagedReleaseListProps) {
       {entries.isLoading ? (
         <span className="text-fg/60 text-sm">{t("usenet.stagedList.loading")}</span>
       ) : entries.isError ? (
-        <span className="text-sm text-red-400">{t("usenet.stagedList.loadError")}</span>
+        <span className="text-destructive-vivid text-sm">{t("usenet.stagedList.loadError")}</span>
       ) : !hasEntries ? (
         <EmptyState
           icon={Disc3}

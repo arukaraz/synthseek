@@ -7,6 +7,7 @@ export function useCreateSubsonicCredential() {
   return trpc.subsonic.createCredential.useMutation({
     onSuccess: () => {
       utils.subsonic.listCredentials.invalidate();
+      utils.subsonic.status.invalidate();
     },
     onError: (error) => errorToast(error, "subsonic.createFailed"),
   });

@@ -19,13 +19,13 @@ Synthseek has two configuration surfaces, and the split is deliberate.
 
 Available to every member, except where a row says otherwise.
 
-| Setting        | What it does                                                                                                          |
-| -------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Theme          | Synthseek, Midnight, or Ocean.                                                                                        |
-| Language       | English, Español, Deutsch, or Français. Switches in place.                                                            |
-| Music players  | Turns the Subsonic API on or off, **admin only**, and shows the address and username a music app needs. Off by default. |
-| AI assistants  | The public URL of your instance, and connection guidance for assistants.                                              |
-| API keys       | Create and revoke keys for assistant connections. Shown once at creation.                                             |
+| Setting       | What it does                                                                                                            |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Theme         | Synthseek, Midnight, or Ocean.                                                                                          |
+| Language      | English, Español, Deutsch, or Français. Switches in place.                                                              |
+| Music players | Turns the Subsonic API on or off, **admin only**, and shows the address and username a music app needs. Off by default. |
+| AI assistants | The public URL of your instance, and connection guidance for assistants.                                                |
+| API keys      | Create and revoke keys for assistant connections. Shown once at creation.                                               |
 
 The three connection rows share one card, **Connect apps**. Each member creates and revokes their own
 credentials there; only an admin can turn the Subsonic API on.
@@ -52,7 +52,7 @@ Administrators only.
 
 **slskd.** URL, API key, connection status, and the banned-peer list.
 
-**Download sources.** Enable, disable, and prioritise slskd and yt-dlp. The yt-dlp tuning is on the [Download Sources page](/download-sources).
+**Download sources.** Enable, disable, and prioritise slskd, Usenet and yt-dlp. The Usenet and yt-dlp tuning is on the [Download Sources page](/download-sources).
 
 **Plex.** Connection status, a reconnect button that signs you in at plex.tv and lets you pick a server, and the server URL that sign-in resolved, shown read-only. Plus two independent behaviour switches:
 
@@ -169,8 +169,8 @@ Two live where you use them rather than in a settings section.
 
 ### Required
 
-| Variable      | What it is                                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------------------- |
+| Variable      | What it is                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AUTH_SECRET` | Signs sessions, and encrypts the credentials music apps use. At least 32 characters. Generate with `openssl rand -base64 48`. Changing it logs everyone out, and any music-app credential stops working in apps that log in with the token-and-salt scheme, which most older ones do. Apps that send the credential directly keep working. Create a new credential after changing it. |
 
 ### Container identity and paths
