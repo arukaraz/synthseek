@@ -141,7 +141,9 @@ Currently, playlist sync only ever adds tracks to the remote playlist. It never 
 
 Synthseek speaks the Subsonic API, so apps built for that ecosystem, Feishin, Symfonium, DSub and others, can browse and play your library directly, without a media server in between. Turn it on in **Settings**, then **General**, then **Connect apps**. It is off until you do.
 
-Each person creates their own credential and pastes it into their app along with the address and their username. A credential is shown once, works only for listening, and can be revoked at any time.
+Each person creates their own credential and pastes it into their app along with the address and their username. A credential is shown once and can be revoked at any time.
+
+The app does what a music app does, and what it does sticks. Favourites you mark there are yours alone and show up marked wherever you look next, in that app or another one. Playlists can be created, renamed, added to and reordered from the app, and they are the same playlists the web app shows. What you played feeds the Recent and Most played lists, and the queue you left behind is offered back when you open a different device. Deleting a playlist from a music app deletes only the playlist, never the music in it, because a swipe is too easy a gesture to lose an album to. Removing the tracks themselves stays in the web app, where it asks first.
 
 Playback is original quality by default. If your app asks for a particular format or caps the bitrate, Synthseek converts on the fly and sends that instead, which is what makes a lossless library usable on a phone or a slow connection. Conversion can be switched off in settings, and it is bounded so a busy server refuses new conversions rather than grinding.
 
