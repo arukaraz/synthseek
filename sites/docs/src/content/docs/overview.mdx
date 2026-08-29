@@ -21,18 +21,18 @@ Synthseek does not host, store, or distribute music itself. It has no content of
 
 Synthseek ships as a single Docker container that runs two processes: a web interface and an API server. Around it sit the services it talks to.
 
-| Piece                    | Role                                                                                                            | Required                                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| slskd                    | Your Soulseek daemon. Synthseek drives it over its local HTTP API.                                              | Yes, for peer-to-peer downloads          |
-| Music catalog            | Where song, album, artist, and playlist metadata comes from. Deezer by default, with no API key and no account. | Yes, built in                            |
-| Beets                    | Tags and files each downloaded track into your library.                                                         | Bundled, on by default                   |
-| AcoustID                 | Fingerprints the audio to prove a file is the recording you asked for.                                          | Optional, free key, strongly recommended |
-| Plex                     | Gets told to rescan after an import, and receives your playlists.                                               | Optional                                 |
-| Lidarr                   | An alternative target you can hand an artist or album to.                                                       | Optional                                 |
-| Last.fm and ListenBrainz | Your listening history, and the discovery mixes built from it.                                                  | Optional                                 |
-| SABnzbd                  | Your Usenet downloader. Synthseek hands it a release and collects the result.                                   | Optional, for Usenet downloads           |
-| Newznab indexer          | Where Synthseek searches for Usenet releases.                                                                   | Optional, for Usenet downloads           |
-| Music apps               | Subsonic-compatible players play the library straight from Synthseek, and their favourites, playlists and queue live in it. | Optional, off by default    |
+| Piece                    | Role                                                                                                                        | Required                                 |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| slskd                    | Your Soulseek daemon. Synthseek drives it over its local HTTP API.                                                          | Yes, for peer-to-peer downloads          |
+| Music catalog            | Where song, album, artist, and playlist metadata comes from. Deezer by default, with no API key and no account.             | Yes, built in                            |
+| Beets                    | Tags and files each downloaded track into your library.                                                                     | Bundled, on by default                   |
+| AcoustID                 | Fingerprints the audio to prove a file is the recording you asked for.                                                      | Optional, free key, strongly recommended |
+| Plex                     | Gets told to rescan after an import, and receives your playlists.                                                           | Optional                                 |
+| Lidarr                   | An alternative target you can hand an artist or album to.                                                                   | Optional                                 |
+| Last.fm and ListenBrainz | Your listening history, and the discovery mixes built from it.                                                              | Optional                                 |
+| SABnzbd                  | Your Usenet downloader. Synthseek hands it a release and collects the result.                                               | Optional, for Usenet downloads           |
+| Newznab indexer          | Where Synthseek searches for Usenet releases.                                                                               | Optional, for Usenet downloads           |
+| Music apps               | Subsonic-compatible players play the library straight from Synthseek, and their favourites, playlists and queue live in it. | Optional, off by default                 |
 
 ## How a request flows
 
