@@ -793,6 +793,10 @@
       "library-scan": {
         "name": "Bibliotheksscan",
         "description": "Indiziert die Audiodateien auf der Festplatte und gleicht ab, was verschwunden ist."
+      },
+      "library-identify": {
+        "name": "Bibliotheks-Identifizierung",
+        "description": "Ermittelt, welchen Titel jede noch nicht identifizierte Datei auf der Festplatte enthält."
       }
     }
   },

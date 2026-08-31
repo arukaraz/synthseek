@@ -793,6 +793,10 @@
       "library-scan": {
         "name": "Library Scan",
         "description": "Indexes the audio files on disk and reconciles what disappeared."
+      },
+      "library-identify": {
+        "name": "Library Identification",
+        "description": "Works out which track each unidentified file on disk holds."
       }
     }
   },

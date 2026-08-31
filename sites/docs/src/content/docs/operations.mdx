@@ -13,14 +13,15 @@ Two kinds of job run in the background.
 
 Listed under **Settings**, then **Jobs**, with what each does, when it last ran, when it runs next, and a run-now button. Only jobs relevant to your setup are shown.
 
-| Job                       | What it does                                                                   | Runs                                |
-| ------------------------- | ------------------------------------------------------------------------------ | ----------------------------------- |
-| **External Library Sync** | Imports tracks from connected external libraries.                              | Every 30 minutes by default         |
-| **Discovery Sweep**       | Evaluates discovery feeds and triggers integrations.                           | On a fixed interval                 |
-| **Media Server Sync**     | Keeps media server playlists named right and topped up.                        | Hourly                              |
-| **Library Scan**          | Indexes the audio files on your library disk and notes the ones that are gone. | Twice a day                         |
-| **Usenet Staging Sweep**  | Deletes downloaded Usenet releases nobody asked another track from.            | Hourly, only when Usenet is on      |
-| **Wanted Sweep**          | Retries watched failed tracks on a release-age cadence.                        | On a fixed interval, off by default |
+| Job                        | What it does                                                                   | Runs                                |
+| -------------------------- | ------------------------------------------------------------------------------ | ----------------------------------- |
+| **External Library Sync**  | Imports tracks from connected external libraries.                              | Every 30 minutes by default         |
+| **Discovery Sweep**        | Evaluates discovery feeds and triggers integrations.                           | On a fixed interval                 |
+| **Media Server Sync**      | Keeps media server playlists named right and topped up.                        | Hourly                              |
+| **Library Scan**           | Indexes the audio files on your library disk and notes the ones that are gone. | Twice a day                         |
+| **Library Identification** | Works out which track each unidentified file holds, so it joins your library.  | Every 30 minutes, in small batches  |
+| **Usenet Staging Sweep**   | Deletes downloaded Usenet releases nobody asked another track from.            | Hourly, only when Usenet is on      |
+| **Wanted Sweep**           | Retries watched failed tracks on a release-age cadence.                        | On a fixed interval, off by default |
 
 Running the discovery sweep by hand forces it past its own due checks, so a manual run does what you expect rather than quietly doing nothing because a feed is not yet due. The other jobs do a normal pass, which still honours their own per-item cadence. Neither permanently shifts the schedule.
 
@@ -45,6 +46,8 @@ These run on a fixed schedule and are not user-triggerable.
 The same **Jobs** page carries a card for the library scan. It reports how many audio files are on your library disk, how many of them Synthseek recognises as tracks it holds, how many it does not recognise yet, and how many it has stopped finding. You can start a scan there and cancel one that is running.
 
 A scan that could not read part of the disk says so, and everything under the paths it could not read keeps the state it already had, so a permissions problem on one folder never looks like a library that lost files. The rest of the library is reconciled as usual, which means one permanently unreadable folder does not stop Synthseek noticing what disappeared everywhere else. Fix the permissions and scan again.
+
+Identification then works through the files the scan could not place, a batch at a time, so it never floods the services it asks. A file it recognises joins your library as a normal track and becomes playable everywhere, including in a music app. A file it cannot place is retried a few times over the following days and then left alone, listed on the card so you can see what it is. A second copy of something you already have is filed against the track you already own rather than added twice, and the copy already in your library keeps its place.
 
 ## Logs
 

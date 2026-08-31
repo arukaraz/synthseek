@@ -793,6 +793,10 @@
       "library-scan": {
         "name": "Escaneo de biblioteca",
         "description": "Indexa los archivos de audio del disco y reconcilia lo que ha desaparecido."
+      },
+      "library-identify": {
+        "name": "Identificación de la biblioteca",
+        "description": "Averigua qué canción contiene cada archivo del disco sin identificar."
       }
     }
   },
