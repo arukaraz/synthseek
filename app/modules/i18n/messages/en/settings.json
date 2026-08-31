@@ -1045,7 +1045,10 @@
       "discard": "Discard",
       "confirmTitle": "Discard this copy?",
       "confirmBody": "Discarding: {{path}}\nKeeping: {{keep}}\nCheck these are the same recording, because a remix or a different edit can look like a duplicate. The discarded file goes to the recycle bin and stays recoverable.",
-      "discarded": "Copy moved to the recycle bin"
+      "discarded": "Copy moved to the recycle bin",
+      "keepBest": "Keep the best of each",
+      "keepingBest": "Working through the duplicate copies",
+      "keepBestRunning": "Keeping the best copy of each track"
     }
   }
 }

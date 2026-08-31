@@ -7,7 +7,8 @@ const ALTERNATE_PREVIEW_LIMIT = 5;
 export function useLibraryScanStatus() {
   return trpc.library.scan.status.useQuery(undefined, {
     staleTime: 0,
-    refetchInterval: (query) => (query.state.data?.activeRun ? ACTIVE_REFETCH_MS : IDLE_REFETCH_MS),
+    refetchInterval: (query) =>
+      query.state.data?.activeRun || query.state.data?.reclaimRunning ? ACTIVE_REFETCH_MS : IDLE_REFETCH_MS,
   });
 }
 

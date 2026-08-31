@@ -8,6 +8,7 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockQuery, createLoadingQuery, createErrorQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
 type ScanStatus = {
+  reclaimRunning: boolean;
   activeRun: ScanRun | null;
   lastRun: ScanRun | null;
   inventory: {
@@ -49,23 +50,12 @@ type AlternateCopies = {
   }[];
 };
 
-type UnlinkedFiles = {
-  total: number;
-  items: {
-    id: string;
-    relativePath: string;
-    title: string | null;
-    artistName: string | null;
-    albumTitle: string | null;
-  }[];
-};
-
 let statusQuery: MockQueryResult<ScanStatus | undefined> = createMockQuery<ScanStatus | undefined>(undefined);
-let unlinkedQuery: MockQueryResult<UnlinkedFiles | undefined> = createMockQuery<UnlinkedFiles | undefined>(undefined);
 let alternatesQuery: MockQueryResult<AlternateCopies | undefined> = createMockQuery<AlternateCopies | undefined>(
   undefined
 );
 const discardMutate = vi.fn();
+const keepBestMutate = vi.fn();
 const cancelMutate = vi.fn();
 
 vi.mock("@hooks/api/queries/useLibraryScanStatus", () => ({
@@ -81,6 +71,7 @@ vi.mock("@hooks/api/mutations/jobs/useTriggerJob", () => ({
 vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
   useCancelLibraryScan: () => ({ mutate: cancelMutate, isPending: false }),
   useDiscardLibraryCopy: () => ({ mutate: discardMutate, isPending: false }),
+  useKeepBestLibraryCopies: () => ({ mutate: keepBestMutate, isPending: false }),
 }));
 
 import { LibraryScanCard } from "../LibraryScanCard";
@@ -93,7 +84,6 @@ afterEach(() => {
   cleanup();
   vi.clearAllMocks();
   statusQuery = createMockQuery<ScanStatus | undefined>(undefined);
-  unlinkedQuery = createMockQuery<UnlinkedFiles | undefined>(undefined);
   alternatesQuery = createMockQuery<AlternateCopies | undefined>(undefined);
 });
 
@@ -116,6 +106,7 @@ function makeRun(overrides: Partial<ScanRun> = {}): ScanRun {
 
 function makeStatus(overrides: Partial<ScanStatus> = {}): ScanStatus {
   return {
+    reclaimRunning: false,
     activeRun: null,
     lastRun: makeRun(),
     inventory: {
@@ -209,12 +200,6 @@ describe("LibraryScanCard", () => {
 
   it("no longer recites which files are unidentified", () => {
     statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
-    unlinkedQuery = createMockQuery<UnlinkedFiles | undefined>({
-      total: 2883,
-      items: [
-        { id: "f1", relativePath: "HIM/solo.flac", title: "Join Me", artistName: "HIM", albumTitle: "Razorblade" },
-      ],
-    });
 
     render(<LibraryScanCard />);
 
@@ -287,6 +272,58 @@ describe("LibraryScanCard", () => {
 
     expect(screen.getByText(/66 files are other copies/)).toBeInTheDocument();
     expect(screen.getByText(/HIM - Join Me/)).toBeInTheDocument();
+  });
+
+  it("offers keeping the best copy of each duplicated track", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
+      total: 325,
+      totalBytes: 3_300_000_000,
+      items: [
+        {
+          id: "c1",
+          relativePath: "Scene/01.flac",
+          sizeBytes: 40_000_000,
+          fileFormat: "flac",
+          artist: "HIM",
+          title: "Join Me",
+          servingPath: "HIM/Razorblade/02.mp3",
+        },
+      ],
+    });
+
+    render(<LibraryScanCard />);
+
+    fireEvent.click(screen.getByRole("button", { name: enSettings.libraryScan.alternates.keepBest }));
+
+    expect(keepBestMutate).toHaveBeenCalled();
+  });
+
+  it("shows the reclaim as busy while the server is still working through the copies", () => {
+    const status = makeStatus();
+    status.reclaimRunning = true;
+    statusQuery = createMockQuery<ScanStatus | undefined>(status);
+    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
+      total: 325,
+      totalBytes: 3_300_000_000,
+      items: [
+        {
+          id: "c1",
+          relativePath: "Scene/01.flac",
+          sizeBytes: 40_000_000,
+          fileFormat: "flac",
+          artist: "HIM",
+          title: "Join Me",
+          servingPath: "HIM/Razorblade/02.mp3",
+        },
+      ],
+    });
+
+    render(<LibraryScanCard />);
+
+    const button = screen.getByRole("button", { name: enSettings.libraryScan.alternates.keepBestRunning });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
   });
 
   it("asks before discarding, and never discards on the click alone", () => {

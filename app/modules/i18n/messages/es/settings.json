@@ -1045,7 +1045,10 @@
       "discard": "Descartar",
       "confirmTitle": "¿Descartar esta copia?",
       "confirmBody": "Se descarta: {{path}}\nSe conserva: {{keep}}\nComprueba que sean la misma grabación, porque un remix o una edición distinta puede parecer un duplicado. El archivo descartado va a la papelera y sigue siendo recuperable.",
-      "discarded": "Copia movida a la papelera"
+      "discarded": "Copia movida a la papelera",
+      "keepBest": "Quedarse con la mejor",
+      "keepingBest": "Revisando las copias duplicadas",
+      "keepBestRunning": "Quedandose con la mejor copia de cada pista"
     }
   }
 }

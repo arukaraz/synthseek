@@ -1045,7 +1045,10 @@
       "discard": "Verwerfen",
       "confirmTitle": "Diese Kopie verwerfen?",
       "confirmBody": "Verworfen wird: {{path}}\nBehalten wird: {{keep}}\nPrüfe, ob es dieselbe Aufnahme ist, denn ein Remix oder eine andere Fassung kann wie ein Duplikat aussehen. Die verworfene Datei landet im Papierkorb und bleibt wiederherstellbar.",
-      "discarded": "Kopie in den Papierkorb verschoben"
+      "discarded": "Kopie in den Papierkorb verschoben",
+      "keepBest": "Die beste behalten",
+      "keepingBest": "Doppelte Kopien werden durchgegangen",
+      "keepBestRunning": "Beste Kopie jedes Titels wird behalten"
     }
   }
 }

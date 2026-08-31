@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Play, Square, Trash2 } from "lucide-react";
+import { Loader2, Play, Sparkles, Square, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { LoadingDots } from "@components/ui/LoadingDots";
 import { Notice } from "@components/ui/Notice";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
-import { useCancelLibraryScan, useDiscardLibraryCopy } from "@hooks/api/mutations/jobs/useLibraryScanControls";
+import {
+  useCancelLibraryScan,
+  useDiscardLibraryCopy,
+  useKeepBestLibraryCopies,
+} from "@hooks/api/mutations/jobs/useLibraryScanControls";
 import { useTriggerJob } from "@hooks/api/mutations/jobs/useTriggerJob";
 import { useAlternateLibraryCopies, useLibraryScanStatus } from "@hooks/api/queries/useLibraryScanStatus";
 import { formatBytes } from "@utils/formatters";
@@ -36,6 +40,7 @@ export function LibraryScanCard() {
   const cancel = useCancelLibraryScan();
   const discard = useDiscardLibraryCopy();
   const trigger = useTriggerJob();
+  const keepBest = useKeepBestLibraryCopies();
   const alternates = useAlternateLibraryCopies((data?.inventory.linkedFiles ?? 0) > 0);
   const [pendingDiscard, setPendingDiscard] = useState<{
     id: string;
@@ -65,6 +70,7 @@ export function LibraryScanCard() {
   const isScanning = activeRun !== null;
   const run = activeRun ?? lastRun;
   const busy = isScanning || trigger.isPending;
+  const reclaiming = data.reclaimRunning || keepBest.isPending;
   const name = t("libraryScan.card.title");
 
   return (
@@ -138,12 +144,24 @@ export function LibraryScanCard() {
 
         {alternates.data && alternates.data.items.length > 0 ? (
           <div className={scanUnlinkedList()}>
-            <span className={scanStatLabel()}>
-              {t("libraryScan.alternates.heading", {
-                count: alternates.data.total,
-                size: formatBytes(alternates.data.totalBytes),
-              })}
-            </span>
+            <div className={scanCopyRow()}>
+              <span className={scanStatLabel()}>
+                {t("libraryScan.alternates.heading", {
+                  count: alternates.data.total,
+                  size: formatBytes(alternates.data.totalBytes),
+                })}
+              </span>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => keepBest.mutate(undefined, { onSuccess: () => void status.refetch() })}
+                disabled={reclaiming}
+                aria-busy={reclaiming}
+              >
+                {reclaiming ? <Loader2 className="animate-spin" /> : <Sparkles />}
+                {reclaiming ? t("libraryScan.alternates.keepBestRunning") : t("libraryScan.alternates.keepBest")}
+              </Button>
+            </div>
             {alternates.data.items.map((copy) => (
               <div key={copy.id} className={scanCopyRow()}>
                 <span className={scanUnlinkedItem()}>

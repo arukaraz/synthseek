@@ -30,3 +30,15 @@ export function useDiscardLibraryCopy() {
     onError: (error) => errorToast(error, "jobs.runFailed"),
   });
 }
+
+export function useKeepBestLibraryCopies() {
+  const utils = trpc.useUtils();
+  return trpc.library.scan.keepBestCopies.useMutation({
+    onSuccess: () => {
+      utils.library.scan.status.invalidate();
+      utils.library.scan.alternateCopies.invalidate();
+      toast.success(i18n.t("settings:libraryScan.alternates.keepingBest"));
+    },
+    onError: (error) => errorToast(error, "jobs.runFailed"),
+  });
+}

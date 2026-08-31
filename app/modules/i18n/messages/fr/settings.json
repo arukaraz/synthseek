@@ -1045,7 +1045,10 @@
       "discard": "Écarter",
       "confirmTitle": "Écarter cette copie ?",
       "confirmBody": "Écarté : {{path}}\nConservé : {{keep}}\nVérifiez qu'il s'agit du même enregistrement, car un remix ou une autre version peut ressembler à un doublon. Le fichier écarté part à la corbeille et reste récupérable.",
-      "discarded": "Copie déplacée vers la corbeille"
+      "discarded": "Copie déplacée vers la corbeille",
+      "keepBest": "Garder la meilleure",
+      "keepingBest": "Traitement des copies en double",
+      "keepBestRunning": "Conservation de la meilleure copie de chaque titre"
     }
   }
 }
