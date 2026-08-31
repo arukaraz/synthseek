@@ -1056,6 +1056,14 @@
     "toast": {
       "cancelling": "Arrêt de l'analyse de la bibliothèque",
       "nothingRunning": "Aucune analyse n'était en cours"
+    },
+    "alternates": {
+      "heading_one": "{{count}} copie en double, {{size}}",
+      "heading_other": "{{count}} copies en double, {{size}}",
+      "discard": "Écarter",
+      "confirmTitle": "Écarter cette copie ?",
+      "confirmBody": "{{path}} part à la corbeille, où elle reste récupérable. La copie diffusée par votre bibliothèque n'est pas touchée.",
+      "discarded": "Copie déplacée vers la corbeille"
     }
   }
 }

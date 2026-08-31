@@ -290,5 +290,13 @@
   "LIBRARY_SCAN_ALREADY_RUNNING": {
     "title": "Analyse déjà en cours",
     "description": "Une analyse de la bibliothèque est déjà en cours. Attendez la fin ou annulez-la d'abord."
+  },
+  "LIBRARY_FILE_NOT_FOUND": {
+    "title": "Fichier introuvable",
+    "description": "Ce fichier n'est plus dans l'index de la bibliothèque. Lancez une analyse et réessayez."
+  },
+  "LIBRARY_FILE_NOT_AN_ALTERNATE": {
+    "title": "C'est la copie utilisée",
+    "description": "C'est le fichier que votre bibliothèque diffuse réellement, il ne peut pas être écarté comme doublon."
   }
 }

@@ -1056,6 +1056,14 @@
     "toast": {
       "cancelling": "Bibliotheksscan wird gestoppt",
       "nothingRunning": "Es lief kein Bibliotheksscan"
+    },
+    "alternates": {
+      "heading_one": "{{count}} doppelte Kopie, {{size}}",
+      "heading_other": "{{count}} doppelte Kopien, {{size}}",
+      "discard": "Verwerfen",
+      "confirmTitle": "Diese Kopie verwerfen?",
+      "confirmBody": "{{path}} wandert in den Papierkorb und bleibt wiederherstellbar. Die von deiner Bibliothek genutzte Kopie bleibt unberührt.",
+      "discarded": "Kopie in den Papierkorb verschoben"
     }
   }
 }

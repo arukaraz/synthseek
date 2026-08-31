@@ -290,5 +290,13 @@
   "LIBRARY_SCAN_ALREADY_RUNNING": {
     "title": "Scan already running",
     "description": "A library scan is already in progress. Wait for it to finish or cancel it first."
+  },
+  "LIBRARY_FILE_NOT_FOUND": {
+    "title": "File not found",
+    "description": "That file is no longer in the library index. Run a scan and try again."
+  },
+  "LIBRARY_FILE_NOT_AN_ALTERNATE": {
+    "title": "That is the copy in use",
+    "description": "This is the file your library actually serves, so it cannot be discarded as a duplicate."
   }
 }

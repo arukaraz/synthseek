@@ -35,6 +35,12 @@ type ScanRun = {
   terminalCode: string | null;
 };
 
+type AlternateCopies = {
+  total: number;
+  totalBytes: number;
+  items: { id: string; relativePath: string; sizeBytes: number; fileFormat: string; artist: string; title: string }[];
+};
+
 type UnlinkedFiles = {
   total: number;
   items: {
@@ -48,15 +54,21 @@ type UnlinkedFiles = {
 
 let statusQuery: MockQueryResult<ScanStatus | undefined> = createMockQuery<ScanStatus | undefined>(undefined);
 let unlinkedQuery: MockQueryResult<UnlinkedFiles | undefined> = createMockQuery<UnlinkedFiles | undefined>(undefined);
+let alternatesQuery: MockQueryResult<AlternateCopies | undefined> = createMockQuery<AlternateCopies | undefined>(
+  undefined
+);
+const discardMutate = vi.fn();
 const cancelMutate = vi.fn();
 
 vi.mock("@hooks/api/queries/useLibraryScanStatus", () => ({
   useLibraryScanStatus: () => statusQuery,
   useUnlinkedLibraryFiles: () => unlinkedQuery,
+  useAlternateLibraryCopies: () => alternatesQuery,
 }));
 
 vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
   useCancelLibraryScan: () => ({ mutate: cancelMutate, isPending: false }),
+  useDiscardLibraryCopy: () => ({ mutate: discardMutate, isPending: false }),
 }));
 
 import { LibraryScanCard } from "../LibraryScanCard";
@@ -70,6 +82,7 @@ afterEach(() => {
   vi.clearAllMocks();
   statusQuery = createMockQuery<ScanStatus | undefined>(undefined);
   unlinkedQuery = createMockQuery<UnlinkedFiles | undefined>(undefined);
+  alternatesQuery = createMockQuery<AlternateCopies | undefined>(undefined);
 });
 
 function makeRun(overrides: Partial<ScanRun> = {}): ScanRun {
@@ -218,6 +231,53 @@ describe("LibraryScanCard", () => {
     render(<LibraryScanCard />);
 
     expect(screen.queryByRole("button", { name: /scan now/i })).not.toBeInTheDocument();
+  });
+
+  it("lists the duplicate copies with what discarding them would free", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
+      total: 66,
+      totalBytes: 2_000_000_000,
+      items: [
+        {
+          id: "copy_1",
+          relativePath: "Scene/01.flac",
+          sizeBytes: 40_000_000,
+          fileFormat: "flac",
+          artist: "HIM",
+          title: "Join Me",
+        },
+      ],
+    });
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByText(/66 duplicate copies/)).toBeInTheDocument();
+    expect(screen.getByText(/HIM - Join Me/)).toBeInTheDocument();
+  });
+
+  it("asks before discarding, and never discards on the click alone", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
+      total: 1,
+      totalBytes: 40_000_000,
+      items: [
+        {
+          id: "copy_1",
+          relativePath: "Scene/01.flac",
+          sizeBytes: 40_000_000,
+          fileFormat: "flac",
+          artist: "HIM",
+          title: "Join Me",
+        },
+      ],
+    });
+
+    render(<LibraryScanCard />);
+    fireEvent.click(screen.getByRole("button", { name: enSettings.libraryScan.alternates.discard }));
+
+    expect(discardMutate).not.toHaveBeenCalled();
+    expect(screen.getByText(enSettings.libraryScan.alternates.confirmTitle)).toBeInTheDocument();
   });
 
   it("says so when the library has never been scanned", () => {

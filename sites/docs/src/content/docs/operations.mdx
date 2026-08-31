@@ -49,6 +49,10 @@ A scan that could not read part of the disk says so, and everything under the pa
 
 Identification then works through the files the scan could not place, a batch at a time, so it never floods the services it asks. A file it recognises joins your library as a normal track and becomes playable everywhere, including in a music app. A file it cannot place is retried a few times over the following days and then left alone, listed on the card so you can see what it is. A second copy of something you already have is filed against the track you already own rather than added twice, and the copy already in your library keeps its place.
 
+Those duplicate copies are listed on the card too, largest first, with how much space they take. Discarding one moves it to the recycle bin, where it stays recoverable, and the copy your library actually serves can never be the one discarded.
+
+A file that moved rather than disappeared is followed to its new location instead of being counted as one loss and one arrival, and anything already pointing at it moves with it. That matters because Synthseek is not the only program writing to your library folder: when the tagger reorganises a file, playback keeps working rather than breaking silently.
+
 ## Logs
 
 **Settings**, then **Logs**, administrators only.

@@ -290,5 +290,13 @@
   "LIBRARY_SCAN_ALREADY_RUNNING": {
     "title": "Ya hay un escaneo en curso",
     "description": "Ya se está escaneando la biblioteca. Espera a que termine o cancélalo antes."
+  },
+  "LIBRARY_FILE_NOT_FOUND": {
+    "title": "Archivo no encontrado",
+    "description": "Ese archivo ya no está en el índice de la biblioteca. Escanea y vuelve a intentarlo."
+  },
+  "LIBRARY_FILE_NOT_AN_ALTERNATE": {
+    "title": "Esa es la copia en uso",
+    "description": "Es el archivo que tu biblioteca sirve de verdad, así que no se puede descartar como duplicado."
   }
 }

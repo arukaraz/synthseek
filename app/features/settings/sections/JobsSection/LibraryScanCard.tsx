@@ -1,13 +1,19 @@
 "use client";
 
-import { Loader2, Square } from "lucide-react";
+import { useState } from "react";
+import { Loader2, Square, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { LoadingDots } from "@components/ui/LoadingDots";
 import { Notice } from "@components/ui/Notice";
-import { useCancelLibraryScan } from "@hooks/api/mutations/jobs/useLibraryScanControls";
-import { useLibraryScanStatus, useUnlinkedLibraryFiles } from "@hooks/api/queries/useLibraryScanStatus";
+import { ConfirmationModal } from "@components/ui/ConfirmationModal";
+import { useCancelLibraryScan, useDiscardLibraryCopy } from "@hooks/api/mutations/jobs/useLibraryScanControls";
+import {
+  useAlternateLibraryCopies,
+  useLibraryScanStatus,
+  useUnlinkedLibraryFiles,
+} from "@hooks/api/queries/useLibraryScanStatus";
 import { formatBytes } from "@utils/formatters";
 
 import { SettingsCard } from "../../components/SettingsCard";
@@ -19,6 +25,8 @@ import {
   scanStatGrid,
   scanStatLabel,
   scanStatValue,
+  scanCopyDiscard,
+  scanCopyRow,
   scanUnlinkedItem,
   scanUnlinkedList,
 } from "../../styles";
@@ -27,7 +35,10 @@ export function LibraryScanCard() {
   const { t } = useTranslation("settings");
   const { data, isLoading, error } = useLibraryScanStatus();
   const cancel = useCancelLibraryScan();
+  const discard = useDiscardLibraryCopy();
   const unlinked = useUnlinkedLibraryFiles((data?.inventory.unlinkedFiles ?? 0) > 0);
+  const alternates = useAlternateLibraryCopies((data?.inventory.linkedFiles ?? 0) > 0);
+  const [pendingDiscard, setPendingDiscard] = useState<{ id: string; relativePath: string } | null>(null);
 
   if (isLoading) {
     return (
@@ -130,6 +141,46 @@ export function LibraryScanCard() {
             ))}
           </div>
         ) : null}
+
+        {alternates.data && alternates.data.items.length > 0 ? (
+          <div className={scanUnlinkedList()}>
+            <span className={scanStatLabel()}>
+              {t("libraryScan.alternates.heading", {
+                count: alternates.data.total,
+                size: formatBytes(alternates.data.totalBytes),
+              })}
+            </span>
+            {alternates.data.items.map((copy) => (
+              <div key={copy.id} className={scanCopyRow()}>
+                <span className={scanUnlinkedItem()}>
+                  {copy.artist} - {copy.title} ({copy.fileFormat.toUpperCase()}, {formatBytes(copy.sizeBytes)})
+                </span>
+                <button
+                  type="button"
+                  className={scanCopyDiscard()}
+                  onClick={() => setPendingDiscard({ id: copy.id, relativePath: copy.relativePath })}
+                  disabled={discard.isPending}
+                  aria-label={t("libraryScan.alternates.discard")}
+                >
+                  <Trash2 />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        <ConfirmationModal
+          isOpen={pendingDiscard !== null}
+          onClose={() => setPendingDiscard(null)}
+          onConfirm={() => {
+            if (pendingDiscard) discard.mutate({ fileId: pendingDiscard.id });
+            setPendingDiscard(null);
+          }}
+          title={t("libraryScan.alternates.confirmTitle")}
+          message={t("libraryScan.alternates.confirmBody", { path: pendingDiscard?.relativePath ?? "" })}
+          confirmText={t("libraryScan.alternates.discard")}
+          variant="danger"
+        />
 
         {isScanning ? (
           <div className={scanActions()}>

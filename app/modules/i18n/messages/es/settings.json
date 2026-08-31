@@ -1056,6 +1056,14 @@
     "toast": {
       "cancelling": "Deteniendo el escaneo de biblioteca",
       "nothingRunning": "No había ningún escaneo en curso"
+    },
+    "alternates": {
+      "heading_one": "{{count}} copia duplicada, {{size}}",
+      "heading_other": "{{count}} copias duplicadas, {{size}}",
+      "discard": "Descartar",
+      "confirmTitle": "¿Descartar esta copia?",
+      "confirmBody": "{{path}} va a la papelera, donde sigue siendo recuperable. La copia que sirve tu biblioteca no se toca.",
+      "discarded": "Copia movida a la papelera"
     }
   }
 }

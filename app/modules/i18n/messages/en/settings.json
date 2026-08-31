@@ -1056,6 +1056,14 @@
     "toast": {
       "cancelling": "Stopping the library scan",
       "nothingRunning": "No library scan was running"
+    },
+    "alternates": {
+      "heading_one": "{{count}} duplicate copy, {{size}}",
+      "heading_other": "{{count}} duplicate copies, {{size}}",
+      "discard": "Discard",
+      "confirmTitle": "Discard this copy?",
+      "confirmBody": "{{path}} goes to the recycle bin, where it stays recoverable. The copy your library serves is untouched.",
+      "discarded": "Copy moved to the recycle bin"
     }
   }
 }

@@ -281,6 +281,12 @@ export const scanUnlinkedList = cva("border-fg/10 flex flex-col gap-1 border-t p
 
 export const scanUnlinkedItem = cva("text-fg/60 truncate text-xs");
 
+export const scanCopyRow = cva("flex items-center justify-between gap-3");
+
+export const scanCopyDiscard = cva(
+  "border-fg/10 text-fg/50 hover:border-destructive-vivid/40 hover:text-destructive-vivid focus-visible:ring-ring flex size-6 shrink-0 cursor-pointer items-center justify-center rounded border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-3"
+);
+
 export const subSection = cva("flex flex-col gap-4 border-t border-fg/10 pt-5");
 
 export const subSectionHeader = cva("flex items-start justify-between gap-3");
