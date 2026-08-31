@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Square, Trash2 } from "lucide-react";
+import { Loader2, Play, Square, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -9,11 +9,8 @@ import { LoadingDots } from "@components/ui/LoadingDots";
 import { Notice } from "@components/ui/Notice";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { useCancelLibraryScan, useDiscardLibraryCopy } from "@hooks/api/mutations/jobs/useLibraryScanControls";
-import {
-  useAlternateLibraryCopies,
-  useLibraryScanStatus,
-  useUnlinkedLibraryFiles,
-} from "@hooks/api/queries/useLibraryScanStatus";
+import { useTriggerJob } from "@hooks/api/mutations/jobs/useTriggerJob";
+import { useAlternateLibraryCopies, useLibraryScanStatus } from "@hooks/api/queries/useLibraryScanStatus";
 import { formatBytes } from "@utils/formatters";
 
 import { SettingsCard } from "../../components/SettingsCard";
@@ -29,14 +26,16 @@ import {
   scanCopyRow,
   scanUnlinkedItem,
   scanUnlinkedList,
+  jobPlayButton,
 } from "../../styles";
 
 export function LibraryScanCard() {
   const { t } = useTranslation("settings");
-  const { data, isLoading, error } = useLibraryScanStatus();
+  const status = useLibraryScanStatus();
+  const { data, isLoading, error } = status;
   const cancel = useCancelLibraryScan();
   const discard = useDiscardLibraryCopy();
-  const unlinked = useUnlinkedLibraryFiles((data?.inventory.unlinkedFiles ?? 0) > 0);
+  const trigger = useTriggerJob();
   const alternates = useAlternateLibraryCopies((data?.inventory.linkedFiles ?? 0) > 0);
   const [pendingDiscard, setPendingDiscard] = useState<{
     id: string;
@@ -65,9 +64,26 @@ export function LibraryScanCard() {
   const { activeRun, lastRun, inventory } = data;
   const isScanning = activeRun !== null;
   const run = activeRun ?? lastRun;
+  const busy = isScanning || trigger.isPending;
+  const name = t("libraryScan.card.title");
 
   return (
-    <SettingsCard title={t("libraryScan.card.title")} description={t("libraryScan.card.description")}>
+    <SettingsCard
+      title={name}
+      description={t("libraryScan.card.description")}
+      trailing={
+        <button
+          type="button"
+          className={jobPlayButton()}
+          onClick={() => trigger.mutate({ id: "library-scan" }, { onSuccess: () => void status.refetch() })}
+          disabled={busy}
+          aria-label={busy ? t("jobs.row.running", { name }) : t("jobs.row.runNow", { name })}
+          aria-busy={busy}
+        >
+          {busy ? <Loader2 className="animate-spin" /> : <Play className="fill-current" />}
+        </button>
+      }
+    >
       <div className="flex flex-col gap-4">
         <div className={scanStatGrid()}>
           <div className={scanStat()}>
@@ -118,19 +134,6 @@ export function LibraryScanCard() {
           <Notice variant="warning" title={t("libraryScan.warning.dirtyWalk.title")}>
             {t("libraryScan.warning.dirtyWalk.body", { count: lastRun.walkFailures })}
           </Notice>
-        ) : null}
-
-        {unlinked.data && unlinked.data.items.length > 0 ? (
-          <div className={scanUnlinkedList()}>
-            <span className={scanStatLabel()}>{t("libraryScan.unlinked.heading", { count: unlinked.data.total })}</span>
-            {unlinked.data.items.map((file) => (
-              <span key={file.id} className={scanUnlinkedItem()}>
-                {file.artistName && file.title
-                  ? `${file.artistName} - ${file.title}${file.albumTitle ? ` (${file.albumTitle})` : ""}`
-                  : file.relativePath}
-              </span>
-            ))}
-          </div>
         ) : null}
 
         {alternates.data && alternates.data.items.length > 0 ? (

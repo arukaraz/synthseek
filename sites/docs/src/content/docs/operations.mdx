@@ -18,7 +18,6 @@ Listed under **Settings**, then **Jobs**, with what each does, when it last ran,
 | **External Library Sync**  | Imports tracks from connected external libraries.                              | Every 30 minutes by default         |
 | **Discovery Sweep**        | Evaluates discovery feeds and triggers integrations.                           | On a fixed interval                 |
 | **Media Server Sync**      | Keeps media server playlists named right and topped up.                        | Hourly                              |
-| **Library Scan**           | Indexes the audio files on your library disk, works out which track each unidentified one holds, and notes the ones that are gone. | Every 30 minutes; the disk walk itself twice a day |
 | **Usenet Staging Sweep**   | Deletes downloaded Usenet releases nobody asked another track from.            | Hourly, only when Usenet is on      |
 | **Wanted Sweep**           | Retries watched failed tracks on a release-age cadence.                        | On a fixed interval, off by default |
 
@@ -43,11 +42,11 @@ These run on a fixed schedule and are not user-triggerable.
 
 ### What the library scan shows you
 
-The same **Jobs** page carries a card for the library scan. It reports how many audio files are on your library disk, how many of them Synthseek recognises as tracks it holds, how many it does not recognise yet, and how many it has stopped finding. Start a scan from the **Library Scan** row above; the card is where you cancel one that is running.
+The library scan has its own card on the same **Jobs** page rather than a row in the table above, because it carries more than a schedule. It reports how many audio files are on your library disk, how many of them Synthseek recognises as tracks it holds, how many it does not recognise yet, and how many it has stopped finding. Its run button sits in the card's top corner and turns into a spinner for as long as a scan is genuinely underway, not just for the instant the click takes. Cancelling is offered on the card while one is running. On its own it runs every 30 minutes, and walks the whole disk twice a day.
 
 A scan that could not read part of the disk says so, and everything under the paths it could not read keeps the state it already had, so a permissions problem on one folder never looks like a library that lost files. The rest of the library is reconciled as usual, which means one permanently unreadable folder does not stop Synthseek noticing what disappeared everywhere else. Fix the permissions and scan again.
 
-Identification then works through the files the scan could not place, a batch at a time, so it never floods the services it asks. A file it recognises joins your library as a normal track and becomes playable everywhere, including in a music app. A file it cannot place is retried a few times over the following days and then left alone, listed on the card so you can see what it is. When a release improves how identification works, those files are reconsidered with a fresh set of attempts rather than staying set aside for good. A second copy of something you already have is filed against the track you already own rather than added twice, and the copy already in your library keeps its place.
+Identification then works through the files the scan could not place, a batch at a time, so it never floods the services it asks. A file it recognises joins your library as a normal track and becomes playable everywhere, including in a music app. A file it cannot place is retried a few times over the following days and then left alone, counted on the card under what it has not identified. When a release improves how identification works, those files are reconsidered with a fresh set of attempts rather than staying set aside for good. A second copy of something you already have is filed against the track you already own rather than added twice, and the copy already in your library keeps its place.
 
 Those duplicate copies are listed on the card too, largest first, with how much space they take. Discarding one moves it to the recycle bin, where it stays recoverable, and the copy your library actually serves can never be the one discarded.
 

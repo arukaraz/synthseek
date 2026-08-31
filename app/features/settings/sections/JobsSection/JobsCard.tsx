@@ -23,7 +23,7 @@ export function JobsCard() {
       ) : (
         <div className={jobList()}>
           {data
-            .filter((job) => job.enabled)
+            .filter((job) => job.enabled && job.listed)
             .map((job) => (
               <JobRow key={job.id} job={job} />
             ))}

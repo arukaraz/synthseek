@@ -70,8 +70,12 @@ const cancelMutate = vi.fn();
 
 vi.mock("@hooks/api/queries/useLibraryScanStatus", () => ({
   useLibraryScanStatus: () => statusQuery,
-  useUnlinkedLibraryFiles: () => unlinkedQuery,
   useAlternateLibraryCopies: () => alternatesQuery,
+}));
+
+const triggerMutate = vi.fn();
+vi.mock("@hooks/api/mutations/jobs/useTriggerJob", () => ({
+  useTriggerJob: () => ({ mutate: triggerMutate, isPending: false }),
 }));
 
 vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
@@ -203,20 +207,19 @@ describe("LibraryScanCard", () => {
     expect(screen.getByText(/SCAN_ERROR/)).toBeInTheDocument();
   });
 
-  it("previews the files nothing has claimed yet", () => {
+  it("no longer recites which files are unidentified", () => {
     statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
     unlinkedQuery = createMockQuery<UnlinkedFiles | undefined>({
       total: 2883,
       items: [
         { id: "f1", relativePath: "HIM/solo.flac", title: "Join Me", artistName: "HIM", albumTitle: "Razorblade" },
-        { id: "f2", relativePath: "loose/track.mp3", title: null, artistName: null, albumTitle: null },
       ],
     });
 
     render(<LibraryScanCard />);
 
-    expect(screen.getByText("HIM - Join Me (Razorblade)")).toBeInTheDocument();
-    expect(screen.getByText("loose/track.mp3")).toBeInTheDocument();
+    expect(screen.queryByText("HIM - Join Me (Razorblade)")).not.toBeInTheDocument();
+    expect(screen.queryByText(/not identified yet/i)).not.toBeInTheDocument();
   });
 
   it("offers cancelling only while a scan is running", () => {
@@ -232,12 +235,34 @@ describe("LibraryScanCard", () => {
     expect(cancelMutate).toHaveBeenCalledTimes(1);
   });
 
-  it("leaves starting a scan to the jobs list, so there is only one way to do it", () => {
+  it("starts a scan from the card itself", () => {
     statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
 
     render(<LibraryScanCard />);
 
-    expect(screen.queryByRole("button", { name: /scan now/i })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /run .*library scan/i }));
+
+    expect(triggerMutate).toHaveBeenCalledWith({ id: "library-scan" }, expect.anything());
+  });
+
+  it("shows the run button as busy while a scan is actually in flight, not merely while the click resolves", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ activeRun: makeRun({ state: "scanning" }) }));
+
+    render(<LibraryScanCard />);
+
+    const button = screen.getByRole("button", { name: /running library scan/i });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("offers the run button again once the scan reaches a terminal state", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ activeRun: null }));
+
+    render(<LibraryScanCard />);
+
+    const button = screen.getByRole("button", { name: /run .*library scan/i });
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "false");
   });
 
   it("lists the duplicate copies with what discarding them would free", () => {

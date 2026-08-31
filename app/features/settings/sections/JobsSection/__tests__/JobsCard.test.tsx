@@ -36,6 +36,7 @@ const makeJob = (id: JobSummary["id"], overrides: Partial<JobSummary> = {}): Job
   description: "",
   intervalMs: 60_000,
   enabled: true,
+  listed: true,
   nextRun: null,
   lastRun: null,
   lastStatus: null,
