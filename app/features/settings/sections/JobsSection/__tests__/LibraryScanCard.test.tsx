@@ -326,6 +326,31 @@ describe("LibraryScanCard", () => {
     expect(button).toHaveAttribute("aria-busy", "true");
   });
 
+  it("locks the per-copy discard while the bulk reclaim is working, so a click cannot race it", () => {
+    const status = makeStatus();
+    status.reclaimRunning = true;
+    statusQuery = createMockQuery<ScanStatus | undefined>(status);
+    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
+      total: 2,
+      totalBytes: 22_600_000,
+      items: [
+        {
+          id: "c1",
+          relativePath: "Scene/01.flac",
+          sizeBytes: 40_000_000,
+          fileFormat: "flac",
+          artist: "HIM",
+          title: "Join Me",
+          servingPath: "HIM/Razorblade/02.mp3",
+        },
+      ],
+    });
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByRole("button", { name: enSettings.libraryScan.alternates.discard })).toBeDisabled();
+  });
+
   it("asks before discarding, and never discards on the click alone", () => {
     statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
     alternatesQuery = createMockQuery<AlternateCopies | undefined>({

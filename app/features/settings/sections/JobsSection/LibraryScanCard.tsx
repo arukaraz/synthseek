@@ -173,7 +173,7 @@ export function LibraryScanCard() {
                   onClick={() =>
                     setPendingDiscard({ id: copy.id, relativePath: copy.relativePath, servingPath: copy.servingPath })
                   }
-                  disabled={discard.isPending}
+                  disabled={discard.isPending || reclaiming}
                   aria-label={t("libraryScan.alternates.discard")}
                 >
                   <Trash2 />
