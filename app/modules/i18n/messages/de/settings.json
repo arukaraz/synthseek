@@ -1031,10 +1031,6 @@
     "actions": {
       "cancel": "Abbrechen"
     },
-    "unlinked": {
-      "heading_one": "{{count}} Datei noch nicht identifiziert, zum Beispiel:",
-      "heading_other": "{{count}} Dateien noch nicht identifiziert, zum Beispiel:"
-    },
     "toast": {
       "cancelling": "Bibliotheksscan wird gestoppt",
       "nothingRunning": "Es lief kein Bibliotheksscan"

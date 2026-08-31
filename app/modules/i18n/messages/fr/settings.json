@@ -1031,10 +1031,6 @@
     "actions": {
       "cancel": "Annuler"
     },
-    "unlinked": {
-      "heading_one": "{{count}} fichier pas encore identifié, par exemple :",
-      "heading_other": "{{count}} fichiers pas encore identifiés, par exemple :"
-    },
     "toast": {
       "cancelling": "Arrêt de l'analyse de la bibliothèque",
       "nothingRunning": "Aucune analyse n'était en cours"

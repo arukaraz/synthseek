@@ -203,7 +203,7 @@ describe("LibraryScanCard", () => {
 
     render(<LibraryScanCard />);
 
-    expect(screen.queryByText("HIM - Join Me (Razorblade)")).not.toBeInTheDocument();
+    expect(screen.getByText("2,883")).toBeInTheDocument();
     expect(screen.queryByText(/not identified yet/i)).not.toBeInTheDocument();
   });
 

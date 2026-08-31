@@ -1031,10 +1031,6 @@
     "actions": {
       "cancel": "Cancelar"
     },
-    "unlinked": {
-      "heading_one": "{{count}} archivo sin identificar, por ejemplo:",
-      "heading_other": "{{count}} archivos sin identificar, por ejemplo:"
-    },
     "toast": {
       "cancelling": "Deteniendo el escaneo de biblioteca",
       "nothingRunning": "No había ningún escaneo en curso"

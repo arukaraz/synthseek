@@ -1031,10 +1031,6 @@
     "actions": {
       "cancel": "Cancel"
     },
-    "unlinked": {
-      "heading_one": "{{count}} file not identified yet, for example:",
-      "heading_other": "{{count}} files not identified yet, for example:"
-    },
     "toast": {
       "cancelling": "Stopping the library scan",
       "nothingRunning": "No library scan was running"
