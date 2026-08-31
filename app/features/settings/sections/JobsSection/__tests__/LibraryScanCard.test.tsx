@@ -178,20 +178,19 @@ describe("LibraryScanCard", () => {
     expect(screen.queryByText(enSettings.libraryScan.warning.dirtyWalk.title)).not.toBeInTheDocument();
   });
 
-  it("names the files it could not read, when there were any", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ lastRun: makeRun({ filesFailed: 7 }) }));
+  it("reports where the run stands without reciting what it counted", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({
+        lastRun: makeRun({ filesSeen: 9111, filesNew: 12, filesLinked: 7222, filesFailed: 7, filesMissing: 3 }),
+      })
+    );
 
     render(<LibraryScanCard />);
 
-    expect(screen.getByText(/7 unreadable/)).toBeInTheDocument();
-  });
-
-  it("says nothing about unreadable files when there were none", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
-
-    render(<LibraryScanCard />);
-
-    expect(screen.queryByText(/unreadable/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Last scan finished/)).toBeInTheDocument();
+    for (const recited of [/9,?111/, /7,?222/, /unreadable/, /seen/, /matched/, /unchanged/]) {
+      expect(screen.queryByText(recited)).not.toBeInTheDocument();
+    }
   });
 
   it("shows why a run ended when it carries a terminal code", () => {

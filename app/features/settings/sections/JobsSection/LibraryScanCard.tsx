@@ -105,19 +105,6 @@ export function LibraryScanCard() {
             {isScanning ? <LoadingDots size="sm" /> : null}
             <span>
               {t(`libraryScan.state.${run.state}`, { defaultValue: run.state })}
-              {" · "}
-              {t("libraryScan.run.seen", { count: run.filesSeen })}
-              {" · "}
-              {t("libraryScan.run.added", { count: run.filesNew })}
-              {" · "}
-              {t("libraryScan.run.updated", { count: run.filesUpdated })}
-              {" · "}
-              {t("libraryScan.run.unchanged", { count: run.filesUnchanged })}
-              {" · "}
-              {t("libraryScan.run.matched", { count: run.filesLinked })}
-              {" · "}
-              {t("libraryScan.run.missing", { count: run.filesMissing })}
-              {run.filesFailed > 0 ? ` · ${t("libraryScan.run.unreadable", { count: run.filesFailed })}` : ""}
               {run.terminalCode !== null ? ` · ${run.terminalCode}` : ""}
             </span>
           </div>

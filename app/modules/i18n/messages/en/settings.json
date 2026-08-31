@@ -792,11 +792,7 @@
       },
       "library-scan": {
         "name": "Library Scan",
-        "description": "Indexes the audio files on disk and reconciles what disappeared."
-      },
-      "library-identify": {
-        "name": "Library Identification",
-        "description": "Works out which track each unidentified file on disk holds."
+        "description": "Indexes the audio files on disk, works out what each one holds, and reconciles what disappeared."
       }
     }
   },
@@ -1023,21 +1019,7 @@
       "failed": "Last scan failed"
     },
     "run": {
-      "seen_one": "{{count}} file seen",
-      "seen_other": "{{count}} files seen",
-      "added_one": "{{count}} new",
-      "added_other": "{{count}} new",
-      "missing_one": "{{count}} gone",
-      "missing_other": "{{count}} gone",
-      "never": "This library has never been scanned.",
-      "updated_one": "{{count}} updated",
-      "updated_other": "{{count}} updated",
-      "unchanged_one": "{{count}} unchanged",
-      "unchanged_other": "{{count}} unchanged",
-      "matched_one": "{{count}} matched",
-      "matched_other": "{{count}} matched",
-      "unreadable_one": "{{count}} unreadable",
-      "unreadable_other": "{{count}} unreadable"
+      "never": "This library has never been scanned."
     },
     "warning": {
       "dirtyWalk": {

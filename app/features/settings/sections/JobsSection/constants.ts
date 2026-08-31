@@ -13,7 +13,6 @@ export const JOB_NAME_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
   "wanted-sweep": "jobs.registry.wanted-sweep.name",
   "usenet-staging-sweep": "jobs.registry.usenet-staging-sweep.name",
   "library-scan": "jobs.registry.library-scan.name",
-  "library-identify": "jobs.registry.library-identify.name",
 };
 
 export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
@@ -23,5 +22,4 @@ export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings"
   "wanted-sweep": "jobs.registry.wanted-sweep.description",
   "usenet-staging-sweep": "jobs.registry.usenet-staging-sweep.description",
   "library-scan": "jobs.registry.library-scan.description",
-  "library-identify": "jobs.registry.library-identify.description",
 };

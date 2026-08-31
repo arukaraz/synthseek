@@ -792,11 +792,7 @@
       },
       "library-scan": {
         "name": "Analyse de la bibliothèque",
-        "description": "Indexe les fichiers audio du disque et réconcilie ce qui a disparu."
-      },
-      "library-identify": {
-        "name": "Identification de la bibliothèque",
-        "description": "Détermine quel morceau contient chaque fichier non identifié du disque."
+        "description": "Indexe les fichiers audio du disque, détermine quel morceau contient chacun d'eux et réconcilie ce qui a disparu."
       }
     }
   },
@@ -1023,21 +1019,7 @@
       "failed": "Dernière analyse échouée"
     },
     "run": {
-      "seen_one": "{{count}} fichier vu",
-      "seen_other": "{{count}} fichiers vus",
-      "added_one": "{{count}} nouveau",
-      "added_other": "{{count}} nouveaux",
-      "missing_one": "{{count}} disparu",
-      "missing_other": "{{count}} disparus",
-      "never": "Cette bibliothèque n'a jamais été analysée.",
-      "updated_one": "{{count}} mis à jour",
-      "updated_other": "{{count}} mis à jour",
-      "unchanged_one": "{{count}} inchangé",
-      "unchanged_other": "{{count}} inchangés",
-      "matched_one": "{{count}} associé",
-      "matched_other": "{{count}} associés",
-      "unreadable_one": "{{count}} illisible",
-      "unreadable_other": "{{count}} illisibles"
+      "never": "Cette bibliothèque n'a jamais été analysée."
     },
     "warning": {
       "dirtyWalk": {

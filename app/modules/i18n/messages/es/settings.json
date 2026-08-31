@@ -792,11 +792,7 @@
       },
       "library-scan": {
         "name": "Escaneo de biblioteca",
-        "description": "Indexa los archivos de audio del disco y reconcilia lo que ha desaparecido."
-      },
-      "library-identify": {
-        "name": "Identificación de la biblioteca",
-        "description": "Averigua qué canción contiene cada archivo del disco sin identificar."
+        "description": "Indexa los archivos de audio del disco, averigua qué contiene cada uno y reconcilia lo que ha desaparecido."
       }
     }
   },
@@ -1023,21 +1019,7 @@
       "failed": "Último escaneo fallido"
     },
     "run": {
-      "seen_one": "{{count}} archivo visto",
-      "seen_other": "{{count}} archivos vistos",
-      "added_one": "{{count}} nuevo",
-      "added_other": "{{count}} nuevos",
-      "missing_one": "{{count}} desaparecido",
-      "missing_other": "{{count}} desaparecidos",
-      "never": "Esta biblioteca no se ha escaneado nunca.",
-      "updated_one": "{{count}} actualizado",
-      "updated_other": "{{count}} actualizados",
-      "unchanged_one": "{{count}} sin cambios",
-      "unchanged_other": "{{count}} sin cambios",
-      "matched_one": "{{count}} emparejado",
-      "matched_other": "{{count}} emparejados",
-      "unreadable_one": "{{count}} ilegible",
-      "unreadable_other": "{{count}} ilegibles"
+      "never": "Esta biblioteca no se ha escaneado nunca."
     },
     "warning": {
       "dirtyWalk": {

@@ -792,11 +792,7 @@
       },
       "library-scan": {
         "name": "Bibliotheksscan",
-        "description": "Indiziert die Audiodateien auf der Festplatte und gleicht ab, was verschwunden ist."
-      },
-      "library-identify": {
-        "name": "Bibliotheks-Identifizierung",
-        "description": "Ermittelt, welchen Titel jede noch nicht identifizierte Datei auf der Festplatte enthält."
+        "description": "Indiziert die Audiodateien auf der Festplatte, ermittelt, welchen Titel jede enthält, und gleicht ab, was verschwunden ist."
       }
     }
   },
@@ -1023,21 +1019,7 @@
       "failed": "Letzter Scan fehlgeschlagen"
     },
     "run": {
-      "seen_one": "{{count}} Datei gesehen",
-      "seen_other": "{{count}} Dateien gesehen",
-      "added_one": "{{count}} neu",
-      "added_other": "{{count}} neu",
-      "missing_one": "{{count}} verschwunden",
-      "missing_other": "{{count}} verschwunden",
-      "never": "Diese Bibliothek wurde noch nie gescannt.",
-      "updated_one": "{{count}} aktualisiert",
-      "updated_other": "{{count}} aktualisiert",
-      "unchanged_one": "{{count}} unverändert",
-      "unchanged_other": "{{count}} unverändert",
-      "matched_one": "{{count}} zugeordnet",
-      "matched_other": "{{count}} zugeordnet",
-      "unreadable_one": "{{count}} unlesbar",
-      "unreadable_other": "{{count}} unlesbar"
+      "never": "Diese Bibliothek wurde noch nie gescannt."
     },
     "warning": {
       "dirtyWalk": {
