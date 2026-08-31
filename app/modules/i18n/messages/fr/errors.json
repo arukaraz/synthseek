@@ -286,5 +286,9 @@
   "HELD_IMPORT_NOT_APPROVABLE": {
     "title": "Approbation impossible",
     "description": "Cette entrée a déjà échoué après le déplacement de son fichier. Seul le rejet reste possible."
+  },
+  "LIBRARY_SCAN_ALREADY_RUNNING": {
+    "title": "Analyse déjà en cours",
+    "description": "Une analyse de la bibliothèque est déjà en cours. Attendez la fin ou annulez-la d'abord."
   }
 }

@@ -308,7 +308,7 @@
     "disconnected": "Plex déconnecté",
     "libraryHeader": "Bibliothèque",
     "libraryScan": {
-      "label": "Analyse de la bibliothèque",
+      "label": "Nouvelle analyse du serveur multimédia",
       "description": "Après chaque importation réussie, demander à Plex d'analyser le dossier du nouveau fichier."
     },
     "playlistSync": {
@@ -789,6 +789,10 @@
       "usenet-staging-sweep": {
         "name": "Nettoyage des albums Usenet",
         "description": "Supprime les albums Usenet téléchargés dont personne n'a demandé un autre morceau."
+      },
+      "library-scan": {
+        "name": "Analyse de la bibliothèque",
+        "description": "Indexe les fichiers audio du disque et réconcilie ce qui a disparu."
       }
     }
   },
@@ -988,6 +992,66 @@
     "card": {
       "title": "Connecter des applications",
       "description": "Applications et assistants qui se connectent à votre Synthseek."
+    }
+  },
+  "libraryScan": {
+    "card": {
+      "title": "Analyse de la bibliothèque",
+      "description": "Ce que Synthseek voit sur le disque, et ce qu'il ne voit pas."
+    },
+    "stats": {
+      "onDisk": "Sur le disque",
+      "linked": "Dans la bibliothèque",
+      "unlinked": "Non identifiés",
+      "missing": "Disparus"
+    },
+    "meta": {
+      "size": "{{size}} indexés",
+      "requestsWithoutFile_one": "{{count}} demande terminée n'a aucun fichier sur le disque",
+      "requestsWithoutFile_other": "{{count}} demandes terminées n'ont aucun fichier sur le disque"
+    },
+    "state": {
+      "scanning": "Analyse en cours",
+      "linking": "Association des fichiers aux demandes",
+      "reconciling": "Réconciliation",
+      "completed": "Dernière analyse terminée",
+      "cancelled": "Dernière analyse annulée",
+      "failed": "Dernière analyse échouée"
+    },
+    "run": {
+      "seen_one": "{{count}} fichier vu",
+      "seen_other": "{{count}} fichiers vus",
+      "added_one": "{{count}} nouveau",
+      "added_other": "{{count}} nouveaux",
+      "missing_one": "{{count}} disparu",
+      "missing_other": "{{count}} disparus",
+      "never": "Cette bibliothèque n'a jamais été analysée.",
+      "updated_one": "{{count}} mis à jour",
+      "updated_other": "{{count}} mis à jour",
+      "unchanged_one": "{{count}} inchangé",
+      "unchanged_other": "{{count}} inchangés",
+      "matched_one": "{{count}} associé",
+      "matched_other": "{{count}} associés",
+      "unreadable_one": "{{count}} illisible",
+      "unreadable_other": "{{count}} illisibles"
+    },
+    "warning": {
+      "dirtyWalk": {
+        "title": "L'analyse n'a pas pu tout lire",
+        "body_one": "{{count}} chemin n'a pas pu être lu. Tout ce qu'il contient conserve son état, et le reste de la bibliothèque a été réconcilié normalement. Corrigez les permissions et relancez l'analyse.",
+        "body_other": "{{count}} chemins n'ont pas pu être lus. Tout ce qu'ils contiennent conserve son état, et le reste de la bibliothèque a été réconcilié normalement. Corrigez les permissions et relancez l'analyse."
+      }
+    },
+    "actions": {
+      "cancel": "Annuler"
+    },
+    "unlinked": {
+      "heading_one": "{{count}} fichier pas encore identifié, par exemple :",
+      "heading_other": "{{count}} fichiers pas encore identifiés, par exemple :"
+    },
+    "toast": {
+      "cancelling": "Arrêt de l'analyse de la bibliothèque",
+      "nothingRunning": "Aucune analyse n'était en cours"
     }
   }
 }

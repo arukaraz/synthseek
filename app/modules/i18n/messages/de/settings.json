@@ -308,7 +308,7 @@
     "disconnected": "Plex getrennt",
     "libraryHeader": "Bibliothek",
     "libraryScan": {
-      "label": "Bibliotheks-Scan",
+      "label": "Medienserver-Neuscan",
       "description": "Bitte Plex nach jedem erfolgreichen Import darum, den Ordner der neuen Datei zu scannen."
     },
     "playlistSync": {
@@ -789,6 +789,10 @@
       "usenet-staging-sweep": {
         "name": "Usenet-Zwischenspeicher aufräumen",
         "description": "Entfernt geladene Usenet-Alben, aus denen niemand einen weiteren Titel angefragt hat."
+      },
+      "library-scan": {
+        "name": "Bibliotheksscan",
+        "description": "Indiziert die Audiodateien auf der Festplatte und gleicht ab, was verschwunden ist."
       }
     }
   },
@@ -988,6 +992,66 @@
     "card": {
       "title": "Apps verbinden",
       "description": "Apps und Assistenten, die sich mit deinem Synthseek verbinden."
+    }
+  },
+  "libraryScan": {
+    "card": {
+      "title": "Bibliotheksscan",
+      "description": "Was Synthseek auf der Festplatte sieht und was nicht."
+    },
+    "stats": {
+      "onDisk": "Auf der Festplatte",
+      "linked": "In der Bibliothek",
+      "unlinked": "Nicht identifiziert",
+      "missing": "Verschwunden"
+    },
+    "meta": {
+      "size": "{{size}} indiziert",
+      "requestsWithoutFile_one": "{{count}} abgeschlossene Anfrage hat keine Datei auf der Festplatte",
+      "requestsWithoutFile_other": "{{count}} abgeschlossene Anfragen haben keine Datei auf der Festplatte"
+    },
+    "state": {
+      "scanning": "Wird gescannt",
+      "linking": "Dateien werden Anfragen zugeordnet",
+      "reconciling": "Abgleich läuft",
+      "completed": "Letzter Scan abgeschlossen",
+      "cancelled": "Letzter Scan abgebrochen",
+      "failed": "Letzter Scan fehlgeschlagen"
+    },
+    "run": {
+      "seen_one": "{{count}} Datei gesehen",
+      "seen_other": "{{count}} Dateien gesehen",
+      "added_one": "{{count}} neu",
+      "added_other": "{{count}} neu",
+      "missing_one": "{{count}} verschwunden",
+      "missing_other": "{{count}} verschwunden",
+      "never": "Diese Bibliothek wurde noch nie gescannt.",
+      "updated_one": "{{count}} aktualisiert",
+      "updated_other": "{{count}} aktualisiert",
+      "unchanged_one": "{{count}} unverändert",
+      "unchanged_other": "{{count}} unverändert",
+      "matched_one": "{{count}} zugeordnet",
+      "matched_other": "{{count}} zugeordnet",
+      "unreadable_one": "{{count}} unlesbar",
+      "unreadable_other": "{{count}} unlesbar"
+    },
+    "warning": {
+      "dirtyWalk": {
+        "title": "Der Scan konnte nicht alles lesen",
+        "body_one": "{{count}} Pfad konnte nicht gelesen werden. Alles darunter behält seinen Zustand, der Rest der Bibliothek wurde normal abgeglichen. Korrigiere die Berechtigungen und scanne erneut.",
+        "body_other": "{{count}} Pfade konnten nicht gelesen werden. Alles darunter behält seinen Zustand, der Rest der Bibliothek wurde normal abgeglichen. Korrigiere die Berechtigungen und scanne erneut."
+      }
+    },
+    "actions": {
+      "cancel": "Abbrechen"
+    },
+    "unlinked": {
+      "heading_one": "{{count}} Datei noch nicht identifiziert, zum Beispiel:",
+      "heading_other": "{{count}} Dateien noch nicht identifiziert, zum Beispiel:"
+    },
+    "toast": {
+      "cancelling": "Bibliotheksscan wird gestoppt",
+      "nothingRunning": "Es lief kein Bibliotheksscan"
     }
   }
 }

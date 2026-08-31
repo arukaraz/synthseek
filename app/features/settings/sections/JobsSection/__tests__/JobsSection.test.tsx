@@ -9,6 +9,10 @@ vi.mock("../JobsCard", () => ({
   JobsCard: () => <div data-testid="jobs-card" />,
 }));
 
+vi.mock("../LibraryScanCard", () => ({
+  LibraryScanCard: () => <div data-testid="library-scan-card" />,
+}));
+
 import { JobsSection } from "../JobsSection";
 
 beforeAll(() => {
@@ -24,5 +28,6 @@ describe("JobsSection", () => {
     render(<JobsSection />);
     expect(screen.getByRole("heading", { name: enSettings.jobs.page.title })).toBeInTheDocument();
     expect(screen.getByTestId("jobs-card")).toBeInTheDocument();
+    expect(screen.getByTestId("library-scan-card")).toBeInTheDocument();
   });
 });

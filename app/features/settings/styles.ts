@@ -263,6 +263,24 @@ export const jobPlayButton = cva(
   "border-primary-500/30 bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 focus-visible:ring-ring flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-3.5 [&_svg]:shrink-0"
 );
 
+export const scanStatGrid = cva("grid grid-cols-2 gap-3 sm:grid-cols-4");
+
+export const scanStat = cva("border-fg/10 bg-fg/[0.03] flex flex-col gap-0.5 rounded-lg border p-3");
+
+export const scanStatValue = cva("text-fg text-lg font-semibold tabular-nums");
+
+export const scanStatLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tracking-wider");
+
+export const scanMetaRow = cva("text-fg/60 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs");
+
+export const scanActions = cva("flex flex-wrap items-center gap-2");
+
+export const scanRunLine = cva("text-fg/70 flex items-center gap-2 text-sm");
+
+export const scanUnlinkedList = cva("border-fg/10 flex flex-col gap-1 border-t pt-3");
+
+export const scanUnlinkedItem = cva("text-fg/60 truncate text-xs");
+
 export const subSection = cva("flex flex-col gap-4 border-t border-fg/10 pt-5");
 
 export const subSectionHeader = cva("flex items-start justify-between gap-3");

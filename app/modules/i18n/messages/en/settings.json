@@ -308,7 +308,7 @@
     "disconnected": "Plex disconnected",
     "libraryHeader": "Library",
     "libraryScan": {
-      "label": "Library scan",
+      "label": "Media server rescan",
       "description": "After each successful import, ask Plex to scan the folder of the new file."
     },
     "playlistSync": {
@@ -789,6 +789,10 @@
       "usenet-staging-sweep": {
         "name": "Usenet Staging Sweep",
         "description": "Removes downloaded Usenet albums nobody asked another track from."
+      },
+      "library-scan": {
+        "name": "Library Scan",
+        "description": "Indexes the audio files on disk and reconciles what disappeared."
       }
     }
   },
@@ -988,6 +992,66 @@
     "card": {
       "title": "Connect apps",
       "description": "Apps and assistants that connect to your Synthseek."
+    }
+  },
+  "libraryScan": {
+    "card": {
+      "title": "Library scan",
+      "description": "What Synthseek can see on disk, and what it cannot."
+    },
+    "stats": {
+      "onDisk": "On disk",
+      "linked": "In the library",
+      "unlinked": "Not identified",
+      "missing": "Gone"
+    },
+    "meta": {
+      "size": "{{size}} indexed",
+      "requestsWithoutFile_one": "{{count}} finished request has no file on disk",
+      "requestsWithoutFile_other": "{{count}} finished requests have no file on disk"
+    },
+    "state": {
+      "scanning": "Scanning",
+      "linking": "Matching files to requests",
+      "reconciling": "Reconciling",
+      "completed": "Last scan finished",
+      "cancelled": "Last scan cancelled",
+      "failed": "Last scan failed"
+    },
+    "run": {
+      "seen_one": "{{count}} file seen",
+      "seen_other": "{{count}} files seen",
+      "added_one": "{{count}} new",
+      "added_other": "{{count}} new",
+      "missing_one": "{{count}} gone",
+      "missing_other": "{{count}} gone",
+      "never": "This library has never been scanned.",
+      "updated_one": "{{count}} updated",
+      "updated_other": "{{count}} updated",
+      "unchanged_one": "{{count}} unchanged",
+      "unchanged_other": "{{count}} unchanged",
+      "matched_one": "{{count}} matched",
+      "matched_other": "{{count}} matched",
+      "unreadable_one": "{{count}} unreadable",
+      "unreadable_other": "{{count}} unreadable"
+    },
+    "warning": {
+      "dirtyWalk": {
+        "title": "The scan could not read everything",
+        "body_one": "{{count}} path could not be read. Everything under it keeps the state it had, and the rest of the library was reconciled normally. Fix the permissions and scan again.",
+        "body_other": "{{count}} paths could not be read. Everything under them keeps the state it had, and the rest of the library was reconciled normally. Fix the permissions and scan again."
+      }
+    },
+    "actions": {
+      "cancel": "Cancel"
+    },
+    "unlinked": {
+      "heading_one": "{{count}} file not identified yet, for example:",
+      "heading_other": "{{count}} files not identified yet, for example:"
+    },
+    "toast": {
+      "cancelling": "Stopping the library scan",
+      "nothingRunning": "No library scan was running"
     }
   }
 }

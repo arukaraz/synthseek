@@ -286,5 +286,9 @@
   "HELD_IMPORT_NOT_APPROVABLE": {
     "title": "Cannot be approved",
     "description": "This entry already failed after its file was moved. Only discarding it is possible."
+  },
+  "LIBRARY_SCAN_ALREADY_RUNNING": {
+    "title": "Scan already running",
+    "description": "A library scan is already in progress. Wait for it to finish or cancel it first."
   }
 }

@@ -12,6 +12,7 @@ export const JOB_NAME_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
   "media-server-sync": "jobs.registry.media-server-sync.name",
   "wanted-sweep": "jobs.registry.wanted-sweep.name",
   "usenet-staging-sweep": "jobs.registry.usenet-staging-sweep.name",
+  "library-scan": "jobs.registry.library-scan.name",
 };
 
 export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
@@ -20,4 +21,5 @@ export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings"
   "media-server-sync": "jobs.registry.media-server-sync.description",
   "wanted-sweep": "jobs.registry.wanted-sweep.description",
   "usenet-staging-sweep": "jobs.registry.usenet-staging-sweep.description",
+  "library-scan": "jobs.registry.library-scan.description",
 };

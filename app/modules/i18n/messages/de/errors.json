@@ -286,5 +286,9 @@
   "HELD_IMPORT_NOT_APPROVABLE": {
     "title": "Freigabe nicht möglich",
     "description": "Dieser Eintrag ist bereits gescheitert, nachdem seine Datei verschoben wurde. Er lässt sich nur noch verwerfen."
+  },
+  "LIBRARY_SCAN_ALREADY_RUNNING": {
+    "title": "Scan läuft bereits",
+    "description": "Ein Bibliotheksscan läuft bereits. Warte, bis er fertig ist, oder brich ihn zuerst ab."
   }
 }

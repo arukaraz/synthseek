@@ -308,7 +308,7 @@
     "disconnected": "Plex desconectado",
     "libraryHeader": "Biblioteca",
     "libraryScan": {
-      "label": "Escaneo de biblioteca",
+      "label": "Reescaneo del servidor multimedia",
       "description": "Después de cada importación correcta, pide a Plex que escanee la carpeta del nuevo archivo."
     },
     "playlistSync": {
@@ -789,6 +789,10 @@
       "usenet-staging-sweep": {
         "name": "Barrido de discos en espera",
         "description": "Elimina los discos de Usenet descargados a los que nadie pidió otra canción."
+      },
+      "library-scan": {
+        "name": "Escaneo de biblioteca",
+        "description": "Indexa los archivos de audio del disco y reconcilia lo que ha desaparecido."
       }
     }
   },
@@ -988,6 +992,66 @@
     "card": {
       "title": "Conectar aplicaciones",
       "description": "Aplicaciones y asistentes que se conectan a tu Synthseek."
+    }
+  },
+  "libraryScan": {
+    "card": {
+      "title": "Escaneo de biblioteca",
+      "description": "Lo que Synthseek ve en el disco, y lo que no."
+    },
+    "stats": {
+      "onDisk": "En el disco",
+      "linked": "En la biblioteca",
+      "unlinked": "Sin identificar",
+      "missing": "Desaparecidos"
+    },
+    "meta": {
+      "size": "{{size}} indexados",
+      "requestsWithoutFile_one": "{{count}} petición terminada no tiene archivo en el disco",
+      "requestsWithoutFile_other": "{{count}} peticiones terminadas no tienen archivo en el disco"
+    },
+    "state": {
+      "scanning": "Escaneando",
+      "linking": "Emparejando archivos con peticiones",
+      "reconciling": "Reconciliando",
+      "completed": "Último escaneo terminado",
+      "cancelled": "Último escaneo cancelado",
+      "failed": "Último escaneo fallido"
+    },
+    "run": {
+      "seen_one": "{{count}} archivo visto",
+      "seen_other": "{{count}} archivos vistos",
+      "added_one": "{{count}} nuevo",
+      "added_other": "{{count}} nuevos",
+      "missing_one": "{{count}} desaparecido",
+      "missing_other": "{{count}} desaparecidos",
+      "never": "Esta biblioteca no se ha escaneado nunca.",
+      "updated_one": "{{count}} actualizado",
+      "updated_other": "{{count}} actualizados",
+      "unchanged_one": "{{count}} sin cambios",
+      "unchanged_other": "{{count}} sin cambios",
+      "matched_one": "{{count}} emparejado",
+      "matched_other": "{{count}} emparejados",
+      "unreadable_one": "{{count}} ilegible",
+      "unreadable_other": "{{count}} ilegibles"
+    },
+    "warning": {
+      "dirtyWalk": {
+        "title": "El escaneo no pudo leerlo todo",
+        "body_one": "No se pudo leer {{count}} ruta. Todo lo que cuelga de ella conserva su estado, y el resto de la biblioteca se reconcilió con normalidad. Corrige los permisos y vuelve a escanear.",
+        "body_other": "No se pudieron leer {{count}} rutas. Todo lo que cuelga de ellas conserva su estado, y el resto de la biblioteca se reconcilió con normalidad. Corrige los permisos y vuelve a escanear."
+      }
+    },
+    "actions": {
+      "cancel": "Cancelar"
+    },
+    "unlinked": {
+      "heading_one": "{{count}} archivo sin identificar, por ejemplo:",
+      "heading_other": "{{count}} archivos sin identificar, por ejemplo:"
+    },
+    "toast": {
+      "cancelling": "Deteniendo el escaneo de biblioteca",
+      "nothingRunning": "No había ningún escaneo en curso"
     }
   }
 }
