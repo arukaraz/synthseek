@@ -1058,11 +1058,11 @@
       "nothingRunning": "Es lief kein Bibliotheksscan"
     },
     "alternates": {
-      "heading_one": "{{count}} doppelte Kopie, {{size}}",
-      "heading_other": "{{count}} doppelte Kopien, {{size}}",
+      "heading_one": "{{count}} Datei ist eine weitere Kopie eines Titels, den du schon hast, {{size}}",
+      "heading_other": "{{count}} Dateien sind weitere Kopien von Titeln, die du schon hast, {{size}}",
       "discard": "Verwerfen",
       "confirmTitle": "Diese Kopie verwerfen?",
-      "confirmBody": "{{path}} wandert in den Papierkorb und bleibt wiederherstellbar. Die von deiner Bibliothek genutzte Kopie bleibt unberührt.",
+      "confirmBody": "Verworfen wird: {{path}}\nBehalten wird: {{keep}}\nPrüfe, ob es dieselbe Aufnahme ist, denn ein Remix oder eine andere Fassung kann wie ein Duplikat aussehen. Die verworfene Datei landet im Papierkorb und bleibt wiederherstellbar.",
       "discarded": "Kopie in den Papierkorb verschoben"
     }
   }

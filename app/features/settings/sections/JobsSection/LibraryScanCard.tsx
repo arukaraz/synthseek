@@ -38,7 +38,11 @@ export function LibraryScanCard() {
   const discard = useDiscardLibraryCopy();
   const unlinked = useUnlinkedLibraryFiles((data?.inventory.unlinkedFiles ?? 0) > 0);
   const alternates = useAlternateLibraryCopies((data?.inventory.linkedFiles ?? 0) > 0);
-  const [pendingDiscard, setPendingDiscard] = useState<{ id: string; relativePath: string } | null>(null);
+  const [pendingDiscard, setPendingDiscard] = useState<{
+    id: string;
+    relativePath: string;
+    servingPath: string;
+  } | null>(null);
 
   if (isLoading) {
     return (
@@ -158,7 +162,9 @@ export function LibraryScanCard() {
                 <button
                   type="button"
                   className={scanCopyDiscard()}
-                  onClick={() => setPendingDiscard({ id: copy.id, relativePath: copy.relativePath })}
+                  onClick={() =>
+                    setPendingDiscard({ id: copy.id, relativePath: copy.relativePath, servingPath: copy.servingPath })
+                  }
                   disabled={discard.isPending}
                   aria-label={t("libraryScan.alternates.discard")}
                 >
@@ -177,7 +183,10 @@ export function LibraryScanCard() {
             setPendingDiscard(null);
           }}
           title={t("libraryScan.alternates.confirmTitle")}
-          message={t("libraryScan.alternates.confirmBody", { path: pendingDiscard?.relativePath ?? "" })}
+          message={t("libraryScan.alternates.confirmBody", {
+            path: pendingDiscard?.relativePath ?? "",
+            keep: pendingDiscard?.servingPath ?? "",
+          })}
           confirmText={t("libraryScan.alternates.discard")}
           variant="danger"
         />

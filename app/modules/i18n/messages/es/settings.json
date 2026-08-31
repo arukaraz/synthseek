@@ -1058,11 +1058,11 @@
       "nothingRunning": "No había ningún escaneo en curso"
     },
     "alternates": {
-      "heading_one": "{{count}} copia duplicada, {{size}}",
-      "heading_other": "{{count}} copias duplicadas, {{size}}",
+      "heading_one": "{{count}} archivo es otra copia de una pista que ya tienes, {{size}}",
+      "heading_other": "{{count}} archivos son otras copias de pistas que ya tienes, {{size}}",
       "discard": "Descartar",
       "confirmTitle": "¿Descartar esta copia?",
-      "confirmBody": "{{path}} va a la papelera, donde sigue siendo recuperable. La copia que sirve tu biblioteca no se toca.",
+      "confirmBody": "Se descarta: {{path}}\nSe conserva: {{keep}}\nComprueba que sean la misma grabación, porque un remix o una edición distinta puede parecer un duplicado. El archivo descartado va a la papelera y sigue siendo recuperable.",
       "discarded": "Copia movida a la papelera"
     }
   }

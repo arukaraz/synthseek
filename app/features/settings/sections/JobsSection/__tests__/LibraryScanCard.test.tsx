@@ -38,7 +38,15 @@ type ScanRun = {
 type AlternateCopies = {
   total: number;
   totalBytes: number;
-  items: { id: string; relativePath: string; sizeBytes: number; fileFormat: string; artist: string; title: string }[];
+  items: {
+    id: string;
+    relativePath: string;
+    sizeBytes: number;
+    fileFormat: string;
+    artist: string;
+    title: string;
+    servingPath: string;
+  }[];
 };
 
 type UnlinkedFiles = {
@@ -246,13 +254,14 @@ describe("LibraryScanCard", () => {
           fileFormat: "flac",
           artist: "HIM",
           title: "Join Me",
+          servingPath: "HIM/served.flac",
         },
       ],
     });
 
     render(<LibraryScanCard />);
 
-    expect(screen.getByText(/66 duplicate copies/)).toBeInTheDocument();
+    expect(screen.getByText(/66 files are other copies/)).toBeInTheDocument();
     expect(screen.getByText(/HIM - Join Me/)).toBeInTheDocument();
   });
 
@@ -269,6 +278,7 @@ describe("LibraryScanCard", () => {
           fileFormat: "flac",
           artist: "HIM",
           title: "Join Me",
+          servingPath: "HIM/the-one-that-stays.flac",
         },
       ],
     });
@@ -278,6 +288,31 @@ describe("LibraryScanCard", () => {
 
     expect(discardMutate).not.toHaveBeenCalled();
     expect(screen.getByText(enSettings.libraryScan.alternates.confirmTitle)).toBeInTheDocument();
+  });
+
+  it("names BOTH files before discarding, so a different mix is not mistaken for a duplicate", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
+      total: 1,
+      totalBytes: 40_000_000,
+      items: [
+        {
+          id: "copy_1",
+          relativePath: "Avicii/vocal-mix.flac",
+          sizeBytes: 40_000_000,
+          fileFormat: "flac",
+          artist: "Avicii",
+          title: "I Could Be The One",
+          servingPath: "Avicii/dub-mix.flac",
+        },
+      ],
+    });
+
+    render(<LibraryScanCard />);
+    fireEvent.click(screen.getByRole("button", { name: enSettings.libraryScan.alternates.discard }));
+
+    expect(screen.getByText(/Avicii\/vocal-mix\.flac/)).toBeInTheDocument();
+    expect(screen.getByText(/Avicii\/dub-mix\.flac/)).toBeInTheDocument();
   });
 
   it("says so when the library has never been scanned", () => {

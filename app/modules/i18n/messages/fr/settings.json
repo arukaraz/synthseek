@@ -1058,11 +1058,11 @@
       "nothingRunning": "Aucune analyse n'était en cours"
     },
     "alternates": {
-      "heading_one": "{{count}} copie en double, {{size}}",
-      "heading_other": "{{count}} copies en double, {{size}}",
+      "heading_one": "{{count}} fichier est une autre copie d'un morceau que vous avez déjà, {{size}}",
+      "heading_other": "{{count}} fichiers sont d'autres copies de morceaux que vous avez déjà, {{size}}",
       "discard": "Écarter",
       "confirmTitle": "Écarter cette copie ?",
-      "confirmBody": "{{path}} part à la corbeille, où elle reste récupérable. La copie diffusée par votre bibliothèque n'est pas touchée.",
+      "confirmBody": "Écarté : {{path}}\nConservé : {{keep}}\nVérifiez qu'il s'agit du même enregistrement, car un remix ou une autre version peut ressembler à un doublon. Le fichier écarté part à la corbeille et reste récupérable.",
       "discarded": "Copie déplacée vers la corbeille"
     }
   }
