@@ -1003,12 +1003,8 @@
       "onDisk": "En el disco",
       "linked": "En la biblioteca",
       "unlinked": "Sin identificar",
-      "missing": "Desaparecidos"
-    },
-    "meta": {
-      "size": "{{size}} indexados",
-      "requestsWithoutFile_one": "{{count}} petición terminada no tiene archivo en el disco",
-      "requestsWithoutFile_other": "{{count}} peticiones terminadas no tienen archivo en el disco"
+      "missing": "Desaparecidos",
+      "duplicated": "Duplicadas"
     },
     "state": {
       "scanning": "Escaneando",
@@ -1035,16 +1031,32 @@
       "cancelling": "Deteniendo el escaneo de biblioteca",
       "nothingRunning": "No había ningún escaneo en curso"
     },
-    "alternates": {
-      "heading_one": "{{count}} archivo es otra copia de una pista que ya tienes, {{size}}",
-      "heading_other": "{{count}} archivos son otras copias de pistas que ya tienes, {{size}}",
-      "discard": "Descartar",
-      "confirmTitle": "¿Descartar esta copia?",
-      "confirmBody": "Se descarta: {{path}}\nSe conserva: {{keep}}\nComprueba que sean la misma grabación, porque un remix o una edición distinta puede parecer un duplicado. El archivo descartado va a la papelera y sigue siendo recuperable.",
+    "duplicates": {
+      "title": "Pistas duplicadas",
+      "description": "Pistas que tu biblioteca guarda más de una vez. Quedarse con la mejor copia manda el resto a la papelera, donde siguen siendo recuperables.",
+      "summary": "{{count}} pista(s) repetidas, {{size}} recuperables",
+      "copies_one": "{{count}} copia",
+      "copies_other": "{{count}} copias",
+      "frees": "{{size}} por recuperar",
+      "ambiguous": "las copias no coinciden, se dejan para ti",
+      "ambiguousHint": "Las copias llevan títulos distintos, así que una puede ser otra grabación. Resuelve esta a mano.",
+      "tidyAll": "Quedarse con la mejor de cada pista",
+      "tidyAllRunning": "Revisándolas",
+      "tidyOne": "Quedarse con la mejor",
+      "tidyDone": "Se quedó la mejor copia, {{size}} recuperados",
+      "tidySkipped": "Esa pista se deja en paz, sus copias no coinciden",
+      "emptyTitle": "Sin duplicados",
+      "emptyBody": "Cada pista de tu biblioteca está guardada una sola vez.",
+      "discard": "Descartar esta copia",
       "discarded": "Copia movida a la papelera",
-      "keepBest": "Quedarse con la mejor",
-      "keepingBest": "Revisando las copias duplicadas",
-      "keepBestRunning": "Quedandose con la mejor copia de cada pista"
+      "confirmTitle": "¿Descartar esta copia?",
+      "confirmBody": "{{path}} va a la papelera. Tu biblioteca sigue reproduciendo {{keep}}."
+    },
+    "header": {
+      "running": "Escaneando",
+      "never": "Nunca escaneado",
+      "ago": "hace {{ago}}",
+      "identifying": "Identificando"
     }
   }
 }

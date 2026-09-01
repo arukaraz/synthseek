@@ -4,6 +4,8 @@ import { Plus, Search, X } from "lucide-react";
 import { useMemo, useState, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Pagination } from "@components/ui/Pagination";
+import { useClientPagination } from "@hooks/ui/useClientPagination";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
 
@@ -59,6 +61,8 @@ export function ListManager({
     return value.filter((v) => v.toLowerCase().includes(needle));
   }, [value, filter]);
 
+  const pager = useClientPagination(filtered);
+
   const countText =
     showFilter && filter
       ? t("shell.listManager.filteredCount", { shown: filtered.length, total: value.length })
@@ -105,7 +109,7 @@ export function ListManager({
         ) : filtered.length === 0 ? (
           <p className={listManagerEmpty()}>{t("shell.listManager.noMatches", { query: filter })}</p>
         ) : (
-          filtered.map((item) => (
+          pager.visible.map((item) => (
             <div key={item} className={listManagerRow()}>
               <span className="text-fg truncate">{item}</span>
               <button
@@ -121,6 +125,18 @@ export function ListManager({
           ))
         )}
       </div>
+
+      {pager.paginated ? (
+        <Pagination
+          page={pager.page}
+          pageCount={pager.pageCount}
+          pageSize={pager.pageSize}
+          totalItems={pager.totalItems}
+          pageSizeOptions={pager.pageSizeOptions}
+          onPageChange={pager.onPageChange}
+          onPageSizeChange={pager.onPageSizeChange}
+        />
+      ) : null}
 
       {helper ? <p className={fieldHelper()}>{helper}</p> : null}
     </div>

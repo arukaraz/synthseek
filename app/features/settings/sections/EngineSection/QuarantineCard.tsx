@@ -14,6 +14,8 @@ import { Switch } from "@components/ui/Switch";
 import { useClearQuarantine, useRemoveQuarantineEntry } from "@hooks/api/mutations/settings/useQuarantine";
 import { useUpdateEngineImport } from "@hooks/api/mutations/settings/useUpdateEngine";
 import { useQuarantineList } from "@hooks/api/queries/useQuarantine";
+import { useClientPagination } from "@hooks/ui/useClientPagination";
+import { Pagination } from "@components/ui/Pagination";
 import { downloadSourceLabelKey } from "@utils/download-source";
 import { formatRelativeTime } from "@utils/formatters";
 
@@ -41,6 +43,7 @@ export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateEngineImport();
   const entries = useQuarantineList();
+  const quarantined = useClientPagination(entries.data);
   const removeEntry = useRemoveQuarantineEntry();
   const clearAll = useClearQuarantine();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial);
@@ -103,7 +106,7 @@ export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
         />
       ) : (
         <ul className={quarantineList()}>
-          {entries.data?.map((entry) => {
+          {quarantined.visible.map((entry) => {
             const sourceKey = downloadSourceLabelKey(entry.source);
             return (
               <li key={entry.id} className={quarantineRow()}>
@@ -142,6 +145,18 @@ export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
           })}
         </ul>
       )}
+
+      {quarantined.paginated ? (
+        <Pagination
+          page={quarantined.page}
+          pageCount={quarantined.pageCount}
+          pageSize={quarantined.pageSize}
+          totalItems={quarantined.totalItems}
+          pageSizeOptions={quarantined.pageSizeOptions}
+          onPageChange={quarantined.onPageChange}
+          onPageSizeChange={quarantined.onPageSizeChange}
+        />
+      ) : null}
 
       <div role="separator" className={cardDivider()} />
       <span className={cardSectionHeader()}>{t("quarantine.sourceTrust.title")}</span>

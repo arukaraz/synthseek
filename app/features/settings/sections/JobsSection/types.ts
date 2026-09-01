@@ -7,3 +7,9 @@ export type JobSummary = inferRouterOutputs<AppRouter>["jobs"]["list"][number];
 export interface JobRowProps {
   job: JobSummary;
 }
+
+export interface DuplicatesDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  reclaiming: boolean;
+}

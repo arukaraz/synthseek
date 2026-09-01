@@ -4,6 +4,8 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DataTable } from "@components/ui/Table";
+import { Pagination } from "@components/ui/Pagination";
+import { useClientPagination } from "@hooks/ui/useClientPagination";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { confirm } from "@utils/confirm";
 import { useUsers } from "@hooks/api/queries/useUsers";
@@ -42,6 +44,7 @@ export function MembersSection() {
   const bulkDelete = useBulkDeleteUsers();
 
   const rows = useMemo(() => sortMembers(usersQuery.data ?? [], sort), [usersQuery.data, sort]);
+  const members = useClientPagination(rows);
   const ids = useMemo(() => rows.map((row) => row.id), [rows]);
   const selectedIds = useMemo(() => ids.filter((id) => selected.has(id)), [ids, selected]);
   const allSelected = ids.length > 0 && ids.every((id) => selected.has(id));
@@ -148,7 +151,7 @@ export function MembersSection() {
           </div>
         ) : (
           <DataTable
-            data={rows}
+            data={members.visible}
             columns={columns}
             getRowId={(member) => member.id}
             sortState={sort}
@@ -156,6 +159,17 @@ export function MembersSection() {
             minWidth="760px"
           />
         )}
+        {members.paginated ? (
+          <Pagination
+            page={members.page}
+            pageCount={members.pageCount}
+            pageSize={members.pageSize}
+            totalItems={members.totalItems}
+            pageSizeOptions={members.pageSizeOptions}
+            onPageChange={members.onPageChange}
+            onPageSizeChange={members.onPageSizeChange}
+          />
+        ) : null}
       </SettingsCard>
 
       <ApprovalCard />

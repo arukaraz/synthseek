@@ -2,7 +2,6 @@ import { trpc } from "@utils/trpc";
 
 const ACTIVE_REFETCH_MS = 8000;
 const IDLE_REFETCH_MS = 60000;
-const ALTERNATE_PREVIEW_LIMIT = 5;
 
 export function useLibraryScanStatus() {
   return trpc.library.scan.status.useQuery(undefined, {
@@ -12,9 +11,6 @@ export function useLibraryScanStatus() {
   });
 }
 
-export function useAlternateLibraryCopies(enabled: boolean) {
-  return trpc.library.scan.alternateCopies.useQuery(
-    { limit: ALTERNATE_PREVIEW_LIMIT },
-    { enabled, staleTime: 30 * 1000 }
-  );
+export function useDuplicateGroups(enabled: boolean) {
+  return trpc.library.scan.duplicateGroups.useQuery(undefined, { enabled, staleTime: 30 * 1000 });
 }

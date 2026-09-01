@@ -1003,12 +1003,8 @@
       "onDisk": "Auf der Festplatte",
       "linked": "In der Bibliothek",
       "unlinked": "Nicht identifiziert",
-      "missing": "Verschwunden"
-    },
-    "meta": {
-      "size": "{{size}} indiziert",
-      "requestsWithoutFile_one": "{{count}} abgeschlossene Anfrage hat keine Datei auf der Festplatte",
-      "requestsWithoutFile_other": "{{count}} abgeschlossene Anfragen haben keine Datei auf der Festplatte"
+      "missing": "Verschwunden",
+      "duplicated": "Doppelt"
     },
     "state": {
       "scanning": "Wird gescannt",
@@ -1035,16 +1031,32 @@
       "cancelling": "Bibliotheksscan wird gestoppt",
       "nothingRunning": "Es lief kein Bibliotheksscan"
     },
-    "alternates": {
-      "heading_one": "{{count}} Datei ist eine weitere Kopie eines Titels, den du schon hast, {{size}}",
-      "heading_other": "{{count}} Dateien sind weitere Kopien von Titeln, die du schon hast, {{size}}",
-      "discard": "Verwerfen",
-      "confirmTitle": "Diese Kopie verwerfen?",
-      "confirmBody": "Verworfen wird: {{path}}\nBehalten wird: {{keep}}\nPrüfe, ob es dieselbe Aufnahme ist, denn ein Remix oder eine andere Fassung kann wie ein Duplikat aussehen. Die verworfene Datei landet im Papierkorb und bleibt wiederherstellbar.",
+    "duplicates": {
+      "title": "Doppelte Titel",
+      "description": "Titel, die deine Bibliothek mehrfach hält. Die beste Kopie zu behalten verschiebt den Rest in den Papierkorb, wo er wiederherstellbar bleibt.",
+      "summary": "{{count}} Titel mehrfach vorhanden, {{size}} wiedergewinnbar",
+      "copies_one": "{{count}} Kopie",
+      "copies_other": "{{count}} Kopien",
+      "frees": "{{size}} freizugeben",
+      "ambiguous": "Kopien stimmen nicht überein, für dich gelassen",
+      "ambiguousHint": "Die Kopien tragen verschiedene Titel, eine könnte eine andere Aufnahme sein. Kläre diesen Fall selbst.",
+      "tidyAll": "Beste Kopie jedes Titels behalten",
+      "tidyAllRunning": "Wird bearbeitet",
+      "tidyOne": "Beste behalten",
+      "tidyDone": "Beste Kopie behalten, {{size}} freigegeben",
+      "tidySkipped": "Dieser Titel bleibt unberührt, seine Kopien stimmen nicht überein",
+      "emptyTitle": "Keine Duplikate",
+      "emptyBody": "Jeder Titel deiner Bibliothek liegt genau einmal vor.",
+      "discard": "Diese Kopie verwerfen",
       "discarded": "Kopie in den Papierkorb verschoben",
-      "keepBest": "Die beste behalten",
-      "keepingBest": "Doppelte Kopien werden durchgegangen",
-      "keepBestRunning": "Beste Kopie jedes Titels wird behalten"
+      "confirmTitle": "Diese Kopie verwerfen?",
+      "confirmBody": "{{path}} wandert in den Papierkorb. Deine Bibliothek spielt weiter {{keep}}."
+    },
+    "header": {
+      "running": "Scannt",
+      "never": "Nie gescannt",
+      "ago": "vor {{ago}}",
+      "identifying": "Identifiziert"
     }
   }
 }

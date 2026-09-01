@@ -1003,12 +1003,8 @@
       "onDisk": "On disk",
       "linked": "In the library",
       "unlinked": "Not identified",
-      "missing": "Gone"
-    },
-    "meta": {
-      "size": "{{size}} indexed",
-      "requestsWithoutFile_one": "{{count}} finished request has no file on disk",
-      "requestsWithoutFile_other": "{{count}} finished requests have no file on disk"
+      "missing": "Gone",
+      "duplicated": "Duplicated"
     },
     "state": {
       "scanning": "Scanning",
@@ -1035,16 +1031,32 @@
       "cancelling": "Stopping the library scan",
       "nothingRunning": "No library scan was running"
     },
-    "alternates": {
-      "heading_one": "{{count}} file is another copy of a track you already hold, {{size}}",
-      "heading_other": "{{count}} files are other copies of tracks you already hold, {{size}}",
-      "discard": "Discard",
-      "confirmTitle": "Discard this copy?",
-      "confirmBody": "Discarding: {{path}}\nKeeping: {{keep}}\nCheck these are the same recording, because a remix or a different edit can look like a duplicate. The discarded file goes to the recycle bin and stays recoverable.",
+    "duplicates": {
+      "title": "Duplicated tracks",
+      "description": "Tracks your library holds more than once. Keeping the best copy moves the rest to the recycle bin, where they stay recoverable.",
+      "summary": "{{count}} track(s) held more than once, {{size}} recoverable",
+      "copies_one": "{{count}} copy",
+      "copies_other": "{{count}} copies",
+      "frees": "{{size}} to reclaim",
+      "ambiguous": "copies do not match, left for you",
+      "ambiguousHint": "The copies carry different titles, so one may be a different recording. Resolve this one yourself.",
+      "tidyAll": "Keep the best of every track",
+      "tidyAllRunning": "Working through them",
+      "tidyOne": "Keep the best",
+      "tidyDone": "Kept the best copy, {{size}} reclaimed",
+      "tidySkipped": "Left that track alone, its copies do not match",
+      "emptyTitle": "No duplicates",
+      "emptyBody": "Every track in your library is held exactly once.",
+      "discard": "Discard this copy",
       "discarded": "Copy moved to the recycle bin",
-      "keepBest": "Keep the best of each",
-      "keepingBest": "Working through the duplicate copies",
-      "keepBestRunning": "Keeping the best copy of each track"
+      "confirmTitle": "Discard this copy?",
+      "confirmBody": "{{path}} goes to the recycle bin. Your library keeps playing {{keep}}."
+    },
+    "header": {
+      "running": "Scanning",
+      "never": "Never scanned",
+      "ago": "ran {{ago}}",
+      "identifying": "Identifying"
     }
   }
 }

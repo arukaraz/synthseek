@@ -1003,12 +1003,8 @@
       "onDisk": "Sur le disque",
       "linked": "Dans la bibliothèque",
       "unlinked": "Non identifiés",
-      "missing": "Disparus"
-    },
-    "meta": {
-      "size": "{{size}} indexés",
-      "requestsWithoutFile_one": "{{count}} demande terminée n'a aucun fichier sur le disque",
-      "requestsWithoutFile_other": "{{count}} demandes terminées n'ont aucun fichier sur le disque"
+      "missing": "Disparus",
+      "duplicated": "En double"
     },
     "state": {
       "scanning": "Analyse en cours",
@@ -1035,16 +1031,32 @@
       "cancelling": "Arrêt de l'analyse de la bibliothèque",
       "nothingRunning": "Aucune analyse n'était en cours"
     },
-    "alternates": {
-      "heading_one": "{{count}} fichier est une autre copie d'un morceau que vous avez déjà, {{size}}",
-      "heading_other": "{{count}} fichiers sont d'autres copies de morceaux que vous avez déjà, {{size}}",
-      "discard": "Écarter",
-      "confirmTitle": "Écarter cette copie ?",
-      "confirmBody": "Écarté : {{path}}\nConservé : {{keep}}\nVérifiez qu'il s'agit du même enregistrement, car un remix ou une autre version peut ressembler à un doublon. Le fichier écarté part à la corbeille et reste récupérable.",
+    "duplicates": {
+      "title": "Titres en double",
+      "description": "Titres que votre bibliothèque détient plusieurs fois. Garder la meilleure copie envoie les autres à la corbeille, où elles restent récupérables.",
+      "summary": "{{count}} titre(s) en plusieurs exemplaires, {{size}} récupérables",
+      "copies_one": "{{count}} copie",
+      "copies_other": "{{count}} copies",
+      "frees": "{{size}} à récupérer",
+      "ambiguous": "les copies ne correspondent pas, laissées pour vous",
+      "ambiguousHint": "Les copies portent des titres différents, l'une peut être un autre enregistrement. Traitez celle-ci vous-même.",
+      "tidyAll": "Garder la meilleure de chaque titre",
+      "tidyAllRunning": "Traitement en cours",
+      "tidyOne": "Garder la meilleure",
+      "tidyDone": "Meilleure copie conservée, {{size}} récupérés",
+      "tidySkipped": "Ce titre est laissé tel quel, ses copies ne correspondent pas",
+      "emptyTitle": "Aucun doublon",
+      "emptyBody": "Chaque titre de votre bibliothèque n'existe qu'une fois.",
+      "discard": "Écarter cette copie",
       "discarded": "Copie déplacée vers la corbeille",
-      "keepBest": "Garder la meilleure",
-      "keepingBest": "Traitement des copies en double",
-      "keepBestRunning": "Conservation de la meilleure copie de chaque titre"
+      "confirmTitle": "Écarter cette copie ?",
+      "confirmBody": "{{path}} part à la corbeille. Votre bibliothèque continue de lire {{keep}}."
+    },
+    "header": {
+      "running": "Analyse",
+      "never": "Jamais analysé",
+      "ago": "il y a {{ago}}",
+      "identifying": "Identification"
     }
   }
 }

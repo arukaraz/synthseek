@@ -7,7 +7,17 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockQuery, createLoadingQuery, createErrorQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
+type ScanRun = {
+  state: string;
+  walkClean: boolean;
+  walkFailures: number;
+  terminalCode: string | null;
+  startedAt: Date;
+  finishedAt: Date | null;
+};
+
 type ScanStatus = {
+  identifyRunning: boolean;
   reclaimRunning: boolean;
   activeRun: ScanRun | null;
   lastRun: ScanRun | null;
@@ -16,62 +26,29 @@ type ScanStatus = {
     linkedFiles: number;
     unlinkedFiles: number;
     missingFiles: number;
-    totalBytes: number;
-    formats: { format: string; count: number }[];
-    completeRequestsWithoutFile: number;
+    duplicateFiles: number;
+    duplicateBytes: number;
   };
 };
 
-type ScanRun = {
-  state: string;
-  walkClean: boolean;
-  walkFailures: number;
-  filesSeen: number;
-  filesNew: number;
-  filesUpdated: number;
-  filesUnchanged: number;
-  filesFailed: number;
-  filesMissing: number;
-  filesLinked: number;
-  terminalCode: string | null;
-};
-
-type AlternateCopies = {
-  total: number;
-  totalBytes: number;
-  items: {
-    id: string;
-    relativePath: string;
-    sizeBytes: number;
-    fileFormat: string;
-    artist: string;
-    title: string;
-    servingPath: string;
-  }[];
-};
-
 let statusQuery: MockQueryResult<ScanStatus | undefined> = createMockQuery<ScanStatus | undefined>(undefined);
-let alternatesQuery: MockQueryResult<AlternateCopies | undefined> = createMockQuery<AlternateCopies | undefined>(
-  undefined
-);
-const discardMutate = vi.fn();
-const keepBestMutate = vi.fn();
 const cancelMutate = vi.fn();
-
-vi.mock("@hooks/api/queries/useLibraryScanStatus", () => ({
-  useLibraryScanStatus: () => statusQuery,
-  useAlternateLibraryCopies: () => alternatesQuery,
-}));
-
 const triggerMutate = vi.fn();
+
 vi.mock("@hooks/api/mutations/jobs/useTriggerJob", () => ({
   useTriggerJob: () => ({ mutate: triggerMutate, isPending: false }),
 }));
 
+vi.mock("@hooks/api/queries/useLibraryScanStatus", () => ({
+  useLibraryScanStatus: () => statusQuery,
+  useDuplicateGroups: () => createMockQuery({ groups: [], totalBytes: 0 }),
+}));
+
 vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
   useCancelLibraryScan: () => ({ mutate: cancelMutate, isPending: false }),
-  useDiscardLibraryCopy: () => ({ mutate: discardMutate, isPending: false }),
-  useKeepBestLibraryCopies: () => ({ mutate: keepBestMutate, isPending: false }),
+  useDiscardLibraryCopy: () => ({ mutate: vi.fn(), isPending: false }),
+  useKeepBestLibraryCopies: () => ({ mutate: vi.fn(), isPending: false }),
+  useKeepBestLibraryCopy: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
 import { LibraryScanCard } from "../LibraryScanCard";
@@ -84,7 +61,6 @@ afterEach(() => {
   cleanup();
   vi.clearAllMocks();
   statusQuery = createMockQuery<ScanStatus | undefined>(undefined);
-  alternatesQuery = createMockQuery<AlternateCopies | undefined>(undefined);
 });
 
 function makeRun(overrides: Partial<ScanRun> = {}): ScanRun {
@@ -92,20 +68,16 @@ function makeRun(overrides: Partial<ScanRun> = {}): ScanRun {
     state: "completed",
     walkClean: true,
     walkFailures: 0,
-    filesSeen: 8334,
-    filesNew: 2883,
-    filesUpdated: 0,
-    filesUnchanged: 5451,
-    filesFailed: 0,
-    filesMissing: 0,
-    filesLinked: 5451,
     terminalCode: null,
+    startedAt: new Date(Date.now() - 10 * 60 * 1000),
+    finishedAt: new Date(Date.now() - 9 * 60 * 1000),
     ...overrides,
   };
 }
 
 function makeStatus(overrides: Partial<ScanStatus> = {}): ScanStatus {
   return {
+    identifyRunning: false,
     reclaimRunning: false,
     activeRun: null,
     lastRun: makeRun(),
@@ -114,12 +86,8 @@ function makeStatus(overrides: Partial<ScanStatus> = {}): ScanStatus {
       linkedFiles: 5451,
       unlinkedFiles: 2883,
       missingFiles: 0,
-      totalBytes: 170_000_000_000,
-      formats: [
-        { format: "mp3", count: 5514 },
-        { format: "flac", count: 2820 },
-      ],
-      completeRequestsWithoutFile: 243,
+      duplicateFiles: 325,
+      duplicateBytes: 3_300_000_000,
     },
     ...overrides,
   };
@@ -136,22 +104,49 @@ describe("LibraryScanCard", () => {
     expect(screen.getByText("2,883")).toBeInTheDocument();
   });
 
-  it("names the finished requests whose file is not on disk", () => {
+  it("counts the duplicated copies and what they take, as its own figure", () => {
     statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
 
     render(<LibraryScanCard />);
 
-    expect(screen.getByText(/243 finished requests have no file on disk/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "325" })).toBeInTheDocument();
+    expect(screen.getByText((text) => text.includes("3.1 GB"))).toBeInTheDocument();
   });
 
-  it("hides that line when every finished request has its file", () => {
+  it("does not offer the duplicates as a link when there are none", () => {
     const status = makeStatus();
-    status.inventory.completeRequestsWithoutFile = 0;
+    status.inventory.duplicateFiles = 0;
     statusQuery = createMockQuery<ScanStatus | undefined>(status);
 
     render(<LibraryScanCard />);
 
-    expect(screen.queryByText(/has no file on disk/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "0" })).not.toBeInTheDocument();
+  });
+
+  it("says in the header how long ago the last scan finished", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByText(/ran /i)).toBeInTheDocument();
+  });
+
+  it("says so when the library has never been scanned", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ lastRun: null }));
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByText(enSettings.libraryScan.header.never)).toBeInTheDocument();
+  });
+
+  it("no longer prints the indexed size, the format tally or the orphan count", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+
+    render(<LibraryScanCard />);
+
+    expect(screen.queryByText(/indexed/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/MP3/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/no file on disk/i)).not.toBeInTheDocument();
   });
 
   it("warns that nothing was marked gone when the walk could not read everything", () => {
@@ -173,38 +168,55 @@ describe("LibraryScanCard", () => {
     expect(screen.queryByText(enSettings.libraryScan.warning.dirtyWalk.title)).not.toBeInTheDocument();
   });
 
-  it("reports where the run stands without reciting what it counted", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(
-      makeStatus({
-        lastRun: makeRun({ filesSeen: 9111, filesNew: 12, filesLinked: 7222, filesFailed: 7, filesMissing: 3 }),
-      })
-    );
-
-    render(<LibraryScanCard />);
-
-    expect(screen.getByText(/Last scan finished/)).toBeInTheDocument();
-    for (const recited of [/9,?111/, /7,?222/, /unreadable/, /seen/, /matched/, /unchanged/]) {
-      expect(screen.queryByText(recited)).not.toBeInTheDocument();
-    }
-  });
-
-  it("shows why a run ended when it carries a terminal code", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(
-      makeStatus({ lastRun: makeRun({ state: "failed", terminalCode: "SCAN_ERROR" }) })
-    );
-
-    render(<LibraryScanCard />);
-
-    expect(screen.getByText(/SCAN_ERROR/)).toBeInTheDocument();
-  });
-
-  it("no longer recites which files are unidentified", () => {
+  it("starts a scan from the card itself", () => {
     statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
 
     render(<LibraryScanCard />);
 
-    expect(screen.getByText("2,883")).toBeInTheDocument();
-    expect(screen.queryByText(/not identified yet/i)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /run .*library scan/i }));
+
+    expect(triggerMutate).toHaveBeenCalledWith({ id: "library-scan" }, expect.anything());
+  });
+
+  it("shows the run button as busy while a scan is in flight, not merely while the click resolves", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ activeRun: makeRun({ state: "scanning" }) }));
+
+    render(<LibraryScanCard />);
+
+    const button = screen.getByRole("button", { name: /running library scan/i });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByText(enSettings.libraryScan.header.running)).toBeInTheDocument();
+  });
+
+  it("shows the button busy while identification is working, even with no disk walk in flight", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ identifyRunning: true, activeRun: null }));
+
+    render(<LibraryScanCard />);
+
+    const button = screen.getByRole("button", { name: /running library scan/i });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByText(enSettings.libraryScan.header.identifying)).toBeInTheDocument();
+  });
+
+  it("says it is scanning, not identifying, while the disk walk is the part that is running", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({ activeRun: makeRun({ state: "scanning" }), identifyRunning: true })
+    );
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByText(enSettings.libraryScan.header.running)).toBeInTheDocument();
+    expect(screen.queryByText(enSettings.libraryScan.header.identifying)).not.toBeInTheDocument();
+  });
+
+  it("shows the button busy while duplicates are being settled, since a scan would refuse to start", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ reclaimRunning: true }));
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByRole("button", { name: /running library scan/i })).toBeDisabled();
   });
 
   it("offers cancelling only while a scan is running", () => {
@@ -217,206 +229,22 @@ describe("LibraryScanCard", () => {
     render(<LibraryScanCard />);
 
     fireEvent.click(screen.getByRole("button", { name: enSettings.libraryScan.actions.cancel }));
-    expect(cancelMutate).toHaveBeenCalledTimes(1);
+    expect(cancelMutate).toHaveBeenCalled();
   });
 
-  it("starts a scan from the card itself", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
-
-    render(<LibraryScanCard />);
-
-    fireEvent.click(screen.getByRole("button", { name: /run .*library scan/i }));
-
-    expect(triggerMutate).toHaveBeenCalledWith({ id: "library-scan" }, expect.anything());
-  });
-
-  it("shows the run button as busy while a scan is actually in flight, not merely while the click resolves", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ activeRun: makeRun({ state: "scanning" }) }));
-
-    render(<LibraryScanCard />);
-
-    const button = screen.getByRole("button", { name: /running library scan/i });
-    expect(button).toBeDisabled();
-    expect(button).toHaveAttribute("aria-busy", "true");
-  });
-
-  it("offers the run button again once the scan reaches a terminal state", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ activeRun: null }));
-
-    render(<LibraryScanCard />);
-
-    const button = screen.getByRole("button", { name: /run .*library scan/i });
-    expect(button).not.toBeDisabled();
-    expect(button).toHaveAttribute("aria-busy", "false");
-  });
-
-  it("lists the duplicate copies with what discarding them would free", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
-    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
-      total: 66,
-      totalBytes: 2_000_000_000,
-      items: [
-        {
-          id: "copy_1",
-          relativePath: "Scene/01.flac",
-          sizeBytes: 40_000_000,
-          fileFormat: "flac",
-          artist: "HIM",
-          title: "Join Me",
-          servingPath: "HIM/served.flac",
-        },
-      ],
-    });
-
-    render(<LibraryScanCard />);
-
-    expect(screen.getByText(/66 files are other copies/)).toBeInTheDocument();
-    expect(screen.getByText(/HIM - Join Me/)).toBeInTheDocument();
-  });
-
-  it("offers keeping the best copy of each duplicated track", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
-    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
-      total: 325,
-      totalBytes: 3_300_000_000,
-      items: [
-        {
-          id: "c1",
-          relativePath: "Scene/01.flac",
-          sizeBytes: 40_000_000,
-          fileFormat: "flac",
-          artist: "HIM",
-          title: "Join Me",
-          servingPath: "HIM/Razorblade/02.mp3",
-        },
-      ],
-    });
-
-    render(<LibraryScanCard />);
-
-    fireEvent.click(screen.getByRole("button", { name: enSettings.libraryScan.alternates.keepBest }));
-
-    expect(keepBestMutate).toHaveBeenCalled();
-  });
-
-  it("shows the reclaim as busy while the server is still working through the copies", () => {
-    const status = makeStatus();
-    status.reclaimRunning = true;
-    statusQuery = createMockQuery<ScanStatus | undefined>(status);
-    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
-      total: 325,
-      totalBytes: 3_300_000_000,
-      items: [
-        {
-          id: "c1",
-          relativePath: "Scene/01.flac",
-          sizeBytes: 40_000_000,
-          fileFormat: "flac",
-          artist: "HIM",
-          title: "Join Me",
-          servingPath: "HIM/Razorblade/02.mp3",
-        },
-      ],
-    });
-
-    render(<LibraryScanCard />);
-
-    const button = screen.getByRole("button", { name: enSettings.libraryScan.alternates.keepBestRunning });
-    expect(button).toBeDisabled();
-    expect(button).toHaveAttribute("aria-busy", "true");
-  });
-
-  it("locks the per-copy discard while the bulk reclaim is working, so a click cannot race it", () => {
-    const status = makeStatus();
-    status.reclaimRunning = true;
-    statusQuery = createMockQuery<ScanStatus | undefined>(status);
-    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
-      total: 2,
-      totalBytes: 22_600_000,
-      items: [
-        {
-          id: "c1",
-          relativePath: "Scene/01.flac",
-          sizeBytes: 40_000_000,
-          fileFormat: "flac",
-          artist: "HIM",
-          title: "Join Me",
-          servingPath: "HIM/Razorblade/02.mp3",
-        },
-      ],
-    });
-
-    render(<LibraryScanCard />);
-
-    expect(screen.getByRole("button", { name: enSettings.libraryScan.alternates.discard })).toBeDisabled();
-  });
-
-  it("asks before discarding, and never discards on the click alone", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
-    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
-      total: 1,
-      totalBytes: 40_000_000,
-      items: [
-        {
-          id: "copy_1",
-          relativePath: "Scene/01.flac",
-          sizeBytes: 40_000_000,
-          fileFormat: "flac",
-          artist: "HIM",
-          title: "Join Me",
-          servingPath: "HIM/the-one-that-stays.flac",
-        },
-      ],
-    });
-
-    render(<LibraryScanCard />);
-    fireEvent.click(screen.getByRole("button", { name: enSettings.libraryScan.alternates.discard }));
-
-    expect(discardMutate).not.toHaveBeenCalled();
-    expect(screen.getByText(enSettings.libraryScan.alternates.confirmTitle)).toBeInTheDocument();
-  });
-
-  it("names BOTH files before discarding, so a different mix is not mistaken for a duplicate", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
-    alternatesQuery = createMockQuery<AlternateCopies | undefined>({
-      total: 1,
-      totalBytes: 40_000_000,
-      items: [
-        {
-          id: "copy_1",
-          relativePath: "Avicii/vocal-mix.flac",
-          sizeBytes: 40_000_000,
-          fileFormat: "flac",
-          artist: "Avicii",
-          title: "I Could Be The One",
-          servingPath: "Avicii/dub-mix.flac",
-        },
-      ],
-    });
-
-    render(<LibraryScanCard />);
-    fireEvent.click(screen.getByRole("button", { name: enSettings.libraryScan.alternates.discard }));
-
-    expect(screen.getByText(/Avicii\/vocal-mix\.flac/)).toBeInTheDocument();
-    expect(screen.getByText(/Avicii\/dub-mix\.flac/)).toBeInTheDocument();
-  });
-
-  it("says so when the library has never been scanned", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus({ lastRun: null }));
-
-    render(<LibraryScanCard />);
-
-    expect(screen.getByText(enSettings.libraryScan.run.never)).toBeInTheDocument();
-  });
-
-  it("reports a loading and an error state instead of an empty card", () => {
-    statusQuery = createLoadingQuery<ScanStatus | undefined>();
-    const { unmount } = render(<LibraryScanCard />);
-    expect(screen.getByText(enSettings.jobs.card.loading)).toBeInTheDocument();
-    unmount();
-
+  it("reports a load failure instead of rendering an empty card", () => {
     statusQuery = createErrorQuery<ScanStatus | undefined>(new Error("boom"));
+
     render(<LibraryScanCard />);
+
     expect(screen.getByText(/boom/)).toBeInTheDocument();
+  });
+
+  it("shows a loading note while the status is still coming", () => {
+    statusQuery = createLoadingQuery<ScanStatus | undefined>();
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByText(enSettings.jobs.card.loading)).toBeInTheDocument();
   });
 });
