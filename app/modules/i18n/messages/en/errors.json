@@ -295,8 +295,8 @@
     "title": "File not found",
     "description": "That file is no longer in the library index. Run a scan and try again."
   },
-  "LIBRARY_FILE_NOT_AN_ALTERNATE": {
-    "title": "That is the copy in use",
-    "description": "This is the file your library actually serves, so it cannot be discarded as a duplicate."
+  "LIBRARY_FILE_MISSING": {
+    "title": "That copy is gone",
+    "description": "The file is no longer on disk. Run a library scan so Synthseek catches up with what changed."
   }
 }

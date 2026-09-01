@@ -13,3 +13,20 @@ export interface DuplicatesDialogProps {
   onClose: () => void;
   reclaiming: boolean;
 }
+
+export interface DuplicateGroupSummary {
+  copies: readonly unknown[];
+  formats: readonly string[];
+  minBytes: number;
+  maxBytes: number;
+  distinctLengths: number | null;
+}
+
+export interface CopyRowProps {
+  copy: { id: string; fileName: string; sizeBytes: number; durationSeconds: number | null; serving: boolean };
+  disabled: boolean;
+  keeping: boolean;
+  playing: boolean;
+  onPlayChange: (id: string | null) => void;
+  onKeep: () => void;
+}

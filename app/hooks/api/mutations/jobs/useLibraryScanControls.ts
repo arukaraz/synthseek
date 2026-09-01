@@ -36,13 +36,13 @@ export function useKeepBestLibraryCopy() {
   });
 }
 
-export function useDiscardLibraryCopy() {
+export function useKeepThisCopy() {
   const utils = trpc.useUtils();
-  return trpc.library.scan.discardCopy.useMutation({
-    onSuccess: () => {
+  return trpc.library.scan.keepThisCopy.useMutation({
+    onSuccess: (result) => {
       utils.library.scan.duplicateGroups.invalidate();
       utils.library.scan.status.invalidate();
-      toast.success(i18n.t("settings:libraryScan.duplicates.discarded"));
+      toast.success(i18n.t("settings:libraryScan.duplicates.keepThisDone", { size: formatBytes(result.freedBytes) }));
     },
     onError: (error) => errorToast(error, "jobs.runFailed"),
   });

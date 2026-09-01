@@ -23,3 +23,5 @@ export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings"
   "usenet-staging-sweep": "jobs.registry.usenet-staging-sweep.description",
   "library-scan": "jobs.registry.library-scan.description",
 };
+
+export const MS_PER_SECOND = 1000;

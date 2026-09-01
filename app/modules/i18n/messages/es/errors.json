@@ -295,8 +295,8 @@
     "title": "Archivo no encontrado",
     "description": "Ese archivo ya no está en el índice de la biblioteca. Escanea y vuelve a intentarlo."
   },
-  "LIBRARY_FILE_NOT_AN_ALTERNATE": {
-    "title": "Esa es la copia en uso",
-    "description": "Es el archivo que tu biblioteca sirve de verdad, así que no se puede descartar como duplicado."
+  "LIBRARY_FILE_MISSING": {
+    "title": "Esa copia ya no está",
+    "description": "El fichero ya no está en el disco. Lanza un escaneo de la biblioteca para que Synthseek se ponga al día."
   }
 }

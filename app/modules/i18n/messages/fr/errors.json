@@ -295,8 +295,8 @@
     "title": "Fichier introuvable",
     "description": "Ce fichier n'est plus dans l'index de la bibliothèque. Lancez une analyse et réessayez."
   },
-  "LIBRARY_FILE_NOT_AN_ALTERNATE": {
-    "title": "C'est la copie utilisée",
-    "description": "C'est le fichier que votre bibliothèque diffuse réellement, il ne peut pas être écarté comme doublon."
+  "LIBRARY_FILE_MISSING": {
+    "title": "Cette copie a disparu",
+    "description": "Le fichier n'est plus sur le disque. Lancez un scan de la bibliothèque pour que Synthseek se remette à jour."
   }
 }

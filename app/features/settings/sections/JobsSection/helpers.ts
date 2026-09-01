@@ -1,4 +1,9 @@
 import i18n from "@locale";
+import type { TFunction } from "i18next";
+
+import { formatBytes } from "@utils/formatters";
+
+import type { DuplicateGroupSummary } from "./types";
 
 import { DAY_MS, HOUR_MS, MINUTE_MS } from "./constants";
 
@@ -45,4 +50,25 @@ export function formatNextRun(date: Date | null, now: number): NextRunParts {
 
   const days = Math.round(hours / 24);
   return { value: String(days), unit: "d" };
+}
+
+export function describeCopies(group: DuplicateGroupSummary, t: TFunction<"settings">): string {
+  const parts = [t("libraryScan.duplicates.copies", { count: group.copies.length })];
+  if (group.formats.length > 0) parts.push(group.formats.map((format) => format.toUpperCase()).join(" + "));
+  const lengths = group.distinctLengths;
+  parts.push(
+    lengths !== null && lengths > 1
+      ? t("libraryScan.duplicates.distinctLengths", { count: lengths })
+      : group.minBytes === group.maxBytes
+        ? t("libraryScan.duplicates.sizeEach", { size: formatBytes(group.maxBytes) })
+        : t("libraryScan.duplicates.sizeRange", {
+            from: formatBytes(group.minBytes),
+            to: formatBytes(group.maxBytes),
+          })
+  );
+  return parts.join(" · ");
+}
+
+export function copyAudioUrl(fileId: string): string {
+  return `/api/v1/library-copies/${encodeURIComponent(fileId)}/audio`;
 }

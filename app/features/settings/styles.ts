@@ -266,26 +266,16 @@ export const jobPlayButton = cva(
 export const scanStatGrid = cva("grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5");
 
 export const scanStatAction = cva(
-  "text-fg hover:text-accent text-lg font-semibold tabular-nums underline-offset-4 transition-colors hover:underline"
+  "text-primary-400 focus-visible:ring-primary-500/50 rounded text-lg font-semibold tabular-nums underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:outline-none"
 );
 
 export const scanHeaderMeta = cva("text-fg/55 flex items-center gap-2 text-xs whitespace-nowrap");
 
-export const scanDupRow = cva(
-  "border-fg/10 flex flex-col gap-2 border-b py-3 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
-);
-
-export const scanDupTitle = cva("text-fg truncate text-sm font-medium");
-
-export const scanDupMeta = cva("text-fg/55 text-xs");
-
-export const scanDupCopies = cva("text-fg/45 mt-1 flex flex-col gap-0.5 text-xs");
-
-export const scanStat = cva("border-fg/10 bg-fg/[0.03] flex flex-col gap-0.5 rounded-lg border p-3");
+export const scanStat = cva("border-fg/10 bg-fg/[0.03] flex flex-col items-center gap-0.5 rounded-lg border p-3");
 
 export const scanStatValue = cva("text-fg text-lg font-semibold tabular-nums");
 
-export const scanStatLabel = cva("text-fg/50 text-[11px] font-semibold uppercase tracking-wider");
+export const scanStatLabel = cva("text-fg/50 text-center text-[11px] font-semibold tracking-wider uppercase");
 
 export const scanMetaRow = cva("text-fg/60 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs");
 
@@ -299,10 +289,6 @@ export const scanUnlinkedItem = cva("text-fg/60 truncate text-xs");
 
 export const scanCopyRow = cva("flex items-center justify-between gap-3");
 
-export const scanCopyDiscard = cva(
-  "border-fg/10 text-fg/50 hover:border-destructive-vivid/40 hover:text-destructive-vivid focus-visible:ring-ring flex size-6 shrink-0 cursor-pointer items-center justify-center rounded border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-3"
-);
-
 export const subSection = cva("flex flex-col gap-4 border-t border-fg/10 pt-5");
 
 export const subSectionHeader = cva("flex items-start justify-between gap-3");
@@ -314,3 +300,79 @@ export const subSectionTitle = cva("text-fg text-sm font-semibold");
 export const subSectionDescription = cva("text-fg/60 text-xs");
 
 export const copyRow = cva("flex items-stretch gap-2");
+
+export const dupTabs = cva("border-fg/10 flex gap-6 overflow-x-auto border-b");
+
+export const dupTab = cva(
+  "flex items-center gap-2 border-b-2 py-2.5 text-[13.5px] font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-primary-500/50 focus-visible:outline-none",
+  {
+    variants: {
+      active: {
+        true: "text-fg border-primary-500",
+        false: "text-fg/55 hover:text-fg/80 border-transparent",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);
+
+export const dupTabCount = cva("rounded-full bg-current/15 px-1.5 py-0.5 text-[11px] font-bold");
+
+export const dupBanner = cva("flex flex-wrap gap-3.5 rounded-xl border p-4", {
+  variants: {
+    tone: {
+      safe: "text-success-vivid border-current/25 bg-current/10 items-center",
+      review: "text-warning-vivid border-current/25 bg-current/10 items-start",
+    },
+  },
+  defaultVariants: { tone: "safe" },
+});
+
+export const dupBannerFigure = cva("text-[22px] font-extrabold tracking-tight");
+
+export const dupBannerTitle = cva("text-[13.5px] font-semibold");
+
+export const dupBannerNote = cva("text-fg/55 text-[12.5px] leading-relaxed");
+
+export const dupScroll = cva("flex max-h-[420px] flex-col gap-2 overflow-y-auto pt-3");
+
+export const dupCard = cva("border-fg/10 bg-fg/[0.02] shrink-0 overflow-hidden rounded-xl border");
+
+export const dupCardHead = cva("flex items-center gap-3.5 p-3");
+
+export const dupCaret = cva(
+  "text-fg/50 hover:text-fg shrink-0 rounded p-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-primary-500/50 focus-visible:outline-none"
+);
+
+export const dupTrackTitle = cva("text-fg truncate text-sm font-semibold");
+
+export const dupTrackMeta = cva("text-fg/55 truncate text-xs");
+
+export const dupReclaim = cva("hidden shrink-0 text-sm font-bold tabular-nums sm:block");
+
+export const dupFiles = cva("border-fg/10 flex flex-col gap-0.5 border-t px-3.5 pt-2.5 pb-3");
+
+export const dupDir = cva("text-fg/45 pt-0.5 pb-1.5 font-mono text-[11px] break-all");
+
+export const dupFileRow = cva("flex items-center gap-2.5 rounded-lg px-2 py-1.5", {
+  variants: { serving: { true: "bg-primary-500/10", false: "even:bg-fg/[0.03]" } },
+  defaultVariants: { serving: false },
+});
+
+export const dupServingBadge = cva(
+  "text-success-vivid bg-current/15 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap"
+);
+
+export const dupFileName = cva("min-w-0 flex-1 font-mono text-xs break-all");
+
+export const dupFileLength = cva("text-fg/70 shrink-0 font-mono text-[11.5px] tabular-nums");
+
+export const dupFileSize = cva("text-fg/50 hidden shrink-0 font-mono text-[11.5px] tabular-nums sm:block");
+
+export const dupPlay = cva(
+  "text-fg/60 hover:text-fg hover:bg-fg/10 focus-visible:ring-primary-500/50 shrink-0 rounded-md p-1 transition-colors focus-visible:ring-2 focus-visible:outline-none"
+);
+
+export const dupKeepThis = cva(
+  "text-primary-400 hover:bg-primary-500/10 focus-visible:ring-primary-500/50 flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[11.5px] font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
+);

@@ -295,8 +295,8 @@
     "title": "Datei nicht gefunden",
     "description": "Diese Datei ist nicht mehr im Bibliotheksindex. Führe einen Scan aus und versuche es erneut."
   },
-  "LIBRARY_FILE_NOT_AN_ALTERNATE": {
-    "title": "Das ist die genutzte Kopie",
-    "description": "Das ist die Datei, die deine Bibliothek tatsächlich ausliefert, sie kann nicht als Duplikat verworfen werden."
+  "LIBRARY_FILE_MISSING": {
+    "title": "Diese Kopie ist weg",
+    "description": "Die Datei liegt nicht mehr auf der Festplatte. Starte einen Bibliotheksscan, damit Synthseek den Stand nachzieht."
   }
 }
