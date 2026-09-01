@@ -40,8 +40,8 @@ export function DownloadSourcesSection() {
           timeouts: data.engine.timeouts,
         }}
       />
-      <YtdlpCard initial={data.downloadSources} />
       <UsenetCard initial={data.downloadSources} />
+      <YtdlpCard initial={data.downloadSources} />
     </div>
   );
 }

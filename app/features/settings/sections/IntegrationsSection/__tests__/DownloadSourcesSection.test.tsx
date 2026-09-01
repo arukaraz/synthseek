@@ -68,4 +68,13 @@ describe("DownloadSourcesSection", () => {
     expect(screen.getByTestId("ytdlp-card")).toBeInTheDocument();
     expect(screen.getByTestId("usenet-card")).toBeInTheDocument();
   });
+
+  it("puts yt-dlp last, so the two-column grid lands it under the tall Slskd card", () => {
+    settingsQuery = createMockQuery<SettingsData | undefined>(data);
+    render(<DownloadSourcesSection />);
+
+    const rendered = screen.getAllByTestId(/-card$/).map((card) => card.dataset.testid);
+
+    expect(rendered).toEqual(["slskd-card", "usenet-card", "ytdlp-card"]);
+  });
 });
