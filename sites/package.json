@@ -13,9 +13,10 @@
     "build": "npm run build --workspace synthseek-docs && npm run build --workspace synthseek-landing",
     "build:docs": "npm run build --workspace synthseek-docs",
     "build:landing": "npm run build --workspace synthseek-landing",
-    "check": "npm run format:check && npm run check --workspace synthseek-docs && npm run check --workspace synthseek-landing",
+    "check": "npm run format:check && npm run check:claims && npm run check --workspace synthseek-docs && npm run check --workspace synthseek-landing",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "check:claims": "node scripts/check-claims.mjs"
   },
   "devDependencies": {
     "prettier": "^3.9.6",
