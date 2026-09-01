@@ -33,10 +33,12 @@ vi.mock("@hooks/api/mutations/settings/useUpdateEngine", () => ({
 vi.mock("@hooks/api/mutations/settings/useRecycleBin", () => ({
   useUpdateLibraryRecycleBin: () => updateRecycleBin,
   useEmptyRecycleBin: () => emptyBin,
+  useRestoreRecycledFile: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
 vi.mock("@hooks/api/queries/useRecycleBin", () => ({
   useRecycleBinStatus: () => statusQuery,
+  useRecycleBinEntries: () => createMockQuery([]),
 }));
 
 import { QualityCard } from "../QualityCard";

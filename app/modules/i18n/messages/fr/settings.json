@@ -229,6 +229,11 @@
         "confirmTitle": "Vider la corbeille ?",
         "confirmMessage": "Tous les fichiers remplacés conservés dans la corbeille seront définitivement supprimés. Cette action est irréversible.",
         "confirm": "Vider la corbeille"
+      },
+      "list": {
+        "toggle_one": "Voir le fichier conservé",
+        "toggle_other": "Voir les {{count}} fichiers conservés",
+        "restore": "Restaurer"
       }
     }
   },

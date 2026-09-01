@@ -298,5 +298,13 @@
   "LIBRARY_FILE_MISSING": {
     "title": "Diese Kopie ist weg",
     "description": "Die Datei liegt nicht mehr auf der Festplatte. Starte einen Bibliotheksscan, damit Synthseek den Stand nachzieht."
+  },
+  "RECYCLE_BIN_ENTRY_NOT_FOUND": {
+    "title": "Diese Datei ist weg",
+    "description": "Sie liegt nicht mehr im Papierkorb. Der Aufbewahrungslauf hat sie womöglich entfernt."
+  },
+  "RECYCLE_BIN_DESTINATION_TAKEN": {
+    "title": "Dort liegt schon etwas",
+    "description": "An der Herkunftsstelle liegt bereits eine Datei, das Wiederherstellen würde sie überschreiben. Verschiebe oder benenne sie zuerst um."
   }
 }

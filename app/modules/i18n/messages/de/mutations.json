@@ -61,7 +61,9 @@
     "stagedReleaseRemoved": "Release entfernt",
     "stagedReleaseRemoveFailed": "Release konnte nicht entfernt werden",
     "stagedReleasesCleared": "Zwischengespeicherte Releases entfernt",
-    "stagedReleasesClearFailed": "Zwischengespeicherte Releases konnten nicht entfernt werden"
+    "stagedReleasesClearFailed": "Zwischengespeicherte Releases konnten nicht entfernt werden",
+    "recycledFileRestored": "{{path}} wiederhergestellt",
+    "recycledFileRestoreFailed": "Diese Datei konnte nicht wiederhergestellt werden"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",

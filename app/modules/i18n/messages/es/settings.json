@@ -229,6 +229,11 @@
         "confirmTitle": "¿Vaciar la papelera?",
         "confirmMessage": "Todos los archivos reemplazados guardados en la papelera se eliminarán permanentemente. Esto no se puede deshacer.",
         "confirm": "Vaciar papelera"
+      },
+      "list": {
+        "toggle_one": "Ver el fichero que guarda",
+        "toggle_other": "Ver los {{count}} ficheros que guarda",
+        "restore": "Restaurar"
       }
     }
   },

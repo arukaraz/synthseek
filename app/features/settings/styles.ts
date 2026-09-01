@@ -376,3 +376,19 @@ export const dupPlay = cva(
 export const dupKeepThis = cva(
   "text-primary-400 hover:bg-primary-500/10 focus-visible:ring-primary-500/50 flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[11.5px] font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
 );
+
+export const binToggle = cva(
+  "text-fg/70 hover:text-fg flex items-center gap-1.5 text-sm font-semibold transition-colors"
+);
+
+export const binRow = cva("border-fg/10 bg-fg/[0.02] flex items-start gap-3 rounded-lg border px-3 py-2.5");
+
+export const binFileName = cva("text-fg/85 font-mono text-[12.5px] break-all");
+
+export const binDir = cva("text-fg/45 font-mono text-[11px] break-all");
+
+export const binRowMeta = cva("text-fg/50 font-mono text-[11px] tabular-nums");
+
+export const binRestore = cva(
+  "text-primary-400 hover:text-primary-300 mt-0.5 focus-visible:ring-primary-500/50 inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
+);

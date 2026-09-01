@@ -298,5 +298,13 @@
   "LIBRARY_FILE_MISSING": {
     "title": "Esa copia ya no está",
     "description": "El fichero ya no está en el disco. Lanza un escaneo de la biblioteca para que Synthseek se ponga al día."
+  },
+  "RECYCLE_BIN_ENTRY_NOT_FOUND": {
+    "title": "Ese fichero ya no está",
+    "description": "Ya no está en la papelera. Puede que el barrido de retención lo haya limpiado."
+  },
+  "RECYCLE_BIN_DESTINATION_TAKEN": {
+    "title": "Ya hay algo ahí",
+    "description": "Hay un fichero donde estaba este, así que restaurarlo lo sobrescribiría. Muévelo o renómbralo primero."
   }
 }

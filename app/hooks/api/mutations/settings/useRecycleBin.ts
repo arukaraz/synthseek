@@ -25,3 +25,15 @@ export function useEmptyRecycleBin() {
     onError: (error) => errorToast(error, "settings.recycleBinEmptyFailed"),
   });
 }
+
+export function useRestoreRecycledFile() {
+  const utils = trpc.useUtils();
+  return trpc.settings.recycleBin.restore.useMutation({
+    onSuccess: ({ relativePath }) => {
+      utils.settings.recycleBin.list.invalidate();
+      utils.settings.recycleBin.status.invalidate();
+      toast.success(i18n.t("mutations:settings.recycledFileRestored", { path: relativePath }));
+    },
+    onError: (error) => errorToast(error, "settings.recycledFileRestoreFailed"),
+  });
+}

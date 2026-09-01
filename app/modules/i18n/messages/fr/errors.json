@@ -298,5 +298,13 @@
   "LIBRARY_FILE_MISSING": {
     "title": "Cette copie a disparu",
     "description": "Le fichier n'est plus sur le disque. Lancez un scan de la bibliothèque pour que Synthseek se remette à jour."
+  },
+  "RECYCLE_BIN_ENTRY_NOT_FOUND": {
+    "title": "Ce fichier a disparu",
+    "description": "Il n'est plus dans la corbeille. Le nettoyage de rétention l'a peut-être supprimé."
+  },
+  "RECYCLE_BIN_DESTINATION_TAKEN": {
+    "title": "Il y a déjà quelque chose",
+    "description": "Un fichier occupe déjà l'emplacement d'origine, le restaurer l'écraserait. Déplacez-le ou renommez-le d'abord."
   }
 }

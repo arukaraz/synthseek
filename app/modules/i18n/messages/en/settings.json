@@ -229,6 +229,11 @@
         "confirmTitle": "Empty the recycle bin?",
         "confirmMessage": "All replaced files kept in the recycle bin will be permanently removed. This cannot be undone.",
         "confirm": "Empty recycle bin"
+      },
+      "list": {
+        "toggle_one": "Show the one file it holds",
+        "toggle_other": "Show the {{count}} files it holds",
+        "restore": "Restore"
       }
     }
   },

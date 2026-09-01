@@ -61,7 +61,9 @@
     "stagedReleaseRemoved": "Release removed",
     "stagedReleaseRemoveFailed": "Could not remove the release",
     "stagedReleasesCleared": "Staged releases cleared",
-    "stagedReleasesClearFailed": "Could not clear the staged releases"
+    "stagedReleasesClearFailed": "Could not clear the staged releases",
+    "recycledFileRestored": "Restored {{path}}",
+    "recycledFileRestoreFailed": "Could not restore that file"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",

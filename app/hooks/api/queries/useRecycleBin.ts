@@ -5,3 +5,10 @@ export function useRecycleBinStatus() {
     staleTime: 30 * 1000,
   });
 }
+
+export function useRecycleBinEntries(enabled: boolean) {
+  return trpc.settings.recycleBin.list.useQuery(undefined, {
+    enabled,
+    staleTime: 30 * 1000,
+  });
+}

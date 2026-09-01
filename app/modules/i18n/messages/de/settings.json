@@ -229,6 +229,11 @@
         "confirmTitle": "Papierkorb leeren?",
         "confirmMessage": "Alle im Papierkorb aufbewahrten ersetzten Dateien werden endgültig entfernt. Dies kann nicht rückgängig gemacht werden.",
         "confirm": "Papierkorb leeren"
+      },
+      "list": {
+        "toggle_one": "Die eine enthaltene Datei anzeigen",
+        "toggle_other": "Die {{count}} enthaltenen Dateien anzeigen",
+        "restore": "Wiederherstellen"
       }
     }
   },

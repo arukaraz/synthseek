@@ -21,6 +21,7 @@ import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
 import { ENGINE_DEFAULTS } from "./defaults";
+import { RecycleBinList } from "./RecycleBinList";
 import { quarantineListHeader, quarantineValue } from "./styles";
 import type { QualityCardProps } from "./types";
 
@@ -124,6 +125,7 @@ export function QualityCard({ initial, recycleBin }: QualityCardProps) {
               </span>
             }
           />
+          <RecycleBinList entryCount={status.data.entryCount} />
         </>
       ) : null}
 

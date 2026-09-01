@@ -61,7 +61,9 @@
     "stagedReleaseRemoved": "Disco eliminado",
     "stagedReleaseRemoveFailed": "No se pudo eliminar el disco",
     "stagedReleasesCleared": "Discos en espera eliminados",
-    "stagedReleasesClearFailed": "No se pudieron eliminar los discos en espera"
+    "stagedReleasesClearFailed": "No se pudieron eliminar los discos en espera",
+    "recycledFileRestored": "Restaurado {{path}}",
+    "recycledFileRestoreFailed": "No se pudo restaurar ese fichero"
   },
   "plexConnect": {
     "timedOut": "El inicio de sesión de Plex agotó el tiempo de espera",

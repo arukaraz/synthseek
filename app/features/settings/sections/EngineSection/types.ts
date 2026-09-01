@@ -60,3 +60,7 @@ export interface TimeoutsCardProps {
     queueWaitIdlePeer: number;
   };
 }
+
+export interface RecycleBinListProps {
+  entryCount: number;
+}
