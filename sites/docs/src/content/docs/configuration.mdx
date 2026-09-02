@@ -116,21 +116,9 @@ The [Download Engine page](/download-engine) covers what happens to a file these
 
 **Quality**
 
-| Setting               | Default | What it does                                          |
-| --------------------- | ------- | ----------------------------------------------------- |
-| Upgrades enabled      | On      | Allow replacing a library file with a better copy.    |
-| Recycle bin retention | 30 days | How long a replaced file stays recoverable. 1 to 365. |
-
-Alongside them, what the recycle bin currently holds, the files it is keeping, a **Restore** on each one, and a button to empty it.
-
-**Quarantine**
-
-| Setting                        | Default        | What it does                                                                                                                                                     |
-| ------------------------------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AcoustID identity gate         | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose audio is by a different artist is refused. Needs an AcoustID key. |
-| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures.                                                                                                                             |
-
-Below them, the list of current entries with the reason for each, and a link to the banned-peer list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
+| Setting          | Default | What it does                                       |
+| ---------------- | ------- | -------------------------------------------------- |
+| Upgrades enabled | On      | Allow replacing a library file with a better copy. |
 
 **Wanted**
 
@@ -143,6 +131,35 @@ Below them, the list of current entries with the reason for each, and a link to 
 **Smart search**
 
 Custom mood keywords, which extend the built-in mood classification with terms of your own.
+
+### Maintenance
+
+Administrators only. Four pages, each holding the list it is about and the one setting that governs it. Every page carries a live count in the sidebar, and the section itself shows a dot while anything is waiting.
+
+**Review**
+
+The files held back because they failed verification, with the reason for each. Nothing arrives until you approve or discard. Its retention is set from the footer of the review queue.
+
+**Duplicates**
+
+Tracks with more than one copy on disk. The ones it could prove identical are already settled; what waits here is what it could not.
+
+**Recycle bin**
+
+| Setting               | Default | What it does                                          |
+| --------------------- | ------- | ----------------------------------------------------- |
+| Recycle bin retention | 30 days | How long a replaced file stays recoverable. 1 to 365. |
+
+Alongside it, what the bin currently holds, the files it is keeping, a **Restore** on each one, and a button to empty it.
+
+**Quarantine**
+
+| Setting                        | Default        | What it does                                                                                                                                                     |
+| ------------------------------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AcoustID identity gate         | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose audio is by a different artist is refused. Needs an AcoustID key. |
+| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures.                                                                                                                             |
+
+Below them, the list of current entries with the reason for each, and a link to the banned-peer list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
 
 ### Jobs
 
@@ -160,10 +177,10 @@ Administrators only. Covered on the [Operations page](/operations). The log leve
 
 Two live where you use them rather than in a settings section.
 
-| Setting                                               | Default                   | Where                                                            |
-| ----------------------------------------------------- | ------------------------- | ---------------------------------------------------------------- |
-| Review queue retention                                | 14 days                   | The footer of the review queue on the Requests screen. 1 to 365. |
-| Per-request format, bitrate, matching, speed, sources | See [Features](/features) | The request window, stored on the request itself.                |
+| Setting                                               | Default                   | Where                                                                                  |
+| ----------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------- |
+| Review queue retention                                | 14 days                   | The footer of the review queue, on the Requests screen or under Maintenance. 1 to 365. |
+| Per-request format, bitrate, matching, speed, sources | See [Features](/features) | The request window, stored on the request itself.                                      |
 
 ## Environment variables
 
