@@ -111,15 +111,16 @@ Then run `/mcp` and complete the authorisation in your browser.
 
 ### System and operations
 
-| Tool                | What it does                                           |
-| ------------------- | ------------------------------------------------------ |
-| `get_queue_stats`   | The queue at a glance, including whether it is paused. |
-| `pause_queue`       | Pause the queue and everything in progress.            |
-| `resume_queue`      | Resume.                                                |
-| `trigger_job`       | Run a background job now.                              |
-| `get_system_health` | Check Synthseek and its connected services.            |
-| `list_log_files`    | The available log files.                               |
-| `read_logs`         | Recent log entries, for troubleshooting.               |
+| Tool                | What it does                                                    |
+| ------------------- | --------------------------------------------------------------- |
+| `get_queue_stats`   | The queue at a glance, including whether it is paused.          |
+| `pause_queue`       | Pause the queue and everything in progress.                     |
+| `resume_queue`      | Resume.                                                         |
+| `trigger_job`       | Start a background job now. It returns once the job is running. |
+| `list_jobs`         | List the background jobs and which are doing work right now.    |
+| `get_system_health` | Check Synthseek and its connected services.                     |
+| `list_log_files`    | The available log files.                                        |
+| `read_logs`         | Recent log entries, for troubleshooting.                        |
 
 ## Two things worth knowing
 

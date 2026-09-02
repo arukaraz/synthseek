@@ -259,6 +259,8 @@ export const jobNextRunUnit = cva("text-fg/55 ml-0.5 text-xs");
 
 export const jobInProgress = cva("text-fg/70 inline-flex items-center gap-1.5 text-sm font-medium");
 
+export const jobLastRunFailed = cva("text-destructive-vivid text-sm font-medium");
+
 export const jobPlayButton = cva(
   "border-primary-500/30 bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 focus-visible:ring-ring flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-3.5 [&_svg]:shrink-0"
 );

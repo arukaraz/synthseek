@@ -759,9 +759,10 @@
     },
     "row": {
       "inProgress": "En curso",
+      "lastRunFailed": "La última ejecución falló",
       "nextRunFallback": "Inactiva",
-      "running": "Ejecutando {{name}}",
-      "runNow": "Ejecutar {{name}} ahora"
+      "runNow": "Ejecutar {{name}} ahora",
+      "running": "Ejecutando {{name}}"
     },
     "interval": {
       "everyMinute": "Cada minuto",

@@ -82,4 +82,23 @@ describe("JobRow", () => {
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
   });
+
+  it("stays in progress from the server's running flag after the trigger request has settled", () => {
+    trigger.isPending = false;
+    render(<JobRow job={{ ...job, running: true }} />);
+    expect(screen.getByText(enSettings.jobs.row.inProgress)).toBeInTheDocument();
+    const name = enSettings.jobs.registry["library-sync"].name;
+    expect(screen.getByRole("button", { name: `Running ${name}` })).toBeDisabled();
+  });
+
+  it("surfaces a failed last run once the job is no longer running", () => {
+    render(<JobRow job={{ ...job, running: false, lastStatus: "failed" }} />);
+    expect(screen.getByText(enSettings.jobs.row.lastRunFailed)).toBeInTheDocument();
+  });
+
+  it("hides the failed marker while the job is running again", () => {
+    render(<JobRow job={{ ...job, running: true, lastStatus: "failed" }} />);
+    expect(screen.queryByText(enSettings.jobs.row.lastRunFailed)).not.toBeInTheDocument();
+    expect(screen.getByText(enSettings.jobs.row.inProgress)).toBeInTheDocument();
+  });
 });

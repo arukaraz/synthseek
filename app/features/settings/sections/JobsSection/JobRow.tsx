@@ -12,6 +12,7 @@ import {
   jobDescription,
   jobInfo,
   jobInProgress,
+  jobLastRunFailed,
   jobName,
   jobNextRun,
   jobNextRunLabel,
@@ -28,7 +29,8 @@ export function JobRow({ job }: JobRowProps) {
   const { t } = useTranslation("settings");
   const trigger = useTriggerJob();
   const now = useNow();
-  const isRunning = trigger.isPending;
+  const isRunning = job.running || trigger.isPending;
+  const lastRunFailed = job.lastStatus === "failed";
   const nextRun = formatNextRun(job.nextRun, now);
   const name = t(JOB_NAME_KEYS[job.id]);
 
@@ -46,6 +48,8 @@ export function JobRow({ job }: JobRowProps) {
               {t("jobs.row.inProgress")}
               <LoadingDots size="sm" />
             </span>
+          ) : lastRunFailed ? (
+            <span className={jobLastRunFailed()}>{t("jobs.row.lastRunFailed")}</span>
           ) : (
             <span className={jobNextRunValue()}>
               {nextRun.value}
