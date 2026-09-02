@@ -2,6 +2,79 @@
   "schemaVersion": 1,
   "versions": [
     {
+      "version": "2.6.0",
+      "date": "2026-09-02",
+      "type": "minor",
+      "title": "",
+      "callouts": [
+        {
+          "level": "important",
+          "body": "This release changes the database. The schema changes run on first start, fourteen of them coming from 2.5.0 and more if you are further back, and before touching anything Synthseek writes a snapshot of your database to /data/backups. Your tracks, playlists, members and settings come across unchanged. The start itself is quick, seconds rather than minutes."
+        },
+        {
+          "level": "warning",
+          "body": "Do not go back to 2.5.0 or older once you have started 2.6.0. Track identity moves into its own tables and a column the older version still reads is gone. The old version will start and report itself healthy, but it can no longer recover an interrupted download queue. If you need to go back, restore the snapshot from /data/backups rather than only changing the image tag, and pin the new version in your compose file so a redeploy cannot quietly move you back."
+        },
+        {
+          "level": "important",
+          "body": "The first start after updating scans your whole music folder, because Synthseek now keeps its own index of what is on disk. Nothing is moved or written while it does. Until that first scan finishes the new duplicates page is empty and the counts on the also new library scan card are still climbing, which is expected rather than a sign it found nothing."
+        },
+        {
+          "level": "note",
+          "body": "Checking that a download really is the song you asked for has not been working. It was sending a fractional length to AcoustID, which rejects it outright, and the rejection read like an honest no-match, so almost nothing was ever checked. That is fixed, so the check now runs for real. Expect downloads to start arriving in the review queue under Settings, then Maintenance, then Review, where you approve or discard them. That queue being busy after the update is the check working, not a new fault."
+        }
+      ],
+      "sections": [
+        {
+          "heading": "Play your library in a normal music app",
+          "category": "feature",
+          "items": [
+            "Synthseek can now speak the Subsonic API, so apps like Feishin and Symfonium can browse and play your library directly, on the desktop or the phone, without going through the web interface.",
+            "It is off until you turn it on. Under Settings, then Integrations, the Connect apps card switches it on and creates the credentials each app needs, and revokes them one at a time when you want an app to lose access.",
+            "Apps can change things, not only play them: starring a track, making and editing playlists, scrobbling what you played, and picking up a saved queue on another device.",
+            "When an app asks for a lower quality than the file on disk, the stream is converted on the fly so it still plays, and you can switch that off if you would rather it never re-encoded anything.",
+            "Only tracks whose file location Synthseek has on record can be offered, which is what the new library scan is working out. The Connect apps card shows how many tracks are ready and how many are not."
+          ]
+        },
+        {
+          "heading": "Usenet as a third place to get music",
+          "category": "feature",
+          "items": [
+            "Alongside Soulseek and the YouTube downloader, Synthseek can now search a Usenet indexer and hand the download to SABnzbd. It is off by default and needs your indexer address and key plus your SABnzbd address and key, under Settings, then Integrations, then Download sources.",
+            "A release downloaded for one track is kept for a short while and reused for its siblings on the same album, rather than pulled again per track, and what is still sitting on disk is listed so you can clear it.",
+            "You can choose which sources a request may use and in what order, per request, rather than accepting the same chain every time."
+          ]
+        },
+        {
+          "heading": "Your library, and the copies you did not know you had",
+          "category": "feature",
+          "items": [
+            "The library scan indexes the audio files on your disk and works out which track each one holds, so files you copied in by hand stop being invisible to Synthseek. It has its own card on the Jobs page showing what it can and cannot see, and it follows a file that merely moved instead of counting it as one loss and one arrival.",
+            "Tracks with more than one copy on disk get their own page under Settings, then Maintenance. Copies it can prove are the same recording are settled on their own, keeping the best file and pointing your library at it. Proof means the copies agree on both their title and their length, because a remix, a live take or a truncated download can carry the title of the track it was filed against while being a different recording.",
+            "What it cannot prove waits for you, showing how many clearly different lengths the copies come in, and letting you play any copy before choosing the one to keep.",
+            "Nothing is deleted outright. A copy it sets aside goes to a recycle bin under Settings, then Maintenance, with a Restore that puts the file back where it came from, for as long as the retention window keeps it.",
+            "Review, duplicates, the recycle bin and quarantine now sit together under Maintenance, with a count on each so you can see what is waiting without opening them."
+          ]
+        },
+        {
+          "heading": "Artists that stay the same artist",
+          "category": "improvement",
+          "items": [
+            "Artists now have an identity of their own rather than being matched by name each time, so the same artist spelled two ways stops being two artists. Existing artists are filled in during the update, and their MusicBrainz identifiers are looked up gradually in the background afterwards, slowly on purpose so the service is not hammered."
+          ]
+        },
+        {
+          "heading": "Smaller things",
+          "category": "fix",
+          "items": [
+            "Pressing run on a background job no longer shows an error for a job that is simply taking a while. A long job now reports itself as in progress until it finishes, and a run that ended badly is flagged on its row.",
+            "The YouTube downloader is listed under Soulseek in the download sources, matching the order they are actually tried in.",
+            "A bitrate recorded as an implausible value is cleared during the update rather than left to be shown as fact, and an existing library's bitrates are measured so a quality cap can be judged against them."
+          ]
+        }
+      ]
+    },
+    {
       "version": "2.5.0",
       "date": "2026-08-19",
       "type": "minor",
