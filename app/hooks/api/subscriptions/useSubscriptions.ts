@@ -13,7 +13,7 @@ import {
   handlePortabilityProgress,
   handleTrackUpdate,
 } from "./handlers/requests";
-import { handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
+import { handleMaintenanceUpdate, handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
 import { invalidateLibraryViews } from "./shared/libraryInvalidation";
 import { resyncPushFedQueries } from "./shared/pushFedResync";
@@ -77,6 +77,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.SettingsUpdate:
           handleSettingsUpdate(event, utils);
+          break;
+        case SubscriptionEventType.MaintenanceUpdate:
+          handleMaintenanceUpdate(event, utils);
           break;
         case SubscriptionEventType.PortabilityProgress:
           handlePortabilityProgress(event, viewerId);

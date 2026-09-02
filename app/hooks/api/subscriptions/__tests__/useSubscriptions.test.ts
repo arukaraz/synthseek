@@ -33,9 +33,15 @@ const utilsStub = vi.hoisted(() => ({
     getLibrarySummary: { invalidate: vi.fn() },
     getPlexSyncAllItems: { invalidate: vi.fn() },
     getPlexSyncAllState: { invalidate: vi.fn() },
+    review: { list: { invalidate: vi.fn() } },
   },
   settings: {
     get: { invalidate: vi.fn() },
+    recycleBin: { list: { invalidate: vi.fn() }, status: { invalidate: vi.fn() } },
+    quarantine: { list: { invalidate: vi.fn() } },
+  },
+  maintenance: {
+    counts: { invalidate: vi.fn() },
   },
   import: {
     listBatches: { invalidate: vi.fn() },
@@ -47,6 +53,7 @@ const utilsStub = vi.hoisted(() => ({
     getPlaylists: { invalidate: vi.fn() },
     getTracks: { invalidate: vi.fn() },
     getCounts: { invalidate: vi.fn() },
+    scan: { duplicateGroups: { invalidate: vi.fn() }, status: { invalidate: vi.fn() } },
   },
 }));
 
@@ -58,6 +65,13 @@ const everyPushFedInvalidate = [
   utilsStub.settings.get.invalidate,
   utilsStub.import.listBatches.invalidate,
   utilsStub.import.getBatch.invalidate,
+  utilsStub.maintenance.counts.invalidate,
+  utilsStub.requests.review.list.invalidate,
+  utilsStub.library.scan.duplicateGroups.invalidate,
+  utilsStub.library.scan.status.invalidate,
+  utilsStub.settings.recycleBin.list.invalidate,
+  utilsStub.settings.recycleBin.status.invalidate,
+  utilsStub.settings.quarantine.list.invalidate,
   utilsStub.library.getAlbums.invalidate,
   utilsStub.library.getArtists.invalidate,
   utilsStub.library.getPlaylists.invalidate,

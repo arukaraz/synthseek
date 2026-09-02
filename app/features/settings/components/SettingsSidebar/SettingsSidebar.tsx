@@ -11,7 +11,10 @@ import { cn } from "@utils/cn";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { sidebar, sidebarFooter, sidebarGroupButton, sidebarGroupLabel, sidebarItem } from "../../styles";
+import { useMaintenanceCounts } from "@hooks/api/queries/useMaintenanceCounts";
+
 import { ADVANCED_ITEMS, BUILD_VERSION, TOP_LEVEL } from "./constants";
+import { MaintenanceBranch } from "./MaintenanceBranch";
 import type { SettingsSidebarProps } from "./types";
 
 export function SettingsSidebar({ className }: SettingsSidebarProps) {
@@ -19,6 +22,7 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
   const pathname = usePathname();
   const { isAdmin } = useAuthContext();
   const [advancedOpen, setAdvancedOpen] = useState(true);
+  const counts = useMaintenanceCounts(isAdmin);
 
   const topItems = TOP_LEVEL.filter((item) => !item.adminOnly || isAdmin);
   const advancedItems = ADVANCED_ITEMS.filter((item) => !item.adminOnly || isAdmin);
@@ -65,16 +69,21 @@ export function SettingsSidebar({ className }: SettingsSidebarProps) {
                 transition={{ duration: 0.15 }}
                 className="flex flex-col gap-0.5 overflow-hidden"
               >
-                {advancedItems.map((item) => {
-                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                {advancedItems.map((entry) => {
+                  if (entry.kind === "branch") {
+                    return (
+                      <MaintenanceBranch key={entry.href} branch={entry} counts={counts.data} pathname={pathname} />
+                    );
+                  }
+                  const active = pathname === entry.href || pathname.startsWith(`${entry.href}/`);
                   return (
                     <Link
-                      key={item.href}
-                      href={item.href}
+                      key={entry.href}
+                      href={entry.href}
                       className={cn(sidebarItem({ active }), "[&_svg]:size-3.5 [&_svg]:shrink-0")}
                     >
-                      {item.icon}
-                      {t(item.labelKey)}
+                      {entry.icon}
+                      {t(entry.labelKey)}
                     </Link>
                   );
                 })}

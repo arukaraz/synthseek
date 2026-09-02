@@ -20,6 +20,10 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+vi.mock("@hooks/api/queries/useMaintenanceCounts", () => ({
+  useMaintenanceCounts: () => ({ data: { review: 2, duplicates: 5, recycleBin: 78, quarantine: 12 } }),
+}));
+
 vi.mock("@modules/providers/AuthProvider", () => ({
   useAuthContext: () => ({ isAdmin, currentUser: null, isLoading: false }),
 }));

@@ -5,6 +5,8 @@ const DEDUP_MAX_ENTRIES = 100;
 
 function eventKey(event: SubscriptionEvent): string {
   switch (event.eventType) {
+    case SubscriptionEventType.MaintenanceUpdate:
+      return `${event.eventType}:${event.surface}`;
     case SubscriptionEventType.TrackUpdate:
       return `${event.eventType}:${event.requestId}:${event.status}:${event.progress ?? ""}`;
     case SubscriptionEventType.AlbumUpdate:
