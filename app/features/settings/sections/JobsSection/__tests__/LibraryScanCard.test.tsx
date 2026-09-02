@@ -26,8 +26,6 @@ type ScanStatus = {
     linkedFiles: number;
     unlinkedFiles: number;
     missingFiles: number;
-    duplicateFiles: number;
-    duplicateBytes: number;
   };
 };
 
@@ -86,8 +84,6 @@ function makeStatus(overrides: Partial<ScanStatus> = {}): ScanStatus {
       linkedFiles: 5451,
       unlinkedFiles: 2883,
       missingFiles: 0,
-      duplicateFiles: 325,
-      duplicateBytes: 3_300_000_000,
     },
     ...overrides,
   };
@@ -104,23 +100,13 @@ describe("LibraryScanCard", () => {
     expect(screen.getByText("2,883")).toBeInTheDocument();
   });
 
-  it("counts the duplicated copies and what they take, as its own figure", () => {
+  it("no longer offers duplicates here, since Maintenance owns them and counts tracks not copies", () => {
     statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
 
     render(<LibraryScanCard />);
 
-    expect(screen.getByRole("button", { name: "325" })).toBeInTheDocument();
-    expect(screen.getByText((text) => text.includes("3.1 GB"))).toBeInTheDocument();
-  });
-
-  it("does not offer the duplicates as a link when there are none", () => {
-    const status = makeStatus();
-    status.inventory.duplicateFiles = 0;
-    statusQuery = createMockQuery<ScanStatus | undefined>(status);
-
-    render(<LibraryScanCard />);
-
-    expect(screen.queryByRole("button", { name: "0" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "325" })).not.toBeInTheDocument();
+    expect(screen.queryByText(/3\.1 GB/)).not.toBeInTheDocument();
   });
 
   it("says in the header how long ago the last scan finished", () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterEach } from "vitest";
-import { render, screen, cleanup, fireEvent, waitFor, within } from "@testing-library/react";
+import { render, screen, cleanup, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import i18n from "@modules/i18n";
@@ -7,7 +7,7 @@ import i18n from "@modules/i18n";
 import enComponents from "@modules/i18n/messages/en/components.json";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
-import { createMockMutation, createMockQuery, createLoadingQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
+import { createMockMutation, createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
 import type { QualityCardProps } from "../types";
 
@@ -73,81 +73,5 @@ describe("QualityCard", () => {
       expect(updateQuality.mutateAsync).toHaveBeenCalledWith({ upgradeEnabled: false });
     });
     expect(updateRecycleBin.mutateAsync).not.toHaveBeenCalled();
-  });
-
-  it("saves the full library.recycleBin draft without touching the quality settings", async () => {
-    render(<QualityCard initial={initial} recycleBin={recycleBin} />);
-
-    fireEvent.change(screen.getByLabelText(enSettings.quality.recycleBin.retentionDays.ariaLabel), {
-      target: { value: "90" },
-    });
-    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
-
-    await waitFor(() => {
-      expect(updateRecycleBin.mutateAsync).toHaveBeenCalledWith({ retentionDays: 90 });
-    });
-    expect(updateQuality.mutateAsync).not.toHaveBeenCalled();
-  });
-
-  it("shows independent save bars when both drafts are dirty", async () => {
-    render(<QualityCard initial={initial} recycleBin={recycleBin} />);
-
-    await userEvent.click(screen.getByRole("switch", { name: enSettings.quality.upgradeEnabled.label }));
-    fireEvent.change(screen.getByLabelText(enSettings.quality.recycleBin.retentionDays.ariaLabel), {
-      target: { value: "7" },
-    });
-
-    const saveButtons = screen.getAllByRole("button", { name: enSettings.shell.saveBar.save });
-    expect(saveButtons).toHaveLength(2);
-
-    await userEvent.click(saveButtons[1]);
-    await waitFor(() => {
-      expect(updateRecycleBin.mutateAsync).toHaveBeenCalledWith({ retentionDays: 7 });
-    });
-    expect(updateQuality.mutateAsync).not.toHaveBeenCalled();
-  });
-
-  it("renders the recycle bin status with a human-readable size, count and oldest date", () => {
-    statusQuery = createMockQuery<RecycleBinStatus>({
-      totalBytes: 5 * 1024 * 1024,
-      entryCount: 12,
-      oldestDate: "2026-07-01",
-    });
-    render(<QualityCard initial={initial} recycleBin={recycleBin} />);
-
-    expect(screen.getByText("5.0 MB")).toBeInTheDocument();
-    expect(screen.getByText("12")).toBeInTheDocument();
-    expect(screen.getByText(/2026/)).toBeInTheDocument();
-  });
-
-  it("renders a dash for the oldest date when the recycle bin is empty", () => {
-    render(<QualityCard initial={initial} recycleBin={recycleBin} />);
-
-    expect(screen.getByText("0 B")).toBeInTheDocument();
-    expect(screen.getByText("-")).toBeInTheDocument();
-  });
-
-  it("renders the loading state while the status is fetching", () => {
-    statusQuery = createLoadingQuery<RecycleBinStatus>();
-    render(<QualityCard initial={initial} recycleBin={recycleBin} />);
-
-    expect(screen.getByText(enSettings.quality.recycleBin.status.loading)).toBeInTheDocument();
-  });
-
-  it("hides the empty action when the recycle bin has no entries", () => {
-    render(<QualityCard initial={initial} recycleBin={recycleBin} />);
-
-    expect(screen.queryByRole("button", { name: enSettings.quality.recycleBin.empty.action })).not.toBeInTheDocument();
-  });
-
-  it("empties the recycle bin only after confirmation", async () => {
-    statusQuery = createMockQuery<RecycleBinStatus>({ totalBytes: 2048, entryCount: 3, oldestDate: "2026-07-15" });
-    render(<QualityCard initial={initial} recycleBin={recycleBin} />);
-
-    await userEvent.click(screen.getByRole("button", { name: enSettings.quality.recycleBin.empty.action }));
-    const dialog = await screen.findByRole("dialog");
-    await userEvent.click(within(dialog).getByRole("button", { name: enSettings.quality.recycleBin.empty.confirm }));
-
-    expect(emptyBin.mutate).toHaveBeenCalled();
   });
 });

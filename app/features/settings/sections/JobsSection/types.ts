@@ -8,9 +8,8 @@ export interface JobRowProps {
   job: JobSummary;
 }
 
-export interface DuplicatesDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
+export interface DuplicatesContentProps {
+  enabled: boolean;
   reclaiming: boolean;
 }
 

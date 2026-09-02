@@ -89,14 +89,13 @@ describe("EngineSection", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the seven engine cards when data is present", () => {
+  it("renders the six engine cards when data is present, with quarantine now under Maintenance", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<EngineSection />);
     expect(screen.getByTestId("smart-search-card")).toBeInTheDocument();
     expect(screen.getByTestId("timeouts-card")).toBeInTheDocument();
     expect(screen.getByTestId("queue-card")).toBeInTheDocument();
     expect(screen.getByTestId("import-card")).toBeInTheDocument();
-    expect(screen.getByTestId("quarantine-card")).toBeInTheDocument();
     expect(screen.getByTestId("wanted-card")).toBeInTheDocument();
     expect(screen.getByTestId("quality-card")).toBeInTheDocument();
   });

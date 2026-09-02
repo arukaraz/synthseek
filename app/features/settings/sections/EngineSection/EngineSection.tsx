@@ -8,7 +8,6 @@ import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
 import { ImportCard } from "./ImportCard";
 import { QualityCard } from "./QualityCard";
-import { QuarantineCard } from "./QuarantineCard";
 import { QueueCard } from "./QueueCard";
 import { SmartSearchCard } from "./SmartSearchCard";
 import { TimeoutsCard } from "./TimeoutsCard";
@@ -51,14 +50,7 @@ export function EngineSection() {
         <QueueCard initial={data.engine.queue} />
         <ImportCard initial={data.engine.import} />
         <WantedCard initial={data.engine.wanted} />
-        <QualityCard initial={data.engine.quality} recycleBin={data.library.recycleBin} />
-        <QuarantineCard
-          initial={data.engine.import}
-          sourceTrust={{
-            bannedUsersCount: data.connections.slskd.bannedUsers.length,
-            banAfterFailedAttempts: data.engine.search.banAfterFailedAttempts,
-          }}
-        />
+        <QualityCard initial={data.engine.quality} />
       </div>
     </div>
   );

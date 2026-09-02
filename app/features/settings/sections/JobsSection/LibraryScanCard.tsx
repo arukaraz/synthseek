@@ -1,26 +1,23 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2, Play, Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { LoadingDots } from "@components/ui/LoadingDots";
+import { formatRelativeTime } from "@utils/formatters";
 import { Notice } from "@components/ui/Notice";
 import { useCancelLibraryScan, useKeepBestLibraryCopies } from "@hooks/api/mutations/jobs/useLibraryScanControls";
 import { useTriggerJob } from "@hooks/api/mutations/jobs/useTriggerJob";
 import { useLibraryScanStatus } from "@hooks/api/queries/useLibraryScanStatus";
-import { formatBytes, formatRelativeTime } from "@utils/formatters";
 
 import { SettingsCard } from "../../components/SettingsCard";
-import { DuplicatesDialog } from "./DuplicatesDialog";
 import {
   scanActions,
   scanStat,
   scanStatGrid,
   scanStatLabel,
   scanStatValue,
-  scanStatAction,
   scanHeaderMeta,
   jobPlayButton,
 } from "../../styles";
@@ -32,7 +29,6 @@ export function LibraryScanCard() {
   const cancel = useCancelLibraryScan();
   const trigger = useTriggerJob();
   const keepBest = useKeepBestLibraryCopies();
-  const [duplicatesOpen, setDuplicatesOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -109,19 +105,6 @@ export function LibraryScanCard() {
             <span className={scanStatValue()}>{inventory.missingFiles.toLocaleString()}</span>
             <span className={scanStatLabel()}>{t("libraryScan.stats.missing")}</span>
           </div>
-          <div className={scanStat()}>
-            {inventory.duplicateFiles > 0 ? (
-              <button type="button" className={scanStatAction()} onClick={() => setDuplicatesOpen(true)}>
-                {inventory.duplicateFiles.toLocaleString()}
-              </button>
-            ) : (
-              <span className={scanStatValue()}>0</span>
-            )}
-            <span className={scanStatLabel()}>
-              {t("libraryScan.stats.duplicated")}
-              {inventory.duplicateFiles > 0 ? ` (${formatBytes(inventory.duplicateBytes)})` : ""}
-            </span>
-          </div>
         </div>
 
         {lastRun && !lastRun.walkClean ? (
@@ -129,8 +112,6 @@ export function LibraryScanCard() {
             {t("libraryScan.warning.dirtyWalk.body", { count: lastRun.walkFailures })}
           </Notice>
         ) : null}
-
-        <DuplicatesDialog isOpen={duplicatesOpen} onClose={() => setDuplicatesOpen(false)} reclaiming={reclaiming} />
 
         {isScanning ? (
           <div className={scanActions()}>

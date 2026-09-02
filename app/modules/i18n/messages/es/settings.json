@@ -817,8 +817,14 @@
         "engine": "Motor",
         "jobs": "Tareas",
         "logs": "Registros",
-        "updates": "Actualizaciones"
-      }
+        "updates": "Actualizaciones",
+        "maintenance": "Mantenimiento",
+        "review": "Revisión",
+        "duplicates": "Duplicados",
+        "recycleBin": "Papelera",
+        "quarantine": "Cuarentena"
+      },
+      "maintenanceWaiting": "Algunas superficies de mantenimiento tienen elementos esperando"
     },
     "integrationTabs": {
       "ariaLabel": "Integraciones"
@@ -1008,8 +1014,7 @@
       "onDisk": "En el disco",
       "linked": "En la biblioteca",
       "unlinked": "Sin identificar",
-      "missing": "Desaparecidos",
-      "duplicated": "Duplicadas"
+      "missing": "Desaparecidos"
     },
     "state": {
       "scanning": "Escaneando",
@@ -1037,7 +1042,6 @@
       "nothingRunning": "No había ningún escaneo en curso"
     },
     "duplicates": {
-      "title": "Pistas duplicadas",
       "copies_one": "{{count}} copia",
       "copies_other": "{{count}} copias",
       "tidyAllRunning": "Revisándolas",
@@ -1081,6 +1085,24 @@
       "never": "Nunca escaneado",
       "ago": "hace {{ago}}",
       "identifying": "Identificando"
+    }
+  },
+  "maintenance": {
+    "review": {
+      "title": "Cola de revisión",
+      "description": "Ficheros que fallaron la verificación y se retuvieron en vez de importarse. No llega nada hasta que decidas."
+    },
+    "duplicates": {
+      "title": "Pistas duplicadas",
+      "description": "Pistas con más de una copia en el disco. Las que se pudieron probar idénticas ya están resueltas."
+    },
+    "recycleBin": {
+      "title": "Papelera",
+      "description": "Ficheros retirados de tu biblioteca, guardados para que una decisión equivocada siga siendo reversible."
+    },
+    "quarantine": {
+      "title": "Cuarentena",
+      "description": "Pares de fuente y fichero que fallaron la verificación, recordados para que un reintento no vuelva a traer el mismo fichero equivocado."
     }
   }
 }

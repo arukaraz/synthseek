@@ -263,11 +263,7 @@ export const jobPlayButton = cva(
   "border-primary-500/30 bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 focus-visible:ring-ring flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-60 [&_svg]:size-3.5 [&_svg]:shrink-0"
 );
 
-export const scanStatGrid = cva("grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5");
-
-export const scanStatAction = cva(
-  "text-primary-400 focus-visible:ring-primary-500/50 rounded text-lg font-semibold tabular-nums underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:outline-none"
-);
+export const scanStatGrid = cva("grid grid-cols-2 gap-3 lg:grid-cols-4");
 
 export const scanHeaderMeta = cva("text-fg/55 flex items-center gap-2 text-xs whitespace-nowrap");
 
@@ -391,4 +387,21 @@ export const binRowMeta = cva("text-fg/50 font-mono text-[11px] tabular-nums");
 
 export const binRestore = cva(
   "text-primary-400 hover:text-primary-300 mt-0.5 focus-visible:ring-primary-500/50 inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
+);
+
+export const sidebarLeaf = cva(
+  "hover:bg-fg/5 flex w-full items-center gap-2 rounded-lg py-1.5 pr-2 pl-14 text-[13px] transition-colors [&_svg]:size-3 [&_svg]:shrink-0",
+  {
+    variants: {
+      active: {
+        true: "bg-primary-500/10 text-fg font-medium",
+        false: "text-fg/55 hover:text-fg/85",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);
+
+export const sidebarLeafCount = cva(
+  "bg-fg/10 text-fg/70 ml-auto shrink-0 rounded-full px-1.5 py-px text-[10px] font-semibold tabular-nums"
 );

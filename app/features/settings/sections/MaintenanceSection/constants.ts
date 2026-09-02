@@ -1,0 +1,1 @@
+export const QUARANTINE_FILENAME_MAX = 64;

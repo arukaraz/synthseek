@@ -817,8 +817,14 @@
         "engine": "Engine",
         "jobs": "Aufgaben",
         "logs": "Protokolle",
-        "updates": "Updates"
-      }
+        "updates": "Updates",
+        "maintenance": "Wartung",
+        "review": "Prüfung",
+        "duplicates": "Duplikate",
+        "recycleBin": "Papierkorb",
+        "quarantine": "Quarantäne"
+      },
+      "maintenanceWaiting": "In einigen Wartungsbereichen warten Einträge"
     },
     "integrationTabs": {
       "ariaLabel": "Integrationen"
@@ -1008,8 +1014,7 @@
       "onDisk": "Auf der Festplatte",
       "linked": "In der Bibliothek",
       "unlinked": "Nicht identifiziert",
-      "missing": "Verschwunden",
-      "duplicated": "Doppelt"
+      "missing": "Verschwunden"
     },
     "state": {
       "scanning": "Wird gescannt",
@@ -1037,7 +1042,6 @@
       "nothingRunning": "Es lief kein Bibliotheksscan"
     },
     "duplicates": {
-      "title": "Doppelte Titel",
       "copies_one": "{{count}} Kopie",
       "copies_other": "{{count}} Kopien",
       "tidyAllRunning": "Wird bearbeitet",
@@ -1081,6 +1085,24 @@
       "never": "Nie gescannt",
       "ago": "vor {{ago}}",
       "identifying": "Identifiziert"
+    }
+  },
+  "maintenance": {
+    "review": {
+      "title": "Prüfliste",
+      "description": "Dateien, die die Prüfung nicht bestanden haben und zurückgehalten wurden. Nichts kommt an, bis du entscheidest."
+    },
+    "duplicates": {
+      "title": "Doppelte Titel",
+      "description": "Titel mit mehr als einer Kopie auf der Festplatte. Die nachweislich identischen sind bereits erledigt."
+    },
+    "recycleBin": {
+      "title": "Papierkorb",
+      "description": "Aus deiner Bibliothek entfernte Dateien, aufbewahrt damit eine falsche Entscheidung umkehrbar bleibt."
+    },
+    "quarantine": {
+      "title": "Quarantäne",
+      "description": "Quelle-Datei-Paare, die die Prüfung nicht bestanden haben, gemerkt damit ein neuer Versuch nicht dieselbe falsche Datei holt."
     }
   }
 }

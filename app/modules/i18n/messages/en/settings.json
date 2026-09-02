@@ -817,8 +817,14 @@
         "engine": "Engine",
         "jobs": "Jobs",
         "logs": "Logs",
-        "updates": "Updates"
-      }
+        "updates": "Updates",
+        "maintenance": "Maintenance",
+        "review": "Review",
+        "duplicates": "Duplicates",
+        "recycleBin": "Recycle bin",
+        "quarantine": "Quarantine"
+      },
+      "maintenanceWaiting": "Some maintenance surfaces have items waiting"
     },
     "integrationTabs": {
       "ariaLabel": "Integrations"
@@ -1008,8 +1014,7 @@
       "onDisk": "On disk",
       "linked": "In the library",
       "unlinked": "Not identified",
-      "missing": "Gone",
-      "duplicated": "Duplicated"
+      "missing": "Gone"
     },
     "state": {
       "scanning": "Scanning",
@@ -1037,7 +1042,6 @@
       "nothingRunning": "No library scan was running"
     },
     "duplicates": {
-      "title": "Duplicated tracks",
       "copies_one": "{{count}} copy",
       "copies_other": "{{count}} copies",
       "tidyAllRunning": "Working through them",
@@ -1081,6 +1085,24 @@
       "never": "Never scanned",
       "ago": "ran {{ago}}",
       "identifying": "Identifying"
+    }
+  },
+  "maintenance": {
+    "review": {
+      "title": "Review queue",
+      "description": "Files that failed verification and were held back instead of imported. Nothing arrives until you decide."
+    },
+    "duplicates": {
+      "title": "Duplicated tracks",
+      "description": "Tracks with more than one copy on disk. The ones it could prove identical are already settled."
+    },
+    "recycleBin": {
+      "title": "Recycle bin",
+      "description": "Files removed from your library, kept so a wrong call stays reversible."
+    },
+    "quarantine": {
+      "title": "Quarantine",
+      "description": "Source and file pairings that failed verification, remembered so a retry never fetches the same wrong file again."
     }
   }
 }

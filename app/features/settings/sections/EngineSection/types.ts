@@ -12,22 +12,12 @@ export interface QuarantineSourceTrust {
   banAfterFailedAttempts: number;
 }
 
-export interface QuarantineCardProps {
-  initial: EngineImportSettings;
-  sourceTrust: QuarantineSourceTrust;
-}
-
 export interface EngineQualitySettings {
   upgradeEnabled: boolean;
 }
 
-export interface LibraryRecycleBinSettings {
-  retentionDays: number;
-}
-
 export interface QualityCardProps {
   initial: EngineQualitySettings;
-  recycleBin: LibraryRecycleBinSettings;
 }
 
 export interface EngineWantedSettings {
@@ -59,8 +49,4 @@ export interface TimeoutsCardProps {
     queueWaitActivePeer: number;
     queueWaitIdlePeer: number;
   };
-}
-
-export interface RecycleBinListProps {
-  entryCount: number;
 }

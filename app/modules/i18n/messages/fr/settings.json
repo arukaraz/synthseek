@@ -817,8 +817,14 @@
         "engine": "Moteur",
         "jobs": "Tâches",
         "logs": "Journaux",
-        "updates": "Mises à jour"
-      }
+        "updates": "Mises à jour",
+        "maintenance": "Maintenance",
+        "review": "Révision",
+        "duplicates": "Doublons",
+        "recycleBin": "Corbeille",
+        "quarantine": "Quarantaine"
+      },
+      "maintenanceWaiting": "Certaines surfaces de maintenance ont des éléments en attente"
     },
     "integrationTabs": {
       "ariaLabel": "Intégrations"
@@ -1008,8 +1014,7 @@
       "onDisk": "Sur le disque",
       "linked": "Dans la bibliothèque",
       "unlinked": "Non identifiés",
-      "missing": "Disparus",
-      "duplicated": "En double"
+      "missing": "Disparus"
     },
     "state": {
       "scanning": "Analyse en cours",
@@ -1037,7 +1042,6 @@
       "nothingRunning": "Aucune analyse n'était en cours"
     },
     "duplicates": {
-      "title": "Titres en double",
       "copies_one": "{{count}} copie",
       "copies_other": "{{count}} copies",
       "tidyAllRunning": "Traitement en cours",
@@ -1081,6 +1085,24 @@
       "never": "Jamais analysé",
       "ago": "il y a {{ago}}",
       "identifying": "Identification"
+    }
+  },
+  "maintenance": {
+    "review": {
+      "title": "File de révision",
+      "description": "Fichiers qui ont échoué à la vérification et ont été retenus au lieu d'être importés. Rien n'arrive tant que vous ne décidez pas."
+    },
+    "duplicates": {
+      "title": "Morceaux en double",
+      "description": "Morceaux ayant plus d'une copie sur le disque. Ceux prouvés identiques sont déjà réglés."
+    },
+    "recycleBin": {
+      "title": "Corbeille",
+      "description": "Fichiers retirés de votre bibliothèque, conservés pour qu'une mauvaise décision reste réversible."
+    },
+    "quarantine": {
+      "title": "Quarantaine",
+      "description": "Paires source-fichier ayant échoué à la vérification, mémorisées pour qu'une nouvelle tentative ne récupère pas le même mauvais fichier."
     }
   }
 }

@@ -39,7 +39,7 @@ import {
 } from "./styles";
 import type { QuarantineCardProps } from "./types";
 
-export function QuarantineCard({ initial, sourceTrust }: QuarantineCardProps) {
+export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateEngineImport();
   const entries = useQuarantineList();

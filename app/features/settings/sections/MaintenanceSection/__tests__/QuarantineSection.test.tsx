@@ -9,8 +9,6 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockMutation, createMockQuery, createLoadingQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
-import type { QuarantineCardProps } from "../types";
-
 interface QuarantineEntry {
   id: string;
   source: string;
@@ -40,7 +38,7 @@ vi.mock("@hooks/api/queries/useQuarantine", () => ({
   useQuarantineList: () => listQuery,
 }));
 
-import { QuarantineCard } from "../QuarantineCard";
+import { QuarantineSection } from "../QuarantineSection";
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);
@@ -53,8 +51,8 @@ afterEach(() => {
   listQuery = createMockQuery<QuarantineEntry[]>([]);
 });
 
-const initial: QuarantineCardProps["initial"] = { metadataConfidenceThreshold: 50, acoustidIdentityGate: true };
-const sourceTrust: QuarantineCardProps["sourceTrust"] = { bannedUsersCount: 2, banAfterFailedAttempts: 0 };
+const initial = { metadataConfidenceThreshold: 50, acoustidIdentityGate: true };
+const sourceTrust = { bannedUsersCount: 2, banAfterFailedAttempts: 0 };
 
 const slskdEntry: QuarantineEntry = {
   id: "q1",
@@ -78,14 +76,14 @@ const ytdlpEntry: QuarantineEntry = {
   track: null,
 };
 
-describe("QuarantineCard", () => {
+describe("QuarantineSection", () => {
   it("renders the identity-gate toggle from the initial settings", () => {
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
     expect(screen.getByRole("switch", { name: enSettings.quarantine.identityGate.label })).toBeChecked();
   });
 
   it("saves the explicit gate value together with the current threshold", async () => {
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     await userEvent.click(screen.getByRole("switch", { name: enSettings.quarantine.identityGate.label }));
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
@@ -95,7 +93,7 @@ describe("QuarantineCard", () => {
 
   it("renders the list rows with peer, reason, age and resolved track", () => {
     listQuery = createMockQuery<QuarantineEntry[]>([slskdEntry, ytdlpEntry]);
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     expect(screen.getByText("peerA")).toBeInTheDocument();
     expect(screen.getByText(enSettings.quarantine.reason.wrong_file)).toBeInTheDocument();
@@ -106,7 +104,7 @@ describe("QuarantineCard", () => {
 
   it("shows a ytdlp row as its source and video URL without a peer label", () => {
     listQuery = createMockQuery<QuarantineEntry[]>([ytdlpEntry]);
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     expect(screen.getAllByText(enSettings.quarantine.source.ytdlp).length).toBe(1);
     expect(screen.getByText(ytdlpEntry.filename)).toBeInTheDocument();
@@ -115,7 +113,7 @@ describe("QuarantineCard", () => {
 
   it("removes a single entry", async () => {
     listQuery = createMockQuery<QuarantineEntry[]>([slskdEntry]);
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     await userEvent.click(screen.getByRole("button", { name: enSettings.quarantine.list.remove }));
 
@@ -124,7 +122,7 @@ describe("QuarantineCard", () => {
 
   it("clears all entries after confirmation", async () => {
     listQuery = createMockQuery<QuarantineEntry[]>([slskdEntry, ytdlpEntry]);
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     await userEvent.click(screen.getByRole("button", { name: enSettings.quarantine.list.clearAll }));
     const dialog = await screen.findByRole("dialog");
@@ -136,7 +134,7 @@ describe("QuarantineCard", () => {
   });
 
   it("renders the empty state and hides the clear-all action when there are no entries", () => {
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     expect(screen.getByText(enSettings.quarantine.list.empty.title)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: enSettings.quarantine.list.clearAll })).not.toBeInTheDocument();
@@ -144,13 +142,13 @@ describe("QuarantineCard", () => {
 
   it("renders the loading state while the list is fetching", () => {
     listQuery = createLoadingQuery<QuarantineEntry[]>();
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     expect(screen.getByText(enSettings.quarantine.list.loading)).toBeInTheDocument();
   });
 
   it("shows the banned-uploaders count and the disabled auto-ban threshold", () => {
-    render(<QuarantineCard initial={initial} sourceTrust={sourceTrust} />);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
 
     expect(screen.getByText("2")).toBeInTheDocument();
     expect(screen.getByText(enSettings.quarantine.sourceTrust.autoBan.off)).toBeInTheDocument();
