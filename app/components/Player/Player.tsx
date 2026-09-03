@@ -1,0 +1,35 @@
+"use client";
+
+import { AnimatePresence } from "framer-motion";
+
+import { DeviceMenu } from "./DeviceMenu";
+import { PlayerBar } from "./PlayerBar";
+import { PlayerNotice } from "./PlayerNotice";
+import { PlayerStage } from "./PlayerStage";
+import { SignalChain } from "./SignalChain";
+import { playerDock, playerRoot } from "./styles";
+import type { PlayerProps } from "./types";
+
+export function Player({ view, actions }: PlayerProps) {
+  const anchorToChain = view.chainVisible && !view.fullscreen;
+
+  return (
+    <>
+      {view.fullscreen ? <PlayerStage view={view} actions={actions} /> : null}
+      {view.notice === null ? null : (
+        <PlayerNotice text={view.notice.text} tone={view.notice.tone} chain={anchorToChain} />
+      )}
+      <AnimatePresence>
+        {view.devicesOpen ? <DeviceMenu view={view} actions={actions} chain={anchorToChain} /> : null}
+      </AnimatePresence>
+      {view.fullscreen ? null : (
+        <div className={playerRoot()} data-cy="player">
+          <div className={playerDock()}>
+            {view.chainVisible ? <SignalChain view={view} actions={actions} /> : null}
+            <PlayerBar view={view} actions={actions} />
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

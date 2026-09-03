@@ -1,0 +1,100 @@
+@layer utilities {
+  @keyframes player-lobe-a {
+    from {
+      transform: translateX(-2.5%) scaleY(0.7);
+    }
+    to {
+      transform: translateX(2.5%) scaleY(1.12);
+    }
+  }
+
+  @keyframes player-lobe-b {
+    from {
+      transform: translateX(4%) scaleY(1.08);
+    }
+    to {
+      transform: translateX(-4%) scaleY(0.66);
+    }
+  }
+
+  @keyframes player-lobe-c {
+    from {
+      transform: translateX(-5%) scaleY(0.8);
+    }
+    to {
+      transform: translateX(5%) scaleY(1.18);
+    }
+  }
+
+  .player-lobe {
+    transform-origin: 50% 50%;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-play-state: var(--player-wave-state, paused);
+  }
+
+  .player-lobe-a {
+    animation-name: player-lobe-a;
+    animation-duration: 1.5s;
+  }
+
+  .player-lobe-b {
+    animation-name: player-lobe-b;
+    animation-duration: 1.9s;
+  }
+
+  .player-lobe-c {
+    animation-name: player-lobe-c;
+    animation-duration: 2.4s;
+  }
+
+  .player-wave-played {
+    clip-path: inset(0 calc(100% - var(--player-progress, 0%)) 0 0);
+  }
+
+  .player-wave-head {
+    left: var(--player-progress, 0%);
+  }
+
+  .player-wave-scrub {
+    left: var(--player-scrub, 0%);
+  }
+
+  .player-metrics {
+    --player-bar-height: 4rem;
+    --player-dock-height: 4rem;
+  }
+
+  @media (min-width: 40rem) {
+    .player-metrics {
+      --player-bar-height: 5.25rem;
+      --player-dock-height: 5.25rem;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .player-metrics-chain {
+      --player-dock-height: 7.125rem;
+    }
+  }
+
+  .player-bar-progress {
+    width: var(--player-progress, 0%);
+  }
+
+  .player-volume-fill {
+    width: var(--player-volume, 0%);
+  }
+
+  .player-volume-head {
+    left: var(--player-volume, 0%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .player-lobe {
+      animation: none;
+      transform: scaleY(0.85);
+    }
+  }
+}

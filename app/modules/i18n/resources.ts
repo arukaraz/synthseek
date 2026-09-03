@@ -10,6 +10,7 @@ import de_errors from "./messages/de/errors.json";
 import de_health from "./messages/de/health.json";
 import de_library from "./messages/de/library.json";
 import de_mutations from "./messages/de/mutations.json";
+import de_player from "./messages/de/player.json";
 import de_requests from "./messages/de/requests.json";
 import de_search from "./messages/de/search.json";
 import de_settings from "./messages/de/settings.json";
@@ -26,6 +27,7 @@ import en_errors from "./messages/en/errors.json";
 import en_health from "./messages/en/health.json";
 import en_library from "./messages/en/library.json";
 import en_mutations from "./messages/en/mutations.json";
+import en_player from "./messages/en/player.json";
 import en_requests from "./messages/en/requests.json";
 import en_search from "./messages/en/search.json";
 import en_settings from "./messages/en/settings.json";
@@ -42,6 +44,7 @@ import es_errors from "./messages/es/errors.json";
 import es_health from "./messages/es/health.json";
 import es_library from "./messages/es/library.json";
 import es_mutations from "./messages/es/mutations.json";
+import es_player from "./messages/es/player.json";
 import es_requests from "./messages/es/requests.json";
 import es_search from "./messages/es/search.json";
 import es_settings from "./messages/es/settings.json";
@@ -58,6 +61,7 @@ import fr_errors from "./messages/fr/errors.json";
 import fr_health from "./messages/fr/health.json";
 import fr_library from "./messages/fr/library.json";
 import fr_mutations from "./messages/fr/mutations.json";
+import fr_player from "./messages/fr/player.json";
 import fr_requests from "./messages/fr/requests.json";
 import fr_search from "./messages/fr/search.json";
 import fr_settings from "./messages/fr/settings.json";
@@ -77,6 +81,7 @@ export const resources = {
     health: de_health,
     library: de_library,
     mutations: de_mutations,
+    player: de_player,
     requests: de_requests,
     search: de_search,
     settings: de_settings,
@@ -95,6 +100,7 @@ export const resources = {
     health: en_health,
     library: en_library,
     mutations: en_mutations,
+    player: en_player,
     requests: en_requests,
     search: en_search,
     settings: en_settings,
@@ -113,6 +119,7 @@ export const resources = {
     health: es_health,
     library: es_library,
     mutations: es_mutations,
+    player: es_player,
     requests: es_requests,
     search: es_search,
     settings: es_settings,
@@ -131,6 +138,7 @@ export const resources = {
     health: fr_health,
     library: fr_library,
     mutations: fr_mutations,
+    player: fr_player,
     requests: fr_requests,
     search: fr_search,
     settings: fr_settings,

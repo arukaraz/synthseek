@@ -1,0 +1,83 @@
+{
+  "controls": {
+    "play": "Abspielen",
+    "pause": "Pause",
+    "next": "Nächster Titel",
+    "previous": "Vorheriger Titel",
+    "shuffle": "Zufallswiedergabe",
+    "repeat": {
+      "off": "Wiederholung aus",
+      "all": "Warteschlange wiederholen",
+      "one": "Diesen Titel wiederholen"
+    },
+    "favoriteAdd": "Zu Favoriten hinzufügen",
+    "favoriteRemove": "Aus Favoriten entfernen",
+    "mute": "Stummschalten",
+    "unmute": "Stummschaltung aufheben",
+    "volume": "Lautstärke",
+    "devices": "Wo es spielt",
+    "fullscreenOpen": "Vollbild-Sitzung",
+    "fullscreenClose": "Vollbild verlassen",
+    "chain": "Signalkette",
+    "seek": "Wiedergabeposition",
+    "openTrack": "Vollbild-Sitzung öffnen",
+    "scrobble": "Scrobbling"
+  },
+  "chain": {
+    "file": "DATEI",
+    "server": "SERVER",
+    "output": "AUSGABE",
+    "notMeasured": "nicht gemessen",
+    "serverDirect": "keine Umwandlung",
+    "serverTranscoding": "wandelt zu mp3 320",
+    "normalizationAlbum": "Album {{gain}} dB",
+    "description": "Signalkette: {{file}} zu {{server}}, {{normalization}}, Ausgabe an {{device}}"
+  },
+  "devices": {
+    "caption": "WO ES SPIELT",
+    "capability": {
+      "own": "volle Kontrolle",
+      "third": "nur lesend",
+      "unarmed": "nicht bereit"
+    },
+    "footnote": "Fremd-Apps sind sichtbar, lassen sich aber nicht steuern: sie können nur Warteschlange und Position übernehmen."
+  },
+  "stage": {
+    "label": "Vollbild-Sitzung",
+    "serverChip": "Server: {{value}}"
+  },
+  "demo": {
+    "heading": "Player-Mockup",
+    "intro": "Wegwerf-Vorschau, um das Design des Players zu prüfen. Titel wählen, Welle ziehen, Warteschlange, Geräte und Vollbild öffnen.",
+    "columnTrack": "Titel",
+    "columnActions": "Warteschlangen-Aktionen",
+    "playNext": "Als Nächstes",
+    "playLast": "Ans Ende",
+    "missingFile": "Datei fehlt",
+    "cannotPlay": "„{{title}}“ kann nicht abgespielt werden: die Datei fehlt",
+    "skipping": "„{{title}}“ ist fehlgeschlagen, es geht weiter zum nächsten Titel",
+    "queueEnd": "Ende der Warteschlange",
+    "addedNext": "Läuft als Nächstes",
+    "addedLast": "Ans Ende der Warteschlange gesetzt",
+    "deviceHere": "Der Ton ist wieder in diesem Browser",
+    "deviceRemote": "Läuft auf {{name}}",
+    "deviceThird": "{{name}} nimmt keine Befehle an, Warteschlange und Position wurden übergeben",
+    "deviceUnarmed": "{{name}} braucht eine Berührung auf dem Gerät, bevor Ton kommt",
+    "devices": {
+      "here": "Dieser Browser",
+      "hereDetail": "Chrome · dieses Gerät",
+      "desktop": "Wohnzimmer",
+      "desktopDetail": "Firefox · Desktop",
+      "phone": "Symfonium (Handy)",
+      "phoneDetail": "Subsonic · nimmt keine Befehle an",
+      "laptop": "Laptop",
+      "laptopDetail": "braucht eine Berührung auf dem Gerät"
+    }
+  },
+  "scrobble": {
+    "off": "Scrobbling aus",
+    "idle": "Deine Titel werden gemeldet",
+    "retrying": "Scrobble wird wiederholt",
+    "failed": "Scrobble fehlgeschlagen"
+  }
+}

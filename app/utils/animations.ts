@@ -29,6 +29,20 @@ export const slideUp: Variants = {
   },
 };
 
+export const playerPanel: Variants = {
+  hidden: { y: 14, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: {
+    y: 14,
+    opacity: 0,
+    transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
+  },
+};
+
 export const scale: Variants = {
   initial: { scale: 1 },
   hover: {

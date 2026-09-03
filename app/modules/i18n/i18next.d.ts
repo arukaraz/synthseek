@@ -12,6 +12,7 @@ import errors from "./messages/en/errors.json";
 import health from "./messages/en/health.json";
 import library from "./messages/en/library.json";
 import mutations from "./messages/en/mutations.json";
+import player from "./messages/en/player.json";
 import requests from "./messages/en/requests.json";
 import search from "./messages/en/search.json";
 import settings from "./messages/en/settings.json";
@@ -33,6 +34,7 @@ declare module "i18next" {
       health: typeof health;
       library: typeof library;
       mutations: typeof mutations;
+      player: typeof player;
       requests: typeof requests;
       search: typeof search;
       settings: typeof settings;
