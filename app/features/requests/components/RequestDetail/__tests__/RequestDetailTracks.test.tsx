@@ -322,7 +322,7 @@ describe("RequestDetailTracks", () => {
     });
   });
 
-  it("uses a synthetic single album id when upgrading a playlist track", async () => {
+  it("sends no album id when upgrading a track whose request is not an album, rather than a fabricated one", async () => {
     const user = userEvent.setup();
     const request = makeRequestWithTracks({
       contentType: ContentType.enum.playlist,
@@ -342,7 +342,7 @@ describe("RequestDetailTracks", () => {
     await user.click(screen.getByRole("button", { name: "Track actions" }));
     await user.click(screen.getByRole("menuitem", { name: "Search better quality" }));
 
-    expect(upgradeRequest).toHaveBeenCalledWith(expect.objectContaining({ album_external_id: "single_track-ext-9" }));
+    expect(upgradeRequest).toHaveBeenCalledWith(expect.objectContaining({ album_external_id: "" }));
   });
 
   it("hides the actions trigger when the user cannot act", () => {

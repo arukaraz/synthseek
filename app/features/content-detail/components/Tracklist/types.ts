@@ -1,5 +1,11 @@
 import type { FailureReason, RequestStatus } from "@api/__generated__/types";
 
+interface TrackAlbumContext {
+  externalId: string;
+  name: string;
+  cover: string | null;
+}
+
 export interface TracklistTrack {
   externalId: string;
   title: string;
@@ -7,6 +13,7 @@ export interface TracklistTrack {
   durationMs: number;
   trackNumber: number;
   plays: number | null;
+  album: TrackAlbumContext | null;
   inLibrary: boolean;
   requestId: string | null;
   slskd_request_id: string | null;
@@ -14,16 +21,9 @@ export interface TracklistTrack {
   failureReason: FailureReason | null;
 }
 
-export interface TrackAlbumContext {
-  id: string;
-  name: string;
-  cover: string | null;
-}
-
 export interface TracklistProps {
   tracks: TracklistTrack[];
   showArtist?: boolean;
-  albumContext?: TrackAlbumContext;
   selectable?: boolean;
   isSelected?: (requestId: string) => boolean;
   onToggleSelect?: (requestId: string) => void;

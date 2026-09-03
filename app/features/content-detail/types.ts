@@ -169,7 +169,7 @@ export interface TrackRequestInput {
   durationMs: number;
   trackNumber: number;
   isrc: string | null;
-  album?: { id: string; name: string; cover: string | null };
+  album: { externalId: string; name: string; cover: string | null } | null;
 }
 
 export interface ContentDetailActions {

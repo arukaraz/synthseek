@@ -19,15 +19,9 @@ function AlbumDetailWidgetComponent({ deezerAlbumId }: AlbumDetailWidgetProps) {
   const count =
     data && tracks.length > 0 ? t("tracklistCount", { inLibrary: completeCount, total: tracks.length }) : undefined;
 
-  const albumContext = data ? { id: data.externalId, name: data.title, cover: data.cover } : undefined;
-
   return (
     <DetailSection title={t("sections.tracklist")} isLoading={isLoading} skeletonHeight="h-72" count={count}>
-      {tracks.length > 0 ? (
-        <Tracklist tracks={tracks} albumContext={albumContext} />
-      ) : (
-        <DetailEmpty message={t("empty.tracklist")} />
-      )}
+      {tracks.length > 0 ? <Tracklist tracks={tracks} /> : <DetailEmpty message={t("empty.tracklist")} />}
     </DetailSection>
   );
 }

@@ -13,6 +13,7 @@ function createTrack(overrides?: Partial<TracklistTrack>): TracklistTrack {
     durationMs: 369000,
     trackNumber: 8,
     plays: null,
+    album: null,
     inLibrary: false,
     requestId: null,
     slskd_request_id: null,

@@ -67,7 +67,7 @@ export function RequestDetailTracks({
           format: { value: track.format, matching: track.format_matching },
           upgrade: true,
         },
-        album_external_id: isAlbum ? albumExternalId : `single_${track.external_id}`,
+        album_external_id: isAlbum ? albumExternalId : "",
       });
     },
     [upgradeRequest, isAlbum, albumExternalId]

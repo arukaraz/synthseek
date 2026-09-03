@@ -263,7 +263,7 @@ export function ConfigRequestModal({
       downloadMutation.mutate({
         track: mapTrackFields(item),
         config,
-        album_external_id: parentAlbum?.id ?? item.album.id ?? `single_${item.id}`,
+        album_external_id: parentAlbum?.id ?? item.album.id,
       });
       onSuccess?.(itemName);
       onClose();

@@ -70,6 +70,7 @@ function createTracklistTrack(overrides?: Partial<TracklistTrack>): TracklistTra
     durationMs: 369000,
     trackNumber: 8,
     plays: null,
+    album: { externalId: "al1", name: "RAM", cover: null },
     inLibrary: false,
     requestId: null,
     slskd_request_id: null,
@@ -501,12 +502,22 @@ describe("content-detail helpers", () => {
         durationMs: 369000,
         trackNumber: 8,
         plays: null,
+        album: { externalId: "al1", name: "RAM", cover: null },
         inLibrary: false,
         requestId: null,
         slskd_request_id: null,
         status: null,
         failureReason: null,
       });
+    });
+
+    it("carries the catalog album through to the row so a request can identify it", () => {
+      const row = preloadedTrack(
+        createMusicTrack({
+          album: { id: "al9", name: "Discovery", images: [{ url: "c.jpg", width: 500, height: 500 }] },
+        })
+      );
+      expect(row.album).toEqual({ externalId: "al9", name: "Discovery", cover: "c.jpg" });
     });
 
     it("falls back to the flat artist string when artists is empty", () => {
@@ -599,7 +610,7 @@ describe("content-detail helpers", () => {
         durationMs: 369000,
         trackNumber: 8,
         isrc: null,
-        album: { id: "al1", name: "RAM", cover: "c.jpg" },
+        album: { externalId: "al1", name: "RAM", cover: "c.jpg" },
       });
       expect(item.type).toBe("track");
       expect(item.album.id).toBe("al1");
@@ -638,7 +649,22 @@ describe("content-detail helpers", () => {
       expect(tracks[0].id).toBe("a");
       expect(tracks[0].artist).toBe("Daft Punk");
       expect(tracks[0].artists[0]?.name).toBe("Daft Punk");
+      expect(tracks[0].album.id).toBe("al1");
+    });
+
+    it("carries each row's album into the MusicTrack so the modal can identify it", () => {
+      const tracks = playlistRequestTracks([
+        createTracklistTrack({ externalId: "a", album: { externalId: "al9", name: "Homework", cover: "c.jpg" } }),
+      ]);
+      expect(tracks[0].album.id).toBe("al9");
+      expect(tracks[0].album.name).toBe("Homework");
+      expect(tracks[0].album.images[0]?.url).toBe("c.jpg");
+    });
+
+    it("leaves the album empty when the row genuinely has none, rather than inventing an id", () => {
+      const tracks = playlistRequestTracks([createTracklistTrack({ externalId: "a", album: null })]);
       expect(tracks[0].album.id).toBe("");
+      expect(tracks[0].album.images).toEqual([]);
     });
   });
 

@@ -10,7 +10,6 @@ import type { TracklistProps } from "./types";
 export function Tracklist({
   tracks,
   showArtist = false,
-  albumContext,
   selectable = false,
   isSelected,
   onToggleSelect,
@@ -38,7 +37,7 @@ export function Tracklist({
               durationMs: track.durationMs,
               trackNumber: track.trackNumber,
               isrc: null,
-              album: albumContext,
+              album: track.album,
             })
           }
           onRetry={() => {
