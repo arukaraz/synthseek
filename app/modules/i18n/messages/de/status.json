@@ -86,6 +86,10 @@
       "label": "Speicherproblem",
       "description": "Ein lokales Speicherproblem hat diesen Download gestoppt, etwa eine volle Festplatte oder ein fehlender bzw. nicht beschreibbarer Download- oder Bibliotheksordner. Nach Behebung des Problems erneut versuchen."
     },
+    "timeout": {
+      "label": "Zeitüberschreitung",
+      "description": "Ein Schritt hat die ihm zugewiesene Zeit aufgebraucht, sodass zu diesem Titel nichts entschieden wurde. Es wird automatisch erneut versucht, und bei wiederholtem Auftreten kannst du das passende Zeitlimit in den Engine-Einstellungen erhöhen."
+    },
     "other": {
       "label": "Fehlgeschlagen",
       "description": "Der Download ist aus einem unerwarteten Grund fehlgeschlagen. Ein erneuter Versuch könnte helfen."

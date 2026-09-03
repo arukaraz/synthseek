@@ -119,6 +119,9 @@ export const REQUEST_STATUS_CONFIG: Record<RequestStatus, StatusConfigItem> = {
       [FailureReason.enum.environment]: {
         icon: HardDrive,
       },
+      [FailureReason.enum.timeout]: {
+        icon: Hourglass,
+      },
       [FailureReason.enum.other]: {
         icon: AlertCircle,
       },

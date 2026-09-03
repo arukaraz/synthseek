@@ -86,6 +86,10 @@
       "label": "Problema de almacenamiento",
       "description": "Un problema de almacenamiento local detuvo esta descarga, como un disco lleno o una carpeta de descargas o de biblioteca que falta o no se puede escribir. Corrige el almacenamiento y reintenta."
     },
+    "timeout": {
+      "label": "Se agotó el tiempo",
+      "description": "Un paso se quedó sin el tiempo que tenía asignado, así que no se llegó a ninguna conclusión sobre esta pista. Se reintenta solo, y si se repite puedes subir el tiempo correspondiente en los ajustes del motor."
+    },
     "other": {
       "label": "Fallida",
       "description": "La descarga falló por un motivo inesperado. Reintentar podría ayudar."

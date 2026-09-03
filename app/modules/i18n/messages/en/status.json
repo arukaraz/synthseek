@@ -86,6 +86,10 @@
       "label": "Storage problem",
       "description": "A local storage problem stopped this download, like a full disk or a downloads or library folder that is missing or not writable. Fix the storage and retry."
     },
+    "timeout": {
+      "label": "Timed out",
+      "description": "A step ran out of the time it was given, so nothing was settled about this track. It is retried automatically, and if it keeps happening you can raise the matching timeout in the engine settings."
+    },
     "other": {
       "label": "Failed",
       "description": "The download failed for an unexpected reason. A retry may help."

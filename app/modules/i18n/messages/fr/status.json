@@ -86,6 +86,10 @@
       "label": "Problème de stockage",
       "description": "Un problème de stockage local a interrompu ce téléchargement, comme un disque plein ou un dossier de téléchargements ou de bibliothèque manquant ou non accessible en écriture. Corrigez le stockage puis réessayez."
     },
+    "timeout": {
+      "label": "Délai dépassé",
+      "description": "Une étape a épuisé le temps qui lui était alloué, donc rien n'a été conclu sur ce titre. Une nouvelle tentative est automatique, et si cela persiste vous pouvez augmenter le délai correspondant dans les réglages du moteur."
+    },
     "other": {
       "label": "Échec",
       "description": "Le téléchargement a échoué pour une raison inattendue. Une nouvelle tentative peut aider."

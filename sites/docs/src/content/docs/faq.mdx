@@ -44,6 +44,9 @@ What arrived positively contradicted what you asked for, and Synthseek refused t
 **A track failed with an environment error.**
 The problem is on your machine, not the source. Usually a full disk or a downloads folder that stopped being writable. These failures do not consume retry budget, so once you fix the underlying problem the tracks are still waiting.
 
+**A track says it timed out.**
+A step ran out of the time it was given, so nothing was settled about that track either way. It is retried automatically. If it keeps happening on the same tracks, raise the matching phase timeout in the engine settings.
+
 **Downloads were working and now nothing gets through.**
 Check the queue is not paused, then check the review queue. If verification is rejecting everything, something is systematically wrong with what is arriving. Each held file in the review queue shows why it was rejected, which will tell you what is going on.
 

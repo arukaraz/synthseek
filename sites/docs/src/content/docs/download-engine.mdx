@@ -114,6 +114,7 @@ Every failure carries a typed reason.
 | `p2p_failed`      | Peers errored out or never delivered.                             | Yes                                  |
 | `download_failed` | The transfer itself failed.                                       | Yes                                  |
 | `environment`     | A problem on your own machine, such as a full or unwritable disk. | Yes, without spending retry budget   |
+| `timeout`         | A step ran out of the time it was given.                          | Yes                                  |
 | `other`           | Anything unclassified.                                            | No                                   |
 
 `wrong_file` being both quarantined and retryable is deliberate and is a single mechanism: the quarantine excludes the specific bad candidate, and the retry is what searches again without it.
