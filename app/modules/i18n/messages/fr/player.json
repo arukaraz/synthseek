@@ -34,8 +34,8 @@
   "devices": {
     "caption": "OÙ ÇA JOUE",
     "footnote": "Synthseek joue dans chaque onglet indépendamment. Choisis-en un autre pour y déplacer la lecture. Les applications connectées via Subsonic lisent de leur côté.",
-    "thisBrowser": "Ce navigateur",
-    "thisBrowserDetail": "l'onglet que vous regardez",
+    "thisBrowser": "Ce navigateur web",
+    "thisBrowserDetail": "l'onglet que tu regardes",
     "playing": "joue {{title}}",
     "idle": "ouvert, ne joue pas",
     "notArmed": "ouvert, n'a pas encore joué",

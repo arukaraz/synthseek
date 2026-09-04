@@ -9,7 +9,7 @@ import {
   SESSION_POSITION_DRIFT_MS,
   TONES,
 } from "./constants";
-import type { PlayerSessionState, SessionSnapshot } from "./types";
+import type { PlayerSessionState, RemotePlayback, SessionSnapshot } from "./types";
 
 function toneFor(item: LibraryTrackItem): PlayerTone {
   let hash = 0;
@@ -86,4 +86,17 @@ export function sessionChanged(previous: SessionSnapshot | null, next: SessionSn
 
 export function beatIsDue(lastBeatAt: number, now: number): boolean {
   return now - lastBeatAt >= DEVICE_HEARTBEAT_MS;
+}
+
+export function mirroredPositionSeconds(remote: RemotePlayback, now: number): number {
+  if (!remote.playing) return remote.positionSeconds;
+  return remote.positionSeconds + Math.max(0, (now - remote.updatedAt) / 1000);
+}
+
+export function expectedPosition(
+  previous: { playing: boolean; positionSeconds: number; at: number },
+  now: number
+): number {
+  if (!previous.playing) return previous.positionSeconds;
+  return previous.positionSeconds + Math.max(0, (now - previous.at) / 1000);
 }

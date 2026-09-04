@@ -27,6 +27,7 @@ export { useFavoriteTracks, usePlaybackSession } from "./queries/playback";
 export {
   useDeviceHeartbeat,
   useForgetDevice,
+  usePublishPlaybackState,
   useSavePlaybackSession,
   useSendPlayerCommand,
   useSetFavoriteTrack,

@@ -14,15 +14,6 @@ const BROWSERS: readonly [string, string][] = [
   ["Safari/", "Safari"],
 ];
 
-const PLATFORMS: readonly [string, string][] = [
-  ["Android", "Android"],
-  ["iPhone", "iPhone"],
-  ["iPad", "iPad"],
-  ["Macintosh", "Mac"],
-  ["Windows", "Windows"],
-  ["Linux", "Linux"],
-];
-
 function firstMatch(userAgent: string, table: readonly [string, string][], fallback: string): string {
   for (const [needle, label] of table) {
     if (userAgent.includes(needle)) return label;
@@ -31,7 +22,7 @@ function firstMatch(userAgent: string, table: readonly [string, string][], fallb
 }
 
 export function deviceNameFrom(userAgent: string): string {
-  return `${firstMatch(userAgent, BROWSERS, "Browser")} on ${firstMatch(userAgent, PLATFORMS, "this device")}`;
+  return `Web Player (${firstMatch(userAgent, BROWSERS, "Browser")})`;
 }
 
 let identity: { id: string; name: string } | null = null;

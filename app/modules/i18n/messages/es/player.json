@@ -34,7 +34,7 @@
   "devices": {
     "caption": "DÓNDE SUENA",
     "footnote": "Synthseek suena en cada pestaña por su cuenta. Elige otra para mover la reproducción allí. Las apps que se conectan por Subsonic reproducen por su cuenta.",
-    "thisBrowser": "Este navegador",
+    "thisBrowser": "Este navegador web",
     "thisBrowserDetail": "la pestaña que estás mirando",
     "playing": "sonando {{title}}",
     "idle": "abierto, sin reproducir",

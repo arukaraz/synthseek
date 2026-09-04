@@ -79,7 +79,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
           />
           <span className="flex min-w-0 flex-col gap-0.5">
             <span className={barTitle()}>{view.track.title}</span>
-            <span className={barSubtitle()}>
+            <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "sm:hidden")}>
               {view.track.artist} · {view.track.album}
             </span>
             <span className={barTitleRow()}>

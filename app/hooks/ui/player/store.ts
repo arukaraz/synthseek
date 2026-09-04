@@ -4,11 +4,11 @@ import { nextRepeat, shouldRestart } from "@components/Player";
 import type { PlayerTrack } from "@components/Player";
 import { artworkProxySrc } from "@utils/artworkProxy";
 
-import { MAX_CONSECUTIVE_FAILURES, NOTICE_MS, SKIP_DELAY_MS, VOLUME_STORAGE_KEY } from "./constants";
+import { MAX_CONSECUTIVE_FAILURES, MIRROR_TICK_MS, NOTICE_MS, SKIP_DELAY_MS, VOLUME_STORAGE_KEY } from "./constants";
 import { applyVolume, canPlayMime, connectEngine, loadAndPlay, loadAt, pause, resume, seek, stop } from "./engine";
 import { needsConversion, nextIndexIn, previousIndexIn, shuffledOrder, streamUrlFor } from "./helpers";
-import { publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
-import type { PlayerSessionState } from "./types";
+import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
+import type { PlayerSessionState, RemotePlayback } from "./types";
 
 const listeners = new Set<() => void>();
 
@@ -27,6 +27,7 @@ let state: PlayerSessionState = {
   repeat: "off",
   transcoding: false,
   armed: false,
+  remote: null,
   offsetSeconds: 0,
   chainVisible: false,
   moreOpen: false,
@@ -38,6 +39,7 @@ let state: PlayerSessionState = {
 };
 
 let noticeTimer: ReturnType<typeof setTimeout> | undefined;
+let mirrorTimer: ReturnType<typeof setInterval> | undefined;
 let skipTimer: ReturnType<typeof setTimeout> | undefined;
 let connected = false;
 
@@ -59,6 +61,13 @@ export function getSnapshot(): PlayerSessionState {
 
 export function currentTrack(): PlayerTrack | null {
   return state.queue[state.index] ?? null;
+}
+
+function silenceOtherAudio(): void {
+  if (typeof document === "undefined") return;
+  for (const element of document.querySelectorAll<HTMLMediaElement>("audio, video")) {
+    if (!element.paused) element.pause();
+  }
 }
 
 function notify(text: string, tone: "info" | "warning" | "danger"): void {
@@ -95,9 +104,12 @@ function playAt(index: number, fromSeconds = 0): void {
   const track = state.queue[index];
   if (track === undefined) return;
   ensureConnected();
+  silenceOtherAudio();
+  clearInterval(mirrorTimer);
   clearTimeout(skipTimer);
   const converted = needsConversion(track.format, canPlayMime);
   publish({
+    remote: null,
     index,
     positionSeconds: fromSeconds,
     durationSeconds: track.durationSeconds,
@@ -327,6 +339,32 @@ export const actions = {
   },
   toggleFullscreen(): void {
     publish({ fullscreen: !state.fullscreen, moreOpen: false });
+  },
+  applyRemoteState(remote: RemotePlayback): void {
+    if (remote.playing) {
+      pause();
+      clearMediaSession();
+      clearInterval(mirrorTimer);
+      mirrorTimer = setInterval(() => publish({}), MIRROR_TICK_MS);
+      publish({ remote, playing: false, started: true });
+      return;
+    }
+    clearInterval(mirrorTimer);
+    if (state.remote !== null && state.remote.deviceId !== remote.deviceId) return;
+    publish({ remote });
+  },
+  forgetRemote(): void {
+    if (state.remote === null) return;
+    clearInterval(mirrorTimer);
+    publish({ remote: null });
+  },
+  adoptQueue(tracks: readonly PlayerTrack[], currentTrackId: string | null): void {
+    if (state.playing || tracks.length === 0) return;
+    const index = Math.max(
+      0,
+      tracks.findIndex((track) => track.id === currentTrackId)
+    );
+    publish({ queue: tracks, index, shuffleOrder: [], started: true });
   },
   resumeHere(): void {
     if (state.playing) return;

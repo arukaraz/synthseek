@@ -70,3 +70,10 @@ export function publishPosition(durationSeconds: number, positionSeconds: number
     return;
   }
 }
+
+export function clearMediaSession(): void {
+  const media = session();
+  if (media === null) return;
+  media.metadata = null;
+  media.playbackState = "none";
+}

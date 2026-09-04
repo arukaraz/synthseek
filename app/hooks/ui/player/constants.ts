@@ -39,3 +39,7 @@ export const DEVICE_ID_STORAGE_KEY = "synthseek.player.device";
 export const DEVICE_CLAIM_CHANNEL = "synthseek.player.devices";
 
 export const DEVICE_HEARTBEAT_MS = 15_000;
+
+export const MIRROR_TICK_MS = 1_000;
+
+export const POSITION_JUMP_SECONDS = 3;

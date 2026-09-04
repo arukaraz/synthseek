@@ -27,6 +27,8 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.jobId}:${event.item?.key ?? event.phase}:${event.item?.state ?? ""}`;
     case SubscriptionEventType.PlayerCommand:
       return `${event.eventType}:${event.deviceId}:${event.issuedAt}`;
+    case SubscriptionEventType.PlaybackState:
+      return `${event.eventType}:${event.deviceId}:${event.issuedAt}`;
     case SubscriptionEventType.DropImportUpdate:
       return `${event.eventType}:${event.batchId}:${event.status}:${event.importedFiles}:${event.alreadyInLibraryFiles}:${event.pendingFiles}:${event.failedFiles}:${event.discardedFiles}:${event.file?.id ?? ""}:${event.file?.status ?? ""}`;
   }

@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import {
   beatIsDue,
+  expectedPosition,
+  mirroredPositionSeconds,
   needsConversion,
   nextIndexIn,
   playerTrackFrom,
@@ -28,6 +30,7 @@ function sessionWith(overrides: Partial<PlayerSessionState>): PlayerSessionState
     repeat: "off",
     transcoding: false,
     armed: false,
+    remote: null,
     offsetSeconds: 0,
     chainVisible: false,
     moreOpen: false,
@@ -222,5 +225,31 @@ describe("beatIsDue", () => {
 
   it("reports in again once the interval has passed", () => {
     expect(beatIsDue(1_000_000, 1_015_000)).toBe(true);
+  });
+});
+
+describe("mirroredPositionSeconds", () => {
+  const remote = { deviceId: "d1", deviceName: "Web Player (Chrome)", trackId: "t1", updatedAt: 10_000 };
+
+  it("carries the reported position forward while the other device keeps playing", () => {
+    expect(mirroredPositionSeconds({ ...remote, playing: true, positionSeconds: 30 }, 14_000)).toBe(34);
+  });
+
+  it("holds the position still once that device paused", () => {
+    expect(mirroredPositionSeconds({ ...remote, playing: false, positionSeconds: 30 }, 99_000)).toBe(30);
+  });
+
+  it("never runs backwards when a clock disagrees", () => {
+    expect(mirroredPositionSeconds({ ...remote, playing: true, positionSeconds: 30 }, 1_000)).toBe(30);
+  });
+});
+
+describe("expectedPosition", () => {
+  it("advances a playing position by the time that passed", () => {
+    expect(expectedPosition({ playing: true, positionSeconds: 10, at: 1_000 }, 6_000)).toBe(15);
+  });
+
+  it("leaves a paused position where it was", () => {
+    expect(expectedPosition({ playing: false, positionSeconds: 10, at: 1_000 }, 60_000)).toBe(10);
   });
 });

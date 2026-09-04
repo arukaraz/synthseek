@@ -48,11 +48,11 @@ export const barTitleStrong = cva("text-fg font-semibold");
 
 export const barTitleArtist = cva("text-fg-muted");
 
-export const barDeviceLine = cva("flex items-center gap-1 truncate text-[11px] leading-tight sm:hidden", {
+export const barDeviceLine = cva("flex items-center gap-1 truncate text-[11px] leading-tight", {
   variants: {
     remote: {
       true: "text-secondary-400",
-      false: "text-fg-muted",
+      false: "text-fg-muted sm:hidden",
     },
   },
   defaultVariants: { remote: false },

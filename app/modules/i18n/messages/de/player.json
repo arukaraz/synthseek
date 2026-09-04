@@ -34,8 +34,8 @@
   "devices": {
     "caption": "WO ES SPIELT",
     "footnote": "Synthseek spielt in jedem Tab für sich. Wähle einen anderen, um die Wiedergabe dorthin zu verschieben. Apps, die sich über Subsonic verbinden, spielen eigenständig ab.",
-    "thisBrowser": "Dieser Browser",
-    "thisBrowserDetail": "der Tab, den du gerade siehst",
+    "thisBrowser": "Dieser Webbrowser",
+    "thisBrowserDetail": "der Tab, den du gerade ansiehst",
     "playing": "spielt {{title}}",
     "idle": "offen, spielt nicht",
     "notArmed": "offen, hat noch nicht gespielt",

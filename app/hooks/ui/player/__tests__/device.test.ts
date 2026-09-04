@@ -3,30 +3,30 @@ import { describe, expect, it } from "vitest";
 import { deviceNameFrom, shouldYield } from "../device";
 
 describe("deviceNameFrom", () => {
-  it("names a Chrome tab on Linux", () => {
+  it("names a Chrome tab", () => {
     expect(deviceNameFrom("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/141.0 Safari/537.36")).toBe(
-      "Chrome on Linux"
+      "Web Player (Chrome)"
     );
   });
 
   it("prefers Edge over the Chrome string Edge also carries", () => {
     expect(deviceNameFrom("Mozilla/5.0 (Windows NT 10.0) Chrome/141.0 Safari/537.36 Edg/141.0")).toBe(
-      "Edge on Windows"
+      "Web Player (Edge)"
     );
   });
 
   it("prefers Firefox over the Safari string it does not carry", () => {
-    expect(deviceNameFrom("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15) Firefox/144.0")).toBe("Firefox on Mac");
+    expect(deviceNameFrom("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15) Firefox/144.0")).toBe("Web Player (Firefox)");
   });
 
-  it("names Safari on an iPhone rather than calling it Chrome", () => {
+  it("names Safari rather than calling it Chrome", () => {
     expect(deviceNameFrom("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0) AppleWebKit/605.1 Version/18.0 Safari/604.1")).toBe(
-      "Safari on iPhone"
+      "Web Player (Safari)"
     );
   });
 
-  it("stays readable when it recognises neither half", () => {
-    expect(deviceNameFrom("SomeCrawler/1.0")).toBe("Browser on this device");
+  it("stays readable when it recognises no browser at all", () => {
+    expect(deviceNameFrom("SomeCrawler/1.0")).toBe("Web Player (Browser)");
   });
 });
 

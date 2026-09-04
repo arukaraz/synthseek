@@ -2,6 +2,15 @@ import type { PlayerNotice, PlayerRepeat, PlayerTrack } from "@components/Player
 
 export type PlayerDockState = "hidden" | "bar" | "chain";
 
+export interface RemotePlayback {
+  deviceId: string;
+  deviceName: string;
+  playing: boolean;
+  trackId: string | null;
+  positionSeconds: number;
+  updatedAt: number;
+}
+
 export interface PlayerSessionState {
   queue: readonly PlayerTrack[];
   index: number;
@@ -17,6 +26,7 @@ export interface PlayerSessionState {
   repeat: PlayerRepeat;
   transcoding: boolean;
   armed: boolean;
+  remote: RemotePlayback | null;
   offsetSeconds: number;
   chainVisible: boolean;
   moreOpen: boolean;

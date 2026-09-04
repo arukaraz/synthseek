@@ -5,6 +5,7 @@ import { useFavoriteTracks, useSetFavoriteTrack } from "@hooks/api";
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 
+import { mirroredPositionSeconds } from "./helpers";
 import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
 import type { PlayerDockState, PlayerSessionState } from "./types";
@@ -28,8 +29,10 @@ function usePlayerSession(): PlayerSessionState {
 export function usePlayer(): { view: PlayerView | null; actions: PlayerActions } {
   const { t } = useTranslation("player");
   const session = usePlayerSession();
-  const { devices: known, handOverTo, toggleRemote } = usePlayerDevices();
-  const track = session.queue[session.index] ?? null;
+  const { devices: known, handOverTo, toggleRemote, commandActive } = usePlayerDevices();
+  const mirroring = session.remote !== null && session.remote.playing;
+  const mirroredIndex = session.queue.findIndex((entry) => entry.id === session.remote?.trackId);
+  const track = (mirroring && mirroredIndex >= 0 ? session.queue[mirroredIndex] : session.queue[session.index]) ?? null;
   const favorites = useFavoriteTracks(track === null ? [] : [track.id]);
   const { mutate: setFavorite, isPending, variables } = useSetFavoriteTrack();
   const pendingForThisTrack = isPending && variables.trackId === track?.id;
@@ -58,15 +61,31 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   const here: PlayerDevice = {
     id: "here",
     name: t("devices.thisBrowser"),
-    detail: t("devices.thisBrowserDetail"),
-    active: true,
+    detail: mirroring ? t("devices.idle") : t("devices.thisBrowserDetail"),
+    active: !mirroring,
     local: true,
     armed: true,
     playing: session.playing,
   };
 
+  const playingOn = session.remote;
+
+  const mirrored: PlayerDevice | null =
+    playingOn === null
+      ? null
+      : {
+          id: playingOn.deviceId,
+          name: playingOn.deviceName,
+          detail: playingOn.playing ? t("devices.playing", { title: track?.title ?? "" }) : t("devices.idle"),
+          active: mirroring,
+          local: false,
+          armed: true,
+          playing: playingOn.playing,
+        };
+
   const devices: PlayerDevice[] = [
     here,
+    ...(mirrored !== null && !known.some((device) => device.id === mirrored.id) ? [mirrored] : []),
     ...known.map((device) => ({
       id: device.id,
       name: device.name,
@@ -75,7 +94,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
         : device.armed
           ? t("devices.idle")
           : t("devices.notArmed"),
-      active: false,
+      active: mirroring && device.id === playingOn?.deviceId,
       local: false,
       armed: device.armed,
       playing: device.playing,
@@ -83,10 +102,10 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   ];
 
   const playerActions: PlayerActions = {
-    togglePlay: actions.togglePlay,
-    next: actions.next,
-    previous: actions.previous,
-    seekTo: actions.seekTo,
+    togglePlay: mirroring ? () => commandActive(playingOn?.playing === true ? "pause" : "play") : actions.togglePlay,
+    next: mirroring ? () => commandActive("next") : actions.next,
+    previous: mirroring ? () => commandActive("previous") : actions.previous,
+    seekTo: mirroring ? (seconds: number) => commandActive("seek", seconds) : actions.seekTo,
     scrubTo: actions.scrubTo,
     setVolume: actions.setVolume,
     toggleMute: actions.toggleMute,
@@ -103,18 +122,21 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
 
   if (track === null || !session.started) return { view: null, actions: playerActions };
 
+  const activeDevice = mirroring && mirrored !== null ? mirrored : here;
+
   const view: PlayerView = {
     track,
-    positionSeconds: session.positionSeconds,
+    positionSeconds:
+      playingOn !== null && !session.playing ? mirroredPositionSeconds(playingOn, Date.now()) : session.positionSeconds,
     scrubSeconds: session.scrubSeconds,
-    playing: session.playing,
-    loading: session.loading,
+    playing: mirroring ? true : session.playing,
+    loading: mirroring ? false : session.loading,
     shuffle: session.shuffle,
     repeat: session.repeat,
     volume: session.volume,
     muted: session.muted,
     devices,
-    activeDevice: here,
+    activeDevice,
     chain: {
       fileLabel: t("chain.fileValue", { format: track.format.toUpperCase(), bitrate: track.bitrateKbps }),
       transcoding: session.transcoding,

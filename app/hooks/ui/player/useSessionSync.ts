@@ -3,7 +3,7 @@
 import { usePlaybackSession, useSavePlaybackSession } from "@hooks/api";
 import { useEffect, useRef } from "react";
 
-import { setTakeOverHandler } from "./commands";
+import { setTakeOverHandler, setUnknownTrackHandler } from "./commands";
 import { SESSION_SAVE_INTERVAL_MS } from "./constants";
 import { playerTrackFrom, sessionChanged } from "./helpers";
 import { actions, getSnapshot, sessionSnapshot, subscribe } from "./store";
@@ -46,6 +46,18 @@ export function usePlayerSessionSync(): void {
       });
     });
     return () => setTakeOverHandler(null);
+  }, [refetch]);
+
+  useEffect(() => {
+    setUnknownTrackHandler((trackId) => {
+      if (getSnapshot().queue.some((track) => track.id === trackId)) return;
+      void refetch().then((result) => {
+        const shared = result.data;
+        if (shared === undefined || shared === null) return;
+        actions.adoptQueue(shared.tracks.filter((track) => track.playable).map(playerTrackFrom), trackId);
+      });
+    });
+    return () => setUnknownTrackHandler(null);
   }, [refetch]);
 
   useEffect(() => {
