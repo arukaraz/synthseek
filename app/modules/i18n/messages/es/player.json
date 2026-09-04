@@ -4,6 +4,8 @@
     "pause": "Pausar",
     "next": "Pista siguiente",
     "previous": "Pista anterior",
+    "favorite": "Añadir a favoritos",
+    "unfavorite": "Quitar de favoritos",
     "shuffle": "Barajar",
     "repeat": {
       "off": "Repetición apagada",
@@ -31,9 +33,13 @@
   },
   "devices": {
     "caption": "DÓNDE SUENA",
-    "footnote": "Synthseek suena aquí, en esta pestaña. Las apps que se conectan por Subsonic reproducen por su cuenta.",
+    "footnote": "Synthseek suena en cada pestaña por su cuenta. Elige otra para mover la reproducción allí. Las apps que se conectan por Subsonic reproducen por su cuenta.",
     "thisBrowser": "Este navegador",
-    "thisBrowserDetail": "la pestaña que estás mirando"
+    "thisBrowserDetail": "la pestaña que estás mirando",
+    "playing": "sonando {{title}}",
+    "idle": "abierto, sin reproducir",
+    "notArmed": "abierto, todavía no ha sonado",
+    "handOver": "Reproducir aquí"
   },
   "stage": {
     "label": "Sesión a pantalla completa",
@@ -43,6 +49,8 @@
     "skipping": "«{{title}}» falló, saltando a la siguiente",
     "queueEnd": "Fin de la cola",
     "autoplayBlocked": "El navegador bloqueó la reproducción. Pulsa play para empezar.",
-    "tooManyFailures": "Varias pistas fallaron seguidas, así que la reproducción se detuvo"
+    "tooManyFailures": "Varias pistas fallaron seguidas, así que la reproducción se detuvo",
+    "resumed": "Continuando donde lo dejó {{client}}",
+    "deviceGone": "Ese dispositivo ya no está"
   }
 }

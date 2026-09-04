@@ -324,5 +324,9 @@
     "revokeFailed": "Impossible de révoquer l'identifiant",
     "settingsSaved": "Paramètres des applications musicales enregistrés",
     "settingsFailed": "Impossible d'enregistrer les paramètres"
+  },
+  "playback": {
+    "favoriteFailed": "Impossible d'enregistrer ce favori",
+    "commandFailed": "Impossible de joindre cet appareil"
   }
 }

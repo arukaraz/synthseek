@@ -15,6 +15,8 @@ export interface PlayerDevice {
   detail: string;
   active: boolean;
   local: boolean;
+  armed: boolean;
+  playing: boolean;
 }
 
 export interface PlayerTrack {
@@ -49,6 +51,7 @@ export interface PlayerView {
   devices: readonly PlayerDevice[];
   activeDevice: PlayerDevice;
   chain: PlayerSignalChain;
+  favorite: boolean;
   chainVisible: boolean;
   devicesOpen: boolean;
   moreOpen: boolean;
@@ -70,11 +73,18 @@ export interface PlayerActions {
   toggleMore: () => void;
   toggleChain: () => void;
   toggleFullscreen: () => void;
+  toggleFavorite: () => void;
+  handOverTo: (deviceId: string) => void;
+  toggleRemote: (deviceId: string, playing: boolean) => void;
 }
 
 export interface PlayerProps {
   view: PlayerView;
   actions: PlayerActions;
+}
+
+export interface PlayerDeviceBodyProps {
+  device: PlayerDevice;
 }
 
 export interface PlayerPanelProps extends PlayerProps {

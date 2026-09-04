@@ -89,6 +89,7 @@ export const iconButton = cva(
       tone: {
         muted: "text-fg-muted hover:text-fg",
         active: "text-primary-400 hover:bg-fg/8",
+        favorite: "text-accent-400 hover:bg-fg/8",
         remote: "text-secondary-400 hover:bg-fg/8",
         warning: "text-warning-vivid hover:bg-fg/8",
         danger: "text-destructive-vivid hover:bg-fg/8",

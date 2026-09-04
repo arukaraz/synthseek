@@ -4,6 +4,8 @@
     "pause": "Pause",
     "next": "Piste suivante",
     "previous": "Piste précédente",
+    "favorite": "Ajouter aux favoris",
+    "unfavorite": "Retirer des favoris",
     "shuffle": "Lecture aléatoire",
     "repeat": {
       "off": "Répétition désactivée",
@@ -31,9 +33,13 @@
   },
   "devices": {
     "caption": "OÙ ÇA JOUE",
-    "footnote": "Synthseek joue ici, dans cet onglet. Les applications connectées via Subsonic lisent de leur côté.",
+    "footnote": "Synthseek joue dans chaque onglet indépendamment. Choisis-en un autre pour y déplacer la lecture. Les applications connectées via Subsonic lisent de leur côté.",
     "thisBrowser": "Ce navigateur",
-    "thisBrowserDetail": "l'onglet que vous regardez"
+    "thisBrowserDetail": "l'onglet que vous regardez",
+    "playing": "joue {{title}}",
+    "idle": "ouvert, ne joue pas",
+    "notArmed": "ouvert, n'a pas encore joué",
+    "handOver": "Lire ici plutôt"
   },
   "stage": {
     "label": "Session en plein écran",
@@ -43,6 +49,8 @@
     "skipping": "« {{title}} » a échoué, passage à la suivante",
     "queueEnd": "Fin de la file",
     "autoplayBlocked": "Le navigateur a bloqué la lecture. Appuyez sur lecture pour démarrer.",
-    "tooManyFailures": "Plusieurs pistes ont échoué de suite, la lecture s'est arrêtée"
+    "tooManyFailures": "Plusieurs pistes ont échoué de suite, la lecture s'est arrêtée",
+    "resumed": "On reprend là où {{client}} s'est arrêté",
+    "deviceGone": "Cet appareil n'est plus là"
   }
 }

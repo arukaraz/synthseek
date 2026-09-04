@@ -4,6 +4,8 @@
     "pause": "Pause",
     "next": "Nächster Titel",
     "previous": "Vorheriger Titel",
+    "favorite": "Zu Favoriten hinzufügen",
+    "unfavorite": "Aus Favoriten entfernen",
     "shuffle": "Zufallswiedergabe",
     "repeat": {
       "off": "Wiederholung aus",
@@ -31,9 +33,13 @@
   },
   "devices": {
     "caption": "WO ES SPIELT",
-    "footnote": "Synthseek spielt hier, in diesem Tab. Apps, die sich über Subsonic verbinden, spielen eigenständig ab.",
+    "footnote": "Synthseek spielt in jedem Tab für sich. Wähle einen anderen, um die Wiedergabe dorthin zu verschieben. Apps, die sich über Subsonic verbinden, spielen eigenständig ab.",
     "thisBrowser": "Dieser Browser",
-    "thisBrowserDetail": "der Tab, den du gerade siehst"
+    "thisBrowserDetail": "der Tab, den du gerade siehst",
+    "playing": "spielt {{title}}",
+    "idle": "offen, spielt nicht",
+    "notArmed": "offen, hat noch nicht gespielt",
+    "handOver": "Stattdessen hier abspielen"
   },
   "stage": {
     "label": "Vollbild-Sitzung",
@@ -43,6 +49,8 @@
     "skipping": "„{{title}}“ ist fehlgeschlagen, es geht weiter zum nächsten Titel",
     "queueEnd": "Ende der Warteschlange",
     "autoplayBlocked": "Der Browser hat die Wiedergabe blockiert. Drücke Play, um zu starten.",
-    "tooManyFailures": "Mehrere Titel sind nacheinander fehlgeschlagen, die Wiedergabe wurde gestoppt"
+    "tooManyFailures": "Mehrere Titel sind nacheinander fehlgeschlagen, die Wiedergabe wurde gestoppt",
+    "resumed": "Weiter da, wo {{client}} aufgehört hat",
+    "deviceGone": "Dieses Gerät ist nicht mehr da"
   }
 }

@@ -104,7 +104,7 @@ export function ReviewItemRow({ item }: ReviewItemRowProps) {
           controls
           className={audioPlayer()}
           src={heldAudioUrl(item.id)}
-          onPlay={playerActions.pauseForOtherAudio}
+          onPlay={playerActions.pauseHere}
           aria-label={t("review.actions.previewLabel", { name: trackLabel })}
         />
       ) : null}

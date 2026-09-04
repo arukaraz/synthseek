@@ -1,0 +1,1 @@
+export const FAVORITE_STALE_TIME = 60_000;

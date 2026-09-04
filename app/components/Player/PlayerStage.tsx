@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Heart,
   MonitorSpeaker,
   Loader2,
   Minimize,
@@ -92,6 +93,15 @@ export function PlayerStage({ view, actions }: PlayerProps) {
             </span>
           </div>
           <div className={stageActions()}>
+            <button
+              type="button"
+              className={iconButton({ tone: view.favorite ? "favorite" : "muted", size: "stage" })}
+              onClick={actions.toggleFavorite}
+              aria-label={view.favorite ? t("controls.unfavorite") : t("controls.favorite")}
+              aria-pressed={view.favorite}
+            >
+              <Heart className={view.favorite ? "size-4 fill-current" : "size-4"} />
+            </button>
             <button
               type="button"
               className={iconButton({ tone: view.shuffle ? "active" : "muted", size: "stage" })}

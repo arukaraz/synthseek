@@ -145,7 +145,11 @@ The queue is the page of tracks you pressed play on, in the order you were looki
 
 Playback is the original file. If your browser cannot decode the format, Synthseek converts it on the fly and scrubbing still works, because the player asks the server to start again from where you dropped the needle.
 
-It is a per-tab session: it does not follow you to another tab, and reloading the page stops it. Favourites and scrobbling belong to your music apps for now, not to this player.
+Your queue is kept for you. Reload the page, come back tomorrow, or open Synthseek somewhere else, and it is there where you left it, paused close to where you stopped. It is the same queue your music apps use, so what you were playing in Symfonium is offered back in the browser, named after the app that left it, and what you queue in the browser is waiting on your phone. The queue and your position travel; shuffle and repeat are settings of the tab you are in, and start over each time.
+
+The Synthseek tabs you have open show up under **Where it plays**, with what each one is playing, a few seconds behind. Pick another one to move playback there, or pause it from where you are. A tab that has not played anything yet can still be handed the queue, but it waits for you to press play, because a browser will not start audio in a tab you have not touched. A Subsonic app is not in that list at all: its protocol has no way for the server to talk back to it, so Synthseek hands it the queue rather than pretending it can command it.
+
+The heart marks the same favourite your music app marks. Scrobbling is not part of this player yet, so what you play here does not reach Last.fm or ListenBrainz, and it is not counted as now playing.
 
 ### Play it in a music app
 

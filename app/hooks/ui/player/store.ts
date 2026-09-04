@@ -5,7 +5,7 @@ import type { PlayerTrack } from "@components/Player";
 import { artworkProxySrc } from "@utils/artworkProxy";
 
 import { MAX_CONSECUTIVE_FAILURES, NOTICE_MS, SKIP_DELAY_MS, VOLUME_STORAGE_KEY } from "./constants";
-import { applyVolume, canPlayMime, connectEngine, loadAndPlay, pause, resume, seek, stop } from "./engine";
+import { applyVolume, canPlayMime, connectEngine, loadAndPlay, loadAt, pause, resume, seek, stop } from "./engine";
 import { needsConversion, nextIndexIn, previousIndexIn, shuffledOrder, streamUrlFor } from "./helpers";
 import { publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
 import type { PlayerSessionState } from "./types";
@@ -26,6 +26,7 @@ let state: PlayerSessionState = {
   shuffleOrder: [],
   repeat: "off",
   transcoding: false,
+  armed: false,
   offsetSeconds: 0,
   chainVisible: false,
   moreOpen: false,
@@ -78,7 +79,11 @@ function ensureConnected(): void {
     },
     onEnded: () => advance(true),
     onPlayingChange: (playing) => {
-      publish({ playing, consecutiveFailures: playing ? 0 : state.consecutiveFailures });
+      publish({
+        playing,
+        armed: state.armed || playing,
+        consecutiveFailures: playing ? 0 : state.consecutiveFailures,
+      });
       publishPlaybackState(playing);
     },
     onLoadingChange: (loading) => publish({ loading }),
@@ -102,7 +107,7 @@ function playAt(index: number, fromSeconds = 0): void {
     transcoding: converted,
     offsetSeconds: converted ? fromSeconds : 0,
   });
-  loadAndPlay(streamUrlFor(track.id, converted, fromSeconds), state.volume, state.muted);
+  loadAndPlay(streamUrlFor(track.id, converted, fromSeconds), state.volume, state.muted, converted ? 0 : fromSeconds);
   publishMediaSession(track, mediaHandlers());
 }
 
@@ -165,6 +170,8 @@ function handleFailure(reason: "load" | "stall" | "autoplay"): void {
 
 export interface PlayerMessages {
   skipping: (title: string) => string;
+  resumedFrom: (client: string) => string;
+  deviceGone: string;
   queueEnd: string;
   autoplayBlocked: string;
   tooManyFailures: string;
@@ -172,6 +179,8 @@ export interface PlayerMessages {
 
 let lastMessages: PlayerMessages = {
   skipping: (title) => title,
+  resumedFrom: (client) => client,
+  deviceGone: "",
   queueEnd: "",
   autoplayBlocked: "",
   tooManyFailures: "",
@@ -197,7 +206,58 @@ function mediaHandlers(): {
   };
 }
 
+export function sessionSnapshot(): { trackIds: string[]; currentTrackId: string | null; positionMs: number } {
+  return {
+    trackIds: state.queue.map((track) => track.id),
+    currentTrackId: currentTrack()?.id ?? null,
+    positionMs: Math.max(0, Math.round(state.positionSeconds * 1000)),
+  };
+}
+
 export const actions = {
+  restoreSession(
+    tracks: readonly PlayerTrack[],
+    currentTrackId: string | null,
+    positionSeconds: number,
+    resumedFrom: string | null
+  ): void {
+    if (state.started || tracks.length === 0) return;
+    const found = tracks.findIndex((track) => track.id === currentTrackId);
+    const index = Math.max(0, found);
+    const track = tracks[index];
+    if (track === undefined) return;
+    ensureConnected();
+    const converted = needsConversion(track.format, canPlayMime);
+    const resumeAt = found < 0 ? 0 : Math.min(positionSeconds, track.durationSeconds);
+    publish({
+      queue: tracks,
+      index,
+      positionSeconds: resumeAt,
+      durationSeconds: track.durationSeconds,
+      scrubSeconds: null,
+      started: true,
+      playing: false,
+      loading: false,
+      transcoding: converted,
+      offsetSeconds: converted ? resumeAt : 0,
+      consecutiveFailures: 0,
+    });
+    loadAt(streamUrlFor(track.id, converted, resumeAt), converted ? 0 : resumeAt, state.volume, state.muted);
+    publishMediaSession(track, mediaHandlers());
+    if (resumedFrom !== null) notify(lastMessages.resumedFrom(resumedFrom), "info");
+  },
+  takeOver(tracks: readonly PlayerTrack[], currentTrackId: string | null, positionSeconds: number): void {
+    if (tracks.length === 0) return;
+    const found = tracks.findIndex((track) => track.id === currentTrackId);
+    const index = Math.max(0, found);
+    publish({
+      queue: tracks,
+      shuffleOrder: state.shuffle ? shuffledOrder(tracks.length, index) : [],
+      consecutiveFailures: 0,
+      started: false,
+    });
+    playAt(index, found < 0 ? 0 : positionSeconds);
+  },
   playQueue(tracks: readonly PlayerTrack[], startIndex: number): void {
     if (tracks.length === 0) return;
     const order = state.shuffle ? shuffledOrder(tracks.length, startIndex) : [];
@@ -268,7 +328,14 @@ export const actions = {
   toggleFullscreen(): void {
     publish({ fullscreen: !state.fullscreen, moreOpen: false });
   },
-  pauseForOtherAudio(): void {
+  resumeHere(): void {
+    if (state.playing) return;
+    actions.togglePlay();
+  },
+  announceDeviceGone(): void {
+    notify(lastMessages.deviceGone, "warning");
+  },
+  pauseHere(): void {
     if (!state.playing) return;
     pause();
   },

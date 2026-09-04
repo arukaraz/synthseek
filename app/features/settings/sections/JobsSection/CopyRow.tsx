@@ -75,7 +75,7 @@ export function CopyRow({ copy, disabled, keeping, playing, onPlayChange, onKeep
         ref={audioRef}
         src={copyAudioUrl(copy.id)}
         preload="none"
-        onPlay={playerActions.pauseForOtherAudio}
+        onPlay={playerActions.pauseHere}
         onPlaying={() => setBuffering(false)}
         onWaiting={() => setBuffering(true)}
         onEnded={() => onPlayChange(null)}

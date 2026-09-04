@@ -4,6 +4,8 @@
     "pause": "Pause",
     "next": "Next track",
     "previous": "Previous track",
+    "favorite": "Add to favourites",
+    "unfavorite": "Remove from favourites",
     "shuffle": "Shuffle",
     "repeat": {
       "off": "Repeat off",
@@ -31,9 +33,13 @@
   },
   "devices": {
     "caption": "WHERE IT PLAYS",
-    "footnote": "Synthseek plays here, in this tab. Apps that connect over Subsonic run their own playback.",
+    "footnote": "Synthseek plays in each tab on its own. Pick another one to move playback there. Apps that connect over Subsonic run their own playback.",
     "thisBrowser": "This browser",
-    "thisBrowserDetail": "the tab you are looking at"
+    "thisBrowserDetail": "the tab you are looking at",
+    "playing": "playing {{title}}",
+    "idle": "open, not playing",
+    "notArmed": "open, has not played yet",
+    "handOver": "Play here instead"
   },
   "stage": {
     "label": "Full screen session",
@@ -43,6 +49,8 @@
     "skipping": "\"{{title}}\" failed, skipping to the next one",
     "queueEnd": "End of the queue",
     "autoplayBlocked": "Your browser blocked playback. Press play to start it.",
-    "tooManyFailures": "Several tracks failed in a row, so playback stopped"
+    "tooManyFailures": "Several tracks failed in a row, so playback stopped",
+    "resumed": "Picking up where {{client}} left off",
+    "deviceGone": "That device is no longer there"
   }
 }

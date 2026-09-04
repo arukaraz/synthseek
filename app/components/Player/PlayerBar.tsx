@@ -4,6 +4,7 @@ import { cn } from "@utils/cn";
 import {
   ChevronLeft,
   ChevronRight,
+  Heart,
   Info,
   Loader2,
   Maximize,
@@ -159,6 +160,15 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         <span className={clock({ align: "right" })}>{formatClock(view.positionSeconds)}</span>
         <SiriWave view={view} actions={actions} size="bar" />
         <span className={clock()}>{formatClock(view.track.durationSeconds)}</span>
+        <button
+          type="button"
+          className={iconButton({ tone: view.favorite ? "favorite" : "muted" })}
+          onClick={actions.toggleFavorite}
+          aria-label={view.favorite ? t("controls.unfavorite") : t("controls.favorite")}
+          aria-pressed={view.favorite}
+        >
+          <Heart className={cn("size-3.5", view.favorite ? "fill-current" : undefined)} />
+        </button>
         <button
           type="button"
           className={iconButton({ tone: view.chainVisible ? "remote" : "muted" })}

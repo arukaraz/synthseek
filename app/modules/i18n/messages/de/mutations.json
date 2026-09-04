@@ -324,5 +324,9 @@
     "revokeFailed": "Zugangsdaten konnten nicht widerrufen werden",
     "settingsSaved": "Einstellungen für Musik-Apps gespeichert",
     "settingsFailed": "Einstellungen konnten nicht gespeichert werden"
+  },
+  "playback": {
+    "favoriteFailed": "Favorit konnte nicht gespeichert werden",
+    "commandFailed": "Dieses Gerät war nicht erreichbar"
   }
 }

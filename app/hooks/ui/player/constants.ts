@@ -27,3 +27,15 @@ export const PLAYBACK_MIME_BY_FORMAT: Readonly<Record<string, string>> = {
   aac: "audio/aac",
   wav: "audio/wav",
 };
+
+export const TONES = ["primary", "secondary", "accent"] as const;
+
+export const SESSION_SAVE_INTERVAL_MS = 10_000;
+
+export const SESSION_POSITION_DRIFT_MS = 5_000;
+
+export const DEVICE_ID_STORAGE_KEY = "synthseek.player.device";
+
+export const DEVICE_CLAIM_CHANNEL = "synthseek.player.devices";
+
+export const DEVICE_HEARTBEAT_MS = 15_000;

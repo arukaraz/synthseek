@@ -1,4 +1,5 @@
 import { RequestStatus, SubscriptionEventType, type SubscriptionEvent } from "@api/__generated__/types";
+import { applyPlayerCommand } from "@hooks/ui/player";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
@@ -89,6 +90,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.DropImportUpdate:
           handleDropImportUpdate(event, utils);
+          break;
+        case SubscriptionEventType.PlayerCommand:
+          applyPlayerCommand(event);
           break;
         default: {
           const _unhandledEventType: never = event;

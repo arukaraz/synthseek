@@ -324,5 +324,9 @@
     "revokeFailed": "No se pudo revocar la credencial",
     "settingsSaved": "Ajustes de aplicaciones de música guardados",
     "settingsFailed": "No se pudieron guardar los ajustes"
+  },
+  "playback": {
+    "favoriteFailed": "No se pudo guardar el favorito",
+    "commandFailed": "No se pudo llegar a ese dispositivo"
   }
 }

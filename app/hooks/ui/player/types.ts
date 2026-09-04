@@ -16,6 +16,7 @@ export interface PlayerSessionState {
   shuffleOrder: readonly number[];
   repeat: PlayerRepeat;
   transcoding: boolean;
+  armed: boolean;
   offsetSeconds: number;
   chainVisible: boolean;
   moreOpen: boolean;
@@ -32,4 +33,18 @@ export interface EngineCallbacks {
   onPlayingChange: (playing: boolean) => void;
   onLoadingChange: (loading: boolean) => void;
   onFailure: (reason: "load" | "stall" | "autoplay") => void;
+}
+
+export interface SessionSnapshot {
+  trackIds: string[];
+  currentTrackId: string | null;
+  positionMs: number;
+}
+
+export interface KnownDevice {
+  id: string;
+  name: string;
+  armed: boolean;
+  playing: boolean;
+  trackTitle: string | null;
 }

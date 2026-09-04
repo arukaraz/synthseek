@@ -74,7 +74,7 @@ export function connectEngine(next: EngineCallbacks): void {
   callbacks = next;
 }
 
-export function loadAndPlay(url: string, volume: number, muted: boolean): number {
+export function loadAndPlay(url: string, volume: number, muted: boolean, startSeconds = 0): number {
   const node = audio();
   const current = ++generation;
   clearTimers();
@@ -82,6 +82,7 @@ export function loadAndPlay(url: string, volume: number, muted: boolean): number
   node.volume = volume;
   node.muted = muted;
   node.load();
+  seekOnceReady(node, current, startSeconds);
   callbacks?.onLoadingChange(true);
   loadTimer = setTimeout(() => {
     if (current === generation) callbacks?.onFailure("load");
@@ -90,6 +91,27 @@ export function loadAndPlay(url: string, volume: number, muted: boolean): number
     if (current === generation) callbacks?.onFailure("autoplay");
   });
   return current;
+}
+
+export function loadAt(url: string, seconds: number, volume: number, muted: boolean): void {
+  const node = audio();
+  const current = ++generation;
+  clearTimers();
+  node.src = url;
+  node.volume = volume;
+  node.muted = muted;
+  node.load();
+  seekOnceReady(node, current, seconds);
+}
+
+function seekOnceReady(node: HTMLAudioElement, expected: number, seconds: number): void {
+  if (seconds <= 0) return;
+  const apply = () => {
+    node.removeEventListener("loadedmetadata", apply);
+    if (expected !== generation) return;
+    node.currentTime = seconds;
+  };
+  node.addEventListener("loadedmetadata", apply);
 }
 
 export function resume(): void {

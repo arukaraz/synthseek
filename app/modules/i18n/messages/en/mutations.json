@@ -324,5 +324,9 @@
     "revokeFailed": "Could not revoke the credential",
     "settingsSaved": "Music-app settings saved",
     "settingsFailed": "Could not save the music-app settings"
+  },
+  "playback": {
+    "favoriteFailed": "Could not save that favourite",
+    "commandFailed": "Could not reach that device"
   }
 }

@@ -52,6 +52,10 @@ vi.mock("@components/ui/ProgressDock", () => ({
   ProgressDock: () => null,
 }));
 
+vi.mock("@components/PlayerDock", () => ({
+  PlayerDock: () => null,
+}));
+
 vi.mock("@features/search/components/ContentRequestFlow", () => ({
   ContentRequestFlow: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));

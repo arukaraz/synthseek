@@ -23,6 +23,14 @@ export { useLibraryAlbums } from "./queries/library/useLibraryAlbums";
 export { useLibraryArtists } from "./queries/library/useLibraryArtists";
 export { useLibraryPlaylists } from "./queries/library/useLibraryPlaylists";
 export { useLibraryCounts } from "./queries/library/useLibraryCounts";
+export { useFavoriteTracks, usePlaybackSession } from "./queries/playback";
+export {
+  useDeviceHeartbeat,
+  useForgetDevice,
+  useSavePlaybackSession,
+  useSendPlayerCommand,
+  useSetFavoriteTrack,
+} from "./mutations/playback";
 
 export { usePlexSyncAllProgress } from "./subscriptions/usePlexSyncAllProgress";
 
