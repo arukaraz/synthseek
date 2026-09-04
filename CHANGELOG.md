@@ -2,6 +2,15 @@
 
 ---
 
+# v2.6.1, September 3, 2026
+
+- Soulseek searches were being given up on just before the results arrived, so a download could fail as though nothing was found. That should be much rarer now.
+- A song with a short title should no longer be turned down just because the file name mentions something extra in brackets, like a guest singer or the format it was ripped at.
+- Requesting a single song from an artist's top tracks or from a playlist should work again.
+- A step that runs out of time now says so, instead of reporting that nothing was found.
+
+---
+
 # v2.6.0, September 2, 2026
 
 > [!IMPORTANT]
