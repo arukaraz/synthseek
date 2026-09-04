@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 
 import { setTakeOverHandler, setUnknownTrackHandler } from "./commands";
 import { SESSION_SAVE_INTERVAL_MS } from "./constants";
-import { playerTrackFrom, sessionChanged } from "./helpers";
+import { playerTrackFrom, queueChanged, sessionChanged } from "./helpers";
 import { actions, getSnapshot, sessionSnapshot, subscribe } from "./store";
 import type { SessionSnapshot } from "./types";
 
@@ -35,6 +35,7 @@ export function usePlayerSessionSync(): void {
   const refetch = session.refetch;
   useEffect(() => {
     setTakeOverHandler(() => {
+      if (actions.playHere()) return;
       void refetch().then((result) => {
         const handed = result.data;
         if (handed === undefined || handed === null) return;
@@ -62,11 +63,13 @@ export function usePlayerSessionSync(): void {
 
   useEffect(() => {
     const flush = (force: boolean) => {
-      if (!getSnapshot().started) return;
-      if (!force && Date.now() - lastSentAt.current < SESSION_SAVE_INTERVAL_MS) return;
+      const session = getSnapshot();
+      if (!session.started || session.remote !== null) return;
+      const throttled = !force && Date.now() - lastSentAt.current < SESSION_SAVE_INTERVAL_MS;
       const next = sessionSnapshot();
       if (next.trackIds.length === 0) return;
       if (!sessionChanged(lastSaved.current, next)) return;
+      if (throttled && !queueChanged(lastSaved.current, next)) return;
       lastSaved.current = next;
       lastSentAt.current = Date.now();
       saveSession(next);

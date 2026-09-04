@@ -1,6 +1,7 @@
 import type { PlaybackStatePayload, PlayerCommandPayload } from "@api/__generated__/types";
 
 import { deviceIdentity } from "./device";
+import { toneFor } from "./helpers";
 import { actions } from "./store";
 
 let takeOverHandler: (() => void) | null = null;
@@ -14,6 +15,14 @@ export function setTakeOverHandler(handler: (() => void) | null): void {
 
 export function setUnknownTrackHandler(handler: ((trackId: string) => void) | null): void {
   unknownTrackHandler = handler;
+}
+
+export function noteCommandIssued(issuedAt: number): void {
+  lastStateAt = Math.max(lastStateAt, issuedAt);
+}
+
+export function adoptSharedQueue(trackId: string): void {
+  unknownTrackHandler?.(trackId);
 }
 
 export function applyPlayerCommand(command: PlayerCommandPayload): void {
@@ -40,6 +49,18 @@ export function applyPlayerCommand(command: PlayerCommandPayload): void {
     case "seek":
       if (command.seekSeconds !== undefined) actions.seekTo(command.seekSeconds);
       return;
+    case "toggleShuffle":
+      actions.toggleShuffle();
+      return;
+    case "cycleRepeat":
+      actions.cycleRepeat();
+      return;
+    case "toggleMute":
+      actions.toggleMute();
+      return;
+    case "setVolume":
+      if (command.volumeLevel !== undefined) actions.setVolume(command.volumeLevel);
+      return;
   }
 }
 
@@ -52,10 +73,16 @@ export function applyPlaybackState(state: PlaybackStatePayload): void {
     deviceId: state.deviceId,
     deviceName: state.deviceName,
     playing: state.playing,
-    trackId: state.trackId,
+    track: state.track === null ? null : { ...state.track, tone: toneFor(state.track.id) },
+    confirmed: true,
     positionSeconds: state.positionSeconds,
+    shuffle: state.shuffle,
+    repeat: state.repeat,
+    volume: state.volume,
+    muted: state.muted,
+    transcoding: state.transcoding,
     updatedAt: Date.now(),
   });
 
-  if (state.playing && state.trackId !== null) unknownTrackHandler?.(state.trackId);
+  if (state.playing && state.track !== null) unknownTrackHandler?.(state.track.id);
 }

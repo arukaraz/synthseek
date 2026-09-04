@@ -3,9 +3,11 @@ import { describe, expect, it } from "vitest";
 import {
   beatIsDue,
   expectedPosition,
+  isMirroring,
   mirroredPositionSeconds,
   needsConversion,
   nextIndexIn,
+  queueChanged,
   playerTrackFrom,
   previousIndexIn,
   sessionChanged,
@@ -229,7 +231,17 @@ describe("beatIsDue", () => {
 });
 
 describe("mirroredPositionSeconds", () => {
-  const remote = { deviceId: "d1", deviceName: "Web Player (Chrome)", trackId: "t1", updatedAt: 10_000 };
+  const remote = {
+    deviceId: "d1",
+    deviceName: "Web Player (Chrome)",
+    trackId: "t1",
+    updatedAt: 10_000,
+    shuffle: false,
+    repeat: "off" as const,
+    volume: 0.8,
+    muted: false,
+    transcoding: false,
+  };
 
   it("carries the reported position forward while the other device keeps playing", () => {
     expect(mirroredPositionSeconds({ ...remote, playing: true, positionSeconds: 30 }, 14_000)).toBe(34);
@@ -251,5 +263,48 @@ describe("expectedPosition", () => {
 
   it("leaves a paused position where it was", () => {
     expect(expectedPosition({ playing: false, positionSeconds: 10, at: 1_000 }, 60_000)).toBe(10);
+  });
+});
+
+describe("queueChanged", () => {
+  const base = { trackIds: ["t1", "t2"], currentTrackId: "t1", positionMs: 10_000 };
+
+  it("is what makes a brand new queue worth saving at once", () => {
+    expect(queueChanged(null, base)).toBe(true);
+    expect(queueChanged(base, { ...base, trackIds: ["t3"] })).toBe(true);
+    expect(queueChanged(base, { ...base, currentTrackId: "t2" })).toBe(true);
+  });
+
+  it("does not fire for a position that merely moved on", () => {
+    expect(queueChanged(base, { ...base, positionMs: 90_000 })).toBe(false);
+  });
+});
+
+describe("isMirroring", () => {
+  const mirrored = {
+    deviceId: "d1",
+    deviceName: "Web Player (Firefox)",
+    confirmed: true,
+    playing: true,
+    track: null,
+    positionSeconds: 10,
+    shuffle: false,
+    repeat: "off" as const,
+    volume: 0.8,
+    muted: false,
+    transcoding: false,
+    updatedAt: 1_000,
+  };
+
+  it("is not mirroring when nobody else holds the audio", () => {
+    expect(isMirroring(sessionWith({ remote: null }))).toBe(false);
+  });
+
+  it("is mirroring while another device holds it", () => {
+    expect(isMirroring(sessionWith({ remote: mirrored }))).toBe(true);
+  });
+
+  it("is never mirroring while this tab is the one making sound, whatever it still remembers", () => {
+    expect(isMirroring(sessionWith({ remote: mirrored, playing: true }))).toBe(false);
   });
 });

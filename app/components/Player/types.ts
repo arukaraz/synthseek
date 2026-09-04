@@ -76,6 +76,7 @@ export interface PlayerActions {
   toggleFavorite: () => void;
   handOverTo: (deviceId: string) => void;
   toggleRemote: (deviceId: string, playing: boolean) => void;
+  playHere: () => void;
 }
 
 export interface PlayerProps {

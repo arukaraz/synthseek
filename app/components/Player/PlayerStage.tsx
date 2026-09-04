@@ -29,6 +29,7 @@ import {
   stageArtist,
   stageBackdrop,
   stageChip,
+  stageDeviceLine,
   stageChips,
   stageFooter,
   stageHeader,
@@ -80,6 +81,12 @@ export function PlayerStage({ view, actions }: PlayerProps) {
           <h2 className={stageTitle()}>{view.track.title}</h2>
           <p className={stageArtist()}>{view.track.artist}</p>
           <p className={stageAlbum()}>{view.track.album}</p>
+          {view.activeDevice.local ? null : (
+            <p className={stageDeviceLine()}>
+              <MonitorSpeaker className="size-3.5 shrink-0" />
+              {view.activeDevice.name}
+            </p>
+          )}
           <div className={stageChips()}>
             <span
               className={stageChip({

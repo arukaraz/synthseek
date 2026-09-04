@@ -4,10 +4,16 @@ export type PlayerDockState = "hidden" | "bar" | "chain";
 
 export interface RemotePlayback {
   deviceId: string;
+  confirmed: boolean;
   deviceName: string;
   playing: boolean;
-  trackId: string | null;
+  track: PlayerTrack | null;
   positionSeconds: number;
+  shuffle: boolean;
+  repeat: PlayerRepeat;
+  volume: number;
+  muted: boolean;
+  transcoding: boolean;
   updatedAt: number;
 }
 
@@ -58,3 +64,14 @@ export interface KnownDevice {
   playing: boolean;
   trackTitle: string | null;
 }
+
+export type RemoteCommand =
+  | "play"
+  | "pause"
+  | "next"
+  | "previous"
+  | "seek"
+  | "toggleShuffle"
+  | "cycleRepeat"
+  | "toggleMute"
+  | "setVolume";

@@ -39,7 +39,8 @@
     "playing": "sonando {{title}}",
     "idle": "abierto, sin reproducir",
     "notArmed": "abierto, todavía no ha sonado",
-    "handOver": "Reproducir aquí"
+    "handOver": "Reproducir aquí",
+    "playHere": "Reproducir aquí"
   },
   "stage": {
     "label": "Sesión a pantalla completa",
@@ -51,6 +52,7 @@
     "autoplayBlocked": "El navegador bloqueó la reproducción. Pulsa play para empezar.",
     "tooManyFailures": "Varias pistas fallaron seguidas, así que la reproducción se detuvo",
     "resumed": "Continuando donde lo dejó {{client}}",
-    "deviceGone": "Ese dispositivo ya no está"
+    "deviceGone": "Ese dispositivo ya no está",
+    "handOverFailed": "{{device}} no lo recogió, así que vuelve a sonar aquí"
   }
 }

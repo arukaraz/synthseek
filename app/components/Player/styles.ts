@@ -361,6 +361,8 @@ export const stageChip = cva("rounded-full border px-2.5 py-1 font-mono text-[11
   defaultVariants: { tone: "muted" },
 });
 
+export const stageDeviceLine = cva("text-secondary-400 mt-0.5 flex items-center gap-1.5 text-[12.5px]");
+
 export const stageActions = cva("mt-1.5 flex items-center gap-4");
 
 export const stageFooter = cva(

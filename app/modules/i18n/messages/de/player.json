@@ -39,7 +39,8 @@
     "playing": "spielt {{title}}",
     "idle": "offen, spielt nicht",
     "notArmed": "offen, hat noch nicht gespielt",
-    "handOver": "Stattdessen hier abspielen"
+    "handOver": "Stattdessen hier abspielen",
+    "playHere": "Hier abspielen"
   },
   "stage": {
     "label": "Vollbild-Sitzung",
@@ -51,6 +52,7 @@
     "autoplayBlocked": "Der Browser hat die Wiedergabe blockiert. Drücke Play, um zu starten.",
     "tooManyFailures": "Mehrere Titel sind nacheinander fehlgeschlagen, die Wiedergabe wurde gestoppt",
     "resumed": "Weiter da, wo {{client}} aufgehört hat",
-    "deviceGone": "Dieses Gerät ist nicht mehr da"
+    "deviceGone": "Dieses Gerät ist nicht mehr da",
+    "handOverFailed": "{{device}} hat nicht übernommen, also läuft es wieder hier"
   }
 }

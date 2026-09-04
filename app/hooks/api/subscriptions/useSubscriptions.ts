@@ -44,6 +44,7 @@ export function useSubscriptions() {
 
       if (hasStreamConnectedRef.current) {
         resyncPushFedQueries(utils);
+        void utils.playback.activeState.refetch();
       }
       hasStreamConnectedRef.current = true;
     },

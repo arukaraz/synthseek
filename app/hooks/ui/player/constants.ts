@@ -43,3 +43,11 @@ export const DEVICE_HEARTBEAT_MS = 15_000;
 export const MIRROR_TICK_MS = 1_000;
 
 export const POSITION_JUMP_SECONDS = 3;
+
+export const PROGRESS_REPORT_MS = 10_000;
+
+export const MIRROR_STALE_MS = 45_000;
+
+export const HAND_OVER_ACK_MS = 8_000;
+
+export const WAKE_BEAT_FLOOR_MS = 3_000;

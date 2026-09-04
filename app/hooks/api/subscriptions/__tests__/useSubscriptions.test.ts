@@ -47,6 +47,9 @@ const utilsStub = vi.hoisted(() => ({
     listBatches: { invalidate: vi.fn() },
     getBatch: { invalidate: vi.fn() },
   },
+  playback: {
+    activeState: { refetch: vi.fn() },
+  },
   library: {
     getAlbums: { invalidate: vi.fn() },
     getArtists: { invalidate: vi.fn() },
@@ -204,6 +207,17 @@ describe("useSubscriptions", () => {
     captured.onStarted?.();
 
     for (const invalidate of everyPushFedInvalidate) expect(invalidate).toHaveBeenCalledTimes(1);
+  });
+
+  it("asks who holds the audio when the stream comes back, since a missed announcement is never replayed", () => {
+    utilsStub.playback.activeState.refetch.mockClear();
+    renderHookWithProviders(() => useSubscriptions());
+
+    captured.onStarted?.();
+    expect(utilsStub.playback.activeState.refetch).not.toHaveBeenCalled();
+
+    captured.onStarted?.();
+    expect(utilsStub.playback.activeState.refetch).toHaveBeenCalledTimes(1);
   });
 
   it("resyncs again on every further reconnect, not only the first one", () => {

@@ -118,3 +118,69 @@ describe("isDuplicate DropImportUpdate", () => {
     expect(isDuplicate(dropImportUpdate({ alreadyInLibraryFiles: 2 }), cache)).toBe(false);
   });
 });
+
+function playbackState(
+  overrides: Partial<Extract<SubscriptionEvent, { eventType: SubscriptionEventType.PlaybackState }>>
+): SubscriptionEvent {
+  return {
+    eventType: SubscriptionEventType.PlaybackState,
+    userId: "u1",
+    deviceId: "d1",
+    deviceName: "Web Player (Chrome)",
+    playing: false,
+    track: {
+      id: "t1",
+      title: "Song",
+      artist: "Air",
+      album: "Album",
+      durationSeconds: 100,
+      format: "flac",
+      bitrateKbps: 1035,
+      lossless: true,
+      artworkUrl: null,
+    },
+    positionSeconds: 0,
+    shuffle: false,
+    repeat: "off",
+    volume: 0.8,
+    muted: false,
+    transcoding: false,
+    issuedAt: 1_000,
+    ...overrides,
+  };
+}
+
+describe("isDuplicate PlaybackState", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-09-04T00:00:00Z"));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("keeps a start distinct from the stop that shared its millisecond, which is how a device announces loading then playing", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(playbackState({ playing: false }), cache)).toBe(false);
+    expect(isDuplicate(playbackState({ playing: true }), cache)).toBe(false);
+  });
+
+  it("keeps a track change distinct within the same millisecond", () => {
+    const cache = new Map<string, number>();
+    const song = playbackState({});
+    const other = playbackState({});
+    if (other.eventType === SubscriptionEventType.PlaybackState && other.track !== null) other.track.id = "t2";
+
+    expect(isDuplicate(song, cache)).toBe(false);
+    expect(isDuplicate(other, cache)).toBe(false);
+  });
+
+  it("still drops the very same announcement repeated", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(playbackState({}), cache)).toBe(false);
+    expect(isDuplicate(playbackState({}), cache)).toBe(true);
+  });
+});

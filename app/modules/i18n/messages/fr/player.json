@@ -39,7 +39,8 @@
     "playing": "joue {{title}}",
     "idle": "ouvert, ne joue pas",
     "notArmed": "ouvert, n'a pas encore joué",
-    "handOver": "Lire ici plutôt"
+    "handOver": "Lire ici plutôt",
+    "playHere": "Lire ici"
   },
   "stage": {
     "label": "Session en plein écran",
@@ -51,6 +52,7 @@
     "autoplayBlocked": "Le navigateur a bloqué la lecture. Appuyez sur lecture pour démarrer.",
     "tooManyFailures": "Plusieurs pistes ont échoué de suite, la lecture s'est arrêtée",
     "resumed": "On reprend là où {{client}} s'est arrêté",
-    "deviceGone": "Cet appareil n'est plus là"
+    "deviceGone": "Cet appareil n'est plus là",
+    "handOverFailed": "{{device}} ne l'a pas repris, donc ça rejoue ici"
   }
 }

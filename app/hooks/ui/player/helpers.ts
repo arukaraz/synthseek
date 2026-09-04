@@ -9,12 +9,14 @@ import {
   SESSION_POSITION_DRIFT_MS,
   TONES,
 } from "./constants";
+import type { PlaybackTrackSummary } from "@api/__generated__/types";
+
 import type { PlayerSessionState, RemotePlayback, SessionSnapshot } from "./types";
 
-function toneFor(item: LibraryTrackItem): PlayerTone {
+export function toneFor(seed: string): PlayerTone {
   let hash = 0;
-  for (let index = 0; index < item.album_id.length; index += 1) {
-    hash = (hash * 31 + item.album_id.charCodeAt(index)) % 997;
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = (hash * 31 + seed.charCodeAt(index)) % 997;
   }
   return TONES[hash % TONES.length] ?? "primary";
 }
@@ -30,7 +32,7 @@ export function playerTrackFrom(item: LibraryTrackItem): PlayerTrack {
     format,
     bitrateKbps: item.file_bitrate ?? item.bitrate,
     lossless: format === "flac" || format === "wav" || format === "alac",
-    tone: toneFor(item),
+    tone: toneFor(item.album_id),
     artworkUrl: item.albumArt,
   };
 }
@@ -76,12 +78,16 @@ export function previousIndexIn(state: PlayerSessionState): number | null {
   return state.shuffleOrder[position - 1] ?? null;
 }
 
-export function sessionChanged(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {
+export function queueChanged(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {
   if (previous === null) return true;
   if (previous.currentTrackId !== next.currentTrackId) return true;
   if (previous.trackIds.length !== next.trackIds.length) return true;
-  if (previous.trackIds.some((id, index) => id !== next.trackIds[index])) return true;
-  return Math.abs(previous.positionMs - next.positionMs) >= SESSION_POSITION_DRIFT_MS;
+  return previous.trackIds.some((id, index) => id !== next.trackIds[index]);
+}
+
+export function sessionChanged(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {
+  if (queueChanged(previous, next)) return true;
+  return Math.abs((previous?.positionMs ?? 0) - next.positionMs) >= SESSION_POSITION_DRIFT_MS;
 }
 
 export function beatIsDue(lastBeatAt: number, now: number): boolean {
@@ -99,4 +105,24 @@ export function expectedPosition(
 ): number {
   if (!previous.playing) return previous.positionSeconds;
   return previous.positionSeconds + Math.max(0, (now - previous.at) / 1000);
+}
+
+export function trackSummary(session: PlayerSessionState): PlaybackTrackSummary | null {
+  const current = session.queue[session.index] ?? null;
+  if (current === null) return null;
+  return {
+    id: current.id,
+    title: current.title,
+    artist: current.artist,
+    album: current.album,
+    durationSeconds: session.durationSeconds > 0 ? Math.round(session.durationSeconds) : current.durationSeconds,
+    format: current.format,
+    bitrateKbps: current.bitrateKbps,
+    lossless: current.lossless,
+    artworkUrl: current.artworkUrl,
+  };
+}
+
+export function isMirroring(session: PlayerSessionState): boolean {
+  return session.remote !== null && !session.playing;
 }

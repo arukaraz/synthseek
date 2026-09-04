@@ -39,7 +39,8 @@
     "playing": "playing {{title}}",
     "idle": "open, not playing",
     "notArmed": "open, has not played yet",
-    "handOver": "Play here instead"
+    "handOver": "Play here instead",
+    "playHere": "Play here"
   },
   "stage": {
     "label": "Full screen session",
@@ -51,6 +52,7 @@
     "autoplayBlocked": "Your browser blocked playback. Press play to start it.",
     "tooManyFailures": "Several tracks failed in a row, so playback stopped",
     "resumed": "Picking up where {{client}} left off",
-    "deviceGone": "That device is no longer there"
+    "deviceGone": "That device is no longer there",
+    "handOverFailed": "{{device}} never picked it up, so it is playing here again"
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useActivePlayback,
   useDeviceHeartbeat,
   useForgetDevice,
   usePublishPlaybackState,
@@ -9,37 +10,53 @@ import {
 } from "@hooks/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { DEVICE_HEARTBEAT_MS, POSITION_JUMP_SECONDS } from "./constants";
+import {
+  DEVICE_HEARTBEAT_MS,
+  HAND_OVER_ACK_MS,
+  POSITION_JUMP_SECONDS,
+  PROGRESS_REPORT_MS,
+  WAKE_BEAT_FLOOR_MS,
+} from "./constants";
+import { adoptSharedQueue, noteCommandIssued } from "./commands";
 import { claimDeviceId, deviceIdentity } from "./device";
-import { beatIsDue, expectedPosition } from "./helpers";
+import { beatIsDue, expectedPosition, isMirroring, toneFor, trackSummary } from "./helpers";
 import { actions, getSnapshot, sessionSnapshot, subscribe } from "./store";
-import type { KnownDevice } from "./types";
+import type { KnownDevice, RemoteCommand } from "./types";
 
 export function usePlayerDevices(): {
   devices: KnownDevice[];
   handOverTo: (deviceId: string) => void;
   toggleRemote: (deviceId: string, playing: boolean) => void;
-  commandActive: (command: "play" | "pause" | "next" | "previous" | "seek", seekSeconds?: number) => void;
+  commandActive: (command: RemoteCommand, value?: number) => void;
 } {
   const [identity, setIdentity] = useState<{ id: string; name: string } | null>(null);
   const [devices, setDevices] = useState<KnownDevice[]>([]);
   const lastBeatAt = useRef(0);
+  const knownIds = useRef(new Set<string>());
+  const ackTimers = useRef<number[]>([]);
   const { mutate: sendHeartbeat } = useDeviceHeartbeat();
   const { mutate: forgetDevice } = useForgetDevice();
   const { mutate: saveSession } = useSavePlaybackSession();
   const { mutate: sendCommand } = useSendPlayerCommand();
   const { mutate: publishState } = usePublishPlaybackState();
-  const lastPublished = useRef<{ playing: boolean; trackId: string | null; positionSeconds: number; at: number }>({
-    playing: false,
-    trackId: null,
-    positionSeconds: 0,
-    at: 0,
-  });
+  const active = useActivePlayback();
+  const refreshActive = active.refetch;
+  const lastPublished = useRef<{
+    playing: boolean;
+    trackId: string | null;
+    positionSeconds: number;
+    at: number;
+    settings: string | null;
+  }>({ playing: false, trackId: null, positionSeconds: 0, at: 0, settings: null });
 
   useEffect(() => {
     const release = claimDeviceId((id) => setIdentity({ id, name: deviceIdentity().name }));
     setIdentity(deviceIdentity());
-    return release;
+    const timers = ackTimers.current;
+    return () => {
+      release();
+      for (const timer of timers) window.clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,55 +73,163 @@ export function usePlayerDevices(): {
           playing: session.playing,
           trackTitle: session.queue[session.index]?.title ?? null,
         },
-        { onSuccess: (known) => setDevices(known.filter((device) => device.id !== identity.id)) }
+        {
+          onSuccess: (known) => {
+            knownIds.current = new Set(known.map((device) => device.id));
+            setDevices(known.filter((device) => device.id !== identity.id));
+          },
+        }
       );
     };
     beat();
     const timer = window.setInterval(beat, DEVICE_HEARTBEAT_MS);
-    const leave = () => forgetDevice({ deviceId: identity.id });
+    const progress = window.setInterval(() => {
+      const session = getSnapshot();
+      if (!session.playing) return;
+      lastPublished.current = { ...lastPublished.current, positionSeconds: session.positionSeconds, at: Date.now() };
+      publishState({
+        deviceId: identity.id,
+        playing: true,
+        track: trackSummary(session),
+        positionSeconds: session.positionSeconds,
+        shuffle: session.shuffle,
+        repeat: session.repeat,
+        volume: session.volume,
+        muted: session.muted,
+        transcoding: session.transcoding,
+      });
+    }, PROGRESS_REPORT_MS);
+    const refreshOnStranger = subscribe(() => {
+      const remote = getSnapshot().remote;
+      if (remote === null || knownIds.current.has(remote.deviceId)) return;
+      knownIds.current.add(remote.deviceId);
+      lastBeatAt.current = 0;
+      beat();
+    });
+    const wakeUp = () => {
+      if (document.visibilityState !== "visible") return;
+      actions.resync();
+      if (Date.now() - lastBeatAt.current > WAKE_BEAT_FLOOR_MS) {
+        lastBeatAt.current = 0;
+        beat();
+        void refreshActive();
+      }
+    };
+    document.addEventListener("visibilitychange", wakeUp);
+    window.addEventListener("pageshow", wakeUp);
+    window.addEventListener("focus", wakeUp);
+
+    const leave = () => {
+      const session = getSnapshot();
+      if (session.playing) {
+        publishState({
+          deviceId: identity.id,
+          playing: false,
+          track: trackSummary(session),
+          positionSeconds: session.positionSeconds,
+          shuffle: session.shuffle,
+          repeat: session.repeat,
+          volume: session.volume,
+          muted: session.muted,
+          transcoding: session.transcoding,
+        });
+      }
+      forgetDevice({ deviceId: identity.id });
+    };
     window.addEventListener("pagehide", leave);
     return () => {
       window.clearInterval(timer);
+      window.clearInterval(progress);
+      refreshOnStranger();
+      document.removeEventListener("visibilitychange", wakeUp);
+      window.removeEventListener("pageshow", wakeUp);
+      window.removeEventListener("focus", wakeUp);
       window.removeEventListener("pagehide", leave);
     };
-  }, [identity, sendHeartbeat, forgetDevice]);
+  }, [identity, sendHeartbeat, forgetDevice, publishState, refreshActive]);
 
   useEffect(() => {
     if (identity === null) return;
     return subscribe(() => {
       const session = getSnapshot();
-      const trackId = session.queue[session.index]?.id ?? null;
+      const current = session.queue[session.index] ?? null;
+      const trackId = current?.id ?? null;
       const previous = lastPublished.current;
+      const settings = `${session.shuffle}:${session.repeat}:${session.volume}:${session.muted}:${session.transcoding}:${Math.round(session.durationSeconds)}`;
       const drifted =
         Math.abs(session.positionSeconds - expectedPosition(previous, Date.now())) > POSITION_JUMP_SECONDS;
-      if (session.playing === previous.playing && trackId === previous.trackId && !drifted) return;
+      if (
+        session.playing === previous.playing &&
+        trackId === previous.trackId &&
+        settings === previous.settings &&
+        !drifted
+      )
+        return;
 
       lastPublished.current = {
         playing: session.playing,
         trackId,
         positionSeconds: session.positionSeconds,
         at: Date.now(),
+        settings,
       };
       publishState({
         deviceId: identity.id,
         playing: session.playing,
-        trackId,
-        trackTitle: session.queue[session.index]?.title ?? null,
+        track: trackSummary(session),
         positionSeconds: session.positionSeconds,
+        shuffle: session.shuffle,
+        repeat: session.repeat,
+        volume: session.volume,
+        muted: session.muted,
+        transcoding: session.transcoding,
       });
     });
   }, [identity, publishState]);
 
+  useEffect(() => {
+    const snapshot = active.data;
+    if (identity === null || snapshot === undefined || snapshot === null) return;
+    if (snapshot.deviceId === identity.id || !snapshot.playing) return;
+    actions.applyRemoteState({
+      deviceId: snapshot.deviceId,
+      deviceName: snapshot.deviceName,
+      playing: snapshot.playing,
+      track: snapshot.track === null ? null : { ...snapshot.track, tone: toneFor(snapshot.track.id) },
+      confirmed: true,
+      positionSeconds: snapshot.positionSeconds + snapshot.reportedSecondsAgo,
+      shuffle: snapshot.shuffle,
+      repeat: snapshot.repeat,
+      volume: snapshot.volume,
+      muted: snapshot.muted,
+      transcoding: snapshot.transcoding,
+      updatedAt: Date.now(),
+    });
+    if (snapshot.track !== null) adoptSharedQueue(snapshot.track.id);
+  }, [active.data, identity]);
+
   const commandActive = useCallback(
-    (command: "play" | "pause" | "next" | "previous" | "seek", seekSeconds?: number) => {
+    (command: RemoteCommand, value?: number) => {
       const remote = getSnapshot().remote;
       if (remote === null) return;
       sendCommand(
-        { deviceId: remote.deviceId, command, seekSeconds },
-        { onSuccess: (result) => (result.delivered ? undefined : actions.forgetRemote()) }
+        {
+          deviceId: remote.deviceId,
+          command,
+          seekSeconds: command === "seek" ? value : undefined,
+          volumeLevel: command === "setVolume" ? value : undefined,
+        },
+        {
+          onSuccess: (result) => {
+            if (result.issuedAt !== null) noteCommandIssued(result.issuedAt);
+            if (result.delivered) return;
+            actions.forgetRemote();
+            void refreshActive();
+          },
+        }
       );
     },
-    [sendCommand]
+    [sendCommand, refreshActive]
   );
 
   const forgetLocally = useCallback((deviceId: string) => {
@@ -127,26 +252,49 @@ export function usePlayerDevices(): {
 
   const handOverTo = useCallback(
     (deviceId: string) => {
+      const mirroring = isMirroring(getSnapshot());
       const snapshot = sessionSnapshot();
-      if (snapshot.trackIds.length === 0) return;
-      saveSession(snapshot, {
-        onSuccess: () => {
-          sendCommand(
-            { deviceId, command: "handOver" },
-            {
-              onSuccess: (result) => {
-                if (!result.delivered) {
-                  forgetLocally(deviceId);
-                  return;
-                }
-                actions.pauseHere();
-              },
-            }
-          );
-        },
-      });
+      if (!mirroring && snapshot.trackIds.length === 0) return;
+
+      const command = () =>
+        sendCommand(
+          { deviceId, command: "handOver" },
+          {
+            onSuccess: (result) => {
+              if (!result.delivered) {
+                forgetLocally(deviceId);
+                return;
+              }
+              const session = getSnapshot();
+              if (session.remote !== null) return;
+              actions.applyRemoteState({
+                confirmed: false,
+                deviceId,
+                deviceName: devices.find((device) => device.id === deviceId)?.name ?? deviceId,
+                playing: true,
+                track: session.queue[session.index] ?? null,
+                positionSeconds: session.positionSeconds,
+                shuffle: session.shuffle,
+                repeat: session.repeat,
+                volume: session.volume,
+                muted: session.muted,
+                transcoding: session.transcoding,
+                updatedAt: Date.now(),
+              });
+              ackTimers.current.push(
+                window.setTimeout(() => actions.recoverUnconfirmedHandOver(deviceId), HAND_OVER_ACK_MS)
+              );
+            },
+          }
+        );
+
+      if (mirroring) {
+        command();
+        return;
+      }
+      saveSession(snapshot, { onSuccess: command });
     },
-    [saveSession, sendCommand, forgetLocally]
+    [saveSession, sendCommand, forgetLocally, devices]
   );
 
   return { devices, handOverTo, toggleRemote, commandActive };

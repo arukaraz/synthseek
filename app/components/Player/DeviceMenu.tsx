@@ -20,9 +20,21 @@ export function DeviceMenu({ view, actions, chain }: PlayerPanelProps) {
           <span className={deviceCaption()}>{t("devices.caption")}</span>
           {view.devices.map((device) =>
             device.local ? (
-              <div key={device.id} className={deviceRow({ state: "active" })} aria-current="true">
-                <DeviceBody device={device} />
-              </div>
+              device.active ? (
+                <div key={device.id} className={deviceRow({ state: "active" })} aria-current="true">
+                  <DeviceBody device={device} />
+                </div>
+              ) : (
+                <button
+                  key={device.id}
+                  type="button"
+                  className={deviceRow({ state: "idle" })}
+                  onClick={actions.playHere}
+                  aria-label={`${t("devices.playHere")}: ${device.name}`}
+                >
+                  <DeviceBody device={device} />
+                </button>
+              )
             ) : (
               <div key={device.id} className={deviceRow({ state: "idle" })}>
                 <button

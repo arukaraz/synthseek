@@ -4,9 +4,23 @@ import { nextRepeat, shouldRestart } from "@components/Player";
 import type { PlayerTrack } from "@components/Player";
 import { artworkProxySrc } from "@utils/artworkProxy";
 
-import { MAX_CONSECUTIVE_FAILURES, MIRROR_TICK_MS, NOTICE_MS, SKIP_DELAY_MS, VOLUME_STORAGE_KEY } from "./constants";
+import {
+  MAX_CONSECUTIVE_FAILURES,
+  MIRROR_STALE_MS,
+  MIRROR_TICK_MS,
+  NOTICE_MS,
+  SKIP_DELAY_MS,
+  VOLUME_STORAGE_KEY,
+} from "./constants";
 import { applyVolume, canPlayMime, connectEngine, loadAndPlay, loadAt, pause, resume, seek, stop } from "./engine";
-import { needsConversion, nextIndexIn, previousIndexIn, shuffledOrder, streamUrlFor } from "./helpers";
+import {
+  mirroredPositionSeconds,
+  needsConversion,
+  nextIndexIn,
+  previousIndexIn,
+  shuffledOrder,
+  streamUrlFor,
+} from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
 import type { PlayerSessionState, RemotePlayback } from "./types";
 
@@ -61,6 +75,14 @@ export function getSnapshot(): PlayerSessionState {
 
 export function currentTrack(): PlayerTrack | null {
   return state.queue[state.index] ?? null;
+}
+
+function tickMirror(): void {
+  if (state.remote !== null && state.remote.playing && Date.now() - state.remote.updatedAt > MIRROR_STALE_MS) {
+    actions.forgetRemote();
+    return;
+  }
+  publish({});
 }
 
 function silenceOtherAudio(): void {
@@ -183,6 +205,7 @@ function handleFailure(reason: "load" | "stall" | "autoplay"): void {
 export interface PlayerMessages {
   skipping: (title: string) => string;
   resumedFrom: (client: string) => string;
+  handOverFailed: (device: string) => string;
   deviceGone: string;
   queueEnd: string;
   autoplayBlocked: string;
@@ -192,6 +215,7 @@ export interface PlayerMessages {
 let lastMessages: PlayerMessages = {
   skipping: (title) => title,
   resumedFrom: (client) => client,
+  handOverFailed: (device) => device,
   deviceGone: "",
   queueEnd: "",
   autoplayBlocked: "",
@@ -345,13 +369,55 @@ export const actions = {
       pause();
       clearMediaSession();
       clearInterval(mirrorTimer);
-      mirrorTimer = setInterval(() => publish({}), MIRROR_TICK_MS);
+      mirrorTimer = setInterval(tickMirror, MIRROR_TICK_MS);
       publish({ remote, playing: false, started: true });
       return;
     }
+    if (state.remote === null || state.remote.deviceId !== remote.deviceId) return;
     clearInterval(mirrorTimer);
-    if (state.remote !== null && state.remote.deviceId !== remote.deviceId) return;
     publish({ remote });
+  },
+  playHere(): boolean {
+    const remote = state.remote;
+    if (remote === null || remote.track === null) return false;
+    const index = state.queue.findIndex((track) => track.id === remote.track?.id);
+    if (index < 0) return false;
+    publish({
+      shuffle: remote.shuffle,
+      shuffleOrder: remote.shuffle ? shuffledOrder(state.queue.length, index) : [],
+      repeat: remote.repeat,
+      volume: remote.volume,
+      muted: remote.muted,
+    });
+    applyVolume(remote.volume, remote.muted);
+    playAt(index, remote.playing ? mirroredPositionSeconds(remote, Date.now()) : remote.positionSeconds);
+    return true;
+  },
+  expectRemote(patch: Partial<RemotePlayback>): void {
+    const remote = state.remote;
+    if (remote === null) return;
+    const carried = patch.playing === undefined ? remote.positionSeconds : mirroredPositionSeconds(remote, Date.now());
+    publish({ remote: { ...remote, positionSeconds: carried, updatedAt: Date.now(), ...patch } });
+    if (patch.playing === true) {
+      clearInterval(mirrorTimer);
+      mirrorTimer = setInterval(tickMirror, MIRROR_TICK_MS);
+    }
+  },
+  resync(): void {
+    if (state.remote === null) return;
+    clearInterval(mirrorTimer);
+    if (state.remote.playing) mirrorTimer = setInterval(tickMirror, MIRROR_TICK_MS);
+    publish({});
+  },
+  recoverUnconfirmedHandOver(deviceId: string): void {
+    const remote = state.remote;
+    if (remote === null || remote.deviceId !== deviceId || remote.confirmed) return;
+    const index = state.queue.findIndex((track) => track.id === remote.track?.id);
+    clearInterval(mirrorTimer);
+    publish({ remote: null });
+    notify(lastMessages.handOverFailed(remote.deviceName), "warning");
+    if (index < 0) return;
+    playAt(index, remote.positionSeconds);
   },
   forgetRemote(): void {
     if (state.remote === null) return;
@@ -368,6 +434,10 @@ export const actions = {
   },
   resumeHere(): void {
     if (state.playing) return;
+    if (state.remote !== null) {
+      clearInterval(mirrorTimer);
+      publish({ remote: null });
+    }
     actions.togglePlay();
   },
   announceDeviceGone(): void {
