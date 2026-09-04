@@ -306,5 +306,17 @@
   "RECYCLE_BIN_DESTINATION_TAKEN": {
     "title": "Ya hay algo ahí",
     "description": "Hay un fichero donde estaba este, así que restaurarlo lo sobrescribiría. Muévelo o renómbralo primero."
+  },
+  "LIBRARY_STREAM_REQUEST_INVALID": {
+    "title": "Esa petición de reproducción no tiene sentido",
+    "description": "Synthseek no pudo interpretar lo que se pidió. Recarga la página y vuelve a darle a reproducir."
+  },
+  "LIBRARY_STREAM_BUSY": {
+    "title": "Convirtiendo a tope",
+    "description": "El servidor está convirtiendo todo el audio que puede ahora mismo. Inténtalo en un momento."
+  },
+  "LIBRARY_STREAM_FAILED": {
+    "title": "Esa canción no se pudo reproducir",
+    "description": "Synthseek no pudo servir el archivo. Si se estaba convirtiendo, reproducirlo en su calidad original todavía puede funcionar."
   }
 }

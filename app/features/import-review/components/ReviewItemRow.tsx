@@ -10,6 +10,7 @@ import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { IconButton } from "@components/ui/IconButton";
 import { useApproveHeldImport, useDiscardHeldImport } from "@hooks/api";
+import { playerActions } from "@hooks/ui/player";
 import { downloadSourceLabelKey } from "@utils/download-source";
 import { formatBytes, formatRelativeTime } from "@utils/formatters";
 
@@ -103,6 +104,7 @@ export function ReviewItemRow({ item }: ReviewItemRowProps) {
           controls
           className={audioPlayer()}
           src={heldAudioUrl(item.id)}
+          onPlay={playerActions.pauseForOtherAudio}
           aria-label={t("review.actions.previewLabel", { name: trackLabel })}
         />
       ) : null}

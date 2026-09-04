@@ -10,8 +10,6 @@
       "all": "Repetir la cola",
       "one": "Repetir esta pista"
     },
-    "favoriteAdd": "Añadir a favoritos",
-    "favoriteRemove": "Quitar de favoritos",
     "mute": "Silenciar",
     "unmute": "Quitar el silencio",
     "volume": "Volumen",
@@ -21,63 +19,30 @@
     "chain": "Cadena de señal",
     "seek": "Posición de reproducción",
     "openTrack": "Abrir la sesión a pantalla completa",
-    "scrobble": "Scrobbling"
+    "more": "Más controles"
   },
   "chain": {
     "file": "FICHERO",
     "server": "SERVIDOR",
     "output": "SALIDA",
-    "notMeasured": "sin medir",
+    "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "sin convertir",
-    "serverTranscoding": "convirtiendo a mp3 320",
-    "normalizationAlbum": "álbum {{gain}} dB",
-    "description": "Cadena de señal: {{file}} hacia {{server}}, {{normalization}}, salida a {{device}}"
+    "serverTranscoding": "convirtiendo a mp3 320"
   },
   "devices": {
     "caption": "DÓNDE SUENA",
-    "capability": {
-      "own": "control total",
-      "third": "solo lectura",
-      "unarmed": "sin activar"
-    },
-    "footnote": "Las aplicaciones de terceros se ven pero no se controlan: solo se les puede pasar la cola y la posición."
+    "footnote": "Synthseek suena aquí, en esta pestaña. Las apps que se conectan por Subsonic reproducen por su cuenta.",
+    "thisBrowser": "Este navegador",
+    "thisBrowserDetail": "la pestaña que estás mirando"
   },
   "stage": {
     "label": "Sesión a pantalla completa",
     "serverChip": "servidor: {{value}}"
   },
-  "demo": {
-    "heading": "Maqueta del reproductor",
-    "intro": "Vista de prueba para revisar el diseño del reproductor. Elige una pista, arrastra la onda, abre la cola, los dispositivos y la pantalla completa.",
-    "columnTrack": "Pista",
-    "columnActions": "Acciones de cola",
-    "playNext": "A continuación",
-    "playLast": "Al final",
-    "missingFile": "Fichero ausente",
-    "cannotPlay": "«{{title}}» no se puede reproducir: el fichero falta",
+  "notice": {
     "skipping": "«{{title}}» falló, saltando a la siguiente",
     "queueEnd": "Fin de la cola",
-    "addedNext": "Se reproducirá a continuación",
-    "addedLast": "Añadida al final de la cola",
-    "deviceHere": "El sonido vuelve a este navegador",
-    "deviceRemote": "Suena en {{name}}",
-    "deviceThird": "{{name}} no acepta órdenes, se le traspasan la cola y la posición",
-    "deviceUnarmed": "{{name}} necesita un toque en ese aparato para empezar a sonar",
-    "devices": {
-      "here": "Este navegador",
-      "hereDetail": "Chrome · este equipo",
-      "desktop": "Salón",
-      "desktopDetail": "Firefox · sobremesa",
-      "phone": "Symfonium (móvil)",
-      "phoneDetail": "Subsonic · no acepta órdenes",
-      "laptop": "Portátil",
-      "laptopDetail": "necesita un toque en ese aparato"
-    }
-  },
-  "scrobble": {
-    "off": "Scrobbling desactivado",
-    "idle": "Enviando tus escuchas",
-    "retrying": "Reintentando el scrobble",
-    "failed": "El scrobble falló"
+    "autoplayBlocked": "El navegador bloqueó la reproducción. Pulsa play para empezar.",
+    "tooManyFailures": "Varias pistas fallaron seguidas, así que la reproducción se detuvo"
   }
 }

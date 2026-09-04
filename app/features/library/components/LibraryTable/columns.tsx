@@ -10,13 +10,14 @@ import { LibraryDurationCell } from "./cells/LibraryDurationCell";
 import { LibraryRequestedAtCell } from "./cells/LibraryRequestedAtCell";
 import { TrackMetaCell } from "./cells/TrackMetaCell";
 import { TrackPrimaryCell } from "./cells/TrackPrimaryCell";
+import type { TrackColumnOptions } from "./types";
 
-export function buildTrackColumns(): ColumnDef<LibraryTrackItem>[] {
+export function buildTrackColumns(options: TrackColumnOptions): ColumnDef<LibraryTrackItem>[] {
   return [
     {
       key: "title",
       header: i18n.t("library:page.columns.track"),
-      cell: (item) => <TrackPrimaryCell item={item} />,
+      cell: (item) => <TrackPrimaryCell item={item} onPlay={options.onPlay} />,
     },
     {
       key: "meta",

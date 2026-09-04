@@ -137,6 +137,16 @@ Renames flow both ways. Rename in Synthseek and Plex follows within seconds; ren
 
 Currently, playlist sync only ever adds tracks to the remote playlist. It never removes them.
 
+### Play it in the web app
+
+Synthseek plays your library itself. Press play on any track in your library and a player docks at the bottom of the page: play and pause, skip forwards and back, scrub, volume, shuffle, and repeat either the queue or a single track. A full screen view gives you the artwork, and your keyboard's media keys, your lock screen and your car stereo see the track, the artist and the cover through the browser's own media controls.
+
+The queue is the page of tracks you pressed play on, in the order you were looking at them. A track with no file on record does not offer a play button at all, rather than failing when you press it.
+
+Playback is the original file. If your browser cannot decode the format, Synthseek converts it on the fly and scrubbing still works, because the player asks the server to start again from where you dropped the needle.
+
+It is a per-tab session: it does not follow you to another tab, and reloading the page stops it. Favourites and scrobbling belong to your music apps for now, not to this player.
+
 ### Play it in a music app
 
 Synthseek speaks the Subsonic API, so apps built for that ecosystem, Feishin, Symfonium, DSub and others, can browse and play your library directly, without a media server in between. Turn it on in **Settings**, then **General**, then **Connect apps**. It is off until you do.

@@ -361,6 +361,9 @@
     "error": {
       "title": "Die Bibliothek konnte nicht geladen werden",
       "description": "Beim Laden dieser Ansicht ist etwas schiefgelaufen. Versuche es gleich erneut."
+    },
+    "actions": {
+      "playTrack": "{{title}} abspielen"
     }
   },
   "playlists": {

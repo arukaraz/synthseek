@@ -361,6 +361,9 @@
     "error": {
       "title": "Impossible de charger la bibliothèque",
       "description": "Une erreur s'est produite lors du chargement de cette vue. Réessayez dans un instant."
+    },
+    "actions": {
+      "playTrack": "Lire {{title}}"
     }
   },
   "playlists": {

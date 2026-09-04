@@ -3,8 +3,9 @@
 import { useLibraryTracks, useLibraryTracksPrefetch } from "@hooks/api";
 import { useEffect, useMemo } from "react";
 
-import { VIEW_CONFIG } from "../constants";
+import { useLibraryPlayback } from "../hooks/useLibraryPlayback";
 import { buildTracksInput } from "../helpers";
+import { buildTrackColumns } from "./LibraryTable/columns";
 import type { TracksViewModeProps } from "../types";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
@@ -36,6 +37,10 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
 
   const query = useLibraryTracks(input, controller.view === "tracks");
 
+  const items = useMemo(() => query.data?.items ?? [], [query.data?.items]);
+  const { play } = useLibraryPlayback(items);
+  const columns = useMemo(() => buildTrackColumns({ onPlay: play }), [play]);
+
   const total = query.data?.total ?? 0;
   const hasNextPage = offset + controller.pageSize < total;
 
@@ -54,9 +59,9 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
       isError={query.isError}
       content={{
         layout: "table",
-        columns: VIEW_CONFIG.tracks.columns,
+        columns,
         getRowId: (item) => item.id,
-        selection: { items: query.data?.items ?? [], selection },
+        selection: { items, selection },
       }}
       filtersOpen={filtersOpen}
       onFiltersOpenChange={onFiltersOpenChange}

@@ -306,5 +306,17 @@
   "RECYCLE_BIN_DESTINATION_TAKEN": {
     "title": "Dort liegt schon etwas",
     "description": "An der Herkunftsstelle liegt bereits eine Datei, das Wiederherstellen würde sie überschreiben. Verschiebe oder benenne sie zuerst um."
+  },
+  "LIBRARY_STREAM_REQUEST_INVALID": {
+    "title": "Diese Wiedergabeanfrage ergab keinen Sinn",
+    "description": "Synthseek konnte nicht lesen, was angefragt wurde. Lade die Seite neu und drücke erneut auf Wiedergabe."
+  },
+  "LIBRARY_STREAM_BUSY": {
+    "title": "Wandelt so schnell es geht",
+    "description": "Der Server wandelt gerade so viel Audio um, wie er kann. Versuche es gleich noch einmal."
+  },
+  "LIBRARY_STREAM_FAILED": {
+    "title": "Dieser Titel ließ sich nicht abspielen",
+    "description": "Synthseek konnte die Datei nicht ausliefern. Falls sie konvertiert wurde, klappt das Abspielen in Originalqualität womöglich trotzdem."
   }
 }

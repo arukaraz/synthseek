@@ -2,7 +2,6 @@ import { ContentType, RequestStatus } from "@api/__generated__/types";
 import { Disc3, ListMusic, Music, User } from "lucide-react";
 
 import { AlbumCard, ArtistCard, PlaylistCard } from "./components/LibraryCard";
-import { buildTrackColumns } from "./components/LibraryTable/columns";
 import type {
   AlbumsViewConfig,
   ArtistsViewConfig,
@@ -67,7 +66,6 @@ const TRACKS_CONFIG: TracksViewConfig = {
   contentType: ContentType.enum.track,
   layout: "table",
   interactive: true,
-  columns: buildTrackColumns(),
   searchPlaceholderKey: "page.toolbar.searchTracks",
   emptyTitleKey: "page.empty.tracksTitle",
   emptyDescriptionKey: "page.empty.tracksDescription",

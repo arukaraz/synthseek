@@ -2,6 +2,7 @@
 
 import { BottomNav } from "@components/BottomNav";
 import { ContentShell } from "@components/ContentShell";
+import { PlayerDock } from "@components/PlayerDock";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { TopHeader } from "@components/TopHeader";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
@@ -39,6 +40,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
       </ContentRequestFlow>
       <BottomNav />
       <ProgressDock />
+      <PlayerDock />
     </div>
   );
 }

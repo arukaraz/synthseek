@@ -2,7 +2,6 @@
 
 import {
   MonitorSpeaker,
-  Heart,
   Loader2,
   Minimize,
   Pause,
@@ -15,8 +14,6 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-
-import { cn } from "@utils/cn";
 
 import { SiriWave } from "./SiriWave";
 import { TrackCover } from "./TrackCover";
@@ -31,7 +28,6 @@ import {
   stageArtist,
   stageBackdrop,
   stageChip,
-  stageChipButton,
   stageChips,
   stageFooter,
   stageHeader,
@@ -73,37 +69,29 @@ export function PlayerStage({ view, actions }: PlayerProps) {
       </div>
 
       <div className={stageMain()}>
-        <TrackCover initials={trackInitials(view.track.album)} tone={view.track.tone} size="stage" />
+        <TrackCover
+          initials={trackInitials(view.track.album)}
+          tone={view.track.tone}
+          size="stage"
+          artworkUrl={view.track.artworkUrl}
+        />
         <div className={stageMeta()}>
           <h2 className={stageTitle()}>{view.track.title}</h2>
           <p className={stageArtist()}>{view.track.artist}</p>
           <p className={stageAlbum()}>{view.track.album}</p>
           <div className={stageChips()}>
-            <button
-              type="button"
-              className={cn(
-                stageChipButton(),
-                stageChip({ tone: view.chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted" })
-              )}
-              onClick={actions.describeChain}
+            <span
+              className={stageChip({
+                tone: view.chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted",
+              })}
             >
               {view.chain.fileLabel}
-            </button>
+            </span>
             <span className={stageChip({ tone: view.chain.transcoding ? "warning" : "success" })}>
               {t("stage.serverChip", { value: view.chain.serverLabel })}
             </span>
-            <span className={stageChip()}>{view.chain.normalizationLabel ?? t("chain.notMeasured")}</span>
           </div>
           <div className={stageActions()}>
-            <button
-              type="button"
-              className={iconButton({ tone: view.favorite ? "favorite" : "muted", size: "stage" })}
-              onClick={actions.toggleFavorite}
-              aria-label={view.favorite ? t("controls.favoriteRemove") : t("controls.favoriteAdd")}
-              aria-pressed={view.favorite}
-            >
-              <Heart className={view.favorite ? "size-4.5 fill-current" : "size-4.5"} />
-            </button>
             <button
               type="button"
               className={iconButton({ tone: view.shuffle ? "active" : "muted", size: "stage" })}

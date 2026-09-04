@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { playerPanel } from "@utils/animations";
 
 import {
-  deviceCapability,
   deviceCaption,
   deviceDetail,
   deviceDot,
@@ -19,7 +18,7 @@ import {
 } from "./styles";
 import type { PlayerPanelProps } from "./types";
 
-export function DeviceMenu({ view, actions, chain }: PlayerPanelProps) {
+export function DeviceMenu({ view, chain }: PlayerPanelProps) {
   const { t } = useTranslation("player");
 
   return (
@@ -28,33 +27,17 @@ export function DeviceMenu({ view, actions, chain }: PlayerPanelProps) {
         <div className={deviceList()}>
           <span className={deviceCaption()}>{t("devices.caption")}</span>
           {view.devices.map((device) => (
-            <button
+            <div
               key={device.id}
-              type="button"
-              className={deviceRow({
-                state: device.kind === "unarmed" ? "unarmed" : device.active ? "active" : "idle",
-              })}
-              onClick={() => actions.selectDevice(device.id)}
+              className={deviceRow({ state: device.active ? "active" : "idle" })}
               aria-current={device.active ? "true" : undefined}
             >
-              <span
-                className={deviceDot({
-                  state:
-                    device.kind === "own"
-                      ? device.active
-                        ? "active"
-                        : "idle"
-                      : device.kind === "third"
-                        ? "third"
-                        : "unarmed",
-                })}
-              />
+              <span className={deviceDot({ state: device.active ? "active" : "idle" })} />
               <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className={deviceName()}>{device.name}</span>
                 <span className={deviceDetail()}>{device.detail}</span>
               </span>
-              <span className={deviceCapability({ kind: device.kind })}>{t(`devices.capability.${device.kind}`)}</span>
-            </button>
+            </div>
           ))}
           <p className={deviceFootnote()}>{t("devices.footnote")}</p>
         </div>

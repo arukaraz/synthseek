@@ -361,6 +361,9 @@
     "error": {
       "title": "No se pudo cargar la biblioteca",
       "description": "Algo salió mal al cargar esta vista. Inténtalo de nuevo en un momento."
+    },
+    "actions": {
+      "playTrack": "Reproducir {{title}}"
     }
   },
   "playlists": {

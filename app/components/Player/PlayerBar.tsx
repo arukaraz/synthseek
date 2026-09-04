@@ -1,14 +1,15 @@
 "use client";
 
+import { cn } from "@utils/cn";
 import {
-  MonitorSpeaker,
-  Heart,
+  ChevronLeft,
+  ChevronRight,
   Info,
   Loader2,
   Maximize,
+  MonitorSpeaker,
   Pause,
   Play,
-  RadioTower,
   Repeat,
   Repeat1,
   Shuffle,
@@ -19,21 +20,22 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { cn } from "@utils/cn";
-
+import { PlayerExtraControls } from "./PlayerExtraControls";
 import { SiriWave } from "./SiriWave";
 import { TrackCover } from "./TrackCover";
 import { VOLUME_STEP } from "./constants";
-import { fractionFromPointer, formatClock, percentOf, trackInitials } from "./helpers";
+import { formatClock, fractionFromPointer, percentOf, trackInitials } from "./helpers";
 import {
   bar,
+  barDesktopExtras,
+  barDeviceLine,
   barExtras,
   barIdentity,
   barIdentityButton,
   barMobileProgress,
   barMobileProgressFill,
+  barMoreGroup,
   barProgress,
-  barDeviceLine,
   barSubtitle,
   barTitle,
   barTitleArtist,
@@ -42,10 +44,10 @@ import {
   barTransport,
   barVolume,
   clock,
-  srOnly,
   iconButton,
   playButton,
   progressVars,
+  srOnly,
   volumeFill,
   volumeHead,
   volumeRail,
@@ -58,13 +60,6 @@ export function PlayerBar({ view, actions }: PlayerProps) {
   const { t } = useTranslation("player");
   const progress = percentOf(view.positionSeconds, view.track.durationSeconds);
   const volumePercent = (view.muted ? 0 : view.volume) * 100;
-  const scrobbleTone = !view.scrobble.enabled
-    ? "muted"
-    : view.scrobble.status === "failed"
-      ? "danger"
-      : view.scrobble.status === "retrying"
-        ? "warning"
-        : "active";
 
   return (
     <div className={bar()}>
@@ -75,7 +70,12 @@ export function PlayerBar({ view, actions }: PlayerProps) {
       <div className={barIdentity()}>
         <button type="button" className={barIdentityButton()} onClick={actions.toggleFullscreen}>
           <span className={srOnly()}>{t("controls.openTrack")}</span>
-          <TrackCover initials={trackInitials(view.track.album)} tone={view.track.tone} size="bar" />
+          <TrackCover
+            initials={trackInitials(view.track.album)}
+            tone={view.track.tone}
+            size="bar"
+            artworkUrl={view.track.artworkUrl}
+          />
           <span className="flex min-w-0 flex-col gap-0.5">
             <span className={barTitle()}>{view.track.title}</span>
             <span className={barSubtitle()}>
@@ -91,6 +91,18 @@ export function PlayerBar({ view, actions }: PlayerProps) {
             </span>
           </span>
         </button>
+        <button
+          type="button"
+          className={cn(iconButton({ tone: view.moreOpen ? "active" : "muted" }), "sm:hidden")}
+          onClick={actions.toggleMore}
+          aria-label={t("controls.more")}
+          aria-expanded={view.moreOpen}
+        >
+          {view.moreOpen ? <ChevronLeft className="size-4" /> : <ChevronRight className="size-4" />}
+        </button>
+        <div className={barMoreGroup({ open: view.moreOpen })}>
+          <PlayerExtraControls view={view} actions={actions} />
+        </div>
       </div>
 
       <div className={barTransport()}>
@@ -105,7 +117,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         </button>
         <button
           type="button"
-          className={cn(iconButton(), "hidden sm:grid")}
+          className={cn(iconButton({ size: "transport" }), "hidden sm:grid")}
           onClick={actions.previous}
           aria-label={t("controls.previous")}
         >
@@ -127,7 +139,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         </button>
         <button
           type="button"
-          className={cn(iconButton(), "hidden sm:grid")}
+          className={iconButton({ size: "transport" })}
           onClick={actions.next}
           aria-label={t("controls.next")}
         >
@@ -159,25 +171,6 @@ export function PlayerBar({ view, actions }: PlayerProps) {
       </div>
 
       <div className={barExtras()}>
-        <button
-          type="button"
-          className={cn(iconButton({ tone: scrobbleTone }), "hidden sm:grid")}
-          onClick={actions.toggleScrobble}
-          aria-label={t("controls.scrobble")}
-          aria-pressed={view.scrobble.enabled}
-          title={t(`scrobble.${view.scrobble.enabled ? view.scrobble.status : "off"}`)}
-        >
-          <RadioTower className="size-3.5" />
-        </button>
-        <button
-          type="button"
-          className={cn(iconButton({ tone: view.favorite ? "favorite" : "muted" }), "hidden sm:grid")}
-          onClick={actions.toggleFavorite}
-          aria-label={view.favorite ? t("controls.favoriteRemove") : t("controls.favoriteAdd")}
-          aria-pressed={view.favorite}
-        >
-          <Heart className={view.favorite ? "size-3.5 fill-current" : "size-3.5"} />
-        </button>
         <div className={barVolume()}>
           <button
             type="button"
@@ -235,15 +228,9 @@ export function PlayerBar({ view, actions }: PlayerProps) {
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          className={iconButton({ tone: view.activeDevice.local ? "muted" : "remote" })}
-          onClick={actions.toggleDevices}
-          aria-label={t("controls.devices")}
-          aria-pressed={view.devicesOpen}
-        >
-          <MonitorSpeaker className="size-5 sm:size-4" />
-        </button>
+        <div className={barDesktopExtras()}>
+          <PlayerExtraControls view={view} actions={actions} />
+        </div>
         <button
           type="button"
           className={cn(iconButton(), "hidden sm:grid")}

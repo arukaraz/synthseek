@@ -10,8 +10,6 @@
       "all": "Repeat the queue",
       "one": "Repeat this track"
     },
-    "favoriteAdd": "Add to favourites",
-    "favoriteRemove": "Remove from favourites",
     "mute": "Mute",
     "unmute": "Unmute",
     "volume": "Volume",
@@ -21,63 +19,30 @@
     "chain": "Signal chain",
     "seek": "Playback position",
     "openTrack": "Open the full screen session",
-    "scrobble": "Scrobbling"
+    "more": "More controls"
   },
   "chain": {
     "file": "FILE",
     "server": "SERVER",
     "output": "OUTPUT",
-    "notMeasured": "not measured",
+    "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "no conversion",
-    "serverTranscoding": "converting to mp3 320",
-    "normalizationAlbum": "album {{gain}} dB",
-    "description": "Signal chain: {{file}} to {{server}}, {{normalization}}, out to {{device}}"
+    "serverTranscoding": "converting to mp3 320"
   },
   "devices": {
     "caption": "WHERE IT PLAYS",
-    "capability": {
-      "own": "full control",
-      "third": "read only",
-      "unarmed": "not armed"
-    },
-    "footnote": "Third-party apps are visible but cannot be commanded: they can only be handed the queue and the position."
+    "footnote": "Synthseek plays here, in this tab. Apps that connect over Subsonic run their own playback.",
+    "thisBrowser": "This browser",
+    "thisBrowserDetail": "the tab you are looking at"
   },
   "stage": {
     "label": "Full screen session",
     "serverChip": "server: {{value}}"
   },
-  "demo": {
-    "heading": "Player mock",
-    "intro": "Throwaway preview to review the player design. Pick a track, drag the wave, open the queue, the devices and the full screen session.",
-    "columnTrack": "Track",
-    "columnActions": "Queue actions",
-    "playNext": "Play next",
-    "playLast": "Add last",
-    "missingFile": "File missing",
-    "cannotPlay": "\"{{title}}\" cannot be played: the file is missing",
+  "notice": {
     "skipping": "\"{{title}}\" failed, skipping to the next one",
     "queueEnd": "End of the queue",
-    "addedNext": "It will play next",
-    "addedLast": "Added to the end of the queue",
-    "deviceHere": "Sound is back on this browser",
-    "deviceRemote": "Playing on {{name}}",
-    "deviceThird": "{{name}} does not accept commands, queue and position handed over instead",
-    "deviceUnarmed": "{{name}} needs a tap on that device before it can play",
-    "devices": {
-      "here": "This browser",
-      "hereDetail": "Chrome · this machine",
-      "desktop": "Living room",
-      "desktopDetail": "Firefox · desktop",
-      "phone": "Symfonium (phone)",
-      "phoneDetail": "Subsonic · accepts no commands",
-      "laptop": "Laptop",
-      "laptopDetail": "needs a tap on that device"
-    }
-  },
-  "scrobble": {
-    "off": "Scrobbling off",
-    "idle": "Scrobbling your listens",
-    "retrying": "Scrobble retrying",
-    "failed": "Scrobble failed"
+    "autoplayBlocked": "Your browser blocked playback. Press play to start it.",
+    "tooManyFailures": "Several tracks failed in a row, so playback stopped"
   }
 }

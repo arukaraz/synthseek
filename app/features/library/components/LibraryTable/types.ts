@@ -3,6 +3,10 @@ import type { ColumnDef } from "@components/ui/Table";
 import type { LibrarySelection } from "../../hooks/useLibrarySelection";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 
+export interface TrackColumnOptions {
+  onPlay: (trackId: string) => void;
+}
+
 export interface LibraryTableProps<TItem> {
   items: TItem[];
   columns: ColumnDef<TItem>[];

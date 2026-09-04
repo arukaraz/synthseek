@@ -361,6 +361,9 @@
     "error": {
       "title": "Could not load the library",
       "description": "Something went wrong loading this view. Try again in a moment."
+    },
+    "actions": {
+      "playTrack": "Play {{title}}"
     }
   },
   "playlists": {

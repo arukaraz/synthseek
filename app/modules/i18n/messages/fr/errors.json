@@ -306,5 +306,17 @@
   "RECYCLE_BIN_DESTINATION_TAKEN": {
     "title": "Il y a déjà quelque chose",
     "description": "Un fichier occupe déjà l'emplacement d'origine, le restaurer l'écraserait. Déplacez-le ou renommez-le d'abord."
+  },
+  "LIBRARY_STREAM_REQUEST_INVALID": {
+    "title": "Cette demande de lecture n'avait aucun sens",
+    "description": "Synthseek n'a pas pu lire ce qui était demandé. Recharge la page et relance la lecture."
+  },
+  "LIBRARY_STREAM_BUSY": {
+    "title": "Conversion à plein régime",
+    "description": "Le serveur convertit déjà autant d'audio qu'il peut. Réessayez dans un instant."
+  },
+  "LIBRARY_STREAM_FAILED": {
+    "title": "Ce morceau n'a pas pu être lu",
+    "description": "Synthseek n'a pas pu servir le fichier. S'il était en cours de conversion, le lire dans sa qualité d'origine peut encore fonctionner."
   }
 }

@@ -10,8 +10,6 @@
       "all": "Répéter la file",
       "one": "Répéter cette piste"
     },
-    "favoriteAdd": "Ajouter aux favoris",
-    "favoriteRemove": "Retirer des favoris",
     "mute": "Couper le son",
     "unmute": "Rétablir le son",
     "volume": "Volume",
@@ -21,63 +19,30 @@
     "chain": "Chaîne du signal",
     "seek": "Position de lecture",
     "openTrack": "Ouvrir la session en plein écran",
-    "scrobble": "Scrobbling"
+    "more": "Plus de commandes"
   },
   "chain": {
     "file": "FICHIER",
     "server": "SERVEUR",
     "output": "SORTIE",
-    "notMeasured": "non mesuré",
+    "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "sans conversion",
-    "serverTranscoding": "conversion en mp3 320",
-    "normalizationAlbum": "album {{gain}} dB",
-    "description": "Chaîne du signal : {{file}} vers {{server}}, {{normalization}}, sortie sur {{device}}"
+    "serverTranscoding": "conversion en mp3 320"
   },
   "devices": {
     "caption": "OÙ ÇA JOUE",
-    "capability": {
-      "own": "contrôle total",
-      "third": "lecture seule",
-      "unarmed": "non activé"
-    },
-    "footnote": "Les applications tierces sont visibles mais ne se commandent pas : on peut seulement leur transmettre la file et la position."
+    "footnote": "Synthseek joue ici, dans cet onglet. Les applications connectées via Subsonic lisent de leur côté.",
+    "thisBrowser": "Ce navigateur",
+    "thisBrowserDetail": "l'onglet que vous regardez"
   },
   "stage": {
     "label": "Session en plein écran",
     "serverChip": "serveur : {{value}}"
   },
-  "demo": {
-    "heading": "Maquette du lecteur",
-    "intro": "Aperçu jetable pour valider le design du lecteur. Choisissez une piste, faites glisser l'onde, ouvrez la file, les appareils et le plein écran.",
-    "columnTrack": "Piste",
-    "columnActions": "Actions de file",
-    "playNext": "À suivre",
-    "playLast": "À la fin",
-    "missingFile": "Fichier absent",
-    "cannotPlay": "« {{title}} » ne peut pas être lue : le fichier est absent",
+  "notice": {
     "skipping": "« {{title}} » a échoué, passage à la suivante",
     "queueEnd": "Fin de la file",
-    "addedNext": "Sera lue juste après",
-    "addedLast": "Ajoutée à la fin de la file",
-    "deviceHere": "Le son revient sur ce navigateur",
-    "deviceRemote": "Lecture sur {{name}}",
-    "deviceThird": "{{name}} n'accepte pas les commandes, la file et la position lui ont été transmises",
-    "deviceUnarmed": "{{name}} a besoin d'une touche sur cet appareil avant de jouer",
-    "devices": {
-      "here": "Ce navigateur",
-      "hereDetail": "Chrome · cet ordinateur",
-      "desktop": "Salon",
-      "desktopDetail": "Firefox · ordinateur de bureau",
-      "phone": "Symfonium (mobile)",
-      "phoneDetail": "Subsonic · n'accepte pas les commandes",
-      "laptop": "Portable",
-      "laptopDetail": "a besoin d'une touche sur cet appareil"
-    }
-  },
-  "scrobble": {
-    "off": "Scrobbling désactivé",
-    "idle": "Vos écoutes sont envoyées",
-    "retrying": "Nouvelle tentative de scrobble",
-    "failed": "Échec du scrobble"
+    "autoplayBlocked": "Le navigateur a bloqué la lecture. Appuyez sur lecture pour démarrer.",
+    "tooManyFailures": "Plusieurs pistes ont échoué de suite, la lecture s'est arrêtée"
   }
 }

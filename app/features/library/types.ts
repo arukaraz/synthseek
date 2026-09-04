@@ -1,11 +1,5 @@
-import type { ColumnDef } from "@components/ui/Table";
 import type { ContentType } from "@api/__generated__/types";
-import type {
-  LibraryAlbumItem,
-  LibraryArtistItem,
-  LibraryPlaylistItem,
-  LibraryTrackItem,
-} from "@hooks/api/queries/library/types";
+import type { LibraryAlbumItem, LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 import type { ParseKeys } from "i18next";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
@@ -67,7 +61,6 @@ interface BaseViewConfig {
 export interface TracksViewConfig extends BaseViewConfig {
   view: "tracks";
   layout: "table";
-  columns: ColumnDef<LibraryTrackItem>[];
 }
 
 export interface AlbumsViewConfig extends BaseViewConfig {

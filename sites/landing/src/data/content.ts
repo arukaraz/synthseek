@@ -32,6 +32,7 @@ export const COMPARISON_ROWS = [
   { label: "Fingerprint verification before import", synthseek: "with a free key", diy: "no" },
   { label: "Tagging with embedded art and album positions", synthseek: "yes", diy: "manual runs" },
   { label: "Playlists that sync to your media server", synthseek: "yes", diy: "no" },
+  { label: "A player built into the web app", synthseek: "yes", diy: "another container" },
   { label: "Play straight from any Subsonic music app", synthseek: "opt-in", diy: "another container" },
   { label: "Accounts, roles, and per-user requests", synthseek: "yes", diy: "no" },
   { label: "An AI assistant that can request for you", synthseek: "yes", diy: "no" },

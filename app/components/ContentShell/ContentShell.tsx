@@ -2,15 +2,18 @@
 
 import { fadeIn, slideUp } from "@utils/animations";
 import { decorativeBlob, glassContainer, gradientOverlay } from "@theme/utilities/styles";
+import { usePlayerDock } from "@hooks/ui/player";
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
-import { gridBackgroundStyle } from "./styles";
+import { contentShell, gridBackgroundStyle } from "./styles";
 import type { ContentShellProps } from "./types";
 
 export function ContentShell({ children }: ContentShellProps) {
+  const dock = usePlayerDock();
+
   return (
     <motion.div
-      className="h-screen-minus-header-and-nav sm:h-screen-minus-header relative flex overflow-hidden"
+      className={contentShell({ player: dock === "hidden" ? "hidden" : "docked", chain: dock === "chain" })}
       initial="hidden"
       animate="visible"
       variants={fadeIn}

@@ -3,23 +3,21 @@
 import { ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { chainButton, chainLabel, chainSeparator, chainStrip, chainValue } from "./styles";
+import { chainLabel, chainSeparator, chainStrip, chainValue } from "./styles";
 import type { PlayerProps } from "./types";
 
-export function SignalChain({ view, actions }: PlayerProps) {
+export function SignalChain({ view }: PlayerProps) {
   const { t } = useTranslation("player");
   const { chain } = view;
 
   return (
     <div className={chainStrip()}>
       <span className={chainLabel()}>{t("chain.file")}</span>
-      <button
-        type="button"
-        className={chainButton({ tone: chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted" })}
-        onClick={actions.describeChain}
+      <span
+        className={chainValue({ tone: chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted" })}
       >
         {chain.fileLabel}
-      </button>
+      </span>
       <ChevronRight className={chainSeparator()} aria-hidden />
       <span className={chainLabel()}>{t("chain.server")}</span>
       <span className={chainValue({ tone: chain.transcoding ? "warning" : "success" })}>{chain.serverLabel}</span>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Loader2, Pause, Play } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { playerActions } from "@hooks/ui/player";
 import { formatBytes, formatTrackDuration } from "@utils/formatters";
 
 import {
@@ -74,6 +75,7 @@ export function CopyRow({ copy, disabled, keeping, playing, onPlayChange, onKeep
         ref={audioRef}
         src={copyAudioUrl(copy.id)}
         preload="none"
+        onPlay={playerActions.pauseForOtherAudio}
         onPlaying={() => setBuffering(false)}
         onWaiting={() => setBuffering(true)}
         onEnded={() => onPlayChange(null)}

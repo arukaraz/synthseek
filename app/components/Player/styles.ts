@@ -28,22 +28,6 @@ export const chainValue = cva("font-mono text-[10.5px]", {
   defaultVariants: { tone: "neutral" },
 });
 
-export const chainButton = cva(
-  "focus-visible:ring-secondary-500 rounded-sm font-mono text-[10.5px] transition-colors hover:underline focus-visible:ring-2 focus-visible:outline-none",
-  {
-    variants: {
-      tone: {
-        neutral: "text-fg",
-        muted: "text-fg-muted",
-        lossless: "text-secondary-400",
-        warning: "text-warning-vivid",
-        success: "text-success-vivid",
-      },
-    },
-    defaultVariants: { tone: "neutral" },
-  }
-);
-
 export const chainSeparator = cva("text-fg-muted/60 size-2.5 shrink-0");
 
 export const bar = cva(
@@ -53,7 +37,7 @@ export const bar = cva(
 export const barIdentity = cva("flex min-w-0 flex-1 items-center gap-3 sm:w-[226px] sm:flex-none");
 
 export const barIdentityButton = cva(
-  "focus-visible:ring-primary-500 flex min-w-0 flex-1 items-center gap-3 rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none sm:cursor-default"
+  "focus-visible:ring-primary-500 flex min-w-0 items-center gap-3 rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none sm:flex-1 sm:cursor-default"
 );
 
 export const barTitle = cva("text-fg hidden truncate text-[13.5px] leading-tight font-semibold sm:block");
@@ -105,13 +89,13 @@ export const iconButton = cva(
       tone: {
         muted: "text-fg-muted hover:text-fg",
         active: "text-primary-400 hover:bg-fg/8",
-        favorite: "text-accent-400 hover:bg-fg/8",
         remote: "text-secondary-400 hover:bg-fg/8",
         warning: "text-warning-vivid hover:bg-fg/8",
         danger: "text-destructive-vivid hover:bg-fg/8",
       },
       size: {
         compact: "size-9 sm:size-8",
+        transport: "size-11 sm:size-8",
         stage: "size-11",
       },
     },
@@ -132,7 +116,7 @@ export const playButton = cva(
   }
 );
 
-export const cover = cva("grid shrink-0 place-items-center overflow-hidden border", {
+export const cover = cva("relative grid shrink-0 place-items-center overflow-hidden border", {
   variants: {
     tone: {
       primary: "bg-primary-500/35 border-primary-500/60",
@@ -158,6 +142,8 @@ export const coverGlow = cva("", {
   },
   defaultVariants: { tone: "primary" },
 });
+
+export const coverArtwork = cva("size-full object-cover");
 
 export const coverInitials = cva("text-fg font-mono", {
   variants: {
@@ -264,27 +250,21 @@ export const deviceList = cva("flex flex-col gap-2 p-2.5");
 
 export const deviceCaption = cva("text-fg-muted font-mono text-[10px] tracking-[0.14em]");
 
-export const deviceRow = cva(
-  "hover:bg-primary-500/10 focus-visible:ring-primary-500 flex w-full items-center gap-2.5 rounded-[10px] border px-2.5 py-2 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none",
-  {
-    variants: {
-      state: {
-        active: "border-primary-500/55",
-        idle: "border-fg-muted/25",
-        unarmed: "border-fg-muted/25 border-dashed",
-      },
+export const deviceRow = cva("flex w-full items-center gap-2.5 rounded-[10px] border px-2.5 py-2 text-left", {
+  variants: {
+    state: {
+      active: "border-primary-500/55",
+      idle: "border-fg-muted/25",
     },
-    defaultVariants: { state: "idle" },
-  }
-);
+  },
+  defaultVariants: { state: "idle" },
+});
 
 export const deviceDot = cva("size-2.25 shrink-0 rounded-full", {
   variants: {
     state: {
       active: "bg-primary-400",
       idle: "bg-primary-500/55",
-      third: "border-fg-muted border-[1.5px]",
-      unarmed: "border-fg-muted border-[1.5px] border-dashed",
     },
   },
   defaultVariants: { state: "idle" },
@@ -294,18 +274,22 @@ export const deviceName = cva("text-fg truncate text-[12.5px] font-semibold");
 
 export const deviceDetail = cva("text-fg-muted truncate text-[10.5px]");
 
-export const deviceCapability = cva("shrink-0 text-right font-mono text-[9.5px]", {
-  variants: {
-    kind: {
-      own: "text-primary-400",
-      third: "text-fg-muted",
-      unarmed: "text-warning-vivid",
-    },
-  },
-  defaultVariants: { kind: "own" },
-});
-
 export const deviceFootnote = cva("text-fg-muted px-1 pb-1 text-[10.5px] leading-relaxed");
+
+export const barDesktopExtras = cva("hidden shrink-0 items-center gap-2.5 sm:flex");
+
+export const barMoreGroup = cva(
+  "flex shrink-0 items-center overflow-hidden transition-all duration-200 ease-out sm:hidden",
+  {
+    variants: {
+      open: {
+        true: "max-w-32 translate-x-0 gap-1 opacity-100",
+        false: "invisible max-w-0 -translate-x-2 gap-0 opacity-0",
+      },
+    },
+    defaultVariants: { open: false },
+  }
+);
 
 export const notice = cva(
   "player-metrics border-fg-muted/25 bg-surface-overlay pointer-events-auto fixed bottom-[calc(var(--height-bottom-nav)+var(--player-dock-height))] left-3 z-70 flex max-w-[460px] items-center gap-2.5 rounded-[10px] border px-3.5 py-2.5 sm:bottom-[var(--player-dock-height)] sm:left-5",
@@ -375,10 +359,6 @@ export const stageChip = cva("rounded-full border px-2.5 py-1 font-mono text-[11
   },
   defaultVariants: { tone: "muted" },
 });
-
-export const stageChipButton = cva(
-  "focus-visible:ring-secondary-500 rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none"
-);
 
 export const stageActions = cva("mt-1.5 flex items-center gap-4");
 

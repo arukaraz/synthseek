@@ -306,5 +306,17 @@
   "RECYCLE_BIN_DESTINATION_TAKEN": {
     "title": "Something is already there",
     "description": "A file already sits where this one came from, so restoring it would overwrite that one. Move or rename it first."
+  },
+  "LIBRARY_STREAM_REQUEST_INVALID": {
+    "title": "That playback request made no sense",
+    "description": "Synthseek could not read what was asked for. Reload the page and press play again."
+  },
+  "LIBRARY_STREAM_BUSY": {
+    "title": "Converting as fast as it can",
+    "description": "The server is converting as much audio as it can right now. Try again in a moment."
+  },
+  "LIBRARY_STREAM_FAILED": {
+    "title": "That track would not play",
+    "description": "Synthseek could not serve that file. If it was being converted, playing it at its original quality may still work."
   }
 }
