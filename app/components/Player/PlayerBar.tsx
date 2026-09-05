@@ -4,11 +4,9 @@ import { cn } from "@utils/cn";
 import {
   ChevronLeft,
   ChevronRight,
-  Heart,
   Info,
   Loader2,
   Maximize,
-  Mic2,
   MonitorSpeaker,
   Pause,
   Play,
@@ -65,7 +63,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
       <div className={barIdentity()}>
         <button
           type="button"
-          className={barCoverButton()}
+          className={barCoverButton({ folded: view.moreOpen })}
           onClick={actions.toggleFullscreen}
           aria-label={t("controls.openTrack")}
         >
@@ -76,7 +74,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
             artworkUrl={view.track.artworkUrl}
           />
         </button>
-        <span className={barTextColumn()}>
+        <span className={barTextColumn({ folded: view.moreOpen })}>
           <span className={barNameRow()}>
             <button type="button" className={barNameButton()} onClick={actions.toggleFullscreen} tabIndex={-1}>
               <span className={barTitle()}>{view.track.title}</span>
@@ -171,23 +169,6 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         <span className={clock({ align: "right" })}>{formatClock(view.positionSeconds)}</span>
         <SiriWave view={view} actions={actions} size="bar" />
         <span className={clock()}>{formatClock(view.track.durationSeconds)}</span>
-        <button
-          type="button"
-          className={iconButton({ tone: view.favorite ? "favorite" : "muted" })}
-          onClick={actions.toggleFavorite}
-          aria-label={view.favorite ? t("controls.unfavorite") : t("controls.favorite")}
-          aria-pressed={view.favorite}
-        >
-          <Heart className={cn("size-3.5", view.favorite ? "fill-current" : undefined)} />
-        </button>
-        <button
-          type="button"
-          className={iconButton({ tone: view.lyricsOpen ? "active" : "muted" })}
-          onClick={actions.openLyrics}
-          aria-label={t("controls.lyrics")}
-        >
-          <Mic2 className="size-3.5" />
-        </button>
       </div>
 
       <div className={barExtras()}>

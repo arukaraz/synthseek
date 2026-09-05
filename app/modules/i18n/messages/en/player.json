@@ -54,8 +54,7 @@
   },
   "lyrics": {
     "empty": "No lyrics found for this track",
-    "loading": "Looking for the lyrics",
-    "failed": "The lyrics could not be fetched right now"
+    "loading": "Looking for the lyrics"
   },
   "scrobble": {
     "off": "Scrobbling off",

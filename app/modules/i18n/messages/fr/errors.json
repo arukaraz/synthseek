@@ -330,5 +330,9 @@
   "LISTENING_SERVICE_REFUSED": {
     "title": "Le service a refuse la connexion",
     "description": "Verifiez le jeton ou reessayez dans un instant."
+  },
+  "LYRICS_LOOKUP_UNAVAILABLE": {
+    "title": "Les paroles n'ont pas pu être récupérées",
+    "description": "Le service de paroles n'a pas répondu. Rien n'a été enregistré pour ce titre, rouvrir les paroles relance donc la demande."
   }
 }

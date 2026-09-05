@@ -171,10 +171,8 @@ export function activeLyricIndex(lyrics: PlayerLyrics | null, positionSeconds: n
   return active;
 }
 
-export function emptyReason(view: Pick<PlayerView, "lyricsLoading" | "lyricsFailed">): "loading" | "failed" | "empty" {
-  if (view.lyricsLoading) return "loading";
-  if (view.lyricsFailed) return "failed";
-  return "empty";
+export function emptyReason(view: Pick<PlayerView, "lyricsLoading" | "lyricsFailure">): "loading" | "empty" {
+  return view.lyricsLoading ? "loading" : "empty";
 }
 
 export function lyricDepth(active: number | null, index: number): "near" | "mid" | "far" {

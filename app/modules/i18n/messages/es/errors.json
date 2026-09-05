@@ -330,5 +330,9 @@
   "LISTENING_SERVICE_REFUSED": {
     "title": "El servicio ha rechazado la conexion",
     "description": "Revisa el token o vuelve a intentarlo en un momento."
+  },
+  "LYRICS_LOOKUP_UNAVAILABLE": {
+    "title": "No se ha podido traer la letra",
+    "description": "El servicio de letras no respondió. No se ha guardado nada de esta canción, así que al abrir la letra otra vez se vuelve a preguntar."
   }
 }

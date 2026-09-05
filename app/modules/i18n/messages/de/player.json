@@ -54,8 +54,7 @@
   },
   "lyrics": {
     "empty": "Für diesen Titel gibt es keinen Songtext",
-    "loading": "Songtext wird gesucht",
-    "failed": "Der Songtext konnte gerade nicht geladen werden"
+    "loading": "Songtext wird gesucht"
   },
   "scrobble": {
     "off": "Scrobbeln aus",

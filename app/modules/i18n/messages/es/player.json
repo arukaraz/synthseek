@@ -54,8 +54,7 @@
   },
   "lyrics": {
     "empty": "No hay letra para esta canción",
-    "loading": "Buscando la letra",
-    "failed": "No se ha podido traer la letra ahora mismo"
+    "loading": "Buscando la letra"
   },
   "scrobble": {
     "off": "Scrobbling apagado",

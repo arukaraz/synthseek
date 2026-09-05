@@ -41,10 +41,27 @@ export const barIdentity = cva(
 );
 
 export const barCoverButton = cva(
-  "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none"
+  "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      folded: {
+        true: "max-sm:hidden",
+        false: "",
+      },
+    },
+    defaultVariants: { folded: false },
+  }
 );
 
-export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5");
+export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5", {
+  variants: {
+    folded: {
+      true: "max-sm:hidden",
+      false: "",
+    },
+  },
+  defaultVariants: { folded: false },
+});
 
 export const barNameRow = cva("flex min-w-0 items-center gap-1.5");
 
@@ -148,7 +165,7 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
     size: {
       row: "size-7 rounded",
       bar: "size-10 rounded-md sm:size-12.5",
-      stage: "size-[min(60vw,268px)] rounded-xl",
+      stage: "size-[min(60vw,32vh,268px)] rounded-xl",
     },
   },
   defaultVariants: { tone: "primary", size: "bar" },
@@ -257,7 +274,7 @@ export const volumeFill = cva("player-volume-fill bg-fg h-1 rounded-full");
 export const volumeHead = cva("player-volume-head bg-fg absolute -top-[3px] -ml-[5px] size-2.5 rounded-full");
 
 export const panelAnchor = cva(
-  "player-metrics pointer-events-auto fixed inset-x-0 bottom-[calc(var(--height-bottom-nav)+var(--player-bar-height))] z-70 sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-bar-height)]",
+  "player-metrics pointer-events-auto fixed inset-x-0 bottom-0 z-70 sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-bar-height)]",
   {
     variants: {
       width: {
@@ -273,7 +290,7 @@ export const panelAnchor = cva(
 );
 
 export const panelSurface = cva(
-  "bg-surface-overlay border-secondary-500/30 flex flex-col overflow-hidden rounded-tl-[14px] border border-r-0 border-b-0 sm:rounded-tr-none"
+  "bg-surface-overlay border-secondary-500/30 flex flex-col overflow-hidden rounded-t-[18px] border border-b-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:rounded-t-[14px] sm:rounded-tr-none sm:border-r-0 sm:pb-0"
 );
 
 export const deviceList = cva("flex flex-col gap-2.5 p-3.5");
@@ -285,7 +302,7 @@ export const deviceRow = cva(
   {
     variants: {
       state: {
-        playing: "border-accent-400/70",
+        playing: "border-secondary-400/70",
         idle: "border-fg-muted/25",
       },
     },
@@ -296,7 +313,7 @@ export const deviceRow = cva(
 export const deviceIcon = cva("size-4.5 shrink-0", {
   variants: {
     state: {
-      playing: "text-accent-400",
+      playing: "text-secondary-400",
       idle: "text-fg-muted",
     },
   },
@@ -312,7 +329,7 @@ export const barMoreGroup = cva(
   {
     variants: {
       open: {
-        true: "max-w-32 translate-x-0 gap-1 opacity-100",
+        true: "max-w-46 translate-x-0 gap-0.5 opacity-100 [&>button]:size-8 sm:gap-1",
         false: "invisible max-w-0 -translate-x-2 gap-0 opacity-0",
       },
     },
@@ -361,9 +378,13 @@ export const stageTint = cva("absolute inset-0", {
   defaultVariants: { tone: "primary" },
 });
 
-export const stageHeader = cva("relative flex items-center justify-end gap-3 px-5 py-4");
+export const stageHeader = cva(
+  "pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-end gap-3 px-5 py-4 [&>*]:pointer-events-auto"
+);
 
-export const stageMain = cva("relative flex min-h-0 flex-1 flex-col px-6 text-center md:px-11 md:text-left");
+export const stageMain = cva(
+  "relative flex min-h-0 flex-1 flex-col overflow-hidden px-6 text-center md:px-11 md:text-left"
+);
 
 export const stageMeta = cva("flex max-w-[430px] flex-col items-center gap-2.5 md:items-start");
 
@@ -392,7 +413,7 @@ export const stageDeviceLine = cva("text-secondary-400 mt-0.5 flex items-center 
 export const stageActions = cva("mt-1.5 flex items-center gap-4");
 
 export const stageFooter = cva(
-  "relative flex flex-col gap-4 px-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] sm:px-15"
+  "relative flex shrink-0 flex-col gap-4 px-5 pt-4 pb-[max(1.75rem,env(safe-area-inset-bottom))] sm:px-15"
 );
 
 export const stageScrubRow = cva("flex items-center gap-3.5");
@@ -463,14 +484,14 @@ export const stageFace = cva("flex h-full min-h-0 w-full items-center justify-ce
 
 export const stageVolume = cva("flex justify-center");
 
-export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-[900px] flex-col items-center gap-4 py-4");
+export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-[900px] flex-col items-center gap-3 pb-3");
 
 export const lyricsScroll = cva("scrollbar-none min-h-0 w-full flex-1 overflow-y-auto px-2");
 
-export const lyricsBody = cva("flex flex-col items-center gap-3 py-[38vh] text-center");
+export const lyricsBody = cva("flex flex-col items-center gap-2.5 py-[32vh] text-center sm:gap-3 sm:py-[42vh]");
 
 export const lyricsLine = cva(
-  "player-lyric-line focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[34px] leading-tight font-bold tracking-[-0.01em] transition-all duration-500 ease-out focus-visible:ring-2 focus-visible:outline-none sm:text-[46px]",
+  "player-lyric-line focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[25px] leading-tight font-bold tracking-[-0.01em] transition-all duration-500 ease-out focus-visible:ring-2 focus-visible:outline-none sm:text-[46px]",
   {
     variants: {
       state: {

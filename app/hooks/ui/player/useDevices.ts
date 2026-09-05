@@ -257,35 +257,39 @@ export function usePlayerDevices(): {
       const snapshot = sessionSnapshot();
       if (!mirroring && snapshot.trackIds.length === 0) return;
 
+      const session = getSnapshot();
+      if (session.remote === null) {
+        actions.applyRemoteState({
+          confirmed: false,
+          deviceId,
+          deviceName: devices.find((device) => device.id === deviceId)?.name ?? deviceId,
+          playing: true,
+          track: session.queue[session.index] ?? null,
+          positionSeconds: session.positionSeconds,
+          shuffle: session.shuffle,
+          repeat: session.repeat,
+          volume: session.volume,
+          muted: session.muted,
+          transcoding: session.transcoding,
+          updatedAt: Date.now(),
+        });
+      }
+
+      const giveTheSoundBack = () => actions.recoverUnconfirmedHandOver(deviceId);
+
       const command = () =>
         sendCommand(
           { deviceId, command: "handOver" },
           {
             onSuccess: (result) => {
               if (!result.delivered) {
+                giveTheSoundBack();
                 forgetLocally(deviceId);
                 return;
               }
-              const session = getSnapshot();
-              if (session.remote !== null) return;
-              actions.applyRemoteState({
-                confirmed: false,
-                deviceId,
-                deviceName: devices.find((device) => device.id === deviceId)?.name ?? deviceId,
-                playing: true,
-                track: session.queue[session.index] ?? null,
-                positionSeconds: session.positionSeconds,
-                shuffle: session.shuffle,
-                repeat: session.repeat,
-                volume: session.volume,
-                muted: session.muted,
-                transcoding: session.transcoding,
-                updatedAt: Date.now(),
-              });
-              ackTimers.current.push(
-                window.setTimeout(() => actions.recoverUnconfirmedHandOver(deviceId), HAND_OVER_ACK_MS)
-              );
+              ackTimers.current.push(window.setTimeout(giveTheSoundBack, HAND_OVER_ACK_MS));
             },
+            onError: giveTheSoundBack,
           }
         );
 
@@ -293,7 +297,7 @@ export function usePlayerDevices(): {
         command();
         return;
       }
-      saveSession(snapshot, { onSuccess: command });
+      saveSession(snapshot, { onSuccess: command, onError: giveTheSoundBack });
     },
     [saveSession, sendCommand, forgetLocally, devices]
   );

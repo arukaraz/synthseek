@@ -9,6 +9,7 @@ import {
   useTrackLyrics,
 } from "@hooks/api";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
+import { resolveFriendlyError } from "@modules/errors";
 import { useTranslation } from "react-i18next";
 
 import { deviceKindFrom } from "./device";
@@ -222,7 +223,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     lyricsOpen: session.lyricsOpen,
     lyrics: lyrics.data ?? null,
     lyricsLoading: lyrics.isLoading,
-    lyricsFailed: lyrics.isError,
+    lyricsFailure: lyrics.isError ? resolveFriendlyError(lyrics.error).title : null,
     scrobble:
       scrobblePending && scrobbleVariables !== undefined
         ? scrobbleVariables.enabled

@@ -71,7 +71,7 @@ export interface PlayerView {
   lyricsOpen: boolean;
   lyrics: PlayerLyrics | null;
   lyricsLoading: boolean;
-  lyricsFailed: boolean;
+  lyricsFailure: string | null;
   scrobble: PlayerScrobbleState;
   scrobbleActionable: boolean;
   moreOpen: boolean;

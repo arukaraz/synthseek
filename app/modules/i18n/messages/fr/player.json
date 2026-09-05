@@ -54,8 +54,7 @@
   },
   "lyrics": {
     "empty": "Aucunes paroles pour ce titre",
-    "loading": "Recherche des paroles",
-    "failed": "Les paroles n'ont pas pu être récupérées pour le moment"
+    "loading": "Recherche des paroles"
   },
   "scrobble": {
     "off": "Scrobbling désactivé",

@@ -330,5 +330,9 @@
   "LISTENING_SERVICE_REFUSED": {
     "title": "Der Dienst hat die Verbindung abgelehnt",
     "description": "Pruefe das Token oder versuche es gleich noch einmal."
+  },
+  "LYRICS_LOOKUP_UNAVAILABLE": {
+    "title": "Der Songtext konnte nicht geladen werden",
+    "description": "Der Songtext-Dienst hat nicht geantwortet. Zu diesem Titel wurde nichts gespeichert, ein erneutes Öffnen fragt also noch einmal nach."
   }
 }

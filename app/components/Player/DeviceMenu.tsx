@@ -25,7 +25,7 @@ export function DeviceMenu({ view, actions, chain }: PlayerPanelProps) {
       <DialogSurface
         className={panelAnchor({ width: "devices", chain })}
         aria-describedby={undefined}
-        onPointerDownOutside={(event) => {
+        onInteractOutside={(event) => {
           if (event.target instanceof Element && event.target.closest(DEVICES_TOGGLE_SELECTOR) !== null) {
             event.preventDefault();
           }

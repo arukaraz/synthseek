@@ -55,7 +55,7 @@ export function PlayerLyrics({ view, actions }: PlayerLyricsProps) {
   return (
     <div className={lyricsPane()}>
       {lines.length === 0 ? (
-        <p className={lyricsEmpty()}>{t(`lyrics.${emptyReason(view)}`)}</p>
+        <p className={lyricsEmpty()}>{view.lyricsFailure ?? t(`lyrics.${emptyReason(view)}`)}</p>
       ) : (
         <div className={lyricsScroll()} ref={scroller}>
           <div className={lyricsBody()}>

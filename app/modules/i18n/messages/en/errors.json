@@ -330,5 +330,9 @@
   "LISTENING_SERVICE_REFUSED": {
     "title": "The service refused the connection",
     "description": "Check the token or try again in a moment."
+  },
+  "LYRICS_LOOKUP_UNAVAILABLE": {
+    "title": "The lyrics could not be fetched",
+    "description": "The lyrics service did not answer. Nothing was saved about this track, so opening the lyrics again asks it once more."
   }
 }
