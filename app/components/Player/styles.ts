@@ -41,7 +41,7 @@ export const barIdentity = cva(
 );
 
 export const barCoverButton = cva(
-  "focus-visible:ring-primary-500 flex shrink-0 rounded-lg focus-visible:ring-2 focus-visible:outline-none sm:cursor-default"
+  "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none"
 );
 
 export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5");
@@ -276,17 +276,16 @@ export const panelSurface = cva(
   "bg-surface-overlay border-secondary-500/30 flex flex-col overflow-hidden rounded-tl-[14px] border border-r-0 border-b-0 sm:rounded-tr-none"
 );
 
-export const deviceList = cva("flex flex-col gap-2 p-2.5");
+export const deviceList = cva("flex flex-col gap-2.5 p-3.5");
 
 export const deviceCaption = cva("text-fg-muted font-mono text-[10px] tracking-[0.14em]");
 
 export const deviceRow = cva(
-  "flex w-full items-center gap-2.5 rounded-[10px] border px-2.5 py-2 text-left transition-colors",
+  "flex w-full items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-colors",
   {
     variants: {
       state: {
         playing: "border-accent-400/70",
-        active: "border-primary-500/55",
         idle: "border-fg-muted/25",
       },
     },
@@ -294,18 +293,17 @@ export const deviceRow = cva(
   }
 );
 
-export const deviceIcon = cva("size-4 shrink-0", {
+export const deviceIcon = cva("size-4.5 shrink-0", {
   variants: {
     state: {
       playing: "text-accent-400",
-      active: "text-primary-400",
       idle: "text-fg-muted",
     },
   },
   defaultVariants: { state: "idle" },
 });
 
-export const deviceName = cva("text-fg min-w-0 flex-1 truncate text-[12.5px] font-semibold");
+export const deviceName = cva("text-fg min-w-0 flex-1 truncate text-[13.5px] font-semibold");
 
 export const barDesktopExtras = cva("hidden shrink-0 items-center gap-2.5 sm:flex");
 

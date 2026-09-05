@@ -21,7 +21,6 @@ import { useTranslation } from "react-i18next";
 
 import { PlayerExtraControls } from "./PlayerExtraControls";
 import { PlayerVolume } from "./PlayerVolume";
-import { ScrobbleStatus } from "./ScrobbleStatus";
 import { SiriWave } from "./SiriWave";
 import { TrackCover } from "./TrackCover";
 import { formatClock, percentOf, trackInitials } from "./helpers";
@@ -180,12 +179,6 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         >
           <Heart className={cn("size-3.5", view.favorite ? "fill-current" : undefined)} />
         </button>
-        <ScrobbleStatus
-          state={view.scrobble}
-          actionable={view.scrobbleActionable}
-          size="bar"
-          onToggle={actions.toggleScrobbling}
-        />
       </div>
 
       <div className={barExtras()}>

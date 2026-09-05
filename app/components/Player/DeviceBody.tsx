@@ -12,7 +12,7 @@ export function DeviceBody({ device }: PlayerDeviceBodyProps) {
 
   return (
     <>
-      <Icon className={deviceIcon({ state: device.playing ? "playing" : device.active ? "active" : "idle" })} />
+      <Icon className={deviceIcon({ state: device.playing ? "playing" : "idle" })} />
       <span className={deviceName()}>{device.name}</span>
     </>
   );

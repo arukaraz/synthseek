@@ -118,7 +118,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     ...(mirrored !== null && !known.some((device) => device.id === mirrored.id) ? [mirrored] : []),
     ...known.map((device) => {
       const announced = playingOn !== null && playingOn.deviceId === device.id ? playingOn : null;
-      const playing = announced?.playing ?? device.playing;
+      const someoneElseHasTheSound = (playingOn !== null && playingOn.deviceId !== device.id) || session.playing;
+      const playing = announced !== null ? announced.playing : someoneElseHasTheSound ? false : device.playing;
       return {
         id: device.id,
         name: device.name,
