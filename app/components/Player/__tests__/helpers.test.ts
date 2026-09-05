@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatClock,
   fractionFromPointer,
+  lyricDepth,
   nextRepeat,
   percentOf,
   secondsFromPointer,
@@ -111,5 +112,26 @@ describe("waveLobePaths", () => {
         expect(y).toBeLessThanOrEqual(100);
       });
     });
+  });
+});
+
+describe("lyricDepth", () => {
+  it("keeps the line playing and its neighbours sharp", () => {
+    expect(lyricDepth(10, 10)).toBe("near");
+    expect(lyricDepth(10, 11)).toBe("near");
+  });
+
+  it("softens a line two away, which is where the blur starts", () => {
+    expect(lyricDepth(10, 12)).toBe("mid");
+    expect(lyricDepth(10, 8)).toBe("mid");
+  });
+
+  it("pushes a line four away furthest back", () => {
+    expect(lyricDepth(10, 14)).toBe("far");
+    expect(lyricDepth(10, 6)).toBe("far");
+  });
+
+  it("treats an unsynced lyric as one flat plane, since no line is playing", () => {
+    expect(lyricDepth(null, 40)).toBe("near");
   });
 });

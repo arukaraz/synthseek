@@ -51,8 +51,8 @@ body:
     id: version
     attributes:
       label: Synthseek Version
-      description: Docker image tag or version number
-      placeholder: "1.0.0"
+      description: Docker image tag or version number, as shown under Settings, then About
+      placeholder: "2.6.1"
     validations:
       required: true
 
@@ -75,14 +75,25 @@ body:
         - Edge
         - Other
 
+  - type: checkboxes
+    id: debug-logs
+    attributes:
+      label: Before you attach the logs
+      description: Logs at the default level rarely say why something failed, so this is the one step that decides whether a bug can be diagnosed at all.
+      options:
+        - label: I set the log level to DEBUG under Settings, then Logs, and reproduced the problem after that
+          required: true
+
   - type: textarea
     id: logs
     attributes:
-      label: Logs
+      label: Logs at DEBUG level
       description: |
-        Relevant logs from `docker logs synthseek` or browser console.
-        For detailed logs, set the log level to DEBUG under Settings, the Logs section, then reproduce the issue.
+        Paste the server logs covering the moment the problem happened, from Settings, then Logs, or from `docker logs synthseek`.
+        Include the browser console too if the problem is something you saw on screen.
       render: shell
+    validations:
+      required: true
 
   - type: textarea
     id: additional

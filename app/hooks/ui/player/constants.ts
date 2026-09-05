@@ -57,3 +57,5 @@ export const LISTEN_DELTA_CEILING_SECONDS = 3;
 export const LISTEN_MAX_SECONDS = 240;
 
 export const LISTEN_FRACTION = 0.5;
+
+export const APP_TITLE = "Synthseek";

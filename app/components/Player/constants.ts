@@ -31,3 +31,9 @@ export const PROGRESS_EASE_MS = "260ms";
 export const DEVICES_TOGGLE_SELECTOR = "[data-player-devices-toggle]";
 
 export const FULLSCREEN_TOGGLE_SELECTOR = "[data-player-fullscreen-toggle]";
+
+export const LYRIC_SCROLL_SPRING = { type: "spring", stiffness: 110, damping: 24, mass: 0.7 } as const;
+
+export const LYRIC_BLUR_DISTANCE = 2;
+
+export const LYRIC_FAR_DISTANCE = 4;

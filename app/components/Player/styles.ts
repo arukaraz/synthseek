@@ -470,20 +470,25 @@ export const lyricsScroll = cva("scrollbar-none min-h-0 w-full flex-1 overflow-y
 export const lyricsBody = cva("flex flex-col items-center gap-3 py-[38vh] text-center");
 
 export const lyricsLine = cva(
-  "focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[34px] leading-tight font-bold tracking-[-0.01em] transition-colors duration-300 focus-visible:ring-2 focus-visible:outline-none sm:text-[46px]",
+  "player-lyric-line focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[34px] leading-tight font-bold tracking-[-0.01em] transition-all duration-500 ease-out focus-visible:ring-2 focus-visible:outline-none sm:text-[46px]",
   {
     variants: {
       state: {
-        active: "text-fg",
+        active: "text-fg scale-[1.02]",
         resting: "text-fg/30 hover:text-fg/60",
         plain: "text-fg/70",
+      },
+      depth: {
+        near: "",
+        mid: "blur-[1.5px]",
+        far: "blur-[3px] opacity-70",
       },
       seekable: {
         true: "cursor-pointer",
         false: "",
       },
     },
-    defaultVariants: { state: "plain", seekable: false },
+    defaultVariants: { state: "plain", depth: "near", seekable: false },
   }
 );
 

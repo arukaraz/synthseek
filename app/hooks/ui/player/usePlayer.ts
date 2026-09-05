@@ -15,6 +15,7 @@ import { deviceKindFrom } from "./device";
 import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom } from "./helpers";
 import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
+import { usePlayerDocumentTitle } from "./useDocumentTitle";
 import { usePlayReporter } from "./usePlayReporter";
 import type { PlayerDockState, PlayerSessionState } from "./types";
 
@@ -50,6 +51,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
         : { ...playingTrack, durationSeconds: measured > 0 ? measured : playingTrack.durationSeconds },
     [playingTrack, measured]
   );
+
   const favorites = useFavoriteTracks(track === null ? [] : [track.id]);
   const connections = useListeningConnections();
   const {
@@ -99,6 +101,11 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   };
 
   const playingOn = session.remote;
+  const sounding = mirroring && playingOn !== null ? playingOn.playing : session.playing;
+
+  usePlayerDocumentTitle(
+    sounding && track !== null ? t("nowPlaying", { title: track.title, artist: track.artist }) : null
+  );
 
   const mirrored: PlayerDevice | null =
     playingOn === null
@@ -195,7 +202,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     positionSeconds:
       playingOn !== null && !session.playing ? mirroredPositionSeconds(playingOn, Date.now()) : session.positionSeconds,
     scrubSeconds: session.scrubSeconds,
-    playing: mirroring && playingOn !== null ? playingOn.playing : session.playing,
+    playing: sounding,
     loading: mirroring ? false : session.loading,
     shuffle: mirroring && playingOn !== null ? playingOn.shuffle : session.shuffle,
     repeat: mirroring && playingOn !== null ? playingOn.repeat : session.repeat,

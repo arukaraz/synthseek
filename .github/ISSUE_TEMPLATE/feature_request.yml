@@ -42,14 +42,6 @@ body:
         - Important
         - Critical for my use case
 
-  - type: checkboxes
-    id: contribution
-    attributes:
-      label: Contribution
-      description: Would you be willing to contribute to this feature?
-      options:
-        - label: I would be willing to submit a PR for this feature
-
   - type: textarea
     id: additional
     attributes:

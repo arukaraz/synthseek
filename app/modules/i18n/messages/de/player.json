@@ -62,5 +62,6 @@
     "sending": "Scrobbeln",
     "retrying": "Scrobbeln, erneuter Versuch",
     "failed": "Scrobbeln fehlgeschlagen"
-  }
+  },
+  "nowPlaying": "{{title}} · {{artist}}"
 }

@@ -62,5 +62,6 @@
     "sending": "Scrobbling",
     "retrying": "Scrobbling, reintentando",
     "failed": "Scrobbling fallido"
-  }
+  },
+  "nowPlaying": "{{title}} · {{artist}}"
 }

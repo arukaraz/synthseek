@@ -105,5 +105,9 @@
     .player-bar-progress {
       transition: none;
     }
+
+    .player-lyric-line {
+      filter: none;
+    }
   }
 }

@@ -1,4 +1,10 @@
-import { RESTART_THRESHOLD_SECONDS, WAVE, WAVE_CACHE_LIMIT } from "./constants";
+import {
+  LYRIC_BLUR_DISTANCE,
+  LYRIC_FAR_DISTANCE,
+  RESTART_THRESHOLD_SECONDS,
+  WAVE,
+  WAVE_CACHE_LIMIT,
+} from "./constants";
 import type { PlayerLyrics, PlayerRepeat, PlayerView } from "./types";
 
 interface WavePoint {
@@ -169,4 +175,11 @@ export function emptyReason(view: Pick<PlayerView, "lyricsLoading" | "lyricsFail
   if (view.lyricsLoading) return "loading";
   if (view.lyricsFailed) return "failed";
   return "empty";
+}
+
+export function lyricDepth(active: number | null, index: number): "near" | "mid" | "far" {
+  const distance = active === null ? 0 : Math.abs(index - active);
+  if (distance >= LYRIC_FAR_DISTANCE) return "far";
+  if (distance >= LYRIC_BLUR_DISTANCE) return "mid";
+  return "near";
 }
