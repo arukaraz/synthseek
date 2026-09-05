@@ -15,7 +15,7 @@
     "mute": "Silenciar",
     "unmute": "Quitar el silencio",
     "volume": "Volumen",
-    "devices": "Dónde suena",
+    "devices": "Dispositivos",
     "fullscreenOpen": "Sesión a pantalla completa",
     "fullscreenClose": "Salir de pantalla completa",
     "chain": "Cadena de señal",
@@ -34,13 +34,8 @@
     "serverTranscoding": "convirtiendo a mp3 320"
   },
   "devices": {
-    "caption": "DÓNDE SUENA",
-    "footnote": "Synthseek suena en cada pestaña por su cuenta. Elige otra para mover la reproducción allí. Las apps que se conectan por Subsonic reproducen por su cuenta.",
+    "caption": "DISPOSITIVOS",
     "thisBrowser": "Este navegador web",
-    "thisBrowserDetail": "la pestaña que estás mirando",
-    "playing": "sonando {{title}}",
-    "idle": "abierto, sin reproducir",
-    "notArmed": "abierto, todavía no ha sonado",
     "handOver": "Reproducir aquí",
     "playHere": "Reproducir aquí"
   },
@@ -63,9 +58,9 @@
     "failed": "No se ha podido traer la letra ahora mismo"
   },
   "scrobble": {
-    "off": "No se envían tus escuchas",
-    "sending": "Enviando tus escuchas",
-    "retrying": "Reintentando enviar tus escuchas",
-    "failed": "No se pueden enviar tus escuchas"
+    "off": "Scrobbling apagado",
+    "sending": "Scrobbling",
+    "retrying": "Scrobbling, reintentando",
+    "failed": "Scrobbling fallido"
   }
 }

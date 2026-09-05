@@ -1,16 +1,19 @@
 "use client";
 
-import { deviceDetail, deviceDot, deviceName } from "./styles";
+import { Monitor, Smartphone, Tablet } from "lucide-react";
+
+import { deviceIcon, deviceName } from "./styles";
 import type { PlayerDeviceBodyProps } from "./types";
 
+const ICONS = { computer: Monitor, phone: Smartphone, tablet: Tablet };
+
 export function DeviceBody({ device }: PlayerDeviceBodyProps) {
+  const Icon = ICONS[device.kind];
+
   return (
     <>
-      <span className={deviceDot({ state: device.active ? "active" : "idle" })} />
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className={deviceName()}>{device.name}</span>
-        <span className={deviceDetail()}>{device.detail}</span>
-      </span>
+      <Icon className={deviceIcon({ state: device.playing ? "playing" : device.active ? "active" : "idle" })} />
+      <span className={deviceName()}>{device.name}</span>
     </>
   );
 }

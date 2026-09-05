@@ -15,7 +15,7 @@
     "mute": "Mute",
     "unmute": "Unmute",
     "volume": "Volume",
-    "devices": "Where it plays",
+    "devices": "Devices",
     "fullscreenOpen": "Full screen session",
     "fullscreenClose": "Leave full screen",
     "chain": "Signal chain",
@@ -34,13 +34,8 @@
     "serverTranscoding": "converting to mp3 320"
   },
   "devices": {
-    "caption": "WHERE IT PLAYS",
-    "footnote": "Synthseek plays in each tab on its own. Pick another one to move playback there. Apps that connect over Subsonic run their own playback.",
+    "caption": "DEVICES",
     "thisBrowser": "This web browser",
-    "thisBrowserDetail": "the tab you are looking at",
-    "playing": "playing {{title}}",
-    "idle": "open, not playing",
-    "notArmed": "open, has not played yet",
     "handOver": "Play here instead",
     "playHere": "Play here"
   },
@@ -63,9 +58,9 @@
     "failed": "The lyrics could not be fetched right now"
   },
   "scrobble": {
-    "off": "Not sending your plays",
-    "sending": "Sending your plays",
-    "retrying": "Retrying to send your plays",
-    "failed": "Cannot send your plays"
+    "off": "Scrobbling off",
+    "sending": "Scrobbling",
+    "retrying": "Scrobbling, retrying",
+    "failed": "Scrobbling failed"
   }
 }

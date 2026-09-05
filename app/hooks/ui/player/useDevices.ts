@@ -18,7 +18,7 @@ import {
   WAKE_BEAT_FLOOR_MS,
 } from "./constants";
 import { adoptSharedQueue, noteCommandIssued } from "./commands";
-import { claimDeviceId, deviceIdentity } from "./device";
+import { claimDeviceId, deviceIdentity, type DeviceIdentity } from "./device";
 import { beatIsDue, expectedPosition, isMirroring, toneFor, trackSummary } from "./helpers";
 import { actions, getSnapshot, sessionSnapshot, subscribe } from "./store";
 import type { KnownDevice, RemoteCommand } from "./types";
@@ -29,7 +29,7 @@ export function usePlayerDevices(): {
   toggleRemote: (deviceId: string, playing: boolean) => void;
   commandActive: (command: RemoteCommand, value?: number) => void;
 } {
-  const [identity, setIdentity] = useState<{ id: string; name: string } | null>(null);
+  const [identity, setIdentity] = useState<DeviceIdentity | null>(null);
   const [devices, setDevices] = useState<KnownDevice[]>([]);
   const lastBeatAt = useRef(0);
   const knownIds = useRef(new Set<string>());
@@ -50,7 +50,7 @@ export function usePlayerDevices(): {
   }>({ playing: false, trackId: null, positionSeconds: 0, at: 0, settings: null });
 
   useEffect(() => {
-    const release = claimDeviceId((id) => setIdentity({ id, name: deviceIdentity().name }));
+    const release = claimDeviceId((id) => setIdentity({ ...deviceIdentity(), id }));
     setIdentity(deviceIdentity());
     const timers = ackTimers.current;
     return () => {
@@ -69,6 +69,7 @@ export function usePlayerDevices(): {
         {
           deviceId: identity.id,
           name: identity.name,
+          kind: identity.kind,
           armed: session.armed,
           playing: session.playing,
           trackTitle: session.queue[session.index]?.title ?? null,

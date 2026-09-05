@@ -1,10 +1,22 @@
+import type { PlayerDeviceKind } from "@components/Player";
+
 import { DEVICE_CLAIM_CHANNEL, DEVICE_ID_STORAGE_KEY } from "./constants";
+
+export interface DeviceIdentity {
+  id: string;
+  name: string;
+  kind: PlayerDeviceKind;
+}
 
 export interface DeviceClaim {
   id: string;
   claimedAt: number;
   nonce: string;
 }
+
+const TABLET_HINTS: readonly string[] = ["iPad", "Tablet", "PlayBook", "Silk"];
+
+const PHONE_HINTS: readonly string[] = ["Mobi", "Android", "iPhone", "iPod", "Windows Phone"];
 
 const BROWSERS: readonly [string, string][] = [
   ["Edg/", "Edge"],
@@ -25,21 +37,28 @@ export function deviceNameFrom(userAgent: string): string {
   return `Web Player (${firstMatch(userAgent, BROWSERS, "Browser")})`;
 }
 
-let identity: { id: string; name: string } | null = null;
-let claim: DeviceClaim | null = null;
-
-function mint(name: string): { id: string; name: string } {
-  const id = window.crypto.randomUUID();
-  window.sessionStorage.setItem(DEVICE_ID_STORAGE_KEY, id);
-  return { id, name };
+export function deviceKindFrom(userAgent: string): PlayerDeviceKind {
+  if (TABLET_HINTS.some((hint) => userAgent.includes(hint))) return "tablet";
+  if (PHONE_HINTS.some((hint) => userAgent.includes(hint))) return "phone";
+  return "computer";
 }
 
-export function deviceIdentity(): { id: string; name: string } {
+let identity: DeviceIdentity | null = null;
+let claim: DeviceClaim | null = null;
+
+function mint(name: string, kind: PlayerDeviceKind): DeviceIdentity {
+  const id = window.crypto.randomUUID();
+  window.sessionStorage.setItem(DEVICE_ID_STORAGE_KEY, id);
+  return { id, name, kind };
+}
+
+export function deviceIdentity(): DeviceIdentity {
   if (identity !== null) return identity;
 
   const name = deviceNameFrom(window.navigator.userAgent);
+  const kind = deviceKindFrom(window.navigator.userAgent);
   const stored = window.sessionStorage.getItem(DEVICE_ID_STORAGE_KEY);
-  identity = stored !== null && stored.length > 0 ? { id: stored, name } : mint(name);
+  identity = stored !== null && stored.length > 0 ? { id: stored, name, kind } : mint(name, kind);
   claim = { id: identity.id, claimedAt: Date.now(), nonce: window.crypto.randomUUID() };
   return identity;
 }
@@ -61,7 +80,8 @@ export function claimDeviceId(onReplaced: (id: string) => void): () => void {
   channel.onmessage = (event: MessageEvent<DeviceClaim>) => {
     const mine = claim;
     if (mine === null || !shouldYield(mine, event.data)) return;
-    const fresh = mint(deviceIdentity().name);
+    const previous = deviceIdentity();
+    const fresh = mint(previous.name, previous.kind);
     identity = fresh;
     claim = { id: fresh.id, claimedAt: Date.now(), nonce: window.crypto.randomUUID() };
     announce();

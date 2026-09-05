@@ -151,7 +151,12 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                       >
                         <Heart className={view.favorite ? "size-4 fill-current" : "size-4"} />
                       </button>
-                      <ScrobbleStatus state={view.scrobble} size="stage" />
+                      <ScrobbleStatus
+                        state={view.scrobble}
+                        actionable={view.scrobbleActionable}
+                        size="stage"
+                        onToggle={actions.toggleScrobbling}
+                      />
                       <button
                         type="button"
                         className={iconButton({ tone: view.lyricsOpen ? "active" : "muted", size: "stage" })}

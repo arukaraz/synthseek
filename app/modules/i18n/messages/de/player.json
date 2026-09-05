@@ -15,7 +15,7 @@
     "mute": "Stummschalten",
     "unmute": "Stummschaltung aufheben",
     "volume": "Lautstärke",
-    "devices": "Wo es spielt",
+    "devices": "Geräte",
     "fullscreenOpen": "Vollbild-Sitzung",
     "fullscreenClose": "Vollbild verlassen",
     "chain": "Signalkette",
@@ -34,13 +34,8 @@
     "serverTranscoding": "wandelt zu mp3 320"
   },
   "devices": {
-    "caption": "WO ES SPIELT",
-    "footnote": "Synthseek spielt in jedem Tab für sich. Wähle einen anderen, um die Wiedergabe dorthin zu verschieben. Apps, die sich über Subsonic verbinden, spielen eigenständig ab.",
+    "caption": "GERÄTE",
     "thisBrowser": "Dieser Webbrowser",
-    "thisBrowserDetail": "der Tab, den du gerade ansiehst",
-    "playing": "spielt {{title}}",
-    "idle": "offen, spielt nicht",
-    "notArmed": "offen, hat noch nicht gespielt",
     "handOver": "Stattdessen hier abspielen",
     "playHere": "Hier abspielen"
   },
@@ -63,9 +58,9 @@
     "failed": "Der Songtext konnte gerade nicht geladen werden"
   },
   "scrobble": {
-    "off": "Wiedergaben werden nicht gesendet",
-    "sending": "Wiedergaben werden gesendet",
-    "retrying": "Senden der Wiedergaben wird wiederholt",
-    "failed": "Wiedergaben können nicht gesendet werden"
+    "off": "Scrobbeln aus",
+    "sending": "Scrobbeln",
+    "retrying": "Scrobbeln, erneuter Versuch",
+    "failed": "Scrobbeln fehlgeschlagen"
   }
 }

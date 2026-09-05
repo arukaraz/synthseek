@@ -1,7 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
+import { playerPanel } from "@utils/animations";
 
 import { chainLabel, chainSeparator, chainStrip, chainValue } from "./styles";
 import type { PlayerProps } from "./types";
@@ -11,7 +14,7 @@ export function SignalChain({ view }: PlayerProps) {
   const { chain } = view;
 
   return (
-    <div className={chainStrip()}>
+    <motion.div className={chainStrip()} variants={playerPanel} initial="hidden" animate="visible" exit="exit">
       <span className={chainLabel()}>{t("chain.file")}</span>
       <span
         className={chainValue({ tone: chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted" })}
@@ -26,6 +29,6 @@ export function SignalChain({ view }: PlayerProps) {
       <span className={chainValue({ tone: view.activeDevice.local ? "neutral" : "lossless" })}>
         {view.activeDevice.name}
       </span>
-    </div>
+    </motion.div>
   );
 }

@@ -1,10 +1,17 @@
 "use client";
 
 import { nextRepeat, type PlayerActions, type PlayerDevice, type PlayerView } from "@components/Player";
-import { useFavoriteTracks, useListeningConnections, useSetFavoriteTrack, useTrackLyrics } from "@hooks/api";
+import {
+  useFavoriteTracks,
+  useListeningConnections,
+  useSetFavoriteTrack,
+  useSetScrobbleEnabled,
+  useTrackLyrics,
+} from "@hooks/api";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 
+import { deviceKindFrom } from "./device";
 import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom } from "./helpers";
 import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
@@ -30,9 +37,10 @@ function usePlayerSession(): PlayerSessionState {
 export function usePlayer(): { view: PlayerView | null; actions: PlayerActions } {
   const { t } = useTranslation("player");
   const session = usePlayerSession();
-  const { devices: known, handOverTo, toggleRemote, commandActive } = usePlayerDevices();
+  const { devices: known, handOverTo, commandActive } = usePlayerDevices();
   usePlayReporter();
   const mirroring = isMirroring(session);
+  const localKind = typeof navigator === "undefined" ? "computer" : deviceKindFrom(navigator.userAgent);
   const playingTrack = (mirroring ? (session.remote?.track ?? null) : (session.queue[session.index] ?? null)) ?? null;
   const measured = mirroring ? (session.remote?.track?.durationSeconds ?? 0) : session.durationSeconds;
   const track = useMemo(
@@ -44,6 +52,12 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   );
   const favorites = useFavoriteTracks(track === null ? [] : [track.id]);
   const connections = useListeningConnections();
+  const { mutate: setScrobbleEnabled } = useSetScrobbleEnabled();
+  const connected = (connections.data ?? []).filter((connection) => connection.connected);
+  const toggleScrobbling = useCallback(() => {
+    const enabled = !connected.some((connection) => connection.scrobbleEnabled);
+    for (const connection of connected) setScrobbleEnabled({ service: connection.service, enabled });
+  }, [connected, setScrobbleEnabled]);
   const lyrics = useTrackLyrics(session.lyricsOpen && track !== null ? track.id : null);
   const { mutate: setFavorite, isPending, variables } = useSetFavoriteTrack();
   const pendingForThisTrack = isPending && variables.trackId === track?.id;
@@ -73,7 +87,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   const here: PlayerDevice = {
     id: "here",
     name: t("devices.thisBrowser"),
-    detail: mirroring ? t("devices.idle") : t("devices.thisBrowserDetail"),
+    kind: localKind,
     active: !mirroring,
     local: true,
     armed: true,
@@ -88,7 +102,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
       : {
           id: playingOn.deviceId,
           name: playingOn.deviceName,
-          detail: playingOn.playing ? t("devices.playing", { title: track?.title ?? "" }) : t("devices.idle"),
+          kind: known.find((device) => device.id === playingOn.deviceId)?.kind ?? "computer",
           active: mirroring,
           local: false,
           armed: true,
@@ -101,15 +115,10 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     ...known.map((device) => {
       const announced = playingOn !== null && playingOn.deviceId === device.id ? playingOn : null;
       const playing = announced?.playing ?? device.playing;
-      const title = announced === null ? device.trackTitle : (announced.track?.title ?? null);
       return {
         id: device.id,
         name: device.name,
-        detail: playing
-          ? t("devices.playing", { title: title ?? "" })
-          : device.armed || announced !== null
-            ? t("devices.idle")
-            : t("devices.notArmed"),
+        kind: device.kind,
         active: mirroring && device.id === playingOn?.deviceId,
         local: false,
         armed: device.armed || announced !== null,
@@ -162,12 +171,12 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
       : actions.cycleRepeat,
     toggleChain: actions.toggleChain,
     toggleLyrics: actions.toggleLyrics,
+    toggleScrobbling,
     toggleMore: actions.toggleMore,
     toggleDevices: actions.toggleDevices,
     toggleFullscreen: actions.toggleFullscreen,
     toggleFavorite,
     handOverTo,
-    toggleRemote,
   };
 
   if (track === null || !session.started) return { view: null, actions: playerActions };
@@ -202,6 +211,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     lyricsLoading: lyrics.isLoading,
     lyricsFailed: lyrics.isError,
     scrobble: scrobbleStateFrom(connections.data ?? []),
+    scrobbleActionable: connected.length > 0,
     fullscreen: session.fullscreen,
     notice: session.notice,
   };

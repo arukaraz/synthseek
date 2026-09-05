@@ -9,10 +9,12 @@ export interface PlayerNotice {
   tone: PlayerNoticeTone;
 }
 
+export type PlayerDeviceKind = "computer" | "phone" | "tablet";
+
 export interface PlayerDevice {
   id: string;
   name: string;
-  detail: string;
+  kind: PlayerDeviceKind;
   active: boolean;
   local: boolean;
   armed: boolean;
@@ -71,6 +73,7 @@ export interface PlayerView {
   lyricsLoading: boolean;
   lyricsFailed: boolean;
   scrobble: PlayerScrobbleState;
+  scrobbleActionable: boolean;
   moreOpen: boolean;
   fullscreen: boolean;
   notice: PlayerNotice | null;
@@ -90,10 +93,10 @@ export interface PlayerActions {
   toggleMore: () => void;
   toggleChain: () => void;
   toggleLyrics: () => void;
+  toggleScrobbling: () => void;
   toggleFullscreen: () => void;
   toggleFavorite: () => void;
   handOverTo: (deviceId: string) => void;
-  toggleRemote: (deviceId: string, playing: boolean) => void;
   playHere: () => void;
 }
 
@@ -124,7 +127,9 @@ export interface PlayerVolumeProps extends PlayerProps {
 
 export interface PlayerScrobbleProps {
   state: PlayerScrobbleState;
+  actionable: boolean;
   size: "bar" | "stage";
+  onToggle: () => void;
 }
 
 export type PlayerLyricsProps = PlayerProps;

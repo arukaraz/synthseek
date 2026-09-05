@@ -3,6 +3,7 @@ export { nextRepeat, shouldRestart } from "./helpers";
 export type {
   PlayerActions,
   PlayerDevice,
+  PlayerDeviceKind,
   PlayerLyrics,
   PlayerLyricsLine,
   PlayerNotice,

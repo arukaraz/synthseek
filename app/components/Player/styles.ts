@@ -37,7 +37,7 @@ export const bar = cva(
 );
 
 export const barIdentity = cva(
-  "flex min-w-0 flex-1 items-center gap-3 sm:w-auto sm:max-w-[42%] sm:flex-none sm:shrink"
+  "flex min-w-0 flex-1 items-center gap-3 sm:w-auto sm:max-w-[42%] sm:flex-none sm:shrink sm:pr-9"
 );
 
 export const barCoverButton = cva(
@@ -280,31 +280,32 @@ export const deviceList = cva("flex flex-col gap-2 p-2.5");
 
 export const deviceCaption = cva("text-fg-muted font-mono text-[10px] tracking-[0.14em]");
 
-export const deviceRow = cva("flex w-full items-center gap-2.5 rounded-[10px] border px-2.5 py-2 text-left", {
+export const deviceRow = cva(
+  "flex w-full items-center gap-2.5 rounded-[10px] border px-2.5 py-2 text-left transition-colors",
+  {
+    variants: {
+      state: {
+        playing: "border-accent-400/70",
+        active: "border-primary-500/55",
+        idle: "border-fg-muted/25",
+      },
+    },
+    defaultVariants: { state: "idle" },
+  }
+);
+
+export const deviceIcon = cva("size-4 shrink-0", {
   variants: {
     state: {
-      active: "border-primary-500/55",
-      idle: "border-fg-muted/25",
+      playing: "text-accent-400",
+      active: "text-primary-400",
+      idle: "text-fg-muted",
     },
   },
   defaultVariants: { state: "idle" },
 });
 
-export const deviceDot = cva("size-2.25 shrink-0 rounded-full", {
-  variants: {
-    state: {
-      active: "bg-primary-400",
-      idle: "bg-primary-500/55",
-    },
-  },
-  defaultVariants: { state: "idle" },
-});
-
-export const deviceName = cva("text-fg truncate text-[12.5px] font-semibold");
-
-export const deviceDetail = cva("text-fg-muted truncate text-[10.5px]");
-
-export const deviceFootnote = cva("text-fg-muted px-1 pb-1 text-[10.5px] leading-relaxed");
+export const deviceName = cva("text-fg min-w-0 flex-1 truncate text-[12.5px] font-semibold");
 
 export const barDesktopExtras = cva("hidden shrink-0 items-center gap-2.5 sm:flex");
 
@@ -419,21 +420,24 @@ export function volumeVars(percent: number): CssVars {
   return { "--player-volume": `${Math.round(percent)}%` };
 }
 
-export const scrobbleStatus = cva("relative grid place-items-center rounded-full transition-colors", {
-  variants: {
-    state: {
-      off: "text-fg-muted",
-      sending: "text-secondary-400",
-      retrying: "text-warning-vivid",
-      failed: "text-destructive-vivid",
+export const scrobbleStatus = cva(
+  "focus-visible:ring-primary-500 relative grid shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      state: {
+        off: "text-fg-muted",
+        sending: "text-secondary-400",
+        retrying: "text-warning-vivid",
+        failed: "text-destructive-vivid",
+      },
+      size: {
+        bar: "size-7",
+        stage: "size-9",
+      },
     },
-    size: {
-      bar: "size-7",
-      stage: "size-9",
-    },
-  },
-  defaultVariants: { state: "off", size: "bar" },
-});
+    defaultVariants: { state: "off", size: "bar" },
+  }
+);
 
 export const scrobbleDot = cva("absolute right-0.5 bottom-0.5 size-1.5 rounded-full", {
   variants: {

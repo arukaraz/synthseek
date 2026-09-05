@@ -25,7 +25,9 @@ export function Player({ view, actions }: PlayerProps) {
       {view.fullscreen ? null : (
         <div className={playerRoot()} data-cy="player">
           <div className={playerDock()}>
-            {view.chainVisible ? <SignalChain view={view} actions={actions} /> : null}
+            <AnimatePresence>
+              {view.chainVisible ? <SignalChain key="chain" view={view} actions={actions} /> : null}
+            </AnimatePresence>
             <PlayerBar view={view} actions={actions} />
           </div>
         </div>

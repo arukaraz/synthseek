@@ -15,7 +15,7 @@
     "mute": "Couper le son",
     "unmute": "Rétablir le son",
     "volume": "Volume",
-    "devices": "Où ça joue",
+    "devices": "Appareils",
     "fullscreenOpen": "Session en plein écran",
     "fullscreenClose": "Quitter le plein écran",
     "chain": "Chaîne du signal",
@@ -34,13 +34,8 @@
     "serverTranscoding": "conversion en mp3 320"
   },
   "devices": {
-    "caption": "OÙ ÇA JOUE",
-    "footnote": "Synthseek joue dans chaque onglet indépendamment. Choisis-en un autre pour y déplacer la lecture. Les applications connectées via Subsonic lisent de leur côté.",
+    "caption": "APPAREILS",
     "thisBrowser": "Ce navigateur web",
-    "thisBrowserDetail": "l'onglet que tu regardes",
-    "playing": "joue {{title}}",
-    "idle": "ouvert, ne joue pas",
-    "notArmed": "ouvert, n'a pas encore joué",
     "handOver": "Lire ici plutôt",
     "playHere": "Lire ici"
   },
@@ -63,9 +58,9 @@
     "failed": "Les paroles n'ont pas pu être récupérées pour le moment"
   },
   "scrobble": {
-    "off": "Vos écoutes ne sont pas envoyées",
-    "sending": "Envoi de vos écoutes",
-    "retrying": "Nouvelle tentative d'envoi de vos écoutes",
-    "failed": "Impossible d'envoyer vos écoutes"
+    "off": "Scrobbling désactivé",
+    "sending": "Scrobbling",
+    "retrying": "Scrobbling, nouvelle tentative",
+    "failed": "Échec du scrobbling"
   }
 }

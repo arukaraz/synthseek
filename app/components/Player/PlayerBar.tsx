@@ -49,7 +49,6 @@ import {
   iconButton,
   playButton,
   progressVars,
-  srOnly,
 } from "./styles";
 import type { PlayerProps } from "./types";
 
@@ -181,7 +180,12 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         >
           <Heart className={cn("size-3.5", view.favorite ? "fill-current" : undefined)} />
         </button>
-        <ScrobbleStatus state={view.scrobble} size="bar" />
+        <ScrobbleStatus
+          state={view.scrobble}
+          actionable={view.scrobbleActionable}
+          size="bar"
+          onToggle={actions.toggleScrobbling}
+        />
       </div>
 
       <div className={barExtras()}>
