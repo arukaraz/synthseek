@@ -21,7 +21,9 @@
     "chain": "Cadena de señal",
     "seek": "Posición de reproducción",
     "openTrack": "Abrir la sesión a pantalla completa",
-    "more": "Más controles"
+    "more": "Más controles",
+    "lyrics": "Letra",
+    "lyricsClose": "Cerrar la letra"
   },
   "chain": {
     "file": "FICHERO",
@@ -54,5 +56,16 @@
     "resumed": "Continuando donde lo dejó {{client}}",
     "deviceGone": "Ese dispositivo ya no está",
     "handOverFailed": "{{device}} no lo recogió, así que vuelve a sonar aquí"
+  },
+  "lyrics": {
+    "empty": "No hay letra para esta canción",
+    "loading": "Buscando la letra",
+    "failed": "No se ha podido traer la letra ahora mismo"
+  },
+  "scrobble": {
+    "off": "No se envían tus escuchas",
+    "sending": "Enviando tus escuchas",
+    "retrying": "Reintentando enviar tus escuchas",
+    "failed": "No se pueden enviar tus escuchas"
   }
 }

@@ -1,5 +1,10 @@
 import { RESTART_THRESHOLD_SECONDS, WAVE, WAVE_CACHE_LIMIT } from "./constants";
-import type { PlayerRepeat } from "./types";
+import type { PlayerLyrics, PlayerRepeat, PlayerView } from "./types";
+
+interface WavePoint {
+  x: number;
+  y: number;
+}
 
 const pathCache = new Map<string, readonly string[]>();
 
@@ -38,14 +43,42 @@ function lobePath(seed: number, lobe: number): string {
   const loudest = Math.max(...raw, 0.0001);
   const amplitudes = raw.map((value) => (value / loudest) * peak);
 
-  const top = amplitudes.map(
-    (amplitude, index) => `${(index * step).toFixed(1)},${(WAVE.CENTER - amplitude).toFixed(1)}`
-  );
-  const bottom = amplitudes
-    .map((amplitude, index) => `${(index * step).toFixed(1)},${(WAVE.CENTER + amplitude).toFixed(1)}`)
-    .reverse();
+  const top = amplitudes.map((amplitude, index) => ({ x: index * step, y: WAVE.CENTER - amplitude }));
+  const bottom = amplitudes.map((amplitude, index) => ({ x: index * step, y: WAVE.CENTER + amplitude })).reverse();
 
-  return `M${[...top, ...bottom].join(" L")} Z`;
+  return closedCurveThrough([...top, ...bottom]);
+}
+
+function pointAt(points: readonly WavePoint[], index: number): WavePoint {
+  const wrapped = ((index % points.length) + points.length) % points.length;
+  return points[wrapped] ?? { x: 0, y: WAVE.CENTER };
+}
+
+function closedCurveThrough(points: readonly WavePoint[]): string {
+  const first = pointAt(points, 0);
+  const commands = [`M${first.x.toFixed(1)},${first.y.toFixed(1)}`];
+
+  for (let index = 0; index < points.length; index += 1) {
+    const previous = pointAt(points, index - 1);
+    const current = pointAt(points, index);
+    const next = pointAt(points, index + 1);
+    const after = pointAt(points, index + 2);
+
+    const firstControl = {
+      x: current.x + ((next.x - previous.x) / 6) * WAVE.SMOOTHING,
+      y: current.y + ((next.y - previous.y) / 6) * WAVE.SMOOTHING,
+    };
+    const secondControl = {
+      x: next.x - ((after.x - current.x) / 6) * WAVE.SMOOTHING,
+      y: next.y - ((after.y - current.y) / 6) * WAVE.SMOOTHING,
+    };
+
+    commands.push(
+      `C${firstControl.x.toFixed(1)},${firstControl.y.toFixed(1)} ${secondControl.x.toFixed(1)},${secondControl.y.toFixed(1)} ${next.x.toFixed(1)},${next.y.toFixed(1)}`
+    );
+  }
+
+  return `${commands.join(" ")} Z`;
 }
 
 export function waveLobePaths(trackId: string): readonly string[] {
@@ -110,4 +143,30 @@ export function fractionFromPointer(clientX: number, rect: DOMRect): number {
 export function returnFocusTo(selector: string): void {
   const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector));
   candidates.find((candidate) => candidate.getClientRects().length > 0)?.focus();
+}
+
+export function lyricLineState(
+  lyrics: PlayerLyrics | null,
+  active: number | null,
+  index: number
+): "active" | "resting" | "plain" {
+  if (lyrics === null || !lyrics.synced) return "plain";
+  return index === active ? "active" : "resting";
+}
+
+export function activeLyricIndex(lyrics: PlayerLyrics | null, positionSeconds: number): number | null {
+  if (lyrics === null || !lyrics.synced) return null;
+  const positionMs = positionSeconds * 1000;
+  let active: number | null = null;
+  for (const [index, line] of lyrics.lines.entries()) {
+    if (line.start === null || line.start > positionMs) break;
+    active = index;
+  }
+  return active;
+}
+
+export function emptyReason(view: Pick<PlayerView, "lyricsLoading" | "lyricsFailed">): "loading" | "failed" | "empty" {
+  if (view.lyricsLoading) return "loading";
+  if (view.lyricsFailed) return "failed";
+  return "empty";
 }

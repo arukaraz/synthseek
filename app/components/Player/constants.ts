@@ -9,6 +9,7 @@ export const WAVE = {
   TAPER_EXPONENT: 0.7,
   BULGE_WIDTH: 0.17,
   RIPPLE_SHARE: 0.45,
+  SMOOTHING: 1,
 } as const;
 
 export const WAVE_CACHE_LIMIT = 60;
@@ -21,9 +22,11 @@ export const SEEK_STEP_SECONDS = 5;
 
 export const SEEK_PAGE_SECONDS = 30;
 
-export const VOLUME_STEP = 0.05;
+export const VOLUME_STEP = 0.02;
 
 export const RESTART_THRESHOLD_SECONDS = 3;
+
+export const PROGRESS_EASE_MS = "260ms";
 
 export const DEVICES_TOGGLE_SELECTOR = "[data-player-devices-toggle]";
 

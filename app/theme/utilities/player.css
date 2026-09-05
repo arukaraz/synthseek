@@ -51,10 +51,12 @@
 
   .player-wave-played {
     clip-path: inset(0 calc(100% - var(--player-progress, 0%)) 0 0);
+    transition: clip-path var(--player-progress-ease, 260ms) linear;
   }
 
   .player-wave-head {
     left: var(--player-progress, 0%);
+    transition: left var(--player-progress-ease, 260ms) linear;
   }
 
   .player-wave-scrub {
@@ -81,6 +83,7 @@
 
   .player-bar-progress {
     width: var(--player-progress, 0%);
+    transition: width var(--player-progress-ease, 260ms) linear;
   }
 
   .player-volume-fill {
@@ -95,6 +98,12 @@
     .player-lobe {
       animation: none;
       transform: scaleY(0.85);
+    }
+
+    .player-wave-played,
+    .player-wave-head,
+    .player-bar-progress {
+      transition: none;
     }
   }
 }

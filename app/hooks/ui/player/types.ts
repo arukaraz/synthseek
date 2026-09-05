@@ -1,4 +1,8 @@
+import type { AppRouter } from "@api/__generated__/types";
 import type { PlayerNotice, PlayerRepeat, PlayerTrack } from "@components/Player";
+import type { inferRouterOutputs } from "@trpc/server";
+
+export type ListeningConnectionStatus = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
 
 export type PlayerDockState = "hidden" | "bar" | "chain";
 
@@ -37,6 +41,7 @@ export interface PlayerSessionState {
   chainVisible: boolean;
   moreOpen: boolean;
   devicesOpen: boolean;
+  lyricsOpen: boolean;
   fullscreen: boolean;
   notice: PlayerNotice | null;
   consecutiveFailures: number;

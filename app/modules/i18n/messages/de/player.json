@@ -21,7 +21,9 @@
     "chain": "Signalkette",
     "seek": "Wiedergabeposition",
     "openTrack": "Vollbild-Sitzung öffnen",
-    "more": "Weitere Bedienelemente"
+    "more": "Weitere Bedienelemente",
+    "lyrics": "Songtext",
+    "lyricsClose": "Songtext schließen"
   },
   "chain": {
     "file": "DATEI",
@@ -54,5 +56,16 @@
     "resumed": "Weiter da, wo {{client}} aufgehört hat",
     "deviceGone": "Dieses Gerät ist nicht mehr da",
     "handOverFailed": "{{device}} hat nicht übernommen, also läuft es wieder hier"
+  },
+  "lyrics": {
+    "empty": "Für diesen Titel gibt es keinen Songtext",
+    "loading": "Songtext wird gesucht",
+    "failed": "Der Songtext konnte gerade nicht geladen werden"
+  },
+  "scrobble": {
+    "off": "Wiedergaben werden nicht gesendet",
+    "sending": "Wiedergaben werden gesendet",
+    "retrying": "Senden der Wiedergaben wird wiederholt",
+    "failed": "Wiedergaben können nicht gesendet werden"
   }
 }

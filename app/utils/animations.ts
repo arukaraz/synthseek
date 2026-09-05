@@ -116,3 +116,31 @@ export const modalContent: Variants = {
     },
   },
 };
+
+export const stageFlip: Variants = {
+  enterFromRight: { rotateY: 70, opacity: 0 },
+  enterFromLeft: { rotateY: -70, opacity: 0 },
+  settled: {
+    rotateY: 0,
+    opacity: 1,
+    transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
+  },
+  leaveToRight: {
+    rotateY: -70,
+    opacity: 0,
+    transition: { duration: 0.24, ease: [0.4, 0, 1, 1] },
+  },
+  leaveToLeft: {
+    rotateY: 70,
+    opacity: 0,
+    transition: { duration: 0.24, ease: [0.4, 0, 1, 1] },
+  },
+};
+
+export const stageFade: Variants = {
+  enterFromRight: { opacity: 0 },
+  enterFromLeft: { opacity: 0 },
+  settled: { opacity: 1, transition: { duration: 0.18 } },
+  leaveToRight: { opacity: 0, transition: { duration: 0.12 } },
+  leaveToLeft: { opacity: 0, transition: { duration: 0.12 } },
+};

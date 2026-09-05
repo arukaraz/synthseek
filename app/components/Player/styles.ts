@@ -1,4 +1,6 @@
 import { cva } from "class-variance-authority";
+
+import { PROGRESS_EASE_MS } from "./constants";
 import type { CSSProperties } from "react";
 
 type CssVars = CSSProperties & Record<`--${string}`, string>;
@@ -34,10 +36,12 @@ export const bar = cva(
   "border-primary-500/25 bg-surface-overlay/95 flex h-16 items-center gap-3 border-t px-3 backdrop-blur-[18px] sm:h-21 sm:gap-4.5 sm:px-5"
 );
 
-export const barIdentity = cva("flex min-w-0 flex-1 items-center gap-3 sm:w-[226px] sm:flex-none");
+export const barIdentity = cva(
+  "flex min-w-0 flex-1 items-center gap-3 sm:w-auto sm:max-w-[42%] sm:flex-none sm:shrink"
+);
 
 export const barIdentityButton = cva(
-  "focus-visible:ring-primary-500 flex min-w-0 items-center gap-3 rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none sm:flex-1 sm:cursor-default"
+  "focus-visible:ring-primary-500 flex min-w-0 items-center gap-3 rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none sm:min-w-fit sm:flex-none sm:cursor-default"
 );
 
 export const barTitle = cva("text-fg hidden truncate text-[13.5px] leading-tight font-semibold sm:block");
@@ -62,11 +66,19 @@ export const barSubtitle = cva("text-fg-muted hidden truncate text-[11.5px] lead
 
 export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 sm:order-none sm:gap-3.5");
 
-export const barProgress = cva("hidden min-w-0 flex-1 items-center gap-3 sm:flex");
+export const barProgress = cva("hidden min-w-0 flex-1 items-center gap-3 sm:flex sm:min-w-[240px]");
 
 export const barExtras = cva("order-2 flex shrink-0 items-center gap-1 sm:order-none sm:gap-2.5");
 
-export const barVolume = cva("hidden items-center gap-2 lg:flex");
+export const volumeGroup = cva("items-center gap-2", {
+  variants: {
+    size: {
+      bar: "hidden xl:flex",
+      stage: "flex",
+    },
+  },
+  defaultVariants: { size: "bar" },
+});
 
 export const clock = cva("text-fg-muted shrink-0 font-mono tabular-nums", {
   variants: {
@@ -219,7 +231,15 @@ export const barMobileProgress = cva("bg-fg-muted/20 absolute inset-x-0 -bottom-
 
 export const barMobileProgressFill = cva("player-bar-progress bg-primary-400 h-0.5");
 
-export const volumeTrack = cva("flex h-4 w-23 cursor-pointer items-center touch-none");
+export const volumeTrack = cva("flex h-4 cursor-pointer items-center touch-none", {
+  variants: {
+    size: {
+      bar: "w-40",
+      stage: "w-44",
+    },
+  },
+  defaultVariants: { size: "bar" },
+});
 
 export const volumeRail = cva("bg-fg-muted/30 relative h-1 w-full rounded-full");
 
@@ -335,9 +355,7 @@ export const stageTint = cva("absolute inset-0", {
 
 export const stageHeader = cva("relative flex items-center justify-end gap-3 px-5 py-4");
 
-export const stageMain = cva(
-  "relative flex min-h-0 flex-1 flex-col items-center justify-center gap-6 px-6 text-center md:flex-row md:gap-11 md:px-11 md:text-left"
-);
+export const stageMain = cva("relative flex min-h-0 flex-1 flex-col px-6 text-center md:px-11 md:text-left");
 
 export const stageMeta = cva("flex max-w-[430px] flex-col items-center gap-2.5 md:items-start");
 
@@ -380,6 +398,7 @@ export function waveVars(progressPercent: number, scrubPercent: number | null, a
     "--player-progress": `${progressPercent.toFixed(2)}%`,
     "--player-scrub": `${(scrubPercent ?? progressPercent).toFixed(2)}%`,
     "--player-wave-state": animating ? "running" : "paused",
+    "--player-progress-ease": scrubPercent === null ? PROGRESS_EASE_MS : "0ms",
   };
 }
 
@@ -390,3 +409,64 @@ export function progressVars(percent: number): CssVars {
 export function volumeVars(percent: number): CssVars {
   return { "--player-volume": `${Math.round(percent)}%` };
 }
+
+export const scrobbleStatus = cva("relative grid place-items-center rounded-full transition-colors", {
+  variants: {
+    state: {
+      off: "text-fg-muted",
+      sending: "text-secondary-400",
+      retrying: "text-warning-vivid",
+      failed: "text-destructive-vivid",
+    },
+    size: {
+      bar: "size-7",
+      stage: "size-9",
+    },
+  },
+  defaultVariants: { state: "off", size: "bar" },
+});
+
+export const scrobbleDot = cva("absolute right-0.5 bottom-0.5 size-1.5 rounded-full", {
+  variants: {
+    state: {
+      off: "bg-fg-muted/50",
+      sending: "bg-secondary-400",
+      retrying: "bg-warning-vivid animate-pulse",
+      failed: "bg-destructive-vivid",
+    },
+  },
+  defaultVariants: { state: "off" },
+});
+
+export const stageFlip = cva(
+  "flex min-h-0 w-full flex-1 self-stretch items-center justify-center [perspective:1400px]"
+);
+
+export const stageFace = cva("flex h-full min-h-0 w-full items-center justify-center [backface-visibility:hidden]", {
+  variants: {
+    layout: {
+      track: "flex-col gap-6 text-center md:flex-row md:gap-11 md:text-left",
+    },
+  },
+});
+
+export const stageVolume = cva("flex justify-center");
+
+export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-[640px] flex-col items-center gap-4 py-4");
+
+export const lyricsScroll = cva("min-h-0 w-full flex-1 overflow-y-auto px-2");
+
+export const lyricsBody = cva("flex flex-col gap-2 py-6 text-center");
+
+export const lyricsLine = cva("text-[17px] leading-snug transition-colors duration-300 sm:text-[19px]", {
+  variants: {
+    state: {
+      active: "text-fg font-semibold",
+      resting: "text-fg/35",
+      plain: "text-fg/70",
+    },
+  },
+  defaultVariants: { state: "plain" },
+});
+
+export const lyricsEmpty = cva("text-fg-muted py-10 text-center text-sm");

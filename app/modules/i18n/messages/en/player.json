@@ -21,7 +21,9 @@
     "chain": "Signal chain",
     "seek": "Playback position",
     "openTrack": "Open the full screen session",
-    "more": "More controls"
+    "more": "More controls",
+    "lyrics": "Lyrics",
+    "lyricsClose": "Close the lyrics"
   },
   "chain": {
     "file": "FILE",
@@ -54,5 +56,16 @@
     "resumed": "Picking up where {{client}} left off",
     "deviceGone": "That device is no longer there",
     "handOverFailed": "{{device}} never picked it up, so it is playing here again"
+  },
+  "lyrics": {
+    "empty": "No lyrics found for this track",
+    "loading": "Looking for the lyrics",
+    "failed": "The lyrics could not be fetched right now"
+  },
+  "scrobble": {
+    "off": "Not sending your plays",
+    "sending": "Sending your plays",
+    "retrying": "Retrying to send your plays",
+    "failed": "Cannot send your plays"
   }
 }

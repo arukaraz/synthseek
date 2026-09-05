@@ -46,6 +46,7 @@ let state: PlayerSessionState = {
   chainVisible: false,
   moreOpen: false,
   devicesOpen: false,
+  lyricsOpen: false,
   fullscreen: false,
   notice: null,
   consecutiveFailures: 0,
@@ -362,7 +363,10 @@ export const actions = {
     publish({ devicesOpen: !state.devicesOpen, moreOpen: false });
   },
   toggleFullscreen(): void {
-    publish({ fullscreen: !state.fullscreen, moreOpen: false });
+    publish({ fullscreen: !state.fullscreen, moreOpen: false, lyricsOpen: false });
+  },
+  toggleLyrics(): void {
+    publish({ lyricsOpen: !state.lyricsOpen, devicesOpen: false });
   },
   applyRemoteState(remote: RemotePlayback): void {
     if (remote.playing) {

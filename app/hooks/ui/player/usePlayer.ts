@@ -1,11 +1,11 @@
 "use client";
 
 import { nextRepeat, type PlayerActions, type PlayerDevice, type PlayerView } from "@components/Player";
-import { useFavoriteTracks, useSetFavoriteTrack } from "@hooks/api";
+import { useFavoriteTracks, useListeningConnections, useSetFavoriteTrack, useTrackLyrics } from "@hooks/api";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 
-import { isMirroring, mirroredPositionSeconds } from "./helpers";
+import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom } from "./helpers";
 import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
 import { usePlayReporter } from "./usePlayReporter";
@@ -43,6 +43,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     [playingTrack, measured]
   );
   const favorites = useFavoriteTracks(track === null ? [] : [track.id]);
+  const connections = useListeningConnections();
+  const lyrics = useTrackLyrics(session.lyricsOpen && track !== null ? track.id : null);
   const { mutate: setFavorite, isPending, variables } = useSetFavoriteTrack();
   const pendingForThisTrack = isPending && variables.trackId === track?.id;
   const favorite = pendingForThisTrack ? variables.favorite : (favorites.data ?? []).includes(track?.id ?? "");
@@ -159,6 +161,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
         }
       : actions.cycleRepeat,
     toggleChain: actions.toggleChain,
+    toggleLyrics: actions.toggleLyrics,
     toggleMore: actions.toggleMore,
     toggleDevices: actions.toggleDevices,
     toggleFullscreen: actions.toggleFullscreen,
@@ -194,6 +197,11 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     chainVisible: session.chainVisible,
     moreOpen: session.moreOpen,
     devicesOpen: session.devicesOpen,
+    lyricsOpen: session.lyricsOpen,
+    lyrics: lyrics.data ?? null,
+    lyricsLoading: lyrics.isLoading,
+    lyricsFailed: lyrics.isError,
+    scrobble: scrobbleStateFrom(connections.data ?? []),
     fullscreen: session.fullscreen,
     notice: session.notice,
   };

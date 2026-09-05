@@ -3,9 +3,12 @@ export { nextRepeat, shouldRestart } from "./helpers";
 export type {
   PlayerActions,
   PlayerDevice,
+  PlayerLyrics,
+  PlayerLyricsLine,
   PlayerNotice,
   PlayerNoticeTone,
   PlayerRepeat,
+  PlayerScrobbleState,
   PlayerSignalChain,
   PlayerTone,
   PlayerTrack,

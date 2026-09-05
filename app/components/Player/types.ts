@@ -32,6 +32,18 @@ export interface PlayerTrack {
   artworkUrl: string | null;
 }
 
+export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";
+
+export interface PlayerLyricsLine {
+  start: number | null;
+  value: string;
+}
+
+export interface PlayerLyrics {
+  synced: boolean;
+  lines: readonly PlayerLyricsLine[];
+}
+
 export interface PlayerSignalChain {
   fileLabel: string;
   transcoding: boolean;
@@ -54,6 +66,11 @@ export interface PlayerView {
   favorite: boolean;
   chainVisible: boolean;
   devicesOpen: boolean;
+  lyricsOpen: boolean;
+  lyrics: PlayerLyrics | null;
+  lyricsLoading: boolean;
+  lyricsFailed: boolean;
+  scrobble: PlayerScrobbleState;
   moreOpen: boolean;
   fullscreen: boolean;
   notice: PlayerNotice | null;
@@ -72,6 +89,7 @@ export interface PlayerActions {
   toggleDevices: () => void;
   toggleMore: () => void;
   toggleChain: () => void;
+  toggleLyrics: () => void;
   toggleFullscreen: () => void;
   toggleFavorite: () => void;
   handOverTo: (deviceId: string) => void;
@@ -99,6 +117,17 @@ export interface PlayerNoticeProps extends PlayerNotice {
 export interface PlayerWaveProps extends PlayerProps {
   size: "bar" | "stage";
 }
+
+export interface PlayerVolumeProps extends PlayerProps {
+  size: "bar" | "stage";
+}
+
+export interface PlayerScrobbleProps {
+  state: PlayerScrobbleState;
+  size: "bar" | "stage";
+}
+
+export type PlayerLyricsProps = PlayerProps;
 
 export interface PlayerCoverProps {
   initials: string;

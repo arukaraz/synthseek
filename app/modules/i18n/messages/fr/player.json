@@ -21,7 +21,9 @@
     "chain": "Chaîne du signal",
     "seek": "Position de lecture",
     "openTrack": "Ouvrir la session en plein écran",
-    "more": "Plus de commandes"
+    "more": "Plus de commandes",
+    "lyrics": "Paroles",
+    "lyricsClose": "Fermer les paroles"
   },
   "chain": {
     "file": "FICHIER",
@@ -54,5 +56,16 @@
     "resumed": "On reprend là où {{client}} s'est arrêté",
     "deviceGone": "Cet appareil n'est plus là",
     "handOverFailed": "{{device}} ne l'a pas repris, donc ça rejoue ici"
+  },
+  "lyrics": {
+    "empty": "Aucunes paroles pour ce titre",
+    "loading": "Recherche des paroles",
+    "failed": "Les paroles n'ont pas pu être récupérées pour le moment"
+  },
+  "scrobble": {
+    "off": "Vos écoutes ne sont pas envoyées",
+    "sending": "Envoi de vos écoutes",
+    "retrying": "Nouvelle tentative d'envoi de vos écoutes",
+    "failed": "Impossible d'envoyer vos écoutes"
   }
 }

@@ -16,16 +16,15 @@ import {
   Shuffle,
   SkipBack,
   SkipForward,
-  Volume2,
-  VolumeX,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { PlayerExtraControls } from "./PlayerExtraControls";
+import { PlayerVolume } from "./PlayerVolume";
+import { ScrobbleStatus } from "./ScrobbleStatus";
 import { SiriWave } from "./SiriWave";
 import { TrackCover } from "./TrackCover";
-import { VOLUME_STEP } from "./constants";
-import { formatClock, fractionFromPointer, percentOf, trackInitials } from "./helpers";
+import { formatClock, percentOf, trackInitials } from "./helpers";
 import {
   bar,
   barDesktopExtras,
@@ -43,24 +42,17 @@ import {
   barTitleRow,
   barTitleStrong,
   barTransport,
-  barVolume,
   clock,
   iconButton,
   playButton,
   progressVars,
   srOnly,
-  volumeFill,
-  volumeHead,
-  volumeRail,
-  volumeTrack,
-  volumeVars,
 } from "./styles";
 import type { PlayerProps } from "./types";
 
 export function PlayerBar({ view, actions }: PlayerProps) {
   const { t } = useTranslation("player");
   const progress = percentOf(view.positionSeconds, view.track.durationSeconds);
-  const volumePercent = (view.muted ? 0 : view.volume) * 100;
 
   return (
     <div className={bar()}>
@@ -91,6 +83,15 @@ export function PlayerBar({ view, actions }: PlayerProps) {
               {view.activeDevice.name}
             </span>
           </span>
+        </button>
+        <button
+          type="button"
+          className={iconButton({ tone: view.chainVisible ? "remote" : "muted" })}
+          onClick={actions.toggleChain}
+          aria-label={t("controls.chain")}
+          aria-pressed={view.chainVisible}
+        >
+          <Info className="size-3.5" />
         </button>
         <button
           type="button"
@@ -169,75 +170,11 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         >
           <Heart className={cn("size-3.5", view.favorite ? "fill-current" : undefined)} />
         </button>
-        <button
-          type="button"
-          className={iconButton({ tone: view.chainVisible ? "remote" : "muted" })}
-          onClick={actions.toggleChain}
-          aria-label={t("controls.chain")}
-          aria-pressed={view.chainVisible}
-        >
-          <Info className="size-3.5" />
-        </button>
+        <ScrobbleStatus state={view.scrobble} size="bar" />
       </div>
 
       <div className={barExtras()}>
-        <div className={barVolume()}>
-          <button
-            type="button"
-            className={iconButton()}
-            onClick={actions.toggleMute}
-            aria-label={view.muted ? t("controls.unmute") : t("controls.mute")}
-          >
-            {view.muted ? <VolumeX className="size-3.5" /> : <Volume2 className="size-3.5" />}
-          </button>
-          <div
-            role="slider"
-            tabIndex={0}
-            aria-label={t("controls.volume")}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(volumePercent)}
-            aria-valuetext={`${Math.round(volumePercent)}%`}
-            className={volumeTrack()}
-            style={volumeVars(volumePercent)}
-            onPointerDown={(event) => {
-              event.currentTarget.setPointerCapture(event.pointerId);
-              actions.setVolume(fractionFromPointer(event.clientX, event.currentTarget.getBoundingClientRect()));
-            }}
-            onPointerMove={(event) => {
-              if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
-              actions.setVolume(fractionFromPointer(event.clientX, event.currentTarget.getBoundingClientRect()));
-            }}
-            onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)}
-            onKeyDown={(event) => {
-              const current = view.muted ? 0 : view.volume;
-              if (event.key === "ArrowRight" || event.key === "PageUp") {
-                event.preventDefault();
-                actions.setVolume(current + VOLUME_STEP);
-                return;
-              }
-              if (event.key === "ArrowLeft" || event.key === "PageDown") {
-                event.preventDefault();
-                actions.setVolume(current - VOLUME_STEP);
-                return;
-              }
-              if (event.key === "Home") {
-                event.preventDefault();
-                actions.setVolume(0);
-                return;
-              }
-              if (event.key === "End") {
-                event.preventDefault();
-                actions.setVolume(1);
-              }
-            }}
-          >
-            <div className={volumeRail()}>
-              <div className={volumeFill()} />
-              <div className={volumeHead()} />
-            </div>
-          </div>
-        </div>
+        <PlayerVolume view={view} actions={actions} size="bar" />
         <div className={barDesktopExtras()}>
           <PlayerExtraControls view={view} actions={actions} />
         </div>

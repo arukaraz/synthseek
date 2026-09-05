@@ -1,4 +1,4 @@
-import type { PlayerTone, PlayerTrack } from "@components/Player";
+import type { PlayerScrobbleState, PlayerTone, PlayerTrack } from "@components/Player";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 
 import {
@@ -14,7 +14,13 @@ import {
 } from "./constants";
 import type { PlaybackTrackSummary } from "@api/__generated__/types";
 
-import type { ListenProgress, PlayerSessionState, RemotePlayback, SessionSnapshot } from "./types";
+import type {
+  ListenProgress,
+  ListeningConnectionStatus,
+  PlayerSessionState,
+  RemotePlayback,
+  SessionSnapshot,
+} from "./types";
 
 export function toneFor(seed: string): PlayerTone {
   let hash = 0;
@@ -156,4 +162,16 @@ export function listenRestarted(progress: ListenProgress, positionSeconds: numbe
 
 export function startedSecondsAgo(progress: ListenProgress, now: number): number {
   return Math.max(0, Math.round((now - progress.startedAt) / 1000));
+}
+
+export function scrobbleStateFrom(connections: readonly ListeningConnectionStatus[]): PlayerScrobbleState {
+  const sending = connections.filter((connection) => connection.connected && connection.scrobbleEnabled);
+  if (sending.length === 0) return "off";
+  if (
+    sending.some((connection) => connection.lastFailure === "unauthorized" || connection.lastFailure === "rejected")
+  ) {
+    return "failed";
+  }
+  if (sending.some((connection) => connection.lastFailure === "unavailable")) return "retrying";
+  return "sending";
 }
