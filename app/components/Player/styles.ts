@@ -182,7 +182,7 @@ export const waveTrack = cva("relative min-w-0 flex-1 cursor-pointer touch-none"
   variants: {
     size: {
       bar: "h-9",
-      stage: "h-18 sm:h-[116px]",
+      stage: "h-9 sm:h-[58px]",
     },
   },
   defaultVariants: { size: "bar" },
@@ -463,21 +463,28 @@ export const stageFace = cva("flex h-full min-h-0 w-full items-center justify-ce
 
 export const stageVolume = cva("flex justify-center");
 
-export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-[640px] flex-col items-center gap-4 py-4");
+export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-[900px] flex-col items-center gap-4 py-4");
 
-export const lyricsScroll = cva("min-h-0 w-full flex-1 overflow-y-auto px-2");
+export const lyricsScroll = cva("scrollbar-none min-h-0 w-full flex-1 overflow-y-auto px-2");
 
-export const lyricsBody = cva("flex flex-col gap-2 py-6 text-center");
+export const lyricsBody = cva("flex flex-col items-center gap-3 py-[38vh] text-center");
 
-export const lyricsLine = cva("text-[17px] leading-snug transition-colors duration-300 sm:text-[19px]", {
-  variants: {
-    state: {
-      active: "text-fg font-semibold",
-      resting: "text-fg/35",
-      plain: "text-fg/70",
+export const lyricsLine = cva(
+  "focus-visible:ring-primary-500 w-full rounded-lg px-2 text-[34px] leading-tight font-bold tracking-[-0.01em] transition-colors duration-300 focus-visible:ring-2 focus-visible:outline-none sm:text-[46px]",
+  {
+    variants: {
+      state: {
+        active: "text-fg",
+        resting: "text-fg/30 hover:text-fg/60",
+        plain: "text-fg/70",
+      },
+      seekable: {
+        true: "cursor-pointer",
+        false: "",
+      },
     },
-  },
-  defaultVariants: { state: "plain" },
-});
+    defaultVariants: { state: "plain", seekable: false },
+  }
+);
 
-export const lyricsEmpty = cva("text-fg-muted py-10 text-center text-sm");
+export const lyricsEmpty = cva("text-fg-muted py-10 text-center text-base");

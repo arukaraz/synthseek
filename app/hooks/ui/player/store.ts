@@ -365,6 +365,9 @@ export const actions = {
   toggleFullscreen(): void {
     publish({ fullscreen: !state.fullscreen, moreOpen: false, lyricsOpen: false });
   },
+  openLyrics(): void {
+    publish({ fullscreen: true, lyricsOpen: true, moreOpen: false, devicesOpen: false });
+  },
   toggleLyrics(): void {
     publish({ lyricsOpen: !state.lyricsOpen, devicesOpen: false });
   },

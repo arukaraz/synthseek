@@ -176,6 +176,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
       : actions.cycleRepeat,
     toggleChain: actions.toggleChain,
     toggleLyrics: actions.toggleLyrics,
+    openLyrics: actions.openLyrics,
     toggleScrobbling,
     toggleMore: actions.toggleMore,
     toggleDevices: actions.toggleDevices,

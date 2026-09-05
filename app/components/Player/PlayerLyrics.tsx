@@ -11,12 +11,17 @@ import type { PlayerLyricsProps } from "./types";
 export function PlayerLyrics({ view, actions }: PlayerLyricsProps) {
   const { t } = useTranslation("player");
   const lines = view.lyrics?.lines ?? [];
+  const synced = view.lyrics?.synced === true;
   const active = activeLyricIndex(view.lyrics, view.positionSeconds);
-  const activeRef = useRef<HTMLParagraphElement>(null);
+  const activeLine = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    activeRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+    activeLine.current?.scrollIntoView({ block: "center", behavior: "smooth" });
   }, [active]);
+
+  const keepActive = (index: number) => (node: HTMLElement | null) => {
+    if (index === active) activeLine.current = node;
+  };
 
   return (
     <div className={lyricsPane()}>
@@ -25,15 +30,27 @@ export function PlayerLyrics({ view, actions }: PlayerLyricsProps) {
       ) : (
         <div className={lyricsScroll()}>
           <div className={lyricsBody()}>
-            {lines.map((line, index) => (
-              <p
-                key={`${index}-${line.start ?? 0}`}
-                ref={index === active ? activeRef : null}
-                className={lyricsLine({ state: lyricLineState(view.lyrics, active, index) })}
-              >
-                {line.value}
-              </p>
-            ))}
+            {lines.map((line, index) =>
+              synced && line.start !== null ? (
+                <button
+                  key={`${index}-${line.start}`}
+                  type="button"
+                  ref={keepActive(index)}
+                  className={lyricsLine({ state: lyricLineState(view.lyrics, active, index), seekable: true })}
+                  onClick={() => actions.seekTo((line.start ?? 0) / 1000)}
+                >
+                  {line.value}
+                </button>
+              ) : (
+                <p
+                  key={`${index}-plain`}
+                  ref={keepActive(index)}
+                  className={lyricsLine({ state: lyricLineState(view.lyrics, active, index) })}
+                >
+                  {line.value}
+                </p>
+              )
+            )}
           </div>
         </div>
       )}

@@ -8,6 +8,7 @@ import {
   Info,
   Loader2,
   Maximize,
+  Mic2,
   MonitorSpeaker,
   Pause,
   Play,
@@ -178,6 +179,14 @@ export function PlayerBar({ view, actions }: PlayerProps) {
           aria-pressed={view.favorite}
         >
           <Heart className={cn("size-3.5", view.favorite ? "fill-current" : undefined)} />
+        </button>
+        <button
+          type="button"
+          className={iconButton({ tone: view.lyricsOpen ? "active" : "muted" })}
+          onClick={actions.openLyrics}
+          aria-label={t("controls.lyrics")}
+        >
+          <Mic2 className="size-3.5" />
         </button>
       </div>
 

@@ -93,6 +93,7 @@ export interface PlayerActions {
   toggleMore: () => void;
   toggleChain: () => void;
   toggleLyrics: () => void;
+  openLyrics: () => void;
   toggleScrobbling: () => void;
   toggleFullscreen: () => void;
   toggleFavorite: () => void;
