@@ -8,7 +8,13 @@ import type { HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import { closeButton } from "../styles";
 import { dialogContent } from "./styles";
-import type { DialogContentProps, DialogDescriptionProps, DialogOverlayProps, DialogTitleProps } from "./types";
+import type {
+  DialogContentProps,
+  DialogDescriptionProps,
+  DialogOverlayProps,
+  DialogSurfaceProps,
+  DialogTitleProps,
+} from "./types";
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
@@ -44,6 +50,16 @@ export function DialogContent({ className, children, ref, showClose = true, anim
             <span className="sr-only">{t("dialog.close", { defaultValue: "Close" })}</span>
           </DialogPrimitive.Close>
         )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  );
+}
+
+export function DialogSurface({ className, children, ref, ...props }: DialogSurfaceProps) {
+  return (
+    <DialogPortal>
+      <DialogPrimitive.Content ref={ref} className={className} {...props}>
+        {children}
       </DialogPrimitive.Content>
     </DialogPortal>
   );

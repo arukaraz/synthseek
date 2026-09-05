@@ -106,3 +106,8 @@ export function fractionFromPointer(clientX: number, rect: DOMRect): number {
   if (rect.width <= 0) return 0;
   return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
 }
+
+export function returnFocusTo(selector: string): void {
+  const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector));
+  candidates.find((candidate) => candidate.getClientRects().length > 0)?.focus();
+}

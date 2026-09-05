@@ -246,6 +246,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
           className={cn(iconButton(), "hidden sm:grid")}
           onClick={actions.toggleFullscreen}
           aria-label={t("controls.fullscreenOpen")}
+          data-player-fullscreen-toggle
         >
           <Maximize className="size-4" />
         </button>

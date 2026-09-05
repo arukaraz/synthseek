@@ -5,10 +5,17 @@ export {
   DialogTrigger,
   DialogClose,
   DialogContent,
+  DialogSurface,
   DialogHeader,
   DialogFooter,
   DialogTitle,
   DialogDescription,
 } from "./Dialog";
 
-export type { DialogOverlayProps, DialogContentProps, DialogTitleProps, DialogDescriptionProps } from "./types";
+export type {
+  DialogOverlayProps,
+  DialogContentProps,
+  DialogSurfaceProps,
+  DialogTitleProps,
+  DialogDescriptionProps,
+} from "./types";

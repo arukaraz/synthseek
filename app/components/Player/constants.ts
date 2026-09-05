@@ -24,3 +24,7 @@ export const SEEK_PAGE_SECONDS = 30;
 export const VOLUME_STEP = 0.05;
 
 export const RESTART_THRESHOLD_SECONDS = 3;
+
+export const DEVICES_TOGGLE_SELECTOR = "[data-player-devices-toggle]";
+
+export const FULLSCREEN_TOGGLE_SELECTOR = "[data-player-fullscreen-toggle]";

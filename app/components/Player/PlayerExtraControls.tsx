@@ -15,7 +15,8 @@ export function PlayerExtraControls({ view, actions }: PlayerProps) {
       className={iconButton({ tone: view.activeDevice.local ? "muted" : "remote" })}
       onClick={actions.toggleDevices}
       aria-label={t("controls.devices")}
-      aria-pressed={view.devicesOpen}
+      aria-expanded={view.devicesOpen}
+      data-player-devices-toggle
     >
       <MonitorSpeaker className="size-5 sm:size-4" />
     </button>
