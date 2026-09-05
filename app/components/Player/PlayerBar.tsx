@@ -30,8 +30,11 @@ import {
   barDesktopExtras,
   barDeviceLine,
   barExtras,
+  barCoverButton,
   barIdentity,
-  barIdentityButton,
+  barNameButton,
+  barNameRow,
+  barTextColumn,
   barMobileProgress,
   barMobileProgressFill,
   barMoreGroup,
@@ -61,38 +64,46 @@ export function PlayerBar({ view, actions }: PlayerProps) {
       </div>
 
       <div className={barIdentity()}>
-        <button type="button" className={barIdentityButton()} onClick={actions.toggleFullscreen}>
-          <span className={srOnly()}>{t("controls.openTrack")}</span>
+        <button
+          type="button"
+          className={barCoverButton()}
+          onClick={actions.toggleFullscreen}
+          aria-label={t("controls.openTrack")}
+        >
           <TrackCover
             initials={trackInitials(view.track.album)}
             tone={view.track.tone}
             size="bar"
             artworkUrl={view.track.artworkUrl}
           />
-          <span className="flex min-w-0 flex-col gap-0.5">
-            <span className={barTitle()}>{view.track.title}</span>
-            <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "sm:hidden")}>
-              {view.track.artist} · {view.track.album}
-            </span>
-            <span className={barTitleRow()}>
-              <span className={barTitleStrong()}>{view.track.title}</span>
-              <span className={barTitleArtist()}> · {view.track.artist}</span>
-            </span>
-            <span className={barDeviceLine({ remote: !view.activeDevice.local })}>
-              <MonitorSpeaker className="size-3.5 shrink-0" />
-              {view.activeDevice.name}
-            </span>
+        </button>
+        <span className={barTextColumn()}>
+          <span className={barNameRow()}>
+            <button type="button" className={barNameButton()} onClick={actions.toggleFullscreen} tabIndex={-1}>
+              <span className={barTitle()}>{view.track.title}</span>
+              <span className={barTitleRow()}>
+                <span className={barTitleStrong()}>{view.track.title}</span>
+                <span className={barTitleArtist()}> · {view.track.artist}</span>
+              </span>
+            </button>
+            <button
+              type="button"
+              className={iconButton({ tone: view.chainVisible ? "remote" : "muted", size: "inline" })}
+              onClick={actions.toggleChain}
+              aria-label={t("controls.chain")}
+              aria-pressed={view.chainVisible}
+            >
+              <Info className="size-3.5" />
+            </button>
           </span>
-        </button>
-        <button
-          type="button"
-          className={iconButton({ tone: view.chainVisible ? "remote" : "muted" })}
-          onClick={actions.toggleChain}
-          aria-label={t("controls.chain")}
-          aria-pressed={view.chainVisible}
-        >
-          <Info className="size-3.5" />
-        </button>
+          <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "sm:hidden")}>
+            {view.track.artist} · {view.track.album}
+          </span>
+          <span className={barDeviceLine({ remote: !view.activeDevice.local })}>
+            <MonitorSpeaker className="size-3.5 shrink-0" />
+            {view.activeDevice.name}
+          </span>
+        </span>
         <button
           type="button"
           className={cn(iconButton({ tone: view.moreOpen ? "active" : "muted" }), "sm:hidden")}

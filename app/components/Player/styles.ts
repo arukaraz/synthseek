@@ -40,13 +40,21 @@ export const barIdentity = cva(
   "flex min-w-0 flex-1 items-center gap-3 sm:w-auto sm:max-w-[42%] sm:flex-none sm:shrink"
 );
 
-export const barIdentityButton = cva(
-  "focus-visible:ring-primary-500 flex min-w-0 items-center gap-3 rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none sm:min-w-fit sm:flex-none sm:cursor-default"
+export const barCoverButton = cva(
+  "focus-visible:ring-primary-500 flex shrink-0 rounded-lg focus-visible:ring-2 focus-visible:outline-none sm:cursor-default"
 );
 
-export const barTitle = cva("text-fg hidden truncate text-[13.5px] leading-tight font-semibold sm:block");
+export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5");
 
-export const barTitleRow = cva("truncate text-[13.5px] leading-tight sm:hidden");
+export const barNameRow = cva("flex min-w-0 items-center gap-1.5");
+
+export const barNameButton = cva(
+  "focus-visible:ring-primary-500 flex min-w-0 items-center rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none sm:cursor-default"
+);
+
+export const barTitle = cva("text-fg hidden min-w-0 truncate text-[13.5px] leading-tight font-semibold sm:block");
+
+export const barTitleRow = cva("block min-w-0 truncate text-[13.5px] leading-tight sm:hidden");
 
 export const barTitleStrong = cva("text-fg font-semibold");
 
@@ -108,6 +116,7 @@ export const iconButton = cva(
       },
       size: {
         compact: "size-9 sm:size-8",
+        inline: "size-6",
         transport: "size-11 sm:size-8",
         stage: "size-11",
       },
