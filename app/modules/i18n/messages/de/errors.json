@@ -318,5 +318,17 @@
   "LIBRARY_STREAM_FAILED": {
     "title": "Dieser Titel ließ sich nicht abspielen",
     "description": "Synthseek konnte die Datei nicht ausliefern. Falls sie konvertiert wurde, klappt das Abspielen in Originalqualität womöglich trotzdem."
+  },
+  "LISTENING_SERVICE_NOT_CONFIGURED": {
+    "title": "Dieser Dienst ist noch nicht eingerichtet",
+    "description": "Eine Administratorin oder ein Administrator muss zuerst die API-Zugangsdaten hinterlegen."
+  },
+  "LISTENING_SERVICE_AUTHORIZATION_EXPIRED": {
+    "title": "Diese Bestaetigung ist abgelaufen",
+    "description": "Starte die Verbindung erneut und bestaetige sie innerhalb weniger Minuten."
+  },
+  "LISTENING_SERVICE_REFUSED": {
+    "title": "Der Dienst hat die Verbindung abgelehnt",
+    "description": "Pruefe das Token oder versuche es gleich noch einmal."
   }
 }

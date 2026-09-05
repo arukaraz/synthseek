@@ -35,12 +35,14 @@ export function LastfmCard({ config }: LastfmCardProps) {
   const [enabled, setEnabled] = useState(config.enabled);
   const [username, setUsername] = useState(config.username ?? "");
   const [apiKey, setApiKey] = useState(settings?.connections.enrichment.lastfmApiKey ?? "");
+  const [apiSecret, setApiSecret] = useState(settings?.connections.enrichment.lastfmApiSecret ?? "");
 
   const persistedApiKey = settings?.connections.enrichment.lastfmApiKey ?? "";
+  const persistedApiSecret = settings?.connections.enrichment.lastfmApiSecret ?? "";
   const hasApiKey = Boolean(persistedApiKey);
+  const credentialsChanged = apiKey !== persistedApiKey || apiSecret !== persistedApiSecret;
 
-  const isDirty =
-    enabled !== config.enabled || username !== (config.username ?? "") || (isAdmin && apiKey !== persistedApiKey);
+  const isDirty = enabled !== config.enabled || username !== (config.username ?? "") || (isAdmin && credentialsChanged);
 
   const isSaving = update.isPending || updateEnrichment.isPending;
 
@@ -49,8 +51,14 @@ export function LastfmCard({ config }: LastfmCardProps) {
     if (enabled !== config.enabled || username !== (config.username ?? "")) {
       tasks.push(update.mutateAsync({ enabled, username: username.trim() || null }));
     }
-    if (isAdmin && apiKey !== persistedApiKey && settings) {
-      tasks.push(updateEnrichment.mutateAsync({ ...settings.connections.enrichment, lastfmApiKey: apiKey }));
+    if (isAdmin && credentialsChanged && settings) {
+      tasks.push(
+        updateEnrichment.mutateAsync({
+          ...settings.connections.enrichment,
+          lastfmApiKey: apiKey,
+          lastfmApiSecret: apiSecret,
+        })
+      );
     }
     await Promise.all(tasks);
   };
@@ -59,6 +67,7 @@ export function LastfmCard({ config }: LastfmCardProps) {
     setEnabled(config.enabled);
     setUsername(config.username ?? "");
     setApiKey(persistedApiKey);
+    setApiSecret(persistedApiSecret);
   };
 
   return (
@@ -84,16 +93,25 @@ export function LastfmCard({ config }: LastfmCardProps) {
         </div>
       ) : null}
 
-      <div className={disabledOverlay({ disabled: !enabled })}>
-        {isAdmin ? (
+      {isAdmin ? (
+        <>
           <SettingsField
             label={t("discoveryIntegrations.lastfm.apiKeyLabel")}
             helper={t("discoveryIntegrations.lastfm.apiKeyHelper")}
           >
             <SettingsSecretInput value={apiKey} onChange={setApiKey} />
           </SettingsField>
-        ) : null}
 
+          <SettingsField
+            label={t("discoveryIntegrations.lastfm.apiSecretLabel")}
+            helper={t("discoveryIntegrations.lastfm.apiSecretHelper")}
+          >
+            <SettingsSecretInput value={apiSecret} onChange={setApiSecret} />
+          </SettingsField>
+        </>
+      ) : null}
+
+      <div className={disabledOverlay({ disabled: !enabled })}>
         <SettingsField
           label={t("discoveryIntegrations.lastfm.usernameLabel")}
           helper={t("discoveryIntegrations.lastfm.usernameHelper")}

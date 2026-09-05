@@ -20,6 +20,9 @@ vi.mock("../components/ChangePasswordCard", () => ({ ChangePasswordCard: () => <
 vi.mock("../components/ConnectedAccountsCard", () => ({
   ConnectedAccountsCard: () => <div data-testid="connected-card" />,
 }));
+vi.mock("../components/ListeningServicesCard", () => ({
+  ListeningServicesCard: () => <div data-testid="listening-card" />,
+}));
 
 import { ProfileSection } from "../ProfileSection";
 
@@ -33,13 +36,14 @@ afterEach(() => {
 });
 
 describe("ProfileSection", () => {
-  it("renders the page header and all four profile cards", () => {
+  it("renders the page header and every profile card", () => {
     render(<ProfileSection />);
     expect(screen.getByRole("heading", { name: enSettings.profile.pageTitle })).toBeInTheDocument();
     expect(screen.getByTestId("account-card")).toBeInTheDocument();
     expect(screen.getByTestId("edit-card")).toBeInTheDocument();
     expect(screen.getByTestId("password-card")).toBeInTheDocument();
     expect(screen.getByTestId("connected-card")).toBeInTheDocument();
+    expect(screen.getByTestId("listening-card")).toBeInTheDocument();
   });
 
   it("renders nothing when there is no current user", () => {

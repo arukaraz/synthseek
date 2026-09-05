@@ -318,5 +318,17 @@
   "LIBRARY_STREAM_FAILED": {
     "title": "That track would not play",
     "description": "Synthseek could not serve that file. If it was being converted, playing it at its original quality may still work."
+  },
+  "LISTENING_SERVICE_NOT_CONFIGURED": {
+    "title": "That service is not set up yet",
+    "description": "An admin has to add the API credentials for it before anyone can connect an account."
+  },
+  "LISTENING_SERVICE_AUTHORIZATION_EXPIRED": {
+    "title": "That approval has expired",
+    "description": "Start the connection again and approve it within a few minutes."
+  },
+  "LISTENING_SERVICE_REFUSED": {
+    "title": "The service refused the connection",
+    "description": "Check the token or try again in a moment."
   }
 }

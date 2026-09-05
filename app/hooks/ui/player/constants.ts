@@ -51,3 +51,9 @@ export const MIRROR_STALE_MS = 45_000;
 export const HAND_OVER_ACK_MS = 8_000;
 
 export const WAKE_BEAT_FLOOR_MS = 3_000;
+
+export const LISTEN_DELTA_CEILING_SECONDS = 3;
+
+export const LISTEN_MAX_SECONDS = 240;
+
+export const LISTEN_FRACTION = 0.5;

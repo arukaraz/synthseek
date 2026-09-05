@@ -574,6 +574,32 @@
         "linkTimedOut": "Délai de liaison Plex dépassé",
         "linkFailed": "Échec de la liaison de Plex"
       }
+    },
+    "listening": {
+      "title": "Services d'ecoute",
+      "description": "Envoyez ce que vous ecoutez vers Last.fm et ListenBrainz. Les ecoutes sont gardees sur le serveur, elles arrivent donc meme si vous fermez l'onglet.",
+      "unavailable": "Vos services d'ecoute n'ont pas pu etre charges.",
+      "connected": "Connecte",
+      "notConnected": "Non connecte",
+      "notConfigured": "Demandez a un administrateur de renseigner les identifiants de l'API.",
+      "sendPlays": "Envoyer mes ecoutes",
+      "otherApps": "Envoyer aussi les ecoutes de ces applications",
+      "lastfm": {
+        "name": "Last.fm",
+        "authorizeHint": "Autorisez Synthseek dans l'onglet qui vient de s'ouvrir, puis terminez ici.",
+        "finish": "Je l'ai autorise"
+      },
+      "listenbrainz": {
+        "name": "ListenBrainz",
+        "tokenHint": "Collez le jeton utilisateur depuis les parametres de votre profil ListenBrainz.",
+        "tokenLabel": "Jeton utilisateur ListenBrainz",
+        "tokenPlaceholder": "Jeton utilisateur"
+      },
+      "failure": {
+        "unauthorized": "Le service a refuse la connexion. Reconnectez-le.",
+        "unavailable": "Le service n'a pas pu etre joint. Vos ecoutes attendent.",
+        "rejected": "Le service a refuse les dernieres ecoutes envoyees."
+      }
     }
   },
   "api": {
@@ -799,6 +825,10 @@
       "library-scan": {
         "name": "Analyse de la bibliothèque",
         "description": "Indexe les fichiers audio du disque, détermine quel morceau contient chacun d'eux et réconcilie ce qui a disparu."
+      },
+      "scrobble-relay": {
+        "name": "Relais d'ecoutes",
+        "description": "Envoie ce que vous avez ecoute vers vos services d'ecoute connectes."
       }
     }
   },

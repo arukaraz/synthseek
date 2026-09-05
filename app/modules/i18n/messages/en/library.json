@@ -207,7 +207,9 @@
       "apiKeyHelper": "System-wide Last.fm API key. Shared across all users.",
       "usernameLabel": "Username",
       "usernameHelper": "Your public Last.fm username.",
-      "usernamePlaceholder": "e.g. yourname"
+      "usernamePlaceholder": "e.g. yourname",
+      "apiSecretLabel": "API shared secret",
+      "apiSecretHelper": "Needed only to send your plays to Last.fm. Issued with the API key."
     },
     "listenbrainz": {
       "enableAria": "Enable ListenBrainz",

@@ -3,6 +3,8 @@
   --brand-apple-music: oklch(0.66 0.22 12);
   --brand-youtube: oklch(0.61 0.24 27);
   --brand-instagram: oklch(0.6 0.24 5);
+  --brand-lastfm: oklch(0.62 0.21 27);
+  --brand-listenbrainz: oklch(0.72 0.15 50);
   --brand-website: var(--color-secondary-400);
 }
 
@@ -21,6 +23,14 @@
 
   .social-instagram {
     color: var(--brand-instagram);
+  }
+
+  .social-lastfm {
+    color: var(--brand-lastfm);
+  }
+
+  .social-listenbrainz {
+    color: var(--brand-listenbrainz);
   }
 
   .social-website {

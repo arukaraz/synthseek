@@ -28,10 +28,21 @@ export {
   useDeviceHeartbeat,
   useForgetDevice,
   usePublishPlaybackState,
+  useRecordPlay,
   useSavePlaybackSession,
   useSendPlayerCommand,
   useSetFavoriteTrack,
 } from "./mutations/playback";
+
+export { useListeningConnections, useSeenPlaybackClients } from "./queries/scrobble";
+export {
+  useBeginLastfmAuthorization,
+  useCompleteLastfmAuthorization,
+  useConnectListenBrainz,
+  useDisconnectListeningService,
+  useSetRelayedClients,
+  useSetScrobbleEnabled,
+} from "./mutations/scrobble";
 
 export { usePlexSyncAllProgress } from "./subscriptions/usePlexSyncAllProgress";
 

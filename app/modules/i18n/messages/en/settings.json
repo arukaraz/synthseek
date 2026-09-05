@@ -574,6 +574,32 @@
         "linkTimedOut": "Plex linking timed out",
         "linkFailed": "Failed to link Plex"
       }
+    },
+    "listening": {
+      "title": "Listening services",
+      "description": "Send what you play to Last.fm and ListenBrainz. Plays are kept on the server, so they arrive even if you close the tab.",
+      "unavailable": "Your listening services could not be loaded.",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "notConfigured": "Ask an admin to set the API credentials first.",
+      "sendPlays": "Send my plays",
+      "otherApps": "Also send plays from these apps",
+      "lastfm": {
+        "name": "Last.fm",
+        "authorizeHint": "Approve Synthseek in the tab that just opened, then finish here.",
+        "finish": "I approved it"
+      },
+      "listenbrainz": {
+        "name": "ListenBrainz",
+        "tokenHint": "Paste the user token from your ListenBrainz profile settings.",
+        "tokenLabel": "ListenBrainz user token",
+        "tokenPlaceholder": "User token"
+      },
+      "failure": {
+        "unauthorized": "The service refused the connection. Connect it again.",
+        "unavailable": "The service could not be reached. Your plays are waiting.",
+        "rejected": "The service refused the last plays sent to it."
+      }
     }
   },
   "api": {
@@ -799,6 +825,10 @@
       "library-scan": {
         "name": "Library Scan",
         "description": "Indexes the audio files on disk, works out what each one holds, and reconciles what disappeared."
+      },
+      "scrobble-relay": {
+        "name": "Scrobble Relay",
+        "description": "Sends what you listened to on to your connected listening services."
       }
     }
   },

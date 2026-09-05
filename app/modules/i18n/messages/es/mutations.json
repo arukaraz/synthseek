@@ -327,6 +327,9 @@
   },
   "playback": {
     "favoriteFailed": "No se pudo guardar el favorito",
-    "commandFailed": "No se pudo llegar a ese dispositivo"
+    "commandFailed": "No se pudo llegar a ese dispositivo",
+    "listeningConnectFailed": "No se ha podido conectar ese servicio de escucha",
+    "listeningDisconnectFailed": "No se ha podido desconectar ese servicio de escucha",
+    "listeningSaveFailed": "No se ha podido guardar ese ajuste de escucha"
   }
 }

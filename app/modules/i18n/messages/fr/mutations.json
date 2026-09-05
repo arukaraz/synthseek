@@ -327,6 +327,9 @@
   },
   "playback": {
     "favoriteFailed": "Impossible d'enregistrer ce favori",
-    "commandFailed": "Impossible de joindre cet appareil"
+    "commandFailed": "Impossible de joindre cet appareil",
+    "listeningConnectFailed": "Impossible de connecter ce service d'ecoute",
+    "listeningDisconnectFailed": "Impossible de deconnecter ce service d'ecoute",
+    "listeningSaveFailed": "Impossible d'enregistrer ce parametre d'ecoute"
   }
 }

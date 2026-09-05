@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { isMirroring, mirroredPositionSeconds } from "./helpers";
 import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
+import { usePlayReporter } from "./usePlayReporter";
 import type { PlayerDockState, PlayerSessionState } from "./types";
 
 const EMPTY_STATE = getSnapshot();
@@ -30,6 +31,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   const { t } = useTranslation("player");
   const session = usePlayerSession();
   const { devices: known, handOverTo, toggleRemote, commandActive } = usePlayerDevices();
+  usePlayReporter();
   const mirroring = isMirroring(session);
   const playingTrack = (mirroring ? (session.remote?.track ?? null) : (session.queue[session.index] ?? null)) ?? null;
   const measured = mirroring ? (session.remote?.track?.durationSeconds ?? 0) : session.durationSeconds;

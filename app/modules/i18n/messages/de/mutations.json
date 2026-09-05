@@ -327,6 +327,9 @@
   },
   "playback": {
     "favoriteFailed": "Favorit konnte nicht gespeichert werden",
-    "commandFailed": "Dieses Gerät war nicht erreichbar"
+    "commandFailed": "Dieses Gerät war nicht erreichbar",
+    "listeningConnectFailed": "Dieser Hoerdienst konnte nicht verbunden werden",
+    "listeningDisconnectFailed": "Dieser Hoerdienst konnte nicht getrennt werden",
+    "listeningSaveFailed": "Diese Hoereinstellung konnte nicht gespeichert werden"
   }
 }

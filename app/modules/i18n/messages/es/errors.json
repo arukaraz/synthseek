@@ -318,5 +318,17 @@
   "LIBRARY_STREAM_FAILED": {
     "title": "Esa canción no se pudo reproducir",
     "description": "Synthseek no pudo servir el archivo. Si se estaba convirtiendo, reproducirlo en su calidad original todavía puede funcionar."
+  },
+  "LISTENING_SERVICE_NOT_CONFIGURED": {
+    "title": "Ese servicio aun no esta configurado",
+    "description": "Un administrador tiene que anadir sus credenciales de la API antes de que nadie pueda conectar una cuenta."
+  },
+  "LISTENING_SERVICE_AUTHORIZATION_EXPIRED": {
+    "title": "Esa autorizacion ha caducado",
+    "description": "Empieza la conexion otra vez y autorizala en unos minutos."
+  },
+  "LISTENING_SERVICE_REFUSED": {
+    "title": "El servicio ha rechazado la conexion",
+    "description": "Revisa el token o vuelve a intentarlo en un momento."
   }
 }

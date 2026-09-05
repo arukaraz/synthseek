@@ -327,6 +327,9 @@
   },
   "playback": {
     "favoriteFailed": "Could not save that favourite",
-    "commandFailed": "Could not reach that device"
+    "commandFailed": "Could not reach that device",
+    "listeningConnectFailed": "Could not connect that listening service",
+    "listeningDisconnectFailed": "Could not disconnect that listening service",
+    "listeningSaveFailed": "Could not save that listening setting"
   }
 }

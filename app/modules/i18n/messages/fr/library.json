@@ -207,7 +207,9 @@
       "apiKeyHelper": "Clé API Last.fm pour tout le système. Partagée entre tous les utilisateurs.",
       "usernameLabel": "Nom d'utilisateur",
       "usernameHelper": "Votre nom d'utilisateur Last.fm public.",
-      "usernamePlaceholder": "ex. votrenom"
+      "usernamePlaceholder": "ex. votrenom",
+      "apiSecretLabel": "Secret partage de l'API",
+      "apiSecretHelper": "Necessaire uniquement pour envoyer vos ecoutes a Last.fm. Fourni avec la cle de l'API."
     },
     "listenbrainz": {
       "enableAria": "Activer ListenBrainz",

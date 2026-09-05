@@ -574,6 +574,32 @@
         "linkTimedOut": "Se agotó el tiempo de vinculación con Plex",
         "linkFailed": "No se pudo vincular Plex"
       }
+    },
+    "listening": {
+      "title": "Servicios de escucha",
+      "description": "Envia lo que reproduces a Last.fm y a ListenBrainz. Las escuchas se guardan en el servidor, asi que llegan aunque cierres la pestana.",
+      "unavailable": "No se han podido cargar tus servicios de escucha.",
+      "connected": "Conectado",
+      "notConnected": "Sin conectar",
+      "notConfigured": "Pide a un administrador que ponga las credenciales de la API.",
+      "sendPlays": "Enviar mis escuchas",
+      "otherApps": "Enviar tambien las escuchas de estas aplicaciones",
+      "lastfm": {
+        "name": "Last.fm",
+        "authorizeHint": "Autoriza Synthseek en la pestana que se acaba de abrir y vuelve aqui para terminar.",
+        "finish": "Ya lo he autorizado"
+      },
+      "listenbrainz": {
+        "name": "ListenBrainz",
+        "tokenHint": "Pega el token de usuario de los ajustes de tu perfil de ListenBrainz.",
+        "tokenLabel": "Token de usuario de ListenBrainz",
+        "tokenPlaceholder": "Token de usuario"
+      },
+      "failure": {
+        "unauthorized": "El servicio ha rechazado la conexion. Vuelve a conectarlo.",
+        "unavailable": "No se ha podido contactar con el servicio. Tus escuchas estan esperando.",
+        "rejected": "El servicio ha rechazado las ultimas escuchas enviadas."
+      }
     }
   },
   "api": {
@@ -799,6 +825,10 @@
       "library-scan": {
         "name": "Escaneo de biblioteca",
         "description": "Indexa los archivos de audio del disco, averigua qué contiene cada uno y reconcilia lo que ha desaparecido."
+      },
+      "scrobble-relay": {
+        "name": "Reenvio de escuchas",
+        "description": "Envia lo que has escuchado a tus servicios de escucha conectados."
       }
     }
   },

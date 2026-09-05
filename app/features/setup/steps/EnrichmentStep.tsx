@@ -30,10 +30,12 @@ export function EnrichmentStep({ stepIndex, totalSteps, onComplete, onBack, onSk
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState({
     lastfmApiKey: "",
+    lastfmApiSecret: "",
     fanartApiKey: "",
     songlinkApiKey: "",
     acoustidApiKey: "",
     musicbrainzEmail: "",
+    discogsToken: "",
   });
 
   const update1 = <K extends keyof typeof draft>(k: K, v: (typeof draft)[K]) => {

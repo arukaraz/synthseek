@@ -318,5 +318,17 @@
   "LIBRARY_STREAM_FAILED": {
     "title": "Ce morceau n'a pas pu être lu",
     "description": "Synthseek n'a pas pu servir le fichier. S'il était en cours de conversion, le lire dans sa qualité d'origine peut encore fonctionner."
+  },
+  "LISTENING_SERVICE_NOT_CONFIGURED": {
+    "title": "Ce service n'est pas encore configure",
+    "description": "Un administrateur doit renseigner ses identifiants d'API avant que quiconque puisse connecter un compte."
+  },
+  "LISTENING_SERVICE_AUTHORIZATION_EXPIRED": {
+    "title": "Cette autorisation a expire",
+    "description": "Relancez la connexion et autorisez-la en quelques minutes."
+  },
+  "LISTENING_SERVICE_REFUSED": {
+    "title": "Le service a refuse la connexion",
+    "description": "Verifiez le jeton ou reessayez dans un instant."
   }
 }

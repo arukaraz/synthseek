@@ -10,6 +10,7 @@ import { AccountCard } from "./components/AccountCard";
 import { ChangePasswordCard } from "./components/ChangePasswordCard";
 import { ConnectedAccountsCard } from "./components/ConnectedAccountsCard";
 import { EditProfileCard } from "./components/EditProfileCard";
+import { ListeningServicesCard } from "./components/ListeningServicesCard";
 
 export function ProfileSection() {
   const { t } = useTranslation("settings");
@@ -24,6 +25,7 @@ export function ProfileSection() {
       <EditProfileCard user={currentUser} />
       <ChangePasswordCard user={currentUser} />
       <ConnectedAccountsCard />
+      <ListeningServicesCard />
     </div>
   );
 }

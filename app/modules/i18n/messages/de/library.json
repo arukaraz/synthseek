@@ -207,7 +207,9 @@
       "apiKeyHelper": "Systemweiter Last.fm-API-Schlüssel. Wird von allen Benutzern gemeinsam genutzt.",
       "usernameLabel": "Benutzername",
       "usernameHelper": "Dein öffentlicher Last.fm-Benutzername.",
-      "usernamePlaceholder": "z. B. deinname"
+      "usernamePlaceholder": "z. B. deinname",
+      "apiSecretLabel": "Gemeinsames API-Geheimnis",
+      "apiSecretHelper": "Nur nötig, um deine Wiedergaben an Last.fm zu senden. Wird zusammen mit dem API-Schlüssel ausgegeben."
     },
     "listenbrainz": {
       "enableAria": "ListenBrainz aktivieren",

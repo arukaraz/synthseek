@@ -92,6 +92,7 @@ Open the web interface, create your admin account in the setup wizard, and point
 - Play your library in Subsonic and OpenSubsonic apps such as Feishin and Symfonium, with no media server in between
 - Apps can change things, not only play them: favourites, playlists you create and reorder, what you played, and a queue you can pick up on another device
 - A stream is converted on the fly when an app asks for a lower quality than the file on disk
+- Send what you play to Last.fm and ListenBrainz from the server, so a listen survives closing the tab
 - Sync playlists to Plex, one at a time or all at once
 
 [Features](https://docs.synthseek.dev/features/)

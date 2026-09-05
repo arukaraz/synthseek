@@ -2,10 +2,12 @@ import type { ParseKeys } from "i18next";
 
 export type ConnectionsEnrichment = {
   lastfmApiKey: string;
+  lastfmApiSecret: string;
   fanartApiKey: string;
   songlinkApiKey: string;
   acoustidApiKey: string;
   musicbrainzEmail: string;
+  discogsToken: string;
 };
 
 export interface ConnectionsSpotify {

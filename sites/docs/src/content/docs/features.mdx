@@ -151,7 +151,15 @@ Only one place plays at a time. Press play in a second tab, or on another comput
 
 Open Synthseek somewhere else while it is playing and it already knows what is on and where, rather than waiting for the next thing to happen. The Synthseek tabs you have open show up under **Where it plays**. Pick one to move the sound there, and pick **This web browser** to bring it back, which resumes where the other one had got to. A tab that has not played anything yet can still be handed the queue, but it waits for you to press play, because a browser will not start audio in a tab you have not touched. A Subsonic app is not in that list at all: its protocol has no way for the server to talk back to it, so Synthseek hands it the queue rather than pretending it can command it, and a music app playing on your phone is the one thing the browser cannot stop.
 
-The heart marks the same favourite your music app marks. Scrobbling is not part of this player yet, so what you play here does not reach Last.fm or ListenBrainz, and it is not counted as now playing.
+The heart marks the same favourite your music app marks.
+
+What you play can reach Last.fm and ListenBrainz. Connect either one under **Settings**, then **Profile**, then **Listening services**: Last.fm asks you to approve Synthseek on its own site, ListenBrainz takes the user token from your profile there. A track counts once you have heard half of it or four minutes of it, whichever comes first, measured from the audio actually advancing rather than from the clock, so a seek is not a listen. A track of thirty seconds or less is never sent, because the services do not accept one.
+
+Nothing you played before you connected is sent, and nothing from a spell when you had **Send my plays** switched off: turning it back on starts from that moment rather than catching up on what it missed.
+
+The sending happens on the server, from a log of what you played, so closing the tab does not lose a listen that had already counted, and a service that is down or slow is retried later rather than dropped. Synthseek gives up on a listen the service keeps refusing, and it stops trying to send anything more than two weeks old. What is playing right now is announced as well, so your profile shows it while it plays.
+
+Your music apps are a separate decision. Most of them scrobble on their own, so Synthseek sends nothing from them unless you tick that app under the service you connected, which keeps one thing sending rather than two.
 
 ### Play it in a music app
 

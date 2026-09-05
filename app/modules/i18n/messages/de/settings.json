@@ -574,6 +574,32 @@
         "linkTimedOut": "Plex-Verknüpfung hat das Zeitlimit überschritten",
         "linkFailed": "Plex konnte nicht verknüpft werden"
       }
+    },
+    "listening": {
+      "title": "Hoerdienste",
+      "description": "Sende, was du abspielst, an Last.fm und ListenBrainz. Wiedergaben liegen auf dem Server, also kommen sie auch an, wenn du den Tab schliesst.",
+      "unavailable": "Deine Hoerdienste konnten nicht geladen werden.",
+      "connected": "Verbunden",
+      "notConnected": "Nicht verbunden",
+      "notConfigured": "Bitte eine Administratorin oder einen Administrator, die API-Zugangsdaten zu hinterlegen.",
+      "sendPlays": "Meine Wiedergaben senden",
+      "otherApps": "Auch Wiedergaben aus diesen Apps senden",
+      "lastfm": {
+        "name": "Last.fm",
+        "authorizeHint": "Bestaetige Synthseek im gerade geoeffneten Tab und schliesse es hier ab.",
+        "finish": "Ich habe es bestaetigt"
+      },
+      "listenbrainz": {
+        "name": "ListenBrainz",
+        "tokenHint": "Fuege das Benutzer-Token aus den Profileinstellungen von ListenBrainz ein.",
+        "tokenLabel": "ListenBrainz-Benutzer-Token",
+        "tokenPlaceholder": "Benutzer-Token"
+      },
+      "failure": {
+        "unauthorized": "Der Dienst hat die Verbindung abgelehnt. Verbinde ihn erneut.",
+        "unavailable": "Der Dienst war nicht erreichbar. Deine Wiedergaben warten.",
+        "rejected": "Der Dienst hat die zuletzt gesendeten Wiedergaben abgelehnt."
+      }
     }
   },
   "api": {
@@ -799,6 +825,10 @@
       "library-scan": {
         "name": "Bibliotheksscan",
         "description": "Indiziert die Audiodateien auf der Festplatte, ermittelt, welchen Titel jede enthält, und gleicht ab, was verschwunden ist."
+      },
+      "scrobble-relay": {
+        "name": "Wiedergabe-Weiterleitung",
+        "description": "Sendet, was du gehoert hast, an deine verbundenen Hoerdienste."
       }
     }
   },

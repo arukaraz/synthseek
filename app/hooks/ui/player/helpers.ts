@@ -5,13 +5,16 @@ import {
   CONVERTED_BITRATE_KBPS,
   CONVERTED_FORMAT,
   DEVICE_HEARTBEAT_MS,
+  LISTEN_DELTA_CEILING_SECONDS,
+  LISTEN_FRACTION,
+  LISTEN_MAX_SECONDS,
   PLAYBACK_MIME_BY_FORMAT,
   SESSION_POSITION_DRIFT_MS,
   TONES,
 } from "./constants";
 import type { PlaybackTrackSummary } from "@api/__generated__/types";
 
-import type { PlayerSessionState, RemotePlayback, SessionSnapshot } from "./types";
+import type { ListenProgress, PlayerSessionState, RemotePlayback, SessionSnapshot } from "./types";
 
 export function toneFor(seed: string): PlayerTone {
   let hash = 0;
@@ -125,4 +128,32 @@ export function trackSummary(session: PlayerSessionState): PlaybackTrackSummary 
 
 export function isMirroring(session: PlayerSessionState): boolean {
   return session.remote !== null && !session.playing;
+}
+
+export function beginListen(trackId: string, startedAt: number, positionSeconds: number): ListenProgress {
+  return { trackId, startedAt, listenedSeconds: 0, lastPositionSeconds: positionSeconds, recorded: false };
+}
+
+export function accumulateListen(progress: ListenProgress, positionSeconds: number): ListenProgress {
+  const delta = positionSeconds - progress.lastPositionSeconds;
+  const heard = delta > 0 && delta <= LISTEN_DELTA_CEILING_SECONDS ? delta : 0;
+  return { ...progress, listenedSeconds: progress.listenedSeconds + heard, lastPositionSeconds: positionSeconds };
+}
+
+export function listenThresholdSeconds(durationSeconds: number): number {
+  return Math.min(durationSeconds * LISTEN_FRACTION, LISTEN_MAX_SECONDS);
+}
+
+export function listenIsDue(progress: ListenProgress, durationSeconds: number): boolean {
+  if (progress.recorded || durationSeconds <= 0) return false;
+  return progress.listenedSeconds >= listenThresholdSeconds(durationSeconds);
+}
+
+export function listenRestarted(progress: ListenProgress, positionSeconds: number): boolean {
+  if (!progress.recorded) return false;
+  return positionSeconds + LISTEN_DELTA_CEILING_SECONDS < progress.lastPositionSeconds;
+}
+
+export function startedSecondsAgo(progress: ListenProgress, now: number): number {
+  return Math.max(0, Math.round((now - progress.startedAt) / 1000));
 }

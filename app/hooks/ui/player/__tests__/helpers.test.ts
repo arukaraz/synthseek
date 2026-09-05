@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  accumulateListen,
   beatIsDue,
+  beginListen,
   expectedPosition,
   isMirroring,
+  listenIsDue,
+  listenRestarted,
+  listenThresholdSeconds,
   mirroredPositionSeconds,
   needsConversion,
   nextIndexIn,
@@ -12,6 +17,7 @@ import {
   previousIndexIn,
   sessionChanged,
   shuffledOrder,
+  startedSecondsAgo,
   streamUrlFor,
 } from "../helpers";
 import type { PlayerSessionState } from "../types";
@@ -306,5 +312,90 @@ describe("isMirroring", () => {
 
   it("is never mirroring while this tab is the one making sound, whatever it still remembers", () => {
     expect(isMirroring(sessionWith({ remote: mirrored, playing: true }))).toBe(false);
+  });
+});
+
+describe("the listen accumulator", () => {
+  const started = beginListen("t1", 1_000_000, 0);
+
+  it("counts the seconds the audio actually advanced", () => {
+    const heard = accumulateListen(accumulateListen(started, 1), 2);
+
+    expect(heard.listenedSeconds).toBe(2);
+  });
+
+  it("does not count a jump forward, because a seek is not listening", () => {
+    const seeked = accumulateListen(started, 90);
+
+    expect(seeked.listenedSeconds).toBe(0);
+    expect(seeked.lastPositionSeconds).toBe(90);
+  });
+
+  it("does not count a jump backwards either", () => {
+    const seeked = accumulateListen(accumulateListen(started, 3), 1);
+
+    expect(seeked.listenedSeconds).toBe(3);
+  });
+
+  it("keeps counting after a seek, from wherever it landed", () => {
+    const afterSeek = accumulateListen(accumulateListen(started, 90), 91);
+
+    expect(afterSeek.listenedSeconds).toBe(1);
+  });
+});
+
+describe("listenThresholdSeconds", () => {
+  it("asks for half of a short track", () => {
+    expect(listenThresholdSeconds(180)).toBe(90);
+  });
+
+  it("never asks for more than four minutes of a long one", () => {
+    expect(listenThresholdSeconds(3600)).toBe(240);
+  });
+});
+
+describe("listenIsDue", () => {
+  const heard = (seconds: number) => ({ ...beginListen("t1", 0, 0), listenedSeconds: seconds });
+
+  it("is not due one second short of the threshold", () => {
+    expect(listenIsDue(heard(89), 180)).toBe(false);
+  });
+
+  it("is due at the threshold", () => {
+    expect(listenIsDue(heard(90), 180)).toBe(true);
+  });
+
+  it("is never due twice for the same play", () => {
+    expect(listenIsDue({ ...heard(90), recorded: true }, 180)).toBe(false);
+  });
+
+  it("is never due for a track of unknown length", () => {
+    expect(listenIsDue(heard(600), 0)).toBe(false);
+  });
+});
+
+describe("listenRestarted", () => {
+  const recorded = { ...beginListen("t1", 0, 0), lastPositionSeconds: 180, recorded: true };
+
+  it("sees a loop back to the top as a new play once the first one counted", () => {
+    expect(listenRestarted(recorded, 0)).toBe(true);
+  });
+
+  it("does not see the ordinary advance as a restart", () => {
+    expect(listenRestarted({ ...recorded, lastPositionSeconds: 180 }, 181)).toBe(false);
+  });
+
+  it("does not restart a play that has not counted yet, however far back it is dragged", () => {
+    expect(listenRestarted({ ...recorded, recorded: false }, 0)).toBe(false);
+  });
+});
+
+describe("startedSecondsAgo", () => {
+  it("measures from when the play began", () => {
+    expect(startedSecondsAgo(beginListen("t1", 1_000_000, 0), 1_090_000)).toBe(90);
+  });
+
+  it("never reports a play that started in the future", () => {
+    expect(startedSecondsAgo(beginListen("t1", 1_090_000, 0), 1_000_000)).toBe(0);
   });
 });

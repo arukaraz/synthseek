@@ -57,6 +57,14 @@ export interface SessionSnapshot {
   positionMs: number;
 }
 
+export interface ListenProgress {
+  trackId: string;
+  startedAt: number;
+  listenedSeconds: number;
+  lastPositionSeconds: number;
+  recorded: boolean;
+}
+
 export interface KnownDevice {
   id: string;
   name: string;
