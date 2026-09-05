@@ -52,7 +52,11 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   );
   const favorites = useFavoriteTracks(track === null ? [] : [track.id]);
   const connections = useListeningConnections();
-  const { mutate: setScrobbleEnabled } = useSetScrobbleEnabled();
+  const {
+    mutate: setScrobbleEnabled,
+    isPending: scrobblePending,
+    variables: scrobbleVariables,
+  } = useSetScrobbleEnabled();
   const connected = (connections.data ?? []).filter((connection) => connection.connected);
   const toggleScrobbling = useCallback(() => {
     const enabled = !connected.some((connection) => connection.scrobbleEnabled);
@@ -210,7 +214,12 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     lyrics: lyrics.data ?? null,
     lyricsLoading: lyrics.isLoading,
     lyricsFailed: lyrics.isError,
-    scrobble: scrobbleStateFrom(connections.data ?? []),
+    scrobble:
+      scrobblePending && scrobbleVariables !== undefined
+        ? scrobbleVariables.enabled
+          ? "sending"
+          : "off"
+        : scrobbleStateFrom(connections.data ?? []),
     scrobbleActionable: connected.length > 0,
     fullscreen: session.fullscreen,
     notice: session.notice,
