@@ -1,9 +1,10 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { Heart, Mic2, MonitorSpeaker } from "lucide-react";
+import { Mic2, MonitorSpeaker, Repeat, Repeat1, Shuffle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FavouriteButton } from "./FavouriteButton";
 import { ScrobbleStatus } from "./ScrobbleStatus";
 import { iconButton } from "./styles";
 import type { PlayerProps } from "./types";
@@ -15,13 +16,22 @@ export function PlayerExtraControls({ view, actions }: PlayerProps) {
     <>
       <button
         type="button"
-        className={iconButton({ tone: view.favorite ? "favorite" : "muted" })}
-        onClick={actions.toggleFavorite}
-        aria-label={view.favorite ? t("controls.unfavorite") : t("controls.favorite")}
-        aria-pressed={view.favorite}
+        className={cn(iconButton({ tone: view.shuffle ? "active" : "muted" }), "sm:hidden")}
+        onClick={actions.toggleShuffle}
+        aria-label={t("controls.shuffle")}
+        aria-pressed={view.shuffle}
       >
-        <Heart className={cn("size-5 sm:size-4", view.favorite ? "fill-current" : undefined)} />
+        <Shuffle className="size-5" />
       </button>
+      <button
+        type="button"
+        className={cn(iconButton({ tone: view.repeat === "off" ? "muted" : "active" }), "sm:hidden")}
+        onClick={actions.cycleRepeat}
+        aria-label={t(`controls.repeat.${view.repeat}`)}
+      >
+        {view.repeat === "one" ? <Repeat1 className="size-5" /> : <Repeat className="size-5" />}
+      </button>
+      <FavouriteButton view={view} actions={actions} className="hidden sm:grid" />
       <ScrobbleStatus
         state={view.scrobble}
         actionable={view.scrobbleActionable}

@@ -232,7 +232,6 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
         : scrobbleStateFrom(connections.data ?? []),
     scrobbleActionable: connected.length > 0,
     fullscreen: session.fullscreen,
-    notice: session.notice,
   };
 
   return { view, actions: playerActions };

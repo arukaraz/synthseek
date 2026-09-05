@@ -1,17 +1,17 @@
 "use client";
 
 import { nextRepeat, shouldRestart } from "@components/Player";
-import type { PlayerTrack } from "@components/Player";
+import type { PlayerNoticeTone, PlayerTrack } from "@components/Player";
 import { artworkProxySrc } from "@utils/artworkProxy";
 
 import {
   MAX_CONSECUTIVE_FAILURES,
   MIRROR_STALE_MS,
   MIRROR_TICK_MS,
-  NOTICE_MS,
   SKIP_DELAY_MS,
   VOLUME_STORAGE_KEY,
 } from "./constants";
+import { announce } from "./announce";
 import { applyVolume, canPlayMime, connectEngine, loadAndPlay, loadAt, pause, resume, seek, stop } from "./engine";
 import {
   mirroredPositionSeconds,
@@ -48,12 +48,10 @@ let state: PlayerSessionState = {
   devicesOpen: false,
   lyricsOpen: false,
   fullscreen: false,
-  notice: null,
   consecutiveFailures: 0,
   started: false,
 };
 
-let noticeTimer: ReturnType<typeof setTimeout> | undefined;
 let mirrorTimer: ReturnType<typeof setInterval> | undefined;
 let skipTimer: ReturnType<typeof setTimeout> | undefined;
 let connected = false;
@@ -93,10 +91,8 @@ function silenceOtherAudio(): void {
   }
 }
 
-function notify(text: string, tone: "info" | "warning" | "danger"): void {
-  publish({ notice: { text, tone } });
-  clearTimeout(noticeTimer);
-  noticeTimer = setTimeout(() => publish({ notice: null }), NOTICE_MS);
+function notify(text: string, tone: PlayerNoticeTone): void {
+  announce({ text, tone });
 }
 
 function ensureConnected(): void {

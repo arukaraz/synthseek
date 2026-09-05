@@ -29,12 +29,16 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.deviceId}:${event.issuedAt}:${event.command}`;
     case SubscriptionEventType.PlaybackState:
       return `${event.eventType}:${event.deviceId}:${event.issuedAt}:${event.playing}:${event.track?.id ?? ""}:${event.positionSeconds}`;
+    case SubscriptionEventType.UserActivity:
+      return `${event.eventType}:${event.subject}`;
     case SubscriptionEventType.DropImportUpdate:
       return `${event.eventType}:${event.batchId}:${event.status}:${event.importedFiles}:${event.alreadyInLibraryFiles}:${event.pendingFiles}:${event.failedFiles}:${event.discardedFiles}:${event.file?.id ?? ""}:${event.file?.status ?? ""}`;
   }
 }
 
 export function isDuplicate(event: SubscriptionEvent, cache: Map<string, number>): boolean {
+  if (event.eventType === SubscriptionEventType.UserActivity) return false;
+
   const key = eventKey(event);
   const lastTimestamp = cache.get(key);
 

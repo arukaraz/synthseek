@@ -49,6 +49,8 @@ const utilsStub = vi.hoisted(() => ({
   },
   playback: {
     activeState: { refetch: vi.fn() },
+    favoriteTrackIds: { invalidate: vi.fn() },
+    scrobble: { connections: { invalidate: vi.fn() } },
   },
   library: {
     getAlbums: { invalidate: vi.fn() },
@@ -75,6 +77,8 @@ const everyPushFedInvalidate = [
   utilsStub.settings.recycleBin.list.invalidate,
   utilsStub.settings.recycleBin.status.invalidate,
   utilsStub.settings.quarantine.list.invalidate,
+  utilsStub.playback.favoriteTrackIds.invalidate,
+  utilsStub.playback.scrobble.connections.invalidate,
   utilsStub.library.getAlbums.invalidate,
   utilsStub.library.getArtists.invalidate,
   utilsStub.library.getPlaylists.invalidate,

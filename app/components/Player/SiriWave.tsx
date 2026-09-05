@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SEEK_PAGE_SECONDS, SEEK_STEP_SECONDS, WAVE, WAVE_LAYERS, WAVE_LOBES } from "./constants";
@@ -9,10 +10,13 @@ import type { PlayerWaveProps } from "./types";
 
 export function SiriWave({ view, actions, size }: PlayerWaveProps) {
   const { t } = useTranslation("player");
+  const [dragging, setDragging] = useState(false);
   const paths = waveLobePaths(view.track.id);
   const duration = view.track.durationSeconds;
-  const progress = percentOf(view.positionSeconds, duration);
+  const played = percentOf(view.positionSeconds, duration);
   const scrub = view.scrubSeconds === null ? null : percentOf(view.scrubSeconds, duration);
+  const progress = dragging && scrub !== null ? scrub : played;
+  const announced = dragging && view.scrubSeconds !== null ? view.scrubSeconds : view.positionSeconds;
 
   const clampedSeek = (seconds: number) => {
     actions.seekTo(Math.min(duration, Math.max(0, seconds)));
@@ -48,27 +52,33 @@ export function SiriWave({ view, actions, size }: PlayerWaveProps) {
       aria-label={t("controls.seek")}
       aria-valuemin={0}
       aria-valuemax={Math.round(duration)}
-      aria-valuenow={Math.round(view.positionSeconds)}
-      aria-valuetext={formatClock(view.positionSeconds)}
+      aria-valuenow={Math.round(announced)}
+      aria-valuetext={formatClock(announced)}
       className={waveTrack({ size })}
-      style={waveVars(progress, scrub, view.playing && !view.loading)}
+      data-player-wave
+      style={waveVars(progress, scrub, view.playing && !view.loading, dragging)}
       onPointerDown={(event) => {
         event.currentTarget.setPointerCapture(event.pointerId);
-        clampedSeek(secondsFromPointer(event.clientX, event.currentTarget.getBoundingClientRect(), duration));
+        setDragging(true);
+        actions.scrubTo(secondsFromPointer(event.clientX, event.currentTarget.getBoundingClientRect(), duration));
       }}
       onPointerMove={(event) => {
-        const seconds = secondsFromPointer(event.clientX, event.currentTarget.getBoundingClientRect(), duration);
-        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-          clampedSeek(seconds);
-          return;
-        }
-        actions.scrubTo(seconds);
+        actions.scrubTo(secondsFromPointer(event.clientX, event.currentTarget.getBoundingClientRect(), duration));
       }}
       onPointerUp={(event) => {
         event.currentTarget.releasePointerCapture(event.pointerId);
+        setDragging(false);
+        clampedSeek(secondsFromPointer(event.clientX, event.currentTarget.getBoundingClientRect(), duration));
         actions.scrubTo(null);
       }}
-      onPointerLeave={() => actions.scrubTo(null)}
+      onPointerLeave={() => {
+        if (!dragging) actions.scrubTo(null);
+      }}
+      onPointerCancel={(event) => {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+        setDragging(false);
+        actions.scrubTo(null);
+      }}
       onKeyDown={handleKeyDown}
     >
       {WAVE_LAYERS.map((state) => (

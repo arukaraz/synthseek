@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FavouriteButton } from "./FavouriteButton";
 import { PlayerExtraControls } from "./PlayerExtraControls";
 import { PlayerVolume } from "./PlayerVolume";
 import { SiriWave } from "./SiriWave";
@@ -63,7 +64,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
       <div className={barIdentity()}>
         <button
           type="button"
-          className={barCoverButton({ folded: view.moreOpen })}
+          className={barCoverButton()}
           onClick={actions.toggleFullscreen}
           aria-label={t("controls.openTrack")}
         >
@@ -115,7 +116,8 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         </div>
       </div>
 
-      <div className={barTransport()}>
+      <div className={barTransport({ folded: view.moreOpen })}>
+        <FavouriteButton view={view} actions={actions} className="sm:hidden" />
         <button
           type="button"
           className={cn(iconButton({ tone: view.shuffle ? "active" : "muted" }), "hidden sm:grid")}

@@ -4,7 +4,6 @@ import { AnimatePresence } from "framer-motion";
 
 import { DeviceMenu } from "./DeviceMenu";
 import { PlayerBar } from "./PlayerBar";
-import { PlayerNotice } from "./PlayerNotice";
 import { PlayerStage } from "./PlayerStage";
 import { SignalChain } from "./SignalChain";
 import { playerDock, playerRoot } from "./styles";
@@ -16,9 +15,6 @@ export function Player({ view, actions }: PlayerProps) {
   return (
     <>
       {view.fullscreen ? <PlayerStage view={view} actions={actions} /> : null}
-      {view.notice === null ? null : (
-        <PlayerNotice text={view.notice.text} tone={view.notice.tone} chain={anchorToChain} />
-      )}
       <AnimatePresence>
         {view.devicesOpen ? <DeviceMenu view={view} actions={actions} chain={anchorToChain} /> : null}
       </AnimatePresence>

@@ -54,7 +54,8 @@
   },
   "lyrics": {
     "empty": "Aucunes paroles pour ce titre",
-    "loading": "Recherche des paroles"
+    "loading": "Recherche des paroles",
+    "untimed": "Ces paroles n'ont pas de minutage, elles ne suivent donc pas la chanson"
   },
   "scrobble": {
     "off": "Scrobbling désactivé",

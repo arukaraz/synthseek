@@ -54,7 +54,8 @@
   },
   "lyrics": {
     "empty": "No lyrics found for this track",
-    "loading": "Looking for the lyrics"
+    "loading": "Looking for the lyrics",
+    "untimed": "These lyrics have no timings, so they do not follow the song"
   },
   "scrobble": {
     "off": "Scrobbling off",

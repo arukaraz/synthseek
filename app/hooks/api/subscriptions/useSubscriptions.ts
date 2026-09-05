@@ -14,7 +14,12 @@ import {
   handlePortabilityProgress,
   handleTrackUpdate,
 } from "./handlers/requests";
-import { handleMaintenanceUpdate, handleSettingsUpdate, handleVersionUpdate } from "./handlers/system";
+import {
+  handleMaintenanceUpdate,
+  handleSettingsUpdate,
+  handleUserActivity,
+  handleVersionUpdate,
+} from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
 import { invalidateLibraryViews } from "./shared/libraryInvalidation";
 import { resyncPushFedQueries } from "./shared/pushFedResync";
@@ -97,6 +102,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.PlaybackState:
           applyPlaybackState(event);
+          break;
+        case SubscriptionEventType.UserActivity:
+          handleUserActivity(event, utils);
           break;
         default: {
           const _unhandledEventType: never = event;

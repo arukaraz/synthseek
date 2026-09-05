@@ -1,4 +1,5 @@
 import { LOAD_TIMEOUT_MS, STALL_TIMEOUT_MS } from "./constants";
+import { followAudio, stopFollowingAudio } from "./energy";
 import type { EngineCallbacks } from "./types";
 
 let element: HTMLAudioElement | null = null;
@@ -39,8 +40,10 @@ function audio(): HTMLAudioElement {
     clearTimers();
     callbacks?.onLoadingChange(false);
     callbacks?.onPlayingChange(true);
+    followAudio(created);
   });
   created.addEventListener("pause", () => {
+    stopFollowingAudio();
     if (created.ended) return;
     callbacks?.onPlayingChange(false);
   });
@@ -50,6 +53,7 @@ function audio(): HTMLAudioElement {
   });
   created.addEventListener("stalled", armStall);
   created.addEventListener("ended", () => {
+    stopFollowingAudio();
     clearTimers();
     callbacks?.onEnded();
   });

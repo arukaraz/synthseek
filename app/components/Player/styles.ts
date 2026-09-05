@@ -12,7 +12,7 @@ export const playerDock = cva(
 );
 
 export const chainStrip = cva(
-  "border-fg-muted/15 bg-surface-sunken/30 hidden h-[30px] items-center gap-2.5 overflow-hidden border-t px-5 whitespace-nowrap backdrop-blur-[18px] md:flex"
+  "player-scroll-fade scrollbar-none border-fg-muted/15 bg-surface-sunken/30 flex h-[30px] items-center gap-2.5 overflow-x-auto border-t px-5 whitespace-nowrap backdrop-blur-[18px]"
 );
 
 export const chainLabel = cva("text-fg-muted font-mono text-[9px] tracking-[0.12em]");
@@ -41,16 +41,7 @@ export const barIdentity = cva(
 );
 
 export const barCoverButton = cva(
-  "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none",
-  {
-    variants: {
-      folded: {
-        true: "max-sm:hidden",
-        false: "",
-      },
-    },
-    defaultVariants: { folded: false },
-  }
+  "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none"
 );
 
 export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5", {
@@ -89,7 +80,15 @@ export const barDeviceLine = cva("flex items-center gap-1 truncate text-[11px] l
 
 export const barSubtitle = cva("text-fg-muted hidden truncate text-[11.5px] leading-tight sm:block");
 
-export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 sm:order-none sm:gap-3.5");
+export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 sm:order-none sm:gap-3.5", {
+  variants: {
+    folded: {
+      true: "max-sm:hidden",
+      false: "",
+    },
+  },
+  defaultVariants: { folded: false },
+});
 
 export const barProgress = cva("hidden min-w-0 flex-1 items-center gap-3 sm:flex sm:min-w-[240px]");
 
@@ -165,7 +164,7 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
     size: {
       row: "size-7 rounded",
       bar: "size-10 rounded-md sm:size-12.5",
-      stage: "size-[min(60vw,32vh,268px)] rounded-xl",
+      stage: "size-[min(60vw,24vh,268px)] rounded-xl sm:size-[min(60vw,32vh,268px)]",
     },
   },
   defaultVariants: { tone: "primary", size: "bar" },
@@ -215,7 +214,7 @@ export const waveLayer = cva("absolute inset-0 overflow-hidden", {
   defaultVariants: { state: "rest" },
 });
 
-export const waveSvg = cva("block h-full w-full");
+export const waveSvg = cva("player-wave-energy block h-full w-full");
 
 export const waveLobe = cva("player-lobe", {
   variants: {
@@ -325,43 +324,17 @@ export const deviceName = cva("text-fg min-w-0 flex-1 truncate text-[13.5px] fon
 export const barDesktopExtras = cva("hidden shrink-0 items-center gap-2.5 sm:flex");
 
 export const barMoreGroup = cva(
-  "flex shrink-0 items-center overflow-hidden transition-all duration-200 ease-out sm:hidden",
+  "player-scroll-fade scrollbar-none flex shrink-0 items-center overflow-x-auto overflow-y-hidden transition-all duration-200 ease-out sm:hidden",
   {
     variants: {
       open: {
-        true: "max-w-46 translate-x-0 gap-0.5 opacity-100 [&>button]:size-8 sm:gap-1",
+        true: "max-w-46 translate-x-0 gap-0.5 opacity-100 [&>button]:size-8 [&>span]:shrink-0 [&>button]:shrink-0 sm:gap-1",
         false: "invisible max-w-0 -translate-x-2 gap-0 opacity-0",
       },
     },
     defaultVariants: { open: false },
   }
 );
-
-export const notice = cva(
-  "player-metrics border-fg-muted/25 bg-surface-overlay pointer-events-auto fixed bottom-[calc(var(--height-bottom-nav)+var(--player-dock-height))] left-3 z-70 flex max-w-[460px] items-center gap-2.5 rounded-[10px] border px-3.5 py-2.5 sm:bottom-[var(--player-dock-height)] sm:left-5",
-  {
-    variants: {
-      chain: {
-        true: "player-metrics-chain",
-        false: "",
-      },
-    },
-    defaultVariants: { chain: false },
-  }
-);
-
-export const noticeDot = cva("size-2 shrink-0 rounded-full bg-current", {
-  variants: {
-    tone: {
-      info: "text-secondary-400",
-      warning: "text-warning-vivid",
-      danger: "text-destructive-vivid",
-    },
-  },
-  defaultVariants: { tone: "info" },
-});
-
-export const noticeText = cva("text-fg text-[12.5px]");
 
 export const stage = cva("pointer-events-auto fixed inset-0 z-60 flex flex-col overflow-hidden");
 
@@ -386,9 +359,11 @@ export const stageMain = cva(
   "relative flex min-h-0 flex-1 flex-col overflow-hidden px-6 text-center md:px-11 md:text-left"
 );
 
-export const stageMeta = cva("flex max-w-[430px] flex-col items-center gap-2.5 md:items-start");
+export const stageMeta = cva("flex max-w-[430px] flex-col items-center gap-1.5 sm:gap-2.5 md:items-start");
 
-export const stageTitle = cva("text-fg text-[26px] leading-tight font-bold tracking-[-0.02em] sm:text-[34px]");
+export const stageTitle = cva(
+  "text-fg line-clamp-2 text-[26px] leading-tight font-bold tracking-[-0.02em] sm:line-clamp-none sm:text-[34px]"
+);
 
 export const stageArtist = cva("text-fg text-[16px]");
 
@@ -422,12 +397,17 @@ export const stageTransport = cva("flex items-center justify-center gap-7 sm:gap
 
 export const srOnly = cva("sr-only");
 
-export function waveVars(progressPercent: number, scrubPercent: number | null, animating: boolean): CssVars {
+export function waveVars(
+  progressPercent: number,
+  scrubPercent: number | null,
+  animating: boolean,
+  touching: boolean
+): CssVars {
   return {
     "--player-progress": `${progressPercent.toFixed(2)}%`,
     "--player-scrub": `${(scrubPercent ?? progressPercent).toFixed(2)}%`,
     "--player-wave-state": animating ? "running" : "paused",
-    "--player-progress-ease": scrubPercent === null ? PROGRESS_EASE_MS : "0ms",
+    "--player-progress-ease": touching || scrubPercent !== null ? "0ms" : PROGRESS_EASE_MS,
   };
 }
 
@@ -477,7 +457,7 @@ export const stageFlip = cva(
 export const stageFace = cva("flex h-full min-h-0 w-full items-center justify-center [backface-visibility:hidden]", {
   variants: {
     layout: {
-      track: "flex-col gap-6 text-center md:flex-row md:gap-11 md:text-left",
+      track: "flex-col gap-4 text-center sm:gap-6 md:flex-row md:gap-11 md:text-left",
     },
   },
 });
@@ -486,7 +466,7 @@ export const stageVolume = cva("flex justify-center");
 
 export const lyricsPane = cva("flex h-full min-h-0 w-full max-w-[900px] flex-col items-center gap-3 pb-3");
 
-export const lyricsScroll = cva("scrollbar-none min-h-0 w-full flex-1 overflow-y-auto px-2");
+export const lyricsScroll = cva("player-lyrics-fade scrollbar-none min-h-0 w-full flex-1 overflow-y-auto px-2");
 
 export const lyricsBody = cva("flex flex-col items-center gap-2.5 py-[32vh] text-center sm:gap-3 sm:py-[42vh]");
 
@@ -514,3 +494,5 @@ export const lyricsLine = cva(
 );
 
 export const lyricsEmpty = cva("text-fg-muted py-10 text-center text-base");
+
+export const lyricsUntimed = cva("text-fg-muted text-center text-xs");

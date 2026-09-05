@@ -76,7 +76,6 @@ export interface PlayerView {
   scrobbleActionable: boolean;
   moreOpen: boolean;
   fullscreen: boolean;
-  notice: PlayerNotice | null;
 }
 
 export interface PlayerActions {
@@ -114,16 +113,16 @@ export interface PlayerPanelProps extends PlayerProps {
   chain: boolean;
 }
 
-export interface PlayerNoticeProps extends PlayerNotice {
-  chain: boolean;
-}
-
 export interface PlayerWaveProps extends PlayerProps {
   size: "bar" | "stage";
 }
 
 export interface PlayerVolumeProps extends PlayerProps {
   size: "bar" | "stage";
+}
+
+export interface PlayerFavouriteProps extends PlayerProps {
+  className?: string;
 }
 
 export interface PlayerScrobbleProps {

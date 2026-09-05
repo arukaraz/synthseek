@@ -49,6 +49,20 @@
     animation-duration: 2.4s;
   }
 
+  .player-scroll-fade {
+    mask-image: linear-gradient(to right, transparent 0, black 10px, black calc(100% - 10px), transparent 100%);
+  }
+
+  .player-lyrics-fade {
+    mask-image: linear-gradient(to bottom, transparent 0, black 12%, black 84%, transparent 100%);
+  }
+
+  .player-wave-energy {
+    transform: scaleY(var(--player-energy, 1));
+    transform-origin: center;
+    transition: transform 90ms linear;
+  }
+
   .player-wave-played {
     clip-path: inset(0 calc(100% - var(--player-progress, 0%)) 0 0);
     transition: clip-path var(--player-progress-ease, 260ms) linear;
@@ -75,10 +89,8 @@
     }
   }
 
-  @media (min-width: 48rem) {
-    .player-metrics-chain {
-      --player-dock-height: 7.125rem;
-    }
+  .player-metrics-chain {
+    --player-dock-height: calc(var(--player-bar-height) + 1.875rem);
   }
 
   .player-bar-progress {
@@ -102,8 +114,13 @@
 
     .player-wave-played,
     .player-wave-head,
-    .player-bar-progress {
+    .player-bar-progress,
+    .player-wave-energy {
       transition: none;
+    }
+
+    .player-wave-energy {
+      transform: none;
     }
 
     .player-lyric-line {

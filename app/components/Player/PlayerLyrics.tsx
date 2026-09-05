@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { LYRIC_SCROLL_SPRING } from "./constants";
 import { activeLyricIndex, emptyReason, lyricDepth, lyricLineState } from "./helpers";
-import { iconButton, lyricsBody, lyricsEmpty, lyricsLine, lyricsPane, lyricsScroll } from "./styles";
+import { iconButton, lyricsBody, lyricsEmpty, lyricsLine, lyricsPane, lyricsScroll, lyricsUntimed } from "./styles";
 import type { PlayerLyricsProps } from "./types";
 
 export function PlayerLyrics({ view, actions }: PlayerLyricsProps) {
@@ -82,6 +82,7 @@ export function PlayerLyrics({ view, actions }: PlayerLyricsProps) {
           </div>
         </div>
       )}
+      {lines.length > 0 && !synced ? <p className={lyricsUntimed()}>{t("lyrics.untimed")}</p> : null}
       <button
         type="button"
         className={iconButton({ size: "stage" })}

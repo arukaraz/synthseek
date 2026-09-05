@@ -54,7 +54,8 @@
   },
   "lyrics": {
     "empty": "Für diesen Titel gibt es keinen Songtext",
-    "loading": "Songtext wird gesucht"
+    "loading": "Songtext wird gesucht",
+    "untimed": "Dieser Songtext hat keine Zeitmarken und folgt dem Lied daher nicht"
   },
   "scrobble": {
     "off": "Scrobbeln aus",
