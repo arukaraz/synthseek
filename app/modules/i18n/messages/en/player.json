@@ -16,6 +16,9 @@
     "unmute": "Unmute",
     "volume": "Volume",
     "devices": "Devices",
+    "modes": "Player mode",
+    "restoreMode": "Exit Compact Mode",
+    "exitMini": "Exit Mini Player",
     "fullscreenOpen": "Full screen session",
     "fullscreenClose": "Leave full screen",
     "chain": "Signal chain",
@@ -38,6 +41,18 @@
     "thisBrowser": "This web browser",
     "handOver": "Play here instead",
     "playHere": "Play here"
+  },
+  "mini": {
+    "upNext": "UP NEXT",
+    "openLibrary": "Open Library",
+    "showControls": "Show more controls",
+    "hideControls": "Hide the extra controls"
+  },
+  "modes": {
+    "caption": "PLAYER MODE",
+    "compact": "Compact player",
+    "mini": "Mini player",
+    "unsupported": "Not in this browser"
   },
   "stage": {
     "label": "Full screen session",

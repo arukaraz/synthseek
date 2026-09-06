@@ -16,6 +16,9 @@
     "unmute": "Stummschaltung aufheben",
     "volume": "Lautstärke",
     "devices": "Geräte",
+    "modes": "Player-Modus",
+    "restoreMode": "Kompaktmodus verlassen",
+    "exitMini": "Mini-Player verlassen",
     "fullscreenOpen": "Vollbild-Sitzung",
     "fullscreenClose": "Vollbild verlassen",
     "chain": "Signalkette",
@@ -38,6 +41,18 @@
     "thisBrowser": "Dieser Webbrowser",
     "handOver": "Stattdessen hier abspielen",
     "playHere": "Hier abspielen"
+  },
+  "mini": {
+    "upNext": "ALS NÄCHSTES",
+    "openLibrary": "Bibliothek öffnen",
+    "showControls": "Mehr Steuerelemente zeigen",
+    "hideControls": "Zusätzliche Steuerelemente ausblenden"
+  },
+  "modes": {
+    "caption": "PLAYER-MODUS",
+    "compact": "Kompakter Player",
+    "mini": "Mini-Player",
+    "unsupported": "Nicht in diesem Browser"
   },
   "stage": {
     "label": "Vollbild-Sitzung",

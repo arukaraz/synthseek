@@ -4,7 +4,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { VOLUME_STEP } from "./constants";
-import { fractionFromPointer } from "./helpers";
+import { fractionFromPointer, labelled } from "./helpers";
 import { iconButton, volumeFill, volumeGroup, volumeHead, volumeRail, volumeTrack, volumeVars } from "./styles";
 import type { PlayerVolumeProps } from "./types";
 
@@ -18,7 +18,7 @@ export function PlayerVolume({ view, actions, size }: PlayerVolumeProps) {
         type="button"
         className={iconButton({ size: size === "stage" ? "stage" : undefined })}
         onClick={actions.toggleMute}
-        aria-label={view.muted ? t("controls.unmute") : t("controls.mute")}
+        {...labelled(view.muted ? t("controls.unmute") : t("controls.mute"))}
       >
         {view.muted ? <VolumeX className="size-3.5" /> : <Volume2 className="size-3.5" />}
       </button>

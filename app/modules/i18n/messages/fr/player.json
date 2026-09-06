@@ -16,6 +16,9 @@
     "unmute": "Rétablir le son",
     "volume": "Volume",
     "devices": "Appareils",
+    "modes": "Mode du lecteur",
+    "restoreMode": "Quitter le mode compact",
+    "exitMini": "Quitter le mini lecteur",
     "fullscreenOpen": "Session en plein écran",
     "fullscreenClose": "Quitter le plein écran",
     "chain": "Chaîne du signal",
@@ -38,6 +41,18 @@
     "thisBrowser": "Ce navigateur web",
     "handOver": "Lire ici plutôt",
     "playHere": "Lire ici"
+  },
+  "mini": {
+    "upNext": "À SUIVRE",
+    "openLibrary": "Ouvrir la bibliothèque",
+    "showControls": "Afficher plus de commandes",
+    "hideControls": "Masquer les commandes supplémentaires"
+  },
+  "modes": {
+    "caption": "MODE DU LECTEUR",
+    "compact": "Lecteur compact",
+    "mini": "Mini lecteur",
+    "unsupported": "Pas dans ce navigateur"
   },
   "stage": {
     "label": "Session en plein écran",

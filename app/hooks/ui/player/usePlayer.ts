@@ -89,6 +89,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
 
   useEffect(() => {
     actions.restoreVolume();
+    actions.restoreMode();
   }, []);
 
   const here: PlayerDevice = {
@@ -188,6 +189,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     toggleScrobbling,
     toggleMore: actions.toggleMore,
     toggleDevices: actions.toggleDevices,
+    toggleModes: actions.toggleModes,
+    selectMode: actions.selectMode,
     toggleFullscreen: actions.toggleFullscreen,
     toggleFavorite,
     handOverTo,
@@ -220,6 +223,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     chainVisible: session.chainVisible,
     moreOpen: session.moreOpen,
     devicesOpen: session.devicesOpen,
+    modesOpen: session.modesOpen,
+    mode: session.mode,
     lyricsOpen: session.lyricsOpen,
     lyrics: lyrics.data ?? null,
     lyricsLoading: lyrics.isLoading,

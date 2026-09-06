@@ -10,6 +10,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { PLAYER_HEADER_SLOT_ID } from "@components/Player";
+
 import { HeaderTab } from "../HeaderTab";
 import { AppLogo } from "../ui/AppLogo";
 import { UserAvatarMenu } from "../UserAvatarMenu";
@@ -144,6 +146,8 @@ export function TopHeader({ onSearch, initialQuery = "" }: TopHeaderProps) {
             </div>
           </motion.div>
         </form>
+
+        <div id={PLAYER_HEADER_SLOT_ID} className="hidden shrink-0 items-center empty:hidden sm:flex" />
 
         <div className="hidden shrink-0 items-center sm:flex">
           <UserAvatarMenu />

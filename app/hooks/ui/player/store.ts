@@ -1,13 +1,14 @@
 "use client";
 
-import { nextRepeat, shouldRestart } from "@components/Player";
-import type { PlayerNoticeTone, PlayerTrack } from "@components/Player";
+import { closeMiniWindow, nextRepeat, openMiniWindow, restorablePlayerMode, shouldRestart } from "@components/Player";
+import type { PlayerMode, PlayerNoticeTone, PlayerTrack } from "@components/Player";
 import { artworkProxySrc } from "@utils/artworkProxy";
 
 import {
   MAX_CONSECUTIVE_FAILURES,
   MIRROR_STALE_MS,
   MIRROR_TICK_MS,
+  MODE_STORAGE_KEY,
   SKIP_DELAY_MS,
   VOLUME_STORAGE_KEY,
 } from "./constants";
@@ -46,6 +47,8 @@ let state: PlayerSessionState = {
   chainVisible: false,
   moreOpen: false,
   devicesOpen: false,
+  modesOpen: false,
+  mode: "normal",
   lyricsOpen: false,
   fullscreen: false,
   consecutiveFailures: 0,
@@ -353,16 +356,31 @@ export const actions = {
     publish({ chainVisible: !state.chainVisible });
   },
   toggleMore(): void {
-    publish({ moreOpen: !state.moreOpen, devicesOpen: false });
+    publish({ moreOpen: !state.moreOpen, devicesOpen: false, modesOpen: false });
   },
   toggleDevices(): void {
-    publish({ devicesOpen: !state.devicesOpen, moreOpen: false });
+    publish({ devicesOpen: !state.devicesOpen, moreOpen: false, modesOpen: false });
+  },
+  toggleModes(): void {
+    publish({ modesOpen: !state.modesOpen, devicesOpen: false, moreOpen: false });
+  },
+  selectMode(mode: PlayerMode): void {
+    if (state.mode === "mini" && mode !== "mini") closeMiniWindow();
+    if (mode === "mini") {
+      void openMiniWindow(() => {
+        if (state.mode === "mini") actions.selectMode("normal");
+      }).then((opened) => {
+        if (!opened && state.mode === "mini") actions.selectMode("normal");
+      });
+    }
+    if (typeof window !== "undefined") window.localStorage.setItem(MODE_STORAGE_KEY, mode);
+    publish({ mode, modesOpen: false, moreOpen: false });
   },
   toggleFullscreen(): void {
-    publish({ fullscreen: !state.fullscreen, moreOpen: false, lyricsOpen: false });
+    publish({ fullscreen: !state.fullscreen, moreOpen: false, modesOpen: false, lyricsOpen: false });
   },
   openLyrics(): void {
-    publish({ fullscreen: true, lyricsOpen: true, moreOpen: false, devicesOpen: false });
+    publish({ fullscreen: true, lyricsOpen: true, moreOpen: false, devicesOpen: false, modesOpen: false });
   },
   toggleLyrics(): void {
     publish({ lyricsOpen: !state.lyricsOpen, devicesOpen: false });
@@ -456,6 +474,12 @@ export const actions = {
     if (!Number.isFinite(stored) || stored <= 0 || stored > 1) return;
     applyVolume(stored, state.muted);
     publish({ volume: stored });
+  },
+  restoreMode(): void {
+    if (typeof window === "undefined") return;
+    const stored = restorablePlayerMode(window.localStorage.getItem(MODE_STORAGE_KEY));
+    if (stored === null) return;
+    publish({ mode: stored });
   },
   artworkFor(track: PlayerTrack): string | null {
     return track.artworkUrl === null ? null : artworkProxySrc(track.artworkUrl);

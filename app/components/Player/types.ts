@@ -36,6 +36,8 @@ export interface PlayerTrack {
 
 export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";
 
+export type PlayerMode = "normal" | "compact" | "mini";
+
 export interface PlayerLyricsLine {
   start: number | null;
   value: string;
@@ -75,6 +77,8 @@ export interface PlayerView {
   scrobble: PlayerScrobbleState;
   scrobbleActionable: boolean;
   moreOpen: boolean;
+  modesOpen: boolean;
+  mode: PlayerMode;
   fullscreen: boolean;
 }
 
@@ -89,6 +93,8 @@ export interface PlayerActions {
   toggleShuffle: () => void;
   cycleRepeat: () => void;
   toggleDevices: () => void;
+  toggleModes: () => void;
+  selectMode: (mode: PlayerMode) => void;
   toggleMore: () => void;
   toggleChain: () => void;
   toggleLyrics: () => void;
@@ -105,12 +111,35 @@ export interface PlayerProps {
   actions: PlayerActions;
 }
 
+export interface PlayerBarProps extends PlayerProps {
+  placement?: "dock" | "header";
+}
+
 export interface PlayerDeviceBodyProps {
   device: PlayerDevice;
 }
 
 export interface PlayerPanelProps extends PlayerProps {
   chain: boolean;
+  anchored?: boolean;
+}
+
+export interface PanelAnchorPoint {
+  top: number;
+  left: number;
+}
+
+export interface PlayerPlacement {
+  target: HTMLElement | null;
+  effective: PlayerMode;
+}
+
+export interface PlayerTransportProps extends PlayerProps {
+  size: "bar" | "stage" | "mini";
+}
+
+export interface PlayerExtraControlsProps extends PlayerProps {
+  omitTransport?: boolean;
 }
 
 export interface PlayerWaveProps extends PlayerProps {

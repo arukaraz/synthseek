@@ -1,5 +1,21 @@
-import { LYRIC_BLUR_DISTANCE, LYRIC_FAR_DISTANCE, RESTART_THRESHOLD_SECONDS, WAVE } from "./constants";
-import type { PlayerLyrics, PlayerRepeat, PlayerView, WaveCanvas, WaveColors, WavePaint, WaveSurface } from "./types";
+import {
+  ALL_PLAYER_MODES,
+  LYRIC_BLUR_DISTANCE,
+  LYRIC_FAR_DISTANCE,
+  RESTART_THRESHOLD_SECONDS,
+  RESTORABLE_PLAYER_MODES,
+  WAVE,
+} from "./constants";
+import type {
+  PlayerLyrics,
+  PlayerMode,
+  PlayerRepeat,
+  PlayerView,
+  WaveCanvas,
+  WaveColors,
+  WavePaint,
+  WaveSurface,
+} from "./types";
 
 const TURN = Math.PI * 2;
 
@@ -240,7 +256,9 @@ export function fractionFromPointer(clientX: number, rect: DOMRect): number {
 
 export function returnFocusTo(selector: string): void {
   const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector));
-  candidates.find((candidate) => candidate.getClientRects().length > 0)?.focus();
+  candidates
+    .find((candidate) => candidate.getClientRects().length > 0 && getComputedStyle(candidate).visibility !== "hidden")
+    ?.focus();
 }
 
 export function lyricLineState(
@@ -265,6 +283,20 @@ export function activeLyricIndex(lyrics: PlayerLyrics | null, positionSeconds: n
 
 export function emptyReason(view: Pick<PlayerView, "lyricsLoading" | "lyricsFailure">): "loading" | "empty" {
   return view.lyricsLoading ? "loading" : "empty";
+}
+
+export function labelled(label: string): { "aria-label": string; title: string } {
+  return { "aria-label": label, title: label };
+}
+
+export function effectivePlayerMode(mode: PlayerMode, target: HTMLElement | null): PlayerMode {
+  return target === null ? "normal" : mode;
+}
+
+export function restorablePlayerMode(value: string | null): PlayerMode | null {
+  const known = ALL_PLAYER_MODES.find((mode) => mode === value);
+  if (known === undefined || !RESTORABLE_PLAYER_MODES.includes(known)) return null;
+  return known;
 }
 
 export function lyricDepth(active: number | null, index: number): "near" | "mid" | "far" {

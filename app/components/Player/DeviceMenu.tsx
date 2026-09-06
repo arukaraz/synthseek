@@ -9,11 +9,13 @@ import { playerPanel } from "@utils/animations";
 import { DeviceBody } from "./DeviceBody";
 import { DEVICES_TOGGLE_SELECTOR } from "./constants";
 import { returnFocusTo } from "./helpers";
-import { deviceCaption, deviceList, deviceRow, panelAnchor, panelSurface } from "./styles";
+import { anchorVars, deviceCaption, deviceList, deviceRow, panelAnchor, panelSurface } from "./styles";
+import { useAnchorRect } from "./useAnchorRect";
 import type { PlayerPanelProps } from "./types";
 
-export function DeviceMenu({ view, actions, chain }: PlayerPanelProps) {
+export function DeviceMenu({ view, actions, chain, anchored = false }: PlayerPanelProps) {
   const { t } = useTranslation("player");
+  const point = useAnchorRect(DEVICES_TOGGLE_SELECTOR, anchored);
 
   return (
     <Dialog
@@ -23,7 +25,8 @@ export function DeviceMenu({ view, actions, chain }: PlayerPanelProps) {
       }}
     >
       <DialogSurface
-        className={panelAnchor({ width: "devices", chain })}
+        className={panelAnchor({ width: "devices", chain, anchored: anchored && point !== null })}
+        style={anchorVars(point)}
         aria-describedby={undefined}
         onInteractOutside={(event) => {
           if (event.target instanceof Element && event.target.closest(DEVICES_TOGGLE_SELECTOR) !== null) {
@@ -35,7 +38,13 @@ export function DeviceMenu({ view, actions, chain }: PlayerPanelProps) {
           returnFocusTo(DEVICES_TOGGLE_SELECTOR);
         }}
       >
-        <motion.div className={panelSurface()} variants={playerPanel} initial="hidden" animate="visible" exit="exit">
+        <motion.div
+          className={panelSurface({ anchored: anchored && point !== null })}
+          variants={playerPanel}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
           <div className={deviceList()}>
             <DialogTitle asChild>
               <span className={deviceCaption()}>{t("devices.caption")}</span>

@@ -1,29 +1,15 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Info,
-  Loader2,
-  Maximize,
-  MonitorSpeaker,
-  Pause,
-  Play,
-  Repeat,
-  Repeat1,
-  Shuffle,
-  SkipBack,
-  SkipForward,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Info, Maximize, MonitorSpeaker } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { FavouriteButton } from "./FavouriteButton";
 import { PlayerExtraControls } from "./PlayerExtraControls";
-import { PlayerVolume } from "./PlayerVolume";
+import { PlayerTransport } from "./PlayerTransport";
 import { PlayerWave } from "./PlayerWave";
 import { TrackCover } from "./TrackCover";
-import { formatClock, percentOf, trackInitials } from "./helpers";
+import { formatClock, labelled, percentOf, trackInitials } from "./helpers";
 import {
   bar,
   barTop,
@@ -47,17 +33,16 @@ import {
   barTransport,
   clock,
   iconButton,
-  playButton,
   progressVars,
 } from "./styles";
-import type { PlayerProps } from "./types";
+import type { PlayerBarProps } from "./types";
 
-export function PlayerBar({ view, actions }: PlayerProps) {
+export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps) {
   const { t } = useTranslation("player");
   const progress = percentOf(view.positionSeconds, view.track.durationSeconds);
 
   return (
-    <div className={bar()}>
+    <div className={bar({ placement })}>
       <div className={barMobileProgress()} style={progressVars(progress)}>
         <div className={barMobileProgressFill()} />
       </div>
@@ -68,7 +53,7 @@ export function PlayerBar({ view, actions }: PlayerProps) {
             type="button"
             className={barCoverButton()}
             onClick={actions.toggleFullscreen}
-            aria-label={t("controls.openTrack")}
+            {...labelled(t("controls.openTrack"))}
           >
             <TrackCover
               initials={trackInitials(view.track.album)}
@@ -86,17 +71,19 @@ export function PlayerBar({ view, actions }: PlayerProps) {
                   <span className={barTitleArtist()}> · {view.track.artist}</span>
                 </span>
               </button>
-              <button
-                type="button"
-                className={iconButton({ tone: view.chainVisible ? "remote" : "muted", size: "inline" })}
-                onClick={actions.toggleChain}
-                aria-label={t("controls.chain")}
-                aria-pressed={view.chainVisible}
-              >
-                <Info className="size-3.5" />
-              </button>
+              {placement === "dock" ? (
+                <button
+                  type="button"
+                  className={iconButton({ tone: view.chainVisible ? "remote" : "muted", size: "inline" })}
+                  onClick={actions.toggleChain}
+                  {...labelled(t("controls.chain"))}
+                  aria-pressed={view.chainVisible}
+                >
+                  <Info className="size-3.5" />
+                </button>
+              ) : null}
             </span>
-            <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "sm:hidden")}>
+            <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "@player:hidden")}>
               {view.track.artist} · {view.track.album}
             </span>
             <span className={barDeviceLine({ remote: !view.activeDevice.local })}>
@@ -104,11 +91,12 @@ export function PlayerBar({ view, actions }: PlayerProps) {
               {view.activeDevice.name}
             </span>
           </span>
+          <FavouriteButton view={view} actions={actions} className="@player:grid hidden" />
           <button
             type="button"
-            className={cn(iconButton({ tone: view.moreOpen ? "active" : "muted" }), "sm:hidden")}
+            className={cn(iconButton({ tone: view.moreOpen ? "active" : "muted" }), "@player:hidden")}
             onClick={actions.toggleMore}
-            aria-label={t("controls.more")}
+            {...labelled(t("controls.more"))}
             aria-expanded={view.moreOpen}
           >
             {view.moreOpen ? <ChevronLeft className="size-4" /> : <ChevronRight className="size-4" />}
@@ -119,66 +107,19 @@ export function PlayerBar({ view, actions }: PlayerProps) {
         </div>
 
         <div className={barTransport({ folded: view.moreOpen })}>
-          <FavouriteButton view={view} actions={actions} className="sm:hidden" />
-          <button
-            type="button"
-            className={cn(iconButton({ tone: view.shuffle ? "active" : "muted" }), "hidden sm:grid")}
-            onClick={actions.toggleShuffle}
-            aria-label={t("controls.shuffle")}
-            aria-pressed={view.shuffle}
-          >
-            <Shuffle className="size-3.5" />
-          </button>
-          <button
-            type="button"
-            className={cn(iconButton({ size: "transport" }), "hidden sm:grid")}
-            onClick={actions.previous}
-            aria-label={t("controls.previous")}
-          >
-            <SkipBack className="size-4 fill-current" />
-          </button>
-          <button
-            type="button"
-            className={playButton({ size: "bar" })}
-            onClick={actions.togglePlay}
-            aria-label={view.playing ? t("controls.pause") : t("controls.play")}
-          >
-            {view.loading ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : view.playing ? (
-              <Pause className="size-3.5 fill-current" />
-            ) : (
-              <Play className="size-3.5 fill-current" />
-            )}
-          </button>
-          <button
-            type="button"
-            className={iconButton({ size: "transport" })}
-            onClick={actions.next}
-            aria-label={t("controls.next")}
-          >
-            <SkipForward className="size-4 fill-current" />
-          </button>
-          <button
-            type="button"
-            className={cn(iconButton({ tone: view.repeat === "off" ? "muted" : "active" }), "hidden sm:grid")}
-            onClick={actions.cycleRepeat}
-            aria-label={t(`controls.repeat.${view.repeat}`)}
-          >
-            {view.repeat === "one" ? <Repeat1 className="size-3.5" /> : <Repeat className="size-3.5" />}
-          </button>
+          <FavouriteButton view={view} actions={actions} className="@player:hidden" />
+          <PlayerTransport view={view} actions={actions} size="bar" />
         </div>
 
         <div className={barExtras()}>
-          <PlayerVolume view={view} actions={actions} size="bar" />
           <div className={barDesktopExtras()}>
             <PlayerExtraControls view={view} actions={actions} />
           </div>
           <button
             type="button"
-            className={cn(iconButton(), "hidden sm:grid")}
+            className={cn(iconButton(), "@player:grid hidden")}
             onClick={actions.toggleFullscreen}
-            aria-label={t("controls.fullscreenOpen")}
+            {...labelled(t("controls.fullscreenOpen"))}
             data-player-fullscreen-toggle
           >
             <Maximize className="size-4" />

@@ -1,3 +1,7 @@
+import { LayoutTemplate, Monitor, PanelBottom, PanelTop, PictureInPicture2, Smartphone, Tablet } from "lucide-react";
+
+import type { PlayerMode } from "./types";
+
 export const WAVE = {
   LOBES: [
     { amplitude: 1, frequency: 1.5, speed: 1 },
@@ -65,7 +69,104 @@ export const RESTART_THRESHOLD_SECONDS = 3;
 
 export const DEVICES_TOGGLE_SELECTOR = "[data-player-devices-toggle]";
 
+export const MODES_TOGGLE_SELECTOR = "[data-player-modes-toggle]";
+
 export const FULLSCREEN_TOGGLE_SELECTOR = "[data-player-fullscreen-toggle]";
+
+export const SELECTABLE_PLAYER_MODES = ["compact", "mini"] as const;
+
+export const RESTORABLE_PLAYER_MODES: readonly PlayerMode[] = ["normal", "compact"];
+
+export const ALL_PLAYER_MODES: readonly [PlayerMode, PlayerMode, PlayerMode] = ["normal", "compact", "mini"];
+
+export const MODE_ICONS = { compact: PanelTop, mini: PictureInPicture2 } as const;
+
+export const MODE_MENU_ICON = LayoutTemplate;
+
+export const RESTORE_MODE_ICON = PanelBottom;
+
+export const DEVICE_ICONS = { computer: Monitor, phone: Smartphone, tablet: Tablet } as const;
+
+export const PLAYER_HEADER_SLOT_ID = "player-header-slot";
+
+export const PLAYER_MODE_ATTRIBUTE = "data-player-mode";
+
+export const PLAYER_CONTAINER_REM = 40;
+
+export const MINI_WINDOW_WIDTH_PX = 400;
+
+export const MINI_HEADER_HEIGHT_PX = 58;
+
+export const MINI_TRANSPORT_HEIGHT_PX = 56;
+
+export const MINI_PROGRESS_HEIGHT_PX = 38;
+
+export const MINI_CHEVRON_HEIGHT_PX = 26;
+
+export const MINI_EXTRAS_HEIGHT_PX = 44;
+
+export const MINI_LIST_CAPTION_HEIGHT_PX = 30;
+
+export const MINI_LIST_ROW_HEIGHT_PX = 56;
+
+export const MINI_FOOTER_HEIGHT_PX = 60;
+
+export const MINI_LIST_ROWS_AT_OPEN = 3;
+
+export const MINI_COLLAPSED_HEIGHT_PX =
+  MINI_HEADER_HEIGHT_PX + MINI_TRANSPORT_HEIGHT_PX + MINI_PROGRESS_HEIGHT_PX + MINI_CHEVRON_HEIGHT_PX;
+
+export const MINI_WINDOW_HEIGHT_PX =
+  MINI_COLLAPSED_HEIGHT_PX +
+  MINI_LIST_CAPTION_HEIGHT_PX +
+  MINI_LIST_ROW_HEIGHT_PX * MINI_LIST_ROWS_AT_OPEN +
+  MINI_FOOTER_HEIGHT_PX;
+
+export const MINI_PLACEHOLDER_ROWS = 6;
+
+export const APP_TITLE = "Synthseek";
+
+export const MINI_QUEUE_ROUTE = "/library";
+
+export const TRANSPORT_METRICS = {
+  bar: {
+    side: undefined,
+    skip: "transport",
+    play: "bar",
+    mark: "size-3.5",
+    arrow: "size-4",
+    face: "size-3.5",
+    folds: "@player:grid hidden",
+  },
+  stage: {
+    side: "stage",
+    skip: "stage",
+    play: "stage",
+    mark: "size-4",
+    arrow: "size-5",
+    face: "size-4.5",
+    folds: undefined,
+  },
+  mini: {
+    side: undefined,
+    skip: "transport",
+    play: "bar",
+    mark: "size-3.5",
+    arrow: "size-4",
+    face: "size-3.5",
+    folds: undefined,
+  },
+} as const;
+
+export const MIRRORED_ROOT_ATTRIBUTES = ["data-theme", "lang"] as const;
+
+export const PANEL_WIDTH_PX = 306;
+
+export const PANEL_ANCHOR_GAP_PX = 10;
+
+export const PANEL_VIEWPORT_MARGIN_PX = 12;
+
+export const HEADER_SLOT_QUERY = `(min-width: ${PLAYER_CONTAINER_REM}rem)`;
 
 export const LYRIC_SCROLL_SPRING = { type: "spring", stiffness: 110, damping: 24, mass: 0.7 } as const;
 

@@ -56,7 +56,7 @@ export const LISTEN_MAX_SECONDS = 240;
 
 export const LISTEN_FRACTION = 0.5;
 
-export const APP_TITLE = "Synthseek";
+export const MODE_STORAGE_KEY = "synthseek.player.mode";
 
 export const WAVE_FFT_SIZE = 2048;
 

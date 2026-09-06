@@ -1,14 +1,11 @@
 "use client";
 
-import { Monitor, Smartphone, Tablet } from "lucide-react";
-
+import { DEVICE_ICONS } from "./constants";
 import { deviceIcon, deviceName } from "./styles";
 import type { PlayerDeviceBodyProps } from "./types";
 
-const ICONS = { computer: Monitor, phone: Smartphone, tablet: Tablet };
-
 export function DeviceBody({ device }: PlayerDeviceBodyProps) {
-  const Icon = ICONS[device.kind];
+  const Icon = DEVICE_ICONS[device.kind];
 
   return (
     <>

@@ -1,36 +1,23 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import {
-  Heart,
-  Mic2,
-  MonitorSpeaker,
-  Loader2,
-  Minimize,
-  Pause,
-  Play,
-  Repeat,
-  Repeat1,
-  Shuffle,
-  SkipBack,
-  SkipForward,
-} from "lucide-react";
+import { Heart, Mic2, MonitorSpeaker, Minimize } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
 import { stageFlip as stageFlipVariants, stageFade } from "@utils/animations";
 
 import { PlayerLyrics } from "./PlayerLyrics";
+import { PlayerTransport } from "./PlayerTransport";
 import { PlayerVolume } from "./PlayerVolume";
 import { PlayerWave } from "./PlayerWave";
 import { ScrobbleStatus } from "./ScrobbleStatus";
 import { TrackCover } from "./TrackCover";
 import { FULLSCREEN_TOGGLE_SELECTOR } from "./constants";
-import { formatClock, returnFocusTo, trackInitials } from "./helpers";
+import { formatClock, labelled, returnFocusTo, trackInitials } from "./helpers";
 import {
   clock,
   iconButton,
-  playButton,
   stage,
   stageActions,
   stageAlbum,
@@ -84,7 +71,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
             type="button"
             className={iconButton()}
             onClick={actions.toggleFullscreen}
-            aria-label={t("controls.fullscreenClose")}
+            {...labelled(t("controls.fullscreenClose"))}
           >
             <Minimize className="size-4" />
           </button>
@@ -146,7 +133,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                         type="button"
                         className={iconButton({ tone: view.favorite ? "favorite" : "muted", size: "stage" })}
                         onClick={actions.toggleFavorite}
-                        aria-label={view.favorite ? t("controls.unfavorite") : t("controls.favorite")}
+                        {...labelled(view.favorite ? t("controls.unfavorite") : t("controls.favorite"))}
                         aria-pressed={view.favorite}
                       >
                         <Heart className={view.favorite ? "size-4 fill-current" : "size-4"} />
@@ -161,7 +148,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                         type="button"
                         className={iconButton({ tone: view.lyricsOpen ? "active" : "muted", size: "stage" })}
                         onClick={actions.toggleLyrics}
-                        aria-label={t("controls.lyrics")}
+                        {...labelled(t("controls.lyrics"))}
                         aria-pressed={view.lyricsOpen}
                       >
                         <Mic2 className="size-4" />
@@ -170,7 +157,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                         type="button"
                         className={iconButton({ tone: view.activeDevice.local ? "muted" : "remote", size: "stage" })}
                         onClick={actions.toggleDevices}
-                        aria-label={t("controls.devices")}
+                        {...labelled(t("controls.devices"))}
                         aria-expanded={view.devicesOpen}
                         data-player-devices-toggle
                       >
@@ -186,53 +173,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
 
         <div className={stageFooter()}>
           <div className={stageTransport()}>
-            <button
-              type="button"
-              className={iconButton({ tone: view.shuffle ? "active" : "muted", size: "stage" })}
-              onClick={actions.toggleShuffle}
-              aria-label={t("controls.shuffle")}
-              aria-pressed={view.shuffle}
-            >
-              <Shuffle className="size-4" />
-            </button>
-            <button
-              type="button"
-              className={iconButton({ size: "stage" })}
-              onClick={actions.previous}
-              aria-label={t("controls.previous")}
-            >
-              <SkipBack className="size-5 fill-current" />
-            </button>
-            <button
-              type="button"
-              className={playButton({ size: "stage" })}
-              onClick={actions.togglePlay}
-              aria-label={view.playing ? t("controls.pause") : t("controls.play")}
-            >
-              {view.loading ? (
-                <Loader2 className="size-5 animate-spin" />
-              ) : view.playing ? (
-                <Pause className="size-4.5 fill-current" />
-              ) : (
-                <Play className="size-4.5 fill-current" />
-              )}
-            </button>
-            <button
-              type="button"
-              className={iconButton({ size: "stage" })}
-              onClick={actions.next}
-              aria-label={t("controls.next")}
-            >
-              <SkipForward className="size-5 fill-current" />
-            </button>
-            <button
-              type="button"
-              className={iconButton({ tone: view.repeat === "off" ? "muted" : "active", size: "stage" })}
-              onClick={actions.cycleRepeat}
-              aria-label={t(`controls.repeat.${view.repeat}`)}
-            >
-              {view.repeat === "one" ? <Repeat1 className="size-4" /> : <Repeat className="size-4" />}
-            </button>
+            <PlayerTransport view={view} actions={actions} size="stage" />
           </div>
           <div className={stageScrubRow()}>
             <span className={clock({ size: "stage", align: "right" })}>{formatClock(view.positionSeconds)}</span>

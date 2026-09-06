@@ -19,6 +19,17 @@
     }
   }
 
+  [data-player-mode="compact"] .player-metrics,
+  [data-player-mode="mini"] .player-metrics {
+    --player-bar-height: 4rem;
+    --player-dock-height: 0rem;
+  }
+
+  [data-player-mode="compact"] .player-panel-anchor {
+    top: var(--height-header-wide);
+    bottom: auto;
+  }
+
   .player-metrics-chain {
     --player-dock-height: calc(var(--player-bar-height) + 1.875rem);
   }

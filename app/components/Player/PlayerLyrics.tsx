@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { LYRIC_SCROLL_SPRING } from "./constants";
-import { activeLyricIndex, emptyReason, lyricDepth, lyricLineState } from "./helpers";
+import { activeLyricIndex, emptyReason, labelled, lyricDepth, lyricLineState } from "./helpers";
 import { iconButton, lyricsBody, lyricsEmpty, lyricsLine, lyricsPane, lyricsScroll, lyricsUntimed } from "./styles";
 import type { PlayerLyricsProps } from "./types";
 
@@ -87,7 +87,7 @@ export function PlayerLyrics({ view, actions }: PlayerLyricsProps) {
         type="button"
         className={iconButton({ size: "stage" })}
         onClick={actions.toggleLyrics}
-        aria-label={t("controls.lyricsClose")}
+        {...labelled(t("controls.lyricsClose"))}
       >
         <X className="size-4" />
       </button>

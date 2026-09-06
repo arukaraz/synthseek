@@ -16,6 +16,9 @@
     "unmute": "Quitar el silencio",
     "volume": "Volumen",
     "devices": "Dispositivos",
+    "modes": "Modo del reproductor",
+    "restoreMode": "Salir del modo compacto",
+    "exitMini": "Salir del mini reproductor",
     "fullscreenOpen": "Sesión a pantalla completa",
     "fullscreenClose": "Salir de pantalla completa",
     "chain": "Cadena de señal",
@@ -38,6 +41,18 @@
     "thisBrowser": "Este navegador web",
     "handOver": "Reproducir aquí",
     "playHere": "Reproducir aquí"
+  },
+  "mini": {
+    "upNext": "A CONTINUACIÓN",
+    "openLibrary": "Abrir la biblioteca",
+    "showControls": "Mostrar más controles",
+    "hideControls": "Ocultar los controles extra"
+  },
+  "modes": {
+    "caption": "MODO DEL REPRODUCTOR",
+    "compact": "Reproductor compacto",
+    "mini": "Mini reproductor",
+    "unsupported": "No en este navegador"
   },
   "stage": {
     "label": "Sesión a pantalla completa",

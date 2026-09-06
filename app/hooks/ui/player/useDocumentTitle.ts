@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { APP_TITLE } from "./constants";
+import { APP_TITLE } from "@components/Player";
 
 export function usePlayerDocumentTitle(nowPlaying: string | null): void {
   useEffect(() => {

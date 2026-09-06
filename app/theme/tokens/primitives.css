@@ -63,12 +63,17 @@
   --color-plex-400: var(--color-plex-400);
   --color-plex-500: var(--color-plex-500);
 
-  --height-screen-minus-header: calc(100vh - 5rem);
+  --height-header-wide: 5rem;
+  --height-screen-minus-header: calc(100vh - var(--height-header-wide));
   --height-bottom-nav: calc(4rem + env(safe-area-inset-bottom));
   --height-screen-minus-header-and-nav: calc(100vh - 4rem - var(--height-bottom-nav));
   --height-modal-max: 90vh;
   --width-sidebar: 28rem;
   --width-dropdown-min: 8rem;
+
+  --container-player: 40rem;
+  --container-player-wide: 80rem;
+  --width-player-compact: 26rem;
 
   --backdrop-blur-glass: 10px;
   --backdrop-blur-glass-lg: 20px;

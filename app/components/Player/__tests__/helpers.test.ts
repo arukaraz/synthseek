@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  effectivePlayerMode,
   followed,
   formatClock,
   fractionFromPointer,
   lyricDepth,
   nextRepeat,
   percentOf,
+  restorablePlayerMode,
   secondsFromPointer,
   shouldRestart,
   softLimit,
@@ -18,6 +20,37 @@ import {
 function rect(left: number, width: number): DOMRect {
   return { left, width, top: 0, right: left + width, bottom: 0, height: 0, x: left, y: 0, toJSON: () => ({}) };
 }
+
+describe("effectivePlayerMode", () => {
+  const node = document.createElement("div");
+
+  it("keeps the chosen mode once its surface exists", () => {
+    expect(effectivePlayerMode("compact", node)).toBe("compact");
+    expect(effectivePlayerMode("mini", node)).toBe("mini");
+  });
+
+  it("falls back to normal when the surface is missing, so the dock and the CSS agree", () => {
+    expect(effectivePlayerMode("compact", null)).toBe("normal");
+    expect(effectivePlayerMode("mini", null)).toBe("normal");
+  });
+});
+
+describe("restorablePlayerMode", () => {
+  it("accepts the modes a reload can put back on its own", () => {
+    expect(restorablePlayerMode("normal")).toBe("normal");
+    expect(restorablePlayerMode("compact")).toBe("compact");
+  });
+
+  it("refuses mini, whose window needs a user gesture no reload can supply", () => {
+    expect(restorablePlayerMode("mini")).toBeNull();
+  });
+
+  it("refuses a value that is not a mode at all", () => {
+    expect(restorablePlayerMode("COMPACT")).toBeNull();
+    expect(restorablePlayerMode("")).toBeNull();
+    expect(restorablePlayerMode(null)).toBeNull();
+  });
+});
 
 describe("formatClock", () => {
   it("pads the seconds below ten", () => {
