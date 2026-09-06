@@ -58,24 +58,24 @@ export const LISTEN_FRACTION = 0.5;
 
 export const APP_TITLE = "Synthseek";
 
-export const WAVE_FFT_SIZE = 256;
+export const WAVE_FFT_SIZE = 2048;
 
-export const WAVE_ENERGY_INTERVAL_MS = 70;
+export const WAVE_BASS_LOW_HZ = 20;
+
+export const WAVE_BASS_HIGH_HZ = 160;
+
+export const WAVE_ENERGY_INTERVAL_MS = 40;
 
 export const WAVE_ANALYSER_SMOOTHING = 0.12;
 
-export const WAVE_ENERGY_FLOOR = 0.6;
+export const WAVE_ENERGY_FLOOR = 0.3;
 
-export const WAVE_ENERGY_CEILING = 1.34;
+export const WAVE_ENERGY_CEILING = 1.5;
 
-export const WAVE_ENERGY_CURVE = 0.75;
+export const WAVE_ENERGY_CURVE = 2.2;
 
-export const WAVE_ENERGY_PEAK_DECAY = 0.992;
+export const WAVE_ENERGY_PEAK_DECAY = 0.966;
 
 export const WAVE_ENERGY_SILENCE = 0.01;
 
 export const WAVE_ENERGY_SMOOTHING = 0.55;
-
-export const WAVE_ENERGY_SELECTOR = "[data-player-wave]";
-
-export const WAVE_ENERGY_VARIABLE = "--player-energy";

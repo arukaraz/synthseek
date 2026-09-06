@@ -1,80 +1,10 @@
 @layer utilities {
-  @keyframes player-lobe-a {
-    from {
-      transform: translateX(-2.5%) scaleY(0.7);
-    }
-    to {
-      transform: translateX(2.5%) scaleY(1.12);
-    }
-  }
-
-  @keyframes player-lobe-b {
-    from {
-      transform: translateX(4%) scaleY(1.08);
-    }
-    to {
-      transform: translateX(-4%) scaleY(0.66);
-    }
-  }
-
-  @keyframes player-lobe-c {
-    from {
-      transform: translateX(-5%) scaleY(0.8);
-    }
-    to {
-      transform: translateX(5%) scaleY(1.18);
-    }
-  }
-
-  .player-lobe {
-    transform-origin: 50% 50%;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    animation-play-state: var(--player-wave-state, paused);
-  }
-
-  .player-lobe-a {
-    animation-name: player-lobe-a;
-    animation-duration: 1.5s;
-  }
-
-  .player-lobe-b {
-    animation-name: player-lobe-b;
-    animation-duration: 1.9s;
-  }
-
-  .player-lobe-c {
-    animation-name: player-lobe-c;
-    animation-duration: 2.4s;
-  }
-
   .player-scroll-fade {
     mask-image: linear-gradient(to right, transparent 0, black 10px, black calc(100% - 10px), transparent 100%);
   }
 
   .player-lyrics-fade {
     mask-image: linear-gradient(to bottom, transparent 0, black 12%, black 84%, transparent 100%);
-  }
-
-  .player-wave-energy {
-    transform: scaleY(var(--player-energy, 1));
-    transform-origin: center;
-    transition: transform 90ms linear;
-  }
-
-  .player-wave-played {
-    clip-path: inset(0 calc(100% - var(--player-progress, 0%)) 0 0);
-    transition: clip-path var(--player-progress-ease, 260ms) linear;
-  }
-
-  .player-wave-head {
-    left: var(--player-progress, 0%);
-    transition: left var(--player-progress-ease, 260ms) linear;
-  }
-
-  .player-wave-scrub {
-    left: var(--player-scrub, 0%);
   }
 
   .player-metrics {
@@ -84,8 +14,8 @@
 
   @media (min-width: 40rem) {
     .player-metrics {
-      --player-bar-height: 5.25rem;
-      --player-dock-height: 5.25rem;
+      --player-bar-height: 7.5rem;
+      --player-dock-height: 7.5rem;
     }
   }
 
@@ -95,7 +25,7 @@
 
   .player-bar-progress {
     width: var(--player-progress, 0%);
-    transition: width var(--player-progress-ease, 260ms) linear;
+    transition: width 260ms linear;
   }
 
   .player-volume-fill {
@@ -107,20 +37,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .player-lobe {
-      animation: none;
-      transform: scaleY(0.85);
-    }
-
-    .player-wave-played,
-    .player-wave-head,
-    .player-bar-progress,
-    .player-wave-energy {
+    .player-bar-progress {
       transition: none;
-    }
-
-    .player-wave-energy {
-      transform: none;
     }
 
     .player-lyric-line {

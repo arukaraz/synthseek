@@ -117,6 +117,81 @@ export interface PlayerWaveProps extends PlayerProps {
   size: "bar" | "stage";
 }
 
+export interface WaveGradient {
+  addColorStop(offset: number, color: string): void;
+}
+
+export interface WavePattern {
+  setTransform(transform?: DOMMatrix2DInit): void;
+}
+
+export type WaveStyle = string | WaveGradient | WavePattern;
+
+export interface WaveCanvas {
+  width: number;
+  height: number;
+  getContext(contextId: "2d"): WaveSurface | null;
+}
+
+export interface WaveSurface {
+  fillStyle: WaveStyle;
+  strokeStyle: WaveStyle;
+  shadowColor: string;
+  shadowBlur: number;
+  globalAlpha: number;
+  lineWidth: number;
+  font: string;
+  textBaseline: string;
+  textAlign: string;
+  globalCompositeOperation: string;
+  save(): void;
+  restore(): void;
+  setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+  clearRect(x: number, y: number, width: number, height: number): void;
+  fillRect(x: number, y: number, width: number, height: number): void;
+  beginPath(): void;
+  moveTo(x: number, y: number): void;
+  lineTo(x: number, y: number): void;
+  arc(x: number, y: number, radius: number, start: number, end: number): void;
+  roundRect(x: number, y: number, width: number, height: number, radii: number): void;
+  stroke(): void;
+  fill(): void;
+  fillText(text: string, x: number, y: number): void;
+  measureText(text: string): { width: number };
+  createLinearGradient(x0: number, y0: number, x1: number, y1: number): WaveGradient;
+  drawImage(image: WaveCanvas | CanvasImageSource, x: number, y: number, width: number, height: number): void;
+  setLineDash(segments: number[]): void;
+}
+
+export interface WaveColors {
+  lobes: readonly string[];
+  primary: string;
+  foreground: string;
+  surface: string;
+  primaryForeground: string;
+  mono: string;
+}
+
+export interface WaveSnapshot {
+  phase: number;
+  progress: number;
+  origin: number | null;
+  hover: number | null;
+  dragging: boolean;
+  playing: boolean;
+  loading: boolean;
+  label: string;
+}
+
+export interface WavePaint extends WaveSnapshot {
+  width: number;
+  height: number;
+  ratio: number;
+  time: number;
+  energy: number;
+  colors: WaveColors;
+}
+
 export interface PlayerVolumeProps extends PlayerProps {
   size: "bar" | "stage";
 }

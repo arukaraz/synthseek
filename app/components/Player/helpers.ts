@@ -1,104 +1,192 @@
-import {
-  LYRIC_BLUR_DISTANCE,
-  LYRIC_FAR_DISTANCE,
-  RESTART_THRESHOLD_SECONDS,
-  WAVE,
-  WAVE_CACHE_LIMIT,
-} from "./constants";
-import type { PlayerLyrics, PlayerRepeat, PlayerView } from "./types";
+import { LYRIC_BLUR_DISTANCE, LYRIC_FAR_DISTANCE, RESTART_THRESHOLD_SECONDS, WAVE } from "./constants";
+import type { PlayerLyrics, PlayerRepeat, PlayerView, WaveCanvas, WaveColors, WavePaint, WaveSurface } from "./types";
 
-interface WavePoint {
-  x: number;
-  y: number;
-}
+const TURN = Math.PI * 2;
 
-const pathCache = new Map<string, readonly string[]>();
+const COLOR_TOKENS = [
+  "var(--color-primary-400)",
+  "var(--color-secondary-400)",
+  "var(--color-accent-400)",
+  "var(--color-fg)",
+  "var(--color-surface-overlay)",
+  "var(--color-primary-foreground)",
+] as const;
 
-function seedFromId(id: string): number {
+export function wavePhase(trackId: string): number {
   let hash = 0;
-  for (let index = 0; index < id.length; index += 1) {
-    hash = (hash * 31 + id.charCodeAt(index)) % 100003;
+  for (let index = 0; index < trackId.length; index += 1) {
+    hash = (hash * 31 + trackId.charCodeAt(index)) % 100003;
   }
-  return hash;
+  return (hash / 100003) * TURN;
 }
 
-function bell(progress: number, center: number, width: number): number {
-  return Math.exp(-Math.pow(progress - center, 2) / (2 * Math.pow(width, 2)));
+export function waveEnvelope(x: number, width: number): number {
+  if (width <= 0) return 0;
+  return Math.pow(Math.cos((((x / width) * 2 - 1) * Math.PI) / 2), WAVE.ENVELOPE_EXPONENT);
 }
 
-function amplitudeAt(progress: number, phase: number, center: number): number {
-  const taper = Math.pow(Math.sin(Math.PI * progress), WAVE.TAPER_EXPONENT);
-  const main = bell(progress, center, WAVE.BULGE_WIDTH);
-  const echo = 0.62 * bell(progress, Math.min(0.9, 1.08 - center), WAVE.BULGE_WIDTH * 0.85);
-  const ripple = Math.sin(progress * 11.3 + phase) * 0.62 + Math.sin(progress * 19.7 + phase * 1.7) * 0.38;
-  return taper * (main + echo + WAVE.RIPPLE_SHARE * Math.abs(ripple));
+export function softLimit(value: number, limit: number): number {
+  if (limit <= 0) return 0;
+  const bend = limit * WAVE.LIMIT_KNEE;
+  if (value <= bend) return value;
+  const room = limit - bend;
+  return bend + room * (1 - Math.exp(-(value - bend) / room));
 }
 
-function lobePath(seed: number, lobe: number): string {
-  const peak = WAVE.LOBE_AMPLITUDES[lobe] ?? WAVE.LOBE_AMPLITUDES[0];
-  const phase = seed * 0.09 + (WAVE.LOBE_PHASES[lobe] ?? 0);
-  const drift = ((seed % 17) / 17 - 0.5) * 0.18;
-  const center = Math.min(0.82, Math.max(0.18, (WAVE.LOBE_CENTERS[lobe] ?? 0.5) + drift));
-  const step = WAVE.VIEWBOX_WIDTH / WAVE.SEGMENTS;
-  const raw: number[] = [];
+export function followed(current: number, target: number, elapsedMs: number, timeConstantMs: number): number {
+  if (elapsedMs <= 0) return current;
+  return current + (target - current) * (1 - Math.exp(-elapsedMs / timeConstantMs));
+}
 
-  for (let index = 0; index <= WAVE.SEGMENTS; index += 1) {
-    raw.push(amplitudeAt(index / WAVE.SEGMENTS, phase, center));
+export function waveColors(host: HTMLElement): WaveColors {
+  const probe = document.createElement("span");
+  probe.style.setProperty("position", "absolute");
+  probe.style.setProperty("opacity", "0");
+  probe.style.setProperty("pointer-events", "none");
+  probe.style.setProperty("font-family", "var(--font-mono)");
+  host.appendChild(probe);
+  const resolved = COLOR_TOKENS.map((token) => {
+    probe.style.setProperty("color", token);
+    return window.getComputedStyle(probe).color;
+  });
+  const mono = window.getComputedStyle(probe).fontFamily;
+  probe.remove();
+  const [primary = "", secondary = "", accent = "", foreground = "", surface = "", primaryForeground = ""] = resolved;
+  return { lobes: [primary, secondary, accent], primary, foreground, surface, primaryForeground, mono };
+}
+
+function strokeLobes(
+  context: WaveSurface,
+  paint: WavePaint,
+  gain: number,
+  alpha: number,
+  colors: readonly string[]
+): void {
+  const middle = paint.height / 2;
+  const lineWidth = Math.max(WAVE.MIN_LINE_WIDTH_PX, paint.height * WAVE.LINE_WIDTH_SHARE);
+  const reach = softLimit(gain * paint.height * WAVE.HEIGHT_SHARE, middle - lineWidth / 2);
+
+  WAVE.LOBES.forEach((lobe, index) => {
+    const tone = colors[index] ?? colors[0] ?? "";
+    const phase = paint.phase + index * WAVE.LOBE_PHASE_STEP - paint.time * lobe.speed;
+    context.beginPath();
+    for (let x = 0; x <= paint.width; x += WAVE.SAMPLE_STEP_PX) {
+      const offset =
+        waveEnvelope(x, paint.width) *
+        lobe.amplitude *
+        reach *
+        Math.sin((x / paint.width) * TURN * lobe.frequency + phase);
+      if (x === 0) context.moveTo(x, middle - offset);
+      else context.lineTo(x, middle - offset);
+    }
+    context.strokeStyle = tone;
+    context.shadowColor = tone;
+    context.lineWidth = lineWidth;
+    context.shadowBlur = paint.height * WAVE.GLOW_SHARE;
+    context.globalAlpha = alpha;
+    context.stroke();
+    context.stroke();
+  });
+
+  context.shadowBlur = 0;
+  context.globalAlpha = 1;
+}
+
+function paintTag(context: WaveSurface, paint: WavePaint, x: number, emphasis: boolean): void {
+  const fontSize = emphasis ? WAVE.TAG_DRAG_FONT_PX : WAVE.TAG_HOVER_FONT_PX;
+  const height = emphasis ? WAVE.TAG_DRAG_HEIGHT_PX : WAVE.TAG_HOVER_HEIGHT_PX;
+  context.font = `${fontSize}px ${paint.colors.mono}`;
+  const width =
+    context.measureText(paint.label).width + (emphasis ? WAVE.TAG_DRAG_PADDING_PX : WAVE.TAG_HOVER_PADDING_PX);
+  const left = Math.max(WAVE.TAG_INSET_PX, Math.min(paint.width - width - WAVE.TAG_INSET_PX, x - width / 2));
+
+  context.globalAlpha = 1;
+  context.fillStyle = emphasis ? paint.colors.primary : paint.colors.surface;
+  context.beginPath();
+  context.roundRect(left, WAVE.TAG_INSET_PX, width, height, height / 2);
+  context.fill();
+  if (!emphasis) {
+    context.strokeStyle = paint.colors.primary;
+    context.lineWidth = 1;
+    context.globalAlpha = WAVE.TAG_BORDER_ALPHA;
+    context.stroke();
   }
 
-  const loudest = Math.max(...raw, 0.0001);
-  const amplitudes = raw.map((value) => (value / loudest) * peak);
-
-  const top = amplitudes.map((amplitude, index) => ({ x: index * step, y: WAVE.CENTER - amplitude }));
-  const bottom = amplitudes.map((amplitude, index) => ({ x: index * step, y: WAVE.CENTER + amplitude })).reverse();
-
-  return closedCurveThrough([...top, ...bottom]);
+  context.fillStyle = emphasis ? paint.colors.primaryForeground : paint.colors.foreground;
+  context.globalAlpha = emphasis ? 1 : WAVE.TAG_TEXT_ALPHA;
+  context.textBaseline = "middle";
+  context.textAlign = "center";
+  context.fillText(paint.label, left + width / 2, WAVE.TAG_INSET_PX + height / 2 + 0.5);
+  context.globalAlpha = 1;
 }
 
-function pointAt(points: readonly WavePoint[], index: number): WavePoint {
-  const wrapped = ((index % points.length) + points.length) % points.length;
-  return points[wrapped] ?? { x: 0, y: WAVE.CENTER };
-}
+export function paintWave(context: WaveSurface, offscreen: WaveCanvas, paint: WavePaint): void {
+  const played = offscreen.getContext("2d");
+  if (played === null || paint.width <= 0 || paint.height <= 0) return;
 
-function closedCurveThrough(points: readonly WavePoint[]): string {
-  const first = pointAt(points, 0);
-  const commands = [`M${first.x.toFixed(1)},${first.y.toFixed(1)}`];
+  context.save();
+  played.save();
+  context.setTransform(paint.ratio, 0, 0, paint.ratio, 0, 0);
+  context.clearRect(0, 0, paint.width, paint.height);
 
-  for (let index = 0; index < points.length; index += 1) {
-    const previous = pointAt(points, index - 1);
-    const current = pointAt(points, index);
-    const next = pointAt(points, index + 1);
-    const after = pointAt(points, index + 2);
+  const middle = Math.round(paint.height / 2) - 0.5;
+  const headX = paint.progress * paint.width;
+  const gain = paint.energy * (paint.dragging ? WAVE.DRAG_GAIN : 1);
+  const lit = paint.hover !== null || paint.dragging;
 
-    const firstControl = {
-      x: current.x + ((next.x - previous.x) / 6) * WAVE.SMOOTHING,
-      y: current.y + ((next.y - previous.y) / 6) * WAVE.SMOOTHING,
-    };
-    const secondControl = {
-      x: next.x - ((after.x - current.x) / 6) * WAVE.SMOOTHING,
-      y: next.y - ((after.y - current.y) / 6) * WAVE.SMOOTHING,
-    };
+  context.fillStyle = paint.colors.foreground;
+  context.globalAlpha = lit ? 1 : WAVE.BASELINE_ALPHA;
+  if (lit) {
+    context.shadowColor = paint.colors.foreground;
+    context.shadowBlur = WAVE.BASELINE_GLOW_PX;
+  }
+  context.fillRect(0, lit ? middle - 0.5 : middle, paint.width, lit ? WAVE.BASELINE_LIT_HEIGHT_PX : 1);
+  context.shadowBlur = 0;
+  context.globalAlpha = 1;
 
-    commands.push(
-      `C${firstControl.x.toFixed(1)},${firstControl.y.toFixed(1)} ${secondControl.x.toFixed(1)},${secondControl.y.toFixed(1)} ${next.x.toFixed(1)},${next.y.toFixed(1)}`
-    );
+  strokeLobes(context, paint, gain * WAVE.REST_AMPLITUDE_SHARE, WAVE.REST_ALPHA, paint.colors.lobes);
+
+  played.setTransform(paint.ratio, 0, 0, paint.ratio, 0, 0);
+  played.clearRect(0, 0, paint.width, paint.height);
+  strokeLobes(played, paint, gain, WAVE.PLAYED_ALPHA, paint.colors.lobes);
+  const fade = Math.max(WAVE.MIN_FADE_PX, paint.width * WAVE.FADE_SHARE);
+  const mask = played.createLinearGradient(headX - fade, 0, headX + fade, 0);
+  mask.addColorStop(0, "rgba(0, 0, 0, 1)");
+  mask.addColorStop(0.5, `rgba(0, 0, 0, ${WAVE.FADE_MIDPOINT_ALPHA})`);
+  mask.addColorStop(1, "rgba(0, 0, 0, 0)");
+  played.globalCompositeOperation = "destination-in";
+  played.fillStyle = mask;
+  played.fillRect(0, 0, paint.width, paint.height);
+  played.globalCompositeOperation = "source-over";
+  context.drawImage(offscreen, 0, 0, paint.width, paint.height);
+
+  if (paint.dragging && paint.origin !== null) {
+    context.setLineDash([...WAVE.ORIGIN_DASH_PX]);
+    context.strokeStyle = paint.colors.foreground;
+    context.globalAlpha = WAVE.ORIGIN_ALPHA;
+    context.lineWidth = 1;
+    context.beginPath();
+    context.moveTo(paint.origin * paint.width, 0);
+    context.lineTo(paint.origin * paint.width, paint.height);
+    context.stroke();
+    context.setLineDash([]);
+    context.globalAlpha = 1;
   }
 
-  return `${commands.join(" ")} Z`;
-}
+  if (paint.hover !== null && !paint.dragging) paintTag(context, paint, paint.hover * paint.width, false);
 
-export function waveLobePaths(trackId: string): readonly string[] {
-  const cached = pathCache.get(trackId);
-  if (cached) return cached;
+  const scale = paint.dragging ? WAVE.DRAG_HEAD_SCALE : paint.hover !== null ? WAVE.HOVER_HEAD_SCALE : 1;
+  context.fillStyle = paint.colors.foreground;
+  context.shadowColor = paint.colors.primary;
+  context.shadowBlur = WAVE.HEAD_GLOW_PX * scale;
+  context.beginPath();
+  context.arc(headX, middle + 0.5, Math.max(WAVE.MIN_HEAD_PX, paint.height * WAVE.HEAD_SHARE) * scale, 0, TURN);
+  context.fill();
+  context.shadowBlur = 0;
 
-  const seed = seedFromId(trackId);
-  const paths = WAVE.LOBE_AMPLITUDES.map((_, lobe) => lobePath(seed, lobe));
-  if (pathCache.size >= WAVE_CACHE_LIMIT) {
-    const oldest = pathCache.keys().next();
-    if (!oldest.done) pathCache.delete(oldest.value);
-  }
-  pathCache.set(trackId, paths);
-  return paths;
+  if (paint.dragging) paintTag(context, paint, headX, true);
+  played.restore();
+  context.restore();
 }
 
 export function formatClock(seconds: number): string {
@@ -120,9 +208,13 @@ export function trackInitials(album: string): string {
   return initials.join("") || "?";
 }
 
-export function percentOf(seconds: number, durationSeconds: number): number {
+export function fractionOf(seconds: number, durationSeconds: number): number {
   if (durationSeconds <= 0) return 0;
-  return Math.min(100, Math.max(0, (seconds / durationSeconds) * 100));
+  return Math.min(1, Math.max(0, seconds / durationSeconds));
+}
+
+export function percentOf(seconds: number, durationSeconds: number): number {
+  return fractionOf(seconds, durationSeconds) * 100;
 }
 
 export function nextRepeat(repeat: PlayerRepeat): PlayerRepeat {

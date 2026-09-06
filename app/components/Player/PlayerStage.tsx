@@ -22,8 +22,8 @@ import { stageFlip as stageFlipVariants, stageFade } from "@utils/animations";
 
 import { PlayerLyrics } from "./PlayerLyrics";
 import { PlayerVolume } from "./PlayerVolume";
+import { PlayerWave } from "./PlayerWave";
 import { ScrobbleStatus } from "./ScrobbleStatus";
-import { SiriWave } from "./SiriWave";
 import { TrackCover } from "./TrackCover";
 import { FULLSCREEN_TOGGLE_SELECTOR } from "./constants";
 import { formatClock, returnFocusTo, trackInitials } from "./helpers";
@@ -185,11 +185,6 @@ export function PlayerStage({ view, actions }: PlayerProps) {
         </div>
 
         <div className={stageFooter()}>
-          <div className={stageScrubRow()}>
-            <span className={clock({ size: "stage", align: "right" })}>{formatClock(view.positionSeconds)}</span>
-            <SiriWave view={view} actions={actions} size="stage" />
-            <span className={clock({ size: "stage" })}>{formatClock(view.track.durationSeconds)}</span>
-          </div>
           <div className={stageTransport()}>
             <button
               type="button"
@@ -238,6 +233,11 @@ export function PlayerStage({ view, actions }: PlayerProps) {
             >
               {view.repeat === "one" ? <Repeat1 className="size-4" /> : <Repeat className="size-4" />}
             </button>
+          </div>
+          <div className={stageScrubRow()}>
+            <span className={clock({ size: "stage", align: "right" })}>{formatClock(view.positionSeconds)}</span>
+            <PlayerWave view={view} actions={actions} size="stage" />
+            <span className={clock({ size: "stage" })}>{formatClock(view.track.durationSeconds)}</span>
           </div>
           <div className={stageVolume()}>
             <PlayerVolume view={view} actions={actions} size="stage" />

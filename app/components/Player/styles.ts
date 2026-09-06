@@ -1,6 +1,5 @@
 import { cva } from "class-variance-authority";
 
-import { PROGRESS_EASE_MS } from "./constants";
 import type { CSSProperties } from "react";
 
 type CssVars = CSSProperties & Record<`--${string}`, string>;
@@ -8,7 +7,7 @@ type CssVars = CSSProperties & Record<`--${string}`, string>;
 export const playerRoot = cva("pointer-events-none fixed inset-0 z-40");
 
 export const playerDock = cva(
-  "pointer-events-auto absolute inset-x-0 bottom-[var(--height-bottom-nav)] flex flex-col sm:bottom-0"
+  "player-metrics pointer-events-auto absolute inset-x-0 bottom-[var(--height-bottom-nav)] flex flex-col sm:bottom-0"
 );
 
 export const chainStrip = cva(
@@ -33,12 +32,12 @@ export const chainValue = cva("font-mono text-[10.5px]", {
 export const chainSeparator = cva("text-fg-muted/60 size-2.5 shrink-0");
 
 export const bar = cva(
-  "border-primary-500/25 bg-surface-overlay/95 flex h-16 items-center gap-3 border-t px-3 backdrop-blur-[18px] sm:h-21 sm:gap-4.5 sm:px-5"
+  "border-primary-500/25 bg-surface-overlay/95 flex h-[var(--player-bar-height)] flex-col justify-center border-t px-3 backdrop-blur-[18px] sm:gap-1 sm:px-5"
 );
 
-export const barIdentity = cva(
-  "flex min-w-0 flex-1 items-center gap-3 sm:w-auto sm:max-w-[42%] sm:flex-none sm:shrink sm:pr-9"
-);
+export const barTop = cva("flex w-full min-w-0 items-center gap-3 sm:gap-4.5");
+
+export const barIdentity = cva("flex min-w-0 flex-1 items-center gap-3 sm:basis-0 sm:grow");
 
 export const barCoverButton = cva(
   "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none"
@@ -90,9 +89,11 @@ export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 sm:ord
   defaultVariants: { folded: false },
 });
 
-export const barProgress = cva("hidden min-w-0 flex-1 items-center gap-3 sm:flex sm:min-w-[240px]");
+export const barProgress = cva("hidden w-full min-w-0 items-center gap-3 sm:flex");
 
-export const barExtras = cva("order-2 flex shrink-0 items-center gap-1 sm:order-none sm:gap-2.5");
+export const barExtras = cva(
+  "order-2 flex shrink-0 items-center gap-1 sm:order-none sm:basis-0 sm:grow sm:justify-end sm:gap-2.5"
+);
 
 export const volumeGroup = cva("items-center gap-2", {
   variants: {
@@ -204,53 +205,7 @@ export const waveTrack = cva("relative min-w-0 flex-1 cursor-pointer touch-none"
   defaultVariants: { size: "bar" },
 });
 
-export const waveLayer = cva("absolute inset-0 overflow-hidden", {
-  variants: {
-    state: {
-      rest: "opacity-40 saturate-50",
-      played: "player-wave-played",
-    },
-  },
-  defaultVariants: { state: "rest" },
-});
-
-export const waveSvg = cva("player-wave-energy block h-full w-full");
-
-export const waveLobe = cva("player-lobe", {
-  variants: {
-    lobe: {
-      a: "player-lobe-a fill-primary-400 opacity-70",
-      b: "player-lobe-b fill-secondary-400 opacity-60",
-      c: "player-lobe-c fill-accent-400 opacity-50",
-    },
-  },
-  defaultVariants: { lobe: "a" },
-});
-
-export const waveBaseline = cva("bg-fg/70 pointer-events-none absolute inset-x-0 top-1/2 h-px");
-
-export const waveHead = cva("player-wave-head bg-fg pointer-events-none absolute top-1/2 rounded-full", {
-  variants: {
-    size: {
-      bar: "-mt-[5px] -ml-[5px] size-2.5 shadow-[0_0_14px_3px_var(--color-secondary-400)]",
-      stage: "-mt-2 -ml-2 size-4 shadow-[0_0_22px_5px_var(--color-secondary-400)]",
-    },
-  },
-  defaultVariants: { size: "bar" },
-});
-
-export const waveScrubLabel = cva(
-  "player-wave-scrub bg-surface-overlay text-secondary-400 pointer-events-none absolute z-10 -translate-x-1/2 rounded-full px-2 py-0.5 font-mono whitespace-nowrap",
-  {
-    variants: {
-      size: {
-        bar: "-top-2 text-[10px]",
-        stage: "-top-3 text-[11px]",
-      },
-    },
-    defaultVariants: { size: "bar" },
-  }
-);
+export const waveCanvas = cva("pointer-events-none block size-full");
 
 export const barMobileProgress = cva("bg-fg-muted/20 absolute inset-x-0 -bottom-0.5 h-0.5 sm:hidden");
 
@@ -396,20 +351,6 @@ export const stageScrubRow = cva("flex items-center gap-3.5");
 export const stageTransport = cva("flex items-center justify-center gap-7 sm:gap-[30px]");
 
 export const srOnly = cva("sr-only");
-
-export function waveVars(
-  progressPercent: number,
-  scrubPercent: number | null,
-  animating: boolean,
-  touching: boolean
-): CssVars {
-  return {
-    "--player-progress": `${progressPercent.toFixed(2)}%`,
-    "--player-scrub": `${(scrubPercent ?? progressPercent).toFixed(2)}%`,
-    "--player-wave-state": animating ? "running" : "paused",
-    "--player-progress-ease": touching || scrubPercent !== null ? "0ms" : PROGRESS_EASE_MS,
-  };
-}
 
 export function progressVars(percent: number): CssVars {
   return { "--player-progress": `${percent.toFixed(2)}%` };
