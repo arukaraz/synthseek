@@ -17,9 +17,16 @@ export interface LibraryInfiniteGridProps<TItem> {
   fetchNextPage: () => void;
 }
 
+export interface CardCoverActionsProps {
+  name: string;
+  onPlay: () => Promise<void>;
+  onOpen: () => void;
+}
+
 export interface AlbumCardProps {
   item: LibraryAlbumItem;
   onOpen?: () => void;
+  onPlay?: () => Promise<void>;
 }
 
 export interface ArtistCardProps {
@@ -27,17 +34,20 @@ export interface ArtistCardProps {
   image?: string | null;
   isResolving?: boolean;
   onOpen?: () => void;
+  onPlay?: () => Promise<void>;
 }
 
 export interface LibraryArtistCardProps {
   item: LibraryArtistItem;
   resolveEnabled: boolean;
   onOpen?: () => void;
+  onPlay?: () => Promise<void>;
 }
 
 export interface PlaylistCardProps {
   item: LibraryPlaylistItem;
   onOpen?: () => void;
+  onPlay?: () => Promise<void>;
 }
 
 export interface PlaylistCardMenuProps {

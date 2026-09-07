@@ -20,6 +20,7 @@ import {
   trackStatusReveal,
   trackTitle,
 } from "../../styles";
+import { TrackPlaybackActions } from "./TrackPlaybackActions";
 import type { TrackRowProps } from "./types";
 
 export function TrackRow({
@@ -31,6 +32,8 @@ export function TrackRow({
   selectable = false,
   isSelected = false,
   onToggleSelect,
+  onPlayNow,
+  onEnqueue,
 }: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
   const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
@@ -56,6 +59,9 @@ export function TrackRow({
       </div>
 
       <div className={trackMeta()}>
+        {onPlayNow && onEnqueue ? (
+          <TrackPlaybackActions title={track.title} onPlayNow={onPlayNow} onEnqueue={onEnqueue} />
+        ) : null}
         {track.plays !== null ? (
           <span>{t("trackPlays", { count: track.plays, plays: formatPlays(track.plays) })}</span>
         ) : null}

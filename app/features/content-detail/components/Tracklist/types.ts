@@ -29,6 +29,12 @@ export interface TracklistProps {
   onToggleSelect?: (requestId: string) => void;
 }
 
+export interface TrackPlaybackActionsProps {
+  title: string;
+  onPlayNow: () => Promise<void>;
+  onEnqueue: () => Promise<boolean>;
+}
+
 export interface TrackRowProps {
   track: TracklistTrack;
   showArtist: boolean;
@@ -38,4 +44,6 @@ export interface TrackRowProps {
   selectable?: boolean;
   isSelected?: boolean;
   onToggleSelect?: () => void;
+  onPlayNow?: () => Promise<void>;
+  onEnqueue?: () => Promise<boolean>;
 }

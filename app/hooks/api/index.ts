@@ -24,6 +24,7 @@ export { useLibraryArtists } from "./queries/library/useLibraryArtists";
 export { useLibraryPlaylists } from "./queries/library/useLibraryPlaylists";
 export { useTrackLyrics } from "./queries/library/useTrackLyrics";
 export { useLibraryCounts } from "./queries/library/useLibraryCounts";
+export { usePlayableTracksFetcher } from "./queries/library/usePlayableTracksFetcher";
 export { useActivePlayback, useFavoriteTracks, usePlaybackSession } from "./queries/playback";
 export {
   useDeviceHeartbeat,

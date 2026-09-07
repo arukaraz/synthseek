@@ -32,6 +32,25 @@ export const cardStatusBadge = cva(
 
 export const cardStatusDot = cva("size-1.5 shrink-0 rounded-full");
 
+export const cardCoverActions = cva(
+  "pointer-events-none absolute inset-0 z-1 grid grid-flow-col place-content-center gap-2 transition-opacity focus-within:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+);
+
+export const cardCoverScrim = cva("absolute inset-0 -z-1 bg-black/45");
+
+export const cardCoverAction = cva(
+  "focus-visible:ring-primary-400 pointer-events-auto grid size-10 place-items-center rounded-full backdrop-blur-sm transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60",
+  {
+    variants: {
+      tone: {
+        play: "bg-primary-500 text-primary-foreground",
+        neutral: "bg-black/60 text-white hover:bg-black/75",
+      },
+    },
+    defaultVariants: { tone: "neutral" },
+  }
+);
+
 export const cardKebab = cva(
   "absolute top-1.5 right-1.5 grid size-7 place-items-center rounded-md bg-black/55 text-white backdrop-blur-sm transition-opacity hover:bg-black/70 focus-visible:opacity-100 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
 );

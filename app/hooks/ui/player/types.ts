@@ -81,6 +81,12 @@ export interface KnownDevice {
   trackTitle: string | null;
 }
 
+export interface QueueAddOutcome {
+  added: number;
+  skipped: number;
+  full: boolean;
+}
+
 export type RemoteCommand =
   | "play"
   | "pause"

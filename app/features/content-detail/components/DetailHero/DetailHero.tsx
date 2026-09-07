@@ -26,6 +26,7 @@ import {
 } from "../../styles";
 import { DegradedSourcesChip } from "../DegradedSourcesChip";
 import { GenreChips } from "./GenreChips";
+import { HeroPlayButton } from "./HeroPlayButton";
 import { heroPillVisibility } from "./helpers";
 import { ShareFan } from "./ShareFan";
 import {
@@ -57,6 +58,7 @@ function DetailHeroComponent({
   socials,
   statsSlot,
   onRequest,
+  onPlay,
   onSubtitleClick,
   showRequest = true,
   showInLibraryPill = true,
@@ -182,7 +184,7 @@ function DetailHeroComponent({
 
         {statsSlot ? <div className={heroStats()}>{statsSlot}</div> : null}
 
-        {showActions ? (
+        {showActions || onPlay ? (
           <div className={heroActions()}>
             {showInLibrary ? (
               <span className={alreadyInLibrary()}>
@@ -204,6 +206,7 @@ function DetailHeroComponent({
                 {requestState === "requestMissing" ? t("requestMissing") : t("request")}
               </button>
             ) : null}
+            {onPlay ? <HeroPlayButton name={name} onPlay={onPlay} /> : null}
           </div>
         ) : null}
 

@@ -346,6 +346,8 @@
       "searchBetterQuality_one": "Rechercher une meilleure qualité ({{count}})",
       "searchBetterQuality_other": "Rechercher une meilleure qualité ({{count}})",
       "addToPlaylist": "Ajouter à une playlist",
+      "addToQueue_one": "Ajouter {{count}} à la file",
+      "addToQueue_other": "Ajouter {{count}} à la file",
       "clear": "Effacer",
       "selectAll": "Tout sélectionner sur cette page",
       "selectRow": "Sélectionner la piste"
@@ -365,7 +367,8 @@
       "description": "Une erreur s'est produite lors du chargement de cette vue. Réessayez dans un instant."
     },
     "actions": {
-      "playTrack": "Lire {{title}}"
+      "playTrack": "Lire {{title}}",
+      "playAll": "Lire tout ce que nous avons de {{name}}"
     }
   },
   "playlists": {

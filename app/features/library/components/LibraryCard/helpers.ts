@@ -2,6 +2,14 @@ import type { RequestStatus } from "@api/__generated__/types";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import type { KeyboardEvent } from "react";
 
+export function cardCoverActionsFrom(
+  onOpen: (() => void) | undefined,
+  onPlay: (() => Promise<void>) | undefined
+): { open: () => void; play: () => Promise<void> } | null {
+  if (onOpen === undefined || onPlay === undefined) return null;
+  return { open: onOpen, play: onPlay };
+}
+
 export function handleCardActivationKey(event: KeyboardEvent<HTMLElement>, onOpen: () => void): void {
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();

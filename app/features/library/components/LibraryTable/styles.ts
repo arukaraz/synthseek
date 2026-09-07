@@ -13,6 +13,8 @@ export const durationText = cva("text-fg/45 font-mono text-xs tabular-nums");
 
 export const selectCell = cva("flex items-center justify-center");
 
+export const queueCell = cva("flex items-center justify-center");
+
 export const tableWrap = cva("min-w-0");
 
 export const primaryCellArtwork = cva("relative size-10 shrink-0 overflow-hidden rounded-md");

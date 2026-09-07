@@ -6,7 +6,8 @@ import { playlistOriginLabel } from "@utils/playlist";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
-import { cardInitials, handleCardActivationKey, mosaicTiles, statusDotClass } from "./helpers";
+import { CardCoverActions } from "./CardCoverActions";
+import { cardCoverActionsFrom, cardInitials, handleCardActivationKey, mosaicTiles, statusDotClass } from "./helpers";
 import { PlaylistCardMenu } from "./PlaylistCardMenu";
 import {
   cardBody,
@@ -24,21 +25,23 @@ import {
 } from "./styles";
 import type { PlaylistCardProps } from "./types";
 
-export function PlaylistCard({ item, onOpen }: PlaylistCardProps) {
+export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
   const { t } = useTranslation("library");
   const { t: tDetail } = useTranslation("contentDetail");
   const tiles = mosaicTiles(item.images, item.image);
   const origin = playlistOriginLabel(item.source_provider, t);
-  const openLabel = onOpen ? tDetail("openDetail", { name: item.name }) : undefined;
+  const coverActions = cardCoverActionsFrom(onOpen, onPlay);
+  const activates = !!onOpen && coverActions === null;
+  const openLabel = activates ? tDetail("openDetail", { name: item.name }) : undefined;
 
   return (
     <li
-      className={cardRoot({ interactive: !!onOpen })}
-      role={onOpen ? "button" : undefined}
-      tabIndex={onOpen ? 0 : undefined}
+      className={cardRoot({ interactive: activates })}
+      role={activates ? "button" : undefined}
+      tabIndex={activates ? 0 : undefined}
       aria-label={openLabel}
-      onClick={onOpen}
-      onKeyDown={onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
+      onClick={activates ? onOpen : undefined}
+      onKeyDown={activates && onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
     >
       <div className={cardCover()}>
         {tiles.length === 0 ? (
@@ -73,6 +76,9 @@ export function PlaylistCard({ item, onOpen }: PlaylistCardProps) {
           {item.completed_tracks}/{item.total_tracks}
         </span>
         <PlaylistCardMenu item={item} />
+        {coverActions ? (
+          <CardCoverActions name={item.name} onPlay={coverActions.play} onOpen={coverActions.open} />
+        ) : null}
       </div>
 
       <div className={cardBody()}>

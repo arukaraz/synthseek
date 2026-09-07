@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Heart, Mic2, MonitorSpeaker, Minimize, Sparkles } from "lucide-react";
+import { Heart, Mic2, MonitorSpeaker, Minimize } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
@@ -13,6 +13,7 @@ import { PlayerVolume } from "./PlayerVolume";
 import { PlayerWave } from "./PlayerWave";
 import { ScrobbleStatus } from "./ScrobbleStatus";
 import { TrackCover } from "./TrackCover";
+import { UpgradeButton } from "./UpgradeButton";
 import { FULLSCREEN_TOGGLE_SELECTOR } from "./constants";
 import { formatClock, labelled, returnFocusTo, trackInitials } from "./helpers";
 import {
@@ -138,21 +139,13 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                       >
                         <Heart className={view.favorite ? "size-4 fill-current" : "size-4"} />
                       </button>
+                      <UpgradeButton view={view} actions={actions} size="stage" />
                       <ScrobbleStatus
                         state={view.scrobble}
                         actionable={view.scrobbleActionable}
                         size="stage"
                         onToggle={actions.toggleScrobbling}
                       />
-                      <button
-                        type="button"
-                        className={iconButton({ size: "stage" })}
-                        onClick={actions.searchBetterQuality}
-                        disabled={view.upgrading}
-                        {...labelled(t("controls.upgrade"))}
-                      >
-                        <Sparkles className="size-4" />
-                      </button>
                       <button
                         type="button"
                         className={iconButton({ tone: view.lyricsOpen ? "active" : "muted", size: "stage" })}

@@ -260,6 +260,11 @@ export interface PlayerFavouriteProps extends PlayerProps {
   className?: string;
 }
 
+export interface PlayerUpgradeProps extends PlayerProps {
+  size?: "compact" | "stage";
+  className?: string;
+}
+
 export interface PlayerScrobbleProps {
   state: PlayerScrobbleState;
   actionable: boolean;

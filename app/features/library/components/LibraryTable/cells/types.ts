@@ -5,6 +5,11 @@ export interface TrackPrimaryCellProps {
   onPlay: (trackId: string) => void;
 }
 
+export interface TrackQueueCellProps {
+  item: LibraryTrackItem;
+  onEnqueue: (trackIds: string[]) => Promise<boolean>;
+}
+
 export interface TrackMetaCellProps {
   artist: string;
   albumName: string;

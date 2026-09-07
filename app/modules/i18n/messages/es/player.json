@@ -16,7 +16,7 @@
     "unmute": "Quitar el silencio",
     "volume": "Volumen",
     "devices": "Dispositivos",
-    "upgrade": "Buscar mejor calidad",
+    "upgrade": "Buscar una versión mejor de esta pista",
     "modes": "Modo del reproductor",
     "restoreMode": "Salir del modo compacto",
     "exitMini": "Salir del mini reproductor",
@@ -56,7 +56,16 @@
     "empty": "No hay nada después de esta",
     "jumpTo": "Reproducir {{title}}",
     "remove": "Quitar {{title}} de la cola",
-    "reorder": "Arrastra para mover {{title}}"
+    "reorder": "Arrastra para mover {{title}}",
+    "addTrack": "Añadir {{title}} a la cola",
+    "playTrack": "Reproducir {{title}} ahora",
+    "added_one": "Se añadió {{count}} pista a la cola",
+    "added_other": "Se añadieron {{count}} pistas a la cola",
+    "nothingAdded": "Esas pistas ya están en la cola",
+    "nothingPlayable": "Aquí todavía no hay nada que se pueda reproducir",
+    "full": "La cola está llena, así que no se añadió nada más",
+    "truncated": "Esto es más largo de lo que cabe en una cola, así que solo se tomaron las primeras {{count}} pistas",
+    "loadFailed": "No se pudieron cargar esas pistas"
   },
   "modes": {
     "caption": "MODO DEL REPRODUCTOR",

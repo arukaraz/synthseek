@@ -10,6 +10,7 @@ import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlayl
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
 import { useRetryPlexPlaylist } from "@hooks/api/mutations/requests/useRetryPlexPlaylist";
 import { useInlineRename } from "@hooks/ui/useInlineRename";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useSelection } from "@hooks/ui/useSelection";
 import { playlistOriginLabel } from "@utils/playlist";
 import { Trash2 } from "lucide-react";
@@ -42,6 +43,11 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
     enabled: isCatalog,
   });
   const { requestPlaylist } = useContentDetailActions();
+  const { playEntity } = useEntityPlayback();
+  const handlePlay = useCallback(
+    () => playEntity({ kind: "playlist", playlistId: target.id }),
+    [playEntity, target.id]
+  );
 
   const removeTracks = useRemoveTracksFromPlaylist();
   const renamePlaylist = useRenamePlaylist();
@@ -199,6 +205,7 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
         requestState={requestState}
         showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
+        onPlay={isLibrary ? handlePlay : undefined}
         requestDisabled={target.requestDisabled}
         requestDisabledTooltip={target.requestDisabledTooltip}
         socials={EMPTY_SOCIALS}

@@ -12,6 +12,7 @@ const prefetchNextPageMock = vi.hoisted(() => vi.fn());
 vi.mock("@hooks/api", () => ({
   useLibraryTracks: useLibraryTracksMock,
   useLibraryTracksPrefetch: () => ({ prefetchNextPage: prefetchNextPageMock }),
+  usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
 }));
 
 interface CapturedLayout {

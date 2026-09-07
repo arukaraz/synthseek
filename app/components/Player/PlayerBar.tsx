@@ -9,6 +9,7 @@ import { PlayerExtraControls } from "./PlayerExtraControls";
 import { PlayerTransport } from "./PlayerTransport";
 import { PlayerWave } from "./PlayerWave";
 import { TrackCover } from "./TrackCover";
+import { UpgradeButton } from "./UpgradeButton";
 import { formatClock, labelled, percentOf, trackInitials } from "./helpers";
 import {
   bar,
@@ -92,6 +93,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
             </span>
           </span>
           <FavouriteButton view={view} actions={actions} className="@player:grid hidden" />
+          <UpgradeButton view={view} actions={actions} className="@player:grid hidden" />
           <button
             type="button"
             className={cn(iconButton({ tone: view.moreOpen ? "active" : "muted" }), "@player:hidden")}
@@ -108,6 +110,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
 
         <div className={barTransport({ folded: view.moreOpen })}>
           <FavouriteButton view={view} actions={actions} className="@player:hidden" />
+          <UpgradeButton view={view} actions={actions} className="@player:hidden" />
           <PlayerTransport view={view} actions={actions} size="bar" />
         </div>
 

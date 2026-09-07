@@ -4,6 +4,8 @@
   "back": "Back to {{name}}",
   "backFallback": "Back",
   "openDetail": "Open details for {{name}}",
+  "play": "Play",
+  "playAll": "Play everything we have of {{name}}",
   "viewArtist": "View artist {{name}}",
   "resolveArtistFailed": "We couldn't find this artist.",
   "close": "Close",

@@ -5,6 +5,7 @@ import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 
 export interface TrackColumnOptions {
   onPlay: (trackId: string) => void;
+  onEnqueue: (trackIds: string[]) => Promise<boolean>;
 }
 
 export interface LibraryTableProps<TItem> {
@@ -18,6 +19,7 @@ export interface LibraryTableProps<TItem> {
 export interface TrackSelectionConfig {
   items: LibraryTrackItem[];
   selection: LibrarySelection;
+  onEnqueue: (trackIds: string[]) => Promise<boolean>;
 }
 
 export interface SelectHeaderProps {

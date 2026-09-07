@@ -22,6 +22,7 @@ vi.mock("@features/content-detail", () => ({
 
 vi.mock("@hooks/api", () => ({
   useLibraryAlbums: useLibraryAlbumsMock,
+  usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
 }));
 
 vi.mock("../LibraryViewLayout/LibraryViewLayout", () => ({
@@ -93,7 +94,7 @@ describe("AlbumsViewMode", () => {
   it("opens the album detail flow with the mapped request item on card click", async () => {
     const { user } = renderWithProviders(<AlbumsViewMode {...makeProps()} />);
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button", { name: /Open details for/i }));
 
     expect(albumRequestItemMock).toHaveBeenCalledWith({
       id: "ext-1",

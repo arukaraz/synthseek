@@ -28,6 +28,8 @@ export const PLAYBACK_MIME_BY_FORMAT: Readonly<Record<string, string>> = {
 
 export const TONES = ["primary", "secondary", "accent"] as const;
 
+export const MAX_QUEUE_TRACKS = 500;
+
 export const SESSION_SAVE_INTERVAL_MS = 10_000;
 
 export const SESSION_POSITION_DRIFT_MS = 5_000;

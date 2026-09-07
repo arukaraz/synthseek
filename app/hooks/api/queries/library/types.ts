@@ -6,6 +6,7 @@ type LibraryInputs = inferRouterInputs<AppRouter>["library"];
 type LibraryOutputs = inferRouterOutputs<AppRouter>["library"];
 
 export type LibraryTracksInput = LibraryInputs["getTracks"];
+export type PlayableTracksTarget = LibraryInputs["getPlayableTracks"];
 export type LibraryAlbumsInput = LibraryInputs["getAlbums"];
 export type LibraryArtistsInput = LibraryInputs["getArtists"];
 export type LibraryPlaylistsInput = LibraryInputs["getPlaylists"];

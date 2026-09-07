@@ -4,6 +4,8 @@
   "back": "Volver a {{name}}",
   "backFallback": "Volver",
   "openDetail": "Abrir detalles de {{name}}",
+  "play": "Reproducir",
+  "playAll": "Reproducir todo lo que tenemos de {{name}}",
   "viewArtist": "Ver artista {{name}}",
   "resolveArtistFailed": "No pudimos encontrar este artista.",
   "close": "Cerrar",

@@ -16,7 +16,7 @@
     "unmute": "Rétablir le son",
     "volume": "Volume",
     "devices": "Appareils",
-    "upgrade": "Chercher une meilleure qualité",
+    "upgrade": "Chercher une meilleure version de ce titre",
     "modes": "Mode du lecteur",
     "restoreMode": "Quitter le mode compact",
     "exitMini": "Quitter le mini lecteur",
@@ -56,7 +56,16 @@
     "empty": "Rien après ce titre",
     "jumpTo": "Lire {{title}}",
     "remove": "Retirer {{title}} de la file",
-    "reorder": "Glisser pour déplacer {{title}}"
+    "reorder": "Glisser pour déplacer {{title}}",
+    "addTrack": "Ajouter {{title}} à la file",
+    "playTrack": "Lire {{title}} maintenant",
+    "added_one": "{{count}} titre ajouté à la file",
+    "added_other": "{{count}} titres ajoutés à la file",
+    "nothingAdded": "Ces titres sont déjà dans la file",
+    "nothingPlayable": "Rien n'est encore lisible ici",
+    "full": "La file est pleine, rien de plus n'a été ajouté",
+    "truncated": "C'est plus long qu'une file ne peut contenir, donc seuls les {{count}} premiers titres ont été pris",
+    "loadFailed": "Impossible de charger ces titres"
   },
   "modes": {
     "caption": "MODE DU LECTEUR",

@@ -167,6 +167,12 @@ export const trackRetryButton = cva(
 
 export const trackStatusReveal = cva("flex items-center group-hover:hidden");
 
+export const trackPlaybackActions = cva("flex shrink-0 items-center gap-0.5");
+
+export const trackPlayButton = cva(
+  "text-fg/45 hover:text-fg focus-visible:ring-primary-400 grid size-7 shrink-0 place-items-center rounded-full transition-[color,opacity] focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100"
+);
+
 export const cardGridRow = cva("grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5");
 
 export const cardButton = cva("group flex w-full min-w-0 flex-col gap-2 text-left");

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-import { renderWithProviders, screen } from "@test/test-utils";
+import { renderWithProviders, screen, waitFor } from "@test/test-utils";
 import type { ColumnDef } from "@components/ui/Table";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 import type { LibrarySelection } from "../../../hooks/useLibrarySelection";
@@ -72,13 +72,16 @@ function makeSelection(overrides?: Partial<LibrarySelection>): LibrarySelection 
       filterSelected: () => [],
       selectedFailedIds: () => [],
       selectedUpgradableIds: () => [],
+      selectedPlayableIds: () => [],
     },
     ...overrides,
   } as unknown as LibrarySelection;
 }
 
+const enqueueMock = vi.fn(async () => true);
+
 function selectionConfig(selection: LibrarySelection, items: LibraryTrackItem[]): TrackSelectionConfig {
-  return { items, selection };
+  return { items, selection, onEnqueue: enqueueMock };
 }
 
 describe("LibraryTable", () => {
@@ -169,6 +172,7 @@ describe("LibraryTable", () => {
         filterSelected: () => ["trk-1"],
         selectedFailedIds: () => ["trk-1"],
         selectedUpgradableIds: () => [],
+        selectedPlayableIds: () => [],
       } as unknown as LibrarySelection["selectors"],
     });
 
@@ -188,6 +192,67 @@ describe("LibraryTable", () => {
     expect(retryFailedMock).toHaveBeenCalledWith(["trk-1"]);
   });
 
+  it("queues only the selected rows that can actually be played, and clears the selection after", async () => {
+    const items = [createTrack({ id: "trk-1" }), createTrack({ id: "trk-2" })];
+    const clear = vi.fn();
+    const selection = makeSelection({
+      selectedCount: 3,
+      selectedIds: new Set(["trk-1", "trk-2", "trk-3"]),
+      clear,
+      selectors: {
+        allSelectedOnPage: () => false,
+        someSelectedOnPage: () => true,
+        filterSelected: () => [],
+        selectedFailedIds: () => [],
+        selectedUpgradableIds: () => [],
+        selectedPlayableIds: () => ["trk-1", "trk-2"],
+      } as unknown as LibrarySelection["selectors"],
+    });
+
+    const { user } = renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    await user.click(screen.getByText("page.selection.addToQueue:2"));
+
+    expect(enqueueMock).toHaveBeenCalledWith(["trk-1", "trk-2"]);
+    await waitFor(() => expect(clear).toHaveBeenCalled());
+  });
+
+  it("hides the queue action when nothing selected can be played", () => {
+    const items = [createTrack({ id: "trk-1" })];
+    const selection = makeSelection({
+      selectedCount: 1,
+      selectedIds: new Set(["trk-1"]),
+      selectors: {
+        allSelectedOnPage: () => false,
+        someSelectedOnPage: () => true,
+        filterSelected: () => [],
+        selectedFailedIds: () => [],
+        selectedUpgradableIds: () => [],
+        selectedPlayableIds: () => [],
+      } as unknown as LibrarySelection["selectors"],
+    });
+
+    renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    expect(screen.queryByText(/page\.selection\.addToQueue/)).toBeNull();
+  });
+
   it("labels the better-quality action with the eligible count, not the selected count, and submits only those ids", async () => {
     const items = [createTrack({ id: "trk-1" }), createTrack({ id: "trk-2" })];
     const selection = makeSelection({
@@ -199,6 +264,7 @@ describe("LibraryTable", () => {
         filterSelected: () => [],
         selectedFailedIds: () => [],
         selectedUpgradableIds: () => ["trk-1", "trk-2"],
+        selectedPlayableIds: () => [],
       } as unknown as LibrarySelection["selectors"],
     });
 
@@ -229,6 +295,7 @@ describe("LibraryTable", () => {
         filterSelected: () => [],
         selectedFailedIds: () => ["trk-1"],
         selectedUpgradableIds: () => [],
+        selectedPlayableIds: () => [],
       } as unknown as LibrarySelection["selectors"],
     });
 
@@ -257,6 +324,7 @@ describe("LibraryTable", () => {
         filterSelected: () => [],
         selectedFailedIds: () => ["trk-1"],
         selectedUpgradableIds: () => ["trk-2"],
+        selectedPlayableIds: () => [],
       } as unknown as LibrarySelection["selectors"],
     });
 
@@ -291,6 +359,7 @@ describe("LibraryTable", () => {
         filterSelected: () => [],
         selectedFailedIds: () => [],
         selectedUpgradableIds: () => ["trk-1"],
+        selectedPlayableIds: () => [],
       } as unknown as LibrarySelection["selectors"],
     });
 

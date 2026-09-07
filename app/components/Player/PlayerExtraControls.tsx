@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { ListMusic, Mic2, MonitorSpeaker, Repeat, Repeat1, Shuffle, Sparkles } from "lucide-react";
+import { ListMusic, Mic2, MonitorSpeaker, Repeat, Repeat1, Shuffle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { MODE_MENU_ICON, RESTORE_MODE_ICON } from "./constants";
@@ -52,15 +52,6 @@ export function PlayerExtraControls({ view, actions, omitTransport = false }: Pl
         <Mic2 className="@player:size-4 size-5" />
       </button>
       <PlayerVolume view={view} actions={actions} size="bar" />
-      <button
-        type="button"
-        className={iconButton()}
-        onClick={actions.searchBetterQuality}
-        disabled={view.upgrading}
-        {...labelled(t("controls.upgrade"))}
-      >
-        <Sparkles className="@player:size-4 size-5" />
-      </button>
       {view.mode === "mini" ? null : (
         <button
           type="button"

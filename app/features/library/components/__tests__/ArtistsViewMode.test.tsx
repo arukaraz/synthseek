@@ -43,6 +43,7 @@ vi.mock("@hooks/api", () => ({
     isFetchingNextPage: false,
     fetchNextPage: vi.fn(),
   }),
+  usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
 }));
 
 vi.mock("../LibraryViewLayout/LibraryViewLayout", () => ({
@@ -86,7 +87,7 @@ describe("ArtistsViewMode", () => {
     fetchMock.mockResolvedValue({ deezerArtistId: "dz-1", name: "Daft Punk", image: null });
     const { user } = renderWithProviders(<ArtistsViewMode {...makeProps()} />);
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button", { name: /Open details for/i }));
 
     await waitFor(() => expect(openForResultMock).toHaveBeenCalledTimes(1));
     expect(fetchMock).toHaveBeenCalledWith({ name: "Daft Punk" });
@@ -98,7 +99,7 @@ describe("ArtistsViewMode", () => {
     fetchMock.mockResolvedValue(null);
     const { user } = renderWithProviders(<ArtistsViewMode {...makeProps()} />);
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button", { name: /Open details for/i }));
 
     await waitFor(() => expect(toastErrorMock).toHaveBeenCalledTimes(1));
     expect(openForResultMock).not.toHaveBeenCalled();
@@ -109,7 +110,7 @@ describe("ArtistsViewMode", () => {
     fetchMock.mockReturnValue(new Promise((resolve) => (resolveFetch = resolve)));
     const { user } = renderWithProviders(<ArtistsViewMode {...makeProps()} />);
 
-    const card = screen.getByRole("button");
+    const card = screen.getByRole("button", { name: /Open details for/i });
     await user.click(card);
     await user.click(card);
 

@@ -12,6 +12,7 @@ import { PlayerTransport } from "./PlayerTransport";
 import { PlayerWave } from "./PlayerWave";
 import { QueueBody } from "./QueueBody";
 import { TrackCover } from "./TrackCover";
+import { UpgradeButton } from "./UpgradeButton";
 import { formatClock, labelled, trackInitials } from "./helpers";
 import { ensureMiniHeight } from "./miniWindow";
 import {
@@ -56,6 +57,7 @@ export function MiniPlayer({ view, actions }: PlayerProps) {
           <span className={miniArtist()}>{view.track.artist}</span>
         </span>
         <FavouriteButton view={view} actions={actions} />
+        <UpgradeButton view={view} actions={actions} />
       </div>
 
       <div className={miniTransport()}>

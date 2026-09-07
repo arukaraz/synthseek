@@ -3,7 +3,7 @@
 import { BulkActionBar, selectionAction, selectionActionLabel, type BulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox } from "@components/ui/Checkbox";
 import { DataTable, type ColumnDef } from "@components/ui/Table";
-import { ListPlus, RefreshCcw, Sparkles } from "lucide-react";
+import { CirclePlus, ListPlus, RefreshCcw, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { AddToPlaylistDropdown } from "../AddToPlaylistDropdown";
@@ -21,11 +21,12 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
   const someSelected = sel?.selectors.someSelectedOnPage(trackItems) ?? false;
   const failedIds = sel?.selectors.selectedFailedIds(trackItems) ?? [];
   const upgradableIds = sel?.selectors.selectedUpgradableIds(trackItems) ?? [];
+  const playableIds = sel?.selectors.selectedPlayableIds(trackItems) ?? [];
 
   const selectColumn: ColumnDef<TItem> | null = sel
     ? {
         key: "select",
-        className: "w-10",
+        className: "w-[6%]",
         header: () => (
           <Checkbox
             checked={allSelected ? true : someSelected ? "indeterminate" : false}
@@ -71,6 +72,18 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
       disabled: actions.isUpgrading,
     });
   }
+  if (sel && playableIds.length > 0) {
+    bulkActions.push({
+      icon: CirclePlus,
+      label: t("page.selection.addToQueue", { count: playableIds.length }),
+      onClick: () => {
+        void selection?.onEnqueue(playableIds).then((added) => {
+          if (added) sel.clear();
+        });
+      },
+      count: playableIds.length,
+    });
+  }
 
   const addToPlaylistLabel = t("page.selection.addToPlaylist");
 
@@ -100,7 +113,7 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
         />
       ) : null}
 
-      <DataTable data={items} columns={tableColumns} getRowId={getRowId} emptyMessage={emptyMessage} />
+      <DataTable data={items} columns={tableColumns} getRowId={getRowId} emptyMessage={emptyMessage} fixedLayout />
     </div>
   );
 }

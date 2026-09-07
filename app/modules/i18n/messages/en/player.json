@@ -16,7 +16,7 @@
     "unmute": "Unmute",
     "volume": "Volume",
     "devices": "Devices",
-    "upgrade": "Search better quality",
+    "upgrade": "Search for a better version of this track",
     "modes": "Player mode",
     "restoreMode": "Exit Compact Mode",
     "exitMini": "Exit Mini Player",
@@ -56,7 +56,16 @@
     "empty": "Nothing queued after this one",
     "jumpTo": "Play {{title}}",
     "remove": "Remove {{title}} from the queue",
-    "reorder": "Drag to move {{title}}"
+    "reorder": "Drag to move {{title}}",
+    "addTrack": "Add {{title}} to the queue",
+    "playTrack": "Play {{title}} now",
+    "added_one": "Added {{count}} track to the queue",
+    "added_other": "Added {{count}} tracks to the queue",
+    "nothingAdded": "Those tracks are already in the queue",
+    "nothingPlayable": "Nothing here can be played yet",
+    "full": "The queue is full, so nothing more was added",
+    "truncated": "This is longer than a queue can hold, so only the first {{count}} tracks were taken",
+    "loadFailed": "Could not load those tracks"
   },
   "modes": {
     "caption": "PLAYER MODE",

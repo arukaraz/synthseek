@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 
 import { artworkProxySrc } from "@utils/artworkProxy";
 
-import { cardInitials, handleCardActivationKey } from "./helpers";
+import { CardCoverActions } from "./CardCoverActions";
+import { cardCoverActionsFrom, cardInitials, handleCardActivationKey } from "./helpers";
 import {
   cardBody,
   cardCover,
@@ -18,20 +19,22 @@ import {
 } from "./styles";
 import type { ArtistCardProps } from "./types";
 
-export function ArtistCard({ item, image, isResolving = false, onOpen }: ArtistCardProps) {
+export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay }: ArtistCardProps) {
   const { t } = useTranslation(["library", "contentDetail"]);
   const albumsLabel = t("library:page.counts.albums", { count: item.albumCount });
   const subtitle = item.genre ? `${albumsLabel} · ${item.genre}` : albumsLabel;
   const cover = isResolving ? null : (image ?? item.albumArt);
+  const coverActions = cardCoverActionsFrom(onOpen, onPlay);
+  const activates = !!onOpen && coverActions === null;
 
   return (
     <li
-      className={cardRoot({ interactive: !!onOpen })}
-      role={onOpen ? "button" : undefined}
-      tabIndex={onOpen ? 0 : undefined}
-      aria-label={onOpen ? t("contentDetail:openDetail", { name: item.artist }) : undefined}
-      onClick={onOpen}
-      onKeyDown={onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
+      className={cardRoot({ interactive: activates })}
+      role={activates ? "button" : undefined}
+      tabIndex={activates ? 0 : undefined}
+      aria-label={activates ? t("contentDetail:openDetail", { name: item.artist }) : undefined}
+      onClick={activates ? onOpen : undefined}
+      onKeyDown={activates && onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
     >
       <div className={cardCover()}>
         {cover ? (
@@ -47,6 +50,9 @@ export function ArtistCard({ item, image, isResolving = false, onOpen }: ArtistC
             {cardInitials(item.artist)}
           </span>
         )}
+        {coverActions ? (
+          <CardCoverActions name={item.artist} onPlay={coverActions.play} onOpen={coverActions.open} />
+        ) : null}
       </div>
 
       <div className={cardBody()}>

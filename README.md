@@ -88,6 +88,7 @@ Open the web interface, create your admin account in the setup wizard, and point
 ### Listen anywhere
 
 - Play your library in the web app, with media keys, a lock screen and a full screen view, and nothing to turn on first
+- The player can shrink into the top bar, or pop out into a small floating window where your browser supports one, and what is playing next comes with it: jump to a track, drop one, drag it earlier, add a track from your library, or play a whole album, artist or playlist
 - Your queue and position are kept on the server, so they survive a reload and are the same ones your phone picks up
 - Play your library in Subsonic and OpenSubsonic apps such as Feishin and Symfonium, with no media server in between
 - Apps can change things, not only play them: favourites, playlists you create and reorder, what you played, and a queue you can pick up on another device

@@ -164,6 +164,22 @@ export function listenThresholdSeconds(durationSeconds: number): number {
   return Math.min(durationSeconds * LISTEN_FRACTION, LISTEN_MAX_SECONDS);
 }
 
+export function withoutRepeats(
+  tracks: readonly PlayerTrack[],
+  against: readonly PlayerTrack[],
+  room: number
+): PlayerTrack[] {
+  const seen = new Set(against.map((track) => track.id));
+  const kept: PlayerTrack[] = [];
+  for (const track of tracks) {
+    if (kept.length >= room) break;
+    if (seen.has(track.id)) continue;
+    seen.add(track.id);
+    kept.push(track);
+  }
+  return kept;
+}
+
 export function listenIsDue(progress: ListenProgress, durationSeconds: number): boolean {
   if (progress.recorded || durationSeconds <= 0) return false;
   return progress.listenedSeconds >= listenThresholdSeconds(durationSeconds);

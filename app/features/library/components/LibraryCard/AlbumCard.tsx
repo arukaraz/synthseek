@@ -5,7 +5,8 @@ import { artworkProxySrc } from "@utils/artworkProxy";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
-import { albumMetaLine, cardInitials, handleCardActivationKey, statusDotClass } from "./helpers";
+import { CardCoverActions } from "./CardCoverActions";
+import { albumMetaLine, cardCoverActionsFrom, cardInitials, handleCardActivationKey, statusDotClass } from "./helpers";
 import {
   cardBody,
   cardCover,
@@ -20,18 +21,20 @@ import {
 } from "./styles";
 import type { AlbumCardProps } from "./types";
 
-export function AlbumCard({ item, onOpen }: AlbumCardProps) {
+export function AlbumCard({ item, onOpen, onPlay }: AlbumCardProps) {
   const { t } = useTranslation("contentDetail");
   const meta = albumMetaLine(item.year, item.quality);
+  const coverActions = cardCoverActionsFrom(onOpen, onPlay);
+  const activates = !!onOpen && coverActions === null;
 
   return (
     <li
-      className={cardRoot({ interactive: !!onOpen })}
-      role={onOpen ? "button" : undefined}
-      tabIndex={onOpen ? 0 : undefined}
-      aria-label={onOpen ? t("openDetail", { name: item.name }) : undefined}
-      onClick={onOpen}
-      onKeyDown={onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
+      className={cardRoot({ interactive: activates })}
+      role={activates ? "button" : undefined}
+      tabIndex={activates ? 0 : undefined}
+      aria-label={activates ? t("openDetail", { name: item.name }) : undefined}
+      onClick={activates ? onOpen : undefined}
+      onKeyDown={activates && onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
     >
       <div className={cardCover()}>
         {item.album_art ? (
@@ -51,6 +54,9 @@ export function AlbumCard({ item, onOpen }: AlbumCardProps) {
           <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
+        {coverActions ? (
+          <CardCoverActions name={item.name} onPlay={coverActions.play} onOpen={coverActions.open} />
+        ) : null}
       </div>
 
       <div className={cardBody()}>

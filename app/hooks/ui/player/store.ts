@@ -6,6 +6,7 @@ import { artworkProxySrc } from "@utils/artworkProxy";
 
 import {
   MAX_CONSECUTIVE_FAILURES,
+  MAX_QUEUE_TRACKS,
   MIRROR_STALE_MS,
   MIRROR_TICK_MS,
   MODE_STORAGE_KEY,
@@ -22,9 +23,10 @@ import {
   shuffledOrder,
   streamUrlFor,
   withoutQueueIndex,
+  withoutRepeats,
 } from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
-import type { PlayerSessionState, RemotePlayback } from "./types";
+import type { PlayerSessionState, QueueAddOutcome, RemotePlayback } from "./types";
 
 const listeners = new Set<() => void>();
 
@@ -147,6 +149,29 @@ function playAt(index: number, fromSeconds = 0): void {
   publishMediaSession(track, mediaHandlers());
 }
 
+function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number, order: number[]): void {
+  const track = queue[index];
+  if (track === undefined) return;
+  ensureConnected();
+  const converted = needsConversion(track.format, canPlayMime);
+  publish({
+    queue,
+    index,
+    shuffleOrder: order,
+    positionSeconds: fromSeconds,
+    durationSeconds: track.durationSeconds,
+    scrubSeconds: null,
+    started: true,
+    playing: false,
+    loading: false,
+    transcoding: converted,
+    offsetSeconds: converted ? fromSeconds : 0,
+    consecutiveFailures: 0,
+  });
+  loadAt(streamUrlFor(track.id, converted, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
+  publishMediaSession(track, mediaHandlers());
+}
+
 function seekWithin(seconds: number): void {
   if (state.transcoding) {
     playAt(state.index, seconds);
@@ -264,24 +289,8 @@ export const actions = {
     const index = Math.max(0, found);
     const track = tracks[index];
     if (track === undefined) return;
-    ensureConnected();
-    const converted = needsConversion(track.format, canPlayMime);
     const resumeAt = found < 0 ? 0 : Math.min(positionSeconds, track.durationSeconds);
-    publish({
-      queue: tracks,
-      index,
-      positionSeconds: resumeAt,
-      durationSeconds: track.durationSeconds,
-      scrubSeconds: null,
-      started: true,
-      playing: false,
-      loading: false,
-      transcoding: converted,
-      offsetSeconds: converted ? resumeAt : 0,
-      consecutiveFailures: 0,
-    });
-    loadAt(streamUrlFor(track.id, converted, resumeAt), converted ? 0 : resumeAt, state.volume, state.muted);
-    publishMediaSession(track, mediaHandlers());
+    armAt(tracks, index, resumeAt, state.shuffle ? shuffledOrder(tracks.length, index) : []);
     if (resumedFrom !== null) notify(lastMessages.resumedFrom(resumedFrom), "info");
   },
   takeOver(tracks: readonly PlayerTrack[], currentTrackId: string | null, positionSeconds: number): void {
@@ -298,9 +307,29 @@ export const actions = {
   },
   playQueue(tracks: readonly PlayerTrack[], startIndex: number): void {
     if (tracks.length === 0) return;
-    const order = state.shuffle ? shuffledOrder(tracks.length, startIndex) : [];
-    publish({ queue: tracks, shuffleOrder: order, consecutiveFailures: 0 });
-    playAt(startIndex);
+    const start = tracks[startIndex];
+    const queue = withoutRepeats(tracks, [], tracks.length);
+    const at = start === undefined ? 0 : Math.max(0, queue.indexOf(start));
+    const order = state.shuffle ? shuffledOrder(queue.length, at) : [];
+    publish({ queue, shuffleOrder: order, consecutiveFailures: 0 });
+    playAt(at);
+  },
+  addToQueue(tracks: readonly PlayerTrack[]): QueueAddOutcome {
+    const room = Math.max(0, MAX_QUEUE_TRACKS - state.queue.length);
+    const fresh = withoutRepeats(tracks, state.queue, room);
+    const skipped = tracks.length - fresh.length;
+    const outcome = { added: fresh.length, full: fresh.length < tracks.length && room <= fresh.length, skipped };
+    if (fresh.length === 0) return outcome;
+
+    const queue = [...state.queue, ...fresh];
+    if (state.queue.length === 0) {
+      armAt(queue, 0, 0, state.shuffle ? shuffledOrder(queue.length, 0) : []);
+      return outcome;
+    }
+
+    const appended = fresh.map((_, at) => state.queue.length + at);
+    publish({ queue, shuffleOrder: state.shuffle ? [...state.shuffleOrder, ...appended] : [] });
+    return outcome;
   },
   togglePlay(): void {
     const track = currentTrack();

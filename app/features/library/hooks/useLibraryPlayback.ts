@@ -2,11 +2,15 @@
 
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 import { playerActions, playerTrackFrom } from "@hooks/ui/player";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useCallback } from "react";
 
 export function useLibraryPlayback(items: readonly LibraryTrackItem[]): {
   play: (trackId: string) => void;
+  enqueue: (trackIds: string[]) => Promise<boolean>;
 } {
+  const { enqueueEntity } = useEntityPlayback();
+
   const play = useCallback(
     (trackId: string) => {
       const playable = items.filter((item) => item.playable);
@@ -17,5 +21,7 @@ export function useLibraryPlayback(items: readonly LibraryTrackItem[]): {
     [items]
   );
 
-  return { play };
+  const enqueue = useCallback((trackIds: string[]) => enqueueEntity({ kind: "tracks", trackIds }), [enqueueEntity]);
+
+  return { play, enqueue };
 }

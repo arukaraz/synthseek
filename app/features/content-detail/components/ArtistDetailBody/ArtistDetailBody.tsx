@@ -2,6 +2,7 @@
 
 import { useArtistIdentity, useArtistStats } from "@hooks/api/queries/content-detail";
 import { useLidarrAvailable } from "@hooks/api/queries/useLidarrAvailable";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
@@ -24,6 +25,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
   const { data: stats } = useArtistStats({ artistName: target.artistName, mbid: identity?.mbid ?? null });
   const { data: lidarr } = useLidarrAvailable();
   const { requestArtist } = useContentDetailActions();
+  const { playEntity } = useEntityPlayback();
 
   const mbid = identity?.mbid ?? null;
   const cover = identity?.image ?? target.cover;
@@ -33,6 +35,8 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
     () => collectDegradedSources([identity?.degraded, stats?.degraded]),
     [identity?.degraded, stats?.degraded]
   );
+
+  const handlePlay = useCallback(() => playEntity({ kind: "artist", artist: target.name }), [playEntity, target.name]);
 
   const handleRequest = useCallback(() => {
     requestArtist({ id: target.id, name: target.name, cover });
@@ -55,6 +59,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
         genres={genres}
         requestState="request"
         onRequest={handleRequest}
+        onPlay={handlePlay}
         showRequest={showRequest}
         socials={socials}
         statsSlot={statsSlot}

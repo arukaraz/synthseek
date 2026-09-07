@@ -16,7 +16,7 @@
     "unmute": "Stummschaltung aufheben",
     "volume": "Lautstärke",
     "devices": "Geräte",
-    "upgrade": "Bessere Qualität suchen",
+    "upgrade": "Eine bessere Version dieses Titels suchen",
     "modes": "Player-Modus",
     "restoreMode": "Kompaktmodus verlassen",
     "exitMini": "Mini-Player verlassen",
@@ -56,7 +56,16 @@
     "empty": "Danach steht nichts an",
     "jumpTo": "{{title}} abspielen",
     "remove": "{{title}} aus der Warteschlange entfernen",
-    "reorder": "Zum Verschieben von {{title}} ziehen"
+    "reorder": "Zum Verschieben von {{title}} ziehen",
+    "addTrack": "{{title}} zur Warteschlange hinzufügen",
+    "playTrack": "{{title}} jetzt abspielen",
+    "added_one": "{{count}} Titel zur Warteschlange hinzugefügt",
+    "added_other": "{{count}} Titel zur Warteschlange hinzugefügt",
+    "nothingAdded": "Diese Titel stehen bereits in der Warteschlange",
+    "nothingPlayable": "Hier lässt sich noch nichts abspielen",
+    "full": "Die Warteschlange ist voll, daher wurde nichts mehr hinzugefügt",
+    "truncated": "Das ist länger als eine Warteschlange fasst, daher wurden nur die ersten {{count}} Titel übernommen",
+    "loadFailed": "Diese Titel konnten nicht geladen werden"
   },
   "modes": {
     "caption": "PLAYER-MODUS",

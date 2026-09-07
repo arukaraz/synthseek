@@ -5,6 +5,7 @@ import { useContentRequestFlow } from "@features/search/components/ContentReques
 import { useLibraryPlaylists } from "@hooks/api";
 import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
 import type { LibraryPlaylistItem } from "@hooks/api/queries/library/types";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useCallback, useMemo } from "react";
 
 import { VIEW_CONFIG } from "../constants";
@@ -15,6 +16,7 @@ import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
 export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
   const { openForTarget } = useContentRequestFlow();
+  const { playEntity } = useEntityPlayback();
   const input = useMemo(
     () =>
       buildPlaylistsInput({
@@ -35,6 +37,7 @@ export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange
     (item: LibraryPlaylistItem) => (
       <PlaylistCard
         item={item}
+        onPlay={() => playEntity({ kind: "playlist", playlistId: item.id })}
         onOpen={() =>
           openForTarget(
             playlistLibraryTarget({
@@ -46,7 +49,7 @@ export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange
         }
       />
     ),
-    [openForTarget]
+    [openForTarget, playEntity]
   );
 
   return (

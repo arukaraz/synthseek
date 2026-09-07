@@ -1,6 +1,7 @@
 "use client";
 
 import { useAlbumCredits, useAlbumDetail, useAlbumStats } from "@hooks/api/queries/content-detail";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
@@ -14,6 +15,7 @@ import type { AlbumDetailBodyProps } from "./types";
 function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
   const { data: album } = useAlbumDetail({ deezerAlbumId: target.id });
   const { requestAlbum } = useContentDetailActions();
+  const { playEntity } = useEntityPlayback();
 
   const artistName = album?.artist ?? target.artistName;
   const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, mbid: null });
@@ -45,6 +47,11 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
     });
   }, [requestAlbum, target.id, target.name, artistName, cover, genres]);
 
+  const handlePlay = useCallback(
+    () => playEntity({ kind: "album", albumExternalId: target.id }),
+    [playEntity, target.id]
+  );
+
   const handleArtistNavigate = useMemo(
     () =>
       artistExternalId
@@ -69,6 +76,7 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
         requestState={requestState}
         showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
+        onPlay={counts.completeCount > 0 ? handlePlay : undefined}
         onSubtitleClick={handleArtistNavigate}
         socials={EMPTY_SOCIALS}
         statsSlot={statsSlot}

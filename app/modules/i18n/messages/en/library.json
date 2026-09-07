@@ -346,6 +346,8 @@
       "searchBetterQuality_one": "Search better quality ({{count}})",
       "searchBetterQuality_other": "Search better quality ({{count}})",
       "addToPlaylist": "Add to playlist",
+      "addToQueue_one": "Add {{count}} to the queue",
+      "addToQueue_other": "Add {{count}} to the queue",
       "clear": "Clear",
       "selectAll": "Select all on this page",
       "selectRow": "Select track"
@@ -365,7 +367,8 @@
       "description": "Something went wrong loading this view. Try again in a moment."
     },
     "actions": {
-      "playTrack": "Play {{title}}"
+      "playTrack": "Play {{title}}",
+      "playAll": "Play everything we have of {{name}}"
     }
   },
   "playlists": {

@@ -3,6 +3,7 @@
 import { useLibraryArtists } from "@hooks/api";
 import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
 import type { LibraryArtistItem } from "@hooks/api/queries/library/types";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useResolveArtistAndOpen } from "@hooks/ui/useResolveArtistAndOpen";
 import { useCallback, useMemo } from "react";
 
@@ -14,6 +15,7 @@ import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
 export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
   const openArtistByName = useResolveArtistAndOpen();
+  const { playEntity } = useEntityPlayback();
 
   const input = useMemo(
     () =>
@@ -34,9 +36,14 @@ export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }
 
   const renderCard = useCallback(
     (item: LibraryArtistItem) => (
-      <LibraryArtistCard item={item} resolveEnabled={isArtistsView} onOpen={() => openArtistByName(item.artist)} />
+      <LibraryArtistCard
+        item={item}
+        resolveEnabled={isArtistsView}
+        onPlay={() => playEntity({ kind: "artist", artist: item.artist })}
+        onOpen={() => openArtistByName(item.artist)}
+      />
     ),
-    [openArtistByName, isArtistsView]
+    [openArtistByName, isArtistsView, playEntity]
   );
 
   return (

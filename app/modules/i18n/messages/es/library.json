@@ -346,6 +346,8 @@
       "searchBetterQuality_one": "Buscar mejor calidad ({{count}})",
       "searchBetterQuality_other": "Buscar mejor calidad ({{count}})",
       "addToPlaylist": "Añadir a lista",
+      "addToQueue_one": "Añadir {{count}} a la cola",
+      "addToQueue_other": "Añadir {{count}} a la cola",
       "clear": "Limpiar",
       "selectAll": "Seleccionar todo en esta página",
       "selectRow": "Seleccionar canción"
@@ -365,7 +367,8 @@
       "description": "Algo salió mal al cargar esta vista. Inténtalo de nuevo en un momento."
     },
     "actions": {
-      "playTrack": "Reproducir {{title}}"
+      "playTrack": "Reproducir {{title}}",
+      "playAll": "Reproducir todo lo que tenemos de {{name}}"
     }
   },
   "playlists": {

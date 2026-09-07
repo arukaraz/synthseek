@@ -45,6 +45,7 @@ export interface DetailHeroProps {
   socials: SocialLink[];
   statsSlot?: ReactNode;
   onRequest?: () => void;
+  onPlay?: () => Promise<void>;
   onSubtitleClick?: () => void;
   showRequest?: boolean;
   showInLibraryPill?: boolean;
@@ -52,6 +53,11 @@ export interface DetailHeroProps {
   requestDisabledTooltip?: string | null;
   playlistControls?: PlaylistHeroControls;
   degradedSources?: DegradedSource[];
+}
+
+export interface HeroPlayButtonProps {
+  name: string;
+  onPlay: () => Promise<void>;
 }
 
 export interface PlaylistSyncToggleProps {

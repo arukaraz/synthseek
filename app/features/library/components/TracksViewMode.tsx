@@ -38,8 +38,8 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
   const query = useLibraryTracks(input, controller.view === "tracks");
 
   const items = useMemo(() => query.data?.items ?? [], [query.data?.items]);
-  const { play } = useLibraryPlayback(items);
-  const columns = useMemo(() => buildTrackColumns({ onPlay: play }), [play]);
+  const { play, enqueue } = useLibraryPlayback(items);
+  const columns = useMemo(() => buildTrackColumns({ onPlay: play, onEnqueue: enqueue }), [play, enqueue]);
 
   const total = query.data?.total ?? 0;
   const hasNextPage = offset + controller.pageSize < total;
@@ -61,7 +61,7 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
         layout: "table",
         columns,
         getRowId: (item) => item.id,
-        selection: { items, selection },
+        selection: { items, selection, onEnqueue: enqueue },
       }}
       filtersOpen={filtersOpen}
       onFiltersOpenChange={onFiltersOpenChange}

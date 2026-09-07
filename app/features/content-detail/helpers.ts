@@ -126,6 +126,11 @@ export function isRemovableTrack(track: TracklistTrack): track is TracklistTrack
   );
 }
 
+export function playableTrackId(track: TracklistTrack): string | null {
+  if (track.requestId === null) return null;
+  return track.status === RequestStatus.enum.complete ? track.requestId : null;
+}
+
 export function detailInitials(name: string): string {
   const words = name
     .trim()

@@ -4,6 +4,7 @@ import { albumRequestItem } from "@features/content-detail";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useLibraryAlbums } from "@hooks/api";
 import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useCallback, useMemo } from "react";
 
 import { VIEW_CONFIG } from "../constants";
@@ -15,6 +16,7 @@ import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
 export function AlbumsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
   const { openForResult } = useContentRequestFlow();
+  const { playEntity } = useEntityPlayback();
   const input = useMemo(
     () =>
       buildAlbumsInput({
@@ -35,6 +37,7 @@ export function AlbumsViewMode({ controller, filtersOpen, onFiltersOpenChange }:
     (item: LibraryAlbumItem) => (
       <AlbumCard
         item={item}
+        onPlay={() => playEntity({ kind: "album", albumExternalId: item.external_id })}
         onOpen={() =>
           openForResult(
             albumRequestItem({
@@ -48,7 +51,7 @@ export function AlbumsViewMode({ controller, filtersOpen, onFiltersOpenChange }:
         }
       />
     ),
-    [openForResult]
+    [openForResult, playEntity]
   );
 
   return (

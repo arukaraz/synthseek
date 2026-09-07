@@ -346,6 +346,8 @@
       "searchBetterQuality_one": "Bessere Qualität suchen ({{count}})",
       "searchBetterQuality_other": "Bessere Qualität suchen ({{count}})",
       "addToPlaylist": "Zur Playlist hinzufügen",
+      "addToQueue_one": "{{count}} zur Warteschlange hinzufügen",
+      "addToQueue_other": "{{count}} zur Warteschlange hinzufügen",
       "clear": "Leeren",
       "selectAll": "Alle auf dieser Seite auswählen",
       "selectRow": "Titel auswählen"
@@ -365,7 +367,8 @@
       "description": "Beim Laden dieser Ansicht ist etwas schiefgelaufen. Versuche es gleich erneut."
     },
     "actions": {
-      "playTrack": "{{title}} abspielen"
+      "playTrack": "{{title}} abspielen",
+      "playAll": "Alles abspielen, was wir von {{name}} haben"
     }
   },
   "playlists": {

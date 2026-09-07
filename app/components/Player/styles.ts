@@ -12,7 +12,7 @@ export const playerDock = cva(
 );
 
 export const headerPlayer = cva(
-  "player-metrics @container flex w-[var(--width-player-compact)] max-w-[34vw] min-w-0 flex-col"
+  "player-metrics @container flex w-[var(--width-player-compact)] max-w-[42vw] min-w-0 flex-col"
 );
 
 export const chainStrip = cva(
