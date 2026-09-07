@@ -39,16 +39,16 @@ export const chainSeparator = cva("text-fg-muted/60 size-2.5 shrink-0");
 export const bar = cva("flex h-[var(--player-bar-height)] flex-col justify-center @player:gap-1", {
   variants: {
     placement: {
-      dock: "bg-surface-overlay/95 border-primary-500/25 border-t px-3 backdrop-blur-[18px] @player:px-5",
+      dock: "bg-surface-overlay/95 border-primary-500/25 border-t px-2 backdrop-blur-[18px] @player:px-5",
       header: "bg-transparent",
     },
   },
   defaultVariants: { placement: "dock" },
 });
 
-export const barTop = cva("flex w-full min-w-0 items-center gap-3 @player:gap-4.5");
+export const barTop = cva("flex w-full min-w-0 items-center gap-2 @player:gap-4.5");
 
-export const barIdentity = cva("flex min-w-0 flex-1 items-center gap-3 @player:basis-0 @player:grow");
+export const barIdentity = cva("flex min-w-0 flex-1 items-center gap-2 @player:gap-3 @player:basis-0 @player:grow");
 
 export const barCoverButton = cva(
   "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none"
@@ -70,25 +70,21 @@ export const barNameButton = cva(
   "focus-visible:ring-primary-500 flex min-w-0 items-center rounded-lg text-left focus-visible:ring-2 focus-visible:outline-none @player:cursor-default"
 );
 
-export const barTitle = cva("text-fg hidden min-w-0 truncate text-[13.5px] leading-tight font-semibold @player:block");
-
-export const barTitleRow = cva("block min-w-0 truncate text-[13.5px] leading-tight @player:hidden");
-
-export const barTitleStrong = cva("text-fg font-semibold");
-
-export const barTitleArtist = cva("text-fg-muted");
+export const barTitle = cva("text-fg block min-w-0 truncate text-[13.5px] leading-tight font-semibold");
 
 export const barDeviceLine = cva("flex items-center gap-1 truncate text-[11px] leading-tight", {
   variants: {
     remote: {
       true: "text-secondary-400",
-      false: "text-fg-muted @player:hidden",
+      false: "hidden",
     },
   },
   defaultVariants: { remote: false },
 });
 
-export const barSubtitle = cva("text-fg-muted hidden truncate text-[11.5px] leading-tight @player:block");
+export const barSubtitle = cva("text-fg-muted block truncate text-[11.5px] leading-tight");
+
+export const barSubtitleAlbum = cva("hidden @player:inline");
 
 export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 @player:order-none @player:gap-3.5", {
   variants: {

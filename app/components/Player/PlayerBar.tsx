@@ -27,10 +27,8 @@ import {
   barMoreGroup,
   barProgress,
   barSubtitle,
+  barSubtitleAlbum,
   barTitle,
-  barTitleArtist,
-  barTitleRow,
-  barTitleStrong,
   barTransport,
   clock,
   iconButton,
@@ -67,10 +65,6 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
             <span className={barNameRow()}>
               <button type="button" className={barNameButton()} onClick={actions.toggleFullscreen} tabIndex={-1}>
                 <span className={barTitle()}>{view.track.title}</span>
-                <span className={barTitleRow()}>
-                  <span className={barTitleStrong()}>{view.track.title}</span>
-                  <span className={barTitleArtist()}> · {view.track.artist}</span>
-                </span>
               </button>
               {placement === "dock" ? (
                 <button
@@ -87,8 +81,9 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
                 </button>
               ) : null}
             </span>
-            <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "@player:hidden")}>
-              {view.track.artist} · {view.track.album}
+            <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "hidden")}>
+              {view.track.artist}
+              <span className={barSubtitleAlbum()}> · {view.track.album}</span>
             </span>
             <span className={barDeviceLine({ remote: !view.activeDevice.local })}>
               <MonitorSpeaker className="size-3.5 shrink-0" />
