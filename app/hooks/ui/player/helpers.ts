@@ -71,6 +71,20 @@ export function shuffledOrder(length: number, startIndex: number): number[] {
   return [startIndex, ...rest];
 }
 
+export function upcomingOrder(state: PlayerSessionState): number[] {
+  if (state.queue.length === 0) return [];
+  if (!state.shuffle) {
+    return Array.from({ length: state.queue.length - state.index - 1 }, (_, step) => state.index + step + 1);
+  }
+  const position = state.shuffleOrder.indexOf(state.index);
+  if (position < 0) return [];
+  return state.shuffleOrder.slice(position + 1);
+}
+
+export function withoutQueueIndex(order: readonly number[], removed: number): number[] {
+  return order.filter((index) => index !== removed).map((index) => (index > removed ? index - 1 : index));
+}
+
 export function nextIndexIn(state: PlayerSessionState): number | null {
   if (state.queue.length === 0) return null;
   if (!state.shuffle) return state.index + 1 < state.queue.length ? state.index + 1 : null;

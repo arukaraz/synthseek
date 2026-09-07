@@ -254,11 +254,17 @@ export function fractionFromPointer(clientX: number, rect: DOMRect): number {
   return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
 }
 
-export function returnFocusTo(selector: string): void {
+export function visibleMatch(selector: string): HTMLElement | null {
   const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector));
-  candidates
-    .find((candidate) => candidate.getClientRects().length > 0 && getComputedStyle(candidate).visibility !== "hidden")
-    ?.focus();
+  return (
+    candidates.find(
+      (candidate) => candidate.getBoundingClientRect().width > 0 && getComputedStyle(candidate).visibility !== "hidden"
+    ) ?? null
+  );
+}
+
+export function returnFocusTo(selector: string): void {
+  visibleMatch(selector)?.focus();
 }
 
 export function lyricLineState(

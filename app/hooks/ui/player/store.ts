@@ -21,6 +21,7 @@ import {
   previousIndexIn,
   shuffledOrder,
   streamUrlFor,
+  withoutQueueIndex,
 } from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
 import type { PlayerSessionState, RemotePlayback } from "./types";
@@ -48,6 +49,7 @@ let state: PlayerSessionState = {
   moreOpen: false,
   devicesOpen: false,
   modesOpen: false,
+  queueOpen: false,
   mode: "normal",
   lyricsOpen: false,
   fullscreen: false,
@@ -316,6 +318,28 @@ export const actions = {
   next(): void {
     advance(false);
   },
+  jumpTo(index: number): void {
+    playAt(index);
+  },
+  removeFromQueue(index: number): void {
+    if (index === state.index || state.queue[index] === undefined) return;
+    publish({
+      queue: state.queue.filter((_, at) => at !== index),
+      index: index < state.index ? state.index - 1 : state.index,
+      shuffleOrder: state.shuffle ? withoutQueueIndex(state.shuffleOrder, index) : [],
+    });
+  },
+  reorderQueue(tail: readonly PlayerTrack[]): void {
+    if (tail.length === 0) return;
+    if (state.shuffle) {
+      const at = state.shuffleOrder.indexOf(state.index);
+      const positions = tail.map((track) => state.queue.indexOf(track));
+      if (at < 0 || positions.some((index) => index < 0)) return;
+      publish({ shuffleOrder: [...state.shuffleOrder.slice(0, at + 1), ...positions] });
+      return;
+    }
+    publish({ queue: [...state.queue.slice(0, state.index + 1), ...tail] });
+  },
   previous(): void {
     if (shouldRestart(state.positionSeconds)) {
       seekWithin(0);
@@ -359,10 +383,13 @@ export const actions = {
     publish({ moreOpen: !state.moreOpen, devicesOpen: false, modesOpen: false });
   },
   toggleDevices(): void {
-    publish({ devicesOpen: !state.devicesOpen, moreOpen: false, modesOpen: false });
+    publish({ devicesOpen: !state.devicesOpen, moreOpen: false, modesOpen: false, queueOpen: false });
   },
   toggleModes(): void {
-    publish({ modesOpen: !state.modesOpen, devicesOpen: false, moreOpen: false });
+    publish({ modesOpen: !state.modesOpen, devicesOpen: false, queueOpen: false, moreOpen: false });
+  },
+  toggleQueue(): void {
+    publish({ queueOpen: !state.queueOpen, devicesOpen: false, modesOpen: false, moreOpen: false });
   },
   selectMode(mode: PlayerMode): void {
     if (state.mode === "mini" && mode !== "mini") closeMiniWindow();

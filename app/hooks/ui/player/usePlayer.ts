@@ -7,13 +7,14 @@ import {
   useSetFavoriteTrack,
   useSetScrobbleEnabled,
   useTrackLyrics,
+  useUpgradeTracks,
 } from "@hooks/api";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { resolveFriendlyError } from "@modules/errors";
 import { useTranslation } from "react-i18next";
 
 import { deviceKindFrom } from "./device";
-import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom } from "./helpers";
+import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom, upcomingOrder } from "./helpers";
 import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
 import { usePlayerDocumentTitle } from "./useDocumentTitle";
@@ -60,6 +61,11 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     isPending: scrobblePending,
     variables: scrobbleVariables,
   } = useSetScrobbleEnabled();
+  const { mutate: upgradeTracks, isPending: upgradePending } = useUpgradeTracks();
+  const searchBetterQuality = useCallback(() => {
+    if (track === null) return;
+    upgradeTracks({ trackIds: [track.id] });
+  }, [track, upgradeTracks]);
   const connected = (connections.data ?? []).filter((connection) => connection.connected);
   const toggleScrobbling = useCallback(() => {
     const enabled = !connected.some((connection) => connection.scrobbleEnabled);
@@ -183,6 +189,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
           actions.expectRemote({ repeat: nextRepeat(playingOn?.repeat ?? "off") });
         }
       : actions.cycleRepeat,
+    searchBetterQuality,
     toggleChain: actions.toggleChain,
     toggleLyrics: actions.toggleLyrics,
     openLyrics: actions.openLyrics,
@@ -190,7 +197,11 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     toggleMore: actions.toggleMore,
     toggleDevices: actions.toggleDevices,
     toggleModes: actions.toggleModes,
+    toggleQueue: actions.toggleQueue,
     selectMode: actions.selectMode,
+    jumpTo: actions.jumpTo,
+    removeFromQueue: actions.removeFromQueue,
+    reorderQueue: actions.reorderQueue,
     toggleFullscreen: actions.toggleFullscreen,
     toggleFavorite,
     handOverTo,
@@ -224,6 +235,15 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     moreOpen: session.moreOpen,
     devicesOpen: session.devicesOpen,
     modesOpen: session.modesOpen,
+    queueOpen: session.queueOpen,
+    queueEditable: !mirroring,
+    queue: {
+      playing: track === null ? null : { index: session.index, track },
+      upNext: upcomingOrder(session).flatMap((index) => {
+        const queued = session.queue[index];
+        return queued === undefined ? [] : [{ index, track: queued }];
+      }),
+    },
     mode: session.mode,
     lyricsOpen: session.lyricsOpen,
     lyrics: lyrics.data ?? null,
@@ -236,6 +256,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
           : "off"
         : scrobbleStateFrom(connections.data ?? []),
     scrobbleActionable: connected.length > 0,
+    upgrading: upgradePending,
     fullscreen: session.fullscreen,
   };
 

@@ -42,6 +42,7 @@ export interface PlayerSessionState {
   moreOpen: boolean;
   devicesOpen: boolean;
   modesOpen: boolean;
+  queueOpen: boolean;
   mode: PlayerMode;
   lyricsOpen: boolean;
   fullscreen: boolean;

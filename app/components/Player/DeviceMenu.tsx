@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
-import { playerPanel } from "@utils/animations";
+import { playerPanel, playerPanelFromTop } from "@utils/animations";
 
 import { DeviceBody } from "./DeviceBody";
 import { DEVICES_TOGGLE_SELECTOR } from "./constants";
@@ -40,7 +40,7 @@ export function DeviceMenu({ view, actions, chain, anchored = false }: PlayerPan
       >
         <motion.div
           className={panelSurface({ anchored: anchored && point !== null })}
-          variants={playerPanel}
+          variants={point?.below === true ? playerPanelFromTop : playerPanel}
           initial="hidden"
           animate="visible"
           exit="exit"

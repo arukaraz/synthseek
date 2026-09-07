@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Heart, Mic2, MonitorSpeaker, Minimize } from "lucide-react";
+import { Heart, Mic2, MonitorSpeaker, Minimize, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
@@ -144,6 +144,15 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                         size="stage"
                         onToggle={actions.toggleScrobbling}
                       />
+                      <button
+                        type="button"
+                        className={iconButton({ size: "stage" })}
+                        onClick={actions.searchBetterQuality}
+                        disabled={view.upgrading}
+                        {...labelled(t("controls.upgrade"))}
+                      >
+                        <Sparkles className="size-4" />
+                      </button>
                       <button
                         type="button"
                         className={iconButton({ tone: view.lyricsOpen ? "active" : "muted", size: "stage" })}

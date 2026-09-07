@@ -19,6 +19,8 @@ import {
   shuffledOrder,
   startedSecondsAgo,
   streamUrlFor,
+  upcomingOrder,
+  withoutQueueIndex,
 } from "../helpers";
 import type { PlayerSessionState } from "../types";
 
@@ -106,6 +108,31 @@ describe("shuffledOrder", () => {
   it("visits every position exactly once", () => {
     const order = shuffledOrder(8, 5);
     expect([...order].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+  });
+});
+
+describe("upcomingOrder", () => {
+  it("lists the rest of the queue in order when shuffle is off", () => {
+    expect(upcomingOrder(sessionWith({ queue: queueOf(4), index: 1 }))).toEqual([2, 3]);
+  });
+
+  it("follows the shuffled order rather than the queue order", () => {
+    const state = sessionWith({ queue: queueOf(4), index: 2, shuffle: true, shuffleOrder: [2, 0, 3, 1] });
+    expect(upcomingOrder(state)).toEqual([0, 3, 1]);
+  });
+
+  it("is empty once the last track is playing", () => {
+    expect(upcomingOrder(sessionWith({ queue: queueOf(3), index: 2 }))).toEqual([]);
+  });
+});
+
+describe("withoutQueueIndex", () => {
+  it("drops the removed position and shifts every later one down", () => {
+    expect(withoutQueueIndex([0, 1, 2, 3], 1)).toEqual([0, 1, 2]);
+  });
+
+  it("leaves earlier positions untouched", () => {
+    expect(withoutQueueIndex([3, 0, 2], 2)).toEqual([2, 0]);
   });
 });
 

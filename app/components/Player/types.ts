@@ -38,6 +38,16 @@ export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";
 
 export type PlayerMode = "normal" | "compact" | "mini";
 
+export interface PlayerQueueEntry {
+  index: number;
+  track: PlayerTrack;
+}
+
+export interface PlayerQueue {
+  playing: PlayerQueueEntry | null;
+  upNext: readonly PlayerQueueEntry[];
+}
+
 export interface PlayerLyricsLine {
   start: number | null;
   value: string;
@@ -76,8 +86,12 @@ export interface PlayerView {
   lyricsFailure: string | null;
   scrobble: PlayerScrobbleState;
   scrobbleActionable: boolean;
+  upgrading: boolean;
   moreOpen: boolean;
   modesOpen: boolean;
+  queueOpen: boolean;
+  queueEditable: boolean;
+  queue: PlayerQueue;
   mode: PlayerMode;
   fullscreen: boolean;
 }
@@ -94,12 +108,17 @@ export interface PlayerActions {
   cycleRepeat: () => void;
   toggleDevices: () => void;
   toggleModes: () => void;
+  toggleQueue: () => void;
   selectMode: (mode: PlayerMode) => void;
+  jumpTo: (index: number) => void;
+  removeFromQueue: (index: number) => void;
+  reorderQueue: (tail: PlayerTrack[]) => void;
   toggleMore: () => void;
   toggleChain: () => void;
   toggleLyrics: () => void;
   openLyrics: () => void;
   toggleScrobbling: () => void;
+  searchBetterQuality: () => void;
   toggleFullscreen: () => void;
   toggleFavorite: () => void;
   handOverTo: (deviceId: string) => void;
@@ -126,7 +145,10 @@ export interface PlayerPanelProps extends PlayerProps {
 
 export interface PanelAnchorPoint {
   top: number;
+  bottom: number;
   left: number;
+  below: boolean;
+  room: number;
 }
 
 export interface PlayerPlacement {
@@ -140,6 +162,15 @@ export interface PlayerTransportProps extends PlayerProps {
 
 export interface PlayerExtraControlsProps extends PlayerProps {
   omitTransport?: boolean;
+}
+
+export type PlayerQueueBodyProps = PlayerProps;
+
+export interface PlayerQueueRowProps {
+  entry: PlayerQueueEntry;
+  current: boolean;
+  editable: boolean;
+  actions: PlayerActions;
 }
 
 export interface PlayerWaveProps extends PlayerProps {

@@ -131,7 +131,7 @@ export const clock = cva("text-fg-muted shrink-0 font-mono tabular-nums", {
 });
 
 export const iconButton = cva(
-  "focus-visible:ring-primary-500 grid shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  "focus-visible:ring-primary-500 grid shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50",
   {
     variants: {
       tone: {
@@ -242,14 +242,17 @@ export const panelAnchor = cva("player-metrics pointer-events-auto fixed z-70", 
   variants: {
     width: {
       devices: "sm:w-[306px]",
+      queue: "",
     },
     chain: {
       true: "player-metrics-chain",
       false: "",
     },
     anchored: {
-      true: "inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-auto sm:top-[var(--player-anchor-top)] sm:left-[var(--player-anchor-left)]",
+      true: "inset-x-0 bottom-0 sm:inset-x-auto sm:top-[var(--player-anchor-top)] sm:bottom-[var(--player-anchor-bottom)] sm:left-[var(--player-anchor-left)] sm:max-h-[var(--player-anchor-height)]",
       false: "player-panel-anchor inset-x-0 bottom-0 sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-bar-height)]",
+      column:
+        "inset-x-0 top-0 bottom-[calc(var(--player-dock-height)+var(--height-bottom-nav))] sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-dock-height)] sm:w-[380px]",
     },
   },
   defaultVariants: { width: "devices", chain: false, anchored: false },
@@ -263,8 +266,12 @@ export const panelSurface = cva(
         true: "sm:rounded-[14px] sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
         false: "border-b-0 sm:rounded-tr-none sm:border-r-0",
       },
+      stretch: {
+        true: "h-full",
+        false: "",
+      },
     },
-    defaultVariants: { anchored: false },
+    defaultVariants: { anchored: false, stretch: false },
   }
 );
 
@@ -291,6 +298,48 @@ export const deviceRow = cva(
 
 export const modeHint = cva("text-fg-muted shrink-0 font-mono text-[10px] tracking-[0.12em] uppercase");
 
+export const queueHeader = cva("flex shrink-0 items-center justify-between gap-3 px-3.5 pt-3 pb-1");
+
+export const queueTitle = cva("text-fg text-[15px] font-semibold");
+
+export const queueCaption = cva("text-fg-muted shrink-0 px-1 pt-2 pb-1 font-mono text-[10px] tracking-[0.14em]");
+
+export const queueList = cva("scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto px-2.5 pb-2");
+
+export const queueRow = cva("flex shrink-0 items-center gap-1 rounded-lg", {
+  variants: {
+    current: {
+      true: "",
+      false: "hover:bg-fg/6",
+    },
+  },
+  defaultVariants: { current: false },
+});
+
+export const queueGrip = cva(
+  "text-fg-muted/40 hover:text-fg-muted grid size-6 shrink-0 cursor-grab touch-none place-items-center active:cursor-grabbing"
+);
+
+export const queueRowText = cva(
+  "focus-visible:ring-primary-500 flex min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-lg py-1.5 text-left focus-visible:ring-2 focus-visible:outline-none"
+);
+
+export const queueRowLines = cva("flex min-w-0 flex-1 flex-col");
+
+export const queueRowTitle = cva("min-w-0 truncate text-[13px] leading-tight font-semibold", {
+  variants: {
+    current: {
+      true: "text-primary-400",
+      false: "text-fg",
+    },
+  },
+  defaultVariants: { current: false },
+});
+
+export const queueRowArtist = cva("text-fg-muted min-w-0 truncate text-[11px] leading-tight");
+
+export const queueEmpty = cva("text-fg-muted px-1 py-3 text-[12px]");
+
 export const miniRoot = cva("bg-surface text-fg flex h-screen w-screen flex-col overflow-hidden");
 
 export const miniHeader = cva("flex shrink-0 items-center gap-3 px-3.5 pt-3 pb-1");
@@ -308,20 +357,6 @@ export const miniProgress = cva("flex w-full min-w-0 shrink-0 items-center gap-2
 export const miniChevronRow = cva("flex shrink-0 items-center justify-center");
 
 export const miniExtras = cva("flex shrink-0 items-center justify-center gap-1 px-3.5 pb-1");
-
-export const miniListCaption = cva("text-fg-muted shrink-0 px-3.5 pt-2 pb-1 font-mono text-[10px] tracking-[0.14em]");
-
-export const miniList = cva("scrollbar-none flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-3.5");
-
-export const miniRow = cva("flex shrink-0 items-center gap-3 rounded-lg py-1.5");
-
-export const miniRowThumb = cva("bg-fg-muted/15 size-10 shrink-0 rounded-md");
-
-export const miniRowText = cva("flex min-w-0 flex-1 flex-col gap-1.5");
-
-export const miniRowTitle = cva("bg-fg-muted/15 h-2.5 w-1/2 rounded-full");
-
-export const miniRowSub = cva("bg-fg-muted/10 h-2 w-3/4 rounded-full");
 
 export const miniFooter = cva("shrink-0 px-3.5 pt-2 pb-3");
 
@@ -423,7 +458,13 @@ export function progressVars(percent: number): CssVars {
 
 export function anchorVars(point: PanelAnchorPoint | null): CssVars | undefined {
   if (point === null) return undefined;
-  return { "--player-anchor-top": `${point.top}px`, "--player-anchor-left": `${point.left}px` };
+  const height = point.room;
+  return {
+    "--player-anchor-top": point.below ? `${point.top}px` : "auto",
+    "--player-anchor-bottom": point.below ? "auto" : `${point.bottom}px`,
+    "--player-anchor-left": `${point.left}px`,
+    "--player-anchor-height": `${Math.max(0, height)}px`,
+  };
 }
 
 export function volumeVars(percent: number): CssVars {

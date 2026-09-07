@@ -16,6 +16,7 @@
     "unmute": "Rétablir le son",
     "volume": "Volume",
     "devices": "Appareils",
+    "upgrade": "Chercher une meilleure qualité",
     "modes": "Mode du lecteur",
     "restoreMode": "Quitter le mode compact",
     "exitMini": "Quitter le mini lecteur",
@@ -43,10 +44,19 @@
     "playHere": "Lire ici"
   },
   "mini": {
-    "upNext": "À SUIVRE",
     "openLibrary": "Ouvrir la bibliothèque",
     "showControls": "Afficher plus de commandes",
     "hideControls": "Masquer les commandes supplémentaires"
+  },
+  "queue": {
+    "title": "File d'attente",
+    "close": "Masquer la file",
+    "nowPlaying": "EN COURS",
+    "upNext": "À SUIVRE",
+    "empty": "Rien après ce titre",
+    "jumpTo": "Lire {{title}}",
+    "remove": "Retirer {{title}} de la file",
+    "reorder": "Glisser pour déplacer {{title}}"
   },
   "modes": {
     "caption": "MODE DU LECTEUR",

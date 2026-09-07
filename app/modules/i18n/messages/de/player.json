@@ -16,6 +16,7 @@
     "unmute": "Stummschaltung aufheben",
     "volume": "Lautstärke",
     "devices": "Geräte",
+    "upgrade": "Bessere Qualität suchen",
     "modes": "Player-Modus",
     "restoreMode": "Kompaktmodus verlassen",
     "exitMini": "Mini-Player verlassen",
@@ -43,10 +44,19 @@
     "playHere": "Hier abspielen"
   },
   "mini": {
-    "upNext": "ALS NÄCHSTES",
     "openLibrary": "Bibliothek öffnen",
     "showControls": "Mehr Steuerelemente zeigen",
     "hideControls": "Zusätzliche Steuerelemente ausblenden"
+  },
+  "queue": {
+    "title": "Warteschlange",
+    "close": "Warteschlange ausblenden",
+    "nowPlaying": "LÄUFT GERADE",
+    "upNext": "ALS NÄCHSTES",
+    "empty": "Danach steht nichts an",
+    "jumpTo": "{{title}} abspielen",
+    "remove": "{{title}} aus der Warteschlange entfernen",
+    "reorder": "Zum Verschieben von {{title}} ziehen"
   },
   "modes": {
     "caption": "PLAYER-MODUS",

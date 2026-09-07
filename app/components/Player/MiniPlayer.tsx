@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { MINI_COLLAPSED_HEIGHT_PX, MINI_EXTRAS_HEIGHT_PX, MINI_PLACEHOLDER_ROWS, MINI_QUEUE_ROUTE } from "./constants";
+import { MINI_COLLAPSED_HEIGHT_PX, MINI_EXTRAS_HEIGHT_PX, MINI_QUEUE_ROUTE } from "./constants";
 import { FavouriteButton } from "./FavouriteButton";
 import { PlayerExtraControls } from "./PlayerExtraControls";
 import { PlayerTransport } from "./PlayerTransport";
 import { PlayerWave } from "./PlayerWave";
+import { QueueBody } from "./QueueBody";
 import { TrackCover } from "./TrackCover";
 import { formatClock, labelled, trackInitials } from "./helpers";
 import { ensureMiniHeight } from "./miniWindow";
@@ -21,15 +22,8 @@ import {
   miniFooter,
   miniHeader,
   miniLibraryButton,
-  miniList,
-  miniListCaption,
   miniProgress,
   miniRoot,
-  miniRow,
-  miniRowSub,
-  miniRowText,
-  miniRowThumb,
-  miniRowTitle,
   miniTextColumn,
   miniTitle,
   miniTransport,
@@ -92,18 +86,7 @@ export function MiniPlayer({ view, actions }: PlayerProps) {
         </div>
       ) : null}
 
-      <span className={miniListCaption()}>{t("mini.upNext")}</span>
-      <div className={miniList()}>
-        {Array.from({ length: MINI_PLACEHOLDER_ROWS }, (_, index) => (
-          <div key={index} className={miniRow()} aria-hidden>
-            <span className={miniRowThumb()} />
-            <span className={miniRowText()}>
-              <span className={miniRowTitle()} />
-              <span className={miniRowSub()} />
-            </span>
-          </div>
-        ))}
-      </div>
+      <QueueBody view={view} actions={actions} />
 
       <div className={miniFooter()}>
         <button

@@ -16,6 +16,7 @@
     "unmute": "Unmute",
     "volume": "Volume",
     "devices": "Devices",
+    "upgrade": "Search better quality",
     "modes": "Player mode",
     "restoreMode": "Exit Compact Mode",
     "exitMini": "Exit Mini Player",
@@ -43,10 +44,19 @@
     "playHere": "Play here"
   },
   "mini": {
-    "upNext": "UP NEXT",
     "openLibrary": "Open Library",
     "showControls": "Show more controls",
     "hideControls": "Hide the extra controls"
+  },
+  "queue": {
+    "title": "Queue",
+    "close": "Hide the queue",
+    "nowPlaying": "NOW PLAYING",
+    "upNext": "NEXT UP",
+    "empty": "Nothing queued after this one",
+    "jumpTo": "Play {{title}}",
+    "remove": "Remove {{title}} from the queue",
+    "reorder": "Drag to move {{title}}"
   },
   "modes": {
     "caption": "PLAYER MODE",

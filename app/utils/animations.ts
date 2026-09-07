@@ -29,18 +29,20 @@ export const slideUp: Variants = {
   },
 };
 
+const panelIn = { duration: 0.22, ease: [0.22, 1, 0.36, 1] } as const;
+
+const panelOut = { duration: 0.34, ease: [0.4, 0, 1, 1], opacity: { duration: 0.16, delay: 0.18 } } as const;
+
 export const playerPanel: Variants = {
   hidden: { y: 14, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] },
-  },
-  exit: {
-    y: 14,
-    opacity: 0,
-    transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
-  },
+  visible: { y: 0, opacity: 1, transition: panelIn },
+  exit: { y: 14, opacity: 0, transition: panelOut },
+};
+
+export const playerPanelFromTop: Variants = {
+  hidden: { y: -14, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: panelIn },
+  exit: { y: -14, opacity: 0, transition: panelOut },
 };
 
 export const scale: Variants = {

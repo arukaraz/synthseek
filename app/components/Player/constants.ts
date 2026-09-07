@@ -71,6 +71,8 @@ export const DEVICES_TOGGLE_SELECTOR = "[data-player-devices-toggle]";
 
 export const MODES_TOGGLE_SELECTOR = "[data-player-modes-toggle]";
 
+export const QUEUE_TOGGLE_SELECTOR = "[data-player-queue-toggle]";
+
 export const FULLSCREEN_TOGGLE_SELECTOR = "[data-player-fullscreen-toggle]";
 
 export const SELECTABLE_PLAYER_MODES = ["compact", "mini"] as const;
@@ -121,8 +123,6 @@ export const MINI_WINDOW_HEIGHT_PX =
   MINI_LIST_CAPTION_HEIGHT_PX +
   MINI_LIST_ROW_HEIGHT_PX * MINI_LIST_ROWS_AT_OPEN +
   MINI_FOOTER_HEIGHT_PX;
-
-export const MINI_PLACEHOLDER_ROWS = 6;
 
 export const APP_TITLE = "Synthseek";
 
