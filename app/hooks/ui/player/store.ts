@@ -412,10 +412,10 @@ export const actions = {
     publish({ moreOpen: !state.moreOpen, devicesOpen: false, modesOpen: false });
   },
   toggleDevices(): void {
-    publish({ devicesOpen: !state.devicesOpen, moreOpen: false, modesOpen: false, queueOpen: false });
+    publish({ devicesOpen: !state.devicesOpen, moreOpen: false, modesOpen: false });
   },
   toggleModes(): void {
-    publish({ modesOpen: !state.modesOpen, devicesOpen: false, queueOpen: false, moreOpen: false });
+    publish({ modesOpen: !state.modesOpen, devicesOpen: false, moreOpen: false });
   },
   toggleQueue(): void {
     publish({ queueOpen: !state.queueOpen, devicesOpen: false, modesOpen: false, moreOpen: false });

@@ -17,6 +17,7 @@ export function QueueMenu({ view, actions, chain }: PlayerPanelProps) {
   return (
     <Dialog
       open
+      modal={false}
       onOpenChange={(next) => {
         if (!next) actions.toggleQueue();
       }}
@@ -24,11 +25,8 @@ export function QueueMenu({ view, actions, chain }: PlayerPanelProps) {
       <DialogSurface
         className={panelAnchor({ width: "queue", chain, anchored: "column" })}
         aria-describedby={undefined}
-        onInteractOutside={(event) => {
-          if (event.target instanceof Element && event.target.closest(QUEUE_TOGGLE_SELECTOR) !== null) {
-            event.preventDefault();
-          }
-        }}
+        onInteractOutside={(event) => event.preventDefault()}
+        onEscapeKeyDown={(event) => event.preventDefault()}
         onCloseAutoFocus={(event) => {
           event.preventDefault();
           returnFocusTo(QUEUE_TOGGLE_SELECTOR);

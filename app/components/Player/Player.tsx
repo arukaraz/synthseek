@@ -26,7 +26,7 @@ export function Player({ view, actions }: PlayerProps) {
           <DeviceMenu view={view} actions={actions} chain={anchorToChain} anchored={view.fullscreen} />
         ) : null}
         {view.modesOpen ? <PlayerModeMenu view={view} actions={actions} chain={anchorToChain} /> : null}
-        {view.queueOpen ? <QueueMenu view={view} actions={actions} chain={anchorToChain} /> : null}
+        {view.queueOpen && !view.fullscreen ? <QueueMenu view={view} actions={actions} chain={anchorToChain} /> : null}
       </AnimatePresence>
       {target !== null
         ? createPortal(
