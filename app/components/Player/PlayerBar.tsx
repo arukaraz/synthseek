@@ -75,7 +75,10 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
               {placement === "dock" ? (
                 <button
                   type="button"
-                  className={iconButton({ tone: view.chainVisible ? "remote" : "muted", size: "inline" })}
+                  className={cn(
+                    iconButton({ tone: view.chainVisible ? "remote" : "muted", size: "inline" }),
+                    "@max-player:hidden"
+                  )}
                   onClick={actions.toggleChain}
                   {...labelled(t("controls.chain"))}
                   aria-pressed={view.chainVisible}
@@ -104,13 +107,13 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
             {view.moreOpen ? <ChevronLeft className="size-4" /> : <ChevronRight className="size-4" />}
           </button>
           <div className={barMoreGroup({ open: view.moreOpen })}>
-            <PlayerExtraControls view={view} actions={actions} />
+            <PlayerExtraControls view={view} actions={actions} mobileChevron={placement === "dock"} />
           </div>
         </div>
 
         <div className={barTransport({ folded: view.moreOpen })}>
           <FavouriteButton view={view} actions={actions} className="@player:hidden" />
-          <UpgradeButton view={view} actions={actions} className="@player:hidden" />
+          {placement === "header" ? <UpgradeButton view={view} actions={actions} className="@player:hidden" /> : null}
           <PlayerTransport view={view} actions={actions} size="bar" />
         </div>
 

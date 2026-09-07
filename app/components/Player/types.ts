@@ -162,6 +162,7 @@ export interface PlayerTransportProps extends PlayerProps {
 
 export interface PlayerExtraControlsProps extends PlayerProps {
   omitTransport?: boolean;
+  mobileChevron?: boolean;
 }
 
 export type PlayerQueueBodyProps = PlayerProps;
