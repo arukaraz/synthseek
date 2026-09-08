@@ -9,6 +9,7 @@ export type SidebarItemKey =
   | "shell.sidebar.items.integrations"
   | "shell.sidebar.items.engine"
   | "shell.sidebar.items.jobs"
+  | "shell.sidebar.items.library"
   | "shell.sidebar.items.logs"
   | "shell.sidebar.items.updates"
   | "shell.sidebar.items.maintenance"

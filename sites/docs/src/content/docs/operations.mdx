@@ -47,6 +47,18 @@ The library scan has its own card on the **Jobs** page rather than a row in the 
 
 Duplicates have their own page under **Settings**, then **Maintenance**, listing them a track at a time, ordered by what settling each one would give back. Copies it can prove are the same recording are settled without anyone pressing anything: it keeps the best file, preferring lossless and then the larger one, points your library at it, and sends the rest to the recycle bin. Proof means the copies agree on both their title and their length, since a remix, a live take, a radio edit or a truncated download can carry the title of the track it was filed against while being a different recording; copies within a couple of seconds of each other count as one length, because that is encoder rounding rather than a different take. What it cannot prove waits under **Needs review**, where each track says how many clearly different lengths its copies come in and you can play any copy before taking a **Keep this copy** on the one you want, which recycles the others. Nothing is deleted outright: a call you disagree with is listed under **Settings**, then **Maintenance**, then **Recycle bin**, with a **Restore** that puts the file back where it came from, for as long as the retention window keeps it.
 
+### Reorganising what is already on disk
+
+**Settings**, then **Library**, administrators only.
+
+A library that predates a setting, or that another tool wrote into, can hold files whose place on disk no longer matches how Synthseek would file them. This page counts those and offers to move them. Nothing moves until you press.
+
+The preview splits the work in two: files that only change folder, and files where a name is rewritten as well. The second is unticked to start with, and it also moves tracks to the album or artist your catalog records for them.
+
+Lyrics and artwork travel with the music they belong to. Where that would mean guessing, they stay, and the page says which case each one hit.
+
+If your library changed between the preview and the press, nothing moves and the preview is worked out again. Anything that could not be moved is listed with its reason. A read-only `/music` fails every move, and a move the index did not record is named as such, which a library scan repairs.
+
 ## Logs
 
 **Settings**, then **Logs**, administrators only.

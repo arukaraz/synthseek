@@ -853,7 +853,8 @@
         "review": "Prüfung",
         "duplicates": "Duplikate",
         "recycleBin": "Papierkorb",
-        "quarantine": "Quarantäne"
+        "quarantine": "Quarantäne",
+        "library": "Bibliothek"
       },
       "maintenanceWaiting": "In einigen Wartungsbereichen warten Einträge"
     },
@@ -1035,6 +1036,82 @@
       "title": "Apps verbinden",
       "description": "Apps und Assistenten, die sich mit deinem Synthseek verbinden."
     }
+  },
+  "library": {
+    "page": {
+      "title": "Bibliothek",
+      "description": "Wie deine Dateien auf der Platte geordnet sind und was nicht passt."
+    }
+  },
+  "libraryOrganise": {
+    "card": {
+      "title": "Was nicht passt",
+      "description": "Dateien, deren Platz auf der Platte nicht dem entspricht, wohin diese Ordnung sie legen würde. Liedtexte und Cover ziehen mit ihrer Musik um."
+    },
+    "stats": {
+      "inPlace": "Am richtigen Platz",
+      "toMove": "Würden umziehen",
+      "rejected": "Unberührt",
+      "companions": "Ziehen mit"
+    },
+    "groups": {
+      "relocate": {
+        "title": "Nur der Ordner ändert sich",
+        "description": "Die Namen bleiben genau so, die Datei zieht in einen anderen Ordner."
+      },
+      "rename": {
+        "title": "Auch ein Name ändert sich",
+        "description": "Ein Ordner- oder Dateiname wird neu geschrieben. Manche Titel wandern zudem zu dem Album oder der Interpretin, die dein Katalog für sie führt."
+      }
+    },
+    "renameWarning": "Das schreibt {{count}} Namen neu. Dein Medienserver muss die Bibliothek erneut lesen, und bis dahin sucht er sie unter den alten.",
+    "rejectedNotice": "{{count}} Dateien bleiben, wo sie sind",
+    "rejectedReason": {
+      "METADATA_UNAVAILABLE": "{{count}} fehlt etwas, das der neue Name braucht, meist die Titelnummer.",
+      "PATH_COLLISION_IDENTICAL": "{{count}} sind doppelt erfasst und zeigen auf dieselbe Datei.",
+      "PATH_COLLISION_DIFFERENT": "{{count}} würden auf demselben Namen landen wie eine andere Datei.",
+      "PATH_TOO_LONG": "{{count}} bekämen einen Pfad, der für die Platte zu lang ist.",
+      "SCRIPT_VALIDATION_FAILED": "{{count}} ergaben einen Namen, der nicht sicher zu schreiben ist."
+    },
+    "finished": "{{moved}} Dateien und {{companions}} Begleitdateien in {{duration}} verschoben",
+    "finishedFailures": "{{count}} konnten nicht verschoben werden und liegen noch dort:",
+    "finishedCompanionsFailed": "{{count}} Liedtexte oder Cover konnten ihrem Titel nicht folgen.",
+    "moveFailure": {
+      "FILE_UNREADABLE": "die Datei war nicht da",
+      "FILE_CHANGED": "die Datei hat sich nach der Vorschau geändert",
+      "PATH_COLLISION_DIFFERENT": "dort liegt bereits etwas",
+      "OUT_OF_ROOT": "das Ziel lag außerhalb der Bibliothek",
+      "ROOT_READ_ONLY": "die Bibliothek ließ das Schreiben nicht zu",
+      "CROSS_DEVICE": "das Ziel liegt auf einer anderen Platte",
+      "NO_SPACE": "die Platte ist voll",
+      "MOVE_REFUSED": "die Platte hat den Umzug abgelehnt",
+      "INDEX_NOT_UPDATED": "die Datei ist umgezogen, der Index aber nicht, ein Bibliotheksscan repariert das"
+    },
+    "companionsLeftNotice": "Einige Liedtexte und Cover bleiben, wo sie sind",
+    "companionsLeft": {
+      "AMBIGUOUS_OWNER": "{{count}} könnten zu mehr als einem Titel gehören, also wird nichts geraten.",
+      "AUDIO_STAYS": "{{count}} liegen in Ordnern, die Musik behalten, die sie weiterhin braucht.",
+      "FOLDER_REMAINS": "{{count}} gehören zu einem Ordner, der weitere Ordner enthält und deshalb bleibt.",
+      "SIDECAR_COLLISION": "{{count}} würden auf einem bereits vergebenen Namen landen."
+    },
+    "companionsProgress": "und {{count}} Dateien, die mitgezogen sind.",
+    "companionsFailed": "{{count}} konnten ihrem Titel nicht folgen.",
+    "progress": "{{processed}} von {{total}} Dateien, {{percent}}%",
+    "error": "Der Plan konnte nicht erstellt werden.",
+    "actions": {
+      "apply": "{{count}} Dateien verschieben",
+      "stop": "Anhalten"
+    },
+    "toast": {
+      "started": "Dateien werden abgelegt",
+      "alreadyRunning": "Läuft bereits",
+      "cancelling": "Hält nach der laufenden Datei an",
+      "nothingRunning": "Es läuft nichts",
+      "planExpired": "Deine Bibliothek hat sich seitdem geändert, also wurde nichts verschoben. Sieh es dir noch einmal an.",
+      "scanBusy": "Der Bibliotheksscan geht gerade durch deine Dateien. Versuch es danach erneut."
+    },
+    "finishedAbandoned": "{{count}} wurden nie erreicht, weil der Lauf vorzeitig endete.",
+    "finishedFailuresTruncated": "Gezeigt werden {{listed}} von {{count}}. Der Rest steht in den Protokollen."
   },
   "libraryScan": {
     "card": {

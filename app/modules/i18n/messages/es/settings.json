@@ -853,7 +853,8 @@
         "review": "Revisión",
         "duplicates": "Duplicados",
         "recycleBin": "Papelera",
-        "quarantine": "Cuarentena"
+        "quarantine": "Cuarentena",
+        "library": "Biblioteca"
       },
       "maintenanceWaiting": "Algunas superficies de mantenimiento tienen elementos esperando"
     },
@@ -1035,6 +1036,82 @@
       "title": "Conectar aplicaciones",
       "description": "Aplicaciones y asistentes que se conectan a tu Synthseek."
     }
+  },
+  "library": {
+    "page": {
+      "title": "Biblioteca",
+      "description": "Cómo están organizados tus ficheros en disco, y qué no encaja."
+    }
+  },
+  "libraryOrganise": {
+    "card": {
+      "title": "Qué no encaja",
+      "description": "Ficheros cuyo sitio en disco no es donde esta organización los pondría. Las letras y las carátulas viajan con su música."
+    },
+    "stats": {
+      "inPlace": "En su sitio",
+      "toMove": "Se moverían",
+      "rejected": "Sin tocar",
+      "companions": "Van con ellos"
+    },
+    "groups": {
+      "relocate": {
+        "title": "Solo cambian de carpeta",
+        "description": "Los nombres se quedan igual, el fichero pasa a otra carpeta."
+      },
+      "rename": {
+        "title": "Además cambia un nombre",
+        "description": "Se reescribe el nombre de una carpeta o de un fichero. Algunas pistas además pasan al álbum o al artista que tu catálogo les asigna."
+      }
+    },
+    "renameWarning": "Esto reescribe {{count}} nombres. Tu servidor multimedia tendrá que releer la biblioteca, y hasta que lo haga los busca por los nombres viejos.",
+    "rejectedNotice": "{{count}} ficheros se quedan donde están",
+    "rejectedReason": {
+      "METADATA_UNAVAILABLE": "A {{count}} les falta algo que el nombre nuevo necesita, casi siempre el número de pista.",
+      "PATH_COLLISION_IDENTICAL": "{{count}} están listados dos veces y apuntan al mismo fichero.",
+      "PATH_COLLISION_DIFFERENT": "{{count}} aterrizarían en el mismo nombre que otro fichero.",
+      "PATH_TOO_LONG": "{{count}} acabarían con una ruta demasiado larga para el disco.",
+      "SCRIPT_VALIDATION_FAILED": "{{count}} dieron un nombre que no es seguro escribir."
+    },
+    "finished": "Movidos {{moved}} ficheros y {{companions}} acompañantes en {{duration}}",
+    "finishedFailures": "{{count}} no se pudieron mover y siguen donde estaban:",
+    "finishedCompanionsFailed": "{{count}} letras o carátulas no pudieron seguir a su pista.",
+    "moveFailure": {
+      "FILE_UNREADABLE": "el fichero no estaba",
+      "FILE_CHANGED": "el fichero cambió después de la previsualización",
+      "PATH_COLLISION_DIFFERENT": "ya hay algo ahí",
+      "OUT_OF_ROOT": "el destino caía fuera de la biblioteca",
+      "ROOT_READ_ONLY": "la biblioteca no aceptó la escritura",
+      "CROSS_DEVICE": "el destino está en otro disco",
+      "NO_SPACE": "el disco está lleno",
+      "MOVE_REFUSED": "el disco rechazó el movimiento",
+      "INDEX_NOT_UPDATED": "el fichero se movió pero el índice no le siguió, un escaneo de biblioteca lo repara"
+    },
+    "companionsLeftNotice": "Algunas letras y carátulas se quedan donde están",
+    "companionsLeft": {
+      "AMBIGUOUS_OWNER": "{{count}} podrían ser de más de una pista, así que no se adivina.",
+      "AUDIO_STAYS": "{{count}} están en carpetas que conservan música, que sigue necesitándolas.",
+      "FOLDER_REMAINS": "{{count}} son de una carpeta que contiene otras carpetas, así que no va a desaparecer.",
+      "SIDECAR_COLLISION": "{{count}} caerían sobre un nombre que ya está ocupado."
+    },
+    "companionsProgress": "y {{count}} ficheros que van con ellos.",
+    "companionsFailed": "{{count}} no pudieron seguir a su pista.",
+    "progress": "{{processed}} de {{total}} ficheros, {{percent}}%",
+    "error": "No se pudo calcular el plan.",
+    "actions": {
+      "apply": "Mover {{count}} ficheros",
+      "stop": "Parar"
+    },
+    "toast": {
+      "started": "Colocando ficheros",
+      "alreadyRunning": "Ya está en marcha",
+      "cancelling": "Parando tras el fichero en curso",
+      "nothingRunning": "No hay nada en marcha",
+      "planExpired": "Tu biblioteca ha cambiado desde que se calculó esto, así que no se ha movido nada. Míralo otra vez.",
+      "scanBusy": "El escaneo de biblioteca está recorriendo tus ficheros. Inténtalo cuando termine."
+    },
+    "finishedAbandoned": "A {{count}} no se llegó, porque la pasada se detuvo antes de tiempo.",
+    "finishedFailuresTruncated": "Se muestran {{listed}} de {{count}}. El resto está en los registros."
   },
   "libraryScan": {
     "card": {

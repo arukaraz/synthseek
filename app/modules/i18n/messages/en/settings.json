@@ -853,7 +853,8 @@
         "review": "Review",
         "duplicates": "Duplicates",
         "recycleBin": "Recycle bin",
-        "quarantine": "Quarantine"
+        "quarantine": "Quarantine",
+        "library": "Library"
       },
       "maintenanceWaiting": "Some maintenance surfaces have items waiting"
     },
@@ -1035,6 +1036,82 @@
       "title": "Connect apps",
       "description": "Apps and assistants that connect to your Synthseek."
     }
+  },
+  "library": {
+    "page": {
+      "title": "Library",
+      "description": "How your files are organised on disk, and what does not match."
+    }
+  },
+  "libraryOrganise": {
+    "card": {
+      "title": "What does not match",
+      "description": "Files whose place on disk differs from where this organisation would put them. Lyrics and artwork travel with their music."
+    },
+    "stats": {
+      "inPlace": "In place",
+      "toMove": "Would move",
+      "rejected": "Left alone",
+      "companions": "Coming along"
+    },
+    "groups": {
+      "relocate": {
+        "title": "Only change folder",
+        "description": "The names stay exactly as they are, the file moves to a different folder."
+      },
+      "rename": {
+        "title": "Also change a name",
+        "description": "A folder or file name is rewritten. Some tracks also move to the album or artist your catalog records for them."
+      }
+    },
+    "renameWarning": "This rewrites {{count}} names. Your media server will have to read the library again, and until it does it looks for them under the old ones.",
+    "rejectedNotice": "{{count}} files are left where they are",
+    "rejectedReason": {
+      "METADATA_UNAVAILABLE": "{{count}} are missing something the new name needs, usually a track number.",
+      "PATH_COLLISION_IDENTICAL": "{{count}} are listed twice and point at the same file.",
+      "PATH_COLLISION_DIFFERENT": "{{count}} would land on the same name as another file.",
+      "PATH_TOO_LONG": "{{count}} would end up with a path too long for the disk.",
+      "SCRIPT_VALIDATION_FAILED": "{{count}} produced a name that is not safe to write."
+    },
+    "finished": "Moved {{moved}} files and {{companions}} companions in {{duration}}",
+    "finishedFailures": "{{count}} could not be moved and are still where they were:",
+    "finishedCompanionsFailed": "{{count}} lyrics or artwork could not follow their track.",
+    "moveFailure": {
+      "FILE_UNREADABLE": "the file was not there",
+      "FILE_CHANGED": "the file changed after the preview",
+      "PATH_COLLISION_DIFFERENT": "something is already there",
+      "OUT_OF_ROOT": "the destination fell outside the library",
+      "ROOT_READ_ONLY": "the library would not accept the write",
+      "CROSS_DEVICE": "the destination is on another disk",
+      "NO_SPACE": "the disk is full",
+      "MOVE_REFUSED": "the disk refused the move",
+      "INDEX_NOT_UPDATED": "the file moved but the index did not follow, a library scan repairs it"
+    },
+    "companionsLeftNotice": "Some lyrics and artwork stay where they are",
+    "companionsLeft": {
+      "AMBIGUOUS_OWNER": "{{count}} could belong to more than one track, so nothing is guessed.",
+      "AUDIO_STAYS": "{{count}} sit in folders that keep music, which still needs them.",
+      "FOLDER_REMAINS": "{{count}} belong to a folder that holds other folders, so it is not going away.",
+      "SIDECAR_COLLISION": "{{count}} would land on a name that is already taken."
+    },
+    "companionsProgress": "and {{count}} files that came along.",
+    "companionsFailed": "{{count}} could not follow their track.",
+    "progress": "{{processed}} of {{total}} files, {{percent}}%",
+    "error": "The plan could not be worked out.",
+    "actions": {
+      "apply": "Move {{count}} files",
+      "stop": "Stop"
+    },
+    "toast": {
+      "started": "Placing files",
+      "alreadyRunning": "Already running",
+      "cancelling": "Stopping after the file in hand",
+      "nothingRunning": "Nothing is running",
+      "planExpired": "Your library changed since this was worked out, so nothing was moved. Have another look.",
+      "scanBusy": "The library scan is walking your files. Try again when it finishes."
+    },
+    "finishedAbandoned": "{{count}} were never reached, because the run stopped early.",
+    "finishedFailuresTruncated": "Showing {{listed}} of {{count}}. The rest are in the logs."
   },
   "libraryScan": {
     "card": {

@@ -61,11 +61,11 @@ Your slskd address and API key are not set here. The setup wizard collects them 
 
 ### What each volume is for
 
-| Container path | What goes there                                                                                                             | Notes                                                                                                                               |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `/data`        | The database, configuration, logs, artwork cache, backups, drop-import staging, files held for review, and the recycle bin. | Back this up. Everything Synthseek knows lives here.                                                                                |
-| `/music`       | Your organised music library. Beets writes here.                                                                            | Can be mounted read-only, in which case Synthseek boots and browsing works, but imports into the library fail until it is writable. |
-| `/downloads`   | The folder slskd writes completed downloads to.                                                                             | Must be writable. This is the same folder slskd calls its "complete" directory.                                                     |
+| Container path | What goes there                                                                                                             | Notes                                                                                                                                                  |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/data`        | The database, configuration, logs, artwork cache, backups, drop-import staging, files held for review, and the recycle bin. | Back this up. Everything Synthseek knows lives here.                                                                                                   |
+| `/music`       | Your organised music library. Beets writes here.                                                                            | Can be mounted read-only, in which case Synthseek boots and browsing works, but imports and any reorganising of the library fail until it is writable. |
+| `/downloads`   | The folder slskd writes completed downloads to.                                                                             | Must be writable. This is the same folder slskd calls its "complete" directory.                                                                        |
 
 ### Ports
 

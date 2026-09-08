@@ -853,7 +853,8 @@
         "review": "Révision",
         "duplicates": "Doublons",
         "recycleBin": "Corbeille",
-        "quarantine": "Quarantaine"
+        "quarantine": "Quarantaine",
+        "library": "Bibliothèque"
       },
       "maintenanceWaiting": "Certaines surfaces de maintenance ont des éléments en attente"
     },
@@ -1035,6 +1036,82 @@
       "title": "Connecter des applications",
       "description": "Applications et assistants qui se connectent à votre Synthseek."
     }
+  },
+  "library": {
+    "page": {
+      "title": "Bibliothèque",
+      "description": "Comment vos fichiers sont rangés sur le disque, et ce qui ne correspond pas."
+    }
+  },
+  "libraryOrganise": {
+    "card": {
+      "title": "Ce qui ne correspond pas",
+      "description": "Fichiers dont la place sur le disque diffère de celle que cette organisation leur donnerait. Les paroles et les pochettes suivent leur musique."
+    },
+    "stats": {
+      "inPlace": "À leur place",
+      "toMove": "Seraient déplacés",
+      "rejected": "Laissés tels quels",
+      "companions": "Suivent"
+    },
+    "groups": {
+      "relocate": {
+        "title": "Change seulement de dossier",
+        "description": "Les noms restent identiques, le fichier passe dans un autre dossier."
+      },
+      "rename": {
+        "title": "Change aussi un nom",
+        "description": "Un nom de dossier ou de fichier est réécrit. Certains titres passent aussi à l'album ou à l'artiste que votre catalogue leur attribue."
+      }
+    },
+    "renameWarning": "Cela réécrit {{count}} noms. Votre serveur multimédia devra relire la bibliothèque, et d'ici là il les cherche sous les anciens.",
+    "rejectedNotice": "{{count}} fichiers restent où ils sont",
+    "rejectedReason": {
+      "METADATA_UNAVAILABLE": "Il manque à {{count}} quelque chose dont le nouveau nom a besoin, le plus souvent le numéro de piste.",
+      "PATH_COLLISION_IDENTICAL": "{{count}} sont référencés deux fois et pointent vers le même fichier.",
+      "PATH_COLLISION_DIFFERENT": "{{count}} aboutiraient au même nom qu'un autre fichier.",
+      "PATH_TOO_LONG": "{{count}} auraient un chemin trop long pour le disque.",
+      "SCRIPT_VALIDATION_FAILED": "{{count}} ont donné un nom qu'il n'est pas sûr d'écrire."
+    },
+    "finished": "{{moved}} fichiers et {{companions}} accompagnements déplacés en {{duration}}",
+    "finishedFailures": "{{count}} n'ont pas pu être déplacés et sont restés sur place :",
+    "finishedCompanionsFailed": "{{count}} paroles ou pochettes n'ont pas pu suivre leur titre.",
+    "moveFailure": {
+      "FILE_UNREADABLE": "le fichier n'était pas là",
+      "FILE_CHANGED": "le fichier a changé après l'aperçu",
+      "PATH_COLLISION_DIFFERENT": "il y a déjà quelque chose à cet endroit",
+      "OUT_OF_ROOT": "la destination sortait de la bibliothèque",
+      "ROOT_READ_ONLY": "la bibliothèque a refusé l'écriture",
+      "CROSS_DEVICE": "la destination est sur un autre disque",
+      "NO_SPACE": "le disque est plein",
+      "MOVE_REFUSED": "le disque a refusé le déplacement",
+      "INDEX_NOT_UPDATED": "le fichier a été déplacé mais l'index n'a pas suivi, une analyse de la bibliothèque le répare"
+    },
+    "companionsLeftNotice": "Certaines paroles et pochettes restent où elles sont",
+    "companionsLeft": {
+      "AMBIGUOUS_OWNER": "{{count}} pourraient appartenir à plus d'un titre, donc rien n'est deviné.",
+      "AUDIO_STAYS": "{{count}} sont dans des dossiers qui gardent de la musique, qui en a encore besoin.",
+      "FOLDER_REMAINS": "{{count}} appartiennent à un dossier qui en contient d'autres, il ne disparaîtra donc pas.",
+      "SIDECAR_COLLISION": "{{count}} aboutiraient à un nom déjà pris."
+    },
+    "companionsProgress": "et {{count}} fichiers qui ont suivi.",
+    "companionsFailed": "{{count}} n'ont pas pu suivre leur titre.",
+    "progress": "{{processed}} sur {{total}} fichiers, {{percent}}%",
+    "error": "Le plan n'a pas pu être établi.",
+    "actions": {
+      "apply": "Déplacer {{count}} fichiers",
+      "stop": "Arrêter"
+    },
+    "toast": {
+      "started": "Rangement des fichiers",
+      "alreadyRunning": "Déjà en cours",
+      "cancelling": "Arrêt après le fichier en cours",
+      "nothingRunning": "Rien n'est en cours",
+      "planExpired": "Votre bibliothèque a changé depuis ce calcul, rien n'a donc été déplacé. Regardez à nouveau.",
+      "scanBusy": "L'analyse de la bibliothèque parcourt vos fichiers. Réessayez quand elle sera finie."
+    },
+    "finishedAbandoned": "{{count}} n'ont jamais été atteints, car la passe s'est arrêtée avant la fin.",
+    "finishedFailuresTruncated": "Affichage de {{listed}} sur {{count}}. Le reste est dans les journaux."
   },
   "libraryScan": {
     "card": {

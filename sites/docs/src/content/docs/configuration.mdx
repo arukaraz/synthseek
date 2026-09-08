@@ -161,6 +161,10 @@ Alongside it, what the bin currently holds, the files it is keeping, a **Restore
 
 Below them, the list of current entries with the reason for each, and a link to the banned-peer list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
 
+### Library
+
+Administrators only. What on disk does not match how Synthseek would file it, and the button that moves it. Covered on the [Operations page](/operations).
+
 ### Jobs
 
 Administrators only. Covered on the [Operations page](/operations).
@@ -192,18 +196,18 @@ Two live where you use them rather than in a settings section.
 
 ### Container identity and paths
 
-| Variable                  | Default                      | What it is                                                             |
-| ------------------------- | ---------------------------- | ---------------------------------------------------------------------- |
-| `PUID`                    | 1000                         | The user Synthseek runs as. Must own your mounted folders.             |
-| `PGID`                    | 1000                         | The group Synthseek runs as.                                           |
-| `WEB_UI_PORT`             | 4400                         | The port the web interface listens on.                                 |
-| `DATABASE_URL`            | `file:/data/db/synthseek.db` | Where the database lives.                                              |
-| `DOWNLOADS_COMPLETE_PATH` | `/downloads`                 | Where your download clients put completed downloads. Must be writable. |
-| `MUSIC_LIBRARY_PATH`      | `/music`                     | Your organised library. Read-only is a supported degraded mode.        |
-| `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                                |
-| `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                                     |
-| `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                               |
-| `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                        |
+| Variable                  | Default                      | What it is                                                                                                   |
+| ------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `PUID`                    | 1000                         | The user Synthseek runs as. Must own your mounted folders.                                                   |
+| `PGID`                    | 1000                         | The group Synthseek runs as.                                                                                 |
+| `WEB_UI_PORT`             | 4400                         | The port the web interface listens on.                                                                       |
+| `DATABASE_URL`            | `file:/data/db/synthseek.db` | Where the database lives.                                                                                    |
+| `DOWNLOADS_COMPLETE_PATH` | `/downloads`                 | Where your download clients put completed downloads. Must be writable.                                       |
+| `MUSIC_LIBRARY_PATH`      | `/music`                     | Your organised library. Read-only is a supported degraded mode, in which nothing is imported or reorganised. |
+| `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                                                                      |
+| `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                                                                           |
+| `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                                                                     |
+| `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                                                              |
 
 ### Sessions and cookies
 
