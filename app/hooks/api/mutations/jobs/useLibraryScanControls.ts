@@ -51,9 +51,13 @@ export function useKeepThisCopy() {
 export function useKeepBestLibraryCopies() {
   const utils = trpc.useUtils();
   return trpc.library.scan.keepBestCopies.useMutation({
-    onSuccess: () => {
+    onSuccess: (result) => {
       utils.library.scan.status.invalidate();
       utils.library.scan.duplicateGroups.invalidate();
+      if (!result.started) {
+        toast.info(i18n.t("settings:libraryScan.duplicates.tidyAllBusy"));
+        return;
+      }
       toast.success(i18n.t("settings:libraryScan.duplicates.tidyAllRunning"));
     },
     onError: (error) => errorToast(error, "jobs.runFailed"),

@@ -1085,7 +1085,8 @@
       "CROSS_DEVICE": "das Ziel liegt auf einer anderen Platte",
       "NO_SPACE": "die Platte ist voll",
       "MOVE_REFUSED": "die Platte hat den Umzug abgelehnt",
-      "INDEX_NOT_UPDATED": "die Datei ist umgezogen, der Index aber nicht, ein Bibliotheksscan repariert das"
+      "INDEX_NOT_UPDATED": "der Index nahm den neuen Pfad nicht an, die Datei blieb daher, wo sie war",
+      "INDEX_AND_DISK_DIVERGED": "die Datei ist umgezogen, der Index aber nicht, ein Bibliotheksscan repariert das"
     },
     "companionsLeftNotice": "Einige Liedtexte und Cover bleiben, wo sie sind",
     "companionsLeft": {
@@ -1153,6 +1154,7 @@
       "copies_one": "{{count}} Kopie",
       "copies_other": "{{count}} Kopien",
       "tidyAllRunning": "Wird bearbeitet",
+      "tidyAllBusy": "Die Bibliothek ist beschäftigt, das wartet bis sie fertig ist",
       "tidyOne": "Beste Kopie behalten",
       "emptyTitle": "Keine Duplikate",
       "emptyBody": "Jeder Titel deiner Bibliothek liegt genau einmal vor.",

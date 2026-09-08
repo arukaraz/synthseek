@@ -1085,7 +1085,8 @@
       "CROSS_DEVICE": "la destination est sur un autre disque",
       "NO_SPACE": "le disque est plein",
       "MOVE_REFUSED": "le disque a refusé le déplacement",
-      "INDEX_NOT_UPDATED": "le fichier a été déplacé mais l'index n'a pas suivi, une analyse de la bibliothèque le répare"
+      "INDEX_NOT_UPDATED": "l'index n'a pas accepté le nouveau chemin, le fichier est resté où il était",
+      "INDEX_AND_DISK_DIVERGED": "le fichier a été déplacé mais l'index n'a pas suivi, une analyse de la bibliothèque le répare"
     },
     "companionsLeftNotice": "Certaines paroles et pochettes restent où elles sont",
     "companionsLeft": {
@@ -1153,6 +1154,7 @@
       "copies_one": "{{count}} copie",
       "copies_other": "{{count}} copies",
       "tidyAllRunning": "Traitement en cours",
+      "tidyAllBusy": "La bibliothèque est occupée, ceci attendra qu'elle finisse",
       "tidyOne": "Garder la meilleure",
       "emptyTitle": "Aucun doublon",
       "emptyBody": "Chaque titre de votre bibliothèque n'existe qu'une fois.",

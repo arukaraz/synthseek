@@ -1085,7 +1085,8 @@
       "CROSS_DEVICE": "el destino está en otro disco",
       "NO_SPACE": "el disco está lleno",
       "MOVE_REFUSED": "el disco rechazó el movimiento",
-      "INDEX_NOT_UPDATED": "el fichero se movió pero el índice no le siguió, un escaneo de biblioteca lo repara"
+      "INDEX_NOT_UPDATED": "el índice no aceptó la ruta nueva, así que el fichero se quedó donde estaba",
+      "INDEX_AND_DISK_DIVERGED": "el fichero se movió pero el índice no le siguió, un escaneo de biblioteca lo repara"
     },
     "companionsLeftNotice": "Algunas letras y carátulas se quedan donde están",
     "companionsLeft": {
@@ -1153,6 +1154,7 @@
       "copies_one": "{{count}} copia",
       "copies_other": "{{count}} copias",
       "tidyAllRunning": "Revisándolas",
+      "tidyAllBusy": "La biblioteca está ocupada, esto esperará a que termine",
       "tidyOne": "Quedarse con la mejor",
       "emptyTitle": "Sin duplicados",
       "emptyBody": "Cada pista de tu biblioteca está guardada una sola vez.",

@@ -1085,7 +1085,8 @@
       "CROSS_DEVICE": "the destination is on another disk",
       "NO_SPACE": "the disk is full",
       "MOVE_REFUSED": "the disk refused the move",
-      "INDEX_NOT_UPDATED": "the file moved but the index did not follow, a library scan repairs it"
+      "INDEX_NOT_UPDATED": "the index would not take the new path, so the file was left where it was",
+      "INDEX_AND_DISK_DIVERGED": "the file moved but the index did not follow, a library scan repairs it"
     },
     "companionsLeftNotice": "Some lyrics and artwork stay where they are",
     "companionsLeft": {
@@ -1153,6 +1154,7 @@
       "copies_one": "{{count}} copy",
       "copies_other": "{{count}} copies",
       "tidyAllRunning": "Working through them",
+      "tidyAllBusy": "The library is busy, this will keep until it finishes",
       "tidyOne": "Keep best copy",
       "emptyTitle": "No duplicates",
       "emptyBody": "Every track in your library is held exactly once.",
