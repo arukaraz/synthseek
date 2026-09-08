@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 import type { TrackRequest, Album, MusicTrack, MusicAlbum, MusicArtist, MusicPlaylist } from "@api/__generated__/types";
 
-export const createMockUseRequest = (overrides: Partial<ReturnType<typeof createMockUseRequest>> = {}) => ({
+const baseUseRequest = () => ({
   requests: [] as TrackRequest[],
   isLoading: false,
   refreshRequests: vi.fn().mockResolvedValue({ data: [] }),
@@ -38,10 +38,14 @@ export const createMockUseRequest = (overrides: Partial<ReturnType<typeof create
     mutateAsync: vi.fn().mockResolvedValue(undefined),
     isPending: false,
   },
+});
+
+export const createMockUseRequest = (overrides: Partial<ReturnType<typeof baseUseRequest>> = {}) => ({
+  ...baseUseRequest(),
   ...overrides,
 });
 
-export const createMockUseAlbum = (overrides: Partial<ReturnType<typeof createMockUseAlbum>> = {}) => ({
+const baseUseAlbum = () => ({
   albums: [] as Album[],
   isLoading: false,
   refreshAlbums: vi.fn().mockResolvedValue({ data: [] }),
@@ -73,6 +77,10 @@ export const createMockUseAlbum = (overrides: Partial<ReturnType<typeof createMo
   },
   isRetryingAll: false,
   isDeletingAll: false,
+});
+
+export const createMockUseAlbum = (overrides: Partial<ReturnType<typeof baseUseAlbum>> = {}) => ({
+  ...baseUseAlbum(),
   ...overrides,
 });
 

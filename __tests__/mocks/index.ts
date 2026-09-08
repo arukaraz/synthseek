@@ -44,4 +44,4 @@ export {
 
 export type { MockQueryResult, MockMutationResult } from "./trpc.mock";
 
-export { mockRouter, mockSearchParams, mockPathname, createMockSearchParams, resetNextMocks } from "./next.mock.tsx";
+export { mockRouter, mockSearchParams, mockPathname, createMockSearchParams, resetNextMocks } from "./next.mock";

@@ -90,7 +90,6 @@ export function createMockTrackFull(
   const album = createMockAlbumSimplified(overrides?.album);
   return {
     ...createMockTrackSimplified(),
-    album,
     images: album.images,
     isrc: "USRC12345678",
     popularity: 75,

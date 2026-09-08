@@ -24,7 +24,7 @@
     "changelog:build": "tsx scripts/build-changelog.ts",
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.tests.json",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "gen:i18n": "node scripts/gen-i18n.mjs"
