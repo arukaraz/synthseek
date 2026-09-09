@@ -56,7 +56,7 @@ Yes. Settings, then Integrations, then download sources. You can also choose whi
 ## Library and imports
 
 **Files downloaded but nothing appears in my library.**
-Beets tagging may be disabled, in which case files stay in the downloads folder. Otherwise check the log for the import phase.
+Filing may be disabled, in which case files stay in the downloads folder. Check both `ENABLE_LIBRARY_IMPORT` and the older `ENABLE_BEETS_IMPORT`, since either one set to false turns it off. Otherwise check the log for the import phase.
 
 **An artist appears twice in my library.**
 Two causes. A past bug stored names in a simplified form, and updating merges those. More often, two programs are writing into the same music root under different naming conventions, typically Lidarr using MusicBrainz spelling and Synthseek using the catalog's. Check which program created each folder before treating it as a bug.

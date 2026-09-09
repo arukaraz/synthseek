@@ -88,7 +88,9 @@ For each held file you can see why it was rejected, listen to it, and then appro
 
 ## Step 5, tagging and import
 
-Verified files are tagged and filed by Beets. Synthseek identifies each track against MusicBrainz where it can, falls back to less certain methods where it cannot, and always ends with the metadata the catalog gave it, so a file is never left untagged.
+Synthseek tags each verified file and files it into your library. It identifies the track by its audio where it can, falls back to the metadata the catalog gave it where it cannot, so a file is never left untagged.
+
+A track Synthseek still knows the whereabouts of is reported as a duplicate, and only a quality upgrade replaces it. A file Synthseek never filed, or has since lost track of, is not recognised and a second copy is filed.
 
 Cover art from the catalog is embedded into the file, and each track is written with its correct position within its album. That last detail matters more than it sounds: it is what stops a media server's own metadata agent from rebinding a single downloaded file to the wrong song.
 

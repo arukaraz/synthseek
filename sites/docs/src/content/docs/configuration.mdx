@@ -234,14 +234,13 @@ A fresh install needs none of them. The setup wizard collects the same values an
 
 ### Tagging
 
-| Variable              | Default                          | What it is                                                                                                                         |
-| --------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `ENABLE_BEETS_IMPORT` | true                             | Whether to tag and file at all. False leaves files in the downloads folder.                                                        |
-| `USE_MUSIC_BRAINZ`    | true                             | Identify tracks against MusicBrainz when tagging.                                                                                  |
-| `USE_ACOUSTIC_ID`     | true                             | Identify tracks by their audio when tagging.                                                                                       |
-| `BEETS_COMMAND`       | `beet`                           | Path to the beets executable.                                                                                                      |
-| `BEETS_CONFIG`        | `/data/config/beets-config.yaml` | Path to the beets configuration. A default is created on first boot, and an updated example is written alongside it on every boot. |
-| `FPCALC_PATH`         | `fpcalc`                         | Path to the fingerprinting binary.                                                                                                 |
+| Variable                | Default                          | What it is                                                                                                                                                             |
+| ----------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ENABLE_LIBRARY_IMPORT` | true                             | Whether to tag and file at all. Replaces `ENABLE_BEETS_IMPORT`, which is still honoured: either one set to false leaves files in the downloads folder.                 |
+| `USE_ACOUSTIC_ID`       | true                             | Identify tracks by their audio when tagging.                                                                                                                           |
+| `BEETS_COMMAND`         | `beet`                           | Path to the beets executable, used only for the presence check behind the Beets CLI row in Settings.                                                                   |
+| `BEETS_CONFIG`          | `/data/config/beets-config.yaml` | Path to a Beets configuration, read only to find the database of an existing Beets library and pick up its MusicBrainz identities. A default is created on first boot. |
+| `FPCALC_PATH`           | `fpcalc`                         | Path to the fingerprinting binary.                                                                                                                                     |
 
 ### One-shot migration
 

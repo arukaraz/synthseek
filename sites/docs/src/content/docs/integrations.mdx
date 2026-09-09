@@ -54,18 +54,16 @@ The handoff is validated before anything is created. Synthseek resolves the arti
 
 ## Beets
 
-Beets tags each downloaded file and files it into your library. It is bundled and on by default.
+Beets no longer tags or files anything. It is still bundled, and Synthseek runs it only to check it is present, which is what the Beets CLI row in Settings reports.
 
-A default configuration is created at `/data/config/beets-config.yaml` on first boot. An up-to-date example is written alongside it as `beets-config.example.yaml` on every boot, so you can diff yours against the current defaults after an upgrade.
-
-Turning Beets off leaves downloaded files in your downloads folder, untagged and unfiled. Synthseek will still track them as complete.
+If you are moving an existing Beets library over, Synthseek reads its database once to pick up the MusicBrainz identities Beets had collected. It looks for that database where the Beets configuration at `BEETS_CONFIG` declares it, so point that at your own configuration to hand the identities over.
 
 ## AcoustID
 
 AcoustID identifies a recording from the audio itself rather than from its filename or tags. Synthseek uses it for two different things:
 
 1. **Verification.** Checking that a downloaded file really is the recording you asked for. This is the identity gate described on the [Download Engine page](/download-engine).
-2. **Tagging.** Identifying a track so it can be tagged correctly when MusicBrainz alone cannot resolve it.
+2. **Tagging.** Identifying a track so it is tagged as the recording it really is, rather than as whatever the catalog named.
 
 The key is free from acoustid.org. Without it, neither of the above runs, and verification falls back to tag comparison alone.
 
