@@ -28,18 +28,18 @@ Running the discovery sweep by hand forces it past its own due checks, so a manu
 
 These run on a fixed schedule and are not user-triggerable.
 
-| Job                     | What it does                                                                   |
-| ----------------------- | ------------------------------------------------------------------------------ |
-| Cache warmup            | Keeps commonly needed catalog data warm.                                       |
-| Search cleanup          | Clears finished searches out of slskd.                                         |
-| Version check           | Checks the container registry for a newer release.                             |
-| Session cleanup         | Removes expired sessions.                                                      |
-| Recording ID enrichment | Resolves MusicBrainz recording identifiers for tracks with an ISRC.            |
-| Artist identity         | Resolves MusicBrainz identifiers for the artists in your library.              |
-| Cache cleanup           | Reaps expired metadata cache entries.                                          |
-| Recycle bin cleanup     | Permanently removes replaced library files once their retention window passes. |
-| Drop import cleanup     | Clears finished drag-and-drop import batches and their staged files.           |
-| Held import cleanup     | Discards review-queue files once their retention window passes.                |
+| Job                     | What it does                                                                                                             |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Cache warmup            | Keeps commonly needed catalog data warm.                                                                                 |
+| Search cleanup          | Clears finished searches out of slskd.                                                                                   |
+| Version check           | Checks the container registry for a newer release.                                                                       |
+| Session cleanup         | Removes expired sessions.                                                                                                |
+| Recording ID enrichment | Resolves MusicBrainz recording identifiers for tracks with an ISRC, and writes them into your files where it safely can. |
+| Artist identity         | Resolves MusicBrainz identifiers for the artists in your library.                                                        |
+| Cache cleanup           | Reaps expired metadata cache entries.                                                                                    |
+| Recycle bin cleanup     | Permanently removes replaced library files once their retention window passes.                                           |
+| Drop import cleanup     | Clears finished drag-and-drop import batches and their staged files.                                                     |
+| Held import cleanup     | Discards review-queue files once their retention window passes.                                                          |
 
 ### What the library scan shows you
 

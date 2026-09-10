@@ -22,7 +22,7 @@ There is an `arm64` image, built and smoke tested natively.
 ## Permissions and paths
 
 **Startup warns that `/downloads` or `/music` is not accessible.**
-The user Synthseek runs as, set by `PUID` and `PGID`, does not own those folders on the host. The container log names the offending path and the ownership fix, above the line where the API stops. Synthseek takes ownership of its own `/data` volume at boot, and deliberately never touches your music and downloads volumes.
+The user Synthseek runs as, set by `PUID` and `PGID`, does not own those folders on the host. The container log names the offending path and the ownership fix, above the line where the API stops. Synthseek takes ownership of its own `/data` volume at boot, and never changes ownership or permissions on your music and downloads volumes.
 
 **My library is on a NAS or an external drive and mounts read-only.**
 Synthseek still boots and browsing works, and it says so at startup. Imports into the library will fail while it stays read-only, so fix the ownership before requesting anything.

@@ -94,6 +94,8 @@ A track Synthseek still knows the whereabouts of is reported as a duplicate, and
 
 Cover art from the catalog is embedded into the file, and each track is written with its correct position within its album. That last detail matters more than it sounds: it is what stops a media server's own metadata agent from rebinding a single downloaded file to the wrong song.
 
+Identifying a track against MusicBrainz happens during the import when the audio can be fingerprinted, and in the background for tracks that carry an ISRC. When it succeeds, Synthseek writes the recording id into the file where it safely can, so the identity travels with your music. A file that already names a recording is left alone.
+
 Imports are strictly serialised. One import runs at a time.
 
 ## Step 6, media server
