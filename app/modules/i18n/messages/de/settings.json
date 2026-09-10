@@ -1043,6 +1043,53 @@
       "description": "Wie deine Dateien auf der Platte geordnet sind und was nicht passt."
     }
   },
+  "libraryNaming": {
+    "card": {
+      "title": "Wie Dateien organisiert werden",
+      "description": "Die Ordner und der Dateiname, die Synthseek jedem abgelegten Titel gibt. Eine Änderung verschiebt von sich aus nichts."
+    },
+    "template": {
+      "label": "Vorlage",
+      "description": "Ordner werden durch / getrennt. Was zwischen < und > steht, verschwindet, wenn das Nötige fehlt."
+    },
+    "rules": "Die Vorlage muss auf .{ext} enden. Ein einzelnes Token ist Pflicht: ein Titel, der es nicht füllen kann, bleibt liegen, und ein Download, der es nicht füllen kann, scheitert beim Import.",
+    "loadFailed": "Die aktuelle Vorlage konnte nicht gelesen werden",
+    "tokens": {
+      "albumartist": "Der Künstler, unter dem das Album abgelegt wird",
+      "album": "Albumtitel",
+      "artist": "Der auf dem Titel genannte Künstler",
+      "title": "Titel des Stücks",
+      "year": "Erscheinungsjahr des Albums",
+      "ext": "Dateiendung",
+      "track": "Titelnummer",
+      "disc": "Disc-Nummer, leer außer das Album hat mehr als eine",
+      "disc_total": "Wie viele Discs das Album hat"
+    },
+    "problem": {
+      "EMPTY_TEMPLATE": "Die Vorlage darf nicht leer sein.",
+      "CONTROL_CHARACTER": "Die Vorlage enthält ein Zeichen, das in keinem Dateinamen vorkommen kann.",
+      "UNBALANCED_GROUP": "Jedes < braucht ein > das es schließt.",
+      "EMPTY_GROUP": "Zwischen < und > steht kein Token, also kann es nie verschwinden.",
+      "SEPARATOR_IN_GROUP": "Etwas zwischen < und > umfasst einen Ordnertrenner. Setze das / davor oder dahinter.",
+      "ABSOLUTE_PATH": "Die Vorlage ist relativ zu deinem Musikordner und darf daher nicht mit / beginnen.",
+      "EMPTY_SEGMENT": "Ein Ordner hat keinen Namen.",
+      "TRAVERSING_SEGMENT": "Ein Ordner darf nicht . oder .. sein",
+      "MISSING_EXTENSION": "Die Vorlage muss auf .{ext} enden, sonst spielt nichts die Datei ab.",
+      "UNKNOWN_TOKEN": "Hier steht ein Token, das es nicht gibt. Die vorhandenen stehen oben.",
+      "UNRENDERABLE": "Diese Vorlage kann keinen brauchbaren Pfad erzeugen."
+    },
+    "stats": {
+      "inPlace": "Passen bereits",
+      "toMove": "Würden verschoben",
+      "rejected": "Nicht ablegbar"
+    },
+    "rejectedNotice_one": "{{count}} Datei trägt nichts, was diese Vorlage nutzen könnte",
+    "rejectedNotice_other": "{{count}} Dateien tragen nichts, was diese Vorlage nutzen könnte",
+    "toast": {
+      "saved": "Gespeichert. Es wurde noch nichts verschoben.",
+      "organiseBusy": "Gerade werden Dateien verschoben. Versuche es danach erneut."
+    }
+  },
   "libraryOrganise": {
     "card": {
       "title": "Was nicht passt",

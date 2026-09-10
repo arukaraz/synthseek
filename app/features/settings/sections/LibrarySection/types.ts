@@ -3,6 +3,8 @@ import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@api/__generated__/types";
 
 export type OrganisePreview = inferRouterOutputs<AppRouter>["library"]["organise"]["preview"];
+export type NamingCurrent = inferRouterOutputs<AppRouter>["library"]["naming"]["current"];
+export type NamingToken = NamingCurrent["tokens"][number];
 export type OrganiseStatus = inferRouterOutputs<AppRouter>["library"]["organise"]["status"];
 export type MoveClass = OrganisePreview["movesByClass"][number]["moveClass"];
 

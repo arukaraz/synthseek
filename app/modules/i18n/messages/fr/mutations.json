@@ -14,6 +14,7 @@
   },
   "settings": {
     "formattingFailed": "Échec de l'enregistrement du formatage",
+    "namingFailed": "Échec de l'enregistrement du modèle de nommage",
     "downloadSourcesFailed": "Échec de la mise à jour des sources de téléchargement",
     "logLevelFailed": "Échec de la mise à jour du niveau de journalisation",
     "queueFailed": "Échec de l'enregistrement des réglages de la file",

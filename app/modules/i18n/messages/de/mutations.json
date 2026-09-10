@@ -14,6 +14,7 @@
   },
   "settings": {
     "formattingFailed": "Formatierung konnte nicht gespeichert werden",
+    "namingFailed": "Die Namensvorlage konnte nicht gespeichert werden",
     "downloadSourcesFailed": "Download-Quellen konnten nicht aktualisiert werden",
     "logLevelFailed": "Protokollebene konnte nicht aktualisiert werden",
     "queueFailed": "Warteschlangeneinstellungen konnten nicht gespeichert werden",

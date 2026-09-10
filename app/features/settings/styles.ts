@@ -277,6 +277,18 @@ export const scanStatLabel = cva("text-fg/50 text-center text-[11px] font-semibo
 
 export const scanMetaRow = cva("text-fg/60 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs");
 
+export const namingTokenList = cva("grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2 lg:grid-cols-3");
+
+export const namingToken = cva("flex items-baseline gap-2 text-xs");
+
+export const namingTokenName = cva("text-fg/70 shrink-0 font-mono");
+
+export const namingTokenMeaning = cva("text-fg/50");
+
+export const namingHint = cva("text-fg/60 text-xs");
+
+export const namingSampleList = cva("text-fg/60 flex flex-col gap-1 text-xs");
+
 export const scanActions = cva("flex flex-wrap items-center gap-2");
 
 export const scanRunLine = cva("text-fg/70 flex items-center gap-2 text-sm");

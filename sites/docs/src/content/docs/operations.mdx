@@ -47,9 +47,19 @@ The library scan has its own card on the **Jobs** page rather than a row in the 
 
 Duplicates have their own page under **Settings**, then **Maintenance**, listing them a track at a time, ordered by what settling each one would give back. Copies it can prove are the same recording are settled without anyone pressing anything: it keeps the best file, preferring lossless and then the larger one, points your library at it, and sends the rest to the recycle bin. Proof means the copies agree on both their title and their length, since a remix, a live take, a radio edit or a truncated download can carry the title of the track it was filed against while being a different recording; copies within a couple of seconds of each other count as one length, because that is encoder rounding rather than a different take. What it cannot prove waits under **Needs review**, where each track says how many clearly different lengths its copies come in and you can play any copy before taking a **Keep this copy** on the one you want, which recycles the others. Nothing is deleted outright: a call you disagree with is listed under **Settings**, then **Maintenance**, then **Recycle bin**, with a **Restore** that puts the file back where it came from, for as long as the retention window keeps it.
 
-### Reorganising what is already on disk
+### How files are organised
 
 **Settings**, then **Library**, administrators only.
+
+The page holds the template that decides the folders and filename every track gets. Its default is on the [Configuration page](/configuration).
+
+Anything between `<` and `>` disappears when what it needs is missing. That is how the disc folder appears only for a release that has more than one. `{album}< ({year})>` gives `OK Computer (1997)` where the year is known and `OK Computer` where it is not.
+
+A token on its own is required. A track already on disk that cannot fill one is left alone. A download that cannot fill one fails to import, so every token you add is one that future downloads have to carry.
+
+As you type, the page counts what your library would do and shows a few examples. Saving moves nothing: it changes where the next import lands, and what the section below would move.
+
+### Reorganising what is already on disk
 
 A library that predates a setting, or that another tool wrote into, can hold files whose place on disk no longer matches how Synthseek would file them. This page counts those and offers to move them. Nothing moves until you press.
 

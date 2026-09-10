@@ -1043,6 +1043,53 @@
       "description": "How your files are organised on disk, and what does not match."
     }
   },
+  "libraryNaming": {
+    "card": {
+      "title": "How files are organised",
+      "description": "The folders and filename Synthseek gives every track it files. Changing it does not move anything on its own."
+    },
+    "template": {
+      "label": "Template",
+      "description": "Folders are separated by /. Anything between < and > disappears when what it needs is missing."
+    },
+    "rules": "The template has to end in .{ext}. A token on its own is required: a track that cannot fill it is left alone, and a download that cannot fill it fails to import.",
+    "loadFailed": "Could not read the current template",
+    "tokens": {
+      "albumartist": "The artist the album is filed under",
+      "album": "Album title",
+      "artist": "The artist credited on the track",
+      "title": "Track title",
+      "year": "Year the album was released",
+      "ext": "File extension",
+      "track": "Track number",
+      "disc": "Disc number, empty unless the album has more than one",
+      "disc_total": "How many discs the album has"
+    },
+    "problem": {
+      "EMPTY_TEMPLATE": "The template cannot be empty.",
+      "CONTROL_CHARACTER": "The template carries a character that cannot appear in a filename.",
+      "UNBALANCED_GROUP": "Every < needs a > to close it.",
+      "EMPTY_GROUP": "Something between < and > has no token in it, so it can never disappear.",
+      "SEPARATOR_IN_GROUP": "Something between < and > covers a folder separator. Put the / outside it.",
+      "ABSOLUTE_PATH": "The template is relative to your library folder, so it cannot start with /.",
+      "EMPTY_SEGMENT": "There is a folder with nothing in its name.",
+      "TRAVERSING_SEGMENT": "A folder cannot be . or ..",
+      "MISSING_EXTENSION": "The template has to end in .{ext}, or nothing will play the file.",
+      "UNKNOWN_TOKEN": "There is a token here that does not exist. The ones that do are listed above.",
+      "UNRENDERABLE": "This template cannot produce a usable path."
+    },
+    "stats": {
+      "inPlace": "Already match",
+      "toMove": "Would move",
+      "rejected": "Could not be filed"
+    },
+    "rejectedNotice_one": "{{count}} file carries nothing this template could use",
+    "rejectedNotice_other": "{{count}} files carry nothing this template could use",
+    "toast": {
+      "saved": "Saved. Nothing has moved yet.",
+      "organiseBusy": "Files are being moved right now. Try again when that finishes."
+    }
+  },
   "libraryOrganise": {
     "card": {
       "title": "What does not match",

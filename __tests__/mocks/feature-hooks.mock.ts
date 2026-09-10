@@ -64,7 +64,11 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
       plexPlaylistUsernameAffix: "prefix",
       plexPlaylistUsernameSeparator: " - ",
     },
-    library: { syncIntervalMinutes: 60, recycleBin: { retentionDays: 30 } },
+    library: {
+      syncIntervalMinutes: 60,
+      recycleBin: { retentionDays: 30 },
+      naming: { template: "{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}.{ext}" },
+    },
     downloadSources: {
       slskd: { enabled: true, priority: 1 },
       ytdlp: { enabled: false, priority: 2, searchResults: 5, maxDurationDeltaSec: 10, searchTimeout: 30 },

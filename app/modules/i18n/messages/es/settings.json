@@ -1043,6 +1043,53 @@
       "description": "Cómo están organizados tus ficheros en disco, y qué no encaja."
     }
   },
+  "libraryNaming": {
+    "card": {
+      "title": "Cómo se organizan los ficheros",
+      "description": "Las carpetas y el nombre que Synthseek le da a cada pista que archiva. Cambiarlo no mueve nada por su cuenta."
+    },
+    "template": {
+      "label": "Plantilla",
+      "description": "Las carpetas se separan con /. Lo que va entre < y > desaparece cuando falta lo que necesita."
+    },
+    "rules": "La plantilla tiene que terminar en .{ext}. Un token suelto es obligatorio: una pista que no pueda rellenarlo se queda donde está, y una descarga que no pueda rellenarlo falla al importar.",
+    "loadFailed": "No se pudo leer la plantilla actual",
+    "tokens": {
+      "albumartist": "El artista bajo el que se archiva el álbum",
+      "album": "Título del álbum",
+      "artist": "El artista acreditado en la pista",
+      "title": "Título de la pista",
+      "year": "Año de publicación del álbum",
+      "ext": "Extensión del fichero",
+      "track": "Número de pista",
+      "disc": "Número de disco, vacío salvo que el álbum tenga más de uno",
+      "disc_total": "Cuántos discos tiene el álbum"
+    },
+    "problem": {
+      "EMPTY_TEMPLATE": "La plantilla no puede estar vacía.",
+      "CONTROL_CHARACTER": "La plantilla lleva un carácter que no puede aparecer en un nombre de fichero.",
+      "UNBALANCED_GROUP": "Cada < necesita un > que lo cierre.",
+      "EMPTY_GROUP": "Hay algo entre < y > sin ningún token dentro, así que nunca podrá desaparecer.",
+      "SEPARATOR_IN_GROUP": "Hay algo entre < y > que abarca un separador de carpetas. Deja la / fuera.",
+      "ABSOLUTE_PATH": "La plantilla es relativa a tu carpeta de música, así que no puede empezar por /.",
+      "EMPTY_SEGMENT": "Hay una carpeta sin nada en el nombre.",
+      "TRAVERSING_SEGMENT": "Una carpeta no puede ser . ni ..",
+      "MISSING_EXTENSION": "La plantilla tiene que terminar en .{ext}, o nada podrá reproducir el fichero.",
+      "UNKNOWN_TOKEN": "Hay un token que no existe. Los que sí existen están listados arriba.",
+      "UNRENDERABLE": "Esta plantilla no puede dar una ruta utilizable."
+    },
+    "stats": {
+      "inPlace": "Ya encajan",
+      "toMove": "Se moverían",
+      "rejected": "No se podrían archivar"
+    },
+    "rejectedNotice_one": "{{count}} fichero no lleva nada que esta plantilla pueda usar",
+    "rejectedNotice_other": "{{count}} ficheros no llevan nada que esta plantilla pueda usar",
+    "toast": {
+      "saved": "Guardado. Todavía no se ha movido nada.",
+      "organiseBusy": "Ahora mismo se están moviendo ficheros. Inténtalo cuando termine."
+    }
+  },
   "libraryOrganise": {
     "card": {
       "title": "Qué no encaja",

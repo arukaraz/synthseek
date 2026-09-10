@@ -1043,6 +1043,53 @@
       "description": "Comment vos fichiers sont rangés sur le disque, et ce qui ne correspond pas."
     }
   },
+  "libraryNaming": {
+    "card": {
+      "title": "Comment les fichiers sont organisés",
+      "description": "Les dossiers et le nom de fichier que Synthseek donne à chaque piste qu'il range. Le modifier ne déplace rien de lui-même."
+    },
+    "template": {
+      "label": "Modèle",
+      "description": "Les dossiers sont séparés par /. Ce qui se trouve entre < et > disparaît quand il manque ce qu'il lui faut."
+    },
+    "rules": "Le modèle doit se terminer par .{ext}. Un jeton seul est obligatoire : une piste qui ne peut pas le remplir reste en place, et un téléchargement qui ne peut pas le remplir échoue à l'import.",
+    "loadFailed": "Impossible de lire le modèle actuel",
+    "tokens": {
+      "albumartist": "L'artiste sous lequel l'album est rangé",
+      "album": "Titre de l'album",
+      "artist": "L'artiste crédité sur la piste",
+      "title": "Titre de la piste",
+      "year": "Année de sortie de l'album",
+      "ext": "Extension du fichier",
+      "track": "Numéro de piste",
+      "disc": "Numéro de disque, vide sauf si l'album en compte plusieurs",
+      "disc_total": "Nombre de disques de l'album"
+    },
+    "problem": {
+      "EMPTY_TEMPLATE": "Le modèle ne peut pas être vide.",
+      "CONTROL_CHARACTER": "Le modèle contient un caractère qui ne peut pas figurer dans un nom de fichier.",
+      "UNBALANCED_GROUP": "Chaque < a besoin d'un > pour le fermer.",
+      "EMPTY_GROUP": "Il n'y a aucun jeton entre < et >, donc cela ne pourra jamais disparaître.",
+      "SEPARATOR_IN_GROUP": "Quelque chose entre < et > couvre un séparateur de dossiers. Placez le / à l'extérieur.",
+      "ABSOLUTE_PATH": "Le modèle est relatif à votre dossier de musique, il ne peut donc pas commencer par /.",
+      "EMPTY_SEGMENT": "Un dossier n'a rien dans son nom.",
+      "TRAVERSING_SEGMENT": "Un dossier ne peut pas être . ni ..",
+      "MISSING_EXTENSION": "Le modèle doit se terminer par .{ext}, sinon rien ne lira le fichier.",
+      "UNKNOWN_TOKEN": "Il y a ici un jeton qui n'existe pas. Ceux qui existent sont listés au-dessus.",
+      "UNRENDERABLE": "Ce modèle ne peut pas produire un chemin utilisable."
+    },
+    "stats": {
+      "inPlace": "Déjà conformes",
+      "toMove": "Seraient déplacés",
+      "rejected": "Impossibles à ranger"
+    },
+    "rejectedNotice_one": "{{count}} fichier ne porte rien que ce modèle puisse utiliser",
+    "rejectedNotice_other": "{{count}} fichiers ne portent rien que ce modèle puisse utiliser",
+    "toast": {
+      "saved": "Enregistré. Rien n'a encore été déplacé.",
+      "organiseBusy": "Des fichiers sont en train d'être déplacés. Réessayez une fois terminé."
+    }
+  },
   "libraryOrganise": {
     "card": {
       "title": "Ce qui ne correspond pas",

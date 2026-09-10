@@ -14,6 +14,7 @@
   },
   "settings": {
     "formattingFailed": "Failed to save formatting",
+    "namingFailed": "Failed to save the naming template",
     "downloadSourcesFailed": "Failed to update download sources",
     "logLevelFailed": "Failed to update log level",
     "queueFailed": "Failed to save queue settings",
