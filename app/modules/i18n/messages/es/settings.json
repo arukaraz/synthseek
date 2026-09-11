@@ -263,7 +263,8 @@
         "action": "Moverlos a la papelera",
         "confirmTitle": "¿Mover estos ficheros a la papelera?",
         "confirmMessage": "Se moverán {{count}} fichero(s) a la papelera, donde puedes restaurarlos hasta que pase el plazo de retención. Ahora no se borra nada.",
-        "confirm": "Mover a la papelera"
+        "confirm": "Mover a la papelera",
+        "running": "Moviendo... {{processed}} de {{total}}"
       }
     }
   },

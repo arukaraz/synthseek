@@ -263,7 +263,8 @@
         "action": "Les mettre à la corbeille",
         "confirmTitle": "Mettre ces fichiers à la corbeille ?",
         "confirmMessage": "{{count}} fichier(s) seront mis à la corbeille, d'où vous pourrez les restaurer jusqu'à la fin de la rétention. Rien n'est supprimé maintenant.",
-        "confirm": "Mettre à la corbeille"
+        "confirm": "Mettre à la corbeille",
+        "running": "Déplacement... {{processed}} sur {{total}}"
       }
     }
   },

@@ -263,7 +263,8 @@
         "action": "In den Papierkorb verschieben",
         "confirmTitle": "Diese Dateien in den Papierkorb verschieben?",
         "confirmMessage": "{{count}} Datei(en) werden in den Papierkorb verschoben und lassen sich bis zum Ablauf der Aufbewahrung wiederherstellen. Jetzt wird nichts gelöscht.",
-        "confirm": "In den Papierkorb"
+        "confirm": "In den Papierkorb",
+        "running": "Wird verschoben... {{processed}} von {{total}}"
       }
     }
   },

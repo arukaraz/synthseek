@@ -6,3 +6,10 @@ export function useOrphanedCompanions(enabled: boolean) {
     staleTime: 5 * 60 * 1000,
   });
 }
+
+export function useOrphanSweepStatus(enabled: boolean) {
+  return trpc.maintenance.orphanSweepStatus.useQuery(undefined, {
+    enabled,
+    refetchInterval: (query) => (query.state.data?.running ? 1000 : false),
+  });
+}

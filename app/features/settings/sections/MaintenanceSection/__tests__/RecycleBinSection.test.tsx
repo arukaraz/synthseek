@@ -41,6 +41,7 @@ vi.mock("@hooks/api/queries/useRecycleBin", () => ({
 
 vi.mock("@hooks/api/queries/useOrphanedCompanions", () => ({
   useOrphanedCompanions: () => createMockQuery(undefined),
+  useOrphanSweepStatus: () => createMockQuery(undefined),
 }));
 
 vi.mock("@hooks/api/mutations/settings/useOrphanedCompanions", () => ({

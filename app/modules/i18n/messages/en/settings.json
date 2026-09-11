@@ -263,7 +263,8 @@
         "action": "Move them to the recycle bin",
         "confirmTitle": "Move these files to the recycle bin?",
         "confirmMessage": "{{count}} file(s) will be moved to the recycle bin, where you can restore them until the retention window passes. Nothing is deleted now.",
-        "confirm": "Move to recycle bin"
+        "confirm": "Move to recycle bin",
+        "running": "Moving... {{processed}} of {{total}}"
       }
     }
   },

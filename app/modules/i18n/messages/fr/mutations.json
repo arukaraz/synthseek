@@ -65,9 +65,9 @@
     "stagedReleasesClearFailed": "Impossible de supprimer les publications en attente",
     "recycledFileRestored": "{{path}} restauré",
     "recycledFileRestoreFailed": "Impossible de restaurer ce fichier",
-    "orphanedCompanionsSwept_one": "{{count}} fichier mis à la corbeille",
-    "orphanedCompanionsSwept_other": "{{count}} fichiers mis à la corbeille",
-    "orphanedCompanionsSweepFailed": "Impossible de mettre les fichiers à la corbeille"
+    "orphanedCompanionsSweepFailed": "Impossible de mettre les fichiers à la corbeille",
+    "orphanedCompanionsSweepStarted": "Déplacement des fichiers vers la corbeille",
+    "orphanedCompanionsSweepAlreadyRunning": "C'est déjà en cours"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",

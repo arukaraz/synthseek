@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { useSweepOrphanedCompanions } from "@hooks/api/mutations/settings/useOrphanedCompanions";
-import { useOrphanedCompanions } from "@hooks/api/queries/useOrphanedCompanions";
+import { useOrphanSweepStatus, useOrphanedCompanions } from "@hooks/api/queries/useOrphanedCompanions";
 import { formatBytes } from "@utils/formatters";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -19,9 +19,11 @@ export function OrphanedCompanions() {
   const [expanded, setExpanded] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const orphans = useOrphanedCompanions(expanded);
+  const sweepStatus = useOrphanSweepStatus(expanded);
   const sweep = useSweepOrphanedCompanions();
 
   const found = orphans.data?.count ?? 0;
+  const running = sweepStatus.data?.running ?? false;
 
   return (
     <>
@@ -29,9 +31,19 @@ export function OrphanedCompanions() {
       <div className={quarantineListHeader()}>
         <span className={cardSectionHeader()}>{t("quality.orphanedCompanions.sectionTitle")}</span>
         {expanded && found > 0 ? (
-          <Button variant="outline" size="sm" onClick={() => setConfirmOpen(true)} disabled={sweep.isPending}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setConfirmOpen(true)}
+            disabled={sweep.isPending || running}
+          >
             <Brush className="size-4" />
-            {t("quality.orphanedCompanions.sweep.action")}
+            {running
+              ? t("quality.orphanedCompanions.sweep.running", {
+                  processed: sweepStatus.data?.processed ?? 0,
+                  total: sweepStatus.data?.total ?? 0,
+                })
+              : t("quality.orphanedCompanions.sweep.action")}
           </Button>
         ) : null}
       </div>
