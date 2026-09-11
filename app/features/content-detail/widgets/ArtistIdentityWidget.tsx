@@ -9,10 +9,10 @@ import { DetailsFacts } from "../components/DetailsFacts";
 import { countAlbumsInLibrary, formatBorn, humanizeArtistType, visibleFacts } from "../helpers";
 import type { ArtistIdentityWidgetProps, FactItem } from "../types";
 
-function ArtistIdentityWidgetComponent({ deezerArtistId, artistName }: ArtistIdentityWidgetProps) {
+function ArtistIdentityWidgetComponent({ catalogArtistId, artistName }: ArtistIdentityWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useArtistIdentity({ deezerArtistId, artistName });
-  const { data: discography } = useArtistDiscography({ deezerArtistId });
+  const { data, isLoading } = useArtistIdentity({ catalogArtistId, artistName });
+  const { data: discography } = useArtistDiscography({ catalogArtistId });
   const albumsInLibrary = countAlbumsInLibrary(discography);
 
   const facts: FactItem[] = [

@@ -13,13 +13,13 @@ import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modal
 import type { AlbumDetailBodyProps } from "./types";
 
 function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
-  const { data: album } = useAlbumDetail({ deezerAlbumId: target.id });
+  const { data: album } = useAlbumDetail({ catalogAlbumId: target.id });
   const { requestAlbum } = useContentDetailActions();
   const { playEntity } = useEntityPlayback();
 
   const artistName = album?.artist ?? target.artistName;
   const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, mbid: null });
-  const { data: albumCredits } = useAlbumCredits({ deezerAlbumId: target.id, barcode: null });
+  const { data: albumCredits } = useAlbumCredits({ catalogAlbumId: target.id, barcode: null });
   const artistExternalId = album?.artistExternalId ?? null;
   const genres = useMemo(() => album?.genres ?? EMPTY_GENRES, [album?.genres]);
   const trackCount = album?.totalTracks ?? null;
@@ -86,13 +86,13 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
       <div className={modalScrollArea()}>
         <div className={modalGrid()}>
           <div className={modalMain()}>
-            <AlbumDetailWidget deezerAlbumId={target.id} />
+            <AlbumDetailWidget catalogAlbumId={target.id} />
           </div>
 
           <div className={modalSide()}>
             <AlbumStatsWidget artistName={artistName} albumName={target.name} trackCount={trackCount} slot="about" />
             <AlbumCreditsWidget
-              deezerAlbumId={target.id}
+              catalogAlbumId={target.id}
               releaseDate={album?.releaseDate ?? null}
               label={album?.label ?? null}
               recordType={album?.recordType ?? null}

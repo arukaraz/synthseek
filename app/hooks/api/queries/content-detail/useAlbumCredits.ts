@@ -5,16 +5,16 @@ import { trpc } from "@utils/trpc";
 import { CONTENT_DETAIL_GC_TIME } from "./constants";
 
 interface UseAlbumCreditsArgs {
-  deezerAlbumId: string;
+  catalogAlbumId: string;
   barcode: string | null;
   enabled?: boolean;
 }
 
-export function useAlbumCredits({ deezerAlbumId, barcode, enabled = true }: UseAlbumCreditsArgs) {
+export function useAlbumCredits({ catalogAlbumId, barcode, enabled = true }: UseAlbumCreditsArgs) {
   return trpc.contentDetail.albumCredits.useQuery(
-    { deezerAlbumId, barcode: barcode ?? undefined },
+    { catalogAlbumId, barcode: barcode ?? undefined },
     {
-      enabled: enabled && !!deezerAlbumId,
+      enabled: enabled && !!catalogAlbumId,
       staleTime: 60 * 60 * 1000,
       gcTime: CONTENT_DETAIL_GC_TIME,
       placeholderData: keepPreviousData,

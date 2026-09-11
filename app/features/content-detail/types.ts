@@ -47,21 +47,21 @@ export interface DetailEmptyProps {
 }
 
 export interface ArtistIdentityWidgetProps {
-  deezerArtistId: string;
+  catalogArtistId: string;
   artistName: string;
 }
 
 export type StatsWidgetSlot = "stats" | "about";
 
 export interface ArtistStatsWidgetProps {
-  deezerArtistId: string;
+  catalogArtistId: string;
   artistName: string;
   mbid: string | null;
   slot: StatsWidgetSlot;
 }
 
 export interface ArtistTopTracksWidgetProps {
-  deezerArtistId: string;
+  catalogArtistId: string;
 }
 
 export interface ArtistSimilarWidgetProps {
@@ -70,13 +70,13 @@ export interface ArtistSimilarWidgetProps {
 }
 
 export interface ArtistDiscographyWidgetProps {
-  deezerArtistId: string;
+  catalogArtistId: string;
   artistName: string;
   onSelectAlbum: (target: DetailTarget) => void;
 }
 
 export interface AlbumDetailWidgetProps {
-  deezerAlbumId: string;
+  catalogAlbumId: string;
 }
 
 export interface AlbumStatsWidgetProps {
@@ -87,7 +87,7 @@ export interface AlbumStatsWidgetProps {
 }
 
 export interface AlbumCreditsWidgetProps {
-  deezerAlbumId: string;
+  catalogAlbumId: string;
   releaseDate: string | null;
   label: string | null;
   recordType: string | null;

@@ -25,8 +25,8 @@ function ArtistSimilarWidgetComponent({ artistName, onSelectArtist }: ArtistSimi
   };
 
   const handleSelect = (artist: SimilarArtistEntry) => {
-    if (!artist.deezerArtistId) return;
-    onSelectArtist(artistTarget({ id: artist.deezerArtistId, name: artist.name, cover: artist.image }));
+    if (!artist.catalogArtistId) return;
+    onSelectArtist(artistTarget({ id: artist.catalogArtistId, name: artist.name, cover: artist.image }));
   };
 
   const trailingSlot =

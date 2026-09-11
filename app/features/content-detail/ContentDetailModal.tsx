@@ -30,12 +30,12 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
   const isAlbum = current?.mode === "album";
   const isPlaylist = current?.mode === "playlist";
   const { data: identity } = useArtistIdentity({
-    deezerArtistId: isArtist ? (current?.id ?? "") : "",
+    catalogArtistId: isArtist ? (current?.id ?? "") : "",
     artistName: current?.artistName ?? "",
     enabled: isArtist,
   });
   const { data: album } = useAlbumDetail({
-    deezerAlbumId: isAlbum ? (current?.id ?? "") : "",
+    catalogAlbumId: isAlbum ? (current?.id ?? "") : "",
     enabled: !!current && isAlbum,
   });
   const isLibraryPlaylist =

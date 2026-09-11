@@ -3,15 +3,15 @@ import { trpc } from "@utils/trpc";
 import { CONTENT_DETAIL_GC_TIME } from "./constants";
 
 interface UseArtistDiscographyArgs {
-  deezerArtistId: string;
+  catalogArtistId: string;
   enabled?: boolean;
 }
 
-export function useArtistDiscography({ deezerArtistId, enabled = true }: UseArtistDiscographyArgs) {
+export function useArtistDiscography({ catalogArtistId, enabled = true }: UseArtistDiscographyArgs) {
   return trpc.contentDetail.artistDiscography.useQuery(
-    { deezerArtistId },
+    { catalogArtistId },
     {
-      enabled: enabled && !!deezerArtistId,
+      enabled: enabled && !!catalogArtistId,
       staleTime: 60 * 60 * 1000,
       gcTime: CONTENT_DETAIL_GC_TIME,
       trpc: { context: { skipBatch: true } },

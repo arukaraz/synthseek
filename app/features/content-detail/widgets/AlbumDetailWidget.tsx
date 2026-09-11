@@ -9,9 +9,9 @@ import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { Tracklist } from "../components/Tracklist";
 import type { AlbumDetailWidgetProps } from "../types";
 
-function AlbumDetailWidgetComponent({ deezerAlbumId }: AlbumDetailWidgetProps) {
+function AlbumDetailWidgetComponent({ catalogAlbumId }: AlbumDetailWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useAlbumDetail({ deezerAlbumId });
+  const { data, isLoading } = useAlbumDetail({ catalogAlbumId });
 
   const tracks = data?.tracks ?? [];
   const { completeCount } = deriveTrackStatusCounts(tracks);

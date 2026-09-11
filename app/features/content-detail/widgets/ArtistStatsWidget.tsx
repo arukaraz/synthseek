@@ -10,10 +10,10 @@ import { StatRow } from "../components/StatRow";
 import { countAlbumsInLibrary } from "../helpers";
 import type { ArtistStatsWidgetProps, StatItem } from "../types";
 
-function ArtistStatsWidgetComponent({ deezerArtistId, artistName, mbid, slot }: ArtistStatsWidgetProps) {
+function ArtistStatsWidgetComponent({ catalogArtistId, artistName, mbid, slot }: ArtistStatsWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useArtistStats({ artistName, mbid });
-  const { data: discography } = useArtistDiscography({ deezerArtistId, enabled: slot === "stats" });
+  const { data: discography } = useArtistDiscography({ catalogArtistId, enabled: slot === "stats" });
 
   if (slot === "about") {
     return (

@@ -23,7 +23,7 @@ export function useResolveArtistAndOpen() {
           toast.error(t("resolveArtistFailed"));
           return;
         }
-        openForResult(artistRequestItem({ id: resolved.deezerArtistId, name: resolved.name, cover: resolved.image }));
+        openForResult(artistRequestItem({ id: resolved.catalogArtistId, name: resolved.name, cover: resolved.image }));
       } finally {
         resolvingRef.current = false;
       }

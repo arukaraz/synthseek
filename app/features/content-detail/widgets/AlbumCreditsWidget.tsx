@@ -11,14 +11,14 @@ import { visibleFacts } from "../helpers";
 import type { AlbumCreditsWidgetProps, FactItem } from "../types";
 
 function AlbumCreditsWidgetComponent({
-  deezerAlbumId,
+  catalogAlbumId,
   releaseDate,
   label,
   recordType,
   length,
 }: AlbumCreditsWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useAlbumCredits({ deezerAlbumId, barcode: null });
+  const { data, isLoading } = useAlbumCredits({ catalogAlbumId, barcode: null });
 
   const facts: FactItem[] = [
     { label: t("details.released"), value: releaseDate ? formatYear(releaseDate) : null },

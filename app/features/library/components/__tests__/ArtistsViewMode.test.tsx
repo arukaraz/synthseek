@@ -84,7 +84,7 @@ describe("ArtistsViewMode", () => {
   });
 
   it("resolves the artist name and opens the detail flow on click", async () => {
-    fetchMock.mockResolvedValue({ deezerArtistId: "dz-1", name: "Daft Punk", image: null });
+    fetchMock.mockResolvedValue({ catalogArtistId: "dz-1", name: "Daft Punk", image: null });
     const { user } = renderWithProviders(<ArtistsViewMode {...makeProps()} />);
 
     await user.click(screen.getByRole("button", { name: /Open details for/i }));
@@ -106,7 +106,7 @@ describe("ArtistsViewMode", () => {
   });
 
   it("does not fire a second resolve while one is already in flight", async () => {
-    let resolveFetch: (value: { deezerArtistId: string; name: string; image: null } | null) => void = () => {};
+    let resolveFetch: (value: { catalogArtistId: string; name: string; image: null } | null) => void = () => {};
     fetchMock.mockReturnValue(new Promise((resolve) => (resolveFetch = resolve)));
     const { user } = renderWithProviders(<ArtistsViewMode {...makeProps()} />);
 
@@ -116,7 +116,7 @@ describe("ArtistsViewMode", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
 
-    resolveFetch({ deezerArtistId: "dz-1", name: "Daft Punk", image: null });
+    resolveFetch({ catalogArtistId: "dz-1", name: "Daft Punk", image: null });
     await waitFor(() => expect(openForResultMock).toHaveBeenCalledTimes(1));
   });
 });

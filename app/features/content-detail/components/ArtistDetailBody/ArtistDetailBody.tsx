@@ -21,7 +21,7 @@ import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modal
 import type { ArtistDetailBodyProps } from "./types";
 
 function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps) {
-  const { data: identity } = useArtistIdentity({ deezerArtistId: target.id, artistName: target.artistName });
+  const { data: identity } = useArtistIdentity({ catalogArtistId: target.id, artistName: target.artistName });
   const { data: stats } = useArtistStats({ artistName: target.artistName, mbid: identity?.mbid ?? null });
   const { data: lidarr } = useLidarrAvailable();
   const { requestArtist } = useContentDetailActions();
@@ -43,7 +43,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
   }, [requestArtist, target.id, target.name, cover]);
 
   const statsSlot = useMemo(
-    () => <ArtistStatsWidget deezerArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="stats" />,
+    () => <ArtistStatsWidget catalogArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="stats" />,
     [target.id, target.artistName, mbid]
   );
 
@@ -69,18 +69,18 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
       <div className={modalScrollArea()}>
         <div className={modalGrid()}>
           <div className={modalMain()}>
-            <ArtistTopTracksWidget deezerArtistId={target.id} />
+            <ArtistTopTracksWidget catalogArtistId={target.id} />
           </div>
 
           <div className={modalSide()}>
-            <ArtistStatsWidget deezerArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="about" />
-            <ArtistIdentityWidget deezerArtistId={target.id} artistName={target.artistName} />
+            <ArtistStatsWidget catalogArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="about" />
+            <ArtistIdentityWidget catalogArtistId={target.id} artistName={target.artistName} />
           </div>
         </div>
 
         <div className={modalFullRow()}>
           <ArtistDiscographyWidget
-            deezerArtistId={target.id}
+            catalogArtistId={target.id}
             artistName={target.artistName}
             onSelectAlbum={onNavigate}
           />

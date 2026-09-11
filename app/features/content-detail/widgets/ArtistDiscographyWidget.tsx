@@ -14,9 +14,13 @@ import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { albumTarget } from "../helpers";
 import type { ArtistDiscographyWidgetProps, ContentCardItem } from "../types";
 
-function ArtistDiscographyWidgetComponent({ deezerArtistId, artistName, onSelectAlbum }: ArtistDiscographyWidgetProps) {
+function ArtistDiscographyWidgetComponent({
+  catalogArtistId,
+  artistName,
+  onSelectAlbum,
+}: ArtistDiscographyWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useArtistDiscography({ deezerArtistId });
+  const { data, isLoading } = useArtistDiscography({ catalogArtistId });
 
   const groups: DiscographyGroup[] = (data?.groups ?? []).map((group) => ({
     recordType: group.recordType,

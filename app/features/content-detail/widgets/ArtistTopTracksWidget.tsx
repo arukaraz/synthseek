@@ -8,9 +8,9 @@ import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { Tracklist } from "../components/Tracklist";
 import type { ArtistTopTracksWidgetProps } from "../types";
 
-function ArtistTopTracksWidgetComponent({ deezerArtistId }: ArtistTopTracksWidgetProps) {
+function ArtistTopTracksWidgetComponent({ catalogArtistId }: ArtistTopTracksWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useArtistTopTracks({ deezerArtistId });
+  const { data, isLoading } = useArtistTopTracks({ catalogArtistId });
 
   const tracks = data ?? [];
 

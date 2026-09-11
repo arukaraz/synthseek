@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 
 export interface SimilarArtistEntry {
-  deezerArtistId: string | null;
+  catalogArtistId: string | null;
   name: string;
   match: number;
   image: string | null;

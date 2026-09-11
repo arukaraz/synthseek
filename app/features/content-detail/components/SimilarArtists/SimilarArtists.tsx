@@ -36,7 +36,7 @@ export function SimilarArtists({ artists, onSelect, trackRef }: SimilarArtistsPr
             </>
           );
 
-          if (artist.deezerArtistId) {
+          if (artist.catalogArtistId) {
             return (
               <button key={artist.name} type="button" className={similarCard()} onClick={() => onSelect(artist)}>
                 {content}

@@ -21,7 +21,7 @@ export function MoreFromArtistWidget({
   const { t } = useTranslation("contentDetail");
   const trackRef = useRef<HTMLDivElement | null>(null);
   const { data, isLoading } = useArtistDiscography({
-    deezerArtistId: artistExternalId ?? "",
+    catalogArtistId: artistExternalId ?? "",
     enabled: !!artistExternalId,
   });
 
