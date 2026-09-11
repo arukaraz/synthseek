@@ -7,10 +7,12 @@ import { trpc } from "@utils/trpc";
 export function useSweepOrphanedCompanions() {
   const utils = trpc.useUtils();
   return trpc.maintenance.sweepOrphanedCompanions.useMutation({
-    onSuccess: ({ started }) => {
+    onSuccess: ({ outcome }) => {
       utils.maintenance.orphanSweepStatus.invalidate();
-      if (started) toast.success(i18n.t("mutations:settings.orphanedCompanionsSweepStarted"));
-      else toast.info(i18n.t("mutations:settings.orphanedCompanionsSweepAlreadyRunning"));
+      if (outcome === "started") toast.success(i18n.t("mutations:settings.orphanedCompanionsSweepStarted"));
+      else if (outcome === "already_running")
+        toast.info(i18n.t("mutations:settings.orphanedCompanionsSweepAlreadyRunning"));
+      else toast.info(i18n.t("mutations:settings.orphanedCompanionsSweepLibraryBusy"));
     },
     onError: (error) => errorToast(error, "settings.orphanedCompanionsSweepFailed"),
   });

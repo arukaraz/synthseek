@@ -67,7 +67,8 @@
     "recycledFileRestoreFailed": "Impossible de restaurer ce fichier",
     "orphanedCompanionsSweepFailed": "Impossible de mettre les fichiers à la corbeille",
     "orphanedCompanionsSweepStarted": "Déplacement des fichiers vers la corbeille",
-    "orphanedCompanionsSweepAlreadyRunning": "C'est déjà en cours"
+    "orphanedCompanionsSweepAlreadyRunning": "C'est déjà en cours",
+    "orphanedCompanionsSweepLibraryBusy": "La bibliothèque est occupée pour le moment, réessayez ensuite"
   },
   "plexConnect": {
     "timedOut": "Délai de connexion Plex dépassé",

@@ -67,7 +67,8 @@
     "recycledFileRestoreFailed": "Diese Datei konnte nicht wiederhergestellt werden",
     "orphanedCompanionsSweepFailed": "Die Dateien konnten nicht in den Papierkorb verschoben werden",
     "orphanedCompanionsSweepStarted": "Dateien werden in den Papierkorb verschoben",
-    "orphanedCompanionsSweepAlreadyRunning": "Das läuft bereits"
+    "orphanedCompanionsSweepAlreadyRunning": "Das läuft bereits",
+    "orphanedCompanionsSweepLibraryBusy": "Die Bibliothek ist gerade beschäftigt, versuche es danach erneut"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",

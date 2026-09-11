@@ -67,7 +67,8 @@
     "recycledFileRestoreFailed": "No se pudo restaurar ese fichero",
     "orphanedCompanionsSweepFailed": "No se pudieron mover los ficheros a la papelera",
     "orphanedCompanionsSweepStarted": "Moviendo los ficheros a la papelera",
-    "orphanedCompanionsSweepAlreadyRunning": "Eso ya está en marcha"
+    "orphanedCompanionsSweepAlreadyRunning": "Eso ya está en marcha",
+    "orphanedCompanionsSweepLibraryBusy": "La biblioteca está ocupada ahora mismo, inténtalo cuando termine"
   },
   "plexConnect": {
     "timedOut": "El inicio de sesión de Plex agotó el tiempo de espera",

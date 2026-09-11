@@ -67,7 +67,8 @@
     "recycledFileRestoreFailed": "Could not restore that file",
     "orphanedCompanionsSweepFailed": "Could not move the files to the recycle bin",
     "orphanedCompanionsSweepStarted": "Moving the files to the recycle bin",
-    "orphanedCompanionsSweepAlreadyRunning": "That is already under way"
+    "orphanedCompanionsSweepAlreadyRunning": "That is already under way",
+    "orphanedCompanionsSweepLibraryBusy": "The library is busy right now, try again when it is done"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",
