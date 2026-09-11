@@ -235,6 +235,36 @@
         "toggle_other": "Voir les {{count}} fichiers conservés",
         "restore": "Restaurer"
       }
+    },
+    "orphanedCompanions": {
+      "sectionTitle": "Fichiers restés en arrière",
+      "check": {
+        "label": "Chercher les fichiers dont le morceau a disparu",
+        "description": "Les paroles et les pochettes de piste restent sur le disque quand la musique qu'elles accompagnaient est retirée. La vérification parcourt toute votre bibliothèque, elle n'est donc pas automatique.",
+        "action": "Vérifier"
+      },
+      "status": {
+        "loading": "Lecture de votre bibliothèque...",
+        "loadError": "Impossible de lire votre bibliothèque.",
+        "found": {
+          "label": "Fichiers trouvés",
+          "description": "Chacun appartient à un morceau qui n'est plus là."
+        },
+        "size": {
+          "label": "Espace occupé",
+          "description": "Ce que vous récupérez en les mettant à la corbeille."
+        },
+        "unreadable": {
+          "label": "Dossiers illisibles",
+          "description": "Rien n'y a été compté, ainsi un disque non monté ne ressemble jamais à de la musique manquante."
+        }
+      },
+      "sweep": {
+        "action": "Les mettre à la corbeille",
+        "confirmTitle": "Mettre ces fichiers à la corbeille ?",
+        "confirmMessage": "{{count}} fichier(s) seront mis à la corbeille, d'où vous pourrez les restaurer jusqu'à la fin de la rétention. Rien n'est supprimé maintenant.",
+        "confirm": "Mettre à la corbeille"
+      }
     }
   },
   "common": {

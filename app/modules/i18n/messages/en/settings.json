@@ -235,6 +235,36 @@
         "toggle_other": "Show the {{count}} files it holds",
         "restore": "Restore"
       }
+    },
+    "orphanedCompanions": {
+      "sectionTitle": "Files left behind",
+      "check": {
+        "label": "Look for files whose track is gone",
+        "description": "Lyrics and per-track artwork stay on disk when the music they belonged to is removed. Checking reads your whole library, so it is not done automatically.",
+        "action": "Check"
+      },
+      "status": {
+        "loading": "Reading your library...",
+        "loadError": "Could not read your library.",
+        "found": {
+          "label": "Files found",
+          "description": "Each one belongs to a track that is no longer there."
+        },
+        "size": {
+          "label": "Space they take",
+          "description": "What you get back by moving them to the recycle bin."
+        },
+        "unreadable": {
+          "label": "Folders that could not be read",
+          "description": "Nothing in these was counted, so a disk that is not mounted never looks like missing music."
+        }
+      },
+      "sweep": {
+        "action": "Move them to the recycle bin",
+        "confirmTitle": "Move these files to the recycle bin?",
+        "confirmMessage": "{{count}} file(s) will be moved to the recycle bin, where you can restore them until the retention window passes. Nothing is deleted now.",
+        "confirm": "Move to recycle bin"
+      }
     }
   },
   "common": {

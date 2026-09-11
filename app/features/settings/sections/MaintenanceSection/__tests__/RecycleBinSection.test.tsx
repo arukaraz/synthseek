@@ -39,6 +39,14 @@ vi.mock("@hooks/api/queries/useRecycleBin", () => ({
   useRecycleBinEntries: () => createMockQuery([]),
 }));
 
+vi.mock("@hooks/api/queries/useOrphanedCompanions", () => ({
+  useOrphanedCompanions: () => createMockQuery(undefined),
+}));
+
+vi.mock("@hooks/api/mutations/settings/useOrphanedCompanions", () => ({
+  useSweepOrphanedCompanions: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+
 import { RecycleBinSection } from "../RecycleBinSection";
 
 beforeAll(() => {

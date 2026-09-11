@@ -64,7 +64,10 @@
     "stagedReleasesCleared": "Staged releases cleared",
     "stagedReleasesClearFailed": "Could not clear the staged releases",
     "recycledFileRestored": "Restored {{path}}",
-    "recycledFileRestoreFailed": "Could not restore that file"
+    "recycledFileRestoreFailed": "Could not restore that file",
+    "orphanedCompanionsSwept_one": "Moved {{count}} file to the recycle bin",
+    "orphanedCompanionsSwept_other": "Moved {{count}} files to the recycle bin",
+    "orphanedCompanionsSweepFailed": "Could not move the files to the recycle bin"
   },
   "plexConnect": {
     "timedOut": "Plex login timed out",

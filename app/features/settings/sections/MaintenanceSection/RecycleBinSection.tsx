@@ -17,6 +17,7 @@ import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
 import { MaintenancePage } from "./MaintenancePage";
+import { OrphanedCompanions } from "./OrphanedCompanions";
 import { RecycleBinList } from "./RecycleBinList";
 import { quarantineListHeader, quarantineValue } from "./styles";
 
@@ -69,6 +70,8 @@ export function RecycleBinSection() {
             }
           />
           <RecycleBinList entryCount={status.data.entryCount} />
+
+          <OrphanedCompanions />
 
           {recycleForm.draft ? (
             <>

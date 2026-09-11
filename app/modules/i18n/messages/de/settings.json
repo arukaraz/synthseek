@@ -235,6 +235,36 @@
         "toggle_other": "Die {{count}} enthaltenen Dateien anzeigen",
         "restore": "Wiederherstellen"
       }
+    },
+    "orphanedCompanions": {
+      "sectionTitle": "Zurückgebliebene Dateien",
+      "check": {
+        "label": "Nach Dateien suchen, deren Titel fehlt",
+        "description": "Liedtexte und titelbezogene Bilder bleiben auf der Festplatte, wenn die zugehörige Musik entfernt wird. Die Prüfung liest deine gesamte Bibliothek und läuft daher nicht automatisch.",
+        "action": "Prüfen"
+      },
+      "status": {
+        "loading": "Bibliothek wird gelesen...",
+        "loadError": "Die Bibliothek konnte nicht gelesen werden.",
+        "found": {
+          "label": "Gefundene Dateien",
+          "description": "Jede gehört zu einem Titel, den es nicht mehr gibt."
+        },
+        "size": {
+          "label": "Belegter Platz",
+          "description": "So viel gibt der Papierkorb wieder frei."
+        },
+        "unreadable": {
+          "label": "Nicht lesbare Ordner",
+          "description": "Daraus wurde nichts gezählt, damit ein nicht eingebundenes Laufwerk nie wie fehlende Musik aussieht."
+        }
+      },
+      "sweep": {
+        "action": "In den Papierkorb verschieben",
+        "confirmTitle": "Diese Dateien in den Papierkorb verschieben?",
+        "confirmMessage": "{{count}} Datei(en) werden in den Papierkorb verschoben und lassen sich bis zum Ablauf der Aufbewahrung wiederherstellen. Jetzt wird nichts gelöscht.",
+        "confirm": "In den Papierkorb"
+      }
     }
   },
   "common": {

@@ -64,7 +64,10 @@
     "stagedReleasesCleared": "Zwischengespeicherte Releases entfernt",
     "stagedReleasesClearFailed": "Zwischengespeicherte Releases konnten nicht entfernt werden",
     "recycledFileRestored": "{{path}} wiederhergestellt",
-    "recycledFileRestoreFailed": "Diese Datei konnte nicht wiederhergestellt werden"
+    "recycledFileRestoreFailed": "Diese Datei konnte nicht wiederhergestellt werden",
+    "orphanedCompanionsSwept_one": "{{count}} Datei in den Papierkorb verschoben",
+    "orphanedCompanionsSwept_other": "{{count}} Dateien in den Papierkorb verschoben",
+    "orphanedCompanionsSweepFailed": "Die Dateien konnten nicht in den Papierkorb verschoben werden"
   },
   "plexConnect": {
     "timedOut": "Plex-Anmeldung hat das Zeitlimit überschritten",

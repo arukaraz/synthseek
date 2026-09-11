@@ -235,6 +235,36 @@
         "toggle_other": "Ver los {{count}} ficheros que guarda",
         "restore": "Restaurar"
       }
+    },
+    "orphanedCompanions": {
+      "sectionTitle": "Ficheros que quedaron atrás",
+      "check": {
+        "label": "Buscar ficheros cuya pista ya no está",
+        "description": "Las letras y las carátulas de pista se quedan en el disco cuando se retira la música a la que acompañaban. Comprobarlo recorre toda tu biblioteca, así que no se hace solo.",
+        "action": "Comprobar"
+      },
+      "status": {
+        "loading": "Leyendo tu biblioteca...",
+        "loadError": "No se pudo leer tu biblioteca.",
+        "found": {
+          "label": "Ficheros encontrados",
+          "description": "Cada uno pertenece a una pista que ya no está."
+        },
+        "size": {
+          "label": "Espacio que ocupan",
+          "description": "Lo que recuperas al moverlos a la papelera."
+        },
+        "unreadable": {
+          "label": "Carpetas que no se pudieron leer",
+          "description": "No se contó nada de ellas, así que un disco sin montar nunca parece música que falta."
+        }
+      },
+      "sweep": {
+        "action": "Moverlos a la papelera",
+        "confirmTitle": "¿Mover estos ficheros a la papelera?",
+        "confirmMessage": "Se moverán {{count}} fichero(s) a la papelera, donde puedes restaurarlos hasta que pase el plazo de retención. Ahora no se borra nada.",
+        "confirm": "Mover a la papelera"
+      }
     }
   },
   "common": {
