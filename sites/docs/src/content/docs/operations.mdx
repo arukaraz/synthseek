@@ -47,6 +47,8 @@ The library scan has its own card on the **Jobs** page rather than a row in the 
 
 Duplicates have their own page under **Settings**, then **Maintenance**, listing them a track at a time, ordered by what settling each one would give back. Copies it can prove are the same recording are settled without anyone pressing anything: it keeps the best file, preferring lossless and then the larger one, points your library at it, and sends the rest to the recycle bin. Proof means the copies agree on both their title and their length, since a remix, a live take, a radio edit or a truncated download can carry the title of the track it was filed against while being a different recording; copies within a couple of seconds of each other count as one length, because that is encoder rounding rather than a different take. What it cannot prove waits under **Needs review**, where each track says how many clearly different lengths its copies come in and you can play any copy before taking a **Keep this copy** on the one you want, which recycles the others. Nothing is deleted outright: a call you disagree with is listed under **Settings**, then **Maintenance**, then **Recycle bin**, with a **Restore** that puts the file back where it came from, for as long as the retention window keeps it.
 
+The same page can also find the lyrics, artwork and metadata files left beside a track that is no longer there, count them, and move them to the recycle bin. It only judges a folder that still holds music, so a folder of booklet scans and a folder it could not read are both left alone.
+
 ### How files are organised
 
 **Settings**, then **Library**, administrators only.
@@ -133,7 +135,7 @@ If there is not enough free space for a copy, or your database lives outside its
 
 Everything Synthseek knows lives under `/data`. Back up that volume and you can restore the instance completely.
 
-Your music files live under `/music` and are not Synthseek's to back up. It removes a file from there in five cases, and never by deleting it: replacing a copy with a better one after a quality upgrade, keeping one copy you picked on the duplicates page, resolving one track with **Keep best copy**, settling in bulk with **Keep the best of every track**, and the scan settling the copies it proved are the same recording on its own. All five move the file to the recycle bin under `/data`, where it stays until the retention sweep clears it.
+Your music files live under `/music` and are not Synthseek's to back up. It removes a file from there in six cases, and never by deleting it: replacing a copy with a better one after a quality upgrade, keeping one copy you picked on the duplicates page, resolving one track with **Keep best copy**, settling in bulk with **Keep the best of every track**, the scan settling the copies it proved are the same recording on its own, and clearing the leftover files described above. All six move the file to the recycle bin under `/data`, where it stays until the retention sweep clears it.
 
 Take your own backup before a major version upgrade. The automatic snapshot covers schema migration failure; it is not a substitute for a backup you control.
 
