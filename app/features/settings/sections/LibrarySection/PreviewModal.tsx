@@ -21,6 +21,7 @@ import {
   previewHead,
   previewRow,
   previewSearch,
+  previewScopeNote,
   previewSearchBox,
   previewTable,
   previewTemplate,
@@ -141,13 +142,19 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
             />
           ) : null}
 
+          {debounced.length > 0 && matched < chosen ? (
+            <p className={previewScopeNote()}>
+              {t("libraryNaming.preview.searchIsALens", { count: chosen, formatted: chosen.toLocaleString() })}
+            </p>
+          ) : null}
+
           <DialogFooter>
             <Button variant="ghost" onClick={() => onOpenChange(false)} disabled={apply.isPending}>
               {t("libraryNaming.preview.cancel")}
             </Button>
             <Button onClick={() => setConfirming(true)} disabled={chosen === 0 || apply.isPending}>
               {apply.isPending ? <Loader2 className="size-4 animate-spin" /> : null}
-              {t("libraryNaming.preview.confirm", { count: chosen })}
+              {t("libraryNaming.preview.confirm", { count: chosen, formatted: chosen.toLocaleString() })}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -164,7 +171,7 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
           );
         }}
         title={t("libraryNaming.preview.confirmTitle")}
-        message={t("libraryNaming.preview.confirmMessage", { count: chosen })}
+        message={t("libraryNaming.preview.confirmMessage", { count: chosen, formatted: chosen.toLocaleString() })}
         confirmText={t("libraryNaming.preview.confirmYes")}
         variant="warning"
       />

@@ -28,6 +28,8 @@ export const previewFrom = cva("text-fg/50 w-0 min-w-0 flex-1 truncate");
 
 export const previewTo = cva("text-fg/90 w-0 min-w-0 flex-1 truncate");
 
+export const previewScopeNote = cva("text-fg/60 text-xs");
+
 export const sampleList = cva("border-fg/10 flex flex-col gap-1.5 rounded-md border p-3");
 
 export const sampleRow = cva("flex flex-col gap-0.5");
