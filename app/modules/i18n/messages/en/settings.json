@@ -1076,12 +1076,12 @@
   },
   "libraryNaming": {
     "card": {
-      "title": "How files are organised",
-      "description": "The folders and filename Synthseek gives every track it files. Changing it does not move anything on its own."
+      "title": "Track Naming",
+      "description": "Where every song goes and what it is called. Nothing moves until you say so."
     },
     "template": {
-      "label": "Template",
-      "description": "Folders are separated by /. Anything between < and > disappears when what it needs is missing."
+      "label": "Standard Track Format",
+      "description": "Each / starts a new folder. Anything inside < > disappears when the song has nothing to put there."
     },
     "rules": "The template has to end in .{ext}. A token on its own is required: a track that cannot fill it is left alone, and a download that cannot fill it fails to import.",
     "loadFailed": "Could not read the current template",
@@ -1110,15 +1110,45 @@
       "UNRENDERABLE": "This template cannot produce a usable path."
     },
     "stats": {
-      "inPlace": "Already match",
-      "toMove": "Would move",
-      "rejected": "Could not be filed"
+      "inPlace": "are already right",
+      "toMove": "songs would move",
+      "rejected": "cannot be named"
     },
-    "rejectedNotice_one": "{{count}} file carries nothing this template could use",
-    "rejectedNotice_other": "{{count}} files carry nothing this template could use",
+    "previewAction_one": "See the change",
+    "previewAction_other": "See the {{formatted}} changes",
+    "samples": {
+      "single_disc": "A normal album",
+      "multi_disc": "An album on two discs",
+      "guest_artist": "A song by a guest",
+      "unrenderable": "This format cannot name this one"
+    },
+    "preview": {
+      "title": "What would change",
+      "tabs": {
+        "all": "Everything",
+        "relocate": "Only the folder",
+        "rename": "Also the name",
+        "ariaLabel": "Filter the changes"
+      },
+      "searchPlaceholder": "Search a song or folder",
+      "loading": "Working out the changes",
+      "noMatches": "Nothing matches that",
+      "loadFailed": "The changes could not be worked out",
+      "renameWarning": "These change the name on disk. Your media server will need to read the library again to find them.",
+      "cancel": "Cancel",
+      "confirm_one": "Move 1 song",
+      "confirm_other": "Move {{count}} songs",
+      "confirmTitle": "Move the files?",
+      "confirmMessage_one": "This moves 1 song on disk and saves this format for everything that arrives from now on.",
+      "confirmMessage_other": "This moves {{count}} songs on disk and saves this format for everything that arrives from now on.",
+      "confirmYes": "Yes, move them"
+    },
+    "rejectedNotice_one": "One song is missing something this format needs, so it stays where it is.",
+    "rejectedNotice_other": "{{count}} songs are missing something this format needs, so they stay where they are.",
     "toast": {
       "saved": "Saved. Nothing has moved yet.",
-      "organiseBusy": "Files are being moved right now. Try again when that finishes."
+      "organiseBusy": "Files are being moved right now. Try again when that finishes.",
+      "invalidTemplate": "That format cannot be used."
     }
   },
   "libraryOrganise": {

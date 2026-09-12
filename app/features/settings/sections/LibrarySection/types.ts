@@ -24,6 +24,27 @@ export interface RunOutcome {
   duration: string;
 }
 
+export interface NamingSample {
+  id: string;
+  albumartist: string;
+  artist: string;
+  album: string;
+  title: string;
+  year: string;
+  track: string;
+  disc: string;
+  disc_total: string;
+  ext: string;
+}
+
+export type MoveFilter = "all" | MoveClass;
+
+export interface PreviewModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  template: string;
+}
+
 export interface OrganiseGroupRowProps {
   moveClass: MoveClass;
   count: number;

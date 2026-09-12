@@ -1,6 +1,26 @@
 import { formatDuration } from "@utils/formatters";
 
-import type { GroupSelection, MoveClass, OrganisePreview, OrganiseStatus, RunOutcome } from "./types";
+import { SAMPLE_LABELS } from "./constants";
+
+import type { GroupSelection, MoveClass, MoveFilter, OrganisePreview, OrganiseStatus, RunOutcome } from "./types";
+
+export function sampleLabelKey(id: string): (typeof SAMPLE_LABELS)[keyof typeof SAMPLE_LABELS] | null {
+  for (const [key, value] of Object.entries(SAMPLE_LABELS)) {
+    if (key === id) return value;
+  }
+  return null;
+}
+
+export function classesFor(filter: MoveFilter): MoveClass[] {
+  return filter === "all" ? ["relocate", "rename"] : [filter];
+}
+
+export function countFrom(
+  byClass: readonly { moveClass: MoveClass; count: number }[] | undefined,
+  moveClass: MoveClass
+): number {
+  return byClass?.find((entry) => entry.moveClass === moveClass)?.count ?? 0;
+}
 
 export function countFor(preview: OrganisePreview | undefined, moveClass: MoveClass): number {
   return preview?.movesByClass.find((entry) => entry.moveClass === moveClass)?.count ?? 0;

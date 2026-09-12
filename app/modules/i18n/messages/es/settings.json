@@ -1076,12 +1076,12 @@
   },
   "libraryNaming": {
     "card": {
-      "title": "Cómo se organizan los ficheros",
-      "description": "Las carpetas y el nombre que Synthseek le da a cada pista que archiva. Cambiarlo no mueve nada por su cuenta."
+      "title": "Nombres de las pistas",
+      "description": "Dónde va cada canción y cómo se llama. No se mueve nada hasta que tú lo digas."
     },
     "template": {
-      "label": "Plantilla",
-      "description": "Las carpetas se separan con /. Lo que va entre < y > desaparece cuando falta lo que necesita."
+      "label": "Formato de pista",
+      "description": "Cada / abre una carpeta. Lo que esté entre < > desaparece si la canción no tiene qué poner ahí."
     },
     "rules": "La plantilla tiene que terminar en .{ext}. Un token suelto es obligatorio: una pista que no pueda rellenarlo se queda donde está, y una descarga que no pueda rellenarlo falla al importar.",
     "loadFailed": "No se pudo leer la plantilla actual",
@@ -1110,15 +1110,45 @@
       "UNRENDERABLE": "Esta plantilla no puede dar una ruta utilizable."
     },
     "stats": {
-      "inPlace": "Ya encajan",
-      "toMove": "Se moverían",
-      "rejected": "No se podrían archivar"
+      "inPlace": "ya están bien",
+      "toMove": "canciones se moverían",
+      "rejected": "no se pueden nombrar"
     },
-    "rejectedNotice_one": "{{count}} fichero no lleva nada que esta plantilla pueda usar",
-    "rejectedNotice_other": "{{count}} ficheros no llevan nada que esta plantilla pueda usar",
+    "previewAction_one": "Ver el cambio",
+    "previewAction_other": "Ver los {{formatted}} cambios",
+    "samples": {
+      "single_disc": "Un álbum normal",
+      "multi_disc": "Un álbum de dos discos",
+      "guest_artist": "Una canción de un invitado",
+      "unrenderable": "Este formato no puede nombrar esta"
+    },
+    "preview": {
+      "title": "Qué cambiaría",
+      "tabs": {
+        "all": "Todo",
+        "relocate": "Solo la carpeta",
+        "rename": "También el nombre",
+        "ariaLabel": "Filtrar los cambios"
+      },
+      "searchPlaceholder": "Buscar una canción o carpeta",
+      "loading": "Calculando los cambios",
+      "noMatches": "Nada coincide con eso",
+      "loadFailed": "No se pudieron calcular los cambios",
+      "renameWarning": "Estos cambian el nombre en el disco. Tu servidor de medios tendrá que releer la biblioteca para encontrarlos.",
+      "cancel": "Cancelar",
+      "confirm_one": "Mover 1 canción",
+      "confirm_other": "Mover {{count}} canciones",
+      "confirmTitle": "¿Mover los ficheros?",
+      "confirmMessage_one": "Esto mueve 1 canción en el disco y guarda este formato para todo lo que llegue a partir de ahora.",
+      "confirmMessage_other": "Esto mueve {{count}} canciones en el disco y guarda este formato para todo lo que llegue a partir de ahora.",
+      "confirmYes": "Sí, muévelos"
+    },
+    "rejectedNotice_one": "A una canción le falta algo que este formato necesita, así que se queda donde está.",
+    "rejectedNotice_other": "A {{count}} canciones les falta algo que este formato necesita, así que se quedan donde están.",
     "toast": {
       "saved": "Guardado. Todavía no se ha movido nada.",
-      "organiseBusy": "Ahora mismo se están moviendo ficheros. Inténtalo cuando termine."
+      "organiseBusy": "Ahora mismo se están moviendo ficheros. Inténtalo cuando termine.",
+      "invalidTemplate": "Ese formato no se puede usar."
     }
   },
   "libraryOrganise": {

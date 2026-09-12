@@ -1076,12 +1076,12 @@
   },
   "libraryNaming": {
     "card": {
-      "title": "Wie Dateien organisiert werden",
-      "description": "Die Ordner und der Dateiname, die Synthseek jedem abgelegten Titel gibt. Eine Änderung verschiebt von sich aus nichts."
+      "title": "Titelbenennung",
+      "description": "Wohin jeder Song kommt und wie er heißt. Nichts wird verschoben, bevor du es sagst."
     },
     "template": {
-      "label": "Vorlage",
-      "description": "Ordner werden durch / getrennt. Was zwischen < und > steht, verschwindet, wenn das Nötige fehlt."
+      "label": "Standard-Titelformat",
+      "description": "Jeder / beginnt einen neuen Ordner. Was zwischen < > steht, verschwindet, wenn der Song nichts dafür hat."
     },
     "rules": "Die Vorlage muss auf .{ext} enden. Ein einzelnes Token ist Pflicht: ein Titel, der es nicht füllen kann, bleibt liegen, und ein Download, der es nicht füllen kann, scheitert beim Import.",
     "loadFailed": "Die aktuelle Vorlage konnte nicht gelesen werden",
@@ -1110,15 +1110,45 @@
       "UNRENDERABLE": "Diese Vorlage kann keinen brauchbaren Pfad erzeugen."
     },
     "stats": {
-      "inPlace": "Passen bereits",
-      "toMove": "Würden verschoben",
-      "rejected": "Nicht ablegbar"
+      "inPlace": "sind schon richtig",
+      "toMove": "Songs würden verschoben",
+      "rejected": "lassen sich nicht benennen"
     },
-    "rejectedNotice_one": "{{count}} Datei trägt nichts, was diese Vorlage nutzen könnte",
-    "rejectedNotice_other": "{{count}} Dateien tragen nichts, was diese Vorlage nutzen könnte",
+    "previewAction_one": "Die Änderung ansehen",
+    "previewAction_other": "Die {{formatted}} Änderungen ansehen",
+    "samples": {
+      "single_disc": "Ein normales Album",
+      "multi_disc": "Ein Album auf zwei CDs",
+      "guest_artist": "Ein Song von einem Gast",
+      "unrenderable": "Dieses Format kann diesen nicht benennen"
+    },
+    "preview": {
+      "title": "Was sich ändern würde",
+      "tabs": {
+        "all": "Alles",
+        "relocate": "Nur der Ordner",
+        "rename": "Auch der Name",
+        "ariaLabel": "Änderungen filtern"
+      },
+      "searchPlaceholder": "Song oder Ordner suchen",
+      "loading": "Änderungen werden berechnet",
+      "noMatches": "Nichts passt dazu",
+      "loadFailed": "Die Änderungen konnten nicht berechnet werden",
+      "renameWarning": "Diese ändern den Namen auf der Festplatte. Dein Medienserver muss die Bibliothek erneut einlesen, um sie zu finden.",
+      "cancel": "Abbrechen",
+      "confirm_one": "1 Song verschieben",
+      "confirm_other": "{{count}} Songs verschieben",
+      "confirmTitle": "Dateien verschieben?",
+      "confirmMessage_one": "Das verschiebt 1 Song auf der Festplatte und speichert dieses Format für alles, was ab jetzt ankommt.",
+      "confirmMessage_other": "Das verschiebt {{count}} Songs auf der Festplatte und speichert dieses Format für alles, was ab jetzt ankommt.",
+      "confirmYes": "Ja, verschieben"
+    },
+    "rejectedNotice_one": "Einem Song fehlt etwas, das dieses Format braucht, er bleibt wo er ist.",
+    "rejectedNotice_other": "{{count}} Songs fehlt etwas, das dieses Format braucht, sie bleiben wo sie sind.",
     "toast": {
       "saved": "Gespeichert. Es wurde noch nichts verschoben.",
-      "organiseBusy": "Gerade werden Dateien verschoben. Versuche es danach erneut."
+      "organiseBusy": "Gerade werden Dateien verschoben. Versuche es danach erneut.",
+      "invalidTemplate": "Dieses Format kann nicht verwendet werden."
     }
   },
   "libraryOrganise": {

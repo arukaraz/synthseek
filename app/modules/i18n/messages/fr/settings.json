@@ -1076,12 +1076,12 @@
   },
   "libraryNaming": {
     "card": {
-      "title": "Comment les fichiers sont organisés",
-      "description": "Les dossiers et le nom de fichier que Synthseek donne à chaque piste qu'il range. Le modifier ne déplace rien de lui-même."
+      "title": "Nommage des morceaux",
+      "description": "Où va chaque morceau et comment il s'appelle. Rien ne bouge tant que vous ne le dites pas."
     },
     "template": {
-      "label": "Modèle",
-      "description": "Les dossiers sont séparés par /. Ce qui se trouve entre < et > disparaît quand il manque ce qu'il lui faut."
+      "label": "Format de morceau standard",
+      "description": "Chaque / ouvre un dossier. Ce qui est entre < > disparaît si le morceau n'a rien à y mettre."
     },
     "rules": "Le modèle doit se terminer par .{ext}. Un jeton seul est obligatoire : une piste qui ne peut pas le remplir reste en place, et un téléchargement qui ne peut pas le remplir échoue à l'import.",
     "loadFailed": "Impossible de lire le modèle actuel",
@@ -1110,15 +1110,45 @@
       "UNRENDERABLE": "Ce modèle ne peut pas produire un chemin utilisable."
     },
     "stats": {
-      "inPlace": "Déjà conformes",
-      "toMove": "Seraient déplacés",
-      "rejected": "Impossibles à ranger"
+      "inPlace": "sont déjà au bon endroit",
+      "toMove": "morceaux seraient déplacés",
+      "rejected": "ne peuvent pas être nommés"
     },
-    "rejectedNotice_one": "{{count}} fichier ne porte rien que ce modèle puisse utiliser",
-    "rejectedNotice_other": "{{count}} fichiers ne portent rien que ce modèle puisse utiliser",
+    "previewAction_one": "Voir le changement",
+    "previewAction_other": "Voir les {{formatted}} changements",
+    "samples": {
+      "single_disc": "Un album normal",
+      "multi_disc": "Un album sur deux disques",
+      "guest_artist": "Un morceau d'un invité",
+      "unrenderable": "Ce format ne peut pas nommer celui-ci"
+    },
+    "preview": {
+      "title": "Ce qui changerait",
+      "tabs": {
+        "all": "Tout",
+        "relocate": "Seulement le dossier",
+        "rename": "Aussi le nom",
+        "ariaLabel": "Filtrer les changements"
+      },
+      "searchPlaceholder": "Chercher un morceau ou un dossier",
+      "loading": "Calcul des changements",
+      "noMatches": "Rien ne correspond",
+      "loadFailed": "Impossible de calculer les changements",
+      "renameWarning": "Ceux-ci changent le nom sur le disque. Votre serveur multimédia devra relire la bibliothèque pour les retrouver.",
+      "cancel": "Annuler",
+      "confirm_one": "Déplacer 1 morceau",
+      "confirm_other": "Déplacer {{count}} morceaux",
+      "confirmTitle": "Déplacer les fichiers ?",
+      "confirmMessage_one": "Cela déplace 1 morceau sur le disque et enregistre ce format pour tout ce qui arrivera désormais.",
+      "confirmMessage_other": "Cela déplace {{count}} morceaux sur le disque et enregistre ce format pour tout ce qui arrivera désormais.",
+      "confirmYes": "Oui, déplacer"
+    },
+    "rejectedNotice_one": "Il manque à un morceau quelque chose dont ce format a besoin, il reste où il est.",
+    "rejectedNotice_other": "Il manque à {{count}} morceaux quelque chose dont ce format a besoin, ils restent où ils sont.",
     "toast": {
       "saved": "Enregistré. Rien n'a encore été déplacé.",
-      "organiseBusy": "Des fichiers sont en train d'être déplacés. Réessayez une fois terminé."
+      "organiseBusy": "Des fichiers sont en train d'être déplacés. Réessayez une fois terminé.",
+      "invalidTemplate": "Ce format ne peut pas être utilisé."
     }
   },
   "libraryOrganise": {
