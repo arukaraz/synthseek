@@ -1241,6 +1241,7 @@
       "reclaimable": "{{size}} reclaimable",
       "reviewNote": "Something about these copies could not be proven the same recording. Open a track and decide copy by copy.",
       "showCopies": "Show copies",
+      "servedFileMissing": "The file this track played is gone, so it will not play until you pick one below",
       "inLibrary": "In library",
       "sizeEach": "{{size}} each",
       "sizeRange": "{{from}} to {{to}}",

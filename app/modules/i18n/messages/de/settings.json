@@ -1241,6 +1241,7 @@
       "reclaimable": "{{size}} wiedergewinnbar",
       "reviewNote": "Bei diesen Kopien liess sich nicht belegen, dass es dieselbe Aufnahme ist. Öffne einen Titel und entscheide Kopie für Kopie.",
       "showCopies": "Kopien anzeigen",
+      "servedFileMissing": "Die Datei dieses Titels ist weg, er wird erst wieder abgespielt, wenn du unten eine auswählst",
       "inLibrary": "In der Bibliothek",
       "sizeEach": "je {{size}}",
       "sizeRange": "{{from}} bis {{to}}",

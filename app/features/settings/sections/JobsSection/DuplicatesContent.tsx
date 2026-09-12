@@ -155,6 +155,12 @@ export function DuplicatesContent({ enabled, reclaiming }: DuplicatesContentProp
                         {group.artist} - {group.title}
                       </span>
                       <span className={dupTrackMeta()}>{describeCopies(group, t)}</span>
+                      {group.servedFileMissing ? (
+                        <span className="flex items-center gap-1 text-xs text-amber-400">
+                          <TriangleAlert className="size-3 shrink-0" />
+                          {t("libraryScan.duplicates.servedFileMissing")}
+                        </span>
+                      ) : null}
                     </div>
                     <span className={dupReclaim()}>{formatBytes(group.reclaimableBytes)}</span>
                     {group.ambiguous ? (

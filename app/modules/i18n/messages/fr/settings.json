@@ -1241,6 +1241,7 @@
       "reclaimable": "{{size}} récupérables",
       "reviewNote": "Rien ne prouve que ces copies soient le même enregistrement. Ouvrez un morceau et décidez copie par copie.",
       "showCopies": "Voir les copies",
+      "servedFileMissing": "Le fichier que lisait ce morceau a disparu, il ne sera pas lu tant que vous n'en aurez pas choisi une ci-dessous",
       "inLibrary": "Dans la bibliothèque",
       "sizeEach": "{{size}} chacune",
       "sizeRange": "de {{from}} à {{to}}",

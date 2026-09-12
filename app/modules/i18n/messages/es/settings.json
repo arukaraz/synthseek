@@ -1241,6 +1241,7 @@
       "reclaimable": "{{size}} recuperables",
       "reviewNote": "De estas copias no se ha podido probar que sean la misma grabación. Abre una pista y decide copia por copia.",
       "showCopies": "Ver copias",
+      "servedFileMissing": "El fichero que sonaba en esta pista ya no está, así que no sonará hasta que elijas una de abajo",
       "inLibrary": "En la biblioteca",
       "sizeEach": "{{size}} cada una",
       "sizeRange": "de {{from}} a {{to}}",
