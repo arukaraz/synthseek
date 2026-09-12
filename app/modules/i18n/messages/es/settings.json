@@ -1136,6 +1136,8 @@
       "loadFailed": "No se pudieron calcular los cambios",
       "renameWarning": "Estos cambian el nombre en el disco. Tu servidor de medios tendrá que releer la biblioteca para encontrarlos.",
       "cancel": "Cancelar",
+      "columnBefore": "Ahora",
+      "columnAfter": "Después",
       "confirm_one": "Mover 1 canción",
       "confirm_other": "Mover {{count}} canciones",
       "confirmTitle": "¿Mover los ficheros?",

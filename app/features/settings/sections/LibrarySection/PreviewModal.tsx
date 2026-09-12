@@ -18,6 +18,7 @@ import { PAGE_SIZES, PREVIEW_DEBOUNCE_MS, PREVIEW_PAGE_SIZE } from "./constants"
 import { classesFor, countFrom } from "./helpers";
 import {
   previewFrom,
+  previewHead,
   previewRow,
   previewSearch,
   previewSearchBox,
@@ -104,6 +105,11 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
           {moves.isError ? <Notice variant="danger" title={t("libraryNaming.preview.loadFailed")} /> : null}
 
           <div className={previewTable()}>
+            <div className={previewHead()}>
+              <span className="w-0 min-w-0 flex-1">{t("libraryNaming.preview.columnBefore")}</span>
+              <span className="w-3.5 shrink-0" />
+              <span className="w-0 min-w-0 flex-1">{t("libraryNaming.preview.columnAfter")}</span>
+            </div>
             {moves.isFetching && data === null ? (
               <span className="text-fg/60 p-4 text-sm">{t("libraryNaming.preview.loading")}</span>
             ) : matched === 0 ? (

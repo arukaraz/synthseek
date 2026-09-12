@@ -1136,6 +1136,8 @@
       "loadFailed": "Impossible de calculer les changements",
       "renameWarning": "Ceux-ci changent le nom sur le disque. Votre serveur multimédia devra relire la bibliothèque pour les retrouver.",
       "cancel": "Annuler",
+      "columnBefore": "Maintenant",
+      "columnAfter": "Après",
       "confirm_one": "Déplacer 1 morceau",
       "confirm_other": "Déplacer {{count}} morceaux",
       "confirmTitle": "Déplacer les fichiers ?",

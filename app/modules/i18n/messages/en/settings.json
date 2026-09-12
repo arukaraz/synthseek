@@ -1136,6 +1136,8 @@
       "loadFailed": "The changes could not be worked out",
       "renameWarning": "These change the name on disk. Your media server will need to read the library again to find them.",
       "cancel": "Cancel",
+      "columnBefore": "Now",
+      "columnAfter": "After",
       "confirm_one": "Move 1 song",
       "confirm_other": "Move {{count}} songs",
       "confirmTitle": "Move the files?",

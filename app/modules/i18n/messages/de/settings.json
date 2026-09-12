@@ -1136,6 +1136,8 @@
       "loadFailed": "Die Änderungen konnten nicht berechnet werden",
       "renameWarning": "Diese ändern den Namen auf der Festplatte. Dein Medienserver muss die Bibliothek erneut einlesen, um sie zu finden.",
       "cancel": "Abbrechen",
+      "columnBefore": "Jetzt",
+      "columnAfter": "Danach",
       "confirm_one": "1 Song verschieben",
       "confirm_other": "{{count}} Songs verschieben",
       "confirmTitle": "Dateien verschieben?",
