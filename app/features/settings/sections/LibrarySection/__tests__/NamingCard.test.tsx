@@ -156,6 +156,21 @@ describe("NamingCard", () => {
     expect(screen.getByRole("button", { name: enSettings.libraryOrganise.actions.stop })).toBeInTheDocument();
   });
 
+  it("takes the preview away while a move runs, since its count is recomputing under the reader", () => {
+    state.status = createMockQuery({
+      running: true,
+      processed: 545,
+      total: 7557,
+      cancelling: false,
+      startedAt: null,
+      finishedAt: null,
+    });
+
+    render(<NamingCard />);
+
+    expect(screen.queryByRole("button", { name: /See the/ })).toBeNull();
+  });
+
   it("says it is still working the estimate out rather than inventing one", () => {
     state.status = createMockQuery({
       running: true,

@@ -142,18 +142,20 @@ export function NamingCard() {
         </Notice>
       ) : null}
 
-      <div className="flex justify-end">
-        <Button
-          onClick={() => setPreviewing(true)}
-          disabled={running || invalid !== null || !settled || (counts?.moves ?? 0) === 0}
-        >
-          {settled ? <Eye className="size-4" /> : <Loader2 className="size-4 animate-spin" />}
-          {t("libraryNaming.previewAction", {
-            count: counts?.moves ?? 0,
-            formatted: (counts?.moves ?? 0).toLocaleString(),
-          })}
-        </Button>
-      </div>
+      {running ? null : (
+        <div className="flex justify-end">
+          <Button
+            onClick={() => setPreviewing(true)}
+            disabled={invalid !== null || !settled || (counts?.moves ?? 0) === 0}
+          >
+            {settled ? <Eye className="size-4" /> : <Loader2 className="size-4 animate-spin" />}
+            {t("libraryNaming.previewAction", {
+              count: counts?.moves ?? 0,
+              formatted: (counts?.moves ?? 0).toLocaleString(),
+            })}
+          </Button>
+        </div>
+      )}
 
       <TokensModal
         open={pickingTokens}
