@@ -30,21 +30,23 @@ export const previewTo = cva("text-fg/90 w-0 min-w-0 flex-1 truncate");
 
 export const previewScopeNote = cva("text-fg/60 text-xs");
 
-export const tokenGroup = cva("flex flex-col gap-2");
+export const tokenGroup = cva("flex flex-col gap-2.5");
 
-export const tokenGroupTitle = cva("text-fg/50 border-fg/10 border-b pb-1 text-xs font-medium tracking-wide uppercase");
+export const tokenGroupTitle = cva(
+  "text-fg/40 border-fg/10 border-b pb-1.5 text-[11px] font-semibold tracking-widest uppercase"
+);
 
 export const tokenGrid = cva("grid gap-1.5 sm:grid-cols-2");
 
 export const tokenCell = cva(
-  "border-fg/10 hover:border-accent/50 hover:bg-fg/5 flex min-w-0 items-center gap-3 rounded-md border px-2.5 py-1.5 text-left transition-colors"
+  "border-fg/10 hover:border-primary-400/60 hover:bg-fg/5 flex min-w-0 items-start gap-2.5 rounded-md border px-2.5 py-2 text-left transition-colors"
 );
 
-export const tokenName = cva("text-accent shrink-0 font-mono text-xs");
+export const tokenName = cva("text-fg/90 shrink-0 font-mono text-xs");
 
-export const tokenExample = cva("text-fg/60 min-w-0 truncate text-xs");
+export const tokenExample = cva("text-fg/55 min-w-0 text-xs leading-snug");
 
-export const tokensRules = cva("text-fg/60 text-xs");
+export const tokensRules = cva("text-fg/60 text-xs leading-relaxed");
 
 export const tokensFooterInput = cva(
   "border-fg/10 bg-fg/5 focus:ring-accent/40 h-9 w-full min-w-0 flex-1 rounded-md border px-3 font-mono text-xs outline-none focus:ring-2"

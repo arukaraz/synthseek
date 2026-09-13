@@ -7,6 +7,7 @@ export type NamingCurrent = inferRouterOutputs<AppRouter>["library"]["naming"]["
 export type NamingToken = NamingCurrent["tokens"][number];
 export type OrganiseStatus = inferRouterOutputs<AppRouter>["library"]["organise"]["status"];
 export type MoveClass = OrganisePreview["movesByClass"][number]["moveClass"];
+export type NamingPreview = inferRouterOutputs<AppRouter>["library"]["naming"]["preview"];
 
 export interface GroupSelection {
   relocate: boolean;
@@ -39,11 +40,14 @@ export interface NamingSample {
 
 export type MoveFilter = "all" | MoveClass;
 
+export type TemplateProblem = Extract<NamingPreview, { outcome: "invalid" }>["problem"];
+
 export interface TokensModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   template: string;
   tokens: readonly NamingToken[];
+  problem: TemplateProblem | null;
   onInsert: (token: string) => void;
   onTemplateChange: (next: string) => void;
 }

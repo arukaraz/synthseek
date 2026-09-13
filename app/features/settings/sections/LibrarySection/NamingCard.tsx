@@ -160,6 +160,7 @@ export function NamingCard() {
         onOpenChange={setPickingTokens}
         template={template}
         tokens={current.data?.tokens ?? []}
+        problem={invalid?.problem ?? null}
         onInsert={insert}
         onTemplateChange={setDraft}
       />
