@@ -1,4 +1,5 @@
 export const sizeClasses = {
-  sm: "h-0.5",
-  md: "h-1",
+  sm: "h-1",
+  md: "h-1.5",
+  lg: "h-2.5",
 };

@@ -36,13 +36,31 @@ describe("ProgressBar", () => {
   it("renders with sm size", () => {
     render(<ProgressBar progress={50} size="sm" />);
     const progressBar = screen.getByTestId("progress-bar");
-    expect(progressBar).toHaveClass("h-0.5");
+    expect(progressBar).toHaveClass("h-1");
   });
 
   it("renders with md size (default)", () => {
     render(<ProgressBar progress={50} size="md" />);
     const progressBar = screen.getByTestId("progress-bar");
-    expect(progressBar).toHaveClass("h-1");
+    expect(progressBar).toHaveClass("h-1.5");
+  });
+
+  it("renders with lg size, for when the bar is the thing being read rather than a trim", () => {
+    render(<ProgressBar progress={50} size="lg" />);
+    const progressBar = screen.getByTestId("progress-bar");
+    expect(progressBar).toHaveClass("h-2.5");
+  });
+
+  it("carries no border, which would eat the height the size asked for and leave the fill with none", () => {
+    render(<ProgressBar progress={50} size="sm" />);
+    const progressBar = screen.getByTestId("progress-bar");
+    expect(progressBar.className).not.toMatch(/\bborder\b/);
+  });
+
+  it("gives the fill the whole track to draw in", () => {
+    render(<ProgressBar progress={50} />);
+    const fill = screen.getByTestId("progress-bar").firstElementChild;
+    expect(fill).toHaveClass("h-full");
   });
 
   it("applies custom className", () => {

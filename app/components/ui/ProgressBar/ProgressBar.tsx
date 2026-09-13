@@ -14,7 +14,7 @@ export function ProgressBar({
 }: ProgressBarProps) {
   return (
     <div
-      className={cn("border-fg/5 bg-surface/40 overflow-hidden rounded-full border", sizeClasses[size], className)}
+      className={cn("bg-surface/40 overflow-hidden rounded-full", sizeClasses[size], className)}
       data-testid="progress-bar"
       data-progress={progress}
       data-loading={isActive}

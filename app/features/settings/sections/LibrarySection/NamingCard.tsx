@@ -111,7 +111,7 @@ export function NamingCard() {
               })}
             </span>
           </div>
-          <ProgressBar progress={percentDone(status.data.processed, status.data.total)} isActive size="sm" />
+          <ProgressBar progress={percentDone(status.data.processed, status.data.total)} isActive size="lg" />
           <div className={progressBottom()}>
             <span className={progressCounts()}>
               {left === null
