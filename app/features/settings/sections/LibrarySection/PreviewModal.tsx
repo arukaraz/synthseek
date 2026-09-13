@@ -11,7 +11,7 @@ import { Notice } from "@components/ui/Notice";
 import { Pagination } from "@components/ui/Pagination";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
 import { useSaveAndOrganise } from "@hooks/api/mutations/library/useLibraryNaming";
-import { useLibraryNamingMoves } from "@hooks/api/queries/useLibraryNaming";
+import { useLibraryNamingMoves, useLibraryNamingPreview } from "@hooks/api/queries/useLibraryNaming";
 import { useDebounce } from "@hooks/ui/useDebounce";
 
 import { PAGE_SIZES, PREVIEW_DEBOUNCE_MS, PREVIEW_PAGE_SIZE } from "./constants";
@@ -27,6 +27,10 @@ import {
   previewTemplate,
   previewTo,
   previewToolbar,
+  statNumber,
+  statPair,
+  statStrip,
+  statWord,
 } from "./styles";
 import type { MoveFilter, PreviewModalProps } from "./types";
 
@@ -39,6 +43,8 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
   const [confirming, setConfirming] = useState(false);
   const debounced = useDebounce(search, { delay: PREVIEW_DEBOUNCE_MS });
   const apply = useSaveAndOrganise();
+  const preview = useLibraryNamingPreview(template, open && template.length > 0);
+  const counts = preview.data?.outcome === "valid" ? preview.data : null;
 
   const moves = useLibraryNamingMoves(
     { template, classes: classesFor(filter), search: debounced, page, pageSize },
@@ -73,6 +79,25 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
           </DialogHeader>
 
           <p className={previewTemplate()}>{template}</p>
+
+          {counts ? (
+            <div className={statStrip()}>
+              <span className={statPair()}>
+                <span className={statNumber()}>{counts.moves.toLocaleString()}</span>
+                <span className={statWord()}>{t("libraryNaming.stats.toMove")}</span>
+              </span>
+              <span className={statPair()}>
+                <span className={statNumber()}>{counts.inPlace.toLocaleString()}</span>
+                <span className={statWord()}>{t("libraryNaming.stats.inPlace")}</span>
+              </span>
+              {counts.rejected > 0 ? (
+                <span className={statPair()}>
+                  <span className={statNumber()}>{counts.rejected.toLocaleString()}</span>
+                  <span className={statWord()}>{t("libraryNaming.stats.rejected")}</span>
+                </span>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className={previewToolbar()}>
             <SegmentTabs

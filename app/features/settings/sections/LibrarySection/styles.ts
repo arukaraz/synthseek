@@ -30,6 +30,38 @@ export const previewTo = cva("text-fg/90 w-0 min-w-0 flex-1 truncate");
 
 export const previewScopeNote = cva("text-fg/60 text-xs");
 
+export const tokenGroup = cva("flex flex-col gap-2");
+
+export const tokenGroupTitle = cva("text-fg/50 border-fg/10 border-b pb-1 text-xs font-medium tracking-wide uppercase");
+
+export const tokenGrid = cva("grid gap-1.5 sm:grid-cols-2");
+
+export const tokenCell = cva(
+  "border-fg/10 hover:border-accent/50 hover:bg-fg/5 flex min-w-0 items-center gap-3 rounded-md border px-2.5 py-1.5 text-left transition-colors"
+);
+
+export const tokenName = cva("text-accent shrink-0 font-mono text-xs");
+
+export const tokenExample = cva("text-fg/60 min-w-0 truncate text-xs");
+
+export const tokensRules = cva("text-fg/60 text-xs");
+
+export const tokensFooterInput = cva(
+  "border-fg/10 bg-fg/5 focus:ring-accent/40 h-9 w-full min-w-0 flex-1 rounded-md border px-3 font-mono text-xs outline-none focus:ring-2"
+);
+
+export const templateRow = cva("flex w-full min-w-0 items-center gap-2");
+
+export const progressWrap = cva("border-fg/10 flex flex-col gap-2 rounded-md border p-3");
+
+export const progressTop = cva("flex items-baseline justify-between gap-3");
+
+export const progressPercent = cva("text-fg text-lg font-semibold tabular-nums");
+
+export const progressCounts = cva("text-fg/60 text-xs tabular-nums");
+
+export const progressBottom = cva("flex items-center justify-between gap-3");
+
 export const sampleList = cva("border-fg/10 flex flex-col gap-1.5 rounded-md border p-3");
 
 export const sampleRow = cva("flex flex-col gap-0.5");

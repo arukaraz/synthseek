@@ -39,6 +39,22 @@ export interface NamingSample {
 
 export type MoveFilter = "all" | MoveClass;
 
+export interface TokensModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  template: string;
+  tokens: readonly NamingToken[];
+  onInsert: (token: string) => void;
+  onTemplateChange: (next: string) => void;
+}
+
+export interface MoveProgress {
+  percent: number;
+  processed: number;
+  total: number;
+  remaining: string | null;
+}
+
 export interface PreviewModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;

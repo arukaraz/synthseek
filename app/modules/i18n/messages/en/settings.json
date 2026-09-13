@@ -1114,6 +1114,14 @@
       "toMove": "songs would move",
       "rejected": "cannot be named"
     },
+    "tokensModal": {
+      "open": "Show the pieces you can use",
+      "title": "Pieces you can use",
+      "group": "Track",
+      "examples": "How it turns out",
+      "rules": "Click a piece to drop it in. It has to end with the file extension, and at least one piece must sit outside the < >, or a song with nothing to put there could not be named at all.",
+      "close": "Done"
+    },
     "previewAction_one": "See the change",
     "previewAction_other": "See the {{formatted}} changes",
     "samples": {
@@ -1210,10 +1218,14 @@
     "companionsProgress": "and {{count}} files that came along.",
     "companionsFailed": "{{count}} could not follow their track.",
     "progress": "{{processed}} of {{total}} files, {{percent}}%",
+    "progressCounts": "{{processed}} of {{total}} moved",
+    "timeLeft": "about {{time}} left",
+    "estimating": "working out how long this will take",
     "error": "The plan could not be worked out.",
     "actions": {
       "apply": "Move {{count}} files",
-      "stop": "Stop"
+      "stop": "Stop",
+      "stopping": "Stopping"
     },
     "toast": {
       "started": "Placing files",

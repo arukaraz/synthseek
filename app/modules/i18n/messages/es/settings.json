@@ -1114,6 +1114,14 @@
       "toMove": "canciones se moverían",
       "rejected": "no se pueden nombrar"
     },
+    "tokensModal": {
+      "open": "Ver las piezas que puedes usar",
+      "title": "Piezas que puedes usar",
+      "group": "Pista",
+      "examples": "Cómo queda",
+      "rules": "Haz clic en una pieza para meterla. Tiene que terminar con la extensión del fichero, y al menos una pieza debe quedar fuera de los < >, o una canción sin nada que poner ahí no se podría nombrar.",
+      "close": "Listo"
+    },
     "previewAction_one": "Ver el cambio",
     "previewAction_other": "Ver los {{formatted}} cambios",
     "samples": {
@@ -1210,10 +1218,14 @@
     "companionsProgress": "y {{count}} ficheros que van con ellos.",
     "companionsFailed": "{{count}} no pudieron seguir a su pista.",
     "progress": "{{processed}} de {{total}} ficheros, {{percent}}%",
+    "progressCounts": "{{processed}} de {{total}} movidos",
+    "timeLeft": "quedan unos {{time}}",
+    "estimating": "calculando cuánto va a tardar",
     "error": "No se pudo calcular el plan.",
     "actions": {
       "apply": "Mover {{count}} ficheros",
-      "stop": "Parar"
+      "stop": "Parar",
+      "stopping": "Parando"
     },
     "toast": {
       "started": "Colocando ficheros",

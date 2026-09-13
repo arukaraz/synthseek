@@ -1114,6 +1114,14 @@
       "toMove": "Songs würden verschoben",
       "rejected": "lassen sich nicht benennen"
     },
+    "tokensModal": {
+      "open": "Verfügbare Bausteine anzeigen",
+      "title": "Bausteine, die du verwenden kannst",
+      "group": "Titel",
+      "examples": "So sieht es aus",
+      "rules": "Klicke einen Baustein an, um ihn einzufügen. Es muss mit der Dateiendung enden, und mindestens ein Baustein muss außerhalb der < > stehen, sonst ließe sich ein Song ohne passende Angabe gar nicht benennen.",
+      "close": "Fertig"
+    },
     "previewAction_one": "Die Änderung ansehen",
     "previewAction_other": "Die {{formatted}} Änderungen ansehen",
     "samples": {
@@ -1210,10 +1218,14 @@
     "companionsProgress": "und {{count}} Dateien, die mitgezogen sind.",
     "companionsFailed": "{{count}} konnten ihrem Titel nicht folgen.",
     "progress": "{{processed}} von {{total}} Dateien, {{percent}}%",
+    "progressCounts": "{{processed}} von {{total}} verschoben",
+    "timeLeft": "noch etwa {{time}}",
+    "estimating": "die Dauer wird berechnet",
     "error": "Der Plan konnte nicht erstellt werden.",
     "actions": {
       "apply": "{{count}} Dateien verschieben",
-      "stop": "Anhalten"
+      "stop": "Anhalten",
+      "stopping": "Wird angehalten"
     },
     "toast": {
       "started": "Dateien werden abgelegt",

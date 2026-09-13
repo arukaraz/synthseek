@@ -1114,6 +1114,14 @@
       "toMove": "morceaux seraient déplacés",
       "rejected": "ne peuvent pas être nommés"
     },
+    "tokensModal": {
+      "open": "Voir les éléments disponibles",
+      "title": "Éléments que vous pouvez utiliser",
+      "group": "Morceau",
+      "examples": "Le résultat",
+      "rules": "Cliquez sur un élément pour l'insérer. Cela doit finir par l'extension du fichier, et au moins un élément doit rester hors des < >, sinon un morceau sans rien à y mettre ne pourrait pas être nommé.",
+      "close": "Terminé"
+    },
     "previewAction_one": "Voir le changement",
     "previewAction_other": "Voir les {{formatted}} changements",
     "samples": {
@@ -1210,10 +1218,14 @@
     "companionsProgress": "et {{count}} fichiers qui ont suivi.",
     "companionsFailed": "{{count}} n'ont pas pu suivre leur titre.",
     "progress": "{{processed}} sur {{total}} fichiers, {{percent}}%",
+    "progressCounts": "{{processed}} sur {{total}} déplacés",
+    "timeLeft": "environ {{time}} restantes",
+    "estimating": "estimation de la durée en cours",
     "error": "Le plan n'a pas pu être établi.",
     "actions": {
       "apply": "Déplacer {{count}} fichiers",
-      "stop": "Arrêter"
+      "stop": "Arrêter",
+      "stopping": "Arrêt en cours"
     },
     "toast": {
       "started": "Rangement des fichiers",

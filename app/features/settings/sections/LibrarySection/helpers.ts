@@ -1,6 +1,6 @@
 import { formatDuration } from "@utils/formatters";
 
-import { SAMPLE_LABELS } from "./constants";
+import { MIN_SAMPLE_FOR_ESTIMATE, SAMPLE_LABELS } from "./constants";
 
 import type { GroupSelection, MoveClass, MoveFilter, OrganisePreview, OrganiseStatus, RunOutcome } from "./types";
 
@@ -40,6 +40,18 @@ export function chosenTotal(preview: OrganisePreview | undefined, selection: Gro
 export function percentDone(processed: number, total: number): number {
   if (total <= 0) return 0;
   return Math.min(100, Math.round((processed / total) * 100));
+}
+
+export function insertAtCursor(value: string, token: string, start: number, end: number): string {
+  return value.slice(0, start) + token + value.slice(end);
+}
+
+export function secondsRemaining(status: OrganiseStatus | undefined, now: number): number | null {
+  if (status === undefined || !status.running || status.startedAt === null) return null;
+  if (status.processed < MIN_SAMPLE_FOR_ESTIMATE || status.processed >= status.total) return null;
+  const elapsed = (now - new Date(status.startedAt).getTime()) / 1000;
+  if (elapsed <= 0) return null;
+  return Math.round((elapsed / status.processed) * (status.total - status.processed));
 }
 
 export function runOutcome(status: OrganiseStatus | undefined): RunOutcome | null {
