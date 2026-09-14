@@ -110,6 +110,71 @@ describe("RecycleBinList", () => {
     expect(screen.getAllByRole("button", { name: enSettings.quality.recycleBin.list.restore })).toHaveLength(10);
   });
 
+  it("narrows the list to the files whose path carries what was typed", () => {
+    entriesQuery = createMockQuery<Entry[] | undefined>([
+      entry({ fileName: "01 - Bohemian Rhapsody.mp3" }),
+      entry({ fileName: "02 - Love of My Life.mp3" }),
+    ]);
+    render(<RecycleBinList entryCount={2} />);
+    expand();
+
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "bohemian" } });
+
+    expect(screen.getByText("01 - Bohemian Rhapsody.mp3")).toBeInTheDocument();
+    expect(screen.queryByText("02 - Love of My Life.mp3")).not.toBeInTheDocument();
+  });
+
+  it("searches the folder too, since that is how the reader remembers where a file came from", () => {
+    entriesQuery = createMockQuery<Entry[] | undefined>([
+      entry({ fileName: "01 - One.mp3" }),
+      { ...entry({ fileName: "01 - Two.mp3" }), relativePath: "Radiohead/OK Computer/01 - Two.mp3" },
+    ]);
+    render(<RecycleBinList entryCount={2} />);
+    expand();
+
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "radiohead" } });
+
+    expect(screen.getByText("01 - Two.mp3")).toBeInTheDocument();
+    expect(screen.queryByText("01 - One.mp3")).not.toBeInTheDocument();
+  });
+
+  it("says nothing matched rather than showing a bare empty list", () => {
+    entriesQuery = createMockQuery<Entry[] | undefined>([entry()]);
+    render(<RecycleBinList entryCount={1} />);
+    expand();
+
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "nothing here" } });
+
+    expect(screen.getByText(enSettings.quality.recycleBin.list.noMatches)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enSettings.quality.recycleBin.list.restore })).not.toBeInTheDocument();
+  });
+
+  it("pages the filtered list, not the whole bin, so the pager cannot promise rows the filter removed", () => {
+    entriesQuery = createMockQuery<Entry[] | undefined>(
+      Array.from({ length: 25 }, (_, index) => entry({ fileName: `${index} - Track.mp3` }))
+    );
+    render(<RecycleBinList entryCount={25} />);
+    expand();
+
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "1 - Track" } });
+
+    expect(screen.queryByRole("button", { name: /next page/i })).not.toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: enSettings.quality.recycleBin.list.restore })).toHaveLength(3);
+  });
+
+  it("drops the filter when the list is closed, so reopening does not hide the bin behind a forgotten word", () => {
+    entriesQuery = createMockQuery<Entry[] | undefined>([entry()]);
+    render(<RecycleBinList entryCount={1} />);
+    expand();
+
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "nothing here" } });
+    expand();
+    expand();
+
+    expect(screen.getByRole("searchbox")).toHaveValue("");
+    expect(screen.getByRole("button", { name: enSettings.quality.recycleBin.list.restore })).toBeInTheDocument();
+  });
+
   it("says it is loading rather than showing an empty bin while the listing arrives", () => {
     entriesQuery = createLoadingQuery<Entry[] | undefined>();
     render(<RecycleBinList entryCount={3} />);

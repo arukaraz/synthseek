@@ -17,3 +17,11 @@ export const quarantineReasonBadge = cva("bg-fg/10 text-fg/70 rounded-full px-2 
 export const quarantineLink = cva("text-primary-400 underline-offset-2 hover:underline");
 
 export const quarantineValue = cva("text-fg text-sm font-medium");
+
+export const binSearchBox = cva("relative w-full min-w-0");
+
+export const binSearch = cva(
+  "bg-fg/5 focus:ring-accent/40 placeholder:text-fg/40 h-8 w-full rounded-md pr-2 pl-8 text-sm outline-none focus:ring-2"
+);
+
+export const binNoMatches = cva("text-fg/60 px-1 py-3 text-sm");

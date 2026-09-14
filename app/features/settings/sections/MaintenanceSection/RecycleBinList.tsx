@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Loader2, Undo2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Loader2, Search, Undo2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Pagination } from "@components/ui/Pagination";
@@ -12,22 +12,33 @@ import { useClientPagination } from "@hooks/ui/useClientPagination";
 import { formatBytes } from "@utils/formatters";
 
 import { binDir, binFileName, binRestore, binRow, binRowMeta, binToggle } from "../../styles";
-import { quarantineListHeader } from "./styles";
+import { matchingRecycled } from "./helpers";
+import { binNoMatches, binSearch, binSearchBox, quarantineListHeader } from "./styles";
 import type { RecycleBinListProps } from "./types";
 
 export function RecycleBinList({ entryCount }: RecycleBinListProps) {
   const { t } = useTranslation("settings");
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const entries = useRecycleBinEntries(open);
   const restore = useRestoreRecycledFile();
-  const pager = useClientPagination(entries.data);
+  const matching = matchingRecycled(entries.data, search);
+  const pager = useClientPagination(matching);
 
   if (entryCount === 0) return null;
 
   return (
     <>
       <div className={quarantineListHeader()}>
-        <button type="button" className={binToggle()} aria-expanded={open} onClick={() => setOpen(!open)}>
+        <button
+          type="button"
+          className={binToggle()}
+          aria-expanded={open}
+          onClick={() => {
+            setOpen(!open);
+            setSearch("");
+          }}
+        >
           {open ? <ChevronDown className="size-3.5" /> : <ChevronRight className="size-3.5" />}
           {t("quality.recycleBin.list.toggle", { count: entryCount })}
         </button>
@@ -38,6 +49,22 @@ export function RecycleBinList({ entryCount }: RecycleBinListProps) {
           <SectionLoading />
         ) : (
           <div className="flex flex-col gap-1.5">
+            <div className={binSearchBox()}>
+              <Search className="text-fg/40 absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
+              <input
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder={t("quality.recycleBin.list.searchPlaceholder")}
+                aria-label={t("quality.recycleBin.list.searchPlaceholder")}
+                className={binSearch()}
+              />
+            </div>
+
+            {pager.totalItems === 0 ? (
+              <span className={binNoMatches()}>{t("quality.recycleBin.list.noMatches")}</span>
+            ) : null}
+
             {pager.visible.map((entry) => (
               <div key={entry.id} className={binRow()}>
                 <div className="flex min-w-0 flex-1 flex-col gap-1">
