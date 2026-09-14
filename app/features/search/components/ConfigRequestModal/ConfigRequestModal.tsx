@@ -287,7 +287,6 @@ export function ConfigRequestModal({
         artist: item.artists[0]?.name || item.artist,
         album_art: item.images[0]?.url ?? null,
         total_tracks: item.total_tracks || trackList.length,
-        genres: item.genres,
         tracks: trackList.map(mapTrackFields),
         config,
         ...(delegate ? { delegate } : {}),
