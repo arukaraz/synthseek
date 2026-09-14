@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { keepPreviousData } from "@tanstack/react-query";
 import type { inferRouterInputs } from "@trpc/server";
 
@@ -17,8 +18,23 @@ export function useLibraryOrganisePreview(enabled: boolean, classes: PreviewClas
 }
 
 export function useLibraryOrganiseStatus() {
-  return trpc.library.organise.status.useQuery(undefined, {
+  const utils = trpc.useUtils();
+  const wasRunning = useRef(false);
+  const query = trpc.library.organise.status.useQuery(undefined, {
     staleTime: 0,
     refetchInterval: (query) => (query.state.data?.running ? RUNNING_REFETCH_MS : IDLE_REFETCH_MS),
   });
+
+  const running = query.data?.running === true;
+
+  useEffect(() => {
+    if (wasRunning.current && !running) {
+      utils.library.naming.preview.invalidate();
+      utils.library.naming.moves.invalidate();
+      utils.library.organise.preview.invalidate();
+    }
+    wasRunning.current = running;
+  }, [running, utils]);
+
+  return query;
 }
