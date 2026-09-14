@@ -233,6 +233,8 @@
       "list": {
         "toggle_one": "Ver el fichero que guarda",
         "toggle_other": "Ver los {{count}} ficheros que guarda",
+        "searchPlaceholder": "Buscar un fichero o carpeta",
+        "noMatches": "Ningún fichero de la papelera coincide",
         "restore": "Restaurar"
       }
     },
@@ -1080,8 +1082,7 @@
       "description": "Dónde va cada canción y cómo se llama. No se mueve nada hasta que tú lo digas."
     },
     "template": {
-      "label": "Formato de pista",
-      "description": "Cada / abre una carpeta. Lo que esté entre < > desaparece si la canción no tiene qué poner ahí."
+      "label": "Formato de pista"
     },
     "rules": "La plantilla tiene que terminar en .{ext}. Un token suelto es obligatorio: una pista que no pueda rellenarlo se queda donde está, y una descarga que no pueda rellenarlo falla al importar.",
     "loadFailed": "No se pudo leer la plantilla actual",
@@ -1106,6 +1107,10 @@
       "EMPTY_SEGMENT": "Hay una carpeta sin nada en el nombre.",
       "TRAVERSING_SEGMENT": "Una carpeta no puede ser . ni ..",
       "MISSING_EXTENSION": "La plantilla tiene que terminar en .{ext}, o nada podrá reproducir el fichero.",
+      "EXTENSION_NOT_LAST": "La extensión se añade sola al final. Quítala de en medio.",
+      "LITERAL_EXTENSION": "Esto termina en una extensión escrita a mano, y la de verdad va después. Quítala.",
+      "EMPTY_FILENAME": "La última parte es la que nombra el fichero, y aquí queda en blanco.",
+      "TRAILING_DOT": "Un nombre no puede acabar en punto. La extensión va justo después.",
       "UNKNOWN_TOKEN": "Hay un token que no existe. Los que sí existen están listados arriba.",
       "UNRENDERABLE": "Esta plantilla no puede dar una ruta utilizable."
     },
@@ -1115,19 +1120,21 @@
       "rejected": "no se pueden nombrar"
     },
     "tokensModal": {
-      "open": "Ver las piezas que puedes usar",
-      "title": "Piezas que puedes usar",
-      "group": "Pista",
+      "open": "Abrir el constructor del formato de pista",
+      "title": "Constructor del formato de pista",
       "examples": "Cómo queda",
-      "rules": "Haz clic en una pieza para meterla. Tiene que terminar con la extensión del fichero, y al menos una pieza debe quedar fuera de los < >, o una canción sin nada que poner ahí no se podría nombrar.",
+      "ruleClick": "Haz clic en una pieza para meterla donde está el cursor.",
+      "rulePadding": "El 02d de un número lo rellena a dos dígitos, así la pista 1 se archiva como 01 y tus canciones quedan en orden.",
+      "ruleBrackets": "Meter una pieza entre < > la vuelve opcional: si la canción no tiene ese dato, ese trozo entero desaparece. Por eso <Disc {disc:02d}> va entre < >, porque sin ellos todo álbum de un solo disco se quedaría sin archivar.",
+      "ruleOptional": "Una pieza que dejas fuera de los < > es obligatoria, y una canción que no puede rellenarla se queda donde está en vez de archivarse con un hueco en el nombre.",
       "close": "Listo"
     },
-    "previewAction_one": "Ver el cambio",
-    "previewAction_other": "Ver los {{formatted}} cambios",
+    "previewAction_one": "Previsualizar 1 cambio",
+    "previewAction_other": "Previsualizar {{formatted}} cambios",
     "samples": {
       "single_disc": "Un álbum normal",
       "multi_disc": "Un álbum de dos discos",
-      "guest_artist": "Una canción de un invitado",
+      "compilation": "Un recopilatorio, donde el álbum no es de un solo artista",
       "unrenderable": "Este formato no puede nombrar esta"
     },
     "preview": {
@@ -1135,14 +1142,31 @@
       "tabs": {
         "all": "Todo",
         "relocate": "Solo la carpeta",
-        "rename": "También el nombre",
+        "rename": "Solo cómo se escribe",
+        "reassign": "Una carpeta nueva",
         "ariaLabel": "Filtrar los cambios"
+      },
+      "info": {
+        "open": "Qué estás viendo",
+        "title": "Qué estás viendo",
+        "counts": "Los números de arriba cuentan toda tu biblioteca: qué se movería, qué ya está bien y qué no se puede nombrar porque a la canción le falta algo.",
+        "lists": "Los cambios se separan en tres, para que te lleves los seguros y dejes el resto.",
+        "relocateTerm": "Solo la carpeta",
+        "relocateText": "El archivo conserva su nombre y cae en otra carpeta.",
+        "relocateExample": "Ten/Disc 01/05 - Black.mp3 → Ten/05 - Black.mp3",
+        "renameTerm": "Solo cómo se escribe",
+        "renameText": "El mismo álbum y el mismo artista, bien escritos.",
+        "renameExample": "pearl jam/ten → Pearl Jam/Ten",
+        "reassignTerm": "Una carpeta nueva",
+        "reassignText": "La canción acaba en una carpeta en la que hoy no está. Puede ser otro álbum, otro artista, o una carpeta de álbum que nunca tuvo. Lee algunas antes de confirmar.",
+        "reassignExample": "Dark Matter/03 - Wreckage.mp3 → Wreckage/01 - Wreckage.mp3",
+        "buttonScope": "El botón de abajo mueve la lista entera que tengas abierta, no solo las filas que enseña una búsqueda."
       },
       "searchPlaceholder": "Buscar una canción o carpeta",
       "loading": "Calculando los cambios",
       "noMatches": "Nada coincide con eso",
       "loadFailed": "No se pudieron calcular los cambios",
-      "renameWarning": "Estos cambian el nombre en el disco. Tu servidor de medios tendrá que releer la biblioteca para encontrarlos.",
+      "reassignWarning": "Estas acaban en una carpeta en la que hoy no están, que puede ser otro álbum u otro artista. Lee algunas antes de confirmar.",
       "cancel": "Cancelar",
       "columnBefore": "Ahora",
       "columnAfter": "Después",
@@ -1151,8 +1175,8 @@
       "searchIsALens_one": "La búsqueda solo acota esta lista. Confirmar mueve igualmente esa canción.",
       "searchIsALens_other": "La búsqueda solo acota esta lista. Confirmar mueve igualmente las {{formatted}}.",
       "confirmTitle": "¿Mover los ficheros?",
-      "confirmMessage_one": "Esto mueve 1 canción en el disco y guarda este formato para todo lo que llegue a partir de ahora.",
-      "confirmMessage_other": "Esto mueve {{formatted}} canciones en el disco y guarda este formato para todo lo que llegue a partir de ahora.",
+      "confirmMessage_one": "Esto mueve 1 canción en el disco y guarda este formato para todo lo que llegue a partir de ahora. Tu servidor de medios tendrá que releer la biblioteca para encontrarla.",
+      "confirmMessage_other": "Esto mueve {{formatted}} canciones en el disco y guarda este formato para todo lo que llegue a partir de ahora. Tu servidor de medios tendrá que releer la biblioteca para encontrarlas.",
       "confirmYes": "Sí, muévelos"
     },
     "rejectedNotice_one": "A una canción le falta algo que este formato necesita, así que se queda donde está.",

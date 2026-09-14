@@ -14,11 +14,15 @@ const state = vi.hoisted(() => ({
   preview: undefined as unknown,
   samples: undefined as unknown,
   status: undefined as unknown,
+  previewCalls: [] as { template: string; enabled: boolean }[],
 }));
 
 vi.mock("@hooks/api/queries/useLibraryNaming", () => ({
   useLibraryNamingCurrent: () => state.current,
-  useLibraryNamingPreview: () => state.preview,
+  useLibraryNamingPreview: (template: string, enabled: boolean) => {
+    state.previewCalls.push({ template, enabled });
+    return state.preview;
+  },
   useLibraryNamingSamples: () => state.samples,
   useLibraryNamingMoves: () => createMockQuery(undefined),
 }));
@@ -63,6 +67,7 @@ beforeEach(() => {
     samples: [{ id: "single_disc", path: "Daft Punk/Discovery/01 - One More Time.flac" }],
   });
   state.status = createMockQuery({ running: false, processed: 0, total: 0, startedAt: null, finishedAt: null });
+  state.previewCalls = [];
 });
 
 afterEach(() => {
@@ -71,10 +76,26 @@ afterEach(() => {
 });
 
 describe("NamingCard", () => {
-  it("shows the stored format", () => {
+  it("shows the stored format without the extension, which the reader cannot place anyway", () => {
     render(<NamingCard />);
 
-    expect(screen.getByLabelText(enSettings.libraryNaming.template.label)).toHaveValue(DEFAULT_TEMPLATE);
+    expect(screen.getByLabelText(enSettings.libraryNaming.template.label)).toHaveValue(
+      "{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}"
+    );
+  });
+
+  it("asks nothing while the stored format is still loading, so no complaint about an empty one can flash", () => {
+    state.current = { ...createMockQuery(undefined), isSuccess: false, isLoading: false };
+
+    render(<NamingCard />);
+
+    expect(state.previewCalls.every((call) => call.enabled === false)).toBe(true);
+  });
+
+  it("asks about the whole format once it has one, extension included", () => {
+    render(<NamingCard />);
+
+    expect(state.previewCalls).toContainEqual({ template: DEFAULT_TEMPLATE, enabled: true });
   });
 
   it("says so rather than offering an empty field to overwrite when the format cannot be read", () => {
@@ -121,7 +142,7 @@ describe("NamingCard", () => {
     render(<NamingCard />);
 
     expect(screen.getByText(enSettings.libraryNaming.problem.MISSING_EXTENSION)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /See the/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Preview/ })).toBeDisabled();
   });
 
   it("refuses to open the preview when nothing would move", () => {
@@ -129,13 +150,21 @@ describe("NamingCard", () => {
 
     render(<NamingCard />);
 
-    expect(screen.getByRole("button", { name: /See the/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Preview/ })).toBeDisabled();
   });
 
   it("offers the preview when there is something to see", () => {
     render(<NamingCard />);
 
-    expect(screen.getByRole("button", { name: /See the 7,415 changes/ })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /Preview 7,415 changes/ })).toBeEnabled();
+  });
+
+  it("says what it is doing rather than offering a count it has not worked out yet", () => {
+    state.preview = { ...validPreview(), isFetching: true };
+
+    render(<NamingCard />);
+
+    expect(screen.getByRole("button", { name: enSettings.libraryNaming.preview.loading })).toBeDisabled();
   });
 
   it("shows a filled bar, the share done and a way to stop while the files are being moved", () => {
@@ -168,7 +197,7 @@ describe("NamingCard", () => {
 
     render(<NamingCard />);
 
-    expect(screen.queryByRole("button", { name: /See the/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Preview/ })).toBeNull();
   });
 
   it("says it is still working the estimate out rather than inventing one", () => {

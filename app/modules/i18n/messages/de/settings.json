@@ -233,6 +233,8 @@
       "list": {
         "toggle_one": "Die eine enthaltene Datei anzeigen",
         "toggle_other": "Die {{count}} enthaltenen Dateien anzeigen",
+        "searchPlaceholder": "Datei oder Ordner suchen",
+        "noMatches": "Keine Datei im Papierkorb passt dazu",
         "restore": "Wiederherstellen"
       }
     },
@@ -1080,8 +1082,7 @@
       "description": "Wohin jeder Song kommt und wie er heißt. Nichts wird verschoben, bevor du es sagst."
     },
     "template": {
-      "label": "Standard-Titelformat",
-      "description": "Jeder / beginnt einen neuen Ordner. Was zwischen < > steht, verschwindet, wenn der Song nichts dafür hat."
+      "label": "Standard-Titelformat"
     },
     "rules": "Die Vorlage muss auf .{ext} enden. Ein einzelnes Token ist Pflicht: ein Titel, der es nicht füllen kann, bleibt liegen, und ein Download, der es nicht füllen kann, scheitert beim Import.",
     "loadFailed": "Die aktuelle Vorlage konnte nicht gelesen werden",
@@ -1106,6 +1107,10 @@
       "EMPTY_SEGMENT": "Ein Ordner hat keinen Namen.",
       "TRAVERSING_SEGMENT": "Ein Ordner darf nicht . oder .. sein",
       "MISSING_EXTENSION": "Die Vorlage muss auf .{ext} enden, sonst spielt nichts die Datei ab.",
+      "EXTENSION_NOT_LAST": "Die Dateiendung wird von selbst am Ende angehängt. Nimm sie aus der Mitte heraus.",
+      "LITERAL_EXTENSION": "Das endet auf eine getippte Endung, und die echte kommt danach. Nimm sie heraus.",
+      "EMPTY_FILENAME": "Der letzte Teil benennt die Datei, und hier bleibt er leer.",
+      "TRAILING_DOT": "Ein Name darf nicht auf einen Punkt enden. Die Dateiendung kommt direkt danach.",
       "UNKNOWN_TOKEN": "Hier steht ein Token, das es nicht gibt. Die vorhandenen stehen oben.",
       "UNRENDERABLE": "Diese Vorlage kann keinen brauchbaren Pfad erzeugen."
     },
@@ -1115,19 +1120,21 @@
       "rejected": "lassen sich nicht benennen"
     },
     "tokensModal": {
-      "open": "Verfügbare Bausteine anzeigen",
-      "title": "Bausteine, die du verwenden kannst",
-      "group": "Titel",
+      "open": "Titelformat-Baukasten öffnen",
+      "title": "Titelformat-Baukasten",
       "examples": "So sieht es aus",
-      "rules": "Klicke einen Baustein an, um ihn einzufügen. Es muss mit der Dateiendung enden, und mindestens ein Baustein muss außerhalb der < > stehen, sonst ließe sich ein Song ohne passende Angabe gar nicht benennen.",
+      "ruleClick": "Klicke einen Baustein an, um ihn an der Cursorposition einzufügen.",
+      "rulePadding": "Das 02d bei einer Zahl füllt sie auf zwei Stellen auf, so wird Titel 1 als 01 abgelegt und deine Songs bleiben in der Reihenfolge.",
+      "ruleBrackets": "Ein Baustein in < > wird optional: fehlt dem Song die Angabe, verschwindet dieser ganze Teil. Deshalb steht <Disc {disc:02d}> in < >, denn ohne sie bliebe jedes Album mit nur einer CD unabgelegt.",
+      "ruleOptional": "Ein Baustein außerhalb der < > ist Pflicht, und ein Song, der ihn nicht füllen kann, bleibt liegen, statt unter einem Namen mit einer Lücke abgelegt zu werden.",
       "close": "Fertig"
     },
-    "previewAction_one": "Die Änderung ansehen",
-    "previewAction_other": "Die {{formatted}} Änderungen ansehen",
+    "previewAction_one": "1 Änderung vorschauen",
+    "previewAction_other": "{{formatted}} Änderungen vorschauen",
     "samples": {
       "single_disc": "Ein normales Album",
       "multi_disc": "Ein Album auf zwei CDs",
-      "guest_artist": "Ein Song von einem Gast",
+      "compilation": "Eine Compilation, deren Album nicht von einem Künstler stammt",
       "unrenderable": "Dieses Format kann diesen nicht benennen"
     },
     "preview": {
@@ -1135,14 +1142,31 @@
       "tabs": {
         "all": "Alles",
         "relocate": "Nur der Ordner",
-        "rename": "Auch der Name",
+        "rename": "Nur die Schreibweise",
+        "reassign": "Ein neuer Ordner",
         "ariaLabel": "Änderungen filtern"
+      },
+      "info": {
+        "open": "Was hier zu sehen ist",
+        "title": "Was hier zu sehen ist",
+        "counts": "Die Zahlen oben zählen deine ganze Bibliothek: was sich bewegen würde, was schon stimmt und was keinen Namen bekommt, weil dem Song etwas fehlt.",
+        "lists": "Die Änderungen teilen sich in drei, damit du die sicheren mitnimmst und den Rest liegen lässt.",
+        "relocateTerm": "Nur der Ordner",
+        "relocateText": "Die Datei behält ihren Namen und landet in einem anderen Ordner.",
+        "relocateExample": "Ten/Disc 01/05 - Black.mp3 → Ten/05 - Black.mp3",
+        "renameTerm": "Nur die Schreibweise",
+        "renameText": "Dasselbe Album, derselbe Künstler, richtig geschrieben.",
+        "renameExample": "pearl jam/ten → Pearl Jam/Ten",
+        "reassignTerm": "Ein neuer Ordner",
+        "reassignText": "Der Song landet in einem Ordner, in dem er heute nicht ist. Das kann ein anderes Album sein, ein anderer Künstler, oder ein Albumordner, den er nie hatte. Lies ein paar davon, bevor du bestätigst.",
+        "reassignExample": "Dark Matter/03 - Wreckage.mp3 → Wreckage/01 - Wreckage.mp3",
+        "buttonScope": "Der Button unten bewegt die ganze offene Liste, nicht nur die Zeilen, die eine Suche zeigt."
       },
       "searchPlaceholder": "Song oder Ordner suchen",
       "loading": "Änderungen werden berechnet",
       "noMatches": "Nichts passt dazu",
       "loadFailed": "Die Änderungen konnten nicht berechnet werden",
-      "renameWarning": "Diese ändern den Namen auf der Festplatte. Dein Medienserver muss die Bibliothek erneut einlesen, um sie zu finden.",
+      "reassignWarning": "Diese landen in einem Ordner, in dem sie heute nicht sind, was ein anderes Album oder ein anderer Künstler sein kann. Lies ein paar davon, bevor du bestätigst.",
       "cancel": "Abbrechen",
       "columnBefore": "Jetzt",
       "columnAfter": "Danach",
@@ -1151,8 +1175,8 @@
       "searchIsALens_one": "Die Suche grenzt nur diese Liste ein. Bestätigen verschiebt den Song trotzdem.",
       "searchIsALens_other": "Die Suche grenzt nur diese Liste ein. Bestätigen verschiebt trotzdem alle {{formatted}}.",
       "confirmTitle": "Dateien verschieben?",
-      "confirmMessage_one": "Das verschiebt 1 Song auf der Festplatte und speichert dieses Format für alles, was ab jetzt ankommt.",
-      "confirmMessage_other": "Das verschiebt {{formatted}} Songs auf der Festplatte und speichert dieses Format für alles, was ab jetzt ankommt.",
+      "confirmMessage_one": "Das verschiebt 1 Song auf der Festplatte und speichert dieses Format für alles, was ab jetzt ankommt. Dein Medienserver muss die Bibliothek erneut einlesen, um ihn zu finden.",
+      "confirmMessage_other": "Das verschiebt {{formatted}} Songs auf der Festplatte und speichert dieses Format für alles, was ab jetzt ankommt. Dein Medienserver muss die Bibliothek erneut einlesen, um sie zu finden.",
       "confirmYes": "Ja, verschieben"
     },
     "rejectedNotice_one": "Einem Song fehlt etwas, das dieses Format braucht, er bleibt wo er ist.",

@@ -22,21 +22,20 @@ const TOKENS = [
 ];
 
 function renderModal(overrides: Record<string, unknown> = {}) {
-  const onInsert = vi.fn();
   const onTemplateChange = vi.fn();
   render(
     <TokensModal
       open
       onOpenChange={vi.fn()}
       template="{albumartist}/{title}.{ext}"
+      edited="{albumartist}/{title}"
       tokens={TOKENS}
       problem={null}
-      onInsert={onInsert}
       onTemplateChange={onTemplateChange}
       {...overrides}
     />
   );
-  return { onInsert, onTemplateChange };
+  return { onTemplateChange };
 }
 
 beforeAll(() => {
@@ -62,18 +61,29 @@ describe("the pieces picker", () => {
     expect(screen.getByRole("button", { name: /\{year\}/ })).toBeInTheDocument();
   });
 
-  it("hands the piece back when one is clicked, rather than editing the format itself", async () => {
-    const { onInsert } = renderModal();
+  it("drops the piece into the field the reader is looking at, which is the one in this modal", async () => {
+    const { onTemplateChange } = renderModal();
 
     await userEvent.click(screen.getByRole("button", { name: /\{year\}/ }));
 
-    expect(onInsert).toHaveBeenCalledWith("{year}");
+    expect(onTemplateChange).toHaveBeenCalledWith("{albumartist}/{title}{year}");
+  });
+
+  it("drops it at the cursor rather than at the end, which is what the rule above the pieces promises", async () => {
+    const { onTemplateChange } = renderModal();
+    const field = screen.getByLabelText(enSettings.libraryNaming.template.label);
+    await userEvent.click(field);
+    field.setSelectionRange(13, 13);
+
+    await userEvent.click(screen.getByRole("button", { name: /\{year\}/ }));
+
+    expect(onTemplateChange).toHaveBeenCalledWith("{albumartist}{year}/{title}");
   });
 
   it("shows the format being built, so the reader is not composing blind", () => {
     renderModal();
 
-    expect(screen.getByLabelText(enSettings.libraryNaming.template.label)).toHaveValue("{albumartist}/{title}.{ext}");
+    expect(screen.getByLabelText(enSettings.libraryNaming.template.label)).toHaveValue("{albumartist}/{title}");
   });
 
   it("says what is wrong with the format, since this is where it is being edited", () => {

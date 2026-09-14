@@ -1,10 +1,28 @@
 import { cva } from "class-variance-authority";
 
 export const previewTemplate = cva(
-  "bg-fg/5 text-fg/80 truncate rounded-md px-3 py-2 font-mono text-xs tabular-nums select-all"
+  "bg-fg/5 text-fg/80 mt-3 truncate rounded-md px-3 py-2.5 font-mono text-xs tabular-nums select-all"
 );
 
-export const previewToolbar = cva("flex w-full min-w-0 flex-wrap items-center gap-2");
+export const previewBody = cva("flex w-full min-w-0 flex-col gap-4");
+
+export const previewTitleRow = cva("flex min-w-0 items-center gap-2");
+
+export const infoBody = cva("flex flex-col gap-2.5");
+
+export const infoList = cva("flex flex-col gap-2.5");
+
+export const infoEntry = cva("flex flex-col gap-0.5");
+
+export const infoTerm = cva("text-fg/90 text-xs font-semibold");
+
+export const infoText = cva("text-fg/70 text-xs leading-snug");
+
+export const infoExample = cva("text-fg/50 font-mono text-[11px] leading-snug break-words");
+
+export const infoNote = cva("text-fg/70 text-xs leading-snug");
+
+export const previewToolbar = cva("flex w-full min-w-0 flex-wrap items-center gap-2.5");
 
 export const previewSearchBox = cva("relative min-w-40 flex-1");
 
@@ -17,12 +35,16 @@ export const previewTable = cva(
 );
 
 export const previewHead = cva(
-  "border-fg/10 bg-fg/5 text-fg/50 sticky top-0 z-10 flex w-full min-w-0 items-center gap-2 border-b px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase"
+  "border-fg/10 bg-surface text-fg/50 sticky top-0 z-10 flex w-full min-w-0 items-center gap-2 border-b px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase"
 );
 
 export const previewRow = cva(
-  "border-fg/5 flex w-full min-w-0 items-center gap-2 border-b px-3 py-2 text-xs last:border-b-0"
+  "border-fg/5 flex w-full min-w-0 items-center gap-3 border-b px-3 py-2.5 text-xs last:border-b-0"
 );
+
+export const previewFooterRow = cva("border-fg/10 flex flex-wrap items-center justify-between gap-3 border-t pt-4");
+
+export const previewCount = cva("text-fg/50 text-xs tabular-nums");
 
 export const previewFrom = cva("text-fg/50 w-0 min-w-0 flex-1 truncate");
 
@@ -39,14 +61,14 @@ export const tokenGroupTitle = cva(
 export const tokenGrid = cva("grid gap-1.5 sm:grid-cols-2");
 
 export const tokenCell = cva(
-  "border-fg/10 hover:border-primary-400/60 hover:bg-fg/5 flex min-w-0 items-start gap-2.5 rounded-md border px-2.5 py-2 text-left transition-colors"
+  "border-fg/10 hover:border-primary-400/60 hover:bg-fg/5 flex min-w-0 items-start gap-3 rounded-md border px-2.5 py-2 text-left transition-colors"
 );
 
-export const tokenName = cva("text-fg/90 shrink-0 font-mono text-xs");
+export const tokenName = cva("text-fg/90 w-32 shrink-0 font-mono text-xs");
 
-export const tokenExample = cva("text-fg/55 min-w-0 text-xs leading-snug");
+export const tokenExample = cva("text-fg/55 min-w-0 flex-1 text-xs leading-snug");
 
-export const tokensRules = cva("text-fg/60 text-xs leading-relaxed");
+export const tokensRules = cva("text-fg/60 flex list-disc flex-col gap-1 pl-4 text-xs leading-relaxed");
 
 export const tokensFooterInput = cva(
   "border-fg/10 bg-fg/5 focus:ring-accent/40 h-9 w-full min-w-0 flex-1 rounded-md border px-3 font-mono text-xs outline-none focus:ring-2"
@@ -72,7 +94,7 @@ export const sampleLabel = cva("text-fg/50 text-[11px]");
 
 export const samplePath = cva("text-fg/80 truncate font-mono text-xs");
 
-export const statStrip = cva("flex flex-wrap items-center gap-x-6 gap-y-1 text-sm");
+export const statStrip = cva("flex flex-wrap items-center justify-center gap-x-6 gap-y-1 py-2 text-sm");
 
 export const statPair = cva("flex items-baseline gap-1.5");
 

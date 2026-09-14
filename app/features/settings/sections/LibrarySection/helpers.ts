@@ -1,8 +1,8 @@
 import { formatDuration } from "@utils/formatters";
 
-import { MIN_SAMPLE_FOR_ESTIMATE, SAMPLE_LABELS } from "./constants";
+import { EXTENSION_SUFFIX, EXTENSION_TOKEN, MIN_SAMPLE_FOR_ESTIMATE, MOVE_CLASSES, SAMPLE_LABELS } from "./constants";
 
-import type { GroupSelection, MoveClass, MoveFilter, OrganisePreview, OrganiseStatus, RunOutcome } from "./types";
+import type { MoveClass, MoveFilter, OrganiseStatus, RunOutcome } from "./types";
 
 export function sampleLabelKey(id: string): (typeof SAMPLE_LABELS)[keyof typeof SAMPLE_LABELS] | null {
   for (const [key, value] of Object.entries(SAMPLE_LABELS)) {
@@ -12,7 +12,7 @@ export function sampleLabelKey(id: string): (typeof SAMPLE_LABELS)[keyof typeof 
 }
 
 export function classesFor(filter: MoveFilter): MoveClass[] {
-  return filter === "all" ? ["relocate", "rename"] : [filter];
+  return filter === "all" ? [...MOVE_CLASSES] : [filter];
 }
 
 export function countFrom(
@@ -22,24 +22,27 @@ export function countFrom(
   return byClass?.find((entry) => entry.moveClass === moveClass)?.count ?? 0;
 }
 
-export function countFor(preview: OrganisePreview | undefined, moveClass: MoveClass): number {
-  return preview?.movesByClass.find((entry) => entry.moveClass === moveClass)?.count ?? 0;
-}
-
-export function chosenClasses(selection: GroupSelection): MoveClass[] {
-  const chosen: MoveClass[] = [];
-  if (selection.relocate) chosen.push("relocate");
-  if (selection.rename) chosen.push("rename");
-  return chosen;
-}
-
-export function chosenTotal(preview: OrganisePreview | undefined, selection: GroupSelection): number {
-  return chosenClasses(selection).reduce((total, moveClass) => total + countFor(preview, moveClass), 0);
-}
-
 export function percentDone(processed: number, total: number): number {
   if (total <= 0) return 0;
   return Math.min(100, Math.round((processed / total) * 100));
+}
+
+export function withoutExtension(template: string): string {
+  return template.endsWith(EXTENSION_SUFFIX) ? template.slice(0, -EXTENSION_SUFFIX.length) : template;
+}
+
+function withoutTrailingFiller(value: string): string {
+  let end = value.length;
+  while (end > 0 && (value[end - 1] === "." || value[end - 1] === " ")) end -= 1;
+  return value.slice(0, end);
+}
+
+export function withExtension(edited: string): string {
+  return `${withoutTrailingFiller(withoutExtension(edited.trimEnd()))}${EXTENSION_SUFFIX}`;
+}
+
+export function refuseExtensionTyping(typed: string): string {
+  return typed.split(EXTENSION_TOKEN).join("");
 }
 
 export function insertAtCursor(value: string, token: string, start: number, end: number): string {

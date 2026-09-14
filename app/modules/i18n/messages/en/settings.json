@@ -233,6 +233,8 @@
       "list": {
         "toggle_one": "Show the one file it holds",
         "toggle_other": "Show the {{count}} files it holds",
+        "searchPlaceholder": "Search a file or folder",
+        "noMatches": "No file in the bin matches that",
         "restore": "Restore"
       }
     },
@@ -1080,8 +1082,7 @@
       "description": "Where every song goes and what it is called. Nothing moves until you say so."
     },
     "template": {
-      "label": "Standard Track Format",
-      "description": "Each / starts a new folder. Anything inside < > disappears when the song has nothing to put there."
+      "label": "Standard Track Format"
     },
     "rules": "The template has to end in .{ext}. A token on its own is required: a track that cannot fill it is left alone, and a download that cannot fill it fails to import.",
     "loadFailed": "Could not read the current template",
@@ -1106,6 +1107,10 @@
       "EMPTY_SEGMENT": "There is a folder with nothing in its name.",
       "TRAVERSING_SEGMENT": "A folder cannot be . or ..",
       "MISSING_EXTENSION": "The template has to end in .{ext}, or nothing will play the file.",
+      "EXTENSION_NOT_LAST": "The file extension is added at the end on its own. Take it out of the middle.",
+      "LITERAL_EXTENSION": "This ends in a typed-out extension, and the real one goes after it. Take it out.",
+      "EMPTY_FILENAME": "The last part names the file, and this one leaves it blank.",
+      "TRAILING_DOT": "A name cannot end in a dot. The file extension goes right after it.",
       "UNKNOWN_TOKEN": "There is a token here that does not exist. The ones that do are listed above.",
       "UNRENDERABLE": "This template cannot produce a usable path."
     },
@@ -1115,19 +1120,21 @@
       "rejected": "cannot be named"
     },
     "tokensModal": {
-      "open": "Show the pieces you can use",
-      "title": "Pieces you can use",
-      "group": "Track",
+      "open": "Open the track format builder",
+      "title": "Track Format Builder",
       "examples": "How it turns out",
-      "rules": "Click a piece to drop it in. It has to end with the file extension, and at least one piece must sit outside the < >, or a song with nothing to put there could not be named at all.",
+      "ruleClick": "Click a piece to drop it in where the cursor is.",
+      "rulePadding": "The 02d on a number pads it to two digits, so track 1 files as 01 and your songs stay in order.",
+      "ruleBrackets": "Wrapping a piece in < > makes it optional: if the song has nothing for it, that whole bit disappears. That is why <Disc {disc:02d}> is wrapped, since without it every album with a single disc would be left unfiled.",
+      "ruleOptional": "A piece left outside the < > is required, and a song that cannot fill it stays where it is rather than being filed under a name with a gap in it.",
       "close": "Done"
     },
-    "previewAction_one": "See the change",
-    "previewAction_other": "See the {{formatted}} changes",
+    "previewAction_one": "Preview 1 change",
+    "previewAction_other": "Preview {{formatted}} changes",
     "samples": {
       "single_disc": "A normal album",
       "multi_disc": "An album on two discs",
-      "guest_artist": "A song by a guest",
+      "compilation": "A compilation, where the album is not by one artist",
       "unrenderable": "This format cannot name this one"
     },
     "preview": {
@@ -1135,14 +1142,31 @@
       "tabs": {
         "all": "Everything",
         "relocate": "Only the folder",
-        "rename": "Also the name",
+        "rename": "Only the spelling",
+        "reassign": "A new folder",
         "ariaLabel": "Filter the changes"
+      },
+      "info": {
+        "open": "What this is showing",
+        "title": "What this is showing",
+        "counts": "The numbers at the top count your whole library: what would move, what is already right, and what cannot be named because the track is missing something.",
+        "lists": "The changes split in three, so you can take the safe ones and leave the rest.",
+        "relocateTerm": "Only the folder",
+        "relocateText": "The file keeps its name and lands in a different folder.",
+        "relocateExample": "Ten/Disc 01/05 - Black.mp3 → Ten/05 - Black.mp3",
+        "renameTerm": "Only the spelling",
+        "renameText": "Same album, same artist, written properly.",
+        "renameExample": "pearl jam/ten → Pearl Jam/Ten",
+        "reassignTerm": "A new folder",
+        "reassignText": "The song lands in a folder it is not in today. That can be another album, another artist, or an album folder it never had. Read a few before you confirm.",
+        "reassignExample": "Dark Matter/03 - Wreckage.mp3 → Wreckage/01 - Wreckage.mp3",
+        "buttonScope": "The button at the bottom moves the whole list you have open, not only the rows a search is showing."
       },
       "searchPlaceholder": "Search a song or folder",
       "loading": "Working out the changes",
       "noMatches": "Nothing matches that",
       "loadFailed": "The changes could not be worked out",
-      "renameWarning": "These change the name on disk. Your media server will need to read the library again to find them.",
+      "reassignWarning": "These land in a folder they are not in today, which can be another album or artist. Read a few before you confirm.",
       "cancel": "Cancel",
       "columnBefore": "Now",
       "columnAfter": "After",
@@ -1151,8 +1175,8 @@
       "searchIsALens_one": "The search only narrows this list. Confirming still moves the 1 song.",
       "searchIsALens_other": "The search only narrows this list. Confirming still moves all {{formatted}}.",
       "confirmTitle": "Move the files?",
-      "confirmMessage_one": "This moves 1 song on disk and saves this format for everything that arrives from now on.",
-      "confirmMessage_other": "This moves {{formatted}} songs on disk and saves this format for everything that arrives from now on.",
+      "confirmMessage_one": "This moves 1 song on disk and saves this format for everything that arrives from now on. Your media server will need to read the library again to find it.",
+      "confirmMessage_other": "This moves {{formatted}} songs on disk and saves this format for everything that arrives from now on. Your media server will need to read the library again to find them.",
       "confirmYes": "Yes, move them"
     },
     "rejectedNotice_one": "One song is missing something this format needs, so it stays where it is.",

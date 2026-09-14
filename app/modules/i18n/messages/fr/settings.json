@@ -233,6 +233,8 @@
       "list": {
         "toggle_one": "Voir le fichier conservé",
         "toggle_other": "Voir les {{count}} fichiers conservés",
+        "searchPlaceholder": "Chercher un fichier ou un dossier",
+        "noMatches": "Aucun fichier de la corbeille ne correspond",
         "restore": "Restaurer"
       }
     },
@@ -1080,8 +1082,7 @@
       "description": "Où va chaque morceau et comment il s'appelle. Rien ne bouge tant que vous ne le dites pas."
     },
     "template": {
-      "label": "Format de morceau standard",
-      "description": "Chaque / ouvre un dossier. Ce qui est entre < > disparaît si le morceau n'a rien à y mettre."
+      "label": "Format de morceau standard"
     },
     "rules": "Le modèle doit se terminer par .{ext}. Un jeton seul est obligatoire : une piste qui ne peut pas le remplir reste en place, et un téléchargement qui ne peut pas le remplir échoue à l'import.",
     "loadFailed": "Impossible de lire le modèle actuel",
@@ -1106,6 +1107,10 @@
       "EMPTY_SEGMENT": "Un dossier n'a rien dans son nom.",
       "TRAVERSING_SEGMENT": "Un dossier ne peut pas être . ni ..",
       "MISSING_EXTENSION": "Le modèle doit se terminer par .{ext}, sinon rien ne lira le fichier.",
+      "EXTENSION_NOT_LAST": "L'extension est ajoutée toute seule à la fin. Retirez-la du milieu.",
+      "LITERAL_EXTENSION": "Cela finit par une extension tapée à la main, et la vraie vient après. Retirez-la.",
+      "EMPTY_FILENAME": "La dernière partie nomme le fichier, et ici elle reste vide.",
+      "TRAILING_DOT": "Un nom ne peut pas se terminer par un point. L'extension vient juste après.",
       "UNKNOWN_TOKEN": "Il y a ici un jeton qui n'existe pas. Ceux qui existent sont listés au-dessus.",
       "UNRENDERABLE": "Ce modèle ne peut pas produire un chemin utilisable."
     },
@@ -1115,19 +1120,21 @@
       "rejected": "ne peuvent pas être nommés"
     },
     "tokensModal": {
-      "open": "Voir les éléments disponibles",
-      "title": "Éléments que vous pouvez utiliser",
-      "group": "Morceau",
+      "open": "Ouvrir le constructeur de format de morceau",
+      "title": "Constructeur de format de morceau",
       "examples": "Le résultat",
-      "rules": "Cliquez sur un élément pour l'insérer. Cela doit finir par l'extension du fichier, et au moins un élément doit rester hors des < >, sinon un morceau sans rien à y mettre ne pourrait pas être nommé.",
+      "ruleClick": "Cliquez sur un élément pour l'insérer à l'endroit du curseur.",
+      "rulePadding": "Le 02d sur un nombre le complète à deux chiffres, ainsi la piste 1 est rangée en 01 et vos morceaux restent dans l'ordre.",
+      "ruleBrackets": "Mettre un élément entre < > le rend facultatif : si le morceau n'a pas cette donnée, tout ce bloc disparaît. C'est pourquoi <Disc {disc:02d}> est entre < >, car sans elles tout album à un seul disque resterait non rangé.",
+      "ruleOptional": "Un élément laissé hors des < > est obligatoire, et un morceau qui ne peut pas le remplir reste où il est au lieu d'être rangé sous un nom troué.",
       "close": "Terminé"
     },
-    "previewAction_one": "Voir le changement",
-    "previewAction_other": "Voir les {{formatted}} changements",
+    "previewAction_one": "Prévisualiser 1 changement",
+    "previewAction_other": "Prévisualiser {{formatted}} changements",
     "samples": {
       "single_disc": "Un album normal",
       "multi_disc": "Un album sur deux disques",
-      "guest_artist": "Un morceau d'un invité",
+      "compilation": "Une compilation, dont l'album n'est pas d'un seul artiste",
       "unrenderable": "Ce format ne peut pas nommer celui-ci"
     },
     "preview": {
@@ -1135,14 +1142,31 @@
       "tabs": {
         "all": "Tout",
         "relocate": "Seulement le dossier",
-        "rename": "Aussi le nom",
+        "rename": "Seulement l'orthographe",
+        "reassign": "Un nouveau dossier",
         "ariaLabel": "Filtrer les changements"
+      },
+      "info": {
+        "open": "Ce que vous voyez ici",
+        "title": "Ce que vous voyez ici",
+        "counts": "Les nombres en haut comptent toute votre bibliothèque : ce qui bougerait, ce qui est déjà correct et ce qui ne peut pas être nommé parce qu'il manque quelque chose au morceau.",
+        "lists": "Les changements se répartissent en trois, pour que vous preniez les sûrs et laissiez le reste.",
+        "relocateTerm": "Seulement le dossier",
+        "relocateText": "Le fichier garde son nom et atterrit dans un autre dossier.",
+        "relocateExample": "Ten/Disc 01/05 - Black.mp3 → Ten/05 - Black.mp3",
+        "renameTerm": "Seulement l'orthographe",
+        "renameText": "Le même album, le même artiste, bien écrits.",
+        "renameExample": "pearl jam/ten → Pearl Jam/Ten",
+        "reassignTerm": "Un nouveau dossier",
+        "reassignText": "Le morceau atterrit dans un dossier où il n'est pas aujourd'hui. Cela peut être un autre album, un autre artiste, ou un dossier d'album qu'il n'a jamais eu. Lisez-en quelques-uns avant de confirmer.",
+        "reassignExample": "Dark Matter/03 - Wreckage.mp3 → Wreckage/01 - Wreckage.mp3",
+        "buttonScope": "Le bouton du bas déplace toute la liste ouverte, pas seulement les lignes qu'une recherche affiche."
       },
       "searchPlaceholder": "Chercher un morceau ou un dossier",
       "loading": "Calcul des changements",
       "noMatches": "Rien ne correspond",
       "loadFailed": "Impossible de calculer les changements",
-      "renameWarning": "Ceux-ci changent le nom sur le disque. Votre serveur multimédia devra relire la bibliothèque pour les retrouver.",
+      "reassignWarning": "Ceux-ci atterrissent dans un dossier où ils ne sont pas aujourd'hui, ce qui peut être un autre album ou un autre artiste. Lisez-en quelques-uns avant de confirmer.",
       "cancel": "Annuler",
       "columnBefore": "Maintenant",
       "columnAfter": "Après",
@@ -1151,8 +1175,8 @@
       "searchIsALens_one": "La recherche ne fait que filtrer cette liste. Confirmer déplace quand même ce morceau.",
       "searchIsALens_other": "La recherche ne fait que filtrer cette liste. Confirmer déplace quand même les {{formatted}}.",
       "confirmTitle": "Déplacer les fichiers ?",
-      "confirmMessage_one": "Cela déplace 1 morceau sur le disque et enregistre ce format pour tout ce qui arrivera désormais.",
-      "confirmMessage_other": "Cela déplace {{formatted}} morceaux sur le disque et enregistre ce format pour tout ce qui arrivera désormais.",
+      "confirmMessage_one": "Cela déplace 1 morceau sur le disque et enregistre ce format pour tout ce qui arrivera désormais. Votre serveur multimédia devra relire la bibliothèque pour le retrouver.",
+      "confirmMessage_other": "Cela déplace {{formatted}} morceaux sur le disque et enregistre ce format pour tout ce qui arrivera désormais. Votre serveur multimédia devra relire la bibliothèque pour les retrouver.",
       "confirmYes": "Oui, déplacer"
     },
     "rejectedNotice_one": "Il manque à un morceau quelque chose dont ce format a besoin, il reste où il est.",

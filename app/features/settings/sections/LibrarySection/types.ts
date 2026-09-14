@@ -9,11 +9,6 @@ export type OrganiseStatus = inferRouterOutputs<AppRouter>["library"]["organise"
 export type MoveClass = OrganisePreview["movesByClass"][number]["moveClass"];
 export type NamingPreview = inferRouterOutputs<AppRouter>["library"]["naming"]["preview"];
 
-export interface GroupSelection {
-  relocate: boolean;
-  rename: boolean;
-}
-
 export interface RunOutcome {
   moved: number;
   companionsMoved: number;
@@ -25,19 +20,6 @@ export interface RunOutcome {
   duration: string;
 }
 
-export interface NamingSample {
-  id: string;
-  albumartist: string;
-  artist: string;
-  album: string;
-  title: string;
-  year: string;
-  track: string;
-  disc: string;
-  disc_total: string;
-  ext: string;
-}
-
 export type MoveFilter = "all" | MoveClass;
 
 export type TemplateProblem = Extract<NamingPreview, { outcome: "invalid" }>["problem"];
@@ -46,9 +28,9 @@ export interface TokensModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   template: string;
+  edited: string;
   tokens: readonly NamingToken[];
   problem: TemplateProblem | null;
-  onInsert: (token: string) => void;
   onTemplateChange: (next: string) => void;
 }
 
@@ -63,12 +45,4 @@ export interface PreviewModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   template: string;
-}
-
-export interface OrganiseGroupRowProps {
-  moveClass: MoveClass;
-  count: number;
-  checked: boolean;
-  disabled: boolean;
-  onToggle: (next: boolean) => void;
 }

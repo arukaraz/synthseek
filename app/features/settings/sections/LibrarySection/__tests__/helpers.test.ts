@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { insertAtCursor, percentDone, secondsRemaining } from "../helpers";
+import {
+  insertAtCursor,
+  percentDone,
+  refuseExtensionTyping,
+  secondsRemaining,
+  withExtension,
+  withoutExtension,
+} from "../helpers";
 import type { OrganiseStatus } from "../types";
 
 function status(overrides: Partial<OrganiseStatus> = {}): OrganiseStatus {
@@ -21,6 +28,61 @@ function status(overrides: Partial<OrganiseStatus> = {}): OrganiseStatus {
 }
 
 const START = new Date("2026-09-13T10:00:00.000Z").getTime();
+
+describe("keeping the file extension out of the reader's way", () => {
+  it("hides it from what the reader edits, since it can only ever sit at the end", () => {
+    expect(withoutExtension("{albumartist}/{album}/{track:02d} - {title}.{ext}")).toBe(
+      "{albumartist}/{album}/{track:02d} - {title}"
+    );
+  });
+
+  it("puts it back on whatever the reader typed", () => {
+    expect(withExtension("{album}/{title}")).toBe("{album}/{title}.{ext}");
+  });
+
+  it("survives a round trip unchanged, which is what the stored value depends on", () => {
+    const stored = "{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}.{ext}";
+    expect(withExtension(withoutExtension(stored))).toBe(stored);
+  });
+
+  it("does not double it up when a reader types the extension themselves", () => {
+    expect(withExtension("{album}/{title}.{ext}")).toBe("{album}/{title}.{ext}");
+  });
+
+  it("leaves a template alone that never carried one, rather than cutting into it", () => {
+    expect(withoutExtension("{album}/{title}")).toBe("{album}/{title}");
+  });
+
+  it("ignores a trailing space, so a stray keystroke does not land inside the name", () => {
+    expect(withExtension("{album}/{title} ")).toBe("{album}/{title}.{ext}");
+  });
+
+  it("leaves an empty field as the extension alone, which the server then refuses as EMPTY_FILENAME", () => {
+    expect(withExtension("")).toBe(".{ext}");
+  });
+
+  it("drops the dot the mask orphans, so pasting the format the docs publish does not double it", () => {
+    const published = "{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}.{ext}";
+
+    expect(withExtension(refuseExtensionTyping(published))).toBe(published);
+  });
+
+  it("drops a run of dots and spaces, not just the one the mask left", () => {
+    expect(withExtension("{album}/{title} . ")).toBe("{album}/{title}.{ext}");
+  });
+
+  it("refuses the extension token as it is typed, so it never reaches the field", () => {
+    expect(refuseExtensionTyping("{album}/{ext}/{title}")).toBe("{album}//{title}");
+  });
+
+  it("refuses it wherever it was pasted, including several at once", () => {
+    expect(refuseExtensionTyping("{ext}{album}{ext}")).toBe("{album}");
+  });
+
+  it("leaves everything else alone, so typing stays typing", () => {
+    expect(refuseExtensionTyping("{albumartist}/{album} (2001)")).toBe("{albumartist}/{album} (2001)");
+  });
+});
 
 describe("dropping a piece into the format", () => {
   it("puts it where the cursor is, not at the end", () => {

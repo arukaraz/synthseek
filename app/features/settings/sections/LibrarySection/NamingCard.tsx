@@ -1,7 +1,7 @@
 "use client";
 
 import { Eye, HelpCircle, Loader2, Square } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -18,7 +18,14 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { namingHint } from "../../styles";
 import { PREVIEW_DEBOUNCE_MS } from "./constants";
-import { insertAtCursor, percentDone, runOutcome, secondsRemaining } from "./helpers";
+import {
+  percentDone,
+  refuseExtensionTyping,
+  runOutcome,
+  secondsRemaining,
+  withExtension,
+  withoutExtension,
+} from "./helpers";
 import { PreviewModal } from "./PreviewModal";
 import {
   progressBottom,
@@ -37,28 +44,23 @@ export function NamingCard() {
   const [draft, setDraft] = useState<string | null>(null);
   const [previewing, setPreviewing] = useState(false);
   const [pickingTokens, setPickingTokens] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const status = useLibraryOrganiseStatus();
   const cancel = useCancelLibraryOrganise();
 
-  const saved = current.data?.template ?? "";
-  const template = draft ?? saved;
-  const debounced = useDebounce(template, { delay: PREVIEW_DEBOUNCE_MS });
-  const preview = useLibraryNamingPreview(debounced, current.isSuccess && debounced.length > 0);
+  const edited = draft ?? withoutExtension(current.data?.template ?? "");
+  const settledEdit = useDebounce(edited, { delay: PREVIEW_DEBOUNCE_MS });
+  const template = withExtension(edited);
+  const preview = useLibraryNamingPreview(
+    withExtension(settledEdit),
+    current.isSuccess && settledEdit.trim().length > 0
+  );
 
   const invalid = preview.data?.outcome === "invalid" ? preview.data : null;
   const counts = preview.data?.outcome === "valid" ? preview.data : null;
   const running = status.data?.running === true;
   const outcome = runOutcome(status.data);
-  const settled = debounced === template && !preview.isFetching;
+  const settled = settledEdit === edited && !preview.isFetching;
   const left = secondsRemaining(status.data, Date.now());
-
-  const insert = (token: string) => {
-    const field = inputRef.current;
-    const start = field?.selectionStart ?? template.length;
-    const end = field?.selectionEnd ?? template.length;
-    setDraft(insertAtCursor(template, token, start, end));
-  };
 
   if (current.isLoading) {
     return (
@@ -78,12 +80,11 @@ export function NamingCard() {
 
   return (
     <SettingsCard title={t("libraryNaming.card.title")} description={t("libraryNaming.card.description")}>
-      <SettingsField label={t("libraryNaming.template.label")} helper={t("libraryNaming.template.description")}>
+      <SettingsField label={t("libraryNaming.template.label")}>
         <div className={templateRow()}>
           <input
-            ref={inputRef}
-            value={template}
-            onChange={(event) => setDraft(event.target.value)}
+            value={edited}
+            onChange={(event) => setDraft(refuseExtensionTyping(event.target.value))}
             disabled={running}
             aria-label={t("libraryNaming.template.label")}
             className={tokensFooterInput()}
@@ -149,10 +150,12 @@ export function NamingCard() {
             disabled={invalid !== null || !settled || (counts?.moves ?? 0) === 0}
           >
             {settled ? <Eye className="size-4" /> : <Loader2 className="size-4 animate-spin" />}
-            {t("libraryNaming.previewAction", {
-              count: counts?.moves ?? 0,
-              formatted: (counts?.moves ?? 0).toLocaleString(),
-            })}
+            {settled
+              ? t("libraryNaming.previewAction", {
+                  count: counts?.moves ?? 0,
+                  formatted: (counts?.moves ?? 0).toLocaleString(),
+                })
+              : t("libraryNaming.preview.loading")}
           </Button>
         </div>
       )}
@@ -161,9 +164,9 @@ export function NamingCard() {
         open={pickingTokens}
         onOpenChange={setPickingTokens}
         template={template}
+        edited={edited}
         tokens={current.data?.tokens ?? []}
         problem={invalid?.problem ?? null}
-        onInsert={insert}
         onTemplateChange={setDraft}
       />
       <PreviewModal open={previewing} onOpenChange={setPreviewing} template={template} />

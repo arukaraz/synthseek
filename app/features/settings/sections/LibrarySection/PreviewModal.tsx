@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowRight, Loader2, Search } from "lucide-react";
+import { ArrowRight, Info, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
+import { IconButton } from "@components/ui/IconButton";
 import { Notice } from "@components/ui/Notice";
 import { Pagination } from "@components/ui/Pagination";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
@@ -15,8 +16,11 @@ import { useLibraryNamingMoves, useLibraryNamingPreview } from "@hooks/api/queri
 import { useDebounce } from "@hooks/ui/useDebounce";
 
 import { PAGE_SIZES, PREVIEW_DEBOUNCE_MS, PREVIEW_PAGE_SIZE } from "./constants";
-import { classesFor, countFrom } from "./helpers";
+import { classesFor, countFrom, withoutExtension } from "./helpers";
+import { PreviewInfo } from "./PreviewInfo";
 import {
+  previewBody,
+  previewFooterRow,
   previewFrom,
   previewHead,
   previewRow,
@@ -25,6 +29,7 @@ import {
   previewSearchBox,
   previewTable,
   previewTemplate,
+  previewTitleRow,
   previewTo,
   previewToolbar,
   statNumber,
@@ -41,6 +46,7 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(PREVIEW_PAGE_SIZE);
   const [confirming, setConfirming] = useState(false);
+  const [explaining, setExplaining] = useState(false);
   const debounced = useDebounce(search, { delay: PREVIEW_DEBOUNCE_MS });
   const apply = useSaveAndOrganise();
   const preview = useLibraryNamingPreview(template, open && template.length > 0);
@@ -61,6 +67,7 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
       setSearch("");
       setPage(1);
       setConfirming(false);
+      setExplaining(false);
     }
   }, [open]);
 
@@ -68,112 +75,129 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
   const matched = data?.matched ?? 0;
   const relocating = countFrom(data?.byClass, "relocate");
   const renaming = countFrom(data?.byClass, "rename");
-  const chosen = filter === "all" ? relocating + renaming : filter === "relocate" ? relocating : renaming;
+  const reassigning = countFrom(data?.byClass, "reassign");
+  const everything = relocating + renaming + reassigning;
+  const chosen = filter === "all" ? everything : countFrom(data?.byClass, filter);
 
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-3xl">
           <DialogHeader>
-            <DialogTitle>{t("libraryNaming.preview.title")}</DialogTitle>
-          </DialogHeader>
-
-          <p className={previewTemplate()}>{template}</p>
-
-          {counts ? (
-            <div className={statStrip()}>
-              <span className={statPair()}>
-                <span className={statNumber()}>{counts.moves.toLocaleString()}</span>
-                <span className={statWord()}>{t("libraryNaming.stats.toMove")}</span>
-              </span>
-              <span className={statPair()}>
-                <span className={statNumber()}>{counts.inPlace.toLocaleString()}</span>
-                <span className={statWord()}>{t("libraryNaming.stats.inPlace")}</span>
-              </span>
-              {counts.rejected > 0 ? (
-                <span className={statPair()}>
-                  <span className={statNumber()}>{counts.rejected.toLocaleString()}</span>
-                  <span className={statWord()}>{t("libraryNaming.stats.rejected")}</span>
-                </span>
-              ) : null}
-            </div>
-          ) : null}
-
-          <div className={previewToolbar()}>
-            <SegmentTabs
-              items={[
-                { value: "all", label: t("libraryNaming.preview.tabs.all"), count: relocating + renaming },
-                { value: "relocate", label: t("libraryNaming.preview.tabs.relocate"), count: relocating },
-                { value: "rename", label: t("libraryNaming.preview.tabs.rename"), count: renaming },
-              ]}
-              value={filter}
-              onValueChange={setFilter}
-              layoutId="library-preview-filter"
-              ariaLabel={t("libraryNaming.preview.tabs.ariaLabel")}
-            />
-            <div className={previewSearchBox()}>
-              <Search className="text-fg/40 absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
-              <input
-                type="search"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder={t("libraryNaming.preview.searchPlaceholder")}
-                aria-label={t("libraryNaming.preview.searchPlaceholder")}
-                className={previewSearch()}
+            <div className={previewTitleRow()}>
+              <DialogTitle>{t("libraryNaming.preview.title")}</DialogTitle>
+              <IconButton
+                icon={Info}
+                variant="primary"
+                size="sm"
+                aria-label={t("libraryNaming.preview.info.open")}
+                aria-expanded={explaining}
+                onClick={() => setExplaining((shown) => !shown)}
               />
             </div>
-          </div>
+          </DialogHeader>
 
-          {filter === "rename" && renaming > 0 ? (
-            <Notice variant="warning" title={t("libraryNaming.preview.renameWarning")} />
-          ) : null}
+          <p className={previewTemplate()}>{withoutExtension(template)}</p>
 
-          {moves.isError ? <Notice variant="danger" title={t("libraryNaming.preview.loadFailed")} /> : null}
+          <div className={previewBody()}>
+            {explaining ? <PreviewInfo /> : null}
 
-          <div className={previewTable()}>
-            <div className={previewHead()}>
-              <span className="w-0 min-w-0 flex-1">{t("libraryNaming.preview.columnBefore")}</span>
-              <span className="w-3.5 shrink-0" />
-              <span className="w-0 min-w-0 flex-1">{t("libraryNaming.preview.columnAfter")}</span>
+            {counts ? (
+              <div className={statStrip()}>
+                <span className={statPair()}>
+                  <span className={statNumber()}>{counts.moves.toLocaleString()}</span>
+                  <span className={statWord()}>{t("libraryNaming.stats.toMove")}</span>
+                </span>
+                <span className={statPair()}>
+                  <span className={statNumber()}>{counts.inPlace.toLocaleString()}</span>
+                  <span className={statWord()}>{t("libraryNaming.stats.inPlace")}</span>
+                </span>
+                {counts.rejected > 0 ? (
+                  <span className={statPair()}>
+                    <span className={statNumber()}>{counts.rejected.toLocaleString()}</span>
+                    <span className={statWord()}>{t("libraryNaming.stats.rejected")}</span>
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
+
+            <div className={previewToolbar()}>
+              <SegmentTabs
+                items={[
+                  { value: "all", label: t("libraryNaming.preview.tabs.all"), count: everything },
+                  { value: "relocate", label: t("libraryNaming.preview.tabs.relocate"), count: relocating },
+                  { value: "rename", label: t("libraryNaming.preview.tabs.rename"), count: renaming },
+                  { value: "reassign", label: t("libraryNaming.preview.tabs.reassign"), count: reassigning },
+                ]}
+                value={filter}
+                onValueChange={setFilter}
+                layoutId="library-preview-filter"
+                ariaLabel={t("libraryNaming.preview.tabs.ariaLabel")}
+              />
+              <div className={previewSearchBox()}>
+                <Search className="text-fg/40 absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
+                <input
+                  type="search"
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder={t("libraryNaming.preview.searchPlaceholder")}
+                  aria-label={t("libraryNaming.preview.searchPlaceholder")}
+                  className={previewSearch()}
+                />
+              </div>
             </div>
-            {moves.isFetching && data === null ? (
-              <span className="text-fg/60 p-4 text-sm">{t("libraryNaming.preview.loading")}</span>
-            ) : matched === 0 ? (
-              <span className="text-fg/60 p-4 text-sm">{t("libraryNaming.preview.noMatches")}</span>
-            ) : (
-              data?.items.map((row) => (
-                <div key={row.from} className={previewRow()}>
-                  <span className={previewFrom()} title={row.from}>
-                    {row.from}
-                  </span>
-                  <ArrowRight className="text-fg/30 size-3.5 shrink-0" />
-                  <span className={previewTo()} title={row.to}>
-                    {row.to}
-                  </span>
-                </div>
-              ))
-            )}
+
+            {filter === "reassign" && reassigning > 0 ? (
+              <Notice variant="warning" title={t("libraryNaming.preview.reassignWarning")} />
+            ) : null}
+
+            {moves.isError ? <Notice variant="danger" title={t("libraryNaming.preview.loadFailed")} /> : null}
+
+            <div className={previewTable()}>
+              <div className={previewHead()}>
+                <span className="w-0 min-w-0 flex-1">{t("libraryNaming.preview.columnBefore")}</span>
+                <span className="w-3.5 shrink-0" />
+                <span className="w-0 min-w-0 flex-1">{t("libraryNaming.preview.columnAfter")}</span>
+              </div>
+              {moves.isFetching && data === null ? (
+                <span className="text-fg/60 p-4 text-sm">{t("libraryNaming.preview.loading")}</span>
+              ) : matched === 0 ? (
+                <span className="text-fg/60 p-4 text-sm">{t("libraryNaming.preview.noMatches")}</span>
+              ) : (
+                data?.items.map((row) => (
+                  <div key={row.from} className={previewRow()}>
+                    <span className={previewFrom()} title={row.from}>
+                      {row.from}
+                    </span>
+                    <ArrowRight className="text-fg/30 size-3.5 shrink-0" />
+                    <span className={previewTo()} title={row.to}>
+                      {row.to}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {matched > pageSize ? (
+              <Pagination
+                page={page}
+                pageCount={Math.ceil(matched / pageSize)}
+                pageSize={pageSize}
+                totalItems={matched}
+                pageSizeOptions={PAGE_SIZES}
+                onPageChange={setPage}
+                onPageSizeChange={setPageSize}
+              />
+            ) : null}
+
+            {debounced.length > 0 && matched < chosen ? (
+              <p className={previewScopeNote()}>
+                {t("libraryNaming.preview.searchIsALens", { count: chosen, formatted: chosen.toLocaleString() })}
+              </p>
+            ) : null}
           </div>
 
-          {matched > pageSize ? (
-            <Pagination
-              page={page}
-              pageCount={Math.ceil(matched / pageSize)}
-              pageSize={pageSize}
-              totalItems={matched}
-              pageSizeOptions={PAGE_SIZES}
-              onPageChange={setPage}
-              onPageSizeChange={setPageSize}
-            />
-          ) : null}
-
-          {debounced.length > 0 && matched < chosen ? (
-            <p className={previewScopeNote()}>
-              {t("libraryNaming.preview.searchIsALens", { count: chosen, formatted: chosen.toLocaleString() })}
-            </p>
-          ) : null}
-
-          <DialogFooter>
+          <DialogFooter className={previewFooterRow()}>
             <Button variant="ghost" onClick={() => onOpenChange(false)} disabled={apply.isPending}>
               {t("libraryNaming.preview.cancel")}
             </Button>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -7,7 +8,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Notice } from "@components/ui/Notice";
 import { useLibraryNamingSamples } from "@hooks/api/queries/useLibraryNaming";
 
-import { sampleLabelKey } from "./helpers";
+import { insertAtCursor, refuseExtensionTyping, sampleLabelKey } from "./helpers";
 import {
   sampleLabel,
   samplePath,
@@ -27,13 +28,22 @@ export function TokensModal({
   open,
   onOpenChange,
   template,
-  onInsert,
+  edited,
   onTemplateChange,
   tokens,
   problem,
 }: TokensModalProps) {
   const { t } = useTranslation("settings");
+  const fieldRef = useRef<HTMLInputElement>(null);
   const samples = useLibraryNamingSamples(template, open && template.length > 0 && problem === null);
+
+  const insert = (token: string) => {
+    const field = fieldRef.current;
+    const start = field?.selectionStart ?? edited.length;
+    const end = field?.selectionEnd ?? edited.length;
+    onTemplateChange(insertAtCursor(edited, token, start, end));
+    field?.focus();
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -42,18 +52,24 @@ export function TokensModal({
           <DialogTitle>{t("libraryNaming.tokensModal.title")}</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-6">
+        <div className="mt-3 flex flex-col gap-6">
           <div className={tokenGroup()}>
-            <span className={tokenGroupTitle()}>{t("libraryNaming.tokensModal.group")}</span>
             <div className={tokenGrid()}>
-              {tokens.map((token) => (
-                <button key={token.name} type="button" className={tokenCell()} onClick={() => onInsert(token.example)}>
-                  <span className={tokenName()}>{token.example}</span>
-                  <span className={tokenExample()}>{t(`libraryNaming.tokens.${token.name}`)}</span>
-                </button>
-              ))}
+              {tokens
+                .filter((token) => token.name !== "ext")
+                .map((token) => (
+                  <button key={token.name} type="button" className={tokenCell()} onClick={() => insert(token.example)}>
+                    <span className={tokenName()}>{token.example}</span>
+                    <span className={tokenExample()}>{t(`libraryNaming.tokens.${token.name}`)}</span>
+                  </button>
+                ))}
             </div>
-            <p className={tokensRules()}>{t("libraryNaming.tokensModal.rules")}</p>
+            <ul className={tokensRules()}>
+              <li>{t("libraryNaming.tokensModal.ruleClick")}</li>
+              <li>{t("libraryNaming.tokensModal.rulePadding")}</li>
+              <li>{t("libraryNaming.tokensModal.ruleBrackets")}</li>
+              <li>{t("libraryNaming.tokensModal.ruleOptional")}</li>
+            </ul>
           </div>
 
           {problem !== null ? <Notice variant="danger" title={t(`libraryNaming.problem.${problem}`)} /> : null}
@@ -75,10 +91,11 @@ export function TokensModal({
           ) : null}
         </div>
 
-        <DialogFooter className="sm:items-center">
+        <DialogFooter className="border-fg/10 mt-2 border-t pt-4 sm:items-center">
           <input
-            value={template}
-            onChange={(event) => onTemplateChange(event.target.value)}
+            ref={fieldRef}
+            value={edited}
+            onChange={(event) => onTemplateChange(refuseExtensionTyping(event.target.value))}
             aria-label={t("libraryNaming.template.label")}
             className={tokensFooterInput()}
           />
