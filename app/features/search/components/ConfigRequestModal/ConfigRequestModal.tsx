@@ -286,7 +286,6 @@ export function ConfigRequestModal({
         name: item.name,
         artist: item.artists[0]?.name || item.artist,
         album_art: item.images[0]?.url ?? null,
-        release_date: item.release_date || "1900-01-01",
         total_tracks: item.total_tracks || trackList.length,
         genres: item.genres,
         tracks: trackList.map(mapTrackFields),
