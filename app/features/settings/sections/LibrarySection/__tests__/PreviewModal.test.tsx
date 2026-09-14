@@ -77,6 +77,25 @@ describe("PreviewModal", () => {
     expect(screen.getByRole("tab", { name: /A new folder/ })).toBeInTheDocument();
   });
 
+  it("groups the thousands in a tab count, which on a real library runs to four digits", () => {
+    state.moves = createMockQuery({
+      outcome: "valid",
+      items: [],
+      total: 7577,
+      matched: 7577,
+      byClass: [
+        { moveClass: "relocate", count: 3893 },
+        { moveClass: "rename", count: 1633 },
+        { moveClass: "reassign", count: 2051 },
+      ],
+    });
+
+    open();
+
+    expect(screen.getByRole("tab", { name: /Everything/ })).toHaveTextContent("7,577");
+    expect(screen.getByRole("tab", { name: /Only the folder/ })).toHaveTextContent("3,893");
+  });
+
   it("counts the three lists separately and adds them up on the everything tab", () => {
     open();
 

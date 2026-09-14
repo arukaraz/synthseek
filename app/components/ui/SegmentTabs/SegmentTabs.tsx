@@ -30,7 +30,7 @@ export function SegmentTabs<TValue extends string>({
           >
             <span>{item.label}</span>
             {item.count !== undefined ? (
-              <span className={segmentTabCount({ active: isActive })}>{item.count}</span>
+              <span className={segmentTabCount({ active: isActive })}>{item.count.toLocaleString()}</span>
             ) : null}
             {isActive ? <motion.span layoutId={layoutId} className={segmentTabUnderline()} /> : null}
           </button>
