@@ -1,7 +1,7 @@
 "use client";
 
 import type { ParseKeys } from "i18next";
-import { Disc3, Menu, Sparkles } from "lucide-react";
+import { Library, Menu, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -30,7 +30,7 @@ const NAV_DEFINITIONS: PrimaryNavDefinition[] = [
   },
   {
     href: "/library",
-    icon: Disc3,
+    icon: Library,
     labelKey: "header.library",
     isActive: (pathname) => pathname.startsWith("/library"),
   },
