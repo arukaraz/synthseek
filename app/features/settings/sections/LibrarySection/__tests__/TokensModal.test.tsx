@@ -71,7 +71,7 @@ describe("the pieces picker", () => {
 
   it("drops it at the cursor rather than at the end, which is what the rule above the pieces promises", async () => {
     const { onTemplateChange } = renderModal();
-    const field = screen.getByLabelText(enSettings.libraryNaming.template.label);
+    const field = screen.getByLabelText<HTMLInputElement>(enSettings.libraryNaming.template.label);
     await userEvent.click(field);
     field.setSelectionRange(13, 13);
 
