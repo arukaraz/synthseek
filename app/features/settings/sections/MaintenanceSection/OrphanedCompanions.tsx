@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
-import { useSweepOrphanedCompanions } from "@hooks/api/mutations/settings/useOrphanedCompanions";
-import { useOrphanSweepStatus, useOrphanedCompanions } from "@hooks/api/queries/useOrphanedCompanions";
+import { useStartOrphanCount, useSweepOrphanedCompanions } from "@hooks/api/mutations/settings/useOrphanedCompanions";
+import { useOrphanCount, useOrphanSweepStatus } from "@hooks/api/queries/useOrphanedCompanions";
 import { formatBytes } from "@utils/formatters";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -18,19 +18,21 @@ export function OrphanedCompanions() {
   const { t } = useTranslation("settings");
   const [expanded, setExpanded] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const orphans = useOrphanedCompanions(expanded);
+  const orphans = useOrphanCount(expanded);
   const sweepStatus = useOrphanSweepStatus(expanded);
   const sweep = useSweepOrphanedCompanions();
+  const startCount = useStartOrphanCount();
 
   const found = orphans.data?.count ?? 0;
   const running = sweepStatus.data?.running ?? false;
+  const settled = orphans.data?.ready === true && orphans.data.counting === false;
 
   return (
     <>
       <div role="separator" className={cardDivider()} />
       <div className={quarantineListHeader()}>
         <span className={cardSectionHeader()}>{t("quality.orphanedCompanions.sectionTitle")}</span>
-        {expanded && found > 0 ? (
+        {expanded && settled && found > 0 ? (
           <Button
             variant="outline"
             size="sm"
@@ -53,15 +55,22 @@ export function OrphanedCompanions() {
           label={t("quality.orphanedCompanions.check.label")}
           description={t("quality.orphanedCompanions.check.description")}
           control={
-            <Button variant="outline" size="sm" onClick={() => setExpanded(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                startCount.mutate();
+                setExpanded(true);
+              }}
+            >
               {t("quality.orphanedCompanions.check.action")}
             </Button>
           }
         />
-      ) : orphans.isLoading ? (
-        <span className="text-fg/60 text-sm">{t("quality.orphanedCompanions.status.loading")}</span>
       ) : orphans.isError ? (
         <span className="text-sm text-red-400">{t("quality.orphanedCompanions.status.loadError")}</span>
+      ) : !settled ? (
+        <span className="text-fg/60 text-sm">{t("quality.orphanedCompanions.status.loading")}</span>
       ) : orphans.data ? (
         <>
           <EngineRow

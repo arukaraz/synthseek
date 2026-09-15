@@ -1,9 +1,9 @@
 import { trpc } from "@utils/trpc";
 
-export function useOrphanedCompanions(enabled: boolean) {
-  return trpc.maintenance.orphanedCompanions.useQuery(undefined, {
+export function useOrphanCount(enabled: boolean) {
+  return trpc.maintenance.orphanCount.useQuery(undefined, {
     enabled,
-    staleTime: 5 * 60 * 1000,
+    refetchInterval: (query) => (query.state.data?.counting ? 1000 : false),
   });
 }
 

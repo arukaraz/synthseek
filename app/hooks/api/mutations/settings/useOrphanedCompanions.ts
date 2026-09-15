@@ -4,6 +4,16 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
+export function useStartOrphanCount() {
+  const utils = trpc.useUtils();
+  return trpc.maintenance.startOrphanCount.useMutation({
+    onSuccess: () => {
+      utils.maintenance.orphanCount.invalidate();
+    },
+    onError: (error) => errorToast(error, "settings.orphanedCompanionsCountFailed"),
+  });
+}
+
 export function useSweepOrphanedCompanions() {
   const utils = trpc.useUtils();
   return trpc.maintenance.sweepOrphanedCompanions.useMutation({

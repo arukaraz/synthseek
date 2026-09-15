@@ -65,6 +65,7 @@
     "stagedReleasesClearFailed": "Impossible de supprimer les publications en attente",
     "recycledFileRestored": "{{path}} restauré",
     "recycledFileRestoreFailed": "Impossible de restaurer ce fichier",
+    "orphanedCompanionsCountFailed": "Impossible de commencer la lecture de votre bibliothèque",
     "orphanedCompanionsSweepFailed": "Impossible de mettre les fichiers à la corbeille",
     "orphanedCompanionsSweepStarted": "Déplacement des fichiers vers la corbeille",
     "orphanedCompanionsSweepAlreadyRunning": "C'est déjà en cours",

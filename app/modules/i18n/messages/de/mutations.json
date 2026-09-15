@@ -65,6 +65,7 @@
     "stagedReleasesClearFailed": "Zwischengespeicherte Releases konnten nicht entfernt werden",
     "recycledFileRestored": "{{path}} wiederhergestellt",
     "recycledFileRestoreFailed": "Diese Datei konnte nicht wiederhergestellt werden",
+    "orphanedCompanionsCountFailed": "Deine Bibliothek konnte nicht gelesen werden",
     "orphanedCompanionsSweepFailed": "Die Dateien konnten nicht in den Papierkorb verschoben werden",
     "orphanedCompanionsSweepStarted": "Dateien werden in den Papierkorb verschoben",
     "orphanedCompanionsSweepAlreadyRunning": "Das läuft bereits",

@@ -65,6 +65,7 @@
     "stagedReleasesClearFailed": "No se pudieron eliminar los discos en espera",
     "recycledFileRestored": "Restaurado {{path}}",
     "recycledFileRestoreFailed": "No se pudo restaurar ese fichero",
+    "orphanedCompanionsCountFailed": "No se pudo empezar a leer tu biblioteca",
     "orphanedCompanionsSweepFailed": "No se pudieron mover los ficheros a la papelera",
     "orphanedCompanionsSweepStarted": "Moviendo los ficheros a la papelera",
     "orphanedCompanionsSweepAlreadyRunning": "Eso ya está en marcha",

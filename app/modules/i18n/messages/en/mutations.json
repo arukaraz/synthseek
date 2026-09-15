@@ -65,6 +65,7 @@
     "stagedReleasesClearFailed": "Could not clear the staged releases",
     "recycledFileRestored": "Restored {{path}}",
     "recycledFileRestoreFailed": "Could not restore that file",
+    "orphanedCompanionsCountFailed": "Could not start reading your library",
     "orphanedCompanionsSweepFailed": "Could not move the files to the recycle bin",
     "orphanedCompanionsSweepStarted": "Moving the files to the recycle bin",
     "orphanedCompanionsSweepAlreadyRunning": "That is already under way",
