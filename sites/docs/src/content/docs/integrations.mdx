@@ -54,7 +54,7 @@ The handoff is validated before anything is created. Synthseek resolves the arti
 
 ## Beets
 
-Beets no longer tags or files anything. It is still bundled, and Synthseek runs it only to check it is present, which is what the Beets CLI row in Settings reports.
+Beets no longer tags or files anything. It is still bundled, and what Synthseek normally runs it for is the presence check behind the Beets CLI row in Settings. One opt-in repair pass, off unless you turn it on, still drives it to resync its own database.
 
 If you are moving an existing Beets library over, Synthseek reads its database once to pick up the MusicBrainz identities Beets had collected. It looks for that database where the Beets configuration at `BEETS_CONFIG` declares it, so point that at your own configuration to hand the identities over.
 

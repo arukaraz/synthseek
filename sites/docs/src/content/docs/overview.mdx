@@ -26,6 +26,7 @@ Synthseek ships as a single Docker container that runs two processes: a web inte
 | slskd                    | Your Soulseek daemon. Synthseek drives it over its local HTTP API.                                                          | Yes, for peer-to-peer downloads          |
 | Music catalog            | Where song, album, artist, and playlist metadata comes from. Deezer by default, with no API key and no account.             | Yes, built in                            |
 | AcoustID                 | Fingerprints the audio to prove a file is the recording you asked for.                                                      | Optional, free key, strongly recommended |
+| LRCLIB                   | Where the words of a song come from.                                                                                        | Optional, built in                       |
 | Plex                     | Gets told to rescan after an import, and receives your playlists.                                                           | Optional                                 |
 | Lidarr                   | An alternative target you can hand an artist or album to.                                                                   | Optional                                 |
 | Last.fm and ListenBrainz | Your listening history, the discovery mixes built from it, and where what you play is sent.                                 | Optional                                 |
