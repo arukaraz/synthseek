@@ -295,11 +295,19 @@ describe("calendarDateOf", () => {
     expect(calendarDateOf("2026-00-00")).toBeNull();
     expect(calendarDateOf("2026-02-30")).toBeNull();
     expect(calendarDateOf("2026-09")).toBeNull();
-    expect(calendarDateOf("  2026-09-14")).toBeNull();
   });
 
   it("refuses a two-digit year rather than mapping it into the twentieth century", () => {
     expect(calendarDateOf("0026-09-14")).toBeNull();
+  });
+
+  it("refuses a value whose leading character shifts the day out of the window it reads", () => {
+    expect(calendarDateOf(" 2026-09-14")).toBeNull();
+    expect(calendarDateOf("  2026-09-14")).toBeNull();
+  });
+
+  it("refuses an unpadded component, which would otherwise read a different day", () => {
+    expect(calendarDateOf("2026-9-14")).toBeNull();
   });
 });
 

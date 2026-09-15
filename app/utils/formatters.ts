@@ -93,11 +93,18 @@ export function formatDate(date: Date): string {
 
 const CALENDAR_DATE_LENGTH = 10;
 
+function isoDayOf(date: Date): string {
+  const year = String(date.getFullYear()).padStart(4, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function calendarDateOf(value: string): Date | null {
-  const [year, month, day] = value.slice(0, CALENDAR_DATE_LENGTH).split("-").map(Number);
+  const head = value.slice(0, CALENDAR_DATE_LENGTH);
+  const [year, month, day] = head.split("-").map(Number);
   const date = new Date(year, month - 1, day);
-  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
-  return date;
+  return isoDayOf(date) === head ? date : null;
 }
 
 export function formatCalendarDate(value: string | null | undefined): string | null {
