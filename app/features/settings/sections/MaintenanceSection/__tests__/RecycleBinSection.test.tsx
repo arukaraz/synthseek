@@ -40,11 +40,12 @@ vi.mock("@hooks/api/queries/useRecycleBin", () => ({
 }));
 
 vi.mock("@hooks/api/queries/useOrphanedCompanions", () => ({
-  useOrphanedCompanions: () => createMockQuery(undefined),
+  useOrphanCount: () => createMockQuery(undefined),
   useOrphanSweepStatus: () => createMockQuery(undefined),
 }));
 
 vi.mock("@hooks/api/mutations/settings/useOrphanedCompanions", () => ({
+  useStartOrphanCount: () => ({ mutate: vi.fn(), isPending: false }),
   useSweepOrphanedCompanions: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
