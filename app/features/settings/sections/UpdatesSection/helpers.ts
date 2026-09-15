@@ -1,3 +1,5 @@
+import { calendarDateOf } from "@utils/formatters";
+
 import type { ChangelogSection, EntryVariant, InlineToken, NoteLine } from "./types";
 
 const BOLD_DELIMITER = "**";
@@ -126,8 +128,8 @@ export function deriveNotes(sections: ChangelogSection[]): NoteLine[] {
 }
 
 export function formatEntryDate(dateString: string, locale: string): string {
-  const date = new Date(`${dateString}T00:00:00`);
-  if (Number.isNaN(date.getTime())) {
+  const date = calendarDateOf(dateString);
+  if (date === null) {
     return dateString;
   }
   return date.toLocaleDateString(locale, { year: "numeric", month: "short", day: "numeric" });

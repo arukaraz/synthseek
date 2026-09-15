@@ -11,7 +11,7 @@ import {
 } from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
 import i18n from "@locale";
-import { formatDate } from "@utils/formatters";
+import { formatCalendarDate } from "@utils/formatters";
 import { isRequestedStatus } from "@utils/status-helpers";
 import { capitalize } from "@utils/string";
 import type { TFunction } from "i18next";
@@ -72,8 +72,8 @@ export function collectDegradedSources(lists: Array<DegradedSource[] | undefined
 }
 
 export function formatBorn(bornDate: string | null, bornPlace: string | null): string | null {
-  if (!bornDate) return null;
-  const date = formatDate(new Date(bornDate));
+  const date = formatCalendarDate(bornDate);
+  if (date === null) return bornPlace ? bornPlace : null;
   return bornPlace ? `${date} · ${bornPlace}` : date;
 }
 

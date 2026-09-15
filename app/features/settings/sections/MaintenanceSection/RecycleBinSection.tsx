@@ -9,7 +9,7 @@ import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { useEmptyRecycleBin, useUpdateLibraryRecycleBin } from "@hooks/api/mutations/settings/useRecycleBin";
 import { useRecycleBinStatus } from "@hooks/api/queries/useRecycleBin";
 import { useSettings } from "@hooks/api/queries/useSettings";
-import { formatBytes, formatDate } from "@utils/formatters";
+import { formatBytes, formatCalendarDate } from "@utils/formatters";
 
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
@@ -63,11 +63,7 @@ export function RecycleBinSection() {
           <EngineRow
             label={t("quality.recycleBin.status.oldest.label")}
             description={t("quality.recycleBin.status.oldest.description")}
-            control={
-              <span className={quarantineValue()}>
-                {status.data.oldestDate ? formatDate(new Date(status.data.oldestDate)) : "-"}
-              </span>
-            }
+            control={<span className={quarantineValue()}>{formatCalendarDate(status.data.oldestDate) ?? "-"}</span>}
           />
           <RecycleBinList entryCount={status.data.entryCount} />
 

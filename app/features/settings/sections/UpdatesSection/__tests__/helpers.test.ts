@@ -153,4 +153,10 @@ describe("formatEntryDate", () => {
   it("returns the raw string when the date is unparseable", () => {
     expect(formatEntryDate("not-a-date", "en-US")).toBe("not-a-date");
   });
+
+  it("returns the raw string for a value that does not exactly name a day, rather than rolling it over", () => {
+    expect(formatEntryDate("2026-02-30", "en-US")).toBe("2026-02-30");
+    expect(formatEntryDate("2026-09", "en-US")).toBe("2026-09");
+    expect(formatEntryDate("1967", "en-US")).toBe("1967");
+  });
 });

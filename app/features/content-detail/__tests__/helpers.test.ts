@@ -1,5 +1,5 @@
 import type { TFunction } from "i18next";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { MusicAlbum, MusicArtist, MusicPlaylist, MusicTrack } from "@api/__generated__/types";
 
@@ -16,6 +16,7 @@ import {
   deriveTrackStatusCounts,
   detailInitials,
   detailTargetFromMusicItem,
+  formatBorn,
   formatPlays,
   formatStat,
   humanizeArtistType,
@@ -761,6 +762,31 @@ describe("content-detail helpers", () => {
 
     it("returns an empty list when nothing degraded", () => {
       expect(collectDegradedSources([undefined, [], undefined])).toEqual([]);
+    });
+  });
+
+  describe("formatBorn", () => {
+    afterEach(() => {
+      vi.unstubAllEnvs();
+    });
+
+    it("names the day the birth date carries, not the day before it, west of UTC", () => {
+      vi.stubEnv("TZ", "America/Los_Angeles");
+      expect(formatBorn("1967-07-13T00:00:00Z", null)).toContain("July 13");
+    });
+
+    it("joins the day with the place", () => {
+      vi.stubEnv("TZ", "America/Los_Angeles");
+      expect(formatBorn("1967-07-13T00:00:00Z", "Amsterdam")).toBe("July 13, 1967 · Amsterdam");
+    });
+
+    it("keeps the place when the date cannot be read", () => {
+      expect(formatBorn("1967", "Amsterdam")).toBe("Amsterdam");
+    });
+
+    it("returns null when it has neither", () => {
+      expect(formatBorn(null, null)).toBeNull();
+      expect(formatBorn("1967", null)).toBeNull();
     });
   });
 });

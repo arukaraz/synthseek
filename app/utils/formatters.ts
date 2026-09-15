@@ -91,6 +91,21 @@ export function formatDate(date: Date): string {
   });
 }
 
+const CALENDAR_DATE_LENGTH = 10;
+
+export function calendarDateOf(value: string): Date | null {
+  const [year, month, day] = value.slice(0, CALENDAR_DATE_LENGTH).split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+  return date;
+}
+
+export function formatCalendarDate(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const date = calendarDateOf(value);
+  return date === null ? null : formatDate(date);
+}
+
 export function formatShortDate(date: Date): string {
   return date.toLocaleDateString(i18n.language, {
     year: "2-digit",

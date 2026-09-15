@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
+  calendarDateOf,
+  formatCalendarDate,
   formatYear,
   formatRelativeTime,
   formatBytes,
@@ -251,5 +253,78 @@ describe("titleCase", () => {
 
   it("handles single character words", () => {
     expect(titleCase("a b c")).toBe("A B C");
+  });
+});
+
+describe("calendarDateOf", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("names the same calendar day west of UTC, where a bare parse lands on the day before", () => {
+    vi.stubEnv("TZ", "America/Los_Angeles");
+    const date = calendarDateOf("2026-09-14");
+    expect(date?.getFullYear()).toBe(2026);
+    expect(date?.getMonth()).toBe(8);
+    expect(date?.getDate()).toBe(14);
+  });
+
+  it("does not over-correct east of UTC, where a bare parse was already on the right day", () => {
+    vi.stubEnv("TZ", "Asia/Tokyo");
+    const date = calendarDateOf("2026-09-14");
+    expect(date?.getFullYear()).toBe(2026);
+    expect(date?.getMonth()).toBe(8);
+    expect(date?.getDate()).toBe(14);
+  });
+
+  it("takes the calendar day out of a UTC midnight timestamp, which is how Wikidata sends a birth date", () => {
+    vi.stubEnv("TZ", "America/Los_Angeles");
+    const date = calendarDateOf("1967-07-13T00:00:00Z");
+    expect(date?.getFullYear()).toBe(1967);
+    expect(date?.getMonth()).toBe(6);
+    expect(date?.getDate()).toBe(13);
+  });
+
+  it("returns null for a value that names no date", () => {
+    expect(calendarDateOf("not a date")).toBeNull();
+    expect(calendarDateOf("")).toBeNull();
+  });
+
+  it("refuses an out-of-range component instead of rolling it over into a plausible wrong day", () => {
+    expect(calendarDateOf("2026-13-45")).toBeNull();
+    expect(calendarDateOf("2026-00-00")).toBeNull();
+    expect(calendarDateOf("2026-02-30")).toBeNull();
+    expect(calendarDateOf("2026-09")).toBeNull();
+    expect(calendarDateOf("  2026-09-14")).toBeNull();
+  });
+
+  it("refuses a two-digit year rather than mapping it into the twentieth century", () => {
+    expect(calendarDateOf("0026-09-14")).toBeNull();
+  });
+});
+
+describe("formatCalendarDate", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("renders the day the value names rather than the day before it", () => {
+    vi.stubEnv("TZ", "America/Los_Angeles");
+    const rendered = formatCalendarDate("2026-09-14");
+    expect(rendered).toContain("14");
+    expect(rendered).not.toContain("13");
+  });
+
+  it("renders a UTC midnight timestamp as its own calendar day", () => {
+    vi.stubEnv("TZ", "America/Los_Angeles");
+    const rendered = formatCalendarDate("1967-07-13T00:00:00Z");
+    expect(rendered).toContain("13");
+    expect(rendered).not.toContain("12");
+  });
+
+  it("returns null for an absent or unparseable value", () => {
+    expect(formatCalendarDate(null)).toBeNull();
+    expect(formatCalendarDate(undefined)).toBeNull();
+    expect(formatCalendarDate("not a date")).toBeNull();
   });
 });

@@ -58,6 +58,7 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  vi.unstubAllEnvs();
   statusQuery = createMockQuery<RecycleBinStatus>({ totalBytes: 0, entryCount: 0, oldestDate: null });
 });
 
@@ -90,6 +91,18 @@ describe("RecycleBinSection", () => {
     expect(screen.getByText("5.0 MB")).toBeInTheDocument();
     expect(screen.getByText("12")).toBeInTheDocument();
     expect(screen.getByText(/2026/)).toBeInTheDocument();
+  });
+
+  it("names the day the oldest entry carries, not the day before it, west of UTC", () => {
+    vi.stubEnv("TZ", "America/Los_Angeles");
+    statusQuery = createMockQuery<RecycleBinStatus>({
+      totalBytes: 5 * 1024 * 1024,
+      entryCount: 12,
+      oldestDate: "2026-07-01",
+    });
+    render(<RecycleBinSection initial={initial} recycleBin={recycleBin} />);
+
+    expect(screen.getByText("July 1, 2026")).toBeInTheDocument();
   });
 
   it("renders a dash for the oldest date when the recycle bin is empty", () => {
