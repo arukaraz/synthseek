@@ -10,6 +10,8 @@ export {
 
 export { createAlbum, createCompletedAlbum, createInProgressAlbum, resetAlbumCounter } from "./album.factory";
 
+export { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "./player.factory";
+
 export {
   createMockImage,
   createMockArtistSimplified,
