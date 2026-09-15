@@ -2,6 +2,58 @@
 
 ---
 
+# v2.7.0, September 14, 2026
+
+> [!WARNING]
+> This release brings a way to move the files already in your library into a naming format you choose, so set up the recycle bin of anything else that manages the same folder before you use it. An app that scans that folder on its own schedule can read the moved files as deleted and clean up what is left, and Lidarr in particular deletes permanently while its Recycle Bin setting is empty. Give it a path in its media management settings, which it may keep behind an advanced toggle. This is worth doing whether or not you reorganise, since it turns anything that app removes into something you can get back.
+
+> [!IMPORTANT]
+> This release brings a naming format you can edit under Settings, then Library, and it decides the folders and filename every track gets. Reorganising the files you already have is something you start yourself and never happens on its own. You edit the format, look at a preview of every single change, and only then apply it. Nothing is moved until you press the button, a file is never written over, and anything Synthseek is unsure about is left where it is and reported to you.
+
+> [!NOTE]
+> This release brings album release dates and genres taken from the catalogue rather than from whatever asked for the track, so the first start after updating repairs the dates earlier versions invented and fills in the genres that were missing. It only touches the placeholder dates, never a real one, and it finishes in seconds. Nothing on disk is moved or rewritten.
+
+### Listen in the app, and decide how your files are named
+
+- There is now a player in the web app. Press a track, an album, an artist or a playlist and it plays, with a queue you can open, reorder and add to.
+- The queue lives on the server, so it follows you between tabs and devices instead of starting over. Music plays in one place at a time and your other screens mirror it, so you never end up with two of them playing at once.
+- The player has a full, a compact and a mini mode, and it reshapes itself for a phone.
+- Lyrics appear alongside the song when they are available.
+- What you listen to can be sent on to Last.fm and ListenBrainz, if you connect them.
+
+---
+
+### Decide how your files are named
+
+- Synthseek now files your downloads into your library itself, instead of handing them to beets.
+- A new Library page under Settings lets you write the naming format, with a picker for the pieces you can use and worked examples as you type.
+- Before anything moves you get a preview of every change, split into files moving to another folder, files only being respelled, and files moving to a different album, and you can search it.
+- Albums that are not really multi-disc no longer get a needless Disc 01 folder. Genuine multi-disc albums keep theirs.
+
+---
+
+### Clearer housekeeping
+
+- A new check finds lyrics and artwork left on disk after the music they belonged to was removed, and offers to move them to the recycle bin. It reads your whole library, so you run it when you want it rather than it running on its own.
+- The recycle bin listing can be searched, and a track that goes there now takes its lyrics and artwork with it.
+- The duplicates page now says when a group is really a track whose file has gone, instead of calling it a duplicate with one copy.
+- Downloads now carry their recording identity inside the audio file, so the match survives being moved or renamed.
+
+---
+
+### Fixes
+
+- Album release dates and genres now come from the catalogue rather than from whatever asked for the track, so an album no longer shows a date nobody chose.
+- Artist and album names are asked for in English where the catalogue has them, which is what ends up in your folder names.
+- A move is refused rather than attempted when the destination is already taken, when the file changed since the preview was made, or when two files would end up with the same name differing only in case.
+- Renaming a folder now renames the folder image with it.
+- The leftover-file sweep no longer touches booklet scans, artwork that belongs to a whole album, or anything inside a folder it could not read.
+- The tag writer and the reorganiser no longer fight over the same file.
+- A failed download is no longer counted as one that might work next time when it cannot.
+- Dates in the recycle bin now show the day they actually name.
+
+---
+
 # v2.6.1, September 3, 2026
 
 - Soulseek searches were being given up on just before the results arrived, so a download could fail as though nothing was found. That should be much rarer now.
