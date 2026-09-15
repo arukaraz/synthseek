@@ -79,6 +79,8 @@ Open the web interface, create your admin account in the setup wizard, and point
 
 - Synthseek keeps its own index of the audio files on your disk, so music you copied in by hand is found and identified rather than staying invisible
 - A file that moved is followed to its new location instead of being counted as one loss and one arrival
+- You decide the folders and filename every track gets, and a preview shows every change before anything moves
+- Files already on disk can be brought in line with that format, or left exactly where they are
 - Tracks with more than one copy are listed a track at a time, and only copies it can prove are the same recording are settled automatically, which means agreeing on both title and length
 - What it cannot prove waits for you, with every copy playable before you choose
 - Nothing is deleted outright: replaced files go to a recycle bin with a restore, for as long as the retention window keeps them
