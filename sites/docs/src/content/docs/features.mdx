@@ -139,49 +139,39 @@ Currently, playlist sync only ever adds tracks to the remote playlist. It never 
 
 ### Play it in the web app
 
-Synthseek plays your library itself. Press play on any track in your library and a player docks at the bottom of the page, with a full screen view for the artwork. Your keyboard's media keys, your lock screen and your car stereo see what is playing.
+Synthseek plays your library itself. Press play on any track and a player docks at the bottom of the page, with a full screen view for the artwork. Your media keys and lock screen see what is playing.
 
-If the bottom bar is in your way, the player can shrink. The compact player moves up into the top bar; the mini player pops out into a small window that floats above your other applications, with the queue listed underneath. The mini window needs Chrome or Edge, and the option says so where it is unavailable.
+The player can shrink into the top bar, or pop out into a small window that floats above your other applications. That window needs Chrome or Edge, and the option says so where it is unavailable.
 
-The queue starts as the page of tracks you pressed play on. Open it from the player to see what is coming, jump to any track, drop one, or drag a track earlier.
-
-You can also add to the queue instead of replacing it. Any track with a file carries a button that drops it at the end of what is playing, and a selection queues all of them at once.
-
-An album, an artist or a playlist plays as a whole, from a button on its cover or beside **Request** in its details. An album plays in disc and track order, an artist gives you everything of theirs you hold, and a playlist keeps your own order. Inside the details, a track you already have can be played or queued; one you do not have offers to request it.
+An album, an artist or a playlist plays as a whole. You can also add to the queue instead of replacing it, a track or a selection at a time.
 
 Playback is the original file. If your browser cannot decode the format, Synthseek converts it on the fly, and scrubbing still works.
 
-Your queue is kept for you. Reload the page, come back tomorrow, or open Synthseek somewhere else, and it is there where you left it, paused close to where you stopped. It is the same queue your music apps use, so a queue you left on your phone is offered back in the browser, and the other way round. Shuffle and repeat do not travel with it.
+Your queue is kept for you, so a reload or another computer picks it up where you left off. It is the same queue your music apps use, so one you left on your phone is offered back in the browser.
 
-Only one place plays at a time. Press play in a second tab, or on another computer, and the sound moves there rather than doubling. The one that stops keeps showing the same track with the position moving, names the device that has the sound, and its own buttons now drive that device.
+Only one place plays at a time. Press play in a second tab, or on another computer, and the sound moves there rather than doubling. **Devices** lists the tabs you have open, so you can send the sound to one and bring it back.
 
-The Synthseek tabs you have open show up under **Devices**. Pick one to move the sound there, and pick **This web browser** to bring it back, resuming where the other one had got to. A tab that has not played anything yet can be handed the queue, but it waits for you to press play. A Subsonic app is not in that list: Synthseek can hand it the queue but cannot command it.
-
-The full screen view can show the words, following the song when they come with timings. Synthseek looks them up on LRCLIB, a free community lyrics database, and remembers the answer. Plenty of tracks have none, and it says so.
+The full screen view can show the words, following the song where they come with timings.
 
 The heart marks the same favourite your music app marks.
 
-What you play can reach Last.fm and ListenBrainz. Connect either one under **Settings**, then **Profile**, then **Listening services**: Last.fm asks you to approve Synthseek on its own site, ListenBrainz takes the user token from your profile there. A track counts once you have heard half of it or four minutes of it, whichever comes first, so a track you skipped through does not count as a listen.
+What you play can reach Last.fm and ListenBrainz. Connect either under **Settings**, then **Profile**, then **Listening services**. A track counts once you have heard half of it or four minutes of it, whichever comes first.
 
-Nothing you played before you connected is sent, and nothing from a spell when you had **Send my plays** switched off.
-
-Closing the tab does not lose a listen, and a service that is down is retried later. What is playing right now is announced as well.
-
-Your music apps are a separate decision. Most of them scrobble on their own, so Synthseek sends nothing from them unless you tick that app under the service you connected.
+Most music apps scrobble on their own, so Synthseek sends nothing from them unless you tick that app under the service you connected.
 
 ### Play it in a music app
 
 Synthseek speaks the Subsonic API, so apps built for that ecosystem, Feishin, Symfonium, DSub and others, can browse and play your library directly, without a media server in between. Turn it on in **Settings**, then **General**, then **Connect apps**. It is off until you do.
 
-Each person creates their own credential and pastes it into their app along with the address and their username. A credential is shown once and can be revoked at any time.
+Each person creates their own credential and pastes it into their app with the address and their username. A credential is shown once and can be revoked at any time.
 
-The app does what a music app does, and what it does sticks. Favourites you mark there are yours alone and show up marked wherever you look next, in that app or another one. Playlists can be created, renamed, added to and reordered from the app, and they are the same playlists the web app shows. What you played feeds the Recent and Most played lists, and the queue you left behind is offered back when you open a different device. Deleting a playlist from a music app deletes only the playlist, never the music in it, because a swipe is too easy a gesture to lose an album to. Removing the tracks themselves stays in the web app, where it asks first.
+What the app does sticks. Favourites, playlists you create and reorder, what you played, and the queue you left behind are the same ones the web app shows. Deleting a playlist from a music app deletes only the playlist, never the music in it, and removing the tracks themselves stays in the web app.
 
-Playback is original quality by default. If your app asks for a particular format or caps the bitrate, Synthseek converts on the fly and sends that instead, which is what makes a lossless library usable on a phone or a slow connection. Conversion can be switched off in settings, and it is bounded so a busy server refuses new conversions rather than grinding.
+Playback is original quality by default. If your app asks for a particular format or caps the bitrate, Synthseek converts on the fly and sends that instead, and it can be switched off in settings. A converted stream cannot be seeked mid-track.
 
-Lyrics are served to music apps as well, timed where the app asks for them that way. Whether an app asks at all is its own decision.
+Lyrics are served to music apps as well, where the app asks for them.
 
-Three limits worth knowing before you rely on it. Only tracks Synthseek imported are offered, so music you added to the library folder by hand is offered once the library scan has found it and identification has worked out which track it is. Only tracks whose file location Synthseek has on record are offered, and it works those out by scanning the library, which happens twice a day and which you can start yourself from the Jobs page, so anything it has not placed yet stays out until it has. And a converted stream cannot be seeked mid-track, so scrubbing works on original-quality playback only.
+One limit worth knowing. Only tracks Synthseek has imported and located on disk are offered, so music you copied into the folder by hand appears once the library scan has found it.
 
 ## Discovery
 
