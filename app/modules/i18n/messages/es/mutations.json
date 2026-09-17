@@ -296,25 +296,13 @@
     }
   },
   "review": {
-    "imported": {
-      "title": "Aprobado e importado",
-      "description": "El archivo retenido se importó con el artista y el título que pediste, y su fuente se desbloqueó."
-    },
-    "alreadyInLibrary": {
-      "title": "Ya estaba en tu biblioteca",
-      "description": "Tu biblioteca ya tenía esta canción, así que no se importó nada. La entrada ha desaparecido y su fuente se desbloqueó."
+    "started": {
+      "title": "Importación en cola",
+      "description": "Se ejecuta en segundo plano. La entrada saldrá de esta lista al terminar."
     },
     "alreadyInProgress": {
-      "title": "Ya se está importando",
-      "description": "Otra aprobación de este archivo sigue en curso. No se ha iniciado nada dos veces."
-    },
-    "retryable": {
-      "title": "La importación no salió adelante",
-      "description": "Se detuvo antes de mover el archivo, así que la copia retenida sigue intacta y puedes volver a aprobarla."
-    },
-    "failed": {
-      "title": "La importación falló tras mover el archivo",
-      "description": "El archivo salió del área de retención antes del fallo, así que esta entrada solo se puede descartar."
+      "title": "Ya aprobado",
+      "description": "Este archivo ya está en la cola de importación. No se ha iniciado nada dos veces."
     },
     "discarded": {
       "title": "Descartado",

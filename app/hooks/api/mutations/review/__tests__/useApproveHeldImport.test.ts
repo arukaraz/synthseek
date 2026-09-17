@@ -1,18 +1,11 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type ApproveResult =
-  | { outcome: "imported"; heldImportId: string; trackRequestId: string; vetoRemoved: number }
-  | {
-      outcome: "already_in_library";
-      heldImportId: string;
-      trackRequestId: string;
-      vetoRemoved: number;
-      fileRemoved: boolean;
-    }
-  | { outcome: "already_in_progress"; heldImportId: string }
-  | { outcome: "retryable"; heldImportId: string; error: string }
-  | { outcome: "failed"; heldImportId: string; error: string };
+import type { inferRouterOutputs } from "@trpc/server";
+
+import type { AppRouter } from "@api/__generated__/types";
+
+type ApproveResult = inferRouterOutputs<AppRouter>["requests"]["review"]["approve"];
 
 interface MutationOptions {
   onSuccess?: (data: ApproveResult) => void;
@@ -64,51 +57,13 @@ describe("useApproveHeldImport", () => {
     spies.captured.options = undefined;
   });
 
-  it("celebrates a completed import", () => {
+  it("confirms the import was queued, not that it already finished", () => {
     renderHook(() => useApproveHeldImport());
 
-    spies.captured.options?.onSuccess?.({
-      outcome: "imported",
-      heldImportId: "held-1",
-      trackRequestId: "track-1",
-      vetoRemoved: 1,
-    });
+    spies.captured.options?.onSuccess?.({ outcome: "started", heldImportId: "held-1" });
 
-    expect(toast.success).toHaveBeenCalledWith("mutations:review.imported.title", {
-      description: "mutations:review.imported.description",
-    });
-  });
-
-  it("reports a beets duplicate as informational, never as an import that happened", () => {
-    renderHook(() => useApproveHeldImport());
-
-    spies.captured.options?.onSuccess?.({
-      outcome: "already_in_library",
-      heldImportId: "held-1",
-      trackRequestId: "track-1",
-      vetoRemoved: 1,
-      fileRemoved: true,
-    });
-
-    expect(toast.info).toHaveBeenCalledWith("mutations:review.alreadyInLibrary.title", {
-      description: "mutations:review.alreadyInLibrary.description",
-    });
-    expect(toast.success).not.toHaveBeenCalled();
-  });
-
-  it("keeps the same duplicate toast when the held copy could not be removed", () => {
-    renderHook(() => useApproveHeldImport());
-
-    spies.captured.options?.onSuccess?.({
-      outcome: "already_in_library",
-      heldImportId: "held-1",
-      trackRequestId: "track-1",
-      vetoRemoved: 0,
-      fileRemoved: false,
-    });
-
-    expect(toast.info).toHaveBeenCalledWith("mutations:review.alreadyInLibrary.title", {
-      description: "mutations:review.alreadyInLibrary.description",
+    expect(toast.success).toHaveBeenCalledWith("mutations:review.started.title", {
+      description: "mutations:review.started.description",
     });
   });
 
@@ -121,31 +76,6 @@ describe("useApproveHeldImport", () => {
       description: "mutations:review.alreadyInProgress.description",
     });
     expect(toast.success).not.toHaveBeenCalled();
-  });
-
-  it("warns that a pre-move failure left the file approvable again", () => {
-    renderHook(() => useApproveHeldImport());
-
-    spies.captured.options?.onSuccess?.({
-      outcome: "retryable",
-      heldImportId: "held-1",
-      error: "importFailedBeforeMove",
-    });
-
-    expect(toast.warning).toHaveBeenCalledWith("mutations:review.retryable.title", {
-      description: "mutations:review.retryable.description",
-    });
-    expect(toast.success).not.toHaveBeenCalled();
-  });
-
-  it("errors on a post-move failure", () => {
-    renderHook(() => useApproveHeldImport());
-
-    spies.captured.options?.onSuccess?.({ outcome: "failed", heldImportId: "held-1", error: "importFailedAfterMove" });
-
-    expect(toast.error).toHaveBeenCalledWith("mutations:review.failed.title", {
-      description: "mutations:review.failed.description",
-    });
   });
 
   it("surfaces a rejected approval through the shared error toast", () => {

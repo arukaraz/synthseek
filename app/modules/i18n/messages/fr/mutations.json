@@ -296,25 +296,13 @@
     }
   },
   "review": {
-    "imported": {
-      "title": "Validé et importé",
-      "description": "Le fichier conservé a été importé avec l'artiste et le titre demandés, et sa source a été débloquée."
-    },
-    "alreadyInLibrary": {
-      "title": "Déjà dans votre bibliothèque",
-      "description": "Votre bibliothèque possédait déjà cette piste, rien n'a donc été importé. L'entrée a disparu et sa source a été débloquée."
+    "started": {
+      "title": "Import mis en file",
+      "description": "Il s'exécute en arrière-plan. L'entrée quittera cette liste une fois terminée."
     },
     "alreadyInProgress": {
-      "title": "Importation déjà en cours",
-      "description": "Une autre validation de ce fichier est encore en cours. Rien n'a été lancé deux fois."
-    },
-    "retryable": {
-      "title": "L'import n'a pas abouti",
-      "description": "Il s'est arrêté avant le déplacement du fichier, la copie conservée est donc intacte et vous pouvez la valider à nouveau."
-    },
-    "failed": {
-      "title": "Import échoué après le déplacement",
-      "description": "Le fichier avait quitté la zone de conservation avant l'échec, cette entrée ne peut donc plus qu'être rejetée."
+      "title": "Déjà validé",
+      "description": "Ce fichier est déjà dans la file d'import. Rien n'a été lancé deux fois."
     },
     "discarded": {
       "title": "Rejeté",

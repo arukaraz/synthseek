@@ -280,8 +280,8 @@
     "description": "The retained audio is no longer on disk, so it cannot be imported or played."
   },
   "HELD_IMPORT_IN_FLIGHT": {
-    "title": "Already importing",
-    "description": "This held file is being imported right now. Wait for it to finish."
+    "title": "Already approved",
+    "description": "This held file is queued for import. Wait for it to finish."
   },
   "HELD_IMPORT_NOT_APPROVABLE": {
     "title": "Cannot be approved",

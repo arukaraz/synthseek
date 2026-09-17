@@ -296,25 +296,13 @@
     }
   },
   "review": {
-    "imported": {
-      "title": "Freigegeben und importiert",
-      "description": "Die zurückgehaltene Datei wurde mit dem angeforderten Interpreten und Titel importiert und ihre Quelle wurde entsperrt."
-    },
-    "alreadyInLibrary": {
-      "title": "Schon in deiner Bibliothek",
-      "description": "Deine Bibliothek hatte diesen Titel bereits, es wurde also nichts importiert. Der Eintrag ist verschwunden und seine Quelle wurde entsperrt."
+    "started": {
+      "title": "Import eingereiht",
+      "description": "Er läuft im Hintergrund. Der Eintrag verlässt diese Liste, sobald er fertig ist."
     },
     "alreadyInProgress": {
-      "title": "Wird bereits importiert",
-      "description": "Eine andere Freigabe dieser Datei läuft noch. Es wurde nichts doppelt gestartet."
-    },
-    "retryable": {
-      "title": "Import kam nicht durch",
-      "description": "Er stoppte vor dem Verschieben der Datei, die zurückgehaltene Kopie ist also unversehrt und du kannst sie erneut freigeben."
-    },
-    "failed": {
-      "title": "Import nach dem Verschieben gescheitert",
-      "description": "Die Datei hatte den Aufbewahrungsbereich vor dem Fehler verlassen, dieser Eintrag lässt sich jetzt nur noch verwerfen."
+      "title": "Bereits freigegeben",
+      "description": "Diese Datei steht bereits in der Import-Warteschlange. Es wurde nichts doppelt gestartet."
     },
     "discarded": {
       "title": "Verworfen",

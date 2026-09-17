@@ -280,8 +280,8 @@
     "description": "El audio guardado ya no está en el disco, así que no se puede importar ni reproducir."
   },
   "HELD_IMPORT_IN_FLIGHT": {
-    "title": "Ya se está importando",
-    "description": "Este archivo retenido se está importando ahora mismo. Espera a que termine."
+    "title": "Ya aprobado",
+    "description": "Este archivo retenido está en cola para importarse. Espera a que termine."
   },
   "HELD_IMPORT_NOT_APPROVABLE": {
     "title": "No se puede aprobar",

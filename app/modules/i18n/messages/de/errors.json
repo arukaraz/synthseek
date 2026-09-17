@@ -280,8 +280,8 @@
     "description": "Das aufbewahrte Audio liegt nicht mehr auf der Festplatte und kann weder importiert noch abgespielt werden."
   },
   "HELD_IMPORT_IN_FLIGHT": {
-    "title": "Wird bereits importiert",
-    "description": "Diese zurückgehaltene Datei wird gerade importiert. Warte, bis der Vorgang abgeschlossen ist."
+    "title": "Bereits freigegeben",
+    "description": "Diese zurückgehaltene Datei steht zum Import an. Warte, bis der Vorgang abgeschlossen ist."
   },
   "HELD_IMPORT_NOT_APPROVABLE": {
     "title": "Freigabe nicht möglich",

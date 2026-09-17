@@ -17,19 +17,12 @@ interface ApproveToast {
 }
 
 const APPROVE_TOASTS: Record<ApproveOutcome, ApproveToast> = {
-  imported: { level: "success", title: "review.imported.title", description: "review.imported.description" },
-  already_in_library: {
-    level: "info",
-    title: "review.alreadyInLibrary.title",
-    description: "review.alreadyInLibrary.description",
-  },
+  started: { level: "success", title: "review.started.title", description: "review.started.description" },
   already_in_progress: {
     level: "info",
     title: "review.alreadyInProgress.title",
     description: "review.alreadyInProgress.description",
   },
-  retryable: { level: "warning", title: "review.retryable.title", description: "review.retryable.description" },
-  failed: { level: "error", title: "review.failed.title", description: "review.failed.description" },
 };
 
 export function useApproveHeldImport() {

@@ -280,8 +280,8 @@
     "description": "L'audio conservé n'est plus sur le disque, il ne peut donc être ni importé ni lu."
   },
   "HELD_IMPORT_IN_FLIGHT": {
-    "title": "Importation déjà en cours",
-    "description": "Ce fichier conservé est en cours d'importation. Attendez la fin de l'opération."
+    "title": "Déjà validé",
+    "description": "Ce fichier conservé est en file pour l'import. Attendez la fin de l'opération."
   },
   "HELD_IMPORT_NOT_APPROVABLE": {
     "title": "Approbation impossible",
