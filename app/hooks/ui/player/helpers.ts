@@ -85,6 +85,32 @@ export function withoutQueueIndex(order: readonly number[], removed: number): nu
   return order.filter((index) => index !== removed).map((index) => (index > removed ? index - 1 : index));
 }
 
+export function visibleQueueIds(state: PlayerSessionState): Set<string> {
+  const ids = new Set<string>();
+  const current = state.queue[state.index];
+  if (current !== undefined) ids.add(current.id);
+  for (const index of upcomingOrder(state)) {
+    const track = state.queue[index];
+    if (track !== undefined) ids.add(track.id);
+  }
+  return ids;
+}
+
+export function withoutQueuePositions(
+  state: PlayerSessionState,
+  removed: readonly number[]
+): { queue: PlayerTrack[]; index: number; shuffleOrder: number[] } {
+  const dropped = new Set(removed);
+  const queue = state.queue.filter((_, at) => !dropped.has(at));
+  let index = state.index;
+  let shuffleOrder = [...state.shuffleOrder];
+  for (const at of [...dropped].sort((a, b) => b - a)) {
+    shuffleOrder = withoutQueueIndex(shuffleOrder, at);
+    if (at < index) index -= 1;
+  }
+  return { queue, index, shuffleOrder };
+}
+
 export function nextIndexIn(state: PlayerSessionState): number | null {
   if (state.queue.length === 0) return null;
   if (!state.shuffle) return state.index + 1 < state.queue.length ? state.index + 1 : null;

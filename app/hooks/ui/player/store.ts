@@ -22,7 +22,9 @@ import {
   previousIndexIn,
   shuffledOrder,
   streamUrlFor,
+  visibleQueueIds,
   withoutQueueIndex,
+  withoutQueuePositions,
   withoutRepeats,
 } from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
@@ -315,20 +317,43 @@ export const actions = {
     playAt(at);
   },
   addToQueue(tracks: readonly PlayerTrack[]): QueueAddOutcome {
-    const room = Math.max(0, MAX_QUEUE_TRACKS - state.queue.length);
-    const fresh = withoutRepeats(tracks, state.queue, room);
+    const visible = visibleQueueIds(state);
+    const seen = new Set<string>();
+    const wanted: PlayerTrack[] = [];
+    for (const track of tracks) {
+      if (visible.has(track.id) || seen.has(track.id)) continue;
+      seen.add(track.id);
+      wanted.push(track);
+    }
+
+    const relocated: number[] = [];
+    const fresh: PlayerTrack[] = [];
+    let length = state.queue.length;
+    for (const track of wanted) {
+      const at = state.queue.findIndex((queued) => queued.id === track.id);
+      if (at < 0 && length >= MAX_QUEUE_TRACKS) continue;
+      if (at < 0) length += 1;
+      else relocated.push(at);
+      fresh.push(track);
+    }
+
     const skipped = tracks.length - fresh.length;
-    const outcome = { added: fresh.length, full: fresh.length < tracks.length && room <= fresh.length, skipped };
+    const outcome = { added: fresh.length, full: fresh.length < wanted.length, skipped };
     if (fresh.length === 0) return outcome;
 
-    const queue = [...state.queue, ...fresh];
+    const pruned = withoutQueuePositions(state, relocated);
+    const queue = [...pruned.queue, ...fresh];
     if (state.queue.length === 0) {
       armAt(queue, 0, 0, state.shuffle ? shuffledOrder(queue.length, 0) : []);
       return outcome;
     }
 
-    const appended = fresh.map((_, at) => state.queue.length + at);
-    publish({ queue, shuffleOrder: state.shuffle ? [...state.shuffleOrder, ...appended] : [] });
+    const appended = fresh.map((_, at) => pruned.queue.length + at);
+    publish({
+      queue,
+      index: pruned.index,
+      shuffleOrder: state.shuffle ? [...pruned.shuffleOrder, ...appended] : [],
+    });
     return outcome;
   },
   togglePlay(): void {
