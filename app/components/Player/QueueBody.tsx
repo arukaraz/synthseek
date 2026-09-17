@@ -1,6 +1,6 @@
 "use client";
 
-import { Reorder } from "framer-motion";
+import { motion, Reorder } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 import { QueueRow } from "./QueueRow";
@@ -13,7 +13,7 @@ export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
   const order = upNext.map((entry) => entry.track);
 
   return (
-    <div className={queueList()}>
+    <motion.div layoutScroll className={queueList()}>
       {playing === null ? null : (
         <>
           <span className={queueCaption()}>{t("queue.nowPlaying")}</span>
@@ -36,6 +36,6 @@ export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
           ))}
         </Reorder.Group>
       )}
-    </div>
+    </motion.div>
   );
 }
