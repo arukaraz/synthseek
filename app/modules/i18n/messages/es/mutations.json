@@ -296,10 +296,6 @@
     }
   },
   "review": {
-    "started": {
-      "title": "Importación en cola",
-      "description": "Se ejecuta en segundo plano. La entrada saldrá de esta lista al terminar."
-    },
     "alreadyInProgress": {
       "title": "Ya aprobado",
       "description": "Este archivo ya está en la cola de importación. No se ha iniciado nada dos veces."

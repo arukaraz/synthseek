@@ -126,6 +126,25 @@ export function isDockJobRunning(jobId: string): boolean {
   return jobs.get(jobId)?.status === "running";
 }
 
+export function getDockJob(jobId: string): DockJob | null {
+  return jobs.get(jobId) ?? null;
+}
+
+export function cancelAutoDismiss(jobId: string): void {
+  clearDismissTimer(jobId);
+}
+
+export function appendDockItems(jobId: string, seed: ReadonlyArray<Omit<DockItem, "state">>): void {
+  if (dismissed.has(jobId)) return;
+  const job = jobs.get(jobId);
+  if (!job) return;
+  const known = new Set(job.items.map((item) => item.key));
+  const added = buildDockItems(seed.filter((item) => !known.has(item.key)));
+  if (added.length === 0) return;
+  jobs.set(jobId, { ...job, items: [...job.items, ...added], updatedAt: Date.now() });
+  publish();
+}
+
 export function resetDockStore(): void {
   for (const handle of dismissTimers.values()) clearTimeout(handle);
   dismissTimers.clear();

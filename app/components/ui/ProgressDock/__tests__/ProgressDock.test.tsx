@@ -1,10 +1,16 @@
 import { render, screen, within, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+import { dialogContent, dialogOverlay, modalCenterContainer } from "@components/ui/styles";
 import { buildDockItems, finalizeDockJob, markDockItem, seedDockJob, setDockJobStatus } from "@hooks/api/subscriptions";
 import { resetDockStore } from "@hooks/api/subscriptions/shared/progressDock";
 
 import { ProgressDock } from "../ProgressDock";
+
+const zIndexOf = (classes: string): number => {
+  const token = classes.split(" ").find((candidate) => candidate.startsWith("z-"));
+  return token === undefined ? Number.NaN : Number(token.slice(2));
+};
 
 const reducedMotion = vi.hoisted(() => ({ value: false }));
 
@@ -387,6 +393,14 @@ describe("ProgressDock", () => {
     expect(viewport).toHaveClass("bottom-[var(--height-bottom-nav)]");
     expect(viewport).toHaveClass("sm:bottom-5");
     expect(viewport).toHaveClass("inset-x-0");
-    expect(viewport).toHaveClass("z-50");
+  });
+
+  it("outranks every modal layer, so a modal rendered later in the document cannot cover it", () => {
+    const { container } = render(<ProgressDock />);
+    const dock = zIndexOf(container.firstElementChild?.className ?? "");
+
+    expect(dock).toBeGreaterThan(zIndexOf(modalCenterContainer()));
+    expect(dock).toBeGreaterThan(zIndexOf(dialogContent()));
+    expect(dock).toBeGreaterThan(zIndexOf(dialogOverlay()));
   });
 });

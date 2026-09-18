@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { EmptyState } from "@components/ui/EmptyState";
 import { Spinner } from "@components/ui/Spinner";
 import { useImportReview } from "@hooks/api";
+import { useReviewApprovalsInFlight } from "@hooks/api/subscriptions";
 
 import { ReviewFooter } from "./components/ReviewFooter";
 import { ReviewItemRow } from "./components/ReviewItemRow";
@@ -14,8 +15,12 @@ import { errorText, itemList } from "./styles";
 export function ReviewContent() {
   const { t } = useTranslation("requests");
   const review = useImportReview();
+  const inFlight = useReviewApprovalsInFlight();
 
-  const items = review.data?.items ?? [];
+  const held = review.data?.items ?? [];
+  const items = held.filter((item) => !inFlight.has(item.id));
+  const hidden = held.filter((item) => inFlight.has(item.id));
+  const hiddenBytes = hidden.reduce((total, item) => total + item.sizeBytes, 0);
 
   return (
     <>
@@ -35,7 +40,10 @@ export function ReviewContent() {
         </ul>
       )}
 
-      <ReviewFooter totalCount={review.data?.totalCount ?? 0} totalBytes={review.data?.totalBytes ?? 0} />
+      <ReviewFooter
+        totalCount={(review.data?.totalCount ?? 0) - hidden.length}
+        totalBytes={(review.data?.totalBytes ?? 0) - hiddenBytes}
+      />
     </>
   );
 }

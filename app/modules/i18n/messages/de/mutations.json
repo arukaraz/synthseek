@@ -296,10 +296,6 @@
     }
   },
   "review": {
-    "started": {
-      "title": "Import eingereiht",
-      "description": "Er läuft im Hintergrund. Der Eintrag verlässt diese Liste, sobald er fertig ist."
-    },
     "alreadyInProgress": {
       "title": "Bereits freigegeben",
       "description": "Diese Datei steht bereits in der Import-Warteschlange. Es wurde nichts doppelt gestartet."

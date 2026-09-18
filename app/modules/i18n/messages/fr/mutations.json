@@ -296,10 +296,6 @@
     }
   },
   "review": {
-    "started": {
-      "title": "Import mis en file",
-      "description": "Il s'exécute en arrière-plan. L'entrée quittera cette liste une fois terminée."
-    },
     "alreadyInProgress": {
       "title": "Déjà validé",
       "description": "Ce fichier est déjà dans la file d'import. Rien n'a été lancé deux fois."

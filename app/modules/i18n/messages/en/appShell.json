@@ -25,7 +25,9 @@
       "fileImportDone": "Import complete",
       "queueing": "Queueing {{name}}",
       "queued": "Queued {{name}}",
-      "queueFailed": "Couldn't queue {{name}}"
+      "queueFailed": "Couldn't queue {{name}}",
+      "reviewApproveRunning": "Importing approved files",
+      "reviewApproveDone": "Approved files imported"
     },
     "subtitle": {
       "ofTotal": "of {{total}}",

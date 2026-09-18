@@ -6,7 +6,12 @@ import { PlayerDock } from "@components/PlayerDock";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { TopHeader } from "@components/TopHeader";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
-import { useRehydratePlexSyncDock, useRehydrateRequestDock, useSubscriptions } from "@hooks/api/subscriptions";
+import {
+  useRehydratePlexSyncDock,
+  useRehydrateRequestDock,
+  useReviewApprovalDock,
+  useSubscriptions,
+} from "@hooks/api/subscriptions";
 import { useHashTargetGlow } from "@hooks/ui/useHashTargetGlow";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -16,6 +21,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
   useSubscriptions();
   useRehydrateRequestDock();
   useRehydratePlexSyncDock();
+  useReviewApprovalDock();
   useHashTargetGlow();
 
   const router = useRouter();

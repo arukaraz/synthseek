@@ -8,8 +8,8 @@ import type { AppRouter } from "@api/__generated__/types";
 type ApproveResult = inferRouterOutputs<AppRouter>["requests"]["review"]["approve"];
 
 interface MutationOptions {
-  onSuccess?: (data: ApproveResult) => void;
-  onError?: (err: Error) => void;
+  onSuccess?: (data: ApproveResult, variables: { id: string }) => void;
+  onError?: (err: Error, variables: { id: string }) => void;
   onSettled?: () => void;
 }
 
@@ -17,6 +17,8 @@ const spies = vi.hoisted(() => ({
   captured: {} as { options?: MutationOptions },
   invalidateReview: vi.fn(),
   invalidateRequests: vi.fn(),
+  markReviewApprovalStarted: vi.fn(),
+  failReviewApproval: vi.fn(),
 }));
 
 vi.mock("@utils/trpc", () => ({
@@ -40,6 +42,11 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
+vi.mock("@hooks/api/subscriptions", () => ({
+  markReviewApprovalStarted: (key: string) => spies.markReviewApprovalStarted(key),
+  failReviewApproval: (key: string) => spies.failReviewApproval(key),
+}));
+
 vi.mock("@modules/errors", () => ({ errorToast: vi.fn() }));
 vi.mock("@locale", () => ({ default: { t: (key: string) => key } }));
 vi.mock("sonner", () => ({
@@ -57,20 +64,35 @@ describe("useApproveHeldImport", () => {
     spies.captured.options = undefined;
   });
 
-  it("confirms the import was queued, not that it already finished", () => {
+  it("stays quiet when the import is queued, because the progress dock is the feedback", () => {
     renderHook(() => useApproveHeldImport());
 
-    spies.captured.options?.onSuccess?.({ outcome: "started", heldImportId: "held-1" });
+    spies.captured.options?.onSuccess?.({ outcome: "started", heldImportId: "held-1" }, { id: "held-1" });
 
-    expect(toast.success).toHaveBeenCalledWith("mutations:review.started.title", {
-      description: "mutations:review.started.description",
-    });
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.info).not.toHaveBeenCalled();
+  });
+
+  it("tells the dock the server has the row, so a stale error stops reading as this attempt's", () => {
+    renderHook(() => useApproveHeldImport());
+
+    spies.captured.options?.onSuccess?.({ outcome: "started", heldImportId: "held-1" }, { id: "held-1" });
+
+    expect(spies.markReviewApprovalStarted).toHaveBeenCalledWith("held-1");
+  });
+
+  it("treats an approval already claimed elsewhere as in flight too", () => {
+    renderHook(() => useApproveHeldImport());
+
+    spies.captured.options?.onSuccess?.({ outcome: "already_in_progress", heldImportId: "held-1" }, { id: "held-1" });
+
+    expect(spies.markReviewApprovalStarted).toHaveBeenCalledWith("held-1");
   });
 
   it("reports a concurrent approval as informational, not as a success", () => {
     renderHook(() => useApproveHeldImport());
 
-    spies.captured.options?.onSuccess?.({ outcome: "already_in_progress", heldImportId: "held-1" });
+    spies.captured.options?.onSuccess?.({ outcome: "already_in_progress", heldImportId: "held-1" }, { id: "held-1" });
 
     expect(toast.info).toHaveBeenCalledWith("mutations:review.alreadyInProgress.title", {
       description: "mutations:review.alreadyInProgress.description",
@@ -81,9 +103,17 @@ describe("useApproveHeldImport", () => {
   it("surfaces a rejected approval through the shared error toast", () => {
     renderHook(() => useApproveHeldImport());
 
-    spies.captured.options?.onError?.(new Error("boom"));
+    spies.captured.options?.onError?.(new Error("boom"), { id: "held-1" });
 
     expect(errorToast).toHaveBeenCalledWith(expect.any(Error), "review.approveFailed");
+  });
+
+  it("releases the row back into the list when the approval never reached the server", () => {
+    renderHook(() => useApproveHeldImport());
+
+    spies.captured.options?.onError?.(new Error("boom"), { id: "held-1" });
+
+    expect(spies.failReviewApproval).toHaveBeenCalledWith("held-1");
   });
 
   it("refreshes the review queue and the requests list on settle", () => {

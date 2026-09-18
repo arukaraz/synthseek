@@ -39,6 +39,10 @@ const TITLE_KEYS: Record<DockJobKind, { running: AppShellKey; done: AppShellKey 
   },
   "file-import": { running: "progressDock.title.fileImportRunning", done: "progressDock.title.fileImportDone" },
   request: { running: "progressDock.title.queueing", done: "progressDock.title.queued" },
+  "review-approve": {
+    running: "progressDock.title.reviewApproveRunning",
+    done: "progressDock.title.reviewApproveDone",
+  },
 };
 
 function requestTitleKey(status: DockJobStatus): AppShellKey {
@@ -59,21 +63,28 @@ export function titleKey(kind: DockJobKind, status: DockJobStatus): AppShellKey 
   return status === "running" ? keys.running : keys.done;
 }
 
+const KIND_BEHAVIOUR: Record<DockJobKind, { countsItems: boolean; toggle: boolean; closeWhileRunning: boolean }> = {
+  "plex-sync": { countsItems: true, toggle: true, closeWhileRunning: true },
+  "library-import": { countsItems: true, toggle: true, closeWhileRunning: true },
+  "file-import": { countsItems: true, toggle: true, closeWhileRunning: true },
+  request: { countsItems: false, toggle: false, closeWhileRunning: false },
+  "review-approve": { countsItems: true, toggle: true, closeWhileRunning: false },
+};
+
 export function presentationFor(
   kind: DockJobKind,
   status: DockJobStatus,
   ratio: number,
   percent: number
 ): DockPresentation {
-  if (kind !== "request") return { indicator: "ring", ratio, percent };
+  if (KIND_BEHAVIOUR[kind].countsItems) return { indicator: "ring", ratio, percent };
   if (status === "running") return { indicator: "spinner" };
   return { indicator: "status-icon", status };
 }
 
 export function controlsFor(kind: DockJobKind, status: DockJobStatus): DockControls {
-  if (kind !== "request") return { toggle: true, close: true };
-  if (status === "running") return { toggle: false, close: false };
-  return { toggle: false, close: true };
+  const behaviour = KIND_BEHAVIOUR[kind];
+  return { toggle: behaviour.toggle, close: status !== "running" || behaviour.closeWhileRunning };
 }
 
 export function statusIconGlyph(status: DockJobStatus): LucideIcon {

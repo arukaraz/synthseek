@@ -1,6 +1,6 @@
 export type DockItemState = "pending" | "importing" | "done" | "failed" | "skipped";
 
-export type DockJobKind = "plex-sync" | "library-import" | "file-import" | "request";
+export type DockJobKind = "plex-sync" | "library-import" | "file-import" | "request" | "review-approve";
 
 export type DockJobStatus = "running" | "complete" | "partial" | "failed";
 

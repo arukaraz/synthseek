@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import type { inferRouterOutputs } from "@trpc/server";
 
 import type { AppRouter } from "@api/__generated__/types";
+import { failReviewApproval, markReviewApprovalStarted } from "@hooks/api/subscriptions";
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
@@ -16,8 +17,8 @@ interface ApproveToast {
   description: ParseKeys<"mutations">;
 }
 
-const APPROVE_TOASTS: Record<ApproveOutcome, ApproveToast> = {
-  started: { level: "success", title: "review.started.title", description: "review.started.description" },
+const APPROVE_TOASTS: Record<ApproveOutcome, ApproveToast | null> = {
+  started: null,
   already_in_progress: {
     level: "info",
     title: "review.alreadyInProgress.title",
@@ -29,11 +30,16 @@ export function useApproveHeldImport() {
   const utils = trpc.useUtils();
 
   return trpc.requests.review.approve.useMutation({
-    onSuccess: ({ outcome }) => {
-      const { level, title, description } = APPROVE_TOASTS[outcome];
-      toast[level](i18n.t(`mutations:${title}`), { description: i18n.t(`mutations:${description}`) });
+    onSuccess: ({ outcome }, { id }) => {
+      markReviewApprovalStarted(id);
+      const entry = APPROVE_TOASTS[outcome];
+      if (entry === null) return;
+      toast[entry.level](i18n.t(`mutations:${entry.title}`), { description: i18n.t(`mutations:${entry.description}`) });
     },
-    onError: (error) => errorToast(error, "review.approveFailed"),
+    onError: (error, { id }) => {
+      failReviewApproval(id);
+      errorToast(error, "review.approveFailed");
+    },
     onSettled: () => {
       void utils.requests.review.list.invalidate();
       void utils.requests.getAll.invalidate();

@@ -25,7 +25,9 @@
       "fileImportDone": "Import abgeschlossen",
       "queueing": "{{name}} wird eingereiht",
       "queued": "{{name}} eingereiht",
-      "queueFailed": "{{name}} konnte nicht eingereiht werden"
+      "queueFailed": "{{name}} konnte nicht eingereiht werden",
+      "reviewApproveRunning": "Freigegebene Dateien werden importiert",
+      "reviewApproveDone": "Freigegebene Dateien importiert"
     },
     "subtitle": {
       "ofTotal": "von {{total}}",

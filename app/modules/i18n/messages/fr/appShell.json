@@ -25,7 +25,9 @@
       "fileImportDone": "Importation terminée",
       "queueing": "Mise en file de {{name}}",
       "queued": "{{name}} en file d'attente",
-      "queueFailed": "Impossible de mettre {{name}} en file"
+      "queueFailed": "Impossible de mettre {{name}} en file",
+      "reviewApproveRunning": "Import des fichiers validés",
+      "reviewApproveDone": "Fichiers validés importés"
     },
     "subtitle": {
       "ofTotal": "sur {{total}}",

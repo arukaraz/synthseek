@@ -14,6 +14,8 @@ export {
   findRunningRequestJobId,
   stashPendingTerminal,
   useDockJobs,
+  getDockJob,
+  appendDockItems,
 } from "./store";
 export { countDockItems, deriveTerminalStatus, terminalStatusFromCounts } from "./helpers";
 export {
@@ -23,7 +25,20 @@ export {
   settleRequestDockJobByRequestId,
 } from "./requestDock";
 export { seedPlexSyncDockJob } from "./plexSyncDock";
-export { PLEX_SYNC_DOCK_ID, REQUEST_DOCK_AUTO_DISMISS_MS } from "./constants";
+export {
+  enqueueReviewApproval,
+  failReviewApproval,
+  markReviewApprovalStarted,
+  reconcileReviewDock,
+  reviewApprovalsInFlight,
+} from "./reviewDock";
+export type { ReviewApprovalSeed, ReviewDockRow } from "./reviewDock";
+export {
+  PLEX_SYNC_DOCK_ID,
+  REQUEST_DOCK_AUTO_DISMISS_MS,
+  REVIEW_DOCK_ID,
+  REVIEW_DOCK_AUTO_DISMISS_MS,
+} from "./constants";
 export type {
   DockItem,
   DockItemState,

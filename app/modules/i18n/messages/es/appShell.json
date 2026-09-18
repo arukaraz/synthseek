@@ -25,7 +25,9 @@
       "fileImportDone": "Importación completa",
       "queueing": "Encolando {{name}}",
       "queued": "{{name}} en cola",
-      "queueFailed": "No se pudo encolar {{name}}"
+      "queueFailed": "No se pudo encolar {{name}}",
+      "reviewApproveRunning": "Importando archivos aprobados",
+      "reviewApproveDone": "Archivos aprobados importados"
     },
     "subtitle": {
       "ofTotal": "de {{total}}",

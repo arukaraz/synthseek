@@ -78,6 +78,14 @@ describe("ProgressDock helpers", () => {
       expect(presentationFor("request", "failed", 0, 0)).toEqual({ indicator: "status-icon", status: "failed" });
       expect(presentationFor("request", "partial", 0, 0)).toEqual({ indicator: "status-icon", status: "partial" });
     });
+
+    it("gives approved imports the counting ring, since the dock knows how many are left", () => {
+      expect(presentationFor("review-approve", "running", 0.25, 25)).toEqual({
+        indicator: "ring",
+        ratio: 0.25,
+        percent: 25,
+      });
+    });
   });
 
   describe("controlsFor", () => {
@@ -90,6 +98,12 @@ describe("ProgressDock helpers", () => {
       expect(controlsFor("request", "running")).toEqual({ toggle: false, close: false });
       expect(controlsFor("request", "complete")).toEqual({ toggle: false, close: true });
       expect(controlsFor("request", "failed")).toEqual({ toggle: false, close: true });
+    });
+
+    it("withholds close while approved imports run, because dismissing would strand their rows", () => {
+      expect(controlsFor("review-approve", "running")).toEqual({ toggle: true, close: false });
+      expect(controlsFor("review-approve", "complete")).toEqual({ toggle: true, close: true });
+      expect(controlsFor("review-approve", "partial")).toEqual({ toggle: true, close: true });
     });
   });
 

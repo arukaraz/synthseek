@@ -296,10 +296,6 @@
     }
   },
   "review": {
-    "started": {
-      "title": "Import queued",
-      "description": "It runs in the background. The entry leaves this list when it finishes."
-    },
     "alreadyInProgress": {
       "title": "Already approved",
       "description": "This file is already in the import queue. Nothing was started twice."

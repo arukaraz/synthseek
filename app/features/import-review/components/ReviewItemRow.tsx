@@ -10,6 +10,7 @@ import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { IconButton } from "@components/ui/IconButton";
 import { useApproveHeldImport, useDiscardHeldImport } from "@hooks/api";
+import { enqueueReviewApproval } from "@hooks/api/subscriptions";
 import { playerActions } from "@hooks/ui/player";
 import { downloadSourceLabelKey } from "@utils/download-source";
 import { formatBytes, formatRelativeTime } from "@utils/formatters";
@@ -41,6 +42,11 @@ export function ReviewItemRow({ item }: ReviewItemRowProps) {
   const sourceKey = downloadSourceLabelKey(item.source);
   const hasFailed = item.status === HeldImportStatus.enum.import_failed;
   const isBusy = item.status === HeldImportStatus.enum.importing || approve.isPending || discard.isPending;
+
+  const handleApprove = () => {
+    enqueueReviewApproval({ key: item.id, name: trackLabel });
+    approve.mutate({ id: item.id });
+  };
 
   return (
     <li className={itemRow()} data-status={item.status}>
@@ -88,7 +94,7 @@ export function ReviewItemRow({ item }: ReviewItemRowProps) {
           />
         )}
         {hasFailed ? null : (
-          <Button size="sm" disabled={isBusy} onClick={() => approve.mutate({ id: item.id })}>
+          <Button size="sm" disabled={isBusy} onClick={handleApprove}>
             <Check />
             {t("review.actions.approve")}
           </Button>
