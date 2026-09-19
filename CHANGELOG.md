@@ -2,6 +2,31 @@
 
 ---
 
+# v2.7.1, September 18, 2026
+
+> [!NOTE]
+> If you asked for only some of the songs on an album, Synthseek kept calling it unfinished even after every one of them had arrived, and offered a Retry that had nothing left to download. It now calls it done, and shows how many songs you asked for out of the whole album. The first time you start this version it tidies up the requests you already have. Nothing is downloaded again and none of your music is touched.
+
+### Pick tracks faster, and say what plays next
+
+- Picking several tracks at once is much quicker. Tick one, hold shift, tick another, and everything in between comes with it. The same thing unticks a run you already picked, and you can do it all from the keyboard.
+- A track, or a whole selection, can now be played next instead of going to the end of the queue.
+- The tick beside a track now tells you it really is in the queue, and clears once it has played, instead of flashing for a second after you add it.
+- Searching and filtering no longer cares about accents. You can also type the words in any order.
+- Filtering the library tells you it is working instead of sitting still, and a long list of requests now loads as you scroll rather than all at once.
+
+---
+
+### Fixes
+
+- The library search boxes were swallowing letters when you typed quickly, and the filter list would open up to everything for a moment before settling.
+- A track you have already heard can be added to the queue again.
+- Dragging a track around the queue landed it in the wrong place once the list had been scrolled.
+- A file you approve from the review page now says it is queued rather than claiming it is already done, stays put on the page while it is working, and is followed in the progress dock.
+- A file whose name uses an underscore before the version is now read correctly when working out which version of a song it is.
+
+---
+
 # v2.7.0, September 14, 2026
 
 > [!WARNING]
