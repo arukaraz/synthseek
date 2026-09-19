@@ -26,6 +26,9 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     exportJspf: vi.fn().mockResolvedValue(undefined),
     canManage: true,
     canRetry: false,
+    retryableTrackCount: 2,
+    canRequestMissing: false,
+    missingTrackCount: 0,
     canRemove: false,
     canCancel: false,
     canPause: false,
@@ -110,7 +113,7 @@ describe("RequestDetailHero", () => {
     const user = userEvent.setup();
     renderHero({ canRetry: true });
 
-    await user.click(screen.getByRole("button", { name: "Retry Failed" }));
+    await user.click(screen.getByRole("button", { name: "Retry 2 failed" }));
 
     expect(retry).toHaveBeenCalledOnce();
   });
@@ -118,7 +121,7 @@ describe("RequestDetailHero", () => {
   it("disables the retry button while a retry is in flight", () => {
     renderHero({ canRetry: true, isRetrying: true });
 
-    expect(screen.getByRole("button", { name: "Retry Failed" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Retry 2 failed" })).toBeDisabled();
   });
 
   it("renders the album label when the request is not a playlist", () => {

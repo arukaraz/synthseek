@@ -141,4 +141,19 @@ describe("LibraryViewLayout", () => {
 
     expect(setFilterValues).toHaveBeenCalledWith("source", ["deezer"]);
   });
+
+  it("covers the stale rows with a spinner while a new filter is in flight", () => {
+    const { container } = renderWithProviders(<LibraryViewLayout {...tableProps({ isRefreshing: true })} />);
+
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(screen.getByTestId("table")).toBeInTheDocument();
+    expect(container.querySelector(".opacity-40")).not.toBeNull();
+  });
+
+  it("leaves the rows alone once the results are current", () => {
+    const { container } = renderWithProviders(<LibraryViewLayout {...tableProps()} />);
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(container.querySelector(".opacity-40")).toBeNull();
+  });
 });

@@ -64,6 +64,8 @@ function makeSelection(overrides?: Partial<LibrarySelection>): LibrarySelection 
     selectedCount: 0,
     isSelected: () => false,
     toggle: vi.fn(),
+    extendTo: vi.fn(),
+    rangeTo: () => null,
     setMany: vi.fn(),
     clear: vi.fn(),
     selectors: {
@@ -159,6 +161,126 @@ describe("LibraryTable", () => {
     await user.click(screen.getByLabelText("page.selection.selectRow"));
 
     expect(toggle).toHaveBeenCalledWith("a");
+  });
+
+  it("extends the selection over the visible order when a checkbox is shift-clicked", async () => {
+    const items = [createTrack({ id: "a" }), createTrack({ id: "b" }), createTrack({ id: "c" })];
+    const extendTo = vi.fn();
+    const toggle = vi.fn();
+    const selection = makeSelection({ extendTo, toggle });
+
+    const { user } = renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    const boxes = screen.getAllByLabelText("page.selection.selectRow");
+    await user.keyboard("{Shift>}");
+    await user.click(boxes[2]!);
+    await user.keyboard("{/Shift}");
+
+    expect(extendTo).toHaveBeenCalledWith(["a", "b", "c"], "c");
+    expect(toggle).not.toHaveBeenCalled();
+  });
+
+  it("selects every row on the page on ctrl+A", async () => {
+    const items = [createTrack({ id: "a" }), createTrack({ id: "b" })];
+    const setMany = vi.fn();
+    const selection = makeSelection({ setMany });
+
+    const { user } = renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    screen.getAllByLabelText("page.selection.selectRow")[0]!.focus();
+    await user.keyboard("{Control>}a{/Control}");
+
+    expect(setMany).toHaveBeenCalledWith(["a", "b"], true);
+  });
+
+  it("clears the selection on Escape", async () => {
+    const items = [createTrack({ id: "a" })];
+    const clear = vi.fn();
+    const selection = makeSelection({ selectedCount: 1, clear });
+
+    const { user } = renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    screen.getAllByLabelText("page.selection.selectRow")[0]!.focus();
+    await user.keyboard("{Escape}");
+
+    expect(clear).toHaveBeenCalled();
+  });
+
+  it("walks the rows with the arrow keys and extends the range while shift is held", async () => {
+    const items = [createTrack({ id: "a" }), createTrack({ id: "b" }), createTrack({ id: "c" })];
+    const extendTo = vi.fn();
+    const selection = makeSelection({ extendTo });
+
+    const { user } = renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    const boxes = screen.getAllByLabelText("page.selection.selectRow");
+    boxes[0]!.focus();
+
+    await user.keyboard("{ArrowDown}");
+    expect(boxes[1]).toHaveFocus();
+    expect(extendTo).not.toHaveBeenCalled();
+
+    await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+    expect(boxes[2]).toHaveFocus();
+    expect(extendTo).toHaveBeenCalledWith(["a", "b", "c"], "c");
+  });
+
+  it("marks the rows of the pending range while shift is held over a row", async () => {
+    const items = [createTrack({ id: "a" }), createTrack({ id: "b" }), createTrack({ id: "c" })];
+    const selection = makeSelection({ rangeTo: () => ({ ids: ["a", "b"], selected: true }) });
+
+    const { user, container } = renderWithProviders(
+      <LibraryTable
+        items={items}
+        columns={[titleColumn]}
+        getRowId={(item) => item.id}
+        emptyMessage="empty"
+        selection={selectionConfig(selection, items)}
+      />
+    );
+
+    await user.keyboard("{Shift>}");
+    await user.hover(screen.getAllByLabelText("page.selection.selectRow")[1]!);
+
+    const rows = container.querySelectorAll("tbody tr");
+    expect(rows[0]).toHaveAttribute("data-range-preview", "select");
+    expect(rows[1]).toHaveAttribute("data-range-preview", "select");
+    expect(rows[2]).not.toHaveAttribute("data-range-preview");
+
+    await user.keyboard("{/Shift}");
+    expect(container.querySelectorAll("tbody tr")[0]).not.toHaveAttribute("data-range-preview");
   });
 
   it("shows the bulk action bar with a retry action when failed tracks are selected", async () => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { Checkbox } from "@components/ui/Checkbox";
+import { Spinner } from "@components/ui/Spinner";
 import { cn } from "@utils/cn";
 import { useTranslation } from "react-i18next";
 
@@ -8,17 +9,36 @@ import { LIBRARY_FACET_TOP_N } from "../../constants";
 import { topFacetValues } from "../../helpers";
 import { FacetSearchInput } from "./FacetSearchInput";
 import { staticFacetValues } from "./helpers";
-import { facetCount, facetLabel, facetRow, group, groupEmpty, groupLabel, groupList, groupMore } from "./styles";
+import {
+  facetCount,
+  facetLabel,
+  facetRow,
+  group,
+  groupEmpty,
+  groupLabel,
+  groupList,
+  groupMore,
+  groupPending,
+} from "./styles";
 import type { FacetGroupProps } from "./types";
 
-export function FacetGroup({ def, values, selected, searchTerm, onToggle, onSearch }: FacetGroupProps) {
+export function FacetGroup({
+  def,
+  values,
+  selected,
+  searchTerm,
+  isRefreshing = false,
+  onToggle,
+  onSearch,
+}: FacetGroupProps) {
   const { t } = useTranslation("library");
   const { t: tStatus } = useTranslation("status");
-  const hasSearch = def.searchable && searchTerm.trim().length > 0;
+  const isSearching = def.searchable && searchTerm.trim().length > 0;
+  const isAwaitingMatches = isSearching && isRefreshing;
   const visible = def.staticValues
     ? staticFacetValues(def.staticValues, values, tStatus)
     : def.searchable
-      ? topFacetValues(values, LIBRARY_FACET_TOP_N, hasSearch)
+      ? topFacetValues(values, LIBRARY_FACET_TOP_N, isSearching)
       : values;
   const hiddenCount = def.staticValues ? 0 : values.length - visible.length;
 
@@ -28,7 +48,11 @@ export function FacetGroup({ def, values, selected, searchTerm, onToggle, onSear
 
       {def.searchable ? <FacetSearchInput value={searchTerm} label={t(def.labelKey)} onSearch={onSearch} /> : null}
 
-      {visible.length === 0 ? (
+      {isAwaitingMatches ? (
+        <div className={groupPending()}>
+          <Spinner size="sm" label={t("page.facets.searching")} />
+        </div>
+      ) : visible.length === 0 ? (
         <p className={groupEmpty()}>{t("page.facets.noValues")}</p>
       ) : (
         <div className={groupList()}>
@@ -45,7 +69,7 @@ export function FacetGroup({ def, values, selected, searchTerm, onToggle, onSear
         </div>
       )}
 
-      {def.searchable && !hasSearch && hiddenCount > 0 ? (
+      {def.searchable && !isSearching && hiddenCount > 0 ? (
         <p className={groupMore()}>{t("page.facets.moreHint", { count: hiddenCount })}</p>
       ) : null}
     </div>

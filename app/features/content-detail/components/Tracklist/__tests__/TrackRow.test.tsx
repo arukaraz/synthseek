@@ -50,7 +50,7 @@ describe("TrackRow selection", () => {
         isRetrying={false}
         selectable
         isSelected={false}
-        onToggleSelect={noop}
+        onSelectTrack={noop}
       />
     );
 
@@ -67,7 +67,7 @@ describe("TrackRow selection", () => {
         isRetrying={false}
         selectable
         isSelected={false}
-        onToggleSelect={noop}
+        onSelectTrack={noop}
       />
     );
 
@@ -84,15 +84,15 @@ describe("TrackRow selection", () => {
         isRetrying={false}
         selectable
         isSelected={false}
-        onToggleSelect={noop}
+        onSelectTrack={noop}
       />
     );
 
     expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
   });
 
-  it("fires onToggleSelect when the checkbox is clicked", async () => {
-    const onToggleSelect = vi.fn();
+  it("reports a plain click as a non-extending selection", async () => {
+    const onSelectTrack = vi.fn();
     const { user } = renderWithProviders(
       <TrackRow
         track={createTrack({ requestId: "r1", status: "complete" })}
@@ -102,12 +102,54 @@ describe("TrackRow selection", () => {
         isRetrying={false}
         selectable
         isSelected={false}
-        onToggleSelect={onToggleSelect}
+        onSelectTrack={onSelectTrack}
       />
     );
 
     await user.click(screen.getByRole("checkbox"));
 
-    expect(onToggleSelect).toHaveBeenCalledTimes(1);
+    expect(onSelectTrack).toHaveBeenCalledTimes(1);
+    expect(onSelectTrack).toHaveBeenCalledWith(false);
+  });
+
+  it("reports a shift click as an extending selection", async () => {
+    const onSelectTrack = vi.fn();
+    const { user } = renderWithProviders(
+      <TrackRow
+        track={createTrack({ requestId: "r1", status: "complete" })}
+        showArtist
+        onRequest={noop}
+        onRetry={noop}
+        isRetrying={false}
+        selectable
+        isSelected={false}
+        onSelectTrack={onSelectTrack}
+      />
+    );
+
+    await user.keyboard("{Shift>}");
+    await user.click(screen.getByRole("checkbox"));
+    await user.keyboard("{/Shift}");
+
+    expect(onSelectTrack).toHaveBeenCalledWith(true);
+  });
+
+  it("marks the row and the checkbox with the pending range tone", () => {
+    const { container } = renderWithProviders(
+      <TrackRow
+        track={createTrack({ requestId: "r1", status: "complete" })}
+        showArtist
+        onRequest={noop}
+        onRetry={noop}
+        isRetrying={false}
+        selectable
+        isSelected={false}
+        onSelectTrack={noop}
+        previewTone="clear"
+      />
+    );
+
+    expect(container.querySelector("li")).toHaveAttribute("data-range-preview", "clear");
+    expect(screen.getByRole("checkbox").className).toContain("ring-fg/40");
   });
 });

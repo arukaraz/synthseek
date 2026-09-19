@@ -12,7 +12,7 @@ export const playerDock = cva(
 );
 
 export const headerPlayer = cva(
-  "player-metrics @container flex w-[var(--width-player-compact)] max-w-[42vw] min-w-0 flex-col"
+  "player-metrics flex w-max max-w-[min(var(--width-player-compact),42vw)] min-w-0 flex-col"
 );
 
 export const chainStrip = cva(
@@ -48,7 +48,15 @@ export const bar = cva("flex h-[var(--player-bar-height)] flex-col justify-cente
 
 export const barTop = cva("flex w-full min-w-0 items-center gap-2 @player:gap-4.5");
 
-export const barIdentity = cva("flex min-w-0 flex-1 items-center gap-2 @player:gap-3 @player:basis-0 @player:grow");
+export const barIdentity = cva("flex min-w-0 items-center gap-2 @player:gap-3", {
+  variants: {
+    placement: {
+      dock: "flex-1 @player:basis-0 @player:grow",
+      header: "",
+    },
+  },
+  defaultVariants: { placement: "dock" },
+});
 
 export const barCoverButton = cva(
   "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none"
@@ -56,12 +64,14 @@ export const barCoverButton = cva(
 
 export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5", {
   variants: {
-    folded: {
-      true: "@max-player:hidden",
-      false: "",
-    },
+    folded: { true: "", false: "" },
+    placement: { dock: "", header: "" },
   },
-  defaultVariants: { folded: false },
+  compoundVariants: [
+    { folded: true, placement: "dock", class: "@max-player:hidden" },
+    { folded: true, placement: "header", class: "hidden" },
+  ],
+  defaultVariants: { folded: false, placement: "dock" },
 });
 
 export const barNameRow = cva("flex min-w-0 items-center gap-1.5");
@@ -88,12 +98,14 @@ export const barSubtitleAlbum = cva("hidden @player:inline");
 
 export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 @player:order-none @player:gap-3.5", {
   variants: {
-    folded: {
-      true: "@max-player:hidden",
-      false: "",
-    },
+    folded: { true: "", false: "" },
+    placement: { dock: "", header: "" },
   },
-  defaultVariants: { folded: false },
+  compoundVariants: [
+    { folded: true, placement: "dock", class: "@max-player:hidden" },
+    { folded: true, placement: "header", class: "hidden" },
+  ],
+  defaultVariants: { folded: false, placement: "dock" },
 });
 
 export const barProgress = cva("hidden w-full min-w-0 items-center gap-3 @player:flex");
@@ -301,6 +313,8 @@ export const queueTitle = cva("text-fg text-[15px] font-semibold");
 export const queueCaption = cva("text-fg-muted shrink-0 px-1 pt-2 pb-1 font-mono text-[10px] tracking-[0.14em]");
 
 export const queueList = cva("scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto px-2.5 pb-2");
+
+export const queueSentinel = cva("h-px w-full shrink-0");
 
 export const queueRow = cva("flex shrink-0 items-center gap-1 rounded-lg", {
   variants: {

@@ -13,6 +13,7 @@ export const groupLabel = cva("text-fg/60 text-[11px] font-semibold tracking-wid
 export const groupSearch = cva("mb-1");
 export const groupList = cva("flex flex-col gap-1");
 export const groupEmpty = cva("text-fg/40 px-1 py-1 text-xs");
+export const groupPending = cva("flex items-center justify-center py-3");
 export const groupMore = cva("text-fg/40 px-1 pt-1 text-[11px]");
 
 export const facetRow = cva(

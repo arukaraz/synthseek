@@ -1,4 +1,5 @@
 import i18n from "@locale";
+import { matchesTerms, searchTerms } from "@utils/search";
 import { generateUuid } from "@utils/uuid";
 
 import { MAX_FILE_BYTES } from "./constants";
@@ -83,11 +84,10 @@ function statusRank(track: TrackCoverage): number {
 }
 
 export function orderedTrackEntries(tracks: TrackCoverage[], search: string): Array<[number, TrackCoverage]> {
-  const query = search.trim().toLowerCase();
+  const terms = searchTerms(search);
   const entries: Array<[number, TrackCoverage]> = tracks.map((track, index) => [index, track]);
-  const filtered = query
-    ? entries.filter(([, track]) => `${track.title} ${track.artist}`.toLowerCase().includes(query))
-    : entries;
+  const filtered =
+    terms.length > 0 ? entries.filter(([, track]) => matchesTerms(terms, [track.title, track.artist])) : entries;
   return filtered.sort(([, a], [, b]) => statusRank(a) - statusRank(b));
 }
 

@@ -173,3 +173,5 @@ export const LYRIC_SCROLL_SPRING = { type: "spring", stiffness: 110, damping: 24
 export const LYRIC_BLUR_DISTANCE = 2;
 
 export const LYRIC_FAR_DISTANCE = 4;
+
+export const QUEUE_WINDOW_KEY = "player-queue";

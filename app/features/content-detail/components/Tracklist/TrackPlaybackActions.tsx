@@ -1,14 +1,14 @@
 "use client";
 
 import { QueueAddButton } from "@components/ui/QueueAddButton";
-import { Play } from "lucide-react";
+import { ListStart, Play } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { trackPlayButton, trackPlaybackActions } from "../../styles";
+import { trackPlaybackActions, trackPlayButton, trackPlayNextButton } from "../../styles";
 import type { TrackPlaybackActionsProps } from "./types";
 
-export function TrackPlaybackActions({ title, onPlayNow, onEnqueue }: TrackPlaybackActionsProps) {
+export function TrackPlaybackActions({ title, onPlayNow, onEnqueue, onPlayNext, inQueue }: TrackPlaybackActionsProps) {
   const { t } = useTranslation("player");
   const [starting, setStarting] = useState(false);
 
@@ -24,10 +24,21 @@ export function TrackPlaybackActions({ title, onPlayNow, onEnqueue }: TrackPlayb
 
   return (
     <span className={trackPlaybackActions()}>
+      {onPlayNext ? (
+        <button
+          type="button"
+          className={trackPlayNextButton()}
+          onClick={() => void onPlayNext()}
+          aria-label={t("queue.playNextTrack", { title })}
+        >
+          <ListStart className="size-4" />
+        </button>
+      ) : null}
       <QueueAddButton
         onAdd={onEnqueue}
         label={t("queue.addTrack", { title })}
-        confirmedLabel={t("queue.added", { count: 1 })}
+        confirmedLabel={t("queue.inQueue", { title })}
+        inQueue={inQueue}
         revealOnHover
       />
       <button

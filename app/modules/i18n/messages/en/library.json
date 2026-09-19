@@ -329,6 +329,7 @@
       "owner": "Owner",
       "searchPlaceholder": "Type to search…",
       "noValues": "No options",
+      "searching": "Searching options",
       "moreHint_one": "{{count}} more, type to search",
       "moreHint_other": "{{count}} more, type to search",
       "orphan": "Loose tracks",

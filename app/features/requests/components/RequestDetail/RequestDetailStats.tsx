@@ -1,6 +1,6 @@
 "use client";
 
-import { ACTIVE_STATUSES, RequestStatus, UNRESOLVED_STATUSES } from "@api/__generated__/types";
+import { ACTIVE_STATUSES, ContentType, RequestStatus, UNRESOLVED_STATUSES } from "@api/__generated__/types";
 import { useTranslation } from "react-i18next";
 import { RequestDetailStatsCard } from "./RequestDetailStatsCard";
 import { detailStatsGrid } from "./styles";
@@ -19,13 +19,23 @@ export function RequestDetailStats({ request, tracks, isResolving }: RequestDeta
   ).length;
   const activeCount = tracks.filter((track) => (ACTIVE_STATUSES as readonly string[]).includes(track.status)).length;
   const hasDuplicates = request.duplicateCount > 0;
+  const requestedTracks = request.requested_tracks > 0 ? request.requested_tracks : request.total_tracks;
+  const missingTracks = Math.max(0, request.total_tracks - requestedTracks);
+  const isPlaylist = request.contentType === ContentType.enum.playlist;
 
   return (
     <div className={detailStatsGrid({ columns: hasDuplicates ? 5 : 4 })}>
       <RequestDetailStatsCard
         label={t("stats.tracksLabel")}
-        value={`${request.completed_tracks}/${request.total_tracks}`}
-        sublabel={t("stats.tracksSublabel")}
+        value={`${request.completed_tracks}/${requestedTracks}`}
+        sublabel={
+          missingTracks > 0
+            ? t(isPlaylist ? "stats.tracksOfPlaylist" : "stats.tracksOfAlbum", {
+                requested: requestedTracks,
+                total: request.total_tracks,
+              })
+            : t("stats.tracksSublabel")
+        }
       />
       <RequestDetailStatsCard
         label={t("stats.completeLabel")}

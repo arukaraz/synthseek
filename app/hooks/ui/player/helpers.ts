@@ -8,6 +8,7 @@ import {
   LISTEN_DELTA_CEILING_SECONDS,
   LISTEN_FRACTION,
   LISTEN_MAX_SECONDS,
+  MAX_QUEUE_TRACKS,
   PLAYBACK_MIME_BY_FORMAT,
   SESSION_POSITION_DRIFT_MS,
   TONES,
@@ -18,6 +19,7 @@ import type {
   ListenProgress,
   ListeningConnectionStatus,
   PlayerSessionState,
+  QueueAddOutcome,
   RemotePlayback,
   SessionSnapshot,
 } from "./types";
@@ -109,6 +111,37 @@ export function withoutQueuePositions(
     if (at < index) index -= 1;
   }
   return { queue, index, shuffleOrder };
+}
+
+export function resolveQueueAdditions(
+  state: PlayerSessionState,
+  tracks: readonly PlayerTrack[]
+): { fresh: PlayerTrack[]; relocated: number[]; outcome: QueueAddOutcome } {
+  const visible = visibleQueueIds(state);
+  const seen = new Set<string>();
+  const wanted: PlayerTrack[] = [];
+  for (const track of tracks) {
+    if (visible.has(track.id) || seen.has(track.id)) continue;
+    seen.add(track.id);
+    wanted.push(track);
+  }
+
+  const relocated: number[] = [];
+  const fresh: PlayerTrack[] = [];
+  let length = state.queue.length;
+  for (const track of wanted) {
+    const at = state.queue.findIndex((queued) => queued.id === track.id);
+    if (at < 0 && length >= MAX_QUEUE_TRACKS) continue;
+    if (at < 0) length += 1;
+    else relocated.push(at);
+    fresh.push(track);
+  }
+
+  return {
+    fresh,
+    relocated,
+    outcome: { added: fresh.length, full: fresh.length < wanted.length, skipped: tracks.length - fresh.length },
+  };
 }
 
 export function nextIndexIn(state: PlayerSessionState): number | null {

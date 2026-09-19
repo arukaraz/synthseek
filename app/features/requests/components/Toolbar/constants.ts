@@ -10,11 +10,7 @@ export const REVIEW_QUEUE_HASH = "review";
 
 export const STATUS_FILTER_ICONS: StatusFilterIcon[] = [
   { value: "all", icon: Layers },
-  {
-    value: "pending_approval",
-    icon: PENDING_APPROVAL_CONFIG.icon,
-    iconClassName: PENDING_APPROVAL_CONFIG.color,
-  },
+  { value: "pending_approval", icon: PENDING_APPROVAL_CONFIG.icon },
   { value: "active", icon: Activity },
   { value: "done", icon: CheckCircle },
   { value: "failed", icon: XCircle },

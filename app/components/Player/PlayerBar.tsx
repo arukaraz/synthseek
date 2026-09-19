@@ -47,7 +47,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
       </div>
 
       <div className={barTop()}>
-        <div className={barIdentity()}>
+        <div className={barIdentity({ placement })}>
           <button
             type="button"
             className={barCoverButton()}
@@ -61,7 +61,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
               artworkUrl={view.track.artworkUrl}
             />
           </button>
-          <span className={barTextColumn({ folded: view.moreOpen })}>
+          <span className={barTextColumn({ folded: view.moreOpen, placement })}>
             <span className={barNameRow()}>
               <button type="button" className={barNameButton()} onClick={actions.toggleFullscreen} tabIndex={-1}>
                 <span className={barTitle()}>{view.track.title}</span>
@@ -106,7 +106,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
           </div>
         </div>
 
-        <div className={barTransport({ folded: view.moreOpen })}>
+        <div className={barTransport({ folded: view.moreOpen, placement })}>
           <FavouriteButton view={view} actions={actions} className="@player:hidden" />
           {placement === "header" ? <UpgradeButton view={view} actions={actions} className="@player:hidden" /> : null}
           <PlayerTransport view={view} actions={actions} size="bar" />

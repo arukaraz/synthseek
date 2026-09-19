@@ -1,10 +1,12 @@
+import { matchesTerms, searchTerms } from "@utils/search";
+
 export function matchingRecycled<T extends { relativePath: string }>(
   entries: readonly T[] | undefined,
   search: string
 ): readonly T[] | undefined {
-  const needle = search.trim().toLowerCase();
-  if (entries === undefined || needle.length === 0) return entries;
-  return entries.filter((entry) => entry.relativePath.toLowerCase().includes(needle));
+  const terms = searchTerms(search);
+  if (entries === undefined || terms.length === 0) return entries;
+  return entries.filter((entry) => matchesTerms(terms, [entry.relativePath]));
 }
 
 export function truncateMiddle(value: string, max: number): string {

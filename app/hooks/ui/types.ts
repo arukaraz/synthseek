@@ -8,6 +8,13 @@ export interface RequestContext {
   parentAlbum?: MusicItem;
 }
 
+export interface UseInfiniteScrollArgs {
+  root: HTMLElement | null;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  onLoadMore: () => void;
+}
+
 export interface PrimaryNavItem {
   href: string;
   icon: LucideIcon;

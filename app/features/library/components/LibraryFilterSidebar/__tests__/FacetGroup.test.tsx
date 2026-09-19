@@ -48,6 +48,29 @@ function baseProps() {
   };
 }
 
+describe("FacetGroup while a search is in flight", () => {
+  it("shows a spinner instead of the stale values, so the list cannot expand and then shrink", () => {
+    render(<FacetGroup def={searchableDef} values={makeValues(30)} {...baseProps()} searchTerm="ab" isRefreshing />);
+
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(screen.queryByText("Value 0")).not.toBeInTheDocument();
+  });
+
+  it("shows the matches once they land", () => {
+    render(<FacetGroup def={searchableDef} values={makeValues(3)} {...baseProps()} searchTerm="ab" />);
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(screen.getByText("Value 0")).toBeInTheDocument();
+  });
+
+  it("leaves a group with no search term alone while other results refresh", () => {
+    render(<FacetGroup def={searchableDef} values={makeValues(3)} {...baseProps()} isRefreshing />);
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(screen.getByText("Value 0")).toBeInTheDocument();
+  });
+});
+
 describe("FacetGroup", () => {
   it("renders an empty hint when there are no values", () => {
     render(<FacetGroup def={plainDef} values={[]} {...baseProps()} />);

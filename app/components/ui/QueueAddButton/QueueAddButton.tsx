@@ -13,6 +13,7 @@ export function QueueAddButton({
   onAdd,
   label,
   confirmedLabel,
+  inQueue = false,
   revealOnHover = false,
   className,
 }: QueueAddButtonProps) {
@@ -40,23 +41,25 @@ export function QueueAddButton({
     [busy, onAdd]
   );
 
+  const queued = inQueue || confirmed;
+
   return (
     <button
       type="button"
-      className={cn(queueAddButton({ confirmed }), revealOnHover && !confirmed && queueAddReveal(), className)}
+      className={cn(queueAddButton({ confirmed: queued }), revealOnHover && !queued && queueAddReveal(), className)}
       onClick={handleClick}
       disabled={busy}
-      aria-label={confirmed ? confirmedLabel : label}
+      aria-label={queued ? confirmedLabel : label}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
-          key={confirmed ? "confirmed" : "idle"}
+          key={queued ? "confirmed" : "idle"}
           variants={queueAddSwap}
           initial="enter"
           animate="settled"
           exit="leave"
         >
-          {confirmed ? <Check className={queueAddGlyph()} /> : <CirclePlus className={queueAddGlyph()} />}
+          {queued ? <Check className={queueAddGlyph()} /> : <CirclePlus className={queueAddGlyph()} />}
         </motion.span>
       </AnimatePresence>
     </button>

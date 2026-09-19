@@ -57,6 +57,7 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
       facets={query.data?.facets ?? {}}
       isLoading={query.isLoading}
       isError={query.isError}
+      isRefreshing={query.isPlaceholderData}
       content={{
         layout: "table",
         columns,

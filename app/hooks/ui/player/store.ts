@@ -20,6 +20,7 @@ import {
   needsConversion,
   nextIndexIn,
   previousIndexIn,
+  resolveQueueAdditions,
   shuffledOrder,
   streamUrlFor,
   visibleQueueIds,
@@ -317,44 +318,50 @@ export const actions = {
     playAt(at);
   },
   addToQueue(tracks: readonly PlayerTrack[]): QueueAddOutcome {
-    const visible = visibleQueueIds(state);
-    const seen = new Set<string>();
-    const wanted: PlayerTrack[] = [];
-    for (const track of tracks) {
-      if (visible.has(track.id) || seen.has(track.id)) continue;
-      seen.add(track.id);
-      wanted.push(track);
-    }
+    const additions = resolveQueueAdditions(state, tracks);
+    if (additions.fresh.length === 0) return additions.outcome;
 
-    const relocated: number[] = [];
-    const fresh: PlayerTrack[] = [];
-    let length = state.queue.length;
-    for (const track of wanted) {
-      const at = state.queue.findIndex((queued) => queued.id === track.id);
-      if (at < 0 && length >= MAX_QUEUE_TRACKS) continue;
-      if (at < 0) length += 1;
-      else relocated.push(at);
-      fresh.push(track);
-    }
-
-    const skipped = tracks.length - fresh.length;
-    const outcome = { added: fresh.length, full: fresh.length < wanted.length, skipped };
-    if (fresh.length === 0) return outcome;
-
-    const pruned = withoutQueuePositions(state, relocated);
-    const queue = [...pruned.queue, ...fresh];
+    const pruned = withoutQueuePositions(state, additions.relocated);
+    const queue = [...pruned.queue, ...additions.fresh];
     if (state.queue.length === 0) {
       armAt(queue, 0, 0, state.shuffle ? shuffledOrder(queue.length, 0) : []);
-      return outcome;
+      return additions.outcome;
     }
 
-    const appended = fresh.map((_, at) => pruned.queue.length + at);
+    const appended = additions.fresh.map((_, at) => pruned.queue.length + at);
     publish({
       queue,
       index: pruned.index,
       shuffleOrder: state.shuffle ? [...pruned.shuffleOrder, ...appended] : [],
     });
-    return outcome;
+    return additions.outcome;
+  },
+  playNext(tracks: readonly PlayerTrack[]): QueueAddOutcome {
+    const additions = resolveQueueAdditions(state, tracks);
+    if (additions.fresh.length === 0) return additions.outcome;
+
+    const pruned = withoutQueuePositions(state, additions.relocated);
+    if (state.queue.length === 0) {
+      armAt(additions.fresh, 0, 0, state.shuffle ? shuffledOrder(additions.fresh.length, 0) : []);
+      return additions.outcome;
+    }
+
+    if (state.shuffle) {
+      const queue = [...pruned.queue, ...additions.fresh];
+      const appended = additions.fresh.map((_, at) => pruned.queue.length + at);
+      const at = pruned.shuffleOrder.indexOf(pruned.index);
+      const order =
+        at < 0
+          ? [...pruned.shuffleOrder, ...appended]
+          : [...pruned.shuffleOrder.slice(0, at + 1), ...appended, ...pruned.shuffleOrder.slice(at + 1)];
+      publish({ queue, index: pruned.index, shuffleOrder: order });
+      return additions.outcome;
+    }
+
+    const insertAt = pruned.index + 1;
+    const queue = [...pruned.queue.slice(0, insertAt), ...additions.fresh, ...pruned.queue.slice(insertAt)];
+    publish({ queue, index: pruned.index, shuffleOrder: [] });
+    return additions.outcome;
   },
   togglePlay(): void {
     const track = currentTrack();

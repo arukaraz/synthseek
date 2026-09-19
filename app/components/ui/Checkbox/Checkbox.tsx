@@ -2,14 +2,16 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 
 import { cn } from "@utils/cn";
+import { checkboxPreview } from "./styles";
 import type { CheckboxProps } from "./types";
 
-export function Checkbox({ className, ref, ...props }: CheckboxProps) {
+export function Checkbox({ className, preview, ref, ...props }: CheckboxProps) {
   return (
     <CheckboxPrimitive.Root
       ref={ref}
       className={cn(
         "peer border-primary ring-offset-background focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground size-4 shrink-0 rounded-sm border focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        checkboxPreview({ preview }),
         className
       )}
       {...props}

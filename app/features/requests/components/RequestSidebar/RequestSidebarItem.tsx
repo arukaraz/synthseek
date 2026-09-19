@@ -15,7 +15,8 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
   const statusConfig = REQUEST_STATUS_CONFIG[request.status];
   const isActive = ACTIVE_STATUSES.includes(request.status as (typeof ACTIVE_STATUSES)[number]);
   const typeLabel = getContentTypeLabel(request.contentType).toUpperCase();
-  const progressPercent = request.total_tracks > 0 ? (request.completed_tracks / request.total_tracks) * 100 : 0;
+  const requestedTracks = request.requested_tracks > 0 ? request.requested_tracks : request.total_tracks;
+  const progressPercent = requestedTracks > 0 ? (request.completed_tracks / requestedTracks) * 100 : 0;
 
   return (
     <button
@@ -42,7 +43,7 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
           />
         </div>
         <span className="text-fg/40 shrink-0 font-mono text-xs">
-          {request.completed_tracks}/{request.total_tracks}
+          {request.completed_tracks}/{requestedTracks}
         </span>
       </div>
 

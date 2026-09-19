@@ -3,7 +3,7 @@ import { createElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useInfiniteScroll } from "../useInfiniteScroll";
-import type { UseInfiniteScrollArgs } from "../../types";
+import type { UseInfiniteScrollArgs } from "../types";
 
 interface ObserverInstance {
   callback: IntersectionObserverCallback;

@@ -5,7 +5,7 @@ import { render, screen } from "@test/test-utils";
 const sentinelRef = vi.hoisted(() => ({ current: null }));
 const useInfiniteScrollMock = vi.hoisted(() => vi.fn(() => sentinelRef));
 
-vi.mock("../../../hooks/useInfiniteScroll", () => ({
+vi.mock("@hooks/ui/useInfiniteScroll", () => ({
   useInfiniteScroll: useInfiniteScrollMock,
 }));
 

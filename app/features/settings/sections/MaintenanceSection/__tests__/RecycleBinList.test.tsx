@@ -156,10 +156,26 @@ describe("RecycleBinList", () => {
     render(<RecycleBinList entryCount={25} />);
     expand();
 
-    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "1 - Track" } });
+    expect(screen.getByRole("button", { name: /next page/i })).toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "23" } });
 
     expect(screen.queryByRole("button", { name: /next page/i })).not.toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: enSettings.quality.recycleBin.list.restore })).toHaveLength(3);
+    expect(screen.getAllByRole("button", { name: enSettings.quality.recycleBin.list.restore })).toHaveLength(1);
+  });
+
+  it("takes the typed words as separate terms, so a half-remembered path still finds the file", () => {
+    entriesQuery = createMockQuery<Entry[] | undefined>([
+      { ...entry({ fileName: "01 - Idioteque.mp3" }), relativePath: "Radiohead/Kid A/01 - Idioteque.mp3" },
+      { ...entry({ fileName: "01 - Airbag.mp3" }), relativePath: "Radiohead/OK Computer/01 - Airbag.mp3" },
+    ]);
+    render(<RecycleBinList entryCount={2} />);
+    expand();
+
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "idioteque radiohead" } });
+
+    expect(screen.getByText("01 - Idioteque.mp3")).toBeInTheDocument();
+    expect(screen.queryByText("01 - Airbag.mp3")).not.toBeInTheDocument();
   });
 
   it("drops the filter when the list is closed, so reopening does not hide the bin behind a forgotten word", () => {

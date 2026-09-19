@@ -1,4 +1,5 @@
 import type { RequestListItem } from "@api/__generated__/types";
+import { matchesTerms, searchTerms } from "@utils/search";
 import { useMemo } from "react";
 import { filterRequestsByStatus } from "../helpers";
 import { SortConfig, SortField, StatusFilter } from "../types";
@@ -13,14 +14,12 @@ export function useFilteredRequests(
   return useMemo(() => {
     let filtered = filterRequestsByStatus(items, statusFilter);
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+    const terms = searchTerms(searchQuery);
+    if (terms.length > 0) {
       const matchedByTrack = new Set(trackTitleMatchIds ?? []);
-      filtered = filtered.filter((item) => {
-        if (item.name.toLowerCase().includes(query)) return true;
-        if (item.artist.toLowerCase().includes(query)) return true;
-        return matchedByTrack.has(item.id);
-      });
+      filtered = filtered.filter(
+        (item) => matchesTerms(terms, [item.name, item.artist]) || matchedByTrack.has(item.id)
+      );
     }
 
     const direction = sort.direction === "asc" ? 1 : -1;

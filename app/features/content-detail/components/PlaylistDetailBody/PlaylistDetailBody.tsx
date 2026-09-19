@@ -1,7 +1,7 @@
 "use client";
 
 import { BulkActionBar, type BulkAction } from "@components/ui/BulkActionBar";
-import { Checkbox } from "@components/ui/Checkbox";
+import { Checkbox, type CheckboxPreview } from "@components/ui/Checkbox";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { DeletePlaylistDialog } from "@components/DeletePlaylistDialog";
 import { useCatalogPlaylistTracks, usePlaylistDetail } from "@hooks/api/queries/content-detail";
@@ -11,6 +11,7 @@ import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylis
 import { useRetryPlexPlaylist } from "@hooks/api/mutations/requests/useRetryPlexPlaylist";
 import { useInlineRename } from "@hooks/ui/useInlineRename";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
+import { useRangePreview } from "@hooks/ui/useRangePreview";
 import { useSelection } from "@hooks/ui/useSelection";
 import { playlistOriginLabel } from "@utils/playlist";
 import { Trash2 } from "lucide-react";
@@ -54,6 +55,7 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
   const setSync = useSetPlaylistSync();
   const syncToPlex = useRetryPlexPlaylist();
   const selection = useSelection<{ id: string }>();
+  const { previewId, trackRow } = useRangePreview();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
   const [sortKey, setSortKey] = useState<TracklistSortKey>(DEFAULT_SORT_KEY);
@@ -136,6 +138,24 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
   );
   const allRemovableSelected = removableIds.length > 0 && removableIds.every((id) => selection.isSelected(id));
   const someRemovableSelected = removableIds.some((id) => selection.isSelected(id));
+
+  const orderedSelectableIds = useMemo(
+    () => sortedTracks.filter(isRemovableTrack).map((track) => track.requestId),
+    [sortedTracks]
+  );
+
+  const handleSelectTrack = useCallback(
+    (requestId: string, extend: boolean) => {
+      if (extend) selection.extendTo(orderedSelectableIds, requestId);
+      else selection.toggle(requestId);
+    },
+    [selection, orderedSelectableIds]
+  );
+
+  const preview = previewId ? selection.rangeTo(orderedSelectableIds, previewId) : null;
+  const previewIds = new Set(preview?.ids ?? []);
+  const previewTone: CheckboxPreview = preview?.selected ? "select" : "clear";
+  const previewToneFor = (requestId: string): CheckboxPreview => (previewIds.has(requestId) ? previewTone : "none");
 
   const handleConfirmRemove = useCallback(() => {
     const trackIds = removableIds.filter((id) => selection.isSelected(id));
@@ -258,7 +278,9 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
                 showArtist
                 selectable={isLibrary && canEdit}
                 isSelected={selection.isSelected}
-                onToggleSelect={selection.toggle}
+                onSelectTrack={handleSelectTrack}
+                onPreviewHover={trackRow}
+                previewTone={previewToneFor}
               />
             ) : (
               <DetailEmpty message={t("empty.tracklist")} />

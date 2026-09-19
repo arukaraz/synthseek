@@ -2,6 +2,7 @@ import type { ParseKeys } from "i18next";
 
 import i18n from "@locale";
 import { formatDate, formatRelativeTime, formatShortDate, formatTimestamp } from "@utils/formatters";
+import { matchesTerms, searchTerms } from "@utils/search";
 
 import { RELATIVE_SYNC_WINDOW_MS } from "./constants";
 import type { LibraryFilter, LibraryItem, LibrarySort, ToggleAggregateState } from "./types";
@@ -14,12 +15,7 @@ export function matchesFilter(item: LibraryItem, filter: LibraryFilter): boolean
 }
 
 export function matchesSearch(item: LibraryItem, q: string): boolean {
-  if (!q) return true;
-  const needle = q.trim().toLowerCase();
-  if (!needle) return true;
-  if (item.name.toLowerCase().includes(needle)) return true;
-  if (item.subtitle && item.subtitle.toLowerCase().includes(needle)) return true;
-  return false;
+  return matchesTerms(searchTerms(q), [item.name, item.subtitle]);
 }
 
 const TYPE_RANK: Record<LibraryItem["type"], number> = { liked: 0, playlist: 1, album: 2 };

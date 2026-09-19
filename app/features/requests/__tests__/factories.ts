@@ -89,6 +89,7 @@ export function makeRequestListItem(overrides: Partial<RequestListItem> = {}): R
     contentType: ContentType.enum.playlist,
     plex_playlist_id: null,
     duplicateCount: 0,
+    requested_tracks: 0,
     requestedBy: makeRequestsUser(),
     ...overrides,
   };

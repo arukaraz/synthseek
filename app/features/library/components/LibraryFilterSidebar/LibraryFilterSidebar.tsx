@@ -27,6 +27,7 @@ export function LibraryFilterSidebar({
   onFacetSearch,
   onClear,
   hasActiveFilters,
+  isRefreshing = false,
 }: LibraryFilterSidebarProps) {
   const { t } = useTranslation("library");
   const orphanActive = (filters.orphan ?? []).includes("true");
@@ -47,6 +48,7 @@ export function LibraryFilterSidebar({
           values={facets[def.key] ?? []}
           selected={filters[def.key] ?? []}
           searchTerm={facetSearchTerm(facetSearch, def.facetSearchKey)}
+          isRefreshing={isRefreshing}
           onToggle={(value) => onToggleValue(def.key, value)}
           onSearch={(term) => (def.facetSearchKey ? onFacetSearch(def.facetSearchKey, term) : undefined)}
         />

@@ -269,3 +269,97 @@ describe("player store addToQueue", () => {
     expect(store.getSnapshot().queue[MAX_QUEUE_TRACKS - 1]?.id).toBe("t0");
   });
 });
+
+describe("player store playNext", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("puts the track straight after the one playing rather than at the end", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+
+    store.actions.playNext([track("z")]);
+
+    expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["a", "z", "b", "c"]);
+    expect(store.getSnapshot().index).toBe(0);
+  });
+
+  it("keeps a batch in the order it was handed over", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+
+    store.actions.playNext([track("y"), track("z")]);
+
+    expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["a", "y", "z", "b"]);
+  });
+
+  it("inserts after the track playing when that is not the first one", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    store.actions.jumpTo(1);
+
+    store.actions.playNext([track("z")]);
+
+    expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["a", "b", "z", "c"]);
+    expect(store.getSnapshot().queue[store.getSnapshot().index]?.id).toBe("b");
+  });
+
+  it("starts playing when the queue was empty", async () => {
+    const store = await freshStore();
+
+    store.actions.playNext([track("a")]);
+
+    expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["a"]);
+  });
+
+  it("skips a track that is already coming up, exactly as adding to the end does", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+
+    const outcome = store.actions.playNext([track("b")]);
+
+    expect(outcome.added).toBe(0);
+    expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["a", "b"]);
+  });
+
+  it("moves an already played track up to next rather than leaving it behind", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    store.actions.jumpTo(2);
+
+    store.actions.playNext([track("a")]);
+
+    const snapshot = store.getSnapshot();
+    expect(snapshot.queue.map((entry) => entry.id)).toEqual(["b", "c", "a"]);
+    expect(snapshot.queue[snapshot.index]?.id).toBe("c");
+  });
+
+  it("leaves a track that shuffle has not reached yet where it is, even though it sits earlier in the array", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c"), track("d")], 0);
+    store.actions.jumpTo(2);
+    store.actions.toggleShuffle();
+    const before = store.getSnapshot();
+
+    const outcome = store.actions.playNext([track("a")]);
+
+    const after = store.getSnapshot();
+    expect(outcome.added).toBe(0);
+    expect(after.queue.map((entry) => entry.id)).toEqual(before.queue.map((entry) => entry.id));
+    expect(after.queue[after.index]?.id).toBe(before.queue[before.index]?.id);
+  });
+
+  it("takes the next shuffle position rather than the next array slot", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    store.actions.toggleShuffle();
+
+    store.actions.playNext([track("z")]);
+
+    const snapshot = store.getSnapshot();
+    const playingAt = snapshot.shuffleOrder.indexOf(snapshot.index);
+    const nextIndex = snapshot.shuffleOrder[playingAt + 1];
+    expect(snapshot.queue[nextIndex ?? -1]?.id).toBe("z");
+  });
+});

@@ -30,6 +30,7 @@ export interface LibraryViewLayoutProps<TItem> {
   facets: Record<string, LibraryFacetValue[]>;
   isLoading: boolean;
   isError: boolean;
+  isRefreshing?: boolean;
   content: LibraryViewContent<TItem>;
   filtersOpen: boolean;
   onFiltersOpenChange: (open: boolean) => void;

@@ -31,22 +31,40 @@ export function TrackRow({
   isRetrying,
   selectable = false,
   isSelected = false,
-  onToggleSelect,
+  onSelectTrack,
+  onPreviewHover,
+  previewTone = "none",
   onPlayNow,
   onEnqueue,
+  onPlayNext,
+  inQueue = false,
 }: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
   const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
   const showCheckbox = selectable && isRemovableTrack(track);
 
   return (
-    <li className={trackRow()}>
+    <li className={trackRow()} data-range-preview={previewTone === "none" ? undefined : previewTone}>
       {selectable ? (
-        <span className={trackSelectCell()}>
+        <span
+          className={trackSelectCell()}
+          onMouseEnter={() => onPreviewHover?.(true)}
+          onMouseLeave={() => onPreviewHover?.(false)}
+          onMouseDownCapture={(event) => {
+            if (event.shiftKey) event.preventDefault();
+          }}
+          onClickCapture={(event) => {
+            if (!showCheckbox) return;
+            event.preventDefault();
+            onSelectTrack?.(event.shiftKey);
+            const box = event.currentTarget.querySelector('[role="checkbox"]');
+            if (box instanceof HTMLElement) box.focus();
+          }}
+        >
           {showCheckbox ? (
             <Checkbox
               checked={isSelected}
-              onCheckedChange={() => onToggleSelect?.()}
+              preview={previewTone}
               aria-label={t("selectTrack", { title: track.title })}
             />
           ) : null}
@@ -60,7 +78,13 @@ export function TrackRow({
 
       <div className={trackMeta()}>
         {onPlayNow && onEnqueue ? (
-          <TrackPlaybackActions title={track.title} onPlayNow={onPlayNow} onEnqueue={onEnqueue} />
+          <TrackPlaybackActions
+            title={track.title}
+            onPlayNow={onPlayNow}
+            onEnqueue={onEnqueue}
+            onPlayNext={onPlayNext}
+            inQueue={inQueue}
+          />
         ) : null}
         {track.plays !== null ? (
           <span>{t("trackPlays", { count: track.plays, plays: formatPlays(track.plays) })}</span>

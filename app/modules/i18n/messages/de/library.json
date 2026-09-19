@@ -329,6 +329,7 @@
       "owner": "Eigentümer",
       "searchPlaceholder": "Tippen, um zu suchen…",
       "noValues": "Keine Optionen",
+      "searching": "Optionen werden gesucht",
       "moreHint_one": "{{count}} weitere, tippen zum Suchen",
       "moreHint_other": "{{count}} weitere, tippen zum Suchen",
       "orphan": "Lose Titel",

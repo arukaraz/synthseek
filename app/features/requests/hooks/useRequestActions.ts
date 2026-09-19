@@ -24,7 +24,7 @@ import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { downloadText } from "@utils/download";
-import { isProcessingStatus } from "@utils/status-helpers";
+import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -47,6 +47,9 @@ interface UseRequestActions {
   pendingApprovalCount: number;
   isApproving: boolean;
   canRetry: boolean;
+  retryableTrackCount: number;
+  canRequestMissing: boolean;
+  missingTrackCount: number;
   canRemove: boolean;
   canCancel: boolean;
   canPause: boolean;
@@ -93,11 +96,10 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     .map((track) => track.id);
   const canApprove = isAdmin && pendingApprovalTrackIds.length > 0;
 
-  const canRetry =
-    canManage &&
-    (request.status === RequestStatus.enum.failed ||
-      request.status === RequestStatus.enum.cancelled ||
-      request.status === RequestStatus.enum.partially_complete);
+  const retryableTrackCount = tracks.filter((track) => isRetryableStatus(track.status)).length;
+  const canRetry = canManage && retryableTrackCount > 0;
+  const missingTrackCount = Math.max(0, request.total_tracks - request.requested_tracks);
+  const canRequestMissing = canManage && !isPlaylist && missingTrackCount > 0;
   const canCancel = canManage && isProcessingStatus(request.status);
   const isPaused = request.status === RequestStatus.enum.paused;
   const canPause = canManage && isProcessingStatus(request.status) && !isPaused;
@@ -202,6 +204,9 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     pendingApprovalCount: pendingApprovalTrackIds.length,
     isApproving: approveTracks.isPending || rejectTracks.isPending,
     canRetry,
+    retryableTrackCount,
+    canRequestMissing,
+    missingTrackCount,
     canRemove: canManage,
     canCancel,
     canPause,

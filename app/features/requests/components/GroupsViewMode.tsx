@@ -55,6 +55,7 @@ export function GroupsViewMode() {
         selectedId={selected?.id ?? null}
         onSelect={handleSelect}
         searchQuery={debouncedSearchQuery}
+        windowKey={`${values.filter}|${values.sort}|${values.dir}|${debouncedSearchQuery}`}
         className={cn("h-full w-full md:w-72 md:shrink-0", selected ? "hidden md:flex" : "flex")}
       />
       <div className={cn("h-full flex-1 flex-col overflow-hidden", selected ? "flex" : "hidden md:flex")}>

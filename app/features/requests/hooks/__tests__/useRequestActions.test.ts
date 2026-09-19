@@ -219,6 +219,65 @@ describe("useRequestActions pause and resume", () => {
     expect(result.current.canResume).toBe(true);
   });
 
+  it("does not offer retry when the group is partially complete but nothing actually failed", () => {
+    currentUser = owner;
+    const request = makePlaylist({
+      status: RequestStatus.enum.partially_complete,
+      tracks: [makeTrack({ status: RequestStatus.enum.complete })],
+    });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.canRetry).toBe(false);
+    expect(result.current.retryableTrackCount).toBe(0);
+  });
+
+  it("offers retry for the tracks that did fail, and counts them", () => {
+    currentUser = owner;
+    const request = makePlaylist({
+      status: RequestStatus.enum.partially_complete,
+      tracks: [
+        makeTrack({ id: "t1", status: RequestStatus.enum.complete }),
+        makeTrack({ id: "t2", status: RequestStatus.enum.failed }),
+        makeTrack({ id: "t3", status: RequestStatus.enum.cancelled }),
+      ],
+    });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.canRetry).toBe(true);
+    expect(result.current.retryableTrackCount).toBe(2);
+  });
+
+  it("offers to request the rest only for an album that holds more than was asked for", () => {
+    currentUser = owner;
+    const album = makePlaylist({
+      contentType: ContentType.enum.album,
+      total_tracks: 14,
+      requested_tracks: 6,
+      tracks: [makeTrack({ status: RequestStatus.enum.complete })],
+    });
+
+    const { result } = renderHook(() => useRequestActionsFor(album));
+
+    expect(result.current.canRequestMissing).toBe(true);
+    expect(result.current.missingTrackCount).toBe(8);
+  });
+
+  it("does not offer to request the rest when the whole album was asked for", () => {
+    currentUser = owner;
+    const album = makePlaylist({
+      contentType: ContentType.enum.album,
+      total_tracks: 14,
+      requested_tracks: 14,
+      tracks: [makeTrack({ status: RequestStatus.enum.complete })],
+    });
+
+    const { result } = renderHook(() => useRequestActionsFor(album));
+
+    expect(result.current.canRequestMissing).toBe(false);
+  });
+
   it("hides pause and resume for a user who cannot manage the request", () => {
     currentUser = null;
     const request = makePlaylist({ status: RequestStatus.enum.paused });

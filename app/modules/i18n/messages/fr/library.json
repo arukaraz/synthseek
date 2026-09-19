@@ -329,6 +329,7 @@
       "owner": "Propriétaire",
       "searchPlaceholder": "Tapez pour rechercher…",
       "noValues": "Aucune option",
+      "searching": "Recherche des options",
       "moreHint_one": "{{count}} de plus, tapez pour rechercher",
       "moreHint_other": "{{count}} de plus, tapez pour rechercher",
       "orphan": "Pistes isolées",

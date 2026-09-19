@@ -329,6 +329,7 @@
       "owner": "Propietario",
       "searchPlaceholder": "Escribe para buscar…",
       "noValues": "Sin opciones",
+      "searching": "Buscando opciones",
       "moreHint_one": "{{count}} más, escribe para buscar",
       "moreHint_other": "{{count}} más, escribe para buscar",
       "orphan": "Canciones sueltas",

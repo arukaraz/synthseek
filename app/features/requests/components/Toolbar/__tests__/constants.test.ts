@@ -20,11 +20,16 @@ describe("STATUS_FILTER_ICONS", () => {
     ]);
   });
 
-  it("draws the pending approval icon and colour from the shared status config", () => {
+  it("draws the pending approval icon from the shared status config", () => {
     const config = REQUEST_STATUS_CONFIG[RequestStatus.enum.pending_approval];
     const option = STATUS_FILTER_ICONS.find((entry) => entry.value === "pending_approval");
 
     expect(option?.icon).toBe(config.icon);
-    expect(option?.iconClassName).toBe(config.color);
+  });
+
+  it("tints no filter icon, so the menu reads as one list rather than one highlighted row", () => {
+    for (const option of STATUS_FILTER_ICONS) {
+      expect(Object.keys(option)).toEqual(["value", "icon"]);
+    }
   });
 });

@@ -6,6 +6,7 @@ import {
   formatClock,
   fractionFromPointer,
   lyricDepth,
+  mergeReorderedWindow,
   nextRepeat,
   percentOf,
   restorablePlayerMode,
@@ -237,5 +238,38 @@ describe("lyricDepth", () => {
 
   it("treats an unsynced lyric as one flat plane, since no line is playing", () => {
     expect(lyricDepth(null, 40)).toBe("near");
+  });
+});
+
+describe("mergeReorderedWindow", () => {
+  const entry = (id: string, index: number) => ({
+    index,
+    track: {
+      id,
+      title: id,
+      artist: "a",
+      album: "b",
+      durationSeconds: 1,
+      format: "mp3",
+      bitrateKbps: 320,
+      lossless: false,
+      tone: "primary" as const,
+      artworkUrl: null,
+    },
+  });
+
+  it("keeps the rows past the rendered window, so a drag cannot truncate the queue", () => {
+    const upNext = [entry("a", 1), entry("b", 2), entry("c", 3), entry("d", 4)];
+    const dragged = [upNext[1]!.track, upNext[0]!.track];
+
+    const merged = mergeReorderedWindow(dragged, upNext);
+
+    expect(merged.map((t) => t.id)).toEqual(["b", "a", "c", "d"]);
+  });
+
+  it("returns exactly the reordering when the whole tail was on screen", () => {
+    const upNext = [entry("a", 1), entry("b", 2)];
+
+    expect(mergeReorderedWindow([upNext[1]!.track, upNext[0]!.track], upNext).map((t) => t.id)).toEqual(["b", "a"]);
   });
 });

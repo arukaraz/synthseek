@@ -1,5 +1,6 @@
 import { ContentType, type MusicAlbum, type MusicItem, type MusicTrack } from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
+import { matchesTerms, searchTerms } from "@utils/search";
 import { SOURCE_PRIORITY_ORDER } from "./constants";
 import type {
   AcquisitionOptionContext,
@@ -273,11 +274,10 @@ export function removeTag(tags: string[], target: string): string[] {
 }
 
 export function filterTagSuggestions(suggestions: string[], selected: string[], query: string): string[] {
-  const trimmed = query.trim().toLowerCase();
+  const terms = searchTerms(query);
   return suggestions.filter((suggestion) => {
     if (hasTag(selected, suggestion)) return false;
-    if (trimmed.length === 0) return true;
-    return suggestion.toLowerCase().includes(trimmed);
+    return matchesTerms(terms, [suggestion]);
   });
 }
 

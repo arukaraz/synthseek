@@ -102,13 +102,6 @@ export interface FacetSearchState {
   owner?: string;
 }
 
-export interface UseInfiniteScrollArgs {
-  root: HTMLElement | null;
-  hasNextPage: boolean;
-  isFetchingNextPage: boolean;
-  onLoadMore: () => void;
-}
-
 export interface LibraryViewModeProps {
   controller: LibraryUrlController;
   filtersOpen: boolean;

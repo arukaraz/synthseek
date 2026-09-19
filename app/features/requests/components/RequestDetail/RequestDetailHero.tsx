@@ -7,7 +7,7 @@ import { useContentRequestFlow } from "@features/search/components/ContentReques
 import { artworkProxySrc } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";
 import { formatDateTime } from "@utils/formatters";
-import { ArrowLeft, Loader2, RefreshCw } from "lucide-react";
+import { ArrowLeft, ListPlus, Loader2, RefreshCw } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -230,7 +230,14 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                     ) : (
                       <RefreshCw className="mr-1.5 size-3.5" />
                     )}
-                    {t("detail.retryFailed")}
+                    {t("detail.retryFailed", { count: actions.retryableTrackCount })}
+                  </Button>
+                )}
+
+                {actions.canRequestMissing && openDetail && (
+                  <Button onClick={openDetail} variant="outline" size="sm" className={heroRetryButton()}>
+                    <ListPlus className="mr-1.5 size-3.5" />
+                    {t("detail.requestMissing", { count: actions.missingTrackCount })}
                   </Button>
                 )}
 

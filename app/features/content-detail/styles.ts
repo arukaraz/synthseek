@@ -143,6 +143,10 @@ export const trackRow = cva(
   "group border-fg/5 hover:bg-fg/5 flex items-center gap-2 rounded-lg border-b px-2 py-2.5 transition-colors last:border-b-0"
 );
 
+export const tracklistRoot = cva(
+  "[&_li[data-range-preview=clear]]:bg-fg/10 [&_li[data-range-preview=select]]:bg-primary-500/10"
+);
+
 export const trackSelectCell = cva("flex w-6 shrink-0 items-center justify-center");
 
 export const selectAllControl = cva("text-fg/60 flex items-center gap-2 text-xs font-medium");
@@ -168,6 +172,10 @@ export const trackRetryButton = cva(
 export const trackStatusReveal = cva("flex items-center group-hover:hidden");
 
 export const trackPlaybackActions = cva("flex shrink-0 items-center gap-0.5");
+
+export const trackPlayNextButton = cva(
+  "text-fg/45 hover:text-fg focus-visible:ring-primary-400 grid size-7 shrink-0 place-items-center rounded-full transition-[color,opacity] focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"
+);
 
 export const trackPlayButton = cva(
   "text-fg/45 hover:text-fg focus-visible:ring-primary-400 grid size-7 shrink-0 place-items-center rounded-full transition-[color,opacity] focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100"

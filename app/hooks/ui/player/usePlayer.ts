@@ -14,7 +14,7 @@ import { resolveFriendlyError } from "@modules/errors";
 import { useTranslation } from "react-i18next";
 
 import { deviceKindFrom } from "./device";
-import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom, upcomingOrder } from "./helpers";
+import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom, upcomingOrder, visibleQueueIds } from "./helpers";
 import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
 import { usePlayerDocumentTitle } from "./useDocumentTitle";
@@ -22,6 +22,7 @@ import { usePlayReporter } from "./usePlayReporter";
 import type { PlayerDockState, PlayerSessionState } from "./types";
 
 const EMPTY_STATE = getSnapshot();
+const EMPTY_QUEUED_IDS: ReadonlySet<string> = new Set<string>();
 
 function dockSnapshot(): PlayerDockState {
   const session = getSnapshot();
@@ -31,6 +32,33 @@ function dockSnapshot(): PlayerDockState {
 
 export function usePlayerDock(): PlayerDockState {
   return useSyncExternalStore(subscribe, dockSnapshot, () => "hidden");
+}
+
+let queuedFrom: { queue: unknown; index: number; shuffle: boolean; order: unknown } | null = null;
+let queuedIds: ReadonlySet<string> = new Set<string>();
+
+export function queuedTrackIdsSnapshot(): ReadonlySet<string> {
+  const session = getSnapshot();
+  if (
+    queuedFrom === null ||
+    queuedFrom.queue !== session.queue ||
+    queuedFrom.index !== session.index ||
+    queuedFrom.shuffle !== session.shuffle ||
+    queuedFrom.order !== session.shuffleOrder
+  ) {
+    queuedFrom = {
+      queue: session.queue,
+      index: session.index,
+      shuffle: session.shuffle,
+      order: session.shuffleOrder,
+    };
+    queuedIds = visibleQueueIds(session);
+  }
+  return queuedIds;
+}
+
+export function useQueuedTrackIds(): ReadonlySet<string> {
+  return useSyncExternalStore(subscribe, queuedTrackIdsSnapshot, () => EMPTY_QUEUED_IDS);
 }
 
 function usePlayerSession(): PlayerSessionState {

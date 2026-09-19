@@ -12,6 +12,7 @@ export interface LibraryFilterSidebarProps {
   onFacetSearch: (key: string, term: string) => void;
   onClear: () => void;
   hasActiveFilters: boolean;
+  isRefreshing?: boolean;
 }
 
 export interface FacetGroupProps {
@@ -19,6 +20,7 @@ export interface FacetGroupProps {
   values: LibraryFacetValue[];
   selected: string[];
   searchTerm: string;
+  isRefreshing?: boolean;
   onToggle: (value: string) => void;
   onSearch: (term: string) => void;
 }

@@ -3,7 +3,9 @@
 import { BulkActionBar, selectionAction, selectionActionLabel, type BulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox } from "@components/ui/Checkbox";
 import { DataTable, type ColumnDef } from "@components/ui/Table";
+import { useRangePreview } from "@hooks/ui/useRangePreview";
 import { CirclePlus, ListPlus, RefreshCcw, Sparkles } from "lucide-react";
+import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AddToPlaylistDropdown } from "../AddToPlaylistDropdown";
@@ -14,14 +16,54 @@ import type { LibraryTableProps } from "./types";
 export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, selection }: LibraryTableProps<TItem>) {
   const { t } = useTranslation("library");
   const actions = useLibraryTrackActions();
+  const { previewId, trackRow } = useRangePreview();
+  const wrapRef = useRef<HTMLDivElement>(null);
 
-  const trackItems = selection?.items ?? [];
+  const selectionItems = selection?.items;
+  const trackItems = selectionItems ?? [];
   const sel = selection?.selection;
   const allSelected = sel?.selectors.allSelectedOnPage(trackItems) ?? false;
   const someSelected = sel?.selectors.someSelectedOnPage(trackItems) ?? false;
   const failedIds = sel?.selectors.selectedFailedIds(trackItems) ?? [];
   const upgradableIds = sel?.selectors.selectedUpgradableIds(trackItems) ?? [];
   const playableIds = sel?.selectors.selectedPlayableIds(trackItems) ?? [];
+
+  const orderedIds = useMemo(() => (selectionItems ?? []).map((item) => item.id), [selectionItems]);
+  const preview = sel && previewId ? sel.rangeTo(orderedIds, previewId) : null;
+  const previewIds = new Set(preview?.ids ?? []);
+  const previewTone = preview === null ? "none" : preview.selected ? "select" : "clear";
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!sel) return;
+
+    if ((event.metaKey || event.ctrlKey) && !event.shiftKey && !event.altKey && event.code === "KeyA") {
+      event.preventDefault();
+      sel.setMany(orderedIds, true);
+      return;
+    }
+
+    if (event.key === "Escape" && sel.selectedCount > 0) {
+      sel.clear();
+      return;
+    }
+
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+
+    const boxes = wrapRef.current?.querySelectorAll('tbody [role="checkbox"]');
+    if (!boxes) return;
+
+    const index = Array.from(boxes).findIndex((node) => node === document.activeElement);
+    if (index === -1) return;
+
+    const nextIndex = event.key === "ArrowDown" ? index + 1 : index - 1;
+    const nextBox = boxes[nextIndex];
+    const nextId = orderedIds[nextIndex];
+    if (!(nextBox instanceof HTMLElement) || nextId === undefined) return;
+
+    event.preventDefault();
+    nextBox.focus();
+    if (event.shiftKey) sel.extendTo(orderedIds, nextId);
+  };
 
   const selectColumn: ColumnDef<TItem> | null = sel
     ? {
@@ -39,15 +81,32 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
             aria-label={t("page.selection.selectAll")}
           />
         ),
-        cell: (item) => (
-          <div className={selectCell()}>
-            <Checkbox
-              checked={sel.isSelected(getRowId(item))}
-              onCheckedChange={() => sel.toggle(getRowId(item))}
-              aria-label={t("page.selection.selectRow")}
-            />
-          </div>
-        ),
+        cell: (item) => {
+          const id = getRowId(item);
+          return (
+            <div
+              className={selectCell()}
+              onMouseEnter={() => trackRow(id)}
+              onMouseLeave={() => trackRow(null)}
+              onMouseDownCapture={(event) => {
+                if (event.shiftKey) event.preventDefault();
+              }}
+              onClickCapture={(event) => {
+                event.preventDefault();
+                if (event.shiftKey) sel.extendTo(orderedIds, id);
+                else sel.toggle(id);
+                const box = event.currentTarget.querySelector('[role="checkbox"]');
+                if (box instanceof HTMLElement) box.focus();
+              }}
+            >
+              <Checkbox
+                checked={sel.isSelected(id)}
+                preview={previewIds.has(id) ? previewTone : "none"}
+                aria-label={t("page.selection.selectRow")}
+              />
+            </div>
+          );
+        },
       }
     : null;
 
@@ -88,7 +147,7 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
   const addToPlaylistLabel = t("page.selection.addToPlaylist");
 
   return (
-    <div className={tableWrap()}>
+    <div ref={wrapRef} className={tableWrap()} onKeyDown={handleKeyDown}>
       {sel && sel.selectedCount > 0 ? (
         <BulkActionBar
           count={sel.selectedCount}
@@ -113,7 +172,16 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
         />
       ) : null}
 
-      <DataTable data={items} columns={tableColumns} getRowId={getRowId} emptyMessage={emptyMessage} fixedLayout />
+      <DataTable
+        data={items}
+        columns={tableColumns}
+        getRowId={getRowId}
+        emptyMessage={emptyMessage}
+        fixedLayout
+        rowAttrs={(item) => ({
+          "data-range-preview": previewTone !== "none" && previewIds.has(getRowId(item)) ? previewTone : undefined,
+        })}
+      />
     </div>
   );
 }

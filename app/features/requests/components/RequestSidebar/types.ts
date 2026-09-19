@@ -5,6 +5,7 @@ export interface RequestSidebarProps {
   selectedId: string | null;
   onSelect: (id: string) => void;
   searchQuery?: string;
+  windowKey: string;
   className?: string;
 }
 

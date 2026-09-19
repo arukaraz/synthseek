@@ -19,6 +19,9 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     exportJspf: vi.fn().mockResolvedValue(undefined),
     canManage: true,
     canRetry: false,
+    retryableTrackCount: 2,
+    canRequestMissing: false,
+    missingTrackCount: 0,
     canRemove: false,
     canCancel: false,
     canPause: false,
@@ -54,7 +57,7 @@ describe("RequestDetailHeroMenu", () => {
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
 
-    expect(screen.getByRole("menuitem", { name: "Retry Failed" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Retry 2 failed" })).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: "Remove Playlist" })).toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: "Cancel downloads" })).not.toBeInTheDocument();
   });
@@ -77,7 +80,7 @@ describe("RequestDetailHeroMenu", () => {
     renderMenu({ canRetry: true, retry });
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Retry Failed" }));
+    await user.click(screen.getByRole("menuitem", { name: "Retry 2 failed" }));
 
     expect(retry).toHaveBeenCalledOnce();
   });

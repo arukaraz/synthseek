@@ -8,6 +8,7 @@ import { Pagination } from "@components/ui/Pagination";
 import { useClientPagination } from "@hooks/ui/useClientPagination";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
+import { matchesTerms, searchTerms } from "@utils/search";
 
 import {
   fieldHelper,
@@ -56,9 +57,9 @@ export function ListManager({
 
   const showFilter = value.length > FILTER_THRESHOLD;
   const filtered = useMemo(() => {
-    if (!filter.trim()) return value;
-    const needle = filter.trim().toLowerCase();
-    return value.filter((v) => v.toLowerCase().includes(needle));
+    const terms = searchTerms(filter);
+    if (terms.length === 0) return value;
+    return value.filter((v) => matchesTerms(terms, [v]));
   }, [value, filter]);
 
   const pager = useClientPagination(filtered);

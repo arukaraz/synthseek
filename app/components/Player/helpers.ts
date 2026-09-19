@@ -9,7 +9,9 @@ import {
 import type {
   PlayerLyrics,
   PlayerMode,
+  PlayerQueueEntry,
   PlayerRepeat,
+  PlayerTrack,
   PlayerView,
   WaveCanvas,
   WaveColors,
@@ -303,6 +305,13 @@ export function restorablePlayerMode(value: string | null): PlayerMode | null {
   const known = ALL_PLAYER_MODES.find((mode) => mode === value);
   if (known === undefined || !RESTORABLE_PLAYER_MODES.includes(known)) return null;
   return known;
+}
+
+export function mergeReorderedWindow(
+  reordered: readonly PlayerTrack[],
+  upNext: readonly PlayerQueueEntry[]
+): PlayerTrack[] {
+  return [...reordered, ...upNext.slice(reordered.length).map((entry) => entry.track)];
 }
 
 export function lyricDepth(active: number | null, index: number): "near" | "mid" | "far" {

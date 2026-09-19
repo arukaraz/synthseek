@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-import { INFINITE_SCROLL_ROOT_MARGIN } from "../constants";
-import type { UseInfiniteScrollArgs } from "../types";
+import { INFINITE_SCROLL_ROOT_MARGIN } from "./constants";
+import type { UseInfiniteScrollArgs } from "./types";
 
 export function useInfiniteScroll({ root, hasNextPage, isFetchingNextPage, onLoadMore }: UseInfiniteScrollArgs) {
   const sentinelRef = useRef<HTMLDivElement | null>(null);

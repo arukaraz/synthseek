@@ -27,7 +27,7 @@ export function BulkActionBar({
 }: BulkActionBarProps) {
   return (
     <div className={cn(selectionBar(), className)}>
-      <span className={selectionChip()}>
+      <span className={selectionChip()} role="status" aria-live="polite">
         <span className={selectionChipDot()} />
         <span className={selectionChipNum()}>{count}</span>
         {countLabel}

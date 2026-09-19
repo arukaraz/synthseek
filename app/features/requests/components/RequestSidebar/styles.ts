@@ -17,6 +17,8 @@ export const sidebarList = cva("flex-1 overflow-y-auto", {
 
 export type SidebarListProps = VariantProps<typeof sidebarList>;
 
+export const sidebarSentinel = cva("h-px w-full");
+
 export const sidebarListItem = cva("even:bg-fg/[0.03]", {
   variants: {},
   defaultVariants: {},

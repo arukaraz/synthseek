@@ -1,9 +1,8 @@
 "use client";
 
 import { Input } from "@components/ui/Input";
-import { useDebounce } from "@hooks/ui/useDebounce";
+import { useDebouncedDraft } from "@hooks/ui/useDebouncedDraft";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { LibraryFilterSortMenu } from "../LibraryFilterSortMenu";
@@ -20,18 +19,7 @@ export function LibraryToolbar({
   activeFilterCount,
 }: LibraryToolbarProps) {
   const { t } = useTranslation("library");
-  const [input, setInput] = useState(searchValue);
-  const debounced = useDebounce(input, { delay: 300 });
-
-  useEffect(() => {
-    setInput(searchValue);
-  }, [searchValue]);
-
-  useEffect(() => {
-    if (debounced !== searchValue) {
-      onSearchChange(debounced);
-    }
-  }, [debounced, searchValue, onSearchChange]);
+  const [input, setInput] = useDebouncedDraft(searchValue, onSearchChange);
 
   return (
     <div className={toolbarRow()}>

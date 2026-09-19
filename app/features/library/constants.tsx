@@ -30,8 +30,6 @@ const STATUS_FACET_DEF = {
   labelNs: "status",
 } as const;
 
-export const INFINITE_SCROLL_ROOT_MARGIN = "200px";
-
 export const LIBRARY_FACET_SEARCH_KEYS = ["artist", "genre", "playlist", "owner"] as const;
 
 export const LIBRARY_SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"];

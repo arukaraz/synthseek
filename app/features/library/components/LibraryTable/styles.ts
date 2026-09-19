@@ -15,7 +15,9 @@ export const selectCell = cva("flex items-center justify-center");
 
 export const queueCell = cva("flex items-center justify-center");
 
-export const tableWrap = cva("min-w-0");
+export const tableWrap = cva(
+  "min-w-0 [&_tr[data-range-preview=clear]]:bg-fg/10 [&_tr[data-range-preview=select]]:bg-primary-500/10"
+);
 
 export const primaryCellArtwork = cva("relative size-10 shrink-0 overflow-hidden rounded-md");
 

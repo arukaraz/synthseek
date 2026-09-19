@@ -4,7 +4,7 @@ import { Spinner } from "@components/ui/Spinner";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { useInfiniteScroll } from "@hooks/ui/useInfiniteScroll";
 import { LibraryCardGrid } from "./LibraryCardGrid";
 import { infiniteSentinel, infiniteSpinnerRow } from "./styles";
 import type { LibraryInfiniteGridProps } from "./types";

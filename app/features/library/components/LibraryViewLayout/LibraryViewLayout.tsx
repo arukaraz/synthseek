@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 import { LIBRARY_PAGE_SIZE_OPTIONS } from "../../constants";
 import { computePageCount, countActiveFilters, toggleFilterValue } from "../../helpers";
-import { mainColumn, resultsScroll, sidebarColumn, stateWrap } from "../../styles";
+import { mainColumn, resultsOverlay, resultsScroll, resultsShell, sidebarColumn, stateWrap } from "../../styles";
 import { LibraryInfiniteGrid } from "../LibraryCard";
 import { LibraryFilterSheet } from "../LibraryFilterSheet/LibraryFilterSheet";
 import { LibraryFilterSidebar } from "../LibraryFilterSidebar/LibraryFilterSidebar";
@@ -24,6 +24,7 @@ export function LibraryViewLayout<TItem>({
   facets,
   isLoading,
   isError,
+  isRefreshing = false,
   content,
   filtersOpen,
   onFiltersOpenChange,
@@ -45,6 +46,7 @@ export function LibraryViewLayout<TItem>({
     onFacetSearch: controller.setFacetSearch,
     onClear: controller.clearFilters,
     hasActiveFilters: activeFilterCount > 0 || Object.values(controller.facetSearch).some(Boolean),
+    isRefreshing,
   };
 
   const pageCount = computePageCount(total, controller.pageSize);
@@ -74,27 +76,34 @@ export function LibraryViewLayout<TItem>({
           </div>
         ) : (
           <>
-            <div ref={setScrollRoot} className={resultsScroll()}>
-              {content.layout === "table" ? (
-                <LibraryTable
-                  items={items ?? []}
-                  columns={content.columns}
-                  getRowId={content.getRowId}
-                  emptyMessage={t(config.emptyTitleKey)}
-                  selection={content.selection}
-                />
-              ) : (
-                <LibraryInfiniteGrid
-                  items={items ?? []}
-                  ariaLabel={t(config.labelKey)}
-                  renderCard={content.renderCard}
-                  getCardId={content.getCardId}
-                  scrollRoot={scrollRoot}
-                  hasNextPage={content.hasNextPage}
-                  isFetchingNextPage={content.isFetchingNextPage}
-                  fetchNextPage={content.fetchNextPage}
-                />
-              )}
+            <div className={resultsShell()}>
+              {isRefreshing ? (
+                <div className={resultsOverlay()}>
+                  <Spinner size="lg" label={t("page.loading")} />
+                </div>
+              ) : null}
+              <div ref={setScrollRoot} className={resultsScroll({ stale: isRefreshing })}>
+                {content.layout === "table" ? (
+                  <LibraryTable
+                    items={items ?? []}
+                    columns={content.columns}
+                    getRowId={content.getRowId}
+                    emptyMessage={t(config.emptyTitleKey)}
+                    selection={content.selection}
+                  />
+                ) : (
+                  <LibraryInfiniteGrid
+                    items={items ?? []}
+                    ariaLabel={t(config.labelKey)}
+                    renderCard={content.renderCard}
+                    getCardId={content.getCardId}
+                    scrollRoot={scrollRoot}
+                    hasNextPage={content.hasNextPage}
+                    isFetchingNextPage={content.isFetchingNextPage}
+                    fetchNextPage={content.fetchNextPage}
+                  />
+                )}
+              </div>
             </div>
             {content.layout === "table" ? (
               <Pagination

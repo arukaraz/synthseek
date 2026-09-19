@@ -1,3 +1,5 @@
+import { matchesTerms, searchTerms } from "@utils/search";
+
 import { REFRESH_INTERVAL_VALUES } from "./constants";
 import type { LogEntry } from "./types";
 
@@ -6,11 +8,10 @@ export function isRefreshOption(raw: string): boolean {
 }
 
 export function filterEntries(entries: LogEntry[], activeLevels: ReadonlySet<string>, search: string): LogEntry[] {
-  const needle = search.trim().toLowerCase();
+  const terms = searchTerms(search);
   return entries.filter((entry) => {
     const levelOk = entry.level === null || activeLevels.has(entry.level);
-    const searchOk = needle === "" || entry.raw.toLowerCase().includes(needle);
-    return levelOk && searchOk;
+    return levelOk && matchesTerms(terms, [entry.raw]);
   });
 }
 

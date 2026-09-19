@@ -81,7 +81,7 @@ export function RequestDetailHeroMenu({
         {canRetry && (
           <DropdownMenuItem onClick={retry} disabled={isRetrying} className={heroRetryMenuItem()}>
             <RefreshCw className="size-3.5" />
-            {t("detail.retryFailed")}
+            {t("detail.retryFailed", { count: actions.retryableTrackCount })}
           </DropdownMenuItem>
         )}
         {canResume ? (
