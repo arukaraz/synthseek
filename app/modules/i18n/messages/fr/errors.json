@@ -291,6 +291,10 @@
     "title": "Analyse déjà en cours",
     "description": "Une analyse de la bibliothèque est déjà en cours. Attendez la fin ou annulez-la d'abord."
   },
+  "JOB_ALREADY_RUNNING": {
+    "title": "Déjà en cours",
+    "description": "Cette tâche travaille déjà. Sa progression est indiquée dans la liste."
+  },
   "LIBRARY_FILE_NOT_FOUND": {
     "title": "Fichier introuvable",
     "description": "Ce fichier n'est plus dans l'index de la bibliothèque. Lancez une analyse et réessayez."

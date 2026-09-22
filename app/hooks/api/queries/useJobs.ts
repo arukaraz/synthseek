@@ -6,6 +6,7 @@ const RUNNING_POLL_MS = 8 * 1000;
 export function useJobs() {
   return trpc.jobs.list.useQuery(undefined, {
     staleTime: 30 * 1000,
+    refetchOnWindowFocus: true,
     refetchInterval: (query) =>
       query.state.data?.some((job) => job.running && job.listed && job.enabled) ? RUNNING_POLL_MS : IDLE_POLL_MS,
   });

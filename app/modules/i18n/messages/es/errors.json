@@ -291,6 +291,10 @@
     "title": "Ya hay un escaneo en curso",
     "description": "Ya se está escaneando la biblioteca. Espera a que termine o cancélalo antes."
   },
+  "JOB_ALREADY_RUNNING": {
+    "title": "Ya está en marcha",
+    "description": "Ese trabajo ya está en curso. Su progreso se ve en la lista."
+  },
   "LIBRARY_FILE_NOT_FOUND": {
     "title": "Archivo no encontrado",
     "description": "Ese archivo ya no está en el índice de la biblioteca. Escanea y vuelve a intentarlo."

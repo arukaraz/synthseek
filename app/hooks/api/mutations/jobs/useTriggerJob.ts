@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-import { errorToast } from "@modules/errors";
+import { errorToast, extractAppCode } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useTriggerJob() {
@@ -10,6 +10,12 @@ export function useTriggerJob() {
       utils.jobs.list.invalidate();
       toast.success(result.message);
     },
-    onError: (error) => errorToast(error, "jobs.runFailed"),
+    onError: (error) => {
+      if (extractAppCode(error) === "JOB_ALREADY_RUNNING") {
+        utils.jobs.list.invalidate();
+        return;
+      }
+      errorToast(error, "jobs.runFailed");
+    },
   });
 }
