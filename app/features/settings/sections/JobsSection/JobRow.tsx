@@ -19,6 +19,7 @@ import {
   jobNextRunUnit,
   jobNextRunValue,
   jobPlayButton,
+  jobProgress,
   jobRight,
   jobRow,
 } from "../../styles";
@@ -39,6 +40,14 @@ export function JobRow({ job }: JobRowProps) {
       <div className={jobInfo()}>
         <span className={jobName()}>{name}</span>
         <span className={jobDescription()}>{t(JOB_DESCRIPTION_KEYS[job.id])}</span>
+        {job.progress ? (
+          <span className={jobProgress()}>
+            {t("jobs.row.progress", {
+              done: job.progress.done.toLocaleString(),
+              total: job.progress.total.toLocaleString(),
+            })}
+          </span>
+        ) : null}
       </div>
       <div className={jobRight()}>
         <div className={jobNextRun()}>

@@ -54,6 +54,18 @@ describe("JobRow", () => {
     expect(screen.getByText(enSettings.jobs.registry["wanted-sweep"].description)).toBeInTheDocument();
   });
 
+  it("tells the listener how much of the library the loudness job has covered", () => {
+    render(<JobRow job={{ ...job, id: "library-loudness", progress: { done: 3402, total: 8410 } }} />);
+
+    expect(screen.getByText("3,402 of 8,410 tracks done")).toBeInTheDocument();
+  });
+
+  it("says nothing about progress for a job that does not report any", () => {
+    render(<JobRow job={job} />);
+
+    expect(screen.queryByText(/tracks done/)).not.toBeInTheDocument();
+  });
+
   it("renders the interval label and the formatted next run", () => {
     render(<JobRow job={job} />);
     expect(screen.getByText(enSettings.jobs.interval.everyHour)).toBeInTheDocument();

@@ -834,6 +834,7 @@
       "inProgress": "En curso",
       "lastRunFailed": "La última ejecución falló",
       "nextRunFallback": "Inactiva",
+      "progress": "{{done}} de {{total}} pistas hechas",
       "runNow": "Ejecutar {{name}} ahora",
       "running": "Ejecutando {{name}}"
     },
@@ -872,6 +873,10 @@
       "library-scan": {
         "name": "Escaneo de biblioteca",
         "description": "Indexa los archivos de audio del disco, averigua qué contiene cada uno y reconcilia lo que ha desaparecido."
+      },
+      "library-loudness": {
+        "name": "Medición de sonoridad",
+        "description": "Mide lo fuerte que suena cada pista, para que la reproducción pueda igualar el volumen entre ellas."
       },
       "scrobble-relay": {
         "name": "Reenvio de escuchas",

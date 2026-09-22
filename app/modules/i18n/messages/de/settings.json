@@ -834,6 +834,7 @@
       "inProgress": "In Bearbeitung",
       "lastRunFailed": "Letzter Lauf fehlgeschlagen",
       "nextRunFallback": "Inaktiv",
+      "progress": "{{done}} von {{total}} Titeln fertig",
       "runNow": "{{name}} jetzt ausführen",
       "running": "{{name}} wird ausgeführt"
     },
@@ -872,6 +873,10 @@
       "library-scan": {
         "name": "Bibliotheksscan",
         "description": "Indiziert die Audiodateien auf der Festplatte, ermittelt, welchen Titel jede enthält, und gleicht ab, was verschwunden ist."
+      },
+      "library-loudness": {
+        "name": "Lautheitsmessung",
+        "description": "Misst, wie laut jeder Titel ist, damit die Wiedergabe die Lautstärke zwischen ihnen ausgleichen kann."
       },
       "scrobble-relay": {
         "name": "Wiedergabe-Weiterleitung",

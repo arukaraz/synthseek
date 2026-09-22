@@ -834,6 +834,7 @@
       "inProgress": "In progress",
       "lastRunFailed": "Last run failed",
       "nextRunFallback": "Idle",
+      "progress": "{{done}} of {{total}} tracks done",
       "runNow": "Run {{name}} now",
       "running": "Running {{name}}"
     },
@@ -872,6 +873,10 @@
       "library-scan": {
         "name": "Library Scan",
         "description": "Indexes the audio files on disk, works out what each one holds, and reconciles what disappeared."
+      },
+      "library-loudness": {
+        "name": "Loudness Measurement",
+        "description": "Measures how loud each track is, so playback can even out the volume between them."
       },
       "scrobble-relay": {
         "name": "Scrobble Relay",

@@ -4,8 +4,6 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import i18n from "@modules/i18n";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
-import { createMockMutation } from "@test/mocks/trpc.mock";
-
 const user = vi.hoisted(() => ({
   current: { loudnessNormalization: true, loudnessPreampDb: 0 } as Record<string, unknown> | null,
 }));
