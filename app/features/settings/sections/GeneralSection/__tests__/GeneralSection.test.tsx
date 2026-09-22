@@ -12,12 +12,20 @@ vi.mock("next-themes", () => ({
 
 vi.mock("@utils/trpc", () => ({
   trpc: {
-    auth: { me: { useQuery: () => createMockQuery({ language: "en" }) } },
+    auth: {
+      me: {
+        useQuery: () => createMockQuery({ language: "en", loudnessNormalization: true, loudnessPreampDb: 0 }),
+      },
+    },
   },
 }));
 
 vi.mock("@hooks/api/mutations/auth/useSetLanguage", () => ({
   useSetLanguage: () => createMockMutation(),
+}));
+
+vi.mock("@hooks/api/mutations/auth/useSetLoudness", () => ({
+  useSetLoudness: () => createMockMutation(),
 }));
 
 vi.mock("@hooks/api/queries/useApiKeys", () => ({
@@ -29,7 +37,11 @@ vi.mock("@hooks/api/queries/usePublicConfig", () => ({
 }));
 
 vi.mock("@modules/providers/AuthProvider", () => ({
-  useAuthContext: () => ({ currentUser: { username: "arukaraz" }, isAdmin: true, isLoading: false }),
+  useAuthContext: () => ({
+    currentUser: { username: "arukaraz", language: "en", loudnessNormalization: true, loudnessPreampDb: 0 },
+    isAdmin: true,
+    isLoading: false,
+  }),
 }));
 
 vi.mock("@hooks/api/queries/useSubsonicStatus", () => ({
@@ -79,12 +91,13 @@ afterEach(() => {
 });
 
 describe("GeneralSection", () => {
-  it("composes the theme, language, and connect-apps cards under the page title", () => {
+  it("composes the theme, language, loudness, and connect-apps cards under the page title", () => {
     render(<GeneralSection />);
 
     expect(screen.getByText(enSettings.general.pageTitle)).toBeInTheDocument();
     expect(screen.getByText(enSettings.general.theme.title)).toBeInTheDocument();
     expect(screen.getByText(enSettings.general.language.title)).toBeInTheDocument();
+    expect(screen.getByText(enSettings.general.loudness.title)).toBeInTheDocument();
     expect(screen.getByText(enSettings.connectApps.card.title)).toBeInTheDocument();
     expect(screen.getByText(enSettings.api.keys.title)).toBeInTheDocument();
     expect(screen.getByText(enSettings.mcp.title)).toBeInTheDocument();

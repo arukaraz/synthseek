@@ -23,6 +23,7 @@ RUN apk add --no-cache \
     py3-pip \
     chromaprint \
     ffmpeg \
+    rsgain \
     wget \
     tini \
     shadow \

@@ -8,6 +8,20 @@
       "updated": "Langue mise à jour",
       "updateFailed": "Impossible de mettre à jour la langue"
     },
+    "loudness": {
+      "title": "Normalisation du volume",
+      "description": "Égalise le volume d'un morceau au suivant.",
+      "enabled": {
+        "label": "Normaliser le volume",
+        "description": "Applique à la lecture la sonie mesurée de chaque piste."
+      },
+      "preamp": {
+        "label": "Gain supplémentaire",
+        "description": "Monte ou baisse l'ensemble d'une valeur fixe, en plus de la correction.",
+        "suffix": "dB"
+      },
+      "updateFailed": "Impossible d'enregistrer les réglages de lecture"
+    },
     "theme": {
       "title": "Thème",
       "description": "Choisissez le thème adapté à votre environnement.",

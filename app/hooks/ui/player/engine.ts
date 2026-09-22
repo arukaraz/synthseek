@@ -1,3 +1,4 @@
+import { attachGraph, resumeGraph, setListenerVolume } from "./audio-graph";
 import { LOAD_TIMEOUT_MS, STALL_TIMEOUT_MS } from "./constants";
 import { followAudio, stopFollowingAudio } from "./energy";
 import type { EngineCallbacks } from "./types";
@@ -83,8 +84,9 @@ export function loadAndPlay(url: string, volume: number, muted: boolean, startSe
   const current = ++generation;
   clearTimers();
   node.src = url;
-  node.volume = volume;
-  node.muted = muted;
+  applyVolume(volume, muted);
+  attachGraph(node);
+  resumeGraph();
   node.load();
   seekOnceReady(node, current, startSeconds);
   callbacks?.onLoadingChange(true);
@@ -102,8 +104,7 @@ export function loadAt(url: string, seconds: number, volume: number, muted: bool
   const current = ++generation;
   clearTimers();
   node.src = url;
-  node.volume = volume;
-  node.muted = muted;
+  applyVolume(volume, muted);
   node.load();
   seekOnceReady(node, current, seconds);
 }
@@ -138,6 +139,7 @@ export function seek(seconds: number): void {
 
 export function applyVolume(volume: number, muted: boolean): void {
   const node = audio();
+  if (setListenerVolume(volume, muted)) return;
   node.volume = Math.min(1, Math.max(0, volume));
   node.muted = muted;
 }

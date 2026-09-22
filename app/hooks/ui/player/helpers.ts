@@ -39,12 +39,14 @@ export function playerTrackFrom(item: LibraryTrackItem): PlayerTrack {
     title: item.title,
     artist: item.artist,
     album: item.albumName,
+    albumId: item.album_id,
     durationSeconds: Math.round(item.duration_ms / 1000),
     format,
     bitrateKbps: item.file_bitrate ?? item.bitrate,
     lossless: format === "flac" || format === "wav" || format === "alac",
     tone: toneFor(item.album_id),
     artworkUrl: item.albumArt,
+    replayGain: item.replayGain,
   };
 }
 

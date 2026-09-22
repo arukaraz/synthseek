@@ -14,7 +14,9 @@ import {
   VOLUME_STORAGE_KEY,
 } from "./constants";
 import { announce } from "./announce";
+import { setGainFactor } from "./audio-graph";
 import { applyVolume, canPlayMime, connectEngine, loadAndPlay, loadAt, pause, resume, seek, stop } from "./engine";
+import { gainFactorFor, loudnessModeFor } from "./loudness";
 import {
   mirroredPositionSeconds,
   needsConversion,
@@ -29,7 +31,7 @@ import {
   withoutRepeats,
 } from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
-import type { PlayerSessionState, QueueAddOutcome, RemotePlayback } from "./types";
+import type { LoudnessMode, LoudnessPreferences, PlayerSessionState, QueueAddOutcome, RemotePlayback } from "./types";
 
 const listeners = new Set<() => void>();
 
@@ -65,6 +67,8 @@ let state: PlayerSessionState = {
 let mirrorTimer: ReturnType<typeof setInterval> | undefined;
 let skipTimer: ReturnType<typeof setTimeout> | undefined;
 let connected = false;
+let loudness: LoudnessPreferences = { enabled: true, preAmpDb: 0 };
+let activeLoudnessMode: LoudnessMode = "track";
 
 function publish(next: Partial<PlayerSessionState>): void {
   state = { ...state, ...next };
@@ -148,6 +152,7 @@ function playAt(index: number, fromSeconds = 0): void {
     transcoding: converted,
     offsetSeconds: converted ? fromSeconds : 0,
   });
+  startLoudness(track, state.queue, state.shuffle);
   loadAndPlay(streamUrlFor(track.id, converted, fromSeconds), state.volume, state.muted, converted ? 0 : fromSeconds);
   publishMediaSession(track, mediaHandlers());
 }
@@ -171,6 +176,7 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
     offsetSeconds: converted ? fromSeconds : 0,
     consecutiveFailures: 0,
   });
+  startLoudness(track, queue, state.shuffle);
   loadAt(streamUrlFor(track.id, converted, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
   publishMediaSession(track, mediaHandlers());
 }
@@ -254,6 +260,17 @@ let lastMessages: PlayerMessages = {
 
 export function setMessages(messages: PlayerMessages): void {
   lastMessages = messages;
+}
+
+export function setLoudnessPreferences(next: LoudnessPreferences): void {
+  loudness = next;
+  const track = currentTrack();
+  setGainFactor(track === null ? 1 : gainFactorFor(track, activeLoudnessMode, loudness));
+}
+
+function startLoudness(track: PlayerTrack, queue: readonly PlayerTrack[], shuffle: boolean): void {
+  activeLoudnessMode = loudnessModeFor(queue, shuffle);
+  setGainFactor(gainFactorFor(track, activeLoudnessMode, loudness));
 }
 
 function mediaHandlers(): {

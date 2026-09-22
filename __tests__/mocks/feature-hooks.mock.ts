@@ -110,6 +110,8 @@ export function createMockUser(overrides: Partial<UsersOutput[number]> = {}): Us
     avatar_url: null,
     role: "member",
     language: "en",
+    loudnessNormalization: true,
+    loudnessPreampDb: 0,
     plex_username: null,
     plexLinked: false,
     hasPassword: true,

@@ -11,6 +11,7 @@ export type {
   PlayerMode,
   PlayerNotice,
   PlayerNoticeTone,
+  PlayerReplayGain,
   PlayerRepeat,
   PlayerScrobbleState,
   PlayerSignalChain,

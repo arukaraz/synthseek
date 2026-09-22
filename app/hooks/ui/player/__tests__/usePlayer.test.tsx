@@ -104,7 +104,22 @@ const store = vi.hoisted(() => ({
     restoreMode: vi.fn(),
   },
   setMessages: vi.fn(),
+  setLoudnessPreferences: vi.fn(),
   currentTrack: vi.fn(),
+}));
+
+const auth = vi.hoisted(() => ({
+  currentUser: { loudnessNormalization: true, loudnessPreampDb: 0 } as Record<string, unknown> | null,
+}));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({
+    currentUser: auth.currentUser,
+    isLoading: false,
+    isError: false,
+    isAdmin: true,
+    refetch: vi.fn(),
+  }),
 }));
 
 vi.mock("../store", () => ({
@@ -112,6 +127,7 @@ vi.mock("../store", () => ({
   currentTrack: store.currentTrack,
   getSnapshot: () => store.snapshot,
   setMessages: store.setMessages,
+  setLoudnessPreferences: store.setLoudnessPreferences,
   subscribe: (listener: () => void) => {
     store.listeners.add(listener);
     return () => {
@@ -138,6 +154,8 @@ function track(overrides: Partial<PlayerTrack> = {}): PlayerTrack {
     lossless: true,
     tone: "primary",
     artworkUrl: null,
+    albumId: "album-1",
+    replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
     ...overrides,
   };
 }
@@ -213,6 +231,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   store.listeners.clear();
   store.snapshot = sessionState();
+  auth.currentUser = { loudnessNormalization: true, loudnessPreampDb: 0 };
   titles.seen = [];
   devices.known = [];
   api.favorites = [];
@@ -359,6 +378,22 @@ describe("usePlayer view", () => {
 
     expect(store.actions.restoreVolume).toHaveBeenCalled();
     expect(store.actions.restoreMode).toHaveBeenCalled();
+  });
+
+  it("hands the store the listener's own normalization settings", () => {
+    auth.currentUser = { loudnessNormalization: false, loudnessPreampDb: 4 };
+
+    renderHook(() => usePlayer());
+
+    expect(store.setLoudnessPreferences).toHaveBeenCalledWith({ enabled: false, preAmpDb: 4 });
+  });
+
+  it("leaves the normalization alone until it knows who is listening", () => {
+    auth.currentUser = null;
+
+    renderHook(() => usePlayer());
+
+    expect(store.setLoudnessPreferences).not.toHaveBeenCalled();
   });
 });
 

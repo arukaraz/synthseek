@@ -81,3 +81,16 @@ export const WAVE_ENERGY_PEAK_DECAY = 0.966;
 export const WAVE_ENERGY_SILENCE = 0.01;
 
 export const WAVE_ENERGY_SMOOTHING = 0.55;
+
+export const NO_GAIN_FACTOR = 1;
+
+export const NO_REPLAY_GAIN = {
+  trackGain: null,
+  albumGain: null,
+  trackPeak: null,
+  albumPeak: null,
+} as const;
+
+export const NO_ALBUM_ID = "";
+
+export const GAIN_RAMP_SECONDS = 0.05;

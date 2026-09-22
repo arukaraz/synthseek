@@ -7,12 +7,14 @@ export const createPlayerTrack = (overrides: Partial<PlayerTrack> = {}): PlayerT
   title: "Digital Love",
   artist: "Daft Punk",
   album: "Discovery",
+  albumId: "album-1",
   durationSeconds: 301,
   format: "flac",
   bitrateKbps: 1024,
   lossless: true,
   tone: "primary",
   artworkUrl: null,
+  replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
   ...overrides,
 });
 

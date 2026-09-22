@@ -255,6 +255,8 @@ describe("mergeReorderedWindow", () => {
       lossless: false,
       tone: "primary" as const,
       artworkUrl: null,
+      albumId: "album-1",
+      replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
     },
   });
 

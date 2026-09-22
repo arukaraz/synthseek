@@ -21,17 +21,26 @@ export interface PlayerDevice {
   playing: boolean;
 }
 
+export interface PlayerReplayGain {
+  trackGain: number | null;
+  albumGain: number | null;
+  trackPeak: number | null;
+  albumPeak: number | null;
+}
+
 export interface PlayerTrack {
   id: string;
   title: string;
   artist: string;
   album: string;
+  albumId: string;
   durationSeconds: number;
   format: string;
   bitrateKbps: number;
   lossless: boolean;
   tone: PlayerTone;
   artworkUrl: string | null;
+  replayGain: PlayerReplayGain;
 }
 
 export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";

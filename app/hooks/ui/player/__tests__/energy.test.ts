@@ -21,10 +21,17 @@ class FakeAnalyser {
   }
 }
 
+class FakeGain {
+  readonly gain = { setTargetAtTime: vi.fn() };
+  readonly connect = vi.fn();
+}
+
 class FakeContext {
   readonly sampleRate = 48_000;
   readonly destination = {};
+  readonly currentTime = 0;
   readonly analyser = new FakeAnalyser();
+  readonly gainNode = new FakeGain();
   readonly source = { connect: vi.fn() };
 
   static record(context: FakeContext): void {
@@ -38,6 +45,10 @@ class FakeContext {
 
   createAnalyser(): FakeAnalyser {
     return this.analyser;
+  }
+
+  createGain(): FakeGain {
+    return this.gainNode;
   }
 
   createMediaElementSource(): { connect: (target: unknown) => void } {
@@ -179,12 +190,13 @@ describe("analyser setup", () => {
     expect(built?.analyser.smoothingTimeConstant).toBe(WAVE_ANALYSER_SMOOTHING);
   });
 
-  it("routes the audio through the analyser and back out to the speakers", async () => {
+  it("hears the audio through the same graph the gain is applied in, not a second one of its own", async () => {
     const energy = await freshEnergy();
 
     energy.followAudio(element());
 
+    expect(built?.source.connect).toHaveBeenCalledWith(built?.gainNode);
+    expect(built?.gainNode.connect).toHaveBeenCalledWith(built?.analyser);
     expect(built?.analyser.connect).toHaveBeenCalledWith(built?.destination);
-    expect(built?.source.connect).toHaveBeenCalledWith(built?.analyser);
   });
 });

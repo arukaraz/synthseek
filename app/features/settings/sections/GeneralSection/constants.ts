@@ -12,6 +12,12 @@ export const THEME_OPTIONS: ReadonlyArray<ThemeOption> = [
 
 export const FEATURED_THEME: Theme = "dark";
 
+export const PREAMP_MIN_DB = -15;
+
+export const PREAMP_MAX_DB = 15;
+
+export const PREAMP_STEP_DB = 1;
+
 export const ROVING_KEYS: ReadonlyArray<RovingNavKey> = [
   "ArrowRight",
   "ArrowDown",

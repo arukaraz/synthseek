@@ -16,6 +16,8 @@ export function makeRequestsUser(overrides: Partial<PublicUser> = {}): PublicUse
     avatar_url: null,
     role: Role.enum.member,
     language: "en",
+    loudnessNormalization: true,
+    loudnessPreampDb: 0,
     plex_username: null,
     plexLinked: false,
     hasPassword: true,

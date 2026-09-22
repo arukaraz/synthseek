@@ -14,10 +14,14 @@ interface Me {
 let meQuery: MockQueryResult<Me | undefined> = createMockQuery<Me | undefined>({ language: "en" });
 const setLanguage = createMockMutation();
 
-vi.mock("@utils/trpc", () => ({
-  trpc: {
-    auth: { me: { useQuery: () => meQuery } },
-  },
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({
+    currentUser: meQuery.data ?? null,
+    isLoading: false,
+    isError: false,
+    isAdmin: true,
+    refetch: vi.fn(),
+  }),
 }));
 
 vi.mock("@hooks/api/mutations/auth/useSetLanguage", () => ({

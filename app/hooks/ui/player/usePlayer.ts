@@ -11,11 +11,12 @@ import {
 } from "@hooks/api";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { resolveFriendlyError } from "@modules/errors";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useTranslation } from "react-i18next";
 
 import { deviceKindFrom } from "./device";
 import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom, upcomingOrder, visibleQueueIds } from "./helpers";
-import { actions, currentTrack, getSnapshot, setMessages, subscribe } from "./store";
+import { actions, currentTrack, getSnapshot, setLoudnessPreferences, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
 import { usePlayerDocumentTitle } from "./useDocumentTitle";
 import { usePlayReporter } from "./usePlayReporter";
@@ -67,6 +68,7 @@ function usePlayerSession(): PlayerSessionState {
 
 export function usePlayer(): { view: PlayerView | null; actions: PlayerActions } {
   const { t } = useTranslation("player");
+  const { currentUser } = useAuthContext();
   const session = usePlayerSession();
   const { devices: known, handOverTo, commandActive } = usePlayerDevices();
   usePlayReporter();
@@ -125,6 +127,14 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     actions.restoreVolume();
     actions.restoreMode();
   }, []);
+
+  useEffect(() => {
+    if (currentUser === null) return;
+    setLoudnessPreferences({
+      enabled: currentUser.loudnessNormalization,
+      preAmpDb: currentUser.loudnessPreampDb,
+    });
+  }, [currentUser]);
 
   const here: PlayerDevice = {
     id: "here",

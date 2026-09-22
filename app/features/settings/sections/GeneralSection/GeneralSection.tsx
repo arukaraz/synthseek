@@ -6,6 +6,7 @@ import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { contentRoot } from "../../styles";
 import { ConnectAppsCard } from "./ConnectAppsCard";
 import { LanguageCard } from "./LanguageCard";
+import { LoudnessCard } from "./LoudnessCard";
 import { ThemeCard } from "./ThemeCard";
 
 export function GeneralSection() {
@@ -15,6 +16,7 @@ export function GeneralSection() {
       <SettingsPageHeader title={t("general.pageTitle")} />
       <ThemeCard />
       <LanguageCard />
+      <LoudnessCard />
       <ConnectAppsCard />
     </div>
   );

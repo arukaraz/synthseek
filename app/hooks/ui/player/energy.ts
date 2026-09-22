@@ -8,9 +8,8 @@ import {
   WAVE_ENERGY_FLOOR,
   WAVE_ENERGY_INTERVAL_MS,
   WAVE_ENERGY_SMOOTHING,
-  WAVE_ANALYSER_SMOOTHING,
-  WAVE_FFT_SIZE,
 } from "./constants";
+import { attachGraph, resumeGraph } from "./audio-graph";
 
 interface Listener {
   context: AudioContext;
@@ -21,7 +20,6 @@ interface Listener {
 }
 
 let listener: Listener | null = null;
-let unsupported = false;
 let timer: ReturnType<typeof setInterval> | undefined;
 let smoothed = 1;
 let peak = 0;
@@ -33,29 +31,21 @@ export function audioEnergy(): number {
 
 function listen(element: HTMLAudioElement): Listener | null {
   if (listener !== null) return listener;
-  if (unsupported) return null;
 
-  try {
-    const context = new AudioContext();
-    const analyser = context.createAnalyser();
-    analyser.fftSize = WAVE_FFT_SIZE;
-    analyser.smoothingTimeConstant = WAVE_ANALYSER_SMOOTHING;
-    analyser.connect(context.destination);
-    context.createMediaElementSource(element).connect(analyser);
-    const hertzPerBin = context.sampleRate / 2 / analyser.frequencyBinCount;
-    const bassFrom = Math.max(1, Math.floor(WAVE_BASS_LOW_HZ / hertzPerBin));
-    listener = {
-      context,
-      analyser,
-      bins: new Uint8Array(new ArrayBuffer(analyser.frequencyBinCount)),
-      bassFrom,
-      bassTo: Math.min(analyser.frequencyBinCount, Math.max(bassFrom + 1, Math.ceil(WAVE_BASS_HIGH_HZ / hertzPerBin))),
-    };
-    return listener;
-  } catch {
-    unsupported = true;
-    return null;
-  }
+  const graph = attachGraph(element);
+  if (graph === null) return null;
+
+  const { context, analyser } = graph;
+  const hertzPerBin = context.sampleRate / 2 / analyser.frequencyBinCount;
+  const bassFrom = Math.max(1, Math.floor(WAVE_BASS_LOW_HZ / hertzPerBin));
+  listener = {
+    context,
+    analyser,
+    bins: new Uint8Array(new ArrayBuffer(analyser.frequencyBinCount)),
+    bassFrom,
+    bassTo: Math.min(analyser.frequencyBinCount, Math.max(bassFrom + 1, Math.ceil(WAVE_BASS_HIGH_HZ / hertzPerBin))),
+  };
+  return listener;
 }
 
 function loudness(source: Listener): number {
@@ -70,7 +60,7 @@ export function followAudio(element: HTMLAudioElement): void {
   const source = listen(element);
   if (source === null) return;
 
-  void source.context.resume().catch(() => undefined);
+  resumeGraph();
   clearInterval(timer);
   timer = setInterval(() => {
     const level = loudness(source);

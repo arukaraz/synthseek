@@ -81,6 +81,25 @@ export interface KnownDevice {
   trackTitle: string | null;
 }
 
+export interface AudioGraph {
+  context: AudioContext;
+  analyser: AnalyserNode;
+  gain: GainNode;
+}
+
+export interface AudioOutput {
+  factor: number;
+  volume: number;
+  muted: boolean;
+}
+
+export type LoudnessMode = "track" | "album";
+
+export interface LoudnessPreferences {
+  enabled: boolean;
+  preAmpDb: number;
+}
+
 export interface QueueAddOutcome {
   added: number;
   skipped: number;

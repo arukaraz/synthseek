@@ -50,6 +50,8 @@ function track(id: string): PlayerTrack {
     lossless: false,
     tone: "primary",
     artworkUrl: null,
+    albumId: "album-1",
+    replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
   };
 }
 

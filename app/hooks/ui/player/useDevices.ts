@@ -13,6 +13,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   DEVICE_HEARTBEAT_MS,
   HAND_OVER_ACK_MS,
+  NO_ALBUM_ID,
+  NO_REPLAY_GAIN,
   POSITION_JUMP_SECONDS,
   PROGRESS_REPORT_MS,
   WAKE_BEAT_FLOOR_MS,
@@ -196,7 +198,15 @@ export function usePlayerDevices(): {
       deviceId: snapshot.deviceId,
       deviceName: snapshot.deviceName,
       playing: snapshot.playing,
-      track: snapshot.track === null ? null : { ...snapshot.track, tone: toneFor(snapshot.track.id) },
+      track:
+        snapshot.track === null
+          ? null
+          : {
+              ...snapshot.track,
+              tone: toneFor(snapshot.track.id),
+              albumId: NO_ALBUM_ID,
+              replayGain: NO_REPLAY_GAIN,
+            },
       confirmed: true,
       positionSeconds: snapshot.positionSeconds + snapshot.reportedSecondsAgo,
       shuffle: snapshot.shuffle,
