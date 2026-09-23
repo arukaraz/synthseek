@@ -97,7 +97,8 @@
     "revoked": "Clé API révoquée"
   },
   "jobs": {
-    "runFailed": "Échec de l'exécution de la tâche"
+    "runFailed": "Échec de l'exécution de la tâche",
+    "stopFailed": "Échec de l'arrêt de la tâche"
   },
   "discovery": {
     "lastfmFailed": "Échec de l'enregistrement des réglages Last.fm",

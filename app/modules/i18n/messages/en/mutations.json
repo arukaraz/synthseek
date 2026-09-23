@@ -97,7 +97,8 @@
     "revoked": "API key revoked"
   },
   "jobs": {
-    "runFailed": "Failed to run job"
+    "runFailed": "Failed to run job",
+    "stopFailed": "Failed to stop job"
   },
   "discovery": {
     "lastfmFailed": "Failed to save Last.fm settings",

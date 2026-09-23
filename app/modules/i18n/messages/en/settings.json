@@ -836,7 +836,8 @@
       "nextRunFallback": "Idle",
       "progress": "{{done}} of {{total}} tracks done",
       "runNow": "Run {{name}} now",
-      "running": "Running {{name}}"
+      "running": "Running {{name}}",
+      "stop": "Stop {{name}}"
     },
     "interval": {
       "everyMinute": "Every minute",

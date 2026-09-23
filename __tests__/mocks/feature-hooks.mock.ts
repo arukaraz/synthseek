@@ -137,6 +137,7 @@ export function createMockJob(overrides: Partial<JobsOutput[number]> = {}): Jobs
     enabled: true,
     listed: true,
     running: false,
+    canStop: false,
     nextRun: new Date("2024-01-01T01:00:00Z"),
     lastRun: new Date("2024-01-01T00:00:00Z"),
     lastStatus: "success",

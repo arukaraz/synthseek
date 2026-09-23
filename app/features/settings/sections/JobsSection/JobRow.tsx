@@ -1,14 +1,17 @@
 "use client";
 
-import { Loader2, Play } from "lucide-react";
+import { Loader2, Play, Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { LoadingDots } from "@components/ui/LoadingDots";
+import { LoadingRing } from "@components/ui/LoadingRing";
+import { useStopJob } from "@hooks/api/mutations/jobs/useStopJob";
 import { useTriggerJob } from "@hooks/api/mutations/jobs/useTriggerJob";
 import { useNow } from "@hooks/ui/useNow";
 
 import { JOB_DESCRIPTION_KEYS, JOB_NAME_KEYS } from "./constants";
 import {
+  jobAction,
   jobDescription,
   jobInfo,
   jobInProgress,
@@ -29,8 +32,10 @@ import type { JobRowProps } from "./types";
 export function JobRow({ job }: JobRowProps) {
   const { t } = useTranslation("settings");
   const trigger = useTriggerJob();
+  const stop = useStopJob();
   const now = useNow();
   const isRunning = job.running || trigger.isPending;
+  const stoppable = isRunning && job.canStop;
   const lastRunFailed = job.lastStatus === "failed";
   const nextRun = formatNextRun(job.nextRun, now);
   const name = t(JOB_NAME_KEYS[job.id]);
@@ -66,16 +71,31 @@ export function JobRow({ job }: JobRowProps) {
             </span>
           )}
         </div>
-        <button
-          type="button"
-          className={jobPlayButton()}
-          onClick={() => trigger.mutate({ id: job.id })}
-          disabled={isRunning}
-          aria-label={isRunning ? t("jobs.row.running", { name }) : t("jobs.row.runNow", { name })}
-          aria-busy={isRunning}
-        >
-          {isRunning ? <Loader2 className="animate-spin" /> : <Play className="fill-current" />}
-        </button>
+        <span className={jobAction()}>
+          {stoppable ? <LoadingRing className="text-primary-400/60" /> : null}
+          <button
+            type="button"
+            className={jobPlayButton({ intent: stoppable ? "stop" : "run" })}
+            onClick={() => (stoppable ? stop.mutate({ id: job.id }) : trigger.mutate({ id: job.id }))}
+            disabled={stoppable ? stop.isPending : isRunning}
+            aria-label={
+              stoppable
+                ? t("jobs.row.stop", { name })
+                : isRunning
+                  ? t("jobs.row.running", { name })
+                  : t("jobs.row.runNow", { name })
+            }
+            aria-busy={isRunning && !stoppable}
+          >
+            {stoppable ? (
+              <Square className="fill-current" />
+            ) : isRunning ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <Play className="fill-current" />
+            )}
+          </button>
+        </span>
       </div>
     </div>
   );

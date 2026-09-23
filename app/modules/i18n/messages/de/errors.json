@@ -295,6 +295,14 @@
     "title": "Läuft bereits",
     "description": "Dieser Auftrag arbeitet bereits. Sein Fortschritt steht in der Liste."
   },
+  "JOB_NOT_RUNNING": {
+    "title": "Nichts zu stoppen",
+    "description": "Dieser Auftrag war fertig, bevor die Anfrage ankam. Die Liste wurde aktualisiert."
+  },
+  "JOB_NOT_STOPPABLE": {
+    "title": "Nicht stoppbar",
+    "description": "Dieser Auftrag läuft in einem Schritt, es gibt nichts zu unterbrechen."
+  },
   "LIBRARY_FILE_NOT_FOUND": {
     "title": "Datei nicht gefunden",
     "description": "Diese Datei ist nicht mehr im Bibliotheksindex. Führe einen Scan aus und versuche es erneut."

@@ -836,7 +836,8 @@
       "nextRunFallback": "Inaktiv",
       "progress": "{{done}} von {{total}} Titeln fertig",
       "runNow": "{{name}} jetzt ausführen",
-      "running": "{{name}} wird ausgeführt"
+      "running": "{{name}} wird ausgeführt",
+      "stop": "{{name}} stoppen"
     },
     "interval": {
       "everyMinute": "Jede Minute",

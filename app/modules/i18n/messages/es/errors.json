@@ -295,6 +295,14 @@
     "title": "Ya está en marcha",
     "description": "Ese trabajo ya está en curso. Su progreso se ve en la lista."
   },
+  "JOB_NOT_RUNNING": {
+    "title": "No hay nada que detener",
+    "description": "Ese trabajo terminó antes de que llegara la petición. La lista se ha actualizado."
+  },
+  "JOB_NOT_STOPPABLE": {
+    "title": "No se puede detener",
+    "description": "Ese trabajo se ejecuta de una sola vez, así que no hay nada que interrumpir."
+  },
   "LIBRARY_FILE_NOT_FOUND": {
     "title": "Archivo no encontrado",
     "description": "Ese archivo ya no está en el índice de la biblioteca. Escanea y vuelve a intentarlo."

@@ -13,9 +13,14 @@ import { HOUR_MS } from "../constants";
 import type { JobRowProps } from "../types";
 
 const trigger = createMockMutation();
+const stop = createMockMutation();
 
 vi.mock("@hooks/api/mutations/jobs/useTriggerJob", () => ({
   useTriggerJob: () => trigger,
+}));
+
+vi.mock("@hooks/api/mutations/jobs/useStopJob", () => ({
+  useStopJob: () => stop,
 }));
 
 vi.mock("@hooks/ui/useNow", () => ({
@@ -33,6 +38,7 @@ afterEach(() => {
   cleanup();
   vi.clearAllMocks();
   trigger.isPending = false;
+  stop.isPending = false;
 });
 
 const job: JobRowProps["job"] = {
@@ -101,6 +107,41 @@ describe("JobRow", () => {
     expect(screen.getByText(enSettings.jobs.row.inProgress)).toBeInTheDocument();
     const name = enSettings.jobs.registry["library-sync"].name;
     expect(screen.getByRole("button", { name: `Running ${name}` })).toBeDisabled();
+  });
+
+  it("turns the run button into a stop button while a job that can be interrupted is running", async () => {
+    render(<JobRow job={{ ...job, running: true, canStop: true }} />);
+    const name = enSettings.jobs.registry["library-sync"].name;
+
+    expect(screen.queryByRole("button", { name: `Running ${name}` })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: `Stop ${name}` }));
+
+    expect(stop.mutate).toHaveBeenCalledWith({ id: "library-sync" });
+    expect(trigger.mutate).not.toHaveBeenCalled();
+  });
+
+  it("does not call the stop button busy, since it is the job that is working and the control is ready", () => {
+    render(<JobRow job={{ ...job, running: true, canStop: true }} />);
+    const name = enSettings.jobs.registry["library-sync"].name;
+
+    const button = screen.getByRole("button", { name: `Stop ${name}` });
+    expect(button).toBeEnabled();
+    expect(button).not.toHaveAttribute("aria-busy", "true");
+  });
+
+  it("keeps the disabled spinner for a running job that cannot be interrupted, rather than a stop that does nothing", () => {
+    render(<JobRow job={{ ...job, running: true, canStop: false }} />);
+    const name = enSettings.jobs.registry["library-sync"].name;
+
+    expect(screen.queryByRole("button", { name: `Stop ${name}` })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: `Running ${name}` })).toBeDisabled();
+  });
+
+  it("offers no stop button while the job is idle", () => {
+    render(<JobRow job={{ ...job, running: false, canStop: true }} />);
+    const name = enSettings.jobs.registry["library-sync"].name;
+
+    expect(screen.queryByRole("button", { name: `Stop ${name}` })).not.toBeInTheDocument();
   });
 
   it("surfaces a failed last run once the job is no longer running", () => {

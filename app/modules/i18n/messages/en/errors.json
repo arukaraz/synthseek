@@ -295,6 +295,14 @@
     "title": "Already running",
     "description": "That job is already working. Its progress is shown in the list."
   },
+  "JOB_NOT_RUNNING": {
+    "title": "Nothing to stop",
+    "description": "That job finished before the request arrived. The list has been refreshed."
+  },
+  "JOB_NOT_STOPPABLE": {
+    "title": "Cannot be stopped",
+    "description": "That job runs in one step, so there is nothing to interrupt."
+  },
   "LIBRARY_FILE_NOT_FOUND": {
     "title": "File not found",
     "description": "That file is no longer in the library index. Run a scan and try again."

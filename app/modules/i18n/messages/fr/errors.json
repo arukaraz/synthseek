@@ -295,6 +295,14 @@
     "title": "Déjà en cours",
     "description": "Cette tâche travaille déjà. Sa progression est indiquée dans la liste."
   },
+  "JOB_NOT_RUNNING": {
+    "title": "Rien à arrêter",
+    "description": "Cette tâche s'est terminée avant l'arrivée de la demande. La liste a été actualisée."
+  },
+  "JOB_NOT_STOPPABLE": {
+    "title": "Ne peut pas être arrêtée",
+    "description": "Cette tâche s'exécute en une seule étape, il n'y a rien à interrompre."
+  },
   "LIBRARY_FILE_NOT_FOUND": {
     "title": "Fichier introuvable",
     "description": "Ce fichier n'est plus dans l'index de la bibliothèque. Lancez une analyse et réessayez."

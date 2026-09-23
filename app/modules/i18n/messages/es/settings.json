@@ -836,7 +836,8 @@
       "nextRunFallback": "Inactiva",
       "progress": "{{done}} de {{total}} pistas hechas",
       "runNow": "Ejecutar {{name}} ahora",
-      "running": "Ejecutando {{name}}"
+      "running": "Ejecutando {{name}}",
+      "stop": "Detener {{name}}"
     },
     "interval": {
       "everyMinute": "Cada minuto",

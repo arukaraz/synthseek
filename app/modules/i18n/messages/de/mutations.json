@@ -97,7 +97,8 @@
     "revoked": "API-Schlüssel widerrufen"
   },
   "jobs": {
-    "runFailed": "Aufgabe konnte nicht ausgeführt werden"
+    "runFailed": "Aufgabe konnte nicht ausgeführt werden",
+    "stopFailed": "Aufgabe konnte nicht gestoppt werden"
   },
   "discovery": {
     "lastfmFailed": "Last.fm-Einstellungen konnten nicht gespeichert werden",

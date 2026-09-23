@@ -16,7 +16,7 @@ vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({ jobs: { list: { invalidate: cache.invalidate } } }),
     jobs: {
-      trigger: {
+      stop: {
         useMutation: (options: CapturedHandlers) => {
           captured.options = options;
           return { mutate: vi.fn() };
@@ -26,10 +26,10 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-import { useTriggerJob } from "../mutations/jobs/useTriggerJob";
+import { useStopJob } from "../mutations/jobs/useStopJob";
 
 function useCapturedHandlers(): CapturedHandlers {
-  useTriggerJob();
+  useStopJob();
   const { options } = captured;
   if (options === null) throw new Error("the mutation registered no handlers");
   return options;
@@ -40,16 +40,16 @@ beforeEach(() => {
   errors.extractAppCode.mockReturnValue(undefined);
 });
 
-describe("asking a job to run now", () => {
-  it("refreshes the list and says so when the job starts", () => {
-    useCapturedHandlers().onSuccess({ message: "Loudness Measurement started" });
+describe("asking a running job to stop", () => {
+  it("refreshes the list and says so when the job accepts the request", () => {
+    useCapturedHandlers().onSuccess({ message: "Loudness Measurement will stop shortly" });
 
     expect(cache.invalidate).toHaveBeenCalledTimes(1);
-    expect(toasts.success).toHaveBeenCalledWith("Loudness Measurement started");
+    expect(toasts.success).toHaveBeenCalledWith("Loudness Measurement will stop shortly");
   });
 
-  it("treats an already-running job as stale state to refresh, not as a failure to shout about", () => {
-    errors.extractAppCode.mockReturnValue("JOB_ALREADY_RUNNING");
+  it("treats a job that already finished as stale state to refresh, not as a failure to shout about", () => {
+    errors.extractAppCode.mockReturnValue("JOB_NOT_RUNNING");
 
     useCapturedHandlers().onError(new Error("whatever the transport wrapped"));
 
@@ -58,7 +58,7 @@ describe("asking a job to run now", () => {
   });
 
   it("still reports a real failure", () => {
-    errors.extractAppCode.mockReturnValue("SOMETHING_ELSE");
+    errors.extractAppCode.mockReturnValue("JOB_NOT_STOPPABLE");
 
     useCapturedHandlers().onError(new Error("boom"));
 
