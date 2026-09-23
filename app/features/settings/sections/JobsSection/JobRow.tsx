@@ -3,6 +3,7 @@
 import { Loader2, Play, Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { LoadingDots } from "@components/ui/LoadingDots";
 import { LoadingRing } from "@components/ui/LoadingRing";
 import { useStopJob } from "@hooks/api/mutations/jobs/useStopJob";
@@ -25,6 +26,7 @@ import {
   jobProgress,
   jobRight,
   jobRow,
+  jobSkipped,
 } from "../../styles";
 import { describeInterval, formatNextRun } from "./helpers";
 import type { JobRowProps } from "./types";
@@ -51,6 +53,20 @@ export function JobRow({ job }: JobRowProps) {
               done: job.progress.done.toLocaleString(),
               total: job.progress.total.toLocaleString(),
             })}
+            {job.progress.skipped > 0 ? (
+              <span className={jobSkipped()}>
+                {t("jobs.row.skipped", {
+                  count: job.progress.skipped,
+                  value: job.progress.skipped.toLocaleString(),
+                })}
+                <InfoTooltip
+                  title={t("jobs.row.skippedTooltipTitle")}
+                  description={t("jobs.row.skippedTooltipWhat")}
+                  secondary={t("jobs.row.skippedTooltipRetry")}
+                  triggerLabel={t("jobs.row.skippedTooltipTriggerLabel")}
+                />
+              </span>
+            ) : null}
           </span>
         ) : null}
       </div>

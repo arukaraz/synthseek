@@ -837,6 +837,12 @@
       "progress": "{{done}} of {{total}} tracks done",
       "runNow": "Run {{name}} now",
       "running": "Running {{name}}",
+      "skipped_one": "· {{value}} skipped",
+      "skipped_other": "· {{value}} skipped",
+      "skippedTooltipRetry": "Synthseek retries each of them a few times before it stops asking.",
+      "skippedTooltipTitle": "Why some tracks are skipped",
+      "skippedTooltipTriggerLabel": "Why some tracks are skipped",
+      "skippedTooltipWhat": "These files are silent or damaged, so there is no reliable loudness to read from them. They play at their original volume.",
       "stop": "Stop {{name}}"
     },
     "interval": {

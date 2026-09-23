@@ -837,6 +837,12 @@
       "progress": "{{done}} de {{total}} pistas hechas",
       "runNow": "Ejecutar {{name}} ahora",
       "running": "Ejecutando {{name}}",
+      "skipped_one": "· {{value}} omitida",
+      "skipped_other": "· {{value}} omitidas",
+      "skippedTooltipRetry": "Synthseek lo reintenta unas cuantas veces antes de dejar de pedirlo.",
+      "skippedTooltipTitle": "Por qué se omiten algunas pistas",
+      "skippedTooltipTriggerLabel": "Por qué se omiten algunas pistas",
+      "skippedTooltipWhat": "Esos ficheros están en silencio o dañados, así que no hay un volumen fiable que leer en ellos. Suenan con su volumen original.",
       "stop": "Detener {{name}}"
     },
     "interval": {

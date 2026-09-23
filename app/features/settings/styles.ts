@@ -249,6 +249,8 @@ export const jobDescription = cva("text-fg/55 text-xs");
 
 export const jobProgress = cva("text-fg/40 text-xs tabular-nums");
 
+export const jobSkipped = cva("ms-1.5 inline-flex items-center gap-1 align-middle");
+
 export const jobRight = cva("flex shrink-0 items-center gap-3");
 
 export const jobNextRun = cva("flex flex-col items-end gap-0.5 text-right");

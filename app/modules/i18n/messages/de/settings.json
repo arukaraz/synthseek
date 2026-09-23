@@ -837,6 +837,12 @@
       "progress": "{{done}} von {{total}} Titeln fertig",
       "runNow": "{{name}} jetzt ausführen",
       "running": "{{name}} wird ausgeführt",
+      "skipped_one": "· {{value}} übersprungen",
+      "skipped_other": "· {{value}} übersprungen",
+      "skippedTooltipRetry": "Synthseek versucht es ein paar Mal, bevor es aufhört zu fragen.",
+      "skippedTooltipTitle": "Warum einige Titel übersprungen werden",
+      "skippedTooltipTriggerLabel": "Warum einige Titel übersprungen werden",
+      "skippedTooltipWhat": "Diese Dateien sind still oder beschädigt, es gibt also keine verlässliche Lautheit darin zu lesen. Sie laufen mit ihrer ursprünglichen Lautstärke.",
       "stop": "{{name}} stoppen"
     },
     "interval": {

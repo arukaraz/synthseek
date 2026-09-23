@@ -66,6 +66,32 @@ describe("JobRow", () => {
     expect(screen.getByText("3,402 of 8,410 tracks done")).toBeInTheDocument();
   });
 
+  it("says how many tracks it gave up on, so a counter short of the total explains itself", () => {
+    render(<JobRow job={{ ...job, id: "library-loudness", progress: { done: 8353, total: 8410, skipped: 57 } }} />);
+
+    expect(screen.getByText("8,353 of 8,410 tracks done")).toBeInTheDocument();
+    expect(screen.getByText("· 57 skipped")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enSettings.jobs.row.skippedTooltipTriggerLabel })).toBeInTheDocument();
+  });
+
+  it("counts one skipped track in the singular, and formats a large count like the rest of the line", () => {
+    render(<JobRow job={{ ...job, id: "library-loudness", progress: { done: 10, total: 11, skipped: 1 } }} />);
+    expect(screen.getByText("· 1 skipped")).toBeInTheDocument();
+
+    cleanup();
+    render(<JobRow job={{ ...job, id: "library-loudness", progress: { done: 10, total: 2345, skipped: 2335 } }} />);
+    expect(screen.getByText("· 2,335 skipped")).toBeInTheDocument();
+  });
+
+  it("stays quiet about skipped tracks when there are none, rather than showing a zero", () => {
+    render(<JobRow job={{ ...job, id: "library-loudness", progress: { done: 8410, total: 8410, skipped: 0 } }} />);
+
+    expect(screen.queryByText(/skipped/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: enSettings.jobs.row.skippedTooltipTriggerLabel })
+    ).not.toBeInTheDocument();
+  });
+
   it("says nothing about progress for a job that does not report any", () => {
     render(<JobRow job={job} />);
 

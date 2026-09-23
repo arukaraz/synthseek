@@ -837,6 +837,12 @@
       "progress": "{{done}} sur {{total}} morceaux traités",
       "runNow": "Exécuter {{name}} maintenant",
       "running": "Exécution de {{name}}",
+      "skipped_one": "· {{value}} ignoré",
+      "skipped_other": "· {{value}} ignorés",
+      "skippedTooltipRetry": "Synthseek réessaie chacun quelques fois avant d'arrêter de demander.",
+      "skippedTooltipTitle": "Pourquoi certains morceaux sont ignorés",
+      "skippedTooltipTriggerLabel": "Pourquoi certains morceaux sont ignorés",
+      "skippedTooltipWhat": "Ces fichiers sont silencieux ou endommagés, il n'y a donc aucun volume fiable à y lire. Ils sont joués à leur volume d'origine.",
       "stop": "Arrêter {{name}}"
     },
     "interval": {
