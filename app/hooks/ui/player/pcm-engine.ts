@@ -210,15 +210,19 @@ function failVoice(voice: Voice): void {
   }
 }
 
+function endOf(voice: Voice): number {
+  return voice.base + (voice.fed ? voice.scheduledUntil : voice.source.durationSeconds);
+}
+
 function seamTarget(voice: Voice): number {
-  const endAt = voice.base + voice.source.durationSeconds;
+  const endAt = endOf(voice);
   return primed === null ? endAt : endAt - primed.plan.fadeSeconds;
 }
 
 function beginPrimedFeed(voice: Voice): void {
   if (primed === null || primed.voice.iterator !== null || primed.voice.fed) return;
   const { plan } = primed;
-  const endAt = voice.base + voice.source.durationSeconds;
+  const endAt = endOf(voice);
   const incoming = primed.voice;
   if (plan.fadeSeconds > 0) {
     const at = endAt - plan.fadeSeconds;

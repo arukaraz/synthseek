@@ -22,6 +22,7 @@ const sources = vi.hoisted(() => ({
       padding?: number;
       failAfter?: number;
       firstAfterMs?: number;
+      shortBy?: number;
     }
   >(),
   opened: [] as string[],
@@ -35,7 +36,7 @@ vi.mock("../pcm-source", () => ({
     const spec = sources.specs.get(url) ?? { duration: 30, trim: 0, chunk: 1, fail: false };
     sources.opened.push(url);
     if (spec.fail) throw new Error("cannot open");
-    const rawEnd = spec.duration + spec.trim + (spec.padding ?? 0);
+    const rawEnd = spec.duration + spec.trim + (spec.padding ?? 0) - (spec.shortBy ?? 0);
     return {
       durationSeconds: spec.duration,
       sampleRate: 44100,
@@ -416,6 +417,25 @@ describe("the seam between two tracks", () => {
     expect(heard.onEnded).not.toHaveBeenCalled();
     await settle(OUTGOING_RELEASE_MARGIN_MS);
     expect(sources.disposed).toContain(A);
+  });
+
+  it("seams on the last decoded sample when the container claims more than the decoder yields", async () => {
+    sources.specs.set(A, { duration: 10, trim: 0, chunk: 1, fail: false, shortBy: 0.0065 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+    context.currentTime = 4;
+    await settle(PCM_FEED_TICK_MS * 3);
+    const scheduledA = context.sources.length;
+
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    await settle();
+
+    const seam = PCM_START_LEAD_SECONDS + 10 - 0.0065;
+    expect(Number(context.sources[scheduledA]?.start.mock.calls[0]?.[0])).toBeCloseTo(seam, 6);
+    context.currentTime = seam + 0.001;
+    await settle(PCM_FEED_TICK_MS);
+    expect(heard.onHandoff).toHaveBeenCalledWith(B);
   });
 
   it("blends into the readied track over the fade, starting it that much earlier", async () => {
