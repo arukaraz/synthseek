@@ -1,4 +1,4 @@
-import type { CompressorPresetId, EqualizerPresetId } from "@components/Player";
+import type { CompressorPresetId, EqualizerPresetId, TransitionCurve, TransitionMode } from "@components/Player";
 
 import type { CompressorParam, CompressorParams } from "./types";
 
@@ -116,6 +116,36 @@ export const EQUALIZER_PRESETS_STORAGE_KEY = "synthseek.player.equalizer.presets
 export const COMPRESSOR_STORAGE_KEY = "synthseek.player.compressor";
 
 export const CONVERSION_STORAGE_KEY = "synthseek.player.conversion";
+
+export const TRANSITION_STORAGE_KEY = "synthseek.player.transition";
+
+export const TRANSITION_MODES = ["gapless", "crossfade", "smart"] as const satisfies readonly TransitionMode[];
+
+export const TRANSITION_CURVES = ["equalPower", "linear"] as const satisfies readonly TransitionCurve[];
+
+export const TRANSITION_MIN_SECONDS = 1;
+
+export const TRANSITION_MAX_SECONDS = 12;
+
+export const TRANSITION_STEP_SECONDS = 1;
+
+export const TRANSITION_DEFAULT_SECONDS = 5;
+
+export const CROSSFADE_MIN_TRACK_RATIO = 2;
+
+export const PRIME_AHEAD_SECONDS = 20;
+
+export const HANDOFF_LEAD_SECONDS = 0.01;
+
+export const SEAM_FADE_SECONDS = 0.01;
+
+export const HANDOFF_WATCH_SECONDS = 2;
+
+export const HANDOFF_POLL_MS = 4;
+
+export const FADE_CURVE_POINTS = 64;
+
+export const OUTGOING_RELEASE_MARGIN_MS = 250;
 
 export const EQUALIZER_MAX_CUSTOM_PRESETS = 20;
 

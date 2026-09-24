@@ -236,7 +236,8 @@ describe("analyser setup", () => {
 
     energy.followAudio(element());
 
-    expect(built?.source.connect).toHaveBeenCalledWith(built?.preamp);
+    expect(built?.source.connect).toHaveBeenCalledWith(built?.gains[2]);
+    expect(built?.gains[2]?.connect).toHaveBeenCalledWith(built?.preamp);
     expect(built?.preamp?.connect).toHaveBeenCalledWith(built?.filters[0]);
     expect(built?.filters.at(-1)?.connect).toHaveBeenCalledWith(built?.gainNode);
     expect(built?.gainNode?.connect).toHaveBeenCalledWith(built?.analyser);

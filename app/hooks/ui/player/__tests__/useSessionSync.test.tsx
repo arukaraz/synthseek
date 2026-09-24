@@ -123,6 +123,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     equalizerPresets: [],
     compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
     conversion: { enabled: false, bitrateKbps: 192 },
+    transition: { mode: "gapless", seconds: 5, curve: "equalPower" },
     modesOpen: false,
     queueOpen: false,
     mode: "normal",

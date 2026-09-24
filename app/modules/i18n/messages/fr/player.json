@@ -61,7 +61,8 @@
     "units": {
       "db": "dB",
       "ms": "ms",
-      "ratio": ":1"
+      "ratio": ":1",
+      "s": "s"
     },
     "compressor": {
       "caption": "COMPRESSEUR",
@@ -99,6 +100,26 @@
       "bitrate": "Débit",
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Économise des données sur une connexion lente. Désactivé, le fichier d'origine est lu sauf si le navigateur ne peut pas le décoder."
+    },
+    "transition": {
+      "caption": "TRANSITIONS",
+      "mode": "Transition",
+      "modes": {
+        "gapless": "Sans coupure",
+        "crossfade": "Fondu enchaîné",
+        "smart": "Fondu intelligent"
+      },
+      "seconds": "Durée",
+      "curve": "Courbe",
+      "curves": {
+        "equalPower": "Puissance égale",
+        "linear": "Linéaire"
+      },
+      "hints": {
+        "gapless": "Une piste enchaîne sur la suivante sans coupure. Seulement dans ce navigateur.",
+        "crossfade": "La fin de chaque piste se fond dans le début de la suivante.",
+        "smart": "Sans coupure quand une piste se termine seule, un court fondu quand vous passez à la suivante."
+      }
     }
   },
   "equalizer": {

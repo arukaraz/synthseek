@@ -31,6 +31,11 @@ const engine = vi.hoisted(() => ({
   resume: vi.fn(),
   seek: vi.fn(),
   stop: vi.fn(),
+  prime: vi.fn(),
+  cancelPrime: vi.fn(),
+  primedUrl: vi.fn((): string | null => null),
+  crossfadeTo: vi.fn(),
+  setActiveTrackGain: vi.fn(),
 }));
 
 vi.mock("../engine", () => ({
@@ -45,6 +50,11 @@ vi.mock("../engine", () => ({
   resume: engine.resume,
   seek: engine.seek,
   stop: engine.stop,
+  prime: engine.prime,
+  cancelPrime: engine.cancelPrime,
+  primedUrl: engine.primedUrl,
+  crossfadeTo: engine.crossfadeTo,
+  setActiveTrackGain: engine.setActiveTrackGain,
 }));
 
 const media = vi.hoisted(() => ({

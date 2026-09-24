@@ -49,6 +49,7 @@ function sessionWith(overrides: Partial<PlayerSessionState>): PlayerSessionState
     equalizerPresets: [],
     compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
     conversion: { enabled: false, bitrateKbps: 192 },
+    transition: { mode: "gapless", seconds: 5, curve: "equalPower" },
     fullscreen: false,
     notice: null,
     consecutiveFailures: 0,

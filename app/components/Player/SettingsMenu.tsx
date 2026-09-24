@@ -11,6 +11,7 @@ import { CompressorSection } from "./CompressorSection";
 import { ConversionSection } from "./ConversionSection";
 import { EqualizerSection } from "./EqualizerSection";
 import { LoudnessSection } from "./LoudnessSection";
+import { TransitionSection } from "./TransitionSection";
 import { SETTINGS_PANEL_WIDTH_PX, SETTINGS_TOGGLE_SELECTOR } from "./constants";
 import { labelled, panelClosesUpward, panelEdge, returnFocusTo } from "./helpers";
 import { anchorVars, iconButton, panelAnchor, panelSurface, queueHeader, queueTitle, settingsPanel } from "./styles";
@@ -65,6 +66,7 @@ export function SettingsMenu({ view, actions, chain, anchored = false, hanging =
             <EqualizerSection view={view} actions={actions} />
             <CompressorSection view={view} actions={actions} />
             <LoudnessSection view={view} actions={actions} />
+            <TransitionSection view={view} actions={actions} />
             <ConversionSection view={view} actions={actions} />
           </div>
         </motion.div>

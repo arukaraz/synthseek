@@ -24,5 +24,8 @@ export type {
   PlayerSignalChain,
   PlayerTone,
   PlayerTrack,
+  PlayerTransition,
   PlayerView,
+  TransitionCurve,
+  TransitionMode,
 } from "./types";

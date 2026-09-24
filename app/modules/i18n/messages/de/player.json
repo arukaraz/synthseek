@@ -61,7 +61,8 @@
     "units": {
       "db": "dB",
       "ms": "ms",
-      "ratio": ":1"
+      "ratio": ":1",
+      "s": "s"
     },
     "compressor": {
       "caption": "KOMPRESSOR",
@@ -99,6 +100,26 @@
       "bitrate": "Bitrate",
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Spart Daten bei langsamer Verbindung. Aus spielt die Originaldatei, außer der Browser kann sie nicht dekodieren."
+    },
+    "transition": {
+      "caption": "ÜBERGÄNGE",
+      "mode": "Übergang",
+      "modes": {
+        "gapless": "Lückenlos",
+        "crossfade": "Überblenden",
+        "smart": "Smartes Überblenden"
+      },
+      "seconds": "Dauer",
+      "curve": "Kurve",
+      "curves": {
+        "equalPower": "Gleiche Leistung",
+        "linear": "Linear"
+      },
+      "hints": {
+        "gapless": "Ein Titel geht ohne Pause in den nächsten über. Nur in diesem Browser.",
+        "crossfade": "Das Ende jedes Titels wird in den Anfang des nächsten übergeblendet.",
+        "smart": "Lückenlos, wenn ein Titel von selbst endet, ein kurzes Überblenden beim Überspringen."
+      }
     }
   },
   "equalizer": {

@@ -61,7 +61,8 @@
     "units": {
       "db": "dB",
       "ms": "ms",
-      "ratio": ":1"
+      "ratio": ":1",
+      "s": "s"
     },
     "compressor": {
       "caption": "COMPRESOR",
@@ -99,6 +100,26 @@
       "bitrate": "Tasa de bits",
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Ahorra datos en una conexión lenta. Apagado, suena el fichero original salvo que el navegador no pueda decodificarlo."
+    },
+    "transition": {
+      "caption": "TRANSICIONES",
+      "mode": "Transición",
+      "modes": {
+        "gapless": "Sin cortes",
+        "crossfade": "Fundido cruzado",
+        "smart": "Fundido inteligente"
+      },
+      "seconds": "Duración",
+      "curve": "Curva",
+      "curves": {
+        "equalPower": "Potencia constante",
+        "linear": "Lineal"
+      },
+      "hints": {
+        "gapless": "Una canción sigue a la otra sin corte. Solo en este navegador.",
+        "crossfade": "El final de cada canción se funde con el principio de la siguiente.",
+        "smart": "Sin cortes cuando una canción acaba sola, un fundido corto cuando saltas."
+      }
     }
   },
   "equalizer": {

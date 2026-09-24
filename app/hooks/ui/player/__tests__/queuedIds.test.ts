@@ -23,6 +23,11 @@ vi.mock("../engine", () => ({
   resume: vi.fn(),
   seek: vi.fn(),
   stop: vi.fn(),
+  prime: vi.fn(),
+  cancelPrime: vi.fn(),
+  primedUrl: () => null,
+  crossfadeTo: vi.fn(),
+  setActiveTrackGain: vi.fn(),
 }));
 
 vi.mock("../media-session", () => ({

@@ -56,7 +56,7 @@ function band(index: number): HTMLElement {
 }
 
 describe("the playback settings panel", () => {
-  it("names itself and lays out the four sections", () => {
+  it("names itself and lays out the five sections", () => {
     renderMenu();
 
     const dialog = screen.getByRole("dialog");
@@ -64,6 +64,7 @@ describe("the playback settings panel", () => {
     expect(within(dialog).getByText(enPlayer.equalizer.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.compressor.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.loudness.caption)).toBeInTheDocument();
+    expect(within(dialog).getByText(enPlayer.settings.transition.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.conversion.caption)).toBeInTheDocument();
   });
 
@@ -392,5 +393,56 @@ describe("the conversion controls", () => {
     );
 
     expect(actions.setConversion).toHaveBeenCalledWith({ enabled: true, bitrateKbps: 320 });
+  });
+});
+
+describe("the transitions section", () => {
+  const CROSSFADE = { mode: "crossfade", seconds: 5, curve: "equalPower" } as const;
+
+  function transitions(): ReturnType<typeof within> {
+    return section(enPlayer.settings.transition.caption);
+  }
+
+  it("names the gapless mode and keeps the blend controls out of sight while there is nothing to blend", () => {
+    renderMenu();
+
+    expect(transitions().getByRole("button", { name: enPlayer.settings.transition.mode })).toHaveTextContent(
+      enPlayer.settings.transition.modes.gapless
+    );
+    expect(transitions().queryByRole("slider", { name: enPlayer.settings.transition.seconds })).toBeNull();
+    expect(transitions().getByText(enPlayer.settings.transition.hints.gapless)).toBeInTheDocument();
+  });
+
+  it("switches mode from its menu, keeping the length and curve already chosen", async () => {
+    const { actions, user } = renderMenu();
+
+    await user.click(transitions().getByRole("button", { name: enPlayer.settings.transition.mode }));
+    await user.click(await screen.findByRole("menuitemradio", { name: enPlayer.settings.transition.modes.smart }));
+
+    expect(actions.setTransition).toHaveBeenCalledWith({ mode: "smart", seconds: 5, curve: "equalPower" });
+  });
+
+  it("shows the blend length in seconds once a mode blends, and nudges it a second at a time", () => {
+    const { actions } = renderMenu({}, { transition: CROSSFADE });
+
+    const slider = transitions().getByRole("slider", { name: enPlayer.settings.transition.seconds });
+    expect(slider).toHaveAttribute("aria-valuenow", "5");
+    expect(slider).toHaveAttribute("aria-valuetext", `5 ${enPlayer.settings.units.s}`);
+    expect(transitions().getByText(enPlayer.settings.transition.hints.crossfade)).toBeInTheDocument();
+
+    fireEvent.keyDown(slider, { key: "ArrowRight" });
+
+    expect(actions.setTransition).toHaveBeenLastCalledWith({ ...CROSSFADE, seconds: 6 });
+  });
+
+  it("offers the curve of the blend from its own menu", async () => {
+    const { actions, user } = renderMenu({}, { transition: CROSSFADE });
+
+    const curve = transitions().getByRole("button", { name: enPlayer.settings.transition.curve });
+    expect(curve).toHaveTextContent(enPlayer.settings.transition.curves.equalPower);
+    await user.click(curve);
+    await user.click(await screen.findByRole("menuitemradio", { name: enPlayer.settings.transition.curves.linear }));
+
+    expect(actions.setTransition).toHaveBeenCalledWith({ ...CROSSFADE, curve: "linear" });
   });
 });

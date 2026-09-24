@@ -61,7 +61,8 @@
     "units": {
       "db": "dB",
       "ms": "ms",
-      "ratio": ":1"
+      "ratio": ":1",
+      "s": "s"
     },
     "compressor": {
       "caption": "COMPRESSOR",
@@ -99,6 +100,26 @@
       "bitrate": "Bitrate",
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Saves data on a slow connection. Off, the original file plays unless the browser cannot decode it."
+    },
+    "transition": {
+      "caption": "TRANSITIONS",
+      "mode": "Transition",
+      "modes": {
+        "gapless": "Gapless",
+        "crossfade": "Crossfade",
+        "smart": "Smart fade"
+      },
+      "seconds": "Length",
+      "curve": "Curve",
+      "curves": {
+        "equalPower": "Equal power",
+        "linear": "Linear"
+      },
+      "hints": {
+        "gapless": "One track runs straight into the next. Only in this browser.",
+        "crossfade": "The end of each track blends into the start of the next.",
+        "smart": "Gapless when a track ends on its own, a short blend when you skip."
+      }
     }
   },
   "equalizer": {

@@ -113,6 +113,16 @@ export interface PlayerConversion {
   bitrateKbps: number;
 }
 
+export type TransitionMode = "gapless" | "crossfade" | "smart";
+
+export type TransitionCurve = "equalPower" | "linear";
+
+export interface PlayerTransition {
+  mode: TransitionMode;
+  seconds: number;
+  curve: TransitionCurve;
+}
+
 export interface PlayerSignalChain {
   fileLabel: string;
   transcoding: boolean;
@@ -144,6 +154,7 @@ export interface PlayerView {
   compressor: PlayerCompressor;
   loudness: PlayerLoudness;
   conversion: PlayerConversion;
+  transition: PlayerTransition;
   lyricsOpen: boolean;
   lyrics: PlayerLyrics | null;
   lyricsLoading: boolean;
@@ -183,6 +194,7 @@ export interface PlayerActions {
   setLoudnessEnabled: (enabled: boolean) => void;
   setLoudnessPreamp: (preAmpDb: number) => void;
   setConversion: (conversion: PlayerConversion) => void;
+  setTransition: (transition: PlayerTransition) => void;
   toggleModes: () => void;
   toggleQueue: () => void;
   selectMode: (mode: PlayerMode) => void;
@@ -345,7 +357,7 @@ export interface PlayerEqualizerBandProps {
   onChange: (gainDb: number) => void;
 }
 
-export type SettingsUnit = "db" | "ms" | "ratio";
+export type SettingsUnit = "db" | "ms" | "ratio" | "s";
 
 export interface PlayerSettingsSliderProps {
   label: string;

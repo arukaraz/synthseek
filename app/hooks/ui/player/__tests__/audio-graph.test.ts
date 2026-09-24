@@ -6,9 +6,19 @@ let built: FakeContext | null = null;
 let contextFails = false;
 
 class FakeGain {
-  readonly gain = { value: 1, setTargetAtTime: vi.fn() };
+  readonly gain = {
+    value: 1,
+    setTargetAtTime: vi.fn(),
+    setValueAtTime: vi.fn(),
+    setValueCurveAtTime: vi.fn(),
+    cancelScheduledValues: vi.fn(),
+  };
   readonly connect = vi.fn();
   readonly disconnect = vi.fn();
+}
+
+interface FakeSource {
+  connect: ReturnType<typeof vi.fn>;
 }
 
 class FakeFilter {
@@ -38,7 +48,7 @@ class FakeContext {
   readonly gains: FakeGain[] = [];
   readonly filters: FakeFilter[] = [];
   readonly compressor = new FakeCompressor();
-  readonly source = { connect: vi.fn() };
+  readonly sources: FakeSource[] = [];
 
   static record(context: FakeContext): void {
     built = context;
@@ -55,6 +65,14 @@ class FakeContext {
 
   get preamp(): FakeGain | undefined {
     return this.gains[1];
+  }
+
+  get deckGain(): FakeGain | undefined {
+    return this.gains[2];
+  }
+
+  get source(): FakeSource | undefined {
+    return this.sources[0];
   }
 
   createAnalyser(): FakeContext["analyser"] {
@@ -77,8 +95,10 @@ class FakeContext {
     return this.compressor;
   }
 
-  createMediaElementSource(): { connect: (target: unknown) => void } {
-    return this.source;
+  createMediaElementSource(): FakeSource {
+    const source: FakeSource = { connect: vi.fn() };
+    this.sources.push(source);
+    return source;
   }
 
   resume(): Promise<void> {
@@ -97,6 +117,11 @@ function element(): HTMLAudioElement {
 
 function lastLevel(): number {
   const calls = built?.gainNode?.gain.setTargetAtTime.mock.calls ?? [];
+  return Number(calls[calls.length - 1]?.[0]);
+}
+
+function lastDeckLevel(): number {
+  const calls = built?.deckGain?.gain.setTargetAtTime.mock.calls ?? [];
   return Number(calls[calls.length - 1]?.[0]);
 }
 
@@ -125,7 +150,21 @@ describe("the one audio graph the player owns", () => {
     const second = graph.attachGraph(node);
 
     expect(first).toBe(second);
-    expect(built?.source.connect).toHaveBeenCalledTimes(1);
+    expect(built?.sources).toHaveLength(1);
+  });
+
+  it("gives a second element its own source and gain on the same chain, so two decks can sound at once", async () => {
+    const graph = await freshGraph();
+    const first = element();
+    const second = element();
+
+    const one = graph.attachGraph(first);
+    const two = graph.attachGraph(second);
+
+    expect(one).toBe(two);
+    expect(built?.sources).toHaveLength(2);
+    expect(built?.sources[1]?.connect).toHaveBeenCalledWith(built?.gains[3]);
+    expect(built?.gains[3]?.connect).toHaveBeenCalledWith(built?.preamp);
   });
 
   it("hands the element's own level over to the gain, so one place decides how loud it plays", async () => {
@@ -139,20 +178,23 @@ describe("the one audio graph the player owns", () => {
     expect(node.muted).toBe(false);
   });
 
-  it("multiplies the listener's volume by the track's correction", async () => {
+  it("keeps the listener's volume on the shared gain and the track's correction on the track's own deck", async () => {
     const graph = await freshGraph();
-    graph.attachGraph(element());
+    const node = element();
+    graph.attachGraph(node);
 
     graph.setListenerVolume(0.5, false);
-    graph.setGainFactor(0.4);
+    graph.setTrackGain(node, 0.4);
 
-    expect(lastLevel()).toBeCloseTo(0.2, 6);
+    expect(lastLevel()).toBeCloseTo(0.5, 6);
+    expect(lastDeckLevel()).toBeCloseTo(0.4, 6);
   });
 
   it("goes silent when muted, whatever correction the track asked for", async () => {
     const graph = await freshGraph();
-    graph.attachGraph(element());
-    graph.setGainFactor(1.4);
+    const node = element();
+    graph.attachGraph(node);
+    graph.setTrackGain(node, 1.4);
 
     graph.setListenerVolume(0.8, true);
 
@@ -161,23 +203,57 @@ describe("the one audio graph the player owns", () => {
 
   it("remembers a correction asked for before the graph existed, and lands on it WITHOUT a ramp", async () => {
     const graph = await freshGraph();
+    const node = element();
 
-    graph.setGainFactor(0.25);
+    graph.setTrackGain(node, 0.25);
     graph.setListenerVolume(1, false);
-    graph.attachGraph(element());
+    graph.attachGraph(node);
 
-    expect(built?.gainNode?.gain.value).toBeCloseTo(0.25, 6);
-    expect(built?.gainNode?.gain.setTargetAtTime).not.toHaveBeenCalled();
+    expect(built?.deckGain?.gain.value).toBeCloseTo(0.25, 6);
+    expect(built?.deckGain?.gain.setTargetAtTime).not.toHaveBeenCalled();
+    expect(built?.gainNode?.gain.value).toBe(1);
+  });
+
+  it("lands a correction without a ramp when asked to, which is how a deck starts silent before a fade", async () => {
+    const graph = await freshGraph();
+    const node = element();
+    graph.attachGraph(node);
+
+    graph.setTrackGain(node, 0, true);
+
+    expect(built?.deckGain?.gain.setValueAtTime).toHaveBeenCalledWith(0, 7);
+    expect(built?.deckGain?.gain.setTargetAtTime).not.toHaveBeenCalled();
+    expect(graph.trackGainOf(node)).toBe(0);
   });
 
   it("refuses a correction that is not a usable number rather than silencing the track", async () => {
     const graph = await freshGraph();
+    const node = element();
+    graph.attachGraph(node);
+
+    graph.setTrackGain(node, Number.NaN);
+
+    expect(lastDeckLevel()).toBe(1);
+  });
+
+  it("fades a deck along the curve it was given, on the audio clock, and remembers where it lands", async () => {
+    const graph = await freshGraph();
+    const node = element();
+    graph.attachGraph(node);
+    const values = new Float32Array([1, 0.5, 0]);
+
+    expect(graph.fadeTrackGain(node, values, 4)).toBe(true);
+
+    expect(built?.deckGain?.gain.cancelScheduledValues).toHaveBeenCalledWith(7);
+    expect(built?.deckGain?.gain.setValueCurveAtTime).toHaveBeenCalledWith(values, 7, 4);
+    expect(graph.trackGainOf(node)).toBe(0);
+  });
+
+  it("cannot fade a deck the graph never took", async () => {
+    const graph = await freshGraph();
     graph.attachGraph(element());
-    graph.setListenerVolume(1, false);
 
-    graph.setGainFactor(Number.NaN);
-
-    expect(lastLevel()).toBe(1);
+    expect(graph.fadeTrackGain(element(), new Float32Array([1, 0]), 2)).toBe(false);
   });
 
   it("tells the caller the volume did not land when the browser gave no graph", async () => {
@@ -203,7 +279,7 @@ const BOOST_SIX = [0, 0, 0, 0, 0, 6, 0, 0, 0, 0];
 const CUT_SIX = [-6, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 describe("the equaliser filters in the chain", () => {
-  it("puts the preamp, then one peaking filter per ISO band, between the source and the gain, in order", async () => {
+  it("puts the deck gain, the preamp, then one peaking filter per ISO band, between the source and the gain, in order", async () => {
     const graph = await freshGraph();
 
     graph.attachGraph(element());
@@ -212,7 +288,8 @@ describe("the equaliser filters in the chain", () => {
     expect(filters).toHaveLength(EQUALIZER_BANDS_HZ.length);
     expect(filters.map((filter) => filter.type)).toEqual(EQUALIZER_BANDS_HZ.map(() => "peaking"));
     expect(filters.map((filter) => filter.frequency.value)).toEqual([...EQUALIZER_BANDS_HZ]);
-    expect(built?.source.connect).toHaveBeenCalledWith(built?.preamp);
+    expect(built?.source?.connect).toHaveBeenCalledWith(built?.deckGain);
+    expect(built?.deckGain?.connect).toHaveBeenCalledWith(built?.preamp);
     expect(built?.preamp?.connect).toHaveBeenCalledWith(filters[0]);
     filters.slice(0, -1).forEach((filter, band) => expect(filter.connect).toHaveBeenCalledWith(filters[band + 1]));
     expect(lastFilter()?.connect).toHaveBeenCalledWith(built?.gainNode);
@@ -244,7 +321,6 @@ describe("the equaliser filters in the chain", () => {
     const graph = await freshGraph();
     graph.attachGraph(element());
     graph.setListenerVolume(1, false);
-    graph.setGainFactor(1);
 
     graph.setEqualizerGains(BOOST_SIX);
 
@@ -255,22 +331,23 @@ describe("the equaliser filters in the chain", () => {
     const graph = await freshGraph();
     graph.attachGraph(element());
     graph.setListenerVolume(1, false);
-    graph.setGainFactor(1);
 
     graph.setEqualizerGains(CUT_SIX);
 
     expect(lastLevel()).toBe(1);
   });
 
-  it("folds the headroom into a level decided before the graph existed", async () => {
+  it("folds the headroom into a level decided before the graph existed, leaving the track's correction to its deck", async () => {
     const graph = await freshGraph();
+    const node = element();
 
     graph.setEqualizerGains(BOOST_SIX);
-    graph.setGainFactor(0.5);
+    graph.setTrackGain(node, 0.5);
     graph.setListenerVolume(1, false);
-    graph.attachGraph(element());
+    graph.attachGraph(node);
 
-    expect(built?.gainNode?.gain.value).toBeCloseTo(0.5 * Math.pow(10, -6 / 20), 6);
+    expect(built?.gainNode?.gain.value).toBeCloseTo(Math.pow(10, -6 / 20), 6);
+    expect(built?.deckGain?.gain.value).toBeCloseTo(0.5, 6);
   });
 });
 

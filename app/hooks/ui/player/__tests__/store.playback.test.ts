@@ -37,6 +37,11 @@ const engine = vi.hoisted(() => ({
   resume: vi.fn(),
   seek: vi.fn(),
   stop: vi.fn(),
+  prime: vi.fn(),
+  cancelPrime: vi.fn(),
+  primedUrl: vi.fn((): string | null => null),
+  crossfadeTo: vi.fn(),
+  setActiveTrackGain: vi.fn(),
 }));
 
 vi.mock("../engine", () => ({
@@ -51,6 +56,11 @@ vi.mock("../engine", () => ({
   resume: engine.resume,
   seek: engine.seek,
   stop: engine.stop,
+  prime: engine.prime,
+  cancelPrime: engine.cancelPrime,
+  primedUrl: engine.primedUrl,
+  crossfadeTo: engine.crossfadeTo,
+  setActiveTrackGain: engine.setActiveTrackGain,
 }));
 
 const media = vi.hoisted(() => ({
@@ -905,5 +915,217 @@ describe("player store media keys", () => {
     engine.handlers?.onPlayingChange(true);
     handlers.pause();
     expect(engine.pause).toHaveBeenCalled();
+  });
+});
+
+const STREAM_B = "/api/v1/library/tracks/b/stream";
+
+describe("readying the next track before the current one ends", () => {
+  it("readies the next track a stretch before the end, with its own correction, and adopts it at the handover", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+
+    engine.handlers?.onProgress(150, 200);
+    expect(engine.prime).not.toHaveBeenCalled();
+
+    engine.handlers?.onProgress(181, 200);
+    expect(engine.prime).toHaveBeenCalledWith({ url: STREAM_B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+
+    engine.handlers?.onHandoff(STREAM_B);
+
+    expect(store.getSnapshot().index).toBe(1);
+    expect(store.getSnapshot().positionSeconds).toBe(0);
+    expect(store.getSnapshot().durationSeconds).toBe(200);
+    expect(engine.loadAndPlay).toHaveBeenCalledTimes(1);
+    expect(media.publishMediaSession).toHaveBeenLastCalledWith(expect.objectContaining({ id: "b" }), expect.anything());
+  });
+
+  it("readies nothing when the queue ends there, and lets any readied track go", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    engine.handlers?.onPlayingChange(true);
+
+    engine.handlers?.onProgress(181, 200);
+
+    expect(engine.prime).not.toHaveBeenCalled();
+    expect(engine.cancelPrime).toHaveBeenCalled();
+  });
+
+  it("readies nothing while one track repeats, and the first track again when the queue repeats as a whole", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 1);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.cycleRepeat();
+    expect(store.getSnapshot().repeat).toBe("all");
+
+    engine.handlers?.onProgress(181, 200);
+    expect(engine.prime).toHaveBeenLastCalledWith(expect.objectContaining({ url: "/api/v1/library/tracks/a/stream" }));
+
+    store.actions.cycleRepeat();
+    expect(store.getSnapshot().repeat).toBe("one");
+    engine.prime.mockClear();
+
+    engine.handlers?.onProgress(182, 200);
+    expect(engine.prime).not.toHaveBeenCalled();
+    expect(engine.cancelPrime).toHaveBeenCalled();
+  });
+
+  it("readies whatever comes next now, when the queue changed under a readied track", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    engine.handlers?.onProgress(181, 200);
+
+    store.actions.playNext([track("c")]);
+    engine.handlers?.onProgress(182, 200);
+
+    expect(engine.prime).toHaveBeenLastCalledWith(expect.objectContaining({ url: "/api/v1/library/tracks/c/stream" }));
+  });
+
+  it("asks for a blend at the seam in crossfade mode, and readies earlier to fit it", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "linear" });
+
+    engine.handlers?.onProgress(174, 200);
+    expect(engine.prime).not.toHaveBeenCalled();
+
+    engine.handlers?.onProgress(176, 200);
+    expect(engine.prime).toHaveBeenCalledWith({ url: STREAM_B, gainFactor: 1, fadeSeconds: 5, curve: "linear" });
+  });
+
+  it("asks for no blend into a track too short to carry one", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b", { durationSeconds: 8 })], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "linear" });
+
+    engine.handlers?.onProgress(181, 200);
+
+    expect(engine.prime).toHaveBeenCalledWith(expect.objectContaining({ fadeSeconds: 0 }));
+  });
+
+  it("lets a natural end run straight on in smart mode, which blends only a skip", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "smart", seconds: 5, curve: "linear" });
+
+    engine.handlers?.onProgress(181, 200);
+
+    expect(engine.prime).toHaveBeenCalledWith(expect.objectContaining({ fadeSeconds: 0 }));
+  });
+
+  it("readies nothing while another device has the sound", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.applyRemoteState({
+      deviceId: "phone",
+      deviceName: "Phone",
+      playing: true,
+      track: track("a"),
+      confirmed: true,
+      positionSeconds: 10,
+      shuffle: false,
+      repeat: "off",
+      volume: 1,
+      muted: false,
+      transcoding: false,
+      updatedAt: Date.now(),
+    });
+    engine.prime.mockClear();
+
+    engine.handlers?.onProgress(181, 200);
+
+    expect(engine.prime).not.toHaveBeenCalled();
+  });
+
+  it("moves on the old way when the deck that took over is not a track the queue knows", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+
+    engine.handlers?.onHandoff("/api/v1/library/tracks/zzz/stream");
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(STREAM_B, 0.8, false, 0);
+    expect(store.getSnapshot().index).toBe(1);
+  });
+});
+
+describe("blending a skip", () => {
+  it("blends a manual skip in crossfade mode instead of cutting to the next track", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "equalPower" });
+
+    store.actions.next();
+
+    expect(engine.crossfadeTo).toHaveBeenCalledWith(
+      STREAM_B,
+      { seconds: 5, curve: "equalPower", gainFactor: 1 },
+      0.8,
+      false,
+      0
+    );
+    expect(engine.loadAndPlay).toHaveBeenCalledTimes(1);
+    expect(store.getSnapshot().index).toBe(1);
+  });
+
+  it("blends a skip in smart mode, and a jump back or into the queue just the same", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 1);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "smart", seconds: 3, curve: "linear" });
+
+    store.actions.previous();
+    expect(engine.crossfadeTo).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream",
+      { seconds: 3, curve: "linear", gainFactor: 1 },
+      0.8,
+      false,
+      0
+    );
+
+    store.actions.jumpTo(2);
+    expect(engine.crossfadeTo).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/c/stream",
+      { seconds: 3, curve: "linear", gainFactor: 1 },
+      0.8,
+      false,
+      0
+    );
+  });
+
+  it("cuts a skip in gapless mode, and while paused in any mode", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    engine.handlers?.onPlayingChange(true);
+
+    store.actions.next();
+    expect(engine.crossfadeTo).not.toHaveBeenCalled();
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(STREAM_B, 0.8, false, 0);
+
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "equalPower" });
+    engine.handlers?.onPlayingChange(false);
+    store.actions.next();
+
+    expect(engine.crossfadeTo).not.toHaveBeenCalled();
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/c/stream", 0.8, false, 0);
+  });
+
+  it("does not blend a natural end that reached the store the old way", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "equalPower" });
+
+    engine.handlers?.onEnded();
+
+    expect(engine.crossfadeTo).not.toHaveBeenCalled();
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(STREAM_B, 0.8, false, 0);
   });
 });

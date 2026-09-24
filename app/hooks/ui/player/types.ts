@@ -1,5 +1,12 @@
 import type { AppRouter } from "@api/__generated__/types";
-import type { PlayerDeviceKind, PlayerMode, PlayerRepeat, PlayerTrack } from "@components/Player";
+import type {
+  PlayerDeviceKind,
+  PlayerMode,
+  PlayerRepeat,
+  PlayerTrack,
+  PlayerTransition,
+  TransitionCurve,
+} from "@components/Player";
 import type { inferRouterOutputs } from "@trpc/server";
 
 export type ListeningConnectionStatus = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
@@ -45,6 +52,7 @@ export interface PlayerSessionState {
   equalizerPresets: readonly EqualizerCustomPreset[];
   compressor: CompressorSettings;
   conversion: ConversionSettings;
+  transition: PlayerTransition;
   modesOpen: boolean;
   queueOpen: boolean;
   mode: PlayerMode;
@@ -92,10 +100,28 @@ export interface StreamConversion {
 export interface EngineCallbacks {
   onProgress: (positionSeconds: number, durationSeconds: number) => void;
   onEnded: () => void;
+  onHandoff: (url: string) => void;
   onPlayingChange: (playing: boolean) => void;
   onLoadingChange: (loading: boolean) => void;
   onFailure: (reason: "load" | "stall" | "autoplay") => void;
 }
+
+export interface PrimePlan {
+  url: string;
+  gainFactor: number;
+  fadeSeconds: number;
+  curve: TransitionCurve;
+}
+
+export interface SkipFade {
+  seconds: number;
+  curve: TransitionCurve;
+  gainFactor: number;
+}
+
+export type FadeDirection = "in" | "out";
+
+export type TransitionReason = "ended" | "skip";
 
 export interface SessionSnapshot {
   trackIds: string[];
@@ -120,6 +146,11 @@ export interface KnownDevice {
   trackTitle: string | null;
 }
 
+export interface AudioDeck {
+  source: MediaElementAudioSourceNode;
+  gain: GainNode;
+}
+
 export interface AudioGraph {
   context: AudioContext;
   analyser: AnalyserNode;
@@ -128,10 +159,10 @@ export interface AudioGraph {
   filters: readonly BiquadFilterNode[];
   compressor: DynamicsCompressorNode;
   compressorEngaged: boolean;
+  decks: Map<HTMLAudioElement, AudioDeck>;
 }
 
 export interface AudioOutput {
-  factor: number;
   volume: number;
   muted: boolean;
   headroom: number;

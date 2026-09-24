@@ -7,6 +7,7 @@ import type {
   PlayerMode,
   PlayerNoticeTone,
   PlayerTrack,
+  PlayerTransition,
 } from "@components/Player";
 import { artworkProxySrc } from "@utils/artworkProxy";
 
@@ -23,13 +24,29 @@ import {
   MIRROR_TICK_MS,
   MODE_STORAGE_KEY,
   SKIP_DELAY_MS,
+  TRANSITION_STORAGE_KEY,
   VOLUME_STORAGE_KEY,
 } from "./constants";
 import { announce } from "./announce";
-import { setCompressor, setEqualizerGains, setEqualizerPreamp, setGainFactor } from "./audio-graph";
+import { setCompressor, setEqualizerGains, setEqualizerPreamp } from "./audio-graph";
 import { defaultCompressor, restorableCompressor, steppedCompressorValue } from "./compressor";
 import { defaultConversion, restorableConversion, streamConversionFor } from "./conversion";
-import { applyVolume, canPlayMime, connectEngine, loadAndPlay, loadAt, pause, resume, seek, stop } from "./engine";
+import {
+  applyVolume,
+  cancelPrime,
+  canPlayMime,
+  connectEngine,
+  crossfadeTo,
+  loadAndPlay,
+  loadAt,
+  pause,
+  prime,
+  primedUrl,
+  resume,
+  seek,
+  setActiveTrackGain,
+  stop,
+} from "./engine";
 import {
   appliedEqualizerGains,
   flatEqualizer,
@@ -54,6 +71,15 @@ import {
   withoutRepeats,
 } from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
+import {
+  defaultTransition,
+  fadeAllowed,
+  primeDue,
+  restorableTransition,
+  sameTransition,
+  steppedTransitionSeconds,
+  transitionFadeSeconds,
+} from "./transition";
 import type {
   CompressorParam,
   CompressorSettings,
@@ -65,6 +91,7 @@ import type {
   PlayerSessionState,
   QueueAddOutcome,
   RemotePlayback,
+  StreamConversion,
 } from "./types";
 
 const listeners = new Set<() => void>();
@@ -93,6 +120,7 @@ let state: PlayerSessionState = {
   equalizerPresets: [],
   compressor: defaultCompressor(),
   conversion: defaultConversion(),
+  transition: defaultTransition(),
   modesOpen: false,
   queueOpen: false,
   mode: "normal",
@@ -156,8 +184,10 @@ function ensureConnected(): void {
       const total = state.offsetSeconds > 0 ? state.durationSeconds : durationSeconds || state.durationSeconds;
       publish({ positionSeconds: elapsed, durationSeconds: total });
       publishPosition(total, elapsed, state.playing);
+      maintainPrime(elapsed, total);
     },
     onEnded: () => advance(true),
+    onHandoff: (url) => adoptHandoff(url),
     onPlayingChange: (playing) => {
       publish({
         playing,
@@ -171,14 +201,23 @@ function ensureConnected(): void {
   });
 }
 
-function playAt(index: number, fromSeconds = 0): void {
+function conversionFor(track: PlayerTrack): StreamConversion | null {
+  return streamConversionFor(needsConversion(track.format, canPlayMime), state.conversion);
+}
+
+function skipFadeSeconds(target: PlayerTrack): number {
+  if (!state.playing) return 0;
+  return fadeAllowed(transitionFadeSeconds(state.transition, "skip"), state.durationSeconds, target.durationSeconds);
+}
+
+function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
   const track = state.queue[index];
   if (track === undefined) return;
   ensureConnected();
   silenceOtherAudio();
   clearInterval(mirrorTimer);
   clearTimeout(skipTimer);
-  const conversion = streamConversionFor(needsConversion(track.format, canPlayMime), state.conversion);
+  const conversion = conversionFor(track);
   const converted = conversion !== null;
   publish({
     remote: null,
@@ -191,8 +230,80 @@ function playAt(index: number, fromSeconds = 0): void {
     transcoding: converted,
     offsetSeconds: converted ? fromSeconds : 0,
   });
-  startLoudness(track, state.queue, state.shuffle);
-  loadAndPlay(streamUrlFor(track.id, conversion, fromSeconds), state.volume, state.muted, converted ? 0 : fromSeconds);
+  const url = streamUrlFor(track.id, conversion, fromSeconds);
+  const start = converted ? 0 : fromSeconds;
+  if (fadeSeconds > 0) {
+    const gainFactor = startLoudness(track, state.queue, state.shuffle, false);
+    crossfadeTo(
+      url,
+      { seconds: fadeSeconds, curve: state.transition.curve, gainFactor },
+      state.volume,
+      state.muted,
+      start
+    );
+  } else {
+    startLoudness(track, state.queue, state.shuffle, true);
+    loadAndPlay(url, state.volume, state.muted, start);
+  }
+  publishMediaSession(track, mediaHandlers());
+}
+
+function automaticNextIndex(): number | null {
+  if (state.repeat === "one") return null;
+  const next = nextIndexIn(state);
+  if (next !== null) return next;
+  if (state.repeat === "all" && state.queue.length > 0) return state.shuffle ? (state.shuffleOrder[0] ?? 0) : 0;
+  return null;
+}
+
+function maintainPrime(positionSeconds: number, durationSeconds: number): void {
+  if (!state.playing) return;
+  const next = automaticNextIndex();
+  const track = next === null ? undefined : state.queue[next];
+  if (track === undefined) {
+    cancelPrime();
+    return;
+  }
+  const url = streamUrlFor(track.id, conversionFor(track), 0);
+  const fade = fadeAllowed(transitionFadeSeconds(state.transition, "ended"), durationSeconds, track.durationSeconds);
+  if (!primeDue(positionSeconds, durationSeconds, fade)) {
+    if (primedUrl() !== url) cancelPrime();
+    return;
+  }
+  prime({
+    url,
+    gainFactor: gainFactorFor(track, activeLoudnessMode, loudness),
+    fadeSeconds: fade,
+    curve: state.transition.curve,
+  });
+}
+
+function adoptHandoff(url: string): void {
+  const expected = automaticNextIndex();
+  const matches = (index: number): boolean => {
+    const track = state.queue[index];
+    return track !== undefined && streamUrlFor(track.id, conversionFor(track), 0) === url;
+  };
+  const index = expected !== null && matches(expected) ? expected : state.queue.findIndex((_, at) => matches(at));
+  const track = state.queue[index];
+  if (track === undefined) {
+    advance(true);
+    return;
+  }
+  clearTimeout(skipTimer);
+  publish({
+    remote: null,
+    index,
+    positionSeconds: 0,
+    durationSeconds: track.durationSeconds,
+    scrubSeconds: null,
+    started: true,
+    loading: false,
+    transcoding: conversionFor(track) !== null,
+    offsetSeconds: 0,
+    consecutiveFailures: 0,
+  });
+  activeLoudnessMode = loudnessModeFor(state.queue, state.shuffle);
   publishMediaSession(track, mediaHandlers());
 }
 
@@ -216,7 +327,7 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
     offsetSeconds: converted ? fromSeconds : 0,
     consecutiveFailures: 0,
   });
-  startLoudness(track, queue, state.shuffle);
+  startLoudness(track, queue, state.shuffle, true);
   loadAt(streamUrlFor(track.id, conversion, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
   publishMediaSession(track, mediaHandlers());
 }
@@ -244,7 +355,8 @@ function advance(automatic: boolean): void {
   const next = nextIndexIn(state);
   if (next === null) {
     if (state.repeat === "all" && state.queue.length > 0) {
-      playAt(state.shuffle ? (state.shuffleOrder[0] ?? 0) : 0);
+      const first = state.shuffle ? (state.shuffleOrder[0] ?? 0) : 0;
+      playAt(first, 0, automatic ? 0 : fadeTowards(first));
       return;
     }
     pause();
@@ -253,7 +365,12 @@ function advance(automatic: boolean): void {
     notify(messages.queueEnd, "info");
     return;
   }
-  playAt(next);
+  playAt(next, 0, automatic ? 0 : fadeTowards(next));
+}
+
+function fadeTowards(index: number): number {
+  const target = state.queue[index];
+  return target === undefined ? 0 : skipFadeSeconds(target);
 }
 
 function handleFailure(reason: "load" | "stall" | "autoplay"): void {
@@ -306,12 +423,14 @@ export function setMessages(messages: PlayerMessages): void {
 export function setLoudnessPreferences(next: LoudnessPreferences): void {
   loudness = next;
   const track = currentTrack();
-  setGainFactor(track === null ? 1 : gainFactorFor(track, activeLoudnessMode, loudness));
+  setActiveTrackGain(track === null ? 1 : gainFactorFor(track, activeLoudnessMode, loudness));
 }
 
-function startLoudness(track: PlayerTrack, queue: readonly PlayerTrack[], shuffle: boolean): void {
+function startLoudness(track: PlayerTrack, queue: readonly PlayerTrack[], shuffle: boolean, apply: boolean): number {
   activeLoudnessMode = loudnessModeFor(queue, shuffle);
-  setGainFactor(gainFactorFor(track, activeLoudnessMode, loudness));
+  const factor = gainFactorFor(track, activeLoudnessMode, loudness);
+  if (apply) setActiveTrackGain(factor);
+  return factor;
 }
 
 function persist(key: string, value: unknown): void {
@@ -473,7 +592,7 @@ export const actions = {
     advance(false);
   },
   jumpTo(index: number): void {
-    playAt(index);
+    playAt(index, 0, fadeTowards(index));
   },
   removeFromQueue(index: number): void {
     if (index === state.index || state.queue[index] === undefined) return;
@@ -504,7 +623,7 @@ export const actions = {
       seekWithin(0);
       return;
     }
-    playAt(previous);
+    playAt(previous, 0, fadeTowards(previous));
   },
   seekTo(seconds: number): void {
     seekWithin(seconds);
@@ -583,6 +702,12 @@ export const actions = {
     persist(CONVERSION_STORAGE_KEY, next);
     reloadCurrentTrack();
   },
+  setTransition(next: PlayerTransition): void {
+    const settled: PlayerTransition = { ...next, seconds: steppedTransitionSeconds(next.seconds) };
+    if (sameTransition(state.transition, settled)) return;
+    publish({ transition: settled });
+    persist(TRANSITION_STORAGE_KEY, settled);
+  },
   toggleModes(): void {
     publish({ modesOpen: !state.modesOpen, devicesOpen: false });
   },
@@ -613,6 +738,7 @@ export const actions = {
   applyRemoteState(remote: RemotePlayback): void {
     if (remote.playing) {
       pause();
+      cancelPrime();
       clearMediaSession();
       clearInterval(mirrorTimer);
       mirrorTimer = setInterval(tickMirror, MIRROR_TICK_MS);
@@ -722,6 +848,8 @@ export const actions = {
     }
     const conversion = restorableConversion(window.localStorage.getItem(CONVERSION_STORAGE_KEY));
     if (conversion !== null) publish({ conversion });
+    const transition = restorableTransition(window.localStorage.getItem(TRANSITION_STORAGE_KEY));
+    if (transition !== null) publish({ transition });
   },
   artworkFor(track: PlayerTrack): string | null {
     return track.artworkUrl === null ? null : artworkProxySrc(track.artworkUrl);

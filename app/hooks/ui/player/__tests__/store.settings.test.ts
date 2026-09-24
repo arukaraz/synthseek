@@ -2,7 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PlayerTrack } from "@components/Player";
 
-import { COMPRESSOR_STORAGE_KEY, CONVERSION_STORAGE_KEY, EQUALIZER_PRESETS_STORAGE_KEY } from "../constants";
+import {
+  COMPRESSOR_STORAGE_KEY,
+  CONVERSION_STORAGE_KEY,
+  EQUALIZER_PRESETS_STORAGE_KEY,
+  TRANSITION_STORAGE_KEY,
+} from "../constants";
 
 vi.mock("@components/Player", async () => {
   const helpers = await vi.importActual<typeof import("@components/Player/helpers")>("@components/Player/helpers");
@@ -27,6 +32,11 @@ const engine = vi.hoisted(() => ({
   resume: vi.fn(),
   seek: vi.fn(),
   stop: vi.fn(),
+  prime: vi.fn(),
+  cancelPrime: vi.fn(),
+  primedUrl: vi.fn((): string | null => null),
+  crossfadeTo: vi.fn(),
+  setActiveTrackGain: vi.fn(),
   playing: null as null | ((playing: boolean) => void),
 }));
 
@@ -42,6 +52,11 @@ vi.mock("../engine", () => ({
   resume: engine.resume,
   seek: engine.seek,
   stop: engine.stop,
+  prime: engine.prime,
+  cancelPrime: engine.cancelPrime,
+  primedUrl: engine.primedUrl,
+  crossfadeTo: engine.crossfadeTo,
+  setActiveTrackGain: engine.setActiveTrackGain,
 }));
 
 vi.mock("../media-session", () => ({
@@ -291,5 +306,46 @@ describe("conversion the listener asks for", () => {
     store.actions.restorePlaybackSettings();
 
     expect(store.getSnapshot().conversion).toEqual({ enabled: false, bitrateKbps: 192 });
+  });
+});
+
+describe("the transition the listener asks for", () => {
+  it("starts gapless and keeps a change in this browser", async () => {
+    const store = await freshStore();
+    expect(store.getSnapshot().transition).toEqual({ mode: "gapless", seconds: 5, curve: "equalPower" });
+
+    store.actions.setTransition({ mode: "crossfade", seconds: 8, curve: "linear" });
+
+    expect(store.getSnapshot().transition).toEqual({ mode: "crossfade", seconds: 8, curve: "linear" });
+    expect(saved(TRANSITION_STORAGE_KEY)).toEqual({ mode: "crossfade", seconds: 8, curve: "linear" });
+  });
+
+  it("keeps the blend length on the range the panel offers", async () => {
+    const store = await freshStore();
+
+    store.actions.setTransition({ mode: "smart", seconds: 40, curve: "equalPower" });
+
+    expect(store.getSnapshot().transition.seconds).toBe(12);
+  });
+
+  it("does nothing for a setting that did not change", async () => {
+    const store = await freshStore();
+
+    store.actions.setTransition({ mode: "gapless", seconds: 5, curve: "equalPower" });
+
+    expect(saved(TRANSITION_STORAGE_KEY)).toBeNull();
+  });
+
+  it("comes back on the next visit, and ignores an entry it cannot read", async () => {
+    window.localStorage.setItem(TRANSITION_STORAGE_KEY, JSON.stringify({ mode: "smart", seconds: 3, curve: "linear" }));
+    const store = await freshStore();
+
+    store.actions.restorePlaybackSettings();
+    expect(store.getSnapshot().transition).toEqual({ mode: "smart", seconds: 3, curve: "linear" });
+
+    window.localStorage.setItem(TRANSITION_STORAGE_KEY, JSON.stringify({ mode: "backwards" }));
+    const again = await freshStore();
+    again.actions.restorePlaybackSettings();
+    expect(again.getSnapshot().transition).toEqual({ mode: "gapless", seconds: 5, curve: "equalPower" });
   });
 });

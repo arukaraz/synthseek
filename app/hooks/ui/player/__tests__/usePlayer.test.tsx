@@ -107,6 +107,7 @@ const store = vi.hoisted(() => ({
     applyCompressorPreset: vi.fn(),
     setCompressorParam: vi.fn(),
     setConversion: vi.fn(),
+    setTransition: vi.fn(),
     toggleModes: vi.fn(),
     toggleQueue: vi.fn(),
     selectMode: vi.fn(),
@@ -201,6 +202,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     equalizerPresets: [],
     compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
     conversion: { enabled: false, bitrateKbps: 192 },
+    transition: { mode: "gapless", seconds: 5, curve: "equalPower" },
     modesOpen: false,
     queueOpen: false,
     mode: "normal",
@@ -902,5 +904,17 @@ describe("usePlayer conversion", () => {
     const { result } = renderHook(() => usePlayer());
 
     expect(result.current.view?.chain.serverLabel).toBe(enPlayer.chain.serverConverting);
+  });
+});
+
+describe("usePlayer transitions", () => {
+  it("shows the transition the listener chose and hands a change straight to the store", () => {
+    store.snapshot = sessionState({ transition: { mode: "smart", seconds: 3, curve: "linear" } });
+
+    const { result } = renderHook(() => usePlayer());
+    result.current.actions.setTransition({ mode: "crossfade", seconds: 7, curve: "equalPower" });
+
+    expect(result.current.view?.transition).toEqual({ mode: "smart", seconds: 3, curve: "linear" });
+    expect(store.actions.setTransition).toHaveBeenCalledWith({ mode: "crossfade", seconds: 7, curve: "equalPower" });
   });
 });
