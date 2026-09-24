@@ -9,7 +9,8 @@ import {
   WAVE_ENERGY_INTERVAL_MS,
   WAVE_ENERGY_SMOOTHING,
 } from "./constants";
-import { attachGraph, resumeGraph } from "./audio-graph";
+import { attachGraph, currentGraph, resumeGraph } from "./audio-graph";
+import type { AudioGraph } from "./types";
 
 interface Listener {
   context: AudioContext;
@@ -29,10 +30,8 @@ export function audioEnergy(): number {
   return smoothed;
 }
 
-function listen(element: HTMLAudioElement): Listener | null {
+function listen(graph: AudioGraph | null): Listener | null {
   if (listener !== null) return listener;
-
-  const graph = attachGraph(element);
   if (graph === null) return null;
 
   const { context, analyser } = graph;
@@ -57,7 +56,14 @@ function loudness(source: Listener): number {
 }
 
 export function followAudio(element: HTMLAudioElement): void {
-  const source = listen(element);
+  follow(listen(attachGraph(element)));
+}
+
+export function followGraph(): void {
+  follow(listen(currentGraph()));
+}
+
+function follow(source: Listener | null): void {
   if (source === null) return;
 
   resumeGraph();

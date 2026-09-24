@@ -231,6 +231,22 @@ describe("analyser setup", () => {
     expect(built?.analyser.smoothingTimeConstant).toBe(WAVE_ANALYSER_SMOOTHING);
   });
 
+  it("follows a graph that already exists without needing an element, and stays quiet without one", async () => {
+    const energy = await freshEnergy();
+    const graph = await import("../audio-graph");
+
+    energy.followGraph();
+    vi.advanceTimersByTime(WAVE_ENERGY_INTERVAL_MS * 5);
+    expect(energy.audioEnergy()).toBe(1);
+
+    graph.attachGraph(element());
+    level = 0.5;
+    energy.followGraph();
+    vi.advanceTimersByTime(WAVE_ENERGY_INTERVAL_MS * 20);
+
+    expect(energy.audioEnergy()).toBeLessThan(1);
+  });
+
   it("hears the audio through the same graph the gain is applied in, not a second one of its own", async () => {
     const energy = await freshEnergy();
 

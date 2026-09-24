@@ -256,6 +256,68 @@ describe("the one audio graph the player owns", () => {
     expect(graph.fadeTrackGain(element(), new Float32Array([1, 0]), 2)).toBe(false);
   });
 
+  it("schedules a fade in the future on the audio clock when asked, never in the past", async () => {
+    const graph = await freshGraph();
+    const node = element();
+    graph.attachGraph(node);
+
+    graph.fadeTrackGain(node, new Float32Array([1, 0]), 2, 30);
+    expect(built?.deckGain?.gain.setValueCurveAtTime).toHaveBeenLastCalledWith(expect.any(Float32Array), 30, 2);
+
+    graph.fadeTrackGain(node, new Float32Array([1, 0]), 2, 1);
+    expect(built?.deckGain?.gain.setValueCurveAtTime).toHaveBeenLastCalledWith(expect.any(Float32Array), 7, 2);
+  });
+
+  it("opens a bus with its own gain for a voice that brings no element, on the same chain", async () => {
+    const graph = await freshGraph();
+    graph.attachGraph(element());
+    const key = { voice: 1 };
+
+    const bus = graph.attachBus(key);
+    const again = graph.attachBus(key);
+
+    expect(bus?.context).toBe(built);
+    expect(bus?.gain).toBe(built?.gains[3]);
+    expect(again?.gain).toBe(bus?.gain);
+    expect(built?.gains[3]?.connect).toHaveBeenCalledWith(built?.preamp);
+    expect(built?.sources).toHaveLength(1);
+  });
+
+  it("remembers a correction asked for a voice before its bus existed", async () => {
+    const graph = await freshGraph();
+    const key = { voice: 2 };
+
+    graph.setTrackGain(key, 0.3);
+    graph.attachBus(key);
+
+    expect(built?.gains[2]?.gain.value).toBeCloseTo(0.3, 6);
+  });
+
+  it("releases a deck by disconnecting its nodes and forgetting its correction", async () => {
+    const graph = await freshGraph();
+    const key = { voice: 3 };
+    const bus = graph.attachBus(key);
+    graph.setTrackGain(key, 0.5);
+
+    graph.releaseDeck(key);
+
+    expect(bus?.gain.disconnect).toHaveBeenCalled();
+    expect(graph.trackGainOf(key)).toBe(1);
+    expect(graph.attachBus(key)?.gain).not.toBe(bus?.gain);
+  });
+
+  it("reads the level a deck is actually at, and the remembered one where there is no deck", async () => {
+    const graph = await freshGraph();
+    const key = { voice: 4 };
+    graph.setTrackGain(key, 0.5);
+    expect(graph.liveTrackGain(key)).toBe(0.5);
+
+    const bus = graph.attachBus(key);
+    if (bus !== null) bus.gain.gain.value = 0.2;
+
+    expect(graph.liveTrackGain(key)).toBe(0.2);
+  });
+
   it("tells the caller the volume did not land when the browser gave no graph", async () => {
     contextFails = true;
     const graph = await freshGraph();

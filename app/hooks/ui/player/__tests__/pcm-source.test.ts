@@ -1,0 +1,228 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { MP3_HEAD_BYTES, MP3_XING_WINDOW_BYTES, PCM_URL_CACHE_BYTES } from "../constants";
+import type { GaplessInfo, PcmTrim } from "../types";
+
+const lame = vi.hoisted(() => ({
+  gaplessInfoFrom: vi.fn<(bytes: Uint8Array) => GaplessInfo | null>(),
+  id3Length: vi.fn<(bytes: Uint8Array) => number>(),
+  trimFor: vi.fn<(info: GaplessInfo, sampleRate: number) => PcmTrim>(),
+}));
+
+const media = vi.hoisted(() => {
+  const track = {
+    codec: "flac",
+    decodable: true,
+    canDecode: vi.fn(async () => track.decodable),
+    getCodec: vi.fn(async () => track.codec),
+    getSampleRate: vi.fn(async () => 44100),
+    computeDuration: vi.fn(async () => 200),
+  };
+  const state = {
+    track,
+    missingTrack: false,
+    urlSources: [] as { url: string; options: unknown }[],
+    inputs: [] as { options: unknown; dispose: ReturnType<typeof vi.fn> }[],
+    sinks: [] as { track: unknown; buffers: ReturnType<typeof vi.fn> }[],
+  };
+  return state;
+});
+
+vi.mock("../lame", () => lame);
+vi.mock("mediabunny", () => ({
+  ALL_FORMATS: ["every-format"],
+  UrlSource: class {
+    constructor(url: string, options: unknown) {
+      media.urlSources.push({ url, options });
+    }
+  },
+  AudioBufferSink: class {
+    readonly buffers = vi.fn((from: number) => `buffers from ${from}`);
+
+    constructor(track: unknown) {
+      media.sinks.push({ track, buffers: this.buffers });
+    }
+  },
+  Input: class {
+    readonly dispose = vi.fn();
+
+    constructor(options: unknown) {
+      media.inputs.push({ options, dispose: this.dispose });
+    }
+
+    async getPrimaryAudioTrack(): Promise<typeof media.track | null> {
+      return media.missingTrack ? null : media.track;
+    }
+  },
+}));
+
+const fetchMock = vi.fn<(url: string, init: RequestInit) => Promise<Response>>();
+
+function headResponse(ok: boolean): Response {
+  return { ok, arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer } as unknown as Response;
+}
+
+async function fresh(): Promise<typeof import("../pcm-source")> {
+  vi.resetModules();
+  return import("../pcm-source");
+}
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  media.track.codec = "flac";
+  media.track.decodable = true;
+  media.missingTrack = false;
+  media.urlSources.length = 0;
+  media.inputs.length = 0;
+  media.sinks.length = 0;
+  fetchMock.mockResolvedValue(headResponse(true));
+  lame.gaplessInfoFrom.mockReturnValue({ delaySamples: 576, paddingSamples: 1000, frames: 100, samplesPerFrame: 1152 });
+  lame.trimFor.mockReturnValue({ startSeconds: 0.025, durationSeconds: 100 });
+  lame.id3Length.mockReturnValue(0);
+  vi.stubGlobal("fetch", fetchMock);
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe("opening a stream as decoded audio", () => {
+  it("reads the stream through the session cookie with a bounded cache, and demuxes every format", async () => {
+    const source = await fresh();
+
+    await source.openPcmSource("/stream/1");
+
+    expect(media.urlSources[0]).toEqual({
+      url: "/stream/1",
+      options: { requestInit: { credentials: "include" }, maxCacheSize: PCM_URL_CACHE_BYTES },
+    });
+    expect(media.inputs[0]?.options).toMatchObject({ formats: ["every-format"] });
+  });
+
+  it("takes a flac as it is: full length, no trim, no extra request", async () => {
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(opened.durationSeconds).toBe(200);
+    expect(opened.sampleRate).toBe(44100);
+    expect(opened.trimStartSeconds).toBe(0);
+    expect(opened.buffers(5)).toBe("buffers from 5");
+    expect(media.sinks[0]?.track).toBe(media.track);
+  });
+
+  it("reads the first bytes of an mp3 for its encoder delay and shifts the decode by it", async () => {
+    media.track.codec = "mp3";
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+
+    expect(fetchMock).toHaveBeenCalledWith("/stream/1", {
+      headers: { Range: `bytes=0-${MP3_HEAD_BYTES - 1}` },
+      credentials: "include",
+    });
+    expect(lame.gaplessInfoFrom.mock.calls[0]?.[0]).toEqual(new Uint8Array([1, 2, 3]));
+    expect(lame.trimFor).toHaveBeenCalledWith(
+      { delaySamples: 576, paddingSamples: 1000, frames: 100, samplesPerFrame: 1152 },
+      44100
+    );
+    expect(opened.durationSeconds).toBe(100);
+    expect(opened.trimStartSeconds).toBe(0.025);
+    expect(opened.buffers(5)).toBe("buffers from 5.025");
+  });
+
+  it("reads past a large ID3 block, the artwork most files carry, with a second range request", async () => {
+    media.track.codec = "mp3";
+    lame.id3Length.mockReturnValue(540_170);
+    fetchMock.mockResolvedValueOnce(headResponse(true));
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      arrayBuffer: async () => new Uint8Array([9, 9]).buffer,
+    } as unknown as Response);
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock.mock.calls[1]?.[1]).toEqual({
+      headers: { Range: `bytes=540170-${540_170 + MP3_HEAD_BYTES - 1}` },
+      credentials: "include",
+    });
+    expect(lame.gaplessInfoFrom.mock.calls[0]?.[0]).toEqual(new Uint8Array([9, 9]));
+    expect(opened.trimStartSeconds).toBe(0.025);
+  });
+
+  it("keeps one request when the ID3 block leaves room for the first frame inside the head", async () => {
+    media.track.codec = "mp3";
+    lame.id3Length.mockReturnValue(MP3_HEAD_BYTES - MP3_XING_WINDOW_BYTES);
+    const fullHead = new Uint8Array(MP3_HEAD_BYTES).fill(7);
+    fetchMock.mockResolvedValueOnce({ ok: true, arrayBuffer: async () => fullHead.buffer } as unknown as Response);
+    const source = await fresh();
+
+    await source.openPcmSource("/stream/1");
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(lame.gaplessInfoFrom.mock.calls[0]?.[0]).toEqual(fullHead);
+  });
+
+  it("plays untrimmed when the second window cannot be read either", async () => {
+    media.track.codec = "mp3";
+    lame.id3Length.mockReturnValue(540_170);
+    fetchMock.mockResolvedValueOnce(headResponse(true));
+    fetchMock.mockResolvedValueOnce(headResponse(false));
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+
+    expect(opened.trimStartSeconds).toBe(0);
+    expect(lame.gaplessInfoFrom).not.toHaveBeenCalled();
+  });
+
+  it("never claims more than the demuxer measured, even when the tag says so", async () => {
+    media.track.codec = "mp3";
+    lame.trimFor.mockReturnValue({ startSeconds: 0.025, durationSeconds: 300 });
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+
+    expect(opened.durationSeconds).toBe(200);
+  });
+
+  it("plays an mp3 untrimmed when its head cannot be read or carries no tag", async () => {
+    media.track.codec = "mp3";
+    const source = await fresh();
+
+    fetchMock.mockResolvedValueOnce(headResponse(false));
+    const unreadable = await source.openPcmSource("/stream/1");
+    expect(unreadable.trimStartSeconds).toBe(0);
+    expect(unreadable.durationSeconds).toBe(200);
+
+    lame.gaplessInfoFrom.mockReturnValueOnce(null);
+    const untagged = await source.openPcmSource("/stream/2");
+    expect(untagged.trimStartSeconds).toBe(0);
+    expect(lame.trimFor).not.toHaveBeenCalled();
+  });
+
+  it("closes the input when the stream has no audio or cannot be decoded here", async () => {
+    const source = await fresh();
+
+    media.missingTrack = true;
+    await expect(source.openPcmSource("/stream/1")).rejects.toThrow("undecodable");
+    expect(media.inputs[0]?.dispose).toHaveBeenCalledTimes(1);
+
+    media.missingTrack = false;
+    media.track.decodable = false;
+    await expect(source.openPcmSource("/stream/2")).rejects.toThrow("undecodable");
+    expect(media.inputs[1]?.dispose).toHaveBeenCalledTimes(1);
+  });
+
+  it("lets the caller close the input once the track is done", async () => {
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+    opened.dispose();
+
+    expect(media.inputs[0]?.dispose).toHaveBeenCalledTimes(1);
+  });
+});

@@ -8,7 +8,7 @@ import {
   WAVE_FFT_SIZE,
 } from "./constants";
 import { headroomFactorFor } from "./equalizer";
-import type { AudioGraph, AudioOutput, CompressorSettings } from "./types";
+import type { AudioBus, AudioGraph, AudioOutput, CompressorSettings, DeckKey, PcmVoiceKey } from "./types";
 
 let graph: AudioGraph | null = null;
 let unsupported = false;
@@ -16,16 +16,40 @@ let output: AudioOutput = { volume: 1, muted: false, headroom: 1 };
 let equalizerGains: readonly number[] = EQUALIZER_BANDS_HZ.map(() => 0);
 let preampDb = 0;
 let compressor: CompressorSettings = defaultCompressor();
-const trackGains = new Map<HTMLAudioElement, number>();
+const trackGains = new Map<DeckKey, number>();
+
+function ensureGraph(): AudioGraph | null {
+  if (unsupported) return null;
+  if (graph === null) graph = createGraph();
+  return graph;
+}
 
 export function attachGraph(element: HTMLAudioElement): AudioGraph | null {
-  if (unsupported) return null;
-  if (graph === null) {
-    graph = createGraph();
-    if (graph === null) return null;
-  }
-  if (!graph.decks.has(element)) attachDeck(graph, element);
-  return graph;
+  const built = ensureGraph();
+  if (built === null) return null;
+  if (!built.decks.has(element)) attachDeck(built, element);
+  return built;
+}
+
+export function attachBus(key: PcmVoiceKey): AudioBus | null {
+  const built = ensureGraph();
+  if (built === null) return null;
+  const existing = built.decks.get(key);
+  if (existing !== undefined) return { context: built.context, gain: existing.gain };
+  const gain = built.context.createGain();
+  gain.gain.value = trackGains.get(key) ?? NO_GAIN_FACTOR;
+  gain.connect(built.preamp);
+  built.decks.set(key, { source: null, gain });
+  return { context: built.context, gain };
+}
+
+export function releaseDeck(key: DeckKey): void {
+  trackGains.delete(key);
+  const deck = graph?.decks.get(key);
+  if (graph === null || deck === undefined) return;
+  deck.source?.disconnect();
+  deck.gain.disconnect();
+  graph.decks.delete(key);
 }
 
 function createGraph(): AudioGraph | null {
@@ -101,10 +125,10 @@ export function resumeGraph(): void {
   void graph.context.resume().catch(() => undefined);
 }
 
-export function setTrackGain(element: HTMLAudioElement, factor: number, immediate = false): void {
+export function setTrackGain(key: DeckKey, factor: number, immediate = false): void {
   const level = Number.isFinite(factor) && factor >= 0 ? factor : NO_GAIN_FACTOR;
-  trackGains.set(element, level);
-  const deck = graph?.decks.get(element);
+  trackGains.set(key, level);
+  const deck = graph?.decks.get(key);
   if (graph === null || deck === undefined) return;
   const at = graph.context.currentTime;
   deck.gain.gain.cancelScheduledValues(at);
@@ -115,18 +139,23 @@ export function setTrackGain(element: HTMLAudioElement, factor: number, immediat
   deck.gain.gain.setTargetAtTime(level, at, GAIN_RAMP_SECONDS);
 }
 
-export function fadeTrackGain(element: HTMLAudioElement, values: Float32Array, seconds: number): boolean {
-  const deck = graph?.decks.get(element);
+export function fadeTrackGain(key: DeckKey, values: Float32Array, seconds: number, atTime?: number): boolean {
+  const deck = graph?.decks.get(key);
   if (graph === null || deck === undefined || values.length < 2 || !(seconds > 0)) return false;
-  const at = graph.context.currentTime;
+  const at = Math.max(graph.context.currentTime, atTime ?? graph.context.currentTime);
   deck.gain.gain.cancelScheduledValues(at);
   deck.gain.gain.setValueCurveAtTime(values, at, seconds);
-  trackGains.set(element, values[values.length - 1] ?? NO_GAIN_FACTOR);
+  trackGains.set(key, values[values.length - 1] ?? NO_GAIN_FACTOR);
   return true;
 }
 
-export function trackGainOf(element: HTMLAudioElement): number {
-  return trackGains.get(element) ?? NO_GAIN_FACTOR;
+export function trackGainOf(key: DeckKey): number {
+  return trackGains.get(key) ?? NO_GAIN_FACTOR;
+}
+
+export function liveTrackGain(key: DeckKey): number {
+  const deck = graph?.decks.get(key);
+  return deck === undefined ? trackGainOf(key) : deck.gain.gain.value;
 }
 
 export function setListenerVolume(volume: number, muted: boolean): boolean {

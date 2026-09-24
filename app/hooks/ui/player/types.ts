@@ -146,9 +146,69 @@ export interface KnownDevice {
   trackTitle: string | null;
 }
 
+export interface PcmVoiceKey {
+  readonly voice: number;
+}
+
+export type DeckKey = HTMLAudioElement | PcmVoiceKey;
+
 export interface AudioDeck {
-  source: MediaElementAudioSourceNode;
+  source: MediaElementAudioSourceNode | null;
   gain: GainNode;
+}
+
+export interface AudioBus {
+  context: AudioContext;
+  gain: GainNode;
+}
+
+export interface GaplessInfo {
+  delaySamples: number;
+  paddingSamples: number;
+  frames: number;
+  samplesPerFrame: number;
+}
+
+export interface PcmTrim {
+  startSeconds: number;
+  durationSeconds: number;
+}
+
+export interface PcmBuffer {
+  buffer: AudioBuffer;
+  timestamp: number;
+  duration: number;
+}
+
+export interface PcmSource {
+  durationSeconds: number;
+  sampleRate: number;
+  trimStartSeconds: number;
+  buffers: (fromSeconds: number) => AsyncGenerator<PcmBuffer, void, unknown>;
+  dispose: () => void;
+}
+
+export interface BufferClip {
+  startSeconds: number;
+  offsetSeconds: number;
+  playSeconds: number;
+}
+
+export interface EngineBackend {
+  canPlayMime: (mimeType: string) => boolean;
+  connectEngine: (next: EngineCallbacks) => void;
+  loadAndPlay: (url: string, volume: number, muted: boolean, startSeconds?: number) => number;
+  crossfadeTo: (url: string, fade: SkipFade, volume: number, muted: boolean, startSeconds?: number) => number;
+  loadAt: (url: string, seconds: number, volume: number, muted: boolean) => void;
+  prime: (plan: PrimePlan) => void;
+  cancelPrime: () => void;
+  primedUrl: () => string | null;
+  setActiveTrackGain: (factor: number) => void;
+  resume: () => void;
+  pause: () => void;
+  seek: (seconds: number) => void;
+  applyVolume: (volume: number, muted: boolean) => void;
+  stop: () => void;
 }
 
 export interface AudioGraph {
@@ -159,7 +219,7 @@ export interface AudioGraph {
   filters: readonly BiquadFilterNode[];
   compressor: DynamicsCompressorNode;
   compressorEngaged: boolean;
-  decks: Map<HTMLAudioElement, AudioDeck>;
+  decks: Map<DeckKey, AudioDeck>;
 }
 
 export interface AudioOutput {

@@ -147,6 +147,45 @@ export const FADE_CURVE_POINTS = 64;
 
 export const OUTGOING_RELEASE_MARGIN_MS = 250;
 
+export const PCM_LEAD_SECONDS = 8;
+
+export const PCM_FEED_TICK_MS = 100;
+
+export const PCM_PROGRESS_MS = 250;
+
+export const PCM_START_LEAD_SECONDS = 0.05;
+
+export const PCM_URL_CACHE_BYTES = 16 * 1024 * 1024;
+
+export const MP3_HEAD_BYTES = 4096;
+export const MP3_XING_WINDOW_BYTES = 512;
+
+export const MP3_DECODER_DELAY_SAMPLES = 529;
+
+export const MP3_SAMPLES_PER_FRAME_MPEG1 = 1152;
+
+export const MP3_SAMPLES_PER_FRAME_MPEG2 = 576;
+
+export const PCM_CODEC_PROBES: readonly { mime: string; config: AudioDecoderConfig }[] = [
+  { mime: "audio/mpeg", config: { codec: "mp3", sampleRate: 44100, numberOfChannels: 2 } },
+  {
+    mime: "audio/flac",
+    config: { codec: "flac", sampleRate: 44100, numberOfChannels: 2, description: new Uint8Array(34) },
+  },
+  { mime: "audio/mp4", config: { codec: "mp4a.40.2", sampleRate: 44100, numberOfChannels: 2 } },
+  { mime: "audio/aac", config: { codec: "mp4a.40.2", sampleRate: 44100, numberOfChannels: 2 } },
+  { mime: "audio/opus", config: { codec: "opus", sampleRate: 48000, numberOfChannels: 2 } },
+  { mime: "audio/ogg", config: { codec: "vorbis", sampleRate: 44100, numberOfChannels: 2 } },
+];
+
+export const PCM_REQUIRED_MIMES: readonly string[] = ["audio/mpeg", "audio/flac"];
+
+export const PCM_NATIVE_MIMES: ReadonlySet<string> = new Set(["audio/wav"]);
+
+export const KEEPALIVE_SAMPLE_RATE = 8000;
+
+export const KEEPALIVE_SECONDS = 1;
+
 export const EQUALIZER_MAX_CUSTOM_PRESETS = 20;
 
 export const EQUALIZER_PRESET_NAME_MAX_LENGTH = 40;
