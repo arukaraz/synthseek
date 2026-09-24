@@ -16,7 +16,16 @@ export const headerPlayer = cva(
 );
 
 export const chainStrip = cva(
-  "player-scroll-fade scrollbar-none border-fg-muted/15 bg-surface-sunken/30 flex h-[30px] items-center gap-2.5 overflow-x-auto border-t px-5 whitespace-nowrap backdrop-blur-[18px]"
+  "player-scroll-fade scrollbar-none border-fg-muted/15 bg-surface-sunken/30 flex h-[30px] items-center gap-2.5 overflow-x-auto px-5 whitespace-nowrap backdrop-blur-[18px]",
+  {
+    variants: {
+      placement: {
+        dock: "border-t",
+        header: "pointer-events-auto fixed inset-x-0 top-[var(--height-header-wide)] z-40 border-b",
+      },
+    },
+    defaultVariants: { placement: "dock" },
+  }
 );
 
 export const chainLabel = cva("text-fg-muted font-mono text-[9px] tracking-[0.12em]");
@@ -36,6 +45,19 @@ export const chainValue = cva("font-mono text-[10.5px]", {
 
 export const chainSeparator = cva("text-fg-muted/60 size-2.5 shrink-0");
 
+export const chainButton = cva(
+  "focus-visible:ring-primary-500 cursor-pointer rounded-sm font-mono text-[10.5px] transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      tone: {
+        active: "text-success-vivid hover:text-fg",
+        muted: "text-fg-muted hover:text-fg",
+      },
+    },
+    defaultVariants: { tone: "muted" },
+  }
+);
+
 export const bar = cva("flex h-[var(--player-bar-height)] flex-col justify-center @player:gap-1", {
   variants: {
     placement: {
@@ -46,7 +68,7 @@ export const bar = cva("flex h-[var(--player-bar-height)] flex-col justify-cente
   defaultVariants: { placement: "dock" },
 });
 
-export const barTop = cva("flex w-full min-w-0 items-center gap-2 @player:gap-4.5");
+export const barTop = cva("flex w-full min-w-0 items-center gap-3 @player:gap-4.5");
 
 export const barIdentity = cva("flex min-w-0 items-center gap-2 @player:gap-3", {
   variants: {
@@ -62,17 +84,7 @@ export const barCoverButton = cva(
   "focus-visible:ring-primary-500 flex shrink-0 cursor-pointer rounded-lg focus-visible:ring-2 focus-visible:outline-none"
 );
 
-export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5", {
-  variants: {
-    folded: { true: "", false: "" },
-    placement: { dock: "", header: "" },
-  },
-  compoundVariants: [
-    { folded: true, placement: "dock", class: "@max-player:hidden" },
-    { folded: true, placement: "header", class: "hidden" },
-  ],
-  defaultVariants: { folded: false, placement: "dock" },
-});
+export const barTextColumn = cva("flex min-w-0 flex-col gap-0.5");
 
 export const barNameRow = cva("flex min-w-0 items-center gap-1.5");
 
@@ -96,23 +108,38 @@ export const barSubtitle = cva("text-fg-muted block truncate text-[11.5px] leadi
 
 export const barSubtitleAlbum = cva("hidden @player:inline");
 
-export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 @player:order-none @player:gap-3.5", {
-  variants: {
-    folded: { true: "", false: "" },
-    placement: { dock: "", header: "" },
-  },
-  compoundVariants: [
-    { folded: true, placement: "dock", class: "@max-player:hidden" },
-    { folded: true, placement: "header", class: "hidden" },
-  ],
-  defaultVariants: { folded: false, placement: "dock" },
-});
+export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 @player:order-none @player:gap-3.5");
 
 export const barProgress = cva("hidden w-full min-w-0 items-center gap-3 @player:flex");
 
 export const barExtras = cva(
-  "order-2 flex shrink-0 items-center gap-1 @player:order-none @player:basis-0 @player:grow @player:justify-end @player:gap-2.5"
+  "order-4 flex shrink-0 items-center gap-1 @player:order-none @player:basis-0 @player:grow @player:justify-end @player:gap-2.5"
 );
+
+export const moreBadge = cva("ring-surface-overlay absolute top-1 right-1 size-2 rounded-full ring-2", {
+  variants: {
+    tone: {
+      remote: "bg-secondary-400",
+      warning: "bg-warning-vivid animate-pulse",
+      danger: "bg-destructive-vivid",
+    },
+  },
+});
+
+export const menuState = cva("ml-auto shrink-0 pl-3 text-[11px]", {
+  variants: {
+    tone: {
+      muted: "text-fg-muted",
+      off: "text-fg-muted",
+      on: "text-secondary-400",
+      sending: "text-secondary-400",
+      remote: "text-secondary-400",
+      retrying: "text-warning-vivid",
+      failed: "text-destructive-vivid",
+    },
+  },
+  defaultVariants: { tone: "muted" },
+});
 
 export const volumeGroup = cva("items-center gap-2", {
   variants: {
@@ -250,6 +277,7 @@ export const panelAnchor = cva("player-metrics pointer-events-auto fixed z-70", 
   variants: {
     width: {
       devices: "sm:w-[306px]",
+      settings: "sm:w-[400px]",
       queue: "",
     },
     chain: {
@@ -260,26 +288,27 @@ export const panelAnchor = cva("player-metrics pointer-events-auto fixed z-70", 
       true: "inset-x-0 bottom-0 sm:inset-x-auto sm:top-[var(--player-anchor-top)] sm:bottom-[var(--player-anchor-bottom)] sm:left-[var(--player-anchor-left)] sm:max-h-[var(--player-anchor-height)]",
       false: "player-panel-anchor inset-x-0 bottom-0 sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-bar-height)]",
       column:
-        "inset-x-0 top-0 bottom-[calc(var(--player-dock-height)+var(--height-bottom-nav))] sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-dock-height)] sm:w-[380px]",
+        "player-panel-column inset-x-0 top-0 bottom-[calc(var(--player-dock-height)+var(--height-bottom-nav))] sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-dock-height)] sm:w-[380px]",
     },
   },
   defaultVariants: { width: "devices", chain: false, anchored: false },
 });
 
 export const panelSurface = cva(
-  "bg-surface-overlay border-secondary-500/30 flex flex-col overflow-hidden rounded-t-[18px] border pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:rounded-t-[14px] sm:pb-0",
+  "bg-surface-overlay border-fg/10 flex flex-col overflow-hidden rounded-t-[18px] border pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:rounded-t-[14px] sm:pb-0",
   {
     variants: {
-      anchored: {
-        true: "sm:rounded-[14px] sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
-        false: "border-b-0 sm:rounded-tr-none sm:border-r-0",
+      edge: {
+        bar: "border-b-0 sm:rounded-tr-none sm:border-r-0",
+        header: "sm:rounded-[14px] sm:rounded-t-none sm:border-t-0 sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
+        floating: "sm:rounded-[14px] sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
       },
       stretch: {
         true: "h-full",
         false: "",
       },
     },
-    defaultVariants: { anchored: false, stretch: false },
+    defaultVariants: { edge: "bar", stretch: false },
   }
 );
 
@@ -305,6 +334,86 @@ export const deviceRow = cva(
 );
 
 export const modeHint = cva("text-fg-muted shrink-0 font-mono text-[10px] tracking-[0.12em] uppercase");
+
+export const settingsPanel = cva(
+  "scrollbar-none flex max-h-[min(78vh,calc(100vh-var(--player-dock-height)-1rem))] flex-col gap-3 overflow-y-auto px-3 pb-3"
+);
+
+export const settingsSection = cva(
+  "border-fg-muted/25 bg-surface/40 flex flex-col gap-3 rounded-xl border px-3.5 py-3"
+);
+
+export const settingsSectionHeader = cva("flex min-h-8 items-center justify-between gap-3");
+
+export const settingsSectionTitle = cva("text-fg font-mono text-[11px] tracking-[0.14em]");
+
+export const settingsSectionBody = cva("border-fg-muted/15 flex flex-col gap-3.5 border-t pt-3.5");
+
+export const settingsHint = cva("text-fg-muted text-[11px] leading-snug");
+
+export const settingsSlider = cva("flex items-center gap-3");
+
+export const settingsSliderLabel = cva("text-fg/80 w-[4.5rem] shrink-0 text-xs");
+
+export const settingsSliderTrack = cva(
+  "focus-visible:ring-primary-500 flex h-4 min-w-0 flex-1 cursor-pointer items-center rounded-md touch-none focus-visible:ring-2 focus-visible:outline-none aria-disabled:cursor-default aria-disabled:opacity-40"
+);
+
+export const settingsSliderValue = cva("text-fg w-16 shrink-0 text-right font-mono text-[11px] tabular-nums");
+
+export const settingsPresetRow = cva("flex items-center gap-2");
+
+export const settingsPresetInput = cva("min-w-0 flex-1");
+
+export const equalizerHeaderGroup = cva("flex items-center gap-2.5");
+
+export const equalizerPresetTrigger = cva("gap-1.5");
+
+export const equalizerBands = cva("flex items-start gap-1");
+
+export const equalizerScale = cva(
+  "text-fg-muted flex h-[140px] shrink-0 flex-col justify-between pt-[18px] pr-1 text-right font-mono text-[9px] leading-none tabular-nums"
+);
+
+export const equalizerBand = cva("flex min-w-0 flex-1 flex-col items-center gap-1.5", {
+  variants: {
+    disabled: {
+      true: "opacity-40",
+      false: "",
+    },
+  },
+  defaultVariants: { disabled: false },
+});
+
+export const equalizerBandValue = cva("h-3 font-mono text-[10px] leading-none tabular-nums", {
+  variants: {
+    active: {
+      true: "text-primary-400",
+      false: "text-fg-muted",
+    },
+  },
+  defaultVariants: { active: false },
+});
+
+export const equalizerBandTrack = cva(
+  "focus-visible:ring-primary-500 relative h-[122px] w-full cursor-pointer rounded-md touch-none focus-visible:ring-2 focus-visible:outline-none aria-disabled:cursor-default"
+);
+
+export const equalizerBandRail = cva("bg-fg-muted/25 absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 rounded-full");
+
+export const equalizerBandZero = cva("bg-fg-muted/40 absolute inset-x-1 top-1/2 h-px");
+
+export const equalizerBandFill = cva(
+  "player-eq-fill bg-primary-400/70 absolute left-1/2 w-1 -translate-x-1/2 rounded-full"
+);
+
+export const equalizerBandHead = cva(
+  "player-eq-head bg-fg absolute left-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-sm"
+);
+
+export const equalizerBandLabel = cva("text-fg-muted font-mono text-[9px] tracking-[0.08em]");
+
+export const equalizerFootnote = cva("text-fg-muted flex flex-col gap-1 font-mono text-[10px] tracking-[0.06em]");
 
 export const queueHeader = cva("flex shrink-0 items-center justify-between gap-3 px-3.5 pt-3 pb-1");
 
@@ -388,19 +497,6 @@ export const deviceName = cva("text-fg min-w-0 flex-1 truncate text-[13.5px] fon
 
 export const barDesktopExtras = cva("hidden shrink-0 items-center gap-2.5 @player:flex");
 
-export const barMoreGroup = cva(
-  "player-scroll-fade scrollbar-none flex items-center overflow-x-auto overflow-y-hidden transition-all duration-200 ease-out @player:hidden",
-  {
-    variants: {
-      open: {
-        true: "min-w-0 grow translate-x-0 gap-0.5 opacity-100 [&>button]:size-8 [&>span]:shrink-0 [&>button]:shrink-0",
-        false: "invisible max-w-0 shrink-0 -translate-x-2 gap-0 opacity-0",
-      },
-    },
-    defaultVariants: { open: false },
-  }
-);
-
 export const stage = cva("@container pointer-events-auto fixed inset-0 z-60 flex flex-col overflow-hidden");
 
 export const stageBackdrop = cva("bg-surface/98 absolute inset-0 backdrop-blur-[26px]");
@@ -479,6 +575,16 @@ export function anchorVars(point: PanelAnchorPoint | null): CssVars | undefined 
 
 export function volumeVars(percent: number): CssVars {
   return { "--player-volume": `${Math.round(percent)}%` };
+}
+
+export function bandVars(fractionFromTop: number): CssVars {
+  const head = fractionFromTop * 100;
+  const above = head <= 50;
+  return {
+    "--player-eq-head-top": `${head.toFixed(2)}%`,
+    "--player-eq-fill-top": above ? `${head.toFixed(2)}%` : "50%",
+    "--player-eq-fill-height": `${Math.abs(50 - head).toFixed(2)}%`,
+  };
 }
 
 export const scrobbleStatus = cva(

@@ -124,6 +124,8 @@ export const dropdownItem = cva(
 
 export type DropdownItemProps = VariantProps<typeof dropdownItem>;
 
+export const popoverLayer = "z-10001";
+
 export const modalCenterContainer = cva("pointer-events-none fixed inset-0 flex items-center justify-center p-4", {
   variants: {
     z: {

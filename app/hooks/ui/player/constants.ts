@@ -1,3 +1,7 @@
+import type { CompressorPresetId, EqualizerPresetId } from "@components/Player";
+
+import type { CompressorParam, CompressorParams } from "./types";
+
 export const LOAD_TIMEOUT_MS = 15000;
 
 export const STALL_TIMEOUT_MS = 15000;
@@ -94,3 +98,79 @@ export const NO_REPLAY_GAIN = {
 export const NO_ALBUM_ID = "";
 
 export const GAIN_RAMP_SECONDS = 0.05;
+
+export const EQUALIZER_Q = 1.41;
+
+export const EQUALIZER_RESPONSE_SAMPLE_RATE = 48_000;
+
+export const EQUALIZER_RESPONSE_MIN_HZ = 20;
+
+export const EQUALIZER_RESPONSE_MAX_HZ = 20_000;
+
+export const EQUALIZER_RESPONSE_POINTS_PER_OCTAVE = 24;
+
+export const EQUALIZER_STORAGE_KEY = "synthseek.player.equalizer";
+
+export const EQUALIZER_PRESETS_STORAGE_KEY = "synthseek.player.equalizer.presets";
+
+export const COMPRESSOR_STORAGE_KEY = "synthseek.player.compressor";
+
+export const CONVERSION_STORAGE_KEY = "synthseek.player.conversion";
+
+export const EQUALIZER_MAX_CUSTOM_PRESETS = 20;
+
+export const EQUALIZER_PRESET_NAME_MAX_LENGTH = 40;
+
+export const COMPRESSOR_LIMITS: Readonly<Record<CompressorParam, { min: number; max: number; step: number }>> = {
+  thresholdDb: { min: -60, max: 0, step: 1 },
+  ratio: { min: 1, max: 20, step: 0.5 },
+  attackMs: { min: 0, max: 200, step: 1 },
+  releaseMs: { min: 0, max: 1000, step: 10 },
+  kneeDb: { min: 0, max: 40, step: 1 },
+};
+
+export const COMPRESSOR_PARAMS: readonly CompressorParam[] = [
+  "thresholdDb",
+  "ratio",
+  "attackMs",
+  "releaseMs",
+  "kneeDb",
+];
+
+export const COMPRESSOR_PRESETS: Readonly<Record<CompressorPresetId, CompressorParams>> = {
+  gentle: { thresholdDb: -15, ratio: 1.5, attackMs: 50, releaseMs: 500, kneeDb: 6 },
+  light: { thresholdDb: -18, ratio: 2, attackMs: 30, releaseMs: 400, kneeDb: 4 },
+  moderate: { thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
+  heavy: { thresholdDb: -30, ratio: 8, attackMs: 10, releaseMs: 150, kneeDb: 2 },
+  broadcast: { thresholdDb: -20, ratio: 5, attackMs: 15, releaseMs: 200, kneeDb: 3 },
+  loudMaster: { thresholdDb: -28, ratio: 6, attackMs: 5, releaseMs: 100, kneeDb: 2 },
+  limiter: { thresholdDb: -3, ratio: 20, attackMs: 1, releaseMs: 100, kneeDb: 1 },
+};
+
+export const COMPRESSOR_DEFAULT_PRESET: CompressorPresetId = "moderate";
+
+export const CONVERSION_BITRATES_KBPS: readonly number[] = [128, 192, 256, 320];
+
+export const CONVERSION_DEFAULT_BITRATE_KBPS = 192;
+
+export const EQUALIZER_BANDS_HZ: readonly number[] = [31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
+
+export const EQUALIZER_MIN_DB = -12;
+
+export const EQUALIZER_MAX_DB = 12;
+
+export const EQUALIZER_STEP_DB = 0.5;
+
+export const EQUALIZER_PRESETS: Readonly<Record<EqualizerPresetId, readonly number[]>> = {
+  flat: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  acoustic: [3, 2, 1, 1, 0, 0, 1, 2, 3, 2],
+  bassBoost: [6, 5, 4, 2, 0, 0, 0, 0, 0, 0],
+  classical: [4, 3, 2, 1, -1, -1, 0, 2, 3, 4],
+  electronic: [5, 4, 2, 0, -2, 1, 3, 4, 5, 4],
+  hipHop: [5, 4, 2, 1, 0, -1, 0, 1, 2, 3],
+  jazz: [3, 2, 1, 2, -1, -1, 0, 1, 3, 4],
+  pop: [-1, 1, 3, 4, 3, 0, -1, -1, 2, 3],
+  rock: [5, 4, 3, 1, -1, 1, 3, 4, 5, 5],
+  trebleBoost: [0, 0, 0, 0, 0, 0, 2, 4, 6, 8],
+  vocal: [-2, -1, 0, 2, 4, 4, 3, 1, 0, -1],
+};

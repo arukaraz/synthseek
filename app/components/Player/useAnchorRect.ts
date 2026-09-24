@@ -6,7 +6,7 @@ import { HEADER_SLOT_QUERY, PANEL_ANCHOR_GAP_PX, PANEL_VIEWPORT_MARGIN_PX, PANEL
 import { visibleMatch } from "./helpers";
 import type { PanelAnchorPoint } from "./types";
 
-export function useAnchorRect(selector: string, enabled: boolean): PanelAnchorPoint | null {
+export function useAnchorRect(selector: string, enabled: boolean, width = PANEL_WIDTH_PX): PanelAnchorPoint | null {
   const [point, setPoint] = useState<PanelAnchorPoint | null>(null);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function useAnchorRect(selector: string, enabled: boolean): PanelAnchorPo
         return;
       }
       const rect = toggle.getBoundingClientRect();
-      const maxLeft = window.innerWidth - PANEL_WIDTH_PX - PANEL_VIEWPORT_MARGIN_PX;
+      const maxLeft = window.innerWidth - width - PANEL_VIEWPORT_MARGIN_PX;
       const below = rect.top < window.innerHeight / 2;
       setPoint({
         top: Math.round(rect.bottom + PANEL_ANCHOR_GAP_PX),
@@ -39,7 +39,7 @@ export function useAnchorRect(selector: string, enabled: boolean): PanelAnchorPo
       window.removeEventListener("resize", measure);
       wide.removeEventListener("change", measure);
     };
-  }, [selector, enabled]);
+  }, [selector, enabled, width]);
 
   return point;
 }

@@ -27,15 +27,108 @@
     "openTrack": "Vollbild-Sitzung öffnen",
     "more": "Weitere Bedienelemente",
     "lyrics": "Songtext",
-    "lyricsClose": "Songtext schließen"
+    "lyricsClose": "Songtext schließen",
+    "settings": "Wiedergabeeinstellungen"
+  },
+  "menu": {
+    "playback": "Wiedergabe",
+    "track": "Dieser Titel",
+    "sound": "Klang",
+    "repeat": "Wiederholen",
+    "repeatState": { "off": "Aus", "all": "Alle", "one": "Dieser Titel" },
+    "upNext_one": "{{count}} als Nächstes",
+    "upNext_other": "{{count}} als Nächstes",
+    "upgrade": "Bessere Version suchen",
+    "scrobbling": "Scrobbling",
+    "scrobblingState": { "off": "Aus", "sending": "An", "retrying": "Erneuter Versuch", "failed": "Fehlgeschlagen" },
+    "playingOn": "Läuft auf {{device}}"
   },
   "chain": {
     "file": "DATEI",
     "server": "SERVER",
+    "equalizer": "EQ",
     "output": "AUSGABE",
     "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "keine Umwandlung",
-    "serverTranscoding": "wandelt zu mp3 320"
+    "serverTranscoding": "wandelt zu mp3 {{bitrate}}",
+    "serverConverting": "wandelt um",
+    "equalizerOff": "aus",
+    "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
+  },
+  "settings": {
+    "title": "Wiedergabeeinstellungen",
+    "close": "Wiedergabeeinstellungen ausblenden",
+    "units": {
+      "db": "dB",
+      "ms": "ms",
+      "ratio": ":1"
+    },
+    "compressor": {
+      "caption": "KOMPRESSOR",
+      "enabled": "Kompressor an",
+      "preset": "Voreinstellung",
+      "custom": "Eigene",
+      "params": {
+        "thresholdDb": "Schwelle",
+        "ratio": "Verhältnis",
+        "attackMs": "Attack",
+        "releaseMs": "Release",
+        "kneeDb": "Knie"
+      },
+      "presets": {
+        "gentle": "Sanft",
+        "light": "Leicht",
+        "moderate": "Moderat",
+        "heavy": "Stark",
+        "broadcast": "Rundfunk",
+        "loudMaster": "Lautes Master",
+        "limiter": "Limiter"
+      },
+      "hint": "Verringert den Abstand zwischen lauten und leisen Stellen. Nur in diesem Browser."
+    },
+    "loudness": {
+      "caption": "LAUTSTÄRKE-NORMALISIERUNG",
+      "enabled": "Lautstärke normalisieren",
+      "preamp": "Zusätzliche Verstärkung",
+      "hint": "Gleicht die Lautstärke von Titel zu Titel an.",
+      "updateFailed": "Die Wiedergabeeinstellungen konnten nicht gespeichert werden"
+    },
+    "conversion": {
+      "caption": "UMWANDLUNG",
+      "enabled": "In diesem Browser zu mp3 umwandeln",
+      "bitrate": "Bitrate",
+      "bitrateValue": "{{kbps}} kbps",
+      "hint": "Spart Daten bei langsamer Verbindung. Aus spielt die Originaldatei, außer der Browser kann sie nicht dekodieren."
+    }
+  },
+  "equalizer": {
+    "caption": "EQUALIZER",
+    "enabled": "Equalizer an",
+    "preset": "Voreinstellung",
+    "custom": "Eigene",
+    "reset": "Auf flach zurücksetzen",
+    "band": "{{band}}-Hz-Band",
+    "gain": "{{value}} dB",
+    "headroom": "Headroom {{value}} dB, der lauteste Punkt dieser Kurve",
+    "remoteHint": "Wirkt nur auf das, was in diesem Browser spielt",
+    "preamp": "Vorverstärker",
+    "savePreset": "Speichern",
+    "presetName": "Name der Voreinstellung",
+    "deletePreset": "Voreinstellung {{name}} löschen",
+    "customGroup": "Deine Voreinstellungen",
+    "presets": {
+      "flat": "Flach",
+      "acoustic": "Akustisch",
+      "bassBoost": "Bass-Boost",
+      "classical": "Klassik",
+      "electronic": "Elektronisch",
+      "hipHop": "Hip-Hop",
+      "jazz": "Jazz",
+      "pop": "Pop",
+      "rock": "Rock",
+      "trebleBoost": "Höhen-Boost",
+      "vocal": "Gesang"
+    }
   },
   "devices": {
     "caption": "GERÄTE",
@@ -79,7 +172,8 @@
   },
   "stage": {
     "label": "Vollbild-Sitzung",
-    "serverChip": "Server: {{value}}"
+    "serverChip": "Server: {{value}}",
+    "equalizerChip": "EQ: {{value}}"
   },
   "notice": {
     "skipping": "„{{title}}“ ist fehlgeschlagen, es geht weiter zum nächsten Titel",

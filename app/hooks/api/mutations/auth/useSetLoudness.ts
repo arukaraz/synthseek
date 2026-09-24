@@ -9,6 +9,6 @@ export function useSetLoudness() {
     onSuccess: (user) => {
       utils.auth.me.setData(undefined, user);
     },
-    onError: () => toast.error(i18n.t("settings:general.loudness.updateFailed")),
+    onError: () => toast.error(i18n.t("player:settings.loudness.updateFailed")),
   });
 }

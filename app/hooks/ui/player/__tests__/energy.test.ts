@@ -22,8 +22,28 @@ class FakeAnalyser {
 }
 
 class FakeGain {
-  readonly gain = { setTargetAtTime: vi.fn() };
+  readonly gain = { value: 1, setTargetAtTime: vi.fn() };
   readonly connect = vi.fn();
+  readonly disconnect = vi.fn();
+}
+
+class FakeFilter {
+  type = "";
+  readonly frequency = { value: 0 };
+  readonly Q = { value: 0 };
+  readonly gain = { value: 0, setTargetAtTime: vi.fn() };
+  readonly connect = vi.fn();
+  readonly disconnect = vi.fn();
+}
+
+class FakeCompressor {
+  readonly threshold = { value: 0 };
+  readonly ratio = { value: 1 };
+  readonly attack = { value: 0 };
+  readonly release = { value: 0 };
+  readonly knee = { value: 0 };
+  readonly connect = vi.fn();
+  readonly disconnect = vi.fn();
 }
 
 class FakeContext {
@@ -31,8 +51,17 @@ class FakeContext {
   readonly destination = {};
   readonly currentTime = 0;
   readonly analyser = new FakeAnalyser();
-  readonly gainNode = new FakeGain();
+  readonly gains: FakeGain[] = [];
+  readonly filters: FakeFilter[] = [];
   readonly source = { connect: vi.fn() };
+
+  get gainNode(): FakeGain | undefined {
+    return this.gains[0];
+  }
+
+  get preamp(): FakeGain | undefined {
+    return this.gains[1];
+  }
 
   static record(context: FakeContext): void {
     built = context;
@@ -48,7 +77,19 @@ class FakeContext {
   }
 
   createGain(): FakeGain {
-    return this.gainNode;
+    const gain = new FakeGain();
+    this.gains.push(gain);
+    return gain;
+  }
+
+  createBiquadFilter(): FakeFilter {
+    const filter = new FakeFilter();
+    this.filters.push(filter);
+    return filter;
+  }
+
+  createDynamicsCompressor(): FakeCompressor {
+    return new FakeCompressor();
   }
 
   createMediaElementSource(): { connect: (target: unknown) => void } {
@@ -195,8 +236,10 @@ describe("analyser setup", () => {
 
     energy.followAudio(element());
 
-    expect(built?.source.connect).toHaveBeenCalledWith(built?.gainNode);
-    expect(built?.gainNode.connect).toHaveBeenCalledWith(built?.analyser);
+    expect(built?.source.connect).toHaveBeenCalledWith(built?.preamp);
+    expect(built?.preamp?.connect).toHaveBeenCalledWith(built?.filters[0]);
+    expect(built?.filters.at(-1)?.connect).toHaveBeenCalledWith(built?.gainNode);
+    expect(built?.gainNode?.connect).toHaveBeenCalledWith(built?.analyser);
     expect(built?.analyser.connect).toHaveBeenCalledWith(built?.destination);
   });
 });

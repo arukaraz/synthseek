@@ -5,6 +5,7 @@ import { Check, ChevronRight, Circle } from "lucide-react";
 import type { HTMLAttributes } from "react";
 
 import { cn } from "@utils/cn";
+import { popoverLayer } from "../styles";
 import { composePointerHandlers } from "./helpers";
 import type {
   DropdownMenuCheckboxItemProps,
@@ -60,7 +61,8 @@ export function DropdownMenuSubContent({ className, ref, ...props }: DropdownMen
       <DropdownMenuPrimitive.SubContent
         ref={ref}
         className={cn(
-          "border-fg/20 bg-surface-overlay/98 sm:bg-surface-overlay/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
+          "border-fg/20 bg-surface-overlay/98 sm:bg-surface-overlay/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 min-w-[8rem] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
+          popoverLayer,
           className
         )}
         {...props}
@@ -76,7 +78,8 @@ export function DropdownMenuContent({ className, sideOffset = 8, ref, ...props }
         ref={ref}
         sideOffset={sideOffset}
         className={cn(
-          "border-fg/20 bg-surface-overlay/98 sm:bg-surface-overlay/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[180px] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
+          "border-fg/20 bg-surface-overlay/98 sm:bg-surface-overlay/95 text-fg shadow-surface/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 min-w-[180px] overflow-hidden rounded-xl border p-2 shadow-xl sm:backdrop-blur-2xl",
+          popoverLayer,
           className
         )}
         {...props}
@@ -110,7 +113,7 @@ export function DropdownMenuCheckboxItem({
     <DropdownMenuPrimitive.CheckboxItem
       ref={ref}
       className={cn(
-        "text-fg/70 hover:bg-fg/10 hover:text-fg focus:bg-fg/10 focus:text-fg relative flex cursor-pointer items-center rounded-lg py-2 pr-3 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "text-fg/70 hover:bg-fg/10 hover:text-fg focus:bg-fg/10 focus:text-fg relative flex cursor-pointer items-center gap-2 rounded-lg py-2 pr-3 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
         className
       )}
       checked={checked}
@@ -131,7 +134,7 @@ export function DropdownMenuRadioItem({ className, children, ref, ...props }: Dr
     <DropdownMenuPrimitive.RadioItem
       ref={ref}
       className={cn(
-        "text-fg/70 hover:bg-fg/10 hover:text-fg focus:bg-fg/10 focus:text-fg relative flex cursor-pointer items-center rounded-lg py-2 pr-3 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "text-fg/70 hover:bg-fg/10 hover:text-fg focus:bg-fg/10 focus:text-fg relative flex cursor-pointer items-center gap-2 rounded-lg py-2 pr-3 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
         className
       )}
       {...props}

@@ -39,8 +39,12 @@ export interface PlayerSessionState {
   remote: RemotePlayback | null;
   offsetSeconds: number;
   chainVisible: boolean;
-  moreOpen: boolean;
   devicesOpen: boolean;
+  settingsOpen: boolean;
+  equalizer: EqualizerSettings;
+  equalizerPresets: readonly EqualizerCustomPreset[];
+  compressor: CompressorSettings;
+  conversion: ConversionSettings;
   modesOpen: boolean;
   queueOpen: boolean;
   mode: PlayerMode;
@@ -48,6 +52,41 @@ export interface PlayerSessionState {
   fullscreen: boolean;
   consecutiveFailures: number;
   started: boolean;
+}
+
+export interface EqualizerSettings {
+  enabled: boolean;
+  gainsDb: readonly number[];
+  preampDb: number;
+}
+
+export interface EqualizerCustomPreset {
+  name: string;
+  gainsDb: readonly number[];
+}
+
+export interface CompressorParams {
+  thresholdDb: number;
+  ratio: number;
+  attackMs: number;
+  releaseMs: number;
+  kneeDb: number;
+}
+
+export interface CompressorSettings extends CompressorParams {
+  enabled: boolean;
+}
+
+export type CompressorParam = keyof CompressorParams;
+
+export interface ConversionSettings {
+  enabled: boolean;
+  bitrateKbps: number;
+}
+
+export interface StreamConversion {
+  format: string;
+  bitrateKbps: number;
 }
 
 export interface EngineCallbacks {
@@ -85,12 +124,17 @@ export interface AudioGraph {
   context: AudioContext;
   analyser: AnalyserNode;
   gain: GainNode;
+  preamp: GainNode;
+  filters: readonly BiquadFilterNode[];
+  compressor: DynamicsCompressorNode;
+  compressorEngaged: boolean;
 }
 
 export interface AudioOutput {
   factor: number;
   volume: number;
   muted: boolean;
+  headroom: number;
 }
 
 export type LoudnessMode = "track" | "album";

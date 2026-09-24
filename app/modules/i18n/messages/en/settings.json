@@ -8,20 +8,6 @@
       "updated": "Language updated",
       "updateFailed": "Could not update language"
     },
-    "loudness": {
-      "title": "Volume normalization",
-      "description": "Evens out how loud tracks sound from one to the next.",
-      "enabled": {
-        "label": "Normalize volume",
-        "description": "Applies the loudness measured for each track while it plays."
-      },
-      "preamp": {
-        "label": "Extra gain",
-        "description": "Raises or lowers everything by a fixed amount, on top of the correction.",
-        "suffix": "dB"
-      },
-      "updateFailed": "Could not update the playback settings"
-    },
     "theme": {
       "title": "Theme",
       "description": "Pick the theme that matches your environment.",

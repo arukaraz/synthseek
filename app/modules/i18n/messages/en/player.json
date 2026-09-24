@@ -27,15 +27,108 @@
     "openTrack": "Open the full screen session",
     "more": "More controls",
     "lyrics": "Lyrics",
-    "lyricsClose": "Close the lyrics"
+    "lyricsClose": "Close the lyrics",
+    "settings": "Playback settings"
+  },
+  "menu": {
+    "playback": "Playback",
+    "track": "This track",
+    "sound": "Sound",
+    "repeat": "Repeat",
+    "repeatState": { "off": "Off", "all": "All", "one": "This track" },
+    "upNext_one": "{{count}} next",
+    "upNext_other": "{{count}} next",
+    "upgrade": "Find a better version",
+    "scrobbling": "Scrobbling",
+    "scrobblingState": { "off": "Off", "sending": "On", "retrying": "Retrying", "failed": "Failed" },
+    "playingOn": "Playing on {{device}}"
   },
   "chain": {
     "file": "FILE",
     "server": "SERVER",
+    "equalizer": "EQ",
     "output": "OUTPUT",
     "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "no conversion",
-    "serverTranscoding": "converting to mp3 320"
+    "serverTranscoding": "converting to mp3 {{bitrate}}",
+    "serverConverting": "converting",
+    "equalizerOff": "off",
+    "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
+  },
+  "settings": {
+    "title": "Playback settings",
+    "close": "Hide the playback settings",
+    "units": {
+      "db": "dB",
+      "ms": "ms",
+      "ratio": ":1"
+    },
+    "compressor": {
+      "caption": "COMPRESSOR",
+      "enabled": "Compressor on",
+      "preset": "Preset",
+      "custom": "Custom",
+      "params": {
+        "thresholdDb": "Threshold",
+        "ratio": "Ratio",
+        "attackMs": "Attack",
+        "releaseMs": "Release",
+        "kneeDb": "Knee"
+      },
+      "presets": {
+        "gentle": "Gentle",
+        "light": "Light",
+        "moderate": "Moderate",
+        "heavy": "Heavy",
+        "broadcast": "Broadcast",
+        "loudMaster": "Loud master",
+        "limiter": "Limiter"
+      },
+      "hint": "Narrows the gap between loud and quiet passages. Only in this browser."
+    },
+    "loudness": {
+      "caption": "VOLUME NORMALIZATION",
+      "enabled": "Normalize volume",
+      "preamp": "Extra gain",
+      "hint": "Evens out the volume from one track to the next.",
+      "updateFailed": "Could not update the playback settings"
+    },
+    "conversion": {
+      "caption": "CONVERSION",
+      "enabled": "Convert to mp3 in this browser",
+      "bitrate": "Bitrate",
+      "bitrateValue": "{{kbps}} kbps",
+      "hint": "Saves data on a slow connection. Off, the original file plays unless the browser cannot decode it."
+    }
+  },
+  "equalizer": {
+    "caption": "EQUALIZER",
+    "enabled": "Equalizer on",
+    "preset": "Preset",
+    "custom": "Custom",
+    "reset": "Back to flat",
+    "band": "{{band}} Hz band",
+    "gain": "{{value}} dB",
+    "headroom": "Headroom {{value}} dB, the loudest point of this curve",
+    "remoteHint": "Shapes only what plays in this browser",
+    "preamp": "Preamp",
+    "savePreset": "Save",
+    "presetName": "Preset name",
+    "deletePreset": "Delete the preset {{name}}",
+    "customGroup": "Your presets",
+    "presets": {
+      "flat": "Flat",
+      "acoustic": "Acoustic",
+      "bassBoost": "Bass boost",
+      "classical": "Classical",
+      "electronic": "Electronic",
+      "hipHop": "Hip-hop",
+      "jazz": "Jazz",
+      "pop": "Pop",
+      "rock": "Rock",
+      "trebleBoost": "Treble boost",
+      "vocal": "Vocal"
+    }
   },
   "devices": {
     "caption": "DEVICES",
@@ -79,7 +172,8 @@
   },
   "stage": {
     "label": "Full screen session",
-    "serverChip": "server: {{value}}"
+    "serverChip": "server: {{value}}",
+    "equalizerChip": "EQ: {{value}}"
   },
   "notice": {
     "skipping": "\"{{title}}\" failed, skipping to the next one",

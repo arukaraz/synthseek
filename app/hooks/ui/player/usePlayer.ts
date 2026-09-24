@@ -1,6 +1,12 @@
 "use client";
 
-import { nextRepeat, type PlayerActions, type PlayerDevice, type PlayerView } from "@components/Player";
+import {
+  nextRepeat,
+  type EqualizerPresetRef,
+  type PlayerActions,
+  type PlayerDevice,
+  type PlayerView,
+} from "@components/Player";
 import {
   useFavoriteTracks,
   useListeningConnections,
@@ -9,12 +15,16 @@ import {
   useTrackLyrics,
   useUpgradeTracks,
 } from "@hooks/api";
+import { useSetLoudness } from "@hooks/api/mutations/auth/useSetLoudness";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { resolveFriendlyError } from "@modules/errors";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useTranslation } from "react-i18next";
 
+import { compressorPresetMatching } from "./compressor";
+import { CONVERTED_BITRATE_KBPS } from "./constants";
 import { deviceKindFrom } from "./device";
+import { appliedEqualizerGains, customPresetMatching, equalizerPresetMatching, headroomDbFor } from "./equalizer";
 import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom, upcomingOrder, visibleQueueIds } from "./helpers";
 import { actions, currentTrack, getSnapshot, setLoudnessPreferences, setMessages, subscribe } from "./store";
 import { usePlayerDevices } from "./useDevices";
@@ -92,6 +102,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     variables: scrobbleVariables,
   } = useSetScrobbleEnabled();
   const { mutate: upgradeTracks, isPending: upgradePending } = useUpgradeTracks();
+  const { mutate: setLoudness } = useSetLoudness();
   const searchBetterQuality = useCallback(() => {
     if (track === null) return;
     upgradeTracks({ trackIds: [track.id] });
@@ -126,6 +137,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   useEffect(() => {
     actions.restoreVolume();
     actions.restoreMode();
+    actions.restorePlaybackSettings();
   }, []);
 
   useEffect(() => {
@@ -232,8 +244,20 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     toggleLyrics: actions.toggleLyrics,
     openLyrics: actions.openLyrics,
     toggleScrobbling,
-    toggleMore: actions.toggleMore,
     toggleDevices: actions.toggleDevices,
+    toggleSettings: actions.toggleSettings,
+    setEqualizerEnabled: actions.setEqualizerEnabled,
+    setEqualizerBand: actions.setEqualizerBand,
+    setEqualizerPreamp: actions.setEqualizerPreamp,
+    applyEqualizerPreset: actions.applyEqualizerPreset,
+    saveEqualizerPreset: actions.saveEqualizerPreset,
+    deleteEqualizerPreset: actions.deleteEqualizerPreset,
+    setCompressorEnabled: actions.setCompressorEnabled,
+    applyCompressorPreset: actions.applyCompressorPreset,
+    setCompressorParam: actions.setCompressorParam,
+    setLoudnessEnabled: (enabled: boolean) => setLoudness({ loudnessNormalization: enabled }),
+    setLoudnessPreamp: (preAmpDb: number) => setLoudness({ loudnessPreampDb: preAmpDb }),
+    setConversion: actions.setConversion,
     toggleModes: actions.toggleModes,
     toggleQueue: actions.toggleQueue,
     selectMode: actions.selectMode,
@@ -249,6 +273,32 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
 
   const activeDevice = mirroring && mirrored !== null ? mirrored : here;
   const chainTranscoding = mirroring && playingOn !== null ? playingOn.transcoding : session.transcoding;
+  const customPreset = customPresetMatching(session.equalizerPresets, session.equalizer.gainsDb);
+  const builtInPreset = customPreset === null ? equalizerPresetMatching(session.equalizer.gainsDb) : null;
+  const equalizerPreset: EqualizerPresetRef | null =
+    customPreset !== null
+      ? { kind: "custom", name: customPreset }
+      : builtInPreset !== null
+        ? { kind: "builtIn", id: builtInPreset }
+        : null;
+  const headroomDb = headroomDbFor(appliedEqualizerGains(session.equalizer));
+  const presetName =
+    equalizerPreset === null
+      ? t("equalizer.custom")
+      : equalizerPreset.kind === "builtIn"
+        ? t(`equalizer.presets.${equalizerPreset.id}`)
+        : equalizerPreset.name;
+  const equalizerLabel = !session.equalizer.enabled
+    ? t("chain.equalizerOff")
+    : headroomDb < 0
+      ? t("chain.equalizerHeadroom", { preset: presetName, headroom: headroomDb.toFixed(1) })
+      : presetName;
+  const conversionBitrate = session.conversion.enabled ? session.conversion.bitrateKbps : CONVERTED_BITRATE_KBPS;
+  const serverLabel = !chainTranscoding
+    ? t("chain.serverDirect")
+    : mirroring
+      ? t("chain.serverConverting")
+      : t("chain.serverTranscoding", { bitrate: conversionBitrate });
 
   const view: PlayerView = {
     track,
@@ -266,12 +316,28 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     chain: {
       fileLabel: t("chain.fileValue", { format: track.format.toUpperCase(), bitrate: track.bitrateKbps }),
       transcoding: chainTranscoding,
-      serverLabel: chainTranscoding ? t("chain.serverTranscoding") : t("chain.serverDirect"),
+      serverLabel,
+      equalizerLabel,
+      equalizerActive: session.equalizer.enabled,
     },
     favorite,
     chainVisible: session.chainVisible,
-    moreOpen: session.moreOpen,
     devicesOpen: session.devicesOpen,
+    settingsOpen: session.settingsOpen,
+    equalizer: {
+      enabled: session.equalizer.enabled,
+      gainsDb: session.equalizer.gainsDb,
+      preampDb: session.equalizer.preampDb,
+      preset: equalizerPreset,
+      headroomDb,
+      customPresets: session.equalizerPresets.map((preset) => preset.name),
+    },
+    compressor: { ...session.compressor, preset: compressorPresetMatching(session.compressor) },
+    loudness: {
+      enabled: currentUser?.loudnessNormalization ?? true,
+      preAmpDb: currentUser?.loudnessPreampDb ?? 0,
+    },
+    conversion: session.conversion,
     modesOpen: session.modesOpen,
     queueOpen: session.queueOpen,
     queueEditable: !mirroring,

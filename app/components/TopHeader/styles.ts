@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-export const headerContainer = cva("sticky top-0 z-50 w-full border-b border-fg/5", {
+export const headerContainer = cva("sticky top-0 z-50 h-16 w-full border-b border-fg/5 sm:h-20", {
   variants: {
     blur: {
       none: "bg-surface/80",
@@ -33,7 +33,7 @@ export type DecorativeLineProps = VariantProps<typeof decorativeLine>;
 export const headerContent = cva("relative flex w-full items-center gap-3 px-4 sm:gap-6 sm:px-6", {
   variants: {
     height: {
-      default: "h-16 sm:h-20",
+      default: "h-full",
     },
   },
   defaultVariants: {

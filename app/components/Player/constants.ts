@@ -1,6 +1,8 @@
 import { LayoutTemplate, Monitor, PanelBottom, PanelTop, PictureInPicture2, Smartphone, Tablet } from "lucide-react";
 
-import type { PlayerMode } from "./types";
+import type { CompressorParam } from "@hooks/ui/player/types";
+
+import type { PlayerMode, SettingsUnit } from "./types";
 
 export const WAVE = {
   LOBES: [
@@ -67,11 +69,39 @@ export const VOLUME_STEP = 0.02;
 
 export const RESTART_THRESHOLD_SECONDS = 3;
 
-export const DEVICES_TOGGLE_SELECTOR = "[data-player-devices-toggle]";
+export const MORE_TOGGLE_SELECTOR = "[data-player-more-toggle]";
 
-export const MODES_TOGGLE_SELECTOR = "[data-player-modes-toggle]";
+export const DEVICES_TOGGLE_SELECTOR = `[data-player-devices-toggle], ${MORE_TOGGLE_SELECTOR}`;
 
-export const QUEUE_TOGGLE_SELECTOR = "[data-player-queue-toggle]";
+export const SETTINGS_TOGGLE_SELECTOR = `[data-player-settings-toggle], ${MORE_TOGGLE_SELECTOR}`;
+
+export const EQUALIZER_PAGE_STEP_DB = 2;
+
+export const EQUALIZER_SCALE_TICKS_DB: readonly number[] = [12, 6, 0, -6, -12];
+
+export const SETTINGS_PANEL_WIDTH_PX = 400;
+
+export const SETTINGS_SLIDER_PAGE_STEPS = 10;
+
+export const CUSTOM_PRESET_VALUE_PREFIX = "custom:";
+
+export const LOUDNESS_PREAMP_MIN_DB = -15;
+
+export const LOUDNESS_PREAMP_MAX_DB = 15;
+
+export const LOUDNESS_PREAMP_STEP_DB = 1;
+
+export const COMPRESSOR_PARAM_UNITS: Readonly<Record<CompressorParam, SettingsUnit>> = {
+  thresholdDb: "db",
+  ratio: "ratio",
+  attackMs: "ms",
+  releaseMs: "ms",
+  kneeDb: "db",
+};
+
+export const MODES_TOGGLE_SELECTOR = `[data-player-modes-toggle], ${MORE_TOGGLE_SELECTOR}`;
+
+export const QUEUE_TOGGLE_SELECTOR = `[data-player-queue-toggle], ${MORE_TOGGLE_SELECTOR}`;
 
 export const FULLSCREEN_TOGGLE_SELECTOR = "[data-player-fullscreen-toggle]";
 

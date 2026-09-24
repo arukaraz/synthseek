@@ -8,20 +8,6 @@
       "updated": "Sprache aktualisiert",
       "updateFailed": "Sprache konnte nicht aktualisiert werden"
     },
-    "loudness": {
-      "title": "Lautstärke-Normalisierung",
-      "description": "Gleicht aus, wie laut ein Titel nach dem anderen klingt.",
-      "enabled": {
-        "label": "Lautstärke normalisieren",
-        "description": "Wendet beim Abspielen die gemessene Lautheit jedes Titels an."
-      },
-      "preamp": {
-        "label": "Zusätzliche Verstärkung",
-        "description": "Hebt oder senkt alles um einen festen Betrag, zusätzlich zur Korrektur.",
-        "suffix": "dB"
-      },
-      "updateFailed": "Die Wiedergabeeinstellungen konnten nicht gespeichert werden"
-    },
     "theme": {
       "title": "Design",
       "description": "Wähle das Design, das zu deiner Umgebung passt.",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { barIdentity, barTextColumn, barTransport, headerPlayer } from "../styles";
+import { barExtras, barIdentity, barTextColumn, barTransport, headerPlayer } from "../styles";
 
 describe("compact player sizing", () => {
   it("does not make the compact shell an inline-size container, which would pin its width to zero", () => {
@@ -17,20 +17,14 @@ describe("compact player sizing", () => {
     expect(barIdentity({ placement: "header" })).not.toContain("flex-1");
   });
 
-  it("folds with a plain hidden in the header, where no container query can resolve", () => {
-    expect(barTextColumn({ folded: true, placement: "header" })).toContain("hidden");
-    expect(barTextColumn({ folded: true, placement: "header" })).not.toContain("@max-player");
-    expect(barTransport({ folded: true, placement: "header" })).toContain("hidden");
-    expect(barTransport({ folded: true, placement: "header" })).not.toContain("@max-player");
+  it("never hides the track name or the transport, now that nothing folds them away", () => {
+    expect(barTextColumn()).not.toContain("hidden");
+    expect(barTransport()).not.toContain("hidden");
   });
 
-  it("keeps the dock folding on its container query, since the dock is still a container", () => {
-    expect(barTextColumn({ folded: true, placement: "dock" })).toContain("@max-player:hidden");
-    expect(barTransport({ folded: true, placement: "dock" })).toContain("@max-player:hidden");
-  });
-
-  it("leaves both unfolded states untouched", () => {
-    expect(barTextColumn({ folded: false, placement: "header" })).not.toContain("hidden");
-    expect(barTransport({ folded: false, placement: "dock" })).not.toContain("hidden");
+  it("puts the extras, and with them the more menu, after the transport on a narrow bar", () => {
+    expect(barTransport()).toContain("order-3");
+    expect(barExtras()).toContain("order-4");
+    expect(barExtras()).toContain("@player:order-none");
   });
 });

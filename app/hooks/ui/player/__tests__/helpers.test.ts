@@ -43,8 +43,12 @@ function sessionWith(overrides: Partial<PlayerSessionState>): PlayerSessionState
     remote: null,
     offsetSeconds: 0,
     chainVisible: false,
-    moreOpen: false,
     devicesOpen: false,
+    settingsOpen: false,
+    equalizer: { enabled: false, gainsDb: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], preampDb: 0 },
+    equalizerPresets: [],
+    compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
+    conversion: { enabled: false, bitrateKbps: 192 },
     fullscreen: false,
     notice: null,
     consecutiveFailures: 0,
@@ -70,19 +74,29 @@ function queueOf(length: number): PlayerSessionState["queue"] {
 
 describe("streamUrlFor", () => {
   it("escapes an id so it cannot break out of the path", () => {
-    expect(streamUrlFor("a/b?c", false, 0)).toBe("/api/v1/library/tracks/a%2Fb%3Fc/stream");
+    expect(streamUrlFor("a/b?c", null, 0)).toBe("/api/v1/library/tracks/a%2Fb%3Fc/stream");
   });
 
   it("asks for the original file when the browser can decode it", () => {
-    expect(streamUrlFor("t1", false, 90)).toBe("/api/v1/library/tracks/t1/stream");
+    expect(streamUrlFor("t1", null, 90)).toBe("/api/v1/library/tracks/t1/stream");
   });
 
   it("asks for a conversion when the browser cannot", () => {
-    expect(streamUrlFor("t1", true, 0)).toBe("/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=320");
+    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 320 }, 0)).toBe(
+      "/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=320"
+    );
+  });
+
+  it("asks for the bitrate the listener chose when they turned conversion on", () => {
+    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 128 }, 0)).toBe(
+      "/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=128"
+    );
   });
 
   it("carries the position so a converted stream can be seeked", () => {
-    expect(streamUrlFor("t1", true, 90.7)).toBe("/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=320&offset=90");
+    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 320 }, 90.7)).toBe(
+      "/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=320&offset=90"
+    );
   });
 });
 

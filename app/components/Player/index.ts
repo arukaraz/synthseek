@@ -3,9 +3,16 @@ export { APP_TITLE, PLAYER_HEADER_SLOT_ID } from "./constants";
 export { nextRepeat, restorablePlayerMode, shouldRestart } from "./helpers";
 export { closeMiniWindow, openMiniWindow } from "./miniWindow";
 export type {
+  CompressorPresetId,
+  EqualizerPresetId,
+  EqualizerPresetRef,
   PlayerActions,
+  PlayerCompressor,
+  PlayerConversion,
   PlayerDevice,
   PlayerDeviceKind,
+  PlayerEqualizer,
+  PlayerLoudness,
   PlayerLyrics,
   PlayerLyricsLine,
   PlayerMode,

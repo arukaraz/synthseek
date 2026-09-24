@@ -496,4 +496,60 @@ describe("compact mode", () => {
 
     expect(document.documentElement.getAttribute("data-player-mode")).toBe("normal");
   });
+
+  it("hangs the signal chain under the header, since the dock that used to carry it is gone", () => {
+    const slot = document.createElement("div");
+    slot.id = PLAYER_HEADER_SLOT_ID;
+    document.body.appendChild(slot);
+
+    renderPlayer({ mode: "compact", chainVisible: true });
+
+    expect(screen.getByText(enPlayer.chain.server)).toBeInTheDocument();
+    expect(within(slot).queryByText(enPlayer.chain.server)).not.toBeInTheDocument();
+    slot.remove();
+  });
+});
+
+describe("the playback settings", () => {
+  it("open from the bar", async () => {
+    const { actions, user } = renderPlayer();
+
+    await user.click(screen.getAllByRole("button", { name: enPlayer.controls.settings })[0] ?? document.body);
+
+    expect(actions.toggleSettings).toHaveBeenCalled();
+  });
+
+  it("take their place in the signal chain as the EQ stage, named with its state, and open from there too", async () => {
+    const { actions, user, view } = renderPlayer({ chainVisible: true });
+
+    expect(screen.getByText(enPlayer.chain.equalizer)).toBeInTheDocument();
+    const stage = screen.getByRole("button", {
+      name: `${enPlayer.controls.settings}: ${view.chain.equalizerLabel}`,
+    });
+    await user.click(stage);
+
+    expect(actions.toggleSettings).toHaveBeenCalled();
+  });
+
+  it("show the curve in play in the chain once the equaliser is on", () => {
+    const chain = { ...createPlayerView().chain, equalizerLabel: "Rock · -5 dB", equalizerActive: true };
+    renderPlayer({ chainVisible: true, chain });
+
+    expect(screen.getByText("Rock · -5 dB")).toBeInTheDocument();
+  });
+
+  it("show the panel with a slider per band when they are open", () => {
+    renderPlayer({ settingsOpen: true });
+
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByText(enPlayer.settings.title)).toBeInTheDocument();
+    expect(within(dialog).getAllByRole("slider", { name: /Hz band/ })).toHaveLength(10);
+  });
+
+  it("keep the equaliser on the stage, as a chip and as a control", () => {
+    renderPlayer({ fullscreen: true });
+
+    expect(screen.getByText(enPlayer.stage.equalizerChip.replace("{{value}}", "off"))).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enPlayer.controls.settings })).toBeInTheDocument();
+  });
 });

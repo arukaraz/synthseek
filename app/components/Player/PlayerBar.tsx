@@ -1,11 +1,12 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { ChevronLeft, ChevronRight, Info, Maximize, MonitorSpeaker } from "lucide-react";
+import { Info, Maximize, MonitorSpeaker } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { FavouriteButton } from "./FavouriteButton";
 import { PlayerExtraControls } from "./PlayerExtraControls";
+import { PlayerMoreMenu } from "./PlayerMoreMenu";
 import { PlayerTransport } from "./PlayerTransport";
 import { PlayerWave } from "./PlayerWave";
 import { TrackCover } from "./TrackCover";
@@ -24,7 +25,6 @@ import {
   barTextColumn,
   barMobileProgress,
   barMobileProgressFill,
-  barMoreGroup,
   barProgress,
   barSubtitle,
   barSubtitleAlbum,
@@ -61,7 +61,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
               artworkUrl={view.track.artworkUrl}
             />
           </button>
-          <span className={barTextColumn({ folded: view.moreOpen, placement })}>
+          <span className={barTextColumn()}>
             <span className={barNameRow()}>
               <button type="button" className={barNameButton()} onClick={actions.toggleFullscreen} tabIndex={-1}>
                 <span className={barTitle()}>{view.track.title}</span>
@@ -92,23 +92,10 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
           </span>
           <FavouriteButton view={view} actions={actions} className="@player:grid hidden" />
           <UpgradeButton view={view} actions={actions} className="@player:grid hidden" />
-          <button
-            type="button"
-            className={cn(iconButton({ tone: view.moreOpen ? "active" : "muted" }), "@player:hidden")}
-            onClick={actions.toggleMore}
-            {...labelled(t("controls.more"))}
-            aria-expanded={view.moreOpen}
-          >
-            {view.moreOpen ? <ChevronLeft className="size-4" /> : <ChevronRight className="size-4" />}
-          </button>
-          <div className={barMoreGroup({ open: view.moreOpen })}>
-            <PlayerExtraControls view={view} actions={actions} mobileChevron={placement === "dock"} />
-          </div>
         </div>
 
-        <div className={barTransport({ folded: view.moreOpen, placement })}>
+        <div className={barTransport()}>
           <FavouriteButton view={view} actions={actions} className="@player:hidden" />
-          {placement === "header" ? <UpgradeButton view={view} actions={actions} className="@player:hidden" /> : null}
           <PlayerTransport view={view} actions={actions} size="bar" />
         </div>
 
@@ -125,6 +112,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
           >
             <Maximize className="size-4" />
           </button>
+          <PlayerMoreMenu view={view} actions={actions} />
         </div>
       </div>
 

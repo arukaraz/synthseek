@@ -8,20 +8,6 @@
       "updated": "Idioma actualizado",
       "updateFailed": "No se pudo actualizar el idioma"
     },
-    "loudness": {
-      "title": "Normalización de volumen",
-      "description": "Iguala lo fuerte que suena una canción y la siguiente.",
-      "enabled": {
-        "label": "Normalizar el volumen",
-        "description": "Aplica al reproducir la sonoridad medida de cada pista."
-      },
-      "preamp": {
-        "label": "Ganancia extra",
-        "description": "Sube o baja todo una cantidad fija, además de la corrección.",
-        "suffix": "dB"
-      },
-      "updateFailed": "No se pudieron guardar los ajustes de reproducción"
-    },
     "theme": {
       "title": "Tema",
       "description": "Elige el tema que mejor se adapte a tu entorno.",

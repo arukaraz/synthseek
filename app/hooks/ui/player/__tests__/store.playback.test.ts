@@ -330,16 +330,34 @@ describe("player store advance", () => {
     expect(store.getSnapshot().index).toBe(order[0]);
   });
 
-  it("stops at the end of the queue and says so", async () => {
+  it("rests at the end of the queue and says so, keeping the last track loaded so play can start it again", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a")], 0);
 
     engine.handlers?.onEnded();
 
-    expect(engine.stop).toHaveBeenCalled();
+    expect(engine.stop).not.toHaveBeenCalled();
+    expect(engine.pause).toHaveBeenCalled();
     expect(store.getSnapshot().playing).toBe(false);
     expect(store.getSnapshot().positionSeconds).toBe(store.getSnapshot().durationSeconds);
+    expect(media.publishPlaybackState).toHaveBeenLastCalledWith(false);
     expect(notices.announce).toHaveBeenCalledWith({ text: "queue end", tone: "info" });
+
+    store.actions.togglePlay();
+
+    expect(engine.resume).toHaveBeenCalled();
+    expect(engine.loadAndPlay).toHaveBeenCalledTimes(1);
+  });
+
+  it("pressing next past the end says so again without unloading the track", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    engine.handlers?.onEnded();
+
+    store.actions.next();
+
+    expect(engine.stop).not.toHaveBeenCalled();
+    expect(notices.announce).toHaveBeenCalledTimes(2);
   });
 
   it("skips forward on the user's press without honouring repeat-one", async () => {
@@ -658,11 +676,7 @@ describe("player store volume and panels", () => {
   it("opens one panel at a time, so two never overlap", async () => {
     const store = await freshStore();
 
-    store.actions.toggleMore();
-    expect(store.getSnapshot().moreOpen).toBe(true);
-
     store.actions.toggleDevices();
-    expect(store.getSnapshot().moreOpen).toBe(false);
     expect(store.getSnapshot().devicesOpen).toBe(true);
 
     store.actions.toggleModes();
@@ -676,12 +690,12 @@ describe("player store volume and panels", () => {
 
   it("closes the menus when the stage goes fullscreen", async () => {
     const store = await freshStore();
-    store.actions.toggleMore();
+    store.actions.toggleModes();
 
     store.actions.toggleFullscreen();
 
     expect(store.getSnapshot().fullscreen).toBe(true);
-    expect(store.getSnapshot().moreOpen).toBe(false);
+    expect(store.getSnapshot().modesOpen).toBe(false);
     expect(store.getSnapshot().lyricsOpen).toBe(false);
   });
 

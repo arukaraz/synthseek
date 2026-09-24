@@ -27,9 +27,13 @@ describe("TopHeader styles", () => {
     expect(decorativeLine()).toContain("via-primary-500");
   });
 
-  it("lays out the header content row with default height", () => {
+  it("sizes the header box itself to the layout tokens, border included, and fills it with the content row", () => {
+    expect(headerContainer()).toContain("h-16");
+    expect(headerContainer()).toContain("sm:h-20");
+    expect(headerContainer()).toContain("border-b");
     expect(headerContent()).toContain("flex");
-    expect(headerContent()).toContain("h-16");
+    expect(headerContent()).toContain("h-full");
+    expect(headerContent()).not.toContain("h-16");
   });
 
   it("renders the focus glow as a hidden blurred gradient that shows on desktop", () => {

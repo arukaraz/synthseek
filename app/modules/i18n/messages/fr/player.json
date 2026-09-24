@@ -27,15 +27,108 @@
     "openTrack": "Ouvrir la session en plein écran",
     "more": "Plus de commandes",
     "lyrics": "Paroles",
-    "lyricsClose": "Fermer les paroles"
+    "lyricsClose": "Fermer les paroles",
+    "settings": "Réglages de lecture"
+  },
+  "menu": {
+    "playback": "Lecture",
+    "track": "Cette piste",
+    "sound": "Son",
+    "repeat": "Répéter",
+    "repeatState": { "off": "Désactivée", "all": "Toute la file", "one": "Cette piste" },
+    "upNext_one": "{{count}} à suivre",
+    "upNext_other": "{{count}} à suivre",
+    "upgrade": "Chercher une meilleure version",
+    "scrobbling": "Scrobbling",
+    "scrobblingState": { "off": "Désactivé", "sending": "Actif", "retrying": "Nouvel essai", "failed": "Échec" },
+    "playingOn": "Lecture sur {{device}}"
   },
   "chain": {
     "file": "FICHIER",
     "server": "SERVEUR",
+    "equalizer": "EQ",
     "output": "SORTIE",
     "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "sans conversion",
-    "serverTranscoding": "conversion en mp3 320"
+    "serverTranscoding": "conversion en mp3 {{bitrate}}",
+    "serverConverting": "conversion",
+    "equalizerOff": "désactivé",
+    "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
+  },
+  "settings": {
+    "title": "Réglages de lecture",
+    "close": "Masquer les réglages de lecture",
+    "units": {
+      "db": "dB",
+      "ms": "ms",
+      "ratio": ":1"
+    },
+    "compressor": {
+      "caption": "COMPRESSEUR",
+      "enabled": "Compresseur activé",
+      "preset": "Préréglage",
+      "custom": "Personnalisé",
+      "params": {
+        "thresholdDb": "Seuil",
+        "ratio": "Ratio",
+        "attackMs": "Attaque",
+        "releaseMs": "Relâchement",
+        "kneeDb": "Knee"
+      },
+      "presets": {
+        "gentle": "Doux",
+        "light": "Léger",
+        "moderate": "Modéré",
+        "heavy": "Fort",
+        "broadcast": "Radio",
+        "loudMaster": "Master fort",
+        "limiter": "Limiteur"
+      },
+      "hint": "Réduit l'écart entre les passages forts et faibles. Uniquement dans ce navigateur."
+    },
+    "loudness": {
+      "caption": "NORMALISATION DU VOLUME",
+      "enabled": "Normaliser le volume",
+      "preamp": "Gain supplémentaire",
+      "hint": "Égalise le volume d'une piste à l'autre.",
+      "updateFailed": "Impossible d'enregistrer les réglages de lecture"
+    },
+    "conversion": {
+      "caption": "CONVERSION",
+      "enabled": "Convertir en mp3 dans ce navigateur",
+      "bitrate": "Débit",
+      "bitrateValue": "{{kbps}} kbps",
+      "hint": "Économise des données sur une connexion lente. Désactivé, le fichier d'origine est lu sauf si le navigateur ne peut pas le décoder."
+    }
+  },
+  "equalizer": {
+    "caption": "ÉGALISEUR",
+    "enabled": "Égaliseur activé",
+    "preset": "Préréglage",
+    "custom": "Personnalisé",
+    "reset": "Remettre à plat",
+    "band": "Bande {{band}} Hz",
+    "gain": "{{value}} dB",
+    "headroom": "Marge de {{value}} dB, le point le plus fort de cette courbe",
+    "remoteHint": "N'agit que sur ce qui joue dans ce navigateur",
+    "preamp": "Préampli",
+    "savePreset": "Enregistrer",
+    "presetName": "Nom du préréglage",
+    "deletePreset": "Supprimer le préréglage {{name}}",
+    "customGroup": "Vos préréglages",
+    "presets": {
+      "flat": "Plat",
+      "acoustic": "Acoustique",
+      "bassBoost": "Renfort de basses",
+      "classical": "Classique",
+      "electronic": "Électronique",
+      "hipHop": "Hip-hop",
+      "jazz": "Jazz",
+      "pop": "Pop",
+      "rock": "Rock",
+      "trebleBoost": "Renfort d'aigus",
+      "vocal": "Voix"
+    }
   },
   "devices": {
     "caption": "APPAREILS",
@@ -79,7 +172,8 @@
   },
   "stage": {
     "label": "Session en plein écran",
-    "serverChip": "serveur : {{value}}"
+    "serverChip": "serveur : {{value}}",
+    "equalizerChip": "EQ : {{value}}"
   },
   "notice": {
     "skipping": "« {{title}} » a échoué, passage à la suivante",

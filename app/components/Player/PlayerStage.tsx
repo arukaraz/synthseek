@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Heart, Mic2, MonitorSpeaker, Minimize } from "lucide-react";
+import { Heart, Mic2, MonitorSpeaker, Minimize, Settings2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
@@ -128,6 +128,9 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                       <span className={stageChip({ tone: view.chain.transcoding ? "warning" : "success" })}>
                         {t("stage.serverChip", { value: view.chain.serverLabel })}
                       </span>
+                      <span className={stageChip({ tone: view.chain.equalizerActive ? "success" : "muted" })}>
+                        {t("stage.equalizerChip", { value: view.chain.equalizerLabel })}
+                      </span>
                     </div>
                     <div className={stageActions()}>
                       <button
@@ -154,6 +157,16 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                         aria-pressed={view.lyricsOpen}
                       >
                         <Mic2 className="size-4" />
+                      </button>
+                      <button
+                        type="button"
+                        className={iconButton({ tone: view.settingsOpen ? "active" : "muted", size: "stage" })}
+                        onClick={actions.toggleSettings}
+                        {...labelled(t("controls.settings"))}
+                        aria-expanded={view.settingsOpen}
+                        data-player-settings-toggle
+                      >
+                        <Settings2 className="size-4" />
                       </button>
                       <button
                         type="button"

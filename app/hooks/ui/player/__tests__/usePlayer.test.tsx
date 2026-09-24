@@ -25,6 +25,11 @@ const api = vi.hoisted(() => ({
   scrobbleVariables: undefined as { service: string; enabled: boolean } | undefined,
   upgradeTracks: vi.fn(),
   upgradePending: false,
+  setLoudness: vi.fn(),
+}));
+
+vi.mock("@hooks/api/mutations/auth/useSetLoudness", () => ({
+  useSetLoudness: () => ({ mutate: api.setLoudness }),
 }));
 
 vi.mock("@hooks/api", () => ({
@@ -90,8 +95,18 @@ const store = vi.hoisted(() => ({
     toggleChain: vi.fn(),
     toggleLyrics: vi.fn(),
     openLyrics: vi.fn(),
-    toggleMore: vi.fn(),
     toggleDevices: vi.fn(),
+    toggleSettings: vi.fn(),
+    setEqualizerEnabled: vi.fn(),
+    setEqualizerBand: vi.fn(),
+    setEqualizerPreamp: vi.fn(),
+    applyEqualizerPreset: vi.fn(),
+    saveEqualizerPreset: vi.fn(),
+    deleteEqualizerPreset: vi.fn(),
+    setCompressorEnabled: vi.fn(),
+    applyCompressorPreset: vi.fn(),
+    setCompressorParam: vi.fn(),
+    setConversion: vi.fn(),
     toggleModes: vi.fn(),
     toggleQueue: vi.fn(),
     selectMode: vi.fn(),
@@ -102,6 +117,7 @@ const store = vi.hoisted(() => ({
     expectRemote: vi.fn(),
     restoreVolume: vi.fn(),
     restoreMode: vi.fn(),
+    restorePlaybackSettings: vi.fn(),
   },
   setMessages: vi.fn(),
   setLoudnessPreferences: vi.fn(),
@@ -179,8 +195,12 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     remote: null,
     offsetSeconds: 0,
     chainVisible: false,
-    moreOpen: false,
     devicesOpen: false,
+    settingsOpen: false,
+    equalizer: { enabled: false, gainsDb: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], preampDb: 0 },
+    equalizerPresets: [],
+    compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
+    conversion: { enabled: false, bitrateKbps: 192 },
     modesOpen: false,
     queueOpen: false,
     mode: "normal",
@@ -333,7 +353,7 @@ describe("usePlayer view", () => {
     const { result } = renderHook(() => usePlayer());
 
     expect(result.current.view?.chain.transcoding).toBe(true);
-    expect(result.current.view?.chain.serverLabel).toBe(enPlayer.chain.serverTranscoding);
+    expect(result.current.view?.chain.serverLabel).toBe(enPlayer.chain.serverTranscoding.replace("{{bitrate}}", "320"));
   });
 
   it("lists what is still to come in the queue", () => {
@@ -725,5 +745,162 @@ describe("usePlayer lyrics", () => {
     const { result } = renderHook(() => usePlayer());
 
     expect(result.current.view?.lyricsLoading).toBe(true);
+  });
+});
+
+describe("usePlayer equaliser", () => {
+  const ROCK = [5, 4, 3, 1, -1, 1, 3, 4, 5, 5];
+
+  it("restores the saved playback settings on mount, next to the volume and the mode", () => {
+    renderHook(() => usePlayer());
+
+    expect(store.actions.restorePlaybackSettings).toHaveBeenCalled();
+  });
+
+  it("names the preset the curve matches and the headroom it costs", () => {
+    store.snapshot = sessionState({ equalizer: { enabled: true, gainsDb: ROCK, preampDb: 0 } });
+
+    const { result } = renderHook(() => usePlayer());
+
+    const headroomDb = result.current.view?.equalizer.headroomDb ?? 0;
+    expect(headroomDb).toBeCloseTo(-6.05, 1);
+    expect(result.current.view?.equalizer).toEqual({
+      enabled: true,
+      gainsDb: ROCK,
+      preampDb: 0,
+      preset: { kind: "builtIn", id: "rock" },
+      headroomDb,
+      customPresets: [],
+    });
+    expect(result.current.view?.chain.equalizerLabel).toBe(
+      `${enPlayer.equalizer.presets.rock} · ${headroomDb.toFixed(1)} dB`
+    );
+    expect(result.current.view?.chain.equalizerActive).toBe(true);
+  });
+
+  it("names a curve the listener saved by the name they gave it", () => {
+    const curve = [2, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    store.snapshot = sessionState({
+      equalizer: { enabled: true, gainsDb: curve, preampDb: 0 },
+      equalizerPresets: [{ name: "Mine", gainsDb: curve }],
+    });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.equalizer.preset).toEqual({ kind: "custom", name: "Mine" });
+    expect(result.current.view?.equalizer.customPresets).toEqual(["Mine"]);
+    expect(result.current.view?.chain.equalizerLabel).toContain("Mine ·");
+  });
+
+  it("prefers the name the listener gave a curve over the built-in preset it happens to equal", () => {
+    store.snapshot = sessionState({
+      equalizer: { enabled: true, gainsDb: ROCK, preampDb: 0 },
+      equalizerPresets: [{ name: "My rock", gainsDb: ROCK }],
+    });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.equalizer.preset).toEqual({ kind: "custom", name: "My rock" });
+  });
+
+  it("calls a curve that matches no preset custom, and charges nothing for a curve that only cuts", () => {
+    store.snapshot = sessionState({
+      equalizer: { enabled: true, gainsDb: [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0], preampDb: 0 },
+    });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.equalizer.preset).toBeNull();
+    expect(result.current.view?.equalizer.headroomDb).toBe(0);
+    expect(result.current.view?.chain.equalizerLabel).toBe(enPlayer.equalizer.custom);
+  });
+
+  it("reports the equaliser off in the chain, with no headroom for a curve nobody hears", () => {
+    store.snapshot = sessionState({ equalizer: { enabled: false, gainsDb: ROCK, preampDb: 0 } });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.chain.equalizerLabel).toBe(enPlayer.chain.equalizerOff);
+    expect(result.current.view?.chain.equalizerActive).toBe(false);
+    expect(result.current.view?.equalizer.headroomDb).toBe(0);
+  });
+
+  it("names the compressor preset in play and passes the settings through", () => {
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.compressor).toEqual({
+      enabled: false,
+      preset: "moderate",
+      thresholdDb: -24,
+      ratio: 4,
+      attackMs: 20,
+      releaseMs: 300,
+      kneeDb: 3,
+    });
+  });
+
+  it("reads the loudness preference from the account rather than the browser", () => {
+    auth.currentUser = { loudnessNormalization: false, loudnessPreampDb: 3 };
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.loudness).toEqual({ enabled: false, preAmpDb: 3 });
+  });
+
+  it("hands the settings actions straight to the store, even while another device has the sound", () => {
+    store.snapshot = sessionState({ remote: remote() });
+
+    const { result } = renderHook(() => usePlayer());
+    result.current.actions.toggleSettings();
+    result.current.actions.setEqualizerEnabled(true);
+    result.current.actions.setEqualizerBand(2, 3);
+    result.current.actions.setEqualizerPreamp(1.5);
+    result.current.actions.applyEqualizerPreset({ kind: "builtIn", id: "rock" });
+    result.current.actions.saveEqualizerPreset("Mine");
+    result.current.actions.deleteEqualizerPreset("Mine");
+    result.current.actions.setCompressorEnabled(true);
+    result.current.actions.applyCompressorPreset("limiter");
+    result.current.actions.setCompressorParam("ratio", 8);
+    result.current.actions.setConversion({ enabled: true, bitrateKbps: 128 });
+
+    expect(store.actions.toggleSettings).toHaveBeenCalled();
+    expect(store.actions.setEqualizerEnabled).toHaveBeenCalledWith(true);
+    expect(store.actions.setEqualizerBand).toHaveBeenCalledWith(2, 3);
+    expect(store.actions.setEqualizerPreamp).toHaveBeenCalledWith(1.5);
+    expect(store.actions.applyEqualizerPreset).toHaveBeenCalledWith({ kind: "builtIn", id: "rock" });
+    expect(store.actions.saveEqualizerPreset).toHaveBeenCalledWith("Mine");
+    expect(store.actions.deleteEqualizerPreset).toHaveBeenCalledWith("Mine");
+    expect(store.actions.setCompressorEnabled).toHaveBeenCalledWith(true);
+    expect(store.actions.applyCompressorPreset).toHaveBeenCalledWith("limiter");
+    expect(store.actions.setCompressorParam).toHaveBeenCalledWith("ratio", 8);
+    expect(store.actions.setConversion).toHaveBeenCalledWith({ enabled: true, bitrateKbps: 128 });
+  });
+
+  it("writes the loudness preference to the account, which is where it lives", () => {
+    const { result } = renderHook(() => usePlayer());
+    result.current.actions.setLoudnessEnabled(false);
+    result.current.actions.setLoudnessPreamp(-2);
+
+    expect(api.setLoudness).toHaveBeenCalledWith({ loudnessNormalization: false });
+    expect(api.setLoudness).toHaveBeenCalledWith({ loudnessPreampDb: -2 });
+  });
+});
+
+describe("usePlayer conversion", () => {
+  it("names the bitrate the listener asked for when their conversion is on", () => {
+    store.snapshot = sessionState({ transcoding: true, conversion: { enabled: true, bitrateKbps: 128 } });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.chain.serverLabel).toBe(enPlayer.chain.serverTranscoding.replace("{{bitrate}}", "128"));
+    expect(result.current.view?.conversion).toEqual({ enabled: true, bitrateKbps: 128 });
+  });
+
+  it("says only that another device is converting, since its bitrate is its own business", () => {
+    store.snapshot = sessionState({ remote: remote({ transcoding: true }) });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.chain.serverLabel).toBe(enPlayer.chain.serverConverting);
   });
 });

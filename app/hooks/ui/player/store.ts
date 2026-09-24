@@ -1,10 +1,22 @@
 "use client";
 
 import { closeMiniWindow, nextRepeat, openMiniWindow, restorablePlayerMode, shouldRestart } from "@components/Player";
-import type { PlayerMode, PlayerNoticeTone, PlayerTrack } from "@components/Player";
+import type {
+  CompressorPresetId,
+  EqualizerPresetRef,
+  PlayerMode,
+  PlayerNoticeTone,
+  PlayerTrack,
+} from "@components/Player";
 import { artworkProxySrc } from "@utils/artworkProxy";
 
 import {
+  COMPRESSOR_PRESETS,
+  COMPRESSOR_STORAGE_KEY,
+  CONVERSION_STORAGE_KEY,
+  EQUALIZER_PRESETS,
+  EQUALIZER_PRESETS_STORAGE_KEY,
+  EQUALIZER_STORAGE_KEY,
   MAX_CONSECUTIVE_FAILURES,
   MAX_QUEUE_TRACKS,
   MIRROR_STALE_MS,
@@ -14,8 +26,19 @@ import {
   VOLUME_STORAGE_KEY,
 } from "./constants";
 import { announce } from "./announce";
-import { setGainFactor } from "./audio-graph";
+import { setCompressor, setEqualizerGains, setEqualizerPreamp, setGainFactor } from "./audio-graph";
+import { defaultCompressor, restorableCompressor, steppedCompressorValue } from "./compressor";
+import { defaultConversion, restorableConversion, streamConversionFor } from "./conversion";
 import { applyVolume, canPlayMime, connectEngine, loadAndPlay, loadAt, pause, resume, seek, stop } from "./engine";
+import {
+  appliedEqualizerGains,
+  flatEqualizer,
+  presetNameFrom,
+  restorableEqualizer,
+  restorableEqualizerPresets,
+  steppedGainDb,
+  withCustomPreset,
+} from "./equalizer";
 import { gainFactorFor, loudnessModeFor } from "./loudness";
 import {
   mirroredPositionSeconds,
@@ -31,7 +54,18 @@ import {
   withoutRepeats,
 } from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
-import type { LoudnessMode, LoudnessPreferences, PlayerSessionState, QueueAddOutcome, RemotePlayback } from "./types";
+import type {
+  CompressorParam,
+  CompressorSettings,
+  ConversionSettings,
+  EqualizerCustomPreset,
+  EqualizerSettings,
+  LoudnessMode,
+  LoudnessPreferences,
+  PlayerSessionState,
+  QueueAddOutcome,
+  RemotePlayback,
+} from "./types";
 
 const listeners = new Set<() => void>();
 
@@ -53,8 +87,12 @@ let state: PlayerSessionState = {
   remote: null,
   offsetSeconds: 0,
   chainVisible: false,
-  moreOpen: false,
   devicesOpen: false,
+  settingsOpen: false,
+  equalizer: flatEqualizer(),
+  equalizerPresets: [],
+  compressor: defaultCompressor(),
+  conversion: defaultConversion(),
   modesOpen: false,
   queueOpen: false,
   mode: "normal",
@@ -140,7 +178,8 @@ function playAt(index: number, fromSeconds = 0): void {
   silenceOtherAudio();
   clearInterval(mirrorTimer);
   clearTimeout(skipTimer);
-  const converted = needsConversion(track.format, canPlayMime);
+  const conversion = streamConversionFor(needsConversion(track.format, canPlayMime), state.conversion);
+  const converted = conversion !== null;
   publish({
     remote: null,
     index,
@@ -153,7 +192,7 @@ function playAt(index: number, fromSeconds = 0): void {
     offsetSeconds: converted ? fromSeconds : 0,
   });
   startLoudness(track, state.queue, state.shuffle);
-  loadAndPlay(streamUrlFor(track.id, converted, fromSeconds), state.volume, state.muted, converted ? 0 : fromSeconds);
+  loadAndPlay(streamUrlFor(track.id, conversion, fromSeconds), state.volume, state.muted, converted ? 0 : fromSeconds);
   publishMediaSession(track, mediaHandlers());
 }
 
@@ -161,7 +200,8 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
   const track = queue[index];
   if (track === undefined) return;
   ensureConnected();
-  const converted = needsConversion(track.format, canPlayMime);
+  const conversion = streamConversionFor(needsConversion(track.format, canPlayMime), state.conversion);
+  const converted = conversion !== null;
   publish({
     queue,
     index,
@@ -177,7 +217,7 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
     consecutiveFailures: 0,
   });
   startLoudness(track, queue, state.shuffle);
-  loadAt(streamUrlFor(track.id, converted, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
+  loadAt(streamUrlFor(track.id, conversion, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
   publishMediaSession(track, mediaHandlers());
 }
 
@@ -207,8 +247,9 @@ function advance(automatic: boolean): void {
       playAt(state.shuffle ? (state.shuffleOrder[0] ?? 0) : 0);
       return;
     }
-    stop();
+    pause();
     publish({ playing: false, positionSeconds: state.durationSeconds });
+    publishPlaybackState(false);
     notify(messages.queueEnd, "info");
     return;
   }
@@ -271,6 +312,41 @@ export function setLoudnessPreferences(next: LoudnessPreferences): void {
 function startLoudness(track: PlayerTrack, queue: readonly PlayerTrack[], shuffle: boolean): void {
   activeLoudnessMode = loudnessModeFor(queue, shuffle);
   setGainFactor(gainFactorFor(track, activeLoudnessMode, loudness));
+}
+
+function persist(key: string, value: unknown): void {
+  if (typeof window !== "undefined") window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+function applyEqualizer(next: EqualizerSettings): void {
+  setEqualizerGains(appliedEqualizerGains(next));
+  setEqualizerPreamp(next.enabled ? next.preampDb : 0);
+}
+
+function writeEqualizer(next: EqualizerSettings): void {
+  publish({ equalizer: next });
+  applyEqualizer(next);
+  persist(EQUALIZER_STORAGE_KEY, next);
+}
+
+function writeEqualizerPresets(next: readonly EqualizerCustomPreset[]): void {
+  publish({ equalizerPresets: next });
+  persist(EQUALIZER_PRESETS_STORAGE_KEY, next);
+}
+
+function writeCompressor(next: CompressorSettings): void {
+  publish({ compressor: next });
+  setCompressor(next);
+  persist(COMPRESSOR_STORAGE_KEY, next);
+}
+
+function reloadCurrentTrack(): void {
+  if (!state.started) return;
+  if (state.playing) {
+    playAt(state.index, state.positionSeconds);
+    return;
+  }
+  armAt(state.queue, state.index, state.positionSeconds, [...state.shuffleOrder]);
 }
 
 function mediaHandlers(): {
@@ -457,17 +533,61 @@ export const actions = {
   toggleChain(): void {
     publish({ chainVisible: !state.chainVisible });
   },
-  toggleMore(): void {
-    publish({ moreOpen: !state.moreOpen, devicesOpen: false, modesOpen: false });
-  },
   toggleDevices(): void {
-    publish({ devicesOpen: !state.devicesOpen, moreOpen: false, modesOpen: false });
+    publish({ devicesOpen: !state.devicesOpen, modesOpen: false });
+  },
+  toggleSettings(): void {
+    publish({ settingsOpen: !state.settingsOpen, devicesOpen: false, modesOpen: false });
+  },
+  setEqualizerEnabled(enabled: boolean): void {
+    writeEqualizer({ ...state.equalizer, enabled });
+  },
+  setEqualizerBand(band: number, gainDb: number): void {
+    if (state.equalizer.gainsDb[band] === undefined) return;
+    const gainsDb = state.equalizer.gainsDb.map((current, at) => (at === band ? steppedGainDb(gainDb) : current));
+    writeEqualizer({ ...state.equalizer, gainsDb });
+  },
+  setEqualizerPreamp(preampDb: number): void {
+    writeEqualizer({ ...state.equalizer, preampDb: steppedGainDb(preampDb) });
+  },
+  applyEqualizerPreset(preset: EqualizerPresetRef): void {
+    if (preset.kind === "builtIn") {
+      writeEqualizer({ ...state.equalizer, gainsDb: EQUALIZER_PRESETS[preset.id] });
+      return;
+    }
+    const custom = state.equalizerPresets.find((entry) => entry.name === preset.name);
+    if (custom === undefined) return;
+    writeEqualizer({ ...state.equalizer, gainsDb: custom.gainsDb });
+  },
+  saveEqualizerPreset(rawName: string): void {
+    const name = presetNameFrom(rawName);
+    if (name === null) return;
+    writeEqualizerPresets(withCustomPreset(state.equalizerPresets, { name, gainsDb: state.equalizer.gainsDb }));
+  },
+  deleteEqualizerPreset(name: string): void {
+    if (!state.equalizerPresets.some((entry) => entry.name === name)) return;
+    writeEqualizerPresets(state.equalizerPresets.filter((entry) => entry.name !== name));
+  },
+  setCompressorEnabled(enabled: boolean): void {
+    writeCompressor({ ...state.compressor, enabled });
+  },
+  applyCompressorPreset(preset: CompressorPresetId): void {
+    writeCompressor({ ...state.compressor, ...COMPRESSOR_PRESETS[preset] });
+  },
+  setCompressorParam(param: CompressorParam, value: number): void {
+    writeCompressor({ ...state.compressor, [param]: steppedCompressorValue(param, value) });
+  },
+  setConversion(next: ConversionSettings): void {
+    if (next.enabled === state.conversion.enabled && next.bitrateKbps === state.conversion.bitrateKbps) return;
+    publish({ conversion: next });
+    persist(CONVERSION_STORAGE_KEY, next);
+    reloadCurrentTrack();
   },
   toggleModes(): void {
-    publish({ modesOpen: !state.modesOpen, devicesOpen: false, moreOpen: false });
+    publish({ modesOpen: !state.modesOpen, devicesOpen: false });
   },
   toggleQueue(): void {
-    publish({ queueOpen: !state.queueOpen, devicesOpen: false, modesOpen: false, moreOpen: false });
+    publish({ queueOpen: !state.queueOpen, devicesOpen: false, modesOpen: false });
   },
   selectMode(mode: PlayerMode): void {
     if (state.mode === "mini" && mode !== "mini") closeMiniWindow();
@@ -479,13 +599,13 @@ export const actions = {
       });
     }
     if (typeof window !== "undefined") window.localStorage.setItem(MODE_STORAGE_KEY, mode);
-    publish({ mode, modesOpen: false, moreOpen: false });
+    publish({ mode, modesOpen: false });
   },
   toggleFullscreen(): void {
-    publish({ fullscreen: !state.fullscreen, moreOpen: false, modesOpen: false, lyricsOpen: false });
+    publish({ fullscreen: !state.fullscreen, modesOpen: false, lyricsOpen: false });
   },
   openLyrics(): void {
-    publish({ fullscreen: true, lyricsOpen: true, moreOpen: false, devicesOpen: false, modesOpen: false });
+    publish({ fullscreen: true, lyricsOpen: true, devicesOpen: false, modesOpen: false });
   },
   toggleLyrics(): void {
     publish({ lyricsOpen: !state.lyricsOpen, devicesOpen: false });
@@ -585,6 +705,23 @@ export const actions = {
     const stored = restorablePlayerMode(window.localStorage.getItem(MODE_STORAGE_KEY));
     if (stored === null) return;
     publish({ mode: stored });
+  },
+  restorePlaybackSettings(): void {
+    if (typeof window === "undefined") return;
+    const equalizer = restorableEqualizer(window.localStorage.getItem(EQUALIZER_STORAGE_KEY));
+    if (equalizer !== null) {
+      publish({ equalizer });
+      applyEqualizer(equalizer);
+    }
+    const presets = restorableEqualizerPresets(window.localStorage.getItem(EQUALIZER_PRESETS_STORAGE_KEY));
+    if (presets !== null) publish({ equalizerPresets: presets });
+    const compressor = restorableCompressor(window.localStorage.getItem(COMPRESSOR_STORAGE_KEY));
+    if (compressor !== null) {
+      publish({ compressor });
+      setCompressor(compressor);
+    }
+    const conversion = restorableConversion(window.localStorage.getItem(CONVERSION_STORAGE_KEY));
+    if (conversion !== null) publish({ conversion });
   },
   artworkFor(track: PlayerTrack): string | null {
     return track.artworkUrl === null ? null : artworkProxySrc(track.artworkUrl);

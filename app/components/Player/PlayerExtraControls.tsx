@@ -1,23 +1,17 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { Info, ListMusic, Mic2, MonitorSpeaker, Repeat, Repeat1, Shuffle } from "lucide-react";
+import { ListMusic, Mic2, MonitorSpeaker, Repeat, Repeat1, Settings2, Shuffle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { MODE_MENU_ICON, RESTORE_MODE_ICON } from "./constants";
 import { labelled } from "./helpers";
 import { PlayerVolume } from "./PlayerVolume";
 import { ScrobbleStatus } from "./ScrobbleStatus";
-import { UpgradeButton } from "./UpgradeButton";
 import { iconButton } from "./styles";
 import type { PlayerExtraControlsProps } from "./types";
 
-export function PlayerExtraControls({
-  view,
-  actions,
-  omitTransport = false,
-  mobileChevron = false,
-}: PlayerExtraControlsProps) {
+export function PlayerExtraControls({ view, actions, omitTransport = false }: PlayerExtraControlsProps) {
   const { t } = useTranslation("player");
 
   return (
@@ -57,21 +51,19 @@ export function PlayerExtraControls({
       >
         <Mic2 className="@player:size-4 size-5" />
       </button>
+      {view.mode === "mini" ? null : (
+        <button
+          type="button"
+          className={iconButton({ tone: view.settingsOpen ? "active" : "muted" })}
+          onClick={actions.toggleSettings}
+          aria-expanded={view.settingsOpen}
+          data-player-settings-toggle
+          {...labelled(t("controls.settings"))}
+        >
+          <Settings2 className="@player:size-4 size-5" />
+        </button>
+      )}
       <PlayerVolume view={view} actions={actions} size="bar" />
-      {mobileChevron ? (
-        <>
-          <UpgradeButton view={view} actions={actions} />
-          <button
-            type="button"
-            className={iconButton({ tone: view.chainVisible ? "remote" : "muted" })}
-            onClick={actions.toggleChain}
-            {...labelled(t("controls.chain"))}
-            aria-pressed={view.chainVisible}
-          >
-            <Info className="@player:size-4 size-5" />
-          </button>
-        </>
-      ) : null}
       {view.mode === "mini" ? null : (
         <button
           type="button"
@@ -95,18 +87,16 @@ export function PlayerExtraControls({
         <MonitorSpeaker className="@player:size-4 size-5" />
       </button>
       {view.mode === "normal" ? (
-        mobileChevron ? null : (
-          <button
-            type="button"
-            className={iconButton()}
-            onClick={actions.toggleModes}
-            {...labelled(t("controls.modes"))}
-            aria-expanded={view.modesOpen}
-            data-player-modes-toggle
-          >
-            <MODE_MENU_ICON className="@player:size-4 size-5" />
-          </button>
-        )
+        <button
+          type="button"
+          className={iconButton()}
+          onClick={actions.toggleModes}
+          {...labelled(t("controls.modes"))}
+          aria-expanded={view.modesOpen}
+          data-player-modes-toggle
+        >
+          <MODE_MENU_ICON className="@player:size-4 size-5" />
+        </button>
       ) : (
         <button
           type="button"

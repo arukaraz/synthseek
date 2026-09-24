@@ -8,14 +8,15 @@ import { playerPanel, playerPanelFromTop } from "@utils/animations";
 
 import { DeviceBody } from "./DeviceBody";
 import { DEVICES_TOGGLE_SELECTOR } from "./constants";
-import { returnFocusTo } from "./helpers";
+import { panelClosesUpward, panelEdge, returnFocusTo } from "./helpers";
 import { anchorVars, deviceCaption, deviceList, deviceRow, panelAnchor, panelSurface } from "./styles";
 import { useAnchorRect } from "./useAnchorRect";
 import type { PlayerPanelProps } from "./types";
 
-export function DeviceMenu({ view, actions, chain, anchored = false }: PlayerPanelProps) {
+export function DeviceMenu({ view, actions, chain, anchored = false, hanging = false }: PlayerPanelProps) {
   const { t } = useTranslation("player");
   const point = useAnchorRect(DEVICES_TOGGLE_SELECTOR, anchored);
+  const edge = panelEdge(anchored, point, hanging);
 
   return (
     <Dialog
@@ -39,8 +40,8 @@ export function DeviceMenu({ view, actions, chain, anchored = false }: PlayerPan
         }}
       >
         <motion.div
-          className={panelSurface({ anchored: anchored && point !== null })}
-          variants={point?.below === true ? playerPanelFromTop : playerPanel}
+          className={panelSurface({ edge })}
+          variants={panelClosesUpward(edge, point) ? playerPanelFromTop : playerPanel}
           initial="hidden"
           animate="visible"
           exit="exit"

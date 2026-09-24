@@ -30,6 +30,15 @@
     bottom: auto;
   }
 
+  [data-player-mode="compact"] .player-panel-column {
+    top: var(--height-header-wide);
+  }
+
+  [data-player-mode="compact"] .player-panel-anchor.player-metrics-chain,
+  [data-player-mode="compact"] .player-panel-column.player-metrics-chain {
+    top: calc(var(--height-header-wide) + 1.875rem);
+  }
+
   .player-metrics-chain {
     --player-dock-height: calc(var(--player-bar-height) + 1.875rem);
   }
@@ -45,6 +54,15 @@
 
   .player-volume-head {
     left: var(--player-volume, 0%);
+  }
+
+  .player-eq-fill {
+    top: var(--player-eq-fill-top, 50%);
+    height: var(--player-eq-fill-height, 0%);
+  }
+
+  .player-eq-head {
+    top: var(--player-eq-head-top, 50%);
   }
 
   @media (prefers-reduced-motion: reduce) {

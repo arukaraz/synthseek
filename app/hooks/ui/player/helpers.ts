@@ -2,8 +2,6 @@ import type { PlayerScrobbleState, PlayerTone, PlayerTrack } from "@components/P
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 
 import {
-  CONVERTED_BITRATE_KBPS,
-  CONVERTED_FORMAT,
   DEVICE_HEARTBEAT_MS,
   LISTEN_DELTA_CEILING_SECONDS,
   LISTEN_FRACTION,
@@ -22,6 +20,7 @@ import type {
   QueueAddOutcome,
   RemotePlayback,
   SessionSnapshot,
+  StreamConversion,
 } from "./types";
 
 export function toneFor(seed: string): PlayerTone {
@@ -50,10 +49,10 @@ export function playerTrackFrom(item: LibraryTrackItem): PlayerTrack {
   };
 }
 
-export function streamUrlFor(trackId: string, converted: boolean, offsetSeconds: number): string {
+export function streamUrlFor(trackId: string, conversion: StreamConversion | null, offsetSeconds: number): string {
   const base = `/api/v1/library/tracks/${encodeURIComponent(trackId)}/stream`;
-  if (!converted) return base;
-  const query = new URLSearchParams({ format: CONVERTED_FORMAT, maxBitrate: String(CONVERTED_BITRATE_KBPS) });
+  if (conversion === null) return base;
+  const query = new URLSearchParams({ format: conversion.format, maxBitrate: String(conversion.bitrateKbps) });
   if (offsetSeconds > 0) query.set("offset", String(Math.floor(offsetSeconds)));
   return `${base}?${query.toString()}`;
 }

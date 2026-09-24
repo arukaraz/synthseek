@@ -67,11 +67,61 @@ export interface PlayerLyrics {
   lines: readonly PlayerLyricsLine[];
 }
 
+export type EqualizerPresetId =
+  | "flat"
+  | "acoustic"
+  | "bassBoost"
+  | "classical"
+  | "electronic"
+  | "hipHop"
+  | "jazz"
+  | "pop"
+  | "rock"
+  | "trebleBoost"
+  | "vocal";
+
+export type EqualizerPresetRef = { kind: "builtIn"; id: EqualizerPresetId } | { kind: "custom"; name: string };
+
+export interface PlayerEqualizer {
+  enabled: boolean;
+  gainsDb: readonly number[];
+  preampDb: number;
+  preset: EqualizerPresetRef | null;
+  headroomDb: number;
+  customPresets: readonly string[];
+}
+
+export type CompressorPresetId = "gentle" | "light" | "moderate" | "heavy" | "broadcast" | "loudMaster" | "limiter";
+
+export interface PlayerCompressor {
+  enabled: boolean;
+  preset: CompressorPresetId | null;
+  thresholdDb: number;
+  ratio: number;
+  attackMs: number;
+  releaseMs: number;
+  kneeDb: number;
+}
+
+export interface PlayerLoudness {
+  enabled: boolean;
+  preAmpDb: number;
+}
+
+export interface PlayerConversion {
+  enabled: boolean;
+  bitrateKbps: number;
+}
+
 export interface PlayerSignalChain {
   fileLabel: string;
   transcoding: boolean;
   serverLabel: string;
+  equalizerLabel: string;
+  equalizerActive: boolean;
 }
+
+export type PlayerAttention = "remote" | "warning" | "danger";
 
 export interface PlayerView {
   track: PlayerTrack;
@@ -89,6 +139,11 @@ export interface PlayerView {
   favorite: boolean;
   chainVisible: boolean;
   devicesOpen: boolean;
+  settingsOpen: boolean;
+  equalizer: PlayerEqualizer;
+  compressor: PlayerCompressor;
+  loudness: PlayerLoudness;
+  conversion: PlayerConversion;
   lyricsOpen: boolean;
   lyrics: PlayerLyrics | null;
   lyricsLoading: boolean;
@@ -96,7 +151,6 @@ export interface PlayerView {
   scrobble: PlayerScrobbleState;
   scrobbleActionable: boolean;
   upgrading: boolean;
-  moreOpen: boolean;
   modesOpen: boolean;
   queueOpen: boolean;
   queueEditable: boolean;
@@ -116,13 +170,25 @@ export interface PlayerActions {
   toggleShuffle: () => void;
   cycleRepeat: () => void;
   toggleDevices: () => void;
+  toggleSettings: () => void;
+  setEqualizerEnabled: (enabled: boolean) => void;
+  setEqualizerBand: (band: number, gainDb: number) => void;
+  setEqualizerPreamp: (preampDb: number) => void;
+  applyEqualizerPreset: (preset: EqualizerPresetRef) => void;
+  saveEqualizerPreset: (name: string) => void;
+  deleteEqualizerPreset: (name: string) => void;
+  setCompressorEnabled: (enabled: boolean) => void;
+  applyCompressorPreset: (preset: CompressorPresetId) => void;
+  setCompressorParam: (param: keyof Omit<PlayerCompressor, "enabled" | "preset">, value: number) => void;
+  setLoudnessEnabled: (enabled: boolean) => void;
+  setLoudnessPreamp: (preAmpDb: number) => void;
+  setConversion: (conversion: PlayerConversion) => void;
   toggleModes: () => void;
   toggleQueue: () => void;
   selectMode: (mode: PlayerMode) => void;
   jumpTo: (index: number) => void;
   removeFromQueue: (index: number) => void;
   reorderQueue: (tail: PlayerTrack[]) => void;
-  toggleMore: () => void;
   toggleChain: () => void;
   toggleLyrics: () => void;
   openLyrics: () => void;
@@ -143,6 +209,10 @@ export interface PlayerBarProps extends PlayerProps {
   placement?: "dock" | "header";
 }
 
+export interface PlayerSignalChainProps extends PlayerProps {
+  placement?: "dock" | "header";
+}
+
 export interface PlayerDeviceBodyProps {
   device: PlayerDevice;
 }
@@ -150,7 +220,10 @@ export interface PlayerDeviceBodyProps {
 export interface PlayerPanelProps extends PlayerProps {
   chain: boolean;
   anchored?: boolean;
+  hanging?: boolean;
 }
+
+export type PanelEdge = "bar" | "header" | "floating";
 
 export interface PanelAnchorPoint {
   top: number;
@@ -171,7 +244,6 @@ export interface PlayerTransportProps extends PlayerProps {
 
 export interface PlayerExtraControlsProps extends PlayerProps {
   omitTransport?: boolean;
-  mobileChevron?: boolean;
 }
 
 export type PlayerQueueBodyProps = PlayerProps;
@@ -265,6 +337,29 @@ export interface WavePaint extends WaveSnapshot {
 export interface PlayerVolumeProps extends PlayerProps {
   size: "bar" | "stage";
 }
+
+export interface PlayerEqualizerBandProps {
+  hz: number;
+  gainDb: number;
+  disabled: boolean;
+  onChange: (gainDb: number) => void;
+}
+
+export type SettingsUnit = "db" | "ms" | "ratio";
+
+export interface PlayerSettingsSliderProps {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  unit: SettingsUnit;
+  disabled?: boolean;
+  onChange: (value: number) => void;
+  onCommit?: (value: number) => void;
+}
+
+export type PlayerSettingsSectionProps = PlayerProps;
 
 export interface PlayerFavouriteProps extends PlayerProps {
   className?: string;

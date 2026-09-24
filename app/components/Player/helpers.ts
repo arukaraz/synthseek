@@ -1,5 +1,9 @@
+import { EQUALIZER_MAX_DB, EQUALIZER_MIN_DB } from "@hooks/ui/player/constants";
+import { clampGainDb, steppedGainDb } from "@hooks/ui/player/equalizer";
+
 import {
   ALL_PLAYER_MODES,
+  CUSTOM_PRESET_VALUE_PREFIX,
   LYRIC_BLUR_DISTANCE,
   LYRIC_FAR_DISTANCE,
   RESTART_THRESHOLD_SECONDS,
@@ -7,6 +11,12 @@ import {
   WAVE,
 } from "./constants";
 import type {
+  EqualizerPresetId,
+  EqualizerPresetRef,
+  SettingsUnit,
+  PanelAnchorPoint,
+  PanelEdge,
+  PlayerAttention,
   PlayerLyrics,
   PlayerMode,
   PlayerQueueEntry,
@@ -319,4 +329,77 @@ export function lyricDepth(active: number | null, index: number): "near" | "mid"
   if (distance >= LYRIC_FAR_DISTANCE) return "far";
   if (distance >= LYRIC_BLUR_DISTANCE) return "mid";
   return "near";
+}
+
+export function bandLabel(hz: number): string {
+  return hz >= 1000 ? `${hz / 1000}k` : String(Math.round(hz));
+}
+
+export function formatGainDb(gainDb: number): string {
+  return gainDb > 0 ? `+${gainDb}` : String(gainDb);
+}
+
+export function gainFractionFromTop(gainDb: number): number {
+  return (EQUALIZER_MAX_DB - clampGainDb(gainDb)) / (EQUALIZER_MAX_DB - EQUALIZER_MIN_DB);
+}
+
+export function gainDbFromPointer(clientY: number, rect: DOMRect): number {
+  if (rect.height <= 0) return 0;
+  const fraction = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
+  return steppedGainDb(EQUALIZER_MAX_DB - fraction * (EQUALIZER_MAX_DB - EQUALIZER_MIN_DB));
+}
+
+export function steppedInRange(value: number, min: number, max: number, step: number): number {
+  if (!Number.isFinite(value)) return min;
+  const stepped = Math.round((value - min) / step) * step + min;
+  return Math.min(max, Math.max(min, Number(stepped.toFixed(3))));
+}
+
+export function valueFromHorizontalPointer(
+  clientX: number,
+  rect: DOMRect,
+  min: number,
+  max: number,
+  step: number
+): number {
+  return steppedInRange(min + fractionFromPointer(clientX, rect) * (max - min), min, max, step);
+}
+
+export function formatWithUnit(value: number, unit: SettingsUnit, unitLabel: string): string {
+  return unit === "ratio" ? `${value}${unitLabel}` : `${value} ${unitLabel}`;
+}
+
+export function presetValueFor(preset: EqualizerPresetRef | null): string {
+  if (preset === null) return "";
+  return preset.kind === "builtIn" ? preset.id : `${CUSTOM_PRESET_VALUE_PREFIX}${preset.name}`;
+}
+
+export function presetRefFromValue(
+  value: string,
+  isBuiltIn: (id: string) => id is EqualizerPresetId
+): EqualizerPresetRef | null {
+  if (value.startsWith(CUSTOM_PRESET_VALUE_PREFIX)) {
+    return { kind: "custom", name: value.slice(CUSTOM_PRESET_VALUE_PREFIX.length) };
+  }
+  return isBuiltIn(value) ? { kind: "builtIn", id: value } : null;
+}
+
+export function panelEdge(anchored: boolean, point: PanelAnchorPoint | null, hanging: boolean): PanelEdge {
+  if (anchored && point !== null) return "floating";
+  return hanging ? "header" : "bar";
+}
+
+export function keepMenuOpen(event: Event): void {
+  event.preventDefault();
+}
+
+export function panelClosesUpward(edge: PanelEdge, point: PanelAnchorPoint | null): boolean {
+  return edge === "header" || (edge === "floating" && point?.below === true);
+}
+
+export function moreAttention(view: PlayerView): PlayerAttention | null {
+  if (view.scrobble === "failed") return "danger";
+  if (view.scrobble === "retrying") return "warning";
+  if (!view.activeDevice.local) return "remote";
+  return null;
 }
