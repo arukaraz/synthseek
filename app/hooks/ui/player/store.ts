@@ -58,6 +58,8 @@ import {
 } from "./equalizer";
 import { gainFactorFor, loudnessModeFor } from "./loudness";
 import {
+  autoplayIdsAmong,
+  insertBeforeAutoplay,
   mirroredPositionSeconds,
   needsConversion,
   nextIndexIn,
@@ -116,6 +118,8 @@ let state: PlayerSessionState = {
   chainVisible: false,
   devicesOpen: false,
   settingsOpen: false,
+  autoplay: false,
+  autoplayIds: new Set<string>(),
   equalizer: flatEqualizer(),
   equalizerPresets: [],
   compressor: defaultCompressor(),
@@ -426,6 +430,11 @@ export function setLoudnessPreferences(next: LoudnessPreferences): void {
   setActiveTrackGain(track === null ? 1 : gainFactorFor(track, activeLoudnessMode, loudness));
 }
 
+export function setAutoplayPreference(enabled: boolean): void {
+  if (state.autoplay === enabled) return;
+  publish({ autoplay: enabled });
+}
+
 function startLoudness(track: PlayerTrack, queue: readonly PlayerTrack[], shuffle: boolean, apply: boolean): number {
   activeLoudnessMode = loudnessModeFor(queue, shuffle);
   const factor = gainFactorFor(track, activeLoudnessMode, loudness);
@@ -484,9 +493,15 @@ function mediaHandlers(): {
   };
 }
 
-export function sessionSnapshot(): { trackIds: string[]; currentTrackId: string | null; positionMs: number } {
+export function sessionSnapshot(): {
+  trackIds: string[];
+  autoplayTrackIds: string[];
+  currentTrackId: string | null;
+  positionMs: number;
+} {
   return {
     trackIds: state.queue.map((track) => track.id),
+    autoplayTrackIds: state.queue.filter((track) => state.autoplayIds.has(track.id)).map((track) => track.id),
     currentTrackId: currentTrack()?.id ?? null,
     positionMs: Math.max(0, Math.round(state.positionSeconds * 1000)),
   };
@@ -497,7 +512,8 @@ export const actions = {
     tracks: readonly PlayerTrack[],
     currentTrackId: string | null,
     positionSeconds: number,
-    resumedFrom: string | null
+    resumedFrom: string | null,
+    autoplayTrackIds: readonly string[]
   ): void {
     if (state.started || tracks.length === 0) return;
     const found = tracks.findIndex((track) => track.id === currentTrackId);
@@ -505,16 +521,23 @@ export const actions = {
     const track = tracks[index];
     if (track === undefined) return;
     const resumeAt = found < 0 ? 0 : Math.min(positionSeconds, track.durationSeconds);
+    publish({ autoplayIds: autoplayIdsAmong(tracks, autoplayTrackIds) });
     armAt(tracks, index, resumeAt, state.shuffle ? shuffledOrder(tracks.length, index) : []);
     if (resumedFrom !== null) notify(lastMessages.resumedFrom(resumedFrom), "info");
   },
-  takeOver(tracks: readonly PlayerTrack[], currentTrackId: string | null, positionSeconds: number): void {
+  takeOver(
+    tracks: readonly PlayerTrack[],
+    currentTrackId: string | null,
+    positionSeconds: number,
+    autoplayTrackIds: readonly string[]
+  ): void {
     if (tracks.length === 0) return;
     const found = tracks.findIndex((track) => track.id === currentTrackId);
     const index = Math.max(0, found);
     publish({
       queue: tracks,
       shuffleOrder: state.shuffle ? shuffledOrder(tracks.length, index) : [],
+      autoplayIds: autoplayIdsAmong(tracks, autoplayTrackIds),
       consecutiveFailures: 0,
       started: false,
     });
@@ -526,25 +549,57 @@ export const actions = {
     const queue = withoutRepeats(tracks, [], tracks.length);
     const at = start === undefined ? 0 : Math.max(0, queue.indexOf(start));
     const order = state.shuffle ? shuffledOrder(queue.length, at) : [];
-    publish({ queue, shuffleOrder: order, consecutiveFailures: 0 });
+    publish({ queue, shuffleOrder: order, autoplayIds: new Set<string>(), consecutiveFailures: 0 });
     playAt(at);
+  },
+  playStation(seed: PlayerTrack | null, tracks: readonly PlayerTrack[]): void {
+    const offered = seed === null ? tracks : [seed, ...tracks];
+    const queue = withoutRepeats(offered, [], offered.length);
+    if (queue.length === 0) return;
+    const autoplayIds = new Set(
+      queue.filter((track) => seed === null || track.id !== seed.id).map((track) => track.id)
+    );
+    publish({
+      queue,
+      shuffleOrder: state.shuffle ? shuffledOrder(queue.length, 0) : [],
+      autoplayIds,
+      consecutiveFailures: 0,
+    });
+    playAt(0);
   },
   addToQueue(tracks: readonly PlayerTrack[]): QueueAddOutcome {
     const additions = resolveQueueAdditions(state, tracks);
     if (additions.fresh.length === 0) return additions.outcome;
 
     const pruned = withoutQueuePositions(state, additions.relocated);
-    const queue = [...pruned.queue, ...additions.fresh];
     if (state.queue.length === 0) {
+      const queue = [...pruned.queue, ...additions.fresh];
       armAt(queue, 0, 0, state.shuffle ? shuffledOrder(queue.length, 0) : []);
       return additions.outcome;
     }
 
+    const placed = insertBeforeAutoplay({ ...state, ...pruned }, additions.fresh);
+    publish({
+      queue: placed.queue,
+      index: pruned.index,
+      shuffleOrder: state.shuffle ? placed.shuffleOrder : [],
+    });
+    return additions.outcome;
+  },
+  appendAutoplay(tracks: readonly PlayerTrack[]): QueueAddOutcome {
+    const additions = resolveQueueAdditions(state, tracks);
+    if (additions.fresh.length === 0 || state.queue.length === 0) return additions.outcome;
+
+    const pruned = withoutQueuePositions(state, additions.relocated);
+    const queue = [...pruned.queue, ...additions.fresh];
     const appended = additions.fresh.map((_, at) => pruned.queue.length + at);
+    const autoplayIds = new Set(state.autoplayIds);
+    for (const track of additions.fresh) autoplayIds.add(track.id);
     publish({
       queue,
       index: pruned.index,
       shuffleOrder: state.shuffle ? [...pruned.shuffleOrder, ...appended] : [],
+      autoplayIds,
     });
     return additions.outcome;
   },
@@ -595,11 +650,15 @@ export const actions = {
     playAt(index, 0, fadeTowards(index));
   },
   removeFromQueue(index: number): void {
-    if (index === state.index || state.queue[index] === undefined) return;
+    const removed = state.queue[index];
+    if (index === state.index || removed === undefined) return;
+    const autoplayIds = new Set(state.autoplayIds);
+    autoplayIds.delete(removed.id);
     publish({
       queue: state.queue.filter((_, at) => at !== index),
       index: index < state.index ? state.index - 1 : state.index,
       shuffleOrder: state.shuffle ? withoutQueueIndex(state.shuffleOrder, index) : [],
+      autoplayIds,
     });
   },
   reorderQueue(tail: readonly PlayerTrack[]): void {
@@ -796,13 +855,19 @@ export const actions = {
     clearInterval(mirrorTimer);
     publish({ remote: null });
   },
-  adoptQueue(tracks: readonly PlayerTrack[], currentTrackId: string | null): void {
+  adoptQueue(tracks: readonly PlayerTrack[], currentTrackId: string | null, autoplayTrackIds: readonly string[]): void {
     if (state.playing || tracks.length === 0) return;
     const index = Math.max(
       0,
       tracks.findIndex((track) => track.id === currentTrackId)
     );
-    publish({ queue: tracks, index, shuffleOrder: [], started: true });
+    publish({
+      queue: tracks,
+      index,
+      shuffleOrder: [],
+      autoplayIds: autoplayIdsAmong(tracks, autoplayTrackIds),
+      started: true,
+    });
   },
   resumeHere(): void {
     if (state.playing) return;

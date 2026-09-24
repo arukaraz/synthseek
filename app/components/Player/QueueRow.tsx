@@ -9,7 +9,7 @@ import { labelled, trackInitials } from "./helpers";
 import { iconButton, queueGrip, queueRow, queueRowArtist, queueRowLines, queueRowText, queueRowTitle } from "./styles";
 import type { PlayerQueueRowProps } from "./types";
 
-export function QueueRow({ entry, current, editable, actions }: PlayerQueueRowProps) {
+export function QueueRow({ entry, current, editable, removable = false, actions }: PlayerQueueRowProps) {
   const { t } = useTranslation("player");
   const controls = useDragControls();
 
@@ -41,7 +41,7 @@ export function QueueRow({ entry, current, editable, actions }: PlayerQueueRowPr
           <span className={queueRowArtist()}>{entry.track.artist}</span>
         </span>
       </button>
-      {editable ? (
+      {editable || removable ? (
         <button
           type="button"
           className={iconButton({ size: "inline" })}

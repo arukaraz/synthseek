@@ -48,6 +48,8 @@ export interface PlayerSessionState {
   chainVisible: boolean;
   devicesOpen: boolean;
   settingsOpen: boolean;
+  autoplay: boolean;
+  autoplayIds: ReadonlySet<string>;
   equalizer: EqualizerSettings;
   equalizerPresets: readonly EqualizerCustomPreset[];
   compressor: CompressorSettings;
@@ -125,6 +127,7 @@ export type TransitionReason = "ended" | "skip";
 
 export interface SessionSnapshot {
   trackIds: string[];
+  autoplayTrackIds: string[];
   currentTrackId: string | null;
   positionMs: number;
 }

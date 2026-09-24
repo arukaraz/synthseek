@@ -14,6 +14,7 @@ let setSyncPending = false;
 vi.mock("@hooks/api", () => ({
   useRetryTracks: () => ({ mutate: vi.fn(), isPending: false, variables: undefined }),
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
+  useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
 vi.mock("@hooks/api/queries/content-detail", () => ({

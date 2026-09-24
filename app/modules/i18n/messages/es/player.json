@@ -39,6 +39,7 @@
     "upNext_one": "{{count}} siguiente",
     "upNext_other": "{{count}} siguientes",
     "upgrade": "Buscar una versión mejor",
+    "startRadio": "Empezar una radio con esta pista",
     "scrobbling": "Scrobbling",
     "scrobblingState": { "off": "Apagado", "sending": "Activo", "retrying": "Reintentando", "failed": "Falló" },
     "playingOn": "Sonando en {{device}}"
@@ -58,6 +59,7 @@
   "settings": {
     "title": "Ajustes de reproducción",
     "close": "Ocultar los ajustes de reproducción",
+    "updateFailed": "No se pudieron guardar los ajustes de reproducción",
     "units": {
       "db": "dB",
       "ms": "ms",
@@ -91,8 +93,7 @@
       "caption": "NORMALIZACIÓN DE VOLUMEN",
       "enabled": "Normalizar el volumen",
       "preamp": "Ganancia extra",
-      "hint": "Iguala el volumen de una pista a la siguiente.",
-      "updateFailed": "No se pudieron guardar los ajustes de reproducción"
+      "hint": "Iguala el volumen de una pista a la siguiente."
     },
     "conversion": {
       "caption": "CONVERSIÓN",
@@ -120,6 +121,11 @@
         "crossfade": "El final de cada canción se funde con el principio de la siguiente.",
         "smart": "Sin cortes cuando una canción acaba sola, un fundido corto cuando saltas."
       }
+    },
+    "autoplay": {
+      "caption": "REPRODUCCIÓN AUTOMÁTICA",
+      "enabled": "Seguir con canciones parecidas",
+      "hint": "Cuando la cola se acaba, siguen sonando canciones de tu biblioteca parecidas a lo que elegiste. Para tu cuenta."
     }
   },
   "equalizer": {
@@ -167,6 +173,7 @@
     "close": "Ocultar la cola",
     "nowPlaying": "SONANDO AHORA",
     "upNext": "A CONTINUACIÓN",
+    "autoplay": "REPRODUCCIÓN AUTOMÁTICA",
     "empty": "No hay nada después de esta",
     "jumpTo": "Reproducir {{title}}",
     "remove": "Quitar {{title}} de la cola",
@@ -183,7 +190,8 @@
     "nothingPlayable": "Aquí todavía no hay nada que se pueda reproducir",
     "full": "La cola está llena, así que no se añadió nada más",
     "truncated": "Esto es más largo de lo que cabe en una cola, así que solo se tomaron las primeras {{count}} pistas",
-    "loadFailed": "No se pudieron cargar esas pistas"
+    "loadFailed": "No se pudieron cargar esas pistas",
+    "radioEmpty": "Todavía no hay nada en tu biblioteca que suene así"
   },
   "modes": {
     "caption": "MODO DEL REPRODUCTOR",

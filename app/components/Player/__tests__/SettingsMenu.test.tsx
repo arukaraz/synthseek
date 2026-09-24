@@ -65,7 +65,16 @@ describe("the playback settings panel", () => {
     expect(within(dialog).getByText(enPlayer.settings.compressor.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.loudness.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.transition.caption)).toBeInTheDocument();
+    expect(within(dialog).getByText(enPlayer.settings.autoplay.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.conversion.caption)).toBeInTheDocument();
+  });
+
+  it("turns autoplay on and off for the account from its own switch", async () => {
+    const { actions, user } = renderMenu({}, { autoplay: false });
+
+    await user.click(section(enPlayer.settings.autoplay.caption).getByRole("switch"));
+
+    expect(actions.setAutoplayEnabled).toHaveBeenCalledWith(true);
   });
 
   it("closes from its own button", async () => {

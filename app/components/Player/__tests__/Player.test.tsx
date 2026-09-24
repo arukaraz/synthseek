@@ -285,7 +285,10 @@ describe("the queue panel", () => {
   ];
 
   it("separates what is playing from what is still to come", () => {
-    renderPlayer({ queueOpen: true, queue: { playing: { index: 0, track: createPlayerTrack() }, upNext } });
+    renderPlayer({
+      queueOpen: true,
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
+    });
 
     const dialog = screen.getByRole("dialog");
     expect(within(dialog).getByText(enPlayer.queue.nowPlaying)).toBeInTheDocument();
@@ -294,7 +297,10 @@ describe("the queue panel", () => {
   });
 
   it("says the queue is empty rather than showing an empty list", () => {
-    renderPlayer({ queueOpen: true, queue: { playing: { index: 0, track: createPlayerTrack() }, upNext: [] } });
+    renderPlayer({
+      queueOpen: true,
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext: [], autoplay: [] },
+    });
 
     expect(within(screen.getByRole("dialog")).getByText(enPlayer.queue.empty)).toBeInTheDocument();
   });
@@ -302,7 +308,7 @@ describe("the queue panel", () => {
   it("jumps to a track the listener picked out of the queue", async () => {
     const { actions, user } = renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
     });
 
     await user.click(screen.getByRole("button", { name: enPlayer.queue.jumpTo.replace("{{title}}", "Veridis Quo") }));
@@ -313,7 +319,7 @@ describe("the queue panel", () => {
   it("drops a track out of the queue", async () => {
     const { actions, user } = renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
     });
 
     await user.click(screen.getByRole("button", { name: enPlayer.queue.remove.replace("{{title}}", "Aerodynamic") }));
@@ -325,7 +331,7 @@ describe("the queue panel", () => {
     renderPlayer({
       queueOpen: true,
       queueEditable: false,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
     });
 
     expect(
@@ -336,7 +342,7 @@ describe("the queue panel", () => {
   it("closes the panel", async () => {
     const { actions, user } = renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
     });
 
     await user.click(screen.getByRole("button", { name: enPlayer.queue.close }));

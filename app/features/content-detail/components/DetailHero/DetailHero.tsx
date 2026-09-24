@@ -27,6 +27,7 @@ import {
 import { DegradedSourcesChip } from "../DegradedSourcesChip";
 import { GenreChips } from "./GenreChips";
 import { HeroPlayButton } from "./HeroPlayButton";
+import { HeroRadioButton } from "./HeroRadioButton";
 import { heroPillVisibility } from "./helpers";
 import { ShareFan } from "./ShareFan";
 import {
@@ -59,6 +60,7 @@ function DetailHeroComponent({
   statsSlot,
   onRequest,
   onPlay,
+  onStartRadio,
   onSubtitleClick,
   showRequest = true,
   showInLibraryPill = true,
@@ -184,7 +186,7 @@ function DetailHeroComponent({
 
         {statsSlot ? <div className={heroStats()}>{statsSlot}</div> : null}
 
-        {showActions || onPlay ? (
+        {showActions || onPlay || onStartRadio ? (
           <div className={heroActions()}>
             {showInLibrary ? (
               <span className={alreadyInLibrary()}>
@@ -207,6 +209,7 @@ function DetailHeroComponent({
               </button>
             ) : null}
             {onPlay ? <HeroPlayButton name={name} onPlay={onPlay} /> : null}
+            {onStartRadio ? <HeroRadioButton name={name} onStartRadio={onStartRadio} /> : null}
           </div>
         ) : null}
 

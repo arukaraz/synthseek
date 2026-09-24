@@ -17,11 +17,13 @@ vi.mock("@hooks/api", () => ({ usePlayableTracksFetcher: () => api.fetchPlayable
 const player = vi.hoisted(() => ({
   playQueue: vi.fn(),
   addToQueue: vi.fn(() => ({ added: 1, skipped: 0, full: false })),
+  startStation: vi.fn(async () => undefined),
 }));
 
 vi.mock("@hooks/ui/player", () => ({
   playerActions: { playQueue: player.playQueue, addToQueue: player.addToQueue },
   playerTrackFrom: (item: { id: string }) => ({ id: item.id, title: `Title ${item.id}` }),
+  useStartRadio: () => player.startStation,
 }));
 
 const toast = vi.hoisted(() => ({ info: vi.fn(), error: vi.fn(), success: vi.fn() }));
@@ -153,5 +155,16 @@ describe("adding a whole album or playlist to the queue", () => {
     await expect(result.current.enqueueEntity(TARGET)).resolves.toBe(false);
 
     expect(player.addToQueue).not.toHaveBeenCalled();
+  });
+});
+
+describe("starting a radio from an album, artist or playlist", () => {
+  it("hands the target to the station starter with no seed track, since the station itself leads", async () => {
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.startRadio(TARGET);
+
+    expect(player.startStation).toHaveBeenCalledWith(TARGET, null);
+    expect(api.fetchPlayable).not.toHaveBeenCalled();
   });
 });

@@ -39,6 +39,7 @@
     "upNext_one": "{{count}} als Nächstes",
     "upNext_other": "{{count}} als Nächstes",
     "upgrade": "Bessere Version suchen",
+    "startRadio": "Radio mit diesem Titel starten",
     "scrobbling": "Scrobbling",
     "scrobblingState": { "off": "Aus", "sending": "An", "retrying": "Erneuter Versuch", "failed": "Fehlgeschlagen" },
     "playingOn": "Läuft auf {{device}}"
@@ -58,6 +59,7 @@
   "settings": {
     "title": "Wiedergabeeinstellungen",
     "close": "Wiedergabeeinstellungen ausblenden",
+    "updateFailed": "Die Wiedergabeeinstellungen konnten nicht gespeichert werden",
     "units": {
       "db": "dB",
       "ms": "ms",
@@ -91,8 +93,7 @@
       "caption": "LAUTSTÄRKE-NORMALISIERUNG",
       "enabled": "Lautstärke normalisieren",
       "preamp": "Zusätzliche Verstärkung",
-      "hint": "Gleicht die Lautstärke von Titel zu Titel an.",
-      "updateFailed": "Die Wiedergabeeinstellungen konnten nicht gespeichert werden"
+      "hint": "Gleicht die Lautstärke von Titel zu Titel an."
     },
     "conversion": {
       "caption": "UMWANDLUNG",
@@ -120,6 +121,11 @@
         "crossfade": "Das Ende jedes Titels wird in den Anfang des nächsten übergeblendet.",
         "smart": "Lückenlos, wenn ein Titel von selbst endet, ein kurzes Überblenden beim Überspringen."
       }
+    },
+    "autoplay": {
+      "caption": "AUTOPLAY",
+      "enabled": "Mit ähnlichen Titeln weiterspielen",
+      "hint": "Wenn die Warteschlange leer ist, geht es mit Titeln aus deiner Bibliothek weiter, die zu deiner Auswahl passen. Für dein Konto."
     }
   },
   "equalizer": {
@@ -167,6 +173,7 @@
     "close": "Warteschlange ausblenden",
     "nowPlaying": "LÄUFT GERADE",
     "upNext": "ALS NÄCHSTES",
+    "autoplay": "AUTOPLAY",
     "empty": "Danach steht nichts an",
     "jumpTo": "{{title}} abspielen",
     "remove": "{{title}} aus der Warteschlange entfernen",
@@ -183,7 +190,8 @@
     "nothingPlayable": "Hier lässt sich noch nichts abspielen",
     "full": "Die Warteschlange ist voll, daher wurde nichts mehr hinzugefügt",
     "truncated": "Das ist länger als eine Warteschlange fasst, daher wurden nur die ersten {{count}} Titel übernommen",
-    "loadFailed": "Diese Titel konnten nicht geladen werden"
+    "loadFailed": "Diese Titel konnten nicht geladen werden",
+    "radioEmpty": "In deiner Bibliothek klingt noch nichts so"
   },
   "modes": {
     "caption": "PLAYER-MODUS",

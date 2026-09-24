@@ -13,6 +13,7 @@ vi.mock("@hooks/api", () => ({
   useLibraryTracks: useLibraryTracksMock,
   useLibraryTracksPrefetch: () => ({ prefetchNextPage: prefetchNextPageMock }),
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
+  useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
 interface CapturedLayout {

@@ -47,7 +47,7 @@ function track(id: string): PlayerTrack {
 function viewWith(count: number): PlayerView {
   const upNext = Array.from({ length: count }, (_, index) => ({ index: index + 1, track: track(`t${index}`) }));
   return {
-    queue: { playing: { index: 0, track: track("playing") }, upNext },
+    queue: { playing: { index: 0, track: track("playing") }, upNext, autoplay: [] },
     queueEditable: true,
   } as unknown as PlayerView;
 }
@@ -70,5 +70,48 @@ describe("QueueBody", () => {
     render(<QueueBody view={viewWith(3)} actions={actions as never} />);
 
     expect(screen.getAllByTestId("queue-row")).toHaveLength(4);
+  });
+
+  it("lists what the radio added under its own caption, after the listener's picks", () => {
+    const view = viewWith(1);
+    const radio = {
+      ...view,
+      queue: {
+        ...view.queue,
+        autoplay: [
+          { index: 2, track: track("r1") },
+          { index: 3, track: track("r2") },
+        ],
+      },
+    };
+
+    render(<QueueBody view={radio} actions={actions as never} />);
+
+    expect(screen.getByText("queue.autoplay")).toBeInTheDocument();
+    expect(screen.getAllByTestId("queue-row").map((row) => row.textContent)).toEqual(["playing", "t0", "r1", "r2"]);
+  });
+
+  it("shows no autoplay caption while the radio has added nothing", () => {
+    render(<QueueBody view={viewWith(1)} actions={actions as never} />);
+
+    expect(screen.queryByText("queue.autoplay")).not.toBeInTheDocument();
+  });
+
+  it("says the queue is empty under its caption when nothing at all follows", () => {
+    render(<QueueBody view={viewWith(0)} actions={actions as never} />);
+
+    expect(screen.getByText("queue.upNext")).toBeInTheDocument();
+    expect(screen.getByText("queue.empty")).toBeInTheDocument();
+  });
+
+  it("drops the empty notice and its caption while the radio tail is all that follows", () => {
+    const view = viewWith(0);
+    const radio = { ...view, queue: { ...view.queue, autoplay: [{ index: 1, track: track("r1") }] } };
+
+    render(<QueueBody view={radio} actions={actions as never} />);
+
+    expect(screen.queryByText("queue.upNext")).not.toBeInTheDocument();
+    expect(screen.queryByText("queue.empty")).not.toBeInTheDocument();
+    expect(screen.getByText("queue.autoplay")).toBeInTheDocument();
   });
 });

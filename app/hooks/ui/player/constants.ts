@@ -34,6 +34,14 @@ export const TONES = ["primary", "secondary", "accent"] as const;
 
 export const MAX_QUEUE_TRACKS = 500;
 
+export const AUTOPLAY_REFILL_BELOW = 3;
+
+export const AUTOPLAY_BATCH = 10;
+
+export const AUTOPLAY_STATION_SIZE = 25;
+
+export const AUTOPLAY_SEED_LIMIT = 3;
+
 export const SESSION_SAVE_INTERVAL_MS = 10_000;
 
 export const SESSION_POSITION_DRIFT_MS = 5_000;

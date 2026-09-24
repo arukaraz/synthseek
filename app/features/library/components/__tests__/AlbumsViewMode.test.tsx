@@ -23,6 +23,7 @@ vi.mock("@features/content-detail", () => ({
 vi.mock("@hooks/api", () => ({
   useLibraryAlbums: useLibraryAlbumsMock,
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
+  useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
 vi.mock("../LibraryViewLayout/LibraryViewLayout", () => ({

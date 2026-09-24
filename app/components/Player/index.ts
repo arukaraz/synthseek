@@ -18,6 +18,8 @@ export type {
   PlayerMode,
   PlayerNotice,
   PlayerNoticeTone,
+  PlayerQueue,
+  PlayerQueueEntry,
   PlayerReplayGain,
   PlayerRepeat,
   PlayerScrobbleState,

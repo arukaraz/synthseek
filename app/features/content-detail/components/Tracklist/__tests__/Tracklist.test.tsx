@@ -11,6 +11,7 @@ import { Tracklist } from "../Tracklist";
 vi.mock("@hooks/api", () => ({
   useRetryTracks: () => ({ isPending: false, variables: undefined, mutate: vi.fn() }),
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
+  useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
 function createTrack(overrides?: Partial<TracklistTrack>): TracklistTrack {

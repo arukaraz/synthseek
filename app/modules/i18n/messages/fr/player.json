@@ -39,6 +39,7 @@
     "upNext_one": "{{count}} à suivre",
     "upNext_other": "{{count}} à suivre",
     "upgrade": "Chercher une meilleure version",
+    "startRadio": "Lancer une radio à partir de cette piste",
     "scrobbling": "Scrobbling",
     "scrobblingState": { "off": "Désactivé", "sending": "Actif", "retrying": "Nouvel essai", "failed": "Échec" },
     "playingOn": "Lecture sur {{device}}"
@@ -58,6 +59,7 @@
   "settings": {
     "title": "Réglages de lecture",
     "close": "Masquer les réglages de lecture",
+    "updateFailed": "Impossible d'enregistrer les réglages de lecture",
     "units": {
       "db": "dB",
       "ms": "ms",
@@ -91,8 +93,7 @@
       "caption": "NORMALISATION DU VOLUME",
       "enabled": "Normaliser le volume",
       "preamp": "Gain supplémentaire",
-      "hint": "Égalise le volume d'une piste à l'autre.",
-      "updateFailed": "Impossible d'enregistrer les réglages de lecture"
+      "hint": "Égalise le volume d'une piste à l'autre."
     },
     "conversion": {
       "caption": "CONVERSION",
@@ -120,6 +121,11 @@
         "crossfade": "La fin de chaque piste se fond dans le début de la suivante.",
         "smart": "Sans coupure quand une piste se termine seule, un court fondu quand vous passez à la suivante."
       }
+    },
+    "autoplay": {
+      "caption": "LECTURE AUTOMATIQUE",
+      "enabled": "Continuer avec des pistes similaires",
+      "hint": "Quand la file est vide, des pistes de votre bibliothèque proches de ce que vous avez choisi prennent le relais. Pour votre compte."
     }
   },
   "equalizer": {
@@ -167,6 +173,7 @@
     "close": "Masquer la file",
     "nowPlaying": "EN COURS",
     "upNext": "À SUIVRE",
+    "autoplay": "LECTURE AUTOMATIQUE",
     "empty": "Rien après ce titre",
     "jumpTo": "Lire {{title}}",
     "remove": "Retirer {{title}} de la file",
@@ -183,7 +190,8 @@
     "nothingPlayable": "Rien n'est encore lisible ici",
     "full": "La file est pleine, rien de plus n'a été ajouté",
     "truncated": "C'est plus long qu'une file ne peut contenir, donc seuls les {{count}} premiers titres ont été pris",
-    "loadFailed": "Impossible de charger ces titres"
+    "loadFailed": "Impossible de charger ces titres",
+    "radioEmpty": "Rien dans votre bibliothèque ne ressemble encore à ceci"
   },
   "modes": {
     "caption": "MODE DU LECTEUR",

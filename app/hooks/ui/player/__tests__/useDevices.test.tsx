@@ -132,6 +132,8 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     chainVisible: false,
     devicesOpen: false,
     settingsOpen: false,
+    autoplay: false,
+    autoplayIds: new Set<string>(),
     equalizer: { enabled: false, gainsDb: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], preampDb: 0 },
     equalizerPresets: [],
     compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },

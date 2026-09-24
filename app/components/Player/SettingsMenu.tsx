@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
 import { playerPanel, playerPanelFromTop } from "@utils/animations";
 
+import { AutoplaySection } from "./AutoplaySection";
 import { CompressorSection } from "./CompressorSection";
 import { ConversionSection } from "./ConversionSection";
 import { EqualizerSection } from "./EqualizerSection";
@@ -67,6 +68,7 @@ export function SettingsMenu({ view, actions, chain, anchored = false, hanging =
             <CompressorSection view={view} actions={actions} />
             <LoudnessSection view={view} actions={actions} />
             <TransitionSection view={view} actions={actions} />
+            <AutoplaySection view={view} actions={actions} />
             <ConversionSection view={view} actions={actions} />
           </div>
         </motion.div>

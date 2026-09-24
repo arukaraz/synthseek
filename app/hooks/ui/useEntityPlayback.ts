@@ -2,7 +2,7 @@
 
 import { usePlayableTracksFetcher } from "@hooks/api";
 import type { PlayableTracksTarget } from "@hooks/api/queries/library/types";
-import { playerActions, playerTrackFrom } from "@hooks/ui/player";
+import { playerActions, playerTrackFrom, useStartRadio } from "@hooks/ui/player";
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -11,9 +11,11 @@ export function useEntityPlayback(): {
   playEntity: (target: PlayableTracksTarget) => Promise<void>;
   enqueueEntity: (target: PlayableTracksTarget) => Promise<boolean>;
   playNextEntity: (target: PlayableTracksTarget) => Promise<boolean>;
+  startRadio: (target: PlayableTracksTarget) => Promise<void>;
 } {
   const { t } = useTranslation("player");
   const fetchPlayable = usePlayableTracksFetcher();
+  const startStation = useStartRadio();
   const inFlightRef = useRef(new Set<string>());
 
   const resolve = useCallback(
@@ -74,5 +76,7 @@ export function useEntityPlayback(): {
     [resolve, t]
   );
 
-  return { playEntity, enqueueEntity, playNextEntity };
+  const startRadio = useCallback((target: PlayableTracksTarget) => startStation(target, null), [startStation]);
+
+  return { playEntity, enqueueEntity, playNextEntity, startRadio };
 }

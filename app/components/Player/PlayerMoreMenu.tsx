@@ -8,6 +8,7 @@ import {
   MonitorSpeaker,
   MoreVertical,
   Radio,
+  RadioTower,
   Repeat,
   Repeat1,
   Settings2,
@@ -87,12 +88,18 @@ export function PlayerMoreMenu({ view, actions }: PlayerProps) {
           <DropdownMenuItem inset onSelect={actions.toggleQueue}>
             <ListMusic className="size-4" />
             {t("queue.title")}
-            <span className={menuState()}>{t("menu.upNext", { count: view.queue.upNext.length })}</span>
+            <span className={menuState()}>
+              {t("menu.upNext", { count: view.queue.upNext.length + view.queue.autoplay.length })}
+            </span>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem inset onSelect={actions.openLyrics}>
           <Mic2 className="size-4" />
           {t("controls.lyrics")}
+        </DropdownMenuItem>
+        <DropdownMenuItem inset onSelect={actions.startRadio} disabled={!view.activeDevice.local}>
+          <RadioTower className="size-4" />
+          {t("menu.startRadio")}
         </DropdownMenuItem>
         <DropdownMenuItem inset onSelect={actions.searchBetterQuality} disabled={view.upgrading}>
           <Sparkles className="size-4" />

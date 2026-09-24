@@ -25,7 +25,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
   const { data: stats } = useArtistStats({ artistName: target.artistName, mbid: identity?.mbid ?? null });
   const { data: lidarr } = useLidarrAvailable();
   const { requestArtist } = useContentDetailActions();
-  const { playEntity } = useEntityPlayback();
+  const { playEntity, startRadio } = useEntityPlayback();
 
   const mbid = identity?.mbid ?? null;
   const cover = identity?.image ?? target.cover;
@@ -37,6 +37,10 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
   );
 
   const handlePlay = useCallback(() => playEntity({ kind: "artist", artist: target.name }), [playEntity, target.name]);
+  const handleStartRadio = useCallback(
+    () => startRadio({ kind: "artist", artist: target.name }),
+    [startRadio, target.name]
+  );
 
   const handleRequest = useCallback(() => {
     requestArtist({ id: target.id, name: target.name, cover });
@@ -60,6 +64,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
         requestState="request"
         onRequest={handleRequest}
         onPlay={handlePlay}
+        onStartRadio={handleStartRadio}
         showRequest={showRequest}
         socials={socials}
         statsSlot={statsSlot}

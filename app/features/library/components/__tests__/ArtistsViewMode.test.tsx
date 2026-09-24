@@ -44,6 +44,7 @@ vi.mock("@hooks/api", () => ({
     fetchNextPage: vi.fn(),
   }),
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
+  useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
 vi.mock("../LibraryViewLayout/LibraryViewLayout", () => ({

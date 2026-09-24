@@ -55,6 +55,7 @@ export interface PlayerQueueEntry {
 export interface PlayerQueue {
   playing: PlayerQueueEntry | null;
   upNext: readonly PlayerQueueEntry[];
+  autoplay: readonly PlayerQueueEntry[];
 }
 
 export interface PlayerLyricsLine {
@@ -153,6 +154,7 @@ export interface PlayerView {
   equalizer: PlayerEqualizer;
   compressor: PlayerCompressor;
   loudness: PlayerLoudness;
+  autoplay: boolean;
   conversion: PlayerConversion;
   transition: PlayerTransition;
   lyricsOpen: boolean;
@@ -193,6 +195,8 @@ export interface PlayerActions {
   setCompressorParam: (param: keyof Omit<PlayerCompressor, "enabled" | "preset">, value: number) => void;
   setLoudnessEnabled: (enabled: boolean) => void;
   setLoudnessPreamp: (preAmpDb: number) => void;
+  setAutoplayEnabled: (enabled: boolean) => void;
+  startRadio: () => void;
   setConversion: (conversion: PlayerConversion) => void;
   setTransition: (transition: PlayerTransition) => void;
   toggleModes: () => void;
@@ -264,6 +268,7 @@ export interface PlayerQueueRowProps {
   entry: PlayerQueueEntry;
   current: boolean;
   editable: boolean;
+  removable?: boolean;
   actions: PlayerActions;
 }
 

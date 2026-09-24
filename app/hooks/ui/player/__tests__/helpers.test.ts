@@ -2,10 +2,16 @@ import { describe, expect, it } from "vitest";
 
 import {
   accumulateListen,
+  autoplayDue,
+  autoplayIdsAmong,
+  autoplaySeeds,
+  autoplaySignature,
   beatIsDue,
   beginListen,
   expectedPosition,
+  insertBeforeAutoplay,
   isMirroring,
+  queueSections,
   listenIsDue,
   listenRestarted,
   listenThresholdSeconds,
@@ -45,6 +51,8 @@ function sessionWith(overrides: Partial<PlayerSessionState>): PlayerSessionState
     chainVisible: false,
     devicesOpen: false,
     settingsOpen: false,
+    autoplay: false,
+    autoplayIds: new Set<string>(),
     equalizer: { enabled: false, gainsDb: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], preampDb: 0 },
     equalizerPresets: [],
     compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
@@ -439,5 +447,143 @@ describe("startedSecondsAgo", () => {
 
   it("never reports a play that started in the future", () => {
     expect(startedSecondsAgo(beginListen("t1", 1_090_000, 0), 1_000_000)).toBe(0);
+  });
+});
+
+function radioTrack(id: string): PlayerSessionState["queue"][number] {
+  return {
+    id,
+    title: `Title ${id}`,
+    artist: "Band",
+    album: "Record",
+    albumId: "album-1",
+    durationSeconds: 200,
+    format: "mp3",
+    bitrateKbps: 320,
+    lossless: false,
+    tone: "primary",
+    artworkUrl: null,
+    replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+  };
+}
+
+function radioSession(overrides: Partial<PlayerSessionState> = {}): PlayerSessionState {
+  return sessionWith({
+    queue: [radioTrack("a"), radioTrack("b"), radioTrack("r1"), radioTrack("r2")],
+    index: 1,
+    autoplay: true,
+    autoplayIds: new Set(["r1", "r2"]),
+    started: true,
+    playing: true,
+    ...overrides,
+  });
+}
+
+describe("autoplayDue", () => {
+  it("is due only when autoplay is on, this player is playing, repeat is off and the queue is nearly out", () => {
+    expect(autoplayDue(radioSession({ queue: [radioTrack("a"), radioTrack("b")], index: 0 }))).toBe(true);
+    expect(autoplayDue(radioSession({ queue: [radioTrack("a"), radioTrack("b")], index: 0, autoplay: false }))).toBe(
+      false
+    );
+    expect(autoplayDue(radioSession({ queue: [radioTrack("a"), radioTrack("b")], index: 0, playing: false }))).toBe(
+      false
+    );
+    expect(autoplayDue(radioSession({ queue: [radioTrack("a"), radioTrack("b")], index: 0, repeat: "all" }))).toBe(
+      false
+    );
+    expect(autoplayDue(radioSession({ index: 0 }))).toBe(false);
+  });
+
+  it("is not due while another device has the sound", () => {
+    const remote = {
+      deviceId: "kitchen",
+      deviceName: "Kitchen",
+      confirmed: true,
+      playing: true,
+      track: null,
+      positionSeconds: 0,
+      shuffle: false,
+      repeat: "off" as const,
+      volume: 1,
+      muted: false,
+      transcoding: false,
+      updatedAt: 0,
+    };
+    expect(autoplayDue(radioSession({ queue: [radioTrack("a")], index: 0, remote }))).toBe(false);
+  });
+});
+
+describe("autoplaySignature", () => {
+  it("changes when the track changes or the queue grows", () => {
+    const base = radioSession({ index: 0 });
+    expect(autoplaySignature(base)).not.toBe(autoplaySignature({ ...base, index: 1 }));
+    expect(autoplaySignature(base)).not.toBe(autoplaySignature({ ...base, queue: [...base.queue, radioTrack("z")] }));
+    expect(autoplaySignature(base)).toBe(autoplaySignature({ ...base, positionSeconds: 99 }));
+  });
+});
+
+describe("autoplaySeeds", () => {
+  it("leads with the current track and never seeds from what the radio itself added", () => {
+    const seeds = autoplaySeeds(radioSession({ index: 2 }), () => 0);
+
+    expect(seeds[0]).toBe("r1");
+    expect(seeds.slice(1).sort()).toEqual(["a", "b"]);
+  });
+
+  it("falls back to the radio's own picks when the listener chose nothing else", () => {
+    const seeds = autoplaySeeds(
+      radioSession({
+        queue: [radioTrack("r1"), radioTrack("r2"), radioTrack("r3")],
+        index: 0,
+        autoplayIds: new Set(["r1", "r2", "r3"]),
+      }),
+      () => 0
+    );
+
+    expect(seeds).toHaveLength(3);
+    expect(seeds[0]).toBe("r1");
+  });
+
+  it("seeds nothing without a current track", () => {
+    expect(autoplaySeeds(radioSession({ queue: [], index: 0 }), () => 0)).toEqual([]);
+  });
+});
+
+describe("insertBeforeAutoplay", () => {
+  it("puts new tracks after the listener's own and before the radio's, in and out of shuffle", () => {
+    const plain = insertBeforeAutoplay(radioSession(), [radioTrack("c")]);
+    expect(plain.queue.map((track) => track.id)).toEqual(["a", "b", "c", "r1", "r2"]);
+    expect(plain.shuffleOrder).toEqual([2]);
+
+    const shuffled = insertBeforeAutoplay(radioSession({ shuffle: true, shuffleOrder: [1, 0, 2, 3] }), [
+      radioTrack("c"),
+    ]);
+    expect(shuffled.queue.map((track) => track.id)).toEqual(["a", "b", "c", "r1", "r2"]);
+    expect(shuffled.shuffleOrder).toEqual([1, 0, 2, 3, 4]);
+  });
+
+  it("appends when there is no radio tail, which is what add-to-queue always did", () => {
+    const placed = insertBeforeAutoplay(
+      radioSession({ autoplayIds: new Set<string>(), shuffle: true, shuffleOrder: [1, 3, 0, 2] }),
+      [radioTrack("c")]
+    );
+
+    expect(placed.queue.map((track) => track.id)).toEqual(["a", "b", "r1", "r2", "c"]);
+    expect(placed.shuffleOrder).toEqual([1, 3, 0, 2, 4]);
+  });
+});
+
+describe("queueSections", () => {
+  it("splits what is coming into the listener's picks and the radio's, keeping play order", () => {
+    const sections = queueSections(radioSession({ index: 0 }));
+
+    expect(sections.upNext.map((entry) => entry.track.id)).toEqual(["b"]);
+    expect(sections.autoplay.map((entry) => entry.track.id)).toEqual(["r1", "r2"]);
+  });
+});
+
+describe("autoplayIdsAmong", () => {
+  it("keeps only the ids that are actually in the queue", () => {
+    expect([...autoplayIdsAmong([radioTrack("a"), radioTrack("r1")], ["r1", "gone"])]).toEqual(["r1"]);
   });
 });

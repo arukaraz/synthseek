@@ -15,7 +15,7 @@ import {
   useTrackLyrics,
   useUpgradeTracks,
 } from "@hooks/api";
-import { useSetLoudness } from "@hooks/api/mutations/auth/useSetLoudness";
+import { useSetPlaybackProfile } from "@hooks/api/mutations/auth/useSetPlaybackProfile";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { resolveFriendlyError } from "@modules/errors";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -25,11 +25,21 @@ import { compressorPresetMatching } from "./compressor";
 import { CONVERTED_BITRATE_KBPS } from "./constants";
 import { deviceKindFrom } from "./device";
 import { appliedEqualizerGains, customPresetMatching, equalizerPresetMatching, headroomDbFor } from "./equalizer";
-import { isMirroring, mirroredPositionSeconds, scrobbleStateFrom, upcomingOrder, visibleQueueIds } from "./helpers";
-import { actions, currentTrack, getSnapshot, setLoudnessPreferences, setMessages, subscribe } from "./store";
+import { isMirroring, mirroredPositionSeconds, queueSections, scrobbleStateFrom, visibleQueueIds } from "./helpers";
+import {
+  actions,
+  currentTrack,
+  getSnapshot,
+  setAutoplayPreference,
+  setLoudnessPreferences,
+  setMessages,
+  subscribe,
+} from "./store";
+import { useAutoplayFill } from "./useAutoplayFill";
 import { usePlayerDevices } from "./useDevices";
 import { usePlayerDocumentTitle } from "./useDocumentTitle";
 import { usePlayReporter } from "./usePlayReporter";
+import { useStartRadio } from "./useStartRadio";
 import type { PlayerDockState, PlayerSessionState } from "./types";
 
 const EMPTY_STATE = getSnapshot();
@@ -82,6 +92,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   const session = usePlayerSession();
   const { devices: known, handOverTo, commandActive } = usePlayerDevices();
   usePlayReporter();
+  useAutoplayFill();
+  const startStation = useStartRadio();
   const mirroring = isMirroring(session);
   const localKind = typeof navigator === "undefined" ? "computer" : deviceKindFrom(navigator.userAgent);
   const playingTrack = (mirroring ? (session.remote?.track ?? null) : (session.queue[session.index] ?? null)) ?? null;
@@ -102,11 +114,15 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     variables: scrobbleVariables,
   } = useSetScrobbleEnabled();
   const { mutate: upgradeTracks, isPending: upgradePending } = useUpgradeTracks();
-  const { mutate: setLoudness } = useSetLoudness();
+  const { mutate: setProfile } = useSetPlaybackProfile();
   const searchBetterQuality = useCallback(() => {
     if (track === null) return;
     upgradeTracks({ trackIds: [track.id] });
   }, [track, upgradeTracks]);
+  const startRadio = useCallback(() => {
+    if (track === null || mirroring) return;
+    void startStation({ kind: "tracks", trackIds: [track.id] }, track);
+  }, [mirroring, startStation, track]);
   const connected = (connections.data ?? []).filter((connection) => connection.connected);
   const toggleScrobbling = useCallback(() => {
     const enabled = !connected.some((connection) => connection.scrobbleEnabled);
@@ -146,6 +162,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
       enabled: currentUser.loudnessNormalization,
       preAmpDb: currentUser.loudnessPreampDb,
     });
+    setAutoplayPreference(currentUser.autoplayEnabled);
   }, [currentUser]);
 
   const here: PlayerDevice = {
@@ -255,8 +272,10 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     setCompressorEnabled: actions.setCompressorEnabled,
     applyCompressorPreset: actions.applyCompressorPreset,
     setCompressorParam: actions.setCompressorParam,
-    setLoudnessEnabled: (enabled: boolean) => setLoudness({ loudnessNormalization: enabled }),
-    setLoudnessPreamp: (preAmpDb: number) => setLoudness({ loudnessPreampDb: preAmpDb }),
+    setLoudnessEnabled: (enabled: boolean) => setProfile({ loudnessNormalization: enabled }),
+    setLoudnessPreamp: (preAmpDb: number) => setProfile({ loudnessPreampDb: preAmpDb }),
+    setAutoplayEnabled: (enabled: boolean) => setProfile({ autoplayEnabled: enabled }),
+    startRadio,
     setConversion: actions.setConversion,
     setTransition: actions.setTransition,
     toggleModes: actions.toggleModes,
@@ -338,6 +357,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
       enabled: currentUser?.loudnessNormalization ?? true,
       preAmpDb: currentUser?.loudnessPreampDb ?? 0,
     },
+    autoplay: currentUser?.autoplayEnabled ?? false,
     conversion: session.conversion,
     transition: session.transition,
     modesOpen: session.modesOpen,
@@ -345,10 +365,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     queueEditable: !mirroring,
     queue: {
       playing: track === null ? null : { index: session.index, track },
-      upNext: upcomingOrder(session).flatMap((index) => {
-        const queued = session.queue[index];
-        return queued === undefined ? [] : [{ index, track: queued }];
-      }),
+      ...queueSections(session),
     },
     mode: session.mode,
     lyricsOpen: session.lyricsOpen,

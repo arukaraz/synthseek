@@ -21,9 +21,11 @@ vi.mock("@hooks/api/queries/content-detail", () => ({
 
 vi.mock("@hooks/api/queries/useLidarrAvailable", () => ({ useLidarrAvailable: () => ({ data: api.lidarr }) }));
 
-const playback = vi.hoisted(() => ({ playEntity: vi.fn() }));
+const playback = vi.hoisted(() => ({ playEntity: vi.fn(), startRadio: vi.fn() }));
 
-vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => ({ playEntity: playback.playEntity }) }));
+vi.mock("@hooks/ui/useEntityPlayback", () => ({
+  useEntityPlayback: () => ({ playEntity: playback.playEntity, startRadio: playback.startRadio }),
+}));
 
 const actions = vi.hoisted(() => ({ requestArtist: vi.fn() }));
 
@@ -43,6 +45,9 @@ vi.mock("../../DetailHero/DetailHero", () => ({
         </button>
         <button type="button" onClick={props.onPlay as () => void}>
           play
+        </button>
+        <button type="button" onClick={props.onStartRadio as () => void}>
+          radio
         </button>
       </div>
     );
@@ -176,6 +181,14 @@ describe("what the artist page offers", () => {
     await user.click(screen.getByRole("button", { name: "play" }));
 
     expect(playback.playEntity).toHaveBeenCalledWith({ kind: "artist", artist: "Daft Punk" });
+  });
+
+  it("starts a radio from everything the library holds by the artist", async () => {
+    const { user } = renderBody();
+
+    await user.click(screen.getByRole("button", { name: "radio" }));
+
+    expect(playback.startRadio).toHaveBeenCalledWith({ kind: "artist", artist: "Daft Punk" });
   });
 
   it("opens an album out of the discography in the same modal", async () => {

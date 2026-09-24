@@ -25,9 +25,11 @@ vi.mock("@hooks/api/queries/content-detail", () => ({
   useAlbumCredits: () => ({ data: api.credits }),
 }));
 
-const playback = vi.hoisted(() => ({ playEntity: vi.fn() }));
+const playback = vi.hoisted(() => ({ playEntity: vi.fn(), startRadio: vi.fn() }));
 
-vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => ({ playEntity: playback.playEntity }) }));
+vi.mock("@hooks/ui/useEntityPlayback", () => ({
+  useEntityPlayback: () => ({ playEntity: playback.playEntity, startRadio: playback.startRadio }),
+}));
 
 const actions = vi.hoisted(() => ({ requestAlbum: vi.fn() }));
 
@@ -50,6 +52,11 @@ vi.mock("../../DetailHero/DetailHero", () => ({
         {typeof props.onPlay === "function" ? (
           <button type="button" onClick={props.onPlay as () => void}>
             play
+          </button>
+        ) : null}
+        {typeof props.onStartRadio === "function" ? (
+          <button type="button" onClick={props.onStartRadio as () => void}>
+            radio
           </button>
         ) : null}
         {typeof props.onSubtitleClick === "function" ? (
@@ -196,6 +203,23 @@ describe("what the album page offers", () => {
     await user.click(screen.getByRole("button", { name: "play" }));
 
     expect(playback.playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "album-1" });
+  });
+
+  it("offers no radio for an album the library does not hold yet", () => {
+    api.album = albumWith([{ id: "t1", status: null }]);
+
+    renderBody();
+
+    expect(screen.queryByRole("button", { name: "radio" })).not.toBeInTheDocument();
+  });
+
+  it("starts a radio from the album once the library holds at least one of its tracks", async () => {
+    api.album = albumWith([{ id: "t1", status: "complete" }]);
+    const { user } = renderBody();
+
+    await user.click(screen.getByRole("button", { name: "radio" }));
+
+    expect(playback.startRadio).toHaveBeenCalledWith({ kind: "album", albumExternalId: "album-1" });
   });
 
   it("offers no jump to the artist until the catalog has named one", () => {

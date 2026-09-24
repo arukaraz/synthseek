@@ -21,6 +21,7 @@ export function usePlayerSessionSync(): void {
     restored.current = true;
     lastSaved.current = {
       trackIds: session.data.tracks.map((track) => track.id),
+      autoplayTrackIds: session.data.autoplayTrackIds,
       currentTrackId: session.data.currentTrackId,
       positionMs: session.data.positionMs,
     };
@@ -28,7 +29,8 @@ export function usePlayerSessionSync(): void {
       session.data.tracks.filter((track) => track.playable).map(playerTrackFrom),
       session.data.currentTrackId,
       session.data.positionMs / 1000,
-      session.data.resumedFrom
+      session.data.resumedFrom,
+      session.data.autoplayTrackIds
     );
   }, [session.data]);
 
@@ -42,7 +44,8 @@ export function usePlayerSessionSync(): void {
         actions.takeOver(
           handed.tracks.filter((track) => track.playable).map(playerTrackFrom),
           handed.currentTrackId,
-          handed.positionMs / 1000
+          handed.positionMs / 1000,
+          handed.autoplayTrackIds
         );
       });
     });
@@ -55,7 +58,11 @@ export function usePlayerSessionSync(): void {
       void refetch().then((result) => {
         const shared = result.data;
         if (shared === undefined || shared === null) return;
-        actions.adoptQueue(shared.tracks.filter((track) => track.playable).map(playerTrackFrom), trackId);
+        actions.adoptQueue(
+          shared.tracks.filter((track) => track.playable).map(playerTrackFrom),
+          trackId,
+          shared.autoplayTrackIds
+        );
       });
     });
     return () => setUnknownTrackHandler(null);

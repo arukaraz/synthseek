@@ -197,7 +197,12 @@ describe("player store playback", () => {
     const store = await freshStore();
 
     expect(store.currentTrack()).toBeNull();
-    expect(store.sessionSnapshot()).toEqual({ trackIds: [], currentTrackId: null, positionMs: 0 });
+    expect(store.sessionSnapshot()).toEqual({
+      trackIds: [],
+      autoplayTrackIds: [],
+      currentTrackId: null,
+      positionMs: 0,
+    });
   });
 
   it("carries the position into the session snapshot in milliseconds", async () => {
@@ -205,7 +210,12 @@ describe("player store playback", () => {
     store.actions.playQueue([track("a"), track("b")], 0);
     engine.handlers?.onProgress(12.4, 200);
 
-    expect(store.sessionSnapshot()).toEqual({ trackIds: ["a", "b"], currentTrackId: "a", positionMs: 12400 });
+    expect(store.sessionSnapshot()).toEqual({
+      trackIds: ["a", "b"],
+      autoplayTrackIds: [],
+      currentTrackId: "a",
+      positionMs: 12400,
+    });
   });
 });
 
@@ -811,7 +821,7 @@ describe("player store session restore", () => {
   it("arms the saved queue without sounding it", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a"), track("b")], "b", 44, null);
+    store.actions.restoreSession([track("a"), track("b")], "b", 44, null, []);
 
     expect(store.getSnapshot().index).toBe(1);
     expect(store.getSnapshot().playing).toBe(false);
@@ -823,7 +833,7 @@ describe("player store session restore", () => {
   it("names the client the session came from", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a")], "a", 0, "Phone");
+    store.actions.restoreSession([track("a")], "a", 0, "Phone", []);
 
     expect(notices.announce).toHaveBeenCalledWith({ text: "resumed from Phone", tone: "info" });
   });
@@ -831,7 +841,7 @@ describe("player store session restore", () => {
   it("starts at the top when the saved track is gone from the queue", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a")], "vanished", 90, null);
+    store.actions.restoreSession([track("a")], "vanished", 90, null, []);
 
     expect(store.getSnapshot().index).toBe(0);
     expect(store.getSnapshot().positionSeconds).toBe(0);
@@ -840,7 +850,7 @@ describe("player store session restore", () => {
   it("never resumes past the end of the track it saved", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a", { durationSeconds: 100 })], "a", 400, null);
+    store.actions.restoreSession([track("a", { durationSeconds: 100 })], "a", 400, null, []);
 
     expect(store.getSnapshot().positionSeconds).toBe(100);
   });
@@ -849,7 +859,7 @@ describe("player store session restore", () => {
     const store = await freshStore();
     store.actions.playQueue([track("live")], 0);
 
-    store.actions.restoreSession([track("saved")], "saved", 0, null);
+    store.actions.restoreSession([track("saved")], "saved", 0, null, []);
 
     expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["live"]);
   });
@@ -857,7 +867,7 @@ describe("player store session restore", () => {
   it("ignores an empty saved session", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([], null, 0, null);
+    store.actions.restoreSession([], null, 0, null, []);
 
     expect(store.getSnapshot().started).toBe(false);
   });
@@ -865,7 +875,7 @@ describe("player store session restore", () => {
   it("starts sounding the queue handed over from another device", async () => {
     const store = await freshStore();
 
-    store.actions.takeOver([track("a"), track("b")], "b", 30);
+    store.actions.takeOver([track("a"), track("b")], "b", 30, []);
 
     expect(store.getSnapshot().index).toBe(1);
     expect(engine.loadAndPlay).toHaveBeenCalledWith("/api/v1/library/tracks/b/stream", 0.8, false, 30);
@@ -874,7 +884,7 @@ describe("player store session restore", () => {
   it("starts a hand-over at the top when the named track is not in it", async () => {
     const store = await freshStore();
 
-    store.actions.takeOver([track("a")], "elsewhere", 30);
+    store.actions.takeOver([track("a")], "elsewhere", 30, []);
 
     expect(store.getSnapshot().index).toBe(0);
     expect(engine.loadAndPlay).toHaveBeenCalledWith("/api/v1/library/tracks/a/stream", 0.8, false, 0);
@@ -883,7 +893,7 @@ describe("player store session restore", () => {
   it("ignores an empty hand-over", async () => {
     const store = await freshStore();
 
-    store.actions.takeOver([], null, 0);
+    store.actions.takeOver([], null, 0, []);
 
     expect(store.getSnapshot().queue).toEqual([]);
   });

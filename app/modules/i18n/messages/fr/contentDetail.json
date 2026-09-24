@@ -6,6 +6,8 @@
   "openDetail": "Ouvrir les détails de {{name}}",
   "play": "Lire",
   "playAll": "Lire tout ce que nous avons de {{name}}",
+  "startRadio": "Lancer une radio",
+  "startRadioFrom": "Lancer une radio à partir de {{name}}",
   "viewArtist": "Voir l'artiste {{name}}",
   "resolveArtistFailed": "Nous n'avons pas trouvé cet artiste.",
   "close": "Fermer",

@@ -25,14 +25,19 @@ const api = vi.hoisted(() => ({
   scrobbleVariables: undefined as { service: string; enabled: boolean } | undefined,
   upgradeTracks: vi.fn(),
   upgradePending: false,
-  setLoudness: vi.fn(),
+  setProfile: vi.fn(),
+  fetchRadio: vi.fn(),
+  startStation: vi.fn(),
 }));
 
-vi.mock("@hooks/api/mutations/auth/useSetLoudness", () => ({
-  useSetLoudness: () => ({ mutate: api.setLoudness }),
+vi.mock("@hooks/api/mutations/auth/useSetPlaybackProfile", () => ({
+  useSetPlaybackProfile: () => ({ mutate: api.setProfile }),
 }));
+
+vi.mock("../useStartRadio", () => ({ useStartRadio: () => api.startStation }));
 
 vi.mock("@hooks/api", () => ({
+  useRadioTracksFetcher: () => api.fetchRadio,
   useFavoriteTracks: () => ({ data: api.favorites }),
   useListeningConnections: () => ({ data: api.connections }),
   useSetFavoriteTrack: () => ({
@@ -122,11 +127,15 @@ const store = vi.hoisted(() => ({
   },
   setMessages: vi.fn(),
   setLoudnessPreferences: vi.fn(),
+  setAutoplayPreference: vi.fn(),
   currentTrack: vi.fn(),
 }));
 
 const auth = vi.hoisted(() => ({
-  currentUser: { loudnessNormalization: true, loudnessPreampDb: 0 } as Record<string, unknown> | null,
+  currentUser: { loudnessNormalization: true, loudnessPreampDb: 0, autoplayEnabled: false } as Record<
+    string,
+    unknown
+  > | null,
 }));
 
 vi.mock("@modules/providers/AuthProvider", () => ({
@@ -145,6 +154,7 @@ vi.mock("../store", () => ({
   getSnapshot: () => store.snapshot,
   setMessages: store.setMessages,
   setLoudnessPreferences: store.setLoudnessPreferences,
+  setAutoplayPreference: store.setAutoplayPreference,
   subscribe: (listener: () => void) => {
     store.listeners.add(listener);
     return () => {
@@ -198,6 +208,8 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     chainVisible: false,
     devicesOpen: false,
     settingsOpen: false,
+    autoplay: false,
+    autoplayIds: new Set<string>(),
     equalizer: { enabled: false, gainsDb: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], preampDb: 0 },
     equalizerPresets: [],
     compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
@@ -883,8 +895,67 @@ describe("usePlayer equaliser", () => {
     result.current.actions.setLoudnessEnabled(false);
     result.current.actions.setLoudnessPreamp(-2);
 
-    expect(api.setLoudness).toHaveBeenCalledWith({ loudnessNormalization: false });
-    expect(api.setLoudness).toHaveBeenCalledWith({ loudnessPreampDb: -2 });
+    expect(api.setProfile).toHaveBeenCalledWith({ loudnessNormalization: false });
+    expect(api.setProfile).toHaveBeenCalledWith({ loudnessPreampDb: -2 });
+  });
+});
+
+describe("usePlayer autoplay", () => {
+  it("hands the store the account's autoplay preference next to the loudness one", () => {
+    auth.currentUser = { loudnessNormalization: true, loudnessPreampDb: 0, autoplayEnabled: true };
+
+    renderHook(() => usePlayer());
+
+    expect(store.setAutoplayPreference).toHaveBeenCalledWith(true);
+  });
+
+  it("writes the autoplay preference to the account, which is where it lives", () => {
+    const { result } = renderHook(() => usePlayer());
+
+    result.current.actions.setAutoplayEnabled(true);
+
+    expect(api.setProfile).toHaveBeenCalledWith({ autoplayEnabled: true });
+  });
+
+  it("reads the autoplay state from the account rather than the browser", () => {
+    auth.currentUser = { loudnessNormalization: true, loudnessPreampDb: 0, autoplayEnabled: true };
+    store.snapshot = sessionState({ autoplay: false });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.autoplay).toBe(true);
+  });
+
+  it("lists the radio's additions apart from what the listener queued", () => {
+    store.snapshot = sessionState({
+      queue: [track(), track({ id: "t2" }), track({ id: "t3" })],
+      autoplayIds: new Set(["t3"]),
+    });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.queue.upNext.map((entry) => entry.track.id)).toEqual(["t2"]);
+    expect(result.current.view?.queue.autoplay.map((entry) => entry.track.id)).toEqual(["t3"]);
+  });
+
+  it("starts a station seeded from the track playing here", () => {
+    const { result } = renderHook(() => usePlayer());
+
+    result.current.actions.startRadio();
+
+    expect(api.startStation).toHaveBeenCalledWith(
+      { kind: "tracks", trackIds: ["t1"] },
+      expect.objectContaining({ id: "t1" })
+    );
+  });
+
+  it("starts no station while another device holds the sound", () => {
+    store.snapshot = sessionState({ remote: remote() });
+    const { result } = renderHook(() => usePlayer());
+
+    result.current.actions.startRadio();
+
+    expect(api.startStation).not.toHaveBeenCalled();
   });
 });
 

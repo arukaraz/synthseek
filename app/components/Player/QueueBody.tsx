@@ -15,7 +15,7 @@ import type { PlayerQueueBodyProps, PlayerTrack } from "./types";
 export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
   const { t } = useTranslation("player");
   const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
-  const { playing, upNext } = view.queue;
+  const { playing, upNext, autoplay } = view.queue;
   const window = useRenderWindow(upNext, QUEUE_WINDOW_KEY);
   const order = window.visible.map((entry) => entry.track);
   const sentinelRef = useInfiniteScroll({
@@ -26,7 +26,7 @@ export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
   });
 
   const handleReorder = (next: PlayerTrack[]) => {
-    actions.reorderQueue(mergeReorderedWindow(next, upNext));
+    actions.reorderQueue([...mergeReorderedWindow(next, upNext), ...autoplay.map((entry) => entry.track)]);
   };
 
   return (
@@ -37,9 +37,11 @@ export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
           <QueueRow entry={playing} current editable={false} actions={actions} />
         </>
       )}
-      <span className={queueCaption()}>{t("queue.upNext")}</span>
+      {upNext.length === 0 && autoplay.length > 0 ? null : <span className={queueCaption()}>{t("queue.upNext")}</span>}
       {upNext.length === 0 ? (
-        <span className={queueEmpty()}>{t("queue.empty")}</span>
+        autoplay.length > 0 ? null : (
+          <span className={queueEmpty()}>{t("queue.empty")}</span>
+        )
       ) : (
         <Reorder.Group axis="y" values={order} onReorder={handleReorder} as="div">
           {window.visible.map((entry) => (
@@ -54,6 +56,21 @@ export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
         </Reorder.Group>
       )}
       {window.hasMore ? <div ref={sentinelRef} className={queueSentinel()} /> : null}
+      {autoplay.length === 0 ? null : (
+        <>
+          <span className={queueCaption()}>{t("queue.autoplay")}</span>
+          {autoplay.map((entry) => (
+            <QueueRow
+              key={entry.track.id}
+              entry={entry}
+              current={false}
+              editable={false}
+              removable={view.queueEditable}
+              actions={actions}
+            />
+          ))}
+        </>
+      )}
     </motion.div>
   );
 }

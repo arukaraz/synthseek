@@ -15,7 +15,7 @@ import type { AlbumDetailBodyProps } from "./types";
 function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
   const { data: album } = useAlbumDetail({ catalogAlbumId: target.id });
   const { requestAlbum } = useContentDetailActions();
-  const { playEntity } = useEntityPlayback();
+  const { playEntity, startRadio } = useEntityPlayback();
 
   const artistName = album?.artist ?? target.artistName;
   const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, mbid: null });
@@ -51,6 +51,10 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
     () => playEntity({ kind: "album", albumExternalId: target.id }),
     [playEntity, target.id]
   );
+  const handleStartRadio = useCallback(
+    () => startRadio({ kind: "album", albumExternalId: target.id }),
+    [startRadio, target.id]
+  );
 
   const handleArtistNavigate = useMemo(
     () =>
@@ -77,6 +81,7 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
         showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
         onPlay={counts.completeCount > 0 ? handlePlay : undefined}
+        onStartRadio={counts.completeCount > 0 ? handleStartRadio : undefined}
         onSubtitleClick={handleArtistNavigate}
         socials={EMPTY_SOCIALS}
         statsSlot={statsSlot}

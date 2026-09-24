@@ -123,6 +123,7 @@ describe("the more menu on the narrow bar", () => {
           { index: 1, track },
           { index: 2, track },
         ],
+        autoplay: [],
       },
     });
     await opened(user);
@@ -142,6 +143,7 @@ describe("the more menu on the narrow bar", () => {
           { index: 1, track },
           { index: 2, track },
         ],
+        autoplay: [],
       },
     });
     await opened(user);
@@ -149,6 +151,44 @@ describe("the more menu on the narrow bar", () => {
     expect(screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.queue.title}`) })).toHaveTextContent(
       enPlayer.menu.upNext_other.replace("{{count}}", "2")
     );
+  });
+
+  it("counts the radio's additions into what is still to come", async () => {
+    const track = createPlayerView().track;
+    const { user } = renderMenu({
+      queue: {
+        playing: { index: 0, track },
+        upNext: [{ index: 1, track }],
+        autoplay: [
+          { index: 2, track },
+          { index: 3, track },
+        ],
+      },
+    });
+    await opened(user);
+
+    expect(screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.queue.title}`) })).toHaveTextContent(
+      enPlayer.menu.upNext_other.replace("{{count}}", "3")
+    );
+  });
+
+  it("starts a radio from the track that is playing", async () => {
+    const { actions, user } = renderMenu();
+    await opened(user);
+
+    await user.click(screen.getByRole("menuitem", { name: enPlayer.menu.startRadio }));
+
+    expect(actions.startRadio).toHaveBeenCalled();
+  });
+
+  it("keeps the radio out of reach while another device holds the sound", async () => {
+    const { user } = renderMenu({
+      activeDevice: kitchen(),
+      devices: [createPlayerDevice({ active: false }), kitchen()],
+    });
+    await opened(user);
+
+    expect(screen.getByRole("menuitem", { name: enPlayer.menu.startRadio })).toHaveAttribute("aria-disabled", "true");
   });
 
   it("hands the panel openers to their actions", async () => {

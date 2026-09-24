@@ -1,7 +1,9 @@
-import type { PlayerScrobbleState, PlayerTone, PlayerTrack } from "@components/Player";
+import type { PlayerQueueEntry, PlayerScrobbleState, PlayerTone, PlayerTrack } from "@components/Player";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 
 import {
+  AUTOPLAY_REFILL_BELOW,
+  AUTOPLAY_SEED_LIMIT,
   DEVICE_HEARTBEAT_MS,
   LISTEN_DELTA_CEILING_SECONDS,
   LISTEN_FRACTION,
@@ -143,6 +145,67 @@ export function resolveQueueAdditions(
     relocated,
     outcome: { added: fresh.length, full: fresh.length < wanted.length, skipped: tracks.length - fresh.length },
   };
+}
+
+export function queueSections(state: PlayerSessionState): {
+  upNext: PlayerQueueEntry[];
+  autoplay: PlayerQueueEntry[];
+} {
+  const upNext: PlayerQueueEntry[] = [];
+  const autoplay: PlayerQueueEntry[] = [];
+  for (const index of upcomingOrder(state)) {
+    const track = state.queue[index];
+    if (track === undefined) continue;
+    (state.autoplayIds.has(track.id) ? autoplay : upNext).push({ index, track });
+  }
+  return { upNext, autoplay };
+}
+
+export function autoplayDue(state: PlayerSessionState): boolean {
+  if (!state.autoplay || !state.playing || state.remote !== null || state.repeat !== "off") return false;
+  if (state.queue.length >= MAX_QUEUE_TRACKS) return false;
+  return upcomingOrder(state).length < AUTOPLAY_REFILL_BELOW;
+}
+
+export function autoplaySignature(state: PlayerSessionState): string {
+  return `${state.queue[state.index]?.id ?? ""}:${state.queue.length}`;
+}
+
+export function autoplaySeeds(state: PlayerSessionState, random: () => number): string[] {
+  const current = state.queue[state.index];
+  if (current === undefined) return [];
+  const chosen = state.queue.filter((track) => track.id !== current.id && !state.autoplayIds.has(track.id));
+  const pool = (chosen.length > 0 ? chosen : state.queue.filter((track) => track.id !== current.id)).map(
+    (track) => track.id
+  );
+  const picked: string[] = [];
+  while (picked.length < AUTOPLAY_SEED_LIMIT - 1 && pool.length > 0) {
+    const at = Math.floor(random() * pool.length);
+    picked.push(...pool.splice(at, 1));
+  }
+  return [current.id, ...picked];
+}
+
+export function insertBeforeAutoplay(
+  state: PlayerSessionState,
+  tracks: readonly PlayerTrack[]
+): { queue: PlayerTrack[]; shuffleOrder: number[] } {
+  const firstAutoplay = state.queue.findIndex((track, at) => at > state.index && state.autoplayIds.has(track.id));
+  const at = firstAutoplay < 0 ? state.queue.length : firstAutoplay;
+  const queue = [...state.queue.slice(0, at), ...tracks, ...state.queue.slice(at)];
+  const fresh = tracks.map((_, offset) => at + offset);
+  const shifted = state.shuffleOrder.map((index) => (index >= at ? index + tracks.length : index));
+  const before = shifted.findIndex(
+    (index) => index >= at + tracks.length && state.autoplayIds.has(queue[index]?.id ?? "")
+  );
+  const shuffleOrder =
+    before < 0 ? [...shifted, ...fresh] : [...shifted.slice(0, before), ...fresh, ...shifted.slice(before)];
+  return { queue, shuffleOrder };
+}
+
+export function autoplayIdsAmong(tracks: readonly PlayerTrack[], autoplayTrackIds: readonly string[]): Set<string> {
+  const wanted = new Set(autoplayTrackIds);
+  return new Set(tracks.filter((track) => wanted.has(track.id)).map((track) => track.id));
 }
 
 export function nextIndexIn(state: PlayerSessionState): number | null {

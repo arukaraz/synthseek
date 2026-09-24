@@ -414,7 +414,7 @@ describe("player store shared queue", () => {
   it("adopts the queue another device is playing so the listener can see it", async () => {
     const store = await freshStore();
 
-    store.actions.adoptQueue([track("a"), track("b")], "b");
+    store.actions.adoptQueue([track("a"), track("b")], "b", []);
 
     expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["a", "b"]);
     expect(store.getSnapshot().index).toBe(1);
@@ -424,7 +424,7 @@ describe("player store shared queue", () => {
   it("points at the top when the named track is not in the shared queue", async () => {
     const store = await freshStore();
 
-    store.actions.adoptQueue([track("a")], "elsewhere");
+    store.actions.adoptQueue([track("a")], "elsewhere", []);
 
     expect(store.getSnapshot().index).toBe(0);
   });
@@ -434,7 +434,7 @@ describe("player store shared queue", () => {
     store.actions.playQueue([track("mine")], 0);
     engine.handlers?.onPlayingChange(true);
 
-    store.actions.adoptQueue([track("theirs")], "theirs");
+    store.actions.adoptQueue([track("theirs")], "theirs", []);
 
     expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["mine"]);
   });
@@ -442,7 +442,7 @@ describe("player store shared queue", () => {
   it("ignores an empty shared queue", async () => {
     const store = await freshStore();
 
-    store.actions.adoptQueue([], null);
+    store.actions.adoptQueue([], null, []);
 
     expect(store.getSnapshot().started).toBe(false);
   });

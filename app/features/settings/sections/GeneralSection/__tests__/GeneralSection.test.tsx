@@ -24,10 +24,6 @@ vi.mock("@hooks/api/mutations/auth/useSetLanguage", () => ({
   useSetLanguage: () => createMockMutation(),
 }));
 
-vi.mock("@hooks/api/mutations/auth/useSetLoudness", () => ({
-  useSetLoudness: () => createMockMutation(),
-}));
-
 vi.mock("@hooks/api/queries/useApiKeys", () => ({
   useApiKeys: () => createMockQuery([]),
 }));

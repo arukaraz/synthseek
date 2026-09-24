@@ -39,6 +39,7 @@
     "upNext_one": "{{count}} next",
     "upNext_other": "{{count}} next",
     "upgrade": "Find a better version",
+    "startRadio": "Start radio from this track",
     "scrobbling": "Scrobbling",
     "scrobblingState": { "off": "Off", "sending": "On", "retrying": "Retrying", "failed": "Failed" },
     "playingOn": "Playing on {{device}}"
@@ -58,6 +59,7 @@
   "settings": {
     "title": "Playback settings",
     "close": "Hide the playback settings",
+    "updateFailed": "Could not update the playback settings",
     "units": {
       "db": "dB",
       "ms": "ms",
@@ -91,8 +93,7 @@
       "caption": "VOLUME NORMALIZATION",
       "enabled": "Normalize volume",
       "preamp": "Extra gain",
-      "hint": "Evens out the volume from one track to the next.",
-      "updateFailed": "Could not update the playback settings"
+      "hint": "Evens out the volume from one track to the next."
     },
     "conversion": {
       "caption": "CONVERSION",
@@ -120,6 +121,11 @@
         "crossfade": "The end of each track blends into the start of the next.",
         "smart": "Gapless when a track ends on its own, a short blend when you skip."
       }
+    },
+    "autoplay": {
+      "caption": "AUTOPLAY",
+      "enabled": "Keep playing similar tracks",
+      "hint": "When the queue runs out, tracks from your library that sound like what you chose keep it going. For your account."
     }
   },
   "equalizer": {
@@ -167,6 +173,7 @@
     "close": "Hide the queue",
     "nowPlaying": "NOW PLAYING",
     "upNext": "NEXT UP",
+    "autoplay": "AUTOPLAY",
     "empty": "Nothing queued after this one",
     "jumpTo": "Play {{title}}",
     "remove": "Remove {{title}} from the queue",
@@ -183,7 +190,8 @@
     "nothingPlayable": "Nothing here can be played yet",
     "full": "The queue is full, so nothing more was added",
     "truncated": "This is longer than a queue can hold, so only the first {{count}} tracks were taken",
-    "loadFailed": "Could not load those tracks"
+    "loadFailed": "Could not load those tracks",
+    "radioEmpty": "Nothing in your library sounds like this yet"
   },
   "modes": {
     "caption": "PLAYER MODE",

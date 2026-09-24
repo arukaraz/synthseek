@@ -21,6 +21,7 @@ interface SavedTrack {
 
 interface SavedSession {
   tracks: SavedTrack[];
+  autoplayTrackIds: string[];
   currentTrackId: string | null;
   positionMs: number;
   resumedFrom: string | null;
@@ -69,7 +70,11 @@ vi.mock("../store", () => ({
     playHere: store.playHere,
   },
   getSnapshot: () => store.snapshot,
-  sessionSnapshot: (): SessionSnapshot => ({ ...store.snapshotOf, trackIds: [...store.snapshotOf.trackIds] }),
+  sessionSnapshot: (): SessionSnapshot => ({
+    ...store.snapshotOf,
+    autoplayTrackIds: [],
+    trackIds: [...store.snapshotOf.trackIds],
+  }),
   subscribe: (listener: () => void) => {
     store.listeners.add(listener);
     return () => {
@@ -119,6 +124,8 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     chainVisible: false,
     devicesOpen: false,
     settingsOpen: false,
+    autoplay: false,
+    autoplayIds: new Set<string>(),
     equalizer: { enabled: false, gainsDb: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], preampDb: 0 },
     equalizerPresets: [],
     compressor: { enabled: false, thresholdDb: -24, ratio: 4, attackMs: 20, releaseMs: 300, kneeDb: 3 },
@@ -159,6 +166,7 @@ describe("restoring the saved session", () => {
   it("arms the queue the listener left behind", () => {
     api.session = {
       tracks: [savedTrack("a"), savedTrack("b")],
+      autoplayTrackIds: ["b"],
       currentTrackId: "b",
       positionMs: 45_000,
       resumedFrom: null,
@@ -170,13 +178,15 @@ describe("restoring the saved session", () => {
       [expect.objectContaining({ id: "a" }), expect.objectContaining({ id: "b" })],
       "b",
       45,
-      null
+      null,
+      ["b"]
     );
   });
 
   it("leaves out a track the library can no longer play", () => {
     api.session = {
       tracks: [savedTrack("a"), savedTrack("gone", { playable: false })],
+      autoplayTrackIds: [],
       currentTrackId: "a",
       positionMs: 0,
       resumedFrom: null,
@@ -188,11 +198,17 @@ describe("restoring the saved session", () => {
   });
 
   it("names the device the session was handed on from", () => {
-    api.session = { tracks: [savedTrack("a")], currentTrackId: "a", positionMs: 0, resumedFrom: "Kitchen" };
+    api.session = {
+      tracks: [savedTrack("a")],
+      autoplayTrackIds: [],
+      currentTrackId: "a",
+      positionMs: 0,
+      resumedFrom: "Kitchen",
+    };
 
     renderHook(() => usePlayerSessionSync());
 
-    expect(store.restoreSession).toHaveBeenCalledWith(expect.anything(), "a", 0, "Kitchen");
+    expect(store.restoreSession).toHaveBeenCalledWith(expect.anything(), "a", 0, "Kitchen", []);
   });
 
   it("does nothing while the saved session is still being fetched", () => {
@@ -212,10 +228,22 @@ describe("restoring the saved session", () => {
   });
 
   it("restores once, however often the query re-reports the same data", () => {
-    api.session = { tracks: [savedTrack("a")], currentTrackId: "a", positionMs: 0, resumedFrom: null };
+    api.session = {
+      tracks: [savedTrack("a")],
+      autoplayTrackIds: [],
+      currentTrackId: "a",
+      positionMs: 0,
+      resumedFrom: null,
+    };
 
     const { rerender } = renderHook(() => usePlayerSessionSync());
-    api.session = { tracks: [savedTrack("b")], currentTrackId: "b", positionMs: 0, resumedFrom: null };
+    api.session = {
+      tracks: [savedTrack("b")],
+      autoplayTrackIds: [],
+      currentTrackId: "b",
+      positionMs: 0,
+      resumedFrom: null,
+    };
     rerender();
 
     expect(store.restoreSession).toHaveBeenCalledTimes(1);
@@ -235,7 +263,13 @@ describe("taking the sound over from another device", () => {
 
   it("fetches the handed-over queue when this player does not hold it", async () => {
     api.refetch.mockResolvedValue({
-      data: { tracks: [savedTrack("a"), savedTrack("b")], currentTrackId: "b", positionMs: 30_000, resumedFrom: null },
+      data: {
+        tracks: [savedTrack("a"), savedTrack("b")],
+        autoplayTrackIds: ["b"],
+        currentTrackId: "b",
+        positionMs: 30_000,
+        resumedFrom: null,
+      },
     });
     renderHook(() => usePlayerSessionSync());
 
@@ -245,7 +279,8 @@ describe("taking the sound over from another device", () => {
       expect(store.takeOver).toHaveBeenCalledWith(
         [expect.objectContaining({ id: "a" }), expect.objectContaining({ id: "b" })],
         "b",
-        30
+        30,
+        ["b"]
       )
     );
   });
@@ -298,13 +333,21 @@ describe("adopting a queue another device announced", () => {
 
   it("fetches and adopts the shared queue for a track it has never seen", async () => {
     api.refetch.mockResolvedValue({
-      data: { tracks: [savedTrack("x")], currentTrackId: "x", positionMs: 0, resumedFrom: null },
+      data: {
+        tracks: [savedTrack("x")],
+        autoplayTrackIds: ["x"],
+        currentTrackId: "x",
+        positionMs: 0,
+        resumedFrom: null,
+      },
     });
     renderHook(() => usePlayerSessionSync());
 
     commands.unknownTrack?.("x");
 
-    await vi.waitFor(() => expect(store.adoptQueue).toHaveBeenCalledWith([expect.objectContaining({ id: "x" })], "x"));
+    await vi.waitFor(() =>
+      expect(store.adoptQueue).toHaveBeenCalledWith([expect.objectContaining({ id: "x" })], "x", ["x"])
+    );
   });
 
   it("stays put when the shared queue comes back empty", async () => {
@@ -333,7 +376,12 @@ describe("saving the session as it moves", () => {
 
     publish();
 
-    expect(api.save).toHaveBeenCalledWith({ trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 });
+    expect(api.save).toHaveBeenCalledWith({
+      trackIds: ["a", "b"],
+      autoplayTrackIds: [],
+      currentTrackId: "a",
+      positionMs: 0,
+    });
   });
 
   it("saves nothing before the player has started", () => {
@@ -412,7 +460,12 @@ describe("saving the session as it moves", () => {
     store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
     publish();
 
-    expect(api.save).toHaveBeenCalledWith({ trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 });
+    expect(api.save).toHaveBeenCalledWith({
+      trackIds: ["a", "b"],
+      autoplayTrackIds: [],
+      currentTrackId: "a",
+      positionMs: 0,
+    });
   });
 
   it("saves the drifted position again once the interval has passed", () => {

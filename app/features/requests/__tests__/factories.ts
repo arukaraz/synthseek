@@ -18,6 +18,7 @@ export function makeRequestsUser(overrides: Partial<PublicUser> = {}): PublicUse
     language: "en",
     loudnessNormalization: true,
     loudnessPreampDb: 0,
+    autoplayEnabled: false,
     plex_username: null,
     plexLinked: false,
     hasPassword: true,
