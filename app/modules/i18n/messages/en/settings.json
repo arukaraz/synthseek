@@ -939,7 +939,7 @@
       },
       "playback-source-links": {
         "name": "Playback Source Links",
-        "description": "Finds which of your tracks your media server can also play, so they can be played from there."
+        "description": "Finds which of your tracks your media servers can also play, so they can be played from there."
       }
     }
   },

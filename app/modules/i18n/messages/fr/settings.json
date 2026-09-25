@@ -939,7 +939,7 @@
       },
       "playback-source-links": {
         "name": "Liens des sources de lecture",
-        "description": "Trouve quelles pistes votre serveur multimédia peut aussi lire, pour pouvoir les lire depuis celui-ci."
+        "description": "Trouve quelles pistes vos serveurs multimédias peuvent aussi lire, pour pouvoir les lire depuis ceux-ci."
       }
     }
   },

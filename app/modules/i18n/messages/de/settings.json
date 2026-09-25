@@ -939,7 +939,7 @@
       },
       "playback-source-links": {
         "name": "Wiedergabequellen-Verknüpfung",
-        "description": "Findet, welche deiner Titel dein Medienserver ebenfalls abspielen kann, damit sie von dort abgespielt werden können."
+        "description": "Findet, welche deiner Titel deine Medienserver ebenfalls abspielen können, damit sie von dort abgespielt werden können."
       }
     }
   },

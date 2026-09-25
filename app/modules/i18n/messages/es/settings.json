@@ -939,7 +939,7 @@
       },
       "playback-source-links": {
         "name": "Enlaces de fuentes de reproducción",
-        "description": "Busca qué canciones tuyas puede reproducir también tu servidor de medios, para poder reproducirlas desde allí."
+        "description": "Busca qué canciones tuyas pueden reproducir también tus servidores de medios, para poder reproducirlas desde allí."
       }
     }
   },
