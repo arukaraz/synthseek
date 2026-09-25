@@ -15,6 +15,7 @@ export const createPlayerTrack = (overrides: Partial<PlayerTrack> = {}): PlayerT
   tone: "primary",
   artworkUrl: null,
   replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+  sources: [{ key: "local", format: "flac", bitrateKbps: 1024 }],
   ...overrides,
 });
 
@@ -45,6 +46,7 @@ export const createPlayerView = (overrides: Partial<PlayerView> = {}): PlayerVie
     devices: [here],
     activeDevice: here,
     chain: {
+      source: { key: "local", label: "Your library", detail: "FLAC · 1024 kbps", local: true },
       fileLabel: "FLAC 1024 kbps",
       transcoding: false,
       serverLabel: "Direct",
@@ -74,6 +76,7 @@ export const createPlayerView = (overrides: Partial<PlayerView> = {}): PlayerVie
     },
     loudness: { enabled: true, preAmpDb: 0 },
     autoplay: false,
+    sourceOptions: [{ key: "local", label: "Your library", detail: "FLAC · 1024 kbps", local: true }],
     conversion: { enabled: false, bitrateKbps: 192 },
     transition: { mode: "gapless", seconds: 5, curve: "equalPower" },
     lyricsOpen: false,
@@ -119,6 +122,7 @@ export const createPlayerActions = (overrides: Partial<PlayerActions> = {}): Pla
   setAutoplayEnabled: vi.fn(),
   startRadio: vi.fn(),
   setConversion: vi.fn(),
+  setSource: vi.fn(),
   setTransition: vi.fn(),
   toggleModes: vi.fn(),
   toggleQueue: vi.fn(),

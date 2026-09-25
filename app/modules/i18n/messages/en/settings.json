@@ -353,6 +353,10 @@
       "label": "Playlist sync",
       "description": "When a Synthseek playlist request completes (or grows), create / update a matching Plex playlist with the imported tracks."
     },
+    "playback": {
+      "label": "Play from Plex",
+      "description": "Lets the player stream a track from Plex when Synthseek has no file for it. Your own copy is always played first."
+    },
     "namingHeader": "Playlist naming",
     "usernameAffix": {
       "label": "Username affix",
@@ -605,7 +609,15 @@
         "linkedAs": "Plex linked as {{username}}",
         "linkedFallback": "Plex account linked",
         "linkTimedOut": "Plex linking timed out",
-        "linkFailed": "Failed to link Plex"
+        "linkFailed": "Failed to link Plex",
+        "reporting": {
+          "label": "Record my plays in Plex",
+          "description": "Every track you finish, here or in a music app, counts as played in your Plex library.",
+          "relinkHint": "Link Plex again so your plays can be recorded in Plex under your name.",
+          "relink": "Link again",
+          "unauthorized": "Plex no longer accepts this link. Link Plex again.",
+          "unreachable": "Plex could not be reached the last time. It will try again with your next play."
+        }
       }
     },
     "listening": {
@@ -874,6 +886,10 @@
       "scrobble-relay": {
         "name": "Scrobble Relay",
         "description": "Sends what you listened to on to your connected listening services."
+      },
+      "playback-source-links": {
+        "name": "Playback Source Links",
+        "description": "Finds which of your tracks your media server can also play, so they can be played from there."
       }
     }
   },

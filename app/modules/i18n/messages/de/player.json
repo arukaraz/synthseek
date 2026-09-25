@@ -49,12 +49,16 @@
     "server": "SERVER",
     "equalizer": "EQ",
     "output": "AUSGABE",
+    "source": "QUELLE",
     "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "keine Umwandlung",
     "serverTranscoding": "wandelt zu mp3 {{bitrate}}",
     "serverConverting": "wandelt um",
     "equalizerOff": "aus",
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
+  },
+  "source": {
+    "local": "Deine Bibliothek"
   },
   "settings": {
     "title": "Wiedergabeeinstellungen",
@@ -102,6 +106,10 @@
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Spart Daten bei langsamer Verbindung. Aus spielt die Originaldatei, außer der Browser kann sie nicht dekodieren."
     },
+    "source": {
+      "caption": "DIESER TITEL SPIELT VON",
+      "hint": "Wechselt, woher dieser Titel kommt, an derselben Stelle. Andere Titel spielen weiterhin zuerst aus deiner Bibliothek."
+    },
     "transition": {
       "caption": "ÜBERGÄNGE",
       "mode": "Übergang",
@@ -125,7 +133,7 @@
     "autoplay": {
       "caption": "AUTOPLAY",
       "enabled": "Mit ähnlichen Titeln weiterspielen",
-      "hint": "Wenn die Warteschlange leer ist, geht es mit Titeln aus deiner Bibliothek weiter, die zu deiner Auswahl passen. Für dein Konto."
+      "hint": "Wenn die Warteschlange leer ist, geht es mit Titeln aus deiner Bibliothek weiter, die zu deiner Auswahl passen."
     }
   },
   "equalizer": {

@@ -92,6 +92,7 @@ function track(id: string): PlayerTrack {
     artworkUrl: null,
     albumId: "album-1",
     replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    sources: [],
   };
 }
 
@@ -306,6 +307,79 @@ describe("conversion the listener asks for", () => {
     store.actions.restorePlaybackSettings();
 
     expect(store.getSnapshot().conversion).toEqual({ enabled: false, bitrateKbps: 192 });
+  });
+});
+
+describe("the source the listener picks for the playing track", () => {
+  function twoSources(id: string, remoteFormat = "flac"): PlayerTrack {
+    return {
+      ...track(id),
+      sources: [
+        { key: "local", format: "mp3", bitrateKbps: 320 },
+        { key: "plex", format: remoteFormat, bitrateKbps: 900 },
+      ],
+    };
+  }
+
+  it("streams the same track from the chosen server, from where it was", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([twoSources("a"), twoSources("b")], 0);
+    engine.playing?.(true);
+    store.actions.seekTo(42);
+
+    store.actions.setSource("plex");
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/a/stream?source=plex", 0.8, false, 42);
+    expect(store.getSnapshot().sourceChoice).toEqual({ trackId: "a", source: "plex" });
+  });
+
+  it("converts when the chosen copy is in a format the browser cannot decode", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([twoSources("a", "wma")], 0);
+    engine.playing?.(true);
+
+    store.actions.setSource("plex");
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      expect.stringMatching(/^\/api\/v1\/library\/tracks\/a\/stream\?source=plex&format=mp3&maxBitrate=\d+$/),
+      0.8,
+      false,
+      0
+    );
+    expect(store.getSnapshot().transcoding).toBe(true);
+  });
+
+  it("names a server source out loud when it is the track's first, so the server cannot serve another copy", async () => {
+    const store = await freshStore();
+    const serverFirst: PlayerTrack = { ...track("a"), sources: [{ key: "plex", format: "mp3", bitrateKbps: 320 }] };
+
+    store.actions.playQueue([serverFirst], 0);
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/a/stream?source=plex", 0.8, false, 0);
+  });
+
+  it("leaves the next track on its default source", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([twoSources("a"), twoSources("b")], 0);
+    engine.playing?.(true);
+    store.actions.setSource("plex");
+
+    store.actions.next();
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/b/stream", 0.8, false, 0);
+  });
+
+  it("does nothing for the source already playing or one the track does not have", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([twoSources("a")], 0);
+    engine.loadAndPlay.mockClear();
+
+    store.actions.setSource("local");
+    store.actions.setSource("jellyfin");
+
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+    expect(engine.loadAt).not.toHaveBeenCalled();
+    expect(store.getSnapshot().sourceChoice).toBeNull();
   });
 });
 

@@ -41,6 +41,20 @@ export interface PlayerTrack {
   tone: PlayerTone;
   artworkUrl: string | null;
   replayGain: PlayerReplayGain;
+  sources: readonly PlayerSource[];
+}
+
+export interface PlayerSource {
+  key: string;
+  format: string;
+  bitrateKbps: number;
+}
+
+export interface PlayerSourceOption {
+  key: string;
+  label: string;
+  detail: string;
+  local: boolean;
 }
 
 export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";
@@ -125,6 +139,7 @@ export interface PlayerTransition {
 }
 
 export interface PlayerSignalChain {
+  source: PlayerSourceOption | null;
   fileLabel: string;
   transcoding: boolean;
   serverLabel: string;
@@ -147,6 +162,7 @@ export interface PlayerView {
   devices: readonly PlayerDevice[];
   activeDevice: PlayerDevice;
   chain: PlayerSignalChain;
+  sourceOptions: readonly PlayerSourceOption[];
   favorite: boolean;
   chainVisible: boolean;
   devicesOpen: boolean;
@@ -198,6 +214,7 @@ export interface PlayerActions {
   setAutoplayEnabled: (enabled: boolean) => void;
   startRadio: () => void;
   setConversion: (conversion: PlayerConversion) => void;
+  setSource: (source: string) => void;
   setTransition: (transition: PlayerTransition) => void;
   toggleModes: () => void;
   toggleQueue: () => void;

@@ -15,7 +15,7 @@ Each integration exposes a live status you can see from its settings card.
 
 ## Plex
 
-Two independent things, each with its own switch.
+Three independent things, each with its own switch.
 
 ### Library scans
 
@@ -31,6 +31,12 @@ Playlists you request or create in Synthseek can be mirrored to Plex.
 - Optionally prefix or suffix mirrored playlist names with the owner's username, so a shared server stays legible.
 
 **Currently, sync only adds tracks. It never removes them.** The only path that removes anything from a mirrored playlist is a library sync you explicitly configured.
+
+### Playing from Plex
+
+Off until you turn it on. Synthseek then works out which of your tracks your Plex server also holds, right away and every six hours after that, and a track Synthseek has no file for plays from Plex instead. Your own copy always plays first. When the player is streaming from Plex it says so next to the artist, and when a track is in both places you can switch the playing track to the other copy from the player's settings.
+
+Each listener can also have their plays counted in Plex. With playing from Plex on, the Plex row under **Profile** offers **Record my plays in Plex**: every track that listener finishes, in the web player or in a music app, counts as played in their own Plex library, as long as Plex also holds that track. A listener who signed in with Plex before this existed links Plex once more from the same row.
 
 ### Why a Plex playlist can show fewer tracks
 

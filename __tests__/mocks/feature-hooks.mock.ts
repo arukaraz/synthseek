@@ -54,7 +54,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
         queueWaitIdlePeer: 30,
       },
       import: { metadataConfidenceThreshold: 0.8, acoustidIdentityGate: true },
-      plexBehavior: { libraryScan: true, playlistSync: true },
+      plexBehavior: { libraryScan: true, playlistSync: true, playback: false },
       smartSearch: { customMoodKeywords: [] },
       wanted: { enabled: false, perRunCap: 10, maxAttempts: 3 },
       quality: { upgradeEnabled: false },

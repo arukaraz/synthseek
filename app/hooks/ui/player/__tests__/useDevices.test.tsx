@@ -146,6 +146,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     fullscreen: false,
     consecutiveFailures: 0,
     started: false,
+    sourceChoice: null,
     ...overrides,
   };
 }
@@ -224,6 +225,7 @@ describe("announcing this device", () => {
           artworkUrl: null,
           albumId: "album-1",
           replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+          sources: [],
         },
       ],
     });

@@ -17,6 +17,7 @@ interface SavedTrack {
   bitrate: number;
   file_bitrate: number | null;
   playable: boolean;
+  sources: Array<{ key: string; format: string | null; bitrate: number | null }>;
 }
 
 interface SavedSession {
@@ -99,6 +100,7 @@ function savedTrack(id: string, overrides: Partial<SavedTrack> = {}): SavedTrack
     bitrate: 320,
     file_bitrate: null,
     playable: true,
+    sources: [{ key: "local", format: null, bitrate: null }],
     ...overrides,
   };
 }
@@ -138,6 +140,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     fullscreen: false,
     consecutiveFailures: 0,
     started: true,
+    sourceChoice: null,
     ...overrides,
   };
 }
@@ -321,6 +324,7 @@ describe("adopting a queue another device announced", () => {
           artworkUrl: null,
           albumId: "album-1",
           replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+          sources: [],
         },
       ],
     });

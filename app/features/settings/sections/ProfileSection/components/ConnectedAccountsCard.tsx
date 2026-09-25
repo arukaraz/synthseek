@@ -14,6 +14,7 @@ import { SettingsCard } from "../../../components/SettingsCard";
 import { usePlexLink } from "../hooks/usePlexLink";
 import { connectedRow, plexChip, spotifyChip } from "../styles";
 import { PlexMark } from "./PlexMark";
+import { PlexReportingRow } from "./PlexReportingRow";
 
 export function ConnectedAccountsCard() {
   const { t } = useTranslation("settings");
@@ -95,6 +96,10 @@ export function ConnectedAccountsCard() {
             </Button>
           )}
         </div>
+      ) : null}
+
+      {currentUser && plexLinked ? (
+        <PlexReportingRow onRelink={() => plexLink.start()} relinking={plexLink.isPending} />
       ) : null}
 
       {!spotifyEnabled && !currentUser ? <p className="text-fg/60 text-sm">{t("profile.connected.empty")}</p> : null}

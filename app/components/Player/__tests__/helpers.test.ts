@@ -257,6 +257,7 @@ describe("mergeReorderedWindow", () => {
       artworkUrl: null,
       albumId: "album-1",
       replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+      sources: [],
     },
   });
 

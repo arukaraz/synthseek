@@ -353,6 +353,10 @@
       "label": "Playlist-Synchronisierung",
       "description": "Wenn eine Synthseek-Playlist-Anfrage abgeschlossen ist (oder wächst), eine passende Plex-Playlist mit den importierten Titeln erstellen / aktualisieren."
     },
+    "playback": {
+      "label": "Von Plex abspielen",
+      "description": "Erlaubt dem Player, einen Titel von Plex zu streamen, wenn Synthseek keine Datei dafür hat. Deine eigene Kopie wird immer zuerst abgespielt."
+    },
     "namingHeader": "Playlist-Benennung",
     "usernameAffix": {
       "label": "Benutzernamen-Affix",
@@ -605,7 +609,15 @@
         "linkedAs": "Plex verknüpft als {{username}}",
         "linkedFallback": "Plex-Konto verknüpft",
         "linkTimedOut": "Plex-Verknüpfung hat das Zeitlimit überschritten",
-        "linkFailed": "Plex konnte nicht verknüpft werden"
+        "linkFailed": "Plex konnte nicht verknüpft werden",
+        "reporting": {
+          "label": "Meine Wiedergaben in Plex erfassen",
+          "description": "Jeder Titel, den du zu Ende hörst, hier oder in einer Musik-App, zählt in deiner Plex-Bibliothek als abgespielt.",
+          "relinkHint": "Verknüpfe Plex erneut, damit deine Wiedergaben unter deinem Namen in Plex erfasst werden.",
+          "relink": "Erneut verknüpfen",
+          "unauthorized": "Plex akzeptiert diese Verknüpfung nicht mehr. Verknüpfe Plex erneut.",
+          "unreachable": "Plex war beim letzten Mal nicht erreichbar. Bei deiner nächsten Wiedergabe wird es erneut versucht."
+        }
       }
     },
     "listening": {
@@ -874,6 +886,10 @@
       "scrobble-relay": {
         "name": "Wiedergabe-Weiterleitung",
         "description": "Sendet, was du gehoert hast, an deine verbundenen Hoerdienste."
+      },
+      "playback-source-links": {
+        "name": "Wiedergabequellen-Verknüpfung",
+        "description": "Findet, welche deiner Titel dein Medienserver ebenfalls abspielen kann, damit sie von dort abgespielt werden können."
       }
     }
   },

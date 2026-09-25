@@ -52,6 +52,7 @@ function track(overrides: Partial<PlayerTrack> = {}): PlayerTrack {
     artworkUrl: null,
     albumId: "album-1",
     replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    sources: [],
     ...overrides,
   };
 }

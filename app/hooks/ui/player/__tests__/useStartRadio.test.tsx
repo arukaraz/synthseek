@@ -33,6 +33,7 @@ const SEED: PlayerTrack = {
   artworkUrl: null,
   albumId: "album-1",
   replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+  sources: [],
 };
 
 function libraryItem(id: string) {
@@ -49,6 +50,7 @@ function libraryItem(id: string) {
     bitrate: 320,
     file_bitrate: null,
     replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    sources: [],
   };
 }
 

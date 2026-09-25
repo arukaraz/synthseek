@@ -42,3 +42,7 @@ export const listeningClientList = cva("flex flex-wrap gap-x-4 gap-y-2");
 export const listeningClientOption = cva("text-fg/70 flex items-center gap-2 text-xs");
 
 export const listeningTokenRow = cva("flex flex-col gap-2 sm:flex-row sm:items-center");
+
+export const reportingNote = cva(
+  "border-fg/10 -mt-1 flex items-center gap-3 rounded-lg border border-dashed px-3 py-2"
+);

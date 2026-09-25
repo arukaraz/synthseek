@@ -49,12 +49,16 @@
     "server": "SERVIDOR",
     "equalizer": "EQ",
     "output": "SALIDA",
+    "source": "FUENTE",
     "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "sin convertir",
     "serverTranscoding": "convirtiendo a mp3 {{bitrate}}",
     "serverConverting": "convirtiendo",
     "equalizerOff": "apagado",
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
+  },
+  "source": {
+    "local": "Tu biblioteca"
   },
   "settings": {
     "title": "Ajustes de reproducción",
@@ -102,6 +106,10 @@
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Ahorra datos en una conexión lenta. Apagado, suena el fichero original salvo que el navegador no pueda decodificarlo."
     },
+    "source": {
+      "caption": "ESTA CANCIÓN SUENA DESDE",
+      "hint": "Cambia de dónde llega esta canción, desde el mismo punto. Las demás siguen sonando primero desde tu biblioteca."
+    },
     "transition": {
       "caption": "TRANSICIONES",
       "mode": "Transición",
@@ -125,7 +133,7 @@
     "autoplay": {
       "caption": "REPRODUCCIÓN AUTOMÁTICA",
       "enabled": "Seguir con canciones parecidas",
-      "hint": "Cuando la cola se acaba, siguen sonando canciones de tu biblioteca parecidas a lo que elegiste. Para tu cuenta."
+      "hint": "Cuando la cola se acaba, siguen sonando canciones de tu biblioteca parecidas a lo que elegiste."
     }
   },
   "equalizer": {

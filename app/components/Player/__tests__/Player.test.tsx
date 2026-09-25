@@ -174,6 +174,28 @@ describe("the player dock", () => {
     expect(screen.getByText("FLAC 1024 kbps")).toBeInTheDocument();
   });
 
+  it("names the media server a track is streamed from, and says nothing for your own copy", () => {
+    const base = createPlayerView();
+    const plex = { key: "plex", label: "Plex", detail: "FLAC · 900 kbps", local: false };
+
+    const { unmount } = renderPlayer();
+    expect(screen.queryByText("Your library")).not.toBeInTheDocument();
+    unmount();
+
+    renderPlayer({ chain: { ...base.chain, source: plex } });
+    expect(screen.getByText("Plex")).toBeInTheDocument();
+  });
+
+  it("starts the chain at the source the sound comes from", () => {
+    const base = createPlayerView();
+    const plex = { key: "plex", label: "Plex", detail: "FLAC · 900 kbps", local: false };
+
+    renderPlayer({ chainVisible: true, chain: { ...base.chain, source: plex } });
+
+    expect(screen.getByText(enPlayer.chain.source)).toBeInTheDocument();
+    expect(screen.getAllByText("Plex")).toHaveLength(2);
+  });
+
   it("falls back to the album initials when there is no artwork", () => {
     renderPlayer();
 

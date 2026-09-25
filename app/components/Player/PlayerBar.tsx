@@ -26,8 +26,10 @@ import {
   barMobileProgress,
   barMobileProgressFill,
   barProgress,
+  barSourceChip,
   barSubtitle,
   barSubtitleAlbum,
+  barSubtitleRow,
   barTitle,
   barTransport,
   clock,
@@ -81,9 +83,16 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
                 </button>
               ) : null}
             </span>
-            <span className={cn(barSubtitle(), view.activeDevice.local ? undefined : "hidden")}>
-              {view.track.artist}
-              <span className={barSubtitleAlbum()}> · {view.track.album}</span>
+            <span className={cn(barSubtitleRow(), view.activeDevice.local ? undefined : "hidden")}>
+              <span className={barSubtitle()}>
+                {view.track.artist}
+                <span className={barSubtitleAlbum()}> · {view.track.album}</span>
+              </span>
+              {view.chain.source !== null && !view.chain.source.local ? (
+                <span className={barSourceChip()} title={`${t("chain.source")} · ${view.chain.source.label}`}>
+                  {view.chain.source.label}
+                </span>
+              ) : null}
             </span>
             <span className={barDeviceLine({ remote: !view.activeDevice.local })}>
               <MonitorSpeaker className="size-3.5 shrink-0" />

@@ -16,7 +16,7 @@ export function usePlexLink() {
     start: startFlow,
     poll,
     onResolved: async (resolved) => {
-      await utils.auth.me.invalidate();
+      await Promise.all([utils.auth.me.invalidate(), utils.playback.sources.accounts.invalidate()]);
       toast.success(
         resolved.plexUsername
           ? t("profile.connected.plex.linkedAs", { username: resolved.plexUsername })

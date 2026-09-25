@@ -5,3 +5,4 @@ export { useRecordPlay } from "./useRecordPlay";
 export { useSavePlaybackSession } from "./useSavePlaybackSession";
 export { useSendPlayerCommand } from "./useSendPlayerCommand";
 export { useSetFavoriteTrack } from "./useSetFavoriteTrack";
+export { useSetSourceReporting } from "./useSetSourceReporting";

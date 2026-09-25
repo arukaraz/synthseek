@@ -1,4 +1,11 @@
-import type { PlayerQueueEntry, PlayerScrobbleState, PlayerTone, PlayerTrack } from "@components/Player";
+import type {
+  PlayerQueueEntry,
+  PlayerScrobbleState,
+  PlayerSource,
+  PlayerSourceOption,
+  PlayerTone,
+  PlayerTrack,
+} from "@components/Player";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 
 import {
@@ -8,9 +15,12 @@ import {
   LISTEN_DELTA_CEILING_SECONDS,
   LISTEN_FRACTION,
   LISTEN_MAX_SECONDS,
+  LOCAL_SOURCE,
+  LOSSLESS_FORMATS,
   MAX_QUEUE_TRACKS,
   PLAYBACK_MIME_BY_FORMAT,
   SESSION_POSITION_DRIFT_MS,
+  SOURCE_NAMES,
   TONES,
 } from "./constants";
 import type { PlaybackTrackSummary } from "@api/__generated__/types";
@@ -22,6 +32,7 @@ import type {
   QueueAddOutcome,
   RemotePlayback,
   SessionSnapshot,
+  SourceChoice,
   StreamConversion,
 } from "./types";
 
@@ -33,8 +44,13 @@ export function toneFor(seed: string): PlayerTone {
   return TONES[hash % TONES.length] ?? "primary";
 }
 
+function isLosslessFormat(format: string): boolean {
+  return LOSSLESS_FORMATS.includes(format);
+}
+
 export function playerTrackFrom(item: LibraryTrackItem): PlayerTrack {
   const format = item.file_format ?? item.format;
+  const bitrateKbps = item.file_bitrate ?? item.bitrate;
   return {
     id: item.id,
     title: item.title,
@@ -43,20 +59,67 @@ export function playerTrackFrom(item: LibraryTrackItem): PlayerTrack {
     albumId: item.album_id,
     durationSeconds: Math.round(item.duration_ms / 1000),
     format,
-    bitrateKbps: item.file_bitrate ?? item.bitrate,
-    lossless: format === "flac" || format === "wav" || format === "alac",
+    bitrateKbps,
+    lossless: isLosslessFormat(format),
     tone: toneFor(item.album_id),
     artworkUrl: item.albumArt,
     replayGain: item.replayGain,
+    sources: item.sources.map((source) => ({
+      key: source.key,
+      format: source.format ?? format,
+      bitrateKbps: source.bitrate ?? bitrateKbps,
+    })),
   };
 }
 
-export function streamUrlFor(trackId: string, conversion: StreamConversion | null, offsetSeconds: number): string {
+export function chosenSourceFor(track: PlayerTrack, choice: SourceChoice | null): string | null {
+  if (choice === null || choice.trackId !== track.id) return null;
+  return track.sources.some((source) => source.key === choice.source) ? choice.source : null;
+}
+
+export function requestedSourceFor(track: PlayerTrack, choice: SourceChoice | null): string | null {
+  const chosen = chosenSourceFor(track, choice);
+  if (chosen !== null) return chosen;
+  const first = track.sources[0];
+  return first === undefined || first.key === LOCAL_SOURCE ? null : first.key;
+}
+
+export function playingSourceOf(track: PlayerTrack, choice: SourceChoice | null): PlayerSource | null {
+  const chosen = chosenSourceFor(track, choice);
+  return track.sources.find((source) => source.key === chosen) ?? track.sources[0] ?? null;
+}
+
+export function sourceOptionFrom(source: PlayerSource, localLabel: string, detail: string): PlayerSourceOption {
+  const local = source.key === LOCAL_SOURCE;
+  return { key: source.key, label: local ? localLabel : (SOURCE_NAMES[source.key] ?? source.key), detail, local };
+}
+
+export function asPlayedFrom(track: PlayerTrack, source: PlayerSource | null): PlayerTrack {
+  if (source === null) return track;
+  return {
+    ...track,
+    format: source.format,
+    bitrateKbps: source.bitrateKbps,
+    lossless: isLosslessFormat(source.format),
+  };
+}
+
+export function streamUrlFor(
+  trackId: string,
+  conversion: StreamConversion | null,
+  offsetSeconds: number,
+  source: string | null
+): string {
   const base = `/api/v1/library/tracks/${encodeURIComponent(trackId)}/stream`;
-  if (conversion === null) return base;
-  const query = new URLSearchParams({ format: conversion.format, maxBitrate: String(conversion.bitrateKbps) });
-  if (offsetSeconds > 0) query.set("offset", String(Math.floor(offsetSeconds)));
-  return `${base}?${query.toString()}`;
+  const query = new URLSearchParams();
+  if (source !== null) query.set("source", source);
+  if (conversion !== null) {
+    query.set("format", conversion.format);
+    query.set("maxBitrate", String(conversion.bitrateKbps));
+    if (offsetSeconds > 0) query.set("offset", String(Math.floor(offsetSeconds)));
+  }
+  const text = query.toString();
+  return text.length === 0 ? base : `${base}?${text}`;
 }
 
 export function needsConversion(format: string, canPlay: (mimeType: string) => boolean): boolean {

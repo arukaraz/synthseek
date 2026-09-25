@@ -178,6 +178,17 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
           />
         }
       />
+      <EngineRow
+        label={t("plex.playback.label")}
+        description={t("plex.playback.description")}
+        control={
+          <Switch
+            checked={behaviorForm.draft.playback}
+            onCheckedChange={(v) => behaviorForm.setField("playback", v)}
+            aria-label={t("plex.playback.label")}
+          />
+        }
+      />
 
       <div className={cardDivider()} />
 

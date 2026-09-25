@@ -21,7 +21,7 @@ export type Affix = "off" | "prefix" | "suffix";
 export interface PlexIntegrationCardProps {
   initial: {
     connection: { url: string; token: string };
-    behavior: { libraryScan: boolean; playlistSync: boolean };
+    behavior: { libraryScan: boolean; playlistSync: boolean; playback: boolean };
     naming: { plexPlaylistUsernameAffix: Affix; plexPlaylistUsernameSeparator: string };
   };
 }

@@ -1,6 +1,6 @@
 import type { PlaybackStatePayload, PlayerCommandPayload } from "@api/__generated__/types";
 
-import { NO_ALBUM_ID, NO_REPLAY_GAIN } from "./constants";
+import { NO_ALBUM_ID, NO_REPLAY_GAIN, NO_SOURCES } from "./constants";
 import { deviceIdentity } from "./device";
 import { toneFor } from "./helpers";
 import { actions } from "./store";
@@ -82,6 +82,7 @@ export function applyPlaybackState(state: PlaybackStatePayload): void {
             tone: toneFor(state.track.id),
             albumId: NO_ALBUM_ID,
             replayGain: NO_REPLAY_GAIN,
+            sources: NO_SOURCES,
           },
     confirmed: true,
     positionSeconds: state.positionSeconds,

@@ -104,7 +104,30 @@ export const barDeviceLine = cva("flex items-center gap-1 truncate text-[11px] l
   defaultVariants: { remote: false },
 });
 
-export const barSubtitle = cva("text-fg-muted block truncate text-[11.5px] leading-tight");
+export const barSubtitle = cva("text-fg-muted block min-w-0 truncate text-[11.5px] leading-tight");
+
+export const barSubtitleRow = cva("flex min-w-0 items-center gap-1.5");
+
+export const barSourceChip = cva(
+  "bg-warning-vivid/15 text-warning-vivid inline-flex shrink-0 items-center rounded-full px-1.5 text-[10px] leading-4 font-semibold"
+);
+
+export const sourceSegments = cva("border-border inline-flex self-start overflow-hidden rounded-md border");
+
+export const sourceSegment = cva(
+  "focus-visible:ring-primary-500 flex flex-col items-start px-3 py-1 text-left text-xs transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      active: {
+        true: "bg-primary-500/15 text-fg font-semibold",
+        false: "text-fg-muted hover:text-fg cursor-pointer",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);
+
+export const sourceSegmentDetail = cva("text-fg-muted font-mono text-[10px] font-normal");
 
 export const barSubtitleAlbum = cva("hidden @player:inline");
 

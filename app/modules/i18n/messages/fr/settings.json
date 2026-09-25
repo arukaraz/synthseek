@@ -353,6 +353,10 @@
       "label": "Synchronisation des playlists",
       "description": "Lorsqu'une demande de playlist Synthseek se termine (ou grandit), créer / mettre à jour une playlist Plex correspondante avec les pistes importées."
     },
+    "playback": {
+      "label": "Lire depuis Plex",
+      "description": "Permet au lecteur de diffuser une piste depuis Plex lorsque Synthseek n'en a pas le fichier. Votre propre copie est toujours lue en premier."
+    },
     "namingHeader": "Nommage des playlists",
     "usernameAffix": {
       "label": "Affixe du nom d'utilisateur",
@@ -605,7 +609,15 @@
         "linkedAs": "Plex lié en tant que {{username}}",
         "linkedFallback": "Compte Plex lié",
         "linkTimedOut": "Délai de liaison Plex dépassé",
-        "linkFailed": "Échec de la liaison de Plex"
+        "linkFailed": "Échec de la liaison de Plex",
+        "reporting": {
+          "label": "Enregistrer mes écoutes dans Plex",
+          "description": "Chaque piste que vous terminez, ici ou dans une app de musique, compte comme lue dans votre bibliothèque Plex.",
+          "relinkHint": "Liez Plex à nouveau pour que vos écoutes soient enregistrées dans Plex à votre nom.",
+          "relink": "Lier à nouveau",
+          "unauthorized": "Plex n'accepte plus cette liaison. Liez Plex à nouveau.",
+          "unreachable": "Plex était injoignable la dernière fois. Une nouvelle tentative aura lieu à votre prochaine écoute."
+        }
       }
     },
     "listening": {
@@ -874,6 +886,10 @@
       "scrobble-relay": {
         "name": "Relais d'ecoutes",
         "description": "Envoie ce que vous avez ecoute vers vos services d'ecoute connectes."
+      },
+      "playback-source-links": {
+        "name": "Liens des sources de lecture",
+        "description": "Trouve quelles pistes votre serveur multimédia peut aussi lire, pour pouvoir les lire depuis celui-ci."
       }
     }
   },

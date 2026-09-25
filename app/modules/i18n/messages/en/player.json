@@ -49,12 +49,16 @@
     "server": "SERVER",
     "equalizer": "EQ",
     "output": "OUTPUT",
+    "source": "SOURCE",
     "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "no conversion",
     "serverTranscoding": "converting to mp3 {{bitrate}}",
     "serverConverting": "converting",
     "equalizerOff": "off",
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
+  },
+  "source": {
+    "local": "Your library"
   },
   "settings": {
     "title": "Playback settings",
@@ -102,6 +106,10 @@
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Saves data on a slow connection. Off, the original file plays unless the browser cannot decode it."
     },
+    "source": {
+      "caption": "THIS TRACK PLAYS FROM",
+      "hint": "Switches where this track streams from, from the same point. Other tracks keep playing from your library first."
+    },
     "transition": {
       "caption": "TRANSITIONS",
       "mode": "Transition",
@@ -125,7 +133,7 @@
     "autoplay": {
       "caption": "AUTOPLAY",
       "enabled": "Keep playing similar tracks",
-      "hint": "When the queue runs out, tracks from your library that sound like what you chose keep it going. For your account."
+      "hint": "When the queue runs out, tracks from your library that sound like what you chose keep it going."
     }
   },
   "equalizer": {

@@ -58,11 +58,14 @@ import {
 } from "./equalizer";
 import { gainFactorFor, loudnessModeFor } from "./loudness";
 import {
+  asPlayedFrom,
   autoplayIdsAmong,
+  requestedSourceFor,
   insertBeforeAutoplay,
   mirroredPositionSeconds,
   needsConversion,
   nextIndexIn,
+  playingSourceOf,
   previousIndexIn,
   resolveQueueAdditions,
   shuffledOrder,
@@ -132,6 +135,7 @@ let state: PlayerSessionState = {
   fullscreen: false,
   consecutiveFailures: 0,
   started: false,
+  sourceChoice: null,
 };
 
 let mirrorTimer: ReturnType<typeof setInterval> | undefined;
@@ -205,8 +209,17 @@ function ensureConnected(): void {
   });
 }
 
+function sourceFor(track: PlayerTrack): string | null {
+  return requestedSourceFor(track, state.sourceChoice);
+}
+
 function conversionFor(track: PlayerTrack): StreamConversion | null {
-  return streamConversionFor(needsConversion(track.format, canPlayMime), state.conversion);
+  const played = asPlayedFrom(track, playingSourceOf(track, state.sourceChoice));
+  return streamConversionFor(needsConversion(played.format, canPlayMime), state.conversion);
+}
+
+function streamUrlOf(track: PlayerTrack, conversion: StreamConversion | null, fromSeconds: number): string {
+  return streamUrlFor(track.id, conversion, fromSeconds, sourceFor(track));
 }
 
 function skipFadeSeconds(target: PlayerTrack): number {
@@ -234,7 +247,7 @@ function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
     transcoding: converted,
     offsetSeconds: converted ? fromSeconds : 0,
   });
-  const url = streamUrlFor(track.id, conversion, fromSeconds);
+  const url = streamUrlOf(track, conversion, fromSeconds);
   const start = converted ? 0 : fromSeconds;
   if (fadeSeconds > 0) {
     const gainFactor = startLoudness(track, state.queue, state.shuffle, false);
@@ -268,7 +281,7 @@ function maintainPrime(positionSeconds: number, durationSeconds: number): void {
     cancelPrime();
     return;
   }
-  const url = streamUrlFor(track.id, conversionFor(track), 0);
+  const url = streamUrlOf(track, conversionFor(track), 0);
   const fade = fadeAllowed(transitionFadeSeconds(state.transition, "ended"), durationSeconds, track.durationSeconds);
   if (!primeDue(positionSeconds, durationSeconds, fade)) {
     if (primedUrl() !== url) cancelPrime();
@@ -286,7 +299,7 @@ function adoptHandoff(url: string): void {
   const expected = automaticNextIndex();
   const matches = (index: number): boolean => {
     const track = state.queue[index];
-    return track !== undefined && streamUrlFor(track.id, conversionFor(track), 0) === url;
+    return track !== undefined && streamUrlOf(track, conversionFor(track), 0) === url;
   };
   const index = expected !== null && matches(expected) ? expected : state.queue.findIndex((_, at) => matches(at));
   const track = state.queue[index];
@@ -315,7 +328,7 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
   const track = queue[index];
   if (track === undefined) return;
   ensureConnected();
-  const conversion = streamConversionFor(needsConversion(track.format, canPlayMime), state.conversion);
+  const conversion = conversionFor(track);
   const converted = conversion !== null;
   publish({
     queue,
@@ -332,7 +345,7 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
     consecutiveFailures: 0,
   });
   startLoudness(track, queue, state.shuffle, true);
-  loadAt(streamUrlFor(track.id, conversion, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
+  loadAt(streamUrlOf(track, conversion, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
   publishMediaSession(track, mediaHandlers());
 }
 
@@ -759,6 +772,13 @@ export const actions = {
     if (next.enabled === state.conversion.enabled && next.bitrateKbps === state.conversion.bitrateKbps) return;
     publish({ conversion: next });
     persist(CONVERSION_STORAGE_KEY, next);
+    reloadCurrentTrack();
+  },
+  setSource(source: string): void {
+    const track = currentTrack();
+    if (track === null || !track.sources.some((entry) => entry.key === source)) return;
+    if (playingSourceOf(track, state.sourceChoice)?.key === source) return;
+    publish({ sourceChoice: { trackId: track.id, source } });
     reloadCurrentTrack();
   },
   setTransition(next: PlayerTransition): void {

@@ -2,12 +2,14 @@ import { describe, expect, it } from "vitest";
 
 import {
   accumulateListen,
+  asPlayedFrom,
   autoplayDue,
   autoplayIdsAmong,
   autoplaySeeds,
   autoplaySignature,
   beatIsDue,
   beginListen,
+  chosenSourceFor,
   expectedPosition,
   insertBeforeAutoplay,
   isMirroring,
@@ -20,9 +22,12 @@ import {
   nextIndexIn,
   queueChanged,
   playerTrackFrom,
+  playingSourceOf,
   previousIndexIn,
+  requestedSourceFor,
   sessionChanged,
   shuffledOrder,
+  sourceOptionFrom,
   startedSecondsAgo,
   streamUrlFor,
   upcomingOrder,
@@ -83,29 +88,87 @@ function queueOf(length: number): PlayerSessionState["queue"] {
 
 describe("streamUrlFor", () => {
   it("escapes an id so it cannot break out of the path", () => {
-    expect(streamUrlFor("a/b?c", null, 0)).toBe("/api/v1/library/tracks/a%2Fb%3Fc/stream");
+    expect(streamUrlFor("a/b?c", null, 0, null)).toBe("/api/v1/library/tracks/a%2Fb%3Fc/stream");
   });
 
   it("asks for the original file when the browser can decode it", () => {
-    expect(streamUrlFor("t1", null, 90)).toBe("/api/v1/library/tracks/t1/stream");
+    expect(streamUrlFor("t1", null, 90, null)).toBe("/api/v1/library/tracks/t1/stream");
   });
 
   it("asks for a conversion when the browser cannot", () => {
-    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 320 }, 0)).toBe(
+    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 320 }, 0, null)).toBe(
       "/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=320"
     );
   });
 
   it("asks for the bitrate the listener chose when they turned conversion on", () => {
-    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 128 }, 0)).toBe(
+    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 128 }, 0, null)).toBe(
       "/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=128"
     );
   });
 
   it("carries the position so a converted stream can be seeked", () => {
-    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 320 }, 90.7)).toBe(
+    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 320 }, 90.7, null)).toBe(
       "/api/v1/library/tracks/t1/stream?format=mp3&maxBitrate=320&offset=90"
     );
+  });
+
+  it("names the source the listener chose, with or without a conversion", () => {
+    expect(streamUrlFor("t1", null, 90, "plex")).toBe("/api/v1/library/tracks/t1/stream?source=plex");
+    expect(streamUrlFor("t1", { format: "mp3", bitrateKbps: 320 }, 12, "plex")).toBe(
+      "/api/v1/library/tracks/t1/stream?source=plex&format=mp3&maxBitrate=320&offset=12"
+    );
+  });
+});
+
+describe("the source a track plays from", () => {
+  const track = {
+    id: "t1",
+    title: "Song",
+    artist: "Air",
+    album: "Album",
+    albumId: "al1",
+    durationSeconds: 200,
+    format: "mp3",
+    bitrateKbps: 320,
+    lossless: false,
+    tone: "primary" as const,
+    artworkUrl: null,
+    replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    sources: [
+      { key: "local", format: "mp3", bitrateKbps: 320 },
+      { key: "plex", format: "flac", bitrateKbps: 900 },
+    ],
+  };
+
+  it("plays the first source unless the listener chose another for this very track", () => {
+    expect(playingSourceOf(track, null)?.key).toBe("local");
+    expect(playingSourceOf(track, { trackId: "t1", source: "plex" })?.key).toBe("plex");
+    expect(playingSourceOf(track, { trackId: "other", source: "plex" })?.key).toBe("local");
+    expect(chosenSourceFor(track, { trackId: "t1", source: "jellyfin" })).toBeNull();
+  });
+
+  it("asks the server for a source only when it is not the local file by default", () => {
+    expect(requestedSourceFor(track, null)).toBeNull();
+    expect(requestedSourceFor(track, { trackId: "t1", source: "local" })).toBe("local");
+    expect(requestedSourceFor({ ...track, sources: [track.sources[1]!] }, null)).toBe("plex");
+  });
+
+  it("describes the track as the chosen copy, so the chain and the format check follow it", () => {
+    const played = asPlayedFrom(track, playingSourceOf(track, { trackId: "t1", source: "plex" }));
+
+    expect(played).toMatchObject({ format: "flac", bitrateKbps: 900, lossless: true });
+    expect(asPlayedFrom(track, null)).toBe(track);
+  });
+
+  it("names your own copy with the label given and a server by its product name", () => {
+    expect(sourceOptionFrom(track.sources[0]!, "Your library", "MP3").label).toBe("Your library");
+    expect(sourceOptionFrom(track.sources[1]!, "Your library", "FLAC")).toEqual({
+      key: "plex",
+      label: "Plex",
+      detail: "FLAC",
+      local: false,
+    });
   });
 });
 
@@ -249,9 +312,20 @@ describe("playerTrackFrom", () => {
     albumArt: "https://art/1.jpg",
     genres: [],
     playlistIds: [],
+    sources: [
+      { key: "local", format: "flac", bitrate: 1035 },
+      { key: "plex", format: null, bitrate: null },
+    ],
     created_at: new Date("2024-01-01T00:00:00Z"),
     completed_at: null,
   };
+
+  it("carries every source with its own format, falling back to the track's when a source does not say", () => {
+    expect(playerTrackFrom(item).sources).toEqual([
+      { key: "local", format: "flac", bitrateKbps: 1035 },
+      { key: "plex", format: "flac", bitrateKbps: 1035 },
+    ]);
+  });
 
   it("believes the file on disk over what was requested", () => {
     const track = playerTrackFrom(item);

@@ -21,6 +21,13 @@ export function SignalChain({ view, actions, placement = "dock" }: PlayerSignalC
       animate="visible"
       exit="exit"
     >
+      {chain.source !== null ? (
+        <>
+          <span className={chainLabel()}>{t("chain.source")}</span>
+          <span className={chainValue({ tone: chain.source.local ? "neutral" : "warning" })}>{chain.source.label}</span>
+          <ChevronRight className={chainSeparator()} aria-hidden />
+        </>
+      ) : null}
       <span className={chainLabel()}>{t("chain.file")}</span>
       <span
         className={chainValue({ tone: chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted" })}

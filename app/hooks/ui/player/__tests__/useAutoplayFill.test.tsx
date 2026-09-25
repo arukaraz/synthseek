@@ -42,6 +42,7 @@ function track(id: string): PlayerTrack {
     artworkUrl: null,
     albumId: "album-1",
     replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    sources: [],
   };
 }
 
@@ -59,6 +60,7 @@ function libraryItem(id: string) {
     bitrate: 320,
     file_bitrate: null,
     replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    sources: [],
   };
 }
 
@@ -97,6 +99,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     fullscreen: false,
     consecutiveFailures: 0,
     started: true,
+    sourceChoice: null,
     ...overrides,
   };
 }

@@ -25,7 +25,16 @@ import { compressorPresetMatching } from "./compressor";
 import { CONVERTED_BITRATE_KBPS } from "./constants";
 import { deviceKindFrom } from "./device";
 import { appliedEqualizerGains, customPresetMatching, equalizerPresetMatching, headroomDbFor } from "./equalizer";
-import { isMirroring, mirroredPositionSeconds, queueSections, scrobbleStateFrom, visibleQueueIds } from "./helpers";
+import {
+  asPlayedFrom,
+  isMirroring,
+  mirroredPositionSeconds,
+  playingSourceOf,
+  queueSections,
+  scrobbleStateFrom,
+  sourceOptionFrom,
+  visibleQueueIds,
+} from "./helpers";
 import {
   actions,
   currentTrack,
@@ -277,6 +286,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     setAutoplayEnabled: (enabled: boolean) => setProfile({ autoplayEnabled: enabled }),
     startRadio,
     setConversion: actions.setConversion,
+    setSource: actions.setSource,
     setTransition: actions.setTransition,
     toggleModes: actions.toggleModes,
     toggleQueue: actions.toggleQueue,
@@ -319,9 +329,18 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     : mirroring
       ? t("chain.serverConverting")
       : t("chain.serverTranscoding", { bitrate: conversionBitrate });
+  const playedSource = playingSourceOf(track, session.sourceChoice);
+  const shown = asPlayedFrom(track, playedSource);
+  const sourceOptions = track.sources.map((source) =>
+    sourceOptionFrom(
+      source,
+      t("source.local"),
+      t("chain.fileValue", { format: source.format.toUpperCase(), bitrate: source.bitrateKbps })
+    )
+  );
 
   const view: PlayerView = {
-    track,
+    track: shown,
     positionSeconds:
       playingOn !== null && !session.playing ? mirroredPositionSeconds(playingOn, Date.now()) : session.positionSeconds,
     scrubSeconds: session.scrubSeconds,
@@ -334,7 +353,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     devices,
     activeDevice,
     chain: {
-      fileLabel: t("chain.fileValue", { format: track.format.toUpperCase(), bitrate: track.bitrateKbps }),
+      source: sourceOptions.find((option) => option.key === playedSource?.key) ?? null,
+      fileLabel: t("chain.fileValue", { format: shown.format.toUpperCase(), bitrate: shown.bitrateKbps }),
       transcoding: chainTranscoding,
       serverLabel,
       equalizerLabel,
@@ -358,6 +378,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
       preAmpDb: currentUser?.loudnessPreampDb ?? 0,
     },
     autoplay: currentUser?.autoplayEnabled ?? false,
+    sourceOptions,
     conversion: session.conversion,
     transition: session.transition,
     modesOpen: session.modesOpen,

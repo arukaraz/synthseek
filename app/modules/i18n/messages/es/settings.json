@@ -353,6 +353,10 @@
       "label": "Sincronización de listas",
       "description": "Cuando una solicitud de lista de reproducción de Synthseek se completa (o crece), crea o actualiza una lista de Plex equivalente con las canciones importadas."
     },
+    "playback": {
+      "label": "Reproducir desde Plex",
+      "description": "Permite que el reproductor sirva una canción desde Plex cuando Synthseek no tiene su archivo. Tu propia copia siempre suena primero."
+    },
     "namingHeader": "Nomenclatura de listas",
     "usernameAffix": {
       "label": "Afijo de nombre de usuario",
@@ -605,7 +609,15 @@
         "linkedAs": "Plex vinculado como {{username}}",
         "linkedFallback": "Cuenta de Plex vinculada",
         "linkTimedOut": "Se agotó el tiempo de vinculación con Plex",
-        "linkFailed": "No se pudo vincular Plex"
+        "linkFailed": "No se pudo vincular Plex",
+        "reporting": {
+          "label": "Registrar mis escuchas en Plex",
+          "description": "Cada canción que terminas, aquí o en una app de música, cuenta como reproducida en tu biblioteca de Plex.",
+          "relinkHint": "Vuelve a vincular Plex para que tus escuchas se registren en Plex a tu nombre.",
+          "relink": "Vincular de nuevo",
+          "unauthorized": "Plex ya no acepta este vínculo. Vuelve a vincular Plex.",
+          "unreachable": "No se pudo contactar con Plex la última vez. Lo volverá a intentar con tu próxima escucha."
+        }
       }
     },
     "listening": {
@@ -874,6 +886,10 @@
       "scrobble-relay": {
         "name": "Reenvio de escuchas",
         "description": "Envia lo que has escuchado a tus servicios de escucha conectados."
+      },
+      "playback-source-links": {
+        "name": "Enlaces de fuentes de reproducción",
+        "description": "Busca qué canciones tuyas puede reproducir también tu servidor de medios, para poder reproducirlas desde allí."
       }
     }
   },

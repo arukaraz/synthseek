@@ -69,6 +69,27 @@ describe("the playback settings panel", () => {
     expect(within(dialog).getByText(enPlayer.settings.conversion.caption)).toBeInTheDocument();
   });
 
+  it("offers no source choice for a track only one source can play", () => {
+    renderMenu();
+
+    expect(screen.queryByRole("radiogroup", { name: enPlayer.settings.source.caption })).not.toBeInTheDocument();
+  });
+
+  it("offers every source that has the track, marks the one playing and switches on a pick", async () => {
+    const local = { key: "local", label: "Your library", detail: "MP3 · 320 kbps", local: true };
+    const plex = { key: "plex", label: "Plex", detail: "FLAC · 900 kbps", local: false };
+    const base = createPlayerView();
+    const { actions, user } = renderMenu({}, { sourceOptions: [local, plex], chain: { ...base.chain, source: local } });
+
+    const group = within(screen.getByRole("radiogroup", { name: enPlayer.settings.source.caption }));
+    expect(group.getByRole("radio", { name: /Your library/ })).toHaveAttribute("aria-checked", "true");
+    expect(group.getByRole("radio", { name: /Plex/ })).toHaveAttribute("aria-checked", "false");
+
+    await user.click(group.getByRole("radio", { name: /Plex/ }));
+
+    expect(actions.setSource).toHaveBeenCalledWith("plex");
+  });
+
   it("turns autoplay on and off for the account from its own switch", async () => {
     const { actions, user } = renderMenu({}, { autoplay: false });
 

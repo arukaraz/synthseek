@@ -49,12 +49,16 @@
     "server": "SERVEUR",
     "equalizer": "EQ",
     "output": "SORTIE",
+    "source": "SOURCE",
     "fileValue": "{{format}} · {{bitrate}} kbps",
     "serverDirect": "sans conversion",
     "serverTranscoding": "conversion en mp3 {{bitrate}}",
     "serverConverting": "conversion",
     "equalizerOff": "désactivé",
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
+  },
+  "source": {
+    "local": "Votre bibliothèque"
   },
   "settings": {
     "title": "Réglages de lecture",
@@ -102,6 +106,10 @@
       "bitrateValue": "{{kbps}} kbps",
       "hint": "Économise des données sur une connexion lente. Désactivé, le fichier d'origine est lu sauf si le navigateur ne peut pas le décoder."
     },
+    "source": {
+      "caption": "CETTE PISTE VIENT DE",
+      "hint": "Change la provenance de cette piste, au même endroit. Les autres pistes sont toujours lues d'abord depuis votre bibliothèque."
+    },
     "transition": {
       "caption": "TRANSITIONS",
       "mode": "Transition",
@@ -125,7 +133,7 @@
     "autoplay": {
       "caption": "LECTURE AUTOMATIQUE",
       "enabled": "Continuer avec des pistes similaires",
-      "hint": "Quand la file est vide, des pistes de votre bibliothèque proches de ce que vous avez choisi prennent le relais. Pour votre compte."
+      "hint": "Quand la file est vide, des pistes de votre bibliothèque proches de ce que vous avez choisi prennent le relais."
     }
   },
   "equalizer": {

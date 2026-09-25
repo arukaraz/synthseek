@@ -57,6 +57,10 @@ vi.mock("../../hooks/usePlexLink", () => ({
   usePlexLink: () => ({ start: plexLinkStart, reset: vi.fn(), phase: "idle", isPending: plexLinkPending }),
 }));
 
+vi.mock("../PlexReportingRow", () => ({
+  PlexReportingRow: () => <div data-testid="plex-reporting-row" />,
+}));
+
 vi.mock("@features/spotify-library", () => ({
   SpotifyMark: () => <span data-testid="spotify-mark" />,
 }));
@@ -117,6 +121,7 @@ describe("ConnectedAccountsCard", () => {
     render(<ConnectedAccountsCard />);
 
     expect(screen.getByText(enSettings.profile.connected.plex.notLinked)).toBeInTheDocument();
+    expect(screen.queryByTestId("plex-reporting-row")).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: enSettings.profile.connected.connect }));
     expect(plexLinkStart).toHaveBeenCalledTimes(1);
   });
@@ -133,6 +138,7 @@ describe("ConnectedAccountsCard", () => {
     render(<ConnectedAccountsCard />);
 
     expect(screen.getByText("plexuser")).toBeInTheDocument();
+    expect(screen.getByTestId("plex-reporting-row")).toBeInTheDocument();
     const unlink = screen.getByRole("button", { name: enSettings.profile.connected.disconnect });
     expect(unlink).toBeEnabled();
     await userEvent.click(unlink);

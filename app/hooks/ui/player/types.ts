@@ -62,6 +62,12 @@ export interface PlayerSessionState {
   fullscreen: boolean;
   consecutiveFailures: number;
   started: boolean;
+  sourceChoice: SourceChoice | null;
+}
+
+export interface SourceChoice {
+  trackId: string;
+  source: string;
 }
 
 export interface EqualizerSettings {

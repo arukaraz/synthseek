@@ -9,6 +9,11 @@ export interface PlexMarkProps {
   size?: number;
 }
 
+export interface PlexReportingRowProps {
+  onRelink: () => void;
+  relinking: boolean;
+}
+
 export type ListeningConnectionView = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
 
 export type ListeningService = ListeningConnectionView["service"];

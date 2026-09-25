@@ -15,6 +15,7 @@ export const JOB_NAME_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
   "library-scan": "jobs.registry.library-scan.name",
   "library-loudness": "jobs.registry.library-loudness.name",
   "scrobble-relay": "jobs.registry.scrobble-relay.name",
+  "playback-source-links": "jobs.registry.playback-source-links.name",
 };
 
 export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
@@ -26,6 +27,7 @@ export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings"
   "library-scan": "jobs.registry.library-scan.description",
   "library-loudness": "jobs.registry.library-loudness.description",
   "scrobble-relay": "jobs.registry.scrobble-relay.description",
+  "playback-source-links": "jobs.registry.playback-source-links.description",
 };
 
 export const MS_PER_SECOND = 1000;

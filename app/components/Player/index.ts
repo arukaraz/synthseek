@@ -24,6 +24,8 @@ export type {
   PlayerRepeat,
   PlayerScrobbleState,
   PlayerSignalChain,
+  PlayerSource,
+  PlayerSourceOption,
   PlayerTone,
   PlayerTrack,
   PlayerTransition,

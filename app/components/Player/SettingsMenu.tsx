@@ -12,6 +12,7 @@ import { CompressorSection } from "./CompressorSection";
 import { ConversionSection } from "./ConversionSection";
 import { EqualizerSection } from "./EqualizerSection";
 import { LoudnessSection } from "./LoudnessSection";
+import { SourceSection } from "./SourceSection";
 import { TransitionSection } from "./TransitionSection";
 import { SETTINGS_PANEL_WIDTH_PX, SETTINGS_TOGGLE_SELECTOR } from "./constants";
 import { labelled, panelClosesUpward, panelEdge, returnFocusTo } from "./helpers";
@@ -64,6 +65,7 @@ export function SettingsMenu({ view, actions, chain, anchored = false, hanging =
             </button>
           </div>
           <div className={settingsPanel()}>
+            <SourceSection view={view} actions={actions} />
             <EqualizerSection view={view} actions={actions} />
             <CompressorSection view={view} actions={actions} />
             <LoudnessSection view={view} actions={actions} />

@@ -1,4 +1,10 @@
-import type { CompressorPresetId, EqualizerPresetId, TransitionCurve, TransitionMode } from "@components/Player";
+import type {
+  CompressorPresetId,
+  EqualizerPresetId,
+  PlayerSource,
+  TransitionCurve,
+  TransitionMode,
+} from "@components/Player";
 
 import type { CompressorParam, CompressorParams } from "./types";
 
@@ -104,6 +110,16 @@ export const NO_REPLAY_GAIN = {
 } as const;
 
 export const NO_ALBUM_ID = "";
+
+export const NO_SOURCES: readonly PlayerSource[] = [];
+
+export const LOSSLESS_FORMATS: readonly string[] = ["flac", "wav", "alac"];
+
+export const LOCAL_SOURCE = "local";
+
+export const SOURCE_NAMES: Readonly<Record<string, string>> = {
+  plex: "Plex",
+};
 
 export const GAIN_RAMP_SECONDS = 0.05;
 
