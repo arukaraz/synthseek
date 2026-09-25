@@ -407,6 +407,43 @@
       "notConfigured": "Nicht konfiguriert"
     }
   },
+  "mediaServers": {
+    "url": "URL",
+    "navidrome": {
+      "title": "Navidrome",
+      "description": "Spielt Titel von Navidrome ab, wenn Synthseek keine Datei dafür hat.",
+      "urlPlaceholder": "http://localhost:4533",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "syntheticPaths": "Navidrome verbirgt die Pfade seiner Dateien, daher werden manche Titel nicht gefunden. Öffne in Navidrome die Liste der Player (Players), wähle Synthseek und schalte \"Report Real Path\" ein."
+    },
+    "jellyfin": {
+      "title": "Jellyfin",
+      "description": "Spielt Titel von Jellyfin ab, wenn Synthseek keine Datei dafür hat.",
+      "urlPlaceholder": "http://localhost:8096",
+      "apiKey": "API-Schlüssel",
+      "apiKeyHelper": "Erstelle einen in Jellyfin unter Dashboard, API-Schlüssel."
+    },
+    "playback": {
+      "label": "Von {{server}} abspielen",
+      "description": "Deine eigene Kopie wird immer zuerst abgespielt."
+    },
+    "test": {
+      "action": "Verbindung testen",
+      "testing": "Wird getestet...",
+      "ok": "Verbunden",
+      "unauthorized": "Der Server hat diese Zugangsdaten nicht akzeptiert",
+      "failed": "Der Server ist nicht erreichbar"
+    },
+    "order": {
+      "title": "Wiedergabereihenfolge",
+      "description": "Synthseek spielt zuerst die eigene Datei und versucht dann diese Server der Reihe nach.",
+      "local": "Synthseek-Bibliothek",
+      "notPlaying": "Wiedergabe aus",
+      "moveUp": "{{server}} nach oben",
+      "moveDown": "{{server}} nach unten"
+    }
+  },
   "lidarr": {
     "title": "Lidarr",
     "description": "Optional. Übergib Alben an eine bestehende Lidarr-Instanz.",
@@ -618,6 +655,19 @@
           "unauthorized": "Plex akzeptiert diese Verknüpfung nicht mehr. Verknüpfe Plex erneut.",
           "unreachable": "Plex war beim letzten Mal nicht erreichbar. Bei deiner nächsten Wiedergabe wird es erneut versucht."
         }
+      },
+      "server": {
+        "notLinked": "Nicht verknüpft",
+        "linkedAs": "Verknüpft als {{username}}",
+        "linkHint": "Melde dich mit deinem {{server}}-Konto an, damit deine Wiedergaben dort unter deinem Namen erfasst werden. Dein Passwort wird nicht gespeichert.",
+        "username": "Benutzername",
+        "password": "Passwort",
+        "reporting": "Meine Wiedergaben in {{server}} erfassen",
+        "linked": "{{server}} verknüpft",
+        "refused": "{{server}} hat diesen Benutzernamen oder dieses Passwort nicht akzeptiert",
+        "linkUnreachable": "{{server}} ist nicht erreichbar",
+        "unauthorized": "Der Server akzeptiert diese Verknüpfung nicht mehr. Verknüpfe ihn erneut.",
+        "unreachable": "Der Server war beim letzten Mal nicht erreichbar. Bei deiner nächsten Wiedergabe wird es erneut versucht."
       }
     },
     "listening": {
@@ -1045,7 +1095,7 @@
       "copyFailed": "Kopieren fehlgeschlagen"
     },
     "coverage": {
-      "line": "{{streamable}} Titel mit hinterlegter Datei · {{missing}} ohne"
+      "line": "{{streamable}} Titel, die Apps abspielen können · {{missing}}, die sie nicht abspielen können"
     },
     "disabled": {
       "admin": "Aktiviere dies, damit Musik-Apps deine Bibliothek erreichen.",

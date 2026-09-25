@@ -407,6 +407,43 @@
       "notConfigured": "Not configured"
     }
   },
+  "mediaServers": {
+    "url": "URL",
+    "navidrome": {
+      "title": "Navidrome",
+      "description": "Play tracks from Navidrome when Synthseek has no file for them.",
+      "urlPlaceholder": "http://localhost:4533",
+      "username": "Username",
+      "password": "Password",
+      "syntheticPaths": "Navidrome is hiding its file paths, so some tracks will not be found. In Navidrome, open Players, pick Synthseek, and turn on \"Report Real Path\"."
+    },
+    "jellyfin": {
+      "title": "Jellyfin",
+      "description": "Play tracks from Jellyfin when Synthseek has no file for them.",
+      "urlPlaceholder": "http://localhost:8096",
+      "apiKey": "API key",
+      "apiKeyHelper": "Create one in Jellyfin under Dashboard, API Keys."
+    },
+    "playback": {
+      "label": "Play from {{server}}",
+      "description": "Your own copy is always played first."
+    },
+    "test": {
+      "action": "Test connection",
+      "testing": "Testing...",
+      "ok": "Connected",
+      "unauthorized": "The server did not accept these credentials",
+      "failed": "The server could not be reached"
+    },
+    "order": {
+      "title": "Playback order",
+      "description": "Synthseek plays its own file first, then tries these servers in order.",
+      "local": "Synthseek library",
+      "notPlaying": "Playback off",
+      "moveUp": "Move {{server}} up",
+      "moveDown": "Move {{server}} down"
+    }
+  },
   "lidarr": {
     "title": "Lidarr",
     "description": "Optional. Hand off albums to an existing Lidarr instance.",
@@ -618,6 +655,19 @@
           "unauthorized": "Plex no longer accepts this link. Link Plex again.",
           "unreachable": "Plex could not be reached the last time. It will try again with your next play."
         }
+      },
+      "server": {
+        "notLinked": "Not linked",
+        "linkedAs": "Linked as {{username}}",
+        "linkHint": "Sign in with your {{server}} account so your plays are recorded there under your name. Your password is not stored.",
+        "username": "Username",
+        "password": "Password",
+        "reporting": "Record my plays in {{server}}",
+        "linked": "{{server}} linked",
+        "refused": "{{server}} did not accept that username or password",
+        "linkUnreachable": "{{server}} could not be reached",
+        "unauthorized": "The server no longer accepts this link. Link it again.",
+        "unreachable": "The server could not be reached the last time. It will try again with your next play."
       }
     },
     "listening": {
@@ -1045,7 +1095,7 @@
       "copyFailed": "Could not copy"
     },
     "coverage": {
-      "line": "{{streamable}} tracks with a recorded file · {{missing}} without one"
+      "line": "{{streamable}} tracks apps can play · {{missing}} they cannot"
     },
     "disabled": {
       "admin": "Turn this on to let music apps reach your library.",

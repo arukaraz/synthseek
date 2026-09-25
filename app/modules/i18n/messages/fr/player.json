@@ -214,6 +214,7 @@
   },
   "notice": {
     "skipping": "« {{title}} » a échoué, passage à la suivante",
+    "tryingSource": "« {{title}} » n'a pas pu être lu depuis {{failed}}, essai avec {{next}}",
     "queueEnd": "Fin de la file",
     "autoplayBlocked": "Le navigateur a bloqué la lecture. Appuyez sur lecture pour démarrer.",
     "tooManyFailures": "Plusieurs pistes ont échoué de suite, la lecture s'est arrêtée",

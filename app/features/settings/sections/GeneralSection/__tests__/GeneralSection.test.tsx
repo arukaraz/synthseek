@@ -46,7 +46,7 @@ vi.mock("@hooks/api/queries/useSubsonicStatus", () => ({
       enabled: false,
       basePath: "/api/v1/subsonic",
       streamableTracks: 0,
-      tracksWithoutPath: 0,
+      unplayableTracks: 0,
       credentialsNeedingRotation: 0,
     }),
 }));

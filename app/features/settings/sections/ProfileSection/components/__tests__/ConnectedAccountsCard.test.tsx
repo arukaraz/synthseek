@@ -61,6 +61,26 @@ vi.mock("../PlexReportingRow", () => ({
   PlexReportingRow: () => <div data-testid="plex-reporting-row" />,
 }));
 
+interface SourceAccount {
+  server: string;
+  linkMethod: "plex" | "password";
+  connected: boolean;
+  externalUsername: string | null;
+  reportEnabled: boolean;
+  lastFailure: string | null;
+}
+let accountsQuery: MockQueryResult<SourceAccount[] | undefined> = createMockQuery<SourceAccount[] | undefined>([]);
+
+vi.mock("@hooks/api", () => ({
+  usePlaybackSourceAccounts: () => accountsQuery,
+}));
+
+vi.mock("../ServerAccountRow", () => ({
+  ServerAccountRow: ({ account }: { account: { server: string } }) => (
+    <div data-testid={`server-row-${account.server}`} />
+  ),
+}));
+
 vi.mock("@features/spotify-library", () => ({
   SpotifyMark: () => <span data-testid="spotify-mark" />,
 }));
@@ -77,6 +97,7 @@ afterEach(() => {
   authUser = createMockUser({ plexLinked: false, hasPassword: true });
   configQuery = createMockQuery<SpotifyConfig | undefined>({ spotify: { enabled: false, configured: false } });
   statusQuery = createMockQuery<SpotifyStatus | undefined>({ connected: false });
+  accountsQuery = createMockQuery<SourceAccount[] | undefined>([]);
   plexLinkPending = false;
 });
 
@@ -179,5 +200,19 @@ describe("ConnectedAccountsCard", () => {
     authUser = createMockUser({ plexLinked: true, hasPassword: true, plex_username: null });
     render(<ConnectedAccountsCard />);
     expect(screen.getByText(enSettings.profile.connected.plex.linked)).toBeInTheDocument();
+  });
+
+  it("offers a sign-in row for each server that links by password, and none for Plex", () => {
+    const account = { connected: false, externalUsername: null, reportEnabled: false, lastFailure: null };
+    accountsQuery = createMockQuery<SourceAccount[] | undefined>([
+      { ...account, server: "plex", linkMethod: "plex" },
+      { ...account, server: "navidrome", linkMethod: "password" },
+      { ...account, server: "jellyfin", linkMethod: "password" },
+    ]);
+    render(<ConnectedAccountsCard />);
+
+    expect(screen.getByTestId("server-row-navidrome")).toBeInTheDocument();
+    expect(screen.getByTestId("server-row-jellyfin")).toBeInTheDocument();
+    expect(screen.queryByTestId("server-row-plex")).not.toBeInTheDocument();
   });
 });

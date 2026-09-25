@@ -44,6 +44,12 @@
     "smartSearchSaved": "Réglages de recherche intelligente enregistrés",
     "slskdSaved": "Connexion Slskd mise à jour",
     "lidarrSaved": "Connexion Lidarr mise à jour",
+    "navidromeSaved": "Connexion Navidrome mise à jour",
+    "navidromeFailed": "Échec de la mise à jour des réglages Navidrome",
+    "jellyfinSaved": "Connexion Jellyfin mise à jour",
+    "jellyfinFailed": "Échec de la mise à jour des réglages Jellyfin",
+    "playbackOrderSaved": "Ordre de lecture mis à jour",
+    "playbackOrderFailed": "Échec de la mise à jour de l'ordre de lecture",
     "enrichmentSaved": "Réglages d'enrichissement mis à jour",
     "spotifySaved": "Réglages de l'application Spotify mis à jour",
     "wantedSaved": "Réglages du balayage de suivi enregistrés",
@@ -321,6 +327,7 @@
     "commandFailed": "Impossible de joindre cet appareil",
     "listeningConnectFailed": "Impossible de connecter ce service d'ecoute",
     "listeningDisconnectFailed": "Impossible de deconnecter ce service d'ecoute",
-    "listeningSaveFailed": "Impossible d'enregistrer ce parametre d'ecoute"
+    "listeningSaveFailed": "Impossible d'enregistrer ce parametre d'ecoute",
+    "sourceLinkFailed": "Impossible de modifier le lien de ce compte"
   }
 }

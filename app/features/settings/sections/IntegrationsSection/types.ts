@@ -1,5 +1,7 @@
 import type { ParseKeys } from "i18next";
 
+import type { PlaybackServerKey } from "@utils/playback-servers";
+
 export type ConnectionsEnrichment = {
   lastfmApiKey: string;
   lastfmApiSecret: string;
@@ -130,4 +132,32 @@ export interface LibrarySourcesCardProps {
 
 export interface StagedReleaseListProps {
   enabled: boolean;
+}
+
+export type ServerTestOutcome = "ok" | "unauthorized" | "failed";
+
+interface NavidromeConnection {
+  url: string;
+  username: string;
+  password: string;
+  playback: boolean;
+}
+
+interface JellyfinConnection {
+  url: string;
+  apiKey: string;
+  playback: boolean;
+}
+
+export interface NavidromeCardProps {
+  initial: NavidromeConnection;
+}
+
+export interface JellyfinCardProps {
+  initial: JellyfinConnection;
+}
+
+export interface PlaybackOrderCardProps {
+  order: readonly PlaybackServerKey[];
+  playing: Readonly<Record<PlaybackServerKey, boolean>>;
 }

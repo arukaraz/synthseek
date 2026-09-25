@@ -32,6 +32,7 @@ import {
   playingSourceOf,
   queueSections,
   scrobbleStateFrom,
+  sourceLabelFor,
   sourceOptionFrom,
   visibleQueueIds,
 } from "./helpers";
@@ -150,6 +151,12 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   useEffect(() => {
     setMessages({
       skipping: (title) => t("notice.skipping", { title }),
+      tryingSource: (title, failedSource, nextSource) =>
+        t("notice.tryingSource", {
+          title,
+          failed: sourceLabelFor(failedSource, t("source.local")),
+          next: sourceLabelFor(nextSource, t("source.local")),
+        }),
       resumedFrom: (client) => t("notice.resumed", { client }),
       handOverFailed: (device) => t("notice.handOverFailed", { device }),
       deviceGone: t("notice.deviceGone"),

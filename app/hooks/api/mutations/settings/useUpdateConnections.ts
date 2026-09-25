@@ -32,6 +32,38 @@ export function useTestLidarr() {
   return trpc.settings.testLidarr.useMutation();
 }
 
+export function useUpdateConnectionsNavidrome() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateConnectionsNavidrome.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      utils.playback.sources.accounts.invalidate();
+      toast.success(i18n.t("mutations:settings.navidromeSaved"));
+    },
+    onError: (error) => errorToast(error, "settings.navidromeFailed"),
+  });
+}
+
+export function useTestNavidrome() {
+  return trpc.settings.testNavidrome.useMutation();
+}
+
+export function useUpdateConnectionsJellyfin() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateConnectionsJellyfin.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      utils.playback.sources.accounts.invalidate();
+      toast.success(i18n.t("mutations:settings.jellyfinSaved"));
+    },
+    onError: (error) => errorToast(error, "settings.jellyfinFailed"),
+  });
+}
+
+export function useTestJellyfin() {
+  return trpc.settings.testJellyfin.useMutation();
+}
+
 export function useUpdateConnectionsPlex() {
   const utils = trpc.useUtils();
   return trpc.settings.updateConnectionsPlex.useMutation({

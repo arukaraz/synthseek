@@ -60,6 +60,9 @@ import { gainFactorFor, loudnessModeFor } from "./loudness";
 import {
   asPlayedFrom,
   autoplayIdsAmong,
+  convertibleSource,
+  failedSourcesFor,
+  fallbackSourceFor,
   requestedSourceFor,
   insertBeforeAutoplay,
   mirroredPositionSeconds,
@@ -136,11 +139,13 @@ let state: PlayerSessionState = {
   consecutiveFailures: 0,
   started: false,
   sourceChoice: null,
+  failedSources: null,
 };
 
 let mirrorTimer: ReturnType<typeof setInterval> | undefined;
 let skipTimer: ReturnType<typeof setTimeout> | undefined;
 let connected = false;
+let loadStarts = true;
 let loudness: LoudnessPreferences = { enabled: true, preAmpDb: 0 };
 let activeLoudnessMode: LoudnessMode = "track";
 
@@ -214,7 +219,9 @@ function sourceFor(track: PlayerTrack): string | null {
 }
 
 function conversionFor(track: PlayerTrack): StreamConversion | null {
-  const played = asPlayedFrom(track, playingSourceOf(track, state.sourceChoice));
+  const source = playingSourceOf(track, state.sourceChoice);
+  if (!convertibleSource(source)) return null;
+  const played = asPlayedFrom(track, source);
   return streamConversionFor(needsConversion(played.format, canPlayMime), state.conversion);
 }
 
@@ -249,6 +256,7 @@ function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
   });
   const url = streamUrlOf(track, conversion, fromSeconds);
   const start = converted ? 0 : fromSeconds;
+  loadStarts = true;
   if (fadeSeconds > 0) {
     const gainFactor = startLoudness(track, state.queue, state.shuffle, false);
     crossfadeTo(
@@ -345,6 +353,7 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
     consecutiveFailures: 0,
   });
   startLoudness(track, queue, state.shuffle, true);
+  loadStarts = false;
   loadAt(streamUrlOf(track, conversion, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
   publishMediaSession(track, mediaHandlers());
 }
@@ -400,6 +409,21 @@ function handleFailure(reason: "load" | "stall" | "autoplay"): void {
     return;
   }
 
+  const fallback = fallbackSourceFor(track, state.sourceChoice, state.failedSources);
+  const failing = playingSourceOf(track, state.sourceChoice);
+  if (fallback !== null && failing !== null) {
+    clearTimeout(skipTimer);
+    publish({
+      sourceChoice: { trackId: track.id, source: fallback.key },
+      failedSources: { trackId: track.id, sources: [...failedSourcesFor(track, state.failedSources), failing.key] },
+      loading: false,
+    });
+    notify(messages.tryingSource(track.title, failing.key, fallback.key), "warning");
+    if (loadStarts) playAt(state.index, state.positionSeconds);
+    else armAt(state.queue, state.index, state.positionSeconds, [...state.shuffleOrder]);
+    return;
+  }
+
   const failures = state.consecutiveFailures + 1;
   publish({ consecutiveFailures: failures, loading: false, playing: false });
   if (failures >= MAX_CONSECUTIVE_FAILURES) {
@@ -415,6 +439,7 @@ function handleFailure(reason: "load" | "stall" | "autoplay"): void {
 
 export interface PlayerMessages {
   skipping: (title: string) => string;
+  tryingSource: (title: string, failedSource: string, nextSource: string) => string;
   resumedFrom: (client: string) => string;
   handOverFailed: (device: string) => string;
   deviceGone: string;
@@ -425,6 +450,7 @@ export interface PlayerMessages {
 
 let lastMessages: PlayerMessages = {
   skipping: (title) => title,
+  tryingSource: (title) => title,
   resumedFrom: (client) => client,
   handOverFailed: (device) => device,
   deviceGone: "",

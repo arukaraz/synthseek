@@ -16,6 +16,8 @@ export const plexChip = cva(
   "bg-plex-500/15 text-plex-400 flex size-9 shrink-0 items-center justify-center rounded-full"
 );
 
+export const serverChip = cva("bg-fg/10 text-fg/70 flex size-9 shrink-0 items-center justify-center rounded-full");
+
 export const listeningChip = cva("flex size-9 shrink-0 items-center justify-center rounded-full bg-current/15", {
   variants: {
     service: {

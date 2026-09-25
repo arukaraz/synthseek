@@ -14,6 +14,14 @@ export interface PlexReportingRowProps {
   relinking: boolean;
 }
 
+type SourceAccountView = inferRouterOutputs<AppRouter>["playback"]["sources"]["accounts"][number];
+
+export type SourceLinkOutcome = inferRouterOutputs<AppRouter>["playback"]["sources"]["link"]["outcome"];
+
+export interface ServerAccountRowProps {
+  account: SourceAccountView;
+}
+
 export type ListeningConnectionView = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
 
 export type ListeningService = ListeningConnectionView["service"];

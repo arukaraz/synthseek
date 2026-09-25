@@ -15,23 +15,23 @@ The engine is source-agnostic. It owns the phases and their timing, and each dow
 
 A request moves through a fixed sequence. The status you see on the requests screen is the phase it is currently in.
 
-| Status               | What is happening                                                 |
-| -------------------- | ----------------------------------------------------------------- |
-| `queued`             | Waiting its turn.                                                 |
-| `pending_approval`   | Held because a member's requests need administrator approval.     |
-| `searching`          | Querying the enabled download sources.                            |
-| `pending_download`   | A candidate was chosen, waiting for a download slot.              |
-| `downloading`        | Transferring.                                                     |
-| `paused`             | You parked it. It stays here until you resume.                    |
-| `pending_import`     | Downloaded, waiting for an import slot.                           |
-| `importing`          | Being verified, tagged, and filed.                                |
-| `syncing_plex`       | The playlist it belongs to is being rebuilt on your media server. |
-| `complete`           | In your library.                                                  |
-| `partially_complete` | Some tracks in the group made it, some did not.                   |
-| `failed`             | Did not make it. Carries a reason.                                |
-| `cancelled`          | You stopped it.                                                   |
-| `delegated`          | Handed to Lidarr, which now owns it.                              |
-| `in_progress`        | A group with work still moving.                                   |
+| Status               | What is happening                                             |
+| -------------------- | ------------------------------------------------------------- |
+| `queued`             | Waiting its turn.                                             |
+| `pending_approval`   | Held because a member's requests need administrator approval. |
+| `searching`          | Querying the enabled download sources.                        |
+| `pending_download`   | A candidate was chosen, waiting for a download slot.          |
+| `downloading`        | Transferring.                                                 |
+| `paused`             | You parked it. It stays here until you resume.                |
+| `pending_import`     | Downloaded, waiting for an import slot.                       |
+| `importing`          | Being verified, tagged, and filed.                            |
+| `syncing_plex`       | The playlist it belongs to is being rebuilt on Plex.          |
+| `complete`           | In your library.                                              |
+| `partially_complete` | Some tracks in the group made it, some did not.               |
+| `failed`             | Did not make it. Carries a reason.                            |
+| `cancelled`          | You stopped it.                                               |
+| `delegated`          | Handed to Lidarr, which now owns it.                          |
+| `in_progress`        | A group with work still moving.                               |
 
 ## Step 1, search
 
@@ -98,11 +98,11 @@ Identifying a track against MusicBrainz happens during the import when the audio
 
 Imports are strictly serialised. One import runs at a time.
 
-## Step 6, media server
+## Step 6, Plex
 
-After a successful import, your media server is asked to rescan the affected part of the library.
+After a successful import, Plex is asked to rescan the affected part of the library.
 
-If the track belongs to a playlist, that playlist is reconciled on the media server. Reconciliation is incremental: as more tracks of a playlist finish over time, they are added to the remote playlist as they arrive rather than waiting for the whole set.
+If the track belongs to a playlist, that playlist is reconciled on Plex. Reconciliation is incremental: as more tracks of a playlist finish over time, they are added to the remote playlist as they arrive rather than waiting for the whole set.
 
 Currently, playlist reconciliation only adds. It never removes.
 

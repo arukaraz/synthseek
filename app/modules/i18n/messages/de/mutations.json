@@ -44,6 +44,12 @@
     "smartSearchSaved": "Einstellungen für die intelligente Suche gespeichert",
     "slskdSaved": "Slskd-Verbindung aktualisiert",
     "lidarrSaved": "Lidarr-Verbindung aktualisiert",
+    "navidromeSaved": "Navidrome-Verbindung aktualisiert",
+    "navidromeFailed": "Navidrome-Einstellungen konnten nicht aktualisiert werden",
+    "jellyfinSaved": "Jellyfin-Verbindung aktualisiert",
+    "jellyfinFailed": "Jellyfin-Einstellungen konnten nicht aktualisiert werden",
+    "playbackOrderSaved": "Wiedergabereihenfolge aktualisiert",
+    "playbackOrderFailed": "Wiedergabereihenfolge konnte nicht aktualisiert werden",
     "enrichmentSaved": "Anreicherungseinstellungen aktualisiert",
     "spotifySaved": "Spotify-App-Einstellungen aktualisiert",
     "wantedSaved": "Wanted-Durchlauf-Einstellungen gespeichert",
@@ -321,6 +327,7 @@
     "commandFailed": "Dieses Gerät war nicht erreichbar",
     "listeningConnectFailed": "Dieser Hoerdienst konnte nicht verbunden werden",
     "listeningDisconnectFailed": "Dieser Hoerdienst konnte nicht getrennt werden",
-    "listeningSaveFailed": "Diese Hoereinstellung konnte nicht gespeichert werden"
+    "listeningSaveFailed": "Diese Hoereinstellung konnte nicht gespeichert werden",
+    "sourceLinkFailed": "Die Verknüpfung dieses Kontos konnte nicht geändert werden"
   }
 }

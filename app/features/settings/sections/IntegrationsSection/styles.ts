@@ -20,6 +20,12 @@ export const disabledOverlay = cva("flex flex-col gap-4 transition-opacity", {
 
 export const stagedListHeader = cva("flex items-center justify-between gap-3");
 
+export const pathsNotice = cva("text-warning-vivid text-xs");
+
+export const orderRow = cva("border-fg/10 bg-fg/[0.03] flex items-center gap-3 rounded-lg border px-3 py-2");
+
+export const orderPosition = cva("text-fg/50 w-4 text-center text-xs tabular-nums");
+
 export const stagedList = cva("flex max-h-96 flex-col gap-2 overflow-y-auto pr-1");
 
 export const stagedRow = cva("border-fg/10 bg-fg/[0.03] flex items-start gap-3 rounded-lg border p-3");

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { SpotifyMark } from "@features/spotify-library";
+import { usePlaybackSourceAccounts } from "@hooks/api";
 import { usePlexUnlink } from "@hooks/api/mutations/auth/usePlexUnlink";
 import { useSpotifyConnect, useSpotifyDisconnect } from "@hooks/api/mutations/spotify/useSpotifyConnect";
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
@@ -15,6 +16,7 @@ import { usePlexLink } from "../hooks/usePlexLink";
 import { connectedRow, plexChip, spotifyChip } from "../styles";
 import { PlexMark } from "./PlexMark";
 import { PlexReportingRow } from "./PlexReportingRow";
+import { ServerAccountRow } from "./ServerAccountRow";
 
 export function ConnectedAccountsCard() {
   const { t } = useTranslation("settings");
@@ -25,11 +27,14 @@ export function ConnectedAccountsCard() {
   const disconnect = useSpotifyDisconnect();
   const plexLink = usePlexLink();
   const plexUnlink = usePlexUnlink();
+  const sourceAccounts = usePlaybackSourceAccounts();
 
   const spotifyEnabled = config.data?.spotify.enabled ?? false;
   const configured = config.data?.spotify.configured ?? false;
   const connected = status.data?.connected ?? false;
   const externalUsername = status.data?.externalUsername;
+
+  const passwordAccounts = (sourceAccounts.data ?? []).filter((account) => account.linkMethod === "password");
 
   const plexLinked = currentUser?.plexLinked ?? false;
   const canUnlinkPlex = plexLinked && (currentUser?.hasPassword ?? false);
@@ -101,6 +106,10 @@ export function ConnectedAccountsCard() {
       {currentUser && plexLinked ? (
         <PlexReportingRow onRelink={() => plexLink.start()} relinking={plexLink.isPending} />
       ) : null}
+
+      {passwordAccounts.map((account) => (
+        <ServerAccountRow key={account.server} account={account} />
+      ))}
 
       {!spotifyEnabled && !currentUser ? <p className="text-fg/60 text-sm">{t("profile.connected.empty")}</p> : null}
     </SettingsCard>

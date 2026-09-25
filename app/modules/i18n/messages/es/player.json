@@ -214,6 +214,7 @@
   },
   "notice": {
     "skipping": "«{{title}}» falló, saltando a la siguiente",
+    "tryingSource": "«{{title}}» no sonó desde {{failed}}, probando {{next}}",
     "queueEnd": "Fin de la cola",
     "autoplayBlocked": "El navegador bloqueó la reproducción. Pulsa play para empezar.",
     "tooManyFailures": "Varias pistas fallaron seguidas, así que la reproducción se detuvo",

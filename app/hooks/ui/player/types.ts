@@ -63,11 +63,17 @@ export interface PlayerSessionState {
   consecutiveFailures: number;
   started: boolean;
   sourceChoice: SourceChoice | null;
+  failedSources: FailedSources | null;
 }
 
 export interface SourceChoice {
   trackId: string;
   source: string;
+}
+
+export interface FailedSources {
+  trackId: string;
+  sources: readonly string[];
 }
 
 export interface EqualizerSettings {

@@ -9,6 +9,7 @@
         "tabs": {
           "downloadSources": "Sources de téléchargement",
           "plex": "Plex",
+          "mediaServers": "Serveurs multimédias",
           "lidarr": "Lidarr",
           "metadata": "Métadonnées"
         }

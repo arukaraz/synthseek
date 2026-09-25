@@ -4,10 +4,18 @@ import i18n from "@modules/i18n";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
-import { buildRedirectUri, previewName } from "../helpers";
+import { buildRedirectUri, movedServer, previewName } from "../helpers";
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);
+});
+
+describe("movedServer", () => {
+  it("swaps a server with its neighbour and leaves the ends where they are", () => {
+    expect(movedServer(["plex", "navidrome", "jellyfin"], 2, -1)).toEqual(["plex", "jellyfin", "navidrome"]);
+    expect(movedServer(["plex", "navidrome", "jellyfin"], 0, -1)).toEqual(["plex", "navidrome", "jellyfin"]);
+    expect(movedServer(["plex", "navidrome", "jellyfin"], 2, 1)).toEqual(["plex", "navidrome", "jellyfin"]);
+  });
 });
 
 describe("buildRedirectUri", () => {

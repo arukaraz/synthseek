@@ -35,12 +35,14 @@ export {
 export {
   useDeviceHeartbeat,
   useForgetDevice,
+  useLinkSourceAccount,
   usePublishPlaybackState,
   useRecordPlay,
   useSavePlaybackSession,
   useSendPlayerCommand,
   useSetFavoriteTrack,
   useSetSourceReporting,
+  useUnlinkSourceAccount,
 } from "./mutations/playback";
 
 export { useListeningConnections, useSeenPlaybackClients } from "./queries/scrobble";

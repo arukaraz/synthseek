@@ -117,10 +117,6 @@ export const LOSSLESS_FORMATS: readonly string[] = ["flac", "wav", "alac"];
 
 export const LOCAL_SOURCE = "local";
 
-export const SOURCE_NAMES: Readonly<Record<string, string>> = {
-  plex: "Plex",
-};
-
 export const GAIN_RAMP_SECONDS = 0.05;
 
 export const EQUALIZER_Q = 1.41;

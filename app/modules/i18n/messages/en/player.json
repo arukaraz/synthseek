@@ -214,6 +214,7 @@
   },
   "notice": {
     "skipping": "\"{{title}}\" failed, skipping to the next one",
+    "tryingSource": "\"{{title}}\" did not play from {{failed}}, trying {{next}}",
     "queueEnd": "End of the queue",
     "autoplayBlocked": "Your browser blocked playback. Press play to start it.",
     "tooManyFailures": "Several tracks failed in a row, so playback stopped",

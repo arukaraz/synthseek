@@ -407,6 +407,43 @@
       "notConfigured": "Sin configurar"
     }
   },
+  "mediaServers": {
+    "url": "URL",
+    "navidrome": {
+      "title": "Navidrome",
+      "description": "Reproduce canciones desde Navidrome cuando Synthseek no tiene su archivo.",
+      "urlPlaceholder": "http://localhost:4533",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "syntheticPaths": "Navidrome oculta las rutas de sus archivos, así que algunas canciones no se encontrarán. En Navidrome, abre la lista de reproductores (Players), elige Synthseek y activa \"Report Real Path\"."
+    },
+    "jellyfin": {
+      "title": "Jellyfin",
+      "description": "Reproduce canciones desde Jellyfin cuando Synthseek no tiene su archivo.",
+      "urlPlaceholder": "http://localhost:8096",
+      "apiKey": "Clave de API",
+      "apiKeyHelper": "Créala en Jellyfin, en Panel de control, Claves de API."
+    },
+    "playback": {
+      "label": "Reproducir desde {{server}}",
+      "description": "Tu propia copia siempre suena primero."
+    },
+    "test": {
+      "action": "Probar conexión",
+      "testing": "Probando...",
+      "ok": "Conectado",
+      "unauthorized": "El servidor no aceptó estas credenciales",
+      "failed": "No se pudo contactar con el servidor"
+    },
+    "order": {
+      "title": "Orden de reproducción",
+      "description": "Synthseek reproduce primero su propio archivo y luego prueba estos servidores en orden.",
+      "local": "Biblioteca de Synthseek",
+      "notPlaying": "Reproducción apagada",
+      "moveUp": "Subir {{server}}",
+      "moveDown": "Bajar {{server}}"
+    }
+  },
   "lidarr": {
     "title": "Lidarr",
     "description": "Opcional. Delega álbumes a una instancia de Lidarr existente.",
@@ -618,6 +655,19 @@
           "unauthorized": "Plex ya no acepta este vínculo. Vuelve a vincular Plex.",
           "unreachable": "No se pudo contactar con Plex la última vez. Lo volverá a intentar con tu próxima escucha."
         }
+      },
+      "server": {
+        "notLinked": "Sin vincular",
+        "linkedAs": "Vinculado como {{username}}",
+        "linkHint": "Inicia sesión con tu cuenta de {{server}} para que tus escuchas se registren allí a tu nombre. Tu contraseña no se guarda.",
+        "username": "Usuario",
+        "password": "Contraseña",
+        "reporting": "Registrar mis escuchas en {{server}}",
+        "linked": "{{server}} vinculado",
+        "refused": "{{server}} no aceptó ese usuario o contraseña",
+        "linkUnreachable": "No se pudo contactar con {{server}}",
+        "unauthorized": "El servidor ya no acepta este vínculo. Vuelve a vincularlo.",
+        "unreachable": "No se pudo contactar con el servidor la última vez. Lo volverá a intentar con tu próxima escucha."
       }
     },
     "listening": {
@@ -1045,7 +1095,7 @@
       "copyFailed": "No se pudo copiar"
     },
     "coverage": {
-      "line": "{{streamable}} canciones con fichero registrado · {{missing}} sin él"
+      "line": "{{streamable}} canciones que las apps pueden reproducir · {{missing}} que no"
     },
     "disabled": {
       "admin": "Actívalo para que las apps de música lleguen a tu biblioteca.",

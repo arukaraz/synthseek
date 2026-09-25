@@ -1,6 +1,6 @@
 ---
 title: "Integrations"
-blurb: "Plex, Lidarr, Beets, AcoustID, and the metadata providers."
+blurb: "Plex, Navidrome, Jellyfin, Lidarr, Beets, AcoustID, and the metadata providers."
 group: "Setup & admin"
 order: 8
 ---
@@ -47,6 +47,12 @@ A mirrored playlist reflects tracks that are complete in Synthseek **and** were 
 | Not yet scanned     | A cleanly titled track missing right after import.                         | Nothing. The next reconcile picks it up.                                         |
 | Not matched         | Titles differ by a featuring credit, a remaster suffix, or an accent.      | Improved matching, which has been hardened repeatedly. Sync again.               |
 | Different recording | Plex genuinely holds a different version than the one that was downloaded. | Nothing automatic. This is a real difference and forcing a match would be wrong. |
+
+## Navidrome and Jellyfin
+
+Synthseek can play a track from Navidrome or Jellyfin when it has no file for it, the same way it plays from Plex, and music apps connected to Synthseek play those tracks too. Each is off until you turn it on under **Settings > Integrations > Media servers**. When more than one server holds a track, Synthseek tries them in the order set on that page. Navidrome finds more of your tracks with **Report Real Path** turned on for the Synthseek player, and its connection test says when it is off.
+
+Each listener can link their own Navidrome or Jellyfin account under **Profile** to have the tracks they finish counted as played there. Synthseek keeps a token from the server, not the password.
 
 ## Lidarr
 

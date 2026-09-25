@@ -407,6 +407,43 @@
       "notConfigured": "Non configuré"
     }
   },
+  "mediaServers": {
+    "url": "URL",
+    "navidrome": {
+      "title": "Navidrome",
+      "description": "Lit les pistes depuis Navidrome lorsque Synthseek n'en a pas le fichier.",
+      "urlPlaceholder": "http://localhost:4533",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "syntheticPaths": "Navidrome masque les chemins de ses fichiers, donc certaines pistes ne seront pas trouvées. Dans Navidrome, ouvrez la liste des lecteurs (Players), choisissez Synthseek et activez \"Report Real Path\"."
+    },
+    "jellyfin": {
+      "title": "Jellyfin",
+      "description": "Lit les pistes depuis Jellyfin lorsque Synthseek n'en a pas le fichier.",
+      "urlPlaceholder": "http://localhost:8096",
+      "apiKey": "Clé API",
+      "apiKeyHelper": "Créez-en une dans Jellyfin, sous Tableau de bord, Clés API."
+    },
+    "playback": {
+      "label": "Lire depuis {{server}}",
+      "description": "Votre propre copie est toujours lue en premier."
+    },
+    "test": {
+      "action": "Tester la connexion",
+      "testing": "Test en cours...",
+      "ok": "Connecté",
+      "unauthorized": "Le serveur n'a pas accepté ces identifiants",
+      "failed": "Le serveur est injoignable"
+    },
+    "order": {
+      "title": "Ordre de lecture",
+      "description": "Synthseek lit d'abord son propre fichier, puis essaie ces serveurs dans l'ordre.",
+      "local": "Bibliothèque Synthseek",
+      "notPlaying": "Lecture désactivée",
+      "moveUp": "Monter {{server}}",
+      "moveDown": "Descendre {{server}}"
+    }
+  },
   "lidarr": {
     "title": "Lidarr",
     "description": "Facultatif. Confiez des albums à une instance Lidarr existante.",
@@ -618,6 +655,19 @@
           "unauthorized": "Plex n'accepte plus cette liaison. Liez Plex à nouveau.",
           "unreachable": "Plex était injoignable la dernière fois. Une nouvelle tentative aura lieu à votre prochaine écoute."
         }
+      },
+      "server": {
+        "notLinked": "Non lié",
+        "linkedAs": "Lié en tant que {{username}}",
+        "linkHint": "Connectez-vous avec votre compte {{server}} pour que vos écoutes y soient enregistrées à votre nom. Votre mot de passe n'est pas conservé.",
+        "username": "Nom d'utilisateur",
+        "password": "Mot de passe",
+        "reporting": "Enregistrer mes écoutes dans {{server}}",
+        "linked": "{{server}} lié",
+        "refused": "{{server}} n'a pas accepté ce nom d'utilisateur ou ce mot de passe",
+        "linkUnreachable": "{{server}} est injoignable",
+        "unauthorized": "Le serveur n'accepte plus ce lien. Liez-le à nouveau.",
+        "unreachable": "Le serveur était injoignable la dernière fois. Une nouvelle tentative aura lieu à votre prochaine écoute."
       }
     },
     "listening": {
@@ -1045,7 +1095,7 @@
       "copyFailed": "Impossible de copier"
     },
     "coverage": {
-      "line": "{{streamable}} titres avec un fichier enregistré · {{missing}} sans"
+      "line": "{{streamable}} titres que les applis peuvent lire · {{missing}} qu'elles ne peuvent pas lire"
     },
     "disabled": {
       "admin": "Activez ceci pour que les applications musicales atteignent votre bibliothèque.",

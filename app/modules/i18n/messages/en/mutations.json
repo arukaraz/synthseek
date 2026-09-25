@@ -44,6 +44,12 @@
     "smartSearchSaved": "Smart search settings saved",
     "slskdSaved": "Slskd connection updated",
     "lidarrSaved": "Lidarr connection updated",
+    "navidromeSaved": "Navidrome connection updated",
+    "navidromeFailed": "Failed to update Navidrome settings",
+    "jellyfinSaved": "Jellyfin connection updated",
+    "jellyfinFailed": "Failed to update Jellyfin settings",
+    "playbackOrderSaved": "Playback order updated",
+    "playbackOrderFailed": "Failed to update the playback order",
     "enrichmentSaved": "Enrichment settings updated",
     "spotifySaved": "Spotify app settings updated",
     "wantedSaved": "Wanted sweep settings saved",
@@ -321,6 +327,7 @@
     "commandFailed": "Could not reach that device",
     "listeningConnectFailed": "Could not connect that listening service",
     "listeningDisconnectFailed": "Could not disconnect that listening service",
-    "listeningSaveFailed": "Could not save that listening setting"
+    "listeningSaveFailed": "Could not save that listening setting",
+    "sourceLinkFailed": "Could not change that account link"
   }
 }

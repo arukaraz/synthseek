@@ -100,7 +100,7 @@ Open the web interface, create your admin account in the setup wizard, and point
 - Send what you play to Last.fm and ListenBrainz from the server, so a listen survives closing the tab
 - Read the lyrics in the full screen view, following the song where they come with timings
 - Sync playlists to Plex, one at a time or all at once
-- Play a track from Plex when Synthseek has no file for it
+- Play a track from Plex, Navidrome or Jellyfin when Synthseek has no file for it
 
 [Features](https://docs.synthseek.dev/features/)
 

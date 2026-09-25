@@ -134,7 +134,7 @@ export function SubsonicSubsection() {
             <span className={connectionMeta()}>
               {t("subsonic.coverage.line", {
                 streamable: status.data?.streamableTracks ?? 0,
-                missing: status.data?.tracksWithoutPath ?? 0,
+                missing: status.data?.unplayableTracks ?? 0,
               })}
             </span>
             <Button size="sm" onClick={() => setCreateOpen(true)}>

@@ -214,6 +214,7 @@
   },
   "notice": {
     "skipping": "„{{title}}“ ist fehlgeschlagen, es geht weiter zum nächsten Titel",
+    "tryingSource": "„{{title}}“ ließ sich nicht von {{failed}} abspielen, versuche {{next}}",
     "queueEnd": "Ende der Warteschlange",
     "autoplayBlocked": "Der Browser hat die Wiedergabe blockiert. Drücke Play, um zu starten.",
     "tooManyFailures": "Mehrere Titel sind nacheinander fehlgeschlagen, die Wiedergabe wurde gestoppt",

@@ -59,6 +59,17 @@ export function useUpdateEnginePlexBehavior() {
   });
 }
 
+export function useUpdateEnginePlaybackSources() {
+  const utils = trpc.useUtils();
+  return trpc.settings.updateEnginePlaybackSources.useMutation({
+    onSuccess: () => {
+      utils.settings.get.invalidate();
+      toast.success(i18n.t("mutations:settings.playbackOrderSaved"));
+    },
+    onError: (error) => errorToast(error, "settings.playbackOrderFailed"),
+  });
+}
+
 export function useUpdateEngineWanted() {
   const utils = trpc.useUtils();
   return trpc.settings.updateEngineWanted.useMutation({

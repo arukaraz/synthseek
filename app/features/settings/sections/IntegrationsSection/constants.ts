@@ -1,4 +1,12 @@
-import type { Affix, LidarrHealth, LidarrStatusTone, SlskdHealth, SlskdStatusTone } from "./types";
+import type { ParseKeys } from "i18next";
+
+import type { Affix, LidarrHealth, LidarrStatusTone, ServerTestOutcome, SlskdHealth, SlskdStatusTone } from "./types";
+
+export const SERVER_TEST_OUTCOME_KEYS: Readonly<Record<ServerTestOutcome, ParseKeys<"settings">>> = {
+  ok: "mediaServers.test.ok",
+  unauthorized: "mediaServers.test.unauthorized",
+  failed: "mediaServers.test.failed",
+};
 
 export const MS = 1000;
 

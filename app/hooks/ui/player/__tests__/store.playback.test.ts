@@ -110,6 +110,7 @@ async function freshStore(): Promise<typeof import("../store")> {
   const store = await import("../store");
   store.setMessages({
     skipping: (title) => `skipping ${title}`,
+    tryingSource: (title, failed, next) => `trying ${title} from ${next} after ${failed}`,
     resumedFrom: (client) => `resumed from ${client}`,
     handOverFailed: (device) => `hand over to ${device} failed`,
     deviceGone: "device gone",
@@ -421,6 +422,60 @@ describe("player store failures", () => {
     expect(store.getSnapshot().index).toBe(1);
   });
 
+  it("tries the next copy of a track, from where it failed, before skipping it", async () => {
+    vi.useFakeTimers();
+    const store = await freshStore();
+    const sources = [
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+      { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.playQueue([track("a", { sources }), track("b")], 0);
+    expect(engine.loadAndPlay.mock.calls.at(-1)?.[0]).toBe("/api/v1/library/tracks/a/stream?source=navidrome");
+    engine.handlers?.onProgress(42, 200);
+
+    engine.handlers?.onFailure("stall");
+
+    expect(notices.announce).toHaveBeenCalledWith({
+      text: "trying Title a from jellyfin after navidrome",
+      tone: "warning",
+    });
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?source=jellyfin",
+      expect.any(Number),
+      expect.any(Boolean),
+      42
+    );
+    vi.advanceTimersByTime(SKIP_DELAY_MS);
+    expect(store.getSnapshot()).toMatchObject({ index: 0, consecutiveFailures: 0 });
+
+    engine.handlers?.onFailure("load");
+
+    expect(notices.announce).toHaveBeenLastCalledWith({ text: "skipping Title a", tone: "danger" });
+    vi.advanceTimersByTime(SKIP_DELAY_MS);
+    expect(store.getSnapshot().index).toBe(1);
+  });
+
+  it("keeps a track that was only armed paused while it moves to the next copy", async () => {
+    const store = await freshStore();
+    const sources = [
+      { key: "local", format: "mp3", bitrateKbps: 320 },
+      { key: "plex", format: "flac", bitrateKbps: 900 },
+    ];
+    store.actions.restoreSession([track("a", { sources })], "a", 30, null, []);
+    engine.loadAndPlay.mockClear();
+
+    engine.handlers?.onFailure("load");
+
+    expect(engine.loadAt).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?source=plex",
+      30,
+      expect.any(Number),
+      expect.any(Boolean)
+    );
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+    expect(store.getSnapshot().playing).toBe(false);
+  });
+
   it("gives up rather than walking the whole queue when nothing will play", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b"), track("c")], 0);
@@ -520,6 +575,45 @@ describe("player store transport", () => {
     expect(engine.seek).not.toHaveBeenCalled();
     expect(engine.loadAndPlay).toHaveBeenCalledWith(
       "/api/v1/library/tracks/a/stream?format=mp3&maxBitrate=320&offset=90",
+      0.8,
+      false,
+      0
+    );
+  });
+
+  it("plays a copy from a media server as the server stores it, so a seek stays in place", async () => {
+    engine.playable = false;
+    const store = await freshStore();
+    store.actions.setConversion({ enabled: true, bitrateKbps: 128 });
+    const sources = [{ key: "navidrome", format: "flac", bitrateKbps: 1000 }];
+    store.actions.playQueue([track("a", { format: "flac", sources })], 0);
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?source=navidrome",
+      0.8,
+      false,
+      0
+    );
+    expect(store.getSnapshot().transcoding).toBe(false);
+    engine.loadAndPlay.mockClear();
+
+    store.actions.seekTo(90);
+
+    expect(engine.seek).toHaveBeenCalledWith(90);
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+  });
+
+  it("still converts the library's own copy of the same track when it cannot play it", async () => {
+    engine.playable = false;
+    const store = await freshStore();
+    const sources = [
+      { key: "local", format: "flac", bitrateKbps: 900 },
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.playQueue([track("a", { format: "flac", sources })], 0);
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?format=mp3&maxBitrate=320",
       0.8,
       false,
       0

@@ -7,6 +7,7 @@ import type {
   PlayerTrack,
 } from "@components/Player";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
+import { playbackServerName } from "@utils/playback-servers";
 
 import {
   AUTOPLAY_REFILL_BELOW,
@@ -20,12 +21,12 @@ import {
   MAX_QUEUE_TRACKS,
   PLAYBACK_MIME_BY_FORMAT,
   SESSION_POSITION_DRIFT_MS,
-  SOURCE_NAMES,
   TONES,
 } from "./constants";
 import type { PlaybackTrackSummary } from "@api/__generated__/types";
 
 import type {
+  FailedSources,
   ListenProgress,
   ListeningConnectionStatus,
   PlayerSessionState,
@@ -89,9 +90,35 @@ export function playingSourceOf(track: PlayerTrack, choice: SourceChoice | null)
   return track.sources.find((source) => source.key === chosen) ?? track.sources[0] ?? null;
 }
 
+export function convertibleSource(source: PlayerSource | null): boolean {
+  return source === null || source.key === LOCAL_SOURCE;
+}
+
+export function failedSourcesFor(track: PlayerTrack, failed: FailedSources | null): readonly string[] {
+  return failed !== null && failed.trackId === track.id ? failed.sources : [];
+}
+
+export function fallbackSourceFor(
+  track: PlayerTrack,
+  choice: SourceChoice | null,
+  failed: FailedSources | null
+): PlayerSource | null {
+  const playing = playingSourceOf(track, choice)?.key ?? null;
+  const tried = failedSourcesFor(track, failed);
+  return track.sources.find((source) => source.key !== playing && !tried.includes(source.key)) ?? null;
+}
+
+export function sourceLabelFor(key: string, localLabel: string): string {
+  return key === LOCAL_SOURCE ? localLabel : playbackServerName(key);
+}
+
 export function sourceOptionFrom(source: PlayerSource, localLabel: string, detail: string): PlayerSourceOption {
-  const local = source.key === LOCAL_SOURCE;
-  return { key: source.key, label: local ? localLabel : (SOURCE_NAMES[source.key] ?? source.key), detail, local };
+  return {
+    key: source.key,
+    label: sourceLabelFor(source.key, localLabel),
+    detail,
+    local: source.key === LOCAL_SOURCE,
+  };
 }
 
 export function asPlayedFrom(track: PlayerTrack, source: PlayerSource | null): PlayerTrack {
