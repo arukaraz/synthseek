@@ -107,6 +107,7 @@ async function freshStore(): Promise<typeof import("../store")> {
   const store = await import("../store");
   store.setMessages({
     skipping: (title) => `skipping ${title}`,
+    tryingSource: (title, failed, next) => `trying ${title} from ${next} after ${failed}`,
     resumedFrom: (client) => `resumed from ${client}`,
     handOverFailed: (device) => `hand over to ${device} failed`,
     deviceGone: "device gone",

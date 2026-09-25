@@ -24,6 +24,8 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
       slskd: { apiUrl: "", apiKey: "", bannedUsers: [] },
       plex: { url: "", token: "" },
       lidarr: { url: "", apiKey: "" },
+      navidrome: { url: "", username: "", password: "", playback: false },
+      jellyfin: { url: "", apiKey: "", playback: false },
       enrichment: {
         lastfmApiKey: "",
         lastfmApiSecret: "",
@@ -55,6 +57,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
       },
       import: { metadataConfidenceThreshold: 0.8, acoustidIdentityGate: true },
       plexBehavior: { libraryScan: true, playlistSync: true, playback: false },
+      playbackSources: { order: ["plex", "navidrome", "jellyfin"] },
       smartSearch: { customMoodKeywords: [] },
       wanted: { enabled: false, perRunCap: 10, maxAttempts: 3 },
       quality: { upgradeEnabled: false },

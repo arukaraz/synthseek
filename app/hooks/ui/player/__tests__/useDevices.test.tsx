@@ -147,6 +147,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     consecutiveFailures: 0,
     started: false,
     sourceChoice: null,
+    failedSources: null,
     ...overrides,
   };
 }
