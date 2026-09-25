@@ -145,7 +145,7 @@ let state: PlayerSessionState = {
 let mirrorTimer: ReturnType<typeof setInterval> | undefined;
 let skipTimer: ReturnType<typeof setTimeout> | undefined;
 let connected = false;
-let loadStarts = true;
+let playRequested = true;
 let loudness: LoudnessPreferences = { enabled: true, preAmpDb: 0 };
 let activeLoudnessMode: LoudnessMode = "track";
 
@@ -256,7 +256,7 @@ function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
   });
   const url = streamUrlOf(track, conversion, fromSeconds);
   const start = converted ? 0 : fromSeconds;
-  loadStarts = true;
+  playRequested = true;
   if (fadeSeconds > 0) {
     const gainFactor = startLoudness(track, state.queue, state.shuffle, false);
     crossfadeTo(
@@ -353,9 +353,19 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
     consecutiveFailures: 0,
   });
   startLoudness(track, queue, state.shuffle, true);
-  loadStarts = false;
+  playRequested = false;
   loadAt(streamUrlOf(track, conversion, fromSeconds), converted ? 0 : fromSeconds, state.volume, state.muted);
   publishMediaSession(track, mediaHandlers());
+}
+
+function pausePlayback(): void {
+  playRequested = false;
+  pause();
+}
+
+function resumePlayback(): void {
+  playRequested = true;
+  resume();
 }
 
 function seekWithin(seconds: number): void {
@@ -375,7 +385,7 @@ function advance(automatic: boolean): void {
       return;
     }
     seek(0);
-    resume();
+    resumePlayback();
     return;
   }
   const next = nextIndexIn(state);
@@ -385,7 +395,7 @@ function advance(automatic: boolean): void {
       playAt(first, 0, automatic ? 0 : fadeTowards(first));
       return;
     }
-    pause();
+    pausePlayback();
     publish({ playing: false, positionSeconds: state.durationSeconds });
     publishPlaybackState(false);
     notify(messages.queueEnd, "info");
@@ -419,7 +429,7 @@ function handleFailure(reason: "load" | "stall" | "autoplay"): void {
       loading: false,
     });
     notify(messages.tryingSource(track.title, failing.key, fallback.key), "warning");
-    if (loadStarts) playAt(state.index, state.positionSeconds);
+    if (playRequested) playAt(state.index, state.positionSeconds);
     else armAt(state.queue, state.index, state.positionSeconds, [...state.shuffleOrder]);
     return;
   }
@@ -677,10 +687,10 @@ export const actions = {
       return;
     }
     if (state.playing) {
-      pause();
+      pausePlayback();
       return;
     }
-    resume();
+    resumePlayback();
   },
   next(): void {
     advance(false);
@@ -842,7 +852,7 @@ export const actions = {
   },
   applyRemoteState(remote: RemotePlayback): void {
     if (remote.playing) {
-      pause();
+      pausePlayback();
       cancelPrime();
       clearMediaSession();
       clearInterval(mirrorTimer);
@@ -928,7 +938,7 @@ export const actions = {
   },
   pauseHere(): void {
     if (!state.playing) return;
-    pause();
+    pausePlayback();
   },
   restoreVolume(): void {
     if (typeof window === "undefined") return;

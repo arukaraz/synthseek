@@ -476,6 +476,68 @@ describe("player store failures", () => {
     expect(store.getSnapshot().playing).toBe(false);
   });
 
+  it("plays the next copy when play was pressed before the first one could load", async () => {
+    const store = await freshStore();
+    const sources = [
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+      { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.restoreSession([track("a", { sources })], "a", 30, null, []);
+    store.actions.togglePlay();
+    engine.loadAt.mockClear();
+
+    engine.handlers?.onFailure("load");
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?source=jellyfin",
+      expect.any(Number),
+      expect.any(Boolean),
+      30
+    );
+    expect(engine.loadAt).not.toHaveBeenCalled();
+  });
+
+  it("keeps a track the listener paused paused while it moves to the next copy", async () => {
+    const store = await freshStore();
+    const sources = [
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+      { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.playQueue([track("a", { sources })], 0);
+    engine.handlers?.onPlayingChange(true);
+    engine.handlers?.onProgress(42, 200);
+    store.actions.togglePlay();
+    engine.handlers?.onPlayingChange(false);
+    engine.loadAndPlay.mockClear();
+
+    engine.handlers?.onFailure("stall");
+
+    expect(engine.loadAt).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?source=jellyfin",
+      42,
+      expect.any(Number),
+      expect.any(Boolean)
+    );
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+  });
+
+  it("stays quiet when a copy fails after the queue has run out", async () => {
+    const store = await freshStore();
+    const sources = [
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+      { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.playQueue([track("a", { sources })], 0);
+    engine.handlers?.onPlayingChange(true);
+    engine.handlers?.onEnded();
+    engine.loadAndPlay.mockClear();
+
+    engine.handlers?.onFailure("stall");
+
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+    expect(store.getSnapshot().playing).toBe(false);
+  });
+
   it("gives up rather than walking the whole queue when nothing will play", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b"), track("c")], 0);

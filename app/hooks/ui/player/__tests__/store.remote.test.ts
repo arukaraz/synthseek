@@ -66,7 +66,7 @@ const media = vi.hoisted(() => ({
 
 vi.mock("../media-session", () => media);
 
-function track(id: string): PlayerTrack {
+function track(id: string, overrides: Partial<PlayerTrack> = {}): PlayerTrack {
   return {
     id,
     title: `Title ${id}`,
@@ -81,6 +81,7 @@ function track(id: string): PlayerTrack {
     albumId: "album-1",
     replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
     sources: [],
+    ...overrides,
   };
 }
 
@@ -140,6 +141,38 @@ describe("player store remote handover", () => {
     expect(store.getSnapshot().playing).toBe(false);
     expect(store.getSnapshot().started).toBe(true);
     expect(store.getSnapshot().remote?.deviceId).toBe("kitchen");
+  });
+
+  it("stays quiet here when a copy fails after another device took over", async () => {
+    const store = await freshStore();
+    const sources = [
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+      { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.playQueue([track("a", { sources })], 0);
+    store.actions.applyRemoteState(remotePlayback());
+    engine.loadAndPlay.mockClear();
+
+    engine.handlers?.onFailure("stall");
+
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+  });
+
+  it("stays quiet when asked to pause here and a copy then fails", async () => {
+    const store = await freshStore();
+    const sources = [
+      { key: "navidrome", format: "flac", bitrateKbps: 1000 },
+      { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
+    ];
+    store.actions.playQueue([track("a", { sources })], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.pauseHere();
+    engine.loadAndPlay.mockClear();
+
+    engine.handlers?.onFailure("stall");
+
+    expect(engine.pause).toHaveBeenCalled();
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
   });
 
   it("ignores a paused report from a device that was never mirroring here", async () => {
