@@ -177,6 +177,10 @@ export const PCM_START_LEAD_SECONDS = 0.05;
 
 export const PCM_URL_CACHE_BYTES = 16 * 1024 * 1024;
 
+export const PCM_READ_RETRIES = 2;
+
+export const PCM_NETWORK_RETRY_MAX_SECONDS = 16;
+
 export const MP3_HEAD_BYTES = 4096;
 export const MP3_XING_WINDOW_BYTES = 512;
 

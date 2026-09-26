@@ -1,6 +1,26 @@
-import { MP3_HEAD_BYTES, MP3_XING_WINDOW_BYTES, PCM_URL_CACHE_BYTES } from "./constants";
+import {
+  MP3_HEAD_BYTES,
+  MP3_XING_WINDOW_BYTES,
+  PCM_NETWORK_RETRY_MAX_SECONDS,
+  PCM_READ_RETRIES,
+  PCM_URL_CACHE_BYTES,
+} from "./constants";
 import { gaplessInfoFrom, id3Length, trimFor } from "./lame";
 import type { PcmSource, PcmTrim } from "./types";
+
+class RefusedRead extends Error {}
+
+async function fetchOrRefuse(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const response = await fetch(input, init);
+  if (response.ok) return response;
+  await response.body?.cancel();
+  throw new RefusedRead(`${response.status} ${response.statusText}`);
+}
+
+function readRetryDelay(previousAttempts: number, error: unknown): number | null {
+  if (!(error instanceof RefusedRead)) return Math.min(previousAttempts, PCM_NETWORK_RETRY_MAX_SECONDS);
+  return previousAttempts > PCM_READ_RETRIES ? null : previousAttempts;
+}
 
 async function fetchRange(url: string, from: number, length: number): Promise<Uint8Array | null> {
   const response = await fetch(url, {
@@ -24,7 +44,12 @@ async function mp3Trim(url: string, sampleRate: number): Promise<PcmTrim | null>
 export async function openPcmSource(url: string): Promise<PcmSource> {
   const media = await import("mediabunny");
   const input = new media.Input({
-    source: new media.UrlSource(url, { requestInit: { credentials: "include" }, maxCacheSize: PCM_URL_CACHE_BYTES }),
+    source: new media.UrlSource(url, {
+      requestInit: { credentials: "include" },
+      maxCacheSize: PCM_URL_CACHE_BYTES,
+      fetchFn: fetchOrRefuse,
+      getRetryDelay: readRetryDelay,
+    }),
     formats: media.ALL_FORMATS,
   });
   try {

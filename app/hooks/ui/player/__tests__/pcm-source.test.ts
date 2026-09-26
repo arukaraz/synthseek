@@ -1,7 +1,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { MP3_HEAD_BYTES, MP3_XING_WINDOW_BYTES, PCM_URL_CACHE_BYTES } from "../constants";
+import {
+  MP3_HEAD_BYTES,
+  MP3_XING_WINDOW_BYTES,
+  PCM_NETWORK_RETRY_MAX_SECONDS,
+  PCM_READ_RETRIES,
+  PCM_URL_CACHE_BYTES,
+} from "../constants";
 import type { GaplessInfo, PcmTrim } from "../types";
+
+interface UrlSourceOptions {
+  requestInit?: RequestInit;
+  maxCacheSize?: number;
+  fetchFn?: (input: string, init?: RequestInit) => Promise<Response>;
+  getRetryDelay?: (previousAttempts: number, error: unknown, url: string) => number | null;
+}
 
 const lame = vi.hoisted(() => ({
   gaplessInfoFrom: vi.fn<(bytes: Uint8Array) => GaplessInfo | null>(),
@@ -21,7 +34,7 @@ const media = vi.hoisted(() => {
   const state = {
     track,
     missingTrack: false,
-    urlSources: [] as { url: string; options: unknown }[],
+    urlSources: [] as { url: string; options: UrlSourceOptions }[],
     inputs: [] as { options: unknown; dispose: ReturnType<typeof vi.fn> }[],
     sinks: [] as { track: unknown; buffers: ReturnType<typeof vi.fn> }[],
   };
@@ -32,7 +45,7 @@ vi.mock("../lame", () => lame);
 vi.mock("mediabunny", () => ({
   ALL_FORMATS: ["every-format"],
   UrlSource: class {
-    constructor(url: string, options: unknown) {
+    constructor(url: string, options: UrlSourceOptions) {
       media.urlSources.push({ url, options });
     }
   },
@@ -75,6 +88,7 @@ beforeEach(() => {
   media.urlSources.length = 0;
   media.inputs.length = 0;
   media.sinks.length = 0;
+  fetchMock.mockReset();
   fetchMock.mockResolvedValue(headResponse(true));
   lame.gaplessInfoFrom.mockReturnValue({ delaySamples: 576, paddingSamples: 1000, frames: 100, samplesPerFrame: 1152 });
   lame.trimFor.mockReturnValue({ startSeconds: 0.025, durationSeconds: 100 });
@@ -92,11 +106,46 @@ describe("opening a stream as decoded audio", () => {
 
     await source.openPcmSource("/stream/1");
 
-    expect(media.urlSources[0]).toEqual({
+    expect(media.urlSources[0]).toMatchObject({
       url: "/stream/1",
       options: { requestInit: { credentials: "include" }, maxCacheSize: PCM_URL_CACHE_BYTES },
     });
     expect(media.inputs[0]?.options).toMatchObject({ formats: ["every-format"] });
+  });
+
+  it("gives up on a server that keeps refusing the read, so the player can move to the next copy", async () => {
+    const source = await fresh();
+    await source.openPcmSource("/stream/1");
+    const { fetchFn, getRetryDelay } = media.urlSources[0]?.options ?? {};
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 503, statusText: "Service Unavailable" }));
+
+    const refusal = await fetchFn?.("/stream/1", {}).catch((error: unknown) => error);
+
+    expect(refusal).toBeInstanceOf(Error);
+    expect(getRetryDelay?.(1, refusal, "/stream/1")).toBe(1);
+    expect(getRetryDelay?.(PCM_READ_RETRIES, refusal, "/stream/1")).toBe(PCM_READ_RETRIES);
+    expect(getRetryDelay?.(PCM_READ_RETRIES + 1, refusal, "/stream/1")).toBeNull();
+  });
+
+  it("keeps retrying a read the network dropped, so playback resumes when the connection does", async () => {
+    const source = await fresh();
+    await source.openPcmSource("/stream/1");
+    const getRetryDelay = media.urlSources[0]?.options.getRetryDelay;
+    const offline = new TypeError("Failed to fetch");
+
+    expect(getRetryDelay?.(1, offline, "/stream/1")).toBe(1);
+    expect(getRetryDelay?.(PCM_READ_RETRIES + 1, offline, "/stream/1")).toBe(PCM_READ_RETRIES + 1);
+    expect(getRetryDelay?.(1000, offline, "/stream/1")).toBe(PCM_NETWORK_RETRY_MAX_SECONDS);
+  });
+
+  it("hands a read the server answered straight back", async () => {
+    const source = await fresh();
+    await source.openPcmSource("/stream/1");
+    const fetchFn = media.urlSources[0]?.options.fetchFn;
+    const partial = new Response("audio", { status: 206 });
+    fetchMock.mockResolvedValueOnce(partial);
+
+    expect(await fetchFn?.("/stream/1", { headers: { Range: "bytes=0-4" } })).toBe(partial);
   });
 
   it("takes a flac as it is: full length, no trim, no extra request", async () => {
