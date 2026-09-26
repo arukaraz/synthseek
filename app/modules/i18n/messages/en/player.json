@@ -60,6 +60,13 @@
   "source": {
     "local": "Local"
   },
+  "sourcePicker": {
+    "title": "Play from",
+    "message": "Some of these tracks are in more than one place. Choose where to play them from.",
+    "count": "{{count}} of {{total}}",
+    "fillFromNext": "Play the missing tracks from the next source",
+    "play": "Play"
+  },
   "settings": {
     "title": "Playback settings",
     "close": "Hide the playback settings",

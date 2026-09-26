@@ -2,6 +2,7 @@
 
 import { BottomNav } from "@components/BottomNav";
 import { ContentShell } from "@components/ContentShell";
+import { PlaybackSourcePicker } from "@components/Player";
 import { PlayerDock } from "@components/PlayerDock";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { TopHeader } from "@components/TopHeader";
@@ -47,6 +48,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
       <BottomNav />
       <ProgressDock />
       <PlayerDock />
+      <PlaybackSourcePicker />
     </div>
   );
 }

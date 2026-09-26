@@ -2,7 +2,7 @@
 
 import { usePlayableTracksFetcher } from "@hooks/api";
 import type { PlayableTracksTarget } from "@hooks/api/queries/library/types";
-import { playerActions, playerTrackFrom, useStartRadio } from "@hooks/ui/player";
+import { playerActions, playerTrackFrom, tracksFromChosenSource, useStartRadio } from "@hooks/ui/player";
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -45,7 +45,9 @@ export function useEntityPlayback(): {
     async (target: PlayableTracksTarget) => {
       const tracks = await resolve(target);
       if (tracks === null) return;
-      playerActions.playQueue(tracks, 0);
+      const queue = target.kind === "album" || target.kind === "artist" ? await tracksFromChosenSource(tracks) : tracks;
+      if (queue === null) return;
+      playerActions.playQueue(queue, 0);
     },
     [resolve]
   );

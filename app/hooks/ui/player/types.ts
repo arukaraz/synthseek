@@ -76,6 +76,22 @@ export interface FailedSources {
   sources: readonly string[];
 }
 
+export interface SourceCount {
+  key: string;
+  count: number;
+}
+
+export interface SourcePick {
+  source: string;
+  fillFromNext: boolean;
+}
+
+export interface SourcePickerRequest {
+  id: number;
+  counts: readonly SourceCount[];
+  total: number;
+}
+
 export interface EqualizerSettings {
   enabled: boolean;
   gainsDb: readonly number[];

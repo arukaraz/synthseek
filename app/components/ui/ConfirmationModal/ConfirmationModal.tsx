@@ -15,7 +15,7 @@ import { cn } from "@utils/cn";
 import { useTranslation } from "react-i18next";
 
 import { VARIANT_ICONS } from "./constants";
-import { confirmActionButton, confirmDialogContent, confirmFooter, confirmIconBadge } from "./styles";
+import { confirmActionButton, confirmBody, confirmDialogContent, confirmFooter, confirmIconBadge } from "./styles";
 import type { ConfirmationModalProps } from "./types";
 
 export function ConfirmationModal({
@@ -29,6 +29,7 @@ export function ConfirmationModal({
   variant = "danger",
   showCancel = true,
   className,
+  children,
 }: ConfirmationModalProps) {
   const { t } = useTranslation("components");
   const Icon = VARIANT_ICONS[variant];
@@ -65,6 +66,8 @@ export function ConfirmationModal({
             <DialogDescription className="text-fg/65 leading-relaxed">{message}</DialogDescription>
           </div>
         </DialogHeader>
+
+        {children ? <div className={confirmBody}>{children}</div> : null}
 
         <DialogFooter className={confirmFooter}>
           {showCancel && (

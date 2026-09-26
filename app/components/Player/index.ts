@@ -1,4 +1,5 @@
 export { Player } from "./Player";
+export { PlaybackSourcePicker } from "./PlaybackSourcePicker";
 export { APP_TITLE, PLAYER_HEADER_SLOT_ID } from "./constants";
 export { nextRepeat, restorablePlayerMode, shouldRestart } from "./helpers";
 export { closeMiniWindow, openMiniWindow } from "./miniWindow";

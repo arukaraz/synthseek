@@ -18,11 +18,13 @@ const player = vi.hoisted(() => ({
   playQueue: vi.fn(),
   addToQueue: vi.fn(() => ({ added: 1, skipped: 0, full: false })),
   startStation: vi.fn(async () => undefined),
+  chooseSource: vi.fn(async (tracks: readonly { id: string }[]): Promise<{ id: string }[] | null> => [...tracks]),
 }));
 
 vi.mock("@hooks/ui/player", () => ({
   playerActions: { playQueue: player.playQueue, addToQueue: player.addToQueue },
   playerTrackFrom: (item: { id: string }) => ({ id: item.id, title: `Title ${item.id}` }),
+  tracksFromChosenSource: player.chooseSource,
   useStartRadio: () => player.startStation,
 }));
 
@@ -38,6 +40,52 @@ beforeEach(() => {
   vi.clearAllMocks();
   api.fetchPlayable.mockResolvedValue({ items: [{ id: "t1" }, { id: "t2" }], truncated: false });
   player.addToQueue.mockReturnValue({ added: 1, skipped: 0, full: false });
+  player.chooseSource.mockImplementation(async (tracks) => [...tracks]);
+});
+
+describe("choosing where an album or artist plays from", () => {
+  it("asks for an album and plays the queue the listener's choice made", async () => {
+    player.chooseSource.mockResolvedValue([{ id: "t2" }]);
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.playEntity(TARGET);
+
+    expect(player.chooseSource).toHaveBeenCalledWith([
+      expect.objectContaining({ id: "t1" }),
+      expect.objectContaining({ id: "t2" }),
+    ]);
+    expect(player.playQueue).toHaveBeenCalledWith([{ id: "t2" }], 0);
+  });
+
+  it("asks for an artist too", async () => {
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.playEntity({ kind: "artist", artist: "Air" });
+
+    expect(player.chooseSource).toHaveBeenCalled();
+    expect(player.playQueue).toHaveBeenCalled();
+  });
+
+  it("never asks for a playlist, which plays as it is", async () => {
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.playEntity({ kind: "playlist", playlistId: "pl1" });
+
+    expect(player.chooseSource).not.toHaveBeenCalled();
+    expect(player.playQueue).toHaveBeenCalledWith(
+      [expect.objectContaining({ id: "t1" }), expect.objectContaining({ id: "t2" })],
+      0
+    );
+  });
+
+  it("plays nothing when the listener closes the question", async () => {
+    player.chooseSource.mockResolvedValue(null);
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.playEntity(TARGET);
+
+    expect(player.playQueue).not.toHaveBeenCalled();
+  });
 });
 
 describe("playing a whole album or playlist", () => {

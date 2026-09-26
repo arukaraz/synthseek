@@ -43,3 +43,5 @@ export type ConfirmActionButtonProps = VariantProps<typeof confirmActionButton>;
 export const confirmDialogContent = "max-w-md bg-surface/95 sm:bg-surface/90 sm:backdrop-blur-2xl";
 
 export const confirmFooter = "mt-6 gap-2 sm:gap-3";
+
+export const confirmBody = "mt-5 flex flex-col gap-4";

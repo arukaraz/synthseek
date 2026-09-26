@@ -129,6 +129,8 @@ export const sourceSegment = cva(
 
 export const sourceSegmentDetail = cva("text-fg-muted font-mono text-[10px] font-normal");
 
+export const pickerFill = cva("text-fg-muted flex cursor-pointer items-center gap-2 text-sm");
+
 export const barSubtitleAlbum = cva("hidden @player:inline");
 
 export const barTransport = cva("order-3 flex shrink-0 items-center gap-1 @player:order-none @player:gap-3.5");

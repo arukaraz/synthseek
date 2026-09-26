@@ -60,6 +60,13 @@
   "source": {
     "local": "Local"
   },
+  "sourcePicker": {
+    "title": "Reproducir desde",
+    "message": "Algunas de estas canciones están en más de un sitio. Elige desde dónde reproducirlas.",
+    "count": "{{count}} de {{total}}",
+    "fillFromNext": "Reproducir las que falten desde la siguiente fuente",
+    "play": "Reproducir"
+  },
   "settings": {
     "title": "Ajustes de reproducción",
     "close": "Ocultar los ajustes de reproducción",

@@ -34,6 +34,8 @@ import type {
   RemotePlayback,
   SessionSnapshot,
   SourceChoice,
+  SourceCount,
+  SourcePick,
   StreamConversion,
 } from "./types";
 
@@ -88,6 +90,36 @@ export function requestedSourceFor(track: PlayerTrack, choice: SourceChoice | nu
 export function playingSourceOf(track: PlayerTrack, choice: SourceChoice | null): PlayerSource | null {
   const chosen = chosenSourceFor(track, choice);
   return track.sources.find((source) => source.key === chosen) ?? track.sources[0] ?? null;
+}
+
+export function sourceCountsOf(tracks: readonly PlayerTrack[]): SourceCount[] {
+  const order: string[] = [];
+  const counts = new Map<string, number>();
+  for (const track of tracks) {
+    let after = -1;
+    for (const { key } of track.sources) {
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+      const at = order.indexOf(key);
+      if (at >= 0) {
+        after = at;
+        continue;
+      }
+      after += 1;
+      order.splice(after, 0, key);
+    }
+  }
+  return order.map((key) => ({ key, count: counts.get(key) ?? 0 }));
+}
+
+export function queueFromSource(tracks: readonly PlayerTrack[], pick: SourcePick): PlayerTrack[] {
+  const holds = (track: PlayerTrack): boolean => track.sources.some((source) => source.key === pick.source);
+  return (pick.fillFromNext ? tracks : tracks.filter(holds)).map((track) => ({
+    ...track,
+    sources: [
+      ...track.sources.filter((source) => source.key === pick.source),
+      ...track.sources.filter((source) => source.key !== pick.source),
+    ],
+  }));
 }
 
 export function failedSourcesFor(track: PlayerTrack, failed: FailedSources | null): readonly string[] {

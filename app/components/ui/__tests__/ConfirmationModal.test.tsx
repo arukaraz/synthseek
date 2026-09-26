@@ -33,6 +33,19 @@ describe("ConfirmationModal", () => {
     expect(screen.getByText("This action cannot be undone.")).toBeInTheDocument();
   });
 
+  it("renders a caller's own controls between the message and the actions", () => {
+    render(
+      <ConfirmationModal {...baseProps} isOpen>
+        <button type="button">Extra choice</button>
+      </ConfirmationModal>
+    );
+    const extra = screen.getByRole("button", { name: "Extra choice" });
+    const confirm = screen.getByRole("button", { name: DEFAULT_CONFIRM_TEXT });
+
+    expect(screen.getByRole("dialog")).toContainElement(extra);
+    expect(extra.compareDocumentPosition(confirm) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("associates the dialog with its title and description for assistive tech", () => {
     render(<ConfirmationModal {...baseProps} isOpen />);
     const dialog = screen.getByRole("dialog");

@@ -60,6 +60,13 @@
   "source": {
     "local": "Local"
   },
+  "sourcePicker": {
+    "title": "Lire depuis",
+    "message": "Certaines de ces pistes sont à plusieurs endroits. Choisissez d'où les lire.",
+    "count": "{{count}} sur {{total}}",
+    "fillFromNext": "Lire les pistes manquantes depuis la source suivante",
+    "play": "Lire"
+  },
   "settings": {
     "title": "Réglages de lecture",
     "close": "Masquer les réglages de lecture",

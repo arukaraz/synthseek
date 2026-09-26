@@ -1,3 +1,5 @@
+import type { SourcePickerRequest } from "@hooks/ui/player";
+
 export type PlayerTone = "primary" | "secondary" | "accent";
 
 export type PlayerRepeat = "off" | "all" | "one";
@@ -55,6 +57,17 @@ export interface PlayerSourceOption {
   label: string;
   detail: string;
   local: boolean;
+}
+
+export interface SourcePickerDialogProps {
+  request: SourcePickerRequest;
+}
+
+export interface SourceOptionsProps {
+  options: readonly Pick<PlayerSourceOption, "key" | "label" | "detail">[];
+  selected: string | null;
+  label: string;
+  onSelect: (key: string) => void;
 }
 
 export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";
