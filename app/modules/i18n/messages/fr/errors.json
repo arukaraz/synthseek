@@ -148,8 +148,8 @@
     "description": "Le rappel de la source de bibliothèque a échoué. Réessayez."
   },
   "LIBRARY_SOURCE_REAUTH_REQUIRED": {
-    "title": "Connexion Spotify expirée",
-    "description": "Reconnectez votre compte Spotify pour charger votre bibliothèque."
+    "title": "Connexion à la bibliothèque expirée",
+    "description": "Reconnectez ce compte pour charger sa bibliothèque."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Échec de la connexion à Lidarr",

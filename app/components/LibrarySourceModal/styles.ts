@@ -21,6 +21,9 @@ export const providerTone = cva("", {
   variants: {
     provider: {
       spotify: "bg-(--brand-spotify)/15 text-(--brand-spotify)",
+      plex: "bg-plex-500/15 text-plex-400",
+      navidrome: "bg-(--brand-navidrome)/15 text-(--brand-navidrome)",
+      jellyfin: "bg-(--brand-jellyfin)/15 text-(--brand-jellyfin)",
     } satisfies Record<LibrarySourceProvider, string>,
   },
 });
@@ -267,6 +270,8 @@ export const bottombarRight = cva(
   "flex min-w-0 flex-col items-stretch gap-3 sm:ml-auto sm:flex-row sm:flex-wrap sm:items-center"
 );
 export const bottombarButtons = cva("flex min-w-0 items-center gap-3");
+
+export const downloadChoice = cva("flex min-w-0 cursor-pointer items-center gap-2 text-xs text-fg/80");
 
 export const bbStat = cva("text-xs text-fg/60");
 export const bbStatStrong = cva("font-mono font-semibold text-fg");

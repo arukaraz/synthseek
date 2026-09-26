@@ -4,6 +4,9 @@ import type { ComponentType } from "react";
 import type { LibrarySourceProvider } from "@hooks/api/queries/library-source/types";
 import type { ErrorCategory } from "@modules/errors";
 
+import { JellyfinMark } from "./components/JellyfinMark";
+import { NavidromeMark } from "./components/NavidromeMark";
+import { PlexMark } from "./components/PlexMark";
 import { SpotifyMark } from "./components/SpotifyMark";
 import type { BrandMarkProps } from "./components/types";
 import type { AutoWatchState, LibraryFilter, LibraryItemType, LibrarySort, WatchRowKeys } from "./types";
@@ -25,10 +28,16 @@ export const FILTER_ITEM_TYPE: Record<Exclude<LibraryFilter, "all">, LibraryItem
 
 export const PROVIDER_MARKS: Record<LibrarySourceProvider, ComponentType<BrandMarkProps>> = {
   spotify: SpotifyMark,
+  plex: PlexMark,
+  navidrome: NavidromeMark,
+  jellyfin: JellyfinMark,
 };
 
 export const PROVIDER_ERROR_CATEGORY: Record<LibrarySourceProvider, ErrorCategory> = {
   spotify: "spotify",
+  plex: "generic",
+  navidrome: "generic",
+  jellyfin: "generic",
 };
 
 export const PROFILE_ROUTE = "/settings/profile";

@@ -111,7 +111,9 @@
       "refreshList": "Actualizar lista",
       "cancel": "Cancelar",
       "saving": "Guardando…",
-      "saveChanges": "Guardar cambios"
+      "saveChanges": "Guardar cambios",
+      "downloadMissing": "Descargar las que falten",
+      "downloadMissingHint": "Desactivado, las canciones que Synthseek no tiene suenan desde {{provider}} y no se descargan."
     },
     "autoWatch": {
       "off": "desactivado",

@@ -30,6 +30,7 @@ function buildSource(overrides: Partial<LibrarySourceDescription> = {}): Library
       connect: "oauth",
       itemTypes: ["playlist", "album", "liked"],
       watch: { playlists: true, savedAlbums: true },
+      streamsAudio: false,
     },
     ...overrides,
   };
@@ -75,6 +76,7 @@ vi.mock("@hooks/api/mutations/library-source/useSaveLibrarySourceChanges", () =>
 }));
 
 interface BottombarCapture {
+  download: { enabled: boolean; onChange: (enabled: boolean) => void; providerName: string } | null;
   onSave: () => void;
   onCancel: () => void;
   onRefresh: () => void;
@@ -257,7 +259,12 @@ describe("LibrarySourceModal", () => {
     sources = [
       buildSource({
         name: "Navi",
-        capabilities: { connect: "oauth", itemTypes: ["playlist"], watch: { playlists: true, savedAlbums: false } },
+        capabilities: {
+          connect: "oauth",
+          itemTypes: ["playlist"],
+          watch: { playlists: true, savedAlbums: false },
+          streamsAudio: false,
+        },
       }),
     ];
 
@@ -447,6 +454,41 @@ describe("LibrarySourceModal", () => {
     expect(payload.toImport[0]).toMatchObject({ id: "a", type: "playlist", syncEnabled: true });
   });
 
+  it("offers no download choice for a source that cannot play the tracks itself, and always downloads", async () => {
+    render(<LibrarySourceModal provider="spotify" open onOpenChange={vi.fn()} />);
+
+    expect(bottombarProps?.download).toBeNull();
+    await act(async () => {
+      await bottombarProps?.onSave();
+    });
+    expect(saveMutateAsync.mock.calls[0][0].download).toBe(true);
+  });
+
+  it("lets a source that holds the audio import without downloading, on by default", async () => {
+    sources = [
+      buildSource({
+        name: "Navidrome",
+        capabilities: {
+          connect: "oauth",
+          itemTypes: ["playlist"],
+          watch: { playlists: true, savedAlbums: false },
+          streamsAudio: true,
+        },
+      }),
+    ];
+    render(<LibrarySourceModal provider="spotify" open onOpenChange={vi.fn()} />);
+
+    expect(bottombarProps?.download).toMatchObject({ enabled: true, providerName: "Navidrome" });
+    act(() => {
+      bottombarProps?.download?.onChange(false);
+    });
+    await act(async () => {
+      await bottombarProps?.onSave();
+    });
+
+    expect(saveMutateAsync.mock.calls[0][0].download).toBe(false);
+  });
+
   it("sends the subscription block only when the watch flags change", async () => {
     render(<LibrarySourceModal provider="spotify" open onOpenChange={vi.fn()} />);
 
@@ -592,7 +634,7 @@ describe("LibrarySourceModal", () => {
     rerender(<LibrarySourceModal provider="spotify" open onOpenChange={vi.fn()} />);
 
     expect(toastMocks.error).toHaveBeenCalledTimes(1);
-    expect(toastMocks.error).toHaveBeenCalledWith("Spotify connection expired", expect.anything());
+    expect(toastMocks.error).toHaveBeenCalledWith("Library connection expired", expect.anything());
     expect(invalidateSources).toHaveBeenCalledTimes(1);
   });
 

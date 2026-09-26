@@ -111,7 +111,9 @@
       "refreshList": "Liste aktualisieren",
       "cancel": "Abbrechen",
       "saving": "Wird gespeichert…",
-      "saveChanges": "Änderungen speichern"
+      "saveChanges": "Änderungen speichern",
+      "downloadMissing": "Fehlende Titel herunterladen",
+      "downloadMissingHint": "Wenn aus, laufen Titel, die Synthseek nicht hat, über {{provider}} und werden nicht heruntergeladen."
     },
     "autoWatch": {
       "off": "aus",

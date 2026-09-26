@@ -1,14 +1,24 @@
 "use client";
 
 import { Button } from "@components/ui/Button";
+import { Switch } from "@components/ui/Switch";
 import { RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { bbStat, bbStatStrong, bottombar, bottombarButtons, bottombarLeft, bottombarRight } from "../styles";
+import {
+  bbStat,
+  bbStatStrong,
+  bottombar,
+  bottombarButtons,
+  bottombarLeft,
+  bottombarRight,
+  downloadChoice,
+} from "../styles";
 
 import type { ModalBottombarProps } from "./types";
 
 export function ModalBottombar({
+  download,
   totalRows,
   totalTracks,
   onSave,
@@ -45,6 +55,19 @@ export function ModalBottombar({
         </Button>
       </div>
       <div className={bottombarRight()}>
+        {download === null ? null : (
+          <label
+            className={downloadChoice()}
+            title={t("librarySource.bottombar.downloadMissingHint", { provider: download.providerName })}
+          >
+            <Switch
+              checked={download.enabled}
+              onCheckedChange={(checked) => download.onChange(Boolean(checked))}
+              disabled={isSaving}
+            />
+            {t("librarySource.bottombar.downloadMissing")}
+          </label>
+        )}
         <div className={bottombarButtons()}>
           <Button variant="ghost" size="sm" onClick={onCancel} disabled={isSaving} className="flex-1 sm:flex-none">
             {t("librarySource.bottombar.cancel")}

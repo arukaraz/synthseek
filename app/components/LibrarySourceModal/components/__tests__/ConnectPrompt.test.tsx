@@ -26,6 +26,7 @@ function source(overrides: Partial<LibrarySourceDescription> = {}): LibrarySourc
       connect: "oauth",
       itemTypes: ["playlist", "album", "liked"],
       watch: { playlists: true, savedAlbums: true },
+      streamsAudio: false,
     },
     ...overrides,
   };
@@ -94,7 +95,12 @@ describe("ConnectPrompt", () => {
       <ConnectPrompt
         source={source({
           name: "Navidrome",
-          capabilities: { connect: "account", itemTypes: ["playlist"], watch: { playlists: true, savedAlbums: false } },
+          capabilities: {
+            connect: "account",
+            itemTypes: ["playlist"],
+            watch: { playlists: true, savedAlbums: false },
+            streamsAudio: true,
+          },
         })}
       />
     );

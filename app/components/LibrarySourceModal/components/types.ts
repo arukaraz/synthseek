@@ -105,7 +105,7 @@ export interface DetailHeroProps {
   imported: boolean;
   importedTarget: boolean;
   onToggleImport: () => void;
-  externalUrl: string;
+  externalUrl: string | null;
   name: string;
   crumb: string;
   byline: string;
@@ -129,11 +129,18 @@ export interface DetailMetadataProps {
 export interface DetailTracklistProps {
   totalTracks: number;
   preview: ReadonlyArray<{ position: number; title: string; artist: string; duration: string }>;
-  externalUrl: string;
+  externalUrl: string | null;
   hasMore: boolean;
 }
 
+export interface DownloadChoice {
+  enabled: boolean;
+  onChange: (enabled: boolean) => void;
+  providerName: string;
+}
+
 export interface ModalBottombarProps {
+  download: DownloadChoice | null;
   totalRows: number;
   totalTracks: number;
   onSave: () => void;

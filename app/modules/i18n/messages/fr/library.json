@@ -111,7 +111,9 @@
       "refreshList": "Actualiser la liste",
       "cancel": "Annuler",
       "saving": "Enregistrement…",
-      "saveChanges": "Enregistrer les modifications"
+      "saveChanges": "Enregistrer les modifications",
+      "downloadMissing": "Télécharger les titres manquants",
+      "downloadMissingHint": "Désactivé, les titres que Synthseek n'a pas sont lus depuis {{provider}} et ne sont pas téléchargés."
     },
     "autoWatch": {
       "off": "désactivé",

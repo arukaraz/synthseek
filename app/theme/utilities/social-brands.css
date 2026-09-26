@@ -5,6 +5,8 @@
   --brand-instagram: oklch(0.6 0.24 5);
   --brand-lastfm: oklch(0.62 0.21 27);
   --brand-listenbrainz: oklch(0.72 0.15 50);
+  --brand-navidrome: oklch(0.66 0.15 245);
+  --brand-jellyfin: oklch(0.64 0.17 305);
   --brand-website: var(--color-secondary-400);
 }
 

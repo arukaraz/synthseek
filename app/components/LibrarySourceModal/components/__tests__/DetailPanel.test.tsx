@@ -13,7 +13,7 @@ interface ItemDetail {
   crumb: string | null;
   subtitle: string | null;
   image: string | null;
-  externalUrl: string;
+  externalUrl: string | null;
   sourceId: string;
   released: string | null;
   label: string | null;
@@ -136,6 +136,20 @@ describe("the detail pane", () => {
     renderPanel(createMockLibraryItem());
 
     expect(screen.getByText("Digital Love")).toBeInTheDocument();
+  });
+
+  it("offers no way out to a source that has no public address for the item", () => {
+    api.detail = detail({ externalUrl: null, hasMore: true });
+
+    renderPanel(createMockLibraryItem());
+
+    expect(
+      screen.queryByText(enLibrary.librarySource.detail.openIn.replace("{{provider}}", "Spotify"))
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(enLibrary.librarySource.tracklist.viewAll.replace("{{total}}", "12"))
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("Summer 2026")).toBeInTheDocument();
   });
 
   it("asks the source it was opened for, and links out to it by name", () => {

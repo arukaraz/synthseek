@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
-import { SpotifyMark } from "@components/LibrarySourceModal";
+import { PlexMark, SpotifyMark } from "@components/LibrarySourceModal";
 import { usePlaybackSourceAccounts } from "@hooks/api";
 import { usePlexUnlink } from "@hooks/api/mutations/auth/usePlexUnlink";
 import { useConnectLibrarySource } from "@hooks/api/mutations/library-source/useConnectLibrarySource";
@@ -15,7 +15,6 @@ import { useAuthContext } from "@modules/providers/AuthProvider";
 import { SettingsCard } from "../../../components/SettingsCard";
 import { usePlexLink } from "../hooks/usePlexLink";
 import { connectedRow, plexChip, spotifyChip } from "../styles";
-import { PlexMark } from "./PlexMark";
 import { PlexReportingRow } from "./PlexReportingRow";
 import { ServerAccountRow } from "./ServerAccountRow";
 

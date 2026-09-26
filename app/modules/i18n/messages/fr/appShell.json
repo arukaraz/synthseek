@@ -60,6 +60,9 @@
     },
     "provider": {
       "spotify": "Spotify",
+      "plex": "Plex",
+      "navidrome": "Navidrome",
+      "jellyfin": "Jellyfin",
       "generic": "votre bibliothèque"
     },
     "announce": {

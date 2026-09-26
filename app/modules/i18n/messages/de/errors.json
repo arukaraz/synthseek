@@ -148,8 +148,8 @@
     "description": "Der Rückruf der Bibliotheksquelle ist fehlgeschlagen. Versuche es erneut."
   },
   "LIBRARY_SOURCE_REAUTH_REQUIRED": {
-    "title": "Spotify-Verbindung abgelaufen",
-    "description": "Verbinde dein Spotify-Konto erneut, um deine Bibliothek zu laden."
+    "title": "Bibliotheksverbindung abgelaufen",
+    "description": "Verbinde dieses Konto erneut, um seine Bibliothek zu laden."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Lidarr-Verbindung fehlgeschlagen",

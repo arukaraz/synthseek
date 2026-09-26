@@ -74,16 +74,18 @@ export function DetailHero({
           <Check className="size-3.5" strokeWidth={2.5} />
           {primaryLabel}
         </button>
-        <a
-          href={externalUrl}
-          target="_blank"
-          rel="noreferrer"
-          className={detailAct()}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <ExternalLink className="size-3.5" />
-          {t("librarySource.detail.openIn", { provider: providerName })}
-        </a>
+        {externalUrl === null ? null : (
+          <a
+            href={externalUrl}
+            target="_blank"
+            rel="noreferrer"
+            className={detailAct()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ExternalLink className="size-3.5" />
+            {t("librarySource.detail.openIn", { provider: providerName })}
+          </a>
+        )}
       </div>
     </div>
   );

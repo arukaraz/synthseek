@@ -117,6 +117,9 @@ export function failureReasonKey(reason: LibraryImportFailureReason | undefined)
 
 const PROVIDER_LABEL_KEYS: Record<string, AppShellKey> = {
   spotify: "progressDock.provider.spotify",
+  plex: "progressDock.provider.plex",
+  navidrome: "progressDock.provider.navidrome",
+  jellyfin: "progressDock.provider.jellyfin",
 };
 
 export function providerLabelKey(provider: string | undefined): AppShellKey {

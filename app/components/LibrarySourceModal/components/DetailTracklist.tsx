@@ -46,7 +46,7 @@ export function DetailTracklist({ totalTracks, preview, externalUrl, hasMore }: 
           ))
         )}
       </div>
-      {hasMore && (
+      {hasMore && externalUrl !== null && (
         <a href={externalUrl} target="_blank" rel="noreferrer" className={trackMore()}>
           {t("librarySource.tracklist.viewAll", { total: totalTracks })}
         </a>

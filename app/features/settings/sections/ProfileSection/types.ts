@@ -5,10 +5,6 @@ export interface ProfileCardProps {
   user: PublicUser;
 }
 
-export interface PlexMarkProps {
-  size?: number;
-}
-
 export interface PlexReportingRowProps {
   onRelink: () => void;
   relinking: boolean;

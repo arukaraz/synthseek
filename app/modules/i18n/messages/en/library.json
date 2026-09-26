@@ -111,7 +111,9 @@
       "refreshList": "Refresh list",
       "cancel": "Cancel",
       "saving": "Saving…",
-      "saveChanges": "Save changes"
+      "saveChanges": "Save changes",
+      "downloadMissing": "Download missing tracks",
+      "downloadMissingHint": "When off, tracks Synthseek does not have play from {{provider}} and are not downloaded."
     },
     "autoWatch": {
       "off": "off",

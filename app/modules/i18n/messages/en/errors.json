@@ -148,8 +148,8 @@
     "description": "The library source callback failed. Try again."
   },
   "LIBRARY_SOURCE_REAUTH_REQUIRED": {
-    "title": "Spotify connection expired",
-    "description": "Reconnect your Spotify account to load your library."
+    "title": "Library connection expired",
+    "description": "Connect that account again to load its library."
   },
   "LIDARR_CONNECTION_FAILED": {
     "title": "Lidarr connection failed",

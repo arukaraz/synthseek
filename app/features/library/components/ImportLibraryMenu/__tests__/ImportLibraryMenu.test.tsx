@@ -42,6 +42,7 @@ function spotify(overrides: Partial<LibrarySourceDescription> = {}): LibrarySour
       connect: "oauth",
       itemTypes: ["playlist", "album", "liked"],
       watch: { playlists: true, savedAlbums: true },
+      streamsAudio: false,
     },
     ...overrides,
   };

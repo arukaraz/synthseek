@@ -67,10 +67,12 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
   );
 
   const draft = useLibraryDraftState(initialWatch);
+  const [download, setDownload] = useState(true);
 
   useEffect(() => {
     if (!open) return;
     draft.reset(initialWatch);
+    setDownload(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
@@ -206,6 +208,7 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
       jobId,
       toImport,
       toToggleSync,
+      download,
       subscription: subscriptionChanged
         ? {
             watch_new_playlists: draft.state.autoWatch.playlists,
@@ -284,6 +287,9 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
               </div>
             </div>
             <ModalBottombar
+              download={
+                source.capabilities.streamsAudio ? { enabled: download, onChange: setDownload, providerName } : null
+              }
               totalRows={totalRows}
               totalTracks={totalTracks}
               onSave={handleSave}
