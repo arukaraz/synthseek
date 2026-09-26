@@ -4,6 +4,7 @@ import {
   PCM_NETWORK_RETRY_MAX_SECONDS,
   PCM_READ_RETRIES,
   PCM_URL_CACHE_BYTES,
+  RANGE_ANSWER_STATUS,
 } from "./constants";
 import { gaplessInfoFrom, id3Length, trimFor } from "./lame";
 import type { PcmSource, PcmTrim } from "./types";
@@ -27,7 +28,10 @@ async function fetchRange(url: string, from: number, length: number): Promise<Ui
     headers: { Range: `bytes=${from}-${from + length - 1}` },
     credentials: "include",
   });
-  if (!response.ok) return null;
+  if (response.status !== RANGE_ANSWER_STATUS) {
+    await response.body?.cancel();
+    return null;
+  }
   return new Uint8Array(await response.arrayBuffer());
 }
 
@@ -43,11 +47,16 @@ async function mp3Trim(url: string, sampleRate: number): Promise<PcmTrim | null>
 
 export async function openPcmSource(url: string): Promise<PcmSource> {
   const media = await import("mediabunny");
+  const transport = { ranged: true };
   const input = new media.Input({
     source: new media.UrlSource(url, {
       requestInit: { credentials: "include" },
       maxCacheSize: PCM_URL_CACHE_BYTES,
-      fetchFn: fetchOrRefuse,
+      fetchFn: async (request, init) => {
+        const response = await fetchOrRefuse(request, init);
+        if (response.status !== RANGE_ANSWER_STATUS) transport.ranged = false;
+        return response;
+      },
       getRetryDelay: readRetryDelay,
     }),
     formats: media.ALL_FORMATS,
@@ -57,11 +66,12 @@ export async function openPcmSource(url: string): Promise<PcmSource> {
     if (track === null || !(await track.canDecode())) throw new Error("undecodable");
     const codec = await track.getCodec();
     const sampleRate = await track.getSampleRate();
-    const rawDuration = await track.computeDuration();
-    const trim = codec === "mp3" ? await mp3Trim(url, sampleRate) : null;
+    const rawDuration = transport.ranged ? await track.computeDuration() : null;
+    const trim = codec === "mp3" && transport.ranged ? await mp3Trim(url, sampleRate) : null;
     const sink = new media.AudioBufferSink(track);
     return {
-      durationSeconds: trim === null ? rawDuration : Math.min(rawDuration, trim.durationSeconds),
+      durationSeconds:
+        rawDuration === null || trim === null ? rawDuration : Math.min(rawDuration, trim.durationSeconds),
       sampleRate,
       trimStartSeconds: trim?.startSeconds ?? 0,
       buffers: (fromSeconds) => sink.buffers(fromSeconds + (trim?.startSeconds ?? 0)),

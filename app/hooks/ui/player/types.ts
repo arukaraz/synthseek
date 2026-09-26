@@ -196,7 +196,7 @@ export interface PcmBuffer {
 }
 
 export interface PcmSource {
-  durationSeconds: number;
+  durationSeconds: number | null;
   sampleRate: number;
   trimStartSeconds: number;
   buffers: (fromSeconds: number) => AsyncGenerator<PcmBuffer, void, unknown>;

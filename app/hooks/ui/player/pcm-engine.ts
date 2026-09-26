@@ -44,9 +44,12 @@ let generation = 0;
 let voiceCount = 0;
 let active: Voice | null = null;
 let primed: { plan: PrimePlan; voice: Voice } | null = null;
+let opening: { plan: PrimePlan; generation: number } | null = null;
 let outgoing: { voice: Voice; release: ReturnType<typeof setTimeout> } | null = null;
 let pausedAt: number | null = null;
 let playing = false;
+let armedLoad: number | null = null;
+let resumeOnOpen = false;
 let activeGain = 1;
 let refusedPrimeUrl: string | null = null;
 let loadTimer: ReturnType<typeof setTimeout> | undefined;
@@ -136,8 +139,16 @@ function samePlan(a: PrimePlan, b: PrimePlan): boolean {
   return a.url === b.url && a.gainFactor === b.gainFactor && a.fadeSeconds === b.fadeSeconds && a.curve === b.curve;
 }
 
+function lastSecondOf(voice: Voice): number {
+  return voice.source.durationSeconds ?? Infinity;
+}
+
+function reportedDurationOf(voice: Voice): number {
+  return voice.source.durationSeconds ?? 0;
+}
+
 function currentPosition(voice: Voice): number {
-  return positionOf(voice.base, voice.bus.context.currentTime, voice.source.durationSeconds);
+  return positionOf(voice.base, voice.bus.context.currentTime, lastSecondOf(voice));
 }
 
 function startVoice(voice: Voice, fromSeconds: number, baseTime?: number): void {
@@ -155,7 +166,7 @@ async function feed(voice: Voice, fromSeconds: number): Promise<void> {
   try {
     for await (const { buffer, timestamp, duration } of iterator) {
       if (voice.iterator !== iterator) return;
-      const clip = clipBuffer(timestamp, duration, voice.source.trimStartSeconds, voice.source.durationSeconds);
+      const clip = clipBuffer(timestamp, duration, voice.source.trimStartSeconds, lastSecondOf(voice));
       if (clip === null) continue;
       let when = roundToSample(voice.base + clip.startSeconds, context.sampleRate);
       if (when < context.currentTime) {
@@ -212,7 +223,7 @@ function failVoice(voice: Voice): void {
 }
 
 function endOf(voice: Voice): number {
-  return voice.base + (voice.fed ? voice.scheduledUntil : voice.source.durationSeconds);
+  return voice.base + (voice.fed ? voice.scheduledUntil : lastSecondOf(voice));
 }
 
 function seamTarget(voice: Voice): number {
@@ -258,10 +269,11 @@ function finishActive(voice: Voice): void {
   stopProgress();
   stopNodes(voice);
   playing = false;
-  pausedAt = voice.source.durationSeconds;
+  const endedAt = voice.source.durationSeconds ?? voice.scheduledUntil;
+  pausedAt = endedAt;
   releaseKeepAlive();
   stopFollowingAudio();
-  callbacks?.onProgress(voice.source.durationSeconds, voice.source.durationSeconds);
+  callbacks?.onProgress(endedAt, endedAt);
   callbacks?.onEnded();
 }
 
@@ -297,7 +309,7 @@ function startProgress(): void {
   clearInterval(progressTimer);
   progressTimer = setInterval(() => {
     if (active === null || !playing) return;
-    callbacks?.onProgress(currentPosition(active), active.source.durationSeconds);
+    callbacks?.onProgress(currentPosition(active), reportedDurationOf(active));
     if (!starved(active)) return;
     stopProgress();
     clearTimeout(loadTimer);
@@ -418,6 +430,8 @@ export function loadAt(url: string, seconds: number, volume: number, muted: bool
   retireActive();
   refusedPrimeUrl = null;
   playing = false;
+  armedLoad = current;
+  resumeOnOpen = false;
   stopProgress();
   applyVolume(volume, muted);
   void open(url)
@@ -426,14 +440,24 @@ export function loadAt(url: string, seconds: number, volume: number, muted: bool
         disposeVoice(voice);
         return;
       }
+      armedLoad = null;
       active = voice;
-      pausedAt = Math.min(Math.max(0, seconds), voice.source.durationSeconds);
+      pausedAt = Math.min(Math.max(0, seconds), lastSecondOf(voice));
       setTrackGain(voice.key, activeGain, true);
+      callbacks?.onProgress(pausedAt, reportedDurationOf(voice));
+      if (resumeOnOpen) {
+        resumeOnOpen = false;
+        resume();
+        return;
+      }
       callbacks?.onLoadingChange(false);
-      callbacks?.onProgress(pausedAt, voice.source.durationSeconds);
     })
     .catch(() => {
-      if (current === generation) callbacks?.onFailure("load");
+      if (current !== generation) return;
+      armedLoad = null;
+      resumeOnOpen = false;
+      clearTimeout(loadTimer);
+      callbacks?.onFailure("load");
     });
 }
 
@@ -445,23 +469,32 @@ export function prime(plan: PrimePlan): void {
     reschedulePrimed();
     return;
   }
+  if (opening !== null && opening.generation === generation && opening.plan.url === plan.url) {
+    opening.plan = plan;
+    return;
+  }
   discardPrimed();
-  const current = generation;
+  const request = { plan, generation };
+  opening = request;
   void open(plan.url)
     .then((voice) => {
-      if (current !== generation || primed !== null || active === null) {
+      const latest = opening === request;
+      if (latest) opening = null;
+      if (!latest || request.generation !== generation || primed !== null || active === null) {
         disposeVoice(voice);
         return;
       }
-      primed = { plan, voice };
+      primed = { plan: request.plan, voice };
       if (active.fed && playing) beginPrimedFeed(active);
     })
     .catch(() => {
-      if (current === generation) refusedPrimeUrl = plan.url;
+      if (opening === request) opening = null;
+      if (request.generation === generation) refusedPrimeUrl = request.plan.url;
     });
 }
 
 export function cancelPrime(): void {
+  opening = null;
   discardPrimed();
 }
 
@@ -477,14 +510,26 @@ export function setActiveTrackGain(factor: number): void {
 }
 
 export function resume(): void {
-  if (active === null || playing) return;
+  if (playing) return;
+  if (active === null) {
+    if (armedLoad !== generation) return;
+    resumeOnOpen = true;
+    callbacks?.onLoadingChange(true);
+    armLoadTimer(generation);
+    return;
+  }
   const from = pausedAt ?? 0;
-  const restart = from >= active.source.durationSeconds ? 0 : from;
+  const restart = from >= lastSecondOf(active) ? 0 : from;
   beginPlaying(active, restart);
   callbacks?.onPlayingChange(true);
 }
 
 export function pause(): void {
+  if (resumeOnOpen && armedLoad === generation) {
+    resumeOnOpen = false;
+    clearTimeout(loadTimer);
+    callbacks?.onLoadingChange(false);
+  }
   if (active === null || !playing) return;
   pausedAt = currentPosition(active);
   playing = false;
@@ -501,10 +546,10 @@ export function pause(): void {
 
 export function seek(seconds: number): void {
   if (active === null || !Number.isFinite(seconds)) return;
-  const target = Math.min(Math.max(0, seconds), active.source.durationSeconds);
+  const target = Math.min(Math.max(0, seconds), lastSecondOf(active));
   if (!playing) {
     pausedAt = target;
-    callbacks?.onProgress(target, active.source.durationSeconds);
+    callbacks?.onProgress(target, reportedDurationOf(active));
     return;
   }
   seamRun += 1;
@@ -513,7 +558,7 @@ export function seek(seconds: number): void {
   if (primed !== null) stopNodes(primed.voice);
   restoreActiveGain(true);
   startVoice(active, target);
-  callbacks?.onProgress(target, active.source.durationSeconds);
+  callbacks?.onProgress(target, reportedDurationOf(active));
 }
 
 export function applyVolume(volume: number, muted: boolean): void {

@@ -34,6 +34,7 @@ const media = vi.hoisted(() => {
   const state = {
     track,
     missingTrack: false,
+    headRead: false,
     urlSources: [] as { url: string; options: UrlSourceOptions }[],
     inputs: [] as { options: unknown; dispose: ReturnType<typeof vi.fn> }[],
     sinks: [] as { track: unknown; buffers: ReturnType<typeof vi.fn> }[],
@@ -64,6 +65,9 @@ vi.mock("mediabunny", () => ({
     }
 
     async getPrimaryAudioTrack(): Promise<typeof media.track | null> {
+      if (media.headRead) {
+        await media.urlSources.at(-1)?.options.fetchFn?.("/stream/1", { headers: { Range: "bytes=0-" } });
+      }
       return media.missingTrack ? null : media.track;
     }
   },
@@ -72,7 +76,11 @@ vi.mock("mediabunny", () => ({
 const fetchMock = vi.fn<(url: string, init: RequestInit) => Promise<Response>>();
 
 function headResponse(ok: boolean): Response {
-  return { ok, arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer } as unknown as Response;
+  return {
+    ok,
+    status: ok ? 206 : 404,
+    arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer,
+  } as unknown as Response;
 }
 
 async function fresh(): Promise<typeof import("../pcm-source")> {
@@ -85,6 +93,7 @@ beforeEach(() => {
   media.track.codec = "flac";
   media.track.decodable = true;
   media.missingTrack = false;
+  media.headRead = false;
   media.urlSources.length = 0;
   media.inputs.length = 0;
   media.sinks.length = 0;
@@ -187,6 +196,7 @@ describe("opening a stream as decoded audio", () => {
     fetchMock.mockResolvedValueOnce(headResponse(true));
     fetchMock.mockResolvedValueOnce({
       ok: true,
+      status: 206,
       arrayBuffer: async () => new Uint8Array([9, 9]).buffer,
     } as unknown as Response);
     const source = await fresh();
@@ -206,7 +216,11 @@ describe("opening a stream as decoded audio", () => {
     media.track.codec = "mp3";
     lame.id3Length.mockReturnValue(MP3_HEAD_BYTES - MP3_XING_WINDOW_BYTES);
     const fullHead = new Uint8Array(MP3_HEAD_BYTES).fill(7);
-    fetchMock.mockResolvedValueOnce({ ok: true, arrayBuffer: async () => fullHead.buffer } as unknown as Response);
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      status: 206,
+      arrayBuffer: async () => fullHead.buffer,
+    } as unknown as Response);
     const source = await fresh();
 
     await source.openPcmSource("/stream/1");
@@ -251,6 +265,59 @@ describe("opening a stream as decoded audio", () => {
     const untagged = await source.openPcmSource("/stream/2");
     expect(untagged.trimStartSeconds).toBe(0);
     expect(lame.trimFor).not.toHaveBeenCalled();
+  });
+
+  it("drops a whole conversion sent in answer to the head's range and plays it untrimmed", async () => {
+    media.track.codec = "mp3";
+    const cancel = vi.fn();
+    let chunks = 3;
+    const body = new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        if (chunks === 0) {
+          controller.close();
+          return;
+        }
+        chunks -= 1;
+        controller.enqueue(new Uint8Array(1024).fill(5));
+      },
+      cancel,
+    });
+    fetchMock.mockResolvedValueOnce(new Response(body, { status: 200 }));
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1?format=mp3&maxBitrate=192");
+
+    expect(cancel).toHaveBeenCalled();
+    expect(lame.gaplessInfoFrom).not.toHaveBeenCalled();
+    expect(opened.trimStartSeconds).toBe(0);
+    expect(opened.durationSeconds).toBe(200);
+  });
+
+  it("reads a stream the server will not range once, front to back, leaving its length to its end", async () => {
+    media.track.codec = "mp3";
+    media.headRead = true;
+    fetchMock.mockResolvedValueOnce(new Response("mp3 frames", { status: 200 }));
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1?format=mp3&maxBitrate=192");
+
+    expect(media.track.computeDuration).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(opened.durationSeconds).toBeNull();
+    expect(opened.trimStartSeconds).toBe(0);
+  });
+
+  it("still measures and trims a stream the server ranges", async () => {
+    media.track.codec = "mp3";
+    media.headRead = true;
+    fetchMock.mockResolvedValueOnce(new Response("mp3 frames", { status: 206 }));
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+
+    expect(media.track.computeDuration).toHaveBeenCalled();
+    expect(opened.durationSeconds).toBe(100);
+    expect(opened.trimStartSeconds).toBe(0.025);
   });
 
   it("closes the input when the stream has no audio or cannot be decoded here", async () => {

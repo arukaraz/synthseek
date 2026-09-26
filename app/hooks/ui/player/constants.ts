@@ -184,6 +184,8 @@ export const PCM_NETWORK_RETRY_MAX_SECONDS = 16;
 export const MP3_HEAD_BYTES = 4096;
 export const MP3_XING_WINDOW_BYTES = 512;
 
+export const RANGE_ANSWER_STATUS = 206;
+
 export const MP3_DECODER_DELAY_SAMPLES = 529;
 
 export const MP3_SAMPLES_PER_FRAME_MPEG1 = 1152;

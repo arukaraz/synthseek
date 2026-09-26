@@ -25,7 +25,9 @@ const sources = vi.hoisted(() => ({
       failAfter?: number;
       hangAfter?: number;
       firstAfterMs?: number;
+      openAfterMs?: number;
       shortBy?: number;
+      unknownLength?: boolean;
     }
   >(),
   opened: [] as string[],
@@ -38,10 +40,11 @@ vi.mock("../pcm-source", () => ({
   openPcmSource: async (url: string): Promise<PcmSource> => {
     const spec = sources.specs.get(url) ?? { duration: 30, trim: 0, chunk: 1, fail: false };
     sources.opened.push(url);
+    if (spec.openAfterMs !== undefined) await new Promise((resolve) => setTimeout(resolve, spec.openAfterMs));
     if (spec.fail) throw new Error("cannot open");
     const rawEnd = spec.duration + spec.trim + (spec.padding ?? 0) - (spec.shortBy ?? 0);
     return {
-      durationSeconds: spec.duration,
+      durationSeconds: spec.unknownLength === true ? null : spec.duration,
       sampleRate: 44100,
       trimStartSeconds: spec.trim,
       buffers: async function* (fromSeconds: number): AsyncGenerator<PcmBuffer, void, unknown> {
@@ -390,6 +393,73 @@ describe("pausing, resuming and seeking", () => {
     expect(heard.onProgress).toHaveBeenLastCalledWith(12, 30);
     expect(keepalive.keepAlive).not.toHaveBeenCalled();
   });
+
+  it("starts a restored track from where it was once it opens, when Play was pressed while it was still opening", async () => {
+    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 5000 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAt(A, 12, 1, false);
+    await settle();
+
+    engine.resume();
+    expect(heard.onLoadingChange).toHaveBeenLastCalledWith(true);
+    await settle(5000);
+    context.currentTime = 2;
+    await settle(PCM_PROGRESS_MS);
+
+    expect(context.sources.length).toBeGreaterThan(0);
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(true);
+    expect(heard.onLoadingChange).toHaveBeenLastCalledWith(false);
+    expect(keepalive.keepAlive).toHaveBeenCalled();
+    const last = vi.mocked(heard.onProgress).mock.calls.at(-1) ?? [];
+    expect(Number(last[0])).toBeCloseTo(14 - PCM_START_LEAD_SECONDS, 9);
+    await settle(LOAD_TIMEOUT_MS);
+    expect(heard.onFailure).not.toHaveBeenCalled();
+  });
+
+  it("arms, resumes and seeks inside a stream of unknown length without pinning it to its start", async () => {
+    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false, unknownLength: true });
+    const { engine, heard } = await freshEngine();
+    engine.loadAt(A, 12, 1, false);
+    await settle();
+
+    expect(heard.onProgress).toHaveBeenLastCalledWith(12, 0);
+
+    engine.resume();
+    await settle();
+    context.currentTime = 1;
+    await settle(PCM_PROGRESS_MS);
+    const resumed = vi.mocked(heard.onProgress).mock.calls.at(-1) ?? [];
+    expect(Number(resumed[0])).toBeCloseTo(13 - PCM_START_LEAD_SECONDS, 9);
+
+    engine.seek(20);
+    expect(heard.onProgress).toHaveBeenLastCalledWith(20, 0);
+  });
+
+  it("takes that Play back when the listener pauses before the track opens", async () => {
+    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 5000 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAt(A, 12, 1, false);
+
+    engine.resume();
+    engine.pause();
+    await settle(LOAD_TIMEOUT_MS);
+
+    expect(context.sources).toHaveLength(0);
+    expect(heard.onLoadingChange).toHaveBeenLastCalledWith(false);
+    expect(heard.onPlayingChange).not.toHaveBeenCalledWith(true);
+    expect(heard.onFailure).not.toHaveBeenCalled();
+  });
+
+  it("reports a load failure when the track Play was pressed on never finishes opening", async () => {
+    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: LOAD_TIMEOUT_MS * 4 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAt(A, 12, 1, false);
+
+    engine.resume();
+    await settle(LOAD_TIMEOUT_MS);
+
+    expect(heard.onFailure).toHaveBeenCalledWith("load");
+  });
 });
 
 describe("the seam between two tracks", () => {
@@ -539,6 +609,25 @@ describe("the seam between two tracks", () => {
     expect(keepalive.releaseKeepAlive).toHaveBeenCalled();
   });
 
+  it("plays a stream of unknown length to where it really ends, reporting the length as unknown until then", async () => {
+    sources.specs.set(A, { duration: 10, trim: 0, chunk: 1, fail: false, padding: 0.5, unknownLength: true });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+    context.currentTime = 4;
+    await settle(PCM_PROGRESS_MS);
+
+    expect(vi.mocked(heard.onProgress).mock.calls.at(-1)?.[1]).toBe(0);
+
+    context.currentTime = PCM_START_LEAD_SECONDS + 10.5;
+    await settle(PCM_FEED_TICK_MS);
+
+    expect(context.sources).toHaveLength(11);
+    expect(Number(context.sources.at(-1)?.start.mock.calls[0]?.[2])).toBeCloseTo(0.5, 9);
+    expect(heard.onEnded).toHaveBeenCalled();
+    expect(heard.onProgress).toHaveBeenLastCalledWith(10.5, 10.5);
+  });
+
   it("lets go of a readied track on request, and does not ask again for one that failed", async () => {
     const { engine } = await freshEngine();
     await playToTheEnd(engine);
@@ -577,6 +666,37 @@ describe("the seam between two tracks", () => {
 
     expect(sources.opened).toEqual([]);
     expect(sources.disposed).toContain(A);
+  });
+
+  it("opens the next track once while it is being readied, however often it is asked, with the latest correction", async () => {
+    const { engine } = await freshEngine();
+    await playToTheEnd(engine);
+    sources.specs.set(B, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 1000 });
+    const scheduledA = context.sources.length;
+
+    for (const gainFactor of [0.5, 0.5, 0.6, 0.7]) {
+      engine.prime({ url: B, gainFactor, fadeSeconds: 0, curve: "equalPower" });
+      await settle(PCM_PROGRESS_MS);
+    }
+    await settle(1000);
+
+    expect(sources.opened.filter((url) => url === B)).toHaveLength(1);
+    expect(engine.primedUrl()).toBe(B);
+    expect(context.sources[scheduledA]?.start).toHaveBeenCalledWith(PCM_START_LEAD_SECONDS + 10, 0, 1);
+    expect(deckGainOf(3).setValueAtTime).toHaveBeenCalledWith(0.7, 4);
+  });
+
+  it("lets go of a track still opening when the prime is called off", async () => {
+    const { engine } = await freshEngine();
+    await playToTheEnd(engine);
+    sources.specs.set(B, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 1000 });
+
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.cancelPrime();
+    await settle(1000);
+
+    expect(engine.primedUrl()).toBeNull();
+    expect(sources.disposed).toContain(B);
   });
 });
 
