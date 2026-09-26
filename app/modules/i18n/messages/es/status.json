@@ -45,8 +45,8 @@
       "description": "Descargando canciones"
     },
     "syncing_plex": {
-      "label": "Sincronizando con Plex",
-      "description": "Sincronizando con Plex..."
+      "label": "Sincronizando con el servidor multimedia",
+      "description": "Sincronizando con el servidor multimedia..."
     },
     "partially_complete": {
       "label": "Parcialmente completada",

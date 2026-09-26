@@ -45,8 +45,8 @@
       "description": "Downloading tracks"
     },
     "syncing_plex": {
-      "label": "Syncing to Plex",
-      "description": "Syncing to Plex..."
+      "label": "Syncing to media server",
+      "description": "Syncing to media server..."
     },
     "partially_complete": {
       "label": "Partially Complete",

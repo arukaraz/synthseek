@@ -45,8 +45,8 @@
       "description": "Titel werden heruntergeladen"
     },
     "syncing_plex": {
-      "label": "Wird mit Plex synchronisiert",
-      "description": "Wird mit Plex synchronisiert..."
+      "label": "Wird mit dem Medienserver synchronisiert",
+      "description": "Wird mit dem Medienserver synchronisiert..."
     },
     "partially_complete": {
       "label": "Teilweise abgeschlossen",

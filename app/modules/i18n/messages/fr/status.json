@@ -45,8 +45,8 @@
       "description": "Téléchargement des pistes"
     },
     "syncing_plex": {
-      "label": "Synchronisation avec Plex",
-      "description": "Synchronisation avec Plex..."
+      "label": "Synchronisation avec le serveur multimédia",
+      "description": "Synchronisation avec le serveur multimédia..."
     },
     "partially_complete": {
       "label": "Partiellement terminé",
