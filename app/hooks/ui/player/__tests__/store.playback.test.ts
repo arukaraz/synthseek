@@ -643,7 +643,7 @@ describe("player store transport", () => {
     );
   });
 
-  it("plays a copy from a media server as the server stores it, so a seek stays in place", async () => {
+  it("converts a copy from a media server too, and a seek asks for the conversion from that second", async () => {
     engine.playable = false;
     const store = await freshStore();
     store.actions.setConversion({ enabled: true, bitrateKbps: 128 });
@@ -651,18 +651,22 @@ describe("player store transport", () => {
     store.actions.playQueue([track("a", { format: "flac", sources })], 0);
 
     expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
-      "/api/v1/library/tracks/a/stream?source=navidrome",
+      "/api/v1/library/tracks/a/stream?source=navidrome&format=mp3&maxBitrate=128",
       0.8,
       false,
       0
     );
-    expect(store.getSnapshot().transcoding).toBe(false);
-    engine.loadAndPlay.mockClear();
+    expect(store.getSnapshot().transcoding).toBe(true);
 
     store.actions.seekTo(90);
 
-    expect(engine.seek).toHaveBeenCalledWith(90);
-    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?source=navidrome&format=mp3&maxBitrate=128&offset=90",
+      0.8,
+      false,
+      0
+    );
+    expect(store.getSnapshot().offsetSeconds).toBe(90);
   });
 
   it("still converts the library's own copy of the same track when it cannot play it", async () => {

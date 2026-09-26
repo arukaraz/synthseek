@@ -60,7 +60,6 @@ import { gainFactorFor, loudnessModeFor } from "./loudness";
 import {
   asPlayedFrom,
   autoplayIdsAmong,
-  convertibleSource,
   failedSourcesFor,
   fallbackSourceFor,
   requestedSourceFor,
@@ -219,9 +218,7 @@ function sourceFor(track: PlayerTrack): string | null {
 }
 
 function conversionFor(track: PlayerTrack): StreamConversion | null {
-  const source = playingSourceOf(track, state.sourceChoice);
-  if (!convertibleSource(source)) return null;
-  const played = asPlayedFrom(track, source);
+  const played = asPlayedFrom(track, playingSourceOf(track, state.sourceChoice));
   return streamConversionFor(needsConversion(played.format, canPlayMime), state.conversion);
 }
 

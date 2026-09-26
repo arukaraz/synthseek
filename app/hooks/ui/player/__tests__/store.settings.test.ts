@@ -333,15 +333,21 @@ describe("the source the listener picks for the playing track", () => {
     expect(store.getSnapshot().sourceChoice).toEqual({ trackId: "a", source: "plex" });
   });
 
-  it("asks for a server's copy as that server stores it, even in a format the browser cannot decode", async () => {
+  it("converts a server's copy the browser cannot decode, from the second it was at", async () => {
     const store = await freshStore();
     store.actions.playQueue([twoSources("a", "wma")], 0);
     engine.playing?.(true);
+    store.actions.seekTo(42);
 
     store.actions.setSource("plex");
 
-    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/a/stream?source=plex", 0.8, false, 0);
-    expect(store.getSnapshot().transcoding).toBe(false);
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?source=plex&format=mp3&maxBitrate=320&offset=42",
+      0.8,
+      false,
+      0
+    );
+    expect(store.getSnapshot().transcoding).toBe(true);
   });
 
   it("names a server source out loud when it is the track's first, so the server cannot serve another copy", async () => {

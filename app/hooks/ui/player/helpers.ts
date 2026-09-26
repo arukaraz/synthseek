@@ -90,10 +90,6 @@ export function playingSourceOf(track: PlayerTrack, choice: SourceChoice | null)
   return track.sources.find((source) => source.key === chosen) ?? track.sources[0] ?? null;
 }
 
-export function convertibleSource(source: PlayerSource | null): boolean {
-  return source === null || source.key === LOCAL_SOURCE;
-}
-
 export function failedSourcesFor(track: PlayerTrack, failed: FailedSources | null): readonly string[] {
   return failed !== null && failed.trackId === track.id ? failed.sources : [];
 }
