@@ -1,21 +1,23 @@
 {
-  "spotifyLibrary": {
+  "librarySource": {
     "dialog": {
-      "title": "Spotify-Bibliothek",
-      "description": "Durchsuche deine Spotify-Bibliothek, importiere Einträge in Synthseek und konfiguriere die laufende Synchronisierung."
+      "title": "{{provider}}-Bibliothek",
+      "description": "Durchsuche deine {{provider}}-Bibliothek, importiere Einträge in Synthseek und konfiguriere die laufende Synchronisierung."
     },
     "connect": {
-      "checking": "Deine Spotify-Verbindung wird überprüft...",
-      "title": "Verbinde dein Spotify-Konto",
-      "expiredTitle": "Deine Spotify-Verbindung ist abgelaufen",
-      "bodyPending": "Spotify autorisiert dein Konto noch. Versuche es erneut zu verbinden, wenn es nicht gleich fertig wird.",
-      "bodyDefault": "Autorisiere Synthseek, deine Spotify-Playlists und gespeicherten Alben zu durchsuchen und zu importieren.",
-      "bodyExpired": "Deine Spotify-Verbindung ist abgelaufen oder wurde widerrufen. Verbinde dich erneut, um deine Bibliothek wieder zu laden.",
-      "reconnect": "Spotify erneut verbinden",
-      "connect": "Spotify verbinden"
+      "checking": "Deine Verbindung wird überprüft...",
+      "title": "Verbinde dein {{provider}}-Konto",
+      "expiredTitle": "Deine {{provider}}-Verbindung ist abgelaufen",
+      "bodyPending": "{{provider}} autorisiert dein Konto noch. Versuche es erneut zu verbinden, wenn es nicht gleich fertig wird.",
+      "bodyDefault": "Autorisiere Synthseek, deine {{provider}}-Playlists und gespeicherten Alben zu durchsuchen und zu importieren.",
+      "bodyExpired": "Deine {{provider}}-Verbindung ist abgelaufen oder wurde widerrufen. Verbinde dich erneut, um deine Bibliothek wieder zu laden.",
+      "reconnect": "{{provider}} erneut verbinden",
+      "connect": "{{provider}} verbinden",
+      "bodyAccount": "Verknüpfe dein {{provider}}-Konto in deinem Profil, damit Synthseek deine Playlists lesen kann.",
+      "linkAccount": "{{provider}} im Profil verknüpfen"
     },
     "loadFailed": {
-      "title": "Deine Spotify-Bibliothek konnte nicht geladen werden",
+      "title": "Deine {{provider}}-Bibliothek konnte nicht geladen werden",
       "description": "Beim Laden deiner Bibliothek ist etwas schiefgelaufen. Versuche es gleich erneut."
     },
     "toolbar": {
@@ -67,7 +69,7 @@
       "importedUnselect": "Importiert · abwählen",
       "selectedForImport": "Zum Import ausgewählt",
       "selectForImport": "Zum Import auswählen",
-      "openInSpotify": "In Spotify öffnen",
+      "openIn": "In {{provider}} öffnen",
       "lastSyncNever": "Nie",
       "tracksByline_one": "{{count}} Titel",
       "tracksByline_other": "{{count}} Titel"
@@ -117,12 +119,12 @@
       "trigger": "Automatischer Import",
       "title": "Neue automatisch importieren",
       "howAria": "Wie funktioniert der automatische Import?",
-      "help": "Einträge, die du nach der Aktivierung zu deiner Spotify-Bibliothek hinzufügst, werden von der Hintergrundsynchronisierung automatisch importiert. Vorhandene Einträge werden nicht angetastet. Deaktiviere ihn jederzeit, bereits importierte Einträge bleiben erhalten.",
+      "help": "Einträge, die du nach der Aktivierung zu deiner {{provider}}-Bibliothek hinzufügst, werden von der Hintergrundsynchronisierung automatisch importiert. Vorhandene Einträge werden nicht angetastet. Deaktiviere ihn jederzeit, bereits importierte Einträge bleiben erhalten.",
       "newPlaylists": "Neue Playlists",
       "newPlaylistsSub": "Zu deiner Bibliothek hinzugefügte Playlists",
       "newPlaylistsAria": "Neue Playlists automatisch importieren",
       "savedAlbums": "Gespeicherte Alben",
-      "savedAlbumsSub": "Alben, die du in Spotify speicherst",
+      "savedAlbumsSub": "Alben, die du in {{provider}} speicherst",
       "savedAlbumsAria": "Neue gespeicherte Alben automatisch importieren"
     },
     "selection": {
@@ -277,7 +279,14 @@
       "searchAria": "In der Bibliothek suchen",
       "sort": "Sortieren",
       "sortAria": "Ergebnisse sortieren",
-      "openFilters": "Filter"
+      "openFilters": "Filter",
+      "import": {
+        "trigger": "Bibliothek importieren",
+        "sourcesLabel": "Quellen",
+        "filesLabel": "Dateien",
+        "playlist": "Playlist",
+        "audio": "Audio"
+      }
     },
     "sort": {
       "newest": "Neueste",

@@ -43,6 +43,7 @@ export default defineConfig({
         "app/hooks/api/index.ts",
         "app/hooks/api/queries/*.ts",
         "app/hooks/api/queries/spotify/**",
+        "app/hooks/api/queries/library-source/**",
         "app/hooks/api/queries/portability/**",
         "app/hooks/api/mutations/**",
         "app/api/health/**",

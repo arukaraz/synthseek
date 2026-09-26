@@ -10,6 +10,10 @@ vi.mock("../../LibraryFilterSortMenu", () => ({
   LibraryFilterSortMenu: () => <div data-testid="filter-sort-menu" />,
 }));
 
+vi.mock("../../ImportLibraryMenu", () => ({
+  ImportLibraryMenu: () => <div data-testid="import-library-menu" />,
+}));
+
 import { LibraryToolbar } from "../LibraryToolbar";
 import type { LibraryToolbarProps } from "../types";
 
@@ -74,5 +78,12 @@ describe("LibraryToolbar", () => {
     renderWithProviders(<LibraryToolbar {...makeProps({ activeFilterCount: 0 })} />);
 
     expect(screen.queryByText("0")).not.toBeInTheDocument();
+  });
+
+  it("places the import menu right after the search box", () => {
+    renderWithProviders(<LibraryToolbar {...makeProps()} />);
+
+    const searchBox = screen.getByLabelText("page.toolbar.searchAria").parentElement;
+    expect(searchBox?.nextElementSibling).toBe(screen.getByTestId("import-library-menu"));
   });
 });

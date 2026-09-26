@@ -117,7 +117,6 @@
   },
   "spotify": {
     "syncFailed": "Sync failed",
-    "saveFailed": "Failed to save library changes",
     "playlistNotLinked": "Playlist is not linked to a Spotify source",
     "playlistNotFound": "Playlist not found",
     "noConnection": "No Spotify connection found",
@@ -138,11 +137,14 @@
     "syncUpdatedPlaylists": "{{count}} updated",
     "syncSavedAlbums_one": "{{count}} saved album",
     "syncSavedAlbums_other": "{{count}} saved albums",
-    "noChangesApplied": "No changes applied",
-    "libraryUpdated": "Spotify library updated",
     "libraryUpdatedProcessing": "{{summary}}. Processing, items will appear shortly.",
     "imports_one": "{{count}} import queued",
-    "imports_other": "{{count}} imports queued",
+    "imports_other": "{{count}} imports queued"
+  },
+  "librarySource": {
+    "saveFailed": "Failed to save library changes",
+    "noChangesApplied": "No changes applied",
+    "libraryUpdated": "{{provider}} library updated",
     "syncUpdates_one": "{{count}} sync update",
     "syncUpdates_other": "{{count}} sync updates",
     "watchersSaved": "watchers saved"

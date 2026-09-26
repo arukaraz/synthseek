@@ -5,6 +5,7 @@ import { useDebouncedDraft } from "@hooks/ui/useDebouncedDraft";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { ImportLibraryMenu } from "../ImportLibraryMenu";
 import { LibraryFilterSortMenu } from "../LibraryFilterSortMenu";
 import { controlButton, filtersBadge, searchBox, searchField, searchIcon, toolbarRow } from "./styles";
 import type { LibraryToolbarProps } from "./types";
@@ -36,6 +37,8 @@ export function LibraryToolbar({
           aria-label={t("page.toolbar.searchAria")}
         />
       </div>
+
+      <ImportLibraryMenu />
 
       <button
         type="button"

@@ -21,12 +21,6 @@
       "confirmPending": "Syncing...",
       "confirmAction": "Sync All"
     },
-    "import": {
-      "trigger": "Import library",
-      "sourcesLabel": "Sources",
-      "playlistFile": "Playlist file",
-      "audioFiles": "Audio files"
-    },
     "menu": {
       "trigger": "More actions",
       "deleteAll": {

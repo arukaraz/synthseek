@@ -21,12 +21,6 @@
       "confirmPending": "Synchronisation...",
       "confirmAction": "Tout synchroniser"
     },
-    "import": {
-      "trigger": "Importer la bibliothèque",
-      "sourcesLabel": "Sources",
-      "playlistFile": "Fichier de playlist",
-      "audioFiles": "Fichiers audio"
-    },
     "menu": {
       "trigger": "Plus d'actions",
       "deleteAll": {

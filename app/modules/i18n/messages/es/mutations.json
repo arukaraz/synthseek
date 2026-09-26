@@ -117,7 +117,6 @@
   },
   "spotify": {
     "syncFailed": "Error de sincronización",
-    "saveFailed": "No se pudieron guardar los cambios de la biblioteca",
     "playlistNotLinked": "La lista de reproducción no está vinculada a una fuente de Spotify",
     "playlistNotFound": "Lista de reproducción no encontrada",
     "noConnection": "No se encontró ninguna conexión con Spotify",
@@ -138,11 +137,14 @@
     "syncUpdatedPlaylists": "{{count}} actualizadas",
     "syncSavedAlbums_one": "{{count}} álbum guardado",
     "syncSavedAlbums_other": "{{count}} álbumes guardados",
-    "noChangesApplied": "No se aplicaron cambios",
-    "libraryUpdated": "Biblioteca de Spotify actualizada",
     "libraryUpdatedProcessing": "{{summary}}. Procesando, los elementos aparecerán en breve.",
     "imports_one": "{{count}} importación en cola",
-    "imports_other": "{{count}} importaciones en cola",
+    "imports_other": "{{count}} importaciones en cola"
+  },
+  "librarySource": {
+    "saveFailed": "No se pudieron guardar los cambios de la biblioteca",
+    "noChangesApplied": "No se aplicaron cambios",
+    "libraryUpdated": "Biblioteca de {{provider}} actualizada",
     "syncUpdates_one": "{{count}} actualización de sincronización",
     "syncUpdates_other": "{{count}} actualizaciones de sincronización",
     "watchersSaved": "ajustes de importación automática guardados"

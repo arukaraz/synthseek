@@ -44,8 +44,11 @@ vi.mock("@hooks/api/queries/spotify/useSpotifyConnectionStatus", () => ({
   useSpotifyConnectionStatus: () => statusQuery,
 }));
 
-vi.mock("@hooks/api/mutations/spotify/useSpotifyConnect", () => ({
-  useSpotifyConnect: () => connect,
+vi.mock("@hooks/api/mutations/library-source/useConnectLibrarySource", () => ({
+  useConnectLibrarySource: () => connect,
+}));
+
+vi.mock("@hooks/api/mutations/spotify/useSpotifyDisconnect", () => ({
   useSpotifyDisconnect: () => disconnect,
 }));
 
@@ -81,7 +84,7 @@ vi.mock("../ServerAccountRow", () => ({
   ),
 }));
 
-vi.mock("@features/spotify-library", () => ({
+vi.mock("@components/LibrarySourceModal", () => ({
   SpotifyMark: () => <span data-testid="spotify-mark" />,
 }));
 
@@ -116,6 +119,7 @@ describe("ConnectedAccountsCard", () => {
     expect(connectButton).toBeEnabled();
     await userEvent.click(connectButton);
     expect(connect.mutate).toHaveBeenCalledTimes(1);
+    expect(connect.mutate).toHaveBeenCalledWith({ provider: "spotify" });
   });
 
   it("disables the spotify connect button when spotify is not configured", () => {

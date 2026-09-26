@@ -25,7 +25,6 @@ export {
   createMockUseLidarrStatus,
   createMockUseSpotifyConnectionStatus,
   createMockLibraryItem,
-  createMockUseSpotifyLibraryItems,
   createMockUseLibrarySubscription,
   createMockImportPreview,
   createMockImportPreviewMutation,

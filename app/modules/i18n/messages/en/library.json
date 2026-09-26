@@ -1,21 +1,23 @@
 {
-  "spotifyLibrary": {
+  "librarySource": {
     "dialog": {
-      "title": "Spotify library",
-      "description": "Browse your Spotify library, import items into Synthseek, and configure ongoing sync."
+      "title": "{{provider}} library",
+      "description": "Browse your {{provider}} library, import items into Synthseek, and configure ongoing sync."
     },
     "connect": {
-      "checking": "Checking your Spotify connection...",
-      "title": "Connect your Spotify account",
-      "expiredTitle": "Your Spotify connection expired",
-      "bodyPending": "Spotify is still authorizing your account. Try connecting again if it does not finish in a moment.",
-      "bodyDefault": "Authorize Synthseek to browse and import your Spotify playlists and saved albums.",
-      "bodyExpired": "Your Spotify connection expired or was revoked. Reconnect to load your library again.",
-      "reconnect": "Reconnect Spotify",
-      "connect": "Connect Spotify"
+      "checking": "Checking your connection...",
+      "title": "Connect your {{provider}} account",
+      "expiredTitle": "Your {{provider}} connection expired",
+      "bodyPending": "{{provider}} is still authorizing your account. Try connecting again if it does not finish in a moment.",
+      "bodyDefault": "Authorize Synthseek to browse and import your {{provider}} playlists and saved albums.",
+      "bodyExpired": "Your {{provider}} connection expired or was revoked. Reconnect to load your library again.",
+      "reconnect": "Reconnect {{provider}}",
+      "connect": "Connect {{provider}}",
+      "bodyAccount": "Link your {{provider}} account in your profile so Synthseek can read your playlists.",
+      "linkAccount": "Link {{provider}} in your profile"
     },
     "loadFailed": {
-      "title": "Could not load your Spotify library",
+      "title": "Could not load your {{provider}} library",
       "description": "Something went wrong loading your library. Try again in a moment."
     },
     "toolbar": {
@@ -67,7 +69,7 @@
       "importedUnselect": "Imported · unselect",
       "selectedForImport": "Selected for import",
       "selectForImport": "Select for import",
-      "openInSpotify": "Open in Spotify",
+      "openIn": "Open in {{provider}}",
       "lastSyncNever": "Never",
       "tracksByline_one": "{{count}} track",
       "tracksByline_other": "{{count}} tracks"
@@ -117,12 +119,12 @@
       "trigger": "Auto-import",
       "title": "Auto-import new",
       "howAria": "How does auto-import work?",
-      "help": "Items added to your Spotify library after enabling get imported automatically by the background sync. Existing items are not touched. Disable any time, already-imported items stay.",
+      "help": "Items added to your {{provider}} library after enabling get imported automatically by the background sync. Existing items are not touched. Disable any time, already-imported items stay.",
       "newPlaylists": "New playlists",
       "newPlaylistsSub": "Playlists added to your library",
       "newPlaylistsAria": "Auto-import new playlists",
       "savedAlbums": "Saved albums",
-      "savedAlbumsSub": "Albums you save in Spotify",
+      "savedAlbumsSub": "Albums you save in {{provider}}",
       "savedAlbumsAria": "Auto-import new saved albums"
     },
     "selection": {
@@ -277,7 +279,14 @@
       "searchAria": "Search the library",
       "sort": "Sort",
       "sortAria": "Sort results",
-      "openFilters": "Filters"
+      "openFilters": "Filters",
+      "import": {
+        "trigger": "Import library",
+        "sourcesLabel": "Sources",
+        "filesLabel": "Files",
+        "playlist": "Playlist",
+        "audio": "Audio"
+      }
     },
     "sort": {
       "newest": "Newest",

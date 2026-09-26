@@ -14,7 +14,7 @@ type ApiKeysOutput = RouterOutputs["apiKeys"]["list"];
 type SlskdStatusOutput = RouterOutputs["settings"]["slskdStatus"];
 type LidarrStatusOutput = RouterOutputs["settings"]["lidarrStatus"];
 type SpotifyConnectionOutput = RouterOutputs["librarySource"]["spotify"]["getConnectionStatus"];
-type SpotifyLibraryItemsOutput = RouterOutputs["librarySource"]["spotify"]["listLibraryItems"];
+type LibrarySourceItemsOutput = RouterOutputs["librarySource"]["provider"]["items"];
 type LibrarySubscriptionOutput = RouterOutputs["librarySource"]["subscription"]["get"];
 type ImportPreviewOutput = RouterOutputs["portability"]["previewImport"];
 
@@ -218,8 +218,8 @@ export const createMockUseSpotifyConnectionStatus = (
   );
 
 export function createMockLibraryItem(
-  overrides: Partial<SpotifyLibraryItemsOutput[number]> = {}
-): SpotifyLibraryItemsOutput[number] {
+  overrides: Partial<LibrarySourceItemsOutput[number]> = {}
+): LibrarySourceItemsOutput[number] {
   return {
     id: "library-item-001",
     type: "playlist",
@@ -235,11 +235,6 @@ export function createMockLibraryItem(
     ...overrides,
   };
 }
-
-export const createMockUseSpotifyLibraryItems = (
-  items: SpotifyLibraryItemsOutput = [createMockLibraryItem()],
-  overrides: Partial<MockQueryResult<SpotifyLibraryItemsOutput>> = {}
-): MockQueryResult<SpotifyLibraryItemsOutput> => createMockQuery(items, overrides);
 
 export const createMockUseLibrarySubscription = (
   data: LibrarySubscriptionOutput = null,

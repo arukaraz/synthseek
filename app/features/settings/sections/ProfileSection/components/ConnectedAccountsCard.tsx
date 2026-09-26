@@ -3,10 +3,11 @@
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
-import { SpotifyMark } from "@features/spotify-library";
+import { SpotifyMark } from "@components/LibrarySourceModal";
 import { usePlaybackSourceAccounts } from "@hooks/api";
 import { usePlexUnlink } from "@hooks/api/mutations/auth/usePlexUnlink";
-import { useSpotifyConnect, useSpotifyDisconnect } from "@hooks/api/mutations/spotify/useSpotifyConnect";
+import { useConnectLibrarySource } from "@hooks/api/mutations/library-source/useConnectLibrarySource";
+import { useSpotifyDisconnect } from "@hooks/api/mutations/spotify/useSpotifyDisconnect";
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -23,7 +24,7 @@ export function ConnectedAccountsCard() {
   const { currentUser } = useAuthContext();
   const config = usePublicConfig();
   const status = useSpotifyConnectionStatus();
-  const connect = useSpotifyConnect();
+  const connect = useConnectLibrarySource();
   const disconnect = useSpotifyDisconnect();
   const plexLink = usePlexLink();
   const plexUnlink = usePlexUnlink();
@@ -61,7 +62,11 @@ export function ConnectedAccountsCard() {
               {t("profile.connected.disconnect")}
             </Button>
           ) : (
-            <Button size="sm" onClick={() => connect.mutate()} disabled={!configured || connect.isPending}>
+            <Button
+              size="sm"
+              onClick={() => connect.mutate({ provider: "spotify" })}
+              disabled={!configured || connect.isPending}
+            >
               {t("profile.connected.connect")}
             </Button>
           )}

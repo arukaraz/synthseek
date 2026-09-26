@@ -1,21 +1,23 @@
 {
-  "spotifyLibrary": {
+  "librarySource": {
     "dialog": {
-      "title": "Biblioteca de Spotify",
-      "description": "Explora tu biblioteca de Spotify, importa elementos a Synthseek y configura la sincronización continua."
+      "title": "Biblioteca de {{provider}}",
+      "description": "Explora tu biblioteca de {{provider}}, importa elementos a Synthseek y configura la sincronización continua."
     },
     "connect": {
-      "checking": "Comprobando tu conexión con Spotify...",
-      "title": "Conecta tu cuenta de Spotify",
-      "expiredTitle": "Tu conexión con Spotify expiró",
-      "bodyPending": "Spotify todavía está autorizando tu cuenta. Intenta conectarte de nuevo si no termina en un momento.",
-      "bodyDefault": "Autoriza a Synthseek para explorar e importar tus listas de reproducción y álbumes guardados de Spotify.",
-      "bodyExpired": "Tu conexión con Spotify expiró o fue revocada. Reconecta para volver a cargar tu biblioteca.",
-      "reconnect": "Reconectar Spotify",
-      "connect": "Conectar Spotify"
+      "checking": "Comprobando tu conexión...",
+      "title": "Conecta tu cuenta de {{provider}}",
+      "expiredTitle": "Tu conexión con {{provider}} expiró",
+      "bodyPending": "{{provider}} todavía está autorizando tu cuenta. Intenta conectarte de nuevo si no termina en un momento.",
+      "bodyDefault": "Autoriza a Synthseek para explorar e importar tus listas de reproducción y álbumes guardados de {{provider}}.",
+      "bodyExpired": "Tu conexión con {{provider}} expiró o fue revocada. Reconecta para volver a cargar tu biblioteca.",
+      "reconnect": "Reconectar {{provider}}",
+      "connect": "Conectar {{provider}}",
+      "bodyAccount": "Vincula tu cuenta de {{provider}} en tu perfil para que Synthseek pueda leer tus listas de reproducción.",
+      "linkAccount": "Vincular {{provider}} en tu perfil"
     },
     "loadFailed": {
-      "title": "No se pudo cargar tu biblioteca de Spotify",
+      "title": "No se pudo cargar tu biblioteca de {{provider}}",
       "description": "Algo salió mal al cargar tu biblioteca. Inténtalo de nuevo en un momento."
     },
     "toolbar": {
@@ -67,7 +69,7 @@
       "importedUnselect": "Importado · quitar selección",
       "selectedForImport": "Seleccionado para importar",
       "selectForImport": "Seleccionar para importar",
-      "openInSpotify": "Abrir en Spotify",
+      "openIn": "Abrir en {{provider}}",
       "lastSyncNever": "Nunca",
       "tracksByline_one": "{{count}} canción",
       "tracksByline_other": "{{count}} canciones"
@@ -117,12 +119,12 @@
       "trigger": "Importación automática",
       "title": "Importar nuevos automáticamente",
       "howAria": "¿Cómo funciona la importación automática?",
-      "help": "Los elementos que añadas a tu biblioteca de Spotify después de activarlo se importan automáticamente mediante la sincronización en segundo plano. Los elementos existentes no se tocan. Desactívalo cuando quieras, los elementos ya importados se conservan.",
+      "help": "Los elementos que añadas a tu biblioteca de {{provider}} después de activarlo se importan automáticamente mediante la sincronización en segundo plano. Los elementos existentes no se tocan. Desactívalo cuando quieras, los elementos ya importados se conservan.",
       "newPlaylists": "Nuevas listas",
       "newPlaylistsSub": "Listas añadidas a tu biblioteca",
       "newPlaylistsAria": "Importar automáticamente las nuevas listas",
       "savedAlbums": "Álbumes guardados",
-      "savedAlbumsSub": "Álbumes que guardas en Spotify",
+      "savedAlbumsSub": "Álbumes que guardas en {{provider}}",
       "savedAlbumsAria": "Importar automáticamente los nuevos álbumes guardados"
     },
     "selection": {
@@ -277,7 +279,14 @@
       "searchAria": "Buscar en la biblioteca",
       "sort": "Ordenar",
       "sortAria": "Ordenar resultados",
-      "openFilters": "Filtros"
+      "openFilters": "Filtros",
+      "import": {
+        "trigger": "Importar biblioteca",
+        "sourcesLabel": "Fuentes",
+        "filesLabel": "Archivos",
+        "playlist": "Lista",
+        "audio": "Audio"
+      }
     },
     "sort": {
       "newest": "Más recientes",

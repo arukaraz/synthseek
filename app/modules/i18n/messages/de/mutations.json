@@ -117,7 +117,6 @@
   },
   "spotify": {
     "syncFailed": "Synchronisierung fehlgeschlagen",
-    "saveFailed": "Bibliotheksänderungen konnten nicht gespeichert werden",
     "playlistNotLinked": "Playlist ist mit keiner Spotify-Quelle verknüpft",
     "playlistNotFound": "Playlist nicht gefunden",
     "noConnection": "Keine Spotify-Verbindung gefunden",
@@ -138,11 +137,14 @@
     "syncUpdatedPlaylists": "{{count}} aktualisiert",
     "syncSavedAlbums_one": "{{count}} gespeichertes Album",
     "syncSavedAlbums_other": "{{count}} gespeicherte Alben",
-    "noChangesApplied": "Keine Änderungen übernommen",
-    "libraryUpdated": "Spotify-Bibliothek aktualisiert",
     "libraryUpdatedProcessing": "{{summary}}. Wird verarbeitet, die Einträge erscheinen in Kürze.",
     "imports_one": "{{count}} Import eingereiht",
-    "imports_other": "{{count}} Importe eingereiht",
+    "imports_other": "{{count}} Importe eingereiht"
+  },
+  "librarySource": {
+    "saveFailed": "Bibliotheksänderungen konnten nicht gespeichert werden",
+    "noChangesApplied": "Keine Änderungen übernommen",
+    "libraryUpdated": "{{provider}}-Bibliothek aktualisiert",
     "syncUpdates_one": "{{count}} Synchronisierungs-Update",
     "syncUpdates_other": "{{count}} Synchronisierungs-Updates",
     "watchersSaved": "Überwachungen gespeichert"
