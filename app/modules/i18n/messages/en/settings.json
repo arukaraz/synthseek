@@ -438,7 +438,7 @@
     "order": {
       "title": "Playback order",
       "description": "Synthseek plays its own file first, then tries these servers in order.",
-      "local": "Synthseek library",
+      "local": "Local",
       "notPlaying": "Playback off",
       "moveUp": "Move {{server}} up",
       "moveDown": "Move {{server}} down"

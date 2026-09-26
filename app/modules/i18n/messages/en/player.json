@@ -58,7 +58,7 @@
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
   },
   "source": {
-    "local": "Your library"
+    "local": "Local"
   },
   "settings": {
     "title": "Playback settings",
@@ -108,7 +108,7 @@
     },
     "source": {
       "caption": "THIS TRACK PLAYS FROM",
-      "hint": "Switches where this track streams from, from the same point. Other tracks keep playing from your library first."
+      "hint": "Switches where this track streams from, from the same point. Other tracks keep playing from their local copy first."
     },
     "transition": {
       "caption": "TRANSITIONS",

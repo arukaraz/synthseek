@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { LIBRARY_FACET_TOP_N } from "../../constants";
 import { topFacetValues } from "../../helpers";
 import { FacetSearchInput } from "./FacetSearchInput";
-import { staticFacetValues } from "./helpers";
+import { originFacetValues, playbackSourceFacetValues, staticFacetValues } from "./helpers";
 import {
   facetCount,
   facetLabel,
@@ -33,13 +33,18 @@ export function FacetGroup({
 }: FacetGroupProps) {
   const { t } = useTranslation("library");
   const { t: tStatus } = useTranslation("status");
+  const { t: tPlayer } = useTranslation("player");
   const isSearching = def.searchable && searchTerm.trim().length > 0;
   const isAwaitingMatches = isSearching && isRefreshing;
   const visible = def.staticValues
     ? staticFacetValues(def.staticValues, values, tStatus)
-    : def.searchable
-      ? topFacetValues(values, LIBRARY_FACET_TOP_N, isSearching)
-      : values;
+    : def.labelNs === "playbackSource"
+      ? playbackSourceFacetValues(values, tPlayer("source.local"))
+      : def.labelNs === "origin"
+        ? originFacetValues(values)
+        : def.searchable
+          ? topFacetValues(values, LIBRARY_FACET_TOP_N, isSearching)
+          : values;
   const hiddenCount = def.staticValues ? 0 : values.length - visible.length;
 
   return (

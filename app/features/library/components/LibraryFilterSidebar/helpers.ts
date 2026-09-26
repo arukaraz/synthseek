@@ -1,9 +1,25 @@
 import { RequestStatus } from "@api/__generated__/types";
 import type { LibraryFacetValue } from "@hooks/api/queries/library/types";
+import { sourceLabelFor } from "@hooks/ui/player";
 import { capitalize } from "@utils/string";
 import type { TFunction } from "i18next";
 
-import type { FacetSearchState } from "../../types";
+import type { FacetDef, FacetSearchState } from "../../types";
+
+export function playbackSourceFacetValues(values: LibraryFacetValue[], localLabel: string): LibraryFacetValue[] {
+  return values.map((value) => ({ ...value, label: sourceLabelFor(value.value, localLabel) }));
+}
+
+export function originFacetValues(values: LibraryFacetValue[]): LibraryFacetValue[] {
+  return values.map((value) => ({ ...value, label: capitalize(value.value) }));
+}
+
+export function facetDefsWithChoice(
+  defs: readonly FacetDef[],
+  facets: Readonly<Record<string, LibraryFacetValue[]>>
+): FacetDef[] {
+  return defs.filter((def) => !def.hideWithoutChoice || (facets[def.key] ?? []).length > 1);
+}
 
 export function facetSearchTerm(facetSearch: FacetSearchState, key: string | undefined): string {
   if (key === "artist") return facetSearch.artist ?? "";

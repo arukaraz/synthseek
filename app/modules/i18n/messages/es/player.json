@@ -58,7 +58,7 @@
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
   },
   "source": {
-    "local": "Tu biblioteca"
+    "local": "Local"
   },
   "settings": {
     "title": "Ajustes de reproducción",
@@ -108,7 +108,7 @@
     },
     "source": {
       "caption": "ESTA CANCIÓN SUENA DESDE",
-      "hint": "Cambia de dónde llega esta canción, desde el mismo punto. Las demás siguen sonando primero desde tu biblioteca."
+      "hint": "Cambia de dónde llega esta canción, desde el mismo punto. Las demás siguen sonando primero desde su copia local."
     },
     "transition": {
       "caption": "TRANSICIONES",

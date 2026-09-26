@@ -315,10 +315,11 @@
     },
     "origin": {
       "imported": "Imported",
-      "createdHere": "Local"
+      "createdHere": "Created here"
     },
     "facets": {
       "status": "Status",
+      "origin": "Origin",
       "source": "Source",
       "format": "Format",
       "genre": "Genre",

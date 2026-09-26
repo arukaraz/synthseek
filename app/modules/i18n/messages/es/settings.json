@@ -438,7 +438,7 @@
     "order": {
       "title": "Orden de reproducción",
       "description": "Synthseek reproduce primero su propio archivo y luego prueba estos servidores en orden.",
-      "local": "Biblioteca de Synthseek",
+      "local": "Local",
       "notPlaying": "Reproducción apagada",
       "moveUp": "Subir {{server}}",
       "moveDown": "Bajar {{server}}"

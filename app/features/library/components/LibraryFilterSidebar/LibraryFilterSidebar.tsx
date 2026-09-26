@@ -4,7 +4,7 @@ import { Checkbox } from "@components/ui/Checkbox";
 import { useTranslation } from "react-i18next";
 
 import { FacetGroup } from "./FacetGroup";
-import { facetSearchTerm } from "./helpers";
+import { facetDefsWithChoice, facetSearchTerm } from "./helpers";
 import {
   clearButton,
   facetLabel,
@@ -41,7 +41,7 @@ export function LibraryFilterSidebar({
         </button>
       </div>
 
-      {config.facets.map((def) => (
+      {facetDefsWithChoice(config.facets, facets).map((def) => (
         <FacetGroup
           key={def.key}
           def={def}

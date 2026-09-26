@@ -315,11 +315,12 @@
     },
     "origin": {
       "imported": "Importada",
-      "createdHere": "Local"
+      "createdHere": "Creada aquí"
     },
     "facets": {
       "status": "Estado",
-      "source": "Origen",
+      "origin": "Origen",
+      "source": "Fuente",
       "format": "Formato",
       "genre": "Género",
       "artist": "Artista",

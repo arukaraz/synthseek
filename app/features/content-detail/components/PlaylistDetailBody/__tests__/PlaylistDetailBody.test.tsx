@@ -190,11 +190,11 @@ describe("PlaylistDetailBody editing", () => {
     expect(screen.getByRole("menuitem", { name: "Rename" })).toBeInTheDocument();
   });
 
-  it("shows the Local origin subtitle for a locally created library playlist", () => {
+  it("shows the created-here origin subtitle for a playlist made in Synthseek", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
     renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
 
-    expect(screen.getByText("Local")).toBeInTheDocument();
+    expect(screen.getByText("Created here")).toBeInTheDocument();
     expect(screen.queryByText("2 tracks")).not.toBeInTheDocument();
   });
 

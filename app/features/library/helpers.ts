@@ -86,6 +86,7 @@ export function buildTracksInput(args: InputBaseArgs): LibraryTracksInput {
     filters: {
       status: emptyToUndefined(toStatusValues(filters.status ?? [])),
       format: emptyToUndefined(toFormatValues(filters.format ?? [])),
+      origin: emptyToUndefined(filters.origin ?? []),
       source: emptyToUndefined(filters.source ?? []),
       artist: emptyToUndefined(filters.artist ?? []),
       requestedBy: emptyToUndefined(filters.requestedBy ?? []),
@@ -111,7 +112,7 @@ export function buildAlbumsInput(args: InputBaseArgs): LibraryAlbumsInput {
       artist: emptyToUndefined(filters.artist ?? []),
       genre: emptyToUndefined(filters.genre ?? []),
       year: emptyToUndefined(filters.year ?? []),
-      source: emptyToUndefined(filters.source ?? []),
+      origin: emptyToUndefined(filters.origin ?? []),
     },
   };
 }
@@ -127,7 +128,7 @@ export function buildArtistsInput(args: InputBaseArgs): LibraryArtistsInput {
     facetSearch: buildFacetSearch(args.facetSearch),
     filters: {
       genre: emptyToUndefined(filters.genre ?? []),
-      source: emptyToUndefined(filters.source ?? []),
+      origin: emptyToUndefined(filters.origin ?? []),
       status: emptyToUndefined(toStatusValues(filters.status ?? [])),
     },
   };
@@ -143,7 +144,7 @@ export function buildPlaylistsInput(args: InputBaseArgs): LibraryPlaylistsInput 
     direction: args.direction,
     facetSearch: buildFacetSearch(args.facetSearch),
     filters: {
-      source: emptyToUndefined(filters.source ?? []),
+      origin: emptyToUndefined(filters.origin ?? []),
       owner: emptyToUndefined(filters.owner ?? []),
       status: emptyToUndefined(toStatusValues(filters.status ?? [])),
     },

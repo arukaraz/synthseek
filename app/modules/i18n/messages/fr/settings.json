@@ -438,7 +438,7 @@
     "order": {
       "title": "Ordre de lecture",
       "description": "Synthseek lit d'abord son propre fichier, puis essaie ces serveurs dans l'ordre.",
-      "local": "Bibliothèque Synthseek",
+      "local": "Local",
       "notPlaying": "Lecture désactivée",
       "moveUp": "Monter {{server}}",
       "moveDown": "Descendre {{server}}"

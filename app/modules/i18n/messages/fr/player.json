@@ -58,7 +58,7 @@
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
   },
   "source": {
-    "local": "Votre bibliothèque"
+    "local": "Local"
   },
   "settings": {
     "title": "Réglages de lecture",
@@ -108,7 +108,7 @@
     },
     "source": {
       "caption": "CETTE PISTE VIENT DE",
-      "hint": "Change la provenance de cette piste, au même endroit. Les autres pistes sont toujours lues d'abord depuis votre bibliothèque."
+      "hint": "Change la provenance de cette piste, au même endroit. Les autres pistes sont toujours lues d'abord depuis leur copie locale."
     },
     "transition": {
       "caption": "TRANSITIONS",

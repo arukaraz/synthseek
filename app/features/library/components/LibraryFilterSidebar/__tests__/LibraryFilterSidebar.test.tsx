@@ -26,12 +26,46 @@ function makeProps(overrides?: Partial<LibraryFilterSidebarProps>): LibraryFilte
 }
 
 describe("LibraryFilterSidebar", () => {
-  it("renders a group for every facet in the config", () => {
+  it("renders a group for every facet in the config that has something to choose", () => {
     renderWithProviders(<LibraryFilterSidebar {...makeProps()} />);
 
-    for (const def of VIEW_CONFIG.tracks.facets) {
+    for (const def of VIEW_CONFIG.tracks.facets.filter((facet) => !facet.hideWithoutChoice)) {
       expect(screen.getAllByText(def.labelKey).length).toBeGreaterThan(0);
     }
+  });
+
+  it("hides the source facet while the library's own files are the only copy to choose", () => {
+    renderWithProviders(
+      <LibraryFilterSidebar {...makeProps({ facets: { source: [{ value: "local", label: "local", count: 8248 }] } })} />
+    );
+
+    expect(screen.queryByText("page.facets.source")).toBeNull();
+  });
+
+  it("offers each copy under the player's own names once a server plays too, and toggles it by its key", async () => {
+    const onToggleValue = vi.fn();
+    const { user } = renderWithProviders(
+      <LibraryFilterSidebar
+        {...makeProps({
+          onToggleValue,
+          facets: {
+            source: [
+              { value: "local", label: "local", count: 8248 },
+              { value: "navidrome", label: "navidrome", count: 7768 },
+            ],
+          },
+        })}
+      />
+    );
+
+    expect(screen.getByText("page.facets.source")).toBeInTheDocument();
+    expect(screen.getByText("source.local")).toBeInTheDocument();
+    const serverRow = screen.getByText("Navidrome").closest("label");
+    const checkbox = serverRow?.querySelector("[role=checkbox]");
+    expect(checkbox).toBeTruthy();
+    if (checkbox) await user.click(checkbox);
+
+    expect(onToggleValue).toHaveBeenCalledWith("source", "navidrome");
   });
 
   it("disables the clear button when there are no active filters", () => {
@@ -73,17 +107,17 @@ describe("LibraryFilterSidebar", () => {
       <LibraryFilterSidebar
         {...makeProps({
           onToggleValue,
-          facets: { source: [{ value: "deezer", label: "Deezer", count: 4 }] },
+          facets: { origin: [{ value: "deezer", label: "deezer", count: 4 }] },
         })}
       />
     );
 
-    const sourceRow = screen.getByText("Deezer").closest("label");
-    const checkbox = sourceRow?.querySelector("[role=checkbox]");
+    const originRow = screen.getByText("Deezer").closest("label");
+    const checkbox = originRow?.querySelector("[role=checkbox]");
     expect(checkbox).toBeTruthy();
     if (checkbox) await user.click(checkbox);
 
-    expect(onToggleValue).toHaveBeenCalledWith("source", "deezer");
+    expect(onToggleValue).toHaveBeenCalledWith("origin", "deezer");
   });
 
   it("forwards a facet search term keyed by the facet search key", async () => {

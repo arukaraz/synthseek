@@ -30,6 +30,21 @@ const STATUS_FACET_DEF = {
   labelNs: "status",
 } as const;
 
+const ORIGIN_FACET_DEF = {
+  key: "origin",
+  labelKey: "page.facets.origin",
+  searchable: false,
+  labelNs: "origin",
+} as const;
+
+const PLAYBACK_SOURCE_FACET_DEF = {
+  key: "source",
+  labelKey: "page.facets.source",
+  searchable: false,
+  labelNs: "playbackSource",
+  hideWithoutChoice: true,
+} as const;
+
 export const LIBRARY_FACET_SEARCH_KEYS = ["artist", "genre", "playlist", "owner"] as const;
 
 export const LIBRARY_SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"];
@@ -45,6 +60,7 @@ export const LIBRARY_BASE_PARAMS = {
 
 export const LIBRARY_ALL_FILTER_KEYS = [
   "status",
+  "origin",
   "source",
   "format",
   "artist",
@@ -77,10 +93,22 @@ const TRACKS_CONFIG: TracksViewConfig = {
     { value: "duration", labelKey: "page.sort.duration", defaultDirection: "desc" },
     { value: "status", labelKey: "page.sort.status", defaultDirection: "asc" },
   ],
-  filterParamKeys: ["status", "source", "format", "artist", "requestedBy", "genre", "playlist", "albumId", "orphan"],
+  filterParamKeys: [
+    "status",
+    "origin",
+    "source",
+    "format",
+    "artist",
+    "requestedBy",
+    "genre",
+    "playlist",
+    "albumId",
+    "orphan",
+  ],
   facets: [
     STATUS_FACET_DEF,
-    { key: "source", labelKey: "page.facets.source", searchable: false },
+    PLAYBACK_SOURCE_FACET_DEF,
+    ORIGIN_FACET_DEF,
     { key: "format", labelKey: "page.facets.format", searchable: false },
     { key: "genre", labelKey: "page.facets.genre", searchable: true, facetSearchKey: "genre" },
     { key: "artist", labelKey: "page.facets.artist", searchable: true, facetSearchKey: "artist" },
@@ -109,10 +137,10 @@ const ALBUMS_CONFIG: AlbumsViewConfig = {
     { value: "year", labelKey: "page.sort.year", defaultDirection: "desc" },
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
   ],
-  filterParamKeys: ["status", "artist", "genre", "year", "source"],
+  filterParamKeys: ["status", "artist", "genre", "year", "origin"],
   facets: [
     STATUS_FACET_DEF,
-    { key: "source", labelKey: "page.facets.source", searchable: false },
+    ORIGIN_FACET_DEF,
     { key: "genre", labelKey: "page.facets.genre", searchable: true, facetSearchKey: "genre" },
     { key: "artist", labelKey: "page.facets.artist", searchable: true, facetSearchKey: "artist" },
     { key: "year", labelKey: "page.facets.year", searchable: false },
@@ -137,10 +165,10 @@ const ARTISTS_CONFIG: ArtistsViewConfig = {
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
     { value: "albums", labelKey: "page.sort.albums", defaultDirection: "desc" },
   ],
-  filterParamKeys: ["genre", "source", "status"],
+  filterParamKeys: ["genre", "origin", "status"],
   facets: [
     { key: "genre", labelKey: "page.facets.genre", searchable: true, facetSearchKey: "genre" },
-    { key: "source", labelKey: "page.facets.source", searchable: false },
+    ORIGIN_FACET_DEF,
     STATUS_FACET_DEF,
   ],
 };
@@ -163,9 +191,9 @@ const PLAYLISTS_CONFIG: PlaylistsViewConfig = {
     { value: "name", labelKey: "page.sort.name", defaultDirection: "asc" },
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
   ],
-  filterParamKeys: ["source", "owner", "status"],
+  filterParamKeys: ["origin", "owner", "status"],
   facets: [
-    { key: "source", labelKey: "page.facets.source", searchable: false },
+    ORIGIN_FACET_DEF,
     { key: "owner", labelKey: "page.facets.owner", searchable: true, facetSearchKey: "owner" },
     STATUS_FACET_DEF,
   ],

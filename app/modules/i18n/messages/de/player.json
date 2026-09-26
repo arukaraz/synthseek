@@ -58,7 +58,7 @@
     "equalizerHeadroom": "{{preset}} · {{headroom}} dB"
   },
   "source": {
-    "local": "Deine Bibliothek"
+    "local": "Lokal"
   },
   "settings": {
     "title": "Wiedergabeeinstellungen",
@@ -108,7 +108,7 @@
     },
     "source": {
       "caption": "DIESER TITEL SPIELT VON",
-      "hint": "Wechselt, woher dieser Titel kommt, an derselben Stelle. Andere Titel spielen weiterhin zuerst aus deiner Bibliothek."
+      "hint": "Wechselt, woher dieser Titel kommt, an derselben Stelle. Andere Titel spielen weiterhin zuerst von ihrer lokalen Kopie."
     },
     "transition": {
       "caption": "ÜBERGÄNGE",

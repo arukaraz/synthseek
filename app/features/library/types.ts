@@ -17,6 +17,7 @@ export type SortDirection = "asc" | "desc";
 
 export type FacetKey =
   | "status"
+  | "origin"
   | "source"
   | "format"
   | "artist"
@@ -33,7 +34,8 @@ export interface FacetDef {
   searchable: boolean;
   facetSearchKey?: "artist" | "genre" | "playlist" | "owner";
   staticValues?: readonly string[];
-  labelNs?: "status";
+  labelNs?: "status" | "playbackSource" | "origin";
+  hideWithoutChoice?: boolean;
 }
 
 export interface SortOptionDef {
