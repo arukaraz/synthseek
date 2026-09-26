@@ -5,7 +5,9 @@ import {
   OUTGOING_RELEASE_MARGIN_MS,
   PCM_FEED_TICK_MS,
   PCM_LEAD_SECONDS,
+  PCM_PROGRESS_MS,
   PCM_START_LEAD_SECONDS,
+  STALL_TIMEOUT_MS,
 } from "../constants";
 import type { EngineCallbacks, PcmBuffer, PcmSource } from "../types";
 
@@ -21,6 +23,7 @@ const sources = vi.hoisted(() => ({
       fail: boolean;
       padding?: number;
       failAfter?: number;
+      hangAfter?: number;
       firstAfterMs?: number;
       shortBy?: number;
     }
@@ -48,6 +51,7 @@ vi.mock("../pcm-source", () => ({
         }
         for (let at = fromSeconds; at < rawEnd; at += spec.chunk) {
           if (spec.failAfter !== undefined && yielded >= spec.failAfter) throw new Error("decoder died");
+          if (spec.hangAfter !== undefined && yielded >= spec.hangAfter) await new Promise(() => undefined);
           yielded += 1;
           const duration = Math.min(spec.chunk, rawEnd - at);
           const buffer = { duration, length: Math.round(duration * 44100), sampleRate: 44100 };
@@ -642,5 +646,81 @@ describe("stopping", () => {
     expect(engine.canPlayMime("audio/mpeg")).toBe(true);
     expect(engine.canPlayMime("audio/ogg")).toBe(false);
     expect(engine.canPlayMime("audio/x-ms-wma")).toBe(false);
+  });
+});
+
+describe("a stream that stops delivering while it plays", () => {
+  const silentFrom = PCM_START_LEAD_SECONDS + 3;
+  const stallSeconds = STALL_TIMEOUT_MS / 1000;
+
+  it("reports it once, when what it had has been silent for the stall timeout and not a second sooner", async () => {
+    sources.specs.set(A, { duration: 60, trim: 0, chunk: 1, fail: false, hangAfter: 3 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+
+    context.currentTime = silentFrom + stallSeconds - 1;
+    await settle(PCM_PROGRESS_MS);
+    expect(heard.onFailure).not.toHaveBeenCalled();
+
+    context.currentTime = silentFrom + stallSeconds;
+    await settle(PCM_PROGRESS_MS * 4);
+    expect(heard.onFailure).toHaveBeenCalledTimes(1);
+    expect(heard.onFailure).toHaveBeenCalledWith("stall");
+  });
+
+  it("reports a stream that never delivered its first frame once, not once as stalled and again as unloaded", async () => {
+    sources.specs.set(A, { duration: 60, trim: 0, chunk: 1, fail: false, hangAfter: 0 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+
+    context.currentTime = PCM_START_LEAD_SECONDS + stallSeconds;
+    await settle(PCM_PROGRESS_MS);
+    await settle(LOAD_TIMEOUT_MS);
+
+    expect(heard.onFailure).toHaveBeenCalledTimes(1);
+    expect(heard.onFailure).toHaveBeenCalledWith("stall");
+  });
+
+  it("never calls a paused track stalled, however long it waits", async () => {
+    sources.specs.set(A, { duration: 60, trim: 0, chunk: 1, fail: false, hangAfter: 3 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+
+    engine.pause();
+    context.currentTime = silentFrom + stallSeconds * 4;
+    await settle(PCM_PROGRESS_MS * 4);
+
+    expect(heard.onFailure).not.toHaveBeenCalled();
+  });
+
+  it("never calls a track stalled once all of it has been decoded", async () => {
+    sources.specs.set(A, { duration: 5, trim: 0, chunk: 1, fail: false });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+
+    context.currentTime = 4;
+    await settle(PCM_PROGRESS_MS * 4);
+
+    expect(heard.onFailure).not.toHaveBeenCalled();
+  });
+
+  it("counts the silence from a seek, not from before it", async () => {
+    sources.specs.set(A, { duration: 60, trim: 0, chunk: 1, fail: false, hangAfter: 3 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+    context.currentTime = silentFrom + stallSeconds - 1;
+    await settle(PCM_PROGRESS_MS);
+
+    engine.seek(30);
+    await settle();
+    context.currentTime += 5;
+    await settle(PCM_PROGRESS_MS * 4);
+
+    expect(heard.onFailure).not.toHaveBeenCalled();
   });
 });

@@ -15,6 +15,7 @@ import {
   PCM_LEAD_SECONDS,
   PCM_PROGRESS_MS,
   PCM_START_LEAD_SECONDS,
+  STALL_TIMEOUT_MS,
 } from "./constants";
 import { followGraph, stopFollowingAudio } from "./energy";
 import { keepAlive, releaseKeepAlive } from "./keepalive";
@@ -286,11 +287,21 @@ function handOver(voice: Voice): void {
   if (incoming.fed) void watchSeam(incoming, ++seamRun);
 }
 
+function starved(voice: Voice): boolean {
+  if (voice.iterator === null) return false;
+  const silentSeconds = voice.bus.context.currentTime - (voice.base + voice.scheduledUntil);
+  return silentSeconds * 1000 >= STALL_TIMEOUT_MS;
+}
+
 function startProgress(): void {
   clearInterval(progressTimer);
   progressTimer = setInterval(() => {
     if (active === null || !playing) return;
     callbacks?.onProgress(currentPosition(active), active.source.durationSeconds);
+    if (!starved(active)) return;
+    stopProgress();
+    clearTimeout(loadTimer);
+    callbacks?.onFailure("stall");
   }, PCM_PROGRESS_MS);
 }
 
