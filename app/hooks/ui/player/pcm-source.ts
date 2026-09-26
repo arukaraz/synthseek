@@ -66,7 +66,7 @@ export async function openPcmSource(url: string): Promise<PcmSource> {
     if (track === null || !(await track.canDecode())) throw new Error("undecodable");
     const codec = await track.getCodec();
     const sampleRate = await track.getSampleRate();
-    const rawDuration = transport.ranged ? await track.computeDuration() : null;
+    const rawDuration = await track.getDurationFromMetadata();
     const trim = codec === "mp3" && transport.ranged ? await mp3Trim(url, sampleRate) : null;
     const sink = new media.AudioBufferSink(track);
     return {

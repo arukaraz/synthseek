@@ -26,10 +26,12 @@ const media = vi.hoisted(() => {
   const track = {
     codec: "flac",
     decodable: true,
+    headerDuration: 200 as number | null,
     canDecode: vi.fn(async () => track.decodable),
     getCodec: vi.fn(async () => track.codec),
     getSampleRate: vi.fn(async () => 44100),
     computeDuration: vi.fn(async () => 200),
+    getDurationFromMetadata: vi.fn(async () => track.headerDuration),
   };
   const state = {
     track,
@@ -92,6 +94,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   media.track.codec = "flac";
   media.track.decodable = true;
+  media.track.headerDuration = 200;
   media.missingTrack = false;
   media.headRead = false;
   media.urlSources.length = 0;
@@ -157,12 +160,13 @@ describe("opening a stream as decoded audio", () => {
     expect(await fetchFn?.("/stream/1", { headers: { Range: "bytes=0-4" } })).toBe(partial);
   });
 
-  it("takes a flac as it is: full length, no trim, no extra request", async () => {
+  it("takes a flac's length from its header, never by reading every frame, with no trim or extra request", async () => {
     const source = await fresh();
 
     const opened = await source.openPcmSource("/stream/1");
 
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(media.track.computeDuration).not.toHaveBeenCalled();
     expect(opened.durationSeconds).toBe(200);
     expect(opened.sampleRate).toBe(44100);
     expect(opened.trimStartSeconds).toBe(0);
@@ -242,7 +246,7 @@ describe("opening a stream as decoded audio", () => {
     expect(lame.gaplessInfoFrom).not.toHaveBeenCalled();
   });
 
-  it("never claims more than the demuxer measured, even when the tag says so", async () => {
+  it("never claims more than the file's header says, even when the tag says so", async () => {
     media.track.codec = "mp3";
     lame.trimFor.mockReturnValue({ startSeconds: 0.025, durationSeconds: 300 });
     const source = await fresh();
@@ -295,6 +299,7 @@ describe("opening a stream as decoded audio", () => {
 
   it("reads a stream the server will not range once, front to back, leaving its length to its end", async () => {
     media.track.codec = "mp3";
+    media.track.headerDuration = null;
     media.headRead = true;
     fetchMock.mockResolvedValueOnce(new Response("mp3 frames", { status: 200 }));
     const source = await fresh();
@@ -315,9 +320,20 @@ describe("opening a stream as decoded audio", () => {
 
     const opened = await source.openPcmSource("/stream/1");
 
-    expect(media.track.computeDuration).toHaveBeenCalled();
+    expect(media.track.getDurationFromMetadata).toHaveBeenCalled();
     expect(opened.durationSeconds).toBe(100);
     expect(opened.trimStartSeconds).toBe(0.025);
+  });
+
+  it("leaves the length unknown when the file's header does not carry one", async () => {
+    media.track.codec = "opus";
+    media.track.headerDuration = null;
+    const source = await fresh();
+
+    const opened = await source.openPcmSource("/stream/1");
+
+    expect(media.track.computeDuration).not.toHaveBeenCalled();
+    expect(opened.durationSeconds).toBeNull();
   });
 
   it("closes the input when the stream has no audio or cannot be decoded here", async () => {
