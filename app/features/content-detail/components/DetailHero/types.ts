@@ -1,3 +1,4 @@
+import type { MediaServerKey } from "@api/__generated__/types";
 import type { SocialBrand } from "@components/ui/SocialIcon";
 import type { ReactNode } from "react";
 
@@ -16,7 +17,7 @@ export interface PlaylistHeroLabels {
   delete: string;
   nameField: string;
   save: string;
-  syncToPlex: string;
+  syncTo: string;
   syncing: string;
 }
 
@@ -24,7 +25,8 @@ export interface PlaylistHeroControls {
   canEdit: boolean;
   onRename: () => void;
   onDelete: () => void;
-  onSyncToPlex?: () => void;
+  onSyncTo?: (server: MediaServerKey) => void;
+  syncExcludeServer: string | null;
   isSyncing: boolean;
   isEditing: boolean;
   editValue: string;

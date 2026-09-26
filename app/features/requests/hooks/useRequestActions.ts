@@ -1,6 +1,12 @@
 "use client";
 
-import { ContentType, RequestStatus, type RequestListItem, type TrackRequest } from "@api/__generated__/types";
+import {
+  ContentType,
+  RequestStatus,
+  type MediaServerKey,
+  type RequestListItem,
+  type TrackRequest,
+} from "@api/__generated__/types";
 import {
   useApproveTracks,
   useCancelAlbum,
@@ -16,7 +22,7 @@ import {
   useResumePlaylist,
   useRetryAlbum,
   useRetryPlaylist,
-  useRetryPlexPlaylist,
+  useSyncPlaylistTo,
 } from "@hooks/api";
 import { useSpotifySyncPlaylistNow } from "@hooks/api/mutations/spotify/useSpotifyImport";
 import { useExportCollection } from "@hooks/api/queries/portability/useExportCollection";
@@ -39,7 +45,7 @@ interface UseRequestActions {
   prioritize: () => void;
   approve: () => void;
   reject: (reason?: string) => void;
-  syncPlex: () => void;
+  syncTo: (server: MediaServerKey) => void;
   syncSourceNow: () => void;
   exportJspf: () => Promise<void>;
   canManage: boolean;
@@ -56,11 +62,12 @@ interface UseRequestActions {
   canResume: boolean;
   isPaused: boolean;
   canPrioritize: boolean;
-  canSyncPlex: boolean;
+  canSyncTo: boolean;
+  syncExcludeServer: string | null;
   canSyncSource: boolean;
   canExport: boolean;
   isRetrying: boolean;
-  syncPlexPending: boolean;
+  syncToPending: boolean;
   syncSourcePending: boolean;
   label: "Album" | "Playlist";
 }
@@ -75,7 +82,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
 
   const retryAlbum = useRetryAlbum();
   const retryPlaylist = useRetryPlaylist();
-  const retryPlex = useRetryPlexPlaylist();
+  const syncPlaylistTo = useSyncPlaylistTo();
   const deleteAlbum = useDeleteAlbum();
   const deletePlaylist = useDeletePlaylist();
   const cancelAlbum = useCancelAlbum();
@@ -106,7 +113,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
   const canResume = canManage && isPaused;
   const canPrioritize =
     canManage && tracks.some((track) => track.status === RequestStatus.enum.queued && track.priority === 0);
-  const canSyncPlex =
+  const canSyncTo =
     canManage &&
     isPlaylist &&
     (request.status === RequestStatus.enum.complete || request.status === RequestStatus.enum.partially_complete);
@@ -170,8 +177,8 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     else resumeAlbum.mutate({ albumId: request.id });
   };
 
-  const syncPlex = () => {
-    retryPlex.mutate({ playlistId: request.id });
+  const syncTo = (server: MediaServerKey) => {
+    syncPlaylistTo.mutate({ playlistId: request.id, server });
   };
 
   const syncSourceNow = () => {
@@ -196,7 +203,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     prioritize,
     approve,
     reject,
-    syncPlex,
+    syncTo,
     syncSourceNow,
     exportJspf,
     canManage,
@@ -213,11 +220,12 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     canResume,
     isPaused,
     canPrioritize,
-    canSyncPlex,
+    canSyncTo,
+    syncExcludeServer: request.source_provider,
     canSyncSource,
     canExport: canManage,
     isRetrying,
-    syncPlexPending: retryPlex.isPending,
+    syncToPending: syncPlaylistTo.isPending,
     syncSourcePending: syncSpotifyPlaylist.isPending,
     label,
   };

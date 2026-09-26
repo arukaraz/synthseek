@@ -18,8 +18,8 @@
   },
   "progressDock": {
     "title": {
-      "plexSyncRunning": "Wird mit Plex synchronisiert",
-      "plexSyncDone": "Alle Playlists synchronisiert",
+      "playlistSyncRunning": "Wird mit {{provider}} synchronisiert",
+      "playlistSyncDone": "Alle Playlists synchronisiert",
       "libraryImportRunning": "Import von {{provider}}",
       "libraryImportDone": "Import abgeschlossen",
       "fileImportRunning": "Playlist wird importiert",

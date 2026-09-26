@@ -12,19 +12,30 @@ vi.mock("sonner", () => ({
   },
 }));
 
-const mocks = vi.hoisted(() => ({
-  items: undefined as unknown,
-  syncState: undefined as { running: boolean; synced: number; total: number } | undefined,
-  queueState: undefined as { isPaused: boolean } | undefined,
-  progress: null as unknown,
-  downloading: false,
-}));
+interface ActivityMocks {
+  items: unknown;
+  syncState: { running: boolean; server: string | null; synced: number; total: number } | undefined;
+  queueState: { isPaused: boolean } | undefined;
+  progress: unknown;
+  downloading: boolean;
+}
+
+const mocks = vi.hoisted(() => {
+  const state: ActivityMocks = {
+    items: undefined,
+    syncState: undefined,
+    queueState: undefined,
+    progress: null,
+    downloading: false,
+  };
+  return state;
+});
 
 vi.mock("@hooks/api", () => ({
   useTrackRequests: () => ({ data: mocks.items }),
-  useGetPlexSyncAllState: () => ({ data: mocks.syncState }),
+  useGetPlaylistSyncAllState: () => ({ data: mocks.syncState }),
   useQueueStatus: () => ({ data: mocks.queueState }),
-  usePlexSyncAllProgress: () => mocks.progress,
+  usePlaylistSyncAllProgress: () => mocks.progress,
 }));
 
 vi.mock("../../helpers", () => ({
@@ -53,11 +64,11 @@ describe("useActivityState", () => {
     expect(result.current.state).toBe("paused");
   });
 
-  it("keeps an in-flight plex sync as plex-sync even while paused", () => {
+  it("keeps an in-flight playlist sync as playlist-sync even while paused", () => {
     mocks.queueState = { isPaused: true };
-    mocks.syncState = { running: true, synced: 1, total: 4 };
+    mocks.syncState = { running: true, server: "jellyfin", synced: 1, total: 4 };
     const { result } = renderHook(() => useActivityState());
-    expect(result.current.state).toBe("plex-sync");
+    expect(result.current.state).toBe("playlist-sync");
   });
 
   it("returns in-progress when downloading and not paused", () => {
@@ -73,7 +84,7 @@ describe("useActivityState", () => {
   });
 
   it("derives synced and total from live progress over the stored sync state", () => {
-    mocks.syncState = { running: true, synced: 1, total: 10 };
+    mocks.syncState = { running: true, server: "plex", synced: 1, total: 10 };
     mocks.progress = { phase: "running", synced: 5, total: 8, failed: 0 };
     const { result } = renderHook(() => useActivityState());
     expect(result.current).toMatchObject({ synced: 5, total: 8 });
@@ -90,21 +101,21 @@ describe("useActivityState completion toasts", () => {
     vi.clearAllMocks();
   });
 
-  it("toasts success once when a sync completes with at least one synced playlist", () => {
-    mocks.progress = { phase: "complete", synced: 3, total: 3, failed: 1 };
+  it("toasts success once when a sync completes with at least one synced playlist, naming the server", () => {
+    mocks.progress = { server: "navidrome", phase: "complete", synced: 3, total: 3, failed: 1 };
     renderHook(() => useActivityState());
 
     expect(toast.success).toHaveBeenCalledWith(
-      i18n.t("mutations:requests.playlistsSyncedPlex", { count: 3, failed: 1 })
+      i18n.t("mutations:requests.playlistsSyncedTo", { count: 3, failed: 1, server: "Navidrome" })
     );
     expect(toast.info).not.toHaveBeenCalled();
   });
 
   it("toasts info when a sync completes with nothing synced", () => {
-    mocks.progress = { phase: "complete", synced: 0, total: 0, failed: 0 };
+    mocks.progress = { server: "plex", phase: "complete", synced: 0, total: 0, failed: 0 };
     renderHook(() => useActivityState());
 
-    expect(toast.info).toHaveBeenCalledWith(i18n.t("mutations:requests.noPlaylistsToSyncPlex"));
+    expect(toast.info).toHaveBeenCalledWith(i18n.t("mutations:requests.noPlaylistsToSyncTo", { server: "Plex" }));
     expect(toast.success).not.toHaveBeenCalled();
   });
 

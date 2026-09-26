@@ -99,6 +99,14 @@
     "title": "Track still downloading",
     "description": "Only completed or failed tracks can be removed from a playlist."
   },
+  "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
+    "title": "Can't sync there",
+    "description": "Playlist sync to that server is off, or this playlist came from it."
+  },
+  "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
+    "title": "Account not linked",
+    "description": "The playlist's owner has to link their account for that server in their profile first."
+  },
   "TRACK_NOT_FOUND": {
     "title": "Track not found",
     "description": "That track could not be found."

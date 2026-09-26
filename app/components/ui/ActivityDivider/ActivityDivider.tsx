@@ -18,11 +18,11 @@ import type { ActivityDividerProps } from "./types";
 export function ActivityDivider({ state, value = 0, max = 0, children, className }: ActivityDividerProps) {
   const { t } = useTranslation("components");
   const reduced = useReducedMotion() ?? false;
-  const isPlexSync = state === "plex-sync";
+  const isPlaylistSync = state === "playlist-sync";
   const isPaused = state === "paused";
 
-  const showTravel = isPlexSync && !reduced;
-  const showStaticFill = isPlexSync && reduced;
+  const showTravel = isPlaylistSync && !reduced;
+  const showStaticFill = isPlaylistSync && reduced;
   const ratio = clampRatio(value, max);
 
   return (

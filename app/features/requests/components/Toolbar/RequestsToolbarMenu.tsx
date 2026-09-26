@@ -1,20 +1,23 @@
 "use client";
 
+import type { MediaServerKey } from "@api/__generated__/types";
+import { SyncToSubmenu } from "@components/SyncToSubmenu";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { Spinner } from "@components/ui/Spinner";
 import {
   useDeleteAllRequests,
-  useGetPlexSyncAllState,
+  useGetPlaylistSyncAllState,
   usePauseAll,
-  usePlexSyncAllProgress,
+  usePlaylistSyncAllProgress,
   useQueueStatus,
   useResumeAll,
   useRetryAllFailed,
-  useSyncAllPlaylistsToPlex,
+  useSyncAllPlaylistsTo,
 } from "@hooks/api";
 import { useAuthContext } from "@modules/providers/AuthProvider";
-import { MoreVertical, Pause, Play, RefreshCw, Trash2, Upload } from "lucide-react";
+import { playbackServerName } from "@utils/playback-servers";
+import { MoreVertical, Pause, Play, RefreshCw, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -25,21 +28,23 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
   const { t } = useTranslation("requests");
   const { isAdmin } = useAuthContext();
   const retryAllFailed = useRetryAllFailed();
-  const syncAllPlex = useSyncAllPlaylistsToPlex();
+  const syncAll = useSyncAllPlaylistsTo();
   const deleteAll = useDeleteAllRequests();
   const pauseAll = usePauseAll();
   const resumeAll = useResumeAll();
   const { data: queueStatus } = useQueueStatus();
-  const { data: plexSyncState } = useGetPlexSyncAllState();
-  const plexSyncProgress = usePlexSyncAllProgress();
+  const { data: syncState } = useGetPlaylistSyncAllState();
+  const syncProgress = usePlaylistSyncAllProgress();
   const isQueuePaused = queueStatus?.isPaused ?? false;
-  const isSyncingPlex = plexSyncProgress
-    ? plexSyncProgress.phase !== "complete"
-    : (plexSyncState?.running ?? false) || syncAllPlex.isPending;
+  const isSyncing = syncProgress
+    ? syncProgress.phase !== "complete"
+    : (syncState?.running ?? false) || syncAll.isPending;
+  const runningServer = syncProgress?.server ?? syncState?.server ?? null;
 
   const [confirmRetryOpen, setConfirmRetryOpen] = useState(false);
-  const [confirmSyncPlexOpen, setConfirmSyncPlexOpen] = useState(false);
+  const [confirmSyncServer, setConfirmSyncServer] = useState<MediaServerKey | null>(null);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const confirmServerName = confirmSyncServer === null ? "" : playbackServerName(confirmSyncServer);
 
   if (!hasItems && !isAdmin) return null;
 
@@ -58,12 +63,17 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
               {t("toolbar.retryAllFailed.label")}
             </DropdownMenuItem>
           )}
-          {hasItems && (
-            <DropdownMenuItem disabled={isSyncingPlex} onSelect={() => setConfirmSyncPlexOpen(true)}>
-              {isSyncingPlex ? <Spinner size="sm" decorative /> : <Upload className="size-3.5" />}
-              {isSyncingPlex ? t("toolbar.syncAllPlex.labelRunning") : t("toolbar.syncAllPlex.label")}
-            </DropdownMenuItem>
-          )}
+          {hasItems &&
+            (isSyncing ? (
+              <DropdownMenuItem disabled>
+                <Spinner size="sm" decorative />
+                {t("toolbar.syncAll.labelRunning", {
+                  server: runningServer === null ? "" : playbackServerName(runningServer),
+                })}
+              </DropdownMenuItem>
+            ) : (
+              <SyncToSubmenu label={t("toolbar.syncAll.label")} onSelect={setConfirmSyncServer} />
+            ))}
           {isAdmin &&
             (isQueuePaused ? (
               <DropdownMenuItem onSelect={() => resumeAll.mutate()}>
@@ -100,15 +110,15 @@ export function RequestsToolbarMenu({ hasItems }: RequestsToolbarMenuProps) {
       />
 
       <ConfirmationModal
-        isOpen={confirmSyncPlexOpen}
-        onClose={() => setConfirmSyncPlexOpen(false)}
+        isOpen={confirmSyncServer !== null}
+        onClose={() => setConfirmSyncServer(null)}
         onConfirm={() => {
-          if (!isSyncingPlex) syncAllPlex.mutate();
+          if (confirmSyncServer !== null && !isSyncing) syncAll.mutate({ server: confirmSyncServer });
         }}
-        title={t("toolbar.syncAllPlex.confirmTitle")}
-        message={t("toolbar.syncAllPlex.confirmMessage")}
+        title={t("toolbar.syncAll.confirmTitle", { server: confirmServerName })}
+        message={t("toolbar.syncAll.confirmMessage", { server: confirmServerName })}
         variant="warning"
-        confirmText={isSyncingPlex ? t("toolbar.syncAllPlex.confirmPending") : t("toolbar.syncAllPlex.confirmAction")}
+        confirmText={isSyncing ? t("toolbar.syncAll.confirmPending") : t("toolbar.syncAll.confirmAction")}
       />
 
       <ConfirmationModal

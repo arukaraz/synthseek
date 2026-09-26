@@ -99,6 +99,14 @@
     "title": "Titel wird noch heruntergeladen",
     "description": "Nur abgeschlossene oder fehlgeschlagene Titel können aus einer Playlist entfernt werden."
   },
+  "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
+    "title": "Dorthin nicht synchronisierbar",
+    "description": "Die Playlist-Synchronisierung mit diesem Server ist aus, oder die Playlist stammt von dort."
+  },
+  "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
+    "title": "Konto nicht verknüpft",
+    "description": "Der Besitzer der Playlist muss zuerst in seinem Profil sein Konto für diesen Server verknüpfen."
+  },
   "TRACK_NOT_FOUND": {
     "title": "Titel nicht gefunden",
     "description": "Dieser Titel konnte nicht gefunden werden."

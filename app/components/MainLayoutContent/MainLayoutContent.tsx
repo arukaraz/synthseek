@@ -8,7 +8,7 @@ import { ProgressDock } from "@components/ui/ProgressDock";
 import { TopHeader } from "@components/TopHeader";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import {
-  useRehydratePlexSyncDock,
+  useRehydratePlaylistSyncDock,
   useRehydrateRequestDock,
   useReviewApprovalDock,
   useSubscriptions,
@@ -21,7 +21,7 @@ import type { MainLayoutContentProps } from "./types";
 export function MainLayoutContent({ children }: MainLayoutContentProps) {
   useSubscriptions();
   useRehydrateRequestDock();
-  useRehydratePlexSyncDock();
+  useRehydratePlaylistSyncDock();
   useReviewApprovalDock();
   useHashTargetGlow();
 

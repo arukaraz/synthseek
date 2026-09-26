@@ -1,5 +1,6 @@
 "use client";
 
+import { SyncToSubmenu } from "@components/SyncToSubmenu";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import {
@@ -38,7 +39,7 @@ export function RequestDetailHeroMenu({
     resume,
     prioritize,
     approve,
-    syncPlex,
+    syncTo,
     syncSourceNow,
     exportJspf,
     canApprove,
@@ -50,11 +51,12 @@ export function RequestDetailHeroMenu({
     canPause,
     canResume,
     canPrioritize,
-    canSyncPlex,
+    canSyncTo,
+    syncExcludeServer,
     canSyncSource,
     canExport,
     isRetrying,
-    syncPlexPending,
+    syncToPending,
     syncSourcePending,
   } = actions;
 
@@ -115,12 +117,20 @@ export function RequestDetailHeroMenu({
             {syncSourcePending ? t("detail.syncing") : t("detail.syncFromSource")}
           </DropdownMenuItem>
         )}
-        {canSyncPlex && (
-          <DropdownMenuItem onClick={syncPlex} disabled={syncPlexPending} className="text-primary-400">
-            <Upload className="size-3.5" />
-            {syncPlexPending ? t("detail.syncing") : t("detail.syncToPlex")}
-          </DropdownMenuItem>
-        )}
+        {canSyncTo &&
+          (syncToPending ? (
+            <DropdownMenuItem disabled className="text-primary-400">
+              <Upload className="size-3.5" />
+              {t("detail.syncing")}
+            </DropdownMenuItem>
+          ) : (
+            <SyncToSubmenu
+              label={t("detail.syncTo")}
+              excludeServer={syncExcludeServer}
+              triggerClassName="text-primary-400"
+              onSelect={syncTo}
+            />
+          ))}
         {canExport && (
           <DropdownMenuItem onClick={() => void exportJspf()}>
             <Download className="size-3.5" />

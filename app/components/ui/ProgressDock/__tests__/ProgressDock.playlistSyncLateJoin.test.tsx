@@ -1,6 +1,6 @@
-import { SubscriptionEventType, type PlexSyncAllProgressPayload } from "@api/__generated__/types";
-import { handlePlexSyncAllProgress } from "@hooks/api/subscriptions/handlers/requests/plexSyncAllProgress";
-import { resetDockStore, seedPlexSyncDockJob } from "@hooks/api/subscriptions/shared/progressDock";
+import { SubscriptionEventType, type PlaylistSyncAllProgressPayload } from "@api/__generated__/types";
+import { handlePlaylistSyncAllProgress } from "@hooks/api/subscriptions/handlers/requests/playlistSyncAllProgress";
+import { resetDockStore, seedPlaylistSyncDockJob } from "@hooks/api/subscriptions/shared/progressDock";
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -12,8 +12,8 @@ vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: {
-        getPlexSyncAllState: { setData: spies.setData },
-        getPlexSyncAllItems: { invalidate: spies.invalidateItems },
+        getPlaylistSyncAllState: { setData: spies.setData },
+        getPlaylistSyncAllItems: { invalidate: spies.invalidateItems },
         getAll: { invalidate: spies.invalidate },
       },
     }),
@@ -22,10 +22,11 @@ vi.mock("@utils/trpc", () => ({
 
 const VIEWER_ID = "u_self";
 
-function progressEvent(current: { id: string; ok: boolean }, synced: number): PlexSyncAllProgressPayload {
+function progressEvent(current: { id: string; ok: boolean }, synced: number): PlaylistSyncAllProgressPayload {
   return {
-    eventType: SubscriptionEventType.PlexSyncAllProgress,
+    eventType: SubscriptionEventType.PlaylistSyncAllProgress,
     userId: VIEWER_ID,
+    server: "plex",
     phase: "progress",
     synced,
     total: 3,
@@ -52,9 +53,9 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe("ProgressDock, Plex sync-all late join", () => {
+describe("ProgressDock, playlist sync-all late join", () => {
   it("renders the real playlist names and the outcome each row already reached", () => {
-    seedPlexSyncDockJob([
+    seedPlaylistSyncDockJob("plex", [
       { id: "pl_a", name: "Road Trip", state: "done" },
       { id: "pl_b", name: "Focus", state: "pending" },
       { id: "pl_c", name: "Chill", state: "pending" },
@@ -68,7 +69,7 @@ describe("ProgressDock, Plex sync-all late join", () => {
   });
 
   it("advances a rehydrated row when a progress event names that playlist", () => {
-    seedPlexSyncDockJob([
+    seedPlaylistSyncDockJob("plex", [
       { id: "pl_a", name: "Road Trip", state: "done" },
       { id: "pl_b", name: "Focus", state: "pending" },
       { id: "pl_c", name: "Chill", state: "pending" },
@@ -77,19 +78,19 @@ describe("ProgressDock, Plex sync-all late join", () => {
 
     const utils = {
       requests: {
-        getPlexSyncAllState: { setData: spies.setData },
-        getPlexSyncAllItems: { invalidate: spies.invalidateItems },
+        getPlaylistSyncAllState: { setData: spies.setData },
+        getPlaylistSyncAllItems: { invalidate: spies.invalidateItems },
         getAll: { invalidate: spies.invalidate },
       },
     };
     act(() => {
-      handlePlexSyncAllProgress(progressEvent({ id: "pl_b", ok: true }, 2), utils, VIEWER_ID);
+      handlePlaylistSyncAllProgress(progressEvent({ id: "pl_b", ok: true }, 2), utils, VIEWER_ID);
     });
 
     expect(stateOf("Focus")).toBe("Done");
 
     act(() => {
-      handlePlexSyncAllProgress(progressEvent({ id: "pl_c", ok: false }, 2), utils, VIEWER_ID);
+      handlePlaylistSyncAllProgress(progressEvent({ id: "pl_c", ok: false }, 2), utils, VIEWER_ID);
     });
 
     expect(stateOf("Chill")).toBe("Failed");

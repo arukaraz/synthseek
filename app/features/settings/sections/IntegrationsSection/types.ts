@@ -141,12 +141,21 @@ interface NavidromeConnection {
   username: string;
   password: string;
   playback: boolean;
+  playlistSync: boolean;
 }
 
 interface JellyfinConnection {
   url: string;
   apiKey: string;
   playback: boolean;
+  playlistSync: boolean;
+}
+
+export interface MediaServerPlaylistSyncRowProps {
+  server: string;
+  playback: boolean;
+  playlistSync: boolean;
+  onChange: (value: boolean) => void;
 }
 
 export interface NavidromeCardProps {

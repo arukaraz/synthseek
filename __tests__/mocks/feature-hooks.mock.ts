@@ -24,8 +24,8 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
       slskd: { apiUrl: "", apiKey: "", bannedUsers: [] },
       plex: { url: "", token: "" },
       lidarr: { url: "", apiKey: "" },
-      navidrome: { url: "", username: "", password: "", playback: false },
-      jellyfin: { url: "", apiKey: "", playback: false },
+      navidrome: { url: "", username: "", password: "", playback: false, playlistSync: false },
+      jellyfin: { url: "", apiKey: "", playback: false, playlistSync: false },
       enrichment: {
         lastfmApiKey: "",
         lastfmApiSecret: "",

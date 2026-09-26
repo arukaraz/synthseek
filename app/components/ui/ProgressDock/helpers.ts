@@ -32,7 +32,10 @@ export function ringStyle(ratio: number): CSSProperties {
 }
 
 const TITLE_KEYS: Record<DockJobKind, { running: AppShellKey; done: AppShellKey }> = {
-  "plex-sync": { running: "progressDock.title.plexSyncRunning", done: "progressDock.title.plexSyncDone" },
+  "playlist-sync": {
+    running: "progressDock.title.playlistSyncRunning",
+    done: "progressDock.title.playlistSyncDone",
+  },
   "library-import": {
     running: "progressDock.title.libraryImportRunning",
     done: "progressDock.title.libraryImportDone",
@@ -64,7 +67,7 @@ export function titleKey(kind: DockJobKind, status: DockJobStatus): AppShellKey 
 }
 
 const KIND_BEHAVIOUR: Record<DockJobKind, { countsItems: boolean; toggle: boolean; closeWhileRunning: boolean }> = {
-  "plex-sync": { countsItems: true, toggle: true, closeWhileRunning: true },
+  "playlist-sync": { countsItems: true, toggle: true, closeWhileRunning: true },
   "library-import": { countsItems: true, toggle: true, closeWhileRunning: true },
   "file-import": { countsItems: true, toggle: true, closeWhileRunning: true },
   request: { countsItems: false, toggle: false, closeWhileRunning: false },

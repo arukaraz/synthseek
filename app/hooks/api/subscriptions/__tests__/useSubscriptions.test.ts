@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   SubscriptionEventType,
   type LibraryImportProgressPayload,
-  type PlexSyncAllProgressPayload,
+  type PlaylistSyncAllProgressPayload,
   type PortabilityProgressPayload,
   type SubscriptionEvent,
 } from "@api/__generated__/types";
@@ -31,8 +31,9 @@ const utilsStub = vi.hoisted(() => ({
     getRecentTracks: { invalidate: vi.fn() },
     getDetail: { invalidate: vi.fn() },
     getLibrarySummary: { invalidate: vi.fn() },
-    getPlexSyncAllItems: { invalidate: vi.fn() },
-    getPlexSyncAllState: { invalidate: vi.fn() },
+    getPlaylistSyncAllItems: { invalidate: vi.fn() },
+    getPlaylistSyncAllState: { invalidate: vi.fn() },
+    playlistSyncTargets: { invalidate: vi.fn() },
     review: { list: { invalidate: vi.fn() } },
   },
   settings: {
@@ -65,8 +66,9 @@ const utilsStub = vi.hoisted(() => ({
 const everyPushFedInvalidate = [
   utilsStub.requests.getAll.invalidate,
   utilsStub.requests.getLibrarySummary.invalidate,
-  utilsStub.requests.getPlexSyncAllItems.invalidate,
-  utilsStub.requests.getPlexSyncAllState.invalidate,
+  utilsStub.requests.getPlaylistSyncAllItems.invalidate,
+  utilsStub.requests.getPlaylistSyncAllState.invalidate,
+  utilsStub.requests.playlistSyncTargets.invalidate,
   utilsStub.settings.get.invalidate,
   utilsStub.import.listBatches.invalidate,
   utilsStub.import.getBatch.invalidate,
@@ -119,7 +121,7 @@ vi.mock("../handlers/requests", () => ({
   handleLibraryImportProgress: handlers.libraryImport,
   handlePlaylistPlexCreated: vi.fn(),
   handlePlaylistUpdate: vi.fn(),
-  handlePlexSyncAllProgress: handlers.plexSyncAll,
+  handlePlaylistSyncAllProgress: handlers.plexSyncAll,
   handlePortabilityProgress: handlers.portability,
   handleTrackUpdate: vi.fn(),
 }));
@@ -129,9 +131,10 @@ vi.mock("../handlers/system", () => ({
   handleVersionUpdate: vi.fn(),
 }));
 
-const plexEvent: PlexSyncAllProgressPayload = {
-  eventType: SubscriptionEventType.PlexSyncAllProgress,
+const plexEvent: PlaylistSyncAllProgressPayload = {
+  eventType: SubscriptionEventType.PlaylistSyncAllProgress,
   userId: "u_other",
+  server: "plex",
   phase: "start",
   synced: 0,
   total: 1,

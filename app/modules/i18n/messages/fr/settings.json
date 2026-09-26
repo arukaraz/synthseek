@@ -428,6 +428,11 @@
       "label": "Lire depuis {{server}}",
       "description": "Votre propre copie est toujours lue en premier."
     },
+    "playlistSync": {
+      "label": "Synchroniser les playlists avec {{server}}",
+      "description": "Les playlists terminées de chaque membre sont créées dans son propre compte {{server}} et tenues à jour.",
+      "needsPlayback": "Activez d'abord la lecture depuis {{server}}."
+    },
     "test": {
       "action": "Tester la connexion",
       "testing": "Test en cours...",

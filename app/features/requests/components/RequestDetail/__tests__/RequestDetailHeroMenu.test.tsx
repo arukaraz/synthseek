@@ -4,6 +4,15 @@ import { describe, expect, it, vi } from "vitest";
 import { RequestDetailHeroMenu } from "../RequestDetailHeroMenu";
 import type { RequestDetailHeroMenuProps } from "../types";
 
+vi.mock("@hooks/api", () => ({
+  usePlaylistSyncTargets: () => ({
+    data: [
+      { server: "plex", name: "Plex" },
+      { server: "jellyfin", name: "Jellyfin" },
+    ],
+  }),
+}));
+
 type Actions = RequestDetailHeroMenuProps["actions"];
 
 function makeActions(overrides: Partial<Actions> = {}): Actions {
@@ -14,7 +23,7 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     pause: vi.fn(),
     resume: vi.fn(),
     prioritize: vi.fn(),
-    syncPlex: vi.fn(),
+    syncTo: vi.fn(),
     syncSourceNow: vi.fn(),
     exportJspf: vi.fn().mockResolvedValue(undefined),
     canManage: true,
@@ -28,11 +37,12 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     canResume: false,
     isPaused: false,
     canPrioritize: false,
-    canSyncPlex: false,
+    canSyncTo: false,
+    syncExcludeServer: null,
     canSyncSource: false,
     canExport: false,
     isRetrying: false,
-    syncPlexPending: false,
+    syncToPending: false,
     syncSourcePending: false,
     label: "Playlist",
     ...overrides,
@@ -123,20 +133,35 @@ describe("RequestDetailHeroMenu", () => {
     expect(syncSourceNow).toHaveBeenCalledOnce();
   });
 
-  it("triggers the Plex sync from the menu", async () => {
-    const syncPlex = vi.fn();
+  it("syncs to the server picked in the Sync to submenu", async () => {
+    const syncTo = vi.fn();
     const user = userEvent.setup();
-    renderMenu({ canSyncPlex: true, syncPlex });
+    renderMenu({ canSyncTo: true, syncTo });
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Sync to Plex" }));
+    screen.getByRole("menuitem", { name: "Sync to..." }).focus();
+    await user.keyboard("{ArrowRight}");
+    expect(await screen.findByRole("menuitem", { name: "Plex" })).toHaveFocus();
+    await user.keyboard("{ArrowDown}{Enter}");
 
-    expect(syncPlex).toHaveBeenCalledOnce();
+    expect(syncTo).toHaveBeenCalledWith("jellyfin");
   });
 
-  it("shows the syncing label while a Plex sync is pending", async () => {
+  it("leaves the server the playlist came from out of the submenu", async () => {
     const user = userEvent.setup();
-    renderMenu({ canSyncPlex: true, syncPlexPending: true });
+    renderMenu({ canSyncTo: true, syncExcludeServer: "jellyfin" });
+
+    await user.click(screen.getByRole("button", { name: "More actions" }));
+    screen.getByRole("menuitem", { name: "Sync to..." }).focus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(await screen.findByRole("menuitem", { name: "Plex" })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Jellyfin" })).not.toBeInTheDocument();
+  });
+
+  it("shows the syncing label while a sync is pending", async () => {
+    const user = userEvent.setup();
+    renderMenu({ canSyncTo: true, syncToPending: true });
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
 

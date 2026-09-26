@@ -9,7 +9,7 @@ export const activityRail = cva("activity-rail", {
     state: {
       idle: "activity-rail-idle [--activity-rail-color:var(--neon-primary)] [--activity-rail-opacity:0.5]",
       "in-progress": "activity-rail-progress [--activity-rail-color:var(--neon-primary)] [--activity-rail-opacity:0.7]",
-      "plex-sync": "activity-rail-plex [--activity-rail-color:var(--neon-sync)] [--activity-rail-opacity:0.9]",
+      "playlist-sync": "activity-rail-sync [--activity-rail-color:var(--neon-sync)] [--activity-rail-opacity:0.9]",
       paused: "activity-rail-paused [--activity-rail-color:var(--neon-warning)] [--activity-rail-opacity:0.9]",
     },
     reduced: {

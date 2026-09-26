@@ -13,11 +13,11 @@
       "confirmPending": "Nouvelle tentative...",
       "confirmAction": "Tout réessayer"
     },
-    "syncAllPlex": {
-      "label": "Synchroniser toutes les playlists vers Plex",
-      "labelRunning": "Synchronisation de toutes les playlists vers Plex...",
-      "confirmTitle": "Synchroniser toutes les playlists vers Plex",
-      "confirmMessage": "Cela synchronisera toutes les playlists éligibles vers Plex. Continuer ?",
+    "syncAll": {
+      "label": "Synchroniser toutes les playlists vers...",
+      "labelRunning": "Synchronisation de toutes les playlists vers {{server}}...",
+      "confirmTitle": "Synchroniser toutes les playlists vers {{server}}",
+      "confirmMessage": "Cela synchronisera toutes les playlists éligibles vers {{server}}. Continuer ?",
       "confirmPending": "Synchronisation...",
       "confirmAction": "Tout synchroniser"
     },
@@ -88,7 +88,7 @@
     "resume": "Reprendre",
     "syncFromSource": "Synchroniser depuis Spotify",
     "syncing": "Synchronisation...",
-    "syncToPlex": "Synchroniser vers Plex",
+    "syncTo": "Synchroniser vers...",
     "export": "Exporter",
     "exportTooltipTitle": "Exporter",
     "exportTooltipDescription": "Télécharge un fichier .jspf maintenant, en utilisant les identifiants déjà enregistrés sur chaque piste.",

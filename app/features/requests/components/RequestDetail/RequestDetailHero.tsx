@@ -58,7 +58,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
     canPause,
     canResume,
     canPrioritize,
-    canSyncPlex,
+    canSyncTo,
     canSyncSource,
     canExport,
     isRetrying,
@@ -74,7 +74,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
     canPause ||
     canResume ||
     canPrioritize ||
-    canSyncPlex ||
+    canSyncTo ||
     canSyncSource ||
     canExport ||
     canRemove;

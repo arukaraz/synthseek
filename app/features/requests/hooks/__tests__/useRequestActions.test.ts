@@ -21,7 +21,7 @@ const idleMutation = { mutate: vi.fn(), isPending: false };
 vi.mock("@hooks/api", () => ({
   useRetryAlbum: () => idleMutation,
   useRetryPlaylist: () => idleMutation,
-  useRetryPlexPlaylist: () => idleMutation,
+  useSyncPlaylistTo: () => idleMutation,
   useDeleteAlbum: () => idleMutation,
   useDeletePlaylist: () => idleMutation,
   useCancelAlbum: () => idleMutation,
@@ -135,14 +135,23 @@ function makePlaylist(overrides: Partial<RequestWithTracks> = {}): RequestWithTr
   };
 }
 
-describe("useRequestActions canSyncPlex", () => {
+describe("useRequestActions canSyncTo", () => {
+  it("hands the menu the server the playlist came from, so it is not offered as a destination", () => {
+    currentUser = owner;
+    const request = makePlaylist({ status: RequestStatus.enum.complete, source_provider: "navidrome" });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.syncExcludeServer).toBe("navidrome");
+  });
+
   it("stays available for a resolved playlist that was already synced to Plex", () => {
     currentUser = owner;
     const request = makePlaylist({ status: RequestStatus.enum.complete, plex_playlist_id: "plex-123" });
 
     const { result } = renderHook(() => useRequestActionsFor(request));
 
-    expect(result.current.canSyncPlex).toBe(true);
+    expect(result.current.canSyncTo).toBe(true);
   });
 
   it("is available for a partially complete playlist already synced to Plex", () => {
@@ -154,7 +163,7 @@ describe("useRequestActions canSyncPlex", () => {
 
     const { result } = renderHook(() => useRequestActionsFor(request));
 
-    expect(result.current.canSyncPlex).toBe(true);
+    expect(result.current.canSyncTo).toBe(true);
   });
 
   it("is unavailable while the playlist is still processing", () => {
@@ -163,7 +172,7 @@ describe("useRequestActions canSyncPlex", () => {
 
     const { result } = renderHook(() => useRequestActionsFor(request));
 
-    expect(result.current.canSyncPlex).toBe(false);
+    expect(result.current.canSyncTo).toBe(false);
   });
 
   it("is unavailable for an album", () => {
@@ -172,7 +181,7 @@ describe("useRequestActions canSyncPlex", () => {
 
     const { result } = renderHook(() => useRequestActionsFor(request));
 
-    expect(result.current.canSyncPlex).toBe(false);
+    expect(result.current.canSyncTo).toBe(false);
   });
 });
 

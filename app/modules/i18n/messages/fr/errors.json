@@ -99,6 +99,14 @@
     "title": "Piste en cours de téléchargement",
     "description": "Seules les pistes terminées ou en échec peuvent être retirées d'une playlist."
   },
+  "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
+    "title": "Synchronisation impossible",
+    "description": "La synchronisation des playlists avec ce serveur est désactivée, ou cette playlist en provient."
+  },
+  "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
+    "title": "Compte non lié",
+    "description": "Le propriétaire de la playlist doit d'abord lier son compte pour ce serveur dans son profil."
+  },
   "TRACK_NOT_FOUND": {
     "title": "Piste introuvable",
     "description": "Cette piste est introuvable."

@@ -13,7 +13,7 @@ function useRequestActionsFor(request: RequestWithTracks) {
 const mutations = vi.hoisted(() => ({
   retryAlbum: vi.fn(),
   retryPlaylist: vi.fn(),
-  retryPlex: vi.fn(),
+  syncTo: vi.fn(),
   deleteAlbum: vi.fn(),
   deletePlaylist: vi.fn(),
   cancelAlbum: vi.fn(),
@@ -34,7 +34,7 @@ const downloadTextMock = vi.hoisted(() => vi.fn());
 vi.mock("@hooks/api", () => ({
   useRetryAlbum: () => ({ mutate: mutations.retryAlbum, isPending: false }),
   useRetryPlaylist: () => ({ mutate: mutations.retryPlaylist, isPending: false }),
-  useRetryPlexPlaylist: () => ({ mutate: mutations.retryPlex, isPending: false }),
+  useSyncPlaylistTo: () => ({ mutate: mutations.syncTo, isPending: false }),
   useDeleteAlbum: () => ({ mutate: mutations.deleteAlbum, isPending: false }),
   useDeletePlaylist: () => ({ mutate: mutations.deletePlaylist, isPending: false }),
   useCancelAlbum: () => ({ mutate: mutations.cancelAlbum, isPending: false }),
@@ -156,12 +156,12 @@ describe("useRequestActions playlist actions", () => {
     expect(mutations.resumePlaylist).toHaveBeenCalledWith({ playlistId: "req-1" });
   });
 
-  it("syncs the playlist to Plex by id", () => {
+  it("syncs the playlist by id to the server it is given", () => {
     const { result } = renderHook(() => useRequestActionsFor(makeRequest()));
 
-    act(() => result.current.syncPlex());
+    act(() => result.current.syncTo("navidrome"));
 
-    expect(mutations.retryPlex).toHaveBeenCalledWith({ playlistId: "req-1" });
+    expect(mutations.syncTo).toHaveBeenCalledWith({ playlistId: "req-1", server: "navidrome" });
   });
 
   it("syncs the playlist from its source by id", () => {

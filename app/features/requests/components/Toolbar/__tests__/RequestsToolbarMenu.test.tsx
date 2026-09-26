@@ -4,15 +4,28 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RequestsToolbarMenu } from "../RequestsToolbarMenu";
 
 const retryAllFailed = vi.fn();
-const syncAllPlex = vi.fn();
+const syncAll = vi.fn();
 const deleteAll = vi.fn();
 const pauseAll = vi.fn();
 const resumeAll = vi.fn();
 
-const hookState = {
+interface HookState {
+  isAdmin: boolean;
+  isQueuePaused: boolean;
+  isSyncRunning: boolean;
+  runningServer: string | null;
+  targets: Array<{ server: string; name: string }>;
+}
+
+const hookState: HookState = {
   isAdmin: false,
   isQueuePaused: false,
-  isPlexRunning: false,
+  isSyncRunning: false,
+  runningServer: null,
+  targets: [
+    { server: "plex", name: "Plex" },
+    { server: "navidrome", name: "Navidrome" },
+  ],
 };
 
 vi.mock("@modules/providers/AuthProvider", () => ({
@@ -21,13 +34,16 @@ vi.mock("@modules/providers/AuthProvider", () => ({
 
 vi.mock("@hooks/api", () => ({
   useRetryAllFailed: () => ({ mutate: retryAllFailed, isPending: false }),
-  useSyncAllPlaylistsToPlex: () => ({ mutate: syncAllPlex, isPending: false }),
+  useSyncAllPlaylistsTo: () => ({ mutate: syncAll, isPending: false }),
   useDeleteAllRequests: () => ({ mutate: deleteAll, isPending: false }),
   usePauseAll: () => ({ mutate: pauseAll }),
   useResumeAll: () => ({ mutate: resumeAll }),
   useQueueStatus: () => ({ data: { isPaused: hookState.isQueuePaused } }),
-  useGetPlexSyncAllState: () => ({ data: { running: hookState.isPlexRunning } }),
-  usePlexSyncAllProgress: () => null,
+  useGetPlaylistSyncAllState: () => ({
+    data: { running: hookState.isSyncRunning, server: hookState.runningServer, synced: 0, total: 0 },
+  }),
+  usePlaylistSyncAllProgress: () => null,
+  usePlaylistSyncTargets: () => ({ data: hookState.targets }),
 }));
 
 async function openMenu() {
@@ -40,7 +56,12 @@ describe("RequestsToolbarMenu", () => {
   beforeEach(() => {
     hookState.isAdmin = false;
     hookState.isQueuePaused = false;
-    hookState.isPlexRunning = false;
+    hookState.isSyncRunning = false;
+    hookState.runningServer = null;
+    hookState.targets = [
+      { server: "plex", name: "Plex" },
+      { server: "navidrome", name: "Navidrome" },
+    ];
   });
 
   afterEach(() => {
@@ -58,8 +79,16 @@ describe("RequestsToolbarMenu", () => {
     await openMenu();
 
     expect(screen.getByRole("menuitem", { name: "Retry all failed" })).toBeInTheDocument();
-    expect(screen.getByRole("menuitem", { name: "Sync all playlists to Plex" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Sync all playlists to..." })).toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: "Delete all requests" })).not.toBeInTheDocument();
+  });
+
+  it("offers no sync entry when no server takes playlists", async () => {
+    hookState.targets = [];
+    render(<RequestsToolbarMenu hasItems />);
+    await openMenu();
+
+    expect(screen.queryByRole("menuitem", { name: "Sync all playlists to..." })).not.toBeInTheDocument();
   });
 
   it("shows the delete and pause actions for an admin", async () => {
@@ -106,25 +135,31 @@ describe("RequestsToolbarMenu", () => {
     expect(retryAllFailed).toHaveBeenCalledOnce();
   });
 
-  it("disables the Plex sync action while a sync is running", async () => {
-    hookState.isPlexRunning = true;
+  it("shows the running sync, naming its server, in place of the sync entry", async () => {
+    hookState.isSyncRunning = true;
+    hookState.runningServer = "navidrome";
     render(<RequestsToolbarMenu hasItems />);
     await openMenu();
 
-    expect(screen.getByRole("menuitem", { name: "Syncing all playlists to Plex..." })).toHaveAttribute(
+    expect(screen.getByRole("menuitem", { name: "Syncing all playlists to Navidrome..." })).toHaveAttribute(
       "aria-disabled",
       "true"
     );
+    expect(screen.queryByRole("menuitem", { name: "Sync all playlists to..." })).not.toBeInTheDocument();
   });
 
-  it("confirms before syncing all playlists to Plex", async () => {
+  it("confirms before syncing all playlists to the server picked in the submenu", async () => {
     render(<RequestsToolbarMenu hasItems />);
     const user = await openMenu();
-    await user.click(screen.getByRole("menuitem", { name: "Sync all playlists to Plex" }));
+    screen.getByRole("menuitem", { name: "Sync all playlists to..." }).focus();
+    await user.keyboard("{ArrowRight}");
+    expect(await screen.findByRole("menuitem", { name: "Plex" })).toHaveFocus();
+    await user.keyboard("{ArrowDown}{Enter}");
 
-    await user.click(await screen.findByRole("button", { name: "Sync All" }));
+    expect(await screen.findByText("Sync All Playlists to Navidrome")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Sync All" }));
 
-    expect(syncAllPlex).toHaveBeenCalledOnce();
+    expect(syncAll).toHaveBeenCalledWith({ server: "navidrome" });
   });
 
   it("confirms before deleting all requests as an admin", async () => {

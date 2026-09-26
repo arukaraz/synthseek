@@ -8,10 +8,16 @@ const removeMutate = vi.fn();
 const setSyncMutate = vi.fn();
 const renameMutate = vi.fn();
 const deleteMutate = vi.fn();
-const syncToPlexMutate = vi.fn();
+const syncToMutate = vi.fn();
 let setSyncPending = false;
 
 vi.mock("@hooks/api", () => ({
+  usePlaylistSyncTargets: () => ({
+    data: [
+      { server: "plex", name: "Plex" },
+      { server: "navidrome", name: "Navidrome" },
+    ],
+  }),
   useRetryTracks: () => ({ mutate: vi.fn(), isPending: false, variables: undefined }),
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
   useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
@@ -38,8 +44,8 @@ vi.mock("@hooks/api/mutations/playlists/useDeletePlaylist", () => ({
   useDeletePlaylist: () => ({ mutate: deleteMutate, isPending: false }),
 }));
 
-vi.mock("@hooks/api/mutations/requests/useRetryPlexPlaylist", () => ({
-  useRetryPlexPlaylist: () => ({ mutate: syncToPlexMutate, isPending: false }),
+vi.mock("@hooks/api/mutations/requests/useSyncPlaylistTo", () => ({
+  useSyncPlaylistTo: () => ({ mutate: syncToMutate, isPending: false }),
 }));
 
 vi.mock("../../../ContentDetailActionsContext", () => ({
@@ -159,6 +165,31 @@ describe("PlaylistDetailBody editing", () => {
     await user.click(screen.getByRole("menuitem", { name: "Delete" }));
 
     expect(screen.getByText("Delete playlist?")).toBeInTheDocument();
+  });
+
+  it("syncs the playlist to the server picked in the Sync to submenu", async () => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail());
+    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+
+    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
+    screen.getByRole("menuitem", { name: "Sync to..." }).focus();
+    await user.keyboard("{ArrowRight}");
+    expect(await screen.findByRole("menuitem", { name: "Plex" })).toHaveFocus();
+    await user.keyboard("{ArrowDown}{Enter}");
+
+    expect(syncToMutate).toHaveBeenCalledWith({ playlistId: "pl-1", server: "navidrome" });
+  });
+
+  it("does not offer to sync a playlist back to the server it came from", async () => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "navidrome", syncEnabled: false }));
+    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+
+    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
+    screen.getByRole("menuitem", { name: "Sync to..." }).focus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(await screen.findByRole("menuitem", { name: "Plex" })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Navidrome" })).not.toBeInTheDocument();
   });
 
   it("only marks complete/failed rows selectable for removal", () => {

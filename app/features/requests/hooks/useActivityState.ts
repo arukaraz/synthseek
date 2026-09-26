@@ -1,6 +1,7 @@
 import type { ActivityDividerState } from "@components/ui/ActivityDivider";
-import { useGetPlexSyncAllState, usePlexSyncAllProgress, useQueueStatus, useTrackRequests } from "@hooks/api";
+import { useGetPlaylistSyncAllState, usePlaylistSyncAllProgress, useQueueStatus, useTrackRequests } from "@hooks/api";
 import i18n from "@locale";
+import { playbackServerName } from "@utils/playback-servers";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
@@ -14,9 +15,9 @@ interface ActivityStateResult {
 
 export function useActivityState(): ActivityStateResult {
   const { data: items } = useTrackRequests();
-  const { data: syncState } = useGetPlexSyncAllState();
+  const { data: syncState } = useGetPlaylistSyncAllState();
   const { data: queueState } = useQueueStatus();
-  const progress = usePlexSyncAllProgress();
+  const progress = usePlaylistSyncAllProgress();
 
   const isSyncing = progress ? progress.phase !== "complete" : (syncState?.running ?? false);
   const synced = progress?.synced ?? syncState?.synced ?? 0;
@@ -28,10 +29,11 @@ export function useActivityState(): ActivityStateResult {
     if (progress?.phase === "complete" && !completedRef.current) {
       completedRef.current = true;
       const failed = progress.failed ?? 0;
+      const server = playbackServerName(progress.server);
       if (progress.synced > 0) {
-        toast.success(i18n.t("mutations:requests.playlistsSyncedPlex", { count: progress.synced, failed }));
+        toast.success(i18n.t("mutations:requests.playlistsSyncedTo", { count: progress.synced, failed, server }));
       } else {
-        toast.info(i18n.t("mutations:requests.noPlaylistsToSyncPlex"));
+        toast.info(i18n.t("mutations:requests.noPlaylistsToSyncTo", { server }));
       }
     }
     if (progress?.phase === "start") {
@@ -41,7 +43,7 @@ export function useActivityState(): ActivityStateResult {
 
   const isPaused = queueState?.isPaused ?? false;
   const state: ActivityDividerState = isSyncing
-    ? "plex-sync"
+    ? "playlist-sync"
     : isPaused
       ? "paused"
       : downloading

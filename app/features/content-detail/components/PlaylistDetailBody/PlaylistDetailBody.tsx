@@ -1,5 +1,6 @@
 "use client";
 
+import type { MediaServerKey } from "@api/__generated__/types";
 import { BulkActionBar, type BulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox, type CheckboxPreview } from "@components/ui/Checkbox";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
@@ -8,7 +9,7 @@ import { useCatalogPlaylistTracks, usePlaylistDetail } from "@hooks/api/queries/
 import { useRemoveTracksFromPlaylist } from "@hooks/api/mutations/playlists/useRemoveTracksFromPlaylist";
 import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlaylist";
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
-import { useRetryPlexPlaylist } from "@hooks/api/mutations/requests/useRetryPlexPlaylist";
+import { useSyncPlaylistTo } from "@hooks/api/mutations/requests/useSyncPlaylistTo";
 import { useInlineRename } from "@hooks/ui/useInlineRename";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useRangePreview } from "@hooks/ui/useRangePreview";
@@ -53,7 +54,7 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
   const removeTracks = useRemoveTracksFromPlaylist();
   const renamePlaylist = useRenamePlaylist();
   const setSync = useSetPlaylistSync();
-  const syncToPlex = useRetryPlexPlaylist();
+  const syncPlaylistTo = useSyncPlaylistTo();
   const selection = useSelection<{ id: string }>();
   const { previewId, trackRow } = useRangePreview();
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -171,9 +172,12 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
     [selection, setSync, target.id]
   );
 
-  const handleSyncToPlex = useCallback(() => {
-    syncToPlex.mutate({ playlistId: target.id });
-  }, [syncToPlex, target.id]);
+  const handleSyncTo = useCallback(
+    (server: MediaServerKey) => {
+      syncPlaylistTo.mutate({ playlistId: target.id, server });
+    },
+    [syncPlaylistTo, target.id]
+  );
 
   const bulkActions: BulkAction[] = [
     {
@@ -192,8 +196,9 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
           canEdit,
           onRename: rename.start,
           onDelete: () => setDeleteOpen(true),
-          onSyncToPlex: handleSyncToPlex,
-          isSyncing: syncToPlex.isPending,
+          onSyncTo: handleSyncTo,
+          syncExcludeServer: sourceProvider,
+          isSyncing: syncPlaylistTo.isPending,
           isEditing: rename.isEditing,
           editValue: rename.draft,
           onEditChange: rename.setDraft,
@@ -205,7 +210,7 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
             delete: tLibrary("playlists.actions.delete"),
             nameField: tLibrary("playlists.renameDialog.placeholder"),
             save: tLibrary("playlists.renameDialog.confirm"),
-            syncToPlex: tLibrary("playlists.actions.syncToPlex"),
+            syncTo: tLibrary("playlists.actions.syncTo"),
             syncing: tLibrary("playlists.actions.syncing"),
           },
           syncBadge: isImported ? (

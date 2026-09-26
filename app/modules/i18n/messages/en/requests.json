@@ -13,11 +13,11 @@
       "confirmPending": "Retrying...",
       "confirmAction": "Retry All"
     },
-    "syncAllPlex": {
-      "label": "Sync all playlists to Plex",
-      "labelRunning": "Syncing all playlists to Plex...",
-      "confirmTitle": "Sync All Playlists to Plex",
-      "confirmMessage": "This will sync every eligible playlist to Plex. Continue?",
+    "syncAll": {
+      "label": "Sync all playlists to...",
+      "labelRunning": "Syncing all playlists to {{server}}...",
+      "confirmTitle": "Sync All Playlists to {{server}}",
+      "confirmMessage": "This will sync every eligible playlist to {{server}}. Continue?",
       "confirmPending": "Syncing...",
       "confirmAction": "Sync All"
     },
@@ -88,7 +88,7 @@
     "resume": "Resume",
     "syncFromSource": "Sync from Spotify",
     "syncing": "Syncing...",
-    "syncToPlex": "Sync to Plex",
+    "syncTo": "Sync to...",
     "export": "Export",
     "exportTooltipTitle": "Export",
     "exportTooltipDescription": "Downloads a .jspf file now, using the IDs already saved on each track.",

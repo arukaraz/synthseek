@@ -428,6 +428,11 @@
       "label": "Play from {{server}}",
       "description": "Your own copy is always played first."
     },
+    "playlistSync": {
+      "label": "Sync playlists to {{server}}",
+      "description": "Each member's finished playlists are created in their own {{server}} account and kept up to date.",
+      "needsPlayback": "Turn on playing from {{server}} first."
+    },
     "test": {
       "action": "Test connection",
       "testing": "Testing...",

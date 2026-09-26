@@ -16,6 +16,7 @@ import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { SERVER_TEST_OUTCOME_KEYS } from "./constants";
+import { MediaServerPlaylistSyncRow } from "./MediaServerPlaylistSyncRow";
 import { pathsNotice } from "./styles";
 import type { NavidromeCardProps } from "./types";
 
@@ -72,6 +73,13 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
             aria-label={t("mediaServers.playback.label", { server: t("mediaServers.navidrome.title") })}
           />
         }
+      />
+
+      <MediaServerPlaylistSyncRow
+        server={t("mediaServers.navidrome.title")}
+        playback={draft.playback}
+        playlistSync={draft.playlistSync}
+        onChange={(value) => setField("playlistSync", value)}
       />
 
       <div className="flex items-center gap-3">

@@ -8,8 +8,9 @@ type Utils = ReturnType<typeof trpc.useUtils>;
 export function resyncPushFedQueries(utils: Utils): void {
   invalidateRequestListNow(utils);
   void utils.requests.getLibrarySummary.invalidate();
-  void utils.requests.getPlexSyncAllItems.invalidate();
-  void utils.requests.getPlexSyncAllState.invalidate();
+  void utils.requests.getPlaylistSyncAllItems.invalidate();
+  void utils.requests.getPlaylistSyncAllState.invalidate();
+  void utils.requests.playlistSyncTargets.invalidate();
   void utils.settings.get.invalidate();
   void utils.import.listBatches.invalidate();
   void utils.import.getBatch.invalidate();

@@ -54,6 +54,8 @@ Synthseek can play a track from Navidrome or Jellyfin when it has no file for it
 
 Each listener can link their own Navidrome or Jellyfin account under **Profile** to have the tracks they finish counted as played there. Synthseek keeps a token from the server, not the password.
 
+With **Sync playlists** on for a server, playlists are mirrored to Navidrome or Jellyfin the way they are to Plex, each into the account its owner linked. A playlist imported from a server is never synced back to it.
+
 ## Lidarr
 
 Lidarr is a delegate target rather than a download source. Handing a request to Lidarr means Lidarr takes it over entirely and manages the download in its own catalog. Synthseek marks the request as delegated and stops working on it.

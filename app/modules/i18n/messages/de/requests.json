@@ -13,11 +13,11 @@
       "confirmPending": "Wird erneut versucht...",
       "confirmAction": "Alle erneut versuchen"
     },
-    "syncAllPlex": {
-      "label": "Alle Playlists mit Plex synchronisieren",
-      "labelRunning": "Alle Playlists werden mit Plex synchronisiert...",
-      "confirmTitle": "Alle Playlists mit Plex synchronisieren",
-      "confirmMessage": "Dadurch wird jede infrage kommende Playlist mit Plex synchronisiert. Fortfahren?",
+    "syncAll": {
+      "label": "Alle Playlists synchronisieren mit...",
+      "labelRunning": "Alle Playlists werden mit {{server}} synchronisiert...",
+      "confirmTitle": "Alle Playlists mit {{server}} synchronisieren",
+      "confirmMessage": "Dadurch wird jede infrage kommende Playlist mit {{server}} synchronisiert. Fortfahren?",
       "confirmPending": "Wird synchronisiert...",
       "confirmAction": "Alle synchronisieren"
     },
@@ -88,7 +88,7 @@
     "resume": "Fortsetzen",
     "syncFromSource": "Von Spotify synchronisieren",
     "syncing": "Wird synchronisiert...",
-    "syncToPlex": "Mit Plex synchronisieren",
+    "syncTo": "Synchronisieren mit...",
     "export": "Exportieren",
     "exportTooltipTitle": "Exportieren",
     "exportTooltipDescription": "Lädt jetzt eine .jspf-Datei herunter, unter Verwendung der bereits zu jedem Titel gespeicherten IDs.",

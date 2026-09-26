@@ -428,6 +428,11 @@
       "label": "Reproducir desde {{server}}",
       "description": "Tu propia copia siempre suena primero."
     },
+    "playlistSync": {
+      "label": "Sincronizar listas con {{server}}",
+      "description": "Las listas terminadas de cada miembro se crean en su propia cuenta de {{server}} y se mantienen al día.",
+      "needsPlayback": "Activa antes reproducir desde {{server}}."
+    },
     "test": {
       "action": "Probar conexión",
       "testing": "Probando...",

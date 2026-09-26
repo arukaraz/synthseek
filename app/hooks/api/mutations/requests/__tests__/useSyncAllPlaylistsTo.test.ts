@@ -1,17 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
 
-import { useSyncAllPlaylistsToPlex } from "../useSyncAllPlaylistsToPlex";
+import { useSyncAllPlaylistsTo } from "../useSyncAllPlaylistsTo";
 
 interface SyncResult {
   started: boolean;
   running: boolean;
+  server: string | null;
   synced: number;
   total: number;
 }
 
-interface PlexSyncState {
+interface PlaylistSyncState {
   running: boolean;
+  server: string | null;
   synced: number;
   total: number;
 }
@@ -38,11 +40,11 @@ vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: {
-        getPlexSyncAllState: { setData: spies.setData },
+        getPlaylistSyncAllState: { setData: spies.setData },
       },
     }),
     requests: {
-      syncAllPlaylistsToPlex: {
+      syncAllPlaylistsTo: {
         useMutation: (options: MutationOptions) => {
           spies.captured.options = options;
           return { mutate: vi.fn(), isPending: false };
@@ -56,38 +58,37 @@ vi.mock("@modules/errors", () => ({
   errorToast: spies.errorToast,
 }));
 
-describe("useSyncAllPlaylistsToPlex", () => {
+describe("useSyncAllPlaylistsTo", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     spies.captured.options = undefined;
   });
 
-  it("on a fresh start seeds the running sync state", () => {
-    renderHook(() => useSyncAllPlaylistsToPlex());
+  it("on a fresh start seeds the running sync state with the server it runs to", () => {
+    renderHook(() => useSyncAllPlaylistsTo());
 
-    spies.captured.options?.onSuccess?.({ started: true, running: true, synced: 0, total: 8 });
+    spies.captured.options?.onSuccess?.({ started: true, running: true, server: "navidrome", synced: 0, total: 8 });
 
-    const setCall = spies.setData.mock.calls[0];
-    const seeded: PlexSyncState = setCall[1];
-    expect(seeded).toEqual({ running: true, synced: 0, total: 8 });
+    const seeded: PlaylistSyncState = spies.setData.mock.calls[0][1];
+    expect(seeded).toEqual({ running: true, server: "navidrome", synced: 0, total: 8 });
   });
 
   it("when a run was already active does not surface a failure toast", () => {
-    renderHook(() => useSyncAllPlaylistsToPlex());
+    renderHook(() => useSyncAllPlaylistsTo());
 
-    spies.captured.options?.onSuccess?.({ started: false, running: true, synced: 3, total: 8 });
+    spies.captured.options?.onSuccess?.({ started: false, running: true, server: "plex", synced: 3, total: 8 });
 
     expect(spies.errorToast).not.toHaveBeenCalled();
-    const seeded: PlexSyncState = spies.setData.mock.calls[0][1];
+    const seeded: PlaylistSyncState = spies.setData.mock.calls[0][1];
     expect(seeded.running).toBe(true);
   });
 
   it("on error delegates to errorToast with the sync fallback key", () => {
-    renderHook(() => useSyncAllPlaylistsToPlex());
+    renderHook(() => useSyncAllPlaylistsTo());
 
-    const error = { message: "Plex unreachable" };
+    const error = { message: "Server unreachable" };
     spies.captured.options?.onError?.(error);
 
-    expect(spies.errorToast).toHaveBeenCalledWith(error, "requests.syncAllPlexFailed");
+    expect(spies.errorToast).toHaveBeenCalledWith(error, "requests.syncAllPlaylistsFailed");
   });
 });

@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { handlePlexSyncAllProgress } from "../handlers/requests/plexSyncAllProgress";
-import { dismissDockJob, resetDockStore, seedPlexSyncDockJob, useDockJobs } from "../shared/progressDock";
+import { handlePlaylistSyncAllProgress } from "../handlers/requests/playlistSyncAllProgress";
+import { dismissDockJob, resetDockStore, seedPlaylistSyncDockJob, useDockJobs } from "../shared/progressDock";
 import type { DockJob } from "../shared/progressDock";
-import { useRehydratePlexSyncDock } from "../useRehydratePlexSyncDock";
-import { SubscriptionEventType, type PlexSyncAllProgressPayload } from "@api/__generated__/types";
+import { useRehydratePlaylistSyncDock } from "../useRehydratePlaylistSyncDock";
+import { SubscriptionEventType, type PlaylistSyncAllProgressPayload } from "@api/__generated__/types";
 
 interface PlexSyncItem {
   id: string;
@@ -13,21 +13,27 @@ interface PlexSyncItem {
   state: "pending" | "done" | "failed";
 }
 
-const queryState = vi.hoisted<{ data: PlexSyncItem[] | undefined }>(() => ({ data: undefined }));
+const queryState = vi.hoisted<{ data: PlexSyncItem[] | undefined; server: string | null }>(() => ({
+  data: undefined,
+  server: "plex",
+}));
 
 const spies = vi.hoisted(() => ({ setData: vi.fn(), invalidate: vi.fn(), invalidateItems: vi.fn() }));
 
 vi.mock("@utils/trpc", () => ({
   trpc: {
     requests: {
-      getPlexSyncAllItems: {
+      getPlaylistSyncAllItems: {
         useQuery: () => ({ data: queryState.data }),
+      },
+      getPlaylistSyncAllState: {
+        useQuery: () => ({ data: { running: true, server: queryState.server, synced: 0, total: 0 } }),
       },
     },
     useUtils: () => ({
       requests: {
-        getPlexSyncAllState: { setData: spies.setData },
-        getPlexSyncAllItems: { invalidate: spies.invalidateItems },
+        getPlaylistSyncAllState: { setData: spies.setData },
+        getPlaylistSyncAllItems: { invalidate: spies.invalidateItems },
         getAll: { invalidate: spies.invalidate },
         getRecentTracks: { invalidate: vi.fn() },
         getDetail: { invalidate: vi.fn() },
@@ -36,17 +42,18 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-function plexJob(): DockJob | undefined {
+function syncJob(): DockJob | undefined {
   const { result } = renderHook(() => useDockJobs());
-  return result.current.find((job) => job.id === "plex-sync");
+  return result.current.find((job) => job.id === "playlist-sync");
 }
 
 const VIEWER_ID = "u_self";
 
-function progressEvent(current: { id: string; ok: boolean }, userId = VIEWER_ID): PlexSyncAllProgressPayload {
+function progressEvent(current: { id: string; ok: boolean }, userId = VIEWER_ID): PlaylistSyncAllProgressPayload {
   return {
-    eventType: SubscriptionEventType.PlexSyncAllProgress,
+    eventType: SubscriptionEventType.PlaylistSyncAllProgress,
     userId,
+    server: "plex",
     phase: "progress",
     synced: 2,
     total: 3,
@@ -57,6 +64,7 @@ function progressEvent(current: { id: string; ok: boolean }, userId = VIEWER_ID)
 beforeEach(() => {
   resetDockStore();
   queryState.data = undefined;
+  queryState.server = "plex";
   spies.setData.mockReset();
   spies.invalidate.mockReset();
 });
@@ -66,7 +74,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe("useRehydratePlexSyncDock", () => {
+describe("useRehydratePlaylistSyncDock", () => {
   it("seeds the dock with the real playlist rows and the outcome each already reached", () => {
     queryState.data = [
       { id: "pl_a", name: "Road Trip", state: "done" },
@@ -74,9 +82,9 @@ describe("useRehydratePlexSyncDock", () => {
       { id: "pl_c", name: "Chill", state: "pending" },
     ];
 
-    renderHook(() => useRehydratePlexSyncDock());
+    renderHook(() => useRehydratePlaylistSyncDock());
 
-    const job = plexJob();
+    const job = syncJob();
     expect(job?.status).toBe("running");
     expect(job?.items).toEqual([
       { key: "pl_a", name: "Road Trip", state: "done" },
@@ -92,13 +100,13 @@ describe("useRehydratePlexSyncDock", () => {
       { id: "pl_c", name: "Chill", state: "pending" },
     ];
 
-    renderHook(() => useRehydratePlexSyncDock());
-    handlePlexSyncAllProgress(
+    renderHook(() => useRehydratePlaylistSyncDock());
+    handlePlaylistSyncAllProgress(
       progressEvent({ id: "pl_b", ok: true }),
       {
         requests: {
-          getPlexSyncAllState: { setData: spies.setData },
-          getPlexSyncAllItems: { invalidate: spies.invalidateItems },
+          getPlaylistSyncAllState: { setData: spies.setData },
+          getPlaylistSyncAllItems: { invalidate: spies.invalidateItems },
           getAll: { invalidate: spies.invalidate },
           getRecentTracks: { invalidate: vi.fn() },
           getDetail: { invalidate: vi.fn() },
@@ -107,7 +115,7 @@ describe("useRehydratePlexSyncDock", () => {
       VIEWER_ID
     );
 
-    expect(plexJob()?.items.find((item) => item.key === "pl_b")?.state).toBe("done");
+    expect(syncJob()?.items.find((item) => item.key === "pl_b")?.state).toBe("done");
   });
 
   it("lets another user's run advance the rows it rehydrated for this session", () => {
@@ -117,13 +125,13 @@ describe("useRehydratePlexSyncDock", () => {
       { id: "pl_c", name: "Chill", state: "pending" },
     ];
 
-    renderHook(() => useRehydratePlexSyncDock());
-    handlePlexSyncAllProgress(
+    renderHook(() => useRehydratePlaylistSyncDock());
+    handlePlaylistSyncAllProgress(
       progressEvent({ id: "pl_b", ok: true }, "u_other"),
       {
         requests: {
-          getPlexSyncAllState: { setData: spies.setData },
-          getPlexSyncAllItems: { invalidate: spies.invalidateItems },
+          getPlaylistSyncAllState: { setData: spies.setData },
+          getPlaylistSyncAllItems: { invalidate: spies.invalidateItems },
           getAll: { invalidate: spies.invalidate },
           getRecentTracks: { invalidate: vi.fn() },
           getDetail: { invalidate: vi.fn() },
@@ -132,27 +140,45 @@ describe("useRehydratePlexSyncDock", () => {
       VIEWER_ID
     );
 
-    expect(plexJob()?.items.find((item) => item.key === "pl_b")?.state).toBe("done");
+    expect(syncJob()?.items.find((item) => item.key === "pl_b")?.state).toBe("done");
+  });
+
+  it("names the run's server on the card it seeds", () => {
+    queryState.server = "navidrome";
+    queryState.data = [{ id: "pl_a", name: "Road Trip", state: "pending" }];
+
+    renderHook(() => useRehydratePlaylistSyncDock());
+
+    expect(syncJob()?.provider).toBe("navidrome");
+  });
+
+  it("waits for the run's server before seeding a card", () => {
+    queryState.server = null;
+    queryState.data = [{ id: "pl_a", name: "Road Trip", state: "pending" }];
+
+    renderHook(() => useRehydratePlaylistSyncDock());
+
+    expect(syncJob()).toBeUndefined();
   });
 
   it("does nothing while no sync-all run is in flight", () => {
     queryState.data = [];
 
-    renderHook(() => useRehydratePlexSyncDock());
+    renderHook(() => useRehydratePlaylistSyncDock());
 
-    expect(plexJob()).toBeUndefined();
+    expect(syncJob()).toBeUndefined();
   });
 
   it("does nothing while the query has no data yet", () => {
     queryState.data = undefined;
 
-    renderHook(() => useRehydratePlexSyncDock());
+    renderHook(() => useRehydratePlaylistSyncDock());
 
-    expect(plexJob()).toBeUndefined();
+    expect(syncJob()).toBeUndefined();
   });
 
   it("leaves a job the live stream already seeded untouched", () => {
-    seedPlexSyncDockJob([
+    seedPlaylistSyncDockJob("plex", [
       { id: "pl_a", name: "Road Trip", state: "done" },
       { id: "pl_b", name: "Focus", state: "pending" },
     ]);
@@ -161,28 +187,28 @@ describe("useRehydratePlexSyncDock", () => {
       { id: "pl_b", name: "Focus", state: "pending" },
     ];
 
-    renderHook(() => useRehydratePlexSyncDock());
+    renderHook(() => useRehydratePlaylistSyncDock());
 
-    expect(plexJob()?.items.find((item) => item.key === "pl_a")?.state).toBe("done");
+    expect(syncJob()?.items.find((item) => item.key === "pl_a")?.state).toBe("done");
   });
 
   it("does not resurrect a card the user dismissed", () => {
-    seedPlexSyncDockJob([{ id: "pl_a", name: "Road Trip", state: "pending" }]);
-    dismissDockJob("plex-sync");
+    seedPlaylistSyncDockJob("plex", [{ id: "pl_a", name: "Road Trip", state: "pending" }]);
+    dismissDockJob("playlist-sync");
     queryState.data = [{ id: "pl_a", name: "Road Trip", state: "pending" }];
 
-    renderHook(() => useRehydratePlexSyncDock());
+    renderHook(() => useRehydratePlaylistSyncDock());
 
-    expect(plexJob()).toBeUndefined();
+    expect(syncJob()).toBeUndefined();
   });
 
   it("is idempotent across re-renders of the same data", () => {
     queryState.data = [{ id: "pl_a", name: "Road Trip", state: "pending" }];
 
-    const { rerender } = renderHook(() => useRehydratePlexSyncDock());
-    const seededAt = plexJob()?.updatedAt;
+    const { rerender } = renderHook(() => useRehydratePlaylistSyncDock());
+    const seededAt = syncJob()?.updatedAt;
     rerender();
 
-    expect(plexJob()?.updatedAt).toBe(seededAt);
+    expect(syncJob()?.updatedAt).toBe(seededAt);
   });
 });

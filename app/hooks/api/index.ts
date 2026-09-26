@@ -15,7 +15,8 @@ export { useSearchContent } from "./queries/useSearchContent";
 export { useSettings } from "./queries/useSettings";
 export { useTrendingTracks } from "./queries/useTrendingTracks";
 export { useQueueStatus } from "./queries/useQueueStatus";
-export { useGetPlexSyncAllState } from "./queries/useGetPlexSyncAllState";
+export { useGetPlaylistSyncAllState } from "./queries/useGetPlaylistSyncAllState";
+export { usePlaylistSyncTargets } from "./queries/usePlaylistSyncTargets";
 
 export { useLibraryTracks } from "./queries/library/useLibraryTracks";
 export { useLibraryTracksPrefetch } from "./queries/library/useLibraryTracksPrefetch";
@@ -55,7 +56,7 @@ export {
   useSetScrobbleEnabled,
 } from "./mutations/scrobble";
 
-export { usePlexSyncAllProgress } from "./subscriptions/usePlexSyncAllProgress";
+export { usePlaylistSyncAllProgress } from "./subscriptions/usePlaylistSyncAllProgress";
 
 export { useDropImportBatches } from "./queries/import/useDropImportBatches";
 export { useDropImportBatch } from "./queries/import/useDropImportBatch";
@@ -81,8 +82,8 @@ export { useDeleteAlbum } from "./mutations/requests/useDeleteAlbum";
 export { useDeletePlaylist } from "./mutations/requests/useDeletePlaylist";
 export { useRetryAlbum } from "./mutations/requests/useRetryAlbum";
 export { useRetryPlaylist } from "./mutations/requests/useRetryPlaylist";
-export { useRetryPlexPlaylist } from "./mutations/requests/useRetryPlexPlaylist";
-export { useSyncAllPlaylistsToPlex } from "./mutations/requests/useSyncAllPlaylistsToPlex";
+export { useSyncPlaylistTo } from "./mutations/requests/useSyncPlaylistTo";
+export { useSyncAllPlaylistsTo } from "./mutations/requests/useSyncAllPlaylistsTo";
 export { useRetryTrack } from "./mutations/requests/useRetryTrack";
 export { useRetryTracks } from "./mutations/requests/useRetryTracks";
 export { useUpgradeTracks } from "./mutations/requests/useUpgradeTracks";

@@ -16,6 +16,7 @@ import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { SERVER_TEST_OUTCOME_KEYS } from "./constants";
+import { MediaServerPlaylistSyncRow } from "./MediaServerPlaylistSyncRow";
 import type { JellyfinCardProps } from "./types";
 
 export function JellyfinCard({ initial }: JellyfinCardProps) {
@@ -62,6 +63,13 @@ export function JellyfinCard({ initial }: JellyfinCardProps) {
             aria-label={t("mediaServers.playback.label", { server: t("mediaServers.jellyfin.title") })}
           />
         }
+      />
+
+      <MediaServerPlaylistSyncRow
+        server={t("mediaServers.jellyfin.title")}
+        playback={draft.playback}
+        playlistSync={draft.playlistSync}
+        onChange={(value) => setField("playlistSync", value)}
       />
 
       <div className="flex items-center gap-3">

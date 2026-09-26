@@ -99,6 +99,14 @@
     "title": "La canción aún se está descargando",
     "description": "Solo se pueden quitar de una playlist las canciones completadas o fallidas."
   },
+  "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
+    "title": "No se puede sincronizar ahí",
+    "description": "La sincronización de listas con ese servidor está apagada, o la lista viene de él."
+  },
+  "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
+    "title": "Cuenta sin vincular",
+    "description": "El dueño de la lista tiene que vincular antes su cuenta de ese servidor en su perfil."
+  },
   "TRACK_NOT_FOUND": {
     "title": "Canción no encontrada",
     "description": "No se pudo encontrar esa canción."

@@ -389,7 +389,7 @@
       "rename": "Umbenennen",
       "delete": "Löschen",
       "menu": "Playlist-Aktionen für {{name}}",
-      "syncToPlex": "Mit Plex synchronisieren",
+      "syncTo": "Synchronisieren mit...",
       "syncing": "Wird synchronisiert..."
     },
     "renameDialog": {

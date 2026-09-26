@@ -1,6 +1,6 @@
 export type DockItemState = "pending" | "importing" | "done" | "failed" | "skipped";
 
-export type DockJobKind = "plex-sync" | "library-import" | "file-import" | "request" | "review-approve";
+export type DockJobKind = "playlist-sync" | "library-import" | "file-import" | "request" | "review-approve";
 
 export type DockJobStatus = "running" | "complete" | "partial" | "failed";
 
@@ -13,7 +13,7 @@ export interface DockItem {
   reason?: LibraryImportFailureReason;
 }
 
-export interface PlexSyncSeedItem {
+export interface PlaylistSyncSeedItem {
   id: string;
   name: string;
   state?: DockItemState;

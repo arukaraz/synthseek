@@ -389,7 +389,7 @@
       "rename": "Renombrar",
       "delete": "Eliminar",
       "menu": "Acciones de la lista {{name}}",
-      "syncToPlex": "Sincronizar con Plex",
+      "syncTo": "Sincronizar con...",
       "syncing": "Sincronizando..."
     },
     "renameDialog": {

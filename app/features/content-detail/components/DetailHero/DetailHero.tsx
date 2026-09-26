@@ -1,5 +1,6 @@
 "use client";
 
+import { SyncToSubmenu } from "@components/SyncToSubmenu";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { SocialIcon } from "@components/ui/SocialIcon";
 import { primaryGradientButton } from "@theme/utilities/styles";
@@ -146,15 +147,20 @@ function DetailHeroComponent({
                     {playlistControls.labels.rename}
                   </DropdownMenuItem>
                 ) : null}
-                {playlistControls.onSyncToPlex ? (
-                  <DropdownMenuItem
-                    className={heroMenuItem()}
-                    onSelect={playlistControls.onSyncToPlex}
-                    disabled={playlistControls.isSyncing}
-                  >
-                    <Upload className="size-4" aria-hidden />
-                    {playlistControls.isSyncing ? playlistControls.labels.syncing : playlistControls.labels.syncToPlex}
-                  </DropdownMenuItem>
+                {playlistControls.onSyncTo ? (
+                  playlistControls.isSyncing ? (
+                    <DropdownMenuItem className={heroMenuItem()} disabled>
+                      <Upload className="size-4" aria-hidden />
+                      {playlistControls.labels.syncing}
+                    </DropdownMenuItem>
+                  ) : (
+                    <SyncToSubmenu
+                      label={playlistControls.labels.syncTo}
+                      excludeServer={playlistControls.syncExcludeServer}
+                      triggerClassName={heroMenuItem()}
+                      onSelect={playlistControls.onSyncTo}
+                    />
+                  )
                 ) : null}
                 <DropdownMenuItem className={heroMenuItemDanger()} onSelect={playlistControls.onDelete}>
                   <Trash2 className="size-4" aria-hidden />

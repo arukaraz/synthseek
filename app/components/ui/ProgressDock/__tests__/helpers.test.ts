@@ -75,7 +75,11 @@ describe("ProgressDock helpers", () => {
 
   describe("presentationFor", () => {
     it("derives a ring for the three existing kinds", () => {
-      expect(presentationFor("plex-sync", "running", 0.5, 50)).toEqual({ indicator: "ring", ratio: 0.5, percent: 50 });
+      expect(presentationFor("playlist-sync", "running", 0.5, 50)).toEqual({
+        indicator: "ring",
+        ratio: 0.5,
+        percent: 50,
+      });
       expect(presentationFor("library-import", "complete", 1, 100)).toEqual({
         indicator: "ring",
         ratio: 1,
@@ -102,7 +106,7 @@ describe("ProgressDock helpers", () => {
 
   describe("controlsFor", () => {
     it("keeps toggle and close for the three existing kinds", () => {
-      expect(controlsFor("plex-sync", "running")).toEqual({ toggle: true, close: true });
+      expect(controlsFor("playlist-sync", "running")).toEqual({ toggle: true, close: true });
       expect(controlsFor("library-import", "complete")).toEqual({ toggle: true, close: true });
     });
 
@@ -184,8 +188,8 @@ describe("ProgressDock helpers", () => {
     });
 
     it("leaves the existing kinds' titles unchanged", () => {
-      expect(titleKey("plex-sync", "running")).toBe("progressDock.title.plexSyncRunning");
-      expect(titleKey("plex-sync", "complete")).toBe("progressDock.title.plexSyncDone");
+      expect(titleKey("playlist-sync", "running")).toBe("progressDock.title.playlistSyncRunning");
+      expect(titleKey("playlist-sync", "complete")).toBe("progressDock.title.playlistSyncDone");
       expect(titleKey("library-import", "running")).toBe("progressDock.title.libraryImportRunning");
       expect(titleKey("library-import", "complete")).toBe("progressDock.title.libraryImportDone");
       expect(titleKey("file-import", "running")).toBe("progressDock.title.fileImportRunning");

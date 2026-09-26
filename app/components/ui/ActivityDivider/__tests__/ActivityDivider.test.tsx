@@ -26,15 +26,15 @@ describe("ActivityDivider", () => {
     expect(rail).toHaveClass("activity-rail-progress");
   });
 
-  it("renders the plex-sync azure rail and its travel sweep", () => {
-    const { container } = render(<ActivityDivider state="plex-sync" value={3} max={8} />);
+  it("renders the playlist-sync azure rail and its travel sweep", () => {
+    const { container } = render(<ActivityDivider state="playlist-sync" value={3} max={8} />);
     const rail = container.querySelector(".activity-rail");
-    expect(rail).toHaveClass("activity-rail-plex");
+    expect(rail).toHaveClass("activity-rail-sync");
     expect(container.querySelector(".activity-rail-travel")).toBeInTheDocument();
   });
 
-  it("no longer renders the inline plex-sync chip, label, or live region", () => {
-    render(<ActivityDivider state="plex-sync" value={3} max={8} />);
+  it("no longer renders the inline playlist-sync chip, label, or live region", () => {
+    render(<ActivityDivider state="playlist-sync" value={3} max={8} />);
     expect(screen.queryByText("3/8")).not.toBeInTheDocument();
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
@@ -68,7 +68,7 @@ describe("ActivityDivider", () => {
 
   it("renders toolbar children", () => {
     render(
-      <ActivityDivider state="plex-sync" value={3} max={8}>
+      <ActivityDivider state="playlist-sync" value={3} max={8}>
         <button type="button">Import library</button>
       </ActivityDivider>
     );
@@ -77,7 +77,7 @@ describe("ActivityDivider", () => {
 
   it("substitutes a static determinate fill under reduced motion", () => {
     reducedMotion.value = true;
-    const { container } = render(<ActivityDivider state="plex-sync" value={4} max={8} />);
+    const { container } = render(<ActivityDivider state="playlist-sync" value={4} max={8} />);
     expect(container.querySelector(".activity-rail-travel")).not.toBeInTheDocument();
     const fill = container.querySelector(".activity-rail-static");
     expect(fill).toBeInTheDocument();

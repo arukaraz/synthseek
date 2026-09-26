@@ -389,7 +389,7 @@
       "rename": "Renommer",
       "delete": "Supprimer",
       "menu": "Actions de playlist pour {{name}}",
-      "syncToPlex": "Synchroniser vers Plex",
+      "syncTo": "Synchroniser vers...",
       "syncing": "Synchronisation..."
     },
     "renameDialog": {

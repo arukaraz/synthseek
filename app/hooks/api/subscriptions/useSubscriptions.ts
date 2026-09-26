@@ -9,8 +9,8 @@ import {
   handleDropImportUpdate,
   handleLibraryImportProgress,
   handlePlaylistPlexCreated,
+  handlePlaylistSyncAllProgress,
   handlePlaylistUpdate,
-  handlePlexSyncAllProgress,
   handlePortabilityProgress,
   handleTrackUpdate,
 } from "./handlers/requests";
@@ -76,8 +76,8 @@ export function useSubscriptions() {
         case SubscriptionEventType.PlaylistPlexCreated:
           handlePlaylistPlexCreated(event, utils);
           break;
-        case SubscriptionEventType.PlexSyncAllProgress:
-          handlePlexSyncAllProgress(event, utils, viewerId);
+        case SubscriptionEventType.PlaylistSyncAllProgress:
+          handlePlaylistSyncAllProgress(event, utils, viewerId);
           break;
         case SubscriptionEventType.VersionUpdate:
           handleVersionUpdate(event);

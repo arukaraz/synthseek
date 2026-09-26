@@ -428,6 +428,11 @@
       "label": "Von {{server}} abspielen",
       "description": "Deine eigene Kopie wird immer zuerst abgespielt."
     },
+    "playlistSync": {
+      "label": "Playlists mit {{server}} synchronisieren",
+      "description": "Die fertigen Playlists jedes Mitglieds werden in seinem eigenen {{server}}-Konto angelegt und aktuell gehalten.",
+      "needsPlayback": "Schalte zuerst die Wiedergabe von {{server}} ein."
+    },
     "test": {
       "action": "Verbindung testen",
       "testing": "Wird getestet...",
