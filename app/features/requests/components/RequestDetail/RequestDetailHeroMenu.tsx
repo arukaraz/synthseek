@@ -53,7 +53,7 @@ export function RequestDetailHeroMenu({
     canPrioritize,
     canSyncTo,
     syncExcludeServer,
-    canSyncSource,
+    syncSourceName,
     canExport,
     isRetrying,
     syncToPending,
@@ -111,10 +111,10 @@ export function RequestDetailHeroMenu({
             {t("detail.jumpTheQueue")}
           </DropdownMenuItem>
         )}
-        {canSyncSource && (
+        {syncSourceName !== null && (
           <DropdownMenuItem onClick={syncSourceNow} disabled={syncSourcePending} className={heroSuccessMenuItem()}>
             <RefreshCcw className="size-3.5" />
-            {syncSourcePending ? t("detail.syncing") : t("detail.syncFromSource")}
+            {syncSourcePending ? t("detail.syncing") : t("detail.syncFromSource", { provider: syncSourceName })}
           </DropdownMenuItem>
         )}
         {canSyncTo &&

@@ -24,12 +24,13 @@ import {
   useRetryPlaylist,
   useSyncPlaylistTo,
 } from "@hooks/api";
-import { useSpotifySyncPlaylistNow } from "@hooks/api/mutations/spotify/useSpotifyImport";
+import { useSyncPlaylistFromSource } from "@hooks/api/mutations/library-source/useSyncPlaylistFromSource";
 import { useExportCollection } from "@hooks/api/queries/portability/useExportCollection";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { isOwnerOrAdminFE } from "@utils/authorization";
 import { confirm } from "@utils/confirm";
 import { downloadText } from "@utils/download";
+import { librarySourceName } from "@utils/library-sources";
 import { isProcessingStatus, isRetryableStatus } from "@utils/status-helpers";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -64,7 +65,7 @@ interface UseRequestActions {
   canPrioritize: boolean;
   canSyncTo: boolean;
   syncExcludeServer: string | null;
-  canSyncSource: boolean;
+  syncSourceName: string | null;
   canExport: boolean;
   isRetrying: boolean;
   syncToPending: boolean;
@@ -95,7 +96,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
   const prioritizePlaylist = usePrioritizePlaylist();
   const approveTracks = useApproveTracks();
   const rejectTracks = useRejectTracks();
-  const syncSpotifyPlaylist = useSpotifySyncPlaylistNow();
+  const syncFromSource = useSyncPlaylistFromSource();
   const { exportCollection } = useExportCollection();
 
   const pendingApprovalTrackIds = tracks
@@ -117,7 +118,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     canManage &&
     isPlaylist &&
     (request.status === RequestStatus.enum.complete || request.status === RequestStatus.enum.partially_complete);
-  const canSyncSource = canManage && isPlaylist && request.source_provider === "spotify";
+  const syncSourceName = canManage && isPlaylist ? librarySourceName(request.source_provider) : null;
 
   const isRetrying = isPlaylist ? retryPlaylist.isPending : retryAlbum.isPending;
 
@@ -182,7 +183,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
   };
 
   const syncSourceNow = () => {
-    syncSpotifyPlaylist.mutate({ playlistId: request.id });
+    syncFromSource.mutate({ playlistId: request.id });
   };
 
   const exportJspf = async () => {
@@ -222,11 +223,11 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
     canPrioritize,
     canSyncTo,
     syncExcludeServer: request.source_provider,
-    canSyncSource,
+    syncSourceName,
     canExport: canManage,
     isRetrying,
     syncToPending: syncPlaylistTo.isPending,
-    syncSourcePending: syncSpotifyPlaylist.isPending,
+    syncSourcePending: syncFromSource.isPending,
     label,
   };
 }

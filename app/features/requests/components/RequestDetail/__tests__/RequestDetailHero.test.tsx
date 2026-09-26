@@ -37,7 +37,7 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     canPrioritize: false,
     canSyncTo: false,
     syncExcludeServer: null,
-    canSyncSource: false,
+    syncSourceName: null,
     canExport: false,
     isRetrying: false,
     syncToPending: false,
@@ -106,6 +106,12 @@ describe("RequestDetailHero", () => {
 
   it("renders the kebab menu when at least one action is permitted", () => {
     renderHero({ canRemove: true });
+
+    expect(screen.getAllByRole("button", { name: "kebab" }).length).toBeGreaterThan(0);
+  });
+
+  it("renders the kebab menu when syncing from the source is the only action", () => {
+    renderHero({ syncSourceName: "Jellyfin" });
 
     expect(screen.getAllByRole("button", { name: "kebab" }).length).toBeGreaterThan(0);
   });

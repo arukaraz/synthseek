@@ -86,7 +86,7 @@
     "cancelDownloads": "Cancelar descargas",
     "pause": "Pausar",
     "resume": "Reanudar",
-    "syncFromSource": "Sincronizar desde Spotify",
+    "syncFromSource": "Sincronizar desde {{provider}}",
     "syncing": "Sincronizando...",
     "syncTo": "Sincronizar con...",
     "export": "Exportar",

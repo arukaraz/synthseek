@@ -28,25 +28,6 @@ export function useSpotifyRunSyncNow() {
   });
 }
 
-export function useSpotifySyncPlaylistNow() {
-  const utils = trpc.useUtils();
-  return trpc.librarySource.spotify.syncPlaylistNow.useMutation({
-    onSuccess: (result) => {
-      if (result.status === "synced") {
-        toast.success(i18n.t("mutations:spotify.playlistSyncQueued"));
-        utils.requests.invalidate();
-      } else if (result.status === "no_change") {
-        toast.info(i18n.t("mutations:spotify.playlistUpToDate"));
-      } else if (result.status === "not_synced_provider") {
-        toast.error(i18n.t("mutations:spotify.playlistNotLinked"));
-      } else {
-        toast.error(i18n.t("mutations:spotify.playlistNotFound"));
-      }
-    },
-    onError: (error) => errorToast(error, "spotify.syncFailed"),
-  });
-}
-
 export function useSpotifyProbeProfile() {
   const utils = trpc.useUtils();
   return trpc.librarySource.spotify.probeProfile.useMutation({

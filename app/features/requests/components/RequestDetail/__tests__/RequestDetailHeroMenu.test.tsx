@@ -39,7 +39,7 @@ function makeActions(overrides: Partial<Actions> = {}): Actions {
     canPrioritize: false,
     canSyncTo: false,
     syncExcludeServer: null,
-    canSyncSource: false,
+    syncSourceName: null,
     canExport: false,
     isRetrying: false,
     syncToPending: false,
@@ -115,22 +115,31 @@ describe("RequestDetailHeroMenu", () => {
 
   it("shows the syncing label while a source sync is pending", async () => {
     const user = userEvent.setup();
-    renderMenu({ canSyncSource: true, syncSourcePending: true });
+    renderMenu({ syncSourceName: "Spotify", syncSourcePending: true });
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
 
     expect(screen.getByRole("menuitem", { name: "Syncing..." })).toBeInTheDocument();
   });
 
-  it("triggers the source sync when permitted and idle", async () => {
+  it("triggers the source sync, naming the source, when permitted and idle", async () => {
     const syncSourceNow = vi.fn();
     const user = userEvent.setup();
-    renderMenu({ canSyncSource: true, syncSourceNow });
+    renderMenu({ syncSourceName: "Navidrome", syncSourceNow });
 
     await user.click(screen.getByRole("button", { name: "More actions" }));
-    await user.click(screen.getByRole("menuitem", { name: "Sync from Spotify" }));
+    await user.click(screen.getByRole("menuitem", { name: "Sync from Navidrome" }));
 
     expect(syncSourceNow).toHaveBeenCalledOnce();
+  });
+
+  it("offers no source sync when the playlist has no library source", async () => {
+    const user = userEvent.setup();
+    renderMenu({ syncSourceName: null, canExport: true });
+
+    await user.click(screen.getByRole("button", { name: "More actions" }));
+
+    expect(screen.queryByRole("menuitem", { name: /^Sync from/ })).not.toBeInTheDocument();
   });
 
   it("syncs to the server picked in the Sync to submenu", async () => {

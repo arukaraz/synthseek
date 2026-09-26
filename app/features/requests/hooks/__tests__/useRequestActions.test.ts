@@ -36,8 +36,8 @@ vi.mock("@hooks/api", () => ({
   useRejectTracks: () => idleMutation,
 }));
 
-vi.mock("@hooks/api/mutations/spotify/useSpotifyImport", () => ({
-  useSpotifySyncPlaylistNow: () => idleMutation,
+vi.mock("@hooks/api/mutations/library-source/useSyncPlaylistFromSource", () => ({
+  useSyncPlaylistFromSource: () => idleMutation,
 }));
 
 vi.mock("@hooks/api/queries/portability/useExportCollection", () => ({
@@ -182,6 +182,49 @@ describe("useRequestActions canSyncTo", () => {
     const { result } = renderHook(() => useRequestActionsFor(request));
 
     expect(result.current.canSyncTo).toBe(false);
+  });
+});
+
+describe("useRequestActions syncSourceName", () => {
+  it.each([
+    ["spotify", "Spotify"],
+    ["plex", "Plex"],
+    ["navidrome", "Navidrome"],
+    ["jellyfin", "Jellyfin"],
+  ])("names %s for a playlist imported from it", (sourceProvider, name) => {
+    currentUser = owner;
+    const request = makePlaylist({ source_provider: sourceProvider });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.syncSourceName).toBe(name);
+  });
+
+  it.each([["jspf"], ["deezer"], [null]])("offers no source sync for a playlist whose origin is %s", (origin) => {
+    currentUser = owner;
+    const request = makePlaylist({ source_provider: origin });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.syncSourceName).toBeNull();
+  });
+
+  it("offers no source sync to a user who cannot manage the playlist", () => {
+    currentUser = null;
+    const request = makePlaylist({ source_provider: "navidrome" });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.syncSourceName).toBeNull();
+  });
+
+  it("offers no source sync for an album", () => {
+    currentUser = owner;
+    const request = makePlaylist({ contentType: ContentType.enum.album, source_provider: "spotify" });
+
+    const { result } = renderHook(() => useRequestActionsFor(request));
+
+    expect(result.current.syncSourceName).toBeNull();
   });
 });
 

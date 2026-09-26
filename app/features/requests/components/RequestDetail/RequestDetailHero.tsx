@@ -59,7 +59,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
     canResume,
     canPrioritize,
     canSyncTo,
-    canSyncSource,
+    syncSourceName,
     canExport,
     isRetrying,
     label,
@@ -75,7 +75,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
     canResume ||
     canPrioritize ||
     canSyncTo ||
-    canSyncSource ||
+    syncSourceName !== null ||
     canExport ||
     canRemove;
   const typeLabel = label === "Playlist" ? t("labels.playlist") : t("labels.album");

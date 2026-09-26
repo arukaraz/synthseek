@@ -24,7 +24,7 @@ const mutations = vi.hoisted(() => ({
   resumePlaylist: vi.fn(),
   prioritizeAlbum: vi.fn(),
   prioritizePlaylist: vi.fn(),
-  syncSpotify: vi.fn(),
+  syncFromSource: vi.fn(),
 }));
 
 const confirmMock = vi.hoisted(() => vi.fn());
@@ -49,8 +49,8 @@ vi.mock("@hooks/api", () => ({
   useRejectTracks: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 
-vi.mock("@hooks/api/mutations/spotify/useSpotifyImport", () => ({
-  useSpotifySyncPlaylistNow: () => ({ mutate: mutations.syncSpotify, isPending: false }),
+vi.mock("@hooks/api/mutations/library-source/useSyncPlaylistFromSource", () => ({
+  useSyncPlaylistFromSource: () => ({ mutate: mutations.syncFromSource, isPending: false }),
 }));
 
 vi.mock("@hooks/api/queries/portability/useExportCollection", () => ({
@@ -169,7 +169,7 @@ describe("useRequestActions playlist actions", () => {
 
     act(() => result.current.syncSourceNow());
 
-    expect(mutations.syncSpotify).toHaveBeenCalledWith({ playlistId: "req-1" });
+    expect(mutations.syncFromSource).toHaveBeenCalledWith({ playlistId: "req-1" });
   });
 
   it("removes the playlist after the user confirms", async () => {
