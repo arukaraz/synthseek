@@ -139,6 +139,57 @@ describe("opening a stream as decoded audio", () => {
     expect(getRetryDelay?.(PCM_READ_RETRIES + 1, refusal, "/stream/1")).toBeNull();
   });
 
+  it("answers a read that starts at the end of the file as an empty range, so the reader stops instead of failing", async () => {
+    const source = await fresh();
+    await source.openPcmSource("/stream/1");
+    const fetchFn = media.urlSources[0]?.options.fetchFn;
+    fetchMock.mockResolvedValueOnce(
+      new Response(null, {
+        status: 416,
+        statusText: "Range Not Satisfiable",
+        headers: { "Content-Range": "bytes */100" },
+      })
+    );
+
+    const answer = await fetchFn?.("/stream/1", { headers: { Range: "bytes=100-" } });
+
+    expect(answer?.status).toBe(206);
+    expect(answer?.headers.get("Content-Range")).toBe("bytes */100");
+    expect((await answer?.arrayBuffer())?.byteLength).toBe(0);
+  });
+
+  it("answers a read past a length it already learned without asking the server at all", async () => {
+    const source = await fresh();
+    await source.openPcmSource("/stream/1");
+    const fetchFn = media.urlSources[0]?.options.fetchFn;
+    fetchMock.mockResolvedValueOnce(
+      new Response("0123456789", { status: 206, headers: { "Content-Range": "bytes 0-9/100" } })
+    );
+    await fetchFn?.("/stream/1", { headers: { Range: "bytes=0-" } });
+    fetchMock.mockClear();
+
+    const answer = await fetchFn?.("/stream/1", { headers: { Range: "bytes=100-" } });
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(answer?.status).toBe(206);
+    expect(answer?.headers.get("Content-Range")).toBe("bytes */100");
+    expect((await answer?.arrayBuffer())?.byteLength).toBe(0);
+  });
+
+  it.each([
+    ["a range that starts inside the file", "bytes=50-", { "Content-Range": "bytes */100" }],
+    ["an answer that does not say how long the file is", "bytes=100-", {}],
+  ])("still refuses a 416 for %s", async (_case, range, headers) => {
+    const source = await fresh();
+    await source.openPcmSource("/stream/1");
+    const fetchFn = media.urlSources[0]?.options.fetchFn;
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 416, statusText: "Range Not Satisfiable", headers }));
+
+    const refusal = await fetchFn?.("/stream/1", { headers: { Range: range } }).catch((error: unknown) => error);
+
+    expect(refusal).toBeInstanceOf(Error);
+  });
+
   it("keeps retrying a read the network dropped, so playback resumes when the connection does", async () => {
     const source = await fresh();
     await source.openPcmSource("/stream/1");

@@ -205,6 +205,11 @@ export interface PcmTrim {
   durationSeconds: number;
 }
 
+export interface PcmTransport {
+  ranged: boolean;
+  totalBytes: number | null;
+}
+
 export interface PcmBuffer {
   buffer: AudioBuffer;
   timestamp: number;

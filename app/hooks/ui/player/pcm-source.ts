@@ -5,16 +5,48 @@ import {
   PCM_READ_RETRIES,
   PCM_URL_CACHE_BYTES,
   RANGE_ANSWER_STATUS,
+  RANGE_BYTES_PREFIX,
+  RANGE_NOT_SATISFIABLE_STATUS,
 } from "./constants";
 import { gaplessInfoFrom, id3Length, trimFor } from "./lame";
-import type { PcmSource, PcmTrim } from "./types";
+import type { PcmSource, PcmTransport, PcmTrim } from "./types";
 
 class RefusedRead extends Error {}
+
+function requestedStart(init?: RequestInit): number | null {
+  const range = new Headers(init?.headers).get("Range");
+  if (range === null || !range.startsWith(RANGE_BYTES_PREFIX)) return null;
+  const start = Number.parseInt(range.slice(RANGE_BYTES_PREFIX.length), 10);
+  return Number.isFinite(start) ? start : null;
+}
+
+function totalLength(response: Response): number | null {
+  const contentRange = response.headers.get("Content-Range");
+  if (contentRange === null) return null;
+  const total = Number(contentRange.slice(contentRange.lastIndexOf("/") + 1));
+  return Number.isFinite(total) && total > 0 ? total : null;
+}
+
+function startsPastTheEnd(init: RequestInit | undefined, totalBytes: number | null): boolean {
+  const start = requestedStart(init);
+  return start !== null && totalBytes !== null && start >= totalBytes;
+}
+
+function emptyRangeAnswer(totalBytes: number): Response {
+  return new Response(new Uint8Array(0), {
+    status: RANGE_ANSWER_STATUS,
+    headers: { "Content-Range": `bytes */${totalBytes}` },
+  });
+}
 
 async function fetchOrRefuse(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   const response = await fetch(input, init);
   if (response.ok) return response;
   await response.body?.cancel();
+  const totalBytes = totalLength(response);
+  if (response.status === RANGE_NOT_SATISFIABLE_STATUS && totalBytes !== null && startsPastTheEnd(init, totalBytes)) {
+    return emptyRangeAnswer(totalBytes);
+  }
   throw new RefusedRead(`${response.status} ${response.statusText}`);
 }
 
@@ -47,14 +79,18 @@ async function mp3Trim(url: string, sampleRate: number): Promise<PcmTrim | null>
 
 export async function openPcmSource(url: string): Promise<PcmSource> {
   const media = await import("mediabunny");
-  const transport = { ranged: true };
+  const transport: PcmTransport = { ranged: true, totalBytes: null };
   const input = new media.Input({
     source: new media.UrlSource(url, {
       requestInit: { credentials: "include" },
       maxCacheSize: PCM_URL_CACHE_BYTES,
       fetchFn: async (request, init) => {
+        if (transport.totalBytes !== null && startsPastTheEnd(init, transport.totalBytes)) {
+          return emptyRangeAnswer(transport.totalBytes);
+        }
         const response = await fetchOrRefuse(request, init);
         if (response.status !== RANGE_ANSWER_STATUS) transport.ranged = false;
+        transport.totalBytes ??= totalLength(response);
         return response;
       },
       getRetryDelay: readRetryDelay,

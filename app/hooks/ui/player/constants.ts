@@ -185,6 +185,8 @@ export const MP3_HEAD_BYTES = 4096;
 export const MP3_XING_WINDOW_BYTES = 512;
 
 export const RANGE_ANSWER_STATUS = 206;
+export const RANGE_NOT_SATISFIABLE_STATUS = 416;
+export const RANGE_BYTES_PREFIX = "bytes=";
 
 export const MP3_DECODER_DELAY_SAMPLES = 529;
 
