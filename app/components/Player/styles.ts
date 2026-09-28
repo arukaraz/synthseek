@@ -1,9 +1,7 @@
+import type { CssVars } from "@theme/utilities/types";
 import { cva } from "class-variance-authority";
 
 import type { PanelAnchorPoint } from "./types";
-import type { CSSProperties } from "react";
-
-type CssVars = CSSProperties & Record<`--${string}`, string>;
 
 export const playerRoot = cva("pointer-events-none fixed inset-0 z-40");
 
@@ -112,22 +110,44 @@ export const barSourceChip = cva(
   "bg-warning-vivid/15 text-warning-vivid inline-flex shrink-0 items-center rounded-full px-1.5 text-[10px] leading-4 font-semibold"
 );
 
-export const sourceSegments = cva("border-border inline-flex self-start overflow-hidden rounded-md border");
+export const sourceList = cva("flex flex-col gap-1.5");
 
-export const sourceSegment = cva(
-  "focus-visible:ring-primary-500 flex flex-col items-start px-3 py-1 text-left text-xs transition-colors focus-visible:ring-2 focus-visible:outline-none",
+export const sourceCard = cva(
+  "focus-visible:ring-primary-500 flex min-h-11 w-full items-center gap-3 rounded-lg border px-2.5 py-2 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none",
   {
     variants: {
       active: {
-        true: "bg-primary-500/15 text-fg font-semibold",
-        false: "text-fg-muted hover:text-fg cursor-pointer",
+        true: "border-primary-500/50 bg-primary-500/10",
+        false: "border-fg-muted/20 hover:bg-fg/5 cursor-pointer",
       },
     },
     defaultVariants: { active: false },
   }
 );
 
-export const sourceSegmentDetail = cva("text-fg-muted font-mono text-[10px] font-normal");
+export const sourceMark = cva("flex size-7 shrink-0 items-center justify-center rounded-full", {
+  variants: {
+    local: {
+      true: "bg-fg/10 text-fg",
+      false: "",
+    },
+  },
+  defaultVariants: { local: false },
+});
+
+export const sourceCardLabel = cva("text-fg min-w-0 flex-1 truncate text-sm font-medium");
+
+export const sourceCardDetail = cva("text-fg-muted shrink-0 text-xs tabular-nums");
+
+export const sourceCardCheck = cva("text-primary-400 size-4 shrink-0", {
+  variants: {
+    active: {
+      true: "",
+      false: "invisible",
+    },
+  },
+  defaultVariants: { active: false },
+});
 
 export const pickerFill = cva("text-fg-muted flex cursor-pointer items-center gap-2 text-sm");
 

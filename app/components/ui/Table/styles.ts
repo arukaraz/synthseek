@@ -1,7 +1,12 @@
+import type { CssVars } from "@theme/utilities/types";
 import { cva, type VariantProps } from "class-variance-authority";
 
+export function stickyOffsetVars(offsetPx: number): CssVars {
+  return { "--table-sticky-top": `${offsetPx}px` };
+}
+
 export const tableContainer = cva(
-  "border-fg/10 bg-surface/30 min-w-0 overflow-hidden rounded-xl border sm:bg-surface/20 sm:backdrop-blur-sm",
+  "border-fg/10 bg-surface/30 min-w-0 overflow-clip rounded-xl border sm:bg-surface/20 sm:backdrop-blur-sm",
   {
     variants: {},
     defaultVariants: {},
@@ -10,9 +15,14 @@ export const tableContainer = cva(
 
 export type TableContainerProps = VariantProps<typeof tableContainer>;
 
-export const tableScroll = cva("overflow-x-auto", {
-  variants: {},
-  defaultVariants: {},
+export const tableScroll = cva("", {
+  variants: {
+    viewport: {
+      true: "max-h-[70dvh] overflow-auto",
+      false: "overflow-x-clip",
+    },
+  },
+  defaultVariants: { viewport: false },
 });
 
 export type TableScrollProps = VariantProps<typeof tableScroll>;
@@ -31,7 +41,7 @@ export const table = cva("w-full caption-bottom text-sm", {
 
 export type TableProps = VariantProps<typeof table>;
 
-export const tableHeader = cva("bg-surface/40 [&_tr]:border-b", {
+export const tableHeader = cva("sticky top-[var(--table-sticky-top,0px)] z-10 [&_tr]:border-b", {
   variants: {},
   defaultVariants: {},
 });
@@ -46,7 +56,7 @@ export const tableHeaderRow = cva("border-fg/10 hover:bg-transparent", {
 export type TableHeaderRowProps = VariantProps<typeof tableHeaderRow>;
 
 export const tableHead = cva(
-  "text-fg/40 px-3 py-2 text-left text-xs font-medium tracking-wider uppercase sm:px-4 sm:py-3",
+  "bg-surface text-fg/40 px-3 py-2 text-left text-xs font-medium tracking-wider uppercase sm:px-4 sm:py-3",
   {
     variants: {},
     defaultVariants: {},

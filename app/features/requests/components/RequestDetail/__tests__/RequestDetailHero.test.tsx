@@ -137,6 +137,12 @@ describe("RequestDetailHero", () => {
     expect(screen.getAllByText("Album").length).toBeGreaterThan(0);
   });
 
+  it("paints the type word beside the cover in the playlist color", () => {
+    renderHero({ label: "Playlist" }, { contentType: ContentType.enum.playlist });
+
+    expect(screen.getAllByText("Playlist").some((node) => node.classList.contains("type-text-playlist"))).toBe(true);
+  });
+
   it("shows the delegated-to line only when the request is delegated", () => {
     const { rerender } = render(
       <RequestDetailHero request={makeRequestListItem({ delegated_to: null })} tracks={[]} onBack={vi.fn()} />

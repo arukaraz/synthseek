@@ -867,6 +867,18 @@ describe("player store volume and panels", () => {
     store.actions.toggleQueue();
     expect(store.getSnapshot().modesOpen).toBe(false);
     expect(store.getSnapshot().queueOpen).toBe(true);
+
+    store.actions.toggleSettings();
+    expect(store.getSnapshot().queueOpen).toBe(false);
+    expect(store.getSnapshot().settingsOpen).toBe(true);
+
+    store.actions.toggleDevices();
+    expect(store.getSnapshot().settingsOpen).toBe(false);
+    expect(store.getSnapshot().devicesOpen).toBe(true);
+
+    store.actions.toggleQueue();
+    expect(store.getSnapshot().devicesOpen).toBe(false);
+    expect(store.getSnapshot().queueOpen).toBe(true);
   });
 
   it("closes the menus when the stage goes fullscreen", async () => {

@@ -59,6 +59,22 @@ describe("RequestSidebarItem", () => {
     expect(screen.getByText(/ALBUM/)).toBeInTheDocument();
   });
 
+  it("paints the type word, and only the type word, in its content-type color", () => {
+    render(
+      <RequestSidebarItem
+        request={makeRequestWithTracks({
+          contentType: ContentType.enum.playlist,
+          requestedBy: makeRequestsUser({ username: "dj" }),
+        })}
+        isSelected={false}
+        onSelect={() => {}}
+      />
+    );
+
+    expect(screen.getByText("PLAYLIST")).toHaveClass("type-text-playlist");
+    expect(screen.getByText(/dj/)).not.toHaveClass("type-text-playlist");
+  });
+
   it("calls onSelect when clicked", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();

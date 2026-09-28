@@ -114,8 +114,8 @@
       "hint": "Économise des données sur une connexion lente. Désactivé, le fichier d'origine est lu sauf si le navigateur ne peut pas le décoder."
     },
     "source": {
-      "caption": "CETTE PISTE VIENT DE",
-      "hint": "Change la provenance de cette piste, au même endroit. Les autres pistes sont toujours lues d'abord depuis leur copie locale."
+      "caption": "LECTURE DEPUIS",
+      "hint": "Seule cette piste change, et elle reprend au même endroit."
     },
     "transition": {
       "caption": "TRANSITIONS",

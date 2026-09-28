@@ -74,11 +74,6 @@ interface InputBaseArgs {
   facetSearch: FacetSearchState;
 }
 
-export function preferredPlaybackSource(filters: FilterParamMap): string | null {
-  const sources = filters.source ?? [];
-  return sources.length === 1 ? (sources[0] ?? null) : null;
-}
-
 export function buildTracksInput(args: InputBaseArgs): LibraryTracksInput {
   const { filters } = args;
   return {

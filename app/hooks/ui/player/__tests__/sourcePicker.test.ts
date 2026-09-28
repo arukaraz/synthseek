@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { queueFromSource, sourceCountsOf } from "../helpers";
+import { playableOnlyFrom, queueFromSource, sourceCountsOf } from "../helpers";
 import { settleSourcePick, tracksFromChosenSource, useSourcePickerRequest } from "../sourcePicker";
 import type { PlayerSessionState } from "../types";
 
@@ -59,9 +59,38 @@ describe("queueing an album from the chosen source", () => {
   });
 });
 
+describe("playing only from the sources the listener filtered to", () => {
+  it("keeps the chosen sources in the admin's order whatever order they were picked in", () => {
+    const queue = playableOnlyFrom(ALBUM, ["jellyfin", "navidrome"]);
+
+    expect(queue.map((entry) => entry.sources.map((source) => source.key))).toEqual([
+      ["navidrome", "jellyfin"],
+      ["navidrome", "jellyfin"],
+      ["jellyfin"],
+    ]);
+  });
+
+  it("drops a track none of the chosen sources holds", () => {
+    const queue = playableOnlyFrom(ALBUM, ["local"]);
+
+    expect(queue.map((entry) => entry.id)).toEqual(["t2", "t3"]);
+    expect(queue.every((entry) => entry.sources.length === 1)).toBe(true);
+  });
+
+  it("keeps every source when none was chosen", () => {
+    expect(playableOnlyFrom(ALBUM, [])).toEqual(ALBUM);
+  });
+});
+
 describe("asking which source to play from", () => {
   it("plays straight away without asking when every track is in the same single place", async () => {
     const tracks = [track("t1", ["local"]), track("t2", ["local"])];
+
+    await expect(tracksFromChosenSource(tracks)).resolves.toEqual(tracks);
+  });
+
+  it("plays straight away when the first source in the admin's order holds every track", async () => {
+    const tracks = [track("t1", ["local", "navidrome"]), track("t2", ["local", "jellyfin"])];
 
     await expect(tracksFromChosenSource(tracks)).resolves.toEqual(tracks);
   });

@@ -124,6 +124,14 @@ export function queueFromSource(tracks: readonly PlayerTrack[], pick: SourcePick
   }));
 }
 
+export function playableOnlyFrom(tracks: readonly PlayerTrack[], keys: readonly string[]): PlayerTrack[] {
+  if (keys.length === 0) return [...tracks];
+  return tracks.flatMap((track) => {
+    const sources = track.sources.filter((source) => keys.includes(source.key));
+    return sources.length === 0 ? [] : [{ ...track, sources }];
+  });
+}
+
 export function failedSourcesFor(track: PlayerTrack, failed: FailedSources | null): readonly string[] {
   return failed !== null && failed.trackId === track.id ? failed.sources : [];
 }

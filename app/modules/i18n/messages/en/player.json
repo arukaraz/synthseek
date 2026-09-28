@@ -114,8 +114,8 @@
       "hint": "Saves data on a slow connection. Off, the original file plays unless the browser cannot decode it."
     },
     "source": {
-      "caption": "THIS TRACK PLAYS FROM",
-      "hint": "Switches where this track streams from, from the same point. Other tracks keep playing from their local copy first."
+      "caption": "PLAYING FROM",
+      "hint": "Only this track switches, and it keeps its place."
     },
     "transition": {
       "caption": "TRANSITIONS",

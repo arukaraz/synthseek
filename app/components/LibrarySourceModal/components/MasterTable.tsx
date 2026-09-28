@@ -23,7 +23,7 @@ export function MasterTable({ items, isLoading, draft, hiddenOnMobile, selection
       ) : items.length === 0 ? (
         <div className={masterEmpty()}>{t("librarySource.table.empty")}</div>
       ) : (
-        <div className={masterXScroll()}>
+        <div className={masterXScroll()} onClick={handleBackgroundClick}>
           <table className={table()}>
             <MasterTableHeader />
             <tbody>

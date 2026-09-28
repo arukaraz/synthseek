@@ -20,6 +20,8 @@ export const LIBRARY_DEFAULT_PAGE = "1";
 
 export const LIBRARY_FACET_TOP_N = 8;
 
+export const NO_CHOSEN_SOURCES: readonly string[] = [];
+
 export const LIBRARY_STATUS_FACET_VALUES = RequestStatus.options;
 
 const STATUS_FACET_DEF = {

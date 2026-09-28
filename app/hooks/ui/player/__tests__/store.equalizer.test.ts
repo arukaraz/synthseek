@@ -75,16 +75,18 @@ describe("the playback settings panel", () => {
     expect(store.getSnapshot().equalizer).toEqual({ enabled: false, gainsDb: FLAT, preampDb: 0 });
   });
 
-  it("opens and closes from the same action, and from nothing else", async () => {
+  it("opens and closes from the same action, and gives way to any other player panel", async () => {
     const store = await freshStore();
 
     store.actions.toggleSettings();
     expect(store.getSnapshot().settingsOpen).toBe(true);
-    store.actions.toggleQueue();
-    store.actions.toggleDevices();
-    expect(store.getSnapshot().settingsOpen).toBe(true);
     store.actions.toggleSettings();
     expect(store.getSnapshot().settingsOpen).toBe(false);
+
+    store.actions.toggleSettings();
+    store.actions.toggleQueue();
+    expect(store.getSnapshot().settingsOpen).toBe(false);
+    expect(store.getSnapshot().queueOpen).toBe(true);
   });
 
   it("takes the place of the devices panel when it opens", async () => {

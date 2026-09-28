@@ -148,7 +148,14 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
 
             <div className="min-w-0 flex-1">
               <div className={heroTypeRow()}>
-                <p className="text-fg/50 text-[10px] font-semibold tracking-wider uppercase">{typeLabel}</p>
+                <p
+                  className={cn(
+                    `type-text-${request.contentType}`,
+                    "text-[10px] font-semibold tracking-wider uppercase"
+                  )}
+                >
+                  {typeLabel}
+                </p>
                 <div className="flex items-center gap-2">
                   <StatusBadge
                     status={request.status}

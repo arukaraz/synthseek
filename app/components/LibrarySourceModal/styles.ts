@@ -51,7 +51,7 @@ export const searchInput = cva(
 export const split = cva("flex h-full min-h-0 w-full min-w-0 flex-col md:flex-row");
 
 export const masterScroll = cva(
-  "h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-y-auto bg-surface/40 md:border-r md:border-fg/10",
+  "h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-surface/40 md:border-r md:border-fg/10",
   {
     variants: {
       hiddenOnMobile: {
@@ -73,8 +73,8 @@ export const detailPaneWrapper = cva("h-full min-h-0 w-full flex-col md:w-[380px
   defaultVariants: { hiddenOnMobile: false },
 });
 
-export const masterControls = cva("px-3 pt-3");
-export const masterXScroll = cva("w-full min-w-0 max-w-full overflow-x-auto");
+export const masterControls = cva("shrink-0 px-3 pt-3");
+export const masterXScroll = cva("min-h-0 w-full min-w-0 max-w-full flex-1 overflow-auto");
 
 export const masterEmpty = cva("flex flex-1 items-center justify-center p-12 text-sm text-fg/40");
 export const detailLoading = cva("flex h-full items-center justify-center p-12 text-sm text-fg/40");

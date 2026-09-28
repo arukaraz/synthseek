@@ -48,7 +48,7 @@ export function useSourcePickerRequest(): SourcePickerRequest | null {
 
 export async function tracksFromChosenSource(tracks: readonly PlayerTrack[]): Promise<PlayerTrack[] | null> {
   const counts = sourceCountsOf(tracks);
-  if (counts.length < 2) return [...tracks];
+  if (counts.length < 2 || counts[0]?.count === tracks.length) return [...tracks];
   const pick = await pickPlaybackSource(counts, tracks.length);
   return pick === null ? null : queueFromSource(tracks, pick);
 }

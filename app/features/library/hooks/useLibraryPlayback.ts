@@ -1,13 +1,13 @@
 "use client";
 
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
-import { playerActions, playerTrackFrom, queueFromSource } from "@hooks/ui/player";
+import { playableOnlyFrom, playerActions, playerTrackFrom } from "@hooks/ui/player";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useCallback } from "react";
 
 export function useLibraryPlayback(
   items: readonly LibraryTrackItem[],
-  preferredSource: string | null
+  chosenSources: readonly string[]
 ): {
   play: (trackId: string) => void;
   enqueue: (trackIds: string[]) => Promise<boolean>;
@@ -16,15 +16,12 @@ export function useLibraryPlayback(
 
   const play = useCallback(
     (trackId: string) => {
-      const playable = items.filter((item) => item.playable);
-      const startIndex = playable.findIndex((item) => item.id === trackId);
+      const queue = playableOnlyFrom(items.filter((item) => item.playable).map(playerTrackFrom), chosenSources);
+      const startIndex = queue.findIndex((track) => track.id === trackId);
       if (startIndex < 0) return;
-      const tracks = playable.map(playerTrackFrom);
-      const queue =
-        preferredSource === null ? tracks : queueFromSource(tracks, { source: preferredSource, fillFromNext: true });
       playerActions.playQueue(queue, startIndex);
     },
-    [items, preferredSource]
+    [items, chosenSources]
   );
 
   const enqueue = useCallback((trackIds: string[]) => enqueueEntity({ kind: "tracks", trackIds }), [enqueueEntity]);

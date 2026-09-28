@@ -10,6 +10,8 @@ import type { CompressorParam, CompressorParams } from "./types";
 
 export const LOAD_TIMEOUT_MS = 15000;
 
+export const NO_PANEL_OPEN = { devicesOpen: false, settingsOpen: false, modesOpen: false, queueOpen: false } as const;
+
 export const STALL_TIMEOUT_MS = 15000;
 
 export const MAX_CONSECUTIVE_FAILURES = 3;

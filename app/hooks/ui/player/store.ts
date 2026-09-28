@@ -19,10 +19,10 @@ import {
   EQUALIZER_PRESETS_STORAGE_KEY,
   EQUALIZER_STORAGE_KEY,
   MAX_CONSECUTIVE_FAILURES,
-  MAX_QUEUE_TRACKS,
   MIRROR_STALE_MS,
   MIRROR_TICK_MS,
   MODE_STORAGE_KEY,
+  NO_PANEL_OPEN,
   SKIP_DELAY_MS,
   TRANSITION_STORAGE_KEY,
   VOLUME_STORAGE_KEY,
@@ -73,7 +73,6 @@ import {
   shuffledOrder,
   streamUrlFor,
   upcomingPositionsOf,
-  visibleQueueIds,
   withoutQueueIndex,
   withoutQueuePositions,
   withoutRepeats,
@@ -740,10 +739,10 @@ export const actions = {
     publish({ chainVisible: !state.chainVisible });
   },
   toggleDevices(): void {
-    publish({ devicesOpen: !state.devicesOpen, modesOpen: false });
+    publish({ ...NO_PANEL_OPEN, devicesOpen: !state.devicesOpen });
   },
   toggleSettings(): void {
-    publish({ settingsOpen: !state.settingsOpen, devicesOpen: false, modesOpen: false });
+    publish({ ...NO_PANEL_OPEN, settingsOpen: !state.settingsOpen });
   },
   setEqualizerEnabled(enabled: boolean): void {
     writeEqualizer({ ...state.equalizer, enabled });
@@ -803,10 +802,10 @@ export const actions = {
     persist(TRANSITION_STORAGE_KEY, settled);
   },
   toggleModes(): void {
-    publish({ modesOpen: !state.modesOpen, devicesOpen: false });
+    publish({ ...NO_PANEL_OPEN, modesOpen: !state.modesOpen });
   },
   toggleQueue(): void {
-    publish({ queueOpen: !state.queueOpen, devicesOpen: false, modesOpen: false });
+    publish({ ...NO_PANEL_OPEN, queueOpen: !state.queueOpen });
   },
   selectMode(mode: PlayerMode): void {
     if (state.mode === "mini" && mode !== "mini") closeMiniWindow();

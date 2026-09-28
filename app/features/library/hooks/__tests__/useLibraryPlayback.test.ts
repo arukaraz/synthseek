@@ -17,7 +17,14 @@ vi.mock("@hooks/ui/player", async (importActual) => {
 
 import { useLibraryPlayback } from "../useLibraryPlayback";
 
-function item(id: string): LibraryTrackItem {
+const EVERY_SOURCE: LibraryTrackItem["sources"] = [
+  { key: "local", format: "mp3", bitrate: 320 },
+  { key: "plex", format: null, bitrate: null },
+  { key: "navidrome", format: "flac", bitrate: 900 },
+  { key: "jellyfin", format: "flac", bitrate: 900 },
+];
+
+function item(id: string, sources: LibraryTrackItem["sources"] = EVERY_SOURCE): LibraryTrackItem {
   return {
     id,
     external_id: `ext-${id}`,
@@ -41,11 +48,7 @@ function item(id: string): LibraryTrackItem {
     albumArt: null,
     genres: [],
     playlistIds: [],
-    sources: [
-      { key: "local", format: "mp3", bitrate: 320 },
-      { key: "plex", format: null, bitrate: null },
-      { key: "navidrome", format: "flac", bitrate: 900 },
-    ],
+    sources,
     created_at: new Date("2024-01-01T00:00:00Z"),
     completed_at: null,
   };
@@ -64,25 +67,44 @@ beforeEach(() => {
 
 describe("useLibraryPlayback", () => {
   it("plays every track from the one source the listener filtered to", () => {
-    const { result } = renderHook(() => useLibraryPlayback(ITEMS, "navidrome"));
+    const { result } = renderHook(() => useLibraryPlayback(ITEMS, ["navidrome"]));
 
     result.current.play("b");
 
     expect(spies.playQueue).toHaveBeenCalledWith(expect.any(Array), 1);
-    expect(queuedSourceOrder()).toEqual([
-      ["navidrome", "local", "plex"],
-      ["navidrome", "local", "plex"],
-    ]);
+    expect(queuedSourceOrder()).toEqual([["navidrome"], ["navidrome"]]);
   });
 
-  it("keeps the order from settings when no single source is chosen", () => {
-    const { result } = renderHook(() => useLibraryPlayback(ITEMS, null));
+  it("orders several chosen sources by settings and leaves the unchosen ones out", () => {
+    const { result } = renderHook(() => useLibraryPlayback(ITEMS, ["jellyfin", "navidrome"]));
 
     result.current.play("a");
 
     expect(queuedSourceOrder()).toEqual([
-      ["local", "plex", "navidrome"],
-      ["local", "plex", "navidrome"],
+      ["navidrome", "jellyfin"],
+      ["navidrome", "jellyfin"],
+    ]);
+  });
+
+  it("skips a track no chosen source holds and starts from the clicked one", () => {
+    const localOnly = item("c", [{ key: "local", format: "mp3", bitrate: 320 }]);
+    const { result } = renderHook(() => useLibraryPlayback([localOnly, ...ITEMS], ["jellyfin"]));
+
+    result.current.play("b");
+
+    const queue: PlayerTrack[] = spies.playQueue.mock.calls[0]?.[0] ?? [];
+    expect(queue.map((track) => track.id)).toEqual(["a", "b"]);
+    expect(spies.playQueue).toHaveBeenCalledWith(expect.any(Array), 1);
+  });
+
+  it("keeps every source in settings order when none is chosen", () => {
+    const { result } = renderHook(() => useLibraryPlayback(ITEMS, []));
+
+    result.current.play("a");
+
+    expect(queuedSourceOrder()).toEqual([
+      ["local", "plex", "navidrome", "jellyfin"],
+      ["local", "plex", "navidrome", "jellyfin"],
     ]);
   });
 });

@@ -11,6 +11,10 @@ export const PLAYBACK_SERVER_NAMES = {
 
 const NAMES = new Map<string, string>(Object.entries(PLAYBACK_SERVER_NAMES));
 
+export function isPlaybackServerKey(key: string): key is PlaybackServerKey {
+  return NAMES.has(key);
+}
+
 export function playbackServerName(key: string): string {
   return NAMES.get(key) ?? key;
 }

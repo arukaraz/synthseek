@@ -70,6 +70,10 @@ export interface SourceOptionsProps {
   onSelect: (key: string) => void;
 }
 
+export interface SourceMarkProps {
+  sourceKey: string;
+}
+
 export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";
 
 export type PlayerMode = "normal" | "compact" | "mini";

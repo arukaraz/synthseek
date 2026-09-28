@@ -29,6 +29,7 @@ export interface DataTableProps<TData> {
   staggerDelay?: number;
   onRowClick?: (item: TData) => void;
   isRowClickable?: (item: TData) => boolean;
+  stickyOffset?: number;
 }
 
 export interface TableHeaderProps<TData> {

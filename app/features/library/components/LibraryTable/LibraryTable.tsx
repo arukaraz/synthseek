@@ -3,6 +3,7 @@
 import { BulkActionBar, selectionAction, selectionActionLabel, type BulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox } from "@components/ui/Checkbox";
 import { DataTable, type ColumnDef } from "@components/ui/Table";
+import { useElementHeight } from "@hooks/ui/useElementHeight";
 import { useRangePreview } from "@hooks/ui/useRangePreview";
 import { CirclePlus, ListPlus, RefreshCcw, Sparkles } from "lucide-react";
 import { useMemo, useRef } from "react";
@@ -18,6 +19,7 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
   const actions = useLibraryTrackActions();
   const { previewId, trackRow } = useRangePreview();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const [barRef, barHeight] = useElementHeight<HTMLDivElement>();
 
   const selectionItems = selection?.items;
   const trackItems = selectionItems ?? [];
@@ -150,6 +152,7 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
     <div ref={wrapRef} className={tableWrap()} onKeyDown={handleKeyDown}>
       {sel && sel.selectedCount > 0 ? (
         <BulkActionBar
+          ref={barRef}
           count={sel.selectedCount}
           countLabel={t("page.selection.selected")}
           actions={bulkActions}
@@ -178,6 +181,7 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
         getRowId={getRowId}
         emptyMessage={emptyMessage}
         fixedLayout
+        stickyOffset={barHeight}
         rowAttrs={(item) => ({
           "data-range-preview": previewTone !== "none" && previewIds.has(getRowId(item)) ? previewTone : undefined,
         })}

@@ -183,9 +183,10 @@ describe("master scroll panes", () => {
     expect(detailLoading()).toContain("justify-center");
   });
 
-  it("master controls sit outside the horizontal scroll region", () => {
-    expect(masterControls()).toContain("pt-3");
-    expect(masterXScroll()).toContain("overflow-x-auto");
+  it("scrolls the table in one box both ways so its sticky header has something to stick to", () => {
+    expect(masterControls()).toContain("shrink-0");
+    expect(masterXScroll()).toContain("overflow-auto");
+    expect(masterScroll({ hiddenOnMobile: false })).not.toContain("overflow-y-auto");
   });
 
   it("the scroll column can be narrower than the table content", () => {

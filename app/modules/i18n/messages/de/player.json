@@ -114,8 +114,8 @@
       "hint": "Spart Daten bei langsamer Verbindung. Aus spielt die Originaldatei, außer der Browser kann sie nicht dekodieren."
     },
     "source": {
-      "caption": "DIESER TITEL SPIELT VON",
-      "hint": "Wechselt, woher dieser Titel kommt, an derselben Stelle. Andere Titel spielen weiterhin zuerst von ihrer lokalen Kopie."
+      "caption": "WIEDERGABE VON",
+      "hint": "Nur dieser Titel wechselt und spielt an derselben Stelle weiter."
     },
     "transition": {
       "caption": "ÜBERGÄNGE",

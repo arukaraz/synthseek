@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 
 export interface BulkAction {
   icon: LucideIcon;
@@ -17,4 +17,5 @@ export interface BulkActionBarProps {
   onClear: () => void;
   trailing?: ReactNode;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }

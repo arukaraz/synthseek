@@ -6,6 +6,16 @@ import { config } from "dotenv";
 
 config();
 
+class InertResizeObserver {
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+
+if (typeof globalThis.ResizeObserver === "undefined") {
+  globalThis.ResizeObserver = InertResizeObserver;
+}
+
 afterEach(() => {
   cleanup();
 });
