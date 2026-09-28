@@ -1,7 +1,7 @@
-import type { RequestListItem } from "@api/__generated__/types";
+import { ContentType, type RequestListItem } from "@api/__generated__/types";
 import { matchesTerms, searchTerms } from "@utils/search";
 import { useMemo } from "react";
-import { filterRequestsByStatus } from "../helpers";
+import { compareTypeFirst, filterRequestsByStatus } from "../helpers";
 import { SortConfig, SortField, StatusFilter } from "../types";
 
 export function useFilteredRequests(
@@ -30,8 +30,9 @@ export function useFilteredRequests(
         case SortField.ARTIST:
           return direction * a.artist.localeCompare(b.artist);
         case SortField.ALBUM:
+          return compareTypeFirst(a, b, ContentType.enum.album) || direction * a.name.localeCompare(b.name);
         case SortField.PLAYLIST:
-          return direction * a.name.localeCompare(b.name);
+          return compareTypeFirst(a, b, ContentType.enum.playlist) || direction * a.name.localeCompare(b.name);
         default:
           return 0;
       }

@@ -4,10 +4,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { PlayerTrack } from "@components/Player";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 
-const spies = vi.hoisted(() => ({ playQueue: vi.fn() }));
+const spies = vi.hoisted(() => ({
+  playQueue: vi.fn(),
+  enqueueTracks: vi.fn<(tracks: readonly PlayerTrack[]) => boolean>(() => true),
+}));
 
 vi.mock("@hooks/ui/useEntityPlayback", () => ({
-  useEntityPlayback: () => ({ enqueueEntity: vi.fn() }),
+  useEntityPlayback: () => ({ enqueueTracks: spies.enqueueTracks }),
 }));
 
 vi.mock("@hooks/ui/player", async (importActual) => {
@@ -95,6 +98,25 @@ describe("useLibraryPlayback", () => {
     const queue: PlayerTrack[] = spies.playQueue.mock.calls[0]?.[0] ?? [];
     expect(queue.map((track) => track.id)).toEqual(["a", "b"]);
     expect(spies.playQueue).toHaveBeenCalledWith(expect.any(Array), 1);
+  });
+
+  it("queues the picked rows from the chosen sources only, in the settings order", async () => {
+    const { result } = renderHook(() => useLibraryPlayback(ITEMS, ["jellyfin", "navidrome"]));
+
+    await expect(result.current.enqueue(["b"])).resolves.toBe(true);
+
+    const queued: readonly PlayerTrack[] = spies.enqueueTracks.mock.calls[0]?.[0] ?? [];
+    expect(queued.map((track) => track.id)).toEqual(["b"]);
+    expect(queued[0]?.sources.map((source) => source.key)).toEqual(["navidrome", "jellyfin"]);
+  });
+
+  it("queues nothing for a row no chosen source holds", async () => {
+    const localOnly = item("c", [{ key: "local", format: "mp3", bitrate: 320 }]);
+    const { result } = renderHook(() => useLibraryPlayback([localOnly], ["jellyfin"]));
+
+    await result.current.enqueue(["c"]);
+
+    expect(spies.enqueueTracks).toHaveBeenCalledWith([]);
   });
 
   it("keeps every source in settings order when none is chosen", () => {

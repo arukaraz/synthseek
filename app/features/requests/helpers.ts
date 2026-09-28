@@ -1,5 +1,6 @@
 import {
   ACTIVE_STATUSES,
+  ContentType,
   RequestStatus,
   RESOLVED_STATUSES,
   UNRESOLVED_STATUSES,
@@ -16,6 +17,10 @@ export const STATUS_ORDER: readonly RequestStatus[] = [
 
 export function compareByStatus(a: RequestStatus, b: RequestStatus): number {
   return STATUS_ORDER.indexOf(a) - STATUS_ORDER.indexOf(b);
+}
+
+export function compareTypeFirst(a: RequestListItem, b: RequestListItem, first: ContentType): number {
+  return Number(a.contentType !== first) - Number(b.contentType !== first);
 }
 
 export function hasActiveDownload(items: RequestListItem[] | undefined): boolean {

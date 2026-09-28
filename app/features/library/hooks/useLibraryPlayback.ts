@@ -12,19 +12,31 @@ export function useLibraryPlayback(
   play: (trackId: string) => void;
   enqueue: (trackIds: string[]) => Promise<boolean>;
 } {
-  const { enqueueEntity } = useEntityPlayback();
+  const { enqueueTracks } = useEntityPlayback();
+
+  const queueOf = useCallback(
+    (wanted: (item: LibraryTrackItem) => boolean) =>
+      playableOnlyFrom(items.filter((item) => item.playable && wanted(item)).map(playerTrackFrom), chosenSources),
+    [items, chosenSources]
+  );
 
   const play = useCallback(
     (trackId: string) => {
-      const queue = playableOnlyFrom(items.filter((item) => item.playable).map(playerTrackFrom), chosenSources);
+      const queue = queueOf(() => true);
       const startIndex = queue.findIndex((track) => track.id === trackId);
       if (startIndex < 0) return;
       playerActions.playQueue(queue, startIndex);
     },
-    [items, chosenSources]
+    [queueOf]
   );
 
-  const enqueue = useCallback((trackIds: string[]) => enqueueEntity({ kind: "tracks", trackIds }), [enqueueEntity]);
+  const enqueue = useCallback(
+    async (trackIds: string[]) => {
+      const wanted = new Set(trackIds);
+      return enqueueTracks(queueOf((item) => wanted.has(item.id)));
+    },
+    [queueOf, enqueueTracks]
+  );
 
   return { play, enqueue };
 }

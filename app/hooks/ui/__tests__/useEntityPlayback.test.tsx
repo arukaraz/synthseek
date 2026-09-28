@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { PlayerTrack } from "@components/Player";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
 interface PlayableResult {
@@ -203,6 +204,42 @@ describe("adding a whole album or playlist to the queue", () => {
     await expect(result.current.enqueueEntity(TARGET)).resolves.toBe(false);
 
     expect(player.addToQueue).not.toHaveBeenCalled();
+  });
+});
+
+describe("adding tracks the page already holds", () => {
+  const onPage: PlayerTrack = {
+    id: "t9",
+    title: "Song",
+    artist: "Air",
+    album: "Moon Safari",
+    albumId: "al1",
+    durationSeconds: 200,
+    format: "flac",
+    bitrateKbps: 900,
+    lossless: true,
+    tone: "primary",
+    artworkUrl: null,
+    replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    sources: [{ key: "jellyfin", format: "flac", bitrateKbps: 900 }],
+  };
+
+  it("adds them as given, without fetching them again", () => {
+    const { result } = renderHook(() => useEntityPlayback());
+
+    expect(result.current.enqueueTracks([onPage])).toBe(true);
+
+    expect(player.addToQueue).toHaveBeenCalledWith([onPage]);
+    expect(api.fetchPlayable).not.toHaveBeenCalled();
+  });
+
+  it("says nothing is playable rather than queueing an empty list", () => {
+    const { result } = renderHook(() => useEntityPlayback());
+
+    expect(result.current.enqueueTracks([])).toBe(false);
+
+    expect(player.addToQueue).not.toHaveBeenCalled();
+    expect(toast.info).toHaveBeenCalledWith(enPlayer.queue.nothingPlayable);
   });
 });
 

@@ -1,5 +1,6 @@
 "use client";
 
+import type { PlayerTrack } from "@components/Player";
 import { usePlayableTracksFetcher } from "@hooks/api";
 import type { PlayableTracksTarget } from "@hooks/api/queries/library/types";
 import { playerActions, playerTrackFrom, tracksFromChosenSource, useStartRadio } from "@hooks/ui/player";
@@ -10,6 +11,7 @@ import { toast } from "sonner";
 export function useEntityPlayback(): {
   playEntity: (target: PlayableTracksTarget) => Promise<void>;
   enqueueEntity: (target: PlayableTracksTarget) => Promise<boolean>;
+  enqueueTracks: (tracks: readonly PlayerTrack[]) => boolean;
   startRadio: (target: PlayableTracksTarget) => Promise<void>;
 } {
   const { t } = useTranslation("player");
@@ -51,20 +53,31 @@ export function useEntityPlayback(): {
     [resolve]
   );
 
-  const enqueueEntity = useCallback(
-    async (target: PlayableTracksTarget) => {
-      const tracks = await resolve(target);
-      if (tracks === null) return false;
+  const enqueueTracks = useCallback(
+    (tracks: readonly PlayerTrack[]) => {
+      if (tracks.length === 0) {
+        toast.info(t("queue.nothingPlayable"));
+        return false;
+      }
       const outcome = playerActions.addToQueue(tracks);
       if (outcome.full) toast.info(t("queue.full"));
       else if (outcome.added === 0) toast.info(t("queue.nothingAdded"));
       else toast.success(t("queue.added", { count: outcome.added }));
       return outcome.added > 0;
     },
-    [resolve, t]
+    [t]
+  );
+
+  const enqueueEntity = useCallback(
+    async (target: PlayableTracksTarget) => {
+      const tracks = await resolve(target);
+      if (tracks === null) return false;
+      return enqueueTracks(tracks);
+    },
+    [resolve, enqueueTracks]
   );
 
   const startRadio = useCallback((target: PlayableTracksTarget) => startStation(target, null), [startStation]);
 
-  return { playEntity, enqueueEntity, startRadio };
+  return { playEntity, enqueueEntity, enqueueTracks, startRadio };
 }

@@ -30,10 +30,10 @@ export function GroupsViewMode() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (values.selected || visibleItems.length === 0) return;
+    if (selected !== null || visibleItems.length === 0) return;
     if (!window.matchMedia("(min-width: 768px)").matches) return;
     set("selected", visibleItems[0].external_id);
-  }, [visibleItems, values.selected, set]);
+  }, [visibleItems, selected, set]);
 
   const handleSelect = (id: string) => {
     const item = visibleItems.find((it) => it.id === id);

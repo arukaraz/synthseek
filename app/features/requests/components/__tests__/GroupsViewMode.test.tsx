@@ -1,3 +1,4 @@
+import { RequestStatus } from "@api/__generated__/types";
 import { render, screen, userEvent, waitFor } from "@test/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -148,6 +149,32 @@ describe("GroupsViewMode", () => {
     await waitFor(() => {
       expect(replace).toHaveBeenCalledWith("/requests?selected=ext-a", { scroll: false });
     });
+  });
+
+  it("moves the selection to the first visible request on desktop when a filter hides the selected one", async () => {
+    setMatchMedia(true);
+    searchParamsRef.current = new URLSearchParams({ selected: "ext-done", filter: "failed" });
+    queryState.data = [
+      makeRequestListItem({ id: "done", external_id: "ext-done", status: RequestStatus.enum.complete }),
+      makeRequestListItem({ id: "failed", external_id: "ext-failed", status: RequestStatus.enum.failed }),
+    ];
+    render(<GroupsViewMode />);
+
+    await waitFor(() => {
+      expect(replace).toHaveBeenCalledWith("/requests?selected=ext-failed&filter=failed", { scroll: false });
+    });
+  });
+
+  it("keeps a selection the filter still shows", () => {
+    setMatchMedia(true);
+    searchParamsRef.current = new URLSearchParams({ selected: "ext-b" });
+    queryState.data = [
+      makeRequestListItem({ id: "a", external_id: "ext-a" }),
+      makeRequestListItem({ id: "b", external_id: "ext-b" }),
+    ];
+    render(<GroupsViewMode />);
+
+    expect(replace).not.toHaveBeenCalled();
   });
 
   it("clears the selected url param when the detail pane requests a back action", async () => {

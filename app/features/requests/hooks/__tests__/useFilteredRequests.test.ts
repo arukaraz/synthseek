@@ -170,22 +170,83 @@ describe("useFilteredRequests sort by field", () => {
     expect(result.current.map((item) => item.id)).toEqual(["zed", "ada"]);
   });
 
-  it("orders by name for the album field", () => {
-    const beta = makeRequest({ id: "beta", name: "Beta" });
-    const alpha = makeRequest({ id: "alpha", name: "Alpha" });
+  const mixed = [
+    makeRequest({ id: "album-mike", name: "Mike", contentType: ContentType.enum.album }),
+    makeRequest({ id: "playlist-zulu", name: "Zulu", contentType: ContentType.enum.playlist }),
+    makeRequest({ id: "album-alpha", name: "Alpha", contentType: ContentType.enum.album }),
+    makeRequest({ id: "playlist-beta", name: "Beta", contentType: ContentType.enum.playlist }),
+  ];
 
-    const { result } = renderHook(() => useFilteredRequests([beta, alpha], "all", albumAsc, "", undefined));
+  it("puts playlists first when sorting by playlist, each group by name", () => {
+    const { result } = renderHook(() => useFilteredRequests(mixed, "all", playlistAsc, "", undefined));
 
-    expect(result.current.map((item) => item.id)).toEqual(["alpha", "beta"]);
+    expect(result.current.map((item) => item.id)).toEqual([
+      "playlist-beta",
+      "playlist-zulu",
+      "album-alpha",
+      "album-mike",
+    ]);
   });
 
-  it("orders by name for the playlist field", () => {
-    const second = makeRequest({ id: "second", name: "Second" });
-    const first = makeRequest({ id: "first", name: "First" });
+  it("keeps playlists first when the order is descending and reverses the names inside each group", () => {
+    const playlistDesc: SortConfig = { field: SortField.PLAYLIST, direction: "desc" };
+    const { result } = renderHook(() => useFilteredRequests(mixed, "all", playlistDesc, "", undefined));
 
-    const { result } = renderHook(() => useFilteredRequests([second, first], "all", playlistAsc, "", undefined));
+    expect(result.current.map((item) => item.id)).toEqual([
+      "playlist-zulu",
+      "playlist-beta",
+      "album-mike",
+      "album-alpha",
+    ]);
+  });
 
-    expect(result.current.map((item) => item.id)).toEqual(["first", "second"]);
+  it("puts albums first when sorting by album, each group by name", () => {
+    const { result } = renderHook(() => useFilteredRequests(mixed, "all", albumAsc, "", undefined));
+
+    expect(result.current.map((item) => item.id)).toEqual([
+      "album-alpha",
+      "album-mike",
+      "playlist-beta",
+      "playlist-zulu",
+    ]);
+  });
+});
+
+describe("useFilteredRequests status filter", () => {
+  const byStatus = [
+    makeRequest({ id: "approval", status: RequestStatus.enum.pending_approval }),
+    makeRequest({ id: "queued", status: RequestStatus.enum.queued }),
+    makeRequest({ id: "downloading", status: RequestStatus.enum.downloading }),
+    makeRequest({ id: "complete", status: RequestStatus.enum.complete }),
+    makeRequest({ id: "delegated", status: RequestStatus.enum.delegated }),
+    makeRequest({ id: "partial", status: RequestStatus.enum.partially_complete }),
+    makeRequest({ id: "failed", status: RequestStatus.enum.failed }),
+    makeRequest({ id: "cancelled", status: RequestStatus.enum.cancelled }),
+  ];
+  const nameAsc: SortConfig = { field: SortField.ALBUM, direction: "asc" };
+  const idsFor = (filter: "all" | "pending_approval" | "active" | "done" | "failed") =>
+    renderHook(() => useFilteredRequests(byStatus, filter, nameAsc, "", undefined))
+      .result.current.map((item) => item.id)
+      .sort();
+
+  it("keeps everything under all", () => {
+    expect(idsFor("all")).toHaveLength(byStatus.length);
+  });
+
+  it("keeps only the requests waiting for approval", () => {
+    expect(idsFor("pending_approval")).toEqual(["approval"]);
+  });
+
+  it("keeps the queued and in-flight requests under active", () => {
+    expect(idsFor("active")).toEqual(["downloading", "queued"]);
+  });
+
+  it("keeps complete and delegated requests under done", () => {
+    expect(idsFor("done")).toEqual(["complete", "delegated"]);
+  });
+
+  it("keeps failed, cancelled and partially complete requests under failed", () => {
+    expect(idsFor("failed")).toEqual(["cancelled", "failed", "partial"]);
   });
 });
 
