@@ -94,12 +94,13 @@ Open the web interface, create your admin account in the setup wizard, and point
 - Your queue and position are kept on the server, so they survive a reload and are the same ones your phone picks up
 - With autoplay on, the queue does not run out: the player adds the closest tracks your library has to what you chose, and you can start a radio from any track, album or artist
 - An equalizer, a preamp, a compressor and gapless or blended transitions in the player, with presets or curves of your own, kept per browser
+- Volume evened out between tracks
 - Play your library in Subsonic and OpenSubsonic apps such as Feishin and Symfonium, with no media server in between
 - Apps can change things, not only play them: favourites, playlists you create and reorder, what you played, and a queue you can pick up on another device
 - A stream is converted on the fly when an app asks for a lower quality than the file on disk
 - Send what you play to Last.fm and ListenBrainz from the server, so a listen survives closing the tab
 - Read the lyrics in the full screen view, following the song where they come with timings
-- Sync playlists to Plex, one at a time or all at once
+- Sync playlists to Plex, Navidrome or Jellyfin, one at a time or all at once
 - Play a track from Plex, Navidrome or Jellyfin when Synthseek has no file for it
 
 [Features](https://docs.synthseek.dev/features/)
@@ -109,7 +110,8 @@ Open the web interface, create your admin account in the setup wizard, and point
 - A built-in MCP server, so assistants can search, request, and manage your library
 - Discovery mixes from Last.fm and ListenBrainz on a dedicated Discover page
 - Lidarr delegation, with tag and monitor-scope selection
-- Spotify library import, and playlist import and export as JSPF, XSPF, or CSV
+- Library import from Spotify, and playlist import from Plex, Navidrome or Jellyfin
+- Playlist import from JSPF, XSPF, or CSV, and export as JSPF
 
 [AI assistants](https://docs.synthseek.dev/ai-assistants/) · [Integrations](https://docs.synthseek.dev/integrations/)
 
@@ -133,7 +135,7 @@ Open the web interface, create your admin account in the setup wizard, and point
 | [Download sources](https://docs.synthseek.dev/download-sources/)       | slskd, Usenet, and the YouTube fallback           |
 | [Configuration](https://docs.synthseek.dev/configuration/)             | Environment variables and in-app settings         |
 | [Users and permissions](https://docs.synthseek.dev/users-permissions/) | Accounts, roles, and what members can see         |
-| [Integrations](https://docs.synthseek.dev/integrations/)               | Plex, Lidarr, Last.fm, ListenBrainz, and more     |
+| [Integrations](https://docs.synthseek.dev/integrations/)               | Plex, Navidrome, Jellyfin, Lidarr, and more       |
 | [AI assistants](https://docs.synthseek.dev/ai-assistants/)             | The MCP server and its tools                      |
 | [Operations](https://docs.synthseek.dev/operations/)                   | Jobs, logs, health, backups, and updates          |
 | [FAQ](https://docs.synthseek.dev/faq/)                                 | Common questions and troubleshooting              |
