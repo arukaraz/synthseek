@@ -39,7 +39,7 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
   const query = useLibraryTracks(input, controller.view === "tracks");
 
   const items = useMemo(() => query.data?.items ?? [], [query.data?.items]);
-  const { play, enqueue } = useLibraryPlayback(items, controller.filters.source ?? NO_CHOSEN_SOURCES);
+  const { play, enqueue } = useLibraryPlayback(items, query.data?.appliedSources ?? NO_CHOSEN_SOURCES);
   const columns = useMemo(() => buildTrackColumns({ onPlay: play, onEnqueue: enqueue }), [play, enqueue]);
 
   const total = query.data?.total ?? 0;

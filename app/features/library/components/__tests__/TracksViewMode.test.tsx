@@ -8,6 +8,9 @@ import { TracksViewMode } from "../TracksViewMode";
 
 const useLibraryTracksMock = vi.hoisted(() => vi.fn());
 const prefetchNextPageMock = vi.hoisted(() => vi.fn());
+const libraryPlaybackMock = vi.hoisted(() => vi.fn(() => ({ play: vi.fn(), enqueue: vi.fn() })));
+
+vi.mock("../../hooks/useLibraryPlayback", () => ({ useLibraryPlayback: libraryPlaybackMock }));
 
 vi.mock("@hooks/api", () => ({
   useLibraryTracks: useLibraryTracksMock,
@@ -115,6 +118,30 @@ describe("TracksViewMode", () => {
 
     expect(prefetchNextPageMock).toHaveBeenCalledTimes(1);
     expect(prefetchNextPageMock).toHaveBeenCalledWith(expect.anything(), 50);
+  });
+
+  it("plays from the sources the server filtered by, not the ones the url asks for", () => {
+    useLibraryTracksMock.mockReturnValue({
+      data: { items: [createTrack()], total: 1, facets: {}, appliedSources: [] },
+      isLoading: false,
+      isError: false,
+    });
+
+    renderWithProviders(<TracksViewMode {...makeProps({ filters: { source: ["navidrome"] } })} />);
+
+    expect(libraryPlaybackMock).toHaveBeenLastCalledWith(expect.any(Array), []);
+  });
+
+  it("hands the applied sources to playback in the order the server reports them", () => {
+    useLibraryTracksMock.mockReturnValue({
+      data: { items: [createTrack()], total: 1, facets: {}, appliedSources: ["jellyfin", "local"] },
+      isLoading: false,
+      isError: false,
+    });
+
+    renderWithProviders(<TracksViewMode {...makeProps({ filters: { source: ["jellyfin", "local", "gone"] } })} />);
+
+    expect(libraryPlaybackMock).toHaveBeenLastCalledWith(expect.any(Array), ["jellyfin", "local"]);
   });
 
   it("forwards the total and loading state to the layout", () => {
