@@ -2,6 +2,68 @@
 
 ---
 
+# v2.8.0, September 28, 2026
+
+> [!NOTE]
+> After updating, Synthseek measures how loud each track in your library is, in the background, so it can even out the volume between them. On a large library this takes a while, and a track it has not reached yet plays at its own volume. It only reads your files and never changes them.
+
+> [!NOTE]
+> Your plays can now be counted in Plex. If you signed in with Plex before this version, link Plex again from the Plex row under Profile to turn this on.
+
+### Play from your media servers, gapless and at an even volume
+
+- Connect Plex, Navidrome or Jellyfin, and a track Synthseek has no file for can play from there, in the web player and in your music apps. Your own copy still plays first.
+- When an album or an artist is only partly on your first source, Synthseek asks where you want to play it from.
+- The library can be filtered by where a track plays from.
+- Each listener can have their plays counted on Plex, Navidrome or Jellyfin, from their Profile.
+- A copy your browser cannot play is converted on the fly, and a server that stops answering no longer leaves the player stuck.
+
+---
+
+### Playlists across your servers
+
+- Playlists can be imported from Plex, Navidrome and Jellyfin as well as Spotify. Import now lives on the library page, with one window per source.
+- Playlists can be synced to Navidrome and Jellyfin as well as Plex, once you turn it on for that server, each into the account its owner linked.
+- An imported playlist can be kept in sync whatever it came from, and one from your server can skip downloading the tracks Synthseek does not have yet, which then play from that server.
+- Each playlist says where it came from.
+
+---
+
+### A better sounding player
+
+- Volume is evened out between tracks. Turn it off, or add a little on top, from the player's settings.
+- Tracks run straight into each other with no gap, or blend into each other if you prefer, on every change or only when you skip.
+- An equalizer with presets, a preamp and curves you can save, plus a compressor, all in the player's settings.
+- Autoplay keeps the music going with similar songs from your library once the queue runs out. It is off until you turn it on, and you can also start a radio from a track, an album or an artist.
+- On a slow connection you can ask for a smaller stream.
+- Music apps can ask for a radio or a mix from your library, and receive the lyrics and the volume measurements too, if they use them.
+
+---
+
+### Elsewhere
+
+- Artist pages show the artist's top tracks, which you can request in one go, and set compilations apart from albums.
+- A long job, such as measuring volume, can be stopped from Settings, then Jobs, and keeps what it had already done.
+- Table headers stay in view as you scroll.
+
+---
+
+### Changes
+
+- Play next is gone. Add tracks to the queue instead, and drag them where you want them.
+
+---
+
+### Fixes
+
+- Albums you saved on Spotify while a library sync was failing could be skipped for good once it worked again. That no longer happens.
+- Sorting requests by Playlist now puts playlists first, as sorting by Album does for albums.
+- Notifications no longer cover the player's buttons.
+- A cancelled track can be removed from a playlist.
+- Music apps that run in a browser, such as the web version of Feishin, now show cover art.
+
+---
+
 # v2.7.1, September 18, 2026
 
 > [!NOTE]
