@@ -433,7 +433,7 @@
     },
     "order": {
       "title": "Playback order",
-      "description": "Synthseek plays its own file first, then tries these servers in this order. When an album or artist you play is in more than one place, it asks where to play it from.",
+      "description": "Synthseek plays its own file first, then tries these servers in this order. When the first place it plays from doesn't have every track of an album or artist you play, it asks where to play it from.",
       "local": "Local",
       "notConnected": "Not connected",
       "moveUp": "Move {{server}} up",

@@ -62,7 +62,7 @@
   },
   "sourcePicker": {
     "title": "Abspielen von",
-    "message": "Einige dieser Titel liegen an mehr als einem Ort. Wähle, woher sie spielen sollen.",
+    "message": "{{source}} hat nicht alle diese Titel. Wähle, woher sie spielen sollen.",
     "count": "{{count}} von {{total}}",
     "fillFromNext": "Fehlende Titel aus der nächsten Quelle abspielen",
     "play": "Abspielen"

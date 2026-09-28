@@ -62,7 +62,7 @@
   },
   "sourcePicker": {
     "title": "Reproducir desde",
-    "message": "Algunas de estas canciones están en más de un sitio. Elige desde dónde reproducirlas.",
+    "message": "{{source}} no tiene todas estas canciones. Elige desde dónde reproducirlas.",
     "count": "{{count}} de {{total}}",
     "fillFromNext": "Reproducir las que falten desde la siguiente fuente",
     "play": "Reproducir"

@@ -433,7 +433,7 @@
     },
     "order": {
       "title": "Wiedergabereihenfolge",
-      "description": "Synthseek spielt zuerst die eigene Datei und versucht dann diese Server in dieser Reihenfolge. Liegt ein Album oder Künstler, den du abspielst, an mehr als einem Ort, fragt es, woher es abgespielt werden soll.",
+      "description": "Synthseek spielt zuerst die eigene Datei und versucht dann diese Server in dieser Reihenfolge. Fehlen dem ersten Ort, von dem es abspielt, Titel eines Albums oder Künstlers, den du abspielst, fragt es, woher es abgespielt werden soll.",
       "local": "Lokal",
       "notConnected": "Nicht verbunden",
       "moveUp": "{{server}} nach oben",

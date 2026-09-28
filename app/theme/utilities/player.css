@@ -8,20 +8,20 @@
   }
 
   .player-metrics {
-    --player-bar-height: 4rem;
-    --player-dock-height: 4rem;
+    --player-bar-height: var(--height-player-bar);
+    --player-dock-height: var(--height-player-bar);
   }
 
   @media (min-width: 40rem) {
     .player-metrics {
-      --player-bar-height: 7.5rem;
-      --player-dock-height: 7.5rem;
+      --player-bar-height: var(--height-player-bar-wide);
+      --player-dock-height: var(--height-player-bar-wide);
     }
   }
 
   [data-player-mode="compact"] .player-metrics,
   [data-player-mode="mini"] .player-metrics {
-    --player-bar-height: 4rem;
+    --player-bar-height: var(--height-player-bar);
     --player-dock-height: 0rem;
   }
 
@@ -36,11 +36,11 @@
 
   [data-player-mode="compact"] .player-panel-anchor.player-metrics-chain,
   [data-player-mode="compact"] .player-panel-column.player-metrics-chain {
-    top: calc(var(--height-header-wide) + 1.875rem);
+    top: calc(var(--height-header-wide) + var(--height-player-chain));
   }
 
   .player-metrics-chain {
-    --player-dock-height: calc(var(--player-bar-height) + 1.875rem);
+    --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain));
   }
 
   .player-bar-progress {

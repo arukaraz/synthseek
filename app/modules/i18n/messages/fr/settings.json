@@ -433,7 +433,7 @@
     },
     "order": {
       "title": "Ordre de lecture",
-      "description": "Synthseek lit d'abord son propre fichier, puis essaie ces serveurs dans cet ordre. Quand un album ou un artiste que vous lancez se trouve à plusieurs endroits, il vous demande d'où le lire.",
+      "description": "Synthseek lit d'abord son propre fichier, puis essaie ces serveurs dans cet ordre. Quand le premier endroit d'où il lit n'a pas toutes les pistes d'un album ou d'un artiste que vous lancez, il vous demande d'où le lire.",
       "local": "Local",
       "notConnected": "Non connecté",
       "moveUp": "Monter {{server}}",

@@ -37,6 +37,14 @@ describe("choosing where an album plays from", () => {
     expect(screen.getByRole("checkbox")).toHaveAttribute("aria-checked", "true");
   });
 
+  it("names the first source as the one missing tracks, which is why it asks", () => {
+    render(<SourcePickerDialog request={REQUEST} />);
+
+    expect(
+      screen.getByText(enPlayer.sourcePicker.message.replace("{{source}}", enPlayer.source.local))
+    ).toBeInTheDocument();
+  });
+
   it("plays from the source picked, filling the missing tracks from the next one", async () => {
     const user = userEvent.setup();
     render(<SourcePickerDialog request={REQUEST} />);

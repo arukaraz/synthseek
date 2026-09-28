@@ -167,7 +167,7 @@ vi.mock("@modules/errors", () => ({
   resolveFriendlyError: (error: unknown) => ({ title: `friendly: ${String(error)}` }),
 }));
 
-import { usePlayer, usePlayerDock } from "../usePlayer";
+import { usePlayer, usePlayerBottomDock, usePlayerDock } from "../usePlayer";
 
 function track(overrides: Partial<PlayerTrack> = {}): PlayerTrack {
   return {
@@ -313,6 +313,41 @@ describe("usePlayerDock", () => {
     });
 
     expect(result.current).toBe("chain");
+  });
+});
+
+describe("usePlayerBottomDock", () => {
+  it("reports the bar docked at the bottom in normal mode, and the chain when it is open", () => {
+    const { result, rerender } = renderHook(() => usePlayerBottomDock());
+    expect(result.current).toBe("bar");
+
+    act(() => {
+      store.snapshot = sessionState({ chainVisible: true });
+      store.listeners.forEach((listener) => listener());
+    });
+    rerender();
+
+    expect(result.current).toBe("chain");
+  });
+
+  it("reports nothing at the bottom in compact and mini modes", () => {
+    store.snapshot = sessionState({ mode: "compact" });
+    expect(renderHook(() => usePlayerBottomDock()).result.current).toBe("hidden");
+
+    store.snapshot = sessionState({ mode: "mini" });
+    expect(renderHook(() => usePlayerBottomDock()).result.current).toBe("hidden");
+  });
+
+  it("reports nothing at the bottom while the player is full screen", () => {
+    store.snapshot = sessionState({ fullscreen: true });
+
+    expect(renderHook(() => usePlayerBottomDock()).result.current).toBe("hidden");
+  });
+
+  it("reports nothing before anything has started", () => {
+    store.snapshot = sessionState({ started: false });
+
+    expect(renderHook(() => usePlayerBottomDock()).result.current).toBe("hidden");
   });
 });
 

@@ -68,6 +68,16 @@ export function usePlayerDock(): PlayerDockState {
   return useSyncExternalStore(subscribe, dockSnapshot, () => "hidden");
 }
 
+function bottomDockSnapshot(): PlayerDockState {
+  const session = getSnapshot();
+  if (session.mode !== "normal" || session.fullscreen) return "hidden";
+  return dockSnapshot();
+}
+
+export function usePlayerBottomDock(): PlayerDockState {
+  return useSyncExternalStore(subscribe, bottomDockSnapshot, () => "hidden");
+}
+
 let upcomingFrom: { queue: unknown; index: number; shuffle: boolean; order: unknown } | null = null;
 let upcomingIds: ReadonlySet<string> = new Set<string>();
 

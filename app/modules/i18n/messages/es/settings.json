@@ -433,7 +433,7 @@
     },
     "order": {
       "title": "Orden de reproducción",
-      "description": "Synthseek reproduce primero su propio archivo y luego prueba estos servidores en este orden. Cuando un álbum o artista que reproduces está en más de un sitio, te pregunta desde dónde reproducirlo.",
+      "description": "Synthseek reproduce primero su propio archivo y luego prueba estos servidores en este orden. Cuando el primer sitio desde el que reproduce no tiene todas las canciones de un álbum o artista que reproduces, te pregunta desde dónde reproducirlo.",
       "local": "Local",
       "notConnected": "Sin conectar",
       "moveUp": "Subir {{server}}",

@@ -66,6 +66,9 @@
   --height-header-wide: 5rem;
   --height-screen-minus-header: calc(100vh - var(--height-header-wide));
   --height-bottom-nav: calc(4rem + env(safe-area-inset-bottom));
+  --height-player-bar: 4rem;
+  --height-player-bar-wide: 7.5rem;
+  --height-player-chain: 1.875rem;
   --height-screen-minus-header-and-nav: calc(100vh - 4rem - var(--height-bottom-nav));
   --height-modal-max: 90vh;
   --width-sidebar: 28rem;

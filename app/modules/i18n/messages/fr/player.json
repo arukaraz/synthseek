@@ -62,7 +62,7 @@
   },
   "sourcePicker": {
     "title": "Lire depuis",
-    "message": "Certaines de ces pistes sont à plusieurs endroits. Choisissez d'où les lire.",
+    "message": "{{source}} n'a pas toutes ces pistes. Choisissez d'où les lire.",
     "count": "{{count}} sur {{total}}",
     "fillFromNext": "Lire les pistes manquantes depuis la source suivante",
     "play": "Lire"

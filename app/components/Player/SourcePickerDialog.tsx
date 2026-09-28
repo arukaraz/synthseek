@@ -25,7 +25,7 @@ export function SourcePickerDialog({ request }: SourcePickerDialogProps) {
       isOpen
       variant="info"
       title={t("sourcePicker.title")}
-      message={t("sourcePicker.message")}
+      message={t("sourcePicker.message", { source: options[0]?.label ?? "" })}
       confirmText={t("sourcePicker.play")}
       onConfirm={() => settleSourcePick(selected === null ? null : { source: selected, fillFromNext })}
       onClose={() => settleSourcePick(null)}
