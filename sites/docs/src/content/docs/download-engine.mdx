@@ -98,11 +98,11 @@ Identifying a track against MusicBrainz happens during the import when the audio
 
 Imports are strictly serialised. One import runs at a time.
 
-## Step 6, Plex
+## Step 6, media servers
 
 After a successful import, Plex is asked to rescan the affected part of the library.
 
-If the track belongs to a playlist, that playlist is reconciled on Plex. Reconciliation is incremental: as more tracks of a playlist finish over time, they are added to the remote playlist as they arrive rather than waiting for the whole set.
+If the track belongs to a playlist, that playlist is reconciled on every media server with playlist sync on. Reconciliation is incremental: as more tracks of a playlist finish over time, they are added to the remote playlist as they arrive rather than waiting for the whole set.
 
 Currently, playlist reconciliation only adds. It never removes.
 

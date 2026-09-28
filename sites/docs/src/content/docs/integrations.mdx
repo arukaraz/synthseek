@@ -34,9 +34,9 @@ Playlists you request or create in Synthseek can be mirrored to Plex.
 
 ### Playing from Plex
 
-Once Plex is connected, Synthseek works out which of your tracks your Plex server also holds, right away and every six hours after that. A track Synthseek has no file for then plays from Plex instead, and by default your own copy plays first. When the player is streaming from Plex it says so next to the artist. When a track is in both places you can switch the playing track to the other copy from the player's settings. Playing an album or artist asks you where to play it from when your first source is missing some of its tracks.
+Once Plex is connected, Synthseek works out which of your tracks your Plex server also holds. A track Synthseek has no file for then plays from Plex instead, and by default your own copy plays first. When a track is in both places you can switch the playing track to the other copy from the player's settings. Playing an album or artist asks you where to play it from when your first source is missing some of its tracks.
 
-Each listener can also have their plays counted in Plex. With Plex connected, the Plex row under **Profile** offers **Record my plays in Plex**: every track that listener finishes, in the web player or in a music app, counts as played in their own Plex library, as long as Plex also holds that track. A listener who signed in with Plex before this existed links Plex once more from the same row.
+Each listener can also have their plays counted in Plex. With Plex connected, the Plex row under **Profile** offers **Record my plays in Plex**. Their plays, in the web player or in a music app, then count in their own Plex library too, when Plex holds the track.
 
 ### Why a Plex playlist can show fewer tracks
 
@@ -50,11 +50,11 @@ A mirrored playlist reflects tracks that are complete in Synthseek **and** were 
 
 ## Navidrome and Jellyfin
 
-Synthseek can play a track from Navidrome or Jellyfin when it has no file for it, the same way it plays from Plex, and music apps connected to Synthseek play those tracks too. This starts once you connect the server under **Settings > Integrations > Media servers**, where Plex is set up too. When more than one server holds a track, Synthseek tries them in the order set on that page. Navidrome finds more of your tracks with **Report Real Path** turned on for the Synthseek player, and its connection test says when it is off.
+Synthseek can play a track from Navidrome or Jellyfin when it has no file for it, as it does from Plex. Music apps connected to Synthseek play those tracks too. This starts once you connect the server under **Settings > Integrations > Media servers**, where Plex is set up too. When more than one server holds a track, Synthseek tries them in the order set on that page. Navidrome finds more of your tracks with **Report Real Path** turned on for the Synthseek player, and its connection test says when it is off.
 
-Each listener can link their own Navidrome or Jellyfin account under **Profile** to have the tracks they finish counted as played there. Synthseek keeps a token from the server, not the password.
+Each listener can link their own Navidrome or Jellyfin account under **Profile** to have their plays counted there. Synthseek does not keep their password.
 
-With **Sync playlists** on for a server, playlists are mirrored to Navidrome or Jellyfin the way they are to Plex, each into the account its owner linked. A playlist imported from a server is never synced back to it.
+With playlist sync on for a server, playlists are mirrored to Navidrome or Jellyfin the way they are to Plex, each into the account its owner linked. A playlist imported from a server is never synced back to it.
 
 ## Lidarr
 
