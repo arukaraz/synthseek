@@ -5,10 +5,8 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
-import { Switch } from "@components/ui/Switch";
 import { useTestJellyfin, useUpdateConnectionsJellyfin } from "@hooks/api/mutations/settings/useUpdateConnections";
 
-import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
@@ -39,7 +37,7 @@ export function JellyfinCard({ initial }: JellyfinCardProps) {
   const handleSave = () => save((payload) => update.mutateAsync({ ...payload, url: payload.url.trim() }));
 
   return (
-    <SettingsCard title={t("mediaServers.jellyfin.title")} description={t("mediaServers.jellyfin.description")}>
+    <SettingsCard title={t("mediaServers.jellyfin.title")}>
       <SettingsField label={t("mediaServers.url")}>
         <SettingsTextInput
           value={draft.url}
@@ -53,21 +51,9 @@ export function JellyfinCard({ initial }: JellyfinCardProps) {
         <SettingsSecretInput value={draft.apiKey} onChange={(value) => setField("apiKey", value)} />
       </SettingsField>
 
-      <EngineRow
-        label={t("mediaServers.playback.label", { server: t("mediaServers.jellyfin.title") })}
-        description={t("mediaServers.playback.description")}
-        control={
-          <Switch
-            checked={draft.playback}
-            onCheckedChange={(value) => setField("playback", value)}
-            aria-label={t("mediaServers.playback.label", { server: t("mediaServers.jellyfin.title") })}
-          />
-        }
-      />
-
       <MediaServerPlaylistSyncRow
         server={t("mediaServers.jellyfin.title")}
-        playback={draft.playback}
+        connected={complete}
         playlistSync={draft.playlistSync}
         onChange={(value) => setField("playlistSync", value)}
       />

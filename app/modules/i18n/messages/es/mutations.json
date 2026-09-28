@@ -270,7 +270,13 @@
     "upgradeSkipUpgradeError_one": "{{count}} no se pudo encolar",
     "upgradeSkipUpgradeError_other": "{{count}} no se pudieron encolar",
     "bulkTracksTooManyTitle": "Demasiadas canciones seleccionadas",
-    "bulkTracksTooManyDescription": "Las acciones en lote admiten hasta {{max}} canciones a la vez. No se envió nada."
+    "bulkTracksTooManyDescription": "Las acciones en lote admiten hasta {{max}} canciones a la vez. No se envió nada.",
+    "tracksRequestFailed": "No se pudieron solicitar las canciones",
+    "tracksRequested_one": "Se solicitó {{count}} canción",
+    "tracksRequested_other": "Se solicitaron {{count}} canciones",
+    "tracksAlreadyRequested": "Esas canciones ya están solicitadas o en tu biblioteca",
+    "tracksNotRequested_one": "No se pudo solicitar {{count}} canción",
+    "tracksNotRequested_other": "No se pudieron solicitar {{count}} canciones"
   },
   "playlists": {
     "created": "Playlist creada",

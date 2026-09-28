@@ -97,7 +97,7 @@
   },
   "PLAYLIST_TRACK_IN_FLIGHT": {
     "title": "La canción aún se está descargando",
-    "description": "Solo se pueden quitar de una playlist las canciones completadas o fallidas."
+    "description": "Espera a que termine, o cancélala, antes de quitarla de la playlist."
   },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "No se puede sincronizar ahí",

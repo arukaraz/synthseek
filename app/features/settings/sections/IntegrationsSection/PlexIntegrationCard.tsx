@@ -17,6 +17,7 @@ import { cn } from "@utils/cn";
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SegmentedControl } from "../../components/SegmentedControl";
+import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
@@ -29,7 +30,6 @@ import {
   serverPickerLocationBadge,
   serverPickerName,
   serverPickerUri,
-  settingsCard,
   statusBadge,
   statusDot,
 } from "../../styles";
@@ -95,14 +95,15 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
   };
 
   return (
-    <section className={settingsCard()}>
-      <div className="flex items-start justify-between gap-3">
+    <SettingsCard
+      title={t("mediaServers.plex.title")}
+      trailing={
         <span className={cn(statusBadge({ tone: connected ? "success" : "muted" }))}>
           <span className={statusDot({ tone: connected ? "success" : "muted" })} />
           {connected ? t("plex.statusConnected") : t("plex.statusNotConnected")}
         </span>
-      </div>
-
+      }
+    >
       <SettingsField
         label={t("plex.serverUrl.label")}
         helper={connected ? t("plex.serverUrl.helperConnected") : t("plex.serverUrl.helperDisconnected")}
@@ -178,18 +179,6 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
           />
         }
       />
-      <EngineRow
-        label={t("plex.playback.label")}
-        description={t("plex.playback.description")}
-        control={
-          <Switch
-            checked={behaviorForm.draft.playback}
-            onCheckedChange={(v) => behaviorForm.setField("playback", v)}
-            aria-label={t("plex.playback.label")}
-          />
-        }
-      />
-
       <div className={cardDivider()} />
 
       <span className={cardSectionHeader()}>{t("plex.namingHeader")}</span>
@@ -225,6 +214,6 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
       </div>
 
       <SaveBar isDirty={isDirty} isSaving={isSaving} onSave={handleSave} onCancel={handleReset} />
-    </section>
+    </SettingsCard>
   );
 }

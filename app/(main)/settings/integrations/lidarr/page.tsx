@@ -1,7 +1,5 @@
-"use client";
-
-import { LidarrSection } from "@features/settings/sections/IntegrationsSection/LidarrSection";
+import { redirect } from "next/navigation";
 
 export default function LidarrIntegrationPage() {
-  return <LidarrSection />;
+  redirect("/settings/integrations/download-sources");
 }

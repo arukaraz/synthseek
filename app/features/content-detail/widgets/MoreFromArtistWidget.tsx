@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DetailEmpty, DetailSection } from "../components/DetailSection";
+import { releaseMeta } from "../components/Discography/helpers";
 import { MoreFromArtist } from "../components/MoreFromArtist";
 import { RAIL_SCROLL_STEP } from "../components/MoreFromArtist/constants";
 import { albumTarget } from "../helpers";
@@ -22,18 +23,19 @@ export function MoreFromArtistWidget({
   const trackRef = useRef<HTMLDivElement | null>(null);
   const { data, isLoading } = useArtistDiscography({
     catalogArtistId: artistExternalId ?? "",
+    artistName,
     enabled: !!artistExternalId,
   });
 
   if (!artistExternalId) return null;
 
   const albums: ContentCardItem[] = (data?.groups ?? [])
-    .flatMap((group) => group.albums)
-    .filter((album) => album.externalId !== excludeAlbumId)
-    .map((album) => ({
+    .flatMap((group) => group.albums.map((album) => ({ album, recordType: group.recordType })))
+    .filter(({ album }) => album.externalId !== excludeAlbumId)
+    .map(({ album, recordType }) => ({
       id: album.externalId,
       title: album.title,
-      subtitle: null,
+      subtitle: releaseMeta(t, album.releaseYear, recordType),
       image: album.image,
       inLibrary: album.inLibrary,
       libraryTrackCount: album.libraryTrackCount,

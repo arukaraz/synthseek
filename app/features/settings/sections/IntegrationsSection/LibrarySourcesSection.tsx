@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { emptyPanel, sectionGrid } from "../../styles";
-import { LidarrCard } from "./LidarrCard";
+import { SpotifySourceCard } from "./SpotifySourceCard";
 
-export function LidarrSection() {
+export function LibrarySourcesSection() {
   const { t } = useTranslation("settings");
   const { data, isLoading, error } = useSettings();
 
@@ -22,7 +22,7 @@ export function LidarrSection() {
   if (error || !data) {
     return (
       <div className={emptyPanel()}>
-        <span className="text-sm text-red-400">
+        <span className="text-destructive-vivid text-sm">
           {t("common.loadFailedWithReason", { reason: error?.message ?? t("common.unknownError") })}
         </span>
       </div>
@@ -31,7 +31,7 @@ export function LidarrSection() {
 
   return (
     <div className={sectionGrid()}>
-      <LidarrCard initial={data.connections.lidarr} />
+      <SpotifySourceCard spotify={data.connections.spotify} />
     </div>
   );
 }

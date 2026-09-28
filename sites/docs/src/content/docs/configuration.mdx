@@ -54,13 +54,14 @@ Administrators only.
 
 **Download sources.** Enable, disable, and prioritise slskd, Usenet and yt-dlp. The Usenet and yt-dlp tuning is on the [Download Sources page](/download-sources).
 
-**Plex.** Connection status, a reconnect button that signs you in at plex.tv and lets you pick a server, and the server URL that sign-in resolved, shown read-only. Plus three independent behaviour switches:
+**Media servers.** Plex, Navidrome and Jellyfin, plus the order Synthseek tries them in when it has no file for a track. A connected server is a place to play from, with no switch of its own.
 
-| Setting             | Default | What it does                                                |
-| ------------------- | ------- | ----------------------------------------------------------- |
-| Media server rescan | On      | Ask Plex to rescan after an import.                         |
-| Playlist sync       | On      | Create and reconcile playlists on Plex.                     |
-| Play from Plex      | Off     | Stream a track from Plex when Synthseek has no file for it. |
+Plex shows its connection status, a reconnect button that signs you in at plex.tv and lets you pick a server, and the server URL that sign-in resolved, shown read-only. Plus two behaviour switches:
+
+| Setting                | Default | What it does                            |
+| ---------------------- | ------- | --------------------------------------- |
+| Media server rescan    | On      | Ask Plex to rescan after an import.     |
+| Sync playlists to Plex | On      | Create and reconcile playlists on Plex. |
 
 And how mirrored playlists are named:
 
@@ -69,7 +70,7 @@ And how mirrored playlists are named:
 | Playlist username affix | Off     | Prefix or suffix a media server playlist with its owner's username. |
 | Separator               | `_`     | The character between the name and the affix.                       |
 
-**Media servers.** Navidrome (URL, username, password) and Jellyfin (URL, API key), each with a test button, a **Play from** switch, and a **Sync playlists** switch that needs **Play from** on. Both start off. Below them, the order Synthseek tries these servers in when it has no file for a track.
+Navidrome (URL, username, password) and Jellyfin (URL, API key) each have a test button and a **Sync playlists** switch. The switch starts off and works once the server is connected.
 
 **Lidarr.** URL, API key, and the quality and metadata profiles available for delegation.
 

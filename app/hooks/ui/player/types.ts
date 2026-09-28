@@ -13,6 +13,11 @@ export type ListeningConnectionStatus = inferRouterOutputs<AppRouter>["playback"
 
 export type PlayerDockState = "hidden" | "bar" | "chain";
 
+export interface NowPlayingTrack {
+  trackId: string;
+  playing: boolean;
+}
+
 export interface RemotePlayback {
   deviceId: string;
   confirmed: boolean;

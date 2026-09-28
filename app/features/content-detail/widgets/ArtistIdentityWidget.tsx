@@ -12,7 +12,7 @@ import type { ArtistIdentityWidgetProps, FactItem } from "../types";
 function ArtistIdentityWidgetComponent({ catalogArtistId, artistName }: ArtistIdentityWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useArtistIdentity({ catalogArtistId, artistName });
-  const { data: discography } = useArtistDiscography({ catalogArtistId });
+  const { data: discography } = useArtistDiscography({ catalogArtistId, artistName });
   const albumsInLibrary = countAlbumsInLibrary(discography);
 
   const facts: FactItem[] = [

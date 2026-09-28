@@ -26,24 +26,25 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-const PLAYING = { plex: true, navidrome: true, jellyfin: false };
+const CONNECTED = { plex: true, navidrome: true, jellyfin: false };
 
 describe("PlaybackOrderCard", () => {
-  it("lists the library first, then every server in the stored order, marking one that cannot play", () => {
-    render(<PlaybackOrderCard order={["navidrome", "plex", "jellyfin"]} playing={PLAYING} />);
+  it("lists the library first, then every server in the stored order, marking one that is not connected", () => {
+    render(<PlaybackOrderCard order={["navidrome", "plex", "jellyfin"]} connected={CONNECTED} />);
 
     const rows = screen.getAllByRole("listitem").map((row) => row.textContent);
     expect(rows[0]).toContain(copy.local);
-    expect(rows.slice(1).map((row) => row?.replace(copy.notPlaying, "").slice(1))).toEqual([
+    expect(rows.slice(1).map((row) => row?.replace(copy.notConnected, "").slice(1))).toEqual([
       "Navidrome",
       "Plex",
       "Jellyfin",
     ]);
-    expect(rows[3]).toContain(copy.notPlaying);
+    expect(rows[1]).not.toContain(copy.notConnected);
+    expect(rows[3]).toContain(copy.notConnected);
   });
 
   it("saves the whole order when a server moves", async () => {
-    render(<PlaybackOrderCard order={["plex", "navidrome", "jellyfin"]} playing={PLAYING} />);
+    render(<PlaybackOrderCard order={["plex", "navidrome", "jellyfin"]} connected={CONNECTED} />);
 
     await userEvent.click(screen.getByRole("button", { name: "Move Navidrome up" }));
     expect(update.mutate).toHaveBeenCalledWith({ order: ["navidrome", "plex", "jellyfin"] });
@@ -53,7 +54,7 @@ describe("PlaybackOrderCard", () => {
   });
 
   it("cannot move the first server up or the last one down", () => {
-    render(<PlaybackOrderCard order={["plex", "navidrome", "jellyfin"]} playing={PLAYING} />);
+    render(<PlaybackOrderCard order={["plex", "navidrome", "jellyfin"]} connected={CONNECTED} />);
 
     expect(screen.getByRole("button", { name: "Move Plex up" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Move Jellyfin down" })).toBeDisabled();

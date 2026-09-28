@@ -97,7 +97,7 @@
   },
   "PLAYLIST_TRACK_IN_FLIGHT": {
     "title": "Piste en cours de téléchargement",
-    "description": "Seules les pistes terminées ou en échec peuvent être retirées d'une playlist."
+    "description": "Attendez qu'elle se termine, ou annulez-la, avant de la retirer de la playlist."
   },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "Synchronisation impossible",

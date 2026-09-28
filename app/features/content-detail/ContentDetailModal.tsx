@@ -13,6 +13,7 @@ import { DetailMiniHeader } from "./components/DetailMiniHeader";
 import { PlaylistDetailBody } from "./components/PlaylistDetailBody";
 import { ContentDetailActionsProvider } from "./ContentDetailActionsContext";
 import { MINI_HEADER_SCROLL_THRESHOLD } from "./constants";
+import { showsInLibraryPill } from "./helpers";
 import { useContentDetail } from "./hooks/useContentDetail";
 import { backBar, modalContainer, modalShell } from "./styles";
 import type { ContentDetailModalProps } from "./types";
@@ -21,7 +22,7 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
   const { t } = useTranslation("contentDetail");
   const { current, previous, canGoBack, navigateTo, goBack, handleOpenChange } = useContentDetail({ open, target });
   const pathname = usePathname();
-  const isLibraryRoute = pathname.startsWith("/library");
+  const showInLibraryPill = showsInLibraryPill(pathname);
   const shellRef = useRef<HTMLDivElement | null>(null);
   const [miniVisible, setMiniVisible] = useState(false);
 
@@ -94,14 +95,15 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
                 key={current.id}
                 target={current}
                 onClose={() => handleOpenChange(false, onClose)}
-                showInLibraryPill={!isLibraryRoute}
+                onNavigate={navigateTo}
+                showInLibraryPill={showInLibraryPill}
               />
             ) : (
               <AlbumDetailBody
                 key={current.id}
                 target={current}
                 onNavigate={navigateTo}
-                showInLibraryPill={!isLibraryRoute}
+                showInLibraryPill={showInLibraryPill}
               />
             )}
           </div>

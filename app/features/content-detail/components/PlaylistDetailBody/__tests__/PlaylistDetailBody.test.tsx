@@ -23,9 +23,12 @@ vi.mock("@hooks/api", () => ({
   useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
+const resolveArtistMock = vi.fn();
+
 vi.mock("@hooks/api/queries/content-detail", () => ({
   usePlaylistDetail: (args: { playlistId: string; enabled?: boolean }) => usePlaylistDetailMock(args),
   useCatalogPlaylistTracks: () => ({ data: undefined, isLoading: false }),
+  useResolveArtistFetcher: () => resolveArtistMock,
 }));
 
 vi.mock("@hooks/api/mutations/playlists/useRemoveTracksFromPlaylist", () => ({
@@ -83,6 +86,7 @@ function playlistDetail(overrides?: Partial<Record<string, unknown>>) {
       name: "Road Trip",
       cover: null,
       sourceProvider: null,
+      origin: { kind: "created" },
       syncEnabled: false,
       totalTracks: 2,
       libraryTrackCount: 1,
@@ -132,7 +136,9 @@ describe("PlaylistDetailBody editing", () => {
   it("renames in place from the kebab and submits the new name via the mutation", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
     const onClose = vi.fn();
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={onClose} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={onClose} onNavigate={vi.fn()} />
+    );
 
     expect(screen.queryByLabelText("Playlist name")).not.toBeInTheDocument();
 
@@ -149,7 +155,9 @@ describe("PlaylistDetailBody editing", () => {
 
   it("does not render a rename dialog in the detail modal", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
     await user.click(screen.getByRole("menuitem", { name: "Rename" }));
@@ -159,7 +167,9 @@ describe("PlaylistDetailBody editing", () => {
 
   it("opens the delete confirm dialog from the kebab", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
     await user.click(screen.getByRole("menuitem", { name: "Delete" }));
@@ -169,7 +179,9 @@ describe("PlaylistDetailBody editing", () => {
 
   it("syncs the playlist to the server picked in the Sync to submenu", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
     screen.getByRole("menuitem", { name: "Sync to..." }).focus();
@@ -182,7 +194,9 @@ describe("PlaylistDetailBody editing", () => {
 
   it("does not offer to sync a playlist back to the server it came from", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "navidrome", syncEnabled: false }));
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
     screen.getByRole("menuitem", { name: "Sync to..." }).focus();
@@ -194,14 +208,16 @@ describe("PlaylistDetailBody editing", () => {
 
   it("only marks complete/failed rows selectable for removal", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
     expect(screen.getAllByRole("checkbox")).toHaveLength(2);
   });
 
   it("hides the rename menu item when imported and syncing", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: true }));
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
 
@@ -212,7 +228,9 @@ describe("PlaylistDetailBody editing", () => {
 
   it("re-enables the rename menu item when an imported playlist has sync off", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     expect(screen.getByRole("switch")).toBeInTheDocument();
 
@@ -221,24 +239,37 @@ describe("PlaylistDetailBody editing", () => {
     expect(screen.getByRole("menuitem", { name: "Rename" })).toBeInTheDocument();
   });
 
-  it("shows the created-here origin subtitle for a playlist made in Synthseek", () => {
+  it("says a playlist made in Synthseek was created here, in place of a track count", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByText("Created here")).toBeInTheDocument();
+    expect(screen.getByText("Created in Synthseek")).toBeInTheDocument();
     expect(screen.queryByText("2 tracks")).not.toBeInTheDocument();
   });
 
   it("shows the capitalized imported-provider origin subtitle for an imported library playlist", () => {
-    usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify" }));
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    usePlaylistDetailMock.mockReturnValue(
+      playlistDetail({ sourceProvider: "spotify", origin: { kind: "imported", provider: "spotify" } })
+    );
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
     expect(screen.getByText("Imported: Spotify")).toBeInTheDocument();
   });
 
+  it.each([
+    [{ kind: "catalog", provider: "deezer" }, "Requested from Deezer"],
+    [{ kind: "discovery", service: "listenbrainz" }, "From ListenBrainz"],
+    [{ kind: "file" }, "Imported from a file"],
+  ])("says where a playlist without a library source came from (%j)", (origin, label) => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail({ origin }));
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+
+    expect(screen.getByText(label)).toBeInTheDocument();
+  });
+
   it("keeps the track-count subtitle for a catalog playlist", () => {
     usePlaylistDetailMock.mockReturnValue({ data: undefined });
-    renderWithProviders(<PlaylistDetailBody target={catalogTarget()} onClose={vi.fn()} />);
+    renderWithProviders(<PlaylistDetailBody target={catalogTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
     expect(screen.getByText("0 tracks")).toBeInTheDocument();
     expect(screen.queryByText("Local")).not.toBeInTheDocument();
@@ -246,7 +277,7 @@ describe("PlaylistDetailBody editing", () => {
 
   it("renders the keep-in-sync control as a sync icon plus a switch for an imported playlist", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
     const toggle = screen.getByRole("switch", { name: "Keep in sync" });
     expect(toggle).toBeInTheDocument();
@@ -256,14 +287,16 @@ describe("PlaylistDetailBody editing", () => {
 
   it("does not render the keep-in-sync switch for a local library playlist", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
     expect(screen.queryByRole("switch")).not.toBeInTheDocument();
   });
 
   it("toggles sync via the keep-in-sync switch on an imported playlist", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByRole("switch"));
 
@@ -273,14 +306,16 @@ describe("PlaylistDetailBody editing", () => {
   it("disables the keep-in-sync switch while the sync mutation is pending", () => {
     setSyncPending = true;
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
 
     expect(screen.getByRole("switch")).toBeDisabled();
   });
 
   it("clears the track selection when the keep-in-sync switch flips", async () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail({ sourceProvider: "spotify", syncEnabled: false }));
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByLabelText("Select all"));
     expect(screen.getByText("selected")).toBeInTheDocument();
@@ -293,12 +328,15 @@ describe("PlaylistDetailBody editing", () => {
   it("shows the already-in-library pill by default but hides it when showInLibraryPill is false", () => {
     usePlaylistDetailMock.mockReturnValue(playlistDetail());
     const { rerender } = renderWithProviders(
-      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} showInLibraryPill />
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} showInLibraryPill />
     );
-    expect(screen.getByText("Already in library")).toBeInTheDocument();
-
-    rerender(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} showInLibraryPill={false} />);
+    expect(screen.getByRole("img", { name: "Already in library" })).toBeInTheDocument();
     expect(screen.queryByText("Already in library")).not.toBeInTheDocument();
+
+    rerender(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} showInLibraryPill={false} />
+    );
+    expect(screen.queryByRole("img", { name: "Already in library" })).not.toBeInTheDocument();
   });
 
   it("confirms before removing the selected tracks in bulk", async () => {
@@ -336,7 +374,9 @@ describe("PlaylistDetailBody editing", () => {
         ],
       })
     );
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByLabelText("Select all"));
     await user.click(screen.getByRole("button", { name: "Remove 2" }));
@@ -387,7 +427,9 @@ describe("PlaylistDetailBody editing", () => {
         ],
       })
     );
-    const { user } = renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} />);
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
 
     await user.click(screen.getByRole("button", { name: "Filter and sort" }));
     await user.click(screen.getByRole("menuitemradio", { name: "Name" }));
@@ -400,5 +442,64 @@ describe("PlaylistDetailBody editing", () => {
 
     const descTitles = screen.getAllByText(/Apple|Banana/).map((node) => node.textContent);
     expect(descTitles).toEqual(["Banana", "Apple"]);
+  });
+});
+
+describe("PlaylistDetailBody artist links", () => {
+  function rowBy(artistExternalId: string | null) {
+    return playlistDetail({
+      tracks: [
+        {
+          externalId: "t1",
+          title: "Digital Love",
+          artist: "Daft Punk",
+          artistExternalId,
+          durationMs: 1000,
+          trackNumber: 1,
+          isrc: null,
+          plays: null,
+          inLibrary: true,
+          requestId: "r1",
+          slskd_request_id: null,
+          status: "complete",
+          failureReason: null,
+        },
+      ],
+    });
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("opens the artist in the same modal when the row carries its catalog id", async () => {
+    usePlaylistDetailMock.mockReturnValue(rowBy("27"));
+    const onNavigate = vi.fn();
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={onNavigate} />
+    );
+
+    await user.click(screen.getByRole("button", { name: "View artist Daft Punk" }));
+
+    expect(onNavigate).toHaveBeenCalledWith(expect.objectContaining({ mode: "artist", id: "27", name: "Daft Punk" }));
+    expect(resolveArtistMock).not.toHaveBeenCalled();
+  });
+
+  it("finds the artist by name first when a library row has no catalog id", async () => {
+    usePlaylistDetailMock.mockReturnValue(rowBy(null));
+    resolveArtistMock.mockResolvedValue({ catalogArtistId: "27", name: "Daft Punk", image: "/dp.jpg" });
+    const onNavigate = vi.fn();
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={onNavigate} />
+    );
+
+    await user.click(screen.getByRole("button", { name: "View artist Daft Punk" }));
+
+    await vi.waitFor(() =>
+      expect(onNavigate).toHaveBeenCalledWith(
+        expect.objectContaining({ mode: "artist", id: "27", name: "Daft Punk", cover: "/dp.jpg" })
+      )
+    );
+    expect(resolveArtistMock).toHaveBeenCalledWith("Daft Punk");
   });
 });

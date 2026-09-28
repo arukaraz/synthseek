@@ -18,6 +18,7 @@ import {
   useLidarrAvailable,
   usePlaylistRequest,
   useRequest,
+  useRequestTracks,
 } from "@hooks/api";
 import { Input } from "@components/ui/Input";
 import { Spinner } from "@components/ui/Spinner";
@@ -168,7 +169,11 @@ export function ConfigRequestModal({
     return content as MusicTrack[];
   }, [preloadedTracks, contentResponse, item?.type]);
 
-  const metadata = useMemo(() => extractItemMetadata(item, parentAlbum), [item, parentAlbum]);
+  const isArtistTracksMode = mode === "artist-tracks";
+  const metadata = useMemo(() => {
+    const base = extractItemMetadata(item, parentAlbum);
+    return isArtistTracksMode ? { ...base, artist: t("config.header.topTracks"), totalTracks: trackList.length } : base;
+  }, [item, parentAlbum, isArtistTracksMode, trackList.length, t]);
 
   const bitrateGridOptions: Option<number>[] = BITRATE_OPTIONS.map((opt) => ({
     value: opt.value,
@@ -211,12 +216,14 @@ export function ConfigRequestModal({
   const downloadMutation = useRequest();
   const downloadAlbumMutation = useBatchRequest();
   const downloadPlaylistMutation = usePlaylistRequest();
+  const downloadTracksMutation = useRequestTracks(metadata.name);
   const delegateArtistMutation = useDelegateArtist();
 
   const isSubmitting =
     downloadMutation.isPending ||
     downloadAlbumMutation.isPending ||
     downloadPlaylistMutation.isPending ||
+    downloadTracksMutation.isPending ||
     delegateArtistMutation.isPending;
   const isLoadingData = !isLidarrArtistMode && needsTrackList && isLoadingTracks;
   const isBusy = isSubmitting || isLoadingData;
@@ -272,6 +279,16 @@ export function ConfigRequestModal({
 
     if (trackList.length === 0) {
       toast.error(t("config.errors.fetchFailed", { type: titleCase(item.type) }));
+      return;
+    }
+
+    if (isArtistTracksMode) {
+      downloadTracksMutation.mutate({
+        tracks: trackList.map((track) => ({ track: mapTrackFields(track), album_external_id: track.album.id })),
+        config,
+      });
+      onSuccess?.(itemName);
+      onClose();
       return;
     }
 

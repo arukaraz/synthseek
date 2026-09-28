@@ -389,6 +389,25 @@ describe("the full stage", () => {
     expect(within(dialog).getByText("Daft Punk")).toBeInTheDocument();
   });
 
+  it("opens the playback settings as a modal over the stage", () => {
+    const { rerender, actions, view } = renderPlayer({ fullscreen: true });
+
+    rerender(<Player view={{ ...view, settingsOpen: true }} actions={actions} />);
+
+    const settings = screen.getByRole("dialog", { name: enPlayer.settings.title });
+    expect(
+      within(settings).getByRole("button", { name: enPlayer.settings.close }).querySelector("svg.lucide-x")
+    ).not.toBeNull();
+  });
+
+  it("keeps the docked settings panel when the stage is not open", () => {
+    renderPlayer({ settingsOpen: true });
+
+    expect(
+      screen.getByRole("button", { name: enPlayer.settings.close }).querySelector("svg.lucide-chevron-down")
+    ).not.toBeNull();
+  });
+
   it("spells out what is being streamed and what the server is doing", () => {
     renderPlayer({ fullscreen: true });
 

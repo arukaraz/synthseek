@@ -53,6 +53,7 @@ export function LidarrCard({ initial }: LidarrCardProps) {
   return (
     <SettingsCard
       title={t("lidarr.title")}
+      optional
       description={t("lidarr.description")}
       trailing={
         status.data ? (

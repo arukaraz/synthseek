@@ -2,8 +2,15 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import "@test/mocks/next.mock";
 import enContentDetail from "@modules/i18n/messages/en/contentDetail.json";
+
+const navigation = vi.hoisted(() => ({ pathname: "/" }));
+
+vi.mock("next/navigation", () => ({ usePathname: () => navigation.pathname }));
+
+vi.mock("next/image", () => ({
+  default: ({ src, alt }: { src: string; alt: string }) => <span data-testid="image" data-src={src} aria-label={alt} />,
+}));
 
 import { MINI_HEADER_SCROLL_THRESHOLD } from "../constants";
 import type { ContentDetailActions, DetailTarget } from "../types";
@@ -79,6 +86,7 @@ function actions(): ContentDetailActions {
     requestArtist: vi.fn(),
     requestTrack: vi.fn(),
     requestPlaylist: vi.fn(),
+    requestTopTracks: vi.fn(),
   };
 }
 
@@ -105,6 +113,25 @@ beforeEach(() => {
   api.album = undefined;
   api.playlist = undefined;
   bodies.navigate = null;
+  navigation.pathname = "/";
+});
+
+describe("the already-in-library badge", () => {
+  it.each(["/", "/search"])("is offered where music is discovered (%s)", (pathname) => {
+    navigation.pathname = pathname;
+
+    renderModal();
+
+    expect(screen.getByTestId("album-body")).toHaveAttribute("data-library-pill", "true");
+  });
+
+  it.each(["/library", "/requests"])("is withheld where the user already sees what they have (%s)", (pathname) => {
+    navigation.pathname = pathname;
+
+    renderModal();
+
+    expect(screen.getByTestId("album-body")).toHaveAttribute("data-library-pill", "false");
+  });
 });
 
 describe("what the modal shows", () => {

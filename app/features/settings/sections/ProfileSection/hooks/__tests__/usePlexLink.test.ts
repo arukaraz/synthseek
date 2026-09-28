@@ -28,6 +28,7 @@ const spies = vi.hoisted(() => {
     poll: vi.fn(),
     invalidateMe: vi.fn().mockResolvedValue(undefined),
     invalidateAccounts: vi.fn().mockResolvedValue(undefined),
+    invalidateLibrarySources: vi.fn(),
     success: vi.fn(),
     captured,
     pinPopupResult,
@@ -36,6 +37,10 @@ const spies = vi.hoisted(() => {
 
 vi.mock("@hooks/api/mutations/auth/usePlexLinkFlow", () => ({
   usePlexLinkFlow: () => ({ start: spies.startFlow, poll: spies.poll }),
+}));
+
+vi.mock("@hooks/api/queries/library-source/useInvalidateLibrarySources", () => ({
+  useInvalidateLibrarySources: () => spies.invalidateLibrarySources,
 }));
 
 vi.mock("@hooks/ui/usePlexPinPopup", () => ({
@@ -93,6 +98,7 @@ describe("usePlexLink", () => {
 
     expect(spies.invalidateMe).toHaveBeenCalledTimes(1);
     expect(spies.invalidateAccounts).toHaveBeenCalledTimes(1);
+    expect(spies.invalidateLibrarySources).toHaveBeenCalledTimes(1);
     expect(spies.success).toHaveBeenCalledWith(
       enSettings.profile.connected.plex.linkedAs.replace("{{username}}", "alice")
     );

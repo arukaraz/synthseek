@@ -25,15 +25,22 @@ import { catalogPlaylistTracks, computeRequestState, deriveTrackStatusCounts, is
 import { DetailHero, PlaylistSyncToggle } from "../DetailHero";
 import { DetailEmpty, DetailSection } from "../DetailSection";
 import { Tracklist } from "../Tracklist";
-import { modalLayout, modalMain, modalScrollArea, selectAllControl } from "../../styles";
+import { useStableTracklistOrder } from "../../hooks/useStableTracklistOrder";
+import { useTrackArtistNavigation } from "../../hooks/useTrackArtistNavigation";
+import { modalLayout, modalMain, modalScrollArea, selectAllControl, tracklistControls } from "../../styles";
 import { DEFAULT_SORT_KEY } from "./constants";
-import { sortTracklist } from "./helpers";
 import { TracklistSort } from "./TracklistSort";
 import type { PlaylistDetailBodyProps, SortDirection, TracklistSortKey } from "./types";
 
-function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true }: PlaylistDetailBodyProps) {
+function PlaylistDetailBodyComponent({
+  target,
+  onClose,
+  onNavigate,
+  showInLibraryPill = true,
+}: PlaylistDetailBodyProps) {
   const { t } = useTranslation("contentDetail");
   const { t: tLibrary } = useTranslation("library");
+  const openTrackArtist = useTrackArtistNavigation(onNavigate);
   const source = target.playlistSource ?? (target.preloadedTracks ? "preloaded" : "library");
   const isPreloaded = source === "preloaded";
   const isLibrary = source === "library";
@@ -77,19 +84,15 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
     [isPreloaded, isCatalog, target.preloadedTracks, catalogTracks, playlist?.tracks]
   );
 
-  const sortedTracks = useMemo(
-    () => sortTracklist(displayTracks, sortKey, direction),
-    [displayTracks, sortKey, direction]
-  );
+  const sortedTracks = useStableTracklistOrder(displayTracks, sortKey, direction);
 
   const totalTracks = isLibrary ? (playlist?.totalTracks ?? 0) : displayTracks.length;
-  const hasMeta = isLibrary ? !!playlist : true;
   const sourceProvider = playlist?.sourceProvider ?? null;
-  const subtitle = !hasMeta
-    ? null
-    : isLibrary
-      ? playlistOriginLabel(sourceProvider, tLibrary, { withProvider: true })
-      : t("playlistTrackCount", { count: totalTracks });
+  const subtitle = !isLibrary
+    ? t("playlistTrackCount", { count: totalTracks })
+    : playlist
+      ? playlistOriginLabel(playlist.origin, tLibrary, { withProvider: true })
+      : null;
   const counts = useMemo(() => deriveTrackStatusCounts(displayTracks), [displayTracks]);
   const requestState = isLibrary
     ? computeRequestState({
@@ -255,7 +258,7 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
             skeletonHeight="h-72"
             count={tracklistCount}
             trailingSlot={
-              <div className="flex items-center gap-2">
+              <div className={tracklistControls()}>
                 {displayTracks.length > 1 ? (
                   <TracklistSort
                     sortKey={sortKey}
@@ -286,6 +289,7 @@ function PlaylistDetailBodyComponent({ target, onClose, showInLibraryPill = true
                 onSelectTrack={handleSelectTrack}
                 onPreviewHover={trackRow}
                 previewTone={previewToneFor}
+                onArtistNavigate={openTrackArtist}
               />
             ) : (
               <DetailEmpty message={t("empty.tracklist")} />

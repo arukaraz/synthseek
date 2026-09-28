@@ -10,6 +10,7 @@ import { PlayerModeMenu } from "./PlayerModeMenu";
 import { PlayerStage } from "./PlayerStage";
 import { QueueMenu } from "./QueueMenu";
 import { SettingsMenu } from "./SettingsMenu";
+import { SettingsModal } from "./SettingsModal";
 import { SignalChain } from "./SignalChain";
 import { usePlayerPlacement } from "./useHeaderSlot";
 import { headerPlayer, playerDock, playerRoot } from "./styles";
@@ -36,14 +37,9 @@ export function Player({ view, actions }: PlayerProps) {
             hanging={hanging}
           />
         ) : null}
-        {view.settingsOpen ? (
-          <SettingsMenu
-            view={view}
-            actions={actions}
-            chain={anchorToChain}
-            anchored={view.fullscreen}
-            hanging={hanging}
-          />
+        {view.settingsOpen && view.fullscreen ? <SettingsModal view={view} actions={actions} /> : null}
+        {view.settingsOpen && !view.fullscreen ? (
+          <SettingsMenu view={view} actions={actions} chain={anchorToChain} hanging={hanging} />
         ) : null}
         {view.modesOpen ? <PlayerModeMenu view={view} actions={actions} chain={anchorToChain} /> : null}
         {view.queueOpen && !view.fullscreen ? (

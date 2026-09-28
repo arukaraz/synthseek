@@ -8,6 +8,7 @@ import enContentDetail from "@modules/i18n/messages/en/contentDetail.json";
 interface DiscographyAlbum {
   externalId: string;
   title: string;
+  releaseYear: number | null;
   image: string | null;
   inLibrary: boolean;
   libraryTrackCount: number;
@@ -40,8 +41,8 @@ import { ArtistDiscographyWidget } from "../ArtistDiscographyWidget";
 import { ArtistSimilarWidget } from "../ArtistSimilarWidget";
 import { MoreFromArtistWidget } from "../MoreFromArtistWidget";
 
-function album(externalId: string, title: string): DiscographyAlbum {
-  return { externalId, title, image: null, inLibrary: false, libraryTrackCount: 0, totalTracks: 10 };
+function album(externalId: string, title: string, releaseYear: number | null = 2001): DiscographyAlbum {
+  return { externalId, title, releaseYear, image: null, inLibrary: false, libraryTrackCount: 0, totalTracks: 10 };
 }
 
 beforeEach(() => {
@@ -74,6 +75,25 @@ describe("the discography", () => {
     renderDiscography();
 
     expect(screen.getByText("Discovery")).toBeInTheDocument();
+  });
+
+  it("gives each release its year and its kind under the title", () => {
+    api.discography = {
+      groups: [{ recordType: "compilation", albums: [album("c1", "The Collection", 2010), album("c2", "Hits", null)] }],
+    };
+
+    renderDiscography();
+
+    expect(screen.getByText("2010 • Compilation")).toBeInTheDocument();
+    expect(screen.getByText("Compilation")).toBeInTheDocument();
+  });
+
+  it("asks for the discography under the artist's name as well as its id", () => {
+    api.discography = { groups: [] };
+
+    renderDiscography();
+
+    expect(api.discographyArgs).toHaveBeenCalledWith({ catalogArtistId: "artist-1", artistName: "Daft Punk" });
   });
 
   it("offers no tabs when the artist has only one kind of release", () => {

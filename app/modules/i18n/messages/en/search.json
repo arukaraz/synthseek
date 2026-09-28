@@ -55,7 +55,8 @@
     "dialogDescription": "Configure download quality settings for {{name}}",
     "header": {
       "trackCount_one": "{{count}} track",
-      "trackCount_other": "{{count}} tracks"
+      "trackCount_other": "{{count}} tracks",
+      "topTracks": "Top tracks"
     },
     "sections": {
       "quality": "Quality Settings",

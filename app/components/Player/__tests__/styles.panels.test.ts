@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { modalCenterContainer, popoverLayer } from "@components/ui/styles";
 
-import { PANEL_WIDTH_PX, SETTINGS_PANEL_WIDTH_PX } from "../constants";
-import { panelAnchor, panelSurface, stage } from "../styles";
+import { PANEL_WIDTH_PX } from "../constants";
+import { panelAnchor, panelSurface, settingsModal, settingsModalOverlay, stage } from "../styles";
 
 function layerOf(classes: string): number {
   const layer = classes.split(" ").find((token) => token.startsWith("z-"));
@@ -15,9 +15,16 @@ describe("the anchored panel widths", () => {
   it("clamps the devices panel to the same width the class paints it at", () => {
     expect(panelAnchor({ width: "devices" })).toContain(`sm:w-[${PANEL_WIDTH_PX}px]`);
   });
+});
 
-  it("clamps the playback settings panel to the same width the class paints it at", () => {
-    expect(panelAnchor({ width: "settings" })).toContain(`sm:w-[${SETTINGS_PANEL_WIDTH_PX}px]`);
+describe("the playback settings modal on the full screen stage", () => {
+  it("covers the stage, backdrop and all", () => {
+    expect(layerOf(settingsModal())).toBeGreaterThan(layerOf(stage()));
+    expect(layerOf(settingsModalOverlay())).toBeGreaterThan(layerOf(stage()));
+  });
+
+  it("still lets a menu opened inside it, the equalizer presets, paint above it", () => {
+    expect(layerOf(popoverLayer)).toBeGreaterThan(layerOf(settingsModal()));
   });
 });
 

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { RECORD_TYPE_LABEL_KEY } from "../components/Discography/constants";
 import { Discography } from "../components/Discography";
-import { orderedGroups } from "../components/Discography/helpers";
+import { orderedGroups, releaseMeta } from "../components/Discography/helpers";
 import type { DiscographyGroup, DiscographyRecordType } from "../components/Discography/types";
 import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { albumTarget } from "../helpers";
@@ -20,14 +20,14 @@ function ArtistDiscographyWidgetComponent({
   onSelectAlbum,
 }: ArtistDiscographyWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useArtistDiscography({ catalogArtistId });
+  const { data, isLoading } = useArtistDiscography({ catalogArtistId, artistName });
 
   const groups: DiscographyGroup[] = (data?.groups ?? []).map((group) => ({
     recordType: group.recordType,
     albums: group.albums.map((album) => ({
       id: album.externalId,
       title: album.title,
-      subtitle: null,
+      subtitle: releaseMeta(t, album.releaseYear, group.recordType),
       image: album.image,
       inLibrary: album.inLibrary,
       libraryTrackCount: album.libraryTrackCount,

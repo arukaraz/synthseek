@@ -26,6 +26,7 @@ export { useLibraryPlaylists } from "./queries/library/useLibraryPlaylists";
 export { useTrackLyrics } from "./queries/library/useTrackLyrics";
 export { useLibraryCounts } from "./queries/library/useLibraryCounts";
 export { usePlayableTracksFetcher } from "./queries/library/usePlayableTracksFetcher";
+export { useHasPlayableTracks } from "./queries/library/useHasPlayableTracks";
 export {
   useActivePlayback,
   useFavoriteTracks,
@@ -77,6 +78,7 @@ export { useDiscardHeldImport } from "./mutations/review/useDiscardHeldImport";
 
 export { useRequest } from "./mutations/requests/useRequest";
 export { useBatchRequest } from "./mutations/requests/useBatchRequest";
+export { useRequestTracks } from "./mutations/requests/useRequestTracks";
 export { usePlaylistRequest } from "./mutations/requests/usePlaylistRequest";
 export { useDeleteAlbum } from "./mutations/requests/useDeleteAlbum";
 export { useDeletePlaylist } from "./mutations/requests/useDeletePlaylist";

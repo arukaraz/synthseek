@@ -7,6 +7,7 @@
   "play": "Reproducir",
   "playAll": "Reproducir todo lo que tenemos de {{name}}",
   "startRadio": "Empezar radio",
+  "startRadioInfo": "Reproduce una mezcla de canciones parecidas que ya tienes en tu biblioteca.",
   "startRadioFrom": "Empezar una radio a partir de {{name}}",
   "viewArtist": "Ver artista {{name}}",
   "resolveArtistFailed": "No pudimos encontrar este artista.",
@@ -51,6 +52,15 @@
     "live": "En vivo",
     "compilation": "Recopilatorios"
   },
+  "recordTypeSingular": {
+    "album": "Álbum",
+    "ep": "EP",
+    "single": "Sencillo",
+    "live": "En vivo",
+    "compilation": "Recopilatorio"
+  },
+  "releaseMeta": "{{year}} • {{type}}",
+  "requestTopTracks": "Solicitar mejores pistas",
   "rail": {
     "prev": "Desplazar atras",
     "next": "Desplazar adelante"

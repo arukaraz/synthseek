@@ -27,7 +27,7 @@ Synthseek ships as a single Docker container that runs two processes: a web inte
 | Music catalog            | Where song, album, artist, and playlist metadata comes from. Deezer by default, with no API key and no account.             | Yes, built in                            |
 | AcoustID                 | Fingerprints the audio to prove a file is the recording you asked for.                                                      | Optional, free key, strongly recommended |
 | LRCLIB                   | Where song lyrics come from.                                                                                                | Optional, built in                       |
-| Plex                     | Gets told to rescan after an import, and receives your playlists.                                                           | Optional                                 |
+| Plex                     | Gets told to rescan after an import, receives your playlists, and plays tracks Synthseek has no file for.                   | Optional                                 |
 | Lidarr                   | An alternative target you can hand an artist or album to.                                                                   | Optional                                 |
 | Last.fm and ListenBrainz | Your listening history, the discovery mixes built from it, and where what you play is sent.                                 | Optional                                 |
 | SABnzbd                  | Your Usenet downloader. Synthseek hands it a release and collects the result.                                               | Optional, for Usenet downloads           |

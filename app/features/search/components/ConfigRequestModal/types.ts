@@ -121,7 +121,7 @@ export interface LidarrSelectProps<T extends string | number> {
 
 export type ArtistMonitorScopeOption = MonitorOption<ArtistMonitorScope>;
 
-export type ConfigRequestMode = "download" | "lidarr-artist";
+export type ConfigRequestMode = "download" | "lidarr-artist" | "artist-tracks";
 
 export interface ConfigRequestModalProps {
   isOpen: boolean;

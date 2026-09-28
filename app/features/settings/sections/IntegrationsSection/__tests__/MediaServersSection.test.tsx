@@ -9,17 +9,25 @@ import { createErrorQuery, createLoadingQuery, createMockQuery, type MockQueryRe
 interface SettingsData {
   connections: {
     plex: { url: string; token: string };
-    navidrome: { url: string; username: string; password: string; playback: boolean };
-    jellyfin: { url: string; apiKey: string; playback: boolean };
+    navidrome: { url: string; username: string; password: string };
+    jellyfin: { url: string; apiKey: string };
   };
-  engine: { plexBehavior: { playback: boolean }; playbackSources: { order: string[] } };
+  engine: { plexBehavior: { libraryScan: boolean; playlistSync: boolean }; playbackSources: { order: string[] } };
+  formatting: { plexPlaylistUsernameAffix: string; plexPlaylistUsernameSeparator: string };
 }
 
 let settingsQuery: MockQueryResult<SettingsData | undefined> = createMockQuery<SettingsData | undefined>(undefined);
 const orderCard = vi.fn();
+const plexCard = vi.fn();
 
 vi.mock("@hooks/api/queries/useSettings", () => ({
   useSettings: () => settingsQuery,
+}));
+vi.mock("../PlexIntegrationCard", () => ({
+  PlexIntegrationCard: (props: unknown) => {
+    plexCard(props);
+    return <div data-testid="plex-card" />;
+  },
 }));
 vi.mock("../NavidromeCard", () => ({ NavidromeCard: () => <div data-testid="navidrome-card" /> }));
 vi.mock("../JellyfinCard", () => ({ JellyfinCard: () => <div data-testid="jellyfin-card" /> }));
@@ -53,22 +61,29 @@ describe("MediaServersSection", () => {
     expect(screen.getByText(enSettings.common.loadFailed)).toBeInTheDocument();
   });
 
-  it("tells the order card which servers can play right now", () => {
+  it("holds the Plex card next to the other servers and tells the order card which of them are connected", () => {
+    const plexBehavior = { libraryScan: true, playlistSync: false };
+    const formatting = { plexPlaylistUsernameAffix: "suffix", plexPlaylistUsernameSeparator: " - " };
     settingsQuery = createMockQuery<SettingsData | undefined>({
       connections: {
         plex: { url: "http://plex:32400", token: "t" },
-        navidrome: { url: "http://navidrome:4533", username: "a", password: "p", playback: true },
-        jellyfin: { url: "", apiKey: "", playback: true },
+        navidrome: { url: "http://navidrome:4533", username: "a", password: "" },
+        jellyfin: { url: "http://jellyfin:8096", apiKey: "k" },
       },
-      engine: { plexBehavior: { playback: false }, playbackSources: { order: ["navidrome", "plex", "jellyfin"] } },
+      engine: { plexBehavior, playbackSources: { order: ["navidrome", "plex", "jellyfin"] } },
+      formatting,
     });
     render(<MediaServersSection />);
 
+    expect(screen.getByTestId("plex-card")).toBeInTheDocument();
     expect(screen.getByTestId("navidrome-card")).toBeInTheDocument();
     expect(screen.getByTestId("jellyfin-card")).toBeInTheDocument();
+    expect(plexCard).toHaveBeenCalledWith({
+      initial: { connection: { url: "http://plex:32400", token: "t" }, behavior: plexBehavior, naming: formatting },
+    });
     expect(orderCard).toHaveBeenCalledWith({
       order: ["navidrome", "plex", "jellyfin"],
-      playing: { plex: false, navidrome: true, jellyfin: false },
+      connected: { plex: true, navidrome: false, jellyfin: true },
     });
   });
 });

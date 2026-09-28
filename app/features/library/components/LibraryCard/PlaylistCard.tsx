@@ -29,7 +29,7 @@ export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
   const { t } = useTranslation("library");
   const { t: tDetail } = useTranslation("contentDetail");
   const tiles = mosaicTiles(item.images, item.image);
-  const origin = playlistOriginLabel(item.source_provider, t);
+  const origin = playlistOriginLabel(item.origin, t);
   const coverActions = cardCoverActionsFrom(onOpen, onPlay);
   const activates = !!onOpen && coverActions === null;
   const openLabel = activates ? tDetail("openDetail", { name: item.name }) : undefined;

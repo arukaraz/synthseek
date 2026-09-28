@@ -4,12 +4,17 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { DetailTarget } from "../../../types";
 
-const api = vi.hoisted(() => ({
-  identity: undefined as Record<string, unknown> | undefined,
-  stats: undefined as Record<string, unknown> | undefined,
-  lidarr: undefined as { available: boolean } | undefined,
-  statsArgs: vi.fn(),
-}));
+const api = vi.hoisted(() => {
+  const state: {
+    identity: Record<string, unknown> | undefined;
+    stats: Record<string, unknown> | undefined;
+    lidarr: { available: boolean } | undefined;
+    playable: boolean | undefined;
+  } = { identity: undefined, stats: undefined, lidarr: undefined, playable: undefined };
+  return { ...state, statsArgs: vi.fn() };
+});
+
+vi.mock("@hooks/api", () => ({ useHasPlayableTracks: () => ({ data: api.playable }) }));
 
 vi.mock("@hooks/api/queries/content-detail", () => ({
   useArtistIdentity: () => ({ data: api.identity }),
@@ -97,6 +102,7 @@ beforeEach(() => {
   api.identity = undefined;
   api.stats = undefined;
   api.lidarr = undefined;
+  api.playable = true;
   hero.props = null;
 });
 
@@ -189,6 +195,15 @@ describe("what the artist page offers", () => {
     await user.click(screen.getByRole("button", { name: "radio" }));
 
     expect(playback.startRadio).toHaveBeenCalledWith({ kind: "artist", artist: "Daft Punk" });
+  });
+
+  it("offers neither play nor radio while the library holds nothing playable by the artist", () => {
+    api.playable = false;
+
+    renderBody();
+
+    expect(hero.props?.onPlay).toBeUndefined();
+    expect(hero.props?.onStartRadio).toBeUndefined();
   });
 
   it("opens an album out of the discography in the same modal", async () => {

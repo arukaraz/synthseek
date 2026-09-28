@@ -45,10 +45,9 @@ const NAVIDROME = {
   url: " http://navidrome:4533 ",
   username: " ana ",
   password: "hunter2",
-  playback: false,
   playlistSync: false,
 };
-const JELLYFIN = { url: "http://jellyfin:8096 ", apiKey: "key", playback: false, playlistSync: false };
+const JELLYFIN = { url: "http://jellyfin:8096 ", apiKey: "key", playlistSync: false };
 
 describe("NavidromeCard", () => {
   it("tests the typed credentials and says what the server answered", async () => {
@@ -91,11 +90,21 @@ describe("NavidromeCard", () => {
     expect(screen.getByRole("button", { name: copy.test.action })).toBeDisabled();
   });
 
-  it("saves the playback switch with the connection, trimmed", async () => {
-    navidromeUpdate.mutateAsync.mockResolvedValue({ ok: true });
+  it("has no switch for playing from it, since connecting is what makes it a place to play from", () => {
     render(<NavidromeCard initial={NAVIDROME} />);
 
-    await userEvent.click(screen.getByRole("switch", { name: "Play from Navidrome" }));
+    expect(screen.getAllByRole("switch").map((control) => control.getAttribute("aria-label"))).toEqual([
+      "Sync playlists to Navidrome",
+    ]);
+  });
+
+  it("offers playlist sync once connected and saves it with the connection, trimmed", async () => {
+    navidromeUpdate.mutateAsync.mockResolvedValue({ ok: true });
+    render(<NavidromeCard initial={NAVIDROME} />);
+    const sync = screen.getByRole("switch", { name: "Sync playlists to Navidrome" });
+
+    expect(sync).toBeEnabled();
+    await userEvent.click(sync);
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() =>
@@ -103,36 +112,18 @@ describe("NavidromeCard", () => {
         url: "http://navidrome:4533",
         username: "ana",
         password: "hunter2",
-        playback: true,
-        playlistSync: false,
+        playlistSync: true,
       })
     );
   });
 
-  it("keeps playlist sync off until playing from the server is on, and says why", async () => {
-    navidromeUpdate.mutateAsync.mockResolvedValue({ ok: true });
-    render(<NavidromeCard initial={NAVIDROME} />);
+  it("keeps playlist sync off until every credential is filled in, and says why", () => {
+    render(<NavidromeCard initial={{ ...NAVIDROME, password: "", playlistSync: true }} />);
     const sync = screen.getByRole("switch", { name: "Sync playlists to Navidrome" });
 
     expect(sync).toBeDisabled();
-    expect(screen.getByText("Turn on playing from Navidrome first.")).toBeInTheDocument();
-
-    await userEvent.click(screen.getByRole("switch", { name: "Play from Navidrome" }));
-    expect(sync).toBeEnabled();
-    await userEvent.click(sync);
-    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
-
-    await waitFor(() =>
-      expect(navidromeUpdate.mutateAsync).toHaveBeenCalledWith(
-        expect.objectContaining({ playback: true, playlistSync: true })
-      )
-    );
-  });
-
-  it("shows playlist sync as off while playback is off, even when it was left on", () => {
-    render(<NavidromeCard initial={{ ...NAVIDROME, playlistSync: true }} />);
-
-    expect(screen.getByRole("switch", { name: "Sync playlists to Navidrome" })).not.toBeChecked();
+    expect(sync).not.toBeChecked();
+    expect(screen.getByText(copy.playlistSync.needsConnection.replace("{{server}}", "Navidrome"))).toBeInTheDocument();
   });
 });
 
@@ -147,34 +138,34 @@ describe("JellyfinCard", () => {
     expect(jellyfinTest.mutateAsync).toHaveBeenCalledWith({ url: "http://jellyfin:8096", apiKey: "key" });
   });
 
-  it("saves the playback switch with the connection, trimmed", async () => {
+  it("saves playlist sync with the connection, trimmed", async () => {
     jellyfinUpdate.mutateAsync.mockResolvedValue({ ok: true });
     render(<JellyfinCard initial={JELLYFIN} />);
 
-    await userEvent.click(screen.getByRole("switch", { name: "Play from Jellyfin" }));
+    await userEvent.click(screen.getByRole("switch", { name: "Sync playlists to Jellyfin" }));
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() =>
       expect(jellyfinUpdate.mutateAsync).toHaveBeenCalledWith({
         url: "http://jellyfin:8096",
         apiKey: "key",
-        playback: true,
-        playlistSync: false,
+        playlistSync: true,
       })
     );
   });
 
-  it("offers playlist sync once playing from Jellyfin is on", () => {
-    render(<JellyfinCard initial={{ ...JELLYFIN, playback: true, playlistSync: true }} />);
+  it("says what syncing does once connected", () => {
+    render(<JellyfinCard initial={{ ...JELLYFIN, playlistSync: true }} />);
     const sync = screen.getByRole("switch", { name: "Sync playlists to Jellyfin" });
 
     expect(sync).toBeEnabled();
     expect(sync).toBeChecked();
-    expect(screen.getByText(/created in their own Jellyfin account/)).toBeInTheDocument();
+    expect(screen.getByText(/in their own Jellyfin account/)).toBeInTheDocument();
   });
 
-  it("cannot test without a key", () => {
+  it("cannot test or sync without a key", () => {
     render(<JellyfinCard initial={{ ...JELLYFIN, apiKey: "" }} />);
     expect(screen.getByRole("button", { name: copy.test.action })).toBeDisabled();
+    expect(screen.getByRole("switch", { name: "Sync playlists to Jellyfin" })).toBeDisabled();
   });
 });

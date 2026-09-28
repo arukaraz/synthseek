@@ -8,6 +8,7 @@ import { emptyPanel, sectionGrid } from "../../styles";
 import { JellyfinCard } from "./JellyfinCard";
 import { NavidromeCard } from "./NavidromeCard";
 import { PlaybackOrderCard } from "./PlaybackOrderCard";
+import { PlexIntegrationCard } from "./PlexIntegrationCard";
 
 export function MediaServersSection() {
   const { t } = useTranslation("settings");
@@ -29,17 +30,21 @@ export function MediaServersSection() {
     );
   }
 
-  const playing = {
-    plex: data.engine.plexBehavior.playback && Boolean(data.connections.plex.url && data.connections.plex.token),
-    navidrome: data.connections.navidrome.playback && Boolean(data.connections.navidrome.url),
-    jellyfin: data.connections.jellyfin.playback && Boolean(data.connections.jellyfin.url),
+  const { plex, navidrome, jellyfin } = data.connections;
+  const connected = {
+    plex: Boolean(plex.url && plex.token),
+    navidrome: Boolean(navidrome.url && navidrome.username && navidrome.password),
+    jellyfin: Boolean(jellyfin.url && jellyfin.apiKey),
   };
 
   return (
     <div className={sectionGrid()}>
-      <NavidromeCard initial={data.connections.navidrome} />
-      <JellyfinCard initial={data.connections.jellyfin} />
-      <PlaybackOrderCard order={data.engine.playbackSources.order} playing={playing} />
+      <NavidromeCard initial={navidrome} />
+      <JellyfinCard initial={jellyfin} />
+      <PlexIntegrationCard
+        initial={{ connection: plex, behavior: data.engine.plexBehavior, naming: data.formatting }}
+      />
+      <PlaybackOrderCard order={data.engine.playbackSources.order} connected={connected} />
     </div>
   );
 }

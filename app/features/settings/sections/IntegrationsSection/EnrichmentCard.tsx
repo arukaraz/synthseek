@@ -47,6 +47,13 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
         <SettingsSecretInput value={draft.acoustidApiKey} onChange={(v) => setField("acoustidApiKey", v)} />
       </SettingsField>
 
+      <SettingsField
+        label={t("metadata.enrichment.songlinkKey.label")}
+        helper={t("metadata.enrichment.songlinkKey.helper")}
+      >
+        <SettingsSecretInput value={draft.songlinkApiKey} onChange={(v) => setField("songlinkApiKey", v)} />
+      </SettingsField>
+
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}

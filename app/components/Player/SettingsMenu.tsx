@@ -7,23 +7,15 @@ import { useTranslation } from "react-i18next";
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
 import { playerPanel, playerPanelFromTop } from "@utils/animations";
 
-import { AutoplaySection } from "./AutoplaySection";
-import { CompressorSection } from "./CompressorSection";
-import { ConversionSection } from "./ConversionSection";
-import { EqualizerSection } from "./EqualizerSection";
-import { LoudnessSection } from "./LoudnessSection";
-import { SourceSection } from "./SourceSection";
-import { TransitionSection } from "./TransitionSection";
-import { SETTINGS_PANEL_WIDTH_PX, SETTINGS_TOGGLE_SELECTOR } from "./constants";
+import { SETTINGS_TOGGLE_SELECTOR } from "./constants";
 import { labelled, panelClosesUpward, panelEdge, returnFocusTo } from "./helpers";
-import { anchorVars, iconButton, panelAnchor, panelSurface, queueHeader, queueTitle, settingsPanel } from "./styles";
-import { useAnchorRect } from "./useAnchorRect";
+import { SettingsSections } from "./SettingsSections";
+import { iconButton, panelAnchor, panelSurface, queueHeader, queueTitle, settingsPanel } from "./styles";
 import type { PlayerPanelProps } from "./types";
 
-export function SettingsMenu({ view, actions, chain, anchored = false, hanging = false }: PlayerPanelProps) {
+export function SettingsMenu({ view, actions, chain, hanging = false }: PlayerPanelProps) {
   const { t } = useTranslation("player");
-  const point = useAnchorRect(SETTINGS_TOGGLE_SELECTOR, anchored, SETTINGS_PANEL_WIDTH_PX);
-  const edge = panelEdge(anchored, point, hanging);
+  const edge = panelEdge(false, null, hanging);
 
   return (
     <Dialog
@@ -34,8 +26,7 @@ export function SettingsMenu({ view, actions, chain, anchored = false, hanging =
       }}
     >
       <DialogSurface
-        className={panelAnchor({ width: "settings", chain, anchored: anchored && point !== null })}
-        style={anchorVars(point)}
+        className={panelAnchor({ width: "settings", chain })}
         aria-describedby={undefined}
         onInteractOutside={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}
@@ -46,7 +37,7 @@ export function SettingsMenu({ view, actions, chain, anchored = false, hanging =
       >
         <motion.div
           className={panelSurface({ edge })}
-          variants={panelClosesUpward(edge, point) ? playerPanelFromTop : playerPanel}
+          variants={panelClosesUpward(edge, null) ? playerPanelFromTop : playerPanel}
           initial="hidden"
           animate="visible"
           exit="exit"
@@ -61,17 +52,11 @@ export function SettingsMenu({ view, actions, chain, anchored = false, hanging =
               onClick={actions.toggleSettings}
               {...labelled(t("settings.close"))}
             >
-              {panelClosesUpward(edge, point) ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+              {panelClosesUpward(edge, null) ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
             </button>
           </div>
           <div className={settingsPanel()}>
-            <SourceSection view={view} actions={actions} />
-            <EqualizerSection view={view} actions={actions} />
-            <CompressorSection view={view} actions={actions} />
-            <LoudnessSection view={view} actions={actions} />
-            <TransitionSection view={view} actions={actions} />
-            <AutoplaySection view={view} actions={actions} />
-            <ConversionSection view={view} actions={actions} />
+            <SettingsSections view={view} actions={actions} />
           </div>
         </motion.div>
       </DialogSurface>

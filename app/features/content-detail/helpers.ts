@@ -12,12 +12,19 @@ import {
 import type { inferRouterOutputs } from "@trpc/server";
 import i18n from "@locale";
 import { formatCalendarDate } from "@utils/formatters";
-import { isRequestedStatus } from "@utils/status-helpers";
+import { isRequestedStatus, isRetryableStatus } from "@utils/status-helpers";
 import { capitalize } from "@utils/string";
 import type { TFunction } from "i18next";
 import type { CSSProperties } from "react";
 
-import { ARTIST_TYPE_LABEL_KEYS, PLAYS_HUNDRED_K, PLAYS_MILLION } from "./constants";
+import {
+  ARTIST_TYPE_LABEL_KEYS,
+  DISCOVER_ROUTE,
+  MISSING_CATALOG_IDS,
+  PLAYS_HUNDRED_K,
+  PLAYS_MILLION,
+  SEARCH_ROUTE,
+} from "./constants";
 import type { TracklistTrack } from "./components/Tracklist/types";
 import type { HeroRequestState } from "./components/DetailHero/types";
 import type {
@@ -120,9 +127,15 @@ export function cardRingFillStyle(libraryTrackCount: number, totalTracks: number
   return { "--dock-ring-fill": `${Math.round(ratio * 360)}deg` } as CSSProperties;
 }
 
+export function unrequestedTracks(tracks: TracklistTrack[]): TracklistTrack[] {
+  return tracks.filter((track) => track.status === null || isRetryableStatus(track.status));
+}
+
 export function isRemovableTrack(track: TracklistTrack): track is TracklistTrack & { requestId: string } {
   return (
-    !!track.requestId && (track.status === RequestStatus.enum.complete || track.status === RequestStatus.enum.failed)
+    !!track.requestId &&
+    track.status !== null &&
+    (track.status === RequestStatus.enum.complete || isRetryableStatus(track.status))
   );
 }
 
@@ -226,11 +239,21 @@ export function playlistLibraryTarget(args: { id: string; name: string; cover: s
   };
 }
 
+export function showsInLibraryPill(pathname: string): boolean {
+  return pathname === DISCOVER_ROUTE || pathname.startsWith(SEARCH_ROUTE);
+}
+
+function catalogArtistId(track: MusicTrack): string | null {
+  const id = track.artists[0]?.id;
+  return id === undefined || MISSING_CATALOG_IDS.has(id) ? null : id;
+}
+
 export function preloadedTrack(track: MusicTrack): TracklistTrack {
   return {
     externalId: track.id,
     title: track.title,
     artist: track.artists[0]?.name || track.artist,
+    artistExternalId: catalogArtistId(track),
     durationMs: track.duration_ms,
     trackNumber: track.track_number,
     plays: null,

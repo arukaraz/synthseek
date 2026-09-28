@@ -1,7 +1,5 @@
-"use client";
-
-import { PlexSection } from "@features/settings/sections/IntegrationsSection/PlexSection";
+import { redirect } from "next/navigation";
 
 export default function PlexIntegrationPage() {
-  return <PlexSection />;
+  redirect("/settings/integrations/media-servers");
 }

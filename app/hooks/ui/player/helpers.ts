@@ -6,6 +6,7 @@ import type {
   PlayerTone,
   PlayerTrack,
 } from "@components/Player";
+import type { QueuePresence } from "@components/ui/QueueAddButton";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 import { playbackServerName } from "@utils/playback-servers";
 
@@ -29,6 +30,7 @@ import type {
   FailedSources,
   ListenProgress,
   ListeningConnectionStatus,
+  NowPlayingTrack,
   PlayerSessionState,
   QueueAddOutcome,
   RemotePlayback,
@@ -208,15 +210,41 @@ export function withoutQueueIndex(order: readonly number[], removed: number): nu
   return order.filter((index) => index !== removed).map((index) => (index > removed ? index - 1 : index));
 }
 
-export function visibleQueueIds(state: PlayerSessionState): Set<string> {
+export function upcomingQueueIds(state: PlayerSessionState): Set<string> {
   const ids = new Set<string>();
-  const current = state.queue[state.index];
-  if (current !== undefined) ids.add(current.id);
   for (const index of upcomingOrder(state)) {
     const track = state.queue[index];
     if (track !== undefined) ids.add(track.id);
   }
   return ids;
+}
+
+export function visibleQueueIds(state: PlayerSessionState): Set<string> {
+  const ids = upcomingQueueIds(state);
+  const current = state.queue[state.index];
+  if (current !== undefined) ids.add(current.id);
+  return ids;
+}
+
+export function upcomingPositionsOf(state: PlayerSessionState, trackId: string): number[] {
+  return upcomingOrder(state).filter((index) => state.queue[index]?.id === trackId);
+}
+
+export function nowPlayingOf(state: PlayerSessionState): NowPlayingTrack | null {
+  if (!state.started) return null;
+  const mirroring = isMirroring(state);
+  const track = mirroring ? (state.remote?.track ?? null) : (state.queue[state.index] ?? null);
+  if (track === null) return null;
+  return { trackId: track.id, playing: mirroring ? state.remote?.playing === true : state.playing };
+}
+
+export function queuePresenceOf(
+  trackId: string,
+  nowPlaying: NowPlayingTrack | null,
+  upcoming: ReadonlySet<string>
+): QueuePresence {
+  if (nowPlaying !== null && nowPlaying.trackId === trackId) return nowPlaying.playing ? "playing" : "paused";
+  return upcoming.has(trackId) ? "upcoming" : "absent";
 }
 
 export function withoutQueuePositions(

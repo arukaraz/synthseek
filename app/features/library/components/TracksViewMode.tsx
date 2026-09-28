@@ -4,7 +4,7 @@ import { useLibraryTracks, useLibraryTracksPrefetch } from "@hooks/api";
 import { useEffect, useMemo } from "react";
 
 import { useLibraryPlayback } from "../hooks/useLibraryPlayback";
-import { buildTracksInput } from "../helpers";
+import { buildTracksInput, preferredPlaybackSource } from "../helpers";
 import { buildTrackColumns } from "./LibraryTable/columns";
 import type { TracksViewModeProps } from "../types";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
@@ -38,7 +38,7 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
   const query = useLibraryTracks(input, controller.view === "tracks");
 
   const items = useMemo(() => query.data?.items ?? [], [query.data?.items]);
-  const { play, enqueue } = useLibraryPlayback(items);
+  const { play, enqueue } = useLibraryPlayback(items, preferredPlaybackSource(controller.filters));
   const columns = useMemo(() => buildTrackColumns({ onPlay: play, onEnqueue: enqueue }), [play, enqueue]);
 
   const total = query.data?.total ?? 0;

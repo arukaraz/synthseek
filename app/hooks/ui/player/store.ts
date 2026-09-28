@@ -72,6 +72,7 @@ import {
   resolveQueueAdditions,
   shuffledOrder,
   streamUrlFor,
+  upcomingPositionsOf,
   visibleQueueIds,
   withoutQueueIndex,
   withoutQueuePositions,
@@ -649,33 +650,6 @@ export const actions = {
     });
     return additions.outcome;
   },
-  playNext(tracks: readonly PlayerTrack[]): QueueAddOutcome {
-    const additions = resolveQueueAdditions(state, tracks);
-    if (additions.fresh.length === 0) return additions.outcome;
-
-    const pruned = withoutQueuePositions(state, additions.relocated);
-    if (state.queue.length === 0) {
-      armAt(additions.fresh, 0, 0, state.shuffle ? shuffledOrder(additions.fresh.length, 0) : []);
-      return additions.outcome;
-    }
-
-    if (state.shuffle) {
-      const queue = [...pruned.queue, ...additions.fresh];
-      const appended = additions.fresh.map((_, at) => pruned.queue.length + at);
-      const at = pruned.shuffleOrder.indexOf(pruned.index);
-      const order =
-        at < 0
-          ? [...pruned.shuffleOrder, ...appended]
-          : [...pruned.shuffleOrder.slice(0, at + 1), ...appended, ...pruned.shuffleOrder.slice(at + 1)];
-      publish({ queue, index: pruned.index, shuffleOrder: order });
-      return additions.outcome;
-    }
-
-    const insertAt = pruned.index + 1;
-    const queue = [...pruned.queue.slice(0, insertAt), ...additions.fresh, ...pruned.queue.slice(insertAt)];
-    publish({ queue, index: pruned.index, shuffleOrder: [] });
-    return additions.outcome;
-  },
   togglePlay(): void {
     const track = currentTrack();
     if (track === null) return;
@@ -706,6 +680,14 @@ export const actions = {
       shuffleOrder: state.shuffle ? withoutQueueIndex(state.shuffleOrder, index) : [],
       autoplayIds,
     });
+  },
+  removeTrackFromQueue(trackId: string): void {
+    const positions = upcomingPositionsOf(state, trackId);
+    if (positions.length === 0) return;
+    const autoplayIds = new Set(state.autoplayIds);
+    autoplayIds.delete(trackId);
+    const pruned = withoutQueuePositions(state, positions);
+    publish({ ...pruned, shuffleOrder: state.shuffle ? pruned.shuffleOrder : [], autoplayIds });
   },
   reorderQueue(tail: readonly PlayerTrack[]): void {
     if (tail.length === 0) return;

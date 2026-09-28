@@ -48,7 +48,7 @@ describe("synthesizeTrack", () => {
       name: "Un Verano Sin Ti",
       images: [{ url: "https://cover/1.jpg", width: null, height: null }],
     });
-    expect(track.artists).toEqual([{ id: "deezer:1:artist", name: "Bad Bunny" }]);
+    expect(track.artists).toEqual([{ id: "", name: "Bad Bunny" }]);
   });
 
   it("yields empty image arrays when albumImage is null", () => {

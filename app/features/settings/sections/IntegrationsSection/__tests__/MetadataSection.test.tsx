@@ -30,8 +30,8 @@ vi.mock("../EnrichmentCard", () => ({
   EnrichmentCard: () => <div data-testid="enrichment-card" />,
 }));
 
-vi.mock("../LibrarySourcesCard", () => ({
-  LibrarySourcesCard: () => <div data-testid="library-sources-card" />,
+vi.mock("../SpotifySourceCard", () => ({
+  SpotifySourceCard: () => <div data-testid="spotify-source-card" />,
 }));
 
 import { MetadataSection } from "../MetadataSection";
@@ -61,12 +61,17 @@ describe("MetadataSection", () => {
     expect(screen.getByText(enSettings.common.loadFailed)).toBeInTheDocument();
   });
 
-  it("always renders the discovery card and shows the admin cards for admins", () => {
+  it("always renders the discovery card and shows the enrichment card for admins", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<MetadataSection />);
     expect(screen.getByTestId("discovery-card")).toBeInTheDocument();
     expect(screen.getByTestId("enrichment-card")).toBeInTheDocument();
-    expect(screen.getByTestId("library-sources-card")).toBeInTheDocument();
+  });
+
+  it("leaves the library sources to their own tab", () => {
+    settingsQuery = createMockQuery<SettingsData | undefined>(data);
+    render(<MetadataSection />);
+    expect(screen.queryByTestId("spotify-source-card")).not.toBeInTheDocument();
   });
 
   it("hides the admin cards for non-admins but keeps the discovery card", () => {
@@ -75,6 +80,5 @@ describe("MetadataSection", () => {
     render(<MetadataSection />);
     expect(screen.getByTestId("discovery-card")).toBeInTheDocument();
     expect(screen.queryByTestId("enrichment-card")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("library-sources-card")).not.toBeInTheDocument();
   });
 });

@@ -13,7 +13,7 @@ import type { ArtistStatsWidgetProps, StatItem } from "../types";
 function ArtistStatsWidgetComponent({ catalogArtistId, artistName, mbid, slot }: ArtistStatsWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { data, isLoading } = useArtistStats({ artistName, mbid });
-  const { data: discography } = useArtistDiscography({ catalogArtistId, enabled: slot === "stats" });
+  const { data: discography } = useArtistDiscography({ catalogArtistId, artistName, enabled: slot === "stats" });
 
   if (slot === "about") {
     return (

@@ -59,6 +59,21 @@ describe("EnrichmentCard", () => {
     });
   });
 
+  it("carries the Songlink key and saves it with the rest of the enrichment settings", async () => {
+    render(<EnrichmentCard initial={initial} />);
+
+    expect(screen.getByText(enSettings.metadata.enrichment.songlinkKey.label)).toBeInTheDocument();
+    const secrets = document.querySelectorAll<HTMLInputElement>('input[type="password"]');
+    const songlinkInput = secrets[secrets.length - 1];
+    if (!songlinkInput) throw new Error("songlink secret input not found");
+    await userEvent.type(songlinkInput, "song-key");
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith({ ...initial, songlinkApiKey: "song-key" });
+    });
+  });
+
   it("reverts the draft when cancel is pressed", async () => {
     render(<EnrichmentCard initial={initial} />);
 

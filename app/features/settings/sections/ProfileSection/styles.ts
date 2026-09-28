@@ -8,15 +8,7 @@ export const accountMeta = cva("text-fg/50 mt-1 flex flex-wrap items-center gap-
 
 export const connectedRow = cva("border-fg/10 bg-fg/5 flex items-center gap-3 rounded-lg border p-3");
 
-export const spotifyChip = cva(
-  "flex size-9 shrink-0 items-center justify-center rounded-full bg-[#1ed760]/15 text-[#1ed760]"
-);
-
-export const plexChip = cva(
-  "bg-plex-500/15 text-plex-400 flex size-9 shrink-0 items-center justify-center rounded-full"
-);
-
-export const serverChip = cva("bg-fg/10 text-fg/70 flex size-9 shrink-0 items-center justify-center rounded-full");
+export const accountChip = cva("flex size-9 shrink-0 items-center justify-center rounded-full");
 
 export const listeningChip = cva("flex size-9 shrink-0 items-center justify-center rounded-full bg-current/15", {
   variants: {

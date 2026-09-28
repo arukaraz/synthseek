@@ -1,5 +1,5 @@
-export { usePlayer, usePlayerDock, useQueuedTrackIds, playerActions } from "./usePlayer";
-export { playerTrackFrom, sourceLabelFor } from "./helpers";
+export { usePlayer, usePlayerDock, useQueuePresence, playerActions } from "./usePlayer";
+export { playerTrackFrom, queueFromSource, sourceLabelFor } from "./helpers";
 export { settleSourcePick, tracksFromChosenSource, useSourcePickerRequest } from "./sourcePicker";
 export type { SourceCount, SourcePick, SourcePickerRequest } from "./types";
 export { applyPlaybackState, applyPlayerCommand } from "./commands";

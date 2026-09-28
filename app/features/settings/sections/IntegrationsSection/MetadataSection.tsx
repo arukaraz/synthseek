@@ -8,7 +8,6 @@ import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { emptyPanel, sectionGrid } from "../../styles";
 import { EnrichmentCard } from "./EnrichmentCard";
-import { LibrarySourcesCard } from "./LibrarySourcesCard";
 
 export function MetadataSection() {
   const { t } = useTranslation("settings");
@@ -34,12 +33,7 @@ export function MetadataSection() {
   return (
     <div className={sectionGrid()}>
       <DiscoveryCard className="lg:col-span-2" />
-      {isAdmin ? (
-        <>
-          <EnrichmentCard initial={data.connections.enrichment} />
-          <LibrarySourcesCard spotify={data.connections.spotify} enrichment={data.connections.enrichment} />
-        </>
-      ) : null}
+      {isAdmin ? <EnrichmentCard initial={data.connections.enrichment} /> : null}
     </div>
   );
 }

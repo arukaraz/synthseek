@@ -16,7 +16,7 @@ import { useLibrarySources } from "@hooks/api/queries/library-source/useLibraryS
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
-import { FileJson, FileUp, Library } from "lucide-react";
+import { FileJson, FileUp, Import } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -48,7 +48,7 @@ export function ImportLibraryMenu() {
             title={t("page.toolbar.import.trigger")}
             aria-label={t("page.toolbar.import.trigger")}
           >
-            <Library className="size-3.5" />
+            <Import className="size-3.5" />
             <span className="hidden sm:inline">{t("page.toolbar.import.trigger")}</span>
           </motion.button>
         </DropdownMenuTrigger>

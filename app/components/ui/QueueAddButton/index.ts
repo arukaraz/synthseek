@@ -1,2 +1,2 @@
 export { QueueAddButton } from "./QueueAddButton";
-export type { QueueAddButtonProps } from "./types";
+export type { QueueAddButtonProps, QueuePresence } from "./types";

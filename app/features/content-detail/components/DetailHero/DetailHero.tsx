@@ -3,6 +3,7 @@
 import { SyncToSubmenu } from "@components/SyncToSubmenu";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { SocialIcon } from "@components/ui/SocialIcon";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { artworkProxySrc } from "@utils/artworkProxy";
@@ -195,10 +196,16 @@ function DetailHeroComponent({
         {showActions || onPlay || onStartRadio ? (
           <div className={heroActions()}>
             {showInLibrary ? (
-              <span className={alreadyInLibrary()}>
-                <CheckCircle className="size-4" aria-hidden />
-                {t("alreadyInLibrary")}
-              </span>
+              <TooltipProvider delayDuration={150}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className={alreadyInLibrary()} role="img" aria-label={t("alreadyInLibrary")} tabIndex={0}>
+                      <CheckCircle className="size-5" aria-hidden />
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>{t("alreadyInLibrary")}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ) : showRequestButton ? (
               <button
                 type="button"

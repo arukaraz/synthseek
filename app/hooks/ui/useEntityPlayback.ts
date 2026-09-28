@@ -10,7 +10,6 @@ import { toast } from "sonner";
 export function useEntityPlayback(): {
   playEntity: (target: PlayableTracksTarget) => Promise<void>;
   enqueueEntity: (target: PlayableTracksTarget) => Promise<boolean>;
-  playNextEntity: (target: PlayableTracksTarget) => Promise<boolean>;
   startRadio: (target: PlayableTracksTarget) => Promise<void>;
 } {
   const { t } = useTranslation("player");
@@ -65,20 +64,7 @@ export function useEntityPlayback(): {
     [resolve, t]
   );
 
-  const playNextEntity = useCallback(
-    async (target: PlayableTracksTarget) => {
-      const tracks = await resolve(target);
-      if (tracks === null) return false;
-      const outcome = playerActions.playNext(tracks);
-      if (outcome.full) toast.info(t("queue.full"));
-      else if (outcome.added === 0) toast.info(t("queue.nothingAdded"));
-      else toast.success(t("queue.playingNext", { count: outcome.added }));
-      return outcome.added > 0;
-    },
-    [resolve, t]
-  );
-
   const startRadio = useCallback((target: PlayableTracksTarget) => startStation(target, null), [startStation]);
 
-  return { playEntity, enqueueEntity, playNextEntity, startRadio };
+  return { playEntity, enqueueEntity, startRadio };
 }

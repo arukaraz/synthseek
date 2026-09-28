@@ -61,7 +61,7 @@ export interface ArtistStatsWidgetProps {
 }
 
 export interface ArtistTopTracksWidgetProps {
-  catalogArtistId: string;
+  artist: ArtistRequestInput;
 }
 
 export interface ArtistSimilarWidgetProps {
@@ -153,6 +153,11 @@ export interface PlaylistRequestInput {
   tracks: TracklistTrack[];
 }
 
+export interface TopTracksRequestInput {
+  artist: ArtistRequestInput;
+  tracks: TracklistTrack[];
+}
+
 export interface PlaylistPreloadedTargetInput {
   id: string;
   name: string;
@@ -177,6 +182,7 @@ export interface ContentDetailActions {
   requestArtist: (input: ArtistRequestInput) => void;
   requestTrack: (input: TrackRequestInput) => void;
   requestPlaylist: (input: PlaylistRequestInput) => void;
+  requestTopTracks: (input: TopTracksRequestInput) => void;
 }
 
 export interface ContentDetailActionsProviderProps {

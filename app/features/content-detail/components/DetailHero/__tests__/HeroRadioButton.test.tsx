@@ -38,4 +38,12 @@ describe("HeroRadioButton", () => {
 
     await waitFor(() => expect(button).toBeEnabled());
   });
+
+  it("explains in plain words what the radio does when the listener hovers the button", async () => {
+    const { user } = renderWithProviders(<HeroRadioButton name="Daft Punk" onStartRadio={vi.fn()} />);
+
+    await user.hover(screen.getByRole("button", { name: LABEL }));
+
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(enContentDetail.startRadioInfo);
+  });
 });

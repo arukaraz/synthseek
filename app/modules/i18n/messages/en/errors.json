@@ -97,7 +97,7 @@
   },
   "PLAYLIST_TRACK_IN_FLIGHT": {
     "title": "Track still downloading",
-    "description": "Only completed or failed tracks can be removed from a playlist."
+    "description": "Wait until it finishes, or cancel it, before removing it from the playlist."
   },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "Can't sync there",

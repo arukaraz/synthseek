@@ -94,6 +94,19 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
     }));
   }, []);
 
+  const requestArtistTracksConfig = useCallback((artist: MusicItem, tracks: MusicTrack[]) => {
+    if (artist.type !== ContentType.enum.artist) return;
+    setState((prev) => ({
+      ...prev,
+      selectedContentToRequest: artist,
+      parentAlbumFromContext: null,
+      preloadedTracks: tracks,
+      showConfigRequestModal: true,
+      showContentDetailModal: false,
+      configRequestMode: "artist-tracks",
+    }));
+  }, []);
+
   const closeConfig = useCallback(() => {
     setState((prev) => ({
       ...prev,
@@ -114,6 +127,7 @@ export function useContentRequestModals(): UseContentRequestModalsResult {
     requestContent,
     requestArtistLidarr,
     requestPlaylistConfig,
+    requestArtistTracksConfig,
     contentDetailModalProps: {
       open: state.showContentDetailModal,
       onClose: closeDetail,

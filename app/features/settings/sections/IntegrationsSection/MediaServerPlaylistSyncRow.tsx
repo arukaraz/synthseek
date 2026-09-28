@@ -9,7 +9,7 @@ import type { MediaServerPlaylistSyncRowProps } from "./types";
 
 export function MediaServerPlaylistSyncRow({
   server,
-  playback,
+  connected,
   playlistSync,
   onChange,
 }: MediaServerPlaylistSyncRowProps) {
@@ -20,12 +20,17 @@ export function MediaServerPlaylistSyncRow({
     <EngineRow
       label={label}
       description={
-        playback
+        connected
           ? t("mediaServers.playlistSync.description", { server })
-          : t("mediaServers.playlistSync.needsPlayback", { server })
+          : t("mediaServers.playlistSync.needsConnection", { server })
       }
       control={
-        <Switch checked={playback && playlistSync} disabled={!playback} onCheckedChange={onChange} aria-label={label} />
+        <Switch
+          checked={connected && playlistSync}
+          disabled={!connected}
+          onCheckedChange={onChange}
+          aria-label={label}
+        />
       }
     />
   );

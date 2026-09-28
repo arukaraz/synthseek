@@ -270,7 +270,13 @@
     "upgradeSkipUpgradeError_one": "{{count}} failed to queue",
     "upgradeSkipUpgradeError_other": "{{count}} failed to queue",
     "bulkTracksTooManyTitle": "Too many tracks selected",
-    "bulkTracksTooManyDescription": "Bulk track actions run up to {{max}} tracks at a time. Nothing was submitted."
+    "bulkTracksTooManyDescription": "Bulk track actions run up to {{max}} tracks at a time. Nothing was submitted.",
+    "tracksRequestFailed": "Could not request the tracks",
+    "tracksRequested_one": "Requested {{count}} track",
+    "tracksRequested_other": "Requested {{count}} tracks",
+    "tracksAlreadyRequested": "Those tracks are already requested or in your library",
+    "tracksNotRequested_one": "{{count}} track could not be requested",
+    "tracksNotRequested_other": "{{count}} tracks could not be requested"
   },
   "playlists": {
     "created": "Playlist created",

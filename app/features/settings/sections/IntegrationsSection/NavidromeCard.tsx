@@ -5,10 +5,8 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
-import { Switch } from "@components/ui/Switch";
 import { useTestNavidrome, useUpdateConnectionsNavidrome } from "@hooks/api/mutations/settings/useUpdateConnections";
 
-import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
@@ -45,7 +43,7 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
     save((payload) => update.mutateAsync({ ...payload, url: payload.url.trim(), username: payload.username.trim() }));
 
   return (
-    <SettingsCard title={t("mediaServers.navidrome.title")} description={t("mediaServers.navidrome.description")}>
+    <SettingsCard title={t("mediaServers.navidrome.title")}>
       <SettingsField label={t("mediaServers.url")}>
         <SettingsTextInput
           value={draft.url}
@@ -63,21 +61,9 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
         <SettingsSecretInput value={draft.password} onChange={(value) => setField("password", value)} />
       </SettingsField>
 
-      <EngineRow
-        label={t("mediaServers.playback.label", { server: t("mediaServers.navidrome.title") })}
-        description={t("mediaServers.playback.description")}
-        control={
-          <Switch
-            checked={draft.playback}
-            onCheckedChange={(value) => setField("playback", value)}
-            aria-label={t("mediaServers.playback.label", { server: t("mediaServers.navidrome.title") })}
-          />
-        }
-      />
-
       <MediaServerPlaylistSyncRow
         server={t("mediaServers.navidrome.title")}
-        playback={draft.playback}
+        connected={complete}
         playlistSync={draft.playlistSync}
         onChange={(value) => setField("playlistSync", value)}
       />

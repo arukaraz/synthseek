@@ -58,51 +58,117 @@ function track(id: string): PlayerTrack {
 async function freshModules() {
   vi.resetModules();
   const store = await import("../store");
-  const { queuedTrackIdsSnapshot } = await import("../usePlayer");
-  return { store, queuedTrackIdsSnapshot };
+  const { nowPlayingSnapshot, upcomingTrackIdsSnapshot } = await import("../usePlayer");
+  return { store, nowPlayingSnapshot, upcomingTrackIdsSnapshot };
 }
 
-describe("queuedTrackIdsSnapshot", () => {
+describe("upcomingTrackIdsSnapshot", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("holds the playing track and everything still ahead of it", async () => {
-    const { store, queuedTrackIdsSnapshot } = await freshModules();
+  it("holds everything still ahead of the playing track, but not the playing track itself", async () => {
+    const { store, upcomingTrackIdsSnapshot } = await freshModules();
     store.actions.playQueue([track("a"), track("b"), track("c")], 0);
 
-    expect([...queuedTrackIdsSnapshot()].sort()).toEqual(["a", "b", "c"]);
+    expect([...upcomingTrackIdsSnapshot()].sort()).toEqual(["b", "c"]);
   });
 
-  it("drops a track once playback has moved past it", async () => {
-    const { store, queuedTrackIdsSnapshot } = await freshModules();
+  it("drops a track once playback has reached it", async () => {
+    const { store, upcomingTrackIdsSnapshot } = await freshModules();
     store.actions.playQueue([track("a"), track("b"), track("c")], 0);
     store.actions.next();
 
-    const ids = queuedTrackIdsSnapshot();
-    expect(ids.has("a")).toBe(false);
-    expect([...ids].sort()).toEqual(["b", "c"]);
+    expect([...upcomingTrackIdsSnapshot()]).toEqual(["c"]);
   });
 
   it("returns the same reference across a republish that only moved the position", async () => {
-    const { store, queuedTrackIdsSnapshot } = await freshModules();
+    const { store, upcomingTrackIdsSnapshot } = await freshModules();
     store.actions.playQueue([track("a"), track("b")], 0);
 
-    const before = queuedTrackIdsSnapshot();
+    const before = upcomingTrackIdsSnapshot();
     store.actions.seekTo(42);
 
-    expect(queuedTrackIdsSnapshot()).toBe(before);
+    expect(upcomingTrackIdsSnapshot()).toBe(before);
   });
 
   it("returns a new reference once the queue itself changes", async () => {
-    const { store, queuedTrackIdsSnapshot } = await freshModules();
+    const { store, upcomingTrackIdsSnapshot } = await freshModules();
     store.actions.playQueue([track("a"), track("b")], 0);
 
-    const before = queuedTrackIdsSnapshot();
+    const before = upcomingTrackIdsSnapshot();
     store.actions.addToQueue([track("c")]);
 
-    const after = queuedTrackIdsSnapshot();
+    const after = upcomingTrackIdsSnapshot();
     expect(after).not.toBe(before);
     expect(after.has("c")).toBe(true);
+  });
+});
+
+describe("nowPlayingSnapshot", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("is empty before anything has played", async () => {
+    const { nowPlayingSnapshot } = await freshModules();
+
+    expect(nowPlayingSnapshot()).toBeNull();
+  });
+
+  it("names the playing track and whether it is sounding", async () => {
+    const { store, nowPlayingSnapshot } = await freshModules();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    store.actions.next();
+
+    expect(nowPlayingSnapshot()?.trackId).toBe("b");
+  });
+
+  it("keeps its reference while only the position moves, so rows do not re-render every tick", async () => {
+    const { store, nowPlayingSnapshot } = await freshModules();
+    store.actions.playQueue([track("a"), track("b")], 0);
+
+    const before = nowPlayingSnapshot();
+    store.actions.seekTo(42);
+
+    expect(nowPlayingSnapshot()).toBe(before);
+  });
+});
+
+describe("removeTrackFromQueue", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("removes a track that is still ahead of the playing one", async () => {
+    const { store, upcomingTrackIdsSnapshot } = await freshModules();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+
+    store.actions.removeTrackFromQueue("b");
+
+    expect([...upcomingTrackIdsSnapshot()]).toEqual(["c"]);
+    expect(store.getSnapshot().queue.map((queued) => queued.id)).toEqual(["a", "c"]);
+  });
+
+  it("leaves the playing track alone", async () => {
+    const { store, nowPlayingSnapshot } = await freshModules();
+    store.actions.playQueue([track("a"), track("b")], 0);
+
+    store.actions.removeTrackFromQueue("a");
+
+    expect(nowPlayingSnapshot()?.trackId).toBe("a");
+    expect(store.getSnapshot().queue.map((queued) => queued.id)).toEqual(["a", "b"]);
+  });
+
+  it("does not reach back into tracks that already played", async () => {
+    const { store } = await freshModules();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    store.actions.next();
+    store.actions.next();
+
+    store.actions.removeTrackFromQueue("a");
+
+    expect(store.getSnapshot().queue.map((queued) => queued.id)).toEqual(["a", "b", "c"]);
+    expect(store.getSnapshot().index).toBe(2);
   });
 });

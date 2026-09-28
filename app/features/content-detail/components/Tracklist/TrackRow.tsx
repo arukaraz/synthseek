@@ -1,6 +1,7 @@
 "use client";
 
 import { Checkbox } from "@components/ui/Checkbox";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 import { isRetryableStatus } from "@utils/status-helpers";
 import { formatTrackDuration } from "@utils/formatters";
@@ -10,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { formatPlays, isRemovableTrack } from "../../helpers";
 import {
   trackArtist,
+  trackArtistLink,
   trackDownloadButton,
   trackInfo,
   trackMeta,
@@ -17,7 +19,7 @@ import {
   trackRow,
   trackSelectCell,
   trackStatusCell,
-  trackStatusReveal,
+  trackStatusIcon,
   trackTitle,
 } from "../../styles";
 import { TrackPlaybackActions } from "./TrackPlaybackActions";
@@ -36,10 +38,12 @@ export function TrackRow({
   previewTone = "none",
   onPlayNow,
   onEnqueue,
-  onPlayNext,
-  inQueue = false,
+  onRemoveFromQueue,
+  queuePresence = "absent",
+  onArtistNavigate,
 }: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
+  const { t: tStatus } = useTranslation("status");
   const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
   const showCheckbox = selectable && isRemovableTrack(track);
 
@@ -73,17 +77,28 @@ export function TrackRow({
 
       <div className={trackInfo()}>
         <span className={trackTitle()}>{track.title}</span>
-        {showArtist ? <span className={trackArtist()}>{track.artist}</span> : null}
+        {showArtist && onArtistNavigate ? (
+          <button
+            type="button"
+            className={trackArtistLink()}
+            onClick={onArtistNavigate}
+            aria-label={t("viewArtist", { name: track.artist })}
+          >
+            {track.artist}
+          </button>
+        ) : showArtist ? (
+          <span className={trackArtist()}>{track.artist}</span>
+        ) : null}
       </div>
 
       <div className={trackMeta()}>
-        {onPlayNow && onEnqueue ? (
+        {onPlayNow && onEnqueue && onRemoveFromQueue ? (
           <TrackPlaybackActions
             title={track.title}
+            presence={queuePresence}
             onPlayNow={onPlayNow}
             onEnqueue={onEnqueue}
-            onPlayNext={onPlayNext}
-            inQueue={inQueue}
+            onRemove={onRemoveFromQueue}
           />
         ) : null}
         {track.plays !== null ? (
@@ -95,9 +110,6 @@ export function TrackRow({
       <div className={trackStatusCell()}>
         {track.status ? (
           <>
-            <span className={canRetry ? trackStatusReveal() : "flex items-center"}>
-              <TrackStatusIndicator status={track.status} failureReason={track.failureReason} hideLabel />
-            </span>
             {canRetry ? (
               <button
                 type="button"
@@ -113,6 +125,16 @@ export function TrackRow({
                 )}
               </button>
             ) : null}
+            <TooltipProvider delayDuration={150}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className={trackStatusIcon()}>
+                    <TrackStatusIndicator status={track.status} failureReason={track.failureReason} hideLabel />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent side="top">{tStatus(`request.${track.status}.label`)}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </>
         ) : (
           <button

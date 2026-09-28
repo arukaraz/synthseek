@@ -7,6 +7,7 @@
   "play": "Play",
   "playAll": "Play everything we have of {{name}}",
   "startRadio": "Start radio",
+  "startRadioInfo": "Plays a mix of similar songs you already have in your library.",
   "startRadioFrom": "Start a radio from {{name}}",
   "viewArtist": "View artist {{name}}",
   "resolveArtistFailed": "We couldn't find this artist.",
@@ -51,6 +52,15 @@
     "live": "Live",
     "compilation": "Compilations"
   },
+  "recordTypeSingular": {
+    "album": "Album",
+    "ep": "EP",
+    "single": "Single",
+    "live": "Live",
+    "compilation": "Compilation"
+  },
+  "releaseMeta": "{{year}} • {{type}}",
+  "requestTopTracks": "Request top tracks",
   "rail": {
     "prev": "Scroll back",
     "next": "Scroll forward"

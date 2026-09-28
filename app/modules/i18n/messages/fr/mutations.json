@@ -270,7 +270,13 @@
     "upgradeSkipUpgradeError_one": "{{count}} n'a pas pu être mise en file",
     "upgradeSkipUpgradeError_other": "{{count}} n'ont pas pu être mises en file",
     "bulkTracksTooManyTitle": "Trop de pistes sélectionnées",
-    "bulkTracksTooManyDescription": "Les actions groupées traitent jusqu'à {{max}} pistes à la fois. Rien n'a été envoyé."
+    "bulkTracksTooManyDescription": "Les actions groupées traitent jusqu'à {{max}} pistes à la fois. Rien n'a été envoyé.",
+    "tracksRequestFailed": "Impossible de demander les pistes",
+    "tracksRequested_one": "{{count}} piste demandée",
+    "tracksRequested_other": "{{count}} pistes demandées",
+    "tracksAlreadyRequested": "Ces pistes sont déjà demandées ou dans votre bibliothèque",
+    "tracksNotRequested_one": "{{count}} piste n'a pas pu être demandée",
+    "tracksNotRequested_other": "{{count}} pistes n'ont pas pu être demandées"
   },
   "playlists": {
     "created": "Playlist créée",

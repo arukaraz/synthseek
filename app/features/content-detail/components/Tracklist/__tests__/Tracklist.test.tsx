@@ -19,6 +19,7 @@ function createTrack(overrides?: Partial<TracklistTrack>): TracklistTrack {
     externalId: "t1",
     title: "Get Lucky",
     artist: "Daft Punk",
+    artistExternalId: "27",
     durationMs: 369000,
     trackNumber: 8,
     plays: null,
@@ -39,6 +40,7 @@ function renderTracklist(tracks: TracklistTrack[]) {
     requestArtist: vi.fn(),
     requestTrack,
     requestPlaylist: vi.fn(),
+    requestTopTracks: vi.fn(),
   };
 
   renderWithProviders(

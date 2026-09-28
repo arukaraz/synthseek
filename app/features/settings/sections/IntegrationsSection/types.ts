@@ -23,7 +23,7 @@ export type Affix = "off" | "prefix" | "suffix";
 export interface PlexIntegrationCardProps {
   initial: {
     connection: { url: string; token: string };
-    behavior: { libraryScan: boolean; playlistSync: boolean; playback: boolean };
+    behavior: { libraryScan: boolean; playlistSync: boolean };
     naming: { plexPlaylistUsernameAffix: Affix; plexPlaylistUsernameSeparator: string };
   };
 }
@@ -125,9 +125,8 @@ export interface UsenetCardProps {
   initial: DownloadSourcesConfig;
 }
 
-export interface LibrarySourcesCardProps {
+export interface SpotifySourceCardProps {
   spotify: ConnectionsSpotify;
-  enrichment: ConnectionsEnrichment;
 }
 
 export interface StagedReleaseListProps {
@@ -140,20 +139,18 @@ interface NavidromeConnection {
   url: string;
   username: string;
   password: string;
-  playback: boolean;
   playlistSync: boolean;
 }
 
 interface JellyfinConnection {
   url: string;
   apiKey: string;
-  playback: boolean;
   playlistSync: boolean;
 }
 
 export interface MediaServerPlaylistSyncRowProps {
   server: string;
-  playback: boolean;
+  connected: boolean;
   playlistSync: boolean;
   onChange: (value: boolean) => void;
 }
@@ -168,5 +165,5 @@ export interface JellyfinCardProps {
 
 export interface PlaybackOrderCardProps {
   order: readonly PlaybackServerKey[];
-  playing: Readonly<Record<PlaybackServerKey, boolean>>;
+  connected: Readonly<Record<PlaybackServerKey, boolean>>;
 }

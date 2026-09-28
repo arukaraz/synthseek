@@ -108,7 +108,7 @@ export const heroActions = cva("mt-3 flex flex-wrap items-center justify-center 
 export const heroStats = cva("flex w-full justify-center sm:justify-start");
 
 export const alreadyInLibrary = cva(
-  "border-secondary-500/30 bg-secondary-500/10 text-secondary-400 flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-semibold"
+  "border-secondary-500/30 bg-secondary-500/10 text-secondary-400 focus-visible:ring-secondary-400 grid size-10.5 place-items-center rounded-full border focus-visible:ring-2 focus-visible:outline-none"
 );
 
 export const genreChip = cva(
@@ -135,6 +135,10 @@ export const sectionDivider = cva("bg-fg/10 h-px min-w-6 flex-1");
 
 export const sectionTrailing = cva("flex shrink-0 items-center gap-2");
 
+export const sectionActionButton = cva(
+  "border-fg/15 bg-fg/[0.06] text-fg/80 hover:bg-fg/[0.12] hover:text-fg focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none"
+);
+
 export const sectionSkeleton = cva("bg-fg/5 w-full animate-pulse rounded-xl");
 
 export const sectionEmpty = cva("text-fg/50 text-sm");
@@ -151,31 +155,33 @@ export const trackSelectCell = cva("flex w-6 shrink-0 items-center justify-cente
 
 export const selectAllControl = cva("text-fg/60 flex items-center gap-2 text-xs font-medium");
 
+export const tracklistControls = cva("flex items-center gap-5");
+
 export const trackInfo = cva("flex min-w-0 flex-1 flex-col");
 
 export const trackTitle = cva("text-fg truncate text-sm font-medium");
 
 export const trackArtist = cva("text-fg/50 truncate text-xs");
 
+export const trackArtistLink = cva(
+  "text-fg/50 hover:text-accent-400 max-w-full cursor-pointer self-start truncate text-left text-xs underline-offset-2 transition-colors hover:underline"
+);
+
 export const trackMeta = cva("text-fg/50 flex shrink-0 items-center gap-2.5 text-xs tabular-nums");
 
-export const trackStatusCell = cva("flex w-16 shrink-0 items-center justify-end");
+export const trackStatusCell = cva("flex w-16 shrink-0 items-center justify-end gap-1");
 
 export const trackDownloadButton = cva(
   "text-fg/30 hover:text-fg flex size-7 items-center justify-center rounded-full transition-colors hover:bg-fg/10"
 );
 
 export const trackRetryButton = cva(
-  "text-fg/50 hover:text-fg hidden size-7 items-center justify-center rounded-full transition-colors hover:bg-fg/10 group-hover:flex"
+  "text-fg/50 hover:text-fg focus-visible:ring-primary-400 flex size-7 shrink-0 items-center justify-center rounded-full transition-[color,background-color,opacity] hover:bg-fg/10 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"
 );
 
-export const trackStatusReveal = cva("flex items-center group-hover:hidden");
+export const trackStatusIcon = cva("flex size-5 shrink-0 items-center justify-center");
 
 export const trackPlaybackActions = cva("flex shrink-0 items-center gap-0.5");
-
-export const trackPlayNextButton = cva(
-  "text-fg/45 hover:text-fg focus-visible:ring-primary-400 grid size-7 shrink-0 place-items-center rounded-full transition-[color,opacity] focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"
-);
 
 export const trackPlayButton = cva(
   "text-fg/45 hover:text-fg focus-visible:ring-primary-400 grid size-7 shrink-0 place-items-center rounded-full transition-[color,opacity] focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100"

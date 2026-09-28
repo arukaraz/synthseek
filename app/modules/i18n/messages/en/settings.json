@@ -292,18 +292,16 @@
       "acoustidKey": {
         "label": "AcoustID API key",
         "helper": "Audio fingerprinting fallback for tracks without reliable tag metadata."
-      }
-    },
-    "librarySources": {
-      "title": "Library Sources",
-      "description": "Streaming platforms that Synthseek can import playlists and saved albums from.",
+      },
       "songlinkKey": {
         "label": "Songlink API key (optional)",
         "helper": "Resolves track URLs across platforms for cross-platform playlist imports. Synthseek uses the public endpoint by default. Leave blank unless you have a key."
-      },
+      }
+    },
+    "librarySources": {
       "spotify": {
         "title": "Spotify",
-        "subtitle": "Developer's app configuration",
+        "description": "Import playlists and saved albums from Spotify.",
         "toggleAriaLabel": "Enable Spotify",
         "clientIdLabel": "Client ID",
         "clientIdPlaceholder": "e.g. 3a1b6c5d7e8f4a...",
@@ -350,12 +348,8 @@
       "description": "After each successful import, ask Plex to scan the folder of the new file."
     },
     "playlistSync": {
-      "label": "Playlist sync",
-      "description": "When a Synthseek playlist request completes (or grows), create / update a matching Plex playlist with the imported tracks."
-    },
-    "playback": {
-      "label": "Play from Plex",
-      "description": "Lets the player stream a track from Plex when Synthseek has no file for it. Your own copy is always played first."
+      "label": "Sync playlists to Plex",
+      "description": "Creates each member's playlists in Plex once they finish downloading, and keeps them up to date. They all go into the Plex account Synthseek is connected with."
     },
     "namingHeader": "Playlist naming",
     "usernameAffix": {
@@ -409,9 +403,11 @@
   },
   "mediaServers": {
     "url": "URL",
+    "plex": {
+      "title": "Plex"
+    },
     "navidrome": {
       "title": "Navidrome",
-      "description": "Play tracks from Navidrome when Synthseek has no file for them.",
       "urlPlaceholder": "http://localhost:4533",
       "username": "Username",
       "password": "Password",
@@ -419,19 +415,14 @@
     },
     "jellyfin": {
       "title": "Jellyfin",
-      "description": "Play tracks from Jellyfin when Synthseek has no file for them.",
       "urlPlaceholder": "http://localhost:8096",
       "apiKey": "API key",
       "apiKeyHelper": "Create one in Jellyfin under Dashboard, API Keys."
     },
-    "playback": {
-      "label": "Play from {{server}}",
-      "description": "Your own copy is always played first."
-    },
     "playlistSync": {
       "label": "Sync playlists to {{server}}",
-      "description": "Each member's finished playlists are created in their own {{server}} account and kept up to date.",
-      "needsPlayback": "Turn on playing from {{server}} first."
+      "description": "Creates each member's playlists in their own {{server}} account once they finish downloading, and keeps them up to date. Members link their account in their profile.",
+      "needsConnection": "Fill in the {{server}} details above to turn this on."
     },
     "test": {
       "action": "Test connection",
@@ -442,16 +433,16 @@
     },
     "order": {
       "title": "Playback order",
-      "description": "Synthseek plays its own file first, then tries these servers in order.",
+      "description": "Synthseek plays its own file first, then tries these servers in this order. When an album or artist you play is in more than one place, it asks where to play it from.",
       "local": "Local",
-      "notPlaying": "Playback off",
+      "notConnected": "Not connected",
       "moveUp": "Move {{server}} up",
       "moveDown": "Move {{server}} down"
     }
   },
   "lidarr": {
     "title": "Lidarr",
-    "description": "Optional. Hand off albums to an existing Lidarr instance.",
+    "description": "Hand off albums to an existing Lidarr instance.",
     "url": {
       "label": "URL",
       "placeholder": "http://localhost:8686"
@@ -682,7 +673,7 @@
       "connected": "Connected",
       "notConnected": "Not connected",
       "notConfigured": "Ask an admin to set the API credentials first.",
-      "sendPlays": "Send my plays",
+      "scrobblePlays": "Scrobble my plays",
       "otherApps": "Also send plays from these apps",
       "lastfm": {
         "name": "Last.fm",

@@ -11,3 +11,11 @@ export const RECORD_TYPE_LABEL_KEY: Record<DiscographyRecordType, ParseKeys<"con
   live: "recordType.live",
   compilation: "recordType.compilation",
 };
+
+export const RECORD_TYPE_SINGULAR_KEY: Record<DiscographyRecordType, ParseKeys<"contentDetail">> = {
+  album: "recordTypeSingular.album",
+  ep: "recordTypeSingular.ep",
+  single: "recordTypeSingular.single",
+  live: "recordTypeSingular.live",
+  compilation: "recordTypeSingular.compilation",
+};

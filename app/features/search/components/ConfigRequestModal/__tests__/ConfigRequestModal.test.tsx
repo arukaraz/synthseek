@@ -7,11 +7,12 @@ const mocks = vi.hoisted(() => ({
   requestMutate: vi.fn(),
   batchMutate: vi.fn(),
   playlistMutate: vi.fn(),
+  tracksMutate: vi.fn(),
   delegateMutate: vi.fn(),
   toastError: vi.fn(),
 }));
 
-const { requestMutate, batchMutate, playlistMutate, delegateMutate, toastError } = mocks;
+const { requestMutate, batchMutate, playlistMutate, tracksMutate, delegateMutate, toastError } = mocks;
 
 let sourcesAvailability: { slskd: boolean; ytdlp: boolean } | undefined;
 let lidarrAvailable: { available: boolean } | undefined;
@@ -21,6 +22,7 @@ let pendingFlags: {
   request: boolean;
   batch: boolean;
   playlist: boolean;
+  tracks: boolean;
   delegate: boolean;
 };
 
@@ -31,6 +33,7 @@ vi.mock("@hooks/api", () => ({
   useRequest: () => ({ mutate: mocks.requestMutate, isPending: pendingFlags.request }),
   useBatchRequest: () => ({ mutate: mocks.batchMutate, isPending: pendingFlags.batch }),
   usePlaylistRequest: () => ({ mutate: mocks.playlistMutate, isPending: pendingFlags.playlist }),
+  useRequestTracks: () => ({ mutate: mocks.tracksMutate, isPending: pendingFlags.tracks }),
   useDelegateArtist: () => ({ mutate: mocks.delegateMutate, isPending: pendingFlags.delegate }),
 }));
 
@@ -116,7 +119,7 @@ describe("ConfigRequestModal", () => {
     lidarrAvailable = { available: false };
     contentResponse = { success: true, content: [makeTrack()] };
     isLoadingTracks = false;
-    pendingFlags = { request: false, batch: false, playlist: false, delegate: false };
+    pendingFlags = { request: false, batch: false, playlist: false, tracks: false, delegate: false };
   });
 
   afterEach(() => {
@@ -205,6 +208,32 @@ describe("ConfigRequestModal", () => {
     expect(playlistMutate).toHaveBeenCalledTimes(1);
     expect(playlistMutate.mock.calls[0][0].external_id).toBe("pl1");
     expect(playlistMutate.mock.calls[0][1]).toBeUndefined();
+  });
+
+  it("requests an artist's chosen tracks one by one, each with its own album, without creating a playlist", async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+
+    render(
+      <ConfigRequestModal
+        isOpen
+        onClose={onClose}
+        item={makeArtist()}
+        itemType={ContentType.enum.artist}
+        mode="artist-tracks"
+        preloadedTracks={[makeTrack()]}
+      />
+    );
+
+    await user.click(confirmButton());
+
+    expect(tracksMutate).toHaveBeenCalledTimes(1);
+    const payload = tracksMutate.mock.calls[0][0];
+    expect(payload.tracks).toHaveLength(1);
+    expect(payload.tracks[0].track.external_id).toBe("t1");
+    expect(payload.tracks[0].album_external_id).toBe(makeTrack().album.id);
+    expect(playlistMutate).not.toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
   });
 
   it("shows the rename input only for playlist items with the playlist name as placeholder", () => {

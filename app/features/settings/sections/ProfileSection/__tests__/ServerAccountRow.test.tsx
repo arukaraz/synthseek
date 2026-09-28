@@ -73,6 +73,19 @@ describe("ServerAccountRow", () => {
     expect(screen.getByLabelText(copy.server.password)).toHaveValue("wrong");
   });
 
+  it("asks the browser neither to fill in nor to invent a password for another server's account", () => {
+    render(<ServerAccountRow account={NOT_LINKED} />);
+
+    expect(screen.getByRole("textbox", { name: copy.server.username })).toHaveAttribute("autocomplete", "off");
+    expect(screen.getByLabelText(copy.server.password)).toHaveAttribute("autocomplete", "off");
+  });
+
+  it("wears its own server's brand mark, like the Spotify and Plex rows", () => {
+    const { container } = render(<ServerAccountRow account={{ ...NOT_LINKED, server: "jellyfin" }} />);
+
+    expect(container.querySelector("svg")?.parentElement?.className).toContain("--brand-jellyfin");
+  });
+
   it("cannot sign in with an empty password", async () => {
     render(<ServerAccountRow account={NOT_LINKED} />);
     await userEvent.type(screen.getByRole("textbox", { name: copy.server.username }), "ana");

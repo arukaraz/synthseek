@@ -55,7 +55,8 @@
     "dialogDescription": "Download-Qualitätseinstellungen für {{name}} konfigurieren",
     "header": {
       "trackCount_one": "{{count}} Titel",
-      "trackCount_other": "{{count}} Titel"
+      "trackCount_other": "{{count}} Titel",
+      "topTracks": "Top-Titel"
     },
     "sections": {
       "quality": "Qualitätseinstellungen",

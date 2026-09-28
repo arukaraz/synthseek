@@ -20,7 +20,9 @@ import {
   mirroredPositionSeconds,
   needsConversion,
   nextIndexIn,
+  nowPlayingOf,
   queueChanged,
+  queuePresenceOf,
   playerTrackFrom,
   playingSourceOf,
   previousIndexIn,
@@ -436,6 +438,59 @@ describe("isMirroring", () => {
 
   it("is never mirroring while this tab is the one making sound, whatever it still remembers", () => {
     expect(isMirroring(sessionWith({ remote: mirrored, playing: true }))).toBe(false);
+  });
+});
+
+describe("nowPlayingOf", () => {
+  const mirroredTrack = queueOf(3)[2];
+  const mirrored = {
+    deviceId: "d1",
+    deviceName: "Web Player (Firefox)",
+    confirmed: true,
+    playing: false,
+    track: mirroredTrack,
+    positionSeconds: 10,
+    shuffle: false,
+    repeat: "off" as const,
+    volume: 0.8,
+    muted: false,
+    transcoding: false,
+    updatedAt: 1_000,
+  };
+
+  it("is empty until a session has started", () => {
+    expect(nowPlayingOf(sessionWith({ queue: queueOf(2), started: false }))).toBeNull();
+  });
+
+  it("names the local track at the queue index and whether this tab is sounding", () => {
+    expect(nowPlayingOf(sessionWith({ queue: queueOf(2), index: 1, playing: true, started: true }))).toEqual({
+      trackId: "t1",
+      playing: true,
+    });
+  });
+
+  it("follows the other device while mirroring it, including its pause", () => {
+    expect(nowPlayingOf(sessionWith({ queue: queueOf(2), index: 0, remote: mirrored, started: true }))).toEqual({
+      trackId: "t2",
+      playing: false,
+    });
+  });
+});
+
+describe("queuePresenceOf", () => {
+  const upcoming = new Set(["t1", "t2"]);
+
+  it("reads the current track as playing or paused before anything else", () => {
+    expect(queuePresenceOf("t1", { trackId: "t1", playing: true }, upcoming)).toBe("playing");
+    expect(queuePresenceOf("t1", { trackId: "t1", playing: false }, upcoming)).toBe("paused");
+  });
+
+  it("reads a track still ahead in the queue as upcoming", () => {
+    expect(queuePresenceOf("t2", { trackId: "t1", playing: true }, upcoming)).toBe("upcoming");
+  });
+
+  it("reads anything else as absent", () => {
+    expect(queuePresenceOf("t9", null, upcoming)).toBe("absent");
   });
 });
 

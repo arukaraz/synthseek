@@ -7,6 +7,7 @@ import {
   type PlayerDevice,
   type PlayerView,
 } from "@components/Player";
+import type { QueuePresence } from "@components/ui/QueueAddButton";
 import {
   useFavoriteTracks,
   useListeningConnections,
@@ -29,12 +30,14 @@ import {
   asPlayedFrom,
   isMirroring,
   mirroredPositionSeconds,
+  nowPlayingOf,
   playingSourceOf,
+  queuePresenceOf,
   queueSections,
   scrobbleStateFrom,
   sourceLabelFor,
   sourceOptionFrom,
-  visibleQueueIds,
+  upcomingQueueIds,
 } from "./helpers";
 import {
   actions,
@@ -50,7 +53,7 @@ import { usePlayerDevices } from "./useDevices";
 import { usePlayerDocumentTitle } from "./useDocumentTitle";
 import { usePlayReporter } from "./usePlayReporter";
 import { useStartRadio } from "./useStartRadio";
-import type { PlayerDockState, PlayerSessionState } from "./types";
+import type { NowPlayingTrack, PlayerDockState, PlayerSessionState } from "./types";
 
 const EMPTY_STATE = getSnapshot();
 const EMPTY_QUEUED_IDS: ReadonlySet<string> = new Set<string>();
@@ -65,31 +68,45 @@ export function usePlayerDock(): PlayerDockState {
   return useSyncExternalStore(subscribe, dockSnapshot, () => "hidden");
 }
 
-let queuedFrom: { queue: unknown; index: number; shuffle: boolean; order: unknown } | null = null;
-let queuedIds: ReadonlySet<string> = new Set<string>();
+let upcomingFrom: { queue: unknown; index: number; shuffle: boolean; order: unknown } | null = null;
+let upcomingIds: ReadonlySet<string> = new Set<string>();
 
-export function queuedTrackIdsSnapshot(): ReadonlySet<string> {
+export function upcomingTrackIdsSnapshot(): ReadonlySet<string> {
   const session = getSnapshot();
   if (
-    queuedFrom === null ||
-    queuedFrom.queue !== session.queue ||
-    queuedFrom.index !== session.index ||
-    queuedFrom.shuffle !== session.shuffle ||
-    queuedFrom.order !== session.shuffleOrder
+    upcomingFrom === null ||
+    upcomingFrom.queue !== session.queue ||
+    upcomingFrom.index !== session.index ||
+    upcomingFrom.shuffle !== session.shuffle ||
+    upcomingFrom.order !== session.shuffleOrder
   ) {
-    queuedFrom = {
+    upcomingFrom = {
       queue: session.queue,
       index: session.index,
       shuffle: session.shuffle,
       order: session.shuffleOrder,
     };
-    queuedIds = visibleQueueIds(session);
+    upcomingIds = upcomingQueueIds(session);
   }
-  return queuedIds;
+  return upcomingIds;
 }
 
-export function useQueuedTrackIds(): ReadonlySet<string> {
-  return useSyncExternalStore(subscribe, queuedTrackIdsSnapshot, () => EMPTY_QUEUED_IDS);
+let nowPlaying: NowPlayingTrack | null = null;
+
+export function nowPlayingSnapshot(): NowPlayingTrack | null {
+  const next = nowPlayingOf(getSnapshot());
+  if (next === null) {
+    nowPlaying = null;
+  } else if (nowPlaying === null || nowPlaying.trackId !== next.trackId || nowPlaying.playing !== next.playing) {
+    nowPlaying = next;
+  }
+  return nowPlaying;
+}
+
+export function useQueuePresence(): (trackId: string) => QueuePresence {
+  const upcoming = useSyncExternalStore(subscribe, upcomingTrackIdsSnapshot, () => EMPTY_QUEUED_IDS);
+  const current = useSyncExternalStore(subscribe, nowPlayingSnapshot, () => null);
+  return useCallback((trackId: string) => queuePresenceOf(trackId, current, upcoming), [current, upcoming]);
 }
 
 function usePlayerSession(): PlayerSessionState {

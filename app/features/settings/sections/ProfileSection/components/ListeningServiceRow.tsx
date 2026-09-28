@@ -114,6 +114,7 @@ export function ListeningServiceRow({ connection, seenClients }: ListeningServic
               onChange={(event) => setToken(event.target.value)}
               placeholder={t("profile.listening.listenbrainz.tokenPlaceholder")}
               aria-label={t("profile.listening.listenbrainz.tokenLabel")}
+              autoComplete="off"
             />
             <Button
               size="sm"
@@ -129,11 +130,11 @@ export function ListeningServiceRow({ connection, seenClients }: ListeningServic
       {connection.connected ? (
         <div className={listeningPanel()}>
           <div className={listeningToggleRow()}>
-            <span className={listeningToggleLabel()}>{t("profile.listening.sendPlays")}</span>
+            <span className={listeningToggleLabel()}>{t("profile.listening.scrobblePlays")}</span>
             <Switch
               checked={connection.scrobbleEnabled}
               onCheckedChange={(enabled) => setEnabled.mutate({ service, enabled })}
-              aria-label={t("profile.listening.sendPlays")}
+              aria-label={t("profile.listening.scrobblePlays")}
             />
           </div>
           {seenClients.length === 0 ? null : (

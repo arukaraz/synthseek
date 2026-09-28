@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { RadioTower } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,15 +23,22 @@ export function HeroRadioButton({ name, onStartRadio }: HeroRadioButtonProps) {
   }, [onStartRadio, starting]);
 
   return (
-    <button
-      type="button"
-      className={heroPlayButton()}
-      onClick={handleClick}
-      disabled={starting}
-      aria-label={t("startRadioFrom", { name })}
-    >
-      <RadioTower className="size-4" />
-      {t("startRadio")}
-    </button>
+    <TooltipProvider delayDuration={150}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            className={heroPlayButton()}
+            onClick={handleClick}
+            disabled={starting}
+            aria-label={t("startRadioFrom", { name })}
+          >
+            <RadioTower className="size-4" />
+            {t("startRadio")}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">{t("startRadioInfo")}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

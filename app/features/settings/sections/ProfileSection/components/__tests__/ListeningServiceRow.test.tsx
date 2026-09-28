@@ -210,7 +210,7 @@ describe("a service that is already connected", () => {
   it("turns the sending of plays on and off", async () => {
     const { user } = renderRow({ connection: connected });
 
-    await user.click(screen.getByRole("switch", { name: enSettings.profile.listening.sendPlays }));
+    await user.click(screen.getByRole("switch", { name: enSettings.profile.listening.scrobblePlays }));
 
     expect(api.setEnabled.mutate).toHaveBeenCalledWith({ service: "lastfm", enabled: false });
   });

@@ -55,7 +55,8 @@
     "dialogDescription": "Configura los ajustes de calidad de descarga para {{name}}",
     "header": {
       "trackCount_one": "{{count}} canción",
-      "trackCount_other": "{{count}} canciones"
+      "trackCount_other": "{{count}} canciones",
+      "topTracks": "Mejores pistas"
     },
     "sections": {
       "quality": "Ajustes de calidad",

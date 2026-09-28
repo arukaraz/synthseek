@@ -3,6 +3,10 @@ import type { TracklistTrack } from "./components/Tracklist/types";
 
 export const MINI_HEADER_SCROLL_THRESHOLD = 150;
 
+export const DISCOVER_ROUTE = "/";
+
+export const SEARCH_ROUTE = "/search";
+
 export const PLAYS_MILLION = 1_000_000;
 
 export const PLAYS_HUNDRED_K = 100_000;
@@ -12,6 +16,8 @@ export const EMPTY_SOCIALS: SocialLink[] = [];
 export const EMPTY_GENRES: string[] = [];
 
 export const EMPTY_TRACKS: TracklistTrack[] = [];
+
+export const MISSING_CATALOG_IDS: ReadonlySet<string> = new Set(["", "0"]);
 
 export const ARTIST_TYPE_LABEL_KEYS = {
   human: "details.typeValue.soloArtist",

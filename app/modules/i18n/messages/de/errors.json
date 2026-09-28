@@ -97,7 +97,7 @@
   },
   "PLAYLIST_TRACK_IN_FLIGHT": {
     "title": "Titel wird noch heruntergeladen",
-    "description": "Nur abgeschlossene oder fehlgeschlagene Titel können aus einer Playlist entfernt werden."
+    "description": "Warte, bis er fertig ist, oder brich ihn ab, bevor du ihn aus der Playlist entfernst."
   },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "Dorthin nicht synchronisierbar",

@@ -59,6 +59,7 @@ export interface UseContentRequestModalsResult {
   requestContent: (requestedItem: MusicItem, context?: RequestContext) => void;
   requestArtistLidarr: (artist: MusicItem) => void;
   requestPlaylistConfig: (playlist: MusicItem, preloadedTracks: MusicTrack[]) => void;
+  requestArtistTracksConfig: (artist: MusicItem, tracks: MusicTrack[]) => void;
   contentDetailModalProps: ContentDetailModalFlowProps;
   configModalProps: ConfigRequestModalFlowProps;
 }

@@ -44,6 +44,8 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
           playlistOpenItem({ id: input.id, name: input.name, cover: input.cover, totalTracks: input.totalTracks }),
           playlistRequestTracks(input.tracks)
         ),
+      requestTopTracks: (input) =>
+        flow.requestArtistTracksConfig(artistRequestItem(input.artist), playlistRequestTracks(input.tracks)),
     }),
     [flow]
   );

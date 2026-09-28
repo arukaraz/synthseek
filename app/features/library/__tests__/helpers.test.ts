@@ -8,6 +8,7 @@ import {
   countActiveFilters,
   isLibraryView,
   parseFilterValues,
+  preferredPlaybackSource,
   resolveEffectiveDirection,
   resolvePageSize,
   serializeFilterValues,
@@ -16,6 +17,15 @@ import {
   viewCountFor,
 } from "../helpers";
 import type { FacetSearchState, FilterParamMap, LibraryView } from "../types";
+
+describe("preferredPlaybackSource", () => {
+  it("names the source only when exactly one is picked", () => {
+    expect(preferredPlaybackSource({ source: ["jellyfin"] })).toBe("jellyfin");
+    expect(preferredPlaybackSource({ source: ["jellyfin", "local"] })).toBeNull();
+    expect(preferredPlaybackSource({ source: [] })).toBeNull();
+    expect(preferredPlaybackSource({})).toBeNull();
+  });
+});
 
 describe("parseFilterValues", () => {
   it("returns an empty array for undefined or empty input", () => {

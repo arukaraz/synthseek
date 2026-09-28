@@ -59,7 +59,7 @@ afterEach(() => {
 
 const connected: PlexIntegrationCardProps["initial"] = {
   connection: { url: "http://plex.local:32400", token: "tok" },
-  behavior: { libraryScan: true, playlistSync: false, playback: false },
+  behavior: { libraryScan: true, playlistSync: false },
   naming: { plexPlaylistUsernameAffix: "off", plexPlaylistUsernameSeparator: " - " },
 };
 
@@ -120,27 +120,18 @@ describe("PlexIntegrationCard", () => {
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() => {
-      expect(updateBehavior.mutateAsync).toHaveBeenCalledWith({
-        libraryScan: true,
-        playlistSync: true,
-        playback: false,
-      });
+      expect(updateBehavior.mutateAsync).toHaveBeenCalledWith({ libraryScan: true, playlistSync: true });
       expect(updateFormatting.mutateAsync).not.toHaveBeenCalled();
     });
   });
 
-  it("saves playing from Plex without touching the other behaviours", async () => {
+  it("is titled by its server and has no switch for playing from it, since connecting is what makes it one", () => {
     render(<PlexIntegrationCard initial={connected} />);
 
-    await userEvent.click(screen.getByRole("switch", { name: enSettings.plex.playback.label }));
-    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
-
-    await waitFor(() => {
-      expect(updateBehavior.mutateAsync).toHaveBeenCalledWith({
-        libraryScan: true,
-        playlistSync: false,
-        playback: true,
-      });
-    });
+    expect(screen.getByRole("heading", { name: enSettings.mediaServers.plex.title })).toBeInTheDocument();
+    expect(screen.getAllByRole("switch").map((control) => control.getAttribute("aria-label"))).toEqual([
+      enSettings.plex.libraryScan.label,
+      enSettings.plex.playlistSync.label,
+    ]);
   });
 });

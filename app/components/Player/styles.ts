@@ -364,6 +364,16 @@ export const settingsPanel = cva(
   "scrollbar-none flex max-h-[min(78vh,calc(100vh-var(--player-dock-height)-1rem))] flex-col gap-3 overflow-y-auto px-3 pb-3"
 );
 
+export const settingsModalOverlay = cva("z-70");
+
+export const settingsModal = cva(
+  "player-metrics bg-surface-overlay border-fg/10 fixed top-1/2 left-1/2 z-70 flex max-h-[min(85dvh,52rem)] w-[min(26rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[14px] border shadow-2xl focus:outline-none"
+);
+
+export const settingsModalFrame = cva("flex min-h-0 flex-1 flex-col");
+
+export const settingsModalBody = cva("scrollbar-none flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3");
+
 export const settingsSection = cva(
   "border-fg-muted/25 bg-surface/40 flex flex-col gap-3 rounded-xl border px-3.5 py-3"
 );

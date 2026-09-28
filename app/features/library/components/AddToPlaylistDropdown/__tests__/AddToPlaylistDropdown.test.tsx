@@ -39,6 +39,7 @@ function makePlaylist(overrides: Partial<LibraryPlaylistItem> = {}): LibraryPlay
     total_tracks: 3,
     completed_tracks: 3,
     source_provider: null,
+    origin: { kind: "created" },
     sync_enabled: false,
     created_at: new Date(),
     ...overrides,

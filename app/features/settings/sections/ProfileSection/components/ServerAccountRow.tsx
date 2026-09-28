@@ -1,18 +1,20 @@
 "use client";
 
-import { Server } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
+import { ProviderMark, providerTone } from "@components/LibrarySourceModal";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
 import { Switch } from "@components/ui/Switch";
 import { useLinkSourceAccount, useSetSourceReporting, useUnlinkSourceAccount } from "@hooks/api";
+import { cn } from "@utils/cn";
 import { PLAYBACK_SERVER_NAMES } from "@utils/playback-servers";
 
 import { LINK_OUTCOME_KEYS, SERVER_REPORT_FAILURE_KEYS } from "../constants";
 import {
+  accountChip,
   listeningFailure,
   listeningPanel,
   listeningRow,
@@ -20,7 +22,6 @@ import {
   listeningToggleLabel,
   listeningToggleRow,
   listeningTokenRow,
-  serverChip,
 } from "../styles";
 import type { ServerAccountRowProps } from "../types";
 
@@ -51,8 +52,8 @@ export function ServerAccountRow({ account }: ServerAccountRowProps) {
   return (
     <div className={listeningRow()}>
       <div className={listeningRowHeader()}>
-        <span className={serverChip()}>
-          <Server className="size-4" />
+        <span className={cn(accountChip(), providerTone({ provider: server }))}>
+          <ProviderMark provider={server} size={18} />
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-fg text-sm font-medium">{name}</p>
@@ -99,7 +100,7 @@ export function ServerAccountRow({ account }: ServerAccountRowProps) {
               onChange={(event) => setPassword(event.target.value)}
               placeholder={t("profile.connected.server.password")}
               aria-label={t("profile.connected.server.password")}
-              autoComplete="new-password"
+              autoComplete="off"
             />
             <Button
               size="sm"

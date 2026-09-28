@@ -12,7 +12,7 @@ import { movedServer } from "./helpers";
 import { orderPosition, orderRow } from "./styles";
 import type { PlaybackOrderCardProps } from "./types";
 
-export function PlaybackOrderCard({ order: servers, playing }: PlaybackOrderCardProps) {
+export function PlaybackOrderCard({ order: servers, connected }: PlaybackOrderCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateEnginePlaybackSources();
 
@@ -30,7 +30,7 @@ export function PlaybackOrderCard({ order: servers, playing }: PlaybackOrderCard
             <span className={orderPosition()}>{index + 2}</span>
             <div className="min-w-0 flex-1">
               <p className="text-fg text-sm">{PLAYBACK_SERVER_NAMES[server]}</p>
-              {playing[server] ? null : <p className="text-fg/50 text-xs">{t("mediaServers.order.notPlaying")}</p>}
+              {connected[server] ? null : <p className="text-fg/50 text-xs">{t("mediaServers.order.notConnected")}</p>}
             </div>
             <Button
               variant="ghost"

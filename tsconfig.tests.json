@@ -67,7 +67,6 @@
     "app/features/settings/sections/GeneralSection/__tests__/ApiKeysSubsection.test.tsx",
     "app/features/settings/sections/GeneralSection/__tests__/CreateApiKeyDialog.test.tsx",
     "app/features/settings/sections/IntegrationsSection/__tests__/EnrichmentCard.test.tsx",
-    "app/features/settings/sections/IntegrationsSection/__tests__/LibrarySourcesCard.test.tsx",
     "app/features/settings/sections/JobsSection/__tests__/JobRow.test.tsx",
     "app/features/settings/sections/JobsSection/__tests__/JobsCard.test.tsx",
     "app/features/settings/sections/MaintenanceSection/__tests__/RecycleBinSection.test.tsx",

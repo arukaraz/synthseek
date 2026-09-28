@@ -23,6 +23,7 @@ function createLibraryPlaylist(overrides?: Partial<LibraryPlaylistItem>): Librar
     total_tracks: 20,
     completed_tracks: 18,
     source_provider: null,
+    origin: { kind: "created" },
     sync_enabled: false,
     created_at: new Date("2024-01-01T00:00:00.000Z"),
     ...overrides,
@@ -39,6 +40,14 @@ describe("PlaylistCard", () => {
 
     expect(screen.queryByRole("button", { name: /Open details for Road Trip/i })).not.toBeInTheDocument();
     expect(screen.getByText("Road Trip")).toBeInTheDocument();
+  });
+
+  it("says where the playlist came from under its name", () => {
+    renderWithProviders(
+      <PlaylistCard item={createLibraryPlaylist({ origin: { kind: "catalog", provider: "deezer" } })} />
+    );
+
+    expect(screen.getByText("Requested from Deezer")).toBeInTheDocument();
   });
 
   it("opens the detail flow on click when onOpen is provided", async () => {

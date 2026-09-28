@@ -1,5 +1,6 @@
 import type { FailureReason, RequestStatus } from "@api/__generated__/types";
 import type { CheckboxPreview } from "@components/ui/Checkbox";
+import type { QueuePresence } from "@components/ui/QueueAddButton";
 
 interface TrackAlbumContext {
   externalId: string;
@@ -11,6 +12,7 @@ export interface TracklistTrack {
   externalId: string;
   title: string;
   artist: string;
+  artistExternalId: string | null;
   durationMs: number;
   trackNumber: number;
   plays: number | null;
@@ -30,14 +32,15 @@ export interface TracklistProps {
   onSelectTrack?: (requestId: string, extend: boolean) => void;
   onPreviewHover?: (requestId: string | null) => void;
   previewTone?: (requestId: string) => CheckboxPreview;
+  onArtistNavigate?: (track: TracklistTrack) => void;
 }
 
 export interface TrackPlaybackActionsProps {
   title: string;
+  presence: QueuePresence;
   onPlayNow: () => Promise<void>;
   onEnqueue: () => Promise<boolean>;
-  onPlayNext?: () => Promise<boolean>;
-  inQueue?: boolean;
+  onRemove: () => void;
 }
 
 export interface TrackRowProps {
@@ -53,6 +56,7 @@ export interface TrackRowProps {
   previewTone?: CheckboxPreview;
   onPlayNow?: () => Promise<void>;
   onEnqueue?: () => Promise<boolean>;
-  onPlayNext?: () => Promise<boolean>;
-  inQueue?: boolean;
+  onRemoveFromQueue?: () => void;
+  queuePresence?: QueuePresence;
+  onArtistNavigate?: () => void;
 }

@@ -1,18 +1,27 @@
+import { useInvalidateLibrarySources } from "@hooks/api/queries/library-source/useInvalidateLibrarySources";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
 export function useLinkSourceAccount() {
   const utils = trpc.useUtils();
+  const invalidateLibrarySources = useInvalidateLibrarySources();
   return trpc.playback.sources.link.useMutation({
-    onSuccess: (result) => utils.playback.sources.accounts.setData(undefined, result.accounts),
+    onSuccess: (result) => {
+      utils.playback.sources.accounts.setData(undefined, result.accounts);
+      invalidateLibrarySources();
+    },
     onError: (error) => errorToast(error, "playback.sourceLinkFailed"),
   });
 }
 
 export function useUnlinkSourceAccount() {
   const utils = trpc.useUtils();
+  const invalidateLibrarySources = useInvalidateLibrarySources();
   return trpc.playback.sources.unlink.useMutation({
-    onSuccess: (accounts) => utils.playback.sources.accounts.setData(undefined, accounts),
+    onSuccess: (accounts) => {
+      utils.playback.sources.accounts.setData(undefined, accounts);
+      invalidateLibrarySources();
+    },
     onError: (error) => errorToast(error, "playback.sourceLinkFailed"),
   });
 }

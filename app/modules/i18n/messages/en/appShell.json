@@ -8,9 +8,8 @@
         "title": "Integrations",
         "tabs": {
           "downloadSources": "Download Sources",
-          "plex": "Plex",
           "mediaServers": "Media servers",
-          "lidarr": "Lidarr",
+          "librarySources": "Library sources",
           "metadata": "Metadata"
         }
       }

@@ -2,7 +2,7 @@
 
 import { useRetryTracks } from "@hooks/api";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
-import { useQueuedTrackIds } from "@hooks/ui/player";
+import { playerActions, useQueuePresence } from "@hooks/ui/player";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { isRemovableTrack, playableTrackId } from "../../helpers";
@@ -18,11 +18,12 @@ export function Tracklist({
   onSelectTrack,
   onPreviewHover,
   previewTone,
+  onArtistNavigate,
 }: TracklistProps) {
   const { requestTrack } = useContentDetailActions();
   const retryTracks = useRetryTracks();
-  const { playEntity, enqueueEntity, playNextEntity } = useEntityPlayback();
-  const queuedIds = useQueuedTrackIds();
+  const { playEntity, enqueueEntity } = useEntityPlayback();
+  const presenceOf = useQueuePresence();
   const retryingId = retryTracks.isPending ? retryTracks.variables?.trackIds[0] : undefined;
 
   return (
@@ -45,10 +46,9 @@ export function Tracklist({
             onEnqueue={
               playableId === null ? undefined : () => enqueueEntity({ kind: "tracks", trackIds: [playableId] })
             }
-            onPlayNext={
-              playableId === null ? undefined : () => playNextEntity({ kind: "tracks", trackIds: [playableId] })
-            }
-            inQueue={playableId !== null && queuedIds.has(playableId)}
+            onRemoveFromQueue={playableId === null ? undefined : () => playerActions.removeTrackFromQueue(playableId)}
+            queuePresence={playableId === null ? "absent" : presenceOf(playableId)}
+            onArtistNavigate={onArtistNavigate ? () => onArtistNavigate(track) : undefined}
             onRequest={() =>
               requestTrack({
                 id: track.externalId,

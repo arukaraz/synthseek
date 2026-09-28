@@ -29,7 +29,7 @@ export function synthesizeTrack(candidate: FeedCandidate): MusicTrack {
     id: candidate.catalogTrackId,
     title: candidate.title,
     artist: candidate.artist,
-    artists: [{ id: `${candidate.catalogTrackId}:artist`, name: candidate.artist }],
+    artists: [{ id: "", name: candidate.artist }],
     album: { id: candidate.albumExternalId, name: candidate.albumName, images },
     duration_ms: candidate.durationMs,
     track_number: candidate.trackNumber,

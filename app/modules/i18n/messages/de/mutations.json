@@ -270,7 +270,13 @@
     "upgradeSkipUpgradeError_one": "{{count}} konnte nicht eingereiht werden",
     "upgradeSkipUpgradeError_other": "{{count}} konnten nicht eingereiht werden",
     "bulkTracksTooManyTitle": "Zu viele Titel ausgewählt",
-    "bulkTracksTooManyDescription": "Sammelaktionen verarbeiten bis zu {{max}} Titel auf einmal. Es wurde nichts gesendet."
+    "bulkTracksTooManyDescription": "Sammelaktionen verarbeiten bis zu {{max}} Titel auf einmal. Es wurde nichts gesendet.",
+    "tracksRequestFailed": "Die Titel konnten nicht angefordert werden",
+    "tracksRequested_one": "{{count}} Titel angefordert",
+    "tracksRequested_other": "{{count}} Titel angefordert",
+    "tracksAlreadyRequested": "Diese Titel sind bereits angefordert oder in deiner Bibliothek",
+    "tracksNotRequested_one": "{{count}} Titel konnte nicht angefordert werden",
+    "tracksNotRequested_other": "{{count}} Titel konnten nicht angefordert werden"
   },
   "playlists": {
     "created": "Playlist erstellt",

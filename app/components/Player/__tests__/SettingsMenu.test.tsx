@@ -8,11 +8,8 @@ import enPlayer from "@modules/i18n/messages/en/player.json";
 
 import { EQUALIZER_PAGE_STEP_DB } from "../constants";
 import { SettingsMenu } from "../SettingsMenu";
-import type { PanelAnchorPoint, PlayerCompressor, PlayerEqualizer, PlayerView } from "../types";
-
-const anchor = vi.hoisted(() => ({ point: null as PanelAnchorPoint | null }));
-
-vi.mock("../useAnchorRect", () => ({ useAnchorRect: () => anchor.point }));
+import { SettingsModal } from "../SettingsModal";
+import type { PlayerCompressor, PlayerEqualizer, PlayerView } from "../types";
 
 function renderMenu(
   equalizer: Partial<PlayerEqualizer> = {},
@@ -107,7 +104,6 @@ describe("the playback settings panel", () => {
   });
 
   it("rises from the bar with its bottom edge open and closes downward", () => {
-    anchor.point = null;
     renderMenu();
 
     const surface = screen.getByRole("button", { name: enPlayer.settings.close }).closest("[class*='rounded-t']");
@@ -118,26 +114,12 @@ describe("the playback settings panel", () => {
   });
 
   it("hangs from the header with its top edge open and closes upward in the compact player", () => {
-    anchor.point = null;
     const actions = createPlayerActions();
     render(<SettingsMenu view={createPlayerView({ settingsOpen: true })} actions={actions} chain={false} hanging />);
 
     const close = screen.getByRole("button", { name: enPlayer.settings.close });
     expect(close.closest("[class*='rounded-t']")?.className).toContain("sm:border-t-0");
     expect(close.querySelector("svg.lucide-chevron-up")).not.toBeNull();
-  });
-
-  it("floats clear of both edges on the full screen stage, closing towards the toggle it hangs from", () => {
-    anchor.point = { top: 80, bottom: 0, left: 1000, below: true, room: 600 };
-    const actions = createPlayerActions();
-    render(<SettingsMenu view={createPlayerView({ settingsOpen: true })} actions={actions} chain={false} anchored />);
-
-    const close = screen.getByRole("button", { name: enPlayer.settings.close });
-    const surface = close.closest("[class*='rounded-t']")?.className ?? "";
-    expect(surface).not.toContain("border-t-0");
-    expect(surface).not.toContain("border-b-0");
-    expect(close.querySelector("svg.lucide-chevron-up")).not.toBeNull();
-    anchor.point = null;
   });
 
   it("stays open when the page behind it is used or escape is pressed, because it closes by hand only", async () => {
@@ -147,6 +129,33 @@ describe("the playback settings panel", () => {
     await user.keyboard("{Escape}");
 
     expect(actions.toggleSettings).not.toHaveBeenCalled();
+  });
+});
+
+describe("the playback settings on the full screen stage", () => {
+  function renderModal() {
+    const actions = createPlayerActions();
+    render(<SettingsModal view={createPlayerView({ settingsOpen: true, fullscreen: true })} actions={actions} />);
+    return { actions, user: userEvent.setup() };
+  }
+
+  it("opens as a modal holding every settings section, so the stage behind it cannot be used", () => {
+    renderModal();
+
+    const dialog = screen.getByRole("dialog", { name: enPlayer.settings.title });
+    expect(within(dialog).getByRole("region", { name: enPlayer.equalizer.caption })).toBeInTheDocument();
+    expect(within(dialog).getByRole("region", { name: enPlayer.settings.compressor.caption })).toBeInTheDocument();
+    expect(document.body.style.pointerEvents).toBe("none");
+  });
+
+  it("closes from its own button and from escape", async () => {
+    const { actions, user } = renderModal();
+
+    await user.click(screen.getByRole("button", { name: enPlayer.settings.close }));
+    expect(actions.toggleSettings).toHaveBeenCalledTimes(1);
+
+    await user.keyboard("{Escape}");
+    expect(actions.toggleSettings).toHaveBeenCalledTimes(2);
   });
 });
 

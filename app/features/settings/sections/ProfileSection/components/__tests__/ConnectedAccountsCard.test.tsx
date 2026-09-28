@@ -85,8 +85,8 @@ vi.mock("../ServerAccountRow", () => ({
 }));
 
 vi.mock("@components/LibrarySourceModal", () => ({
-  SpotifyMark: () => <span data-testid="spotify-mark" />,
-  PlexMark: () => <span data-testid="plex-mark" />,
+  ProviderMark: ({ provider }: { provider: string }) => <span data-testid={`${provider}-mark`} />,
+  providerTone: ({ provider }: { provider: string }) => `tone-${provider}`,
 }));
 
 import { ConnectedAccountsCard } from "../ConnectedAccountsCard";

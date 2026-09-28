@@ -27,7 +27,9 @@ import {
   playlistRequestTracks,
   playlistTarget,
   preloadedTrack,
+  showsInLibraryPill,
   trackRequestItem,
+  unrequestedTracks,
   visibleFacts,
 } from "../helpers";
 import type { TracklistTrack } from "../components/Tracklist/types";
@@ -68,6 +70,7 @@ function createTracklistTrack(overrides?: Partial<TracklistTrack>): TracklistTra
     externalId: "t1",
     title: "Get Lucky",
     artist: "Daft Punk",
+    artistExternalId: null,
     durationMs: 369000,
     trackNumber: 8,
     plays: null,
@@ -82,6 +85,32 @@ function createTracklistTrack(overrides?: Partial<TracklistTrack>): TracklistTra
 }
 
 describe("content-detail helpers", () => {
+  describe("showsInLibraryPill", () => {
+    it("shows the pill where a user discovers music", () => {
+      expect(showsInLibraryPill("/")).toBe(true);
+      expect(showsInLibraryPill("/search")).toBe(true);
+    });
+
+    it("hides it where the user is already looking at what they have or asked for", () => {
+      expect(showsInLibraryPill("/library")).toBe(false);
+      expect(showsInLibraryPill("/requests")).toBe(false);
+      expect(showsInLibraryPill("/settings/integrations")).toBe(false);
+    });
+  });
+
+  describe("unrequestedTracks", () => {
+    it("keeps the tracks never requested and the ones that can be tried again", () => {
+      const tracks = [
+        createTracklistTrack({ externalId: "new", status: null }),
+        createTracklistTrack({ externalId: "failed", status: "failed" }),
+        createTracklistTrack({ externalId: "done", status: "complete" }),
+        createTracklistTrack({ externalId: "busy", status: "downloading" }),
+      ];
+
+      expect(unrequestedTracks(tracks).map((track) => track.externalId)).toEqual(["new", "failed"]);
+    });
+  });
+
   describe("detailInitials", () => {
     it("takes the first letter of the first two words", () => {
       expect(detailInitials("Daft Punk")).toBe("DP");
@@ -500,6 +529,7 @@ describe("content-detail helpers", () => {
         externalId: "deezer:1",
         title: "Get Lucky",
         artist: "Daft Punk",
+        artistExternalId: "ar1",
         durationMs: 369000,
         trackNumber: 8,
         plays: null,
@@ -524,6 +554,12 @@ describe("content-detail helpers", () => {
     it("falls back to the flat artist string when artists is empty", () => {
       const row = preloadedTrack(createMusicTrack({ artists: [], artist: "Justice" }));
       expect(row.artist).toBe("Justice");
+      expect(row.artistExternalId).toBeNull();
+    });
+
+    it.each(["0", ""])("does not treat the missing artist id %j as an artist to open", (id) => {
+      const row = preloadedTrack(createMusicTrack({ artists: [{ id, name: "Unknown Artist" }] }));
+      expect(row.artistExternalId).toBeNull();
     });
 
     it("builds a preloaded playlist target carrying its mapped tracks and disabled-request guard", () => {
@@ -676,6 +712,10 @@ describe("content-detail helpers", () => {
 
     it("treats a failed track with a requestId as removable", () => {
       expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: "failed" }))).toBe(true);
+    });
+
+    it("treats a cancelled track as removable, since it is finished rather than in flight", () => {
+      expect(isRemovableTrack(createTracklistTrack({ requestId: "r1", status: "cancelled" }))).toBe(true);
     });
 
     it("rejects in-flight statuses", () => {

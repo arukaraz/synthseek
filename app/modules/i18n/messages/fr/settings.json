@@ -292,18 +292,16 @@
       "acoustidKey": {
         "label": "Clé API AcoustID",
         "helper": "Solution de repli par empreinte audio pour les pistes sans métadonnées de tags fiables."
-      }
-    },
-    "librarySources": {
-      "title": "Sources de bibliothèque",
-      "description": "Plateformes de streaming depuis lesquelles Synthseek peut importer des playlists et des albums enregistrés.",
+      },
       "songlinkKey": {
         "label": "Clé API Songlink (facultatif)",
         "helper": "Résout les URL de pistes entre plateformes pour les importations de playlists multi-plateformes. Synthseek utilise le point de terminaison public par défaut. Laissez vide sauf si vous avez une clé."
-      },
+      }
+    },
+    "librarySources": {
       "spotify": {
         "title": "Spotify",
-        "subtitle": "Configuration de l'application du développeur",
+        "description": "Importe les playlists et albums enregistrés depuis Spotify.",
         "toggleAriaLabel": "Activer Spotify",
         "clientIdLabel": "Client ID",
         "clientIdPlaceholder": "ex. 3a1b6c5d7e8f4a...",
@@ -350,12 +348,8 @@
       "description": "Après chaque importation réussie, demander à Plex d'analyser le dossier du nouveau fichier."
     },
     "playlistSync": {
-      "label": "Synchronisation des playlists",
-      "description": "Lorsqu'une demande de playlist Synthseek se termine (ou grandit), créer / mettre à jour une playlist Plex correspondante avec les pistes importées."
-    },
-    "playback": {
-      "label": "Lire depuis Plex",
-      "description": "Permet au lecteur de diffuser une piste depuis Plex lorsque Synthseek n'en a pas le fichier. Votre propre copie est toujours lue en premier."
+      "label": "Synchroniser les playlists avec Plex",
+      "description": "Crée les playlists de chaque membre dans Plex dès qu'elles ont fini de se télécharger, et les tient à jour. Elles vont toutes dans le compte Plex auquel Synthseek est connecté."
     },
     "namingHeader": "Nommage des playlists",
     "usernameAffix": {
@@ -409,9 +403,11 @@
   },
   "mediaServers": {
     "url": "URL",
+    "plex": {
+      "title": "Plex"
+    },
     "navidrome": {
       "title": "Navidrome",
-      "description": "Lit les pistes depuis Navidrome lorsque Synthseek n'en a pas le fichier.",
       "urlPlaceholder": "http://localhost:4533",
       "username": "Nom d'utilisateur",
       "password": "Mot de passe",
@@ -419,19 +415,14 @@
     },
     "jellyfin": {
       "title": "Jellyfin",
-      "description": "Lit les pistes depuis Jellyfin lorsque Synthseek n'en a pas le fichier.",
       "urlPlaceholder": "http://localhost:8096",
       "apiKey": "Clé API",
       "apiKeyHelper": "Créez-en une dans Jellyfin, sous Tableau de bord, Clés API."
     },
-    "playback": {
-      "label": "Lire depuis {{server}}",
-      "description": "Votre propre copie est toujours lue en premier."
-    },
     "playlistSync": {
       "label": "Synchroniser les playlists avec {{server}}",
-      "description": "Les playlists terminées de chaque membre sont créées dans son propre compte {{server}} et tenues à jour.",
-      "needsPlayback": "Activez d'abord la lecture depuis {{server}}."
+      "description": "Crée les playlists de chaque membre dans son propre compte {{server}} dès qu'elles ont fini de se télécharger, et les tient à jour. Chaque membre relie son compte dans son profil.",
+      "needsConnection": "Renseignez les informations de {{server}} ci-dessus pour l'activer."
     },
     "test": {
       "action": "Tester la connexion",
@@ -442,16 +433,16 @@
     },
     "order": {
       "title": "Ordre de lecture",
-      "description": "Synthseek lit d'abord son propre fichier, puis essaie ces serveurs dans l'ordre.",
+      "description": "Synthseek lit d'abord son propre fichier, puis essaie ces serveurs dans cet ordre. Quand un album ou un artiste que vous lancez se trouve à plusieurs endroits, il vous demande d'où le lire.",
       "local": "Local",
-      "notPlaying": "Lecture désactivée",
+      "notConnected": "Non connecté",
       "moveUp": "Monter {{server}}",
       "moveDown": "Descendre {{server}}"
     }
   },
   "lidarr": {
     "title": "Lidarr",
-    "description": "Facultatif. Confiez des albums à une instance Lidarr existante.",
+    "description": "Confiez des albums à une instance Lidarr existante.",
     "url": {
       "label": "URL",
       "placeholder": "http://localhost:8686"
@@ -682,7 +673,7 @@
       "connected": "Connecte",
       "notConnected": "Non connecte",
       "notConfigured": "Demandez a un administrateur de renseigner les identifiants de l'API.",
-      "sendPlays": "Envoyer mes ecoutes",
+      "scrobblePlays": "Scrobbler mes écoutes",
       "otherApps": "Envoyer aussi les ecoutes de ces applications",
       "lastfm": {
         "name": "Last.fm",

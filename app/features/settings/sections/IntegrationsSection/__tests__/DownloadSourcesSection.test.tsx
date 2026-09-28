@@ -8,7 +8,7 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockQuery, createLoadingQuery, createErrorQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
 interface SettingsData {
-  connections: { slskd: { apiUrl: string; apiKey: string; bannedUsers: string[] } };
+  connections: { slskd: { apiUrl: string; apiKey: string; bannedUsers: string[] }; lidarr: unknown };
   engine: { search: unknown; timeouts: unknown };
   downloadSources: unknown;
 }
@@ -31,10 +31,14 @@ vi.mock("../UsenetCard", () => ({
   UsenetCard: () => <div data-testid="usenet-card" />,
 }));
 
+vi.mock("../LidarrCard", () => ({
+  LidarrCard: () => <div data-testid="lidarr-card" />,
+}));
+
 import { DownloadSourcesSection } from "../DownloadSourcesSection";
 
 const data: SettingsData = {
-  connections: { slskd: { apiUrl: "http://localhost:5030", apiKey: "k", bannedUsers: [] } },
+  connections: { slskd: { apiUrl: "http://localhost:5030", apiKey: "k", bannedUsers: [] }, lidarr: {} },
   engine: { search: {}, timeouts: {} },
   downloadSources: {},
 };
@@ -67,14 +71,15 @@ describe("DownloadSourcesSection", () => {
     expect(screen.getByTestId("slskd-card")).toBeInTheDocument();
     expect(screen.getByTestId("ytdlp-card")).toBeInTheDocument();
     expect(screen.getByTestId("usenet-card")).toBeInTheDocument();
+    expect(screen.getByTestId("lidarr-card")).toBeInTheDocument();
   });
 
-  it("puts yt-dlp last, so the two-column grid lands it under the tall Slskd card", () => {
+  it("keeps yt-dlp third, so the two-column grid lands it under the tall Slskd card, with Lidarr after it", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<DownloadSourcesSection />);
 
     const rendered = screen.getAllByTestId(/-card$/).map((card) => card.dataset.testid);
 
-    expect(rendered).toEqual(["slskd-card", "usenet-card", "ytdlp-card"]);
+    expect(rendered).toEqual(["slskd-card", "usenet-card", "ytdlp-card", "lidarr-card"]);
   });
 });

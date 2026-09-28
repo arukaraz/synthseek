@@ -1,5 +1,6 @@
 "use client";
 
+import { useHasPlayableTracks } from "@hooks/api";
 import { useArtistIdentity, useArtistStats } from "@hooks/api/queries/content-detail";
 import { useLidarrAvailable } from "@hooks/api/queries/useLidarrAvailable";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
@@ -24,6 +25,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
   const { data: identity } = useArtistIdentity({ catalogArtistId: target.id, artistName: target.artistName });
   const { data: stats } = useArtistStats({ artistName: target.artistName, mbid: identity?.mbid ?? null });
   const { data: lidarr } = useLidarrAvailable();
+  const { data: playable } = useHasPlayableTracks({ kind: "artist", artist: target.name });
   const { requestArtist } = useContentDetailActions();
   const { playEntity, startRadio } = useEntityPlayback();
 
@@ -42,9 +44,11 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
     [startRadio, target.name]
   );
 
+  const artistInput = useMemo(() => ({ id: target.id, name: target.name, cover }), [target.id, target.name, cover]);
+
   const handleRequest = useCallback(() => {
-    requestArtist({ id: target.id, name: target.name, cover });
-  }, [requestArtist, target.id, target.name, cover]);
+    requestArtist(artistInput);
+  }, [requestArtist, artistInput]);
 
   const statsSlot = useMemo(
     () => <ArtistStatsWidget catalogArtistId={target.id} artistName={target.artistName} mbid={mbid} slot="stats" />,
@@ -63,8 +67,8 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
         genres={genres}
         requestState="request"
         onRequest={handleRequest}
-        onPlay={handlePlay}
-        onStartRadio={handleStartRadio}
+        onPlay={playable ? handlePlay : undefined}
+        onStartRadio={playable ? handleStartRadio : undefined}
         showRequest={showRequest}
         socials={socials}
         statsSlot={statsSlot}
@@ -74,7 +78,7 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
       <div className={modalScrollArea()}>
         <div className={modalGrid()}>
           <div className={modalMain()}>
-            <ArtistTopTracksWidget catalogArtistId={target.id} />
+            <ArtistTopTracksWidget artist={artistInput} />
           </div>
 
           <div className={modalSide()}>

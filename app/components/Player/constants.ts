@@ -79,8 +79,6 @@ export const EQUALIZER_PAGE_STEP_DB = 2;
 
 export const EQUALIZER_SCALE_TICKS_DB: readonly number[] = [12, 6, 0, -6, -12];
 
-export const SETTINGS_PANEL_WIDTH_PX = 400;
-
 export const SETTINGS_SLIDER_PAGE_STEPS = 10;
 
 export const CUSTOM_PRESET_VALUE_PREFIX = "custom:";

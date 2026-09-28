@@ -7,6 +7,7 @@
   "play": "Lire",
   "playAll": "Lire tout ce que nous avons de {{name}}",
   "startRadio": "Lancer une radio",
+  "startRadioInfo": "Lance un mélange de titres similaires déjà présents dans votre bibliothèque.",
   "startRadioFrom": "Lancer une radio à partir de {{name}}",
   "viewArtist": "Voir l'artiste {{name}}",
   "resolveArtistFailed": "Nous n'avons pas trouvé cet artiste.",
@@ -51,6 +52,15 @@
     "live": "Live",
     "compilation": "Compilations"
   },
+  "recordTypeSingular": {
+    "album": "Album",
+    "ep": "EP",
+    "single": "Single",
+    "live": "Live",
+    "compilation": "Compilation"
+  },
+  "releaseMeta": "{{year}} • {{type}}",
+  "requestTopTracks": "Demander les meilleures pistes",
   "rail": {
     "prev": "Défiler en arrière",
     "next": "Défiler en avant"

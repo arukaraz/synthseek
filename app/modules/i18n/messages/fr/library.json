@@ -283,7 +283,7 @@
       "sortAria": "Trier les résultats",
       "openFilters": "Filtres",
       "import": {
-        "trigger": "Importer la bibliothèque",
+        "trigger": "Importer",
         "sourcesLabel": "Sources",
         "filesLabel": "Fichiers",
         "playlist": "Playlist",
@@ -326,7 +326,11 @@
     },
     "origin": {
       "imported": "Importé",
-      "createdHere": "Créée ici"
+      "createdInSynthseek": "Créée dans Synthseek",
+      "requestedFrom": "Demandée sur {{provider}}",
+      "fromService": "De {{service}}",
+      "fromDiscovery": "D'un mix de découverte",
+      "importedFromFile": "Importée depuis un fichier"
     },
     "facets": {
       "status": "Statut",

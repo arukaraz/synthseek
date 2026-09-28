@@ -1144,11 +1144,12 @@ describe("readying the next track before the current one ends", () => {
 
   it("readies whatever comes next now, when the queue changed under a readied track", async () => {
     const store = await freshStore();
-    store.actions.playQueue([track("a"), track("b")], 0);
+    const [b, c] = [track("b"), track("c")];
+    store.actions.playQueue([track("a"), b, c], 0);
     engine.handlers?.onPlayingChange(true);
     engine.handlers?.onProgress(181, 200);
 
-    store.actions.playNext([track("c")]);
+    store.actions.reorderQueue([c, b]);
     engine.handlers?.onProgress(182, 200);
 
     expect(engine.prime).toHaveBeenLastCalledWith(expect.objectContaining({ url: "/api/v1/library/tracks/c/stream" }));

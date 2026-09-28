@@ -8,9 +8,8 @@
         "title": "Integraciones",
         "tabs": {
           "downloadSources": "Fuentes de descarga",
-          "plex": "Plex",
           "mediaServers": "Servidores de medios",
-          "lidarr": "Lidarr",
+          "librarySources": "Fuentes de biblioteca",
           "metadata": "Metadatos"
         }
       }

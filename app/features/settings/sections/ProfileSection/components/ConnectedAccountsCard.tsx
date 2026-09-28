@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
-import { PlexMark, SpotifyMark } from "@components/LibrarySourceModal";
+import { ProviderMark, providerTone } from "@components/LibrarySourceModal";
 import { usePlaybackSourceAccounts } from "@hooks/api";
 import { usePlexUnlink } from "@hooks/api/mutations/auth/usePlexUnlink";
 import { useConnectLibrarySource } from "@hooks/api/mutations/library-source/useConnectLibrarySource";
@@ -11,10 +11,11 @@ import { useSpotifyDisconnect } from "@hooks/api/mutations/spotify/useSpotifyDis
 import { useSpotifyConnectionStatus } from "@hooks/api/queries/spotify/useSpotifyConnectionStatus";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 import { useAuthContext } from "@modules/providers/AuthProvider";
+import { cn } from "@utils/cn";
 
 import { SettingsCard } from "../../../components/SettingsCard";
 import { usePlexLink } from "../hooks/usePlexLink";
-import { connectedRow, plexChip, spotifyChip } from "../styles";
+import { accountChip, connectedRow } from "../styles";
 import { PlexReportingRow } from "./PlexReportingRow";
 import { ServerAccountRow } from "./ServerAccountRow";
 
@@ -43,8 +44,8 @@ export function ConnectedAccountsCard() {
     <SettingsCard title={t("profile.connected.title")}>
       {spotifyEnabled ? (
         <div className={connectedRow()}>
-          <span className={spotifyChip()}>
-            <SpotifyMark size={18} />
+          <span className={cn(accountChip(), providerTone({ provider: "spotify" }))}>
+            <ProviderMark provider="spotify" size={18} />
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-fg text-sm font-medium">{t("profile.connected.spotify.name")}</p>
@@ -74,8 +75,8 @@ export function ConnectedAccountsCard() {
 
       {currentUser ? (
         <div className={connectedRow()}>
-          <span className={plexChip()}>
-            <PlexMark size={18} />
+          <span className={cn(accountChip(), providerTone({ provider: "plex" }))}>
+            <ProviderMark provider="plex" size={18} />
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-fg text-sm font-medium">{t("profile.connected.plex.name")}</p>

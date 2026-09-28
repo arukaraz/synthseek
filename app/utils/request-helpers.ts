@@ -28,6 +28,22 @@ const RECLAIM_KIND_KEYS: Record<
   playlist: "requests.reclaim.playlist",
 };
 
+export type RequestTracksResult = inferRouterOutputs<AppRouter>["requests"]["requestTracks"];
+
+export function notifyTracksRequested(result: RequestTracksResult, itemName: string) {
+  if (result.pendingApproval) notifyPendingApproval(itemName);
+  const started = result.created + result.requeued;
+  if (started > 0 && !result.pendingApproval) {
+    toast.success(i18n.t("mutations:requests.tracksRequested", { count: started }), { description: itemName });
+  }
+  if (started === 0 && result.failed === 0) {
+    toast.info(i18n.t("mutations:requests.tracksAlreadyRequested"), { description: itemName });
+  }
+  if (result.failed > 0) {
+    toast.error(i18n.t("mutations:requests.tracksNotRequested", { count: result.failed }), { description: itemName });
+  }
+}
+
 export function isSingleTrackRequest(tracks: TrackRequest[]): boolean {
   if (tracks.length !== 1) return false;
 
