@@ -961,6 +961,7 @@
         "duplicates": "Duplicates",
         "recycleBin": "Recycle bin",
         "quarantine": "Quarantine",
+        "systemStatus": "System status",
         "library": "Library"
       },
       "maintenanceWaiting": "Some maintenance surfaces have items waiting"
@@ -1436,6 +1437,40 @@
     "quarantine": {
       "title": "Quarantine",
       "description": "Source and file pairings that failed verification, remembered so a retry never fetches the same wrong file again."
+    },
+    "systemStatus": {
+      "title": "System status",
+      "description": "Problems that limit what Synthseek can do right now. Each one clears on its own once it is fixed.",
+      "allClear": "Everything is working.",
+      "lastChecked": "Last checked {{time}}",
+      "loadError": "Could not load the system status.",
+      "problems": {
+        "downloads_unwritable": {
+          "title": "Downloads folder is not writable",
+          "effect": "Downloads are on hold until Synthseek can write to {{path}}.",
+          "fix": "Give the user Synthseek runs as ownership of that folder on the host, for example: chown -R {{puid}}:{{pgid}} <your downloads folder>"
+        },
+        "library_inaccessible": {
+          "title": "Music library cannot be reached",
+          "effect": "Downloads are on hold, and files from the library cannot be played, until {{path}} can be reached again.",
+          "fix": "Check that the drive or share is mounted and that the user Synthseek runs as can read it, for example: chown -R {{puid}}:{{pgid}} <your music folder>"
+        },
+        "library_read_only": {
+          "title": "Music library is read-only",
+          "effect": "Browsing and playback work, but new downloads cannot be added to {{path}}.",
+          "fix": "If you want Synthseek to add music, give it write access, for example: chown -R {{puid}}:{{pgid}} <your music folder>"
+        },
+        "catalog_unreachable": {
+          "title": "Music catalog is not answering",
+          "effect": "Search and new requests fail until it answers again. Your library and playback keep working.",
+          "fix": "Check that this server can reach the internet. Synthseek checks again every minute."
+        },
+        "config_value_ignored": {
+          "title": "A setting was ignored",
+          "effect": "{{name}} holds an invalid value, so Synthseek started without it.",
+          "fix": "Correct it or remove it from the container environment, then restart."
+        }
+      }
     }
   }
 }

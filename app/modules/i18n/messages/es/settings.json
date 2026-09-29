@@ -961,6 +961,7 @@
         "duplicates": "Duplicados",
         "recycleBin": "Papelera",
         "quarantine": "Cuarentena",
+        "systemStatus": "Estado del sistema",
         "library": "Biblioteca"
       },
       "maintenanceWaiting": "Algunas superficies de mantenimiento tienen elementos esperando"
@@ -1436,6 +1437,40 @@
     "quarantine": {
       "title": "Cuarentena",
       "description": "Pares de fuente y fichero que fallaron la verificación, recordados para que un reintento no vuelva a traer el mismo fichero equivocado."
+    },
+    "systemStatus": {
+      "title": "Estado del sistema",
+      "description": "Problemas que limitan lo que Synthseek puede hacer ahora mismo. Cada uno desaparece solo en cuanto se arregla.",
+      "allClear": "Todo funciona correctamente.",
+      "lastChecked": "Última comprobación: {{time}}",
+      "loadError": "No se pudo cargar el estado del sistema.",
+      "problems": {
+        "downloads_unwritable": {
+          "title": "La carpeta de descargas no admite escritura",
+          "effect": "Las descargas están en espera hasta que Synthseek pueda escribir en {{path}}.",
+          "fix": "Da la propiedad de esa carpeta en el servidor al usuario con el que se ejecuta Synthseek, por ejemplo: chown -R {{puid}}:{{pgid}} <tu carpeta de descargas>"
+        },
+        "library_inaccessible": {
+          "title": "No se puede acceder a la biblioteca de música",
+          "effect": "Las descargas están en espera, y los ficheros de la biblioteca no se pueden reproducir, hasta que se pueda volver a acceder a {{path}}.",
+          "fix": "Comprueba que el disco o la carpeta compartida estén montados y que el usuario con el que se ejecuta Synthseek pueda leerlos, por ejemplo: chown -R {{puid}}:{{pgid}} <tu carpeta de música>"
+        },
+        "library_read_only": {
+          "title": "La biblioteca de música es de solo lectura",
+          "effect": "Explorar y reproducir funcionan, pero las descargas nuevas no se pueden añadir a {{path}}.",
+          "fix": "Si quieres que Synthseek añada música, dale permiso de escritura, por ejemplo: chown -R {{puid}}:{{pgid}} <tu carpeta de música>"
+        },
+        "catalog_unreachable": {
+          "title": "El catálogo de música no responde",
+          "effect": "La búsqueda y las peticiones nuevas fallan hasta que vuelva a responder. Tu biblioteca y la reproducción siguen funcionando.",
+          "fix": "Comprueba que este servidor tenga acceso a internet. Synthseek lo vuelve a comprobar cada minuto."
+        },
+        "config_value_ignored": {
+          "title": "Se ha ignorado un ajuste",
+          "effect": "{{name}} tiene un valor no válido, así que Synthseek arrancó sin él.",
+          "fix": "Corrígelo o quítalo del entorno del contenedor y reinicia."
+        }
+      }
     }
   }
 }

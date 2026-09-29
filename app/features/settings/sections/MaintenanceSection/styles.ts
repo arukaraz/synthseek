@@ -25,3 +25,21 @@ export const binSearch = cva(
 );
 
 export const binNoMatches = cva("text-fg/60 px-1 py-3 text-sm");
+
+export const problemList = cva("flex flex-col gap-3");
+
+export const problemRow = cva(
+  "border-warning-vivid/30 bg-warning-vivid/15 flex items-start gap-3 rounded-lg border p-3 sm:p-4"
+);
+
+export const problemIcon = cva("text-warning-vivid mt-0.5 size-5 shrink-0");
+
+export const problemBody = cva("flex min-w-0 flex-1 flex-col gap-1.5");
+
+export const problemTitle = cva("text-fg text-sm font-semibold");
+
+export const problemEffect = cva("text-fg/80 text-sm break-words");
+
+export const problemFix = cva("bg-fg/5 text-fg/80 rounded-md px-2 py-1.5 font-mono text-xs break-words");
+
+export const statusLoadError = cva("text-destructive-vivid text-sm");

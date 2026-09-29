@@ -7,7 +7,7 @@ order: 8
 
 ## How integrations behave
 
-Every integration except the core catalog is optional and non-fatal. A misconfigured or unreachable service logs a warning and Synthseek boots anyway, then shows that integration as unhealthy in Settings.
+Every integration except the core catalog is optional, and none of them stops Synthseek from starting. A misconfigured or unreachable service logs a warning and Synthseek boots anyway, then shows that integration as unhealthy in Settings. An unreachable catalog shows under **Settings**, **Maintenance**, **System status**.
 
 This is deliberate. An integration you can fix from the interface must never be able to stop the interface from starting, or a single wrong URL locks you out of the only place you could correct it.
 

@@ -103,11 +103,11 @@ Inside the application, each integration shows a live status on its settings car
 
 ## Startup
 
-Boot aborts for genuine prerequisites: the database and its migration, a required folder that is not usable, the core music catalog, and the one-shot 1.x migration seed. Every integration logs a warning and continues.
+Boot aborts for genuine prerequisites, such as the database and its migration, a missing `AUTH_SECRET`, and the one-shot 1.x migration seed. A folder that is not usable, an unreachable music catalog and every integration let Synthseek start. It logs a warning, and admins see the problem and its fix under **Settings**, **Maintenance**, **System status**, which clears on its own once the problem is fixed.
 
-When a required folder fails, the container log names the offending path and the ownership fix before the API stops with `Required service(s) failed: Paths`.
+When the downloads or music folder is not usable, the container log names the offending path and the ownership fix, and downloads wait until it is fixed.
 
-A music library that is readable but not writable does not stop the boot. Synthseek starts and says so, in the log and on the Paths entry of the health view. Browsing works, and imports into the library fail until it is writable.
+A music library that is readable but not writable holds nothing back. Synthseek starts and says so, in the log and under **System status**. Browsing works, and imports into the library fail until it is writable.
 
 ## Updates
 

@@ -16,7 +16,9 @@ vi.mock("next/link", () => ({
 import { MAINTENANCE_BRANCH } from "../constants";
 import { MaintenanceBranch } from "../MaintenanceBranch";
 
-const COUNTS = { review: 2, duplicates: 5, recycleBin: 78, quarantine: 0 };
+const COUNTS = { review: 2, duplicates: 5, recycleBin: 78, quarantine: 0, systemStatus: 3 };
+
+const ALL_CLEAR = { review: 0, duplicates: 0, recycleBin: 0, quarantine: 0, systemStatus: 0 };
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);
@@ -33,7 +35,7 @@ function openWhileLoading(pathname: string) {
 }
 
 describe("MaintenanceBranch", () => {
-  it("starts collapsed away from maintenance, so the sidebar is not four rows longer for everyone", () => {
+  it("starts collapsed away from maintenance, so the sidebar is not five rows longer for everyone", () => {
     open();
 
     expect(screen.queryByRole("link", { name: /Review/ })).not.toBeInTheDocument();
@@ -76,7 +78,35 @@ describe("MaintenanceBranch", () => {
 
     const names = screen.getAllByRole("link").map((link) => link.textContent);
 
-    expect(names).toEqual(["Review", "Duplicates", "Recycle bin", "Quarantine"]);
+    expect(names).toEqual([
+      "Review",
+      "Duplicates",
+      "Recycle bin",
+      "Quarantine",
+      enSettings.shell.sidebar.items.systemStatus,
+    ]);
+  });
+
+  it("lists system status last, linked to its page, with the number of problems beside it", () => {
+    open("/settings/maintenance/status");
+
+    const links = screen.getAllByRole("link");
+    const status = links[links.length - 1];
+
+    expect(status).toHaveAttribute("href", "/settings/maintenance/status");
+    expect(status.textContent).toBe(`${enSettings.shell.sidebar.items.systemStatus}3`);
+  });
+
+  it("warns on the parent when only the system has problems", () => {
+    render(
+      <MaintenanceBranch
+        branch={MAINTENANCE_BRANCH}
+        counts={{ ...ALL_CLEAR, systemStatus: 1 }}
+        pathname="/settings/general"
+      />
+    );
+
+    expect(screen.getByText(enSettings.shell.sidebar.maintenanceWaiting)).toBeInTheDocument();
   });
 
   it("warns on the parent when a child has items waiting, so a collapsed branch still says so", () => {
@@ -86,13 +116,7 @@ describe("MaintenanceBranch", () => {
   });
 
   it("stays quiet on the parent when every child is empty", () => {
-    render(
-      <MaintenanceBranch
-        branch={MAINTENANCE_BRANCH}
-        counts={{ review: 0, duplicates: 0, recycleBin: 0, quarantine: 0 }}
-        pathname="/settings/general"
-      />
-    );
+    render(<MaintenanceBranch branch={MAINTENANCE_BRANCH} counts={ALL_CLEAR} pathname="/settings/general" />);
 
     expect(screen.queryByText(enSettings.shell.sidebar.maintenanceWaiting)).not.toBeInTheDocument();
   });

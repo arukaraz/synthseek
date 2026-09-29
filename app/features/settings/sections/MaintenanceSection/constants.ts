@@ -1,1 +1,3 @@
 export const QUARANTINE_FILENAME_MAX = 64;
+
+export const CONTAINER_DEFAULT_OWNER_ID = "1000";

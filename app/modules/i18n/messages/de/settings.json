@@ -961,6 +961,7 @@
         "duplicates": "Duplikate",
         "recycleBin": "Papierkorb",
         "quarantine": "Quarantäne",
+        "systemStatus": "Systemstatus",
         "library": "Bibliothek"
       },
       "maintenanceWaiting": "In einigen Wartungsbereichen warten Einträge"
@@ -1436,6 +1437,40 @@
     "quarantine": {
       "title": "Quarantäne",
       "description": "Quelle-Datei-Paare, die die Prüfung nicht bestanden haben, gemerkt damit ein neuer Versuch nicht dieselbe falsche Datei holt."
+    },
+    "systemStatus": {
+      "title": "Systemstatus",
+      "description": "Probleme, die gerade einschränken, was Synthseek tun kann. Jedes verschwindet von selbst, sobald es behoben ist.",
+      "allClear": "Alles funktioniert.",
+      "lastChecked": "Zuletzt geprüft: {{time}}",
+      "loadError": "Der Systemstatus konnte nicht geladen werden.",
+      "problems": {
+        "downloads_unwritable": {
+          "title": "Der Download-Ordner ist nicht beschreibbar",
+          "effect": "Downloads sind angehalten, bis Synthseek in {{path}} schreiben kann.",
+          "fix": "Übertrage auf dem Host den Besitz dieses Ordners an den Benutzer, unter dem Synthseek läuft, zum Beispiel: chown -R {{puid}}:{{pgid}} <dein Download-Ordner>"
+        },
+        "library_inaccessible": {
+          "title": "Die Musikbibliothek ist nicht erreichbar",
+          "effect": "Downloads sind angehalten, und Dateien aus der Bibliothek lassen sich nicht abspielen, bis {{path}} wieder erreichbar ist.",
+          "fix": "Prüfe, ob das Laufwerk oder die Freigabe eingebunden ist und der Benutzer, unter dem Synthseek läuft, sie lesen kann, zum Beispiel: chown -R {{puid}}:{{pgid}} <dein Musikordner>"
+        },
+        "library_read_only": {
+          "title": "Die Musikbibliothek ist schreibgeschützt",
+          "effect": "Durchsuchen und Abspielen funktionieren, aber neue Downloads können nicht zu {{path}} hinzugefügt werden.",
+          "fix": "Wenn Synthseek Musik hinzufügen soll, gib ihm Schreibrechte, zum Beispiel: chown -R {{puid}}:{{pgid}} <dein Musikordner>"
+        },
+        "catalog_unreachable": {
+          "title": "Der Musikkatalog antwortet nicht",
+          "effect": "Suche und neue Anfragen schlagen fehl, bis er wieder antwortet. Deine Bibliothek und die Wiedergabe funktionieren weiter.",
+          "fix": "Prüfe, ob dieser Server das Internet erreicht. Synthseek prüft jede Minute erneut."
+        },
+        "config_value_ignored": {
+          "title": "Eine Einstellung wurde ignoriert",
+          "effect": "{{name}} enthält einen ungültigen Wert, daher ist Synthseek ohne ihn gestartet.",
+          "fix": "Korrigiere oder entferne ihn in der Container-Umgebung und starte dann neu."
+        }
+      }
     }
   }
 }

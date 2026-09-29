@@ -43,6 +43,7 @@ const utilsStub = vi.hoisted(() => ({
   },
   maintenance: {
     counts: { invalidate: vi.fn() },
+    systemStatus: { invalidate: vi.fn() },
   },
   import: {
     listBatches: { invalidate: vi.fn() },
@@ -73,6 +74,7 @@ const everyPushFedInvalidate = [
   utilsStub.import.listBatches.invalidate,
   utilsStub.import.getBatch.invalidate,
   utilsStub.maintenance.counts.invalidate,
+  utilsStub.maintenance.systemStatus.invalidate,
   utilsStub.requests.review.list.invalidate,
   utilsStub.library.scan.duplicateGroups.invalidate,
   utilsStub.library.scan.status.invalidate,

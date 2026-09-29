@@ -70,5 +70,11 @@
     "minimize": "Minimize",
     "expand": "Expand",
     "dismiss": "Dismiss"
+  },
+  "systemStatusBanner": {
+    "label": "System problems",
+    "more_one": "and {{count}} more problem",
+    "more_other": "and {{count}} more problems",
+    "details": "View details"
   }
 }

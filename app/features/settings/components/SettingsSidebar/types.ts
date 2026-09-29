@@ -16,7 +16,8 @@ export type SidebarItemKey =
   | "shell.sidebar.items.review"
   | "shell.sidebar.items.duplicates"
   | "shell.sidebar.items.recycleBin"
-  | "shell.sidebar.items.quarantine";
+  | "shell.sidebar.items.quarantine"
+  | "shell.sidebar.items.systemStatus";
 
 export interface NavItem {
   kind: "item";

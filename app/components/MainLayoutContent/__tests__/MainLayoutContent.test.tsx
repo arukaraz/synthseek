@@ -43,7 +43,16 @@ vi.mock("@components/TopHeader", () => ({
 }));
 
 vi.mock("@components/ContentShell", () => ({
-  ContentShell: ({ children }: { children: React.ReactNode }) => <main data-testid="content-shell">{children}</main>,
+  ContentShell: ({ children, banner }: { children: React.ReactNode; banner?: React.ReactNode }) => (
+    <main data-testid="content-shell">
+      <div data-testid="content-shell-banner">{banner}</div>
+      {children}
+    </main>
+  ),
+}));
+
+vi.mock("@components/SystemStatusBanner", () => ({
+  SystemStatusBanner: () => <section data-testid="system-status-banner" />,
 }));
 
 vi.mock("@components/BottomNav", () => ({
@@ -90,6 +99,16 @@ describe("MainLayoutContent", () => {
     );
 
     expect(screen.getByTestId("content-shell")).toHaveTextContent("child");
+  });
+
+  it("mounts the system status notice in the content shell's banner slot, so it spans every page", () => {
+    render(
+      <MainLayoutContent>
+        <p>child</p>
+      </MainLayoutContent>
+    );
+
+    expect(screen.getByTestId("content-shell-banner")).toContainElement(screen.getByTestId("system-status-banner"));
   });
 
   it("seeds the header with the q search param", () => {

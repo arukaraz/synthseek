@@ -78,7 +78,7 @@ Your slskd address and API key are not set here. The setup wizard collects them 
 
 Synthseek runs as an unprivileged user inside the container. It takes ownership of its own `/data` volume at boot and never touches the ownership of your music and downloads folders. Set `PUID` and `PGID` to the user and group that own your downloads and music folders on the host.
 
-If a required folder is not usable, Synthseek stops at boot rather than starting broken. The container log names the offending path and the ownership fix, and the API then stops with `Required service(s) failed: Paths`. A music library that is readable but not writable does not stop the boot: Synthseek starts and browsing works, and imports into the library fail until you fix the ownership.
+If the downloads or music folder is not usable, Synthseek still starts, and downloads wait until it is fixed. The container log names the offending path and the ownership fix, and admins see the same under **Settings**, **Maintenance**, **System status**. A music library that is readable but not writable holds nothing back: browsing works, and imports into the library fail until you fix the ownership.
 
 ## First run
 

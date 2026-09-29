@@ -10,6 +10,14 @@ export type MaintenanceCounts = inferRouterOutputs<AppRouter>["maintenance"]["co
 
 export type MaintenanceSurfaceKey = keyof MaintenanceCounts;
 
+export type SystemProblem = inferRouterOutputs<AppRouter>["maintenance"]["systemStatus"]["problems"][number];
+
+export type SystemProblemCopyParams = Partial<Record<"path" | "puid" | "pgid" | "name", string>>;
+
+export interface SystemProblemRowProps {
+  problem: SystemProblem;
+}
+
 export interface MaintenancePageProps {
   surface: MaintenanceSurfaceKey;
   children: ReactNode;

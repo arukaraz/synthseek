@@ -1,4 +1,5 @@
 import {
+  Activity,
   ArrowUpCircle,
   Blocks,
   CopyCheck,
@@ -40,6 +41,7 @@ export const MAINTENANCE_BRANCH: AdvancedEntry = {
     { href: "/settings/maintenance/duplicates", labelKey: "shell.sidebar.items.duplicates", countKey: "duplicates" },
     { href: "/settings/maintenance/recycle-bin", labelKey: "shell.sidebar.items.recycleBin", countKey: "recycleBin" },
     { href: "/settings/maintenance/quarantine", labelKey: "shell.sidebar.items.quarantine", countKey: "quarantine" },
+    { href: "/settings/maintenance/status", labelKey: "shell.sidebar.items.systemStatus", countKey: "systemStatus" },
   ],
 };
 
@@ -75,6 +77,7 @@ export const MAINTENANCE_ICONS = {
   duplicates: <CopyCheck />,
   recycleBin: <Trash2 />,
   quarantine: <ShieldBan />,
+  systemStatus: <Activity />,
 } as const;
 
 export const BUILD_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.0.0";

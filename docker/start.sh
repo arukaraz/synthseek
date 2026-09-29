@@ -137,16 +137,16 @@ mkdir -p /app/web/.next/cache
 chown -R synthseek:nodejs /app/web/.next/cache
 if ! su-exec synthseek test -w /downloads 2>/dev/null; then
     if su-exec synthseek test -r /downloads 2>/dev/null; then
-        echo "      WARN /downloads: read-only for synthseek (PUID=$PUID). Downloads need write access, the app will fail to start. Fix host ownership: chown -R $PUID:$PGID <your downloads path>"
+        echo "      WARN /downloads: read-only for synthseek (PUID=$PUID). Downloads wait until it is writable. Fix host ownership: chown -R $PUID:$PGID <your downloads path>"
     else
-        echo "      WARN /downloads: synthseek (PUID=$PUID) has no access. Set PUID/PGID to match host owner of /downloads, or remount with uid=$PUID,gid=$PGID."
+        echo "      WARN /downloads: synthseek (PUID=$PUID) has no access, so downloads wait until it has. Set PUID/PGID to match host owner of /downloads, or remount with uid=$PUID,gid=$PGID."
     fi
 fi
 if ! su-exec synthseek test -w /music 2>/dev/null; then
     if su-exec synthseek test -r /music 2>/dev/null; then
         echo "      /music: read-only for synthseek (PUID=$PUID). Library will work read-only."
     else
-        echo "      WARN /music: synthseek (PUID=$PUID) has no access. Set PUID/PGID to match host owner of /music, or remount with uid=$PUID,gid=$PGID."
+        echo "      WARN /music: synthseek (PUID=$PUID) has no access, so downloads wait until it has. Set PUID/PGID to match host owner of /music, or remount with uid=$PUID,gid=$PGID."
     fi
 fi
 echo "      Done"

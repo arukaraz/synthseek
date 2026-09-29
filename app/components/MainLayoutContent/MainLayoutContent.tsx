@@ -5,6 +5,7 @@ import { ContentShell } from "@components/ContentShell";
 import { PlaybackSourcePicker } from "@components/Player";
 import { PlayerDock } from "@components/PlayerDock";
 import { ProgressDock } from "@components/ui/ProgressDock";
+import { SystemStatusBanner } from "@components/SystemStatusBanner";
 import { TopHeader } from "@components/TopHeader";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import {
@@ -43,7 +44,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
     <div className="bg-surface min-h-screen overflow-hidden">
       <TopHeader onSearch={handleSearch} initialQuery={searchQuery} />
       <ContentRequestFlow>
-        <ContentShell>{children}</ContentShell>
+        <ContentShell banner={<SystemStatusBanner />}>{children}</ContentShell>
       </ContentRequestFlow>
       <BottomNav />
       <ProgressDock />

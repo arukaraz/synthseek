@@ -21,5 +21,8 @@ export function handleMaintenanceUpdate(event: MaintenanceUpdatePayload, utils: 
     case "quarantine":
       utils.settings.quarantine.list.invalidate();
       return;
+    case "systemStatus":
+      utils.maintenance.systemStatus.invalidate();
+      return;
   }
 }

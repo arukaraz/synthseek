@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { contentShell, gridBackgroundStyle } from "./styles";
 import type { ContentShellProps } from "./types";
 
-export function ContentShell({ children }: ContentShellProps) {
+export function ContentShell({ children, banner }: ContentShellProps) {
   const dock = usePlayerDock();
 
   return (
@@ -69,6 +69,7 @@ export function ContentShell({ children }: ContentShellProps) {
       >
         <div className={gradientOverlay({ direction: "toBl", intensity: "accent", rounded: "none" })} />
         <div className="relative z-10 flex h-full flex-col">
+          {banner}
           <div className="flex-1 overflow-hidden">{children}</div>
         </div>
       </motion.main>

@@ -961,6 +961,7 @@
         "duplicates": "Doublons",
         "recycleBin": "Corbeille",
         "quarantine": "Quarantaine",
+        "systemStatus": "État du système",
         "library": "Bibliothèque"
       },
       "maintenanceWaiting": "Certaines surfaces de maintenance ont des éléments en attente"
@@ -1436,6 +1437,40 @@
     "quarantine": {
       "title": "Quarantaine",
       "description": "Paires source-fichier ayant échoué à la vérification, mémorisées pour qu'une nouvelle tentative ne récupère pas le même mauvais fichier."
+    },
+    "systemStatus": {
+      "title": "État du système",
+      "description": "Les problèmes qui limitent ce que Synthseek peut faire en ce moment. Chacun disparaît de lui-même une fois réglé.",
+      "allClear": "Tout fonctionne.",
+      "lastChecked": "Dernière vérification : {{time}}",
+      "loadError": "Impossible de charger l'état du système.",
+      "problems": {
+        "downloads_unwritable": {
+          "title": "Le dossier de téléchargements n'est pas accessible en écriture",
+          "effect": "Les téléchargements sont en attente jusqu'à ce que Synthseek puisse écrire dans {{path}}.",
+          "fix": "Donnez la propriété de ce dossier sur l'hôte à l'utilisateur sous lequel tourne Synthseek, par exemple : chown -R {{puid}}:{{pgid}} <votre dossier de téléchargements>"
+        },
+        "library_inaccessible": {
+          "title": "La bibliothèque musicale est inaccessible",
+          "effect": "Les téléchargements sont en attente, et les fichiers de la bibliothèque ne peuvent pas être lus, jusqu'à ce que {{path}} soit de nouveau accessible.",
+          "fix": "Vérifiez que le disque ou le partage est monté et que l'utilisateur sous lequel tourne Synthseek peut le lire, par exemple : chown -R {{puid}}:{{pgid}} <votre dossier de musique>"
+        },
+        "library_read_only": {
+          "title": "La bibliothèque musicale est en lecture seule",
+          "effect": "La navigation et la lecture fonctionnent, mais les nouveaux téléchargements ne peuvent pas être ajoutés à {{path}}.",
+          "fix": "Si vous voulez que Synthseek ajoute de la musique, donnez-lui l'accès en écriture, par exemple : chown -R {{puid}}:{{pgid}} <votre dossier de musique>"
+        },
+        "catalog_unreachable": {
+          "title": "Le catalogue musical ne répond pas",
+          "effect": "La recherche et les nouvelles demandes échouent jusqu'à ce qu'il réponde à nouveau. Votre bibliothèque et la lecture continuent de fonctionner.",
+          "fix": "Vérifiez que ce serveur a accès à Internet. Synthseek vérifie de nouveau chaque minute."
+        },
+        "config_value_ignored": {
+          "title": "Un réglage a été ignoré",
+          "effect": "{{name}} contient une valeur non valide, Synthseek a donc démarré sans elle.",
+          "fix": "Corrigez-la ou supprimez-la de l'environnement du conteneur, puis redémarrez."
+        }
+      }
     }
   }
 }

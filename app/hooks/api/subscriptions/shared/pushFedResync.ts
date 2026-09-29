@@ -15,6 +15,7 @@ export function resyncPushFedQueries(utils: Utils): void {
   void utils.import.listBatches.invalidate();
   void utils.import.getBatch.invalidate();
   void utils.maintenance.counts.invalidate();
+  void utils.maintenance.systemStatus.invalidate();
   void utils.requests.review.list.invalidate();
   void utils.library.scan.duplicateGroups.invalidate();
   void utils.library.scan.status.invalidate();
