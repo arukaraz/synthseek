@@ -501,19 +501,92 @@ describe("following the system when it pauses or plays the keep-alive itself", (
     expect(heard.onPlayingChange).not.toHaveBeenCalled();
   });
 
-  it("keeps a system play that lands while a restored track opens, through the echo of putting the keep-alive to sleep", async () => {
-    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 5000 });
+  it("opens a skipped-to track paused when the system pauses the keep-alive while it is still opening", async () => {
+    sources.specs.set(B, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 2000 });
     const { engine, heard } = await freshEngine();
-    engine.loadAt(A, 12, 1, false);
+    engine.loadAndPlay(A, 1, false);
     await settle();
+    engine.loadAndPlay(B, 1, false);
+
+    systemFollower()(false);
+    const before = context.sources.length;
+    await settle(2000);
+
+    expect(context.sources).toHaveLength(before);
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(false);
 
     systemFollower()(true);
-    expect(keepalive.releaseKeepAlive).toHaveBeenCalled();
-    systemFollower()(false);
-    await settle(5000);
+    await settle();
 
+    expect(context.sources.length).toBeGreaterThan(before);
     expect(heard.onPlayingChange).toHaveBeenLastCalledWith(true);
-    expect(keepalive.keepAlive).toHaveBeenCalled();
+  });
+});
+
+describe("a pause that lands while a track is still opening", () => {
+  it("opens a skipped-to track paused at the point it was asked for, and Play starts it there", async () => {
+    sources.specs.set(B, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 2000 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+    engine.loadAndPlay(B, 1, false, 7);
+
+    engine.pause();
+
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(false);
+    expect(heard.onLoadingChange).toHaveBeenLastCalledWith(false);
+    expect(keepalive.releaseKeepAlive).toHaveBeenCalled();
+    expect(energy.stopFollowingAudio).toHaveBeenCalled();
+    const before = context.sources.length;
+    await settle(2000);
+    expect(context.sources).toHaveLength(before);
+    expect(heard.onProgress).toHaveBeenLastCalledWith(7, 30);
+    expect(heard.onFailure).not.toHaveBeenCalled();
+
+    context.currentTime = 1;
+    engine.resume();
+    await settle();
+
+    expect(context.sources[before]?.start).toHaveBeenCalledWith(1 + PCM_START_LEAD_SECONDS, 0, 1);
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(true);
+  });
+
+  it("installs a blended skip's track paused at its own level instead of starting the blend", async () => {
+    sources.specs.set(B, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 2000 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+    context.currentTime = 2;
+    engine.crossfadeTo(B, { seconds: 3, curve: "equalPower", gainFactor: 0.5 }, 1, false, 4);
+
+    engine.pause();
+    const before = context.sources.length;
+    await settle(2000);
+
+    expect(context.sources).toHaveLength(before);
+    expect(sources.disposed).toContain(A);
+    expect(deckGainOf(3).setValueAtTime).toHaveBeenCalledWith(0.5, 2);
+    expect(heard.onProgress).toHaveBeenLastCalledWith(4, 30);
+    expect(heard.onLoadingChange).toHaveBeenLastCalledWith(false);
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(false);
+
+    engine.resume();
+    await settle();
+
+    expect(context.sources[before]?.start).toHaveBeenCalledWith(2 + PCM_START_LEAD_SECONDS, 0, 1);
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(true);
+  });
+
+  it("keeps the load timer running from the first Play when Play is pressed again while the track opens", async () => {
+    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: LOAD_TIMEOUT_MS * 4 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle(LOAD_TIMEOUT_MS / 2);
+
+    engine.resume();
+    await settle(LOAD_TIMEOUT_MS / 2);
+
+    expect(heard.onFailure).toHaveBeenCalledWith("load");
   });
 });
 

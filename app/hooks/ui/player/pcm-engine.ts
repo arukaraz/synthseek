@@ -351,13 +351,19 @@ export function canPlayMime(mimeType: string): boolean {
 }
 
 function followSystem(sounding: boolean): void {
-  if (sounding === playing) return;
   if (!sounding) {
     pause();
     return;
   }
   resume();
   if (!playing) releaseKeepAlive();
+}
+
+function installPaused(voice: Voice, seconds: number): void {
+  active = voice;
+  pausedAt = Math.min(Math.max(0, seconds), lastSecondOf(voice));
+  setTrackGain(voice.key, activeGain, true);
+  callbacks?.onProgress(pausedAt, reportedDurationOf(voice));
 }
 
 export function connectEngine(next: EngineCallbacks): void {
@@ -373,6 +379,8 @@ export function loadAndPlay(url: string, volume: number, muted: boolean, startSe
   retireActive();
   refusedPrimeUrl = null;
   playing = false;
+  armedLoad = current;
+  resumeOnOpen = true;
   applyVolume(volume, muted);
   callbacks?.onLoadingChange(true);
   armLoadTimer(current);
@@ -382,16 +390,23 @@ export function loadAndPlay(url: string, volume: number, muted: boolean, startSe
         disposeVoice(voice);
         return;
       }
+      armedLoad = null;
+      if (!resumeOnOpen) {
+        installPaused(voice, startSeconds);
+        return;
+      }
+      resumeOnOpen = false;
       voice.announced = false;
       active = voice;
       setTrackGain(voice.key, activeGain, true);
       beginPlaying(voice, startSeconds);
     })
     .catch(() => {
-      if (current === generation) {
-        clearTimeout(loadTimer);
-        callbacks?.onFailure("load");
-      }
+      if (current !== generation) return;
+      armedLoad = null;
+      resumeOnOpen = false;
+      clearTimeout(loadTimer);
+      callbacks?.onFailure("load");
     });
   return current;
 }
@@ -410,6 +425,14 @@ export function crossfadeTo(url: string, fade: SkipFade, volume: number, muted: 
     .then((voice) => {
       if (current !== generation || active !== leaving) {
         disposeVoice(voice);
+        return;
+      }
+      if (!playing) {
+        retireActive();
+        activeGain = fade.gainFactor;
+        installPaused(voice, startSeconds);
+        clearTimeout(loadTimer);
+        callbacks?.onLoadingChange(false);
         return;
       }
       const at = voice.bus.context.currentTime + PCM_START_LEAD_SECONDS;
@@ -452,10 +475,7 @@ export function loadAt(url: string, seconds: number, volume: number, muted: bool
         return;
       }
       armedLoad = null;
-      active = voice;
-      pausedAt = Math.min(Math.max(0, seconds), lastSecondOf(voice));
-      setTrackGain(voice.key, activeGain, true);
-      callbacks?.onProgress(pausedAt, reportedDurationOf(voice));
+      installPaused(voice, seconds);
       if (resumeOnOpen) {
         resumeOnOpen = false;
         resume();
@@ -523,7 +543,7 @@ export function setActiveTrackGain(factor: number): void {
 export function resume(): void {
   if (playing) return;
   if (active === null) {
-    if (armedLoad !== generation) return;
+    if (armedLoad !== generation || resumeOnOpen) return;
     resumeOnOpen = true;
     callbacks?.onLoadingChange(true);
     armLoadTimer(generation);
@@ -539,7 +559,11 @@ export function pause(): void {
   if (resumeOnOpen && armedLoad === generation) {
     resumeOnOpen = false;
     clearTimeout(loadTimer);
+    releaseKeepAlive();
+    stopFollowingAudio();
     callbacks?.onLoadingChange(false);
+    callbacks?.onPlayingChange(false);
+    return;
   }
   if (active === null || !playing) return;
   pausedAt = currentPosition(active);

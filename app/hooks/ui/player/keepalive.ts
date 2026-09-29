@@ -4,6 +4,7 @@ const WAV_HEADER_BYTES = 44;
 const SILENCE_8BIT = 0x80;
 
 let element: HTMLAudioElement | null = null;
+let held = false;
 let follower: ((sounding: boolean) => void) | null = null;
 
 function writeAscii(view: DataView, at: number, text: string): void {
@@ -34,9 +35,12 @@ function silentWavUrl(): string {
 function create(): HTMLAudioElement {
   const created = new Audio(silentWavUrl());
   created.loop = true;
-  const report = (): void => follower?.(!created.paused);
-  created.addEventListener("pause", report);
-  created.addEventListener("play", report);
+  created.addEventListener("pause", () => {
+    if (held && created.paused) follower?.(false);
+  });
+  created.addEventListener("play", () => {
+    if (!held && !created.paused) follower?.(true);
+  });
   return created;
 }
 
@@ -45,10 +49,12 @@ export function followKeepAlive(next: (sounding: boolean) => void): void {
 }
 
 export function keepAlive(): void {
+  held = true;
   if (element === null) element = create();
   void element.play().catch(() => undefined);
 }
 
 export function releaseKeepAlive(): void {
+  held = false;
   element?.pause();
 }

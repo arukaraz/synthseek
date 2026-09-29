@@ -116,7 +116,7 @@ describe("the silent element that keeps the media session alive", () => {
     expect(created[0]?.pause).toHaveBeenCalled();
   });
 
-  it("tells its follower whether it is sounding whenever the system pauses or plays it", async () => {
+  it("tells its follower when the system pauses it while held, and when the system plays it once released", async () => {
     const keepalive = await fresh();
     const follower = vi.fn();
     keepalive.followKeepAlive(follower);
@@ -128,12 +128,28 @@ describe("the silent element that keeps the media session alive", () => {
     element.dispatch("pause");
     expect(follower).toHaveBeenLastCalledWith(false);
 
+    keepalive.releaseKeepAlive();
     element.paused = false;
     element.dispatch("play");
     expect(follower).toHaveBeenLastCalledWith(true);
   });
 
-  it("reports the state when the event lands, so a release and a restart in one task read as still sounding", async () => {
+  it("keeps quiet about the pauses and plays it made itself", async () => {
+    const keepalive = await fresh();
+    const follower = vi.fn();
+    keepalive.followKeepAlive(follower);
+    keepalive.keepAlive();
+    const element = created[0];
+    if (element === undefined) throw new Error("no element was built");
+
+    element.dispatch("play");
+    keepalive.releaseKeepAlive();
+    element.dispatch("pause");
+
+    expect(follower).not.toHaveBeenCalled();
+  });
+
+  it("reads the element as the event lands, so a release and a restart in one task, or the reverse, read as its own", async () => {
     const keepalive = await fresh();
     const follower = vi.fn();
     keepalive.followKeepAlive(follower);
@@ -145,6 +161,11 @@ describe("the silent element that keeps the media session alive", () => {
     keepalive.keepAlive();
     element.dispatch("pause");
 
-    expect(follower).toHaveBeenLastCalledWith(true);
+    keepalive.releaseKeepAlive();
+    keepalive.keepAlive();
+    keepalive.releaseKeepAlive();
+    element.dispatch("play");
+
+    expect(follower).not.toHaveBeenCalled();
   });
 });
