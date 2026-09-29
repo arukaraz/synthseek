@@ -49,8 +49,8 @@ describe("RequestDetailTracks", () => {
   it("renders a row per track with title and artist", () => {
     const request = makeRequestWithTracks({
       tracks: [
-        makeRequestsTrack({ id: "t1", title: "First Song", artist: "Artist A" }),
-        makeRequestsTrack({ id: "t2", title: "Second Song", artist: "Artist B" }),
+        makeRequestsTrack({ id: "t1", title: "First Song", credited_artist: "Artist A" }),
+        makeRequestsTrack({ id: "t2", title: "Second Song", credited_artist: "Artist B" }),
       ],
     });
 
@@ -305,7 +305,7 @@ describe("RequestDetailTracks", () => {
     expect(upgradeRequest).toHaveBeenCalledWith({
       track: {
         external_id: "track-ext-8",
-        artist: "An Artist",
+        credited_artist: "An Artist",
         title: "A Song",
         isrc: "USRC17607839",
         track_number: 1,

@@ -184,7 +184,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                   request.name
                 )}
               </h1>
-              <p className="text-fg/60 truncate text-sm">{request.artist}</p>
+              <p className="text-fg/60 truncate text-sm">{request.credited_artist}</p>
               <div className="mt-2 space-y-0.5">
                 <p className="text-fg/40 truncate text-xs">
                   <Trans

@@ -91,7 +91,10 @@ describe("RequestDetailHero", () => {
   });
 
   it("shows the request name, artist and requester", () => {
-    renderHero({}, { name: "Summer Mix", artist: "DJ Sun", requestedBy: makeRequestsUser({ username: "alice" }) });
+    renderHero(
+      {},
+      { name: "Summer Mix", credited_artist: "DJ Sun", requestedBy: makeRequestsUser({ username: "alice" }) }
+    );
 
     expect(screen.getByRole("heading", { name: "Summer Mix" })).toBeInTheDocument();
     expect(screen.getByText("DJ Sun")).toBeInTheDocument();
@@ -203,7 +206,7 @@ describe("RequestDetailHero", () => {
         id: "album-row-1",
         external_id: "123456",
         name: "Discovery",
-        artist: "Daft Punk",
+        credited_artist: "Daft Punk",
       }
     );
 
@@ -226,7 +229,7 @@ describe("RequestDetailHero", () => {
         contentType: ContentType.enum.album,
         external_id: "123456",
         name: "Discovery",
-        artist: "Daft Punk",
+        credited_artist: "Daft Punk",
         album_art: "https://example.com/cover.jpg",
       }
     );

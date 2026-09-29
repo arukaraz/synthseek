@@ -528,7 +528,7 @@ describe("mapTrackFields", () => {
     expect(mapTrackFields(track)).toEqual({
       external_id: "track-9",
       title: "Nine",
-      artist: "Composer",
+      credited_artist: "Composer",
       track_number: 3,
       disc_number: 1,
       duration_ms: 210000,

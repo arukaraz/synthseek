@@ -90,8 +90,8 @@ describe("GroupsViewMode", () => {
   it("keeps a request the server matched only on a TRACK title, which the client filter cannot see", () => {
     searchParamsRef.current = new URLSearchParams("q=hidden");
     queryState.data = [
-      makeRequestListItem({ id: "a", external_id: "ext-a", name: "Album One", artist: "Artist" }),
-      makeRequestListItem({ id: "b", external_id: "ext-b", name: "Album Two", artist: "Artist" }),
+      makeRequestListItem({ id: "a", external_id: "ext-a", name: "Album One", credited_artist: "Artist" }),
+      makeRequestListItem({ id: "b", external_id: "ext-b", name: "Album Two", credited_artist: "Artist" }),
     ];
     queryState.trackTitleMatchIds = ["b"];
 
@@ -104,7 +104,9 @@ describe("GroupsViewMode", () => {
 
   it("drops every request when the server reports no track-title match either", () => {
     searchParamsRef.current = new URLSearchParams("q=hidden");
-    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a", name: "Album One", artist: "Artist" })];
+    queryState.data = [
+      makeRequestListItem({ id: "a", external_id: "ext-a", name: "Album One", credited_artist: "Artist" }),
+    ];
     queryState.trackTitleMatchIds = [];
 
     render(<GroupsViewMode />);

@@ -7,7 +7,7 @@ const generateId = () => `album-${++albumCounter}-${Date.now()}`;
 const defaultAlbum: Omit<Album, "id"> = {
   external_id: "album:xyz789",
   name: "Test Album",
-  artist: "Test Artist",
+  credited_artist: "Test Artist",
   artist_id: null,
   album_art: "https://example.com/album-art.jpg",
   user_id: "user-1",

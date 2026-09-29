@@ -24,7 +24,7 @@ export function createFlatTrackRow(overrides: Partial<FlatTrackRow> = {}): FlatT
     external_id: "ext-1",
     user_id: owner.id,
     title: "Avril 14th",
-    artist: "Aphex Twin",
+    credited_artist: "Aphex Twin",
     artist_id: null,
     request_type: ContentType.enum.track,
     isrc: null,

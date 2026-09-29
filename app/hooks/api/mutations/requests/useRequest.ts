@@ -10,7 +10,7 @@ export function useRequest() {
   return trpc.requests.request.useMutation({
     onMutate: ({ track }) => {
       const dockJobId = seedRequestDockJob({
-        name: track.artist ? `${track.artist} - ${track.title}` : track.title,
+        name: track.credited_artist ? `${track.credited_artist} - ${track.title}` : track.title,
         trackCount: 1,
       });
       return { dockJobId };

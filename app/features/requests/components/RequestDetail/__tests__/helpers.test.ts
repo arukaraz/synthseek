@@ -33,7 +33,7 @@ describe("requestDetailTarget", () => {
       id: "album-row-1",
       external_id: "123456",
       name: "Random Access Memories",
-      artist: "Daft Punk",
+      credited_artist: "Daft Punk",
       album_art: "https://example.com/cover.jpg",
     });
 
@@ -52,7 +52,7 @@ describe("requestDetailTarget", () => {
       id: "playlist-row-1",
       external_id: "local_abc123",
       name: "Summer Mix",
-      artist: "alice",
+      credited_artist: "alice",
       album_art: null,
     });
 

@@ -18,7 +18,7 @@ export function useFilteredRequests(
     if (terms.length > 0) {
       const matchedByTrack = new Set(trackTitleMatchIds ?? []);
       filtered = filtered.filter(
-        (item) => matchesTerms(terms, [item.name, item.artist]) || matchedByTrack.has(item.id)
+        (item) => matchesTerms(terms, [item.name, item.credited_artist]) || matchedByTrack.has(item.id)
       );
     }
 
@@ -28,7 +28,7 @@ export function useFilteredRequests(
         case SortField.RECENT:
           return direction * (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime());
         case SortField.ARTIST:
-          return direction * a.artist.localeCompare(b.artist);
+          return direction * a.credited_artist.localeCompare(b.credited_artist);
         case SortField.ALBUM:
           return compareTypeFirst(a, b, ContentType.enum.album) || direction * a.name.localeCompare(b.name);
         case SortField.PLAYLIST:

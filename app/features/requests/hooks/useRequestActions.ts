@@ -145,7 +145,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
   const remove = async () => {
     const confirmed = await confirm({
       title: t("confirm.removeTitle", { label: typeLabel }),
-      message: t("confirm.removeMessage", { name: request.name, artist: request.artist }),
+      message: t("confirm.removeMessage", { name: request.name, artist: request.credited_artist }),
       variant: "danger",
       confirmText: t("confirm.removeConfirm", { label: typeLabel }),
       cancelText: t("confirm.removeKeep"),
@@ -158,7 +158,7 @@ export function useRequestActions(request: RequestListItem, tracks: TrackRequest
   const cancel = async () => {
     const confirmed = await confirm({
       title: t("confirm.cancelDownloadsTitle", { label: typeLabel }),
-      message: t("confirm.cancelDownloadsMessage", { name: request.name, artist: request.artist }),
+      message: t("confirm.cancelDownloadsMessage", { name: request.name, artist: request.credited_artist }),
       variant: "danger",
       confirmText: t("confirm.cancelDownloadsConfirm"),
       cancelText: t("confirm.cancelDownloadsKeep"),

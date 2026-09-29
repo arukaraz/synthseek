@@ -49,7 +49,7 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
 
       <div className="min-w-0">
         <p className={cn("truncate text-sm font-semibold", isSelected ? "text-fg" : "text-fg/90")}>{request.name}</p>
-        <p className="text-fg/50 truncate text-xs">{request.artist}</p>
+        <p className="text-fg/50 truncate text-xs">{request.credited_artist}</p>
       </div>
 
       <ProgressBar progress={progressPercent} isActive={isActive} size="md" gradient={statusConfig.glowColor} />

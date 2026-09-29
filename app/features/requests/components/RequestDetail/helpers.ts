@@ -13,7 +13,7 @@ const DETAIL_TARGET_BY_CONTENT_TYPE: Record<RequestContainerType, (request: Requ
     albumTarget({
       id: request.external_id,
       name: request.name,
-      artistName: request.artist,
+      artistName: request.credited_artist,
       cover: request.album_art,
     }),
   [ContentType.enum.playlist]: (request) =>

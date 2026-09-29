@@ -8,9 +8,9 @@ export function useBatchRequest() {
   const utils = trpc.useUtils();
 
   return trpc.requests.batchRequest.useMutation({
-    onMutate: ({ name, artist, tracks }) => {
+    onMutate: ({ name, credited_artist, tracks }) => {
       const dockJobId = seedRequestDockJob({
-        name: artist ? `${artist} - ${name}` : name,
+        name: credited_artist ? `${credited_artist} - ${name}` : name,
         trackCount: tracks.length,
       });
       return { dockJobId };

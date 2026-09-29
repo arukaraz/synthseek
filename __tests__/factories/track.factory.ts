@@ -9,7 +9,7 @@ const defaultTrackRequest: Omit<TrackRequest, "id"> = {
   external_id: "track:abc123",
   user_id: "user-1",
   title: "Test Track",
-  artist: "Test Artist",
+  credited_artist: "Test Artist",
   request_type: ContentType.enum.track,
   isrc: "USRC12345678",
   track_number: 1,

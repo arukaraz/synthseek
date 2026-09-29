@@ -221,7 +221,7 @@ export function mapTrackFields(t: MusicTrack) {
   return {
     external_id: t.id,
     title: t.title,
-    artist: getMusicItemArtist(t),
+    credited_artist: getMusicItemArtist(t),
     track_number: t.track_number,
     disc_number: t.disc_number,
     duration_ms: t.duration_ms,

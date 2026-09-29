@@ -301,7 +301,7 @@ export function ConfigRequestModal({
       downloadAlbumMutation.mutate({
         external_id: item.id,
         name: item.name,
-        artist: item.artists[0]?.name || item.artist,
+        credited_artist: item.artists[0]?.name || item.artist,
         album_art: item.images[0]?.url ?? null,
         total_tracks: item.total_tracks || trackList.length,
         tracks: trackList.map(mapTrackFields),

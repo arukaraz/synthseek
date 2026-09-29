@@ -54,7 +54,7 @@ export function RequestDetailTracks({
       upgradeRequest.mutate({
         track: {
           external_id: track.external_id,
-          artist: track.artist,
+          credited_artist: track.credited_artist,
           title: track.title,
           isrc: track.isrc,
           track_number: track.track_number,
@@ -77,7 +77,7 @@ export function RequestDetailTracks({
     async (track: TrackRequest) => {
       const confirmed = await confirm({
         title: t("confirm.cancelTrackTitle"),
-        message: t("confirm.cancelTrackMessage", { title: track.title, artist: track.artist }),
+        message: t("confirm.cancelTrackMessage", { title: track.title, artist: track.credited_artist }),
         variant: "danger",
         confirmText: t("confirm.cancelConfirm"),
         cancelText: t("confirm.cancelKeep"),
@@ -97,7 +97,7 @@ export function RequestDetailTracks({
       {
         key: "artist",
         header: t("tracks.artistHeader"),
-        cell: (track) => <span className="block truncate">{track.artist}</span>,
+        cell: (track) => <span className="block truncate">{track.credited_artist}</span>,
         className: "hidden lg:table-cell",
       },
       {

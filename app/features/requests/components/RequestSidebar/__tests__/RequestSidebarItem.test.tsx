@@ -9,7 +9,7 @@ describe("RequestSidebarItem", () => {
   it("renders the name, artist, completed ratio and requester", () => {
     const request = makeRequestWithTracks({
       name: "Summer Mix",
-      artist: "Various",
+      credited_artist: "Various",
       completed_tracks: 4,
       total_tracks: 12,
       requestedBy: makeRequestsUser({ username: "dj" }),

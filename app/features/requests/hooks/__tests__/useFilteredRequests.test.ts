@@ -32,7 +32,7 @@ function makeRequest(overrides: Partial<RequestWithTracks> = {}): RequestWithTra
     id: "req-1",
     external_id: "ext-1",
     name: "A Request",
-    artist: "An Artist",
+    credited_artist: "An Artist",
     album_art: null,
     user_id: ownerId,
     release_date: "2024-01-01",
@@ -63,7 +63,7 @@ function makeTrack(overrides: Partial<TrackRequest> = {}): TrackRequest {
     external_id: "ext-track-1",
     user_id: ownerId,
     title: "A Song",
-    artist: "An Artist",
+    credited_artist: "An Artist",
     request_type: ContentType.enum.track,
     isrc: null,
     track_number: 1,
@@ -153,8 +153,8 @@ describe("useFilteredRequests sort by field", () => {
   const playlistAsc: SortConfig = { field: SortField.PLAYLIST, direction: "asc" };
 
   it("orders by artist ascending", () => {
-    const zed = makeRequest({ id: "zed", artist: "Zed" });
-    const ada = makeRequest({ id: "ada", artist: "Ada" });
+    const zed = makeRequest({ id: "zed", credited_artist: "Zed" });
+    const ada = makeRequest({ id: "ada", credited_artist: "Ada" });
 
     const { result } = renderHook(() => useFilteredRequests([zed, ada], "all", artistAsc, "", undefined));
 
@@ -162,8 +162,8 @@ describe("useFilteredRequests sort by field", () => {
   });
 
   it("orders by artist descending", () => {
-    const zed = makeRequest({ id: "zed", artist: "Zed" });
-    const ada = makeRequest({ id: "ada", artist: "Ada" });
+    const zed = makeRequest({ id: "zed", credited_artist: "Zed" });
+    const ada = makeRequest({ id: "ada", credited_artist: "Ada" });
 
     const { result } = renderHook(() => useFilteredRequests([ada, zed], "all", artistDesc, "", undefined));
 
@@ -252,8 +252,8 @@ describe("useFilteredRequests status filter", () => {
 
 describe("useFilteredRequests search filter", () => {
   it("matches on the request name", () => {
-    const match = makeRequest({ id: "match", name: "Midnight Drive", artist: "Nobody" });
-    const other = makeRequest({ id: "other", name: "Sunrise", artist: "Nobody" });
+    const match = makeRequest({ id: "match", name: "Midnight Drive", credited_artist: "Nobody" });
+    const other = makeRequest({ id: "other", name: "Sunrise", credited_artist: "Nobody" });
 
     const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "midnight", undefined));
 
@@ -261,8 +261,8 @@ describe("useFilteredRequests search filter", () => {
   });
 
   it("matches on the artist name", () => {
-    const match = makeRequest({ id: "match", name: "Untitled", artist: "Daft Punk" });
-    const other = makeRequest({ id: "other", name: "Untitled", artist: "Air" });
+    const match = makeRequest({ id: "match", name: "Untitled", credited_artist: "Daft Punk" });
+    const other = makeRequest({ id: "other", name: "Untitled", credited_artist: "Air" });
 
     const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "daft", undefined));
 
@@ -270,8 +270,8 @@ describe("useFilteredRequests search filter", () => {
   });
 
   it("keeps a request whose id the server reported as a track-title match", () => {
-    const match = makeRequest({ id: "match", name: "Album", artist: "Artist" });
-    const other = makeRequest({ id: "other", name: "Album", artist: "Artist" });
+    const match = makeRequest({ id: "match", name: "Album", credited_artist: "Artist" });
+    const other = makeRequest({ id: "other", name: "Album", credited_artist: "Artist" });
 
     const { result } = renderHook(() => useFilteredRequests([match, other], "all", recentDesc, "hidden", ["match"]));
 
@@ -279,8 +279,8 @@ describe("useFilteredRequests search filter", () => {
   });
 
   it("drops every request when the query matches no name, artist or reported track title", () => {
-    const first = makeRequest({ id: "first", name: "Album", artist: "Artist" });
-    const second = makeRequest({ id: "second", name: "Album", artist: "Artist" });
+    const first = makeRequest({ id: "first", name: "Album", credited_artist: "Artist" });
+    const second = makeRequest({ id: "second", name: "Album", credited_artist: "Artist" });
 
     const { result } = renderHook(() => useFilteredRequests([first, second], "all", recentDesc, "hidden", []));
 
@@ -288,8 +288,8 @@ describe("useFilteredRequests search filter", () => {
   });
 
   it("still matches on name and artist while the track-title lookup is in flight", () => {
-    const byName = makeRequest({ id: "by-name", name: "Hidden Gem", artist: "Artist" });
-    const other = makeRequest({ id: "other", name: "Album", artist: "Artist" });
+    const byName = makeRequest({ id: "by-name", name: "Hidden Gem", credited_artist: "Artist" });
+    const other = makeRequest({ id: "other", name: "Album", credited_artist: "Artist" });
 
     const { result } = renderHook(() => useFilteredRequests([byName, other], "all", recentDesc, "hidden", undefined));
 
