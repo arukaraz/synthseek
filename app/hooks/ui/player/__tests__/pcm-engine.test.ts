@@ -12,7 +12,11 @@ import {
 import type { EngineCallbacks, PcmBuffer, PcmSource } from "../types";
 
 const energy = vi.hoisted(() => ({ followAudio: vi.fn(), followGraph: vi.fn(), stopFollowingAudio: vi.fn() }));
-const keepalive = vi.hoisted(() => ({ keepAlive: vi.fn(), releaseKeepAlive: vi.fn() }));
+const keepalive = vi.hoisted(() => ({
+  keepAlive: vi.fn(),
+  releaseKeepAlive: vi.fn(),
+  followKeepAlive: vi.fn<(next: (sounding: boolean) => void) => void>(),
+}));
 const sources = vi.hoisted(() => ({
   specs: new Map<
     string,
@@ -160,6 +164,12 @@ async function freshEngine(): Promise<{ engine: typeof import("../pcm-engine"); 
 
 async function settle(ms = 0): Promise<void> {
   await vi.advanceTimersByTimeAsync(ms);
+}
+
+function systemFollower(): (sounding: boolean) => void {
+  const follower = keepalive.followKeepAlive.mock.calls.at(-1)?.[0];
+  if (follower === undefined) throw new Error("the engine never followed the keep-alive");
+  return follower;
 }
 
 function startsOf(): number[] {
@@ -459,6 +469,51 @@ describe("pausing, resuming and seeking", () => {
     await settle(LOAD_TIMEOUT_MS);
 
     expect(heard.onFailure).toHaveBeenCalledWith("load");
+  });
+});
+
+describe("following the system when it pauses or plays the keep-alive itself", () => {
+  it("pauses when a phone call takes the audio and resumes from the same position when it gives it back", async () => {
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+    context.currentTime = 3.25;
+
+    systemFollower()(false);
+
+    expect(context.sources.every((node) => node.stop.mock.calls.length === 1)).toBe(true);
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(false);
+
+    const before = context.sources.length;
+    systemFollower()(true);
+    await settle();
+
+    expect(Number(context.sources[before]?.start.mock.calls[0]?.[0])).toBeCloseTo(3.25 + PCM_START_LEAD_SECONDS, 9);
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(true);
+  });
+
+  it("puts the keep-alive back to sleep when the system plays it with nothing to resume", async () => {
+    const { heard } = await freshEngine();
+
+    systemFollower()(true);
+
+    expect(keepalive.releaseKeepAlive).toHaveBeenCalled();
+    expect(heard.onPlayingChange).not.toHaveBeenCalled();
+  });
+
+  it("keeps a system play that lands while a restored track opens, through the echo of putting the keep-alive to sleep", async () => {
+    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 5000 });
+    const { engine, heard } = await freshEngine();
+    engine.loadAt(A, 12, 1, false);
+    await settle();
+
+    systemFollower()(true);
+    expect(keepalive.releaseKeepAlive).toHaveBeenCalled();
+    systemFollower()(false);
+    await settle(5000);
+
+    expect(heard.onPlayingChange).toHaveBeenLastCalledWith(true);
+    expect(keepalive.keepAlive).toHaveBeenCalled();
   });
 });
 

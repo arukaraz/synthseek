@@ -18,7 +18,7 @@ import {
   STALL_TIMEOUT_MS,
 } from "./constants";
 import { followGraph, stopFollowingAudio } from "./energy";
-import { keepAlive, releaseKeepAlive } from "./keepalive";
+import { followKeepAlive, keepAlive, releaseKeepAlive } from "./keepalive";
 import { clipBuffer, leadFilled, positionOf, roundToSample } from "./pcm-schedule";
 import { openPcmSource } from "./pcm-source";
 import { pcmCanPlay } from "./pcm-support";
@@ -350,8 +350,19 @@ export function canPlayMime(mimeType: string): boolean {
   return pcmCanPlay(mimeType);
 }
 
+function followSystem(sounding: boolean): void {
+  if (sounding === playing) return;
+  if (!sounding) {
+    pause();
+    return;
+  }
+  resume();
+  if (!playing) releaseKeepAlive();
+}
+
 export function connectEngine(next: EngineCallbacks): void {
   callbacks = next;
+  followKeepAlive(followSystem);
 }
 
 export function loadAndPlay(url: string, volume: number, muted: boolean, startSeconds = 0): number {

@@ -214,7 +214,7 @@ export const PCM_NATIVE_MIMES: ReadonlySet<string> = new Set(["audio/wav"]);
 
 export const KEEPALIVE_SAMPLE_RATE = 8000;
 
-export const KEEPALIVE_SECONDS = 1;
+export const KEEPALIVE_SECONDS = 10;
 
 export const EQUALIZER_MAX_CUSTOM_PRESETS = 20;
 

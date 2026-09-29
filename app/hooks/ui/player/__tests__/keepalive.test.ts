@@ -2,12 +2,27 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 class FakeAudio {
   loop = false;
+  paused = true;
   readonly src: string;
-  readonly play = vi.fn(() => Promise.resolve());
-  readonly pause = vi.fn();
+  readonly listeners = new Map<string, () => void>();
+  readonly play = vi.fn(() => {
+    this.paused = false;
+    return Promise.resolve();
+  });
+  readonly pause = vi.fn(() => {
+    this.paused = true;
+  });
 
   constructor(src: string) {
     this.src = src;
+  }
+
+  addEventListener(type: string, listener: () => void): void {
+    this.listeners.set(type, listener);
+  }
+
+  dispatch(type: string): void {
+    this.listeners.get(type)?.();
   }
 }
 
@@ -33,9 +48,36 @@ afterEach(() => {
   Reflect.deleteProperty(URL, "createObjectURL");
 });
 
+const CHROME_TRANSIENT_SOUND_MAX_SECONDS = 5;
+
 async function fresh(): Promise<typeof import("../keepalive")> {
   vi.resetModules();
   return import("../keepalive");
+}
+
+function silentWave(): Blob {
+  const blob = vi.mocked(URL.createObjectURL).mock.calls[0]?.[0];
+  if (!(blob instanceof Blob)) throw new Error("no wave file was built");
+  return blob;
+}
+
+function bytesOf(blob: Blob): Promise<ArrayBuffer> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.result instanceof ArrayBuffer) resolve(reader.result);
+      else reject(new Error("the wave file did not read as bytes"));
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsArrayBuffer(blob);
+  });
+}
+
+async function waveSeconds(blob: Blob): Promise<number> {
+  const view = new DataView(await bytesOf(blob));
+  const byteRate = view.getUint32(28, true);
+  const dataBytes = view.getUint32(40, true);
+  return dataBytes / byteRate;
 }
 
 describe("the silent element that keeps the media session alive", () => {
@@ -49,10 +91,18 @@ describe("the silent element that keeps the media session alive", () => {
     expect(created[0]?.loop).toBe(true);
     expect(created[0]?.src).toBe("blob:silence");
     expect(created[0]?.play).toHaveBeenCalledTimes(2);
-    const blob = vi.mocked(URL.createObjectURL).mock.calls[0]?.[0];
-    expect(blob).toBeInstanceOf(Blob);
-    expect((blob as Blob).type).toBe("audio/wav");
-    expect((blob as Blob).size).toBe(44 + 8000);
+    expect(silentWave().type).toBe("audio/wav");
+  });
+
+  it("lasts longer than the five seconds Chrome treats as a transient sound, which Android never shows on the lock screen", async () => {
+    const keepalive = await fresh();
+
+    keepalive.keepAlive();
+
+    const wave = silentWave();
+    const seconds = await waveSeconds(wave);
+    expect(seconds).toBeGreaterThan(CHROME_TRANSIENT_SOUND_MAX_SECONDS);
+    expect(wave.size).toBe(44 + seconds * 8000);
   });
 
   it("pauses it when playback stops, and does nothing before it ever played", async () => {
@@ -64,5 +114,37 @@ describe("the silent element that keeps the media session alive", () => {
     keepalive.keepAlive();
     keepalive.releaseKeepAlive();
     expect(created[0]?.pause).toHaveBeenCalled();
+  });
+
+  it("tells its follower whether it is sounding whenever the system pauses or plays it", async () => {
+    const keepalive = await fresh();
+    const follower = vi.fn();
+    keepalive.followKeepAlive(follower);
+    keepalive.keepAlive();
+    const element = created[0];
+    if (element === undefined) throw new Error("no element was built");
+
+    element.paused = true;
+    element.dispatch("pause");
+    expect(follower).toHaveBeenLastCalledWith(false);
+
+    element.paused = false;
+    element.dispatch("play");
+    expect(follower).toHaveBeenLastCalledWith(true);
+  });
+
+  it("reports the state when the event lands, so a release and a restart in one task read as still sounding", async () => {
+    const keepalive = await fresh();
+    const follower = vi.fn();
+    keepalive.followKeepAlive(follower);
+    keepalive.keepAlive();
+    const element = created[0];
+    if (element === undefined) throw new Error("no element was built");
+
+    keepalive.releaseKeepAlive();
+    keepalive.keepAlive();
+    element.dispatch("pause");
+
+    expect(follower).toHaveBeenLastCalledWith(true);
   });
 });
