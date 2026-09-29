@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { cn } from "@utils/cn";
 
-import { statusBadge, statusDot } from "../../styles";
+import { statusBadge, statusDot, statusSupportingText } from "../../styles";
 import { LIDARR_STATUS_TONE } from "./constants";
 import type { LidarrHealth, LidarrStatusBadgeProps } from "./types";
 
@@ -27,7 +27,7 @@ export function LidarrStatusBadge({ status, message, messageCode, messageParams 
         <span className={statusDot({ tone })} />
         {label[status]}
       </span>
-      {supporting ? <p className="text-fg/55 text-xs">{supporting}</p> : null}
+      {supporting ? <p className={statusSupportingText()}>{supporting}</p> : null}
     </div>
   );
 }

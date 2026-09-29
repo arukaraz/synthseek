@@ -125,6 +125,8 @@ export const statusBadge = cva(
   }
 );
 
+export const statusSupportingText = cva("text-fg/55 text-xs sm:max-w-56");
+
 export const statusDot = cva("inline-block size-1.5 rounded-full", {
   variants: {
     tone: {
