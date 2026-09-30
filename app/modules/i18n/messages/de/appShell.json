@@ -55,6 +55,7 @@
       "notInLibrary": "Nicht in deiner Bibliothek",
       "noMatchableTracks": "Keine Treffer für die Titel",
       "sourceHasNoTracks": "Die Quelle enthält keine Titel",
+      "quotaExceeded": "Überschreitet dein Download-Kontingent",
       "importError": "Import fehlgeschlagen"
     },
     "provider": {

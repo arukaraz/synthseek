@@ -8,9 +8,10 @@ import { PasswordField } from "@components/ui/PasswordField";
 import { authInputControl, authInputIcon, authInputRow } from "@components/ui/styles";
 
 import { useSetupBootstrap } from "@hooks/api/mutations/auth/useSetupBootstrap";
+import { ACCOUNT_FIELD_RULES } from "@utils/account";
 
 import { StatusStrip } from "../components/StatusStrip";
-import { ADMIN_FIELD_RULES, SETUP_HEADING_IDS } from "../constants";
+import { SETUP_HEADING_IDS } from "../constants";
 import { isValidAdminEmail } from "../helpers";
 import { fieldError, fieldGroup, fieldHint, fieldLabel } from "../styles";
 import { StepShell } from "./StepShell";
@@ -47,8 +48,8 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
 
   const emailValid = isValidAdminEmail(email);
   const usernameValid =
-    username.length >= ADMIN_FIELD_RULES.usernameMin && username.length <= ADMIN_FIELD_RULES.usernameMax;
-  const passwordValid = password.length >= ADMIN_FIELD_RULES.passwordMin;
+    username.length >= ACCOUNT_FIELD_RULES.usernameMin && username.length <= ACCOUNT_FIELD_RULES.usernameMax;
+  const passwordValid = password.length >= ACCOUNT_FIELD_RULES.passwordMin;
   const emailInvalid = email.length > 0 && !emailValid;
   const usernameInvalid = username.length > 0 && !usernameValid;
   const passwordInvalid = password.length > 0 && !passwordValid;
@@ -116,8 +117,8 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
                 clearError();
               }}
               required
-              minLength={ADMIN_FIELD_RULES.usernameMin}
-              maxLength={ADMIN_FIELD_RULES.usernameMax}
+              minLength={ACCOUNT_FIELD_RULES.usernameMin}
+              maxLength={ACCOUNT_FIELD_RULES.usernameMax}
               autoComplete="username"
               placeholder={t("admin.usernamePlaceholder")}
               aria-describedby={usernameHintId}
@@ -139,7 +140,7 @@ export function AdminStep({ stepIndex, totalSteps, onComplete }: AdminStepProps)
             }}
             invalid={passwordInvalid}
             autoComplete="new-password"
-            minLength={ADMIN_FIELD_RULES.passwordMin}
+            minLength={ACCOUNT_FIELD_RULES.passwordMin}
             describedBy={passwordHintId}
           />
           <p id={passwordHintId} className={passwordInvalid ? fieldError() : fieldHint()}>

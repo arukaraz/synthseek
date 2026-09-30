@@ -1,5 +1,5 @@
 import type { AppErrorCode } from "./appCode";
-import type { ErrorCategory, ErrorSeverity } from "./types";
+import type { ErrorCategory, ErrorParamFormat, ErrorSeverity } from "./types";
 
 export const GENERIC_FALLBACK_CODE: AppErrorCode = "GENERIC_FALLBACK";
 
@@ -9,7 +9,16 @@ export interface ErrorMeta {
   duration?: number;
   matchers?: ReadonlyArray<RegExp>;
   spotifyReason?: string;
+  params?: Readonly<Record<string, ErrorParamFormat>>;
 }
+
+const QUOTA_NOTICE_MS = 12000;
+
+const STORAGE_PARAMS: Readonly<Record<string, ErrorParamFormat>> = {
+  limitBytes: "bytes",
+  usedBytes: "bytes",
+  requestedBytes: "bytes",
+};
 
 /**
  * Single source of truth for per-code presentation metadata + the fallback
@@ -59,6 +68,10 @@ export const ERROR_META: Partial<Record<AppErrorCode, ErrorMeta>> = {
   NETWORK_ERROR: { category: "generic", severity: "error", matchers: [/fetch failed/i, /network/i, /ECONNREFUSED/i] },
   SIGNED_OUT: { category: "generic", severity: "warning", matchers: [/UNAUTHORIZED/i, /Authentication required/i] },
   FORBIDDEN: { category: "generic", matchers: [/FORBIDDEN/i] },
+  QUOTA_TRACKS_EXCEEDED: { severity: "warning", duration: QUOTA_NOTICE_MS, params: { freesAt: "dateTime" } },
+  QUOTA_REQUEST_TOO_LARGE: { severity: "warning", duration: QUOTA_NOTICE_MS },
+  QUOTA_STORAGE_EXCEEDED: { severity: "warning", duration: QUOTA_NOTICE_MS, params: STORAGE_PARAMS },
+  QUOTA_LIBRARY_FULL: { severity: "warning", duration: QUOTA_NOTICE_MS, params: STORAGE_PARAMS },
 };
 
 const ALL_CODES: ReadonlyArray<AppErrorCode> = Object.keys(ERROR_META).filter((code): code is AppErrorCode =>

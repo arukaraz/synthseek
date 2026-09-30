@@ -59,6 +59,7 @@ vi.mock("../components/CreateLocalUserDialog", () => ({
 vi.mock("../components/ImportPlexUsersDialog", () => ({
   ImportPlexUsersDialog: ({ open }: { open: boolean }) => (open ? <div data-testid="import-dialog" /> : null),
 }));
+vi.mock("../components/QuotasCard", () => ({ QuotasCard: () => <div data-testid="quotas-card" /> }));
 vi.mock("../components/EditUserDialog", () => ({
   EditUserDialog: ({ open }: { open: boolean }) => (open ? <div data-testid="edit-dialog" /> : null),
 }));
@@ -105,6 +106,11 @@ describe("MembersSection", () => {
     usersQuery = createMockQuery<MemberListItem[]>([createMockUser({ id: "m1", username: "alice" })]);
     render(<MembersSection />);
     expect(screen.getByText("alice")).toBeInTheDocument();
+  });
+
+  it("offers the download quota settings to an admin", () => {
+    render(<MembersSection />);
+    expect(screen.getByTestId("quotas-card")).toBeInTheDocument();
   });
 
   it("opens the create and import dialogs from the toolbar", async () => {

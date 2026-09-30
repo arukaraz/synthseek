@@ -55,6 +55,7 @@
       "notInLibrary": "Pas dans votre bibliothèque",
       "noMatchableTracks": "Aucune correspondance pour ses pistes",
       "sourceHasNoTracks": "La source ne contient aucune piste",
+      "quotaExceeded": "Dépasse votre quota de téléchargement",
       "importError": "Échec de l'importation"
     },
     "provider": {

@@ -2,6 +2,10 @@ export type ErrorCategory = "spotify" | "generic";
 
 export type ErrorSeverity = "error" | "warning" | "success";
 
+export type ErrorParamFormat = "dateTime" | "bytes";
+
+export type AppErrorParams = Readonly<Record<string, string | number>>;
+
 export interface FriendlyError {
   title: string;
   description?: string;

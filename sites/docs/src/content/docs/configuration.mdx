@@ -32,11 +32,15 @@ credentials there; only an admin can turn the Subsonic API on.
 
 ### Members
 
-Administrators only. Covered on the [Users and Permissions page](/users-permissions). The approval gate lives here too:
+Administrators only. Covered on the [Users and Permissions page](/users-permissions). The approval gate and the download quotas live here too:
 
 | Setting                      | Default | What it does                                                         |
 | ---------------------------- | ------- | -------------------------------------------------------------------- |
 | Require approval for members | Off     | Hold a plain member's requests until an administrator approves them. |
+| Tracks per member            | 0       | New tracks a member can request within the window. 0 is no limit.    |
+| Window                       | 7 days  | The rolling number of days the track quota counts over.              |
+| Storage per member           | 0 GB    | Space a member's music can take. 0 is no limit.                      |
+| Whole library                | 0 GB    | Downloads stop once the library reaches this size. 0 is no limit.    |
 
 ### Profile
 

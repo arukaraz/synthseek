@@ -9,7 +9,7 @@
     "retryAllFailed": {
       "label": "Retry all failed",
       "confirmTitle": "Retry All Failed",
-      "confirmMessage": "This will retry all failed and partially completed downloads. Continue?",
+      "confirmMessage": "This will retry failed and partially completed downloads. Continue?",
       "confirmPending": "Retrying...",
       "confirmAction": "Retry All"
     },
@@ -168,7 +168,7 @@
   "watch": {
     "stop": "Stop watching",
     "resume": "Resume watching, reset the schedule",
-    "resumeTitle": "Clears the attempt count and the scheduled time, so the next sweep retries this track."
+    "resumeTitle": "Clears the attempt count and the scheduled time, so the track is due at the next sweep."
   },
   "approval": {
     "approvePending_one": "Approve pending track",

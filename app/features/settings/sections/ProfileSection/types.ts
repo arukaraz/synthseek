@@ -22,6 +22,14 @@ export type ListeningConnectionView = inferRouterOutputs<AppRouter>["playback"][
 
 export type ListeningService = ListeningConnectionView["service"];
 
+export type QuotaUsageView = inferRouterOutputs<AppRouter>["requests"]["myQuota"];
+
+export interface QuotaRowProps {
+  label: string;
+  value: string;
+  note: string | null;
+}
+
 export interface ListeningServiceRowProps {
   connection: ListeningConnectionView;
   seenClients: string[];

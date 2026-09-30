@@ -9,7 +9,7 @@
     "retryAllFailed": {
       "label": "Alle fehlgeschlagenen erneut versuchen",
       "confirmTitle": "Alle fehlgeschlagenen erneut versuchen",
-      "confirmMessage": "Dadurch werden alle fehlgeschlagenen und teilweise abgeschlossenen Downloads erneut versucht. Fortfahren?",
+      "confirmMessage": "Dadurch werden fehlgeschlagene und teilweise abgeschlossene Downloads erneut versucht. Fortfahren?",
       "confirmPending": "Wird erneut versucht...",
       "confirmAction": "Alle erneut versuchen"
     },
@@ -168,7 +168,7 @@
   "watch": {
     "stop": "Beobachtung beenden",
     "resume": "Beobachtung fortsetzen, Zeitplan zurücksetzen",
-    "resumeTitle": "Setzt die Versuchszahl und die geplante Zeit zurück, damit der nächste Durchlauf diesen Titel erneut versucht."
+    "resumeTitle": "Setzt die Versuchszahl und die geplante Zeit zurück, damit der Titel beim nächsten Durchlauf an der Reihe ist."
   },
   "approval": {
     "approvePending_one": "Wartenden Titel freigeben",

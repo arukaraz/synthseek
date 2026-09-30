@@ -354,5 +354,21 @@
   "LYRICS_LOOKUP_UNAVAILABLE": {
     "title": "The lyrics could not be fetched",
     "description": "The lyrics service did not answer. Nothing was saved about this track, so opening the lyrics again asks it once more."
+  },
+  "QUOTA_TRACKS_EXCEEDED": {
+    "title": "Track quota reached",
+    "description": "Track quota: {{used}} of {{limit}} used, and this request adds {{requested}} more. Room frees up on {{freesAt}}."
+  },
+  "QUOTA_REQUEST_TOO_LARGE": {
+    "title": "Request larger than your quota",
+    "description": "This request adds {{requested}} tracks and your whole quota is {{limit}}. Request fewer at a time."
+  },
+  "QUOTA_STORAGE_EXCEEDED": {
+    "title": "Storage quota reached",
+    "description": "You are using {{usedBytes}} of your {{limitBytes}}, counting downloads still on their way, and this request needs about {{requestedBytes}} more. Remove something or ask an admin for more room."
+  },
+  "QUOTA_LIBRARY_FULL": {
+    "title": "The library is full",
+    "description": "The library holds {{usedBytes}} of the {{limitBytes}} the admin allows, counting downloads still on their way, and this request needs about {{requestedBytes}} more."
   }
 }

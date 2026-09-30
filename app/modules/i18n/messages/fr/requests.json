@@ -9,7 +9,7 @@
     "retryAllFailed": {
       "label": "Réessayer tous les échecs",
       "confirmTitle": "Réessayer tous les échecs",
-      "confirmMessage": "Cela réessaiera tous les téléchargements en échec et partiellement terminés. Continuer ?",
+      "confirmMessage": "Cela réessaiera les téléchargements en échec et partiellement terminés. Continuer ?",
       "confirmPending": "Nouvelle tentative...",
       "confirmAction": "Tout réessayer"
     },
@@ -168,7 +168,7 @@
   "watch": {
     "stop": "Arrêter le suivi",
     "resume": "Reprendre le suivi, réinitialiser la planification",
-    "resumeTitle": "Efface le nombre de tentatives et l'heure planifiée, le prochain balayage réessaie donc ce morceau."
+    "resumeTitle": "Efface le nombre de tentatives et l'heure planifiée, le morceau passe donc au prochain balayage."
   },
   "approval": {
     "approvePending_one": "Approuver le titre en attente",

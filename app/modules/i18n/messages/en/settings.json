@@ -484,6 +484,10 @@
       "ariaLabel": "yt-dlp search timeout seconds"
     }
   },
+  "accountRules": {
+    "usernameHint": "Between {{min}} and {{max}} characters",
+    "passwordHint": "At least {{min}} characters"
+  },
   "members": {
     "pageTitle": "Members",
     "cardTitle": "User list",
@@ -502,6 +506,7 @@
       "type": "Type",
       "role": "Role",
       "joined": "Joined",
+      "quota": "Quota",
       "selectAll": "Select all members",
       "selectMember": "Select {{username}}"
     },
@@ -549,7 +554,6 @@
       "usernamePlaceholder": "username",
       "usernameAriaLabel": "Username",
       "passwordLabel": "Password",
-      "passwordPlaceholder": "At least 8 characters",
       "passwordAriaLabel": "Password",
       "roleLabel": "Role",
       "roleAriaLabel": "User role",
@@ -568,6 +572,12 @@
       "passwordPlaceholder": "Leave blank to keep current password",
       "passwordAriaLabel": "New password",
       "ownerRoleNote": "The owner account must stay an admin.",
+      "quotaTracksLabel": "Own track quota",
+      "quotaTracksAriaLabel": "This member's track quota",
+      "quotaStorageLabel": "Own storage quota (GB)",
+      "quotaStorageAriaLabel": "This member's storage quota in gigabytes",
+      "quotaPlaceholder": "Follow the global quota",
+      "quotaNote": "Leave a quota empty to follow the global one. Zero means no limit for this member.",
       "submit": "Save changes"
     },
     "import": {
@@ -582,7 +592,7 @@
       "submit": "Import selected"
     },
     "roleDescriptions": {
-      "trusted": "Trusted members' requests skip the approval queue."
+      "trusted": "Trusted members' requests skip the approval queue, and member quotas do not limit them."
     },
     "approval": {
       "cardTitle": "Request approval",
@@ -591,6 +601,38 @@
         "label": "Require approval for members",
         "description": "New requests from members wait for an admin. Trusted members and admins skip the queue."
       }
+    },
+    "quotaCell": {
+      "exempt": "Exempt",
+      "unlimited": "No limit",
+      "tracks": "Tracks {{used}}/{{limit}}",
+      "storage": "Space {{used}}/{{limit}}"
+    },
+    "quotas": {
+      "cardTitle": "Download quotas",
+      "cardDescription": "Limit how much each member can download. Zero means no limit. Admins and trusted members are not limited per member, and a member's own quota is set from their edit dialog.",
+      "tracksPerWindow": {
+        "label": "Tracks per member",
+        "description": "New tracks a member can request within the window below. Requests waiting for approval count; retries and quality upgrades do not.",
+        "ariaLabel": "Tracks per member"
+      },
+      "windowDays": {
+        "label": "Window",
+        "description": "The rolling number of days the track quota counts over.",
+        "ariaLabel": "Track quota window in days",
+        "unit": "days"
+      },
+      "userStorageGb": {
+        "label": "Storage per member",
+        "description": "Space a member's music can take, counting downloads still on their way.",
+        "ariaLabel": "Storage per member in gigabytes"
+      },
+      "libraryStorageGb": {
+        "label": "Whole library",
+        "description": "A ceiling for the whole library. It applies to everyone, admins included, and counts files nobody requested.",
+        "ariaLabel": "Whole library storage in gigabytes"
+      },
+      "unitGb": "GB"
     }
   },
   "profile": {
@@ -617,7 +659,6 @@
       "currentLabel": "Current password",
       "currentAriaLabel": "Current password",
       "newLabel": "New password",
-      "newPlaceholder": "At least 8 characters",
       "newAriaLabel": "New password",
       "submit": "Change password",
       "managedByPlex": "Your password is managed by Plex."
@@ -691,6 +732,18 @@
         "unavailable": "The service could not be reached. Your plays are waiting.",
         "rejected": "The service refused the last plays sent to it."
       }
+    },
+    "quota": {
+      "title": "Download quota",
+      "unavailable": "Your quota could not be loaded.",
+      "exempt": "Your role is not limited by member quotas.",
+      "tracksLabel": "Tracks requested",
+      "tracksValue_one": "{{used}} of {{limit}} in the last day",
+      "tracksValue_other": "{{used}} of {{limit}} in the last {{count}} days",
+      "storageLabel": "Storage",
+      "storageValue": "{{used}} of {{limit}}",
+      "storagePending": "Includes about {{pending}} still downloading",
+      "unlimited": "No limit"
     }
   },
   "api": {

@@ -22,6 +22,8 @@ export const requestCount = cva("text-fg/60 text-sm tabular-nums");
 
 export const joinedDate = cva("text-fg/50 text-xs");
 
+export const quotaLines = cva("text-fg/60 flex flex-col text-xs whitespace-nowrap tabular-nums");
+
 export const actionsCell = cva("flex items-center justify-end gap-1.5");
 
 export const pill = cva(

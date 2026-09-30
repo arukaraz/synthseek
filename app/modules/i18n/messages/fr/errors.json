@@ -354,5 +354,21 @@
   "LYRICS_LOOKUP_UNAVAILABLE": {
     "title": "Les paroles n'ont pas pu être récupérées",
     "description": "Le service de paroles n'a pas répondu. Rien n'a été enregistré pour ce titre, rouvrir les paroles relance donc la demande."
+  },
+  "QUOTA_TRACKS_EXCEEDED": {
+    "title": "Quota de pistes atteint",
+    "description": "Quota de pistes : {{used}} sur {{limit}} utilisées, et cette demande en ajoute {{requested}}. De la place se libère le {{freesAt}}."
+  },
+  "QUOTA_REQUEST_TOO_LARGE": {
+    "title": "Demande plus grande que votre quota",
+    "description": "Cette demande ajoute {{requested}} pistes et votre quota entier est de {{limit}}. Demandez-en moins à la fois."
+  },
+  "QUOTA_STORAGE_EXCEEDED": {
+    "title": "Quota d'espace atteint",
+    "description": "Vous utilisez {{usedBytes}} sur {{limitBytes}}, téléchargements en cours compris, et cette demande nécessite environ {{requestedBytes}} de plus. Supprimez quelque chose ou demandez plus d'espace à un administrateur."
+  },
+  "QUOTA_LIBRARY_FULL": {
+    "title": "La bibliothèque est pleine",
+    "description": "La bibliothèque occupe {{usedBytes}} des {{limitBytes}} autorisés par l'administrateur, téléchargements en cours compris, et cette demande nécessite environ {{requestedBytes}} de plus."
   }
 }

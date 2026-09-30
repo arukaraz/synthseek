@@ -1,5 +1,5 @@
 export { ErrorBoundaryProvider, useErrorBoundary } from "./ErrorBoundaryProvider";
-export { extractAppCode } from "./appCode";
+export { extractAppCode, extractAppParams } from "./appCode";
 export type { AppErrorCode } from "./appCode";
 export {
   emitFriendlyToast,

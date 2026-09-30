@@ -47,6 +47,7 @@ describe("ChangePasswordCard", () => {
     await userEvent.type(screen.getByLabelText(enSettings.profile.password.currentAriaLabel), "oldpass");
     await userEvent.type(screen.getByLabelText(enSettings.profile.password.newAriaLabel), "short");
     expect(submit).toBeDisabled();
+    expect(screen.getByText("At least 8 characters")).toBeInTheDocument();
 
     await userEvent.type(screen.getByLabelText(enSettings.profile.password.newAriaLabel), "longenough");
     expect(submit).toBeEnabled();

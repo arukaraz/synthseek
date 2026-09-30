@@ -20,7 +20,7 @@ A member can link Plex to an existing local account, and sign in either way afte
 | Role              | Can do                                                                                                                                                            |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Administrator** | Everything. Manage members, all settings, integrations, engine tuning, jobs, logs, and the review and quarantine queues.                                          |
-| **Trusted**       | Everything a member can do, and requests are never held for approval.                                                                                             |
+| **Trusted**       | Everything a member can do. Requests are never held for approval, and member quotas do not apply.                                                                 |
 | **Member**        | Search, request, manage their own library and playlists, connect their own discovery and library-source accounts, and set their own profile, theme, and language. |
 
 Administrator-only sections are hidden from members entirely, not shown and disabled. The first account created is the instance owner and cannot be demoted or deleted.
@@ -53,12 +53,25 @@ Off by default. When **Require approval for members** is enabled, anything a pla
 
 Give the gate a purpose by promoting the people you do not want to review to trusted, rather than turning the gate off.
 
+## Download quotas
+
+Off by default. An administrator can cap how much each member downloads, from **Settings**, then **Members**.
+
+- **Tracks.** New tracks a member can request within a rolling number of days. Requests waiting for approval count. Retries and quality upgrades do not.
+- **Storage.** Space a member's music can take, counting downloads still on their way. A member's own retries and resumes are checked against it too.
+- **Whole library.** Downloads stop once the music in the library reaches this size. It applies to everyone, administrators included.
+
+Trusted members and administrators are not limited per member. An administrator can give one member their own limits from the member's edit dialog, and those replace the shared ones.
+
+A request that would go over a quota is refused. Automatic requests, such as a library sync or a discovery playlist, are skipped and logged instead. Each member sees their own usage under **Settings**, then **Profile**.
+
 ## Managing members
 
 **Settings**, then **Members**, administrators only.
 
 - Add a local member, or import from Plex.
 - Change a member's role.
+- Set a member's own download quotas.
 - Remove a member.
 - See who owns what.
 

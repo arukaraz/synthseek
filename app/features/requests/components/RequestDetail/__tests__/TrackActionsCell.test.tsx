@@ -306,7 +306,7 @@ describe("RequestDetail TrackActionsCell", () => {
 
     expect(screen.getByRole("menuitem", { name: "Resume watching, reset the schedule" })).toHaveAttribute(
       "title",
-      "Clears the attempt count and the scheduled time, so the next sweep retries this track."
+      "Clears the attempt count and the scheduled time, so the track is due at the next sweep."
     );
   });
 

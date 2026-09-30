@@ -56,6 +56,8 @@
     "wantedFailed": "Échec de l'enregistrement des réglages du balayage de suivi",
     "usersSaved": "Paramètres des membres enregistrés",
     "usersFailed": "Impossible d'enregistrer les paramètres des membres",
+    "quotasSaved": "Quotas de téléchargement enregistrés",
+    "quotasFailed": "Impossible d'enregistrer les quotas de téléchargement",
     "qualitySaved": "Réglages de qualité enregistrés",
     "qualityFailed": "Échec de l'enregistrement des réglages de qualité",
     "recycleBinSaved": "Réglages de la corbeille enregistrés",

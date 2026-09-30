@@ -484,6 +484,10 @@
       "ariaLabel": "Délai de recherche yt-dlp en secondes"
     }
   },
+  "accountRules": {
+    "usernameHint": "Entre {{min}} et {{max}} caractères",
+    "passwordHint": "Au moins {{min}} caractères"
+  },
   "members": {
     "pageTitle": "Membres",
     "cardTitle": "Liste des utilisateurs",
@@ -502,6 +506,7 @@
       "type": "Type",
       "role": "Rôle",
       "joined": "Inscrit le",
+      "quota": "Quota",
       "selectAll": "Sélectionner tous les membres",
       "selectMember": "Sélectionner {{username}}"
     },
@@ -549,7 +554,6 @@
       "usernamePlaceholder": "nom d'utilisateur",
       "usernameAriaLabel": "Nom d'utilisateur",
       "passwordLabel": "Mot de passe",
-      "passwordPlaceholder": "Au moins 8 caractères",
       "passwordAriaLabel": "Mot de passe",
       "roleLabel": "Rôle",
       "roleAriaLabel": "Rôle de l'utilisateur",
@@ -568,6 +572,12 @@
       "passwordPlaceholder": "Laissez vide pour conserver le mot de passe actuel",
       "passwordAriaLabel": "Nouveau mot de passe",
       "ownerRoleNote": "Le compte propriétaire doit rester administrateur.",
+      "quotaTracksLabel": "Quota de pistes propre",
+      "quotaTracksAriaLabel": "Quota de pistes de ce membre",
+      "quotaStorageLabel": "Quota d'espace propre (Go)",
+      "quotaStorageAriaLabel": "Quota d'espace de ce membre en gigaoctets",
+      "quotaPlaceholder": "Suivre le quota global",
+      "quotaNote": "Laissez un quota vide pour suivre le quota global. Zéro signifie aucune limite pour ce membre.",
       "submit": "Enregistrer les modifications"
     },
     "import": {
@@ -582,7 +592,7 @@
       "submit": "Importer la sélection"
     },
     "roleDescriptions": {
-      "trusted": "Les demandes des membres de confiance passent sans file d'approbation."
+      "trusted": "Les demandes des membres de confiance passent sans file d'approbation, et les quotas de membre ne les limitent pas."
     },
     "approval": {
       "cardTitle": "Approbation des demandes",
@@ -591,6 +601,38 @@
         "label": "Exiger l'approbation pour les membres",
         "description": "Les nouvelles demandes des membres attendent un administrateur. Les membres de confiance et les administrateurs passent directement."
       }
+    },
+    "quotaCell": {
+      "exempt": "Exempté",
+      "unlimited": "Sans limite",
+      "tracks": "Pistes {{used}}/{{limit}}",
+      "storage": "Espace {{used}}/{{limit}}"
+    },
+    "quotas": {
+      "cardTitle": "Quotas de téléchargement",
+      "cardDescription": "Limitez ce que chaque membre peut télécharger. Zéro signifie aucune limite. Les administrateurs et les membres de confiance ne sont pas limités par membre, et le quota propre d'un membre se règle dans sa fenêtre de modification.",
+      "tracksPerWindow": {
+        "label": "Pistes par membre",
+        "description": "Nouvelles pistes qu'un membre peut demander dans la période ci-dessous. Les demandes en attente d'approbation comptent ; les nouvelles tentatives et les améliorations de qualité non.",
+        "ariaLabel": "Pistes par membre"
+      },
+      "windowDays": {
+        "label": "Période",
+        "description": "Le nombre de jours glissants sur lequel le quota de pistes est compté.",
+        "ariaLabel": "Période du quota de pistes en jours",
+        "unit": "jours"
+      },
+      "userStorageGb": {
+        "label": "Espace par membre",
+        "description": "L'espace que la musique d'un membre peut occuper, téléchargements en cours compris.",
+        "ariaLabel": "Espace par membre en gigaoctets"
+      },
+      "libraryStorageGb": {
+        "label": "Bibliothèque entière",
+        "description": "Un plafond pour toute la bibliothèque. Il s'applique à tous, administrateurs compris, et compte les fichiers que personne n'a demandés.",
+        "ariaLabel": "Espace de la bibliothèque entière en gigaoctets"
+      },
+      "unitGb": "Go"
     }
   },
   "profile": {
@@ -617,7 +659,6 @@
       "currentLabel": "Mot de passe actuel",
       "currentAriaLabel": "Mot de passe actuel",
       "newLabel": "Nouveau mot de passe",
-      "newPlaceholder": "Au moins 8 caractères",
       "newAriaLabel": "Nouveau mot de passe",
       "submit": "Changer le mot de passe",
       "managedByPlex": "Votre mot de passe est géré par Plex."
@@ -691,6 +732,18 @@
         "unavailable": "Le service n'a pas pu etre joint. Vos ecoutes attendent.",
         "rejected": "Le service a refuse les dernieres ecoutes envoyees."
       }
+    },
+    "quota": {
+      "title": "Quota de téléchargement",
+      "unavailable": "Votre quota n'a pas pu être chargé.",
+      "exempt": "Votre rôle n'est pas limité par les quotas des membres.",
+      "tracksLabel": "Pistes demandées",
+      "tracksValue_one": "{{used}} sur {{limit}} au cours du dernier jour",
+      "tracksValue_other": "{{used}} sur {{limit}} au cours des {{count}} derniers jours",
+      "storageLabel": "Espace",
+      "storageValue": "{{used}} sur {{limit}}",
+      "storagePending": "Dont environ {{pending}} encore en téléchargement",
+      "unlimited": "Sans limite"
     }
   },
   "api": {

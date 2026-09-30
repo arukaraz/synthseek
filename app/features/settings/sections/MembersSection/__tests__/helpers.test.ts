@@ -4,12 +4,79 @@ import { Role } from "@api/__generated__/types";
 
 import { createMockUser } from "@test/mocks/feature-hooks.mock";
 
-import { buildRoleOptions, formatJoinedDate, roleLabel, roleTone, sortMembers } from "../helpers";
+import {
+  buildRoleOptions,
+  formatJoinedDate,
+  isValidQuotaInput,
+  parseQuotaInput,
+  quotaInputOf,
+  quotaSummary,
+  roleLabel,
+  roleTone,
+  sortMembers,
+} from "../helpers";
 import type { MemberSort } from "../types";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
 const tIdentity = ((key: string) => key) as unknown as Parameters<typeof buildRoleOptions>[0];
+
+describe("quota inputs", () => {
+  it("shows an unset override as an empty field", () => {
+    expect(quotaInputOf(null)).toBe("");
+    expect(quotaInputOf(0)).toBe("0");
+    expect(quotaInputOf(2.5)).toBe("2.5");
+  });
+
+  it("reads an empty or blank field as following the global quota", () => {
+    expect(parseQuotaInput("")).toBeNull();
+    expect(parseQuotaInput("   ")).toBeNull();
+    expect(parseQuotaInput(" 12 ")).toBe(12);
+  });
+
+  it("accepts an empty field, zero, and a whole track count", () => {
+    expect(isValidQuotaInput("", true)).toBe(true);
+    expect(isValidQuotaInput("0", true)).toBe(true);
+    expect(isValidQuotaInput("25", true)).toBe(true);
+  });
+
+  it("rejects a fractional track count but accepts fractional gigabytes", () => {
+    expect(isValidQuotaInput("2.5", true)).toBe(false);
+    expect(isValidQuotaInput("2.5", false)).toBe(true);
+  });
+
+  it("rejects a negative amount and text that is not a number", () => {
+    expect(isValidQuotaInput("-1", false)).toBe(false);
+    expect(isValidQuotaInput("abc", false)).toBe(false);
+    expect(isValidQuotaInput("Infinity", false)).toBe(false);
+  });
+});
+
+describe("quotaSummary", () => {
+  const quota = createMockUser().quota;
+
+  it("names an exempt member instead of listing numbers", () => {
+    expect(quotaSummary({ ...quota, exempt: true, tracks: { limit: 10, used: 3, windowDays: 7 } })).toEqual([
+      enSettings.members.quotaCell.exempt,
+    ]);
+  });
+
+  it("says there is no limit when neither quota is set", () => {
+    expect(quotaSummary(quota)).toEqual([enSettings.members.quotaCell.unlimited]);
+  });
+
+  it("lists tracks used against the limit", () => {
+    expect(quotaSummary({ ...quota, tracks: { limit: 50, used: 12, windowDays: 7 } })).toEqual(["Tracks 12/50"]);
+  });
+
+  it("counts downloads still on their way toward the storage used", () => {
+    const lines = quotaSummary({
+      ...quota,
+      storage: { limitBytes: 10 * 1024 ** 3, storedBytes: 1024 ** 3, pendingBytes: 1024 ** 3 },
+    });
+    expect(lines).toEqual(["Space 2.0 GB/10.0 GB"]);
+  });
+});
 
 describe("formatJoinedDate", () => {
   it("formats a date with a long month", () => {
@@ -96,6 +163,28 @@ describe("sortMembers", () => {
     ];
     const sorted = sortMembers(rows, { field: "role", direction: "asc" });
     expect(sorted.map((row) => row.id)).toEqual(["member", "admin", "owner"]);
+  });
+
+  it("sorts by how full each member's fullest quota is, with exempt members lowest", () => {
+    const base = createMockUser().quota;
+    const rows = [
+      createMockUser({ id: "unlimited", quota: { ...base, tracks: { limit: null, used: 500, windowDays: 7 } } }),
+      createMockUser({
+        id: "tracks-full",
+        quota: { ...base, tracks: { limit: 10, used: 9, windowDays: 7 } },
+      }),
+      createMockUser({
+        id: "exempt",
+        quota: { ...base, exempt: true, tracks: { limit: 10, used: 10, windowDays: 7 } },
+      }),
+      createMockUser({
+        id: "storage-half",
+        quota: { ...base, storage: { limitBytes: 100, storedBytes: 30, pendingBytes: 20 } },
+      }),
+      createMockUser({ id: "tracks-40", quota: { ...base, tracks: { limit: 10, used: 4, windowDays: 7 } } }),
+    ];
+    const sorted = sortMembers(rows, { field: "quota", direction: "asc" });
+    expect(sorted.map((row) => row.id)).toEqual(["exempt", "unlimited", "tracks-40", "storage-half", "tracks-full"]);
   });
 
   it("sorts by joined date", () => {

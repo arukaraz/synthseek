@@ -55,6 +55,7 @@
       "notInLibrary": "Not in your library",
       "noMatchableTracks": "No matches for its tracks",
       "sourceHasNoTracks": "The source has no tracks",
+      "quotaExceeded": "Over your download quota",
       "importError": "Failed to import"
     },
     "provider": {

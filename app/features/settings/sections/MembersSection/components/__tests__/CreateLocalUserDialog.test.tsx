@@ -32,6 +32,16 @@ describe("CreateLocalUserDialog", () => {
     expect(screen.getByText(enSettings.members.create.description)).toBeInTheDocument();
   });
 
+  it("keeps the username and password rules visible while the fields are being filled", async () => {
+    render(<CreateLocalUserDialog open onOpenChange={vi.fn()} />);
+
+    await userEvent.type(screen.getByLabelText(enSettings.members.create.usernameAriaLabel), "al");
+    await userEvent.type(screen.getByLabelText(enSettings.members.create.passwordAriaLabel), "short");
+
+    expect(screen.getByText("Between 3 and 32 characters")).toBeInTheDocument();
+    expect(screen.getByText("At least 8 characters")).toBeInTheDocument();
+  });
+
   it("disables submit until all fields are valid", async () => {
     render(<CreateLocalUserDialog open onOpenChange={vi.fn()} />);
     const submit = screen.getByRole("button", { name: enSettings.members.create.submit });

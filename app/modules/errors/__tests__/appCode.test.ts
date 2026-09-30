@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { extractAppCode } from "../appCode";
+import { extractAppCode, extractAppParams } from "../appCode";
 
 describe("extractAppCode", () => {
   it("returns the code from a well-formed tRPC error envelope", () => {
@@ -44,5 +44,22 @@ describe("extractAppCode", () => {
 
   it("no longer recognizes the retired Lidarr MBID resolution code", () => {
     expect(extractAppCode({ data: { appCode: "LIDARR_MBID_RESOLUTION_FAILED" } })).toBeNull();
+  });
+});
+
+describe("extractAppParams", () => {
+  it("returns the values the server sent alongside the code", () => {
+    const error = { data: { appCode: "QUOTA_TRACKS_EXCEEDED", appParams: { used: 48, limit: 50 } } };
+    expect(extractAppParams(error)).toEqual({ used: 48, limit: 50 });
+  });
+
+  it("returns null when the server sent no values", () => {
+    expect(extractAppParams({ data: { appCode: "EMAIL_TAKEN", appParams: null } })).toBeNull();
+    expect(extractAppParams({ data: { appCode: "EMAIL_TAKEN" } })).toBeNull();
+    expect(extractAppParams({ message: "boom" })).toBeNull();
+  });
+
+  it("drops values that are neither text nor numbers rather than passing them to the copy", () => {
+    expect(extractAppParams({ data: { appParams: { used: { nested: true } } } })).toBeNull();
   });
 });

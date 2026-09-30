@@ -6,6 +6,7 @@ import {
   buildRequestSubtitle,
   buildSubtitle,
   controlsFor,
+  failureReasonKey,
   presentationFor,
   providerLabelKey,
   ringStyle,
@@ -21,6 +22,16 @@ describe("providerLabelKey", () => {
     expect(providerLabelKey("jellyfin")).toBe("progressDock.provider.jellyfin");
     expect(providerLabelKey("deezer")).toBe("progressDock.provider.generic");
     expect(providerLabelKey(undefined)).toBe("progressDock.provider.generic");
+  });
+});
+
+describe("failureReasonKey", () => {
+  it("explains a playlist skipped because its owner is over quota", () => {
+    expect(failureReasonKey("quotaExceeded")).toBe("progressDock.failureReason.quotaExceeded");
+  });
+
+  it("falls back to the plain failed label when no reason came with the failure", () => {
+    expect(failureReasonKey(undefined)).toBe("progressDock.itemState.failed");
   });
 });
 import type { DockCounts } from "../types";

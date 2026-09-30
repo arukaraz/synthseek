@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Role } from "@api/__generated__/types";
 import { Button } from "@components/ui/Button";
 import {
   Dialog,
@@ -14,12 +15,14 @@ import {
 } from "@components/ui/Dialog";
 import { Notice } from "@components/ui/Notice";
 import { useUpdateUser } from "@hooks/api/mutations/users/useUpdateUser";
+import { ACCOUNT_FIELD_RULES, isValidPassword, isValidUsername } from "@utils/account";
 
 import { SettingsField } from "../../../components/SettingsField";
 import { SettingsTextInput } from "../../../components/SettingsTextInput";
 import { SettingsSecretInput } from "../../../components/SettingsSecretInput";
 import { SegmentedControl } from "../../../components/SegmentedControl";
-import { buildRoleOptions } from "../helpers";
+
+import { buildRoleOptions, isValidQuotaInput, parseQuotaInput, quotaInputOf } from "../helpers";
 import type { EditUserDialogProps, RoleValue } from "../types";
 
 export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogProps) {
@@ -29,6 +32,8 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<RoleValue>("member");
   const [password, setPassword] = useState("");
+  const [quotaTracks, setQuotaTracks] = useState("");
+  const [quotaStorage, setQuotaStorage] = useState("");
   const update = useUpdateUser();
 
   useEffect(() => {
@@ -37,15 +42,23 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
     setEmail(member.email);
     setRole(member.role);
     setPassword("");
+    setQuotaTracks(quotaInputOf(member.quotaTracks));
+    setQuotaStorage(quotaInputOf(member.quotaStorageGb));
   }, [member]);
 
   if (!member) return null;
 
-  const canSubmit = username.trim().length >= 3 && email.trim().length > 0 && !update.isPending;
+  const limitsMember = role === Role.enum.member;
+  const quotasValid = !limitsMember || (isValidQuotaInput(quotaTracks, true) && isValidQuotaInput(quotaStorage, false));
+  const passwordValid = password.length === 0 || isValidPassword(password);
+  const canSubmit =
+    isValidUsername(username) && email.trim().length > 0 && passwordValid && quotasValid && !update.isPending;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (!canSubmit) return;
+    const nextTracks = parseQuotaInput(quotaTracks);
+    const nextStorage = parseQuotaInput(quotaStorage);
     update.mutate(
       {
         id: member.id,
@@ -53,6 +66,8 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
         email: email.trim() === member.email ? undefined : email.trim(),
         role: role === member.role ? undefined : role,
         password: password.length > 0 ? password : undefined,
+        quotaTracks: limitsMember && nextTracks !== member.quotaTracks ? nextTracks : undefined,
+        quotaStorageGb: limitsMember && nextStorage !== member.quotaStorageGb ? nextStorage : undefined,
       },
       { onSuccess: () => onOpenChange(false) }
     );
@@ -67,7 +82,13 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
             <DialogDescription>{t("members.edit.description")}</DialogDescription>
           </DialogHeader>
 
-          <SettingsField label={t("members.edit.usernameLabel")}>
+          <SettingsField
+            label={t("members.edit.usernameLabel")}
+            helper={t("accountRules.usernameHint", {
+              min: ACCOUNT_FIELD_RULES.usernameMin,
+              max: ACCOUNT_FIELD_RULES.usernameMax,
+            })}
+          >
             <SettingsTextInput
               value={username}
               onChange={setUsername}
@@ -99,7 +120,32 @@ export function EditUserDialog({ member, open, onOpenChange }: EditUserDialogPro
             <Notice variant="info" title={t("members.roleDescriptions.trusted")} />
           ) : null}
 
-          <SettingsField label={t("members.edit.passwordLabel")}>
+          {limitsMember ? (
+            <SettingsField label={t("members.edit.quotaTracksLabel")} helper={t("members.edit.quotaNote")}>
+              <SettingsTextInput
+                value={quotaTracks}
+                onChange={setQuotaTracks}
+                placeholder={t("members.edit.quotaPlaceholder")}
+                ariaLabel={t("members.edit.quotaTracksAriaLabel")}
+              />
+            </SettingsField>
+          ) : null}
+
+          {limitsMember ? (
+            <SettingsField label={t("members.edit.quotaStorageLabel")}>
+              <SettingsTextInput
+                value={quotaStorage}
+                onChange={setQuotaStorage}
+                placeholder={t("members.edit.quotaPlaceholder")}
+                ariaLabel={t("members.edit.quotaStorageAriaLabel")}
+              />
+            </SettingsField>
+          ) : null}
+
+          <SettingsField
+            label={t("members.edit.passwordLabel")}
+            helper={t("accountRules.passwordHint", { min: ACCOUNT_FIELD_RULES.passwordMin })}
+          >
             <SettingsSecretInput
               value={password}
               onChange={setPassword}

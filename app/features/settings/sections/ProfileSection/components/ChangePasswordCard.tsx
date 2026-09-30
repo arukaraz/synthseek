@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { Notice } from "@components/ui/Notice";
 import { useChangePassword } from "@hooks/api/mutations/auth/useChangePassword";
+import { ACCOUNT_FIELD_RULES, isValidPassword } from "@utils/account";
 
 import { SettingsCard } from "../../../components/SettingsCard";
 import { SettingsField } from "../../../components/SettingsField";
@@ -19,7 +20,7 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
 
-  const canSubmit = current.length > 0 && next.length >= 8 && !change.isPending;
+  const canSubmit = current.length > 0 && isValidPassword(next) && !change.isPending;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -46,13 +47,11 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
               ariaLabel={t("profile.password.currentAriaLabel")}
             />
           </SettingsField>
-          <SettingsField label={t("profile.password.newLabel")}>
-            <SettingsSecretInput
-              value={next}
-              onChange={setNext}
-              placeholder={t("profile.password.newPlaceholder")}
-              ariaLabel={t("profile.password.newAriaLabel")}
-            />
+          <SettingsField
+            label={t("profile.password.newLabel")}
+            helper={t("accountRules.passwordHint", { min: ACCOUNT_FIELD_RULES.passwordMin })}
+          >
+            <SettingsSecretInput value={next} onChange={setNext} ariaLabel={t("profile.password.newAriaLabel")} />
           </SettingsField>
           <div className="flex justify-end">
             <Button type="submit" size="sm" disabled={!canSubmit}>

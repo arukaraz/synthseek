@@ -47,6 +47,7 @@ describe("buildMemberColumns", () => {
       "select",
       "user",
       "requests",
+      "quota",
       "type",
       "role",
       "joined",
@@ -84,9 +85,22 @@ describe("buildMemberColumns", () => {
     expect(screen.getByText("7")).toBeInTheDocument();
   });
 
+  it("renders the member's quota usage in the quota cell", () => {
+    const columns = buildMemberColumns(buildArgs());
+    const member = createMockUser({
+      quota: {
+        exempt: false,
+        tracks: { limit: 30, used: 4, windowDays: 7 },
+        storage: { limitBytes: null, storedBytes: 0, pendingBytes: 0 },
+      },
+    });
+    renderNode(columns[3]?.cell(member));
+    expect(screen.getByText("Tracks 4/30")).toBeInTheDocument();
+  });
+
   it("renders the joined date cell", () => {
     const columns = buildMemberColumns(buildArgs());
-    renderNode(columns[5]?.cell(createMockUser({ created_at: new Date("2024-03-15T00:00:00Z") })));
+    renderNode(columns[6]?.cell(createMockUser({ created_at: new Date("2024-03-15T00:00:00Z") })));
     expect(screen.getByText(/2024/)).toBeInTheDocument();
   });
 
@@ -95,7 +109,7 @@ describe("buildMemberColumns", () => {
     const onDelete = vi.fn();
     const member = createMockUser({ id: "m2", username: "bob" });
     const columns = buildMemberColumns(buildArgs({ onEdit, onDelete }));
-    renderNode(columns[6]?.cell(member));
+    renderNode(columns[7]?.cell(member));
 
     await userEvent.click(screen.getByLabelText("Edit bob"));
     expect(onEdit).toHaveBeenCalledWith(member);

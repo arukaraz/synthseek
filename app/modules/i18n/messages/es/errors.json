@@ -354,5 +354,21 @@
   "LYRICS_LOOKUP_UNAVAILABLE": {
     "title": "No se ha podido traer la letra",
     "description": "El servicio de letras no respondió. No se ha guardado nada de esta canción, así que al abrir la letra otra vez se vuelve a preguntar."
+  },
+  "QUOTA_TRACKS_EXCEEDED": {
+    "title": "Cuota de canciones alcanzada",
+    "description": "Cuota de canciones: {{used}} de {{limit}} usadas, y esta solicitud suma {{requested}} más. Habrá sitio el {{freesAt}}."
+  },
+  "QUOTA_REQUEST_TOO_LARGE": {
+    "title": "Solicitud mayor que tu cuota",
+    "description": "Esta solicitud suma {{requested}} canciones y tu cuota entera es de {{limit}}. Pide menos de una vez."
+  },
+  "QUOTA_STORAGE_EXCEEDED": {
+    "title": "Cuota de espacio alcanzada",
+    "description": "Usas {{usedBytes}} de tus {{limitBytes}}, contando las descargas que están en camino, y esta solicitud necesita unos {{requestedBytes}} más. Borra algo o pide más espacio a un administrador."
+  },
+  "QUOTA_LIBRARY_FULL": {
+    "title": "La biblioteca está llena",
+    "description": "La biblioteca ocupa {{usedBytes}} de los {{limitBytes}} que permite el administrador, contando las descargas en camino, y esta solicitud necesita unos {{requestedBytes}} más."
   }
 }

@@ -484,6 +484,10 @@
       "ariaLabel": "Tiempo de espera de búsqueda de yt-dlp en segundos"
     }
   },
+  "accountRules": {
+    "usernameHint": "Entre {{min}} y {{max}} caracteres",
+    "passwordHint": "Al menos {{min}} caracteres"
+  },
   "members": {
     "pageTitle": "Miembros",
     "cardTitle": "Lista de usuarios",
@@ -502,6 +506,7 @@
       "type": "Tipo",
       "role": "Rol",
       "joined": "Se unió",
+      "quota": "Cuota",
       "selectAll": "Seleccionar todos los miembros",
       "selectMember": "Seleccionar a {{username}}"
     },
@@ -549,7 +554,6 @@
       "usernamePlaceholder": "nombre de usuario",
       "usernameAriaLabel": "Nombre de usuario",
       "passwordLabel": "Contraseña",
-      "passwordPlaceholder": "Al menos 8 caracteres",
       "passwordAriaLabel": "Contraseña",
       "roleLabel": "Rol",
       "roleAriaLabel": "Rol del usuario",
@@ -568,6 +572,12 @@
       "passwordPlaceholder": "Deja en blanco para mantener la contraseña actual",
       "passwordAriaLabel": "Nueva contraseña",
       "ownerRoleNote": "La cuenta del propietario debe seguir siendo administrador.",
+      "quotaTracksLabel": "Cuota de canciones propia",
+      "quotaTracksAriaLabel": "Cuota de canciones de este miembro",
+      "quotaStorageLabel": "Cuota de espacio propia (GB)",
+      "quotaStorageAriaLabel": "Cuota de espacio de este miembro en gigabytes",
+      "quotaPlaceholder": "Seguir la cuota global",
+      "quotaNote": "Deja una cuota vacía para seguir la global. Cero significa sin límite para este miembro.",
       "submit": "Guardar cambios"
     },
     "import": {
@@ -582,7 +592,7 @@
       "submit": "Importar seleccionados"
     },
     "roleDescriptions": {
-      "trusted": "Las solicitudes de los miembros de confianza omiten la cola de aprobación."
+      "trusted": "Las solicitudes de los miembros de confianza omiten la cola de aprobación, y las cuotas de miembro no los limitan."
     },
     "approval": {
       "cardTitle": "Aprobación de solicitudes",
@@ -591,6 +601,38 @@
         "label": "Requerir aprobación para miembros",
         "description": "Las nuevas solicitudes de los miembros esperan a un administrador. Los miembros de confianza y los administradores omiten la cola."
       }
+    },
+    "quotaCell": {
+      "exempt": "Exento",
+      "unlimited": "Sin límite",
+      "tracks": "Canciones {{used}}/{{limit}}",
+      "storage": "Espacio {{used}}/{{limit}}"
+    },
+    "quotas": {
+      "cardTitle": "Cuotas de descarga",
+      "cardDescription": "Limita cuánto puede descargar cada miembro. Cero significa sin límite. Los administradores y los miembros de confianza no tienen límite por miembro, y la cuota propia de un miembro se ajusta en su diálogo de edición.",
+      "tracksPerWindow": {
+        "label": "Canciones por miembro",
+        "description": "Canciones nuevas que un miembro puede solicitar dentro de la ventana de abajo. Cuentan las que esperan aprobación; los reintentos y las mejoras de calidad no.",
+        "ariaLabel": "Canciones por miembro"
+      },
+      "windowDays": {
+        "label": "Ventana",
+        "description": "Los días móviles sobre los que se cuenta la cuota de canciones.",
+        "ariaLabel": "Ventana de la cuota de canciones en días",
+        "unit": "días"
+      },
+      "userStorageGb": {
+        "label": "Espacio por miembro",
+        "description": "Lo que puede ocupar la música de un miembro, contando las descargas en camino.",
+        "ariaLabel": "Espacio por miembro en gigabytes"
+      },
+      "libraryStorageGb": {
+        "label": "Biblioteca entera",
+        "description": "Un techo para toda la biblioteca. Se aplica a todos, administradores incluidos, y cuenta los ficheros que nadie solicitó.",
+        "ariaLabel": "Espacio de la biblioteca entera en gigabytes"
+      },
+      "unitGb": "GB"
     }
   },
   "profile": {
@@ -617,7 +659,6 @@
       "currentLabel": "Contraseña actual",
       "currentAriaLabel": "Contraseña actual",
       "newLabel": "Nueva contraseña",
-      "newPlaceholder": "Al menos 8 caracteres",
       "newAriaLabel": "Nueva contraseña",
       "submit": "Cambiar contraseña",
       "managedByPlex": "Tu contraseña la gestiona Plex."
@@ -691,6 +732,18 @@
         "unavailable": "No se ha podido contactar con el servicio. Tus escuchas estan esperando.",
         "rejected": "El servicio ha rechazado las ultimas escuchas enviadas."
       }
+    },
+    "quota": {
+      "title": "Cuota de descarga",
+      "unavailable": "No se pudo cargar tu cuota.",
+      "exempt": "Tu rol no está limitado por las cuotas de miembros.",
+      "tracksLabel": "Canciones solicitadas",
+      "tracksValue_one": "{{used}} de {{limit}} en el último día",
+      "tracksValue_other": "{{used}} de {{limit}} en los últimos {{count}} días",
+      "storageLabel": "Espacio",
+      "storageValue": "{{used}} de {{limit}}",
+      "storagePending": "Incluye unos {{pending}} que aún se descargan",
+      "unlimited": "Sin límite"
     }
   },
   "api": {

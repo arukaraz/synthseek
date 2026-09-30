@@ -484,6 +484,10 @@
       "ariaLabel": "yt-dlp-Such-Zeitlimit in Sekunden"
     }
   },
+  "accountRules": {
+    "usernameHint": "Zwischen {{min}} und {{max}} Zeichen",
+    "passwordHint": "Mindestens {{min}} Zeichen"
+  },
   "members": {
     "pageTitle": "Mitglieder",
     "cardTitle": "Benutzerliste",
@@ -502,6 +506,7 @@
       "type": "Typ",
       "role": "Rolle",
       "joined": "Beigetreten",
+      "quota": "Kontingent",
       "selectAll": "Alle Mitglieder auswählen",
       "selectMember": "{{username}} auswählen"
     },
@@ -549,7 +554,6 @@
       "usernamePlaceholder": "benutzername",
       "usernameAriaLabel": "Benutzername",
       "passwordLabel": "Passwort",
-      "passwordPlaceholder": "Mindestens 8 Zeichen",
       "passwordAriaLabel": "Passwort",
       "roleLabel": "Rolle",
       "roleAriaLabel": "Benutzerrolle",
@@ -568,6 +572,12 @@
       "passwordPlaceholder": "Leer lassen, um das aktuelle Passwort zu behalten",
       "passwordAriaLabel": "Neues Passwort",
       "ownerRoleNote": "Das Eigentümerkonto muss ein Administrator bleiben.",
+      "quotaTracksLabel": "Eigenes Titelkontingent",
+      "quotaTracksAriaLabel": "Titelkontingent dieses Mitglieds",
+      "quotaStorageLabel": "Eigenes Speicherkontingent (GB)",
+      "quotaStorageAriaLabel": "Speicherkontingent dieses Mitglieds in Gigabyte",
+      "quotaPlaceholder": "Globales Kontingent verwenden",
+      "quotaNote": "Lass ein Kontingent leer, um das globale zu verwenden. Null bedeutet kein Limit für dieses Mitglied.",
       "submit": "Änderungen speichern"
     },
     "import": {
@@ -582,7 +592,7 @@
       "submit": "Ausgewählte importieren"
     },
     "roleDescriptions": {
-      "trusted": "Anfragen vertrauter Mitglieder überspringen die Freigabewarteschlange."
+      "trusted": "Anfragen vertrauter Mitglieder überspringen die Freigabewarteschlange, und Mitglieds-Kontingente begrenzen sie nicht."
     },
     "approval": {
       "cardTitle": "Anfragen-Freigabe",
@@ -591,6 +601,38 @@
         "label": "Freigabe für Mitglieder erforderlich",
         "description": "Neue Anfragen von Mitgliedern warten auf einen Administrator. Vertraute Mitglieder und Administratoren überspringen die Warteschlange."
       }
+    },
+    "quotaCell": {
+      "exempt": "Ausgenommen",
+      "unlimited": "Kein Limit",
+      "tracks": "Titel {{used}}/{{limit}}",
+      "storage": "Speicher {{used}}/{{limit}}"
+    },
+    "quotas": {
+      "cardTitle": "Download-Kontingente",
+      "cardDescription": "Begrenzt, wie viel jedes Mitglied herunterladen kann. Null bedeutet kein Limit. Administratoren und vertraute Mitglieder sind pro Mitglied nicht begrenzt, und das eigene Kontingent eines Mitglieds wird in seinem Bearbeitungsdialog festgelegt.",
+      "tracksPerWindow": {
+        "label": "Titel pro Mitglied",
+        "description": "Neue Titel, die ein Mitglied innerhalb des Zeitraums unten anfordern kann. Anfragen, die auf Freigabe warten, zählen; Wiederholungen und Qualitäts-Upgrades nicht.",
+        "ariaLabel": "Titel pro Mitglied"
+      },
+      "windowDays": {
+        "label": "Zeitraum",
+        "description": "Die gleitende Zahl an Tagen, über die das Titelkontingent zählt.",
+        "ariaLabel": "Zeitraum des Titelkontingents in Tagen",
+        "unit": "Tage"
+      },
+      "userStorageGb": {
+        "label": "Speicher pro Mitglied",
+        "description": "Wie viel Platz die Musik eines Mitglieds belegen darf, laufende Downloads eingerechnet.",
+        "ariaLabel": "Speicher pro Mitglied in Gigabyte"
+      },
+      "libraryStorageGb": {
+        "label": "Gesamte Bibliothek",
+        "description": "Eine Obergrenze für die ganze Bibliothek. Sie gilt für alle, auch für Administratoren, und zählt Dateien mit, die niemand angefordert hat.",
+        "ariaLabel": "Speicher der gesamten Bibliothek in Gigabyte"
+      },
+      "unitGb": "GB"
     }
   },
   "profile": {
@@ -617,7 +659,6 @@
       "currentLabel": "Aktuelles Passwort",
       "currentAriaLabel": "Aktuelles Passwort",
       "newLabel": "Neues Passwort",
-      "newPlaceholder": "Mindestens 8 Zeichen",
       "newAriaLabel": "Neues Passwort",
       "submit": "Passwort ändern",
       "managedByPlex": "Dein Passwort wird von Plex verwaltet."
@@ -691,6 +732,18 @@
         "unavailable": "Der Dienst war nicht erreichbar. Deine Wiedergaben warten.",
         "rejected": "Der Dienst hat die zuletzt gesendeten Wiedergaben abgelehnt."
       }
+    },
+    "quota": {
+      "title": "Download-Kontingent",
+      "unavailable": "Dein Kontingent konnte nicht geladen werden.",
+      "exempt": "Deine Rolle ist nicht durch Mitgliederkontingente begrenzt.",
+      "tracksLabel": "Angeforderte Titel",
+      "tracksValue_one": "{{used}} von {{limit}} am letzten Tag",
+      "tracksValue_other": "{{used}} von {{limit}} in den letzten {{count}} Tagen",
+      "storageLabel": "Speicher",
+      "storageValue": "{{used}} von {{limit}}",
+      "storagePending": "Enthält etwa {{pending}}, die noch geladen werden",
+      "unlimited": "Kein Limit"
     }
   },
   "api": {

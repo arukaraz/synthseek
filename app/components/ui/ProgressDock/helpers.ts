@@ -110,6 +110,7 @@ const FAILURE_REASON_KEYS: Record<LibraryImportFailureReason, AppShellKey> = {
   notInLibrary: "progressDock.failureReason.notInLibrary",
   noMatchableTracks: "progressDock.failureReason.noMatchableTracks",
   sourceHasNoTracks: "progressDock.failureReason.sourceHasNoTracks",
+  quotaExceeded: "progressDock.failureReason.quotaExceeded",
   importError: "progressDock.failureReason.importError",
 };
 

@@ -354,5 +354,21 @@
   "LYRICS_LOOKUP_UNAVAILABLE": {
     "title": "Der Songtext konnte nicht geladen werden",
     "description": "Der Songtext-Dienst hat nicht geantwortet. Zu diesem Titel wurde nichts gespeichert, ein erneutes Öffnen fragt also noch einmal nach."
+  },
+  "QUOTA_TRACKS_EXCEEDED": {
+    "title": "Titelkontingent erreicht",
+    "description": "Titelkontingent: {{used}} von {{limit}} genutzt, und diese Anfrage fügt {{requested}} hinzu. Platz wird am {{freesAt}} frei."
+  },
+  "QUOTA_REQUEST_TOO_LARGE": {
+    "title": "Anfrage größer als dein Kontingent",
+    "description": "Diese Anfrage umfasst {{requested}} Titel, dein gesamtes Kontingent sind {{limit}}. Fordere weniger auf einmal an."
+  },
+  "QUOTA_STORAGE_EXCEEDED": {
+    "title": "Speicherkontingent erreicht",
+    "description": "Du nutzt {{usedBytes}} von {{limitBytes}}, laufende Downloads eingerechnet, und diese Anfrage braucht etwa {{requestedBytes}} mehr. Lösche etwas oder bitte einen Administrator um mehr Platz."
+  },
+  "QUOTA_LIBRARY_FULL": {
+    "title": "Die Bibliothek ist voll",
+    "description": "Die Bibliothek belegt {{usedBytes}} der {{limitBytes}}, die der Administrator erlaubt, laufende Downloads eingerechnet, und diese Anfrage braucht etwa {{requestedBytes}} mehr."
   }
 }

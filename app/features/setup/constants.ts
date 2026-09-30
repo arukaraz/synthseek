@@ -13,9 +13,3 @@ export const SETUP_HEADING_IDS: Record<WizardStep, string> = {
   enrichment: "setup-step-enrichment-heading",
   done: "setup-step-done-heading",
 };
-
-export const ADMIN_FIELD_RULES = {
-  usernameMin: 3,
-  usernameMax: 32,
-  passwordMin: 8,
-} as const;

@@ -22,6 +22,9 @@ function trpcError(appCode: string): { data: { appCode: string } } {
   return { data: { appCode } };
 }
 
+const TOO_LARGE = { data: { appCode: "QUOTA_REQUEST_TOO_LARGE", appParams: { requested: 80, limit: 50 } } };
+const TOO_LARGE_DESCRIPTION = "This request adds 80 tracks and your whole quota is 50. Request fewer at a time.";
+
 beforeEach(() => {
   vi.clearAllMocks();
 });
@@ -32,6 +35,10 @@ describe("resolveFriendlyError", () => {
 
     expect(friendly.title).toBe(enErrors.SPOTIFY_NOT_CONFIGURED.title);
     expect(friendly.severity).toBe("warning");
+  });
+
+  it("fills the translated copy with the values the server sent", () => {
+    expect(resolveFriendlyError(TOO_LARGE).description).toBe(TOO_LARGE_DESCRIPTION);
   });
 
   it("falls back to reading the message when the server sent no code", () => {
@@ -133,6 +140,15 @@ describe("errorToast", () => {
     expect(toast.warning).toHaveBeenCalledWith(enErrors.SPOTIFY_NOT_CONFIGURED.title, expect.anything());
   });
 
+  it("fills the toast with the values the server sent", () => {
+    errorToast(TOO_LARGE);
+
+    expect(toast.warning).toHaveBeenCalledWith(
+      enErrors.QUOTA_REQUEST_TOO_LARGE.title,
+      expect.objectContaining({ description: TOO_LARGE_DESCRIPTION })
+    );
+  });
+
   it("falls back to the caller's key when the server sent no code", () => {
     errorToast(new Error("something odd"), "requests.downloadFailed");
 
@@ -151,6 +167,15 @@ describe("errorToastDetailed", () => {
     errorToastDetailed(trpcError("SPOTIFY_NOT_CONFIGURED"), "requests.downloadFailed");
 
     expect(toast.warning).toHaveBeenCalled();
+  });
+
+  it("fills the detailed toast with the values the server sent", () => {
+    errorToastDetailed(TOO_LARGE, "requests.downloadFailed");
+
+    expect(toast.warning).toHaveBeenCalledWith(
+      enErrors.QUOTA_REQUEST_TOO_LARGE.title,
+      expect.objectContaining({ description: TOO_LARGE_DESCRIPTION })
+    );
   });
 
   it("keeps the raw message as the detail under the caller's wording", () => {

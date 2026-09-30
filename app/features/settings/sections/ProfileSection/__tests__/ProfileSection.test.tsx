@@ -23,6 +23,7 @@ vi.mock("../components/ConnectedAccountsCard", () => ({
 vi.mock("../components/ListeningServicesCard", () => ({
   ListeningServicesCard: () => <div data-testid="listening-card" />,
 }));
+vi.mock("../components/QuotaCard", () => ({ QuotaCard: () => <div data-testid="quota-card" /> }));
 
 import { ProfileSection } from "../ProfileSection";
 
@@ -40,6 +41,7 @@ describe("ProfileSection", () => {
     render(<ProfileSection />);
     expect(screen.getByRole("heading", { name: enSettings.profile.pageTitle })).toBeInTheDocument();
     expect(screen.getByTestId("account-card")).toBeInTheDocument();
+    expect(screen.getByTestId("quota-card")).toBeInTheDocument();
     expect(screen.getByTestId("edit-card")).toBeInTheDocument();
     expect(screen.getByTestId("password-card")).toBeInTheDocument();
     expect(screen.getByTestId("connected-card")).toBeInTheDocument();

@@ -14,6 +14,7 @@ import {
 } from "@components/ui/Dialog";
 import { Role } from "@api/__generated__/types";
 import { useCreateLocalUser } from "@hooks/api/mutations/users/useCreateLocalUser";
+import { ACCOUNT_FIELD_RULES, isValidPassword, isValidUsername } from "@utils/account";
 
 import { SettingsField } from "../../../components/SettingsField";
 import { SettingsTextInput } from "../../../components/SettingsTextInput";
@@ -31,7 +32,8 @@ export function CreateLocalUserDialog({ open, onOpenChange }: CreateLocalUserDia
   const [role, setRole] = useState<RoleValue>(Role.enum.member);
   const create = useCreateLocalUser();
 
-  const canSubmit = email.trim().length > 0 && username.trim().length >= 3 && password.length >= 8 && !create.isPending;
+  const canSubmit =
+    email.trim().length > 0 && isValidUsername(username) && isValidPassword(password) && !create.isPending;
 
   const handleClose = () => {
     setEmail("");
@@ -71,7 +73,13 @@ export function CreateLocalUserDialog({ open, onOpenChange }: CreateLocalUserDia
             />
           </SettingsField>
 
-          <SettingsField label={t("members.create.usernameLabel")}>
+          <SettingsField
+            label={t("members.create.usernameLabel")}
+            helper={t("accountRules.usernameHint", {
+              min: ACCOUNT_FIELD_RULES.usernameMin,
+              max: ACCOUNT_FIELD_RULES.usernameMax,
+            })}
+          >
             <SettingsTextInput
               value={username}
               onChange={setUsername}
@@ -80,11 +88,13 @@ export function CreateLocalUserDialog({ open, onOpenChange }: CreateLocalUserDia
             />
           </SettingsField>
 
-          <SettingsField label={t("members.create.passwordLabel")}>
+          <SettingsField
+            label={t("members.create.passwordLabel")}
+            helper={t("accountRules.passwordHint", { min: ACCOUNT_FIELD_RULES.passwordMin })}
+          >
             <SettingsSecretInput
               value={password}
               onChange={setPassword}
-              placeholder={t("members.create.passwordPlaceholder")}
               ariaLabel={t("members.create.passwordAriaLabel")}
             />
           </SettingsField>

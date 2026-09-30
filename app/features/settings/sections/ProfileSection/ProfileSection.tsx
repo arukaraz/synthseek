@@ -11,6 +11,7 @@ import { ChangePasswordCard } from "./components/ChangePasswordCard";
 import { ConnectedAccountsCard } from "./components/ConnectedAccountsCard";
 import { EditProfileCard } from "./components/EditProfileCard";
 import { ListeningServicesCard } from "./components/ListeningServicesCard";
+import { QuotaCard } from "./components/QuotaCard";
 
 export function ProfileSection() {
   const { t } = useTranslation("settings");
@@ -22,6 +23,7 @@ export function ProfileSection() {
     <div className={contentRoot()}>
       <SettingsPageHeader title={t("profile.pageTitle")} />
       <AccountCard user={currentUser} />
+      <QuotaCard />
       <EditProfileCard user={currentUser} />
       <ChangePasswordCard user={currentUser} />
       <ConnectedAccountsCard />

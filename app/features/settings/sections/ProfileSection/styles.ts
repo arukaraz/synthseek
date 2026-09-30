@@ -37,6 +37,16 @@ export const listeningClientOption = cva("text-fg/70 flex items-center gap-2 tex
 
 export const listeningTokenRow = cva("flex flex-col gap-2 sm:flex-row sm:items-center");
 
+export const quotaRow = cva("flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-sm");
+
+export const quotaLabel = cva("text-fg/70");
+
+export const quotaValue = cva("text-fg tabular-nums");
+
+export const quotaNote = cva("text-fg/50 w-full text-xs");
+
+export const quotaMessage = cva("text-fg/60 text-sm");
+
 export const reportingNote = cva(
   "border-fg/10 -mt-1 flex items-center gap-3 rounded-lg border border-dashed px-3 py-2"
 );

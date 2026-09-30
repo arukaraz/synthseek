@@ -56,6 +56,8 @@
     "wantedFailed": "Failed to save wanted sweep settings",
     "usersSaved": "Member settings saved",
     "usersFailed": "Failed to save member settings",
+    "quotasSaved": "Download quotas saved",
+    "quotasFailed": "Failed to save download quotas",
     "qualitySaved": "Quality settings saved",
     "qualityFailed": "Failed to save quality settings",
     "recycleBinSaved": "Recycle bin settings saved",

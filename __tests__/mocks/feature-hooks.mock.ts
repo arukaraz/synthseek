@@ -97,6 +97,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
     },
     users: { requireApprovalForMembers: false },
     connectApps: { subsonicEnabled: false, subsonicTranscodingEnabled: false },
+    quotas: { tracksPerWindow: 0, windowDays: 7, userStorageGb: 0, libraryStorageGb: 0 },
     ...overrides,
   };
 }
@@ -123,6 +124,13 @@ export function createMockUser(overrides: Partial<UsersOutput[number]> = {}): Us
     requestCount: 0,
     isOwner: false,
     isPlexUser: false,
+    quotaTracks: null,
+    quotaStorageGb: null,
+    quota: {
+      exempt: false,
+      tracks: { limit: null, used: 0, windowDays: 7 },
+      storage: { limitBytes: null, storedBytes: 0, pendingBytes: 0 },
+    },
     ...overrides,
   };
 }

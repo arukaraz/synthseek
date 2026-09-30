@@ -9,7 +9,7 @@
     "retryAllFailed": {
       "label": "Reintentar fallidas",
       "confirmTitle": "Reintentar todas las fallidas",
-      "confirmMessage": "Esto reintentará todas las descargas fallidas y parcialmente completadas. ¿Continuar?",
+      "confirmMessage": "Esto reintentará las descargas fallidas y parcialmente completadas. ¿Continuar?",
       "confirmPending": "Reintentando...",
       "confirmAction": "Reintentar todas"
     },
@@ -168,7 +168,7 @@
   "watch": {
     "stop": "Dejar de seguir",
     "resume": "Reanudar seguimiento, reiniciar la programación",
-    "resumeTitle": "Borra el número de intentos y la hora programada, así el próximo barrido reintenta esta canción."
+    "resumeTitle": "Borra el número de intentos y la hora programada, así la canción entra en el próximo barrido."
   },
   "approval": {
     "approvePending_one": "Aprobar canción pendiente",

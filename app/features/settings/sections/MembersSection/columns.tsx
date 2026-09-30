@@ -2,6 +2,7 @@ import { Checkbox } from "@components/ui/Checkbox";
 import type { ColumnDef } from "@components/ui/Table";
 
 import { MemberActionsCell } from "./components/MemberActionsCell";
+import { MemberQuotaCell } from "./components/MemberQuotaCell";
 import { MemberRoleBadge } from "./components/MemberRoleBadge";
 import { MemberTypeBadge } from "./components/MemberTypeBadge";
 import { MemberUserCell } from "./components/MemberUserCell";
@@ -40,6 +41,12 @@ export function buildMemberColumns(args: BuildMemberColumnsArgs): ColumnDef<Memb
       key: "requests",
       header: t("members.columns.requests"),
       cell: (member) => <span className={requestCount()}>{member.requestCount}</span>,
+      sortable: true,
+    },
+    {
+      key: "quota",
+      header: t("members.columns.quota"),
+      cell: (member) => <MemberQuotaCell member={member} />,
       sortable: true,
     },
     {

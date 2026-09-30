@@ -56,6 +56,8 @@
     "wantedFailed": "No se pudo guardar la configuración del barrido de seguimiento",
     "usersSaved": "Configuración de miembros guardada",
     "usersFailed": "No se pudo guardar la configuración de miembros",
+    "quotasSaved": "Cuotas de descarga guardadas",
+    "quotasFailed": "No se pudieron guardar las cuotas de descarga",
     "qualitySaved": "Ajustes de calidad guardados",
     "qualityFailed": "No se pudieron guardar los ajustes de calidad",
     "recycleBinSaved": "Ajustes de la papelera guardados",

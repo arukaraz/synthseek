@@ -56,6 +56,8 @@
     "wantedFailed": "Wanted-Durchlauf-Einstellungen konnten nicht gespeichert werden",
     "usersSaved": "Mitgliedereinstellungen gespeichert",
     "usersFailed": "Mitgliedereinstellungen konnten nicht gespeichert werden",
+    "quotasSaved": "Download-Kontingente gespeichert",
+    "quotasFailed": "Download-Kontingente konnten nicht gespeichert werden",
     "qualitySaved": "Qualitätseinstellungen gespeichert",
     "qualityFailed": "Qualitätseinstellungen konnten nicht gespeichert werden",
     "recycleBinSaved": "Papierkorb-Einstellungen gespeichert",

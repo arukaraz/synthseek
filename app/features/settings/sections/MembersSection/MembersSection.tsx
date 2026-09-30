@@ -22,6 +22,7 @@ import { CreateLocalUserDialog } from "./components/CreateLocalUserDialog";
 import { EditUserDialog } from "./components/EditUserDialog";
 import { ImportPlexUsersDialog } from "./components/ImportPlexUsersDialog";
 import { MembersToolbar } from "./components/MembersToolbar";
+import { QuotasCard } from "./components/QuotasCard";
 import { buildMemberColumns } from "./columns";
 import { sortMembers } from "./helpers";
 import { useMemberSelection } from "./hooks/useMemberSelection";
@@ -173,6 +174,7 @@ export function MembersSection() {
       </SettingsCard>
 
       <ApprovalCard />
+      <QuotasCard />
 
       <CreateLocalUserDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ImportPlexUsersDialog open={importOpen} onOpenChange={setImportOpen} />

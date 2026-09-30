@@ -4,7 +4,7 @@ import { z } from "zod";
 import i18n from "@locale";
 import type { ParseKeys } from "i18next";
 
-import { extractAppCode } from "./appCode";
+import { extractAppCode, extractAppParams } from "./appCode";
 import { GENERIC_FALLBACK_CODE, spotifyReasonToCode } from "./constants";
 import { resolveByCode, resolveByMessage } from "./registry";
 import type { ErrorMutationMeta, FriendlyError, ResolveErrorOptions } from "./types";
@@ -25,7 +25,7 @@ function genericFallback(): FriendlyError {
 
 export function resolveFriendlyError(input: unknown, options: ResolveErrorOptions = {}): FriendlyError {
   const appCode = extractAppCode(input);
-  if (appCode) return resolveByCode(appCode);
+  if (appCode) return resolveByCode(appCode, extractAppParams(input));
 
   const message = extractMessage(input);
   const matched = resolveByMessage(message, options.category);
@@ -69,7 +69,7 @@ export function emitFriendlyToast(friendly: FriendlyError): void {
 export function errorToast(error: unknown, fallbackKey?: ParseKeys<"mutations">): void {
   const appCode = extractAppCode(error);
   if (appCode) {
-    emitFriendlyToast(resolveByCode(appCode));
+    emitFriendlyToast(resolveByCode(appCode, extractAppParams(error)));
     return;
   }
   if (fallbackKey) {
@@ -82,7 +82,7 @@ export function errorToast(error: unknown, fallbackKey?: ParseKeys<"mutations">)
 export function errorToastDetailed(error: unknown, fallbackKey: ParseKeys<"mutations">): void {
   const appCode = extractAppCode(error);
   if (appCode) {
-    emitFriendlyToast(resolveByCode(appCode));
+    emitFriendlyToast(resolveByCode(appCode, extractAppParams(error)));
     return;
   }
   const description = extractMessage(error);

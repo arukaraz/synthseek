@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import enErrors from "@locale/messages/en/errors.json";
 
+import type { AppErrorParams } from "./types";
+
 export type AppErrorCode = keyof typeof enErrors;
 
 const APP_ERROR_CODES = Object.keys(enErrors);
@@ -24,4 +26,18 @@ export function extractAppCode(error: unknown): AppErrorCode | null {
   const code = parsed.data.data?.appCode;
   if (!code) return null;
   return isKnownAppErrorCode(code) ? code : null;
+}
+
+const appParamsEnvelopeSchema = z.object({
+  data: z
+    .object({
+      appParams: z.record(z.string(), z.union([z.string(), z.number()])).nullish(),
+    })
+    .nullish(),
+});
+
+export function extractAppParams(error: unknown): AppErrorParams | null {
+  const parsed = appParamsEnvelopeSchema.safeParse(error);
+  if (!parsed.success) return null;
+  return parsed.data.data?.appParams ?? null;
 }
