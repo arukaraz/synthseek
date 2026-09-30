@@ -40,6 +40,7 @@ export {
   usePublishPlaybackState,
   useRadioTracksFetcher,
   useRecordPlay,
+  useSavePlaybackPosition,
   useSavePlaybackSession,
   useSendPlayerCommand,
   useSetFavoriteTrack,

@@ -23,6 +23,7 @@ import {
   nowPlayingOf,
   queueChanged,
   queuePresenceOf,
+  queueRewritten,
   playerTrackFrom,
   playingSourceOf,
   previousIndexIn,
@@ -409,6 +410,22 @@ describe("queueChanged", () => {
 
   it("does not fire for a position that merely moved on", () => {
     expect(queueChanged(base, { ...base, positionMs: 90_000 })).toBe(false);
+  });
+});
+
+describe("queueRewritten", () => {
+  const base = { trackIds: ["t1", "t2"], autoplayTrackIds: [], currentTrackId: "t1", positionMs: 10_000 };
+
+  it("fires when there is no saved queue yet, when a track joins or leaves, and when the order changes", () => {
+    expect(queueRewritten(null, base)).toBe(true);
+    expect(queueRewritten(base, { ...base, trackIds: ["t1", "t2", "t3"] })).toBe(true);
+    expect(queueRewritten(base, { ...base, trackIds: ["t1"] })).toBe(true);
+    expect(queueRewritten(base, { ...base, trackIds: ["t2", "t1"] })).toBe(true);
+  });
+
+  it("does not fire when only the pointer moved, to another track or further into the same one", () => {
+    expect(queueRewritten(base, { ...base, currentTrackId: "t2" })).toBe(false);
+    expect(queueRewritten(base, { ...base, positionMs: 90_000 })).toBe(false);
   });
 });
 

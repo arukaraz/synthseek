@@ -378,11 +378,16 @@ export function previousIndexIn(state: PlayerSessionState): number | null {
   return state.shuffleOrder[position - 1] ?? null;
 }
 
+export function queueRewritten(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {
+  if (previous === null) return true;
+  if (previous.trackIds.length !== next.trackIds.length) return true;
+  return previous.trackIds.some((id, index) => id !== next.trackIds[index]);
+}
+
 export function queueChanged(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {
   if (previous === null) return true;
   if (previous.currentTrackId !== next.currentTrackId) return true;
-  if (previous.trackIds.length !== next.trackIds.length) return true;
-  return previous.trackIds.some((id, index) => id !== next.trackIds[index]);
+  return queueRewritten(previous, next);
 }
 
 export function sessionChanged(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {

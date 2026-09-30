@@ -4,6 +4,7 @@ export { useLinkSourceAccount, useUnlinkSourceAccount } from "./useLinkSourceAcc
 export { usePublishPlaybackState } from "./usePublishPlaybackState";
 export { useRadioTracksFetcher } from "./useRadioTracksFetcher";
 export { useRecordPlay } from "./useRecordPlay";
+export { useSavePlaybackPosition } from "./useSavePlaybackPosition";
 export { useSavePlaybackSession } from "./useSavePlaybackSession";
 export { useSendPlayerCommand } from "./useSendPlayerCommand";
 export { useSetFavoriteTrack } from "./useSetFavoriteTrack";

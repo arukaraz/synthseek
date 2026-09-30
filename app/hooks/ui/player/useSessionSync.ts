@@ -1,11 +1,11 @@
 "use client";
 
-import { usePlaybackSession, useSavePlaybackSession } from "@hooks/api";
+import { usePlaybackSession, useSavePlaybackPosition, useSavePlaybackSession } from "@hooks/api";
 import { useEffect, useRef } from "react";
 
 import { setTakeOverHandler, setUnknownTrackHandler } from "./commands";
 import { SESSION_SAVE_INTERVAL_MS } from "./constants";
-import { playerTrackFrom, queueChanged, sessionChanged } from "./helpers";
+import { playerTrackFrom, queueChanged, queueRewritten, sessionChanged } from "./helpers";
 import { actions, getSnapshot, sessionSnapshot, subscribe } from "./store";
 import type { SessionSnapshot } from "./types";
 
@@ -13,12 +13,15 @@ export function usePlayerSessionSync(): void {
   const restored = useRef(false);
   const lastSaved = useRef<SessionSnapshot | null>(null);
   const lastSentAt = useRef(0);
+  const queueRevision = useRef<string | null>(null);
   const session = usePlaybackSession(!restored.current);
   const { mutate: saveSession } = useSavePlaybackSession();
+  const { mutate: savePosition } = useSavePlaybackPosition();
 
   useEffect(() => {
     if (restored.current || session.data === undefined || session.data === null) return;
     restored.current = true;
+    queueRevision.current = session.data.queueRevision;
     lastSaved.current = {
       trackIds: session.data.tracks.map((track) => track.id),
       autoplayTrackIds: session.data.autoplayTrackIds,
@@ -69,6 +72,15 @@ export function usePlayerSessionSync(): void {
   }, [refetch]);
 
   useEffect(() => {
+    const saveWhole = (snapshot: SessionSnapshot) => {
+      queueRevision.current = null;
+      saveSession(snapshot, {
+        onSuccess: (saved) => {
+          queueRevision.current = saved.queueRevision;
+        },
+      });
+    };
+
     const flush = (force: boolean) => {
       const session = getSnapshot();
       if (!session.started || session.remote !== null) return;
@@ -77,9 +89,25 @@ export function usePlayerSessionSync(): void {
       if (next.trackIds.length === 0) return;
       if (!sessionChanged(lastSaved.current, next)) return;
       if (throttled && !queueChanged(lastSaved.current, next)) return;
+      const rewritten = queueRewritten(lastSaved.current, next);
+      const revision = queueRevision.current;
       lastSaved.current = next;
       lastSentAt.current = Date.now();
-      saveSession(next);
+      if (rewritten || revision === null) {
+        saveWhole(next);
+        return;
+      }
+      savePosition(
+        { queueRevision: revision, currentTrackId: next.currentTrackId, positionMs: next.positionMs },
+        {
+          onSuccess: (answer) => {
+            if (answer.saved) return;
+            queueRevision.current = null;
+            lastSaved.current = null;
+            flush(true);
+          },
+        }
+      );
     };
 
     const unsubscribe = subscribe(() => flush(false));
@@ -94,5 +122,5 @@ export function usePlayerSessionSync(): void {
       window.removeEventListener("pagehide", onLeave);
       document.removeEventListener("visibilitychange", onHidden);
     };
-  }, [saveSession]);
+  }, [saveSession, savePosition]);
 }

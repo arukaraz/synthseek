@@ -26,17 +26,34 @@ interface SavedSession {
   currentTrackId: string | null;
   positionMs: number;
   resumedFrom: string | null;
+  queueRevision: string;
+}
+
+interface WholeSaveOptions {
+  onSuccess: (saved: { queueRevision: string | null }) => void;
+}
+
+interface PositionReport {
+  queueRevision: string;
+  currentTrackId: string | null;
+  positionMs: number;
+}
+
+interface PositionSaveOptions {
+  onSuccess: (answer: { saved: boolean }) => void;
 }
 
 const api = vi.hoisted(() => ({
   session: null as SavedSession | null | undefined,
   refetch: vi.fn(async () => ({ data: null as SavedSession | null })),
-  save: vi.fn(),
+  save: vi.fn<(snapshot: SessionSnapshot, options: WholeSaveOptions) => void>(),
+  position: vi.fn<(report: PositionReport, options: PositionSaveOptions) => void>(),
 }));
 
 vi.mock("@hooks/api", () => ({
   usePlaybackSession: () => ({ data: api.session, refetch: api.refetch }),
   useSavePlaybackSession: () => ({ mutate: api.save }),
+  useSavePlaybackPosition: () => ({ mutate: api.position }),
 }));
 
 const commands = vi.hoisted(() => ({
@@ -174,6 +191,7 @@ describe("restoring the saved session", () => {
       currentTrackId: "b",
       positionMs: 45_000,
       resumedFrom: null,
+      queueRevision: "q1",
     };
 
     renderHook(() => usePlayerSessionSync());
@@ -194,6 +212,7 @@ describe("restoring the saved session", () => {
       currentTrackId: "a",
       positionMs: 0,
       resumedFrom: null,
+      queueRevision: "q1",
     };
 
     renderHook(() => usePlayerSessionSync());
@@ -208,6 +227,7 @@ describe("restoring the saved session", () => {
       currentTrackId: "a",
       positionMs: 0,
       resumedFrom: "Kitchen",
+      queueRevision: "q1",
     };
 
     renderHook(() => usePlayerSessionSync());
@@ -238,6 +258,7 @@ describe("restoring the saved session", () => {
       currentTrackId: "a",
       positionMs: 0,
       resumedFrom: null,
+      queueRevision: "q1",
     };
 
     const { rerender } = renderHook(() => usePlayerSessionSync());
@@ -247,6 +268,7 @@ describe("restoring the saved session", () => {
       currentTrackId: "b",
       positionMs: 0,
       resumedFrom: null,
+      queueRevision: "q1",
     };
     rerender();
 
@@ -273,6 +295,7 @@ describe("taking the sound over from another device", () => {
         currentTrackId: "b",
         positionMs: 30_000,
         resumedFrom: null,
+        queueRevision: "q1",
       },
     });
     renderHook(() => usePlayerSessionSync());
@@ -344,6 +367,7 @@ describe("adopting a queue another device announced", () => {
         currentTrackId: "x",
         positionMs: 0,
         resumedFrom: null,
+        queueRevision: "q1",
       },
     });
     renderHook(() => usePlayerSessionSync());
@@ -381,12 +405,10 @@ describe("saving the session as it moves", () => {
 
     publish();
 
-    expect(api.save).toHaveBeenCalledWith({
-      trackIds: ["a", "b"],
-      autoplayTrackIds: [],
-      currentTrackId: "a",
-      positionMs: 0,
-    });
+    expect(api.save).toHaveBeenCalledWith(
+      { trackIds: ["a", "b"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0 },
+      expect.anything()
+    );
   });
 
   it("saves nothing before the player has started", () => {
@@ -465,12 +487,10 @@ describe("saving the session as it moves", () => {
     store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
     publish();
 
-    expect(api.save).toHaveBeenCalledWith({
-      trackIds: ["a", "b"],
-      autoplayTrackIds: [],
-      currentTrackId: "a",
-      positionMs: 0,
-    });
+    expect(api.save).toHaveBeenCalledWith(
+      { trackIds: ["a", "b"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0 },
+      expect.anything()
+    );
   });
 
   it("saves the drifted position again once the interval has passed", () => {
@@ -535,5 +555,161 @@ describe("saving the session as it moves", () => {
 
     expect(api.save).not.toHaveBeenCalled();
     expect(store.listeners.size).toBe(0);
+  });
+});
+
+describe("reporting where the listener is without resending the queue", () => {
+  function serverNamesTheSavedQueue(queueRevision: string | null): void {
+    api.save.mock.lastCall?.[1].onSuccess({ queueRevision });
+  }
+
+  function serverAnswersThePosition(saved: boolean): void {
+    api.position.mock.lastCall?.[1].onSuccess({ saved });
+  }
+
+  function playingASavedQueue(): void {
+    vi.useFakeTimers();
+    renderHook(() => usePlayerSessionSync());
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
+    publish();
+    serverNamesTheSavedQueue("q7");
+  }
+
+  function driftPastTheInterval(positionMs: number): void {
+    vi.advanceTimersByTime(SESSION_SAVE_INTERVAL_MS + 1);
+    store.snapshotOf = { ...store.snapshotOf, positionMs };
+    publish();
+  }
+
+  it("sends the pointer and the revision of the saved queue, not the queue", () => {
+    playingASavedQueue();
+
+    driftPastTheInterval(60_000);
+
+    expect(api.position).toHaveBeenCalledWith(
+      { queueRevision: "q7", currentTrackId: "a", positionMs: 60_000 },
+      expect.anything()
+    );
+    expect(api.save).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports a move to another track of the same queue straight away, still without the queue", () => {
+    playingASavedQueue();
+
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "b", positionMs: 0 };
+    publish();
+
+    expect(api.position).toHaveBeenCalledWith(
+      { queueRevision: "q7", currentTrackId: "b", positionMs: 0 },
+      expect.anything()
+    );
+    expect(api.save).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps reporting against the same revision while the server accepts it", () => {
+    playingASavedQueue();
+    driftPastTheInterval(60_000);
+    serverAnswersThePosition(true);
+
+    driftPastTheInterval(120_000);
+
+    expect(api.position).toHaveBeenCalledTimes(2);
+    expect(api.position.mock.lastCall?.[0]).toEqual({ queueRevision: "q7", currentTrackId: "a", positionMs: 120_000 });
+    expect(api.save).toHaveBeenCalledTimes(1);
+  });
+
+  it("sends the whole queue while the server has not yet named the one it saved", () => {
+    vi.useFakeTimers();
+    renderHook(() => usePlayerSessionSync());
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
+    publish();
+
+    driftPastTheInterval(60_000);
+
+    expect(api.save).toHaveBeenCalledTimes(2);
+    expect(api.position).not.toHaveBeenCalled();
+  });
+
+  it("sends the whole queue when its order changed, whatever revision it holds", () => {
+    playingASavedQueue();
+
+    store.snapshotOf = { trackIds: ["b", "a"], currentTrackId: "a", positionMs: 0 };
+    publish();
+
+    expect(api.save).toHaveBeenCalledTimes(2);
+    expect(api.save.mock.lastCall?.[0].trackIds).toEqual(["b", "a"]);
+    expect(api.position).not.toHaveBeenCalled();
+  });
+
+  it("forgets the revision while a changed queue is on its way, so a position in between still carries the queue", () => {
+    playingASavedQueue();
+    store.snapshotOf = { trackIds: ["a", "b", "c"], currentTrackId: "a", positionMs: 0 };
+    publish();
+
+    driftPastTheInterval(60_000);
+
+    expect(api.save).toHaveBeenCalledTimes(3);
+    expect(api.position).not.toHaveBeenCalled();
+  });
+
+  it("sends the whole queue when the server refuses the position, because the saved queue is no longer this one", () => {
+    playingASavedQueue();
+    driftPastTheInterval(60_000);
+
+    serverAnswersThePosition(false);
+
+    expect(api.save).toHaveBeenCalledTimes(2);
+    expect(api.save.mock.lastCall?.[0]).toEqual({
+      trackIds: ["a", "b"],
+      autoplayTrackIds: [],
+      currentTrackId: "a",
+      positionMs: 60_000,
+    });
+  });
+
+  it("writes nothing after a refusal once another device holds the sound, whose session is the one that counts", () => {
+    playingASavedQueue();
+    driftPastTheInterval(60_000);
+    store.snapshot = sessionState({
+      remote: {
+        deviceId: "kitchen",
+        deviceName: "Kitchen",
+        confirmed: true,
+        playing: true,
+        track: null,
+        positionSeconds: 0,
+        shuffle: false,
+        repeat: "off",
+        volume: 1,
+        muted: false,
+        transcoding: false,
+        updatedAt: Date.now(),
+      },
+    });
+
+    serverAnswersThePosition(false);
+
+    expect(api.save).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports against the revision of the session it restored, so a reload does not resend the queue", () => {
+    api.session = {
+      tracks: [savedTrack("a"), savedTrack("b")],
+      autoplayTrackIds: [],
+      currentTrackId: "a",
+      positionMs: 0,
+      resumedFrom: null,
+      queueRevision: "q1",
+    };
+    renderHook(() => usePlayerSessionSync());
+
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 60_000 };
+    publish();
+
+    expect(api.position).toHaveBeenCalledWith(
+      { queueRevision: "q1", currentTrackId: "a", positionMs: 60_000 },
+      expect.anything()
+    );
+    expect(api.save).not.toHaveBeenCalled();
   });
 });
