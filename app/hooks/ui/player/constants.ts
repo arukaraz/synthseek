@@ -40,7 +40,7 @@ export const PLAYBACK_MIME_BY_FORMAT: Readonly<Record<string, string>> = {
 
 export const TONES = ["primary", "secondary", "accent"] as const;
 
-export const MAX_QUEUE_TRACKS = 500;
+export const MAX_QUEUE_TRACKS = 5000;
 
 export const AUTOPLAY_REFILL_BELOW = 3;
 
