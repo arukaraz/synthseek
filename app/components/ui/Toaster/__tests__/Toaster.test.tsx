@@ -58,6 +58,19 @@ describe("Toaster", () => {
     }
   });
 
+  it("hands Sonner one bottom offset for both widths, so the switch follows the app's breakpoint", async () => {
+    render(<Toaster />);
+    toast.success("Placed");
+
+    await findToast("Placed");
+    const toaster = document.querySelector("[data-sonner-toaster]");
+    if (!(toaster instanceof HTMLElement)) throw new Error("toaster element not found");
+    expect(toaster.style.getPropertyValue("--offset-bottom")).toBe("var(--toast-offset-bottom)");
+    expect(toaster.style.getPropertyValue("--mobile-offset-bottom")).toBe("var(--toast-offset-bottom)");
+    expect(toaster.style.getPropertyValue("--toast-offset-mobile")).toContain("var(--height-bottom-nav)");
+    expect(toaster.style.getPropertyValue("--toast-offset-wide")).not.toContain("--height-bottom-nav");
+  });
+
   it("keeps an accessible close control", async () => {
     render(<Toaster />);
     toast.success("Done");

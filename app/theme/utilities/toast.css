@@ -1,6 +1,13 @@
 [data-sonner-toaster] {
   --toast-accent: var(--color-primary-500);
   --toast-accent-glow: var(--shadow-neon-primary);
+  --toast-offset-bottom: var(--toast-offset-mobile);
+}
+
+@media (min-width: 40rem) {
+  [data-sonner-toaster] {
+    --toast-offset-bottom: var(--toast-offset-wide);
+  }
 }
 
 [data-sonner-toaster] [data-sonner-toast][data-type="success"] {
