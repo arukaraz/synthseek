@@ -2,6 +2,8 @@ import type { TFunction } from "i18next";
 import { CheckCircle, XCircle } from "lucide-react";
 import { describe, expect, it } from "vitest";
 
+import enErrors from "@modules/i18n/messages/en/errors.json";
+
 import {
   buildRequestSubtitle,
   buildSubtitle,
@@ -181,6 +183,17 @@ describe("ProgressDock helpers", () => {
       const subtitle = buildRequestSubtitle("failed", 71, t);
       expect(subtitle.accentTone).toBe("error");
       expect(subtitle.rest).toBe("progressDock.subtitle.requestFailed");
+    });
+
+    it("names the coded cause of a failed request instead of the generic failed copy", () => {
+      const subtitle = buildRequestSubtitle("failed", 71, t, { appCode: "QUOTA_LIBRARY_FULL", appParams: null });
+      expect(subtitle.accentTone).toBe("error");
+      expect(subtitle.rest).toBe(enErrors.QUOTA_LIBRARY_FULL.title);
+    });
+
+    it("ignores a coded cause on a request that did not fail", () => {
+      const subtitle = buildRequestSubtitle("complete", 3, t, { appCode: "QUOTA_LIBRARY_FULL", appParams: null });
+      expect(subtitle.rest).toBe('progressDock.subtitle.requestComplete:{"count":3}');
     });
   });
 

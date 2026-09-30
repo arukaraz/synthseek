@@ -1,15 +1,9 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { RetryTracksResult } from "@utils/request-helpers";
+
 import { useRetryTracks } from "../useRetryTracks";
-
-type SkipReason = "notFound" | "forbidden" | "notRetryable" | "retryError";
-
-interface RetryTracksResult {
-  requested: number;
-  retried: number;
-  skipped: { id: string; reason: SkipReason }[];
-}
 
 interface MutationOptions {
   onSettled?: () => void;
@@ -61,7 +55,8 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-vi.mock("@modules/errors", () => ({
+vi.mock("@modules/errors", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@modules/errors")>()),
   errorToast: vi.fn(),
 }));
 
@@ -95,7 +90,7 @@ describe("useRetryTracks", () => {
   it("toasts the retried count on a clean success", () => {
     renderHook(() => useRetryTracks());
 
-    spies.captured.options?.onSuccess?.({ requested: 3, retried: 3, skipped: [] });
+    spies.captured.options?.onSuccess?.({ requested: 3, retried: 3, skipped: [], refusal: null });
 
     expect(spies.toastSuccess).toHaveBeenCalledWith('mutations:requests.tracksRetried:{"count":3}', {
       description: undefined,
@@ -114,6 +109,7 @@ describe("useRetryTracks", () => {
         { id: "b", reason: "notFound" },
         { id: "c", reason: "forbidden" },
       ],
+      refusal: null,
     });
 
     expect(spies.toastSuccess).toHaveBeenCalledTimes(1);
@@ -131,6 +127,7 @@ describe("useRetryTracks", () => {
       requested: 1,
       retried: 0,
       skipped: [{ id: "a", reason: "notRetryable" }],
+      refusal: null,
     });
 
     expect(spies.toastWarning).toHaveBeenCalledTimes(1);
@@ -141,10 +138,25 @@ describe("useRetryTracks", () => {
   it("shows the no-failed info toast when nothing was retried and nothing was skipped", () => {
     renderHook(() => useRetryTracks());
 
-    spies.captured.options?.onSuccess?.({ requested: 0, retried: 0, skipped: [] });
+    spies.captured.options?.onSuccess?.({ requested: 0, retried: 0, skipped: [], refusal: null });
 
     expect(spies.toastInfo).toHaveBeenCalledWith("mutations:requests.noFailedToRetry");
     expect(spies.toastSuccess).not.toHaveBeenCalled();
     expect(spies.toastWarning).not.toHaveBeenCalled();
+  });
+
+  it("says how many tracks it retried when a quota stopped the rest", () => {
+    renderHook(() => useRetryTracks());
+
+    spies.captured.options?.onSuccess?.({
+      requested: 3,
+      retried: 2,
+      skipped: [{ id: "c", reason: "quotaExceeded" }],
+      refusal: { appCode: "QUOTA_STORAGE_EXCEEDED", appParams: {}, message: "Storage quota reached" },
+    });
+
+    expect(spies.toastWarning).toHaveBeenCalledTimes(1);
+    expect(spies.toastWarning.mock.calls[0][0]).toBe('mutations:requests.tracksRetriedUntilQuota:{"count":2}');
+    expect(spies.toastSuccess).not.toHaveBeenCalled();
   });
 });

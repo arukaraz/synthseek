@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { extractAppCode, extractAppParams } from "../appCode";
+import { codedErrorOf, extractAppCode, extractAppParams } from "../appCode";
 
 describe("extractAppCode", () => {
   it("returns the code from a well-formed tRPC error envelope", () => {
@@ -61,5 +61,21 @@ describe("extractAppParams", () => {
 
   it("drops values that are neither text nor numbers rather than passing them to the copy", () => {
     expect(extractAppParams({ data: { appParams: { used: { nested: true } } } })).toBeNull();
+  });
+});
+
+describe("codedErrorOf", () => {
+  it("keeps the code and the values together so the error can be translated later", () => {
+    const error = { data: { appCode: "QUOTA_TRACKS_EXCEEDED", appParams: { used: 48, limit: 50 } } };
+    expect(codedErrorOf(error)).toEqual({ appCode: "QUOTA_TRACKS_EXCEEDED", appParams: { used: 48, limit: 50 } });
+  });
+
+  it("keeps a code that came with no values", () => {
+    expect(codedErrorOf({ data: { appCode: "EMAIL_TAKEN" } })).toEqual({ appCode: "EMAIL_TAKEN", appParams: null });
+  });
+
+  it("returns null for an error with no code, or with one this build does not know", () => {
+    expect(codedErrorOf(new Error("boom"))).toBeNull();
+    expect(codedErrorOf({ data: { appCode: "NOT_A_REAL_CODE", appParams: { used: 1 } } })).toBeNull();
   });
 });

@@ -1,10 +1,11 @@
 export { ErrorBoundaryProvider, useErrorBoundary } from "./ErrorBoundaryProvider";
-export { extractAppCode, extractAppParams } from "./appCode";
-export type { AppErrorCode } from "./appCode";
+export { codedErrorOf, extractAppCode, extractAppParams } from "./appCode";
+export type { AppErrorCode, CodedError } from "./appCode";
 export {
   emitFriendlyToast,
   errorToast,
   errorToastDetailed,
+  resolveCodedRefusal,
   resolveFriendlyError,
   resolveFriendlyErrorById,
 } from "./helpers";

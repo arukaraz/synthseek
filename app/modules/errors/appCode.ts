@@ -6,6 +6,11 @@ import type { AppErrorParams } from "./types";
 
 export type AppErrorCode = keyof typeof enErrors;
 
+export interface CodedError {
+  appCode: AppErrorCode;
+  appParams: AppErrorParams | null;
+}
+
 const APP_ERROR_CODES = Object.keys(enErrors);
 
 const appCodeEnvelopeSchema = z.object({
@@ -40,4 +45,9 @@ export function extractAppParams(error: unknown): AppErrorParams | null {
   const parsed = appParamsEnvelopeSchema.safeParse(error);
   if (!parsed.success) return null;
   return parsed.data.data?.appParams ?? null;
+}
+
+export function codedErrorOf(error: unknown): CodedError | null {
+  const appCode = extractAppCode(error);
+  return appCode ? { appCode, appParams: extractAppParams(error) } : null;
 }

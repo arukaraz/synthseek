@@ -2,7 +2,7 @@ import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyPendingApproval, notifyReclaimOutcome } from "@utils/request-helpers";
 
-import { seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
+import { failRequestDockJob, seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
 export function useBatchRequest() {
   const utils = trpc.useUtils();
@@ -16,7 +16,7 @@ export function useBatchRequest() {
       return { dockJobId };
     },
     onError: (err, _vars, context) => {
-      if (context) settleRequestDockJob(context.dockJobId, "failed", true);
+      if (context) failRequestDockJob(context.dockJobId, err, true);
       errorToastDetailed(err, "requests.albumDownloadFailed");
     },
     onSuccess: ({ outcome, data, pendingApproval }, _vars, context) => {

@@ -4,8 +4,26 @@ import type { ParseKeys } from "i18next";
 import { toast } from "sonner";
 
 import i18n from "@locale";
+import { emitFriendlyToast, resolveCodedRefusal } from "@modules/errors";
 
 type ReclaimKind = "download" | "album" | "playlist";
+
+type RequestsOutputs = inferRouterOutputs<AppRouter>["requests"];
+
+export type RetryTracksResult = RequestsOutputs["retryTracks"];
+
+type RetryAllFailedResult = RequestsOutputs["retryAllFailed"];
+
+type RetryRefusal = NonNullable<RetryTracksResult["refusal"]>;
+
+type RetrySkipReason = Exclude<RetryTracksResult["skipped"][number]["reason"], "quotaExceeded">;
+
+const RETRY_SKIP_REASON_KEYS: Record<RetrySkipReason, ParseKeys<"mutations">> = {
+  notFound: "requests.retrySkipNotFound",
+  forbidden: "requests.retrySkipForbidden",
+  notRetryable: "requests.retrySkipNotRetryable",
+  retryError: "requests.retrySkipRetryError",
+};
 
 export type UpgradeTrackResult = inferRouterOutputs<AppRouter>["requests"]["upgradeTracks"]["results"][number];
 
@@ -89,6 +107,72 @@ export function summarizeSkipReasons<TReason extends string>(
   return Array.from(counts.entries())
     .map(([reason, count]) => describe(reason, count))
     .join(" · ");
+}
+
+function notifyRetryStoppedByQuota(args: {
+  refusal: RetryRefusal;
+  retriedTitle: string | null;
+  skippedLine: string | null;
+}) {
+  const quota = resolveCodedRefusal(args.refusal);
+  const detail = (lead: string | undefined) => [lead, args.skippedLine].filter((part) => part != null).join(" ");
+  if (args.retriedTitle === null) {
+    emitFriendlyToast({ ...quota, description: detail(quota.description) || undefined });
+    return;
+  }
+  toast.warning(args.retriedTitle, {
+    description: detail(quota.description ?? quota.title),
+    duration: quota.duration,
+  });
+}
+
+export function notifyTracksRetried({ retried, skipped, refusal }: RetryTracksResult) {
+  const reasons = skipped.flatMap(({ reason }) => (reason === "quotaExceeded" ? [] : [reason]));
+  const skipSummary =
+    reasons.length > 0
+      ? summarizeSkipReasons(reasons, (reason, count) =>
+          i18n.t(`mutations:${RETRY_SKIP_REASON_KEYS[reason]}`, { count })
+        )
+      : null;
+  const skippedLine = skipSummary
+    ? i18n.t("mutations:requests.tracksRetrySkipped", { count: reasons.length, reasons: skipSummary })
+    : null;
+
+  if (refusal) {
+    notifyRetryStoppedByQuota({
+      refusal,
+      retriedTitle: retried > 0 ? i18n.t("mutations:requests.tracksRetriedUntilQuota", { count: retried }) : null,
+      skippedLine,
+    });
+    return;
+  }
+  if (retried > 0) {
+    toast.success(i18n.t("mutations:requests.tracksRetried", { count: retried }), {
+      description: skippedLine ?? undefined,
+    });
+    return;
+  }
+  if (skipSummary) {
+    toast.warning(i18n.t("mutations:requests.tracksRetryAllSkipped"), { description: skipSummary });
+    return;
+  }
+  toast.info(i18n.t("mutations:requests.noFailedToRetry"));
+}
+
+export function notifyRequestsRetried({ retried, refusal }: RetryAllFailedResult) {
+  if (refusal) {
+    notifyRetryStoppedByQuota({
+      refusal,
+      retriedTitle: retried > 0 ? i18n.t("mutations:requests.retryingUntilQuota", { count: retried }) : null,
+      skippedLine: null,
+    });
+    return;
+  }
+  if (retried > 0) {
+    toast.success(i18n.t("mutations:requests.retrying", { count: retried }));
+    return;
+  }
+  toast.info(i18n.t("mutations:requests.noFailedToRetry"));
 }
 
 export function notifyBulkUpgradeOutcome(results: UpgradeTrackResult[]) {

@@ -2,7 +2,7 @@ import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyTracksRequested } from "@utils/request-helpers";
 
-import { seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
+import { failRequestDockJob, seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
 export function useRequestTracks(itemName: string) {
   const utils = trpc.useUtils();
@@ -13,7 +13,7 @@ export function useRequestTracks(itemName: string) {
       return { dockJobId };
     },
     onError: (err, _vars, context) => {
-      if (context) settleRequestDockJob(context.dockJobId, "failed", true);
+      if (context) failRequestDockJob(context.dockJobId, err, true);
       errorToastDetailed(err, "requests.tracksRequestFailed");
     },
     onSuccess: (result, _vars, context) => {

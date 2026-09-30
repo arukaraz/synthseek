@@ -38,7 +38,10 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-vi.mock("@modules/errors", () => ({ errorToastDetailed: spies.errorToastDetailed }));
+vi.mock("@modules/errors", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@modules/errors")>()),
+  errorToastDetailed: spies.errorToastDetailed,
+}));
 vi.mock("@utils/request-helpers", () => ({ notifyReclaimOutcome: spies.notifyReclaimOutcome }));
 vi.mock("@locale", () => ({ default: { t: (key: string) => key } }));
 
@@ -46,9 +49,13 @@ function playlistVars() {
   return { name: "Workout 70s 80s Rock 120bpm", total_tracks: 64 };
 }
 
-function readStatus(jobId: string): string | undefined {
+function readJob(jobId: string | undefined) {
   const { result } = renderHook(() => useDockJobs());
-  return result.current.find((job) => job.id === jobId)?.status;
+  return result.current.find((job) => job.id === jobId);
+}
+
+function readStatus(jobId: string): string | undefined {
+  return readJob(jobId)?.status;
 }
 
 describe("usePlaylistRequest dock lifecycle", () => {
@@ -108,5 +115,21 @@ describe("usePlaylistRequest dock lifecycle", () => {
 
     if (context) expect(readStatus(context.dockJobId)).toBe("failed");
     expect(spies.errorToastDetailed).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the quota that refused the playlist on the dock job, so the card can name it", () => {
+    renderHook(() => usePlaylistRequest());
+
+    const context = spies.captured.options?.onMutate?.(playlistVars());
+    spies.captured.options?.onError?.(
+      { message: "Track quota reached", data: { appCode: "QUOTA_TRACKS_EXCEEDED", appParams: { limit: 50 } } },
+      playlistVars(),
+      context
+    );
+
+    expect(readJob(context?.dockJobId)).toMatchObject({
+      status: "failed",
+      failure: { appCode: "QUOTA_TRACKS_EXCEEDED", appParams: { limit: 50 } },
+    });
   });
 });

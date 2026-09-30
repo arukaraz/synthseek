@@ -49,7 +49,10 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-vi.mock("@modules/errors", () => ({ errorToastDetailed: spies.errorToastDetailed }));
+vi.mock("@modules/errors", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@modules/errors")>()),
+  errorToastDetailed: spies.errorToastDetailed,
+}));
 vi.mock("@utils/request-helpers", () => ({
   notifyReclaimOutcome: spies.notifyReclaimOutcome,
   notifyPendingApproval: spies.notifyPendingApproval,
@@ -60,9 +63,13 @@ function trackVars(config: Record<string, unknown> = {}) {
   return { track: { artist: "Daft Punk", title: "One More Time" }, config };
 }
 
-function readStatus(jobId: string): string | undefined {
+function readJob(jobId: string | undefined) {
   const { result } = renderHook(() => useDockJobs());
-  return result.current.find((job) => job.id === jobId)?.status;
+  return result.current.find((job) => job.id === jobId);
+}
+
+function readStatus(jobId: string): string | undefined {
+  return readJob(jobId)?.status;
 }
 
 describe("useRequest dock lifecycle", () => {
@@ -159,6 +166,31 @@ describe("useRequest dock lifecycle", () => {
 
     if (context) expect(readStatus(context.dockJobId)).toBe("failed");
     expect(spies.errorToastDetailed).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the quota that refused the request on the dock job, so the card can name it", () => {
+    renderHook(() => useRequest());
+
+    const context = spies.captured.options?.onMutate?.(trackVars());
+    spies.captured.options?.onError?.(
+      { message: "Storage quota reached", data: { appCode: "QUOTA_STORAGE_EXCEEDED", appParams: { used: 3 } } },
+      trackVars(),
+      context
+    );
+
+    expect(readJob(context?.dockJobId)).toMatchObject({
+      status: "failed",
+      failure: { appCode: "QUOTA_STORAGE_EXCEEDED", appParams: { used: 3 } },
+    });
+  });
+
+  it("leaves the dock job without a named cause when the error carries no code", () => {
+    renderHook(() => useRequest());
+
+    const context = spies.captured.options?.onMutate?.(trackVars());
+    spies.captured.options?.onError?.(new Error("boom"), trackVars(), context);
+
+    expect(readJob(context?.dockJobId)).toMatchObject({ status: "failed", failure: null });
   });
 
   it("seeds with the artist-title display name", () => {

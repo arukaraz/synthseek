@@ -11,6 +11,7 @@ import type {
 } from "@hooks/api/subscriptions";
 
 import { countDockItems } from "@hooks/api/subscriptions";
+import { resolveByCode, type CodedError } from "@modules/errors";
 
 import { REQUEST_LONG_RUN_TRACK_THRESHOLD } from "./constants";
 import type { DockCardModel, DockControls, DockCounts, DockPresentation, DockSubtitle } from "./types";
@@ -149,7 +150,8 @@ export function currentItemName(job: DockJob): string {
 export function buildRequestSubtitle(
   status: DockJobStatus,
   trackCount: number,
-  t: TFunction<"appShell">
+  t: TFunction<"appShell">,
+  failure: CodedError | null = null
 ): DockSubtitle {
   switch (status) {
     case "running": {
@@ -168,7 +170,13 @@ export function buildRequestSubtitle(
     case "partial":
       return { accent: "", accentTone: "sync", rest: t("progressDock.subtitle.requestPartial") };
     case "failed":
-      return { accent: "", accentTone: "error", rest: t("progressDock.subtitle.requestFailed") };
+      return {
+        accent: "",
+        accentTone: "error",
+        rest: failure
+          ? resolveByCode(failure.appCode, failure.appParams).title
+          : t("progressDock.subtitle.requestFailed"),
+      };
   }
 }
 
@@ -202,7 +210,9 @@ export function deriveDockCardModel(job: DockJob, t: TFunction<"appShell">): Doc
     provider: t(providerLabelKey(job.provider)),
     name: currentItemName(job),
   });
-  const subtitle = isRequest ? buildRequestSubtitle(job.status, counts.total, t) : buildSubtitle(counts, isTerminal, t);
+  const subtitle = isRequest
+    ? buildRequestSubtitle(job.status, counts.total, t, job.failure)
+    : buildSubtitle(counts, isTerminal, t);
   const mobileMeta = isRequest
     ? subtitle.rest
     : t("progressDock.mobileMeta", { done: counts.done, total: counts.total, current: currentItemName(job) });

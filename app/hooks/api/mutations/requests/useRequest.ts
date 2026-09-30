@@ -2,7 +2,7 @@ import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyPendingApproval, notifyReclaimOutcome, notifyUpgradeOutcome } from "@utils/request-helpers";
 
-import { seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
+import { failRequestDockJob, seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
 
 export function useRequest() {
   const utils = trpc.useUtils();
@@ -16,7 +16,7 @@ export function useRequest() {
       return { dockJobId };
     },
     onError: (err, _vars, context) => {
-      if (context) settleRequestDockJob(context.dockJobId, "failed", true);
+      if (context) failRequestDockJob(context.dockJobId, err, true);
       errorToastDetailed(err, "requests.downloadFailed");
     },
     onSuccess: ({ outcome, data, pendingApproval }, vars, context) => {

@@ -21,6 +21,7 @@ export { countDockItems, deriveTerminalStatus, terminalStatusFromCounts } from "
 export {
   seedRequestDockJob,
   correlateRequestDockJob,
+  failRequestDockJob,
   settleRequestDockJob,
   settleRequestDockJobByRequestId,
 } from "./requestDock";

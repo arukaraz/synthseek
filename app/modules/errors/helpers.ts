@@ -7,7 +7,7 @@ import type { ParseKeys } from "i18next";
 import { extractAppCode, extractAppParams } from "./appCode";
 import { GENERIC_FALLBACK_CODE, spotifyReasonToCode } from "./constants";
 import { resolveByCode, resolveByMessage } from "./registry";
-import type { ErrorMutationMeta, FriendlyError, ResolveErrorOptions } from "./types";
+import type { CodedRefusal, ErrorMutationMeta, FriendlyError, ResolveErrorOptions } from "./types";
 
 function extractMessage(input: unknown): string {
   if (typeof input === "string") return input;
@@ -38,6 +38,10 @@ export function resolveFriendlyError(input: unknown, options: ResolveErrorOption
     return { title: message, severity: "error" };
   }
   return genericFallback();
+}
+
+export function resolveCodedRefusal(refusal: CodedRefusal): FriendlyError {
+  return resolveFriendlyError({ data: refusal, message: refusal.message });
 }
 
 export function resolveFriendlyErrorById(

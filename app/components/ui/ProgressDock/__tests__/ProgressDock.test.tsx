@@ -2,7 +2,14 @@ import { render, screen, within, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { dialogContent, dialogOverlay, modalCenterContainer } from "@components/ui/styles";
-import { buildDockItems, finalizeDockJob, markDockItem, seedDockJob, setDockJobStatus } from "@hooks/api/subscriptions";
+import {
+  buildDockItems,
+  failRequestDockJob,
+  finalizeDockJob,
+  markDockItem,
+  seedDockJob,
+  setDockJobStatus,
+} from "@hooks/api/subscriptions";
 import { resetDockStore } from "@hooks/api/subscriptions/shared/progressDock";
 
 import { ProgressDock } from "../ProgressDock";
@@ -295,6 +302,33 @@ describe("ProgressDock", () => {
       setDockJobStatus("req-test", "failed");
     });
     expect(screen.getAllByText("Couldn't queue Broken Album").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Request failed").length).toBeGreaterThan(0);
+  });
+
+  it("names the quota that refused a request instead of the generic failed subtitle", () => {
+    render(<ProgressDock />);
+    act(() => {
+      seedRequest(5, "Big Album");
+      failRequestDockJob(
+        "req-test",
+        {
+          message: "Storage quota reached",
+          data: { appCode: "QUOTA_STORAGE_EXCEEDED", appParams: { usedBytes: 1, limitBytes: 2, requestedBytes: 3 } },
+        },
+        false
+      );
+    });
+    expect(screen.getAllByText("Couldn't queue Big Album").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Storage quota reached").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Request failed")).not.toBeInTheDocument();
+  });
+
+  it("keeps the generic failed subtitle when a request fails without a coded cause", () => {
+    render(<ProgressDock />);
+    act(() => {
+      seedRequest(5, "Broken Album");
+      failRequestDockJob("req-test", new Error("socket hang up"), false);
+    });
     expect(screen.getAllByText("Request failed").length).toBeGreaterThan(0);
   });
 

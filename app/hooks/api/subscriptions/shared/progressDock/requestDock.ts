@@ -1,3 +1,5 @@
+import { codedErrorOf } from "@modules/errors";
+
 import { REQUEST_DOCK_AUTO_DISMISS_MS } from "./constants";
 import {
   autoDismiss,
@@ -36,6 +38,11 @@ export function correlateRequestDockJob(jobId: string, requestId: string): void 
 
 export function settleRequestDockJob(jobId: string, status: DockJobStatus, withAutoDismiss: boolean): void {
   setDockJobStatus(jobId, status);
+  if (withAutoDismiss) autoDismiss(jobId, REQUEST_DOCK_AUTO_DISMISS_MS);
+}
+
+export function failRequestDockJob(jobId: string, error: unknown, withAutoDismiss: boolean): void {
+  setDockJobStatus(jobId, "failed", codedErrorOf(error));
   if (withAutoDismiss) autoDismiss(jobId, REQUEST_DOCK_AUTO_DISMISS_MS);
 }
 

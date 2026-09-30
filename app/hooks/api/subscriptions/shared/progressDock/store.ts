@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 
+import type { CodedError } from "@modules/errors";
+
 import { countDockItems, deriveTerminalStatus } from "./helpers";
 import type { DockItem, DockItemState, DockJob, DockJobStatus, LibraryImportFailureReason } from "./types";
 
@@ -90,11 +92,11 @@ export function markDockItem(
   publish();
 }
 
-export function setDockJobStatus(jobId: string, status: DockJobStatus): void {
+export function setDockJobStatus(jobId: string, status: DockJobStatus, failure: CodedError | null = null): void {
   if (dismissed.has(jobId)) return;
   const job = jobs.get(jobId);
   if (!job) return;
-  jobs.set(jobId, { ...job, status, updatedAt: Date.now() });
+  jobs.set(jobId, { ...job, status, failure, updatedAt: Date.now() });
   publish();
 }
 

@@ -10,6 +10,7 @@ import {
   errorToast,
   errorToastDetailed,
   readErrorMeta,
+  resolveCodedRefusal,
   resolveFriendlyError,
   resolveFriendlyErrorById,
 } from "../helpers";
@@ -84,6 +85,32 @@ describe("resolveFriendlyError", () => {
     const friendly = resolveFriendlyError({ message: 42 });
 
     expect(friendly.title).toBe(i18n.t(`errors:${GENERIC_FALLBACK_CODE}.title`));
+  });
+});
+
+describe("resolveCodedRefusal", () => {
+  it("translates a refusal the server returned inside a successful result, with its values", () => {
+    const friendly = resolveCodedRefusal({
+      appCode: "QUOTA_REQUEST_TOO_LARGE",
+      appParams: { requested: 80, limit: 50 },
+      message: "Request too large",
+    });
+
+    expect(friendly).toMatchObject({
+      title: enErrors.QUOTA_REQUEST_TOO_LARGE.title,
+      description: TOO_LARGE_DESCRIPTION,
+      severity: "warning",
+    });
+  });
+
+  it("falls back to the server's own words for a code this build does not know", () => {
+    const friendly = resolveCodedRefusal({
+      appCode: "QUOTA_FROM_A_NEWER_SERVER",
+      appParams: {},
+      message: "A newer quota stopped this",
+    });
+
+    expect(friendly).toEqual({ title: "A newer quota stopped this", severity: "error" });
   });
 });
 

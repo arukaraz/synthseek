@@ -1,3 +1,5 @@
+import type { CodedError } from "@modules/errors";
+
 export type DockItemState = "pending" | "importing" | "done" | "failed" | "skipped";
 
 export type DockJobKind = "playlist-sync" | "library-import" | "file-import" | "request" | "review-approve";
@@ -31,5 +33,6 @@ export interface DockJob {
   requestId?: string;
   items: DockItem[];
   status: DockJobStatus;
+  failure?: CodedError | null;
   updatedAt: number;
 }

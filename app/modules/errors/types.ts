@@ -6,6 +6,12 @@ export type ErrorParamFormat = "dateTime" | "bytes";
 
 export type AppErrorParams = Readonly<Record<string, string | number>>;
 
+export interface CodedRefusal {
+  appCode: string;
+  appParams: AppErrorParams;
+  message: string;
+}
+
 export interface FriendlyError {
   title: string;
   description?: string;

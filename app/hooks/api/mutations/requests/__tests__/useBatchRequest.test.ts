@@ -43,7 +43,10 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
-vi.mock("@modules/errors", () => ({ errorToastDetailed: spies.errorToastDetailed }));
+vi.mock("@modules/errors", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@modules/errors")>()),
+  errorToastDetailed: spies.errorToastDetailed,
+}));
 vi.mock("@utils/request-helpers", () => ({
   notifyReclaimOutcome: spies.notifyReclaimOutcome,
   notifyPendingApproval: spies.notifyPendingApproval,
@@ -53,9 +56,13 @@ function albumVars() {
   return { name: "Discovery", artist: "Daft Punk", tracks: [{}, {}, {}] };
 }
 
-function readStatus(jobId: string): string | undefined {
+function readJob(jobId: string | undefined) {
   const { result } = renderHook(() => useDockJobs());
-  return result.current.find((job) => job.id === jobId)?.status;
+  return result.current.find((job) => job.id === jobId);
+}
+
+function readStatus(jobId: string): string | undefined {
+  return readJob(jobId)?.status;
 }
 
 describe("useBatchRequest dock lifecycle", () => {
@@ -107,5 +114,21 @@ describe("useBatchRequest dock lifecycle", () => {
 
     if (context) expect(readStatus(context.dockJobId)).toBe("failed");
     expect(spies.errorToastDetailed).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the quota that refused the album on the dock job, so the card can name it", () => {
+    renderHook(() => useBatchRequest());
+
+    const context = spies.captured.options?.onMutate?.(albumVars());
+    spies.captured.options?.onError?.(
+      { message: "The library is full", data: { appCode: "QUOTA_LIBRARY_FULL", appParams: { used: 3 } } },
+      albumVars(),
+      context
+    );
+
+    expect(readJob(context?.dockJobId)).toMatchObject({
+      status: "failed",
+      failure: { appCode: "QUOTA_LIBRARY_FULL", appParams: { used: 3 } },
+    });
   });
 });

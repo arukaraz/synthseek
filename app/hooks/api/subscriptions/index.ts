@@ -18,6 +18,7 @@ export {
   findRunningRequestJobId,
   seedRequestDockJob,
   correlateRequestDockJob,
+  failRequestDockJob,
   settleRequestDockJob,
   settleRequestDockJobByRequestId,
   seedPlaylistSyncDockJob,

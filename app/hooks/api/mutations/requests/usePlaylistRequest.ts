@@ -3,7 +3,12 @@ import { errorToastDetailed } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 import { notifyReclaimOutcome } from "@utils/request-helpers";
 
-import { correlateRequestDockJob, seedRequestDockJob, settleRequestDockJob } from "@hooks/api/subscriptions";
+import {
+  correlateRequestDockJob,
+  failRequestDockJob,
+  seedRequestDockJob,
+  settleRequestDockJob,
+} from "@hooks/api/subscriptions";
 
 export function usePlaylistRequest() {
   const utils = trpc.useUtils();
@@ -14,7 +19,7 @@ export function usePlaylistRequest() {
       return { dockJobId };
     },
     onError: (err, _vars, context) => {
-      if (context) settleRequestDockJob(context.dockJobId, "failed", false);
+      if (context) failRequestDockJob(context.dockJobId, err, false);
       errorToastDetailed(err, "requests.playlistDownloadFailed");
     },
     onSuccess: ({ outcome, requestId, data }, _vars, context) => {
