@@ -187,6 +187,9 @@
   "queue": {
     "title": "File d'attente",
     "close": "Masquer la file",
+    "clear": "Vider la file",
+    "clearTitle": "Vider la file ?",
+    "clearMessage": "Tous les titres quittent la file et la lecture s'arrête. Impossible d'annuler.",
     "nowPlaying": "EN COURS",
     "upNext": "À SUIVRE",
     "autoplay": "LECTURE AUTOMATIQUE",

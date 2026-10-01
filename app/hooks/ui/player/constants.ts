@@ -6,7 +6,7 @@ import type {
   TransitionMode,
 } from "@components/Player";
 
-import type { CompressorParam, CompressorParams } from "./types";
+import type { CompressorParam, CompressorParams, SessionSnapshot } from "./types";
 
 export const LOAD_TIMEOUT_MS = 15000;
 
@@ -51,6 +51,13 @@ export const AUTOPLAY_STATION_SIZE = 25;
 export const AUTOPLAY_SEED_LIMIT = 3;
 
 export const SESSION_SAVE_INTERVAL_MS = 10_000;
+
+export const EMPTY_SESSION: SessionSnapshot = {
+  trackIds: [],
+  autoplayTrackIds: [],
+  currentTrackId: null,
+  positionMs: 0,
+};
 
 export const SESSION_POSITION_DRIFT_MS = 5_000;
 

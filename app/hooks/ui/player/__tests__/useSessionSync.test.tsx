@@ -78,9 +78,13 @@ const store = vi.hoisted(() => ({
   takeOver: vi.fn(),
   adoptQueue: vi.fn(),
   playHere: vi.fn(() => false),
+  queueCleared: null as (() => void) | null,
 }));
 
 vi.mock("../store", () => ({
+  setQueueClearedHandler: (handler: (() => void) | null) => {
+    store.queueCleared = handler;
+  },
   actions: {
     restoreSession: store.restoreSession,
     takeOver: store.takeOver,
@@ -523,6 +527,25 @@ describe("saving the session as it moves", () => {
 
     expect(api.save).toHaveBeenCalledWith(
       { trackIds: ["a"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0 },
+      expect.anything()
+    );
+  });
+
+  it("saves an empty session when the listener clears the queue, so a reload does not bring it back", () => {
+    vi.useFakeTimers();
+    renderHook(() => usePlayerSessionSync());
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000 };
+    publish();
+    api.save.mockClear();
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    publish();
+
+    store.queueCleared?.();
+    vi.advanceTimersByTime(SESSION_SAVE_INTERVAL_MS);
+
+    expect(api.save).toHaveBeenCalledTimes(1);
+    expect(api.save).toHaveBeenCalledWith(
+      { trackIds: [], autoplayTrackIds: [], currentTrackId: null, positionMs: 0 },
       expect.anything()
     );
   });

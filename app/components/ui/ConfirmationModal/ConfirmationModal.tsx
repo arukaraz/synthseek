@@ -29,6 +29,7 @@ export function ConfirmationModal({
   variant = "danger",
   showCancel = true,
   className,
+  overlayClassName,
   children,
 }: ConfirmationModalProps) {
   const { t } = useTranslation("components");
@@ -51,6 +52,7 @@ export function ConfirmationModal({
     >
       <DialogContent
         showClose={false}
+        overlayClassName={overlayClassName}
         className={cn(confirmDialogContent, className)}
         onOpenAutoFocus={(event) => {
           event.preventDefault();

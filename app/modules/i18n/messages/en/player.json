@@ -187,6 +187,9 @@
   "queue": {
     "title": "Queue",
     "close": "Hide the queue",
+    "clear": "Clear queue",
+    "clearTitle": "Clear the queue?",
+    "clearMessage": "Every track leaves the queue and playback stops. This can't be undone.",
     "nowPlaying": "NOW PLAYING",
     "upNext": "NEXT UP",
     "autoplay": "AUTOPLAY",

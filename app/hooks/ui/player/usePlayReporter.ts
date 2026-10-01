@@ -14,7 +14,7 @@ export function usePlayReporter(): void {
   useEffect(() => {
     return subscribe(() => {
       const session = getSnapshot();
-      if (session.halt === "stopped") {
+      if (!session.started || session.halt === "stopped") {
         listen.current = null;
         return;
       }

@@ -64,6 +64,7 @@ import {
   fallbackSourceFor,
   requestedSourceFor,
   insertBeforeAutoplay,
+  isMirroring,
   mirroredPositionSeconds,
   needsConversion,
   nextIndexIn,
@@ -208,7 +209,7 @@ function ensureConnected(): void {
         armed: state.armed || playing,
         consecutiveFailures: playing ? 0 : state.consecutiveFailures,
       });
-      if (state.halt !== "stopped") publishPlaybackState(playing);
+      if (state.started && state.halt !== "stopped") publishPlaybackState(playing);
     },
     onLoadingChange: (loading) => publish({ loading }),
     onFailure: (reason) => handleFailure(reason),
@@ -491,6 +492,12 @@ let lastMessages: PlayerMessages = {
   tooManyFailures: "",
 };
 
+let queueClearedHandler: (() => void) | null = null;
+
+export function setQueueClearedHandler(handler: (() => void) | null): void {
+  queueClearedHandler = handler;
+}
+
 export function setMessages(messages: PlayerMessages): void {
   lastMessages = messages;
 }
@@ -707,6 +714,35 @@ export const actions = {
   stop(): void {
     if (state.halt === "stopped" || currentTrack() === null) return;
     stopPlayback();
+  },
+  clearQueue(): void {
+    if (state.queue.length === 0 || isMirroring(state)) return;
+    clearTimeout(skipTimer);
+    playRequested = false;
+    stop();
+    publish({
+      ...NO_PANEL_OPEN,
+      queue: [],
+      index: 0,
+      shuffleOrder: [],
+      autoplayIds: new Set<string>(),
+      started: false,
+      halt: null,
+      playing: false,
+      loading: false,
+      positionSeconds: 0,
+      durationSeconds: 0,
+      scrubSeconds: null,
+      offsetSeconds: 0,
+      transcoding: false,
+      consecutiveFailures: 0,
+      sourceChoice: null,
+      failedSources: null,
+      fullscreen: false,
+      lyricsOpen: false,
+    });
+    clearMediaSession();
+    queueClearedHandler?.();
   },
   next(): void {
     advance(false);

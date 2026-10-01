@@ -100,6 +100,7 @@ export const createPlayerView = (overrides: Partial<PlayerView> = {}): PlayerVie
 export const createPlayerActions = (overrides: Partial<PlayerActions> = {}): PlayerActions => ({
   togglePlay: vi.fn(),
   stop: vi.fn(),
+  clearQueue: vi.fn(),
   next: vi.fn(),
   previous: vi.fn(),
   seekTo: vi.fn(),

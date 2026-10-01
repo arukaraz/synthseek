@@ -4,9 +4,9 @@ import { usePlaybackSession, useSavePlaybackPosition, useSavePlaybackSession } f
 import { useEffect, useRef } from "react";
 
 import { setTakeOverHandler, setUnknownTrackHandler } from "./commands";
-import { SESSION_SAVE_INTERVAL_MS } from "./constants";
+import { EMPTY_SESSION, SESSION_SAVE_INTERVAL_MS } from "./constants";
 import { playerTrackFrom, queueChanged, queueRewritten, sessionChanged } from "./helpers";
-import { actions, getSnapshot, sessionSnapshot, subscribe } from "./store";
+import { actions, getSnapshot, sessionSnapshot, setQueueClearedHandler, subscribe } from "./store";
 import type { SessionSnapshot } from "./types";
 
 export function usePlayerSessionSync(): void {
@@ -123,6 +123,14 @@ export function usePlayerSessionSync(): void {
       );
     };
 
+    setQueueClearedHandler(() => {
+      clearTimeout(trailing);
+      trailing = undefined;
+      lastSaved.current = EMPTY_SESSION;
+      lastSentAt.current = Date.now();
+      saveWhole(EMPTY_SESSION);
+    });
+
     const unsubscribe = subscribe(() => flush(false));
     const onLeave = () => flush(true);
     const onHidden = () => {
@@ -132,6 +140,7 @@ export function usePlayerSessionSync(): void {
     document.addEventListener("visibilitychange", onHidden);
     return () => {
       clearTimeout(trailing);
+      setQueueClearedHandler(null);
       unsubscribe();
       window.removeEventListener("pagehide", onLeave);
       document.removeEventListener("visibilitychange", onHidden);

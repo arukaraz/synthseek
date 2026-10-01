@@ -8,6 +8,7 @@ export type DialogOverlayProps = ComponentProps<typeof DialogPrimitive.Overlay>;
 export type DialogContentProps = ComponentProps<typeof DialogPrimitive.Content> &
   VariantProps<typeof dialogContent> & {
     showClose?: boolean;
+    overlayClassName?: string;
   };
 export type DialogSurfaceProps = ComponentProps<typeof DialogPrimitive.Content>;
 export type DialogTitleProps = ComponentProps<typeof DialogPrimitive.Title>;

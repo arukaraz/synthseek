@@ -14,4 +14,5 @@ export interface ConfirmationModalProps {
   variant?: ConfirmationVariant;
   showCancel?: boolean;
   className?: string;
+  overlayClassName?: string;
 }

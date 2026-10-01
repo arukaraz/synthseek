@@ -162,6 +162,21 @@ describe("usePlayReporter", () => {
     expect(recordPlay.mock.calls.filter(([input]) => input.submission)).toHaveLength(0);
   });
 
+  it("starts a fresh listen after the queue was cleared, so the cleared play never adds to the next one", () => {
+    renderHook(() => usePlayReporter());
+    advanceTo(0);
+    playThrough(60);
+    session = sessionAt({ queue: [], playing: false, positionSeconds: 0, started: false });
+    listeners.forEach((listener) => listener());
+    recordPlay.mockClear();
+
+    advanceTo(0);
+    playThrough(40);
+
+    expect(recordPlay).toHaveBeenCalledWith({ trackId: "t1", startedSecondsAgo: 0, submission: false });
+    expect(recordPlay.mock.calls.filter(([input]) => input.submission)).toHaveLength(0);
+  });
+
   it("treats a loop back to the top as a new play once the first one counted", () => {
     renderHook(() => usePlayReporter());
     advanceTo(0);

@@ -746,6 +746,64 @@ describe("player store transport", () => {
     expect(store.getSnapshot().halt).toBe("stopped");
   });
 
+  it("empties the queue, releases the stream and puts the player away when the queue is cleared", async () => {
+    const store = await freshStore();
+    const cleared = vi.fn();
+    store.setQueueClearedHandler(cleared);
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.toggleQueue();
+
+    store.actions.clearQueue();
+
+    const after = store.getSnapshot();
+    expect(after.queue).toEqual([]);
+    expect(after.started).toBe(false);
+    expect(after.playing).toBe(false);
+    expect(after.queueOpen).toBe(false);
+    expect(engine.stop).toHaveBeenCalledTimes(1);
+    expect(media.clearMediaSession).toHaveBeenCalled();
+    expect(cleared).toHaveBeenCalledTimes(1);
+  });
+
+  it("publishes nothing to the system once the cleared stream reports its pause", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.clearQueue();
+    media.publishPlaybackState.mockClear();
+
+    engine.handlers?.onPlayingChange(false);
+
+    expect(media.publishPlaybackState).not.toHaveBeenCalled();
+  });
+
+  it("leaves a queue it only mirrors alone", async () => {
+    const store = await freshStore();
+    const cleared = vi.fn();
+    store.setQueueClearedHandler(cleared);
+    store.actions.adoptQueue([track("a"), track("b")], "a", []);
+    store.actions.applyRemoteState({
+      deviceId: "kitchen",
+      deviceName: "Kitchen",
+      confirmed: true,
+      playing: true,
+      track: track("a"),
+      positionSeconds: 0,
+      shuffle: false,
+      repeat: "off",
+      volume: 1,
+      muted: false,
+      transcoding: false,
+      updatedAt: Date.now(),
+    });
+
+    store.actions.clearQueue();
+
+    expect(store.getSnapshot().queue).toHaveLength(2);
+    expect(cleared).not.toHaveBeenCalled();
+  });
+
   it("moves to the next track on next while stopped", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b")], 0);

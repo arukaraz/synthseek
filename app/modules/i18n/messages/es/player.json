@@ -187,6 +187,9 @@
   "queue": {
     "title": "Cola",
     "close": "Ocultar la cola",
+    "clear": "Vaciar la cola",
+    "clearTitle": "¿Vaciar la cola?",
+    "clearMessage": "Todas las pistas salen de la cola y la reproducción se detiene. No se puede deshacer.",
     "nowPlaying": "SONANDO AHORA",
     "upNext": "A CONTINUACIÓN",
     "autoplay": "REPRODUCCIÓN AUTOMÁTICA",

@@ -273,6 +273,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
           actions.expectRemote({ playing: false, positionSeconds: 0 });
         }
       : actions.stop,
+    clearQueue: actions.clearQueue,
     next: mirroring ? () => commandActive("next") : actions.next,
     previous: mirroring ? () => commandActive("previous") : actions.previous,
     seekTo: mirroring

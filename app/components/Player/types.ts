@@ -210,6 +210,7 @@ export interface PlayerView {
 export interface PlayerActions {
   togglePlay: () => void;
   stop: () => void;
+  clearQueue: () => void;
   next: () => void;
   previous: () => void;
   seekTo: (seconds: number) => void;

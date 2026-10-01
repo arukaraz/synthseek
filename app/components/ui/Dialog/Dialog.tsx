@@ -34,11 +34,19 @@ export function DialogOverlay({ className, ref, ...props }: DialogOverlayProps) 
   );
 }
 
-export function DialogContent({ className, children, ref, showClose = true, animation, ...props }: DialogContentProps) {
+export function DialogContent({
+  className,
+  children,
+  ref,
+  showClose = true,
+  animation,
+  overlayClassName,
+  ...props
+}: DialogContentProps) {
   const { t } = useTranslation("components");
   return (
     <DialogPortal>
-      <DialogOverlay />
+      <DialogOverlay className={overlayClassName} />
       <DialogPrimitive.Content ref={ref} className={cn(dialogContent({ animation }), className)} {...props}>
         <div className={gradientOverlay({ direction: "toBr", intensity: "mixed", rounded: "2xl" })} />
 

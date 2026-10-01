@@ -378,6 +378,43 @@ describe("the queue panel", () => {
     expect(actions.removeFromQueue).toHaveBeenCalledWith(1);
   });
 
+  it("clears the queue only once the listener confirms it", async () => {
+    const { actions, user } = renderPlayer({
+      queueOpen: true,
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
+    });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.queue.clear }));
+    expect(actions.clearQueue).not.toHaveBeenCalled();
+    const confirmation = screen.getByRole("dialog", { name: enPlayer.queue.clearTitle });
+    await user.click(within(confirmation).getByRole("button", { name: enPlayer.queue.clear }));
+
+    expect(actions.clearQueue).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the queue when the listener backs out of clearing it", async () => {
+    const { actions, user } = renderPlayer({
+      queueOpen: true,
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
+    });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.queue.clear }));
+    await user.keyboard("{Escape}");
+
+    expect(screen.queryByRole("dialog", { name: enPlayer.queue.clearTitle })).not.toBeInTheDocument();
+    expect(actions.clearQueue).not.toHaveBeenCalled();
+  });
+
+  it("offers no clearing while another device owns the queue", () => {
+    renderPlayer({
+      queueOpen: true,
+      queueEditable: false,
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
+    });
+
+    expect(screen.queryByRole("button", { name: enPlayer.queue.clear })).not.toBeInTheDocument();
+  });
+
   it("offers no reordering or removal while another device owns the queue", () => {
     renderPlayer({
       queueOpen: true,

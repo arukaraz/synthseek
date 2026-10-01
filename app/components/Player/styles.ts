@@ -474,6 +474,10 @@ export const queueHeader = cva("flex shrink-0 items-center justify-between gap-3
 
 export const queueTitle = cva("text-fg text-[15px] font-semibold");
 
+export const queueHeaderActions = cva("flex items-center gap-1");
+
+export const abovePlayerPanels = cva("z-80");
+
 export const queueCaption = cva("text-fg-muted shrink-0 px-1 pt-2 pb-1 font-mono text-[10px] tracking-[0.14em]");
 
 export const queueList = cva("scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto px-2.5 pb-2");

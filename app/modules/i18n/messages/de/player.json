@@ -187,6 +187,9 @@
   "queue": {
     "title": "Warteschlange",
     "close": "Warteschlange ausblenden",
+    "clear": "Warteschlange leeren",
+    "clearTitle": "Warteschlange leeren?",
+    "clearMessage": "Alle Titel verlassen die Warteschlange und die Wiedergabe stoppt. Das lässt sich nicht rückgängig machen.",
     "nowPlaying": "LÄUFT GERADE",
     "upNext": "ALS NÄCHSTES",
     "autoplay": "AUTOPLAY",
