@@ -14,6 +14,10 @@ export function usePlayReporter(): void {
   useEffect(() => {
     return subscribe(() => {
       const session = getSnapshot();
+      if (session.halt === "stopped") {
+        listen.current = null;
+        return;
+      }
       const track = session.queue[session.index] ?? null;
       if (track === null || !session.playing) return;
 

@@ -123,6 +123,7 @@ describe("the detached mini player", () => {
         playing: { index: 0, track: createPlayerTrack() },
         upNext: [{ index: 1, track: createPlayerTrack({ id: "track-2", title: "Aerodynamic" }) }],
         autoplay: [],
+        loop: [],
       },
     });
 

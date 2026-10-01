@@ -87,6 +87,7 @@ export interface PlayerQueue {
   playing: PlayerQueueEntry | null;
   upNext: readonly PlayerQueueEntry[];
   autoplay: readonly PlayerQueueEntry[];
+  loop: readonly PlayerQueueEntry[];
 }
 
 export interface PlayerLyricsLine {
@@ -171,6 +172,7 @@ export interface PlayerView {
   positionSeconds: number;
   scrubSeconds: number | null;
   playing: boolean;
+  stopped: boolean;
   loading: boolean;
   shuffle: boolean;
   repeat: PlayerRepeat;
@@ -207,6 +209,7 @@ export interface PlayerView {
 
 export interface PlayerActions {
   togglePlay: () => void;
+  stop: () => void;
   next: () => void;
   previous: () => void;
   seekTo: (seconds: number) => void;

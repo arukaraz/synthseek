@@ -6,7 +6,7 @@ import { motion, Reorder } from "framer-motion";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { QUEUE_WINDOW_KEY } from "./constants";
+import { QUEUE_LOOP_WINDOW_KEY, QUEUE_WINDOW_KEY } from "./constants";
 import { mergeReorderedWindow } from "./helpers";
 import { QueueRow } from "./QueueRow";
 import { queueCaption, queueEmpty, queueList, queueSentinel } from "./styles";
@@ -15,15 +15,18 @@ import type { PlayerQueueBodyProps, PlayerTrack } from "./types";
 export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
   const { t } = useTranslation("player");
   const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
-  const { playing, upNext, autoplay } = view.queue;
+  const { playing, upNext, autoplay, loop } = view.queue;
   const window = useRenderWindow(upNext, QUEUE_WINDOW_KEY);
+  const loopWindow = useRenderWindow(loop, QUEUE_LOOP_WINDOW_KEY);
+  const growing = window.hasMore ? window : loopWindow;
   const order = window.visible.map((entry) => entry.track);
   const sentinelRef = useInfiniteScroll({
     root: scrollRoot,
-    hasNextPage: window.hasMore,
+    hasNextPage: growing.hasMore,
     isFetchingNextPage: false,
-    onLoadMore: window.loadMore,
+    onLoadMore: growing.loadMore,
   });
+  const nothingElse = autoplay.length === 0 && loop.length === 0;
 
   const handleReorder = (next: PlayerTrack[]) => {
     actions.reorderQueue([...mergeReorderedWindow(next, upNext), ...autoplay.map((entry) => entry.track)]);
@@ -37,11 +40,11 @@ export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
           <QueueRow entry={playing} current editable={false} actions={actions} />
         </>
       )}
-      {upNext.length === 0 && autoplay.length > 0 ? null : <span className={queueCaption()}>{t("queue.upNext")}</span>}
+      {upNext.length === 0 && !nothingElse ? null : <span className={queueCaption()}>{t("queue.upNext")}</span>}
       {upNext.length === 0 ? (
-        autoplay.length > 0 ? null : (
+        nothingElse ? (
           <span className={queueEmpty()}>{t("queue.empty")}</span>
-        )
+        ) : null
       ) : (
         <Reorder.Group axis="y" values={order} onReorder={handleReorder} as="div">
           {window.visible.map((entry) => (
@@ -69,6 +72,22 @@ export function QueueBody({ view, actions }: PlayerQueueBodyProps) {
               actions={actions}
             />
           ))}
+        </>
+      )}
+      {window.hasMore || loop.length === 0 ? null : (
+        <>
+          <span className={queueCaption()}>{t("queue.loop")}</span>
+          {loopWindow.visible.map((entry) => (
+            <QueueRow
+              key={entry.track.id}
+              entry={entry}
+              current={false}
+              editable={false}
+              removable={view.queueEditable}
+              actions={actions}
+            />
+          ))}
+          {loopWindow.hasMore ? <div ref={sentinelRef} className={queueSentinel()} /> : null}
         </>
       )}
     </motion.div>

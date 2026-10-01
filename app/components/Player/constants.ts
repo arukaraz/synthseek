@@ -203,3 +203,5 @@ export const LYRIC_BLUR_DISTANCE = 2;
 export const LYRIC_FAR_DISTANCE = 4;
 
 export const QUEUE_WINDOW_KEY = "player-queue";
+
+export const QUEUE_LOOP_WINDOW_KEY = "player-queue-loop";

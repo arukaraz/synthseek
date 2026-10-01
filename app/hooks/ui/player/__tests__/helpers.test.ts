@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   accumulateListen,
@@ -11,6 +11,7 @@ import {
   beginListen,
   chosenSourceFor,
   expectedPosition,
+  hiddenQueuePositions,
   insertBeforeAutoplay,
   isMirroring,
   queueSections,
@@ -28,14 +29,18 @@ import {
   playingSourceOf,
   previousIndexIn,
   requestedSourceFor,
+  resolveQueueAdditions,
   sessionChanged,
+  queueWindow,
   shuffledOrder,
   sourceOptionFrom,
   startedSecondsAgo,
   streamUrlFor,
   upcomingOrder,
+  upcomingQueueIds,
   withoutQueueIndex,
 } from "../helpers";
+import { MAX_QUEUE_TRACKS } from "../constants";
 import type { PlayerSessionState } from "../types";
 
 function sessionWith(overrides: Partial<PlayerSessionState>): PlayerSessionState {
@@ -70,6 +75,7 @@ function sessionWith(overrides: Partial<PlayerSessionState>): PlayerSessionState
     notice: null,
     consecutiveFailures: 0,
     started: false,
+    halt: null,
     ...overrides,
   };
 }
@@ -190,13 +196,75 @@ describe("needsConversion", () => {
 });
 
 describe("shuffledOrder", () => {
+  const none = new Set<string>();
+
   it("starts on the track the listener picked", () => {
-    expect(shuffledOrder(6, 3)[0]).toBe(3);
+    expect(shuffledOrder(queueOf(6), 3, none)[0]).toBe(3);
   });
 
   it("visits every position exactly once", () => {
-    const order = shuffledOrder(8, 5);
+    const order = shuffledOrder(queueOf(8), 5, none);
     expect([...order].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+  });
+
+  it("keeps the autoplay tail after every track the listener chose", () => {
+    const queue = [radioTrack("r1"), radioTrack("a"), radioTrack("r2"), radioTrack("b"), radioTrack("c")];
+    const random = vi.spyOn(Math, "random").mockReturnValue(0);
+
+    const order = shuffledOrder(queue, 1, new Set(["r1", "r2"]));
+    random.mockRestore();
+
+    const played = order.map((index) => queue[index]?.id);
+    expect(played[0]).toBe("a");
+    expect(played.slice(1, 3).sort()).toEqual(["b", "c"]);
+    expect(played.slice(3).sort()).toEqual(["r1", "r2"]);
+  });
+});
+
+describe("queueWindow", () => {
+  it("keeps a list within the cap whole and starts on the chosen track", () => {
+    const window = queueWindow(queueOf(3), 1);
+
+    expect(window.queue.map((track) => track.id)).toEqual(["t0", "t1", "t2"]);
+    expect(window.index).toBe(1);
+  });
+
+  it("starts on the chosen track when the caller picked the second copy of a repeated one", () => {
+    const queue = [radioTrack("a"), radioTrack("b"), radioTrack("b"), radioTrack("c")];
+
+    const window = queueWindow(queue, 2);
+
+    expect(window.queue[window.index]?.id).toBe("b");
+  });
+
+  it("drops a repeat and still starts on the chosen track", () => {
+    const queue = [radioTrack("a"), radioTrack("b"), radioTrack("a"), radioTrack("c")];
+
+    const window = queueWindow(queue, 3);
+
+    expect(window.queue.map((track) => track.id)).toEqual(["a", "b", "c"]);
+    expect(window.index).toBe(2);
+  });
+
+  it("starts on the chosen track when what follows it already fills the queue", () => {
+    const long = queueOf(MAX_QUEUE_TRACKS + 4);
+
+    const window = queueWindow(long, 2);
+
+    expect(window.queue).toHaveLength(MAX_QUEUE_TRACKS);
+    expect(window.index).toBe(0);
+    expect(window.queue[0]?.id).toBe("t2");
+  });
+
+  it("keeps everything after the chosen track and only as much before it as still fits", () => {
+    const long = queueOf(MAX_QUEUE_TRACKS + 4);
+
+    const window = queueWindow(long, MAX_QUEUE_TRACKS + 1);
+
+    expect(window.queue).toHaveLength(MAX_QUEUE_TRACKS);
+    expect(window.queue[window.index]?.id).toBe(`t${MAX_QUEUE_TRACKS + 1}`);
+    expect(window.queue[0]?.id).toBe("t4");
+    expect(window.queue.at(-1)?.id).toBe(`t${MAX_QUEUE_TRACKS + 3}`);
   });
 });
 
@@ -640,6 +708,14 @@ describe("autoplayDue", () => {
     expect(autoplayDue(radioSession({ index: 0 }))).toBe(false);
   });
 
+  it("stays due after the listener has played a full queue's worth, since the played tracks give way", () => {
+    const heard = Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => radioTrack(`t${at}`));
+
+    expect(
+      autoplayDue(radioSession({ queue: heard, index: MAX_QUEUE_TRACKS - 1, autoplayIds: new Set<string>() }))
+    ).toBe(true);
+  });
+
   it("is not due while another device has the sound", () => {
     const remote = {
       deviceId: "kitchen",
@@ -708,6 +784,21 @@ describe("insertBeforeAutoplay", () => {
     expect(shuffled.shuffleOrder).toEqual([1, 0, 2, 3, 4]);
   });
 
+  it("schedules new tracks after the one playing in shuffle, even when a radio track already played sits later in the queue", () => {
+    const session = radioSession({
+      queue: [radioTrack("a"), radioTrack("b"), radioTrack("r1"), radioTrack("r2"), radioTrack("r3")],
+      index: 2,
+      autoplayIds: new Set(["r1", "r2", "r3"]),
+      shuffle: true,
+      shuffleOrder: [0, 1, 4, 2, 3],
+    });
+
+    const placed = insertBeforeAutoplay(session, [radioTrack("c")]);
+
+    const order = placed.shuffleOrder.map((index) => placed.queue[index]?.id);
+    expect(order).toEqual(["a", "b", "r3", "r1", "c", "r2"]);
+  });
+
   it("appends when there is no radio tail, which is what add-to-queue always did", () => {
     const placed = insertBeforeAutoplay(
       radioSession({ autoplayIds: new Set<string>(), shuffle: true, shuffleOrder: [1, 3, 0, 2] }),
@@ -725,6 +816,47 @@ describe("queueSections", () => {
 
     expect(sections.upNext.map((entry) => entry.track.id)).toEqual(["b"]);
     expect(sections.autoplay.map((entry) => entry.track.id)).toEqual(["r1", "r2"]);
+  });
+});
+
+describe("the loop under repeat-all", () => {
+  it("lists what comes round again after the end, in the order it will play", () => {
+    const sections = queueSections(radioSession({ index: 2, repeat: "all", autoplayIds: new Set<string>() }));
+
+    expect(sections.upNext.map((entry) => entry.track.id)).toEqual(["r2"]);
+    expect(sections.loop.map((entry) => entry.track.id)).toEqual(["a", "b"]);
+  });
+
+  it("follows the shuffled order round the loop", () => {
+    const sections = queueSections(
+      radioSession({ index: 0, repeat: "all", shuffle: true, shuffleOrder: [3, 1, 0, 2], autoplayIds: new Set() })
+    );
+
+    expect(sections.upNext.map((entry) => entry.track.id)).toEqual(["r1"]);
+    expect(sections.loop.map((entry) => entry.track.id)).toEqual(["r2", "b"]);
+  });
+
+  it("shows no loop while repeat is off or on one track", () => {
+    expect(queueSections(radioSession({ index: 2 })).loop).toEqual([]);
+    expect(queueSections(radioSession({ index: 2, repeat: "one" })).loop).toEqual([]);
+  });
+
+  it("counts a track that will come round again as already queued", () => {
+    const session = radioSession({ index: 2, repeat: "all", autoplayIds: new Set<string>() });
+
+    expect(upcomingQueueIds(session).has("a")).toBe(true);
+    expect(resolveQueueAdditions(session, [radioTrack("a")]).outcome).toEqual({ added: 0, full: false, skipped: 1 });
+  });
+
+  it("forgets nothing under repeat-all, so a full queue is full", () => {
+    const heard = Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => radioTrack(`t${at}`));
+    const session = radioSession({ queue: heard, index: MAX_QUEUE_TRACKS - 1, repeat: "all", autoplayIds: new Set() });
+
+    const additions = resolveQueueAdditions(session, [radioTrack("fresh")]);
+
+    expect(additions.outcome).toEqual({ added: 0, full: true, skipped: 1 });
+    expect(additions.dropped).toEqual([]);
+    expect(hiddenQueuePositions(session)).toEqual([]);
   });
 });
 

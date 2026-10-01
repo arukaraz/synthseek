@@ -69,6 +69,7 @@ import {
   nextIndexIn,
   playingSourceOf,
   previousIndexIn,
+  queueWindow,
   resolveQueueAdditions,
   shuffledOrder,
   streamUrlFor,
@@ -137,6 +138,7 @@ let state: PlayerSessionState = {
   fullscreen: false,
   consecutiveFailures: 0,
   started: false,
+  halt: null,
   sourceChoice: null,
   failedSources: null,
 };
@@ -206,7 +208,7 @@ function ensureConnected(): void {
         armed: state.armed || playing,
         consecutiveFailures: playing ? 0 : state.consecutiveFailures,
       });
-      publishPlaybackState(playing);
+      if (state.halt !== "stopped") publishPlaybackState(playing);
     },
     onLoadingChange: (loading) => publish({ loading }),
     onFailure: (reason) => handleFailure(reason),
@@ -247,6 +249,7 @@ function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
     durationSeconds: track.durationSeconds,
     scrubSeconds: null,
     started: true,
+    halt: null,
     loading: true,
     transcoding: converted,
     offsetSeconds: converted ? fromSeconds : 0,
@@ -320,6 +323,7 @@ function adoptHandoff(url: string): void {
     durationSeconds: track.durationSeconds,
     scrubSeconds: null,
     started: true,
+    halt: null,
     loading: false,
     transcoding: conversionFor(track) !== null,
     offsetSeconds: 0,
@@ -343,6 +347,7 @@ function armAt(queue: readonly PlayerTrack[], index: number, fromSeconds: number
     durationSeconds: track.durationSeconds,
     scrubSeconds: null,
     started: true,
+    halt: null,
     playing: false,
     loading: false,
     transcoding: converted,
@@ -362,16 +367,36 @@ function pausePlayback(): void {
 
 function resumePlayback(): void {
   playRequested = true;
+  if (state.halt !== null) publish({ halt: null });
   resume();
 }
 
+function stopPlayback(): void {
+  clearTimeout(skipTimer);
+  playRequested = false;
+  stop();
+  publish({
+    halt: "stopped",
+    playing: false,
+    loading: false,
+    positionSeconds: 0,
+    scrubSeconds: null,
+    offsetSeconds: 0,
+  });
+  clearMediaSession();
+}
+
 function seekWithin(seconds: number): void {
+  if (state.halt === "stopped") {
+    publish({ positionSeconds: seconds, scrubSeconds: null });
+    return;
+  }
   if (state.transcoding) {
     playAt(state.index, seconds);
     return;
   }
   seek(seconds);
-  publish({ positionSeconds: seconds, scrubSeconds: null });
+  publish({ positionSeconds: seconds, scrubSeconds: null, halt: null });
 }
 
 function advance(automatic: boolean): void {
@@ -393,7 +418,7 @@ function advance(automatic: boolean): void {
       return;
     }
     pausePlayback();
-    publish({ playing: false, positionSeconds: state.durationSeconds });
+    publish({ playing: false, positionSeconds: state.durationSeconds, halt: "queueEnd" });
     publishPlaybackState(false);
     notify(messages.queueEnd, "info");
     return;
@@ -515,7 +540,7 @@ function writeCompressor(next: CompressorSettings): void {
 }
 
 function reloadCurrentTrack(): void {
-  if (!state.started) return;
+  if (!state.started || state.halt === "stopped") return;
   if (state.playing) {
     playAt(state.index, state.positionSeconds);
     return;
@@ -526,6 +551,7 @@ function reloadCurrentTrack(): void {
 function mediaHandlers(): {
   play: () => void;
   pause: () => void;
+  stop: () => void;
   next: () => void;
   previous: () => void;
   seekTo: (seconds: number) => void;
@@ -533,6 +559,7 @@ function mediaHandlers(): {
   return {
     play: () => actions.togglePlay(),
     pause: () => actions.togglePlay(),
+    stop: () => actions.stop(),
     next: () => advance(false),
     previous: () => actions.previous(),
     seekTo: (seconds) => actions.seekTo(seconds),
@@ -567,8 +594,9 @@ export const actions = {
     const track = tracks[index];
     if (track === undefined) return;
     const resumeAt = found < 0 ? 0 : Math.min(positionSeconds, track.durationSeconds);
-    publish({ autoplayIds: autoplayIdsAmong(tracks, autoplayTrackIds) });
-    armAt(tracks, index, resumeAt, state.shuffle ? shuffledOrder(tracks.length, index) : []);
+    const autoplayIds = autoplayIdsAmong(tracks, autoplayTrackIds);
+    publish({ autoplayIds });
+    armAt(tracks, index, resumeAt, state.shuffle ? shuffledOrder(tracks, index, autoplayIds) : []);
     if (resumedFrom !== null) notify(lastMessages.resumedFrom(resumedFrom), "info");
   },
   takeOver(
@@ -580,10 +608,11 @@ export const actions = {
     if (tracks.length === 0) return;
     const found = tracks.findIndex((track) => track.id === currentTrackId);
     const index = Math.max(0, found);
+    const autoplayIds = autoplayIdsAmong(tracks, autoplayTrackIds);
     publish({
       queue: tracks,
-      shuffleOrder: state.shuffle ? shuffledOrder(tracks.length, index) : [],
-      autoplayIds: autoplayIdsAmong(tracks, autoplayTrackIds),
+      shuffleOrder: state.shuffle ? shuffledOrder(tracks, index, autoplayIds) : [],
+      autoplayIds,
       consecutiveFailures: 0,
       started: false,
     });
@@ -591,12 +620,11 @@ export const actions = {
   },
   playQueue(tracks: readonly PlayerTrack[], startIndex: number): void {
     if (tracks.length === 0) return;
-    const start = tracks[startIndex];
-    const queue = withoutRepeats(tracks, [], tracks.length);
-    const at = start === undefined ? 0 : Math.max(0, queue.indexOf(start));
-    const order = state.shuffle ? shuffledOrder(queue.length, at) : [];
-    publish({ queue, shuffleOrder: order, autoplayIds: new Set<string>(), consecutiveFailures: 0 });
-    playAt(at);
+    const { queue, index } = queueWindow(tracks, startIndex);
+    const autoplayIds = new Set<string>();
+    const order = state.shuffle ? shuffledOrder(queue, index, autoplayIds) : [];
+    publish({ queue, shuffleOrder: order, autoplayIds, consecutiveFailures: 0 });
+    playAt(index);
   },
   playStation(seed: PlayerTrack | null, tracks: readonly PlayerTrack[]): void {
     const offered = seed === null ? tracks : [seed, ...tracks];
@@ -607,7 +635,7 @@ export const actions = {
     );
     publish({
       queue,
-      shuffleOrder: state.shuffle ? shuffledOrder(queue.length, 0) : [],
+      shuffleOrder: state.shuffle ? shuffledOrder(queue, 0, autoplayIds) : [],
       autoplayIds,
       consecutiveFailures: 0,
     });
@@ -617,18 +645,24 @@ export const actions = {
     const additions = resolveQueueAdditions(state, tracks);
     if (additions.fresh.length === 0) return additions.outcome;
 
-    const pruned = withoutQueuePositions(state, additions.relocated);
+    const pruned = withoutQueuePositions(state, additions.dropped);
+    const added = new Set(additions.fresh.map((track) => track.id));
+    const autoplayIds = autoplayIdsAmong(
+      pruned.queue,
+      [...state.autoplayIds].filter((id) => !added.has(id))
+    );
     if (state.queue.length === 0) {
       const queue = [...pruned.queue, ...additions.fresh];
-      armAt(queue, 0, 0, state.shuffle ? shuffledOrder(queue.length, 0) : []);
+      armAt(queue, 0, 0, state.shuffle ? shuffledOrder(queue, 0, autoplayIds) : []);
       return additions.outcome;
     }
 
-    const placed = insertBeforeAutoplay({ ...state, ...pruned }, additions.fresh);
+    const placed = insertBeforeAutoplay({ ...state, ...pruned, autoplayIds }, additions.fresh);
     publish({
       queue: placed.queue,
       index: pruned.index,
       shuffleOrder: state.shuffle ? placed.shuffleOrder : [],
+      autoplayIds,
     });
     return additions.outcome;
   },
@@ -636,11 +670,10 @@ export const actions = {
     const additions = resolveQueueAdditions(state, tracks);
     if (additions.fresh.length === 0 || state.queue.length === 0) return additions.outcome;
 
-    const pruned = withoutQueuePositions(state, additions.relocated);
+    const pruned = withoutQueuePositions(state, additions.dropped);
     const queue = [...pruned.queue, ...additions.fresh];
     const appended = additions.fresh.map((_, at) => pruned.queue.length + at);
-    const autoplayIds = new Set(state.autoplayIds);
-    for (const track of additions.fresh) autoplayIds.add(track.id);
+    const autoplayIds = autoplayIdsAmong(queue, [...state.autoplayIds, ...additions.fresh.map((track) => track.id)]);
     publish({
       queue,
       index: pruned.index,
@@ -656,11 +689,24 @@ export const actions = {
       playAt(state.index);
       return;
     }
+    if (state.halt === "stopped") {
+      playAt(state.index, state.positionSeconds);
+      return;
+    }
     if (state.playing) {
       pausePlayback();
       return;
     }
+    const next = state.halt === "queueEnd" ? automaticNextIndex() : null;
+    if (next !== null) {
+      playAt(next);
+      return;
+    }
     resumePlayback();
+  },
+  stop(): void {
+    if (state.halt === "stopped" || currentTrack() === null) return;
+    stopPlayback();
   },
   next(): void {
     advance(false);
@@ -730,7 +776,7 @@ export const actions = {
   },
   toggleShuffle(): void {
     const shuffle = !state.shuffle;
-    publish({ shuffle, shuffleOrder: shuffle ? shuffledOrder(state.queue.length, state.index) : [] });
+    publish({ shuffle, shuffleOrder: shuffle ? shuffledOrder(state.queue, state.index, state.autoplayIds) : [] });
   },
   cycleRepeat(): void {
     publish({ repeat: nextRepeat(state.repeat) });
@@ -849,7 +895,7 @@ export const actions = {
     if (index < 0) return false;
     publish({
       shuffle: remote.shuffle,
-      shuffleOrder: remote.shuffle ? shuffledOrder(state.queue.length, index) : [],
+      shuffleOrder: remote.shuffle ? shuffledOrder(state.queue, index, state.autoplayIds) : [],
       repeat: remote.repeat,
       volume: remote.volume,
       muted: remote.muted,
@@ -895,12 +941,14 @@ export const actions = {
       0,
       tracks.findIndex((track) => track.id === currentTrackId)
     );
+    const autoplayIds = autoplayIdsAmong(tracks, autoplayTrackIds);
     publish({
       queue: tracks,
       index,
-      shuffleOrder: [],
-      autoplayIds: autoplayIdsAmong(tracks, autoplayTrackIds),
+      shuffleOrder: state.shuffle ? shuffledOrder(tracks, index, autoplayIds) : [],
+      autoplayIds,
       started: true,
+      halt: state.halt === "stopped" ? "stopped" : null,
     });
   },
   resumeHere(): void {

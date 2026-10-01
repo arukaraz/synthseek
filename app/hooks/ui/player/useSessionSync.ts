@@ -72,6 +72,8 @@ export function usePlayerSessionSync(): void {
   }, [refetch]);
 
   useEffect(() => {
+    let trailing: ReturnType<typeof setTimeout> | undefined;
+
     const saveWhole = (snapshot: SessionSnapshot) => {
       queueRevision.current = null;
       saveSession(snapshot, {
@@ -88,7 +90,18 @@ export function usePlayerSessionSync(): void {
       const next = sessionSnapshot();
       if (next.trackIds.length === 0) return;
       if (!sessionChanged(lastSaved.current, next)) return;
-      if (throttled && !queueChanged(lastSaved.current, next)) return;
+      if (throttled && !queueChanged(lastSaved.current, next)) {
+        if (trailing === undefined) {
+          trailing = setTimeout(
+            () => {
+              trailing = undefined;
+              flush(false);
+            },
+            SESSION_SAVE_INTERVAL_MS - (Date.now() - lastSentAt.current)
+          );
+        }
+        return;
+      }
       const rewritten = queueRewritten(lastSaved.current, next);
       const revision = queueRevision.current;
       lastSaved.current = next;
@@ -118,6 +131,7 @@ export function usePlayerSessionSync(): void {
     window.addEventListener("pagehide", onLeave);
     document.addEventListener("visibilitychange", onHidden);
     return () => {
+      clearTimeout(trailing);
       unsubscribe();
       window.removeEventListener("pagehide", onLeave);
       document.removeEventListener("visibilitychange", onHidden);

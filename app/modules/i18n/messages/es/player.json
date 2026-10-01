@@ -2,6 +2,7 @@
   "controls": {
     "play": "Reproducir",
     "pause": "Pausar",
+    "stop": "Detener",
     "next": "Pista siguiente",
     "previous": "Pista anterior",
     "favorite": "Añadir a favoritos",
@@ -189,6 +190,7 @@
     "nowPlaying": "SONANDO AHORA",
     "upNext": "A CONTINUACIÓN",
     "autoplay": "REPRODUCCIÓN AUTOMÁTICA",
+    "loop": "DESPUÉS, DESDE EL PRINCIPIO",
     "empty": "No hay nada después de esta",
     "jumpTo": "Reproducir {{title}}",
     "remove": "Quitar {{title}} de la cola",

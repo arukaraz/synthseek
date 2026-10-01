@@ -60,6 +60,7 @@ function track(overrides: Partial<PlayerTrack> = {}): PlayerTrack {
 const handlers = {
   play: vi.fn(),
   pause: vi.fn(),
+  stop: vi.fn(),
   next: vi.fn(),
   previous: vi.fn(),
   seekTo: vi.fn(),
@@ -134,6 +135,17 @@ describe("publishMediaSession", () => {
     expect(handlers.pause).toHaveBeenCalled();
     expect(handlers.next).toHaveBeenCalled();
     expect(handlers.previous).toHaveBeenCalled();
+  });
+
+  it("stops the player when the system asks, which is what swiping the phone's media card away sends", () => {
+    const session = fakeSession();
+    install(session);
+    publishMediaSession(track(), handlers);
+
+    handlerFor(session, "stop")({});
+
+    expect(handlers.stop).toHaveBeenCalledTimes(1);
+    expect(handlers.pause).not.toHaveBeenCalled();
   });
 
   it("follows a scrub from the system's own transport", () => {

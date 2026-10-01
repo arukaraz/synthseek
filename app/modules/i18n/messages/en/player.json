@@ -2,6 +2,7 @@
   "controls": {
     "play": "Play",
     "pause": "Pause",
+    "stop": "Stop",
     "next": "Next track",
     "previous": "Previous track",
     "favorite": "Add to favourites",
@@ -189,6 +190,7 @@
     "nowPlaying": "NOW PLAYING",
     "upNext": "NEXT UP",
     "autoplay": "AUTOPLAY",
+    "loop": "THEN FROM THE START",
     "empty": "Nothing queued after this one",
     "jumpTo": "Play {{title}}",
     "remove": "Remove {{title}} from the queue",

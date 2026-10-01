@@ -6,7 +6,7 @@ import type { PlayerTrack } from "@components/Player";
 vi.mock("@components/Player", () => ({
   closeMiniWindow: vi.fn(),
   openMiniWindow: vi.fn(() => Promise.resolve(true)),
-  nextRepeat: (repeat: string) => repeat,
+  nextRepeat: (repeat: string) => (repeat === "off" ? "all" : repeat === "all" ? "one" : "off"),
   restorablePlayerMode: () => "normal",
   shouldRestart: () => false,
 }));
@@ -264,16 +264,105 @@ describe("player store addToQueue", () => {
     expect(store.getSnapshot().queue).toHaveLength(MAX_QUEUE_TRACKS);
   });
 
-  it("still relocates a played track when a new one in the same batch does not fit", async () => {
+  it("takes more once the listener has heard the whole queue, forgetting the oldest plays to make room", async () => {
     const store = await freshStore();
     const full = Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => track(`t${at}`));
     store.actions.playQueue(full, 0);
-    store.actions.jumpTo(2);
+    store.actions.jumpTo(MAX_QUEUE_TRACKS - 1);
 
-    const outcome = store.actions.addToQueue([track("one-too-many"), track("t0")]);
+    const outcome = store.actions.addToQueue([track("fresh")]);
 
-    expect(outcome.added).toBe(1);
-    expect(store.getSnapshot().queue).toHaveLength(MAX_QUEUE_TRACKS);
-    expect(store.getSnapshot().queue[MAX_QUEUE_TRACKS - 1]?.id).toBe("t0");
+    const after = store.getSnapshot();
+    expect(outcome).toEqual({ added: 1, full: false, skipped: 0 });
+    expect(after.queue).toHaveLength(MAX_QUEUE_TRACKS);
+    expect(after.queue[0]?.id).toBe("t1");
+    expect(after.queue[after.index]?.id).toBe(`t${MAX_QUEUE_TRACKS - 1}`);
+    expect(after.queue[after.index + 1]?.id).toBe("fresh");
+  });
+
+  it("forgets the oldest plays in the order shuffle played them", async () => {
+    const store = await freshStore();
+    const full = Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => track(`t${at}`));
+    store.actions.playQueue(full, 5);
+    store.actions.toggleShuffle();
+    const order = store.getSnapshot().shuffleOrder;
+    const firstPlayed = store.getSnapshot().queue[order[0] ?? 0]?.id;
+    const secondPlayed = store.getSnapshot().queue[order[1] ?? 0]?.id;
+    store.actions.jumpTo(order[order.length - 1] ?? 0);
+
+    store.actions.addToQueue([track("fresh")]);
+
+    const after = store.getSnapshot();
+    const ids = after.queue.map((entry) => entry.id);
+    expect(ids).not.toContain(firstPlayed);
+    expect(ids).toContain(secondPlayed);
+    expect([...after.shuffleOrder].sort((left, right) => left - right)).toEqual(
+      Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => at)
+    );
+    expect(after.queue[after.shuffleOrder[after.shuffleOrder.indexOf(after.index) + 1] ?? -1]?.id).toBe("fresh");
+  });
+
+  it("counts a relocated play against the visible queue, so a batch stops where the listener's list is full", async () => {
+    const store = await freshStore();
+    const full = Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => track(`t${at}`));
+    store.actions.playQueue(full, 0);
+    store.actions.jumpTo(1);
+
+    const outcome = store.actions.addToQueue([track("fresh"), track("t0")]);
+
+    const after = store.getSnapshot();
+    expect(outcome).toEqual({ added: 1, full: true, skipped: 1 });
+    expect(after.queue).toHaveLength(MAX_QUEUE_TRACKS);
+    expect(after.queue.map((entry) => entry.id)).not.toContain("t0");
+    expect(after.queue[MAX_QUEUE_TRACKS - 1]?.id).toBe("fresh");
+  });
+
+  it("keeps a full queue full under repeat-all, since every played track will come round again", async () => {
+    const store = await freshStore();
+    const full = Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => track(`t${at}`));
+    store.actions.playQueue(full, 0);
+    store.actions.jumpTo(MAX_QUEUE_TRACKS - 1);
+    store.actions.cycleRepeat();
+
+    const outcome = store.actions.addToQueue([track("fresh")]);
+
+    expect(store.getSnapshot().repeat).toBe("all");
+    expect(outcome).toEqual({ added: 0, full: true, skipped: 1 });
+    expect(store.getSnapshot().queue[0]?.id).toBe("t0");
+  });
+
+  it("takes a track out of the loop when the listener removes it under repeat-all", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 2);
+    store.actions.cycleRepeat();
+
+    store.actions.removeTrackFromQueue("a");
+
+    expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["b", "c"]);
+    expect(store.getSnapshot().queue[store.getSnapshot().index]?.id).toBe("c");
+  });
+
+  it("plays a list longer than the queue holds from the chosen track, within the cap", async () => {
+    const store = await freshStore();
+    const long = Array.from({ length: MAX_QUEUE_TRACKS + 10 }, (_, at) => track(`t${at}`));
+
+    store.actions.playQueue(long, MAX_QUEUE_TRACKS + 5);
+
+    const after = store.getSnapshot();
+    expect(after.queue).toHaveLength(MAX_QUEUE_TRACKS);
+    expect(after.queue[after.index]?.id).toBe(`t${MAX_QUEUE_TRACKS + 5}`);
+    expect(after.queue.at(-1)?.id).toBe(`t${MAX_QUEUE_TRACKS + 9}`);
+  });
+
+  it("keeps a shuffle order for a queue adopted from another device while shuffle is on", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    store.actions.toggleShuffle();
+
+    store.actions.adoptQueue([track("x"), track("y"), track("z")], "x", []);
+
+    const after = store.getSnapshot();
+    expect([...after.shuffleOrder].sort((left, right) => left - right)).toEqual([0, 1, 2]);
+    expect(after.shuffleOrder[0]).toBe(0);
   });
 });

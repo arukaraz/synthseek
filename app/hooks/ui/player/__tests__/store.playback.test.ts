@@ -94,6 +94,7 @@ function track(id: string, overrides: Partial<PlayerTrack> = {}): PlayerTrack {
 interface MediaHandlers {
   play: () => void;
   pause: () => void;
+  stop: () => void;
   next: () => void;
   previous: () => void;
   seekTo: (seconds: number) => void;
@@ -371,6 +372,65 @@ describe("player store advance", () => {
     expect(engine.loadAndPlay).toHaveBeenCalledTimes(1);
   });
 
+  it("plays what the listener added after the queue ran out, rather than the track that already finished", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    engine.handlers?.onEnded();
+    store.actions.addToQueue([track("b")]);
+
+    store.actions.togglePlay();
+
+    expect(store.getSnapshot().queue[store.getSnapshot().index]?.id).toBe("b");
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/b/stream",
+      expect.any(Number),
+      expect.any(Boolean),
+      0
+    );
+    expect(engine.resume).not.toHaveBeenCalled();
+  });
+
+  it("goes round to the top on play when repeat-all is turned on after the queue ran out", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 1);
+    engine.handlers?.onEnded();
+    store.actions.cycleRepeat();
+
+    store.actions.togglePlay();
+
+    expect(store.getSnapshot().repeat).toBe("all");
+    expect(store.getSnapshot().index).toBe(0);
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/a/stream", 0.8, false, 0);
+    expect(engine.resume).not.toHaveBeenCalled();
+  });
+
+  it("replays the finished track on play when repeat-one is turned on after the queue ran out", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 1);
+    engine.handlers?.onEnded();
+    store.actions.cycleRepeat();
+    store.actions.cycleRepeat();
+
+    store.actions.togglePlay();
+
+    expect(store.getSnapshot().repeat).toBe("one");
+    expect(store.getSnapshot().index).toBe(1);
+    expect(engine.resume).toHaveBeenCalled();
+  });
+
+  it("replays the finished track from its start when the listener rewound it before pressing play", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    engine.handlers?.onEnded();
+    store.actions.addToQueue([track("b")]);
+    store.actions.seekTo(30);
+
+    store.actions.togglePlay();
+
+    expect(store.getSnapshot().queue[store.getSnapshot().index]?.id).toBe("a");
+    expect(engine.resume).toHaveBeenCalled();
+  });
+
   it("pressing next past the end says so again without unloading the track", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a")], 0);
@@ -571,6 +631,130 @@ describe("player store transport", () => {
 
     expect(engine.loadAndPlay).toHaveBeenCalled();
     expect(engine.resume).not.toHaveBeenCalled();
+  });
+
+  it("stops by releasing the stream and rewinding, keeping the queue and the player on screen", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    engine.handlers?.onProgress(80, 200);
+
+    store.actions.stop();
+
+    const after = store.getSnapshot();
+    expect(engine.stop).toHaveBeenCalledTimes(1);
+    expect(engine.pause).not.toHaveBeenCalled();
+    expect(after.halt).toBe("stopped");
+    expect(after.playing).toBe(false);
+    expect(after.positionSeconds).toBe(0);
+    expect(after.started).toBe(true);
+    expect(after.queue.map((entry) => entry.id)).toEqual(["a", "b"]);
+    expect(after.index).toBe(0);
+    expect(media.clearMediaSession).toHaveBeenCalled();
+  });
+
+  it("starts the same track over from its beginning when play follows a stop", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 1);
+    engine.handlers?.onProgress(80, 200);
+    store.actions.stop();
+    engine.loadAndPlay.mockClear();
+
+    store.actions.togglePlay();
+
+    expect(engine.resume).not.toHaveBeenCalled();
+    expect(engine.loadAndPlay).toHaveBeenCalledWith("/api/v1/library/tracks/b/stream", 0.8, false, 0);
+    expect(store.getSnapshot().halt).toBeNull();
+  });
+
+  it("starts from where the listener dragged the bar while stopped, without touching the engine", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    store.actions.stop();
+
+    store.actions.seekTo(45);
+
+    expect(engine.seek).not.toHaveBeenCalled();
+    expect(store.getSnapshot().halt).toBe("stopped");
+    store.actions.togglePlay();
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/a/stream", 0.8, false, 45);
+  });
+
+  it("ignores a second stop, so the engine is released once", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+
+    store.actions.stop();
+    store.actions.stop();
+
+    expect(engine.stop).toHaveBeenCalledTimes(1);
+  });
+
+  it("does nothing on stop before anything has played", async () => {
+    const store = await freshStore();
+
+    store.actions.stop();
+
+    expect(engine.stop).not.toHaveBeenCalled();
+    expect(store.getSnapshot().halt).toBeNull();
+  });
+
+  it("cancels a pending skip, so a stop after a failed track stays stopped", async () => {
+    vi.useFakeTimers();
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onFailure("load");
+
+    store.actions.stop();
+    vi.advanceTimersByTime(SKIP_DELAY_MS);
+
+    expect(store.getSnapshot().index).toBe(0);
+    expect(store.getSnapshot().halt).toBe("stopped");
+  });
+
+  it("does not reload a stopped track when a playback setting changes", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    store.actions.stop();
+    engine.loadAndPlay.mockClear();
+
+    store.actions.setConversion({ enabled: true, bitrateKbps: 192 });
+
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
+    expect(engine.loadAt).not.toHaveBeenCalled();
+  });
+
+  it("keeps the system media state cleared when the released stream reports its pause", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.stop();
+    media.publishPlaybackState.mockClear();
+
+    engine.handlers?.onPlayingChange(false);
+
+    expect(media.publishPlaybackState).not.toHaveBeenCalled();
+  });
+
+  it("answers the system's stop key with a stop", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+
+    lastMediaHandlers().stop();
+
+    expect(engine.stop).toHaveBeenCalledTimes(1);
+    expect(store.getSnapshot().halt).toBe("stopped");
+  });
+
+  it("moves to the next track on next while stopped", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 0);
+    store.actions.stop();
+
+    store.actions.next();
+
+    expect(store.getSnapshot().index).toBe(1);
+    expect(store.getSnapshot().halt).toBeNull();
   });
 
   it("resumes rather than reloading a track that is merely armed", async () => {

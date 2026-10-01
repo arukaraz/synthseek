@@ -41,6 +41,9 @@ export function applyPlayerCommand(command: PlayerCommandPayload): void {
     case "pause":
       actions.pauseHere();
       return;
+    case "stop":
+      actions.stop();
+      return;
     case "next":
       actions.next();
       return;

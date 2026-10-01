@@ -124,6 +124,7 @@ describe("the more menu on the narrow bar", () => {
           { index: 2, track },
         ],
         autoplay: [],
+        loop: [],
       },
     });
     await opened(user);
@@ -144,6 +145,7 @@ describe("the more menu on the narrow bar", () => {
           { index: 2, track },
         ],
         autoplay: [],
+        loop: [],
       },
     });
     await opened(user);
@@ -163,12 +165,33 @@ describe("the more menu on the narrow bar", () => {
           { index: 2, track },
           { index: 3, track },
         ],
+        loop: [],
       },
     });
     await opened(user);
 
     expect(screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.queue.title}`) })).toHaveTextContent(
       enPlayer.menu.upNext_other.replace("{{count}}", "3")
+    );
+  });
+
+  it("counts what repeat-all brings round again into what is still to come", async () => {
+    const track = createPlayerView().track;
+    const { user } = renderMenu({
+      queue: {
+        playing: { index: 2, track },
+        upNext: [],
+        autoplay: [],
+        loop: [
+          { index: 0, track },
+          { index: 1, track },
+        ],
+      },
+    });
+    await opened(user);
+
+    expect(screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.queue.title}`) })).toHaveTextContent(
+      enPlayer.menu.upNext_other.replace("{{count}}", "2")
     );
   });
 

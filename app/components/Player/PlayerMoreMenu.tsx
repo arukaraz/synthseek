@@ -89,7 +89,9 @@ export function PlayerMoreMenu({ view, actions }: PlayerProps) {
             <ListMusic className="size-4" />
             {t("queue.title")}
             <span className={menuState()}>
-              {t("menu.upNext", { count: view.queue.upNext.length + view.queue.autoplay.length })}
+              {t("menu.upNext", {
+                count: view.queue.upNext.length + view.queue.autoplay.length + view.queue.loop.length,
+              })}
             </span>
           </DropdownMenuItem>
         )}

@@ -88,6 +88,7 @@ const store = vi.hoisted(() => ({
   snapshot: sessionState(),
   actions: {
     togglePlay: vi.fn(),
+    stop: vi.fn(),
     next: vi.fn(),
     previous: vi.fn(),
     seekTo: vi.fn(),
@@ -223,6 +224,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     fullscreen: false,
     consecutiveFailures: 0,
     started: true,
+    halt: null,
     sourceChoice: null,
     failedSources: null,
     ...overrides,
@@ -546,6 +548,17 @@ describe("usePlayer mirroring another device", () => {
 });
 
 describe("usePlayer actions", () => {
+  it("stops this player directly and shows it stopped", () => {
+    store.snapshot = sessionState({ halt: "stopped" });
+    const { result } = renderHook(() => usePlayer());
+
+    result.current.actions.stop();
+
+    expect(store.actions.stop).toHaveBeenCalledTimes(1);
+    expect(devices.commandActive).not.toHaveBeenCalled();
+    expect(result.current.view?.stopped).toBe(true);
+  });
+
   it("drives this player directly while the sound is here", () => {
     const { result } = renderHook(() => usePlayer());
 
@@ -588,6 +601,25 @@ describe("usePlayer actions", () => {
 
     expect(devices.commandActive).toHaveBeenCalledWith("play");
     expect(store.actions.expectRemote).toHaveBeenCalledWith({ playing: true });
+  });
+
+  it("asks the other device to stop and shows it stopped at the start before it confirms", () => {
+    store.snapshot = sessionState({ remote: remote() });
+    const { result } = renderHook(() => usePlayer());
+
+    result.current.actions.stop();
+
+    expect(devices.commandActive).toHaveBeenCalledWith("stop");
+    expect(store.actions.expectRemote).toHaveBeenCalledWith({ playing: false, positionSeconds: 0 });
+    expect(store.actions.stop).not.toHaveBeenCalled();
+  });
+
+  it("does not report this player stopped while it only mirrors another device", () => {
+    store.snapshot = sessionState({ remote: remote(), halt: "stopped" });
+
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.stopped).toBe(false);
   });
 
   it("passes a skip and a seek on to the other device", () => {

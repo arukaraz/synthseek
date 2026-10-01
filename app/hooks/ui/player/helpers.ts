@@ -193,15 +193,48 @@ export function needsConversion(format: string, canPlay: (mimeType: string) => b
   return !canPlay(mimeType);
 }
 
-export function shuffledOrder(length: number, startIndex: number): number[] {
-  const rest = Array.from({ length }, (_, index) => index).filter((index) => index !== startIndex);
+function shuffled(indices: readonly number[]): number[] {
+  const rest = [...indices];
   for (let i = rest.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     const swap = rest[i];
     rest[i] = rest[j] ?? swap ?? 0;
     rest[j] = swap ?? 0;
   }
-  return [startIndex, ...rest];
+  return rest;
+}
+
+function isAutoplayAt(queue: readonly PlayerTrack[], index: number, autoplayIds: ReadonlySet<string>): boolean {
+  const track = queue[index];
+  return track !== undefined && autoplayIds.has(track.id);
+}
+
+export function shuffledOrder(
+  queue: readonly PlayerTrack[],
+  startIndex: number,
+  autoplayIds: ReadonlySet<string>
+): number[] {
+  const rest = queue.map((_, index) => index).filter((index) => index !== startIndex);
+  const chosen = rest.filter((index) => !isAutoplayAt(queue, index, autoplayIds));
+  const radio = rest.filter((index) => isAutoplayAt(queue, index, autoplayIds));
+  return [startIndex, ...shuffled(chosen), ...shuffled(radio)];
+}
+
+export function queueWindow(
+  tracks: readonly PlayerTrack[],
+  startIndex: number
+): { queue: PlayerTrack[]; index: number } {
+  const unique = withoutRepeats(tracks, [], tracks.length);
+  const start = tracks[startIndex];
+  const at =
+    start === undefined
+      ? 0
+      : Math.max(
+          0,
+          unique.findIndex((track) => track.id === start.id)
+        );
+  const from = Math.min(at, Math.max(0, unique.length - MAX_QUEUE_TRACKS));
+  return { queue: unique.slice(from, from + MAX_QUEUE_TRACKS), index: at - from };
 }
 
 export function upcomingOrder(state: PlayerSessionState): number[] {
@@ -214,13 +247,25 @@ export function upcomingOrder(state: PlayerSessionState): number[] {
   return state.shuffleOrder.slice(position + 1);
 }
 
+function loopOrder(state: PlayerSessionState): number[] {
+  if (state.repeat !== "all" || state.queue.length === 0) return [];
+  if (!state.shuffle) return Array.from({ length: state.index }, (_, at) => at);
+  const position = state.shuffleOrder.indexOf(state.index);
+  if (position < 0) return [];
+  return state.shuffleOrder.slice(0, position);
+}
+
+function comingOrder(state: PlayerSessionState): number[] {
+  return [...upcomingOrder(state), ...loopOrder(state)];
+}
+
 export function withoutQueueIndex(order: readonly number[], removed: number): number[] {
   return order.filter((index) => index !== removed).map((index) => (index > removed ? index - 1 : index));
 }
 
 export function upcomingQueueIds(state: PlayerSessionState): Set<string> {
   const ids = new Set<string>();
-  for (const index of upcomingOrder(state)) {
+  for (const index of comingOrder(state)) {
     const track = state.queue[index];
     if (track !== undefined) ids.add(track.id);
   }
@@ -235,7 +280,15 @@ export function visibleQueueIds(state: PlayerSessionState): Set<string> {
 }
 
 export function upcomingPositionsOf(state: PlayerSessionState, trackId: string): number[] {
-  return upcomingOrder(state).filter((index) => state.queue[index]?.id === trackId);
+  return comingOrder(state).filter((index) => state.queue[index]?.id === trackId);
+}
+
+export function hiddenQueuePositions(state: PlayerSessionState): number[] {
+  const shown = new Set(comingOrder(state));
+  shown.add(state.index);
+  const positions = state.queue.map((_, at) => at);
+  const byPlay = state.shuffle ? [...state.shuffleOrder, ...positions] : positions;
+  return [...new Set(byPlay)].filter((at) => !shown.has(at));
 }
 
 export function nowPlayingOf(state: PlayerSessionState): NowPlayingTrack | null {
@@ -273,7 +326,7 @@ export function withoutQueuePositions(
 export function resolveQueueAdditions(
   state: PlayerSessionState,
   tracks: readonly PlayerTrack[]
-): { fresh: PlayerTrack[]; relocated: number[]; outcome: QueueAddOutcome } {
+): { fresh: PlayerTrack[]; dropped: number[]; outcome: QueueAddOutcome } {
   const visible = visibleQueueIds(state);
   const seen = new Set<string>();
   const wanted: PlayerTrack[] = [];
@@ -283,41 +336,53 @@ export function resolveQueueAdditions(
     wanted.push(track);
   }
 
-  const relocated: number[] = [];
+  const shown = comingOrder(state).length + (state.queue[state.index] === undefined ? 0 : 1);
+  const relocated = new Set<number>();
   const fresh: PlayerTrack[] = [];
-  let length = state.queue.length;
   for (const track of wanted) {
+    if (shown + fresh.length >= MAX_QUEUE_TRACKS) break;
     const at = state.queue.findIndex((queued) => queued.id === track.id);
-    if (at < 0 && length >= MAX_QUEUE_TRACKS) continue;
-    if (at < 0) length += 1;
-    else relocated.push(at);
+    if (at >= 0) relocated.add(at);
     fresh.push(track);
   }
 
+  const excess = state.queue.length + fresh.length - relocated.size - MAX_QUEUE_TRACKS;
+  const forgotten =
+    excess > 0
+      ? hiddenQueuePositions(state)
+          .filter((at) => !relocated.has(at))
+          .slice(0, excess)
+      : [];
+
   return {
     fresh,
-    relocated,
+    dropped: [...relocated, ...forgotten],
     outcome: { added: fresh.length, full: fresh.length < wanted.length, skipped: tracks.length - fresh.length },
   };
+}
+
+function entriesAt(state: PlayerSessionState, order: readonly number[]): PlayerQueueEntry[] {
+  return order.flatMap((index) => {
+    const track = state.queue[index];
+    return track === undefined ? [] : [{ index, track }];
+  });
 }
 
 export function queueSections(state: PlayerSessionState): {
   upNext: PlayerQueueEntry[];
   autoplay: PlayerQueueEntry[];
+  loop: PlayerQueueEntry[];
 } {
-  const upNext: PlayerQueueEntry[] = [];
-  const autoplay: PlayerQueueEntry[] = [];
-  for (const index of upcomingOrder(state)) {
-    const track = state.queue[index];
-    if (track === undefined) continue;
-    (state.autoplayIds.has(track.id) ? autoplay : upNext).push({ index, track });
-  }
-  return { upNext, autoplay };
+  const upcoming = entriesAt(state, upcomingOrder(state));
+  return {
+    upNext: upcoming.filter((entry) => !state.autoplayIds.has(entry.track.id)),
+    autoplay: upcoming.filter((entry) => state.autoplayIds.has(entry.track.id)),
+    loop: entriesAt(state, loopOrder(state)),
+  };
 }
 
 export function autoplayDue(state: PlayerSessionState): boolean {
   if (!state.autoplay || !state.playing || state.remote !== null || state.repeat !== "off") return false;
-  if (state.queue.length >= MAX_QUEUE_TRACKS) return false;
   return upcomingOrder(state).length < AUTOPLAY_REFILL_BELOW;
 }
 
@@ -349,8 +414,9 @@ export function insertBeforeAutoplay(
   const queue = [...state.queue.slice(0, at), ...tracks, ...state.queue.slice(at)];
   const fresh = tracks.map((_, offset) => at + offset);
   const shifted = state.shuffleOrder.map((index) => (index >= at ? index + tracks.length : index));
+  const playing = shifted.indexOf(state.index);
   const before = shifted.findIndex(
-    (index) => index >= at + tracks.length && state.autoplayIds.has(queue[index]?.id ?? "")
+    (index, position) => position > playing && isAutoplayAt(queue, index, state.autoplayIds)
   );
   const shuffleOrder =
     before < 0 ? [...shifted, ...fresh] : [...shifted.slice(0, before), ...fresh, ...shifted.slice(before)];

@@ -2,6 +2,7 @@
   "controls": {
     "play": "Lire",
     "pause": "Pause",
+    "stop": "Arrêter",
     "next": "Piste suivante",
     "previous": "Piste précédente",
     "favorite": "Ajouter aux favoris",
@@ -189,6 +190,7 @@
     "nowPlaying": "EN COURS",
     "upNext": "À SUIVRE",
     "autoplay": "LECTURE AUTOMATIQUE",
+    "loop": "PUIS DEPUIS LE DÉBUT",
     "empty": "Rien après ce titre",
     "jumpTo": "Lire {{title}}",
     "remove": "Retirer {{title}} de la file",

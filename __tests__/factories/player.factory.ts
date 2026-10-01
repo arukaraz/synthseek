@@ -38,6 +38,7 @@ export const createPlayerView = (overrides: Partial<PlayerView> = {}): PlayerVie
     positionSeconds: 30,
     scrubSeconds: null,
     playing: false,
+    stopped: false,
     loading: false,
     shuffle: false,
     repeat: "off",
@@ -89,7 +90,7 @@ export const createPlayerView = (overrides: Partial<PlayerView> = {}): PlayerVie
     modesOpen: false,
     queueOpen: false,
     queueEditable: true,
-    queue: { playing: { index: 0, track }, upNext: [], autoplay: [] },
+    queue: { playing: { index: 0, track }, upNext: [], autoplay: [], loop: [] },
     mode: "normal",
     fullscreen: false,
     ...overrides,
@@ -98,6 +99,7 @@ export const createPlayerView = (overrides: Partial<PlayerView> = {}): PlayerVie
 
 export const createPlayerActions = (overrides: Partial<PlayerActions> = {}): PlayerActions => ({
   togglePlay: vi.fn(),
+  stop: vi.fn(),
   next: vi.fn(),
   previous: vi.fn(),
   seekTo: vi.fn(),

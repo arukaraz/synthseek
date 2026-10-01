@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { createPlayerActions } from "@test/factories";
 import { RENDER_WINDOW_STEP } from "@hooks/ui/constants";
 import type { PlayerQueueEntry, PlayerTrack, PlayerView } from "../types";
 
@@ -48,7 +49,7 @@ function track(id: string): PlayerTrack {
 function viewWith(count: number): PlayerView {
   const upNext = Array.from({ length: count }, (_, index) => ({ index: index + 1, track: track(`t${index}`) }));
   return {
-    queue: { playing: { index: 0, track: track("playing") }, upNext, autoplay: [] },
+    queue: { playing: { index: 0, track: track("playing") }, upNext, autoplay: [], loop: [] },
     queueEditable: true,
   } as unknown as PlayerView;
 }
@@ -114,5 +115,48 @@ describe("QueueBody", () => {
     expect(screen.queryByText("queue.upNext")).not.toBeInTheDocument();
     expect(screen.queryByText("queue.empty")).not.toBeInTheDocument();
     expect(screen.getByText("queue.autoplay")).toBeInTheDocument();
+  });
+
+  it("lists what repeat-all brings round again under its own caption, last", () => {
+    const view = viewWith(1);
+    const looping = {
+      ...view,
+      queue: {
+        ...view.queue,
+        autoplay: [{ index: 3, track: track("r1") }],
+        loop: [
+          { index: 4, track: track("a") },
+          { index: 5, track: track("b") },
+        ],
+      },
+    };
+
+    render(<QueueBody view={looping} actions={createPlayerActions()} />);
+
+    expect(screen.getByText("queue.loop")).toBeInTheDocument();
+    expect(screen.getAllByTestId("queue-row").map((row) => row.textContent)).toEqual(["playing", "t0", "r1", "a", "b"]);
+  });
+
+  it("renders only the first window of a long loop", () => {
+    const view = viewWith(0);
+    const loop = Array.from({ length: RENDER_WINDOW_STEP + 30 }, (_, at) => ({
+      index: at + 1,
+      track: track(`l${at}`),
+    }));
+
+    render(<QueueBody view={{ ...view, queue: { ...view.queue, loop } }} actions={createPlayerActions()} />);
+
+    expect(screen.getAllByTestId("queue-row")).toHaveLength(RENDER_WINDOW_STEP + 1);
+  });
+
+  it("does not call the queue empty while repeat-all will bring tracks round again", () => {
+    const view = viewWith(0);
+    const looping = { ...view, queue: { ...view.queue, loop: [{ index: 1, track: track("a") }] } };
+
+    render(<QueueBody view={looping} actions={createPlayerActions()} />);
+
+    expect(screen.queryByText("queue.empty")).not.toBeInTheDocument();
+    expect(screen.queryByText("queue.upNext")).not.toBeInTheDocument();
+    expect(screen.getByText("queue.loop")).toBeInTheDocument();
   });
 });

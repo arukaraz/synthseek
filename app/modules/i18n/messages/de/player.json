@@ -2,6 +2,7 @@
   "controls": {
     "play": "Abspielen",
     "pause": "Pause",
+    "stop": "Stopp",
     "next": "Nächster Titel",
     "previous": "Vorheriger Titel",
     "favorite": "Zu Favoriten hinzufügen",
@@ -189,6 +190,7 @@
     "nowPlaying": "LÄUFT GERADE",
     "upNext": "ALS NÄCHSTES",
     "autoplay": "AUTOPLAY",
+    "loop": "DANACH WIEDER VON VORN",
     "empty": "Danach steht nichts an",
     "jumpTo": "{{title}} abspielen",
     "remove": "{{title}} aus der Warteschlange entfernen",

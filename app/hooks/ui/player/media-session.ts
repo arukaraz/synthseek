@@ -6,6 +6,7 @@ import { ARTWORK_SIZES } from "./constants";
 interface MediaHandlers {
   play: () => void;
   pause: () => void;
+  stop: () => void;
   next: () => void;
   previous: () => void;
   seekTo: (seconds: number) => void;
@@ -35,6 +36,7 @@ export function publishMediaSession(track: PlayerTrack, handlers: MediaHandlers)
 
   register(media, "play", handlers.play);
   register(media, "pause", handlers.pause);
+  register(media, "stop", handlers.stop);
   register(media, "nexttrack", handlers.next);
   register(media, "previoustrack", handlers.previous);
   register(media, "seekto", (details) => {

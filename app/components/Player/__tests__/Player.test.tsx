@@ -108,6 +108,35 @@ describe("the player dock", () => {
     expect(actions.previous).toHaveBeenCalled();
   });
 
+  it("stops the player from its own button", async () => {
+    const { user, actions } = renderPlayer();
+    const stop = screen.getAllByRole("button", { name: enPlayer.controls.stop })[0];
+
+    if (stop !== undefined) await user.click(stop);
+
+    expect(actions.stop).toHaveBeenCalledTimes(1);
+  });
+
+  it("places stop right before previous, after shuffle", () => {
+    renderPlayer();
+
+    const order = [
+      ...(screen.getAllByRole("button", { name: enPlayer.controls.stop })[0]?.parentElement?.children ?? []),
+    ].map((button) => button.getAttribute("aria-label"));
+    const stop = order.indexOf(enPlayer.controls.stop);
+
+    expect(order[stop - 1]).toBe(enPlayer.controls.shuffle);
+    expect(order[stop + 1]).toBe(enPlayer.controls.previous);
+  });
+
+  it("offers no second stop while the player is already stopped", () => {
+    renderPlayer({ stopped: true });
+
+    const stops = screen.getAllByRole("button", { name: enPlayer.controls.stop });
+    expect(stops.length).toBeGreaterThan(0);
+    for (const stop of stops) expect(stop).toBeDisabled();
+  });
+
   it("marks shuffle as pressed only while it is on", async () => {
     const { user, actions } = renderPlayer();
     const shuffle = screen.getAllByRole("button", { name: enPlayer.controls.shuffle })[0];
@@ -309,7 +338,7 @@ describe("the queue panel", () => {
   it("separates what is playing from what is still to come", () => {
     renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
     });
 
     const dialog = screen.getByRole("dialog");
@@ -321,7 +350,7 @@ describe("the queue panel", () => {
   it("says the queue is empty rather than showing an empty list", () => {
     renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext: [], autoplay: [] },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext: [], autoplay: [], loop: [] },
     });
 
     expect(within(screen.getByRole("dialog")).getByText(enPlayer.queue.empty)).toBeInTheDocument();
@@ -330,7 +359,7 @@ describe("the queue panel", () => {
   it("jumps to a track the listener picked out of the queue", async () => {
     const { actions, user } = renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
     });
 
     await user.click(screen.getByRole("button", { name: enPlayer.queue.jumpTo.replace("{{title}}", "Veridis Quo") }));
@@ -341,7 +370,7 @@ describe("the queue panel", () => {
   it("drops a track out of the queue", async () => {
     const { actions, user } = renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
     });
 
     await user.click(screen.getByRole("button", { name: enPlayer.queue.remove.replace("{{title}}", "Aerodynamic") }));
@@ -353,7 +382,7 @@ describe("the queue panel", () => {
     renderPlayer({
       queueOpen: true,
       queueEditable: false,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
     });
 
     expect(
@@ -364,7 +393,7 @@ describe("the queue panel", () => {
   it("closes the panel", async () => {
     const { actions, user } = renderPlayer({
       queueOpen: true,
-      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [] },
+      queue: { playing: { index: 0, track: createPlayerTrack() }, upNext, autoplay: [], loop: [] },
     });
 
     await user.click(screen.getByRole("button", { name: enPlayer.queue.close }));

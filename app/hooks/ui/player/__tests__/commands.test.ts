@@ -6,6 +6,7 @@ const store = vi.hoisted(() => ({
   actions: {
     resumeHere: vi.fn(),
     pauseHere: vi.fn(),
+    stop: vi.fn(),
     togglePlay: vi.fn(),
     next: vi.fn(),
     previous: vi.fn(),
@@ -83,6 +84,13 @@ describe("applyPlayerCommand", () => {
 });
 
 describe("applyPlayerCommand, every member", () => {
+  it("stops on stop, rather than pausing", () => {
+    applyPlayerCommand(command({ command: "stop", issuedAt: 19_000 }));
+
+    expect(store.actions.stop).toHaveBeenCalledTimes(1);
+    expect(store.actions.pauseHere).not.toHaveBeenCalled();
+  });
+
   it("skips to the next track", () => {
     applyPlayerCommand(command({ command: "next", issuedAt: 20_000 }));
     expect(store.actions.next).toHaveBeenCalledTimes(1);

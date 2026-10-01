@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { Loader2, Pause, Play, Repeat, Repeat1, Shuffle, SkipBack, SkipForward } from "lucide-react";
+import { Loader2, Pause, Play, Repeat, Repeat1, Shuffle, SkipBack, SkipForward, Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { TRANSPORT_METRICS } from "./constants";
@@ -23,6 +23,15 @@ export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
         aria-pressed={view.shuffle}
       >
         <Shuffle className={metrics.mark} />
+      </button>
+      <button
+        type="button"
+        className={cn(iconButton({ size: metrics.side }), metrics.folds)}
+        onClick={actions.stop}
+        disabled={view.stopped}
+        {...labelled(t("controls.stop"))}
+      >
+        <Square className={cn(metrics.mark, "fill-current")} />
       </button>
       <button
         type="button"

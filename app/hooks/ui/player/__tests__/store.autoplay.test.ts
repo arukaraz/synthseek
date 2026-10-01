@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PlayerTrack } from "@components/Player";
 
+import { MAX_QUEUE_TRACKS } from "../constants";
+
 vi.mock("@components/Player", () => ({
   closeMiniWindow: vi.fn(),
   openMiniWindow: vi.fn(() => Promise.resolve(true)),
@@ -106,6 +108,50 @@ describe("the autoplay tail of the queue", () => {
     expect(played.slice(-2)).toEqual(["r1", "r2"]);
     expect(played.slice(0, 3).sort()).toEqual(["a", "b", "c"]);
     expect([...after.shuffleOrder].sort((left, right) => left - right)).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  it("plays the autoplay tail after the listener's own picks when shuffle is turned on later", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    store.actions.appendAutoplay([track("r1"), track("r2")]);
+    const random = vi.spyOn(Math, "random").mockReturnValue(0);
+
+    store.actions.toggleShuffle();
+    random.mockRestore();
+
+    const after = store.getSnapshot();
+    const played = after.shuffleOrder.map((index) => after.queue[index]?.id);
+    expect(played[0]).toBe("a");
+    expect(played.slice(1, 3).sort()).toEqual(["b", "c"]);
+    expect(played.slice(3).sort()).toEqual(["r1", "r2"]);
+  });
+
+  it("keeps the radio going after a full queue's worth of plays, forgetting the oldest to stay within the cap", async () => {
+    const store = await freshStore();
+    const heard = Array.from({ length: MAX_QUEUE_TRACKS }, (_, at) => track(`t${at}`));
+    store.actions.playQueue(heard, 0);
+    store.actions.jumpTo(MAX_QUEUE_TRACKS - 1);
+
+    const outcome = store.actions.appendAutoplay([track("r1"), track("r2")]);
+
+    const after = store.getSnapshot();
+    expect(outcome.added).toBe(2);
+    expect(after.queue).toHaveLength(MAX_QUEUE_TRACKS);
+    expect(after.queue.slice(-2).map((entry) => entry.id)).toEqual(["r1", "r2"]);
+    expect(after.queue[after.index]?.id).toBe(`t${MAX_QUEUE_TRACKS - 1}`);
+  });
+
+  it("treats a radio track the listener queues again by hand as the listener's own pick", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a")], 0);
+    store.actions.appendAutoplay([track("r1"), track("r2")]);
+    store.actions.jumpTo(2);
+
+    store.actions.addToQueue([track("r1")]);
+
+    const after = store.getSnapshot();
+    expect(after.autoplayIds.has("r1")).toBe(false);
+    expect(after.queue.map((entry) => entry.id)).toEqual(["a", "r2", "r1"]);
   });
 
   it("forgets a radio track the listener removes", async () => {

@@ -63,6 +63,7 @@ function sessionAt(overrides: Partial<PlayerSessionState>): PlayerSessionState {
     notice: null,
     consecutiveFailures: 0,
     started: true,
+    halt: null,
     ...overrides,
   };
 }
@@ -144,6 +145,21 @@ describe("usePlayReporter", () => {
     listeners.forEach((listener) => listener());
 
     expect(recordPlay).toHaveBeenCalledWith({ trackId: "t2", startedSecondsAgo: 0, submission: false });
+  });
+
+  it("starts a fresh listen after a stop, so time heard before it never adds to time heard after", () => {
+    renderHook(() => usePlayReporter());
+    advanceTo(0);
+    playThrough(60);
+    session = sessionAt({ playing: false, positionSeconds: 0, halt: "stopped" });
+    listeners.forEach((listener) => listener());
+    recordPlay.mockClear();
+
+    advanceTo(0);
+    playThrough(40);
+
+    expect(recordPlay).toHaveBeenCalledWith({ trackId: "t1", startedSecondsAgo: 0, submission: false });
+    expect(recordPlay.mock.calls.filter(([input]) => input.submission)).toHaveLength(0);
   });
 
   it("treats a loop back to the top as a new play once the first one counted", () => {

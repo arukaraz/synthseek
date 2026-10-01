@@ -146,6 +146,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     fullscreen: false,
     consecutiveFailures: 0,
     started: false,
+    halt: null,
     sourceChoice: null,
     failedSources: null,
     ...overrides,

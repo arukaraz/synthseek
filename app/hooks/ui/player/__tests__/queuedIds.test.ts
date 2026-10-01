@@ -5,7 +5,7 @@ import type { PlayerTrack } from "@components/Player";
 vi.mock("@components/Player", () => ({
   closeMiniWindow: vi.fn(),
   openMiniWindow: vi.fn(() => Promise.resolve(true)),
-  nextRepeat: (repeat: string) => repeat,
+  nextRepeat: (repeat: string) => (repeat === "off" ? "all" : repeat === "all" ? "one" : "off"),
   restorablePlayerMode: () => "normal",
   shouldRestart: () => false,
 }));
@@ -80,6 +80,16 @@ describe("upcomingTrackIdsSnapshot", () => {
     store.actions.next();
 
     expect([...upcomingTrackIdsSnapshot()]).toEqual(["c"]);
+  });
+
+  it("counts the tracks repeat-all will bring round again, as soon as repeat-all is turned on", async () => {
+    const { store, upcomingTrackIdsSnapshot } = await freshModules();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 2);
+    expect(upcomingTrackIdsSnapshot().has("a")).toBe(false);
+
+    store.actions.cycleRepeat();
+
+    expect([...upcomingTrackIdsSnapshot()].sort()).toEqual(["a", "b"]);
   });
 
   it("returns the same reference across a republish that only moved the position", async () => {

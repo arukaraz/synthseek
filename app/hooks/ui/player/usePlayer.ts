@@ -78,7 +78,7 @@ export function usePlayerBottomDock(): PlayerDockState {
   return useSyncExternalStore(subscribe, bottomDockSnapshot, () => "hidden");
 }
 
-let upcomingFrom: { queue: unknown; index: number; shuffle: boolean; order: unknown } | null = null;
+let upcomingFrom: { queue: unknown; index: number; shuffle: boolean; order: unknown; repeat: unknown } | null = null;
 let upcomingIds: ReadonlySet<string> = new Set<string>();
 
 export function upcomingTrackIdsSnapshot(): ReadonlySet<string> {
@@ -88,13 +88,15 @@ export function upcomingTrackIdsSnapshot(): ReadonlySet<string> {
     upcomingFrom.queue !== session.queue ||
     upcomingFrom.index !== session.index ||
     upcomingFrom.shuffle !== session.shuffle ||
-    upcomingFrom.order !== session.shuffleOrder
+    upcomingFrom.order !== session.shuffleOrder ||
+    upcomingFrom.repeat !== session.repeat
   ) {
     upcomingFrom = {
       queue: session.queue,
       index: session.index,
       shuffle: session.shuffle,
       order: session.shuffleOrder,
+      repeat: session.repeat,
     };
     upcomingIds = upcomingQueueIds(session);
   }
@@ -265,6 +267,12 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
           actions.expectRemote({ playing: !playing });
         }
       : actions.togglePlay,
+    stop: mirroring
+      ? () => {
+          commandActive("stop");
+          actions.expectRemote({ playing: false, positionSeconds: 0 });
+        }
+      : actions.stop,
     next: mirroring ? () => commandActive("next") : actions.next,
     previous: mirroring ? () => commandActive("previous") : actions.previous,
     seekTo: mirroring
@@ -379,6 +387,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
       playingOn !== null && !session.playing ? mirroredPositionSeconds(playingOn, Date.now()) : session.positionSeconds,
     scrubSeconds: session.scrubSeconds,
     playing: sounding,
+    stopped: !mirroring && session.halt === "stopped",
     loading: mirroring ? false : session.loading,
     shuffle: mirroring && playingOn !== null ? playingOn.shuffle : session.shuffle,
     repeat: mirroring && playingOn !== null ? playingOn.repeat : session.repeat,

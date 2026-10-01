@@ -67,9 +67,12 @@ export interface PlayerSessionState {
   fullscreen: boolean;
   consecutiveFailures: number;
   started: boolean;
+  halt: PlayerHalt | null;
   sourceChoice: SourceChoice | null;
   failedSources: FailedSources | null;
 }
+
+export type PlayerHalt = "stopped" | "queueEnd";
 
 export interface SourceChoice {
   trackId: string;
@@ -285,6 +288,7 @@ export interface QueueAddOutcome {
 export type RemoteCommand =
   | "play"
   | "pause"
+  | "stop"
   | "next"
   | "previous"
   | "seek"

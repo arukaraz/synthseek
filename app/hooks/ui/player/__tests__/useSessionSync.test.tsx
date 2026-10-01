@@ -157,6 +157,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     fullscreen: false,
     consecutiveFailures: 0,
     started: true,
+    halt: null,
     sourceChoice: null,
     failedSources: null,
     ...overrides,
@@ -505,6 +506,40 @@ describe("saving the session as it moves", () => {
     publish();
 
     expect(api.save).toHaveBeenCalled();
+  });
+
+  it("saves the last held-back position once the interval ends, even when nothing moves after it", () => {
+    vi.useFakeTimers();
+    renderHook(() => usePlayerSessionSync());
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000 };
+    publish();
+    api.save.mockClear();
+
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    publish();
+    expect(api.save).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(SESSION_SAVE_INTERVAL_MS);
+
+    expect(api.save).toHaveBeenCalledWith(
+      { trackIds: ["a"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0 },
+      expect.anything()
+    );
+  });
+
+  it("drops the held-back save when the player goes away before the interval ends", () => {
+    vi.useFakeTimers();
+    const { unmount } = renderHook(() => usePlayerSessionSync());
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000 };
+    publish();
+    api.save.mockClear();
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    publish();
+
+    unmount();
+    vi.advanceTimersByTime(SESSION_SAVE_INTERVAL_MS);
+
+    expect(api.save).not.toHaveBeenCalled();
   });
 
   it("saves on the way out, whatever the interval says", () => {
