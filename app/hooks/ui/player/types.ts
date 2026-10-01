@@ -228,8 +228,17 @@ export interface PcmSource {
   durationSeconds: number | null;
   sampleRate: number;
   trimStartSeconds: number;
-  buffers: (fromSeconds: number) => AsyncGenerator<PcmBuffer, void, unknown>;
+  buffers: (fromSeconds: number, targetRate: number) => AsyncGenerator<PcmBuffer, void, unknown>;
   dispose: () => void;
+}
+
+export interface ResamplerState {
+  sourceRate: number;
+  targetRate: number;
+  channels: number;
+  nextOutput: number;
+  inputFrames: number;
+  previous: number[] | null;
 }
 
 export interface BufferClip {

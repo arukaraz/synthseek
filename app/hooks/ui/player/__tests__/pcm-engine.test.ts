@@ -36,6 +36,7 @@ const sources = vi.hoisted(() => ({
   >(),
   opened: [] as string[],
   disposed: [] as string[],
+  requestedRates: [] as number[],
 }));
 
 vi.mock("../energy", () => energy);
@@ -51,7 +52,8 @@ vi.mock("../pcm-source", () => ({
       durationSeconds: spec.unknownLength === true ? null : spec.duration,
       sampleRate: 44100,
       trimStartSeconds: spec.trim,
-      buffers: async function* (fromSeconds: number): AsyncGenerator<PcmBuffer, void, unknown> {
+      buffers: async function* (fromSeconds: number, targetRate: number): AsyncGenerator<PcmBuffer, void, unknown> {
+        sources.requestedRates.push(targetRate);
         let yielded = 0;
         if (spec.firstAfterMs !== undefined) {
           await new Promise((resolve) => setTimeout(resolve, spec.firstAfterMs));
@@ -191,6 +193,7 @@ beforeEach(() => {
   sources.specs.clear();
   sources.opened.length = 0;
   sources.disposed.length = 0;
+  sources.requestedRates.length = 0;
   context = new FakeContext();
   vi.stubGlobal(
     "AudioContext",
@@ -214,6 +217,16 @@ describe("feeding one track into the graph", () => {
     engine.loadAndPlay(A, 1, false);
 
     expect(context.gains.length).toBeGreaterThan(0);
+  });
+
+  it("asks for the decoded audio at the context's own rate, never the file's, so no buffer is resampled on its own", async () => {
+    const { engine } = await freshEngine();
+
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+
+    expect(sources.requestedRates.length).toBeGreaterThan(0);
+    expect(sources.requestedRates.every((rate) => rate === context.sampleRate)).toBe(true);
   });
 
   it("schedules each decoded buffer on the audio clock, sample-aligned, from a small lead", async () => {

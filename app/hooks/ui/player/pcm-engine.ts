@@ -161,7 +161,7 @@ function startVoice(voice: Voice, fromSeconds: number, baseTime?: number): void 
 
 async function feed(voice: Voice, fromSeconds: number): Promise<void> {
   const context = voice.bus.context;
-  const iterator = voice.source.buffers(fromSeconds);
+  const iterator = voice.source.buffers(fromSeconds, context.sampleRate);
   voice.iterator = iterator;
   try {
     for await (const { buffer, timestamp, duration } of iterator) {

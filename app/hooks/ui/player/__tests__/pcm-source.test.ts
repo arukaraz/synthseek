@@ -221,7 +221,8 @@ describe("opening a stream as decoded audio", () => {
     expect(opened.durationSeconds).toBe(200);
     expect(opened.sampleRate).toBe(44100);
     expect(opened.trimStartSeconds).toBe(0);
-    expect(opened.buffers(5)).toBe("buffers from 5");
+    opened.buffers(5, 44100);
+    expect(media.sinks[0]?.buffers).toHaveBeenCalledWith(5);
     expect(media.sinks[0]?.track).toBe(media.track);
   });
 
@@ -242,7 +243,8 @@ describe("opening a stream as decoded audio", () => {
     );
     expect(opened.durationSeconds).toBe(100);
     expect(opened.trimStartSeconds).toBe(0.025);
-    expect(opened.buffers(5)).toBe("buffers from 5.025");
+    opened.buffers(5, 44100);
+    expect(media.sinks[0]?.buffers).toHaveBeenCalledWith(5.025);
   });
 
   it("reads past a large ID3 block, the artwork most files carry, with a second range request", async () => {
@@ -407,5 +409,89 @@ describe("opening a stream as decoded audio", () => {
     opened.dispose();
 
     expect(media.inputs[0]?.dispose).toHaveBeenCalledTimes(1);
+  });
+});
+
+class FakeAudioBuffer {
+  readonly length: number;
+  readonly numberOfChannels: number;
+  readonly sampleRate: number;
+  private readonly planes: Float32Array[];
+
+  constructor(options: { length: number; numberOfChannels: number; sampleRate: number }) {
+    this.length = options.length;
+    this.numberOfChannels = options.numberOfChannels;
+    this.sampleRate = options.sampleRate;
+    this.planes = Array.from({ length: options.numberOfChannels }, () => new Float32Array(options.length));
+  }
+
+  getChannelData(channel: number): Float32Array {
+    return this.planes[channel] ?? new Float32Array(0);
+  }
+
+  copyToChannel(source: Float32Array, channel: number): void {
+    this.planes[channel]?.set(source);
+  }
+}
+
+function decodedChunk(rate: number, frames: number, timestamp: number) {
+  const buffer = new AudioBuffer({ length: frames, numberOfChannels: 2, sampleRate: rate });
+  buffer.getChannelData(0).fill(0.5);
+  buffer.getChannelData(1).fill(-0.5);
+  return { buffer, timestamp, duration: frames / rate };
+}
+
+async function* decodedStream(rate: number, chunks: number, frames: number, from: number) {
+  for (let at = 0; at < chunks; at += 1) yield decodedChunk(rate, frames, from + (at * frames) / rate);
+}
+
+async function collected<T>(stream: AsyncIterable<T>): Promise<T[]> {
+  const out: T[] = [];
+  for await (const item of stream) out.push(item);
+  return out;
+}
+
+describe("handing decoded audio to the context at its own rate", () => {
+  beforeEach(() => {
+    vi.stubGlobal("AudioBuffer", FakeAudioBuffer);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("passes audio already at the context's rate through untouched", async () => {
+    const source = await fresh();
+    const original = await collected(decodedStream(48_000, 3, 1152, 10));
+
+    const handed = await collected(source.atContextRate(decodedStream(48_000, 3, 1152, 10), 48_000));
+
+    expect(handed.map((chunk) => chunk.timestamp)).toEqual(original.map((chunk) => chunk.timestamp));
+    expect(handed.every((chunk) => chunk.buffer.sampleRate === 48_000 && chunk.buffer.length === 1152)).toBe(true);
+  });
+
+  it("resamples every chunk to the context's rate and lays them end to end on whole samples", async () => {
+    const source = await fresh();
+
+    const handed = await collected(source.atContextRate(decodedStream(48_000, 41, 1152, 10), 44_100));
+
+    expect(handed.every((chunk) => chunk.buffer.sampleRate === 44_100)).toBe(true);
+    for (const [at, chunk] of handed.entries()) {
+      const offsetSamples = (chunk.timestamp - 10) * 44_100;
+      expect(Math.abs(offsetSamples - Math.round(offsetSamples))).toBeLessThan(1e-6);
+      const next = handed[at + 1];
+      if (next !== undefined) expect(next.timestamp).toBeCloseTo(chunk.timestamp + chunk.buffer.length / 44_100, 9);
+    }
+    const total = handed.reduce((sum, chunk) => sum + chunk.buffer.length, 0);
+    expect(total).toBe(Math.ceil((41 * 1152 * 44_100) / 48_000));
+  });
+
+  it("keeps each channel's own signal through the conversion", async () => {
+    const source = await fresh();
+
+    const handed = await collected(source.atContextRate(decodedStream(48_000, 2, 1152, 0), 44_100));
+
+    expect(handed[0]?.buffer.getChannelData(0)[100]).toBeCloseTo(0.5, 6);
+    expect(handed[0]?.buffer.getChannelData(1)[100]).toBeCloseTo(-0.5, 6);
   });
 });

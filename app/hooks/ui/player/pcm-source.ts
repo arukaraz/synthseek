@@ -9,9 +9,51 @@ import {
   RANGE_NOT_SATISFIABLE_STATUS,
 } from "./constants";
 import { gaplessInfoFrom, id3Length, trimFor } from "./lame";
-import type { PcmSource, PcmTransport, PcmTrim } from "./types";
+import { flushResampler, resampleChunk, startResampler } from "./pcm-resample";
+import type { PcmBuffer, PcmSource, PcmTransport, PcmTrim, ResamplerState } from "./types";
 
 class RefusedRead extends Error {}
+
+function planesOf(buffer: AudioBuffer): Float32Array[] {
+  return Array.from({ length: buffer.numberOfChannels }, (_, channel) => buffer.getChannelData(channel));
+}
+
+function pcmBufferFrom(planes: readonly Float32Array[], sampleRate: number, timestamp: number): PcmBuffer | null {
+  const length = planes[0]?.length ?? 0;
+  if (length === 0) return null;
+  const buffer = new AudioBuffer({ length, numberOfChannels: planes.length, sampleRate });
+  planes.forEach((plane, channel) => buffer.copyToChannel(Float32Array.from(plane), channel));
+  return { buffer, timestamp, duration: length / sampleRate };
+}
+
+export async function* atContextRate(
+  decoded: AsyncIterable<PcmBuffer>,
+  targetRate: number
+): AsyncGenerator<PcmBuffer, void, unknown> {
+  let state: ResamplerState | null = null;
+  let origin = 0;
+  for await (const chunk of decoded) {
+    if (state === null && chunk.buffer.sampleRate === targetRate) {
+      yield chunk;
+      continue;
+    }
+    if (state === null) {
+      state = startResampler(chunk.buffer.sampleRate, targetRate, chunk.buffer.numberOfChannels);
+      origin = chunk.timestamp;
+    }
+    const firstOutput = state.nextOutput;
+    const resampled = pcmBufferFrom(
+      resampleChunk(state, planesOf(chunk.buffer)),
+      targetRate,
+      origin + firstOutput / targetRate
+    );
+    if (resampled !== null) yield resampled;
+  }
+  if (state === null) return;
+  const firstOutput = state.nextOutput;
+  const tail = pcmBufferFrom(flushResampler(state), targetRate, origin + firstOutput / targetRate);
+  if (tail !== null) yield tail;
+}
 
 function requestedStart(init?: RequestInit): number | null {
   const range = new Headers(init?.headers).get("Range");
@@ -110,7 +152,8 @@ export async function openPcmSource(url: string): Promise<PcmSource> {
         rawDuration === null || trim === null ? rawDuration : Math.min(rawDuration, trim.durationSeconds),
       sampleRate,
       trimStartSeconds: trim?.startSeconds ?? 0,
-      buffers: (fromSeconds) => sink.buffers(fromSeconds + (trim?.startSeconds ?? 0)),
+      buffers: (fromSeconds, targetRate) =>
+        atContextRate(sink.buffers(fromSeconds + (trim?.startSeconds ?? 0)), targetRate),
       dispose: () => input.dispose(),
     };
   } catch (error) {
