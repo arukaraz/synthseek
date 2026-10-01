@@ -2,6 +2,59 @@
 
 ---
 
+# v2.8.1, October 1, 2026
+
+> [!NOTE]
+> After updating, Synthseek recounts the progress of every album once, in the background. An album that showed as unfinished although all of its tracks were there now shows as complete.
+
+### Download quotas, a Stop button, and a server that starts anyway
+
+- Administrators can limit how many tracks each member downloads over a number of days, how much storage each member's music can take, and how big the whole library can grow. Set the limits under Settings, Members, and give any member their own.
+- Members see how much of their quota they have used in their Profile, and a request that would go over it is turned down with the reason.
+- Administrators and trusted members are not limited by member quotas. The library limit applies to everyone.
+
+---
+
+### Starting up
+
+- Synthseek now starts even when it cannot write to the downloads or music folder, or reach the music catalog. Downloads wait until the problem is fixed, and a System status page under Settings, Maintenance says what is wrong and how to fix it.
+
+---
+
+### Player
+
+- A Stop button, next to Previous. It stops the music and goes back to the start of the track, and keeps your queue.
+- Clear the whole queue from the button at the top of the queue, after confirming.
+- The queue holds up to 5,000 tracks, so long playlists play whole.
+- With repeat on for the whole queue, the queue shows the tracks that will play again after the last one.
+- On Android the player now shows on the lock screen and in the notification, and pauses for a phone call.
+
+---
+
+### Changes
+
+- Messages about an integration that is not set up now say where to set it up in Settings.
+- Account and password fields say what they expect.
+
+---
+
+### Fixes
+
+- Calm tracks, such as meditation or frequency music, no longer play with a crackle of static on some devices.
+- Once a long queue had played out, adding more could say the queue was full. You can now keep adding.
+- After the queue ends, pressing play starts what you added since, instead of the last song again.
+- With shuffle on, autoplay's songs now play after the ones you picked, as the queue shows, and a song added during shuffle is no longer skipped.
+- Autoplay no longer stops on a long queue.
+- The player remembers where you paused or stopped, even if you switch to another device right away.
+- Pausing a track while it is still loading now keeps it paused.
+- Live updates in the app no longer stop after a page has been open for a while.
+- Album progress stays correct when the library scan finds a file, or when a track leaves an album.
+- A download that finished just as it was retried could stay stuck on importing. That no longer happens.
+- A scheduled job no longer tries to start while you are running it by hand.
+- Notifications no longer hide behind the navigation bar on phones, and long integration messages no longer spill out of their row.
+
+---
+
 # v2.8.0, September 28, 2026
 
 > [!NOTE]
