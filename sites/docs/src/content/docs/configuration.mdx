@@ -58,6 +58,8 @@ Everyone can send to Discord, ntfy and Telegram. Administrators can also send JS
 
 A notification goes out when something changes, so a pass that changed nothing sends nothing. Messages are written in the member's language.
 
+On Discord, ntfy and Telegram, a download notice shows the cover art when there is one. Once `PUBLIC_BASE_URL` is an HTTPS address, every notification on those three also links to the page it is about.
+
 | Setting                 | Default | What it does                                                                           |
 | ----------------------- | ------- | -------------------------------------------------------------------------------------- |
 | ntfy server for members | Empty   | **Admin only.** A second ntfy server members may use. Without it, members use ntfy.sh. |
@@ -250,9 +252,9 @@ Two live where you use them rather than in a settings section.
 
 ### Public reachability
 
-| Variable          | What it is                                                                                                                                                                                               |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PUBLIC_BASE_URL` | The public HTTPS address this instance is reachable at. Required for assistant connectors and for the Spotify OAuth callback, both of which call back over the internet. Leave empty for local-only use. |
+| Variable          | What it is                                                                                                                                                                                                                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PUBLIC_BASE_URL` | The public HTTPS address this instance is reachable at. Required for assistant connectors and for the Spotify OAuth callback, both of which call back over the internet. Discord, ntfy and Telegram notifications link back to it. Leave empty for local-only use. |
 
 ### Bootstrap credentials
 
