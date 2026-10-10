@@ -9,6 +9,7 @@ import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { stageFlip as stageFlipVariants, stageFade } from "@utils/animations";
 
+import { MiniPlayer } from "./MiniPlayer";
 import { PlayerLyrics } from "./PlayerLyrics";
 import { PlayerTransport } from "./PlayerTransport";
 import { PlayerVolume } from "./PlayerVolume";
@@ -18,8 +19,8 @@ import { StageChips } from "./StageChips";
 import { StageController } from "./StageController";
 import { StageDrawer } from "./StageDrawer";
 import { TrackCover } from "./TrackCover";
-import { FULLSCREEN_TOGGLE_SELECTOR, STAGE_WIDE_QUERY } from "./constants";
-import { formatClock, labelled, returnFocusTo, trackInitials } from "./helpers";
+import { FULLSCREEN_TOGGLE_SELECTOR, OPEN_TRACK_SELECTOR, STAGE_SHORT_QUERY, STAGE_WIDE_QUERY } from "./constants";
+import { formatClock, labelled, returnFocusTo, stageLayout, trackInitials } from "./helpers";
 import {
   clock,
   iconButton,
@@ -50,7 +51,8 @@ export function PlayerStage({ view, actions }: PlayerProps) {
   const reduceMotion = useReducedMotion() === true;
   const faceVariants = reduceMotion ? stageFade : stageFlipVariants;
   const wide = useMediaQuery(STAGE_WIDE_QUERY);
-  const layout = wide ? "wide" : "compact";
+  const short = useMediaQuery(STAGE_SHORT_QUERY);
+  const layout = stageLayout(wide, short);
   const [drawer, setDrawer] = useState<StageDrawerName | null>(null);
   const cover = (
     <TrackCover
@@ -74,7 +76,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
         aria-describedby={undefined}
         onCloseAutoFocus={(event) => {
           event.preventDefault();
-          returnFocusTo(FULLSCREEN_TOGGLE_SELECTOR);
+          returnFocusTo(FULLSCREEN_TOGGLE_SELECTOR, OPEN_TRACK_SELECTOR);
         }}
       >
         <DialogTitle className={srOnly()}>{view.track.title}</DialogTitle>
@@ -92,84 +94,98 @@ export function PlayerStage({ view, actions }: PlayerProps) {
           </button>
         </div>
 
-        <div className={stageMain({ layout })}>
-          <div className={stageFlip()}>
-            <AnimatePresence mode="wait" initial={false}>
-              {view.lyricsOpen ? (
-                <motion.div
-                  key="lyrics"
-                  className={stageFace()}
-                  variants={faceVariants}
-                  initial="enterFromRight"
-                  animate="settled"
-                  exit="leaveToRight"
-                >
-                  <PlayerLyrics view={view} actions={actions} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="track"
-                  className={stageFace({ layout: wide ? "track" : "compact" })}
-                  variants={faceVariants}
-                  initial="enterFromLeft"
-                  animate="settled"
-                  exit="leaveToLeft"
-                >
-                  {wide ? cover : <div className={stageCoverSlot()}>{cover}</div>}
-                  <div className={stageMeta()}>
-                    <h2 className={stageTitle()}>{view.track.title}</h2>
-                    <p className={stageArtist()}>{view.track.artist}</p>
-                    <p className={stageAlbum()}>{view.track.album}</p>
-                    {view.activeDevice.local ? null : (
-                      <p className={stageDeviceLine()}>
-                        <MonitorSpeaker className="size-3.5 shrink-0" />
-                        {view.activeDevice.name}
-                      </p>
-                    )}
-                    {wide ? (
-                      <>
-                        <StageChips view={view} />
-                        <div className={stageActions()}>
-                          <StageActions view={view} actions={actions} />
-                        </div>
-                      </>
-                    ) : null}
-                  </div>
-                </motion.div>
+        {layout === "landscape" ? (
+          <div className={stageMain({ layout })}>
+            {view.lyricsOpen ? (
+              <div className={stageFace()}>
+                <PlayerLyrics view={view} actions={actions} />
+              </div>
+            ) : (
+              <MiniPlayer view={view} actions={actions} placement="stage" />
+            )}
+          </div>
+        ) : (
+          <>
+            <div className={stageMain({ layout })}>
+              <div className={stageFlip()}>
+                <AnimatePresence mode="wait" initial={false}>
+                  {view.lyricsOpen ? (
+                    <motion.div
+                      key="lyrics"
+                      className={stageFace()}
+                      variants={faceVariants}
+                      initial="enterFromRight"
+                      animate="settled"
+                      exit="leaveToRight"
+                    >
+                      <PlayerLyrics view={view} actions={actions} />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="track"
+                      className={stageFace({ layout: wide ? "track" : "compact" })}
+                      variants={faceVariants}
+                      initial="enterFromLeft"
+                      animate="settled"
+                      exit="leaveToLeft"
+                    >
+                      {wide ? cover : <div className={stageCoverSlot()}>{cover}</div>}
+                      <div className={stageMeta()}>
+                        <h2 className={stageTitle()}>{view.track.title}</h2>
+                        <p className={stageArtist()}>{view.track.artist}</p>
+                        <p className={stageAlbum()}>{view.track.album}</p>
+                        {view.activeDevice.local ? null : (
+                          <p className={stageDeviceLine()}>
+                            <MonitorSpeaker className="size-3.5 shrink-0" />
+                            {view.activeDevice.name}
+                          </p>
+                        )}
+                        {wide ? (
+                          <>
+                            <StageChips view={view} />
+                            <div className={stageActions()}>
+                              <StageActions view={view} actions={actions} />
+                            </div>
+                          </>
+                        ) : null}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              {wide ? null : (
+                <StageDrawer open={drawer === "info"}>
+                  <StageChips view={view} />
+                </StageDrawer>
               )}
-            </AnimatePresence>
-          </div>
-          {wide ? null : (
-            <StageDrawer open={drawer === "info"}>
-              <StageChips view={view} />
-            </StageDrawer>
-          )}
-        </div>
+            </div>
 
-        <div className={stageFooter({ layout })}>
-          {wide ? (
-            <div className={stageTransport()}>
-              <PlayerTransport view={view} actions={actions} size="stage" />
+            <div className={stageFooter({ layout })}>
+              {wide ? (
+                <div className={stageTransport()}>
+                  <PlayerTransport view={view} actions={actions} size="stage" />
+                </div>
+              ) : null}
+              <div className={stageScrubRow()}>
+                <span className={clock({ size: "stage", align: "right" })}>{formatClock(view.positionSeconds)}</span>
+                <PlayerWave view={view} actions={actions} size="stage" />
+                <span className={clock({ size: "stage" })}>{formatClock(view.track.durationSeconds)}</span>
+              </div>
+              {wide ? (
+                <div className={stageVolume()}>
+                  <PlayerVolume view={view} actions={actions} size="stage" />
+                </div>
+              ) : (
+                <StageController
+                  view={view}
+                  actions={actions}
+                  drawer={drawer}
+                  onToggle={(next) => setDrawer((current) => (current === next ? null : next))}
+                />
+              )}
             </div>
-          ) : null}
-          <div className={stageScrubRow()}>
-            <span className={clock({ size: "stage", align: "right" })}>{formatClock(view.positionSeconds)}</span>
-            <PlayerWave view={view} actions={actions} size="stage" />
-            <span className={clock({ size: "stage" })}>{formatClock(view.track.durationSeconds)}</span>
-          </div>
-          {wide ? (
-            <div className={stageVolume()}>
-              <PlayerVolume view={view} actions={actions} size="stage" />
-            </div>
-          ) : (
-            <StageController
-              view={view}
-              actions={actions}
-              drawer={drawer}
-              onToggle={(next) => setDrawer((current) => (current === next ? null : next))}
-            />
-          )}
-        </div>
+          </>
+        )}
       </DialogSurface>
     </Dialog>
   );

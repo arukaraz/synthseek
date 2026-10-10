@@ -300,7 +300,14 @@ export interface PlayerTransportProps extends PlayerProps {
 
 export interface PlayerExtraControlsProps extends PlayerProps {
   omitTransport?: boolean;
+  onStage?: boolean;
 }
+
+export interface MiniPlayerProps extends PlayerProps {
+  placement?: "window" | "stage";
+}
+
+export type StageLayout = "wide" | "compact" | "landscape";
 
 export type PlayerQueueBodyProps = PlayerProps;
 

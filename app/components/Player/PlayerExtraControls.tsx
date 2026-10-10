@@ -11,7 +11,12 @@ import { ScrobbleStatus } from "./ScrobbleStatus";
 import { iconButton } from "./styles";
 import type { PlayerExtraControlsProps } from "./types";
 
-export function PlayerExtraControls({ view, actions, omitTransport = false }: PlayerExtraControlsProps) {
+export function PlayerExtraControls({
+  view,
+  actions,
+  omitTransport = false,
+  onStage = false,
+}: PlayerExtraControlsProps) {
   const { t } = useTranslation("player");
 
   return (
@@ -64,7 +69,7 @@ export function PlayerExtraControls({ view, actions, omitTransport = false }: Pl
         </button>
       )}
       <PlayerVolume view={view} actions={actions} size="bar" />
-      {view.mode === "mini" ? null : (
+      {view.mode === "mini" || onStage ? null : (
         <button
           type="button"
           className={iconButton({ tone: view.queueOpen ? "active" : "muted" })}
@@ -86,7 +91,7 @@ export function PlayerExtraControls({ view, actions, omitTransport = false }: Pl
       >
         <MonitorSpeaker className="@player:size-4 size-5" />
       </button>
-      {view.mode === "normal" ? (
+      {onStage ? null : view.mode === "normal" ? (
         <button
           type="button"
           className={iconButton()}

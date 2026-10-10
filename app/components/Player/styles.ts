@@ -524,7 +524,15 @@ export const queueRowArtist = cva("text-fg-muted min-w-0 truncate text-[11px] le
 
 export const queueEmpty = cva("text-fg-muted px-1 py-3 text-[12px]");
 
-export const miniRoot = cva("bg-surface text-fg flex h-screen w-screen flex-col overflow-hidden");
+export const miniRoot = cva("text-fg flex flex-col overflow-hidden", {
+  variants: {
+    placement: {
+      window: "bg-surface h-screen w-screen",
+      stage: "relative mx-auto my-auto w-full max-w-[30rem]",
+    },
+  },
+  defaultVariants: { placement: "window" },
+});
 
 export const miniHeader = cva("flex shrink-0 items-center gap-3 px-3.5 pt-3 pb-1");
 
@@ -534,7 +542,26 @@ export const miniTitle = cva("text-fg truncate text-[13.5px] leading-tight font-
 
 export const miniArtist = cva("text-fg-muted truncate text-[11.5px] leading-tight");
 
-export const miniTransport = cva("flex shrink-0 items-center justify-center gap-3.5 px-3.5 py-1");
+export const miniTransport = cva(
+  "grid shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3.5 px-3.5 py-1"
+);
+
+export const transportSide = cva("", {
+  variants: {
+    layout: {
+      inline: "contents",
+      centred: "flex items-center gap-3.5",
+    },
+    at: {
+      start: "",
+      end: "",
+    },
+  },
+  compoundVariants: [
+    { layout: "centred", at: "start", class: "justify-end" },
+    { layout: "centred", at: "end", class: "justify-start" },
+  ],
+});
 
 export const miniProgress = cva("flex w-full min-w-0 shrink-0 items-center gap-2.5 px-3.5");
 
@@ -588,6 +615,7 @@ export const stageMain = cva(
       layout: {
         wide: "",
         compact: "pt-14",
+        landscape: "py-4",
       },
     },
     defaultVariants: { layout: "wide" },

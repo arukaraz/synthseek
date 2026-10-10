@@ -23,6 +23,7 @@ import type {
   PlayerRepeat,
   PlayerTrack,
   PlayerView,
+  StageLayout,
   WaveCanvas,
   WaveColors,
   WavePaint,
@@ -275,8 +276,16 @@ export function visibleMatch(selector: string): HTMLElement | null {
   );
 }
 
-export function returnFocusTo(selector: string): void {
-  visibleMatch(selector)?.focus();
+export function stageLayout(wide: boolean, short: boolean): StageLayout {
+  if (short) return "landscape";
+  return wide ? "wide" : "compact";
+}
+
+export function returnFocusTo(...selectors: string[]): void {
+  selectors
+    .map((selector) => visibleMatch(selector))
+    .find((match) => match !== null)
+    ?.focus();
 }
 
 export function lyricLineState(

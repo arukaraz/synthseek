@@ -30,21 +30,22 @@ import {
   miniTransport,
   iconButton,
 } from "./styles";
-import type { PlayerProps } from "./types";
+import type { MiniPlayerProps } from "./types";
 
-export function MiniPlayer({ view, actions }: PlayerProps) {
+export function MiniPlayer({ view, actions, placement = "window" }: MiniPlayerProps) {
   const { t } = useTranslation("player");
   const router = useRouter();
   const [controlsOpen, setControlsOpen] = useState(false);
+  const inWindow = placement === "window";
 
   const toggleControls = () => {
     const next = !controlsOpen;
     setControlsOpen(next);
-    ensureMiniHeight(MINI_COLLAPSED_HEIGHT_PX + (next ? MINI_EXTRAS_HEIGHT_PX : 0));
+    if (inWindow) ensureMiniHeight(MINI_COLLAPSED_HEIGHT_PX + (next ? MINI_EXTRAS_HEIGHT_PX : 0));
   };
 
   return (
-    <div className={miniRoot()}>
+    <div className={miniRoot({ placement })}>
       <div className={miniHeader()}>
         <TrackCover
           initials={trackInitials(view.track.album)}
@@ -84,25 +85,28 @@ export function MiniPlayer({ view, actions }: PlayerProps) {
 
       {controlsOpen ? (
         <div className={miniExtras()}>
-          <PlayerExtraControls view={view} actions={actions} omitTransport />
+          <PlayerExtraControls view={view} actions={actions} omitTransport onStage={!inWindow} />
         </div>
       ) : null}
 
-      <QueueBody view={view} actions={actions} />
-
-      <div className={miniFooter()}>
-        <button
-          type="button"
-          className={miniLibraryButton()}
-          onClick={() => {
-            router.push(MINI_QUEUE_ROUTE);
-            window.focus();
-          }}
-        >
-          <Library className="size-4" />
-          {t("mini.openLibrary")}
-        </button>
-      </div>
+      {inWindow ? (
+        <>
+          <QueueBody view={view} actions={actions} />
+          <div className={miniFooter()}>
+            <button
+              type="button"
+              className={miniLibraryButton()}
+              onClick={() => {
+                router.push(MINI_QUEUE_ROUTE);
+                window.focus();
+              }}
+            >
+              <Library className="size-4" />
+              {t("mini.openLibrary")}
+            </button>
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }

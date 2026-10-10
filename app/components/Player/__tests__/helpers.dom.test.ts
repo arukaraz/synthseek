@@ -62,6 +62,32 @@ describe("returnFocusTo", () => {
     expect(document.activeElement).toBe(toggle);
   });
 
+  it("falls back to the next control in order when the first one is out of sight", () => {
+    addCandidate(0, "visible");
+    const fallback = document.createElement("button");
+    fallback.setAttribute("data-fallback-probe", "");
+    fallback.getBoundingClientRect = () => new DOMRect(0, 0, 40, 20);
+    document.body.appendChild(fallback);
+
+    returnFocusTo(SELECTOR, "[data-fallback-probe]");
+
+    expect(document.activeElement).toBe(fallback);
+    fallback.remove();
+  });
+
+  it("prefers the first control in order when both are on screen", () => {
+    const first = addCandidate(40, "visible");
+    const fallback = document.createElement("button");
+    fallback.setAttribute("data-fallback-probe", "");
+    fallback.getBoundingClientRect = () => new DOMRect(0, 0, 40, 20);
+    document.body.appendChild(fallback);
+
+    returnFocusTo(SELECTOR, "[data-fallback-probe]");
+
+    expect(document.activeElement).toBe(first);
+    fallback.remove();
+  });
+
   it("leaves the focus alone when the control is no longer on screen", () => {
     addCandidate(0, "visible");
     const elsewhere = document.createElement("button");

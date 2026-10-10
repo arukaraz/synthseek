@@ -13,6 +13,7 @@ import {
   secondsFromPointer,
   shouldRestart,
   softLimit,
+  stageLayout,
   trackInitials,
   waveEnvelope,
   wavePhase,
@@ -21,6 +22,18 @@ import {
 function rect(left: number, width: number): DOMRect {
   return { left, width, top: 0, right: left + width, bottom: 0, height: 0, x: left, y: 0, toJSON: () => ({}) };
 }
+
+describe("stageLayout", () => {
+  it("lays a short sideways screen out like the mini player, however wide it is", () => {
+    expect(stageLayout(true, true)).toBe("landscape");
+    expect(stageLayout(false, true)).toBe("landscape");
+  });
+
+  it("uses the row layout on a wide screen and the ring on a narrow one", () => {
+    expect(stageLayout(true, false)).toBe("wide");
+    expect(stageLayout(false, false)).toBe("compact");
+  });
+});
 
 describe("effectivePlayerMode", () => {
   const node = document.createElement("div");

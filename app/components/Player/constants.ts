@@ -103,6 +103,8 @@ export const QUEUE_TOGGLE_SELECTOR = `[data-player-queue-toggle], ${MORE_TOGGLE_
 
 export const FULLSCREEN_TOGGLE_SELECTOR = "[data-player-fullscreen-toggle]";
 
+export const OPEN_TRACK_SELECTOR = "[data-player-open-track]";
+
 export const SELECTABLE_PLAYER_MODES = ["compact", "mini"] as const;
 
 export const RESTORABLE_PLAYER_MODES: readonly PlayerMode[] = ["normal", "compact"];
@@ -165,6 +167,7 @@ export const TRANSPORT_METRICS = {
     arrow: "size-4",
     face: "size-3.5",
     folds: "@player:grid hidden",
+    sides: "inline",
   },
   stage: {
     side: "stage",
@@ -174,6 +177,7 @@ export const TRANSPORT_METRICS = {
     arrow: "size-5",
     face: "size-4.5",
     folds: undefined,
+    sides: "inline",
   },
   mini: {
     side: undefined,
@@ -183,6 +187,7 @@ export const TRANSPORT_METRICS = {
     arrow: "size-4",
     face: "size-3.5",
     folds: undefined,
+    sides: "centred",
   },
 } as const;
 
@@ -197,6 +202,8 @@ export const PANEL_VIEWPORT_MARGIN_PX = 12;
 export const HEADER_SLOT_QUERY = `(min-width: ${PLAYER_CONTAINER_REM}rem)`;
 
 export const STAGE_WIDE_QUERY = "(min-width: 40rem)";
+
+export const STAGE_SHORT_QUERY = "(orientation: landscape) and (max-height: 31.25rem)";
 
 export const LYRIC_SCROLL_SPRING = { type: "spring", stiffness: 110, damping: 24, mass: 0.7 } as const;
 

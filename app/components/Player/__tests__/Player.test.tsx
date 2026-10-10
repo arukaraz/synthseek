@@ -17,13 +17,18 @@ class FakeResizeObserver {
 }
 
 let wideScreen = true;
+let shortScreen = false;
 
 function stubMatchMedia(): void {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     configurable: true,
     value: (query: string) => ({
-      matches: query.includes("prefers-reduced-motion") ? false : wideScreen,
+      matches: query.includes("prefers-reduced-motion")
+        ? false
+        : query.includes("max-height")
+          ? shortScreen
+          : wideScreen,
       media: query,
       onchange: null,
       addListener: vi.fn(),
@@ -44,6 +49,7 @@ function renderPlayer(overrides: Partial<PlayerView> = {}) {
 
 beforeEach(() => {
   wideScreen = true;
+  shortScreen = false;
   vi.stubGlobal("ResizeObserver", FakeResizeObserver);
   stubMatchMedia();
 });
@@ -664,6 +670,69 @@ describe("the full stage on a phone", () => {
 
     expect(screen.getByRole("button", { name: enPlayer.controls.info }).querySelector("span")).toBeNull();
     expect(screen.getByRole("button", { name: enPlayer.controls.more }).querySelector("span")).toBeNull();
+  });
+
+  it("hands the focus back to the cover on leaving, since the full screen button is hidden on a phone", async () => {
+    const rect = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (
+      this: HTMLElement
+    ) {
+      return new DOMRect(0, 0, this.hasAttribute("data-player-open-track") ? 40 : 0, 20);
+    });
+    const { rerender, actions, view } = renderPlayer({ fullscreen: true });
+
+    rerender(<Player view={{ ...view, fullscreen: false }} actions={actions} />);
+
+    await waitFor(() => expect(screen.getByRole("button", { name: enPlayer.controls.openTrack })).toHaveFocus());
+    rect.mockRestore();
+  });
+});
+
+describe("the full stage on a phone held sideways", () => {
+  beforeEach(() => {
+    shortScreen = true;
+  });
+
+  it("lays the stage out like the mini player, transport first and extras folded away", () => {
+    renderPlayer({ fullscreen: true });
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.play })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enPlayer.mini.showControls })).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("button", { name: enPlayer.controls.more })).not.toBeInTheDocument();
+  });
+
+  it("leaves out the queue and the way back to the library, which the app behind already has", () => {
+    const next = createPlayerTrack({ id: "aero", title: "Aerodynamic" });
+    renderPlayer({
+      fullscreen: true,
+      queue: {
+        playing: { index: 0, track: createPlayerTrack() },
+        upNext: [{ index: 1, track: next }],
+        autoplay: [],
+        loop: [],
+      },
+    });
+
+    expect(screen.queryByText(enPlayer.queue.nowPlaying)).not.toBeInTheDocument();
+    expect(screen.queryByText("Aerodynamic")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enPlayer.mini.openLibrary })).not.toBeInTheDocument();
+  });
+
+  it("offers the track's extra controls but not the queue or the mode menu, which do nothing over the stage", async () => {
+    const { user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.mini.showControls }));
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.lyrics })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enPlayer.controls.settings })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enPlayer.queue.title })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enPlayer.controls.modes })).not.toBeInTheDocument();
+  });
+
+  it("shows the lyrics in place of the player while they are open", () => {
+    renderPlayer({ fullscreen: true, lyricsOpen: true });
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.lyricsClose })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enPlayer.mini.showControls })).not.toBeInTheDocument();
   });
 });
 

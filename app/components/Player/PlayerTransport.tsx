@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { PlayGlyph } from "./PlayGlyph";
 import { TRANSPORT_METRICS } from "./constants";
 import { labelled } from "./helpers";
-import { iconButton, playButton } from "./styles";
+import { iconButton, playButton, transportSide } from "./styles";
 import type { PlayerTransportProps } from "./types";
 
 export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
@@ -16,32 +16,34 @@ export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
 
   return (
     <>
-      <button
-        type="button"
-        className={cn(iconButton({ tone: view.shuffle ? "active" : "muted", size: metrics.side }), metrics.folds)}
-        onClick={actions.toggleShuffle}
-        {...labelled(t("controls.shuffle"))}
-        aria-pressed={view.shuffle}
-      >
-        <Shuffle className={metrics.mark} />
-      </button>
-      <button
-        type="button"
-        className={cn(iconButton({ size: metrics.side }), metrics.folds)}
-        onClick={actions.stop}
-        disabled={view.stopped}
-        {...labelled(t("controls.stop"))}
-      >
-        <Square className={cn(metrics.mark, "fill-current")} />
-      </button>
-      <button
-        type="button"
-        className={cn(iconButton({ size: metrics.skip }), metrics.folds)}
-        onClick={actions.previous}
-        {...labelled(t("controls.previous"))}
-      >
-        <SkipBack className={cn(metrics.arrow, "fill-current")} />
-      </button>
+      <div className={transportSide({ layout: metrics.sides, at: "start" })}>
+        <button
+          type="button"
+          className={cn(iconButton({ tone: view.shuffle ? "active" : "muted", size: metrics.side }), metrics.folds)}
+          onClick={actions.toggleShuffle}
+          {...labelled(t("controls.shuffle"))}
+          aria-pressed={view.shuffle}
+        >
+          <Shuffle className={metrics.mark} />
+        </button>
+        <button
+          type="button"
+          className={cn(iconButton({ size: metrics.side }), metrics.folds)}
+          onClick={actions.stop}
+          disabled={view.stopped}
+          {...labelled(t("controls.stop"))}
+        >
+          <Square className={cn(metrics.mark, "fill-current")} />
+        </button>
+        <button
+          type="button"
+          className={cn(iconButton({ size: metrics.skip }), metrics.folds)}
+          onClick={actions.previous}
+          {...labelled(t("controls.previous"))}
+        >
+          <SkipBack className={cn(metrics.arrow, "fill-current")} />
+        </button>
+      </div>
       <button
         type="button"
         className={playButton({ size: metrics.play })}
@@ -50,25 +52,27 @@ export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
       >
         <PlayGlyph view={view} spin={metrics.arrow} face={metrics.face} />
       </button>
-      <button
-        type="button"
-        className={iconButton({ size: metrics.skip })}
-        onClick={actions.next}
-        {...labelled(t("controls.next"))}
-      >
-        <SkipForward className={cn(metrics.arrow, "fill-current")} />
-      </button>
-      <button
-        type="button"
-        className={cn(
-          iconButton({ tone: view.repeat === "off" ? "muted" : "active", size: metrics.side }),
-          metrics.folds
-        )}
-        onClick={actions.cycleRepeat}
-        {...labelled(t(`controls.repeat.${view.repeat}`))}
-      >
-        {view.repeat === "one" ? <Repeat1 className={metrics.mark} /> : <Repeat className={metrics.mark} />}
-      </button>
+      <div className={transportSide({ layout: metrics.sides, at: "end" })}>
+        <button
+          type="button"
+          className={iconButton({ size: metrics.skip })}
+          onClick={actions.next}
+          {...labelled(t("controls.next"))}
+        >
+          <SkipForward className={cn(metrics.arrow, "fill-current")} />
+        </button>
+        <button
+          type="button"
+          className={cn(
+            iconButton({ tone: view.repeat === "off" ? "muted" : "active", size: metrics.side }),
+            metrics.folds
+          )}
+          onClick={actions.cycleRepeat}
+          {...labelled(t(`controls.repeat.${view.repeat}`))}
+        >
+          {view.repeat === "one" ? <Repeat1 className={metrics.mark} /> : <Repeat className={metrics.mark} />}
+        </button>
+      </div>
     </>
   );
 }

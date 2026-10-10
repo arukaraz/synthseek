@@ -55,6 +55,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
             className={barCoverButton()}
             onClick={actions.toggleFullscreen}
             {...labelled(t("controls.openTrack"))}
+            data-player-open-track
           >
             <TrackCover
               initials={trackInitials(view.track.album)}
