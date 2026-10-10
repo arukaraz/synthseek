@@ -370,5 +370,21 @@
   "QUOTA_LIBRARY_FULL": {
     "title": "La bibliothèque est pleine",
     "description": "La bibliothèque occupe {{usedBytes}} des {{limitBytes}} autorisés par l'administrateur, téléchargements en cours compris, et cette demande nécessite environ {{requestedBytes}} de plus."
+  },
+  "NOTIFICATION_CHANNEL_NOT_ALLOWED": {
+    "title": "Seuls les administrateurs peuvent utiliser cette destination",
+    "description": "Choisissez plutôt Discord, ntfy ou Telegram."
+  },
+  "NOTIFICATION_CONFIG_INVALID": {
+    "title": "Cette destination n'est pas complète",
+    "description": "Vérifiez que chaque champ obligatoire est rempli et écrit comme le service l'attend."
+  },
+  "NOTIFICATION_HOST_NOT_ALLOWED": {
+    "title": "Cette adresse n'est pas autorisée ici",
+    "description": "Discord a besoin d'un webhook discord.com, et ntfy d'un des serveurs listés sous le champ."
+  },
+  "NOTIFICATION_DESTINATION_NOT_FOUND": {
+    "title": "Enregistrez d'abord cette destination",
+    "description": "Un test ne peut aller que vers une destination enregistrée."
   }
 }

@@ -344,5 +344,11 @@
     "listeningDisconnectFailed": "Dieser Hoerdienst konnte nicht getrennt werden",
     "listeningSaveFailed": "Diese Hoereinstellung konnte nicht gespeichert werden",
     "sourceLinkFailed": "Die Verknüpfung dieses Kontos konnte nicht geändert werden"
+  },
+  "notifications": {
+    "saveFailed": "Dieses Benachrichtigungsziel konnte nicht gespeichert werden",
+    "removeFailed": "Dieses Benachrichtigungsziel konnte nicht entfernt werden",
+    "testFailed": "Die Testbenachrichtigung konnte nicht gesendet werden",
+    "settingsFailed": "Die Benachrichtigungseinstellungen konnten nicht gespeichert werden"
   }
 }

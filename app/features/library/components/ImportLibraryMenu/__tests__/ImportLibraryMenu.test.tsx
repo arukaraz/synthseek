@@ -37,6 +37,7 @@ function spotify(overrides: Partial<LibrarySourceDescription> = {}): LibrarySour
     configured: true,
     connected: false,
     pending: false,
+    needsReconnect: false,
     externalUsername: null,
     capabilities: {
       connect: "oauth",

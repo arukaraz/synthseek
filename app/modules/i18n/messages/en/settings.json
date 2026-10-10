@@ -1,4 +1,129 @@
 {
+  "notifications": {
+    "pageTitle": "Notifications",
+    "pageDescription": "Get told outside Synthseek when something happens. Each destination picks its own notifications, and only what changed is ever sent.",
+    "destinations": {
+      "title": "Destinations",
+      "description": "Set up the apps that should receive your notifications.",
+      "tabsLabel": "Notification destinations",
+      "unavailable": "Notification settings could not be loaded."
+    },
+    "channels": {
+      "discord": "Discord",
+      "ntfy": "ntfy",
+      "telegram": "Telegram",
+      "webhook": "Webhook",
+      "apprise": "Apprise"
+    },
+    "channelHelp": {
+      "discord": "Paste a webhook from a Discord channel: Edit channel, Integrations, Webhooks.",
+      "ntfy": "Messages go to a topic on an ntfy server. Anyone who knows the topic can read it, so pick one that is hard to guess.",
+      "telegram": "Create a bot with @BotFather, send it a message, then enter its token and your chat id.",
+      "webhook": "Synthseek sends each notification as JSON to this address.",
+      "apprise": "Point at an Apprise API server to reach email and many other services."
+    },
+    "fields": {
+      "webhookUrl": { "label": "Webhook URL", "placeholder": "https://discord.com/api/webhooks/..." },
+      "serverUrl": {
+        "label": "Server",
+        "placeholder": "https://ntfy.sh",
+        "allowed": "Servers you can use: {{servers}}"
+      },
+      "topic": { "label": "Topic", "placeholder": "synthseek-a1b2c3" },
+      "accessToken": { "label": "Access token", "placeholder": "Optional" },
+      "botToken": { "label": "Bot token", "placeholder": "123456789:AA..." },
+      "chatId": { "label": "Chat id", "placeholder": "-1001234567890" },
+      "url": { "label": "URL", "placeholder": "http://192.168.1.10:8080/hook" },
+      "authorization": { "label": "Authorization header", "placeholder": "Optional, for example Bearer abc123" },
+      "targets": { "label": "Apprise URLs", "placeholder": "Optional, for example mailto://user:pass@example.com" }
+    },
+    "enable": { "label": "Send notifications to {{channel}}" },
+    "allRequests": {
+      "label": "Include every member's downloads",
+      "helper": "Off: only the downloads you requested. On: downloads from everyone on this server."
+    },
+    "whatToSend": "What to send",
+    "selectCategory": "All of {{category}}",
+    "categories": {
+      "downloads": "Downloads",
+      "discovery": "Discovery",
+      "account": "Account",
+      "members": "Members",
+      "library": "Library",
+      "maintenance": "Maintenance",
+      "system": "System"
+    },
+    "kinds": {
+      "track_completed": "Song downloaded",
+      "track_failed": "Song failed",
+      "album_completed": "Album downloaded",
+      "album_partial": "Album partly downloaded",
+      "album_failed": "Album failed",
+      "playlist_completed": "Playlist downloaded",
+      "playlist_partial": "Playlist partly downloaded",
+      "playlist_failed": "Playlist failed",
+      "track_upgraded": "Better quality found for a song",
+      "approval_decided": "Request approved or rejected",
+      "quota_reached": "You reached a download quota",
+      "import_finished": "Upload or library import finished",
+      "discovery_cf_recommendations": "CF Recommendations updated",
+      "discovery_weekly_exploration": "Weekly Exploration updated",
+      "discovery_weekly_jams": "Weekly Jams updated",
+      "discovery_daily_jams": "Daily Jams updated",
+      "source_playlist_changed": "Followed playlists or saved albums changed",
+      "connection_attention": "A profile connection needs attention",
+      "account_access_granted": "New app or key with access to your account",
+      "approval_pending": "Requests awaiting approval",
+      "member_quota_reached": "A member reached a download quota",
+      "naming_started": "Renaming started",
+      "naming_finished": "Renaming finished",
+      "library_scan": "Library scan found changes",
+      "loudness_measured": "Loudness measured",
+      "wanted_sweep": "Wanted sweep searched again",
+      "media_server_sync": "Media server playlists synced",
+      "review_new": "New imports to review",
+      "duplicates_new": "New duplicate copies",
+      "quarantine_new": "Files quarantined",
+      "recycle_bin_digest": "Daily recycle bin summary",
+      "purge_upcoming": "Files about to be deleted",
+      "system_status": "System status changed",
+      "integration_health": "An integration went down or came back",
+      "low_disk_space": "Low disk space",
+      "version_available": "New Synthseek version",
+      "job_failed": "A background job failed"
+    },
+    "status": {
+      "notConfigured": "Not set up yet",
+      "neverDelivered": "Nothing sent yet",
+      "delivered": "Last sent {{when}}",
+      "failed": "The last one did not arrive: {{reason}}",
+      "failedWithCode": "The last one did not arrive: {{reason}} (HTTP {{code}})"
+    },
+    "failures": {
+      "unreachable": "the service could not be reached",
+      "rejected": "the service refused it",
+      "timeout": "the service took too long",
+      "blocked": "that address is not allowed",
+      "misconfigured": "the saved settings no longer work"
+    },
+    "actions": {
+      "test": "Send a test",
+      "testing": "Sending...",
+      "remove": "Remove",
+      "saveBeforeTest": "Save your changes to test them."
+    },
+    "saved": "{{channel}} saved",
+    "test": {
+      "sent": "Test sent. Check {{channel}}.",
+      "failed": "The test did not arrive: {{reason}}"
+    },
+    "memberServer": {
+      "title": "ntfy server for members",
+      "description": "Members can always use ntfy.sh. Add your own ntfy server here to let them use it too.",
+      "label": "Server URL",
+      "placeholder": "https://ntfy.example.org"
+    }
+  },
   "general": {
     "pageTitle": "General",
     "language": {
@@ -667,12 +792,14 @@
       "title": "Connected accounts",
       "empty": "No connected sources are available right now.",
       "connect": "Connect",
+      "reconnect": "Reconnect",
       "disconnect": "Disconnect",
       "spotify": {
         "name": "Spotify",
         "connected": "Connected",
         "notConnected": "Not connected",
-        "notConfigured": "Ask an admin to configure Spotify first."
+        "notConfigured": "Ask an admin to configure Spotify first.",
+        "needsReconnect": "Spotify stopped accepting this connection. Reconnect to keep your library in sync."
       },
       "plex": {
         "name": "Plex",
@@ -1015,7 +1142,8 @@
         "recycleBin": "Recycle bin",
         "quarantine": "Quarantine",
         "systemStatus": "System status",
-        "library": "Library"
+        "library": "Library",
+        "notifications": "Notifications"
       },
       "maintenanceWaiting": "Some maintenance surfaces have items waiting"
     },

@@ -65,6 +65,17 @@ describe("SettingsSidebar", () => {
     expect(screen.getByText(enSettings.shell.sidebar.items.general)).toBeInTheDocument();
   });
 
+  it("offers notifications under advanced to a non-admin user", () => {
+    isAdmin = false;
+    render(<SettingsSidebar />);
+
+    const link = screen.getByText(enSettings.shell.sidebar.items.notifications).closest("a");
+    expect(link).toHaveAttribute("href", "/settings/notifications");
+    expect(
+      screen.getByRole("button", { name: new RegExp(enSettings.shell.sidebar.advanced, "i") })
+    ).toBeInTheDocument();
+  });
+
   it("marks the active link via its href", () => {
     pathname = "/settings/profile";
     render(<SettingsSidebar />);

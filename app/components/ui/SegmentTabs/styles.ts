@@ -1,9 +1,11 @@
 import { cva } from "class-variance-authority";
 
-export const segmentTabsRoot = cva("border-fg/10 flex items-center gap-1 border-b");
+export const segmentTabsRoot = cva(
+  "border-fg/10 scrollbar-none flex items-center gap-1 overflow-x-auto overflow-y-hidden border-b"
+);
 
 export const segmentTab = cva(
-  "relative flex h-9 items-center gap-1.5 rounded-t-md px-3 text-sm font-medium transition-colors",
+  "relative flex h-9 shrink-0 items-center gap-1.5 rounded-t-md px-3 text-sm font-medium whitespace-nowrap transition-colors",
   {
     variants: {
       active: {
@@ -28,4 +30,4 @@ export const segmentTabCount = cva(
   }
 );
 
-export const segmentTabUnderline = cva("bg-primary-500 absolute inset-x-3 -bottom-px h-[2px] rounded-full");
+export const segmentTabUnderline = cva("bg-primary-500 absolute inset-x-3 bottom-0 h-[2px] rounded-full");

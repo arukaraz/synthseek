@@ -80,6 +80,7 @@ export function makeRequestListItem(overrides: Partial<RequestListItem> = {}): R
     total_tracks: 10,
     completed_tracks: 7,
     status: RequestStatus.enum.downloading,
+    notified_status: null,
     genres: null,
     upc: null,
     delegated_to: null,

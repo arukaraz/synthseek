@@ -344,5 +344,11 @@
     "listeningDisconnectFailed": "Could not disconnect that listening service",
     "listeningSaveFailed": "Could not save that listening setting",
     "sourceLinkFailed": "Could not change that account link"
+  },
+  "notifications": {
+    "saveFailed": "Could not save that notification destination",
+    "removeFailed": "Could not remove that notification destination",
+    "testFailed": "Could not send the test notification",
+    "settingsFailed": "Could not save the notification settings"
   }
 }

@@ -121,6 +121,7 @@ Open the web interface, create your admin account in the setup wizard, and point
 - A responsive web interface that works on a phone as well as a desktop
 - Available in English, Espanol, Deutsch, and Francais
 - Logs viewer, background job controls, and in-app update notifications
+- Notifications on Discord, ntfy or Telegram, plus a webhook or Apprise for administrators, with each member picking what they receive
 
 [Users and permissions](https://docs.synthseek.dev/users-permissions/) · [Configuration](https://docs.synthseek.dev/configuration/)
 

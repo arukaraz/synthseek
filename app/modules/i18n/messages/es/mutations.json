@@ -344,5 +344,11 @@
     "listeningDisconnectFailed": "No se ha podido desconectar ese servicio de escucha",
     "listeningSaveFailed": "No se ha podido guardar ese ajuste de escucha",
     "sourceLinkFailed": "No se ha podido cambiar el vínculo de esa cuenta"
+  },
+  "notifications": {
+    "saveFailed": "No se ha podido guardar ese destino de notificaciones",
+    "removeFailed": "No se ha podido quitar ese destino de notificaciones",
+    "testFailed": "No se ha podido enviar la notificación de prueba",
+    "settingsFailed": "No se han podido guardar los ajustes de notificaciones"
   }
 }

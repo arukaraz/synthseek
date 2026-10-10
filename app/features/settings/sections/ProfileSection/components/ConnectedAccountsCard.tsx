@@ -15,7 +15,7 @@ import { cn } from "@utils/cn";
 
 import { SettingsCard } from "../../../components/SettingsCard";
 import { usePlexLink } from "../hooks/usePlexLink";
-import { accountChip, connectedRow } from "../styles";
+import { accountChip, connectedRow, listeningFailure } from "../styles";
 import { PlexReportingRow } from "./PlexReportingRow";
 import { ServerAccountRow } from "./ServerAccountRow";
 
@@ -33,6 +33,7 @@ export function ConnectedAccountsCard() {
   const spotifyEnabled = config.data?.spotify.enabled ?? false;
   const configured = config.data?.spotify.configured ?? false;
   const connected = status.data?.connected ?? false;
+  const needsReconnect = connected && (status.data?.needsReconnect ?? false);
   const externalUsername = status.data?.externalUsername;
 
   const passwordAccounts = (sourceAccounts.data ?? []).filter((account) => account.linkMethod === "password");
@@ -56,7 +57,21 @@ export function ConnectedAccountsCard() {
                   ? t("profile.connected.spotify.notConnected")
                   : t("profile.connected.spotify.notConfigured")}
             </p>
+            {needsReconnect ? (
+              <p className={listeningFailure()} role="status">
+                {t("profile.connected.spotify.needsReconnect")}
+              </p>
+            ) : null}
           </div>
+          {needsReconnect ? (
+            <Button
+              size="sm"
+              onClick={() => connect.mutate({ provider: "spotify" })}
+              disabled={!configured || connect.isPending}
+            >
+              {t("profile.connected.reconnect")}
+            </Button>
+          ) : null}
           {connected ? (
             <Button variant="outline" size="sm" onClick={() => disconnect.mutate()} disabled={disconnect.isPending}>
               {t("profile.connected.disconnect")}

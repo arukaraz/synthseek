@@ -344,5 +344,11 @@
     "listeningDisconnectFailed": "Impossible de deconnecter ce service d'ecoute",
     "listeningSaveFailed": "Impossible d'enregistrer ce parametre d'ecoute",
     "sourceLinkFailed": "Impossible de modifier le lien de ce compte"
+  },
+  "notifications": {
+    "saveFailed": "Impossible d'enregistrer cette destination de notifications",
+    "removeFailed": "Impossible de retirer cette destination de notifications",
+    "testFailed": "Impossible d'envoyer la notification de test",
+    "settingsFailed": "Impossible d'enregistrer les réglages des notifications"
   }
 }

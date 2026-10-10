@@ -98,6 +98,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
     users: { requireApprovalForMembers: false },
     connectApps: { subsonicEnabled: false, subsonicTranscodingEnabled: false },
     quotas: { tracksPerWindow: 0, windowDays: 7, userStorageGb: 0, libraryStorageGb: 0 },
+    notifications: { memberNtfyServer: "" },
     ...overrides,
   };
 }
@@ -216,6 +217,7 @@ export const createMockUseSpotifyConnectionStatus = (
     {
       connected: false,
       pending: false,
+      needsReconnect: false,
       externalUsername: null,
       externalUserId: null,
       scopes: [],

@@ -7,6 +7,7 @@ export type SidebarItemKey =
   | "shell.sidebar.items.members"
   | "shell.sidebar.items.profile"
   | "shell.sidebar.items.integrations"
+  | "shell.sidebar.items.notifications"
   | "shell.sidebar.items.engine"
   | "shell.sidebar.items.jobs"
   | "shell.sidebar.items.library"

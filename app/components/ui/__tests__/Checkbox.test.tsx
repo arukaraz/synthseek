@@ -59,6 +59,23 @@ describe("Checkbox", () => {
     expect(handleChange).toHaveBeenCalledWith(true);
   });
 
+  it("draws a dash for a partial selection and a tick for a full one", () => {
+    const { rerender } = render(<Checkbox aria-label="Partial" checked="indeterminate" />);
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).toHaveAttribute("data-state", "indeterminate");
+    expect(checkbox.querySelector(".lucide-minus")).not.toBeNull();
+    expect(checkbox.querySelector(".lucide-check")).toBeNull();
+
+    rerender(<Checkbox aria-label="Partial" checked />);
+    expect(checkbox.querySelector(".lucide-check")).not.toBeNull();
+    expect(checkbox.querySelector(".lucide-minus")).toBeNull();
+  });
+
+  it("fills a partial selection like a full one", () => {
+    render(<Checkbox aria-label="Partial" checked="indeterminate" />);
+    expect(screen.getByRole("checkbox")).toHaveClass("data-[state=indeterminate]:bg-primary");
+  });
+
   it("renders with proper border styling", () => {
     render(<Checkbox aria-label="Styled" />);
     const checkbox = screen.getByRole("checkbox");

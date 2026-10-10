@@ -21,6 +21,7 @@ function source(overrides: Partial<LibrarySourceDescription> = {}): LibrarySourc
     configured: true,
     connected: false,
     pending: false,
+    needsReconnect: false,
     externalUsername: null,
     capabilities: {
       connect: "oauth",

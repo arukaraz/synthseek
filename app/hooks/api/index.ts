@@ -50,6 +50,17 @@ export {
 
 export { useListeningConnections, useSeenPlaybackClients } from "./queries/scrobble";
 export {
+  useNotificationAdminSettings,
+  useNotificationCatalog,
+  useNotificationDestinations,
+} from "./queries/notifications";
+export {
+  useRemoveNotificationDestination,
+  useSaveNotificationDestination,
+  useTestNotificationDestination,
+  useUpdateNotificationAdminSettings,
+} from "./mutations/notifications";
+export {
   useBeginLastfmAuthorization,
   useCompleteLastfmAuthorization,
   useConnectListenBrainz,

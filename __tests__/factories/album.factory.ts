@@ -15,6 +15,7 @@ const defaultAlbum: Omit<Album, "id"> = {
   total_tracks: 10,
   completed_tracks: 0,
   status: RequestStatus.enum.queued,
+  notified_status: null,
   genres: null,
   upc: null,
   delegated_to: null,

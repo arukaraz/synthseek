@@ -1,4 +1,129 @@
 {
+  "notifications": {
+    "pageTitle": "Notifications",
+    "pageDescription": "Soyez prévenu hors de Synthseek quand quelque chose se passe. Chaque destination choisit ses propres notifications, et seul ce qui a changé est envoyé.",
+    "destinations": {
+      "title": "Destinations",
+      "description": "Configurez les applications qui doivent recevoir vos notifications.",
+      "tabsLabel": "Destinations des notifications",
+      "unavailable": "Impossible de charger les réglages des notifications."
+    },
+    "channels": {
+      "discord": "Discord",
+      "ntfy": "ntfy",
+      "telegram": "Telegram",
+      "webhook": "Webhook",
+      "apprise": "Apprise"
+    },
+    "channelHelp": {
+      "discord": "Collez le webhook d'un salon Discord : Modifier le salon, Intégrations, Webhooks.",
+      "ntfy": "Les messages vont vers un sujet sur un serveur ntfy. Toute personne qui connaît le sujet peut le lire, choisissez-en donc un difficile à deviner.",
+      "telegram": "Créez un bot avec @BotFather, envoyez-lui un message, puis saisissez son jeton et votre identifiant de discussion.",
+      "webhook": "Synthseek envoie chaque notification en JSON à cette adresse.",
+      "apprise": "Indiquez un serveur Apprise API pour atteindre l'e-mail et de nombreux autres services."
+    },
+    "fields": {
+      "webhookUrl": { "label": "URL du webhook", "placeholder": "https://discord.com/api/webhooks/..." },
+      "serverUrl": {
+        "label": "Serveur",
+        "placeholder": "https://ntfy.sh",
+        "allowed": "Serveurs que vous pouvez utiliser : {{servers}}"
+      },
+      "topic": { "label": "Sujet", "placeholder": "synthseek-a1b2c3" },
+      "accessToken": { "label": "Jeton d'accès", "placeholder": "Facultatif" },
+      "botToken": { "label": "Jeton du bot", "placeholder": "123456789:AA..." },
+      "chatId": { "label": "Identifiant de discussion", "placeholder": "-1001234567890" },
+      "url": { "label": "URL", "placeholder": "http://192.168.1.10:8080/hook" },
+      "authorization": { "label": "En-tête Authorization", "placeholder": "Facultatif, par exemple Bearer abc123" },
+      "targets": { "label": "URL Apprise", "placeholder": "Facultatif, par exemple mailto://user:pass@example.com" }
+    },
+    "enable": { "label": "Envoyer les notifications vers {{channel}}" },
+    "allRequests": {
+      "label": "Inclure les téléchargements de tous les membres",
+      "helper": "Désactivé : seulement les téléchargements que vous avez demandés. Activé : ceux de tout le monde sur ce serveur."
+    },
+    "whatToSend": "Quoi envoyer",
+    "selectCategory": "Tout dans {{category}}",
+    "categories": {
+      "downloads": "Téléchargements",
+      "discovery": "Découverte",
+      "account": "Compte",
+      "members": "Membres",
+      "library": "Bibliothèque",
+      "maintenance": "Maintenance",
+      "system": "Système"
+    },
+    "kinds": {
+      "track_completed": "Piste téléchargée",
+      "track_failed": "Échec d'une piste",
+      "album_completed": "Album téléchargé",
+      "album_partial": "Album téléchargé en partie",
+      "album_failed": "Échec d'un album",
+      "playlist_completed": "Playlist téléchargée",
+      "playlist_partial": "Playlist téléchargée en partie",
+      "playlist_failed": "Échec d'une playlist",
+      "track_upgraded": "Meilleure qualité trouvée pour une piste",
+      "approval_decided": "Demande approuvée ou refusée",
+      "quota_reached": "Vous avez atteint un quota de téléchargement",
+      "import_finished": "Envoi ou importation de bibliothèque terminé",
+      "discovery_cf_recommendations": "Recommandations CF mises à jour",
+      "discovery_weekly_exploration": "Weekly Exploration mis à jour",
+      "discovery_weekly_jams": "Weekly Jams mis à jour",
+      "discovery_daily_jams": "Daily Jams mis à jour",
+      "source_playlist_changed": "Les playlists ou albums enregistrés que vous suivez ont changé",
+      "connection_attention": "Une connexion du profil demande votre attention",
+      "account_access_granted": "Nouvelle application ou clé ayant accès à votre compte",
+      "approval_pending": "Demandes en attente d'approbation",
+      "member_quota_reached": "Un membre a atteint un quota de téléchargement",
+      "naming_started": "Renommage lancé",
+      "naming_finished": "Renommage terminé",
+      "library_scan": "L'analyse de la bibliothèque a trouvé des changements",
+      "loudness_measured": "Sonie mesurée",
+      "wanted_sweep": "Le balayage de suivi a relancé des recherches",
+      "media_server_sync": "Playlists du serveur multimédia synchronisées",
+      "review_new": "Nouvelles importations à réviser",
+      "duplicates_new": "Nouvelles copies en double",
+      "quarantine_new": "Fichiers mis en quarantaine",
+      "recycle_bin_digest": "Résumé quotidien de la corbeille",
+      "purge_upcoming": "Fichiers bientôt supprimés",
+      "system_status": "L'état du système a changé",
+      "integration_health": "Une intégration ne répond plus ou est revenue",
+      "low_disk_space": "Espace disque faible",
+      "version_available": "Nouvelle version de Synthseek",
+      "job_failed": "Une tâche de fond a échoué"
+    },
+    "status": {
+      "notConfigured": "Pas encore configuré",
+      "neverDelivered": "Rien n'a encore été envoyé",
+      "delivered": "Dernier envoi {{when}}",
+      "failed": "La dernière n'est pas arrivée : {{reason}}",
+      "failedWithCode": "La dernière n'est pas arrivée : {{reason}} (HTTP {{code}})"
+    },
+    "failures": {
+      "unreachable": "le service était injoignable",
+      "rejected": "le service l'a refusée",
+      "timeout": "le service a mis trop de temps",
+      "blocked": "cette adresse n'est pas autorisée",
+      "misconfigured": "les réglages enregistrés ne fonctionnent plus"
+    },
+    "actions": {
+      "test": "Envoyer un test",
+      "testing": "Envoi...",
+      "remove": "Retirer",
+      "saveBeforeTest": "Enregistrez vos modifications pour les tester."
+    },
+    "saved": "{{channel}} enregistré",
+    "test": {
+      "sent": "Test envoyé. Vérifiez {{channel}}.",
+      "failed": "Le test n'est pas arrivé : {{reason}}"
+    },
+    "memberServer": {
+      "title": "Serveur ntfy pour les membres",
+      "description": "Les membres peuvent toujours utiliser ntfy.sh. Ajoutez ici votre propre serveur ntfy pour qu'ils puissent aussi l'utiliser.",
+      "label": "URL du serveur",
+      "placeholder": "https://ntfy.example.org"
+    }
+  },
   "general": {
     "pageTitle": "Général",
     "language": {
@@ -667,12 +792,14 @@
       "title": "Comptes connectés",
       "empty": "Aucune source connectée n'est disponible pour le moment.",
       "connect": "Connecter",
+      "reconnect": "Reconnecter",
       "disconnect": "Déconnecter",
       "spotify": {
         "name": "Spotify",
         "connected": "Connecté",
         "notConnected": "Non connecté",
-        "notConfigured": "Demandez d'abord à un administrateur de configurer Spotify."
+        "notConfigured": "Demandez d'abord à un administrateur de configurer Spotify.",
+        "needsReconnect": "Spotify n'accepte plus cette connexion. Reconnectez-la pour garder votre bibliothèque synchronisée."
       },
       "plex": {
         "name": "Plex",
@@ -1015,6 +1142,7 @@
         "recycleBin": "Corbeille",
         "quarantine": "Quarantaine",
         "systemStatus": "État du système",
+        "notifications": "Notifications",
         "library": "Bibliothèque"
       },
       "maintenanceWaiting": "Certaines surfaces de maintenance ont des éléments en attente"

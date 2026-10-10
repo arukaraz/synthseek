@@ -1,6 +1,7 @@
 import {
   Activity,
   ArrowUpCircle,
+  Bell,
   Blocks,
   CopyCheck,
   FileText,
@@ -46,6 +47,12 @@ export const MAINTENANCE_BRANCH: AdvancedEntry = {
 };
 
 export const ADVANCED_ITEMS: AdvancedEntry[] = [
+  {
+    kind: "item",
+    href: "/settings/notifications",
+    labelKey: "shell.sidebar.items.notifications",
+    icon: <Bell />,
+  },
   {
     kind: "item",
     href: "/settings/integrations",

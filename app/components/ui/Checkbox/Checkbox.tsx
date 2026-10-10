@@ -1,23 +1,24 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Check } from "lucide-react";
+import { Check, Minus } from "lucide-react";
 
 import { cn } from "@utils/cn";
 import { checkboxPreview } from "./styles";
 import type { CheckboxProps } from "./types";
 
 export function Checkbox({ className, preview, ref, ...props }: CheckboxProps) {
+  const Mark = props.checked === "indeterminate" ? Minus : Check;
   return (
     <CheckboxPrimitive.Root
       ref={ref}
       className={cn(
-        "peer border-primary ring-offset-background focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground size-4 shrink-0 rounded-sm border focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "peer border-primary ring-offset-background focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground size-4 shrink-0 rounded-sm border focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
         checkboxPreview({ preview }),
         className
       )}
       {...props}
     >
       <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current")}>
-        <Check className="size-4" />
+        <Mark className="size-4" />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );

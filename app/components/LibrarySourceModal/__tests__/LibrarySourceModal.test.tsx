@@ -25,6 +25,7 @@ function buildSource(overrides: Partial<LibrarySourceDescription> = {}): Library
     configured: true,
     connected: true,
     pending: false,
+    needsReconnect: false,
     externalUsername: null,
     capabilities: {
       connect: "oauth",

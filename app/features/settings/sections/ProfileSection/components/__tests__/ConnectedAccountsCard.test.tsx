@@ -15,6 +15,7 @@ interface SpotifyConfig {
 interface SpotifyStatus {
   connected: boolean;
   externalUsername?: string;
+  needsReconnect?: boolean;
 }
 type AuthUser = ReturnType<typeof createMockUser> | null;
 
@@ -140,6 +141,26 @@ describe("ConnectedAccountsCard", () => {
     expect(screen.getByText("spotify-bob")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: enSettings.profile.connected.disconnect }));
     expect(disconnect.mutate).toHaveBeenCalledTimes(1);
+  });
+
+  it("warns and offers a reconnect when spotify stopped accepting the connection", async () => {
+    configQuery = createMockQuery<SpotifyConfig | undefined>({ spotify: { enabled: true, configured: true } });
+    statusQuery = createMockQuery<SpotifyStatus | undefined>({ connected: true, needsReconnect: true });
+    render(<ConnectedAccountsCard />);
+
+    expect(screen.getByRole("status")).toHaveTextContent(enSettings.profile.connected.spotify.needsReconnect);
+    await userEvent.click(screen.getByRole("button", { name: enSettings.profile.connected.reconnect }));
+    expect(connect.mutate).toHaveBeenCalledWith({ provider: "spotify" });
+    expect(screen.getByRole("button", { name: enSettings.profile.connected.disconnect })).toBeEnabled();
+  });
+
+  it("shows neither the warning nor the reconnect for a healthy connection", () => {
+    configQuery = createMockQuery<SpotifyConfig | undefined>({ spotify: { enabled: true, configured: true } });
+    statusQuery = createMockQuery<SpotifyStatus | undefined>({ connected: true, needsReconnect: false });
+    render(<ConnectedAccountsCard />);
+
+    expect(screen.queryByText(enSettings.profile.connected.spotify.needsReconnect)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enSettings.profile.connected.reconnect })).not.toBeInTheDocument();
   });
 
   it("shows a plex connect button and starts linking when clicked", async () => {
