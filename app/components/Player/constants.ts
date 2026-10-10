@@ -196,6 +196,8 @@ export const PANEL_VIEWPORT_MARGIN_PX = 12;
 
 export const HEADER_SLOT_QUERY = `(min-width: ${PLAYER_CONTAINER_REM}rem)`;
 
+export const STAGE_WIDE_QUERY = "(min-width: 40rem)";
+
 export const LYRIC_SCROLL_SPRING = { type: "spring", stiffness: 110, damping: 24, mass: 0.7 } as const;
 
 export const LYRIC_BLUR_DISTANCE = 2;

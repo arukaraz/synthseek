@@ -146,3 +146,13 @@ export const stageFade: Variants = {
   leaveToRight: { opacity: 0, transition: { duration: 0.12 } },
   leaveToLeft: { opacity: 0, transition: { duration: 0.12 } },
 };
+
+export const stageDrawer: Variants = {
+  closed: { height: 0, opacity: 0, transition: { duration: 0.2, ease: [0.4, 0, 1, 1] } },
+  open: { height: "auto", opacity: 1, transition: panelIn },
+};
+
+export const stageDrawerFade: Variants = {
+  closed: { height: 0, opacity: 0, transition: { duration: 0 } },
+  open: { height: "auto", opacity: 1, transition: { duration: 0 } },
+};

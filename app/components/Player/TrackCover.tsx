@@ -7,7 +7,7 @@ import type { PlayerCoverProps } from "./types";
 
 export function TrackCover({ initials, tone, size, artworkUrl = null }: PlayerCoverProps) {
   return (
-    <div className={cn(cover({ tone, size }), size === "stage" ? coverGlow({ tone }) : undefined)}>
+    <div className={cn(cover({ tone, size }), size === "stage" || size === "fluid" ? coverGlow({ tone }) : undefined)}>
       {artworkUrl === null ? (
         <span className={coverInitials({ size })} aria-hidden>
           {initials}

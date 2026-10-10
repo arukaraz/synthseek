@@ -27,6 +27,8 @@
     "seek": "Posición de reproducción",
     "openTrack": "Abrir la sesión a pantalla completa",
     "more": "Más controles",
+    "info": "Detalles de la reproducción",
+    "volumeControls": "Controles de volumen",
     "lyrics": "Letra",
     "lyricsClose": "Cerrar la letra",
     "settings": "Ajustes de reproducción"

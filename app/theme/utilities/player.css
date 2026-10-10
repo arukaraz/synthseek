@@ -43,6 +43,28 @@
     --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain));
   }
 
+  .player-stage-ring {
+    --player-ring-side: 3.25rem;
+    --player-ring-gap: 0.625rem;
+    --player-ring: clamp(9.5rem, min(100cqw - 2 * (var(--player-ring-side) + var(--player-ring-gap)), 30dvh), 11.5rem);
+    grid-template-columns: var(--player-ring-side) var(--player-ring) var(--player-ring-side);
+    grid-template-rows: auto calc(var(--player-ring) / 2) calc(var(--player-ring) / 2) auto;
+    grid-template-areas:
+      "actions actions actions"
+      "info ring more"
+      "shuffle ring repeat"
+      "volume volume volume";
+    column-gap: var(--player-ring-gap);
+    justify-content: center;
+  }
+
+  @container (max-width: 18rem) {
+    .player-stage-ring {
+      --player-ring-side: 2.75rem;
+      --player-ring-gap: 0.25rem;
+    }
+  }
+
   .player-bar-progress {
     width: var(--player-progress, 0%);
     transition: width 260ms linear;

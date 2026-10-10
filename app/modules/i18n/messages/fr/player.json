@@ -27,6 +27,8 @@
     "seek": "Position de lecture",
     "openTrack": "Ouvrir la session en plein écran",
     "more": "Plus de commandes",
+    "info": "Détails de la lecture",
+    "volumeControls": "Réglage du volume",
     "lyrics": "Paroles",
     "lyricsClose": "Fermer les paroles",
     "settings": "Réglages de lecture"

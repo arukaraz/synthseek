@@ -27,6 +27,8 @@
     "seek": "Playback position",
     "openTrack": "Open the full screen session",
     "more": "More controls",
+    "info": "Playback details",
+    "volumeControls": "Volume controls",
     "lyrics": "Lyrics",
     "lyricsClose": "Close the lyrics",
     "settings": "Playback settings"

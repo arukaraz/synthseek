@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import type { SourcePickerRequest } from "@hooks/ui/player";
 
 export type PlayerTone = "primary" | "secondary" | "accent";
@@ -390,7 +392,36 @@ export interface WavePaint extends WaveSnapshot {
 }
 
 export interface PlayerVolumeProps extends PlayerProps {
-  size: "bar" | "stage";
+  size: "bar" | "stage" | "drawer";
+}
+
+export type StageDrawerName = "info" | "actions" | "volume";
+
+export interface StageControllerProps extends PlayerProps {
+  drawer: StageDrawerName | null;
+  onToggle: (drawer: StageDrawerName) => void;
+}
+
+export interface StageDrawerProps {
+  open: boolean;
+  children: ReactNode;
+}
+
+export interface MoreAttentionLabel {
+  attention: PlayerAttention | null;
+  name: string;
+}
+
+export type StageActionsProps = PlayerProps;
+
+export interface PlayGlyphProps {
+  view: PlayerView;
+  spin: string;
+  face: string;
+}
+
+export interface StageChipsProps {
+  view: PlayerView;
 }
 
 export interface PlayerEqualizerBandProps {
@@ -437,6 +468,6 @@ export type PlayerLyricsProps = PlayerProps;
 export interface PlayerCoverProps {
   initials: string;
   tone: PlayerTone;
-  size: "row" | "bar" | "stage";
+  size: "row" | "bar" | "stage" | "fluid";
   artworkUrl?: string | null;
 }

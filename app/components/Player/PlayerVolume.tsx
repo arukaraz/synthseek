@@ -16,7 +16,7 @@ export function PlayerVolume({ view, actions, size }: PlayerVolumeProps) {
     <div className={volumeGroup({ size })}>
       <button
         type="button"
-        className={iconButton({ size: size === "stage" ? "stage" : undefined })}
+        className={iconButton({ size: size === "bar" ? undefined : "stage" })}
         onClick={actions.toggleMute}
         {...labelled(view.muted ? t("controls.unmute") : t("controls.mute"))}
       >

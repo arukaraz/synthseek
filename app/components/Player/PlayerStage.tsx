@@ -1,20 +1,24 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Heart, Mic2, MonitorSpeaker, Minimize, Settings2 } from "lucide-react";
+import { Minimize, MonitorSpeaker } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
+import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { stageFlip as stageFlipVariants, stageFade } from "@utils/animations";
 
 import { PlayerLyrics } from "./PlayerLyrics";
 import { PlayerTransport } from "./PlayerTransport";
 import { PlayerVolume } from "./PlayerVolume";
 import { PlayerWave } from "./PlayerWave";
-import { ScrobbleStatus } from "./ScrobbleStatus";
+import { StageActions } from "./StageActions";
+import { StageChips } from "./StageChips";
+import { StageController } from "./StageController";
+import { StageDrawer } from "./StageDrawer";
 import { TrackCover } from "./TrackCover";
-import { UpgradeButton } from "./UpgradeButton";
-import { FULLSCREEN_TOGGLE_SELECTOR } from "./constants";
+import { FULLSCREEN_TOGGLE_SELECTOR, STAGE_WIDE_QUERY } from "./constants";
 import { formatClock, labelled, returnFocusTo, trackInitials } from "./helpers";
 import {
   clock,
@@ -24,9 +28,8 @@ import {
   stageAlbum,
   stageArtist,
   stageBackdrop,
-  stageChip,
+  stageCoverSlot,
   stageDeviceLine,
-  stageChips,
   stageFace,
   stageFlip,
   stageFooter,
@@ -40,12 +43,23 @@ import {
   stageVolume,
   srOnly,
 } from "./styles";
-import type { PlayerProps } from "./types";
+import type { PlayerProps, StageDrawerName } from "./types";
 
 export function PlayerStage({ view, actions }: PlayerProps) {
   const { t } = useTranslation("player");
   const reduceMotion = useReducedMotion() === true;
   const faceVariants = reduceMotion ? stageFade : stageFlipVariants;
+  const wide = useMediaQuery(STAGE_WIDE_QUERY);
+  const layout = wide ? "wide" : "compact";
+  const [drawer, setDrawer] = useState<StageDrawerName | null>(null);
+  const cover = (
+    <TrackCover
+      initials={trackInitials(view.track.album)}
+      tone={view.track.tone}
+      size={wide ? "stage" : "fluid"}
+      artworkUrl={view.track.artworkUrl}
+    />
+  );
 
   return (
     <Dialog
@@ -78,7 +92,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
           </button>
         </div>
 
-        <div className={stageMain()}>
+        <div className={stageMain({ layout })}>
           <div className={stageFlip()}>
             <AnimatePresence mode="wait" initial={false}>
               {view.lyricsOpen ? (
@@ -95,18 +109,13 @@ export function PlayerStage({ view, actions }: PlayerProps) {
               ) : (
                 <motion.div
                   key="track"
-                  className={stageFace({ layout: "track" })}
+                  className={stageFace({ layout: wide ? "track" : "compact" })}
                   variants={faceVariants}
                   initial="enterFromLeft"
                   animate="settled"
                   exit="leaveToLeft"
                 >
-                  <TrackCover
-                    initials={trackInitials(view.track.album)}
-                    tone={view.track.tone}
-                    size="stage"
-                    artworkUrl={view.track.artworkUrl}
-                  />
+                  {wide ? cover : <div className={stageCoverSlot()}>{cover}</div>}
                   <div className={stageMeta()}>
                     <h2 className={stageTitle()}>{view.track.title}</h2>
                     <p className={stageArtist()}>{view.track.artist}</p>
@@ -117,87 +126,49 @@ export function PlayerStage({ view, actions }: PlayerProps) {
                         {view.activeDevice.name}
                       </p>
                     )}
-                    <div className={stageChips()}>
-                      <span
-                        className={stageChip({
-                          tone: view.chain.transcoding ? "warning" : view.track.lossless ? "lossless" : "muted",
-                        })}
-                      >
-                        {view.chain.fileLabel}
-                      </span>
-                      <span className={stageChip({ tone: view.chain.transcoding ? "warning" : "success" })}>
-                        {t("stage.serverChip", { value: view.chain.serverLabel })}
-                      </span>
-                      <span className={stageChip({ tone: view.chain.equalizerActive ? "success" : "muted" })}>
-                        {t("stage.equalizerChip", { value: view.chain.equalizerLabel })}
-                      </span>
-                    </div>
-                    <div className={stageActions()}>
-                      <button
-                        type="button"
-                        className={iconButton({ tone: view.favorite ? "favorite" : "muted", size: "stage" })}
-                        onClick={actions.toggleFavorite}
-                        {...labelled(view.favorite ? t("controls.unfavorite") : t("controls.favorite"))}
-                        aria-pressed={view.favorite}
-                      >
-                        <Heart className={view.favorite ? "size-4 fill-current" : "size-4"} />
-                      </button>
-                      <UpgradeButton view={view} actions={actions} size="stage" />
-                      <ScrobbleStatus
-                        state={view.scrobble}
-                        actionable={view.scrobbleActionable}
-                        size="stage"
-                        onToggle={actions.toggleScrobbling}
-                      />
-                      <button
-                        type="button"
-                        className={iconButton({ tone: view.lyricsOpen ? "active" : "muted", size: "stage" })}
-                        onClick={actions.toggleLyrics}
-                        {...labelled(t("controls.lyrics"))}
-                        aria-pressed={view.lyricsOpen}
-                      >
-                        <Mic2 className="size-4" />
-                      </button>
-                      <button
-                        type="button"
-                        className={iconButton({ tone: view.settingsOpen ? "active" : "muted", size: "stage" })}
-                        onClick={actions.toggleSettings}
-                        {...labelled(t("controls.settings"))}
-                        aria-expanded={view.settingsOpen}
-                        data-player-settings-toggle
-                      >
-                        <Settings2 className="size-4" />
-                      </button>
-                      <button
-                        type="button"
-                        className={iconButton({ tone: view.activeDevice.local ? "muted" : "remote", size: "stage" })}
-                        onClick={actions.toggleDevices}
-                        {...labelled(t("controls.devices"))}
-                        aria-expanded={view.devicesOpen}
-                        data-player-devices-toggle
-                      >
-                        <MonitorSpeaker className="size-4" />
-                      </button>
-                    </div>
+                    {wide ? (
+                      <>
+                        <StageChips view={view} />
+                        <div className={stageActions()}>
+                          <StageActions view={view} actions={actions} />
+                        </div>
+                      </>
+                    ) : null}
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
+          {wide ? null : (
+            <StageDrawer open={drawer === "info"}>
+              <StageChips view={view} />
+            </StageDrawer>
+          )}
         </div>
 
-        <div className={stageFooter()}>
-          <div className={stageTransport()}>
-            <PlayerTransport view={view} actions={actions} size="stage" />
-          </div>
+        <div className={stageFooter({ layout })}>
+          {wide ? (
+            <div className={stageTransport()}>
+              <PlayerTransport view={view} actions={actions} size="stage" />
+            </div>
+          ) : null}
           <div className={stageScrubRow()}>
             <span className={clock({ size: "stage", align: "right" })}>{formatClock(view.positionSeconds)}</span>
             <PlayerWave view={view} actions={actions} size="stage" />
             <span className={clock({ size: "stage" })}>{formatClock(view.track.durationSeconds)}</span>
           </div>
-          <div className={stageVolume()}>
-            <PlayerVolume view={view} actions={actions} size="stage" />
-          </div>
+          {wide ? (
+            <div className={stageVolume()}>
+              <PlayerVolume view={view} actions={actions} size="stage" />
+            </div>
+          ) : (
+            <StageController
+              view={view}
+              actions={actions}
+              drawer={drawer}
+              onToggle={(next) => setDrawer((current) => (current === next ? null : next))}
+            />
+          )}
         </div>
       </DialogSurface>
     </Dialog>

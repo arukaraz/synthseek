@@ -167,6 +167,7 @@ export const moreBadge = cva("ring-surface-overlay absolute top-1 right-1 size-2
       remote: "bg-secondary-400",
       warning: "bg-warning-vivid animate-pulse",
       danger: "bg-destructive-vivid",
+      notice: "bg-warning-vivid",
     },
   },
 });
@@ -191,6 +192,7 @@ export const volumeGroup = cva("items-center gap-2", {
     size: {
       bar: "hidden @player-wide:flex",
       stage: "flex",
+      drawer: "flex w-full",
     },
   },
   defaultVariants: { size: "bar" },
@@ -240,6 +242,7 @@ export const playButton = cva(
       size: {
         bar: "size-11 @player:size-9.5",
         stage: "size-14 @player:size-15",
+        ring: "size-15 shadow-neon-primary",
       },
     },
     defaultVariants: { size: "bar" },
@@ -257,6 +260,7 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
       row: "size-7 rounded",
       bar: "size-10 rounded-md @player:size-12.5",
       stage: "size-[min(60vw,24vh,268px)] rounded-xl @player:size-[min(60vw,32vh,268px)]",
+      fluid: "size-[min(100cqw,100cqh,268px)] rounded-xl",
     },
   },
   defaultVariants: { tone: "primary", size: "bar" },
@@ -281,6 +285,7 @@ export const coverInitials = cva("text-fg font-mono", {
       row: "text-[8px]",
       bar: "text-[10px]",
       stage: "text-[26px]",
+      fluid: "text-[26px]",
     },
   },
   defaultVariants: { size: "bar" },
@@ -307,6 +312,7 @@ export const volumeTrack = cva("flex h-4 cursor-pointer items-center touch-none"
     size: {
       bar: "w-40",
       stage: "w-44",
+      drawer: "min-w-0 flex-1",
     },
   },
   defaultVariants: { size: "bar" },
@@ -576,7 +582,16 @@ export const stageHeader = cva(
 );
 
 export const stageMain = cva(
-  "relative flex min-h-0 flex-1 flex-col overflow-hidden px-6 text-center md:px-11 md:text-left"
+  "relative flex min-h-0 flex-1 flex-col overflow-hidden px-6 text-center md:px-11 md:text-left",
+  {
+    variants: {
+      layout: {
+        wide: "",
+        compact: "pt-14",
+      },
+    },
+    defaultVariants: { layout: "wide" },
+  }
 );
 
 export const stageMeta = cva("flex max-w-[430px] flex-col items-center gap-1.5 sm:gap-2.5 md:items-start");
@@ -607,9 +622,76 @@ export const stageDeviceLine = cva("text-secondary-400 mt-0.5 flex items-center 
 
 export const stageActions = cva("mt-1.5 flex items-center gap-4");
 
-export const stageFooter = cva(
-  "relative flex shrink-0 flex-col gap-4 px-5 pt-4 pb-[max(1.75rem,env(safe-area-inset-bottom))] sm:px-15"
+export const stageFooter = cva("relative flex shrink-0 flex-col px-5 sm:px-15", {
+  variants: {
+    layout: {
+      wide: "gap-4 pt-4 pb-[max(1.75rem,env(safe-area-inset-bottom))]",
+      compact: "gap-3 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]",
+    },
+  },
+  defaultVariants: { layout: "wide" },
+});
+
+export const stageCoverSlot = cva("flex min-h-0 w-full flex-1 items-center justify-center [container-type:size]");
+
+export const stageDrawerFrame = cva("w-full overflow-hidden");
+
+export const stageController = cva(
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 shadow-glass @container flex flex-col rounded-[28px] border bg-linear-to-br p-3.5"
 );
+
+export const stagePad = cva("player-stage-ring grid");
+
+export const stageArea = cva("", {
+  variants: {
+    area: {
+      actions: "[grid-area:actions]",
+      info: "[grid-area:info] self-start justify-self-center",
+      shuffle: "[grid-area:shuffle] self-end justify-self-center",
+      more: "[grid-area:more] self-start justify-self-center",
+      repeat: "[grid-area:repeat] self-end justify-self-center",
+      volume: "[grid-area:volume]",
+    },
+  },
+});
+
+export const stageRing = cva(
+  "bg-surface-sunken/70 ring-fg/8 shadow-well relative size-(--player-ring) rounded-full ring-1 ring-inset [grid-area:ring]"
+);
+
+export const stageRingSlot = cva("absolute", {
+  variants: {
+    at: {
+      top: "top-1 left-1/2 -translate-x-1/2",
+      bottom: "bottom-1 left-1/2 -translate-x-1/2",
+      left: "top-1/2 left-1 -translate-y-1/2",
+      right: "top-1/2 right-1 -translate-y-1/2",
+      center: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+    },
+  },
+});
+
+export const stageCorner = cva(
+  "focus-visible:ring-primary-500 relative grid size-(--player-ring-side) shrink-0 place-items-center rounded-full border transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      active: {
+        true: "border-primary-500/45 bg-primary-500/15 text-primary-400",
+        false: "border-fg/10 bg-surface-overlay/70 text-fg-muted hover:text-fg",
+      },
+    },
+    defaultVariants: { active: false },
+  }
+);
+
+export const stageTray = cva("border-fg-muted/15 flex items-center justify-between", {
+  variants: {
+    edge: {
+      top: "mb-3 border-b pb-3",
+      bottom: "mt-3 border-t pt-3",
+    },
+  },
+});
 
 export const stageScrubRow = cva("flex items-center gap-3.5");
 
@@ -685,6 +767,7 @@ export const stageFace = cva("flex h-full min-h-0 w-full items-center justify-ce
   variants: {
     layout: {
       track: "flex-col gap-4 text-center sm:gap-6 md:flex-row md:gap-11 md:text-left",
+      compact: "flex-col gap-3 text-center",
     },
   },
 });

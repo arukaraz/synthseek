@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -514,6 +514,156 @@ describe("the full stage", () => {
     const { container } = renderPlayer({ fullscreen: true });
 
     expect(container.querySelector("[data-cy=player]")).toBeNull();
+  });
+});
+
+describe("the full stage on a phone", () => {
+  beforeEach(() => {
+    wideScreen = false;
+  });
+
+  it("keeps the details, the track actions and the volume folded away until asked", () => {
+    renderPlayer({ fullscreen: true });
+
+    expect(screen.queryByText("FLAC 1024 kbps")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enPlayer.controls.lyrics })).not.toBeInTheDocument();
+    expect(screen.queryByRole("slider", { name: enPlayer.controls.volume })).not.toBeInTheDocument();
+  });
+
+  it("keeps the playback position where it was", () => {
+    renderPlayer({ fullscreen: true, positionSeconds: 65 });
+
+    expect(screen.getByRole("slider", { name: enPlayer.controls.seek })).toBeInTheDocument();
+    expect(screen.getByText("1:05")).toBeInTheDocument();
+  });
+
+  it("drives playback from the ring", async () => {
+    const { actions, user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.play }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.stop }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.previous }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.next }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.shuffle }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.repeat.off }));
+
+    expect(actions.togglePlay).toHaveBeenCalled();
+    expect(actions.stop).toHaveBeenCalled();
+    expect(actions.previous).toHaveBeenCalled();
+    expect(actions.next).toHaveBeenCalled();
+    expect(actions.toggleShuffle).toHaveBeenCalled();
+    expect(actions.cycleRepeat).toHaveBeenCalled();
+  });
+
+  it("opens the details from the info corner", async () => {
+    const { user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.info }));
+
+    expect(screen.getByText("FLAC 1024 kbps")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enPlayer.controls.info })).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("opens the track actions from the more corner", async () => {
+    const { actions, user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.more }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.lyrics }));
+
+    expect(actions.toggleLyrics).toHaveBeenCalled();
+  });
+
+  it("opens the volume from the ring", async () => {
+    const { actions, user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.volumeControls }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.mute }));
+
+    expect(screen.getByRole("slider", { name: enPlayer.controls.volume })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enPlayer.controls.volumeControls })).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+    expect(actions.toggleMute).toHaveBeenCalled();
+  });
+
+  it("shows the shuffle and repeat state on their corners", () => {
+    renderPlayer({ fullscreen: true, shuffle: true, repeat: "one" });
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.shuffle })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: enPlayer.controls.repeat.one })).toBeInTheDocument();
+  });
+
+  it("opens the details while the lyrics are showing", async () => {
+    const { user } = renderPlayer({ fullscreen: true, lyricsOpen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.info }));
+
+    expect(screen.getByText("FLAC 1024 kbps")).toBeInTheDocument();
+  });
+
+  it("puts the track actions right after the button that opens them, for the keyboard", async () => {
+    const { user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.more }));
+    await user.tab();
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.favorite })).toHaveFocus();
+  });
+
+  it("keeps one drawer open at a time, so the cover and the title stay on screen", async () => {
+    const { user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.info }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.more }));
+
+    await waitFor(() => expect(screen.queryByText("FLAC 1024 kbps")).not.toBeInTheDocument());
+    expect(screen.getByRole("button", { name: enPlayer.controls.lyrics })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.volumeControls }));
+
+    await waitFor(() =>
+      expect(screen.queryByRole("button", { name: enPlayer.controls.lyrics })).not.toBeInTheDocument()
+    );
+    expect(screen.getByRole("slider", { name: enPlayer.controls.volume })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enPlayer.controls.info })).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByRole("button", { name: enPlayer.controls.more })).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("folds a drawer away when its own button is pressed again", async () => {
+    const { user } = renderPlayer({ fullscreen: true });
+
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.info }));
+    await user.click(screen.getByRole("button", { name: enPlayer.controls.info }));
+
+    await waitFor(() => expect(screen.queryByText("FLAC 1024 kbps")).not.toBeInTheDocument());
+  });
+
+  it("flags the info corner while the server is converting, since the details are folded away", () => {
+    renderPlayer({
+      fullscreen: true,
+      chain: { ...createPlayerView().chain, transcoding: true, serverLabel: "mp3 320" },
+    });
+
+    const info = screen.getByRole("button", { name: `${enPlayer.controls.info}: ${enPlayer.chain.serverConverting}` });
+    expect(info.querySelector("span")).not.toBeNull();
+  });
+
+  it("flags the more corner when the sound plays on another device", () => {
+    const kitchen = createPlayerDevice({ id: "kitchen", name: "Kitchen", local: false });
+    renderPlayer({ fullscreen: true, activeDevice: kitchen, devices: [kitchen] });
+
+    const more = screen.getByRole("button", {
+      name: `${enPlayer.controls.more}: ${enPlayer.menu.playingOn.replace("{{device}}", "Kitchen")}`,
+    });
+    expect(more.querySelector("span")).not.toBeNull();
+  });
+
+  it("leaves both corners unflagged when nothing needs attention", () => {
+    renderPlayer({ fullscreen: true });
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.info }).querySelector("span")).toBeNull();
+    expect(screen.getByRole("button", { name: enPlayer.controls.more }).querySelector("span")).toBeNull();
   });
 });
 

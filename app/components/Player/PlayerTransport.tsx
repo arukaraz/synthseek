@@ -1,9 +1,10 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { Loader2, Pause, Play, Repeat, Repeat1, Shuffle, SkipBack, SkipForward, Square } from "lucide-react";
+import { Repeat, Repeat1, Shuffle, SkipBack, SkipForward, Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { PlayGlyph } from "./PlayGlyph";
 import { TRANSPORT_METRICS } from "./constants";
 import { labelled } from "./helpers";
 import { iconButton, playButton } from "./styles";
@@ -47,13 +48,7 @@ export function PlayerTransport({ view, actions, size }: PlayerTransportProps) {
         onClick={actions.togglePlay}
         {...labelled(view.playing ? t("controls.pause") : t("controls.play"))}
       >
-        {view.loading ? (
-          <Loader2 className={cn(metrics.arrow, "animate-spin")} />
-        ) : view.playing ? (
-          <Pause className={cn(metrics.face, "fill-current")} />
-        ) : (
-          <Play className={cn(metrics.face, "fill-current")} />
-        )}
+        <PlayGlyph view={view} spin={metrics.arrow} face={metrics.face} />
       </button>
       <button
         type="button"

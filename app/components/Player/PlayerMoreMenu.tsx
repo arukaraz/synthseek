@@ -28,22 +28,14 @@ import {
 } from "@components/ui/DropdownMenu";
 
 import { MODE_MENU_ICON, RESTORE_MODE_ICON } from "./constants";
-import { keepMenuOpen, labelled, moreAttention } from "./helpers";
+import { keepMenuOpen, labelled } from "./helpers";
 import { iconButton, menuState, moreBadge } from "./styles";
 import type { PlayerProps } from "./types";
+import { useMoreAttention } from "./useMoreAttention";
 
 export function PlayerMoreMenu({ view, actions }: PlayerProps) {
   const { t } = useTranslation("player");
-  const attention = moreAttention(view);
-  const attentionText =
-    attention === "remote"
-      ? t("menu.playingOn", { device: view.activeDevice.name })
-      : attention === "warning"
-        ? t("scrobble.retrying")
-        : attention === "danger"
-          ? t("scrobble.failed")
-          : null;
-  const name = attentionText === null ? t("controls.more") : `${t("controls.more")}: ${attentionText}`;
+  const { attention, name } = useMoreAttention(view);
 
   return (
     <DropdownMenu>
