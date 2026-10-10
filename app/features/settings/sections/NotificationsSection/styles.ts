@@ -29,7 +29,7 @@ export const actionsRow = cva("flex flex-wrap items-center gap-2");
 
 export const checklistHeading = cva("text-fg text-sm font-semibold");
 
-export const checklistGrid = cva("grid grid-cols-1 gap-4 md:grid-cols-2");
+export const checklistGrid = cva("grid grid-cols-1 gap-4 lg:grid-cols-2");
 
 export const checklistGroup = cva("border-fg/10 bg-fg/5 flex flex-col gap-3 rounded-lg border p-3");
 
