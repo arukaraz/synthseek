@@ -1,4 +1,5 @@
 import { API_URL } from "@utils/env";
+import { forwardedRequestHeaders } from "@utils/proxy-headers";
 import { NextRequest, NextResponse } from "next/server";
 
 function isSSERequest(request: NextRequest): boolean {
@@ -8,12 +9,7 @@ function isSSERequest(request: NextRequest): boolean {
 async function handleSSERequest(request: NextRequest, path: string): Promise<Response> {
   const url = `${API_URL}/api/v1/trpc/${path}${request.nextUrl.search}`;
 
-  const headers = new Headers();
-  request.headers.forEach((value, key) => {
-    if (!["host", "connection", "keep-alive", "transfer-encoding"].includes(key.toLowerCase())) {
-      headers.set(key, value);
-    }
-  });
+  const headers = forwardedRequestHeaders(request.headers);
 
   const backendResponse = await fetch(url, {
     method: request.method,
@@ -45,12 +41,7 @@ async function handleSSERequest(request: NextRequest, path: string): Promise<Res
 async function handleHTTPRequest(request: NextRequest, path: string): Promise<Response> {
   const url = `${API_URL}/api/v1/trpc/${path}${request.nextUrl.search}`;
 
-  const headers = new Headers();
-  request.headers.forEach((value, key) => {
-    if (!["host", "connection", "keep-alive", "transfer-encoding"].includes(key.toLowerCase())) {
-      headers.set(key, value);
-    }
-  });
+  const headers = forwardedRequestHeaders(request.headers);
 
   let body: BodyInit | null = null;
   if (request.method === "POST") {
