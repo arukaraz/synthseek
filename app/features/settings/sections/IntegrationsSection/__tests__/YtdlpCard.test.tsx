@@ -48,6 +48,12 @@ const initial: YtdlpCardProps["initial"] = {
     singleTrackRequests: false,
     stagingRetentionHours: 24,
   },
+  archive: {
+    enabled: true,
+    priority: 20,
+    collections: { netlabels: true, etree: false },
+    searchTimeout: 30000,
+  },
 };
 
 describe("YtdlpCard", () => {
@@ -72,6 +78,7 @@ describe("YtdlpCard", () => {
         slskd: initial.slskd,
         ytdlp: { ...initial.ytdlp, enabled: true },
         usenet: initial.usenet,
+        archive: initial.archive,
       });
     });
   });

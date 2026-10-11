@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { emptyPanel, sectionGrid } from "../../styles";
+import { ArchiveCard } from "./ArchiveCard";
 import { LidarrCard } from "./LidarrCard";
 import { SlskdCard } from "./SlskdCard";
 import { UsenetCard } from "./UsenetCard";
@@ -43,6 +44,7 @@ export function DownloadSourcesSection() {
       />
       <UsenetCard initial={data.downloadSources} />
       <YtdlpCard initial={data.downloadSources} />
+      <ArchiveCard initial={data.downloadSources} />
       <LidarrCard initial={data.connections.lidarr} />
     </div>
   );

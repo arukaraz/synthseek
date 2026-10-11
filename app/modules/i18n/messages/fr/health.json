@@ -29,5 +29,9 @@
   "USENET_NOT_CONFIGURED": "L'indexeur Usenet et SABnzbd ne sont pas configurés (optionnel)",
   "USENET_INDEXER_UNREACHABLE": "Indexeur injoignable",
   "USENET_DOWNLOADER_UNREACHABLE": "SABnzbd injoignable",
-  "USENET_CONNECTED": "Indexeur et SABnzbd joignables"
+  "USENET_CONNECTED": "Indexeur et SABnzbd joignables",
+  "ARCHIVE_DISABLED": "Internet Archive est désactivé (optionnel)",
+  "ARCHIVE_REACHABLE": "Internet Archive joignable",
+  "ARCHIVE_UNREACHABLE": "Internet Archive injoignable",
+  "ARCHIVE_PAUSED": "En pause encore {{seconds}} s après des échecs ou une demande de ralentir"
 }

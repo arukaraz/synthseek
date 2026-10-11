@@ -54,6 +54,12 @@ const initial: UsenetCardProps["initial"] = {
     singleTrackRequests: false,
     stagingRetentionHours: 24,
   },
+  archive: {
+    enabled: true,
+    priority: 20,
+    collections: { netlabels: true, etree: true },
+    searchTimeout: 30000,
+  },
 };
 
 const optedIn: UsenetCardProps["initial"] = {
@@ -117,6 +123,7 @@ describe("UsenetCard", () => {
         slskd: initial.slskd,
         ytdlp: initial.ytdlp,
         usenet: { ...initial.usenet, enabled: true },
+        archive: initial.archive,
       });
     });
   });
@@ -132,6 +139,7 @@ describe("UsenetCard", () => {
         slskd: initial.slskd,
         ytdlp: initial.ytdlp,
         usenet: { ...initial.usenet, singleTrackRequests: true },
+        archive: initial.archive,
       });
     });
   });

@@ -30,6 +30,39 @@ describe("TrackStatusCell", () => {
     expect(screen.getByText("via Usenet")).toHaveAttribute("title", "Artist - Album [FLAC]");
   });
 
+  it("links the licence of a track that came with one, opening it in a new tab", () => {
+    render(
+      <TrackStatusCell
+        track={makeRequestsTrack({
+          status: RequestStatus.enum.complete,
+          acquisition_source: "archive",
+          acquisition_ref: "DWK155/Poldoore_-_02_-_Paradise.mp3",
+          acquisition_license: "http://creativecommons.org/licenses/by-nc-nd/3.0/",
+        })}
+      />
+    );
+
+    expect(screen.getByText("via Internet Archive")).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: "licence" });
+    expect(link).toHaveAttribute("href", "http://creativecommons.org/licenses/by-nc-nd/3.0/");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("shows no licence link for a track without one", () => {
+    render(
+      <TrackStatusCell
+        track={makeRequestsTrack({
+          status: RequestStatus.enum.complete,
+          acquisition_source: "usenet",
+          acquisition_ref: "x",
+        })}
+      />
+    );
+
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
+
   it("names a source it has no label for by its raw key", () => {
     render(
       <TrackStatusCell

@@ -15,7 +15,7 @@ import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { SERVER_TEST_OUTCOME_KEYS } from "./constants";
 import { MediaServerPlaylistSyncRow } from "./MediaServerPlaylistSyncRow";
-import { pathsNotice } from "./styles";
+import { cardNotice } from "./styles";
 import type { NavidromeCardProps } from "./types";
 
 export function NavidromeCard({ initial }: NavidromeCardProps) {
@@ -75,7 +75,7 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
         </Button>
       </div>
       {testConnection.data?.realPaths === false ? (
-        <p className={pathsNotice()}>{t("mediaServers.navidrome.syntheticPaths")}</p>
+        <p className={cardNotice()}>{t("mediaServers.navidrome.syntheticPaths")}</p>
       ) : null}
 
       <SaveBar isDirty={isDirty} isSaving={isSaving} onSave={handleSave} onCancel={reset} />

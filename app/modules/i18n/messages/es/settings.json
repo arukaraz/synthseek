@@ -277,7 +277,8 @@
     "source": {
       "slskd": "Soulseek",
       "ytdlp": "YouTube",
-      "usenet": "Usenet"
+      "usenet": "Usenet",
+      "archive": "Internet Archive"
     },
     "reason": {
       "wrong_file": "Archivo incorrecto",
@@ -611,6 +612,31 @@
       "label": "Tiempo de espera de búsqueda",
       "description": "Cuánto tiempo puede dedicar yt-dlp a buscar una canción en YouTube. La búsqueda en YouTube es más lenta que slskd, por eso tiene un valor predeterminado más amplio.",
       "ariaLabel": "Tiempo de espera de búsqueda de yt-dlp en segundos"
+    }
+  },
+  "archive": {
+    "title": "Internet Archive",
+    "description": "Música gratuita y con licencia libre del Internet Archive. Se usa cuando las fuentes de más prioridad no consiguen una pista.",
+    "enable": {
+      "label": "Activar",
+      "description": "Si está activo, las pistas que las demás fuentes no consiguen se buscan en las colecciones de abajo.",
+      "ariaLabel": "Activar Internet Archive"
+    },
+    "netlabels": {
+      "label": "Lanzamientos de netlabels",
+      "description": "Álbumes que sellos independientes publicaron con licencias libres.",
+      "ariaLabel": "Buscar en lanzamientos de netlabels"
+    },
+    "etree": {
+      "label": "Grabaciones en directo",
+      "description": "Conciertos de grupos que permiten grabarlos. Rara vez es la versión de estudio de una pista.",
+      "ariaLabel": "Buscar en grabaciones en directo"
+    },
+    "noCollection": "Activa al menos una colección o esta fuente no buscará nada.",
+    "searchTimeout": {
+      "label": "Tiempo de búsqueda",
+      "description": "Cuánto tiempo puede dedicar el Internet Archive a encontrar una pista.",
+      "ariaLabel": "Tiempo de espera de búsqueda del Internet Archive en segundos"
     }
   },
   "accountRules": {

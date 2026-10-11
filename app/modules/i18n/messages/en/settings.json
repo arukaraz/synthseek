@@ -274,7 +274,8 @@
     "source": {
       "slskd": "Soulseek",
       "ytdlp": "YouTube",
-      "usenet": "Usenet"
+      "usenet": "Usenet",
+      "archive": "Internet Archive"
     },
     "reason": {
       "wrong_file": "Wrong file",
@@ -608,6 +609,31 @@
       "label": "Search timeout",
       "description": "How long yt-dlp can spend searching YouTube for a track. YouTube search is slower than slskd, so it gets a wider default.",
       "ariaLabel": "yt-dlp search timeout seconds"
+    }
+  },
+  "archive": {
+    "title": "Internet Archive",
+    "description": "Free, openly licensed music from the Internet Archive. Used when higher-priority sources cannot deliver a track.",
+    "enable": {
+      "label": "Enable",
+      "description": "When on, tracks the other sources cannot deliver are looked for in the collections below.",
+      "ariaLabel": "Enable Internet Archive"
+    },
+    "netlabels": {
+      "label": "Netlabel releases",
+      "description": "Albums independent labels published under free licences.",
+      "ariaLabel": "Search netlabel releases"
+    },
+    "etree": {
+      "label": "Live recordings",
+      "description": "Concerts by bands that allow taping. Rarely the studio version of a track.",
+      "ariaLabel": "Search live recordings"
+    },
+    "noCollection": "Turn on at least one collection, or this source stays idle.",
+    "searchTimeout": {
+      "label": "Search timeout",
+      "description": "How long the Internet Archive can spend finding a track.",
+      "ariaLabel": "Internet Archive search timeout seconds"
     }
   },
   "accountRules": {

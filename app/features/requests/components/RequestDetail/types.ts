@@ -51,6 +51,7 @@ export interface TrackStatusCellProps {
 export interface AcquisitionLineProps {
   source: string;
   sourceRef: string | null;
+  license: string | null;
 }
 
 export interface RequestDetailHeroProps {

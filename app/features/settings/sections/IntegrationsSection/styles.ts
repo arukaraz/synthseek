@@ -20,7 +20,7 @@ export const disabledOverlay = cva("flex flex-col gap-4 transition-opacity", {
 
 export const stagedListHeader = cva("flex items-center justify-between gap-3");
 
-export const pathsNotice = cva("text-warning-vivid text-xs");
+export const cardNotice = cva("text-warning-vivid text-xs");
 
 export const orderRow = cva("border-fg/10 bg-fg/[0.03] flex items-center gap-3 rounded-lg border px-3 py-2");
 

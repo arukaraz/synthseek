@@ -97,9 +97,7 @@ export function YtdlpCard({ initial }: YtdlpCardProps) {
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}
-        onSave={() =>
-          save((payload) => update.mutateAsync({ slskd: initial.slskd, ytdlp: payload, usenet: initial.usenet }))
-        }
+        onSave={() => save((payload) => update.mutateAsync({ ...initial, ytdlp: payload }))}
         onCancel={reset}
       />
     </SettingsCard>

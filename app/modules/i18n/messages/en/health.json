@@ -29,5 +29,9 @@
   "USENET_NOT_CONFIGURED": "Usenet indexer and SABnzbd are not configured (optional)",
   "USENET_INDEXER_UNREACHABLE": "Indexer unreachable",
   "USENET_DOWNLOADER_UNREACHABLE": "SABnzbd unreachable",
-  "USENET_CONNECTED": "Indexer and SABnzbd reachable"
+  "USENET_CONNECTED": "Indexer and SABnzbd reachable",
+  "ARCHIVE_DISABLED": "Internet Archive is turned off (optional)",
+  "ARCHIVE_REACHABLE": "Internet Archive reachable",
+  "ARCHIVE_UNREACHABLE": "Internet Archive unreachable",
+  "ARCHIVE_PAUSED": "Paused for another {{seconds}}s after failures or a request to slow down"
 }

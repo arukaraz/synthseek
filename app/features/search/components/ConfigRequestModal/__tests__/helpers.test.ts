@@ -32,7 +32,8 @@ import type { LidarrArtistSelection, LidarrSelection } from "../types";
 
 const PER_TRACK = { enabled: true, allowsSingleTracks: true };
 const ALBUM_ONLY = { enabled: true, allowsSingleTracks: false };
-const ALL_ENABLED = { slskd: PER_TRACK, ytdlp: PER_TRACK, usenet: ALBUM_ONLY };
+const DISABLED = { enabled: false, allowsSingleTracks: true };
+const ALL_ENABLED = { slskd: PER_TRACK, ytdlp: PER_TRACK, usenet: ALBUM_ONLY, archive: PER_TRACK };
 
 const COMPLETE_SELECTION: LidarrSelection = {
   rootFolderPath: "/music",
@@ -186,26 +187,26 @@ describe("extractItemMetadata", () => {
 
 describe("offeredSources", () => {
   it("keeps the canonical priority order regardless of the availability order", () => {
-    expect(offeredSources({ ytdlp: PER_TRACK, usenet: ALBUM_ONLY, slskd: PER_TRACK }, true)).toEqual([
-      "slskd",
-      "usenet",
-      "ytdlp",
-    ]);
+    expect(
+      offeredSources({ archive: PER_TRACK, ytdlp: PER_TRACK, usenet: ALBUM_ONLY, slskd: PER_TRACK }, true)
+    ).toEqual(["slskd", "usenet", "ytdlp", "archive"]);
   });
 
   it("drops a disabled source", () => {
-    expect(offeredSources({ ...ALL_ENABLED, ytdlp: { enabled: false, allowsSingleTracks: true } }, true)).toEqual([
-      "slskd",
-      "usenet",
-    ]);
+    expect(offeredSources({ ...ALL_ENABLED, ytdlp: DISABLED, archive: DISABLED }, true)).toEqual(["slskd", "usenet"]);
   });
 
   it("withholds a source that serves only albums from a non-album request", () => {
-    expect(offeredSources(ALL_ENABLED, false)).toEqual(["slskd", "ytdlp"]);
+    expect(offeredSources(ALL_ENABLED, false)).toEqual(["slskd", "ytdlp", "archive"]);
   });
 
   it("offers that source outside albums once it allows single tracks", () => {
-    expect(offeredSources({ ...ALL_ENABLED, usenet: PER_TRACK }, false)).toEqual(["slskd", "usenet", "ytdlp"]);
+    expect(offeredSources({ ...ALL_ENABLED, usenet: PER_TRACK }, false)).toEqual([
+      "slskd",
+      "usenet",
+      "ytdlp",
+      "archive",
+    ]);
   });
 
   it("offers nothing while the availability has not arrived", () => {

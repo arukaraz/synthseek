@@ -15,7 +15,11 @@ export function TrackStatusCell({ track, onRetryNow }: TrackStatusCellProps) {
     <div className="flex min-w-0 flex-col gap-0.5">
       <TrackStatusIndicator status={track.status} failureReason={track.failure_reason} />
       {isComplete && track.acquisition_source !== null ? (
-        <AcquisitionLine source={track.acquisition_source} sourceRef={track.acquisition_ref} />
+        <AcquisitionLine
+          source={track.acquisition_source}
+          sourceRef={track.acquisition_ref}
+          license={track.acquisition_license}
+        />
       ) : null}
       {isFailed ? (
         <TrackRetrySchedule

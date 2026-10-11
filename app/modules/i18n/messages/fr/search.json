@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Récupère l'album entier depuis votre indexeur via SABnzbd."
         },
+        "archive": {
+          "label": "Internet Archive",
+          "description": "Musique gratuite sous licence libre, issue des collections que vous avez autorisées."
+        },
         "orderHint": "Les sources sont essayées de haut en bas. Décochez-en une pour l'ignorer.",
         "moveUp": "Monter {{source}}",
         "moveDown": "Descendre {{source}}",

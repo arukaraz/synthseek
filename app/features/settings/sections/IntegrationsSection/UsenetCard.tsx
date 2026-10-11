@@ -149,9 +149,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}
-        onSave={() =>
-          save((payload) => update.mutateAsync({ slskd: initial.slskd, ytdlp: initial.ytdlp, usenet: payload }))
-        }
+        onSave={() => save((payload) => update.mutateAsync({ ...initial, usenet: payload }))}
         onCancel={reset}
       />
     </SettingsCard>

@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Se trae el disco entero desde tu indexador a través de SABnzbd."
         },
+        "archive": {
+          "label": "Internet Archive",
+          "description": "Música gratuita y con licencia libre de las colecciones que permitiste."
+        },
         "orderHint": "Las fuentes se intentan de arriba abajo. Desmarca una para saltártela.",
         "moveUp": "Subir {{source}}",
         "moveDown": "Bajar {{source}}",

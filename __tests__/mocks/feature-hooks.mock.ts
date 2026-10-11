@@ -88,6 +88,12 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
         singleTrackRequests: false,
         stagingRetentionHours: 24,
       },
+      archive: {
+        enabled: false,
+        priority: 20,
+        collections: { netlabels: true, etree: false },
+        searchTimeout: 30,
+      },
     },
     system: {
       wizardCompleted: true,

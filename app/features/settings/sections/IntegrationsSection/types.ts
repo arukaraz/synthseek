@@ -1,6 +1,10 @@
+import type { inferRouterOutputs } from "@trpc/server";
 import type { ParseKeys } from "i18next";
 
+import type { AppRouter } from "@api/__generated__/types";
 import type { PlaybackServerKey } from "@utils/playback-servers";
+
+type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export type ConnectionsEnrichment = {
   lastfmApiKey: string;
@@ -84,44 +88,17 @@ export interface EnrichmentCardProps {
   initial: ConnectionsEnrichment;
 }
 
-export interface DownloadSourceSlskd {
-  enabled: boolean;
-  priority: number;
-}
-
-export interface DownloadSourceYtdlp {
-  enabled: boolean;
-  priority: number;
-  searchResults: number;
-  maxDurationDeltaSec: number;
-  searchTimeout: number;
-}
-
-export interface DownloadSourceUsenet {
-  enabled: boolean;
-  priority: number;
-  indexerUrl: string;
-  indexerApiKey: string;
-  sabnzbdUrl: string;
-  sabnzbdApiKey: string;
-  maxSizeMb: number;
-  minAgeHours: number;
-  searchTimeout: number;
-  singleTrackRequests: boolean;
-  stagingRetentionHours: number;
-}
-
-export interface DownloadSourcesConfig {
-  slskd: DownloadSourceSlskd;
-  ytdlp: DownloadSourceYtdlp;
-  usenet: DownloadSourceUsenet;
-}
+export type DownloadSourcesConfig = RouterOutputs["settings"]["get"]["downloadSources"];
 
 export interface YtdlpCardProps {
   initial: DownloadSourcesConfig;
 }
 
 export interface UsenetCardProps {
+  initial: DownloadSourcesConfig;
+}
+
+export interface ArchiveCardProps {
   initial: DownloadSourcesConfig;
 }
 

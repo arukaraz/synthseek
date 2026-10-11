@@ -1,6 +1,6 @@
 ---
 title: "Download Sources"
-blurb: "Wire up slskd and Usenet, and understand the yt-dlp fallback."
+blurb: "Wire up slskd and Usenet, and understand the yt-dlp and Internet Archive fallbacks."
 group: "Core concepts"
 order: 5
 ---
@@ -9,13 +9,14 @@ order: 5
 
 A download source is an adapter. Synthseek asks each enabled source, in priority order, whether it can supply a track, and takes the first one that delivers something that passes verification. Lower priority numbers are tried first.
 
-Three sources ship today.
+Four sources ship today.
 
-| Source | Priority | Enabled by default |
-| ------ | -------- | ------------------ |
-| slskd  | 0        | Yes                |
-| Usenet | 5        | No                 |
-| yt-dlp | 10       | Yes                |
+| Source           | Priority | Enabled by default |
+| ---------------- | -------- | ------------------ |
+| slskd            | 0        | Yes                |
+| Usenet           | 5        | No                 |
+| yt-dlp           | 10       | Yes                |
+| Internet Archive | 20       | No                 |
 
 You can disable any of them globally in Settings, or choose which sources to try, and in what order, per request.
 
@@ -138,6 +139,29 @@ Everything downloaded through the fallback goes through exactly the same verific
 | Search results         | 15         | How many candidates are considered before one is chosen.           |
 | Maximum duration delta | 15 seconds | How much a candidate's length may differ from the expected length. |
 | Search timeout         | 60 seconds | How long to wait for results.                                      |
+
+## The Internet Archive
+
+Synthseek can also look for a track in the Internet Archive's free music. It needs no account, and it
+is off until you turn it on.
+
+It searches only the collections you allow. Netlabel releases, albums independent labels published
+under free licences, are allowed as soon as you turn the source on. Live recordings, from bands that
+let fans tape their concerts, are off by default, because a concert recording is rarely the studio
+version you asked for.
+
+A download is checked against the checksum the Internet Archive publishes for it, when there is one.
+When the release states its licence, the request page links to it. If the Internet Archive asks
+Synthseek to slow down, the source pauses for a while instead of retrying.
+
+### Internet Archive settings
+
+| Setting           | Default    | What it does                                     |
+| ----------------- | ---------- | ------------------------------------------------ |
+| Enabled           | Off        | Whether the Internet Archive is searched at all. |
+| Netlabel releases | On         | Search albums published by netlabels.            |
+| Live recordings   | Off        | Search concert recordings.                       |
+| Search timeout    | 30 seconds | How long to wait for results.                    |
 
 ## Delegating to Lidarr
 

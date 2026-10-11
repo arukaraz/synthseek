@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Pulls the whole release from your indexer via SABnzbd."
         },
+        "archive": {
+          "label": "Internet Archive",
+          "description": "Free, openly licensed music from the collections you allowed."
+        },
         "orderHint": "Sources are tried top to bottom. Untick one to skip it.",
         "moveUp": "Move {{source}} up",
         "moveDown": "Move {{source}} down",

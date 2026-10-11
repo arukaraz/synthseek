@@ -274,7 +274,8 @@
     "source": {
       "slskd": "Soulseek",
       "ytdlp": "YouTube",
-      "usenet": "Usenet"
+      "usenet": "Usenet",
+      "archive": "Internet Archive"
     },
     "reason": {
       "wrong_file": "Falsche Datei",
@@ -608,6 +609,31 @@
       "label": "Such-Zeitlimit",
       "description": "Wie lange yt-dlp damit verbringen darf, einen Titel auf YouTube zu suchen. Die YouTube-Suche ist langsamer als slskd, daher erhält sie einen großzügigeren Standardwert.",
       "ariaLabel": "yt-dlp-Such-Zeitlimit in Sekunden"
+    }
+  },
+  "archive": {
+    "title": "Internet Archive",
+    "description": "Kostenlose, frei lizenzierte Musik aus dem Internet Archive. Wird genutzt, wenn Quellen mit höherer Priorität einen Titel nicht liefern.",
+    "enable": {
+      "label": "Aktivieren",
+      "description": "Wenn aktiv, werden Titel, die andere Quellen nicht liefern, in den Sammlungen unten gesucht.",
+      "ariaLabel": "Internet Archive aktivieren"
+    },
+    "netlabels": {
+      "label": "Netlabel-Veröffentlichungen",
+      "description": "Alben, die unabhängige Labels unter freien Lizenzen veröffentlicht haben.",
+      "ariaLabel": "Netlabel-Veröffentlichungen durchsuchen"
+    },
+    "etree": {
+      "label": "Live-Mitschnitte",
+      "description": "Konzerte von Bands, die Mitschnitte erlauben. Selten die Studioversion eines Titels.",
+      "ariaLabel": "Live-Mitschnitte durchsuchen"
+    },
+    "noCollection": "Aktiviere mindestens eine Sammlung, sonst bleibt diese Quelle untätig.",
+    "searchTimeout": {
+      "label": "Such-Zeitlimit",
+      "description": "Wie lange das Internet Archive für die Suche nach einem Titel brauchen darf.",
+      "ariaLabel": "Internet-Archive-Such-Zeitlimit in Sekunden"
     }
   },
   "accountRules": {

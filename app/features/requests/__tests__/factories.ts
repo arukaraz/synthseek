@@ -60,6 +60,7 @@ export function makeRequestsTrack(overrides: Partial<TrackRequest> = {}): TrackR
     source_peer: null,
     acquisition_source: null,
     acquisition_ref: null,
+    acquisition_license: null,
     upgrade: false,
     created_at: new Date(),
     completed_at: null,

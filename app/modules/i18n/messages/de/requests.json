@@ -119,6 +119,7 @@
   "tracks": {
     "trackHeader": "Titel",
     "acquiredFrom": "über {{source}}",
+    "license": "Lizenz",
     "artistHeader": "Künstler",
     "statusHeader": "Status",
     "completedHeader": "Abgeschlossen",
