@@ -58,6 +58,8 @@ export function makeRequestsTrack(overrides: Partial<TrackRequest> = {}): TrackR
     watch_enabled: true,
     watch_empty_streak: 0,
     source_peer: null,
+    acquisition_source: null,
+    acquisition_ref: null,
     upgrade: false,
     created_at: new Date(),
     completed_at: null,

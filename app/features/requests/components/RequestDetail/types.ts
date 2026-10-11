@@ -48,6 +48,11 @@ export interface TrackStatusCellProps {
   onRetryNow?: () => void;
 }
 
+export interface AcquisitionLineProps {
+  source: string;
+  sourceRef: string | null;
+}
+
 export interface RequestDetailHeroProps {
   request: RequestListItem;
   tracks: TrackRequest[];

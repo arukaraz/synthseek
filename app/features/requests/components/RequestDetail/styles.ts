@@ -2,6 +2,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 export const jspfExportDialogContent = cva("flex w-full max-w-sm flex-col gap-4 p-6");
 
+export const acquisitionLine = cva("text-fg/50 truncate text-xs");
+
 export const detailContainer = cva("h-full overflow-y-auto", {
   variants: {},
   defaultVariants: {},

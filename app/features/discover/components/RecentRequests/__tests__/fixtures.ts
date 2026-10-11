@@ -54,6 +54,8 @@ export function createFlatTrackRow(overrides: Partial<FlatTrackRow> = {}): FlatT
     watch_enabled: true,
     watch_empty_streak: 0,
     source_peer: null,
+    acquisition_source: null,
+    acquisition_ref: null,
     upgrade: false,
     upgrade_in_flight: false,
     created_at: new Date("2024-01-01T00:00:00Z"),

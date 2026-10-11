@@ -16,6 +16,54 @@ describe("TrackStatusCell", () => {
     expect(container.firstChild).not.toBeNull();
   });
 
+  it("says which source a completed track came from, with what it was called there on hover", () => {
+    render(
+      <TrackStatusCell
+        track={makeRequestsTrack({
+          status: RequestStatus.enum.complete,
+          acquisition_source: "usenet",
+          acquisition_ref: "Artist - Album [FLAC]",
+        })}
+      />
+    );
+
+    expect(screen.getByText("via Usenet")).toHaveAttribute("title", "Artist - Album [FLAC]");
+  });
+
+  it("names a source it has no label for by its raw key", () => {
+    render(
+      <TrackStatusCell
+        track={makeRequestsTrack({
+          status: RequestStatus.enum.complete,
+          acquisition_source: "napster",
+          acquisition_ref: null,
+        })}
+      />
+    );
+
+    expect(screen.getByText("via napster")).not.toHaveAttribute("title");
+  });
+
+  it("says nothing about the source of a completed track that predates the record", () => {
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.complete })} />);
+
+    expect(screen.queryByText(/^via /)).not.toBeInTheDocument();
+  });
+
+  it("says nothing about the source of a track that is not complete", () => {
+    render(
+      <TrackStatusCell
+        track={makeRequestsTrack({
+          status: RequestStatus.enum.failed,
+          acquisition_source: "slskd",
+          acquisition_ref: "x",
+        })}
+      />
+    );
+
+    expect(screen.queryByText(/^via /)).not.toBeInTheDocument();
+  });
+
   it("renders for a failed track carrying a failure reason", () => {
     const { container } = render(
       <TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.failed, failure_reason: "not_found" })} />
