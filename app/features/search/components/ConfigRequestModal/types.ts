@@ -39,16 +39,7 @@ export interface AcquisitionOrderListProps {
   onChange: (selection: AcquisitionSelection) => void;
 }
 
-export interface EnabledDownloadSources {
-  slskd: boolean;
-  ytdlp: boolean;
-  usenet: boolean;
-}
-
-export interface AcquisitionOptionContext {
-  isAlbum: boolean;
-  usenetAllowsSingleTracks: boolean;
-}
+export type DownloadSourcesAvailability = RouterOutputs["settings"]["downloadSourcesAvailability"];
 
 export interface SourceRowLabels {
   labelKey: ParseKeys<"search">;

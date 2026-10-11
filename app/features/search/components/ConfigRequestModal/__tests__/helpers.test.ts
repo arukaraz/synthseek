@@ -30,10 +30,9 @@ import {
 import { createMockTrackFull, createMockAlbumSimplified, createMockPlaylistSimplified } from "@test/factories";
 import type { LidarrArtistSelection, LidarrSelection } from "../types";
 
-const ALL_ENABLED = { slskd: true, ytdlp: true, usenet: true };
-const NON_ALBUM_CONTEXT = { isAlbum: false, usenetAllowsSingleTracks: false };
-const ALBUM_CONTEXT = { isAlbum: true, usenetAllowsSingleTracks: false };
-const NON_ALBUM_OPTED_IN = { isAlbum: false, usenetAllowsSingleTracks: true };
+const PER_TRACK = { enabled: true, allowsSingleTracks: true };
+const ALBUM_ONLY = { enabled: true, allowsSingleTracks: false };
+const ALL_ENABLED = { slskd: PER_TRACK, ytdlp: PER_TRACK, usenet: ALBUM_ONLY };
 
 const COMPLETE_SELECTION: LidarrSelection = {
   rootFolderPath: "/music",
@@ -186,20 +185,31 @@ describe("extractItemMetadata", () => {
 });
 
 describe("offeredSources", () => {
-  it("keeps the canonical priority order regardless of the enabled map order", () => {
-    expect(offeredSources(ALL_ENABLED, ALBUM_CONTEXT)).toEqual(["slskd", "usenet", "ytdlp"]);
+  it("keeps the canonical priority order regardless of the availability order", () => {
+    expect(offeredSources({ ytdlp: PER_TRACK, usenet: ALBUM_ONLY, slskd: PER_TRACK }, true)).toEqual([
+      "slskd",
+      "usenet",
+      "ytdlp",
+    ]);
   });
 
   it("drops a disabled source", () => {
-    expect(offeredSources({ slskd: true, ytdlp: false, usenet: true }, ALBUM_CONTEXT)).toEqual(["slskd", "usenet"]);
+    expect(offeredSources({ ...ALL_ENABLED, ytdlp: { enabled: false, allowsSingleTracks: true } }, true)).toEqual([
+      "slskd",
+      "usenet",
+    ]);
   });
 
-  it("withholds usenet from a non-album request by default", () => {
-    expect(offeredSources(ALL_ENABLED, NON_ALBUM_CONTEXT)).toEqual(["slskd", "ytdlp"]);
+  it("withholds a source that serves only albums from a non-album request", () => {
+    expect(offeredSources(ALL_ENABLED, false)).toEqual(["slskd", "ytdlp"]);
   });
 
-  it("offers usenet outside albums once the opt-in is on", () => {
-    expect(offeredSources(ALL_ENABLED, NON_ALBUM_OPTED_IN)).toContain("usenet");
+  it("offers that source outside albums once it allows single tracks", () => {
+    expect(offeredSources({ ...ALL_ENABLED, usenet: PER_TRACK }, false)).toEqual(["slskd", "usenet", "ytdlp"]);
+  });
+
+  it("offers nothing while the availability has not arrived", () => {
+    expect(offeredSources(undefined, true)).toEqual([]);
   });
 });
 

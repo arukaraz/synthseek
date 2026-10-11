@@ -3,6 +3,8 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { createMockTrackFull, createMockAlbumSimplified } from "@test/factories";
 import { mockRouter } from "@test/mocks/next.mock";
 
+import type { DownloadSourcesAvailability } from "../types";
+
 const mocks = vi.hoisted(() => ({
   requestMutate: vi.fn(),
   batchMutate: vi.fn(),
@@ -14,7 +16,7 @@ const mocks = vi.hoisted(() => ({
 
 const { requestMutate, batchMutate, playlistMutate, tracksMutate, delegateMutate, toastError } = mocks;
 
-let sourcesAvailability: { slskd: boolean; ytdlp: boolean } | undefined;
+let sourcesAvailability: DownloadSourcesAvailability | undefined;
 let lidarrAvailable: { available: boolean } | undefined;
 let contentResponse: { success: boolean; content: unknown } | undefined;
 let isLoadingTracks: boolean;
@@ -115,7 +117,11 @@ function makeArtist() {
 
 describe("ConfigRequestModal", () => {
   beforeEach(() => {
-    sourcesAvailability = { slskd: true, ytdlp: true };
+    sourcesAvailability = {
+      slskd: { enabled: true, allowsSingleTracks: true },
+      ytdlp: { enabled: true, allowsSingleTracks: true },
+      usenet: { enabled: false, allowsSingleTracks: false },
+    };
     lidarrAvailable = { available: false };
     contentResponse = { success: true, content: [makeTrack()] };
     isLoadingTracks = false;
@@ -139,6 +145,30 @@ describe("ConfigRequestModal", () => {
 
     expect(screen.getByTestId("config-header")).toBeInTheDocument();
     expect(screen.getByTestId("acquisition-order-list")).toBeInTheDocument();
+  });
+
+  it("leaves an album-only source out of a track request", () => {
+    sourcesAvailability = {
+      slskd: { enabled: true, allowsSingleTracks: true },
+      ytdlp: { enabled: true, allowsSingleTracks: true },
+      usenet: { enabled: true, allowsSingleTracks: false },
+    };
+
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+    expect(screen.getByTestId("acquisition-order-list")).toHaveAttribute("data-order", "slskd,ytdlp");
+  });
+
+  it("offers an album-only source for an album request", () => {
+    sourcesAvailability = {
+      slskd: { enabled: true, allowsSingleTracks: true },
+      ytdlp: { enabled: true, allowsSingleTracks: true },
+      usenet: { enabled: true, allowsSingleTracks: false },
+    };
+
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+    expect(screen.getByTestId("acquisition-order-list")).toHaveAttribute("data-order", "slskd,usenet,ytdlp");
   });
 
   it("fires the track mutation without per-call dock callbacks and closes immediately", async () => {

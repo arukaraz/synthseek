@@ -113,22 +113,7 @@ export function ConfigRequestModal({
 
   const { data: sourcesAvailability } = useDownloadSourcesAvailability();
   const { data: lidarrAvailability } = useLidarrAvailable({ enabled: isAlbumItem });
-  const enabledSources = useMemo(
-    () => ({
-      slskd: sourcesAvailability?.slskd ?? false,
-      ytdlp: sourcesAvailability?.ytdlp ?? false,
-      usenet: sourcesAvailability?.usenet ?? false,
-    }),
-    [sourcesAvailability]
-  );
-  const offered = useMemo(
-    () =>
-      offeredSources(enabledSources, {
-        isAlbum: isAlbumItem,
-        usenetAllowsSingleTracks: sourcesAvailability?.usenetAllowsSingleTracks ?? false,
-      }),
-    [enabledSources, isAlbumItem, sourcesAvailability?.usenetAllowsSingleTracks]
-  );
+  const offered = useMemo(() => offeredSources(sourcesAvailability, isAlbumItem), [sourcesAvailability, isAlbumItem]);
   const lidarrOffered = isAlbumItem && (lidarrAvailability?.available ?? false);
 
   useEffect(() => {

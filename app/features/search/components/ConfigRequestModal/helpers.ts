@@ -3,12 +3,11 @@ import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helper
 import { matchesTerms, searchTerms } from "@utils/search";
 import { SOURCE_PRIORITY_ORDER } from "./constants";
 import type {
-  AcquisitionOptionContext,
   AcquisitionSelection,
   AlbumDelegate,
   ArtistDelegateInput,
   DownloadSourceKey,
-  EnabledDownloadSources,
+  DownloadSourcesAvailability,
   LidarrArtistSelection,
   LidarrMetadataProfile,
   LidarrQualityProfile,
@@ -18,14 +17,13 @@ import type {
 } from "./types";
 
 export function offeredSources(
-  enabledSources: EnabledDownloadSources,
-  context: AcquisitionOptionContext
+  availability: DownloadSourcesAvailability | undefined,
+  isAlbum: boolean
 ): DownloadSourceKey[] {
-  return SOURCE_PRIORITY_ORDER.filter((key) => {
-    if (!enabledSources[key]) return false;
-    if (key === "usenet") return context.isAlbum || context.usenetAllowsSingleTracks;
-    return true;
-  });
+  if (availability === undefined) return [];
+  return SOURCE_PRIORITY_ORDER.filter(
+    (key) => availability[key].enabled && (isAlbum || availability[key].allowsSingleTracks)
+  );
 }
 
 export function defaultSelection(offered: DownloadSourceKey[]): AcquisitionSelection {

@@ -273,7 +273,8 @@
     },
     "source": {
       "slskd": "Soulseek",
-      "ytdlp": "YouTube"
+      "ytdlp": "YouTube",
+      "usenet": "Usenet"
     },
     "reason": {
       "wrong_file": "Falsche Datei",
