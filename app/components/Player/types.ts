@@ -295,7 +295,7 @@ export interface PlayerPlacement {
 }
 
 export interface PlayerTransportProps extends PlayerProps {
-  size: "bar" | "stage" | "mini";
+  size: "bar" | "stage" | "mini" | "sideways";
 }
 
 export interface PlayerExtraControlsProps extends PlayerProps {
@@ -454,11 +454,7 @@ export interface PlayerSettingsSliderProps {
 
 export type PlayerSettingsSectionProps = PlayerProps;
 
-export interface PlayerFavouriteProps extends PlayerProps {
-  className?: string;
-}
-
-export interface PlayerUpgradeProps extends PlayerProps {
+export interface PlayerTrackButtonProps extends PlayerProps {
   size?: "compact" | "stage";
   className?: string;
 }
@@ -475,6 +471,6 @@ export type PlayerLyricsProps = PlayerProps;
 export interface PlayerCoverProps {
   initials: string;
   tone: PlayerTone;
-  size: "row" | "bar" | "stage" | "fluid";
+  size: "row" | "bar" | "stage" | "fluid" | "sideways";
   artworkUrl?: string | null;
 }

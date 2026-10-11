@@ -123,7 +123,7 @@ export const PLAYER_HEADER_SLOT_ID = "player-header-slot";
 
 export const PLAYER_MODE_ATTRIBUTE = "data-player-mode";
 
-export const PLAYER_CONTAINER_REM = 40;
+export const HEADER_SLOT_MIN_REM = 40;
 
 export const MINI_WINDOW_WIDTH_PX = 400;
 
@@ -189,6 +189,16 @@ export const TRANSPORT_METRICS = {
     folds: undefined,
     sides: "centred",
   },
+  sideways: {
+    side: "stage",
+    skip: "stage",
+    play: "stage",
+    mark: "size-4",
+    arrow: "size-5",
+    face: "size-4.5",
+    folds: undefined,
+    sides: "spread",
+  },
 } as const;
 
 export const MIRRORED_ROOT_ATTRIBUTES = ["data-theme", "lang"] as const;
@@ -199,11 +209,13 @@ export const PANEL_ANCHOR_GAP_PX = 10;
 
 export const PANEL_VIEWPORT_MARGIN_PX = 12;
 
-export const HEADER_SLOT_QUERY = `(min-width: ${PLAYER_CONTAINER_REM}rem)`;
+export const HEADER_SLOT_QUERY = `(min-width: ${HEADER_SLOT_MIN_REM}rem)`;
 
 export const STAGE_WIDE_QUERY = "(min-width: 40rem)";
 
-export const STAGE_SHORT_QUERY = "(orientation: landscape) and (max-height: 31.25rem)";
+export const SHORT_LANDSCAPE_QUERY = "(orientation: landscape) and (max-height: 31.25rem)";
+
+export const TOUCH_SHORT_LANDSCAPE_QUERY = `${SHORT_LANDSCAPE_QUERY} and (pointer: coarse)`;
 
 export const LYRIC_SCROLL_SPRING = { type: "spring", stiffness: 110, damping: 24, mass: 0.7 } as const;
 

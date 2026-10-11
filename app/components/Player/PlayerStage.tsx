@@ -19,7 +19,7 @@ import { StageChips } from "./StageChips";
 import { StageController } from "./StageController";
 import { StageDrawer } from "./StageDrawer";
 import { TrackCover } from "./TrackCover";
-import { FULLSCREEN_TOGGLE_SELECTOR, OPEN_TRACK_SELECTOR, STAGE_SHORT_QUERY, STAGE_WIDE_QUERY } from "./constants";
+import { FULLSCREEN_TOGGLE_SELECTOR, OPEN_TRACK_SELECTOR, SHORT_LANDSCAPE_QUERY, STAGE_WIDE_QUERY } from "./constants";
 import { formatClock, labelled, returnFocusTo, stageLayout, trackInitials } from "./helpers";
 import {
   clock,
@@ -51,7 +51,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
   const reduceMotion = useReducedMotion() === true;
   const faceVariants = reduceMotion ? stageFade : stageFlipVariants;
   const wide = useMediaQuery(STAGE_WIDE_QUERY);
-  const short = useMediaQuery(STAGE_SHORT_QUERY);
+  const short = useMediaQuery(SHORT_LANDSCAPE_QUERY);
   const layout = stageLayout(wide, short);
   const [drawer, setDrawer] = useState<StageDrawerName | null>(null);
   const cover = (

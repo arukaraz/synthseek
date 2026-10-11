@@ -29,7 +29,7 @@ import {
 
 import { MODE_MENU_ICON, RESTORE_MODE_ICON } from "./constants";
 import { keepMenuOpen, labelled } from "./helpers";
-import { iconButton, menuState, moreBadge } from "./styles";
+import { iconButton, menuState, moreBadge, moreMenuContent } from "./styles";
 import type { PlayerProps } from "./types";
 import { useMoreAttention } from "./useMoreAttention";
 
@@ -50,7 +50,7 @@ export function PlayerMoreMenu({ view, actions }: PlayerProps) {
           {attention === null ? null : <span className={moreBadge({ tone: attention })} />}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" side="top" sideOffset={10}>
+      <DropdownMenuContent align="end" side="top" sideOffset={10} className={moreMenuContent()}>
         <DropdownMenuLabel>{t("menu.playback")}</DropdownMenuLabel>
         <DropdownMenuCheckboxItem
           checked={view.shuffle}

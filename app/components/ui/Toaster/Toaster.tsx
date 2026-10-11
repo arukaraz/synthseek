@@ -18,6 +18,7 @@ export function Toaster({ ...props }: ToasterProps) {
     <Sonner
       theme={resolveSonnerTheme(theme)}
       position="bottom-right"
+      className="player-metrics"
       closeButton
       gap={12}
       icons={TOAST_ICONS}

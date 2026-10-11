@@ -1,8 +1,9 @@
 "use client";
 
-import { Heart, Mic2, MonitorSpeaker, Settings2 } from "lucide-react";
+import { Mic2, MonitorSpeaker, Settings2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FavouriteButton } from "./FavouriteButton";
 import { ScrobbleStatus } from "./ScrobbleStatus";
 import { UpgradeButton } from "./UpgradeButton";
 import { labelled } from "./helpers";
@@ -14,15 +15,7 @@ export function StageActions({ view, actions }: StageActionsProps) {
 
   return (
     <>
-      <button
-        type="button"
-        className={iconButton({ tone: view.favorite ? "favorite" : "muted", size: "stage" })}
-        onClick={actions.toggleFavorite}
-        {...labelled(view.favorite ? t("controls.unfavorite") : t("controls.favorite"))}
-        aria-pressed={view.favorite}
-      >
-        <Heart className={view.favorite ? "size-4 fill-current" : "size-4"} />
-      </button>
+      <FavouriteButton view={view} actions={actions} size="stage" />
       <UpgradeButton view={view} actions={actions} size="stage" />
       <ScrobbleStatus
         state={view.scrobble}

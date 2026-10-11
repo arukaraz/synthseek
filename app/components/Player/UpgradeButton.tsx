@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 
 import { labelled } from "./helpers";
 import { iconButton } from "./styles";
-import type { PlayerUpgradeProps } from "./types";
+import type { PlayerTrackButtonProps } from "./types";
 
-export function UpgradeButton({ view, actions, size, className }: PlayerUpgradeProps) {
+export function UpgradeButton({ view, actions, size, className }: PlayerTrackButtonProps) {
   const { t } = useTranslation("player");
 
   return (

@@ -172,6 +172,8 @@ export const moreBadge = cva("ring-surface-overlay absolute top-1 right-1 size-2
   },
 });
 
+export const moreMenuContent = cva("max-h-(--radix-dropdown-menu-content-available-height) overflow-auto");
+
 export const menuState = cva("ml-auto shrink-0 pl-3 text-[11px]", {
   variants: {
     tone: {
@@ -261,6 +263,7 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
       bar: "size-10 rounded-md @player:size-12.5",
       stage: "size-[min(60vw,24vh,268px)] rounded-xl @player:size-[min(60vw,32vh,268px)]",
       fluid: "size-[min(100cqw,100cqh,268px)] rounded-xl",
+      sideways: "size-16 rounded-lg",
     },
   },
   defaultVariants: { tone: "primary", size: "bar" },
@@ -286,6 +289,7 @@ export const coverInitials = cva("text-fg font-mono", {
       bar: "text-[10px]",
       stage: "text-[26px]",
       fluid: "text-[26px]",
+      sideways: "text-[14px]",
     },
   },
   defaultVariants: { size: "bar" },
@@ -528,29 +532,68 @@ export const miniRoot = cva("text-fg flex flex-col overflow-hidden", {
   variants: {
     placement: {
       window: "bg-surface h-screen w-screen",
-      stage: "relative mx-auto my-auto w-full max-w-[30rem]",
+      stage: "relative h-full w-full justify-evenly",
     },
   },
   defaultVariants: { placement: "window" },
 });
 
-export const miniHeader = cva("flex shrink-0 items-center gap-3 px-3.5 pt-3 pb-1");
+export const miniHeader = cva("flex shrink-0 items-center", {
+  variants: {
+    placement: {
+      window: "gap-3 px-3.5 pt-3 pb-1",
+      stage: "gap-4",
+    },
+  },
+  defaultVariants: { placement: "window" },
+});
 
-export const miniTextColumn = cva("flex min-w-0 flex-1 flex-col");
+export const miniTextColumn = cva("flex min-w-0 flex-1 flex-col", {
+  variants: {
+    placement: {
+      window: "",
+      stage: "text-left",
+    },
+  },
+  defaultVariants: { placement: "window" },
+});
 
-export const miniTitle = cva("text-fg truncate text-[13.5px] leading-tight font-semibold");
+export const miniTitle = cva("text-fg truncate leading-tight font-semibold", {
+  variants: {
+    placement: {
+      window: "text-[13.5px]",
+      stage: "text-xl",
+    },
+  },
+  defaultVariants: { placement: "window" },
+});
 
-export const miniArtist = cva("text-fg-muted truncate text-[11.5px] leading-tight");
+export const miniArtist = cva("text-fg-muted truncate leading-tight", {
+  variants: {
+    placement: {
+      window: "text-[11.5px]",
+      stage: "text-[15px]",
+    },
+  },
+  defaultVariants: { placement: "window" },
+});
 
-export const miniTransport = cva(
-  "grid shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3.5 px-3.5 py-1"
-);
+export const miniTransport = cva("grid shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center", {
+  variants: {
+    placement: {
+      window: "gap-3.5 px-3.5 py-1",
+      stage: "gap-7",
+    },
+  },
+  defaultVariants: { placement: "window" },
+});
 
 export const transportSide = cva("", {
   variants: {
     layout: {
       inline: "contents",
       centred: "flex items-center gap-3.5",
+      spread: "flex items-center gap-7",
     },
     at: {
       start: "",
@@ -558,12 +601,20 @@ export const transportSide = cva("", {
     },
   },
   compoundVariants: [
-    { layout: "centred", at: "start", class: "justify-end" },
-    { layout: "centred", at: "end", class: "justify-start" },
+    { layout: ["centred", "spread"], at: "start", class: "justify-end" },
+    { layout: ["centred", "spread"], at: "end", class: "justify-start" },
   ],
 });
 
-export const miniProgress = cva("flex w-full min-w-0 shrink-0 items-center gap-2.5 px-3.5");
+export const miniProgress = cva("flex w-full min-w-0 shrink-0 items-center", {
+  variants: {
+    placement: {
+      window: "gap-2.5 px-3.5",
+      stage: "gap-3.5",
+    },
+  },
+  defaultVariants: { placement: "window" },
+});
 
 export const miniChevronRow = cva("flex shrink-0 items-center justify-center");
 
@@ -615,7 +666,7 @@ export const stageMain = cva(
       layout: {
         wide: "",
         compact: "pt-14",
-        landscape: "py-4",
+        landscape: "pt-12 pb-4",
       },
     },
     defaultVariants: { layout: "wide" },

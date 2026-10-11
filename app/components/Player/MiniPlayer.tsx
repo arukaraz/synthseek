@@ -46,29 +46,31 @@ export function MiniPlayer({ view, actions, placement = "window" }: MiniPlayerPr
 
   return (
     <div className={miniRoot({ placement })}>
-      <div className={miniHeader()}>
+      <div className={miniHeader({ placement })}>
         <TrackCover
           initials={trackInitials(view.track.album)}
           tone={view.track.tone}
-          size="row"
+          size={inWindow ? "row" : "sideways"}
           artworkUrl={view.track.artworkUrl}
         />
-        <span className={miniTextColumn()}>
-          <span className={miniTitle()}>{view.track.title}</span>
-          <span className={miniArtist()}>{view.track.artist}</span>
+        <span className={miniTextColumn({ placement })}>
+          <span className={miniTitle({ placement })}>{view.track.title}</span>
+          <span className={miniArtist({ placement })}>{view.track.artist}</span>
         </span>
-        <FavouriteButton view={view} actions={actions} />
-        <UpgradeButton view={view} actions={actions} />
+        <FavouriteButton view={view} actions={actions} size={inWindow ? undefined : "stage"} />
+        <UpgradeButton view={view} actions={actions} size={inWindow ? undefined : "stage"} />
       </div>
 
-      <div className={miniTransport()}>
-        <PlayerTransport view={view} actions={actions} size="mini" />
+      <div className={miniTransport({ placement })}>
+        <PlayerTransport view={view} actions={actions} size={inWindow ? "mini" : "sideways"} />
       </div>
 
-      <div className={miniProgress()}>
-        <span className={clock({ align: "right" })}>{formatClock(view.positionSeconds)}</span>
-        <PlayerWave view={view} actions={actions} size="bar" />
-        <span className={clock()}>{formatClock(view.track.durationSeconds)}</span>
+      <div className={miniProgress({ placement })}>
+        <span className={clock({ size: inWindow ? "bar" : "stage", align: "right" })}>
+          {formatClock(view.positionSeconds)}
+        </span>
+        <PlayerWave view={view} actions={actions} size={inWindow ? "bar" : "stage"} />
+        <span className={clock({ size: inWindow ? "bar" : "stage" })}>{formatClock(view.track.durationSeconds)}</span>
       </div>
 
       <div className={miniChevronRow()}>

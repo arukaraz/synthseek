@@ -71,6 +71,16 @@ describe("Toaster", () => {
     expect(toaster.style.getPropertyValue("--toast-offset-wide")).not.toContain("--height-bottom-nav");
   });
 
+  it("reads the player bar's height where it sits, so a toast clears the bar at every width", async () => {
+    render(<Toaster />);
+    toast.success("Cleared");
+
+    await findToast("Cleared");
+    const toaster = document.querySelector("[data-sonner-toaster]");
+    if (!(toaster instanceof HTMLElement)) throw new Error("toaster element not found");
+    expect(toaster).toHaveClass("player-metrics");
+  });
+
   it("keeps an accessible close control", async () => {
     render(<Toaster />);
     toast.success("Done");

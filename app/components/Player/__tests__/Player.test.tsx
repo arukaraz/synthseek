@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import "@test/mocks/next.mock";
 import { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "@test/factories";
@@ -18,6 +18,7 @@ class FakeResizeObserver {
 
 let wideScreen = true;
 let shortScreen = false;
+let touchScreen = false;
 
 function stubMatchMedia(): void {
   Object.defineProperty(window, "matchMedia", {
@@ -26,9 +27,11 @@ function stubMatchMedia(): void {
     value: (query: string) => ({
       matches: query.includes("prefers-reduced-motion")
         ? false
-        : query.includes("max-height")
-          ? shortScreen
-          : wideScreen,
+        : query.includes("pointer: coarse")
+          ? shortScreen && touchScreen
+          : query.includes("max-height")
+            ? shortScreen
+            : wideScreen,
       media: query,
       onchange: null,
       addListener: vi.fn(),
@@ -50,11 +53,50 @@ function renderPlayer(overrides: Partial<PlayerView> = {}) {
 beforeEach(() => {
   wideScreen = true;
   shortScreen = false;
+  touchScreen = false;
   vi.stubGlobal("ResizeObserver", FakeResizeObserver);
   stubMatchMedia();
 });
 
+afterEach(() => {
+  document.getElementById(PLAYER_HEADER_SLOT_ID)?.remove();
+});
+
 describe("the player dock", () => {
+  it("keeps the more menu while the screen is not short and sideways", () => {
+    renderPlayer();
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.more })).toBeInTheDocument();
+  });
+
+  it("drops the more menu from the bottom bar of a phone held sideways, where it would not fit above the bar", () => {
+    shortScreen = true;
+    touchScreen = true;
+    renderPlayer();
+
+    expect(screen.queryByRole("button", { name: enPlayer.controls.more })).not.toBeInTheDocument();
+  });
+
+  it("keeps the more menu in a short desktop window, which has no touch screen", () => {
+    shortScreen = true;
+    renderPlayer();
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.more })).toBeInTheDocument();
+  });
+
+  it("keeps the more menu in the compact header player, where it holds the way back to the normal player", () => {
+    const slot = document.createElement("div");
+    slot.id = PLAYER_HEADER_SLOT_ID;
+    document.body.appendChild(slot);
+    shortScreen = true;
+    touchScreen = true;
+
+    renderPlayer({ mode: "compact" });
+
+    expect(screen.getByRole("button", { name: enPlayer.controls.more })).toBeInTheDocument();
+    slot.remove();
+  });
+
   it("names the track, the artist and the album it is playing", () => {
     renderPlayer();
 

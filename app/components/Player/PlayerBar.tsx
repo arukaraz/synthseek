@@ -4,6 +4,8 @@ import { cn } from "@utils/cn";
 import { Info, Maximize, MonitorSpeaker } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { useMediaQuery } from "@hooks/ui/useMediaQuery";
+
 import { FavouriteButton } from "./FavouriteButton";
 import { PlayerExtraControls } from "./PlayerExtraControls";
 import { PlayerMoreMenu } from "./PlayerMoreMenu";
@@ -11,6 +13,7 @@ import { PlayerTransport } from "./PlayerTransport";
 import { PlayerWave } from "./PlayerWave";
 import { TrackCover } from "./TrackCover";
 import { UpgradeButton } from "./UpgradeButton";
+import { TOUCH_SHORT_LANDSCAPE_QUERY } from "./constants";
 import { formatClock, labelled, percentOf, trackInitials } from "./helpers";
 import {
   bar,
@@ -41,6 +44,7 @@ import type { PlayerBarProps } from "./types";
 export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps) {
   const { t } = useTranslation("player");
   const progress = percentOf(view.positionSeconds, view.track.durationSeconds);
+  const phoneSideways = useMediaQuery(TOUCH_SHORT_LANDSCAPE_QUERY);
 
   return (
     <div className={bar({ placement })}>
@@ -122,7 +126,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
           >
             <Maximize className="size-4" />
           </button>
-          <PlayerMoreMenu view={view} actions={actions} />
+          {placement === "dock" && phoneSideways ? null : <PlayerMoreMenu view={view} actions={actions} />}
         </div>
       </div>
 
