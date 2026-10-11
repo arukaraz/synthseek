@@ -54,6 +54,7 @@ const initial: YtdlpCardProps["initial"] = {
     collections: { netlabels: true, etree: false },
     searchTimeout: 30000,
   },
+  soundcloud: { enabled: true, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
 };
 
 describe("YtdlpCard", () => {
@@ -79,6 +80,7 @@ describe("YtdlpCard", () => {
         ytdlp: { ...initial.ytdlp, enabled: true },
         usenet: initial.usenet,
         archive: initial.archive,
+        soundcloud: initial.soundcloud,
       });
     });
   });

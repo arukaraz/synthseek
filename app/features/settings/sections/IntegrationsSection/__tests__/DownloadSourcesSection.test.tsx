@@ -31,6 +31,10 @@ vi.mock("../UsenetCard", () => ({
   UsenetCard: () => <div data-testid="usenet-card" />,
 }));
 
+vi.mock("../SoundcloudCard", () => ({
+  SoundcloudCard: () => <div data-testid="soundcloud-card" />,
+}));
+
 vi.mock("../ArchiveCard", () => ({
   ArchiveCard: () => <div data-testid="archive-card" />,
 }));
@@ -75,16 +79,24 @@ describe("DownloadSourcesSection", () => {
     expect(screen.getByTestId("slskd-card")).toBeInTheDocument();
     expect(screen.getByTestId("ytdlp-card")).toBeInTheDocument();
     expect(screen.getByTestId("usenet-card")).toBeInTheDocument();
+    expect(screen.getByTestId("soundcloud-card")).toBeInTheDocument();
     expect(screen.getByTestId("archive-card")).toBeInTheDocument();
     expect(screen.getByTestId("lidarr-card")).toBeInTheDocument();
   });
 
-  it("keeps yt-dlp third, so the two-column grid lands it under the tall Slskd card, with the Internet Archive and then Lidarr after it", () => {
+  it("keeps yt-dlp third, so the two-column grid lands it under the tall Slskd card, with the other sources and then Lidarr after it", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<DownloadSourcesSection />);
 
     const rendered = screen.getAllByTestId(/-card$/).map((card) => card.dataset.testid);
 
-    expect(rendered).toEqual(["slskd-card", "usenet-card", "ytdlp-card", "archive-card", "lidarr-card"]);
+    expect(rendered).toEqual([
+      "slskd-card",
+      "usenet-card",
+      "ytdlp-card",
+      "soundcloud-card",
+      "archive-card",
+      "lidarr-card",
+    ]);
   });
 });

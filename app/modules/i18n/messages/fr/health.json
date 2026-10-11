@@ -33,5 +33,8 @@
   "ARCHIVE_DISABLED": "Internet Archive est désactivé (optionnel)",
   "ARCHIVE_REACHABLE": "Internet Archive joignable",
   "ARCHIVE_UNREACHABLE": "Internet Archive injoignable",
-  "ARCHIVE_PAUSED": "En pause encore {{seconds}} s après des échecs ou une demande de ralentir"
+  "ARCHIVE_PAUSED": "En pause encore {{seconds}} s après des échecs ou une demande de ralentir",
+  "SOUNDCLOUD_DISABLED": "SoundCloud est désactivé (optionnel)",
+  "SOUNDCLOUD_AVAILABLE": "Disponible via yt-dlp {{version}}",
+  "SOUNDCLOUD_UNAVAILABLE": "Le programme yt-dlp, qui télécharge depuis SoundCloud, n'a pas répondu"
 }

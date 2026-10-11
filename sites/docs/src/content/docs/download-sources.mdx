@@ -1,6 +1,6 @@
 ---
 title: "Download Sources"
-blurb: "Wire up slskd and Usenet, and understand the yt-dlp and Internet Archive fallbacks."
+blurb: "Wire up slskd and Usenet, and understand the yt-dlp, SoundCloud and Internet Archive fallbacks."
 group: "Core concepts"
 order: 5
 ---
@@ -9,13 +9,14 @@ order: 5
 
 A download source is an adapter. Synthseek asks each enabled source, in priority order, whether it can supply a track, and takes the first one that delivers something that passes verification. Lower priority numbers are tried first.
 
-Four sources ship today.
+Five sources ship today.
 
 | Source           | Priority | Enabled by default |
 | ---------------- | -------- | ------------------ |
 | slskd            | 0        | Yes                |
 | Usenet           | 5        | No                 |
 | yt-dlp           | 10       | Yes                |
+| SoundCloud       | 12       | No                 |
 | Internet Archive | 20       | No                 |
 
 You can disable any of them globally in Settings, or choose which sources to try, and in what order, per request.
@@ -139,6 +140,25 @@ Everything downloaded through the fallback goes through exactly the same verific
 | Search results         | 15         | How many candidates are considered before one is chosen.           |
 | Maximum duration delta | 15 seconds | How much a candidate's length may differ from the expected length. |
 | Search timeout         | 60 seconds | How long to wait for results.                                      |
+
+## SoundCloud
+
+Synthseek can also look for a track on SoundCloud, through the same bundled yt-dlp. It needs no
+account, and it is off until you turn it on.
+
+Most of what SoundCloud returns for a well-known song is somebody else's version of it: remixes,
+covers, sped-up or slowed edits. Uploads named as one of those are skipped. An upload by the artist's
+own account is preferred, and an upload has to be about as long as the track you asked for. Tracks
+SoundCloud offers only as a short preview, or only behind its own DRM, are left out of the search.
+
+### SoundCloud settings
+
+| Setting                | Default    | What it does                                                     |
+| ---------------------- | ---------- | ---------------------------------------------------------------- |
+| Enabled                | Off        | Whether SoundCloud is searched at all.                           |
+| Search results         | 15         | How many uploads are considered before one is chosen.            |
+| Maximum duration delta | 10 seconds | How much an upload's length may differ from the expected length. |
+| Search timeout         | 60 seconds | How long to wait for results.                                    |
 
 ## The Internet Archive
 

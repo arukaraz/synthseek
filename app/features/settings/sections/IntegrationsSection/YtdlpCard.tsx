@@ -8,9 +8,8 @@ import { useUpdateDownloadSources } from "@hooks/api/mutations/settings/useDownl
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
-import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
-import { MS } from "./constants";
+import { RemoteMediaSearchRows } from "./RemoteMediaSearchRows";
 import type { YtdlpCardProps } from "./types";
 
 export function YtdlpCard({ initial }: YtdlpCardProps) {
@@ -50,49 +49,7 @@ export function YtdlpCard({ initial }: YtdlpCardProps) {
       />
       */}
 
-      <EngineRow
-        label={t("ytdlp.searchResults.label")}
-        description={t("ytdlp.searchResults.description")}
-        control={
-          <SettingsNumberInput
-            value={draft.searchResults}
-            onChange={(v) => setField("searchResults", v)}
-            min={1}
-            max={20}
-            ariaLabel={t("ytdlp.searchResults.ariaLabel")}
-          />
-        }
-      />
-
-      <EngineRow
-        label={t("ytdlp.maxDurationDelta.label")}
-        description={t("ytdlp.maxDurationDelta.description")}
-        control={
-          <SettingsNumberInput
-            value={draft.maxDurationDeltaSec}
-            onChange={(v) => setField("maxDurationDeltaSec", v)}
-            min={0}
-            max={120}
-            suffix="s"
-            ariaLabel={t("ytdlp.maxDurationDelta.ariaLabel")}
-          />
-        }
-      />
-
-      <EngineRow
-        label={t("ytdlp.searchTimeout.label")}
-        description={t("ytdlp.searchTimeout.description")}
-        control={
-          <SettingsNumberInput
-            value={Math.round(draft.searchTimeout / MS)}
-            onChange={(v) => setField("searchTimeout", v * MS)}
-            min={5}
-            max={120}
-            suffix="s"
-            ariaLabel={t("ytdlp.searchTimeout.ariaLabel")}
-          />
-        }
-      />
+      <RemoteMediaSearchRows section="ytdlp" values={draft} onFieldChange={(field, value) => setField(field, value)} />
 
       <SaveBar
         isDirty={isDirty}

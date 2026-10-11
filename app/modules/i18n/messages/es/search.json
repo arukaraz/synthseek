@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Se trae el disco entero desde tu indexador a través de SABnzbd."
         },
+        "soundcloud": {
+          "label": "SoundCloud",
+          "description": "Subidas de SoundCloud, sin las que se presentan como remix o versión"
+        },
         "archive": {
           "label": "Internet Archive",
           "description": "Música gratuita y con licencia libre de las colecciones que permitiste."

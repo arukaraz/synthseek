@@ -275,7 +275,8 @@
       "slskd": "Soulseek",
       "ytdlp": "YouTube",
       "usenet": "Usenet",
-      "archive": "Internet Archive"
+      "archive": "Internet Archive",
+      "soundcloud": "SoundCloud"
     },
     "reason": {
       "wrong_file": "Wrong file",
@@ -634,6 +635,30 @@
       "label": "Search timeout",
       "description": "How long the Internet Archive can spend finding a track.",
       "ariaLabel": "Internet Archive search timeout seconds"
+    }
+  },
+  "soundcloud": {
+    "title": "SoundCloud",
+    "description": "Uploads on SoundCloud, downloaded through yt-dlp. Used when higher-priority sources cannot deliver a track.",
+    "enable": {
+      "label": "Enable",
+      "description": "When on, tracks the other sources cannot deliver are looked for on SoundCloud. Uploads named as remixes, covers or speed edits are skipped.",
+      "ariaLabel": "Enable SoundCloud"
+    },
+    "searchResults": {
+      "label": "Search results",
+      "description": "How many uploads to consider per track before choosing one.",
+      "ariaLabel": "SoundCloud search results"
+    },
+    "maxDurationDelta": {
+      "label": "Max duration delta",
+      "description": "Reject uploads whose length differs from the expected track by more than this many seconds.",
+      "ariaLabel": "SoundCloud max duration delta seconds"
+    },
+    "searchTimeout": {
+      "label": "Search timeout",
+      "description": "How long SoundCloud can spend finding a track.",
+      "ariaLabel": "SoundCloud search timeout seconds"
     }
   },
   "accountRules": {

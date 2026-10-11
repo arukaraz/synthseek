@@ -94,6 +94,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
         collections: { netlabels: true, etree: false },
         searchTimeout: 30,
       },
+      soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60 },
     },
     system: {
       wizardCompleted: true,

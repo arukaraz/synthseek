@@ -275,7 +275,8 @@
       "slskd": "Soulseek",
       "ytdlp": "YouTube",
       "usenet": "Usenet",
-      "archive": "Internet Archive"
+      "archive": "Internet Archive",
+      "soundcloud": "SoundCloud"
     },
     "reason": {
       "wrong_file": "Falsche Datei",
@@ -634,6 +635,30 @@
       "label": "Such-Zeitlimit",
       "description": "Wie lange das Internet Archive für die Suche nach einem Titel brauchen darf.",
       "ariaLabel": "Internet-Archive-Such-Zeitlimit in Sekunden"
+    }
+  },
+  "soundcloud": {
+    "title": "SoundCloud",
+    "description": "Uploads auf SoundCloud, geladen über yt-dlp. Wird genutzt, wenn Quellen mit höherer Priorität einen Titel nicht liefern.",
+    "enable": {
+      "label": "Aktivieren",
+      "description": "Wenn aktiv, werden Titel, die andere Quellen nicht liefern, auf SoundCloud gesucht. Uploads, die als Remix, Cover oder Tempo-Edit bezeichnet sind, werden übersprungen.",
+      "ariaLabel": "SoundCloud aktivieren"
+    },
+    "searchResults": {
+      "label": "Suchergebnisse",
+      "description": "Wie viele Uploads pro Titel geprüft werden, bevor einer gewählt wird.",
+      "ariaLabel": "SoundCloud-Suchergebnisse"
+    },
+    "maxDurationDelta": {
+      "label": "Maximale Längenabweichung",
+      "description": "Verwirft Uploads, deren Länge um mehr als so viele Sekunden vom erwarteten Titel abweicht.",
+      "ariaLabel": "SoundCloud maximale Längenabweichung in Sekunden"
+    },
+    "searchTimeout": {
+      "label": "Such-Zeitlimit",
+      "description": "Wie lange SoundCloud für die Suche nach einem Titel brauchen darf.",
+      "ariaLabel": "SoundCloud-Such-Zeitlimit in Sekunden"
     }
   },
   "accountRules": {

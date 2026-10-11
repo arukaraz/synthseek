@@ -60,6 +60,7 @@ const initial: UsenetCardProps["initial"] = {
     collections: { netlabels: true, etree: true },
     searchTimeout: 30000,
   },
+  soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
 };
 
 const optedIn: UsenetCardProps["initial"] = {
@@ -124,6 +125,7 @@ describe("UsenetCard", () => {
         ytdlp: initial.ytdlp,
         usenet: { ...initial.usenet, enabled: true },
         archive: initial.archive,
+        soundcloud: initial.soundcloud,
       });
     });
   });
@@ -140,6 +142,7 @@ describe("UsenetCard", () => {
         ytdlp: initial.ytdlp,
         usenet: { ...initial.usenet, singleTrackRequests: true },
         archive: initial.archive,
+        soundcloud: initial.soundcloud,
       });
     });
   });

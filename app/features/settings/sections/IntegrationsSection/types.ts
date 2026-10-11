@@ -102,6 +102,18 @@ export interface ArchiveCardProps {
   initial: DownloadSourcesConfig;
 }
 
+export interface SoundcloudCardProps {
+  initial: DownloadSourcesConfig;
+}
+
+type RemoteMediaSearchField = "searchResults" | "maxDurationDeltaSec" | "searchTimeout";
+
+export interface RemoteMediaSearchRowsProps {
+  section: "ytdlp" | "soundcloud";
+  values: Pick<DownloadSourcesConfig["soundcloud"], RemoteMediaSearchField>;
+  onFieldChange: (field: RemoteMediaSearchField, value: number) => void;
+}
+
 export interface SpotifySourceCardProps {
   spotify: ConnectionsSpotify;
 }

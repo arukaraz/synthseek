@@ -275,7 +275,8 @@
       "slskd": "Soulseek",
       "ytdlp": "YouTube",
       "usenet": "Usenet",
-      "archive": "Internet Archive"
+      "archive": "Internet Archive",
+      "soundcloud": "SoundCloud"
     },
     "reason": {
       "wrong_file": "Mauvais fichier",
@@ -634,6 +635,30 @@
       "label": "Délai de recherche",
       "description": "Temps que l'Internet Archive peut consacrer à trouver un titre.",
       "ariaLabel": "Délai de recherche Internet Archive en secondes"
+    }
+  },
+  "soundcloud": {
+    "title": "SoundCloud",
+    "description": "Morceaux publiés sur SoundCloud, téléchargés avec yt-dlp. Utilisé quand les sources prioritaires ne trouvent pas un titre.",
+    "enable": {
+      "label": "Activer",
+      "description": "Si activé, les titres que les autres sources ne trouvent pas sont cherchés sur SoundCloud. Les morceaux présentés comme remix, reprise ou version accélérée sont ignorés.",
+      "ariaLabel": "Activer SoundCloud"
+    },
+    "searchResults": {
+      "label": "Résultats de recherche",
+      "description": "Nombre de morceaux examinés par titre avant d'en choisir un.",
+      "ariaLabel": "Résultats de recherche SoundCloud"
+    },
+    "maxDurationDelta": {
+      "label": "Écart de durée maximal",
+      "description": "Rejette les morceaux dont la durée s'écarte de celle attendue de plus de ce nombre de secondes.",
+      "ariaLabel": "Écart de durée maximal SoundCloud en secondes"
+    },
+    "searchTimeout": {
+      "label": "Délai de recherche",
+      "description": "Temps que SoundCloud peut consacrer à trouver un titre.",
+      "ariaLabel": "Délai de recherche SoundCloud en secondes"
     }
   },
   "accountRules": {

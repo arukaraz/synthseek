@@ -48,6 +48,7 @@ const initial: ArchiveCardProps["initial"] = {
     collections: { netlabels: true, etree: false },
     searchTimeout: 30000,
   },
+  soundcloud: { enabled: true, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
 };
 
 const t = enSettings.archive;
@@ -78,6 +79,7 @@ describe("ArchiveCard", () => {
         ytdlp: initial.ytdlp,
         usenet: initial.usenet,
         archive: { ...initial.archive, collections: { netlabels: true, etree: true } },
+        soundcloud: initial.soundcloud,
       });
     });
   });

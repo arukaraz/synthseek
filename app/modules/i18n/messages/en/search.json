@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Pulls the whole release from your indexer via SABnzbd."
         },
+        "soundcloud": {
+          "label": "SoundCloud",
+          "description": "Uploads on SoundCloud, skipping those named as remixes or covers"
+        },
         "archive": {
           "label": "Internet Archive",
           "description": "Free, openly licensed music from the collections you allowed."

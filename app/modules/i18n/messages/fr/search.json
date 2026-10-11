@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Récupère l'album entier depuis votre indexeur via SABnzbd."
         },
+        "soundcloud": {
+          "label": "SoundCloud",
+          "description": "Morceaux publiés sur SoundCloud, sans ceux présentés comme remix ou reprise"
+        },
         "archive": {
           "label": "Internet Archive",
           "description": "Musique gratuite sous licence libre, issue des collections que vous avez autorisées."

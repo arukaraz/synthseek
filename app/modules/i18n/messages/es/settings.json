@@ -278,7 +278,8 @@
       "slskd": "Soulseek",
       "ytdlp": "YouTube",
       "usenet": "Usenet",
-      "archive": "Internet Archive"
+      "archive": "Internet Archive",
+      "soundcloud": "SoundCloud"
     },
     "reason": {
       "wrong_file": "Archivo incorrecto",
@@ -637,6 +638,30 @@
       "label": "Tiempo de búsqueda",
       "description": "Cuánto tiempo puede dedicar el Internet Archive a encontrar una pista.",
       "ariaLabel": "Tiempo de espera de búsqueda del Internet Archive en segundos"
+    }
+  },
+  "soundcloud": {
+    "title": "SoundCloud",
+    "description": "Subidas de SoundCloud, descargadas con yt-dlp. Se usa cuando las fuentes de más prioridad no consiguen una pista.",
+    "enable": {
+      "label": "Activar",
+      "description": "Si está activo, las pistas que las demás fuentes no consiguen se buscan en SoundCloud. Se descartan las subidas que se presentan como remix, versión o edición de velocidad.",
+      "ariaLabel": "Activar SoundCloud"
+    },
+    "searchResults": {
+      "label": "Resultados de búsqueda",
+      "description": "Cuántas subidas se consideran por pista antes de elegir una.",
+      "ariaLabel": "Resultados de búsqueda de SoundCloud"
+    },
+    "maxDurationDelta": {
+      "label": "Diferencia máxima de duración",
+      "description": "Descarta las subidas cuya duración se aleja de la esperada más de estos segundos.",
+      "ariaLabel": "Diferencia máxima de duración de SoundCloud en segundos"
+    },
+    "searchTimeout": {
+      "label": "Tiempo de búsqueda",
+      "description": "Cuánto tiempo puede dedicar SoundCloud a encontrar una pista.",
+      "ariaLabel": "Tiempo de espera de búsqueda de SoundCloud en segundos"
     }
   },
   "accountRules": {

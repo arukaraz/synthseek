@@ -9,6 +9,7 @@ const DOWNLOAD_SOURCE_LABEL_KEYS = {
   ytdlp: "quarantine.source.ytdlp",
   usenet: "quarantine.source.usenet",
   archive: "quarantine.source.archive",
+  soundcloud: "quarantine.source.soundcloud",
 } as const satisfies Record<DownloadSourceKey, ParseKeys<"settings">>;
 
 const LABEL_KEYS = new Map<string, ParseKeys<"settings">>(Object.entries(DOWNLOAD_SOURCE_LABEL_KEYS));

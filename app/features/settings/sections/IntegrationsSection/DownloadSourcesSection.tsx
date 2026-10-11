@@ -8,6 +8,7 @@ import { emptyPanel, sectionGrid } from "../../styles";
 import { ArchiveCard } from "./ArchiveCard";
 import { LidarrCard } from "./LidarrCard";
 import { SlskdCard } from "./SlskdCard";
+import { SoundcloudCard } from "./SoundcloudCard";
 import { UsenetCard } from "./UsenetCard";
 import { YtdlpCard } from "./YtdlpCard";
 
@@ -44,6 +45,7 @@ export function DownloadSourcesSection() {
       />
       <UsenetCard initial={data.downloadSources} />
       <YtdlpCard initial={data.downloadSources} />
+      <SoundcloudCard initial={data.downloadSources} />
       <ArchiveCard initial={data.downloadSources} />
       <LidarrCard initial={data.connections.lidarr} />
     </div>

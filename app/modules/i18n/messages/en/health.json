@@ -33,5 +33,8 @@
   "ARCHIVE_DISABLED": "Internet Archive is turned off (optional)",
   "ARCHIVE_REACHABLE": "Internet Archive reachable",
   "ARCHIVE_UNREACHABLE": "Internet Archive unreachable",
-  "ARCHIVE_PAUSED": "Paused for another {{seconds}}s after failures or a request to slow down"
+  "ARCHIVE_PAUSED": "Paused for another {{seconds}}s after failures or a request to slow down",
+  "SOUNDCLOUD_DISABLED": "SoundCloud is turned off (optional)",
+  "SOUNDCLOUD_AVAILABLE": "Available through yt-dlp {{version}}",
+  "SOUNDCLOUD_UNAVAILABLE": "The yt-dlp program SoundCloud downloads through did not answer"
 }
