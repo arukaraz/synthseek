@@ -14,3 +14,7 @@ export function useUpdateDownloadSources() {
     onError: (error) => errorToast(error, "settings.downloadSourcesFailed"),
   });
 }
+
+export function useTestSubsonicSource() {
+  return trpc.settings.testSubsonicSource.useMutation();
+}

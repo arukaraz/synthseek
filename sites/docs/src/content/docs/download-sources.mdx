@@ -1,6 +1,6 @@
 ---
 title: "Download Sources"
-blurb: "Wire up slskd and Usenet, and understand the yt-dlp, SoundCloud and Internet Archive fallbacks."
+blurb: "Wire up slskd, Usenet and another Subsonic server, and understand the yt-dlp, SoundCloud and Internet Archive fallbacks."
 group: "Core concepts"
 order: 5
 ---
@@ -9,11 +9,12 @@ order: 5
 
 A download source is an adapter. Synthseek asks each enabled source, in priority order, whether it can supply a track, and takes the first one that delivers something that passes verification. Lower priority numbers are tried first.
 
-Five sources ship today.
+Six sources ship today.
 
 | Source           | Priority | Enabled by default |
 | ---------------- | -------- | ------------------ |
 | slskd            | 0        | Yes                |
+| Subsonic server  | 2        | No                 |
 | Usenet           | 5        | No                 |
 | yt-dlp           | 10       | Yes                |
 | SoundCloud       | 12       | No                 |
@@ -56,9 +57,38 @@ On the slskd card, under **Settings**, then **Integrations**:
 
 Banning a peer automatically after repeated failures is a separate switch, on the quarantine card under **Settings**, then **Engine**. See the [Configuration page](/configuration).
 
+## Another Subsonic server
+
+Synthseek can download original files from another server that speaks the Subsonic API, such as a
+friend's Navidrome or Synthseek. It is off until you set it up, and it uses one server.
+
+### Setting it up
+
+1. Ask the server's owner for an account. On a Synthseek server, the owner turns on **Music
+   players** and makes you a member. You then create a credential under **Settings**, then
+   **General**, then **Connect apps**, and use it as the API key.
+2. In Synthseek, go to **Settings**, then **Integrations**, then the **Subsonic server** card. Enter
+   the address, then the API key, or a username and password.
+3. Test the connection, turn the source on and save.
+
+The address is where the server answers. For a Synthseek server it ends in `/api/v1/subsonic`, for
+Navidrome it is usually the server itself, such as `http://navidrome:4533`. An address that points
+back at this Synthseek is refused.
+
+A track counts as the one you asked for when its ISRC matches, or when the title, the artist and the
+length agree. Downloading from a Synthseek server leaves no plays on it.
+
+### Subsonic server settings
+
+| Setting        | Default    | What it does                         |
+| -------------- | ---------- | ------------------------------------ |
+| Enabled        | Off        | Whether the server is searched.      |
+| Priority       | 2          | Tried right after slskd.             |
+| Search timeout | 30 seconds | How long to wait for search results. |
+
 ## Usenet
 
-Usenet is a second acquisition source, and it works differently enough from the other two to be worth
+Usenet is another acquisition source, and it works differently enough from the other two to be worth
 a paragraph before the setup steps. Nobody publishes single tracks on Usenet: material is posted as a
 whole release, so a request fetches the entire album and takes the track it needs out of it.
 

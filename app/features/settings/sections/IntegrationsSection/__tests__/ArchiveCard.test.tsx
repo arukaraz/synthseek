@@ -49,6 +49,7 @@ const initial: ArchiveCardProps["initial"] = {
     searchTimeout: 30000,
   },
   soundcloud: { enabled: true, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
+  subsonic: { enabled: false, priority: 2, url: "", username: "", password: "", apiKey: "", searchTimeout: 30000 },
 };
 
 const t = enSettings.archive;
@@ -80,6 +81,7 @@ describe("ArchiveCard", () => {
         usenet: initial.usenet,
         archive: { ...initial.archive, collections: { netlabels: true, etree: true } },
         soundcloud: initial.soundcloud,
+        subsonic: initial.subsonic,
       });
     });
   });

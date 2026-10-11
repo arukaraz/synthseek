@@ -1,6 +1,22 @@
 import type { ParseKeys } from "i18next";
 
-import type { Affix, LidarrHealth, LidarrStatusTone, ServerTestOutcome, SlskdHealth, SlskdStatusTone } from "./types";
+import type {
+  Affix,
+  LidarrHealth,
+  LidarrStatusTone,
+  ServerTestOutcome,
+  SlskdHealth,
+  SlskdStatusTone,
+  SubsonicSourceTestOutcome,
+} from "./types";
+
+export const SUBSONIC_SOURCE_TEST_KEYS: Readonly<Record<SubsonicSourceTestOutcome, ParseKeys<"settings">>> = {
+  ok: "subsonicSource.test.ok",
+  unauthorized: "subsonicSource.test.unauthorized",
+  unreachable: "subsonicSource.test.unreachable",
+  self: "subsonicSource.test.self",
+  incomplete: "subsonicSource.test.incomplete",
+};
 
 export const SERVER_TEST_OUTCOME_KEYS: Readonly<Record<ServerTestOutcome, ParseKeys<"settings">>> = {
   ok: "mediaServers.test.ok",

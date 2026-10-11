@@ -276,7 +276,8 @@
       "ytdlp": "YouTube",
       "usenet": "Usenet",
       "archive": "Internet Archive",
-      "soundcloud": "SoundCloud"
+      "soundcloud": "SoundCloud",
+      "subsonic": "Subsonic-Server"
     },
     "reason": {
       "wrong_file": "Falsche Datei",
@@ -659,6 +660,36 @@
       "label": "Such-Zeitlimit",
       "description": "Wie lange SoundCloud für die Suche nach einem Titel brauchen darf.",
       "ariaLabel": "SoundCloud-Such-Zeitlimit in Sekunden"
+    }
+  },
+  "subsonicSource": {
+    "title": "Subsonic-Server",
+    "description": "Ein anderer Musikserver, etwa das Navidrome oder Synthseek eines Freundes, von dem Titel als Originaldateien geladen werden.",
+    "enable": {
+      "label": "Aktivieren",
+      "description": "Wenn aktiv, werden Titel auf diesem Server gesucht.",
+      "ariaLabel": "Subsonic-Server aktivieren"
+    },
+    "url": "Serveradresse",
+    "urlHint": "Den Pfad angeben, wenn die API nicht im Stamm liegt; bei einem Synthseek-Server /api/v1/subsonic.",
+    "urlPlaceholder": "http://navidrome:4533",
+    "apiKey": "API-Schlüssel",
+    "apiKeyHint": "Wird statt Benutzername und Passwort verwendet, wenn der Server API-Schlüssel unterstützt.",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "searchTimeout": {
+      "label": "Such-Zeitlimit",
+      "description": "Wie lange der Server für die Suche nach einem Titel brauchen darf.",
+      "ariaLabel": "Such-Zeitlimit des Subsonic-Servers in Sekunden"
+    },
+    "test": {
+      "action": "Verbindung testen",
+      "testing": "Wird getestet...",
+      "ok": "Mit dem Subsonic-Server verbunden",
+      "unauthorized": "Der Server hat die Zugangsdaten abgelehnt",
+      "unreachable": "Server nicht erreichbar",
+      "self": "Diese Adresse ist dieses Synthseek selbst",
+      "incomplete": "Gib eine Webadresse und einen API-Schlüssel oder Benutzername und Passwort ein"
     }
   },
   "accountRules": {

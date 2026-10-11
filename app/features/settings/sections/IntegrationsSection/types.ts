@@ -106,6 +106,12 @@ export interface SoundcloudCardProps {
   initial: DownloadSourcesConfig;
 }
 
+export interface SubsonicSourceCardProps {
+  initial: DownloadSourcesConfig;
+}
+
+export type SubsonicSourceTestOutcome = RouterOutputs["settings"]["testSubsonicSource"]["outcome"];
+
 type RemoteMediaSearchField = "searchResults" | "maxDurationDeltaSec" | "searchTimeout";
 
 export interface RemoteMediaSearchRowsProps {

@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Lädt das ganze Release über SABnzbd von deinem Indexer."
         },
+        "subsonic": {
+          "label": "Subsonic-Server",
+          "description": "Die Originaldatei vom eingerichteten Subsonic-Server"
+        },
         "soundcloud": {
           "label": "SoundCloud",
           "description": "Uploads auf SoundCloud, ohne die als Remix oder Cover bezeichneten"

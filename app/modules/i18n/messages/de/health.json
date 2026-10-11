@@ -36,5 +36,11 @@
   "ARCHIVE_PAUSED": "Noch {{seconds}} s pausiert nach Fehlern oder einer Bitte um Drosselung",
   "SOUNDCLOUD_DISABLED": "SoundCloud ist deaktiviert (optional)",
   "SOUNDCLOUD_AVAILABLE": "Verfügbar über yt-dlp {{version}}",
-  "SOUNDCLOUD_UNAVAILABLE": "Das Programm yt-dlp, über das SoundCloud lädt, hat nicht geantwortet"
+  "SOUNDCLOUD_UNAVAILABLE": "Das Programm yt-dlp, über das SoundCloud lädt, hat nicht geantwortet",
+  "SUBSONIC_SOURCE_DISABLED": "Die Subsonic-Quelle ist deaktiviert (optional)",
+  "SUBSONIC_SOURCE_NOT_CONFIGURED": "Keine Adresse und Zugangsdaten für einen Subsonic-Server (optional)",
+  "SUBSONIC_SOURCE_CONNECTED": "Verbunden",
+  "SUBSONIC_SOURCE_UNAUTHORIZED": "Der Server hat die Zugangsdaten abgelehnt",
+  "SUBSONIC_SOURCE_UNREACHABLE": "Nicht erreichbar",
+  "SUBSONIC_SOURCE_SELF": "Die Adresse zeigt auf dieses Synthseek selbst"
 }

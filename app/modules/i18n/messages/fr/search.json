@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Récupère l'album entier depuis votre indexeur via SABnzbd."
         },
+        "subsonic": {
+          "label": "Serveur Subsonic",
+          "description": "Le fichier original du serveur Subsonic que vous avez configuré"
+        },
         "soundcloud": {
           "label": "SoundCloud",
           "description": "Morceaux publiés sur SoundCloud, sans ceux présentés comme remix ou reprise"

@@ -39,6 +39,7 @@ const ALL_ENABLED = {
   usenet: ALBUM_ONLY,
   archive: PER_TRACK,
   soundcloud: PER_TRACK,
+  subsonic: PER_TRACK,
 };
 
 const COMPLETE_SELECTION: LidarrSelection = {
@@ -195,26 +196,36 @@ describe("offeredSources", () => {
   it("keeps the canonical priority order regardless of the availability order", () => {
     expect(
       offeredSources(
-        { archive: PER_TRACK, soundcloud: PER_TRACK, ytdlp: PER_TRACK, usenet: ALBUM_ONLY, slskd: PER_TRACK },
+        {
+          archive: PER_TRACK,
+          soundcloud: PER_TRACK,
+          ytdlp: PER_TRACK,
+          usenet: ALBUM_ONLY,
+          subsonic: PER_TRACK,
+          slskd: PER_TRACK,
+        },
         true
       )
-    ).toEqual(["slskd", "usenet", "ytdlp", "soundcloud", "archive"]);
+    ).toEqual(["slskd", "subsonic", "usenet", "ytdlp", "soundcloud", "archive"]);
   });
 
   it("drops a disabled source", () => {
-    expect(offeredSources({ ...ALL_ENABLED, ytdlp: DISABLED, archive: DISABLED, soundcloud: DISABLED }, true)).toEqual([
-      "slskd",
-      "usenet",
-    ]);
+    expect(
+      offeredSources(
+        { ...ALL_ENABLED, ytdlp: DISABLED, archive: DISABLED, soundcloud: DISABLED, subsonic: DISABLED },
+        true
+      )
+    ).toEqual(["slskd", "usenet"]);
   });
 
   it("withholds a source that serves only albums from a non-album request", () => {
-    expect(offeredSources(ALL_ENABLED, false)).toEqual(["slskd", "ytdlp", "soundcloud", "archive"]);
+    expect(offeredSources(ALL_ENABLED, false)).toEqual(["slskd", "subsonic", "ytdlp", "soundcloud", "archive"]);
   });
 
   it("offers that source outside albums once it allows single tracks", () => {
     expect(offeredSources({ ...ALL_ENABLED, usenet: PER_TRACK }, false)).toEqual([
       "slskd",
+      "subsonic",
       "usenet",
       "ytdlp",
       "soundcloud",

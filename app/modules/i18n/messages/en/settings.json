@@ -276,7 +276,8 @@
       "ytdlp": "YouTube",
       "usenet": "Usenet",
       "archive": "Internet Archive",
-      "soundcloud": "SoundCloud"
+      "soundcloud": "SoundCloud",
+      "subsonic": "Subsonic server"
     },
     "reason": {
       "wrong_file": "Wrong file",
@@ -659,6 +660,36 @@
       "label": "Search timeout",
       "description": "How long SoundCloud can spend finding a track.",
       "ariaLabel": "SoundCloud search timeout seconds"
+    }
+  },
+  "subsonicSource": {
+    "title": "Subsonic server",
+    "description": "Another music server, such as a friend's Navidrome or Synthseek, that tracks can be downloaded from as original files.",
+    "enable": {
+      "label": "Enable",
+      "description": "When on, tracks are looked for on this server.",
+      "ariaLabel": "Enable the Subsonic server"
+    },
+    "url": "Server address",
+    "urlHint": "Include the path when the API is not at the root, for a Synthseek server /api/v1/subsonic.",
+    "urlPlaceholder": "http://navidrome:4533",
+    "apiKey": "API key",
+    "apiKeyHint": "Used instead of the username and password when the server supports API keys.",
+    "username": "Username",
+    "password": "Password",
+    "searchTimeout": {
+      "label": "Search timeout",
+      "description": "How long the server can spend finding a track.",
+      "ariaLabel": "Subsonic server search timeout seconds"
+    },
+    "test": {
+      "action": "Test connection",
+      "testing": "Testing...",
+      "ok": "Connected to the Subsonic server",
+      "unauthorized": "The server rejected the credentials",
+      "unreachable": "Could not reach the server",
+      "self": "That address is this Synthseek itself",
+      "incomplete": "Enter a web address and an API key or a username and password"
     }
   },
   "accountRules": {

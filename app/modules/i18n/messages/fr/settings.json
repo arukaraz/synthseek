@@ -276,7 +276,8 @@
       "ytdlp": "YouTube",
       "usenet": "Usenet",
       "archive": "Internet Archive",
-      "soundcloud": "SoundCloud"
+      "soundcloud": "SoundCloud",
+      "subsonic": "Serveur Subsonic"
     },
     "reason": {
       "wrong_file": "Mauvais fichier",
@@ -659,6 +660,36 @@
       "label": "Délai de recherche",
       "description": "Temps que SoundCloud peut consacrer à trouver un titre.",
       "ariaLabel": "Délai de recherche SoundCloud en secondes"
+    }
+  },
+  "subsonicSource": {
+    "title": "Serveur Subsonic",
+    "description": "Un autre serveur de musique, comme le Navidrome ou le Synthseek d'un ami, d'où télécharger des titres en fichiers originaux.",
+    "enable": {
+      "label": "Activer",
+      "description": "Si activé, les titres sont cherchés sur ce serveur.",
+      "ariaLabel": "Activer le serveur Subsonic"
+    },
+    "url": "Adresse du serveur",
+    "urlHint": "Ajoutez le chemin si l'API n'est pas à la racine ; pour un serveur Synthseek, /api/v1/subsonic.",
+    "urlPlaceholder": "http://navidrome:4533",
+    "apiKey": "Clé d'API",
+    "apiKeyHint": "Utilisée à la place de l'identifiant et du mot de passe quand le serveur accepte les clés d'API.",
+    "username": "Identifiant",
+    "password": "Mot de passe",
+    "searchTimeout": {
+      "label": "Délai de recherche",
+      "description": "Temps que le serveur peut consacrer à trouver un titre.",
+      "ariaLabel": "Délai de recherche du serveur Subsonic en secondes"
+    },
+    "test": {
+      "action": "Tester la connexion",
+      "testing": "Test en cours...",
+      "ok": "Connecté au serveur Subsonic",
+      "unauthorized": "Le serveur a refusé les identifiants",
+      "unreachable": "Impossible de joindre le serveur",
+      "self": "Cette adresse est ce Synthseek lui-même",
+      "incomplete": "Saisissez une adresse web et une clé d'API ou un identifiant et un mot de passe"
     }
   },
   "accountRules": {

@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Pulls the whole release from your indexer via SABnzbd."
         },
+        "subsonic": {
+          "label": "Subsonic server",
+          "description": "The original file from the Subsonic server you set up"
+        },
         "soundcloud": {
           "label": "SoundCloud",
           "description": "Uploads on SoundCloud, skipping those named as remixes or covers"

@@ -55,6 +55,7 @@ const initial: YtdlpCardProps["initial"] = {
     searchTimeout: 30000,
   },
   soundcloud: { enabled: true, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
+  subsonic: { enabled: false, priority: 2, url: "", username: "", password: "", apiKey: "", searchTimeout: 30000 },
 };
 
 describe("YtdlpCard", () => {
@@ -81,6 +82,7 @@ describe("YtdlpCard", () => {
         usenet: initial.usenet,
         archive: initial.archive,
         soundcloud: initial.soundcloud,
+        subsonic: initial.subsonic,
       });
     });
   });

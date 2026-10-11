@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Se trae el disco entero desde tu indexador a través de SABnzbd."
         },
+        "subsonic": {
+          "label": "Servidor Subsonic",
+          "description": "El fichero original del servidor Subsonic que configuraste"
+        },
         "soundcloud": {
           "label": "SoundCloud",
           "description": "Subidas de SoundCloud, sin las que se presentan como remix o versión"

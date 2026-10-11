@@ -31,6 +31,10 @@ vi.mock("../UsenetCard", () => ({
   UsenetCard: () => <div data-testid="usenet-card" />,
 }));
 
+vi.mock("../SubsonicSourceCard", () => ({
+  SubsonicSourceCard: () => <div data-testid="subsonic-card" />,
+}));
+
 vi.mock("../SoundcloudCard", () => ({
   SoundcloudCard: () => <div data-testid="soundcloud-card" />,
 }));
@@ -79,6 +83,7 @@ describe("DownloadSourcesSection", () => {
     expect(screen.getByTestId("slskd-card")).toBeInTheDocument();
     expect(screen.getByTestId("ytdlp-card")).toBeInTheDocument();
     expect(screen.getByTestId("usenet-card")).toBeInTheDocument();
+    expect(screen.getByTestId("subsonic-card")).toBeInTheDocument();
     expect(screen.getByTestId("soundcloud-card")).toBeInTheDocument();
     expect(screen.getByTestId("archive-card")).toBeInTheDocument();
     expect(screen.getByTestId("lidarr-card")).toBeInTheDocument();
@@ -94,6 +99,7 @@ describe("DownloadSourcesSection", () => {
       "slskd-card",
       "usenet-card",
       "ytdlp-card",
+      "subsonic-card",
       "soundcloud-card",
       "archive-card",
       "lidarr-card",

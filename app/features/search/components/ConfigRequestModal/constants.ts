@@ -10,7 +10,14 @@ import type {
   UploadSpeedOption,
 } from "./types";
 
-export const SOURCE_PRIORITY_ORDER: DownloadSourceKey[] = ["slskd", "usenet", "ytdlp", "soundcloud", "archive"];
+export const SOURCE_PRIORITY_ORDER: DownloadSourceKey[] = [
+  "slskd",
+  "subsonic",
+  "usenet",
+  "ytdlp",
+  "soundcloud",
+  "archive",
+];
 
 export const SOURCE_ROW_LABELS: Record<DownloadSourceKey, SourceRowLabels> = {
   slskd: {
@@ -24,6 +31,10 @@ export const SOURCE_ROW_LABELS: Record<DownloadSourceKey, SourceRowLabels> = {
   ytdlp: {
     labelKey: "config.options.acquisition.ytdlp.label",
     descriptionKey: "config.options.acquisition.ytdlp.description",
+  },
+  subsonic: {
+    labelKey: "config.options.acquisition.subsonic.label",
+    descriptionKey: "config.options.acquisition.subsonic.description",
   },
   soundcloud: {
     labelKey: "config.options.acquisition.soundcloud.label",

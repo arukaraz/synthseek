@@ -95,6 +95,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
         searchTimeout: 30,
       },
       soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60 },
+      subsonic: { enabled: false, priority: 2, url: "", username: "", password: "", apiKey: "", searchTimeout: 30000 },
     },
     system: {
       wizardCompleted: true,
