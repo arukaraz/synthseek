@@ -14,6 +14,7 @@ export const SOURCE_PRIORITY_ORDER: DownloadSourceKey[] = [
   "slskd",
   "subsonic",
   "usenet",
+  "torrent",
   "ytdlp",
   "soundcloud",
   "archive",
@@ -27,6 +28,10 @@ export const SOURCE_ROW_LABELS: Record<DownloadSourceKey, SourceRowLabels> = {
   usenet: {
     labelKey: "config.options.acquisition.usenet.label",
     descriptionKey: "config.options.acquisition.usenet.description",
+  },
+  torrent: {
+    labelKey: "config.options.acquisition.torrent.label",
+    descriptionKey: "config.options.acquisition.torrent.description",
   },
   ytdlp: {
     labelKey: "config.options.acquisition.ytdlp.label",

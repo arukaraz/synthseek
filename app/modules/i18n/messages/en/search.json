@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Pulls the whole release from your indexer via SABnzbd."
         },
+        "torrent": {
+          "label": "Torrent",
+          "description": "Pulls the whole release from your indexer via qBittorrent, and leaves it seeding."
+        },
         "subsonic": {
           "label": "Subsonic server",
           "description": "The original file from the Subsonic server you set up"

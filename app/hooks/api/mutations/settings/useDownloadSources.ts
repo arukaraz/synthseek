@@ -18,3 +18,7 @@ export function useUpdateDownloadSources() {
 export function useTestSubsonicSource() {
   return trpc.settings.testSubsonicSource.useMutation();
 }
+
+export function useTestTorrentSource() {
+  return trpc.settings.testTorrentSource.useMutation();
+}

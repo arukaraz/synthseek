@@ -280,7 +280,8 @@
       "usenet": "Usenet",
       "archive": "Internet Archive",
       "soundcloud": "SoundCloud",
-      "subsonic": "Servidor Subsonic"
+      "subsonic": "Servidor Subsonic",
+      "torrent": "Torrent"
     },
     "reason": {
       "wrong_file": "Archivo incorrecto",
@@ -663,6 +664,99 @@
       "label": "Tiempo de búsqueda",
       "description": "Cuánto tiempo puede dedicar SoundCloud a encontrar una pista.",
       "ariaLabel": "Tiempo de espera de búsqueda de SoundCloud en segundos"
+    }
+  },
+  "torrent": {
+    "title": "Torrent",
+    "description": "Descarga discos enteros desde un indexador Torznab, como Prowlarr o Jackett, a través de qBittorrent, y los deja compartiéndose.",
+    "enable": {
+      "label": "Activar",
+      "description": "Al activarlo, las peticiones de álbum pueden servirse por torrent a través de tu indexador y qBittorrent.",
+      "ariaLabel": "Activar la fuente torrent"
+    },
+    "indexerUrl": { "label": "Dirección del indexador Torznab", "placeholder": "http://prowlarr:9696/1" },
+    "indexerApiKey": { "label": "Clave API del indexador" },
+    "qbittorrentUrl": { "label": "Dirección de qBittorrent", "placeholder": "http://qbittorrent:8080" },
+    "qbittorrentApiKey": {
+      "label": "Clave API de qBittorrent",
+      "hint": "qBittorrent 5.2 o posterior. Déjala vacía para entrar con usuario y contraseña."
+    },
+    "qbittorrentUsername": { "label": "Usuario de qBittorrent" },
+    "qbittorrentPassword": { "label": "Contraseña de qBittorrent" },
+    "category": {
+      "label": "Categoría",
+      "hint": "Synthseek añade sus torrents en esta categoría. Su carpeta de guardado tiene que ser la carpeta de descargas que lee Synthseek."
+    },
+    "minSeeders": {
+      "label": "Mínimo de semillas",
+      "description": "Descarta los discos con menos semillas que esto.",
+      "ariaLabel": "Mínimo de semillas"
+    },
+    "maxSize": {
+      "label": "Tamaño máximo del disco",
+      "description": "Descarta cualquier publicación más grande que esto. Ponlo a 0 para aceptar cualquier tamaño.",
+      "suffix": "MB",
+      "ariaLabel": "Tamaño máximo del disco en megabytes"
+    },
+    "stallTimeout": {
+      "label": "Rendirse tras",
+      "description": "Un torrent que no avanza durante este tiempo se deja para la siguiente fuente.",
+      "suffix": "min",
+      "ariaLabel": "Minutos sin avance antes de rendirse"
+    },
+    "singleTrackRequests": {
+      "title": "Peticiones de una sola canción",
+      "label": "Usar torrents también fuera de álbumes",
+      "description": "Apagado por defecto. Mientras esté apagado, los torrents solo se ofrecen en peticiones de álbum.",
+      "ariaLabel": "Permitir torrents en peticiones de una sola canción",
+      "tooltipTitle": "Qué cambia esto",
+      "tooltipWhat": "Un torrent trae un disco entero. Conseguir una canción significa descargar el álbum al que pertenece.",
+      "tooltipCost": "Activarlo cambia espacio en disco y ancho de banda por encontrar canciones que nadie comparte sueltas.",
+      "tooltipTriggerLabel": "Sobre las peticiones de una sola canción por torrent"
+    },
+    "stagingRetention": {
+      "label": "Guardar los torrents terminados",
+      "description": "Cuánto espera un disco descargado a que le pidas otra de sus canciones. Después se borra, pero solo cuando qBittorrent ha dejado de compartirlo.",
+      "suffix": "h",
+      "ariaLabel": "Horas que se guarda un torrent terminado"
+    },
+    "stagedList": {
+      "title": "Torrents en espera",
+      "empty": {
+        "title": "Nada en espera",
+        "description": "Los discos descargados por torrent aparecen aquí hasta que caducan."
+      },
+      "loading": "Cargando...",
+      "loadError": "No se pudieron cargar los torrents en espera",
+      "clearAll": "Borrar todos",
+      "remove": "Borrar este torrent",
+      "expiresIn": "caduca {{when}}",
+      "confirmClear": {
+        "title": "¿Borrar todos los torrents en espera?",
+        "message": "Los torrents y sus ficheros se quitan de qBittorrent, aunque se estén compartiendo. Cualquier canción que pidas de ellos después volverá a descargar el disco.",
+        "confirm": "Borrar todos"
+      }
+    },
+    "test": {
+      "action": "Probar conexión",
+      "testing": "Probando...",
+      "ok": "Conectado al indexador y a qBittorrent",
+      "indexer": {
+        "failed": "El indexador no respondió",
+        "incomplete": "Escribe la dirección y la clave API del indexador"
+      },
+      "client": {
+        "bad_credentials": "qBittorrent rechazó el usuario o la contraseña",
+        "host_rejected": "qBittorrent rechazó la dirección que usa Synthseek",
+        "banned": "qBittorrent bloqueó esta dirección tras demasiados intentos fallidos",
+        "unreachable": "No se pudo contactar con qBittorrent",
+        "too_old": "Este qBittorrent es demasiado antiguo: hace falta la versión 5.0 o posterior",
+        "incomplete": "Escribe la dirección de qBittorrent y un usuario o una clave API"
+      },
+      "warning": {
+        "removes_on_share_limit": "qBittorrent borra los torrents que llegan a su límite de compartición, así que un disco puede desaparecer antes de sacar todas sus canciones.",
+        "dht_off": "DHT está apagado en qBittorrent, así que los enlaces magnet no pueden encontrar sus ficheros."
+      }
     }
   },
   "subsonicSource": {

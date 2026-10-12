@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Se trae el disco entero desde tu indexador a través de SABnzbd."
         },
+        "torrent": {
+          "label": "Torrent",
+          "description": "Se trae el disco entero desde tu indexador a través de qBittorrent, y lo deja compartiéndose."
+        },
         "subsonic": {
           "label": "Servidor Subsonic",
           "description": "El fichero original del servidor Subsonic que configuraste"

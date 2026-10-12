@@ -42,5 +42,10 @@
   "SUBSONIC_SOURCE_CONNECTED": "Conectado",
   "SUBSONIC_SOURCE_UNAUTHORIZED": "El servidor rechazó las credenciales",
   "SUBSONIC_SOURCE_UNREACHABLE": "Inaccesible",
-  "SUBSONIC_SOURCE_SELF": "La dirección apunta a este mismo Synthseek"
+  "SUBSONIC_SOURCE_SELF": "La dirección apunta a este mismo Synthseek",
+  "TORRENT_SOURCE_DISABLED": "La fuente torrent está desactivada (opcional)",
+  "TORRENT_SOURCE_NOT_CONFIGURED": "Sin indexador Torznab ni dirección de qBittorrent (opcional)",
+  "TORRENT_SOURCE_CONNECTED": "Conectado",
+  "TORRENT_SOURCE_INDEXER_FAILED": "El indexador Torznab no respondió",
+  "TORRENT_SOURCE_CLIENT_FAILED": "qBittorrent no respondió o rechazó el inicio de sesión"
 }

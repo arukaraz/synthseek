@@ -10,6 +10,7 @@ import { LidarrCard } from "./LidarrCard";
 import { SlskdCard } from "./SlskdCard";
 import { SoundcloudCard } from "./SoundcloudCard";
 import { SubsonicSourceCard } from "./SubsonicSourceCard";
+import { TorrentCard } from "./TorrentCard";
 import { UsenetCard } from "./UsenetCard";
 import { YtdlpCard } from "./YtdlpCard";
 
@@ -47,6 +48,7 @@ export function DownloadSourcesSection() {
       <UsenetCard initial={data.downloadSources} />
       <YtdlpCard initial={data.downloadSources} />
       <SubsonicSourceCard initial={data.downloadSources} />
+      <TorrentCard initial={data.downloadSources} />
       <SoundcloudCard initial={data.downloadSources} />
       <ArchiveCard initial={data.downloadSources} />
       <LidarrCard initial={data.connections.lidarr} />

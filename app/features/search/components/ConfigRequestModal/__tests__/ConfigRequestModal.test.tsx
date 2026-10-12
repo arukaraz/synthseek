@@ -124,6 +124,7 @@ describe("ConfigRequestModal", () => {
       archive: { enabled: false, allowsSingleTracks: true },
       soundcloud: { enabled: false, allowsSingleTracks: true },
       subsonic: { enabled: false, allowsSingleTracks: true },
+      torrent: { enabled: false, allowsSingleTracks: false },
     };
     lidarrAvailable = { available: false };
     contentResponse = { success: true, content: [makeTrack()] };
@@ -158,6 +159,7 @@ describe("ConfigRequestModal", () => {
       archive: { enabled: false, allowsSingleTracks: true },
       soundcloud: { enabled: false, allowsSingleTracks: true },
       subsonic: { enabled: false, allowsSingleTracks: true },
+      torrent: { enabled: false, allowsSingleTracks: false },
     };
 
     render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
@@ -173,6 +175,7 @@ describe("ConfigRequestModal", () => {
       archive: { enabled: false, allowsSingleTracks: true },
       soundcloud: { enabled: false, allowsSingleTracks: true },
       subsonic: { enabled: false, allowsSingleTracks: true },
+      torrent: { enabled: false, allowsSingleTracks: false },
     };
 
     render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);

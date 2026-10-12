@@ -277,7 +277,8 @@
       "usenet": "Usenet",
       "archive": "Internet Archive",
       "soundcloud": "SoundCloud",
-      "subsonic": "Serveur Subsonic"
+      "subsonic": "Serveur Subsonic",
+      "torrent": "Torrent"
     },
     "reason": {
       "wrong_file": "Mauvais fichier",
@@ -660,6 +661,99 @@
       "label": "Délai de recherche",
       "description": "Temps que SoundCloud peut consacrer à trouver un titre.",
       "ariaLabel": "Délai de recherche SoundCloud en secondes"
+    }
+  },
+  "torrent": {
+    "title": "Torrent",
+    "description": "Télécharge des albums entiers depuis un indexeur Torznab, comme Prowlarr ou Jackett, via qBittorrent, et les laisse en partage.",
+    "enable": {
+      "label": "Activer",
+      "description": "Une fois activé, les demandes d'album peuvent être servies par torrent via votre indexeur et qBittorrent.",
+      "ariaLabel": "Activer la source torrent"
+    },
+    "indexerUrl": { "label": "Adresse de l'indexeur Torznab", "placeholder": "http://prowlarr:9696/1" },
+    "indexerApiKey": { "label": "Clé API de l'indexeur" },
+    "qbittorrentUrl": { "label": "Adresse de qBittorrent", "placeholder": "http://qbittorrent:8080" },
+    "qbittorrentApiKey": {
+      "label": "Clé API de qBittorrent",
+      "hint": "qBittorrent 5.2 ou plus récent. Laissez vide pour vous connecter avec un identifiant et un mot de passe."
+    },
+    "qbittorrentUsername": { "label": "Identifiant qBittorrent" },
+    "qbittorrentPassword": { "label": "Mot de passe qBittorrent" },
+    "category": {
+      "label": "Catégorie",
+      "hint": "Synthseek ajoute ses torrents dans cette catégorie. Son dossier d'enregistrement doit être le dossier de téléchargements que lit Synthseek."
+    },
+    "minSeeders": {
+      "label": "Sources minimales",
+      "description": "Ignorer les publications avec moins de sources que cela.",
+      "ariaLabel": "Nombre minimal de sources"
+    },
+    "maxSize": {
+      "label": "Taille maximale de la publication",
+      "description": "Ignorer toute publication plus grande que cela. Mettre 0 pour accepter n'importe quelle taille.",
+      "suffix": "Mo",
+      "ariaLabel": "Taille maximale de la publication en mégaoctets"
+    },
+    "stallTimeout": {
+      "label": "Abandonner après",
+      "description": "Un torrent qui n'avance plus pendant ce temps est laissé à la source suivante.",
+      "suffix": "min",
+      "ariaLabel": "Minutes sans progression avant d'abandonner"
+    },
+    "singleTrackRequests": {
+      "title": "Demandes d'un seul morceau",
+      "label": "Utiliser les torrents aussi hors des albums",
+      "description": "Désactivé par défaut. Tant que c'est désactivé, les torrents ne sont proposés que pour les demandes d'album.",
+      "ariaLabel": "Autoriser les torrents pour les demandes d'un seul morceau",
+      "tooltipTitle": "Ce que cela change",
+      "tooltipWhat": "Un torrent contient un album entier. Obtenir un morceau implique de télécharger l'album auquel il appartient.",
+      "tooltipCost": "L'activer échange de l'espace disque et de la bande passante contre des morceaux que personne ne partage seuls.",
+      "tooltipTriggerLabel": "À propos des demandes d'un seul morceau via torrent"
+    },
+    "stagingRetention": {
+      "label": "Conserver les torrents terminés pendant",
+      "description": "Combien de temps une publication téléchargée attend qu'un autre de ses morceaux soit demandé. Elle est ensuite supprimée, mais seulement quand qBittorrent ne la partage plus.",
+      "suffix": "h",
+      "ariaLabel": "Heures de conservation d'un torrent terminé"
+    },
+    "stagedList": {
+      "title": "Torrents en attente",
+      "empty": {
+        "title": "Rien en attente",
+        "description": "Les publications téléchargées par torrent apparaissent ici jusqu'à leur expiration."
+      },
+      "loading": "Chargement...",
+      "loadError": "Impossible de charger les torrents en attente",
+      "clearAll": "Tout supprimer",
+      "remove": "Supprimer ce torrent",
+      "expiresIn": "expire {{when}}",
+      "confirmClear": {
+        "title": "Supprimer tous les torrents en attente ?",
+        "message": "Les torrents et leurs fichiers sont retirés de qBittorrent, même en cours de partage. Tout morceau demandé ensuite retéléchargera la publication.",
+        "confirm": "Tout supprimer"
+      }
+    },
+    "test": {
+      "action": "Tester la connexion",
+      "testing": "Test en cours...",
+      "ok": "Connecté à l'indexeur et à qBittorrent",
+      "indexer": {
+        "failed": "L'indexeur n'a pas répondu",
+        "incomplete": "Saisissez l'adresse et la clé API de l'indexeur"
+      },
+      "client": {
+        "bad_credentials": "qBittorrent a refusé l'identifiant ou le mot de passe",
+        "host_rejected": "qBittorrent a refusé l'adresse qu'utilise Synthseek",
+        "banned": "qBittorrent a bloqué cette adresse après trop d'échecs de connexion",
+        "unreachable": "Impossible de joindre qBittorrent",
+        "too_old": "Ce qBittorrent est trop ancien : la version 5.0 ou plus récente est nécessaire",
+        "incomplete": "Saisissez l'adresse de qBittorrent et un identifiant ou une clé API"
+      },
+      "warning": {
+        "removes_on_share_limit": "qBittorrent supprime les torrents qui atteignent leur limite de partage, une publication peut donc disparaître avant que tous ses morceaux en soient tirés.",
+        "dht_off": "Le DHT est désactivé dans qBittorrent, les liens magnet ne peuvent donc pas trouver leurs fichiers."
+      }
     }
   },
   "subsonicSource": {

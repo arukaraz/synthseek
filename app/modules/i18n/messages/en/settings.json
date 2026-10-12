@@ -277,7 +277,8 @@
       "usenet": "Usenet",
       "archive": "Internet Archive",
       "soundcloud": "SoundCloud",
-      "subsonic": "Subsonic server"
+      "subsonic": "Subsonic server",
+      "torrent": "Torrent"
     },
     "reason": {
       "wrong_file": "Wrong file",
@@ -660,6 +661,99 @@
       "label": "Search timeout",
       "description": "How long SoundCloud can spend finding a track.",
       "ariaLabel": "SoundCloud search timeout seconds"
+    }
+  },
+  "torrent": {
+    "title": "Torrent",
+    "description": "Downloads whole album releases from a Torznab indexer, such as Prowlarr or Jackett, through qBittorrent, and leaves them seeding.",
+    "enable": {
+      "label": "Enable",
+      "description": "When on, album requests can be served from torrents through your indexer and qBittorrent.",
+      "ariaLabel": "Enable torrent source"
+    },
+    "indexerUrl": { "label": "Torznab indexer address", "placeholder": "http://prowlarr:9696/1" },
+    "indexerApiKey": { "label": "Indexer API key" },
+    "qbittorrentUrl": { "label": "qBittorrent address", "placeholder": "http://qbittorrent:8080" },
+    "qbittorrentApiKey": {
+      "label": "qBittorrent API key",
+      "hint": "qBittorrent 5.2 or newer. Leave it empty to log in with a username and password."
+    },
+    "qbittorrentUsername": { "label": "qBittorrent username" },
+    "qbittorrentPassword": { "label": "qBittorrent password" },
+    "category": {
+      "label": "Category",
+      "hint": "Synthseek adds its torrents under this category. Its save folder must be the folder Synthseek reads as its downloads."
+    },
+    "minSeeders": {
+      "label": "Minimum seeders",
+      "description": "Skip releases with fewer seeders than this.",
+      "ariaLabel": "Minimum seeders"
+    },
+    "maxSize": {
+      "label": "Maximum release size",
+      "description": "Skip any release larger than this. Set to 0 to accept any size.",
+      "suffix": "MB",
+      "ariaLabel": "Maximum release size in megabytes"
+    },
+    "stallTimeout": {
+      "label": "Give up after",
+      "description": "A torrent that makes no progress for this long is left for the next source.",
+      "suffix": "min",
+      "ariaLabel": "Minutes without progress before giving up"
+    },
+    "singleTrackRequests": {
+      "title": "Single-track requests",
+      "label": "Use torrents outside albums too",
+      "description": "Off by default. When off, torrents are only offered for album requests.",
+      "ariaLabel": "Allow torrents for single-track requests",
+      "tooltipTitle": "What this changes",
+      "tooltipWhat": "A torrent carries a whole release. Getting one song means downloading the album it belongs to.",
+      "tooltipCost": "Turning this on trades disk space and bandwidth for finding songs that nobody shares on their own.",
+      "tooltipTriggerLabel": "About single-track requests over torrent"
+    },
+    "stagingRetention": {
+      "label": "Keep finished torrents for",
+      "description": "How long a downloaded release waits for another of its tracks. After that it is deleted, but only once qBittorrent has stopped seeding it.",
+      "suffix": "h",
+      "ariaLabel": "Hours a finished torrent is kept"
+    },
+    "stagedList": {
+      "title": "Torrents waiting",
+      "empty": {
+        "title": "Nothing waiting",
+        "description": "Releases downloaded by torrent appear here until they expire."
+      },
+      "loading": "Loading...",
+      "loadError": "Could not load the waiting torrents",
+      "clearAll": "Delete all",
+      "remove": "Delete this torrent",
+      "expiresIn": "expires {{when}}",
+      "confirmClear": {
+        "title": "Delete every waiting torrent?",
+        "message": "The torrents and their files are removed from qBittorrent, even while seeding. Any track requested from them later will download the release again.",
+        "confirm": "Delete all"
+      }
+    },
+    "test": {
+      "action": "Test connection",
+      "testing": "Testing...",
+      "ok": "Connected to the indexer and qBittorrent",
+      "indexer": {
+        "failed": "The indexer did not answer",
+        "incomplete": "Enter the indexer address and API key"
+      },
+      "client": {
+        "bad_credentials": "qBittorrent rejected the username or password",
+        "host_rejected": "qBittorrent rejected the address Synthseek uses",
+        "banned": "qBittorrent banned this address after too many failed logins",
+        "unreachable": "Could not reach qBittorrent",
+        "too_old": "This qBittorrent is too old: version 5.0 or newer is needed",
+        "incomplete": "Enter the qBittorrent address and a login or API key"
+      },
+      "warning": {
+        "removes_on_share_limit": "qBittorrent deletes torrents that reach their share limit, so a release can vanish before every track is taken from it.",
+        "dht_off": "DHT is off in qBittorrent, so magnet links cannot find their files."
+      }
     }
   },
   "subsonicSource": {

@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Lädt das ganze Release über SABnzbd von deinem Indexer."
         },
+        "torrent": {
+          "label": "Torrent",
+          "description": "Lädt das ganze Release über qBittorrent von deinem Indexer und lässt es weiter teilen."
+        },
         "subsonic": {
           "label": "Subsonic-Server",
           "description": "Die Originaldatei vom eingerichteten Subsonic-Server"

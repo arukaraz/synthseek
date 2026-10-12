@@ -15,44 +15,43 @@ import { useStagedReleases } from "@hooks/api/queries/useStagedReleases";
 import { formatBytes, formatRelativeTime } from "@utils/formatters";
 
 import { cardSectionHeader } from "../../styles";
+import { STAGED_LIST_KEYS } from "./constants";
 import { stagedList, stagedListHeader, stagedMeta, stagedRow, stagedRowBody, stagedTitle } from "./styles";
 import type { StagedReleaseListProps } from "./types";
 
-export function StagedReleaseList({ enabled }: StagedReleaseListProps) {
+export function StagedReleaseList({ enabled, source }: StagedReleaseListProps) {
   const { t } = useTranslation("settings");
+  const keys = STAGED_LIST_KEYS[source];
   const entries = useStagedReleases(enabled);
   const removeEntry = useRemoveStagedRelease();
   const clearAll = useClearStagedReleases();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const hasEntries = Boolean(entries.data && entries.data.length > 0);
+  const ownEntries = (entries.data ?? []).filter((entry) => entry.source === source);
+  const hasEntries = ownEntries.length > 0;
   const busy = removeEntry.isPending || clearAll.isPending;
 
   return (
     <>
       <div className={stagedListHeader()}>
-        <span className={cardSectionHeader()}>{t("usenet.stagedList.title")}</span>
+        <span className={cardSectionHeader()}>{t(keys.title)}</span>
         {hasEntries ? (
           <Button variant="outline" size="sm" onClick={() => setConfirmOpen(true)} disabled={busy}>
             {clearAll.isPending ? <Spinner size="sm" /> : <Trash2 className="size-4" />}
-            {t("usenet.stagedList.clearAll")}
+            {t(keys.clearAll)}
           </Button>
         ) : null}
       </div>
 
       {entries.isLoading ? (
-        <span className="text-fg/60 text-sm">{t("usenet.stagedList.loading")}</span>
+        <span className="text-fg/60 text-sm">{t(keys.loading)}</span>
       ) : entries.isError ? (
-        <span className="text-destructive-vivid text-sm">{t("usenet.stagedList.loadError")}</span>
+        <span className="text-destructive-vivid text-sm">{t(keys.loadError)}</span>
       ) : !hasEntries ? (
-        <EmptyState
-          icon={Disc3}
-          title={t("usenet.stagedList.empty.title")}
-          description={t("usenet.stagedList.empty.description")}
-        />
+        <EmptyState icon={Disc3} title={t(keys.emptyTitle)} description={t(keys.emptyDescription)} />
       ) : (
         <ul className={stagedList()}>
-          {entries.data?.map((entry) => (
+          {ownEntries.map((entry) => (
             <li key={entry.id} className={stagedRow()}>
               <div className={stagedRowBody()}>
                 <span className={stagedTitle()} title={entry.releaseTitle}>
@@ -61,13 +60,13 @@ export function StagedReleaseList({ enabled }: StagedReleaseListProps) {
                 <div className={stagedMeta()}>
                   <span>{formatBytes(entry.sizeBytes)}</span>
                   <span>{formatRelativeTime(entry.lastUsedAt)}</span>
-                  <span>{t("usenet.stagedList.expiresIn", { when: formatRelativeTime(entry.expiresAt) })}</span>
+                  <span>{t(keys.expiresIn, { when: formatRelativeTime(entry.expiresAt) })}</span>
                 </div>
               </div>
               <IconButton
                 icon={X}
                 size="sm"
-                aria-label={t("usenet.stagedList.remove")}
+                aria-label={t(keys.remove)}
                 onClick={() => removeEntry.mutate({ id: entry.id })}
                 disabled={busy}
               />
@@ -79,10 +78,10 @@ export function StagedReleaseList({ enabled }: StagedReleaseListProps) {
       <ConfirmationModal
         isOpen={confirmOpen}
         onClose={() => setConfirmOpen(false)}
-        onConfirm={() => clearAll.mutate()}
-        title={t("usenet.stagedList.confirmClear.title")}
-        message={t("usenet.stagedList.confirmClear.message")}
-        confirmText={t("usenet.stagedList.confirmClear.confirm")}
+        onConfirm={() => clearAll.mutate({ source })}
+        title={t(keys.confirmTitle)}
+        message={t(keys.confirmMessage)}
+        confirmText={t(keys.confirm)}
         variant="danger"
       />
     </>

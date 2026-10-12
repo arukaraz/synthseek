@@ -1,6 +1,6 @@
 ---
 title: "Download Sources"
-blurb: "Wire up slskd, Usenet and another Subsonic server, and understand the yt-dlp, SoundCloud and Internet Archive fallbacks."
+blurb: "Wire up slskd, Usenet, torrent and another Subsonic server, and understand the yt-dlp, SoundCloud and Internet Archive fallbacks."
 group: "Core concepts"
 order: 5
 ---
@@ -9,13 +9,14 @@ order: 5
 
 A download source is an adapter. Synthseek asks each enabled source, in priority order, whether it can supply a track, and takes the first one that delivers something that passes verification. Lower priority numbers are tried first.
 
-Six sources ship today.
+Seven sources ship today.
 
 | Source           | Priority | Enabled by default |
 | ---------------- | -------- | ------------------ |
 | slskd            | 0        | Yes                |
 | Subsonic server  | 2        | No                 |
 | Usenet           | 5        | No                 |
+| Torrent          | 6        | No                 |
 | yt-dlp           | 10       | Yes                |
 | SoundCloud       | 12       | No                 |
 | Internet Archive | 20       | No                 |
@@ -150,6 +151,41 @@ downloads folder itself cannot be read, nothing is blamed at all, because that i
 side rather than the release's.
 
 Whatever Usenet cannot deliver falls through to your other enabled sources in the usual order.
+
+## Torrent
+
+Torrent fetches whole album releases, the way Usenet does. It searches an indexer that speaks the
+Torznab API, such as Prowlarr or Jackett, and downloads through qBittorrent 5.0 or later. It is off
+until you set it up. Like Usenet, it serves only album requests unless you allow single tracks.
+
+### Setting it up
+
+1. In Prowlarr or Jackett, note the indexer's Torznab address and its API key.
+2. In qBittorrent, turn on the web interface. Create an API key (qBittorrent 5.2 or later), or use
+   its username and password.
+3. Make qBittorrent save the `synthseek` category to the same `/downloads` volume Synthseek uses.
+4. In Synthseek, go to **Settings**, then **Integrations**, then the **Torrent** card. Enter both
+   addresses and the keys, and test the connection.
+
+### Seeding
+
+Synthseek imports a copy of the track it needs and leaves the release seeding. A finished torrent is
+deleted with its files after the time you set, but only once qBittorrent has stopped seeding it. Your
+share limits in qBittorrent decide when that is. A torrent that stops making progress is given up,
+and the next source is tried. The peers see qBittorrent's address, not Synthseek's.
+
+### Torrent settings
+
+| Setting                    | Default    | What it does                                                   |
+| -------------------------- | ---------- | -------------------------------------------------------------- |
+| Enabled                    | Off        | Whether torrents are searched.                                 |
+| Priority                   | 6          | Tried right after Usenet.                                      |
+| Minimum seeders            | 1          | Releases with fewer seeders are skipped.                       |
+| Maximum release size       | 1500 MB    | Releases larger than this are skipped. 0 accepts any size.     |
+| Give up after              | 30 minutes | How long a torrent may go without progress.                    |
+| Single-track requests      | Off        | Allows torrents outside album requests.                        |
+| Keep finished torrents for | 24 h       | How long a downloaded release waits for another of its tracks. |
+| Category                   | synthseek  | The qBittorrent category Synthseek adds its torrents under.    |
 
 ## The yt-dlp fallback
 

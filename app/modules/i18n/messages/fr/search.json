@@ -158,6 +158,10 @@
           "label": "Usenet",
           "description": "Récupère l'album entier depuis votre indexeur via SABnzbd."
         },
+        "torrent": {
+          "label": "Torrent",
+          "description": "Récupère l'album entier depuis votre indexeur via qBittorrent, et le laisse en partage."
+        },
         "subsonic": {
           "label": "Serveur Subsonic",
           "description": "Le fichier original du serveur Subsonic que vous avez configuré"

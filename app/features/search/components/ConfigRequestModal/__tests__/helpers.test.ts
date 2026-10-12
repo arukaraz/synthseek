@@ -40,6 +40,7 @@ const ALL_ENABLED = {
   archive: PER_TRACK,
   soundcloud: PER_TRACK,
   subsonic: PER_TRACK,
+  torrent: ALBUM_ONLY,
 };
 
 const COMPLETE_SELECTION: LidarrSelection = {
@@ -201,12 +202,13 @@ describe("offeredSources", () => {
           soundcloud: PER_TRACK,
           ytdlp: PER_TRACK,
           usenet: ALBUM_ONLY,
+          torrent: ALBUM_ONLY,
           subsonic: PER_TRACK,
           slskd: PER_TRACK,
         },
         true
       )
-    ).toEqual(["slskd", "subsonic", "usenet", "ytdlp", "soundcloud", "archive"]);
+    ).toEqual(["slskd", "subsonic", "usenet", "torrent", "ytdlp", "soundcloud", "archive"]);
   });
 
   it("drops a disabled source", () => {
@@ -215,7 +217,7 @@ describe("offeredSources", () => {
         { ...ALL_ENABLED, ytdlp: DISABLED, archive: DISABLED, soundcloud: DISABLED, subsonic: DISABLED },
         true
       )
-    ).toEqual(["slskd", "usenet"]);
+    ).toEqual(["slskd", "usenet", "torrent"]);
   });
 
   it("withholds a source that serves only albums from a non-album request", () => {
@@ -227,6 +229,14 @@ describe("offeredSources", () => {
       "slskd",
       "subsonic",
       "usenet",
+      "ytdlp",
+      "soundcloud",
+      "archive",
+    ]);
+    expect(offeredSources({ ...ALL_ENABLED, torrent: PER_TRACK }, false)).toEqual([
+      "slskd",
+      "subsonic",
+      "torrent",
       "ytdlp",
       "soundcloud",
       "archive",

@@ -277,7 +277,8 @@
       "usenet": "Usenet",
       "archive": "Internet Archive",
       "soundcloud": "SoundCloud",
-      "subsonic": "Subsonic-Server"
+      "subsonic": "Subsonic-Server",
+      "torrent": "Torrent"
     },
     "reason": {
       "wrong_file": "Falsche Datei",
@@ -660,6 +661,99 @@
       "label": "Such-Zeitlimit",
       "description": "Wie lange SoundCloud für die Suche nach einem Titel brauchen darf.",
       "ariaLabel": "SoundCloud-Such-Zeitlimit in Sekunden"
+    }
+  },
+  "torrent": {
+    "title": "Torrent",
+    "description": "Lädt ganze Album-Releases über qBittorrent von einem Torznab-Indexer wie Prowlarr oder Jackett und lässt sie weiter teilen.",
+    "enable": {
+      "label": "Aktivieren",
+      "description": "Wenn aktiv, können Album-Anfragen über deinen Indexer und qBittorrent per Torrent bedient werden.",
+      "ariaLabel": "Torrent-Quelle aktivieren"
+    },
+    "indexerUrl": { "label": "Torznab-Indexer-Adresse", "placeholder": "http://prowlarr:9696/1" },
+    "indexerApiKey": { "label": "Indexer-API-Schlüssel" },
+    "qbittorrentUrl": { "label": "qBittorrent-Adresse", "placeholder": "http://qbittorrent:8080" },
+    "qbittorrentApiKey": {
+      "label": "qBittorrent-API-Schlüssel",
+      "hint": "qBittorrent 5.2 oder neuer. Leer lassen, um dich mit Benutzername und Passwort anzumelden."
+    },
+    "qbittorrentUsername": { "label": "qBittorrent-Benutzername" },
+    "qbittorrentPassword": { "label": "qBittorrent-Passwort" },
+    "category": {
+      "label": "Kategorie",
+      "hint": "Synthseek fügt seine Torrents unter dieser Kategorie hinzu. Ihr Speicherordner muss der Ordner sein, den Synthseek als Download-Ordner liest."
+    },
+    "minSeeders": {
+      "label": "Mindestanzahl Seeder",
+      "description": "Releases mit weniger Seedern werden übersprungen.",
+      "ariaLabel": "Mindestanzahl Seeder"
+    },
+    "maxSize": {
+      "label": "Maximale Release-Größe",
+      "description": "Releases über dieser Größe werden übersprungen. 0 bedeutet keine Begrenzung.",
+      "suffix": "MB",
+      "ariaLabel": "Maximale Release-Größe in Megabyte"
+    },
+    "stallTimeout": {
+      "label": "Aufgeben nach",
+      "description": "Ein Torrent, der so lange keinen Fortschritt macht, wird für die nächste Quelle aufgegeben.",
+      "suffix": "min",
+      "ariaLabel": "Minuten ohne Fortschritt bis zum Aufgeben"
+    },
+    "singleTrackRequests": {
+      "title": "Anfragen für einzelne Titel",
+      "label": "Torrents auch außerhalb von Alben nutzen",
+      "description": "Standardmäßig aus. Solange es aus ist, werden Torrents nur bei Album-Anfragen angeboten.",
+      "ariaLabel": "Torrents für Anfragen einzelner Titel erlauben",
+      "tooltipTitle": "Was sich dadurch ändert",
+      "tooltipWhat": "Ein Torrent enthält ein ganzes Release. Ein einzelner Titel bedeutet, das zugehörige Album zu laden.",
+      "tooltipCost": "Aktivieren tauscht Speicherplatz und Bandbreite gegen Titel, die niemand einzeln teilt.",
+      "tooltipTriggerLabel": "Über Anfragen einzelner Titel via Torrent"
+    },
+    "stagingRetention": {
+      "label": "Fertige Torrents aufbewahren für",
+      "description": "Wie lange ein geladenes Release darauf wartet, dass ein weiterer seiner Titel angefragt wird. Danach wird es gelöscht, aber erst, wenn qBittorrent es nicht mehr teilt.",
+      "suffix": "h",
+      "ariaLabel": "Stunden, die ein fertiger Torrent aufbewahrt wird"
+    },
+    "stagedList": {
+      "title": "Wartende Torrents",
+      "empty": {
+        "title": "Nichts in Wartestellung",
+        "description": "Per Torrent geladene Releases erscheinen hier, bis sie ablaufen."
+      },
+      "loading": "Wird geladen...",
+      "loadError": "Wartende Torrents konnten nicht geladen werden",
+      "clearAll": "Alle löschen",
+      "remove": "Diesen Torrent löschen",
+      "expiresIn": "läuft {{when}} ab",
+      "confirmClear": {
+        "title": "Alle wartenden Torrents löschen?",
+        "message": "Die Torrents und ihre Dateien werden aus qBittorrent entfernt, auch wenn sie noch geteilt werden. Ein später angefragter Titel lädt das Release erneut.",
+        "confirm": "Alle löschen"
+      }
+    },
+    "test": {
+      "action": "Verbindung testen",
+      "testing": "Wird getestet...",
+      "ok": "Mit dem Indexer und qBittorrent verbunden",
+      "indexer": {
+        "failed": "Der Indexer hat nicht geantwortet",
+        "incomplete": "Gib die Adresse und den API-Schlüssel des Indexers ein"
+      },
+      "client": {
+        "bad_credentials": "qBittorrent hat Benutzername oder Passwort abgelehnt",
+        "host_rejected": "qBittorrent hat die Adresse abgelehnt, die Synthseek verwendet",
+        "banned": "qBittorrent hat diese Adresse nach zu vielen Fehlversuchen gesperrt",
+        "unreachable": "qBittorrent nicht erreichbar",
+        "too_old": "Dieses qBittorrent ist zu alt: Version 5.0 oder neuer wird benötigt",
+        "incomplete": "Gib die qBittorrent-Adresse und eine Anmeldung oder einen API-Schlüssel ein"
+      },
+      "warning": {
+        "removes_on_share_limit": "qBittorrent löscht Torrents, die ihr Teilungslimit erreichen, daher kann ein Release verschwinden, bevor alle Titel daraus entnommen sind.",
+        "dht_off": "DHT ist in qBittorrent aus, daher finden Magnet-Links ihre Dateien nicht."
+      }
     }
   },
   "subsonicSource": {

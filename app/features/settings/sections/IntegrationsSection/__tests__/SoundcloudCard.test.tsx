@@ -6,6 +6,7 @@ import i18n from "@modules/i18n";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
+import { createMockSettings } from "@test/mocks/feature-hooks.mock";
 import { createMockMutation } from "@test/mocks/trpc.mock";
 import type { SoundcloudCardProps } from "../types";
 
@@ -45,6 +46,7 @@ const initial: SoundcloudCardProps["initial"] = {
   archive: { enabled: false, priority: 20, collections: { netlabels: true, etree: false }, searchTimeout: 30000 },
   soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
   subsonic: { enabled: false, priority: 2, url: "", username: "", password: "", apiKey: "", searchTimeout: 30000 },
+  torrent: createMockSettings().downloadSources.torrent,
 };
 
 const t = enSettings.soundcloud;

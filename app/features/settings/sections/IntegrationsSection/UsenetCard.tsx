@@ -144,7 +144,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
         />
       ) : null}
 
-      {draft.singleTrackRequests ? <StagedReleaseList enabled={draft.enabled} /> : null}
+      {draft.singleTrackRequests ? <StagedReleaseList enabled={draft.enabled} source="usenet" /> : null}
 
       <SaveBar
         isDirty={isDirty}

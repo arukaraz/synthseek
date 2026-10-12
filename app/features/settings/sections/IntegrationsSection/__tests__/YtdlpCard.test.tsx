@@ -6,6 +6,7 @@ import i18n from "@modules/i18n";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
+import { createMockSettings } from "@test/mocks/feature-hooks.mock";
 import { createMockMutation } from "@test/mocks/trpc.mock";
 import type { YtdlpCardProps } from "../types";
 
@@ -56,6 +57,7 @@ const initial: YtdlpCardProps["initial"] = {
   },
   soundcloud: { enabled: true, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
   subsonic: { enabled: false, priority: 2, url: "", username: "", password: "", apiKey: "", searchTimeout: 30000 },
+  torrent: createMockSettings().downloadSources.torrent,
 };
 
 describe("YtdlpCard", () => {
@@ -83,6 +85,7 @@ describe("YtdlpCard", () => {
         archive: initial.archive,
         soundcloud: initial.soundcloud,
         subsonic: initial.subsonic,
+        torrent: initial.torrent,
       });
     });
   });

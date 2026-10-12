@@ -32,6 +32,8 @@ Synthseek ships as a single Docker container that runs two processes: a web inte
 | Last.fm and ListenBrainz | Your listening history, the discovery mixes built from it, and where what you play is sent.                                 | Optional                                 |
 | SABnzbd                  | Your Usenet downloader. Synthseek hands it a release and collects the result.                                               | Optional, for Usenet downloads           |
 | Newznab indexer          | Where Synthseek searches for Usenet releases.                                                                               | Optional, for Usenet downloads           |
+| qBittorrent              | Your torrent client. Synthseek hands it a release and imports a copy of the track it needs.                                 | Optional, for torrent downloads          |
+| Torznab indexer          | Where Synthseek searches for torrent releases, such as Prowlarr or Jackett.                                                 | Optional, for torrent downloads          |
 | Another Subsonic server  | A friend's Navidrome or Synthseek that tracks can be downloaded from as original files.                                     | Optional, off by default                 |
 | SoundCloud               | Uploads on SoundCloud, searched through the bundled yt-dlp when your other sources cannot deliver. No account needed.       | Optional, off by default                 |
 | Internet Archive         | Free, openly licensed music, searched when your other sources cannot deliver. No account needed.                            | Optional, off by default                 |

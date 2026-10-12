@@ -6,6 +6,7 @@ import i18n from "@modules/i18n";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
+import { createMockSettings } from "@test/mocks/feature-hooks.mock";
 import { createMockMutation } from "@test/mocks/trpc.mock";
 import type { UsenetCardProps } from "../types";
 
@@ -62,6 +63,7 @@ const initial: UsenetCardProps["initial"] = {
   },
   soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
   subsonic: { enabled: false, priority: 2, url: "", username: "", password: "", apiKey: "", searchTimeout: 30000 },
+  torrent: createMockSettings().downloadSources.torrent,
 };
 
 const optedIn: UsenetCardProps["initial"] = {
@@ -128,6 +130,7 @@ describe("UsenetCard", () => {
         archive: initial.archive,
         soundcloud: initial.soundcloud,
         subsonic: initial.subsonic,
+        torrent: initial.torrent,
       });
     });
   });
@@ -146,6 +149,7 @@ describe("UsenetCard", () => {
         archive: initial.archive,
         soundcloud: initial.soundcloud,
         subsonic: initial.subsonic,
+        torrent: initial.torrent,
       });
     });
   });

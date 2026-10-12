@@ -42,5 +42,10 @@
   "SUBSONIC_SOURCE_CONNECTED": "Verbunden",
   "SUBSONIC_SOURCE_UNAUTHORIZED": "Der Server hat die Zugangsdaten abgelehnt",
   "SUBSONIC_SOURCE_UNREACHABLE": "Nicht erreichbar",
-  "SUBSONIC_SOURCE_SELF": "Die Adresse zeigt auf dieses Synthseek selbst"
+  "SUBSONIC_SOURCE_SELF": "Die Adresse zeigt auf dieses Synthseek selbst",
+  "TORRENT_SOURCE_DISABLED": "Die Torrent-Quelle ist deaktiviert (optional)",
+  "TORRENT_SOURCE_NOT_CONFIGURED": "Kein Torznab-Indexer und keine qBittorrent-Adresse (optional)",
+  "TORRENT_SOURCE_CONNECTED": "Verbunden",
+  "TORRENT_SOURCE_INDEXER_FAILED": "Der Torznab-Indexer hat nicht geantwortet",
+  "TORRENT_SOURCE_CLIENT_FAILED": "qBittorrent hat nicht geantwortet oder die Anmeldung abgelehnt"
 }
