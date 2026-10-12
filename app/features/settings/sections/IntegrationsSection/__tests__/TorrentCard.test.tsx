@@ -9,16 +9,22 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockSettings } from "@test/mocks/feature-hooks.mock";
 import { createMockMutation } from "@test/mocks/trpc.mock";
 
+import { SECRET_SENTINEL } from "../../../components/constants";
+
 const update = createMockMutation();
 const testConnection = createMockMutation();
 const toastSuccess = vi.hoisted(() => vi.fn());
 const toastError = vi.hoisted(() => vi.fn());
 const toastWarning = vi.hoisted(() => vi.fn());
 
+const reveal = vi.hoisted(() => vi.fn());
+
 vi.mock("@hooks/api/mutations/settings/useDownloadSources", () => ({
   useUpdateDownloadSources: () => update,
   useTestTorrentSource: () => testConnection,
 }));
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
 
 vi.mock("sonner", () => ({
   toast: {
@@ -67,6 +73,25 @@ const healthy = {
 };
 
 describe("TorrentCard", () => {
+  it("asks for each saved secret by its own field when its eye is clicked", async () => {
+    reveal.mockResolvedValue("real");
+    const torrent = {
+      ...initial.torrent,
+      indexerApiKey: SECRET_SENTINEL,
+      qbittorrentApiKey: SECRET_SENTINEL,
+      qbittorrentPassword: SECRET_SENTINEL,
+    };
+    render(<TorrentCard initial={{ ...initial, torrent }} />);
+
+    for (const eye of screen.getAllByLabelText(enSettings.shell.secretInput.reveal)) await userEvent.click(eye);
+
+    expect(reveal.mock.calls.map(([ref]) => ref)).toEqual([
+      { section: "downloadSources.torrent", field: "indexerApiKey" },
+      { section: "downloadSources.torrent", field: "qbittorrentApiKey" },
+      { section: "downloadSources.torrent", field: "qbittorrentPassword" },
+    ]);
+  });
+
   it("lets a connection be tested only once both addresses are filled in", () => {
     render(<TorrentCard initial={initial} />);
     expect(testButton()).toBeDisabled();

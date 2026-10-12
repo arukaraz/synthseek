@@ -6,6 +6,7 @@ import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
 
 import { useUpdateDownloadSources } from "@hooks/api/mutations/settings/useDownloadSources";
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
@@ -21,6 +22,7 @@ import type { UsenetCardProps } from "./types";
 export function UsenetCard({ initial }: UsenetCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
+  const reveal = useRevealSettingsSecret();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.usenet);
 
   if (!draft) return null;
@@ -52,6 +54,10 @@ export function UsenetCard({ initial }: UsenetCardProps) {
         <SettingsSecretInput
           value={draft.indexerApiKey}
           onChange={(v) => setField("indexerApiKey", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "downloadSources.usenet", field: "indexerApiKey" }),
+          }}
           ariaLabel={t("usenet.indexerApiKey.label")}
         />
       </SettingsField>
@@ -69,6 +75,10 @@ export function UsenetCard({ initial }: UsenetCardProps) {
         <SettingsSecretInput
           value={draft.sabnzbdApiKey}
           onChange={(v) => setField("sabnzbdApiKey", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "downloadSources.usenet", field: "sabnzbdApiKey" }),
+          }}
           ariaLabel={t("usenet.sabnzbdApiKey.label")}
         />
       </SettingsField>

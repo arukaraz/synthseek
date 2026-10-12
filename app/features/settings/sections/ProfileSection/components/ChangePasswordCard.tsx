@@ -10,6 +10,7 @@ import { ACCOUNT_FIELD_RULES, isValidPassword } from "@utils/account";
 
 import { SettingsCard } from "../../../components/SettingsCard";
 import { SettingsField } from "../../../components/SettingsField";
+import { TYPED_SECRET } from "../../../components/constants";
 import { SettingsSecretInput } from "../../../components/SettingsSecretInput";
 import type { ProfileCardProps } from "../types";
 
@@ -44,6 +45,7 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
             <SettingsSecretInput
               value={current}
               onChange={setCurrent}
+              source={TYPED_SECRET}
               ariaLabel={t("profile.password.currentAriaLabel")}
             />
           </SettingsField>
@@ -51,7 +53,12 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
             label={t("profile.password.newLabel")}
             helper={t("accountRules.passwordHint", { min: ACCOUNT_FIELD_RULES.passwordMin })}
           >
-            <SettingsSecretInput value={next} onChange={setNext} ariaLabel={t("profile.password.newAriaLabel")} />
+            <SettingsSecretInput
+              value={next}
+              onChange={setNext}
+              source={TYPED_SECRET}
+              ariaLabel={t("profile.password.newAriaLabel")}
+            />
           </SettingsField>
           <div className="flex justify-end">
             <Button type="submit" size="sm" disabled={!canSubmit}>

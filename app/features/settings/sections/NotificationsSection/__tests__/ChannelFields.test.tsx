@@ -1,10 +1,16 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import i18n from "@modules/i18n";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
+import { SECRET_SENTINEL } from "../../../components/constants";
 import { ChannelFields } from "../components/ChannelFields";
+
+const reveal = vi.hoisted(() => vi.fn());
+
+vi.mock("@hooks/api", () => ({ useRevealNotificationSecret: () => reveal }));
 
 const onChange = vi.fn();
 const fields = enSettings.notifications.fields;
@@ -19,6 +25,24 @@ afterEach(() => {
 });
 
 describe("ChannelFields", () => {
+  it("asks for a saved secret of this channel by its own field when its eye is clicked", async () => {
+    reveal.mockResolvedValue("123456:token");
+    render(
+      <ChannelFields
+        channel="telegram"
+        config={{ botToken: SECRET_SENTINEL, chatId: "-1001" }}
+        ntfyServers={null}
+        onChange={onChange}
+      />
+    );
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+
+    expect(reveal).toHaveBeenCalledWith({ channel: "telegram", field: "botToken" });
+    expect(screen.getByDisplayValue("123456:token")).toBeInTheDocument();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("names the ntfy servers a member may use under the server field", () => {
     render(
       <ChannelFields

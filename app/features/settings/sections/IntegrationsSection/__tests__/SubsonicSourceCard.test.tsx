@@ -8,6 +8,7 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockSettings } from "@test/mocks/feature-hooks.mock";
 import { createMockMutation } from "@test/mocks/trpc.mock";
+import { SECRET_SENTINEL } from "../../../components/constants";
 import type { SubsonicSourceCardProps } from "../types";
 
 const update = createMockMutation();
@@ -15,10 +16,14 @@ const testConnection = createMockMutation();
 const toastSuccess = vi.hoisted(() => vi.fn());
 const toastError = vi.hoisted(() => vi.fn());
 
+const reveal = vi.hoisted(() => vi.fn());
+
 vi.mock("@hooks/api/mutations/settings/useDownloadSources", () => ({
   useUpdateDownloadSources: () => update,
   useTestSubsonicSource: () => testConnection,
 }));
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
 
 vi.mock("sonner", () => ({
   toast: {
@@ -69,6 +74,19 @@ function typeInto(label: string, value: string): void {
 }
 
 describe("SubsonicSourceCard", () => {
+  it("asks for each saved credential by its own field when its eye is clicked", async () => {
+    reveal.mockResolvedValue("real");
+    const subsonic = { ...initial.subsonic, apiKey: SECRET_SENTINEL, password: SECRET_SENTINEL };
+    render(<SubsonicSourceCard initial={{ ...initial, subsonic }} />);
+
+    for (const eye of screen.getAllByLabelText(enSettings.shell.secretInput.reveal)) await userEvent.click(eye);
+
+    expect(reveal.mock.calls.map(([ref]) => ref)).toEqual([
+      { section: "downloadSources.subsonic", field: "apiKey" },
+      { section: "downloadSources.subsonic", field: "password" },
+    ]);
+  });
+
   it("only lets a connection be tested once there is an address and a key or a username and password", () => {
     render(<SubsonicSourceCard initial={initial} />);
     expect(testButton()).toBeDisabled();

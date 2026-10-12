@@ -16,6 +16,7 @@
     "formattingFailed": "Formatierung konnte nicht gespeichert werden",
     "namingFailed": "Die Namensvorlage konnte nicht gespeichert werden",
     "downloadSourcesFailed": "Download-Quellen konnten nicht aktualisiert werden",
+    "revealSecretFailed": "Der gespeicherte Wert konnte nicht angezeigt werden",
     "logLevelFailed": "Protokollebene konnte nicht aktualisiert werden",
     "queueFailed": "Warteschlangeneinstellungen konnten nicht gespeichert werden",
     "searchFailed": "Sucheinstellungen konnten nicht gespeichert werden",
@@ -349,6 +350,7 @@
     "saveFailed": "Dieses Benachrichtigungsziel konnte nicht gespeichert werden",
     "removeFailed": "Dieses Benachrichtigungsziel konnte nicht entfernt werden",
     "testFailed": "Die Testbenachrichtigung konnte nicht gesendet werden",
+    "revealSecretFailed": "Der gespeicherte Wert konnte nicht angezeigt werden",
     "settingsFailed": "Die Benachrichtigungseinstellungen konnten nicht gespeichert werden"
   }
 }

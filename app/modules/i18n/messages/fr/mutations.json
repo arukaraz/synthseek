@@ -16,6 +16,7 @@
     "formattingFailed": "Échec de l'enregistrement du formatage",
     "namingFailed": "Échec de l'enregistrement du modèle de nommage",
     "downloadSourcesFailed": "Échec de la mise à jour des sources de téléchargement",
+    "revealSecretFailed": "Impossible d'afficher la valeur enregistrée",
     "logLevelFailed": "Échec de la mise à jour du niveau de journalisation",
     "queueFailed": "Échec de l'enregistrement des réglages de la file",
     "searchFailed": "Échec de l'enregistrement des réglages de recherche",
@@ -349,6 +350,7 @@
     "saveFailed": "Impossible d'enregistrer cette destination de notifications",
     "removeFailed": "Impossible de retirer cette destination de notifications",
     "testFailed": "Impossible d'envoyer la notification de test",
+    "revealSecretFailed": "Impossible d'afficher la valeur enregistrée",
     "settingsFailed": "Impossible d'enregistrer les réglages des notifications"
   }
 }

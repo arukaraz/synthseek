@@ -10,6 +10,7 @@ import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
 
 import { useTestTorrentSource, useUpdateDownloadSources } from "@hooks/api/mutations/settings/useDownloadSources";
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
@@ -27,6 +28,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
   const testConnection = useTestTorrentSource();
+  const reveal = useRevealSettingsSecret();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.torrent);
   const fieldId = useId();
 
@@ -90,6 +92,10 @@ export function TorrentCard({ initial }: TorrentCardProps) {
           id={`${fieldId}-indexer-key`}
           value={draft.indexerApiKey}
           onChange={(v) => setField("indexerApiKey", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "downloadSources.torrent", field: "indexerApiKey" }),
+          }}
         />
       </SettingsField>
 
@@ -112,6 +118,10 @@ export function TorrentCard({ initial }: TorrentCardProps) {
           id={`${fieldId}-client-key`}
           value={draft.qbittorrentApiKey}
           onChange={(v) => setField("qbittorrentApiKey", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "downloadSources.torrent", field: "qbittorrentApiKey" }),
+          }}
         />
       </SettingsField>
 
@@ -128,6 +138,10 @@ export function TorrentCard({ initial }: TorrentCardProps) {
           id={`${fieldId}-client-password`}
           value={draft.qbittorrentPassword}
           onChange={(v) => setField("qbittorrentPassword", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "downloadSources.torrent", field: "qbittorrentPassword" }),
+          }}
         />
       </SettingsField>
 

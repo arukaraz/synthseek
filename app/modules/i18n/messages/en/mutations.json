@@ -16,6 +16,7 @@
     "formattingFailed": "Failed to save formatting",
     "namingFailed": "Failed to save the naming template",
     "downloadSourcesFailed": "Failed to update download sources",
+    "revealSecretFailed": "Could not show the saved value",
     "logLevelFailed": "Failed to update log level",
     "queueFailed": "Failed to save queue settings",
     "searchFailed": "Failed to save search settings",
@@ -349,6 +350,7 @@
     "saveFailed": "Could not save that notification destination",
     "removeFailed": "Could not remove that notification destination",
     "testFailed": "Could not send the test notification",
+    "revealSecretFailed": "Could not show the saved value",
     "settingsFailed": "Could not save the notification settings"
   }
 }

@@ -20,12 +20,17 @@ vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
   useTestJellyfin: () => jellyfinTest,
 }));
 
+const reveal = vi.hoisted(() => vi.fn());
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
+
 vi.mock("sonner", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 import { toast } from "sonner";
 
+import { SECRET_SENTINEL } from "../../../components/constants";
 import { JellyfinCard } from "../JellyfinCard";
 import { NavidromeCard } from "../NavidromeCard";
 
@@ -48,6 +53,22 @@ const NAVIDROME = {
   playlistSync: false,
 };
 const JELLYFIN = { url: "http://jellyfin:8096 ", apiKey: "key", playlistSync: false };
+
+describe("saved media server credentials", () => {
+  it("ask for their own field when the eye is clicked", async () => {
+    reveal.mockResolvedValue("real");
+    render(<NavidromeCard initial={{ ...NAVIDROME, password: SECRET_SENTINEL }} />);
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+    cleanup();
+    render(<JellyfinCard initial={{ ...JELLYFIN, apiKey: SECRET_SENTINEL }} />);
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+
+    expect(reveal.mock.calls.map(([ref]) => ref)).toEqual([
+      { section: "connections.navidrome", field: "password" },
+      { section: "connections.jellyfin", field: "apiKey" },
+    ]);
+  });
+});
 
 describe("NavidromeCard", () => {
   it("tests the typed credentials and says what the server answered", async () => {

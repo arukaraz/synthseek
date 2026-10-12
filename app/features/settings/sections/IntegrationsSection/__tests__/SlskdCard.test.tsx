@@ -8,6 +8,7 @@ import enHealth from "@modules/i18n/messages/en/health.json";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockMutation, createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
+import { SECRET_SENTINEL } from "../../../components/constants";
 import type { SlskdCardProps } from "../types";
 
 interface SlskdStatusData {
@@ -23,10 +24,14 @@ const updateTimeouts = createMockMutation();
 const testConnection = createMockMutation();
 let statusQuery: MockQueryResult<SlskdStatusData | undefined> = createMockQuery<SlskdStatusData | undefined>(undefined);
 
+const reveal = vi.hoisted(() => vi.fn());
+
 vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
   useUpdateConnectionsSlskd: () => updateConnection,
   useTestSlskd: () => testConnection,
 }));
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
 
 vi.mock("@hooks/api/mutations/settings/useUpdateEngine", () => ({
   useUpdateEngineSearch: () => updateSearch,
@@ -77,6 +82,15 @@ const initial: SlskdCardProps["initial"] = {
 };
 
 describe("SlskdCard", () => {
+  it("asks for the saved slskd key when its eye is clicked", async () => {
+    reveal.mockResolvedValue("real");
+    render(<SlskdCard initial={{ ...initial, connection: { ...initial.connection, apiKey: SECRET_SENTINEL } }} />);
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+
+    expect(reveal).toHaveBeenCalledWith({ section: "connections.slskd", field: "apiKey" });
+  });
+
   it("renders the card title", () => {
     render(<SlskdCard initial={initial} />);
     expect(screen.getByText(enSettings.slskd.title)).toBeInTheDocument();

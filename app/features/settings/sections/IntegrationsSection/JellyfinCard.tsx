@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { useTestJellyfin, useUpdateConnectionsJellyfin } from "@hooks/api/mutations/settings/useUpdateConnections";
 
 import { SaveBar } from "../../components/SaveBar";
@@ -21,6 +22,7 @@ export function JellyfinCard({ initial }: JellyfinCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateConnectionsJellyfin();
   const testConnection = useTestJellyfin();
+  const reveal = useRevealSettingsSecret();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial);
 
   if (!draft) return null;
@@ -48,7 +50,11 @@ export function JellyfinCard({ initial }: JellyfinCardProps) {
       </SettingsField>
 
       <SettingsField label={t("mediaServers.jellyfin.apiKey")} helper={t("mediaServers.jellyfin.apiKeyHelper")}>
-        <SettingsSecretInput value={draft.apiKey} onChange={(value) => setField("apiKey", value)} />
+        <SettingsSecretInput
+          value={draft.apiKey}
+          onChange={(value) => setField("apiKey", value)}
+          source={{ kind: "stored", reveal: () => reveal({ section: "connections.jellyfin", field: "apiKey" }) }}
+        />
       </SettingsField>
 
       <MediaServerPlaylistSyncRow

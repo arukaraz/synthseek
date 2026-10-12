@@ -17,6 +17,13 @@ export function useRemoveNotificationDestination() {
   });
 }
 
+export function useRevealNotificationSecret() {
+  const { mutateAsync } = trpc.notifications.revealSecret.useMutation({
+    onError: (error) => errorToast(error, "notifications.revealSecretFailed"),
+  });
+  return async (ref: Parameters<typeof mutateAsync>[0]): Promise<string> => (await mutateAsync(ref)).value;
+}
+
 export function useTestNotificationDestination() {
   const utils = trpc.useUtils();
   return trpc.notifications.test.useMutation({

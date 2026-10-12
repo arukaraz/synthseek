@@ -111,9 +111,12 @@ export interface SettingsPagePlaceholderProps {
   message?: string;
 }
 
+export type SecretSource = { kind: "typed" } | { kind: "stored"; reveal: () => Promise<string> };
+
 export interface SettingsSecretInputProps {
   value: string;
   onChange: (next: string) => void;
+  source: SecretSource;
   placeholder?: string;
   disabled?: boolean;
   id?: string;

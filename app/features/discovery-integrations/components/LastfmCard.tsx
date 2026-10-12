@@ -11,6 +11,7 @@ import { SettingsField } from "@features/settings/components/SettingsField";
 import { SettingsSecretInput } from "@features/settings/components/SettingsSecretInput";
 import { SettingsTextInput } from "@features/settings/components/SettingsTextInput";
 import { useUpdateLastfm } from "@hooks/api/mutations/discovery/useUpdateLastfm";
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { useUpdateConnectionsEnrichment } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { useSettings } from "@hooks/api/queries/useSettings";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -29,6 +30,7 @@ export function LastfmCard({ config }: LastfmCardProps) {
   const { t } = useTranslation("library");
   const update = useUpdateLastfm();
   const updateEnrichment = useUpdateConnectionsEnrichment();
+  const reveal = useRevealSettingsSecret();
   const { data: settings } = useSettings();
   const { isAdmin } = useAuthContext();
 
@@ -99,14 +101,28 @@ export function LastfmCard({ config }: LastfmCardProps) {
             label={t("discoveryIntegrations.lastfm.apiKeyLabel")}
             helper={t("discoveryIntegrations.lastfm.apiKeyHelper")}
           >
-            <SettingsSecretInput value={apiKey} onChange={setApiKey} />
+            <SettingsSecretInput
+              value={apiKey}
+              onChange={setApiKey}
+              source={{
+                kind: "stored",
+                reveal: () => reveal({ section: "connections.enrichment", field: "lastfmApiKey" }),
+              }}
+            />
           </SettingsField>
 
           <SettingsField
             label={t("discoveryIntegrations.lastfm.apiSecretLabel")}
             helper={t("discoveryIntegrations.lastfm.apiSecretHelper")}
           >
-            <SettingsSecretInput value={apiSecret} onChange={setApiSecret} />
+            <SettingsSecretInput
+              value={apiSecret}
+              onChange={setApiSecret}
+              source={{
+                kind: "stored",
+                reveal: () => reveal({ section: "connections.enrichment", field: "lastfmApiSecret" }),
+              }}
+            />
           </SettingsField>
         </>
       ) : null}

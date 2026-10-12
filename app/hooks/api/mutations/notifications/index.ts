@@ -1,5 +1,6 @@
 export {
   useRemoveNotificationDestination,
+  useRevealNotificationSecret,
   useSaveNotificationDestination,
   useTestNotificationDestination,
   useUpdateNotificationAdminSettings,

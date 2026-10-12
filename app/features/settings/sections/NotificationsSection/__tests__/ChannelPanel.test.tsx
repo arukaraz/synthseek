@@ -18,6 +18,7 @@ vi.mock("@hooks/api", () => ({
   useSaveNotificationDestination: () => save,
   useRemoveNotificationDestination: () => remove,
   useTestNotificationDestination: () => test,
+  useRevealNotificationSecret: () => vi.fn(),
 }));
 
 vi.mock("sonner", () => ({

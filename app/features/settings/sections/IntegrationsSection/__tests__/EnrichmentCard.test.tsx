@@ -7,13 +7,18 @@ import i18n from "@modules/i18n";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockMutation } from "@test/mocks/trpc.mock";
+import { SECRET_SENTINEL } from "../../../components/constants";
 import type { ConnectionsEnrichment } from "../types";
 
 const update = createMockMutation();
 
+const reveal = vi.hoisted(() => vi.fn());
+
 vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
   useUpdateConnectionsEnrichment: () => update,
 }));
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
 
 import { EnrichmentCard } from "../EnrichmentCard";
 
@@ -35,6 +40,28 @@ const initial: ConnectionsEnrichment = {
 };
 
 describe("EnrichmentCard", () => {
+  it("asks for each saved key by its own field when its eye is clicked", async () => {
+    reveal.mockResolvedValue("real");
+    render(
+      <EnrichmentCard
+        initial={{
+          ...initial,
+          fanartApiKey: SECRET_SENTINEL,
+          acoustidApiKey: SECRET_SENTINEL,
+          songlinkApiKey: SECRET_SENTINEL,
+        }}
+      />
+    );
+
+    for (const eye of screen.getAllByLabelText(enSettings.shell.secretInput.reveal)) await userEvent.click(eye);
+
+    expect(reveal.mock.calls.map(([ref]) => ref)).toEqual([
+      { section: "connections.enrichment", field: "fanartApiKey" },
+      { section: "connections.enrichment", field: "acoustidApiKey" },
+      { section: "connections.enrichment", field: "songlinkApiKey" },
+    ]);
+  });
+
   it("renders the enrichment card title", () => {
     render(<EnrichmentCard initial={initial} />);
     expect(screen.getByText(enSettings.metadata.enrichment.title)).toBeInTheDocument();

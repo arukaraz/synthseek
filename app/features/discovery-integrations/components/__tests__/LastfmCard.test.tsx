@@ -5,6 +5,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import enLibrary from "@modules/i18n/messages/en/library.json";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
+import { SECRET_SENTINEL } from "@features/settings/components/constants";
+
 interface Enrichment {
   lastfmApiKey: string;
   lastfmApiSecret: string;
@@ -16,6 +18,7 @@ const api = vi.hoisted(() => ({
   updateLastfmPending: false,
   updateEnrichment: vi.fn(async () => undefined),
   updateEnrichmentPending: false,
+  reveal: vi.fn(async () => "real"),
   settings: undefined as { connections: { enrichment: Enrichment } } | undefined,
   isAdmin: true,
 }));
@@ -34,6 +37,8 @@ vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
 vi.mock("@hooks/api/queries/useSettings", () => ({ useSettings: () => ({ data: api.settings }) }));
 
 vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => ({ isAdmin: api.isAdmin }) }));
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => api.reveal }));
 
 import { LastfmCard } from "../LastfmCard";
 
@@ -57,6 +62,22 @@ beforeEach(() => {
 });
 
 describe("what the card shows", () => {
+  it("asks for the saved key and secret by their own fields when their eyes are clicked", async () => {
+    api.settings = {
+      connections: {
+        enrichment: { lastfmApiKey: SECRET_SENTINEL, lastfmApiSecret: SECRET_SENTINEL, fanartApiKey: "" },
+      },
+    };
+    const { user } = renderCard();
+
+    for (const eye of screen.getAllByLabelText(enSettings.shell.secretInput.reveal)) await user.click(eye);
+
+    expect(api.reveal.mock.calls.map((call) => call.at(0))).toEqual([
+      { section: "connections.enrichment", field: "lastfmApiKey" },
+      { section: "connections.enrichment", field: "lastfmApiSecret" },
+    ]);
+  });
+
   it("names the integration and offers a switch for it", () => {
     renderCard();
 

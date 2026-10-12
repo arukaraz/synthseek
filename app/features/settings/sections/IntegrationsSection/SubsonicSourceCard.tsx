@@ -9,6 +9,7 @@ import { Button } from "@components/ui/Button";
 import { Switch } from "@components/ui/Switch";
 
 import { useTestSubsonicSource, useUpdateDownloadSources } from "@hooks/api/mutations/settings/useDownloadSources";
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
@@ -24,6 +25,7 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
   const testConnection = useTestSubsonicSource();
+  const reveal = useRevealSettingsSecret();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.subsonic);
   const fieldId = useId();
 
@@ -77,6 +79,7 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
           id={`${fieldId}-api-key`}
           value={draft.apiKey}
           onChange={(value) => setField("apiKey", value)}
+          source={{ kind: "stored", reveal: () => reveal({ section: "downloadSources.subsonic", field: "apiKey" }) }}
         />
       </SettingsField>
 
@@ -93,6 +96,7 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
           id={`${fieldId}-password`}
           value={draft.password}
           onChange={(value) => setField("password", value)}
+          source={{ kind: "stored", reveal: () => reveal({ section: "downloadSources.subsonic", field: "password" }) }}
         />
       </SettingsField>
 

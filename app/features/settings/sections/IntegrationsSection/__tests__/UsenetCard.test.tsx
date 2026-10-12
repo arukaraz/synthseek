@@ -8,13 +8,18 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockSettings } from "@test/mocks/feature-hooks.mock";
 import { createMockMutation } from "@test/mocks/trpc.mock";
+import { SECRET_SENTINEL } from "../../../components/constants";
 import type { UsenetCardProps } from "../types";
 
 const update = createMockMutation();
 
+const reveal = vi.hoisted(() => vi.fn());
+
 vi.mock("@hooks/api/mutations/settings/useDownloadSources", () => ({
   useUpdateDownloadSources: () => update,
 }));
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
 
 vi.mock("../StagedReleaseList", () => ({
   StagedReleaseList: ({ enabled }: { enabled: boolean }) => (
@@ -74,6 +79,19 @@ const optedIn: UsenetCardProps["initial"] = {
 const t = enSettings.usenet;
 
 describe("UsenetCard", () => {
+  it("asks for each saved key by its own field when its eye is clicked", async () => {
+    reveal.mockResolvedValue("real");
+    const usenet = { ...initial.usenet, indexerApiKey: SECRET_SENTINEL, sabnzbdApiKey: SECRET_SENTINEL };
+    render(<UsenetCard initial={{ ...initial, usenet }} />);
+
+    for (const eye of screen.getAllByLabelText(enSettings.shell.secretInput.reveal)) await userEvent.click(eye);
+
+    expect(reveal.mock.calls.map(([ref]) => ref)).toEqual([
+      { section: "downloadSources.usenet", field: "indexerApiKey" },
+      { section: "downloadSources.usenet", field: "sabnzbdApiKey" },
+    ]);
+  });
+
   it("renders the card title", () => {
     render(<UsenetCard initial={initial} />);
     expect(screen.getByText(t.title)).toBeInTheDocument();

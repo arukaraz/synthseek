@@ -10,6 +10,7 @@ import { Button } from "@components/ui/Button";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
 
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { useUpdateEngineSearch, useUpdateEngineTimeouts } from "@hooks/api/mutations/settings/useUpdateEngine";
 import { useSlskdStatus } from "@hooks/api/queries/useSlskdStatus";
@@ -31,6 +32,7 @@ import type { SlskdCardProps } from "./types";
 export function SlskdCard({ initial }: SlskdCardProps) {
   const { t } = useTranslation("settings");
   const updateConnection = useUpdateConnectionsSlskd();
+  const reveal = useRevealSettingsSecret();
   const updateSearch = useUpdateEngineSearch();
   const updateTimeouts = useUpdateEngineTimeouts();
   const testConnection = useTestSlskd();
@@ -115,7 +117,11 @@ export function SlskdCard({ initial }: SlskdCardProps) {
       </SettingsField>
 
       <SettingsField label={t("slskd.apiKey.label")}>
-        <SettingsSecretInput value={connection.apiKey} onChange={(v) => connectionForm.setField("apiKey", v)} />
+        <SettingsSecretInput
+          value={connection.apiKey}
+          onChange={(v) => connectionForm.setField("apiKey", v)}
+          source={{ kind: "stored", reveal: () => reveal({ section: "connections.slskd", field: "apiKey" }) }}
+        />
       </SettingsField>
 
       <div className="flex items-center gap-3">

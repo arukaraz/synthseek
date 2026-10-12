@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
 
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { useTestLidarr, useUpdateConnectionsLidarr } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { useLidarrStatus } from "@hooks/api/queries/useLidarrStatus";
 import { validateLidarrUrl } from "@utils/lidarr-url";
@@ -24,6 +25,7 @@ export function LidarrCard({ initial }: LidarrCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateConnectionsLidarr();
   const testConnection = useTestLidarr();
+  const reveal = useRevealSettingsSecret();
   const status = useLidarrStatus();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial);
   const [testing, setTesting] = useState(false);
@@ -83,7 +85,11 @@ export function LidarrCard({ initial }: LidarrCardProps) {
       </SettingsField>
 
       <SettingsField label={t("lidarr.apiKey.label")}>
-        <SettingsSecretInput value={draft.apiKey} onChange={(v) => setField("apiKey", v)} />
+        <SettingsSecretInput
+          value={draft.apiKey}
+          onChange={(v) => setField("apiKey", v)}
+          source={{ kind: "stored", reveal: () => reveal({ section: "connections.lidarr", field: "apiKey" }) }}
+        />
       </SettingsField>
 
       <div className="flex items-center gap-3">

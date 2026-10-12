@@ -25,6 +25,7 @@ vi.mock("@hooks/api", () => ({
   useSaveNotificationDestination: () => createMockMutation(),
   useRemoveNotificationDestination: () => createMockMutation(),
   useTestNotificationDestination: () => createMockMutation(),
+  useRevealNotificationSecret: () => vi.fn(),
 }));
 
 import { NotificationDestinations } from "../components/NotificationDestinations";

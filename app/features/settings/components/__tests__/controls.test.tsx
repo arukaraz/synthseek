@@ -11,6 +11,7 @@ import { SettingsCard } from "../SettingsCard";
 import { SettingsNumberInput } from "../SettingsNumberInput";
 import { SettingsSecretInput } from "../SettingsSecretInput";
 import { IntegrationTabs } from "../IntegrationTabs";
+import { SECRET_SENTINEL, TYPED_SECRET } from "../constants";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
@@ -63,8 +64,8 @@ describe("SettingsNumberInput", () => {
 });
 
 describe("SettingsSecretInput", () => {
-  it("masks the value and toggles visibility", async () => {
-    render(<SettingsSecretInput value="secret" onChange={vi.fn()} ariaLabel="token" />);
+  it("masks a typed value and toggles visibility", async () => {
+    render(<SettingsSecretInput value="secret" onChange={vi.fn()} source={TYPED_SECRET} ariaLabel="token" />);
     const input = screen.getByLabelText("token");
     expect(input).toHaveAttribute("type", "password");
 
@@ -77,9 +78,81 @@ describe("SettingsSecretInput", () => {
 
   it("propagates changes", () => {
     const onChange = vi.fn();
-    render(<SettingsSecretInput value="" onChange={onChange} ariaLabel="token" />);
+    render(<SettingsSecretInput value="" onChange={onChange} source={TYPED_SECRET} ariaLabel="token" />);
     fireEvent.change(screen.getByLabelText("token"), { target: { value: "abc" } });
     expect(onChange).toHaveBeenCalledWith("abc");
+  });
+
+  it("fetches a saved secret to show it, without touching the form, and masks it again on hide", async () => {
+    const reveal = vi.fn().mockResolvedValue("real-saved-key");
+    const onChange = vi.fn();
+    render(
+      <SettingsSecretInput
+        value={SECRET_SENTINEL}
+        onChange={onChange}
+        source={{ kind: "stored", reveal }}
+        ariaLabel="token"
+      />
+    );
+    const input = screen.getByLabelText("token");
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+    expect(input).toHaveAttribute("type", "text");
+    expect(input).toHaveValue("real-saved-key");
+    expect(reveal).toHaveBeenCalledTimes(1);
+    expect(onChange).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.hide));
+    expect(input).toHaveAttribute("type", "password");
+    expect(input).toHaveValue(SECRET_SENTINEL);
+  });
+
+  it("does not ask the server for a value the user typed over the saved one", async () => {
+    const reveal = vi.fn();
+    render(
+      <SettingsSecretInput value="new-key" onChange={vi.fn()} source={{ kind: "stored", reveal }} ariaLabel="token" />
+    );
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+
+    expect(screen.getByLabelText("token")).toHaveValue("new-key");
+    expect(reveal).not.toHaveBeenCalled();
+  });
+
+  it("stays hidden when the saved secret cannot be fetched", async () => {
+    const reveal = vi.fn().mockRejectedValue(new Error("forbidden"));
+    render(
+      <SettingsSecretInput
+        value={SECRET_SENTINEL}
+        onChange={vi.fn()}
+        source={{ kind: "stored", reveal }}
+        ariaLabel="token"
+      />
+    );
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+
+    const input = screen.getByLabelText("token");
+    expect(input).toHaveAttribute("type", "password");
+    expect(input).toHaveValue(SECRET_SENTINEL);
+    expect(screen.getByLabelText(enSettings.shell.secretInput.reveal)).toBeEnabled();
+  });
+
+  it("hands an edit of the revealed secret to the form as typed", async () => {
+    const onChange = vi.fn();
+    render(
+      <SettingsSecretInput
+        value={SECRET_SENTINEL}
+        onChange={onChange}
+        source={{ kind: "stored", reveal: vi.fn().mockResolvedValue("abc") }}
+        ariaLabel="token"
+      />
+    );
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+    fireEvent.change(screen.getByLabelText("token"), { target: { value: "abcd" } });
+
+    expect(onChange).toHaveBeenCalledWith("abcd");
   });
 });
 

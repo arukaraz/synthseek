@@ -56,6 +56,7 @@ export {
 } from "./queries/notifications";
 export {
   useRemoveNotificationDestination,
+  useRevealNotificationSecret,
   useSaveNotificationDestination,
   useTestNotificationDestination,
   useUpdateNotificationAdminSettings,

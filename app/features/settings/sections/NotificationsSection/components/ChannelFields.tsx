@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@components/ui/Input";
+import { useRevealNotificationSecret } from "@hooks/api";
 
 import { SettingsField } from "../../../components/SettingsField";
 import { SettingsSecretInput } from "../../../components/SettingsSecretInput";
@@ -12,6 +13,7 @@ import type { ChannelFieldsProps } from "../types";
 
 export function ChannelFields({ channel, config, ntfyServers, onChange }: ChannelFieldsProps) {
   const { t } = useTranslation("settings");
+  const reveal = useRevealNotificationSecret();
 
   return (
     <div className={fieldGrid()}>
@@ -32,6 +34,7 @@ export function ChannelFields({ channel, config, ntfyServers, onChange }: Channe
                 placeholder={placeholder}
                 ariaLabel={label}
                 onChange={(value) => onChange(field.name, value)}
+                source={{ kind: "stored", reveal: () => reveal({ channel, field: field.name }) }}
               />
             ) : (
               <Input

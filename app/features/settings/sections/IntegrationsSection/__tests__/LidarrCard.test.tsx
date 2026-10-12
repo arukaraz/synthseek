@@ -8,6 +8,7 @@ import enHealth from "@modules/i18n/messages/en/health.json";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockMutation, createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
+import { SECRET_SENTINEL } from "../../../components/constants";
 import type { LidarrCardProps } from "../types";
 
 interface LidarrStatusData {
@@ -23,10 +24,14 @@ let statusQuery: MockQueryResult<LidarrStatusData | undefined> = createMockQuery
   undefined
 );
 
+const reveal = vi.hoisted(() => vi.fn());
+
 vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
   useUpdateConnectionsLidarr: () => update,
   useTestLidarr: () => testConnection,
 }));
+
+vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
 
 vi.mock("@hooks/api/queries/useLidarrStatus", () => ({
   useLidarrStatus: () => statusQuery,
@@ -54,6 +59,15 @@ afterEach(() => {
 const connected: LidarrCardProps["initial"] = { url: "http://localhost:8686", apiKey: "secret-key" };
 
 describe("LidarrCard", () => {
+  it("asks for the saved Lidarr key when its eye is clicked", async () => {
+    reveal.mockResolvedValue("real");
+    render(<LidarrCard initial={{ ...connected, apiKey: SECRET_SENTINEL }} />);
+
+    await userEvent.click(screen.getByLabelText(enSettings.shell.secretInput.reveal));
+
+    expect(reveal).toHaveBeenCalledWith({ section: "connections.lidarr", field: "apiKey" });
+  });
+
   it("renders the card title", () => {
     render(<LidarrCard initial={connected} />);
     expect(screen.getByText(enSettings.lidarr.title)).toBeInTheDocument();

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
+import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { useTestNavidrome, useUpdateConnectionsNavidrome } from "@hooks/api/mutations/settings/useUpdateConnections";
 
 import { SaveBar } from "../../components/SaveBar";
@@ -22,6 +23,7 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateConnectionsNavidrome();
   const testConnection = useTestNavidrome();
+  const reveal = useRevealSettingsSecret();
   const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial);
 
   if (!draft) return null;
@@ -58,7 +60,11 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
       </SettingsField>
 
       <SettingsField label={t("mediaServers.navidrome.password")}>
-        <SettingsSecretInput value={draft.password} onChange={(value) => setField("password", value)} />
+        <SettingsSecretInput
+          value={draft.password}
+          onChange={(value) => setField("password", value)}
+          source={{ kind: "stored", reveal: () => reveal({ section: "connections.navidrome", field: "password" }) }}
+        />
       </SettingsField>
 
       <MediaServerPlaylistSyncRow
