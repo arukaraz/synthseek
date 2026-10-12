@@ -2,6 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 
+import { useSessionExpiryWatch } from "@hooks/api/queries/useSessionExpiryWatch";
 import { trpc } from "@utils/trpc";
 import { isAdminFE } from "@utils/authorization";
 import type { AuthContextValue } from "./types";
@@ -13,6 +14,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     staleTime: 60 * 1000,
     gcTime: 5 * 60 * 1000,
   });
+  useSessionExpiryWatch();
 
   const currentUser = meQuery.data ?? null;
 

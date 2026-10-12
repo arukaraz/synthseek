@@ -5,6 +5,10 @@ export function getHttpStatusFromError(error: unknown): number | undefined {
   return error.data?.httpStatus;
 }
 
+export function isUnauthorizedError(error: unknown): boolean {
+  return getHttpStatusFromError(error) === 401;
+}
+
 export function isHttpClientError(error: unknown): boolean {
   const status = getHttpStatusFromError(error);
   return status !== undefined && status >= 400 && status < 500;

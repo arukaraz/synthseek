@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { TRPCClientError } from "@trpc/client";
 
-import { getHttpStatusFromError, isHttpClientError } from "../trpc-error";
+import { getHttpStatusFromError, isHttpClientError, isUnauthorizedError } from "../trpc-error";
 
 function clientErrorWithStatus(httpStatus: number): TRPCClientError<never> {
   const error = new TRPCClientError<never>("boom");
@@ -28,6 +28,14 @@ describe("getHttpStatusFromError", () => {
 
   it("returns undefined when the tRPC error carries no data", () => {
     expect(getHttpStatusFromError(new TRPCClientError("boom"))).toBeUndefined();
+  });
+});
+
+describe("isUnauthorizedError", () => {
+  it("is true only for a missing or dead session", () => {
+    expect(isUnauthorizedError(clientErrorWithStatus(401))).toBe(true);
+    expect(isUnauthorizedError(clientErrorWithStatus(403))).toBe(false);
+    expect(isUnauthorizedError(new Error("network"))).toBe(false);
   });
 });
 
