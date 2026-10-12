@@ -8,7 +8,7 @@
 
 Self-hosted, multi-user music library automation.
 
-Synthseek searches across music providers, downloads through the sources you enable, [slskd](https://github.com/slskd/slskd), Usenet, or yt-dlp, checks that what arrived is what you asked for, and keeps your library organized afterwards. It is multi-user, provider-agnostic, and ships a built-in MCP server so assistants can drive your library.
+Synthseek searches across music providers, downloads through the sources you enable, such as [slskd](https://github.com/slskd/slskd), Usenet, torrent or yt-dlp, checks that what arrived is what you asked for, and keeps your library organized afterwards. It is multi-user, provider-agnostic, and ships a built-in MCP server so assistants can drive your library.
 
 **[Website](https://synthseek.dev) · [Documentation](https://docs.synthseek.dev) · [Patch notes](https://docs.synthseek.dev/patch-notes/)**
 
@@ -40,7 +40,7 @@ https://github.com/user-attachments/assets/50c3988e-7ec1-41dc-9a9e-a8407043b552
 ## Why Synthseek
 
 - **No API keys to get started.** The catalog is provider-agnostic and runs on Deezer by default, so a first run needs nothing you have to register for.
-- **Three download sources, and you decide the order.** Peer-to-peer, Usenet, and a YouTube fallback, chosen per request rather than once globally.
+- **Seven download sources, and you decide the order.** Peer-to-peer, Usenet, torrent, another Subsonic server, and fallbacks to YouTube, SoundCloud and the Internet Archive, chosen per request rather than once globally.
 - **It treats your library as something to keep honest.** Files are checked before they are imported, duplicate copies are only settled when they can be proven identical, and nothing is ever deleted outright.
 
 ## Quick start
@@ -68,8 +68,8 @@ Open the web interface, create your admin account in the setup wizard, and point
 
 ### Get the files
 
-- slskd for peer-to-peer, Usenet through your own indexer and SABnzbd, and yt-dlp as a fallback
-- A Usenet release downloaded for one track is reused for the other tracks on the same album instead of being fetched again
+- slskd for peer-to-peer, Usenet through your own indexer and SABnzbd, torrent through your own indexer and qBittorrent, and another Subsonic server, with yt-dlp, SoundCloud and the Internet Archive as fallbacks
+- A Usenet or torrent release downloaded for one track is reused for the other tracks on the same album instead of being fetched again
 - Every download is fingerprinted and identified before it is imported, so a file whose tags look right but whose audio is by someone else is refused
 - Anything that fails that check waits in a review queue for you to approve or discard
 
@@ -133,7 +133,7 @@ Open the web interface, create your admin account in the setup wizard, and point
 | [Getting Started](https://docs.synthseek.dev/getting-started/)         | Install, first run, and pointing it at your music |
 | [Features](https://docs.synthseek.dev/features/)                       | Everything the app does, in detail                |
 | [Download engine](https://docs.synthseek.dev/download-engine/)         | How a request becomes a file in your library      |
-| [Download sources](https://docs.synthseek.dev/download-sources/)       | slskd, Usenet, and the YouTube fallback           |
+| [Download sources](https://docs.synthseek.dev/download-sources/)       | All seven sources, and the order they run in      |
 | [Configuration](https://docs.synthseek.dev/configuration/)             | Environment variables and in-app settings         |
 | [Users and permissions](https://docs.synthseek.dev/users-permissions/) | Accounts, roles, and what members can see         |
 | [Integrations](https://docs.synthseek.dev/integrations/)               | Plex, Navidrome, Jellyfin, Lidarr, and more       |

@@ -1275,8 +1275,8 @@
         "description": "Retries watched failed tracks on a release-age schedule."
       },
       "usenet-staging-sweep": {
-        "name": "Usenet Staging Sweep",
-        "description": "Removes downloaded Usenet albums nobody asked another track from."
+        "name": "Release Staging Sweep",
+        "description": "Removes downloaded Usenet and torrent albums nobody asked another track from, a torrent only once it stopped seeding."
       },
       "library-scan": {
         "name": "Library Scan",

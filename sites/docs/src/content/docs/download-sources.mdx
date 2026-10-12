@@ -89,7 +89,7 @@ length agree. Downloading from a Synthseek server leaves no plays on it.
 
 ## Usenet
 
-Usenet is another acquisition source, and it works differently enough from the other two to be worth
+Usenet is another acquisition source, and it works differently enough from the per-track sources to be worth
 a paragraph before the setup steps. Nobody publishes single tracks on Usenet: material is posted as a
 whole release, so a request fetches the entire album and takes the track it needs out of it.
 
@@ -171,8 +171,9 @@ until you set it up. Like Usenet, it serves only album requests unless you allow
 
 Synthseek imports a copy of the track it needs and leaves the release seeding. A finished torrent is
 deleted with its files after the time you set, but only once qBittorrent has stopped seeding it. Your
-share limits in qBittorrent decide when that is. A torrent that stops making progress is given up,
-and the next source is tried. The peers see qBittorrent's address, not Synthseek's.
+share limits in qBittorrent decide when that is. When a torrent stops making progress, the tracks that
+arrived are kept and the next source is tried for the rest. The peers see qBittorrent's address, not
+Synthseek's.
 
 ### Torrent settings
 
@@ -213,9 +214,8 @@ Synthseek can also look for a track on SoundCloud, through the same bundled yt-d
 account, and it is off until you turn it on.
 
 Most of what SoundCloud returns for a well-known song is somebody else's version of it: remixes,
-covers, sped-up or slowed edits. Uploads named as one of those are skipped. An upload by the artist's
-own account is preferred, and an upload has to be about as long as the track you asked for. Tracks
-SoundCloud offers only as a short preview, or only behind its own DRM, are left out of the search.
+covers, sped-up or slowed edits. Uploads named as one of those are skipped. Tracks SoundCloud offers
+only as a short preview, or only behind its own DRM, are left out of the search.
 
 ### SoundCloud settings
 

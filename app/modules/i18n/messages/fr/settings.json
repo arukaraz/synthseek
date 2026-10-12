@@ -1275,8 +1275,8 @@
         "description": "Réessaie les pistes en échec suivies selon un calendrier basé sur l'âge de la sortie."
       },
       "usenet-staging-sweep": {
-        "name": "Nettoyage des albums Usenet",
-        "description": "Supprime les albums Usenet téléchargés dont personne n'a demandé un autre morceau."
+        "name": "Nettoyage des albums en attente",
+        "description": "Supprime les albums Usenet et torrent téléchargés dont personne n'a demandé un autre morceau, un torrent seulement une fois son partage arrêté."
       },
       "library-scan": {
         "name": "Analyse de la bibliothèque",

@@ -1279,7 +1279,7 @@
       },
       "usenet-staging-sweep": {
         "name": "Barrido de discos en espera",
-        "description": "Elimina los discos de Usenet descargados a los que nadie pidió otra canción."
+        "description": "Elimina los discos de Usenet y torrent descargados a los que nadie pidió otra canción, un torrent solo cuando ha dejado de compartirse."
       },
       "library-scan": {
         "name": "Escaneo de biblioteca",

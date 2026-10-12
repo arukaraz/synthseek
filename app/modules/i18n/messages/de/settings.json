@@ -1275,8 +1275,8 @@
         "description": "Versucht beobachtete fehlgeschlagene Titel nach einem Zeitplan auf Basis des Veröffentlichungsalters erneut."
       },
       "usenet-staging-sweep": {
-        "name": "Usenet-Zwischenspeicher aufräumen",
-        "description": "Entfernt geladene Usenet-Alben, aus denen niemand einen weiteren Titel angefragt hat."
+        "name": "Wartende Alben aufräumen",
+        "description": "Entfernt geladene Usenet- und Torrent-Alben, aus denen niemand einen weiteren Titel angefragt hat, einen Torrent erst, wenn er nicht mehr geteilt wird."
       },
       "library-scan": {
         "name": "Bibliotheksscan",
