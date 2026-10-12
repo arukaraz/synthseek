@@ -46,6 +46,7 @@ function entry(id: string, source: "usenet" | "torrent", releaseTitle: string) {
   };
 }
 
+const HOUR_MS = 3_600_000;
 const both = [entry("u1", "usenet", "Usenet Album"), entry("t1", "torrent", "Torrent Album")];
 
 describe("StagedReleaseList", () => {
@@ -85,5 +86,13 @@ describe("StagedReleaseList", () => {
     await userEvent.click(screen.getByRole("button", { name: enSettings.usenet.stagedList.remove }));
 
     expect(removeEntry.mutate).toHaveBeenCalledWith({ id: "u1" });
+  });
+
+  it("says how far ahead a release expires, not that it expired just now", () => {
+    const expiring = { ...entry("t1", "torrent", "Torrent Album"), expiresAt: new Date(Date.now() + 23.5 * HOUR_MS) };
+    entries.current = createMockQuery([expiring]);
+    render(<StagedReleaseList enabled source="torrent" />);
+
+    expect(screen.getByText("expires in 23h")).toBeInTheDocument();
   });
 });

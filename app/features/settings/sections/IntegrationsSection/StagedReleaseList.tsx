@@ -12,7 +12,7 @@ import { Spinner } from "@components/ui/Spinner";
 
 import { useClearStagedReleases, useRemoveStagedRelease } from "@hooks/api/mutations/settings/useStagedReleases";
 import { useStagedReleases } from "@hooks/api/queries/useStagedReleases";
-import { formatBytes, formatRelativeTime } from "@utils/formatters";
+import { formatBytes, formatRelativeTime, formatTimeUntil } from "@utils/formatters";
 
 import { cardSectionHeader } from "../../styles";
 import { STAGED_LIST_KEYS } from "./constants";
@@ -60,7 +60,7 @@ export function StagedReleaseList({ enabled, source }: StagedReleaseListProps) {
                 <div className={stagedMeta()}>
                   <span>{formatBytes(entry.sizeBytes)}</span>
                   <span>{formatRelativeTime(entry.lastUsedAt)}</span>
-                  <span>{t(keys.expiresIn, { when: formatRelativeTime(entry.expiresAt) })}</span>
+                  <span>{t(keys.expiresIn, { when: formatTimeUntil(entry.expiresAt) })}</span>
                 </div>
               </div>
               <IconButton
