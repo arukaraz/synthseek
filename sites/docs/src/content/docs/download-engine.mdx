@@ -60,6 +60,8 @@ Several timeouts guard this phase, all configurable:
 - Separate queue-wait budgets depending on whether the peer is actively transferring to someone else or simply idle.
 - A short window after which a transfer that never materialises fails fast rather than holding a slot.
 
+A Usenet or torrent album is fetched before this phase, under that source's own limits, and other downloads carry on while it is.
+
 If a source cannot deliver, the engine moves to the next source in the chain. A failure caused by your own machine rather than the source short-circuits this, because another peer cannot fix a full disk.
 
 ## Step 4, verification

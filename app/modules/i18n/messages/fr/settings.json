@@ -189,7 +189,7 @@
     },
     "downloadPhase": {
       "label": "Phase de téléchargement",
-      "description": "Budget total pour toute la phase de téléchargement par piste. La piste est marquée comme en échec si ce délai s'écoule.",
+      "description": "Budget total pour toute la phase de téléchargement par piste. La piste est marquée comme en échec si ce délai s'écoule. Les albums Usenet et torrent sont téléchargés avant, avec leurs propres limites.",
       "ariaLabel": "Délai de la phase de téléchargement"
     },
     "importPhase": {

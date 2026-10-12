@@ -192,7 +192,7 @@
     },
     "downloadPhase": {
       "label": "Fase de descarga",
-      "description": "Presupuesto total para toda la fase de descarga por canción. La canción se marca como fallida si transcurre este tiempo.",
+      "description": "Presupuesto total para toda la fase de descarga por canción. La canción se marca como fallida si transcurre este tiempo. Los álbumes de Usenet y torrent se descargan antes de que empiece, con sus propios límites.",
       "ariaLabel": "Tiempo de espera de la fase de descarga"
     },
     "importPhase": {

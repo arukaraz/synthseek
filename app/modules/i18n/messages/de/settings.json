@@ -189,7 +189,7 @@
     },
     "downloadPhase": {
       "label": "Download-Phase",
-      "description": "Gesamtbudget für die gesamte Download-Phase pro Titel. Der Titel wird als fehlgeschlagen markiert, wenn diese Zeit verstreicht.",
+      "description": "Gesamtbudget für die gesamte Download-Phase pro Titel. Der Titel wird als fehlgeschlagen markiert, wenn diese Zeit verstreicht. Usenet- und Torrent-Alben werden vorher geladen, mit eigenen Limits.",
       "ariaLabel": "Zeitlimit der Download-Phase"
     },
     "importPhase": {

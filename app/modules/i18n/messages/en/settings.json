@@ -189,7 +189,7 @@
     },
     "downloadPhase": {
       "label": "Download phase",
-      "description": "Total budget for the full download phase per track. The track is marked failed if this elapses.",
+      "description": "Total budget for the full download phase per track. The track is marked failed if this elapses. Usenet and torrent albums are fetched before this starts, under their own limits.",
       "ariaLabel": "Download phase timeout"
     },
     "importPhase": {
