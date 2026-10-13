@@ -261,6 +261,8 @@
         "track": "Track"
       },
       "trackDisplay": "{{title}} - {{artist}}",
+      "trackCount_one": "{{count}} track",
+      "trackCount_other": "{{count}} tracks",
       "empty": {
         "title": "No quarantined files",
         "description": "When a downloaded file fails verification, the exact file and its source appear here and are skipped on retries."

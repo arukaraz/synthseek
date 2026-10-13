@@ -264,6 +264,8 @@
         "track": "Canción"
       },
       "trackDisplay": "{{title}} - {{artist}}",
+      "trackCount_one": "{{count}} pista",
+      "trackCount_other": "{{count}} pistas",
       "empty": {
         "title": "No hay archivos en cuarentena",
         "description": "Cuando un archivo descargado no supera la verificación, el archivo exacto y su fuente aparecen aquí y se omiten en los reintentos."

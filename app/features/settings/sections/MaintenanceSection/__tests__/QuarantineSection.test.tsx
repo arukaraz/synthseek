@@ -10,14 +10,13 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockMutation, createMockQuery, createLoadingQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
 interface QuarantineEntry {
-  id: string;
   source: string;
   username: string;
   filename: string;
-  externalId: string;
   reason: "wrong_file" | "verify_failed";
   createdAt: Date;
-  track: { title: string; artist: string } | null;
+  trackCount: number;
+  tracks: Array<{ title: string; artist: string }>;
 }
 
 const update = createMockMutation();
@@ -55,25 +54,36 @@ const initial = { metadataConfidenceThreshold: 50, acoustidIdentityGate: true };
 const sourceTrust = { bannedUsersCount: 2, banAfterFailedAttempts: 0 };
 
 const slskdEntry: QuarantineEntry = {
-  id: "q1",
   source: "slskd",
   username: "peerA",
   filename: "Music/Artist/Album/01 - Some Very Long Track Name That Should Be Truncated In The Middle.flac",
-  externalId: "ext-1",
   reason: "wrong_file",
   createdAt: new Date(Date.now() - 60 * 60 * 1000),
-  track: { title: "Song Title", artist: "Some Artist" },
+  trackCount: 1,
+  tracks: [{ title: "Song Title", artist: "Some Artist" }],
 };
 
 const ytdlpEntry: QuarantineEntry = {
-  id: "q2",
   source: "ytdlp",
   username: "",
   filename: "https://www.youtube.com/watch?v=abc123",
-  externalId: "ext-2",
   reason: "verify_failed",
   createdAt: new Date(Date.now() - 5 * 60 * 1000),
-  track: null,
+  trackCount: 1,
+  tracks: [],
+};
+
+const brokenRelease: QuarantineEntry = {
+  source: "usenet",
+  username: "",
+  filename: "Radiohead-Pablo Honey-1993-EMG INT",
+  reason: "verify_failed",
+  createdAt: new Date(Date.now() - 2 * 60 * 1000),
+  trackCount: 12,
+  tracks: [
+    { title: "You", artist: "Radiohead" },
+    { title: "Creep", artist: "Radiohead" },
+  ],
 };
 
 describe("QuarantineSection", () => {
@@ -117,7 +127,41 @@ describe("QuarantineSection", () => {
 
     await userEvent.click(screen.getByRole("button", { name: enSettings.quarantine.list.remove }));
 
-    expect(removeEntry.mutate).toHaveBeenCalledWith({ id: slskdEntry.id });
+    expect(removeEntry.mutate).toHaveBeenCalledWith({
+      source: slskdEntry.source,
+      username: slskdEntry.username,
+      filename: slskdEntry.filename,
+    });
+  });
+
+  it("shows a release set aside for many tracks once, with its tracks folded behind a count", async () => {
+    listQuery = createMockQuery<QuarantineEntry[]>([brokenRelease]);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
+
+    expect(screen.getAllByTitle(brokenRelease.filename)).toHaveLength(1);
+    const toggle = screen.getByRole("button", { name: /12 tracks/ });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByText("Creep - Radiohead")).not.toBeInTheDocument();
+
+    await userEvent.click(toggle);
+
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText("You - Radiohead")).toBeInTheDocument();
+    expect(screen.getByText("Creep - Radiohead")).toBeInTheDocument();
+  });
+
+  it("lifts a release for all of its tracks with one removal", async () => {
+    listQuery = createMockQuery<QuarantineEntry[]>([brokenRelease]);
+    render(<QuarantineSection initial={initial} sourceTrust={sourceTrust} />);
+
+    await userEvent.click(screen.getByRole("button", { name: enSettings.quarantine.list.remove }));
+
+    expect(removeEntry.mutate).toHaveBeenCalledTimes(1);
+    expect(removeEntry.mutate).toHaveBeenCalledWith({
+      source: "usenet",
+      username: "",
+      filename: brokenRelease.filename,
+    });
   });
 
   it("clears all entries after confirmation", async () => {

@@ -27,6 +27,14 @@ export interface MaintenancePageProps {
   children: ReactNode;
 }
 
+export type QuarantineGroup = inferRouterOutputs<AppRouter>["settings"]["quarantine"]["list"][number];
+
+export interface QuarantineGroupRowProps {
+  group: QuarantineGroup;
+  removing: boolean;
+  onRemove: (group: QuarantineGroup) => void;
+}
+
 export interface QuarantineCardProps {
   initial: EngineImportSettings;
   sourceTrust: QuarantineSourceTrust;

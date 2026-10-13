@@ -261,6 +261,8 @@
         "track": "Titel"
       },
       "trackDisplay": "{{title}} - {{artist}}",
+      "trackCount_one": "{{count}} Titel",
+      "trackCount_other": "{{count}} Titel",
       "empty": {
         "title": "Keine Dateien in Quarantäne",
         "description": "Wenn eine heruntergeladene Datei die Überprüfung nicht besteht, erscheinen die genaue Datei und ihre Quelle hier und werden bei erneuten Versuchen übersprungen."

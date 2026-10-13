@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldCheck, Trash2, X } from "lucide-react";
+import { ShieldCheck, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -8,7 +8,6 @@ import { HashLink } from "@components/HashLink";
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { EmptyState } from "@components/ui/EmptyState";
-import { IconButton } from "@components/ui/IconButton";
 import { Switch } from "@components/ui/Switch";
 
 import { useClearQuarantine, useRemoveQuarantineEntry } from "@hooks/api/mutations/settings/useQuarantine";
@@ -16,32 +15,18 @@ import { useUpdateEngineImport } from "@hooks/api/mutations/settings/useUpdateEn
 import { useQuarantineList } from "@hooks/api/queries/useQuarantine";
 import { useClientPagination } from "@hooks/ui/useClientPagination";
 import { Pagination } from "@components/ui/Pagination";
-import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
-import { formatRelativeTime } from "@utils/formatters";
 
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
-import { QUARANTINE_FILENAME_MAX } from "./constants";
-import { truncateMiddle } from "./helpers";
-import {
-  quarantineFilename,
-  quarantineLink,
-  quarantineList,
-  quarantineListHeader,
-  quarantineMeta,
-  quarantineReasonBadge,
-  quarantineRow,
-  quarantineRowBody,
-  quarantineValue,
-} from "./styles";
+import { QuarantineGroupRow } from "./QuarantineGroupRow";
+import { quarantineLink, quarantineList, quarantineListHeader, quarantineValue } from "./styles";
 import type { QuarantineCardProps } from "./types";
 
 export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps) {
   const { t } = useTranslation("settings");
-  const sourceLabel = useDownloadSourceLabel();
   const update = useUpdateEngineImport();
   const entries = useQuarantineList();
   const quarantined = useClientPagination(entries.data);
@@ -107,42 +92,14 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
         />
       ) : (
         <ul className={quarantineList()}>
-          {quarantined.visible.map((entry) => {
-            return (
-              <li key={entry.id} className={quarantineRow()}>
-                <div className={quarantineRowBody()}>
-                  <span className={quarantineFilename()} title={entry.filename}>
-                    {truncateMiddle(entry.filename, QUARANTINE_FILENAME_MAX)}
-                  </span>
-                  <div className={quarantineMeta()}>
-                    <span title={t("quarantine.list.columns.source")}>{sourceLabel(entry.source)}</span>
-                    {entry.username.length > 0 ? (
-                      <span title={t("quarantine.list.columns.peer")}>{entry.username}</span>
-                    ) : null}
-                    <span className={quarantineReasonBadge()} title={t("quarantine.list.columns.reason")}>
-                      {t(`quarantine.reason.${entry.reason}`)}
-                    </span>
-                    <span title={t("quarantine.list.columns.age")}>{formatRelativeTime(entry.createdAt)}</span>
-                    {entry.track ? (
-                      <span title={t("quarantine.list.columns.track")}>
-                        {t("quarantine.list.trackDisplay", {
-                          title: entry.track.title,
-                          artist: entry.track.artist,
-                        })}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-                <IconButton
-                  icon={X}
-                  size="sm"
-                  aria-label={t("quarantine.list.remove")}
-                  onClick={() => removeEntry.mutate({ id: entry.id })}
-                  disabled={removeEntry.isPending || clearAll.isPending}
-                />
-              </li>
-            );
-          })}
+          {quarantined.visible.map((group) => (
+            <QuarantineGroupRow
+              key={JSON.stringify([group.source, group.username, group.filename])}
+              group={group}
+              removing={removeEntry.isPending || clearAll.isPending}
+              onRemove={({ source, username, filename }) => removeEntry.mutate({ source, username, filename })}
+            />
+          ))}
         </ul>
       )}
 

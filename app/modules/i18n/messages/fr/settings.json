@@ -261,6 +261,8 @@
         "track": "Piste"
       },
       "trackDisplay": "{{title}} - {{artist}}",
+      "trackCount_one": "{{count}} piste",
+      "trackCount_other": "{{count}} pistes",
       "empty": {
         "title": "Aucun fichier en quarantaine",
         "description": "Quand un fichier téléchargé échoue à la vérification, le fichier exact et sa source apparaissent ici et sont ignorés lors des nouvelles tentatives."

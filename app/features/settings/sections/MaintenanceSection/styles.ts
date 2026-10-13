@@ -16,6 +16,12 @@ export const quarantineReasonBadge = cva("bg-fg/10 text-fg/70 rounded-full px-2 
 
 export const quarantineLink = cva("text-primary-400 underline-offset-2 hover:underline");
 
+export const quarantineTracksToggle = cva(
+  "text-fg/70 hover:text-fg focus-visible:ring-primary-500 inline-flex items-center gap-1 rounded outline-none focus-visible:ring-2"
+);
+
+export const quarantineTrackList = cva("text-fg/60 flex flex-col gap-0.5 pt-1 text-xs");
+
 export const quarantineValue = cva("text-fg text-sm font-medium");
 
 export const downloadedAlbumName = cva(
