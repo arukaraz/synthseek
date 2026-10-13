@@ -24,7 +24,7 @@ export const downloadedAlbumName = cva(
 
 export const downloadedAlbumSource = quarantineReasonBadge;
 
-export const downloadedAlbumsHeader = quarantineListHeader;
+export const downloadedAlbumsHeader = cva("flex flex-wrap items-center justify-between gap-3");
 
 export const downloadedAlbumList = quarantineList;
 

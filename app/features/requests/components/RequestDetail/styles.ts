@@ -258,7 +258,7 @@ export const keptCardRow = cva("flex flex-wrap items-center gap-3");
 
 export const keptCardBody = cva("flex min-w-0 flex-1 flex-col gap-0.5");
 
-export const releaseTrackLine = cva("text-fg/50 max-w-full truncate text-xs");
+export const releaseTrackLine = cva("text-fg/50 text-xs leading-snug");
 
 export const tracksLoadFailed = cva("flex min-h-40 flex-col items-center justify-center gap-3 p-6 text-center");
 

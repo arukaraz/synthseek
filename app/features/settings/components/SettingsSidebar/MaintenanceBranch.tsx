@@ -54,7 +54,7 @@ export function MaintenanceBranch({ branch, counts, pathname }: MaintenanceBranc
               return (
                 <Link key={leaf.href} href={leaf.href} className={sidebarLeaf({ active: pathname === leaf.href })}>
                   {MAINTENANCE_ICONS[leaf.countKey]}
-                  <span className="flex-1 truncate text-left">{t(leaf.labelKey)}</span>
+                  <span className="min-w-0 flex-1 text-left leading-snug">{t(leaf.labelKey)}</span>
                   {count !== undefined && count > 0 ? <span className={sidebarLeafCount()}>{count}</span> : null}
                 </Link>
               );
