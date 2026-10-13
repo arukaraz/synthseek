@@ -299,6 +299,18 @@
     "title": "Scan already running",
     "description": "A library scan is already in progress. Wait for it to finish or cancel it first."
   },
+  "UNIDENTIFIED_GROUP_NOT_FOUND": {
+    "title": "Nothing left to review here",
+    "description": "These files were matched or ignored in the meantime. The list shows what is still waiting."
+  },
+  "UNIDENTIFIED_ALBUM_NOT_FOUND": {
+    "title": "Album not found",
+    "description": "That album is no longer available. Try another one."
+  },
+  "UNIDENTIFIED_NO_OWNER": {
+    "title": "No administrator yet",
+    "description": "Songs can be added to the library once an administrator account exists."
+  },
   "JOB_ALREADY_RUNNING": {
     "title": "Already running",
     "description": "That job is already working. Its progress is shown in the list."

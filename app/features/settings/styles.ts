@@ -286,7 +286,20 @@ export const scanStatGrid = cva("grid grid-cols-2 gap-3 lg:grid-cols-4");
 
 export const scanHeaderMeta = cva("text-fg/55 flex items-center gap-2 text-xs whitespace-nowrap");
 
-export const scanStat = cva("border-fg/10 bg-fg/[0.03] flex flex-col items-center gap-0.5 rounded-lg border p-3");
+export const scanStat = cva("bg-fg/[0.03] flex flex-col items-center gap-0.5 rounded-lg border p-3", {
+  variants: {
+    attention: { true: "border-warning-vivid/60", false: "border-fg/10" },
+  },
+  defaultVariants: { attention: false },
+});
+
+export const scanStatLink = cva(
+  "text-primary-400 hover:text-primary-300 mt-1 inline-flex items-center gap-0.5 text-xs font-semibold transition-colors [&_svg]:size-3.5"
+);
+
+export const scanFooter = cva("text-fg/50 text-xs");
+
+export const scanFooterLink = cva("hover:text-fg underline-offset-4 transition-colors hover:underline");
 
 export const scanStatValue = cva("text-fg text-lg font-semibold tabular-nums");
 

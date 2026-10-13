@@ -64,7 +64,11 @@ const utilsStub = vi.hoisted(() => ({
     getPlaylists: { invalidate: vi.fn() },
     getTracks: { invalidate: vi.fn() },
     getCounts: { invalidate: vi.fn() },
-    scan: { duplicateGroups: { invalidate: vi.fn() }, status: { invalidate: vi.fn() } },
+    scan: {
+      duplicateGroups: { invalidate: vi.fn() },
+      status: { invalidate: vi.fn() },
+      unidentified: { list: { invalidate: vi.fn() } },
+    },
   },
 }));
 
@@ -82,6 +86,7 @@ const everyPushFedInvalidate = [
   utilsStub.requests.review.list.invalidate,
   utilsStub.library.scan.duplicateGroups.invalidate,
   utilsStub.library.scan.status.invalidate,
+  utilsStub.library.scan.unidentified.list.invalidate,
   utilsStub.settings.recycleBin.list.invalidate,
   utilsStub.settings.recycleBin.status.invalidate,
   utilsStub.settings.stagedReleases.list.invalidate,

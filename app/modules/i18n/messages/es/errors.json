@@ -299,6 +299,18 @@
     "title": "Ya hay un escaneo en curso",
     "description": "Ya se está escaneando la biblioteca. Espera a que termine o cancélalo antes."
   },
+  "UNIDENTIFIED_GROUP_NOT_FOUND": {
+    "title": "Aquí ya no queda nada por revisar",
+    "description": "Estos archivos se emparejaron o se ignoraron mientras tanto. La lista muestra lo que sigue esperando."
+  },
+  "UNIDENTIFIED_ALBUM_NOT_FOUND": {
+    "title": "Álbum no encontrado",
+    "description": "Ese álbum ya no está disponible. Prueba con otro."
+  },
+  "UNIDENTIFIED_NO_OWNER": {
+    "title": "Todavía no hay administrador",
+    "description": "Las canciones se pueden añadir a la biblioteca cuando exista una cuenta de administrador."
+  },
   "JOB_ALREADY_RUNNING": {
     "title": "Ya está en marcha",
     "description": "Ese trabajo ya está en curso. Su progreso se ve en la lista."

@@ -77,7 +77,7 @@ Open the web interface, create your admin account in the setup wizard, and point
 
 ### Keep your library honest
 
-- Synthseek keeps its own index of the audio files on your disk, so music you copied in by hand is found and identified rather than staying invisible
+- Synthseek keeps its own index of the audio files on your disk, so music you copied in by hand is found and identified, and you can match or ignore what it cannot recognise
 - A file that moved is followed to its new location instead of being counted as one loss and one arrival
 - You decide the folders and filename every track gets, and a preview shows every change before anything moves
 - Files already on disk can be brought in line with that format, or left exactly where they are

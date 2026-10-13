@@ -1,8 +1,10 @@
 "use client";
 
-import { Loader2, Play, Square } from "lucide-react";
+import { ChevronRight, Loader2, Play, Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { REVIEW_URL_PARAM, REVIEW_URL_VALUE, UnidentifiedFilesModal } from "@features/unidentified-files";
+import { useUrlParam } from "@hooks/ui/useUrlParam";
 import { Button } from "@components/ui/Button";
 import { LoadingDots } from "@components/ui/LoadingDots";
 import { formatRelativeTime } from "@utils/formatters";
@@ -19,6 +21,9 @@ import {
   scanStatLabel,
   scanStatValue,
   scanHeaderMeta,
+  scanFooter,
+  scanFooterLink,
+  scanStatLink,
   jobPlayButton,
 } from "../../styles";
 
@@ -29,6 +34,7 @@ export function LibraryScanCard() {
   const cancel = useCancelLibraryScan();
   const trigger = useTriggerJob();
   const keepBest = useKeepBestLibraryCopies();
+  const [review, setReview] = useUrlParam(REVIEW_URL_PARAM, { validValues: [REVIEW_URL_VALUE] });
 
   if (isLoading) {
     return (
@@ -98,14 +104,36 @@ export function LibraryScanCard() {
             <span className={scanStatLabel()}>{t("libraryScan.stats.linked")}</span>
           </div>
           <div className={scanStat()}>
-            <span className={scanStatValue()}>{inventory.unlinkedFiles.toLocaleString()}</span>
-            <span className={scanStatLabel()}>{t("libraryScan.stats.unlinked")}</span>
+            <span className={scanStatValue()}>{inventory.searchingFiles.toLocaleString()}</span>
+            <span className={scanStatLabel()}>{t("libraryScan.stats.searching")}</span>
           </div>
-          <div className={scanStat()}>
-            <span className={scanStatValue()}>{inventory.missingFiles.toLocaleString()}</span>
-            <span className={scanStatLabel()}>{t("libraryScan.stats.missing")}</span>
+          <div className={scanStat({ attention: inventory.reviewFiles > 0 })}>
+            <span className={scanStatValue()}>{inventory.reviewFiles.toLocaleString()}</span>
+            <span className={scanStatLabel()}>{t("libraryScan.stats.toReview")}</span>
+            {inventory.reviewFiles > 0 ? (
+              <button type="button" className={scanStatLink()} onClick={() => setReview(REVIEW_URL_VALUE)}>
+                {t("libraryScan.stats.reviewFiles")}
+                <ChevronRight aria-hidden />
+              </button>
+            ) : null}
           </div>
         </div>
+
+        <p className={scanFooter()}>
+          {inventory.ignoredFiles > 0 ? (
+            <button type="button" className={scanFooterLink()} onClick={() => setReview(REVIEW_URL_VALUE)}>
+              {t("libraryScan.stats.footer", {
+                ignored: inventory.ignoredFiles.toLocaleString(),
+                missing: inventory.missingFiles.toLocaleString(),
+              })}
+            </button>
+          ) : (
+            t("libraryScan.stats.footer", {
+              ignored: inventory.ignoredFiles.toLocaleString(),
+              missing: inventory.missingFiles.toLocaleString(),
+            })
+          )}
+        </p>
 
         {lastRun && !lastRun.walkClean ? (
           <Notice variant="warning" title={t("libraryScan.warning.dirtyWalk.title")}>
@@ -122,6 +150,10 @@ export function LibraryScanCard() {
           </div>
         ) : null}
       </div>
+      <UnidentifiedFilesModal
+        open={review === REVIEW_URL_VALUE}
+        onOpenChange={(open) => setReview(open ? REVIEW_URL_VALUE : null)}
+      />
     </SettingsCard>
   );
 }

@@ -16,6 +16,7 @@ const spies = vi.hoisted(() => ({
   quarantineList: vi.fn(),
   stagedList: vi.fn(),
   keptReleases: vi.fn(),
+  unidentifiedList: vi.fn(),
 }));
 
 vi.mock("@utils/trpc", () => ({
@@ -30,7 +31,11 @@ vi.mock("@utils/trpc", () => ({
         keptReleases: { invalidate: spies.keptReleases },
       },
       library: {
-        scan: { duplicateGroups: { invalidate: spies.duplicateGroups }, status: { invalidate: spies.scanStatus } },
+        scan: {
+          duplicateGroups: { invalidate: spies.duplicateGroups },
+          status: { invalidate: spies.scanStatus },
+          unidentified: { list: { invalidate: spies.unidentifiedList } },
+        },
       },
       settings: {
         recycleBin: { list: { invalidate: spies.recycleBinList }, status: { invalidate: spies.recycleBinStatus } },
@@ -50,6 +55,13 @@ beforeEach(() => {
 });
 
 describe("handleMaintenanceUpdate", () => {
+  it("refreshes the files waiting for review and the scan counts when that list changes", () => {
+    handleMaintenanceUpdate(event("unidentified"), trpc.useUtils());
+
+    expect(spies.unidentifiedList).toHaveBeenCalledTimes(1);
+    expect(spies.scanStatus).toHaveBeenCalledTimes(1);
+  });
+
   it("refetches the system status when the set of problems changes, so the notice and the page follow it", () => {
     handleMaintenanceUpdate(event("systemStatus"), trpc.useUtils());
 

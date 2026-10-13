@@ -24,10 +24,24 @@ type ScanStatus = {
   inventory: {
     indexedFiles: number;
     linkedFiles: number;
-    unlinkedFiles: number;
+    searchingFiles: number;
+    reviewFiles: number;
+    ignoredFiles: number;
     missingFiles: number;
   };
 };
+
+const urlParam = vi.hoisted(() => ({ value: undefined as string | undefined, set: vi.fn() }));
+
+vi.mock("@hooks/ui/useUrlParam", () => ({
+  useUrlParam: () => [urlParam.value, urlParam.set],
+}));
+
+vi.mock("@features/unidentified-files", () => ({
+  REVIEW_URL_PARAM: "review",
+  REVIEW_URL_VALUE: "files",
+  UnidentifiedFilesModal: ({ open }: { open: boolean }) => (open ? <div>review modal open</div> : null),
+}));
 
 let statusQuery: MockQueryResult<ScanStatus | undefined> = createMockQuery<ScanStatus | undefined>(undefined);
 const cancelMutate = vi.fn();
@@ -82,7 +96,9 @@ function makeStatus(overrides: Partial<ScanStatus> = {}): ScanStatus {
     inventory: {
       indexedFiles: 8334,
       linkedFiles: 5451,
-      unlinkedFiles: 2883,
+      searchingFiles: 2747,
+      reviewFiles: 136,
+      ignoredFiles: 0,
       missingFiles: 0,
     },
     ...overrides,
@@ -97,7 +113,66 @@ describe("LibraryScanCard", () => {
 
     expect(screen.getByText("8,334")).toBeInTheDocument();
     expect(screen.getByText("5,451")).toBeInTheDocument();
-    expect(screen.getByText("2,883")).toBeInTheDocument();
+    expect(screen.getByText("2,747")).toBeInTheDocument();
+    expect(screen.getByText("136")).toBeInTheDocument();
+  });
+
+  it("opens the review when files wait for a decision", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+
+    render(<LibraryScanCard />);
+    fireEvent.click(screen.getByRole("button", { name: /review files/i }));
+
+    expect(urlParam.set).toHaveBeenCalledWith("files");
+  });
+
+  it("offers no review when nothing waits for one", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({
+        inventory: {
+          indexedFiles: 10,
+          linkedFiles: 10,
+          searchingFiles: 0,
+          reviewFiles: 0,
+          ignoredFiles: 0,
+          missingFiles: 0,
+        },
+      })
+    );
+
+    render(<LibraryScanCard />);
+
+    expect(screen.queryByRole("button", { name: /review files/i })).not.toBeInTheDocument();
+  });
+
+  it("keeps ignored files reachable from the line under the counts", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({
+        inventory: {
+          indexedFiles: 10,
+          linkedFiles: 9,
+          searchingFiles: 0,
+          reviewFiles: 0,
+          ignoredFiles: 1,
+          missingFiles: 2,
+        },
+      })
+    );
+
+    render(<LibraryScanCard />);
+    fireEvent.click(screen.getByRole("button", { name: "1 ignored · 2 gone" }));
+
+    expect(urlParam.set).toHaveBeenCalledWith("files");
+  });
+
+  it("shows the review while the address asks for it", () => {
+    urlParam.value = "files";
+    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByText("review modal open")).toBeInTheDocument();
+    urlParam.value = undefined;
   });
 
   it("no longer offers duplicates here, since Maintenance owns them and counts tracks not copies", () => {

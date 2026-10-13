@@ -28,5 +28,9 @@ export function handleMaintenanceUpdate(event: MaintenanceUpdatePayload, utils: 
       utils.settings.stagedReleases.list.invalidate();
       utils.requests.keptReleases.invalidate();
       return;
+    case "unidentified":
+      utils.library.scan.unidentified.list.invalidate();
+      utils.library.scan.status.invalidate();
+      return;
   }
 }
