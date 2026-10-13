@@ -188,7 +188,8 @@ describe("isDuplicate PlaybackState", () => {
 function releaseProgress(
   percent: number | null,
   state: "queued" | "fetching" = "fetching",
-  title: string | null = null
+  title: string | null = null,
+  etaMinutes: number | null = null
 ): SubscriptionEvent {
   return {
     eventType: SubscriptionEventType.ReleaseProgress,
@@ -207,7 +208,7 @@ function releaseProgress(
             percent,
             doneBytes: percent,
             totalBytes: 100,
-            etaMinutes: null,
+            etaMinutes,
             albumIds: ["album-1"],
             trackRequestIds: ["track-1"],
           },
@@ -222,6 +223,7 @@ describe("isDuplicate ReleaseProgress", () => {
     expect(isDuplicate(releaseProgress(11), cache)).toBe(false);
     expect(isDuplicate(releaseProgress(11, "queued"), cache)).toBe(false);
     expect(isDuplicate(releaseProgress(11, "queued", "Artist - Album"), cache)).toBe(false);
+    expect(isDuplicate(releaseProgress(11, "queued", "Artist - Album", 3), cache)).toBe(false);
     expect(isDuplicate(releaseProgress(null), cache)).toBe(false);
   });
 

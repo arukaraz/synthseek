@@ -32,7 +32,7 @@ function eventKey(event: SubscriptionEvent): string {
     case SubscriptionEventType.UserActivity:
       return `${event.eventType}:${event.subject}`;
     case SubscriptionEventType.ReleaseProgress:
-      return `${event.eventType}:${event.userId}:${event.source}:${event.releaseKey}:${event.release?.state ?? "gone"}:${event.release?.percent ?? ""}:${event.release?.title ?? ""}:${event.release?.trackRequestIds.join(",") ?? ""}`;
+      return `${event.eventType}:${event.userId}:${event.source}:${event.releaseKey}:${event.release?.state ?? "gone"}:${event.release?.percent ?? ""}:${event.release?.title ?? ""}:${event.release?.etaMinutes === null ? "no-eta" : "eta"}:${event.release?.trackRequestIds.join(",") ?? ""}`;
     case SubscriptionEventType.DropImportUpdate:
       return `${event.eventType}:${event.batchId}:${event.status}:${event.importedFiles}:${event.alreadyInLibraryFiles}:${event.pendingFiles}:${event.failedFiles}:${event.discardedFiles}:${event.file?.id ?? ""}:${event.file?.status ?? ""}`;
   }
