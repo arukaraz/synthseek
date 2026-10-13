@@ -139,6 +139,21 @@
     "loadFailed": "Diese Titel konnten nicht geladen werden.",
     "loadRetry": "Erneut versuchen"
   },
+  "release": {
+    "fetchingTitle": "Album wird über {{source}} geladen",
+    "fetchingSize": "{{done}} von {{total}}",
+    "fetchingEta": "noch etwa {{minutes}} Min.",
+    "queuedTitle": "Wartet auf {{source}}",
+    "queuedDescription": "{{source}} ist mit anderen Downloads beschäftigt. Dieser startet von selbst, sobald Platz frei ist.",
+    "trackFetching": "Mit dem Album über {{source}} · {{percent}} %",
+    "trackQueued": "Album wartet auf {{source}}",
+    "sidebarFetching": "Album wird über {{source}} geladen · {{percent}} %",
+    "sidebarQueued": "Wartet auf {{source}}",
+    "keptTitle": "Album auf der Festplatte behalten",
+    "keptMeta": "{{source}} · {{size}} · läuft {{when}} ab",
+    "keptReuse": "Ein erneuter Versuch für einen Titel nutzt es wieder.",
+    "keptDelete": "Jetzt löschen"
+  },
   "export": {
     "dialogTitle": "Exportieren (max. Kompatibilität)",
     "dialogDescription": "Die MusicBrainz-ID jedes Titels wird aufgelöst, damit die Datei in jeder App passt, und dann heruntergeladen.",

@@ -24,5 +24,9 @@ export function handleMaintenanceUpdate(event: MaintenanceUpdatePayload, utils: 
     case "systemStatus":
       utils.maintenance.systemStatus.invalidate();
       return;
+    case "downloadedAlbums":
+      utils.settings.stagedReleases.list.invalidate();
+      utils.requests.keptReleases.invalidate();
+      return;
   }
 }

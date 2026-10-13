@@ -16,9 +16,9 @@ vi.mock("next/link", () => ({
 import { MAINTENANCE_BRANCH } from "../constants";
 import { MaintenanceBranch } from "../MaintenanceBranch";
 
-const COUNTS = { review: 2, duplicates: 5, recycleBin: 78, quarantine: 0, systemStatus: 3 };
+const COUNTS = { review: 2, duplicates: 5, recycleBin: 78, quarantine: 0, systemStatus: 3, downloadedAlbums: 4 };
 
-const ALL_CLEAR = { review: 0, duplicates: 0, recycleBin: 0, quarantine: 0, systemStatus: 0 };
+const ALL_CLEAR = { review: 0, duplicates: 0, recycleBin: 0, quarantine: 0, systemStatus: 0, downloadedAlbums: 0 };
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);
@@ -82,9 +82,31 @@ describe("MaintenanceBranch", () => {
       "Review",
       "Duplicates",
       "Recycle bin",
+      "Downloaded albums",
       "Quarantine",
       enSettings.shell.sidebar.items.systemStatus,
     ]);
+  });
+
+  it("lists the downloaded albums beside the recycle bin, with how many are kept", () => {
+    open("/settings/maintenance/downloaded-albums");
+
+    const kept = screen.getByRole("link", { name: /Downloaded albums/ });
+
+    expect(kept).toHaveAttribute("href", "/settings/maintenance/downloaded-albums");
+    expect(kept.textContent).toBe("Downloaded albums4");
+  });
+
+  it("stays quiet on the parent when only downloaded albums are kept, since nothing there needs a decision", () => {
+    render(
+      <MaintenanceBranch
+        branch={MAINTENANCE_BRANCH}
+        counts={{ ...ALL_CLEAR, downloadedAlbums: 6 }}
+        pathname="/settings/general"
+      />
+    );
+
+    expect(screen.queryByText(enSettings.shell.sidebar.maintenanceWaiting)).not.toBeInTheDocument();
   });
 
   it("lists system status last, linked to its page, with the number of problems beside it", () => {

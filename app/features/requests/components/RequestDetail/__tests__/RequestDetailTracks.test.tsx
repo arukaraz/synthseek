@@ -26,6 +26,10 @@ vi.mock("@utils/confirm", () => ({
   confirm: (...args: unknown[]) => confirmMock(...args),
 }));
 
+vi.mock("@hooks/api/queries/useActiveReleases", () => ({
+  useTrackRelease: () => null,
+}));
+
 vi.mock("@hooks/api", () => ({
   useRetryTrack: () => ({ mutate: retryTrack }),
   useCancelTrack: () => ({ mutate: cancelTrack }),

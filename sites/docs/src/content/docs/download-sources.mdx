@@ -134,9 +134,8 @@ Off by default. While it is off, Usenet is offered only when you request an albu
 
 Turning it on lets Usenet serve any request, at the cost the section above describes: one song means
 downloading its album. To keep that from being pure waste, the downloaded album stays on disk for a
-while, so another track from it costs nothing. The **Usenet** card lists what is currently waiting,
-what each one will cost you in disk space, and when it expires, and lets you delete one or all of
-them at any time. An hourly job removes the ones nobody came back for.
+while, so another track from it costs nothing. **Settings**, then **Maintenance**, then **Downloaded
+albums** lists them. An hourly job removes the ones nobody came back for.
 
 ### When a release does not deliver
 
@@ -167,7 +166,12 @@ until you set it up. Like Usenet, it serves only album requests unless you allow
 4. In Synthseek, go to **Settings**, then **Integrations**, then the **Torrent** card. Enter both
    addresses and the keys, and test the connection.
 
-### Seeding
+### Downloading and seeding
+
+Every album goes to qBittorrent as soon as it is found, and qBittorrent's own queue settings decide
+how many download at once. Time an album spends in that queue does not count toward **Give up
+after**, only toward **Wait in the queue for up to**. Your request shows each album's progress while
+it downloads.
 
 Synthseek imports a copy of the track it needs and leaves the release seeding. A finished torrent is
 deleted with its files after the time you set, but only once qBittorrent has stopped seeding it. Your
@@ -177,16 +181,17 @@ Synthseek's.
 
 ### Torrent settings
 
-| Setting                    | Default    | What it does                                                   |
-| -------------------------- | ---------- | -------------------------------------------------------------- |
-| Enabled                    | Off        | Whether torrents are searched.                                 |
-| Priority                   | 6          | Tried right after Usenet.                                      |
-| Minimum seeders            | 1          | Releases with fewer seeders are skipped.                       |
-| Maximum release size       | 1500 MB    | Releases larger than this are skipped. 0 accepts any size.     |
-| Give up after              | 30 minutes | How long a torrent may go without progress.                    |
-| Single-track requests      | Off        | Allows torrents outside album requests.                        |
-| Keep finished torrents for | 24 h       | How long a downloaded release waits for another of its tracks. |
-| Category                   | synthseek  | The qBittorrent category Synthseek adds its torrents under.    |
+| Setting                     | Default    | What it does                                                   |
+| --------------------------- | ---------- | -------------------------------------------------------------- |
+| Enabled                     | Off        | Whether torrents are searched.                                 |
+| Priority                    | 6          | Tried right after Usenet.                                      |
+| Minimum seeders             | 1          | Releases with fewer seeders are skipped.                       |
+| Maximum release size        | 1500 MB    | Releases larger than this are skipped. 0 accepts any size.     |
+| Give up after               | 30 minutes | How long a torrent may go without progress.                    |
+| Wait in the queue for up to | 24 h       | How long qBittorrent may keep a torrent queued.                |
+| Single-track requests       | Off        | Allows torrents outside album requests.                        |
+| Keep finished torrents for  | 24 h       | How long a downloaded release waits for another of its tracks. |
+| Category                    | synthseek  | The qBittorrent category Synthseek adds its torrents under.    |
 
 ## The yt-dlp fallback
 

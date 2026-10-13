@@ -5,6 +5,7 @@ import {
   Blocks,
   CopyCheck,
   FileText,
+  HardDrive,
   Inbox,
   Library,
   ListOrdered,
@@ -38,11 +39,42 @@ export const MAINTENANCE_BRANCH: AdvancedEntry = {
   icon: <Wrench />,
   adminOnly: true,
   children: [
-    { href: "/settings/maintenance/review", labelKey: "shell.sidebar.items.review", countKey: "review" },
-    { href: "/settings/maintenance/duplicates", labelKey: "shell.sidebar.items.duplicates", countKey: "duplicates" },
-    { href: "/settings/maintenance/recycle-bin", labelKey: "shell.sidebar.items.recycleBin", countKey: "recycleBin" },
-    { href: "/settings/maintenance/quarantine", labelKey: "shell.sidebar.items.quarantine", countKey: "quarantine" },
-    { href: "/settings/maintenance/status", labelKey: "shell.sidebar.items.systemStatus", countKey: "systemStatus" },
+    {
+      href: "/settings/maintenance/review",
+      labelKey: "shell.sidebar.items.review",
+      countKey: "review",
+      asksForAttention: true,
+    },
+    {
+      href: "/settings/maintenance/duplicates",
+      labelKey: "shell.sidebar.items.duplicates",
+      countKey: "duplicates",
+      asksForAttention: true,
+    },
+    {
+      href: "/settings/maintenance/recycle-bin",
+      labelKey: "shell.sidebar.items.recycleBin",
+      countKey: "recycleBin",
+      asksForAttention: true,
+    },
+    {
+      href: "/settings/maintenance/downloaded-albums",
+      labelKey: "shell.sidebar.items.downloadedAlbums",
+      countKey: "downloadedAlbums",
+      asksForAttention: false,
+    },
+    {
+      href: "/settings/maintenance/quarantine",
+      labelKey: "shell.sidebar.items.quarantine",
+      countKey: "quarantine",
+      asksForAttention: true,
+    },
+    {
+      href: "/settings/maintenance/status",
+      labelKey: "shell.sidebar.items.systemStatus",
+      countKey: "systemStatus",
+      asksForAttention: true,
+    },
   ],
 };
 
@@ -83,6 +115,7 @@ export const MAINTENANCE_ICONS = {
   review: <Inbox />,
   duplicates: <CopyCheck />,
   recycleBin: <Trash2 />,
+  downloadedAlbums: <HardDrive />,
   quarantine: <ShieldBan />,
   systemStatus: <Activity />,
 } as const;

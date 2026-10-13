@@ -8,6 +8,8 @@ type Utils = ReturnType<typeof trpc.useUtils>;
 export function resyncPushFedQueries(utils: Utils): void {
   invalidateRequestListNow(utils);
   void utils.requests.getLibrarySummary.invalidate();
+  void utils.requests.activeReleases.invalidate();
+  void utils.requests.keptReleases.invalidate();
   void utils.requests.getPlaylistSyncAllItems.invalidate();
   void utils.requests.getPlaylistSyncAllState.invalidate();
   void utils.requests.playlistSyncTargets.invalidate();
@@ -20,6 +22,7 @@ export function resyncPushFedQueries(utils: Utils): void {
   void utils.library.scan.duplicateGroups.invalidate();
   void utils.library.scan.status.invalidate();
   void utils.settings.recycleBin.list.invalidate();
+  void utils.settings.stagedReleases.list.invalidate();
   void utils.settings.recycleBin.status.invalidate();
   void utils.settings.quarantine.list.invalidate();
   void utils.playback.favoriteTrackIds.invalidate();

@@ -3,10 +3,11 @@
 import { useTranslation } from "react-i18next";
 
 import { ProgressBar } from "@components/ui/ProgressBar";
-import { ACTIVE_STATUSES } from "@api/__generated__/types";
+import { ACTIVE_STATUSES, ContentType } from "@api/__generated__/types";
 import { cn } from "@utils/cn";
 import { getContentTypeLabel } from "@utils/content-type-helpers";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
+import { RequestSidebarRelease } from "./RequestSidebarRelease";
 import { sidebarItem } from "./styles";
 import type { RequestSidebarItemProps } from "./types";
 
@@ -50,6 +51,7 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
       <div className="min-w-0">
         <p className={cn("truncate text-sm font-semibold", isSelected ? "text-fg" : "text-fg/90")}>{request.name}</p>
         <p className="text-fg/50 truncate text-xs">{request.credited_artist}</p>
+        {request.contentType === ContentType.enum.album ? <RequestSidebarRelease albumId={request.id} /> : null}
       </div>
 
       <ProgressBar progress={progressPercent} isActive={isActive} size="md" gradient={statusConfig.glowColor} />

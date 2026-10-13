@@ -34,10 +34,6 @@ vi.mock("sonner", () => ({
   },
 }));
 
-vi.mock("../StagedReleaseList", () => ({
-  StagedReleaseList: ({ source }: { source: string }) => <div data-testid="staged-list" data-source={source} />,
-}));
-
 import { TorrentCard } from "../TorrentCard";
 
 beforeAll(() => {
@@ -162,10 +158,28 @@ describe("TorrentCard", () => {
     );
   });
 
-  it("lists the waiting torrents even while single-track requests are off", () => {
+  it("points to the downloaded albums under Maintenance instead of listing them here", () => {
     render(<TorrentCard initial={initial} />);
 
-    expect(screen.getByTestId("staged-list")).toHaveAttribute("data-source", "torrent");
+    expect(screen.getByText(enSettings.downloadedAlbumsPointer.text)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: enSettings.downloadedAlbumsPointer.link })).toHaveAttribute(
+      "href",
+      "/settings/maintenance/downloaded-albums"
+    );
+  });
+
+  it("saves how long a torrent may wait in qBittorrent's queue", async () => {
+    render(<TorrentCard initial={initial} />);
+
+    fireEvent.change(screen.getByLabelText(t.queueTimeout.ariaLabel), { target: { value: "48" } });
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith({
+        ...initial,
+        torrent: { ...initial.torrent, queueTimeoutHours: 48 },
+      });
+    });
   });
 
   it("saves the source with the username and category trimmed, alongside every unchanged sibling source", async () => {

@@ -34,6 +34,22 @@ vi.mock("../RequestDetailStats", () => ({
   },
 }));
 
+const releaseSpies = vi.hoisted(() => ({ progress: vi.fn(), kept: vi.fn() }));
+
+vi.mock("../RequestReleaseProgress", () => ({
+  RequestReleaseProgress: (props: { tracks: TrackRequest[] }) => {
+    releaseSpies.progress(props.tracks);
+    return <div>release progress</div>;
+  },
+}));
+
+vi.mock("../KeptReleaseNotice", () => ({
+  KeptReleaseNotice: (props: { request: { id: string } }) => {
+    releaseSpies.kept(props.request.id);
+    return <div>kept release</div>;
+  },
+}));
+
 vi.mock("../RequestDetailTracks", () => ({
   RequestDetailTracks: (props: { tracks: TrackRequest[]; isResolving: boolean; hasFailed: boolean }) => {
     tracksSpy(props);
@@ -68,6 +84,18 @@ describe("RequestDetail", () => {
     expect(screen.getByText("hero")).toBeInTheDocument();
     expect(screen.getByText("stats")).toBeInTheDocument();
     expect(screen.getByText("tracks")).toBeInTheDocument();
+  });
+
+  it("hands the loaded tracks to the release progress and the request to what it keeps on disk", () => {
+    const request = makeRequestListItem({ id: "req-1" });
+    const track = makeRequestsTrack({ id: "t1" });
+    detailQuery.data = { ...request, tracks: [track] };
+
+    render(<RequestDetail request={request} onBack={vi.fn()} />);
+
+    expect(screen.getByText("release progress")).toBeInTheDocument();
+    expect(releaseSpies.progress).toHaveBeenLastCalledWith([track]);
+    expect(releaseSpies.kept).toHaveBeenLastCalledWith("req-1");
   });
 
   it("hands the loaded tracks to the hero, which derives the approve and prioritize actions from them", () => {

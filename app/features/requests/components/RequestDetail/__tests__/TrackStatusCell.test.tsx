@@ -1,11 +1,84 @@
-import { RequestStatus } from "@api/__generated__/types";
+import { RequestStatus, type ActiveRelease } from "@api/__generated__/types";
 import { render, screen, userEvent } from "@test/test-utils";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { makeRequestsTrack } from "../../../__tests__/factories";
 import { TrackStatusCell } from "../TrackStatusCell";
 
+const releaseState = vi.hoisted(() => ({ current: null as ActiveRelease | null, askedFor: [] as string[] }));
+
+vi.mock("@hooks/api/queries/useActiveReleases", () => ({
+  useTrackRelease: (trackId: string) => {
+    releaseState.askedFor.push(trackId);
+    return releaseState.current;
+  },
+}));
+
 const inTwoHours = () => new Date(Date.now() + 2 * 60 * 60 * 1000 + 5 * 60 * 1000);
+
+function release(overrides: Partial<ActiveRelease> = {}): ActiveRelease {
+  return {
+    userId: "user-1",
+    source: "torrent",
+    releaseKey: "album|300",
+    title: "Artist - Album",
+    state: "fetching",
+    percent: 62,
+    doneBytes: 62,
+    totalBytes: 100,
+    etaMinutes: 1,
+    albumIds: ["album-1"],
+    trackRequestIds: ["track-1"],
+    ...overrides,
+  };
+}
+
+beforeEach(() => {
+  releaseState.current = null;
+  releaseState.askedFor = [];
+});
+
+describe("TrackStatusCell, with the album its track is fetched with", () => {
+  it("says the track comes with the album and how far the album has got", () => {
+    releaseState.current = release();
+
+    render(<TrackStatusCell track={makeRequestsTrack({ id: "track-1", status: RequestStatus.enum.downloading })} />);
+
+    expect(screen.getByTestId("track-release-line")).toHaveTextContent("With the album by Torrent · 62%");
+    expect(screen.getByText("Downloading")).toBeInTheDocument();
+    expect(releaseState.askedFor).toContain("track-1");
+  });
+
+  it("calls a track waiting in its client's queue waiting rather than downloading", () => {
+    releaseState.current = release({ state: "queued" });
+
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.downloading })} />);
+
+    expect(screen.getByTestId("track-release-line")).toHaveTextContent("Album lined up for Torrent");
+    expect(screen.getByText("Pending Download")).toBeInTheDocument();
+    expect(screen.queryByText("Downloading")).not.toBeInTheDocument();
+  });
+
+  it("keeps a track that already left the album phase on its own status", () => {
+    releaseState.current = release({ state: "queued" });
+
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.importing })} />);
+
+    expect(screen.getByText("Importing")).toBeInTheDocument();
+  });
+
+  it("drops the album line once the track is complete or failed", () => {
+    releaseState.current = release();
+
+    const { rerender } = render(
+      <TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.complete, acquisition_source: null })} />
+    );
+    expect(screen.queryByTestId("track-release-line")).not.toBeInTheDocument();
+
+    rerender(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.failed })} />);
+    expect(screen.queryByTestId("track-release-line")).not.toBeInTheDocument();
+  });
+});
 
 describe("TrackStatusCell", () => {
   it("renders a status indicator for the track status", () => {

@@ -2,20 +2,19 @@
 
 import { useTranslation } from "react-i18next";
 
-import { downloadSourceLabelKey } from "@utils/download-source";
+import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 
 import { acquisitionLicense, acquisitionLine, acquisitionRow } from "./styles";
 import type { AcquisitionLineProps } from "./types";
 
 export function AcquisitionLine({ source, sourceRef, license }: AcquisitionLineProps) {
   const { t } = useTranslation("requests");
-  const { t: tSettings } = useTranslation("settings");
-  const labelKey = downloadSourceLabelKey(source);
+  const sourceLabel = useDownloadSourceLabel();
 
   return (
     <span className={acquisitionRow()}>
       <span className={acquisitionLine()} title={sourceRef ?? undefined}>
-        {t("tracks.acquiredFrom", { source: labelKey ? tSettings(labelKey) : source })}
+        {t("tracks.acquiredFrom", { source: sourceLabel(source) })}
       </span>
       {license !== null ? (
         <a href={license} target="_blank" rel="noopener noreferrer" className={acquisitionLicense()}>

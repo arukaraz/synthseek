@@ -16,7 +16,7 @@ import type { MaintenanceBranchProps } from "./types";
 export function MaintenanceBranch({ branch, counts, pathname }: MaintenanceBranchProps) {
   const { t } = useTranslation("settings");
   const inside = pathname.startsWith(branch.href);
-  const waiting = branch.children.some((leaf) => (counts?.[leaf.countKey] ?? 0) > 0);
+  const waiting = branch.children.some((leaf) => leaf.asksForAttention && (counts?.[leaf.countKey] ?? 0) > 0);
   const [open, setOpen] = useState(inside);
 
   useEffect(() => {

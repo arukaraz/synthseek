@@ -12,6 +12,7 @@ import {
   handlePlaylistSyncAllProgress,
   handlePlaylistUpdate,
   handlePortabilityProgress,
+  handleReleaseProgress,
   handleTrackUpdate,
 } from "./handlers/requests";
 import {
@@ -65,7 +66,11 @@ export function useSubscriptions() {
           }
           if (event.status === RequestStatus.enum.complete) {
             invalidateLibraryViews(utils);
+            void utils.requests.keptReleases.invalidate();
           }
+          break;
+        case SubscriptionEventType.ReleaseProgress:
+          handleReleaseProgress(event, queryClient);
           break;
         case SubscriptionEventType.AlbumUpdate:
           handleAlbumUpdate(event, utils);

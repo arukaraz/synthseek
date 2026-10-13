@@ -17,6 +17,7 @@ export type SidebarItemKey =
   | "shell.sidebar.items.review"
   | "shell.sidebar.items.duplicates"
   | "shell.sidebar.items.recycleBin"
+  | "shell.sidebar.items.downloadedAlbums"
   | "shell.sidebar.items.quarantine"
   | "shell.sidebar.items.systemStatus";
 
@@ -43,6 +44,7 @@ export interface NavLeaf {
   href: string;
   labelKey: SidebarItemKey;
   countKey: keyof MaintenanceCounts;
+  asksForAttention: boolean;
 }
 
 export interface SettingsSidebarProps {

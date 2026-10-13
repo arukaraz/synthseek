@@ -35,3 +35,13 @@ export const sidebarItem = cva(
 );
 
 export type SidebarItemProps = VariantProps<typeof sidebarItem>;
+
+export const sidebarReleaseLine = cva("truncate text-xs", {
+  variants: {
+    state: {
+      fetching: "text-primary-400",
+      queued: "text-warning-vivid",
+    },
+  },
+  defaultVariants: { state: "fetching" },
+});

@@ -231,6 +231,35 @@ export const rejectReasonInput = cva(
 
 export type RejectReasonInputProps = VariantProps<typeof rejectReasonInput>;
 
+export const releaseStack = cva("flex flex-col gap-3 px-3 pb-4 sm:px-4");
+
+export const releaseCard = cva("flex flex-col gap-2 rounded-xl border p-3 sm:p-4", {
+  variants: {
+    tone: {
+      fetching: "border-primary-500/25 bg-primary-500/5",
+      queued: "border-warning-vivid/30 bg-warning-vivid/5",
+      kept: "border-fg/10 bg-fg/5",
+    },
+  },
+  defaultVariants: { tone: "fetching" },
+});
+
+export const releaseCardHeader = cva("flex min-w-0 items-center gap-2 [&_svg]:size-4 [&_svg]:shrink-0");
+
+export const releaseCardTitle = cva("text-fg min-w-0 flex-1 text-sm font-semibold");
+
+export const releaseCardPercent = cva("text-primary-400 shrink-0 text-sm font-bold tabular-nums");
+
+export const releaseCardText = cva("text-fg/60 text-xs");
+
+export const releaseCardName = cva("text-fg/40 truncate font-mono text-xs");
+
+export const keptCardRow = cva("flex flex-wrap items-center gap-3");
+
+export const keptCardBody = cva("flex min-w-0 flex-1 flex-col gap-0.5");
+
+export const releaseTrackLine = cva("text-fg/50 max-w-full truncate text-xs");
+
 export const tracksLoadFailed = cva("flex min-h-40 flex-col items-center justify-center gap-3 p-6 text-center");
 
 export type TracksLoadFailedProps = VariantProps<typeof tracksLoadFailed>;

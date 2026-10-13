@@ -21,7 +21,7 @@ import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
 import { TORRENT_CLIENT_TEST_KEYS, TORRENT_INDEXER_TEST_KEYS, TORRENT_TEST_WARNING_KEYS } from "./constants";
-import { StagedReleaseList } from "./StagedReleaseList";
+import { DownloadedAlbumsPointer } from "./DownloadedAlbumsPointer";
 import type { TorrentCardProps } from "./types";
 
 export function TorrentCard({ initial }: TorrentCardProps) {
@@ -201,6 +201,21 @@ export function TorrentCard({ initial }: TorrentCardProps) {
         }
       />
 
+      <EngineRow
+        label={t("torrent.queueTimeout.label")}
+        description={t("torrent.queueTimeout.description")}
+        control={
+          <SettingsNumberInput
+            value={draft.queueTimeoutHours}
+            onChange={(v) => setField("queueTimeoutHours", v)}
+            min={1}
+            max={168}
+            suffix={t("torrent.queueTimeout.suffix")}
+            ariaLabel={t("torrent.queueTimeout.ariaLabel")}
+          />
+        }
+      />
+
       <div role="separator" className={cardDivider()} />
 
       <div className="flex items-center gap-2">
@@ -240,7 +255,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
         }
       />
 
-      <StagedReleaseList enabled={draft.enabled} source="torrent" />
+      <DownloadedAlbumsPointer />
 
       <div className="flex items-center gap-3">
         <Button

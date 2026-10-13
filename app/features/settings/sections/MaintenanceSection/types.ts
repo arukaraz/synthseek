@@ -10,6 +10,10 @@ export type MaintenanceCounts = inferRouterOutputs<AppRouter>["maintenance"]["co
 
 export type MaintenanceSurfaceKey = keyof MaintenanceCounts;
 
+export type DownloadedAlbum = inferRouterOutputs<AppRouter>["settings"]["stagedReleases"]["list"][number];
+
+export type DownloadedAlbumFilter = "all" | DownloadedAlbum["source"];
+
 export type SystemProblem = inferRouterOutputs<AppRouter>["maintenance"]["systemStatus"]["problems"][number];
 
 export type SystemProblemCopyParams = Partial<Record<"path" | "puid" | "pgid" | "name", string>>;

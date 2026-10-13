@@ -14,6 +14,8 @@ const spies = vi.hoisted(() => ({
   recycleBinList: vi.fn(),
   recycleBinStatus: vi.fn(),
   quarantineList: vi.fn(),
+  stagedList: vi.fn(),
+  keptReleases: vi.fn(),
 }));
 
 vi.mock("@utils/trpc", () => ({
@@ -23,13 +25,17 @@ vi.mock("@utils/trpc", () => ({
         counts: { invalidate: spies.counts },
         systemStatus: { invalidate: spies.systemStatus },
       },
-      requests: { review: { list: { invalidate: spies.reviewList } } },
+      requests: {
+        review: { list: { invalidate: spies.reviewList } },
+        keptReleases: { invalidate: spies.keptReleases },
+      },
       library: {
         scan: { duplicateGroups: { invalidate: spies.duplicateGroups }, status: { invalidate: spies.scanStatus } },
       },
       settings: {
         recycleBin: { list: { invalidate: spies.recycleBinList }, status: { invalidate: spies.recycleBinStatus } },
         quarantine: { list: { invalidate: spies.quarantineList } },
+        stagedReleases: { list: { invalidate: spies.stagedList } },
       },
     }),
   },
@@ -63,6 +69,15 @@ describe("handleMaintenanceUpdate", () => {
     expect(spies.duplicateGroups).not.toHaveBeenCalled();
     expect(spies.recycleBinList).not.toHaveBeenCalled();
     expect(spies.quarantineList).not.toHaveBeenCalled();
+  });
+
+  it("refetches the downloaded albums and what each request keeps on disk when one is kept or removed", () => {
+    handleMaintenanceUpdate(event("downloadedAlbums"), trpc.useUtils());
+
+    expect(spies.stagedList).toHaveBeenCalledTimes(1);
+    expect(spies.keptReleases).toHaveBeenCalledTimes(1);
+    expect(spies.counts).toHaveBeenCalledTimes(1);
+    expect(spies.recycleBinList).not.toHaveBeenCalled();
   });
 
   it("does not refetch the system status for another surface's change", () => {

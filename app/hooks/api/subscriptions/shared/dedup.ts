@@ -31,6 +31,8 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.deviceId}:${event.issuedAt}:${event.playing}:${event.track?.id ?? ""}:${event.positionSeconds}`;
     case SubscriptionEventType.UserActivity:
       return `${event.eventType}:${event.subject}`;
+    case SubscriptionEventType.ReleaseProgress:
+      return `${event.eventType}:${event.userId}:${event.source}:${event.releaseKey}:${event.release?.state ?? "gone"}:${event.release?.percent ?? ""}:${event.release?.title ?? ""}:${event.release?.trackRequestIds.join(",") ?? ""}`;
     case SubscriptionEventType.DropImportUpdate:
       return `${event.eventType}:${event.batchId}:${event.status}:${event.importedFiles}:${event.alreadyInLibraryFiles}:${event.pendingFiles}:${event.failedFiles}:${event.discardedFiles}:${event.file?.id ?? ""}:${event.file?.status ?? ""}`;
   }

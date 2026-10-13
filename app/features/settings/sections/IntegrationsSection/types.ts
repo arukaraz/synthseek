@@ -121,22 +121,6 @@ export type TorrentIndexerOutcome = TorrentTestReport["indexer"];
 export type TorrentClientOutcome = TorrentTestReport["client"];
 export type TorrentTestWarning = TorrentTestReport["warnings"][number];
 
-export type StagedReleaseSource = RouterOutputs["settings"]["stagedReleases"]["list"][number]["source"];
-
-export interface StagedReleaseListKeys {
-  title: ParseKeys<"settings">;
-  emptyTitle: ParseKeys<"settings">;
-  emptyDescription: ParseKeys<"settings">;
-  loading: ParseKeys<"settings">;
-  loadError: ParseKeys<"settings">;
-  clearAll: ParseKeys<"settings">;
-  remove: ParseKeys<"settings">;
-  expiresIn: ParseKeys<"settings">;
-  confirmTitle: ParseKeys<"settings">;
-  confirmMessage: ParseKeys<"settings">;
-  confirm: ParseKeys<"settings">;
-}
-
 type RemoteMediaSearchField = "searchResults" | "maxDurationDeltaSec" | "searchTimeout";
 
 export interface RemoteMediaSearchRowsProps {
@@ -147,11 +131,6 @@ export interface RemoteMediaSearchRowsProps {
 
 export interface SpotifySourceCardProps {
   spotify: ConnectionsSpotify;
-}
-
-export interface StagedReleaseListProps {
-  enabled: boolean;
-  source: StagedReleaseSource;
 }
 
 export type ServerTestOutcome = "ok" | "unauthorized" | "failed";

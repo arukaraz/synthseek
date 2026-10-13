@@ -184,3 +184,51 @@ describe("isDuplicate PlaybackState", () => {
     expect(isDuplicate(playbackState({}), cache)).toBe(true);
   });
 });
+
+function releaseProgress(
+  percent: number | null,
+  state: "queued" | "fetching" = "fetching",
+  title: string | null = null
+): SubscriptionEvent {
+  return {
+    eventType: SubscriptionEventType.ReleaseProgress,
+    userId: "user-1",
+    source: "torrent",
+    releaseKey: "album|300",
+    release:
+      percent === null
+        ? null
+        : {
+            userId: "user-1",
+            source: "torrent",
+            releaseKey: "album|300",
+            title,
+            state,
+            percent,
+            doneBytes: percent,
+            totalBytes: 100,
+            etaMinutes: null,
+            albumIds: ["album-1"],
+            trackRequestIds: ["track-1"],
+          },
+  };
+}
+
+describe("isDuplicate ReleaseProgress", () => {
+  it("keeps every step of a release distinct: a new percentage, a state change and its end", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(releaseProgress(10), cache)).toBe(false);
+    expect(isDuplicate(releaseProgress(11), cache)).toBe(false);
+    expect(isDuplicate(releaseProgress(11, "queued"), cache)).toBe(false);
+    expect(isDuplicate(releaseProgress(11, "queued", "Artist - Album"), cache)).toBe(false);
+    expect(isDuplicate(releaseProgress(null), cache)).toBe(false);
+  });
+
+  it("drops the very same step repeated", () => {
+    const cache = new Map<string, number>();
+
+    expect(isDuplicate(releaseProgress(10), cache)).toBe(false);
+    expect(isDuplicate(releaseProgress(10), cache)).toBe(true);
+  });
+});

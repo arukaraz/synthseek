@@ -23,6 +23,7 @@ const handlers = vi.hoisted(() => ({
   plexSyncAll: vi.fn(),
   portability: vi.fn(),
   libraryImport: vi.fn(),
+  releaseProgress: vi.fn(),
 }));
 
 const utilsStub = vi.hoisted(() => ({
@@ -35,10 +36,13 @@ const utilsStub = vi.hoisted(() => ({
     getPlaylistSyncAllState: { invalidate: vi.fn() },
     playlistSyncTargets: { invalidate: vi.fn() },
     review: { list: { invalidate: vi.fn() } },
+    activeReleases: { invalidate: vi.fn() },
+    keptReleases: { invalidate: vi.fn() },
   },
   settings: {
     get: { invalidate: vi.fn() },
     recycleBin: { list: { invalidate: vi.fn() }, status: { invalidate: vi.fn() } },
+    stagedReleases: { list: { invalidate: vi.fn() } },
     quarantine: { list: { invalidate: vi.fn() } },
   },
   maintenance: {
@@ -80,6 +84,9 @@ const everyPushFedInvalidate = [
   utilsStub.library.scan.status.invalidate,
   utilsStub.settings.recycleBin.list.invalidate,
   utilsStub.settings.recycleBin.status.invalidate,
+  utilsStub.settings.stagedReleases.list.invalidate,
+  utilsStub.requests.activeReleases.invalidate,
+  utilsStub.requests.keptReleases.invalidate,
   utilsStub.settings.quarantine.list.invalidate,
   utilsStub.playback.favoriteTrackIds.invalidate,
   utilsStub.playback.scrobble.connections.invalidate,
@@ -125,6 +132,7 @@ vi.mock("../handlers/requests", () => ({
   handlePlaylistUpdate: vi.fn(),
   handlePlaylistSyncAllProgress: handlers.plexSyncAll,
   handlePortabilityProgress: handlers.portability,
+  handleReleaseProgress: handlers.releaseProgress,
   handleTrackUpdate: vi.fn(),
 }));
 
@@ -227,6 +235,35 @@ describe("useSubscriptions", () => {
 
     captured.onStarted?.();
     expect(utilsStub.playback.activeState.refetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("hands a release's progress to its handler, with the cache it patches", () => {
+    handlers.releaseProgress.mockReset();
+    renderHookWithProviders(() => useSubscriptions());
+    const event: SubscriptionEvent = {
+      eventType: SubscriptionEventType.ReleaseProgress,
+      userId: "u_self",
+      source: "torrent",
+      releaseKey: "album|300",
+      release: null,
+    };
+
+    captured.onData?.(event);
+
+    expect(handlers.releaseProgress).toHaveBeenCalledWith(event, expect.anything());
+  });
+
+  it("refreshes what a request keeps on disk once one of its tracks completes", () => {
+    renderHookWithProviders(() => useSubscriptions());
+
+    captured.onData?.({
+      eventType: SubscriptionEventType.TrackUpdate,
+      requestId: "req_1",
+      status: "complete",
+      message: "done",
+    });
+
+    expect(utilsStub.requests.keptReleases.invalidate).toHaveBeenCalledTimes(1);
   });
 
   it("resyncs again on every further reconnect, not only the first one", () => {

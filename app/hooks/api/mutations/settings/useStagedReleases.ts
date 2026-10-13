@@ -4,11 +4,20 @@ import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
-export function useRemoveStagedRelease() {
+function useInvalidateStagedReleases() {
   const utils = trpc.useUtils();
+  return () => {
+    void utils.settings.stagedReleases.list.invalidate();
+    void utils.requests.keptReleases.invalidate();
+    void utils.maintenance.counts.invalidate();
+  };
+}
+
+export function useRemoveStagedRelease() {
+  const invalidate = useInvalidateStagedReleases();
   return trpc.settings.stagedReleases.remove.useMutation({
     onSuccess: () => {
-      utils.settings.stagedReleases.list.invalidate();
+      invalidate();
       toast.success(i18n.t("mutations:settings.stagedReleaseRemoved"));
     },
     onError: (error) => errorToast(error, "settings.stagedReleaseRemoveFailed"),
@@ -16,10 +25,10 @@ export function useRemoveStagedRelease() {
 }
 
 export function useClearStagedReleases() {
-  const utils = trpc.useUtils();
+  const invalidate = useInvalidateStagedReleases();
   return trpc.settings.stagedReleases.clear.useMutation({
     onSuccess: () => {
-      utils.settings.stagedReleases.list.invalidate();
+      invalidate();
       toast.success(i18n.t("mutations:settings.stagedReleasesCleared"));
     },
     onError: (error) => errorToast(error, "settings.stagedReleasesClearFailed"),

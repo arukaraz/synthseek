@@ -700,9 +700,15 @@
     },
     "stallTimeout": {
       "label": "Rendirse tras",
-      "description": "Un torrent que no avanza durante este tiempo se deja para la siguiente fuente.",
+      "description": "Un torrent que no avanza durante este tiempo se deja para la siguiente fuente. El tiempo en la cola de qBittorrent no cuenta.",
       "suffix": "min",
       "ariaLabel": "Minutos sin avance antes de rendirse"
+    },
+    "queueTimeout": {
+      "label": "Esperar en la cola hasta",
+      "description": "Un torrent que qBittorrent mantiene en cola más de este tiempo se deja para la siguiente fuente.",
+      "suffix": "h",
+      "ariaLabel": "Horas que un torrent puede esperar en la cola de qBittorrent"
     },
     "singleTrackRequests": {
       "title": "Peticiones de una sola canción",
@@ -719,23 +725,6 @@
       "description": "Cuánto espera un disco descargado a que le pidas otra de sus canciones. Después se borra, pero solo cuando qBittorrent ha dejado de compartirlo.",
       "suffix": "h",
       "ariaLabel": "Horas que se guarda un torrent terminado"
-    },
-    "stagedList": {
-      "title": "Torrents en espera",
-      "empty": {
-        "title": "Nada en espera",
-        "description": "Los discos descargados por torrent aparecen aquí hasta que caducan."
-      },
-      "loading": "Cargando...",
-      "loadError": "No se pudieron cargar los torrents en espera",
-      "clearAll": "Borrar todos",
-      "remove": "Borrar este torrent",
-      "expiresIn": "caduca {{when}}",
-      "confirmClear": {
-        "title": "¿Borrar todos los torrents en espera?",
-        "message": "Los torrents y sus ficheros se quitan de qBittorrent, aunque se estén compartiendo. Cualquier canción que pidas de ellos después volverá a descargar el disco.",
-        "confirm": "Borrar todos"
-      }
     },
     "test": {
       "action": "Probar conexión",
@@ -1320,6 +1309,7 @@
         "review": "Revisión",
         "duplicates": "Duplicados",
         "recycleBin": "Papelera",
+        "downloadedAlbums": "Álbumes descargados",
         "quarantine": "Cuarentena",
         "systemStatus": "Estado del sistema",
         "notifications": "Notificaciones",
@@ -1416,24 +1406,11 @@
       "description": "Cuánto espera un disco descargado a que le pidas otra de sus canciones antes de borrarse.",
       "suffix": "h",
       "ariaLabel": "Horas que se guardan los discos sin usar"
-    },
-    "stagedList": {
-      "title": "Discos en espera",
-      "empty": {
-        "title": "Nada en espera",
-        "description": "Los discos descargados por una sola canción aparecen aquí hasta que caducan."
-      },
-      "loading": "Cargando...",
-      "loadError": "No se pudieron cargar los discos en espera",
-      "clearAll": "Borrar todos",
-      "remove": "Borrar este disco",
-      "expiresIn": "caduca {{when}}",
-      "confirmClear": {
-        "title": "¿Borrar todos los discos en espera?",
-        "message": "Las carpetas descargadas se eliminan del disco. Cualquier canción que pidas de ellas después volverá a descargar el álbum.",
-        "confirm": "Borrar todos"
-      }
     }
+  },
+  "downloadedAlbumsPointer": {
+    "text": "Los álbumes que esta fuente guarda en disco aparecen en Mantenimiento.",
+    "link": "Abrir Álbumes descargados"
   },
   "subsonic": {
     "title": "Reproductores de música",
@@ -1794,6 +1771,26 @@
     "recycleBin": {
       "title": "Papelera",
       "description": "Ficheros retirados de tu biblioteca, guardados para que una decisión equivocada siga siendo reversible."
+    },
+    "downloadedAlbums": {
+      "title": "Álbumes descargados",
+      "description": "Los álbumes descargados enteros por torrent o Usenet se quedan aquí un tiempo después de importar sus pistas, para que un reintento los reutilice. Cada uno se borra solo cuando caduca, un torrent solo cuando qBittorrent ha dejado de compartirlo.",
+      "filterLabel": "Filtrar por fuente",
+      "filterAll": "Todos",
+      "loading": "Cargando...",
+      "loadError": "No se pudieron cargar los álbumes descargados",
+      "emptyTitle": "Nada guardado en disco",
+      "emptyDescription": "Los álbumes descargados por torrent o Usenet aparecen aquí hasta que caducan.",
+      "clearAll": "Borrar todos",
+      "remove": "Borrar {{title}}",
+      "lastUsed": "usado {{when}}",
+      "expiresIn": "caduca {{when}}",
+      "total": "{{size}} en total",
+      "confirmClear": {
+        "title": "¿Borrar estos álbumes descargados?",
+        "message": "Sus ficheros se eliminan del disco, y los torrents se quitan de qBittorrent aunque se estén compartiendo. Las pistas que ya están en tu biblioteca se quedan. Una pista que pidas de uno después volverá a descargar el álbum.",
+        "confirm": "Borrar todos"
+      }
     },
     "quarantine": {
       "title": "Cuarentena",

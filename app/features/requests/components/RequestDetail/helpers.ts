@@ -1,6 +1,20 @@
-import { ContentType, type RequestContainerType, type RequestListItem } from "@api/__generated__/types";
+import {
+  ContentType,
+  type ActiveRelease,
+  type RequestContainerType,
+  type RequestListItem,
+} from "@api/__generated__/types";
 import { albumTarget, playlistLibraryTarget, type DetailTarget } from "@features/content-detail";
 import { titleCase } from "@utils/formatters";
+
+import type { ReleaseFigureFormat } from "./types";
+
+export function releaseFigures(release: ActiveRelease, format: ReleaseFigureFormat): string[] {
+  const figures: string[] = [];
+  if (release.totalBytes > 0) figures.push(format.size(release.doneBytes, release.totalBytes));
+  if (release.etaMinutes !== null) figures.push(format.eta(release.etaMinutes));
+  return figures;
+}
 
 export function formatDelegatedTo(delegatedTo: string | null): string | null {
   const trimmed = delegatedTo?.trim();

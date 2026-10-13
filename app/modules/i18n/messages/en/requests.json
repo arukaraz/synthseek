@@ -139,6 +139,21 @@
     "loadFailed": "Could not load these tracks.",
     "loadRetry": "Try again"
   },
+  "release": {
+    "fetchingTitle": "Fetching the album by {{source}}",
+    "fetchingSize": "{{done}} of {{total}}",
+    "fetchingEta": "about {{minutes}} min left",
+    "queuedTitle": "Lined up for {{source}}",
+    "queuedDescription": "{{source}} is busy with other downloads. This one starts on its own as soon as it has room.",
+    "trackFetching": "With the album by {{source}} · {{percent}}%",
+    "trackQueued": "Album lined up for {{source}}",
+    "sidebarFetching": "Fetching album by {{source}} · {{percent}}%",
+    "sidebarQueued": "Lined up for {{source}}",
+    "keptTitle": "Album kept on disk",
+    "keptMeta": "{{source}} · {{size}} · expires {{when}}",
+    "keptReuse": "Retrying a track reuses it.",
+    "keptDelete": "Delete now"
+  },
   "export": {
     "dialogTitle": "Export (max compatibility)",
     "dialogDescription": "Resolving every track's MusicBrainz ID so the file matches in any app, then downloading.",

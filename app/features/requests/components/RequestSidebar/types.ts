@@ -9,6 +9,10 @@ export interface RequestSidebarProps {
   className?: string;
 }
 
+export interface RequestSidebarReleaseProps {
+  albumId: string;
+}
+
 export interface RequestSidebarItemProps {
   request: RequestListItem;
   isSelected: boolean;

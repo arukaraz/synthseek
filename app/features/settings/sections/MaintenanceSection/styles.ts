@@ -18,6 +18,24 @@ export const quarantineLink = cva("text-primary-400 underline-offset-2 hover:und
 
 export const quarantineValue = cva("text-fg text-sm font-medium");
 
+export const downloadedAlbumName = cva(
+  "text-primary-400 truncate text-sm font-semibold underline-offset-2 hover:underline"
+);
+
+export const downloadedAlbumSource = quarantineReasonBadge;
+
+export const downloadedAlbumsHeader = quarantineListHeader;
+
+export const downloadedAlbumList = quarantineList;
+
+export const downloadedAlbumRow = quarantineRow;
+
+export const downloadedAlbumBody = quarantineRowBody;
+
+export const downloadedAlbumMeta = quarantineMeta;
+
+export const downloadedAlbumRelease = quarantineValue;
+
 export const binSearchBox = cva("relative w-full min-w-0");
 
 export const binSearch = cva(

@@ -6,3 +6,4 @@ export { handlePlaylistSyncAllProgress } from "./playlistSyncAllProgress";
 export { handlePortabilityProgress } from "./portabilityProgress";
 export { handleLibraryImportProgress } from "./libraryImportProgress";
 export { handleDropImportUpdate } from "./dropImportUpdate";
+export { handleReleaseProgress } from "./releaseProgress";

@@ -1,9 +1,94 @@
-import { ContentType, RequestStatus } from "@api/__generated__/types";
+import { ContentType, RequestStatus, type ActiveRelease } from "@api/__generated__/types";
 import { render, screen, userEvent } from "@test/test-utils";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { makeRequestWithTracks, makeRequestsUser } from "../../../__tests__/factories";
 import { RequestSidebarItem } from "../RequestSidebarItem";
+
+const releaseState = vi.hoisted(() => ({ current: null as ActiveRelease | null, askedFor: [] as string[] }));
+
+vi.mock("@hooks/api/queries/useActiveReleases", () => ({
+  useAlbumRelease: (albumId: string) => {
+    releaseState.askedFor.push(albumId);
+    return releaseState.current;
+  },
+}));
+
+beforeEach(() => {
+  releaseState.current = null;
+  releaseState.askedFor = [];
+});
+
+function release(overrides: Partial<ActiveRelease> = {}): ActiveRelease {
+  return {
+    userId: "user-1",
+    source: "usenet",
+    releaseKey: "album|300",
+    title: "Artist - Album",
+    state: "fetching",
+    percent: 40,
+    doneBytes: 40,
+    totalBytes: 100,
+    etaMinutes: null,
+    albumIds: ["album-1"],
+    trackRequestIds: ["track-1"],
+    ...overrides,
+  };
+}
+
+describe("RequestSidebarItem, while its album is fetched as one release", () => {
+  it("says how far the album has got", () => {
+    releaseState.current = release();
+
+    render(
+      <RequestSidebarItem
+        request={makeRequestWithTracks({ id: "album-1", contentType: ContentType.enum.album })}
+        isSelected={false}
+        onSelect={() => {}}
+      />
+    );
+
+    expect(screen.getByTestId("sidebar-release-line")).toHaveTextContent("Fetching album by Usenet · 40%");
+    expect(releaseState.askedFor).toContain("album-1");
+  });
+
+  it("says the album is lined up while its client has no room", () => {
+    releaseState.current = release({ state: "queued" });
+
+    render(
+      <RequestSidebarItem
+        request={makeRequestWithTracks({ contentType: ContentType.enum.album })}
+        isSelected={false}
+        onSelect={() => {}}
+      />
+    );
+
+    expect(screen.getByTestId("sidebar-release-line")).toHaveTextContent("Lined up for Usenet");
+  });
+
+  it("says nothing for an album nothing is fetching, or for a playlist", () => {
+    const { rerender } = render(
+      <RequestSidebarItem
+        request={makeRequestWithTracks({ contentType: ContentType.enum.album })}
+        isSelected={false}
+        onSelect={() => {}}
+      />
+    );
+    expect(screen.queryByTestId("sidebar-release-line")).not.toBeInTheDocument();
+
+    releaseState.current = release();
+    releaseState.askedFor = [];
+    rerender(
+      <RequestSidebarItem
+        request={makeRequestWithTracks({ contentType: ContentType.enum.playlist })}
+        isSelected={false}
+        onSelect={() => {}}
+      />
+    );
+    expect(screen.queryByTestId("sidebar-release-line")).not.toBeInTheDocument();
+    expect(releaseState.askedFor).toEqual([]);
+  });
+});
 
 describe("RequestSidebarItem", () => {
   it("renders the name, artist, completed ratio and requester", () => {

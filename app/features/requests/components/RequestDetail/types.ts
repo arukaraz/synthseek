@@ -1,4 +1,4 @@
-import type { RequestListItem, TrackRequest } from "@api/__generated__/types";
+import type { ActiveRelease, RequestListItem, TrackRequest } from "@api/__generated__/types";
 
 import type { useRequestActions } from "../../hooks/useRequestActions";
 
@@ -70,6 +70,23 @@ export interface RequestDetailStatsProps {
   request: RequestListItem;
   tracks: TrackRequest[];
   isResolving: boolean;
+}
+
+export interface ReleaseProgressCardProps {
+  release: ActiveRelease;
+}
+
+export interface RequestReleaseProgressProps {
+  tracks: TrackRequest[];
+}
+
+export interface KeptReleaseNoticeProps {
+  request: RequestListItem;
+}
+
+export interface ReleaseFigureFormat {
+  size: (doneBytes: number, totalBytes: number) => string;
+  eta: (minutes: number) => string;
 }
 
 export interface RequestDetailStatsCardProps {

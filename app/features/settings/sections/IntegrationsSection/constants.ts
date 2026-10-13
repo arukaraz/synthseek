@@ -7,8 +7,6 @@ import type {
   ServerTestOutcome,
   SlskdHealth,
   SlskdStatusTone,
-  StagedReleaseListKeys,
-  StagedReleaseSource,
   SubsonicSourceTestOutcome,
   TorrentClientOutcome,
   TorrentIndexerOutcome,
@@ -36,34 +34,7 @@ export const TORRENT_TEST_WARNING_KEYS: Readonly<Record<TorrentTestWarning, Pars
   dht_off: "torrent.test.warning.dht_off",
 };
 
-export const STAGED_LIST_KEYS: Readonly<Record<StagedReleaseSource, StagedReleaseListKeys>> = {
-  usenet: {
-    title: "usenet.stagedList.title",
-    emptyTitle: "usenet.stagedList.empty.title",
-    emptyDescription: "usenet.stagedList.empty.description",
-    loading: "usenet.stagedList.loading",
-    loadError: "usenet.stagedList.loadError",
-    clearAll: "usenet.stagedList.clearAll",
-    remove: "usenet.stagedList.remove",
-    expiresIn: "usenet.stagedList.expiresIn",
-    confirmTitle: "usenet.stagedList.confirmClear.title",
-    confirmMessage: "usenet.stagedList.confirmClear.message",
-    confirm: "usenet.stagedList.confirmClear.confirm",
-  },
-  torrent: {
-    title: "torrent.stagedList.title",
-    emptyTitle: "torrent.stagedList.empty.title",
-    emptyDescription: "torrent.stagedList.empty.description",
-    loading: "torrent.stagedList.loading",
-    loadError: "torrent.stagedList.loadError",
-    clearAll: "torrent.stagedList.clearAll",
-    remove: "torrent.stagedList.remove",
-    expiresIn: "torrent.stagedList.expiresIn",
-    confirmTitle: "torrent.stagedList.confirmClear.title",
-    confirmMessage: "torrent.stagedList.confirmClear.message",
-    confirm: "torrent.stagedList.confirmClear.confirm",
-  },
-};
+export const DOWNLOADED_ALBUMS_HREF = "/settings/maintenance/downloaded-albums";
 
 export const SUBSONIC_SOURCE_TEST_KEYS: Readonly<Record<SubsonicSourceTestOutcome, ParseKeys<"settings">>> = {
   ok: "subsonicSource.test.ok",

@@ -12,7 +12,7 @@ import { IconButton } from "@components/ui/IconButton";
 import { useApproveHeldImport, useDiscardHeldImport } from "@hooks/api";
 import { enqueueReviewApproval } from "@hooks/api/subscriptions";
 import { playerActions } from "@hooks/ui/player";
-import { downloadSourceLabelKey } from "@utils/download-source";
+import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 import { formatBytes, formatRelativeTime } from "@utils/formatters";
 
 import { evidenceSentence, heldAudioUrl, heldImportErrorKey } from "../helpers";
@@ -32,14 +32,13 @@ import { ReviewReasonBadge } from "./ReviewReasonBadge";
 
 export function ReviewItemRow({ item }: ReviewItemRowProps) {
   const { t } = useTranslation("requests");
-  const { t: tSettings } = useTranslation("settings");
+  const sourceLabel = useDownloadSourceLabel();
   const approve = useApproveHeldImport();
   const discard = useDiscardHeldImport();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const trackLabel = t("review.trackDisplay", { title: item.track.title, artist: item.track.artist });
-  const sourceKey = downloadSourceLabelKey(item.source);
   const hasFailed = item.status === HeldImportStatus.enum.import_failed;
   const isBusy = item.status === HeldImportStatus.enum.importing || approve.isPending || discard.isPending;
 
@@ -64,7 +63,7 @@ export function ReviewItemRow({ item }: ReviewItemRowProps) {
       </span>
 
       <div className={metaRow()}>
-        <span title={t("review.columns.source")}>{sourceKey ? tSettings(sourceKey) : item.source}</span>
+        <span title={t("review.columns.source")}>{sourceLabel(item.source)}</span>
         {item.sourceUsername.length > 0 ? <span title={t("review.columns.peer")}>{item.sourceUsername}</span> : null}
         <span title={t("review.columns.size")}>{formatBytes(item.sizeBytes)}</span>
         <span title={t("review.columns.age")}>{formatRelativeTime(new Date(item.createdAt))}</span>

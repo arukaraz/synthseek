@@ -1,7 +1,22 @@
 import { matchesTerms, searchTerms } from "@utils/search";
 
 import { CONTAINER_DEFAULT_OWNER_ID } from "./constants";
-import type { SystemProblem, SystemProblemCopyParams } from "./types";
+import type { DownloadedAlbum, DownloadedAlbumFilter, SystemProblem, SystemProblemCopyParams } from "./types";
+
+export function downloadedAlbumsIn(
+  entries: readonly DownloadedAlbum[],
+  filter: DownloadedAlbumFilter
+): DownloadedAlbum[] {
+  return filter === "all" ? [...entries] : entries.filter((entry) => entry.source === filter);
+}
+
+export function totalBytesOf(entries: readonly DownloadedAlbum[]): number {
+  return entries.reduce((total, entry) => total + entry.sizeBytes, 0);
+}
+
+export function requestLinkFor(albumExternalId: string): string {
+  return `/requests?selected=${encodeURIComponent(albumExternalId)}`;
+}
 
 export function matchingRecycled<T extends { relativePath: string }>(
   entries: readonly T[] | undefined,

@@ -697,9 +697,15 @@
     },
     "stallTimeout": {
       "label": "Abandonner après",
-      "description": "Un torrent qui n'avance plus pendant ce temps est laissé à la source suivante.",
+      "description": "Un torrent qui n'avance plus pendant ce temps est laissé à la source suivante. Le temps passé dans la file de qBittorrent ne compte pas.",
       "suffix": "min",
       "ariaLabel": "Minutes sans progression avant d'abandonner"
+    },
+    "queueTimeout": {
+      "label": "Attendre dans la file jusqu'à",
+      "description": "Un torrent que qBittorrent garde en file plus longtemps est laissé à la source suivante.",
+      "suffix": "h",
+      "ariaLabel": "Heures pendant lesquelles un torrent peut attendre dans la file de qBittorrent"
     },
     "singleTrackRequests": {
       "title": "Demandes d'un seul morceau",
@@ -716,23 +722,6 @@
       "description": "Combien de temps une publication téléchargée attend qu'un autre de ses morceaux soit demandé. Elle est ensuite supprimée, mais seulement quand qBittorrent ne la partage plus.",
       "suffix": "h",
       "ariaLabel": "Heures de conservation d'un torrent terminé"
-    },
-    "stagedList": {
-      "title": "Torrents en attente",
-      "empty": {
-        "title": "Rien en attente",
-        "description": "Les publications téléchargées par torrent apparaissent ici jusqu'à leur expiration."
-      },
-      "loading": "Chargement...",
-      "loadError": "Impossible de charger les torrents en attente",
-      "clearAll": "Tout supprimer",
-      "remove": "Supprimer ce torrent",
-      "expiresIn": "expire {{when}}",
-      "confirmClear": {
-        "title": "Supprimer tous les torrents en attente ?",
-        "message": "Les torrents et leurs fichiers sont retirés de qBittorrent, même en cours de partage. Tout morceau demandé ensuite retéléchargera la publication.",
-        "confirm": "Tout supprimer"
-      }
     },
     "test": {
       "action": "Tester la connexion",
@@ -1317,6 +1306,7 @@
         "review": "Révision",
         "duplicates": "Doublons",
         "recycleBin": "Corbeille",
+        "downloadedAlbums": "Albums téléchargés",
         "quarantine": "Quarantaine",
         "systemStatus": "État du système",
         "notifications": "Notifications",
@@ -1413,24 +1403,11 @@
       "description": "Combien de temps un album téléchargé attend qu'un autre de ses morceaux soit demandé avant d'être supprimé.",
       "suffix": "h",
       "ariaLabel": "Heures de conservation des albums inutilisés"
-    },
-    "stagedList": {
-      "title": "Albums en attente",
-      "empty": {
-        "title": "Rien en attente",
-        "description": "Les albums téléchargés pour un seul morceau apparaissent ici jusqu'à leur expiration."
-      },
-      "loading": "Chargement...",
-      "loadError": "Impossible de charger les albums en attente",
-      "clearAll": "Tout supprimer",
-      "remove": "Supprimer cet album",
-      "expiresIn": "expire {{when}}",
-      "confirmClear": {
-        "title": "Supprimer tous les albums en attente ?",
-        "message": "Les dossiers téléchargés sont supprimés du disque. Tout morceau demandé ensuite retéléchargera l'album.",
-        "confirm": "Tout supprimer"
-      }
     }
+  },
+  "downloadedAlbumsPointer": {
+    "text": "Les albums que cette source garde sur le disque sont listés dans Maintenance.",
+    "link": "Ouvrir Albums téléchargés"
   },
   "subsonic": {
     "title": "Lecteurs de musique",
@@ -1791,6 +1768,26 @@
     "recycleBin": {
       "title": "Corbeille",
       "description": "Fichiers retirés de votre bibliothèque, conservés pour qu'une mauvaise décision reste réversible."
+    },
+    "downloadedAlbums": {
+      "title": "Albums téléchargés",
+      "description": "Les albums téléchargés en entier par torrent ou Usenet restent ici un moment après l'import de leurs pistes, pour qu'une nouvelle tentative les réutilise. Chacun est supprimé tout seul une fois expiré, un torrent seulement quand qBittorrent a cessé de le partager.",
+      "filterLabel": "Filtrer par source",
+      "filterAll": "Tous",
+      "loading": "Chargement...",
+      "loadError": "Impossible de charger les albums téléchargés",
+      "emptyTitle": "Rien de conservé sur le disque",
+      "emptyDescription": "Les albums téléchargés par torrent ou Usenet apparaissent ici jusqu'à leur expiration.",
+      "clearAll": "Tout supprimer",
+      "remove": "Supprimer {{title}}",
+      "lastUsed": "utilisé {{when}}",
+      "expiresIn": "expire {{when}}",
+      "total": "{{size}} au total",
+      "confirmClear": {
+        "title": "Supprimer ces albums téléchargés ?",
+        "message": "Leurs fichiers sont supprimés du disque, et les torrents sont retirés de qBittorrent même en cours de partage. Les pistes déjà dans votre bibliothèque restent. Un morceau demandé ensuite retéléchargera l'album.",
+        "confirm": "Tout supprimer"
+      }
     },
     "quarantine": {
       "title": "Quarantaine",

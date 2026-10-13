@@ -16,7 +16,7 @@ import { useUpdateEngineImport } from "@hooks/api/mutations/settings/useUpdateEn
 import { useQuarantineList } from "@hooks/api/queries/useQuarantine";
 import { useClientPagination } from "@hooks/ui/useClientPagination";
 import { Pagination } from "@components/ui/Pagination";
-import { downloadSourceLabelKey } from "@utils/download-source";
+import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 import { formatRelativeTime } from "@utils/formatters";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -41,6 +41,7 @@ import type { QuarantineCardProps } from "./types";
 
 export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps) {
   const { t } = useTranslation("settings");
+  const sourceLabel = useDownloadSourceLabel();
   const update = useUpdateEngineImport();
   const entries = useQuarantineList();
   const quarantined = useClientPagination(entries.data);
@@ -107,7 +108,6 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
       ) : (
         <ul className={quarantineList()}>
           {quarantined.visible.map((entry) => {
-            const sourceKey = downloadSourceLabelKey(entry.source);
             return (
               <li key={entry.id} className={quarantineRow()}>
                 <div className={quarantineRowBody()}>
@@ -115,7 +115,7 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
                     {truncateMiddle(entry.filename, QUARANTINE_FILENAME_MAX)}
                   </span>
                   <div className={quarantineMeta()}>
-                    <span title={t("quarantine.list.columns.source")}>{sourceKey ? t(sourceKey) : entry.source}</span>
+                    <span title={t("quarantine.list.columns.source")}>{sourceLabel(entry.source)}</span>
                     {entry.username.length > 0 ? (
                       <span title={t("quarantine.list.columns.peer")}>{entry.username}</span>
                     ) : null}

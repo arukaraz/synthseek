@@ -139,6 +139,21 @@
     "loadFailed": "No se pudieron cargar estas pistas.",
     "loadRetry": "Reintentar"
   },
+  "release": {
+    "fetchingTitle": "Descargando el álbum por {{source}}",
+    "fetchingSize": "{{done}} de {{total}}",
+    "fetchingEta": "faltan unos {{minutes}} min",
+    "queuedTitle": "En fila para {{source}}",
+    "queuedDescription": "{{source}} está ocupado con otras descargas. Esta empieza sola en cuanto tenga hueco.",
+    "trackFetching": "Con el álbum por {{source}} · {{percent}}%",
+    "trackQueued": "Álbum en fila para {{source}}",
+    "sidebarFetching": "Descargando el álbum por {{source}} · {{percent}}%",
+    "sidebarQueued": "En fila para {{source}}",
+    "keptTitle": "Álbum guardado en disco",
+    "keptMeta": "{{source}} · {{size}} · caduca {{when}}",
+    "keptReuse": "Reintentar una pista lo reutiliza.",
+    "keptDelete": "Borrar ahora"
+  },
   "export": {
     "dialogTitle": "Exportar (máxima compatibilidad)",
     "dialogDescription": "Resolviendo el ID de MusicBrainz de cada canción para que el archivo coincida en cualquier aplicación, y luego descargando.",

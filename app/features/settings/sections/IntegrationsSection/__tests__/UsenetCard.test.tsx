@@ -21,12 +21,6 @@ vi.mock("@hooks/api/mutations/settings/useDownloadSources", () => ({
 
 vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
 
-vi.mock("../StagedReleaseList", () => ({
-  StagedReleaseList: ({ enabled }: { enabled: boolean }) => (
-    <div data-testid="staged-release-list" data-enabled={String(enabled)} />
-  ),
-}));
-
 import { UsenetCard } from "../UsenetCard";
 
 beforeAll(() => {
@@ -172,19 +166,16 @@ describe("UsenetCard", () => {
     });
   });
 
-  it("shows the waiting-albums list only once single-track requests are on", async () => {
+  it("points to the downloaded albums under Maintenance only once single-track requests are on", async () => {
     render(<UsenetCard initial={initial} />);
-    expect(screen.queryByTestId("staged-release-list")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: enSettings.downloadedAlbumsPointer.link })).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("switch", { name: t.singleTrackRequests.ariaLabel }));
 
-    expect(screen.getByTestId("staged-release-list")).toBeInTheDocument();
-  });
-
-  it("tells the list whether the source is enabled, so it does not query while off", () => {
-    render(<UsenetCard initial={optedIn} />);
-
-    expect(screen.getByTestId("staged-release-list")).toHaveAttribute("data-enabled", "false");
+    expect(screen.getByRole("link", { name: enSettings.downloadedAlbumsPointer.link })).toHaveAttribute(
+      "href",
+      "/settings/maintenance/downloaded-albums"
+    );
   });
 
   it("reverts the draft when cancel is pressed", async () => {

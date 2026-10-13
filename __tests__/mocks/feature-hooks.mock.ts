@@ -112,6 +112,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
         singleTrackRequests: false,
         stagingRetentionHours: 24,
         stallTimeoutMinutes: 30,
+        queueTimeoutHours: 24,
       },
     },
     system: {
