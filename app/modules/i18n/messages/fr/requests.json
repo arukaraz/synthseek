@@ -65,6 +65,10 @@
     "noResultsDescription": "Aucune demande ne correspond à \"{{query}}\"",
     "noRequestsTitle": "Aucune demande",
     "noRequestsDescription": "Vos demandes de téléchargement apparaîtront ici.",
+    "noSourceTitle": "Rien de {{source}} pour l'instant",
+    "noSourceDescription": "Les titres téléchargés avant cette version n'enregistrent pas leur source, ils n'apparaissent donc pas ici.",
+    "noFilterTitle": "Aucune demande correspondante",
+    "noFilterDescription": "Aucune demande ne correspond à ces filtres.",
     "selectTitle": "Sélectionnez une demande",
     "selectDescription": "Choisissez une demande dans la liste pour voir ses détails."
   },

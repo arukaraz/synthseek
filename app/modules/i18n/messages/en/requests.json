@@ -65,6 +65,10 @@
     "noResultsDescription": "No requests match \"{{query}}\"",
     "noRequestsTitle": "No Requests",
     "noRequestsDescription": "Your download requests will appear here.",
+    "noSourceTitle": "Nothing from {{source}} yet",
+    "noSourceDescription": "Tracks downloaded before this version don't record their source, so they don't show up here.",
+    "noFilterTitle": "No matching requests",
+    "noFilterDescription": "No requests match these filters.",
     "selectTitle": "Select a request",
     "selectDescription": "Choose a request from the list to see its details."
   },

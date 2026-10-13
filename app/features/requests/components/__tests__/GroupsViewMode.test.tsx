@@ -138,6 +138,27 @@ describe("GroupsViewMode", () => {
     render(<GroupsViewMode />);
 
     expect(screen.queryAllByTestId("sidebar-request-item")).toHaveLength(0);
+    expect(screen.queryByText("Nothing from Internet Archive yet")).not.toBeInTheDocument();
+  });
+
+  it("says a chosen source has nothing yet once the server answers with no request", () => {
+    searchParamsRef.current = new URLSearchParams("source=slskd");
+    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+    queryState.sourceMatchIds = [];
+
+    render(<GroupsViewMode />);
+
+    expect(screen.getByText("Nothing from Slskd yet")).toBeInTheDocument();
+  });
+
+  it("blames the status filter, not the source, when the source has requests the status hides", () => {
+    searchParamsRef.current = new URLSearchParams("source=archive&filter=failed");
+    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a", status: RequestStatus.enum.complete })];
+    queryState.sourceMatchIds = ["a"];
+
+    render(<GroupsViewMode />);
+
+    expect(screen.getByText("No matching requests")).toBeInTheDocument();
   });
 
   it("drops every request when the server reports no track-title match either", () => {

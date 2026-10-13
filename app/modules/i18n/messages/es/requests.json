@@ -65,6 +65,10 @@
     "noResultsDescription": "Ninguna solicitud coincide con \"{{query}}\"",
     "noRequestsTitle": "Sin solicitudes",
     "noRequestsDescription": "Tus solicitudes de descarga aparecerán aquí.",
+    "noSourceTitle": "Nada de {{source}} todavía",
+    "noSourceDescription": "Las pistas descargadas antes de esta versión no guardan su fuente, así que no aparecen aquí.",
+    "noFilterTitle": "Ninguna solicitud coincide",
+    "noFilterDescription": "Ninguna solicitud coincide con estos filtros.",
     "selectTitle": "Selecciona una solicitud",
     "selectDescription": "Elige una solicitud de la lista para ver sus detalles."
   },

@@ -3,6 +3,7 @@
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { useRequestIdsBySource, useTrackRequests, useTrackTitleMatches } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
+import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
 import { useEffect } from "react";
@@ -16,6 +17,7 @@ export function GroupsViewMode() {
   const { t } = useTranslation("requests");
   const { data: items, isLoading } = useTrackRequests();
   const { values, set } = useUrlParams(REQUESTS_URL_PARAMS);
+  const sourceLabel = useDownloadSourceLabel();
 
   const debouncedSearchQuery = useDebounce(values.q, { delay: 300 });
   const { data: trackTitleMatchIds } = useTrackTitleMatches(debouncedSearchQuery);
@@ -30,6 +32,8 @@ export function GroupsViewMode() {
     sourceKey === null ? null : (sourceMatchIds ?? [])
   );
   const selected = visibleItems.find((it) => it.external_id === values.selected) ?? null;
+  const emptySourceLabel =
+    sourceKey !== null && sourceMatchIds !== undefined && sourceMatchIds.length === 0 ? sourceLabel(sourceKey) : null;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -58,6 +62,8 @@ export function GroupsViewMode() {
         selectedId={selected?.id ?? null}
         onSelect={handleSelect}
         searchQuery={debouncedSearchQuery}
+        emptySourceLabel={emptySourceLabel}
+        filtered={values.filter !== "all" || sourceKey !== null}
         windowKey={`${values.filter}|${values.source}|${values.sort}|${values.dir}|${debouncedSearchQuery}`}
         className={cn("h-full w-full md:w-72 md:shrink-0", selected ? "hidden md:flex" : "flex")}
       />

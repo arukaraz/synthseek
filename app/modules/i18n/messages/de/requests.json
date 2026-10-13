@@ -65,6 +65,10 @@
     "noResultsDescription": "Keine Anfragen passen zu \"{{query}}\"",
     "noRequestsTitle": "Keine Anfragen",
     "noRequestsDescription": "Deine Download-Anfragen erscheinen hier.",
+    "noSourceTitle": "Noch nichts von {{source}}",
+    "noSourceDescription": "Titel, die vor dieser Version heruntergeladen wurden, speichern ihre Quelle nicht und erscheinen deshalb hier nicht.",
+    "noFilterTitle": "Keine passenden Anfragen",
+    "noFilterDescription": "Keine Anfrage passt zu diesen Filtern.",
     "selectTitle": "Wähle eine Anfrage",
     "selectDescription": "Wähle eine Anfrage aus der Liste, um ihre Details zu sehen."
   },

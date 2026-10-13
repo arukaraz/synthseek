@@ -23,4 +23,25 @@ describe("RequestsEmptyState", () => {
     expect(screen.getByText("No Results")).toBeInTheDocument();
     expect(screen.getByText(/daft punk/)).toBeInTheDocument();
   });
+
+  it("explains that older downloads record no source when a chosen source has nothing", () => {
+    render(<RequestsEmptyState emptySourceLabel="Slskd" filtered />);
+
+    expect(screen.getByText("Nothing from Slskd yet")).toBeInTheDocument();
+    expect(screen.getByText(/downloaded before this version don't record their source/)).toBeInTheDocument();
+    expect(screen.queryByText("No Requests")).not.toBeInTheDocument();
+  });
+
+  it("says the filters hide everything rather than that there are no requests", () => {
+    render(<RequestsEmptyState filtered />);
+
+    expect(screen.getByText("No matching requests")).toBeInTheDocument();
+    expect(screen.queryByText("No Requests")).not.toBeInTheDocument();
+  });
+
+  it("keeps the search message ahead of the filter messages", () => {
+    render(<RequestsEmptyState searchQuery="daft punk" emptySourceLabel="Slskd" filtered />);
+
+    expect(screen.getByText("No Results")).toBeInTheDocument();
+  });
 });

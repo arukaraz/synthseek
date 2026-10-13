@@ -14,6 +14,8 @@ export function RequestSidebar({
   selectedId,
   onSelect,
   searchQuery,
+  emptySourceLabel,
+  filtered,
   windowKey,
   className,
 }: RequestSidebarProps) {
@@ -30,7 +32,7 @@ export function RequestSidebar({
     return (
       <div className={`${sidebarContainer()} ${className ?? ""}`}>
         <div className="flex flex-1 items-center justify-center p-4">
-          <RequestsEmptyState searchQuery={searchQuery} />
+          <RequestsEmptyState searchQuery={searchQuery} emptySourceLabel={emptySourceLabel} filtered={filtered} />
         </div>
       </div>
     );
