@@ -141,7 +141,7 @@
           "ariaLabel": "Quellen automatisch wählen"
         },
         "slskd": {
-          "label": "Soulseek",
+          "label": "Slskd",
           "description": "Nur slskd, kein verlustbehafteter Ausweichweg"
         },
         "ytdlp": {

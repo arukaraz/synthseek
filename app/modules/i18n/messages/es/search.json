@@ -141,7 +141,7 @@
           "ariaLabel": "Elegir las fuentes automáticamente"
         },
         "slskd": {
-          "label": "Soulseek",
+          "label": "Slskd",
           "description": "Solo slskd, sin alternativa lossy"
         },
         "ytdlp": {

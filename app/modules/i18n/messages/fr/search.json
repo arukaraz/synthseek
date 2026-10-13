@@ -141,7 +141,7 @@
           "ariaLabel": "Choisir les sources automatiquement"
         },
         "slskd": {
-          "label": "Soulseek",
+          "label": "Slskd",
           "description": "slskd uniquement, pas de repli avec perte"
         },
         "ytdlp": {
