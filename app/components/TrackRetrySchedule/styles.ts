@@ -9,7 +9,3 @@ export const scheduleIcon = cva("inline-flex shrink-0");
 export const scheduleTrigger = cva(
   "text-fg/40 hover:text-fg/70 focus-visible:text-fg/70 shrink-0 rounded transition-colors outline-none"
 );
-
-export const retryNowButton = cva(
-  "text-primary-400 hover:bg-fg/10 focus-visible:ring-primary-500 shrink-0 rounded p-0.5 transition-colors outline-none focus-visible:ring-2"
-);

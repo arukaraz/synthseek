@@ -1,24 +1,22 @@
 "use client";
 
-import { Clock, History, RefreshCw } from "lucide-react";
+import { Clock, History } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/Popover";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 
 import { formatTimeUntil } from "@utils/formatters";
 
-import { retryNowButton, scheduleFact, scheduleIcon, scheduleRow, scheduleTrigger } from "./styles";
+import { scheduleFact, scheduleIcon, scheduleRow, scheduleTrigger } from "./styles";
 import type { TrackRetryScheduleProps } from "./types";
 
-export function TrackRetrySchedule({ nextRetryAt, retryCount, onRetryNow, compact = false }: TrackRetryScheduleProps) {
+export function TrackRetrySchedule({ nextRetryAt, retryCount, compact = false }: TrackRetryScheduleProps) {
   const { t } = useTranslation("components");
   const [scheduleOpen, setScheduleOpen] = useState(false);
 
   if (!nextRetryAt && retryCount <= 0) return null;
 
-  const retryNowLabel = t("trackRetrySchedule.retryNow");
   const attemptsLabel = retryCount > 0 ? t("trackRetrySchedule.attempts", { count: retryCount }) : null;
 
   return (
@@ -44,18 +42,6 @@ export function TrackRetrySchedule({ nextRetryAt, retryCount, onRetryNow, compac
         <History className="size-3.5 shrink-0" aria-hidden />
       )}
       {!compact && attemptsLabel !== null ? <span className={scheduleFact()}>{attemptsLabel}</span> : null}
-      {onRetryNow ? (
-        <TooltipProvider delayDuration={150}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button type="button" aria-label={retryNowLabel} className={retryNowButton()} onClick={onRetryNow}>
-                <RefreshCw className="size-3.5" aria-hidden />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="top">{retryNowLabel}</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ) : null}
     </div>
   );
 }

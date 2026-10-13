@@ -222,23 +222,4 @@ describe("TrackStatusCell", () => {
     expect(screen.queryByText(/Next attempt/)).not.toBeInTheDocument();
     expect(screen.queryByText(/attempts so far/)).not.toBeInTheDocument();
   });
-
-  it("offers an immediate retry beside the schedule when a handler is supplied", async () => {
-    const user = userEvent.setup();
-    const onRetryNow = vi.fn();
-    render(
-      <TrackStatusCell
-        track={makeRequestsTrack({
-          status: RequestStatus.enum.failed,
-          watch_enabled: true,
-          next_retry_at: inTwoHours(),
-        })}
-        onRetryNow={onRetryNow}
-      />
-    );
-
-    await user.click(screen.getByRole("button", { name: "Retry now" }));
-
-    expect(onRetryNow).toHaveBeenCalledOnce();
-  });
 });

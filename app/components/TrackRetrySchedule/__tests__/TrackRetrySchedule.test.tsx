@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { TrackRetrySchedule } from "../TrackRetrySchedule";
 
@@ -54,31 +54,5 @@ describe("TrackRetrySchedule", () => {
 
     expect(screen.queryByText("2 attempts")).not.toBeInTheDocument();
     expect(screen.getByRole("img", { name: "2 attempts" })).toHaveAttribute("title", "2 attempts");
-  });
-
-  it("still offers the retry affordance when compact", async () => {
-    const user = userEvent.setup();
-    const onRetryNow = vi.fn();
-    render(<TrackRetrySchedule nextRetryAt={null} retryCount={1} onRetryNow={onRetryNow} compact />);
-
-    await user.click(screen.getByRole("button", { name: "Retry now" }));
-
-    expect(onRetryNow).toHaveBeenCalledOnce();
-  });
-
-  it("omits the retry affordance when no handler is supplied", () => {
-    render(<TrackRetrySchedule nextRetryAt={inHours(2)} retryCount={2} />);
-
-    expect(screen.queryByRole("button", { name: "Retry now" })).not.toBeInTheDocument();
-  });
-
-  it("calls the supplied handler from the retry affordance", async () => {
-    const user = userEvent.setup();
-    const onRetryNow = vi.fn();
-    render(<TrackRetrySchedule nextRetryAt={inHours(2)} retryCount={2} onRetryNow={onRetryNow} />);
-
-    await user.click(screen.getByRole("button", { name: "Retry now" }));
-
-    expect(onRetryNow).toHaveBeenCalledOnce();
   });
 });

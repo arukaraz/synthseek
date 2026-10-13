@@ -195,7 +195,7 @@ describe("RequestDetailTracks", () => {
     expect(setWatch).toHaveBeenCalledWith({ trackId: "t6", enabled: true });
   });
 
-  it("retries a scheduled failed track from the Retry now affordance on the row", async () => {
+  it("retries a scheduled failed track only from the row actions, leaving the status column to the schedule", async () => {
     const user = userEvent.setup();
     const request = makeRequestWithTracks({
       tracks: [
@@ -221,13 +221,15 @@ describe("RequestDetailTracks", () => {
 
     expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
     expect(screen.queryByText(/2 attempts/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Retry now" })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Retry now" }));
+    await user.click(screen.getByRole("button", { name: "Track actions" }));
+    await user.click(screen.getByRole("menuitem", { name: "Retry track" }));
 
     expect(retryTrack).toHaveBeenCalledWith({ trackId: "t10" });
   });
 
-  it("hides the Retry now affordance when the user cannot act, keeping the schedule visible", () => {
+  it("keeps the schedule visible when the user cannot act", () => {
     authState.canAct = false;
     const request = makeRequestWithTracks({
       tracks: [
@@ -251,7 +253,6 @@ describe("RequestDetailTracks", () => {
     );
 
     expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Retry now" })).not.toBeInTheDocument();
   });
 
   it("prioritizes a queued track from the jump-the-queue action", async () => {

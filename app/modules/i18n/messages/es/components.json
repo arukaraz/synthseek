@@ -78,7 +78,6 @@
     "nextAttempt": "Próximo intento {{time}}",
     "attempts_one": "{{count}} intento",
     "attempts_other": "{{count}} intentos",
-    "retryNow": "Reintentar ahora",
     "watching": "El barrido de reintentos automáticos vigila esta canción"
   }
 }

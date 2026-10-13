@@ -104,12 +104,7 @@ export function RequestDetailTracks({
       {
         key: "status",
         header: t("tracks.statusHeader"),
-        cell: (track) => (
-          <TrackStatusCell
-            track={track}
-            onRetryNow={canAct ? () => retryTrack.mutate({ trackId: track.id }) : undefined}
-          />
-        ),
+        cell: (track) => <TrackStatusCell track={track} />,
         className: "w-56",
       },
       {

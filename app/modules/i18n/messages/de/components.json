@@ -78,7 +78,6 @@
     "nextAttempt": "Nächster Versuch {{time}}",
     "attempts_one": "{{count}} Versuch",
     "attempts_other": "{{count}} Versuche",
-    "retryNow": "Jetzt wiederholen",
     "watching": "Der automatische Wiederholungslauf beobachtet diesen Titel"
   }
 }

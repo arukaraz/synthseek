@@ -10,7 +10,7 @@ import { trackStatusIndicator, trackStatusLine, trackStatusPercent } from "./sty
 import { TrackSourceInfo } from "./TrackSourceInfo";
 import type { TrackStatusCellProps } from "./types";
 
-export function TrackStatusCell({ track, onRetryNow }: TrackStatusCellProps) {
+export function TrackStatusCell({ track }: TrackStatusCellProps) {
   const release = useTrackRelease(track.id);
   const isFailed = track.status === RequestStatus.enum.failed;
   const isDownloading = track.status === RequestStatus.enum.downloading;
@@ -30,7 +30,6 @@ export function TrackStatusCell({ track, onRetryNow }: TrackStatusCellProps) {
         <TrackRetrySchedule
           nextRetryAt={track.watch_enabled ? track.next_retry_at : null}
           retryCount={track.retry_count}
-          onRetryNow={onRetryNow}
           compact
         />
       ) : null}

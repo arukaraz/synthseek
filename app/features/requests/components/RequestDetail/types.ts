@@ -45,7 +45,6 @@ export interface TrackPriorityCellProps {
 
 export interface TrackStatusCellProps {
   track: TrackRequest;
-  onRetryNow?: () => void;
 }
 
 export interface TrackProvenance {
