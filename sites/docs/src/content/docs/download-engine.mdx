@@ -115,7 +115,7 @@ Every failure carries a typed reason.
 | Reason            | Meaning                                                           | Retried automatically                |
 | ----------------- | ----------------------------------------------------------------- | ------------------------------------ |
 | `not_found`       | No source had a matching candidate.                               | Yes                                  |
-| `wrong_file`      | What arrived was a different recording.                           | Yes, with the bad candidate excluded |
+| `wrong_file`      | What arrived was a different recording, or a broken release.      | Yes, with the bad candidate excluded |
 | `import_rejected` | The tagging and filing step refused the file.                     | No                                   |
 | `p2p_failed`      | Peers errored out or never delivered.                             | Yes                                  |
 | `download_failed` | The transfer itself failed.                                       | Yes                                  |
