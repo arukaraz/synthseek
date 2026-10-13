@@ -126,7 +126,7 @@ export function RequestDetailTracks({
             {track.completed_at ? formatRelativeTime(new Date(track.completed_at)) : "-"}
           </span>
         ),
-        className: "hidden w-28 md:table-cell",
+        className: "hidden w-28 lg:table-cell",
       },
       {
         key: "priority",
@@ -151,7 +151,7 @@ export function RequestDetailTracks({
             onUpgrade={() => handleUpgrade(track)}
           />
         ),
-        className: "w-20 text-right",
+        className: "w-24 text-right",
       },
     ],
     [canAct, isAdmin, retryTrack, prioritizeTrack, setWatch, approveTracks, handleCancel, handleUpgrade, t]
