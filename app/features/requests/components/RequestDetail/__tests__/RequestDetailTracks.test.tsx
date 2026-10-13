@@ -220,7 +220,7 @@ describe("RequestDetailTracks", () => {
     );
 
     expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
-    expect(screen.getByText(/2 attempts/)).toBeInTheDocument();
+    expect(screen.queryByText(/2 attempts/)).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Retry now" }));
 

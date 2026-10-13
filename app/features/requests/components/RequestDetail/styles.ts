@@ -2,8 +2,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 export const jspfExportDialogContent = cva("flex w-full max-w-sm flex-col gap-4 p-6");
 
-export const trackStatusCell = cva("flex min-w-0 flex-col gap-0.5");
-
 export const trackStatusLine = cva("flex min-w-0 items-center gap-1.5");
 
 export const trackStatusIndicator = cva("min-w-0");

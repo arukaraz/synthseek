@@ -39,6 +39,33 @@ describe("TrackRetrySchedule", () => {
     expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
   });
 
+  it("keeps the attempt count out of the line when compact, and puts it in the popover behind the clock", async () => {
+    const user = userEvent.setup();
+    render(<TrackRetrySchedule nextRetryAt={inHours(2)} retryCount={3} compact />);
+
+    expect(screen.queryByText("3 attempts")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /watching this track/i }));
+
+    expect(await screen.findByText("3 attempts")).toBeInTheDocument();
+  });
+
+  it("names the attempt count on the history icon when compact and not watched", () => {
+    render(<TrackRetrySchedule nextRetryAt={null} retryCount={2} compact />);
+
+    expect(screen.queryByText("2 attempts")).not.toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "2 attempts" })).toHaveAttribute("title", "2 attempts");
+  });
+
+  it("still offers the retry affordance when compact", async () => {
+    const user = userEvent.setup();
+    const onRetryNow = vi.fn();
+    render(<TrackRetrySchedule nextRetryAt={null} retryCount={1} onRetryNow={onRetryNow} compact />);
+
+    await user.click(screen.getByRole("button", { name: "Retry now" }));
+
+    expect(onRetryNow).toHaveBeenCalledOnce();
+  });
+
   it("omits the retry affordance when no handler is supplied", () => {
     render(<TrackRetrySchedule nextRetryAt={inHours(2)} retryCount={2} />);
 

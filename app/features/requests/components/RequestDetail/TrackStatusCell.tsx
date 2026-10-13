@@ -6,7 +6,7 @@ import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 import { useTrackRelease } from "@hooks/api/queries/useActiveReleases";
 
 import { trackProvenance } from "./helpers";
-import { trackStatusCell, trackStatusIndicator, trackStatusLine, trackStatusPercent } from "./styles";
+import { trackStatusIndicator, trackStatusLine, trackStatusPercent } from "./styles";
 import { TrackSourceInfo } from "./TrackSourceInfo";
 import type { TrackStatusCellProps } from "./types";
 
@@ -19,23 +19,22 @@ export function TrackStatusCell({ track, onRetryNow }: TrackStatusCellProps) {
   const provenance = trackProvenance(track, release);
 
   return (
-    <div className={trackStatusCell()}>
-      <div className={trackStatusLine()}>
-        <TrackStatusIndicator
-          status={isWaitingOnClient ? RequestStatus.enum.pending_download : track.status}
-          failureReason={track.failure_reason}
-          className={trackStatusIndicator()}
-        />
-        {percent !== null ? <span className={trackStatusPercent()}>{percent}%</span> : null}
-        {provenance !== null ? <TrackSourceInfo provenance={provenance} /> : null}
-      </div>
+    <div className={trackStatusLine()}>
+      <TrackStatusIndicator
+        status={isWaitingOnClient ? RequestStatus.enum.pending_download : track.status}
+        failureReason={track.failure_reason}
+        className={trackStatusIndicator()}
+      />
+      {percent !== null ? <span className={trackStatusPercent()}>{percent}%</span> : null}
       {isFailed ? (
         <TrackRetrySchedule
           nextRetryAt={track.watch_enabled ? track.next_retry_at : null}
           retryCount={track.retry_count}
           onRetryNow={onRetryNow}
+          compact
         />
       ) : null}
+      {provenance !== null ? <TrackSourceInfo provenance={provenance} /> : null}
     </div>
   );
 }

@@ -9,16 +9,17 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@compo
 
 import { formatTimeUntil } from "@utils/formatters";
 
-import { retryNowButton, scheduleFact, scheduleRow, scheduleTrigger } from "./styles";
+import { retryNowButton, scheduleFact, scheduleIcon, scheduleRow, scheduleTrigger } from "./styles";
 import type { TrackRetryScheduleProps } from "./types";
 
-export function TrackRetrySchedule({ nextRetryAt, retryCount, onRetryNow }: TrackRetryScheduleProps) {
+export function TrackRetrySchedule({ nextRetryAt, retryCount, onRetryNow, compact = false }: TrackRetryScheduleProps) {
   const { t } = useTranslation("components");
   const [scheduleOpen, setScheduleOpen] = useState(false);
 
   if (!nextRetryAt && retryCount <= 0) return null;
 
   const retryNowLabel = t("trackRetrySchedule.retryNow");
+  const attemptsLabel = retryCount > 0 ? t("trackRetrySchedule.attempts", { count: retryCount }) : null;
 
   return (
     <div className={scheduleRow()}>
@@ -32,14 +33,17 @@ export function TrackRetrySchedule({ nextRetryAt, retryCount, onRetryNow }: Trac
           <PopoverContent side="top">
             <p>{t("trackRetrySchedule.watching")}</p>
             <p>{t("trackRetrySchedule.nextAttempt", { time: formatTimeUntil(new Date(nextRetryAt)) })}</p>
+            {compact && attemptsLabel !== null ? <p>{attemptsLabel}</p> : null}
           </PopoverContent>
         </Popover>
+      ) : compact && attemptsLabel !== null ? (
+        <span role="img" aria-label={attemptsLabel} title={attemptsLabel} className={scheduleIcon()}>
+          <History className="size-3.5" aria-hidden />
+        </span>
       ) : (
         <History className="size-3.5 shrink-0" aria-hidden />
       )}
-      {retryCount > 0 ? (
-        <span className={scheduleFact()}>{t("trackRetrySchedule.attempts", { count: retryCount })}</span>
-      ) : null}
+      {!compact && attemptsLabel !== null ? <span className={scheduleFact()}>{attemptsLabel}</span> : null}
       {onRetryNow ? (
         <TooltipProvider delayDuration={150}>
           <Tooltip>

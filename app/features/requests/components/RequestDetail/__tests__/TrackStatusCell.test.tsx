@@ -174,7 +174,7 @@ describe("TrackStatusCell", () => {
     expect(screen.getByRole("button", { name: /watching this track/i })).toBeInTheDocument();
   });
 
-  it("surfaces the attempt count next to the schedule", () => {
+  it("keeps a failed track on one line, with the attempt count behind the schedule", async () => {
     render(
       <TrackStatusCell
         track={makeRequestsTrack({
@@ -186,7 +186,9 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.getByText(/3 attempts/)).toBeInTheDocument();
+    expect(screen.queryByText("3 attempts")).not.toBeInTheDocument();
+    await userEvent.setup().click(screen.getByRole("button", { name: /watching this track/i }));
+    expect(await screen.findByText("3 attempts")).toBeInTheDocument();
   });
 
   it("still surfaces the attempt count on a failed track with watching disabled", () => {
@@ -202,7 +204,7 @@ describe("TrackStatusCell", () => {
     );
 
     expect(screen.queryByText(/Next attempt/)).not.toBeInTheDocument();
-    expect(screen.getByText(/2 attempts/)).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "2 attempts" })).toBeInTheDocument();
   });
 
   it("shows no schedule on a non-failed watched track", () => {
