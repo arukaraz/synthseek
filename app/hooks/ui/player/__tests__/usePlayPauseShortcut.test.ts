@@ -71,16 +71,41 @@ describe("usePlayPauseShortcut", () => {
     expect(togglePlay).not.toHaveBeenCalled();
   });
 
-  it("ignores a held key, a modifier, and a Space another handler already took", () => {
+  it("keeps the focused element's own Space handler from running, as a menu trigger or a card would open", () => {
+    const togglePlay = vi.fn();
+    const ownHandler = vi.fn();
+    renderHook(() => usePlayPauseShortcut(togglePlay));
+    const trigger = mount("<button type='button' aria-haspopup='menu'>Filter and sort</button>").querySelector(
+      "button"
+    );
+    if (trigger === null) throw new Error("no trigger");
+    trigger.addEventListener("keydown", ownHandler);
+
+    pressSpace(trigger);
+
+    expect(togglePlay).toHaveBeenCalledOnce();
+    expect(ownHandler).not.toHaveBeenCalled();
+  });
+
+  it("leaves Space to an open menu or list, where it picks the option", () => {
     const togglePlay = vi.fn();
     renderHook(() => usePlayPauseShortcut(togglePlay));
-    const taken = mount("<div tabindex='0'></div>").firstElementChild;
-    if (taken === null) throw new Error("no element");
-    taken.addEventListener("keydown", (event) => event.preventDefault());
+    const host = mount(
+      "<div role='menu'><div role='menuitemradio' tabindex='0'>Done</div></div><div role='listbox'><div role='option' tabindex='0'>A</div></div>"
+    );
+
+    host.querySelectorAll("[tabindex]").forEach((item) => pressSpace(item));
+
+    expect(togglePlay).not.toHaveBeenCalled();
+  });
+
+  it("ignores a held key and a modifier", () => {
+    const togglePlay = vi.fn();
+    renderHook(() => usePlayPauseShortcut(togglePlay));
 
     pressSpace(document.body, { repeat: true });
     pressSpace(document.body, { ctrlKey: true });
-    pressSpace(taken);
+    pressSpace(document.body, { metaKey: true });
 
     expect(togglePlay).not.toHaveBeenCalled();
   });

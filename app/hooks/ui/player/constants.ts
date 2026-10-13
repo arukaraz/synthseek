@@ -294,4 +294,4 @@ export const NON_TEXT_INPUT_TYPES: ReadonlySet<string> = new Set([
 ]);
 
 export const TEXT_ENTRY_OR_DIALOG_SELECTOR =
-  '[role="dialog"], [role="alertdialog"], [role="textbox"], [role="combobox"], [role="searchbox"], [contenteditable=""], [contenteditable="true"], [contenteditable="plaintext-only"]';
+  '[role="dialog"], [role="alertdialog"], [role="menu"], [role="listbox"], [role="textbox"], [role="combobox"], [role="searchbox"], [contenteditable=""], [contenteditable="true"], [contenteditable="plaintext-only"]';
