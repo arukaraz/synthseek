@@ -52,7 +52,7 @@ const initial: YtdlpCardProps["initial"] = {
   archive: {
     enabled: true,
     priority: 20,
-    collections: { netlabels: true, etree: false },
+    collections: { netlabels: true, etree: false, community: false },
     searchTimeout: 30000,
   },
   soundcloud: { enabled: true, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },

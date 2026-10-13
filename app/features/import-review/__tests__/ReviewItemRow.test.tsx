@@ -70,7 +70,7 @@ describe("ReviewItemRow", () => {
     render(<ReviewItemRow item={makeReviewItem()} />);
 
     expect(screen.getByText("peer-copy.flac")).toBeInTheDocument();
-    expect(screen.getByText("Soulseek")).toBeInTheDocument();
+    expect(screen.getByText("Slskd")).toBeInTheDocument();
     expect(screen.getByText("peer-one")).toBeInTheDocument();
     expect(screen.getByText("12.0 MB")).toBeInTheDocument();
   });

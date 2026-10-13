@@ -9,6 +9,25 @@ export interface FilterSortFilterOption<F extends string> {
   count?: number;
 }
 
+export interface FilterSortOptionItemProps {
+  option: FilterSortFilterOption<string>;
+}
+
+export interface FilterSortOrderProps {
+  value: "asc" | "desc";
+  onChange: (v: "asc" | "desc") => void;
+  spaced?: boolean;
+}
+
+export interface FilterSortFilterGroup {
+  id: string;
+  label: string;
+  icon?: LucideIcon;
+  value: string;
+  onChange: (v: string) => void;
+  options: ReadonlyArray<FilterSortFilterOption<string>>;
+}
+
 export interface FilterSortSortOption<S extends string> {
   value: S;
   label: string;
@@ -22,6 +41,7 @@ export interface FilterSortDropdownProps<F extends string, S extends string = st
     sectionLabel?: string;
     sectionIcon?: LucideIcon;
   };
+  filterGroups?: ReadonlyArray<FilterSortFilterGroup>;
   sort?: {
     value: S;
     onChange: (v: S) => void;

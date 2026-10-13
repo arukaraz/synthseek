@@ -48,10 +48,18 @@ export interface TrackStatusCellProps {
   onRetryNow?: () => void;
 }
 
-export interface AcquisitionLineProps {
+export interface TrackProvenance {
   source: string;
-  sourceRef: string | null;
+  ref: string | null;
   license: string | null;
+}
+
+export interface TrackSourceCellProps {
+  track: TrackRequest;
+}
+
+export interface TrackSourceInfoProps {
+  provenance: TrackProvenance;
 }
 
 export interface RequestDetailHeroProps {

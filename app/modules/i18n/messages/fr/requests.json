@@ -40,6 +40,13 @@
     "open": "Ouvrir le filtre",
     "close": "Fermer le filtre"
   },
+  "filterGroup": {
+    "status": "Statut",
+    "source": "Source"
+  },
+  "sourceFilter": {
+    "all": "Toutes"
+  },
   "statusFilter": {
     "all": "Toutes",
     "pending_approval": "En attente d'approbation",
@@ -119,7 +126,9 @@
   "tracks": {
     "trackHeader": "Piste",
     "acquiredFrom": "via {{source}}",
-    "license": "licence",
+    "license": "Licence",
+    "sourceInfo": "D'où vient ce titre",
+    "sourceHeader": "Source",
     "artistHeader": "Artiste",
     "statusHeader": "Statut",
     "completedHeader": "Terminée",
@@ -145,14 +154,15 @@
     "fetchingEta": "environ {{minutes}} min restantes",
     "queuedTitle": "En file pour {{source}}",
     "queuedDescription": "{{source}} est occupé par d'autres téléchargements. Celui-ci démarre tout seul dès qu'il y a de la place.",
-    "trackFetching": "Avec l'album par {{source}} · {{percent}} %",
-    "trackQueued": "Album en file pour {{source}}",
     "sidebarFetching": "Téléchargement de l'album par {{source}} · {{percent}} %",
     "sidebarQueued": "En file pour {{source}}",
     "keptTitle": "Album conservé sur le disque",
     "keptMeta": "{{source}} · {{size}} · expire {{when}}",
     "keptReuse": "Relancer une piste le réutilise.",
-    "keptDelete": "Supprimer maintenant"
+    "keptDelete": "Supprimer maintenant",
+    "keptInfoLabel": "Qu'est-ce qu'un album conservé ?",
+    "keptInfo": "Après avoir téléchargé cet album, Synthseek en garde une copie pendant un moment, pour qu'une nouvelle tentative sur un titre ne retélécharge pas tout l'album. La copie est supprimée d'elle-même à son expiration.",
+    "keptInfoDelete": "Supprimer maintenant n'efface que cette copie. Les morceaux déjà dans votre bibliothèque et cette demande restent tels quels."
   },
   "export": {
     "dialogTitle": "Exporter (compatibilité maximale)",

@@ -272,7 +272,7 @@
       }
     },
     "source": {
-      "slskd": "Soulseek",
+      "slskd": "Slskd",
       "ytdlp": "YouTube",
       "usenet": "Usenet",
       "archive": "Internet Archive",
@@ -616,7 +616,7 @@
   },
   "archive": {
     "title": "Internet Archive",
-    "description": "Free, openly licensed music from the Internet Archive. Used when higher-priority sources cannot deliver a track.",
+    "description": "Free music from the Internet Archive. Used when higher-priority sources cannot deliver a track.",
     "enable": {
       "label": "Enable",
       "description": "When on, tracks the other sources cannot deliver are looked for in the collections below.",
@@ -631,6 +631,11 @@
       "label": "Live recordings",
       "description": "Concerts by bands that allow taping. Rarely the studio version of a track.",
       "ariaLabel": "Search live recordings"
+    },
+    "community": {
+      "label": "Community uploads",
+      "description": "Music anyone uploaded, searched only when the collections above find nothing. Nobody checks the rights, and the licence is whatever the uploader claims.",
+      "ariaLabel": "Search community uploads"
     },
     "noCollection": "Turn on at least one collection, or this source stays idle.",
     "searchTimeout": {

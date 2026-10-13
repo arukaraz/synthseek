@@ -22,7 +22,7 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
   if (!draft) return null;
 
   const { collections } = draft;
-  const noCollection = draft.enabled && !collections.netlabels && !collections.etree;
+  const noCollection = draft.enabled && !Object.values(collections).some(Boolean);
 
   return (
     <SettingsCard title={t("archive.title")} optional description={t("archive.description")}>
@@ -58,6 +58,18 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
             checked={collections.etree}
             onCheckedChange={(v) => setField("collections", { ...collections, etree: v })}
             aria-label={t("archive.etree.ariaLabel")}
+          />
+        }
+      />
+
+      <EngineRow
+        label={t("archive.community.label")}
+        description={t("archive.community.description")}
+        control={
+          <Switch
+            checked={collections.community}
+            onCheckedChange={(v) => setField("collections", { ...collections, community: v })}
+            aria-label={t("archive.community.ariaLabel")}
           />
         }
       />

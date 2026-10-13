@@ -172,7 +172,7 @@
         },
         "archive": {
           "label": "Internet Archive",
-          "description": "Música gratuita y con licencia libre de las colecciones que permitiste."
+          "description": "Música gratuita de las colecciones que permitiste."
         },
         "orderHint": "Las fuentes se intentan de arriba abajo. Desmarca una para saltártela.",
         "moveUp": "Subir {{source}}",

@@ -40,6 +40,13 @@
     "open": "Abrir filtro",
     "close": "Cerrar filtro"
   },
+  "filterGroup": {
+    "status": "Estado",
+    "source": "Fuente"
+  },
+  "sourceFilter": {
+    "all": "Todas"
+  },
   "statusFilter": {
     "all": "Todas",
     "pending_approval": "Esperando aprobación",
@@ -119,7 +126,9 @@
   "tracks": {
     "trackHeader": "Canción",
     "acquiredFrom": "vía {{source}}",
-    "license": "licencia",
+    "license": "Licencia",
+    "sourceInfo": "De dónde viene esta pista",
+    "sourceHeader": "Fuente",
     "artistHeader": "Artista",
     "statusHeader": "Estado",
     "completedHeader": "Completada",
@@ -145,14 +154,15 @@
     "fetchingEta": "faltan unos {{minutes}} min",
     "queuedTitle": "En fila para {{source}}",
     "queuedDescription": "{{source}} está ocupado con otras descargas. Esta empieza sola en cuanto tenga hueco.",
-    "trackFetching": "Con el álbum por {{source}} · {{percent}}%",
-    "trackQueued": "Álbum en fila para {{source}}",
     "sidebarFetching": "Descargando el álbum por {{source}} · {{percent}}%",
     "sidebarQueued": "En fila para {{source}}",
     "keptTitle": "Álbum guardado en disco",
     "keptMeta": "{{source}} · {{size}} · caduca {{when}}",
     "keptReuse": "Reintentar una pista lo reutiliza.",
-    "keptDelete": "Borrar ahora"
+    "keptDelete": "Borrar ahora",
+    "keptInfoLabel": "¿Qué es un álbum guardado?",
+    "keptInfo": "Después de descargar este álbum, Synthseek guarda una copia un tiempo, para que reintentar una pista no vuelva a descargar el álbum entero. La copia se borra sola cuando caduca.",
+    "keptInfoDelete": "Borrar ahora solo elimina esa copia. Las canciones que ya están en tu biblioteca y esta solicitud se quedan como están."
   },
   "export": {
     "dialogTitle": "Exportar (máxima compatibilidad)",

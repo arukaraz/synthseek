@@ -43,7 +43,12 @@ const initial: SoundcloudCardProps["initial"] = {
     singleTrackRequests: false,
     stagingRetentionHours: 24,
   },
-  archive: { enabled: false, priority: 20, collections: { netlabels: true, etree: false }, searchTimeout: 30000 },
+  archive: {
+    enabled: false,
+    priority: 20,
+    collections: { netlabels: true, etree: false, community: false },
+    searchTimeout: 30000,
+  },
   soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
   subsonic: { enabled: false, priority: 2, url: "", username: "", password: "", apiKey: "", searchTimeout: 30000 },
   torrent: createMockSettings().downloadSources.torrent,

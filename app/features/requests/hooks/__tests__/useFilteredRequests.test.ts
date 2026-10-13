@@ -278,6 +278,32 @@ describe("useFilteredRequests search filter", () => {
     expect(result.current.map((item) => item.id)).toEqual(["match"]);
   });
 
+  it("keeps only the requests the server reported for the chosen source, together with the status filter", () => {
+    const fromTorrent = makeRequest({ id: "torrent-album", status: "complete" });
+    const failedFromTorrent = makeRequest({ id: "torrent-failed", status: "failed" });
+    const elsewhere = makeRequest({ id: "other-album", status: "complete" });
+
+    const { result } = renderHook(() =>
+      useFilteredRequests([fromTorrent, failedFromTorrent, elsewhere], "done", recentDesc, "", undefined, [
+        "torrent-album",
+        "torrent-failed",
+      ])
+    );
+
+    expect(result.current.map((item) => item.id)).toEqual(["torrent-album"]);
+  });
+
+  it("shows nothing for a source no request came from, and everything when no source is chosen", () => {
+    const first = makeRequest({ id: "first" });
+    const second = makeRequest({ id: "second" });
+
+    const none = renderHook(() => useFilteredRequests([first, second], "all", recentDesc, "", undefined, []));
+    const all = renderHook(() => useFilteredRequests([first, second], "all", recentDesc, "", undefined, null));
+
+    expect(none.result.current).toEqual([]);
+    expect(all.result.current).toHaveLength(2);
+  });
+
   it("drops every request when the query matches no name, artist or reported track title", () => {
     const first = makeRequest({ id: "first", name: "Album", credited_artist: "Artist" });
     const second = makeRequest({ id: "second", name: "Album", credited_artist: "Artist" });

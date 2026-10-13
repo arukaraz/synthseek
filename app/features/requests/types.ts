@@ -1,7 +1,14 @@
-import { ACTIVE_STATUSES, RequestStatus, UNRESOLVED_STATUSES, type AppRouter } from "@api/__generated__/types";
+import {
+  ACTIVE_STATUSES,
+  DownloadSourceKey,
+  RequestStatus,
+  UNRESOLVED_STATUSES,
+  type AppRouter,
+} from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
 
 export type StatusFilter = "all" | "pending_approval" | "active" | "done" | "failed";
+export type SourceFilter = "all" | DownloadSourceKey;
 
 export enum SortField {
   RECENT = "recent",
@@ -12,11 +19,14 @@ export enum SortField {
 export type SortDirection = "asc" | "desc";
 
 export const STATUS_FILTERS: readonly StatusFilter[] = ["all", "pending_approval", "active", "done", "failed"];
+export const SOURCE_FILTERS: readonly SourceFilter[] = ["all", ...DownloadSourceKey.options];
+const DEFAULT_SOURCE_FILTER: SourceFilter = "all";
 export const SORT_FIELD_VALUES: readonly SortField[] = Object.values(SortField);
 export const SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"];
 
 export const REQUESTS_URL_PARAMS = {
   filter: { defaultValue: "all" as StatusFilter, validValues: STATUS_FILTERS },
+  source: { defaultValue: DEFAULT_SOURCE_FILTER, validValues: SOURCE_FILTERS },
   sort: { defaultValue: SortField.RECENT, validValues: SORT_FIELD_VALUES },
   dir: { defaultValue: "desc" as SortDirection, validValues: SORT_DIRECTIONS },
   q: { defaultValue: "" as string },

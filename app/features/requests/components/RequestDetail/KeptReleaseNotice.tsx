@@ -4,6 +4,7 @@ import { HardDrive } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { useRemoveStagedRelease } from "@hooks/api/mutations/settings/useStagedReleases";
 import { useKeptReleases } from "@hooks/api/queries/useKeptReleases";
 import { useDownloadSourceLabel } from "@hooks/ui/useDownloadSourceLabel";
@@ -13,6 +14,7 @@ import { formatBytes, formatTimeUntil } from "@utils/formatters";
 import {
   keptCardBody,
   keptCardRow,
+  keptInfoTrigger,
   releaseCard,
   releaseCardHeader,
   releaseCardText,
@@ -39,7 +41,17 @@ export function KeptReleaseNotice({ request }: KeptReleaseNoticeProps) {
             <div className={keptCardBody()}>
               <div className={releaseCardHeader()}>
                 <HardDrive className="text-success-vivid" aria-hidden="true" />
-                <span className={releaseCardTitle()}>{t("release.keptTitle")}</span>
+                <span className={releaseCardTitle()}>
+                  {t("release.keptTitle")}
+                  <InfoTooltip
+                    trigger="click"
+                    side="bottom"
+                    triggerLabel={t("release.keptInfoLabel")}
+                    description={t("release.keptInfo")}
+                    secondary={isAdmin ? t("release.keptInfoDelete") : undefined}
+                    className={keptInfoTrigger()}
+                  />
+                </span>
               </div>
               <span className={releaseCardText()}>
                 {t("release.keptMeta", {

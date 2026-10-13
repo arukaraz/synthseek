@@ -3,6 +3,7 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -14,11 +15,15 @@ import { cn } from "@utils/cn";
 import { ArrowDown, ArrowUp, ChevronDown, Filter, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { filterSortCount, filterSortOrderBtn, filterSortOrderRow, filterSortTriggerDefault } from "./styles";
+import { FilterSortOptionItem } from "./FilterSortOptionItem";
+import { FilterSortOrder } from "./FilterSortOrder";
+import { selectedValue } from "./helpers";
+import { filterSortColumn, filterSortColumns, filterSortColumnsContent, filterSortTriggerDefault } from "./styles";
 import type { FilterSortDropdownProps } from "./types";
 
 export function FilterSortDropdown<F extends string, S extends string = string>({
   filter,
+  filterGroups,
   sort,
   direction,
   children,
@@ -57,79 +62,120 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
         </button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align={align} className="min-w-52">
-        {filter && (
-          <>
-            <DropdownMenuLabel className="flex items-center gap-2">
-              <FilterSectionIcon className="size-3" />
-              {filter.sectionLabel ?? t("filterSort.filterLabel", { defaultValue: "Filter" })}
-            </DropdownMenuLabel>
-            <DropdownMenuRadioGroup value={filter.value} onValueChange={(v) => filter.onChange(v as F)}>
-              {filter.options.map((option) => {
-                const Icon = option.icon;
-                return (
+      {filterGroups && filterGroups.length > 0 ? (
+        <DropdownMenuContent align={align} className={filterSortColumnsContent()}>
+          <div className={filterSortColumns()}>
+            {filterGroups.map((group) => {
+              const GroupIcon = group.icon ?? Filter;
+              return (
+                <DropdownMenuGroup key={group.id} aria-label={group.label} className={filterSortColumn()}>
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    <GroupIcon className="size-3" />
+                    {group.label}
+                  </DropdownMenuLabel>
+                  <DropdownMenuRadioGroup value={group.value} onValueChange={group.onChange}>
+                    {group.options.map((option) => (
+                      <FilterSortOptionItem key={option.value} option={option} />
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuGroup>
+              );
+            })}
+            {(sort || direction) && (
+              <DropdownMenuGroup className={filterSortColumn()}>
+                {sort && (
+                  <>
+                    <DropdownMenuLabel className="flex items-center gap-2">
+                      <SortSectionIcon className="size-3" />
+                      {sort.sectionLabel ?? t("filterSort.sortLabel", { defaultValue: "Sort by" })}
+                    </DropdownMenuLabel>
+                    <DropdownMenuRadioGroup
+                      value={sort.value}
+                      onValueChange={(v) => {
+                        const next = selectedValue(sort.options, v);
+                        if (next !== null) sort.onChange(next);
+                      }}
+                    >
+                      {sort.options.map((option) => (
+                        <DropdownMenuRadioItem key={option.value} value={option.value}>
+                          {option.label}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </>
+                )}
+                {direction && <FilterSortOrder value={direction.value} onChange={direction.onChange} spaced />}
+              </DropdownMenuGroup>
+            )}
+          </div>
+          {children && (
+            <>
+              <DropdownMenuSeparator />
+              {children}
+            </>
+          )}
+        </DropdownMenuContent>
+      ) : (
+        <DropdownMenuContent align={align} className="min-w-52">
+          {filter && (
+            <>
+              <DropdownMenuLabel className="flex items-center gap-2">
+                <FilterSectionIcon className="size-3" />
+                {filter.sectionLabel ?? t("filterSort.filterLabel", { defaultValue: "Filter" })}
+              </DropdownMenuLabel>
+              <DropdownMenuRadioGroup
+                value={filter.value}
+                onValueChange={(v) => {
+                  const next = selectedValue(filter.options, v);
+                  if (next !== null) filter.onChange(next);
+                }}
+              >
+                {filter.options.map((option) => (
+                  <FilterSortOptionItem key={option.value} option={option} />
+                ))}
+              </DropdownMenuRadioGroup>
+            </>
+          )}
+
+          {sort && (
+            <>
+              {filter && <DropdownMenuSeparator />}
+              <DropdownMenuLabel className="flex items-center gap-2">
+                <SortSectionIcon className="size-3" />
+                {sort.sectionLabel ?? t("filterSort.sortLabel", { defaultValue: "Sort by" })}
+              </DropdownMenuLabel>
+              <DropdownMenuRadioGroup
+                value={sort.value}
+                onValueChange={(v) => {
+                  const next = selectedValue(sort.options, v);
+                  if (next !== null) sort.onChange(next);
+                }}
+              >
+                {sort.options.map((option) => (
                   <DropdownMenuRadioItem key={option.value} value={option.value}>
-                    {Icon && <Icon className={cn("mr-2 size-3.5", option.iconClassName)} />}
-                    <span className="flex-1">{option.label}</span>
-                    {option.count !== undefined && <span className={filterSortCount()}>{option.count}</span>}
+                    {option.label}
                   </DropdownMenuRadioItem>
-                );
-              })}
-            </DropdownMenuRadioGroup>
-          </>
-        )}
+                ))}
+              </DropdownMenuRadioGroup>
+            </>
+          )}
 
-        {sort && (
-          <>
-            {filter && <DropdownMenuSeparator />}
-            <DropdownMenuLabel className="flex items-center gap-2">
-              <SortSectionIcon className="size-3" />
-              {sort.sectionLabel ?? t("filterSort.sortLabel", { defaultValue: "Sort by" })}
-            </DropdownMenuLabel>
-            <DropdownMenuRadioGroup value={sort.value} onValueChange={(v) => sort.onChange(v as S)}>
-              {sort.options.map((option) => (
-                <DropdownMenuRadioItem key={option.value} value={option.value}>
-                  {option.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </>
-        )}
+          {direction && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>{t("filterSort.orderLabel", { defaultValue: "Order" })}</DropdownMenuLabel>
+              <FilterSortOrder value={direction.value} onChange={direction.onChange} />
+            </>
+          )}
 
-        {direction && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>{t("filterSort.orderLabel", { defaultValue: "Order" })}</DropdownMenuLabel>
-            <div className={filterSortOrderRow()}>
-              <button
-                type="button"
-                aria-pressed={direction.value === "asc"}
-                onClick={() => direction.onChange("asc")}
-                className={filterSortOrderBtn({ active: direction.value === "asc" })}
-              >
-                <ArrowUp className="size-3" />
-                {t("filterSort.ascending", { defaultValue: "Ascending" })}
-              </button>
-              <button
-                type="button"
-                aria-pressed={direction.value === "desc"}
-                onClick={() => direction.onChange("desc")}
-                className={filterSortOrderBtn({ active: direction.value === "desc" })}
-              >
-                <ArrowDown className="size-3" />
-                {t("filterSort.descending", { defaultValue: "Descending" })}
-              </button>
-            </div>
-          </>
-        )}
-
-        {children && (
-          <>
-            <DropdownMenuSeparator />
-            {children}
-          </>
-        )}
-      </DropdownMenuContent>
+          {children && (
+            <>
+              <DropdownMenuSeparator />
+              {children}
+            </>
+          )}
+        </DropdownMenuContent>
+      )}
     </DropdownMenu>
   );
 }

@@ -9,10 +9,16 @@ export function useFilteredRequests(
   statusFilter: StatusFilter,
   sort: SortConfig,
   searchQuery: string,
-  trackTitleMatchIds: string[] | undefined
+  trackTitleMatchIds: string[] | undefined,
+  sourceMatchIds: string[] | null = null
 ): RequestListItem[] {
   return useMemo(() => {
     let filtered = filterRequestsByStatus(items, statusFilter);
+
+    if (sourceMatchIds !== null) {
+      const fromSource = new Set(sourceMatchIds);
+      filtered = filtered.filter((item) => fromSource.has(item.id));
+    }
 
     const terms = searchTerms(searchQuery);
     if (terms.length > 0) {
@@ -37,5 +43,5 @@ export function useFilteredRequests(
           return 0;
       }
     });
-  }, [items, statusFilter, sort, searchQuery, trackTitleMatchIds]);
+  }, [items, statusFilter, sort, searchQuery, trackTitleMatchIds, sourceMatchIds]);
 }

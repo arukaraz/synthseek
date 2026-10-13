@@ -172,7 +172,7 @@
         },
         "archive": {
           "label": "Internet Archive",
-          "description": "Kostenlose, frei lizenzierte Musik aus den Sammlungen, die du erlaubt hast."
+          "description": "Kostenlose Musik aus den Sammlungen, die du erlaubt hast."
         },
         "orderHint": "Quellen werden von oben nach unten versucht. Abwählen überspringt eine.",
         "moveUp": "{{source}} nach oben",

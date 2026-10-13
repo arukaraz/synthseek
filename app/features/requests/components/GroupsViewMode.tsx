@@ -1,7 +1,7 @@
 "use client";
 
 import { SectionLoading } from "@components/ui/SectionLoading";
-import { useTrackRequests, useTrackTitleMatches } from "@hooks/api";
+import { useRequestIdsBySource, useTrackRequests, useTrackTitleMatches } from "@hooks/api";
 import { useDebounce } from "@hooks/ui/useDebounce";
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import { cn } from "@utils/cn";
@@ -19,12 +19,15 @@ export function GroupsViewMode() {
 
   const debouncedSearchQuery = useDebounce(values.q, { delay: 300 });
   const { data: trackTitleMatchIds } = useTrackTitleMatches(debouncedSearchQuery);
+  const sourceKey = values.source === "all" ? null : values.source;
+  const { data: sourceMatchIds } = useRequestIdsBySource(sourceKey);
   const visibleItems = useFilteredRequests(
     items,
     values.filter,
     { field: values.sort, direction: values.dir },
     debouncedSearchQuery,
-    trackTitleMatchIds
+    trackTitleMatchIds,
+    sourceKey === null ? null : (sourceMatchIds ?? [])
   );
   const selected = visibleItems.find((it) => it.external_id === values.selected) ?? null;
 
@@ -55,7 +58,7 @@ export function GroupsViewMode() {
         selectedId={selected?.id ?? null}
         onSelect={handleSelect}
         searchQuery={debouncedSearchQuery}
-        windowKey={`${values.filter}|${values.sort}|${values.dir}|${debouncedSearchQuery}`}
+        windowKey={`${values.filter}|${values.source}|${values.sort}|${values.dir}|${debouncedSearchQuery}`}
         className={cn("h-full w-full md:w-72 md:shrink-0", selected ? "hidden md:flex" : "flex")}
       />
       <div className={cn("h-full flex-1 flex-col overflow-hidden", selected ? "flex" : "hidden md:flex")}>

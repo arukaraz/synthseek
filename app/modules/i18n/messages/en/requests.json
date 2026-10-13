@@ -40,6 +40,13 @@
     "open": "Open filter",
     "close": "Close filter"
   },
+  "filterGroup": {
+    "status": "Status",
+    "source": "Source"
+  },
+  "sourceFilter": {
+    "all": "All"
+  },
   "statusFilter": {
     "all": "All",
     "pending_approval": "Waiting for Approval",
@@ -119,9 +126,11 @@
   "tracks": {
     "trackHeader": "Track",
     "acquiredFrom": "via {{source}}",
-    "license": "licence",
+    "license": "Licence",
+    "sourceInfo": "Where this track comes from",
     "artistHeader": "Artist",
     "statusHeader": "Status",
+    "sourceHeader": "Source",
     "completedHeader": "Completed",
     "actionsHeader": "Actions",
     "priorityHeader": "Priority",
@@ -145,14 +154,15 @@
     "fetchingEta": "about {{minutes}} min left",
     "queuedTitle": "Lined up for {{source}}",
     "queuedDescription": "{{source}} is busy with other downloads. This one starts on its own as soon as it has room.",
-    "trackFetching": "With the album by {{source}} · {{percent}}%",
-    "trackQueued": "Album lined up for {{source}}",
     "sidebarFetching": "Fetching album by {{source}} · {{percent}}%",
     "sidebarQueued": "Lined up for {{source}}",
     "keptTitle": "Album kept on disk",
     "keptMeta": "{{source}} · {{size}} · expires {{when}}",
     "keptReuse": "Retrying a track reuses it.",
-    "keptDelete": "Delete now"
+    "keptDelete": "Delete now",
+    "keptInfoLabel": "What is a kept album?",
+    "keptInfo": "After downloading this album, Synthseek keeps a copy for a while, so retrying a track does not download the whole album again. The copy is removed on its own when it expires.",
+    "keptInfoDelete": "Delete now only removes that copy. The songs already in your library and this request stay as they are."
   },
   "export": {
     "dialogTitle": "Export (max compatibility)",

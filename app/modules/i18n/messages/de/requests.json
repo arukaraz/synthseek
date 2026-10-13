@@ -40,6 +40,13 @@
     "open": "Filter öffnen",
     "close": "Filter schließen"
   },
+  "filterGroup": {
+    "status": "Status",
+    "source": "Quelle"
+  },
+  "sourceFilter": {
+    "all": "Alle"
+  },
   "statusFilter": {
     "all": "Alle",
     "pending_approval": "Wartet auf Freigabe",
@@ -120,6 +127,8 @@
     "trackHeader": "Titel",
     "acquiredFrom": "über {{source}}",
     "license": "Lizenz",
+    "sourceInfo": "Woher dieser Titel kommt",
+    "sourceHeader": "Quelle",
     "artistHeader": "Künstler",
     "statusHeader": "Status",
     "completedHeader": "Abgeschlossen",
@@ -145,14 +154,15 @@
     "fetchingEta": "noch etwa {{minutes}} Min.",
     "queuedTitle": "Wartet auf {{source}}",
     "queuedDescription": "{{source}} ist mit anderen Downloads beschäftigt. Dieser startet von selbst, sobald Platz frei ist.",
-    "trackFetching": "Mit dem Album über {{source}} · {{percent}} %",
-    "trackQueued": "Album wartet auf {{source}}",
     "sidebarFetching": "Album wird über {{source}} geladen · {{percent}} %",
     "sidebarQueued": "Wartet auf {{source}}",
     "keptTitle": "Album auf der Festplatte behalten",
     "keptMeta": "{{source}} · {{size}} · läuft {{when}} ab",
     "keptReuse": "Ein erneuter Versuch für einen Titel nutzt es wieder.",
-    "keptDelete": "Jetzt löschen"
+    "keptDelete": "Jetzt löschen",
+    "keptInfoLabel": "Was ist ein aufbewahrtes Album?",
+    "keptInfo": "Nach dem Download dieses Albums behält Synthseek eine Kopie für eine Weile, damit ein erneuter Versuch für einen Titel nicht das ganze Album noch einmal herunterlädt. Die Kopie wird von selbst entfernt, wenn sie abläuft.",
+    "keptInfoDelete": "Jetzt löschen entfernt nur diese Kopie. Die Songs in deiner Bibliothek und diese Anfrage bleiben, wie sie sind."
   },
   "export": {
     "dialogTitle": "Exportieren (max. Kompatibilität)",

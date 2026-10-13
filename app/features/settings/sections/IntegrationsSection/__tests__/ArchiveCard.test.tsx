@@ -46,7 +46,7 @@ const initial: ArchiveCardProps["initial"] = {
   archive: {
     enabled: true,
     priority: 20,
-    collections: { netlabels: true, etree: false },
+    collections: { netlabels: true, etree: false, community: false },
     searchTimeout: 30000,
   },
   soundcloud: { enabled: true, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },
@@ -68,6 +68,22 @@ describe("ArchiveCard", () => {
     expect(screen.getByRole("switch", { name: t.enable.ariaLabel })).toBeChecked();
     expect(screen.getByRole("switch", { name: t.netlabels.ariaLabel })).toBeChecked();
     expect(screen.getByRole("switch", { name: t.etree.ariaLabel })).not.toBeChecked();
+    expect(screen.getByRole("switch", { name: t.community.ariaLabel })).not.toBeChecked();
+  });
+
+  it("saves community uploads turned on without touching the other collections", async () => {
+    render(<ArchiveCard initial={initial} />);
+
+    await userEvent.click(screen.getByRole("switch", { name: t.community.ariaLabel }));
+    await save();
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({
+          archive: { ...initial.archive, collections: { netlabels: true, etree: false, community: true } },
+        })
+      );
+    });
   });
 
   it("saves a collection change alongside every unchanged sibling source", async () => {
@@ -81,7 +97,7 @@ describe("ArchiveCard", () => {
         slskd: initial.slskd,
         ytdlp: initial.ytdlp,
         usenet: initial.usenet,
-        archive: { ...initial.archive, collections: { netlabels: true, etree: true } },
+        archive: { ...initial.archive, collections: { netlabels: true, etree: true, community: false } },
         soundcloud: initial.soundcloud,
         subsonic: initial.subsonic,
         torrent: initial.torrent,
@@ -113,10 +129,23 @@ describe("ArchiveCard", () => {
     expect(screen.getByText(t.noCollection)).toBeInTheDocument();
   });
 
+  it("counts community uploads as a collection that keeps the source working", async () => {
+    render(<ArchiveCard initial={initial} />);
+
+    await userEvent.click(screen.getByRole("switch", { name: t.community.ariaLabel }));
+    await userEvent.click(screen.getByRole("switch", { name: t.netlabels.ariaLabel }));
+
+    expect(screen.queryByText(t.noCollection)).not.toBeInTheDocument();
+  });
+
   it("does not warn about collections while the source is off", () => {
     const off = {
       ...initial,
-      archive: { ...initial.archive, enabled: false, collections: { netlabels: false, etree: false } },
+      archive: {
+        ...initial.archive,
+        enabled: false,
+        collections: { netlabels: false, etree: false, community: false },
+      },
     };
 
     render(<ArchiveCard initial={off} />);

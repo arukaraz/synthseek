@@ -80,6 +80,29 @@ describe("KeptReleaseNotice", () => {
     expect(state.remove).toHaveBeenCalledWith({ id: "staged-1" });
   });
 
+  it("explains the kept album on click, and tells an admin that deleting it keeps the songs and the request", async () => {
+    state.kept = [entry()];
+    state.isAdmin = true;
+    const user = userEvent.setup();
+
+    render(<KeptReleaseNotice request={makeRequestListItem()} />);
+    await user.click(screen.getByRole("button", { name: "What is a kept album?" }));
+
+    expect(await screen.findByText(/Synthseek keeps a copy for a while/)).toBeInTheDocument();
+    expect(screen.getByText(/The songs already in your library and this request stay/)).toBeInTheDocument();
+  });
+
+  it("explains the kept album to someone who cannot delete it, without mentioning the button", async () => {
+    state.kept = [entry()];
+    const user = userEvent.setup();
+
+    render(<KeptReleaseNotice request={makeRequestListItem()} />);
+    await user.click(screen.getByRole("button", { name: "What is a kept album?" }));
+
+    expect(await screen.findByText(/Synthseek keeps a copy for a while/)).toBeInTheDocument();
+    expect(screen.queryByText(/Delete now only removes that copy/)).not.toBeInTheDocument();
+  });
+
   it("disables the button while a delete is on its way", () => {
     state.kept = [entry()];
     state.isAdmin = true;

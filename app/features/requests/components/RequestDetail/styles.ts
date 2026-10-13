@@ -2,13 +2,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 export const jspfExportDialogContent = cva("flex w-full max-w-sm flex-col gap-4 p-6");
 
-export const acquisitionRow = cva("flex min-w-0 flex-wrap items-baseline gap-x-2");
+export const trackStatusCell = cva("flex min-w-0 flex-col gap-0.5");
 
-export const acquisitionLine = cva("text-fg/50 max-w-full truncate text-xs");
+export const trackStatusLine = cva("flex min-w-0 items-center gap-1.5");
 
-export const acquisitionLicense = cva(
-  "text-fg/50 hover:text-fg/80 shrink-0 text-xs underline underline-offset-2 transition-colors"
+export const trackStatusIndicator = cva("min-w-0");
+
+export const trackStatusPercent = cva("text-fg/50 shrink-0 text-xs tabular-nums");
+
+export const trackSourceInfo = cva("xl:hidden");
+
+export const trackSource = cva("flex min-w-0 items-center gap-1.5");
+
+export const trackSourceLabel = cva("text-fg/60 min-w-0 truncate text-xs");
+
+export const trackSourceLicense = cva(
+  "text-fg/40 hover:text-fg/80 focus-visible:text-fg/80 shrink-0 rounded outline-none transition-colors"
 );
+
+export const trackSourceEmpty = cva("text-fg/40 text-xs");
 
 export const detailContainer = cva("h-full overflow-y-auto", {
   variants: {},
@@ -258,7 +270,7 @@ export const keptCardRow = cva("flex flex-wrap items-center gap-3");
 
 export const keptCardBody = cva("flex min-w-0 flex-1 flex-col gap-0.5");
 
-export const releaseTrackLine = cva("text-fg/50 text-xs leading-snug");
+export const keptInfoTrigger = cva("ml-1.5 align-middle");
 
 export const tracksLoadFailed = cva("flex min-h-40 flex-col items-center justify-center gap-3 p-6 text-center");
 

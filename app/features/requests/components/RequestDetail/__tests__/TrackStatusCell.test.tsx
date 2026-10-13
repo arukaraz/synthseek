@@ -38,45 +38,55 @@ beforeEach(() => {
   releaseState.askedFor = [];
 });
 
+const SOURCE_INFO = "Where this track comes from";
+
 describe("TrackStatusCell, with the album its track is fetched with", () => {
-  it("says the track comes with the album and how far the album has got", () => {
+  it("shows how far the album has got on the status line itself", () => {
     releaseState.current = release();
 
     render(<TrackStatusCell track={makeRequestsTrack({ id: "track-1", status: RequestStatus.enum.downloading })} />);
 
-    expect(screen.getByTestId("track-release-line")).toHaveTextContent("With the album by Torrent · 62%");
     expect(screen.getByText("Downloading")).toBeInTheDocument();
+    expect(screen.getByText("62%")).toBeInTheDocument();
     expect(releaseState.askedFor).toContain("track-1");
   });
 
-  it("calls a track waiting in its client's queue waiting rather than downloading", () => {
+  it("calls a track waiting in its client's queue waiting rather than downloading, with no percentage", () => {
     releaseState.current = release({ state: "queued" });
 
     render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.downloading })} />);
 
-    expect(screen.getByTestId("track-release-line")).toHaveTextContent("Album lined up for Torrent");
     expect(screen.getByText("Pending Download")).toBeInTheDocument();
     expect(screen.queryByText("Downloading")).not.toBeInTheDocument();
+    expect(screen.queryByText(/%$/)).not.toBeInTheDocument();
   });
 
-  it("keeps a track that already left the album phase on its own status", () => {
-    releaseState.current = release({ state: "queued" });
+  it("keeps a track that already left the album phase on its own status, without the album's percentage", () => {
+    releaseState.current = release();
 
     render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.importing })} />);
 
     expect(screen.getByText("Importing")).toBeInTheDocument();
+    expect(screen.queryByText("62%")).not.toBeInTheDocument();
   });
 
-  it("drops the album line once the track is complete or failed", () => {
+  it("names the album's source in the details beside the status", async () => {
     releaseState.current = release();
 
-    const { rerender } = render(
-      <TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.complete, acquisition_source: null })} />
-    );
-    expect(screen.queryByTestId("track-release-line")).not.toBeInTheDocument();
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.downloading })} />);
+    await userEvent.setup().click(screen.getByRole("button", { name: SOURCE_INFO }));
 
-    rerender(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.failed })} />);
-    expect(screen.queryByTestId("track-release-line")).not.toBeInTheDocument();
+    expect(await screen.findByText("via Torrent")).toBeInTheDocument();
+    expect(screen.getByText("Artist - Album")).toBeInTheDocument();
+  });
+
+  it("drops the album's percentage and details once the track failed", () => {
+    releaseState.current = release();
+
+    render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.failed })} />);
+
+    expect(screen.queryByText("62%")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: SOURCE_INFO })).not.toBeInTheDocument();
   });
 });
 
@@ -89,21 +99,7 @@ describe("TrackStatusCell", () => {
     expect(container.firstChild).not.toBeNull();
   });
 
-  it("says which source a completed track came from, with what it was called there on hover", () => {
-    render(
-      <TrackStatusCell
-        track={makeRequestsTrack({
-          status: RequestStatus.enum.complete,
-          acquisition_source: "usenet",
-          acquisition_ref: "Artist - Album [FLAC]",
-        })}
-      />
-    );
-
-    expect(screen.getByText("via Usenet")).toHaveAttribute("title", "Artist - Album [FLAC]");
-  });
-
-  it("links the licence of a track that came with one, opening it in a new tab", () => {
+  it("keeps the status on one line, with the source and its licence behind the details button", async () => {
     render(
       <TrackStatusCell
         track={makeRequestsTrack({
@@ -115,48 +111,24 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.getByText("via Internet Archive")).toBeInTheDocument();
-    const link = screen.getByRole("link", { name: "licence" });
-    expect(link).toHaveAttribute("href", "http://creativecommons.org/licenses/by-nc-nd/3.0/");
-    expect(link).toHaveAttribute("target", "_blank");
-    expect(link).toHaveAttribute("rel", "noopener noreferrer");
-  });
+    expect(screen.queryByText("via Internet Archive")).not.toBeInTheDocument();
+    await userEvent.setup().click(screen.getByRole("button", { name: SOURCE_INFO }));
 
-  it("shows no licence link for a track without one", () => {
-    render(
-      <TrackStatusCell
-        track={makeRequestsTrack({
-          status: RequestStatus.enum.complete,
-          acquisition_source: "usenet",
-          acquisition_ref: "x",
-        })}
-      />
+    expect(await screen.findByText("via Internet Archive")).toBeInTheDocument();
+    expect(screen.getByText("DWK155/Poldoore_-_02_-_Paradise.mp3")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Licence" })).toHaveAttribute(
+      "href",
+      "http://creativecommons.org/licenses/by-nc-nd/3.0/"
     );
-
-    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("names a source it has no label for by its raw key", () => {
-    render(
-      <TrackStatusCell
-        track={makeRequestsTrack({
-          status: RequestStatus.enum.complete,
-          acquisition_source: "napster",
-          acquisition_ref: null,
-        })}
-      />
-    );
-
-    expect(screen.getByText("via napster")).not.toHaveAttribute("title");
-  });
-
-  it("says nothing about the source of a completed track that predates the record", () => {
+  it("offers no details for a completed track that predates the record", () => {
     render(<TrackStatusCell track={makeRequestsTrack({ status: RequestStatus.enum.complete })} />);
 
-    expect(screen.queryByText(/^via /)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: SOURCE_INFO })).not.toBeInTheDocument();
   });
 
-  it("says nothing about the source of a track that is not complete", () => {
+  it("offers no details for a failed track, whatever source it last tried", () => {
     render(
       <TrackStatusCell
         track={makeRequestsTrack({
@@ -167,7 +139,7 @@ describe("TrackStatusCell", () => {
       />
     );
 
-    expect(screen.queryByText(/^via /)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: SOURCE_INFO })).not.toBeInTheDocument();
   });
 
   it("renders for a failed track carrying a failure reason", () => {

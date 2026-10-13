@@ -12,6 +12,8 @@ const { replace, searchParamsRef, queryState, detailSpy } = vi.hoisted(() => ({
     data: undefined as ReturnType<typeof makeRequestListItem>[] | undefined,
     isLoading: false,
     trackTitleMatchIds: undefined as string[] | undefined,
+    sourceMatchIds: undefined as string[] | undefined,
+    askedSource: [] as Array<string | null>,
   },
   detailSpy: vi.fn(),
 }));
@@ -25,6 +27,10 @@ vi.mock("next/navigation", () => ({
 vi.mock("@hooks/api", () => ({
   useTrackRequests: () => ({ data: queryState.data, isLoading: queryState.isLoading }),
   useTrackTitleMatches: () => ({ data: queryState.trackTitleMatchIds }),
+  useRequestIdsBySource: (source: string | null) => {
+    queryState.askedSource.push(source);
+    return { data: source === null ? undefined : queryState.sourceMatchIds };
+  },
 }));
 
 vi.mock("../RequestDetail/RequestDetail", () => ({
@@ -62,6 +68,8 @@ describe("GroupsViewMode", () => {
     queryState.data = undefined;
     queryState.isLoading = false;
     queryState.trackTitleMatchIds = undefined;
+    queryState.sourceMatchIds = undefined;
+    queryState.askedSource = [];
     setMatchMedia(false);
   });
 
@@ -100,6 +108,36 @@ describe("GroupsViewMode", () => {
     const rows = screen.getAllByTestId("sidebar-request-item");
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent("Album Two");
+  });
+
+  it("shows only the requests the server reports for the source in the url, and asks for no source by default", () => {
+    queryState.data = [
+      makeRequestListItem({ id: "a", external_id: "ext-a", name: "From Torrent" }),
+      makeRequestListItem({ id: "b", external_id: "ext-b", name: "From Slskd" }),
+    ];
+    queryState.sourceMatchIds = ["a"];
+
+    const { unmount } = render(<GroupsViewMode />);
+    expect(screen.getAllByTestId("sidebar-request-item")).toHaveLength(2);
+    expect(queryState.askedSource.at(-1)).toBeNull();
+    unmount();
+
+    searchParamsRef.current = new URLSearchParams("source=torrent");
+    render(<GroupsViewMode />);
+
+    const rows = screen.getAllByTestId("sidebar-request-item");
+    expect(queryState.askedSource.at(-1)).toBe("torrent");
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent("From Torrent");
+  });
+
+  it("shows nothing for a chosen source until the server answers", () => {
+    searchParamsRef.current = new URLSearchParams("source=archive");
+    queryState.data = [makeRequestListItem({ id: "a", external_id: "ext-a" })];
+
+    render(<GroupsViewMode />);
+
+    expect(screen.queryAllByTestId("sidebar-request-item")).toHaveLength(0);
   });
 
   it("drops every request when the server reports no track-title match either", () => {

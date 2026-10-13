@@ -57,7 +57,7 @@ const initial: UsenetCardProps["initial"] = {
   archive: {
     enabled: true,
     priority: 20,
-    collections: { netlabels: true, etree: true },
+    collections: { netlabels: true, etree: true, community: false },
     searchTimeout: 30000,
   },
   soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60000 },

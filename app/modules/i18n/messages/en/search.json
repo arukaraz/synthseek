@@ -172,7 +172,7 @@
         },
         "archive": {
           "label": "Internet Archive",
-          "description": "Free, openly licensed music from the collections you allowed."
+          "description": "Free music from the collections you allowed."
         },
         "orderHint": "Sources are tried top to bottom. Untick one to skip it.",
         "moveUp": "Move {{source}} up",

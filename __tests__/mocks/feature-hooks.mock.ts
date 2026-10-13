@@ -91,7 +91,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
       archive: {
         enabled: false,
         priority: 20,
-        collections: { netlabels: true, etree: false },
+        collections: { netlabels: true, etree: false, community: false },
         searchTimeout: 30,
       },
       soundcloud: { enabled: false, priority: 12, searchResults: 15, maxDurationDeltaSec: 10, searchTimeout: 60 },

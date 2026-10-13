@@ -21,6 +21,7 @@ import { compareByStatus } from "../../helpers";
 import { PriorityCell } from "./PriorityCell";
 import { RejectApprovalDialog } from "./RejectApprovalDialog";
 import { TrackActionsCell } from "./TrackActionsCell";
+import { TrackSourceCell } from "./TrackSourceCell";
 import { TrackStatusCell } from "./TrackStatusCell";
 import { TrackTitleCell } from "./TrackTitleCell";
 import { Button } from "@components/ui/Button";
@@ -110,6 +111,12 @@ export function RequestDetailTracks({
           />
         ),
         className: "w-44",
+      },
+      {
+        key: "source",
+        header: t("tracks.sourceHeader"),
+        cell: (track) => <TrackSourceCell track={track} />,
+        className: "hidden w-36 xl:table-cell",
       },
       {
         key: "completed",

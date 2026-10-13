@@ -272,7 +272,7 @@
       }
     },
     "source": {
-      "slskd": "Soulseek",
+      "slskd": "Slskd",
       "ytdlp": "YouTube",
       "usenet": "Usenet",
       "archive": "Internet Archive",
@@ -616,7 +616,7 @@
   },
   "archive": {
     "title": "Internet Archive",
-    "description": "Musique gratuite sous licence libre provenant de l'Internet Archive. Utilisée quand les sources prioritaires ne trouvent pas un titre.",
+    "description": "Musique gratuite provenant de l'Internet Archive. Utilisée quand les sources prioritaires ne trouvent pas un titre.",
     "enable": {
       "label": "Activer",
       "description": "Si activé, les titres que les autres sources ne trouvent pas sont cherchés dans les collections ci-dessous.",
@@ -631,6 +631,11 @@
       "label": "Enregistrements live",
       "description": "Concerts de groupes qui autorisent l'enregistrement. Rarement la version studio d'un titre.",
       "ariaLabel": "Chercher dans les enregistrements live"
+    },
+    "community": {
+      "label": "Mises en ligne de la communauté",
+      "description": "De la musique mise en ligne par n'importe qui, cherchée seulement quand les collections ci-dessus ne trouvent rien. Personne ne vérifie les droits, et la licence est celle que déclare la personne qui l'a mise en ligne.",
+      "ariaLabel": "Chercher dans les mises en ligne de la communauté"
     },
     "noCollection": "Activez au moins une collection, sinon cette source reste inactive.",
     "searchTimeout": {
