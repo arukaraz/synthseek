@@ -99,7 +99,7 @@ export function RequestDetailTracks({
         key: "artist",
         header: t("tracks.artistHeader"),
         cell: (track) => <span className="block truncate">{track.credited_artist}</span>,
-        className: "hidden lg:table-cell",
+        className: "hidden xl:table-cell",
       },
       {
         key: "status",
@@ -110,7 +110,7 @@ export function RequestDetailTracks({
             onRetryNow={canAct ? () => retryTrack.mutate({ trackId: track.id }) : undefined}
           />
         ),
-        className: "w-44",
+        className: "w-56",
       },
       {
         key: "source",
@@ -132,7 +132,7 @@ export function RequestDetailTracks({
         key: "priority",
         header: t("tracks.priorityHeader"),
         cell: (track) => <PriorityCell track={track} />,
-        className: "w-24",
+        className: "hidden w-24 lg:table-cell",
       },
       {
         key: "actions",
