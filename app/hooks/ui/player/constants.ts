@@ -280,3 +280,18 @@ export const EQUALIZER_PRESETS: Readonly<Record<EqualizerPresetId, readonly numb
   trebleBoost: [0, 0, 0, 0, 0, 0, 2, 4, 6, 8],
   vocal: [-2, -1, 0, 2, 4, 4, 3, 1, 0, -1],
 };
+
+export const NON_TEXT_INPUT_TYPES: ReadonlySet<string> = new Set([
+  "button",
+  "checkbox",
+  "color",
+  "file",
+  "image",
+  "radio",
+  "range",
+  "reset",
+  "submit",
+]);
+
+export const TEXT_ENTRY_OR_DIALOG_SELECTOR =
+  '[role="dialog"], [role="alertdialog"], [role="textbox"], [role="combobox"], [role="searchbox"], [contenteditable=""], [contenteditable="true"], [contenteditable="plaintext-only"]';

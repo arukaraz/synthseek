@@ -5,4 +5,5 @@ export type { PlayerDockState, SourceCount, SourcePick, SourcePickerRequest } fr
 export { applyPlaybackState, applyPlayerCommand } from "./commands";
 export { usePlayerDevices } from "./useDevices";
 export { usePlayerSessionSync } from "./useSessionSync";
+export { usePlayPauseShortcut } from "./usePlayPauseShortcut";
 export { useStartRadio } from "./useStartRadio";

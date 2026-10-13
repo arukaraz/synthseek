@@ -20,8 +20,10 @@ import {
   LOCAL_SOURCE,
   LOSSLESS_FORMATS,
   MAX_QUEUE_TRACKS,
+  NON_TEXT_INPUT_TYPES,
   PLAYBACK_MIME_BY_FORMAT,
   SESSION_POSITION_DRIFT_MS,
+  TEXT_ENTRY_OR_DIALOG_SELECTOR,
   TONES,
 } from "./constants";
 import type { PlaybackTrackSummary } from "@api/__generated__/types";
@@ -552,4 +554,15 @@ export function scrobbleStateFrom(connections: readonly ListeningConnectionStatu
   }
   if (sending.some((connection) => connection.lastFailure === "unavailable")) return "retrying";
   return "sending";
+}
+
+export function isPlayPauseShortcut(event: KeyboardEvent): boolean {
+  if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return false;
+  if (event.key !== " " && event.code !== "Space") return false;
+  const target = event.target;
+  if (!(target instanceof Element)) return true;
+  if (target instanceof HTMLElement && target.isContentEditable) return false;
+  if (target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) return false;
+  if (target instanceof HTMLInputElement && !NON_TEXT_INPUT_TYPES.has(target.type)) return false;
+  return target.closest(TEXT_ENTRY_OR_DIALOG_SELECTOR) === null;
 }
