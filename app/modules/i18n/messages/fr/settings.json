@@ -1765,7 +1765,8 @@
         "retry": "Rechercher à nouveau",
         "retryHelp": "Relancer la recherche. Utile quand l’album est sorti après que vous avez eu les fichiers.",
         "ignore": "Ignorer",
-        "ignoreHelp": "Arrêter de le chercher. Le fichier reste sur votre disque, hors de votre bibliothèque.",
+        "ignoreHelp_one": "Arrêter de le chercher. Le fichier reste sur votre disque, hors de votre bibliothèque.",
+        "ignoreHelp_other": "Arrêter de les chercher. Les fichiers restent sur votre disque, hors de votre bibliothèque.",
         "stopIgnoring": "Ne plus ignorer"
       },
       "toast": {

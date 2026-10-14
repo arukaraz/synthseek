@@ -3,7 +3,7 @@ import type { CssVars } from "@theme/utilities/types";
 import type { ToastClassnames } from "./types";
 
 export const TOAST_CLASS_NAMES: ToastClassnames = {
-  toast: "group",
+  toast: "group pointer-events-auto",
   icon: "shrink-0",
 };
 

@@ -11,5 +11,6 @@ export type DialogContentProps = ComponentProps<typeof DialogPrimitive.Content> 
     overlayClassName?: string;
   };
 export type DialogSurfaceProps = ComponentProps<typeof DialogPrimitive.Content>;
+export type DialogOutsideHandler = NonNullable<DialogSurfaceProps["onInteractOutside"]>;
 export type DialogTitleProps = ComponentProps<typeof DialogPrimitive.Title>;
 export type DialogDescriptionProps = ComponentProps<typeof DialogPrimitive.Description>;

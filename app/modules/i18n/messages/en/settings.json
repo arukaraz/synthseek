@@ -1765,7 +1765,8 @@
         "retry": "Try again",
         "retryHelp": "Search again. Useful when the album came out after you got the files.",
         "ignore": "Ignore",
-        "ignoreHelp": "Stop searching for it. The file stays on your disk, out of your library.",
+        "ignoreHelp_one": "Stop searching for it. The file stays on your disk, out of your library.",
+        "ignoreHelp_other": "Stop searching for them. The files stay on your disk, out of your library.",
         "stopIgnoring": "Stop ignoring"
       },
       "toast": {

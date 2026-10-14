@@ -161,7 +161,7 @@ export function GroupRow({
                   label: multi
                     ? t("libraryScan.review.match.ignoreFiles", { count: group.fileCount })
                     : t("libraryScan.review.actions.ignore"),
-                  help: t("libraryScan.review.actions.ignoreHelp"),
+                  help: t("libraryScan.review.actions.ignoreHelp", { count: group.fileCount }),
                   onSelect: () => onIgnore(groupFileIds(group)),
                 },
               ]}

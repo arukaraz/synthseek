@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import i18n from "@locale";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
@@ -31,6 +32,7 @@ export function useIgnoreUnidentified() {
       refreshReview(utils);
       if (result.ignored === 0) return;
       toast.success(i18n.t("settings:libraryScan.review.toast.ignored", { count: result.ignored }), {
+        duration: TOAST_ACTION_DURATION_MS,
         action: {
           label: i18n.t("settings:libraryScan.review.toast.undo"),
           onClick: () => {

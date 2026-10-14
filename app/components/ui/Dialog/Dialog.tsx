@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import type { HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import { closeButton } from "../styles";
+import { keepOpenForToasts } from "./helpers";
 import { dialogContent } from "./styles";
 import type {
   DialogContentProps,
@@ -41,13 +42,19 @@ export function DialogContent({
   showClose = true,
   animation,
   overlayClassName,
+  onInteractOutside,
   ...props
 }: DialogContentProps) {
   const { t } = useTranslation("components");
   return (
     <DialogPortal>
       <DialogOverlay className={overlayClassName} />
-      <DialogPrimitive.Content ref={ref} className={cn(dialogContent({ animation }), className)} {...props}>
+      <DialogPrimitive.Content
+        ref={ref}
+        className={cn(dialogContent({ animation }), className)}
+        onInteractOutside={keepOpenForToasts(onInteractOutside)}
+        {...props}
+      >
         <div className={gradientOverlay({ direction: "toBr", intensity: "mixed", rounded: "2xl" })} />
 
         <div className="relative z-10 flex h-full flex-col">{children}</div>
@@ -63,10 +70,15 @@ export function DialogContent({
   );
 }
 
-export function DialogSurface({ className, children, ref, ...props }: DialogSurfaceProps) {
+export function DialogSurface({ className, children, ref, onInteractOutside, ...props }: DialogSurfaceProps) {
   return (
     <DialogPortal>
-      <DialogPrimitive.Content ref={ref} className={className} {...props}>
+      <DialogPrimitive.Content
+        ref={ref}
+        className={className}
+        onInteractOutside={keepOpenForToasts(onInteractOutside)}
+        {...props}
+      >
         {children}
       </DialogPrimitive.Content>
     </DialogPortal>

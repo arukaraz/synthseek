@@ -1765,7 +1765,8 @@
         "retry": "Erneut suchen",
         "retryHelp": "Noch einmal suchen. Hilfreich, wenn das Album erst nach deinen Dateien erschienen ist.",
         "ignore": "Ignorieren",
-        "ignoreHelp": "Nicht mehr danach suchen. Die Datei bleibt auf deiner Festplatte, außerhalb deiner Bibliothek.",
+        "ignoreHelp_one": "Nicht mehr danach suchen. Die Datei bleibt auf deiner Festplatte, außerhalb deiner Bibliothek.",
+        "ignoreHelp_other": "Nicht mehr danach suchen. Die Dateien bleiben auf deiner Festplatte, außerhalb deiner Bibliothek.",
         "stopIgnoring": "Nicht mehr ignorieren"
       },
       "toast": {

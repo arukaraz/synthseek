@@ -1768,7 +1768,8 @@
         "retry": "Buscar otra vez",
         "retryHelp": "Vuelve a buscar. Útil cuando el álbum salió después de que tuvieras los archivos.",
         "ignore": "Ignorar",
-        "ignoreHelp": "Deja de buscarlo. El archivo sigue en tu disco, fuera de tu biblioteca.",
+        "ignoreHelp_one": "Deja de buscarlo. El archivo sigue en tu disco, fuera de tu biblioteca.",
+        "ignoreHelp_other": "Deja de buscarlos. Los archivos siguen en tu disco, fuera de tu biblioteca.",
         "stopIgnoring": "Dejar de ignorar"
       },
       "toast": {

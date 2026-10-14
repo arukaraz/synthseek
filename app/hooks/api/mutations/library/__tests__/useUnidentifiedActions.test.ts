@@ -7,6 +7,7 @@ interface MutationOptions {
 }
 
 interface ToastOptions {
+  duration?: number;
   action?: { label: string; onClick: () => void };
 }
 
@@ -63,6 +64,8 @@ vi.mock("@utils/trpc", () => ({
   },
 }));
 
+import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
+
 import { useAssignUnidentified, useIgnoreUnidentified } from "../useUnidentifiedActions";
 
 beforeEach(() => {
@@ -85,6 +88,13 @@ describe("useIgnoreUnidentified", () => {
 
     expect(spies.unignore).toHaveBeenCalledWith({ fileIds: ["a", "b"], searchAgain: false });
     await waitFor(() => expect(spies.invalidateList).toHaveBeenCalledTimes(2));
+  });
+
+  it("keeps the undo on screen long enough to reach it", () => {
+    renderHook(() => useIgnoreUnidentified());
+    spies.captured.ignore?.onSuccess?.({ ignored: 2 }, { fileIds: ["a", "b"] });
+
+    expect(spies.toastSuccess.mock.calls[0]?.[1]?.duration).toBe(TOAST_ACTION_DURATION_MS);
   });
 
   it("reports an undo that failed", async () => {

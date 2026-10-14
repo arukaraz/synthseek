@@ -68,7 +68,7 @@ export function FileRow({ file, tab, busy, onMatchSong, onRetry, onIgnore }: Fil
                   key: "ignore",
                   icon: Ban,
                   label: t("libraryScan.review.actions.ignore"),
-                  help: t("libraryScan.review.actions.ignoreHelp"),
+                  help: t("libraryScan.review.actions.ignoreHelp", { count: 1 }),
                   onSelect: onIgnore,
                 },
               ]}
