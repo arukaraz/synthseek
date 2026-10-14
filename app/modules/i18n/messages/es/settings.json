@@ -1882,7 +1882,7 @@
     "header": {
       "running": "Escaneando",
       "never": "Nunca escaneado",
-      "ago": "hace {{ago}}",
+      "ago": "Ejecutado {{ago}}",
       "identifying": "Identificando"
     }
   },

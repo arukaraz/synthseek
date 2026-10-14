@@ -117,6 +117,15 @@ describe("MatchAlbumPanel", () => {
     );
   });
 
+  it("offers to ignore leftovers only when some file did not match", () => {
+    candidatesQuery = createMockQuery({ candidates: [ESTRUS] });
+    proposalQuery = createMockQuery(proposalWith([proposalFile("f7", "07-im_the_cake.flac", "I'm The Cake", "t7")]));
+
+    render(<MatchAlbumPanel group={GROUP} onBack={vi.fn()} />);
+
+    expect(screen.queryByText(/didn’t match/)).not.toBeInTheDocument();
+  });
+
   it("leaves a file for later when someone takes its song away", () => {
     candidatesQuery = createMockQuery({ candidates: [ESTRUS] });
     proposalQuery = createMockQuery(proposalWith([proposalFile("f7", "07-im_the_cake.flac", "I'm The Cake", "t7")]));

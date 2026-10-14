@@ -221,14 +221,14 @@ export function MatchAlbumPanel({ group, onBack }: MatchAlbumPanelProps) {
           </div>
         ) : (
           <div className={footerActions()}>
-            <label className={checkLabel()}>
-              <Checkbox
-                checked={ignoreLeftover}
-                disabled={leftover.length === 0}
-                onCheckedChange={(checked) => setIgnoreLeftover(checked === true)}
-              />
-              {t("libraryScan.review.match.ignoreLeftover", { count: leftover.length })}
-            </label>
+            {leftover.length > 0 ? (
+              <label className={checkLabel()}>
+                <Checkbox checked={ignoreLeftover} onCheckedChange={(checked) => setIgnoreLeftover(checked === true)} />
+                {t("libraryScan.review.match.ignoreLeftover", { count: leftover.length })}
+              </label>
+            ) : (
+              <span />
+            )}
             <div className={footerButtons()}>
               <Button variant="ghost" size="sm" onClick={onBack}>
                 {t("libraryScan.review.match.cancel")}

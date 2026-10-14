@@ -1879,7 +1879,7 @@
     "header": {
       "running": "Analyse",
       "never": "Jamais analysé",
-      "ago": "il y a {{ago}}",
+      "ago": "Exécuté {{ago}}",
       "identifying": "Identification"
     }
   },

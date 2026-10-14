@@ -1879,7 +1879,7 @@
     "header": {
       "running": "Scannt",
       "never": "Nie gescannt",
-      "ago": "vor {{ago}}",
+      "ago": "Ausgeführt {{ago}}",
       "identifying": "Identifiziert"
     }
   },
