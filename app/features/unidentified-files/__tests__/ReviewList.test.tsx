@@ -66,7 +66,6 @@ function group(overrides: Partial<UnidentifiedGroup> = {}): UnidentifiedGroup {
     fileCount: 2,
     retrying: 0,
     ignoredAt: null,
-    suggestedAlbumId: null,
     files: [file("a", "Roll Over Beethoven"), file("b", "Chains")],
     ...overrides,
   };

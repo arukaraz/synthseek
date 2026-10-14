@@ -46,7 +46,7 @@ export function MatchAlbumPanel({ group, onBack }: MatchAlbumPanelProps) {
   const [artist, setArtist] = useState(group.artist ?? "");
   const [album, setAlbum] = useState(group.album ?? "");
   const [query, setQuery] = useState({ artist: group.artist ?? "", album: group.album ?? "" });
-  const [chosenId, setChosenId] = useState<string | null>(group.suggestedAlbumId);
+  const [chosenId, setChosenId] = useState<string | null>(null);
   const [overrides, setOverrides] = useState<ReadonlyMap<string, string | null>>(new Map());
   const [ignoreLeftover, setIgnoreLeftover] = useState(false);
   const [linkMissed, setLinkMissed] = useState(false);

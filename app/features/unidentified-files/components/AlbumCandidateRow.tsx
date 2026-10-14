@@ -33,9 +33,7 @@ export function AlbumCandidateRow({ candidate, picked, onPick }: AlbumCandidateR
       </span>
       <span className={groupInfo()}>
         <span className={groupTitle()}>{candidate.name}</span>
-        {candidate.suggested ? (
-          <span className={resultHint()}>{t("libraryScan.review.match.pickedLastTime")}</span>
-        ) : null}
+        {candidate.suggested ? <span className={resultHint()}>{t("libraryScan.review.match.sameFolder")}</span> : null}
         <span className={resultLine()}>
           {parts.map((part) => (
             <span key={part}>{part}</span>

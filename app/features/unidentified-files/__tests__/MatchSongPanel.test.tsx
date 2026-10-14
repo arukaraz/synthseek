@@ -48,7 +48,6 @@ const GROUP: UnidentifiedGroup = {
   fileCount: 7,
   retrying: 0,
   ignoredAt: null,
-  suggestedAlbumId: null,
   files: [FILE],
 };
 

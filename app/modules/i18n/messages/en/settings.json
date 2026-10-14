@@ -1797,7 +1797,7 @@
         "songsCount_one": "{{count}} song",
         "songsCount_other": "{{count}} songs",
         "matchCount": "{{matched}} of {{total}} match",
-        "pickedLastTime": "You picked this album last time",
+        "sameFolder": "Other files from this folder are on this album",
         "columns": {
           "file": "Your file",
           "length": "Length",

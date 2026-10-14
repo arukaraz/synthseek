@@ -83,7 +83,6 @@ describe("display helpers", () => {
       fileCount: 2,
       retrying: 0,
       ignoredAt: null,
-      suggestedAlbumId: null,
       files: [],
     };
     expect(groupName(base)).toBe("Some Folder");

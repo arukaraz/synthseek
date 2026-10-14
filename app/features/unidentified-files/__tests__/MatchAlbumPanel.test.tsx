@@ -7,14 +7,22 @@ import { createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
 import type { AlbumCandidate, AlbumProposal, UnidentifiedGroup } from "../types";
 
-const state = vi.hoisted(() => ({ assign: vi.fn(), ignore: vi.fn(), resolve: vi.fn() }));
+const state = vi.hoisted(() => ({
+  assign: vi.fn(),
+  ignore: vi.fn(),
+  resolve: vi.fn(),
+  lastProposalInput: null as unknown,
+}));
 
 let candidatesQuery: MockQueryResult<{ candidates: AlbumCandidate[] } | undefined>;
 let proposalQuery: MockQueryResult<AlbumProposal | undefined>;
 
 vi.mock("@hooks/api/queries/useUnidentifiedFiles", () => ({
   useUnidentifiedAlbumCandidates: () => candidatesQuery,
-  useUnidentifiedAlbumProposal: () => proposalQuery,
+  useUnidentifiedAlbumProposal: (input: unknown) => {
+    state.lastProposalInput = input;
+    return proposalQuery;
+  },
 }));
 
 vi.mock("@hooks/api/mutations/library/useUnidentifiedActions", () => ({
@@ -39,7 +47,6 @@ const GROUP: UnidentifiedGroup = {
   fileCount: 2,
   retrying: 0,
   ignoredAt: null,
-  suggestedAlbumId: null,
   files: [],
 };
 
@@ -141,12 +148,22 @@ describe("MatchAlbumPanel", () => {
     expect(state.ignore).toHaveBeenCalled();
   });
 
-  it("says when it reuses the album picked last time", () => {
+  it("marks the album other files from the folder are on", () => {
     candidatesQuery = createMockQuery({ candidates: [{ ...ESTRUS, suggested: true }] });
     proposalQuery = createMockQuery(proposalWith([]));
 
-    render(<MatchAlbumPanel group={{ ...GROUP, suggestedAlbumId: ESTRUS.id }} onBack={vi.fn()} />);
+    render(<MatchAlbumPanel group={GROUP} onBack={vi.fn()} />);
 
-    expect(screen.getByText("You picked this album last time")).toBeInTheDocument();
+    expect(screen.getByText("Other files from this folder are on this album")).toBeInTheDocument();
+  });
+
+  it("opens on the first album offered, the one the files fit best", () => {
+    const single = { ...ESTRUS, id: "cat-single", name: "des fleurs x stromae", matched: 0, suggested: true };
+    candidatesQuery = createMockQuery({ candidates: [ESTRUS, single] });
+    proposalQuery = createMockQuery(proposalWith([]));
+
+    render(<MatchAlbumPanel group={GROUP} onBack={vi.fn()} />);
+
+    expect(state.lastProposalInput).toEqual(expect.objectContaining({ albumId: ESTRUS.id }));
   });
 });

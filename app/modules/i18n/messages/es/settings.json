@@ -1800,7 +1800,7 @@
         "songsCount_one": "{{count}} canción",
         "songsCount_other": "{{count}} canciones",
         "matchCount": "{{matched}} de {{total}} coinciden",
-        "pickedLastTime": "Elegiste este álbum la última vez",
+        "sameFolder": "Otros archivos de esta carpeta están en este álbum",
         "columns": {
           "file": "Tu archivo",
           "length": "Duración",
