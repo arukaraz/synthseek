@@ -30,6 +30,7 @@ import { DegradedSourcesChip } from "../DegradedSourcesChip";
 import { GenreChips } from "./GenreChips";
 import { HeroPlayButton } from "./HeroPlayButton";
 import { HeroRadioButton } from "./HeroRadioButton";
+import { HeroShuffleButton } from "./HeroShuffleButton";
 import { heroPillVisibility } from "./helpers";
 import { ShareFan } from "./ShareFan";
 import {
@@ -62,6 +63,7 @@ function DetailHeroComponent({
   statsSlot,
   onRequest,
   onPlay,
+  onShuffle,
   onStartRadio,
   onSubtitleClick,
   showRequest = true,
@@ -193,7 +195,7 @@ function DetailHeroComponent({
 
         {statsSlot ? <div className={heroStats()}>{statsSlot}</div> : null}
 
-        {showActions || onPlay || onStartRadio ? (
+        {showActions || onPlay || onShuffle || onStartRadio ? (
           <div className={heroActions()}>
             {showInLibrary ? (
               <TooltipProvider delayDuration={150}>
@@ -222,6 +224,7 @@ function DetailHeroComponent({
               </button>
             ) : null}
             {onPlay ? <HeroPlayButton name={name} onPlay={onPlay} /> : null}
+            {onShuffle ? <HeroShuffleButton name={name} onShuffle={onShuffle} /> : null}
             {onStartRadio ? <HeroRadioButton name={name} onStartRadio={onStartRadio} /> : null}
           </div>
         ) : null}

@@ -1355,7 +1355,14 @@ describe("readying the next track before the current one ends", () => {
     expect(engine.prime).not.toHaveBeenCalled();
 
     engine.handlers?.onProgress(181, 200);
-    expect(engine.prime).toHaveBeenCalledWith({ url: STREAM_B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    expect(engine.prime).toHaveBeenCalledWith({
+      url: STREAM_B,
+      gainFactor: 1,
+      fadeSeconds: 0,
+      curve: "equalPower",
+      leaveAtSeconds: null,
+      enterAtSeconds: 0,
+    });
 
     engine.handlers?.onHandoff(STREAM_B);
 
@@ -1419,7 +1426,67 @@ describe("readying the next track before the current one ends", () => {
     expect(engine.prime).not.toHaveBeenCalled();
 
     engine.handlers?.onProgress(176, 200);
-    expect(engine.prime).toHaveBeenCalledWith({ url: STREAM_B, gainFactor: 1, fadeSeconds: 5, curve: "linear" });
+    expect(engine.prime).toHaveBeenCalledWith({
+      url: STREAM_B,
+      gainFactor: 1,
+      fadeSeconds: 5,
+      curve: "linear",
+      leaveAtSeconds: null,
+      enterAtSeconds: 0,
+    });
+  });
+
+  it("ends a blend where the leaving track's sound ends, and starts the next past its leading silence", async () => {
+    const store = await freshStore();
+    const silence = await import("../silence");
+    silence.rememberSilence([
+      { trackId: "a", leadingSeconds: 0.5, trailingSeconds: 3 },
+      { trackId: "b", leadingSeconds: 1.2, trailingSeconds: 0 },
+    ]);
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "linear" });
+
+    engine.handlers?.onProgress(171, 200);
+    expect(engine.prime).not.toHaveBeenCalled();
+
+    engine.handlers?.onProgress(173, 200);
+    expect(engine.prime).toHaveBeenCalledWith({
+      url: STREAM_B,
+      gainFactor: 1,
+      fadeSeconds: 5,
+      curve: "linear",
+      leaveAtSeconds: 197,
+      enterAtSeconds: 1.2,
+    });
+  });
+
+  it("keeps a gapless seam at the edges of the files, whatever silence was measured", async () => {
+    const store = await freshStore();
+    const silence = await import("../silence");
+    silence.rememberSilence([
+      { trackId: "a", leadingSeconds: 0.5, trailingSeconds: 3 },
+      { trackId: "b", leadingSeconds: 1.2, trailingSeconds: 0 },
+    ]);
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+
+    engine.handlers?.onProgress(181, 200);
+
+    expect(engine.prime).toHaveBeenCalledWith(
+      expect.objectContaining({ fadeSeconds: 0, leaveAtSeconds: null, enterAtSeconds: 0 })
+    );
+  });
+
+  it("asks for the silence of the playing and the next track only while a blend is chosen", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    engine.handlers?.onPlayingChange(true);
+
+    expect(store.silenceCandidates()).toEqual([]);
+
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "linear" });
+    expect(store.silenceCandidates()).toEqual(["a", "b"]);
   });
 
   it("asks for no blend into a track too short to carry one", async () => {
@@ -1427,17 +1494,6 @@ describe("readying the next track before the current one ends", () => {
     store.actions.playQueue([track("a"), track("b", { durationSeconds: 8 })], 0);
     engine.handlers?.onPlayingChange(true);
     store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "linear" });
-
-    engine.handlers?.onProgress(181, 200);
-
-    expect(engine.prime).toHaveBeenCalledWith(expect.objectContaining({ fadeSeconds: 0 }));
-  });
-
-  it("lets a natural end run straight on in smart mode, which blends only a skip", async () => {
-    const store = await freshStore();
-    store.actions.playQueue([track("a"), track("b")], 0);
-    engine.handlers?.onPlayingChange(true);
-    store.actions.setTransition({ mode: "smart", seconds: 5, curve: "linear" });
 
     engine.handlers?.onProgress(181, 200);
 
@@ -1501,11 +1557,31 @@ describe("blending a skip", () => {
     expect(store.getSnapshot().index).toBe(1);
   });
 
-  it("blends a skip in smart mode, and a jump back or into the queue just the same", async () => {
+  it("starts a blended skip past the next track's leading silence", async () => {
+    const store = await freshStore();
+    const silence = await import("../silence");
+    silence.rememberSilence([{ trackId: "b", leadingSeconds: 1.5, trailingSeconds: 0 }]);
+    store.actions.playQueue([track("a"), track("b")], 0);
+    engine.handlers?.onPlayingChange(true);
+    store.actions.setTransition({ mode: "crossfade", seconds: 5, curve: "equalPower" });
+
+    store.actions.next();
+
+    expect(engine.crossfadeTo).toHaveBeenCalledWith(
+      STREAM_B,
+      { seconds: 5, curve: "equalPower", gainFactor: 1 },
+      0.8,
+      false,
+      1.5
+    );
+    expect(store.getSnapshot().positionSeconds).toBe(1.5);
+  });
+
+  it("blends a jump back or into the queue just like a skip forward", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b"), track("c")], 1);
     engine.handlers?.onPlayingChange(true);
-    store.actions.setTransition({ mode: "smart", seconds: 3, curve: "linear" });
+    store.actions.setTransition({ mode: "crossfade", seconds: 3, curve: "linear" });
 
     store.actions.previous();
     expect(engine.crossfadeTo).toHaveBeenLastCalledWith(
@@ -1553,5 +1629,31 @@ describe("blending a skip", () => {
 
     expect(engine.crossfadeTo).not.toHaveBeenCalled();
     expect(engine.loadAndPlay).toHaveBeenLastCalledWith(STREAM_B, 0.8, false, 0);
+  });
+});
+
+describe("shuffling a whole set of tracks", () => {
+  it("turns shuffle on and starts from a track picked at random", async () => {
+    const store = await freshStore();
+    const random = vi.spyOn(Math, "random").mockReturnValue(0.7);
+
+    store.actions.playShuffled([track("a"), track("b"), track("c")]);
+    random.mockRestore();
+
+    const session = store.getSnapshot();
+    expect(session.shuffle).toBe(true);
+    expect(session.index).toBe(2);
+    expect(session.shuffleOrder[0]).toBe(2);
+    expect([...session.shuffleOrder].sort()).toEqual([0, 1, 2]);
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/c/stream", 0.8, false, 0);
+  });
+
+  it("starts nothing for an empty set", async () => {
+    const store = await freshStore();
+
+    store.actions.playShuffled([]);
+
+    expect(store.getSnapshot().shuffle).toBe(false);
+    expect(engine.loadAndPlay).not.toHaveBeenCalled();
   });
 });

@@ -76,7 +76,13 @@ vi.mock("../device", () => ({
   deviceIdentity: () => ({ id: "here", name: "Web Player (Chrome)", kind: "computer" }),
 }));
 
-const commands = vi.hoisted(() => ({ adoptSharedQueue: vi.fn(), noteCommandIssued: vi.fn() }));
+const commands = vi.hoisted(() => ({
+  adoptSharedQueue: vi.fn(),
+  noteCommandIssued: vi.fn(),
+  lastAppliedCommandAt: vi.fn(() => 0),
+  setCommandAppliedListener: vi.fn<(listener: (() => void) | null) => void>(),
+  setTransferHandler: vi.fn<(handler: ((deviceId: string) => void) | null) => void>(),
+}));
 
 vi.mock("../commands", () => commands);
 
@@ -237,6 +243,46 @@ describe("announcing this device", () => {
     expect(api.heartbeat).toHaveBeenCalledWith(
       expect.objectContaining({ armed: true, playing: true, trackTitle: "Digital Love" })
     );
+  });
+
+  it("reports its settings and the last remote command it applied, so an assistant can read and confirm them", () => {
+    store.snapshot = sessionState({ transition: { mode: "crossfade", seconds: 7, curve: "linear" }, lyricsOpen: true });
+    commands.lastAppliedCommandAt.mockReturnValue(1234);
+
+    renderHook(() => usePlayerDevices());
+
+    expect(api.heartbeat).toHaveBeenCalledWith(
+      expect.objectContaining({
+        appliedCommandAt: 1234,
+        settings: expect.objectContaining({
+          transition: { mode: "crossfade", seconds: 7, curve: "linear", secondsRange: { min: 1, max: 12 } },
+          view: { mode: "normal", fullscreen: false, lyricsOpen: true, queueOpen: false },
+        }),
+      })
+    );
+  });
+
+  it("reports in at once after applying a remote command, without waiting for the beat", () => {
+    renderHook(() => usePlayerDevices());
+    const listener = commands.setCommandAppliedListener.mock.calls[0]?.[0];
+    if (typeof listener !== "function") throw new Error("no applied-command listener was registered");
+    api.heartbeat.mockClear();
+    commands.lastAppliedCommandAt.mockReturnValue(99);
+
+    act(() => listener());
+
+    expect(api.heartbeat).toHaveBeenCalledTimes(1);
+    expect(api.heartbeat).toHaveBeenCalledWith(expect.objectContaining({ appliedCommandAt: 99 }));
+  });
+
+  it("stops listening for applied commands and transfers when the player goes away", () => {
+    const { unmount } = renderHook(() => usePlayerDevices());
+    expect(commands.setTransferHandler).toHaveBeenLastCalledWith(expect.any(Function));
+
+    unmount();
+
+    expect(commands.setCommandAppliedListener).toHaveBeenLastCalledWith(null);
+    expect(commands.setTransferHandler).toHaveBeenLastCalledWith(null);
   });
 
   it("keeps saying hello on a beat", () => {
@@ -648,6 +694,18 @@ describe("handing the sound to another device", () => {
     act(() => {
       result.current.handOverTo("kitchen");
     });
+
+    expect(api.save).toHaveBeenCalledWith({ trackIds: ["a"], currentTrackId: "a", positionMs: 0 });
+    expect(api.command).toHaveBeenCalledWith({ deviceId: "kitchen", command: "handOver" });
+  });
+
+  it("hands over the same way when an assistant asks this device to move the sound", () => {
+    store.saved = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    renderHook(() => usePlayerDevices());
+    const transfer = commands.setTransferHandler.mock.lastCall?.[0];
+    if (typeof transfer !== "function") throw new Error("no transfer handler was registered");
+
+    act(() => transfer("kitchen"));
 
     expect(api.save).toHaveBeenCalledWith({ trackIds: ["a"], currentTrackId: "a", positionMs: 0 });
     expect(api.command).toHaveBeenCalledWith({ deviceId: "kitchen", command: "handOver" });

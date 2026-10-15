@@ -51,7 +51,7 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay }:
           </span>
         )}
         {coverActions ? (
-          <CardCoverActions name={item.artist} onPlay={coverActions.play} onOpen={coverActions.open} />
+          <CardCoverActions name={item.artist} order="shuffled" onPlay={coverActions.play} onOpen={coverActions.open} />
         ) : null}
       </div>
 

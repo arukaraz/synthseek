@@ -37,6 +37,7 @@ const sources = vi.hoisted(() => ({
   opened: [] as string[],
   disposed: [] as string[],
   requestedRates: [] as number[],
+  requestedFrom: new Map<string, number[]>(),
 }));
 
 vi.mock("../energy", () => energy);
@@ -54,6 +55,7 @@ vi.mock("../pcm-source", () => ({
       trimStartSeconds: spec.trim,
       buffers: async function* (fromSeconds: number, targetRate: number): AsyncGenerator<PcmBuffer, void, unknown> {
         sources.requestedRates.push(targetRate);
+        sources.requestedFrom.set(url, [...(sources.requestedFrom.get(url) ?? []), fromSeconds]);
         let yielded = 0;
         if (spec.firstAfterMs !== undefined) {
           await new Promise((resolve) => setTimeout(resolve, spec.firstAfterMs));
@@ -194,6 +196,7 @@ beforeEach(() => {
   sources.opened.length = 0;
   sources.disposed.length = 0;
   sources.requestedRates.length = 0;
+  sources.requestedFrom.clear();
   context = new FakeContext();
   vi.stubGlobal(
     "AudioContext",
@@ -603,6 +606,8 @@ describe("a pause that lands while a track is still opening", () => {
   });
 });
 
+const AT_FILE_EDGES = { leaveAtSeconds: null, enterAtSeconds: 0 };
+
 describe("the seam between two tracks", () => {
   async function playToTheEnd(engine: typeof import("../pcm-engine")): Promise<void> {
     sources.specs.set(A, { duration: 10, trim: 0, chunk: 1, fail: false });
@@ -617,7 +622,7 @@ describe("the seam between two tracks", () => {
     await playToTheEnd(engine);
     const scheduledA = context.sources.length;
 
-    engine.prime({ url: B, gainFactor: 0.5, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 0.5, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
 
     const firstB = context.sources[scheduledA];
@@ -643,7 +648,7 @@ describe("the seam between two tracks", () => {
     await settle(PCM_FEED_TICK_MS * 3);
     const scheduledA = context.sources.length;
 
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
 
     const seam = PCM_START_LEAD_SECONDS + 10 - 0.0065;
@@ -658,7 +663,7 @@ describe("the seam between two tracks", () => {
     await playToTheEnd(engine);
     const scheduledA = context.sources.length;
 
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 4, curve: "linear" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 4, curve: "linear", ...AT_FILE_EDGES });
     await settle();
 
     const seam = PCM_START_LEAD_SECONDS + 10;
@@ -668,20 +673,52 @@ describe("the seam between two tracks", () => {
     expect(Number(deckGainOf(2).setValueCurveAtTime.mock.calls[0]?.[1])).toBeCloseTo(seam - 4, 9);
   });
 
+  it("schedules a blend toward where the sound ends long before the track is fully decoded, past the next track's silence", async () => {
+    sources.specs.set(A, { duration: 30, trim: 0, chunk: 1, fail: false });
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay(A, 1, false);
+    await settle();
+    context.currentTime = 1;
+    await settle(PCM_FEED_TICK_MS * 3);
+    const scheduledA = context.sources.length;
+
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 4, curve: "linear", leaveAtSeconds: 20, enterAtSeconds: 1 });
+    await settle();
+
+    const blendAt = PCM_START_LEAD_SECONDS + 20 - 4;
+    const firstB = context.sources[scheduledA];
+    expect(Number(firstB?.start.mock.calls[0]?.[0])).toBeCloseTo(blendAt, 9);
+    expect(Number(deckGainOf(3).setValueCurveAtTime.mock.calls[0]?.[1])).toBeCloseTo(blendAt, 9);
+    expect(deckGainOf(3).setValueCurveAtTime.mock.calls[0]?.[2]).toBeCloseTo(4, 9);
+    expect(Number(deckGainOf(2).setValueCurveAtTime.mock.calls[0]?.[1])).toBeCloseTo(blendAt, 9);
+    expect(sources.requestedFrom.get(B)).toEqual([1]);
+
+    for (let second = 2; second <= Math.floor(blendAt); second += 1) {
+      context.currentTime = second;
+      await settle(PCM_FEED_TICK_MS * 2);
+    }
+    expect(heard.onHandoff).not.toHaveBeenCalled();
+
+    context.currentTime = blendAt + 0.01;
+    await settle(PCM_FEED_TICK_MS * 2);
+    expect(heard.onHandoff).toHaveBeenCalledWith(B);
+    expect(heard.onEnded).not.toHaveBeenCalled();
+  });
+
   it("schedules a readied track again when its blend or correction changes after it was scheduled", async () => {
     const { engine } = await freshEngine();
     await playToTheEnd(engine);
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
     const seam = PCM_START_LEAD_SECONDS + 10;
     const firstB = context.sources.length - 1;
     const before = context.sources.length;
 
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
     expect(context.sources).toHaveLength(before);
 
-    engine.prime({ url: B, gainFactor: 0.5, fadeSeconds: 4, curve: "linear" });
+    engine.prime({ url: B, gainFactor: 0.5, fadeSeconds: 4, curve: "linear", ...AT_FILE_EDGES });
     await settle();
 
     expect(sources.opened.filter((url) => url === B)).toHaveLength(1);
@@ -699,7 +736,7 @@ describe("the seam between two tracks", () => {
   it("keeps the current track at its level when a readied blend is paused, seeked away or cancelled", async () => {
     const { engine } = await freshEngine();
     await playToTheEnd(engine);
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 4, curve: "linear" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 4, curve: "linear", ...AT_FILE_EDGES });
     await settle();
     expect(deckGainOf(2).setValueCurveAtTime).toHaveBeenCalledTimes(1);
 
@@ -723,7 +760,7 @@ describe("the seam between two tracks", () => {
     const { engine, heard } = await freshEngine();
     await playToTheEnd(engine);
     sources.specs.set(B, { duration: 30, trim: 0, chunk: 1, fail: false, firstAfterMs: 1000 });
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
 
     context.currentTime = PCM_START_LEAD_SECONDS + 10;
@@ -772,7 +809,7 @@ describe("the seam between two tracks", () => {
   it("lets go of a readied track on request, and does not ask again for one that failed", async () => {
     const { engine } = await freshEngine();
     await playToTheEnd(engine);
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
 
     engine.cancelPrime();
@@ -780,17 +817,17 @@ describe("the seam between two tracks", () => {
     expect(engine.primedUrl()).toBeNull();
 
     sources.specs.set("/stream/c", { duration: 5, trim: 0, chunk: 1, fail: true });
-    engine.prime({ url: "/stream/c", gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: "/stream/c", gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
-    engine.prime({ url: "/stream/c", gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: "/stream/c", gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
     expect(sources.opened.filter((url) => url === "/stream/c")).toHaveLength(1);
 
     sources.specs.set("/stream/d", { duration: 5, trim: 0, chunk: 1, fail: false, failAfter: 1 });
-    engine.prime({ url: "/stream/d", gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: "/stream/d", gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
     expect(engine.primedUrl()).toBeNull();
-    engine.prime({ url: "/stream/d", gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: "/stream/d", gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
     expect(sources.opened.filter((url) => url === "/stream/d")).toHaveLength(1);
   });
@@ -798,7 +835,7 @@ describe("the seam between two tracks", () => {
   it("reuses a readied track when the listener jumps to it by hand", async () => {
     const { engine } = await freshEngine();
     await playToTheEnd(engine);
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
     sources.opened.length = 0;
 
@@ -816,7 +853,7 @@ describe("the seam between two tracks", () => {
     const scheduledA = context.sources.length;
 
     for (const gainFactor of [0.5, 0.5, 0.6, 0.7]) {
-      engine.prime({ url: B, gainFactor, fadeSeconds: 0, curve: "equalPower" });
+      engine.prime({ url: B, gainFactor, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
       await settle(PCM_PROGRESS_MS);
     }
     await settle(1000);
@@ -832,7 +869,7 @@ describe("the seam between two tracks", () => {
     await playToTheEnd(engine);
     sources.specs.set(B, { duration: 30, trim: 0, chunk: 1, fail: false, openAfterMs: 1000 });
 
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     engine.cancelPrime();
     await settle(1000);
 
@@ -883,7 +920,7 @@ describe("stopping", () => {
     const { engine, heard } = await freshEngine();
     engine.loadAndPlay(A, 1, false);
     await settle();
-    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower" });
+    engine.prime({ url: B, gainFactor: 1, fadeSeconds: 0, curve: "equalPower", ...AT_FILE_EDGES });
     await settle();
 
     engine.stop();

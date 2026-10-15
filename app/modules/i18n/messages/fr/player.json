@@ -125,8 +125,7 @@
       "mode": "Transition",
       "modes": {
         "gapless": "Sans coupure",
-        "crossfade": "Fondu enchaîné",
-        "smart": "Fondu intelligent"
+        "crossfade": "Fondu enchaîné"
       },
       "seconds": "Durée",
       "curve": "Courbe",
@@ -136,8 +135,7 @@
       },
       "hints": {
         "gapless": "Une piste enchaîne sur la suivante sans coupure. Seulement dans ce navigateur.",
-        "crossfade": "La fin de chaque piste se fond dans le début de la suivante.",
-        "smart": "Sans coupure quand une piste se termine seule, un court fondu quand vous passez à la suivante."
+        "crossfade": "Chaque piste se fond dans la suivante, quand elle se termine et quand vous passez à la suivante."
       }
     },
     "autoplay": {

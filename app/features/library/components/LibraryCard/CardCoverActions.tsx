@@ -1,13 +1,13 @@
 "use client";
 
-import { Info, Play } from "lucide-react";
+import { Info, Play, Shuffle } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { cardCoverAction, cardCoverActions, cardCoverScrim } from "./styles";
 import type { CardCoverActionsProps } from "./types";
 
-export function CardCoverActions({ name, onPlay, onOpen, menu }: CardCoverActionsProps) {
+export function CardCoverActions({ name, order, onPlay, onOpen, menu }: CardCoverActionsProps) {
   const { t } = useTranslation(["library", "contentDetail"]);
   const [starting, setStarting] = useState(false);
 
@@ -41,9 +41,11 @@ export function CardCoverActions({ name, onPlay, onOpen, menu }: CardCoverAction
         className={cardCoverAction({ tone: "play" })}
         onClick={handlePlay}
         disabled={starting}
-        aria-label={t("library:page.actions.playAll", { name })}
+        aria-label={
+          order === "shuffled" ? t("contentDetail:shuffleAll", { name }) : t("library:page.actions.playAll", { name })
+        }
       >
-        <Play className="size-5 fill-current" />
+        {order === "shuffled" ? <Shuffle className="size-5" /> : <Play className="size-5 fill-current" />}
       </button>
       {onOpen ? (
         <button

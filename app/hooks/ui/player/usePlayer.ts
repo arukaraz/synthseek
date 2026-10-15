@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  nextRepeat,
-  type EqualizerPresetRef,
-  type PlayerActions,
-  type PlayerDevice,
-  type PlayerView,
-} from "@components/Player";
+import { nextRepeat, type PlayerActions, type PlayerDevice, type PlayerView } from "@components/Player";
 import type { QueuePresence } from "@components/ui/QueueAddButton";
 import {
   useFavoriteTracks,
@@ -17,15 +11,17 @@ import {
   useUpgradeTracks,
 } from "@hooks/api";
 import { useSetPlaybackProfile } from "@hooks/api/mutations/auth/useSetPlaybackProfile";
+import { useRefreshCurrentUser } from "@hooks/api/queries/useRefreshCurrentUser";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { resolveFriendlyError } from "@modules/errors";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useTranslation } from "react-i18next";
 
+import { setAccountRefreshHandler } from "./commands";
 import { compressorPresetMatching } from "./compressor";
 import { CONVERTED_BITRATE_KBPS } from "./constants";
 import { deviceKindFrom } from "./device";
-import { appliedEqualizerGains, customPresetMatching, equalizerPresetMatching, headroomDbFor } from "./equalizer";
+import { appliedEqualizerGains, equalizerPresetOf, headroomDbFor } from "./equalizer";
 import {
   asPlayedFrom,
   isMirroring,
@@ -49,6 +45,7 @@ import {
   subscribe,
 } from "./store";
 import { useAutoplayFill } from "./useAutoplayFill";
+import { useTrackSilence } from "./useTrackSilence";
 import { usePlayerDevices } from "./useDevices";
 import { usePlayerDocumentTitle } from "./useDocumentTitle";
 import { usePlayReporter } from "./usePlayReporter";
@@ -132,6 +129,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   const { devices: known, handOverTo, commandActive } = usePlayerDevices();
   usePlayReporter();
   useAutoplayFill();
+  useTrackSilence();
   const startStation = useStartRadio();
   const mirroring = isMirroring(session);
   const localKind = typeof navigator === "undefined" ? "computer" : deviceKindFrom(navigator.userAgent);
@@ -154,6 +152,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   } = useSetScrobbleEnabled();
   const { mutate: upgradeTracks, isPending: upgradePending } = useUpgradeTracks();
   const { mutate: setProfile } = useSetPlaybackProfile();
+  const refreshCurrentUser = useRefreshCurrentUser();
   const searchBetterQuality = useCallback(() => {
     if (track === null) return;
     upgradeTracks({ trackIds: [track.id] });
@@ -209,6 +208,11 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     });
     setAutoplayPreference(currentUser.autoplayEnabled);
   }, [currentUser]);
+
+  useEffect(() => {
+    setAccountRefreshHandler(refreshCurrentUser);
+    return () => setAccountRefreshHandler(null);
+  }, [refreshCurrentUser]);
 
   const here: PlayerDevice = {
     id: "here",
@@ -346,14 +350,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
 
   const activeDevice = mirroring && mirrored !== null ? mirrored : here;
   const chainTranscoding = mirroring && playingOn !== null ? playingOn.transcoding : session.transcoding;
-  const customPreset = customPresetMatching(session.equalizerPresets, session.equalizer.gainsDb);
-  const builtInPreset = customPreset === null ? equalizerPresetMatching(session.equalizer.gainsDb) : null;
-  const equalizerPreset: EqualizerPresetRef | null =
-    customPreset !== null
-      ? { kind: "custom", name: customPreset }
-      : builtInPreset !== null
-        ? { kind: "builtIn", id: builtInPreset }
-        : null;
+  const equalizerPreset = equalizerPresetOf(session.equalizerPresets, session.equalizer.gainsDb);
   const headroomDb = headroomDbFor(appliedEqualizerGains(session.equalizer));
   const presetName =
     equalizerPreset === null

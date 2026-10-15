@@ -15,7 +15,7 @@ import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
 export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
   const openArtistByName = useResolveArtistAndOpen();
-  const { playEntity } = useEntityPlayback();
+  const { shuffleEntity } = useEntityPlayback();
 
   const input = useMemo(
     () =>
@@ -39,11 +39,11 @@ export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }
       <LibraryArtistCard
         item={item}
         resolveEnabled={isArtistsView}
-        onPlay={() => playEntity({ kind: "artist", artist: item.artist })}
+        onPlay={() => shuffleEntity({ kind: "artist", artist: item.artist })}
         onOpen={() => openArtistByName(item.artist)}
       />
     ),
-    [openArtistByName, isArtistsView, playEntity]
+    [openArtistByName, isArtistsView, shuffleEntity]
   );
 
   return (

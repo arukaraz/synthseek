@@ -17,13 +17,14 @@ vi.mock("@hooks/api", () => ({ usePlayableTracksFetcher: () => api.fetchPlayable
 
 const player = vi.hoisted(() => ({
   playQueue: vi.fn(),
+  playShuffled: vi.fn(),
   addToQueue: vi.fn(() => ({ added: 1, skipped: 0, full: false })),
   startStation: vi.fn(async () => undefined),
   chooseSource: vi.fn(async (tracks: readonly { id: string }[]): Promise<{ id: string }[] | null> => [...tracks]),
 }));
 
 vi.mock("@hooks/ui/player", () => ({
-  playerActions: { playQueue: player.playQueue, addToQueue: player.addToQueue },
+  playerActions: { playQueue: player.playQueue, playShuffled: player.playShuffled, addToQueue: player.addToQueue },
   playerTrackFrom: (item: { id: string }) => ({ id: item.id, title: `Title ${item.id}` }),
   tracksFromChosenSource: player.chooseSource,
   useStartRadio: () => player.startStation,
@@ -86,6 +87,38 @@ describe("choosing where an album or artist plays from", () => {
     await result.current.playEntity(TARGET);
 
     expect(player.playQueue).not.toHaveBeenCalled();
+  });
+});
+
+describe("shuffling a whole artist or playlist", () => {
+  it("hands the playlist's tracks to the player to shuffle, never playing them in order", async () => {
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.shuffleEntity({ kind: "playlist", playlistId: "pl1" });
+
+    expect(player.playShuffled).toHaveBeenCalledWith([
+      expect.objectContaining({ id: "t1" }),
+      expect.objectContaining({ id: "t2" }),
+    ]);
+    expect(player.playQueue).not.toHaveBeenCalled();
+  });
+
+  it("shuffles an artist from the copy the listener chose to play", async () => {
+    player.chooseSource.mockResolvedValue([{ id: "t2" }]);
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.shuffleEntity({ kind: "artist", artist: "Air" });
+
+    expect(player.playShuffled).toHaveBeenCalledWith([{ id: "t2" }]);
+  });
+
+  it("shuffles nothing when nothing in it can be played", async () => {
+    api.fetchPlayable.mockResolvedValue({ items: [], truncated: false });
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await result.current.shuffleEntity({ kind: "playlist", playlistId: "pl1" });
+
+    expect(player.playShuffled).not.toHaveBeenCalled();
   });
 });
 

@@ -84,7 +84,7 @@ export function AlbumCard({ item, showLibraryPaths = false, onOpen, onPlay, menu
           <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
-        {onPlay ? <CardCoverActions name={item.name} onPlay={onPlay} menu={menu} /> : null}
+        {onPlay ? <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} menu={menu} /> : null}
         {selection ? (
           <div
             className={cardSelectBox({ shown: selecting })}

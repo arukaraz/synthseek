@@ -456,9 +456,9 @@ describe("the transitions section", () => {
     const { actions, user } = renderMenu();
 
     await user.click(transitions().getByRole("button", { name: enPlayer.settings.transition.mode }));
-    await user.click(await screen.findByRole("menuitemradio", { name: enPlayer.settings.transition.modes.smart }));
+    await user.click(await screen.findByRole("menuitemradio", { name: enPlayer.settings.transition.modes.crossfade }));
 
-    expect(actions.setTransition).toHaveBeenCalledWith({ mode: "smart", seconds: 5, curve: "equalPower" });
+    expect(actions.setTransition).toHaveBeenCalledWith({ mode: "crossfade", seconds: 5, curve: "equalPower" });
   });
 
   it("shows the blend length in seconds once a mode blends, and nudges it a second at a time", () => {

@@ -148,7 +148,7 @@ export interface PlayerConversion {
   bitrateKbps: number;
 }
 
-export type TransitionMode = "gapless" | "crossfade" | "smart";
+export type TransitionMode = "gapless" | "crossfade";
 
 export type TransitionCurve = "equalPower" | "linear";
 

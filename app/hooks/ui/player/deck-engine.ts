@@ -149,9 +149,13 @@ function applyElementVolume(node: HTMLAudioElement): void {
   node.muted = listener.muted;
 }
 
+function leavingEndOf(node: HTMLAudioElement, plan: PrimePlan): number {
+  return plan.leaveAtSeconds === null ? node.duration : Math.min(plan.leaveAtSeconds, node.duration);
+}
+
 function watchHandoff(node: HTMLAudioElement): void {
   if (primed === null || watchTimer !== undefined) return;
-  const remaining = node.duration - node.currentTime;
+  const remaining = leavingEndOf(node, primed) - node.currentTime;
   if (!Number.isFinite(remaining)) return;
   if (remaining > handoffLeadSeconds(primed.fadeSeconds) + HANDOFF_WATCH_SECONDS) return;
   watchTimer = setInterval(checkHandoff, HANDOFF_POLL_MS);
@@ -163,7 +167,7 @@ function checkHandoff(): void {
     return;
   }
   const node = activeDeck();
-  const remaining = node.duration - node.currentTime;
+  const remaining = leavingEndOf(node, primed) - node.currentTime;
   const lead = handoffLeadSeconds(primed.fadeSeconds);
   if (!Number.isFinite(remaining) || remaining > lead + HANDOFF_WATCH_SECONDS) {
     stopWatching();
@@ -183,6 +187,7 @@ function performHandoff(): void {
   const fade = plan.fadeSeconds > 0 ? plan.fadeSeconds : SEAM_FADE_SECONDS;
   const blend = crossDecks(leaving, incoming, fade, plan.curve, plan.gainFactor);
   resumeGraph();
+  if (plan.enterAtSeconds > 0) incoming.currentTime = plan.enterAtSeconds;
   void incoming.play().catch(() => undefined);
   swapTo(incoming, blend);
   if (incoming.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) callbacks?.onLoadingChange(true);

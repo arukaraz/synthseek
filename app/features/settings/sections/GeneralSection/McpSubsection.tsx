@@ -26,7 +26,10 @@ export function McpSubsection() {
     t("mcp.tools.discovery"),
     t("mcp.tools.downloads"),
     t("mcp.tools.requests"),
+    t("mcp.tools.playlists"),
     t("mcp.tools.library"),
+    t("mcp.tools.listening"),
+    t("mcp.tools.player"),
     t("mcp.tools.settings"),
     t("mcp.tools.operations"),
   ];

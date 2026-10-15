@@ -5,8 +5,10 @@ import type { PlayerTransition, TransitionCurve, TransitionMode } from "@compone
 import {
   CROSSFADE_MIN_TRACK_RATIO,
   FADE_CURVE_POINTS,
+  FADING_MODE,
   HANDOFF_LEAD_SECONDS,
   PRIME_AHEAD_SECONDS,
+  RETIRED_FADING_MODES,
   TRANSITION_CURVES,
   TRANSITION_DEFAULT_SECONDS,
   TRANSITION_MAX_SECONDS,
@@ -14,10 +16,10 @@ import {
   TRANSITION_MODES,
   TRANSITION_STEP_SECONDS,
 } from "./constants";
-import type { FadeDirection, TransitionReason } from "./types";
+import type { FadeDirection } from "./types";
 
 const storedTransition = z.object({
-  mode: z.enum(TRANSITION_MODES),
+  mode: z.union([z.enum(TRANSITION_MODES), z.enum(RETIRED_FADING_MODES).transform((): TransitionMode => FADING_MODE)]),
   seconds: z.number().min(TRANSITION_MIN_SECONDS).max(TRANSITION_MAX_SECONDS),
   curve: z.enum(TRANSITION_CURVES),
 });
@@ -54,10 +56,8 @@ export function sameTransition(a: PlayerTransition, b: PlayerTransition): boolea
   return a.mode === b.mode && a.seconds === b.seconds && a.curve === b.curve;
 }
 
-export function transitionFadeSeconds(settings: PlayerTransition, reason: TransitionReason): number {
-  if (settings.mode === "crossfade") return settings.seconds;
-  if (settings.mode === "smart" && reason === "skip") return settings.seconds;
-  return 0;
+export function transitionFadeSeconds(settings: PlayerTransition): number {
+  return settings.mode === "crossfade" ? settings.seconds : 0;
 }
 
 export function fadeAllowed(fadeSeconds: number, outgoingSeconds: number, incomingSeconds: number): number {

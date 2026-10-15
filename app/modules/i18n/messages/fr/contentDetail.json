@@ -6,6 +6,7 @@
   "openDetail": "Ouvrir les détails de {{name}}",
   "play": "Lire",
   "playAll": "Lire tout ce que nous avons de {{name}}",
+  "shuffleAll": "Lire en aléatoire tout ce que nous avons de {{name}}",
   "startRadio": "Lancer une radio",
   "startRadioInfo": "Lance un mélange de titres similaires déjà présents dans votre bibliothèque.",
   "startRadioFrom": "Lancer une radio à partir de {{name}}",

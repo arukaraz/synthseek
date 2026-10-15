@@ -20,10 +20,23 @@ const store = vi.hoisted(() => ({
 }));
 const device = vi.hoisted(() => ({ deviceIdentity: vi.fn(() => ({ id: "mine", name: "Chrome on Linux" })) }));
 
+const remote = vi.hoisted(() => ({ applyRemoteSettings: vi.fn(), applyRemoteView: vi.fn() }));
+
 vi.mock("../store", () => store);
 vi.mock("../device", () => device);
+vi.mock("../remote-settings", () => remote);
 
-import { applyPlaybackState, applyPlayerCommand, noteCommandIssued, setTakeOverHandler } from "../commands";
+import {
+  applyPlaybackState,
+  applyPlayerCommand,
+  lastAppliedCommandAt,
+  noteCommandIssued,
+  setAccountRefreshHandler,
+  setCommandAppliedListener,
+  setQueueCommandHandler,
+  setTakeOverHandler,
+  setTransferHandler,
+} from "../commands";
 
 function command(overrides: Partial<Parameters<typeof applyPlayerCommand>[0]>) {
   return {
@@ -159,5 +172,117 @@ describe("noteCommandIssued", () => {
     applyPlaybackState(announcement(61_000));
 
     expect(store.actions.applyRemoteState).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("queue commands", () => {
+  const issuedLater = (): number => Date.now() + 10_000_000;
+
+  it("hands a queue change meant for this device to the queue handler, and touches no transport control", () => {
+    const handler = vi.fn();
+    setQueueCommandHandler(handler);
+    const queued = {
+      eventType: SubscriptionEventType.PlayerCommand,
+      userId: "u1",
+      deviceId: "mine",
+      issuedAt: issuedLater(),
+      command: "queueAdd" as const,
+      trackIds: ["t1"],
+      placement: "next" as const,
+    };
+
+    applyPlayerCommand(queued);
+
+    expect(handler).toHaveBeenCalledWith(queued);
+    expect(store.actions.pauseHere).not.toHaveBeenCalled();
+    setQueueCommandHandler(null);
+  });
+
+  it("ignores a queue change meant for another device", () => {
+    const handler = vi.fn();
+    setQueueCommandHandler(handler);
+
+    applyPlayerCommand({
+      eventType: SubscriptionEventType.PlayerCommand,
+      userId: "u1",
+      deviceId: "somebody-else",
+      issuedAt: issuedLater() + 1,
+      command: "queueClear",
+    });
+
+    expect(handler).not.toHaveBeenCalled();
+    setQueueCommandHandler(null);
+  });
+});
+
+describe("settings, view and device commands", () => {
+  const issuedAt = (offset: number): number => Date.now() + 20_000_000 + offset;
+  const addressed = (deviceId: string, at: number) => ({
+    eventType: SubscriptionEventType.PlayerCommand,
+    userId: "u1",
+    deviceId,
+    issuedAt: at,
+  });
+
+  beforeEach(() => {
+    remote.applyRemoteSettings.mockReset();
+    remote.applyRemoteView.mockReset();
+  });
+
+  it("applies a settings change, then reports in with the time of the command it applied", () => {
+    const applied = vi.fn();
+    setCommandAppliedListener(applied);
+    const change = {
+      ...addressed("mine", issuedAt(1)),
+      command: "applySettings" as const,
+      conversion: { enabled: true },
+    };
+
+    applyPlayerCommand(change);
+
+    expect(remote.applyRemoteSettings).toHaveBeenCalledWith(change);
+    expect(applied).toHaveBeenCalledTimes(1);
+    expect(lastAppliedCommandAt()).toBe(change.issuedAt);
+    setCommandAppliedListener(null);
+  });
+
+  it("changes what the player shows, then reports in", () => {
+    const applied = vi.fn();
+    setCommandAppliedListener(applied);
+    const view = { ...addressed("mine", issuedAt(2)), command: "showView" as const, lyrics: true };
+
+    applyPlayerCommand(view);
+
+    expect(remote.applyRemoteView).toHaveBeenCalledWith(view);
+    expect(applied).toHaveBeenCalledTimes(1);
+    setCommandAppliedListener(null);
+  });
+
+  it("hands the sound to the device named in a transfer, and reloads the account when told to", () => {
+    const transfer = vi.fn();
+    const refresh = vi.fn();
+    setTransferHandler(transfer);
+    setAccountRefreshHandler(refresh);
+
+    applyPlayerCommand({ ...addressed("mine", issuedAt(3)), command: "transferTo", targetDeviceId: "kitchen" });
+    applyPlayerCommand({ ...addressed("mine", issuedAt(4)), command: "refreshAccount" });
+
+    expect(transfer).toHaveBeenCalledWith("kitchen");
+    expect(refresh).toHaveBeenCalledTimes(1);
+    setTransferHandler(null);
+    setAccountRefreshHandler(null);
+  });
+
+  it("leaves a change meant for another device alone, and does not count it as applied", () => {
+    const applied = vi.fn();
+    setCommandAppliedListener(applied);
+    const before = lastAppliedCommandAt();
+
+    applyPlayerCommand({ ...addressed("somebody-else", issuedAt(5)), command: "showView", queue: true });
+
+    expect(remote.applyRemoteView).not.toHaveBeenCalled();
+    expect(applied).not.toHaveBeenCalled();
+    expect(lastAppliedCommandAt()).toBe(before);
+    setCommandAppliedListener(null);
   });
 });

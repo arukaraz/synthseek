@@ -148,7 +148,11 @@ export const CONVERSION_STORAGE_KEY = "synthseek.player.conversion";
 
 export const TRANSITION_STORAGE_KEY = "synthseek.player.transition";
 
-export const TRANSITION_MODES = ["gapless", "crossfade", "smart"] as const satisfies readonly TransitionMode[];
+export const TRANSITION_MODES = ["gapless", "crossfade"] as const satisfies readonly TransitionMode[];
+
+export const RETIRED_FADING_MODES = ["smart"] as const;
+
+export const FADING_MODE: TransitionMode = "crossfade";
 
 export const TRANSITION_CURVES = ["equalPower", "linear"] as const satisfies readonly TransitionCurve[];
 

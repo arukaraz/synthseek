@@ -47,6 +47,13 @@ vi.mock("@hooks/api", () => ({
   useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
+const playback = vi.hoisted(() => ({
+  playEntity: vi.fn(async () => undefined),
+  shuffleEntity: vi.fn(async () => undefined),
+}));
+
+vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => playback }));
+
 vi.mock("../LibraryViewLayout/LibraryViewLayout", () => ({
   LibraryViewLayout: ({
     items,
@@ -82,6 +89,15 @@ describe("ArtistsViewMode", () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  it("shuffles everything of the artist when its cover's button is pressed", async () => {
+    const { user } = renderWithProviders(<ArtistsViewMode {...makeProps()} />);
+
+    await user.click(screen.getByRole("button", { name: "Shuffle everything we have of Daft Punk" }));
+
+    expect(playback.shuffleEntity).toHaveBeenCalledWith({ kind: "artist", artist: "Daft Punk" });
+    expect(playback.playEntity).not.toHaveBeenCalled();
   });
 
   it("resolves the artist name and opens the detail flow on click", async () => {

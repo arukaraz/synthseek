@@ -4,3 +4,7 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 export type RadioTracksInput = inferRouterInputs<AppRouter>["playback"]["radioTracks"];
 
 export type RadioTracksResult = inferRouterOutputs<AppRouter>["playback"]["radioTracks"];
+
+export type TrackSilenceInput = inferRouterInputs<AppRouter>["playback"]["trackSilence"];
+
+export type TrackSilenceResult = inferRouterOutputs<AppRouter>["playback"]["trackSilence"];

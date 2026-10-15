@@ -66,6 +66,68 @@ async function freshStore(): Promise<typeof import("../store")> {
   return import("../store");
 }
 
+describe("player store playNext and moveUpcoming", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  function ids(store: typeof import("../store")): string[] {
+    return store.getSnapshot().queue.map((entry) => entry.id);
+  }
+
+  it("puts tracks right after the one playing, without moving what plays", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+
+    const outcome = store.actions.playNext([track("x"), track("y")]);
+
+    expect(outcome.added).toBe(2);
+    expect(ids(store)).toEqual(["a", "x", "y", "b", "c"]);
+    expect(store.getSnapshot().index).toBe(0);
+  });
+
+  it("brings a track already coming up to the front instead of listing it twice", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+
+    store.actions.playNext([track("c")]);
+
+    expect(ids(store)).toEqual(["a", "c", "b"]);
+  });
+
+  it("plays them next under shuffle too", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c")], 0);
+    store.actions.toggleShuffle();
+
+    store.actions.playNext([track("x")]);
+
+    const session = store.getSnapshot();
+    const playing = session.shuffleOrder.indexOf(session.index);
+    expect(session.queue[session.shuffleOrder[playing + 1] ?? -1]?.id).toBe("x");
+  });
+
+  it("moves an upcoming track to a position counted from right after the one playing", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b"), track("c"), track("d")], 0);
+
+    store.actions.moveUpcoming("d", 0);
+    expect(ids(store)).toEqual(["a", "d", "b", "c"]);
+
+    store.actions.moveUpcoming("d", 99);
+    expect(ids(store)).toEqual(["a", "b", "c", "d"]);
+  });
+
+  it("leaves the queue alone when asked to move a track that is not coming up", async () => {
+    const store = await freshStore();
+    store.actions.playQueue([track("a"), track("b")], 1);
+
+    store.actions.moveUpcoming("a", 0);
+
+    expect(ids(store)).toEqual(["a", "b"]);
+  });
+});
+
 describe("player store addToQueue", () => {
   beforeEach(() => {
     vi.clearAllMocks();

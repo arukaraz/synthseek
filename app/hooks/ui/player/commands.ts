@@ -3,10 +3,20 @@ import type { PlaybackStatePayload, PlayerCommandPayload } from "@api/__generate
 import { NO_ALBUM_ID, NO_REPLAY_GAIN, NO_SOURCES } from "./constants";
 import { deviceIdentity } from "./device";
 import { toneFor } from "./helpers";
+import { applyRemoteSettings, applyRemoteView } from "./remote-settings";
 import { actions } from "./store";
+
+export type QueueCommandPayload = Extract<
+  PlayerCommandPayload,
+  { command: "queueAdd" | "queueRemove" | "queueClear" | "queueMove" | "queuePlay" }
+>;
 
 let takeOverHandler: (() => void) | null = null;
 let unknownTrackHandler: ((trackId: string) => void) | null = null;
+let queueCommandHandler: ((command: QueueCommandPayload) => void) | null = null;
+let transferHandler: ((deviceId: string) => void) | null = null;
+let accountRefreshHandler: (() => void) | null = null;
+let commandAppliedListener: (() => void) | null = null;
 let lastCommandAt = 0;
 let lastStateAt = 0;
 
@@ -14,8 +24,28 @@ export function setTakeOverHandler(handler: (() => void) | null): void {
   takeOverHandler = handler;
 }
 
+export function setTransferHandler(handler: ((deviceId: string) => void) | null): void {
+  transferHandler = handler;
+}
+
+export function setAccountRefreshHandler(handler: (() => void) | null): void {
+  accountRefreshHandler = handler;
+}
+
+export function setCommandAppliedListener(listener: (() => void) | null): void {
+  commandAppliedListener = listener;
+}
+
+export function lastAppliedCommandAt(): number {
+  return lastCommandAt;
+}
+
 export function setUnknownTrackHandler(handler: ((trackId: string) => void) | null): void {
   unknownTrackHandler = handler;
+}
+
+export function setQueueCommandHandler(handler: ((command: QueueCommandPayload) => void) | null): void {
+  queueCommandHandler = handler;
 }
 
 export function noteCommandIssued(issuedAt: number): void {
@@ -64,6 +94,27 @@ export function applyPlayerCommand(command: PlayerCommandPayload): void {
       return;
     case "setVolume":
       if (command.volumeLevel !== undefined) actions.setVolume(command.volumeLevel);
+      return;
+    case "queueAdd":
+    case "queueRemove":
+    case "queueClear":
+    case "queueMove":
+    case "queuePlay":
+      queueCommandHandler?.(command);
+      return;
+    case "applySettings":
+      applyRemoteSettings(command);
+      commandAppliedListener?.();
+      return;
+    case "showView":
+      applyRemoteView(command);
+      commandAppliedListener?.();
+      return;
+    case "transferTo":
+      transferHandler?.(command.targetDeviceId);
+      return;
+    case "refreshAccount":
+      accountRefreshHandler?.();
       return;
   }
 }

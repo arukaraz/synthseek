@@ -125,8 +125,7 @@
       "mode": "Übergang",
       "modes": {
         "gapless": "Lückenlos",
-        "crossfade": "Überblenden",
-        "smart": "Smartes Überblenden"
+        "crossfade": "Überblenden"
       },
       "seconds": "Dauer",
       "curve": "Kurve",
@@ -136,8 +135,7 @@
       },
       "hints": {
         "gapless": "Ein Titel geht ohne Pause in den nächsten über. Nur in diesem Browser.",
-        "crossfade": "Das Ende jedes Titels wird in den Anfang des nächsten übergeblendet.",
-        "smart": "Lückenlos, wenn ein Titel von selbst endet, ein kurzes Überblenden beim Überspringen."
+        "crossfade": "Jeder Titel wird in den nächsten übergeblendet, wenn er endet und wenn du überspringst."
       }
     },
     "autoplay": {

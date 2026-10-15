@@ -20,9 +20,16 @@ import {
   PROGRESS_REPORT_MS,
   WAKE_BEAT_FLOOR_MS,
 } from "./constants";
-import { adoptSharedQueue, noteCommandIssued } from "./commands";
+import {
+  adoptSharedQueue,
+  lastAppliedCommandAt,
+  noteCommandIssued,
+  setCommandAppliedListener,
+  setTransferHandler,
+} from "./commands";
 import { claimDeviceId, deviceIdentity, type DeviceIdentity } from "./device";
 import { beatIsDue, expectedPosition, isMirroring, toneFor, trackSummary } from "./helpers";
+import { playerSettingsReport } from "./remote-settings";
 import { actions, getSnapshot, sessionSnapshot, subscribe } from "./store";
 import type { KnownDevice, RemoteCommand } from "./types";
 
@@ -76,6 +83,8 @@ export function usePlayerDevices(): {
           armed: session.armed,
           playing: session.playing,
           trackTitle: session.queue[session.index]?.title ?? null,
+          settings: playerSettingsReport(session),
+          appliedCommandAt: lastAppliedCommandAt(),
         },
         {
           onSuccess: (known) => {
@@ -86,6 +95,10 @@ export function usePlayerDevices(): {
       );
     };
     beat();
+    setCommandAppliedListener(() => {
+      lastBeatAt.current = 0;
+      beat();
+    });
     const timer = window.setInterval(beat, DEVICE_HEARTBEAT_MS);
     const progress = window.setInterval(() => {
       const session = getSnapshot();
@@ -142,6 +155,7 @@ export function usePlayerDevices(): {
     };
     window.addEventListener("pagehide", leave);
     return () => {
+      setCommandAppliedListener(null);
       window.clearInterval(timer);
       window.clearInterval(progress);
       refreshOnStranger();
@@ -313,6 +327,11 @@ export function usePlayerDevices(): {
     },
     [saveSession, sendCommand, forgetLocally, devices]
   );
+
+  useEffect(() => {
+    setTransferHandler(handOverTo);
+    return () => setTransferHandler(null);
+  }, [handOverTo]);
 
   return { devices, handOverTo, toggleRemote, commandActive };
 }

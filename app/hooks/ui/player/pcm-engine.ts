@@ -132,11 +132,18 @@ function reschedulePrimed(): void {
   if (primed === null || !primedScheduled()) return;
   stopNodes(primed.voice);
   restoreActiveGain(false);
-  if (active !== null && active.fed && playing) beginPrimedFeed(active);
+  if (active !== null && playing) beginPrimedFeed(active);
 }
 
 function samePlan(a: PrimePlan, b: PrimePlan): boolean {
-  return a.url === b.url && a.gainFactor === b.gainFactor && a.fadeSeconds === b.fadeSeconds && a.curve === b.curve;
+  return (
+    a.url === b.url &&
+    a.gainFactor === b.gainFactor &&
+    a.fadeSeconds === b.fadeSeconds &&
+    a.curve === b.curve &&
+    a.leaveAtSeconds === b.leaveAtSeconds &&
+    a.enterAtSeconds === b.enterAtSeconds
+  );
 }
 
 function lastSecondOf(voice: Voice): number {
@@ -173,6 +180,7 @@ async function feed(voice: Voice, fromSeconds: number): Promise<void> {
         const late = context.currentTime - when + PCM_START_LEAD_SECONDS;
         voice.base += late;
         when = roundToSample(when + late, context.sampleRate);
+        if (voice === active) reschedulePrimed();
       }
       const node = context.createBufferSource();
       node.buffer = buffer;
@@ -226,26 +234,34 @@ function endOf(voice: Voice): number {
   return voice.base + (voice.fed ? voice.scheduledUntil : lastSecondOf(voice));
 }
 
-function seamTarget(voice: Voice): number {
+function leavingEndOf(voice: Voice): number {
   const endAt = endOf(voice);
-  return primed === null ? endAt : endAt - primed.plan.fadeSeconds;
+  if (primed === null || primed.plan.fadeSeconds <= 0 || primed.plan.leaveAtSeconds === null) return endAt;
+  return Math.min(endAt, voice.base + primed.plan.leaveAtSeconds);
+}
+
+function seamTarget(voice: Voice): number {
+  return primed === null ? endOf(voice) : leavingEndOf(voice) - primed.plan.fadeSeconds;
 }
 
 function beginPrimedFeed(voice: Voice): void {
   if (primed === null || primed.voice.iterator !== null || primed.voice.fed) return;
   const { plan } = primed;
-  const endAt = endOf(voice);
   const incoming = primed.voice;
   if (plan.fadeSeconds > 0) {
-    const at = endAt - plan.fadeSeconds;
+    const endAt = leavingEndOf(voice);
+    const at = Math.max(endAt - plan.fadeSeconds, voice.bus.context.currentTime + PCM_START_LEAD_SECONDS);
+    const seconds = Math.max(endAt - at, PCM_START_LEAD_SECONDS);
     setTrackGain(incoming.key, 0, true);
-    fadeTrackGain(incoming.key, fadeCurveValues(plan.curve, "in", plan.gainFactor), plan.fadeSeconds, at);
-    fadeTrackGain(voice.key, fadeCurveValues(plan.curve, "out", trackGainOf(voice.key)), plan.fadeSeconds, at);
-    startVoice(incoming, 0, at);
+    fadeTrackGain(incoming.key, fadeCurveValues(plan.curve, "in", plan.gainFactor), seconds, at);
+    fadeTrackGain(voice.key, fadeCurveValues(plan.curve, "out", trackGainOf(voice.key)), seconds, at);
+    startVoice(incoming, plan.enterAtSeconds, at);
+    if (!voice.fed) void watchSeam(voice, ++seamRun);
     return;
   }
+  if (!voice.fed) return;
   setTrackGain(incoming.key, plan.gainFactor, true);
-  startVoice(incoming, 0, endAt);
+  startVoice(incoming, 0, endOf(voice));
 }
 
 async function watchSeam(voice: Voice, run: number): Promise<void> {
@@ -289,7 +305,7 @@ function handOver(voice: Voice): void {
   };
   active = incoming;
   activeGain = plan.gainFactor;
-  const sounding = incoming.scheduledUntil > 0;
+  const sounding = incoming.fed || incoming.nodes.size > 0;
   incoming.announced = sounding;
   if (!sounding) {
     callbacks?.onLoadingChange(true);
@@ -495,9 +511,11 @@ export function loadAt(url: string, seconds: number, volume: number, muted: bool
 export function prime(plan: PrimePlan): void {
   if (plan.url === refusedPrimeUrl || outgoing !== null) return;
   if (primed !== null && primed.plan.url === plan.url) {
-    if (samePlan(primed.plan, plan)) return;
-    primed.plan = plan;
-    reschedulePrimed();
+    if (!samePlan(primed.plan, plan)) {
+      primed.plan = plan;
+      reschedulePrimed();
+    }
+    if (active !== null && playing && !primedScheduled()) beginPrimedFeed(active);
     return;
   }
   if (opening !== null && opening.generation === generation && opening.plan.url === plan.url) {
@@ -516,7 +534,7 @@ export function prime(plan: PrimePlan): void {
         return;
       }
       primed = { plan: request.plan, voice };
-      if (active.fed && playing) beginPrimedFeed(active);
+      if (playing) beginPrimedFeed(active);
     })
     .catch(() => {
       if (opening === request) opening = null;

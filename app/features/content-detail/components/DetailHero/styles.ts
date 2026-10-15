@@ -71,6 +71,10 @@ export const heroPlayButton = cva(
   "border-fg/15 bg-fg/[0.06] text-fg hover:bg-fg/[0.12] focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
 );
 
+export const heroIconButton = cva(
+  "border-fg/15 bg-fg/[0.06] text-fg hover:bg-fg/[0.12] focus-visible:ring-primary-400 inline-flex size-10 shrink-0 items-center justify-center rounded-full border transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
+);
+
 export const heroBadgeRow = cva("flex flex-wrap items-center justify-center gap-2 sm:justify-start");
 
 export const heroBadgeDivider = cva("bg-fg/15 h-4 w-px shrink-0");

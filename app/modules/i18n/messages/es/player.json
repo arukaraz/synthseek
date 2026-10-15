@@ -125,8 +125,7 @@
       "mode": "Transición",
       "modes": {
         "gapless": "Sin cortes",
-        "crossfade": "Fundido cruzado",
-        "smart": "Fundido inteligente"
+        "crossfade": "Fundido cruzado"
       },
       "seconds": "Duración",
       "curve": "Curva",
@@ -136,8 +135,7 @@
       },
       "hints": {
         "gapless": "Una canción sigue a la otra sin corte. Solo en este navegador.",
-        "crossfade": "El final de cada canción se funde con el principio de la siguiente.",
-        "smart": "Sin cortes cuando una canción acaba sola, un fundido corto cuando saltas."
+        "crossfade": "Cada canción se funde con la siguiente, cuando acaba y cuando saltas."
       }
     },
     "autoplay": {

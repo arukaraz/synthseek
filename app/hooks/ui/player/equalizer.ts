@@ -1,4 +1,4 @@
-import type { EqualizerPresetId } from "@components/Player";
+import type { EqualizerPresetId, EqualizerPresetRef } from "@components/Player";
 import { z } from "zod";
 
 import {
@@ -46,10 +46,7 @@ export function withCustomPreset(
   return [...presets.filter((entry) => entry.name !== preset.name), preset].slice(-EQUALIZER_MAX_CUSTOM_PRESETS);
 }
 
-export function customPresetMatching(
-  presets: readonly EqualizerCustomPreset[],
-  gainsDb: readonly number[]
-): string | null {
+function customPresetMatching(presets: readonly EqualizerCustomPreset[], gainsDb: readonly number[]): string | null {
   return (
     presets.find(
       (preset) =>
@@ -92,6 +89,16 @@ export function equalizerPresetMatching(gainsDb: readonly number[]): EqualizerPr
       return preset.length === gainsDb.length && preset.every((gain, band) => gain === gainsDb[band]);
     }) ?? null
   );
+}
+
+export function equalizerPresetOf(
+  presets: readonly EqualizerCustomPreset[],
+  gainsDb: readonly number[]
+): EqualizerPresetRef | null {
+  const custom = customPresetMatching(presets, gainsDb);
+  if (custom !== null) return { kind: "custom", name: custom };
+  const builtIn = equalizerPresetMatching(gainsDb);
+  return builtIn === null ? null : { kind: "builtIn", id: builtIn };
 }
 
 function peakingResponseDb(hz: number, centreHz: number, q: number, gainDb: number, sampleRate: number): number {

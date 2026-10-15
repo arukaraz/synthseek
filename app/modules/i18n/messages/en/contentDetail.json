@@ -6,6 +6,7 @@
   "openDetail": "Open details for {{name}}",
   "play": "Play",
   "playAll": "Play everything we have of {{name}}",
+  "shuffleAll": "Shuffle everything we have of {{name}}",
   "startRadio": "Start radio",
   "startRadioInfo": "Plays a mix of similar songs you already have in your library.",
   "startRadioFrom": "Start a radio from {{name}}",

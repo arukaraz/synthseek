@@ -6,6 +6,7 @@
   "openDetail": "Abrir detalles de {{name}}",
   "play": "Reproducir",
   "playAll": "Reproducir todo lo que tenemos de {{name}}",
+  "shuffleAll": "Reproducir en aleatorio todo lo que tenemos de {{name}}",
   "startRadio": "Empezar radio",
   "startRadioInfo": "Reproduce una mezcla de canciones parecidas que ya tienes en tu biblioteca.",
   "startRadioFrom": "Empezar una radio a partir de {{name}}",

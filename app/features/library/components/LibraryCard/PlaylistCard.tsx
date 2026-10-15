@@ -77,7 +77,7 @@ export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
         </span>
         <PlaylistCardMenu item={item} />
         {coverActions ? (
-          <CardCoverActions name={item.name} onPlay={coverActions.play} onOpen={coverActions.open} />
+          <CardCoverActions name={item.name} order="inOrder" onPlay={coverActions.play} onOpen={coverActions.open} />
         ) : null}
       </div>
 

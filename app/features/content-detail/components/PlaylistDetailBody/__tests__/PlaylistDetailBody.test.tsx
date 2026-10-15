@@ -55,6 +55,13 @@ vi.mock("../../../ContentDetailActionsContext", () => ({
   useContentDetailActions: () => ({ requestPlaylist: vi.fn(), requestTrack: vi.fn() }),
 }));
 
+const playback = vi.hoisted(() => ({
+  playEntity: vi.fn(async () => undefined),
+  shuffleEntity: vi.fn(async () => undefined),
+}));
+
+vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => playback }));
+
 import { PlaylistDetailBody } from "../PlaylistDetailBody";
 
 function libraryTarget(): DetailTarget {
@@ -126,6 +133,31 @@ function playlistDetail(overrides?: Partial<Record<string, unknown>>) {
     },
   };
 }
+
+describe("PlaylistDetailBody shuffle", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    usePlaylistDetailMock.mockReturnValue(playlistDetail());
+  });
+
+  it("shuffles a library playlist from the icon beside Play", async () => {
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Shuffle everything we have of Road Trip" }));
+
+    expect(playback.shuffleEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" });
+    expect(playback.playEntity).not.toHaveBeenCalled();
+  });
+
+  it("offers no shuffle for a catalog playlist it cannot play", () => {
+    usePlaylistDetailMock.mockReturnValue({ data: undefined });
+    renderWithProviders(<PlaylistDetailBody target={catalogTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+
+    expect(screen.queryByRole("button", { name: "Shuffle everything we have of Top Hits" })).not.toBeInTheDocument();
+  });
+});
 
 describe("PlaylistDetailBody editing", () => {
   beforeEach(() => {

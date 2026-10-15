@@ -63,6 +63,7 @@ import {
   failedSourcesFor,
   fallbackSourceFor,
   requestedSourceFor,
+  insertAfterCurrent,
   insertBeforeAutoplay,
   isMirroring,
   mirroredPositionSeconds,
@@ -74,12 +75,14 @@ import {
   resolveQueueAdditions,
   shuffledOrder,
   streamUrlFor,
+  upcomingOrder,
   upcomingPositionsOf,
   withoutQueueIndex,
   withoutQueuePositions,
   withoutRepeats,
 } from "./helpers";
 import { clearMediaSession, publishMediaSession, publishPlaybackState, publishPosition } from "./media-session";
+import { silenceOf } from "./silence";
 import {
   defaultTransition,
   fadeAllowed,
@@ -231,7 +234,33 @@ function streamUrlOf(track: PlayerTrack, conversion: StreamConversion | null, fr
 
 function skipFadeSeconds(target: PlayerTrack): number {
   if (!state.playing) return 0;
-  return fadeAllowed(transitionFadeSeconds(state.transition, "skip"), state.durationSeconds, target.durationSeconds);
+  return fadeAllowed(transitionFadeSeconds(state.transition), state.durationSeconds, target.durationSeconds);
+}
+
+function playsLocalFile(track: PlayerTrack): boolean {
+  return sourceFor(track) === null && conversionFor(track) === null;
+}
+
+function leadingSilenceSecondsOf(track: PlayerTrack): number {
+  if (!playsLocalFile(track)) return 0;
+  return silenceOf(track.id)?.leadingSeconds ?? 0;
+}
+
+function audibleEndOf(track: PlayerTrack, durationSeconds: number, fadeSeconds: number): number | null {
+  if (state.transcoding || !playsLocalFile(track)) return null;
+  const silence = silenceOf(track.id);
+  if (silence === null || silence.trailingSeconds <= 0) return null;
+  const end = durationSeconds - silence.trailingSeconds;
+  return end > silence.leadingSeconds + fadeSeconds ? end : null;
+}
+
+export function silenceCandidates(): string[] {
+  if (transitionFadeSeconds(state.transition) <= 0 || !state.started || isMirroring(state)) return [];
+  const next = automaticNextIndex();
+  const candidates = [state.queue[state.index], next === null ? undefined : state.queue[next]];
+  return candidates
+    .filter((track): track is PlayerTrack => track !== undefined && playsLocalFile(track))
+    .map((track) => track.id);
 }
 
 function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
@@ -243,10 +272,11 @@ function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
   clearTimeout(skipTimer);
   const conversion = conversionFor(track);
   const converted = conversion !== null;
+  const begin = fadeSeconds > 0 && fromSeconds === 0 ? leadingSilenceSecondsOf(track) : fromSeconds;
   publish({
     remote: null,
     index,
-    positionSeconds: fromSeconds,
+    positionSeconds: begin,
     durationSeconds: track.durationSeconds,
     scrubSeconds: null,
     started: true,
@@ -256,7 +286,7 @@ function playAt(index: number, fromSeconds = 0, fadeSeconds = 0): void {
     offsetSeconds: converted ? fromSeconds : 0,
   });
   const url = streamUrlOf(track, conversion, fromSeconds);
-  const start = converted ? 0 : fromSeconds;
+  const start = converted ? 0 : begin;
   playRequested = true;
   if (fadeSeconds > 0) {
     const gainFactor = startLoudness(track, state.queue, state.shuffle, false);
@@ -290,9 +320,11 @@ function maintainPrime(positionSeconds: number, durationSeconds: number): void {
     cancelPrime();
     return;
   }
+  const leaving = currentTrack();
   const url = streamUrlOf(track, conversionFor(track), 0);
-  const fade = fadeAllowed(transitionFadeSeconds(state.transition, "ended"), durationSeconds, track.durationSeconds);
-  if (!primeDue(positionSeconds, durationSeconds, fade)) {
+  const fade = fadeAllowed(transitionFadeSeconds(state.transition), durationSeconds, track.durationSeconds);
+  const leaveAtSeconds = fade > 0 && leaving !== null ? audibleEndOf(leaving, durationSeconds, fade) : null;
+  if (!primeDue(positionSeconds, leaveAtSeconds ?? durationSeconds, fade)) {
     if (primedUrl() !== url) cancelPrime();
     return;
   }
@@ -301,6 +333,8 @@ function maintainPrime(positionSeconds: number, durationSeconds: number): void {
     gainFactor: gainFactorFor(track, activeLoudnessMode, loudness),
     fadeSeconds: fade,
     curve: state.transition.curve,
+    leaveAtSeconds,
+    enterAtSeconds: fade > 0 ? leadingSilenceSecondsOf(track) : 0,
   });
 }
 
@@ -633,6 +667,19 @@ export const actions = {
     publish({ queue, shuffleOrder: order, autoplayIds, consecutiveFailures: 0 });
     playAt(index);
   },
+  playShuffled(tracks: readonly PlayerTrack[]): void {
+    if (tracks.length === 0) return;
+    const { queue, index } = queueWindow(tracks, Math.floor(Math.random() * tracks.length));
+    const autoplayIds = new Set<string>();
+    publish({
+      queue,
+      shuffle: true,
+      shuffleOrder: shuffledOrder(queue, index, autoplayIds),
+      autoplayIds,
+      consecutiveFailures: 0,
+    });
+    playAt(index);
+  },
   playStation(seed: PlayerTrack | null, tracks: readonly PlayerTrack[]): void {
     const offered = seed === null ? tracks : [seed, ...tracks];
     const queue = withoutRepeats(offered, [], offered.length);
@@ -672,6 +719,46 @@ export const actions = {
       autoplayIds,
     });
     return additions.outcome;
+  },
+  playNext(tracks: readonly PlayerTrack[]): QueueAddOutcome {
+    for (const track of tracks) {
+      if (track.id !== currentTrack()?.id) actions.removeTrackFromQueue(track.id);
+    }
+    const additions = resolveQueueAdditions(state, tracks);
+    if (additions.fresh.length === 0) return additions.outcome;
+
+    const pruned = withoutQueuePositions(state, additions.dropped);
+    const added = new Set(additions.fresh.map((track) => track.id));
+    const autoplayIds = autoplayIdsAmong(
+      pruned.queue,
+      [...state.autoplayIds].filter((id) => !added.has(id))
+    );
+    if (state.queue.length === 0) {
+      const queue = [...pruned.queue, ...additions.fresh];
+      armAt(queue, 0, 0, state.shuffle ? shuffledOrder(queue, 0, autoplayIds) : []);
+      return additions.outcome;
+    }
+
+    const placed = insertAfterCurrent({ ...state, ...pruned, autoplayIds }, additions.fresh);
+    publish({
+      queue: placed.queue,
+      index: pruned.index,
+      shuffleOrder: state.shuffle ? placed.shuffleOrder : [],
+      autoplayIds,
+    });
+    return additions.outcome;
+  },
+  moveUpcoming(trackId: string, toPosition: number): void {
+    const tail = upcomingOrder(state).flatMap((index) => {
+      const track = state.queue[index];
+      return track === undefined ? [] : [track];
+    });
+    const from = tail.findIndex((track) => track.id === trackId);
+    const moving = tail[from];
+    if (moving === undefined) return;
+    const without = tail.filter((_, at) => at !== from);
+    const at = Math.min(Math.max(0, toPosition), without.length);
+    actions.reorderQueue([...without.slice(0, at), moving, ...without.slice(at)]);
   },
   appendAutoplay(tracks: readonly PlayerTrack[]): QueueAddOutcome {
     const additions = resolveQueueAdditions(state, tracks);

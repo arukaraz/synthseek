@@ -398,7 +398,7 @@ describe("the transition the listener asks for", () => {
   it("keeps the blend length on the range the panel offers", async () => {
     const store = await freshStore();
 
-    store.actions.setTransition({ mode: "smart", seconds: 40, curve: "equalPower" });
+    store.actions.setTransition({ mode: "crossfade", seconds: 40, curve: "equalPower" });
 
     expect(store.getSnapshot().transition.seconds).toBe(12);
   });
@@ -416,7 +416,7 @@ describe("the transition the listener asks for", () => {
     const store = await freshStore();
 
     store.actions.restorePlaybackSettings();
-    expect(store.getSnapshot().transition).toEqual({ mode: "smart", seconds: 3, curve: "linear" });
+    expect(store.getSnapshot().transition).toEqual({ mode: "crossfade", seconds: 3, curve: "linear" });
 
     window.localStorage.setItem(TRANSITION_STORAGE_KEY, JSON.stringify({ mode: "backwards" }));
     const again = await freshStore();

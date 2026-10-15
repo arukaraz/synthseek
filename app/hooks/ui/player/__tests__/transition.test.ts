@@ -23,22 +23,14 @@ import {
 } from "../transition";
 
 const CROSSFADE = { mode: "crossfade", seconds: 6, curve: "equalPower" } as const;
-const SMART = { mode: "smart", seconds: 4, curve: "linear" } as const;
 
 describe("what each transition mode does at a seam", () => {
-  it("runs one track straight into the next in gapless mode, whether the track ended or was skipped", () => {
-    expect(transitionFadeSeconds(defaultTransition(), "ended")).toBe(0);
-    expect(transitionFadeSeconds(defaultTransition(), "skip")).toBe(0);
+  it("runs one track straight into the next in gapless mode", () => {
+    expect(transitionFadeSeconds(defaultTransition())).toBe(0);
   });
 
-  it("blends for the chosen length in crossfade mode, on a natural end and on a skip alike", () => {
-    expect(transitionFadeSeconds(CROSSFADE, "ended")).toBe(6);
-    expect(transitionFadeSeconds(CROSSFADE, "skip")).toBe(6);
-  });
-
-  it("blends only a skip in smart mode, and lets a track that ends on its own run straight on", () => {
-    expect(transitionFadeSeconds(SMART, "ended")).toBe(0);
-    expect(transitionFadeSeconds(SMART, "skip")).toBe(4);
+  it("blends for the chosen length in crossfade mode", () => {
+    expect(transitionFadeSeconds(CROSSFADE)).toBe(6);
   });
 });
 
@@ -119,9 +111,17 @@ describe("the stored transition setting", () => {
   it("comes back from storage when it is well formed, and falls back otherwise", () => {
     expect(restorableTransition(JSON.stringify(CROSSFADE))).toEqual(CROSSFADE);
     expect(restorableTransition(JSON.stringify({ mode: "reverse", seconds: 3, curve: "linear" }))).toBeNull();
-    expect(restorableTransition(JSON.stringify({ mode: "smart", seconds: 99, curve: "linear" }))).toBeNull();
+    expect(restorableTransition(JSON.stringify({ mode: "crossfade", seconds: 99, curve: "linear" }))).toBeNull();
     expect(restorableTransition("not json")).toBeNull();
     expect(restorableTransition(null)).toBeNull();
+  });
+
+  it("brings a saved smart fade back as a crossfade, keeping its length and curve", () => {
+    expect(restorableTransition(JSON.stringify({ mode: "smart", seconds: 3, curve: "linear" }))).toEqual({
+      mode: "crossfade",
+      seconds: 3,
+      curve: "linear",
+    });
   });
 
   it("keeps the blend length on whole seconds inside the range the panel offers", () => {
@@ -135,11 +135,12 @@ describe("the stored transition setting", () => {
     expect(sameTransition(CROSSFADE, { ...CROSSFADE })).toBe(true);
     expect(sameTransition(CROSSFADE, { ...CROSSFADE, seconds: 7 })).toBe(false);
     expect(sameTransition(CROSSFADE, { ...CROSSFADE, curve: "linear" })).toBe(false);
-    expect(sameTransition(CROSSFADE, { ...CROSSFADE, mode: "smart" })).toBe(false);
+    expect(sameTransition(CROSSFADE, { ...CROSSFADE, mode: "gapless" })).toBe(false);
   });
 
   it("recognises the modes and curves the panel can name, and nothing else", () => {
-    expect(isTransitionMode("smart")).toBe(true);
+    expect(isTransitionMode("crossfade")).toBe(true);
+    expect(isTransitionMode("smart")).toBe(false);
     expect(isTransitionMode("reverse")).toBe(false);
     expect(isTransitionCurve("linear")).toBe(true);
     expect(isTransitionCurve("cubic")).toBe(false);

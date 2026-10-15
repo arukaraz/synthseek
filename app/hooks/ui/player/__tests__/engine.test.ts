@@ -111,7 +111,14 @@ describe("choosing the engine for the session", () => {
       onLoadingChange: vi.fn(),
       onFailure: vi.fn(),
     };
-    const plan = { url: "/stream/b", gainFactor: 0.8, fadeSeconds: 0, curve: "equalPower" as const };
+    const plan = {
+      url: "/stream/b",
+      gainFactor: 0.8,
+      fadeSeconds: 0,
+      curve: "equalPower" as const,
+      leaveAtSeconds: null,
+      enterAtSeconds: 0,
+    };
     const fade = { seconds: 4, curve: "linear" as const, gainFactor: 1 };
 
     facade.connectEngine(heard);

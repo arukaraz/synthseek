@@ -48,6 +48,7 @@ export interface DetailHeroProps {
   statsSlot?: ReactNode;
   onRequest?: () => void;
   onPlay?: () => Promise<void>;
+  onShuffle?: () => Promise<void>;
   onStartRadio?: () => Promise<void>;
   onSubtitleClick?: () => void;
   showRequest?: boolean;
@@ -61,6 +62,11 @@ export interface DetailHeroProps {
 export interface HeroPlayButtonProps {
   name: string;
   onPlay: () => Promise<void>;
+}
+
+export interface HeroShuffleButtonProps {
+  name: string;
+  onShuffle: () => Promise<void>;
 }
 
 export interface HeroRadioButtonProps {

@@ -52,10 +52,14 @@ function PlaylistDetailBodyComponent({
     enabled: isCatalog,
   });
   const { requestPlaylist } = useContentDetailActions();
-  const { playEntity } = useEntityPlayback();
+  const { playEntity, shuffleEntity } = useEntityPlayback();
   const handlePlay = useCallback(
     () => playEntity({ kind: "playlist", playlistId: target.id }),
     [playEntity, target.id]
+  );
+  const handleShuffle = useCallback(
+    () => shuffleEntity({ kind: "playlist", playlistId: target.id }),
+    [shuffleEntity, target.id]
   );
 
   const removeTracks = useRemoveTracksFromPlaylist();
@@ -234,6 +238,7 @@ function PlaylistDetailBodyComponent({
         showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
         onPlay={isLibrary ? handlePlay : undefined}
+        onShuffle={isLibrary ? handleShuffle : undefined}
         requestDisabled={target.requestDisabled}
         requestDisabledTooltip={target.requestDisabledTooltip}
         socials={EMPTY_SOCIALS}

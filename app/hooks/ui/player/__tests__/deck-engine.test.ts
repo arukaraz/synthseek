@@ -399,7 +399,14 @@ describe("engine element events", () => {
   });
 });
 
-const NEXT = { url: "/stream/b", gainFactor: 0.5, fadeSeconds: 0, curve: "equalPower" } as const;
+const NEXT = {
+  url: "/stream/b",
+  gainFactor: 0.5,
+  fadeSeconds: 0,
+  curve: "equalPower",
+  leaveAtSeconds: null,
+  enterAtSeconds: 0,
+} as const;
 
 describe("the deck that waits with the next track", () => {
   it("loads the next track on the standby deck, silent and unplayed, without touching the one that is sounding", async () => {
@@ -468,6 +475,27 @@ describe("the deck that waits with the next track", () => {
     expect(heard.onHandoff).toHaveBeenCalledWith("/stream/b");
     expect(heard.onEnded).not.toHaveBeenCalled();
     expect(engine.primedUrl()).toBeNull();
+  });
+
+  it("blends where the leaving track's sound ends rather than where its file ends, and starts the next past its silence", async () => {
+    vi.useFakeTimers();
+    const { engine, heard } = await freshEngine();
+    engine.loadAndPlay("/stream/a", 1, false);
+    engine.prime({ ...NEXT, fadeSeconds: 4, leaveAtSeconds: 196, enterAtSeconds: 1.5 });
+    node.duration = 200;
+    node.currentTime = 190;
+    node.dispatchEvent(new Event("timeupdate"));
+
+    node.currentTime = 191.5;
+    vi.advanceTimersByTime(HANDOFF_POLL_MS);
+    expect(standby().play).not.toHaveBeenCalled();
+
+    node.currentTime = 192.01;
+    vi.advanceTimersByTime(HANDOFF_POLL_MS);
+
+    expect(standby().play).toHaveBeenCalled();
+    expect(standby().currentTime).toBe(1.5);
+    expect(heard.onHandoff).toHaveBeenCalledWith("/stream/b");
   });
 
   it("hands over at the end when the browser never said how long the track was", async () => {

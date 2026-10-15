@@ -1099,14 +1099,17 @@
     "keyLabel": "Clave de API",
     "keyBody": "Para Claude Code, Cursor o Claude Desktop (mediante mcp-remote). Crea una clave arriba y envíala como token bearer: Authorization: Bearer <tu clave>.",
     "toolsTitle": "Herramientas disponibles",
-    "toolsDescription": "Lo que puede hacer un asistente conectado: buscar en el catálogo, encolar y gestionar descargas, explorar tu biblioteca, leer y actualizar ajustes y (para administradores) controlar la cola, lanzar trabajos, comprobar el estado del sistema y leer los registros del servidor para diagnóstico. La disponibilidad exacta depende de tu rol.",
+    "toolsDescription": "Lo que puede hacer un asistente conectado: buscar en el catálogo, encolar y gestionar descargas, armar playlists, explorar tu biblioteca, manejar el reproductor, leer y actualizar ajustes y (para administradores) controlar la cola de descargas, lanzar trabajos, comprobar el estado del sistema y leer los registros del servidor para diagnóstico. La disponibilidad exacta depende de tu rol.",
     "tools": {
-      "discovery": "Descubrimiento: search_music, get_music_details, get_artist_overview, get_trending, browse_genres, get_recommendations, resolve_url",
-      "downloads": "Descargas: download_track, download_album, download_playlist, retry_request, cancel_request, retry_all_failed",
-      "requests": "Solicitudes: list_requests, get_request",
-      "library": "Biblioteca: get_library_summary, search_library",
+      "discovery": "Descubrimiento: search_music, get_music_details, get_artist_overview, get_artist_discography, get_trending, browse_genres, get_recommendations, resolve_url",
+      "downloads": "Descargas: download_track, download_album, download_playlist, retry_all_failed",
+      "requests": "Solicitudes: list_requests, get_request, control_request, upgrade_tracks, get_my_quota y (admin) decide_request",
+      "playlists": "Playlists: list_playlists, get_playlist, create_playlist, add_tracks_to_playlist, replace_playlist_tracks, remove_tracks_from_playlist, delete_playlist, update_playlist, sync_playlist_to_media_server",
+      "library": "Biblioteca: get_library_summary, search_library, set_favorite, list_favorites",
+      "listening": "Historial de escucha: get_listening_history, get_lastfm_scrobbles",
+      "player": "Reproductor: get_play_queue, edit_play_queue, play, now_playing, control_player, start_radio, get_lyrics, get_player_settings, set_player_settings, set_player_view",
       "settings": "Ajustes: get_settings, update_setting",
-      "operations": "Operaciones (admin): get_queue_stats, pause_queue, resume_queue, trigger_job, get_system_health, y leer los registros del servidor para diagnóstico (list_log_files, read_logs)"
+      "operations": "Operaciones (admin): get_download_queue_stats, pause_download_queue, resume_download_queue, list_jobs, trigger_job, get_system_health, get_maintenance_status, review_imports, check_for_updates y leer los registros del servidor para diagnóstico (list_log_files, read_logs)"
     }
   },
   "logs": {

@@ -47,6 +47,7 @@ export {
   useSendPlayerCommand,
   useSetFavoriteTrack,
   useSetSourceReporting,
+  useTrackSilenceFetcher,
   useUnlinkSourceAccount,
 } from "./mutations/playback";
 

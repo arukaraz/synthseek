@@ -27,17 +27,30 @@ const api = vi.hoisted(() => ({
   upgradePending: false,
   setProfile: vi.fn(),
   fetchRadio: vi.fn(),
+  fetchSilence: vi.fn(),
   startStation: vi.fn(),
+  refreshCurrentUser: vi.fn(),
 }));
 
 vi.mock("@hooks/api/mutations/auth/useSetPlaybackProfile", () => ({
   useSetPlaybackProfile: () => ({ mutate: api.setProfile }),
 }));
 
+vi.mock("@hooks/api/queries/useRefreshCurrentUser", () => ({
+  useRefreshCurrentUser: () => api.refreshCurrentUser,
+}));
+
+const commands = vi.hoisted(() => ({
+  setAccountRefreshHandler: vi.fn<(handler: (() => void) | null) => void>(),
+}));
+
+vi.mock("../commands", () => commands);
+
 vi.mock("../useStartRadio", () => ({ useStartRadio: () => api.startStation }));
 
 vi.mock("@hooks/api", () => ({
   useRadioTracksFetcher: () => api.fetchRadio,
+  useTrackSilenceFetcher: () => api.fetchSilence,
   useFavoriteTracks: () => ({ data: api.favorites }),
   useListeningConnections: () => ({ data: api.connections }),
   useSetFavoriteTrack: () => ({
@@ -979,6 +992,18 @@ describe("usePlayer autoplay", () => {
     expect(store.setAutoplayPreference).toHaveBeenCalledWith(true);
   });
 
+  it("reloads the account settings when an assistant changed them, and stops listening once gone", () => {
+    const { unmount } = renderHook(() => usePlayer());
+    const refresh = commands.setAccountRefreshHandler.mock.lastCall?.[0];
+    if (typeof refresh !== "function") throw new Error("no account refresh handler was registered");
+
+    refresh();
+    expect(api.refreshCurrentUser).toHaveBeenCalledTimes(1);
+
+    unmount();
+    expect(commands.setAccountRefreshHandler).toHaveBeenLastCalledWith(null);
+  });
+
   it("writes the autoplay preference to the account, which is where it lives", () => {
     const { result } = renderHook(() => usePlayer());
 
@@ -1050,12 +1075,12 @@ describe("usePlayer conversion", () => {
 
 describe("usePlayer transitions", () => {
   it("shows the transition the listener chose and hands a change straight to the store", () => {
-    store.snapshot = sessionState({ transition: { mode: "smart", seconds: 3, curve: "linear" } });
+    store.snapshot = sessionState({ transition: { mode: "crossfade", seconds: 3, curve: "linear" } });
 
     const { result } = renderHook(() => usePlayer());
     result.current.actions.setTransition({ mode: "crossfade", seconds: 7, curve: "equalPower" });
 
-    expect(result.current.view?.transition).toEqual({ mode: "smart", seconds: 3, curve: "linear" });
+    expect(result.current.view?.transition).toEqual({ mode: "crossfade", seconds: 3, curve: "linear" });
     expect(store.actions.setTransition).toHaveBeenCalledWith({ mode: "crossfade", seconds: 7, curve: "equalPower" });
   });
 });

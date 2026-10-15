@@ -425,6 +425,20 @@ export function insertBeforeAutoplay(
   return { queue, shuffleOrder };
 }
 
+export function insertAfterCurrent(
+  state: PlayerSessionState,
+  tracks: readonly PlayerTrack[]
+): { queue: PlayerTrack[]; shuffleOrder: number[] } {
+  const at = state.index + 1;
+  const queue = [...state.queue.slice(0, at), ...tracks, ...state.queue.slice(at)];
+  const fresh = tracks.map((_, offset) => at + offset);
+  const shifted = state.shuffleOrder.map((index) => (index >= at ? index + tracks.length : index));
+  const playing = shifted.indexOf(state.index);
+  const shuffleOrder =
+    playing < 0 ? [...fresh, ...shifted] : [...shifted.slice(0, playing + 1), ...fresh, ...shifted.slice(playing + 1)];
+  return { queue, shuffleOrder };
+}
+
 export function autoplayIdsAmong(tracks: readonly PlayerTrack[], autoplayTrackIds: readonly string[]): Set<string> {
   const wanted = new Set(autoplayTrackIds);
   return new Set(tracks.filter((track) => wanted.has(track.id)).map((track) => track.id));

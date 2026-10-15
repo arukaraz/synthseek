@@ -20,8 +20,11 @@ export interface LibraryInfiniteGridProps<TItem> {
   fetchNextPage: () => void;
 }
 
+export type CardPlayOrder = "inOrder" | "shuffled";
+
 export interface CardCoverActionsProps {
   name: string;
+  order: CardPlayOrder;
   onPlay: () => Promise<void>;
   onOpen?: () => void;
   menu?: ReactNode;

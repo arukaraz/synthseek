@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 export function useEntityPlayback(): {
   playEntity: (target: PlayableTracksTarget) => Promise<void>;
+  shuffleEntity: (target: PlayableTracksTarget) => Promise<void>;
   enqueueEntity: (target: PlayableTracksTarget) => Promise<boolean>;
   enqueueEntities: (targets: readonly PlayableTracksTarget[]) => Promise<boolean>;
   enqueueTracks: (tracks: readonly PlayerTrack[]) => boolean;
@@ -43,15 +44,29 @@ export function useEntityPlayback(): {
     [fetchPlayable, t]
   );
 
-  const playEntity = useCallback(
+  const queueFor = useCallback(
     async (target: PlayableTracksTarget) => {
       const tracks = await resolve(target);
-      if (tracks === null) return;
-      const queue = target.kind === "album" || target.kind === "artist" ? await tracksFromChosenSource(tracks) : tracks;
-      if (queue === null) return;
-      playerActions.playQueue(queue, 0);
+      if (tracks === null) return null;
+      return target.kind === "album" || target.kind === "artist" ? tracksFromChosenSource(tracks) : tracks;
     },
     [resolve]
+  );
+
+  const playEntity = useCallback(
+    async (target: PlayableTracksTarget) => {
+      const queue = await queueFor(target);
+      if (queue !== null) playerActions.playQueue(queue, 0);
+    },
+    [queueFor]
+  );
+
+  const shuffleEntity = useCallback(
+    async (target: PlayableTracksTarget) => {
+      const queue = await queueFor(target);
+      if (queue !== null) playerActions.playShuffled(queue);
+    },
+    [queueFor]
   );
 
   const enqueueTracks = useCallback(
@@ -100,5 +115,5 @@ export function useEntityPlayback(): {
 
   const startRadio = useCallback((target: PlayableTracksTarget) => startStation(target, null), [startStation]);
 
-  return { playEntity, enqueueEntity, enqueueEntities, enqueueTracks, startRadio };
+  return { playEntity, shuffleEntity, enqueueEntity, enqueueEntities, enqueueTracks, startRadio };
 }

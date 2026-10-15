@@ -1,4 +1,4 @@
-import type { AppRouter } from "@api/__generated__/types";
+import type { AppRouter, PlayerCommandPayload } from "@api/__generated__/types";
 import type {
   PlayerDeviceKind,
   PlayerMode,
@@ -7,9 +7,17 @@ import type {
   PlayerTransition,
   TransitionCurve,
 } from "@components/Player";
-import type { inferRouterOutputs } from "@trpc/server";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 export type ListeningConnectionStatus = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
+
+export type TrackSilence = inferRouterOutputs<AppRouter>["playback"]["trackSilence"][number];
+
+export type PlayerSettingsReport = NonNullable<inferRouterInputs<AppRouter>["playback"]["heartbeat"]["settings"]>;
+
+export type SettingsCommandPayload = Extract<PlayerCommandPayload, { command: "applySettings" }>;
+
+export type ViewCommandPayload = Extract<PlayerCommandPayload, { command: "showView" }>;
 
 export type PlayerDockState = "hidden" | "bar" | "chain";
 
@@ -149,6 +157,8 @@ export interface PrimePlan {
   gainFactor: number;
   fadeSeconds: number;
   curve: TransitionCurve;
+  leaveAtSeconds: number | null;
+  enterAtSeconds: number;
 }
 
 export interface SkipFade {
@@ -158,8 +168,6 @@ export interface SkipFade {
 }
 
 export type FadeDirection = "in" | "out";
-
-export type TransitionReason = "ended" | "skip";
 
 export interface SessionSnapshot {
   trackIds: string[];
