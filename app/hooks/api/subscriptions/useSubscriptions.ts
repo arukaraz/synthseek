@@ -1,9 +1,15 @@
 import { RequestStatus, SubscriptionEventType, type SubscriptionEvent } from "@api/__generated__/types";
-import { applyPlaybackState, applyPlayerCommand } from "@hooks/ui/player";
+import {
+  applyPlaybackState,
+  applyPlayerCommand,
+  currentDeviceId,
+  noDeviceIdYet,
+  subscribeDeviceId,
+} from "@hooks/ui/player";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@utils/trpc";
-import { useRef } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import {
   handleAlbumUpdate,
   handleDropImportUpdate,
@@ -44,7 +50,10 @@ export function useSubscriptions() {
   const hasStreamConnectedRef = useRef(false);
   const lastEventRef = useRef<Map<string, number>>(new Map());
 
-  trpc.subscriptionEvents.onEvent.useSubscription(undefined, {
+  const deviceId = useSyncExternalStore(subscribeDeviceId, currentDeviceId, noDeviceIdYet);
+
+  trpc.subscriptionEvents.onEvent.useSubscription(deviceId === null ? undefined : { deviceId }, {
+    enabled: deviceId !== null,
     onStarted: () => {
       reconnectAttemptsRef.current = 0;
 

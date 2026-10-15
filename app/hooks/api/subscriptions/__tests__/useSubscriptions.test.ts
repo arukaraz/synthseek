@@ -15,6 +15,8 @@ import { resetRequestListInvalidation } from "../shared/requestListInvalidation"
 const auth = vi.hoisted(() => ({ currentUser: null as { id: string } | null }));
 
 const captured = vi.hoisted(() => ({
+  input: undefined as { deviceId: string } | undefined,
+  enabled: false,
   onData: null as ((event: SubscriptionEvent) => void) | null,
   onStarted: null as (() => void) | null,
 }));
@@ -118,9 +120,11 @@ vi.mock("@utils/trpc", () => ({
     subscriptionEvents: {
       onEvent: {
         useSubscription: (
-          _input: undefined,
-          opts: { onData: (event: SubscriptionEvent) => void; onStarted: () => void }
+          input: { deviceId: string } | undefined,
+          opts: { enabled: boolean; onData: (event: SubscriptionEvent) => void; onStarted: () => void }
         ) => {
+          captured.input = input;
+          captured.enabled = opts.enabled;
           captured.onData = opts.onData;
           captured.onStarted = opts.onStarted;
         },
@@ -194,6 +198,15 @@ beforeEach(() => {
 });
 
 describe("useSubscriptions", () => {
+  it("opens the event stream under this tab's device id, so the server knows the tab is gone when it closes", () => {
+    renderHookWithProviders(() => useSubscriptions());
+
+    const stored = window.sessionStorage.getItem("synthseek.player.device");
+    expect(stored).not.toBeNull();
+    expect(captured.input).toEqual({ deviceId: stored });
+    expect(captured.enabled).toBe(true);
+  });
+
   it("hands the signed-in user's id to every job-progress handler", () => {
     auth.currentUser = { id: "u_self" };
 

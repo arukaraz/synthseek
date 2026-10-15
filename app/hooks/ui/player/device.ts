@@ -45,6 +45,22 @@ export function deviceKindFrom(userAgent: string): PlayerDeviceKind {
 
 let identity: DeviceIdentity | null = null;
 let claim: DeviceClaim | null = null;
+const idListeners = new Set<() => void>();
+
+export function subscribeDeviceId(listener: () => void): () => void {
+  idListeners.add(listener);
+  return () => {
+    idListeners.delete(listener);
+  };
+}
+
+export function currentDeviceId(): string {
+  return deviceIdentity().id;
+}
+
+export function noDeviceIdYet(): null {
+  return null;
+}
 
 function mint(name: string, kind: PlayerDeviceKind): DeviceIdentity {
   const id = window.crypto.randomUUID();
@@ -86,6 +102,7 @@ export function claimDeviceId(onReplaced: (id: string) => void): () => void {
     claim = { id: fresh.id, claimedAt: Date.now(), nonce: window.crypto.randomUUID() };
     announce();
     onReplaced(fresh.id);
+    for (const listener of idListeners) listener();
   };
 
   deviceIdentity();

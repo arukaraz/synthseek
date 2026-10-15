@@ -3,6 +3,7 @@ export { playableOnlyFrom, playerTrackFrom, sourceLabelFor } from "./helpers";
 export { settleSourcePick, tracksFromChosenSource, useSourcePickerRequest } from "./sourcePicker";
 export type { PlayerDockState, SourceCount, SourcePick, SourcePickerRequest } from "./types";
 export { applyPlaybackState, applyPlayerCommand } from "./commands";
+export { currentDeviceId, noDeviceIdYet, subscribeDeviceId } from "./device";
 export { usePlayerDevices } from "./useDevices";
 export { usePlayerSessionSync } from "./useSessionSync";
 export { useRemoteQueueCommands } from "./useRemoteQueueCommands";

@@ -55,9 +55,17 @@ export function getTRPCClientConfig(clientSessionId: string) {
         condition: (op) => op.type === "subscription",
         true: httpSubscriptionLink({ url: baseUrl, transformer: superjson }),
         false: splitLink({
-          condition: (op) => op.context.skipBatch === true,
-          true: httpLink({ url: baseUrl, transformer: superjson }),
-          false: httpBatchLink({ url: baseUrl, transformer: superjson }),
+          condition: (op) => op.context.outliveThePage === true,
+          true: httpLink({
+            url: baseUrl,
+            transformer: superjson,
+            fetch: (input, init) => fetch(input, { ...init, keepalive: true }),
+          }),
+          false: splitLink({
+            condition: (op) => op.context.skipBatch === true,
+            true: httpLink({ url: baseUrl, transformer: superjson }),
+            false: httpBatchLink({ url: baseUrl, transformer: superjson }),
+          }),
         }),
       }),
     ],

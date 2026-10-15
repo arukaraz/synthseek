@@ -168,6 +168,22 @@ describe("claimDeviceId", () => {
     expect(window.sessionStorage.getItem(DEVICE_ID_STORAGE_KEY)).toBe("uuid-3");
   });
 
+  it("tells whoever follows the id that it moved, so the event stream can reopen under the new one", async () => {
+    const device = await freshDevice();
+    const moved = vi.fn();
+    const stop = device.subscribeDeviceId(moved);
+    device.claimDeviceId(vi.fn());
+    expect(device.currentDeviceId()).toBe("uuid-1");
+
+    channels[0]?.receive({ id: "uuid-1", claimedAt: Date.now() - 10_000, nonce: "aaa" });
+
+    expect(moved).toHaveBeenCalledTimes(1);
+    expect(device.currentDeviceId()).toBe("uuid-3");
+    stop();
+    channels[0]?.receive({ id: "uuid-3", claimedAt: Date.now() - 20_000, nonce: "aaa" });
+    expect(moved).toHaveBeenCalledTimes(1);
+  });
+
   it("announces the fresh id too, so the tabs settle rather than trade the id back", async () => {
     const device = await freshDevice();
     device.claimDeviceId(vi.fn());

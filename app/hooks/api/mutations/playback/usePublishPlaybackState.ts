@@ -1,5 +1,5 @@
 import { trpc } from "@utils/trpc";
 
 export function usePublishPlaybackState() {
-  return trpc.playback.publishState.useMutation();
+  return trpc.playback.publishState.useMutation({ trpc: { context: { outliveThePage: true } } });
 }
