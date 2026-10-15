@@ -61,7 +61,7 @@ Banning a peer automatically after repeated failures is a separate switch, on th
 ## Another Subsonic server
 
 Synthseek can download original files from another server that speaks the Subsonic API, such as a
-friend's Navidrome or Synthseek. It is off until you set it up, and it uses one server.
+friend's Navidrome or Synthseek. It is off until you set it up, and it connects to one server.
 
 ### Setting it up
 
@@ -72,12 +72,9 @@ friend's Navidrome or Synthseek. It is off until you set it up, and it uses one 
    the address, then the API key, or a username and password.
 3. Test the connection, turn the source on and save.
 
-The address is where the server answers. For a Synthseek server it ends in `/api/v1/subsonic`, for
-Navidrome it is usually the server itself, such as `http://navidrome:4533`. An address that points
-back at this Synthseek is refused.
-
-A track counts as the one you asked for when its ISRC matches, or when the title, the artist and the
-length agree. Downloading from a Synthseek server leaves no plays on it.
+For a Synthseek server the address ends in `/api/v1/subsonic`. For Navidrome it is usually the
+server itself, such as `http://navidrome:4533`. An address that points back at this Synthseek is
+refused. Downloading from a Synthseek server leaves no plays on it.
 
 ### Subsonic server settings
 
@@ -133,20 +130,19 @@ account:
 Off by default. While it is off, Usenet is offered only when you request an album.
 
 Turning it on lets Usenet serve any request, at the cost the section above describes: one song means
-downloading its album. To keep that from being pure waste, the downloaded album stays on disk for a
-while, so another track from it costs nothing. **Settings**, then **Maintenance**, then **Downloaded
-albums** lists them. An hourly job removes the ones nobody came back for.
+downloading its album. To keep that from being pure waste, the downloaded album stays on disk for the
+time set in **Keep unused albums for**, so another track from it costs nothing. **Settings**, then
+**Maintenance**, then **Downloaded albums** lists them.
 
 ### When a release does not deliver
 
 Usenet does not always hand over what its name promised, and Synthseek treats the outcomes
 differently on purpose.
 
-A release that arrives with files but without the track you asked for is a bad release, and it is
-remembered so the same one is not tried again for that track. So is one SABnzbd reports it could not
-repair or complete. A release that arrives with nothing
-readable is NOT blamed: a very recent post can still be spreading between servers, and blaming it
-would rule out something that is merely early. Those are retried later instead. And when the
+A release that arrives with files but without the track you asked for is a bad release. It is
+remembered so the same one is not tried again for that track, and so is one SABnzbd reports it could
+not repair or complete. A release that arrives with nothing readable is NOT blamed, because a very
+recent post can still be spreading between servers. Those are retried later instead. And when the
 downloads folder itself cannot be read, nothing is blamed at all, because that is a problem on your
 side rather than the release's.
 
@@ -220,7 +216,7 @@ Synthseek can also look for a track on SoundCloud, through the same bundled yt-d
 account, and it is off until you turn it on.
 
 Most of what SoundCloud returns for a well-known song is somebody else's version of it: remixes,
-covers, sped-up or slowed edits. Uploads named as one of those are skipped. Tracks SoundCloud offers
+covers, sped-up or slowed edits. Synthseek skips the ones it recognises. Tracks SoundCloud offers
 only as a short preview, or only behind its own DRM, are left out of the search.
 
 ### SoundCloud settings
@@ -237,15 +233,13 @@ only as a short preview, or only behind its own DRM, are left out of the search.
 Synthseek can also look for a track in the Internet Archive's free music. It needs no account, and it
 is off until you turn it on.
 
-It searches only the collections you allow. Netlabel releases, albums independent labels published
-under free licences, are allowed as soon as you turn the source on. Live recordings, from bands that
-let fans tape their concerts, are off by default, because a concert recording is rarely the studio
-version you asked for. Community uploads, music anyone uploaded, are off by default too. When on, they
-are searched only after the other collections find nothing, and nobody checks who owns that music.
+It searches only the collections you allow in the settings below. Netlabel releases are albums
+independent labels published under free licences. Live recordings come from bands that let fans tape
+their concerts, so they are rarely the studio version. Community uploads are music anyone uploaded,
+and nobody checks who owns it.
 
 A download is checked against the checksum the Internet Archive publishes for it, when there is one.
-When the release states its licence, the request page links to it. If the Internet Archive asks
-Synthseek to slow down, the source pauses for a while instead of retrying.
+When the release states its licence, the request page links to it.
 
 ### Internet Archive settings
 

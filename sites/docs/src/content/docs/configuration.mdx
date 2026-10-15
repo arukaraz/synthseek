@@ -56,13 +56,13 @@ Available to every member. Each member sets up their own destinations and picks 
 
 Everyone can send to Discord, ntfy and Telegram. Administrators can also send JSON to a webhook, or reach other services through an Apprise server. A member picks from their own downloads, their discovery mixes and their account. Administrators also get members, library, maintenance and system notifications, and can include every member's downloads.
 
-A notification goes out when something changes, so a pass that changed nothing sends nothing. Messages are written in the member's language.
+Messages are written in the member's language.
 
 On Discord, ntfy and Telegram, a download notice shows the cover art when there is one. Once `PUBLIC_BASE_URL` is an HTTPS address, every notification on those three also links to the page it is about.
 
-| Setting                 | Default | What it does                                                                           |
-| ----------------------- | ------- | -------------------------------------------------------------------------------------- |
-| ntfy server for members | Empty   | **Admin only.** A second ntfy server members may use. Without it, members use ntfy.sh. |
+| Setting                 | Default | What it does                                                                                    |
+| ----------------------- | ------- | ----------------------------------------------------------------------------------------------- |
+| ntfy server for members | Empty   | **Administrators only.** A second ntfy server members may use. Without it, members use ntfy.sh. |
 
 ### Integrations
 
@@ -94,14 +94,14 @@ Navidrome (URL, username, password) and Jellyfin (URL, API key) each have a test
 
 **Metadata and artwork.** All optional, all free:
 
-| Key                       | What it unlocks                                                                                                           |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| AcoustID                  | Verifying a download by its audio, and identifying a track for tagging when other methods cannot. The most valuable one.  |
-| Last.fm                   | Similar artists, global charts, and your scrobble history. Its shared secret also lets members send plays to Last.fm.     |
-| fanart.tv                 | High quality artist images.                                                                                               |
-| MusicBrainz contact email | A higher rate limit against MusicBrainz.                                                                                  |
-| Songlink                  | Turning a link from another platform, such as Spotify, into a track. A link to the music catalog itself works without it. |
-| Discogs                   | Additional metadata depth on the content detail views.                                                                    |
+| Key                       | What it unlocks                                                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| AcoustID                  | Verifying a download by its audio, and identifying a track for tagging when other methods cannot. The most valuable one. |
+| Last.fm                   | Similar artists, global charts, and your scrobble history. Its shared secret also lets members send plays to Last.fm.    |
+| fanart.tv                 | High quality artist images.                                                                                              |
+| MusicBrainz contact email | A higher rate limit against MusicBrainz.                                                                                 |
+| Songlink                  | A higher rate limit when turning a link from another platform, such as Spotify, into a track.                            |
+| Discogs                   | Additional metadata depth on the content detail views.                                                                   |
 
 **Library sources.** Connect Spotify to import your existing library. Requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet.
 
@@ -156,7 +156,7 @@ Custom mood keywords, which extend the built-in mood classification with terms o
 
 ### Maintenance
 
-Administrators only. Six pages, each holding the list it is about and, for most, the setting that governs it. Every page carries a live count in the sidebar, and the section itself shows a dot while anything is waiting, downloaded albums aside.
+Administrators only. Six pages, each holding the list it is about and, for most, the setting that governs it. Every page carries a live count in the sidebar. The section itself shows a dot while any page but **Downloaded albums** has something waiting.
 
 **Review**
 
@@ -176,7 +176,7 @@ Alongside it, what the bin currently holds, the files it is keeping, a **Restore
 
 **Downloaded albums**
 
-The albums Usenet and torrent fetched whole that are still on disk. Each shows its size and when it expires, with a delete on each and a button to delete them all.
+The albums Usenet and torrent fetched whole that are still on disk. Each shows its size and when it expires, and you can delete one or all of them.
 
 **Quarantine**
 

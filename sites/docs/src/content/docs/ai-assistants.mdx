@@ -76,7 +76,7 @@ Then run `/mcp` and complete the authorisation in your browser.
 | `control_request` | Prioritise, pause, resume, cancel, or retry a song, album, or playlist download.    |
 | `upgrade_tracks`  | Look for a better quality copy of songs you already have.                           |
 | `get_my_quota`    | How much of your download allowance you have used.                                  |
-| `decide_request`  | Approve or turn down a member's request. Admins only.                               |
+| `decide_request`  | Approve or turn down a member's request. Administrators only.                       |
 
 ### Playlists
 
@@ -94,12 +94,12 @@ Then run `/mcp` and complete the authorisation in your browser.
 
 ### Library
 
-| Tool                  | What it does                                                 |
-| --------------------- | ------------------------------------------------------------ |
-| `get_library_summary` | Totals, top artists and genres, and queue size.              |
-| `search_library`      | Search what you already have.                                |
-| `set_favorite`        | Mark songs, albums, or artists as favorites, or unmark them. |
-| `list_favorites`      | Your favorite songs, albums, and artists.                    |
+| Tool                  | What it does                                                  |
+| --------------------- | ------------------------------------------------------------- |
+| `get_library_summary` | Totals, top artists and genres, and queue size.               |
+| `search_library`      | Search what you already have.                                 |
+| `set_favorite`        | Mark songs, albums, or artists as favourites, or unmark them. |
+| `list_favorites`      | Your favourite songs, albums, and artists.                    |
 
 ### Listening history
 
@@ -120,10 +120,10 @@ Then run `/mcp` and complete the authorisation in your browser.
 | `start_radio`         | Play similar songs from your library, starting from a song or an artist.                    |
 | `get_lyrics`          | The words of a song.                                                                        |
 | `get_player_settings` | How a player is set up: equalizer, compressor, transitions, conversion, and what it shows.  |
-| `set_player_settings` | Change those, plus volume normalization and autoplay.                                       |
+| `set_player_settings` | Change those, plus volume normalisation and autoplay.                                       |
 | `set_player_view`     | Show or hide the lyrics, the full-screen player, or the queue, or resize the bar.           |
 
-The sound comes from a Synthseek page open in a browser, so the player tools act on one. With none open, `play` and `edit_play_queue` save the queue for the next player you open.
+The player tools act on a Synthseek page open in a browser. With none open, `play` and `edit_play_queue` save the queue for the next player you open.
 
 ### Settings
 
@@ -134,21 +134,21 @@ The sound comes from a Synthseek page open in a browser, so the player tools act
 
 ### System and operations
 
-These are for admins.
+Administrators only.
 
-| Tool                       | What it does                                                            |
-| -------------------------- | ----------------------------------------------------------------------- |
-| `get_download_queue_stats` | The download queue at a glance, including whether it is paused.         |
-| `pause_download_queue`     | Pause downloading and everything in progress. Playback is not affected. |
-| `resume_download_queue`    | Resume downloading.                                                     |
-| `trigger_job`              | Start a background job now. It returns once the job is running.         |
-| `list_jobs`                | List the background jobs and which are doing work right now.            |
-| `get_system_health`        | Check Synthseek and its connected services.                             |
-| `get_maintenance_status`   | Everything that needs your attention, in one summary.                   |
-| `review_imports`           | Look at downloads held back for a check, then keep or discard them.     |
-| `check_for_updates`        | Whether a newer Synthseek version is out.                               |
-| `list_log_files`           | The available log files.                                                |
-| `read_logs`                | Recent log entries, for troubleshooting.                                |
+| Tool                       | What it does                                                        |
+| -------------------------- | ------------------------------------------------------------------- |
+| `get_download_queue_stats` | The download queue at a glance, including whether it is paused.     |
+| `pause_download_queue`     | Pause downloading and everything in progress.                       |
+| `resume_download_queue`    | Resume downloading.                                                 |
+| `trigger_job`              | Start a background job now. It returns once the job is running.     |
+| `list_jobs`                | List the background jobs and which are doing work right now.        |
+| `get_system_health`        | Check Synthseek and its connected services.                         |
+| `get_maintenance_status`   | Everything that needs your attention, in one summary.               |
+| `review_imports`           | Look at downloads held back for a check, then keep or discard them. |
+| `check_for_updates`        | Whether a newer Synthseek version is out.                           |
+| `list_log_files`           | The available log files.                                            |
+| `read_logs`                | Recent log entries, for troubleshooting.                            |
 
 ## Two things worth knowing
 
