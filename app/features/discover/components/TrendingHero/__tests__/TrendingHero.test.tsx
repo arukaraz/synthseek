@@ -16,9 +16,23 @@ vi.mock("@hooks/api/queries/useTrendingTracks", () => ({
 }));
 
 vi.mock("../TrendingHeroSlide", () => ({
-  TrendingHeroSlide: ({ item, total }: { item: { track: MusicTrack }; total: number }) => (
-    <div data-testid="slide" data-total={total}>
-      {item.track.title}
+  TrendingHeroSlide: ({
+    item,
+    total,
+    onRequestOpenChange,
+  }: {
+    item: { track: MusicTrack };
+    total: number;
+    onRequestOpenChange: (open: boolean) => void;
+  }) => (
+    <div data-total={total}>
+      <div data-testid="slide">{item.track.title}</div>
+      <button type="button" onClick={() => onRequestOpenChange(true)}>
+        open-request
+      </button>
+      <button type="button" onClick={() => onRequestOpenChange(false)}>
+        close-request
+      </button>
     </div>
   ),
 }));
@@ -156,5 +170,54 @@ describe("TrendingHero", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it("holds the slide while its request dialog is open and rotates again once it closes", () => {
+    vi.useFakeTimers();
+    try {
+      useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
+
+      renderWithProviders(<TrendingHero />);
+      fireEvent.click(screen.getByText("open-request"));
+
+      act(() => {
+        vi.advanceTimersByTime(10000);
+      });
+      expect(screen.getByTestId("slide")).toHaveTextContent("Track 0");
+
+      fireEvent.click(screen.getByText("close-request"));
+      act(() => {
+        vi.advanceTimersByTime(10000);
+      });
+      expect(screen.getByTestId("slide")).toHaveTextContent("Track 1");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("leaves arrow keys to the open request dialog", () => {
+    useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
+
+    renderWithProviders(<TrendingHero />);
+    fireEvent.click(screen.getByText("open-request"));
+    const notPrevented = fireEvent.keyDown(screen.getByRole("region", { name: "Trending tracks hero" }), {
+      key: "ArrowRight",
+    });
+
+    expect(notPrevented).toBe(true);
+    expect(screen.getByTestId("slide")).toHaveTextContent("Track 0");
+  });
+
+  it("ignores a swipe while the request dialog is open", () => {
+    useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
+
+    renderWithProviders(<TrendingHero />);
+    fireEvent.click(screen.getByText("open-request"));
+    const region = screen.getByRole("region", { name: "Trending tracks hero" });
+    fireEvent.touchStart(region, { touches: [{ clientX: 300 }] });
+    fireEvent.touchMove(region, { touches: [{ clientX: 100 }] });
+    fireEvent.touchEnd(region);
+
+    expect(screen.getByTestId("slide")).toHaveTextContent("Track 0");
   });
 });

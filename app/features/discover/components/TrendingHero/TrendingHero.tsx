@@ -21,14 +21,15 @@ export function TrendingHero() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isRequestOpen, setIsRequestOpen] = useState(false);
 
   useEffect(() => {
-    if (!isAutoPlaying || tracks.length === 0) return;
+    if (!isAutoPlaying || isRequestOpen || tracks.length === 0) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % tracks.length);
     }, AUTO_ROTATE_INTERVAL);
     return () => clearInterval(interval);
-  }, [isAutoPlaying, tracks.length]);
+  }, [isAutoPlaying, isRequestOpen, tracks.length]);
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -44,6 +45,7 @@ export function TrendingHero() {
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
+      if (isRequestOpen) return;
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         handlePrev();
@@ -52,10 +54,13 @@ export function TrendingHero() {
         handleNext();
       }
     },
-    [handlePrev, handleNext]
+    [isRequestOpen, handlePrev, handleNext]
   );
 
-  const swipeHandlers = useSwipe({ onSwipeLeft: handleNext, onSwipeRight: handlePrev });
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: isRequestOpen ? undefined : handleNext,
+    onSwipeRight: isRequestOpen ? undefined : handlePrev,
+  });
 
   if (isError) {
     return (
@@ -96,6 +101,7 @@ export function TrendingHero() {
         currentIndex={currentIndex}
         total={tracks.length}
         onIndexChange={setCurrentIndex}
+        onRequestOpenChange={setIsRequestOpen}
       />
       <TrendingHeroNav
         total={tracks.length}

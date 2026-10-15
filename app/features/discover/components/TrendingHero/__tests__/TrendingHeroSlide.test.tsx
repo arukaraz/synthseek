@@ -6,10 +6,10 @@ import { createTrendingItem } from "./fixtures";
 const configModalMock = vi.fn();
 
 vi.mock("@features/search/components/ConfigRequestModal/ConfigRequestModal", () => ({
-  ConfigRequestModal: (props: { isOpen: boolean; onClose: () => void }) => {
+  ConfigRequestModal: (props: { isOpen: boolean; item: { title?: string }; onClose: () => void }) => {
     configModalMock(props);
     return (
-      <div data-testid="config-request-modal">
+      <div data-testid="config-request-modal" data-item-title={props.item.title}>
         <button type="button" onClick={props.onClose}>
           close-modal
         </button>
@@ -27,6 +27,7 @@ const baseProps = {
   currentIndex: 0,
   total: 3,
   onIndexChange: vi.fn(),
+  onRequestOpenChange: vi.fn(),
 };
 
 describe("TrendingHeroSlide", () => {
@@ -98,6 +99,25 @@ describe("TrendingHeroSlide", () => {
 
     fireEvent.click(screen.getByText("close-modal"));
     expect(screen.queryByTestId("config-request-modal")).not.toBeInTheDocument();
+  });
+
+  it("reports the request dialog opening and closing", () => {
+    render(<TrendingHeroSlide item={createTrendingItem()} {...baseProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Request/ }));
+    expect(baseProps.onRequestOpenChange).toHaveBeenLastCalledWith(true);
+
+    fireEvent.click(screen.getByText("close-modal"));
+    expect(baseProps.onRequestOpenChange).toHaveBeenLastCalledWith(false);
+  });
+
+  it("keeps the request dialog on the track it was opened for when the slide changes", () => {
+    const { rerender } = render(<TrendingHeroSlide item={createTrendingItem({ title: "First" })} {...baseProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Request First" }));
+    rerender(<TrendingHeroSlide item={createTrendingItem({ id: "other", title: "Second" })} {...baseProps} />);
+
+    expect(screen.getByTestId("config-request-modal")).toHaveAttribute("data-item-title", "First");
   });
 
   it("renders the cover alt text built from title and artist", () => {

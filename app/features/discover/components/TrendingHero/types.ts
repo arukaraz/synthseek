@@ -13,4 +13,5 @@ export interface TrendingHeroSlideProps {
   currentIndex: number;
   total: number;
   onIndexChange: (index: number) => void;
+  onRequestOpenChange: (open: boolean) => void;
 }

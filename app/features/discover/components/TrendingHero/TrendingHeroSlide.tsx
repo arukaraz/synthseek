@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentType } from "@api/__generated__/types";
+import { ContentType, type MusicTrack } from "@api/__generated__/types";
 import { ImageWithFallback } from "@components/ImageWithFallback/ImageWithFallback";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { primaryGradientButton } from "@theme/utilities/styles";
@@ -20,18 +20,27 @@ import {
 } from "./styles";
 import type { TrendingHeroSlideProps } from "./types";
 
-export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
+export function TrendingHeroSlide({ item, onRequestOpenChange }: TrendingHeroSlideProps) {
   const { t } = useTranslation("discover");
-  const [showModal, setShowModal] = useState(false);
+  const [requestedTrack, setRequestedTrack] = useState<MusicTrack | null>(null);
   const track = item.track;
   const trackName = track.title ?? t("trendingHero.unknownTrack");
   const artistName = track.artists?.[0]?.name ?? track.artist ?? t("trendingHero.unknownArtist");
   const imageUrl = track.images?.[0]?.url ?? null;
 
-  const handleRequest = useCallback((event: React.MouseEvent) => {
-    event.stopPropagation();
-    setShowModal(true);
-  }, []);
+  const handleRequest = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      setRequestedTrack(track);
+      onRequestOpenChange(true);
+    },
+    [track, onRequestOpenChange]
+  );
+
+  const handleClose = useCallback(() => {
+    setRequestedTrack(null);
+    onRequestOpenChange(false);
+  }, [onRequestOpenChange]);
 
   return (
     <>
@@ -88,12 +97,12 @@ export function TrendingHeroSlide({ item }: TrendingHeroSlideProps) {
         </AnimatePresence>
       </div>
 
-      {showModal && (
+      {requestedTrack && (
         <ConfigRequestModal
-          isOpen={showModal}
-          item={track}
+          isOpen
+          item={requestedTrack}
           itemType={ContentType.enum.track}
-          onClose={() => setShowModal(false)}
+          onClose={handleClose}
           parentAlbum={null}
         />
       )}
