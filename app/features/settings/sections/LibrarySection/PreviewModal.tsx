@@ -39,7 +39,7 @@ import {
 } from "./styles";
 import type { MoveFilter, PreviewModalProps } from "./types";
 
-export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps) {
+export function PreviewModal({ open, onOpenChange, pathId, pathLabel, template }: PreviewModalProps) {
   const { t } = useTranslation("settings");
   const [filter, setFilter] = useState<MoveFilter>("all");
   const [search, setSearch] = useState("");
@@ -49,11 +49,11 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
   const [explaining, setExplaining] = useState(false);
   const debounced = useDebounce(search, { delay: PREVIEW_DEBOUNCE_MS });
   const apply = useSaveAndOrganise();
-  const preview = useLibraryNamingPreview(template, open && template.length > 0);
+  const preview = useLibraryNamingPreview({ pathId, template }, open && template.length > 0);
   const counts = preview.data?.outcome === "valid" ? preview.data : null;
 
   const moves = useLibraryNamingMoves(
-    { template, classes: classesFor(filter), search: debounced, page, pageSize },
+    { pathId, template, classes: classesFor(filter), search: debounced, page, pageSize },
     open && template.length > 0
   );
 
@@ -85,7 +85,7 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
         <DialogContent className="sm:max-w-3xl">
           <DialogHeader>
             <div className={previewTitleRow()}>
-              <DialogTitle>{t("libraryNaming.preview.title")}</DialogTitle>
+              <DialogTitle>{t("libraryNaming.preview.title", { label: pathLabel })}</DialogTitle>
               <IconButton
                 icon={Info}
                 variant="primary"
@@ -215,7 +215,7 @@ export function PreviewModal({ open, onOpenChange, template }: PreviewModalProps
         onConfirm={() => {
           setConfirming(false);
           apply.mutate(
-            { template, classes: classesFor(filter) },
+            { pathId, template, classes: classesFor(filter) },
             { onSuccess: (result) => result.outcome === "started" && onOpenChange(false) }
           );
         }}

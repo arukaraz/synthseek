@@ -16,6 +16,12 @@ vi.mock("../hooks/useLibrarySelection", () => ({
   useLibrarySelection: () => ({ clear: selectionClearMock }) as unknown as LibrarySelection,
 }));
 
+const albumSelectionClearMock = vi.hoisted(() => vi.fn());
+
+vi.mock("@hooks/ui/useSelection", () => ({
+  useSelection: () => ({ clear: albumSelectionClearMock }),
+}));
+
 vi.mock("../components/LibraryToolbar/LibraryToolbar", () => ({
   LibraryToolbar: ({
     onViewChange,
@@ -45,9 +51,59 @@ vi.mock("../components/AlbumsViewMode", () => ({ AlbumsViewMode: () => <div>albu
 vi.mock("../components/ArtistsViewMode", () => ({ ArtistsViewMode: () => <div>artists-view</div> }));
 vi.mock("../components/PlaylistsViewMode", () => ({ PlaylistsViewMode: () => <div>playlists-view</div> }));
 
+vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => ({ isAdmin: true }) }));
+vi.mock("@hooks/api/queries/useLibraryPaths", () => ({ useLibraryPaths: () => ({ data: undefined }) }));
+
+vi.mock("../components/LibraryFileFlow", () => ({
+  LibraryFileFlow: ({ onStarted }: { onStarted: (request: LibraryFileRequest) => void }) => (
+    <>
+      <button
+        type="button"
+        onClick={() =>
+          onStarted({ kind: "move", target: { scope: "tracks", trackIds: ["a", "b"], pathIds: ["music"] } })
+        }
+      >
+        bulk-move-started
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          onStarted({ kind: "move", target: { scope: "track", trackId: "a", title: "A", pathIds: ["music"] } })
+        }
+      >
+        row-move-started
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          onStarted({ kind: "delete", target: { scope: "track", trackId: "a", title: "A", pathIds: ["music"] } })
+        }
+      >
+        row-delete-started
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          onStarted({ kind: "move", target: { scope: "albums", albumIds: ["x", "y"], pathIds: ["music"] } })
+        }
+      >
+        albums-move-started
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          onStarted({ kind: "move", target: { scope: "album", albumId: "x", name: "X", pathIds: ["music"] } })
+        }
+      >
+        album-move-started
+      </button>
+    </>
+  ),
+}));
+
 import { VIEW_CONFIG } from "../constants";
 import { LibraryScreen } from "../LibraryScreen";
-import type { LibraryView } from "../types";
+import type { LibraryFileRequest, LibraryView } from "../types";
 
 const setSearchMock = vi.hoisted(() => vi.fn());
 
@@ -65,6 +121,7 @@ function makeController(view: LibraryView): LibraryUrlController {
 describe("LibraryScreen", () => {
   beforeEach(() => {
     selectionClearMock.mockReset();
+    albumSelectionClearMock.mockReset();
     setTabMock.mockReset();
     setSearchMock.mockReset();
   });
@@ -106,7 +163,26 @@ describe("LibraryScreen", () => {
     await user.click(screen.getByRole("button", { name: "change-view" }));
 
     expect(selectionClearMock).toHaveBeenCalledTimes(1);
+    expect(albumSelectionClearMock).toHaveBeenCalledTimes(1);
     expect(setTabMock).toHaveBeenCalledWith("albums");
+  });
+
+  it("clears the album selection once a move of the selected albums has started", async () => {
+    controllerMock.current = makeController("albums");
+    const { user } = renderWithProviders(<LibraryScreen />);
+
+    await user.click(screen.getByRole("button", { name: "albums-move-started" }));
+
+    expect(albumSelectionClearMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the album selection when one album's own menu moves it", async () => {
+    controllerMock.current = makeController("albums");
+    const { user } = renderWithProviders(<LibraryScreen />);
+
+    await user.click(screen.getByRole("button", { name: "album-move-started" }));
+
+    expect(albumSelectionClearMock).not.toHaveBeenCalled();
   });
 
   it("wires the toolbar search change into the controller's setSearch", async () => {
@@ -125,5 +201,32 @@ describe("LibraryScreen", () => {
     await user.click(screen.getByRole("button", { name: "open-filters" }));
 
     expect(screen.getByText("tracks-view")).toBeInTheDocument();
+  });
+
+  it("clears the selection once a move of the selected rows has started", async () => {
+    controllerMock.current = makeController("tracks");
+    const { user } = renderWithProviders(<LibraryScreen />);
+
+    await user.click(screen.getByRole("button", { name: "bulk-move-started" }));
+
+    expect(selectionClearMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the selection when one row's own menu moves it", async () => {
+    controllerMock.current = makeController("tracks");
+    const { user } = renderWithProviders(<LibraryScreen />);
+
+    await user.click(screen.getByRole("button", { name: "row-move-started" }));
+
+    expect(selectionClearMock).not.toHaveBeenCalled();
+  });
+
+  it("clears the selection once a delete has started, since deleted rows leave the list", async () => {
+    controllerMock.current = makeController("tracks");
+    const { user } = renderWithProviders(<LibraryScreen />);
+
+    await user.click(screen.getByRole("button", { name: "row-delete-started" }));
+
+    expect(selectionClearMock).toHaveBeenCalledTimes(1);
   });
 });

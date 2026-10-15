@@ -282,28 +282,41 @@ export const jobPlayButton = cva(
 
 export const jobAction = cva("relative flex shrink-0");
 
-export const scanStatGrid = cva("grid grid-cols-2 gap-3 lg:grid-cols-4");
-
 export const scanHeaderMeta = cva("text-fg/55 flex items-center gap-2 text-xs whitespace-nowrap");
 
-export const scanStat = cva("bg-fg/[0.03] flex flex-col items-center gap-0.5 rounded-lg border p-3", {
-  variants: {
-    attention: { true: "border-warning-vivid/60", false: "border-fg/10" },
-  },
-  defaultVariants: { attention: false },
-});
-
 export const scanStatLink = cva(
-  "text-primary-400 hover:text-primary-300 mt-1 inline-flex items-center gap-0.5 text-xs font-semibold transition-colors [&_svg]:size-3.5"
+  "text-primary-400 hover:text-primary-300 inline-flex items-center gap-0.5 text-xs font-semibold transition-colors [&_svg]:size-3.5"
 );
 
 export const scanFooter = cva("text-fg/50 text-xs");
 
 export const scanFooterLink = cva("hover:text-fg underline-offset-4 transition-colors hover:underline");
 
-export const scanStatValue = cva("text-fg text-lg font-semibold tabular-nums");
+export const scanFooterRow = cva("flex flex-wrap items-center justify-between gap-2");
 
-export const scanStatLabel = cva("text-fg/50 text-center text-[11px] font-semibold tracking-wider uppercase");
+export const scanPathCell = cva("flex min-w-0 flex-col gap-0.5");
+
+export const scanPathLabel = cva("text-fg truncate text-sm font-medium");
+
+export const scanPathFolder = cva("text-fg/50 truncate font-mono text-xs");
+
+export const scanCount = cva("text-sm tabular-nums", {
+  variants: {
+    tone: {
+      plain: "text-fg/80",
+      attention: "text-warning-vivid font-semibold",
+      danger: "text-destructive-vivid font-semibold",
+    },
+  },
+  defaultVariants: { tone: "plain" },
+});
+
+export const scanLastRun = cva("text-xs whitespace-nowrap", {
+  variants: {
+    skipped: { true: "text-warning-vivid", false: "text-fg/55" },
+  },
+  defaultVariants: { skipped: false },
+});
 
 export const scanMetaRow = cva("text-fg/60 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs");
 
@@ -401,6 +414,10 @@ export const dupFileRow = cva("flex items-center gap-2.5 rounded-lg px-2 py-1.5"
 
 export const dupServingBadge = cva(
   "text-success-vivid bg-current/15 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap"
+);
+
+export const dupPathBadge = cva(
+  "text-fg/70 bg-fg/10 shrink-0 truncate rounded-full px-1.5 py-0.5 text-[10px] font-semibold whitespace-nowrap"
 );
 
 export const dupFileName = cva("min-w-0 flex-1 font-mono text-xs break-all");

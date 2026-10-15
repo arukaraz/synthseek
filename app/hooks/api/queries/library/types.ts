@@ -24,6 +24,12 @@ export type LibraryPlaylistItem = LibraryPlaylistsResult["items"][number];
 
 export type LibraryFacetValue = LibraryTracksResult["facets"][string][number];
 
+export type LibraryFileSelection = LibraryInputs["files"]["previewMove"]["selection"];
+export type LibraryMovePreview = LibraryOutputs["files"]["previewMove"];
+export type LibraryFilesStatus = LibraryOutputs["files"]["status"];
+export type LibraryFileFailure = LibraryFilesStatus["failures"][number];
+export type LibraryPathRecord = LibraryOutputs["paths"]["list"][number];
+
 export interface LibraryInfiniteResult<TItem> {
   items: TItem[] | undefined;
   total: number;

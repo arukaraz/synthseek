@@ -316,7 +316,8 @@
       "albums": "Álbumes",
       "year": "Año",
       "owner": "Propietario",
-      "source": "Origen"
+      "source": "Origen",
+      "libraryPath": "Ruta de biblioteca"
     },
     "counts": {
       "tracks_one": "{{count}} canción",
@@ -349,7 +350,8 @@
       "moreHint_one": "{{count}} más, escribe para buscar",
       "moreHint_other": "{{count}} más, escribe para buscar",
       "orphan": "Canciones sueltas",
-      "orphanOnly": "Solo canciones que no están en una lista"
+      "orphanOnly": "Solo canciones que no están en una lista",
+      "libraryPath": "Ruta de biblioteca"
     },
     "filters": {
       "title": "Filtros",
@@ -367,7 +369,10 @@
       "addToQueue_other": "Añadir {{count}} a la cola",
       "clear": "Limpiar",
       "selectAll": "Seleccionar todo en esta página",
-      "selectRow": "Seleccionar canción"
+      "selectRow": "Seleccionar canción",
+      "selectAlbum": "Seleccionar {{name}}",
+      "selectAllShown": "Seleccionar todos los mostrados",
+      "selectedAlbums": "seleccionados"
     },
     "empty": {
       "tracksTitle": "No se encontraron canciones",
@@ -385,7 +390,113 @@
     },
     "actions": {
       "playTrack": "Reproducir {{title}}",
-      "playAll": "Reproducir todo lo que tenemos de {{name}}"
+      "playAll": "Reproducir todo lo que tenemos de {{name}}",
+      "trackMenu": "Más acciones para {{title}}",
+      "albumMenu": "Más acciones para {{name}}",
+      "searchBetterQuality": "Buscar mejor calidad",
+      "addToQueue": "Añadir a la cola",
+      "removeFromQueue": "Quitar de la cola",
+      "moveToPath": "Mover a otra ruta…",
+      "deleteFile": "Eliminar archivo",
+      "deleteFiles": "Eliminar archivos"
+    }
+  },
+  "files": {
+    "move": {
+      "titleTrack": "Mover «{{title}}»",
+      "titleAlbum": "Mover «{{name}}»",
+      "titleTracks_one": "Mover {{count}} canción",
+      "titleTracks_other": "Mover {{count}} canciones",
+      "titleAlbums_one": "Mover {{count}} álbum",
+      "titleAlbums_other": "Mover {{count}} álbumes",
+      "description": "Elige la ruta de biblioteca a la que van los archivos. Favoritos, listas y reproducciones siguen con las canciones.",
+      "to": "Mover a",
+      "loadingPaths": "Cargando las rutas de biblioteca",
+      "pathsFailed": "No se pudieron cargar las rutas de biblioteca. Inténtalo de nuevo en un momento.",
+      "noTarget": "Ninguna otra ruta de biblioteca puede recibir estas canciones ahora mismo.",
+      "free": "{{size}} libres",
+      "freeUnknown": "Espacio libre desconocido",
+      "pathState": {
+        "current": "Ya están aquí",
+        "disabled": "Desactivada",
+        "readonly": "Solo lectura",
+        "unreachable": "Inaccesible"
+      },
+      "checking": "Comprobando qué se mueve",
+      "previewFailed": "No se pudo comprobar este movimiento. Inténtalo de nuevo en un momento.",
+      "notFound": "Esa ruta de biblioteca ya no existe.",
+      "targetUnavailable": "{{label}} no está disponible ahora mismo: está desactivada, es de solo lectura o es inaccesible.",
+      "stats": {
+        "songs_one": "{{count}} canción por mover",
+        "songs_other": "{{count}} canciones por mover",
+        "copy": "{{size}} por copiar",
+        "rename": "{{size}} por renombrar",
+        "free": "{{size}} libres en {{label}}"
+      },
+      "crossDevice": "Las canciones que están en otro disco se copian, se comprueban y solo entonces se borran de donde estaban.",
+      "sameDevice": "Mismo disco: cada canción se renombra en su sitio.",
+      "nothing": "No hay nada que mover: todas las canciones ya están allí o no se pueden mover.",
+      "alreadyThere_one": "{{count}} canción ya está en {{label}}.",
+      "alreadyThere_other": "{{count}} canciones ya están en {{label}}.",
+      "unmovable_one": "{{count}} canción no se puede mover: falta su archivo, o su ruta de biblioteca es de solo lectura o inaccesible.",
+      "unmovable_other": "{{count}} canciones no se pueden mover: faltan sus archivos, o su ruta de biblioteca es de solo lectura o inaccesible.",
+      "splitTitle": "Algunos álbumes quedan repartidos entre rutas de biblioteca",
+      "split": "Se mueven {{moving}} de {{total}} canciones de {{album}}, el resto se queda.",
+      "blockedTitle": "No hay espacio suficiente en {{label}}",
+      "blocked": "{{album}} se queda donde está: necesita {{needed}} y hay {{free}} libres.",
+      "sampleFrom": "Ahora",
+      "sampleTo": "En {{label}}",
+      "confirmIdle": "Mover",
+      "confirm_one": "Mover {{count}} canción",
+      "confirm_other": "Mover {{count}} canciones"
+    },
+    "delete": {
+      "titleTrack": "¿Eliminar «{{title}}»?",
+      "titleAlbum": "¿Eliminar los archivos de «{{name}}»?",
+      "titleTracks_one": "¿Eliminar {{count}} archivo?",
+      "titleTracks_other": "¿Eliminar {{count}} archivos?",
+      "titleAlbums_one": "¿Eliminar los archivos de {{count}} álbum?",
+      "titleAlbums_other": "¿Eliminar los archivos de {{count}} álbumes?",
+      "messageOne": "El archivo va a la papelera y la canción sale de la biblioteca y de las playlists donde esté.",
+      "messageMany": "Los archivos van a la papelera y las canciones salen de la biblioteca y de las playlists donde estén.",
+      "confirmOne": "Eliminar archivo",
+      "confirmMany": "Eliminar archivos"
+    },
+    "progress": {
+      "move": "Moviendo a {{label}}",
+      "delete": "Moviendo a la papelera",
+      "hint": "Puedes cerrar esta ventana. Un mensaje te avisa cuando termine.",
+      "starting": "Empezando",
+      "count": "{{processed}} de {{total}} canciones",
+      "hide": "Ocultar"
+    },
+    "outcome": {
+      "busy": "Hay otra tarea de la biblioteca en marcha. Inténtalo de nuevo cuando termine.",
+      "nothingToDo": "No hay nada que hacer: ninguna de estas canciones tiene un archivo en la biblioteca.",
+      "notFound": "Esa ruta de biblioteca ya no existe.",
+      "targetUnavailable": "Esa ruta de biblioteca no está disponible ahora mismo."
+    },
+    "result": {
+      "moved_one": "{{count}} canción movida a {{label}}",
+      "moved_other": "{{count}} canciones movidas a {{label}}",
+      "movedPartly": "{{done}} de {{total}} canciones movidas a {{label}}",
+      "moveFailed": "No se movió ninguna canción",
+      "deleted_one": "{{count}} canción fue a la papelera",
+      "deleted_other": "{{count}} canciones fueron a la papelera",
+      "deletedPartly": "{{done}} de {{total}} canciones fueron a la papelera",
+      "deleteFailed": "No se eliminó ninguna canción"
+    },
+    "failure": {
+      "item": "{{title}}: {{reason}}",
+      "more_one": "y {{count}} más",
+      "more_other": "y {{count}} más",
+      "PATH_UNAVAILABLE": "una ruta de biblioteca donde está se encuentra desactivada o inaccesible",
+      "READ_ONLY": "su ruta de biblioteca es de solo lectura",
+      "OCCUPIED": "otro archivo ya tiene su nuevo nombre",
+      "NO_SPACE": "no hay espacio suficiente",
+      "MOVE_FAILED": "no se pudo mover el archivo",
+      "RECYCLE_FAILED": "el archivo no pudo ir a la papelera",
+      "LIBRARY_NOT_UPDATED": "el archivo está en la papelera, pero no se pudo actualizar la biblioteca"
     }
   },
   "playlists": {

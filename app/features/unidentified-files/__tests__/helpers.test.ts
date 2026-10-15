@@ -76,6 +76,7 @@ describe("display helpers", () => {
   it("names a single-file group after its song and a folder group after its album or folder", () => {
     const base: UnidentifiedGroup = {
       key: "k",
+      libraryPath: "Music",
       folder: "Artist/Some Folder",
       album: null,
       artist: "Artist",

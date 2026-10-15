@@ -15,8 +15,34 @@ export const cardRoot = cva("group flex min-w-0 flex-col gap-2", {
 });
 
 export const cardCover = cva(
-  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative aspect-square w-full overflow-hidden rounded-lg bg-linear-to-br ring-1"
+  "from-primary-500/20 to-accent-500/20 relative aspect-square w-full overflow-hidden rounded-lg bg-linear-to-br",
+  {
+    variants: {
+      tone: {
+        none: "ring-fg/10 ring-1",
+        selected: "ring-primary-500 ring-2",
+        select: "ring-primary-400/60 ring-2",
+        clear: "ring-fg/40 ring-2",
+      },
+    },
+    defaultVariants: { tone: "none" },
+  }
 );
+
+export const cardSelectBox = cva(
+  "absolute top-1.5 right-1.5 z-2 grid size-7 place-items-center rounded-md bg-black/55 backdrop-blur-sm transition-opacity",
+  {
+    variants: {
+      shown: {
+        true: "opacity-100",
+        false: "focus-within:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:pointer-coarse:opacity-100",
+      },
+    },
+    defaultVariants: { shown: false },
+  }
+);
+
+export const cardSelectCheckbox = cva("border-overlay-fg");
 
 export const cardImage = cva("h-full w-full object-cover");
 
@@ -33,7 +59,7 @@ export const cardStatusBadge = cva(
 export const cardStatusDot = cva("size-1.5 shrink-0 rounded-full");
 
 export const cardCoverActions = cva(
-  "pointer-events-none absolute inset-0 z-1 grid grid-flow-col place-content-center gap-2 transition-opacity focus-within:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+  "pointer-events-none absolute inset-0 z-1 grid grid-flow-col place-content-center gap-2 transition-opacity focus-within:opacity-100 has-data-[state=open]:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
 );
 
 export const cardCoverScrim = cva("absolute inset-0 -z-1 bg-black/45");
@@ -53,12 +79,6 @@ export const cardCoverAction = cva(
 
 export const cardKebab = cva(
   "absolute top-1.5 right-1.5 grid size-7 place-items-center rounded-md bg-black/55 text-white backdrop-blur-sm transition-opacity hover:bg-black/70 focus-visible:opacity-100 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
-);
-
-export const cardMenuItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2");
-
-export const cardMenuItemDanger = cva(
-  "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2"
 );
 
 export const cardBody = cva("flex min-w-0 flex-col gap-0.5 px-0.5");

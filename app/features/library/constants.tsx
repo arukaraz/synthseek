@@ -39,6 +39,13 @@ const ORIGIN_FACET_DEF = {
   labelNs: "origin",
 } as const;
 
+const LIBRARY_PATH_FACET_DEF = {
+  key: "libraryPath",
+  labelKey: "page.facets.libraryPath",
+  searchable: false,
+  hideWithoutChoice: true,
+} as const;
+
 const PLAYBACK_SOURCE_FACET_DEF = {
   key: "source",
   labelKey: "page.facets.source",
@@ -72,6 +79,7 @@ export const LIBRARY_ALL_FILTER_KEYS = [
   "albumId",
   "year",
   "owner",
+  "libraryPath",
   "orphan",
 ] as const;
 
@@ -105,9 +113,11 @@ const TRACKS_CONFIG: TracksViewConfig = {
     "genre",
     "playlist",
     "albumId",
+    "libraryPath",
     "orphan",
   ],
   facets: [
+    LIBRARY_PATH_FACET_DEF,
     STATUS_FACET_DEF,
     PLAYBACK_SOURCE_FACET_DEF,
     ORIGIN_FACET_DEF,
@@ -139,8 +149,9 @@ const ALBUMS_CONFIG: AlbumsViewConfig = {
     { value: "year", labelKey: "page.sort.year", defaultDirection: "desc" },
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
   ],
-  filterParamKeys: ["status", "artist", "genre", "year", "origin"],
+  filterParamKeys: ["status", "artist", "genre", "year", "origin", "libraryPath"],
   facets: [
+    LIBRARY_PATH_FACET_DEF,
     STATUS_FACET_DEF,
     ORIGIN_FACET_DEF,
     { key: "genre", labelKey: "page.facets.genre", searchable: true, facetSearchKey: "genre" },

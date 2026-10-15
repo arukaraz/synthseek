@@ -41,6 +41,7 @@ const FILE: UnidentifiedFile = {
 
 const GROUP: UnidentifiedGroup = {
   key: "him",
+  libraryPath: "Music",
   folder: "HIM",
   album: "Deep Shadows And Brilliant Highlights",
   artist: "HIM",

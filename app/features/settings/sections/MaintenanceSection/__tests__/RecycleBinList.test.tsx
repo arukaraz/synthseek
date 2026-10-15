@@ -10,6 +10,7 @@ import { createMockQuery, createLoadingQuery, type MockQueryResult } from "@test
 type Entry = {
   id: string;
   recycledOn: string;
+  libraryPath: string;
   relativePath: string;
   fileName: string;
   sizeBytes: number;
@@ -48,6 +49,7 @@ function entry(overrides: Partial<Entry> = {}): Entry {
   return {
     id: `2026-09-01/Queen/A Night at the Opera/${name}`,
     recycledOn: "2026-09-01",
+    libraryPath: "Music",
     relativePath: `Queen/A Night at the Opera/${name}`,
     fileName: name,
     sizeBytes: 9_400_000,
@@ -86,6 +88,14 @@ describe("RecycleBinList", () => {
     expect(screen.getByText("Queen/A Night at the Opera/")).toBeInTheDocument();
     expect(screen.queryByText(/Opera\/11 - Bohemian/)).not.toBeInTheDocument();
     expect(screen.getByText(/9\.0 MB · 2026-09-01/)).toBeInTheDocument();
+  });
+
+  it("names the library path a file goes back to", () => {
+    entriesQuery = createMockQuery<Entry[] | undefined>([entry({ libraryPath: "Archive" })]);
+    render(<RecycleBinList entryCount={1} />);
+    expand();
+
+    expect(screen.getByText(/^Archive · 9\.0 MB/)).toBeInTheDocument();
   });
 
   it("restores the entry the reader picked, by its own id", () => {

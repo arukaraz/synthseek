@@ -1,11 +1,20 @@
 import i18n from "@locale";
 import type { TFunction } from "i18next";
 
-import { formatBytes } from "@utils/formatters";
+import { formatBytes, formatRelativeTime } from "@utils/formatters";
 
-import type { DuplicateGroupSummary } from "./types";
+import type { DuplicateGroupSummary, LibraryScanPath } from "./types";
 
-import { DAY_MS, HOUR_MS, MINUTE_MS } from "./constants";
+import { DAY_MS, HOUR_MS, MINUTE_MS, SKIPPED_SCAN_KEYS } from "./constants";
+
+export function lastScanOf(path: LibraryScanPath, t: TFunction<"settings">): { text: string; skipped: boolean } {
+  if (path.scanning) return { text: t("libraryScan.header.running"), skipped: false };
+  if (path.lastScanAt === null) return { text: t("libraryScan.paths.never"), skipped: false };
+  if (path.lastScanOutcome === null || path.lastScanOutcome === "reconciled") {
+    return { text: formatRelativeTime(new Date(path.lastScanAt)), skipped: false };
+  }
+  return { text: t(SKIPPED_SCAN_KEYS[path.lastScanOutcome]), skipped: true };
+}
 
 export function describeInterval(intervalMs: number): string {
   if (intervalMs < HOUR_MS) {

@@ -316,7 +316,8 @@
       "albums": "Alben",
       "year": "Jahr",
       "owner": "Eigentümer",
-      "source": "Quelle"
+      "source": "Quelle",
+      "libraryPath": "Bibliothekspfad"
     },
     "counts": {
       "tracks_one": "{{count}} Titel",
@@ -349,7 +350,8 @@
       "moreHint_one": "{{count}} weitere, tippen zum Suchen",
       "moreHint_other": "{{count}} weitere, tippen zum Suchen",
       "orphan": "Lose Titel",
-      "orphanOnly": "Nur Titel, die in keiner Playlist sind"
+      "orphanOnly": "Nur Titel, die in keiner Playlist sind",
+      "libraryPath": "Bibliothekspfad"
     },
     "filters": {
       "title": "Filter",
@@ -367,7 +369,10 @@
       "addToQueue_other": "{{count}} zur Warteschlange hinzufügen",
       "clear": "Leeren",
       "selectAll": "Alle auf dieser Seite auswählen",
-      "selectRow": "Titel auswählen"
+      "selectRow": "Titel auswählen",
+      "selectAlbum": "{{name}} auswählen",
+      "selectAllShown": "Alle angezeigten auswählen",
+      "selectedAlbums": "ausgewählt"
     },
     "empty": {
       "tracksTitle": "Keine Titel gefunden",
@@ -385,7 +390,113 @@
     },
     "actions": {
       "playTrack": "{{title}} abspielen",
-      "playAll": "Alles abspielen, was wir von {{name}} haben"
+      "playAll": "Alles abspielen, was wir von {{name}} haben",
+      "trackMenu": "Weitere Aktionen für {{title}}",
+      "albumMenu": "Weitere Aktionen für {{name}}",
+      "searchBetterQuality": "Bessere Qualität suchen",
+      "addToQueue": "Zur Warteschlange hinzufügen",
+      "removeFromQueue": "Aus der Warteschlange entfernen",
+      "moveToPath": "In anderen Pfad verschieben…",
+      "deleteFile": "Datei löschen",
+      "deleteFiles": "Dateien löschen"
+    }
+  },
+  "files": {
+    "move": {
+      "titleTrack": "„{{title}}“ verschieben",
+      "titleAlbum": "„{{name}}“ verschieben",
+      "titleTracks_one": "{{count}} Titel verschieben",
+      "titleTracks_other": "{{count}} Titel verschieben",
+      "titleAlbums_one": "{{count}} Album verschieben",
+      "titleAlbums_other": "{{count}} Alben verschieben",
+      "description": "Wähle den Bibliothekspfad, in den die Dateien kommen. Favoriten, Playlists und Wiedergaben bleiben bei den Titeln.",
+      "to": "Verschieben nach",
+      "loadingPaths": "Bibliothekspfade werden geladen",
+      "pathsFailed": "Die Bibliothekspfade konnten nicht geladen werden. Versuche es gleich noch einmal.",
+      "noTarget": "Gerade kann kein anderer Bibliothekspfad diese Titel aufnehmen.",
+      "free": "{{size}} frei",
+      "freeUnknown": "Freier Speicher unbekannt",
+      "pathState": {
+        "current": "Schon hier",
+        "disabled": "Deaktiviert",
+        "readonly": "Schreibgeschützt",
+        "unreachable": "Nicht erreichbar"
+      },
+      "checking": "Es wird geprüft, was verschoben wird",
+      "previewFailed": "Diese Verschiebung konnte nicht geprüft werden. Versuche es gleich noch einmal.",
+      "notFound": "Diesen Bibliothekspfad gibt es nicht mehr.",
+      "targetUnavailable": "{{label}} ist gerade nicht verfügbar: Er ist deaktiviert, schreibgeschützt oder nicht erreichbar.",
+      "stats": {
+        "songs_one": "{{count}} Titel zu verschieben",
+        "songs_other": "{{count}} Titel zu verschieben",
+        "copy": "{{size}} zu kopieren",
+        "rename": "{{size}} umzubenennen",
+        "free": "{{size}} frei in {{label}}"
+      },
+      "crossDevice": "Titel auf einem anderen Datenträger werden kopiert, geprüft und erst dann an ihrem alten Ort entfernt.",
+      "sameDevice": "Gleicher Datenträger: Jeder Titel wird an Ort und Stelle umbenannt.",
+      "nothing": "Nichts zu verschieben: Alle Titel sind schon dort oder können nicht verschoben werden.",
+      "alreadyThere_one": "{{count}} Titel ist schon in {{label}}.",
+      "alreadyThere_other": "{{count}} Titel sind schon in {{label}}.",
+      "unmovable_one": "{{count}} Titel kann nicht verschoben werden: Die Datei fehlt, oder ihr Bibliothekspfad ist schreibgeschützt oder nicht erreichbar.",
+      "unmovable_other": "{{count}} Titel können nicht verschoben werden: Die Dateien fehlen, oder ihr Bibliothekspfad ist schreibgeschützt oder nicht erreichbar.",
+      "splitTitle": "Manche Alben werden auf mehrere Bibliothekspfade verteilt",
+      "split": "{{moving}} von {{total}} Titeln von {{album}} werden verschoben, der Rest bleibt.",
+      "blockedTitle": "Nicht genug Speicher in {{label}}",
+      "blocked": "{{album}} bleibt, wo es ist: Es braucht {{needed}} und {{free}} sind frei.",
+      "sampleFrom": "Jetzt",
+      "sampleTo": "In {{label}}",
+      "confirmIdle": "Verschieben",
+      "confirm_one": "{{count}} Titel verschieben",
+      "confirm_other": "{{count}} Titel verschieben"
+    },
+    "delete": {
+      "titleTrack": "„{{title}}“ löschen?",
+      "titleAlbum": "Die Dateien von „{{name}}“ löschen?",
+      "titleTracks_one": "{{count}} Datei löschen?",
+      "titleTracks_other": "{{count}} Dateien löschen?",
+      "titleAlbums_one": "Die Dateien von {{count}} Album löschen?",
+      "titleAlbums_other": "Die Dateien von {{count}} Alben löschen?",
+      "messageOne": "Die Datei kommt in den Papierkorb und der Titel verlässt die Bibliothek und seine Playlists.",
+      "messageMany": "Die Dateien kommen in den Papierkorb und die Titel verlassen die Bibliothek und ihre Playlists.",
+      "confirmOne": "Datei löschen",
+      "confirmMany": "Dateien löschen"
+    },
+    "progress": {
+      "move": "Wird nach {{label}} verschoben",
+      "delete": "Wird in den Papierkorb verschoben",
+      "hint": "Du kannst dieses Fenster schließen. Eine Meldung sagt dir, wenn es fertig ist.",
+      "starting": "Wird gestartet",
+      "count": "{{processed}} von {{total}} Titeln",
+      "hide": "Ausblenden"
+    },
+    "outcome": {
+      "busy": "Gerade läuft eine andere Bibliotheksaufgabe. Versuche es erneut, wenn sie fertig ist.",
+      "nothingToDo": "Nichts zu tun: Keiner dieser Titel hat eine Datei in der Bibliothek.",
+      "notFound": "Diesen Bibliothekspfad gibt es nicht mehr.",
+      "targetUnavailable": "Dieser Bibliothekspfad ist gerade nicht verfügbar."
+    },
+    "result": {
+      "moved_one": "{{count}} Titel nach {{label}} verschoben",
+      "moved_other": "{{count}} Titel nach {{label}} verschoben",
+      "movedPartly": "{{done}} von {{total}} Titeln nach {{label}} verschoben",
+      "moveFailed": "Kein Titel wurde verschoben",
+      "deleted_one": "{{count}} Titel ist im Papierkorb",
+      "deleted_other": "{{count}} Titel sind im Papierkorb",
+      "deletedPartly": "{{done}} von {{total}} Titeln sind im Papierkorb",
+      "deleteFailed": "Kein Titel wurde gelöscht"
+    },
+    "failure": {
+      "item": "{{title}}: {{reason}}",
+      "more_one": "und {{count}} weiterer",
+      "more_other": "und {{count}} weitere",
+      "PATH_UNAVAILABLE": "ein Bibliothekspfad, in dem er liegt, ist ausgeschaltet oder nicht erreichbar",
+      "READ_ONLY": "sein Bibliothekspfad ist schreibgeschützt",
+      "OCCUPIED": "eine andere Datei hat bereits seinen neuen Namen",
+      "NO_SPACE": "nicht genug Speicher",
+      "MOVE_FAILED": "die Datei konnte nicht verschoben werden",
+      "RECYCLE_FAILED": "die Datei konnte nicht in den Papierkorb",
+      "LIBRARY_NOT_UPDATED": "die Datei liegt im Papierkorb, aber die Bibliothek konnte nicht aktualisiert werden"
     }
   },
   "playlists": {

@@ -7,6 +7,8 @@ import { useCallback } from "react";
 export function useLibraryTrackActions() {
   const retryTracks = useRetryTracks();
   const upgradeTracks = useUpgradeTracks();
+  const retryMutate = retryTracks.mutate;
+  const upgradeMutate = upgradeTracks.mutate;
 
   const retryFailed = useCallback(
     (trackIds: string[]) => {
@@ -15,9 +17,9 @@ export function useLibraryTrackActions() {
         notifyBulkTrackLimit(MAX_BULK_TRACK_IDS);
         return;
       }
-      retryTracks.mutate({ trackIds });
+      retryMutate({ trackIds });
     },
-    [retryTracks]
+    [retryMutate]
   );
 
   const searchBetterQuality = useCallback(
@@ -27,9 +29,9 @@ export function useLibraryTrackActions() {
         notifyBulkTrackLimit(MAX_BULK_TRACK_IDS);
         return;
       }
-      upgradeTracks.mutate({ trackIds });
+      upgradeMutate({ trackIds });
     },
-    [upgradeTracks]
+    [upgradeMutate]
   );
 
   return {

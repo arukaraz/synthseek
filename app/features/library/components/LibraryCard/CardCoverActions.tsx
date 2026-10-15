@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { cardCoverAction, cardCoverActions, cardCoverScrim } from "./styles";
 import type { CardCoverActionsProps } from "./types";
 
-export function CardCoverActions({ name, onPlay, onOpen }: CardCoverActionsProps) {
+export function CardCoverActions({ name, onPlay, onOpen, menu }: CardCoverActionsProps) {
   const { t } = useTranslation(["library", "contentDetail"]);
   const [starting, setStarting] = useState(false);
 
@@ -28,13 +28,13 @@ export function CardCoverActions({ name, onPlay, onOpen }: CardCoverActionsProps
   const handleOpen = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
-      onOpen();
+      onOpen?.();
     },
     [onOpen]
   );
 
   return (
-    <div className={cardCoverActions()}>
+    <div className={cardCoverActions()} onKeyDown={(event) => event.stopPropagation()}>
       <span aria-hidden className={cardCoverScrim()} />
       <button
         type="button"
@@ -45,14 +45,17 @@ export function CardCoverActions({ name, onPlay, onOpen }: CardCoverActionsProps
       >
         <Play className="size-5 fill-current" />
       </button>
-      <button
-        type="button"
-        className={cardCoverAction()}
-        onClick={handleOpen}
-        aria-label={t("contentDetail:openDetail", { name })}
-      >
-        <Info className="size-5" />
-      </button>
+      {onOpen ? (
+        <button
+          type="button"
+          className={cardCoverAction()}
+          onClick={handleOpen}
+          aria-label={t("contentDetail:openDetail", { name })}
+        >
+          <Info className="size-5" />
+        </button>
+      ) : null}
+      {menu}
     </div>
   );
 }

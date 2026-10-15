@@ -5,18 +5,26 @@ import { useContentRequestFlow } from "@features/search/components/ContentReques
 import { useLibraryAlbums } from "@hooks/api";
 import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
+import { useRangePreview } from "@hooks/ui/useRangePreview";
 import { useCallback, useMemo } from "react";
 
 import { VIEW_CONFIG } from "../constants";
-import { buildAlbumsInput } from "../helpers";
-import type { LibraryViewModeProps } from "../types";
-import { AlbumCard } from "./LibraryCard";
-import type { LibraryAlbumItem } from "@hooks/api/queries/library/types";
+import { applySelectionShortcut, buildAlbumsInput, rangePreviewTone } from "../helpers";
+import type { AlbumsViewModeProps } from "../types";
+import { AlbumCard, AlbumCardMenu, AlbumSelectionBar } from "./LibraryCard";
+import type { LibraryAlbumItem, PlayableTracksTarget } from "@hooks/api/queries/library/types";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
-export function AlbumsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
+export function AlbumsViewMode({
+  controller,
+  filtersOpen,
+  onFiltersOpenChange,
+  selection,
+  fileActions,
+}: AlbumsViewModeProps) {
   const { openForResult } = useContentRequestFlow();
-  const { playEntity } = useEntityPlayback();
+  const { playEntity, enqueueEntity, enqueueEntities } = useEntityPlayback();
+  const { previewId, trackRow } = useRangePreview();
   const input = useMemo(
     () =>
       buildAlbumsInput({
@@ -33,10 +41,26 @@ export function AlbumsViewMode({ controller, filtersOpen, onFiltersOpenChange }:
 
   const query = useLibraryAlbums(input, controller.view === "albums");
 
+  const items = useMemo(() => query.items ?? [], [query.items]);
+  const orderedIds = useMemo(() => items.map((item) => item.id), [items]);
+  const preview = previewId ? selection.rangeTo(orderedIds, previewId) : null;
+  const previewTone = rangePreviewTone(preview);
+  const selecting = selection.selectedCount > 0;
+  const showLibraryPaths = (query.facets.libraryPath ?? []).length > 1;
+
+  const enqueueAlbums = useCallback(
+    (albums: LibraryAlbumItem[]) =>
+      enqueueEntities(
+        albums.map((album): PlayableTracksTarget => ({ kind: "album", albumExternalId: album.external_id }))
+      ),
+    [enqueueEntities]
+  );
+
   const renderCard = useCallback(
     (item: LibraryAlbumItem) => (
       <AlbumCard
         item={item}
+        showLibraryPaths={showLibraryPaths}
         onPlay={() => playEntity({ kind: "album", albumExternalId: item.external_id })}
         onOpen={() =>
           openForResult(
@@ -49,9 +73,35 @@ export function AlbumsViewMode({ controller, filtersOpen, onFiltersOpenChange }:
             })
           )
         }
+        menu={
+          <AlbumCardMenu
+            item={item}
+            onEnqueue={() => void enqueueEntity({ kind: "album", albumExternalId: item.external_id })}
+            fileActions={fileActions}
+          />
+        }
+        selection={{
+          selected: selection.isSelected(item.id),
+          selecting,
+          preview: preview?.ids.includes(item.id) ? previewTone : "none",
+          onToggle: (extend) => (extend ? selection.extendTo(orderedIds, item.id) : selection.toggle(item.id)),
+          onHover: (hovered) => trackRow(hovered ? item.id : null),
+        }}
       />
     ),
-    [openForResult, playEntity]
+    [
+      openForResult,
+      playEntity,
+      enqueueEntity,
+      fileActions,
+      selection,
+      selecting,
+      preview,
+      previewTone,
+      orderedIds,
+      trackRow,
+      showLibraryPaths,
+    ]
   );
 
   return (
@@ -69,6 +119,12 @@ export function AlbumsViewMode({ controller, filtersOpen, onFiltersOpenChange }:
         hasNextPage: query.hasNextPage,
         isFetchingNextPage: query.isFetchingNextPage,
         fetchNextPage: query.fetchNextPage,
+        bulkBar: (
+          <AlbumSelectionBar items={items} selection={selection} fileActions={fileActions} onEnqueue={enqueueAlbums} />
+        ),
+        onKeyDown: (event) => {
+          applySelectionShortcut(event, selection, orderedIds);
+        },
       }}
       filtersOpen={filtersOpen}
       onFiltersOpenChange={onFiltersOpenChange}

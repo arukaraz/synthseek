@@ -22,6 +22,7 @@ const defaultAlbum: Omit<Album, "id"> = {
   source_provider: null,
   source_id: null,
   auto_imported: false,
+  destination_path_id: null,
   requested: true,
   requested_at: new Date("2024-01-01T00:00:00Z"),
   created_at: new Date("2024-01-01T00:00:00Z"),

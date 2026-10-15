@@ -101,3 +101,130 @@ export const statPair = cva("flex items-baseline gap-1.5");
 export const statNumber = cva("text-fg font-semibold tabular-nums");
 
 export const statWord = cva("text-fg/60");
+
+export const listFrame = cva("border-fg/10 @container flex flex-col overflow-clip rounded-xl border");
+
+export const listHead = cva(
+  "border-fg/10 bg-surface text-fg/50 sticky top-0 z-10 hidden items-center gap-4 border-b px-4 py-2 text-[11px] font-semibold tracking-wider uppercase @3xl:grid",
+  {
+    variants: {
+      layout: {
+        paths: "@3xl:grid-cols-[minmax(0,1fr)_7rem_9rem_6rem_7.5rem]",
+        rules: "@3xl:grid-cols-[4.5rem_minmax(0,1fr)_minmax(0,1.3fr)_9rem_7rem]",
+      },
+    },
+  }
+);
+
+export const listHeadEnd = cva("text-right");
+
+export const listRow = cva("border-fg/10 flex flex-col gap-3 border-b px-4 py-3 last:border-b-0");
+
+export const listRowGrid = cva("grid grid-cols-2 items-center gap-x-4 gap-y-2", {
+  variants: {
+    layout: {
+      paths: "@3xl:grid-cols-[minmax(0,1fr)_7rem_9rem_6rem_7.5rem]",
+      rules: "@3xl:grid-cols-[4.5rem_minmax(0,1fr)_minmax(0,1.3fr)_9rem_7rem]",
+    },
+  },
+});
+
+export const rowIdentity = cva("col-span-2 flex min-w-0 flex-col gap-1 @3xl:col-span-1");
+
+export const rowTitleLine = cva("flex min-w-0 flex-wrap items-center gap-2");
+
+export const rowTitle = cva("text-fg truncate text-sm font-semibold");
+
+export const rowFolder = cva("text-fg/50 truncate font-mono text-xs");
+
+export const rowStat = cva("flex min-w-0 flex-col gap-1");
+
+export const rowStatMain = cva("text-fg text-sm font-medium tabular-nums");
+
+export const rowStatSub = cva("text-fg/50 truncate text-xs tabular-nums");
+
+export const rowActions = cva("flex items-center justify-end gap-3", {
+  variants: {
+    layout: {
+      paths: "",
+      rules: "col-span-2 @3xl:col-span-1",
+    },
+  },
+  defaultVariants: { layout: "paths" },
+});
+
+export const rowOrder = cva("flex items-center gap-1");
+
+export const accessBadge = cva(
+  "inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium ring-1",
+  {
+    variants: {
+      tone: {
+        success: "bg-success-vivid/10 text-success-vivid ring-success-vivid/30",
+        warning: "bg-warning-vivid/10 text-warning-vivid ring-warning-vivid/30",
+        danger: "bg-destructive-vivid/10 text-destructive-vivid ring-destructive-vivid/30",
+        muted: "bg-fg/5 text-fg/60 ring-fg/10",
+      },
+    },
+    defaultVariants: { tone: "muted" },
+  }
+);
+
+export const formStack = cva("mt-5 flex flex-col gap-5");
+
+export const formGrid = cva("grid gap-4 sm:grid-cols-2");
+
+export const fieldMessage = cva("text-xs leading-snug", {
+  variants: {
+    tone: {
+      neutral: "text-fg/55",
+      success: "text-success-vivid",
+      danger: "text-destructive-vivid",
+    },
+  },
+  defaultVariants: { tone: "neutral" },
+});
+
+export const toggleRow = cva("border-fg/10 flex items-start justify-between gap-4 rounded-lg border p-3");
+
+export const toggleText = cva("flex min-w-0 flex-col gap-0.5");
+
+export const toggleTitle = cva("text-fg text-sm font-medium");
+
+export const toggleHint = cva("text-fg/60 text-xs leading-snug");
+
+export const choiceList = cva("border-fg/10 flex max-h-56 flex-col overflow-y-auto rounded-lg border");
+
+export const choiceRow = cva("border-fg/5 flex items-center gap-3 border-b px-3 py-2 last:border-b-0", {
+  variants: {
+    taken: {
+      true: "opacity-60",
+      false: "cursor-pointer",
+    },
+  },
+  defaultVariants: { taken: false },
+});
+
+export const choiceText = cva("flex min-w-0 flex-1 flex-col");
+
+export const choiceName = cva("text-fg truncate text-sm font-medium");
+
+export const choiceSummary = cva("text-fg/50 truncate text-xs");
+
+export const choiceOwner = cva("text-fg/50 shrink-0 text-[11px]");
+
+export const namingFooter = cva("flex flex-wrap items-center justify-between gap-2");
+
+export const modalFooter = cva("border-fg/10 flex flex-wrap items-center gap-2 border-t pt-4 sm:justify-end");
+
+export const footerStart = cva("mr-auto");
+
+export const checkRow = cva("flex flex-wrap items-center justify-between gap-3");
+
+export const conditionList = cva("flex flex-col gap-2");
+
+export const conditionRow = cva(
+  "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,1.2fr)_auto]"
+);
+
+export const conditionCell = cva("col-span-2 min-w-0 sm:col-span-1");

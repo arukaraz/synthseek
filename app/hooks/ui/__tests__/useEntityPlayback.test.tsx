@@ -243,6 +243,52 @@ describe("adding tracks the page already holds", () => {
   });
 });
 
+describe("adding several albums to the queue at once", () => {
+  const SECOND = { kind: "album", albumExternalId: "album-2" } as const;
+
+  it("loads every album and adds all their tracks in one go, with one toast", async () => {
+    api.fetchPlayable
+      .mockResolvedValueOnce({ items: [{ id: "t1" }], truncated: false })
+      .mockResolvedValueOnce({ items: [{ id: "t2" }, { id: "t3" }], truncated: false });
+    player.addToQueue.mockReturnValue({ added: 3, skipped: 0, full: false });
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await expect(result.current.enqueueEntities([TARGET, SECOND])).resolves.toBe(true);
+
+    expect(api.fetchPlayable).toHaveBeenNthCalledWith(1, TARGET);
+    expect(api.fetchPlayable).toHaveBeenNthCalledWith(2, SECOND);
+    expect(player.addToQueue).toHaveBeenCalledTimes(1);
+    expect(player.addToQueue).toHaveBeenCalledWith([
+      expect.objectContaining({ id: "t1" }),
+      expect.objectContaining({ id: "t2" }),
+      expect.objectContaining({ id: "t3" }),
+    ]);
+    expect(toast.success).toHaveBeenCalledTimes(1);
+  });
+
+  it("adds nothing and reports the failure when any album fails to load", async () => {
+    api.fetchPlayable
+      .mockResolvedValueOnce({ items: [{ id: "t1" }], truncated: false })
+      .mockRejectedValueOnce(new Error("boom"));
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await expect(result.current.enqueueEntities([TARGET, SECOND])).resolves.toBe(false);
+
+    expect(player.addToQueue).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledWith(enPlayer.queue.loadFailed);
+  });
+
+  it("says nothing is playable when none of the albums has a playable track", async () => {
+    api.fetchPlayable.mockResolvedValue({ items: [], truncated: false });
+    const { result } = renderHook(() => useEntityPlayback());
+
+    await expect(result.current.enqueueEntities([TARGET, SECOND])).resolves.toBe(false);
+
+    expect(player.addToQueue).not.toHaveBeenCalled();
+    expect(toast.info).toHaveBeenCalledWith(enPlayer.queue.nothingPlayable);
+  });
+});
+
 describe("starting a radio from an album, artist or playlist", () => {
   it("hands the target to the station starter with no seed track, since the station itself leads", async () => {
     const { result } = renderHook(() => useEntityPlayback());

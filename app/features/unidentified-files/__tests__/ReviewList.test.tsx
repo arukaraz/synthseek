@@ -66,6 +66,7 @@ function group(overrides: Partial<UnidentifiedGroup> = {}): UnidentifiedGroup {
     fileCount: 2,
     retrying: 0,
     ignoredAt: null,
+    libraryPath: "Archive",
     files: [file("a", "Roll Over Beethoven"), file("b", "Chains")],
     ...overrides,
   };
@@ -97,6 +98,7 @@ describe("ReviewList", () => {
     expect(screen.getByText("The Beatles · Bournemouth 1963")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /2 files/ })).toBeInTheDocument();
     expect(screen.getByText("2 discs")).toBeInTheDocument();
+    expect(screen.getByText("Archive")).toBeInTheDocument();
   });
 
   it("opens a group's files from the chevron beside the count", () => {

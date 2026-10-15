@@ -63,7 +63,16 @@
       "matching": "Abgleichmodus",
       "acquisition": "Beschaffungsmethode",
       "peer": "Peer-Einstellungen",
-      "lidarr": "Übergabe an Lidarr"
+      "lidarr": "Übergabe an Lidarr",
+      "destination": "Ziel"
+    },
+    "destination": {
+      "lockedInPath_one": "{{count}} Titel dieses Albums liegt schon in {{label}}, der Rest kommt dazu.",
+      "lockedInPath_other": "{{count}} Titel dieses Albums liegen schon in {{label}}, der Rest kommt dazu.",
+      "lockedOnItsWay": "Dieses Album ist schon auf dem Weg nach {{label}}.",
+      "noRule": "Keine Regel passt, deshalb geht es in den Standardpfad.",
+      "matched_one": "{{count}} Regel passt:",
+      "matched_other": "{{count}} Regeln passen:"
     },
     "fields": {
       "quality": "Qualität",
@@ -80,7 +89,8 @@
       "lidarrMonitor": "Überwachungsumfang",
       "lidarrArtistScope": "Künstlerumfang",
       "lidarrTags": "Tags",
-      "renamePlaylist": "Playlist umbenennen (optional)"
+      "renamePlaylist": "Playlist umbenennen (optional)",
+      "destination": "Bibliothekspfad"
     },
     "options": {
       "bitrate": {

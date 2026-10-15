@@ -84,7 +84,7 @@
     },
     "environment": {
       "label": "Speicherproblem",
-      "description": "Ein lokales Speicherproblem hat diesen Download gestoppt, etwa eine volle Festplatte oder ein fehlender bzw. nicht beschreibbarer Download- oder Bibliotheksordner. Nach Behebung des Problems erneut versuchen."
+      "description": "Ein lokales Speicherproblem hat diesen Download gestoppt, etwa eine volle Festplatte, ein fehlender bzw. nicht beschreibbarer Download-Ordner oder Bibliothekspfad oder ein ausgeschalteter Bibliothekspfad. Nach Behebung des Problems erneut versuchen."
     },
     "timeout": {
       "label": "Zeitüberschreitung",

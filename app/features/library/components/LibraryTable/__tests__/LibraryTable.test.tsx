@@ -24,6 +24,14 @@ vi.mock("../../AddToPlaylistDropdown", () => ({
   ),
 }));
 
+const auth = vi.hoisted(() => ({ isAdmin: false }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ isAdmin: auth.isAdmin, currentUser: null, isLoading: false }),
+}));
+
+const fileActions = vi.hoisted(() => ({ canMove: true, openMove: vi.fn(), openDelete: vi.fn() }));
+
 import { LibraryTable } from "../LibraryTable";
 
 function createTrack(overrides?: Partial<LibraryTrackItem>): LibraryTrackItem {
@@ -59,6 +67,7 @@ const titleColumn: ColumnDef<LibraryTrackItem> = {
 };
 
 function makeSelection(overrides?: Partial<LibrarySelection>): LibrarySelection {
+  const { selectors, ...rest } = overrides ?? {};
   return {
     selectedIds: new Set<string>(),
     selectedCount: 0,
@@ -68,6 +77,7 @@ function makeSelection(overrides?: Partial<LibrarySelection>): LibrarySelection 
     rangeTo: () => null,
     setMany: vi.fn(),
     clear: vi.fn(),
+    ...rest,
     selectors: {
       allSelectedOnPage: () => false,
       someSelectedOnPage: () => false,
@@ -75,19 +85,31 @@ function makeSelection(overrides?: Partial<LibrarySelection>): LibrarySelection 
       selectedFailedIds: () => [],
       selectedUpgradableIds: () => [],
       selectedPlayableIds: () => [],
+      selectedInLibraryIds: () => [],
+      ...selectors,
     },
-    ...overrides,
   } as unknown as LibrarySelection;
 }
 
 const enqueueMock = vi.fn(async () => true);
 
 function selectionConfig(selection: LibrarySelection, items: LibraryTrackItem[]): TrackSelectionConfig {
-  return { items, selection, onEnqueue: enqueueMock };
+  return { items, selection, onEnqueue: enqueueMock, fileActions };
+}
+
+function inLibrarySelection(inLibraryIds: string[]): LibrarySelection {
+  return makeSelection({
+    selectedCount: 2,
+    selectedIds: new Set(["trk-1", "trk-2"]),
+    selectors: { selectedInLibraryIds: () => inLibraryIds } as unknown as LibrarySelection["selectors"],
+  });
 }
 
 describe("LibraryTable", () => {
   beforeEach(() => {
+    auth.isAdmin = false;
+    fileActions.openMove.mockReset();
+    fileActions.openDelete.mockReset();
     retryFailedMock.mockReset();
     searchBetterQualityMock.mockReset();
     useLibraryTrackActionsMock.mockReturnValue({
@@ -531,5 +553,65 @@ describe("LibraryTable", () => {
     );
 
     expect(screen.queryByText("page.selection.clear")).not.toBeInTheDocument();
+  });
+
+  describe("library path actions", () => {
+    const items = [
+      createTrack({ id: "trk-1", libraryPath: { id: "music", label: "Music" } }),
+      createTrack({ id: "trk-2", libraryPath: { id: "archive", label: "Archive" } }),
+    ];
+
+    function renderSelected(selection: LibrarySelection) {
+      return renderWithProviders(
+        <LibraryTable
+          items={items}
+          columns={[titleColumn]}
+          getRowId={(item) => item.id}
+          emptyMessage="empty"
+          selection={selectionConfig(selection, items)}
+        />
+      );
+    }
+
+    it("offers no move or delete to a member", () => {
+      renderSelected(inLibrarySelection(["trk-1", "trk-2"]));
+
+      expect(screen.queryByLabelText("Move to path…")).toBeNull();
+      expect(screen.queryByLabelText("Delete files")).toBeNull();
+    });
+
+    it("hands an admin's move the selected rows that are in the library, with the paths they sit in", async () => {
+      auth.isAdmin = true;
+      const { user } = renderSelected(inLibrarySelection(["trk-1", "trk-2"]));
+
+      await user.click(screen.getByLabelText("Move to path…"));
+
+      expect(fileActions.openMove).toHaveBeenCalledWith({
+        scope: "tracks",
+        trackIds: ["trk-1", "trk-2"],
+        pathIds: ["music", "archive"],
+      });
+    });
+
+    it("asks for the delete confirmation for the same rows", async () => {
+      auth.isAdmin = true;
+      const { user } = renderSelected(inLibrarySelection(["trk-2"]));
+
+      await user.click(screen.getByLabelText("Delete files"));
+
+      expect(fileActions.openDelete).toHaveBeenCalledWith({
+        scope: "tracks",
+        trackIds: ["trk-2"],
+        pathIds: ["archive"],
+      });
+    });
+
+    it("leaves move and delete out when no selected row has a file in the library", () => {
+      auth.isAdmin = true;
+      renderSelected(inLibrarySelection([]));
+
+      expect(screen.queryByLabelText("Move to path…")).toBeNull();
+      expect(screen.queryByLabelText("Delete files")).toBeNull();
+    });
   });
 });

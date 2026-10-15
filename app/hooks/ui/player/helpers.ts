@@ -9,6 +9,7 @@ import type {
 import type { QueuePresence } from "@components/ui/QueueAddButton";
 import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
 import { playbackServerName } from "@utils/playback-servers";
+import { isTextEntryTarget } from "@utils/text-entry";
 
 import {
   AUTOPLAY_REFILL_BELOW,
@@ -20,10 +21,9 @@ import {
   LOCAL_SOURCE,
   LOSSLESS_FORMATS,
   MAX_QUEUE_TRACKS,
-  NON_TEXT_INPUT_TYPES,
+  DIALOG_OR_MENU_SELECTOR,
   PLAYBACK_MIME_BY_FORMAT,
   SESSION_POSITION_DRIFT_MS,
-  TEXT_ENTRY_OR_DIALOG_SELECTOR,
   TONES,
 } from "./constants";
 import type { PlaybackTrackSummary } from "@api/__generated__/types";
@@ -561,8 +561,6 @@ export function isPlayPauseShortcut(event: KeyboardEvent): boolean {
   if (event.key !== " " && event.code !== "Space") return false;
   const target = event.target;
   if (!(target instanceof Element)) return true;
-  if (target instanceof HTMLElement && target.isContentEditable) return false;
-  if (target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) return false;
-  if (target instanceof HTMLInputElement && !NON_TEXT_INPUT_TYPES.has(target.type)) return false;
-  return target.closest(TEXT_ENTRY_OR_DIALOG_SELECTOR) === null;
+  if (isTextEntryTarget(target)) return false;
+  return target.closest(DIALOG_OR_MENU_SELECTOR) === null;
 }

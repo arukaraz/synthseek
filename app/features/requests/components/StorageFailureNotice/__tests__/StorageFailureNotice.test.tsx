@@ -7,7 +7,7 @@ import { fireEvent, renderWithProviders, screen } from "@test/test-utils";
 import { StorageFailureNotice } from "../StorageFailureNotice";
 
 interface SummaryResult {
-  data: { count: number; downloadsPathBroken: boolean } | undefined;
+  data: { count: number; downloadsPathBroken: boolean; unavailablePaths: string[] } | undefined;
 }
 
 const useStorageFailureSummaryMock = vi.fn<() => SummaryResult>();
@@ -36,7 +36,9 @@ describe("StorageFailureNotice", () => {
   });
 
   it("renders nothing when no failure blames the local disk", () => {
-    useStorageFailureSummaryMock.mockReturnValue({ data: { count: 0, downloadsPathBroken: false } });
+    useStorageFailureSummaryMock.mockReturnValue({
+      data: { count: 0, downloadsPathBroken: false, unavailablePaths: [] },
+    });
 
     const { container } = renderWithProviders(<StorageFailureNotice />);
 
@@ -44,7 +46,9 @@ describe("StorageFailureNotice", () => {
   });
 
   it("offers the retry when the downloads folder is reachable again", () => {
-    useStorageFailureSummaryMock.mockReturnValue({ data: { count: 3, downloadsPathBroken: false } });
+    useStorageFailureSummaryMock.mockReturnValue({
+      data: { count: 3, downloadsPathBroken: false, unavailablePaths: [] },
+    });
 
     renderWithProviders(<StorageFailureNotice />);
 
@@ -58,7 +62,9 @@ describe("StorageFailureNotice", () => {
   });
 
   it("never promises more than one batch can retry", () => {
-    useStorageFailureSummaryMock.mockReturnValue({ data: { count: 900, downloadsPathBroken: false } });
+    useStorageFailureSummaryMock.mockReturnValue({
+      data: { count: 900, downloadsPathBroken: false, unavailablePaths: [] },
+    });
 
     renderWithProviders(<StorageFailureNotice />);
 
@@ -67,7 +73,9 @@ describe("StorageFailureNotice", () => {
   });
 
   it("stays silent about batching when everything fits in one attempt", () => {
-    useStorageFailureSummaryMock.mockReturnValue({ data: { count: MAX_BULK_TRACK_IDS, downloadsPathBroken: false } });
+    useStorageFailureSummaryMock.mockReturnValue({
+      data: { count: MAX_BULK_TRACK_IDS, downloadsPathBroken: false, unavailablePaths: [] },
+    });
 
     renderWithProviders(<StorageFailureNotice />);
 
@@ -75,7 +83,9 @@ describe("StorageFailureNotice", () => {
   });
 
   it("blocks the retry while the downloads folder is still unreachable", () => {
-    useStorageFailureSummaryMock.mockReturnValue({ data: { count: 3, downloadsPathBroken: true } });
+    useStorageFailureSummaryMock.mockReturnValue({
+      data: { count: 3, downloadsPathBroken: true, unavailablePaths: [] },
+    });
 
     renderWithProviders(<StorageFailureNotice />);
 
@@ -83,8 +93,23 @@ describe("StorageFailureNotice", () => {
     expect(screen.getByRole("button")).toBeDisabled();
   });
 
+  it("names the library paths that cannot take music and blocks the retry until they can", () => {
+    useStorageFailureSummaryMock.mockReturnValue({
+      data: { count: 2, downloadsPathBroken: false, unavailablePaths: ["Archive", "NAS"] },
+    });
+
+    renderWithProviders(<StorageFailureNotice />);
+
+    expect(screen.getByText(/The library paths Archive, NAS cannot take music right now/)).toBeInTheDocument();
+    expect(screen.queryByText(enRequests.storageFailure.pathReachable)).not.toBeInTheDocument();
+    expect(screen.getByRole("button")).toBeDisabled();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+  });
+
   it("raises the notice to an alert when the disk is still unreachable", () => {
-    useStorageFailureSummaryMock.mockReturnValue({ data: { count: 1, downloadsPathBroken: true } });
+    useStorageFailureSummaryMock.mockReturnValue({
+      data: { count: 1, downloadsPathBroken: true, unavailablePaths: [] },
+    });
 
     renderWithProviders(<StorageFailureNotice />);
 

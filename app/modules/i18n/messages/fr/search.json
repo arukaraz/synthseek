@@ -63,7 +63,16 @@
       "matching": "Mode de correspondance",
       "acquisition": "Méthode d'acquisition",
       "peer": "Préférences de pairs",
-      "lidarr": "Transfert vers Lidarr"
+      "lidarr": "Transfert vers Lidarr",
+      "destination": "Destination"
+    },
+    "destination": {
+      "lockedInPath_one": "{{count}} titre de cet album est déjà dans {{label}}, le reste le rejoint.",
+      "lockedInPath_other": "{{count}} titres de cet album sont déjà dans {{label}}, le reste les rejoint.",
+      "lockedOnItsWay": "Cet album est déjà en route vers {{label}}.",
+      "noRule": "Aucune règle ne correspond, il va donc dans le chemin par défaut.",
+      "matched_one": "{{count}} règle correspond :",
+      "matched_other": "{{count}} règles correspondent :"
     },
     "fields": {
       "quality": "Qualité",
@@ -80,7 +89,8 @@
       "lidarrMonitor": "Portée de surveillance",
       "lidarrArtistScope": "Portée de l'artiste",
       "lidarrTags": "Étiquettes",
-      "renamePlaylist": "Renommer la playlist (optionnel)"
+      "renamePlaylist": "Renommer la playlist (optionnel)",
+      "destination": "Chemin de bibliothèque"
     },
     "options": {
       "bitrate": {

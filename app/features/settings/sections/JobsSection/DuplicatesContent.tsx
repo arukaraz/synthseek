@@ -197,6 +197,7 @@ export function DuplicatesContent({ enabled, reclaiming }: DuplicatesContentProp
                         <CopyRow
                           key={copy.id}
                           copy={copy}
+                          showPath={group.reason === "different_paths"}
                           disabled={busy}
                           keeping={keepThis.isPending}
                           playing={playingId === copy.id}

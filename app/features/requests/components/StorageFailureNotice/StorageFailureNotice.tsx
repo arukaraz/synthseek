@@ -19,24 +19,30 @@ export function StorageFailureNotice() {
   if (!data || data.count === 0) return null;
 
   const retryableNow = Math.min(data.count, MAX_BULK_TRACK_IDS);
+  const pathsBroken = data.unavailablePaths.length > 0;
+  const broken = data.downloadsPathBroken || pathsBroken;
 
   return (
     <div className={storageFailureRoot()}>
       <Notice
-        variant={data.downloadsPathBroken ? "danger" : "warning"}
+        variant={broken ? "danger" : "warning"}
         icon={HardDrive}
         title={t("storageFailure.title", { count: data.count })}
       >
         <div className={storageFailureBody()}>
-          <p>{data.downloadsPathBroken ? t("storageFailure.stillBroken") : t("storageFailure.pathReachable")}</p>
+          {data.downloadsPathBroken ? <p>{t("storageFailure.stillBroken")}</p> : null}
+          {pathsBroken ? (
+            <p>
+              {t("storageFailure.libraryPathsBroken", {
+                count: data.unavailablePaths.length,
+                paths: data.unavailablePaths.join(", "),
+              })}
+            </p>
+          ) : null}
+          {broken ? null : <p>{t("storageFailure.pathReachable")}</p>}
           {retryableNow < data.count ? <p>{t("storageFailure.cappedBatch", { count: retryableNow })}</p> : null}
           <div className={storageFailureActions()}>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => retry.mutate()}
-              disabled={retry.isPending || data.downloadsPathBroken}
-            >
+            <Button variant="outline" size="sm" onClick={() => retry.mutate()} disabled={retry.isPending || broken}>
               <RefreshCw aria-hidden />
               {t("storageFailure.retryAction", { count: retryableNow })}
             </Button>

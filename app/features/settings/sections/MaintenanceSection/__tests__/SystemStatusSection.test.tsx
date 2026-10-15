@@ -23,8 +23,8 @@ const CHECKED_AT = new Date(2026, 8, 29, 14, 32);
 
 const EVERY_KIND: SystemProblem[] = [
   { kind: "downloads_unwritable", path: "/data/downloads", puid: "", pgid: "" },
-  { kind: "library_inaccessible", path: "/data/music", puid: "99", pgid: "100" },
-  { kind: "library_read_only", path: "/data/music-ro", puid: "1001", pgid: "" },
+  { kind: "library_inaccessible", label: "Music", path: "/data/music", puid: "99", pgid: "100" },
+  { kind: "library_read_only", label: "Archive", path: "/data/music-ro", puid: "1001", pgid: "" },
   { kind: "catalog_unreachable" },
   { kind: "config_value_ignored", name: "ADMIN_MIGRATION_PASSWORD" },
 ];
@@ -72,15 +72,35 @@ describe("SystemStatusSection", () => {
   it("keeps a known owner in the fix command rather than the default", () => {
     renderWith({ data: { checkedAt: CHECKED_AT, problems: EVERY_KIND } });
 
-    expect(screen.getByText(copyOf("library_inaccessible", "effect", { path: "/data/music" }))).toBeInTheDocument();
+    expect(
+      screen.getByText(copyOf("library_inaccessible", "effect", { label: "Music", path: "/data/music" }))
+    ).toBeInTheDocument();
     expect(screen.getByText(copyOf("library_inaccessible", "fix", { puid: "99", pgid: "100" }))).toBeInTheDocument();
   });
 
   it("defaults only the owner part that is unknown", () => {
     renderWith({ data: { checkedAt: CHECKED_AT, problems: EVERY_KIND } });
 
-    expect(screen.getByText(copyOf("library_read_only", "effect", { path: "/data/music-ro" }))).toBeInTheDocument();
+    expect(
+      screen.getByText(copyOf("library_read_only", "effect", { label: "Archive", path: "/data/music-ro" }))
+    ).toBeInTheDocument();
     expect(screen.getByText(copyOf("library_read_only", "fix", { puid: "1001", pgid: "1000" }))).toBeInTheDocument();
+  });
+
+  it("names the library path a problem is about, one row per path", () => {
+    renderWith({
+      data: {
+        checkedAt: CHECKED_AT,
+        problems: [
+          { kind: "library_inaccessible", label: "NAS", path: "/mnt/nas", puid: "1", pgid: "1" },
+          { kind: "library_inaccessible", label: "USB", path: "/mnt/usb", puid: "1", pgid: "1" },
+        ],
+      },
+    });
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(screen.getByText(/Music meant for NAS waits/)).toBeInTheDocument();
+    expect(screen.getByText(/Music meant for USB waits/)).toBeInTheDocument();
   });
 
   it("explains an unreachable catalog without any placeholders", () => {

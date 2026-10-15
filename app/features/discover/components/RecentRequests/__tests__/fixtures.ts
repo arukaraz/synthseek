@@ -47,6 +47,7 @@ export function createFlatTrackRow(overrides: Partial<FlatTrackRow> = {}): FlatT
     source: "deezer",
     failure_reason: null,
     downloaded_file: null,
+    library_path_id: null,
     library_path: null,
     file_bitrate: null,
     retry_count: 0,

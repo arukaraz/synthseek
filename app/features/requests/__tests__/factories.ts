@@ -90,6 +90,7 @@ export function makeRequestListItem(overrides: Partial<RequestListItem> = {}): R
     source_provider: null,
     source_id: null,
     auto_imported: false,
+    destination_path_id: null,
     requested: true,
     created_at: new Date(),
     updated_at: new Date(),

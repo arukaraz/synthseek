@@ -8,9 +8,10 @@ import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 
 import { LibraryDurationCell } from "./cells/LibraryDurationCell";
 import { LibraryRequestedAtCell } from "./cells/LibraryRequestedAtCell";
+import { TrackActionsCell } from "./cells/TrackActionsCell";
+import { TrackLibraryPathCell } from "./cells/TrackLibraryPathCell";
 import { TrackMetaCell } from "./cells/TrackMetaCell";
 import { TrackPrimaryCell } from "./cells/TrackPrimaryCell";
-import { TrackQueueCell } from "./cells/TrackQueueCell";
 import type { TrackColumnOptions } from "./types";
 
 export function buildTrackColumns(options: TrackColumnOptions): ColumnDef<LibraryTrackItem>[] {
@@ -25,7 +26,7 @@ export function buildTrackColumns(options: TrackColumnOptions): ColumnDef<Librar
       key: "meta",
       header: i18n.t("library:page.columns.artistAlbum"),
       cell: (item) => <TrackMetaCell artist={item.artist} albumName={item.albumName} />,
-      className: "hidden w-[24%] sm:table-cell",
+      className: "hidden w-[20%] sm:table-cell",
     },
     {
       key: "status",
@@ -37,8 +38,18 @@ export function buildTrackColumns(options: TrackColumnOptions): ColumnDef<Librar
       key: "requestedAt",
       header: i18n.t("library:page.columns.requestedAt"),
       cell: (item) => <LibraryRequestedAtCell createdAt={item.created_at} />,
-      className: "hidden w-[21%] lg:table-cell",
+      className: "hidden w-[13%] lg:table-cell",
     },
+    ...(options.showLibraryPath
+      ? [
+          {
+            key: "libraryPath",
+            header: i18n.t("library:page.columns.libraryPath"),
+            cell: (item: LibraryTrackItem) => <TrackLibraryPathCell libraryPath={item.libraryPath} />,
+            className: "hidden w-[12%] md:table-cell",
+          },
+        ]
+      : []),
     {
       key: "length",
       header: i18n.t("library:page.columns.length"),
@@ -46,9 +57,16 @@ export function buildTrackColumns(options: TrackColumnOptions): ColumnDef<Librar
       className: "w-[8%] text-right",
     },
     {
-      key: "queue",
+      key: "actions",
       header: "",
-      cell: (item) => <TrackQueueCell item={item} onEnqueue={options.onEnqueue} />,
+      cell: (item) => (
+        <TrackActionsCell
+          item={item}
+          onEnqueue={options.onEnqueue}
+          onSearchBetterQuality={options.onSearchBetterQuality}
+          fileActions={options.fileActions}
+        />
+      ),
       className: "w-[4%]",
     },
   ];

@@ -1,5 +1,6 @@
 import type { ContentType } from "@api/__generated__/types";
 import type { LibraryAlbumItem, LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
+import type { Selection } from "@hooks/ui/useSelection";
 import type { ParseKeys } from "i18next";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
@@ -26,7 +27,8 @@ export type FacetKey =
   | "genre"
   | "playlist"
   | "year"
-  | "owner";
+  | "owner"
+  | "libraryPath";
 
 export interface FacetDef {
   key: FacetKey;
@@ -104,12 +106,51 @@ export interface FacetSearchState {
   owner?: string;
 }
 
+export type LibraryFileTarget =
+  | { scope: "track"; trackId: string; title: string; pathIds: string[] }
+  | { scope: "album"; albumId: string; name: string; pathIds: string[] }
+  | { scope: "tracks"; trackIds: string[]; pathIds: string[] }
+  | { scope: "albums"; albumIds: string[]; pathIds: string[] };
+
+export interface LibraryFileRequest {
+  kind: "move" | "delete";
+  target: LibraryFileTarget;
+}
+
+export type LibraryFileJobKind = { kind: "move"; targetLabel: string } | { kind: "delete" };
+
+export type LibraryFileJob = LibraryFileJobKind & {
+  baseline: string | null;
+  since: number;
+  visible: boolean;
+};
+
+export interface LibraryFileActions {
+  canMove: boolean;
+  openMove: (target: LibraryFileTarget) => void;
+  openDelete: (target: LibraryFileTarget) => void;
+}
+
 export interface LibraryViewModeProps {
   controller: LibraryUrlController;
   filtersOpen: boolean;
   onFiltersOpenChange: (open: boolean) => void;
 }
 
+export type AlbumSelection = Selection<LibraryAlbumItem>;
+
+export interface SelectionShortcutTarget {
+  selectedCount: number;
+  setMany: (ids: string[], selected: boolean) => void;
+  clear: () => void;
+}
+
+export interface AlbumsViewModeProps extends LibraryViewModeProps {
+  selection: AlbumSelection;
+  fileActions: LibraryFileActions;
+}
+
 export interface TracksViewModeProps extends LibraryViewModeProps {
   selection: LibrarySelection;
+  fileActions: LibraryFileActions;
 }

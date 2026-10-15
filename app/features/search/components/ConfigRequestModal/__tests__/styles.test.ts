@@ -4,8 +4,6 @@ import {
   configDialogContent,
   fieldGroup,
   fieldLabel,
-  lidarrSelectRadioItem,
-  lidarrSelectTrigger,
   lidarrTagChip,
   lidarrTagChipRemove,
   lidarrTagInputField,
@@ -31,16 +29,6 @@ describe("fieldLabel", () => {
   it("separates the label from its control with a small bottom margin", () => {
     expect(fieldLabel()).toContain("mb-1.5");
     expect(fieldLabel()).toContain("block");
-  });
-});
-
-describe("lidarr select controls", () => {
-  it("trigger disables with reduced opacity", () => {
-    expect(lidarrSelectTrigger()).toContain("disabled:opacity-40");
-  });
-
-  it("radio item stacks its label and description", () => {
-    expect(lidarrSelectRadioItem()).toContain("flex-col");
   });
 });
 

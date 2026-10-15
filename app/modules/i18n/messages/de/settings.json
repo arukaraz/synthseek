@@ -1494,16 +1494,243 @@
       "description": "Wie deine Dateien auf der Platte geordnet sind und was nicht passt."
     }
   },
-  "libraryNaming": {
+  "libraryPaths": {
     "card": {
-      "title": "Titelbenennung",
-      "description": "Wohin jeder Song kommt und wie er heißt. Nichts wird verschoben, bevor du es sagst."
+      "title": "Bibliothekspfade",
+      "description": "Die Ordner, in denen Synthseek deine Musik aufbewahrt. Jeder hat seine eigene Titelbenennung und die Regeln, die ihm Musik schicken."
     },
+    "loading": "Bibliothekspfade werden geladen",
+    "loadFailed": "Die Bibliothekspfade konnten nicht gelesen werden",
+    "add": "Bibliothekspfad hinzufügen",
+    "columns": {
+      "path": "Bibliothekspfad",
+      "files": "Dateien",
+      "free": "Freier Platz",
+      "rules": "Regeln",
+      "enabled": "Aktiv"
+    },
+    "defaultBadge": "Standard",
+    "environmentBadge": "MUSIC_LIBRARY_PATH",
+    "environmentHint": "Kommt aus MUSIC_LIBRARY_PATH",
+    "status": {
+      "writable": "Verfügbar",
+      "readonly": "Nur lesbar",
+      "missing": "Ordner fehlt",
+      "not_directory": "Kein Ordner",
+      "unreachable": "Nicht erreichbar",
+      "disabled": "Deaktiviert"
+    },
+    "files_one": "1 Datei",
+    "files_other": "{{formatted}} Dateien",
+    "freeSpace": "{{size}} frei",
+    "freeUnknown": "Unbekannt",
+    "rulesCount_one": "1 Regel",
+    "rulesCount_other": "{{count}} Regeln",
+    "edit": "Bearbeiten",
+    "editLabel": "{{label}} bearbeiten",
+    "enabledLabel": "{{label}} verwenden",
+    "defaultCannotTurnOff": "Der Standardpfad kann nicht ausgeschaltet werden",
+    "unreachableNotice": "{{label}} ist nicht erreichbar. Seine Dateien behalten ihren Platz in der Bibliothek und keine wird als fehlend markiert.",
+    "modal": {
+      "addTitle": "Bibliothekspfad hinzufügen",
+      "editTitle": "{{label}} bearbeiten",
+      "cancel": "Abbrechen",
+      "add": "Bibliothekspfad hinzufügen",
+      "save": "Speichern"
+    },
+    "label": {
+      "label": "Name",
+      "placeholder": "Soundtracks",
+      "taken": "Ein anderer Bibliothekspfad hat schon diesen Namen."
+    },
+    "folder": {
+      "label": "Ordner",
+      "placeholder": "/music-soundtracks",
+      "fromEnvironment": "Kommt aus MUSIC_LIBRARY_PATH. Ändere ihn in deiner Compose-Datei und starte neu.",
+      "checking": "Ordner wird geprüft",
+      "usable": "Synthseek kann diesen Ordner sehen.",
+      "readonly": "Dieser Ordner ist nur lesbar, Synthseek kann die Musik darin also lesen, aber dort nichts speichern.",
+      "problem": {
+        "not_absolute": "Gib den vollständigen Pfad im Container an, beginnend mit /.",
+        "too_long": "Dieser Pfad ist zu lang.",
+        "system_folder": "Das ist ein Systemordner. Wähle einen Ordner, der Musik enthält.",
+        "same_as_path": "{{label}} verwendet diesen Ordner schon.",
+        "inside_path": "Dieser Ordner liegt in {{label}}. Wähle einen Ordner außerhalb aller anderen Bibliothekspfade.",
+        "contains_path": "{{label}} liegt in diesem Ordner. Bibliothekspfade können einander nicht enthalten.",
+        "app_folder": "{{folder}} ist ein Ordner, den Synthseek selbst verwendet. Ein Bibliothekspfad kann weder darin liegen noch ihn enthalten.",
+        "not_found": "Synthseek sieht {{folder}} nicht. Binde ihn zuerst in deiner Compose-Datei ein, zum Beispiel /dein/host/ordner:{{folder}}, und starte dann neu.",
+        "not_directory": "Das ist eine Datei, kein Ordner.",
+        "unreachable": "Dieser Ordner antwortet nicht. Prüfe, ob seine Platte angeschlossen ist."
+      },
+      "check": {
+        "needed_one": "{{label}} enthält 1 Datei. Prüfe vor dem Speichern, ob sie im neuen Ordner liegt.",
+        "needed_other": "{{label}} enthält {{formatted}} Dateien. Prüfe vor dem Speichern, ob sie im neuen Ordner liegen.",
+        "action": "Ordner prüfen",
+        "found": "{{found}} von {{sampled}} Stichproben im neuen Ordner gefunden. Nichts wird verschoben oder umbenannt, Synthseek liest sie nach dem Speichern von dort.",
+        "missing": "{{found}} von {{sampled}} Stichproben dort gefunden. Die Musik von {{label}} liegt nicht in diesem Ordner.",
+        "failed": "Der Ordner konnte nicht geprüft werden."
+      }
+    },
+    "default": {
+      "label": "Standardpfad",
+      "other": "Musik, die zu keiner Regel passt, wird hier gespeichert. Gerade ist das {{label}}.",
+      "isThis": "Musik, die zu keiner Regel passt, wird hier gespeichert. Um das zu ändern, schalte es in einem anderen Bibliothekspfad ein.",
+      "readonly": "Ein nur lesbarer Pfad kann nicht der Standardpfad sein."
+    },
+    "rules": {
+      "label": "Regeln",
+      "empty": "Noch keine Regeln. Lege sie unter Regeln an, unterhalb der Bibliothekspfade.",
+      "usedBy": "Verwendet von {{label}}",
+      "otherPath": "einem anderen Bibliothekspfad",
+      "taken": "{{name}} wird schon von einem anderen Bibliothekspfad verwendet.",
+      "takenUnknown": "Eine dieser Regeln wird schon von einem anderen Bibliothekspfad verwendet."
+    },
+    "naming": {
+      "addHint": "Gilt für alles, was hier ankommt.",
+      "readonly": "Dieser Pfad ist nur lesbar, seine Dateien können also nicht umbenannt werden.",
+      "moves_one": "1 Song würde innerhalb von {{label}} verschoben.",
+      "moves_other": "{{formatted}} Songs würden innerhalb von {{label}} verschoben.",
+      "inPlace": "Jeder Song hier folgt schon diesem Format.",
+      "preview": "Was sich ändern würde",
+      "invalid": "Dieses Benennungsformat kann nicht verwendet werden."
+    },
+    "remove": {
+      "action": "Pfad entfernen",
+      "confirmTitle": "{{label}} entfernen?",
+      "confirmMessage": "Synthseek verwendet diesen Ordner nicht mehr. Der Ordner auf der Platte bleibt, wie er ist.",
+      "confirmYes": "Pfad entfernen",
+      "forgetAction": "Pfad und seine Titel entfernen",
+      "forgetConfirmTitle": "{{label}} und seine Titel entfernen?",
+      "forgetConfirmMessage_one": "1 Titel verlässt die Bibliothek und seine Playlists. Seine Datei bleibt auf der Platte.",
+      "forgetConfirmMessage_other": "{{formatted}} Titel verlassen die Bibliothek und ihre Playlists. Ihre Dateien bleiben auf der Platte.",
+      "forgetConfirmYes": "Pfad und Titel entfernen",
+      "blockedTitle": "{{label}} kann noch nicht entfernt werden",
+      "blocker": {
+        "from_environment": "Er kommt aus MUSIC_LIBRARY_PATH. Ändere diese Variable in deiner Compose-Datei, damit sie woanders hinzeigt.",
+        "default_path": "Er ist der Standardpfad. Mach zuerst einen anderen Bibliothekspfad zum Standard.",
+        "has_rules_one": "Er verwendet 1 Regel. Entferne zuerst den Haken.",
+        "has_rules_other": "Er verwendet {{count}} Regeln. Entferne zuerst die Haken.",
+        "has_songs_one": "1 Titel hat seine Datei noch hier. Verschiebe ihn zuerst in einen anderen Pfad, oder entferne den Pfad mitsamt ihm.",
+        "has_songs_other": "{{formatted}} Titel haben ihre Dateien noch hier. Verschiebe sie zuerst in einen anderen Pfad, oder entferne den Pfad mitsamt ihnen.",
+        "pending_downloads_one": "1 Download ist auf dem Weg dorthin.",
+        "pending_downloads_other": "{{count}} Downloads sind auf dem Weg dorthin."
+      }
+    },
+    "toast": {
+      "added": "Bibliothekspfad hinzugefügt",
+      "saved": "Bibliothekspfad gespeichert",
+      "removed": "Bibliothekspfad entfernt",
+      "notFound": "Diesen Bibliothekspfad gibt es nicht mehr",
+      "defaultCannotTurnOff": "Der Standardpfad kann nicht ausgeschaltet werden. Mach zuerst einen anderen Bibliothekspfad zum Standard."
+    }
+  },
+  "libraryRules": {
+    "card": {
+      "title": "Regeln",
+      "description": "Bedingungen, zu denen eine Anfrage passen kann. Ein Bibliothekspfad verwendet die Regeln, die du in seinen Einstellungen auswählst. Passen mehrere, wird die, die in dieser Liste weiter oben steht, zuerst versucht. Passt keine, kommt die Musik in den Standardpfad."
+    },
+    "loading": "Regeln werden geladen",
+    "loadFailed": "Die Regeln konnten nicht gelesen werden",
+    "add": "Regel hinzufügen",
+    "empty": "Noch keine Regeln. Alles kommt in den Standardpfad.",
+    "columns": {
+      "order": "Reihenfolge",
+      "rule": "Regel",
+      "conditions": "Bedingungen",
+      "usedBy": "Verwendet von"
+    },
+    "priority": "Priorität {{position}}",
+    "notUsed": "Von keinem Pfad verwendet",
+    "moveUp": "{{name}} nach oben",
+    "moveDown": "{{name}} nach unten",
+    "edit": "Bearbeiten",
+    "editLabel": "{{name}} bearbeiten",
+    "delete": "{{name}} löschen",
+    "deleteConfirm": {
+      "title": "{{name}} löschen?",
+      "used": "{{label}} verwendet sie nicht mehr. Nichts, was schon in der Bibliothek ist, wird verschoben.",
+      "unused": "Kein Bibliothekspfad verwendet sie. Nichts, was schon in der Bibliothek ist, wird verschoben.",
+      "yes": "Regel löschen"
+    },
+    "unknownMember": "ein entferntes Mitglied",
+    "fields": {
+      "requested_by": "Angefragt von",
+      "genre": "Genre",
+      "artist": "Künstler",
+      "quality": "Angefragte Qualität",
+      "year": "Erscheinungsjahr",
+      "request_type": "Art der Anfrage",
+      "track_count": "Anzahl der Songs"
+    },
+    "ops": {
+      "is": "ist",
+      "is_not": "ist nicht",
+      "contains": "enthält",
+      "not_contains": "enthält nicht",
+      "before": "vor",
+      "after": "nach",
+      "more_than": "mehr als",
+      "fewer_than": "weniger als"
+    },
+    "quality": {
+      "lossless": "Verlustfrei",
+      "lossy": "Verlustbehaftet"
+    },
+    "requestType": {
+      "album": "Album",
+      "track": "Einzelner Titel",
+      "playlist": "Playlist",
+      "artist": "Künstler"
+    },
+    "summary": {
+      "condition": "{{field}} {{op}} {{value}}",
+      "and": "{{left}} und {{right}}",
+      "or": "{{left}} oder {{right}}",
+      "none": "Keine Bedingungen"
+    },
+    "modal": {
+      "addTitle": "Regel hinzufügen",
+      "editTitle": "Regel bearbeiten",
+      "name": "Name",
+      "namePlaceholder": "Soundtracks",
+      "nameTaken": "Eine andere Regel hat schon diesen Namen.",
+      "matchLabel": "Passt, wenn",
+      "matchAll": "Alle Bedingungen",
+      "matchAny": "Eine Bedingung",
+      "conditionsLabel": "Bedingungen",
+      "fieldLabel": "Bedingung {{position}}, was geprüft wird",
+      "opLabel": "Bedingung {{position}}, wie verglichen wird",
+      "valueLabel": "Bedingung {{position}}, Wert",
+      "removeCondition": "Bedingung {{position}} entfernen",
+      "addCondition": "Bedingung hinzufügen",
+      "conditionLimit_one": "Eine Regel kann 1 Bedingung haben.",
+      "conditionLimit_other": "Eine Regel kann bis zu {{count}} Bedingungen haben.",
+      "pickMember": "Mitglied wählen",
+      "placeholders": {
+        "genre": "Soundtrack",
+        "artist": "Hans Zimmer",
+        "year": "1980",
+        "track_count": "20"
+      },
+      "pathNote": "Welcher Bibliothekspfad diese Regel verwendet, wählst du in den Einstellungen dieses Pfads.",
+      "tooMany": "Es gibt schon so viele Regeln, wie Synthseek erlaubt. Lösche zuerst eine.",
+      "cancel": "Abbrechen",
+      "add": "Regel hinzufügen",
+      "save": "Regel speichern"
+    },
+    "toast": {
+      "added": "Regel hinzugefügt",
+      "saved": "Regel gespeichert",
+      "removed": "Regel gelöscht",
+      "notFound": "Diese Regel gibt es nicht mehr",
+      "reorderMismatch": "Die Regeln haben sich geändert, während du sie umsortiert hast. Die Liste zeigt jetzt ihre aktuelle Reihenfolge."
+    }
+  },
+  "libraryNaming": {
     "template": {
-      "label": "Standard-Titelformat"
+      "label": "Titelbenennung"
     },
     "rules": "Die Vorlage muss auf .{ext} enden. Ein einzelnes Token ist Pflicht: ein Titel, der es nicht füllen kann, bleibt liegen, und ein Download, der es nicht füllen kann, scheitert beim Import.",
-    "loadFailed": "Die aktuelle Vorlage konnte nicht gelesen werden",
     "tokens": {
       "albumartist": "Der Künstler, unter dem das Album abgelegt wird",
       "album": "Albumtitel",
@@ -1547,8 +1774,6 @@
       "ruleOptional": "Ein Baustein außerhalb der < > ist Pflicht, und ein Song, der ihn nicht füllen kann, bleibt liegen, statt unter einem Namen mit einer Lücke abgelegt zu werden.",
       "close": "Fertig"
     },
-    "previewAction_one": "1 Änderung vorschauen",
-    "previewAction_other": "{{formatted}} Änderungen vorschauen",
     "samples": {
       "single_disc": "Ein normales Album",
       "multi_disc": "Ein Album auf zwei CDs",
@@ -1556,7 +1781,7 @@
       "unrenderable": "Dieses Format kann diesen nicht benennen"
     },
     "preview": {
-      "title": "Was sich ändern würde",
+      "title": "Was sich in {{label}} ändern würde",
       "tabs": {
         "all": "Alles",
         "relocate": "Nur der Ordner",
@@ -1567,7 +1792,7 @@
       "info": {
         "open": "Was hier zu sehen ist",
         "title": "Was hier zu sehen ist",
-        "counts": "Die Zahlen oben zählen deine ganze Bibliothek: was sich bewegen würde, was schon stimmt und was keinen Namen bekommt, weil dem Song etwas fehlt.",
+        "counts": "Die Zahlen oben zählen diesen Bibliothekspfad: was sich bewegen würde, was schon stimmt und was keinen Namen bekommt, weil dem Song etwas fehlt.",
         "lists": "Die Änderungen teilen sich in drei, damit du die sicheren mitnimmst und den Rest liegen lässt.",
         "relocateTerm": "Nur der Ordner",
         "relocateText": "Die Datei behält ihren Namen und landet in einem anderen Ordner.",
@@ -1600,7 +1825,6 @@
     "rejectedNotice_one": "Einem Song fehlt etwas, das dieses Format braucht, er bleibt wo er ist.",
     "rejectedNotice_other": "{{count}} Songs fehlt etwas, das dieses Format braucht, sie bleiben wo sie sind.",
     "toast": {
-      "saved": "Gespeichert. Es wurde noch nichts verschoben.",
       "organiseBusy": "Gerade werden Dateien verschoben. Versuche es danach erneut.",
       "invalidTemplate": "Dieses Format kann nicht verwendet werden."
     }
@@ -1635,7 +1859,10 @@
       "PATH_TOO_LONG": "{{count}} bekämen einen Pfad, der für die Platte zu lang ist.",
       "SCRIPT_VALIDATION_FAILED": "{{count}} ergaben einen Namen, der nicht sicher zu schreiben ist."
     },
-    "finished": "{{moved}} Dateien und {{companions}} Begleitdateien in {{duration}} verschoben",
+    "finished_one": "1 Datei in {{duration}} verschoben",
+    "finished_other": "{{formatted}} Dateien in {{duration}} verschoben",
+    "finishedCompanions_one": "1 Liedtext oder Cover ist mitgekommen.",
+    "finishedCompanions_other": "{{formatted}} Liedtexte oder Cover sind mitgekommen.",
     "finishedFailures": "{{count}} konnten nicht verschoben werden und liegen noch dort:",
     "finishedCompanionsFailed": "{{count}} Liedtexte oder Cover konnten ihrem Titel nicht folgen.",
     "moveFailure": {
@@ -1690,8 +1917,25 @@
       "linked": "In der Bibliothek",
       "searching": "Wird gesucht",
       "toReview": "Zu prüfen",
-      "reviewFiles": "Dateien prüfen",
-      "footer": "{{ignored}} ignoriert · {{missing}} verschwunden"
+      "reviewFiles": "Dateien prüfen"
+    },
+    "paths": {
+      "columns": {
+        "path": "Bibliothekspfad",
+        "gone": "Verschwunden",
+        "lastScan": "Letzter Scan",
+        "scan": "Scannen"
+      },
+      "never": "Nie",
+      "outcome": {
+        "unavailable": "Übersprungen, nicht erreichbar",
+        "disabled": "Übersprungen, deaktiviert",
+        "unreadable": "Übersprungen, zu viel war nicht lesbar",
+        "empty": "Übersprungen, keine Titel gefunden"
+      },
+      "scan": "{{label}} scannen",
+      "ignored_one": "{{count}} Datei ignoriert",
+      "ignored_other": "{{count}} Dateien ignoriert"
     },
     "state": {
       "scanning": "Wird gescannt",
@@ -1716,7 +1960,9 @@
     },
     "toast": {
       "cancelling": "Bibliotheksscan wird gestoppt",
-      "nothingRunning": "Es lief kein Bibliotheksscan"
+      "nothingRunning": "Es lief kein Bibliotheksscan",
+      "alreadyRunning": "Ein Bibliotheksscan läuft bereits",
+      "pathNotFound": "Diesen Bibliothekspfad gibt es nicht mehr"
     },
     "review": {
       "title": "Titel zur Prüfung",
@@ -1856,7 +2102,8 @@
         "titles_differ": "Die Kopien tragen verschiedene Titel, eine könnte eine Live-Version, ein Remix oder eine andere Fassung sein. Automatisch aufzulösen könnte eine unwiederbringliche Aufnahme in den Papierkorb schieben.",
         "untitled_copy": "Mindestens eine Kopie hat kein Titel-Tag, also kann nichts bestätigen, dass es dieselbe Aufnahme ist. Entscheide hier Kopie für Kopie.",
         "lengths_differ": "Die Titel stimmen überein, aber die Kopien sind nicht gleich lang, eine ist also vermutlich ein Edit, eine verlängerte Fassung oder eine andere Aufnahme. Automatisch aufzulösen könnte eine unwiederbringliche Aufnahme in den Papierkorb schieben.",
-        "length_unknown": "Eine Kopie wurde noch nicht gemessen, also kann nichts bestätigen, dass es dieselbe Aufnahme ist. Der nächste Bibliotheksscan misst sie."
+        "length_unknown": "Eine Kopie wurde noch nicht gemessen, also kann nichts bestätigen, dass es dieselbe Aufnahme ist. Der nächste Bibliotheksscan misst sie.",
+        "different_paths": "Die Kopien liegen in verschiedenen Bibliothekspfaden, jede kann also absichtlich dort sein. Wähle mit Diese Kopie behalten die, die bleiben soll."
       },
       "tidyDone": "Beste Kopie behalten, {{size}} freigegeben",
       "tidySkipped": "Dieser Titel bleibt unberührt, seine Kopien stimmen nicht überein",
@@ -1933,13 +2180,13 @@
           "fix": "Übertrage auf dem Host den Besitz dieses Ordners an den Benutzer, unter dem Synthseek läuft, zum Beispiel: chown -R {{puid}}:{{pgid}} <dein Download-Ordner>"
         },
         "library_inaccessible": {
-          "title": "Die Musikbibliothek ist nicht erreichbar",
-          "effect": "Downloads sind angehalten, und Dateien aus der Bibliothek lassen sich nicht abspielen, bis {{path}} wieder erreichbar ist.",
+          "title": "Ein Bibliothekspfad ist nicht erreichbar",
+          "effect": "Musik für {{label}} wartet, und ihre Dateien lassen sich nicht abspielen, bis {{path}} wieder erreichbar ist.",
           "fix": "Prüfe, ob das Laufwerk oder die Freigabe eingebunden ist und der Benutzer, unter dem Synthseek läuft, sie lesen kann, zum Beispiel: chown -R {{puid}}:{{pgid}} <dein Musikordner>"
         },
         "library_read_only": {
-          "title": "Die Musikbibliothek ist schreibgeschützt",
-          "effect": "Durchsuchen und Abspielen funktionieren, aber neue Downloads können nicht zu {{path}} hinzugefügt werden.",
+          "title": "Ein Bibliothekspfad ist schreibgeschützt",
+          "effect": "Durchsuchen und Abspielen funktionieren, aber neue Musik für {{label}} kann nicht zu {{path}} hinzugefügt werden.",
           "fix": "Wenn Synthseek Musik hinzufügen soll, gib ihm Schreibrechte, zum Beispiel: chown -R {{puid}}:{{pgid}} <dein Musikordner>"
         },
         "catalog_unreachable": {

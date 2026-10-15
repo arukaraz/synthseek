@@ -11,6 +11,7 @@ import { toast } from "sonner";
 export function useEntityPlayback(): {
   playEntity: (target: PlayableTracksTarget) => Promise<void>;
   enqueueEntity: (target: PlayableTracksTarget) => Promise<boolean>;
+  enqueueEntities: (targets: readonly PlayableTracksTarget[]) => Promise<boolean>;
   enqueueTracks: (tracks: readonly PlayerTrack[]) => boolean;
   startRadio: (target: PlayableTracksTarget) => Promise<void>;
 } {
@@ -77,7 +78,27 @@ export function useEntityPlayback(): {
     [resolve, enqueueTracks]
   );
 
+  const enqueueEntities = useCallback(
+    async (targets: readonly PlayableTracksTarget[]) => {
+      const tracks: PlayerTrack[] = [];
+      let truncated = false;
+      try {
+        for (const target of targets) {
+          const result = await fetchPlayable(target);
+          truncated = truncated || result.truncated;
+          tracks.push(...result.items.map(playerTrackFrom));
+        }
+      } catch {
+        toast.error(t("queue.loadFailed"));
+        return false;
+      }
+      if (truncated) toast.info(t("queue.truncated", { count: tracks.length }));
+      return enqueueTracks(tracks);
+    },
+    [fetchPlayable, enqueueTracks, t]
+  );
+
   const startRadio = useCallback((target: PlayableTracksTarget) => startStation(target, null), [startStation]);
 
-  return { playEntity, enqueueEntity, enqueueTracks, startRadio };
+  return { playEntity, enqueueEntity, enqueueEntities, enqueueTracks, startRadio };
 }

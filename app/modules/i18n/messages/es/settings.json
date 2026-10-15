@@ -1497,16 +1497,243 @@
       "description": "Cómo están organizados tus ficheros en disco, y qué no encaja."
     }
   },
-  "libraryNaming": {
+  "libraryPaths": {
     "card": {
-      "title": "Nombres de las pistas",
-      "description": "Dónde va cada canción y cómo se llama. No se mueve nada hasta que tú lo digas."
+      "title": "Rutas de biblioteca",
+      "description": "Las carpetas donde Synthseek guarda tu música. Cada una tiene su propio nombre de pistas y las reglas que le mandan música."
     },
+    "loading": "Cargando las rutas de biblioteca",
+    "loadFailed": "No se pudieron leer las rutas de biblioteca",
+    "add": "Añadir ruta de biblioteca",
+    "columns": {
+      "path": "Ruta de biblioteca",
+      "files": "Ficheros",
+      "free": "Espacio libre",
+      "rules": "Reglas",
+      "enabled": "Activa"
+    },
+    "defaultBadge": "Por defecto",
+    "environmentBadge": "MUSIC_LIBRARY_PATH",
+    "environmentHint": "Viene de MUSIC_LIBRARY_PATH",
+    "status": {
+      "writable": "Disponible",
+      "readonly": "Solo lectura",
+      "missing": "Falta la carpeta",
+      "not_directory": "No es una carpeta",
+      "unreachable": "No responde",
+      "disabled": "Desactivada"
+    },
+    "files_one": "1 fichero",
+    "files_other": "{{formatted}} ficheros",
+    "freeSpace": "{{size}} libres",
+    "freeUnknown": "Desconocido",
+    "rulesCount_one": "1 regla",
+    "rulesCount_other": "{{count}} reglas",
+    "edit": "Editar",
+    "editLabel": "Editar {{label}}",
+    "enabledLabel": "Usar {{label}}",
+    "defaultCannotTurnOff": "La ruta por defecto no se puede desactivar",
+    "unreachableNotice": "{{label}} no responde. Sus ficheros conservan su sitio en la biblioteca y ninguno se marca como perdido.",
+    "modal": {
+      "addTitle": "Añadir una ruta de biblioteca",
+      "editTitle": "Editar {{label}}",
+      "cancel": "Cancelar",
+      "add": "Añadir ruta de biblioteca",
+      "save": "Guardar"
+    },
+    "label": {
+      "label": "Nombre",
+      "placeholder": "Bandas sonoras",
+      "taken": "Ya hay otra ruta de biblioteca con este nombre."
+    },
+    "folder": {
+      "label": "Carpeta",
+      "placeholder": "/music-soundtracks",
+      "fromEnvironment": "Viene de MUSIC_LIBRARY_PATH. Cámbiala en tu fichero compose y reinicia.",
+      "checking": "Comprobando la carpeta",
+      "usable": "Synthseek puede ver esta carpeta.",
+      "readonly": "Esta carpeta es de solo lectura, así que Synthseek puede leer la música que tiene pero no guardar nada en ella.",
+      "problem": {
+        "not_absolute": "Usa la ruta completa dentro del contenedor, empezando por /.",
+        "too_long": "Esta ruta es demasiado larga.",
+        "system_folder": "Esta es una carpeta del sistema. Elige una carpeta con música.",
+        "same_as_path": "{{label}} ya usa esta carpeta.",
+        "inside_path": "Esta carpeta está dentro de {{label}}. Elige una carpeta fuera de las demás rutas de biblioteca.",
+        "contains_path": "{{label}} está dentro de esta carpeta. Las rutas de biblioteca no pueden contenerse unas a otras.",
+        "app_folder": "{{folder}} es una carpeta que Synthseek usa para sí mismo. Una ruta de biblioteca no puede estar dentro de ella ni contenerla.",
+        "not_found": "Synthseek no ve {{folder}}. Móntala primero en tu fichero compose, por ejemplo /tu/carpeta/del/host:{{folder}}, y reinicia.",
+        "not_directory": "Esto es un fichero, no una carpeta.",
+        "unreachable": "Esta carpeta no responde. Comprueba que su disco está conectado."
+      },
+      "check": {
+        "needed_one": "{{label}} tiene 1 fichero. Comprueba que está en la carpeta nueva antes de guardar.",
+        "needed_other": "{{label}} tiene {{formatted}} ficheros. Comprueba que están en la carpeta nueva antes de guardar.",
+        "action": "Comprobar carpeta",
+        "found": "Encontrados {{found}} de {{sampled}} ficheros de muestra en la carpeta nueva. No se mueve ni se renombra nada, Synthseek los lee desde ahí en cuanto guardes.",
+        "missing": "Encontrados {{found}} de {{sampled}} ficheros de muestra ahí. La música de {{label}} no está en esta carpeta.",
+        "failed": "No se pudo comprobar la carpeta."
+      }
+    },
+    "default": {
+      "label": "Ruta por defecto",
+      "other": "La música que no coincide con ninguna regla se guarda aquí. Ahora mismo es {{label}}.",
+      "isThis": "La música que no coincide con ninguna regla se guarda aquí. Para cambiarlo, actívalo en otra ruta de biblioteca.",
+      "readonly": "Una ruta de solo lectura no puede ser la ruta por defecto."
+    },
+    "rules": {
+      "label": "Reglas",
+      "empty": "Todavía no hay reglas. Créalas en Reglas, debajo de Rutas de biblioteca.",
+      "usedBy": "La usa {{label}}",
+      "otherPath": "otra ruta de biblioteca",
+      "taken": "{{name}} ya la usa otra ruta de biblioteca.",
+      "takenUnknown": "Una de estas reglas ya la usa otra ruta de biblioteca."
+    },
+    "naming": {
+      "addHint": "Se aplica a todo lo que llegue aquí.",
+      "readonly": "Esta ruta es de solo lectura, así que sus ficheros no se pueden renombrar.",
+      "moves_one": "1 canción se movería dentro de {{label}}.",
+      "moves_other": "{{formatted}} canciones se moverían dentro de {{label}}.",
+      "inPlace": "Todas las canciones de aquí ya siguen este formato.",
+      "preview": "Qué cambiaría",
+      "invalid": "Este formato de nombres no se puede usar."
+    },
+    "remove": {
+      "action": "Quitar ruta",
+      "confirmTitle": "¿Quitar {{label}}?",
+      "confirmMessage": "Synthseek deja de usar esta carpeta. La carpeta del disco se queda como está.",
+      "confirmYes": "Quitar ruta",
+      "forgetAction": "Quitar la ruta y sus canciones",
+      "forgetConfirmTitle": "¿Quitar {{label}} y sus canciones?",
+      "forgetConfirmMessage_one": "1 canción sale de la biblioteca y de las playlists donde esté. Su fichero se queda en el disco.",
+      "forgetConfirmMessage_other": "{{formatted}} canciones salen de la biblioteca y de las playlists donde estén. Sus ficheros se quedan en el disco.",
+      "forgetConfirmYes": "Quitar ruta y canciones",
+      "blockedTitle": "Todavía no se puede quitar {{label}}",
+      "blocker": {
+        "from_environment": "Viene de MUSIC_LIBRARY_PATH. Cambia esa variable en tu fichero compose para que apunte a otro sitio.",
+        "default_path": "Es la ruta por defecto. Haz antes que otra ruta de biblioteca sea la ruta por defecto.",
+        "has_rules_one": "Usa 1 regla. Desmárcala primero.",
+        "has_rules_other": "Usa {{count}} reglas. Desmárcalas primero.",
+        "has_songs_one": "1 canción aún tiene su fichero aquí. Muévela antes a otra ruta, o quita la ruta junto con ella.",
+        "has_songs_other": "{{formatted}} canciones aún tienen sus ficheros aquí. Muévelas antes a otra ruta, o quita la ruta junto con ellas.",
+        "pending_downloads_one": "1 descarga va de camino a ella.",
+        "pending_downloads_other": "{{count}} descargas van de camino a ella."
+      }
+    },
+    "toast": {
+      "added": "Ruta de biblioteca añadida",
+      "saved": "Ruta de biblioteca guardada",
+      "removed": "Ruta de biblioteca quitada",
+      "notFound": "Esa ruta de biblioteca ya no existe",
+      "defaultCannotTurnOff": "La ruta por defecto no se puede desactivar. Haz antes que otra ruta de biblioteca sea la ruta por defecto."
+    }
+  },
+  "libraryRules": {
+    "card": {
+      "title": "Reglas",
+      "description": "Condiciones con las que puede coincidir una petición. Cada ruta de biblioteca usa las reglas que elijas en sus ajustes. Si coinciden varias, se prueba primero la que esté más arriba en esta lista. Si no coincide ninguna, la música va a la ruta por defecto."
+    },
+    "loading": "Cargando las reglas",
+    "loadFailed": "No se pudieron leer las reglas",
+    "add": "Añadir regla",
+    "empty": "Todavía no hay reglas. Todo va a la ruta por defecto.",
+    "columns": {
+      "order": "Orden",
+      "rule": "Regla",
+      "conditions": "Condiciones",
+      "usedBy": "La usa"
+    },
+    "priority": "Prioridad {{position}}",
+    "notUsed": "No la usa ninguna ruta",
+    "moveUp": "Subir {{name}}",
+    "moveDown": "Bajar {{name}}",
+    "edit": "Editar",
+    "editLabel": "Editar {{name}}",
+    "delete": "Borrar {{name}}",
+    "deleteConfirm": {
+      "title": "¿Borrar {{name}}?",
+      "used": "{{label}} deja de usarla. No se mueve nada de lo que ya está en la biblioteca.",
+      "unused": "No la usa ninguna ruta de biblioteca. No se mueve nada de lo que ya está en la biblioteca.",
+      "yes": "Borrar regla"
+    },
+    "unknownMember": "un miembro eliminado",
+    "fields": {
+      "requested_by": "Pedido por",
+      "genre": "Género",
+      "artist": "Artista",
+      "quality": "Calidad pedida",
+      "year": "Año de lanzamiento",
+      "request_type": "Tipo de petición",
+      "track_count": "Número de canciones"
+    },
+    "ops": {
+      "is": "es",
+      "is_not": "no es",
+      "contains": "contiene",
+      "not_contains": "no contiene",
+      "before": "antes de",
+      "after": "después de",
+      "more_than": "más de",
+      "fewer_than": "menos de"
+    },
+    "quality": {
+      "lossless": "Lossless",
+      "lossy": "Lossy"
+    },
+    "requestType": {
+      "album": "Álbum",
+      "track": "Canción suelta",
+      "playlist": "Playlist",
+      "artist": "Artista"
+    },
+    "summary": {
+      "condition": "{{field}} {{op}} {{value}}",
+      "and": "{{left}} y {{right}}",
+      "or": "{{left}} o {{right}}",
+      "none": "Sin condiciones"
+    },
+    "modal": {
+      "addTitle": "Añadir regla",
+      "editTitle": "Editar regla",
+      "name": "Nombre",
+      "namePlaceholder": "Bandas sonoras",
+      "nameTaken": "Ya hay otra regla con este nombre.",
+      "matchLabel": "Coincide cuando se cumplen",
+      "matchAll": "Todas las condiciones",
+      "matchAny": "Cualquier condición",
+      "conditionsLabel": "Condiciones",
+      "fieldLabel": "Condición {{position}}, qué mirar",
+      "opLabel": "Condición {{position}}, cómo comparar",
+      "valueLabel": "Condición {{position}}, valor",
+      "removeCondition": "Quitar la condición {{position}}",
+      "addCondition": "Añadir condición",
+      "conditionLimit_one": "Una regla puede tener 1 condición.",
+      "conditionLimit_other": "Una regla puede tener hasta {{count}} condiciones.",
+      "pickMember": "Elige un miembro",
+      "placeholders": {
+        "genre": "Banda sonora",
+        "artist": "Hans Zimmer",
+        "year": "1980",
+        "track_count": "20"
+      },
+      "pathNote": "Qué ruta de biblioteca usa esta regla se elige en los ajustes de esa ruta.",
+      "tooMany": "Ya hay tantas reglas como permite Synthseek. Borra una primero.",
+      "cancel": "Cancelar",
+      "add": "Añadir regla",
+      "save": "Guardar regla"
+    },
+    "toast": {
+      "added": "Regla añadida",
+      "saved": "Regla guardada",
+      "removed": "Regla borrada",
+      "notFound": "Esa regla ya no existe",
+      "reorderMismatch": "Las reglas cambiaron mientras las reordenabas. La lista muestra ahora su orden actual."
+    }
+  },
+  "libraryNaming": {
     "template": {
-      "label": "Formato de pista"
+      "label": "Nombre de las pistas"
     },
     "rules": "La plantilla tiene que terminar en .{ext}. Un token suelto es obligatorio: una pista que no pueda rellenarlo se queda donde está, y una descarga que no pueda rellenarlo falla al importar.",
-    "loadFailed": "No se pudo leer la plantilla actual",
     "tokens": {
       "albumartist": "El artista bajo el que se archiva el álbum",
       "album": "Título del álbum",
@@ -1550,8 +1777,6 @@
       "ruleOptional": "Una pieza que dejas fuera de los < > es obligatoria, y una canción que no puede rellenarla se queda donde está en vez de archivarse con un hueco en el nombre.",
       "close": "Listo"
     },
-    "previewAction_one": "Previsualizar 1 cambio",
-    "previewAction_other": "Previsualizar {{formatted}} cambios",
     "samples": {
       "single_disc": "Un álbum normal",
       "multi_disc": "Un álbum de dos discos",
@@ -1559,7 +1784,7 @@
       "unrenderable": "Este formato no puede nombrar esta"
     },
     "preview": {
-      "title": "Qué cambiaría",
+      "title": "Qué cambiaría en {{label}}",
       "tabs": {
         "all": "Todo",
         "relocate": "Solo la carpeta",
@@ -1570,7 +1795,7 @@
       "info": {
         "open": "Qué estás viendo",
         "title": "Qué estás viendo",
-        "counts": "Los números de arriba cuentan toda tu biblioteca: qué se movería, qué ya está bien y qué no se puede nombrar porque a la canción le falta algo.",
+        "counts": "Los números de arriba cuentan esta ruta de biblioteca: qué se movería, qué ya está bien y qué no se puede nombrar porque a la canción le falta algo.",
         "lists": "Los cambios se separan en tres, para que te lleves los seguros y dejes el resto.",
         "relocateTerm": "Solo la carpeta",
         "relocateText": "El archivo conserva su nombre y cae en otra carpeta.",
@@ -1603,7 +1828,6 @@
     "rejectedNotice_one": "A una canción le falta algo que este formato necesita, así que se queda donde está.",
     "rejectedNotice_other": "A {{count}} canciones les falta algo que este formato necesita, así que se quedan donde están.",
     "toast": {
-      "saved": "Guardado. Todavía no se ha movido nada.",
       "organiseBusy": "Ahora mismo se están moviendo ficheros. Inténtalo cuando termine.",
       "invalidTemplate": "Ese formato no se puede usar."
     }
@@ -1638,7 +1862,10 @@
       "PATH_TOO_LONG": "{{count}} acabarían con una ruta demasiado larga para el disco.",
       "SCRIPT_VALIDATION_FAILED": "{{count}} dieron un nombre que no es seguro escribir."
     },
-    "finished": "Movidos {{moved}} ficheros y {{companions}} acompañantes en {{duration}}",
+    "finished_one": "1 fichero movido en {{duration}}",
+    "finished_other": "{{formatted}} ficheros movidos en {{duration}}",
+    "finishedCompanions_one": "Con ellos se movió 1 letra o carátula.",
+    "finishedCompanions_other": "Con ellos se movieron {{formatted}} letras o carátulas.",
     "finishedFailures": "{{count}} no se pudieron mover y siguen donde estaban:",
     "finishedCompanionsFailed": "{{count}} letras o carátulas no pudieron seguir a su pista.",
     "moveFailure": {
@@ -1693,8 +1920,25 @@
       "linked": "En la biblioteca",
       "searching": "Buscando",
       "toReview": "Por revisar",
-      "reviewFiles": "Revisar archivos",
-      "footer": "{{ignored}} ignorados · {{missing}} desaparecidos"
+      "reviewFiles": "Revisar archivos"
+    },
+    "paths": {
+      "columns": {
+        "path": "Ruta de biblioteca",
+        "gone": "Desaparecidos",
+        "lastScan": "Último escaneo",
+        "scan": "Escanear"
+      },
+      "never": "Nunca",
+      "outcome": {
+        "unavailable": "Omitida, no se puede acceder",
+        "disabled": "Omitida, desactivada",
+        "unreadable": "Omitida, no se pudo leer demasiado",
+        "empty": "Omitida, no se encontraron canciones"
+      },
+      "scan": "Escanear {{label}}",
+      "ignored_one": "{{count}} archivo ignorado",
+      "ignored_other": "{{count}} archivos ignorados"
     },
     "state": {
       "scanning": "Escaneando",
@@ -1719,7 +1963,9 @@
     },
     "toast": {
       "cancelling": "Deteniendo el escaneo de biblioteca",
-      "nothingRunning": "No había ningún escaneo en curso"
+      "nothingRunning": "No había ningún escaneo en curso",
+      "alreadyRunning": "Ya hay un escaneo de biblioteca en curso",
+      "pathNotFound": "Esa ruta de biblioteca ya no existe"
     },
     "review": {
       "title": "Canciones por revisar",
@@ -1859,7 +2105,8 @@
         "titles_differ": "Las copias llevan títulos distintos, así que una puede ser un directo, un remix u otra versión. Resolver automáticamente podría reciclar una grabación que no vuelve.",
         "untitled_copy": "Al menos una copia no tiene título, así que nada avala que sea la misma grabación. Decide esta copia por copia.",
         "lengths_differ": "Los títulos coinciden pero las copias no duran lo mismo, así que una será un edit, una versión extendida u otra toma. Resolver automáticamente podría reciclar una grabación que no vuelve.",
-        "length_unknown": "Una copia todavía no se ha medido, así que nada avala que sea la misma grabación. El próximo escaneo de la biblioteca la medirá."
+        "length_unknown": "Una copia todavía no se ha medido, así que nada avala que sea la misma grabación. El próximo escaneo de la biblioteca la medirá.",
+        "different_paths": "Las copias están en rutas de biblioteca distintas, así que cada una puede estar ahí a propósito. Elige la que quieres con Quedarse con esta."
       },
       "tidyDone": "Se quedó la mejor copia, {{size}} recuperados",
       "tidySkipped": "Esa pista se deja en paz, sus copias no coinciden",
@@ -1936,13 +2183,13 @@
           "fix": "Da la propiedad de esa carpeta en el servidor al usuario con el que se ejecuta Synthseek, por ejemplo: chown -R {{puid}}:{{pgid}} <tu carpeta de descargas>"
         },
         "library_inaccessible": {
-          "title": "No se puede acceder a la biblioteca de música",
-          "effect": "Las descargas están en espera, y los ficheros de la biblioteca no se pueden reproducir, hasta que se pueda volver a acceder a {{path}}.",
+          "title": "No se puede acceder a una ruta de biblioteca",
+          "effect": "La música destinada a {{label}} espera, y sus ficheros no se pueden reproducir, hasta que se pueda volver a acceder a {{path}}.",
           "fix": "Comprueba que el disco o la carpeta compartida estén montados y que el usuario con el que se ejecuta Synthseek pueda leerlos, por ejemplo: chown -R {{puid}}:{{pgid}} <tu carpeta de música>"
         },
         "library_read_only": {
-          "title": "La biblioteca de música es de solo lectura",
-          "effect": "Explorar y reproducir funcionan, pero las descargas nuevas no se pueden añadir a {{path}}.",
+          "title": "Una ruta de biblioteca es de solo lectura",
+          "effect": "Explorar y reproducir funcionan, pero la música nueva para {{label}} no se puede añadir a {{path}}.",
           "fix": "Si quieres que Synthseek añada música, dale permiso de escritura, por ejemplo: chown -R {{puid}}:{{pgid}} <tu carpeta de música>"
         },
         "catalog_unreachable": {

@@ -111,6 +111,7 @@ export function GroupRow({
                 <span>{t("libraryScan.review.files", { count: 1 })}</span>
               )}
               {group.discCount > 1 ? <span>{t("libraryScan.review.discs", { count: group.discCount })}</span> : null}
+              <span>{group.libraryPath}</span>
               {!multi && firstFile ? <span>{lengthLabel(firstFile.durationSeconds)}</span> : null}
               {tab === "ignored" && group.ignoredAt ? (
                 <span>

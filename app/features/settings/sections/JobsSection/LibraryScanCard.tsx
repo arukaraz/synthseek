@@ -9,23 +9,26 @@ import { Button } from "@components/ui/Button";
 import { LoadingDots } from "@components/ui/LoadingDots";
 import { formatRelativeTime } from "@utils/formatters";
 import { Notice } from "@components/ui/Notice";
-import { useCancelLibraryScan, useKeepBestLibraryCopies } from "@hooks/api/mutations/jobs/useLibraryScanControls";
+import { DataTable } from "@components/ui/Table";
+import {
+  useCancelLibraryScan,
+  useKeepBestLibraryCopies,
+  useScanLibraryPath,
+} from "@hooks/api/mutations/jobs/useLibraryScanControls";
 import { useTriggerJob } from "@hooks/api/mutations/jobs/useTriggerJob";
 import { useLibraryScanStatus } from "@hooks/api/queries/useLibraryScanStatus";
 
 import { SettingsCard } from "../../components/SettingsCard";
 import {
   scanActions,
-  scanStat,
-  scanStatGrid,
-  scanStatLabel,
-  scanStatValue,
   scanHeaderMeta,
   scanFooter,
   scanFooterLink,
+  scanFooterRow,
   scanStatLink,
   jobPlayButton,
 } from "../../styles";
+import { buildScanPathColumns } from "./scanColumns";
 
 export function LibraryScanCard() {
   const { t } = useTranslation("settings");
@@ -34,6 +37,7 @@ export function LibraryScanCard() {
   const cancel = useCancelLibraryScan();
   const trigger = useTriggerJob();
   const keepBest = useKeepBestLibraryCopies();
+  const scanPath = useScanLibraryPath();
   const [review, setReview] = useUrlParam(REVIEW_URL_PARAM, { validValues: [REVIEW_URL_VALUE] });
 
   if (isLoading) {
@@ -54,10 +58,15 @@ export function LibraryScanCard() {
     );
   }
 
-  const { activeRun, lastRun, inventory } = data;
+  const { activeRun, lastRun, inventory, paths } = data;
   const isScanning = activeRun !== null;
   const reclaiming = data.reclaimRunning || keepBest.isPending;
-  const busy = isScanning || data.identifyRunning || reclaiming || trigger.isPending;
+  const busy = isScanning || data.identifyRunning || reclaiming || trigger.isPending || scanPath.isPending;
+  const columns = buildScanPathColumns({
+    t,
+    busy,
+    onScan: (path) => scanPath.mutate({ pathId: path.id }, { onSuccess: () => void status.refetch() }),
+  });
   const name = t("libraryScan.card.title");
   const lastRunLabel =
     lastRun?.finishedAt != null
@@ -94,46 +103,25 @@ export function LibraryScanCard() {
       }
     >
       <div className="flex flex-col gap-4">
-        <div className={scanStatGrid()}>
-          <div className={scanStat()}>
-            <span className={scanStatValue()}>{inventory.indexedFiles.toLocaleString()}</span>
-            <span className={scanStatLabel()}>{t("libraryScan.stats.onDisk")}</span>
-          </div>
-          <div className={scanStat()}>
-            <span className={scanStatValue()}>{inventory.linkedFiles.toLocaleString()}</span>
-            <span className={scanStatLabel()}>{t("libraryScan.stats.linked")}</span>
-          </div>
-          <div className={scanStat()}>
-            <span className={scanStatValue()}>{inventory.searchingFiles.toLocaleString()}</span>
-            <span className={scanStatLabel()}>{t("libraryScan.stats.searching")}</span>
-          </div>
-          <div className={scanStat({ attention: inventory.reviewFiles > 0 })}>
-            <span className={scanStatValue()}>{inventory.reviewFiles.toLocaleString()}</span>
-            <span className={scanStatLabel()}>{t("libraryScan.stats.toReview")}</span>
-            {inventory.reviewFiles > 0 ? (
-              <button type="button" className={scanStatLink()} onClick={() => setReview(REVIEW_URL_VALUE)}>
-                {t("libraryScan.stats.reviewFiles")}
-                <ChevronRight aria-hidden />
-              </button>
-            ) : null}
-          </div>
-        </div>
+        <DataTable data={paths} columns={columns} getRowId={(path) => path.id} staggerDelay={0} />
 
-        <p className={scanFooter()}>
-          {inventory.ignoredFiles > 0 ? (
-            <button type="button" className={scanFooterLink()} onClick={() => setReview(REVIEW_URL_VALUE)}>
-              {t("libraryScan.stats.footer", {
-                ignored: inventory.ignoredFiles.toLocaleString(),
-                missing: inventory.missingFiles.toLocaleString(),
-              })}
+        <div className={scanFooterRow()}>
+          <p className={scanFooter()}>
+            {inventory.ignoredFiles > 0 ? (
+              <button type="button" className={scanFooterLink()} onClick={() => setReview(REVIEW_URL_VALUE)}>
+                {t("libraryScan.paths.ignored", { count: inventory.ignoredFiles })}
+              </button>
+            ) : (
+              t("libraryScan.paths.ignored", { count: inventory.ignoredFiles })
+            )}
+          </p>
+          {inventory.reviewFiles > 0 ? (
+            <button type="button" className={scanStatLink()} onClick={() => setReview(REVIEW_URL_VALUE)}>
+              {t("libraryScan.stats.reviewFiles")}
+              <ChevronRight aria-hidden />
             </button>
-          ) : (
-            t("libraryScan.stats.footer", {
-              ignored: inventory.ignoredFiles.toLocaleString(),
-              missing: inventory.missingFiles.toLocaleString(),
-            })
-          )}
-        </p>
+          ) : null}
+        </div>
 
         {lastRun && !lastRun.walkClean ? (
           <Notice variant="warning" title={t("libraryScan.warning.dirtyWalk.title")}>

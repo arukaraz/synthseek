@@ -3,7 +3,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { createMockTrackFull, createMockAlbumSimplified } from "@test/factories";
 import { mockRouter } from "@test/mocks/next.mock";
 
-import type { DownloadSourcesAvailability } from "../types";
+import type { DestinationPreview, DownloadSourcesAvailability } from "../types";
 
 const mocks = vi.hoisted(() => ({
   requestMutate: vi.fn(),
@@ -17,6 +17,9 @@ const mocks = vi.hoisted(() => ({
 const { requestMutate, batchMutate, playlistMutate, tracksMutate, delegateMutate, toastError } = mocks;
 
 let sourcesAvailability: DownloadSourcesAvailability | undefined;
+let isAdmin: boolean;
+let destinationPreview: DestinationPreview | undefined;
+const destinationQuery = vi.fn();
 let lidarrAvailable: { available: boolean } | undefined;
 let contentResponse: { success: boolean; content: unknown } | undefined;
 let isLoadingTracks: boolean;
@@ -37,6 +40,14 @@ vi.mock("@hooks/api", () => ({
   usePlaylistRequest: () => ({ mutate: mocks.playlistMutate, isPending: pendingFlags.playlist }),
   useRequestTracks: () => ({ mutate: mocks.tracksMutate, isPending: pendingFlags.tracks }),
   useDelegateArtist: () => ({ mutate: mocks.delegateMutate, isPending: pendingFlags.delegate }),
+  useLibraryDestination: (...args: unknown[]) => {
+    destinationQuery(...args);
+    return { data: destinationPreview };
+  },
+}));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ isAdmin, currentUser: null, isLoading: false }),
 }));
 
 vi.mock("sonner", () => ({
@@ -127,6 +138,8 @@ describe("ConfigRequestModal", () => {
       torrent: { enabled: false, allowsSingleTracks: false },
     };
     lidarrAvailable = { available: false };
+    isAdmin = false;
+    destinationPreview = undefined;
     contentResponse = { success: true, content: [makeTrack()] };
     isLoadingTracks = false;
     pendingFlags = { request: false, batch: false, playlist: false, tracks: false, delegate: false };
@@ -218,6 +231,139 @@ describe("ConfigRequestModal", () => {
     expect(batchMutate).toHaveBeenCalledTimes(1);
     expect(batchMutate.mock.calls[0][0].external_id).toBe("al1");
     expect(batchMutate.mock.calls[0][1]).toBeUndefined();
+  });
+
+  describe("destination", () => {
+    function preview(overrides: Partial<DestinationPreview> = {}): DestinationPreview {
+      return {
+        pathId: "soundtracks",
+        matched: [{ id: "r1", name: "Soundtracks", libraryPathId: "soundtracks" }],
+        winnerRuleId: "r1",
+        lock: null,
+        paths: [
+          { id: "primary", label: "Music", accepts: true },
+          { id: "soundtracks", label: "Soundtracks", accepts: true },
+          { id: "archive", label: "Archive", accepts: false },
+        ],
+        ...overrides,
+      };
+    }
+
+    it("never asks a member, and sends no destination for them", async () => {
+      const user = userEvent.setup();
+      destinationPreview = preview();
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+      expect(document.querySelector('[data-cy="request-destination"]')).toBeNull();
+      expect(destinationQuery).not.toHaveBeenCalled();
+      await user.click(confirmButton());
+      expect(batchMutate.mock.calls[0][0]).not.toHaveProperty("destinationPathId");
+    });
+
+    it("shows an admin where the rules send the album and which rules matched", () => {
+      isAdmin = true;
+      destinationPreview = preview();
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+      expect(destinationQuery).toHaveBeenCalledWith(
+        { albumExternalId: "al1", format: "mp3", requestType: ContentType.enum.album },
+        true
+      );
+      expect(screen.getByRole("button", { name: "Library path" })).toHaveTextContent("Soundtracks");
+      expect(screen.getByText(/Matched 1 rule:/)).toBeInTheDocument();
+      expect(screen.getByText("Soundtracks", { selector: "p span" })).toBeInTheDocument();
+    });
+
+    it("leaves the destination to the rules when the admin keeps their choice", async () => {
+      const user = userEvent.setup();
+      isAdmin = true;
+      destinationPreview = preview();
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(confirmButton());
+
+      expect(batchMutate.mock.calls[0][0]).not.toHaveProperty("destinationPathId");
+    });
+
+    it("sends the path an admin picks instead of the rules' choice", async () => {
+      const user = userEvent.setup();
+      isAdmin = true;
+      destinationPreview = preview();
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(screen.getByRole("button", { name: "Library path" }));
+      await user.click(await screen.findByRole("menuitemradio", { name: "Music" }));
+      await user.click(confirmButton());
+
+      expect(batchMutate.mock.calls[0][0].destinationPathId).toBe("primary");
+    });
+
+    it("offers only paths that take new music", async () => {
+      const user = userEvent.setup();
+      isAdmin = true;
+      destinationPreview = preview();
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(screen.getByRole("button", { name: "Library path" }));
+
+      expect(await screen.findByRole("menuitemradio", { name: "Music" })).toBeInTheDocument();
+      expect(screen.queryByRole("menuitemradio", { name: "Archive" })).toBeNull();
+    });
+
+    it("locks the field when the album already has songs in a path", () => {
+      isAdmin = true;
+      destinationPreview = preview({
+        pathId: "primary",
+        matched: [],
+        winnerRuleId: null,
+        lock: { reason: "album_in_path", tracks: 3 },
+      });
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+      expect(screen.getByRole("button", { name: "Library path" })).toBeDisabled();
+      expect(
+        screen.getByText("3 songs of this album are already in Music, the rest go with them.")
+      ).toBeInTheDocument();
+    });
+
+    it("hides the field when there is only one path", () => {
+      isAdmin = true;
+      destinationPreview = preview({ paths: [{ id: "primary", label: "Music", accepts: true }], pathId: "primary" });
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+      expect(document.querySelector('[data-cy="request-destination"]')).toBeNull();
+    });
+
+    it("asks for a single track by its album, and never for a playlist", () => {
+      isAdmin = true;
+      destinationPreview = preview();
+      const track = makeTrack();
+
+      const { unmount } = render(
+        <ConfigRequestModal isOpen onClose={vi.fn()} item={track} itemType={ContentType.enum.track} />
+      );
+      expect(destinationQuery).toHaveBeenLastCalledWith(
+        { albumExternalId: track.album.id, format: "mp3", requestType: ContentType.enum.track },
+        true
+      );
+      unmount();
+      destinationQuery.mockClear();
+
+      render(
+        <ConfigRequestModal
+          isOpen
+          onClose={vi.fn()}
+          item={makePlaylist()}
+          itemType={ContentType.enum.playlist}
+          preloadedTracks={[makeTrack()]}
+        />
+      );
+      expect(destinationQuery).not.toHaveBeenCalled();
+    });
   });
 
   it("warns and aborts when the album track list is empty", async () => {

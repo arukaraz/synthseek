@@ -22,6 +22,7 @@ import {
 } from "@hooks/api";
 import { Input } from "@components/ui/Input";
 import { Spinner } from "@components/ui/Spinner";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { titleCase } from "@utils/formatters";
 import { Download } from "lucide-react";
@@ -30,6 +31,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { AcquisitionOrderList } from "./AcquisitionOrderList";
 import { ConfigHeader } from "./ConfigHeader";
+import { DestinationField } from "./DestinationField";
 import { LidarrInputs } from "./LidarrInputs";
 import { OptionGrid } from "./OptionGrid";
 import {
@@ -48,6 +50,7 @@ import {
   buildSourceChain,
   extractItemMetadata,
   defaultSelection,
+  destinationRequestFor,
   offeredSources,
   reconcileSelection,
   getItemDisplayName,
@@ -99,12 +102,15 @@ export function ConfigRequestModal({
     tags: [],
   });
   const [renameValue, setRenameValue] = useState("");
+  const [destinationPathId, setDestinationPathId] = useState<string | null>(null);
   const losslessActive = qualityMode === "lossless";
+  const { isAdmin } = useAuthContext();
 
   const isLidarrArtistMode = mode === "lidarr-artist";
 
   useEffect(() => {
     setRenameValue("");
+    setDestinationPathId(null);
   }, [item?.id, isOpen]);
 
   const { t } = useTranslation("search");
@@ -127,6 +133,11 @@ export function ConfigRequestModal({
   }, [acquisition, qualityMode]);
 
   const lidarrSelected = isLidarrSelected(acquisition);
+  const destinationRequest = isAdmin
+    ? destinationRequestFor(item, parentAlbum, losslessActive ? RequestFormat.enum.flac : format, mode)
+    : null;
+  const showDestination = destinationRequest !== null && !lidarrSelected;
+  const chosenDestination = showDestination && destinationPathId !== null ? { destinationPathId } : {};
   const showSlskdControls = usesSlskd(acquisition);
   const losslessAvailable = allowsLossless(acquisition);
   const showMatchingControls = !lidarrSelected && losslessAvailable;
@@ -256,6 +267,7 @@ export function ConfigRequestModal({
         track: mapTrackFields(item),
         config,
         album_external_id: parentAlbum?.id ?? item.album.id,
+        ...chosenDestination,
       });
       onSuccess?.(itemName);
       onClose();
@@ -292,6 +304,7 @@ export function ConfigRequestModal({
         tracks: trackList.map(mapTrackFields),
         config,
         ...(delegate ? { delegate } : {}),
+        ...chosenDestination,
       });
       onSuccess?.(itemName);
       onClose();
@@ -473,6 +486,14 @@ export function ConfigRequestModal({
                   />
                 </div>
               )}
+
+              {showDestination && destinationRequest !== null ? (
+                <DestinationField
+                  request={destinationRequest}
+                  value={destinationPathId}
+                  onChange={setDestinationPathId}
+                />
+              ) : null}
             </>
           )}
 

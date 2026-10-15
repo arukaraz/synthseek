@@ -1,15 +1,32 @@
 import { RequestFormat, RequestStatus } from "@api/__generated__/types";
 import type {
+  LibraryAlbumItem,
   LibraryAlbumsInput,
   LibraryArtistsInput,
   LibraryCountsResult,
   LibraryFacetValue,
+  LibraryFilesStatus,
   LibraryPlaylistsInput,
+  LibraryTrackItem,
   LibraryTracksInput,
 } from "@hooks/api/queries/library/types";
+import type { CheckboxPreview } from "@components/ui/Checkbox";
+import type { SelectionRange } from "@hooks/ui/useSelection";
+import { isTextEntryTarget } from "@utils/text-entry";
+import type { KeyboardEvent } from "react";
 
 import { LIBRARY_PAGE_SIZE_OPTIONS, VIEW_CONFIG } from "./constants";
-import type { FacetSearchState, FilterParamMap, LibraryView, SortDirection, ViewConfig } from "./types";
+import type {
+  FacetSearchState,
+  FilterParamMap,
+  LibraryFileJob,
+  LibraryFileRequest,
+  LibraryFileTarget,
+  LibraryView,
+  SelectionShortcutTarget,
+  SortDirection,
+  ViewConfig,
+} from "./types";
 
 const FILTER_VALUE_SEPARATOR = ",";
 
@@ -93,6 +110,7 @@ export function buildTracksInput(args: InputBaseArgs): LibraryTracksInput {
       genre: emptyToUndefined(filters.genre ?? []),
       playlist: emptyToUndefined(filters.playlist ?? []),
       albumId: emptyToUndefined(filters.albumId ?? []),
+      libraryPath: emptyToUndefined(filters.libraryPath ?? []),
       orphan: filters.orphan?.includes("true") ? true : undefined,
     },
   };
@@ -113,6 +131,7 @@ export function buildAlbumsInput(args: InputBaseArgs): LibraryAlbumsInput {
       genre: emptyToUndefined(filters.genre ?? []),
       year: emptyToUndefined(filters.year ?? []),
       origin: emptyToUndefined(filters.origin ?? []),
+      libraryPath: emptyToUndefined(filters.libraryPath ?? []),
     },
   };
 }
@@ -221,4 +240,74 @@ export function countActiveFilters(filters: FilterParamMap): number {
     if (values) count += values.length;
   }
   return count;
+}
+
+export function fileJobReport(
+  job: LibraryFileJob | null,
+  status: LibraryFilesStatus | undefined,
+  fetchedAt: number
+): LibraryFilesStatus | null {
+  if (job === null || status === undefined || fetchedAt < job.since) return null;
+  if (status.startedAt === null || status.startedAt === job.baseline) return null;
+  return status;
+}
+
+export function spendsSelection(request: LibraryFileRequest): boolean {
+  return request.kind === "delete" || request.target.scope === "tracks" || request.target.scope === "albums";
+}
+
+export function applySelectionShortcut(
+  event: KeyboardEvent<HTMLElement>,
+  selection: SelectionShortcutTarget,
+  orderedIds: string[]
+): boolean {
+  if (isTextEntryTarget(event.target)) return false;
+  if ((event.metaKey || event.ctrlKey) && !event.shiftKey && !event.altKey && event.code === "KeyA") {
+    event.preventDefault();
+    selection.setMany(orderedIds, true);
+    return true;
+  }
+  if (event.key === "Escape" && selection.selectedCount > 0) {
+    selection.clear();
+    return true;
+  }
+  return false;
+}
+
+export function rangePreviewTone(range: SelectionRange | null): CheckboxPreview {
+  if (range === null) return "none";
+  return range.selected ? "select" : "clear";
+}
+
+export function trackFileTarget(item: LibraryTrackItem): LibraryFileTarget {
+  return {
+    scope: "track",
+    trackId: item.id,
+    title: item.title,
+    pathIds: item.libraryPath === null ? [] : [item.libraryPath.id],
+  };
+}
+
+export function albumFileTarget(item: LibraryAlbumItem): LibraryFileTarget {
+  return { scope: "album", albumId: item.id, name: item.name, pathIds: item.libraryPaths.map((path) => path.id) };
+}
+
+export function selectedTracksFileTarget(
+  items: readonly LibraryTrackItem[],
+  ids: readonly string[]
+): LibraryFileTarget {
+  const wanted = new Set(ids);
+  const chosen = items.filter((item) => wanted.has(item.id));
+  const pathIds = new Set(chosen.flatMap((item) => (item.libraryPath === null ? [] : [item.libraryPath.id])));
+  return { scope: "tracks", trackIds: chosen.map((item) => item.id), pathIds: [...pathIds] };
+}
+
+export function selectedAlbumsFileTarget(
+  items: readonly LibraryAlbumItem[],
+  ids: readonly string[]
+): LibraryFileTarget {
+  const wanted = new Set(ids);
+  const chosen = items.filter((item) => wanted.has(item.id));
+  const pathIds = new Set(chosen.flatMap((item) => item.libraryPaths.map((path) => path.id)));
+  return { scope: "albums", albumIds: chosen.map((item) => item.id), pathIds: [...pathIds] };
 }

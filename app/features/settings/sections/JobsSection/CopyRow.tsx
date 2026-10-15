@@ -13,6 +13,7 @@ import {
   dupFileRow,
   dupFileSize,
   dupKeepThis,
+  dupPathBadge,
   dupPlay,
   dupServingBadge,
 } from "../../styles";
@@ -20,7 +21,7 @@ import { MS_PER_SECOND } from "./constants";
 import { copyAudioUrl } from "./helpers";
 import type { CopyRowProps } from "./types";
 
-export function CopyRow({ copy, disabled, keeping, playing, onPlayChange, onKeep }: CopyRowProps) {
+export function CopyRow({ copy, showPath, disabled, keeping, playing, onPlayChange, onKeep }: CopyRowProps) {
   const { t } = useTranslation("settings");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [buffering, setBuffering] = useState(false);
@@ -85,6 +86,7 @@ export function CopyRow({ copy, disabled, keeping, playing, onPlayChange, onKeep
         }}
       />
       {copy.serving ? <span className={dupServingBadge()}>{t("libraryScan.duplicates.inLibrary")}</span> : null}
+      {showPath ? <span className={dupPathBadge()}>{copy.libraryPath}</span> : null}
       <span className={dupFileName()}>{copy.fileName}</span>
       {copy.durationSeconds === null ? null : (
         <span className={dupFileLength()}>{formatTrackDuration(copy.durationSeconds * MS_PER_SECOND)}</span>

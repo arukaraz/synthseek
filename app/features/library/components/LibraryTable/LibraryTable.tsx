@@ -5,17 +5,21 @@ import { Checkbox } from "@components/ui/Checkbox";
 import { DataTable, type ColumnDef } from "@components/ui/Table";
 import { useElementHeight } from "@hooks/ui/useElementHeight";
 import { useRangePreview } from "@hooks/ui/useRangePreview";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { CirclePlus, ListPlus, RefreshCcw, Sparkles } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AddToPlaylistDropdown } from "../AddToPlaylistDropdown";
+import { applySelectionShortcut, rangePreviewTone, selectedTracksFileTarget } from "../../helpers";
+import { fileBulkActions } from "../LibraryFileFlow";
 import { useLibraryTrackActions } from "../../hooks/useLibraryTrackActions";
 import { selectCell, tableWrap } from "./styles";
 import type { LibraryTableProps } from "./types";
 
 export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, selection }: LibraryTableProps<TItem>) {
   const { t } = useTranslation("library");
+  const { isAdmin } = useAuthContext();
   const actions = useLibraryTrackActions();
   const { previewId, trackRow } = useRangePreview();
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -29,26 +33,16 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
   const failedIds = sel?.selectors.selectedFailedIds(trackItems) ?? [];
   const upgradableIds = sel?.selectors.selectedUpgradableIds(trackItems) ?? [];
   const playableIds = sel?.selectors.selectedPlayableIds(trackItems) ?? [];
+  const inLibraryIds = sel?.selectors.selectedInLibraryIds(trackItems) ?? [];
 
   const orderedIds = useMemo(() => (selectionItems ?? []).map((item) => item.id), [selectionItems]);
   const preview = sel && previewId ? sel.rangeTo(orderedIds, previewId) : null;
   const previewIds = new Set(preview?.ids ?? []);
-  const previewTone = preview === null ? "none" : preview.selected ? "select" : "clear";
+  const previewTone = rangePreviewTone(preview);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (!sel) return;
-
-    if ((event.metaKey || event.ctrlKey) && !event.shiftKey && !event.altKey && event.code === "KeyA") {
-      event.preventDefault();
-      sel.setMany(orderedIds, true);
-      return;
-    }
-
-    if (event.key === "Escape" && sel.selectedCount > 0) {
-      sel.clear();
-      return;
-    }
-
+    if (applySelectionShortcut(event, sel, orderedIds)) return;
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
 
     const boxes = wrapRef.current?.querySelectorAll('tbody [role="checkbox"]');
@@ -144,6 +138,11 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
       },
       count: playableIds.length,
     });
+  }
+  if (selection && isAdmin) {
+    bulkActions.push(
+      ...fileBulkActions(selectedTracksFileTarget(trackItems, inLibraryIds), inLibraryIds.length, selection.fileActions)
+    );
   }
 
   const addToPlaylistLabel = t("page.selection.addToPlaylist");

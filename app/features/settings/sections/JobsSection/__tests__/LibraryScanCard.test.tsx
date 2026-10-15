@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterEach } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent, within } from "@testing-library/react";
 
 import i18n from "@modules/i18n";
 
@@ -16,19 +16,32 @@ type ScanRun = {
   finishedAt: Date | null;
 };
 
+type Inventory = {
+  indexedFiles: number;
+  linkedFiles: number;
+  searchingFiles: number;
+  reviewFiles: number;
+  ignoredFiles: number;
+  missingFiles: number;
+};
+
+type ScanPath = Inventory & {
+  id: string;
+  label: string;
+  folder: string;
+  enabled: boolean;
+  scanning: boolean;
+  lastScanAt: string | null;
+  lastScanOutcome: "reconciled" | "unavailable" | "disabled" | "unreadable" | "empty" | null;
+};
+
 type ScanStatus = {
   identifyRunning: boolean;
   reclaimRunning: boolean;
   activeRun: ScanRun | null;
   lastRun: ScanRun | null;
-  inventory: {
-    indexedFiles: number;
-    linkedFiles: number;
-    searchingFiles: number;
-    reviewFiles: number;
-    ignoredFiles: number;
-    missingFiles: number;
-  };
+  inventory: Inventory;
+  paths: ScanPath[];
 };
 
 const urlParam = vi.hoisted(() => ({ value: undefined as string | undefined, set: vi.fn() }));
@@ -46,6 +59,7 @@ vi.mock("@features/unidentified-files", () => ({
 let statusQuery: MockQueryResult<ScanStatus | undefined> = createMockQuery<ScanStatus | undefined>(undefined);
 const cancelMutate = vi.fn();
 const triggerMutate = vi.fn();
+const scanPathMutate = vi.fn();
 
 vi.mock("@hooks/api/mutations/jobs/useTriggerJob", () => ({
   useTriggerJob: () => ({ mutate: triggerMutate, isPending: false }),
@@ -61,6 +75,7 @@ vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
   useKeepThisCopy: () => ({ mutate: vi.fn(), isPending: false }),
   useKeepBestLibraryCopies: () => ({ mutate: vi.fn(), isPending: false }),
   useKeepBestLibraryCopy: () => ({ mutate: vi.fn(), isPending: false }),
+  useScanLibraryPath: () => ({ mutate: scanPathMutate, isPending: false }),
 }));
 
 import { LibraryScanCard } from "../LibraryScanCard";
@@ -87,6 +102,25 @@ function makeRun(overrides: Partial<ScanRun> = {}): ScanRun {
   };
 }
 
+function makePath(overrides: Partial<ScanPath> = {}): ScanPath {
+  return {
+    id: "primary",
+    label: "Music",
+    folder: "/music",
+    enabled: true,
+    scanning: false,
+    lastScanAt: new Date(Date.now() - 9 * 60 * 1000).toISOString(),
+    lastScanOutcome: "reconciled",
+    indexedFiles: 8334,
+    linkedFiles: 5451,
+    searchingFiles: 2747,
+    reviewFiles: 136,
+    ignoredFiles: 0,
+    missingFiles: 0,
+    ...overrides,
+  };
+}
+
 function makeStatus(overrides: Partial<ScanStatus> = {}): ScanStatus {
   return {
     identifyRunning: false,
@@ -101,20 +135,88 @@ function makeStatus(overrides: Partial<ScanStatus> = {}): ScanStatus {
       ignoredFiles: 0,
       missingFiles: 0,
     },
+    paths: [makePath()],
     ...overrides,
   };
 }
 
 describe("LibraryScanCard", () => {
-  it("shows how much of the disk the library actually covers", () => {
-    statusQuery = createMockQuery<ScanStatus | undefined>(makeStatus());
+  it("shows how much of the disk each library path covers", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({
+        paths: [
+          makePath(),
+          makePath({
+            id: "archive",
+            label: "Archive",
+            folder: "/mnt/archive",
+            indexedFiles: 412,
+            linkedFiles: 400,
+            searchingFiles: 3,
+            reviewFiles: 9,
+            missingFiles: 7,
+          }),
+        ],
+      })
+    );
 
     render(<LibraryScanCard />);
 
-    expect(screen.getByText("8,334")).toBeInTheDocument();
-    expect(screen.getByText("5,451")).toBeInTheDocument();
-    expect(screen.getByText("2,747")).toBeInTheDocument();
-    expect(screen.getByText("136")).toBeInTheDocument();
+    const music = screen.getByRole("row", { name: /Music/ });
+    expect(within(music).getByText("8,334")).toBeInTheDocument();
+    expect(within(music).getByText("5,451")).toBeInTheDocument();
+    expect(within(music).getByText("2,747")).toBeInTheDocument();
+    expect(within(music).getByText("136")).toBeInTheDocument();
+    const archive = screen.getByRole("row", { name: /Archive/ });
+    expect(within(archive).getByText("/mnt/archive")).toBeInTheDocument();
+    expect(within(archive).getByText("412")).toBeInTheDocument();
+    expect(within(archive).getByText("7")).toBeInTheDocument();
+  });
+
+  it("scans one library path from its own row", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({ paths: [makePath(), makePath({ id: "archive", label: "Archive" })] })
+    );
+
+    render(<LibraryScanCard />);
+    fireEvent.click(screen.getByRole("button", { name: "Scan Archive" }));
+
+    expect(scanPathMutate).toHaveBeenCalledWith({ pathId: "archive" }, expect.anything());
+  });
+
+  it("cannot scan a disabled path, and says why its last scan was skipped", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({
+        paths: [
+          makePath(),
+          makePath({ id: "nas", label: "NAS", enabled: false, lastScanOutcome: "disabled" }),
+          makePath({ id: "usb", label: "USB", lastScanOutcome: "unavailable" }),
+        ],
+      })
+    );
+
+    render(<LibraryScanCard />);
+
+    expect(screen.getByRole("button", { name: "Scan NAS" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Scan USB" })).toBeEnabled();
+    expect(within(screen.getByRole("row", { name: /NAS/ })).getByText("Skipped, disabled")).toBeInTheDocument();
+    expect(within(screen.getByRole("row", { name: /USB/ })).getByText("Skipped, not reachable")).toBeInTheDocument();
+  });
+
+  it("marks a path never scanned and one scanning right now", () => {
+    statusQuery = createMockQuery<ScanStatus | undefined>(
+      makeStatus({
+        paths: [
+          makePath({ lastScanAt: null, lastScanOutcome: null }),
+          makePath({ id: "b", label: "B", scanning: true }),
+        ],
+      })
+    );
+
+    render(<LibraryScanCard />);
+
+    expect(within(screen.getByRole("row", { name: /Music/ })).getByText("Never")).toBeInTheDocument();
+    expect(within(screen.getByRole("row", { name: /^B/ })).getByText("Scanning")).toBeInTheDocument();
   });
 
   it("opens the review when files wait for a decision", () => {
@@ -160,7 +262,7 @@ describe("LibraryScanCard", () => {
     );
 
     render(<LibraryScanCard />);
-    fireEvent.click(screen.getByRole("button", { name: "1 ignored · 2 gone" }));
+    fireEvent.click(screen.getByRole("button", { name: "1 file ignored" }));
 
     expect(urlParam.set).toHaveBeenCalledWith("files");
   });

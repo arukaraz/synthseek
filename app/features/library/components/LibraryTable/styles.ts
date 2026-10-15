@@ -13,7 +13,15 @@ export const durationText = cva("text-fg/45 font-mono text-xs tabular-nums");
 
 export const selectCell = cva("flex items-center justify-center");
 
-export const queueCell = cva("flex items-center justify-center");
+export const actionsCell = cva("flex items-center justify-center");
+
+export const rowKebab = cva(
+  "text-fg/55 hover:text-fg hover:bg-fg/5 focus-visible:ring-primary-400 grid size-7 shrink-0 place-items-center rounded-full transition-[color,opacity] focus-visible:ring-2 focus-visible:outline-none data-[state=open]:text-fg"
+);
+
+export const pathCellText = cva("text-fg/70 block truncate text-sm");
+
+export const pathCellEmpty = cva("text-fg/45 font-mono text-xs");
 
 export const tableWrap = cva(
   "min-w-0 [&_tr[data-range-preview=clear]]:bg-fg/10 [&_tr[data-range-preview=select]]:bg-primary-500/10"

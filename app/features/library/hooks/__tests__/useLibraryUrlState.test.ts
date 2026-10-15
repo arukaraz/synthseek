@@ -214,4 +214,32 @@ describe("useLibraryUrlState", () => {
 
     expect(result.current.direction).toBeUndefined();
   });
+
+  it.each(["tracks", "albums"])("reads the library path filter from the URL on the %s view", (tab) => {
+    currentSearch = `tab=${tab}&libraryPath=music,archive`;
+    const { result } = renderHook(() => useLibraryUrlState());
+
+    expect(result.current.filters.libraryPath).toEqual(["music", "archive"]);
+  });
+
+  it("writes a library path choice to the URL and resets the page", () => {
+    currentSearch = "page=3";
+    const { result, rerender } = renderHook(() => useLibraryUrlState());
+
+    act(() => result.current.setFilterValues("libraryPath", ["archive"]));
+    rerender();
+
+    expect(lastReplacedParams().get("libraryPath")).toBe("archive");
+    expect(lastReplacedParams().get("page")).toBeNull();
+  });
+
+  it("drops the library path filter with the rest when the filters are cleared", () => {
+    currentSearch = "libraryPath=archive&status=failed";
+    const { result, rerender } = renderHook(() => useLibraryUrlState());
+
+    act(() => result.current.clearFilters());
+    rerender();
+
+    expect(lastReplacedParams().get("libraryPath")).toBeNull();
+  });
 });

@@ -70,7 +70,6 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
     library: {
       syncIntervalMinutes: 60,
       recycleBin: { retentionDays: 30 },
-      naming: { template: "{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}.{ext}" },
     },
     downloadSources: {
       slskd: { enabled: true, priority: 1 },

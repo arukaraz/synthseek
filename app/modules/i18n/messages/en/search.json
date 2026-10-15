@@ -63,7 +63,16 @@
       "matching": "Matching Mode",
       "acquisition": "Acquisition Method",
       "peer": "Peer Preferences",
-      "lidarr": "Lidarr Handoff"
+      "lidarr": "Lidarr Handoff",
+      "destination": "Destination"
+    },
+    "destination": {
+      "lockedInPath_one": "{{count}} song of this album is already in {{label}}, the rest go with it.",
+      "lockedInPath_other": "{{count}} songs of this album are already in {{label}}, the rest go with them.",
+      "lockedOnItsWay": "This album is already on its way to {{label}}.",
+      "noRule": "No rule matched, so it goes to the default path.",
+      "matched_one": "Matched {{count}} rule:",
+      "matched_other": "Matched {{count}} rules:"
     },
     "fields": {
       "quality": "Quality",
@@ -80,7 +89,8 @@
       "lidarrMonitor": "Monitor Scope",
       "lidarrArtistScope": "Artist scope",
       "lidarrTags": "Tags",
-      "renamePlaylist": "Rename playlist (optional)"
+      "renamePlaylist": "Rename playlist (optional)",
+      "destination": "Library path"
     },
     "options": {
       "bitrate": {

@@ -1,4 +1,5 @@
 import type { AppRouter, ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
+import type { SelectMenuOption } from "@components/ui/SelectMenu";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { ParseKeys } from "i18next";
 import type { ReactNode } from "react";
@@ -95,11 +96,7 @@ export interface LidarrTagsInputProps {
   suggestions: string[];
 }
 
-export interface LidarrSelectOption<T extends string | number> {
-  value: T;
-  label: string;
-  description?: string;
-}
+export type LidarrSelectOption<T extends string | number> = SelectMenuOption<T>;
 
 export interface LidarrSelectProps<T extends string | number> {
   label: string;
@@ -113,6 +110,20 @@ export interface LidarrSelectProps<T extends string | number> {
 export type ArtistMonitorScopeOption = MonitorOption<ArtistMonitorScope>;
 
 export type ConfigRequestMode = "download" | "lidarr-artist" | "artist-tracks";
+
+export type DestinationRequest = RouterInputs["library"]["paths"]["destination"];
+
+export type DestinationPreview = RouterOutputs["library"]["paths"]["destination"];
+
+export interface DestinationNoteProps {
+  preview: DestinationPreview;
+}
+
+export interface DestinationFieldProps {
+  request: DestinationRequest;
+  value: string | null;
+  onChange: (pathId: string | null) => void;
+}
 
 export interface ConfigRequestModalProps {
   isOpen: boolean;

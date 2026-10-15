@@ -299,6 +299,10 @@
     "title": "Scan läuft bereits",
     "description": "Ein Bibliotheksscan läuft bereits. Warte, bis er fertig ist, oder brich ihn zuerst ab."
   },
+  "LIBRARY_PATH_NOT_FOUND": {
+    "title": "Bibliothekspfad nicht gefunden",
+    "description": "Diesen Bibliothekspfad gibt es nicht mehr."
+  },
   "UNIDENTIFIED_GROUP_NOT_FOUND": {
     "title": "Hier gibt es nichts mehr zu prüfen",
     "description": "Diese Dateien wurden inzwischen zugeordnet oder ignoriert. Die Liste zeigt, was noch wartet."

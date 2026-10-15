@@ -1,17 +1,17 @@
 import { keepPreviousData } from "@tanstack/react-query";
+import type { inferRouterInputs } from "@trpc/server";
 
-import type { MoveClass } from "@features/settings/sections/LibrarySection/types";
+import type { AppRouter } from "@api/__generated__/types";
 import { trpc } from "@utils/trpc";
+
+type NamingInputs = inferRouterInputs<AppRouter>["library"]["naming"];
 
 export function useLibraryNamingCurrent() {
   return trpc.library.naming.current.useQuery(undefined, { staleTime: 0 });
 }
 
-export function useLibraryNamingPreview(template: string, enabled: boolean) {
-  return trpc.library.naming.preview.useQuery(
-    { template },
-    { enabled, staleTime: 0, placeholderData: keepPreviousData }
-  );
+export function useLibraryNamingPreview(input: NamingInputs["preview"], enabled: boolean) {
+  return trpc.library.naming.preview.useQuery(input, { enabled, staleTime: 0, placeholderData: keepPreviousData });
 }
 
 export function useLibraryNamingSamples(template: string, enabled: boolean) {
@@ -21,9 +21,6 @@ export function useLibraryNamingSamples(template: string, enabled: boolean) {
   );
 }
 
-export function useLibraryNamingMoves(
-  input: { template: string; classes: MoveClass[]; search: string; page: number; pageSize: number },
-  enabled: boolean
-) {
+export function useLibraryNamingMoves(input: NamingInputs["moves"], enabled: boolean) {
   return trpc.library.naming.moves.useQuery(input, { enabled, staleTime: 0, placeholderData: keepPreviousData });
 }

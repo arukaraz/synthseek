@@ -1,21 +1,33 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+import type { KeyboardEvent } from "react";
+
+import type { LibraryAlbumItem, LibraryFilesStatus, LibraryTrackItem } from "@hooks/api/queries/library/types";
 
 import { VIEW_CONFIG } from "../constants";
 import {
+  applySelectionShortcut,
+  buildAlbumsInput,
   buildTracksInput,
   clampPage,
   computePageCount,
   countActiveFilters,
+  fileJobReport,
   isLibraryView,
   parseFilterValues,
   resolveEffectiveDirection,
+  rangePreviewTone,
   resolvePageSize,
+  selectedAlbumsFileTarget,
+  selectedTracksFileTarget,
   serializeFilterValues,
+  spendsSelection,
   toggleFilterValue,
   topFacetValues,
+  trackFileTarget,
   viewCountFor,
 } from "../helpers";
-import type { FacetSearchState, FilterParamMap, LibraryView } from "../types";
+import type { FacetSearchState, FilterParamMap, LibraryFileJob, LibraryFileTarget, LibraryView } from "../types";
 
 describe("parseFilterValues", () => {
   it("returns an empty array for undefined or empty input", () => {
@@ -282,5 +294,282 @@ describe("VIEW_CONFIG layout", () => {
         expect(option.defaultDirection === "asc" || option.defaultDirection === "desc").toBe(true);
       }
     }
+  });
+});
+
+function track(overrides: Partial<LibraryTrackItem>): LibraryTrackItem {
+  return {
+    id: "trk-1",
+    external_id: "ext-1",
+    title: "Aerodynamic",
+    artist: "Daft Punk",
+    status: "complete",
+    source: "local",
+    format: "flac",
+    request_type: "track",
+    bitrate: 1411,
+    file_bitrate: null,
+    file_format: null,
+    playable: true,
+    sources: [],
+    duration_ms: 212000,
+    track_number: 3,
+    disc_number: 1,
+    explicit: false,
+    album_id: "alb-1",
+    albumName: "Discovery",
+    albumArt: null,
+    genres: [],
+    playlistIds: [],
+    replayGain: { trackGain: null, albumGain: null, trackPeak: null, albumPeak: null },
+    libraryPath: null,
+    created_at: new Date("2024-01-01T00:00:00.000Z"),
+    completed_at: null,
+    ...overrides,
+  };
+}
+
+function album(overrides: Partial<LibraryAlbumItem>): LibraryAlbumItem {
+  return {
+    id: "alb-1",
+    external_id: "ext-alb-1",
+    name: "Discovery",
+    artist: "Daft Punk",
+    album_art: null,
+    status: "complete",
+    total_tracks: 14,
+    completed_tracks: 14,
+    source_provider: null,
+    release_date: "2001-03-12",
+    genres: [],
+    year: 2001,
+    quality: null,
+    requested: true,
+    libraryPaths: [],
+    created_at: new Date("2001-03-12T00:00:00.000Z"),
+    ...overrides,
+  };
+}
+
+const STATUS: LibraryFilesStatus = {
+  running: false,
+  kind: "move",
+  targetPathId: "archive",
+  total: 3,
+  processed: 3,
+  done: 3,
+  failed: 0,
+  startedAt: "2026-10-14T10:00:00.000Z",
+  finishedAt: "2026-10-14T10:00:05.000Z",
+  failures: [],
+};
+
+const JOB: LibraryFileJob = { kind: "move", targetLabel: "Archive", baseline: null, since: 1000, visible: true };
+
+describe("library path facet", () => {
+  it.each(["tracks", "albums"] as const)("is offered on the %s view and read from the URL", (view) => {
+    expect(VIEW_CONFIG[view].facets.map((facet) => facet.key)).toContain("libraryPath");
+    expect(VIEW_CONFIG[view].filterParamKeys).toContain("libraryPath");
+  });
+
+  it("hides itself while the library has a single path to pick", () => {
+    const def = VIEW_CONFIG.tracks.facets.find((facet) => facet.key === "libraryPath");
+    expect(def?.hideWithoutChoice).toBe(true);
+  });
+
+  it("sends the chosen path ids with the tracks query", () => {
+    const input = buildTracksInput({
+      limit: 50,
+      offset: 0,
+      q: undefined,
+      sort: "recent",
+      direction: undefined,
+      filters: { libraryPath: ["music", "archive"] },
+      facetSearch: {},
+    });
+
+    expect(input.filters?.libraryPath).toEqual(["music", "archive"]);
+  });
+
+  it("sends the chosen path ids with the albums query, and nothing when none is chosen", () => {
+    const base = { limit: 50, offset: 0, q: undefined, sort: "recent", direction: undefined, facetSearch: {} };
+
+    expect(buildAlbumsInput({ ...base, filters: { libraryPath: ["archive"] } }).filters?.libraryPath).toEqual([
+      "archive",
+    ]);
+    expect(buildAlbumsInput({ ...base, filters: {} }).filters?.libraryPath).toBeUndefined();
+  });
+});
+
+describe("file targets", () => {
+  it("targets a track by id, with the path it sits in", () => {
+    expect(trackFileTarget(track({ libraryPath: { id: "music", label: "Music" } }))).toEqual({
+      scope: "track",
+      trackId: "trk-1",
+      title: "Aerodynamic",
+      pathIds: ["music"],
+    });
+  });
+
+  it("gives a track with no file in the library no path", () => {
+    expect(trackFileTarget(track({})).pathIds).toEqual([]);
+  });
+
+  it("collects the selected rows and each path they sit in once", () => {
+    const items = [
+      track({ id: "a", libraryPath: { id: "music", label: "Music" } }),
+      track({ id: "b", libraryPath: { id: "music", label: "Music" } }),
+      track({ id: "c", libraryPath: { id: "archive", label: "Archive" } }),
+      track({ id: "d", libraryPath: { id: "archive", label: "Archive" } }),
+    ];
+
+    expect(selectedTracksFileTarget(items, ["a", "b", "c"])).toEqual({
+      scope: "tracks",
+      trackIds: ["a", "b", "c"],
+      pathIds: ["music", "archive"],
+    });
+  });
+
+  it("spends the selection on a delete and on a bulk move, never on a single row's move", () => {
+    const row = trackFileTarget(track({ libraryPath: { id: "music", label: "Music" } }));
+    const bulk = selectedTracksFileTarget([track({ libraryPath: { id: "music", label: "Music" } })], ["trk-1"]);
+
+    expect(spendsSelection({ kind: "move", target: row })).toBe(false);
+    expect(spendsSelection({ kind: "move", target: bulk })).toBe(true);
+    expect(spendsSelection({ kind: "delete", target: row })).toBe(true);
+  });
+
+  it("spends the album selection on a bulk album move, never on one album's own move", () => {
+    const one: LibraryFileTarget = { scope: "album", albumId: "alb-1", name: "Discovery", pathIds: ["music"] };
+    const many: LibraryFileTarget = { scope: "albums", albumIds: ["alb-1", "alb-2"], pathIds: ["music"] };
+
+    expect(spendsSelection({ kind: "move", target: one })).toBe(false);
+    expect(spendsSelection({ kind: "move", target: many })).toBe(true);
+  });
+
+  it("collects the selected albums by album id and each path they sit in once", () => {
+    const items = [
+      album({ id: "a", libraryPaths: [{ id: "music", label: "Music" }] }),
+      album({
+        id: "b",
+        libraryPaths: [
+          { id: "music", label: "Music" },
+          { id: "archive", label: "Archive" },
+        ],
+      }),
+      album({ id: "c", libraryPaths: [{ id: "lossy", label: "Lossy" }] }),
+    ];
+
+    expect(selectedAlbumsFileTarget(items, ["a", "b"])).toEqual({
+      scope: "albums",
+      albumIds: ["a", "b"],
+      pathIds: ["music", "archive"],
+    });
+  });
+});
+
+describe("applySelectionShortcut", () => {
+  function keyEvent(init: Partial<KeyboardEvent<HTMLElement>>): KeyboardEvent<HTMLElement> {
+    return {
+      key: "",
+      code: "",
+      metaKey: false,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: false,
+      preventDefault: vi.fn(),
+      ...init,
+    } as unknown as KeyboardEvent<HTMLElement>;
+  }
+
+  function target(selectedCount: number) {
+    return { selectedCount, setMany: vi.fn(), clear: vi.fn() };
+  }
+
+  it("selects every shown id on Ctrl+A or Cmd+A", () => {
+    const ctrl = target(0);
+    const meta = target(0);
+    const event = keyEvent({ key: "a", code: "KeyA", ctrlKey: true });
+
+    expect(applySelectionShortcut(event, ctrl, ["a", "b"])).toBe(true);
+    expect(applySelectionShortcut(keyEvent({ key: "a", code: "KeyA", metaKey: true }), meta, ["a"])).toBe(true);
+
+    expect(ctrl.setMany).toHaveBeenCalledWith(["a", "b"], true);
+    expect(meta.setMany).toHaveBeenCalledWith(["a"], true);
+    expect(event.preventDefault).toHaveBeenCalled();
+  });
+
+  it("leaves Ctrl+A and Escape to a text field the person is typing in", () => {
+    const selection = target(2);
+    const input = document.createElement("input");
+    const event = keyEvent({ key: "a", code: "KeyA", ctrlKey: true, target: input });
+
+    expect(applySelectionShortcut(event, selection, ["a"])).toBe(false);
+    expect(applySelectionShortcut(keyEvent({ key: "Escape", target: input }), selection, ["a"])).toBe(false);
+    expect(event.preventDefault).not.toHaveBeenCalled();
+    expect(selection.setMany).not.toHaveBeenCalled();
+    expect(selection.clear).not.toHaveBeenCalled();
+  });
+
+  it("still selects from a checkbox, which takes no text", () => {
+    const selection = target(0);
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+
+    expect(applySelectionShortcut(keyEvent({ code: "KeyA", ctrlKey: true, target: checkbox }), selection, ["a"])).toBe(
+      true
+    );
+  });
+
+  it("leaves Ctrl+Shift+A and a bare A alone", () => {
+    const selection = target(0);
+
+    expect(applySelectionShortcut(keyEvent({ code: "KeyA", ctrlKey: true, shiftKey: true }), selection, ["a"])).toBe(
+      false
+    );
+    expect(applySelectionShortcut(keyEvent({ key: "a", code: "KeyA" }), selection, ["a"])).toBe(false);
+    expect(selection.setMany).not.toHaveBeenCalled();
+  });
+
+  it("clears on Escape only while something is selected", () => {
+    const empty = target(0);
+    const some = target(2);
+
+    expect(applySelectionShortcut(keyEvent({ key: "Escape" }), empty, [])).toBe(false);
+    expect(applySelectionShortcut(keyEvent({ key: "Escape" }), some, [])).toBe(true);
+
+    expect(empty.clear).not.toHaveBeenCalled();
+    expect(some.clear).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("rangePreviewTone", () => {
+  it("previews nothing without a range, and the anchor's state otherwise", () => {
+    expect(rangePreviewTone(null)).toBe("none");
+    expect(rangePreviewTone({ ids: ["a"], selected: true })).toBe("select");
+    expect(rangePreviewTone({ ids: ["a"], selected: false })).toBe("clear");
+  });
+});
+
+describe("fileJobReport", () => {
+  it("reads a status fetched after the job began whose run is a new one", () => {
+    expect(fileJobReport(JOB, STATUS, 2000)).toBe(STATUS);
+  });
+
+  it("ignores a status fetched before the job began", () => {
+    expect(fileJobReport(JOB, STATUS, 999)).toBeNull();
+  });
+
+  it("ignores the run that was already on record when the job began", () => {
+    expect(fileJobReport({ ...JOB, baseline: STATUS.startedAt }, STATUS, 2000)).toBeNull();
+  });
+
+  it("ignores a status that has never run anything", () => {
+    expect(fileJobReport(JOB, { ...STATUS, startedAt: null }, 2000)).toBeNull();
+  });
+
+  it("reports nothing without a job or a status", () => {
+    expect(fileJobReport(null, STATUS, 2000)).toBeNull();
+    expect(fileJobReport(JOB, undefined, 2000)).toBeNull();
   });
 });

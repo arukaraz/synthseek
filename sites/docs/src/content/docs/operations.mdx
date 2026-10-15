@@ -46,7 +46,7 @@ These run on a fixed schedule and are not user-triggerable.
 
 ### What the library scan shows you
 
-The library scan has its own card on the **Jobs** page rather than a row in the table. It reports four figures. The first two count the audio files on your library disk and the ones Synthseek recognises as tracks it holds. The other two count the files it is still searching for and the ones it could not recognise. A line below counts the files you ignored and the ones it has stopped finding. The run button turns into a spinner while work is underway, and you can cancel a running scan. It ticks every 30 minutes and walks the whole disk twice a day. On the ticks in between, it identifies a batch of unrecognised files. A scan that could not read part of the disk says so and leaves everything under those paths as it was. A permissions problem on one folder never looks like a library that lost files. A file that merely moved is followed to its new location, not counted as one loss and one arrival.
+The library scan has its own card on the **Jobs** page rather than a row in the table. It lists each library path with its audio files on disk and the ones Synthseek recognises. It also counts those it is still searching for, could not recognise, or stopped finding. A line below counts the files you ignored. Each row can scan its path on its own. A path that is turned off or cannot be reached is skipped, and the others are still scanned. The run button turns into a spinner while work is underway, and you can cancel a running scan. It ticks every 30 minutes and walks every library path twice a day. On the ticks in between, it identifies a batch of unrecognised files. A scan that could not read part of the disk says so and leaves everything under those paths as it was. A permissions problem on one folder never looks like a library that lost files. A file that merely moved is followed to its new location, not counted as one loss and one arrival.
 
 **Review files** opens what Synthseek could not recognise, grouped by folder and album. You can match a group to an album or a file to a song, search again, or ignore a file. Synthseek also searches again later on its own, so an album the catalog publishes after you got the files can still be found. Fixing a file's tags makes it search again at the next scan. An ignored file stays on your disk and out of your library, and Synthseek stops searching for it until you choose **Stop ignoring**.
 
@@ -58,13 +58,13 @@ The same page can also find the lyrics, artwork and metadata files left beside a
 
 **Settings**, then **Library**, administrators only.
 
-The page holds the template that decides the folders and filename every track gets. Its default is on the [Configuration page](/configuration).
+Each library path has its own template, which decides the folders and filename every track in it gets. You edit it in that path's settings. Its default is on the [Configuration page](/configuration).
 
-Anything between `<` and `>` disappears when what it needs is missing. That is how the disc folder appears only for a release that has more than one. `{album}< ({year})>` gives `OK Computer (1997)` where the year is known and `OK Computer` where it is not.
+Anything between `<` and `>` disappears when what it needs is missing. That is how the disc folder appears only for a release that has more than one. For example, `{album}< ({year})>` gives `OK Computer (1997)` where the year is known and `OK Computer` where it is not.
 
 A token on its own is required. A track already on disk that cannot fill one is left alone. A download that cannot fill one fails to import, so every token you add is one that future downloads have to carry.
 
-As you type, the page counts what your library would do. The preview shows every change before you confirm. Confirming saves the format and moves the files in one go.
+As you type, the page counts what that library path would do. The preview shows every change before you confirm. Confirming saves the format and moves the files in one go.
 
 ### Reorganising what is already on disk
 
@@ -74,7 +74,7 @@ The preview splits the work in three. Files that only change folder, files spell
 
 Lyrics and artwork travel with the music they belong to. Where that would mean guessing, they stay, and the page says which case each one hit.
 
-If your library changed between the preview and the press, nothing moves and the preview is worked out again. Anything that could not be moved is listed with its reason. A read-only `/music` fails every move. A file whose new place the index will not accept is put back where it was, or named as one a library scan has to reconcile if it cannot be.
+If your library changed between the preview and the press, nothing moves and the preview is worked out again. Anything that could not be moved is listed with its reason. A read-only library path cannot be reorganised. A file whose new place the index will not accept is put back where it was, or named as one a library scan has to reconcile if it cannot be.
 
 Check what else manages the same folder before you start. Another library manager that scans it on its own schedule can read the moved files as deleted, and some of them then clean up what is left. Lidarr deletes permanently while its **Recycle Bin** setting is empty, in its own media management settings, which it may keep behind an advanced toggle. Give it a path first and anything it removes becomes something you can get back. That is worth doing whether or not you reorganise, since Synthseek moves a file out of your library in several other cases too.
 
@@ -142,7 +142,17 @@ If there is not enough free space for a copy, or your database lives outside its
 
 Everything Synthseek knows lives under `/data`. Back up that volume and you can restore the instance completely.
 
-Your music files live under `/music` and are not Synthseek's to back up. It removes a file from there in six cases, and never by deleting it: replacing a copy with a better one after a quality upgrade, keeping one copy you picked on the duplicates page, resolving one track with **Keep best copy**, settling in bulk with **Keep the best of every track**, the scan settling the copies it proved are the same recording on its own, and clearing the leftover files described above. All six move the file to the recycle bin under `/data`, where it stays until the retention sweep clears it.
+Your music files live in your library paths, `/music` and any you added, and are not Synthseek's to back up. Synthseek removes a file from them only in these cases, and never by deleting it:
+
+- Replacing a copy with a better one after a quality upgrade.
+- Keeping one copy you picked on the duplicates page.
+- Resolving one track with **Keep best copy**.
+- Settling in bulk with **Keep the best of every track**.
+- The scan settling the copies it proved are the same recording.
+- Clearing the leftover files described above.
+- **Delete files** on the Library page.
+
+Each one moves the file to the recycle bin under `/data`, where it stays until the retention sweep clears it.
 
 Take your own backup before a major version upgrade. The automatic snapshot covers schema migration failure; it is not a substitute for a backup you control.
 

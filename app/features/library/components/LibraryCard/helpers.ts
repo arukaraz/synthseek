@@ -2,6 +2,14 @@ import type { RequestStatus } from "@api/__generated__/types";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import type { KeyboardEvent } from "react";
 
+import type { CardCoverTone, CardSelection } from "./types";
+
+export function cardCoverTone(selection: CardSelection | undefined): CardCoverTone {
+  if (selection === undefined) return "none";
+  if (selection.preview !== "none") return selection.preview;
+  return selection.selected ? "selected" : "none";
+}
+
 export function cardCoverActionsFrom(
   onOpen: (() => void) | undefined,
   onPlay: (() => Promise<void>) | undefined
@@ -10,11 +18,19 @@ export function cardCoverActionsFrom(
   return { open: onOpen, play: onPlay };
 }
 
+function isCardActivationKey(event: KeyboardEvent<HTMLElement>): boolean {
+  return event.key === "Enter" || event.key === " ";
+}
+
 export function handleCardActivationKey(event: KeyboardEvent<HTMLElement>, onOpen: () => void): void {
-  if (event.key === "Enter" || event.key === " ") {
+  if (isCardActivationKey(event)) {
     event.preventDefault();
     onOpen();
   }
+}
+
+export function shieldCardActivationKey(event: KeyboardEvent<HTMLElement>): void {
+  if (isCardActivationKey(event)) event.stopPropagation();
 }
 
 export function cardInitials(name: string): string {
@@ -33,10 +49,15 @@ export function statusDotClass(status: RequestStatus): string {
   return REQUEST_STATUS_CONFIG[status].glowColor;
 }
 
-export function albumMetaLine(year: number | null, quality: string | null): string | null {
+export function albumMetaLine(
+  year: number | null,
+  quality: string | null,
+  pathLabels: readonly string[]
+): string | null {
   const parts: string[] = [];
   if (year !== null) parts.push(String(year));
   if (quality) parts.push(quality);
+  parts.push(...pathLabels);
   if (parts.length === 0) return null;
   return parts.join(" · ");
 }

@@ -45,9 +45,15 @@ function ownerIdOrDefault(value: string): string {
 export function problemCopyParams(problem: SystemProblem): SystemProblemCopyParams {
   switch (problem.kind) {
     case "downloads_unwritable":
+      return { path: problem.path, puid: ownerIdOrDefault(problem.puid), pgid: ownerIdOrDefault(problem.pgid) };
     case "library_inaccessible":
     case "library_read_only":
-      return { path: problem.path, puid: ownerIdOrDefault(problem.puid), pgid: ownerIdOrDefault(problem.pgid) };
+      return {
+        label: problem.label,
+        path: problem.path,
+        puid: ownerIdOrDefault(problem.puid),
+        pgid: ownerIdOrDefault(problem.pgid),
+      };
     case "catalog_unreachable":
       return {};
     case "config_value_ignored":

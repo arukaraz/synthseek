@@ -17,6 +17,8 @@ export function useLibrarySelection() {
       selectedUpgradableIds: (items: LibraryTrackItem[]) =>
         selectors.filterSelected(items, (item) => item.status === RequestStatus.enum.complete),
       selectedPlayableIds: (items: LibraryTrackItem[]) => selectors.filterSelected(items, (item) => item.playable),
+      selectedInLibraryIds: (items: LibraryTrackItem[]) =>
+        selectors.filterSelected(items, (item) => item.libraryPath !== null),
     }),
     [selectors]
   );

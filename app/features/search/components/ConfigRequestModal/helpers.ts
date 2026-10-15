@@ -1,4 +1,10 @@
-import { ContentType, type MusicAlbum, type MusicItem, type MusicTrack } from "@api/__generated__/types";
+import {
+  ContentType,
+  type MusicAlbum,
+  type MusicItem,
+  type MusicTrack,
+  type RequestFormat,
+} from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
 import { matchesTerms, searchTerms } from "@utils/search";
 import { SOURCE_PRIORITY_ORDER } from "./constants";
@@ -6,6 +12,9 @@ import type {
   AcquisitionSelection,
   AlbumDelegate,
   ArtistDelegateInput,
+  ConfigRequestMode,
+  DestinationPreview,
+  DestinationRequest,
   DownloadSourceKey,
   DownloadSourcesAvailability,
   LidarrArtistSelection,
@@ -277,6 +286,32 @@ export function filterTagSuggestions(suggestions: string[], selected: string[], 
     if (hasTag(selected, suggestion)) return false;
     return matchesTerms(terms, [suggestion]);
   });
+}
+
+export function destinationRequestFor(
+  item: MusicItem | null,
+  parentAlbum: MusicItem | null | undefined,
+  format: RequestFormat,
+  mode: ConfigRequestMode
+): DestinationRequest | null {
+  if (item === null || mode !== "download") return null;
+  if (item.type === ContentType.enum.album) {
+    return { albumExternalId: item.id, format, requestType: ContentType.enum.album };
+  }
+  if (item.type === ContentType.enum.track) {
+    return { albumExternalId: parentAlbum?.id ?? item.album.id, format, requestType: ContentType.enum.track };
+  }
+  return null;
+}
+
+export function destinationOptions(preview: DestinationPreview): LidarrSelectOption<string>[] {
+  return preview.paths
+    .filter((path) => path.accepts || path.id === preview.pathId)
+    .map((path) => ({ value: path.id, label: path.label }));
+}
+
+export function destinationLabel(preview: DestinationPreview): string {
+  return preview.paths.find((path) => path.id === preview.pathId)?.label ?? "";
 }
 
 export function buildMetadataProfileOptions(profiles: LidarrMetadataProfile[]): LidarrSelectOption<number>[] {

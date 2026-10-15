@@ -5,13 +5,21 @@ import { useEffect, useMemo } from "react";
 
 import { NO_CHOSEN_SOURCES } from "../constants";
 import { useLibraryPlayback } from "../hooks/useLibraryPlayback";
+import { useLibraryTrackActions } from "../hooks/useLibraryTrackActions";
 import { buildTracksInput } from "../helpers";
 import { buildTrackColumns } from "./LibraryTable/columns";
 import type { TracksViewModeProps } from "../types";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
-export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, selection }: TracksViewModeProps) {
+export function TracksViewMode({
+  controller,
+  filtersOpen,
+  onFiltersOpenChange,
+  selection,
+  fileActions,
+}: TracksViewModeProps) {
   const { prefetchNextPage } = useLibraryTracksPrefetch();
+  const { searchBetterQuality } = useLibraryTrackActions();
   const offset = (controller.page - 1) * controller.pageSize;
 
   const input = useMemo(
@@ -40,7 +48,18 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
 
   const items = useMemo(() => query.data?.items ?? [], [query.data?.items]);
   const { play, enqueue } = useLibraryPlayback(items, query.data?.appliedSources ?? NO_CHOSEN_SOURCES);
-  const columns = useMemo(() => buildTrackColumns({ onPlay: play, onEnqueue: enqueue }), [play, enqueue]);
+  const showLibraryPath = (query.data?.facets.libraryPath ?? []).length > 1;
+  const columns = useMemo(
+    () =>
+      buildTrackColumns({
+        onPlay: play,
+        onEnqueue: enqueue,
+        onSearchBetterQuality: searchBetterQuality,
+        fileActions,
+        showLibraryPath,
+      }),
+    [play, enqueue, searchBetterQuality, fileActions, showLibraryPath]
+  );
 
   const total = query.data?.total ?? 0;
   const hasNextPage = offset + controller.pageSize < total;
@@ -63,7 +82,7 @@ export function TracksViewMode({ controller, filtersOpen, onFiltersOpenChange, s
         layout: "table",
         columns,
         getRowId: (item) => item.id,
-        selection: { items, selection, onEnqueue: enqueue },
+        selection: { items, selection, onEnqueue: enqueue, fileActions },
       }}
       filtersOpen={filtersOpen}
       onFiltersOpenChange={onFiltersOpenChange}

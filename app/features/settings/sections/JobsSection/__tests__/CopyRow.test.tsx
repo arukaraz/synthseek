@@ -20,6 +20,7 @@ function copy(overrides: Partial<CopyRowProps["copy"]> = {}): CopyRowProps["copy
     sizeBytes: 31_457_280,
     durationSeconds: 301,
     serving: false,
+    libraryPath: "Archive",
     ...overrides,
   };
 }
@@ -27,6 +28,7 @@ function copy(overrides: Partial<CopyRowProps["copy"]> = {}): CopyRowProps["copy
 function renderRow(overrides: Partial<CopyRowProps> = {}) {
   const props: CopyRowProps = {
     copy: copy(),
+    showPath: false,
     disabled: false,
     keeping: false,
     playing: false,
@@ -52,6 +54,20 @@ beforeEach(() => {
     configurable: true,
     writable: true,
     value: vi.fn(),
+  });
+});
+
+describe("which library path a copy lives in", () => {
+  it("names the path when the copies sit in different paths", () => {
+    renderRow({ showPath: true });
+
+    expect(screen.getByText("Archive")).toBeInTheDocument();
+  });
+
+  it("keeps the path out of the row when every copy shares one", () => {
+    renderRow();
+
+    expect(screen.queryByText("Archive")).not.toBeInTheDocument();
   });
 });
 

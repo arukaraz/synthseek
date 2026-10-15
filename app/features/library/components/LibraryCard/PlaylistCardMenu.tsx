@@ -7,7 +7,8 @@ import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { cardKebab, cardMenuItem, cardMenuItemDanger } from "./styles";
+import { libraryMenuItem, libraryMenuItemDanger } from "../../styles";
+import { cardKebab } from "./styles";
 import type { PlaylistCardMenuProps } from "./types";
 
 export function PlaylistCardMenu({ item }: PlaylistCardMenuProps) {
@@ -24,11 +25,11 @@ export function PlaylistCardMenu({ item }: PlaylistCardMenuProps) {
           <MoreVertical className="size-4" aria-hidden />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem className={cardMenuItem()} disabled={!canEdit} onSelect={() => setRenameOpen(true)}>
+          <DropdownMenuItem className={libraryMenuItem()} disabled={!canEdit} onSelect={() => setRenameOpen(true)}>
             <Pencil className="size-4" aria-hidden />
             {t("playlists.actions.rename")}
           </DropdownMenuItem>
-          <DropdownMenuItem className={cardMenuItemDanger()} onSelect={() => setDeleteOpen(true)}>
+          <DropdownMenuItem className={libraryMenuItemDanger()} onSelect={() => setDeleteOpen(true)}>
             <Trash2 className="size-4" aria-hidden />
             {t("playlists.actions.delete")}
           </DropdownMenuItem>

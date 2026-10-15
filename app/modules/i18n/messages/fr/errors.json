@@ -299,6 +299,10 @@
     "title": "Analyse déjà en cours",
     "description": "Une analyse de la bibliothèque est déjà en cours. Attendez la fin ou annulez-la d'abord."
   },
+  "LIBRARY_PATH_NOT_FOUND": {
+    "title": "Chemin de bibliothèque introuvable",
+    "description": "Ce chemin de bibliothèque n'existe plus."
+  },
   "UNIDENTIFIED_GROUP_NOT_FOUND": {
     "title": "Plus rien à vérifier ici",
     "description": "Ces fichiers ont été associés ou ignorés entre-temps. La liste montre ce qui attend encore."

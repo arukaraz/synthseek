@@ -21,6 +21,11 @@ export function useStartLibraryOrganise() {
         toast.warning(i18n.t("settings:libraryOrganise.toast.scanBusy"));
         return;
       }
+      if (result.outcome === "not_found") {
+        utils.library.paths.list.invalidate();
+        toast.warning(i18n.t("settings:libraryPaths.toast.notFound"));
+        return;
+      }
       utils.library.organise.preview.invalidate();
       toast.warning(i18n.t("settings:libraryOrganise.toast.planExpired"));
     },

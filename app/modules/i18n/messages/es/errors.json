@@ -299,6 +299,10 @@
     "title": "Ya hay un escaneo en curso",
     "description": "Ya se está escaneando la biblioteca. Espera a que termine o cancélalo antes."
   },
+  "LIBRARY_PATH_NOT_FOUND": {
+    "title": "Ruta de biblioteca no encontrada",
+    "description": "Esa ruta de biblioteca ya no existe."
+  },
   "UNIDENTIFIED_GROUP_NOT_FOUND": {
     "title": "Aquí ya no queda nada por revisar",
     "description": "Estos archivos se emparejaron o se ignoraron mientras tanto. La lista muestra lo que sigue esperando."

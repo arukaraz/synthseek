@@ -52,6 +52,7 @@ function item(id: string, sources: LibraryTrackItem["sources"] = EVERY_SOURCE): 
     genres: [],
     playlistIds: [],
     sources,
+    libraryPath: null,
     created_at: new Date("2024-01-01T00:00:00Z"),
     completed_at: null,
   };

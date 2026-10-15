@@ -1,5 +1,8 @@
 import type { LibraryAlbumItem, LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
+import type { CheckboxPreview } from "@components/ui/Checkbox";
 import type { ReactNode } from "react";
+
+import type { AlbumSelection, LibraryFileActions } from "../../types";
 
 export interface LibraryCardGridProps {
   children: ReactNode;
@@ -20,13 +23,40 @@ export interface LibraryInfiniteGridProps<TItem> {
 export interface CardCoverActionsProps {
   name: string;
   onPlay: () => Promise<void>;
-  onOpen: () => void;
+  onOpen?: () => void;
+  menu?: ReactNode;
 }
+
+export interface CardSelection {
+  selected: boolean;
+  selecting: boolean;
+  preview: CheckboxPreview;
+  onToggle: (extend: boolean) => void;
+  onHover: (hovered: boolean) => void;
+}
+
+export type CardCoverTone = "none" | "selected" | "select" | "clear";
 
 export interface AlbumCardProps {
   item: LibraryAlbumItem;
+  showLibraryPaths?: boolean;
   onOpen?: () => void;
   onPlay?: () => Promise<void>;
+  menu?: ReactNode;
+  selection?: CardSelection;
+}
+
+export interface AlbumSelectionBarProps {
+  items: LibraryAlbumItem[];
+  selection: AlbumSelection;
+  fileActions: LibraryFileActions;
+  onEnqueue: (albums: LibraryAlbumItem[]) => Promise<boolean>;
+}
+
+export interface AlbumCardMenuProps {
+  item: LibraryAlbumItem;
+  onEnqueue: () => void;
+  fileActions: LibraryFileActions;
 }
 
 export interface ArtistCardProps {

@@ -1494,16 +1494,243 @@
       "description": "Comment vos fichiers sont rangés sur le disque, et ce qui ne correspond pas."
     }
   },
-  "libraryNaming": {
+  "libraryPaths": {
     "card": {
-      "title": "Nommage des morceaux",
-      "description": "Où va chaque morceau et comment il s'appelle. Rien ne bouge tant que vous ne le dites pas."
+      "title": "Chemins de bibliothèque",
+      "description": "Les dossiers où Synthseek garde votre musique. Chacun a son propre nommage des morceaux et les règles qui lui envoient de la musique."
     },
+    "loading": "Chargement des chemins de bibliothèque",
+    "loadFailed": "Impossible de lire les chemins de bibliothèque",
+    "add": "Ajouter un chemin de bibliothèque",
+    "columns": {
+      "path": "Chemin de bibliothèque",
+      "files": "Fichiers",
+      "free": "Espace libre",
+      "rules": "Règles",
+      "enabled": "Activé"
+    },
+    "defaultBadge": "Par défaut",
+    "environmentBadge": "MUSIC_LIBRARY_PATH",
+    "environmentHint": "Défini par MUSIC_LIBRARY_PATH",
+    "status": {
+      "writable": "Disponible",
+      "readonly": "Lecture seule",
+      "missing": "Dossier introuvable",
+      "not_directory": "Pas un dossier",
+      "unreachable": "Injoignable",
+      "disabled": "Désactivé"
+    },
+    "files_one": "1 fichier",
+    "files_other": "{{formatted}} fichiers",
+    "freeSpace": "{{size}} libres",
+    "freeUnknown": "Inconnu",
+    "rulesCount_one": "1 règle",
+    "rulesCount_other": "{{count}} règles",
+    "edit": "Modifier",
+    "editLabel": "Modifier {{label}}",
+    "enabledLabel": "Utiliser {{label}}",
+    "defaultCannotTurnOff": "Le chemin par défaut ne peut pas être désactivé",
+    "unreachableNotice": "{{label}} est injoignable. Ses fichiers gardent leur place dans la bibliothèque et aucun n'est marqué comme manquant.",
+    "modal": {
+      "addTitle": "Ajouter un chemin de bibliothèque",
+      "editTitle": "Modifier {{label}}",
+      "cancel": "Annuler",
+      "add": "Ajouter le chemin",
+      "save": "Enregistrer"
+    },
+    "label": {
+      "label": "Nom",
+      "placeholder": "Bandes originales",
+      "taken": "Un autre chemin de bibliothèque porte déjà ce nom."
+    },
+    "folder": {
+      "label": "Dossier",
+      "placeholder": "/music-soundtracks",
+      "fromEnvironment": "Défini par MUSIC_LIBRARY_PATH. Modifiez-le dans votre fichier compose et redémarrez.",
+      "checking": "Vérification du dossier",
+      "usable": "Synthseek voit ce dossier.",
+      "readonly": "Ce dossier est en lecture seule : Synthseek peut lire la musique qu'il contient mais ne peut rien y enregistrer.",
+      "problem": {
+        "not_absolute": "Indiquez le chemin complet dans le conteneur, en commençant par /.",
+        "too_long": "Ce chemin est trop long.",
+        "system_folder": "C'est un dossier système. Choisissez un dossier qui contient de la musique.",
+        "same_as_path": "{{label}} utilise déjà ce dossier.",
+        "inside_path": "Ce dossier se trouve dans {{label}}. Choisissez un dossier en dehors de tous les autres chemins de bibliothèque.",
+        "contains_path": "{{label}} se trouve dans ce dossier. Les chemins de bibliothèque ne peuvent pas se contenir les uns les autres.",
+        "app_folder": "{{folder}} est un dossier que Synthseek utilise pour lui-même. Un chemin de bibliothèque ne peut ni s'y trouver ni le contenir.",
+        "not_found": "Synthseek ne voit pas {{folder}}. Montez-le d'abord dans votre fichier compose, par exemple /votre/dossier/hote:{{folder}}, puis redémarrez.",
+        "not_directory": "C'est un fichier, pas un dossier.",
+        "unreachable": "Ce dossier ne répond pas. Vérifiez que son disque est branché."
+      },
+      "check": {
+        "needed_one": "{{label}} contient 1 fichier. Vérifiez qu'il se trouve dans le nouveau dossier avant d'enregistrer.",
+        "needed_other": "{{label}} contient {{formatted}} fichiers. Vérifiez qu'ils se trouvent dans le nouveau dossier avant d'enregistrer.",
+        "action": "Vérifier le dossier",
+        "found": "{{found}} fichiers sur {{sampled}} échantillonnés trouvés dans le nouveau dossier. Rien n'est déplacé ni renommé, Synthseek les lit depuis cet endroit dès que vous enregistrez.",
+        "missing": "{{found}} fichiers sur {{sampled}} échantillonnés trouvés à cet endroit. La musique de {{label}} n'est pas dans ce dossier.",
+        "failed": "Impossible de vérifier le dossier."
+      }
+    },
+    "default": {
+      "label": "Chemin par défaut",
+      "other": "La musique qui ne correspond à aucune règle est enregistrée ici. Pour l'instant, c'est {{label}}.",
+      "isThis": "La musique qui ne correspond à aucune règle est enregistrée ici. Pour changer, activez cette option dans un autre chemin de bibliothèque.",
+      "readonly": "Un chemin en lecture seule ne peut pas être le chemin par défaut."
+    },
+    "rules": {
+      "label": "Règles",
+      "empty": "Aucune règle pour l'instant. Créez-les dans Règles, sous Chemins de bibliothèque.",
+      "usedBy": "Utilisée par {{label}}",
+      "otherPath": "un autre chemin de bibliothèque",
+      "taken": "{{name}} est déjà utilisée par un autre chemin de bibliothèque.",
+      "takenUnknown": "L'une de ces règles est déjà utilisée par un autre chemin de bibliothèque."
+    },
+    "naming": {
+      "addHint": "S'applique à tout ce qui arrive ici.",
+      "readonly": "Ce chemin est en lecture seule, ses fichiers ne peuvent donc pas être renommés.",
+      "moves_one": "1 morceau serait déplacé dans {{label}}.",
+      "moves_other": "{{formatted}} morceaux seraient déplacés dans {{label}}.",
+      "inPlace": "Tous les morceaux d'ici suivent déjà ce format.",
+      "preview": "Ce qui changerait",
+      "invalid": "Ce format de nommage ne peut pas être utilisé."
+    },
+    "remove": {
+      "action": "Retirer le chemin",
+      "confirmTitle": "Retirer {{label}} ?",
+      "confirmMessage": "Synthseek cesse d'utiliser ce dossier. Le dossier sur le disque reste tel quel.",
+      "confirmYes": "Retirer le chemin",
+      "forgetAction": "Retirer le chemin et ses morceaux",
+      "forgetConfirmTitle": "Retirer {{label}} et ses morceaux ?",
+      "forgetConfirmMessage_one": "1 morceau quitte la bibliothèque et ses playlists. Son fichier reste sur le disque.",
+      "forgetConfirmMessage_other": "{{formatted}} morceaux quittent la bibliothèque et leurs playlists. Leurs fichiers restent sur le disque.",
+      "forgetConfirmYes": "Retirer le chemin et les morceaux",
+      "blockedTitle": "{{label}} ne peut pas encore être retiré",
+      "blocker": {
+        "from_environment": "Il vient de MUSIC_LIBRARY_PATH. Modifiez cette variable dans votre fichier compose pour le faire pointer ailleurs.",
+        "default_path": "C'est le chemin par défaut. Faites d'abord d'un autre chemin de bibliothèque le chemin par défaut.",
+        "has_rules_one": "Il utilise 1 règle. Décochez-la d'abord.",
+        "has_rules_other": "Il utilise {{count}} règles. Décochez-les d'abord.",
+        "has_songs_one": "1 morceau a encore son fichier ici. Déplacez-le d'abord vers un autre chemin, ou retirez le chemin avec lui.",
+        "has_songs_other": "{{formatted}} morceaux ont encore leurs fichiers ici. Déplacez-les d'abord vers un autre chemin, ou retirez le chemin avec eux.",
+        "pending_downloads_one": "1 téléchargement est en route vers lui.",
+        "pending_downloads_other": "{{count}} téléchargements sont en route vers lui."
+      }
+    },
+    "toast": {
+      "added": "Chemin de bibliothèque ajouté",
+      "saved": "Chemin de bibliothèque enregistré",
+      "removed": "Chemin de bibliothèque retiré",
+      "notFound": "Ce chemin de bibliothèque n'existe plus",
+      "defaultCannotTurnOff": "Le chemin par défaut ne peut pas être désactivé. Faites d'abord d'un autre chemin de bibliothèque le chemin par défaut."
+    }
+  },
+  "libraryRules": {
+    "card": {
+      "title": "Règles",
+      "description": "Des conditions auxquelles une demande peut correspondre. Un chemin de bibliothèque utilise les règles que vous choisissez dans ses réglages. Si plusieurs correspondent, celle placée le plus haut dans cette liste est essayée en premier. Si aucune ne correspond, la musique va dans le chemin par défaut."
+    },
+    "loading": "Chargement des règles",
+    "loadFailed": "Impossible de lire les règles",
+    "add": "Ajouter une règle",
+    "empty": "Aucune règle pour l'instant. Tout va dans le chemin par défaut.",
+    "columns": {
+      "order": "Ordre",
+      "rule": "Règle",
+      "conditions": "Conditions",
+      "usedBy": "Utilisée par"
+    },
+    "priority": "Priorité {{position}}",
+    "notUsed": "Utilisée par aucun chemin",
+    "moveUp": "Monter {{name}}",
+    "moveDown": "Descendre {{name}}",
+    "edit": "Modifier",
+    "editLabel": "Modifier {{name}}",
+    "delete": "Supprimer {{name}}",
+    "deleteConfirm": {
+      "title": "Supprimer {{name}} ?",
+      "used": "{{label}} cesse de l'utiliser. Rien de ce qui est déjà dans la bibliothèque ne bouge.",
+      "unused": "Aucun chemin de bibliothèque ne l'utilise. Rien de ce qui est déjà dans la bibliothèque ne bouge.",
+      "yes": "Supprimer la règle"
+    },
+    "unknownMember": "un membre supprimé",
+    "fields": {
+      "requested_by": "Demandé par",
+      "genre": "Genre",
+      "artist": "Artiste",
+      "quality": "Qualité demandée",
+      "year": "Année de sortie",
+      "request_type": "Type de demande",
+      "track_count": "Nombre de morceaux"
+    },
+    "ops": {
+      "is": "est",
+      "is_not": "n'est pas",
+      "contains": "contient",
+      "not_contains": "ne contient pas",
+      "before": "avant",
+      "after": "après",
+      "more_than": "plus de",
+      "fewer_than": "moins de"
+    },
+    "quality": {
+      "lossless": "Sans perte",
+      "lossy": "Avec perte"
+    },
+    "requestType": {
+      "album": "Album",
+      "track": "Morceau seul",
+      "playlist": "Playlist",
+      "artist": "Artiste"
+    },
+    "summary": {
+      "condition": "{{field}} {{op}} {{value}}",
+      "and": "{{left}} et {{right}}",
+      "or": "{{left}} ou {{right}}",
+      "none": "Aucune condition"
+    },
+    "modal": {
+      "addTitle": "Ajouter une règle",
+      "editTitle": "Modifier la règle",
+      "name": "Nom",
+      "namePlaceholder": "Bandes originales",
+      "nameTaken": "Une autre règle porte déjà ce nom.",
+      "matchLabel": "Correspond quand",
+      "matchAll": "Toutes les conditions",
+      "matchAny": "Une des conditions",
+      "conditionsLabel": "Conditions",
+      "fieldLabel": "Condition {{position}}, ce qu'on regarde",
+      "opLabel": "Condition {{position}}, comment comparer",
+      "valueLabel": "Condition {{position}}, valeur",
+      "removeCondition": "Retirer la condition {{position}}",
+      "addCondition": "Ajouter une condition",
+      "conditionLimit_one": "Une règle peut avoir 1 condition.",
+      "conditionLimit_other": "Une règle peut avoir jusqu'à {{count}} conditions.",
+      "pickMember": "Choisir un membre",
+      "placeholders": {
+        "genre": "Bande originale",
+        "artist": "Hans Zimmer",
+        "year": "1980",
+        "track_count": "20"
+      },
+      "pathNote": "Le chemin de bibliothèque qui utilise cette règle se choisit dans les réglages de ce chemin.",
+      "tooMany": "Il y a déjà autant de règles que Synthseek le permet. Supprimez-en une d'abord.",
+      "cancel": "Annuler",
+      "add": "Ajouter la règle",
+      "save": "Enregistrer la règle"
+    },
+    "toast": {
+      "added": "Règle ajoutée",
+      "saved": "Règle enregistrée",
+      "removed": "Règle supprimée",
+      "notFound": "Cette règle n'existe plus",
+      "reorderMismatch": "Les règles ont changé pendant que vous les réordonniez. La liste montre maintenant leur ordre actuel."
+    }
+  },
+  "libraryNaming": {
     "template": {
-      "label": "Format de morceau standard"
+      "label": "Nommage des morceaux"
     },
     "rules": "Le modèle doit se terminer par .{ext}. Un jeton seul est obligatoire : une piste qui ne peut pas le remplir reste en place, et un téléchargement qui ne peut pas le remplir échoue à l'import.",
-    "loadFailed": "Impossible de lire le modèle actuel",
     "tokens": {
       "albumartist": "L'artiste sous lequel l'album est rangé",
       "album": "Titre de l'album",
@@ -1547,8 +1774,6 @@
       "ruleOptional": "Un élément laissé hors des < > est obligatoire, et un morceau qui ne peut pas le remplir reste où il est au lieu d'être rangé sous un nom troué.",
       "close": "Terminé"
     },
-    "previewAction_one": "Prévisualiser 1 changement",
-    "previewAction_other": "Prévisualiser {{formatted}} changements",
     "samples": {
       "single_disc": "Un album normal",
       "multi_disc": "Un album sur deux disques",
@@ -1556,7 +1781,7 @@
       "unrenderable": "Ce format ne peut pas nommer celui-ci"
     },
     "preview": {
-      "title": "Ce qui changerait",
+      "title": "Ce qui changerait dans {{label}}",
       "tabs": {
         "all": "Tout",
         "relocate": "Seulement le dossier",
@@ -1567,7 +1792,7 @@
       "info": {
         "open": "Ce que vous voyez ici",
         "title": "Ce que vous voyez ici",
-        "counts": "Les nombres en haut comptent toute votre bibliothèque : ce qui bougerait, ce qui est déjà correct et ce qui ne peut pas être nommé parce qu'il manque quelque chose au morceau.",
+        "counts": "Les nombres en haut comptent ce chemin de bibliothèque : ce qui bougerait, ce qui est déjà correct et ce qui ne peut pas être nommé parce qu'il manque quelque chose au morceau.",
         "lists": "Les changements se répartissent en trois, pour que vous preniez les sûrs et laissiez le reste.",
         "relocateTerm": "Seulement le dossier",
         "relocateText": "Le fichier garde son nom et atterrit dans un autre dossier.",
@@ -1600,7 +1825,6 @@
     "rejectedNotice_one": "Il manque à un morceau quelque chose dont ce format a besoin, il reste où il est.",
     "rejectedNotice_other": "Il manque à {{count}} morceaux quelque chose dont ce format a besoin, ils restent où ils sont.",
     "toast": {
-      "saved": "Enregistré. Rien n'a encore été déplacé.",
       "organiseBusy": "Des fichiers sont en train d'être déplacés. Réessayez une fois terminé.",
       "invalidTemplate": "Ce format ne peut pas être utilisé."
     }
@@ -1635,7 +1859,10 @@
       "PATH_TOO_LONG": "{{count}} auraient un chemin trop long pour le disque.",
       "SCRIPT_VALIDATION_FAILED": "{{count}} ont donné un nom qu'il n'est pas sûr d'écrire."
     },
-    "finished": "{{moved}} fichiers et {{companions}} accompagnements déplacés en {{duration}}",
+    "finished_one": "1 fichier déplacé en {{duration}}",
+    "finished_other": "{{formatted}} fichiers déplacés en {{duration}}",
+    "finishedCompanions_one": "1 parole ou pochette a suivi.",
+    "finishedCompanions_other": "{{formatted}} paroles ou pochettes ont suivi.",
     "finishedFailures": "{{count}} n'ont pas pu être déplacés et sont restés sur place :",
     "finishedCompanionsFailed": "{{count}} paroles ou pochettes n'ont pas pu suivre leur titre.",
     "moveFailure": {
@@ -1690,8 +1917,25 @@
       "linked": "Dans la bibliothèque",
       "searching": "Recherche en cours",
       "toReview": "À vérifier",
-      "reviewFiles": "Vérifier les fichiers",
-      "footer": "{{ignored}} ignorés · {{missing}} disparus"
+      "reviewFiles": "Vérifier les fichiers"
+    },
+    "paths": {
+      "columns": {
+        "path": "Chemin de bibliothèque",
+        "gone": "Disparus",
+        "lastScan": "Dernier scan",
+        "scan": "Scanner"
+      },
+      "never": "Jamais",
+      "outcome": {
+        "unavailable": "Ignoré, inaccessible",
+        "disabled": "Ignoré, désactivé",
+        "unreadable": "Ignoré, trop de fichiers illisibles",
+        "empty": "Ignoré, aucun titre trouvé"
+      },
+      "scan": "Scanner {{label}}",
+      "ignored_one": "{{count}} fichier ignoré",
+      "ignored_other": "{{count}} fichiers ignorés"
     },
     "state": {
       "scanning": "Analyse en cours",
@@ -1716,7 +1960,9 @@
     },
     "toast": {
       "cancelling": "Arrêt de l'analyse de la bibliothèque",
-      "nothingRunning": "Aucune analyse n'était en cours"
+      "nothingRunning": "Aucune analyse n'était en cours",
+      "alreadyRunning": "Un scan de la bibliothèque est déjà en cours",
+      "pathNotFound": "Ce chemin de bibliothèque n'existe plus"
     },
     "review": {
       "title": "Titres à vérifier",
@@ -1856,7 +2102,8 @@
         "titles_differ": "Les copies portent des titres différents, l'une peut être un live, un remix ou une autre version. Résoudre automatiquement risquerait de mettre à la corbeille un enregistrement irrécupérable.",
         "untitled_copy": "Au moins une copie n'a pas de titre, donc rien ne garantit qu'il s'agisse du même enregistrement. Décidez copie par copie.",
         "lengths_differ": "Les titres correspondent mais les copies ne durent pas pareil, l'une est donc sans doute un edit, une version longue ou une autre prise. Résoudre automatiquement risquerait de mettre à la corbeille un enregistrement irrécupérable.",
-        "length_unknown": "Une copie n'a pas encore été mesurée, donc rien ne garantit qu'il s'agisse du même enregistrement. Le prochain scan de la bibliothèque la mesurera."
+        "length_unknown": "Une copie n'a pas encore été mesurée, donc rien ne garantit qu'il s'agisse du même enregistrement. Le prochain scan de la bibliothèque la mesurera.",
+        "different_paths": "Les copies sont dans des chemins de bibliothèque différents, chacune peut donc y être volontairement. Choisissez celle à garder avec Garder cette copie."
       },
       "tidyDone": "Meilleure copie conservée, {{size}} récupérés",
       "tidySkipped": "Ce titre est laissé tel quel, ses copies ne correspondent pas",
@@ -1933,13 +2180,13 @@
           "fix": "Donnez la propriété de ce dossier sur l'hôte à l'utilisateur sous lequel tourne Synthseek, par exemple : chown -R {{puid}}:{{pgid}} <votre dossier de téléchargements>"
         },
         "library_inaccessible": {
-          "title": "La bibliothèque musicale est inaccessible",
-          "effect": "Les téléchargements sont en attente, et les fichiers de la bibliothèque ne peuvent pas être lus, jusqu'à ce que {{path}} soit de nouveau accessible.",
+          "title": "Un chemin de bibliothèque est inaccessible",
+          "effect": "La musique destinée à {{label}} attend, et ses fichiers ne peuvent pas être lus, jusqu'à ce que {{path}} soit de nouveau accessible.",
           "fix": "Vérifiez que le disque ou le partage est monté et que l'utilisateur sous lequel tourne Synthseek peut le lire, par exemple : chown -R {{puid}}:{{pgid}} <votre dossier de musique>"
         },
         "library_read_only": {
-          "title": "La bibliothèque musicale est en lecture seule",
-          "effect": "La navigation et la lecture fonctionnent, mais les nouveaux téléchargements ne peuvent pas être ajoutés à {{path}}.",
+          "title": "Un chemin de bibliothèque est en lecture seule",
+          "effect": "La navigation et la lecture fonctionnent, mais la nouvelle musique pour {{label}} ne peut pas être ajoutée à {{path}}.",
           "fix": "Si vous voulez que Synthseek ajoute de la musique, donnez-lui l'accès en écriture, par exemple : chown -R {{puid}}:{{pgid}} <votre dossier de musique>"
         },
         "catalog_unreachable": {

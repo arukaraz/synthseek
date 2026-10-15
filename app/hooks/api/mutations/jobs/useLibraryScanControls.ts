@@ -20,6 +20,18 @@ export function useCancelLibraryScan() {
   });
 }
 
+export function useScanLibraryPath() {
+  const utils = trpc.useUtils();
+  return trpc.library.scan.scanPath.useMutation({
+    onSuccess: (result) => {
+      utils.library.scan.status.invalidate();
+      if (result.outcome === "already_running") toast.info(i18n.t("settings:libraryScan.toast.alreadyRunning"));
+      if (result.outcome === "not_found") toast.error(i18n.t("settings:libraryScan.toast.pathNotFound"));
+    },
+    onError: (error) => errorToast(error, "jobs.runFailed"),
+  });
+}
+
 export function useKeepBestLibraryCopy() {
   const utils = trpc.useUtils();
   return trpc.library.scan.keepBestCopy.useMutation({

@@ -16,7 +16,7 @@ export type DownloadedAlbumFilter = "all" | DownloadedAlbum["source"];
 
 export type SystemProblem = inferRouterOutputs<AppRouter>["maintenance"]["systemStatus"]["problems"][number];
 
-export type SystemProblemCopyParams = Partial<Record<"path" | "puid" | "pgid" | "name", string>>;
+export type SystemProblemCopyParams = Partial<Record<"path" | "puid" | "pgid" | "name" | "label", string>>;
 
 export interface SystemProblemRowProps {
   problem: SystemProblem;

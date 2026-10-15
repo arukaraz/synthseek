@@ -71,7 +71,7 @@ export function RecycleBinList({ entryCount }: RecycleBinListProps) {
                   <span className={binFileName()}>{entry.fileName}</span>
                   <span className={binDir()}>{entry.relativePath.slice(0, -entry.fileName.length)}</span>
                   <span className={binRowMeta()}>
-                    {formatBytes(entry.sizeBytes)} · {entry.recycledOn}
+                    {entry.libraryPath} · {formatBytes(entry.sizeBytes)} · {entry.recycledOn}
                   </span>
                 </div>
                 <button

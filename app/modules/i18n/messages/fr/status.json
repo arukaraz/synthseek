@@ -84,7 +84,7 @@
     },
     "environment": {
       "label": "Problème de stockage",
-      "description": "Un problème de stockage local a interrompu ce téléchargement, comme un disque plein ou un dossier de téléchargements ou de bibliothèque manquant ou non accessible en écriture. Corrigez le stockage puis réessayez."
+      "description": "Un problème de stockage local a interrompu ce téléchargement, comme un disque plein, un dossier de téléchargements ou un chemin de bibliothèque manquant ou non accessible en écriture, ou un chemin de bibliothèque désactivé. Corrigez le stockage puis réessayez."
     },
     "timeout": {
       "label": "Délai dépassé",

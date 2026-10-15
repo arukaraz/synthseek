@@ -40,6 +40,7 @@ import { MatchAlbumPanel } from "../components/MatchAlbumPanel";
 
 const GROUP: UnidentifiedGroup = {
   key: "tove",
+  libraryPath: "Music",
   folder: "Tove Lo",
   album: "Estrus",
   artist: "Tove Lo",

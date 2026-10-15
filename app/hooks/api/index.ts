@@ -9,6 +9,7 @@ export { useCategoryPlaylists } from "./queries/useCategoryPlaylists";
 export { useDownloadSourcesAvailability } from "./queries/useDownloadSourcesAvailability";
 export { useGetContents } from "./queries/useGetContents";
 export { useLibrarySummary } from "./queries/useLibrarySummary";
+export { useLibraryDestination } from "./queries/useLibraryDestination";
 export { useLidarrAvailable } from "./queries/useLidarrAvailable";
 export { useLidarrProfiles } from "./queries/useLidarrProfiles";
 export { useLidarrTags } from "./queries/useLidarrTags";

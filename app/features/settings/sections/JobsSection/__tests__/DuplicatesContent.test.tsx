@@ -10,6 +10,7 @@ interface Copy {
   sizeBytes: number;
   durationSeconds: number | null;
   serving: boolean;
+  libraryPath: string;
 }
 
 interface Group {
@@ -54,8 +55,8 @@ vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
 }));
 
 vi.mock("../CopyRow", () => ({
-  CopyRow: ({ copy, onKeep }: { copy: Copy; onKeep: () => void }) => (
-    <button type="button" onClick={onKeep}>
+  CopyRow: ({ copy, showPath, onKeep }: { copy: Copy; showPath: boolean; onKeep: () => void }) => (
+    <button type="button" onClick={onKeep} data-show-path={showPath}>
       {copy.fileName}
     </button>
   ),
@@ -74,8 +75,22 @@ function group(overrides: Partial<Group> = {}): Group {
     reclaimableBytes: 31_457_280,
     servedFileMissing: false,
     copies: [
-      { id: "file-1", fileName: "01 - Digital Love.flac", sizeBytes: 31_457_280, durationSeconds: 301, serving: true },
-      { id: "file-2", fileName: "digital love.flac", sizeBytes: 31_457_280, durationSeconds: 301, serving: false },
+      {
+        id: "file-1",
+        fileName: "01 - Digital Love.flac",
+        sizeBytes: 31_457_280,
+        durationSeconds: 301,
+        serving: true,
+        libraryPath: "Music",
+      },
+      {
+        id: "file-2",
+        fileName: "digital love.flac",
+        sizeBytes: 31_457_280,
+        durationSeconds: 301,
+        serving: false,
+        libraryPath: "Music",
+      },
     ],
     formats: ["flac"],
     minBytes: 31_457_280,
@@ -251,6 +266,24 @@ describe("looking inside a group", () => {
     await user.click(screen.getByRole("button", { name: "digital love.flac" }));
 
     expect(api.keepThis).toHaveBeenCalledWith({ fileId: "file-2" });
+  });
+
+  it("names each copy's library path only when the copies live in different paths", async () => {
+    api.groups = {
+      groups: [
+        group({ requestId: "req-1", ambiguous: true, reason: "different_paths" }),
+        group({ requestId: "req-2", title: "Aerodynamic", ambiguous: true, reason: "titles_differ" }),
+      ],
+      safeBytes: 0,
+    };
+    const { user } = renderContent();
+
+    for (const caret of screen.getAllByRole("button", { name: enSettings.libraryScan.duplicates.showCopies })) {
+      await user.click(caret);
+    }
+
+    const rows = screen.getAllByRole("button", { name: "01 - Digital Love.flac" });
+    expect(rows.map((row) => row.getAttribute("data-show-path"))).toEqual(["true", "false"]);
   });
 
   it("shows no folder line for a group whose copies sit in different places", async () => {

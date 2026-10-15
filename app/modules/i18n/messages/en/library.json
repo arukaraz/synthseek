@@ -316,7 +316,8 @@
       "albums": "Albums",
       "year": "Year",
       "owner": "Owner",
-      "source": "Source"
+      "source": "Source",
+      "libraryPath": "Library path"
     },
     "counts": {
       "tracks_one": "{{count}} track",
@@ -349,7 +350,8 @@
       "moreHint_one": "{{count}} more, type to search",
       "moreHint_other": "{{count}} more, type to search",
       "orphan": "Loose tracks",
-      "orphanOnly": "Only tracks not in a playlist"
+      "orphanOnly": "Only tracks not in a playlist",
+      "libraryPath": "Library path"
     },
     "filters": {
       "title": "Filters",
@@ -367,7 +369,10 @@
       "addToQueue_other": "Add {{count}} to the queue",
       "clear": "Clear",
       "selectAll": "Select all on this page",
-      "selectRow": "Select track"
+      "selectRow": "Select track",
+      "selectAlbum": "Select {{name}}",
+      "selectAllShown": "Select all shown",
+      "selectedAlbums": "selected"
     },
     "empty": {
       "tracksTitle": "No tracks found",
@@ -385,7 +390,113 @@
     },
     "actions": {
       "playTrack": "Play {{title}}",
-      "playAll": "Play everything we have of {{name}}"
+      "playAll": "Play everything we have of {{name}}",
+      "trackMenu": "More actions for {{title}}",
+      "albumMenu": "More actions for {{name}}",
+      "searchBetterQuality": "Search better quality",
+      "addToQueue": "Add to queue",
+      "removeFromQueue": "Remove from queue",
+      "moveToPath": "Move to path…",
+      "deleteFile": "Delete file",
+      "deleteFiles": "Delete files"
+    }
+  },
+  "files": {
+    "move": {
+      "titleTrack": "Move “{{title}}”",
+      "titleAlbum": "Move “{{name}}”",
+      "titleTracks_one": "Move {{count}} song",
+      "titleTracks_other": "Move {{count}} songs",
+      "titleAlbums_one": "Move {{count}} album",
+      "titleAlbums_other": "Move {{count}} albums",
+      "description": "Pick the library path the files go to. Favourites, playlists and plays stay with the songs.",
+      "to": "Move to",
+      "loadingPaths": "Loading library paths",
+      "pathsFailed": "Could not load the library paths. Try again in a moment.",
+      "noTarget": "No other library path can take these songs right now.",
+      "free": "{{size}} free",
+      "freeUnknown": "Free space unknown",
+      "pathState": {
+        "current": "Already here",
+        "disabled": "Disabled",
+        "readonly": "Read-only",
+        "unreachable": "Not reachable"
+      },
+      "checking": "Checking what moves",
+      "previewFailed": "Could not check this move. Try again in a moment.",
+      "notFound": "That library path no longer exists.",
+      "targetUnavailable": "{{label}} is not available right now: it is disabled, read-only or not reachable.",
+      "stats": {
+        "songs_one": "{{count}} song to move",
+        "songs_other": "{{count}} songs to move",
+        "copy": "{{size}} to copy",
+        "rename": "{{size}} to rename",
+        "free": "{{size}} free in {{label}}"
+      },
+      "crossDevice": "Songs on another disk are copied, checked, and only then removed from where they were.",
+      "sameDevice": "Same disk: every song is renamed in place.",
+      "nothing": "Nothing to move: every song is already there or cannot move.",
+      "alreadyThere_one": "{{count}} song is already in {{label}}.",
+      "alreadyThere_other": "{{count}} songs are already in {{label}}.",
+      "unmovable_one": "{{count}} song cannot move: its file is missing, or its library path is read-only or not reachable.",
+      "unmovable_other": "{{count}} songs cannot move: their files are missing, or their library path is read-only or not reachable.",
+      "splitTitle": "Some albums end up split between library paths",
+      "split": "{{moving}} of {{total}} songs of {{album}} move, the rest stay.",
+      "blockedTitle": "Not enough space in {{label}}",
+      "blocked": "{{album}} stays where it is: it needs {{needed}} and {{free}} is free.",
+      "sampleFrom": "Now",
+      "sampleTo": "In {{label}}",
+      "confirmIdle": "Move",
+      "confirm_one": "Move {{count}} song",
+      "confirm_other": "Move {{count}} songs"
+    },
+    "delete": {
+      "titleTrack": "Delete “{{title}}”?",
+      "titleAlbum": "Delete the files of “{{name}}”?",
+      "titleTracks_one": "Delete {{count}} file?",
+      "titleTracks_other": "Delete {{count}} files?",
+      "titleAlbums_one": "Delete the files of {{count}} album?",
+      "titleAlbums_other": "Delete the files of {{count}} albums?",
+      "messageOne": "The file moves to the recycle bin and the song leaves the library and any playlist it is in.",
+      "messageMany": "The files move to the recycle bin and the songs leave the library and any playlist they are in.",
+      "confirmOne": "Delete file",
+      "confirmMany": "Delete files"
+    },
+    "progress": {
+      "move": "Moving to {{label}}",
+      "delete": "Moving to the recycle bin",
+      "hint": "You can close this window. A message tells you when it finishes.",
+      "starting": "Starting",
+      "count": "{{processed}} of {{total}} songs",
+      "hide": "Hide"
+    },
+    "outcome": {
+      "busy": "Another library job is running. Try again when it finishes.",
+      "nothingToDo": "Nothing to do: none of these songs has a file in the library.",
+      "notFound": "That library path no longer exists.",
+      "targetUnavailable": "That library path is not available right now."
+    },
+    "result": {
+      "moved_one": "Moved {{count}} song to {{label}}",
+      "moved_other": "Moved {{count}} songs to {{label}}",
+      "movedPartly": "Moved {{done}} of {{total}} songs to {{label}}",
+      "moveFailed": "No song was moved",
+      "deleted_one": "{{count}} song went to the recycle bin",
+      "deleted_other": "{{count}} songs went to the recycle bin",
+      "deletedPartly": "{{done}} of {{total}} songs went to the recycle bin",
+      "deleteFailed": "No song was deleted"
+    },
+    "failure": {
+      "item": "{{title}}: {{reason}}",
+      "more_one": "and {{count}} more",
+      "more_other": "and {{count}} more",
+      "PATH_UNAVAILABLE": "a library path it is in is turned off or not reachable",
+      "READ_ONLY": "its library path is read-only",
+      "OCCUPIED": "another file already has its new name",
+      "NO_SPACE": "not enough space",
+      "MOVE_FAILED": "the file could not be moved",
+      "RECYCLE_FAILED": "the file could not go to the recycle bin",
+      "LIBRARY_NOT_UPDATED": "the file is in the recycle bin, but the library could not be updated"
     }
   },
   "playlists": {

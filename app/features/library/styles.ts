@@ -25,3 +25,9 @@ export const resultsScroll = cva("min-h-0 flex-1 overflow-y-auto transition-opac
 export const resultsOverlay = cva("absolute inset-0 z-10 grid place-items-center");
 
 export const stateWrap = cva("flex min-h-64 flex-1 items-center justify-center");
+
+export const libraryMenuItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2");
+
+export const libraryMenuItemDanger = cva(
+  "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2"
+);

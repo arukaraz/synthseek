@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@components/ui/Table";
 import type { LibraryFacetValue } from "@hooks/api/queries/library/types";
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 
 import type { LibraryUrlController } from "../../hooks/useLibraryUrlState";
 import type { TrackSelectionConfig } from "../LibraryTable/types";
@@ -19,6 +19,8 @@ interface GridContent<TItem> {
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
+  bulkBar?: ReactNode;
+  onKeyDown?: (event: KeyboardEvent<HTMLDivElement>) => void;
 }
 
 export type LibraryViewContent<TItem> = TableContent<TItem> | GridContent<TItem>;

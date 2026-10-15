@@ -1494,16 +1494,243 @@
       "description": "How your files are organised on disk, and what does not match."
     }
   },
-  "libraryNaming": {
+  "libraryPaths": {
     "card": {
-      "title": "Track Naming",
-      "description": "Where every song goes and what it is called. Nothing moves until you say so."
+      "title": "Library paths",
+      "description": "The folders Synthseek keeps your music in. Each one has its own track naming and the rules that send music to it."
     },
+    "loading": "Loading the library paths",
+    "loadFailed": "The library paths could not be read",
+    "add": "Add library path",
+    "columns": {
+      "path": "Library path",
+      "files": "Files",
+      "free": "Free space",
+      "rules": "Rules",
+      "enabled": "Enabled"
+    },
+    "defaultBadge": "Default",
+    "environmentBadge": "MUSIC_LIBRARY_PATH",
+    "environmentHint": "Set by MUSIC_LIBRARY_PATH",
+    "status": {
+      "writable": "Available",
+      "readonly": "Read-only",
+      "missing": "Folder missing",
+      "not_directory": "Not a folder",
+      "unreachable": "Not reachable",
+      "disabled": "Disabled"
+    },
+    "files_one": "1 file",
+    "files_other": "{{formatted}} files",
+    "freeSpace": "{{size}} free",
+    "freeUnknown": "Unknown",
+    "rulesCount_one": "1 rule",
+    "rulesCount_other": "{{count}} rules",
+    "edit": "Edit",
+    "editLabel": "Edit {{label}}",
+    "enabledLabel": "Use {{label}}",
+    "defaultCannotTurnOff": "The default path cannot be turned off",
+    "unreachableNotice": "{{label}} cannot be reached. Its files keep their place in the library and none of them is marked missing.",
+    "modal": {
+      "addTitle": "Add a library path",
+      "editTitle": "Edit {{label}}",
+      "cancel": "Cancel",
+      "add": "Add library path",
+      "save": "Save"
+    },
+    "label": {
+      "label": "Name",
+      "placeholder": "Soundtracks",
+      "taken": "Another library path already has this name."
+    },
+    "folder": {
+      "label": "Folder",
+      "placeholder": "/music-soundtracks",
+      "fromEnvironment": "Set by MUSIC_LIBRARY_PATH. Change it in your compose file and restart.",
+      "checking": "Checking the folder",
+      "usable": "Synthseek can see this folder.",
+      "readonly": "This folder is read-only, so Synthseek can read the music in it but cannot save any there.",
+      "problem": {
+        "not_absolute": "Use the full path inside the container, starting with /.",
+        "too_long": "This path is too long.",
+        "system_folder": "This is a system folder. Pick a folder that holds music.",
+        "same_as_path": "{{label}} already uses this folder.",
+        "inside_path": "This folder is inside {{label}}. Pick a folder outside every other library path.",
+        "contains_path": "{{label}} is inside this folder. Library paths cannot contain each other.",
+        "app_folder": "{{folder}} is a folder Synthseek uses for itself. A library path cannot be inside it or contain it.",
+        "not_found": "Synthseek cannot see {{folder}}. Mount it in your compose file first, for example /your/host/folder:{{folder}}, then restart.",
+        "not_directory": "This is a file, not a folder.",
+        "unreachable": "This folder is not answering. Check that its disk is connected."
+      },
+      "check": {
+        "needed_one": "{{label}} holds 1 file. Check that it is in the new folder before saving.",
+        "needed_other": "{{label}} holds {{formatted}} files. Check that they are in the new folder before saving.",
+        "action": "Check folder",
+        "found": "Found {{found}} of {{sampled}} sampled files in the new folder. Nothing is moved or renamed, Synthseek reads them from there once you save.",
+        "missing": "Found {{found}} of {{sampled}} sampled files there. The music of {{label}} is not in this folder.",
+        "failed": "The folder could not be checked."
+      }
+    },
+    "default": {
+      "label": "Default path",
+      "other": "Music that matches no rule is saved here. Right now that is {{label}}.",
+      "isThis": "Music that matches no rule is saved here. To change it, turn this on in another library path.",
+      "readonly": "A read-only path cannot be the default."
+    },
+    "rules": {
+      "label": "Rules",
+      "empty": "No rules yet. Create them in Rules, below Library paths.",
+      "usedBy": "Used by {{label}}",
+      "otherPath": "another library path",
+      "taken": "{{name}} is already used by another library path.",
+      "takenUnknown": "One of these rules is already used by another library path."
+    },
+    "naming": {
+      "addHint": "Applies to everything that lands here.",
+      "readonly": "This path is read-only, so its files cannot be renamed.",
+      "moves_one": "1 song would move inside {{label}}.",
+      "moves_other": "{{formatted}} songs would move inside {{label}}.",
+      "inPlace": "Every song here already follows this format.",
+      "preview": "What would change",
+      "invalid": "This naming format cannot be used."
+    },
+    "remove": {
+      "action": "Remove path",
+      "confirmTitle": "Remove {{label}}?",
+      "confirmMessage": "Synthseek stops using this folder. The folder on disk is left as it is.",
+      "confirmYes": "Remove path",
+      "forgetAction": "Remove path and its songs",
+      "forgetConfirmTitle": "Remove {{label}} and its songs?",
+      "forgetConfirmMessage_one": "1 song leaves the library and any playlist it is in. Its file stays on disk.",
+      "forgetConfirmMessage_other": "{{formatted}} songs leave the library and any playlist they are in. Their files stay on disk.",
+      "forgetConfirmYes": "Remove path and songs",
+      "blockedTitle": "{{label}} cannot be removed yet",
+      "blocker": {
+        "from_environment": "It comes from MUSIC_LIBRARY_PATH. Change that variable in your compose file to point it elsewhere.",
+        "default_path": "It is the default path. Make another library path the default first.",
+        "has_rules_one": "It uses 1 rule. Untick it first.",
+        "has_rules_other": "It uses {{count}} rules. Untick them first.",
+        "has_songs_one": "1 song still has its file here. Move it to another path first, or remove the path together with it.",
+        "has_songs_other": "{{formatted}} songs still have their files here. Move them to another path first, or remove the path together with them.",
+        "pending_downloads_one": "1 download is on its way to it.",
+        "pending_downloads_other": "{{count}} downloads are on their way to it."
+      }
+    },
+    "toast": {
+      "added": "Library path added",
+      "saved": "Library path saved",
+      "removed": "Library path removed",
+      "notFound": "That library path no longer exists",
+      "defaultCannotTurnOff": "The default path cannot be turned off. Make another library path the default first."
+    }
+  },
+  "libraryRules": {
+    "card": {
+      "title": "Rules",
+      "description": "Conditions a request can match. A library path uses the rules you pick in its settings. When several match, the one higher in this list is tried first. When none does, music goes to the default path."
+    },
+    "loading": "Loading the rules",
+    "loadFailed": "The rules could not be read",
+    "add": "Add rule",
+    "empty": "No rules yet. Everything goes to the default path.",
+    "columns": {
+      "order": "Order",
+      "rule": "Rule",
+      "conditions": "Conditions",
+      "usedBy": "Used by"
+    },
+    "priority": "Priority {{position}}",
+    "notUsed": "Not used by any path",
+    "moveUp": "Move {{name}} up",
+    "moveDown": "Move {{name}} down",
+    "edit": "Edit",
+    "editLabel": "Edit {{name}}",
+    "delete": "Delete {{name}}",
+    "deleteConfirm": {
+      "title": "Delete {{name}}?",
+      "used": "{{label}} stops using it. Nothing already in the library moves.",
+      "unused": "No library path uses it. Nothing already in the library moves.",
+      "yes": "Delete rule"
+    },
+    "unknownMember": "a removed member",
+    "fields": {
+      "requested_by": "Requested by",
+      "genre": "Genre",
+      "artist": "Artist",
+      "quality": "Quality requested",
+      "year": "Release year",
+      "request_type": "Request type",
+      "track_count": "Number of songs"
+    },
+    "ops": {
+      "is": "is",
+      "is_not": "is not",
+      "contains": "contains",
+      "not_contains": "does not contain",
+      "before": "before",
+      "after": "after",
+      "more_than": "more than",
+      "fewer_than": "fewer than"
+    },
+    "quality": {
+      "lossless": "Lossless",
+      "lossy": "Lossy"
+    },
+    "requestType": {
+      "album": "Album",
+      "track": "Single track",
+      "playlist": "Playlist",
+      "artist": "Artist"
+    },
+    "summary": {
+      "condition": "{{field}} {{op}} {{value}}",
+      "and": "{{left}} and {{right}}",
+      "or": "{{left}} or {{right}}",
+      "none": "No conditions"
+    },
+    "modal": {
+      "addTitle": "Add rule",
+      "editTitle": "Edit rule",
+      "name": "Name",
+      "namePlaceholder": "Soundtracks",
+      "nameTaken": "Another rule already has this name.",
+      "matchLabel": "Matches when",
+      "matchAll": "All conditions",
+      "matchAny": "Any condition",
+      "conditionsLabel": "Conditions",
+      "fieldLabel": "Condition {{position}}, what to look at",
+      "opLabel": "Condition {{position}}, how to compare",
+      "valueLabel": "Condition {{position}}, value",
+      "removeCondition": "Remove condition {{position}}",
+      "addCondition": "Add condition",
+      "conditionLimit_one": "A rule can have 1 condition.",
+      "conditionLimit_other": "A rule can have up to {{count}} conditions.",
+      "pickMember": "Pick a member",
+      "placeholders": {
+        "genre": "Soundtrack",
+        "artist": "Hans Zimmer",
+        "year": "1980",
+        "track_count": "20"
+      },
+      "pathNote": "Pick which library path uses this rule from that path's settings.",
+      "tooMany": "There are already as many rules as Synthseek allows. Delete one first.",
+      "cancel": "Cancel",
+      "add": "Add rule",
+      "save": "Save rule"
+    },
+    "toast": {
+      "added": "Rule added",
+      "saved": "Rule saved",
+      "removed": "Rule deleted",
+      "notFound": "That rule no longer exists",
+      "reorderMismatch": "The rules changed while you were reordering them. The list now shows their current order."
+    }
+  },
+  "libraryNaming": {
     "template": {
-      "label": "Standard Track Format"
+      "label": "Track naming"
     },
     "rules": "The template has to end in .{ext}. A token on its own is required: a track that cannot fill it is left alone, and a download that cannot fill it fails to import.",
-    "loadFailed": "Could not read the current template",
     "tokens": {
       "albumartist": "The artist the album is filed under",
       "album": "Album title",
@@ -1547,8 +1774,6 @@
       "ruleOptional": "A piece left outside the < > is required, and a song that cannot fill it stays where it is rather than being filed under a name with a gap in it.",
       "close": "Done"
     },
-    "previewAction_one": "Preview 1 change",
-    "previewAction_other": "Preview {{formatted}} changes",
     "samples": {
       "single_disc": "A normal album",
       "multi_disc": "An album on two discs",
@@ -1556,7 +1781,7 @@
       "unrenderable": "This format cannot name this one"
     },
     "preview": {
-      "title": "What would change",
+      "title": "What would change in {{label}}",
       "tabs": {
         "all": "Everything",
         "relocate": "Only the folder",
@@ -1567,7 +1792,7 @@
       "info": {
         "open": "What this is showing",
         "title": "What this is showing",
-        "counts": "The numbers at the top count your whole library: what would move, what is already right, and what cannot be named because the track is missing something.",
+        "counts": "The numbers at the top count this library path: what would move, what is already right, and what cannot be named because the track is missing something.",
         "lists": "The changes split in three, so you can take the safe ones and leave the rest.",
         "relocateTerm": "Only the folder",
         "relocateText": "The file keeps its name and lands in a different folder.",
@@ -1600,7 +1825,6 @@
     "rejectedNotice_one": "One song is missing something this format needs, so it stays where it is.",
     "rejectedNotice_other": "{{count}} songs are missing something this format needs, so they stay where they are.",
     "toast": {
-      "saved": "Saved. Nothing has moved yet.",
       "organiseBusy": "Files are being moved right now. Try again when that finishes.",
       "invalidTemplate": "That format cannot be used."
     }
@@ -1635,7 +1859,10 @@
       "PATH_TOO_LONG": "{{count}} would end up with a path too long for the disk.",
       "SCRIPT_VALIDATION_FAILED": "{{count}} produced a name that is not safe to write."
     },
-    "finished": "Moved {{moved}} files and {{companions}} companions in {{duration}}",
+    "finished_one": "Moved 1 file in {{duration}}",
+    "finished_other": "Moved {{formatted}} files in {{duration}}",
+    "finishedCompanions_one": "1 lyrics or artwork file went with them.",
+    "finishedCompanions_other": "{{formatted}} lyrics or artwork files went with them.",
     "finishedFailures": "{{count}} could not be moved and are still where they were:",
     "finishedCompanionsFailed": "{{count}} lyrics or artwork could not follow their track.",
     "moveFailure": {
@@ -1690,8 +1917,25 @@
       "linked": "In the library",
       "searching": "Searching",
       "toReview": "To review",
-      "reviewFiles": "Review files",
-      "footer": "{{ignored}} ignored · {{missing}} gone"
+      "reviewFiles": "Review files"
+    },
+    "paths": {
+      "columns": {
+        "path": "Library path",
+        "gone": "Gone",
+        "lastScan": "Last scan",
+        "scan": "Scan"
+      },
+      "never": "Never",
+      "outcome": {
+        "unavailable": "Skipped, not reachable",
+        "disabled": "Skipped, disabled",
+        "unreadable": "Skipped, too much could not be read",
+        "empty": "Skipped, no songs found"
+      },
+      "scan": "Scan {{label}}",
+      "ignored_one": "{{count}} file ignored",
+      "ignored_other": "{{count}} files ignored"
     },
     "state": {
       "scanning": "Scanning",
@@ -1716,7 +1960,9 @@
     },
     "toast": {
       "cancelling": "Stopping the library scan",
-      "nothingRunning": "No library scan was running"
+      "nothingRunning": "No library scan was running",
+      "alreadyRunning": "A library scan is already running",
+      "pathNotFound": "That library path no longer exists"
     },
     "review": {
       "title": "Songs to review",
@@ -1856,7 +2102,8 @@
         "titles_differ": "The copies carry different titles, so one may be a live take, a remix or another version. Resolving automatically could recycle a recording you cannot get back.",
         "untitled_copy": "At least one copy has no title tag, so nothing can vouch for it being the same recording. Decide this one copy by copy.",
         "lengths_differ": "The titles match but the copies do not last the same, so one is likely an edit, an extended cut or a different take. Resolving automatically could recycle a recording you cannot get back.",
-        "length_unknown": "One copy has not been measured yet, so nothing can vouch for it being the same recording. The next library scan will measure it."
+        "length_unknown": "One copy has not been measured yet, so nothing can vouch for it being the same recording. The next library scan will measure it.",
+        "different_paths": "The copies are in different library paths, so each may be there on purpose. Pick the one to keep with Keep this copy."
       },
       "tidyDone": "Kept the best copy, {{size}} reclaimed",
       "tidySkipped": "Left that track alone, its copies do not match",
@@ -1933,13 +2180,13 @@
           "fix": "Give the user Synthseek runs as ownership of that folder on the host, for example: chown -R {{puid}}:{{pgid}} <your downloads folder>"
         },
         "library_inaccessible": {
-          "title": "Music library cannot be reached",
-          "effect": "Downloads are on hold, and files from the library cannot be played, until {{path}} can be reached again.",
+          "title": "A library path cannot be reached",
+          "effect": "Music meant for {{label}} waits, and its files cannot be played, until {{path}} can be reached again.",
           "fix": "Check that the drive or share is mounted and that the user Synthseek runs as can read it, for example: chown -R {{puid}}:{{pgid}} <your music folder>"
         },
         "library_read_only": {
-          "title": "Music library is read-only",
-          "effect": "Browsing and playback work, but new downloads cannot be added to {{path}}.",
+          "title": "A library path is read-only",
+          "effect": "Browsing and playback work, but new music for {{label}} cannot be added to {{path}}.",
           "fix": "If you want Synthseek to add music, give it write access, for example: chown -R {{puid}}:{{pgid}} <your music folder>"
         },
         "catalog_unreachable": {

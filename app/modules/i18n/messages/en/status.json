@@ -84,7 +84,7 @@
     },
     "environment": {
       "label": "Storage problem",
-      "description": "A local storage problem stopped this download, like a full disk or a downloads or library folder that is missing or not writable. Fix the storage and retry."
+      "description": "A local storage problem stopped this download, like a full disk, a downloads folder or library path that is missing or not writable, or a library path that is turned off. Fix the storage and retry."
     },
     "timeout": {
       "label": "Timed out",

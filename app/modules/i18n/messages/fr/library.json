@@ -316,7 +316,8 @@
       "albums": "Albums",
       "year": "Année",
       "owner": "Propriétaire",
-      "source": "Source"
+      "source": "Source",
+      "libraryPath": "Chemin de bibliothèque"
     },
     "counts": {
       "tracks_one": "{{count}} piste",
@@ -349,7 +350,8 @@
       "moreHint_one": "{{count}} de plus, tapez pour rechercher",
       "moreHint_other": "{{count}} de plus, tapez pour rechercher",
       "orphan": "Pistes isolées",
-      "orphanOnly": "Uniquement les pistes hors playlist"
+      "orphanOnly": "Uniquement les pistes hors playlist",
+      "libraryPath": "Chemin de bibliothèque"
     },
     "filters": {
       "title": "Filtres",
@@ -367,7 +369,10 @@
       "addToQueue_other": "Ajouter {{count}} à la file",
       "clear": "Effacer",
       "selectAll": "Tout sélectionner sur cette page",
-      "selectRow": "Sélectionner la piste"
+      "selectRow": "Sélectionner la piste",
+      "selectAlbum": "Sélectionner {{name}}",
+      "selectAllShown": "Tout sélectionner à l'écran",
+      "selectedAlbums": "sélectionnés"
     },
     "empty": {
       "tracksTitle": "Aucune piste trouvée",
@@ -385,7 +390,113 @@
     },
     "actions": {
       "playTrack": "Lire {{title}}",
-      "playAll": "Lire tout ce que nous avons de {{name}}"
+      "playAll": "Lire tout ce que nous avons de {{name}}",
+      "trackMenu": "Plus d'actions pour {{title}}",
+      "albumMenu": "Plus d'actions pour {{name}}",
+      "searchBetterQuality": "Rechercher une meilleure qualité",
+      "addToQueue": "Ajouter à la file",
+      "removeFromQueue": "Retirer de la file",
+      "moveToPath": "Déplacer vers un chemin…",
+      "deleteFile": "Supprimer le fichier",
+      "deleteFiles": "Supprimer les fichiers"
+    }
+  },
+  "files": {
+    "move": {
+      "titleTrack": "Déplacer « {{title}} »",
+      "titleAlbum": "Déplacer « {{name}} »",
+      "titleTracks_one": "Déplacer {{count}} morceau",
+      "titleTracks_other": "Déplacer {{count}} morceaux",
+      "titleAlbums_one": "Déplacer {{count}} album",
+      "titleAlbums_other": "Déplacer {{count}} albums",
+      "description": "Choisissez le chemin de bibliothèque où vont les fichiers. Les favoris, les playlists et les écoutes restent liés aux morceaux.",
+      "to": "Déplacer vers",
+      "loadingPaths": "Chargement des chemins de bibliothèque",
+      "pathsFailed": "Impossible de charger les chemins de bibliothèque. Réessayez dans un instant.",
+      "noTarget": "Aucun autre chemin de bibliothèque ne peut recevoir ces morceaux pour le moment.",
+      "free": "{{size}} libres",
+      "freeUnknown": "Espace libre inconnu",
+      "pathState": {
+        "current": "Déjà ici",
+        "disabled": "Désactivé",
+        "readonly": "Lecture seule",
+        "unreachable": "Inaccessible"
+      },
+      "checking": "Vérification de ce qui sera déplacé",
+      "previewFailed": "Impossible de vérifier ce déplacement. Réessayez dans un instant.",
+      "notFound": "Ce chemin de bibliothèque n'existe plus.",
+      "targetUnavailable": "{{label}} n'est pas disponible pour le moment : il est désactivé, en lecture seule ou inaccessible.",
+      "stats": {
+        "songs_one": "{{count}} morceau à déplacer",
+        "songs_other": "{{count}} morceaux à déplacer",
+        "copy": "{{size}} à copier",
+        "rename": "{{size}} à renommer",
+        "free": "{{size}} libres dans {{label}}"
+      },
+      "crossDevice": "Les morceaux situés sur un autre disque sont copiés, vérifiés, puis seulement ensuite supprimés de leur emplacement d'origine.",
+      "sameDevice": "Même disque : chaque morceau est renommé sur place.",
+      "nothing": "Rien à déplacer : tous les morceaux y sont déjà ou ne peuvent pas être déplacés.",
+      "alreadyThere_one": "{{count}} morceau est déjà dans {{label}}.",
+      "alreadyThere_other": "{{count}} morceaux sont déjà dans {{label}}.",
+      "unmovable_one": "{{count}} morceau ne peut pas être déplacé : son fichier est manquant, ou son chemin de bibliothèque est en lecture seule ou inaccessible.",
+      "unmovable_other": "{{count}} morceaux ne peuvent pas être déplacés : leurs fichiers sont manquants, ou leur chemin de bibliothèque est en lecture seule ou inaccessible.",
+      "splitTitle": "Certains albums se retrouvent répartis entre plusieurs chemins de bibliothèque",
+      "split": "{{moving}} morceaux sur {{total}} de {{album}} sont déplacés, les autres restent.",
+      "blockedTitle": "Pas assez d'espace dans {{label}}",
+      "blocked": "{{album}} reste où il est : il lui faut {{needed}} et {{free}} sont libres.",
+      "sampleFrom": "Maintenant",
+      "sampleTo": "Dans {{label}}",
+      "confirmIdle": "Déplacer",
+      "confirm_one": "Déplacer {{count}} morceau",
+      "confirm_other": "Déplacer {{count}} morceaux"
+    },
+    "delete": {
+      "titleTrack": "Supprimer « {{title}} » ?",
+      "titleAlbum": "Supprimer les fichiers de « {{name}} » ?",
+      "titleTracks_one": "Supprimer {{count}} fichier ?",
+      "titleTracks_other": "Supprimer {{count}} fichiers ?",
+      "titleAlbums_one": "Supprimer les fichiers de {{count}} album ?",
+      "titleAlbums_other": "Supprimer les fichiers de {{count}} albums ?",
+      "messageOne": "Le fichier part dans la corbeille et le morceau quitte la bibliothèque et ses playlists.",
+      "messageMany": "Les fichiers partent dans la corbeille et les morceaux quittent la bibliothèque et leurs playlists.",
+      "confirmOne": "Supprimer le fichier",
+      "confirmMany": "Supprimer les fichiers"
+    },
+    "progress": {
+      "move": "Déplacement vers {{label}}",
+      "delete": "Envoi vers la corbeille",
+      "hint": "Vous pouvez fermer cette fenêtre. Un message vous prévient quand c'est terminé.",
+      "starting": "Démarrage",
+      "count": "{{processed}} morceaux sur {{total}}",
+      "hide": "Masquer"
+    },
+    "outcome": {
+      "busy": "Une autre tâche de la bibliothèque est en cours. Réessayez quand elle sera terminée.",
+      "nothingToDo": "Rien à faire : aucun de ces morceaux n'a de fichier dans la bibliothèque.",
+      "notFound": "Ce chemin de bibliothèque n'existe plus.",
+      "targetUnavailable": "Ce chemin de bibliothèque n'est pas disponible pour le moment."
+    },
+    "result": {
+      "moved_one": "{{count}} morceau déplacé vers {{label}}",
+      "moved_other": "{{count}} morceaux déplacés vers {{label}}",
+      "movedPartly": "{{done}} morceaux sur {{total}} déplacés vers {{label}}",
+      "moveFailed": "Aucun morceau n'a été déplacé",
+      "deleted_one": "{{count}} morceau est parti dans la corbeille",
+      "deleted_other": "{{count}} morceaux sont partis dans la corbeille",
+      "deletedPartly": "{{done}} morceaux sur {{total}} sont partis dans la corbeille",
+      "deleteFailed": "Aucun morceau n'a été supprimé"
+    },
+    "failure": {
+      "item": "{{title}} : {{reason}}",
+      "more_one": "et {{count}} de plus",
+      "more_other": "et {{count}} de plus",
+      "PATH_UNAVAILABLE": "un chemin de bibliothèque où il se trouve est désactivé ou inaccessible",
+      "READ_ONLY": "son chemin de bibliothèque est en lecture seule",
+      "OCCUPIED": "un autre fichier porte déjà son nouveau nom",
+      "NO_SPACE": "pas assez d'espace",
+      "MOVE_FAILED": "le fichier n'a pas pu être déplacé",
+      "RECYCLE_FAILED": "le fichier n'a pas pu aller dans la corbeille",
+      "LIBRARY_NOT_UPDATED": "le fichier est dans la corbeille, mais la bibliothèque n'a pas pu être mise à jour"
     }
   },
   "playlists": {

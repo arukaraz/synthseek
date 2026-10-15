@@ -1,6 +1,13 @@
 import type { ParseKeys } from "i18next";
 
-import type { JobSummary } from "./types";
+import type { JobSummary, LibraryScanOutcome } from "./types";
+
+export const SKIPPED_SCAN_KEYS: Record<Exclude<LibraryScanOutcome, "reconciled">, ParseKeys<"settings">> = {
+  unavailable: "libraryScan.paths.outcome.unavailable",
+  disabled: "libraryScan.paths.outcome.disabled",
+  unreadable: "libraryScan.paths.outcome.unreadable",
+  empty: "libraryScan.paths.outcome.empty",
+};
 
 export const MINUTE_MS = 60_000;
 export const HOUR_MS = 60 * MINUTE_MS;

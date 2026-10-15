@@ -12,6 +12,15 @@ const libraryPlaybackMock = vi.hoisted(() => vi.fn(() => ({ play: vi.fn(), enque
 
 vi.mock("../../hooks/useLibraryPlayback", () => ({ useLibraryPlayback: libraryPlaybackMock }));
 
+vi.mock("../../hooks/useLibraryTrackActions", () => ({
+  useLibraryTrackActions: () => ({
+    retryFailed: vi.fn(),
+    isRetrying: false,
+    searchBetterQuality: vi.fn(),
+    isUpgrading: false,
+  }),
+}));
+
 vi.mock("@hooks/api", () => ({
   useLibraryTracks: useLibraryTracksMock,
   useLibraryTracksPrefetch: () => ({ prefetchNextPage: prefetchNextPageMock }),
@@ -76,6 +85,7 @@ function makeProps(overrides?: Partial<TracksViewModeProps["controller"]>): Trac
     filtersOpen: false,
     onFiltersOpenChange: vi.fn(),
     selection: {} as unknown as TracksViewModeProps["selection"],
+    fileActions: { canMove: true, openMove: vi.fn(), openDelete: vi.fn() },
   };
 }
 

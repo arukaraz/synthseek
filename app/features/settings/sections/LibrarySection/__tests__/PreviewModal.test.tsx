@@ -10,24 +10,34 @@ import { createMockQuery } from "@test/mocks/trpc.mock";
 
 const TEMPLATE = "{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}.{ext}";
 
-const state = vi.hoisted(() => ({
-  moves: undefined as unknown,
-  applyMutate: vi.fn(),
-  moveCalls: [] as { template: string; classes: readonly string[] }[],
-}));
+const PATH_ID = "archive";
+
+interface PreviewState {
+  moves: unknown;
+  applyMutate: ReturnType<typeof vi.fn>;
+  moveCalls: { pathId: string; template: string; classes: readonly string[] }[];
+  previewCalls: { pathId: string; template: string }[];
+}
+
+const state = vi.hoisted(() => {
+  const initial: PreviewState = { moves: undefined, applyMutate: vi.fn(), moveCalls: [], previewCalls: [] };
+  return initial;
+});
 
 vi.mock("@hooks/api/queries/useLibraryNaming", () => ({
-  useLibraryNamingPreview: () =>
-    createMockQuery({
+  useLibraryNamingPreview: (input: { pathId: string; template: string }) => {
+    state.previewCalls.push(input);
+    return createMockQuery({
       outcome: "valid",
       inPlace: 81,
       moves: 163,
       rejected: 20,
       rejectionsByReason: [],
       moveSample: [],
-    }),
-  useLibraryNamingMoves: (input: { template: string; classes: readonly string[] }) => {
-    state.moveCalls.push({ template: input.template, classes: input.classes });
+    });
+  },
+  useLibraryNamingMoves: (input: { pathId: string; template: string; classes: readonly string[] }) => {
+    state.moveCalls.push({ pathId: input.pathId, template: input.template, classes: input.classes });
     return state.moves;
   },
 }));
@@ -58,6 +68,7 @@ beforeEach(() => {
   });
   state.applyMutate = vi.fn();
   state.moveCalls = [];
+  state.previewCalls = [];
 });
 
 afterEach(() => {
@@ -66,10 +77,25 @@ afterEach(() => {
 });
 
 function open() {
-  render(<PreviewModal open onOpenChange={vi.fn()} template={TEMPLATE} />);
+  render(<PreviewModal open onOpenChange={vi.fn()} pathId={PATH_ID} pathLabel="Archive" template={TEMPLATE} />);
 }
 
 describe("PreviewModal", () => {
+  it("names the library path it is planning, since each path has its own naming", () => {
+    open();
+
+    expect(screen.getByRole("heading", { name: "What would change in Archive" })).toBeInTheDocument();
+  });
+
+  it("asks about the one library path being edited, for the counts and for the list", () => {
+    open();
+
+    expect(state.previewCalls.length).toBeGreaterThan(0);
+    expect(state.previewCalls.every((call) => call.pathId === PATH_ID)).toBe(true);
+    expect(state.moveCalls.length).toBeGreaterThan(0);
+    expect(state.moveCalls.every((call) => call.pathId === PATH_ID)).toBe(true);
+  });
+
   it("splits the songs that change album off from the spelling fixes, which have nothing in common but a new name", () => {
     open();
 
@@ -166,7 +192,7 @@ describe("PreviewModal", () => {
     await user.click(screen.getByRole("button", { name: enSettings.libraryNaming.preview.confirmYes }));
 
     expect(state.applyMutate).toHaveBeenCalledWith(
-      { template: TEMPLATE, classes: ["reassign"] },
+      { pathId: PATH_ID, template: TEMPLATE, classes: ["reassign"] },
       expect.objectContaining({ onSuccess: expect.any(Function) })
     );
   });
@@ -174,6 +200,10 @@ describe("PreviewModal", () => {
   it("asks the server for every class at once on the everything tab, so no list is silently left behind", () => {
     open();
 
-    expect(state.moveCalls).toContainEqual({ template: TEMPLATE, classes: ["relocate", "rename", "reassign"] });
+    expect(state.moveCalls).toContainEqual({
+      pathId: PATH_ID,
+      template: TEMPLATE,
+      classes: ["relocate", "rename", "reassign"],
+    });
   });
 });

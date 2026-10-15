@@ -299,6 +299,10 @@
     "title": "Scan already running",
     "description": "A library scan is already in progress. Wait for it to finish or cancel it first."
   },
+  "LIBRARY_PATH_NOT_FOUND": {
+    "title": "Library path not found",
+    "description": "That library path no longer exists."
+  },
   "UNIDENTIFIED_GROUP_NOT_FOUND": {
     "title": "Nothing left to review here",
     "description": "These files were matched or ignored in the meantime. The list shows what is still waiting."

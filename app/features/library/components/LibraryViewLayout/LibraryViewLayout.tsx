@@ -82,7 +82,11 @@ export function LibraryViewLayout<TItem>({
                   <Spinner size="lg" label={t("page.loading")} />
                 </div>
               ) : null}
-              <div ref={setScrollRoot} className={resultsScroll({ stale: isRefreshing })}>
+              <div
+                ref={setScrollRoot}
+                className={resultsScroll({ stale: isRefreshing })}
+                onKeyDown={content.layout === "grid" ? content.onKeyDown : undefined}
+              >
                 {content.layout === "table" ? (
                   <LibraryTable
                     items={items ?? []}
@@ -92,16 +96,19 @@ export function LibraryViewLayout<TItem>({
                     selection={content.selection}
                   />
                 ) : (
-                  <LibraryInfiniteGrid
-                    items={items ?? []}
-                    ariaLabel={t(config.labelKey)}
-                    renderCard={content.renderCard}
-                    getCardId={content.getCardId}
-                    scrollRoot={scrollRoot}
-                    hasNextPage={content.hasNextPage}
-                    isFetchingNextPage={content.isFetchingNextPage}
-                    fetchNextPage={content.fetchNextPage}
-                  />
+                  <>
+                    {content.bulkBar}
+                    <LibraryInfiniteGrid
+                      items={items ?? []}
+                      ariaLabel={t(config.labelKey)}
+                      renderCard={content.renderCard}
+                      getCardId={content.getCardId}
+                      scrollRoot={scrollRoot}
+                      hasNextPage={content.hasNextPage}
+                      isFetchingNextPage={content.isFetchingNextPage}
+                      fetchNextPage={content.fetchNextPage}
+                    />
+                  </>
                 )}
               </div>
             </div>

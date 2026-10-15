@@ -2,6 +2,8 @@ import type { ToasterOffset } from "./types";
 
 export const TOAST_ACTION_DURATION_MS = 8000;
 
+export const TOAST_DETAIL_DURATION_MS = 8000;
+
 export const TOAST_OFFSET_DEFAULT = "1.5rem";
 
 export const TOAST_OFFSET_DEFAULT_MOBILE = "calc(var(--height-bottom-nav) + 0.75rem)";

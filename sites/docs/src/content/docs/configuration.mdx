@@ -195,11 +195,14 @@ What is limiting Synthseek right now, such as a folder it cannot write to or a m
 
 Administrators only. Covered on the [Operations page](/operations).
 
-| Setting         | Default                                                         | What it does                                                    |
-| --------------- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| Naming template | `{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}` | The folders and filename every track is given when it is filed. |
+**Library paths** lists the folders Synthseek keeps your music in. The first one comes from `MUSIC_LIBRARY_PATH`. You can add more, turn one off, and choose the default, which takes music that matches no rule. A folder you add has to be mounted into the container first, like `/music`. Each path has its own settings:
 
-Below it, what on disk does not match that template.
+| Setting      | Default                                                         | What it does                                                    |
+| ------------ | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| Track naming | `{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}` | The folders and filename every track is given when it is filed. |
+| Rules        | None                                                            | The rules that send music to this path.                         |
+
+**Rules** lists the conditions a request can match, such as who asked for it, its genre or its release year. When several match, the one higher in the list is tried first.
 
 ### Jobs
 
@@ -232,18 +235,18 @@ Two live where you use them rather than in a settings section.
 
 ### Container identity and paths
 
-| Variable                  | Default                      | What it is                                                                                              |
-| ------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `PUID`                    | 1000                         | The user Synthseek runs as. Must own your mounted folders.                                              |
-| `PGID`                    | 1000                         | The group Synthseek runs as.                                                                            |
-| `WEB_UI_PORT`             | 4400                         | The port the web interface listens on.                                                                  |
-| `DATABASE_URL`            | `file:/data/db/synthseek.db` | Where the database lives.                                                                               |
-| `DOWNLOADS_COMPLETE_PATH` | `/downloads`                 | Where your download clients put completed downloads. Must be writable.                                  |
-| `MUSIC_LIBRARY_PATH`      | `/music`                     | Your organised library. Read-only is a supported degraded mode, in which imports and reorganising fail. |
-| `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                                                                 |
-| `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                                                                      |
-| `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                                                                |
-| `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                                                         |
+| Variable                  | Default                      | What it is                                                                                               |
+| ------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `PUID`                    | 1000                         | The user Synthseek runs as. Must own your mounted folders.                                               |
+| `PGID`                    | 1000                         | The group Synthseek runs as.                                                                             |
+| `WEB_UI_PORT`             | 4400                         | The port the web interface listens on.                                                                   |
+| `DATABASE_URL`            | `file:/data/db/synthseek.db` | Where the database lives.                                                                                |
+| `DOWNLOADS_COMPLETE_PATH` | `/downloads`                 | Where your download clients put completed downloads. Must be writable.                                   |
+| `MUSIC_LIBRARY_PATH`      | `/music`                     | Your first library path. Read-only is a supported degraded mode, in which imports and reorganising fail. |
+| `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                                                                  |
+| `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                                                                       |
+| `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                                                                 |
+| `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                                                          |
 
 ### Sessions and cookies
 

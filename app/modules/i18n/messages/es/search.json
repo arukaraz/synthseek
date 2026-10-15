@@ -63,7 +63,16 @@
       "matching": "Modo de coincidencia",
       "acquisition": "Método de adquisición",
       "peer": "Preferencias de pares",
-      "lidarr": "Delegar a Lidarr"
+      "lidarr": "Delegar a Lidarr",
+      "destination": "Destino"
+    },
+    "destination": {
+      "lockedInPath_one": "{{count}} canción de este álbum ya está en {{label}}, el resto va con ella.",
+      "lockedInPath_other": "{{count}} canciones de este álbum ya están en {{label}}, el resto va con ellas.",
+      "lockedOnItsWay": "Este álbum ya va de camino a {{label}}.",
+      "noRule": "Ninguna regla coincide, así que va a la ruta por defecto.",
+      "matched_one": "Coincide {{count}} regla:",
+      "matched_other": "Coinciden {{count}} reglas:"
     },
     "fields": {
       "quality": "Calidad",
@@ -80,7 +89,8 @@
       "lidarrMonitor": "Alcance de seguimiento",
       "lidarrArtistScope": "Alcance del artista",
       "lidarrTags": "Etiquetas",
-      "renamePlaylist": "Renombrar playlist (opcional)"
+      "renamePlaylist": "Renombrar playlist (opcional)",
+      "destination": "Ruta de biblioteca"
     },
     "options": {
       "bitrate": {
