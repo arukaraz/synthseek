@@ -460,10 +460,28 @@ export function previousIndexIn(state: PlayerSessionState): number | null {
   return state.shuffleOrder[position - 1] ?? null;
 }
 
+function sameIds(left: readonly string[] | null, right: readonly string[] | null): boolean {
+  if (left === null || right === null) return left === right;
+  return left.length === right.length && left.every((id, index) => id === right[index]);
+}
+
 export function queueRewritten(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {
   if (previous === null) return true;
-  if (previous.trackIds.length !== next.trackIds.length) return true;
-  return previous.trackIds.some((id, index) => id !== next.trackIds[index]);
+  return !sameIds(previous.trackIds, next.trackIds) || !sameIds(previous.playOrder, next.playOrder);
+}
+
+export function shuffleFrom(
+  tracks: readonly PlayerTrack[],
+  playOrder: readonly string[] | null
+): { shuffle: boolean; shuffleOrder: number[] } {
+  if (playOrder === null) return { shuffle: false, shuffleOrder: [] };
+  const at = new Map(tracks.map((track, index) => [track.id, index]));
+  const listed = [...new Set(playOrder.flatMap((id) => at.get(id) ?? []))];
+  const seen = new Set(listed);
+  return {
+    shuffle: true,
+    shuffleOrder: [...listed, ...tracks.map((_, index) => index).filter((index) => !seen.has(index))],
+  };
 }
 
 export function queueChanged(previous: SessionSnapshot | null, next: SessionSnapshot): boolean {

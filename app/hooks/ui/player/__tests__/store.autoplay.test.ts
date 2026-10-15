@@ -185,10 +185,11 @@ describe("the autoplay tail of the queue", () => {
       autoplayTrackIds: ["r1"],
       currentTrackId: "a",
       positionMs: 0,
+      playOrder: null,
     });
 
     const restored = await freshStore();
-    restored.actions.restoreSession([track("a"), track("r1")], "a", 0, null, ["r1", "gone"]);
+    restored.actions.restoreSession([track("a"), track("r1")], "a", 0, null, ["r1", "gone"], null);
 
     expect([...restored.getSnapshot().autoplayIds]).toEqual(["r1"]);
   });

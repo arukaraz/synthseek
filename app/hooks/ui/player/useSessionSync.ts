@@ -27,13 +27,15 @@ export function usePlayerSessionSync(): void {
       autoplayTrackIds: session.data.autoplayTrackIds,
       currentTrackId: session.data.currentTrackId,
       positionMs: session.data.positionMs,
+      playOrder: session.data.playOrder,
     };
     actions.restoreSession(
       session.data.tracks.filter((track) => track.playable).map(playerTrackFrom),
       session.data.currentTrackId,
       session.data.positionMs / 1000,
       session.data.resumedFrom,
-      session.data.autoplayTrackIds
+      session.data.autoplayTrackIds,
+      session.data.playOrder
     );
   }, [session.data]);
 
@@ -48,7 +50,8 @@ export function usePlayerSessionSync(): void {
           handed.tracks.filter((track) => track.playable).map(playerTrackFrom),
           handed.currentTrackId,
           handed.positionMs / 1000,
-          handed.autoplayTrackIds
+          handed.autoplayTrackIds,
+          handed.playOrder
         );
       });
     });
@@ -64,7 +67,8 @@ export function usePlayerSessionSync(): void {
         actions.adoptQueue(
           shared.tracks.filter((track) => track.playable).map(playerTrackFrom),
           trackId,
-          shared.autoplayTrackIds
+          shared.autoplayTrackIds,
+          shared.playOrder
         );
       });
     });
@@ -73,13 +77,28 @@ export function usePlayerSessionSync(): void {
 
   useEffect(() => {
     let trailing: ReturnType<typeof setTimeout> | undefined;
+    let saving = false;
+    let waiting: SessionSnapshot | null = null;
 
     const saveWhole = (snapshot: SessionSnapshot) => {
       queueRevision.current = null;
+      if (saving) {
+        waiting = snapshot;
+        return;
+      }
+      saving = true;
+      const settle = () => {
+        saving = false;
+        const queued = waiting;
+        waiting = null;
+        if (queued !== null) saveWhole(queued);
+      };
       saveSession(snapshot, {
         onSuccess: (saved) => {
           queueRevision.current = saved.queueRevision;
+          settle();
         },
+        onError: settle,
       });
     };
 

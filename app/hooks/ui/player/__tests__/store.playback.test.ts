@@ -205,6 +205,7 @@ describe("player store playback", () => {
       autoplayTrackIds: [],
       currentTrackId: null,
       positionMs: 0,
+      playOrder: null,
     });
   });
 
@@ -218,7 +219,22 @@ describe("player store playback", () => {
       autoplayTrackIds: [],
       currentTrackId: "a",
       positionMs: 12400,
+      playOrder: null,
     });
+  });
+
+  it("saves the order a shuffled queue plays in, beside the queue's own order", async () => {
+    const store = await freshStore();
+    const random = vi.spyOn(Math, "random").mockReturnValue(0.7);
+    store.actions.playShuffled([track("a"), track("b"), track("c")]);
+    random.mockRestore();
+
+    const { shuffleOrder, queue } = store.getSnapshot();
+    const snapshot = store.sessionSnapshot();
+
+    expect(snapshot.trackIds).toEqual(["a", "b", "c"]);
+    expect(snapshot.playOrder).toEqual(shuffleOrder.map((index) => queue[index]?.id));
+    expect(snapshot.playOrder?.[0]).toBe("c");
   });
 });
 
@@ -521,7 +537,7 @@ describe("player store failures", () => {
       { key: "local", format: "mp3", bitrateKbps: 320 },
       { key: "plex", format: "flac", bitrateKbps: 900 },
     ];
-    store.actions.restoreSession([track("a", { sources })], "a", 30, null, []);
+    store.actions.restoreSession([track("a", { sources })], "a", 30, null, [], null);
     engine.loadAndPlay.mockClear();
 
     engine.handlers?.onFailure("load");
@@ -542,7 +558,7 @@ describe("player store failures", () => {
       { key: "navidrome", format: "flac", bitrateKbps: 1000 },
       { key: "jellyfin", format: "flac", bitrateKbps: 1000 },
     ];
-    store.actions.restoreSession([track("a", { sources })], "a", 30, null, []);
+    store.actions.restoreSession([track("a", { sources })], "a", 30, null, [], null);
     store.actions.togglePlay();
     engine.loadAt.mockClear();
 
@@ -782,7 +798,7 @@ describe("player store transport", () => {
     const store = await freshStore();
     const cleared = vi.fn();
     store.setQueueClearedHandler(cleared);
-    store.actions.adoptQueue([track("a"), track("b")], "a", []);
+    store.actions.adoptQueue([track("a"), track("b")], "a", [], null);
     store.actions.applyRemoteState({
       deviceId: "kitchen",
       deviceName: "Kitchen",
@@ -1236,7 +1252,7 @@ describe("player store session restore", () => {
   it("arms the saved queue without sounding it", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a"), track("b")], "b", 44, null, []);
+    store.actions.restoreSession([track("a"), track("b")], "b", 44, null, [], null);
 
     expect(store.getSnapshot().index).toBe(1);
     expect(store.getSnapshot().playing).toBe(false);
@@ -1248,7 +1264,7 @@ describe("player store session restore", () => {
   it("names the client the session came from", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a")], "a", 0, "Phone", []);
+    store.actions.restoreSession([track("a")], "a", 0, "Phone", [], null);
 
     expect(notices.announce).toHaveBeenCalledWith({ text: "resumed from Phone", tone: "info" });
   });
@@ -1256,7 +1272,7 @@ describe("player store session restore", () => {
   it("starts at the top when the saved track is gone from the queue", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a")], "vanished", 90, null, []);
+    store.actions.restoreSession([track("a")], "vanished", 90, null, [], null);
 
     expect(store.getSnapshot().index).toBe(0);
     expect(store.getSnapshot().positionSeconds).toBe(0);
@@ -1265,7 +1281,7 @@ describe("player store session restore", () => {
   it("never resumes past the end of the track it saved", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([track("a", { durationSeconds: 100 })], "a", 400, null, []);
+    store.actions.restoreSession([track("a", { durationSeconds: 100 })], "a", 400, null, [], null);
 
     expect(store.getSnapshot().positionSeconds).toBe(100);
   });
@@ -1274,7 +1290,7 @@ describe("player store session restore", () => {
     const store = await freshStore();
     store.actions.playQueue([track("live")], 0);
 
-    store.actions.restoreSession([track("saved")], "saved", 0, null, []);
+    store.actions.restoreSession([track("saved")], "saved", 0, null, [], null);
 
     expect(store.getSnapshot().queue.map((entry) => entry.id)).toEqual(["live"]);
   });
@@ -1282,7 +1298,7 @@ describe("player store session restore", () => {
   it("ignores an empty saved session", async () => {
     const store = await freshStore();
 
-    store.actions.restoreSession([], null, 0, null, []);
+    store.actions.restoreSession([], null, 0, null, [], null);
 
     expect(store.getSnapshot().started).toBe(false);
   });
@@ -1290,7 +1306,7 @@ describe("player store session restore", () => {
   it("starts sounding the queue handed over from another device", async () => {
     const store = await freshStore();
 
-    store.actions.takeOver([track("a"), track("b")], "b", 30, []);
+    store.actions.takeOver([track("a"), track("b")], "b", 30, [], null);
 
     expect(store.getSnapshot().index).toBe(1);
     expect(engine.loadAndPlay).toHaveBeenCalledWith("/api/v1/library/tracks/b/stream", 0.8, false, 30);
@@ -1299,7 +1315,7 @@ describe("player store session restore", () => {
   it("starts a hand-over at the top when the named track is not in it", async () => {
     const store = await freshStore();
 
-    store.actions.takeOver([track("a")], "elsewhere", 30, []);
+    store.actions.takeOver([track("a")], "elsewhere", 30, [], null);
 
     expect(store.getSnapshot().index).toBe(0);
     expect(engine.loadAndPlay).toHaveBeenCalledWith("/api/v1/library/tracks/a/stream", 0.8, false, 0);
@@ -1308,9 +1324,39 @@ describe("player store session restore", () => {
   it("ignores an empty hand-over", async () => {
     const store = await freshStore();
 
-    store.actions.takeOver([], null, 0, []);
+    store.actions.takeOver([], null, 0, [], null);
 
     expect(store.getSnapshot().queue).toEqual([]);
+  });
+
+  it("restores a shuffled session in the order it was playing, so the next track is the one that was coming", async () => {
+    const store = await freshStore();
+
+    store.actions.restoreSession([track("a"), track("b"), track("c")], "b", 0, null, [], ["b", "c", "a"]);
+
+    expect(store.getSnapshot().shuffle).toBe(true);
+    expect(store.getSnapshot().shuffleOrder).toEqual([1, 2, 0]);
+    store.actions.next();
+    expect(store.getSnapshot().index).toBe(2);
+  });
+
+  it("restores a session played in order with shuffle off", async () => {
+    const store = await freshStore();
+    store.actions.toggleShuffle();
+
+    store.actions.restoreSession([track("a"), track("b")], "a", 0, null, [], null);
+
+    expect(store.getSnapshot().shuffle).toBe(false);
+    expect(store.getSnapshot().shuffleOrder).toEqual([]);
+  });
+
+  it("takes a handed-over queue in the order the other device was playing it", async () => {
+    const store = await freshStore();
+
+    store.actions.takeOver([track("a"), track("b"), track("c")], "a", 0, [], ["a", "c", "b"]);
+
+    expect(store.getSnapshot().shuffle).toBe(true);
+    expect(store.getSnapshot().shuffleOrder).toEqual([0, 2, 1]);
   });
 
   it("ignores an empty play request", async () => {

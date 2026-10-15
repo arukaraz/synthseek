@@ -74,6 +74,7 @@ import {
   queueWindow,
   resolveQueueAdditions,
   shuffledOrder,
+  shuffleFrom,
   streamUrlFor,
   upcomingOrder,
   upcomingPositionsOf,
@@ -103,6 +104,7 @@ import type {
   PlayerSessionState,
   QueueAddOutcome,
   RemotePlayback,
+  SessionSnapshot,
   StreamConversion,
 } from "./types";
 
@@ -607,17 +609,13 @@ function mediaHandlers(): {
   };
 }
 
-export function sessionSnapshot(): {
-  trackIds: string[];
-  autoplayTrackIds: string[];
-  currentTrackId: string | null;
-  positionMs: number;
-} {
+export function sessionSnapshot(): SessionSnapshot {
   return {
     trackIds: state.queue.map((track) => track.id),
     autoplayTrackIds: state.queue.filter((track) => state.autoplayIds.has(track.id)).map((track) => track.id),
     currentTrackId: currentTrack()?.id ?? null,
     positionMs: Math.max(0, Math.round(state.positionSeconds * 1000)),
+    playOrder: state.shuffle ? state.shuffleOrder.flatMap((index) => state.queue[index]?.id ?? []) : null,
   };
 }
 
@@ -627,7 +625,8 @@ export const actions = {
     currentTrackId: string | null,
     positionSeconds: number,
     resumedFrom: string | null,
-    autoplayTrackIds: readonly string[]
+    autoplayTrackIds: readonly string[],
+    playOrder: readonly string[] | null
   ): void {
     if (state.started || tracks.length === 0) return;
     const found = tracks.findIndex((track) => track.id === currentTrackId);
@@ -636,15 +635,17 @@ export const actions = {
     if (track === undefined) return;
     const resumeAt = found < 0 ? 0 : Math.min(positionSeconds, track.durationSeconds);
     const autoplayIds = autoplayIdsAmong(tracks, autoplayTrackIds);
-    publish({ autoplayIds });
-    armAt(tracks, index, resumeAt, state.shuffle ? shuffledOrder(tracks, index, autoplayIds) : []);
+    const { shuffle, shuffleOrder } = shuffleFrom(tracks, playOrder);
+    publish({ autoplayIds, shuffle });
+    armAt(tracks, index, resumeAt, shuffleOrder);
     if (resumedFrom !== null) notify(lastMessages.resumedFrom(resumedFrom), "info");
   },
   takeOver(
     tracks: readonly PlayerTrack[],
     currentTrackId: string | null,
     positionSeconds: number,
-    autoplayTrackIds: readonly string[]
+    autoplayTrackIds: readonly string[],
+    playOrder: readonly string[] | null
   ): void {
     if (tracks.length === 0) return;
     const found = tracks.findIndex((track) => track.id === currentTrackId);
@@ -652,7 +653,7 @@ export const actions = {
     const autoplayIds = autoplayIdsAmong(tracks, autoplayTrackIds);
     publish({
       queue: tracks,
-      shuffleOrder: state.shuffle ? shuffledOrder(tracks, index, autoplayIds) : [],
+      ...shuffleFrom(tracks, playOrder),
       autoplayIds,
       consecutiveFailures: 0,
       started: false,
@@ -1016,9 +1017,12 @@ export const actions = {
     if (remote === null || remote.track === null) return false;
     const index = state.queue.findIndex((track) => track.id === remote.track?.id);
     if (index < 0) return false;
+    const adopted =
+      state.shuffle && state.shuffleOrder.length === state.queue.length && state.shuffleOrder.includes(index);
+    const order = adopted ? state.shuffleOrder : shuffledOrder(state.queue, index, state.autoplayIds);
     publish({
       shuffle: remote.shuffle,
-      shuffleOrder: remote.shuffle ? shuffledOrder(state.queue, index, state.autoplayIds) : [],
+      shuffleOrder: remote.shuffle ? order : [],
       repeat: remote.repeat,
       volume: remote.volume,
       muted: remote.muted,
@@ -1058,7 +1062,12 @@ export const actions = {
     clearInterval(mirrorTimer);
     publish({ remote: null });
   },
-  adoptQueue(tracks: readonly PlayerTrack[], currentTrackId: string | null, autoplayTrackIds: readonly string[]): void {
+  adoptQueue(
+    tracks: readonly PlayerTrack[],
+    currentTrackId: string | null,
+    autoplayTrackIds: readonly string[],
+    playOrder: readonly string[] | null
+  ): void {
     if (state.playing || tracks.length === 0) return;
     const index = Math.max(
       0,
@@ -1068,7 +1077,7 @@ export const actions = {
     publish({
       queue: tracks,
       index,
-      shuffleOrder: state.shuffle ? shuffledOrder(tracks, index, autoplayIds) : [],
+      ...shuffleFrom(tracks, playOrder),
       autoplayIds,
       started: true,
       halt: state.halt === "stopped" ? "stopped" : null,

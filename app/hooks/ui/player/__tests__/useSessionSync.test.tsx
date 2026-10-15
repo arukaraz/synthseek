@@ -27,10 +27,12 @@ interface SavedSession {
   positionMs: number;
   resumedFrom: string | null;
   queueRevision: string;
+  playOrder: string[] | null;
 }
 
 interface WholeSaveOptions {
   onSuccess: (saved: { queueRevision: string | null }) => void;
+  onError: () => void;
 }
 
 interface PositionReport {
@@ -44,6 +46,7 @@ interface PositionSaveOptions {
 }
 
 const api = vi.hoisted(() => ({
+  settleSaves: true,
   session: null as SavedSession | null | undefined,
   refetch: vi.fn(async () => ({ data: null as SavedSession | null })),
   save: vi.fn<(snapshot: SessionSnapshot, options: WholeSaveOptions) => void>(),
@@ -73,7 +76,12 @@ vi.mock("../commands", () => ({
 const store = vi.hoisted(() => ({
   listeners: new Set<() => void>(),
   snapshot: sessionState(),
-  snapshotOf: { trackIds: [] as string[], currentTrackId: null as string | null, positionMs: 0 },
+  snapshotOf: {
+    trackIds: [] as string[],
+    currentTrackId: null as string | null,
+    positionMs: 0,
+    playOrder: null as string[] | null,
+  },
   restoreSession: vi.fn(),
   takeOver: vi.fn(),
   adoptQueue: vi.fn(),
@@ -176,10 +184,14 @@ beforeEach(() => {
   vi.clearAllMocks();
   store.listeners.clear();
   store.snapshot = sessionState();
-  store.snapshotOf = { trackIds: [], currentTrackId: null, positionMs: 0 };
+  store.snapshotOf = { trackIds: [], currentTrackId: null, positionMs: 0, playOrder: null };
   store.playHere.mockReturnValue(false);
   api.session = null;
   api.refetch.mockResolvedValue({ data: null });
+  api.settleSaves = true;
+  api.save.mockImplementation((_snapshot, options) => {
+    if (api.settleSaves) options.onError();
+  });
   commands.takeOver = null;
   commands.unknownTrack = null;
 });
@@ -197,6 +209,7 @@ describe("restoring the saved session", () => {
       positionMs: 45_000,
       resumedFrom: null,
       queueRevision: "q1",
+      playOrder: null,
     };
 
     renderHook(() => usePlayerSessionSync());
@@ -206,8 +219,25 @@ describe("restoring the saved session", () => {
       "b",
       45,
       null,
-      ["b"]
+      ["b"],
+      null
     );
+  });
+
+  it("restores the order a shuffled queue was playing in", () => {
+    api.session = {
+      tracks: [savedTrack("a"), savedTrack("b"), savedTrack("c")],
+      autoplayTrackIds: [],
+      currentTrackId: "c",
+      positionMs: 0,
+      resumedFrom: null,
+      queueRevision: "q1",
+      playOrder: ["c", "a", "b"],
+    };
+
+    renderHook(() => usePlayerSessionSync());
+
+    expect(store.restoreSession).toHaveBeenCalledWith(expect.anything(), "c", 0, null, [], ["c", "a", "b"]);
   });
 
   it("leaves out a track the library can no longer play", () => {
@@ -218,6 +248,7 @@ describe("restoring the saved session", () => {
       positionMs: 0,
       resumedFrom: null,
       queueRevision: "q1",
+      playOrder: null,
     };
 
     renderHook(() => usePlayerSessionSync());
@@ -233,11 +264,12 @@ describe("restoring the saved session", () => {
       positionMs: 0,
       resumedFrom: "Kitchen",
       queueRevision: "q1",
+      playOrder: null,
     };
 
     renderHook(() => usePlayerSessionSync());
 
-    expect(store.restoreSession).toHaveBeenCalledWith(expect.anything(), "a", 0, "Kitchen", []);
+    expect(store.restoreSession).toHaveBeenCalledWith(expect.anything(), "a", 0, "Kitchen", [], null);
   });
 
   it("does nothing while the saved session is still being fetched", () => {
@@ -264,6 +296,7 @@ describe("restoring the saved session", () => {
       positionMs: 0,
       resumedFrom: null,
       queueRevision: "q1",
+      playOrder: null,
     };
 
     const { rerender } = renderHook(() => usePlayerSessionSync());
@@ -274,6 +307,7 @@ describe("restoring the saved session", () => {
       positionMs: 0,
       resumedFrom: null,
       queueRevision: "q1",
+      playOrder: null,
     };
     rerender();
 
@@ -301,6 +335,7 @@ describe("taking the sound over from another device", () => {
         positionMs: 30_000,
         resumedFrom: null,
         queueRevision: "q1",
+        playOrder: null,
       },
     });
     renderHook(() => usePlayerSessionSync());
@@ -312,7 +347,8 @@ describe("taking the sound over from another device", () => {
         [expect.objectContaining({ id: "a" }), expect.objectContaining({ id: "b" })],
         "b",
         30,
-        ["b"]
+        ["b"],
+        null
       )
     );
   });
@@ -373,6 +409,7 @@ describe("adopting a queue another device announced", () => {
         positionMs: 0,
         resumedFrom: null,
         queueRevision: "q1",
+        playOrder: null,
       },
     });
     renderHook(() => usePlayerSessionSync());
@@ -380,7 +417,7 @@ describe("adopting a queue another device announced", () => {
     commands.unknownTrack?.("x");
 
     await vi.waitFor(() =>
-      expect(store.adoptQueue).toHaveBeenCalledWith([expect.objectContaining({ id: "x" })], "x", ["x"])
+      expect(store.adoptQueue).toHaveBeenCalledWith([expect.objectContaining({ id: "x" })], "x", ["x"], null)
     );
   });
 
@@ -406,12 +443,12 @@ describe("adopting a queue another device announced", () => {
 describe("saving the session as it moves", () => {
   it("saves the queue the first time it holds anything", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0, playOrder: null };
 
     publish();
 
     expect(api.save).toHaveBeenCalledWith(
-      { trackIds: ["a", "b"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0 },
+      { trackIds: ["a", "b"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0, playOrder: null },
       expect.anything()
     );
   });
@@ -419,7 +456,7 @@ describe("saving the session as it moves", () => {
   it("saves nothing before the player has started", () => {
     store.snapshot = sessionState({ started: false });
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
 
     publish();
 
@@ -444,7 +481,7 @@ describe("saving the session as it moves", () => {
       },
     });
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
 
     publish();
 
@@ -453,7 +490,7 @@ describe("saving the session as it moves", () => {
 
   it("never saves an empty queue over a good one", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: [], currentTrackId: null, positionMs: 0 };
+    store.snapshotOf = { trackIds: [], currentTrackId: null, positionMs: 0, playOrder: null };
 
     publish();
 
@@ -462,7 +499,7 @@ describe("saving the session as it moves", () => {
 
   it("saves nothing when neither the queue nor the position has moved", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     api.save.mockClear();
 
@@ -473,11 +510,11 @@ describe("saving the session as it moves", () => {
 
   it("holds back a position that merely drifted on, so playing a track is not a stream of writes", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     api.save.mockClear();
 
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000, playOrder: null };
     publish();
 
     expect(api.save).not.toHaveBeenCalled();
@@ -485,15 +522,15 @@ describe("saving the session as it moves", () => {
 
   it("saves a changed queue straight away rather than waiting out the interval", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     api.save.mockClear();
 
-    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
 
     expect(api.save).toHaveBeenCalledWith(
-      { trackIds: ["a", "b"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0 },
+      { trackIds: ["a", "b"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0, playOrder: null },
       expect.anything()
     );
   });
@@ -501,12 +538,12 @@ describe("saving the session as it moves", () => {
   it("saves the drifted position again once the interval has passed", () => {
     vi.useFakeTimers();
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     api.save.mockClear();
 
     vi.advanceTimersByTime(SESSION_SAVE_INTERVAL_MS + 1);
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000, playOrder: null };
     publish();
 
     expect(api.save).toHaveBeenCalled();
@@ -515,18 +552,18 @@ describe("saving the session as it moves", () => {
   it("saves the last held-back position once the interval ends, even when nothing moves after it", () => {
     vi.useFakeTimers();
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000, playOrder: null };
     publish();
     api.save.mockClear();
 
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     expect(api.save).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(SESSION_SAVE_INTERVAL_MS);
 
     expect(api.save).toHaveBeenCalledWith(
-      { trackIds: ["a"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0 },
+      { trackIds: ["a"], autoplayTrackIds: [], currentTrackId: "a", positionMs: 0, playOrder: null },
       expect.anything()
     );
   });
@@ -534,10 +571,10 @@ describe("saving the session as it moves", () => {
   it("saves an empty session when the listener clears the queue, so a reload does not bring it back", () => {
     vi.useFakeTimers();
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000, playOrder: null };
     publish();
     api.save.mockClear();
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
 
     store.queueCleared?.();
@@ -545,7 +582,7 @@ describe("saving the session as it moves", () => {
 
     expect(api.save).toHaveBeenCalledTimes(1);
     expect(api.save).toHaveBeenCalledWith(
-      { trackIds: [], autoplayTrackIds: [], currentTrackId: null, positionMs: 0 },
+      { trackIds: [], autoplayTrackIds: [], currentTrackId: null, positionMs: 0, playOrder: null },
       expect.anything()
     );
   });
@@ -553,10 +590,10 @@ describe("saving the session as it moves", () => {
   it("drops the held-back save when the player goes away before the interval ends", () => {
     vi.useFakeTimers();
     const { unmount } = renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 22_000, playOrder: null };
     publish();
     api.save.mockClear();
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
 
     unmount();
@@ -567,10 +604,10 @@ describe("saving the session as it moves", () => {
 
   it("saves on the way out, whatever the interval says", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     api.save.mockClear();
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000, playOrder: null };
 
     window.dispatchEvent(new Event("pagehide"));
 
@@ -579,10 +616,10 @@ describe("saving the session as it moves", () => {
 
   it("saves when the tab is hidden, which on a phone is the last moment it gets", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     api.save.mockClear();
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000, playOrder: null };
     Object.defineProperty(document, "visibilityState", { value: "hidden", configurable: true });
 
     document.dispatchEvent(new Event("visibilitychange"));
@@ -592,10 +629,10 @@ describe("saving the session as it moves", () => {
 
   it("does not save merely because the tab came back into view", () => {
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     api.save.mockClear();
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 60_000, playOrder: null };
     Object.defineProperty(document, "visibilityState", { value: "visible", configurable: true });
 
     document.dispatchEvent(new Event("visibilitychange"));
@@ -607,12 +644,64 @@ describe("saving the session as it moves", () => {
     const { unmount } = renderHook(() => usePlayerSessionSync());
 
     unmount();
-    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     window.dispatchEvent(new Event("pagehide"));
 
     expect(api.save).not.toHaveBeenCalled();
     expect(store.listeners.size).toBe(0);
+  });
+});
+
+describe("keeping whole saves in order", () => {
+  function changeQueueTo(trackIds: string[]): void {
+    store.snapshotOf = { trackIds, currentTrackId: "a", positionMs: 0, playOrder: null };
+    publish();
+  }
+
+  it("sends one whole save at a time, and the one held back carries the newest queue", () => {
+    api.settleSaves = false;
+    renderHook(() => usePlayerSessionSync());
+
+    changeQueueTo(["a", "b", "c"]);
+    changeQueueTo(["a", "c"]);
+    changeQueueTo(["a", "x", "c"]);
+    expect(api.save).toHaveBeenCalledTimes(1);
+
+    api.save.mock.calls[0]?.[1].onSuccess({ queueRevision: "q1" });
+
+    expect(api.save).toHaveBeenCalledTimes(2);
+    expect(api.save.mock.lastCall?.[0]).toMatchObject({ trackIds: ["a", "x", "c"] });
+  });
+
+  it("does not take the revision of a save that a newer one is already waiting to replace", () => {
+    api.settleSaves = false;
+    vi.useFakeTimers();
+    renderHook(() => usePlayerSessionSync());
+    changeQueueTo(["a", "b"]);
+    changeQueueTo(["a", "c"]);
+
+    api.save.mock.calls[0]?.[1].onSuccess({ queueRevision: "stale" });
+    vi.advanceTimersByTime(SESSION_SAVE_INTERVAL_MS + 1);
+    store.snapshotOf = { ...store.snapshotOf, positionMs: 60_000 };
+    publish();
+    api.save.mock.calls[1]?.[1].onSuccess({ queueRevision: "q2" });
+
+    expect(api.position).not.toHaveBeenCalled();
+    expect(api.save).toHaveBeenCalledTimes(3);
+    expect(api.save.mock.lastCall?.[0]).toMatchObject({ trackIds: ["a", "c"], positionMs: 60_000 });
+  });
+
+  it("lets the held-back save through when the one in flight fails", () => {
+    api.settleSaves = false;
+    renderHook(() => usePlayerSessionSync());
+    changeQueueTo(["a", "b"]);
+    changeQueueTo(["a", "c"]);
+
+    api.save.mock.calls[0]?.[1].onError();
+
+    expect(api.save).toHaveBeenCalledTimes(2);
+    expect(api.save.mock.lastCall?.[0]).toMatchObject({ trackIds: ["a", "c"] });
   });
 });
 
@@ -628,7 +717,7 @@ describe("reporting where the listener is without resending the queue", () => {
   function playingASavedQueue(): void {
     vi.useFakeTimers();
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
     serverNamesTheSavedQueue("q7");
   }
@@ -651,10 +740,21 @@ describe("reporting where the listener is without resending the queue", () => {
     expect(api.save).toHaveBeenCalledTimes(1);
   });
 
+  it("resends the whole queue when only its play order changed, since a pointer report cannot carry it", () => {
+    playingASavedQueue();
+
+    store.snapshotOf = { ...store.snapshotOf, playOrder: ["b", "a"] };
+    publish();
+
+    expect(api.save).toHaveBeenCalledTimes(2);
+    expect(api.save.mock.lastCall?.[0]).toMatchObject({ trackIds: ["a", "b"], playOrder: ["b", "a"] });
+    expect(api.position).not.toHaveBeenCalled();
+  });
+
   it("reports a move to another track of the same queue straight away, still without the queue", () => {
     playingASavedQueue();
 
-    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "b", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "b", positionMs: 0, playOrder: null };
     publish();
 
     expect(api.position).toHaveBeenCalledWith(
@@ -679,7 +779,7 @@ describe("reporting where the listener is without resending the queue", () => {
   it("sends the whole queue while the server has not yet named the one it saved", () => {
     vi.useFakeTimers();
     renderHook(() => usePlayerSessionSync());
-    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
 
     driftPastTheInterval(60_000);
@@ -691,7 +791,7 @@ describe("reporting where the listener is without resending the queue", () => {
   it("sends the whole queue when its order changed, whatever revision it holds", () => {
     playingASavedQueue();
 
-    store.snapshotOf = { trackIds: ["b", "a"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["b", "a"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
 
     expect(api.save).toHaveBeenCalledTimes(2);
@@ -701,7 +801,7 @@ describe("reporting where the listener is without resending the queue", () => {
 
   it("forgets the revision while a changed queue is on its way, so a position in between still carries the queue", () => {
     playingASavedQueue();
-    store.snapshotOf = { trackIds: ["a", "b", "c"], currentTrackId: "a", positionMs: 0 };
+    store.snapshotOf = { trackIds: ["a", "b", "c"], currentTrackId: "a", positionMs: 0, playOrder: null };
     publish();
 
     driftPastTheInterval(60_000);
@@ -722,6 +822,7 @@ describe("reporting where the listener is without resending the queue", () => {
       autoplayTrackIds: [],
       currentTrackId: "a",
       positionMs: 60_000,
+      playOrder: null,
     });
   });
 
@@ -758,10 +859,11 @@ describe("reporting where the listener is without resending the queue", () => {
       positionMs: 0,
       resumedFrom: null,
       queueRevision: "q1",
+      playOrder: null,
     };
     renderHook(() => usePlayerSessionSync());
 
-    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 60_000 };
+    store.snapshotOf = { trackIds: ["a", "b"], currentTrackId: "a", positionMs: 60_000, playOrder: null };
     publish();
 
     expect(api.position).toHaveBeenCalledWith(

@@ -57,6 +57,7 @@ export const EMPTY_SESSION: SessionSnapshot = {
   autoplayTrackIds: [],
   currentTrackId: null,
   positionMs: 0,
+  playOrder: null,
 };
 
 export const SESSION_POSITION_DRIFT_MS = 5_000;

@@ -416,15 +416,16 @@ describe("player store addToQueue", () => {
     expect(after.queue.at(-1)?.id).toBe(`t${MAX_QUEUE_TRACKS + 9}`);
   });
 
-  it("keeps a shuffle order for a queue adopted from another device while shuffle is on", async () => {
+  it("takes the shuffle order of a queue adopted from another device from that device, not from its own", async () => {
     const store = await freshStore();
     store.actions.playQueue([track("a"), track("b")], 0);
     store.actions.toggleShuffle();
 
-    store.actions.adoptQueue([track("x"), track("y"), track("z")], "x", []);
+    store.actions.adoptQueue([track("x"), track("y"), track("z")], "x", [], ["x", "z", "y"]);
+    expect(store.getSnapshot().shuffleOrder).toEqual([0, 2, 1]);
 
-    const after = store.getSnapshot();
-    expect([...after.shuffleOrder].sort((left, right) => left - right)).toEqual([0, 1, 2]);
-    expect(after.shuffleOrder[0]).toBe(0);
+    store.actions.adoptQueue([track("x"), track("y")], "x", [], null);
+    expect(store.getSnapshot().shuffle).toBe(false);
+    expect(store.getSnapshot().shuffleOrder).toEqual([]);
   });
 });

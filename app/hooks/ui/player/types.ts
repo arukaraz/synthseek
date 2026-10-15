@@ -174,6 +174,7 @@ export interface SessionSnapshot {
   autoplayTrackIds: string[];
   currentTrackId: string | null;
   positionMs: number;
+  playOrder: string[] | null;
 }
 
 export interface ListenProgress {

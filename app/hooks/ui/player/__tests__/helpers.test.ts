@@ -33,6 +33,7 @@ import {
   sessionChanged,
   queueWindow,
   shuffledOrder,
+  shuffleFrom,
   sourceOptionFrom,
   startedSecondsAgo,
   streamUrlFor,
@@ -329,7 +330,7 @@ describe("previousIndexIn", () => {
 });
 
 describe("sessionChanged", () => {
-  const base = { trackIds: ["t1", "t2"], currentTrackId: "t1", positionMs: 10_000 };
+  const base = { trackIds: ["t1", "t2"], currentTrackId: "t1", positionMs: 10_000, playOrder: null };
 
   it("saves the first session it ever sees", () => {
     expect(sessionChanged(null, base)).toBe(true);
@@ -468,7 +469,7 @@ describe("expectedPosition", () => {
 });
 
 describe("queueChanged", () => {
-  const base = { trackIds: ["t1", "t2"], currentTrackId: "t1", positionMs: 10_000 };
+  const base = { trackIds: ["t1", "t2"], currentTrackId: "t1", positionMs: 10_000, playOrder: null };
 
   it("is what makes a brand new queue worth saving at once", () => {
     expect(queueChanged(null, base)).toBe(true);
@@ -481,8 +482,32 @@ describe("queueChanged", () => {
   });
 });
 
+describe("shuffleFrom", () => {
+  const queue = [radioTrack("a"), radioTrack("b"), radioTrack("c")];
+
+  it("turns shuffle off for a queue saved in order", () => {
+    expect(shuffleFrom(queue, null)).toEqual({ shuffle: false, shuffleOrder: [] });
+  });
+
+  it("rebuilds the play order from the saved ids, skipping what this queue lacks and ending with what the order missed", () => {
+    expect(shuffleFrom(queue, ["c", "gone", "a", "c"])).toEqual({ shuffle: true, shuffleOrder: [2, 0, 1] });
+  });
+});
+
 describe("queueRewritten", () => {
-  const base = { trackIds: ["t1", "t2"], autoplayTrackIds: [], currentTrackId: "t1", positionMs: 10_000 };
+  const base = {
+    trackIds: ["t1", "t2"],
+    autoplayTrackIds: [],
+    currentTrackId: "t1",
+    positionMs: 10_000,
+    playOrder: null,
+  };
+
+  it("fires when only the play order changed, which a pointer report could not carry", () => {
+    expect(queueRewritten(base, { ...base, playOrder: ["t2", "t1"] })).toBe(true);
+    expect(queueRewritten({ ...base, playOrder: ["t2", "t1"] }, { ...base, playOrder: ["t1", "t2"] })).toBe(true);
+    expect(queueRewritten({ ...base, playOrder: ["t2", "t1"] }, { ...base, playOrder: ["t2", "t1"] })).toBe(false);
+  });
 
   it("fires when there is no saved queue yet, when a track joins or leaves, and when the order changes", () => {
     expect(queueRewritten(null, base)).toBe(true);
