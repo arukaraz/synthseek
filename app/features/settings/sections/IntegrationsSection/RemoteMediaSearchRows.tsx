@@ -13,6 +13,7 @@ export function RemoteMediaSearchRows({ section, values, onFieldChange }: Remote
   return (
     <>
       <EngineRow
+        anchor={`downloadSources.${section}.searchResults`}
         label={t(`${section}.searchResults.label`)}
         description={t(`${section}.searchResults.description`)}
         control={
@@ -27,6 +28,7 @@ export function RemoteMediaSearchRows({ section, values, onFieldChange }: Remote
       />
 
       <EngineRow
+        anchor={`downloadSources.${section}.maxDurationDeltaSec`}
         label={t(`${section}.maxDurationDelta.label`)}
         description={t(`${section}.maxDurationDelta.description`)}
         control={
@@ -42,6 +44,7 @@ export function RemoteMediaSearchRows({ section, values, onFieldChange }: Remote
       />
 
       <EngineRow
+        anchor={`downloadSources.${section}.searchTimeout`}
         label={t(`${section}.searchTimeout.label`)}
         description={t(`${section}.searchTimeout.description`)}
         control={

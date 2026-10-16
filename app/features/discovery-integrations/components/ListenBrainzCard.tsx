@@ -21,11 +21,10 @@ import {
   playlistChip,
   playlistChipsGrid,
   playlistRenameGroup,
+  feedPanel,
+  feedPanelHeader,
+  feedPanelTitle,
   replacePlaylistRow,
-  subSection,
-  subSectionHeader,
-  subSectionSaveBar,
-  subSectionTitle,
 } from "../styles";
 import type { LbPlaylistKind, ListenBrainzCardProps } from "../types";
 
@@ -56,8 +55,8 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
     setPlaylistNames((prev) => ({ ...prev, [kind]: value }));
   };
 
-  const handleSave = () => {
-    update.mutate({
+  const handleSave = () =>
+    update.mutateAsync({
       enabled,
       username: username.trim() || null,
       selectedKinds: kinds,
@@ -65,7 +64,6 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
       replaceExistingPlaylist,
       playlistNames: playlistNamesPatch(playlistNames),
     });
-  };
 
   const handleCancel = () => {
     setEnabled(config.enabled);
@@ -77,14 +75,12 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
   };
 
   return (
-    <section className={subSection()} data-anchor-target="listenbrainz">
-      <header className={subSectionHeader()}>
-        <h3 className={subSectionTitle()}>
-          <span className="inline-flex items-center gap-1.5">
-            ListenBrainz
-            <InfoTooltip description={t("discoveryIntegrations.listenbrainz.tooltip")} />
-          </span>
-        </h3>
+    <section className={feedPanel()} data-anchor-target="listenbrainz.feeds">
+      <header className={feedPanelHeader()}>
+        <span className={feedPanelTitle()}>
+          {t("discoveryIntegrations.feedsTitle")}
+          <InfoTooltip description={t("discoveryIntegrations.listenbrainz.tooltip")} />
+        </span>
         <Switch
           checked={enabled}
           onCheckedChange={setEnabled}
@@ -142,7 +138,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
           </SettingsField>
         ) : null}
 
-        <div className={autoRequestRow()}>
+        <div className={autoRequestRow()} data-anchor-target="listenbrainz.autoRequest">
           <div className={autoRequestText()}>
             <span className={autoRequestLabel()}>{t("discoveryIntegrations.listenbrainz.autoRequestLabel")}</span>
             <span className={autoRequestHelper()}>{t("discoveryIntegrations.listenbrainz.autoRequestHelper")}</span>
@@ -168,9 +164,7 @@ export function ListenBrainzCard({ config }: ListenBrainzCardProps) {
         </div>
       </div>
 
-      <div className={subSectionSaveBar()}>
-        <SaveBar isDirty={isDirty} isSaving={update.isPending} onSave={handleSave} onCancel={handleCancel} />
-      </div>
+      <SaveBar isDirty={isDirty} isSaving={update.isPending} onSave={handleSave} onCancel={handleCancel} />
     </section>
   );
 }

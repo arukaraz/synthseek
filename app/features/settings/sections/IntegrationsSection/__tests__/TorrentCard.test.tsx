@@ -46,6 +46,7 @@ afterEach(() => {
 });
 
 const initial = createMockSettings().downloadSources;
+const { priority: _priority, ...storedTorrent } = initial.torrent;
 const t = enSettings.torrent;
 const testButton = () => screen.getByRole("button", { name: t.test.action });
 
@@ -175,14 +176,24 @@ describe("TorrentCard", () => {
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith({
-        ...initial,
-        torrent: { ...initial.torrent, queueTimeoutHours: 48 },
-      });
+      expect(update.mutateAsync).toHaveBeenCalledWith({ torrent: { ...storedTorrent, queueTimeoutHours: 48 } });
     });
   });
 
-  it("saves the source with the username and category trimmed, alongside every unchanged sibling source", async () => {
+  it("shows the search timeout in seconds and saves it in milliseconds", async () => {
+    render(<TorrentCard initial={initial} />);
+
+    const timeout = screen.getByLabelText(t.searchTimeout.ariaLabel);
+    expect(timeout).toHaveValue(30);
+    fireEvent.change(timeout, { target: { value: "75" } });
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith({ torrent: { ...storedTorrent, searchTimeout: 75000 } });
+    });
+  });
+
+  it("saves only the torrent source with the username and category trimmed, leaving its priority and every sibling out", async () => {
     render(<TorrentCard initial={initial} />);
 
     await userEvent.click(screen.getByRole("switch", { name: t.enable.ariaLabel }));
@@ -195,9 +206,8 @@ describe("TorrentCard", () => {
 
     await waitFor(() => {
       expect(update.mutateAsync).toHaveBeenCalledWith({
-        ...initial,
         torrent: {
-          ...initial.torrent,
+          ...storedTorrent,
           enabled: true,
           indexerUrl: "http://prowlarr:9696/1",
           indexerApiKey: "indexer-key",

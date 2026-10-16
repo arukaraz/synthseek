@@ -25,7 +25,8 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  mutation.mutate.mockReset();
+  mutation.mutateAsync.mockReset();
+  mutation.mutateAsync.mockResolvedValue(undefined);
 });
 
 afterEach(() => {
@@ -70,7 +71,7 @@ describe("ListenBrainzCard replace-playlist switch", () => {
     await userEvent.click(screen.getByRole("switch", { name: lb.autoRequestAria }));
 
     expect(replaceSwitch()).not.toBeDisabled();
-    expect(mutation.mutate).not.toHaveBeenCalled();
+    expect(mutation.mutateAsync).not.toHaveBeenCalled();
   });
 
   it("includes replaceExistingPlaylist in the save payload when toggled on", async () => {
@@ -79,7 +80,7 @@ describe("ListenBrainzCard replace-playlist switch", () => {
     await userEvent.click(replaceSwitch());
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
-    expect(mutation.mutate).toHaveBeenCalledWith(
+    expect(mutation.mutateAsync).toHaveBeenCalledWith(
       expect.objectContaining({ autoRequest: true, replaceExistingPlaylist: true })
     );
   });
@@ -147,7 +148,7 @@ describe("ListenBrainzCard playlist rename inputs", () => {
     await userEvent.type(screen.getByRole("textbox", { name: playlistKind.weeklyJamsLabel }), "  Road Trip  ");
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
-    expect(mutation.mutate).toHaveBeenCalledWith(
+    expect(mutation.mutateAsync).toHaveBeenCalledWith(
       expect.objectContaining({ playlistNames: { "weekly-jams": "Road Trip" } })
     );
   });
@@ -159,8 +160,35 @@ describe("ListenBrainzCard playlist rename inputs", () => {
     await userEvent.type(screen.getByRole("textbox", { name: playlistKind.weeklyJamsLabel }), "Keepers");
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
-    expect(mutation.mutate).toHaveBeenCalledWith(
+    expect(mutation.mutateAsync).toHaveBeenCalledWith(
       expect.objectContaining({ playlistNames: { "weekly-jams": "Keepers" } })
     );
+  });
+});
+
+describe("ListenBrainzCard feeds panel", () => {
+  it("titles its panel as the discovery feeds and offers a switch for them", () => {
+    render(<ListenBrainzCard config={makeConfig()} />);
+
+    expect(screen.getByText(enLibrary.discoveryIntegrations.feedsTitle)).toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: lb.enableAria })).toBeChecked();
+  });
+
+  it("saves the whole feed setup through the awaited mutation, with the username trimmed", async () => {
+    render(<ListenBrainzCard config={makeConfig({ username: null, selectedKinds: [] })} />);
+
+    await userEvent.type(screen.getByPlaceholderText(lb.usernamePlaceholder), "  listener  ");
+    await userEvent.click(screen.getByRole("button", { name: playlistKind.dailyJamsLabel }));
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    expect(mutation.mutateAsync).toHaveBeenCalledWith({
+      enabled: true,
+      username: "listener",
+      selectedKinds: ["daily-jams"],
+      autoRequest: false,
+      replaceExistingPlaylist: false,
+      playlistNames: {},
+    });
+    expect(mutation.mutate).not.toHaveBeenCalled();
   });
 });

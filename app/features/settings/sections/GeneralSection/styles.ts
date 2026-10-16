@@ -94,9 +94,11 @@ export const apiKeyMetaSeparator = cva("text-fg/30");
 
 export const tokenBox = cva("bg-fg/5 ring-fg/10 text-fg block break-all rounded-lg p-3 font-mono text-xs ring-1");
 
-export const connectList = cva("flex flex-col gap-2");
+export const connectMethods = cva("grid gap-3 sm:grid-cols-2");
 
-export const connectLabel = cva("text-fg font-semibold");
+export const connectMethod = cva("border-fg/10 bg-fg/5 flex flex-col items-start gap-2 rounded-lg border p-3");
+
+export const connectMethodBody = cva("text-fg/70 text-xs leading-relaxed");
 
 export const connectionBody = cva("flex flex-col gap-4");
 

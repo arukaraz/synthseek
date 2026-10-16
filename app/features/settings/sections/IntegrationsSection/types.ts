@@ -1,8 +1,10 @@
 import type { inferRouterOutputs } from "@trpc/server";
 import type { ParseKeys } from "i18next";
 
-import type { AppRouter } from "@api/__generated__/types";
+import type { AppRouter, DownloadSourceKey } from "@api/__generated__/types";
 import type { PlaybackServerKey } from "@utils/playback-servers";
+
+import type { DownloadSourcesConfig, LidarrHealth, SlskdHealth } from "../../types";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 
@@ -58,8 +60,6 @@ export interface SlskdCardProps {
   };
 }
 
-export type SlskdHealth = "healthy" | "unhealthy" | "not_configured";
-
 export type SlskdStatusTone = "success" | "danger" | "muted";
 
 export interface SlskdStatusBadgeProps {
@@ -72,8 +72,6 @@ export interface SlskdStatusBadgeProps {
 export interface LidarrCardProps {
   initial: { url: string; apiKey: string };
 }
-
-export type LidarrHealth = SlskdHealth;
 
 export type LidarrStatusTone = SlskdStatusTone;
 
@@ -88,7 +86,9 @@ export interface EnrichmentCardProps {
   initial: ConnectionsEnrichment;
 }
 
-export type DownloadSourcesConfig = RouterOutputs["settings"]["get"]["downloadSources"];
+export type SourceChainSelection = DownloadSourceKey | "lidarr";
+
+export type PlaybackChainSelection = "local" | PlaybackServerKey;
 
 export interface YtdlpCardProps {
   initial: DownloadSourcesConfig;
@@ -163,7 +163,10 @@ export interface JellyfinCardProps {
   initial: JellyfinConnection;
 }
 
-export interface PlaybackOrderCardProps {
-  order: readonly PlaybackServerKey[];
+export interface LibrarySyncCardProps {
+  initial: { syncIntervalMinutes: number };
+}
+
+export interface MediaServerSourcesCardProps {
   connected: Readonly<Record<PlaybackServerKey, boolean>>;
 }

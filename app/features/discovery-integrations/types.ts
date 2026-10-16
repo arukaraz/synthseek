@@ -47,8 +47,11 @@ export interface ScheduleSpec {
   hour: number;
 }
 
-export interface DiscoveryCardProps {
-  className?: string;
+export type DiscoveryService = "lastfm" | "listenbrainz";
+
+export interface DiscoveryFeedsProps {
+  service: DiscoveryService;
+  apiKeyConfigured: boolean;
 }
 
 export interface ListenBrainzCardProps {
@@ -57,6 +60,7 @@ export interface ListenBrainzCardProps {
 
 export interface LastfmCardProps {
   config: LfmConfig;
+  apiKeyConfigured: boolean;
 }
 
 export interface ScheduleDayHourPickerProps {

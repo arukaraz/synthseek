@@ -7,10 +7,14 @@ export const sidebar = cva(
 );
 
 export const sidebarFooter = cva(
-  "text-fg/60 bg-fg/5 ring-fg/10 mt-auto inline-flex w-fit items-center self-start rounded-full px-2.5 py-1 font-mono text-[11px] font-medium ring-1"
+  "text-fg/60 bg-fg/5 ring-fg/10 inline-flex w-fit items-center self-start rounded-full px-2.5 py-1 font-mono text-[11px] font-medium ring-1"
 );
 
+export const sidebarBottom = cva("mt-auto flex flex-col gap-2 pt-4");
+
 export const contentScroll = cva("flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-y-auto");
+
+export const pageColumn = cva("flex min-w-0 flex-col");
 
 export const contentRoot = cva("mx-auto flex w-full max-w-3xl flex-col gap-5 p-4 sm:gap-6 sm:p-6 lg:max-w-6xl lg:p-10");
 
@@ -36,19 +40,6 @@ export const sidebarGroupButton = cva(
 );
 
 export const sidebarGroupLabel = cva("flex-1 truncate text-left");
-
-export const sidebarItem = cva(
-  "hover:bg-fg/5 flex w-full items-center gap-2 rounded-lg py-1.5 pr-3 pl-9 text-sm transition-colors",
-  {
-    variants: {
-      active: {
-        true: "bg-primary-500/10 text-fg font-medium",
-        false: "text-fg/60 hover:text-fg/90",
-      },
-    },
-    defaultVariants: { active: false },
-  }
-);
 
 export const sidebarGroupHeader = cva("text-fg/40 px-3 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider");
 
@@ -215,6 +206,10 @@ export const integrationTab = cva(
 
 export const integrationTabUnderline = cva("absolute -bottom-px left-2 right-2 h-[2px] rounded-full bg-primary-500");
 
+export const integrationTabCount = cva(
+  "bg-fg/10 text-fg/70 rounded-full px-1.5 py-px text-[10px] font-semibold tabular-nums"
+);
+
 export const listManagerCount = cva("text-fg/45 text-[11px] font-semibold uppercase tracking-wider");
 
 export const listManagerAddRow = cva("flex items-center gap-2");
@@ -284,10 +279,6 @@ export const jobAction = cva("relative flex shrink-0");
 
 export const scanHeaderMeta = cva("text-fg/55 flex items-center gap-2 text-xs whitespace-nowrap");
 
-export const scanStatLink = cva(
-  "text-primary-400 hover:text-primary-300 inline-flex items-center gap-0.5 text-xs font-semibold transition-colors [&_svg]:size-3.5"
-);
-
 export const scanFooter = cva("text-fg/50 text-xs");
 
 export const scanFooterLink = cva("hover:text-fg underline-offset-4 transition-colors hover:underline");
@@ -341,16 +332,6 @@ export const scanUnlinkedList = cva("border-fg/10 flex flex-col gap-1 border-t p
 export const scanUnlinkedItem = cva("text-fg/60 truncate text-xs");
 
 export const scanCopyRow = cva("flex items-center justify-between gap-3");
-
-export const subSection = cva("flex flex-col gap-4 border-t border-fg/10 pt-5");
-
-export const subSectionHeader = cva("flex items-start justify-between gap-3");
-
-export const subSectionHeaderText = cva("flex flex-col gap-0.5");
-
-export const subSectionTitle = cva("text-fg text-sm font-semibold");
-
-export const subSectionDescription = cva("text-fg/60 text-xs");
 
 export const copyRow = cva("flex items-stretch gap-2");
 
@@ -448,21 +429,4 @@ export const binRowMeta = cva("text-fg/50 font-mono text-[11px] tabular-nums");
 
 export const binRestore = cva(
   "text-primary-400 hover:text-primary-300 mt-0.5 focus-visible:ring-primary-500/50 inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
-);
-
-export const sidebarLeaf = cva(
-  "hover:bg-fg/5 flex w-full items-center gap-2 rounded-lg py-1.5 pr-2 pl-14 text-[13px] transition-colors [&_svg]:size-3 [&_svg]:shrink-0",
-  {
-    variants: {
-      active: {
-        true: "bg-primary-500/10 text-fg font-medium",
-        false: "text-fg/55 hover:text-fg/85",
-      },
-    },
-    defaultVariants: { active: false },
-  }
-);
-
-export const sidebarLeafCount = cva(
-  "bg-fg/10 text-fg/70 ml-auto shrink-0 rounded-full px-1.5 py-px text-[10px] font-semibold tabular-nums"
 );

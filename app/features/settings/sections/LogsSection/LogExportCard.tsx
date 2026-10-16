@@ -25,7 +25,7 @@ export function LogExportCard() {
   };
 
   return (
-    <SettingsCard title={t("logs.export.title")} description={t("logs.export.description")}>
+    <SettingsCard title={t("logs.export.title")} description={t("logs.export.description")} anchor="log-export">
       <div className={exportActions()}>
         <Button variant="outline" size="sm" onClick={handleArchive} disabled={busy}>
           <Archive />

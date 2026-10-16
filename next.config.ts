@@ -76,6 +76,17 @@ const nextConfig: NextConfig = {
     return config;
   },
 
+  async redirects() {
+    return [
+      {
+        source: "/settings/jobs",
+        has: [{ type: "query", key: "review", value: "files" }],
+        destination: "/settings/library/scan?review=files",
+        permanent: false,
+      },
+    ];
+  },
+
   async rewrites() {
     // Proxy the backend API and the OAuth Authorization Server endpoints (which
     // live at the Express root) to the backend, so a single public host serves

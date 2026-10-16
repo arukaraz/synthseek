@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { InfoTooltip } from "@components/ui/InfoTooltip";
@@ -16,19 +17,22 @@ import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
+import { MS } from "./constants";
 import { DownloadedAlbumsPointer } from "./DownloadedAlbumsPointer";
+import { withoutPriority } from "./helpers";
 import type { UsenetCardProps } from "./types";
 
 export function UsenetCard({ initial }: UsenetCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
   const reveal = useRevealSettingsSecret();
-  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.usenet);
+  const stored = useMemo(() => withoutPriority(initial.usenet), [initial.usenet]);
+  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(stored);
 
   if (!draft) return null;
 
   return (
-    <SettingsCard title={t("usenet.title")} optional description={t("usenet.description")}>
+    <SettingsCard title={t("usenet.title")} optional description={t("usenet.description")} anchor="usenet">
       <EngineRow
         label={t("usenet.enable.label")}
         description={t("usenet.enable.description")}
@@ -41,7 +45,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
         }
       />
 
-      <SettingsField label={t("usenet.indexerUrl.label")}>
+      <SettingsField label={t("usenet.indexerUrl.label")} anchor="downloadSources.usenet.indexerUrl">
         <SettingsTextInput
           value={draft.indexerUrl}
           onChange={(v) => setField("indexerUrl", v)}
@@ -62,7 +66,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
         />
       </SettingsField>
 
-      <SettingsField label={t("usenet.sabnzbdUrl.label")}>
+      <SettingsField label={t("usenet.sabnzbdUrl.label")} anchor="downloadSources.usenet.sabnzbdUrl">
         <SettingsTextInput
           value={draft.sabnzbdUrl}
           onChange={(v) => setField("sabnzbdUrl", v)}
@@ -84,6 +88,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
       </SettingsField>
 
       <EngineRow
+        anchor="downloadSources.usenet.maxSizeMb"
         label={t("usenet.maxSize.label")}
         description={t("usenet.maxSize.description")}
         control={
@@ -99,6 +104,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.usenet.minAgeHours"
         label={t("usenet.minAge.label")}
         description={t("usenet.minAge.description")}
         control={
@@ -109,6 +115,22 @@ export function UsenetCard({ initial }: UsenetCardProps) {
             max={720}
             suffix={t("usenet.minAge.suffix")}
             ariaLabel={t("usenet.minAge.ariaLabel")}
+          />
+        }
+      />
+
+      <EngineRow
+        anchor="downloadSources.usenet.searchTimeout"
+        label={t("usenet.searchTimeout.label")}
+        description={t("usenet.searchTimeout.description")}
+        control={
+          <SettingsNumberInput
+            value={Math.round(draft.searchTimeout / MS)}
+            onChange={(v) => setField("searchTimeout", v * MS)}
+            min={5}
+            max={120}
+            suffix="s"
+            ariaLabel={t("usenet.searchTimeout.ariaLabel")}
           />
         }
       />
@@ -126,6 +148,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
       </div>
 
       <EngineRow
+        anchor="downloadSources.usenet.singleTrackRequests"
         label={t("usenet.singleTrackRequests.label")}
         description={t("usenet.singleTrackRequests.description")}
         control={
@@ -159,7 +182,7 @@ export function UsenetCard({ initial }: UsenetCardProps) {
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}
-        onSave={() => save((payload) => update.mutateAsync({ ...initial, usenet: payload }))}
+        onSave={() => save((usenet) => update.mutateAsync({ usenet }))}
         onCancel={reset}
       />
     </SettingsCard>

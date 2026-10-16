@@ -89,6 +89,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
     <SettingsCard
       title={t("slskd.title")}
       description={t("slskd.description")}
+      anchor="slskd"
       trailing={
         status.data ? (
           <SlskdStatusBadge
@@ -100,7 +101,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         ) : null
       }
     >
-      <SettingsField label={t("slskd.apiUrl.label")} helper="">
+      <SettingsField label={t("slskd.apiUrl.label")} helper="" anchor="connections.slskd.apiUrl">
         <SettingsTextInput
           value={connection.apiUrl}
           onChange={(v) => connectionForm.setField("apiUrl", v)}
@@ -116,7 +117,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         ) : null}
       </SettingsField>
 
-      <SettingsField label={t("slskd.apiKey.label")}>
+      <SettingsField label={t("slskd.apiKey.label")} anchor="connections.slskd.apiKey">
         <SettingsSecretInput
           value={connection.apiKey}
           onChange={(v) => connectionForm.setField("apiKey", v)}
@@ -140,6 +141,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
       <span className={cardSectionHeader()}>{t("search.title")}</span>
 
       <EngineRow
+        anchor="engine.search.maxPeerAttempts"
         label={t("search.maxPeerAttempts.label")}
         description={t("search.maxPeerAttempts.description")}
         control={
@@ -153,6 +155,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.search.maxVariations"
         label={t("search.maxVariations.label")}
         description={t("search.maxVariations.description")}
         control={
@@ -166,6 +169,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.search.historyCleanupEnabled"
         label={t("search.historyCleanup.label")}
         description={t("search.historyCleanup.description")}
         control={
@@ -177,6 +181,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.search.maxHistorySearches"
         label={t("search.maxHistorySearches.label")}
         description={t("search.maxHistorySearches.description")}
         control={
@@ -190,6 +195,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.search.strictTierOrdering"
         label={t("search.strictTierOrdering.label")}
         description={t("search.strictTierOrdering.description")}
         control={
@@ -217,6 +223,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
 
       <SettingsField
         label={t("slskd.bannedUploaders.label")}
+        anchor="connections.slskd.bannedUsers"
         contentSpacing="loose"
         labelTrailing={
           <InfoTooltip
@@ -240,7 +247,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
               components={{
                 threshold: (
                   <HashLink
-                    href="/settings/integrations/download-sources#ban-threshold"
+                    href="/settings/download-sources?source=slskd#ban-threshold"
                     className="text-primary-400 underline-offset-2 hover:underline"
                   />
                 ),
@@ -254,6 +261,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
       <span className={cardSectionHeader()}>{t("timeouts.title")}</span>
 
       <EngineRow
+        anchor="engine.timeouts.searchPhase"
         label={t("timeouts.searchPhase.label")}
         description={t("timeouts.searchPhase.description")}
         control={
@@ -268,6 +276,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.timeouts.peerUnresponsive"
         label={t("timeouts.peerUnresponsive.label")}
         description={t("timeouts.peerUnresponsive.description")}
         control={
@@ -282,6 +291,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.timeouts.queueWaitActivePeer"
         label={t("timeouts.queueWaitActivePeer.label")}
         description={t("timeouts.queueWaitActivePeer.description")}
         control={
@@ -296,6 +306,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.timeouts.queueWaitIdlePeer"
         label={t("timeouts.queueWaitIdlePeer.label")}
         description={t("timeouts.queueWaitIdlePeer.description")}
         control={

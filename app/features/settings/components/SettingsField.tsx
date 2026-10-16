@@ -7,6 +7,7 @@ import type { SettingsFieldProps } from "./types";
 
 export function SettingsField({
   label,
+  anchor,
   labelTrailing,
   htmlFor,
   helper,
@@ -15,7 +16,7 @@ export function SettingsField({
   children,
 }: SettingsFieldProps) {
   return (
-    <div className={cn(fieldRow({ spacing: contentSpacing }), className)}>
+    <div className={cn(fieldRow({ spacing: contentSpacing }), className)} data-anchor-target={anchor}>
       {labelTrailing ? (
         <div className={fieldLabelRow()}>
           {htmlFor ? (

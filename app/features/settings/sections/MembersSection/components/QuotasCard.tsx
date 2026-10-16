@@ -20,8 +20,13 @@ export function QuotasCard() {
   if (!draft) return null;
 
   return (
-    <SettingsCard title={t("members.quotas.cardTitle")} description={t("members.quotas.cardDescription")}>
+    <SettingsCard
+      title={t("members.quotas.cardTitle")}
+      description={t("members.quotas.cardDescription")}
+      anchor="quotas"
+    >
       <EngineRow
+        anchor="quotas.tracksPerWindow"
         label={t("members.quotas.tracksPerWindow.label")}
         description={t("members.quotas.tracksPerWindow.description")}
         control={
@@ -34,6 +39,7 @@ export function QuotasCard() {
         }
       />
       <EngineRow
+        anchor="quotas.windowDays"
         label={t("members.quotas.windowDays.label")}
         description={t("members.quotas.windowDays.description")}
         control={
@@ -48,6 +54,7 @@ export function QuotasCard() {
         }
       />
       <EngineRow
+        anchor="quotas.userStorageGb"
         label={t("members.quotas.userStorageGb.label")}
         description={t("members.quotas.userStorageGb.description")}
         control={
@@ -61,6 +68,7 @@ export function QuotasCard() {
         }
       />
       <EngineRow
+        anchor="quotas.libraryStorageGb"
         label={t("members.quotas.libraryStorageGb.label")}
         description={t("members.quotas.libraryStorageGb.description")}
         control={

@@ -1,5 +1,6 @@
 import type { AppRouter, PublicUser } from "@api/__generated__/types";
 import type { inferRouterOutputs } from "@trpc/server";
+import type { ReactNode } from "react";
 
 export interface ProfileCardProps {
   user: PublicUser;
@@ -33,4 +34,5 @@ export interface QuotaRowProps {
 export interface ListeningServiceRowProps {
   connection: ListeningConnectionView;
   seenClients: string[];
+  children?: ReactNode;
 }

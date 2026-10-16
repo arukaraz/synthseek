@@ -9,7 +9,7 @@ import { useSystemStatus } from "@hooks/api/queries/useSystemStatus";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { formatDateTime } from "@utils/formatters";
 
-import { problemKey } from "./helpers";
+import { problemKey } from "../../helpers";
 import { MaintenancePage } from "./MaintenancePage";
 import { problemList, statusLoadError } from "./styles";
 import { SystemProblemRow } from "./SystemProblemRow";

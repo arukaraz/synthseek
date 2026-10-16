@@ -105,7 +105,7 @@
   },
   "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
     "title": "Account not linked",
-    "description": "The playlist's owner has to link their account for that server in their profile first."
+    "description": "The playlist's owner has to link their account for that server under Connected accounts first."
   },
   "TRACK_NOT_FOUND": {
     "title": "Track not found",

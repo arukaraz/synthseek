@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useSettings } from "@hooks/api/queries/useSettings";
 
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
+import { SETTINGS_PAGE_BY_ID } from "../../constants";
 import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
 import { ImportCard } from "./ImportCard";
 import { QualityCard } from "./QualityCard";
@@ -16,11 +17,12 @@ import { WantedCard } from "./WantedCard";
 export function EngineSection() {
   const { t } = useTranslation("settings");
   const { data, isLoading, error } = useSettings();
+  const page = SETTINGS_PAGE_BY_ID.engine;
 
   if (isLoading) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title={t("header.title")} description={t("header.description")} />
+        <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
         <div className={emptyPanel()}>
           <span className="text-fg/60 text-sm">{t("header.loading")}</span>
         </div>
@@ -31,7 +33,7 @@ export function EngineSection() {
   if (error || !data) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title={t("header.title")} description={t("header.description")} />
+        <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
         <div className={emptyPanel()}>
           <span className="text-sm text-red-400">
             {t("header.loadError", { message: error?.message ?? t("header.unknownError") })}
@@ -43,7 +45,7 @@ export function EngineSection() {
 
   return (
     <div className={contentRoot()}>
-      <SettingsPageHeader title={t("header.title")} description={t("header.description")} />
+      <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <div className={sectionGrid()}>
         <SmartSearchCard initial={data.engine.smartSearch} />
         <TimeoutsCard initial={data.engine.timeouts} />

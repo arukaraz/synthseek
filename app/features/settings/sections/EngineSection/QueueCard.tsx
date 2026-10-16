@@ -23,9 +23,11 @@ export function QueueCard({ initial }: QueueCardProps) {
   return (
     <SettingsCard
       title={t("queue.title")}
+      anchor="queue"
       trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.queue })} disabled={isSaving} />}
     >
       <EngineRow
+        anchor="engine.queue.maxSize"
         label={t("queue.maxSize.label")}
         description={t("queue.maxSize.description")}
         control={
@@ -39,6 +41,7 @@ export function QueueCard({ initial }: QueueCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.queue.maxConcurrentSearches"
         label={t("queue.maxConcurrentSearches.label")}
         description={t("queue.maxConcurrentSearches.description")}
         control={
@@ -52,6 +55,7 @@ export function QueueCard({ initial }: QueueCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.queue.maxPendingImports"
         label={t("queue.maxPendingImports.label")}
         description={t("queue.maxPendingImports.description")}
         control={

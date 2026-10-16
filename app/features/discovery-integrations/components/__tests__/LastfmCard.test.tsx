@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -20,6 +20,7 @@ const api = vi.hoisted(() => ({
   updateEnrichmentPending: false,
   reveal: vi.fn(async () => "real"),
   settings: undefined as { connections: { enrichment: Enrichment } } | undefined,
+  settingsOptions: vi.fn(),
   isAdmin: true,
 }));
 
@@ -34,7 +35,12 @@ vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
   }),
 }));
 
-vi.mock("@hooks/api/queries/useSettings", () => ({ useSettings: () => ({ data: api.settings }) }));
+vi.mock("@hooks/api/queries/useSettings", () => ({
+  useSettings: (options?: { enabled?: boolean }) => {
+    api.settingsOptions(options);
+    return { data: options?.enabled === false ? undefined : api.settings };
+  },
+}));
 
 vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => ({ isAdmin: api.isAdmin }) }));
 
@@ -48,9 +54,15 @@ function config(overrides: { enabled?: boolean; username?: string | null } = {})
   return { enabled: false, username: null, ...overrides };
 }
 
-function renderCard(overrides: { enabled?: boolean; username?: string | null } = {}) {
-  render(<LastfmCard config={config(overrides)} />);
+function renderCard(overrides: { enabled?: boolean; username?: string | null } = {}, apiKeyConfigured = true) {
+  render(<LastfmCard config={config(overrides)} apiKeyConfigured={apiKeyConfigured} />);
   return { user: userEvent.setup() };
+}
+
+function inputOf(label: string): HTMLElement {
+  const input = screen.getByText(label).parentElement?.querySelector("input");
+  if (!input) throw new Error(`no input under ${label}`);
+  return input;
 }
 
 beforeEach(() => {
@@ -78,11 +90,22 @@ describe("what the card shows", () => {
     ]);
   });
 
-  it("names the integration and offers a switch for it", () => {
+  it("titles its panel as the discovery feeds and offers a switch for them", () => {
     renderCard();
 
-    expect(screen.getByText("Last.fm")).toBeInTheDocument();
+    expect(screen.getByText(enLibrary.discoveryIntegrations.feedsTitle)).toBeInTheDocument();
     expect(screen.getByRole("switch", { name: lastfm.enableAria })).toBeInTheDocument();
+  });
+
+  it("reads the server settings only for an administrator", () => {
+    api.isAdmin = false;
+    renderCard();
+    expect(api.settingsOptions).toHaveBeenLastCalledWith({ enabled: false });
+    cleanup();
+
+    api.isAdmin = true;
+    renderCard();
+    expect(api.settingsOptions).toHaveBeenLastCalledWith({ enabled: true });
   });
 
   it("shows the switch in the state the server reported", () => {
@@ -97,36 +120,45 @@ describe("what the card shows", () => {
     expect(screen.getByDisplayValue("arukaraz")).toBeInTheDocument();
   });
 
-  it("offers the shared credentials to an administrator", () => {
+  it("offers an administrator the server credentials in a panel of their own", () => {
     renderCard();
 
+    expect(screen.getByText(lastfm.credentialsTitle)).toBeInTheDocument();
+    expect(screen.getByText(lastfm.adminBadge)).toBeInTheDocument();
     expect(screen.getByText(lastfm.apiKeyLabel)).toBeInTheDocument();
     expect(screen.getByText(lastfm.apiSecretLabel)).toBeInTheDocument();
   });
 
-  it("keeps the shared credentials away from an ordinary listener", () => {
+  it("keeps the server credentials panel away from an ordinary listener", () => {
     api.isAdmin = false;
 
     renderCard();
 
+    expect(screen.queryByText(lastfm.credentialsTitle)).not.toBeInTheDocument();
     expect(screen.queryByText(lastfm.apiKeyLabel)).not.toBeInTheDocument();
   });
 
-  it("tells an ordinary listener to ask the administrator when no key has been set", () => {
+  it("tells an ordinary listener to ask the administrator when the server has no key", () => {
     api.isAdmin = false;
 
-    renderCard();
+    renderCard({}, false);
 
     expect(screen.getByText(lastfm.apiKeyWarning)).toBeInTheDocument();
   });
 
-  it("says nothing to an ordinary listener once the key is in place", () => {
+  it("says nothing to an ordinary listener once the server reports the key is in place", () => {
     api.isAdmin = false;
-    api.settings = { connections: { enrichment: { lastfmApiKey: "key", lastfmApiSecret: "", fanartApiKey: "" } } };
 
-    renderCard();
+    renderCard({}, true);
 
     expect(screen.queryByText(lastfm.apiKeyWarning)).not.toBeInTheDocument();
+  });
+
+  it("does not warn an administrator, who can set the key right below", () => {
+    renderCard({}, false);
+
+    expect(screen.queryByText(lastfm.apiKeyWarning)).not.toBeInTheDocument();
+    expect(screen.getByText(lastfm.credentialsTitle)).toBeInTheDocument();
   });
 });
 
@@ -166,15 +198,16 @@ describe("saving the card", () => {
 
   it("saves a changed shared key alongside the rest of the enrichment settings", async () => {
     const { user } = renderCard();
-    const boxes = screen.getAllByDisplayValue("");
 
-    await user.type(boxes[0] ?? document.body, "new-key");
+    await user.type(inputOf(lastfm.apiKeyLabel), "new-key");
     await user.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() =>
-      expect(api.updateEnrichment).toHaveBeenCalledWith(
-        expect.objectContaining({ lastfmApiKey: "new-key", fanartApiKey: "fan" })
-      )
+      expect(api.updateEnrichment).toHaveBeenCalledWith({
+        lastfmApiKey: "new-key",
+        lastfmApiSecret: "",
+        fanartApiKey: "fan",
+      })
     );
     expect(api.updateLastfm).not.toHaveBeenCalled();
   });

@@ -1,7 +1,5 @@
-"use client";
-
-import { ProfileSection } from "@features/settings/sections/ProfileSection/ProfileSection";
+import { redirect } from "next/navigation";
 
 export default function ProfilePage() {
-  return <ProfileSection />;
+  redirect("/settings/account");
 }

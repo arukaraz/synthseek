@@ -39,19 +39,19 @@ Check whether the queue is paused first. Pausing is in memory, so a restart clea
 No enabled source had a candidate that passed scoring. Turn on the wanted sweep to have Synthseek keep trying on its own, with attempts spaced further apart the longer a track stays missing.
 
 **A track says "wrong file".**
-What arrived positively contradicted what you asked for, and Synthseek refused to put it in your library. The file is in the review queue where you can listen to it and decide, and that exact source and file pairing is excluded from future searches so the retry looks elsewhere.
+What arrived positively contradicted what you asked for, and Synthseek refused to put it in your library. The file is in the review queue, where you can listen to it and decide. That exact source and file pairing is excluded from future searches, so the retry looks elsewhere.
 
 **A track failed with an environment error.**
 The problem is on your machine, not the source. Usually a full disk or a downloads folder that stopped being writable. These failures do not consume retry budget, so once you fix the underlying problem the tracks are still waiting.
 
 **A track says it timed out.**
-A step ran out of the time it was given, so nothing was settled about that track either way. It is retried automatically. If it keeps happening on the same tracks, raise the matching phase timeout in the engine settings.
+A step ran out of the time it was given, so nothing was settled about that track either way. It is retried automatically. If it keeps happening on the same tracks, raise that timeout. Each source's own timeouts are in its panel under **Download sources**, and the download and import timeouts are under **Download engine**.
 
 **Downloads were working and now nothing gets through.**
 Check the queue is not paused, then check the review queue. If verification is rejecting everything, something is systematically wrong with what is arriving. Each held file in the review queue shows why it was rejected, which will tell you what is going on.
 
 **Can I stop the yt-dlp fallback?**
-Yes. Settings, then Integrations, then download sources. You can also choose which sources to try, and in what order, per request.
+Yes. Settings, then Download sources. You can also choose which sources to try, and in what order, per request.
 
 ## Library and imports
 
@@ -81,7 +81,7 @@ No. Renames flow both ways. Whichever side changed most recently wins, and Synth
 ## Listening
 
 **How do I actually listen to my library?**
-In the web app itself, through your media server, or straight from Synthseek with any Subsonic-compatible app. The web app needs nothing turned on: press play on a track in your library. For a music app, turn on **Music players** in Settings, then General, then Connect apps. Create a credential, then paste the address, your username and that credential into the app.
+In the web app itself, through your media server, or straight from Synthseek with any Subsonic-compatible app. The web app needs nothing turned on: press play on a track in your library. For a music app, turn on **Music players** in Settings, then Apps & API keys. Create a credential, then paste the address, your username and that credential into the app.
 
 **Does the web player pick up where I left off?**
 Yes, and not only in the browser. Your queue and your position are kept on the server, so a reload brings them back where you stopped. It is the same queue your Subsonic app uses, so you can leave a queue on your phone and find it in the browser. Favourites are the same mark in both, and what you play can be sent on to Last.fm or ListenBrainz once you connect one.
@@ -93,7 +93,7 @@ No. That is the point of it. A media server remains useful for everything else i
 It can change things, and that is deliberate. Favourites, playlists, what you played and the queue you left behind are all written back. The app and the web app agree with each other instead of each keeping a private copy. Three limits are worth knowing. Favourites are per person, so yours are invisible to everyone else on the instance. What you are playing right now is not: any music app on the instance can see who is listening to what, which is how the Subsonic protocol defines that feature. And deleting a playlist from a music app deletes the playlist only. The tracks stay in your library, even the ones downloaded for that playlist that live nowhere else. Deleting the music itself is a web app action, where you are asked to confirm it.
 
 **Some tracks do not show up in my music app.**
-A track is offered when Synthseek has its file on record, or when a [connected media server](/integrations/#navidrome-and-jellyfin) holds it. Music you copied into the library folder yourself is found by the library scan and then identified in small batches, after which it behaves like any other track. A file it cannot recognise waits under **Settings**, then **Jobs**, behind **Review files** on the library scan card, where you can match it to an album or a song. Synthseek works out where each existing track's file is by scanning the library, on its schedule or whenever you start a scan yourself. Anything it has not placed yet stays out of the list until it has. A track whose file was moved or deleted stays listed until Synthseek records its new location. Until then it fails when you press play, unless a connected media server holds it. The Connect apps card shows how many tracks your music app can play and how many it cannot.
+A track is offered when Synthseek has its file on record, or when a [connected media server](/integrations/#navidrome-and-jellyfin) holds it. Music you copied into the library folder yourself is found by the library scan and then identified in small batches, after which it behaves like any other track. A file it cannot recognise waits under **Settings**, then **Library**, then **Scan**, behind **Review files**, where you can match it to an album or a song. Synthseek works out where each existing track's file is by scanning the library, on its schedule or whenever you start a scan yourself. Anything it has not placed yet stays out of the list until it has. A track whose file was moved or deleted stays listed until Synthseek records its new location. Until then it fails when you press play, unless a connected media server holds it. The Music players card shows how many tracks your music app can play and how many it cannot.
 
 **Playback takes a while to start on some albums.**
 By default files are served exactly as they are, and a lossless track can be forty megabytes or more. The wait is your network moving the file rather than the server thinking. If your app offers a streaming-quality or bitrate setting, use it: Synthseek converts on the fly to what you asked for. A converted track weighs about a megabyte per minute at 128 kbps, however large the original was. A five-minute lossless track arrives as roughly five megabytes instead of twenty-seven or more. The one limit is that converted playback cannot be seeked mid-track. The progress bar still moves, you just cannot drag it. Original-quality playback seeks normally.
@@ -101,7 +101,7 @@ By default files are served exactly as they are, and a lossless track can be for
 ## Users
 
 **How do I add my household?**
-Settings, then Members. Add local accounts, or import from your Plex server.
+Settings, then Members & access. Add local accounts, or import from your Plex server.
 
 **Can I stop people downloading anything they like?**
 Turn on approval for members. Their requests are held until an administrator approves them. Promote the people you trust to the trusted role so they bypass it. To limit how much rather than what, set [download quotas](/users-permissions/#download-quotas).

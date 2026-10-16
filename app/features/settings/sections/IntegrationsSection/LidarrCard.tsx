@@ -56,6 +56,7 @@ export function LidarrCard({ initial }: LidarrCardProps) {
     <SettingsCard
       title={t("lidarr.title")}
       optional
+      anchor="lidarr"
       description={t("lidarr.description")}
       trailing={
         status.data ? (
@@ -68,7 +69,7 @@ export function LidarrCard({ initial }: LidarrCardProps) {
         ) : null
       }
     >
-      <SettingsField label={t("lidarr.url.label")} helper="">
+      <SettingsField label={t("lidarr.url.label")} helper="" anchor="connections.lidarr.url">
         <SettingsTextInput
           value={draft.url}
           onChange={(v) => setField("url", v)}

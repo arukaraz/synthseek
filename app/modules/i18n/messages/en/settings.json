@@ -5,7 +5,6 @@
     "destinations": {
       "title": "Destinations",
       "description": "Set up the apps that should receive your notifications.",
-      "tabsLabel": "Notification destinations",
       "unavailable": "Notification settings could not be loaded."
     },
     "channels": {
@@ -43,7 +42,6 @@
       "helper": "Off: only the downloads you requested. On: downloads from everyone on this server."
     },
     "whatToSend": "What to send",
-    "selectCategory": "All of {{category}}",
     "categories": {
       "downloads": "Downloads",
       "discovery": "Discovery",
@@ -111,7 +109,30 @@
       "test": "Send a test",
       "testing": "Sending...",
       "remove": "Remove",
-      "saveBeforeTest": "Save your changes to test them."
+      "saveBeforeTest": "Save your changes to test them.",
+      "edit": "Edit",
+      "close": "Close",
+      "setUp": "Set up"
+    },
+    "matrix": {
+      "description": "One list for every destination. Each column is a destination that is set up, so a new one only needs a tick per row.",
+      "empty": "Set up a destination above to choose what it receives.",
+      "note": "Open a group to pick single notifications. A destination can start from a preset, or copy another destination, from the menu under its name.",
+      "notification": "Notification",
+      "categoryTo": "All of {{category}} to {{channel}}",
+      "kindTo": "{{kind}} to {{channel}}",
+      "count": "{{selected}}/{{total}}",
+      "presetsFor": "Presets for {{channel}}",
+      "selected_one": "{{count}} selected",
+      "selected_other": "{{count}} selected",
+      "startFrom": "Start from",
+      "sameAs": "Same as {{channel}}",
+      "presets": {
+        "failures": "Only failures and problems",
+        "finished": "Finished downloads",
+        "everything": "Everything",
+        "nothing": "Nothing"
+      }
     },
     "saved": "{{channel}} saved",
     "test": {
@@ -126,7 +147,6 @@
     }
   },
   "general": {
-    "pageTitle": "General",
     "language": {
       "title": "Language",
       "description": "Choose the language used across the interface.",
@@ -141,7 +161,6 @@
     }
   },
   "header": {
-    "title": "Engine",
     "description": "Advanced controls for the search to download to import pipeline. Defaults are tuned to a balanced sweet spot that works well for most setups, change them only if you know what you are doing. When in doubt, leave them as-is or hit Reset to defaults on the affected card if tracks start failing after a change.",
     "loading": "Loading settings…",
     "loadError": "Failed to load settings: {{message}}",
@@ -429,6 +448,10 @@
       "songlinkKey": {
         "label": "Songlink API key (optional)",
         "helper": "Resolves track URLs across platforms for cross-platform playlist imports. Synthseek uses the public endpoint by default. Leave blank unless you have a key."
+      },
+      "discogsToken": {
+        "label": "Discogs token (optional)",
+        "helper": "Adds genres, labels and release details from Discogs. Leave blank to skip Discogs."
       }
     },
     "librarySources": {
@@ -568,9 +591,15 @@
       "title": "Playback order",
       "description": "Synthseek plays its own file first, then tries these servers in this order. When the first place it plays from doesn't have every track of an album or artist you play, it asks where to play it from.",
       "local": "Local",
+      "connected": "Connected",
       "notConnected": "Not connected",
-      "moveUp": "Move {{server}} up",
-      "moveDown": "Move {{server}} down"
+      "hint": "Drag a server, or use its arrows, to change the order."
+    },
+    "panelLabel": "Settings of the selected place to play from",
+    "local": {
+      "description": "Synthseek's own copy of each track. It always plays first, and the servers below are only tried when it cannot.",
+      "nothingToSet": "Nothing to set up here. Library paths and naming live in Library.",
+      "openLibrary": "Open Library"
     }
   },
   "lidarr": {
@@ -715,6 +744,11 @@
       "suffix": "h",
       "ariaLabel": "Hours a torrent may wait in qBittorrent's queue"
     },
+    "searchTimeout": {
+      "label": "Search timeout",
+      "description": "How long the indexer can spend finding a release.",
+      "ariaLabel": "Torrent search timeout in seconds"
+    },
     "singleTrackRequests": {
       "title": "Single-track requests",
       "label": "Use torrents outside albums too",
@@ -788,7 +822,6 @@
     "passwordHint": "At least {{min}} characters"
   },
   "members": {
-    "pageTitle": "Members",
     "cardTitle": "User list",
     "cardDescription": "Users that share this Synthseek instance.",
     "adminOnly": "Only administrators can view members.",
@@ -935,7 +968,6 @@
     }
   },
   "profile": {
-    "pageTitle": "Profile",
     "account": {
       "title": "Account",
       "memberSince": "Member since",
@@ -1094,7 +1126,7 @@
     "oauthLabel": "Sign in (OAuth)",
     "oauthBody": "For claude.ai web and native connectors. Add the endpoint as a custom connector and sign in with your Synthseek account. No key needed, and access follows your role.",
     "keyLabel": "API key",
-    "keyBody": "For Claude Code, Cursor, or Claude Desktop (via mcp-remote). Create a key above and send it as the bearer token: Authorization: Bearer <your key>.",
+    "keyBody": "For Claude Code, Cursor, or Claude Desktop (via mcp-remote). Create a key below and send it as the bearer token: Authorization: Bearer <your key>.",
     "toolsTitle": "Available tools",
     "toolsDescription": "What a connected assistant can do: search the catalog, queue and manage downloads, build playlists, browse your library, drive the music player, read and update settings, and (for admins) control the download queue, trigger jobs, check system health, and read server logs for diagnostics. Exact availability depends on your role.",
     "tools": {
@@ -1110,10 +1142,6 @@
     }
   },
   "logs": {
-    "page": {
-      "title": "Logs",
-      "description": "Recent server logs in the same format as the console. Filter by level, search, copy, or export."
-    },
     "level": {
       "title": "Level",
       "description": "Set logging verbosity level.",
@@ -1220,10 +1248,6 @@
     }
   },
   "jobs": {
-    "page": {
-      "title": "Jobs",
-      "description": "Background tasks Synthseek runs on a schedule. Trigger any job to run it immediately."
-    },
     "card": {
       "title": "Scheduled jobs",
       "description": "Each job shows its schedule and next run. Press play to run it now.",
@@ -1296,37 +1320,209 @@
       }
     }
   },
+  "overview": {
+    "tiles": {
+      "review": "Files held back after verification.",
+      "duplicates": "Tracks with more than one copy on disk.",
+      "quarantine": "Wrong files kept out of retries.",
+      "filesToReviewTitle": "Files to review",
+      "filesToReview": "Files the library scan could not recognize."
+    },
+    "problems": {
+      "body": "This limits what Synthseek can do until it is fixed.",
+      "seeFix": "See the fix"
+    },
+    "connections": {
+      "title": "Connections",
+      "downloadSource": "Download source {{position}}",
+      "handOff": "Album hand off",
+      "mediaServer": "Media server",
+      "librarySource": "Library source",
+      "missingDetails": "Missing details"
+    },
+    "setup": {
+      "title": "Finish setting up",
+      "progress": "{{done}} of {{total}}",
+      "action": "Set up",
+      "downloadSource": "A download source",
+      "mediaServer": "A media server",
+      "musicbrainzEmail": "MusicBrainz contact email",
+      "acoustidKey": "AcoustID key, to verify imports"
+    },
+    "jobs": {
+      "all": "All jobs"
+    }
+  },
   "shell": {
     "card": {
       "optional": "(Optional)"
     },
     "sidebar": {
       "ariaLabel": "Settings sections",
-      "advanced": "Advanced",
       "version": "synthseek v{{version}}",
-      "items": {
-        "general": "General",
-        "members": "Members",
-        "profile": "Profile",
-        "integrations": "Integrations",
-        "engine": "Engine",
-        "jobs": "Jobs",
-        "logs": "Logs",
-        "updates": "Updates",
-        "maintenance": "Maintenance",
+      "groups": {
+        "you": "You",
+        "server": "This server"
+      },
+      "attention": "Something here is waiting for you"
+    },
+    "pages": {
+      "account": {
+        "title": "Account",
+        "description": "Your profile, password and download quota."
+      },
+      "appearance": {
+        "title": "Appearance & language",
+        "description": "The theme and the language Synthseek uses for you."
+      },
+      "connectedAccounts": {
+        "title": "Connected accounts",
+        "description": "Accounts on other services that Synthseek uses on your behalf."
+      },
+      "listening": {
+        "title": "Listening & discovery",
+        "description": "Send what you play to Last.fm and ListenBrainz, and bring their recommendations to Discover."
+      },
+      "notifications": {
+        "title": "Notifications"
+      },
+      "apps": {
+        "title": "Apps & API keys",
+        "description": "Music apps, AI assistants and scripts that connect to your Synthseek."
+      },
+      "overview": {
+        "title": "Overview",
+        "description": "This server at a glance. Each item links to the page where it is handled."
+      },
+      "members": {
+        "title": "Members & access",
+        "description": "The people who share this Synthseek, what they can do and how much they can download."
+      },
+      "downloadSources": {
+        "title": "Download sources",
+        "description": "Synthseek tries the sources from top to bottom. When one cannot deliver a track, the next one gets it in the same request."
+      },
+      "engine": {
+        "title": "Download engine"
+      },
+      "library": {
+        "title": "Library"
+      },
+      "media": {
+        "title": "Media & playback",
+        "description": "The media servers Synthseek keeps in sync, and the order the player tries them in."
+      },
+      "metadata": {
+        "title": "Metadata",
+        "description": "External services that add artwork, fingerprints and tags to your library."
+      },
+      "maintenance": {
+        "title": "Maintenance",
+        "description": "Things that wait for a decision from you."
+      },
+      "system": {
+        "title": "System",
+        "description": "Background jobs and server logs."
+      },
+      "about": {
+        "title": "About & updates"
+      }
+    },
+    "tabs": {
+      "library": {
+        "paths": "Paths & rules",
+        "scan": "Scan",
+        "sources": "Sources"
+      },
+      "maintenance": {
         "review": "Review",
         "duplicates": "Duplicates",
         "recycleBin": "Recycle bin",
         "downloadedAlbums": "Downloaded albums",
         "quarantine": "Quarantine",
-        "systemStatus": "System status",
-        "library": "Library",
-        "notifications": "Notifications"
+        "systemStatus": "System status"
       },
-      "maintenanceWaiting": "Some maintenance surfaces have items waiting"
+      "system": {
+        "jobs": "Jobs",
+        "logs": "Logs"
+      }
     },
-    "integrationTabs": {
-      "ariaLabel": "Integrations"
+    "search": {
+      "label": "Search settings",
+      "placeholder": "Search settings",
+      "clear": "Clear search",
+      "shortcut": "/",
+      "summary_one": "{{count}} result in {{places}} place",
+      "summary_other": "{{count}} results in {{places}} places",
+      "empty": "No setting matches. Try key, timeout, quota or Plex.",
+      "place": "{{page}} › {{place}}",
+      "entries": {
+        "navidromeAccount": "Navidrome account",
+        "jellyfinAccount": "Jellyfin account",
+        "lastfmFeeds": "Last.fm discovery feeds",
+        "lastfmCredentials": "Last.fm API key and secret",
+        "listenbrainzFeeds": "ListenBrainz discovery feeds",
+        "listenbrainzAutoRequest": "Request ListenBrainz playlists automatically"
+      },
+      "keywords": {
+        "theme": "dark midnight ocean color colour",
+        "language": "english spanish french german",
+        "scrobble": "scrobble plays listening history",
+        "channels": "discord ntfy telegram webhook apprise",
+        "musicApps": "subsonic feishin symfonium dsub credential",
+        "libraryPaths": "folder naming template rename",
+        "unidentified": "unidentified unrecognized match ignore",
+        "jobs": "cron schedule run",
+        "updates": "version release changelog patch notes",
+        "timeout": "timeout time limit wait"
+      }
+    },
+    "palette": {
+      "title": "Search or run an action",
+      "description": "Find a setting or a page, or run a common action.",
+      "placeholder": "Search settings, pages and actions",
+      "actions": "Actions",
+      "settings": "Settings and pages",
+      "pages": "Pages",
+      "empty": "Nothing matches “{{query}}”.",
+      "keys": "Arrows to move, Enter to open, / to search in the sidebar",
+      "actionLabels": {
+        "runLibraryScan": "Run the library scan now",
+        "reviewUnidentified": "Review files the scan could not recognize",
+        "checkForUpdates": "Check for updates",
+        "createLocalUser": "Create a local user",
+        "addLibraryPath": "Add a library path",
+        "newApiKey": "Create an API key",
+        "emptyRecycleBin": "Empty the recycle bin",
+        "resolveDuplicates": "Resolve duplicate copies",
+        "downloadLogs": "Download all logs"
+      }
+    },
+    "leaveDialog": {
+      "title": "Leave with unsaved changes?",
+      "description": "Some changes on this page are not saved yet.",
+      "stay": "Keep editing",
+      "discard": "Discard",
+      "save": "Save and continue"
+    },
+    "downloadSources": {
+      "order": "Search order",
+      "orderHint": "Drag a source, or use its arrows, to change the order.",
+      "handOff": "Hand off instead of downloading",
+      "panelLabel": "Settings of the selected source"
+    },
+    "sourceStatus": {
+      "on": "On",
+      "off": "Off",
+      "checking": "Checking",
+      "notConfigured": "Not configured",
+      "noCollection": "No collection on"
+    },
+    "chain": {
+      "open": "Open {{name}}",
+      "drag": "Drag {{name}} to change its place",
+      "moveUp": "Move {{name}} up",
+      "moveDown": "Move {{name}} down"
     },
     "pageHeader": {
       "backToSections": "Back to sections"
@@ -1341,7 +1537,10 @@
     "saveBar": {
       "cancel": "Cancel",
       "save": "Save changes",
-      "saving": "Saving..."
+      "saving": "Saving...",
+      "region": "Unsaved changes",
+      "summary_one": "{{count}} unsaved change",
+      "summary_other": "{{count}} unsaved changes"
     },
     "resetDefaults": {
       "label": "Reset to defaults"
@@ -1398,6 +1597,11 @@
       "description": "Skip releases newer than this, since a very recent post may still be spreading across servers and would arrive incomplete.",
       "suffix": "h",
       "ariaLabel": "Minimum release age in hours"
+    },
+    "searchTimeout": {
+      "label": "Search timeout",
+      "description": "How long the indexer can spend finding a release.",
+      "ariaLabel": "Usenet search timeout in seconds"
     },
     "singleTrackRequests": {
       "title": "Single-track requests",
@@ -1485,16 +1689,26 @@
       "ariaLabel": "Convert audio on the fly"
     }
   },
-  "connectApps": {
-    "card": {
-      "title": "Connect apps",
-      "description": "Apps and assistants that connect to your Synthseek."
-    }
-  },
   "library": {
     "page": {
-      "title": "Library",
-      "description": "How your files are organised on disk, and what does not match."
+      "description": "How your files are organised on disk, what the scan finds, and where libraries are imported from."
+    },
+    "sync": {
+      "title": "External library sync",
+      "description": "Followed playlists and saved albums on every connected service are checked for changes on this schedule.",
+      "interval": {
+        "label": "Check for changes every",
+        "description": "How often Synthseek looks for new tracks in what members follow and save on other services.",
+        "suffix": "min"
+      }
+    },
+    "mediaServerSources": {
+      "title": "Your media servers",
+      "description": "Members can also import playlists from Plex, Navidrome and Jellyfin. Nothing is set here: the server connection lives in Media & playback, and each member imports with the account they link in Connected accounts.",
+      "available": "Available to members",
+      "notConfigured": "Not configured",
+      "open": "Open",
+      "setUp": "Set up"
     }
   },
   "libraryPaths": {
@@ -1920,7 +2134,9 @@
       "linked": "In the library",
       "searching": "Searching",
       "toReview": "To review",
-      "reviewFiles": "Review files"
+      "reviewFiles": "Review files",
+      "reviewFilesCount_one": "Review {{count}} file",
+      "reviewFilesCount_other": "Review {{count}} files"
     },
     "paths": {
       "columns": {

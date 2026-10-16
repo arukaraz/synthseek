@@ -1,1 +1,1 @@
-export { DiscoveryCard } from "./components/DiscoveryCard";
+export { DiscoveryFeeds } from "./components/DiscoveryFeeds";

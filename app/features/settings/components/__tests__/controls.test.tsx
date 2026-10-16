@@ -10,7 +10,7 @@ import { SegmentedControl } from "../SegmentedControl";
 import { SettingsCard } from "../SettingsCard";
 import { SettingsNumberInput } from "../SettingsNumberInput";
 import { SettingsSecretInput } from "../SettingsSecretInput";
-import { IntegrationTabs } from "../IntegrationTabs";
+import { SettingsTabs } from "../SettingsTabs";
 import { SECRET_SENTINEL, TYPED_SECRET } from "../constants";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
@@ -247,10 +247,11 @@ describe("SettingsCard", () => {
   });
 });
 
-describe("IntegrationTabs", () => {
+describe("SettingsTabs", () => {
   it("renders tabs and marks the active one based on the pathname", () => {
     render(
-      <IntegrationTabs
+      <SettingsTabs
+        ariaLabel="Sections"
         items={[
           { href: "/", label: "Home", icon: Music },
           { href: "/other", label: "Other", icon: Music },
@@ -261,6 +262,21 @@ describe("IntegrationTabs", () => {
     const homeLink = screen.getByRole("link", { name: /Home/ });
     expect(homeLink).toHaveAttribute("aria-current", "page");
     expect(screen.getByRole("link", { name: /Other/ })).not.toHaveAttribute("aria-current");
-    expect(screen.getByRole("navigation", { name: enSettings.shell.integrationTabs.ariaLabel })).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Sections" })).toBeInTheDocument();
+  });
+
+  it("shows a count only when it is above zero", () => {
+    render(
+      <SettingsTabs
+        ariaLabel="Sections"
+        items={[
+          { href: "/a", label: "Waiting", icon: Music, count: 4 },
+          { href: "/b", label: "Clear", icon: Music, count: 0 },
+        ]}
+      />
+    );
+
+    expect(screen.getByRole("link", { name: /Waiting/ })).toHaveTextContent("4");
+    expect(screen.getByRole("link", { name: /Clear/ })).not.toHaveTextContent("0");
   });
 });

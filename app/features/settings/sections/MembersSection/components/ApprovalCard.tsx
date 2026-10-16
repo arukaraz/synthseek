@@ -22,6 +22,7 @@ export function ApprovalCard() {
   return (
     <SettingsCard title={t("members.approval.cardTitle")} description={t("members.approval.cardDescription")}>
       <EngineRow
+        anchor="users.requireApprovalForMembers"
         label={t("members.approval.requireForMembers.label")}
         description={t("members.approval.requireForMembers.description")}
         control={

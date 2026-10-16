@@ -60,6 +60,8 @@ const initial: YtdlpCardProps["initial"] = {
   torrent: createMockSettings().downloadSources.torrent,
 };
 
+const { priority: _priority, ...storedYtdlp } = initial.ytdlp;
+
 describe("YtdlpCard", () => {
   it("renders the card title", () => {
     render(<YtdlpCard initial={initial} />);
@@ -71,22 +73,14 @@ describe("YtdlpCard", () => {
     expect(screen.getByRole("switch", { name: enSettings.ytdlp.enable.ariaLabel })).not.toBeChecked();
   });
 
-  it("saves the ytdlp draft alongside every unchanged sibling source after an edit", async () => {
+  it("saves only the ytdlp source after an edit, leaving its priority and every sibling source out of the payload", async () => {
     render(<YtdlpCard initial={initial} />);
 
     await userEvent.click(screen.getByRole("switch", { name: enSettings.ytdlp.enable.ariaLabel }));
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith({
-        slskd: initial.slskd,
-        ytdlp: { ...initial.ytdlp, enabled: true },
-        usenet: initial.usenet,
-        archive: initial.archive,
-        soundcloud: initial.soundcloud,
-        subsonic: initial.subsonic,
-        torrent: initial.torrent,
-      });
+      expect(update.mutateAsync).toHaveBeenCalledWith({ ytdlp: { ...storedYtdlp, enabled: true } });
     });
   });
 

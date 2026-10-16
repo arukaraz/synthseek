@@ -23,9 +23,14 @@ export function SmartSearchCard({ initial }: SmartSearchCardProps) {
   return (
     <SettingsCard
       title={t("search.smartSearchHeader")}
+      anchor="smart-search"
       trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.smartSearch })} disabled={isSaving} />}
     >
-      <SettingsField label={t("search.customMoodKeywords.label")} helper={t("search.customMoodKeywords.helper")}>
+      <SettingsField
+        label={t("search.customMoodKeywords.label")}
+        helper={t("search.customMoodKeywords.helper")}
+        anchor="engine.smartSearch.customMoodKeywords"
+      >
         <ChipsInput
           value={draft.customMoodKeywords}
           onChange={(v) => setField("customMoodKeywords", v)}

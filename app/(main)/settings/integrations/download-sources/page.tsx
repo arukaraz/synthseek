@@ -1,7 +1,5 @@
-"use client";
-
-import { DownloadSourcesSection } from "@features/settings/sections/IntegrationsSection/DownloadSourcesSection";
+import { redirect } from "next/navigation";
 
 export default function DownloadSourcesIntegrationPage() {
-  return <DownloadSourcesSection />;
+  redirect("/settings/download-sources");
 }

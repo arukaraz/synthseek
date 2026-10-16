@@ -1,7 +1,11 @@
+import type { TFunction } from "i18next";
+
+import { formatBytes } from "@utils/formatters";
 import { matchesTerms, searchTerms } from "@utils/search";
 
+import type { SystemProblem } from "../../types";
 import { CONTAINER_DEFAULT_OWNER_ID } from "./constants";
-import type { DownloadedAlbum, DownloadedAlbumFilter, SystemProblem, SystemProblemCopyParams } from "./types";
+import type { DownloadedAlbum, DownloadedAlbumFilter, DuplicateGroupSummary, SystemProblemCopyParams } from "./types";
 
 export function downloadedAlbumsIn(
   entries: readonly DownloadedAlbum[],
@@ -34,10 +38,6 @@ export function truncateMiddle(value: string, max: number): string {
   return `${value.slice(0, head)}…${value.slice(value.length - tail)}`;
 }
 
-export function problemKey(problem: SystemProblem): string {
-  return JSON.stringify(problem);
-}
-
 function ownerIdOrDefault(value: string): string {
   return value.length > 0 ? value : CONTAINER_DEFAULT_OWNER_ID;
 }
@@ -59,4 +59,25 @@ export function problemCopyParams(problem: SystemProblem): SystemProblemCopyPara
     case "config_value_ignored":
       return { name: problem.name };
   }
+}
+
+export function describeCopies(group: DuplicateGroupSummary, t: TFunction<"settings">): string {
+  const parts = [t("libraryScan.duplicates.copies", { count: group.copies.length })];
+  if (group.formats.length > 0) parts.push(group.formats.map((format) => format.toUpperCase()).join(" + "));
+  const lengths = group.distinctLengths;
+  parts.push(
+    lengths !== null && lengths > 1
+      ? t("libraryScan.duplicates.distinctLengths", { count: lengths })
+      : group.minBytes === group.maxBytes
+        ? t("libraryScan.duplicates.sizeEach", { size: formatBytes(group.maxBytes) })
+        : t("libraryScan.duplicates.sizeRange", {
+            from: formatBytes(group.minBytes),
+            to: formatBytes(group.maxBytes),
+          })
+  );
+  return parts.join(" · ");
+}
+
+export function copyAudioUrl(fileId: string): string {
+  return `/api/v1/library-copies/${encodeURIComponent(fileId)}/audio`;
 }

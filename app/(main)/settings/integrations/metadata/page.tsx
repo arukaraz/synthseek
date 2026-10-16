@@ -1,7 +1,5 @@
-"use client";
-
-import { MetadataSection } from "@features/settings/sections/IntegrationsSection/MetadataSection";
+import { redirect } from "next/navigation";
 
 export default function MetadataIntegrationPage() {
-  return <MetadataSection />;
+  redirect("/settings/metadata");
 }

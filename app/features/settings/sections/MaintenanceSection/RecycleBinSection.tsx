@@ -73,6 +73,7 @@ export function RecycleBinSection() {
             <>
               <div role="separator" className={cardDivider()} />
               <EngineRow
+                anchor="library.recycleBin.retentionDays"
                 label={t("quality.recycleBin.retentionDays.label")}
                 description={t("quality.recycleBin.retentionDays.description")}
                 control={

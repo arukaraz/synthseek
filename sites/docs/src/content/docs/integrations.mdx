@@ -36,7 +36,7 @@ Playlists you request or create in Synthseek can be mirrored to Plex.
 
 Once Plex is connected, Synthseek works out which of your tracks your Plex server also holds. A track Synthseek has no file for then plays from Plex instead, and by default your own copy plays first. When a track is in both places you can switch the playing track to the other copy from the player's settings. Playing an album or artist asks you where to play it from when your first source is missing some of its tracks.
 
-Each listener can also have their plays counted in Plex. With Plex connected, the Plex row under **Profile** offers **Record my plays in Plex**. Their plays, in the web player or in a music app, then count in their own Plex library too, when Plex holds the track.
+Each listener can also have their plays counted in Plex. With Plex connected, the Plex row under **Connected accounts** offers **Record my plays in Plex**. Their plays, in the web player or in a music app, then count in their own Plex library too, when Plex holds the track.
 
 ### Why a Plex playlist can show fewer tracks
 
@@ -50,9 +50,9 @@ A mirrored playlist reflects tracks that are complete in Synthseek **and** were 
 
 ## Navidrome and Jellyfin
 
-Synthseek can play a track from Navidrome or Jellyfin when it has no file for it, as it does from Plex. Music apps connected to Synthseek play those tracks too. This starts once you connect the server under **Settings > Integrations > Media servers**, where Plex is set up too. When more than one server holds a track, Synthseek tries them in the order set on that page. Navidrome finds more of your tracks with **Report Real Path** turned on for the Synthseek player, and its connection test says when it is off.
+Synthseek can play a track from Navidrome or Jellyfin when it has no file for it, as it does from Plex. Music apps connected to Synthseek play those tracks too. This starts once you connect the server under **Settings**, then **Media & playback**, where Plex is set up too. When more than one server holds a track, Synthseek tries them in the order set on that page. Navidrome finds more of your tracks with **Report Real Path** turned on for the Synthseek player, and its connection test says when it is off.
 
-Each listener can link their own Navidrome or Jellyfin account under **Profile** to have their plays counted there. Synthseek does not keep their password.
+Each listener can link their own Navidrome or Jellyfin account under **Connected accounts** to have their plays counted there. Synthseek does not keep their password.
 
 With playlist sync on for a server, playlists are mirrored to Navidrome or Jellyfin the way they are to Plex, each into the account its owner linked. A playlist imported from a server is never synced back to it.
 
@@ -106,13 +106,13 @@ Artwork from the catalog, Cover Art Archive, fanart.tv and the Spotify image CDN
 
 A library source is where your existing collection lives: Spotify, or a connected Plex, Navidrome, or Jellyfin server. **Import** on the library page lists them.
 
-Each member connects their own. Spotify connects over OAuth, and you can then browse your saved albums, saved tracks, and playlists, select what you want, and import it. A server offers its playlists through the account the member linked under **Profile**. An imported playlist can be kept in sync so later additions flow through.
+Each member connects their own. Spotify connects over OAuth, and you can then browse your saved albums, saved tracks, and playlists, select what you want, and import it. A server offers its playlists through the account the member linked under **Connected accounts**. An imported playlist can be kept in sync so later additions flow through.
 
 The Spotify connection needs a client ID and a public base URL, because the OAuth callback returns over the internet.
 
 ## Discovery services
 
-**ListenBrainz** and **Last.fm**, both per member, both configured under discovery integrations.
+**ListenBrainz** and **Last.fm**, both per member, both configured under **Listening & discovery**.
 
 ListenBrainz provides four kinds of mix: collaborative filtering recommendations, weekly exploration, weekly jams, and daily jams. Choose which you want, name them, and decide whether Synthseek should request their tracks automatically. A mix can update a single playlist in place rather than creating a new one each refresh.
 
@@ -120,6 +120,6 @@ Last.fm provides your recent scrobbles and top tracks, and powers similar-artist
 
 ## Listening services
 
-Last.fm and ListenBrainz also take plays the other way, from Synthseek to them. That is a separate per-member connection under **Settings**, then **Profile**, then **Listening services**, and it is described with the web player in [Features](/features/). Last.fm needs its shared secret alongside the API key before anyone can connect an account; ListenBrainz needs only the user token from your profile there.
+Last.fm and ListenBrainz also take plays the other way, from Synthseek to them. That is a separate per-member connection under **Settings**, then **Listening & discovery**, and it is described with the web player in [Features](/features/). Last.fm needs its shared secret alongside the API key before anyone can connect an account; ListenBrainz needs only the user token from your profile there.
 
 ---

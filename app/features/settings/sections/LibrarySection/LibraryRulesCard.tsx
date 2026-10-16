@@ -61,6 +61,7 @@ export function LibraryRulesCard() {
     <SettingsCard
       title={title}
       description={description}
+      anchor="library-rules"
       trailing={
         <Button onClick={() => setTarget({ mode: "add" })}>
           <Plus className="size-4" aria-hidden />

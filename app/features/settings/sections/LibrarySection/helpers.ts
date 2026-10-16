@@ -1,7 +1,10 @@
+import type { TFunction } from "i18next";
+
 import i18n from "@locale";
-import { formatDuration } from "@utils/formatters";
+import { formatDuration, formatRelativeTime } from "@utils/formatters";
 
 import {
+  SKIPPED_SCAN_KEYS,
   ACCESS_TONE,
   EXTENSION_SUFFIX,
   EXTENSION_TOKEN,
@@ -35,7 +38,18 @@ import type {
   RuleMember,
   RunOutcome,
   TemplateHintInput,
+  LastScanText,
+  LibraryScanPath,
 } from "./types";
+
+export function lastScanOf(path: LibraryScanPath, t: TFunction<"settings">): LastScanText {
+  if (path.scanning) return { text: t("libraryScan.header.running"), skipped: false };
+  if (path.lastScanAt === null) return { text: t("libraryScan.paths.never"), skipped: false };
+  if (path.lastScanOutcome === null || path.lastScanOutcome === "reconciled") {
+    return { text: formatRelativeTime(new Date(path.lastScanAt)), skipped: false };
+  }
+  return { text: t(SKIPPED_SCAN_KEYS[path.lastScanOutcome]), skipped: true };
+}
 
 export function sampleLabelKey(id: string): (typeof SAMPLE_LABELS)[keyof typeof SAMPLE_LABELS] | null {
   for (const [key, value] of Object.entries(SAMPLE_LABELS)) {

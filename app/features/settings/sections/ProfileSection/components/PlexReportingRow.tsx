@@ -7,7 +7,7 @@ import { Switch } from "@components/ui/Switch";
 import { usePlaybackSourceAccounts, useSetSourceReporting } from "@hooks/api";
 
 import { PLEX_SOURCE_KEY, REPORT_FAILURE_KEYS } from "../constants";
-import { reportingNote } from "../styles";
+import { listeningFailure, listeningPanel, listeningToggleLabel, listeningToggleRow } from "../styles";
 import type { PlexReportingRowProps } from "../types";
 
 export function PlexReportingRow({ onRelink, relinking }: PlexReportingRowProps) {
@@ -19,11 +19,13 @@ export function PlexReportingRow({ onRelink, relinking }: PlexReportingRowProps)
 
   if (!plex.connected) {
     return (
-      <div className={reportingNote()}>
-        <p className="text-fg/60 min-w-0 flex-1 text-xs">{t("profile.connected.plex.reporting.relinkHint")}</p>
-        <Button variant="outline" size="sm" onClick={onRelink} disabled={relinking}>
-          {t("profile.connected.plex.reporting.relink")}
-        </Button>
+      <div className={listeningPanel()}>
+        <div className={listeningToggleRow()}>
+          <p className={listeningToggleLabel()}>{t("profile.connected.plex.reporting.relinkHint")}</p>
+          <Button variant="outline" size="sm" onClick={onRelink} disabled={relinking}>
+            {t("profile.connected.plex.reporting.relink")}
+          </Button>
+        </div>
       </div>
     );
   }
@@ -31,18 +33,20 @@ export function PlexReportingRow({ onRelink, relinking }: PlexReportingRowProps)
   const failureKey = plex.lastFailure === null ? undefined : REPORT_FAILURE_KEYS[plex.lastFailure];
 
   return (
-    <div className={reportingNote()}>
-      <div className="min-w-0 flex-1">
-        <p className="text-fg text-xs font-medium">{t("profile.connected.plex.reporting.label")}</p>
-        <p className="text-fg/50 text-xs">{t("profile.connected.plex.reporting.description")}</p>
-        {failureKey !== undefined ? <p className="text-warning-vivid mt-1 text-xs">{t(failureKey)}</p> : null}
+    <div className={listeningPanel()}>
+      <div className={listeningToggleRow()}>
+        <div className="min-w-0 flex-1">
+          <p className={listeningToggleLabel()}>{t("profile.connected.plex.reporting.label")}</p>
+          <p className="text-fg/50 text-xs">{t("profile.connected.plex.reporting.description")}</p>
+          {failureKey !== undefined ? <p className={listeningFailure()}>{t(failureKey)}</p> : null}
+        </div>
+        <Switch
+          checked={plex.reportEnabled}
+          onCheckedChange={(enabled) => setReporting.mutate({ server: PLEX_SOURCE_KEY, enabled })}
+          disabled={setReporting.isPending}
+          aria-label={t("profile.connected.plex.reporting.label")}
+        />
       </div>
-      <Switch
-        checked={plex.reportEnabled}
-        onCheckedChange={(enabled) => setReporting.mutate({ server: PLEX_SOURCE_KEY, enabled })}
-        disabled={setReporting.isPending}
-        aria-label={t("profile.connected.plex.reporting.label")}
-      />
     </div>
   );
 }

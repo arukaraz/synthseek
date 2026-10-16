@@ -32,9 +32,11 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
   return (
     <SettingsCard
       title={t("timeouts.title")}
+      anchor="timeouts"
       trailing={<ResetDefaultsButton onReset={handleReset} disabled={isSaving} />}
     >
       <EngineRow
+        anchor="engine.timeouts.downloadPhase"
         label={t("timeouts.downloadPhase.label")}
         description={t("timeouts.downloadPhase.description")}
         control={
@@ -49,6 +51,7 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.timeouts.importPhase"
         label={t("timeouts.importPhase.label")}
         description={t("timeouts.importPhase.description")}
         control={

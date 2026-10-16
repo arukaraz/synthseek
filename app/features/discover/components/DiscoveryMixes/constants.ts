@@ -60,7 +60,7 @@ export const EMPTY_REASON_FALLBACK_KEY: ParseKeys<"discover"> = "mixes.emptyReas
 
 export const WAITING_FIRST_SYNC_KEY: ParseKeys<"discover"> = "mixes.emptyReason.waitingFirstSync";
 
-export const DISCOVERY_SETTINGS_HREF = "/settings/integrations/metadata#listenbrainz";
+export const DISCOVERY_SETTINGS_HREF = "/settings/listening#listenbrainz.feeds";
 
 export const SKELETON_PLACEHOLDERS = [0, 1, 2, 3] as const;
 

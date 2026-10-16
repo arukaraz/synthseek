@@ -17,7 +17,7 @@ export function HashLink({ href, className, children }: HashLinkProps) {
       href={href}
       className={className}
       onClick={() => {
-        if (path === pathname) triggerHashTargetGlow(hash);
+        if (path.split("?")[0] === pathname) triggerHashTargetGlow(hash);
       }}
     >
       {children}

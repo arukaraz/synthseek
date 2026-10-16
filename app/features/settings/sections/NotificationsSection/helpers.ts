@@ -1,12 +1,27 @@
-import { CHANNEL_FIELDS, PUBLIC_NTFY_SERVER } from "./constants";
+import { CHANNEL_FIELDS, NOTIFICATION_PRESETS, PUBLIC_NTFY_SERVER } from "./constants";
 import type {
   CategorySelection,
   DestinationDraft,
+  NotificationCategory,
   NotificationChannel,
   NotificationDestination,
   NotificationKind,
+  NotificationPresetId,
   SaveDestinationInput,
 } from "./types";
+
+export function availableKinds(categories: readonly NotificationCategory[]): NotificationKind[] {
+  return categories.flatMap((category) => category.kinds);
+}
+
+export function presetKinds(preset: NotificationPresetId, available: readonly NotificationKind[]): NotificationKind[] {
+  const kinds = NOTIFICATION_PRESETS[preset];
+  return kinds === "all" ? [...available] : available.filter((kind) => kinds.includes(kind));
+}
+
+export function countSelected(kinds: readonly NotificationKind[], selected: readonly NotificationKind[]): number {
+  return kinds.filter((kind) => selected.includes(kind)).length;
+}
 
 export function draftOf(
   channel: NotificationChannel,

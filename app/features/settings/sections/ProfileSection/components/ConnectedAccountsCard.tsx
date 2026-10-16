@@ -15,7 +15,7 @@ import { cn } from "@utils/cn";
 
 import { SettingsCard } from "../../../components/SettingsCard";
 import { usePlexLink } from "../hooks/usePlexLink";
-import { accountChip, connectedRow, listeningFailure } from "../styles";
+import { accountChip, listeningFailure, listeningRow, listeningRowHeader } from "../styles";
 import { PlexReportingRow } from "./PlexReportingRow";
 import { ServerAccountRow } from "./ServerAccountRow";
 
@@ -44,87 +44,88 @@ export function ConnectedAccountsCard() {
   return (
     <SettingsCard title={t("profile.connected.title")}>
       {spotifyEnabled ? (
-        <div className={connectedRow()}>
-          <span className={cn(accountChip(), providerTone({ provider: "spotify" }))}>
-            <ProviderMark provider="spotify" size={18} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-fg text-sm font-medium">{t("profile.connected.spotify.name")}</p>
-            <p className="text-fg/50 truncate text-xs">
-              {connected
-                ? (externalUsername ?? t("profile.connected.spotify.connected"))
-                : configured
-                  ? t("profile.connected.spotify.notConnected")
-                  : t("profile.connected.spotify.notConfigured")}
-            </p>
-            {needsReconnect ? (
-              <p className={listeningFailure()} role="status">
-                {t("profile.connected.spotify.needsReconnect")}
+        <div className={listeningRow()} data-anchor-target="spotify">
+          <div className={listeningRowHeader()}>
+            <span className={cn(accountChip(), providerTone({ provider: "spotify" }))}>
+              <ProviderMark provider="spotify" size={18} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-fg text-sm font-medium">{t("profile.connected.spotify.name")}</p>
+              <p className="text-fg/50 truncate text-xs">
+                {connected
+                  ? (externalUsername ?? t("profile.connected.spotify.connected"))
+                  : configured
+                    ? t("profile.connected.spotify.notConnected")
+                    : t("profile.connected.spotify.notConfigured")}
               </p>
+              {needsReconnect ? (
+                <p className={listeningFailure()} role="status">
+                  {t("profile.connected.spotify.needsReconnect")}
+                </p>
+              ) : null}
+            </div>
+            {needsReconnect ? (
+              <Button
+                size="sm"
+                onClick={() => connect.mutate({ provider: "spotify" })}
+                disabled={!configured || connect.isPending}
+              >
+                {t("profile.connected.reconnect")}
+              </Button>
             ) : null}
+            {connected ? (
+              <Button variant="outline" size="sm" onClick={() => disconnect.mutate()} disabled={disconnect.isPending}>
+                {t("profile.connected.disconnect")}
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => connect.mutate({ provider: "spotify" })}
+                disabled={!configured || connect.isPending}
+              >
+                {t("profile.connected.connect")}
+              </Button>
+            )}
           </div>
-          {needsReconnect ? (
-            <Button
-              size="sm"
-              onClick={() => connect.mutate({ provider: "spotify" })}
-              disabled={!configured || connect.isPending}
-            >
-              {t("profile.connected.reconnect")}
-            </Button>
-          ) : null}
-          {connected ? (
-            <Button variant="outline" size="sm" onClick={() => disconnect.mutate()} disabled={disconnect.isPending}>
-              {t("profile.connected.disconnect")}
-            </Button>
-          ) : (
-            <Button
-              size="sm"
-              onClick={() => connect.mutate({ provider: "spotify" })}
-              disabled={!configured || connect.isPending}
-            >
-              {t("profile.connected.connect")}
-            </Button>
-          )}
         </div>
       ) : null}
 
       {currentUser ? (
-        <div className={connectedRow()}>
-          <span className={cn(accountChip(), providerTone({ provider: "plex" }))}>
-            <ProviderMark provider="plex" size={18} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-fg text-sm font-medium">{t("profile.connected.plex.name")}</p>
-            <p className="text-fg/50 truncate text-xs">
-              {plexLinked
-                ? (currentUser.plex_username ?? t("profile.connected.plex.linked"))
-                : plexLink.isPending
-                  ? t("profile.connected.plex.connecting")
-                  : t("profile.connected.plex.notLinked")}
-            </p>
-            {plexLinked && !canUnlinkPlex ? (
-              <p className="text-fg/40 mt-1 text-xs">{t("profile.connected.plex.needsPassword")}</p>
-            ) : null}
+        <div className={listeningRow()} data-anchor-target="plex">
+          <div className={listeningRowHeader()}>
+            <span className={cn(accountChip(), providerTone({ provider: "plex" }))}>
+              <ProviderMark provider="plex" size={18} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-fg text-sm font-medium">{t("profile.connected.plex.name")}</p>
+              <p className="text-fg/50 truncate text-xs">
+                {plexLinked
+                  ? (currentUser.plex_username ?? t("profile.connected.plex.linked"))
+                  : plexLink.isPending
+                    ? t("profile.connected.plex.connecting")
+                    : t("profile.connected.plex.notLinked")}
+              </p>
+              {plexLinked && !canUnlinkPlex ? (
+                <p className="text-fg/40 mt-1 text-xs">{t("profile.connected.plex.needsPassword")}</p>
+              ) : null}
+            </div>
+            {plexLinked ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => plexUnlink.mutate()}
+                disabled={!canUnlinkPlex || plexUnlink.isPending}
+              >
+                {t("profile.connected.disconnect")}
+              </Button>
+            ) : (
+              <Button size="sm" onClick={() => plexLink.start()} disabled={plexLink.isPending}>
+                {t("profile.connected.connect")}
+              </Button>
+            )}
           </div>
-          {plexLinked ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => plexUnlink.mutate()}
-              disabled={!canUnlinkPlex || plexUnlink.isPending}
-            >
-              {t("profile.connected.disconnect")}
-            </Button>
-          ) : (
-            <Button size="sm" onClick={() => plexLink.start()} disabled={plexLink.isPending}>
-              {t("profile.connected.connect")}
-            </Button>
-          )}
+          {plexLinked ? <PlexReportingRow onRelink={() => plexLink.start()} relinking={plexLink.isPending} /> : null}
         </div>
-      ) : null}
-
-      {currentUser && plexLinked ? (
-        <PlexReportingRow onRelink={() => plexLink.start()} relinking={plexLink.isPending} />
       ) : null}
 
       {passwordAccounts.map((account) => (

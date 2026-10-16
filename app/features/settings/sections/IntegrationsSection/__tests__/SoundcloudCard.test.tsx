@@ -54,6 +54,8 @@ const initial: SoundcloudCardProps["initial"] = {
   torrent: createMockSettings().downloadSources.torrent,
 };
 
+const { priority: _priority, ...storedSoundcloud } = initial.soundcloud;
+
 const t = enSettings.soundcloud;
 
 function save() {
@@ -71,17 +73,14 @@ describe("SoundcloudCard", () => {
     expect(screen.getByLabelText(t.searchTimeout.ariaLabel)).toHaveValue(60);
   });
 
-  it("saves the switch alongside every unchanged sibling source", async () => {
+  it("saves only the soundcloud source, leaving its priority and every sibling source out of the payload", async () => {
     render(<SoundcloudCard initial={initial} />);
 
     await userEvent.click(screen.getByRole("switch", { name: t.enable.ariaLabel }));
     await save();
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith({
-        ...initial,
-        soundcloud: { ...initial.soundcloud, enabled: true },
-      });
+      expect(update.mutateAsync).toHaveBeenCalledWith({ soundcloud: { ...storedSoundcloud, enabled: true } });
     });
   });
 
@@ -95,8 +94,7 @@ describe("SoundcloudCard", () => {
 
     await waitFor(() => {
       expect(update.mutateAsync).toHaveBeenCalledWith({
-        ...initial,
-        soundcloud: { ...initial.soundcloud, searchResults: 8, maxDurationDeltaSec: 4, searchTimeout: 45000 },
+        soundcloud: { ...storedSoundcloud, searchResults: 8, maxDurationDeltaSec: 4, searchTimeout: 45000 },
       });
     });
   });

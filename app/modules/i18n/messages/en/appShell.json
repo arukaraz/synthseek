@@ -2,17 +2,6 @@
   "appShell": {
     "loader": {
       "library": "Loading your library"
-    },
-    "settings": {
-      "integrations": {
-        "title": "Integrations",
-        "tabs": {
-          "downloadSources": "Download Sources",
-          "mediaServers": "Media servers",
-          "librarySources": "Library sources",
-          "metadata": "Metadata"
-        }
-      }
     }
   },
   "progressDock": {

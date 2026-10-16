@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen, within } from "@testing-library/react";
 
 import i18n from "@modules/i18n";
-import type { SystemProblem } from "@features/settings/sections/MaintenanceSection/types";
+import type { SystemProblem } from "@features/settings/types";
 
 import { SystemStatusBanner } from "../SystemStatusBanner";
 

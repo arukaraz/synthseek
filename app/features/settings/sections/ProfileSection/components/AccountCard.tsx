@@ -16,7 +16,7 @@ export function AccountCard({ user }: ProfileCardProps) {
   const isAdmin = user.role === Role.enum.admin;
 
   return (
-    <SettingsCard title={t("profile.account.title")}>
+    <SettingsCard title={t("profile.account.title")} anchor="account">
       <div className="flex items-center gap-4">
         <div className={accountAvatar()}>
           {user.avatar_url ? (

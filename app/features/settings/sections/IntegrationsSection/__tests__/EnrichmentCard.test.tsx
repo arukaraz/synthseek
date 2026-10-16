@@ -33,11 +33,19 @@ afterEach(() => {
 
 const initial: ConnectionsEnrichment = {
   lastfmApiKey: "",
+  lastfmApiSecret: "",
   fanartApiKey: "",
   songlinkApiKey: "",
   acoustidApiKey: "",
   musicbrainzEmail: "",
+  discogsToken: "",
 };
+
+function secretInputFor(label: string): HTMLInputElement {
+  const input = screen.getByText(label).closest("[data-anchor-target]")?.querySelector("input");
+  if (!input) throw new Error(`no secret input under the field labelled ${label}`);
+  return input;
+}
 
 describe("EnrichmentCard", () => {
   it("asks for each saved key by its own field when its eye is clicked", async () => {
@@ -49,6 +57,7 @@ describe("EnrichmentCard", () => {
           fanartApiKey: SECRET_SENTINEL,
           acoustidApiKey: SECRET_SENTINEL,
           songlinkApiKey: SECRET_SENTINEL,
+          discogsToken: SECRET_SENTINEL,
         }}
       />
     );
@@ -59,6 +68,7 @@ describe("EnrichmentCard", () => {
       { section: "connections.enrichment", field: "fanartApiKey" },
       { section: "connections.enrichment", field: "acoustidApiKey" },
       { section: "connections.enrichment", field: "songlinkApiKey" },
+      { section: "connections.enrichment", field: "discogsToken" },
     ]);
   });
 
@@ -89,15 +99,24 @@ describe("EnrichmentCard", () => {
   it("carries the Songlink key and saves it with the rest of the enrichment settings", async () => {
     render(<EnrichmentCard initial={initial} />);
 
-    expect(screen.getByText(enSettings.metadata.enrichment.songlinkKey.label)).toBeInTheDocument();
-    const secrets = document.querySelectorAll<HTMLInputElement>('input[type="password"]');
-    const songlinkInput = secrets[secrets.length - 1];
-    if (!songlinkInput) throw new Error("songlink secret input not found");
-    await userEvent.type(songlinkInput, "song-key");
+    await userEvent.type(secretInputFor(enSettings.metadata.enrichment.songlinkKey.label), "song-key");
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() => {
       expect(update.mutateAsync).toHaveBeenCalledWith({ ...initial, songlinkApiKey: "song-key" });
+    });
+  });
+
+  it("carries the Discogs token and saves it with the rest of the enrichment settings", async () => {
+    render(<EnrichmentCard initial={initial} />);
+
+    const discogsInput = secretInputFor(enSettings.metadata.enrichment.discogsToken.label);
+    expect(discogsInput).toHaveAttribute("type", "password");
+    await userEvent.type(discogsInput, "dg-token");
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith({ ...initial, discogsToken: "dg-token" });
     });
   });
 

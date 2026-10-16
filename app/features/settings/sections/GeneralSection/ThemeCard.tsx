@@ -20,7 +20,7 @@ export function ThemeCard() {
   const selected = mounted && isThemeValue(theme) ? theme : undefined;
 
   return (
-    <SettingsCard title={t("general.theme.title")} description={t("general.theme.description")}>
+    <SettingsCard title={t("general.theme.title")} description={t("general.theme.description")} anchor="theme">
       <ThemeSelector value={selected} onSelect={setTheme} ariaLabel={t("general.theme.groupLabel")} />
     </SettingsCard>
   );

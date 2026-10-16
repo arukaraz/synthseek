@@ -11,4 +11,4 @@ export const EMPTY_CTA = {
   "no-data": null,
 } as const;
 
-export const SETTINGS_HREF = "/settings/integrations/metadata#lastfm";
+export const SETTINGS_HREF = "/settings/listening#lastfm.feeds";

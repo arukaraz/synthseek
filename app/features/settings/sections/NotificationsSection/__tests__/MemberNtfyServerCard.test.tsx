@@ -43,15 +43,23 @@ describe("MemberNtfyServerCard", () => {
     expect(screen.queryByRole("button", { name: saveBar.save })).not.toBeInTheDocument();
   });
 
-  it("saves the trimmed server and drops the draft once it is stored", async () => {
+  it("saves the trimmed server and drops the draft only once it is stored", async () => {
+    let stored = () => {};
+    update.mutateAsync.mockReturnValueOnce(
+      new Promise<undefined>((done) => {
+        stored = () => done(undefined);
+      })
+    );
     render(<MemberNtfyServerCard />);
 
     fireEvent.change(screen.getByLabelText(copy.label), { target: { value: " https://push.example.org " } });
     await userEvent.click(screen.getByRole("button", { name: saveBar.save }));
 
-    expect(update.mutate).toHaveBeenCalledWith({ memberNtfyServer: "https://push.example.org" }, expect.anything());
-    const callbacks: { onSuccess: () => void } = update.mutate.mock.calls[0][1];
-    act(() => callbacks.onSuccess());
+    expect(update.mutateAsync).toHaveBeenCalledWith({ memberNtfyServer: "https://push.example.org" });
+    expect(screen.getByLabelText(copy.label)).toHaveValue(" https://push.example.org ");
+
+    await act(async () => stored());
+
     expect(screen.getByLabelText(copy.label)).toHaveValue("");
   });
 

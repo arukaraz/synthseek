@@ -2,6 +2,11 @@ import type { VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
 import type { KeyboardEvent, ReactNode } from "react";
 import type { fieldRow, pill } from "../styles";
+import type { JobSummary } from "../types";
+
+export interface JobRowProps {
+  job: JobSummary;
+}
 
 export interface ChipsInputProps {
   value: string[];
@@ -18,14 +23,16 @@ export interface EngineRowProps {
   anchor?: string;
 }
 
-export interface IntegrationTabItem {
+export interface SettingsTabItem {
   href: string;
   label: string;
   icon: LucideIcon;
+  count?: number;
 }
 
-export interface IntegrationTabsProps {
-  items: ReadonlyArray<IntegrationTabItem>;
+export interface SettingsTabsProps {
+  items: ReadonlyArray<SettingsTabItem>;
+  ariaLabel: string;
 }
 
 export interface ListManagerProps {
@@ -52,7 +59,7 @@ export interface SaveBarProps {
   isDirty: boolean;
   isSaving: boolean;
   saveDisabled?: boolean;
-  onSave: () => void;
+  onSave: () => unknown;
   onCancel: () => void;
 }
 
@@ -71,15 +78,18 @@ export interface SegmentedControlProps<T extends string> {
 
 export interface SettingsCardProps {
   title: string;
+  titleTrailing?: ReactNode;
   optional?: boolean;
   description?: string;
   trailing?: ReactNode;
+  anchor?: string;
   className?: string;
   children: ReactNode;
 }
 
 export interface SettingsFieldProps {
   label: string;
+  anchor?: string;
   labelTrailing?: ReactNode;
   htmlFor?: string;
   helper?: ReactNode;

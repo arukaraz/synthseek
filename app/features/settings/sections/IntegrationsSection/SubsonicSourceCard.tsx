@@ -1,7 +1,7 @@
 "use client";
 
 import { Plug } from "lucide-react";
-import { useId } from "react";
+import { useId, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -19,6 +19,7 @@ import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { MS, SUBSONIC_SOURCE_TEST_KEYS } from "./constants";
+import { withoutPriority } from "./helpers";
 import type { SubsonicSourceCardProps } from "./types";
 
 export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
@@ -26,7 +27,8 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
   const update = useUpdateDownloadSources();
   const testConnection = useTestSubsonicSource();
   const reveal = useRevealSettingsSecret();
-  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.subsonic);
+  const stored = useMemo(() => withoutPriority(initial.subsonic), [initial.subsonic]);
+  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(stored);
   const fieldId = useId();
 
   if (!draft) return null;
@@ -47,7 +49,12 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
   };
 
   return (
-    <SettingsCard title={t("subsonicSource.title")} optional description={t("subsonicSource.description")}>
+    <SettingsCard
+      title={t("subsonicSource.title")}
+      optional
+      description={t("subsonicSource.description")}
+      anchor="subsonic"
+    >
       <EngineRow
         label={t("subsonicSource.enable.label")}
         description={t("subsonicSource.enable.description")}
@@ -60,7 +67,12 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
         }
       />
 
-      <SettingsField label={t("subsonicSource.url")} helper={t("subsonicSource.urlHint")} htmlFor={`${fieldId}-url`}>
+      <SettingsField
+        label={t("subsonicSource.url")}
+        helper={t("subsonicSource.urlHint")}
+        htmlFor={`${fieldId}-url`}
+        anchor="downloadSources.subsonic.url"
+      >
         <SettingsTextInput
           id={`${fieldId}-url`}
           value={draft.url}
@@ -74,6 +86,7 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
         label={t("subsonicSource.apiKey")}
         helper={t("subsonicSource.apiKeyHint")}
         htmlFor={`${fieldId}-api-key`}
+        anchor="downloadSources.subsonic.apiKey"
       >
         <SettingsSecretInput
           id={`${fieldId}-api-key`}
@@ -101,6 +114,7 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
       </SettingsField>
 
       <EngineRow
+        anchor="downloadSources.subsonic.searchTimeout"
         label={t("subsonicSource.searchTimeout.label")}
         description={t("subsonicSource.searchTimeout.description")}
         control={
@@ -126,12 +140,7 @@ export function SubsonicSourceCard({ initial }: SubsonicSourceCardProps) {
         isDirty={isDirty}
         isSaving={isSaving}
         onSave={() =>
-          save((payload) =>
-            update.mutateAsync({
-              ...initial,
-              subsonic: { ...payload, username: payload.username.trim() },
-            })
-          )
+          save((subsonic) => update.mutateAsync({ subsonic: { ...subsonic, username: subsonic.username.trim() } }))
         }
         onCancel={reset}
       />

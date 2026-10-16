@@ -50,7 +50,7 @@ export function DownloadedAlbumsSection() {
   }));
 
   return (
-    <MaintenancePage surface="downloadedAlbums">
+    <MaintenancePage surface="downloadedAlbums" descriptionAsTooltip>
       <div className={downloadedAlbumsHeader()}>
         <SegmentTabs
           items={tabs}

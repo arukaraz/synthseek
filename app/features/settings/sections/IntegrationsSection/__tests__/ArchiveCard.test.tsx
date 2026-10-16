@@ -54,6 +54,8 @@ const initial: ArchiveCardProps["initial"] = {
   torrent: createMockSettings().downloadSources.torrent,
 };
 
+const { priority: _priority, ...storedArchive } = initial.archive;
+
 const t = enSettings.archive;
 
 function save() {
@@ -78,15 +80,13 @@ describe("ArchiveCard", () => {
     await save();
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith(
-        expect.objectContaining({
-          archive: { ...initial.archive, collections: { netlabels: true, etree: false, community: true } },
-        })
-      );
+      expect(update.mutateAsync).toHaveBeenCalledWith({
+        archive: { ...storedArchive, collections: { netlabels: true, etree: false, community: true } },
+      });
     });
   });
 
-  it("saves a collection change alongside every unchanged sibling source", async () => {
+  it("saves only the archive source, leaving its priority and every sibling source out of the payload", async () => {
     render(<ArchiveCard initial={initial} />);
 
     await userEvent.click(screen.getByRole("switch", { name: t.etree.ariaLabel }));
@@ -94,13 +94,7 @@ describe("ArchiveCard", () => {
 
     await waitFor(() => {
       expect(update.mutateAsync).toHaveBeenCalledWith({
-        slskd: initial.slskd,
-        ytdlp: initial.ytdlp,
-        usenet: initial.usenet,
-        archive: { ...initial.archive, collections: { netlabels: true, etree: true, community: false } },
-        soundcloud: initial.soundcloud,
-        subsonic: initial.subsonic,
-        torrent: initial.torrent,
+        archive: { ...storedArchive, collections: { netlabels: true, etree: true, community: false } },
       });
     });
   });
@@ -114,9 +108,7 @@ describe("ArchiveCard", () => {
     await save();
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith(
-        expect.objectContaining({ archive: expect.objectContaining({ searchTimeout: 45000 }) })
-      );
+      expect(update.mutateAsync).toHaveBeenCalledWith({ archive: { ...storedArchive, searchTimeout: 45000 } });
     });
   });
 

@@ -42,6 +42,7 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
   return (
     <SettingsCard title={t("quarantine.title")} description={t("quarantine.description")} className="lg:col-span-2">
       <EngineRow
+        anchor="engine.import.acoustidIdentityGate"
         label={t("quarantine.identityGate.label")}
         description={t("quarantine.identityGate.description")}
         control={
@@ -123,7 +124,7 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
           i18nKey="quarantine.sourceTrust.manage"
           components={{
             slskd: (
-              <HashLink href="/settings/integrations/download-sources#ban-threshold" className={quarantineLink()} />
+              <HashLink href="/settings/download-sources?source=slskd#ban-threshold" className={quarantineLink()} />
             ),
           }}
         />

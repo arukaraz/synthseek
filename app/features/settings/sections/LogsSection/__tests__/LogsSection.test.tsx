@@ -40,12 +40,17 @@ afterEach(() => {
 });
 
 describe("LogsSection", () => {
-  it("composes the page header and the three log cards", () => {
+  it("composes the three log cards", () => {
     render(<LogsSection />);
 
-    expect(screen.getByRole("heading", { level: 1, name: enSettings.logs.page.title })).toBeInTheDocument();
     expect(screen.getByText(enSettings.logs.level.title)).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: enSettings.logs.viewer.title })).toBeInTheDocument();
     expect(screen.getByText(enSettings.logs.export.title)).toBeInTheDocument();
+  });
+
+  it("leaves the page header to the System layout that hosts it as a tab", () => {
+    render(<LogsSection />);
+
+    expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
   });
 });

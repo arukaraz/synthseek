@@ -23,7 +23,7 @@ export function LogLevelCard() {
   ];
 
   return (
-    <SettingsCard title={t("logs.level.title")} description={t("logs.level.description")}>
+    <SettingsCard title={t("logs.level.title")} description={t("logs.level.description")} anchor="log-level">
       {isLoading || !current ? (
         <span className="text-fg/60 text-sm">{t("logs.level.loading")}</span>
       ) : (

@@ -22,10 +22,16 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
   if (!draft) return null;
 
   return (
-    <SettingsCard title={t("metadata.enrichment.title")} optional description={t("metadata.enrichment.description")}>
+    <SettingsCard
+      title={t("metadata.enrichment.title")}
+      optional
+      description={t("metadata.enrichment.description")}
+      anchor="enrichment"
+    >
       <SettingsField
         label={t("metadata.enrichment.fanartKey.label")}
         helper={t("metadata.enrichment.fanartKey.helper")}
+        anchor="connections.enrichment.fanartApiKey"
       >
         <SettingsSecretInput
           value={draft.fanartApiKey}
@@ -40,6 +46,7 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
       <SettingsField
         label={t("metadata.enrichment.musicbrainzEmail.label")}
         helper={t("metadata.enrichment.musicbrainzEmail.helper")}
+        anchor="connections.enrichment.musicbrainzEmail"
       >
         <SettingsTextInput
           value={draft.musicbrainzEmail}
@@ -52,6 +59,7 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
       <SettingsField
         label={t("metadata.enrichment.acoustidKey.label")}
         helper={t("metadata.enrichment.acoustidKey.helper")}
+        anchor="connections.enrichment.acoustidApiKey"
       >
         <SettingsSecretInput
           value={draft.acoustidApiKey}
@@ -66,6 +74,7 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
       <SettingsField
         label={t("metadata.enrichment.songlinkKey.label")}
         helper={t("metadata.enrichment.songlinkKey.helper")}
+        anchor="connections.enrichment.songlinkApiKey"
       >
         <SettingsSecretInput
           value={draft.songlinkApiKey}
@@ -73,6 +82,21 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
           source={{
             kind: "stored",
             reveal: () => reveal({ section: "connections.enrichment", field: "songlinkApiKey" }),
+          }}
+        />
+      </SettingsField>
+
+      <SettingsField
+        label={t("metadata.enrichment.discogsToken.label")}
+        helper={t("metadata.enrichment.discogsToken.helper")}
+        anchor="connections.enrichment.discogsToken"
+      >
+        <SettingsSecretInput
+          value={draft.discogsToken}
+          onChange={(v) => setField("discogsToken", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "connections.enrichment", field: "discogsToken" }),
           }}
         />
       </SettingsField>

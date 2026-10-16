@@ -1,7 +1,5 @@
-"use client";
-
-import { LogsSection } from "@features/settings/sections/LogsSection";
+import { redirect } from "next/navigation";
 
 export default function LogsPage() {
-  return <LogsSection />;
+  redirect("/settings/system/logs");
 }

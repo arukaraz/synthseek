@@ -54,10 +54,20 @@ describe("SpotifySourceCard", () => {
     render(<SpotifySourceCard spotify={disabledSpotify} />);
 
     await userEvent.click(screen.getByRole("switch", { name: spotifySettings.toggleAriaLabel }));
-    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
-    expect(await screen.findByText(spotifySettings.validationMissingFields)).toBeInTheDocument();
+    expect(screen.getByText(spotifySettings.validationMissingFields)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: enSettings.shell.saveBar.save })).toBeDisabled();
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
     expect(updateSpotify.mutateAsync).not.toHaveBeenCalled();
+  });
+
+  it("drops the validation message once spotify is switched back off", async () => {
+    render(<SpotifySourceCard spotify={disabledSpotify} />);
+
+    await userEvent.click(screen.getByRole("switch", { name: spotifySettings.toggleAriaLabel }));
+    await userEvent.click(screen.getByRole("switch", { name: spotifySettings.toggleAriaLabel }));
+
+    expect(screen.queryByText(spotifySettings.validationMissingFields)).not.toBeInTheDocument();
   });
 
   it("saves the spotify connection when enabled with the required fields", async () => {

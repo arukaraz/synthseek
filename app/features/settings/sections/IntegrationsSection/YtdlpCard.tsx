@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Switch } from "@components/ui/Switch";
@@ -9,18 +10,20 @@ import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
+import { withoutPriority } from "./helpers";
 import { RemoteMediaSearchRows } from "./RemoteMediaSearchRows";
 import type { YtdlpCardProps } from "./types";
 
 export function YtdlpCard({ initial }: YtdlpCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
-  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.ytdlp);
+  const stored = useMemo(() => withoutPriority(initial.ytdlp), [initial.ytdlp]);
+  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(stored);
 
   if (!draft) return null;
 
   return (
-    <SettingsCard title={t("ytdlp.title")} optional description={t("ytdlp.description")}>
+    <SettingsCard title={t("ytdlp.title")} optional description={t("ytdlp.description")} anchor="ytdlp">
       <EngineRow
         label={t("ytdlp.enable.label")}
         description={t("ytdlp.enable.description")}
@@ -33,28 +36,12 @@ export function YtdlpCard({ initial }: YtdlpCardProps) {
         }
       />
 
-      {/* Priority is hidden until there are enough sources to reorder (value stays at 10). Re-enable when more sources exist:
-      <EngineRow
-        label="Priority"
-        description="Lower runs first. Currently slskd defaults to 0, so slskd is tried before any other source.."
-        control={
-          <SettingsNumberInput
-            value={draft.priority}
-            onChange={(v) => setField("priority", v)}
-            min={0}
-            max={100}
-            ariaLabel="yt-dlp priority"
-          />
-        }
-      />
-      */}
-
       <RemoteMediaSearchRows section="ytdlp" values={draft} onFieldChange={(field, value) => setField(field, value)} />
 
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}
-        onSave={() => save((payload) => update.mutateAsync({ ...initial, ytdlp: payload }))}
+        onSave={() => save((ytdlp) => update.mutateAsync({ ytdlp }))}
         onCancel={reset}
       />
     </SettingsCard>

@@ -1,11 +1,15 @@
 import type { ParseKeys } from "i18next";
 
+import { DownloadSourceKey } from "@api/__generated__/types";
+
+import { PLAYBACK_SERVER_KEYS } from "../../constants";
+import type { LidarrHealth, SlskdHealth } from "../../types";
 import type {
   Affix,
-  LidarrHealth,
+  PlaybackChainSelection,
+  SourceChainSelection,
   LidarrStatusTone,
   ServerTestOutcome,
-  SlskdHealth,
   SlskdStatusTone,
   SubsonicSourceTestOutcome,
   TorrentClientOutcome,
@@ -35,6 +39,10 @@ export const TORRENT_TEST_WARNING_KEYS: Readonly<Record<TorrentTestWarning, Pars
 };
 
 export const DOWNLOADED_ALBUMS_HREF = "/settings/maintenance/downloaded-albums";
+
+export const CHAIN_SELECTIONS: readonly SourceChainSelection[] = [...DownloadSourceKey.options, "lidarr"];
+
+export const PLAYBACK_CHAIN_SELECTIONS: readonly PlaybackChainSelection[] = ["local", ...PLAYBACK_SERVER_KEYS];
 
 export const SUBSONIC_SOURCE_TEST_KEYS: Readonly<Record<SubsonicSourceTestOutcome, ParseKeys<"settings">>> = {
   ok: "subsonicSource.test.ok",

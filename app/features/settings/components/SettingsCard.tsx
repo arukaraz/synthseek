@@ -7,21 +7,32 @@ import { cn } from "@utils/cn";
 
 import { cardDescription, cardHeader, cardHeaderText, cardHeaderTrailing, cardTitle, settingsCard } from "../styles";
 import { DESCRIPTION_INLINE_LIMIT } from "./constants";
+import { SaveLabelProvider } from "./SettingsSaveScope";
 import type { SettingsCardProps } from "./types";
 
-export function SettingsCard({ title, optional, description, trailing, className, children }: SettingsCardProps) {
+export function SettingsCard({
+  title,
+  titleTrailing,
+  optional,
+  description,
+  trailing,
+  anchor,
+  className,
+  children,
+}: SettingsCardProps) {
   const { t } = useTranslation("settings");
   const hasDescription = Boolean(description);
   const collapseAsTooltip = hasDescription && description!.length > DESCRIPTION_INLINE_LIMIT;
 
   return (
-    <section className={cn(settingsCard(), className)}>
+    <section className={cn(settingsCard(), className)} data-anchor-target={anchor}>
       <header className={cardHeader()}>
         <div className={cardHeaderText()}>
           <h2 className={cardTitle()}>
             <span className="inline-flex items-center gap-1.5">
               {title}
               {collapseAsTooltip ? <InfoTooltip description={description!} /> : null}
+              {titleTrailing}
             </span>
             {optional ? (
               <span className="text-fg/60 ml-1.5 text-base font-normal">{t("shell.card.optional")}</span>
@@ -31,7 +42,9 @@ export function SettingsCard({ title, optional, description, trailing, className
         </div>
         {trailing ? <div className={cardHeaderTrailing()}>{trailing}</div> : null}
       </header>
-      <div className="flex flex-col gap-4">{children}</div>
+      <SaveLabelProvider label={title}>
+        <div className="flex flex-col gap-4">{children}</div>
+      </SaveLabelProvider>
     </section>
   );
 }

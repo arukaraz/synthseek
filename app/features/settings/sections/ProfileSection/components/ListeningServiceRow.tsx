@@ -18,6 +18,7 @@ import {
 } from "@hooks/api";
 import { cn } from "@utils/cn";
 
+import { SaveLabelProvider } from "../../../components/SettingsSaveScope";
 import {
   listeningChip,
   listeningClientList,
@@ -32,7 +33,7 @@ import {
 } from "../styles";
 import type { ListeningServiceRowProps } from "../types";
 
-export function ListeningServiceRow({ connection, seenClients }: ListeningServiceRowProps) {
+export function ListeningServiceRow({ connection, seenClients, children }: ListeningServiceRowProps) {
   const { t } = useTranslation("settings");
   const [token, setToken] = useState("");
   const [awaitingLastfm, setAwaitingLastfm] = useState(false);
@@ -71,12 +72,14 @@ export function ListeningServiceRow({ connection, seenClients }: ListeningServic
     setRelayed.mutate({ service, clients: next });
   };
 
+  const name = t(`profile.listening.${service}.name`);
+
   return (
-    <div className={listeningRow()}>
+    <div className={listeningRow()} data-anchor-target={service}>
       <div className={listeningRowHeader()}>
         <span className={listeningChip({ service })}>{isLastfm ? <Radio size={18} /> : <AudioLines size={18} />}</span>
         <div className="min-w-0 flex-1">
-          <p className="text-fg text-sm font-medium">{t(`profile.listening.${service}.name`)}</p>
+          <p className="text-fg text-sm font-medium">{name}</p>
           <p className="text-fg/50 truncate text-xs">{status}</p>
           {connection.lastFailure === null ? null : (
             <p className={listeningFailure()}>{t(`profile.listening.failure.${connection.lastFailure}`)}</p>
@@ -156,6 +159,8 @@ export function ListeningServiceRow({ connection, seenClients }: ListeningServic
           )}
         </div>
       ) : null}
+
+      <SaveLabelProvider label={name}>{children}</SaveLabelProvider>
     </div>
   );
 }

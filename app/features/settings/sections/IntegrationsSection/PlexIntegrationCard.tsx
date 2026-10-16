@@ -97,6 +97,7 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
   return (
     <SettingsCard
       title={t("mediaServers.plex.title")}
+      anchor="plex"
       trailing={
         <span className={cn(statusBadge({ tone: connected ? "success" : "muted" }))}>
           <span className={statusDot({ tone: connected ? "success" : "muted" })} />
@@ -158,6 +159,7 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
 
       <span className={cardSectionHeader()}>{t("plex.libraryHeader")}</span>
       <EngineRow
+        anchor="engine.plexBehavior.libraryScan"
         label={t("plex.libraryScan.label")}
         description={t("plex.libraryScan.description")}
         control={
@@ -169,6 +171,7 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.plexBehavior.playlistSync"
         label={t("plex.playlistSync.label")}
         description={t("plex.playlistSync.description")}
         control={
@@ -183,6 +186,7 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
 
       <span className={cardSectionHeader()}>{t("plex.namingHeader")}</span>
       <EngineRow
+        anchor="formatting.plexPlaylistUsernameAffix"
         label={t("plex.usernameAffix.label")}
         description={t("plex.usernameAffix.description")}
         control={
@@ -194,7 +198,11 @@ export function PlexIntegrationCard({ initial }: PlexIntegrationCardProps) {
           />
         }
       />
-      <SettingsField label={t("plex.separator.label")} helper={t("plex.separator.helper")}>
+      <SettingsField
+        label={t("plex.separator.label")}
+        helper={t("plex.separator.helper")}
+        anchor="formatting.plexPlaylistUsernameSeparator"
+      >
         <SettingsTextInput
           value={namingForm.draft.plexPlaylistUsernameSeparator}
           onChange={(v) => namingForm.setField("plexPlaylistUsernameSeparator", v)}

@@ -1,4 +1,7 @@
+import type { ParseKeys } from "i18next";
+
 import type {
+  LibraryScanOutcome,
   ConditionValueKind,
   FieldOps,
   FolderAccess,
@@ -10,6 +13,13 @@ import type {
 } from "./types";
 
 export const MOVE_CLASSES: readonly MoveClass[] = ["relocate", "rename", "reassign"];
+
+export const SKIPPED_SCAN_KEYS: Readonly<Record<Exclude<LibraryScanOutcome, "reconciled">, ParseKeys<"settings">>> = {
+  unavailable: "libraryScan.paths.outcome.unavailable",
+  disabled: "libraryScan.paths.outcome.disabled",
+  unreadable: "libraryScan.paths.outcome.unreadable",
+  empty: "libraryScan.paths.outcome.empty",
+};
 
 export const PREVIEW_DEBOUNCE_MS = 600;
 

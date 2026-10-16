@@ -25,10 +25,12 @@ export function WantedCard({ initial }: WantedCardProps) {
   return (
     <SettingsCard
       title={t("wanted.title")}
+      anchor="wanted"
       description={t("wanted.description")}
       trailing={<ResetDefaultsButton onReset={() => setAll({ ...ENGINE_DEFAULTS.wanted })} disabled={isSaving} />}
     >
       <EngineRow
+        anchor="engine.wanted.enabled"
         label={t("wanted.enabled.label")}
         description={t("wanted.enabled.description")}
         control={
@@ -40,6 +42,7 @@ export function WantedCard({ initial }: WantedCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.wanted.perRunCap"
         label={t("wanted.perRunCap.label")}
         description={t("wanted.perRunCap.description")}
         control={
@@ -53,6 +56,7 @@ export function WantedCard({ initial }: WantedCardProps) {
         }
       />
       <EngineRow
+        anchor="engine.wanted.maxAttempts"
         label={t("wanted.maxAttempts.label")}
         description={t("wanted.maxAttempts.description")}
         control={

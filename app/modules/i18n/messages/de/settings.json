@@ -5,7 +5,6 @@
     "destinations": {
       "title": "Ziele",
       "description": "Richte die Apps ein, die deine Benachrichtigungen bekommen sollen.",
-      "tabsLabel": "Benachrichtigungsziele",
       "unavailable": "Die Benachrichtigungseinstellungen konnten nicht geladen werden."
     },
     "channels": {
@@ -43,7 +42,6 @@
       "helper": "Aus: nur die Downloads, die du angefragt hast. An: die Downloads aller auf diesem Server."
     },
     "whatToSend": "Was gesendet wird",
-    "selectCategory": "Alles in {{category}}",
     "categories": {
       "downloads": "Downloads",
       "discovery": "Entdecken",
@@ -111,7 +109,30 @@
       "test": "Test senden",
       "testing": "Wird gesendet...",
       "remove": "Entfernen",
-      "saveBeforeTest": "Speichere deine Änderungen, um sie zu testen."
+      "saveBeforeTest": "Speichere deine Änderungen, um sie zu testen.",
+      "edit": "Bearbeiten",
+      "close": "Schließen",
+      "setUp": "Einrichten"
+    },
+    "matrix": {
+      "description": "Eine Liste für alle Ziele. Jede Spalte ist ein eingerichtetes Ziel, ein neues braucht also nur ein Häkchen pro Zeile.",
+      "empty": "Richte oben ein Ziel ein, um festzulegen, was es bekommt.",
+      "note": "Öffne eine Gruppe, um einzelne Benachrichtigungen zu wählen. Ein Ziel kann über das Menü unter seinem Namen mit einer Vorlage starten oder ein anderes Ziel kopieren.",
+      "notification": "Benachrichtigung",
+      "categoryTo": "Die ganze Kategorie {{category}} an {{channel}}",
+      "kindTo": "{{kind}} an {{channel}}",
+      "count": "{{selected}}/{{total}}",
+      "presetsFor": "Vorlagen für {{channel}}",
+      "selected_one": "{{count}} ausgewählt",
+      "selected_other": "{{count}} ausgewählt",
+      "startFrom": "Starten mit",
+      "sameAs": "Wie {{channel}}",
+      "presets": {
+        "failures": "Nur Fehler und Probleme",
+        "finished": "Abgeschlossene Downloads",
+        "everything": "Alles",
+        "nothing": "Nichts"
+      }
     },
     "saved": "{{channel}} gespeichert",
     "test": {
@@ -126,7 +147,6 @@
     }
   },
   "general": {
-    "pageTitle": "Allgemein",
     "language": {
       "title": "Sprache",
       "description": "Wähle die Sprache der Benutzeroberfläche.",
@@ -141,7 +161,6 @@
     }
   },
   "header": {
-    "title": "Engine",
     "description": "Erweiterte Steuerungen für die Pipeline von Suche über Download bis Import. Die Standardwerte sind auf einen ausgewogenen Optimalpunkt eingestellt, der für die meisten Setups gut funktioniert, ändere sie nur, wenn du weißt, was du tust. Lass sie im Zweifel unverändert oder klicke auf der betroffenen Karte auf Auf Standard zurücksetzen, falls nach einer Änderung Titel zu scheitern beginnen.",
     "loading": "Einstellungen werden geladen…",
     "loadError": "Einstellungen konnten nicht geladen werden: {{message}}",
@@ -429,6 +448,10 @@
       "songlinkKey": {
         "label": "Songlink-API-Schlüssel (optional)",
         "helper": "Löst Titel-URLs plattformübergreifend für plattformübergreifende Playlist-Importe auf. Synthseek verwendet standardmäßig den öffentlichen Endpunkt. Lass es leer, es sei denn, du hast einen Schlüssel."
+      },
+      "discogsToken": {
+        "label": "Discogs-Token (optional)",
+        "helper": "Ergänzt Genres, Labels und Release-Details von Discogs. Leer lassen, um Discogs nicht zu nutzen."
       }
     },
     "librarySources": {
@@ -568,9 +591,15 @@
       "title": "Wiedergabereihenfolge",
       "description": "Synthseek spielt zuerst die eigene Datei und versucht dann diese Server in dieser Reihenfolge. Fehlen dem ersten Ort, von dem es abspielt, Titel eines Albums oder Künstlers, den du abspielst, fragt es, woher es abgespielt werden soll.",
       "local": "Lokal",
+      "connected": "Verbunden",
       "notConnected": "Nicht verbunden",
-      "moveUp": "{{server}} nach oben",
-      "moveDown": "{{server}} nach unten"
+      "hint": "Zieh einen Server, oder nutze seine Pfeile, um die Reihenfolge zu ändern."
+    },
+    "panelLabel": "Einstellungen des ausgewählten Wiedergabeorts",
+    "local": {
+      "description": "Die eigene Kopie jedes Titels in Synthseek. Sie spielt immer zuerst, und die Server darunter werden nur probiert, wenn sie es nicht kann.",
+      "nothingToSet": "Hier gibt es nichts einzurichten. Bibliothekspfade und Benennung findest du unter Bibliothek.",
+      "openLibrary": "Bibliothek öffnen"
     }
   },
   "lidarr": {
@@ -715,6 +744,11 @@
       "suffix": "h",
       "ariaLabel": "Stunden, die ein Torrent in der Warteschlange von qBittorrent warten darf"
     },
+    "searchTimeout": {
+      "label": "Suchzeitlimit",
+      "description": "Wie lange der Indexer brauchen darf, um ein Release zu finden.",
+      "ariaLabel": "Torrent-Suchzeitlimit in Sekunden"
+    },
     "singleTrackRequests": {
       "title": "Anfragen für einzelne Titel",
       "label": "Torrents auch außerhalb von Alben nutzen",
@@ -788,7 +822,6 @@
     "passwordHint": "Mindestens {{min}} Zeichen"
   },
   "members": {
-    "pageTitle": "Mitglieder",
     "cardTitle": "Benutzerliste",
     "cardDescription": "Benutzer, die diese Synthseek-Instanz teilen.",
     "adminOnly": "Nur Administratoren können Mitglieder ansehen.",
@@ -935,7 +968,6 @@
     }
   },
   "profile": {
-    "pageTitle": "Profil",
     "account": {
       "title": "Konto",
       "memberSince": "Mitglied seit",
@@ -1094,7 +1126,7 @@
     "oauthLabel": "Anmelden (OAuth)",
     "oauthBody": "Für die Web- und nativen Connectoren von claude.ai. Füge den Endpunkt als benutzerdefinierten Connector hinzu und melde dich mit deinem Synthseek-Konto an. Kein Schlüssel nötig, und der Zugriff folgt deiner Rolle.",
     "keyLabel": "API-Schlüssel",
-    "keyBody": "Für Claude Code, Cursor oder Claude Desktop (über mcp-remote). Erstelle oben einen Schlüssel und sende ihn als Bearer-Token: Authorization: Bearer <dein Schlüssel>.",
+    "keyBody": "Für Claude Code, Cursor oder Claude Desktop (über mcp-remote). Erstelle unten einen Schlüssel und sende ihn als Bearer-Token: Authorization: Bearer <dein Schlüssel>.",
     "toolsTitle": "Verfügbare Tools",
     "toolsDescription": "Was ein verbundener Assistent tun kann: den Katalog durchsuchen, Downloads einreihen und verwalten, Playlists erstellen, deine Bibliothek durchsuchen, den Player steuern, Einstellungen lesen und aktualisieren und (für Administratoren) die Download-Warteschlange steuern, Aufgaben auslösen, den Systemzustand prüfen und Serverprotokolle zur Diagnose lesen. Die genaue Verfügbarkeit hängt von deiner Rolle ab.",
     "tools": {
@@ -1110,10 +1142,6 @@
     }
   },
   "logs": {
-    "page": {
-      "title": "Protokolle",
-      "description": "Aktuelle Serverprotokolle im selben Format wie die Konsole. Nach Ebene filtern, suchen, kopieren oder exportieren."
-    },
     "level": {
       "title": "Ebene",
       "description": "Lege die Ausführlichkeit der Protokollierung fest.",
@@ -1220,10 +1248,6 @@
     }
   },
   "jobs": {
-    "page": {
-      "title": "Aufgaben",
-      "description": "Hintergrundaufgaben, die Synthseek nach einem Zeitplan ausführt. Löse eine beliebige Aufgabe aus, um sie sofort auszuführen."
-    },
     "card": {
       "title": "Geplante Aufgaben",
       "description": "Jede Aufgabe zeigt ihren Zeitplan und ihre nächste Ausführung. Drücke Abspielen, um sie jetzt auszuführen.",
@@ -1296,37 +1320,209 @@
       }
     }
   },
+  "overview": {
+    "tiles": {
+      "review": "Dateien, die nach der Prüfung zurückgehalten wurden.",
+      "duplicates": "Titel mit mehr als einer Kopie auf der Platte.",
+      "quarantine": "Falsche Dateien, die nicht erneut versucht werden.",
+      "filesToReviewTitle": "Zu prüfende Dateien",
+      "filesToReview": "Dateien, die der Bibliotheksscan nicht erkannt hat."
+    },
+    "problems": {
+      "body": "Das schränkt ein, was Synthseek tun kann, bis es behoben ist.",
+      "seeFix": "Lösung ansehen"
+    },
+    "connections": {
+      "title": "Verbindungen",
+      "downloadSource": "Download-Quelle {{position}}",
+      "handOff": "Album-Weitergabe",
+      "mediaServer": "Medienserver",
+      "librarySource": "Bibliotheksquelle",
+      "missingDetails": "Angaben fehlen"
+    },
+    "setup": {
+      "title": "Einrichtung abschließen",
+      "progress": "{{done}} von {{total}}",
+      "action": "Einrichten",
+      "downloadSource": "Eine Download-Quelle",
+      "mediaServer": "Ein Medienserver",
+      "musicbrainzEmail": "MusicBrainz-Kontaktadresse",
+      "acoustidKey": "AcoustID-Schlüssel, um Importe zu prüfen"
+    },
+    "jobs": {
+      "all": "Alle Aufgaben"
+    }
+  },
   "shell": {
     "card": {
       "optional": "(Optional)"
     },
     "sidebar": {
       "ariaLabel": "Einstellungsbereiche",
-      "advanced": "Erweitert",
       "version": "synthseek v{{version}}",
-      "items": {
-        "general": "Allgemein",
-        "members": "Mitglieder",
-        "profile": "Profil",
-        "integrations": "Integrationen",
-        "engine": "Engine",
-        "jobs": "Aufgaben",
-        "logs": "Protokolle",
-        "updates": "Updates",
-        "maintenance": "Wartung",
+      "groups": {
+        "you": "Du",
+        "server": "Dieser Server"
+      },
+      "attention": "Hier wartet etwas auf dich"
+    },
+    "pages": {
+      "account": {
+        "title": "Konto",
+        "description": "Dein Profil, dein Passwort und dein Download-Kontingent."
+      },
+      "appearance": {
+        "title": "Darstellung und Sprache",
+        "description": "Das Design und die Sprache, die Synthseek für dich verwendet."
+      },
+      "connectedAccounts": {
+        "title": "Verbundene Konten",
+        "description": "Konten bei anderen Diensten, die Synthseek in deinem Namen nutzt."
+      },
+      "listening": {
+        "title": "Hören und Entdecken",
+        "description": "Sende, was du hörst, an Last.fm und ListenBrainz, und hol ihre Empfehlungen nach Entdecken."
+      },
+      "notifications": {
+        "title": "Benachrichtigungen"
+      },
+      "apps": {
+        "title": "Apps und API-Schlüssel",
+        "description": "Musik-Apps, KI-Assistenten und Skripte, die sich mit deinem Synthseek verbinden."
+      },
+      "overview": {
+        "title": "Übersicht",
+        "description": "Dieser Server auf einen Blick. Jeder Eintrag führt zu der Seite, auf der er geregelt wird."
+      },
+      "members": {
+        "title": "Mitglieder und Zugriff",
+        "description": "Die Personen, die dieses Synthseek teilen, was sie tun dürfen und wie viel sie herunterladen können."
+      },
+      "downloadSources": {
+        "title": "Download-Quellen",
+        "description": "Synthseek probiert die Quellen von oben nach unten. Kann eine einen Titel nicht liefern, bekommt ihn die nächste in derselben Anfrage."
+      },
+      "engine": {
+        "title": "Download-Engine"
+      },
+      "library": {
+        "title": "Bibliothek"
+      },
+      "media": {
+        "title": "Medien und Wiedergabe",
+        "description": "Die Medienserver, die Synthseek synchron hält, und die Reihenfolge, in der der Player sie probiert."
+      },
+      "metadata": {
+        "title": "Metadaten",
+        "description": "Externe Dienste, die deiner Bibliothek Cover, Audio-Fingerabdrücke und Tags hinzufügen."
+      },
+      "maintenance": {
+        "title": "Wartung",
+        "description": "Dinge, die auf eine Entscheidung von dir warten."
+      },
+      "system": {
+        "title": "System",
+        "description": "Hintergrundaufgaben und Serverprotokolle."
+      },
+      "about": {
+        "title": "Info und Updates"
+      }
+    },
+    "tabs": {
+      "library": {
+        "paths": "Pfade und Regeln",
+        "scan": "Scan",
+        "sources": "Quellen"
+      },
+      "maintenance": {
         "review": "Prüfung",
         "duplicates": "Duplikate",
         "recycleBin": "Papierkorb",
         "downloadedAlbums": "Heruntergeladene Alben",
         "quarantine": "Quarantäne",
-        "systemStatus": "Systemstatus",
-        "notifications": "Benachrichtigungen",
-        "library": "Bibliothek"
+        "systemStatus": "Systemstatus"
       },
-      "maintenanceWaiting": "In einigen Wartungsbereichen warten Einträge"
+      "system": {
+        "jobs": "Aufgaben",
+        "logs": "Protokolle"
+      }
     },
-    "integrationTabs": {
-      "ariaLabel": "Integrationen"
+    "search": {
+      "label": "Einstellungen durchsuchen",
+      "placeholder": "Einstellungen durchsuchen",
+      "clear": "Suche löschen",
+      "shortcut": "/",
+      "summary_one": "{{count}} Treffer an {{places}} Stelle",
+      "summary_other": "{{count}} Treffer an {{places}} Stellen",
+      "empty": "Keine Einstellung passt. Versuch es mit Schlüssel, Zeitlimit, Kontingent oder Plex.",
+      "place": "{{page}} › {{place}}",
+      "entries": {
+        "navidromeAccount": "Navidrome-Konto",
+        "jellyfinAccount": "Jellyfin-Konto",
+        "lastfmFeeds": "Last.fm-Entdeckungsfeeds",
+        "lastfmCredentials": "Last.fm-API-Schlüssel und -Secret",
+        "listenbrainzFeeds": "ListenBrainz-Entdeckungsfeeds",
+        "listenbrainzAutoRequest": "ListenBrainz-Playlists automatisch anfragen"
+      },
+      "keywords": {
+        "theme": "dunkel mitternacht ozean farbe",
+        "language": "englisch spanisch französisch deutsch",
+        "scrobble": "scrobble wiedergaben hörverlauf",
+        "channels": "discord ntfy telegram webhook apprise",
+        "musicApps": "subsonic feishin symfonium dsub zugangsdaten",
+        "libraryPaths": "ordner benennung vorlage umbenennen",
+        "unidentified": "unerkannt nicht erkannt zuordnen ignorieren",
+        "jobs": "cron zeitplan ausführen",
+        "updates": "version release changelog patchnotes",
+        "timeout": "zeitlimit timeout wartezeit warten"
+      }
+    },
+    "palette": {
+      "title": "Suchen oder eine Aktion ausführen",
+      "description": "Finde eine Einstellung oder Seite, oder führe eine häufige Aktion aus.",
+      "placeholder": "Einstellungen, Seiten und Aktionen suchen",
+      "actions": "Aktionen",
+      "settings": "Einstellungen und Seiten",
+      "pages": "Seiten",
+      "empty": "Nichts passt zu „{{query}}“.",
+      "keys": "Pfeiltasten zum Bewegen, Eingabe zum Öffnen, / zum Suchen in der Seitenleiste",
+      "actionLabels": {
+        "runLibraryScan": "Bibliothek jetzt scannen",
+        "reviewUnidentified": "Dateien prüfen, die der Scan nicht erkannt hat",
+        "checkForUpdates": "Nach Updates suchen",
+        "createLocalUser": "Lokalen Benutzer anlegen",
+        "addLibraryPath": "Bibliothekspfad hinzufügen",
+        "newApiKey": "API-Schlüssel erstellen",
+        "emptyRecycleBin": "Papierkorb leeren",
+        "resolveDuplicates": "Doppelte Kopien auflösen",
+        "downloadLogs": "Alle Protokolle herunterladen"
+      }
+    },
+    "leaveDialog": {
+      "title": "Mit ungespeicherten Änderungen verlassen?",
+      "description": "Einige Änderungen auf dieser Seite sind noch nicht gespeichert.",
+      "stay": "Weiter bearbeiten",
+      "discard": "Verwerfen",
+      "save": "Speichern und weiter"
+    },
+    "downloadSources": {
+      "order": "Suchreihenfolge",
+      "orderHint": "Zieh eine Quelle, oder nutze ihre Pfeile, um die Reihenfolge zu ändern.",
+      "handOff": "Weitergeben statt herunterladen",
+      "panelLabel": "Einstellungen der ausgewählten Quelle"
+    },
+    "sourceStatus": {
+      "on": "An",
+      "off": "Aus",
+      "checking": "Wird geprüft",
+      "notConfigured": "Nicht eingerichtet",
+      "noCollection": "Keine Sammlung aktiv"
+    },
+    "chain": {
+      "open": "{{name}} öffnen",
+      "drag": "{{name}} ziehen, um die Position zu ändern",
+      "moveUp": "{{name}} nach oben",
+      "moveDown": "{{name}} nach unten"
     },
     "pageHeader": {
       "backToSections": "Zurück zu den Bereichen"
@@ -1341,7 +1537,10 @@
     "saveBar": {
       "cancel": "Abbrechen",
       "save": "Änderungen speichern",
-      "saving": "Wird gespeichert..."
+      "saving": "Wird gespeichert...",
+      "region": "Ungespeicherte Änderungen",
+      "summary_one": "{{count}} ungespeicherte Änderung",
+      "summary_other": "{{count}} ungespeicherte Änderungen"
     },
     "resetDefaults": {
       "label": "Auf Standard zurücksetzen"
@@ -1398,6 +1597,11 @@
       "description": "Neuere Releases werden übersprungen, da eine sehr frische Veröffentlichung sich noch auf die Server verteilt und unvollständig ankäme.",
       "suffix": "h",
       "ariaLabel": "Mindestalter in Stunden"
+    },
+    "searchTimeout": {
+      "label": "Suchzeitlimit",
+      "description": "Wie lange der Indexer brauchen darf, um ein Release zu finden.",
+      "ariaLabel": "Usenet-Suchzeitlimit in Sekunden"
     },
     "singleTrackRequests": {
       "title": "Anfragen für einzelne Titel",
@@ -1485,16 +1689,26 @@
       "ariaLabel": "Audio beim Abspielen umwandeln"
     }
   },
-  "connectApps": {
-    "card": {
-      "title": "Apps verbinden",
-      "description": "Apps und Assistenten, die sich mit deinem Synthseek verbinden."
-    }
-  },
   "library": {
     "page": {
-      "title": "Bibliothek",
-      "description": "Wie deine Dateien auf der Platte geordnet sind und was nicht passt."
+      "description": "Wie deine Dateien auf der Platte geordnet sind, was der Scan findet und woher Bibliotheken importiert werden."
+    },
+    "sync": {
+      "title": "Synchronisierung externer Bibliotheken",
+      "description": "Gefolgte Playlists und gespeicherte Alben auf jedem verbundenen Dienst werden in diesem Takt auf Änderungen geprüft.",
+      "interval": {
+        "label": "Auf Änderungen prüfen alle",
+        "description": "Wie oft Synthseek in dem, was Mitglieder auf anderen Diensten folgen und speichern, nach neuen Titeln sucht.",
+        "suffix": "min"
+      }
+    },
+    "mediaServerSources": {
+      "title": "Deine Medienserver",
+      "description": "Mitglieder können auch Playlists aus Plex, Navidrome und Jellyfin importieren. Hier wird nichts eingestellt: Die Serververbindung liegt unter Medien und Wiedergabe, und jedes Mitglied importiert mit dem Konto, das es unter Verbundene Konten verknüpft.",
+      "available": "Für Mitglieder verfügbar",
+      "notConfigured": "Nicht eingerichtet",
+      "open": "Öffnen",
+      "setUp": "Einrichten"
     }
   },
   "libraryPaths": {
@@ -1920,7 +2134,9 @@
       "linked": "In der Bibliothek",
       "searching": "Wird gesucht",
       "toReview": "Zu prüfen",
-      "reviewFiles": "Dateien prüfen"
+      "reviewFiles": "Dateien prüfen",
+      "reviewFilesCount_one": "{{count}} Datei prüfen",
+      "reviewFilesCount_other": "{{count}} Dateien prüfen"
     },
     "paths": {
       "columns": {

@@ -1,6 +1,6 @@
 export const MENU_ROUTES = {
-  settings: "/settings/general",
-  profile: "/settings/profile",
+  settings: "/settings",
+  profile: "/settings/account",
   members: "/settings/members",
-  updates: "/settings/updates",
+  updates: "/settings/about",
 } as const;

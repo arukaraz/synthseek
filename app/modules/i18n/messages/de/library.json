@@ -13,8 +13,8 @@
       "bodyExpired": "Deine {{provider}}-Verbindung ist abgelaufen oder wurde widerrufen. Verbinde dich erneut, um deine Bibliothek wieder zu laden.",
       "reconnect": "{{provider}} erneut verbinden",
       "connect": "{{provider}} verbinden",
-      "bodyAccount": "Verknüpfe dein {{provider}}-Konto in deinem Profil, damit Synthseek deine Playlists lesen kann.",
-      "linkAccount": "{{provider}} im Profil verknüpfen"
+      "bodyAccount": "Verknüpfe dein {{provider}}-Konto unter Verbundene Konten, damit Synthseek deine Playlists lesen kann.",
+      "linkAccount": "{{provider}} unter Verbundene Konten verknüpfen"
     },
     "loadFailed": {
       "title": "Deine {{provider}}-Bibliothek konnte nicht geladen werden",
@@ -197,14 +197,16 @@
     }
   },
   "discoveryIntegrations": {
+    "feedsTitle": "Entdeckungsfeeds",
     "card": {
-      "title": "Entdeckung",
       "loading": "Wird geladen…",
-      "loadError": "Entdeckungskonfiguration konnte nicht geladen werden.",
-      "description": "Rufe Empfehlungen und Feeds zum kürzlich Gehörten von externen Diensten ab. Jeder lässt sich unabhängig aktivieren, die Feeds füllen die Widgets auf deiner Entdecken-Seite."
+      "loadError": "Entdeckungskonfiguration konnte nicht geladen werden."
     },
     "lastfm": {
-      "enableAria": "Last.fm aktivieren",
+      "enableAria": "Last.fm-Entdeckungsfeeds aktivieren",
+      "credentialsTitle": "Server-Zugangsdaten",
+      "credentialsTooltip": "Der Last.fm-API-Schlüssel und das Secret, die die Verbindung jedes Mitglieds nutzt. Nur Administratoren sehen diesen Teil.",
+      "adminBadge": "Admin",
       "tooltip": "Letzte Scrobbles und meistgespielte Titel aller Zeiten von deinem Last.fm-Konto. Die Feeds sind fest.",
       "apiKeyWarning": "Der Last.fm-API-Schlüssel ist nicht konfiguriert. Bitte deinen Administrator, ihn festzulegen, bevor du diese Integration aktivierst.",
       "apiKeyLabel": "API-Schlüssel",
@@ -216,7 +218,7 @@
       "apiSecretHelper": "Nur nötig, um deine Wiedergaben an Last.fm zu senden. Wird zusammen mit dem API-Schlüssel ausgegeben."
     },
     "listenbrainz": {
-      "enableAria": "ListenBrainz aktivieren",
+      "enableAria": "ListenBrainz-Entdeckungsfeeds aktivieren",
       "tooltip": "Empfehlungen und kuratierte Playlists von deinem ListenBrainz-Konto. Es wird nur der öffentliche Benutzername benötigt.",
       "usernameLabel": "Benutzername",
       "usernameHelper": "Dein öffentlicher ListenBrainz-Benutzername (Groß-/Kleinschreibung beachten).",

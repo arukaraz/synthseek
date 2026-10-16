@@ -5,8 +5,9 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@utils/cn";
 
 import { statusBadge, statusDot, statusSupportingText } from "../../styles";
+import type { LidarrHealth } from "../../types";
 import { LIDARR_STATUS_TONE } from "./constants";
-import type { LidarrHealth, LidarrStatusBadgeProps } from "./types";
+import type { LidarrStatusBadgeProps } from "./types";
 
 export function LidarrStatusBadge({ status, message, messageCode, messageParams }: LidarrStatusBadgeProps) {
   const { t } = useTranslation("settings");

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterEach } from "vitest";
-import { render, screen, cleanup, waitFor } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import i18n from "@modules/i18n";
@@ -70,6 +70,8 @@ const optedIn: UsenetCardProps["initial"] = {
   usenet: { ...initial.usenet, singleTrackRequests: true },
 };
 
+const { priority: _priority, ...storedUsenet } = initial.usenet;
+
 const t = enSettings.usenet;
 
 describe("UsenetCard", () => {
@@ -128,22 +130,14 @@ describe("UsenetCard", () => {
     expect(screen.queryByLabelText(t.stagingRetention.ariaLabel)).not.toBeInTheDocument();
   });
 
-  it("saves the usenet draft alongside every unchanged sibling source", async () => {
+  it("saves only the usenet source, leaving its priority and every sibling source out of the payload", async () => {
     render(<UsenetCard initial={initial} />);
 
     await userEvent.click(screen.getByRole("switch", { name: t.enable.ariaLabel }));
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith({
-        slskd: initial.slskd,
-        ytdlp: initial.ytdlp,
-        usenet: { ...initial.usenet, enabled: true },
-        archive: initial.archive,
-        soundcloud: initial.soundcloud,
-        subsonic: initial.subsonic,
-        torrent: initial.torrent,
-      });
+      expect(update.mutateAsync).toHaveBeenCalledWith({ usenet: { ...storedUsenet, enabled: true } });
     });
   });
 
@@ -154,15 +148,20 @@ describe("UsenetCard", () => {
     await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
 
     await waitFor(() => {
-      expect(update.mutateAsync).toHaveBeenCalledWith({
-        slskd: initial.slskd,
-        ytdlp: initial.ytdlp,
-        usenet: { ...initial.usenet, singleTrackRequests: true },
-        archive: initial.archive,
-        soundcloud: initial.soundcloud,
-        subsonic: initial.subsonic,
-        torrent: initial.torrent,
-      });
+      expect(update.mutateAsync).toHaveBeenCalledWith({ usenet: { ...storedUsenet, singleTrackRequests: true } });
+    });
+  });
+
+  it("shows the search timeout in seconds and saves it in milliseconds", async () => {
+    render(<UsenetCard initial={initial} />);
+
+    const timeout = screen.getByLabelText(t.searchTimeout.ariaLabel);
+    expect(timeout).toHaveValue(30);
+    fireEvent.change(timeout, { target: { value: "45" } });
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith({ usenet: { ...storedUsenet, searchTimeout: 45000 } });
     });
   });
 
@@ -176,6 +175,19 @@ describe("UsenetCard", () => {
       "href",
       "/settings/maintenance/downloaded-albums"
     );
+  });
+
+  it("settles an edit once it is saved, even after the order moved the source", async () => {
+    const { rerender } = render(<UsenetCard initial={initial} />);
+    await userEvent.click(screen.getByRole("switch", { name: t.enable.ariaLabel }));
+
+    const reordered = { ...initial, usenet: { ...initial.usenet, priority: 2 } };
+    rerender(<UsenetCard initial={reordered} />);
+    expect(screen.getByRole("switch", { name: t.enable.ariaLabel })).toBeChecked();
+    expect(screen.getByRole("button", { name: enSettings.shell.saveBar.save })).toBeInTheDocument();
+
+    rerender(<UsenetCard initial={{ ...reordered, usenet: { ...reordered.usenet, enabled: true } }} />);
+    expect(screen.queryByRole("button", { name: enSettings.shell.saveBar.save })).not.toBeInTheDocument();
   });
 
   it("reverts the draft when cancel is pressed", async () => {

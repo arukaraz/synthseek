@@ -84,7 +84,7 @@ export function LogViewerCard() {
   };
 
   return (
-    <SettingsCard title={t("logs.viewer.title")} description={t("logs.viewer.description")}>
+    <SettingsCard title={t("logs.viewer.title")} description={t("logs.viewer.description")} anchor="log-viewer">
       <div className={viewerToolbar()}>
         <div className={levelChips()}>
           {Object.entries(LOG_LEVEL_STYLES).map(([level, colorClass]) => (

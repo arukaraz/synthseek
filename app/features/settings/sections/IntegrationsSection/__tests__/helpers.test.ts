@@ -4,17 +4,21 @@ import i18n from "@modules/i18n";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
-import { buildRedirectUri, movedServer, previewName } from "../helpers";
+import { buildRedirectUri, previewName, sameOrder } from "../helpers";
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);
 });
 
-describe("movedServer", () => {
-  it("swaps a server with its neighbour and leaves the ends where they are", () => {
-    expect(movedServer(["plex", "navidrome", "jellyfin"], 2, -1)).toEqual(["plex", "jellyfin", "navidrome"]);
-    expect(movedServer(["plex", "navidrome", "jellyfin"], 0, -1)).toEqual(["plex", "navidrome", "jellyfin"]);
-    expect(movedServer(["plex", "navidrome", "jellyfin"], 2, 1)).toEqual(["plex", "navidrome", "jellyfin"]);
+describe("sameOrder", () => {
+  it("holds only for the same keys in the same places", () => {
+    expect(sameOrder(["plex", "navidrome"], ["plex", "navidrome"])).toBe(true);
+    expect(sameOrder(["navidrome", "plex"], ["plex", "navidrome"])).toBe(false);
+  });
+
+  it("does not hold when one order is a prefix of the other", () => {
+    expect(sameOrder(["plex"], ["plex", "navidrome"])).toBe(false);
+    expect(sameOrder(["plex", "navidrome"], ["plex"])).toBe(false);
   });
 });
 

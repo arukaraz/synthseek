@@ -1,7 +1,5 @@
-"use client";
-
-import { LibrarySourcesSection } from "@features/settings/sections/IntegrationsSection/LibrarySourcesSection";
+import { redirect } from "next/navigation";
 
 export default function LibrarySourcesIntegrationPage() {
-  return <LibrarySourcesSection />;
+  redirect("/settings/library/sources");
 }

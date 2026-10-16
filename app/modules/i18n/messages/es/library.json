@@ -13,8 +13,8 @@
       "bodyExpired": "Tu conexión con {{provider}} expiró o fue revocada. Reconecta para volver a cargar tu biblioteca.",
       "reconnect": "Reconectar {{provider}}",
       "connect": "Conectar {{provider}}",
-      "bodyAccount": "Vincula tu cuenta de {{provider}} en tu perfil para que Synthseek pueda leer tus listas de reproducción.",
-      "linkAccount": "Vincular {{provider}} en tu perfil"
+      "bodyAccount": "Vincula tu cuenta de {{provider}} en Cuentas conectadas para que Synthseek pueda leer tus listas de reproducción.",
+      "linkAccount": "Vincular {{provider}} en Cuentas conectadas"
     },
     "loadFailed": {
       "title": "No se pudo cargar tu biblioteca de {{provider}}",
@@ -197,14 +197,16 @@
     }
   },
   "discoveryIntegrations": {
+    "feedsTitle": "Feeds de descubrimiento",
     "card": {
-      "title": "Descubrimiento",
       "loading": "Cargando…",
-      "loadError": "No se pudo cargar la configuración de descubrimiento.",
-      "description": "Obtén recomendaciones y feeds de escuchas recientes de servicios externos. Cada uno se puede activar de forma independiente, los feeds alimentan los widgets de tu página de Descubrir."
+      "loadError": "No se pudo cargar la configuración de descubrimiento."
     },
     "lastfm": {
-      "enableAria": "Activar Last.fm",
+      "enableAria": "Activar los feeds de descubrimiento de Last.fm",
+      "credentialsTitle": "Credenciales del servidor",
+      "credentialsTooltip": "La clave y el secreto de la API de Last.fm que usa la conexión de cada miembro. Solo los administradores ven esta parte.",
+      "adminBadge": "Admin",
       "tooltip": "Scrobbles recientes y canciones más escuchadas de todos los tiempos en tu cuenta de Last.fm. Los feeds son fijos.",
       "apiKeyWarning": "La clave de API de Last.fm no está configurada. Pide a tu administrador que la configure antes de activar esta integración.",
       "apiKeyLabel": "Clave de API",
@@ -216,7 +218,7 @@
       "apiSecretHelper": "Solo hace falta para enviar tus escuchas a Last.fm. Se entrega junto a la clave de la API."
     },
     "listenbrainz": {
-      "enableAria": "Activar ListenBrainz",
+      "enableAria": "Activar los feeds de descubrimiento de ListenBrainz",
       "tooltip": "Recomendaciones y listas de reproducción seleccionadas de tu cuenta de ListenBrainz. Solo se necesita el nombre de usuario público.",
       "usernameLabel": "Nombre de usuario",
       "usernameHelper": "Tu nombre de usuario público de ListenBrainz (distingue mayúsculas y minúsculas).",

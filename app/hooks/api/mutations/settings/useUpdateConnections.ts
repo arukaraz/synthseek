@@ -10,6 +10,7 @@ export function useUpdateConnectionsSlskd() {
     onSuccess: () => {
       utils.settings.get.invalidate();
       utils.settings.slskdStatus.invalidate();
+      utils.settings.downloadSourcesAvailability.invalidate();
       toast.success(i18n.t("mutations:settings.slskdSaved"));
     },
     onError: (error) => errorToast(error, "settings.slskdFailed"),

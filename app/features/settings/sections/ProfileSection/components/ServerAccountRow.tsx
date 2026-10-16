@@ -50,7 +50,7 @@ export function ServerAccountRow({ account }: ServerAccountRowProps) {
   };
 
   return (
-    <div className={listeningRow()}>
+    <div className={listeningRow()} data-anchor-target={server}>
       <div className={listeningRowHeader()}>
         <span className={cn(accountChip(), providerTone({ provider: server }))}>
           <ProviderMark provider={server} size={18} />

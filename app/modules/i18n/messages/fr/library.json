@@ -13,8 +13,8 @@
       "bodyExpired": "Votre connexion {{provider}} a expiré ou a été révoquée. Reconnectez-vous pour recharger votre bibliothèque.",
       "reconnect": "Reconnecter {{provider}}",
       "connect": "Connecter {{provider}}",
-      "bodyAccount": "Associez votre compte {{provider}} dans votre profil pour que Synthseek puisse lire vos playlists.",
-      "linkAccount": "Associer {{provider}} dans votre profil"
+      "bodyAccount": "Associez votre compte {{provider}} dans Comptes connectés pour que Synthseek puisse lire vos playlists.",
+      "linkAccount": "Associer {{provider}} dans Comptes connectés"
     },
     "loadFailed": {
       "title": "Impossible de charger votre bibliothèque {{provider}}",
@@ -197,14 +197,16 @@
     }
   },
   "discoveryIntegrations": {
+    "feedsTitle": "Flux de découverte",
     "card": {
-      "title": "Découverte",
       "loading": "Chargement…",
-      "loadError": "Échec du chargement de la configuration de découverte.",
-      "description": "Récupérez des recommandations et des flux d'écoute récents depuis des services externes. Chacun peut être activé indépendamment, les flux alimentent les widgets de votre page Découvrir."
+      "loadError": "Échec du chargement de la configuration de découverte."
     },
     "lastfm": {
-      "enableAria": "Activer Last.fm",
+      "enableAria": "Activer les flux de découverte Last.fm",
+      "credentialsTitle": "Identifiants du serveur",
+      "credentialsTooltip": "La clé et le secret de l'API Last.fm qu'utilise la connexion de chaque membre. Seuls les administrateurs voient cette partie.",
+      "adminBadge": "Admin",
       "tooltip": "Scrobbles récents et meilleures pistes de toujours de votre compte Last.fm. Les flux sont fixes.",
       "apiKeyWarning": "La clé API Last.fm n'est pas configurée. Demandez à votre administrateur de la définir avant d'activer cette intégration.",
       "apiKeyLabel": "Clé API",
@@ -216,7 +218,7 @@
       "apiSecretHelper": "Necessaire uniquement pour envoyer vos ecoutes a Last.fm. Fourni avec la cle de l'API."
     },
     "listenbrainz": {
-      "enableAria": "Activer ListenBrainz",
+      "enableAria": "Activer les flux de découverte ListenBrainz",
       "tooltip": "Recommandations et playlists organisées de votre compte ListenBrainz. Seul le nom d'utilisateur public est nécessaire.",
       "usernameLabel": "Nom d'utilisateur",
       "usernameHelper": "Votre nom d'utilisateur ListenBrainz public (sensible à la casse).",

@@ -1,15 +1,7 @@
-export interface EngineImportSettings {
-  metadataConfidenceThreshold: number;
-  acoustidIdentityGate: boolean;
-}
+import type { EngineImportSettings } from "../../types";
 
 export interface ImportCardProps {
   initial: EngineImportSettings;
-}
-
-export interface QuarantineSourceTrust {
-  bannedUsersCount: number;
-  banAfterFailedAttempts: number;
 }
 
 export interface EngineQualitySettings {

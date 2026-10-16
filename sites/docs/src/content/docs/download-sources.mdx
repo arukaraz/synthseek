@@ -7,21 +7,21 @@ order: 5
 
 ## How sources work
 
-A download source is an adapter. Synthseek asks each enabled source, in priority order, whether it can supply a track, and takes the first one that delivers something that passes verification. Lower priority numbers are tried first.
+A download source is an adapter. Synthseek asks each enabled source, from the top of the list down, whether it can supply a track, and takes the first one that delivers something that passes verification.
 
-Seven sources ship today.
+Seven sources ship today, listed in their default order.
 
-| Source           | Priority | Enabled by default |
-| ---------------- | -------- | ------------------ |
-| slskd            | 0        | Yes                |
-| Subsonic server  | 2        | No                 |
-| Usenet           | 5        | No                 |
-| Torrent          | 6        | No                 |
-| yt-dlp           | 10       | Yes                |
-| SoundCloud       | 12       | No                 |
-| Internet Archive | 20       | No                 |
+| Source           | Enabled by default |
+| ---------------- | ------------------ |
+| slskd            | Yes                |
+| Subsonic server  | No                 |
+| Usenet           | No                 |
+| Torrent          | No                 |
+| yt-dlp           | Yes                |
+| SoundCloud       | No                 |
+| Internet Archive | No                 |
 
-You can disable any of them globally in Settings, or choose which sources to try, and in what order, per request. Disabling a source moves the tracks it was fetching on to their next source, if they have one.
+All of them live under **Settings**, then **Download sources**. Drag a source to change the order. You can also choose which sources to try, and in what order, per request. Disabling a source moves the tracks it was fetching on to their next source, if they have one.
 
 ## slskd
 
@@ -32,7 +32,7 @@ slskd is a Soulseek daemon with an HTTP API. It is the primary download source, 
 1. Run slskd and complete its own setup, including your Soulseek account.
 2. In slskd, go to **Settings**, then **Options**, then **Web**, and note or generate an API key.
 3. Note the URL slskd's web interface is reachable at from inside the Synthseek container. On the same Docker network this is typically `http://slskd:5030`.
-4. In Synthseek, go to **Settings**, then **Integrations**, then the **slskd** card. Enter the URL and the API key, and test the connection.
+4. In Synthseek, go to **Settings**, then **Download sources**, then **slskd**. Enter the URL and the API key, and test the connection.
 
 ### The shared downloads folder
 
@@ -45,7 +45,7 @@ Both must point at the same place on the host, and the user Synthseek runs as, s
 
 ### slskd settings
 
-On the slskd card, under **Settings**, then **Integrations**:
+Under **Settings**, then **Download sources**, then **slskd**:
 
 | Setting                  | Default | What it does                                                               |
 | ------------------------ | ------- | -------------------------------------------------------------------------- |
@@ -56,7 +56,7 @@ On the slskd card, under **Settings**, then **Integrations**:
 | Maximum history searches | 30      | How many to retain before cleanup.                                         |
 | Banned users             | Empty   | Peers excluded from all searches. You can add and remove entries manually. |
 
-Banning a peer automatically after repeated failures is a separate switch, on the quarantine card under **Settings**, then **Engine**. See the [Configuration page](/configuration).
+The same panel holds the Soulseek timeouts from the [Configuration page](/configuration), and **Auto-ban after N failures**, which bans a peer after repeated failed downloads. It is off at 0.
 
 ## Another Subsonic server
 
@@ -67,8 +67,8 @@ friend's Navidrome or Synthseek. It is off until you set it up, and it connects 
 
 1. Ask the server's owner for an account. On a Synthseek server, the owner turns on **Music
    players** and makes you a member. You then create a credential under **Settings**, then
-   **General**, then **Connect apps**, and use it as the API key.
-2. In Synthseek, go to **Settings**, then **Integrations**, then the **Subsonic server** card. Enter
+   **Apps & API keys**, and use it as the API key.
+2. In Synthseek, go to **Settings**, then **Download sources**, then **Subsonic server**. Enter
    the address, then the API key, or a username and password.
 3. Test the connection, turn the source on and save.
 
@@ -81,7 +81,6 @@ refused. Downloading from a Synthseek server leaves no plays on it.
 | Setting        | Default    | What it does                         |
 | -------------- | ---------- | ------------------------------------ |
 | Enabled        | Off        | Whether the server is searched.      |
-| Priority       | 2          | Tried right after slskd.             |
 | Search timeout | 30 seconds | How long to wait for search results. |
 
 ## Usenet
@@ -113,17 +112,18 @@ account:
 3. Point SABnzbd's completed-downloads folder at the same `/downloads` volume Synthseek uses. This is
    the same requirement the slskd section describes above, and the same thing goes wrong when it is
    missed: downloads succeed and nothing is ever imported.
-4. In Synthseek, go to **Settings**, then **Integrations**, then the **Usenet** card. Enter both
+4. In Synthseek, go to **Settings**, then **Download sources**, then **Usenet**. Enter both
    addresses and both keys.
 
 ### Usenet settings
 
-| Setting                | Default | What it does                                                                      |
-| ---------------------- | ------- | --------------------------------------------------------------------------------- |
-| Maximum release size   | 1000 MB | Releases larger than this are skipped. 0 accepts any size.                        |
-| Minimum release age    | 1 hour  | Releases newer than this are skipped, because a fresh post can still be arriving. |
-| Single-track requests  | Off     | Allows Usenet outside album requests. See below.                                  |
-| Keep unused albums for | 24 h    | How long a downloaded album waits for another of its tracks before it is deleted. |
+| Setting                | Default    | What it does                                                                      |
+| ---------------------- | ---------- | --------------------------------------------------------------------------------- |
+| Maximum release size   | 1000 MB    | Releases larger than this are skipped. 0 accepts any size.                        |
+| Minimum release age    | 1 hour     | Releases newer than this are skipped, because a fresh post can still be arriving. |
+| Search timeout         | 30 seconds | How long the indexer may take to find a release.                                  |
+| Single-track requests  | Off        | Allows Usenet outside album requests. See below.                                  |
+| Keep unused albums for | 24 h       | How long a downloaded album waits for another of its tracks before it is deleted. |
 
 ### Single-track requests
 
@@ -160,7 +160,7 @@ until you set it up. Like Usenet, it serves only album requests unless you allow
 2. In qBittorrent, turn on the web interface. Create an API key (qBittorrent 5.2 or later), or use
    its username and password.
 3. Make qBittorrent save the `synthseek` category to the same `/downloads` volume Synthseek uses.
-4. In Synthseek, go to **Settings**, then **Integrations**, then the **Torrent** card. Enter both
+4. In Synthseek, go to **Settings**, then **Download sources**, then **Torrent**. Enter both
    addresses and the keys, and test the connection.
 
 ### Downloading and seeding
@@ -181,9 +181,9 @@ Synthseek's.
 | Setting                     | Default    | What it does                                                   |
 | --------------------------- | ---------- | -------------------------------------------------------------- |
 | Enabled                     | Off        | Whether torrents are searched.                                 |
-| Priority                    | 6          | Tried right after Usenet.                                      |
 | Minimum seeders             | 1          | Releases with fewer seeders are skipped.                       |
 | Maximum release size        | 1500 MB    | Releases larger than this are skipped. 0 accepts any size.     |
+| Search timeout              | 30 seconds | How long the indexer may take to find a release.               |
 | Give up after               | 30 minutes | How long a torrent may go without progress.                    |
 | Wait in the queue for up to | 24 h       | How long qBittorrent may keep a torrent queued.                |
 | Single-track requests       | Off        | Allows torrents outside album requests.                        |
@@ -205,7 +205,6 @@ Everything downloaded through the fallback goes through exactly the same verific
 | Setting                | Default    | What it does                                                       |
 | ---------------------- | ---------- | ------------------------------------------------------------------ |
 | Enabled                | On         | Whether the fallback is used at all.                               |
-| Priority               | 10         | Tried after slskd.                                                 |
 | Search results         | 15         | How many candidates are considered before one is chosen.           |
 | Maximum duration delta | 15 seconds | How much a candidate's length may differ from the expected length. |
 | Search timeout         | 60 seconds | How long to wait for results.                                      |
@@ -253,6 +252,6 @@ When the release states its licence, the request page links to it.
 
 ## Delegating to Lidarr
 
-Rather than downloading through a source, a request can be handed to Lidarr, which then manages it in its own catalog. See the [Integrations page](/integrations).
+Rather than downloading through a source, a request can be handed to Lidarr, which then manages it in its own catalog. Lidarr is set up at the bottom of the same page. See the [Integrations page](/integrations).
 
 ---

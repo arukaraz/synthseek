@@ -8,26 +8,26 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockQuery, createLoadingQuery, createErrorQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
 interface SettingsData {
-  connections: { enrichment: unknown; spotify: unknown };
+  connections: { enrichment: { musicbrainzEmail: string }; spotify: unknown };
 }
 
 let settingsQuery: MockQueryResult<SettingsData | undefined> = createMockQuery<SettingsData | undefined>(undefined);
-let isAdmin = true;
+
+const enrichmentCard = vi.hoisted(() => vi.fn());
 
 vi.mock("@hooks/api/queries/useSettings", () => ({
   useSettings: () => settingsQuery,
 }));
 
-vi.mock("@modules/providers/AuthProvider", () => ({
-  useAuthContext: () => ({ isAdmin, currentUser: null, isLoading: false }),
-}));
-
 vi.mock("@features/discovery-integrations", () => ({
-  DiscoveryCard: () => <div data-testid="discovery-card" />,
+  DiscoveryFeeds: () => <div data-testid="discovery-feeds" />,
 }));
 
 vi.mock("../EnrichmentCard", () => ({
-  EnrichmentCard: () => <div data-testid="enrichment-card" />,
+  EnrichmentCard: (props: { initial: unknown }) => {
+    enrichmentCard(props);
+    return <div data-testid="enrichment-card" />;
+  },
 }));
 
 vi.mock("../SpotifySourceCard", () => ({
@@ -36,7 +36,7 @@ vi.mock("../SpotifySourceCard", () => ({
 
 import { MetadataSection } from "../MetadataSection";
 
-const data: SettingsData = { connections: { enrichment: {}, spotify: {} } };
+const data: SettingsData = { connections: { enrichment: { musicbrainzEmail: "me@example.com" }, spotify: {} } };
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);
@@ -44,28 +44,33 @@ beforeAll(() => {
 
 afterEach(() => {
   cleanup();
+  vi.clearAllMocks();
   settingsQuery = createMockQuery<SettingsData | undefined>(undefined);
-  isAdmin = true;
 });
 
 describe("MetadataSection", () => {
-  it("renders the loading state", () => {
+  it("renders the loading state under the page header", () => {
     settingsQuery = createLoadingQuery<SettingsData | undefined>();
     render(<MetadataSection />);
+    expect(screen.getByRole("heading", { level: 1, name: enSettings.shell.pages.metadata.title })).toBeInTheDocument();
     expect(screen.getByText(enSettings.common.loading)).toBeInTheDocument();
+    expect(screen.queryByTestId("enrichment-card")).not.toBeInTheDocument();
   });
 
-  it("renders the error state", () => {
+  it("renders the error state under the page header", () => {
     settingsQuery = createErrorQuery<SettingsData | undefined>(new Error("boom"));
     render(<MetadataSection />);
+    expect(screen.getByRole("heading", { level: 1, name: enSettings.shell.pages.metadata.title })).toBeInTheDocument();
     expect(screen.getByText(enSettings.common.loadFailed)).toBeInTheDocument();
+    expect(screen.queryByTestId("enrichment-card")).not.toBeInTheDocument();
   });
 
-  it("always renders the discovery card and shows the enrichment card for admins", () => {
+  it("renders the page header and hands the stored enrichment settings to the enrichment card", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<MetadataSection />);
-    expect(screen.getByTestId("discovery-card")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: enSettings.shell.pages.metadata.title })).toBeInTheDocument();
     expect(screen.getByTestId("enrichment-card")).toBeInTheDocument();
+    expect(enrichmentCard).toHaveBeenCalledWith({ initial: data.connections.enrichment });
   });
 
   it("leaves the library sources to their own tab", () => {
@@ -74,11 +79,9 @@ describe("MetadataSection", () => {
     expect(screen.queryByTestId("spotify-source-card")).not.toBeInTheDocument();
   });
 
-  it("hides the admin cards for non-admins but keeps the discovery card", () => {
-    isAdmin = false;
+  it("leaves the discovery feeds to the listening page", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<MetadataSection />);
-    expect(screen.getByTestId("discovery-card")).toBeInTheDocument();
-    expect(screen.queryByTestId("enrichment-card")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("discovery-feeds")).not.toBeInTheDocument();
   });
 });

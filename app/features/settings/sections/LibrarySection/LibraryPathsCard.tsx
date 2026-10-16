@@ -52,6 +52,7 @@ export function LibraryPathsCard() {
     <SettingsCard
       title={title}
       description={description}
+      anchor="library-paths"
       trailing={
         <Button onClick={() => setTarget({ mode: "add" })}>
           <Plus className="size-4" aria-hidden />

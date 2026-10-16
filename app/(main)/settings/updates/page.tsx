@@ -1,7 +1,5 @@
-"use client";
-
-import { UpdatesSection } from "@features/settings/sections/UpdatesSection";
+import { redirect } from "next/navigation";
 
 export default function UpdatesPage() {
-  return <UpdatesSection />;
+  redirect("/settings/about");
 }

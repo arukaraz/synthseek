@@ -38,7 +38,7 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
   };
 
   return (
-    <SettingsCard title={t("profile.password.title")}>
+    <SettingsCard title={t("profile.password.title")} anchor="password">
       {isLocal ? (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <SettingsField label={t("profile.password.currentLabel")}>

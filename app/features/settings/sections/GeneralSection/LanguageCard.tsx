@@ -17,7 +17,7 @@ export function LanguageCard() {
   const value = currentUser && isLocale(currentUser.language) ? currentUser.language : DEFAULT_LOCALE;
 
   return (
-    <SettingsCard title={t("general.language.title")} description={t("general.language.description")}>
+    <SettingsCard title={t("general.language.title")} description={t("general.language.description")} anchor="language">
       <LanguageSelector
         value={value}
         ariaLabel={t("general.language.selectorLabel")}

@@ -2,6 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
+import { DiscoveryFeeds } from "@features/discovery-integrations";
 import { useListeningConnections, useSeenPlaybackClients } from "@hooks/api";
 
 import { SettingsCard } from "../../../components/SettingsCard";
@@ -16,7 +17,9 @@ export function ListeningServicesCard() {
     <SettingsCard title={t("profile.listening.title")} optional description={t("profile.listening.description")}>
       {connections.isError ? <p className="text-fg/60 text-sm">{t("profile.listening.unavailable")}</p> : null}
       {(connections.data ?? []).map((connection) => (
-        <ListeningServiceRow key={connection.service} connection={connection} seenClients={seenClients.data ?? []} />
+        <ListeningServiceRow key={connection.service} connection={connection} seenClients={seenClients.data ?? []}>
+          <DiscoveryFeeds service={connection.service} apiKeyConfigured={connection.configured} />
+        </ListeningServiceRow>
       ))}
     </SettingsCard>
   );

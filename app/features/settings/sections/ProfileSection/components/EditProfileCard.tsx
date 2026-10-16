@@ -38,8 +38,8 @@ export function EditProfileCard({ user }: ProfileCardProps) {
     });
 
   return (
-    <SettingsCard title={t("profile.edit.title")}>
-      <SettingsField label={t("profile.edit.usernameLabel")}>
+    <SettingsCard title={t("profile.edit.title")} anchor="profile">
+      <SettingsField label={t("profile.edit.usernameLabel")} anchor="profile.username">
         <SettingsTextInput
           value={draft.username}
           onChange={(v) => form.setField("username", v)}
@@ -49,6 +49,7 @@ export function EditProfileCard({ user }: ProfileCardProps) {
 
       <SettingsField
         label={t("profile.edit.emailLabel")}
+        anchor="profile.email"
         helper={isLocal ? undefined : t("profile.edit.emailManagedByPlex")}
       >
         <SettingsTextInput
@@ -60,7 +61,7 @@ export function EditProfileCard({ user }: ProfileCardProps) {
         />
       </SettingsField>
 
-      <SettingsField label={t("profile.edit.avatarLabel")}>
+      <SettingsField label={t("profile.edit.avatarLabel")} anchor="profile.avatar">
         <SettingsTextInput
           value={draft.avatar_url}
           onChange={(v) => form.setField("avatar_url", v)}

@@ -1,7 +1,5 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { LibrarySection } from "@features/settings/sections/LibrarySection/LibrarySection";
-
-export default function Page() {
-  return <LibrarySection />;
+export default function LibraryIndex() {
+  redirect("/settings/library/paths");
 }

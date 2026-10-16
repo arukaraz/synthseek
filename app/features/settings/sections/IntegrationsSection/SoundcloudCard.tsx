@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Switch } from "@components/ui/Switch";
@@ -9,18 +10,20 @@ import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
+import { withoutPriority } from "./helpers";
 import { RemoteMediaSearchRows } from "./RemoteMediaSearchRows";
 import type { SoundcloudCardProps } from "./types";
 
 export function SoundcloudCard({ initial }: SoundcloudCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
-  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.soundcloud);
+  const stored = useMemo(() => withoutPriority(initial.soundcloud), [initial.soundcloud]);
+  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(stored);
 
   if (!draft) return null;
 
   return (
-    <SettingsCard title={t("soundcloud.title")} optional description={t("soundcloud.description")}>
+    <SettingsCard title={t("soundcloud.title")} optional description={t("soundcloud.description")} anchor="soundcloud">
       <EngineRow
         label={t("soundcloud.enable.label")}
         description={t("soundcloud.enable.description")}
@@ -42,7 +45,7 @@ export function SoundcloudCard({ initial }: SoundcloudCardProps) {
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}
-        onSave={() => save((payload) => update.mutateAsync({ ...initial, soundcloud: payload }))}
+        onSave={() => save((soundcloud) => update.mutateAsync({ soundcloud }))}
         onCancel={reset}
       />
     </SettingsCard>

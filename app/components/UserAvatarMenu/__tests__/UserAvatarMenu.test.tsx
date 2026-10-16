@@ -107,7 +107,7 @@ describe("UserAvatarMenu", () => {
     await user.click(screen.getByLabelText("User menu"));
     await user.click(await screen.findByText("Settings"));
 
-    expect(pushMock).toHaveBeenCalledWith("/settings/general");
+    expect(pushMock).toHaveBeenCalledWith("/settings");
   });
 
   it("logs out and replaces the route with the login page", async () => {
@@ -126,7 +126,7 @@ describe("UserAvatarMenu", () => {
     await user.click(screen.getByLabelText("User menu"));
     await user.click(await screen.findByText("Profile"));
 
-    expect(pushMock).toHaveBeenCalledWith("/settings/profile");
+    expect(pushMock).toHaveBeenCalledWith("/settings/account");
   });
 
   it("navigates to the members page when the members item is selected", async () => {
@@ -168,6 +168,6 @@ describe("UserAvatarMenu", () => {
     await user.click(screen.getByLabelText("User menu"));
     await user.click(await screen.findByText("Changelog"));
 
-    expect(pushMock).toHaveBeenCalledWith("/settings/updates");
+    expect(pushMock).toHaveBeenCalledWith("/settings/about");
   });
 });

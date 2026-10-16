@@ -5,8 +5,9 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@utils/cn";
 
 import { statusBadge, statusDot, statusSupportingText } from "../../styles";
+import type { SlskdHealth } from "../../types";
 import { SLSKD_STATUS_TONE } from "./constants";
-import type { SlskdHealth, SlskdStatusBadgeProps } from "./types";
+import type { SlskdStatusBadgeProps } from "./types";
 
 export function SlskdStatusBadge({ status, message, messageCode, messageParams }: SlskdStatusBadgeProps) {
   const { t } = useTranslation("settings");

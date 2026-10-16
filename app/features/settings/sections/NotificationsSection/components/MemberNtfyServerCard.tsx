@@ -24,6 +24,7 @@ export function MemberNtfyServerCard() {
       title={t("notifications.memberServer.title")}
       optional
       description={t("notifications.memberServer.description")}
+      anchor="member-ntfy"
     >
       <SettingsField label={t("notifications.memberServer.label")} htmlFor="notification-member-ntfy">
         <Input
@@ -38,7 +39,10 @@ export function MemberNtfyServerCard() {
       <SaveBar
         isDirty={draft !== null && draft !== saved}
         isSaving={update.isPending}
-        onSave={() => update.mutate({ memberNtfyServer: value.trim() }, { onSuccess: () => setDraft(null) })}
+        onSave={async () => {
+          await update.mutateAsync({ memberNtfyServer: value.trim() });
+          setDraft(null);
+        }}
         onCancel={() => setDraft(null)}
       />
     </SettingsCard>

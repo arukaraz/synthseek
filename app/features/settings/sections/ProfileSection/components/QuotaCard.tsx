@@ -15,7 +15,7 @@ export function QuotaCard() {
   const usage = quota.data;
 
   return (
-    <SettingsCard title={t("profile.quota.title")}>
+    <SettingsCard title={t("profile.quota.title")} anchor="quota">
       {quota.isError ? <p className={quotaMessage()}>{t("profile.quota.unavailable")}</p> : null}
       {usage?.exempt ? <p className={quotaMessage()}>{t("profile.quota.exempt")}</p> : null}
       {usage && !usage.exempt ? (

@@ -1,5 +1,9 @@
 import { cva } from "class-variance-authority";
 
+export const maintenanceHeader = cva("flex flex-col gap-1");
+
+export const maintenanceTitle = cva("inline-flex items-center gap-1.5");
+
 export const quarantineListHeader = cva("flex items-center justify-between gap-3");
 
 export const quarantineList = cva("flex max-h-96 flex-col gap-2 overflow-y-auto pr-1");

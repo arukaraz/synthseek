@@ -62,9 +62,23 @@ export const scheduleDayChip = cva(
 
 export const scheduleHourGrid = cva("grid grid-cols-4 gap-1.5");
 
-export const subSection = cva("flex h-full flex-col gap-4");
+export const feedPanel = cva("border-fg/10 flex flex-col gap-4 border-t pt-3");
 
-export const subSectionSaveBar = cva("mt-auto");
+export const feedPanelHeader = cva("flex items-center justify-between gap-3");
+
+export const feedPanelTitle = cva(
+  "text-fg/70 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
+);
+
+export const feedPanelStatus = cva("text-sm", {
+  variants: {
+    failed: {
+      true: "text-destructive-vivid",
+      false: "text-fg/60",
+    },
+  },
+  defaultVariants: { failed: false },
+});
 
 export const playlistChipsGrid = cva("grid grid-cols-4 gap-1.5");
 
@@ -82,16 +96,6 @@ export const playlistChip = cva(
     defaultVariants: { selected: false },
   }
 );
-
-export const discoveryGrid = cva("grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2");
-
-export const discoverySubBoundary = cva(
-  "border-fg/10 border-t pt-5 md:border-t-0 md:pt-0 md:border-l md:pl-6 [&:first-child]:border-t-0 [&:first-child]:pt-0 md:[&:first-child]:border-l-0 md:[&:first-child]:pl-0"
-);
-
-export const subSectionHeader = cva("flex items-start justify-between gap-3");
-
-export const subSectionTitle = cva("text-fg text-sm font-semibold");
 
 export const autoRequestRow = cva(
   "border-fg/10 bg-fg/[0.02] flex items-start justify-between gap-3 rounded-lg border p-3"

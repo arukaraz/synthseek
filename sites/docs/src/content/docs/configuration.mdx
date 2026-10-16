@@ -15,22 +15,44 @@ Synthseek has two configuration surfaces, and the split is deliberate.
 
 ## Settings, by section
 
-### General
+Settings has two groups. **You** holds what each member sets for themselves. **This server** holds what administrators set for everyone, and members do not see it. **About & updates** sits at the bottom for everyone.
 
-Available to every member, except where a row says otherwise.
+The search box at the top of the sidebar finds any setting and opens the page it lives on. Ctrl+K, or Cmd+K on a Mac, opens the same search with a few common actions.
+
+### Account
+
+Your username, email, avatar and password, and how much of your download quota you have used.
+
+### Appearance & language
+
+| Setting  | What it does                                               |
+| -------- | ---------------------------------------------------------- |
+| Theme    | Synthseek, Midnight, or Ocean.                             |
+| Language | English, Español, Deutsch, or Français. Switches in place. |
+
+### Connected accounts
+
+Your own accounts on Spotify, Plex, Navidrome and Jellyfin, which Synthseek uses on your behalf. The Plex row also offers to count your plays in Plex.
+
+### Listening & discovery
+
+Your Last.fm and ListenBrainz connections, which send what you play to them, and the discovery mixes each one brings to Discover. Administrators also set the Last.fm API key and shared secret here, which every member's Last.fm connection uses.
+
+### Apps & API keys
 
 | Setting       | What it does                                                                                                            |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Theme         | Synthseek, Midnight, or Ocean.                                                                                          |
-| Language      | English, Español, Deutsch, or Français. Switches in place.                                                              |
 | Music players | Turns the Subsonic API on or off, **admin only**, and shows the address and username a music app needs. Off by default. |
 | AI assistants | The public URL of your instance, and connection guidance for assistants.                                                |
 | API keys      | Create and revoke keys for assistant connections. Shown once at creation.                                               |
 
-The three connection rows share one card, **Connect apps**. Each member creates and revokes their own
-credentials there; only an admin can turn the Subsonic API on.
+Each member creates and revokes their own credentials here; only an admin can turn the Subsonic API on.
 
-### Members
+### Overview
+
+Administrators only. What needs attention on this server, which services are connected, the setup steps still open, and the state of the background jobs. Each item links to the page that handles it.
+
+### Members & access
 
 Administrators only. Covered on the [Users and Permissions page](/users-permissions). The approval gate and the download quotas live here too:
 
@@ -41,14 +63,6 @@ Administrators only. Covered on the [Users and Permissions page](/users-permissi
 | Window                       | 7 days  | The rolling number of days the track quota counts over.              |
 | Storage per member           | 0 GB    | Space a member's music can take. 0 is no limit.                      |
 | Whole library                | 0 GB    | Downloads stop once the library reaches this size. 0 is no limit.    |
-
-### Profile
-
-Your own account. Username, email, password, avatar, connected accounts.
-
-### Updates
-
-The patch notes timeline, and whether a newer version is available.
 
 ### Notifications
 
@@ -64,48 +78,13 @@ On Discord, ntfy and Telegram, a download notice shows the cover art when there 
 | ----------------------- | ------- | ----------------------------------------------------------------------------------------------- |
 | ntfy server for members | Empty   | **Administrators only.** A second ntfy server members may use. Without it, members use ntfy.sh. |
 
-### Integrations
+### Download sources
 
-Administrators only.
+Administrators only. Enable, disable, and order slskd, another Subsonic server, Usenet, torrent, yt-dlp, SoundCloud and the Internet Archive. Synthseek tries them from the top down. The tuning of each is on the [Download Sources page](/download-sources).
 
-**slskd.** URL, API key, connection status, and the banned-peer list.
+**Lidarr**, at the bottom of the page, takes a request instead of downloading it: URL, API key, and the quality and metadata profiles available for delegation.
 
-**Download sources.** Enable, disable, and prioritise slskd, another Subsonic server, Usenet, torrent, yt-dlp, SoundCloud and the Internet Archive. The tuning of each is on the [Download Sources page](/download-sources).
-
-**Media servers.** Plex, Navidrome and Jellyfin, plus the order Synthseek tries them in when it has no file for a track. A connected server is a place to play from, with no switch of its own.
-
-Plex shows its connection status, a reconnect button that signs you in at plex.tv and lets you pick a server, and the server URL that sign-in resolved, shown read-only. Plus two behaviour switches:
-
-| Setting                | Default | What it does                            |
-| ---------------------- | ------- | --------------------------------------- |
-| Media server rescan    | On      | Ask Plex to rescan after an import.     |
-| Sync playlists to Plex | On      | Create and reconcile playlists on Plex. |
-
-And how mirrored playlists are named:
-
-| Setting                 | Default | What it does                                                        |
-| ----------------------- | ------- | ------------------------------------------------------------------- |
-| Playlist username affix | Off     | Prefix or suffix a media server playlist with its owner's username. |
-| Separator               | `_`     | The character between the name and the affix.                       |
-
-Navidrome (URL, username, password) and Jellyfin (URL, API key) each have a test button and a switch to sync playlists to that server. The switch starts off.
-
-**Lidarr.** URL, API key, and the quality and metadata profiles available for delegation.
-
-**Metadata and artwork.** All optional, all free:
-
-| Key                       | What it unlocks                                                                                                          |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| AcoustID                  | Verifying a download by its audio, and identifying a track for tagging when other methods cannot. The most valuable one. |
-| Last.fm                   | Similar artists, global charts, and your scrobble history. Its shared secret also lets members send plays to Last.fm.    |
-| fanart.tv                 | High quality artist images.                                                                                              |
-| MusicBrainz contact email | A higher rate limit against MusicBrainz.                                                                                 |
-| Songlink                  | A higher rate limit when turning a link from another platform, such as Spotify, into a track.                            |
-| Discogs                   | Additional metadata depth on the content detail views.                                                                   |
-
-**Library sources.** Connect Spotify to import your existing library. Requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet.
-
-### Engine
+### Download engine
 
 Administrators only. Most cards have a reset to defaults.
 
@@ -119,11 +98,16 @@ Administrators only. Most cards have a reset to defaults.
 
 **Timeouts**
 
+| Setting        | Default    | Range      |
+| -------------- | ---------- | ---------- |
+| Download phase | 20 minutes | 1m to 60m  |
+| Import phase   | 5 minutes  | 30s to 60m |
+
+The Soulseek timeouts are with the rest of slskd's settings, under **Download sources**:
+
 | Setting                 | Default    | Range      |
 | ----------------------- | ---------- | ---------- |
 | Search phase            | 15 seconds | 5s to 120s |
-| Download phase          | 20 minutes | 1m to 60m  |
-| Import phase            | 5 minutes  | 30s to 60m |
 | Peer unresponsive       | 2 minutes  | 15s to 15m |
 | Queue wait, active peer | 8 minutes  | 30s to 30m |
 | Queue wait, idle peer   | 12 minutes | 30s to 60m |
@@ -154,9 +138,64 @@ The [Download Engine page](/download-engine) covers what happens to a file these
 
 Custom mood keywords, which extend the built-in mood classification with terms of your own.
 
+### Library
+
+Administrators only, in three tabs. Covered on the [Operations page](/operations).
+
+**Paths & rules** lists the folders Synthseek keeps your music in. The first one comes from `MUSIC_LIBRARY_PATH`. You can add more, turn one off, and choose the default, which takes music that matches no rule. A folder you add has to be mounted into the container first, like `/music`. Each path has its own settings:
+
+| Setting      | Default                                                         | What it does                                                    |
+| ------------ | --------------------------------------------------------------- | --------------------------------------------------------------- |
+| Track naming | `{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}` | The folders and filename every track is given when it is filed. |
+| Rules        | None                                                            | The rules that send music to this path.                         |
+
+**Rules** lists the conditions a request can match, such as who asked for it, its genre or its release year. When several match, the one higher in the list is tried first.
+
+**Scan** shows what the last library scan found, and the files it could not recognise, behind **Review files**.
+
+**Sources** is where members' libraries come from. Connect Spotify to import an existing library. It requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet. Members can also import playlists from your media servers, through the account each one links under **Connected accounts**.
+
+| Setting                 | Default    | What it does                                                                                    |
+| ----------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| Check for changes every | 30 minutes | How often followed playlists and saved albums on other services are checked. 5 to 1440 minutes. |
+
+### Media & playback
+
+Administrators only. Plex, Navidrome and Jellyfin, plus the order the player tries them in when Synthseek has no file for a track. A connected server is a place to play from, with no switch of its own.
+
+Plex shows its connection status, a reconnect button that signs you in at plex.tv and lets you pick a server, and the server URL that sign-in resolved, shown read-only. Plus two behaviour switches:
+
+| Setting                | Default | What it does                            |
+| ---------------------- | ------- | --------------------------------------- |
+| Media server rescan    | On      | Ask Plex to rescan after an import.     |
+| Sync playlists to Plex | On      | Create and reconcile playlists on Plex. |
+
+And how mirrored playlists are named:
+
+| Setting                 | Default | What it does                                                        |
+| ----------------------- | ------- | ------------------------------------------------------------------- |
+| Playlist username affix | Off     | Prefix or suffix a media server playlist with its owner's username. |
+| Separator               | `_`     | The character between the name and the affix.                       |
+
+Navidrome (URL, username, password) and Jellyfin (URL, API key) each have a test button and a switch to sync playlists to that server. The switch starts off.
+
+### Metadata
+
+Administrators only. All optional, all free:
+
+| Key                       | What it unlocks                                                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| AcoustID                  | Verifying a download by its audio, and identifying a track for tagging when other methods cannot. The most valuable one. |
+| fanart.tv                 | High quality artist images.                                                                                              |
+| MusicBrainz contact email | A higher rate limit against MusicBrainz.                                                                                 |
+| Songlink                  | A higher rate limit when turning a link from another platform, such as Spotify, into a track.                            |
+| Discogs                   | Additional metadata depth on the content detail views.                                                                   |
+
+The Last.fm key and shared secret are under **Listening & discovery**. The key brings similar artists, global charts, and your scrobble history; the secret lets members send plays to Last.fm.
+
 ### Maintenance
 
-Administrators only. Six pages, each holding the list it is about and, for most, the setting that governs it. Every page carries a live count in the sidebar. The section itself shows a dot while any page but **Downloaded albums** has something waiting.
+Administrators only. Six tabs, each holding the list it is about and, for most, the setting that governs it. Every tab carries a live count. The sidebar shows a dot on **Maintenance** while any tab but **Downloaded albums** has something waiting.
 
 **Review**
 
@@ -183,7 +222,7 @@ The albums Usenet and torrent fetched whole that are still on disk. Each shows i
 | Setting                        | Default        | What it does                                                                                                                                                     |
 | ------------------------------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AcoustID identity gate         | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose audio is by a different artist is refused. Needs an AcoustID key. |
-| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures.                                                                                                                             |
+| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures. Shown here, and changed with slskd's settings under **Download sources**.                                                   |
 
 Below them, the list of current entries with the reason for each, and a link to the banned-peer list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
 
@@ -191,30 +230,17 @@ Below them, the list of current entries with the reason for each, and a link to 
 
 What is limiting Synthseek right now, such as a folder it cannot write to or a music catalog that is not answering, with the fix for each. A problem clears on its own once it is fixed, and while any remains, admins see a notice at the top of **Settings**.
 
-### Library
+### System
 
-Administrators only. Covered on the [Operations page](/operations).
-
-**Library paths** lists the folders Synthseek keeps your music in. The first one comes from `MUSIC_LIBRARY_PATH`. You can add more, turn one off, and choose the default, which takes music that matches no rule. A folder you add has to be mounted into the container first, like `/music`. Each path has its own settings:
-
-| Setting      | Default                                                         | What it does                                                    |
-| ------------ | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| Track naming | `{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}` | The folders and filename every track is given when it is filed. |
-| Rules        | None                                                            | The rules that send music to this path.                         |
-
-**Rules** lists the conditions a request can match, such as who asked for it, its genre or its release year. When several match, the one higher in the list is tried first.
-
-### Jobs
-
-Administrators only. Covered on the [Operations page](/operations).
-
-### Logs
-
-Administrators only. Covered on the [Operations page](/operations). The log level lives here:
+Administrators only, in two tabs, **Jobs** and **Logs**. Both are covered on the [Operations page](/operations). The log level lives under **Logs**:
 
 | Setting   | Default | What it does              |
 | --------- | ------- | ------------------------- |
 | Log level | INFO    | Applied live, no restart. |
+
+### About & updates
+
+The patch notes timeline, and whether a newer version is available.
 
 ## Settings that live outside Settings
 

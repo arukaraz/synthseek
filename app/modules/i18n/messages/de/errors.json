@@ -105,7 +105,7 @@
   },
   "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
     "title": "Konto nicht verknüpft",
-    "description": "Der Besitzer der Playlist muss zuerst in seinem Profil sein Konto für diesen Server verknüpfen."
+    "description": "Der Besitzer der Playlist muss zuerst unter Verbundene Konten sein Konto für diesen Server verknüpfen."
   },
   "TRACK_NOT_FOUND": {
     "title": "Titel nicht gefunden",

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function LidarrIntegrationPage() {
-  redirect("/settings/integrations/download-sources");
+  redirect("/settings/download-sources?source=lidarr");
 }

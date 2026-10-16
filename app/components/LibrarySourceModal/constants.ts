@@ -40,7 +40,7 @@ export const PROVIDER_ERROR_CATEGORY: Record<LibrarySourceProvider, ErrorCategor
   jellyfin: "generic",
 };
 
-export const PROFILE_ROUTE = "/settings/profile";
+export const PROFILE_ROUTE = "/settings/connected-accounts";
 
 export const WATCH_ROW_KEYS: Record<keyof AutoWatchState, WatchRowKeys> = {
   playlists: {

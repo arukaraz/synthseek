@@ -1,58 +1,15 @@
-import type { ReactNode } from "react";
-
-import type { MaintenanceCounts } from "@features/settings/sections/MaintenanceSection/types";
-
-export type SidebarItemKey =
-  | "shell.sidebar.items.general"
-  | "shell.sidebar.items.members"
-  | "shell.sidebar.items.profile"
-  | "shell.sidebar.items.integrations"
-  | "shell.sidebar.items.notifications"
-  | "shell.sidebar.items.engine"
-  | "shell.sidebar.items.jobs"
-  | "shell.sidebar.items.library"
-  | "shell.sidebar.items.logs"
-  | "shell.sidebar.items.updates"
-  | "shell.sidebar.items.maintenance"
-  | "shell.sidebar.items.review"
-  | "shell.sidebar.items.duplicates"
-  | "shell.sidebar.items.recycleBin"
-  | "shell.sidebar.items.downloadedAlbums"
-  | "shell.sidebar.items.quarantine"
-  | "shell.sidebar.items.systemStatus";
-
-export interface NavItem {
-  kind: "item";
-  href: string;
-  labelKey: SidebarItemKey;
-  icon: ReactNode;
-  adminOnly?: boolean;
-}
-
-export interface NavBranch {
-  kind: "branch";
-  href: string;
-  labelKey: SidebarItemKey;
-  icon: ReactNode;
-  adminOnly?: boolean;
-  children: NavLeaf[];
-}
-
-export type AdvancedEntry = NavItem | NavBranch;
-
-export interface NavLeaf {
-  href: string;
-  labelKey: SidebarItemKey;
-  countKey: keyof MaintenanceCounts;
-  asksForAttention: boolean;
-}
+import type { SettingsBadgeKey, SettingsPage } from "../../types";
 
 export interface SettingsSidebarProps {
   className?: string;
+  query: string;
+  onQueryChange: (next: string) => void;
 }
 
-export interface MaintenanceBranchProps {
-  branch: NavBranch;
-  counts: MaintenanceCounts | undefined;
-  pathname: string;
+export interface SidebarNavLinkProps {
+  page: SettingsPage;
+  active: boolean;
+  attention: boolean;
 }
+
+export type SidebarAttention = Readonly<Record<SettingsBadgeKey, boolean>>;

@@ -27,30 +27,17 @@ export function SpotifySourceCard({ spotify }: SpotifySourceCardProps) {
   const [clientId, setClientId] = useState(spotify.clientId);
   const [publicBaseUrl, setPublicBaseUrl] = useState(spotify.publicBaseUrl);
   const [copied, setCopied] = useState(false);
-  const [validationMessage, setValidationMessage] = useState<string | null>(null);
 
   const isDirty =
     spotifyEnabled !== spotify.enabled || clientId !== spotify.clientId || publicBaseUrl !== spotify.publicBaseUrl;
+  const missingFields = spotifyEnabled && (!clientId.trim() || !publicBaseUrl.trim());
 
-  const handleSave = async () => {
-    if (spotifyEnabled && (!clientId.trim() || !publicBaseUrl.trim())) {
-      setValidationMessage(t("metadata.librarySources.spotify.validationMissingFields"));
-      return;
-    }
-    setValidationMessage(null);
-    await updateSpotify.mutateAsync({ enabled: spotifyEnabled, clientId, publicBaseUrl });
-  };
+  const handleSave = () => updateSpotify.mutateAsync({ enabled: spotifyEnabled, clientId, publicBaseUrl });
 
   const handleCancel = () => {
     setSpotifyEnabled(spotify.enabled);
     setClientId(spotify.clientId);
     setPublicBaseUrl(spotify.publicBaseUrl);
-    setValidationMessage(null);
-  };
-
-  const handleSpotifyEnabledChange = (next: boolean) => {
-    setSpotifyEnabled(next);
-    if (!next) setValidationMessage(null);
   };
 
   const redirectUri = buildRedirectUri(publicBaseUrl);
@@ -71,11 +58,12 @@ export function SpotifySourceCard({ spotify }: SpotifySourceCardProps) {
     <SettingsCard
       title={t("metadata.librarySources.spotify.title")}
       optional
+      anchor="spotify-app"
       description={t("metadata.librarySources.spotify.description")}
       trailing={
         <Switch
           checked={spotifyEnabled}
-          onCheckedChange={handleSpotifyEnabledChange}
+          onCheckedChange={setSpotifyEnabled}
           aria-label={t("metadata.librarySources.spotify.toggleAriaLabel")}
         />
       }
@@ -83,7 +71,7 @@ export function SpotifySourceCard({ spotify }: SpotifySourceCardProps) {
       <div className={disabledOverlay({ disabled: !spotifyEnabled })}>
         <SpotifyRequirementsNotice />
 
-        <SettingsField label={t("metadata.librarySources.spotify.clientIdLabel")}>
+        <SettingsField label={t("metadata.librarySources.spotify.clientIdLabel")} anchor="connections.spotify.clientId">
           <SettingsTextInput
             value={clientId}
             onChange={setClientId}
@@ -94,6 +82,7 @@ export function SpotifySourceCard({ spotify }: SpotifySourceCardProps) {
         <SettingsField
           label={t("metadata.librarySources.spotify.publicBaseUrlLabel")}
           helper={t("metadata.librarySources.spotify.publicBaseUrlHelper")}
+          anchor="connections.spotify.publicBaseUrl"
         >
           <SettingsTextInput
             value={publicBaseUrl}
@@ -125,14 +114,20 @@ export function SpotifySourceCard({ spotify }: SpotifySourceCardProps) {
         </SettingsField>
       </div>
 
-      {validationMessage ? (
+      {isDirty && missingFields ? (
         <div className={validationError()} role="alert">
           <AlertCircle className="mt-0.5 size-4 shrink-0" />
-          <span>{validationMessage}</span>
+          <span>{t("metadata.librarySources.spotify.validationMissingFields")}</span>
         </div>
       ) : null}
 
-      <SaveBar isDirty={isDirty} isSaving={updateSpotify.isPending} onSave={handleSave} onCancel={handleCancel} />
+      <SaveBar
+        isDirty={isDirty}
+        isSaving={updateSpotify.isPending}
+        saveDisabled={missingFields}
+        onSave={handleSave}
+        onCancel={handleCancel}
+      />
     </SettingsCard>
   );
 }

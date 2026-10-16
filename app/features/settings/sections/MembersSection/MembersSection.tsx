@@ -15,6 +15,7 @@ import { useBulkDeleteUsers } from "@hooks/api/mutations/users/useBulkDeleteUser
 
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
+import { SETTINGS_PAGE_BY_ID } from "../../constants";
 import { contentRoot, emptyPanel } from "../../styles";
 import { ApprovalCard } from "./components/ApprovalCard";
 import { BulkEditBar } from "./components/BulkEditBar";
@@ -31,6 +32,7 @@ import type { MemberListItem, RoleValue } from "./types";
 
 export function MembersSection() {
   const { t } = useTranslation("settings");
+  const page = SETTINGS_PAGE_BY_ID.members;
   const { isAdmin, currentUser } = useAuthContext();
   const usersQuery = useUsers({ enabled: isAdmin });
   const { selected, toggle, selectAll, clear } = useMemberSelection();
@@ -108,7 +110,7 @@ export function MembersSection() {
   if (!isAdmin) {
     return (
       <div className={contentRoot()}>
-        <SettingsPageHeader title={t("members.pageTitle")} />
+        <SettingsPageHeader title={t(page.labelKey)} />
         <SettingsCard title={t("members.cardTitle")}>
           <div className={emptyPanel()}>
             <span className="text-fg/60 text-sm">{t("members.adminOnly")}</span>
@@ -120,10 +122,11 @@ export function MembersSection() {
 
   return (
     <div className={contentRoot()}>
-      <SettingsPageHeader title={t("members.pageTitle")} />
+      <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <SettingsCard
         title={t("members.cardTitle")}
         description={t("members.cardDescription")}
+        anchor="members"
         trailing={<MembersToolbar onCreate={() => setCreateOpen(true)} onImport={() => setImportOpen(true)} />}
       >
         {selectedIds.length > 0 ? (

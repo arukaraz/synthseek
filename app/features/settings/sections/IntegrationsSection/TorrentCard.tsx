@@ -1,7 +1,7 @@
 "use client";
 
 import { Plug } from "lucide-react";
-import { useId } from "react";
+import { useId, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -20,8 +20,9 @@ import { SettingsSecretInput } from "../../components/SettingsSecretInput";
 import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
-import { TORRENT_CLIENT_TEST_KEYS, TORRENT_INDEXER_TEST_KEYS, TORRENT_TEST_WARNING_KEYS } from "./constants";
+import { MS, TORRENT_CLIENT_TEST_KEYS, TORRENT_INDEXER_TEST_KEYS, TORRENT_TEST_WARNING_KEYS } from "./constants";
 import { DownloadedAlbumsPointer } from "./DownloadedAlbumsPointer";
+import { withoutPriority } from "./helpers";
 import type { TorrentCardProps } from "./types";
 
 export function TorrentCard({ initial }: TorrentCardProps) {
@@ -29,7 +30,8 @@ export function TorrentCard({ initial }: TorrentCardProps) {
   const update = useUpdateDownloadSources();
   const testConnection = useTestTorrentSource();
   const reveal = useRevealSettingsSecret();
-  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.torrent);
+  const stored = useMemo(() => withoutPriority(initial.torrent), [initial.torrent]);
+  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(stored);
   const fieldId = useId();
 
   if (!draft) return null;
@@ -64,7 +66,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
   };
 
   return (
-    <SettingsCard title={t("torrent.title")} optional description={t("torrent.description")}>
+    <SettingsCard title={t("torrent.title")} optional description={t("torrent.description")} anchor="torrent">
       <EngineRow
         label={t("torrent.enable.label")}
         description={t("torrent.enable.description")}
@@ -77,7 +79,11 @@ export function TorrentCard({ initial }: TorrentCardProps) {
         }
       />
 
-      <SettingsField label={t("torrent.indexerUrl.label")} htmlFor={`${fieldId}-indexer-url`}>
+      <SettingsField
+        label={t("torrent.indexerUrl.label")}
+        htmlFor={`${fieldId}-indexer-url`}
+        anchor="downloadSources.torrent.indexerUrl"
+      >
         <SettingsTextInput
           id={`${fieldId}-indexer-url`}
           value={draft.indexerUrl}
@@ -99,7 +105,11 @@ export function TorrentCard({ initial }: TorrentCardProps) {
         />
       </SettingsField>
 
-      <SettingsField label={t("torrent.qbittorrentUrl.label")} htmlFor={`${fieldId}-client-url`}>
+      <SettingsField
+        label={t("torrent.qbittorrentUrl.label")}
+        htmlFor={`${fieldId}-client-url`}
+        anchor="downloadSources.torrent.qbittorrentUrl"
+      >
         <SettingsTextInput
           id={`${fieldId}-client-url`}
           value={draft.qbittorrentUrl}
@@ -149,6 +159,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
         label={t("torrent.category.label")}
         helper={t("torrent.category.hint")}
         htmlFor={`${fieldId}-category`}
+        anchor="downloadSources.torrent.category"
       >
         <SettingsTextInput
           id={`${fieldId}-category`}
@@ -158,6 +169,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
       </SettingsField>
 
       <EngineRow
+        anchor="downloadSources.torrent.minSeeders"
         label={t("torrent.minSeeders.label")}
         description={t("torrent.minSeeders.description")}
         control={
@@ -172,6 +184,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.torrent.maxSizeMb"
         label={t("torrent.maxSize.label")}
         description={t("torrent.maxSize.description")}
         control={
@@ -187,6 +200,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.torrent.stallTimeoutMinutes"
         label={t("torrent.stallTimeout.label")}
         description={t("torrent.stallTimeout.description")}
         control={
@@ -202,6 +216,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.torrent.queueTimeoutHours"
         label={t("torrent.queueTimeout.label")}
         description={t("torrent.queueTimeout.description")}
         control={
@@ -212,6 +227,22 @@ export function TorrentCard({ initial }: TorrentCardProps) {
             max={168}
             suffix={t("torrent.queueTimeout.suffix")}
             ariaLabel={t("torrent.queueTimeout.ariaLabel")}
+          />
+        }
+      />
+
+      <EngineRow
+        anchor="downloadSources.torrent.searchTimeout"
+        label={t("torrent.searchTimeout.label")}
+        description={t("torrent.searchTimeout.description")}
+        control={
+          <SettingsNumberInput
+            value={Math.round(draft.searchTimeout / MS)}
+            onChange={(v) => setField("searchTimeout", v * MS)}
+            min={5}
+            max={120}
+            suffix="s"
+            ariaLabel={t("torrent.searchTimeout.ariaLabel")}
           />
         }
       />
@@ -229,6 +260,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
       </div>
 
       <EngineRow
+        anchor="downloadSources.torrent.singleTrackRequests"
         label={t("torrent.singleTrackRequests.label")}
         description={t("torrent.singleTrackRequests.description")}
         control={
@@ -241,6 +273,7 @@ export function TorrentCard({ initial }: TorrentCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.torrent.stagingRetentionHours"
         label={t("torrent.stagingRetention.label")}
         description={t("torrent.stagingRetention.description")}
         control={
@@ -273,13 +306,12 @@ export function TorrentCard({ initial }: TorrentCardProps) {
         isDirty={isDirty}
         isSaving={isSaving}
         onSave={() =>
-          save((payload) =>
+          save((torrent) =>
             update.mutateAsync({
-              ...initial,
               torrent: {
-                ...payload,
-                qbittorrentUsername: payload.qbittorrentUsername.trim(),
-                category: payload.category.trim(),
+                ...torrent,
+                qbittorrentUsername: torrent.qbittorrentUsername.trim(),
+                category: torrent.category.trim(),
               },
             })
           )

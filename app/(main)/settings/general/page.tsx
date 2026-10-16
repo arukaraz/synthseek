@@ -1,7 +1,5 @@
-"use client";
-
-import { GeneralSection } from "@features/settings/sections/GeneralSection/GeneralSection";
+import { redirect } from "next/navigation";
 
 export default function GeneralPage() {
-  return <GeneralSection />;
+  redirect("/settings/appearance");
 }

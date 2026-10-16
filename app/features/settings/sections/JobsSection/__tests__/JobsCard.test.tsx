@@ -7,7 +7,7 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockQuery, createLoadingQuery, createErrorQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
-import type { JobSummary } from "../types";
+import type { JobSummary } from "../../../types";
 
 let jobsQuery: MockQueryResult<JobSummary[] | undefined> = createMockQuery<JobSummary[] | undefined>(undefined);
 
@@ -15,7 +15,7 @@ vi.mock("@hooks/api/queries/useJobs", () => ({
   useJobs: () => jobsQuery,
 }));
 
-vi.mock("../JobRow", () => ({
+vi.mock("../../../components/JobRow", () => ({
   JobRow: ({ job }: { job: JobSummary }) => <div data-testid="job-row" data-job-id={job.id} />,
 }));
 

@@ -24,6 +24,7 @@ export function QualityCard({ initial }: QualityCardProps) {
   return (
     <SettingsCard
       title={t("quality.title")}
+      anchor="quality"
       description={t("quality.description")}
       trailing={
         <ResetDefaultsButton
@@ -33,6 +34,7 @@ export function QualityCard({ initial }: QualityCardProps) {
       }
     >
       <EngineRow
+        anchor="engine.quality.upgradeEnabled"
         label={t("quality.upgradeEnabled.label")}
         description={t("quality.upgradeEnabled.description")}
         control={

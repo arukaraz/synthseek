@@ -1,7 +1,5 @@
-"use client";
-
-import { MediaServersSection } from "@features/settings/sections/IntegrationsSection/MediaServersSection";
+import { redirect } from "next/navigation";
 
 export default function MediaServersIntegrationPage() {
-  return <MediaServersSection />;
+  redirect("/settings/media");
 }

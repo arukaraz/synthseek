@@ -1,8 +1,8 @@
 "use client";
 
-import { DuplicatesContent } from "@features/settings/sections/JobsSection/DuplicatesContent";
 import { useLibraryScanStatus } from "@hooks/api/queries/useLibraryScanStatus";
 
+import { DuplicatesContent } from "./DuplicatesContent";
 import { MaintenancePage } from "./MaintenancePage";
 
 export function DuplicatesSection() {

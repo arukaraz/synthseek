@@ -1,4 +1,5 @@
 import type { inferRouterOutputs } from "@trpc/server";
+import type { TFunction } from "i18next";
 
 import type { AppRouter } from "@api/__generated__/types";
 
@@ -216,4 +217,19 @@ export interface ConditionRowProps {
   removable: boolean;
   onChange: (next: ConditionDraft) => void;
   onRemove: () => void;
+}
+
+export type LibraryScanPath = LibraryOutputs["scan"]["status"]["paths"][number];
+
+export type LibraryScanOutcome = NonNullable<LibraryScanPath["lastScanOutcome"]>;
+
+export interface ScanPathColumnsArgs {
+  t: TFunction<"settings">;
+  busy: boolean;
+  onScan: (path: LibraryScanPath) => void;
+}
+
+export interface LastScanText {
+  text: string;
+  skipped: boolean;
 }

@@ -39,7 +39,7 @@ export function JellyfinCard({ initial }: JellyfinCardProps) {
   const handleSave = () => save((payload) => update.mutateAsync({ ...payload, url: payload.url.trim() }));
 
   return (
-    <SettingsCard title={t("mediaServers.jellyfin.title")}>
+    <SettingsCard title={t("mediaServers.jellyfin.title")} anchor="jellyfin">
       <SettingsField label={t("mediaServers.url")}>
         <SettingsTextInput
           value={draft.url}
@@ -49,7 +49,11 @@ export function JellyfinCard({ initial }: JellyfinCardProps) {
         />
       </SettingsField>
 
-      <SettingsField label={t("mediaServers.jellyfin.apiKey")} helper={t("mediaServers.jellyfin.apiKeyHelper")}>
+      <SettingsField
+        label={t("mediaServers.jellyfin.apiKey")}
+        helper={t("mediaServers.jellyfin.apiKeyHelper")}
+        anchor="connections.jellyfin.apiKey"
+      >
         <SettingsSecretInput
           value={draft.apiKey}
           onChange={(value) => setField("apiKey", value)}

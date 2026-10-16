@@ -3,15 +3,20 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+import { useAuthContext } from "@modules/providers/AuthProvider";
+
+import { settingsHomeFor } from "../../helpers";
+
 export function SettingsIndexScreen() {
   const router = useRouter();
+  const { isAdmin, isLoading } = useAuthContext();
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (isLoading || typeof window === "undefined") return;
     if (window.matchMedia("(min-width: 768px)").matches) {
-      router.replace("/settings/general");
+      router.replace(settingsHomeFor(isAdmin));
     }
-  }, [router]);
+  }, [router, isAdmin, isLoading]);
 
   return null;
 }

@@ -70,6 +70,8 @@ const initial: SubsonicSourceCardProps["initial"] = {
   torrent: createMockSettings().downloadSources.torrent,
 };
 
+const { priority: _priority, ...storedSubsonic } = initial.subsonic;
+
 const t = enSettings.subsonicSource;
 const urlInput = () => screen.getByPlaceholderText(t.urlPlaceholder);
 const testButton = () => screen.getByRole("button", { name: t.test.action });
@@ -125,7 +127,7 @@ describe("SubsonicSourceCard", () => {
     expect(toastError).toHaveBeenCalledWith(t.test.unreachable, { description: "ECONNREFUSED" });
   });
 
-  it("saves the source trimmed, alongside every unchanged sibling source", async () => {
+  it("saves only the subsonic source trimmed, leaving its priority and every sibling source out of the payload", async () => {
     render(<SubsonicSourceCard initial={initial} />);
 
     await userEvent.click(screen.getByRole("switch", { name: t.enable.ariaLabel }));
@@ -137,9 +139,8 @@ describe("SubsonicSourceCard", () => {
 
     await waitFor(() => {
       expect(update.mutateAsync).toHaveBeenCalledWith({
-        ...initial,
         subsonic: {
-          ...initial.subsonic,
+          ...storedSubsonic,
           enabled: true,
           url: "http://friend:4533",
           username: "me",

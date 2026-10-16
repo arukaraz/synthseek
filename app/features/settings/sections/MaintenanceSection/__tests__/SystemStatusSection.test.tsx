@@ -4,8 +4,9 @@ import { cleanup, render, screen } from "@testing-library/react";
 import i18n from "@modules/i18n";
 import { formatDateTime } from "@utils/formatters";
 
+import type { SystemProblem } from "../../../types";
 import { SystemStatusSection } from "../SystemStatusSection";
-import type { SystemProblem, SystemProblemCopyParams } from "../types";
+import type { SystemProblemCopyParams } from "../types";
 
 const auth = vi.hoisted(() => ({ isAdmin: true }));
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Switch } from "@components/ui/Switch";
@@ -11,13 +12,15 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { MS } from "./constants";
+import { withoutPriority } from "./helpers";
 import { cardNotice } from "./styles";
 import type { ArchiveCardProps } from "./types";
 
 export function ArchiveCard({ initial }: ArchiveCardProps) {
   const { t } = useTranslation("settings");
   const update = useUpdateDownloadSources();
-  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(initial.archive);
+  const stored = useMemo(() => withoutPriority(initial.archive), [initial.archive]);
+  const { draft, setField, save, reset, isDirty, isSaving } = useSettingsForm(stored);
 
   if (!draft) return null;
 
@@ -25,7 +28,7 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
   const noCollection = draft.enabled && !Object.values(collections).some(Boolean);
 
   return (
-    <SettingsCard title={t("archive.title")} optional description={t("archive.description")}>
+    <SettingsCard title={t("archive.title")} optional description={t("archive.description")} anchor="archive">
       <EngineRow
         label={t("archive.enable.label")}
         description={t("archive.enable.description")}
@@ -39,6 +42,7 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.archive.collections.netlabels"
         label={t("archive.netlabels.label")}
         description={t("archive.netlabels.description")}
         control={
@@ -51,6 +55,7 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.archive.collections.etree"
         label={t("archive.etree.label")}
         description={t("archive.etree.description")}
         control={
@@ -63,6 +68,7 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
       />
 
       <EngineRow
+        anchor="downloadSources.archive.collections.community"
         label={t("archive.community.label")}
         description={t("archive.community.description")}
         control={
@@ -77,6 +83,7 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
       {noCollection && <p className={cardNotice()}>{t("archive.noCollection")}</p>}
 
       <EngineRow
+        anchor="downloadSources.archive.searchTimeout"
         label={t("archive.searchTimeout.label")}
         description={t("archive.searchTimeout.description")}
         control={
@@ -94,7 +101,7 @@ export function ArchiveCard({ initial }: ArchiveCardProps) {
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}
-        onSave={() => save((payload) => update.mutateAsync({ ...initial, archive: payload }))}
+        onSave={() => save((archive) => update.mutateAsync({ archive }))}
         onCancel={reset}
       />
     </SettingsCard>

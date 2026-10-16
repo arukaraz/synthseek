@@ -1,7 +1,5 @@
-"use client";
-
-import { JobsSection } from "@features/settings/sections/JobsSection/JobsSection";
+import { redirect } from "next/navigation";
 
 export default function JobsPage() {
-  return <JobsSection />;
+  redirect("/settings/system/jobs");
 }

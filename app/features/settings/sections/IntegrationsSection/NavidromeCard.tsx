@@ -45,7 +45,7 @@ export function NavidromeCard({ initial }: NavidromeCardProps) {
     save((payload) => update.mutateAsync({ ...payload, url: payload.url.trim(), username: payload.username.trim() }));
 
   return (
-    <SettingsCard title={t("mediaServers.navidrome.title")}>
+    <SettingsCard title={t("mediaServers.navidrome.title")} anchor="navidrome">
       <SettingsField label={t("mediaServers.url")}>
         <SettingsTextInput
           value={draft.url}

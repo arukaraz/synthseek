@@ -20,8 +20,12 @@ export const disabledOverlay = cva("flex flex-col gap-4 transition-opacity", {
 
 export const cardNotice = cva("text-warning-vivid text-xs");
 
-export const orderRow = cva("border-fg/10 bg-fg/[0.03] flex items-center gap-3 rounded-lg border px-3 py-2");
+export const chainMark = cva("bg-fg/10 text-fg/70 flex size-7 shrink-0 items-center justify-center rounded-full");
 
-export const orderPosition = cva("text-fg/50 w-4 text-center text-xs tabular-nums");
+export const mediaServerLinks = cva("flex flex-col gap-3");
+
+export const mediaServerLink = cva("flex items-center gap-3");
+
+export const mediaServerMark = cva("flex size-9 shrink-0 items-center justify-center rounded-full");
 
 export const downloadedAlbumsLink = cva("text-primary-400 text-sm underline-offset-2 hover:underline");

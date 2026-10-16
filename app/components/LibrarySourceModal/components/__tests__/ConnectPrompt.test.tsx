@@ -91,7 +91,7 @@ describe("ConnectPrompt", () => {
     expect(screen.getByRole("button", { name: named(enLibrary.librarySource.connect.connect) })).toBeDisabled();
   });
 
-  it("sends an account-linked source to the profile instead of starting an authorization", () => {
+  it("sends an account-linked source to the connected accounts page instead of starting an authorization", () => {
     render(
       <ConnectPrompt
         source={source({
@@ -108,7 +108,7 @@ describe("ConnectPrompt", () => {
 
     expect(screen.getByText(named(enLibrary.librarySource.connect.bodyAccount, "Navidrome"))).toBeInTheDocument();
     const link = screen.getByRole("link", { name: named(enLibrary.librarySource.connect.linkAccount, "Navidrome") });
-    expect(link).toHaveAttribute("href", "/settings/profile");
+    expect(link).toHaveAttribute("href", "/settings/connected-accounts");
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
     expect(connect.mutate).not.toHaveBeenCalled();
   });

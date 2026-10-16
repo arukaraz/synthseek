@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 
 import { useJobs } from "@hooks/api/queries/useJobs";
 
+import { JobRow } from "../../components/JobRow";
 import { SettingsCard } from "../../components/SettingsCard";
 import { jobList } from "../../styles";
-import { JobRow } from "./JobRow";
 
 export function JobsCard() {
   const { t } = useTranslation("settings");
