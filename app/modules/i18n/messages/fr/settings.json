@@ -969,7 +969,7 @@
   },
   "profile": {
     "account": {
-      "title": "Compte",
+      "title": "Profil",
       "memberSince": "Membre depuis",
       "plexAccount": "Compte Plex",
       "localAccount": "Compte local"
@@ -995,7 +995,7 @@
       "managedByPlex": "Votre mot de passe est géré par Plex."
     },
     "connected": {
-      "title": "Comptes connectés",
+      "title": "Services",
       "empty": "Aucune source connectée n'est disponible pour le moment.",
       "connect": "Connecter",
       "reconnect": "Reconnecter",

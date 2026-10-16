@@ -969,7 +969,7 @@
   },
   "profile": {
     "account": {
-      "title": "Konto",
+      "title": "Profil",
       "memberSince": "Mitglied seit",
       "plexAccount": "Plex-Konto",
       "localAccount": "Lokales Konto"
@@ -995,7 +995,7 @@
       "managedByPlex": "Dein Passwort wird von Plex verwaltet."
     },
     "connected": {
-      "title": "Verbundene Konten",
+      "title": "Dienste",
       "empty": "Derzeit sind keine verbundenen Quellen verfügbar.",
       "connect": "Verbinden",
       "reconnect": "Neu verbinden",

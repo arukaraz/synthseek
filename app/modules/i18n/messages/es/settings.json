@@ -972,7 +972,7 @@
   },
   "profile": {
     "account": {
-      "title": "Cuenta",
+      "title": "Perfil",
       "memberSince": "Miembro desde",
       "plexAccount": "Cuenta de Plex",
       "localAccount": "Cuenta local"
@@ -998,7 +998,7 @@
       "managedByPlex": "Tu contraseña la gestiona Plex."
     },
     "connected": {
-      "title": "Cuentas conectadas",
+      "title": "Servicios",
       "empty": "No hay fuentes conectadas disponibles en este momento.",
       "connect": "Conectar",
       "reconnect": "Volver a conectar",

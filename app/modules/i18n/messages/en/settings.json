@@ -969,7 +969,7 @@
   },
   "profile": {
     "account": {
-      "title": "Account",
+      "title": "Profile",
       "memberSince": "Member since",
       "plexAccount": "Plex account",
       "localAccount": "Local account"
@@ -995,7 +995,7 @@
       "managedByPlex": "Your password is managed by Plex."
     },
     "connected": {
-      "title": "Connected accounts",
+      "title": "Services",
       "empty": "No connected sources are available right now.",
       "connect": "Connect",
       "reconnect": "Reconnect",
