@@ -19,6 +19,7 @@ import { SaveLabelProvider } from "../../components/SettingsSaveScope";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { SETTINGS_PAGE_BY_ID } from "../../constants";
 import { serverChainStatus, serverConnections } from "../../helpers";
+import { useRevealPanel } from "../../hooks/useRevealPanel";
 import { contentRoot, emptyPanel } from "../../styles";
 import { PLAYBACK_CHAIN_SELECTIONS } from "./constants";
 import { sameOrder } from "./helpers";
@@ -27,6 +28,7 @@ import { LocalPlaybackCard } from "./LocalPlaybackCard";
 import { NavidromeCard } from "./NavidromeCard";
 import { PlexIntegrationCard } from "./PlexIntegrationCard";
 import { chainMark } from "./styles";
+import type { PlaybackChainSelection } from "./types";
 
 export function MediaServersSection() {
   const { t } = useTranslation("settings");
@@ -35,6 +37,11 @@ export function MediaServersSection() {
   const updateOrder = useUpdateEnginePlaybackSources();
   const [selected, setSelected] = useUrlParam("server", { validValues: PLAYBACK_CHAIN_SELECTIONS });
   const [draftOrder, setDraftOrder] = useState<PlaybackServerKey[] | null>(null);
+  const { panelRef, reveal } = useRevealPanel();
+  const pick = (key: PlaybackChainSelection) => {
+    setSelected(key);
+    reveal();
+  };
 
   const header = <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />;
 
@@ -98,7 +105,7 @@ export function MediaServersSection() {
               ),
             }))}
             selected={active}
-            onSelect={setSelected}
+            onSelect={pick}
             onReorder={(next) => {
               const servers = next.filter(isPlaybackServerKey);
               setDraftOrder(sameOrder(servers, savedOrder) ? null : servers);
@@ -119,7 +126,7 @@ export function MediaServersSection() {
           </SaveLabelProvider>
         </div>
 
-        <ChainPanel label={t("mediaServers.panelLabel")}>
+        <ChainPanel label={t("mediaServers.panelLabel")} panelRef={panelRef}>
           <div hidden={hiddenUnless("local")}>
             <LocalPlaybackCard />
           </div>

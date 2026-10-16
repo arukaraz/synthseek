@@ -273,3 +273,5 @@ export const SOURCE_TITLE_KEYS: Readonly<Record<DownloadSourceKey, ParseKeys<"se
 
 export const PLAYBACK_SERVER_KEYS: readonly PlaybackServerKey[] =
   Object.keys(PLAYBACK_SERVER_NAMES).filter(isPlaybackServerKey);
+
+export const PANEL_REVEAL_VIEWPORT_SHARE = 0.5;

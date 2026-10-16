@@ -3,9 +3,9 @@
 import { chainPanel } from "./styles";
 import type { ChainPanelProps } from "./types";
 
-export function ChainPanel({ children, label }: ChainPanelProps) {
+export function ChainPanel({ children, label, panelRef }: ChainPanelProps) {
   return (
-    <section className={chainPanel()} aria-label={label}>
+    <section ref={panelRef} className={chainPanel()} aria-label={label}>
       {children}
     </section>
   );

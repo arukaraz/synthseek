@@ -42,6 +42,12 @@ vi.mock("../PlexIntegrationCard", () => ({
     return <div data-testid="plex-card" />;
   },
 }));
+const reveal = vi.hoisted(() => vi.fn());
+
+vi.mock("../../../hooks/useRevealPanel", () => ({
+  useRevealPanel: () => ({ panelRef: { current: null }, reveal }),
+}));
+
 vi.mock("../NavidromeCard", () => ({ NavidromeCard: () => <div data-testid="navidrome-card" /> }));
 vi.mock("../JellyfinCard", () => ({ JellyfinCard: () => <div data-testid="jellyfin-card" /> }));
 
@@ -157,6 +163,16 @@ describe("MediaServersSection", () => {
     await userEvent.click(screen.getByRole("button", { name: openName("plex") }));
 
     expect(navigation.replace).toHaveBeenCalledWith("/settings/media?server=plex", { scroll: false });
+  });
+
+  it("brings the chosen server's panel into view, Local included", async () => {
+    render(<MediaServersSection />);
+
+    await userEvent.click(screen.getByRole("button", { name: openName("navidrome") }));
+    expect(reveal).toHaveBeenCalledTimes(1);
+
+    await userEvent.click(screen.getByRole("button", { name: openName("local") }));
+    expect(reveal).toHaveBeenCalledTimes(2);
   });
 
   it("hands the Plex card its connection, behaviour and playlist naming", () => {

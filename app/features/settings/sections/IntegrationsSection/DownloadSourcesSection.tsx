@@ -27,6 +27,7 @@ import { SaveLabelProvider } from "../../components/SettingsSaveScope";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { SETTINGS_PAGE_BY_ID, SOURCE_TITLE_KEYS } from "../../constants";
 import { lidarrChainStatus, sourceChainStatus, sourceOrderOf } from "../../helpers";
+import { useRevealPanel } from "../../hooks/useRevealPanel";
 import { contentRoot, emptyPanel } from "../../styles";
 import { ArchiveCard } from "./ArchiveCard";
 import { CHAIN_SELECTIONS } from "./constants";
@@ -36,6 +37,7 @@ import { SlskdCard } from "./SlskdCard";
 import { SoundcloudCard } from "./SoundcloudCard";
 import { SubsonicSourceCard } from "./SubsonicSourceCard";
 import { TorrentCard } from "./TorrentCard";
+import type { SourceChainSelection } from "./types";
 import { UsenetCard } from "./UsenetCard";
 import { YtdlpCard } from "./YtdlpCard";
 
@@ -49,6 +51,11 @@ export function DownloadSourcesSection() {
   const updateOrder = useUpdateDownloadSourceOrder();
   const [selected, setSelected] = useUrlParam("source", { validValues: CHAIN_SELECTIONS });
   const [draftOrder, setDraftOrder] = useState<DownloadSourceKey[] | null>(null);
+  const { panelRef, reveal } = useRevealPanel();
+  const pick = (key: SourceChainSelection) => {
+    setSelected(key);
+    reveal();
+  };
 
   const header = <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />;
 
@@ -94,7 +101,7 @@ export function DownloadSourcesSection() {
               status: sourceChainStatus(key, data.downloadSources, availability.data, slskd.data?.status),
             }))}
             selected={active}
-            onSelect={setSelected}
+            onSelect={pick}
             onReorder={(next) => setDraftOrder(sameOrder(next, savedOrder) ? null : next)}
             hint={t("shell.downloadSources.orderHint")}
           />
@@ -110,7 +117,7 @@ export function DownloadSourcesSection() {
                 }
                 selected={active === "lidarr"}
                 reorderable={false}
-                onSelect={() => setSelected("lidarr")}
+                onSelect={() => pick("lidarr")}
               />
             </ol>
           </div>
@@ -128,7 +135,7 @@ export function DownloadSourcesSection() {
           </SaveLabelProvider>
         </div>
 
-        <ChainPanel label={t("shell.downloadSources.panelLabel")}>
+        <ChainPanel label={t("shell.downloadSources.panelLabel")} panelRef={panelRef}>
           <div hidden={hiddenUnless("slskd")}>
             <SlskdCard
               initial={{

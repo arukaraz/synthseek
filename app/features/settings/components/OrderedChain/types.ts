@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 
 export type ChainStatusTone = "success" | "muted" | "warning" | "danger";
 
@@ -38,4 +38,5 @@ export interface ChainItemProps<K extends string> {
 export interface ChainPanelProps {
   children: ReactNode;
   label: string;
+  panelRef?: Ref<HTMLElement>;
 }

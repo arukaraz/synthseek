@@ -51,6 +51,12 @@ vi.mock("@hooks/api/mutations/settings/useDownloadSources", () => ({
   useUpdateDownloadSourceOrder: () => updateOrder,
 }));
 
+const reveal = vi.hoisted(() => vi.fn());
+
+vi.mock("../../../hooks/useRevealPanel", () => ({
+  useRevealPanel: () => ({ panelRef: { current: null }, reveal }),
+}));
+
 vi.mock("../SlskdCard", () => ({ SlskdCard: () => <div data-testid="slskd-card" /> }));
 vi.mock("../YtdlpCard", () => ({ YtdlpCard: () => <div data-testid="ytdlp-card" /> }));
 vi.mock("../UsenetCard", () => ({ UsenetCard: () => <div data-testid="usenet-card" /> }));
@@ -235,6 +241,16 @@ describe("DownloadSourcesSection", () => {
     await userEvent.click(screen.getByRole("button", { name: openName("usenet") }));
 
     expect(navigation.replace).toHaveBeenCalledWith("/settings/download-sources?source=usenet", { scroll: false });
+  });
+
+  it("brings the chosen source's panel into view, Lidarr included", async () => {
+    render(<DownloadSourcesSection />);
+
+    await userEvent.click(screen.getByRole("button", { name: openName("usenet") }));
+    expect(reveal).toHaveBeenCalledTimes(1);
+
+    await userEvent.click(screen.getByRole("button", { name: openName("lidarr") }));
+    expect(reveal).toHaveBeenCalledTimes(2);
   });
 
   it("holds a moved source as a draft and saves the whole order through the order mutation", async () => {
