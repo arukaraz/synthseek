@@ -111,6 +111,11 @@ export interface SettingsNumberInputProps {
   ariaLabel?: string;
 }
 
+export interface TypedNumber {
+  text: string;
+  value: number;
+}
+
 export interface SettingsPageHeaderProps {
   title: string;
   description?: string;

@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 import { Input } from "@components/ui/Input";
 import { cn } from "@utils/cn";
-import type { SettingsNumberInputProps } from "./types";
+import type { SettingsNumberInputProps, TypedNumber } from "./types";
 
 export function SettingsNumberInput({
   value,
@@ -16,6 +18,8 @@ export function SettingsNumberInput({
   id,
   ariaLabel,
 }: SettingsNumberInputProps) {
+  const [typed, setTyped] = useState<TypedNumber | null>(null);
+  const shown = typed !== null && Object.is(typed.value, value) ? typed.text : Number.isFinite(value) ? value : "";
   const clamp = (n: number): number => {
     let clamped = n;
     if (typeof min === "number" && clamped < min) clamped = min;
@@ -29,7 +33,7 @@ export function SettingsNumberInput({
         id={id}
         type="number"
         inputMode="numeric"
-        value={Number.isFinite(value) ? value : ""}
+        value={shown}
         min={min}
         max={max}
         step={step}
@@ -37,9 +41,12 @@ export function SettingsNumberInput({
         aria-label={ariaLabel}
         onChange={(e) => {
           const next = e.target.valueAsNumber;
-          if (Number.isFinite(next)) onChange(next);
+          const finite = Number.isFinite(next);
+          setTyped({ text: e.target.value, value: finite ? next : value });
+          if (finite) onChange(next);
         }}
         onBlur={(e) => {
+          setTyped(null);
           const raw = e.target.valueAsNumber;
           if (!Number.isFinite(raw)) {
             if (typeof min === "number") onChange(min);

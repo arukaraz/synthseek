@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Music } from "lucide-react";
+import { useState } from "react";
 
 import "@test/mocks/next.mock";
 
@@ -60,6 +61,45 @@ describe("SettingsNumberInput", () => {
     render(<SettingsNumberInput value={5} onChange={onChange} min={2} max={10} ariaLabel="count" />);
     fireEvent.blur(screen.getByLabelText("count"), { target: { value: "-4" } });
     expect(onChange).toHaveBeenLastCalledWith(2);
+  });
+
+  it("lets a number be deleted and another typed in its place", async () => {
+    const onChange = vi.fn();
+    function Controlled() {
+      const [value, setValue] = useState(1440);
+      return (
+        <SettingsNumberInput
+          value={value}
+          onChange={(next) => {
+            onChange(next);
+            setValue(next);
+          }}
+          min={5}
+          max={1440}
+          ariaLabel="count"
+        />
+      );
+    }
+    render(<Controlled />);
+    const input = screen.getByLabelText("count");
+
+    await userEvent.clear(input);
+    expect(input).toHaveValue(null);
+    await userEvent.type(input, "45");
+    await userEvent.tab();
+
+    expect(input).toHaveValue(45);
+    expect(onChange).toHaveBeenLastCalledWith(45);
+  });
+
+  it("shows the stored value again once the field loses focus", async () => {
+    render(<SettingsNumberInput value={30} onChange={vi.fn()} ariaLabel="count" />);
+    const input = screen.getByLabelText("count");
+
+    await userEvent.clear(input);
+    await userEvent.tab();
+
+    expect(input).toHaveValue(30);
   });
 });
 
