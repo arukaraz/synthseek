@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { HTMLInputAutoCompleteAttribute, KeyboardEvent, ReactNode } from "react";
 import type { fieldRow, pill } from "../styles";
 import type { JobSummary } from "../types";
 
@@ -136,6 +136,7 @@ export interface SettingsSecretInputProps {
   disabled?: boolean;
   id?: string;
   ariaLabel?: string;
+  autoComplete?: HTMLInputAutoCompleteAttribute;
 }
 
 export interface SettingsTextInputProps {
@@ -147,6 +148,7 @@ export interface SettingsTextInputProps {
   type?: "text" | "email" | "url";
   id?: string;
   ariaLabel?: string;
+  autoComplete?: HTMLInputAutoCompleteAttribute;
 }
 
 export type ChipsKeyboardEvent = KeyboardEvent<HTMLInputElement>;

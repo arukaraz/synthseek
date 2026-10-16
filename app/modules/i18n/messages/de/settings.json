@@ -992,7 +992,7 @@
       "newLabel": "Neues Passwort",
       "newAriaLabel": "Neues Passwort",
       "submit": "Passwort ändern",
-      "managedByPlex": "Dein Passwort wird von Plex verwaltet."
+      "managedByPlex": "Du meldest dich mit Plex an. Um ein Passwort zu nutzen, trenne Plex unter Verbundene Konten."
     },
     "connected": {
       "title": "Dienste",
@@ -1012,7 +1012,17 @@
         "linked": "Verknüpft",
         "notLinked": "Nicht verknüpft",
         "connecting": "Warte auf Plex...",
-        "needsPassword": "Lege ein Passwort fest, bevor du trennst, sonst würdest du ausgesperrt.",
+        "needsPassword": "Du meldest dich mit Plex an. Beim Trennen wirst du zuerst nach einem Passwort gefragt.",
+        "unlinkDialog": {
+          "title": "Lege ein Passwort fest, bevor du Plex trennst",
+          "description": "Heute meldest du dich mit Plex an. Nach dem Trennen meldest du dich mit dieser E-Mail-Adresse und diesem Passwort an.",
+          "emailLabel": "E-Mail",
+          "emailHint": "Die Adresse, mit der du dich anmeldest.",
+          "passwordLabel": "Passwort",
+          "cancel": "Abbrechen",
+          "submit": "Speichern und trennen",
+          "submitting": "Wird getrennt..."
+        },
         "linkedAs": "Plex verknüpft als {{username}}",
         "linkedFallback": "Plex-Konto verknüpft",
         "linkTimedOut": "Plex-Verknüpfung hat das Zeitlimit überschritten",

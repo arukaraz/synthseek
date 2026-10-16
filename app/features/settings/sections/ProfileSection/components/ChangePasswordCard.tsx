@@ -16,7 +16,7 @@ import type { ProfileCardProps } from "../types";
 
 export function ChangePasswordCard({ user }: ProfileCardProps) {
   const { t } = useTranslation("settings");
-  const isLocal = user.plex_username === null;
+  const { hasPassword } = user;
   const change = useChangePassword();
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
@@ -39,7 +39,7 @@ export function ChangePasswordCard({ user }: ProfileCardProps) {
 
   return (
     <SettingsCard title={t("profile.password.title")} anchor="password">
-      {isLocal ? (
+      {hasPassword ? (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <SettingsField label={t("profile.password.currentLabel")}>
             <SettingsSecretInput

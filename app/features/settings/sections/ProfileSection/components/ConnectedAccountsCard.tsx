@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -18,6 +19,7 @@ import { usePlexLink } from "../hooks/usePlexLink";
 import { accountChip, listeningFailure, listeningRow, listeningRowHeader } from "../styles";
 import { PlexReportingRow } from "./PlexReportingRow";
 import { ServerAccountRow } from "./ServerAccountRow";
+import { UnlinkPlexDialog } from "./UnlinkPlexDialog";
 
 export function ConnectedAccountsCard() {
   const { t } = useTranslation("settings");
@@ -39,7 +41,8 @@ export function ConnectedAccountsCard() {
   const passwordAccounts = (sourceAccounts.data ?? []).filter((account) => account.linkMethod === "password");
 
   const plexLinked = currentUser?.plexLinked ?? false;
-  const canUnlinkPlex = plexLinked && (currentUser?.hasPassword ?? false);
+  const plexIsOnlySignIn = plexLinked && !(currentUser?.hasPassword ?? false);
+  const [unlinkDialogOpen, setUnlinkDialogOpen] = useState(false);
 
   return (
     <SettingsCard title={t("profile.connected.title")}>
@@ -105,7 +108,7 @@ export function ConnectedAccountsCard() {
                     ? t("profile.connected.plex.connecting")
                     : t("profile.connected.plex.notLinked")}
               </p>
-              {plexLinked && !canUnlinkPlex ? (
+              {plexIsOnlySignIn ? (
                 <p className="text-fg/40 mt-1 text-xs">{t("profile.connected.plex.needsPassword")}</p>
               ) : null}
             </div>
@@ -113,8 +116,8 @@ export function ConnectedAccountsCard() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => plexUnlink.mutate()}
-                disabled={!canUnlinkPlex || plexUnlink.isPending}
+                onClick={() => (plexIsOnlySignIn ? setUnlinkDialogOpen(true) : plexUnlink.mutate())}
+                disabled={plexUnlink.isPending}
               >
                 {t("profile.connected.disconnect")}
               </Button>
@@ -125,6 +128,9 @@ export function ConnectedAccountsCard() {
             )}
           </div>
           {plexLinked ? <PlexReportingRow onRelink={() => plexLink.start()} relinking={plexLink.isPending} /> : null}
+          {plexIsOnlySignIn ? (
+            <UnlinkPlexDialog email={currentUser.email} open={unlinkDialogOpen} onOpenChange={setUnlinkDialogOpen} />
+          ) : null}
         </div>
       ) : null}
 

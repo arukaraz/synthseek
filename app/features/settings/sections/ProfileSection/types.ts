@@ -11,6 +11,12 @@ export interface PlexReportingRowProps {
   relinking: boolean;
 }
 
+export interface UnlinkPlexDialogProps {
+  email: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
 type SourceAccountView = inferRouterOutputs<AppRouter>["playback"]["sources"]["accounts"][number];
 
 export type SourceLinkOutcome = inferRouterOutputs<AppRouter>["playback"]["sources"]["link"]["outcome"];

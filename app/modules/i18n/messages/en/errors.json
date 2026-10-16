@@ -43,6 +43,10 @@
     "title": "Password required before unlinking Plex",
     "description": "Set a password before unlinking Plex, otherwise you would be locked out."
   },
+  "PASSWORD_ALREADY_SET": {
+    "title": "This account already has a password",
+    "description": "Disconnect Plex without setting a new one. Change your password under Account."
+  },
   "OWNER_MUST_REMAIN_ADMIN": {
     "title": "Owner must remain an admin",
     "description": "The owner must remain an admin."

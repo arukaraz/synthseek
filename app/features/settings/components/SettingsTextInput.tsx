@@ -12,6 +12,7 @@ export function SettingsTextInput({
   type = "text",
   id,
   ariaLabel,
+  autoComplete,
 }: SettingsTextInputProps) {
   return (
     <Input
@@ -22,6 +23,7 @@ export function SettingsTextInput({
       disabled={disabled}
       readOnly={readOnly}
       aria-label={ariaLabel}
+      autoComplete={autoComplete}
       onChange={(e) => onChange?.(e.target.value)}
     />
   );

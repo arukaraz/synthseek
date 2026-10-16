@@ -43,6 +43,10 @@
     "title": "Passwort erforderlich vor dem Trennen von Plex",
     "description": "Lege ein Passwort fest, bevor du Plex trennst, sonst würdest du ausgesperrt."
   },
+  "PASSWORD_ALREADY_SET": {
+    "title": "Dieses Konto hat bereits ein Passwort",
+    "description": "Trenne Plex, ohne ein neues festzulegen. Dein Passwort änderst du unter Konto."
+  },
   "OWNER_MUST_REMAIN_ADMIN": {
     "title": "Eigentümer muss Administrator bleiben",
     "description": "Der Eigentümer muss ein Administrator bleiben."

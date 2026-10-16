@@ -995,7 +995,7 @@
       "newLabel": "Nueva contraseña",
       "newAriaLabel": "Nueva contraseña",
       "submit": "Cambiar contraseña",
-      "managedByPlex": "Tu contraseña la gestiona Plex."
+      "managedByPlex": "Inicias sesión con Plex. Para usar una contraseña, desconecta Plex en Cuentas conectadas."
     },
     "connected": {
       "title": "Servicios",
@@ -1015,7 +1015,17 @@
         "linked": "Vinculado",
         "notLinked": "No vinculado",
         "connecting": "Esperando a Plex...",
-        "needsPassword": "Establece una contraseña antes de desvincular, de lo contrario quedarías sin acceso.",
+        "needsPassword": "Inicias sesión con Plex. Al desconectarlo te pedirá antes una contraseña.",
+        "unlinkDialog": {
+          "title": "Crea una contraseña antes de desconectar Plex",
+          "description": "Hoy inicias sesión con Plex. Después de desconectarlo, entrarás con este correo y esta contraseña.",
+          "emailLabel": "Correo",
+          "emailHint": "La dirección con la que iniciarás sesión.",
+          "passwordLabel": "Contraseña",
+          "cancel": "Cancelar",
+          "submit": "Guardar y desconectar",
+          "submitting": "Desconectando..."
+        },
         "linkedAs": "Plex vinculado como {{username}}",
         "linkedFallback": "Cuenta de Plex vinculada",
         "linkTimedOut": "Se agotó el tiempo de vinculación con Plex",

@@ -28,19 +28,25 @@ afterEach(() => {
 
 describe("ChangePasswordCard", () => {
   it("renders the form for a local user", () => {
-    render(<ChangePasswordCard user={createMockUser({ plex_username: null })} />);
+    render(<ChangePasswordCard user={createMockUser({ plex_username: null, hasPassword: true })} />);
     expect(screen.getByLabelText(enSettings.profile.password.currentAriaLabel)).toBeInTheDocument();
     expect(screen.getByLabelText(enSettings.profile.password.newAriaLabel)).toBeInTheDocument();
   });
 
-  it("renders the managed-by-plex notice for a plex user", () => {
-    render(<ChangePasswordCard user={createMockUser({ plex_username: "plexuser" })} />);
+  it("lets an account that has a password change it while Plex is linked too", () => {
+    render(<ChangePasswordCard user={createMockUser({ plex_username: "plexuser", hasPassword: true })} />);
+    expect(screen.getByLabelText(enSettings.profile.password.currentAriaLabel)).toBeInTheDocument();
+    expect(screen.queryByText(enSettings.profile.password.managedByPlex)).not.toBeInTheDocument();
+  });
+
+  it("tells an account that signs in only with Plex where to set a password", () => {
+    render(<ChangePasswordCard user={createMockUser({ plex_username: "plexuser", hasPassword: false })} />);
     expect(screen.getByText(enSettings.profile.password.managedByPlex)).toBeInTheDocument();
     expect(screen.queryByLabelText(enSettings.profile.password.currentAriaLabel)).not.toBeInTheDocument();
   });
 
   it("keeps the submit button disabled until both fields are valid", async () => {
-    render(<ChangePasswordCard user={createMockUser({ plex_username: null })} />);
+    render(<ChangePasswordCard user={createMockUser({ plex_username: null, hasPassword: true })} />);
     const submit = screen.getByRole("button", { name: enSettings.profile.password.submit });
     expect(submit).toBeDisabled();
 
@@ -55,7 +61,7 @@ describe("ChangePasswordCard", () => {
 
   it("submits the password change and clears the inputs on success", async () => {
     change.mutate.mockImplementation((_payload, opts?: { onSuccess?: () => void }) => opts?.onSuccess?.());
-    render(<ChangePasswordCard user={createMockUser({ plex_username: null })} />);
+    render(<ChangePasswordCard user={createMockUser({ plex_username: null, hasPassword: true })} />);
 
     const current = screen.getByLabelText(enSettings.profile.password.currentAriaLabel);
     const next = screen.getByLabelText(enSettings.profile.password.newAriaLabel);

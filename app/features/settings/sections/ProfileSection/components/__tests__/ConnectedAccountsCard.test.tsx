@@ -30,6 +30,7 @@ let statusQuery: MockQueryResult<SpotifyStatus | undefined> = createMockQuery<Sp
 const connect = createMockMutation();
 const disconnect = createMockMutation();
 const plexUnlink = createMockMutation();
+const unlinkWithPassword = createMockMutation();
 const plexLinkStart = vi.fn();
 let plexLinkPending = false;
 
@@ -55,6 +56,7 @@ vi.mock("@hooks/api/mutations/spotify/useSpotifyDisconnect", () => ({
 
 vi.mock("@hooks/api/mutations/auth/usePlexUnlink", () => ({
   usePlexUnlink: () => plexUnlink,
+  useUnlinkPlexWithPassword: () => unlinkWithPassword,
 }));
 
 vi.mock("../../hooks/usePlexLink", () => ({
@@ -192,12 +194,28 @@ describe("ConnectedAccountsCard", () => {
     expect(plexUnlink.mutate).toHaveBeenCalledTimes(1);
   });
 
-  it("blocks unlinking and shows the password hint when plex is linked without a password", () => {
+  it("asks an account that signs in only with Plex for an email and password before disconnecting", async () => {
     authUser = createMockUser({ plexLinked: true, hasPassword: false, plex_username: "plexuser" });
     render(<ConnectedAccountsCard />);
 
     expect(screen.getByText(enSettings.profile.connected.plex.needsPassword)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: enSettings.profile.connected.disconnect })).toBeDisabled();
+    await userEvent.click(screen.getByRole("button", { name: enSettings.profile.connected.disconnect }));
+
+    expect(
+      screen.getByRole("dialog", { name: enSettings.profile.connected.plex.unlinkDialog.title })
+    ).toBeInTheDocument();
+    expect(plexUnlink.mutate).not.toHaveBeenCalled();
+  });
+
+  it("disconnects an account that already has a password straight away", async () => {
+    authUser = createMockUser({ plexLinked: true, hasPassword: true, plex_username: "plexuser" });
+    render(<ConnectedAccountsCard />);
+
+    expect(screen.queryByText(enSettings.profile.connected.plex.needsPassword)).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: enSettings.profile.connected.disconnect }));
+
+    expect(plexUnlink.mutate).toHaveBeenCalledOnce();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("renders the empty state when spotify is disabled and there is no user", () => {

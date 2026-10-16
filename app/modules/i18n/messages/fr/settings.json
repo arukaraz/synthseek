@@ -992,7 +992,7 @@
       "newLabel": "Nouveau mot de passe",
       "newAriaLabel": "Nouveau mot de passe",
       "submit": "Changer le mot de passe",
-      "managedByPlex": "Votre mot de passe est géré par Plex."
+      "managedByPlex": "Vous vous connectez avec Plex. Pour utiliser un mot de passe, déconnectez Plex dans Comptes connectés."
     },
     "connected": {
       "title": "Services",
@@ -1012,7 +1012,17 @@
         "linked": "Lié",
         "notLinked": "Non lié",
         "connecting": "En attente de Plex...",
-        "needsPassword": "Définissez un mot de passe avant de dissocier, sinon vous seriez bloqué hors de votre compte.",
+        "needsPassword": "Vous vous connectez avec Plex. Le déconnecter vous demande d'abord un mot de passe.",
+        "unlinkDialog": {
+          "title": "Créez un mot de passe avant de déconnecter Plex",
+          "description": "Aujourd'hui, vous vous connectez avec Plex. Après l'avoir déconnecté, vous vous connecterez avec cette adresse et ce mot de passe.",
+          "emailLabel": "E-mail",
+          "emailHint": "L'adresse avec laquelle vous vous connecterez.",
+          "passwordLabel": "Mot de passe",
+          "cancel": "Annuler",
+          "submit": "Enregistrer et déconnecter",
+          "submitting": "Déconnexion..."
+        },
         "linkedAs": "Plex lié en tant que {{username}}",
         "linkedFallback": "Compte Plex lié",
         "linkTimedOut": "Délai de liaison Plex dépassé",

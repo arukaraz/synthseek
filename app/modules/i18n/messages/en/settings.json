@@ -992,7 +992,7 @@
       "newLabel": "New password",
       "newAriaLabel": "New password",
       "submit": "Change password",
-      "managedByPlex": "Your password is managed by Plex."
+      "managedByPlex": "You sign in with Plex. To use a password instead, disconnect Plex under Connected accounts."
     },
     "connected": {
       "title": "Services",
@@ -1012,7 +1012,17 @@
         "linked": "Linked",
         "notLinked": "Not linked",
         "connecting": "Waiting for Plex...",
-        "needsPassword": "Set a password before unlinking, otherwise you would be locked out.",
+        "needsPassword": "You sign in with Plex. Disconnecting it asks you for a password first.",
+        "unlinkDialog": {
+          "title": "Set a password before disconnecting Plex",
+          "description": "Plex is how you sign in today. After disconnecting, you sign in with this email and password.",
+          "emailLabel": "Email",
+          "emailHint": "The address you will sign in with.",
+          "passwordLabel": "Password",
+          "cancel": "Cancel",
+          "submit": "Save and disconnect",
+          "submitting": "Disconnecting..."
+        },
         "linkedAs": "Plex linked as {{username}}",
         "linkedFallback": "Plex account linked",
         "linkTimedOut": "Plex linking timed out",

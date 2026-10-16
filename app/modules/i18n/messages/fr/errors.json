@@ -43,6 +43,10 @@
     "title": "Mot de passe requis avant de dissocier Plex",
     "description": "Définissez un mot de passe avant de dissocier Plex, sinon vous seriez bloqué hors de votre compte."
   },
+  "PASSWORD_ALREADY_SET": {
+    "title": "Ce compte a déjà un mot de passe",
+    "description": "Déconnectez Plex sans en créer un autre. Changez votre mot de passe dans Compte."
+  },
   "OWNER_MUST_REMAIN_ADMIN": {
     "title": "Le propriétaire doit rester administrateur",
     "description": "Le propriétaire doit rester administrateur."

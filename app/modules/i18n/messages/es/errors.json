@@ -43,6 +43,10 @@
     "title": "Se requiere contraseña antes de desvincular Plex",
     "description": "Establece una contraseña antes de desvincular Plex, de lo contrario quedarías bloqueado."
   },
+  "PASSWORD_ALREADY_SET": {
+    "title": "Esta cuenta ya tiene contraseña",
+    "description": "Desconecta Plex sin crear otra. Cambia tu contraseña en Cuenta."
+  },
   "OWNER_MUST_REMAIN_ADMIN": {
     "title": "El propietario debe seguir siendo administrador",
     "description": "El propietario debe seguir siendo administrador."

@@ -17,6 +17,7 @@ export function SettingsSecretInput({
   disabled,
   id,
   ariaLabel,
+  autoComplete,
 }: SettingsSecretInputProps) {
   const { t } = useTranslation("settings");
   const [revealed, setRevealed] = useState(false);
@@ -55,6 +56,7 @@ export function SettingsSecretInput({
         placeholder={placeholder}
         disabled={disabled}
         aria-label={ariaLabel}
+        autoComplete={autoComplete}
         onChange={(e) => {
           setStored(null);
           onChange(e.target.value);
