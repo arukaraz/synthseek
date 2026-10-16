@@ -402,5 +402,13 @@
   "NOTIFICATION_DESTINATION_NOT_FOUND": {
     "title": "Enregistrez d'abord cette destination",
     "description": "Un test ne peut aller que vers une destination enregistrée."
+  },
+  "CATALOG_ITEM_NOT_FOUND": {
+    "title": "Introuvable dans le catalogue",
+    "description": "Le catalogue musical n'a rien sous ce lien ou cet identifiant."
+  },
+  "CATALOG_UNAVAILABLE": {
+    "title": "Le catalogue musical ne répond pas",
+    "description": "Réessayez dans un instant."
   }
 }

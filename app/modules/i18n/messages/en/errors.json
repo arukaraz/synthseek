@@ -402,5 +402,13 @@
   "NOTIFICATION_DESTINATION_NOT_FOUND": {
     "title": "Save this destination first",
     "description": "A test can only go to a destination that is saved."
+  },
+  "CATALOG_ITEM_NOT_FOUND": {
+    "title": "Not in the catalog",
+    "description": "The music catalog has nothing under that link or ID."
+  },
+  "CATALOG_UNAVAILABLE": {
+    "title": "The music catalog is not answering",
+    "description": "Try again in a moment."
   }
 }

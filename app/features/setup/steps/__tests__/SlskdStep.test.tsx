@@ -18,6 +18,15 @@ vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
   useUpdateConnectionsSlskd: () => ({ mutateAsync: updateMutateAsync }),
 }));
 
+const settings = vi.hoisted(() => {
+  const state: { slskd?: { apiUrl: string; apiKey: string; bannedUsers: string[] } } = {};
+  return state;
+});
+
+vi.mock("@hooks/api/queries/useSettings", () => ({
+  useSettings: () => ({ data: settings.slskd ? { connections: { slskd: settings.slskd } } : undefined }),
+}));
+
 const onComplete = vi.fn();
 
 const renderStep = () => render(<SlskdStep stepIndex={1} totalSteps={5} onComplete={onComplete} />);
@@ -40,6 +49,21 @@ describe("SlskdStep", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     updateMutateAsync.mockResolvedValue(undefined);
+    settings.slskd = undefined;
+  });
+
+  it("opens with the connection already saved, and tests and saves it without retyping the key", async () => {
+    settings.slskd = { apiUrl: "http://slskd:5030", apiKey: "••••••••", bannedUsers: [] };
+    renderStep();
+
+    expect(screen.getByLabelText("API URL")).toHaveValue("http://slskd:5030");
+    await runTest({ ok: true });
+    expect(testMutateAsync).toHaveBeenCalledWith({ apiUrl: "http://slskd:5030", apiKey: "••••••••" });
+    fireEvent.click(continueButton());
+
+    await waitFor(() =>
+      expect(updateMutateAsync).toHaveBeenCalledWith({ apiUrl: "http://slskd:5030", apiKey: "••••••••" })
+    );
   });
 
   it("keeps Continue disabled while fields are filled but untested", () => {

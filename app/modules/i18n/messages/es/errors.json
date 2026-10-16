@@ -402,5 +402,13 @@
   "NOTIFICATION_DESTINATION_NOT_FOUND": {
     "title": "Guarda este destino primero",
     "description": "Una prueba solo puede ir a un destino guardado."
+  },
+  "CATALOG_ITEM_NOT_FOUND": {
+    "title": "No está en el catálogo",
+    "description": "El catálogo de música no tiene nada con ese enlace o ID."
+  },
+  "CATALOG_UNAVAILABLE": {
+    "title": "El catálogo de música no responde",
+    "description": "Inténtalo de nuevo en un momento."
   }
 }

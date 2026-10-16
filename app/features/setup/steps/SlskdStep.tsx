@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { PasswordField } from "@components/ui/PasswordField";
 import { authInputControl, authInputIcon, authInputRow } from "@components/ui/styles";
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
+import { useSettings } from "@hooks/api/queries/useSettings";
 import { validateSlskdApiUrl } from "@utils/slskd-url";
 
 import { StatusStrip } from "../components/StatusStrip";
@@ -27,10 +28,13 @@ export function SlskdStep({ stepIndex, totalSteps, onComplete, onBack }: SlskdSt
   const { t } = useTranslation("setup");
   const update = useUpdateConnectionsSlskd();
   const testConn = useTestSlskd();
+  const saved = useSettings().data?.connections.slskd;
   const apiUrlId = useId();
   const apiKeyId = useId();
-  const [apiUrl, setApiUrl] = useState("");
-  const [apiKey, setApiKey] = useState("");
+  const [editedApiUrl, setApiUrl] = useState<string | null>(null);
+  const [editedApiKey, setApiKey] = useState<string | null>(null);
+  const apiUrl = editedApiUrl ?? saved?.apiUrl ?? "";
+  const apiKey = editedApiKey ?? saved?.apiKey ?? "";
   const [state, setState] = useState<SlskdConnectState>({ kind: "untested" });
 
   const urlCheck = validateSlskdApiUrl(apiUrl);
