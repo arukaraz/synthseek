@@ -1449,7 +1449,7 @@
     },
     "search": {
       "label": "Einstellungen durchsuchen",
-      "placeholder": "Einstellungen durchsuchen",
+      "placeholder": "Einstellungen suchen",
       "clear": "Suche löschen",
       "shortcut": "/",
       "summary_one": "{{count}} Treffer an {{places}} Stelle",
