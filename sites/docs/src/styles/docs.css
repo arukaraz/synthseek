@@ -95,7 +95,17 @@
     padding: 1.5px 6px;
     border-radius: 5px;
     font-size: 0.855em;
+    overflow-wrap: anywhere;
+  }
+
+  .dx-prose td code,
+  .dx-prose th code {
     white-space: nowrap;
+  }
+
+  .dx-table {
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   .dx-prose table {
@@ -122,10 +132,15 @@
     border-top: 1px solid var(--border-subtle);
     line-height: 1.6;
     vertical-align: top;
+    min-width: 9rem;
   }
 
   .dx-prose tbody td:first-child {
     color: var(--surface-fg);
+  }
+
+  .dx-prose tbody td:last-child {
+    min-width: 16rem;
   }
 
   .dx-prose blockquote {

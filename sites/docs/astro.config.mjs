@@ -3,6 +3,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { rehypeCodeChrome } from "./src/lib/rehype-code-chrome.mjs";
+import { rehypeTableScroll } from "./src/lib/rehype-table-scroll.mjs";
 
 export default defineConfig({
   site: "https://docs.synthseek.dev",
@@ -14,6 +15,6 @@ export default defineConfig({
     shikiConfig: {
       theme: "github-dark-default",
     },
-    rehypePlugins: [rehypeCodeChrome],
+    rehypePlugins: [rehypeCodeChrome, rehypeTableScroll],
   },
 });
