@@ -7,7 +7,7 @@ export const sidebar = cva(
 );
 
 export const sidebarFooter = cva(
-  "text-fg/60 bg-fg/5 ring-fg/10 inline-flex w-fit items-center self-start rounded-full px-2.5 py-1 font-mono text-[11px] font-medium ring-1"
+  "text-fg/60 bg-fg/5 ring-fg/10 mt-10.5 inline-flex w-fit items-center self-start rounded-full px-2.5 py-1 font-mono text-[11px] font-medium ring-1"
 );
 
 export const sidebarBottom = cva("mt-auto flex flex-col gap-2 pt-4");
