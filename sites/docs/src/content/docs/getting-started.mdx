@@ -65,7 +65,7 @@ Your slskd address and API key are not set here. The setup wizard collects them 
 | -------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `/data`        | The database, configuration, logs, artwork cache, backups, drop-import staging, files held for review, and the recycle bin. | Back this up. Everything Synthseek knows lives here.                                                                                                   |
 | `/music`       | Your organised music library. Synthseek writes here.                                                                        | Can be mounted read-only, in which case Synthseek boots and browsing works, but imports and any reorganising of the library fail until it is writable. |
-| `/downloads`   | The folder slskd writes completed downloads to.                                                                             | Must be writable. This is the same folder slskd calls its "complete" directory.                                                                        |
+| `/downloads`   | The folder your download clients write completed downloads to.                                                              | Must be writable. This is the same folder slskd calls its "complete" directory.                                                                        |
 
 ### Ports
 
@@ -86,7 +86,7 @@ The first time you open Synthseek, a setup wizard walks you through five steps.
 
 1. **Administrator account.** Create the first account. This account is the instance owner and cannot be demoted or deleted.
 2. **slskd.** Enter the URL and API key of your slskd instance. Synthseek tests the connection and tells you what it found. You can continue past a failed test, and Synthseek will boot anyway and show the integration as unhealthy so you can fix it from Settings.
-3. **Plex.** Optional. A popup opens for you to sign in at plex.tv, then you pick which of your servers Synthseek should target. This is what enables library rescans and playlist sync.
+3. **Plex.** Optional. A popup opens for you to sign in at plex.tv, then you pick which of your servers Synthseek should target. This is what enables Plex rescans and playlist sync to Plex. Navidrome and Jellyfin are connected later, under **Settings**, then **Media & playback**.
 4. **Enrichment services.** Optional. An AcoustID key, a Last.fm key, a fanart.tv key, a Songlink key, and a MusicBrainz contact email. All are free, and each one improves a different thing: verification accuracy, discovery, artist images, link imports, and rate limits. Discogs is added later, from Settings.
 5. **Done.** You land in the application.
 
@@ -107,7 +107,7 @@ If you requested a playlist, the request is accepted immediately and the tracks 
 
 - **Configuration** to tune the engine, or to understand what a setting actually does before changing it.
 - **Users and Permissions** to add the rest of your household.
-- **Integrations** to connect Plex, Lidarr, or your listening history.
+- **Integrations** to connect a media server, Lidarr, or your listening history.
 - **AI Assistants** to let Claude or another assistant drive your library in plain language.
 
 ---

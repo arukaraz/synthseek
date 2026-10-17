@@ -13,29 +13,29 @@ The engine is source-agnostic. It owns the phases and their timing, and each dow
 
 ## The phases
 
-A request moves through a fixed sequence. The status you see on the requests screen is the phase it is currently in.
+A request moves through a fixed sequence. The status you see on the requests screen is the phase it is currently in. The code is what assistants and the logs use.
 
-| Status               | What is happening                                             |
-| -------------------- | ------------------------------------------------------------- |
-| `queued`             | Waiting its turn.                                             |
-| `pending_approval`   | Held because a member's requests need administrator approval. |
-| `searching`          | Querying the enabled download sources.                        |
-| `pending_download`   | A candidate was chosen, waiting for a download slot.          |
-| `downloading`        | Transferring.                                                 |
-| `paused`             | You parked it. It stays here until you resume.                |
-| `pending_import`     | Downloaded, waiting for an import slot.                       |
-| `importing`          | Being verified, tagged, and filed.                            |
-| `syncing_plex`       | The playlist it belongs to is being synced to a media server. |
-| `complete`           | In your library.                                              |
-| `partially_complete` | Some tracks in the group made it, some did not.               |
-| `failed`             | Did not make it. Carries a reason.                            |
-| `cancelled`          | You stopped it.                                               |
-| `delegated`          | Handed to Lidarr, which now owns it.                          |
-| `in_progress`        | A group with work still moving.                               |
+| Status                  | What is happening                                             | Code                 |
+| ----------------------- | ------------------------------------------------------------- | -------------------- |
+| Queued                  | Waiting its turn.                                             | `queued`             |
+| Waiting for Approval    | Held because a member's requests need administrator approval. | `pending_approval`   |
+| Searching               | Querying the enabled download sources.                        | `searching`          |
+| Pending Download        | A candidate was chosen, waiting for a download slot.          | `pending_download`   |
+| Downloading             | Transferring.                                                 | `downloading`        |
+| Paused                  | You parked it. It stays here until you resume.                | `paused`             |
+| Pending Import          | Downloaded, waiting for an import slot.                       | `pending_import`     |
+| Importing               | Being verified, tagged, and filed.                            | `importing`          |
+| Syncing to media server | The playlist it belongs to is being synced to a media server. | `syncing_plex`       |
+| Complete                | In your library.                                              | `complete`           |
+| Partially Complete      | Some tracks in the group made it, some did not.               | `partially_complete` |
+| Failed                  | Did not make it. Carries a reason.                            | `failed`             |
+| Cancelled               | You stopped it.                                               | `cancelled`          |
+| Delegated               | Handed to Lidarr, which now owns it.                          | `delegated`          |
+| In Progress             | A group with work still moving.                               | `in_progress`        |
 
 ## Step 1, search
 
-For each track, the engine queries every enabled download source in priority order.
+For each track, the engine tries the enabled download sources in priority order, or in the order chosen for that request, until one delivers.
 
 Search is not a single query. Files on other people's machines are rarely named the way a catalog names them, so each track is searched several ways rather than once. How many variations it tries is a setting.
 
@@ -45,9 +45,9 @@ Concurrency is bounded, and how many searches run at once is a setting too.
 
 Every candidate returned is scored and ranked. The best one is taken, not the first one that looks acceptable.
 
-Much of what feeds that ranking is yours to set: the format and bitrate you asked for and how strictly you meant it, a minimum upload speed, and whether a peer has to have a free slot. Sources and peers you have quarantined or banned are excluded outright.
+Much of what feeds that ranking is yours to set. That is the format and bitrate you asked for, how strictly you meant them, a minimum upload speed, and whether a peer needs a free slot. Sources and peers you have quarantined or banned are excluded outright.
 
-When a candidate is discarded, the engine records why, so the interface can tell you what was rejected and on what grounds rather than only that nothing was found.
+When a candidate is discarded, the engine records why, so you can see what was rejected and on what grounds.
 
 ## Step 3, download
 
@@ -68,7 +68,7 @@ If a source cannot deliver, the engine moves to the next source in the chain. A 
 
 Before anything reaches your library, Synthseek checks that what arrived is what you asked for. Some checks read the file's own tags and compare them against your request. One listens to the audio itself.
 
-Not every failure means the same thing. Some simply stop the import. Others are treated as evidence that the source sent the wrong thing, and those put the file in the review queue and set that source and file pairing aside, so a retry looks elsewhere instead of fetching the same thing again.
+Not every failure means the same thing. Some simply stop the import. Others are treated as evidence that the source sent the wrong thing. Those put the file in the review queue and set that source and file pairing aside, so a retry looks elsewhere.
 
 ### What you control
 
@@ -84,7 +84,7 @@ An inconclusive identification does not block the import. AcoustID's database is
 
 ### What reaches the review queue
 
-A file lands there when something positively contradicted your request: tags that do not match, audio that identifies as another artist, or a tag block that cannot be read at all. A file that merely could not be identified does not.
+A file lands there when something positively contradicted your request. That means tags that do not match, audio that identifies as another artist, or tags that cannot be read at all. A file that merely could not be identified does not.
 
 For each held file you can see why it was rejected, listen to it, and then approve or discard it.
 
@@ -102,26 +102,26 @@ Imports are strictly serialised. One import runs at a time.
 
 ## Step 6, media servers
 
-After a successful import, Plex is asked to rescan the affected part of the library.
+After a successful import, Plex is asked to rescan the affected part of the library. Navidrome and Jellyfin are not asked, so the new file appears there after their own next scan.
 
 If the track belongs to a playlist, that playlist is reconciled on every media server with playlist sync on. Reconciliation is incremental: as more tracks of a playlist finish over time, they are added to the remote playlist as they arrive rather than waiting for the whole set.
 
-Currently, playlist reconciliation only adds. It never removes.
+Reconciliation only adds. Synthseek takes a track off the server's copy only when a playlist kept in sync with its source loses it there.
 
 ## When a track fails
 
 Every failure carries a typed reason.
 
-| Reason            | Meaning                                                           | Retried automatically                |
-| ----------------- | ----------------------------------------------------------------- | ------------------------------------ |
-| `not_found`       | No source had a matching candidate.                               | Yes                                  |
-| `wrong_file`      | What arrived was a different recording, or a broken release.      | Yes, with the bad candidate excluded |
-| `import_rejected` | The tagging and filing step refused the file.                     | No                                   |
-| `p2p_failed`      | Peers errored out or never delivered.                             | Yes                                  |
-| `download_failed` | The transfer itself failed.                                       | Yes                                  |
-| `environment`     | A problem on your own machine, such as a full or unwritable disk. | Yes, without spending retry budget   |
-| `timeout`         | A step ran out of the time it was given.                          | Yes                                  |
-| `other`           | Anything unclassified.                                            | No                                   |
+| Reason             | Meaning                                                           | Retried automatically                | Code              |
+| ------------------ | ----------------------------------------------------------------- | ------------------------------------ | ----------------- |
+| Not found          | No source had a matching candidate.                               | Yes                                  | `not_found`       |
+| Wrong file         | What arrived was a different recording, or a broken release.      | Yes, with the bad candidate excluded | `wrong_file`      |
+| Import rejected    | The tagging and filing step refused the file.                     | No                                   | `import_rejected` |
+| Connection dropped | Peers errored out or never delivered.                             | Yes                                  | `p2p_failed`      |
+| Download failed    | The transfer itself failed.                                       | Yes                                  | `download_failed` |
+| Storage problem    | A problem on your own machine, such as a full or unwritable disk. | Yes, without spending retry budget   | `environment`     |
+| Timed out          | A step ran out of the time it was given.                          | Yes                                  | `timeout`         |
+| Failed             | Anything unclassified.                                            | No                                   | `other`           |
 
 `wrong_file` being both quarantined and retryable is deliberate and is a single mechanism: the quarantine excludes the specific bad candidate, and the retry is what searches again without it.
 

@@ -32,7 +32,7 @@ slskd is a Soulseek daemon with an HTTP API. It is the primary download source, 
 1. Run slskd and complete its own setup, including your Soulseek account.
 2. In slskd, go to **Settings**, then **Options**, then **Web**, and note or generate an API key.
 3. Note the URL slskd's web interface is reachable at from inside the Synthseek container. On the same Docker network this is typically `http://slskd:5030`.
-4. In Synthseek, go to **Settings**, then **Download sources**, then **slskd**. Enter the URL and the API key, and test the connection.
+4. In Synthseek, go to **Settings**, then **Download sources**, then **Slskd**. Enter the URL and the API key, and test the connection.
 
 ### The shared downloads folder
 
@@ -45,16 +45,16 @@ Both must point at the same place on the host, and the user Synthseek runs as, s
 
 ### slskd settings
 
-Under **Settings**, then **Download sources**, then **slskd**:
+Under **Settings**, then **Download sources**, then **Slskd**:
 
-| Setting                  | Default | What it does                                                               |
-| ------------------------ | ------- | -------------------------------------------------------------------------- |
-| Maximum peer attempts    | 15      | How many peers to try per track before giving up.                          |
-| Maximum variations       | 6       | How many title and artist variations to search.                            |
-| Strict tier ordering     | Off     | Exhaust one quality tier fully before dropping to the next.                |
-| Search history cleanup   | On      | Have slskd discard finished searches.                                      |
-| Maximum history searches | 30      | How many to retain before cleanup.                                         |
-| Banned users             | Empty   | Peers excluded from all searches. You can add and remove entries manually. |
+| Setting                      | Default | What it does                                                               |
+| ---------------------------- | ------- | -------------------------------------------------------------------------- |
+| Max peer attempts            | 15      | How many peers to try per track before giving up.                          |
+| Max variations               | 6       | How many title and artist variations to search.                            |
+| Strict quality tier ordering | Off     | Exhaust one quality tier fully before dropping to the next.                |
+| History cleanup enabled      | On      | Have slskd discard finished searches.                                      |
+| Max history searches         | 30      | How many to retain before cleanup.                                         |
+| Banned uploaders             | Empty   | Peers excluded from all searches. You can add and remove entries manually. |
 
 The same panel holds the Soulseek timeouts from the [Configuration page](/configuration), and **Auto-ban after N failures**, which bans a peer after repeated failed downloads. It is off at 0.
 
@@ -192,7 +192,7 @@ Synthseek's.
 
 ## The yt-dlp fallback
 
-When slskd cannot deliver a track, Synthseek can fall back to yt-dlp. It is bundled in the container and enabled by default.
+When the sources above it cannot deliver a track, Synthseek can fall back to yt-dlp. It is bundled in the container and enabled by default.
 
 Video platforms change often enough to break a downloader that stands still, so the bundled yt-dlp does not stand still. The container refreshes it on every start, and if downloads start being refused while it is running, it refreshes it again without waiting for a restart. Both refreshes need outbound network access and say what they did in the log, including when they could not reach the package index. A refresh cannot invent a fix that has not been published yet, so downloads can still fail for a while after a platform change.
 
@@ -202,12 +202,12 @@ Everything downloaded through the fallback goes through exactly the same verific
 
 ### yt-dlp settings
 
-| Setting                | Default    | What it does                                                       |
-| ---------------------- | ---------- | ------------------------------------------------------------------ |
-| Enabled                | On         | Whether the fallback is used at all.                               |
-| Search results         | 15         | How many candidates are considered before one is chosen.           |
-| Maximum duration delta | 15 seconds | How much a candidate's length may differ from the expected length. |
-| Search timeout         | 60 seconds | How long to wait for results.                                      |
+| Setting            | Default    | What it does                                                       |
+| ------------------ | ---------- | ------------------------------------------------------------------ |
+| Enabled            | On         | Whether the fallback is used at all.                               |
+| Search results     | 15         | How many candidates are considered before one is chosen.           |
+| Max duration delta | 15 seconds | How much a candidate's length may differ from the expected length. |
+| Search timeout     | 60 seconds | How long to wait for results.                                      |
 
 ## SoundCloud
 
@@ -220,12 +220,12 @@ only as a short preview, or only behind its own DRM, are left out of the search.
 
 ### SoundCloud settings
 
-| Setting                | Default    | What it does                                                     |
-| ---------------------- | ---------- | ---------------------------------------------------------------- |
-| Enabled                | Off        | Whether SoundCloud is searched at all.                           |
-| Search results         | 15         | How many uploads are considered before one is chosen.            |
-| Maximum duration delta | 10 seconds | How much an upload's length may differ from the expected length. |
-| Search timeout         | 60 seconds | How long to wait for results.                                    |
+| Setting            | Default    | What it does                                                     |
+| ------------------ | ---------- | ---------------------------------------------------------------- |
+| Enabled            | Off        | Whether SoundCloud is searched at all.                           |
+| Search results     | 15         | How many uploads are considered before one is chosen.            |
+| Max duration delta | 10 seconds | How much an upload's length may differ from the expected length. |
+| Search timeout     | 60 seconds | How long to wait for results.                                    |
 
 ## The Internet Archive
 

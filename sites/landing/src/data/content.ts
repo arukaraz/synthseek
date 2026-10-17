@@ -15,7 +15,7 @@ export const SETUP_STEPS = [
   },
   {
     title: "Run the wizard",
-    body: "Admin account, download source, media server sign-in, optional API keys.",
+    body: "Admin account, download source, optional Plex sign-in and API keys.",
   },
   {
     title: "Invite your people",
@@ -43,7 +43,7 @@ export const FAQ_ITEMS = [
   {
     question: "What do I need before installing?",
     answer:
-      "Docker, a running slskd instance with its own Soulseek account, and two folders: one where slskd puts completed downloads, one where your library lives. Everything else, including your media server connection, is set up from the wizard.",
+      "Docker, a running slskd instance with its own Soulseek account, and two folders: one where slskd puts completed downloads, one where your library lives. The wizard and Settings take care of the rest, media servers included.",
   },
   {
     question: "What happens when a download is wrong?",

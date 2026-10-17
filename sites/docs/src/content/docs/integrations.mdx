@@ -9,8 +9,6 @@ order: 8
 
 Every integration except the core catalog is optional, and none of them stops Synthseek from starting. A misconfigured or unreachable service logs a warning and Synthseek boots anyway, then shows that integration as unhealthy in Settings. An unreachable catalog shows under **Settings**, **Maintenance**, **System status**.
 
-This is deliberate. An integration you can fix from the interface must never be able to stop the interface from starting, or a single wrong URL locks you out of the only place you could correct it.
-
 Each integration exposes a live status you can see from its settings card.
 
 ## Plex
@@ -19,18 +17,18 @@ Three independent things. Library scans and playlist sync each have a switch, an
 
 ### Library scans
 
-After a successful import, Synthseek asks Plex to rescan the affected section so the new file appears without waiting for Plex's own schedule.
+After a successful import, Synthseek asks Plex to scan the new file's folder. The file appears without waiting for Plex's own schedule.
 
 ### Playlist sync
 
 Playlists you request or create in Synthseek can be mirrored to Plex.
 
 - Push one playlist, or all eligible playlists at once, from either the requests screen or your library.
-- An hourly background job keeps mirrored playlists named correctly and topped up.
+- A background job keeps mirrored playlists named correctly and topped up.
 - Renames flow both ways.
 - Optionally prefix or suffix mirrored playlist names with the owner's username, so a shared server stays legible.
 
-**Currently, sync only adds tracks. It never removes them.** The only path that removes anything from a mirrored playlist is a library sync you explicitly configured.
+**Sync only adds tracks.** The one exception is a playlist kept in sync with its source: a track removed there is removed from the mirrored copy too.
 
 ### Playing from Plex
 

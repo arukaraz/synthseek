@@ -8,13 +8,13 @@ order: 11
 ## Getting started
 
 **Do I need a Soulseek account?**
-You need slskd, and slskd needs a Soulseek account. Synthseek talks only to slskd's HTTP API and holds no Soulseek credentials of its own.
+Only for slskd, which needs one. Synthseek talks only to slskd's HTTP API and holds no Soulseek credentials of its own.
 
 **Do I need any API keys to start?**
 No. The music catalog needs none. Everything else is optional. An AcoustID key is free and is the one worth getting, because without it Synthseek cannot verify by listening that a downloaded file really is what you asked for.
 
 **Can I run it without slskd?**
-The yt-dlp fallback is enabled by default, so you can, but slskd is the primary source and Synthseek is designed around it.
+Yes. slskd comes first by default, but any other source you enable can deliver, and the yt-dlp fallback is on from the start. The setup wizard still asks for slskd, and lets you continue past a failed connection test.
 
 **Does it work on a Raspberry Pi?**
 There is an `arm64` image, built and smoke tested natively.
@@ -33,7 +33,7 @@ Fixed in 1.2.1. Your music and downloads volumes are no longer chowned recursive
 ## Downloads
 
 **Everything is stuck at queued and nothing downloads.**
-Check whether the queue is paused first. Pausing is in memory, so a restart clears it, and pending work drains automatically on boot. If it is not paused, check that slskd is reachable from its settings card.
+Check whether the queue is paused first. Pausing is in memory, so a restart clears it, and pending work drains automatically on boot. If it is not paused, check that your download sources are reachable, from their panels under **Download sources**.
 
 **A track says "not found".**
 No enabled source had a candidate that passed scoring. Turn on the wanted sweep to have Synthseek keep trying on its own, with attempts spaced further apart the longer a track stays missing.
@@ -41,7 +41,7 @@ No enabled source had a candidate that passed scoring. Turn on the wanted sweep 
 **A track says "wrong file".**
 What arrived positively contradicted what you asked for, and Synthseek refused to put it in your library. The file is in the review queue, where you can listen to it and decide. That exact source and file pairing is excluded from future searches, so the retry looks elsewhere.
 
-**A track failed with an environment error.**
+**A track says "storage problem".**
 The problem is on your machine, not the source. Usually a full disk or a downloads folder that stopped being writable. These failures do not consume retry budget, so once you fix the underlying problem the tracks are still waiting.
 
 **A track says it timed out.**
@@ -67,15 +67,15 @@ Yes, three ways. Drag files or zip archives in. Connect a library source such as
 **Does a quality upgrade delete my old file?**
 No. It is moved to a recycle bin under `/data` before the replacement is imported, and that move is verified before anything else happens. You can see what the bin is holding and put any of it back from **Settings**, then **Maintenance**, then **Recycle bin**. The bin empties itself after thirty days by default.
 
-## Playlists and Plex
+## Playlists and media servers
 
 **My Plex playlist has fewer tracks than Synthseek shows.**
 Three possible causes, covered in detail on the [Integrations page](/integrations): the tracks are not scanned into Plex yet, the titles did not match, or Plex genuinely holds a different version. Reconciling again fixes the first two.
 
-**Will syncing remove tracks I added to a Plex playlist by hand?**
-Currently, no. Sync only adds. It is a work in progress feature.
+**Will syncing remove tracks I added to a server's playlist by hand?**
+Not on its own. Sync only adds. The one exception is a playlist kept in sync with its source: a track removed there is removed from the server's copy too.
 
-**I renamed a playlist in Plex. Will Synthseek fight me?**
+**I renamed a playlist on my media server. Will Synthseek fight me?**
 No. Renames flow both ways. Whichever side changed most recently wins, and Synthseek tracks a baseline so it can tell a remote rename from a local one.
 
 ## Listening
@@ -86,7 +86,7 @@ In the web app itself, through your media server, or straight from Synthseek wit
 **Does the web player pick up where I left off?**
 Yes, and not only in the browser. Your queue and your position are kept on the server, so a reload brings them back where you stopped. It is the same queue your Subsonic app uses, so you can leave a queue on your phone and find it in the browser. Favourites are the same mark in both, and what you play can be sent on to Last.fm or ListenBrainz once you connect one.
 
-**Do I need Plex or Jellyfin for that?**
+**Do I need a media server for that?**
 No. That is the point of it. A media server remains useful for everything else it does, but it is no longer the only way to hear what Synthseek downloaded.
 
 **Can my music app change things in Synthseek, or only play them?**

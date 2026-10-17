@@ -17,7 +17,7 @@ Synthseek has two configuration surfaces, and the split is deliberate.
 
 Settings has two groups. **You** holds what each member sets for themselves. **This server** holds what administrators set for everyone, and members do not see it. **Changelog** sits at the bottom for everyone.
 
-The search box at the top of the sidebar finds any setting and opens the page it lives on. Ctrl+K, or Cmd+K on a Mac, opens the same search with a few common actions.
+The search box at the top of the sidebar finds settings by name and opens the page each one lives on. Ctrl+K, or Cmd+K on a Mac, opens the same search with a few common actions.
 
 ### Account
 
@@ -32,7 +32,7 @@ Your username, email, avatar and password, and how much of your download quota y
 
 ### Connected accounts
 
-Your own accounts on Spotify, Plex, Navidrome and Jellyfin, which Synthseek uses on your behalf. The Plex row also offers to count your plays in Plex.
+Your own accounts on Spotify, Plex, Navidrome and Jellyfin, which Synthseek uses on your behalf. Each server's row also offers to count your plays on that server.
 
 ### Listening & discovery
 
@@ -40,11 +40,12 @@ Your Last.fm and ListenBrainz connections, which send what you play to them, and
 
 ### Apps & API keys
 
-| Setting       | What it does                                                                                                            |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Music players | Turns the Subsonic API on or off, **admin only**, and shows the address and username a music app needs. Off by default. |
-| AI assistants | The public URL of your instance, and connection guidance for assistants.                                                |
-| API keys      | Create and revoke keys for assistant connections. Shown once at creation.                                               |
+| Setting            | What it does                                                                                                            |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Music players      | Turns the Subsonic API on or off, **admin only**, and shows the address and username a music app needs. Off by default. |
+| Convert on the fly | Sends a smaller stream when a music app asks for one, **admin only**. On by default.                                    |
+| AI assistants      | The public URL of your instance, and connection guidance for assistants.                                                |
+| API keys           | Create and revoke keys for assistant connections. Shown once at creation.                                               |
 
 Each member creates and revokes their own credentials here; only an admin can turn the Subsonic API on.
 
@@ -88,13 +89,13 @@ Administrators only. Enable, disable, and order slskd, another Subsonic server, 
 
 Administrators only. Most cards have a reset to defaults.
 
-**Queue**
+**Queue & concurrency**
 
-| Setting                    | Default | Range       |
-| -------------------------- | ------- | ----------- |
-| Maximum queue size         | 1000    | 10 to 10000 |
-| Concurrent searches        | 3       | 1 to 10     |
-| Concurrent pending imports | 6       | 1 to 20     |
+| Setting                 | Default | Range       |
+| ----------------------- | ------- | ----------- |
+| Max size                | 1000    | 10 to 10000 |
+| Max concurrent searches | 3       | 1 to 10     |
+| Max pending imports     | 6       | 1 to 20     |
 
 **Timeouts**
 
@@ -105,12 +106,12 @@ Administrators only. Most cards have a reset to defaults.
 
 The Soulseek timeouts are with the rest of slskd's settings, under **Download sources**:
 
-| Setting                 | Default    | Range      |
-| ----------------------- | ---------- | ---------- |
-| Search phase            | 15 seconds | 5s to 120s |
-| Peer unresponsive       | 2 minutes  | 15s to 15m |
-| Queue wait, active peer | 8 minutes  | 30s to 30m |
-| Queue wait, idle peer   | 12 minutes | 30s to 60m |
+| Setting                  | Default    | Range      |
+| ------------------------ | ---------- | ---------- |
+| Search phase             | 15 seconds | 5s to 120s |
+| Peer unresponsive        | 2 minutes  | 15s to 15m |
+| Queue wait (active peer) | 8 minutes  | 30s to 30m |
+| Queue wait (idle peer)   | 12 minutes | 30s to 60m |
 
 **Import**
 
@@ -122,17 +123,17 @@ The [Download Engine page](/download-engine) covers what happens to a file these
 
 **Quality**
 
-| Setting          | Default | What it does                                       |
-| ---------------- | ------- | -------------------------------------------------- |
-| Upgrades enabled | On      | Allow replacing a library file with a better copy. |
+| Setting                | Default | What it does                                       |
+| ---------------------- | ------- | -------------------------------------------------- |
+| Allow quality upgrades | On      | Allow replacing a library file with a better copy. |
 
-**Wanted**
+**Wanted sweep**
 
-| Setting                    | Default | Range   |
-| -------------------------- | ------- | ------- |
-| Enabled                    | Off     |         |
-| Attempts per run           | 10      | 1 to 50 |
-| Maximum attempts per track | 8       | 1 to 20 |
+| Setting             | Default | Range   |
+| ------------------- | ------- | ------- |
+| Enable wanted sweep | Off     |         |
+| Tracks per sweep    | 10      | 1 to 50 |
+| Max sweep attempts  | 8       | 1 to 20 |
 
 **Smart search**
 
@@ -170,12 +171,12 @@ Plex shows its connection status, a reconnect button that signs you in at plex.t
 | Media server rescan    | On      | Ask Plex to rescan after an import.     |
 | Sync playlists to Plex | On      | Create and reconcile playlists on Plex. |
 
-And how mirrored playlists are named:
+And how playlists mirrored to Plex are named:
 
-| Setting                 | Default | What it does                                                        |
-| ----------------------- | ------- | ------------------------------------------------------------------- |
-| Playlist username affix | Off     | Prefix or suffix a media server playlist with its owner's username. |
-| Separator               | `_`     | The character between the name and the affix.                       |
+| Setting        | Default | What it does                                                |
+| -------------- | ------- | ----------------------------------------------------------- |
+| Username affix | Off     | Prefix or suffix a Plex playlist with its owner's username. |
+| Separator      | `_`     | The character between the name and the affix.               |
 
 Navidrome (URL, username, password) and Jellyfin (URL, API key) each have a test button and a switch to sync playlists to that server. The switch starts off.
 
@@ -203,13 +204,13 @@ The files held back because they failed verification, with the reason for each. 
 
 **Duplicates**
 
-Tracks with more than one copy on disk. The ones it could prove identical are already settled; what waits here is what it could not.
+Tracks with more than one copy on disk. Copies it can prove identical wait under **Safe to resolve** until the library scan settles them, or until you resolve them yourself. What it cannot prove waits under **Needs review**.
 
 **Recycle bin**
 
-| Setting               | Default | What it does                                          |
-| --------------------- | ------- | ----------------------------------------------------- |
-| Recycle bin retention | 30 days | How long a replaced file stays recoverable. 1 to 365. |
+| Setting          | Default | What it does                                          |
+| ---------------- | ------- | ----------------------------------------------------- |
+| Retention period | 30 days | How long a replaced file stays recoverable. 1 to 365. |
 
 Alongside it, what the bin currently holds, the files it is keeping, a **Restore** on each one, and a button to empty it.
 
@@ -219,12 +220,12 @@ The albums Usenet and torrent fetched whole that are still on disk. Each shows i
 
 **Quarantine**
 
-| Setting                        | Default        | What it does                                                                                                                                                     |
-| ------------------------------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AcoustID identity gate         | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose audio is by a different artist is refused. Needs an AcoustID key. |
-| Auto-ban after failed attempts | 0, meaning off | Ban a peer after this many failures. Shown here, and changed with slskd's settings under **Download sources**.                                                   |
+| Setting                | Default        | What it does                                                                                                                                                     |
+| ---------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AcoustID identity gate | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose audio is by a different artist is refused. Needs an AcoustID key. |
+| Auto-ban threshold     | 0, meaning off | Ban a peer after this many failures. Shown here, and changed with slskd's settings under **Download sources**.                                                   |
 
-Below them, the list of current entries with the reason for each, and a link to the banned-peer list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tag mismatch, duration mismatch, and tags unreadable.
+Below them, the list of current entries with the reason for each, and the **Banned uploaders** list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tags do not match, duration mismatch, and tags unreadable.
 
 **System status**
 
@@ -234,9 +235,9 @@ What is limiting Synthseek right now, such as a folder it cannot write to or a m
 
 Administrators only, in two tabs, **Jobs** and **Logs**. Both are covered on the [Operations page](/operations). The log level lives under **Logs**:
 
-| Setting   | Default | What it does              |
-| --------- | ------- | ------------------------- |
-| Log level | INFO    | Applied live, no restart. |
+| Setting | Default | What it does              |
+| ------- | ------- | ------------------------- |
+| Level   | INFO    | Applied live, no restart. |
 
 ### Changelog
 
@@ -248,7 +249,7 @@ Two live where you use them rather than in a settings section.
 
 | Setting                                               | Default                   | Where                                                                                  |
 | ----------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------- |
-| Review queue retention                                | 14 days                   | The footer of the review queue, on the Requests screen or under Maintenance. 1 to 365. |
+| Keep for, in the review queue                         | 14 days                   | The footer of the review queue, on the Requests screen or under Maintenance. 1 to 365. |
 | Per-request format, bitrate, matching, speed, sources | See [Features](/features) | The request window, stored on the request itself.                                      |
 
 ## Environment variables
@@ -272,6 +273,7 @@ Two live where you use them rather than in a settings section.
 | `LOGS_PATH`               | `/data/logs`                 | Where logs are written.                                                                                  |
 | `IMPORTS_PATH`            | `/data/imports`              | Staging for drag-and-drop uploads.                                                                       |
 | `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                                                                 |
+| `HELD_IMPORTS_PATH`       | `/data/held-imports`         | Where files held for review wait.                                                                        |
 | `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                                                          |
 
 ### Sessions and cookies

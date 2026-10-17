@@ -136,7 +136,7 @@ Where there is room, the container proves the migration on a copy before touchin
 
 The last ten snapshots are retained. Every migration run is logged to `/data/logs/migrate.log`.
 
-If there is not enough free space for a copy, or your database lives outside its default location, Synthseek falls back to migrating in place and tells you, having already taken the snapshot.
+If there is not enough free space for a copy, or your database lives outside its default location, Synthseek migrates in place. It tells you so, and the snapshot is already taken.
 
 ## Backups
 
@@ -147,7 +147,7 @@ Your music files live in your library paths, `/music` and any you added, and are
 - Replacing a copy with a better one after a quality upgrade.
 - Keeping one copy you picked on the duplicates page.
 - Resolving one track with **Keep best copy**.
-- Settling in bulk with **Keep the best of every track**.
+- Resolving every track under **Safe to resolve** at once.
 - The scan settling the copies it proved are the same recording.
 - Clearing the leftover files described above.
 - **Delete files** on the Library page.
@@ -158,6 +158,6 @@ Take your own backup before a major version upgrade. The automatic snapshot cove
 
 ## Architecture support
 
-Images are published for both `amd64` and `arm64`. Each architecture is built on a native runner with its own native dependencies, and each is smoke tested before publication by starting it and confirming the running architecture through the health endpoint. A published manifest is not taken as proof that a non-host architecture works.
+Images are published for both `amd64` and `arm64`. Each one is built natively and smoke tested on its own architecture before it is published.
 
 ---

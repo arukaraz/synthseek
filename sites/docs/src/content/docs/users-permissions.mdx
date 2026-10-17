@@ -17,13 +17,13 @@ A member can link Plex to an existing local account, and sign in either way afte
 
 ## Roles
 
-| Role              | Can do                                                                                                                                                                           |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Administrator** | Everything. Manage members, all settings, integrations, engine tuning, jobs, logs, and the review and quarantine queues.                                                         |
-| **Trusted**       | Everything a member can do. Requests are never held for approval, and member quotas do not apply.                                                                                |
-| **Member**        | Search, request, manage their own library and playlists, connect their own discovery and library-source accounts, and set their own profile, theme, language, and notifications. |
+| Role        | Can do                                                                                                                                                                           |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Admin**   | Everything. Manage members, all settings, integrations, engine tuning, jobs, logs, and the review and quarantine queues.                                                         |
+| **Trusted** | Everything a user can do. Requests are never held for approval, and member quotas do not apply.                                                                                  |
+| **User**    | Search, request, manage their own library and playlists, connect their own discovery and library-source accounts, and set their own profile, theme, language, and notifications. |
 
-Administrator-only sections are hidden from members entirely, not shown and disabled. The first account created is the instance owner and cannot be demoted or deleted.
+A plain member, as these pages call one, has the **User** role. Administrator-only sections are hidden from members entirely, not shown and disabled. The first account created is the instance owner, shown as **Owner**, and cannot be demoted or deleted.
 
 ## What is shared and what is not
 
@@ -50,7 +50,7 @@ Off by default. When **Require approval for members** is enabled, anything a pla
 - Held requests sit in the `pending_approval` state and are not queued.
 - An administrator approves or rejects them.
 - Trusted members and administrators bypass the gate entirely.
-- The gate applies to every path a request can arrive through: a direct request, an album or playlist populate, a library sync, a discovery auto-request, and an assistant acting through MCP.
+- The gate applies however a request arrives, including when an album or playlist fills in, a library sync, a discovery playlist and an assistant.
 
 Give the gate a purpose by promoting the people you do not want to review to trusted, rather than turning the gate off.
 
