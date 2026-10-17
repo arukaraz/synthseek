@@ -2,6 +2,84 @@
 
 ---
 
+# v2.9.0, October 16, 2026
+
+### Seven download sources, several library paths, and a simpler Settings
+
+- Four new places to download from: the Internet Archive, SoundCloud, another Subsonic server such as a friend's Navidrome, and torrent through qBittorrent. They all start off. Turn them on under Settings, Download sources.
+- Drag your download sources into the order you want them tried.
+- The Internet Archive can also search its community uploads, as a last resort after its curated collections. This starts off too.
+- Albums from Usenet and torrent download without holding up other tracks, and each one shows its progress. qBittorrent's own queue settings decide how many albums download at once.
+- Albums downloaded by Usenet or torrent are kept for a while, so retrying a track does not download the whole album again. See and delete them under Settings, Maintenance, Downloaded albums.
+- The requests page shows which source each track came from, and you can filter by source.
+
+---
+
+### Notifications
+
+- Get notified on Discord, ntfy, Telegram, a webhook or Apprise. Each user picks their own destinations, and which notifications each one receives, under Settings, Notifications.
+
+---
+
+### Library
+
+- Keep your music in more than one library path, such as a second disk. Each path has its own naming format, and rules decide which music goes where, by artist, genre, year, quality, who asked for it and more.
+- Move songs and albums to another library path, or delete them to the recycle bin.
+- Files the library scan cannot recognise now wait for you to match, search again or ignore, instead of being dropped.
+- Quarantine lists a set-aside album once, instead of once for every track.
+
+---
+
+### Settings
+
+- Settings is reorganised into focused pages, in two groups: your own settings and this server's. Search them from the sidebar, or press Ctrl+K (Cmd+K on a Mac).
+- Each page has one save bar, and leaving a page with unsaved changes asks first.
+- The setup checklist hides once every step is done.
+- The Updates page in Settings is now called Changelog.
+
+---
+
+### Player
+
+- AI Assistants connected to Synthseek can now run the player: play, edit the queue, change player settings, start a radio and move playback to another device.
+- Crossfade now starts where a song actually goes quiet, so songs that end in silence blend properly.
+- Smart fade is gone. If you used it you are now on Crossfade, or pick Gapless to have tracks run straight into each other.
+- Lyrics turn up for more songs. A .lrc file next to the song, or lyrics in its tags, are used first, and a song with no lyrics is checked again sooner.
+- Press the space bar to pause and resume.
+- Shuffle an artist from their card in your library, and a library playlist from its page.
+- On phones, the full-screen player's controls fold into a ring, and the player fits a phone held sideways.
+
+---
+
+### Changes
+
+- Retrying a failed track is in its actions menu, and no longer in the status column.
+- Turning a download source off stops it at once, and its tracks move on to the next source.
+- An empty requests list under a filter says so, instead of looking empty.
+
+---
+
+### Fixes
+
+- Usenet now works with Prowlarr and NZBHydra2, and an indexer address works with or without /api at the end.
+- Album downloads search the indexer once per album, instead of once per track.
+- While SABnzbd is still unpacking a download, Synthseek waits for it instead of failing it, and a download SABnzbd cannot repair is set aside.
+- Cancelling an album also removes it from qBittorrent or SABnzbd.
+- An album download whose song titles add a subtitle, such as (Remastered), now matches its tracks.
+- Writing tags no longer freezes the server on long tracks.
+- A tab that closes or crashes leaves the device list, and a shuffled queue keeps its order after a reload.
+- A tab whose session ended goes to the login page.
+- Requesting a trending song requests the song you picked.
+- Changing a setting through an assistant no longer resets the other settings beside it.
+- An account that signs in only with Plex is asked to set a password before unlinking Plex, so it is not locked out.
+- The eye button shows a saved password or key again, and a number in Settings can be cleared and typed again.
+- Dropped files bigger than 10 MB now import.
+- The Undo button on a pop-up message can be pressed while a dialog is open.
+- Saved Slskd settings stay filled in during setup, and catalog errors say what went wrong.
+- Long labels no longer get cut off in German table headers, on tablets, and in release and maintenance rows.
+
+---
+
 # v2.8.1, October 1, 2026
 
 > [!NOTE]
