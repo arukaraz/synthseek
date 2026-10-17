@@ -1089,6 +1089,16 @@
       "unlimited": "Sans limite"
     }
   },
+  "credentialTable": {
+    "columns": {
+      "name": "Nom",
+      "created": "Création",
+      "lastUsed": "Dernière utilisation",
+      "app": "App",
+      "actions": "Actions"
+    },
+    "neverUsed": "Jamais"
+  },
   "api": {
     "keys": {
       "title": "Clés API",
@@ -1099,9 +1109,6 @@
       "description": "Pour les scripts et les assistants qui ne peuvent pas utiliser OAuth."
     },
     "row": {
-      "lastUsed": "dernière utilisation {{time}}",
-      "neverUsed": "jamais utilisée",
-      "created": "créée {{time}}",
       "revokeLabel": "Révoquer {{name}}"
     },
     "create": {
@@ -1209,7 +1216,7 @@
       "current": "Actuelle"
     },
     "page": {
-      "title": "Mises à jour",
+      "title": "Journal des modifications",
       "description": "Consultez votre version actuelle, recherchez de nouvelles versions et parcourez les notes de version pour chaque version."
     },
     "version": {
@@ -1435,7 +1442,7 @@
         "description": "Tâches en arrière-plan et journaux du serveur."
       },
       "about": {
-        "title": "À propos et mises à jour"
+        "title": "Journal des modifications"
       }
     },
     "tabs": {
@@ -1483,7 +1490,7 @@
         "libraryPaths": "dossier nommage modèle renommer",
         "unidentified": "non identifié non reconnu associer ignorer",
         "jobs": "cron planification lancer",
-        "updates": "version publication changelog notes",
+        "updates": "mises à jour version publication changelog notes",
         "timeout": "délai expiration timeout attente"
       }
     },
@@ -1664,10 +1671,6 @@
       "empty": "Aucun identifiant pour l'instant."
     },
     "row": {
-      "created": "Créé {{time}}",
-      "lastUsed": "Dernière utilisation {{time}}",
-      "neverUsed": "Jamais utilisé",
-      "client": "via {{client}}",
       "revokeLabel": "Révoquer {{name}}"
     },
     "create": {
@@ -1737,7 +1740,6 @@
       "enabled": "Activé"
     },
     "defaultBadge": "Par défaut",
-    "environmentBadge": "MUSIC_LIBRARY_PATH",
     "environmentHint": "Défini par MUSIC_LIBRARY_PATH",
     "status": {
       "writable": "Disponible",

@@ -16,12 +16,11 @@ import {
   refuseExtensionTyping,
   ruleSummary,
   secondsRemaining,
-  usedPercent,
   withExtension,
   withoutExtension,
 } from "../helpers";
 import type { ConditionDraft, OrganiseStatus, RuleCondition } from "../types";
-import { makeArchive, makeOrganiseStatus, MEMBERS } from "./fixtures";
+import { makeOrganiseStatus, MEMBERS } from "./fixtures";
 
 function status(overrides: Partial<OrganiseStatus> = {}): OrganiseStatus {
   return makeOrganiseStatus({
@@ -327,15 +326,5 @@ describe("comparing folders", () => {
     expect(comparableFolder(" /music/ ")).toBe("/music");
     expect(comparableFolder("/music//")).toBe("/music");
     expect(comparableFolder("/")).toBe("/");
-  });
-});
-
-describe("how full a path is", () => {
-  it("is unknown when the free space is", () => {
-    expect(usedPercent(makeArchive({ freeBytes: null }))).toBeNull();
-  });
-
-  it("is the library's share of what it holds plus what is free", () => {
-    expect(usedPercent(makeArchive({ sizeBytes: 250, freeBytes: 750 }))).toBe(25);
   });
 });

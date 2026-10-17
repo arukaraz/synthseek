@@ -5,6 +5,7 @@ import i18n from "@modules/i18n";
 
 import { SETTINGS_PAGE_BY_ID } from "../../../constants";
 import { SETTINGS_PALETTE_ACTIONS, SETTINGS_SEARCH_ENTRIES } from "../constants";
+import { searchSettings } from "../helpers";
 
 const t = i18n.getFixedT("en", "settings");
 
@@ -37,6 +38,16 @@ describe("SETTINGS_SEARCH_ENTRIES", () => {
       expect(isInsidePage(href, SETTINGS_PAGE_BY_ID[page].href)).toBe(true);
     }
   );
+
+  it.each([
+    ["en", "updates"],
+    ["es", "actualizaciones"],
+    ["fr", "mises à jour"],
+    ["de", "aktualisierung"],
+  ])("still finds the changelog page in %s by searching for %s", (locale, query) => {
+    const results = searchSettings(query, SETTINGS_SEARCH_ENTRIES, i18n.getFixedT(locale, "settings"), false);
+    expect(results.some((result) => result.entry.page === "about")).toBe(true);
+  });
 
   it("never repeats the same label at the same destination", () => {
     const destinations = SETTINGS_SEARCH_ENTRIES.map(

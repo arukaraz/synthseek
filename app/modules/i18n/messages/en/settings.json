@@ -1089,6 +1089,16 @@
       "unlimited": "No limit"
     }
   },
+  "credentialTable": {
+    "columns": {
+      "name": "Name",
+      "created": "Created",
+      "lastUsed": "Last used",
+      "app": "App",
+      "actions": "Actions"
+    },
+    "neverUsed": "Never"
+  },
   "api": {
     "keys": {
       "title": "API Keys",
@@ -1099,9 +1109,6 @@
       "description": "For scripts, and for assistants that cannot use OAuth."
     },
     "row": {
-      "lastUsed": "last used {{time}}",
-      "neverUsed": "never used",
-      "created": "created {{time}}",
       "revokeLabel": "Revoke {{name}}"
     },
     "create": {
@@ -1209,7 +1216,7 @@
       "current": "Current"
     },
     "page": {
-      "title": "Updates",
+      "title": "Changelog",
       "description": "See your current version, check for new releases, and browse patch notes for every version."
     },
     "version": {
@@ -1435,7 +1442,7 @@
         "description": "Background jobs and server logs."
       },
       "about": {
-        "title": "About & updates"
+        "title": "Changelog"
       }
     },
     "tabs": {
@@ -1483,7 +1490,7 @@
         "libraryPaths": "folder naming template rename",
         "unidentified": "unidentified unrecognized match ignore",
         "jobs": "cron schedule run",
-        "updates": "version release changelog patch notes",
+        "updates": "updates version release changelog patch notes",
         "timeout": "timeout time limit wait"
       }
     },
@@ -1664,10 +1671,6 @@
       "empty": "No credentials yet."
     },
     "row": {
-      "created": "Created {{time}}",
-      "lastUsed": "Last used {{time}}",
-      "neverUsed": "Never used",
-      "client": "via {{client}}",
       "revokeLabel": "Revoke {{name}}"
     },
     "create": {
@@ -1737,7 +1740,6 @@
       "enabled": "Enabled"
     },
     "defaultBadge": "Default",
-    "environmentBadge": "MUSIC_LIBRARY_PATH",
     "environmentHint": "Set by MUSIC_LIBRARY_PATH",
     "status": {
       "writable": "Available",

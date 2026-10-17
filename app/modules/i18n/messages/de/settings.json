@@ -1089,6 +1089,16 @@
       "unlimited": "Kein Limit"
     }
   },
+  "credentialTable": {
+    "columns": {
+      "name": "Name",
+      "created": "Erstellt",
+      "lastUsed": "Zuletzt genutzt",
+      "app": "App",
+      "actions": "Aktionen"
+    },
+    "neverUsed": "Nie"
+  },
   "api": {
     "keys": {
       "title": "API-Schlüssel",
@@ -1099,9 +1109,6 @@
       "description": "Für Skripte und für Assistenten, die kein OAuth nutzen können."
     },
     "row": {
-      "lastUsed": "zuletzt verwendet {{time}}",
-      "neverUsed": "nie verwendet",
-      "created": "erstellt {{time}}",
       "revokeLabel": "{{name}} widerrufen"
     },
     "create": {
@@ -1209,7 +1216,7 @@
       "current": "Aktuell"
     },
     "page": {
-      "title": "Updates",
+      "title": "Änderungsprotokoll",
       "description": "Sieh deine aktuelle Version, prüfe auf neue Versionen und durchstöbere die Versionshinweise zu jeder Version."
     },
     "version": {
@@ -1435,7 +1442,7 @@
         "description": "Hintergrundaufgaben und Serverprotokolle."
       },
       "about": {
-        "title": "Info und Updates"
+        "title": "Änderungsprotokoll"
       }
     },
     "tabs": {
@@ -1483,7 +1490,7 @@
         "libraryPaths": "ordner benennung vorlage umbenennen",
         "unidentified": "unerkannt nicht erkannt zuordnen ignorieren",
         "jobs": "cron zeitplan ausführen",
-        "updates": "version release changelog patchnotes",
+        "updates": "updates aktualisierung version release changelog patchnotes",
         "timeout": "zeitlimit timeout wartezeit warten"
       }
     },
@@ -1664,10 +1671,6 @@
       "empty": "Noch keine Zugangsdaten."
     },
     "row": {
-      "created": "Erstellt {{time}}",
-      "lastUsed": "Zuletzt genutzt {{time}}",
-      "neverUsed": "Nie genutzt",
-      "client": "über {{client}}",
       "revokeLabel": "{{name}} widerrufen"
     },
     "create": {
@@ -1737,7 +1740,6 @@
       "enabled": "Aktiv"
     },
     "defaultBadge": "Standard",
-    "environmentBadge": "MUSIC_LIBRARY_PATH",
     "environmentHint": "Kommt aus MUSIC_LIBRARY_PATH",
     "status": {
       "writable": "Verfügbar",

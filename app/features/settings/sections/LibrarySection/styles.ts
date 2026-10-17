@@ -135,6 +135,8 @@ export const rowTitleLine = cva("flex min-w-0 flex-wrap items-center gap-2");
 
 export const rowTitle = cva("text-fg truncate text-sm font-semibold");
 
+export const rowEnvironmentLock = cva("text-fg/50 inline-flex shrink-0 items-center");
+
 export const rowFolder = cva("text-fg/50 truncate font-mono text-xs");
 
 export const rowStat = cva("flex min-w-0 flex-col gap-1");

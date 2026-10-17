@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
@@ -17,8 +17,16 @@ vi.mock("@hooks/api/queries/usePublicConfig", () => ({
   usePublicConfig: () => createMockQuery({ publicBaseUrl: "https://example.test" }),
 }));
 
+let credentials: SubsonicCredentialSummary[] = [];
+const revokeMutate = vi.fn();
+const confirmMock = vi.fn();
+
 vi.mock("@hooks/api/queries/useSubsonicCredentials", () => ({
-  useSubsonicCredentials: () => createMockQuery([]),
+  useSubsonicCredentials: () => createMockQuery(credentials),
+}));
+
+vi.mock("@utils/confirm", () => ({
+  confirm: (...args: unknown[]) => confirmMock(...args),
 }));
 
 vi.mock("@hooks/api/queries/useSubsonicStatus", () => ({
@@ -42,13 +50,14 @@ vi.mock("@hooks/api/mutations/subsonic/useCreateSubsonicCredential", () => ({
 }));
 
 vi.mock("@hooks/api/mutations/subsonic/useRevokeSubsonicCredential", () => ({
-  useRevokeSubsonicCredential: () => ({ mutate: vi.fn(), isPending: false }),
+  useRevokeSubsonicCredential: () => ({ mutate: revokeMutate, isPending: false }),
 }));
 
 vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 import { SETTINGS_SEARCH_ENTRIES } from "../../../components/SettingsSearch";
 import { SubsonicCard } from "../SubsonicCard";
+import type { SubsonicCredentialSummary } from "../types";
 
 function searchAnchor(labelKey: string): string | undefined {
   return SETTINGS_SEARCH_ENTRIES.find((entry) => entry.labelKey === labelKey)?.anchor;
@@ -61,6 +70,7 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  credentials = [];
 });
 
 describe("SubsonicCard anchors", () => {
@@ -102,5 +112,52 @@ describe("SubsonicCard toggles", () => {
     await userEvent.click(screen.getByLabelText(enSettings.subsonic.enable.ariaLabel));
 
     expect(mutate).toHaveBeenCalledWith({ subsonicEnabled: false, subsonicTranscodingEnabled: true });
+  });
+});
+
+describe("SubsonicCard credentials", () => {
+  const used: SubsonicCredentialSummary = {
+    id: "cred-1",
+    name: "final-verification",
+    prefix: "sub_a1b2",
+    last_client: "Symfonium",
+    last_used_at: new Date(),
+    created_at: new Date("2026-08-26T12:00:00Z"),
+  };
+  const unused: SubsonicCredentialSummary = {
+    ...used,
+    id: "cred-2",
+    name: "laptop",
+    last_client: null,
+    last_used_at: null,
+  };
+
+  it("lists each credential as a table row with the app that last used it", () => {
+    credentials = [used, unused];
+    render(<SubsonicCard />);
+
+    const table = screen.getByRole("table");
+    expect(within(table).getByRole("columnheader", { name: enSettings.credentialTable.columns.app })).toBeVisible();
+    const usedRow = within(table).getByText("final-verification").closest("tr");
+    const unusedRow = within(table).getByText("laptop").closest("tr");
+    expect(usedRow).not.toBeNull();
+    expect(unusedRow).not.toBeNull();
+    if (usedRow === null || unusedRow === null) return;
+    expect(within(usedRow).getByText("Symfonium")).toBeInTheDocument();
+    expect(within(unusedRow).getByText(enSettings.credentialTable.neverUsed)).toBeInTheDocument();
+  });
+
+  it("revokes a credential only once the confirmation is accepted", async () => {
+    credentials = [used];
+    confirmMock.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+    render(<SubsonicCard />);
+
+    const button = screen.getByRole("button", { name: /Revoke final-verification/i });
+    await userEvent.click(button);
+    expect(confirmMock).toHaveBeenCalledWith(expect.objectContaining({ message: enSettings.subsonic.revoke.message }));
+    expect(revokeMutate).not.toHaveBeenCalled();
+
+    await userEvent.click(button);
+    expect(revokeMutate).toHaveBeenCalledWith({ id: "cred-1" });
   });
 });

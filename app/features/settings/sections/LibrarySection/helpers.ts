@@ -136,11 +136,6 @@ export function pathStatusLabel(path: LibraryPathSummary): string {
     : i18n.t("settings:libraryPaths.status.disabled");
 }
 
-export function usedPercent(path: LibraryPathSummary): number | null {
-  if (path.freeBytes === null) return null;
-  return percentDone(path.sizeBytes, path.sizeBytes + path.freeBytes);
-}
-
 function folderProblemText(refusal: FolderRefusal): string {
   switch (refusal.problem) {
     case "not_absolute":

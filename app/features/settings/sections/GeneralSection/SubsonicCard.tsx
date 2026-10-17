@@ -7,18 +7,22 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { Notice } from "@components/ui/Notice";
 import { Switch } from "@components/ui/Switch";
+import { DataTable } from "@components/ui/Table";
 import { useUpdateConnectApps } from "@hooks/api/mutations/settings/useUpdateConnectApps";
+import { useRevokeSubsonicCredential } from "@hooks/api/mutations/subsonic/useRevokeSubsonicCredential";
 import { usePublicConfig } from "@hooks/api/queries/usePublicConfig";
 import { useSubsonicCredentials } from "@hooks/api/queries/useSubsonicCredentials";
 import { useSubsonicStatus } from "@hooks/api/queries/useSubsonicStatus";
 import { useAuthContext } from "@modules/providers/AuthProvider";
+import { confirm } from "@utils/confirm";
 
 import { SettingsCard } from "../../components/SettingsCard";
 import { ConnectionValueField } from "./ConnectionValueField";
 import { CreateSubsonicCredentialDialog } from "./CreateSubsonicCredentialDialog";
+import { buildCredentialColumns } from "./credentialColumns";
 import { publicEndpoint } from "./helpers";
-import { connectionBody, connectionError, connectionFooterRow, connectionList, connectionMeta } from "./styles";
-import { SubsonicCredentialRow } from "./SubsonicCredentialRow";
+import { connectionBody, connectionError, connectionFooterRow, connectionMeta } from "./styles";
+import type { SubsonicCredentialSummary } from "./types";
 
 export function SubsonicCard() {
   const { t } = useTranslation("settings");
@@ -27,7 +31,26 @@ export function SubsonicCard() {
   const credentials = useSubsonicCredentials();
   const publicConfig = usePublicConfig();
   const updateConnectApps = useUpdateConnectApps();
+  const revoke = useRevokeSubsonicCredential();
   const [createOpen, setCreateOpen] = useState(false);
+
+  const handleRevoke = async (credential: SubsonicCredentialSummary) => {
+    const confirmed = await confirm({
+      title: t("subsonic.revoke.title"),
+      message: t("subsonic.revoke.message"),
+      confirmText: t("subsonic.revoke.confirm"),
+      variant: "danger",
+    });
+    if (confirmed) revoke.mutate({ id: credential.id });
+  };
+
+  const columns = buildCredentialColumns({
+    t,
+    revoking: revoke.isPending,
+    onRevoke: handleRevoke,
+    revokeLabelKey: "subsonic.row.revokeLabel",
+    appOf: (credential) => credential.last_client,
+  });
 
   const enabled = status.data?.enabled ?? false;
   const address = publicEndpoint(
@@ -89,11 +112,12 @@ export function SubsonicCard() {
             {t("subsonic.credentials.loadError", { message: credentials.error.message })}
           </span>
         ) : credentials.data && credentials.data.length > 0 ? (
-          <div className={connectionList()}>
-            {credentials.data.map((credential) => (
-              <SubsonicCredentialRow key={credential.id} credential={credential} />
-            ))}
-          </div>
+          <DataTable
+            data={credentials.data}
+            columns={columns}
+            getRowId={(credential) => credential.id}
+            staggerDelay={0}
+          />
         ) : enabled ? (
           <span className={connectionMeta()}>{t("subsonic.credentials.empty")}</span>
         ) : null}

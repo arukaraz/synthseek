@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import i18n from "@modules/i18n";
@@ -16,13 +16,19 @@ import { SETTINGS_SEARCH_ENTRIES } from "../../../components/SettingsSearch";
 import type { ApiKeySummary } from "../types";
 
 let apiKeysQuery: MockQueryResult<ApiKeySummary[] | undefined> = createMockQuery<ApiKeySummary[] | undefined>([]);
+const revoke = createMockMutation();
+const confirmMock = vi.fn();
 
 vi.mock("@hooks/api/queries/useApiKeys", () => ({
   useApiKeys: () => apiKeysQuery,
 }));
 
 vi.mock("@hooks/api/mutations/api-keys/useRevokeApiKey", () => ({
-  useRevokeApiKey: () => createMockMutation(),
+  useRevokeApiKey: () => revoke,
+}));
+
+vi.mock("@utils/confirm", () => ({
+  confirm: (...args: unknown[]) => confirmMock(...args),
 }));
 
 vi.mock("@hooks/api/mutations/api-keys/useCreateApiKey", () => ({
@@ -81,11 +87,35 @@ describe("ApiKeysCard", () => {
     expect(screen.getByText(enSettings.api.keys.empty)).toBeInTheDocument();
   });
 
-  it("renders a row per key when the list is populated", () => {
-    apiKeysQuery = createMockQuery<ApiKeySummary[]>([key]);
+  it("lists the keys in a table with their created and last-used columns", () => {
+    const usedKey: ApiKeySummary = { ...key, id: "key-2", name: "Cursor", last_used_at: new Date() };
+    apiKeysQuery = createMockQuery<ApiKeySummary[]>([key, usedKey]);
     render(<ApiKeysCard />);
 
-    expect(screen.getByText("Claude Desktop")).toBeInTheDocument();
+    const table = screen.getByRole("table");
+    expect(within(table).getByRole("columnheader", { name: enSettings.credentialTable.columns.name })).toBeVisible();
+    expect(
+      within(table).getByRole("columnheader", { name: enSettings.credentialTable.columns.lastUsed })
+    ).toBeVisible();
+    const rows = within(table).getAllByRole("row");
+    expect(rows).toHaveLength(3);
+    expect(within(rows[1]).getByText("Claude Desktop")).toBeInTheDocument();
+    expect(within(rows[1]).getByText(enSettings.credentialTable.neverUsed)).toBeInTheDocument();
+    expect(within(rows[2]).queryByText(enSettings.credentialTable.neverUsed)).not.toBeInTheDocument();
+  });
+
+  it("revokes a key only once the confirmation is accepted", async () => {
+    apiKeysQuery = createMockQuery<ApiKeySummary[]>([key]);
+    confirmMock.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+    render(<ApiKeysCard />);
+
+    const button = screen.getByRole("button", { name: /Revoke Claude Desktop/i });
+    await userEvent.click(button);
+    expect(confirmMock).toHaveBeenCalledWith(expect.objectContaining({ message: enSettings.api.revoke.message }));
+    expect(revoke.mutate).not.toHaveBeenCalled();
+
+    await userEvent.click(button);
+    expect(revoke.mutate).toHaveBeenCalledWith({ id: "key-1" });
   });
 
   it("opens the create dialog from the new-key button", async () => {

@@ -80,17 +80,11 @@ export const themePreviewBarRow = cva("flex flex-col gap-1.5");
 
 export const themePreviewChip = cva("bg-primary-500 mt-auto h-2.5 w-1/3 rounded-full");
 
-export const apiKeyRow = cva(
-  "border-fg/10 flex items-start justify-between gap-3 border-b py-3.5 first:pt-0 last:border-b-0 last:pb-0"
-);
+export const credentialName = cva("text-fg break-words font-medium");
 
-export const apiKeyInfo = cva("flex min-w-[3ch] flex-1 flex-col gap-0.5");
+export const credentialTime = cva("whitespace-nowrap tabular-nums");
 
-export const apiKeyName = cva("text-fg break-words text-sm font-medium");
-
-export const apiKeyMeta = cva("text-fg/50 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs");
-
-export const apiKeyMetaSeparator = cva("text-fg/30");
+export const credentialRevokeCell = cva("w-12 text-right");
 
 export const tokenBox = cva("bg-fg/5 ring-fg/10 text-fg block break-all rounded-lg p-3 font-mono text-xs ring-1");
 
@@ -105,7 +99,5 @@ export const connectionBody = cva("flex flex-col gap-4");
 export const connectionMeta = cva("text-fg/50 text-xs");
 
 export const connectionError = cva("text-destructive-vivid text-xs");
-
-export const connectionList = cva("flex flex-col");
 
 export const connectionFooterRow = cva("flex flex-wrap items-center justify-between gap-3");

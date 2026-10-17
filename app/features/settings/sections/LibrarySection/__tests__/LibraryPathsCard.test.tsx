@@ -141,8 +141,10 @@ describe("LibraryPathsCard", () => {
   it("marks the path whose folder comes from the environment", () => {
     render(<LibraryPathsCard />);
 
-    expect(row("Music").getByText("MUSIC_LIBRARY_PATH")).toBeInTheDocument();
-    expect(row("Archive").queryByText("MUSIC_LIBRARY_PATH")).not.toBeInTheDocument();
+    const hint = enSettings.libraryPaths.environmentHint;
+    expect(row("Music").getByRole("img", { name: hint })).toHaveAttribute("title", hint);
+    expect(row("Music").queryByText("MUSIC_LIBRARY_PATH")).not.toBeInTheDocument();
+    expect(row("Archive").queryByRole("img", { name: hint })).not.toBeInTheDocument();
   });
 
   it("says the free space is unknown when the disk does not answer", () => {

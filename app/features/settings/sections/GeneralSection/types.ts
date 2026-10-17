@@ -1,4 +1,5 @@
 import type { inferRouterOutputs } from "@trpc/server";
+import type { TFunction } from "i18next";
 import type { LucideIcon } from "lucide-react";
 import type { KeyboardEvent } from "react";
 
@@ -45,8 +46,21 @@ export type RovingNavKey = "ArrowRight" | "ArrowDown" | "ArrowLeft" | "ArrowUp" 
 export type ApiKeySummary = RouterOutputs["apiKeys"]["list"][number];
 export type CreatedApiKey = RouterOutputs["apiKeys"]["create"];
 
-export interface ApiKeyRowProps {
-  apiKey: ApiKeySummary;
+export interface CredentialSummary {
+  id: string;
+  name: string;
+  created_at: Date;
+  last_used_at: Date | null;
+}
+
+export type RevokeLabelKey = "api.row.revokeLabel" | "subsonic.row.revokeLabel";
+
+export interface CredentialColumnsArgs<TCredential extends CredentialSummary> {
+  t: TFunction<"settings">;
+  revoking: boolean;
+  onRevoke: (credential: TCredential) => void;
+  revokeLabelKey: RevokeLabelKey;
+  appOf?: (credential: TCredential) => string | null;
 }
 
 export interface CreateApiKeyDialogProps {
@@ -56,10 +70,6 @@ export interface CreateApiKeyDialogProps {
 
 export type SubsonicCredentialSummary = RouterOutputs["subsonic"]["listCredentials"][number];
 export type CreatedSubsonicCredential = RouterOutputs["subsonic"]["createCredential"];
-
-export interface SubsonicCredentialRowProps {
-  credential: SubsonicCredentialSummary;
-}
 
 export interface CreateSubsonicCredentialDialogProps {
   open: boolean;

@@ -111,7 +111,7 @@ describe("SettingsSidebar", () => {
     expect(linkFor(pages.notifications.title)).toHaveAttribute("href", "/settings/notifications");
   });
 
-  it("offers About & updates at the bottom to every user", () => {
+  it("offers the changelog at the bottom to every user", () => {
     isAdmin = false;
     renderSidebar();
 

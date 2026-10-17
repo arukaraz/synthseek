@@ -1092,6 +1092,16 @@
       "unlimited": "Sin límite"
     }
   },
+  "credentialTable": {
+    "columns": {
+      "name": "Nombre",
+      "created": "Creación",
+      "lastUsed": "Último uso",
+      "app": "App",
+      "actions": "Acciones"
+    },
+    "neverUsed": "Nunca"
+  },
   "api": {
     "keys": {
       "title": "Claves de API",
@@ -1102,9 +1112,6 @@
       "description": "Para scripts, y para asistentes que no puedan usar OAuth."
     },
     "row": {
-      "lastUsed": "usada por última vez {{time}}",
-      "neverUsed": "nunca usada",
-      "created": "creada {{time}}",
       "revokeLabel": "Revocar {{name}}"
     },
     "create": {
@@ -1212,7 +1219,7 @@
       "current": "Actual"
     },
     "page": {
-      "title": "Actualizaciones",
+      "title": "Registro de cambios",
       "description": "Consulta tu versión actual, busca nuevas versiones y revisa las notas de cada versión."
     },
     "version": {
@@ -1438,7 +1445,7 @@
         "description": "Tareas en segundo plano y registros del servidor."
       },
       "about": {
-        "title": "Acerca de y actualizaciones"
+        "title": "Registro de cambios"
       }
     },
     "tabs": {
@@ -1486,7 +1493,7 @@
         "libraryPaths": "carpeta nombres plantilla renombrar",
         "unidentified": "sin identificar sin reconocer asociar ignorar",
         "jobs": "cron programación ejecutar",
-        "updates": "versión lanzamiento changelog notas",
+        "updates": "actualizaciones versión lanzamiento changelog notas",
         "timeout": "tiempo límite timeout espera"
       }
     },
@@ -1667,10 +1674,6 @@
       "empty": "Aún no hay credenciales."
     },
     "row": {
-      "created": "Creada {{time}}",
-      "lastUsed": "Último uso {{time}}",
-      "neverUsed": "Sin usar",
-      "client": "desde {{client}}",
       "revokeLabel": "Revocar {{name}}"
     },
     "create": {
@@ -1740,7 +1743,6 @@
       "enabled": "Activa"
     },
     "defaultBadge": "Por defecto",
-    "environmentBadge": "MUSIC_LIBRARY_PATH",
     "environmentHint": "Viene de MUSIC_LIBRARY_PATH",
     "status": {
       "writable": "Disponible",
