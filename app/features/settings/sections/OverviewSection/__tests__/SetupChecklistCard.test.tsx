@@ -12,11 +12,13 @@ interface State {
   push: Mock;
   router: { push: Mock };
   settings: Settings | undefined;
+  availability: DownloadSourcesAvailability | undefined;
+  availabilityLoading: boolean;
 }
 
 const state = vi.hoisted((): State => {
   const push = vi.fn();
-  return { push, router: { push }, settings: undefined };
+  return { push, router: { push }, settings: undefined, availability: undefined, availabilityLoading: false };
 });
 
 vi.mock("next/navigation", () => ({
@@ -29,10 +31,12 @@ vi.mock("@hooks/api/queries/useSettings", () => ({
 }));
 
 vi.mock("@hooks/api/queries/useDownloadSourcesAvailability", () => ({
-  useDownloadSourcesAvailability: () => ({ data: undefined }),
+  useDownloadSourcesAvailability: () => ({ data: state.availability, isLoading: state.availabilityLoading }),
 }));
 
+import type { DownloadSourcesAvailability } from "../../../types";
 import { SetupChecklistCard } from "../components/SetupChecklistCard";
+import { availability } from "./fixtures";
 
 const t = i18n.getFixedT("en", "settings");
 
@@ -43,9 +47,17 @@ function halfDone(): Settings {
   return settings;
 }
 
+function allDone(): Settings {
+  const settings = halfDone();
+  settings.connections.enrichment.musicbrainzEmail = "owner@example.test";
+  return settings;
+}
+
 beforeEach(() => {
   state.push.mockReset();
   state.settings = halfDone();
+  state.availability = undefined;
+  state.availabilityLoading = false;
 });
 
 describe("SetupChecklistCard", () => {
@@ -53,6 +65,27 @@ describe("SetupChecklistCard", () => {
     state.settings = undefined;
     const { container } = render(<SetupChecklistCard />);
     expect(container).toBeEmptyDOMElement();
+  });
+
+  it("renders nothing while the download sources are still loading, so a finished setup never flashes", () => {
+    state.settings = allDone();
+    state.availabilityLoading = true;
+    const { container } = render(<SetupChecklistCard />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("goes away once every check is done", () => {
+    state.settings = allDone();
+    state.availability = availability(["slskd"]);
+    const { container } = render(<SetupChecklistCard />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("stays while one check is left", () => {
+    state.settings = allDone();
+    state.availability = availability();
+    render(<SetupChecklistCard />);
+    expect(screen.getByText(t("overview.setup.progress", { done: 3, total: 4 }))).toBeInTheDocument();
   });
 
   it("shows how many checks are done", () => {

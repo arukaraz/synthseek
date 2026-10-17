@@ -3,27 +3,13 @@ import { describe, expect, it } from "vitest";
 import i18n from "@modules/i18n";
 import { createMockJob, createMockSettings } from "@test/mocks/feature-hooks.mock";
 
-import type { DownloadSourceKey } from "@api/__generated__/types";
-
 import type { DownloadSourcesAvailability } from "../../../types";
 import { connectionRows, jobsAtAGlance, setupChecks } from "../helpers";
+import { availability } from "./fixtures";
 
 const t = i18n.getFixedT("en", "settings");
 
 type Settings = ReturnType<typeof createMockSettings>;
-
-function availability(enabled: readonly DownloadSourceKey[] = []): DownloadSourcesAvailability {
-  const entry = (key: DownloadSourceKey) => ({ enabled: enabled.includes(key), allowsSingleTracks: true });
-  return {
-    slskd: entry("slskd"),
-    ytdlp: entry("ytdlp"),
-    usenet: entry("usenet"),
-    archive: entry("archive"),
-    soundcloud: entry("soundcloud"),
-    subsonic: entry("subsonic"),
-    torrent: entry("torrent"),
-  };
-}
 
 function settingsWith(change: (settings: Settings) => void): Settings {
   const settings = createMockSettings();

@@ -19,10 +19,11 @@ export function SetupChecklistCard() {
   const settings = useSettings();
   const availability = useDownloadSourcesAvailability();
 
-  if (!settings.data) return null;
+  if (!settings.data || availability.isLoading) return null;
 
   const checks = setupChecks(settings.data, availability.data);
   const done = checks.filter((check) => check.done).length;
+  if (done === checks.length) return null;
 
   return (
     <SettingsCard
