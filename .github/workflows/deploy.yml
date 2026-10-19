@@ -20,6 +20,11 @@ on:
         required: false
         default: ""
         type: string
+      branch:
+        description: "Branch to build from (prereleases only). Empty builds the branch the workflow runs on."
+        required: false
+        default: ""
+        type: string
       skip_cache:
         description: "Skip Docker layer cache"
         required: false
@@ -47,6 +52,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}
       tag: ${{ steps.version.outputs.tag }}
       commit_sha: ${{ steps.version.outputs.commit_sha }}
+      web_sha: ${{ steps.version.outputs.web_sha }}
       prerelease: ${{ steps.version.outputs.prerelease }}
       prerelease_label: ${{ steps.version.outputs.prerelease_label }}
       image_tags: ${{ steps.tags.outputs.image_tags }}
@@ -57,6 +63,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.client_payload.web_ref || github.event.inputs.branch }}
 
       - name: Configure git identity
         run: |
@@ -65,6 +72,8 @@ jobs:
 
       - name: Determine version and source
         id: version
+        env:
+          WEB_REF: ${{ github.event.client_payload.web_ref || github.event.inputs.branch }}
         run: |
           if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
             VERSION="${{ github.event.client_payload.version }}"
@@ -101,19 +110,27 @@ jobs:
             fi
           fi
 
+          if [ -n "$WEB_REF" ] && [ "$PRERELEASE" != "true" ]; then
+            echo "A branch can only be chosen for a prerelease; a stable release builds the default branch."
+            exit 1
+          fi
+
           if [ -n "$PRERELEASE_LABEL" ]; then
             VERSION="${VERSION%-$PRERELEASE_LABEL}"
           fi
+
+          WEB_SHA="$(git rev-parse HEAD)"
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "server_repo=$SERVER_REPO" >> $GITHUB_OUTPUT
           echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
           echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          echo "web_sha=$WEB_SHA" >> $GITHUB_OUTPUT
           echo "prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
           echo "prerelease_label=$PRERELEASE_LABEL" >> $GITHUB_OUTPUT
 
-          echo "Building Docker image for server version: $VERSION (prerelease: $PRERELEASE, label: '$PRERELEASE_LABEL')"
+          echo "Building Docker image for server version: $VERSION (prerelease: $PRERELEASE, label: '$PRERELEASE_LABEL', web: $(git rev-parse --abbrev-ref HEAD) at $WEB_SHA)"
 
       - name: Compute image tag list
         id: tags
@@ -124,7 +141,7 @@ jobs:
           IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
 
           if [ "$PRERELEASE" = "true" ]; then
-            SHORT_SHA="$(echo "${{ github.sha }}" | cut -c1-7)"
+            SHORT_SHA="$(echo "${{ steps.version.outputs.web_sha }}" | cut -c1-7)"
             TAGS="${IMAGE}:v${VERSION}-${LABEL} ${IMAGE}:${LABEL} ${IMAGE}:pre-release-${SHORT_SHA}"
           else
             TAGS="${IMAGE}:v${VERSION} ${IMAGE}:${VERSION} ${IMAGE}:latest"
@@ -521,7 +538,7 @@ jobs:
           ARM64_DIGEST="$(cat digests/arm64.txt)"
 
           if [ "$PRERELEASE" = "true" ]; then
-            SHORT_SHA="$(echo "${{ github.sha }}" | cut -c1-7)"
+            SHORT_SHA="$(echo "${{ needs.prepare.outputs.web_sha }}" | cut -c1-7)"
             PRIMARY_TAG="v${VERSION}-${LABEL}"
             TAG_ROWS="| \`v${VERSION}-${LABEL}\` | linux/amd64, linux/arm64 |\n| \`${LABEL}\` | linux/amd64, linux/arm64 |\n| \`pre-release-${SHORT_SHA}\` | linux/amd64, linux/arm64 |"
           else
