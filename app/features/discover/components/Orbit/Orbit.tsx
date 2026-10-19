@@ -8,8 +8,10 @@ import { albumTarget } from "@features/content-detail";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import type { OrbitAlbum } from "@hooks/api/queries/analytics/types";
 import { useOrbitAlbums } from "@hooks/api/queries/analytics/useOrbitAlbums";
+import { cn } from "@utils/cn";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { scrollFadeBottom } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { OrbitCard } from "./OrbitCard";
@@ -48,7 +50,7 @@ export function Orbit({ size, info }: BoardWidgetProps) {
         </ul>
       ) : (
         <div className={orbitBody()}>
-          <div className={orbitGrid()}>
+          <div className={cn(orbitGrid(), scrollFadeBottom())}>
             {albums.map((album) => (
               <OrbitCard key={album.id} album={album} onOpen={() => open(album)} />
             ))}
