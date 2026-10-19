@@ -24,6 +24,7 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
   const pathname = usePathname();
   const showInLibraryPill = showsInLibraryPill(pathname);
   const shellRef = useRef<HTMLDivElement | null>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
   const [miniVisible, setMiniVisible] = useState(false);
 
   const currentId = current?.id ?? null;
@@ -65,7 +66,12 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
         aria-describedby="content-detail-description"
         onOpenAutoFocus={(event) => {
           event.preventDefault();
+          openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
           shellRef.current?.focus();
+        }}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          if (openerRef.current?.isConnected) openerRef.current.focus();
         }}
       >
         <ContentDetailActionsProvider actions={actions}>

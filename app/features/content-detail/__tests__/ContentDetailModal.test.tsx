@@ -301,6 +301,27 @@ describe("closing the modal", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it("gives focus back to whatever opened it once it closes", async () => {
+    const opener = document.createElement("button");
+    document.body.appendChild(opener);
+    opener.focus();
+    const detail = (open: boolean) => (
+      <ContentDetailModal
+        open={open}
+        onClose={vi.fn()}
+        target={target({ mode: "playlist", id: "playlist-1", name: "Summer" })}
+        actions={actions()}
+      />
+    );
+    const { rerender } = render(detail(true));
+    await waitFor(() => expect(opener).not.toHaveFocus());
+
+    rerender(detail(false));
+
+    await waitFor(() => expect(opener).toHaveFocus());
+    opener.remove();
+  });
+
   it("tells the caller when the body asks to close", async () => {
     const onClose = vi.fn();
     render(
