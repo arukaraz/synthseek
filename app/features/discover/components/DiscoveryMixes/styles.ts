@@ -53,14 +53,4 @@ export const mosaicImage = cva("object-cover");
 
 export const mosaicFallback = cva("size-full");
 
-export const emptyPanel = cva(
-  "border-fg/10 bg-fg/[0.02] flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center"
-);
-
-export const emptyPanelText = cva("text-fg/60 text-sm");
-
-export const emptyPanelLink = cva(
-  "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
-);
-
 export const skeletonCard = cva("bg-fg/5 h-full animate-pulse rounded-2xl");

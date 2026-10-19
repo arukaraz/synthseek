@@ -75,14 +75,4 @@ export const timelineArtist = cva("text-fg/60 truncate text-[11.5px]");
 
 export const skeletonRow = cva("bg-fg/5 h-12 w-full shrink-0 animate-pulse rounded-lg");
 
-export const emptyPanel = cva(
-  "border-fg/10 bg-fg/[0.02] flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center"
-);
-
-export const emptyText = cva("text-fg/60 text-sm");
-
-export const emptyLink = cva(
-  "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
-);
-
 export const skeletonNode = cva("bg-fg/5 h-[152px] w-[112px] shrink-0 animate-pulse rounded-lg sm:w-[120px]");

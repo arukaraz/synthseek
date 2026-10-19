@@ -8,8 +8,8 @@ import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 
 import { LASTFM_EMPTY_CTA, LASTFM_SETTINGS_HREF } from "../constants";
+import { widgetEmptyLink, widgetEmptyPanel, widgetEmptyText } from "../styles";
 import { emptyTextKey } from "./helpers";
-import { emptyLink, emptyPanel, emptyText } from "./styles";
 import type { RecentScrobblesEmptyProps } from "./types";
 
 export function RecentScrobblesEmpty({ reason, info }: RecentScrobblesEmptyProps) {
@@ -27,10 +27,10 @@ export function RecentScrobblesEmpty({ reason, info }: RecentScrobblesEmptyProps
         titleId="recent-scrobbles-heading"
         info={info}
       />
-      <div className={emptyPanel()}>
-        <p className={emptyText()}>{t(emptyTextKey(reason))}</p>
+      <div className={widgetEmptyPanel()}>
+        <p className={widgetEmptyText()}>{t(emptyTextKey(reason))}</p>
         {cta ? (
-          <Link href={LASTFM_SETTINGS_HREF} className={emptyLink()}>
+          <Link href={LASTFM_SETTINGS_HREF} className={widgetEmptyLink()}>
             {ctaLabel}
           </Link>
         ) : null}

@@ -21,6 +21,16 @@ export const widgetNote = cva(
   "border-fg/10 bg-fg/[0.02] text-fg/60 flex flex-1 items-center justify-center rounded-xl border border-dashed px-6 py-8 text-center text-sm"
 );
 
+export const widgetEmptyPanel = cva(
+  "border-fg/10 bg-fg/[0.02] flex min-h-0 flex-1 flex-col items-center justify-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center"
+);
+
+export const widgetEmptyText = cva("text-fg/60 text-sm");
+
+export const widgetEmptyLink = cva(
+  "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
+);
+
 export const skeletonPulse = cva("bg-fg/10 animate-pulse rounded", {
   variants: {
     size: {

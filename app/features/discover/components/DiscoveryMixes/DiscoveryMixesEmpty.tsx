@@ -7,9 +7,9 @@ import { useTranslation } from "react-i18next";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 
+import { widgetEmptyLink, widgetEmptyPanel, widgetEmptyText } from "../styles";
 import { DISCOVERY_SETTINGS_HREF, EMPTY_CTA } from "./constants";
 import { emptyTextKey } from "./helpers";
-import { emptyPanel, emptyPanelLink, emptyPanelText } from "./styles";
 import type { DiscoveryMixesEmptyProps } from "./types";
 
 export function DiscoveryMixesEmpty({ reason, info }: DiscoveryMixesEmptyProps) {
@@ -31,10 +31,10 @@ export function DiscoveryMixesEmpty({ reason, info }: DiscoveryMixesEmptyProps) 
         titleId="discover-mixes-heading"
         info={info}
       />
-      <div className={emptyPanel()}>
-        <p className={emptyPanelText()}>{t(emptyTextKey(reason))}</p>
+      <div className={widgetEmptyPanel()}>
+        <p className={widgetEmptyText()}>{t(emptyTextKey(reason))}</p>
         {cta ? (
-          <Link href={DISCOVERY_SETTINGS_HREF} className={emptyPanelLink()}>
+          <Link href={DISCOVERY_SETTINGS_HREF} className={widgetEmptyLink()}>
             {ctaLabel}
           </Link>
         ) : null}

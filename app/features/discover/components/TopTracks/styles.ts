@@ -66,16 +66,6 @@ export const itemArtist = cva("text-fg/55 truncate text-[11.5px]");
 
 export const itemPlays = cva("text-fg/40 shrink-0 font-mono text-[11px]");
 
-export const emptyPanel = cva(
-  "border-fg/10 bg-fg/[0.02] flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center"
-);
-
-export const emptyText = cva("text-fg/60 text-sm");
-
-export const emptyLink = cva(
-  "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
-);
-
 export const skeletonHero = cva(`bg-fg/5 animate-pulse ${heroFrame}`, {
   variants: { shape: heroShapes },
 });
