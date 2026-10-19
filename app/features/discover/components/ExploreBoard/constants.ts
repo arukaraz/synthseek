@@ -18,6 +18,10 @@ export const BOARD_SCHEMA_VERSION = 1;
 
 export const BOARD_COLUMNS: Record<BoardDevice, number> = { wide: 12, narrow: 4 };
 
+export const BOARD_ROW_PX = 72;
+
+export const BOARD_GAP_PX = 16;
+
 export const FAMILY_SPANS: Record<BoardDevice, Record<BoardSize, BoardSpan>> = {
   wide: {
     S: { cols: 3, rows: 2 },
@@ -57,6 +61,25 @@ export const BOARD_SIZE_LABEL_KEYS: Record<BoardSize, ParseKeys<"discover">> = {
   L: "board.sizes.L",
   XL: "board.sizes.XL",
 };
+
+export const BOARD_SIZE_NAME_KEYS: Record<BoardSize, ParseKeys<"discover">> = {
+  S: "board.sizeNames.S",
+  C: "board.sizeNames.C",
+  M: "board.sizeNames.M",
+  "M+": "board.sizeNames.MPlus",
+  L: "board.sizeNames.L",
+  XL: "board.sizeNames.XL",
+};
+
+export const BOARD_WIDGET_ORDER: readonly BoardWidgetKey[] = [
+  "trending",
+  "topTracks",
+  "scrobbles",
+  "mixes",
+  "artistsNext",
+  "genres",
+  "requests",
+];
 
 export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
   trending: {

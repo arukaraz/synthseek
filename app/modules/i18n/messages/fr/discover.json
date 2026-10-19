@@ -210,7 +210,8 @@
       "moveLater": "Reculer {{name}}",
       "remove": "Retirer {{name}}",
       "drag": "Faire glisser {{name}}",
-      "sizes": "Taille de {{name}}"
+      "sizes": "Taille de {{name}}",
+      "label": "{{name}}, position {{position}} sur {{total}}"
     },
     "sizes": {
       "S": "S",
@@ -237,17 +238,24 @@
       "add": "Ajouter",
       "remove": "Retirer",
       "onBoard": "Dans le tableau",
+      "addNamed": "Ajouter {{name}}",
       "categoryCount": "{{onBoard}} sur {{total}} dans le tableau",
       "empty": "Aucun widget ne correspond à « {{query}} »."
     },
     "toast": {
       "added": "{{name}} ajouté à la fin",
       "removed": "{{name}} retiré",
+      "moved": "Disposition du tableau enregistrée",
       "undo": "Annuler"
     },
     "announce": {
       "moved": "{{name}} déplacé en position {{position}} sur {{total}}",
-      "resized": "{{name}} est maintenant {{size}}"
+      "resized": "{{name}} est maintenant {{size}}",
+      "removed": "{{name}} retiré"
+    },
+    "empty": {
+      "title": "Votre tableau est vide",
+      "description": "Ajoutez des widgets pour composer votre page Découvrir."
     },
     "categories": {
       "now": {

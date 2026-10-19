@@ -2,18 +2,81 @@ import { describe, expect, it } from "vitest";
 
 import type { BoardItem } from "@hooks/api/queries/board/types";
 
-import { DEFAULT_BOARD } from "../constants";
+import { BOARD_WIDGET_ORDER, BOARD_WIDGETS, DEFAULT_BOARD } from "../constants";
 import {
   appendWidget,
   boardItemsOf,
+  boardKeyAction,
+  cycleSize,
   displayedSize,
   layoutOf,
   moveItem,
   packBoard,
+  placementsById,
   removeItem,
   resizeItem,
+  uniqueTileId,
   widgetsOnBoard,
 } from "../helpers";
+
+describe("BOARD_WIDGET_ORDER", () => {
+  it("lists every registered widget exactly once", () => {
+    expect([...BOARD_WIDGET_ORDER].sort()).toEqual(Object.keys(BOARD_WIDGETS).sort());
+  });
+});
+
+describe("boardKeyAction", () => {
+  it("maps arrows to moves, shifted arrows to resizes and Delete or Backspace to removal", () => {
+    expect(boardKeyAction({ key: "ArrowLeft", shiftKey: false })).toEqual({ kind: "move", delta: -1 });
+    expect(boardKeyAction({ key: "ArrowUp", shiftKey: false })).toEqual({ kind: "move", delta: -1 });
+    expect(boardKeyAction({ key: "ArrowRight", shiftKey: false })).toEqual({ kind: "move", delta: 1 });
+    expect(boardKeyAction({ key: "ArrowDown", shiftKey: false })).toEqual({ kind: "move", delta: 1 });
+    expect(boardKeyAction({ key: "ArrowLeft", shiftKey: true })).toEqual({ kind: "resize", delta: -1 });
+    expect(boardKeyAction({ key: "ArrowDown", shiftKey: true })).toEqual({ kind: "resize", delta: 1 });
+    expect(boardKeyAction({ key: "Delete", shiftKey: false })).toEqual({ kind: "remove" });
+    expect(boardKeyAction({ key: "Backspace", shiftKey: false })).toEqual({ kind: "remove" });
+  });
+
+  it("ignores every other key", () => {
+    expect(boardKeyAction({ key: "Enter", shiftKey: false })).toBeNull();
+    expect(boardKeyAction({ key: "a", shiftKey: true })).toBeNull();
+  });
+});
+
+describe("cycleSize", () => {
+  it("steps through the offered sizes and wraps at both ends", () => {
+    expect(cycleSize(["M", "L", "XL"], "M", 1)).toBe("L");
+    expect(cycleSize(["M", "L", "XL"], "XL", 1)).toBe("M");
+    expect(cycleSize(["M", "L", "XL"], "M", -1)).toBe("XL");
+  });
+});
+
+describe("uniqueTileId", () => {
+  it("uses the widget key while it is free and numbers it after that", () => {
+    expect(uniqueTileId("mixes", [])).toBe("mixes");
+    expect(uniqueTileId("mixes", [{ id: "mixes", widget: "mixes", size: "L" }])).toBe("mixes-2");
+    expect(
+      uniqueTileId("mixes", [
+        { id: "mixes", widget: "mixes", size: "L" },
+        { id: "mixes-2", widget: "mixes", size: "L" },
+      ])
+    ).toBe("mixes-3");
+  });
+});
+
+describe("placementsById", () => {
+  it("indexes the packed tiles by item id", () => {
+    const placed = packBoard(
+      [
+        { id: "x", widget: "scrobbles", size: "M" },
+        { id: "y", widget: "requests", size: "M" },
+      ],
+      "wide"
+    );
+
+    expect(placementsById(placed).get("y")?.col).toBe(6);
+  });
+});
 
 const TRENDING: BoardItem = { id: "t", widget: "trending", size: "L" };
 const SCROBBLES: BoardItem = { id: "s", widget: "scrobbles", size: "M" };

@@ -210,7 +210,8 @@
       "moveLater": "Move {{name}} later",
       "remove": "Remove {{name}}",
       "drag": "Drag {{name}}",
-      "sizes": "Size of {{name}}"
+      "sizes": "Size of {{name}}",
+      "label": "{{name}}, position {{position}} of {{total}}"
     },
     "sizes": {
       "S": "S",
@@ -237,17 +238,24 @@
       "add": "Add",
       "remove": "Remove",
       "onBoard": "On board",
+      "addNamed": "Add {{name}}",
       "categoryCount": "{{onBoard}} of {{total}} on board",
       "empty": "No widget matches “{{query}}”."
     },
     "toast": {
       "added": "{{name}} added at the end",
       "removed": "{{name}} removed",
+      "moved": "Board layout saved",
       "undo": "Undo"
     },
     "announce": {
       "moved": "{{name}} moved to position {{position}} of {{total}}",
-      "resized": "{{name}} is now {{size}}"
+      "resized": "{{name}} is now {{size}}",
+      "removed": "{{name}} removed"
+    },
+    "empty": {
+      "title": "Your board is empty",
+      "description": "Add widgets to build your Explore page."
     },
     "categories": {
       "now": {

@@ -210,7 +210,8 @@
       "moveLater": "{{name}} nach hinten verschieben",
       "remove": "{{name}} entfernen",
       "drag": "{{name}} ziehen",
-      "sizes": "Größe von {{name}}"
+      "sizes": "Größe von {{name}}",
+      "label": "{{name}}, Position {{position}} von {{total}}"
     },
     "sizes": {
       "S": "S",
@@ -237,17 +238,24 @@
       "add": "Hinzufügen",
       "remove": "Entfernen",
       "onBoard": "Auf dem Board",
+      "addNamed": "{{name}} hinzufügen",
       "categoryCount": "{{onBoard}} von {{total}} auf dem Board",
       "empty": "Kein Widget passt zu „{{query}}“."
     },
     "toast": {
       "added": "{{name}} am Ende hinzugefügt",
       "removed": "{{name}} entfernt",
+      "moved": "Board-Layout gespeichert",
       "undo": "Rückgängig"
     },
     "announce": {
       "moved": "{{name}} an Position {{position}} von {{total}} verschoben",
-      "resized": "{{name}} ist jetzt {{size}}"
+      "resized": "{{name}} ist jetzt {{size}}",
+      "removed": "{{name}} entfernt"
+    },
+    "empty": {
+      "title": "Dein Board ist leer",
+      "description": "Füg Widgets hinzu, um deine Entdecken-Seite zu gestalten."
     },
     "categories": {
       "now": {

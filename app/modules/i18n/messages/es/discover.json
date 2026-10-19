@@ -210,7 +210,8 @@
       "moveLater": "Mover {{name}} después",
       "remove": "Quitar {{name}}",
       "drag": "Arrastrar {{name}}",
-      "sizes": "Tamaño de {{name}}"
+      "sizes": "Tamaño de {{name}}",
+      "label": "{{name}}, posición {{position}} de {{total}}"
     },
     "sizes": {
       "S": "S",
@@ -237,17 +238,24 @@
       "add": "Añadir",
       "remove": "Quitar",
       "onBoard": "En el tablero",
+      "addNamed": "Añadir {{name}}",
       "categoryCount": "{{onBoard}} de {{total}} en el tablero",
       "empty": "Ningún widget coincide con «{{query}}»."
     },
     "toast": {
       "added": "{{name}} añadido al final",
       "removed": "{{name}} quitado",
+      "moved": "Tablero guardado",
       "undo": "Deshacer"
     },
     "announce": {
       "moved": "{{name}} movido a la posición {{position}} de {{total}}",
-      "resized": "{{name}} ahora es {{size}}"
+      "resized": "{{name}} ahora es {{size}}",
+      "removed": "{{name}} quitado"
+    },
+    "empty": {
+      "title": "Tu tablero está vacío",
+      "description": "Añade widgets para armar tu página de Explorar."
     },
     "categories": {
       "now": {

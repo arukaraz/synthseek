@@ -1,7 +1,33 @@
 import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 
 import { BOARD_COLUMNS, BOARD_SCHEMA_VERSION, BOARD_WIDGETS, DEFAULT_BOARD, FAMILY_SPANS } from "./constants";
-import type { BoardDevice, PlacedTile } from "./types";
+import type { BoardDevice, BoardKeyAction, MoveDelta, PlacedTile } from "./types";
+
+export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): BoardKeyAction | null {
+  if (event.key === "Delete" || event.key === "Backspace") return { kind: "remove" };
+  const delta: MoveDelta | null =
+    event.key === "ArrowLeft" || event.key === "ArrowUp"
+      ? -1
+      : event.key === "ArrowRight" || event.key === "ArrowDown"
+        ? 1
+        : null;
+  if (delta === null) return null;
+  return event.shiftKey ? { kind: "resize", delta } : { kind: "move", delta };
+}
+
+export function cycleSize(sizes: readonly BoardSize[], current: BoardSize, delta: MoveDelta): BoardSize {
+  const index = sizes.indexOf(current);
+  const next = (index + delta + sizes.length) % sizes.length;
+  return sizes[next] ?? current;
+}
+
+export function uniqueTileId(widget: BoardWidgetKey, items: readonly BoardItem[]): string {
+  const taken = new Set(items.map((item) => item.id));
+  if (!taken.has(widget)) return widget;
+  let suffix = 2;
+  while (taken.has(`${widget}-${suffix}`)) suffix++;
+  return `${widget}-${suffix}`;
+}
 
 export function boardItemsOf(layout: BoardLayout | null | undefined): BoardItem[] {
   if (!layout) return DEFAULT_BOARD.map((item) => ({ ...item }));
@@ -64,6 +90,10 @@ export function packBoard(items: readonly BoardItem[], device: BoardDevice): Pla
   }
 
   return placed;
+}
+
+export function placementsById(tiles: readonly PlacedTile[]): Map<string, PlacedTile> {
+  return new Map(tiles.map((tile) => [tile.item.id, tile]));
 }
 
 export function moveItem(items: readonly BoardItem[], id: string, toIndex: number): BoardItem[] {
