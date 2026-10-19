@@ -368,7 +368,7 @@
   "orbit": {
     "title": "Élargissez votre orbite",
     "subtitle": "Des albums à partir de vos écoutes",
-    "empty": "Écoutez quelques titres et des albums proches apparaîtront ici.",
+    "empty": "Pas encore d'albums proches de vos écoutes.",
     "because": "Parce que vous avez écouté {{title}}",
     "row": "{{artist}} · parce que vous avez écouté {{title}}"
   },

@@ -368,7 +368,7 @@
   "orbit": {
     "title": "Amplía tu órbita",
     "subtitle": "Álbumes a partir de lo que escuchas",
-    "empty": "Escucha algunas canciones y aquí aparecerán álbumes parecidos.",
+    "empty": "Aún no hay álbumes parecidos a lo que escuchas.",
     "because": "Porque escuchaste {{title}}",
     "row": "{{artist}} · porque escuchaste {{title}}"
   },

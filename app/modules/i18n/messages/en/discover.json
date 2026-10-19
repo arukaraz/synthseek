@@ -368,7 +368,7 @@
   "orbit": {
     "title": "Expand your orbit",
     "subtitle": "Albums from what you play",
-    "empty": "Play a few tracks and similar albums show up here.",
+    "empty": "No similar albums for what you play yet.",
     "because": "Because you played {{title}}",
     "row": "{{artist}} · because you played {{title}}"
   },
