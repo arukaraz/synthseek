@@ -5,11 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
+import { isSettingsPath } from "@features/settings/helpers";
 import { useSystemStatus } from "@hooks/api/queries/useSystemStatus";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { SYSTEM_STATUS_HREF } from "./constants";
-import { isSettingsPath } from "./helpers";
 import {
   bannerBody,
   bannerIcon,

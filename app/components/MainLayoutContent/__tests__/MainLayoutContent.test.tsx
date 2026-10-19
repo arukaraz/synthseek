@@ -29,14 +29,23 @@ vi.mock("@hooks/ui/useHashTargetGlow", () => ({
 }));
 
 vi.mock("@components/TopHeader", () => ({
-  TopHeader: ({ onSearch, initialQuery }: { onSearch: (q: string) => void; initialQuery: string }) => (
+  TopHeader: ({
+    onSearch,
+    initialQuery,
+    initialScope,
+  }: {
+    onSearch: (q: string, scope: string) => void;
+    initialQuery: string;
+    initialScope: string;
+  }) => (
     <header>
       <span data-testid="initial-query">{initialQuery}</span>
-      <button type="button" onClick={() => onSearch("synth")}>
+      <span data-testid="initial-scope">{initialScope}</span>
+      <button type="button" onClick={() => onSearch("synth", initialScope)}>
         do-search
       </button>
-      <button type="button" onClick={() => onSearch("   ")}>
-        empty-search
+      <button type="button" onClick={() => onSearch("boards of canada", "all")}>
+        spaced-search
       </button>
     </header>
   ),
@@ -123,8 +132,27 @@ describe("MainLayoutContent", () => {
     expect(screen.getByTestId("initial-query")).toHaveTextContent("tycho");
   });
 
-  it("pushes a search route preserving the active filter", async () => {
+  it("seeds the header scope with a valid filter param and falls back to all for an unknown one", () => {
+    getParamMock.mockImplementation((key) => (key === "filter" ? "album" : null));
+    const { unmount } = render(
+      <MainLayoutContent>
+        <p>child</p>
+      </MainLayoutContent>
+    );
+    expect(screen.getByTestId("initial-scope")).toHaveTextContent("album");
+    unmount();
+
     getParamMock.mockImplementation((key) => (key === "filter" ? "albums" : null));
+    render(
+      <MainLayoutContent>
+        <p>child</p>
+      </MainLayoutContent>
+    );
+    expect(screen.getByTestId("initial-scope")).toHaveTextContent("all");
+  });
+
+  it("pushes a search route carrying the chosen scope", async () => {
+    getParamMock.mockImplementation((key) => (key === "filter" ? "album" : null));
 
     const { user } = renderWithUser(
       <MainLayoutContent>
@@ -134,7 +162,7 @@ describe("MainLayoutContent", () => {
 
     await user.click(screen.getByRole("button", { name: "do-search" }));
 
-    expect(pushMock).toHaveBeenCalledWith("/search?q=synth&filter=albums");
+    expect(pushMock).toHaveBeenCalledWith("/search?q=synth&filter=album");
   });
 
   it("pushes a search route without a filter when none is set", async () => {
@@ -149,15 +177,15 @@ describe("MainLayoutContent", () => {
     expect(pushMock).toHaveBeenCalledWith("/search?q=synth");
   });
 
-  it("pushes back to the root when the query is empty", async () => {
+  it("encodes the query and leaves the filter out for the all scope", async () => {
     const { user } = renderWithUser(
       <MainLayoutContent>
         <p>child</p>
       </MainLayoutContent>
     );
 
-    await user.click(screen.getByRole("button", { name: "empty-search" }));
+    await user.click(screen.getByRole("button", { name: "spaced-search" }));
 
-    expect(pushMock).toHaveBeenCalledWith("/");
+    expect(pushMock).toHaveBeenCalledWith("/search?q=boards%20of%20canada");
   });
 });

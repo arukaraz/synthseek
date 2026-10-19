@@ -7,7 +7,9 @@ import { PlayerDock } from "@components/PlayerDock";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { SystemStatusBanner } from "@components/SystemStatusBanner";
 import { TopHeader } from "@components/TopHeader";
+import type { FilterType } from "@api/__generated__/types";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
+import { getActiveFilter } from "@features/search/components/SearchResultsWidget/helpers";
 import {
   useRehydratePlaylistSyncDock,
   useRehydrateRequestDock,
@@ -17,6 +19,7 @@ import {
 import { useHashTargetGlow } from "@hooks/ui/useHashTargetGlow";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { searchHref } from "./helpers";
 import type { MainLayoutContentProps } from "./types";
 
 export function MainLayoutContent({ children }: MainLayoutContentProps) {
@@ -29,21 +32,16 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q") ?? "";
+  const searchScope = getActiveFilter(searchParams.get("filter"), "all");
 
-  const handleSearch = (query: string) => {
-    if (query.trim()) {
-      const currentFilter = searchParams.get("filter");
-      const filterParam = currentFilter ? `&filter=${currentFilter}` : "";
-      router.push(`/search?q=${encodeURIComponent(query)}${filterParam}`);
-    } else {
-      router.push("/");
-    }
+  const handleSearch = (query: string, scope: FilterType) => {
+    router.push(searchHref(query, scope));
   };
 
   return (
     <div className="bg-surface min-h-screen overflow-hidden">
-      <TopHeader onSearch={handleSearch} initialQuery={searchQuery} />
       <ContentRequestFlow>
+        <TopHeader onSearch={handleSearch} initialQuery={searchQuery} initialScope={searchScope} />
         <ContentShell banner={<SystemStatusBanner />}>{children}</ContentShell>
       </ContentRequestFlow>
       <BottomNav />

@@ -3,7 +3,7 @@ import i18n from "@locale";
 import type { PlaybackServerKey } from "@utils/playback-servers";
 
 import type { ChainStatus } from "./components/OrderedChain";
-import { DAY_MS, HOUR_MS, MINUTE_MS, SETTINGS_HOME_BY_ROLE, SETTINGS_PAGES } from "./constants";
+import { DAY_MS, HOUR_MS, MINUTE_MS, SETTINGS_HOME_BY_ROLE, SETTINGS_PAGES, SETTINGS_ROOT } from "./constants";
 import type {
   DownloadSourcesAvailability,
   DownloadSourcesConfig,
@@ -17,6 +17,10 @@ import type {
 
 export function isPathWithin(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function isSettingsPath(pathname: string): boolean {
+  return isPathWithin(pathname, SETTINGS_ROOT);
 }
 
 export function settingsPageAt(pathname: string): SettingsPage | undefined {

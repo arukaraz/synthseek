@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterEach } from "vitest";
+import { describe, it, expect, beforeAll, afterEach, vi } from "vitest";
 import { render, screen, cleanup, within } from "@testing-library/react";
 
 import i18n from "@modules/i18n";
@@ -8,6 +8,8 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockUser } from "@test/mocks/feature-hooks.mock";
 
 import { AccountCard } from "../AccountCard";
+
+vi.mock("../LogOutRow", () => ({ LogOutRow: () => <div data-testid="logout-row" /> }));
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);

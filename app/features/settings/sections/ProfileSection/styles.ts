@@ -6,6 +6,8 @@ export const accountAvatar = cva(
 
 export const accountMeta = cva("text-fg/50 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs");
 
+export const logoutRow = cva("border-fg/10 mt-4 border-t pt-4");
+
 export const accountChip = cva("flex size-9 shrink-0 items-center justify-center rounded-full");
 
 export const listeningChip = cva("flex size-9 shrink-0 items-center justify-center rounded-full bg-current/15", {

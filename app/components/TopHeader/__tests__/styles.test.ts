@@ -1,74 +1,26 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import {
-  headerContainer,
-  decorativeLine,
-  headerContent,
-  searchGlow,
-  clearButton,
-  headerTab,
-  headerTabLabel,
-  headerTabUnderline,
-  headerTabBadge,
-  searchForm,
-  searchShell,
-  searchInput,
-} from "../styles";
+import { brandLink, headerContainer, headerTab, omniPill, scopeChip } from "../styles";
 
 describe("TopHeader styles", () => {
-  it("pins the header to the top with a responsive blur by default", () => {
-    expect(headerContainer()).toContain("sticky");
-    expect(headerContainer()).toContain("top-0");
-    expect(headerContainer()).toContain("sm:backdrop-blur-2xl");
-    expect(headerContainer({ blur: "none" })).not.toContain("backdrop-blur-2xl");
-  });
-
-  it("renders the decorative line with the primary gradient by default", () => {
-    expect(decorativeLine()).toContain("via-primary-500");
-  });
-
-  it("sizes the header box itself to the layout tokens, border included, and fills it with the content row", () => {
+  it("sizes the desktop header from the shared header token the player panels also read", () => {
+    expect(headerContainer()).toContain("sm:h-[var(--height-header-wide)]");
     expect(headerContainer()).toContain("h-16");
-    expect(headerContainer()).toContain("sm:h-20");
-    expect(headerContainer()).toContain("border-b");
-    expect(headerContent()).toContain("flex");
-    expect(headerContent()).toContain("h-full");
-    expect(headerContent()).not.toContain("h-16");
   });
 
-  it("renders the focus glow as a hidden blurred gradient that shows on desktop", () => {
-    expect(searchGlow()).toContain("blur-sm");
-    expect(searchGlow()).toContain("sm:block");
-    expect(searchGlow()).toContain("from-primary-600");
+  it("hides the closed Omnibar on phones and shows it everywhere once it opens", () => {
+    expect(omniPill({ open: false })).toContain("hidden sm:flex");
+    expect(omniPill({ open: true })).not.toContain("hidden");
   });
 
-  it("positions the clear button to the right with hover affordance", () => {
-    expect(clearButton()).toContain("absolute");
-    expect(clearButton()).toContain("right-2.5");
-    expect(clearButton()).toContain("hover:text-fg");
+  it("hides the logo on phones while the search takes the bar", () => {
+    expect(brandLink({ hidden: true })).toContain("hidden sm:flex");
+    expect(brandLink({ hidden: false })).not.toContain("hidden");
   });
 
-  it("switches the header tab foreground on active state", () => {
-    expect(headerTab({ active: true })).toContain("text-fg");
-    expect(headerTab({ active: false })).toContain("text-fg/55");
-    expect(headerTab({ mobile: "hide" })).toContain("hidden");
-  });
-
-  it("controls the tab label visibility per breakpoint", () => {
-    expect(headerTabLabel({ mobile: "show" })).toContain("inline");
-    expect(headerTabLabel({ mobile: "hide" })).toContain("hidden");
-    expect(headerTabUnderline()).toContain("bg-primary-500");
-    expect(headerTabBadge()).toContain("rounded-full");
-  });
-
-  it("renders the search form expanded on mobile and inline on desktop", () => {
-    expect(searchForm()).toContain("flex");
-    expect(searchForm()).toContain("sm:block");
-  });
-
-  it("highlights the search shell when focused", () => {
-    expect(searchShell({ focused: true })).toContain("border-primary-500/50");
-    expect(searchShell({ focused: false })).toContain("border-fg/10");
-    expect(searchInput()).toContain("bg-transparent");
+  it("fills the active nav chip and the active scope with the primary pair", () => {
+    expect(headerTab({ active: true })).toContain("bg-primary text-primary-foreground");
+    expect(scopeChip({ active: true })).toContain("bg-primary text-primary-foreground");
+    expect(headerTab({ active: false })).not.toContain("bg-primary");
   });
 });

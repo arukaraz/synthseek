@@ -19,6 +19,13 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
   { labelKey: "profile.edit.emailLabel", page: "account", href: "/settings/account", anchor: "profile.email" },
   { labelKey: "profile.edit.avatarLabel", page: "account", href: "/settings/account", anchor: "profile.avatar" },
   { labelKey: "profile.password.title", page: "account", href: "/settings/account", anchor: "password" },
+  {
+    labelKey: "profile.account.logout",
+    page: "account",
+    href: "/settings/account",
+    anchor: "account.logout",
+    keywordsKey: "shell.search.keywords.logout",
+  },
 
   {
     labelKey: "general.theme.title",

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
-import { UserAvatarMenu } from "../UserAvatarMenu";
+import { SettingsLink } from "../SettingsLink";
 import { bottomNavContainer, bottomNavItem, bottomNavLabel, bottomNavList, bottomNavUnderline } from "./styles";
 
 export function BottomNav() {
@@ -37,7 +37,7 @@ export function BottomNav() {
         })}
 
         <li className="flex min-w-0 flex-1 items-center justify-center pb-1">
-          <UserAvatarMenu />
+          <SettingsLink variant="avatar" />
         </li>
       </ul>
     </nav>

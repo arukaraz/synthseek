@@ -1,1 +1,0 @@
-export { UserAvatarMenu } from "./UserAvatarMenu";

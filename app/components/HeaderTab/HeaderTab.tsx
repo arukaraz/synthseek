@@ -1,32 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 
-import { headerTab, headerTabBadge, headerTabLabel, headerTabUnderline } from "../TopHeader/styles";
+import { headerTab } from "../TopHeader/styles";
 import type { HeaderTabProps } from "./types";
 
-export function HeaderTab({
-  href,
-  icon: Icon,
-  label,
-  isActive,
-  badge,
-  hideOnMobile = false,
-  labelOnMobile = false,
-}: HeaderTabProps) {
+export function HeaderTab({ href, icon: Icon, label, isActive }: HeaderTabProps) {
   return (
-    <Link
-      href={href}
-      prefetch
-      aria-label={label}
-      aria-current={isActive ? "page" : undefined}
-      className={headerTab({ active: isActive, mobile: hideOnMobile ? "hide" : "show" })}
-    >
-      <Icon />
-      <span className={headerTabLabel({ mobile: labelOnMobile ? "show" : "hide" })}>{label}</span>
-      {badge !== undefined && badge > 0 ? <span className={headerTabBadge()}>{badge}</span> : null}
-      {isActive ? <motion.span layoutId="header-tab-underline" className={headerTabUnderline()} /> : null}
+    <Link href={href} prefetch aria-current={isActive ? "page" : undefined} className={headerTab({ active: isActive })}>
+      <Icon aria-hidden />
+      <span>{label}</span>
     </Link>
   );
 }

@@ -5,7 +5,4 @@ export interface HeaderTabProps {
   icon: LucideIcon;
   label: string;
   isActive: boolean;
-  badge?: number;
-  hideOnMobile?: boolean;
-  labelOnMobile?: boolean;
 }

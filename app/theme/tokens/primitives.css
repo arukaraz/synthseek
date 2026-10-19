@@ -63,7 +63,7 @@
   --color-plex-400: var(--color-plex-400);
   --color-plex-500: var(--color-plex-500);
 
-  --height-header-wide: 5rem;
+  --height-header-wide: 3.25rem;
   --height-screen-minus-header: calc(100vh - var(--height-header-wide));
   --height-bottom-nav: calc(4rem + env(safe-area-inset-bottom));
   --height-player-bar: 4rem;

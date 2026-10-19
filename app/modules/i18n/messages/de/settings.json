@@ -972,7 +972,10 @@
       "title": "Profil",
       "memberSince": "Mitglied seit",
       "plexAccount": "Plex-Konto",
-      "localAccount": "Lokales Konto"
+      "localAccount": "Lokales Konto",
+      "logout": "Abmelden",
+      "loggingOut": "Abmeldung läuft…",
+      "logoutDescription": "Beende deine Sitzung in diesem Browser."
     },
     "edit": {
       "title": "Profil bearbeiten",
@@ -1491,7 +1494,8 @@
         "unidentified": "unerkannt nicht erkannt zuordnen ignorieren",
         "jobs": "cron zeitplan ausführen",
         "updates": "updates aktualisierung version release changelog patchnotes",
-        "timeout": "zeitlimit timeout wartezeit warten"
+        "timeout": "zeitlimit timeout wartezeit warten",
+        "logout": "abmelden ausloggen logout sitzung"
       }
     },
     "palette": {

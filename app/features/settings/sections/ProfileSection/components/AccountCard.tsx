@@ -9,6 +9,7 @@ import { formatDate } from "@utils/formatters";
 import { SettingsCard } from "../../../components/SettingsCard";
 import { accountAvatar, accountMeta } from "../styles";
 import type { ProfileCardProps } from "../types";
+import { LogOutRow } from "./LogOutRow";
 
 export function AccountCard({ user }: ProfileCardProps) {
   const { t } = useTranslation("settings");
@@ -43,6 +44,7 @@ export function AccountCard({ user }: ProfileCardProps) {
           </div>
         </div>
       </div>
+      <LogOutRow />
     </SettingsCard>
   );
 }

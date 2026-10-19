@@ -972,7 +972,10 @@
       "title": "Profile",
       "memberSince": "Member since",
       "plexAccount": "Plex account",
-      "localAccount": "Local account"
+      "localAccount": "Local account",
+      "logout": "Log out",
+      "loggingOut": "Logging out…",
+      "logoutDescription": "End your session in this browser."
     },
     "edit": {
       "title": "Edit profile",
@@ -1491,7 +1494,8 @@
         "unidentified": "unidentified unrecognized match ignore",
         "jobs": "cron schedule run",
         "updates": "updates version release changelog patch notes",
-        "timeout": "timeout time limit wait"
+        "timeout": "timeout time limit wait",
+        "logout": "logout log out sign out signout session"
       }
     },
     "palette": {

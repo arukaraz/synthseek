@@ -975,7 +975,10 @@
       "title": "Perfil",
       "memberSince": "Miembro desde",
       "plexAccount": "Cuenta de Plex",
-      "localAccount": "Cuenta local"
+      "localAccount": "Cuenta local",
+      "logout": "Cerrar sesión",
+      "loggingOut": "Cerrando sesión…",
+      "logoutDescription": "Termina tu sesión en este navegador."
     },
     "edit": {
       "title": "Editar perfil",
@@ -1494,7 +1497,8 @@
         "unidentified": "sin identificar sin reconocer asociar ignorar",
         "jobs": "cron programación ejecutar",
         "updates": "actualizaciones versión lanzamiento changelog notas",
-        "timeout": "tiempo límite timeout espera"
+        "timeout": "tiempo límite timeout espera",
+        "logout": "cerrar sesión salir logout desconectar"
       }
     },
     "palette": {

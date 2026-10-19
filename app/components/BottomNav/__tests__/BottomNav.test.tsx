@@ -19,8 +19,8 @@ vi.mock("@hooks/ui/usePrimaryNav", () => ({
   usePrimaryNav: () => navState.items,
 }));
 
-vi.mock("../../UserAvatarMenu", () => ({
-  UserAvatarMenu: () => <button type="button">avatar</button>,
+vi.mock("../../SettingsLink", () => ({
+  SettingsLink: ({ variant }: { variant: string }) => <a href="/settings/overview">{`settings ${variant}`}</a>,
 }));
 
 describe("BottomNav", () => {
@@ -44,10 +44,12 @@ describe("BottomNav", () => {
     expect(screen.getByRole("link", { name: "Library" })).not.toHaveAttribute("aria-current");
   });
 
-  it("exposes a distinctly named navigation landmark and keeps the avatar menu reachable", () => {
+  it("exposes a distinctly named navigation landmark and ends with the avatar as the settings link", () => {
     renderWithProviders(<BottomNav />);
 
     expect(screen.getByRole("navigation", { name: "Mobile" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "avatar" })).toBeInTheDocument();
+    const links = screen.getAllByRole("link");
+    expect(links.at(-1)).toHaveTextContent("settings avatar");
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });
