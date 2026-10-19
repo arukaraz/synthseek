@@ -27,7 +27,7 @@ export function Gaps({ info }: BoardWidgetProps) {
       info={info}
       titleId="gaps-heading"
       loading={isLoading}
-      note={isError ? t("history.error") : gaps.length === 0 ? t("gaps.empty") : null}
+      note={isError ? t("board.loadError") : gaps.length === 0 ? t("gaps.empty") : null}
     >
       <div className={gapsBody()}>
         <FadeScroll>

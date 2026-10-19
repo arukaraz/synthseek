@@ -35,7 +35,7 @@ export function Landed({ info }: BoardWidgetProps) {
       info={info}
       titleId="landed-heading"
       loading={isLoading}
-      note={isError ? t("history.error") : albums.length === 0 ? t("landed.empty") : null}
+      note={isError ? t("board.loadError") : albums.length === 0 ? t("landed.empty") : null}
     >
       <FadeScroll>
         <ul className={widgetList()}>

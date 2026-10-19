@@ -31,7 +31,7 @@ export function Charts({ size, info }: BoardWidgetProps) {
       info={info}
       titleId="charts-heading"
       loading={isLoading}
-      note={isError ? t("history.error") : leaderEntry === undefined ? t("charts.empty") : null}
+      note={isError ? t("board.loadError") : leaderEntry === undefined ? t("charts.empty") : null}
     >
       <div className={chartsBody()}>
         <div className={chartsLayout()}>

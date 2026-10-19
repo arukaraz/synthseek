@@ -32,7 +32,7 @@ export function LovedNotHere({ info }: BoardWidgetProps) {
       loading={isLoading}
       action={unlinked ? { label: t("loved.link"), href: LASTFM_SETTINGS_HREF } : undefined}
       note={
-        isError ? t("history.error") : unlinked ? t("loved.unlinked") : tracks.length === 0 ? t("loved.empty") : null
+        isError ? t("board.loadError") : unlinked ? t("loved.unlinked") : tracks.length === 0 ? t("loved.empty") : null
       }
     >
       <FadeScroll>

@@ -150,6 +150,22 @@ describe("LovedNotHere", () => {
   });
 });
 
+describe("a catalog widget that fails to load", () => {
+  const failed = { data: undefined, isLoading: false, isError: true };
+
+  it.each([
+    ["Charts", () => <Charts size="L" info="x" />],
+    ["Loved on Last.fm, not here", () => <LovedNotHere size="M" info="x" />],
+  ])("%s says it could not load, without blaming the listening history", (_name, widget) => {
+    mocks.charts.mockReturnValue(failed);
+    mocks.loved.mockReturnValue(failed);
+    renderWithProviders(widget());
+
+    expect(screen.getByText("Couldn't load this right now.")).toBeInTheDocument();
+    expect(screen.queryByText("Couldn't load your listening history.")).not.toBeInTheDocument();
+  });
+});
+
 describe("Rarities", () => {
   it("shows the index with its threshold and plays a rare track", () => {
     mocks.rarities.mockReturnValue(

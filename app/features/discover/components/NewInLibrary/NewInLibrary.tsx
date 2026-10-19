@@ -31,7 +31,7 @@ export function NewInLibrary({ info }: BoardWidgetProps) {
       info={info}
       titleId="new-in-library-heading"
       loading={isLoading}
-      note={isError ? t("history.error") : albums.length === 0 ? t("newInLibrary.empty") : null}
+      note={isError ? t("board.loadError") : albums.length === 0 ? t("newInLibrary.empty") : null}
     >
       <FadeScroll>
         <ul className={widgetList()}>

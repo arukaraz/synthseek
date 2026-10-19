@@ -213,3 +213,25 @@ describe("ServerPlaylists", () => {
     expect(screen.getByText("Connect a media server to sync playlists.")).toBeInTheDocument();
   });
 });
+
+describe("a library widget that fails to load", () => {
+  const failed = { data: undefined, isLoading: false, isError: true };
+
+  it.each([
+    ["New in your library", () => <NewInLibrary size="M" info="x" />],
+    ["Landed this week", () => <Landed size="M" info="x" />],
+    ["Complete the discography", () => <Gaps size="L" info="x" />],
+    ["Anniversaries", () => <Anniversaries size="M" info="x" />],
+    ["Your playlists on media servers", () => <ServerPlaylists size="L" info="x" />],
+  ])("%s says it could not load, without blaming the listening history", (_name, widget) => {
+    mocks.recentAlbums.mockReturnValue(failed);
+    mocks.gaps.mockReturnValue(failed);
+    mocks.anniversaries.mockReturnValue(failed);
+    mocks.serverPlaylists.mockReturnValue(failed);
+    mocks.targets.mockReturnValue(ready([]));
+    renderWithProviders(widget());
+
+    expect(screen.getByText("Couldn't load this right now.")).toBeInTheDocument();
+    expect(screen.queryByText("Couldn't load your listening history.")).not.toBeInTheDocument();
+  });
+});

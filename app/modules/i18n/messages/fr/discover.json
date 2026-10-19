@@ -183,6 +183,7 @@
   },
   "board": {
     "regionLabel": "Tableau Découvrir",
+    "loadError": "Impossible de charger pour le moment.",
     "customize": "Personnaliser",
     "done": "Terminé",
     "addWidget": "Ajouter un widget",

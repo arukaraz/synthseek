@@ -183,6 +183,7 @@
   },
   "board": {
     "regionLabel": "Tablero de Explorar",
+    "loadError": "No se pudo cargar ahora mismo.",
     "customize": "Personalizar",
     "done": "Listo",
     "addWidget": "Añadir widget",

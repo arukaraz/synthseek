@@ -183,6 +183,7 @@
   },
   "board": {
     "regionLabel": "Explore board",
+    "loadError": "Couldn't load this right now.",
     "customize": "Customize",
     "done": "Done",
     "addWidget": "Add widget",

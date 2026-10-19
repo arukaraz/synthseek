@@ -31,7 +31,7 @@ export function Anniversaries({ info }: BoardWidgetProps) {
       info={info}
       titleId="anniversaries-heading"
       loading={isLoading}
-      note={isError ? t("history.error") : albums.length === 0 ? t("anniversaries.empty") : null}
+      note={isError ? t("board.loadError") : albums.length === 0 ? t("anniversaries.empty") : null}
     >
       <FadeScroll>
         <ul className={widgetList()}>

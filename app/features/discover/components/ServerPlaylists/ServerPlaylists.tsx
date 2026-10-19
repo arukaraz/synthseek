@@ -38,7 +38,7 @@ export function ServerPlaylists({ info }: BoardWidgetProps) {
       loading={playlists.isLoading || targets.isLoading}
       note={
         failed
-          ? t("history.error")
+          ? t("board.loadError")
           : servers.length === 0
             ? t("serverPlaylists.noServers")
             : rows.length === 0

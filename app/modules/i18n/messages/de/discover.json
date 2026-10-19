@@ -183,6 +183,7 @@
   },
   "board": {
     "regionLabel": "Entdecken-Board",
+    "loadError": "Konnte gerade nicht geladen werden.",
     "customize": "Anpassen",
     "done": "Fertig",
     "addWidget": "Widget hinzufügen",
