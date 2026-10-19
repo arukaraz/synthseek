@@ -9,9 +9,9 @@ import { PlayerMoreMenu } from "../PlayerMoreMenu";
 
 vi.mock("@hooks/ui/useMediaQuery", () => ({ useMediaQuery: () => false }));
 
-function renderPhoneMenu() {
+function renderPhoneMenu(view = createPlayerView()) {
   const actions = createPlayerActions();
-  render(<PlayerMoreMenu view={createPlayerView()} actions={actions} />);
+  render(<PlayerMoreMenu view={view} actions={actions} />);
   return { actions, user: userEvent.setup() };
 }
 
@@ -29,6 +29,16 @@ describe("the more menu on a phone", () => {
     expect(sheet).toHaveTextContent(enPlayer.menu.playback);
     expect(screen.getByRole("menuitemcheckbox", { name: enPlayer.controls.shuffle })).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: enPlayer.controls.lyrics })).toBeInTheDocument();
+  });
+
+  it("titles the sheet plainly while the button still announces what needs attention", async () => {
+    const { user } = renderPhoneMenu(createPlayerView({ scrobble: "retrying" }));
+    const trigger = screen.getByRole("button", { name: new RegExp(`^${enPlayer.controls.more}`) });
+
+    const sheet = await openSheet(user);
+
+    expect(trigger).toHaveAccessibleName(`${enPlayer.controls.more}: ${enPlayer.scrobble.retrying}`);
+    expect(sheet).toHaveAccessibleName(enPlayer.controls.more);
   });
 
   it("keeps the sheet open for a toggle and for repeat, and closes it for an action", async () => {

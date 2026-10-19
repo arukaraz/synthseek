@@ -182,7 +182,9 @@ export const moreMenuIcon = cva("size-4 shrink-0");
 
 export const moreSheetTitle = cva("text-fg px-5 pt-4 pb-1 text-sm font-semibold");
 
-export const moreSheetBody = cva("scrollbar-none flex max-h-[70dvh] flex-col overflow-y-auto px-2 pb-2");
+export const moreSheetBody = cva("max-h-[70dvh] px-2 pb-2");
+
+export const moreSheetList = cva("flex flex-col");
 
 export const moreSheetLabel = cva("text-fg-muted px-3 pt-3 pb-1 font-mono text-[10px] tracking-[0.14em] uppercase");
 

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Fragment } from "react";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
 import { playerPanel } from "@utils/animations";
 
@@ -15,6 +16,7 @@ import {
   moreSheetBody,
   moreSheetCheck,
   moreSheetLabel,
+  moreSheetList,
   moreSheetRow,
   moreSheetSeparator,
   moreSheetTitle,
@@ -43,52 +45,54 @@ export function PlayerMoreSheet({ title, groups, onClose }: PlayerMoreSheetProps
           <DialogTitle asChild>
             <span className={moreSheetTitle()}>{title}</span>
           </DialogTitle>
-          <div className={moreSheetBody()} role="menu" aria-label={title}>
-            {groups.map((group, index) => (
-              <Fragment key={group.key}>
-                {index > 0 ? <div className={moreSheetSeparator()} role="separator" /> : null}
-                {group.label ? <span className={moreSheetLabel()}>{group.label}</span> : null}
-                {group.entries.map((entry) => {
-                  const Icon = entry.icon;
-                  const state = entry.state ? (
-                    <span className={menuState({ tone: entry.state.tone })}>{entry.state.text}</span>
-                  ) : null;
-                  return entry.kind === "toggle" ? (
-                    <button
-                      key={entry.key}
-                      type="button"
-                      role="menuitemcheckbox"
-                      aria-checked={entry.checked}
-                      className={moreSheetRow()}
-                      disabled={entry.disabled}
-                      onClick={entry.onToggle}
-                    >
-                      <Icon className={moreMenuIcon()} />
-                      {entry.label}
-                      {state}
-                      <Check className={moreSheetCheck({ checked: entry.checked })} aria-hidden />
-                    </button>
-                  ) : (
-                    <button
-                      key={entry.key}
-                      type="button"
-                      role="menuitem"
-                      className={moreSheetRow()}
-                      disabled={entry.disabled}
-                      onClick={() => {
-                        if (!entry.keepOpen) onClose();
-                        entry.onSelect();
-                      }}
-                    >
-                      <Icon className={moreMenuIcon()} />
-                      {entry.label}
-                      {state}
-                    </button>
-                  );
-                })}
-              </Fragment>
-            ))}
-          </div>
+          <FadeScroll className={moreSheetBody()}>
+            <div className={moreSheetList()} role="menu" aria-label={title}>
+              {groups.map((group, index) => (
+                <Fragment key={group.key}>
+                  {index > 0 ? <div className={moreSheetSeparator()} role="separator" /> : null}
+                  {group.label ? <span className={moreSheetLabel()}>{group.label}</span> : null}
+                  {group.entries.map((entry) => {
+                    const Icon = entry.icon;
+                    const state = entry.state ? (
+                      <span className={menuState({ tone: entry.state.tone })}>{entry.state.text}</span>
+                    ) : null;
+                    return entry.kind === "toggle" ? (
+                      <button
+                        key={entry.key}
+                        type="button"
+                        role="menuitemcheckbox"
+                        aria-checked={entry.checked}
+                        className={moreSheetRow()}
+                        disabled={entry.disabled}
+                        onClick={entry.onToggle}
+                      >
+                        <Icon className={moreMenuIcon()} />
+                        {entry.label}
+                        {state}
+                        <Check className={moreSheetCheck({ checked: entry.checked })} aria-hidden />
+                      </button>
+                    ) : (
+                      <button
+                        key={entry.key}
+                        type="button"
+                        role="menuitem"
+                        className={moreSheetRow()}
+                        disabled={entry.disabled}
+                        onClick={() => {
+                          if (!entry.keepOpen) onClose();
+                          entry.onSelect();
+                        }}
+                      >
+                        <Icon className={moreMenuIcon()} />
+                        {entry.label}
+                        {state}
+                      </button>
+                    );
+                  })}
+                </Fragment>
+              ))}
+            </div>
+          </FadeScroll>
         </motion.div>
       </DialogSurface>
     </Dialog>

@@ -56,7 +56,9 @@ export function PlayerMoreMenu({ view, actions }: PlayerProps) {
     return (
       <>
         {trigger}
-        {sheetOpen ? <PlayerMoreSheet title={name} groups={groups} onClose={() => setSheetOpen(false)} /> : null}
+        {sheetOpen ? (
+          <PlayerMoreSheet title={t("controls.more")} groups={groups} onClose={() => setSheetOpen(false)} />
+        ) : null}
       </>
     );
   }
