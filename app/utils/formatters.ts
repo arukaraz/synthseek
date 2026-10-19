@@ -50,7 +50,10 @@ export function formatElapsed(seconds: number): string {
   const hours = Math.floor(minutes / 60);
   if (hours < 1) return i18n.t("common:elapsed.minutes", { count: minutes });
 
-  return i18n.t("common:elapsed.hours", { count: hours });
+  const days = Math.floor(hours / 24);
+  if (days < 1) return i18n.t("common:elapsed.hours", { count: hours });
+
+  return i18n.t("common:elapsed.days", { count: days });
 }
 
 export function formatDuration(start: Date, end?: Date): string | null {

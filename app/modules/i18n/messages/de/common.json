@@ -20,6 +20,7 @@
   "elapsed": {
     "seconds": "{{count}} Sek",
     "minutes": "{{count}} Min",
-    "hours": "{{count}} Std"
+    "hours": "{{count}} Std",
+    "days": "{{count}} T"
   }
 }

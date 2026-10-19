@@ -6,6 +6,7 @@ import {
   formatRelativeTime,
   formatBytes,
   formatDuration,
+  formatElapsed,
   formatShortDate,
   formatTimestamp,
   formatTrackDuration,
@@ -334,5 +335,15 @@ describe("formatCalendarDate", () => {
     expect(formatCalendarDate(null)).toBeNull();
     expect(formatCalendarDate(undefined)).toBeNull();
     expect(formatCalendarDate("not a date")).toBeNull();
+  });
+});
+
+describe("formatElapsed", () => {
+  it("names the largest whole unit, from seconds up to days", () => {
+    expect(formatElapsed(45)).toBe("45s");
+    expect(formatElapsed(3 * 60)).toBe("3m");
+    expect(formatElapsed(23 * 3600 + 59 * 60)).toBe("23h");
+    expect(formatElapsed(24 * 3600)).toBe("1d");
+    expect(formatElapsed(2539 * 3600)).toBe("105d");
   });
 });
