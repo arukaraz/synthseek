@@ -67,12 +67,12 @@
     "unknownArtist": "Unbekannter Künstler"
   },
   "artistSpotlight": {
-    "title": "Künstler im Rampenlicht",
-    "subtitle": "Top-Künstler in deiner Region",
+    "title": "Künstler, die dir gefallen könnten",
+    "subtitle": "Ähnlich wie das, was du hörst",
     "errorTitle": "Künstler konnten nicht geladen werden",
-    "errorDescription": "Top-Künstler konnten nicht abgerufen werden. Bitte versuche es später erneut.",
+    "errorDescription": "Künstler konnten nicht abgerufen werden. Bitte versuche es später erneut.",
     "emptyTitle": "Keine Künstler gefunden",
-    "emptyDescription": "Für diese Region wurden keine Top-Künstler gefunden.",
+    "emptyDescription": "Hör etwas Musik, dann erscheinen hier Vorschläge.",
     "artistBadge": "Künstler",
     "latestRelease": "Neueste Veröffentlichung:",
     "songs_one": "{{count}} Song",
@@ -260,7 +260,7 @@
     "widgets": {
       "trending": "Die angesagten Titel aus den Katalog-Charts, einer nach dem anderen. Anfordern holt einen Titel in deine Bibliothek.",
       "mixes": "Die Playlists, die ListenBrainz aus deinen Scrobbles erstellt. Öffne eine, um ihre Titel zu sehen und Fehlendes anzufordern.",
-      "artistsNext": "Die Top-Künstler deiner Region mit ihrer neuesten Veröffentlichung. Öffne einen, um den Künstler zu sehen und Musik anzufordern.",
+      "artistsNext": "Künstler, die denen ähneln, die du am meisten hörst, und die nicht in deiner Bibliothek sind, mit ihrer neuesten Veröffentlichung. Ohne Verlauf die Top-Künstler deiner Region.",
       "genres": "Katalog-Kategorien zum Stöbern. Öffne eine, um ihre Alben und redaktionellen Playlists zu sehen.",
       "topTracks": "Deine meistgescrobbelten Titel auf Last.fm, aller Zeiten.",
       "scrobbles": "Deine neuesten Last.fm-Scrobbles, sobald sie eintreffen, die neuesten zuerst.",
@@ -271,7 +271,17 @@
       "forgottenFavorites": "Favoriten, die du seit 90 Tagen oder länger nicht gehört hast. Abspielen ersetzt die Warteschlange damit.",
       "jumpBackIn": "Alben, die du in den letzten 7 Tagen begonnen und nicht beendet hast. Abspielen startet das Album von vorn.",
       "lastYear": "Was du in derselben Woche vor einem Jahr gehört hast, aus deinem eigenen Verlauf.",
-      "stations": "Radiosender auf Basis deiner Top-Künstler, deiner Favoriten und der Titel, die du nie gehört hast."
+      "stations": "Radiosender auf Basis deiner Top-Künstler, deiner Favoriten und der Titel, die du nie gehört hast.",
+      "continueListening": "Deine Warteschlange dort, wo du aufgehört hast, und deine letzten Wiedergaben aus allen Apps.",
+      "rarities": "Titel, die du hörst und die nur wenige hören, nach den Zahlen von ListenBrainz.",
+      "orbit": "Alben, die du nicht besitzt, ausgewählt aus Titeln, die deinen meistgehörten ähneln.",
+      "charts": "Die meistgehörten Titel dieser Woche in deiner Region auf Last.fm. Spiel ab, was du hast, und fordere den Rest an.",
+      "loved": "Titel, die du auf Last.fm geliebt hast und die noch nicht in deiner Bibliothek sind.",
+      "newInLibrary": "Alben, die in den letzten 7 Tagen angekommen sind, und ob du sie gehört hast.",
+      "gaps": "Veröffentlichungen, die von deinen meistvertretenen Künstlern fehlen, verglichen mit dem Katalog.",
+      "anniversaries": "Alben in deiner Bibliothek, die in früheren Jahren um dieses Datum erschienen sind.",
+      "landed": "In den letzten 7 Tagen heruntergeladene Alben, mit Quelle und Dauer.",
+      "serverPlaylists": "Deine neuesten Playlists und die Medienserver, mit denen sie synchronisiert sind."
     }
   },
   "history": {
@@ -333,5 +343,86 @@
       "favorites": "Deine Favoriten",
       "unplayed": "Nie gehört"
     }
+  },
+  "albumMeta_one": "{{artist}} · {{count}} Titel · {{when}}",
+  "albumMeta_other": "{{artist}} · {{count}} Titel · {{when}}",
+  "continueListening": {
+    "title": "Weiterhören",
+    "subtitle": "Deine Warteschlange",
+    "empty": "Nichts wartet. Spiel etwas ab, dann bleibt es hier.",
+    "position": "{{artist}} · {{index}} von {{total}}",
+    "time": "{{position}} / {{duration}}",
+    "resume": "Fortsetzen",
+    "pause": "Pausieren",
+    "recent": "Zuletzt gehört",
+    "played": "{{artist}} · {{when}}"
+  },
+  "rarities": {
+    "title": "Deine Raritäten",
+    "subtitle": "ListenBrainz-Wiedergaben",
+    "empty": "Noch nicht genug erkannte Wiedergaben.",
+    "caption": "deiner Top-Titel haben weltweit unter {{threshold}} Wiedergaben. Median {{median}}.",
+    "yours_one": "{{artist}} · {{count}} Wiedergabe von dir",
+    "yours_other": "{{artist}} · {{count}} Wiedergaben von dir"
+  },
+  "orbit": {
+    "title": "Erweitere deinen Orbit",
+    "subtitle": "Alben aus dem, was du hörst",
+    "empty": "Hör ein paar Titel, dann erscheinen hier ähnliche Alben.",
+    "because": "Weil du {{title}} gehört hast",
+    "row": "{{artist}} · weil du {{title}} gehört hast"
+  },
+  "charts": {
+    "title": "Charts",
+    "subtitle": "Top-Titel in {{country}}",
+    "empty": "Gerade keine Charts für diese Region.",
+    "play": "Abspielen",
+    "request": "Anfordern"
+  },
+  "loved": {
+    "title": "Auf Last.fm geliebt, hier nicht",
+    "subtitle": "Geliebte Titel auf Last.fm",
+    "unlinked": "Füge deinen Last.fm-Benutzernamen hinzu, um sie zu sehen.",
+    "link": "Einstellungen",
+    "empty": "Alles, was du geliebt hast, ist schon hier.",
+    "request": "Anfordern"
+  },
+  "newInLibrary": {
+    "title": "Neu in deiner Bibliothek",
+    "subtitle": "Letzte 7 Tage",
+    "empty": "Nichts Neues in den letzten 7 Tagen.",
+    "played": "Gehört",
+    "unplayed": "Neu"
+  },
+  "landed": {
+    "title": "Diese Woche angekommen",
+    "subtitle": "Heruntergeladene Alben",
+    "empty": "In den letzten 7 Tagen ist kein Download angekommen.",
+    "via": "{{source}} · {{duration}}"
+  },
+  "gaps": {
+    "title": "Vervollständige die Diskografie",
+    "subtitle": "Katalog im Vergleich zu deiner Bibliothek",
+    "empty": "Deine Top-Künstler sind vollständig.",
+    "have": "{{have}} von {{total}} Veröffentlichungen",
+    "missing": "Nicht in deiner Bibliothek"
+  },
+  "anniversaries": {
+    "title": "Jubiläen",
+    "subtitle": "Um diesen Tag erschienen",
+    "empty": "Keine Jubiläen um diesen Tag.",
+    "released": "{{artist}} · erschienen am {{date}}",
+    "years_one": "{{count}} Jahr",
+    "years_other": "{{count}} Jahre"
+  },
+  "serverPlaylists": {
+    "title": "Deine Playlists auf Medienservern",
+    "subtitle": "Synchronisierungsstatus",
+    "noServers": "Verbinde einen Medienserver, um Playlists zu synchronisieren.",
+    "empty": "Noch keine Playlists.",
+    "tracks_one": "{{count}} Titel",
+    "tracks_other": "{{count}} Titel",
+    "synced": "Synchronisiert {{when}}",
+    "notSynced": "Nicht synchronisiert"
   }
 }

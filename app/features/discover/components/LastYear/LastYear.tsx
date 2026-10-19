@@ -12,17 +12,9 @@ import { formatElapsed, formatShortDate } from "@utils/formatters";
 
 import { CARD_ROW_SKELETONS } from "../constants";
 import { scrollFadeBottom, widgetNote } from "../styles";
-import { LastYearRow } from "./LastYearRow";
-import {
-  weekBody,
-  weekLayout,
-  weekList,
-  weekSkeleton,
-  weekStat,
-  weekStatLabel,
-  weekStatValue,
-  weekStats,
-} from "./styles";
+import { widgetList } from "../WidgetRow/styles";
+import { WidgetRow } from "../WidgetRow/WidgetRow";
+import { weekBody, weekLayout, weekSkeleton, weekStat, weekStatLabel, weekStatValue, weekStats } from "./styles";
 import type { LastYearProps } from "./types";
 
 export function LastYear({ info }: LastYearProps) {
@@ -48,7 +40,7 @@ export function LastYear({ info }: LastYearProps) {
         }
       />
       {isLoading ? (
-        <div className={weekList()}>
+        <div className={widgetList()}>
           {CARD_ROW_SKELETONS.map((index) => (
             <div key={index} className={weekSkeleton()} />
           ))}
@@ -72,9 +64,17 @@ export function LastYear({ info }: LastYearProps) {
                 <dd className={weekStatValue()}>{week.topArtist ?? ""}</dd>
               </div>
             </dl>
-            <ol className={cn(weekList(), scrollFadeBottom())}>
+            <ol className={cn(widgetList(), scrollFadeBottom())}>
               {week.tracks.map((track, index) => (
-                <LastYearRow key={track.trackId} track={track} rank={index + 1} />
+                <WidgetRow
+                  key={track.trackId}
+                  cover={track.cover}
+                  seed={track.trackId}
+                  title={track.title}
+                  subtitle={track.artist}
+                  lead={index + 1}
+                  trailing={t("lastYear.plays", { count: track.plays })}
+                />
               ))}
             </ol>
           </div>

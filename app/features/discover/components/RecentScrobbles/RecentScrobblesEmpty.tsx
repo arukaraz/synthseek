@@ -7,14 +7,14 @@ import { useTranslation } from "react-i18next";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 
-import { EMPTY_CTA, SETTINGS_HREF } from "./constants";
+import { LASTFM_EMPTY_CTA, LASTFM_SETTINGS_HREF } from "../constants";
 import { emptyTextKey } from "./helpers";
 import { emptyLink, emptyPanel, emptyText } from "./styles";
 import type { RecentScrobblesEmptyProps } from "./types";
 
 export function RecentScrobblesEmpty({ reason, info }: RecentScrobblesEmptyProps) {
   const { t } = useTranslation("discover");
-  const cta = EMPTY_CTA[reason];
+  const cta = LASTFM_EMPTY_CTA[reason];
   const ctaLabel =
     cta === "open-settings" ? t("recentScrobbles.empty.ctaOpenSettings") : t("recentScrobbles.empty.ctaConfigure");
 
@@ -30,7 +30,7 @@ export function RecentScrobblesEmpty({ reason, info }: RecentScrobblesEmptyProps
       <div className={emptyPanel()}>
         <p className={emptyText()}>{t(emptyTextKey(reason))}</p>
         {cta ? (
-          <Link href={SETTINGS_HREF} className={emptyLink()}>
+          <Link href={LASTFM_SETTINGS_HREF} className={emptyLink()}>
             {ctaLabel}
           </Link>
         ) : null}

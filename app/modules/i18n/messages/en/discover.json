@@ -67,12 +67,12 @@
     "unknownArtist": "Unknown Artist"
   },
   "artistSpotlight": {
-    "title": "Artist Spotlight",
-    "subtitle": "Top artists in your region",
+    "title": "Artists you might want next",
+    "subtitle": "Similar to what you play",
     "errorTitle": "Failed to load artists",
-    "errorDescription": "Unable to fetch top artists. Please try again later.",
+    "errorDescription": "Unable to fetch artists. Please try again later.",
     "emptyTitle": "No Artists Found",
-    "emptyDescription": "No top artists found for this region.",
+    "emptyDescription": "Play some music and suggestions show up here.",
     "artistBadge": "Artist",
     "latestRelease": "Latest Release:",
     "songs_one": "{{count}} Song",
@@ -260,7 +260,7 @@
     "widgets": {
       "trending": "The tracks trending on the catalog charts, one at a time. Request pulls a track into your library.",
       "mixes": "The playlists ListenBrainz builds from your scrobbles. Open one to see its tracks and request what you are missing.",
-      "artistsNext": "Top artists in your region with their latest release. Open one to see the artist and request music.",
+      "artistsNext": "Artists similar to the ones you play most that are not in your library, with their latest release. Without history, the top artists in your region.",
       "genres": "Catalog categories to browse. Open one to see its albums and editorial playlists.",
       "topTracks": "Your most scrobbled tracks on Last.fm, all time.",
       "scrobbles": "Your latest Last.fm scrobbles as they arrive, newest first.",
@@ -271,7 +271,17 @@
       "forgottenFavorites": "Favorites you have not played in 90 days or more. Play replaces the queue with them.",
       "jumpBackIn": "Albums you started in the last 7 days and did not finish. Play starts the album again.",
       "lastYear": "What you played this same week one year ago, from your own play history.",
-      "stations": "Radio stations seeded from your top artists, your favorites and the tracks you have never played."
+      "stations": "Radio stations seeded from your top artists, your favorites and the tracks you have never played.",
+      "continueListening": "Your play queue where you left it, and your latest plays from every app.",
+      "rarities": "Tracks you play that few people listen to, from ListenBrainz listen counts.",
+      "orbit": "Albums you do not own, picked from tracks similar to the ones you play most.",
+      "charts": "This week's top tracks in your region on Last.fm. Play the ones you have and request the rest.",
+      "loved": "Tracks you loved on Last.fm that are not in your library yet.",
+      "newInLibrary": "Albums that landed in the last 7 days, and whether you played them.",
+      "gaps": "Releases missing from the artists you own most, compared with the catalog.",
+      "anniversaries": "Albums in your library released around this date in past years.",
+      "landed": "Albums downloaded in the last 7 days, with the source and how long they took.",
+      "serverPlaylists": "Your latest playlists and the media servers they are synced to."
     }
   },
   "history": {
@@ -333,5 +343,86 @@
       "favorites": "Your favorites",
       "unplayed": "Never played"
     }
+  },
+  "albumMeta_one": "{{artist}} · {{count}} track · {{when}}",
+  "albumMeta_other": "{{artist}} · {{count}} tracks · {{when}}",
+  "continueListening": {
+    "title": "Continue listening",
+    "subtitle": "Your play queue",
+    "empty": "Nothing waiting. Play something and it stays here.",
+    "position": "{{artist}} · {{index}} of {{total}}",
+    "time": "{{position}} / {{duration}}",
+    "resume": "Resume",
+    "pause": "Pause",
+    "recent": "Recently played",
+    "played": "{{artist}} · {{when}}"
+  },
+  "rarities": {
+    "title": "Your rarities",
+    "subtitle": "ListenBrainz listens",
+    "empty": "Not enough identified plays yet.",
+    "caption": "of your top tracks have under {{threshold}} listens worldwide. Median {{median}}.",
+    "yours_one": "{{artist}} · {{count}} play by you",
+    "yours_other": "{{artist}} · {{count}} plays by you"
+  },
+  "orbit": {
+    "title": "Expand your orbit",
+    "subtitle": "Albums from what you play",
+    "empty": "Play a few tracks and similar albums show up here.",
+    "because": "Because you played {{title}}",
+    "row": "{{artist}} · because you played {{title}}"
+  },
+  "charts": {
+    "title": "Charts",
+    "subtitle": "Top tracks in {{country}}",
+    "empty": "No chart for this region right now.",
+    "play": "Play",
+    "request": "Request"
+  },
+  "loved": {
+    "title": "Loved on Last.fm, not here",
+    "subtitle": "Last.fm loved tracks",
+    "unlinked": "Add your Last.fm username to see these.",
+    "link": "Settings",
+    "empty": "Everything you loved is already here.",
+    "request": "Request"
+  },
+  "newInLibrary": {
+    "title": "New in your library",
+    "subtitle": "Last 7 days",
+    "empty": "Nothing new in the last 7 days.",
+    "played": "Played",
+    "unplayed": "New"
+  },
+  "landed": {
+    "title": "Landed this week",
+    "subtitle": "Downloaded albums",
+    "empty": "No downloads landed in the last 7 days.",
+    "via": "{{source}} · {{duration}}"
+  },
+  "gaps": {
+    "title": "Complete the discography",
+    "subtitle": "Catalog against your library",
+    "empty": "Your top artists are complete.",
+    "have": "{{have}} of {{total}} releases",
+    "missing": "Not in your library"
+  },
+  "anniversaries": {
+    "title": "Anniversaries",
+    "subtitle": "Released around today",
+    "empty": "No anniversaries around today.",
+    "released": "{{artist}} · released {{date}}",
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years"
+  },
+  "serverPlaylists": {
+    "title": "Your playlists on media servers",
+    "subtitle": "Sync state",
+    "noServers": "Connect a media server to sync playlists.",
+    "empty": "No playlists yet.",
+    "tracks_one": "{{count}} track",
+    "tracks_other": "{{count}} tracks",
+    "synced": "Synced {{when}}",
+    "notSynced": "Not synced"
   }
 }

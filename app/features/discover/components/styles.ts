@@ -313,3 +313,23 @@ export const playIcon = cva("text-overlay-fg-primary shrink-0 fill-current h-3 w
 });
 
 export type PlayIconProps = VariantProps<typeof playIcon>;
+
+export const widgetPill = cva(
+  "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 font-sans text-[10.5px] font-semibold whitespace-nowrap",
+  {
+    variants: {
+      tone: {
+        success: "bg-success-vivid/15 text-success-vivid",
+        primary: "bg-primary-500/15 text-primary-400",
+        muted: "bg-fg/10 text-fg/60",
+      },
+    },
+    defaultVariants: { tone: "muted" },
+  }
+);
+
+export const widgetEyebrow = cva("text-fg/50 mt-1 font-mono text-[10px] tracking-[0.18em] uppercase");
+
+export const widgetAction = cva(
+  "text-primary-400 hover:bg-primary-500/10 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 font-sans text-[12px] font-medium outline-none focus-visible:ring-2"
+);

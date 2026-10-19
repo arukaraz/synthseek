@@ -4,9 +4,9 @@ import { Disc3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { ProgressBar } from "@components/ui/ProgressBar";
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useQualityMix } from "@hooks/api/queries/analytics/useQualityMix";
 
-import { AnalyticsTile } from "./AnalyticsTile";
 import { QUALITY_ROW_LIMIT } from "./constants";
 import { formatPercent, qualityRows } from "./helpers";
 import { qualityFormat, qualityList, qualityNumber, qualityRow } from "./styles";
@@ -18,7 +18,7 @@ export function QualityTile() {
   const rows = qualityRows(quality.data?.formats ?? [], total, QUALITY_ROW_LIMIT);
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
       icon={Disc3}
       title={t("overview.analytics.quality.title")}
       subtitle={t("overview.analytics.quality.subtitle")}
@@ -39,6 +39,6 @@ export function QualityTile() {
           </li>
         ))}
       </ul>
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

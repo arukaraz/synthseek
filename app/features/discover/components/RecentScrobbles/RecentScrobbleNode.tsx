@@ -1,7 +1,7 @@
 "use client";
 
+import { CoverArt } from "../WidgetRow/CoverArt";
 import { describeScrobbleAge } from "./helpers";
-import { ScrobbleCover } from "./ScrobbleCover";
 import { node, nodeArtist, nodeCover, nodeDot, nodeTime, nodeTitle } from "./styles";
 import type { RecentScrobbleNodeProps } from "./types";
 
@@ -13,7 +13,7 @@ export function RecentScrobbleNode({ scrobble }: RecentScrobbleNodeProps) {
       <span className={nodeTime()}>{age}</span>
       <span className={nodeDot()} aria-hidden />
       <div className={nodeCover()}>
-        <ScrobbleCover scrobble={scrobble} sizes="120px" />
+        <CoverArt src={scrobble.albumImage} seed={scrobble.catalogTrackId} sizes="120px" />
       </div>
       <p className={nodeTitle()}>{scrobble.title}</p>
       <p className={nodeArtist()}>{scrobble.artist}</p>

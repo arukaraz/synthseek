@@ -12,16 +12,16 @@ interface SpotlightArtist {
 }
 
 interface SpotlightQuery {
-  data: { data: { artists: SpotlightArtist[] } } | undefined;
+  data: SpotlightArtist[] | undefined;
   isLoading: boolean;
   isError: boolean;
 }
 
-const useArtistSpotlightMock = vi.fn<() => SpotlightQuery>();
+const useArtistsForYouMock = vi.fn<(countryName: string) => SpotlightQuery>();
 const openForResult = vi.fn();
 
-vi.mock("@hooks/api/queries/useArtistSpotlight", () => ({
-  useArtistSpotlight: () => useArtistSpotlightMock(),
+vi.mock("@hooks/api/queries/analytics/useArtistsForYou", () => ({
+  useArtistsForYou: (countryName: string) => useArtistsForYouMock(countryName),
 }));
 
 vi.mock("@modules/providers/CountryProvider", () => ({
@@ -49,7 +49,7 @@ function buildArtist(id: string, name: string): SpotlightArtist {
 
 function buildQuery(overrides: Partial<SpotlightQuery> = {}): SpotlightQuery {
   return {
-    data: { data: { artists: [buildArtist("artist-1", "Aphex Twin")] } },
+    data: [buildArtist("artist-1", "Aphex Twin")],
     isLoading: false,
     isError: false,
     ...overrides,
@@ -59,19 +59,20 @@ function buildQuery(overrides: Partial<SpotlightQuery> = {}): SpotlightQuery {
 describe("ArtistSpotlight", () => {
   afterEach(() => {
     vi.clearAllMocks();
-    useArtistSpotlightMock.mockReset();
+    useArtistsForYouMock.mockReset();
   });
 
   it("always renders the widget header", () => {
-    useArtistSpotlightMock.mockReturnValue(buildQuery());
+    useArtistsForYouMock.mockReturnValue(buildQuery());
 
     renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
     expect(screen.getByRole("heading", { name: enDiscover.artistSpotlight.title })).toBeInTheDocument();
+    expect(useArtistsForYouMock).toHaveBeenCalledWith("United States");
   });
 
   it("renders the loading skeleton while the query is pending", () => {
-    useArtistSpotlightMock.mockReturnValue(buildQuery({ isLoading: true, data: undefined }));
+    useArtistsForYouMock.mockReturnValue(buildQuery({ isLoading: true, data: undefined }));
 
     const { container } = renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
@@ -80,7 +81,7 @@ describe("ArtistSpotlight", () => {
   });
 
   it("renders the error empty state when the query errors", () => {
-    useArtistSpotlightMock.mockReturnValue(buildQuery({ isError: true, data: undefined }));
+    useArtistsForYouMock.mockReturnValue(buildQuery({ isError: true, data: undefined }));
 
     renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
@@ -89,7 +90,7 @@ describe("ArtistSpotlight", () => {
   });
 
   it("renders the empty state when the resolved artist list is empty", () => {
-    useArtistSpotlightMock.mockReturnValue(buildQuery({ data: { data: { artists: [] } } }));
+    useArtistsForYouMock.mockReturnValue(buildQuery({ data: [] }));
 
     renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
@@ -98,7 +99,7 @@ describe("ArtistSpotlight", () => {
   });
 
   it("renders the empty state when the query data is absent and not loading or erroring", () => {
-    useArtistSpotlightMock.mockReturnValue(buildQuery({ data: undefined }));
+    useArtistsForYouMock.mockReturnValue(buildQuery({ data: undefined }));
 
     renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
@@ -106,10 +107,8 @@ describe("ArtistSpotlight", () => {
   });
 
   it("renders a card per artist when the list resolves", () => {
-    useArtistSpotlightMock.mockReturnValue(
-      buildQuery({
-        data: { data: { artists: [buildArtist("a", "Boards of Canada"), buildArtist("b", "Autechre")] } },
-      })
+    useArtistsForYouMock.mockReturnValue(
+      buildQuery({ data: [buildArtist("a", "Boards of Canada"), buildArtist("b", "Autechre")] })
     );
 
     renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
@@ -120,9 +119,7 @@ describe("ArtistSpotlight", () => {
   });
 
   it("opens the request flow for the clicked artist", () => {
-    useArtistSpotlightMock.mockReturnValue(
-      buildQuery({ data: { data: { artists: [buildArtist("a", "Squarepusher")] } } })
-    );
+    useArtistsForYouMock.mockReturnValue(buildQuery({ data: [buildArtist("a", "Squarepusher")] }));
 
     renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
     fireEvent.click(screen.getByTestId("artist-card"));

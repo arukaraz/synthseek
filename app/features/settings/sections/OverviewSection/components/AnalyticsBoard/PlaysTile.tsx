@@ -3,9 +3,9 @@
 import { Play } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useListeningSummary } from "@hooks/api/queries/analytics/useListeningSummary";
 
-import { AnalyticsTile } from "./AnalyticsTile";
 import { SUMMARY_WINDOW_DAYS } from "./constants";
 import { deltaOf, windowTotals } from "./helpers";
 import { MetricValue } from "./MetricValue";
@@ -18,7 +18,8 @@ export function PlaysTile() {
   const totals = windowTotals(plays, SUMMARY_WINDOW_DAYS);
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
+      compactOnPhone
       icon={Play}
       title={t("overview.analytics.plays.title")}
       subtitle={t("overview.analytics.plays.subtitle")}
@@ -29,6 +30,6 @@ export function PlaysTile() {
     >
       <MetricValue value={totals.current.toLocaleString()} delta={deltaOf(totals.current, totals.previous)} />
       <SparkLine values={plays} />
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

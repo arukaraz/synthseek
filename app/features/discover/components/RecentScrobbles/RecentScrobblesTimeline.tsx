@@ -3,8 +3,8 @@
 import { cn } from "@utils/cn";
 
 import { scrollFadeBottom } from "../styles";
+import { CoverArt } from "../WidgetRow/CoverArt";
 import { describeScrobbleAge } from "./helpers";
-import { ScrobbleCover } from "./ScrobbleCover";
 import {
   timeline,
   timelineArtist,
@@ -30,7 +30,7 @@ export function RecentScrobblesTimeline({ scrobbles }: RecentScrobblesTimelinePr
             <span className={timelineDot()} />
           </span>
           <span className={timelineCover()}>
-            <ScrobbleCover scrobble={scrobble} sizes="36px" />
+            <CoverArt src={scrobble.albumImage} seed={scrobble.catalogTrackId} sizes="36px" />
           </span>
           <span className={timelineCopy()}>
             <span className={timelineTitle()}>{scrobble.title}</span>

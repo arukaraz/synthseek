@@ -43,8 +43,6 @@ export const nodeDot = cva(
 
 export const nodeCover = cva("bg-surface-sunken relative aspect-square w-full overflow-hidden rounded-lg");
 
-export const nodeFallback = cva("size-full");
-
 export const nodeTitle = cva("text-fg mt-2 truncate text-[12.5px] font-medium");
 
 export const nodeArtist = cva("text-fg/60 truncate text-[11.5px]");

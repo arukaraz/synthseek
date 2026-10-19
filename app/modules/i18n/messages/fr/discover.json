@@ -67,12 +67,12 @@
     "unknownArtist": "Artiste inconnu"
   },
   "artistSpotlight": {
-    "title": "Artiste à l'honneur",
-    "subtitle": "Meilleurs artistes de votre région",
+    "title": "Des artistes qui pourraient vous plaire",
+    "subtitle": "Proches de ce que vous écoutez",
     "errorTitle": "Échec du chargement des artistes",
-    "errorDescription": "Impossible de récupérer les meilleurs artistes. Veuillez réessayer plus tard.",
+    "errorDescription": "Impossible de récupérer les artistes. Veuillez réessayer plus tard.",
     "emptyTitle": "Aucun artiste trouvé",
-    "emptyDescription": "Aucun artiste populaire trouvé pour cette région.",
+    "emptyDescription": "Écoutez un peu de musique et des suggestions apparaîtront ici.",
     "artistBadge": "Artiste",
     "latestRelease": "Dernière sortie :",
     "songs_one": "{{count}} chanson",
@@ -260,7 +260,7 @@
     "widgets": {
       "trending": "Les titres en tendance dans les classements du catalogue, un par un. Demander ajoute le titre à votre bibliothèque.",
       "mixes": "Les playlists que ListenBrainz crée à partir de vos scrobbles. Ouvrez-en une pour voir ses titres et demander ce qui vous manque.",
-      "artistsNext": "Les artistes les plus écoutés de votre région avec leur dernière sortie. Ouvrez-en un pour voir l'artiste et demander de la musique.",
+      "artistsNext": "Des artistes proches de ceux que vous écoutez le plus et absents de votre bibliothèque, avec leur dernière sortie. Sans historique, les plus écoutés de votre région.",
       "genres": "Des catégories du catalogue à parcourir. Ouvrez-en une pour voir ses albums et ses playlists éditoriales.",
       "topTracks": "Vos titres les plus scrobblés sur Last.fm, de tous les temps.",
       "scrobbles": "Vos derniers scrobbles Last.fm à mesure qu'ils arrivent, les plus récents d'abord.",
@@ -271,7 +271,17 @@
       "forgottenFavorites": "Les favoris que vous n'avez pas écoutés depuis 90 jours ou plus. Lire remplace la file d'attente par ces titres.",
       "jumpBackIn": "Les albums commencés ces 7 derniers jours et pas terminés. Lire relance l'album depuis le début.",
       "lastYear": "Ce que vous avez écouté la même semaine il y a un an, d'après votre propre historique.",
-      "stations": "Des radios construites à partir de vos artistes préférés, de vos favoris et des titres jamais écoutés."
+      "stations": "Des radios construites à partir de vos artistes préférés, de vos favoris et des titres jamais écoutés.",
+      "continueListening": "Votre file d'attente là où vous l'avez laissée, et vos dernières écoutes depuis toutes vos apps.",
+      "rarities": "Les titres que vous écoutez et que peu de gens écoutent, d'après les comptes de ListenBrainz.",
+      "orbit": "Des albums que vous n'avez pas, choisis à partir de titres proches de ceux que vous écoutez le plus.",
+      "charts": "Les titres les plus écoutés cette semaine dans votre région sur Last.fm. Lisez ceux que vous avez et demandez les autres.",
+      "loved": "Les titres que vous avez aimés sur Last.fm et qui ne sont pas encore dans votre bibliothèque.",
+      "newInLibrary": "Les albums arrivés ces 7 derniers jours, et si vous les avez écoutés.",
+      "gaps": "Les sorties qui manquent chez les artistes que vous possédez le plus, comparées au catalogue.",
+      "anniversaries": "Les albums de votre bibliothèque sortis autour de cette date les années passées.",
+      "landed": "Les albums téléchargés ces 7 derniers jours, avec la source et le temps qu'ils ont pris.",
+      "serverPlaylists": "Vos dernières playlists et les serveurs multimédias avec lesquels elles sont synchronisées."
     }
   },
   "history": {
@@ -333,5 +343,86 @@
       "favorites": "Vos favoris",
       "unplayed": "Jamais écoutés"
     }
+  },
+  "albumMeta_one": "{{artist}} · {{count}} piste · {{when}}",
+  "albumMeta_other": "{{artist}} · {{count}} pistes · {{when}}",
+  "continueListening": {
+    "title": "Reprendre l'écoute",
+    "subtitle": "Votre file d'attente",
+    "empty": "Rien en attente. Lancez quelque chose et ça restera ici.",
+    "position": "{{artist}} · {{index}} sur {{total}}",
+    "time": "{{position}} / {{duration}}",
+    "resume": "Reprendre",
+    "pause": "Pause",
+    "recent": "Écouté récemment",
+    "played": "{{artist}} · {{when}}"
+  },
+  "rarities": {
+    "title": "Vos raretés",
+    "subtitle": "Écoutes ListenBrainz",
+    "empty": "Pas encore assez d'écoutes identifiées.",
+    "caption": "de vos titres préférés ont moins de {{threshold}} écoutes dans le monde. Médiane {{median}}.",
+    "yours_one": "{{artist}} · {{count}} écoute de votre part",
+    "yours_other": "{{artist}} · {{count}} écoutes de votre part"
+  },
+  "orbit": {
+    "title": "Élargissez votre orbite",
+    "subtitle": "Des albums à partir de vos écoutes",
+    "empty": "Écoutez quelques titres et des albums proches apparaîtront ici.",
+    "because": "Parce que vous avez écouté {{title}}",
+    "row": "{{artist}} · parce que vous avez écouté {{title}}"
+  },
+  "charts": {
+    "title": "Classements",
+    "subtitle": "Meilleurs titres en {{country}}",
+    "empty": "Aucun classement pour cette région pour le moment.",
+    "play": "Lire",
+    "request": "Demander"
+  },
+  "loved": {
+    "title": "Aimés sur Last.fm, absents ici",
+    "subtitle": "Titres aimés sur Last.fm",
+    "unlinked": "Ajoutez votre nom d'utilisateur Last.fm pour les voir.",
+    "link": "Paramètres",
+    "empty": "Tout ce que vous avez aimé est déjà ici.",
+    "request": "Demander"
+  },
+  "newInLibrary": {
+    "title": "Nouveau dans votre bibliothèque",
+    "subtitle": "7 derniers jours",
+    "empty": "Rien de nouveau ces 7 derniers jours.",
+    "played": "Écouté",
+    "unplayed": "Nouveau"
+  },
+  "landed": {
+    "title": "Arrivés cette semaine",
+    "subtitle": "Albums téléchargés",
+    "empty": "Aucun téléchargement arrivé ces 7 derniers jours.",
+    "via": "{{source}} · {{duration}}"
+  },
+  "gaps": {
+    "title": "Complétez la discographie",
+    "subtitle": "Le catalogue face à votre bibliothèque",
+    "empty": "Vos artistes principaux sont complets.",
+    "have": "{{have}} sorties sur {{total}}",
+    "missing": "Pas dans votre bibliothèque"
+  },
+  "anniversaries": {
+    "title": "Anniversaires",
+    "subtitle": "Sortis autour d'aujourd'hui",
+    "empty": "Aucun anniversaire autour d'aujourd'hui.",
+    "released": "{{artist}} · sorti le {{date}}",
+    "years_one": "{{count}} an",
+    "years_other": "{{count}} ans"
+  },
+  "serverPlaylists": {
+    "title": "Vos playlists sur les serveurs multimédias",
+    "subtitle": "État de la synchronisation",
+    "noServers": "Connectez un serveur multimédia pour synchroniser les playlists.",
+    "empty": "Aucune playlist pour l'instant.",
+    "tracks_one": "{{count}} piste",
+    "tracks_other": "{{count}} pistes",
+    "synced": "Synchronisée {{when}}",
+    "notSynced": "Non synchronisée"
   }
 }

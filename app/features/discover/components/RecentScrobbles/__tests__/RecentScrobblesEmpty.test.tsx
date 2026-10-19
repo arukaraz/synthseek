@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import enDiscover from "@modules/i18n/messages/en/discover.json";
 import { render, screen } from "@test/test-utils";
 
-import { SETTINGS_HREF } from "../constants";
+import { LASTFM_SETTINGS_HREF as SETTINGS_HREF } from "../../constants";
 import { RecentScrobblesEmpty } from "../RecentScrobblesEmpty";
 
 describe("RecentScrobblesEmpty", () => {

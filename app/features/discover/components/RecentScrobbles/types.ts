@@ -30,8 +30,3 @@ export interface RecentScrobblesTimelineProps {
 export interface RecentScrobbleNodeProps {
   scrobble: LastfmScrobble;
 }
-
-export interface ScrobbleCoverProps {
-  scrobble: LastfmScrobble;
-  sizes: string;
-}

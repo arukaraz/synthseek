@@ -26,6 +26,19 @@ export interface NowPlayingTrack {
   playing: boolean;
 }
 
+export interface ResumePoint {
+  track: PlayerTrack;
+  index: number;
+  total: number;
+  positionSeconds: number;
+  playing: boolean;
+}
+
+export interface ResumeControls {
+  point: ResumePoint | null;
+  toggle: () => void;
+}
+
 export interface RemotePlayback {
   deviceId: string;
   confirmed: boolean;

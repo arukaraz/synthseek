@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@test/test-utils";
 
 import { TopTracksEmpty } from "../TopTracksEmpty";
-import { SETTINGS_HREF } from "../constants";
+import { LASTFM_SETTINGS_HREF as SETTINGS_HREF } from "../../constants";
 
 vi.mock("next/link", () => ({
   default: ({ children, href }: { children: React.ReactNode; href: string }) => <a href={href}>{children}</a>,

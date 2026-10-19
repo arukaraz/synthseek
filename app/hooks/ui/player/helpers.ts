@@ -36,6 +36,7 @@ import type {
   PlayerSessionState,
   QueueAddOutcome,
   RemotePlayback,
+  ResumePoint,
   SessionSnapshot,
   SourceChoice,
   SourceCount,
@@ -299,6 +300,29 @@ export function nowPlayingOf(state: PlayerSessionState): NowPlayingTrack | null 
   const track = mirroring ? (state.remote?.track ?? null) : (state.queue[state.index] ?? null);
   if (track === null) return null;
   return { trackId: track.id, playing: mirroring ? state.remote?.playing === true : state.playing };
+}
+
+export function resumePointOf(state: PlayerSessionState): ResumePoint | null {
+  if (!state.started || isMirroring(state)) return null;
+  const track = state.queue[state.index];
+  if (track === undefined) return null;
+  return {
+    track,
+    index: state.index,
+    total: state.queue.length,
+    positionSeconds: Math.floor(state.positionSeconds),
+    playing: state.playing,
+  };
+}
+
+export function sameResumePoint(left: ResumePoint, right: ResumePoint): boolean {
+  return (
+    left.track === right.track &&
+    left.index === right.index &&
+    left.total === right.total &&
+    left.positionSeconds === right.positionSeconds &&
+    left.playing === right.playing
+  );
 }
 
 export function queuePresenceOf(

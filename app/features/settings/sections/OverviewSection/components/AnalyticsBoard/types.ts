@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { BoardDevice } from "@components/BoardGrid";
@@ -44,17 +43,6 @@ export interface QualityRow {
 export interface AnalyticsCellProps {
   device: BoardDevice;
   size: BoardSize;
-  children: ReactNode;
-}
-
-export interface AnalyticsTileProps {
-  icon: LucideIcon;
-  title: string;
-  subtitle: string;
-  info: string;
-  titleId: string;
-  loading: boolean;
-  note: string | null;
   children: ReactNode;
 }
 

@@ -3,9 +3,9 @@
 import { History } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useDecades } from "@hooks/api/queries/analytics/useDecades";
 
-import { AnalyticsTile } from "./AnalyticsTile";
 import { barVars, decadeBar, decadeChart, decadeColumn, decadeLabel, decadeTrack, decadeValue } from "./styles";
 
 export function DecadesTile() {
@@ -15,7 +15,7 @@ export function DecadesTile() {
   const max = Math.max(0, ...rows.map((row) => row.albums));
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
       icon={History}
       title={t("overview.analytics.decades.title")}
       subtitle={t("overview.analytics.decades.subtitle")}
@@ -44,6 +44,6 @@ export function DecadesTile() {
           </div>
         ))}
       </div>
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

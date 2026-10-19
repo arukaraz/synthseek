@@ -3,9 +3,9 @@
 import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useLibraryGrowth } from "@hooks/api/queries/analytics/useLibraryGrowth";
 
-import { AnalyticsTile } from "./AnalyticsTile";
 import { deltaOf } from "./helpers";
 import { MetricValue } from "./MetricValue";
 import { SparkBars } from "./SparkBars";
@@ -16,7 +16,8 @@ export function AddedTile() {
   const added = growth.data?.addedLast30 ?? 0;
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
+      compactOnPhone
       icon={Plus}
       title={t("overview.analytics.added.title")}
       subtitle={t("overview.analytics.added.subtitle")}
@@ -31,6 +32,6 @@ export function AddedTile() {
         delta={deltaOf(added, growth.data?.addedPrev30 ?? 0)}
       />
       <SparkBars values={growth.data?.addedByWeek ?? []} />
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

@@ -5,10 +5,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SegmentTabs } from "@components/ui/SegmentTabs";
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useListeningClock } from "@hooks/api/queries/analytics/useListeningClock";
 import type { ClockPeriod } from "@hooks/api/queries/analytics/types";
 
-import { AnalyticsTile } from "./AnalyticsTile";
 import { CLOCK_DEFAULT_PERIOD, CLOCK_PERIOD_KEYS, CLOCK_PERIODS } from "./constants";
 import { browserTimeZone, clockPeak, weekdayLabels } from "./helpers";
 import { HeatGrid } from "./HeatGrid";
@@ -24,7 +24,7 @@ export function ListeningClockTile() {
   const peak = clockPeak(cells);
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
       icon={CalendarDays}
       title={t("overview.analytics.clock.title")}
       subtitle={t("overview.analytics.clock.subtitle")}
@@ -52,6 +52,6 @@ export function ListeningClockTile() {
           ariaLabel={t("overview.analytics.clock.periodLabel")}
         />
       </div>
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

@@ -3,9 +3,9 @@
 import { TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useLibraryGrowth } from "@hooks/api/queries/analytics/useLibraryGrowth";
 
-import { AnalyticsTile } from "./AnalyticsTile";
 import { totalOf } from "./helpers";
 import { SparkLine } from "./SparkLine";
 import { axisRow, caption } from "./styles";
@@ -17,7 +17,7 @@ export function GrowthTile() {
   const total = totalOf(weeks);
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
       icon={TrendingUp}
       title={t("overview.analytics.growth.title")}
       subtitle={t("overview.analytics.growth.subtitle")}
@@ -34,6 +34,6 @@ export function GrowthTile() {
         <span>{t("overview.analytics.growth.start", { count: weeks.length })}</span>
         <span>{t("overview.analytics.growth.end")}</span>
       </div>
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

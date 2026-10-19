@@ -3,7 +3,6 @@ export { useRequestDetail } from "./queries/useRequestDetail";
 export { useRecentTracks } from "./queries/useRecentTracks";
 export { useTrackTitleMatches } from "./queries/useTrackTitleMatches";
 export { useRequestIdsBySource } from "./queries/useRequestIdsBySource";
-export { useArtistSpotlight } from "./queries/useArtistSpotlight";
 export { useCategories } from "./queries/useCategories";
 export { useCategoryPlaylists } from "./queries/useCategoryPlaylists";
 export { useDownloadSourcesAvailability } from "./queries/useDownloadSourcesAvailability";

@@ -7,14 +7,14 @@ import { useTranslation } from "react-i18next";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 
-import { EMPTY_CTA, SETTINGS_HREF } from "./constants";
+import { LASTFM_EMPTY_CTA, LASTFM_SETTINGS_HREF } from "../constants";
 import { emptyTextKey } from "./helpers";
 import { emptyLink, emptyPanel, emptyText } from "./styles";
 import type { TopTracksEmptyProps } from "./types";
 
 export function TopTracksEmpty({ reason, info }: TopTracksEmptyProps) {
   const { t } = useTranslation("discover");
-  const cta = EMPTY_CTA[reason];
+  const cta = LASTFM_EMPTY_CTA[reason];
   const ctaLabel = cta === "open-settings" ? t("topTracks.empty.ctaOpenSettings") : t("topTracks.empty.ctaConfigure");
 
   return (
@@ -29,7 +29,7 @@ export function TopTracksEmpty({ reason, info }: TopTracksEmptyProps) {
       <div className={emptyPanel()}>
         <p className={emptyText()}>{t(emptyTextKey(reason))}</p>
         {cta ? (
-          <Link href={SETTINGS_HREF} className={emptyLink()}>
+          <Link href={LASTFM_SETTINGS_HREF} className={emptyLink()}>
             {ctaLabel}
           </Link>
         ) : null}

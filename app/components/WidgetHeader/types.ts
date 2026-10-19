@@ -11,7 +11,7 @@ export interface WidgetHeaderAction {
 }
 
 export interface WidgetHeaderProps {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   title: string;
   subtitle: string;
   headingLevel?: WidgetHeaderHeadingLevel;

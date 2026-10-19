@@ -5,7 +5,7 @@ import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 import type { MusicItem } from "@api/__generated__/types";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
-import { useArtistSpotlight } from "@hooks/api/queries/useArtistSpotlight";
+import { useArtistsForYou } from "@hooks/api/queries/analytics/useArtistsForYou";
 import { useCountry } from "@modules/providers/CountryProvider";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
@@ -15,7 +15,6 @@ import { AlertCircle, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
 import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
-import { ARTIST_SPOTLIGHT_COUNT } from "./constants";
 import { spotlightBody, spotlightGrid } from "./styles";
 import type { ArtistSpotlightProps } from "./types";
 
@@ -25,8 +24,8 @@ export function ArtistSpotlight({ info }: ArtistSpotlightProps) {
   const countryData = getCountryByCode(country) ?? getCountryByCode(DEFAULT_COUNTRY);
   const countryName = countryData?.name ?? "";
 
-  const { data, isLoading, isError } = useArtistSpotlight(countryName, ARTIST_SPOTLIGHT_COUNT);
-  const artists = data?.data?.artists ?? [];
+  const { data, isLoading, isError } = useArtistsForYou(countryName);
+  const artists = data ?? [];
 
   const { openForResult } = useContentRequestFlow();
 

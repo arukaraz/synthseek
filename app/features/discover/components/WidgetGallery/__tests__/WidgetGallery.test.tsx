@@ -28,6 +28,16 @@ vi.mock("../../HistoryMixes/ForgottenFavorites", () => ({ ForgottenFavorites: st
 vi.mock("../../JumpBackIn/JumpBackIn", () => ({ JumpBackIn: stub("jumpBackIn") }));
 vi.mock("../../LastYear/LastYear", () => ({ LastYear: stub("lastYear") }));
 vi.mock("../../Stations/Stations", () => ({ Stations: stub("stations") }));
+vi.mock("../../ContinueListening/ContinueListening", () => ({ ContinueListening: stub("continueListening") }));
+vi.mock("../../Rarities/Rarities", () => ({ Rarities: stub("rarities") }));
+vi.mock("../../Orbit/Orbit", () => ({ Orbit: stub("orbit") }));
+vi.mock("../../Charts/Charts", () => ({ Charts: stub("charts") }));
+vi.mock("../../LovedNotHere/LovedNotHere", () => ({ LovedNotHere: stub("loved") }));
+vi.mock("../../NewInLibrary/NewInLibrary", () => ({ NewInLibrary: stub("newInLibrary") }));
+vi.mock("../../Gaps/Gaps", () => ({ Gaps: stub("gaps") }));
+vi.mock("../../Anniversaries/Anniversaries", () => ({ Anniversaries: stub("anniversaries") }));
+vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
+vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 
 const ON_BOARD: BoardItem[] = [{ id: "s1", widget: "scrobbles", size: "M" }];
 
@@ -51,11 +61,11 @@ describe("WidgetGallery", () => {
   it("lists every widget under its category band with a scaled live preview at the default size", () => {
     renderGallery();
 
-    expect(cardTitles()).toHaveLength(14);
+    expect(cardTitles()).toHaveLength(24);
     expect(screen.getByRole("heading", { level: 3, name: "Now" })).toBeInTheDocument();
-    expect(screen.getByText("1 of 7 on board")).toBeInTheDocument();
+    expect(screen.getByText("1 of 8 on board")).toBeInTheDocument();
     expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "XL");
-    expect(screen.getByText(i18n.t("discover:board.gallery.summary", { onBoard: 1, total: 14 }))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t("discover:board.gallery.summary", { onBoard: 1, total: 24 }))).toBeInTheDocument();
   });
 
   it("narrows to one category without bands when a tab is chosen", () => {
@@ -71,6 +81,7 @@ describe("WidgetGallery", () => {
       "This time last year",
       "Top Tracks",
       "Recent Scrobbles",
+      "Your rarities",
     ]);
     expect(screen.queryByRole("heading", { level: 3 })).not.toBeInTheDocument();
   });
@@ -80,7 +91,7 @@ describe("WidgetGallery", () => {
     const search = screen.getByRole("searchbox", { name: i18n.t("discover:board.gallery.search") });
 
     fireEvent.change(search, { target: { value: "listenbrainz" } });
-    expect(cardTitles()).toEqual(["Discover Mixes"]);
+    expect(cardTitles()).toEqual(["Your rarities", "Discover Mixes"]);
 
     fireEvent.change(search, { target: { value: "zzz" } });
     expect(screen.getByText(i18n.t("discover:board.gallery.empty", { query: "zzz" }))).toBeInTheDocument();

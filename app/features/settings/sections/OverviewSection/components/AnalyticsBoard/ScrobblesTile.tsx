@@ -3,11 +3,11 @@
 import { Radio } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useScrobbleHealth } from "@hooks/api/queries/analytics/useScrobbleHealth";
 import { DISCOVERY_SERVICE_NAMES } from "@utils/playlist";
 
 import { Pill } from "../../../../components/Pill";
-import { AnalyticsTile } from "./AnalyticsTile";
 import { activeDeliveries } from "./helpers";
 import { MetricValue } from "./MetricValue";
 import { serviceList, serviceName, servicePills, serviceRow } from "./styles";
@@ -19,7 +19,7 @@ export function ScrobblesTile() {
   const sent = services.reduce((total, service) => total + service.sent, 0);
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
       icon={Radio}
       title={t("overview.analytics.scrobbles.title")}
       subtitle={t("overview.analytics.scrobbles.subtitle")}
@@ -51,6 +51,6 @@ export function ScrobblesTile() {
           </li>
         ))}
       </ul>
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

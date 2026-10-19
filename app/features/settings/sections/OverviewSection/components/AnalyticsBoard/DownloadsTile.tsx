@@ -3,10 +3,10 @@
 import { Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { WidgetFrame } from "@components/WidgetFrame";
 import { useDownloadOutcomes } from "@hooks/api/queries/analytics/useDownloadOutcomes";
 import { formatElapsed } from "@utils/formatters";
 
-import { AnalyticsTile } from "./AnalyticsTile";
 import { formatPercent, landedShare } from "./helpers";
 import { MetricValue } from "./MetricValue";
 import { caption, shareVars, splitBar, splitFill } from "./styles";
@@ -20,7 +20,8 @@ export function DownloadsTile() {
   const median = outcomes.data?.medianMinutes ?? null;
 
   return (
-    <AnalyticsTile
+    <WidgetFrame
+      compactOnPhone
       icon={Download}
       title={t("overview.analytics.downloads.title")}
       subtitle={t("overview.analytics.downloads.subtitle")}
@@ -48,6 +49,6 @@ export function DownloadsTile() {
           {t("overview.analytics.downloads.median", { duration: formatElapsed(median * 60) })}
         </p>
       )}
-    </AnalyticsTile>
+    </WidgetFrame>
   );
 }

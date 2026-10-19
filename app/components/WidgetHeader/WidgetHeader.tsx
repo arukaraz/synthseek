@@ -28,9 +28,11 @@ export function WidgetHeader({
   return (
     <header className={widgetHeaderRow()}>
       <div className={widgetHeaderLead()}>
-        <span className={widgetHeaderIcon()} aria-hidden>
-          <Icon className="size-4" />
-        </span>
+        {Icon ? (
+          <span className={widgetHeaderIcon()} aria-hidden>
+            <Icon className="size-4" />
+          </span>
+        ) : null}
         <div className={widgetHeaderTitleStack()}>
           <div className={widgetHeaderTitleLine()}>
             <Heading id={titleId} className={widgetHeaderTitle()}>

@@ -47,6 +47,16 @@ vi.mock("../../HistoryMixes/ForgottenFavorites", () => ({ ForgottenFavorites: st
 vi.mock("../../JumpBackIn/JumpBackIn", () => ({ JumpBackIn: stub("jumpBackIn") }));
 vi.mock("../../LastYear/LastYear", () => ({ LastYear: stub("lastYear") }));
 vi.mock("../../Stations/Stations", () => ({ Stations: stub("stations") }));
+vi.mock("../../ContinueListening/ContinueListening", () => ({ ContinueListening: stub("continueListening") }));
+vi.mock("../../Rarities/Rarities", () => ({ Rarities: stub("rarities") }));
+vi.mock("../../Orbit/Orbit", () => ({ Orbit: stub("orbit") }));
+vi.mock("../../Charts/Charts", () => ({ Charts: stub("charts") }));
+vi.mock("../../LovedNotHere/LovedNotHere", () => ({ LovedNotHere: stub("loved") }));
+vi.mock("../../NewInLibrary/NewInLibrary", () => ({ NewInLibrary: stub("newInLibrary") }));
+vi.mock("../../Gaps/Gaps", () => ({ Gaps: stub("gaps") }));
+vi.mock("../../Anniversaries/Anniversaries", () => ({ Anniversaries: stub("anniversaries") }));
+vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
+vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 
 const TWO_TILES: BoardLayout = {
   schemaVersion: 1,

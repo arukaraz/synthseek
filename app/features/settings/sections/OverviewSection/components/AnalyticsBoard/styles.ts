@@ -7,14 +7,6 @@ export const analyticsCell = cva(
   "flex min-h-0 min-w-0 [grid-column:span_var(--cell-cols)/span_var(--cell-cols)] [grid-row:span_var(--cell-rows)/span_var(--cell-rows)] [&>*]:min-h-0 [&>*]:min-w-0 [&>*]:flex-1"
 );
 
-export const analyticsTile = cva("min-h-0 overflow-hidden");
-
-export const tileBody = cva("flex min-h-0 flex-1 flex-col gap-2");
-
-export const tileSkeleton = cva("bg-fg/5 min-h-0 flex-1 animate-pulse rounded-lg");
-
-export const tileNote = cva("text-fg/60 flex flex-1 items-center text-sm");
-
 export const metricRow = cva("flex flex-wrap items-center gap-x-2 gap-y-1");
 
 export const metricValue = cva("text-fg text-2xl leading-none font-semibold tabular-nums");
