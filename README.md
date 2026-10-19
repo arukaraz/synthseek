@@ -109,7 +109,7 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 ### Automate it
 
 - A built-in MCP server, so assistants can search, request, manage your library and run the player
-- Discovery mixes from Last.fm and ListenBrainz on a dedicated Discover page
+- A Discover board each member arranges, with mixes from Last.fm and ListenBrainz, sets and stations built from your own plays, charts, and artists and albums similar to what you play
 - Lidarr delegation, with tag and monitor-scope selection
 - Library import from Spotify, and playlist import from Plex, Navidrome or Jellyfin
 - Playlist import from JSPF, XSPF, or CSV, and export as JSPF
@@ -122,7 +122,7 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 - Optional approval for members' requests, and download quotas per member and for the whole library
 - A responsive web interface that works on a phone as well as a desktop
 - Available in English, Español, Deutsch, and Français
-- Logs viewer, background job controls, a system status page, and in-app update notifications
+- Logs viewer, background job controls, a system status page, listening, library and download numbers on the settings overview, and in-app update notifications
 - Notifications on Discord, ntfy or Telegram, plus a webhook or Apprise for administrators, with each member picking what they receive
 
 [Users and permissions](https://docs.synthseek.dev/users-permissions/) · [Configuration](https://docs.synthseek.dev/configuration/)
