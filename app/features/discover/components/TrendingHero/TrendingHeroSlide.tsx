@@ -2,6 +2,7 @@
 
 import { ContentType, type MusicTrack } from "@api/__generated__/types";
 import { ImageWithFallback } from "@components/ImageWithFallback/ImageWithFallback";
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
@@ -14,13 +15,14 @@ import {
   heroContent,
   heroImageOverlayBottom,
   heroImageOverlayLeft,
+  heroInfo,
   heroSubtitle,
   heroTitle,
   heroTrendingBadge,
 } from "./styles";
 import type { TrendingHeroSlideProps } from "./types";
 
-export function TrendingHeroSlide({ item, onRequestOpenChange }: TrendingHeroSlideProps) {
+export function TrendingHeroSlide({ item, onRequestOpenChange, info }: TrendingHeroSlideProps) {
   const { t } = useTranslation("discover");
   const [requestedTrack, setRequestedTrack] = useState<MusicTrack | null>(null);
   const track = item.track;
@@ -69,6 +71,7 @@ export function TrendingHeroSlide({ item, onRequestOpenChange }: TrendingHeroSli
 
         <div className={heroTrendingBadge()}>
           <Zap className="h-3 w-3" /> {t("trendingHero.badge")}
+          <InfoTooltip title={t("trendingHero.badge")} description={info} className={heroInfo()} />
         </div>
 
         <AnimatePresence mode="wait">

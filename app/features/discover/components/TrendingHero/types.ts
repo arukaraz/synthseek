@@ -1,5 +1,9 @@
 import type { MusicTrack } from "@api/__generated__/types";
 
+export interface TrendingHeroProps {
+  info: string;
+}
+
 export interface TrendingHeroNavProps {
   total: number;
   currentIndex: number;
@@ -14,4 +18,5 @@ export interface TrendingHeroSlideProps {
   total: number;
   onIndexChange: (index: number) => void;
   onRequestOpenChange: (open: boolean) => void;
+  info: string;
 }

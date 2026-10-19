@@ -11,35 +11,35 @@ vi.mock("next/link", () => ({
 
 describe("TopTracksEmpty", () => {
   it("renders the error copy without a call to action", () => {
-    render(<TopTracksEmpty reason="error" />);
+    render(<TopTracksEmpty reason="error" info="Your top tracks" />);
 
     expect(screen.getByText("Couldn't load Last.fm data.")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("renders the disabled copy with an open-settings link to the lastfm anchor", () => {
-    render(<TopTracksEmpty reason="disabled" />);
+    render(<TopTracksEmpty reason="disabled" info="Your top tracks" />);
 
     expect(screen.getByText("Enable Last.fm to see your most played tracks here.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open settings" })).toHaveAttribute("href", SETTINGS_HREF);
   });
 
   it("renders the no-username copy with a configure link", () => {
-    render(<TopTracksEmpty reason="no-username" />);
+    render(<TopTracksEmpty reason="no-username" info="Your top tracks" />);
 
     expect(screen.getByText("Add your Last.fm username to start syncing top tracks.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Configure Last.fm" })).toBeInTheDocument();
   });
 
   it("renders the no-data copy without a call to action", () => {
-    render(<TopTracksEmpty reason="no-data" />);
+    render(<TopTracksEmpty reason="no-data" info="Your top tracks" />);
 
     expect(screen.getByText("No top tracks yet, scrobble some music to see them ranked.")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("always renders the widget header so the panel reads as Top Tracks", () => {
-    render(<TopTracksEmpty reason="error" />);
+    render(<TopTracksEmpty reason="error" info="Your top tracks" />);
 
     expect(screen.getByRole("heading", { name: "Top Tracks" })).toBeInTheDocument();
   });

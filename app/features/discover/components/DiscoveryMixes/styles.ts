@@ -1,9 +1,11 @@
 import { cva } from "class-variance-authority";
 
-export const mixGrid = cva("grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4");
+export const mixBody = cva("@container flex min-h-0 flex-1 flex-col");
+
+export const mixGrid = cva("grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-3 @3xl:grid-cols-4 @3xl:gap-4");
 
 export const mixCard = cva(
-  "group relative flex flex-col overflow-hidden rounded-2xl border border-fg/10 bg-surface/40 text-left transition-all",
+  "group relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-fg/10 bg-surface/40 text-left transition-all",
   {
     variants: {
       state: {
@@ -15,7 +17,7 @@ export const mixCard = cva(
   }
 );
 
-export const mixPoster = cva("relative aspect-square w-full overflow-hidden");
+export const mixPoster = cva("relative min-h-0 w-full flex-1 overflow-hidden");
 
 export const mixPosterTint = cva("pointer-events-none absolute inset-0 bg-[var(--mix-acc)] opacity-55 mix-blend-color");
 
@@ -31,7 +33,7 @@ export const mixFreshPill = cva(
   "text-overlay-fg/90 absolute right-3 top-3 rounded-full border border-white/20 bg-black/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider backdrop-blur-sm"
 );
 
-export const mixInfo = cva("flex flex-1 flex-col gap-1 bg-surface/60 p-3.5");
+export const mixInfo = cva("flex shrink-0 flex-col gap-1 bg-surface/60 p-3.5");
 
 export const mixTag = cva("text-[10px] font-semibold uppercase tracking-wider text-[var(--mix-acc)]");
 
@@ -61,4 +63,4 @@ export const emptyPanelLink = cva(
   "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
 );
 
-export const skeletonCard = cva("bg-fg/5 aspect-[3/4] animate-pulse rounded-2xl");
+export const skeletonCard = cva("bg-fg/5 h-full animate-pulse rounded-2xl");

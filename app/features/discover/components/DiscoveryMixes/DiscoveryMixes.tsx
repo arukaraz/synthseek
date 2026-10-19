@@ -17,10 +17,10 @@ import { DiscoveryMixesEmpty } from "./DiscoveryMixesEmpty";
 import { DiscoveryMixesSkeleton } from "./DiscoveryMixesSkeleton";
 import { LB_KIND_METADATA } from "./constants";
 import { synthesizePlaylist, synthesizeTrack } from "./helpers";
-import { mixGrid } from "./styles";
-import type { ReadyMix } from "./types";
+import { mixBody, mixGrid } from "./styles";
+import type { DiscoveryMixesProps, ReadyMix } from "./types";
 
-export function DiscoveryMixes() {
+export function DiscoveryMixes({ size, info }: DiscoveryMixesProps) {
   const { t } = useTranslation("discover");
   const { mixes, lbConfig, isLoading, isError } = useDiscoveryMixes();
   const { openForTarget } = useContentRequestFlow();
@@ -43,10 +43,12 @@ export function DiscoveryMixes() {
   };
 
   if (isLoading) return <DiscoveryMixesSkeleton />;
-  if (isError) return <DiscoveryMixesEmpty reason="error" />;
-  if (!lbConfig || !lbConfig.enabled) return <DiscoveryMixesEmpty reason="disabled" />;
-  if (!lbConfig.username) return <DiscoveryMixesEmpty reason="no-username" />;
-  if (mixes.length === 0) return <DiscoveryMixesEmpty reason="no-kinds" />;
+  if (isError) return <DiscoveryMixesEmpty reason="error" info={info} />;
+  if (!lbConfig || !lbConfig.enabled) return <DiscoveryMixesEmpty reason="disabled" info={info} />;
+  if (!lbConfig.username) return <DiscoveryMixesEmpty reason="no-username" info={info} />;
+  if (mixes.length === 0) return <DiscoveryMixesEmpty reason="no-kinds" info={info} />;
+
+  const compact = size === "L";
 
   return (
     <motion.section
@@ -61,15 +63,18 @@ export function DiscoveryMixes() {
         title={t("mixes.title")}
         subtitle={t("mixes.subtitle")}
         titleId="discover-mixes-heading"
+        info={info}
       />
-      <div className={mixGrid()}>
-        {mixes.map((mix) =>
-          mix.status === "ready" ? (
-            <DiscoveryMixCard key={mix.kind} mix={mix} onClick={() => handleCardClick(mix)} />
-          ) : (
-            <DiscoveryMixCardEmpty key={mix.kind} mix={mix} />
-          )
-        )}
+      <div className={mixBody()}>
+        <div className={mixGrid()}>
+          {mixes.map((mix) =>
+            mix.status === "ready" ? (
+              <DiscoveryMixCard key={mix.kind} mix={mix} compact={compact} onClick={() => handleCardClick(mix)} />
+            ) : (
+              <DiscoveryMixCardEmpty key={mix.kind} mix={mix} compact={compact} />
+            )
+          )}
+        </div>
       </div>
     </motion.section>
   );

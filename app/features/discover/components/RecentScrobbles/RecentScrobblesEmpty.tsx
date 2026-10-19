@@ -11,7 +11,7 @@ import { emptyTextKey } from "./helpers";
 import { emptyLink, emptyPanel, emptyText } from "./styles";
 import type { RecentScrobblesEmptyProps } from "./types";
 
-export function RecentScrobblesEmpty({ reason }: RecentScrobblesEmptyProps) {
+export function RecentScrobblesEmpty({ reason, info }: RecentScrobblesEmptyProps) {
   const { t } = useTranslation("discover");
   const cta = EMPTY_CTA[reason];
   const ctaLabel =
@@ -24,6 +24,7 @@ export function RecentScrobblesEmpty({ reason }: RecentScrobblesEmptyProps) {
         title={t("recentScrobbles.title")}
         subtitle={t("recentScrobbles.subtitle")}
         titleId="recent-scrobbles-heading"
+        info={info}
       />
       <div className={emptyPanel()}>
         <p className={emptyText()}>{t(emptyTextKey(reason))}</p>

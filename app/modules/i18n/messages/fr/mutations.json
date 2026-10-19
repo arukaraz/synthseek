@@ -119,7 +119,8 @@
     "lastfmFailed": "Échec de l'enregistrement des réglages Last.fm",
     "listenBrainzFailed": "Échec de l'enregistrement des réglages ListenBrainz",
     "lastfmSaved": "Réglages de découverte Last.fm enregistrés",
-    "listenBrainzSaved": "Réglages ListenBrainz enregistrés"
+    "listenBrainzSaved": "Réglages ListenBrainz enregistrés",
+    "boardSaveFailed": "Échec de l'enregistrement de votre tableau"
   },
   "portability": {
     "importFailed": "Échec de l'importation"

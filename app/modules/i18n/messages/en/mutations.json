@@ -119,7 +119,8 @@
     "lastfmFailed": "Failed to save Last.fm settings",
     "listenBrainzFailed": "Failed to save ListenBrainz settings",
     "lastfmSaved": "Last.fm discovery settings saved",
-    "listenBrainzSaved": "ListenBrainz settings saved"
+    "listenBrainzSaved": "ListenBrainz settings saved",
+    "boardSaveFailed": "Could not save your board"
   },
   "portability": {
     "importFailed": "Import failed"

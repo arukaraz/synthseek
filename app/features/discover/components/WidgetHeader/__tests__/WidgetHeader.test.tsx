@@ -30,7 +30,21 @@ describe("WidgetHeader", () => {
 
     const heading = screen.getByRole("heading", { level: 2, name: "Recent Scrobbles" });
     const subtitle = screen.getByText("Last.fm");
-    expect(heading.parentElement).toBe(subtitle.parentElement);
+    expect(heading.parentElement?.parentElement).toBe(subtitle.parentElement);
+  });
+
+  it("renders no info trigger unless an info text is given", () => {
+    render(<WidgetHeader icon={Library} title="Genres" subtitle="Explore" />);
+
+    expect(screen.queryByRole("button", { name: /more information/i })).not.toBeInTheDocument();
+  });
+
+  it("renders an info trigger beside the title when an info text is given", () => {
+    render(<WidgetHeader icon={Library} title="Genres" subtitle="Explore" info="Browse categories" />);
+
+    const heading = screen.getByRole("heading", { level: 2, name: "Genres" });
+    const trigger = screen.getByRole("button", { name: /more information/i });
+    expect(trigger.parentElement).toBe(heading.parentElement);
   });
 
   it("renders a button action that fires onClick", () => {

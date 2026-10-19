@@ -1,8 +1,13 @@
 import type { ParseKeys } from "i18next";
 
 import i18n from "@locale";
+import type { BoardSize } from "@hooks/api/queries/board/types";
 
-import type { EmptyReason } from "./types";
+import type { EmptyReason, ScrobbleLayout } from "./types";
+
+export function scrobbleLayoutFor(size: BoardSize): ScrobbleLayout {
+  return size === "M" ? "timeline" : "rail";
+}
 
 const EMPTY_TEXT_KEYS: Record<EmptyReason, ParseKeys<"discover">> = {
   error: "recentScrobbles.empty.error",

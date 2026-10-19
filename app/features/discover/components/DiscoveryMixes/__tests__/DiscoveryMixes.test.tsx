@@ -66,7 +66,7 @@ describe("DiscoveryMixes", () => {
   it("renders the skeleton while loading", () => {
     useDiscoveryMixesMock.mockReturnValue(buildResult({ isLoading: true }));
 
-    const { container } = renderWithProviders(<DiscoveryMixes />);
+    const { container } = renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
 
     expect(container.querySelector(".animate-pulse")).not.toBeNull();
     expect(screen.queryByTestId("ready-card")).not.toBeInTheDocument();
@@ -75,7 +75,7 @@ describe("DiscoveryMixes", () => {
   it("renders the error empty state when the query errors", () => {
     useDiscoveryMixesMock.mockReturnValue(buildResult({ isError: true }));
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
 
     expect(screen.getByText(enDiscover.mixes.empty.error)).toBeInTheDocument();
   });
@@ -83,7 +83,7 @@ describe("DiscoveryMixes", () => {
   it("renders the disabled empty state when ListenBrainz is off", () => {
     useDiscoveryMixesMock.mockReturnValue(buildResult({ lbConfig: buildConfig({ enabled: false }) }));
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
 
     expect(screen.getByText(enDiscover.mixes.empty.disabled)).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe("DiscoveryMixes", () => {
   it("renders the disabled empty state when the config is missing", () => {
     useDiscoveryMixesMock.mockReturnValue(buildResult({ lbConfig: undefined }));
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
 
     expect(screen.getByText(enDiscover.mixes.empty.disabled)).toBeInTheDocument();
   });
@@ -99,7 +99,7 @@ describe("DiscoveryMixes", () => {
   it("renders the no-username empty state when the username is empty", () => {
     useDiscoveryMixesMock.mockReturnValue(buildResult({ lbConfig: buildConfig({ username: "" }) }));
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
 
     expect(screen.getByText(enDiscover.mixes.empty.noUsername)).toBeInTheDocument();
   });
@@ -107,7 +107,7 @@ describe("DiscoveryMixes", () => {
   it("renders the no-kinds empty state when no mixes are selected", () => {
     useDiscoveryMixesMock.mockReturnValue(buildResult({ mixes: [] }));
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
 
     expect(screen.getByText(enDiscover.mixes.empty.noKinds)).toBeInTheDocument();
   });
@@ -120,7 +120,7 @@ describe("DiscoveryMixes", () => {
       })
     );
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
 
     expect(screen.getByTestId("ready-card")).toHaveAttribute("data-kind", "daily-jams");
     expect(screen.getByTestId("empty-card")).toHaveAttribute("data-kind", "weekly-jams");
@@ -140,7 +140,7 @@ describe("DiscoveryMixes", () => {
       })
     );
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
     fireEvent.click(screen.getByTestId("ready-card"));
 
     expect(openForTarget).toHaveBeenCalledTimes(1);
@@ -158,7 +158,7 @@ describe("DiscoveryMixes", () => {
       })
     );
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
     fireEvent.click(screen.getByTestId("ready-card"));
 
     const target = openForTarget.mock.calls[0][0];
@@ -174,7 +174,7 @@ describe("DiscoveryMixes", () => {
       })
     );
 
-    renderWithProviders(<DiscoveryMixes />);
+    renderWithProviders(<DiscoveryMixes size="XL" info="Your ListenBrainz mixes" />);
     fireEvent.click(screen.getByTestId("ready-card"));
 
     const target = openForTarget.mock.calls[0][0];

@@ -15,6 +15,6 @@ describe("DiscoveryMixesSkeleton", () => {
   it("renders one placeholder card per skeleton slot", () => {
     const { container } = render(<DiscoveryMixesSkeleton />);
 
-    expect(container.querySelectorAll(".aspect-\\[3\\/4\\].animate-pulse")).toHaveLength(SKELETON_PLACEHOLDERS.length);
+    expect(container.querySelectorAll(".grid > .h-full.animate-pulse")).toHaveLength(SKELETON_PLACEHOLDERS.length);
   });
 });

@@ -12,7 +12,7 @@ vi.mock("next/image", () => ({
 
 describe("TopTrackHero", () => {
   it("renders the title, artist and the number-one rank badge", () => {
-    render(<TopTrackHero track={createTopTrack({ title: "Avril 14th", artist: "Aphex Twin" })} />);
+    render(<TopTrackHero track={createTopTrack({ title: "Avril 14th", artist: "Aphex Twin" })} shape="tall" />);
 
     expect(screen.getByRole("heading", { level: 3, name: "Avril 14th" })).toBeInTheDocument();
     expect(screen.getByText("Aphex Twin")).toBeInTheDocument();
@@ -21,26 +21,26 @@ describe("TopTrackHero", () => {
   });
 
   it("renders the album cover when artwork is present", () => {
-    render(<TopTrackHero track={createTopTrack({ albumImage: "https://img/cover.jpg" })} />);
+    render(<TopTrackHero track={createTopTrack({ albumImage: "https://img/cover.jpg" })} shape="tall" />);
 
     expect(screen.getByTestId("hero-cover")).toBeInTheDocument();
   });
 
   it("renders a gradient fallback when there is no album image", () => {
-    const { container } = render(<TopTrackHero track={createTopTrack({ albumImage: null })} />);
+    const { container } = render(<TopTrackHero track={createTopTrack({ albumImage: null })} shape="tall" />);
 
     expect(screen.queryByTestId("hero-cover")).not.toBeInTheDocument();
     expect(container.querySelector("[style*='background']")).not.toBeNull();
   });
 
   it("renders a formatted play count when present", () => {
-    render(<TopTrackHero track={createTopTrack({ playcount: 4200 })} />);
+    render(<TopTrackHero track={createTopTrack({ playcount: 4200 })} shape="tall" />);
 
     expect(screen.getByText("4.2k plays")).toBeInTheDocument();
   });
 
   it("omits the play count line when playcount is null", () => {
-    render(<TopTrackHero track={createTopTrack({ playcount: null })} />);
+    render(<TopTrackHero track={createTopTrack({ playcount: null })} shape="tall" />);
 
     expect(screen.queryByText(/plays/)).not.toBeInTheDocument();
   });

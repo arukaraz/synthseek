@@ -28,6 +28,7 @@ const baseProps = {
   total: 3,
   onIndexChange: vi.fn(),
   onRequestOpenChange: vi.fn(),
+  info: "What is trending right now",
 };
 
 describe("TrendingHeroSlide", () => {

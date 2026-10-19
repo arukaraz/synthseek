@@ -2,21 +2,26 @@
 
 import { EmptyState } from "@components/ui/EmptyState";
 import { fadeIn } from "@utils/animations";
+import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { AlertCircle, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
+import { glassPanelCard, scrollFadeBottom } from "../styles";
 import { useRecentRequests } from "../../hooks/useRecentRequests";
+import { requestLayoutFor } from "./helpers";
+import { RecentRequestCard } from "./RecentRequestCard";
 import { RecentRequestsSkeleton } from "./RecentRequestsSkeleton";
-import { RecentRequestsStrip } from "./RecentRequestsStrip";
+import { requestsBody, requestsScroller } from "./styles";
+import type { RecentRequestsProps } from "./types";
 
-export function RecentRequests() {
+export function RecentRequests({ size, info }: RecentRequestsProps) {
   const { t } = useTranslation("discover");
   const router = useRouter();
   const { recent, isLoading, isError, limit } = useRecentRequests();
+  const layout = requestLayoutFor(size);
 
   const handleOpenRequests = () => {
     router.push("/requests");
@@ -28,6 +33,7 @@ export function RecentRequests() {
       title={t("recentRequests.title")}
       subtitle={t("recentRequests.subtitle", { count: limit })}
       titleId="recent-requests-heading"
+      info={info}
       action={{
         label: t("recentRequests.open"),
         ariaLabel: t("recentRequests.openAriaLabel"),
@@ -40,33 +46,28 @@ export function RecentRequests() {
     return (
       <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-requests-heading">
         {header}
-        <RecentRequestsSkeleton />
+        <RecentRequestsSkeleton layout={layout} />
       </section>
     );
   }
 
-  if (isError) {
+  if (isError || recent.length === 0) {
     return (
       <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-requests-heading">
         {header}
-        <EmptyState
-          icon={AlertCircle}
-          title={t("recentRequests.errorTitle")}
-          description={t("recentRequests.errorDescription")}
-        />
-      </section>
-    );
-  }
-
-  if (recent.length === 0) {
-    return (
-      <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-requests-heading">
-        {header}
-        <EmptyState
-          icon={Download}
-          title={t("recentRequests.emptyTitle")}
-          description={t("recentRequests.emptyDescription")}
-        />
+        {isError ? (
+          <EmptyState
+            icon={AlertCircle}
+            title={t("recentRequests.errorTitle")}
+            description={t("recentRequests.errorDescription")}
+          />
+        ) : (
+          <EmptyState
+            icon={Download}
+            title={t("recentRequests.emptyTitle")}
+            description={t("recentRequests.emptyDescription")}
+          />
+        )}
       </section>
     );
   }
@@ -80,7 +81,13 @@ export function RecentRequests() {
       aria-labelledby="recent-requests-heading"
     >
       {header}
-      <RecentRequestsStrip items={recent} />
+      <div className={requestsBody()}>
+        <div className={cn(requestsScroller({ layout }), scrollFadeBottom())}>
+          {recent.map((request) => (
+            <RecentRequestCard key={request.id} request={request} layout={layout} />
+          ))}
+        </div>
+      </div>
     </motion.section>
   );
 }

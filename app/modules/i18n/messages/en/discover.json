@@ -140,9 +140,7 @@
     "errorDescription": "Unable to fetch recent requests. Please try again.",
     "emptyTitle": "No requests yet",
     "emptyDescription": "Start requesting music to see your recent downloads here.",
-    "albumArtAlt": "Album art for {{name}}",
-    "scrollPrevAriaLabel": "Scroll to previous requests",
-    "scrollNextAriaLabel": "Scroll to next requests"
+    "albumArtAlt": "Album art for {{name}}"
   },
   "mixes": {
     "title": "Discover Mixes",
@@ -199,6 +197,84 @@
       "ctaOpenSettings": "Open settings",
       "ctaConfigure": "Configure ListenBrainz",
       "ctaChoosePlaylists": "Choose playlists"
+    }
+  },
+  "board": {
+    "regionLabel": "Explore board",
+    "customize": "Customize",
+    "done": "Done",
+    "addWidget": "Add widget",
+    "editHint": "Drag a widget by its handle or move it with the arrows, and pick a size on each one.",
+    "tile": {
+      "moveEarlier": "Move {{name}} earlier",
+      "moveLater": "Move {{name}} later",
+      "remove": "Remove {{name}}",
+      "drag": "Drag {{name}}",
+      "sizes": "Size of {{name}}"
+    },
+    "sizes": {
+      "S": "S",
+      "C": "C",
+      "M": "M",
+      "MPlus": "M+",
+      "L": "L",
+      "XL": "XL"
+    },
+    "sizeNames": {
+      "S": "Small",
+      "C": "Card",
+      "M": "Medium",
+      "MPlus": "Medium, tall",
+      "L": "Large",
+      "XL": "Extra large"
+    },
+    "gallery": {
+      "title": "Add a widget",
+      "summary": "{{onBoard}} of {{total}} on your board. A new widget lands at the end, then move it where you want.",
+      "search": "Search widgets",
+      "all": "All",
+      "close": "Close",
+      "add": "Add",
+      "remove": "Remove",
+      "onBoard": "On board",
+      "categoryCount": "{{onBoard}} of {{total}} on board",
+      "empty": "No widget matches “{{query}}”."
+    },
+    "toast": {
+      "added": "{{name}} added at the end",
+      "removed": "{{name}} removed",
+      "undo": "Undo"
+    },
+    "announce": {
+      "moved": "{{name}} moved to position {{position}} of {{total}}",
+      "resized": "{{name}} is now {{size}}"
+    },
+    "categories": {
+      "now": {
+        "title": "Now",
+        "description": "What is playing and what is new"
+      },
+      "history": {
+        "title": "From your history",
+        "description": "Built from your own plays and Last.fm"
+      },
+      "discover": {
+        "title": "Discover",
+        "description": "Catalog, similar artists and charts"
+      },
+      "library": {
+        "title": "Library",
+        "description": "What you own and what is coming"
+      }
+    },
+    "widgets": {
+      "trending": "The tracks trending on the catalog charts, one at a time. Request pulls a track into your library.",
+      "mixes": "The playlists ListenBrainz builds from your scrobbles. Open one to see its tracks and request what you are missing.",
+      "artistsNext": "Top artists in your region with their latest release. Open one to see the artist and request music.",
+      "genres": "Catalog categories to browse. Open one to see its albums and editorial playlists.",
+      "topTracks": "Your most scrobbled tracks on Last.fm, all time.",
+      "scrobbles": "Your latest Last.fm scrobbles as they arrive, newest first.",
+      "requests": "What you requested most recently, with how far each one got."
     }
   }
 }

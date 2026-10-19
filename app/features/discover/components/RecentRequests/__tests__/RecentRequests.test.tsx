@@ -21,8 +21,12 @@ vi.mock("../../../hooks/useRecentRequests", () => ({
   useRecentRequests: () => useRecentRequestsMock(),
 }));
 
-vi.mock("../RecentRequestsStrip", () => ({
-  RecentRequestsStrip: ({ items }: { items: FlatTrackRow[] }) => <div data-testid="strip" data-count={items.length} />,
+vi.mock("../RecentRequestCard", () => ({
+  RecentRequestCard: ({ request, layout }: { request: FlatTrackRow; layout: string }) => (
+    <div data-testid="card" data-layout={layout}>
+      {request.title}
+    </div>
+  ),
 }));
 
 function buildResult(overrides: Partial<RecentRequestsResult> = {}): RecentRequestsResult {
@@ -45,17 +49,17 @@ describe("RecentRequests", () => {
   it("renders the skeleton and header while loading", () => {
     useRecentRequestsMock.mockReturnValue(buildResult({ isLoading: true, recent: [] }));
 
-    const { container } = renderWithProviders(<RecentRequests />);
+    const { container } = renderWithProviders(<RecentRequests size="L" info="Your latest requests" />);
 
     expect(screen.getByText(i18n.t("discover:recentRequests.title"))).toBeInTheDocument();
     expect(container.querySelector(".animate-pulse")).not.toBeNull();
-    expect(screen.queryByTestId("strip")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("card")).not.toBeInTheDocument();
   });
 
   it("renders the error empty state when the query errors", () => {
     useRecentRequestsMock.mockReturnValue(buildResult({ isError: true, recent: [] }));
 
-    renderWithProviders(<RecentRequests />);
+    renderWithProviders(<RecentRequests size="L" info="Your latest requests" />);
 
     expect(screen.getByText(i18n.t("discover:recentRequests.errorTitle"))).toBeInTheDocument();
   });
@@ -63,26 +67,44 @@ describe("RecentRequests", () => {
   it("renders the empty state when there are no recent requests", () => {
     useRecentRequestsMock.mockReturnValue(buildResult({ recent: [] }));
 
-    renderWithProviders(<RecentRequests />);
+    renderWithProviders(<RecentRequests size="L" info="Your latest requests" />);
 
     expect(screen.getByText(i18n.t("discover:recentRequests.emptyTitle"))).toBeInTheDocument();
   });
 
-  it("renders the strip with the recent rows and the limit in the subtitle", () => {
+  it("renders every recent row as a tile at size L with the limit in the subtitle", () => {
     useRecentRequestsMock.mockReturnValue(
       buildResult({ recent: [createFlatTrackRow({ id: "a" }), createFlatTrackRow({ id: "b" })], limit: 15 })
     );
 
-    renderWithProviders(<RecentRequests />);
+    renderWithProviders(<RecentRequests size="L" info="Your latest requests" />);
 
-    expect(screen.getByTestId("strip")).toHaveAttribute("data-count", "2");
+    const cards = screen.getAllByTestId("card");
+    expect(cards).toHaveLength(2);
+    expect(cards.every((card) => card.dataset.layout === "tile")).toBe(true);
     expect(screen.getByText(i18n.t("discover:recentRequests.subtitle", { count: 15 }))).toBeInTheDocument();
+  });
+
+  it("renders the recent rows as compact rows at size M", () => {
+    useRecentRequestsMock.mockReturnValue(buildResult({ recent: [createFlatTrackRow({ id: "a" })] }));
+
+    renderWithProviders(<RecentRequests size="M" info="Your latest requests" />);
+
+    expect(screen.getByTestId("card")).toHaveAttribute("data-layout", "row");
+  });
+
+  it("shows the widget description in an info tooltip trigger", () => {
+    useRecentRequestsMock.mockReturnValue(buildResult());
+
+    renderWithProviders(<RecentRequests size="L" info="Your latest requests" />);
+
+    expect(screen.getByRole("button", { name: /more information/i })).toBeInTheDocument();
   });
 
   it("navigates to the requests page when the header action is clicked", async () => {
     useRecentRequestsMock.mockReturnValue(buildResult());
 
-    const { user } = renderWithProviders(<RecentRequests />);
+    const { user } = renderWithProviders(<RecentRequests size="L" info="Your latest requests" />);
     await user.click(screen.getByRole("button", { name: i18n.t("discover:recentRequests.openAriaLabel") }));
 
     expect(mockRouter.push).toHaveBeenCalledWith("/requests");

@@ -3,6 +3,7 @@ import type { LucideIcon } from "lucide-react";
 
 import type { AppRouter } from "@api/__generated__/types";
 import type { LbPlaylistKind } from "@features/discovery-integrations/types";
+import type { BoardSize } from "@hooks/api/queries/board/types";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 type FeedEntry = RouterOutputs["discovery"]["getAllFeeds"][number];
@@ -31,13 +32,20 @@ export interface LbKindMeta {
   acc: MixAccent;
 }
 
+export interface DiscoveryMixesProps {
+  size: BoardSize;
+  info: string;
+}
+
 export interface DiscoveryMixCardProps {
   mix: ReadyMix;
   onClick: () => void;
+  compact: boolean;
 }
 
 export interface DiscoveryMixCardEmptyProps {
   mix: EmptyMix;
+  compact: boolean;
 }
 
 export interface DiscoveryMixMosaicProps {
@@ -49,4 +57,5 @@ export type DiscoveryMixesEmptyReason = "error" | "disabled" | "no-username" | "
 
 export interface DiscoveryMixesEmptyProps {
   reason: DiscoveryMixesEmptyReason;
+  info: string;
 }

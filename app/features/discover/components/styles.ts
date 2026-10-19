@@ -29,6 +29,10 @@ export const glassPanelCard = cva(
 
 export type GlassPanelCardProps = VariantProps<typeof glassPanelCard>;
 
+export const scrollFadeBottom = cva(
+  "pb-6 [-webkit-mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)] [mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)]"
+);
+
 export const skeletonPulse = cva("bg-fg/10 animate-pulse rounded", {
   variants: {
     size: {

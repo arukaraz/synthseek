@@ -1,10 +1,26 @@
 import { cva } from "class-variance-authority";
 
-export const body = cva("flex flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-5");
+export const bodyFrame = cva("@container flex min-h-0 flex-1");
 
-export const hero = cva(
-  "group relative flex aspect-[4/5] w-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl sm:aspect-auto sm:w-[200px] md:w-[220px] lg:w-[240px]"
-);
+export const body = cva("flex min-h-0 w-full @xl:flex-row @xl:items-stretch @xl:gap-5", {
+  variants: {
+    shape: {
+      compact: "flex-row items-stretch gap-3",
+      tall: "flex-col gap-4",
+    },
+  },
+});
+
+const heroFrame = "relative shrink-0 overflow-hidden rounded-2xl @xl:aspect-auto @xl:w-[220px] @3xl:w-[240px]";
+
+const heroShapes = {
+  compact: "w-2/5 max-w-[240px]",
+  tall: "aspect-[4/3] w-full",
+};
+
+export const hero = cva(`group flex flex-col justify-end ${heroFrame}`, {
+  variants: { shape: heroShapes },
+});
 
 export const heroImage = cva("absolute inset-0 size-full object-cover");
 
@@ -30,7 +46,9 @@ export const heroBy = cva("text-overlay-fg/80 text-sm");
 
 export const heroPlays = cva("type-text-track type-text-overlay mt-2 font-mono text-xs");
 
-export const list = cva("flex min-w-0 flex-1 flex-col gap-1");
+export const list = cva(
+  "flex min-h-0 min-w-0 flex-1 flex-col gap-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+);
 
 export const item = cva("group flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-fg/5");
 
@@ -58,8 +76,8 @@ export const emptyLink = cva(
   "text-primary-400 text-sm font-medium underline-offset-2 transition-colors hover:underline"
 );
 
-export const skeletonHero = cva(
-  "bg-fg/5 aspect-[4/5] w-full shrink-0 animate-pulse rounded-2xl sm:aspect-auto sm:h-72 sm:w-[200px] md:w-[220px] lg:w-[240px]"
-);
+export const skeletonHero = cva(`bg-fg/5 animate-pulse ${heroFrame}`, {
+  variants: { shape: heroShapes },
+});
 
 export const skeletonRow = cva("bg-fg/5 h-14 w-full animate-pulse rounded-lg");

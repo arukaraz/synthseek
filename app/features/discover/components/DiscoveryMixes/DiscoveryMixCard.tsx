@@ -21,7 +21,7 @@ import {
 } from "./styles";
 import type { DiscoveryMixCardProps } from "./types";
 
-export function DiscoveryMixCard({ mix, onClick }: DiscoveryMixCardProps) {
+export function DiscoveryMixCard({ mix, onClick, compact }: DiscoveryMixCardProps) {
   const { t } = useTranslation("discover");
   const meta = LB_KIND_METADATA[mix.kind];
   const Icon = meta.icon;
@@ -43,10 +43,14 @@ export function DiscoveryMixCard({ mix, onClick }: DiscoveryMixCardProps) {
       <div className={mixInfo()}>
         <span className={mixTag()}>{t(LB_KIND_TAG_KEYS[mix.kind])}</span>
         <h3 className={mixTitle()}>{label}</h3>
-        <p className={mixBlurb()}>{t(LB_KIND_BLURB_KEYS[mix.kind])}</p>
-        <div className={mixFoot()}>
-          <span className={mixCount()}>{t("mixes.trackCount", { count: mix.candidates.length })}</span>
-        </div>
+        {compact ? null : (
+          <>
+            <p className={mixBlurb()}>{t(LB_KIND_BLURB_KEYS[mix.kind])}</p>
+            <div className={mixFoot()}>
+              <span className={mixCount()}>{t("mixes.trackCount", { count: mix.candidates.length })}</span>
+            </div>
+          </>
+        )}
       </div>
     </button>
   );

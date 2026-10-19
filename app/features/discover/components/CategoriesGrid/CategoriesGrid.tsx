@@ -14,14 +14,16 @@ import { glassPanelCard } from "../styles";
 import { CategoriesGridSkeleton } from "./CategoriesGridSkeleton";
 import { CategoryCard } from "./CategoryCard";
 import { CATEGORIES_LIMIT } from "./constants";
-import { getCardSize } from "./helpers";
-import { mosaicGrid, panelBody, emptyWrap } from "./styles";
+import { getCardSize, mosaicLayoutFor } from "./helpers";
+import { emptyWrap, mosaicGrid, panelBody } from "./styles";
+import type { CategoriesGridProps } from "./types";
 
-export function CategoriesGrid() {
+export function CategoriesGrid({ size, info }: CategoriesGridProps) {
   const { t } = useTranslation("discover");
   const router = useRouter();
   const { data, isLoading, isError } = useCategories(CATEGORIES_LIMIT);
   const categories = data?.data?.items ?? [];
+  const layout = mosaicLayoutFor(size);
 
   const handleCategoryClick = (categoryId: string, categoryName: string) => {
     router.push(`/discover/category/${categoryId}?name=${encodeURIComponent(categoryName)}`);
@@ -32,59 +34,44 @@ export function CategoriesGrid() {
   };
 
   if (isLoading) {
-    return <CategoriesGridSkeleton />;
+    return <CategoriesGridSkeleton layout={layout} />;
   }
 
-  if (isError) {
+  const header = (
+    <WidgetHeader
+      icon={Grid3X3}
+      title={t("categories.grid.title")}
+      subtitle={t("categories.grid.subtitle")}
+      titleId="genres-heading"
+      info={info}
+      action={{
+        label: t("categories.grid.seeAll"),
+        ariaLabel: t("categories.grid.seeAllAriaLabel"),
+        onClick: handleSeeAll,
+      }}
+    />
+  );
+
+  if (isError || categories.length === 0) {
     return (
       <section className={glassPanelCard({ width: "full" })} aria-labelledby="genres-heading">
         <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
         <div className={panelBody()}>
-          <WidgetHeader
-            icon={Grid3X3}
-            title={t("categories.grid.title")}
-            subtitle={t("categories.grid.subtitle")}
-            titleId="genres-heading"
-            action={{
-              label: t("categories.grid.seeAll"),
-              ariaLabel: t("categories.grid.seeAllAriaLabel"),
-              onClick: handleSeeAll,
-            }}
-          />
+          {header}
           <div className={emptyWrap()}>
-            <EmptyState
-              icon={AlertCircle}
-              title={t("categories.grid.errorTitle")}
-              description={t("categories.grid.errorDescription")}
-            />
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (categories.length === 0) {
-    return (
-      <section className={glassPanelCard({ width: "full" })} aria-labelledby="genres-heading">
-        <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
-        <div className={panelBody()}>
-          <WidgetHeader
-            icon={Grid3X3}
-            title={t("categories.grid.title")}
-            subtitle={t("categories.grid.subtitle")}
-            titleId="genres-heading"
-            action={{
-              label: t("categories.grid.seeAll"),
-              ariaLabel: t("categories.grid.seeAllAriaLabel"),
-              onClick: handleSeeAll,
-            }}
-          />
-          <div className={emptyWrap()}>
-            <EmptyState
-              icon={Grid3X3}
-              title={t("categories.grid.emptyTitle")}
-              description={t("categories.grid.emptyDescription")}
-            />
+            {isError ? (
+              <EmptyState
+                icon={AlertCircle}
+                title={t("categories.grid.errorTitle")}
+                description={t("categories.grid.errorDescription")}
+              />
+            ) : (
+              <EmptyState
+                icon={Grid3X3}
+                title={t("categories.grid.emptyTitle")}
+                description={t("categories.grid.emptyDescription")}
+              />
+            )}
           </div>
         </div>
       </section>
@@ -102,24 +89,14 @@ export function CategoriesGrid() {
       <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
 
       <div className={panelBody()}>
-        <WidgetHeader
-          icon={Grid3X3}
-          title={t("categories.grid.title")}
-          subtitle={t("categories.grid.subtitle")}
-          titleId="genres-heading"
-          action={{
-            label: t("categories.grid.seeAll"),
-            ariaLabel: t("categories.grid.seeAllAriaLabel"),
-            onClick: handleSeeAll,
-          }}
-        />
+        {header}
 
-        <div className={mosaicGrid()}>
+        <div className={mosaicGrid({ layout })}>
           {categories.slice(0, CATEGORIES_LIMIT).map((category, index) => (
             <CategoryCard
               key={category.id}
               category={category}
-              size={getCardSize(index)}
+              size={getCardSize(index, layout)}
               onClick={handleCategoryClick}
             />
           ))}

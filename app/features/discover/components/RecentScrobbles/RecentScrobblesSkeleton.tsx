@@ -5,20 +5,29 @@ import { useTranslation } from "react-i18next";
 import { WidgetHeaderSkeleton } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { SKELETON_PLACEHOLDERS } from "./constants";
-import { rail, railWrap, skeletonNode } from "./styles";
+import { rail, railWrap, skeletonNode, skeletonRow, timeline } from "./styles";
+import type { RecentScrobblesSkeletonProps } from "./types";
 
-export function RecentScrobblesSkeleton() {
+export function RecentScrobblesSkeleton({ layout }: RecentScrobblesSkeletonProps) {
   const { t } = useTranslation("discover");
   return (
     <section className={glassPanelCard({ height: "auto" })} aria-label={t("recentScrobbles.title")}>
       <WidgetHeaderSkeleton />
-      <div className={railWrap()}>
-        <div className={rail()}>
+      {layout === "timeline" ? (
+        <div className={timeline()}>
           {SKELETON_PLACEHOLDERS.map((i) => (
-            <div key={i} className={skeletonNode()} />
+            <div key={i} className={skeletonRow()} />
           ))}
         </div>
-      </div>
+      ) : (
+        <div className={railWrap()}>
+          <div className={rail()}>
+            {SKELETON_PLACEHOLDERS.map((i) => (
+              <div key={i} className={skeletonNode()} />
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

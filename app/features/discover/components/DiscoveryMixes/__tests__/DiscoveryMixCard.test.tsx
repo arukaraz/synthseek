@@ -14,7 +14,7 @@ vi.mock("../DiscoveryMixMosaic", () => ({
 
 describe("DiscoveryMixCard", () => {
   it("renders the localized label, tag and blurb for the mix kind", () => {
-    render(<DiscoveryMixCard mix={createReadyMix({ kind: "daily-jams" })} onClick={() => {}} />);
+    render(<DiscoveryMixCard mix={createReadyMix({ kind: "daily-jams" })} compact={false} onClick={() => {}} />);
 
     expect(screen.getByRole("heading", { level: 3, name: "Daily Jams" })).toBeInTheDocument();
     expect(screen.getByText("Refreshes daily")).toBeInTheDocument();
@@ -23,12 +23,23 @@ describe("DiscoveryMixCard", () => {
     ).toBeInTheDocument();
   });
 
+  it("hides the blurb and the track count footer when compact", () => {
+    render(<DiscoveryMixCard mix={createReadyMix({ kind: "daily-jams" })} compact onClick={() => {}} />);
+
+    expect(screen.getByRole("heading", { level: 3, name: "Daily Jams" })).toBeInTheDocument();
+    expect(
+      screen.queryByText("A comfortable background mix of recordings you already love, regenerated every morning.")
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/tracks?$/)).not.toBeInTheDocument();
+  });
+
   it("labels the button with the kind and candidate count for screen readers", () => {
     render(
       <DiscoveryMixCard
         mix={createReadyMix({
           candidates: [createCandidate({ catalogTrackId: "a" }), createCandidate({ catalogTrackId: "b" })],
         })}
+        compact={false}
         onClick={() => {}}
       />
     );
@@ -46,6 +57,7 @@ describe("DiscoveryMixCard", () => {
             createCandidate({ catalogTrackId: "z" }),
           ],
         })}
+        compact={false}
         onClick={() => {}}
       />
     );
@@ -54,26 +66,28 @@ describe("DiscoveryMixCard", () => {
   });
 
   it("passes the kind to the mosaic as the deterministic fallback seed", () => {
-    render(<DiscoveryMixCard mix={createReadyMix({ kind: "weekly-jams" })} onClick={() => {}} />);
+    render(<DiscoveryMixCard mix={createReadyMix({ kind: "weekly-jams" })} compact={false} onClick={() => {}} />);
 
     expect(screen.getByTestId("mosaic")).toHaveAttribute("data-seed", "weekly-jams");
   });
 
   it("stamps the accent of the kind onto the card", () => {
-    render(<DiscoveryMixCard mix={createReadyMix({ kind: "cf-recommendations" })} onClick={() => {}} />);
+    render(
+      <DiscoveryMixCard mix={createReadyMix({ kind: "cf-recommendations" })} compact={false} onClick={() => {}} />
+    );
 
     expect(screen.getByRole("button")).toHaveAttribute("data-acc", LB_KIND_METADATA["cf-recommendations"].acc);
   });
 
   it("omits the freshness pill when the mix has never been generated", () => {
-    render(<DiscoveryMixCard mix={createReadyMix({ generatedAt: undefined })} onClick={() => {}} />);
+    render(<DiscoveryMixCard mix={createReadyMix({ generatedAt: undefined })} compact={false} onClick={() => {}} />);
 
     expect(screen.queryByText(/Updated|Synced/)).not.toBeInTheDocument();
   });
 
   it("invokes onClick when the card is pressed", () => {
     const onClick = vi.fn();
-    render(<DiscoveryMixCard mix={createReadyMix()} onClick={onClick} />);
+    render(<DiscoveryMixCard mix={createReadyMix()} compact={false} onClick={onClick} />);
 
     fireEvent.click(screen.getByRole("button"));
 

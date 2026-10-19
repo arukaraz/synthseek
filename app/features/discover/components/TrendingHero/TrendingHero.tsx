@@ -13,8 +13,9 @@ import { errorFrame, heroFrame } from "./styles";
 import { TrendingHeroNav } from "./TrendingHeroNav";
 import { TrendingHeroSkeleton } from "./TrendingHeroSkeleton";
 import { TrendingHeroSlide } from "./TrendingHeroSlide";
+import type { TrendingHeroProps } from "./types";
 
-export function TrendingHero() {
+export function TrendingHero({ info }: TrendingHeroProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useTrendingTracks();
   const tracks = useMemo(() => data?.data?.tracks ?? [], [data?.data?.tracks]);
@@ -102,6 +103,7 @@ export function TrendingHero() {
         total={tracks.length}
         onIndexChange={setCurrentIndex}
         onRequestOpenChange={setIsRequestOpen}
+        info={info}
       />
       <TrendingHeroNav
         total={tracks.length}

@@ -140,9 +140,7 @@
     "errorDescription": "Impossible de récupérer les demandes récentes. Veuillez réessayer.",
     "emptyTitle": "Aucune demande pour l'instant",
     "emptyDescription": "Commencez à demander de la musique pour voir vos téléchargements récents ici.",
-    "albumArtAlt": "Pochette de l'album {{name}}",
-    "scrollPrevAriaLabel": "Défiler vers les demandes précédentes",
-    "scrollNextAriaLabel": "Défiler vers les demandes suivantes"
+    "albumArtAlt": "Pochette de l'album {{name}}"
   },
   "mixes": {
     "title": "Mixs de découverte",
@@ -199,6 +197,84 @@
       "ctaOpenSettings": "Ouvrir les réglages",
       "ctaConfigure": "Configurer ListenBrainz",
       "ctaChoosePlaylists": "Choisir les playlists"
+    }
+  },
+  "board": {
+    "regionLabel": "Tableau Découvrir",
+    "customize": "Personnaliser",
+    "done": "Terminé",
+    "addWidget": "Ajouter un widget",
+    "editHint": "Faites glisser un widget par sa poignée ou déplacez-le avec les flèches, et choisissez une taille pour chacun.",
+    "tile": {
+      "moveEarlier": "Avancer {{name}}",
+      "moveLater": "Reculer {{name}}",
+      "remove": "Retirer {{name}}",
+      "drag": "Faire glisser {{name}}",
+      "sizes": "Taille de {{name}}"
+    },
+    "sizes": {
+      "S": "S",
+      "C": "C",
+      "M": "M",
+      "MPlus": "M+",
+      "L": "L",
+      "XL": "XL"
+    },
+    "sizeNames": {
+      "S": "Petit",
+      "C": "Carte",
+      "M": "Moyen",
+      "MPlus": "Moyen, haut",
+      "L": "Grand",
+      "XL": "Très grand"
+    },
+    "gallery": {
+      "title": "Ajouter un widget",
+      "summary": "{{onBoard}} sur {{total}} dans votre tableau. Un nouveau widget arrive à la fin, déplacez-le ensuite où vous voulez.",
+      "search": "Rechercher des widgets",
+      "all": "Tous",
+      "close": "Fermer",
+      "add": "Ajouter",
+      "remove": "Retirer",
+      "onBoard": "Dans le tableau",
+      "categoryCount": "{{onBoard}} sur {{total}} dans le tableau",
+      "empty": "Aucun widget ne correspond à « {{query}} »."
+    },
+    "toast": {
+      "added": "{{name}} ajouté à la fin",
+      "removed": "{{name}} retiré",
+      "undo": "Annuler"
+    },
+    "announce": {
+      "moved": "{{name}} déplacé en position {{position}} sur {{total}}",
+      "resized": "{{name}} est maintenant {{size}}"
+    },
+    "categories": {
+      "now": {
+        "title": "Maintenant",
+        "description": "Ce qui joue et ce qui est nouveau"
+      },
+      "history": {
+        "title": "Depuis votre historique",
+        "description": "Construit à partir de vos écoutes et de Last.fm"
+      },
+      "discover": {
+        "title": "Découvrir",
+        "description": "Catalogue, artistes similaires et classements"
+      },
+      "library": {
+        "title": "Bibliothèque",
+        "description": "Ce que vous possédez et ce qui arrive"
+      }
+    },
+    "widgets": {
+      "trending": "Les titres en tendance dans les classements du catalogue, un par un. Demander ajoute le titre à votre bibliothèque.",
+      "mixes": "Les playlists que ListenBrainz crée à partir de vos scrobbles. Ouvrez-en une pour voir ses titres et demander ce qui vous manque.",
+      "artistsNext": "Les artistes les plus écoutés de votre région avec leur dernière sortie. Ouvrez-en un pour voir l'artiste et demander de la musique.",
+      "genres": "Des catégories du catalogue à parcourir. Ouvrez-en une pour voir ses albums et ses playlists éditoriales.",
+      "topTracks": "Vos titres les plus scrobblés sur Last.fm, de tous les temps.",
+      "scrobbles": "Vos derniers scrobbles Last.fm à mesure qu'ils arrivent, les plus récents d'abord.",
+      "requests": "Ce que vous avez demandé récemment et où en est chaque demande."
     }
   }
 }

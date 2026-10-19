@@ -1,3 +1,7 @@
+export interface ArtistSpotlightProps {
+  info: string;
+}
+
 export interface ArtistSpotlightCardProps {
   artist: {
     id: string;

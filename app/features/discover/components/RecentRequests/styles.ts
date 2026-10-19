@@ -1,39 +1,61 @@
 import { cva } from "class-variance-authority";
 
-export const stripFrame = cva("relative -mx-1 overflow-hidden rounded-lg");
+export const requestsBody = cva("@container -mx-1 flex min-h-0 flex-1 flex-col");
 
-export const stripScroller = cva(
-  "no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-);
-
-export const stripCard = cva("w-full shrink-0 snap-start sm:w-1/2 md:w-1/3 xl:w-1/5");
-
-export const stripEdgeBase = cva(
-  "pointer-events-none absolute inset-y-0 z-10 flex w-16 items-center justify-center transition-opacity duration-200",
+export const requestsScroller = cva(
+  "min-h-0 flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
   {
     variants: {
-      side: {
-        left: "left-0 from-surface bg-linear-to-r via-surface/80 to-transparent",
-        right: "right-0 from-surface bg-linear-to-l via-surface/80 to-transparent",
-      },
-      visible: {
-        true: "opacity-100",
-        false: "opacity-0",
+      layout: {
+        tile: "grid auto-rows-max grid-cols-1 gap-1 @md:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-5",
+        row: "flex flex-col gap-0.5",
       },
     },
   }
 );
 
-export const stripEdgeButton = cva(
-  "text-fg/80 hover:text-fg pointer-events-auto rounded-full p-1.5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fg/40 disabled:pointer-events-none"
-);
+export const cardBase = cva("hover:bg-fg/[0.03] grid rounded-lg transition-colors", {
+  variants: {
+    layout: {
+      tile: "grid-cols-[minmax(0,1fr)_auto] gap-2 p-3 [grid-template-areas:'time_badge'_'main_main']",
+      row: "grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 px-2 py-1.5 [grid-template-areas:'main_time_badge']",
+    },
+  },
+});
 
-export const skeletonStrip = cva("-mx-1 flex animate-pulse overflow-hidden rounded-lg");
+export const cardTime = cva("text-fg/60 self-center font-mono text-[10px] [grid-area:time]", {
+  variants: {
+    layout: {
+      tile: "",
+      row: "hidden @sm:block",
+    },
+  },
+});
 
-export const skeletonCell = cva(
-  "border-fg/5 flex w-full shrink-0 flex-col gap-2 border-r p-4 sm:w-1/2 md:w-1/3 xl:w-1/5 last:border-r-0"
-);
+export const cardBadge = cva("justify-self-end [grid-area:badge]");
 
-export const cardBase = cva(
-  "border-fg/5 relative flex flex-col gap-2 border-r p-4 transition-colors last:border-r-0 hover:bg-white/[0.02]"
-);
+export const cardMain = cva("flex min-w-0 items-center gap-3 [grid-area:main]");
+
+export const cardArt = cva("relative shrink-0 overflow-hidden rounded-md", {
+  variants: {
+    layout: {
+      tile: "size-12",
+      row: "size-10",
+    },
+  },
+});
+
+export const cardCopy = cva("min-w-0");
+
+export const cardTitle = cva("text-fg line-clamp-1 text-sm font-medium");
+
+export const cardParent = cva("text-fg/60 line-clamp-1 text-xs");
+
+export const skeletonCell = cva("bg-fg/5 animate-pulse rounded-lg", {
+  variants: {
+    layout: {
+      tile: "h-24",
+      row: "h-12",
+    },
+  },
+});

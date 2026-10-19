@@ -6,11 +6,21 @@ import { SKELETON_CELLS } from "../constants";
 import { RecentRequestsSkeleton } from "../RecentRequestsSkeleton";
 
 describe("RecentRequestsSkeleton", () => {
-  it("renders one placeholder cell per configured slot", () => {
-    const { container } = render(<RecentRequestsSkeleton />);
+  it("renders one tile placeholder per configured slot inside a grid", () => {
+    const { container } = render(<RecentRequestsSkeleton layout="tile" />);
 
-    const strip = container.querySelector(".animate-pulse");
-    expect(strip).not.toBeNull();
-    expect(strip?.children).toHaveLength(SKELETON_CELLS);
+    const cells = container.querySelectorAll(".animate-pulse");
+    expect(cells).toHaveLength(SKELETON_CELLS);
+    expect(cells[0]?.parentElement).toHaveClass("grid");
+    expect(cells[0]).toHaveClass("h-24");
+  });
+
+  it("renders one row placeholder per configured slot inside a stacked list", () => {
+    const { container } = render(<RecentRequestsSkeleton layout="row" />);
+
+    const cells = container.querySelectorAll(".animate-pulse");
+    expect(cells).toHaveLength(SKELETON_CELLS);
+    expect(cells[0]?.parentElement).toHaveClass("flex-col");
+    expect(cells[0]).toHaveClass("h-12");
   });
 });

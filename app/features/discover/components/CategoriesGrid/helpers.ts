@@ -1,6 +1,12 @@
-import { SIZE_PATTERN } from "./constants";
-import type { CardSize } from "./types";
+import type { BoardSize } from "@hooks/api/queries/board/types";
 
-export function getCardSize(index: number): CardSize {
-  return SIZE_PATTERN[index] ?? "small";
+import { SIZE_PATTERN } from "./constants";
+import type { CardSize, MosaicLayout } from "./types";
+
+export function mosaicLayoutFor(size: BoardSize): MosaicLayout {
+  return size === "XL" ? "quad" : "pair";
+}
+
+export function getCardSize(index: number, layout: MosaicLayout): CardSize {
+  return SIZE_PATTERN[layout][index] ?? "small";
 }

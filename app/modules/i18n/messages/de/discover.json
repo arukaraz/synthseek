@@ -140,9 +140,7 @@
     "errorDescription": "Letzte Anfragen konnten nicht abgerufen werden. Bitte versuche es erneut.",
     "emptyTitle": "Noch keine Anfragen",
     "emptyDescription": "Beginne, Musik anzufordern, um hier deine letzten Downloads zu sehen.",
-    "albumArtAlt": "Albumcover für {{name}}",
-    "scrollPrevAriaLabel": "Zu vorherigen Anfragen scrollen",
-    "scrollNextAriaLabel": "Zu nächsten Anfragen scrollen"
+    "albumArtAlt": "Albumcover für {{name}}"
   },
   "mixes": {
     "title": "Mixe zum Entdecken",
@@ -199,6 +197,84 @@
       "ctaOpenSettings": "Einstellungen öffnen",
       "ctaConfigure": "ListenBrainz konfigurieren",
       "ctaChoosePlaylists": "Playlists auswählen"
+    }
+  },
+  "board": {
+    "regionLabel": "Entdecken-Board",
+    "customize": "Anpassen",
+    "done": "Fertig",
+    "addWidget": "Widget hinzufügen",
+    "editHint": "Zieh ein Widget an seinem Griff oder verschieb es mit den Pfeilen, und wähl für jedes eine Größe.",
+    "tile": {
+      "moveEarlier": "{{name}} nach vorne verschieben",
+      "moveLater": "{{name}} nach hinten verschieben",
+      "remove": "{{name}} entfernen",
+      "drag": "{{name}} ziehen",
+      "sizes": "Größe von {{name}}"
+    },
+    "sizes": {
+      "S": "S",
+      "C": "C",
+      "M": "M",
+      "MPlus": "M+",
+      "L": "L",
+      "XL": "XL"
+    },
+    "sizeNames": {
+      "S": "Klein",
+      "C": "Karte",
+      "M": "Mittel",
+      "MPlus": "Mittel, hoch",
+      "L": "Groß",
+      "XL": "Sehr groß"
+    },
+    "gallery": {
+      "title": "Widget hinzufügen",
+      "summary": "{{onBoard}} von {{total}} auf deinem Board. Ein neues Widget landet am Ende, danach verschiebst du es, wohin du willst.",
+      "search": "Widgets suchen",
+      "all": "Alle",
+      "close": "Schließen",
+      "add": "Hinzufügen",
+      "remove": "Entfernen",
+      "onBoard": "Auf dem Board",
+      "categoryCount": "{{onBoard}} von {{total}} auf dem Board",
+      "empty": "Kein Widget passt zu „{{query}}“."
+    },
+    "toast": {
+      "added": "{{name}} am Ende hinzugefügt",
+      "removed": "{{name}} entfernt",
+      "undo": "Rückgängig"
+    },
+    "announce": {
+      "moved": "{{name}} an Position {{position}} von {{total}} verschoben",
+      "resized": "{{name}} ist jetzt {{size}}"
+    },
+    "categories": {
+      "now": {
+        "title": "Jetzt",
+        "description": "Was läuft und was neu ist"
+      },
+      "history": {
+        "title": "Aus deinem Verlauf",
+        "description": "Aus deinen eigenen Wiedergaben und Last.fm"
+      },
+      "discover": {
+        "title": "Entdecken",
+        "description": "Katalog, ähnliche Künstler und Charts"
+      },
+      "library": {
+        "title": "Bibliothek",
+        "description": "Was du hast und was kommt"
+      }
+    },
+    "widgets": {
+      "trending": "Die angesagten Titel aus den Katalog-Charts, einer nach dem anderen. Anfordern holt einen Titel in deine Bibliothek.",
+      "mixes": "Die Playlists, die ListenBrainz aus deinen Scrobbles erstellt. Öffne eine, um ihre Titel zu sehen und Fehlendes anzufordern.",
+      "artistsNext": "Die Top-Künstler deiner Region mit ihrer neuesten Veröffentlichung. Öffne einen, um den Künstler zu sehen und Musik anzufordern.",
+      "genres": "Katalog-Kategorien zum Stöbern. Öffne eine, um ihre Alben und redaktionellen Playlists zu sehen.",
+      "topTracks": "Deine meistgescrobbelten Titel auf Last.fm, aller Zeiten.",
+      "scrobbles": "Deine neuesten Last.fm-Scrobbles, sobald sie eintreffen, die neuesten zuerst.",
+      "requests": "Was du zuletzt angefordert hast und wie weit jede Anfrage gekommen ist."
     }
   }
 }

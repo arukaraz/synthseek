@@ -65,7 +65,7 @@ describe("ArtistSpotlight", () => {
   it("always renders the widget header", () => {
     useArtistSpotlightMock.mockReturnValue(buildQuery());
 
-    renderWithProviders(<ArtistSpotlight />);
+    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
     expect(screen.getByRole("heading", { name: enDiscover.artistSpotlight.title })).toBeInTheDocument();
   });
@@ -73,7 +73,7 @@ describe("ArtistSpotlight", () => {
   it("renders the loading skeleton while the query is pending", () => {
     useArtistSpotlightMock.mockReturnValue(buildQuery({ isLoading: true, data: undefined }));
 
-    const { container } = renderWithProviders(<ArtistSpotlight />);
+    const { container } = renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
     expect(container.querySelector(".animate-pulse")).not.toBeNull();
     expect(screen.queryByTestId("artist-card")).not.toBeInTheDocument();
@@ -82,7 +82,7 @@ describe("ArtistSpotlight", () => {
   it("renders the error empty state when the query errors", () => {
     useArtistSpotlightMock.mockReturnValue(buildQuery({ isError: true, data: undefined }));
 
-    renderWithProviders(<ArtistSpotlight />);
+    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
     expect(screen.getByText(enDiscover.artistSpotlight.errorTitle)).toBeInTheDocument();
     expect(screen.getByText(enDiscover.artistSpotlight.errorDescription)).toBeInTheDocument();
@@ -91,7 +91,7 @@ describe("ArtistSpotlight", () => {
   it("renders the empty state when the resolved artist list is empty", () => {
     useArtistSpotlightMock.mockReturnValue(buildQuery({ data: { data: { artists: [] } } }));
 
-    renderWithProviders(<ArtistSpotlight />);
+    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
     expect(screen.getByText(enDiscover.artistSpotlight.emptyTitle)).toBeInTheDocument();
     expect(screen.getByText(enDiscover.artistSpotlight.emptyDescription)).toBeInTheDocument();
@@ -100,7 +100,7 @@ describe("ArtistSpotlight", () => {
   it("renders the empty state when the query data is absent and not loading or erroring", () => {
     useArtistSpotlightMock.mockReturnValue(buildQuery({ data: undefined }));
 
-    renderWithProviders(<ArtistSpotlight />);
+    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
     expect(screen.getByText(enDiscover.artistSpotlight.emptyTitle)).toBeInTheDocument();
   });
@@ -112,7 +112,7 @@ describe("ArtistSpotlight", () => {
       })
     );
 
-    renderWithProviders(<ArtistSpotlight />);
+    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
 
     const cards = screen.getAllByTestId("artist-card");
     expect(cards).toHaveLength(2);
@@ -124,7 +124,7 @@ describe("ArtistSpotlight", () => {
       buildQuery({ data: { data: { artists: [buildArtist("a", "Squarepusher")] } } })
     );
 
-    renderWithProviders(<ArtistSpotlight />);
+    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
     fireEvent.click(screen.getByTestId("artist-card"));
 
     expect(openForResult).toHaveBeenCalledTimes(1);

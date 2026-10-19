@@ -1,10 +1,10 @@
 "use client";
 
 import { Badge } from "@components/ui/Badge";
-import { cn } from "@utils/cn";
 import { artworkProxySrc } from "@utils/artworkProxy";
 import { scale } from "@utils/animations";
 import { categoryPlaceholder, cardBottomContent, albumThumbnail, hoverBorder, playIcon } from "../styles";
+import { spotlightCard, spotlightCardMedia } from "./styles";
 import { motion } from "framer-motion";
 import { Play, User, Music } from "lucide-react";
 import Image from "next/image";
@@ -24,16 +24,13 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
   return (
     <motion.div
       onClick={onClick}
-      className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-lg",
-        "transition-all duration-300 hover:shadow-xl"
-      )}
+      className={spotlightCard()}
       variants={scale}
       initial="initial"
       whileHover="hover"
       whileTap="tap"
     >
-      <div className="relative aspect-3/4">
+      <div className={spotlightCardMedia()}>
         {artistImage && !imageError ? (
           <Image
             src={artworkProxySrc(artistImage)}

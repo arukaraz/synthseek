@@ -10,25 +10,29 @@ import { fadeIn } from "@utils/animations";
 import { WidgetHeader } from "../WidgetHeader";
 import { glassPanelCard } from "../styles";
 import { LASTFM_USER_URL_BASE } from "./constants";
+import { scrobbleLayoutFor } from "./helpers";
 import { RecentScrobblesEmpty } from "./RecentScrobblesEmpty";
 import { RecentScrobblesRail } from "./RecentScrobblesRail";
 import { RecentScrobblesSkeleton } from "./RecentScrobblesSkeleton";
+import { RecentScrobblesTimeline } from "./RecentScrobblesTimeline";
+import type { RecentScrobblesProps } from "./types";
 
-export function RecentScrobbles() {
+export function RecentScrobbles({ size, info }: RecentScrobblesProps) {
   const { t } = useTranslation("discover");
   const { lfmConfig, recentScrobbles, isLoading, isError } = useLastfmFeeds();
+  const layout = scrobbleLayoutFor(size);
 
-  if (isLoading) return <RecentScrobblesSkeleton />;
-  if (isError) return <RecentScrobblesEmpty reason="error" />;
-  if (!lfmConfig || !lfmConfig.enabled) return <RecentScrobblesEmpty reason="disabled" />;
-  if (!lfmConfig.username) return <RecentScrobblesEmpty reason="no-username" />;
+  if (isLoading) return <RecentScrobblesSkeleton layout={layout} />;
+  if (isError) return <RecentScrobblesEmpty reason="error" info={info} />;
+  if (!lfmConfig || !lfmConfig.enabled) return <RecentScrobblesEmpty reason="disabled" info={info} />;
+  if (!lfmConfig.username) return <RecentScrobblesEmpty reason="no-username" info={info} />;
   if (!recentScrobbles || recentScrobbles.status !== "ready") {
-    return <RecentScrobblesEmpty reason="no-data" />;
+    return <RecentScrobblesEmpty reason="no-data" info={info} />;
   }
 
   const scrobbles = recentScrobbles.scrobbles.filter((s) => s.playedAt != null);
   if (scrobbles.length === 0) {
-    return <RecentScrobblesEmpty reason="no-data" />;
+    return <RecentScrobblesEmpty reason="no-data" info={info} />;
   }
 
   const seeMoreHref = `${LASTFM_USER_URL_BASE}/${encodeURIComponent(lfmConfig.username)}`;
@@ -46,6 +50,7 @@ export function RecentScrobbles() {
         title={t("recentScrobbles.title")}
         subtitle={t("recentScrobbles.subtitle")}
         titleId="recent-scrobbles-heading"
+        info={info}
         action={{
           label: t("recentScrobbles.seeMore"),
           ariaLabel: t("recentScrobbles.seeMoreAriaLabel"),
@@ -53,7 +58,11 @@ export function RecentScrobbles() {
           external: true,
         }}
       />
-      <RecentScrobblesRail scrobbles={scrobbles} />
+      {layout === "timeline" ? (
+        <RecentScrobblesTimeline scrobbles={scrobbles} />
+      ) : (
+        <RecentScrobblesRail scrobbles={scrobbles} />
+      )}
     </motion.section>
   );
 }

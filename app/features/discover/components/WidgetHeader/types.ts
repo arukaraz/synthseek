@@ -17,6 +17,7 @@ export interface WidgetHeaderProps {
   headingLevel?: WidgetHeaderHeadingLevel;
   action?: WidgetHeaderAction;
   titleId?: string;
+  info?: string;
 }
 
 export interface WidgetHeaderActionLinkProps {

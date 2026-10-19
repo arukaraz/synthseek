@@ -6,26 +6,27 @@ import { formatRelativeTime } from "@utils/formatters";
 import { artworkProxySrc } from "@utils/artworkProxy";
 import { Disc } from "lucide-react";
 import Image from "next/image";
-import { cardBase } from "./styles";
+import { useTranslation } from "react-i18next";
+import { cardArt, cardBadge, cardBase, cardCopy, cardMain, cardParent, cardTime, cardTitle } from "./styles";
 import type { RecentRequestCardProps } from "./types";
 
-export function RecentRequestCard({ request }: RecentRequestCardProps) {
+export function RecentRequestCard({ request, layout }: RecentRequestCardProps) {
+  const { t } = useTranslation("discover");
   const parentArt = request.parent.album_art;
   const timeAgo = formatRelativeTime(new Date(request.created_at));
 
   return (
-    <article className={cardBase()}>
-      <div className="flex items-center justify-between">
-        <span className="text-fg/60 font-mono text-[10px]">{timeAgo}</span>
+    <article className={cardBase({ layout })}>
+      <span className={cardTime({ layout })}>{timeAgo}</span>
+      <div className={cardBadge()}>
         <StatusBadge status={request.status} size="sm" showIcon />
       </div>
-
-      <div className="flex items-center gap-3">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md">
+      <div className={cardMain()}>
+        <div className={cardArt({ layout })}>
           {parentArt ? (
             <Image
               src={artworkProxySrc(parentArt)}
-              alt={`Album art for ${request.parent.name}`}
+              alt={t("recentRequests.albumArtAlt", { name: request.parent.name })}
               fill
               className="object-cover"
               sizes="48px"
@@ -35,9 +36,9 @@ export function RecentRequestCard({ request }: RecentRequestCardProps) {
             <ImagePlaceholder size="md" icon={Disc} />
           )}
         </div>
-        <div className="min-w-0">
-          <div className="text-fg line-clamp-1 text-sm font-medium">{request.title}</div>
-          <div className="text-fg/60 line-clamp-1 text-xs">{request.parent.name}</div>
+        <div className={cardCopy()}>
+          <div className={cardTitle()}>{request.title}</div>
+          <div className={cardParent()}>{request.parent.name}</div>
         </div>
       </div>
     </article>

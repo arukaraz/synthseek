@@ -119,7 +119,8 @@
     "lastfmFailed": "Last.fm-Einstellungen konnten nicht gespeichert werden",
     "listenBrainzFailed": "ListenBrainz-Einstellungen konnten nicht gespeichert werden",
     "lastfmSaved": "Last.fm-Entdeckungseinstellungen gespeichert",
-    "listenBrainzSaved": "ListenBrainz-Einstellungen gespeichert"
+    "listenBrainzSaved": "ListenBrainz-Einstellungen gespeichert",
+    "boardSaveFailed": "Dein Board konnte nicht gespeichert werden"
   },
   "portability": {
     "importFailed": "Import fehlgeschlagen"

@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 
-import { describeScrobbleAge } from "../helpers";
+import { describeScrobbleAge, scrobbleLayoutFor } from "../helpers";
+
+describe("scrobbleLayoutFor", () => {
+  it("uses the vertical timeline for the half-width M size", () => {
+    expect(scrobbleLayoutFor("M")).toBe("timeline");
+  });
+
+  it("keeps the horizontal rail for the full-row L size", () => {
+    expect(scrobbleLayoutFor("L")).toBe("rail");
+  });
+});
 
 const NOW = new Date("2026-05-29T12:00:00.000Z").getTime();
 const MIN = 60_000;

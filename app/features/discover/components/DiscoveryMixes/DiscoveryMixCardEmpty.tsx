@@ -17,7 +17,7 @@ import {
 } from "./styles";
 import type { DiscoveryMixCardEmptyProps } from "./types";
 
-export function DiscoveryMixCardEmpty({ mix }: DiscoveryMixCardEmptyProps) {
+export function DiscoveryMixCardEmpty({ mix, compact }: DiscoveryMixCardEmptyProps) {
   const { t } = useTranslation("discover");
   const meta = LB_KIND_METADATA[mix.kind];
   const Icon = meta.icon;
@@ -36,7 +36,7 @@ export function DiscoveryMixCardEmpty({ mix }: DiscoveryMixCardEmptyProps) {
       <div className={mixInfo()}>
         <span className={mixTag()}>{t(LB_KIND_TAG_KEYS[mix.kind])}</span>
         <h3 className={mixTitle()}>{t(LB_KIND_LABEL_KEYS[mix.kind])}</h3>
-        <p className={mixBlurb()}>{reasonLabel}</p>
+        {compact ? null : <p className={mixBlurb()}>{reasonLabel}</p>}
       </div>
     </div>
   );

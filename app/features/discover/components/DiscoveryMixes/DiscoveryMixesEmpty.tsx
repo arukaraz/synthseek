@@ -11,7 +11,7 @@ import { emptyTextKey } from "./helpers";
 import { emptyPanel, emptyPanelLink, emptyPanelText } from "./styles";
 import type { DiscoveryMixesEmptyProps } from "./types";
 
-export function DiscoveryMixesEmpty({ reason }: DiscoveryMixesEmptyProps) {
+export function DiscoveryMixesEmpty({ reason, info }: DiscoveryMixesEmptyProps) {
   const { t } = useTranslation("discover");
   const cta = EMPTY_CTA[reason];
   const ctaLabel =
@@ -28,6 +28,7 @@ export function DiscoveryMixesEmpty({ reason }: DiscoveryMixesEmptyProps) {
         title={t("mixes.title")}
         subtitle={t("mixes.subtitle")}
         titleId="discover-mixes-heading"
+        info={info}
       />
       <div className={emptyPanel()}>
         <p className={emptyPanelText()}>{t(emptyTextKey(reason))}</p>

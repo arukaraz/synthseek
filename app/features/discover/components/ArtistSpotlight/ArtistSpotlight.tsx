@@ -16,8 +16,10 @@ import { useTranslation } from "react-i18next";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
 import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
 import { ARTIST_SPOTLIGHT_COUNT } from "./constants";
+import { spotlightBody, spotlightGrid } from "./styles";
+import type { ArtistSpotlightProps } from "./types";
 
-export function ArtistSpotlight() {
+export function ArtistSpotlight({ info }: ArtistSpotlightProps) {
   const { t } = useTranslation("discover");
   const { country } = useCountry();
   const countryData = getCountryByCode(country) ?? getCountryByCode(DEFAULT_COUNTRY);
@@ -42,12 +44,13 @@ export function ArtistSpotlight() {
     >
       <div className={gradientOverlay({ direction: "toR", intensity: "subtle" })} />
 
-      <div className="relative flex flex-1 flex-col">
+      <div className={spotlightBody()}>
         <WidgetHeader
           icon={Users}
           title={t("artistSpotlight.title")}
           subtitle={t("artistSpotlight.subtitle")}
           titleId="artist-spotlight-heading"
+          info={info}
         />
 
         {isLoading && <ArtistSpotlightSkeleton />}
@@ -69,7 +72,7 @@ export function ArtistSpotlight() {
         )}
 
         {!isLoading && !isError && artists.length > 0 && (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          <div className={spotlightGrid()}>
             {artists.map((item) => (
               <ArtistSpotlightCard
                 key={item.artist.id}
