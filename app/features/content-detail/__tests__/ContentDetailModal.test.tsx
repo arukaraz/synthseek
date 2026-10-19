@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -281,6 +281,26 @@ describe("the sticky header", () => {
 });
 
 describe("closing the modal", () => {
+  it("opens on the entry itself, so its first control opens no tooltip and one Escape closes it", async () => {
+    const onClose = vi.fn();
+    render(
+      <ContentDetailModal
+        open
+        onClose={onClose}
+        target={target({ mode: "playlist", id: "playlist-1", name: "Summer" })}
+        actions={actions()}
+      />
+    );
+    const shell = screen.getByTestId("playlist-body").parentElement;
+
+    await waitFor(() => expect(shell).toHaveFocus());
+    expect(screen.getByRole("button", { name: "close from body" })).not.toHaveFocus();
+
+    await userEvent.setup().keyboard("{Escape}");
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
   it("tells the caller when the body asks to close", async () => {
     const onClose = vi.fn();
     render(

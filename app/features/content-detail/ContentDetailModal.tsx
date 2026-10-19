@@ -60,7 +60,14 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
 
   return (
     <Dialog open={open} onOpenChange={(nextOpen) => handleOpenChange(nextOpen, onClose)}>
-      <DialogContent className={modalContainer()} aria-describedby="content-detail-description">
+      <DialogContent
+        className={modalContainer()}
+        aria-describedby="content-detail-description"
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          shellRef.current?.focus();
+        }}
+      >
         <ContentDetailActionsProvider actions={actions}>
           <DialogTitle className="sr-only">{t("dialogTitle", { name: current.name })}</DialogTitle>
           <DialogDescription id="content-detail-description" className="sr-only">
@@ -69,6 +76,7 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
 
           <div
             ref={shellRef}
+            tabIndex={-1}
             className={modalShell()}
             onScroll={(event) => setMiniVisible(event.currentTarget.scrollTop > MINI_HEADER_SCROLL_THRESHOLD)}
           >

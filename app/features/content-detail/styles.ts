@@ -5,7 +5,7 @@ export const modalContainer = cva(
 );
 
 export const modalShell = cva(
-  "relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto sm:overflow-hidden"
+  "relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto outline-none sm:overflow-hidden"
 );
 
 export const modalLayout = cva("flex min-w-0 flex-col sm:min-h-0 sm:flex-1");
