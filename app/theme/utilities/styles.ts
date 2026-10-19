@@ -59,7 +59,7 @@ export type DecorativeBlobProps = VariantProps<typeof decorativeBlob>;
 export const primaryGradientButton = cva("flex items-center transition-all", {
   variants: {
     variant: {
-      primary: "from-primary-600 to-accent-600 bg-linear-to-r text-fg",
+      primary: "from-primary-600 to-accent-600 bg-linear-to-r text-primary-foreground",
     },
     size: {
       xs: "gap-1 rounded-lg px-2 py-1 text-xs",

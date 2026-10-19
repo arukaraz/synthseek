@@ -78,7 +78,7 @@ export const omniInput = cva(
 );
 
 export const kbd = cva(
-  "border-fg/15 text-fg/50 hidden shrink-0 items-center rounded-md border px-1.5 py-0.5 font-mono text-[10.5px] leading-none sm:inline-flex"
+  "border-fg/15 text-fg/50 hidden shrink-0 items-center rounded-md border px-1.5 py-0.5 font-mono text-[10.5px] leading-none lg:inline-flex"
 );
 
 export const clearButton = cva("text-fg/40 hover:bg-fg/10 hover:text-fg shrink-0 rounded p-1 transition-colors");
