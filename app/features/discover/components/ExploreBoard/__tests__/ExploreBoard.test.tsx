@@ -40,6 +40,13 @@ vi.mock("../../CategoriesGrid/CategoriesGrid", () => ({ CategoriesGrid: stub("ge
 vi.mock("../../TopTracks/TopTracks", () => ({ TopTracks: stub("topTracks") }));
 vi.mock("../../RecentScrobbles/RecentScrobbles", () => ({ RecentScrobbles: stub("scrobbles") }));
 vi.mock("../../RecentRequests/RecentRequests", () => ({ RecentRequests: stub("requests") }));
+vi.mock("../../HistoryMixes/OnRepeat", () => ({ OnRepeat: stub("onRepeat") }));
+vi.mock("../../HistoryMixes/RepeatRewind", () => ({ RepeatRewind: stub("rewind") }));
+vi.mock("../../HistoryMixes/DeepCuts", () => ({ DeepCuts: stub("deepCuts") }));
+vi.mock("../../HistoryMixes/ForgottenFavorites", () => ({ ForgottenFavorites: stub("forgottenFavorites") }));
+vi.mock("../../JumpBackIn/JumpBackIn", () => ({ JumpBackIn: stub("jumpBackIn") }));
+vi.mock("../../LastYear/LastYear", () => ({ LastYear: stub("lastYear") }));
+vi.mock("../../Stations/Stations", () => ({ Stations: stub("stations") }));
 
 const TWO_TILES: BoardLayout = {
   schemaVersion: 1,

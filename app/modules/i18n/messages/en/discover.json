@@ -282,7 +282,74 @@
       "genres": "Catalog categories to browse. Open one to see its albums and editorial playlists.",
       "topTracks": "Your most scrobbled tracks on Last.fm, all time.",
       "scrobbles": "Your latest Last.fm scrobbles as they arrive, newest first.",
-      "requests": "What you requested most recently, with how far each one got."
+      "requests": "What you requested most recently, with how far each one got.",
+      "onRepeat": "Your most played tracks of the last 30 days as one set. Play replaces the queue with them.",
+      "rewind": "Tracks you played a lot 6 to 12 months ago and have not played in the last 30 days. Play replaces the queue with them.",
+      "deepCuts": "Tracks you own by your most played artists that you have never played. Play replaces the queue with them.",
+      "forgottenFavorites": "Favorites you have not played in 90 days or more. Play replaces the queue with them.",
+      "jumpBackIn": "Albums you started in the last 7 days and did not finish. Play starts the album again.",
+      "lastYear": "What you played this same week one year ago, from your own play history.",
+      "stations": "Radio stations seeded from your top artists, your favorites and the tracks you have never played."
+    }
+  },
+  "history": {
+    "play": "Play {{name}}",
+    "error": "Couldn't load your listening history.",
+    "onRepeat": {
+      "title": "On repeat",
+      "tag": "Last 30 days",
+      "blurb": "Your most played tracks lately.",
+      "empty": "Play a few tracks and your most played ones show up here."
+    },
+    "rewind": {
+      "title": "Repeat rewind",
+      "tag": "6 to 12 months ago",
+      "blurb": "What you played most back then and stopped playing.",
+      "empty": "Nothing you played a lot back then has gone quiet yet."
+    },
+    "deepCuts": {
+      "title": "Deep cuts",
+      "tag": "Owned, never played",
+      "blurb": "Tracks you own by the artists you play most.",
+      "empty": "You have played everything you own by your top artists."
+    },
+    "forgottenFavorites": {
+      "title": "Forgotten favorites",
+      "tag": "Quiet for 90 days",
+      "blurb": "Favorites you have not played in a while.",
+      "empty": "You have played every favorite recently."
+    }
+  },
+  "jumpBackIn": {
+    "title": "Jump back in",
+    "subtitle": "Last 7 days",
+    "empty": "Albums you start and leave unfinished show up here.",
+    "progress": "{{played}} of {{total}} tracks played"
+  },
+  "lastYear": {
+    "title": "This time last year",
+    "subtitle": "{{from}} to {{to}}",
+    "empty": "You played nothing this week last year.",
+    "play": "Play",
+    "plays_one": "{{count}} play",
+    "plays_other": "{{count}} plays",
+    "statPlays": "Plays",
+    "statTime": "Listened",
+    "statArtist": "Top artist"
+  },
+  "stations": {
+    "heading": "Stations for you",
+    "subtitle": "Seeded from your listening",
+    "empty": "Play some music and your stations show up here.",
+    "start": "Start {{name}} radio",
+    "kind": {
+      "artist": "Artist radio",
+      "favorites": "Favorites radio",
+      "unplayed": "Discovery radio"
+    },
+    "title": {
+      "favorites": "Your favorites",
+      "unplayed": "Never played"
     }
   }
 }

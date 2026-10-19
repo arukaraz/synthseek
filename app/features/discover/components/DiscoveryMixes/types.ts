@@ -49,7 +49,7 @@ export interface DiscoveryMixCardEmptyProps {
 }
 
 export interface DiscoveryMixMosaicProps {
-  candidates: FeedCandidate[];
+  covers: readonly string[];
   fallbackSeed: string;
 }
 

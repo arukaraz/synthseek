@@ -1,13 +1,32 @@
 import type { ParseKeys } from "i18next";
-import { Activity, Download, Grid3X3, Library, Trophy, Users, Zap } from "lucide-react";
+import {
+  Activity,
+  CalendarClock,
+  Download,
+  Grid3X3,
+  Library,
+  Radio,
+  RotateCcw,
+  Trophy,
+  Users,
+  Zap,
+} from "lucide-react";
 
 import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 
 import { ArtistSpotlight } from "../ArtistSpotlight/ArtistSpotlight";
 import { CategoriesGrid } from "../CategoriesGrid/CategoriesGrid";
 import { DiscoveryMixes } from "../DiscoveryMixes/DiscoveryMixes";
+import { HISTORY_MIXES } from "../HistoryMixes/constants";
+import { DeepCuts } from "../HistoryMixes/DeepCuts";
+import { ForgottenFavorites } from "../HistoryMixes/ForgottenFavorites";
+import { OnRepeat } from "../HistoryMixes/OnRepeat";
+import { RepeatRewind } from "../HistoryMixes/RepeatRewind";
+import { JumpBackIn } from "../JumpBackIn/JumpBackIn";
+import { LastYear } from "../LastYear/LastYear";
 import { RecentRequests } from "../RecentRequests/RecentRequests";
 import { RecentScrobbles } from "../RecentScrobbles/RecentScrobbles";
+import { Stations } from "../Stations/Stations";
 import { TopTracks } from "../TopTracks/TopTracks";
 import { TrendingHero } from "../TrendingHero/TrendingHero";
 import type { BoardCategory, BoardDevice, BoardSpan, BoardWidgetDefinition } from "./types";
@@ -73,6 +92,13 @@ export const BOARD_SIZE_NAME_KEYS: Record<BoardSize, ParseKeys<"discover">> = {
 
 export const BOARD_WIDGET_ORDER: readonly BoardWidgetKey[] = [
   "trending",
+  "jumpBackIn",
+  "stations",
+  "onRepeat",
+  "rewind",
+  "deepCuts",
+  "forgottenFavorites",
+  "lastYear",
   "topTracks",
   "scrobbles",
   "mixes",
@@ -149,14 +175,86 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     defaultSize: "L",
     narrowSizes: { L: "M" },
   },
+  onRepeat: {
+    component: OnRepeat,
+    category: "history",
+    icon: HISTORY_MIXES.onRepeat.icon,
+    titleKey: HISTORY_MIXES.onRepeat.titleKey,
+    descriptionKey: "board.widgets.onRepeat",
+    sizes: ["C", "M"],
+    defaultSize: "C",
+  },
+  rewind: {
+    component: RepeatRewind,
+    category: "history",
+    icon: HISTORY_MIXES.rewind.icon,
+    titleKey: HISTORY_MIXES.rewind.titleKey,
+    descriptionKey: "board.widgets.rewind",
+    sizes: ["C", "M"],
+    defaultSize: "C",
+  },
+  deepCuts: {
+    component: DeepCuts,
+    category: "history",
+    icon: HISTORY_MIXES.deepCuts.icon,
+    titleKey: HISTORY_MIXES.deepCuts.titleKey,
+    descriptionKey: "board.widgets.deepCuts",
+    sizes: ["C", "M"],
+    defaultSize: "C",
+  },
+  forgottenFavorites: {
+    component: ForgottenFavorites,
+    category: "history",
+    icon: HISTORY_MIXES.forgottenFavorites.icon,
+    titleKey: HISTORY_MIXES.forgottenFavorites.titleKey,
+    descriptionKey: "board.widgets.forgottenFavorites",
+    sizes: ["C", "M"],
+    defaultSize: "C",
+  },
+  jumpBackIn: {
+    component: JumpBackIn,
+    category: "now",
+    icon: RotateCcw,
+    titleKey: "jumpBackIn.title",
+    descriptionKey: "board.widgets.jumpBackIn",
+    sizes: ["M", "L"],
+    defaultSize: "L",
+    narrowSizes: { L: "M" },
+  },
+  lastYear: {
+    component: LastYear,
+    category: "history",
+    icon: CalendarClock,
+    titleKey: "lastYear.title",
+    descriptionKey: "board.widgets.lastYear",
+    sizes: ["M", "L"],
+    defaultSize: "M",
+  },
+  stations: {
+    component: Stations,
+    category: "now",
+    icon: Radio,
+    titleKey: "stations.heading",
+    descriptionKey: "board.widgets.stations",
+    sizes: ["M", "L"],
+    defaultSize: "L",
+    narrowSizes: { L: "M" },
+  },
 };
 
 export const DEFAULT_BOARD: readonly BoardItem[] = [
   { id: "trending", widget: "trending", size: "L" },
+  { id: "jump-back-in", widget: "jumpBackIn", size: "L" },
+  { id: "on-repeat", widget: "onRepeat", size: "C" },
+  { id: "rewind", widget: "rewind", size: "C" },
+  { id: "deep-cuts", widget: "deepCuts", size: "C" },
+  { id: "forgotten-favorites", widget: "forgottenFavorites", size: "C" },
   { id: "mixes", widget: "mixes", size: "XL" },
   { id: "top-tracks", widget: "topTracks", size: "M+" },
   { id: "genres", widget: "genres", size: "M+" },
+  { id: "stations", widget: "stations", size: "L" },
   { id: "artists-next", widget: "artistsNext", size: "XL" },
+  { id: "last-year", widget: "lastYear", size: "M" },
+  { id: "requests", widget: "requests", size: "M" },
   { id: "scrobbles", widget: "scrobbles", size: "L" },
-  { id: "requests", widget: "requests", size: "L" },
 ];

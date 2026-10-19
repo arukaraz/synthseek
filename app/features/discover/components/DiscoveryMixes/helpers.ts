@@ -99,6 +99,10 @@ export function describeEmptyReason(mix: DiscoveryMix): string {
   return i18n.t(`discover:${key}`);
 }
 
+export function candidateCovers(candidates: readonly FeedCandidate[]): string[] {
+  return candidates.flatMap((candidate) => (candidate.albumImage ? [candidate.albumImage] : []));
+}
+
 export function tileGradient(seed: string): string {
   let h = 0;
   for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) % 360;

@@ -33,6 +33,16 @@ export const scrollFadeBottom = cva(
   "pb-6 [-webkit-mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)] [mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)]"
 );
 
+export const cardRowBody = cva("@container flex min-h-0 flex-1 flex-col");
+
+export const cardRow = cva("grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-3 @3xl:grid-cols-4 @3xl:gap-4");
+
+export const cardRowSkeleton = cva("bg-fg/5 h-full min-h-32 animate-pulse rounded-2xl");
+
+export const widgetNote = cva(
+  "border-fg/10 bg-fg/[0.02] text-fg/60 flex flex-1 items-center justify-center rounded-xl border border-dashed px-6 py-8 text-center text-sm"
+);
+
 export const skeletonPulse = cva("bg-fg/10 animate-pulse rounded", {
   variants: {
     size: {

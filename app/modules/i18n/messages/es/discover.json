@@ -282,7 +282,74 @@
       "genres": "Categorías del catálogo para explorar. Abre una para ver sus álbumes y listas editoriales.",
       "topTracks": "Tus canciones con más scrobbles en Last.fm, de siempre.",
       "scrobbles": "Tus últimos scrobbles de Last.fm según llegan, el más reciente primero.",
-      "requests": "Lo que solicitaste más recientemente y hasta dónde llegó cada cosa."
+      "requests": "Lo que solicitaste más recientemente y hasta dónde llegó cada cosa.",
+      "onRepeat": "Tus canciones más escuchadas de los últimos 30 días en un solo grupo. Reproducir reemplaza la cola con ellas.",
+      "rewind": "Canciones que escuchaste mucho hace 6 a 12 meses y que no has escuchado en los últimos 30 días. Reproducir reemplaza la cola con ellas.",
+      "deepCuts": "Canciones que tienes de tus artistas más escuchados y que nunca has escuchado. Reproducir reemplaza la cola con ellas.",
+      "forgottenFavorites": "Favoritas que no escuchas desde hace 90 días o más. Reproducir reemplaza la cola con ellas.",
+      "jumpBackIn": "Álbumes que empezaste en los últimos 7 días y no terminaste. Reproducir empieza el álbum de nuevo.",
+      "lastYear": "Lo que escuchaste esta misma semana hace un año, según tu propio historial.",
+      "stations": "Radios creadas a partir de tus artistas más escuchados, tus favoritas y las canciones que nunca has escuchado."
+    }
+  },
+  "history": {
+    "play": "Reproducir {{name}}",
+    "error": "No se pudo cargar tu historial de escucha.",
+    "onRepeat": {
+      "title": "En bucle",
+      "tag": "Últimos 30 días",
+      "blurb": "Tus canciones más escuchadas últimamente.",
+      "empty": "Escucha algunas canciones y aquí aparecerán las que más suenan."
+    },
+    "rewind": {
+      "title": "Rebobinar",
+      "tag": "Hace 6 a 12 meses",
+      "blurb": "Lo que más escuchabas entonces y dejaste de escuchar.",
+      "empty": "Nada de lo que escuchabas mucho entonces se ha quedado en silencio todavía."
+    },
+    "deepCuts": {
+      "title": "Joyas ocultas",
+      "tag": "Tuyas, nunca escuchadas",
+      "blurb": "Canciones que tienes de los artistas que más escuchas.",
+      "empty": "Ya escuchaste todo lo que tienes de tus artistas favoritos."
+    },
+    "forgottenFavorites": {
+      "title": "Favoritas olvidadas",
+      "tag": "Sin sonar 90 días",
+      "blurb": "Favoritas que no escuchas desde hace tiempo.",
+      "empty": "Escuchaste todas tus favoritas hace poco."
+    }
+  },
+  "jumpBackIn": {
+    "title": "Retoma",
+    "subtitle": "Últimos 7 días",
+    "empty": "Aquí aparecen los álbumes que empiezas y dejas a medias.",
+    "progress": "{{played}} de {{total}} canciones escuchadas"
+  },
+  "lastYear": {
+    "title": "Hace un año",
+    "subtitle": "{{from}} a {{to}}",
+    "empty": "No escuchaste nada esta semana el año pasado.",
+    "play": "Reproducir",
+    "plays_one": "{{count}} reproducción",
+    "plays_other": "{{count}} reproducciones",
+    "statPlays": "Reproducciones",
+    "statTime": "Escuchado",
+    "statArtist": "Artista principal"
+  },
+  "stations": {
+    "heading": "Radios para ti",
+    "subtitle": "Creadas a partir de lo que escuchas",
+    "empty": "Escucha algo de música y aquí aparecerán tus radios.",
+    "start": "Iniciar la radio de {{name}}",
+    "kind": {
+      "artist": "Radio del artista",
+      "favorites": "Radio de favoritas",
+      "unplayed": "Radio de descubrimiento"
+    },
+    "title": {
+      "favorites": "Tus favoritas",
+      "unplayed": "Nunca escuchadas"
     }
   }
 }

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { DiscoveryMixMosaic } from "./DiscoveryMixMosaic";
 import { LB_KIND_BLURB_KEYS, LB_KIND_LABEL_KEYS, LB_KIND_METADATA, LB_KIND_TAG_KEYS } from "./constants";
-import { formatFreshness } from "./helpers";
+import { candidateCovers, formatFreshness } from "./helpers";
 import {
   mixBlurb,
   mixCard,
@@ -32,7 +32,7 @@ export function DiscoveryMixCard({ mix, onClick, compact }: DiscoveryMixCardProp
   return (
     <button type="button" data-acc={meta.acc} onClick={onClick} aria-label={ariaLabel} className={mixCard()}>
       <div className={mixPoster()}>
-        <DiscoveryMixMosaic candidates={mix.candidates.slice(0, 4)} fallbackSeed={mix.kind} />
+        <DiscoveryMixMosaic covers={candidateCovers(mix.candidates.slice(0, 4))} fallbackSeed={mix.kind} />
         <span className={mixPosterTint()} />
         <span className={mixPosterShade()} />
         <span className={mixChip()}>

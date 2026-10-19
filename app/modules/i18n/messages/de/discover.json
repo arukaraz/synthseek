@@ -282,7 +282,74 @@
       "genres": "Katalog-Kategorien zum Stöbern. Öffne eine, um ihre Alben und redaktionellen Playlists zu sehen.",
       "topTracks": "Deine meistgescrobbelten Titel auf Last.fm, aller Zeiten.",
       "scrobbles": "Deine neuesten Last.fm-Scrobbles, sobald sie eintreffen, die neuesten zuerst.",
-      "requests": "Was du zuletzt angefordert hast und wie weit jede Anfrage gekommen ist."
+      "requests": "Was du zuletzt angefordert hast und wie weit jede Anfrage gekommen ist.",
+      "onRepeat": "Deine meistgehörten Titel der letzten 30 Tage als ein Set. Abspielen ersetzt die Warteschlange damit.",
+      "rewind": "Titel, die du vor 6 bis 12 Monaten oft gehört hast und in den letzten 30 Tagen nicht mehr. Abspielen ersetzt die Warteschlange damit.",
+      "deepCuts": "Titel deiner meistgehörten Künstler, die du besitzt und nie gehört hast. Abspielen ersetzt die Warteschlange damit.",
+      "forgottenFavorites": "Favoriten, die du seit 90 Tagen oder länger nicht gehört hast. Abspielen ersetzt die Warteschlange damit.",
+      "jumpBackIn": "Alben, die du in den letzten 7 Tagen begonnen und nicht beendet hast. Abspielen startet das Album von vorn.",
+      "lastYear": "Was du in derselben Woche vor einem Jahr gehört hast, aus deinem eigenen Verlauf.",
+      "stations": "Radiosender auf Basis deiner Top-Künstler, deiner Favoriten und der Titel, die du nie gehört hast."
+    }
+  },
+  "history": {
+    "play": "{{name}} abspielen",
+    "error": "Dein Hörverlauf konnte nicht geladen werden.",
+    "onRepeat": {
+      "title": "In Dauerschleife",
+      "tag": "Letzte 30 Tage",
+      "blurb": "Deine zuletzt meistgehörten Titel.",
+      "empty": "Hör ein paar Titel, dann erscheinen hier deine meistgehörten."
+    },
+    "rewind": {
+      "title": "Zurückgespult",
+      "tag": "Vor 6 bis 12 Monaten",
+      "blurb": "Was du damals am meisten gehört hast und nicht mehr hörst.",
+      "empty": "Nichts, was du damals oft gehört hast, ist bisher verstummt."
+    },
+    "deepCuts": {
+      "title": "Verborgene Perlen",
+      "tag": "Im Besitz, nie gehört",
+      "blurb": "Titel der Künstler, die du am meisten hörst.",
+      "empty": "Du hast alles von deinen Top-Künstlern schon gehört."
+    },
+    "forgottenFavorites": {
+      "title": "Vergessene Favoriten",
+      "tag": "90 Tage still",
+      "blurb": "Favoriten, die du länger nicht gehört hast.",
+      "empty": "Du hast alle Favoriten kürzlich gehört."
+    }
+  },
+  "jumpBackIn": {
+    "title": "Weiterhören",
+    "subtitle": "Letzte 7 Tage",
+    "empty": "Hier erscheinen Alben, die du beginnst und nicht zu Ende hörst.",
+    "progress": "{{played}} von {{total}} Titeln gehört"
+  },
+  "lastYear": {
+    "title": "Vor einem Jahr",
+    "subtitle": "{{from}} bis {{to}}",
+    "empty": "In dieser Woche im letzten Jahr hast du nichts gehört.",
+    "play": "Abspielen",
+    "plays_one": "{{count}} Wiedergabe",
+    "plays_other": "{{count}} Wiedergaben",
+    "statPlays": "Wiedergaben",
+    "statTime": "Gehört",
+    "statArtist": "Top-Künstler"
+  },
+  "stations": {
+    "heading": "Sender für dich",
+    "subtitle": "Aus deinem Hörverhalten",
+    "empty": "Hör etwas Musik, dann erscheinen hier deine Sender.",
+    "start": "Radio für {{name}} starten",
+    "kind": {
+      "artist": "Künstlerradio",
+      "favorites": "Favoritenradio",
+      "unplayed": "Entdeckungsradio"
+    },
+    "title": {
+      "favorites": "Deine Favoriten",
+      "unplayed": "Nie gehört"
     }
   }
 }

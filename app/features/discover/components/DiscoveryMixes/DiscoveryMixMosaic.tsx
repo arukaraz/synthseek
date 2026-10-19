@@ -8,9 +8,7 @@ import { tileGradient } from "./helpers";
 import { mosaicFallback, mosaicGrid, mosaicImage, mosaicTile } from "./styles";
 import type { DiscoveryMixMosaicProps } from "./types";
 
-export function DiscoveryMixMosaic({ candidates, fallbackSeed }: DiscoveryMixMosaicProps) {
-  const images = candidates.map((candidate) => candidate.albumImage).filter((url): url is string => Boolean(url));
-
+export function DiscoveryMixMosaic({ covers: images, fallbackSeed }: DiscoveryMixMosaicProps) {
   if (images.length === 0) {
     const background = tileGradient(fallbackSeed);
     return <div style={{ background }} className={mosaicFallback()} />;

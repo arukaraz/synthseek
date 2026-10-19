@@ -1,7 +1,15 @@
 import { describe, expect, it } from "vitest";
 
 import type { FeedCandidate } from "../types";
-import { describeEmptyReason, formatFreshness, synthesizePlaylist, synthesizeTrack, tileGradient } from "../helpers";
+import {
+  candidateCovers,
+  describeEmptyReason,
+  formatFreshness,
+  synthesizePlaylist,
+  synthesizeTrack,
+  tileGradient,
+} from "../helpers";
+import { createCandidate } from "./fixtures";
 import { LB_KIND_METADATA } from "../constants";
 
 function candidate(overrides: Partial<FeedCandidate> = {}): FeedCandidate {
@@ -180,6 +188,18 @@ describe("describeEmptyReason", () => {
     expect(describeEmptyReason({ kind: "weekly-jams", status: "empty", candidates: [], emptyReason: "weird" })).toBe(
       "ListenBrainz returned no songs for this mix yet."
     );
+  });
+});
+
+describe("candidateCovers", () => {
+  it("keeps the album images in order and skips candidates without one", () => {
+    expect(
+      candidateCovers([
+        createCandidate({ catalogTrackId: "a", albumImage: "https://cover/a.jpg" }),
+        createCandidate({ catalogTrackId: "b", albumImage: null }),
+        createCandidate({ catalogTrackId: "c", albumImage: "https://cover/c.jpg" }),
+      ])
+    ).toEqual(["https://cover/a.jpg", "https://cover/c.jpg"]);
   });
 });
 

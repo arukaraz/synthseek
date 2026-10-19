@@ -21,6 +21,13 @@ vi.mock("../../CategoriesGrid/CategoriesGrid", () => ({ CategoriesGrid: stub("ge
 vi.mock("../../TopTracks/TopTracks", () => ({ TopTracks: stub("topTracks") }));
 vi.mock("../../RecentScrobbles/RecentScrobbles", () => ({ RecentScrobbles: stub("scrobbles") }));
 vi.mock("../../RecentRequests/RecentRequests", () => ({ RecentRequests: stub("requests") }));
+vi.mock("../../HistoryMixes/OnRepeat", () => ({ OnRepeat: stub("onRepeat") }));
+vi.mock("../../HistoryMixes/RepeatRewind", () => ({ RepeatRewind: stub("rewind") }));
+vi.mock("../../HistoryMixes/DeepCuts", () => ({ DeepCuts: stub("deepCuts") }));
+vi.mock("../../HistoryMixes/ForgottenFavorites", () => ({ ForgottenFavorites: stub("forgottenFavorites") }));
+vi.mock("../../JumpBackIn/JumpBackIn", () => ({ JumpBackIn: stub("jumpBackIn") }));
+vi.mock("../../LastYear/LastYear", () => ({ LastYear: stub("lastYear") }));
+vi.mock("../../Stations/Stations", () => ({ Stations: stub("stations") }));
 
 const ON_BOARD: BoardItem[] = [{ id: "s1", widget: "scrobbles", size: "M" }];
 
@@ -44,11 +51,11 @@ describe("WidgetGallery", () => {
   it("lists every widget under its category band with a scaled live preview at the default size", () => {
     renderGallery();
 
-    expect(cardTitles()).toHaveLength(7);
+    expect(cardTitles()).toHaveLength(14);
     expect(screen.getByRole("heading", { level: 3, name: "Now" })).toBeInTheDocument();
-    expect(screen.getByText("1 of 2 on board")).toBeInTheDocument();
+    expect(screen.getByText("1 of 7 on board")).toBeInTheDocument();
     expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "XL");
-    expect(screen.getByText(i18n.t("discover:board.gallery.summary", { onBoard: 1, total: 7 }))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t("discover:board.gallery.summary", { onBoard: 1, total: 14 }))).toBeInTheDocument();
   });
 
   it("narrows to one category without bands when a tab is chosen", () => {
@@ -56,7 +63,15 @@ describe("WidgetGallery", () => {
 
     fireEvent.click(screen.getByRole("tab", { name: /From your history/ }));
 
-    expect(cardTitles()).toEqual(["Top Tracks", "Recent Scrobbles"]);
+    expect(cardTitles()).toEqual([
+      "On repeat",
+      "Repeat rewind",
+      "Deep cuts",
+      "Forgotten favorites",
+      "This time last year",
+      "Top Tracks",
+      "Recent Scrobbles",
+    ]);
     expect(screen.queryByRole("heading", { level: 3 })).not.toBeInTheDocument();
   });
 

@@ -282,7 +282,74 @@
       "genres": "Des catégories du catalogue à parcourir. Ouvrez-en une pour voir ses albums et ses playlists éditoriales.",
       "topTracks": "Vos titres les plus scrobblés sur Last.fm, de tous les temps.",
       "scrobbles": "Vos derniers scrobbles Last.fm à mesure qu'ils arrivent, les plus récents d'abord.",
-      "requests": "Ce que vous avez demandé récemment et où en est chaque demande."
+      "requests": "Ce que vous avez demandé récemment et où en est chaque demande.",
+      "onRepeat": "Vos titres les plus écoutés des 30 derniers jours en un seul ensemble. Lire remplace la file d'attente par ces titres.",
+      "rewind": "Les titres très écoutés il y a 6 à 12 mois et plus écoutés depuis 30 jours. Lire remplace la file d'attente par ces titres.",
+      "deepCuts": "Les titres de vos artistes les plus écoutés que vous possédez sans les avoir jamais écoutés. Lire remplace la file d'attente par ces titres.",
+      "forgottenFavorites": "Les favoris que vous n'avez pas écoutés depuis 90 jours ou plus. Lire remplace la file d'attente par ces titres.",
+      "jumpBackIn": "Les albums commencés ces 7 derniers jours et pas terminés. Lire relance l'album depuis le début.",
+      "lastYear": "Ce que vous avez écouté la même semaine il y a un an, d'après votre propre historique.",
+      "stations": "Des radios construites à partir de vos artistes préférés, de vos favoris et des titres jamais écoutés."
+    }
+  },
+  "history": {
+    "play": "Lire {{name}}",
+    "error": "Impossible de charger votre historique d'écoute.",
+    "onRepeat": {
+      "title": "En boucle",
+      "tag": "30 derniers jours",
+      "blurb": "Vos titres les plus écoutés ces derniers temps.",
+      "empty": "Écoutez quelques titres et vos plus écoutés apparaîtront ici."
+    },
+    "rewind": {
+      "title": "Retour en arrière",
+      "tag": "Il y a 6 à 12 mois",
+      "blurb": "Ce que vous écoutiez le plus alors et avez cessé d'écouter.",
+      "empty": "Rien de ce que vous écoutiez beaucoup alors ne s'est encore tu."
+    },
+    "deepCuts": {
+      "title": "Pépites cachées",
+      "tag": "Possédés, jamais écoutés",
+      "blurb": "Les titres des artistes que vous écoutez le plus.",
+      "empty": "Vous avez écouté tout ce que vous possédez de vos artistes préférés."
+    },
+    "forgottenFavorites": {
+      "title": "Favoris oubliés",
+      "tag": "Silencieux depuis 90 jours",
+      "blurb": "Des favoris que vous n'avez pas écoutés depuis un moment.",
+      "empty": "Vous avez écouté tous vos favoris récemment."
+    }
+  },
+  "jumpBackIn": {
+    "title": "Reprendre",
+    "subtitle": "7 derniers jours",
+    "empty": "Les albums que vous commencez sans les finir apparaissent ici.",
+    "progress": "{{played}} titres écoutés sur {{total}}"
+  },
+  "lastYear": {
+    "title": "Il y a un an",
+    "subtitle": "Du {{from}} au {{to}}",
+    "empty": "Vous n'avez rien écouté cette semaine l'an dernier.",
+    "play": "Lire",
+    "plays_one": "{{count}} écoute",
+    "plays_other": "{{count}} écoutes",
+    "statPlays": "Écoutes",
+    "statTime": "Durée d'écoute",
+    "statArtist": "Artiste principal"
+  },
+  "stations": {
+    "heading": "Radios pour vous",
+    "subtitle": "Construites à partir de vos écoutes",
+    "empty": "Écoutez un peu de musique et vos radios apparaîtront ici.",
+    "start": "Lancer la radio {{name}}",
+    "kind": {
+      "artist": "Radio de l'artiste",
+      "favorites": "Radio des favoris",
+      "unplayed": "Radio découverte"
+    },
+    "title": {
+      "favorites": "Vos favoris",
+      "unplayed": "Jamais écoutés"
     }
   }
 }

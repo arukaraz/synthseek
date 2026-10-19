@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 import { render } from "@test/test-utils";
 
 import { DiscoveryMixMosaic } from "../DiscoveryMixMosaic";
-import { createCandidate } from "./fixtures";
 
 vi.mock("next/image", () => ({
   // eslint-disable-next-line @next/next/no-img-element
@@ -11,25 +10,17 @@ vi.mock("next/image", () => ({
 }));
 
 describe("DiscoveryMixMosaic", () => {
-  it("renders a single gradient fallback when no candidate has an album image", () => {
-    const { container } = render(
-      <DiscoveryMixMosaic candidates={[createCandidate({ albumImage: null })]} fallbackSeed="daily-jams" />
-    );
+  it("renders a single gradient fallback when there is no cover", () => {
+    const { container } = render(<DiscoveryMixMosaic covers={[]} fallbackSeed="daily-jams" />);
 
     const tiles = container.querySelectorAll("div[style*='linear-gradient']");
     expect(tiles).toHaveLength(1);
     expect(container.querySelectorAll("img")).toHaveLength(0);
   });
 
-  it("renders an image tile per available cover and proxies the source", () => {
+  it("renders an image tile per cover and proxies the source", () => {
     const { container } = render(
-      <DiscoveryMixMosaic
-        candidates={[
-          createCandidate({ catalogTrackId: "a", albumImage: "https://cover/a.jpg" }),
-          createCandidate({ catalogTrackId: "b", albumImage: "https://cover/b.jpg" }),
-        ]}
-        fallbackSeed="weekly-jams"
-      />
+      <DiscoveryMixMosaic covers={["https://cover/a.jpg", "https://cover/b.jpg"]} fallbackSeed="weekly-jams" />
     );
 
     const images = container.querySelectorAll("img");
@@ -38,23 +29,16 @@ describe("DiscoveryMixMosaic", () => {
   });
 
   it("pads the mosaic to four tiles with gradient fillers when fewer covers exist", () => {
-    const { container } = render(
-      <DiscoveryMixMosaic
-        candidates={[createCandidate({ albumImage: "https://cover/only.jpg" })]}
-        fallbackSeed="explore"
-      />
-    );
+    const { container } = render(<DiscoveryMixMosaic covers={["https://cover/only.jpg"]} fallbackSeed="explore" />);
 
     expect(container.querySelectorAll("img")).toHaveLength(1);
     expect(container.querySelectorAll("div[style*='linear-gradient']")).toHaveLength(3);
   });
 
   it("caps the mosaic at four image tiles even with more covers", () => {
-    const candidates = Array.from({ length: 6 }, (_, i) =>
-      createCandidate({ catalogTrackId: `c-${i}`, albumImage: `https://cover/${i}.jpg` })
-    );
+    const covers = Array.from({ length: 6 }, (_, i) => `https://cover/${i}.jpg`);
 
-    const { container } = render(<DiscoveryMixMosaic candidates={candidates} fallbackSeed="cf" />);
+    const { container } = render(<DiscoveryMixMosaic covers={covers} fallbackSeed="cf" />);
 
     expect(container.querySelectorAll("img")).toHaveLength(4);
   });
