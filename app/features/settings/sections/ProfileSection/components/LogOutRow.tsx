@@ -16,11 +16,8 @@ export function LogOutRow() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    try {
-      await logout.mutateAsync();
-    } finally {
-      router.replace("/login");
-    }
+    await logout.mutateAsync().catch(() => undefined);
+    router.replace("/login");
   };
 
   return (
