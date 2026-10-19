@@ -139,4 +139,18 @@ describe("useBoardEditor", () => {
     });
     expect(result.current.editing).toBe(false);
   });
+
+  it("stays in edit mode when another layer already handled the Escape", () => {
+    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const handled = (event: KeyboardEvent) => event.preventDefault();
+    document.addEventListener("keydown", handled, { capture: true });
+
+    act(() => result.current.startEditing());
+    act(() => {
+      fireEvent.keyDown(document.body, { key: "Escape" });
+    });
+    document.removeEventListener("keydown", handled, { capture: true });
+
+    expect(result.current.editing).toBe(true);
+  });
 });

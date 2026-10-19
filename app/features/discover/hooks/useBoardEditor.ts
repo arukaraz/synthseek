@@ -107,7 +107,7 @@ export function useBoardEditor(items: BoardItem[]): BoardEditor {
   useEffect(() => {
     if (!editing || galleryOpen) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setEditing(false);
+      if (event.key === "Escape" && !event.defaultPrevented) setEditing(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
