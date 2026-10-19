@@ -3,6 +3,7 @@
 import { Gem } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useRarities } from "@hooks/api/queries/analytics/useRarities";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
@@ -39,19 +40,26 @@ export function Rarities({ info }: BoardWidgetProps) {
               })}
             </span>
           </div>
-          <ul className={widgetList()}>
-            {data.items.map((item) => (
-              <WidgetRow
-                key={item.trackId}
-                cover={item.cover}
-                seed={item.trackId}
-                title={item.title}
-                subtitle={t("rarities.yours", { artist: item.artist, count: item.plays })}
-                trailing={compactCount(item.listens)}
-                onSelect={() => void playEntity({ kind: "tracks", trackIds: [item.trackId] })}
-              />
-            ))}
-          </ul>
+          <FadeScroll>
+            <ul className={widgetList()}>
+              {data.items.map((item) => (
+                <WidgetRow
+                  key={item.trackId}
+                  cover={item.cover}
+                  seed={item.trackId}
+                  title={item.title}
+                  subtitle={t("rarities.yours", { artist: item.artist, count: item.plays })}
+                  trailing={compactCount(item.listens)}
+                  onSelect={() => void playEntity({ kind: "tracks", trackIds: [item.trackId] })}
+                  coverAction={{
+                    kind: "play",
+                    label: t("history.play", { name: item.title }),
+                    onClick: () => void playEntity({ kind: "tracks", trackIds: [item.trackId] }),
+                  }}
+                />
+              ))}
+            </ul>
+          </FadeScroll>
         </>
       ) : null}
     </WidgetFrame>

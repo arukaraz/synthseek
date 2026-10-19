@@ -7,7 +7,7 @@ import { BOARD_TILE_ATTRIBUTE } from "@hooks/ui/board/constants";
 
 import { BoardTileEditControls } from "./BoardTileEditControls";
 import { BOARD_WIDGETS } from "./constants";
-import { boardKeyAction, cycleSize } from "./helpers";
+import { blockWidgetAction, boardKeyAction, cycleSize } from "./helpers";
 import { boardTile, tileBody, tileVars } from "./styles";
 import type { BoardTileProps } from "./types";
 
@@ -38,7 +38,7 @@ export function BoardTile({ tile, device, editing, dragging, position, total, ac
       aria-label={editing ? t("board.tile.label", { name, position, total }) : undefined}
       onKeyDown={handleKeyDown}
     >
-      <div className={tileBody({ editing })} inert={editing}>
+      <div className={tileBody({ editing })} onClickCapture={editing ? blockWidgetAction : undefined}>
         <Widget size={tile.size} info={t(definition.descriptionKey)} />
       </div>
       {editing ? (

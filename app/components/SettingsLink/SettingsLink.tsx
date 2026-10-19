@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Avatar } from "@components/ui/Avatar";
 import { NotificationBadge } from "@components/ui/NotificationBadge";
+import { SETTINGS_ROOT } from "@features/settings/constants";
 import { settingsHomeFor } from "@features/settings/helpers";
 import { useVersionState } from "@hooks/api/subscriptions";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -26,7 +27,11 @@ export function SettingsLink({ variant }: SettingsLinkProps) {
       : t("header.settings");
 
   return (
-    <Link href={settingsHomeFor(isAdmin)} aria-label={label} className={settingsLink({ variant })}>
+    <Link
+      href={variant === "avatar" ? SETTINGS_ROOT : settingsHomeFor(isAdmin)}
+      aria-label={label}
+      className={settingsLink({ variant })}
+    >
       {variant === "gear" ? (
         <Settings aria-hidden />
       ) : (

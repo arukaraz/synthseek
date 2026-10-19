@@ -3,4 +3,6 @@ import type { CatalogAlbumRef, DiscographyGap } from "@hooks/api/queries/analyti
 export interface GapCardProps {
   gap: DiscographyGap;
   onOpen: (album: CatalogAlbumRef) => void;
+  onRequest: (album: CatalogAlbumRef) => void;
+  onOpenArtist: () => void;
 }

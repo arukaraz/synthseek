@@ -8,14 +8,14 @@ describe("TopHeader styles", () => {
     expect(headerContainer()).toContain("h-16");
   });
 
-  it("hides the closed Omnibar on phones and shows it everywhere once it opens", () => {
-    expect(omniPill({ open: false })).toContain("hidden sm:flex");
+  it("shows the search box at every width, open or closed", () => {
+    expect(omniPill({ open: false })).not.toContain("hidden");
     expect(omniPill({ open: true })).not.toContain("hidden");
   });
 
-  it("hides the logo on phones while the search takes the bar", () => {
-    expect(brandLink({ hidden: true })).toContain("hidden sm:flex");
-    expect(brandLink({ hidden: false })).not.toContain("hidden");
+  it("gives the phone's top bar to the search box and keeps the logo for wider screens", () => {
+    expect(brandLink()).toContain("hidden");
+    expect(brandLink()).toContain("sm:flex");
   });
 
   it("fills the active nav chip and the active scope with the primary pair", () => {

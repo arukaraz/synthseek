@@ -3,7 +3,10 @@
 import { ListPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { WidgetFrame } from "@components/WidgetFrame";
+import { albumRequestItem } from "@features/content-detail";
+import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useRecentAlbums } from "@hooks/api/queries/analytics/useRecentAlbums";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { formatRelativeTime } from "@utils/formatters";
@@ -17,6 +20,7 @@ export function NewInLibrary({ info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useRecentAlbums();
   const { playEntity } = useEntityPlayback();
+  const { openForResult } = useContentRequestFlow();
   const albums = data ?? [];
 
   return (
@@ -29,27 +33,43 @@ export function NewInLibrary({ info }: BoardWidgetProps) {
       loading={isLoading}
       note={isError ? t("history.error") : albums.length === 0 ? t("newInLibrary.empty") : null}
     >
-      <ul className={widgetList()}>
-        {albums.map((album) => (
-          <WidgetRow
-            key={album.albumExternalId}
-            cover={album.cover}
-            seed={album.albumExternalId}
-            title={album.name}
-            subtitle={t("albumMeta", {
-              artist: album.artist,
-              count: album.tracks,
-              when: formatRelativeTime(album.landedAt),
-            })}
-            trailing={
-              <span className={widgetPill({ tone: album.played ? "muted" : "primary" })}>
-                {album.played ? t("newInLibrary.played") : t("newInLibrary.unplayed")}
-              </span>
-            }
-            onSelect={() => void playEntity({ kind: "album", albumExternalId: album.albumExternalId })}
-          />
-        ))}
-      </ul>
+      <FadeScroll>
+        <ul className={widgetList()}>
+          {albums.map((album) => (
+            <WidgetRow
+              key={album.albumExternalId}
+              cover={album.cover}
+              seed={album.albumExternalId}
+              title={album.name}
+              subtitle={t("albumMeta", {
+                artist: album.artist,
+                count: album.tracks,
+                when: formatRelativeTime(album.landedAt),
+              })}
+              trailing={
+                <span className={widgetPill({ tone: album.played ? "muted" : "primary" })}>
+                  {album.played ? t("newInLibrary.played") : t("newInLibrary.unplayed")}
+                </span>
+              }
+              onSelect={() =>
+                openForResult(
+                  albumRequestItem({
+                    id: album.albumExternalId,
+                    name: album.name,
+                    artistName: album.artist,
+                    cover: album.cover,
+                  })
+                )
+              }
+              coverAction={{
+                kind: "play",
+                label: t("history.play", { name: album.name }),
+                onClick: () => void playEntity({ kind: "album", albumExternalId: album.albumExternalId }),
+              }}
+            />
+          ))}
+        </ul>
+      </FadeScroll>
     </WidgetFrame>
   );
 }

@@ -8,6 +8,8 @@ import {
   heroCount,
   heroFrame,
   heroGhostRank,
+  heroImage,
+  heroMeta,
   heroName,
   heroNameButton,
   heroRankLabel,
@@ -18,8 +20,8 @@ import {
 import type { LeaderboardHeroProps } from "./types";
 
 export function LeaderboardHero({ entry, mode, onSelect }: LeaderboardHeroProps) {
-  const { t } = useTranslation("settings");
-  const unitLabel = mode === "artists" ? t("overview.leaderboard.unitTracks") : t("overview.leaderboard.unitAlbums");
+  const { t } = useTranslation("discover");
+  const unitLabel = mode === "artists" ? t("leaderboard.unitTracks") : t("leaderboard.unitAlbums");
 
   return (
     <div className={heroFrame()}>
@@ -34,7 +36,7 @@ export function LeaderboardHero({ entry, mode, onSelect }: LeaderboardHeroProps)
           fill
           sizes="72px"
           fallbackIcon={Crown}
-          className="object-cover"
+          className={heroImage()}
         />
         <div className={heroThumbOverlay()} />
         <div className={heroRankLabel()}>#01</div>
@@ -48,7 +50,7 @@ export function LeaderboardHero({ entry, mode, onSelect }: LeaderboardHeroProps)
         ) : (
           <div className={heroName()}>{entry.name}</div>
         )}
-        <div className="mt-1.5 flex items-baseline gap-1">
+        <div className={heroMeta()}>
           <span className={heroCount()}>{entry.count.toLocaleString()}</span>
           <span className={heroUnit()}>{unitLabel}</span>
         </div>

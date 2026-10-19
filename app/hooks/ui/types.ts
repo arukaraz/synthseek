@@ -156,3 +156,24 @@ export interface ClientPagination<T> {
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
 }
+
+export type ScrollAxis = "x" | "y";
+
+export interface ScrollMetrics {
+  scrollTop: number;
+  scrollLeft: number;
+  scrollHeight: number;
+  scrollWidth: number;
+  clientHeight: number;
+  clientWidth: number;
+}
+
+export interface ScrollEdges {
+  start: boolean;
+  end: boolean;
+}
+
+export interface ScrollEdgesState<T extends HTMLElement> extends ScrollEdges {
+  ref: (node: T | null) => void;
+  node: T | null;
+}

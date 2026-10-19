@@ -281,7 +281,8 @@
       "gaps": "Releases missing from the artists you own most, compared with the catalog.",
       "anniversaries": "Albums in your library released around this date in past years.",
       "landed": "Albums downloaded in the last 7 days, with the source and how long they took.",
-      "serverPlaylists": "Your latest playlists and the media servers they are synced to."
+      "serverPlaylists": "Your latest playlists and the media servers they are synced to.",
+      "leaderboard": "How big your library is, and the artists and genres that fill it most."
     }
   },
   "history": {
@@ -316,7 +317,7 @@
     "title": "Jump back in",
     "subtitle": "Last 7 days",
     "empty": "Albums you start and leave unfinished show up here.",
-    "progress": "{{played}} of {{total}} tracks played"
+    "progress": "{{played}}/{{total}} played"
   },
   "lastYear": {
     "title": "This time last year",
@@ -332,6 +333,7 @@
   "stations": {
     "heading": "Stations for you",
     "subtitle": "Seeded from your listening",
+    "rail": "All stations, scroll sideways",
     "empty": "Play some music and your stations show up here.",
     "start": "Start {{name}} radio",
     "kind": {
@@ -346,6 +348,27 @@
   },
   "albumMeta_one": "{{artist}} · {{count}} track · {{when}}",
   "albumMeta_other": "{{artist}} · {{count}} tracks · {{when}}",
+  "requestNamed": "Request {{name}}",
+  "leaderboard": {
+    "title": "Your library",
+    "subtitle": "Top artists and genres",
+    "errorTitle": "Failed to load library",
+    "errorDescription": "Unable to fetch library statistics. Please try again.",
+    "tabsAriaLabel": "Library leaderboard mode",
+    "tabArtists": "Artists",
+    "tabGenres": "Genres",
+    "topArtists": "Top artists",
+    "topGenres": "Top genres",
+    "statsTracks": "Tracks",
+    "statsLibrary": "Library",
+    "statsQueued": "Queued",
+    "unitTracks": "tracks",
+    "unitAlbums": "albums",
+    "emptyArtistsTitle": "No artists yet",
+    "emptyArtistsDescription": "Complete some downloads to see your top artists.",
+    "emptyGenresTitle": "No genres yet",
+    "emptyGenresDescription": "Genres are tracked on new downloads, they will populate as your library grows."
+  },
   "continueListening": {
     "title": "Continue listening",
     "subtitle": "Your play queue",
@@ -377,7 +400,8 @@
     "subtitle": "Top tracks in {{country}}",
     "empty": "No chart for this region right now.",
     "play": "Play",
-    "request": "Request"
+    "request": "Request",
+    "leaderBadge": "#1 in {{country}}"
   },
   "loved": {
     "title": "Loved on Last.fm, not here",
@@ -398,14 +422,15 @@
     "title": "Landed this week",
     "subtitle": "Downloaded albums",
     "empty": "No downloads landed in the last 7 days.",
-    "via": "{{source}} · {{duration}}"
+    "took": "in {{duration}}"
   },
   "gaps": {
     "title": "Complete the discography",
     "subtitle": "Catalog against your library",
     "empty": "Your top artists are complete.",
     "have": "{{have}} of {{total}} releases",
-    "missing": "Not in your library"
+    "missing": "Not in your library",
+    "openArtist": "Open {{artist}}"
   },
   "anniversaries": {
     "title": "Anniversaries",

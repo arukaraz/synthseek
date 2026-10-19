@@ -16,6 +16,8 @@ const mocks = vi.hoisted(() => ({
   targets: vi.fn(),
   playEntity: vi.fn(),
   openForTarget: vi.fn(),
+  openForResult: vi.fn(),
+  requestResult: vi.fn(),
 }));
 
 vi.mock("@hooks/api/queries/analytics/useRecentAlbums", () => ({ useRecentAlbums: () => mocks.recentAlbums() }));
@@ -27,7 +29,11 @@ vi.mock("@hooks/api/queries/analytics/useServerPlaylists", () => ({
 vi.mock("@hooks/api/queries/usePlaylistSyncTargets", () => ({ usePlaylistSyncTargets: () => mocks.targets() }));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => ({ playEntity: mocks.playEntity }) }));
 vi.mock("@features/search/components/ContentRequestFlow", () => ({
-  useContentRequestFlow: () => ({ openForTarget: mocks.openForTarget, openForResult: vi.fn() }),
+  useContentRequestFlow: () => ({
+    openForTarget: mocks.openForTarget,
+    openForResult: mocks.openForResult,
+    requestResult: mocks.requestResult,
+  }),
 }));
 vi.mock("next/image", () => ({
   // eslint-disable-next-line @next/next/no-img-element
@@ -55,7 +61,7 @@ afterEach(() => {
 });
 
 describe("NewInLibrary", () => {
-  it("lists what landed with whether it was played, and plays an album when picked", () => {
+  it("lists what landed with whether it was played, opens an album when picked and plays it from its cover", () => {
     mocks.recentAlbums.mockReturnValue(
       ready([ALBUM, { ...ALBUM, albumExternalId: "ext2", name: "Vs", played: true, source: null, minutes: null }])
     );
@@ -67,7 +73,11 @@ describe("NewInLibrary", () => {
     expect(rows[0]).toHaveTextContent("New");
     expect(rows[1]).toHaveTextContent("Played");
 
-    fireEvent.click(within(rows[0]).getByRole("button"));
+    fireEvent.click(within(rows[0]).getByRole("button", { name: /^Ten/ }));
+    expect(mocks.openForResult).toHaveBeenCalledWith(expect.objectContaining({ type: "album", id: "ext1" }));
+    expect(mocks.playEntity).not.toHaveBeenCalled();
+
+    fireEvent.click(within(rows[0]).getByRole("button", { name: "Play Ten" }));
     expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "ext1" });
   });
 
@@ -88,7 +98,11 @@ describe("Landed", () => {
 
     const rows = screen.getAllByRole("listitem");
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toHaveTextContent("Usenet · 1h");
+    expect(within(rows[0]).getByText("Usenet")).toBeInTheDocument();
+    expect(within(rows[0]).getByText("in 1h")).toBeInTheDocument();
+
+    fireEvent.click(within(rows[0]).getByRole("button", { name: "Play Ten" }));
+    expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "ext1" });
   });
 
   it("says when no download landed", () => {
@@ -102,33 +116,44 @@ describe("Landed", () => {
 describe("Gaps", () => {
   const gap = (artist: string) => ({
     artist,
+    artistId: `${artist}-id`,
     cover: null,
     have: 1,
     total: 4,
     missing: [{ id: `${artist}-vs`, name: "Vs", artist, cover: null, year: 1993 }],
   });
 
-  it("shows only the first artist at M and all of them at L", () => {
+  it("lists every artist at any size, to scroll through", () => {
     mocks.gaps.mockReturnValue(ready([gap("Pearl Jam"), gap("Tycho")]));
-    const { unmount } = renderWithProviders(<Gaps size="M" info="x" />);
-    expect(screen.queryByText("Tycho")).not.toBeInTheDocument();
-    unmount();
+    renderWithProviders(<Gaps size="M" info="x" />);
 
-    renderWithProviders(<Gaps size="L" info="x" />);
     expect(screen.getByText("Tycho")).toBeInTheDocument();
     expect(screen.getAllByText("1 of 4 releases")).toHaveLength(2);
     expect(screen.getAllByText("25%")).toHaveLength(2);
   });
 
-  it("opens a missing album to request it", () => {
+  it("opens the artist from its progress header", () => {
     mocks.gaps.mockReturnValue(ready([gap("Pearl Jam")]));
     renderWithProviders(<Gaps size="M" info="x" />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Vs/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Open Pearl Jam" }));
 
+    expect(mocks.openForTarget).toHaveBeenCalledWith(
+      expect.objectContaining({ mode: "artist", id: "Pearl Jam-id", name: "Pearl Jam" })
+    );
+  });
+
+  it("opens a missing album from its row and requests it from its cover", () => {
+    mocks.gaps.mockReturnValue(ready([gap("Pearl Jam")]));
+    renderWithProviders(<Gaps size="M" info="x" />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^Vs/ }));
     expect(mocks.openForTarget).toHaveBeenCalledWith(
       expect.objectContaining({ mode: "album", id: "Pearl Jam-vs", name: "Vs", artistName: "Pearl Jam" })
     );
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Vs" }));
+    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ type: "album", id: "Pearl Jam-vs" }));
   });
 });
 
@@ -173,8 +198,11 @@ describe("ServerPlaylists", () => {
     expect(within(row).getByText("Plex")).toHaveTextContent("Synced");
     expect(within(row).getByText("Jellyfin")).toHaveTextContent("Not synced");
 
-    fireEvent.click(within(row).getByRole("button"));
+    fireEvent.click(within(row).getByRole("button", { name: /^Road trip/ }));
     expect(mocks.openForTarget).toHaveBeenCalledWith(expect.objectContaining({ mode: "playlist", id: "p1" }));
+
+    fireEvent.click(within(row).getByRole("button", { name: "Play Road trip" }));
+    expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "p1" });
   });
 
   it("asks for a media server when none is connected", () => {

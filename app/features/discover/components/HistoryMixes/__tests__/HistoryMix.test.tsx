@@ -49,6 +49,7 @@ describe("HistoryMix", () => {
     );
 
     expect(screen.getByText("You have played every favorite recently.")).toBeInTheDocument();
+    expect(screen.getByText("0 tracks")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^Play/ })).not.toBeInTheDocument();
   });
 

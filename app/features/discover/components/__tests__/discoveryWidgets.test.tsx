@@ -110,13 +110,17 @@ describe("Charts", () => {
 
     expect(mocks.charts).toHaveBeenCalledWith("MX");
     expect(screen.getByText("Top tracks in Mexico")).toBeInTheDocument();
+    const leader = screen.getByRole("article");
+    expect(leader).toHaveTextContent("#1 in Mexico");
+    fireEvent.click(within(leader).getByRole("button", { name: "Play Joga" }));
+
     const rows = screen.getAllByRole("listitem");
-    fireEvent.click(within(rows[0]).getByRole("button", { name: "Play" }));
-    fireEvent.click(within(rows[1]).getByRole("button", { name: "Request" }));
+    expect(rows).toHaveLength(2);
+    fireEvent.click(within(rows[0]).getByRole("button", { name: "Request Awake" }));
 
     expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["lib1"] });
     expect(mocks.openForResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c1" }));
-    expect(within(rows[2]).queryByRole("button")).not.toBeInTheDocument();
+    expect(within(rows[1]).queryByRole("button")).not.toBeInTheDocument();
   });
 });
 
@@ -162,7 +166,7 @@ describe("Rarities", () => {
     expect(screen.getByText(/under 10K listens worldwide. Median 4.2K/)).toBeInTheDocument();
     const row = screen.getByRole("listitem");
     expect(row).toHaveTextContent("B · 3 plays by you");
-    fireEvent.click(within(row).getByRole("button"));
+    fireEvent.click(within(row).getByRole("button", { name: "Play Rare" }));
     expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["t1"] });
   });
 

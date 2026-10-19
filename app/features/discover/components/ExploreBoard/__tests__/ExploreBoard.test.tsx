@@ -50,6 +50,7 @@ vi.mock("../../Stations/Stations", () => ({ Stations: stub("stations") }));
 vi.mock("../../ContinueListening/ContinueListening", () => ({ ContinueListening: stub("continueListening") }));
 vi.mock("../../Rarities/Rarities", () => ({ Rarities: stub("rarities") }));
 vi.mock("../../Orbit/Orbit", () => ({ Orbit: stub("orbit") }));
+vi.mock("../../LibraryLeaderboard", () => ({ LibraryLeaderboard: stub("leaderboard") }));
 vi.mock("../../Charts/Charts", () => ({ Charts: stub("charts") }));
 vi.mock("../../LovedNotHere/LovedNotHere", () => ({ LovedNotHere: stub("loved") }));
 vi.mock("../../NewInLibrary/NewInLibrary", () => ({ NewInLibrary: stub("newInLibrary") }));

@@ -1,8 +1,10 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+
+import { useScrollEdges } from "@hooks/ui/useScrollEdges";
 
 import { RAIL_SCROLL_STEP } from "./constants";
 import { RecentScrobbleNode } from "./RecentScrobbleNode";
@@ -11,44 +13,26 @@ import type { RecentScrobblesRailProps } from "./types";
 
 export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
   const { t } = useTranslation("discover");
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const edges = useScrollEdges<HTMLDivElement>("x");
+  const canScrollLeft = edges.start;
+  const canScrollRight = edges.end;
+  const scroller = edges.node;
 
-  const updateAffordances = useCallback(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 8);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 8);
-  }, []);
-
-  useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    updateAffordances();
-    el.addEventListener("scroll", updateAffordances, { passive: true });
-    const observer = new ResizeObserver(updateAffordances);
-    observer.observe(el);
-    Array.from(el.children).forEach((child) => observer.observe(child));
-    return () => {
-      el.removeEventListener("scroll", updateAffordances);
-      observer.disconnect();
-    };
-  }, [updateAffordances, scrobbles.length]);
-
-  const scrollByPage = useCallback((direction: "left" | "right") => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const first = el.firstElementChild;
-    const nodeStep = first instanceof HTMLElement ? first.offsetWidth + 12 : el.clientWidth;
-    const step = nodeStep * RAIL_SCROLL_STEP;
-    el.scrollBy({ left: direction === "right" ? step : -step, behavior: "smooth" });
-  }, []);
+  const scrollByPage = useCallback(
+    (direction: "left" | "right") => {
+      if (!scroller) return;
+      const first = scroller.firstElementChild;
+      const nodeStep = first instanceof HTMLElement ? first.offsetWidth + 12 : scroller.clientWidth;
+      const step = nodeStep * RAIL_SCROLL_STEP;
+      scroller.scrollBy({ left: direction === "right" ? step : -step, behavior: "smooth" });
+    },
+    [scroller]
+  );
 
   return (
     <div className={railWrap()}>
       <span className={axisLine()} aria-hidden />
-      <div ref={scrollerRef} className={rail()}>
+      <div ref={edges.ref} className={rail()}>
         {scrobbles.map((s) => (
           <RecentScrobbleNode key={s.catalogTrackId} scrobble={s} />
         ))}

@@ -3,6 +3,7 @@ export {
   albumRequestItem,
   albumTarget,
   artistRequestItem,
+  artistTarget,
   detailTargetFromMusicItem,
   playlistLibraryTarget,
   playlistOpenItem,

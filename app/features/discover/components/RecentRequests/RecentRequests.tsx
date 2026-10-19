@@ -1,21 +1,20 @@
 "use client";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { EmptyState } from "@components/ui/EmptyState";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 import { fadeIn } from "@utils/animations";
-import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { AlertCircle, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-import { scrollFadeBottom } from "../styles";
 import { useRecentRequests } from "../../hooks/useRecentRequests";
 import { requestLayoutFor } from "./helpers";
 import { RecentRequestCard } from "./RecentRequestCard";
 import { RecentRequestsSkeleton } from "./RecentRequestsSkeleton";
-import { requestsBody, requestsScroller } from "./styles";
+import { requestsBody, requestsList } from "./styles";
 import type { RecentRequestsProps } from "./types";
 
 export function RecentRequests({ size, info }: RecentRequestsProps) {
@@ -83,11 +82,13 @@ export function RecentRequests({ size, info }: RecentRequestsProps) {
     >
       {header}
       <div className={requestsBody()}>
-        <div className={cn(requestsScroller({ layout }), scrollFadeBottom())}>
-          {recent.map((request) => (
-            <RecentRequestCard key={request.id} request={request} layout={layout} />
-          ))}
-        </div>
+        <FadeScroll>
+          <div className={requestsList({ layout })}>
+            {recent.map((request) => (
+              <RecentRequestCard key={request.id} request={request} layout={layout} />
+            ))}
+          </div>
+        </FadeScroll>
       </div>
     </motion.section>
   );

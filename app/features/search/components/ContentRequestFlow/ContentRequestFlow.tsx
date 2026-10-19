@@ -52,7 +52,11 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
 
   return (
     <ContentRequestFlowContext.Provider
-      value={{ openForResult: flow.openForResult, openForTarget: flow.openForTarget }}
+      value={{
+        openForResult: flow.openForResult,
+        openForTarget: flow.openForTarget,
+        requestResult: (result) => flow.requestContent(result),
+      }}
     >
       {children}
       <ContentDetailModal

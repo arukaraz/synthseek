@@ -1,10 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslation } from "react-i18next";
 
 import { PLAYER_HEADER_SLOT_ID } from "@components/Player";
 import { Avatar } from "@components/ui/Avatar";
@@ -23,18 +21,15 @@ import {
   brandIcon,
   brandLink,
   brandWordmark,
-  cancelButton,
   decorativeLine,
   headerContainer,
   headerContent,
-  mobileSearchButton,
   playerSlot,
   rightCluster,
 } from "./styles";
 import type { TopHeaderProps } from "./types";
 
 export function TopHeader({ onSearch, initialQuery, initialScope }: TopHeaderProps) {
-  const { t } = useTranslation("components");
   const { currentUser } = useAuthContext();
   const navItems = usePrimaryNav();
   const pathname = usePathname();
@@ -63,26 +58,11 @@ export function TopHeader({ onSearch, initialQuery, initialScope }: TopHeaderPro
       />
 
       <div className={headerContent()}>
-        <Link href="/" className={brandLink({ hidden: omni.open })}>
+        <Link href="/" className={brandLink()}>
           <AppLogo iconClassName={brandIcon()} wordmarkClassName={brandWordmark()} />
         </Link>
 
         <OmniBar omni={omni} navItems={navItems} />
-
-        {omni.open ? (
-          <button type="button" className={cancelButton()} onClick={omni.close}>
-            {t("header.omni.cancel")}
-          </button>
-        ) : (
-          <button
-            type="button"
-            className={mobileSearchButton()}
-            aria-label={t("header.search")}
-            onClick={omni.openSearch}
-          >
-            <Search />
-          </button>
-        )}
 
         <div id={PLAYER_HEADER_SLOT_ID} className={playerSlot()} />
 

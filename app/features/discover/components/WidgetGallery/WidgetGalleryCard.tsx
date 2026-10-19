@@ -6,7 +6,16 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 
-import { cardFooter, cardIcon, cardPreview, cardTitle, cardTitleRow, galleryCard, onBoardBadge } from "./styles";
+import {
+  cardAction,
+  cardFooter,
+  cardIcon,
+  cardPreview,
+  cardTitle,
+  cardTitleRow,
+  galleryCard,
+  onBoardBadge,
+} from "./styles";
 import type { WidgetGalleryCardProps } from "./types";
 import { WidgetPreview } from "./WidgetPreview";
 
@@ -38,6 +47,7 @@ export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove }: WidgetGall
           <Button
             variant="ghost"
             size="sm"
+            className={cardAction()}
             aria-label={t("board.tile.remove", { name })}
             onClick={() => onRemove(tileId)}
           >
@@ -45,7 +55,12 @@ export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove }: WidgetGall
             {t("board.gallery.remove")}
           </Button>
         ) : (
-          <Button size="sm" aria-label={t("board.gallery.addNamed", { name })} onClick={() => onAdd(entry.widget)}>
+          <Button
+            size="sm"
+            className={cardAction()}
+            aria-label={t("board.gallery.addNamed", { name })}
+            onClick={() => onAdd(entry.widget)}
+          >
             <Plus />
             {t("board.gallery.add")}
           </Button>

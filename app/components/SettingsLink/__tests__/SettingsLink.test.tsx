@@ -38,9 +38,18 @@ describe("SettingsLink", () => {
 
   it("sends a member to their account, since the overview is admin only", () => {
     auth.current = { currentUser: { username: "ana", avatar_url: null }, isAdmin: false };
-    renderWithProviders(<SettingsLink variant="avatar" />);
+    renderWithProviders(<SettingsLink variant="gear" />);
 
     expect(screen.getByRole("link", { name: "Settings" })).toHaveAttribute("href", "/settings/account");
+  });
+
+  it("opens the settings menu from the phone's bottom bar, for admins and members alike", () => {
+    renderWithProviders(<SettingsLink variant="avatar" />);
+    expect(screen.getByRole("link", { name: "Settings" })).toHaveAttribute("href", "/settings");
+
+    auth.current = { currentUser: { username: "ana", avatar_url: null }, isAdmin: false };
+    renderWithProviders(<SettingsLink variant="avatar" />);
+    expect(screen.getAllByRole("link", { name: "Settings" })[1]).toHaveAttribute("href", "/settings");
   });
 
   it("names the available version and shows the update badge", () => {

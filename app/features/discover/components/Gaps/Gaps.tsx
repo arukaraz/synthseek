@@ -3,8 +3,9 @@
 import { Disc3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { WidgetFrame } from "@components/WidgetFrame";
-import { albumTarget } from "@features/content-detail";
+import { albumRequestItem, albumTarget, artistTarget } from "@features/content-detail";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useDiscographyGaps } from "@hooks/api/queries/analytics/useDiscographyGaps";
 
@@ -12,11 +13,11 @@ import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { GapCard } from "./GapCard";
 import { gapsBody, gapsGrid } from "./styles";
 
-export function Gaps({ size, info }: BoardWidgetProps) {
+export function Gaps({ info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useDiscographyGaps();
-  const { openForTarget } = useContentRequestFlow();
-  const gaps = size === "M" ? (data ?? []).slice(0, 1) : (data ?? []);
+  const { openForTarget, requestResult } = useContentRequestFlow();
+  const gaps = data ?? [];
 
   return (
     <WidgetFrame
@@ -29,19 +30,29 @@ export function Gaps({ size, info }: BoardWidgetProps) {
       note={isError ? t("history.error") : gaps.length === 0 ? t("gaps.empty") : null}
     >
       <div className={gapsBody()}>
-        <div className={gapsGrid()}>
-          {gaps.map((gap) => (
-            <GapCard
-              key={gap.artist}
-              gap={gap}
-              onOpen={(album) =>
-                openForTarget(
-                  albumTarget({ id: album.id, name: album.name, artistName: album.artist, cover: album.cover })
-                )
-              }
-            />
-          ))}
-        </div>
+        <FadeScroll>
+          <div className={gapsGrid()}>
+            {gaps.map((gap) => (
+              <GapCard
+                key={gap.artist}
+                gap={gap}
+                onOpen={(album) =>
+                  openForTarget(
+                    albumTarget({ id: album.id, name: album.name, artistName: album.artist, cover: album.cover })
+                  )
+                }
+                onRequest={(album) =>
+                  requestResult(
+                    albumRequestItem({ id: album.id, name: album.name, artistName: album.artist, cover: album.cover })
+                  )
+                }
+                onOpenArtist={() =>
+                  openForTarget(artistTarget({ id: gap.artistId, name: gap.artist, cover: gap.cover }))
+                }
+              />
+            ))}
+          </div>
+        </FadeScroll>
       </div>
     </WidgetFrame>
   );

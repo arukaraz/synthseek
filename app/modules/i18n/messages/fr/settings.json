@@ -1372,24 +1372,6 @@
     "jobs": {
       "all": "Toutes les tâches"
     },
-    "leaderboard": {
-      "errorTitle": "Échec du chargement de la bibliothèque",
-      "errorDescription": "Impossible de récupérer les statistiques de la bibliothèque. Veuillez réessayer.",
-      "tabsAriaLabel": "Mode du classement de la bibliothèque",
-      "tabArtists": "Artistes",
-      "tabGenres": "Genres",
-      "topArtists": "Meilleurs artistes",
-      "topGenres": "Meilleurs genres",
-      "statsTracks": "Pistes",
-      "statsLibrary": "Bibliothèque",
-      "statsQueued": "En file",
-      "unitTracks": "pistes",
-      "unitAlbums": "albums",
-      "emptyArtistsTitle": "Aucun artiste pour l'instant",
-      "emptyArtistsDescription": "Terminez quelques téléchargements pour voir vos meilleurs artistes.",
-      "emptyGenresTitle": "Aucun genre pour l'instant",
-      "emptyGenresDescription": "Les genres sont suivis lors des nouveaux téléchargements, ils se rempliront à mesure que votre bibliothèque grandit."
-    },
     "analytics": {
       "title": "Statistiques",
       "description": "Chiffres d'écoute, de la bibliothèque et des téléchargements.",

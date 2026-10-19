@@ -281,7 +281,8 @@
       "gaps": "Les sorties qui manquent chez les artistes que vous possédez le plus, comparées au catalogue.",
       "anniversaries": "Les albums de votre bibliothèque sortis autour de cette date les années passées.",
       "landed": "Les albums téléchargés ces 7 derniers jours, avec la source et le temps qu'ils ont pris.",
-      "serverPlaylists": "Vos dernières playlists et les serveurs multimédias avec lesquels elles sont synchronisées."
+      "serverPlaylists": "Vos dernières playlists et les serveurs multimédias avec lesquels elles sont synchronisées.",
+      "leaderboard": "La taille de votre bibliothèque, et les artistes et genres qui la remplissent le plus."
     }
   },
   "history": {
@@ -316,7 +317,7 @@
     "title": "Reprendre",
     "subtitle": "7 derniers jours",
     "empty": "Les albums que vous commencez sans les finir apparaissent ici.",
-    "progress": "{{played}} titres écoutés sur {{total}}"
+    "progress": "{{played}}/{{total}} écoutés"
   },
   "lastYear": {
     "title": "Il y a un an",
@@ -332,6 +333,7 @@
   "stations": {
     "heading": "Radios pour vous",
     "subtitle": "Construites à partir de vos écoutes",
+    "rail": "Toutes les radios, faites défiler sur le côté",
     "empty": "Écoutez un peu de musique et vos radios apparaîtront ici.",
     "start": "Lancer la radio {{name}}",
     "kind": {
@@ -346,6 +348,27 @@
   },
   "albumMeta_one": "{{artist}} · {{count}} piste · {{when}}",
   "albumMeta_other": "{{artist}} · {{count}} pistes · {{when}}",
+  "requestNamed": "Demander {{name}}",
+  "leaderboard": {
+    "title": "Votre bibliothèque",
+    "subtitle": "Meilleurs artistes et genres",
+    "errorTitle": "Échec du chargement de la bibliothèque",
+    "errorDescription": "Impossible de récupérer les statistiques de la bibliothèque. Veuillez réessayer.",
+    "tabsAriaLabel": "Mode du classement de la bibliothèque",
+    "tabArtists": "Artistes",
+    "tabGenres": "Genres",
+    "topArtists": "Meilleurs artistes",
+    "topGenres": "Meilleurs genres",
+    "statsTracks": "Pistes",
+    "statsLibrary": "Bibliothèque",
+    "statsQueued": "En file",
+    "unitTracks": "pistes",
+    "unitAlbums": "albums",
+    "emptyArtistsTitle": "Aucun artiste pour l'instant",
+    "emptyArtistsDescription": "Terminez quelques téléchargements pour voir vos meilleurs artistes.",
+    "emptyGenresTitle": "Aucun genre pour l'instant",
+    "emptyGenresDescription": "Les genres sont suivis lors des nouveaux téléchargements, ils se rempliront à mesure que votre bibliothèque grandit."
+  },
   "continueListening": {
     "title": "Reprendre l'écoute",
     "subtitle": "Votre file d'attente",
@@ -377,7 +400,8 @@
     "subtitle": "Meilleurs titres en {{country}}",
     "empty": "Aucun classement pour cette région pour le moment.",
     "play": "Lire",
-    "request": "Demander"
+    "request": "Demander",
+    "leaderBadge": "N°1 en {{country}}"
   },
   "loved": {
     "title": "Aimés sur Last.fm, absents ici",
@@ -398,14 +422,15 @@
     "title": "Arrivés cette semaine",
     "subtitle": "Albums téléchargés",
     "empty": "Aucun téléchargement arrivé ces 7 derniers jours.",
-    "via": "{{source}} · {{duration}}"
+    "took": "en {{duration}}"
   },
   "gaps": {
     "title": "Complétez la discographie",
     "subtitle": "Le catalogue face à votre bibliothèque",
     "empty": "Vos artistes principaux sont complets.",
     "have": "{{have}} sorties sur {{total}}",
-    "missing": "Pas dans votre bibliothèque"
+    "missing": "Pas dans votre bibliothèque",
+    "openArtist": "Ouvrir {{artist}}"
   },
   "anniversaries": {
     "title": "Anniversaires",

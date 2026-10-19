@@ -38,6 +38,7 @@ vi.mock("../../Gaps/Gaps", () => ({ Gaps: stub("gaps") }));
 vi.mock("../../Anniversaries/Anniversaries", () => ({ Anniversaries: stub("anniversaries") }));
 vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
+vi.mock("../../LibraryLeaderboard", () => ({ LibraryLeaderboard: stub("leaderboard") }));
 
 const ON_BOARD: BoardItem[] = [{ id: "s1", widget: "scrobbles", size: "M" }];
 
@@ -61,11 +62,11 @@ describe("WidgetGallery", () => {
   it("lists every widget under its category band with a scaled live preview at the default size", () => {
     renderGallery();
 
-    expect(cardTitles()).toHaveLength(24);
+    expect(cardTitles()).toHaveLength(25);
     expect(screen.getByRole("heading", { level: 3, name: "Now" })).toBeInTheDocument();
     expect(screen.getByText("1 of 8 on board")).toBeInTheDocument();
     expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "XL");
-    expect(screen.getByText(i18n.t("discover:board.gallery.summary", { onBoard: 1, total: 24 }))).toBeInTheDocument();
+    expect(screen.getByText(i18n.t("discover:board.gallery.summary", { onBoard: 1, total: 25 }))).toBeInTheDocument();
   });
 
   it("narrows to one category without bands when a tab is chosen", () => {

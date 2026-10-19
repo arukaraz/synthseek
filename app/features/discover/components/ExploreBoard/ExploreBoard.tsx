@@ -31,14 +31,6 @@ export function ExploreBoard() {
 
   return (
     <section className={boardRoot()} aria-label={t("board.regionLabel")}>
-      {items.length > 0 ? (
-        <BoardToolbar
-          editing={editor.editing}
-          onCustomize={editor.startEditing}
-          onDone={editor.stopEditing}
-          onAddWidget={editor.openGallery}
-        />
-      ) : null}
       {items.length === 0 ? (
         <BoardEmpty onAddWidget={editor.openGallery} />
       ) : (
@@ -61,6 +53,14 @@ export function ExploreBoard() {
           })}
         </BoardGrid>
       )}
+      {items.length > 0 ? (
+        <BoardToolbar
+          editing={editor.editing}
+          onCustomize={editor.startEditing}
+          onDone={editor.stopEditing}
+          onAddWidget={editor.openGallery}
+        />
+      ) : null}
       <p className={liveRegion()} aria-live="polite">
         {editor.announcement}
       </p>

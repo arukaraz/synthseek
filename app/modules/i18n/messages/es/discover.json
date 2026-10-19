@@ -281,7 +281,8 @@
       "gaps": "Lanzamientos que faltan de los artistas que más tienes, comparados con el catálogo.",
       "anniversaries": "Álbumes de tu biblioteca que salieron alrededor de esta fecha en años anteriores.",
       "landed": "Álbumes descargados en los últimos 7 días, con la fuente y lo que tardaron.",
-      "serverPlaylists": "Tus listas más recientes y los servidores multimedia con los que están sincronizadas."
+      "serverPlaylists": "Tus listas más recientes y los servidores multimedia con los que están sincronizadas.",
+      "leaderboard": "El tamaño de tu biblioteca y los artistas y géneros que más la llenan."
     }
   },
   "history": {
@@ -316,7 +317,7 @@
     "title": "Retoma",
     "subtitle": "Últimos 7 días",
     "empty": "Aquí aparecen los álbumes que empiezas y dejas a medias.",
-    "progress": "{{played}} de {{total}} canciones escuchadas"
+    "progress": "{{played}}/{{total}} escuchadas"
   },
   "lastYear": {
     "title": "Hace un año",
@@ -332,6 +333,7 @@
   "stations": {
     "heading": "Radios para ti",
     "subtitle": "Creadas a partir de lo que escuchas",
+    "rail": "Todas las radios, desliza hacia los lados",
     "empty": "Escucha algo de música y aquí aparecerán tus radios.",
     "start": "Iniciar la radio de {{name}}",
     "kind": {
@@ -346,6 +348,27 @@
   },
   "albumMeta_one": "{{artist}} · {{count}} canción · {{when}}",
   "albumMeta_other": "{{artist}} · {{count}} canciones · {{when}}",
+  "requestNamed": "Solicitar {{name}}",
+  "leaderboard": {
+    "title": "Tu biblioteca",
+    "subtitle": "Mejores artistas y géneros",
+    "errorTitle": "No se pudo cargar la biblioteca",
+    "errorDescription": "No se pudieron obtener las estadísticas de la biblioteca. Inténtalo de nuevo.",
+    "tabsAriaLabel": "Modo de clasificación de la biblioteca",
+    "tabArtists": "Artistas",
+    "tabGenres": "Géneros",
+    "topArtists": "Mejores artistas",
+    "topGenres": "Mejores géneros",
+    "statsTracks": "Canciones",
+    "statsLibrary": "Biblioteca",
+    "statsQueued": "En cola",
+    "unitTracks": "canciones",
+    "unitAlbums": "álbumes",
+    "emptyArtistsTitle": "Aún no hay artistas",
+    "emptyArtistsDescription": "Completa algunas descargas para ver tus mejores artistas.",
+    "emptyGenresTitle": "Aún no hay géneros",
+    "emptyGenresDescription": "Los géneros se registran con cada nueva descarga, se irán completando a medida que crezca tu biblioteca."
+  },
   "continueListening": {
     "title": "Seguir escuchando",
     "subtitle": "Tu cola de reproducción",
@@ -377,7 +400,8 @@
     "subtitle": "Lo más escuchado en {{country}}",
     "empty": "No hay lista para esta región ahora mismo.",
     "play": "Reproducir",
-    "request": "Solicitar"
+    "request": "Solicitar",
+    "leaderBadge": "#1 en {{country}}"
   },
   "loved": {
     "title": "Favoritas en Last.fm que no tienes",
@@ -398,14 +422,15 @@
     "title": "Llegó esta semana",
     "subtitle": "Álbumes descargados",
     "empty": "No llegó ninguna descarga en los últimos 7 días.",
-    "via": "{{source}} · {{duration}}"
+    "took": "en {{duration}}"
   },
   "gaps": {
     "title": "Completa la discografía",
     "subtitle": "Catálogo frente a tu biblioteca",
     "empty": "Tus artistas principales están completos.",
     "have": "{{have}} de {{total}} lanzamientos",
-    "missing": "No está en tu biblioteca"
+    "missing": "No está en tu biblioteca",
+    "openArtist": "Abrir {{artist}}"
   },
   "anniversaries": {
     "title": "Aniversarios",

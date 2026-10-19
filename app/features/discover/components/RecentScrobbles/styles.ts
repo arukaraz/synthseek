@@ -47,9 +47,9 @@ export const nodeTitle = cva("text-fg mt-2 truncate text-[12.5px] font-medium");
 
 export const nodeArtist = cva("text-fg/60 truncate text-[11.5px]");
 
-export const timeline = cva(
-  "-mx-1 flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-);
+export const timelineScroller = cva("-mx-1");
+
+export const timeline = cva("flex flex-col");
 
 export const timelineRow = cva(
   "group/row hover:bg-fg/[0.04] grid grid-cols-[3rem_1rem_2.25rem_minmax(0,1fr)] items-center gap-2.5 rounded-lg px-1.5 py-1.5 transition-colors"

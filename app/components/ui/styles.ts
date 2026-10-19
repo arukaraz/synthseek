@@ -269,3 +269,58 @@ export const authForwardButton = cva(
 export const authQuietButton = cva(
   "border-fg/15 bg-fg/[0.04] text-fg hover:border-fg/25 focus-visible:ring-primary-500 flex h-11 w-full items-center justify-center rounded-[0.6875rem] border text-sm font-semibold outline-none transition-colors hover:bg-fg/[0.08] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-5"
 );
+
+export const hiddenScrollbar = cva("[scrollbar-width:none] [&::-webkit-scrollbar]:hidden");
+
+export const scrollFade = cva("", {
+  variants: {
+    axis: { x: "", y: "" },
+    start: { true: "", false: "" },
+    end: { true: "", false: "" },
+  },
+  compoundVariants: [
+    {
+      axis: "y",
+      start: true,
+      end: true,
+      className:
+        "[-webkit-mask-image:linear-gradient(to_bottom,transparent,#000_1.5rem,#000_calc(100%-1.5rem),transparent)] [mask-image:linear-gradient(to_bottom,transparent,#000_1.5rem,#000_calc(100%-1.5rem),transparent)]",
+    },
+    {
+      axis: "y",
+      start: false,
+      end: true,
+      className:
+        "[-webkit-mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)] [mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)]",
+    },
+    {
+      axis: "y",
+      start: true,
+      end: false,
+      className:
+        "[-webkit-mask-image:linear-gradient(to_bottom,transparent,#000_1.5rem)] [mask-image:linear-gradient(to_bottom,transparent,#000_1.5rem)]",
+    },
+    {
+      axis: "x",
+      start: true,
+      end: true,
+      className:
+        "[-webkit-mask-image:linear-gradient(to_right,transparent,#000_2rem,#000_calc(100%-2rem),transparent)] [mask-image:linear-gradient(to_right,transparent,#000_2rem,#000_calc(100%-2rem),transparent)]",
+    },
+    {
+      axis: "x",
+      start: false,
+      end: true,
+      className:
+        "[-webkit-mask-image:linear-gradient(to_right,#000_calc(100%-2rem),transparent)] [mask-image:linear-gradient(to_right,#000_calc(100%-2rem),transparent)]",
+    },
+    {
+      axis: "x",
+      start: true,
+      end: false,
+      className:
+        "[-webkit-mask-image:linear-gradient(to_right,transparent,#000_2rem)] [mask-image:linear-gradient(to_right,transparent,#000_2rem)]",
+    },
+  ],
+  defaultVariants: { axis: "y", start: false, end: false },
+});

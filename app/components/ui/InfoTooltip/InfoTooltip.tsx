@@ -54,6 +54,7 @@ export function InfoTooltip({
             type="button"
             className={infoTooltipTrigger({ className })}
             aria-label={resolvedTriggerLabel}
+            data-info-tooltip=""
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
             onPointerUp={(e) => e.stopPropagation()}
@@ -87,6 +88,7 @@ export function InfoTooltip({
             type="button"
             className={infoTooltipTrigger({ className })}
             aria-label={resolvedTriggerLabel}
+            data-info-tooltip=""
             onClick={(e) => e.preventDefault()}
           >
             <Info className="size-3.5" />

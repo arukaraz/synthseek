@@ -1,20 +1,8 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import {
-  Info,
-  ListMusic,
-  Mic2,
-  MonitorSpeaker,
-  MoreVertical,
-  Radio,
-  RadioTower,
-  Repeat,
-  Repeat1,
-  Settings2,
-  Shuffle,
-  Sparkles,
-} from "lucide-react";
+import { MoreVertical } from "lucide-react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -26,133 +14,96 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
+import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 
-import { MODE_MENU_ICON, RESTORE_MODE_ICON } from "./constants";
+import { STAGE_WIDE_QUERY } from "./constants";
 import { keepMenuOpen, labelled } from "./helpers";
-import { iconButton, menuState, moreBadge, moreMenuContent } from "./styles";
+import { moreMenuGroups } from "./moreMenu";
+import { PlayerMoreSheet } from "./PlayerMoreSheet";
+import {
+  iconButton,
+  menuState,
+  moreBadge,
+  moreMenuContent,
+  moreMenuIcon,
+  moreTrigger,
+  moreTriggerIcon,
+} from "./styles";
 import type { PlayerProps } from "./types";
 import { useMoreAttention } from "./useMoreAttention";
 
 export function PlayerMoreMenu({ view, actions }: PlayerProps) {
   const { t } = useTranslation("player");
   const { attention, name } = useMoreAttention(view);
+  const wide = useMediaQuery(STAGE_WIDE_QUERY, true);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const groups = moreMenuGroups(view, actions, t);
+
+  const trigger = (
+    <button
+      type="button"
+      className={cn(iconButton({ tone: attention === "remote" ? "remote" : "muted" }), moreTrigger())}
+      data-player-more-toggle
+      onClick={wide ? undefined : () => setSheetOpen(true)}
+      {...labelled(name)}
+    >
+      <MoreVertical className={moreTriggerIcon()} />
+      {attention === null ? null : <span className={moreBadge({ tone: attention })} />}
+    </button>
+  );
+
+  if (!wide) {
+    return (
+      <>
+        {trigger}
+        {sheetOpen ? <PlayerMoreSheet title={name} groups={groups} onClose={() => setSheetOpen(false)} /> : null}
+      </>
+    );
+  }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          className={cn(iconButton({ tone: attention === "remote" ? "remote" : "muted" }), "@player:hidden relative")}
-          data-player-more-toggle
-          {...labelled(name)}
-        >
-          <MoreVertical className="size-5" />
-          {attention === null ? null : <span className={moreBadge({ tone: attention })} />}
-        </button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent align="end" side="top" sideOffset={10} className={moreMenuContent()}>
-        <DropdownMenuLabel>{t("menu.playback")}</DropdownMenuLabel>
-        <DropdownMenuCheckboxItem
-          checked={view.shuffle}
-          onCheckedChange={actions.toggleShuffle}
-          onSelect={keepMenuOpen}
-        >
-          <Shuffle className="size-4" />
-          {t("controls.shuffle")}
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuItem
-          inset
-          onSelect={(event) => {
-            keepMenuOpen(event);
-            actions.cycleRepeat();
-          }}
-        >
-          {view.repeat === "one" ? <Repeat1 className="size-4" /> : <Repeat className="size-4" />}
-          {t("menu.repeat")}
-          <span className={menuState({ tone: view.repeat === "off" ? "muted" : "on" })}>
-            {t(`menu.repeatState.${view.repeat}`)}
-          </span>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>{t("menu.track")}</DropdownMenuLabel>
-        {view.mode === "mini" ? null : (
-          <DropdownMenuItem inset onSelect={actions.toggleQueue}>
-            <ListMusic className="size-4" />
-            {t("queue.title")}
-            <span className={menuState()}>
-              {t("menu.upNext", {
-                count: view.queue.upNext.length + view.queue.autoplay.length + view.queue.loop.length,
-              })}
-            </span>
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem inset onSelect={actions.openLyrics}>
-          <Mic2 className="size-4" />
-          {t("controls.lyrics")}
-        </DropdownMenuItem>
-        <DropdownMenuItem inset onSelect={actions.startRadio} disabled={!view.activeDevice.local}>
-          <RadioTower className="size-4" />
-          {t("menu.startRadio")}
-        </DropdownMenuItem>
-        <DropdownMenuItem inset onSelect={actions.searchBetterQuality} disabled={view.upgrading}>
-          <Sparkles className="size-4" />
-          {t("menu.upgrade")}
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>{t("menu.sound")}</DropdownMenuLabel>
-        <DropdownMenuItem inset onSelect={actions.toggleDevices}>
-          <MonitorSpeaker className="size-4" />
-          {t("controls.devices")}
-          <span className={menuState({ tone: view.activeDevice.local ? "muted" : "remote" })}>
-            {view.activeDevice.local ? t("devices.thisBrowser") : view.activeDevice.name}
-          </span>
-        </DropdownMenuItem>
-        {view.mode === "mini" ? null : (
-          <DropdownMenuItem inset onSelect={actions.toggleSettings}>
-            <Settings2 className="size-4" />
-            {t("controls.settings")}
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuCheckboxItem
-          checked={view.chainVisible}
-          onCheckedChange={actions.toggleChain}
-          onSelect={keepMenuOpen}
-        >
-          <Info className="size-4" />
-          {t("controls.chain")}
-        </DropdownMenuCheckboxItem>
-
-        <DropdownMenuSeparator />
-        {view.scrobbleActionable ? (
-          <DropdownMenuCheckboxItem
-            checked={view.scrobble !== "off"}
-            onCheckedChange={actions.toggleScrobbling}
-            onSelect={keepMenuOpen}
-          >
-            <Radio className="size-4" />
-            {t("menu.scrobbling")}
-            <span className={menuState({ tone: view.scrobble })}>{t(`menu.scrobblingState.${view.scrobble}`)}</span>
-          </DropdownMenuCheckboxItem>
-        ) : (
-          <DropdownMenuItem inset disabled>
-            <Radio className="size-4" />
-            {t("menu.scrobbling")}
-            <span className={menuState({ tone: view.scrobble })}>{t(`menu.scrobblingState.${view.scrobble}`)}</span>
-          </DropdownMenuItem>
-        )}
-        {view.mode === "normal" ? (
-          <DropdownMenuItem inset onSelect={actions.toggleModes}>
-            <MODE_MENU_ICON className="size-4" />
-            {t("controls.modes")}
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem inset onSelect={() => actions.selectMode("normal")}>
-            <RESTORE_MODE_ICON className="size-4" />
-            {view.mode === "mini" ? t("controls.exitMini") : t("controls.restoreMode")}
-          </DropdownMenuItem>
-        )}
+        {groups.map((group, index) => (
+          <Fragment key={group.key}>
+            {index > 0 ? <DropdownMenuSeparator /> : null}
+            {group.label ? <DropdownMenuLabel>{group.label}</DropdownMenuLabel> : null}
+            {group.entries.map((entry) => {
+              const Icon = entry.icon;
+              const state = entry.state ? (
+                <span className={menuState({ tone: entry.state.tone })}>{entry.state.text}</span>
+              ) : null;
+              return entry.kind === "toggle" ? (
+                <DropdownMenuCheckboxItem
+                  key={entry.key}
+                  checked={entry.checked}
+                  disabled={entry.disabled}
+                  onCheckedChange={entry.onToggle}
+                  onSelect={keepMenuOpen}
+                >
+                  <Icon className={moreMenuIcon()} />
+                  {entry.label}
+                  {state}
+                </DropdownMenuCheckboxItem>
+              ) : (
+                <DropdownMenuItem
+                  key={entry.key}
+                  inset
+                  disabled={entry.disabled}
+                  onSelect={(event) => {
+                    if (entry.keepOpen) keepMenuOpen(event);
+                    entry.onSelect();
+                  }}
+                >
+                  <Icon className={moreMenuIcon()} />
+                  {entry.label}
+                  {state}
+                </DropdownMenuItem>
+              );
+            })}
+          </Fragment>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -12,9 +12,10 @@ export const TOAST_OFFSET_WITH_DOCK = "7rem";
 
 export const TOAST_OFFSET_WITH_DOCK_MOBILE = "calc(var(--height-bottom-nav) + 6.5rem)";
 
-export const TOAST_OFFSET_ABOVE_PLAYER = "calc(var(--player-bar-height) + 1rem)";
+export const TOAST_OFFSET_ABOVE_PLAYER = "calc(var(--player-bar-height) + var(--player-dock-gap) + 1rem)";
 
-export const TOAST_OFFSET_ABOVE_PLAYER_CHAIN = "calc(var(--player-bar-height) + var(--height-player-chain) + 1rem)";
+export const TOAST_OFFSET_ABOVE_PLAYER_CHAIN =
+  "calc(var(--player-bar-height) + var(--height-player-chain) + var(--player-dock-gap) + 1rem)";
 
 export const TOAST_OFFSET_ABOVE_PLAYER_MOBILE = "calc(var(--height-bottom-nav) + var(--height-player-bar) + 0.75rem)";
 

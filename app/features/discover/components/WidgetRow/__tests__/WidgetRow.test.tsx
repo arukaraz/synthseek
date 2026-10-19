@@ -22,7 +22,7 @@ describe("WidgetRow", () => {
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  it("turns the cover and text into a button when it can be selected", () => {
+  it("turns the row into a button with a visible hover when it can be selected", () => {
     const onSelect = vi.fn();
     render(
       <ul>
@@ -34,5 +34,28 @@ describe("WidgetRow", () => {
 
     expect(onSelect).toHaveBeenCalledTimes(1);
     expect(document.querySelector("img")).toBeNull();
+    expect(screen.getByRole("listitem").className).toContain("hover:bg-fg/[0.07]");
+  });
+
+  it("puts its own action on the cover, apart from selecting the row", () => {
+    const onSelect = vi.fn();
+    const onPlay = vi.fn();
+    render(
+      <ul>
+        <WidgetRow
+          cover={null}
+          seed="t1"
+          title="Joga"
+          subtitle="Bjork"
+          onSelect={onSelect}
+          coverAction={{ kind: "play", label: "Play Joga", onClick: onPlay }}
+        />
+      </ul>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Play Joga" }));
+
+    expect(onPlay).toHaveBeenCalledTimes(1);
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });

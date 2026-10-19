@@ -5,8 +5,17 @@ import { fireEvent, render, screen } from "@test/test-utils";
 import { BoardTile } from "../BoardTile";
 import type { BoardTileActions, PlacedTile } from "../types";
 
+const spies = vi.hoisted(() => ({ widget: vi.fn<() => void>(), info: vi.fn<() => void>() }));
+
 vi.mock("../../TrendingHero/TrendingHero", () => ({
-  TrendingHero: ({ size }: { size: string }) => <button type="button">{`widget ${size}`}</button>,
+  TrendingHero: ({ size }: { size: string }) => (
+    <div>
+      <button type="button" onClick={spies.widget}>{`widget ${size}`}</button>
+      <button type="button" data-info-tooltip="" onClick={spies.info}>
+        info
+      </button>
+    </div>
+  ),
 }));
 
 const TILE: PlacedTile = {
@@ -46,12 +55,23 @@ describe("BoardTile", () => {
     expect(handlers.remove).not.toHaveBeenCalled();
   });
 
-  it("labels the focusable tile with its name and position and makes the widget inert in edit mode", () => {
+  it("labels the focusable tile with its name and position and blocks the widget's own actions in edit mode", () => {
+    spies.widget.mockClear();
     renderTile(true);
 
     expect(tileElement()).toHaveAttribute("tabindex", "0");
     expect(tileElement()).toHaveAccessibleName("Trending now, position 1 of 2");
-    expect(screen.getByText("widget L").closest("[inert]")).not.toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "widget L" }));
+    expect(spies.widget).not.toHaveBeenCalled();
+  });
+
+  it("still lets the widget's info icon answer in edit mode", () => {
+    spies.info.mockClear();
+    renderTile(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "info" }));
+
+    expect(spies.info).toHaveBeenCalledTimes(1);
   });
 
   it("maps the tile's own keys to move, resize to the next size, and remove", () => {

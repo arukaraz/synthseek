@@ -3,14 +3,15 @@
 import { PlayCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useRecentPlays } from "@hooks/api/queries/analytics/useRecentPlays";
 import { useResumePoint } from "@hooks/ui/player";
-import { cn } from "@utils/cn";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { formatRelativeTime } from "@utils/formatters";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
-import { scrollFadeBottom, widgetEyebrow, widgetNote } from "../styles";
+import { widgetEyebrow, widgetNote } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { ResumeCard } from "./ResumeCard";
@@ -18,6 +19,7 @@ import { ResumeCard } from "./ResumeCard";
 export function ContinueListening({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { point, toggle } = useResumePoint();
+  const { playEntity } = useEntityPlayback();
   const withRecent = size !== "M";
   const recent = useRecentPlays(withRecent);
   const plays = withRecent ? (recent.data ?? []) : [];
@@ -40,21 +42,28 @@ export function ContinueListening({ size, info }: BoardWidgetProps) {
       {plays.length > 0 ? (
         <>
           <span className={widgetEyebrow()}>{t("continueListening.recent")}</span>
-          <ul className={cn(widgetList(), scrollFadeBottom())}>
-            {plays.map((play) => (
-              <WidgetRow
-                key={`${play.trackId}-${play.playedAt.getTime()}`}
-                cover={play.cover}
-                seed={play.trackId}
-                title={play.title}
-                subtitle={t("continueListening.played", {
-                  artist: play.artist,
-                  when: formatRelativeTime(play.playedAt),
-                })}
-                trailing={play.client ?? undefined}
-              />
-            ))}
-          </ul>
+          <FadeScroll>
+            <ul className={widgetList()}>
+              {plays.map((play) => (
+                <WidgetRow
+                  key={`${play.trackId}-${play.playedAt.getTime()}`}
+                  cover={play.cover}
+                  seed={play.trackId}
+                  title={play.title}
+                  subtitle={t("continueListening.played", {
+                    artist: play.artist,
+                    when: formatRelativeTime(play.playedAt),
+                  })}
+                  trailing={play.client ?? undefined}
+                  coverAction={{
+                    kind: "play",
+                    label: t("history.play", { name: play.title }),
+                    onClick: () => void playEntity({ kind: "tracks", trackIds: [play.trackId] }),
+                  }}
+                />
+              ))}
+            </ul>
+          </FadeScroll>
         </>
       ) : null}
     </WidgetFrame>

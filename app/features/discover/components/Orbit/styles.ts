@@ -2,9 +2,7 @@ import { cva } from "class-variance-authority";
 
 export const orbitBody = cva("@container flex min-h-0 flex-1 flex-col");
 
-export const orbitGrid = cva(
-  "grid min-h-0 flex-1 grid-cols-2 gap-3 overflow-y-auto [scrollbar-width:none] @3xl:grid-cols-3 @5xl:grid-cols-6 [&::-webkit-scrollbar]:hidden"
-);
+export const orbitGrid = cva("grid grid-cols-2 gap-3 @3xl:grid-cols-3 @5xl:grid-cols-6");
 
 export const orbitCard = cva(
   "focus-visible:ring-primary-400 group/orbit flex min-w-0 flex-col gap-1.5 rounded-xl text-left outline-none focus-visible:ring-2"

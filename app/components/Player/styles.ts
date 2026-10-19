@@ -6,7 +6,7 @@ import type { PanelAnchorPoint } from "./types";
 export const playerRoot = cva("pointer-events-none fixed inset-0 z-40");
 
 export const playerDock = cva(
-  "player-metrics @container pointer-events-auto absolute inset-x-0 bottom-[var(--height-bottom-nav)] flex flex-col sm:bottom-0"
+  "player-metrics @container pointer-events-auto absolute inset-x-0 bottom-[var(--height-bottom-nav)] flex flex-col sm:inset-x-[var(--player-dock-gap)] sm:bottom-[var(--player-dock-gap)] sm:overflow-hidden sm:rounded-2xl sm:border-x sm:border-b sm:border-primary-500/25 sm:shadow-2xl"
 );
 
 export const headerPlayer = cva(
@@ -173,6 +173,33 @@ export const moreBadge = cva("ring-surface-overlay absolute top-1 right-1 size-2
 });
 
 export const moreMenuContent = cva("max-h-(--radix-dropdown-menu-content-available-height) overflow-auto");
+
+export const moreTrigger = cva("relative @player:hidden");
+
+export const moreTriggerIcon = cva("size-5");
+
+export const moreMenuIcon = cva("size-4 shrink-0");
+
+export const moreSheetTitle = cva("text-fg px-5 pt-4 pb-1 text-sm font-semibold");
+
+export const moreSheetBody = cva("scrollbar-none flex max-h-[70dvh] flex-col overflow-y-auto px-2 pb-2");
+
+export const moreSheetLabel = cva("text-fg-muted px-3 pt-3 pb-1 font-mono text-[10px] tracking-[0.14em] uppercase");
+
+export const moreSheetSeparator = cva("bg-fg/10 mx-3 my-1 h-px");
+
+export const moreSheetRow = cva(
+  "text-fg hover:bg-fg/5 focus-visible:bg-fg/5 flex min-h-12 w-full items-center gap-3 rounded-lg px-3 text-left text-sm outline-none disabled:pointer-events-none disabled:opacity-45"
+);
+
+export const moreSheetCheck = cva("text-primary-400 size-4 shrink-0", {
+  variants: {
+    checked: {
+      true: "opacity-100",
+      false: "opacity-0",
+    },
+  },
+});
 
 export const menuState = cva("ml-auto shrink-0 pl-3 text-[11px]", {
   variants: {
@@ -341,9 +368,10 @@ export const panelAnchor = cva("player-metrics pointer-events-auto fixed z-70", 
     },
     anchored: {
       true: "inset-x-0 bottom-0 sm:inset-x-auto sm:top-[var(--player-anchor-top)] sm:bottom-[var(--player-anchor-bottom)] sm:left-[var(--player-anchor-left)] sm:max-h-[var(--player-anchor-height)]",
-      false: "player-panel-anchor inset-x-0 bottom-0 sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-bar-height)]",
+      false:
+        "player-panel-anchor inset-x-0 bottom-0 sm:inset-x-auto sm:right-[var(--player-dock-gap)] sm:bottom-[calc(var(--player-bar-height)+var(--player-dock-gap))]",
       column:
-        "player-panel-column inset-x-0 top-0 bottom-[calc(var(--player-dock-height)+var(--height-bottom-nav))] sm:inset-x-auto sm:right-0 sm:bottom-[var(--player-dock-height)] sm:w-[380px]",
+        "player-panel-column inset-x-0 top-0 bottom-[calc(var(--player-dock-height)+var(--height-bottom-nav))] sm:inset-x-auto sm:right-[var(--player-dock-gap)] sm:bottom-[var(--player-dock-height)] sm:w-[380px]",
     },
   },
   defaultVariants: { width: "devices", chain: false, anchored: false },
@@ -354,7 +382,7 @@ export const panelSurface = cva(
   {
     variants: {
       edge: {
-        bar: "border-b-0 sm:rounded-tr-none sm:border-r-0",
+        bar: "border-b-0",
         header: "sm:rounded-[14px] sm:rounded-t-none sm:border-t-0 sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
         floating: "sm:rounded-[14px] sm:shadow-[0_24px_60px_rgba(0,0,0,0.45)]",
       },
@@ -397,7 +425,7 @@ export const settingsPanel = cva(
 export const settingsModalOverlay = cva("z-70");
 
 export const settingsModal = cva(
-  "player-metrics bg-surface-overlay border-fg/10 fixed top-1/2 left-1/2 z-70 flex max-h-[min(85dvh,52rem)] w-[min(26rem,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[14px] border shadow-2xl focus:outline-none"
+  "player-metrics bg-surface-overlay border-fg/10 fixed inset-x-0 bottom-0 z-70 flex max-h-[85dvh] flex-col overflow-hidden rounded-t-[18px] border border-b-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl focus:outline-none sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:max-h-[min(85dvh,52rem)] sm:w-[min(26rem,calc(100vw-2rem))] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[14px] sm:border-b sm:pb-0"
 );
 
 export const settingsModalFrame = cva("flex min-h-0 flex-1 flex-col");

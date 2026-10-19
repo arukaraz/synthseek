@@ -3,15 +3,15 @@
 import { CalendarClock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 import { useLastYear } from "@hooks/api/queries/analytics/useLastYear";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
-import { cn } from "@utils/cn";
 import { formatElapsed, formatShortDate } from "@utils/formatters";
 
 import { CARD_ROW_SKELETONS } from "../constants";
-import { scrollFadeBottom, widgetNote } from "../styles";
+import { widgetNote } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { weekBody, weekLayout, weekSkeleton, weekStat, weekStatLabel, weekStatValue, weekStats } from "./styles";
@@ -64,19 +64,26 @@ export function LastYear({ info }: LastYearProps) {
                 <dd className={weekStatValue()}>{week.topArtist ?? ""}</dd>
               </div>
             </dl>
-            <ol className={cn(widgetList(), scrollFadeBottom())}>
-              {week.tracks.map((track, index) => (
-                <WidgetRow
-                  key={track.trackId}
-                  cover={track.cover}
-                  seed={track.trackId}
-                  title={track.title}
-                  subtitle={track.artist}
-                  lead={index + 1}
-                  trailing={t("lastYear.plays", { count: track.plays })}
-                />
-              ))}
-            </ol>
+            <FadeScroll>
+              <ol className={widgetList()}>
+                {week.tracks.map((track, index) => (
+                  <WidgetRow
+                    key={track.trackId}
+                    cover={track.cover}
+                    seed={track.trackId}
+                    title={track.title}
+                    subtitle={track.artist}
+                    lead={index + 1}
+                    trailing={t("lastYear.plays", { count: track.plays })}
+                    coverAction={{
+                      kind: "play",
+                      label: t("history.play", { name: track.title }),
+                      onClick: () => void playEntity({ kind: "tracks", trackIds: [track.trackId] }),
+                    }}
+                  />
+                ))}
+              </ol>
+            </FadeScroll>
           </div>
         </div>
       )}

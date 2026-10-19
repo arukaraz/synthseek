@@ -12,7 +12,7 @@ export const widgetHeaderTitleStack = cva("flex min-w-0 flex-col");
 
 export const widgetHeaderTitleLine = cva("flex min-w-0 items-center gap-1.5");
 
-export const widgetHeaderTitle = cva("text-fg truncate text-base font-semibold sm:text-lg");
+export const widgetHeaderTitle = cva("text-fg text-base leading-tight font-semibold break-words sm:text-lg");
 
 export const widgetHeaderSubtitle = cva("text-fg-muted text-xs");
 

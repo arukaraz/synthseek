@@ -130,4 +130,26 @@ describe("ContentRequestFlow", () => {
 
     expect(captured).toBe(flowState.openForResult);
   });
+
+  it("requests a result straight away, skipping its detail view", () => {
+    const album = { type: "album", id: "al1", name: "Ten" };
+
+    function Consumer() {
+      const flow = useContentRequestFlow();
+      return (
+        <button type="button" onClick={() => flow.requestResult(album)}>
+          request
+        </button>
+      );
+    }
+
+    renderWithProviders(
+      <ContentRequestFlow>
+        <Consumer />
+      </ContentRequestFlow>
+    );
+    screen.getByRole("button", { name: "request" }).click();
+
+    expect(flowState.requestContent).toHaveBeenCalledWith(album);
+  });
 });

@@ -5,6 +5,7 @@ import type { DetailTarget } from "@features/content-detail";
 export interface FlowContextValue {
   openForResult: (result: MusicItem) => void;
   openForTarget: (target: DetailTarget) => void;
+  requestResult: (result: MusicItem) => void;
 }
 
 export interface ContentRequestFlowProps {

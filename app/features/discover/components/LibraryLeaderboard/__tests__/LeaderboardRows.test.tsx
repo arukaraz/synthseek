@@ -32,8 +32,23 @@ describe("LeaderboardRows", () => {
   it("clamps the progress width to zero when maxCount is zero", () => {
     const { container } = render(<LeaderboardRows entries={[{ name: "Only", count: 5, image: null }]} maxCount={0} />);
 
-    const fill = container.querySelector<HTMLDivElement>("[style*='width']");
-    expect(fill?.style.width).toBe("0%");
+    const fill = container.querySelector<HTMLDivElement>("[style*='--fill-width']");
+    expect(fill?.style.getPropertyValue("--fill-width")).toBe("0%");
+  });
+
+  it("sizes each bar against the top count and fades the lower ranks down to a floor", () => {
+    const entries = Array.from({ length: 6 }, (_, index) => ({
+      name: `Artist ${index}`,
+      count: 10 - index,
+      image: null,
+    }));
+    const { container } = render(<LeaderboardRows entries={entries} maxCount={20} />);
+
+    const fills = [...container.querySelectorAll<HTMLDivElement>("[style*='--fill-width']")];
+    expect(fills[0]?.style.getPropertyValue("--fill-width")).toBe("50%");
+    expect(fills[0]?.style.getPropertyValue("--fill-opacity")).toBe("1");
+    expect(fills[1]?.style.getPropertyValue("--fill-opacity")).toBe("0.88");
+    expect(fills[5]?.style.getPropertyValue("--fill-opacity")).toBe("0.45");
   });
 });
 

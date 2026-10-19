@@ -38,6 +38,7 @@ import { OnRepeat } from "../HistoryMixes/OnRepeat";
 import { RepeatRewind } from "../HistoryMixes/RepeatRewind";
 import { JumpBackIn } from "../JumpBackIn/JumpBackIn";
 import { Landed } from "../Landed/Landed";
+import { LibraryLeaderboard } from "../LibraryLeaderboard";
 import { LastYear } from "../LastYear/LastYear";
 import { LovedNotHere } from "../LovedNotHere/LovedNotHere";
 import { NewInLibrary } from "../NewInLibrary/NewInLibrary";
@@ -52,6 +53,8 @@ import { TrendingHero } from "../TrendingHero/TrendingHero";
 import type { BoardCategory, BoardWidgetDefinition } from "./types";
 
 export const BOARD_SCHEMA_VERSION = 1;
+
+export const EDIT_PASSTHROUGH_SELECTOR = "[data-info-tooltip]";
 
 export const BOARD_CATEGORY_ORDER: readonly BoardCategory[] = ["now", "history", "discover", "library"];
 
@@ -103,6 +106,7 @@ export const BOARD_WIDGET_ORDER: readonly BoardWidgetKey[] = [
   "loved",
   "genres",
   "newInLibrary",
+  "leaderboard",
   "gaps",
   "anniversaries",
   "requests",
@@ -294,8 +298,17 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: ListPlus,
     titleKey: "newInLibrary.title",
     descriptionKey: "board.widgets.newInLibrary",
-    sizes: ["M", "L"],
-    defaultSize: "M",
+    sizes: ["M", "M+", "L"],
+    defaultSize: "M+",
+  },
+  leaderboard: {
+    component: LibraryLeaderboard,
+    category: "library",
+    icon: Library,
+    titleKey: "leaderboard.title",
+    descriptionKey: "board.widgets.leaderboard",
+    sizes: ["M+", "L"],
+    defaultSize: "M+",
   },
   gaps: {
     component: Gaps,
@@ -352,13 +365,14 @@ export const DEFAULT_BOARD: readonly BoardItem[] = [
   { id: "last-year", widget: "lastYear", size: "M" },
   { id: "rarities", widget: "rarities", size: "M" },
   { id: "charts", widget: "charts", size: "XL" },
+  { id: "new-in-library", widget: "newInLibrary", size: "M+" },
+  { id: "leaderboard", widget: "leaderboard", size: "M+" },
   { id: "loved", widget: "loved", size: "M" },
-  { id: "new-in-library", widget: "newInLibrary", size: "M" },
+  { id: "anniversaries", widget: "anniversaries", size: "M" },
   { id: "gaps", widget: "gaps", size: "L" },
   { id: "orbit", widget: "orbit", size: "XL" },
   { id: "requests", widget: "requests", size: "M" },
   { id: "landed", widget: "landed", size: "M" },
   { id: "server-playlists", widget: "serverPlaylists", size: "L" },
-  { id: "scrobbles", widget: "scrobbles", size: "M" },
-  { id: "anniversaries", widget: "anniversaries", size: "M" },
+  { id: "scrobbles", widget: "scrobbles", size: "L" },
 ];

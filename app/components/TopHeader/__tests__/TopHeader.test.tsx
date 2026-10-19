@@ -231,14 +231,14 @@ describe("TopHeader", () => {
     expect(onSearch).toHaveBeenLastCalledWith("boards of canada", "all");
   });
 
-  it("swaps the mobile search button for Cancel while the search is open", () => {
+  it("keeps the search box itself as the phone's way in and out, with no Cancel button", () => {
     renderHeader();
     openSearch();
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(screen.queryByRole("button", { name: "Cancel" })).not.toBeInTheDocument();
+    fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
 
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Cancel" })).not.toBeInTheDocument();
   });
 
   it("shows the settings gear and the user's avatar on the right when signed in", () => {

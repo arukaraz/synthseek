@@ -6,7 +6,6 @@ import { BoardGrid } from "@components/BoardGrid";
 import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import { SettingsCard } from "../../../../components/SettingsCard";
-import { LibraryLeaderboard } from "../LibraryLeaderboard";
 import { AddedTile } from "./AddedTile";
 import { AnalyticsCell } from "./AnalyticsCell";
 import { DecadesTile } from "./DecadesTile";
@@ -51,9 +50,6 @@ export function AnalyticsBoard() {
         </AnalyticsCell>
         <AnalyticsCell device={device} size="L">
           <ListeningClockTile />
-        </AnalyticsCell>
-        <AnalyticsCell device={device} size="L">
-          <LibraryLeaderboard />
         </AnalyticsCell>
       </BoardGrid>
     </SettingsCard>

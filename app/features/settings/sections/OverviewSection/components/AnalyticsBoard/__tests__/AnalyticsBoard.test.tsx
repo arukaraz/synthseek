@@ -23,20 +23,8 @@ vi.mock("../QualityTile", () => ({ QualityTile: stub("quality") }));
 vi.mock("../ScrobblesTile", () => ({ ScrobblesTile: stub("scrobbles") }));
 vi.mock("../GrowthTile", () => ({ GrowthTile: stub("growth") }));
 vi.mock("../ListeningClockTile", () => ({ ListeningClockTile: stub("clock") }));
-vi.mock("../../LibraryLeaderboard", () => ({ LibraryLeaderboard: stub("leaderboard") }));
 
-const ORDER = [
-  "plays",
-  "time",
-  "added",
-  "downloads",
-  "decades",
-  "quality",
-  "scrobbles",
-  "growth",
-  "clock",
-  "leaderboard",
-];
+const ORDER = ["plays", "time", "added", "downloads", "decades", "quality", "scrobbles", "growth", "clock"];
 
 function spans() {
   return ORDER.map((id) => {
@@ -46,19 +34,19 @@ function spans() {
 }
 
 describe("AnalyticsBoard", () => {
-  it("lays the ten widgets out in order with their wide sizes", () => {
+  it("lays the nine widgets out in order with their wide sizes", () => {
     device.value = "wide";
     renderWithProviders(<AnalyticsBoard />);
 
     expect(screen.getByRole("heading", { name: "Analytics" })).toBeInTheDocument();
     expect(screen.getAllByTestId(/./).map((node) => node.dataset.testid)).toEqual(ORDER);
-    expect(spans()).toEqual(["3x2", "3x2", "3x2", "3x2", "6x4", "6x4", "6x4", "6x4", "12x4", "12x4"]);
+    expect(spans()).toEqual(["3x2", "3x2", "3x2", "3x2", "6x4", "6x4", "6x4", "6x4", "12x4"]);
   });
 
   it("uses the narrow spans on a phone", () => {
     device.value = "narrow";
     renderWithProviders(<AnalyticsBoard />);
 
-    expect(spans()).toEqual(["2x2", "2x2", "2x2", "2x2", "4x4", "4x4", "4x4", "4x4", "4x5", "4x5"]);
+    expect(spans()).toEqual(["2x2", "2x2", "2x2", "2x2", "4x4", "4x4", "4x4", "4x4", "4x5"]);
   });
 });

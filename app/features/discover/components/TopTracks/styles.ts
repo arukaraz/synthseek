@@ -46,9 +46,7 @@ export const heroBy = cva("text-overlay-fg/80 text-sm");
 
 export const heroPlays = cva("type-text-track type-text-overlay mt-2 font-mono text-xs");
 
-export const list = cva(
-  "flex min-h-0 min-w-0 flex-1 flex-col gap-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-);
+export const list = cva("flex min-w-0 flex-col gap-1");
 
 export const item = cva("group flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-fg/5");
 

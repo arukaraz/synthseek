@@ -5,9 +5,10 @@ import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Dialog, DialogClose, DialogOverlay, DialogPortal, DialogSurface, DialogTitle } from "@components/ui/Dialog";
-import { modalContent } from "@utils/animations";
+import { useMediaQuery } from "@hooks/ui/useMediaQuery";
+import { modalContent, playerPanel } from "@utils/animations";
 
-import { SETTINGS_TOGGLE_SELECTOR } from "./constants";
+import { SETTINGS_TOGGLE_SELECTOR, STAGE_WIDE_QUERY } from "./constants";
 import { labelled, returnFocusTo } from "./helpers";
 import { SettingsSections } from "./SettingsSections";
 import {
@@ -23,6 +24,7 @@ import type { PlayerSettingsSectionProps } from "./types";
 
 export function SettingsModal({ view, actions }: PlayerSettingsSectionProps) {
   const { t } = useTranslation("player");
+  const wide = useMediaQuery(STAGE_WIDE_QUERY, true);
 
   return (
     <Dialog
@@ -44,7 +46,7 @@ export function SettingsModal({ view, actions }: PlayerSettingsSectionProps) {
       >
         <motion.div
           className={settingsModalFrame()}
-          variants={modalContent}
+          variants={wide ? modalContent : playerPanel}
           initial="hidden"
           animate="visible"
           exit="exit"

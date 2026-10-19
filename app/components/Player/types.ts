@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { SourcePickerRequest } from "@hooks/ui/player";
@@ -473,4 +474,35 @@ export interface PlayerCoverProps {
   tone: PlayerTone;
   size: "row" | "bar" | "stage" | "fluid" | "sideways";
   artworkUrl?: string | null;
+}
+
+export type MoreMenuTone = "muted" | "on" | "remote" | PlayerScrobbleState;
+
+export interface MoreMenuState {
+  text: string;
+  tone: MoreMenuTone;
+}
+
+interface MoreMenuEntryBase {
+  key: string;
+  icon: LucideIcon;
+  label: string;
+  state?: MoreMenuState;
+  disabled?: boolean;
+}
+
+export type MoreMenuEntry =
+  | (MoreMenuEntryBase & { kind: "action"; keepOpen: boolean; onSelect: () => void })
+  | (MoreMenuEntryBase & { kind: "toggle"; checked: boolean; onToggle: () => void });
+
+export interface MoreMenuGroup {
+  key: string;
+  label: string | null;
+  entries: MoreMenuEntry[];
+}
+
+export interface PlayerMoreSheetProps {
+  title: string;
+  groups: MoreMenuGroup[];
+  onClose: () => void;
 }

@@ -1,8 +1,16 @@
+import type { MouseEvent } from "react";
+
 import { BOARD_COLUMNS, type BoardDevice, FAMILY_SPANS } from "@components/BoardGrid";
 import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 
-import { BOARD_SCHEMA_VERSION, BOARD_WIDGETS, DEFAULT_BOARD } from "./constants";
+import { BOARD_SCHEMA_VERSION, BOARD_WIDGETS, DEFAULT_BOARD, EDIT_PASSTHROUGH_SELECTOR } from "./constants";
 import type { BoardKeyAction, MoveDelta, PlacedTile } from "./types";
+
+export function blockWidgetAction(event: Pick<MouseEvent, "target" | "preventDefault" | "stopPropagation">): void {
+  if (event.target instanceof Element && event.target.closest(EDIT_PASSTHROUGH_SELECTOR)) return;
+  event.preventDefault();
+  event.stopPropagation();
+}
 
 export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): BoardKeyAction | null {
   if (event.key === "Delete" || event.key === "Backspace") return { kind: "remove" };

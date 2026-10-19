@@ -28,7 +28,7 @@ export function HistoryMix({ kind, query, info }: HistoryMixProps) {
       tag={t(config.tagKey)}
       title={title}
       blurb={blurb}
-      footnote={playable ? t("mixes.trackCount", { count: trackIds.length }) : null}
+      footnote={t("mixes.trackCount", { count: trackIds.length })}
       covers={query.data?.covers ?? []}
       seed={kind}
       info={info}

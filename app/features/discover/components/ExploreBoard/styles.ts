@@ -5,9 +5,19 @@ import type { PlacedTile } from "./types";
 
 export const boardRoot = cva("flex flex-col gap-4");
 
-export const boardToolbar = cva("flex min-h-9 flex-wrap items-center justify-end gap-2");
+export const boardDock = cva("pointer-events-none sticky bottom-4 z-30 -mt-2 flex justify-end");
 
-export const boardHint = cva("text-fg/60 mr-auto hidden text-sm md:block");
+export const boardDockPill = cva(
+  "border-fg/10 bg-surface/90 pointer-events-auto flex items-center gap-1.5 rounded-full border p-1.5 pl-4 shadow-2xl backdrop-blur-xl"
+);
+
+export const boardFab = cva(
+  "bg-primary text-primary-foreground shadow-primary-500/40 focus-visible:ring-primary-300 pointer-events-auto flex size-12 items-center justify-center rounded-full shadow-xl transition-transform outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:size-5"
+);
+
+export const boardFabLabel = cva("sr-only");
+
+export const boardHint = cva("text-fg/60 hidden pr-2 text-sm lg:block");
 
 export const boardTile = cva(
   "relative flex min-h-0 min-w-0 rounded-xl outline-none [grid-column:var(--tile-col)] [grid-row:var(--tile-row)]",
@@ -29,7 +39,7 @@ export const boardTile = cva(
 export const tileBody = cva("flex min-h-0 min-w-0 flex-1 [&>*]:min-h-0 [&>*]:size-full", {
   variants: {
     editing: {
-      true: "pointer-events-none select-none",
+      true: "select-none [&_*]:pointer-events-none [&_[data-info-tooltip]]:pointer-events-auto",
       false: "",
     },
   },

@@ -33,15 +33,7 @@ export const decorativeLine = cva(
 
 export const headerContent = cva("relative flex h-full w-full items-center gap-3 px-4 sm:gap-4 sm:px-6");
 
-export const brandLink = cva("shrink-0 items-center", {
-  variants: {
-    hidden: {
-      true: "hidden sm:flex",
-      false: "flex",
-    },
-  },
-  defaultVariants: { hidden: false },
-});
+export const brandLink = cva("hidden shrink-0 items-center sm:flex");
 
 export const brandIcon = cva("h-12 w-auto sm:h-9");
 
@@ -53,7 +45,7 @@ export const omniPill = cva(
     variants: {
       open: {
         true: "border-primary-500/55 bg-primary-500/5 shadow-primary-500/20 flex shadow-lg",
-        false: "border-fg/10 bg-fg/5 hidden sm:flex",
+        false: "border-fg/10 bg-fg/5 flex",
       },
     },
     defaultVariants: { open: false },
@@ -90,12 +82,6 @@ export const kbd = cva(
 );
 
 export const clearButton = cva("text-fg/40 hover:bg-fg/10 hover:text-fg shrink-0 rounded p-1 transition-colors");
-
-export const mobileSearchButton = cva(
-  "text-fg/70 hover:text-fg hover:bg-fg/5 ml-auto flex size-10 items-center justify-center rounded-xl sm:hidden [&_svg]:size-5"
-);
-
-export const cancelButton = cva("text-primary-400 shrink-0 text-sm font-medium sm:hidden");
 
 export const playerSlot = cva("hidden shrink-0 items-center empty:hidden sm:flex");
 

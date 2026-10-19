@@ -8,14 +8,20 @@
   }
 
   .player-metrics {
+    --player-dock-gap: 0rem;
     --player-bar-height: var(--height-player-bar);
-    --player-dock-height: var(--height-player-bar);
+    --player-dock-height: calc(var(--player-bar-height) + var(--player-dock-gap));
+  }
+
+  @media (min-width: 40rem) {
+    .player-metrics {
+      --player-dock-gap: 0.75rem;
+    }
   }
 
   @media (min-width: 58rem) {
     .player-metrics {
       --player-bar-height: var(--height-player-bar-wide);
-      --player-dock-height: var(--height-player-bar-wide);
     }
   }
 
@@ -40,7 +46,7 @@
   }
 
   .player-metrics-chain {
-    --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain));
+    --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain) + var(--player-dock-gap));
   }
 
   .player-stage-ring {

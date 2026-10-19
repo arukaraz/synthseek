@@ -3,69 +3,55 @@
 import { Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { WidgetFrame } from "@components/WidgetFrame";
-import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useCharts } from "@hooks/api/queries/analytics/useCharts";
-import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useCountry } from "@modules/providers/CountryProvider";
-import { cn } from "@utils/cn";
 import { getCountryByCode } from "@utils/countries";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
-import { widgetAction } from "../styles";
-import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
-import { chartsBody, chartsList } from "./styles";
+import { ChartAction } from "./ChartAction";
+import { ChartsLeader } from "./ChartsLeader";
+import { chartKey } from "./helpers";
+import { chartRank, chartsBody, chartsLayout, chartsList } from "./styles";
 
 export function Charts({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { country } = useCountry();
   const { data, isLoading, isError } = useCharts(country);
-  const { openForResult } = useContentRequestFlow();
-  const { playEntity } = useEntityPlayback();
-  const entries = data ?? [];
+  const countryName = getCountryByCode(country)?.name ?? country;
+  const [leaderEntry, ...rest] = data ?? [];
 
   return (
     <WidgetFrame
       icon={Flame}
       title={t("charts.title")}
-      subtitle={t("charts.subtitle", { country: getCountryByCode(country)?.name ?? country })}
+      subtitle={t("charts.subtitle", { country: countryName })}
       info={info}
       titleId="charts-heading"
       loading={isLoading}
-      note={isError ? t("history.error") : entries.length === 0 ? t("charts.empty") : null}
+      note={isError ? t("history.error") : leaderEntry === undefined ? t("charts.empty") : null}
     >
       <div className={chartsBody()}>
-        <ol className={cn(widgetList(), chartsList({ wide: size === "XL" }))}>
-          {entries.map((entry, index) => {
-            const { libraryTrackId, track } = entry;
-            return (
-              <WidgetRow
-                key={`${entry.artist}-${entry.title}`}
-                cover={track?.album.images[0]?.url ?? null}
-                seed={`${entry.artist}-${entry.title}`}
-                title={entry.title}
-                subtitle={entry.artist}
-                lead={index + 1}
-                trailing={
-                  libraryTrackId ? (
-                    <button
-                      type="button"
-                      className={widgetAction()}
-                      onClick={() => void playEntity({ kind: "tracks", trackIds: [libraryTrackId] })}
-                    >
-                      {t("charts.play")}
-                    </button>
-                  ) : track ? (
-                    <button type="button" className={widgetAction()} onClick={() => openForResult(track)}>
-                      {t("charts.request")}
-                    </button>
-                  ) : undefined
-                }
-              />
-            );
-          })}
-        </ol>
+        <div className={chartsLayout()}>
+          {leaderEntry ? <ChartsLeader entry={leaderEntry} country={countryName} /> : null}
+          <FadeScroll>
+            <ol className={chartsList({ wide: size === "XL" })} start={2}>
+              {rest.map((entry, index) => (
+                <WidgetRow
+                  key={chartKey(entry)}
+                  cover={entry.track?.album.images[0]?.url ?? null}
+                  seed={chartKey(entry)}
+                  title={entry.title}
+                  subtitle={entry.artist}
+                  lead={<span className={chartRank()}>{index + 2}</span>}
+                  trailing={<ChartAction entry={entry} />}
+                />
+              ))}
+            </ol>
+          </FadeScroll>
+        </div>
       </div>
     </WidgetFrame>
   );

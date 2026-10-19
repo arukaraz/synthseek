@@ -37,13 +37,13 @@ export const mixInfo = cva("flex shrink-0 flex-col gap-1 bg-surface/60 p-3.5");
 
 export const mixTag = cva("text-[10px] font-semibold uppercase tracking-wider text-[var(--mix-acc)]");
 
-export const mixTitle = cva("text-fg text-sm font-semibold sm:text-base");
+export const mixTitle = cva("text-fg truncate text-sm font-semibold sm:text-base");
 
-export const mixBlurb = cva("text-fg/55 line-clamp-2 flex-1 text-xs leading-relaxed");
+export const mixBlurb = cva("text-fg/55 line-clamp-2 min-h-[2lh] text-xs leading-relaxed");
 
-export const mixFoot = cva("mt-2 flex items-center border-t border-fg/10 pt-2.5");
+export const mixFoot = cva("mt-2 flex min-w-0 items-center border-t border-fg/10 pt-2.5");
 
-export const mixCount = cva("text-fg/50 font-mono text-[11px]");
+export const mixCount = cva("text-fg/50 truncate font-mono text-[11px] whitespace-nowrap");
 
 export const mosaicGrid = cva("grid size-full grid-cols-2 grid-rows-2");
 

@@ -6,6 +6,12 @@ export interface CoverArtProps {
   sizes: string;
 }
 
+export interface WidgetRowCoverAction {
+  kind: "play" | "request";
+  label: string;
+  onClick: () => void;
+}
+
 export interface WidgetRowProps {
   cover: string | null;
   seed: string;
@@ -13,6 +19,6 @@ export interface WidgetRowProps {
   subtitle: string;
   lead?: ReactNode;
   trailing?: ReactNode;
-  round?: boolean;
   onSelect?: () => void;
+  coverAction?: WidgetRowCoverAction;
 }

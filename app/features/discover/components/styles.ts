@@ -7,10 +7,6 @@ export const NAV_BUTTON_CLASSES = cn(
   "border-fg/10 border shadow-lg"
 );
 
-export const scrollFadeBottom = cva(
-  "pb-6 [-webkit-mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)] [mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)]"
-);
-
 export const cardRowBody = cva("@container flex min-h-0 flex-1 flex-col");
 
 export const cardRow = cva("grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-3 @3xl:grid-cols-4 @3xl:gap-4");
@@ -339,7 +335,3 @@ export const widgetPill = cva(
 );
 
 export const widgetEyebrow = cva("text-fg/50 mt-1 font-mono text-[10px] tracking-[0.18em] uppercase");
-
-export const widgetAction = cva(
-  "text-primary-400 hover:bg-primary-500/10 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 font-sans text-[12px] font-medium outline-none focus-visible:ring-2"
-);

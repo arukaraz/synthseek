@@ -2,17 +2,14 @@ import { cva } from "class-variance-authority";
 
 export const requestsBody = cva("@container -mx-1 flex min-h-0 flex-1 flex-col");
 
-export const requestsScroller = cva(
-  "min-h-0 flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-  {
-    variants: {
-      layout: {
-        tile: "grid auto-rows-max grid-cols-1 gap-1 @md:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-5",
-        row: "flex flex-col gap-0.5",
-      },
+export const requestsList = cva("", {
+  variants: {
+    layout: {
+      tile: "grid auto-rows-max grid-cols-1 gap-1 @md:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-5",
+      row: "flex flex-col gap-0.5",
     },
-  }
-);
+  },
+});
 
 export const cardBase = cva("hover:bg-fg/[0.03] grid rounded-lg transition-colors", {
   variants: {

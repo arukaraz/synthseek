@@ -43,11 +43,12 @@ describe("Stations", () => {
     expect(startRadio).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["f1"] }, null);
   });
 
-  it("keeps two stations at half width", () => {
+  it("lays every station on a horizontal rail at half width, scrollable from the keyboard", () => {
     stationsQuery.mockReturnValue({ data: STATIONS, isLoading: false, isError: false });
     renderWithProviders(<Stations size="M" info="x" />);
 
-    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(2);
+    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(3);
+    expect(screen.getByRole("region", { name: "All stations, scroll sideways" })).toHaveAttribute("tabindex", "0");
   });
 
   it("explains the empty state", () => {

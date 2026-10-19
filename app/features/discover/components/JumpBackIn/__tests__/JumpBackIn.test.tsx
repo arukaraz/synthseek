@@ -35,7 +35,7 @@ describe("JumpBackIn", () => {
     renderWithProviders(<JumpBackIn size="M" info="x" />);
 
     expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(2);
-    expect(screen.getAllByText("3 of 10 tracks played")).toHaveLength(2);
+    expect(screen.getAllByText("3/10 played")).toHaveLength(2);
   });
 
   it("shows up to four albums at full width and plays the album chosen", () => {

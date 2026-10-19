@@ -23,10 +23,10 @@ export const galleryGrid = cva("grid grid-cols-1 gap-3 pt-4 sm:grid-cols-2 lg:gr
 
 export const galleryEmpty = cva("text-fg/60 py-12 text-center text-sm");
 
-export const band = cva("bg-surface sticky top-0 z-10 col-span-full -mx-1 px-1 pt-2 pb-1");
+export const band = cva("sticky top-0 z-20 col-span-full -mx-4 backdrop-blur-xl sm:-mx-6");
 
 export const bandInner = cva(
-  "border-primary-500/20 from-primary-500/15 via-primary-500/5 flex items-center gap-3 rounded-xl border bg-linear-to-r to-transparent px-3 py-2"
+  "border-primary-500/20 from-primary-500/20 via-primary-500/10 to-primary-500/5 flex items-center gap-3 border-y bg-linear-to-r px-4 py-2.5 sm:px-6"
 );
 
 export const bandIcon = cva(
@@ -66,10 +66,12 @@ export const previewStage = cva(
 );
 
 export const onBoardBadge = cva(
-  "bg-success-vivid/15 text-success-vivid absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold"
+  "bg-success-vivid/15 text-success-vivid absolute top-2.5 right-2.5 z-[1] inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold backdrop-blur-sm"
 );
 
 export const cardFooter = cva("flex min-w-0 items-center gap-2.5 px-3 py-2.5");
+
+export const cardAction = cva("shrink-0");
 
 export const cardIcon = cva(
   "bg-primary-500/15 text-primary-400 flex size-8 shrink-0 items-center justify-center rounded-lg"
@@ -77,7 +79,7 @@ export const cardIcon = cva(
 
 export const cardTitleRow = cva("flex min-w-0 flex-1 items-center gap-1");
 
-export const cardTitle = cva("text-fg truncate text-sm font-semibold");
+export const cardTitle = cva("text-fg text-sm leading-tight font-semibold text-balance break-words");
 
 export function previewVars(frame: PreviewFrame): CssVars {
   return {

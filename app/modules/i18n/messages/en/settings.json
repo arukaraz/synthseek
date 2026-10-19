@@ -1372,24 +1372,6 @@
     "jobs": {
       "all": "All jobs"
     },
-    "leaderboard": {
-      "errorTitle": "Failed to load library",
-      "errorDescription": "Unable to fetch library statistics. Please try again.",
-      "tabsAriaLabel": "Library leaderboard mode",
-      "tabArtists": "Artists",
-      "tabGenres": "Genres",
-      "topArtists": "Top artists",
-      "topGenres": "Top genres",
-      "statsTracks": "Tracks",
-      "statsLibrary": "Library",
-      "statsQueued": "Queued",
-      "unitTracks": "tracks",
-      "unitAlbums": "albums",
-      "emptyArtistsTitle": "No artists yet",
-      "emptyArtistsDescription": "Complete some downloads to see your top artists.",
-      "emptyGenresTitle": "No genres yet",
-      "emptyGenresDescription": "Genres are tracked on new downloads, they will populate as your library grows."
-    },
     "analytics": {
       "title": "Analytics",
       "description": "Listening, library and download numbers.",

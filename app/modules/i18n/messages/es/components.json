@@ -70,7 +70,6 @@
       "seeAllHint": "Biblioteca y catálogo, con filtros",
       "noMatches": "Sin coincidencias rápidas para “{{query}}”",
       "noMatchesHint": "Pulsa Enter para buscar en todo",
-      "cancel": "Cancelar",
       "shortcutMac": "⌘K",
       "shortcutOther": "Ctrl K",
       "keyEnter": "Enter",
