@@ -3,22 +3,22 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
+import { BoardGrid } from "@components/BoardGrid";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { useBoardLayout } from "@hooks/api/queries/board/useBoardLayout";
-import { useMediaQuery } from "@hooks/ui/useMediaQuery";
+import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import { useBoardEditor } from "../../hooks/useBoardEditor";
 import { WidgetGallery } from "../WidgetGallery/WidgetGallery";
 import { BoardEmpty } from "./BoardEmpty";
 import { BoardTile } from "./BoardTile";
 import { BoardToolbar } from "./BoardToolbar";
-import { BOARD_WIDE_QUERY } from "./constants";
 import { boardItemsOf, packBoard, placementsById } from "./helpers";
-import { boardGrid, boardGridVars, boardRoot, liveRegion } from "./styles";
+import { boardRoot, liveRegion } from "./styles";
 
 export function ExploreBoard() {
   const { t } = useTranslation("discover");
-  const device = useMediaQuery(BOARD_WIDE_QUERY, true) ? "wide" : "narrow";
+  const device = useBoardDevice();
   const { data, isLoading } = useBoardLayout();
   const items = useMemo(() => boardItemsOf(data), [data]);
   const editor = useBoardEditor(items);
@@ -42,7 +42,7 @@ export function ExploreBoard() {
       {items.length === 0 ? (
         <BoardEmpty onAddWidget={editor.openGallery} />
       ) : (
-        <div className={boardGrid()} style={boardGridVars(device)}>
+        <BoardGrid device={device}>
           {items.map((item, index) => {
             const tile = placements.get(item.id);
             if (!tile) return null;
@@ -59,7 +59,7 @@ export function ExploreBoard() {
               />
             );
           })}
-        </div>
+        </BoardGrid>
       )}
       <p className={liveRegion()} aria-live="polite">
         {editor.announcement}

@@ -1,13 +1,13 @@
 "use client";
 
 import { EmptyState } from "@components/ui/EmptyState";
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import type { MusicItem } from "@api/__generated__/types";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useArtistSpotlight } from "@hooks/api/queries/useArtistSpotlight";
 import { useCountry } from "@modules/providers/CountryProvider";
 import { gradientOverlay } from "@theme/utilities/styles";
-import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
 import { fadeIn } from "@utils/animations";
 import { DEFAULT_COUNTRY, getCountryByCode } from "@utils/countries";
 import { motion } from "framer-motion";

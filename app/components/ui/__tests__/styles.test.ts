@@ -1,6 +1,32 @@
 import { describe, expect, it } from "vitest";
 
-import { authInputRow, authPlexButton, authPlexIcon } from "../styles";
+import { authInputRow, authPlexButton, authPlexIcon, glassPanelCard } from "../styles";
+
+describe("glassPanelCard", () => {
+  it("returns base classes", () => {
+    const result = glassPanelCard();
+    expect(result).toContain("bg-surface/40");
+    expect(result).toContain("bg-linear-to-br");
+    expect(result).toContain("flex");
+    expect(result).toContain("flex-col");
+    expect(result).toContain("rounded-xl");
+  });
+
+  it("applies height full variant", () => {
+    const result = glassPanelCard({ height: "full" });
+    expect(result).toContain("h-full");
+  });
+
+  it("applies height auto variant", () => {
+    const result = glassPanelCard({ height: "auto" });
+    expect(result).not.toContain("h-full");
+  });
+
+  it("applies width full variant", () => {
+    const result = glassPanelCard({ width: "full" });
+    expect(result).toContain("w-full");
+  });
+});
 
 describe("authInputRow", () => {
   it("carries the destructive border alone when invalid", () => {

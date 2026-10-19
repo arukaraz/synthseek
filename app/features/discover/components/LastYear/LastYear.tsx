@@ -3,14 +3,15 @@
 import { CalendarClock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { useLastYear } from "@hooks/api/queries/analytics/useLastYear";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { cn } from "@utils/cn";
 import { formatElapsed, formatShortDate } from "@utils/formatters";
 
-import { WidgetHeader } from "../WidgetHeader";
 import { CARD_ROW_SKELETONS } from "../constants";
-import { glassPanelCard, scrollFadeBottom, widgetNote } from "../styles";
+import { scrollFadeBottom, widgetNote } from "../styles";
 import { LastYearRow } from "./LastYearRow";
 import {
   weekBody,

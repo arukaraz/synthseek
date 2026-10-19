@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import { Library } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { playlistPreloadedTarget } from "@features/content-detail";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useDiscoveryMixes } from "@hooks/api/queries/discovery/useDiscoveryMixes";
 import { fadeIn } from "@utils/animations";
 
-import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
 import { DiscoveryMixCard } from "./DiscoveryMixCard";
 import { DiscoveryMixCardEmpty } from "./DiscoveryMixCardEmpty";
 import { DiscoveryMixesEmpty } from "./DiscoveryMixesEmpty";

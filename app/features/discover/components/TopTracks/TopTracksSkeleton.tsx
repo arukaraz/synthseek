@@ -2,8 +2,9 @@
 
 import { useTranslation } from "react-i18next";
 
-import { WidgetHeaderSkeleton } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeaderSkeleton } from "@components/WidgetHeader";
+
 import { SKELETON_LIST_PLACEHOLDERS } from "./constants";
 import { body, bodyFrame, list, skeletonHero, skeletonRow } from "./styles";
 import type { TopTracksSkeletonProps } from "./types";

@@ -1,6 +1,8 @@
 "use client";
 
 import { EmptyState } from "@components/ui/EmptyState";
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { fadeIn } from "@utils/animations";
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
@@ -8,8 +10,7 @@ import { AlertCircle, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard, scrollFadeBottom } from "../styles";
+import { scrollFadeBottom } from "../styles";
 import { useRecentRequests } from "../../hooks/useRecentRequests";
 import { requestLayoutFor } from "./helpers";
 import { RecentRequestCard } from "./RecentRequestCard";

@@ -3,14 +3,15 @@
 import { Radio } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { useStations } from "@hooks/api/queries/analytics/useStations";
 import { useStartRadio } from "@hooks/ui/player";
 
 import { PlaySetCard } from "../PlaySetCard/PlaySetCard";
-import { WidgetHeader } from "../WidgetHeader";
 import { CARD_ROW_SKELETONS } from "../constants";
 import { cardRowLimit } from "../helpers";
-import { cardRow, cardRowBody, cardRowSkeleton, glassPanelCard, widgetNote } from "../styles";
+import { cardRow, cardRowBody, cardRowSkeleton, widgetNote } from "../styles";
 import { STATION_ACCENTS, STATION_TAG_KEYS, STATION_TITLE_KEYS } from "./constants";
 import type { StationsProps } from "./types";
 

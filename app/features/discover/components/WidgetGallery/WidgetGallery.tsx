@@ -8,12 +8,11 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@componen
 import { Input } from "@components/ui/Input";
 import { SegmentTabs } from "@components/ui/SegmentTabs";
 import type { SegmentTabItem } from "@components/ui/SegmentTabs/types";
-import { useMediaQuery } from "@hooks/ui/useMediaQuery";
+import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import {
   BOARD_CATEGORY_KEYS,
   BOARD_CATEGORY_ORDER,
-  BOARD_WIDE_QUERY,
   BOARD_WIDGET_ORDER,
   BOARD_WIDGETS,
 } from "../ExploreBoard/constants";
@@ -39,7 +38,7 @@ export function WidgetGallery({ items, onAdd, onRemove, onClose }: WidgetGallery
   const { t } = useTranslation("discover");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<GalleryFilter>("all");
-  const wide = useMediaQuery(BOARD_WIDE_QUERY, true);
+  const wide = useBoardDevice() === "wide";
 
   const entries = useMemo(
     () =>

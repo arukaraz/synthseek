@@ -22,11 +22,11 @@ export const tabActive = cva(
 
 export const tabInactive = cva("text-fg/60 hover:text-fg rounded-md px-3 py-1 transition-colors");
 
-export const sectionHeaderRow = cva("border-fg/10 flex items-center justify-between border-b px-4 py-2.5");
+export const sectionHeaderRow = cva("border-fg/10 flex shrink-0 items-center justify-between border-b px-4 py-2.5");
 
 export const sectionHeaderLabel = cva("text-fg/60 text-[12px] font-mono font-bold uppercase tracking-[0.22em]");
 
-export const heroFrame = cva("border-fg/10 relative h-24 overflow-hidden border-b");
+export const heroFrame = cva("border-fg/10 relative h-24 shrink-0 overflow-hidden border-b");
 
 export const heroGhostRank = cva(
   "pointer-events-none absolute -bottom-10 -left-3 select-none text-[160px] font-black leading-none text-white/[0.04]"
@@ -54,13 +54,13 @@ export const heroCount = cva("text-fg text-base font-bold tabular-nums leading-n
 
 export const heroUnit = cva("text-fg/60 text-[10px] font-mono");
 
-export const statsRow = cva("border-fg/10 grid grid-cols-3 border-b text-center");
+export const statsRow = cva("border-fg/10 grid shrink-0 grid-cols-3 border-b text-center");
 
 export const statsValue = cva("text-fg text-xl font-bold tabular-nums leading-none");
 
 export const statsLabel = cva("text-fg/60 mt-1.5 text-[9px] font-mono uppercase tracking-[0.18em]");
 
-export const rowsContainer = cva("flex flex-1 flex-col gap-0.5 px-4 py-2");
+export const rowsContainer = cva("flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto px-4 py-2");
 
 export const rowGrid = cva("grid grid-cols-[20px_1fr_70px_38px] items-center gap-2 py-1.5", {
   variants: {

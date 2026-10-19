@@ -1,6 +1,8 @@
 "use client";
 
 import { EmptyState } from "@components/ui/EmptyState";
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { useCategories } from "@hooks/api/queries/useCategories";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
@@ -9,8 +11,6 @@ import { AlertCircle, Grid3X3 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
 import { CategoriesGridSkeleton } from "./CategoriesGridSkeleton";
 import { CategoryCard } from "./CategoryCard";
 import { CATEGORIES_LIMIT } from "./constants";

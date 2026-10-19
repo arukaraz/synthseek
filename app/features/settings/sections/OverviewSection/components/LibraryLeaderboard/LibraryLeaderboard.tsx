@@ -18,7 +18,7 @@ import { errorFrame, panelFrame, sectionHeaderLabel, sectionHeaderRow } from "./
 import type { LeaderboardEntry, LeaderboardMode } from "./types";
 
 export function LibraryLeaderboard() {
-  const { t } = useTranslation("discover");
+  const { t } = useTranslation("settings");
   const { data, isLoading, isError } = useLibrarySummary();
   const [mode, setMode] = useState<LeaderboardMode>("artists");
   const openArtistByName = useResolveArtistAndOpen();
@@ -48,8 +48,8 @@ export function LibraryLeaderboard() {
       <div className={errorFrame()}>
         <EmptyState
           icon={AlertCircle}
-          title={t("leaderboard.errorTitle")}
-          description={t("leaderboard.errorDescription")}
+          title={t("overview.leaderboard.errorTitle")}
+          description={t("overview.leaderboard.errorDescription")}
         />
       </div>
     );
@@ -66,9 +66,12 @@ export function LibraryLeaderboard() {
   const maxCount = top?.count ?? 0;
 
   const emptyIcon = mode === "artists" ? Music : Crown;
-  const emptyTitle = mode === "artists" ? t("leaderboard.emptyArtistsTitle") : t("leaderboard.emptyGenresTitle");
+  const emptyTitle =
+    mode === "artists" ? t("overview.leaderboard.emptyArtistsTitle") : t("overview.leaderboard.emptyGenresTitle");
   const emptyDescription =
-    mode === "artists" ? t("leaderboard.emptyArtistsDescription") : t("leaderboard.emptyGenresDescription");
+    mode === "artists"
+      ? t("overview.leaderboard.emptyArtistsDescription")
+      : t("overview.leaderboard.emptyGenresDescription");
 
   return (
     <motion.div variants={fadeIn} initial="hidden" animate="visible" className={panelFrame()}>
@@ -76,7 +79,7 @@ export function LibraryLeaderboard() {
 
       <div className={sectionHeaderRow()}>
         <div className={sectionHeaderLabel()}>
-          {mode === "artists" ? t("leaderboard.topArtists") : t("leaderboard.topGenres")}
+          {mode === "artists" ? t("overview.leaderboard.topArtists") : t("overview.leaderboard.topGenres")}
         </div>
         <LeaderboardTabs mode={mode} onChange={setMode} />
       </div>

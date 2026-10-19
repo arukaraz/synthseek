@@ -4,8 +4,9 @@ import { Library } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
-import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
+
 import { DISCOVERY_SETTINGS_HREF, EMPTY_CTA } from "./constants";
 import { emptyTextKey } from "./helpers";
 import { emptyPanel, emptyPanelLink, emptyPanelText } from "./styles";

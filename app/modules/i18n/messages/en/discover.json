@@ -79,24 +79,6 @@
     "songs_other": "{{count}} Songs",
     "noAlbums": "No albums available"
   },
-  "leaderboard": {
-    "errorTitle": "Failed to load library",
-    "errorDescription": "Unable to fetch library statistics. Please try again.",
-    "tabsAriaLabel": "Library leaderboard mode",
-    "tabArtists": "Artists",
-    "tabGenres": "Genres",
-    "topArtists": "Top artists",
-    "topGenres": "Top genres",
-    "statsTracks": "Tracks",
-    "statsLibrary": "Library",
-    "statsQueued": "Queued",
-    "unitTracks": "tracks",
-    "unitAlbums": "albums",
-    "emptyArtistsTitle": "No artists yet",
-    "emptyArtistsDescription": "Complete some downloads to see your top artists.",
-    "emptyGenresTitle": "No genres yet",
-    "emptyGenresDescription": "Genres are tracked on new downloads, they will populate as your library grows."
-  },
   "topTracks": {
     "title": "Top Tracks",
     "subtitle": "Most played · all time · Last.fm",

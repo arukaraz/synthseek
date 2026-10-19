@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { SETTINGS_PAGE_BY_ID } from "../../constants";
 import { contentRoot, sectionGrid } from "../../styles";
+import { AnalyticsBoard } from "./components/AnalyticsBoard/AnalyticsBoard";
 import { AttentionTiles } from "./components/AttentionTiles";
 import { ConnectionsCard } from "./components/ConnectionsCard";
 import { JobsGlanceCard } from "./components/JobsGlanceCard";
@@ -28,6 +29,7 @@ export function OverviewSection() {
           <JobsGlanceCard />
         </div>
       </div>
+      <AnalyticsBoard />
     </div>
   );
 }

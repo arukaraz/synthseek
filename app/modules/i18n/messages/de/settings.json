@@ -1371,6 +1371,113 @@
     },
     "jobs": {
       "all": "Alle Aufgaben"
+    },
+    "leaderboard": {
+      "errorTitle": "Bibliothek konnte nicht geladen werden",
+      "errorDescription": "Bibliotheksstatistiken konnten nicht abgerufen werden. Bitte versuche es erneut.",
+      "tabsAriaLabel": "Bibliotheks-Bestenlisten-Modus",
+      "tabArtists": "Künstler",
+      "tabGenres": "Genres",
+      "topArtists": "Top-Künstler",
+      "topGenres": "Top-Genres",
+      "statsTracks": "Titel",
+      "statsLibrary": "Bibliothek",
+      "statsQueued": "In Warteschlange",
+      "unitTracks": "Titel",
+      "unitAlbums": "Alben",
+      "emptyArtistsTitle": "Noch keine Künstler",
+      "emptyArtistsDescription": "Schließe einige Downloads ab, um deine Top-Künstler zu sehen.",
+      "emptyGenresTitle": "Noch keine Genres",
+      "emptyGenresDescription": "Genres werden bei neuen Downloads erfasst, sie füllen sich, während deine Bibliothek wächst."
+    },
+    "analytics": {
+      "title": "Statistiken",
+      "description": "Zahlen zum Hören, zur Bibliothek und zu den Downloads.",
+      "loadError": "Konnte nicht geladen werden.",
+      "deltaNew": "Neu",
+      "plays": {
+        "title": "Wiedergaben",
+        "subtitle": "Letzte 7 Tage",
+        "info": "Deine vollständigen Wiedergaben aus allen Apps in den letzten 7 Tagen, verglichen mit den 7 davor."
+      },
+      "listeningTime": {
+        "title": "Hörzeit",
+        "subtitle": "Letzte 7 Tage",
+        "info": "Die Zeit deiner vollständigen Wiedergaben in den letzten 7 Tagen, verglichen mit den 7 davor.",
+        "value": "{{hours}} Std. {{minutes}} Min."
+      },
+      "added": {
+        "title": "Hinzugefügt",
+        "subtitle": "Letzte 30 Tage",
+        "info": "Titel, die in den letzten 30 Tagen zur Bibliothek kamen, verglichen mit den 30 davor.",
+        "unit_one": "Titel",
+        "unit_other": "Titel"
+      },
+      "downloads": {
+        "title": "Downloads",
+        "subtitle": "Letzte 30 Tage",
+        "info": "Der Anteil der Anfragen der letzten 30 Tage, der in der Bibliothek ankam statt zu scheitern, und die mittlere Zeit von der Anfrage bis zur Bibliothek.",
+        "unit": "angekommen",
+        "summary": "{{completed}} angekommen, {{failed}} fehlgeschlagen",
+        "median": "Median {{duration}}",
+        "empty": "Keine Downloads in den letzten 30 Tagen."
+      },
+      "decades": {
+        "title": "Nach Jahrzehnt",
+        "subtitle": "Alben nach Erscheinungsjahr",
+        "info": "Vollständige Alben nach dem Jahrzehnt, in dem sie erschienen sind.",
+        "label": "{{decade}}er",
+        "empty": "Noch keine Erscheinungsjahre."
+      },
+      "quality": {
+        "title": "Qualitätsmix",
+        "subtitle": "Nach Dateiformat",
+        "info": "Die Titel der Bibliothek nach Dateiformat.",
+        "empty": "Noch keine Titel in der Bibliothek."
+      },
+      "scrobbles": {
+        "title": "Scrobbles",
+        "subtitle": "Letzte 30 Tage",
+        "info": "Wiedergaben, die in den letzten 30 Tagen an Last.fm und ListenBrainz gingen, mit denen, die noch warten, und denen, die fehlschlugen.",
+        "unit_one": "gesendet",
+        "unit_other": "gesendet",
+        "sent_one": "{{count}} gesendet",
+        "sent_other": "{{count}} gesendet",
+        "pending_one": "{{count}} wartet",
+        "pending_other": "{{count}} warten",
+        "failed_one": "{{count}} fehlgeschlagen",
+        "failed_other": "{{count}} fehlgeschlagen",
+        "empty": "In den letzten 30 Tagen nichts gesendet."
+      },
+      "growth": {
+        "title": "Bibliothekswachstum",
+        "subtitle": "Hinzugefügte Titel pro Woche",
+        "info": "Titel, die jede Woche zur Bibliothek kamen.",
+        "total_one": "{{count}} Titel in {{weeks}} Wochen",
+        "total_other": "{{count}} Titel in {{weeks}} Wochen",
+        "start_one": "Vor {{count}} Woche",
+        "start_other": "Vor {{count}} Wochen",
+        "end": "Diese Woche",
+        "empty": "In letzter Zeit nichts hinzugefügt."
+      },
+      "clock": {
+        "title": "Höruhr",
+        "subtitle": "Wiedergaben nach Wochentag und Stunde",
+        "info": "Wann du hörst: deine vollständigen Wiedergaben nach Wochentag und Stunde, in deiner Zeitzone.",
+        "chart": "Wiedergaben nach Wochentag und Stunde",
+        "periodLabel": "Zeitraum",
+        "periods": {
+          "7day": "7 Tage",
+          "1month": "30 Tage",
+          "3month": "90 Tage"
+        },
+        "hour": "{{hour}} Uhr",
+        "cell_one": "{{day}} {{hour}}:00, {{count}} Wiedergabe",
+        "cell_other": "{{day}} {{hour}}:00, {{count}} Wiedergaben",
+        "peak_one": "Am meisten {{day}} um {{hour}}:00, {{count}} Wiedergabe insgesamt",
+        "peak_other": "Am meisten {{day}} um {{hour}}:00, {{count}} Wiedergaben insgesamt",
+        "empty": "Keine Wiedergaben in diesem Zeitraum."
+      }
     }
   },
   "shell": {

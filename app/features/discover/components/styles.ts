@@ -7,28 +7,6 @@ export const NAV_BUTTON_CLASSES = cn(
   "border-fg/10 border shadow-lg"
 );
 
-export const glassPanelCard = cva(
-  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 relative flex flex-col rounded-xl border bg-linear-to-br p-4",
-  {
-    variants: {
-      height: {
-        full: "h-full",
-        auto: "",
-      },
-      width: {
-        full: "w-full",
-        auto: "",
-      },
-    },
-    defaultVariants: {
-      height: "full",
-      width: "auto",
-    },
-  }
-);
-
-export type GlassPanelCardProps = VariantProps<typeof glassPanelCard>;
-
 export const scrollFadeBottom = cva(
   "pb-6 [-webkit-mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)] [mask-image:linear-gradient(to_bottom,#000_calc(100%-1.5rem),transparent)]"
 );

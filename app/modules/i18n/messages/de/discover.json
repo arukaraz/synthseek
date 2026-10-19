@@ -79,24 +79,6 @@
     "songs_other": "{{count}} Songs",
     "noAlbums": "Keine Alben verfügbar"
   },
-  "leaderboard": {
-    "errorTitle": "Bibliothek konnte nicht geladen werden",
-    "errorDescription": "Bibliotheksstatistiken konnten nicht abgerufen werden. Bitte versuche es erneut.",
-    "tabsAriaLabel": "Bibliotheks-Bestenlisten-Modus",
-    "tabArtists": "Künstler",
-    "tabGenres": "Genres",
-    "topArtists": "Top-Künstler",
-    "topGenres": "Top-Genres",
-    "statsTracks": "Titel",
-    "statsLibrary": "Bibliothek",
-    "statsQueued": "In Warteschlange",
-    "unitTracks": "Titel",
-    "unitAlbums": "Alben",
-    "emptyArtistsTitle": "Noch keine Künstler",
-    "emptyArtistsDescription": "Schließe einige Downloads ab, um deine Top-Künstler zu sehen.",
-    "emptyGenresTitle": "Noch keine Genres",
-    "emptyGenresDescription": "Genres werden bei neuen Downloads erfasst, sie füllen sich, während deine Bibliothek wächst."
-  },
   "topTracks": {
     "title": "Top-Titel",
     "subtitle": "Meistgespielt · aller Zeiten · Last.fm",

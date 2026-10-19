@@ -1374,6 +1374,113 @@
     },
     "jobs": {
       "all": "Todas las tareas"
+    },
+    "leaderboard": {
+      "errorTitle": "No se pudo cargar la biblioteca",
+      "errorDescription": "No se pudieron obtener las estadísticas de la biblioteca. Inténtalo de nuevo.",
+      "tabsAriaLabel": "Modo de clasificación de la biblioteca",
+      "tabArtists": "Artistas",
+      "tabGenres": "Géneros",
+      "topArtists": "Mejores artistas",
+      "topGenres": "Mejores géneros",
+      "statsTracks": "Canciones",
+      "statsLibrary": "Biblioteca",
+      "statsQueued": "En cola",
+      "unitTracks": "canciones",
+      "unitAlbums": "álbumes",
+      "emptyArtistsTitle": "Aún no hay artistas",
+      "emptyArtistsDescription": "Completa algunas descargas para ver tus mejores artistas.",
+      "emptyGenresTitle": "Aún no hay géneros",
+      "emptyGenresDescription": "Los géneros se registran con cada nueva descarga, se irán completando a medida que crezca tu biblioteca."
+    },
+    "analytics": {
+      "title": "Analíticas",
+      "description": "Cifras de escucha, de la biblioteca y de las descargas.",
+      "loadError": "No se pudo cargar.",
+      "deltaNew": "Nuevo",
+      "plays": {
+        "title": "Reproducciones",
+        "subtitle": "Últimos 7 días",
+        "info": "Tus reproducciones completas desde cualquier app en los últimos 7 días, frente a los 7 anteriores."
+      },
+      "listeningTime": {
+        "title": "Tiempo de escucha",
+        "subtitle": "Últimos 7 días",
+        "info": "El tiempo de tus reproducciones completas en los últimos 7 días, frente a los 7 anteriores.",
+        "value": "{{hours}} h {{minutes}} min"
+      },
+      "added": {
+        "title": "Añadidas",
+        "subtitle": "Últimos 30 días",
+        "info": "Canciones añadidas a la biblioteca en los últimos 30 días, frente a los 30 anteriores.",
+        "unit_one": "canción",
+        "unit_other": "canciones"
+      },
+      "downloads": {
+        "title": "Descargas",
+        "subtitle": "Últimos 30 días",
+        "info": "La parte de las peticiones de los últimos 30 días que llegó a la biblioteca en vez de fallar, y el tiempo mediano desde la petición hasta la biblioteca.",
+        "unit": "llegaron",
+        "summary": "{{completed}} llegaron, {{failed}} fallaron",
+        "median": "Mediana de {{duration}}",
+        "empty": "Sin descargas en los últimos 30 días."
+      },
+      "decades": {
+        "title": "Por década",
+        "subtitle": "Álbumes por año de lanzamiento",
+        "info": "Álbumes completos según la década en que salieron.",
+        "label": "{{decade}}s",
+        "empty": "Aún no hay años de lanzamiento."
+      },
+      "quality": {
+        "title": "Calidad",
+        "subtitle": "Por formato de archivo",
+        "info": "Las canciones de la biblioteca por formato de archivo.",
+        "empty": "Aún no hay canciones en la biblioteca."
+      },
+      "scrobbles": {
+        "title": "Scrobbles",
+        "subtitle": "Últimos 30 días",
+        "info": "Reproducciones enviadas a Last.fm y ListenBrainz en los últimos 30 días, con las que siguen esperando y las que fallaron.",
+        "unit_one": "enviado",
+        "unit_other": "enviados",
+        "sent_one": "{{count}} enviado",
+        "sent_other": "{{count}} enviados",
+        "pending_one": "{{count}} en espera",
+        "pending_other": "{{count}} en espera",
+        "failed_one": "{{count}} falló",
+        "failed_other": "{{count}} fallaron",
+        "empty": "Nada enviado en los últimos 30 días."
+      },
+      "growth": {
+        "title": "Crecimiento de la biblioteca",
+        "subtitle": "Canciones añadidas por semana",
+        "info": "Canciones añadidas a la biblioteca cada semana.",
+        "total_one": "{{count}} canción en {{weeks}} semanas",
+        "total_other": "{{count}} canciones en {{weeks}} semanas",
+        "start_one": "Hace {{count}} semana",
+        "start_other": "Hace {{count}} semanas",
+        "end": "Esta semana",
+        "empty": "Nada añadido últimamente."
+      },
+      "clock": {
+        "title": "Reloj de escucha",
+        "subtitle": "Reproducciones por día y hora",
+        "info": "Cuándo escuchas: tus reproducciones completas por día de la semana y hora, en tu zona horaria.",
+        "chart": "Reproducciones por día de la semana y hora",
+        "periodLabel": "Periodo",
+        "periods": {
+          "7day": "7 días",
+          "1month": "30 días",
+          "3month": "90 días"
+        },
+        "hour": "{{hour}} h",
+        "cell_one": "{{day}} {{hour}}:00, {{count}} reproducción",
+        "cell_other": "{{day}} {{hour}}:00, {{count}} reproducciones",
+        "peak_one": "Más activo el {{day}} a las {{hour}}:00, {{count}} reproducción en total",
+        "peak_other": "Más activo el {{day}} a las {{hour}}:00, {{count}} reproducciones en total",
+        "empty": "Sin reproducciones en este periodo."
+      }
     }
   },
   "shell": {

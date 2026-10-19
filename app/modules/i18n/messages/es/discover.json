@@ -79,24 +79,6 @@
     "songs_other": "{{count}} canciones",
     "noAlbums": "No hay álbumes disponibles"
   },
-  "leaderboard": {
-    "errorTitle": "No se pudo cargar la biblioteca",
-    "errorDescription": "No se pudieron obtener las estadísticas de la biblioteca. Inténtalo de nuevo.",
-    "tabsAriaLabel": "Modo de clasificación de la biblioteca",
-    "tabArtists": "Artistas",
-    "tabGenres": "Géneros",
-    "topArtists": "Mejores artistas",
-    "topGenres": "Mejores géneros",
-    "statsTracks": "Canciones",
-    "statsLibrary": "Biblioteca",
-    "statsQueued": "En cola",
-    "unitTracks": "canciones",
-    "unitAlbums": "álbumes",
-    "emptyArtistsTitle": "Aún no hay artistas",
-    "emptyArtistsDescription": "Completa algunas descargas para ver tus mejores artistas.",
-    "emptyGenresTitle": "Aún no hay géneros",
-    "emptyGenresDescription": "Los géneros se registran con cada nueva descarga, se irán completando a medida que crezca tu biblioteca."
-  },
   "topTracks": {
     "title": "Canciones más escuchadas",
     "subtitle": "Más reproducidas · de todos los tiempos · Last.fm",

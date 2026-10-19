@@ -1371,6 +1371,113 @@
     },
     "jobs": {
       "all": "All jobs"
+    },
+    "leaderboard": {
+      "errorTitle": "Failed to load library",
+      "errorDescription": "Unable to fetch library statistics. Please try again.",
+      "tabsAriaLabel": "Library leaderboard mode",
+      "tabArtists": "Artists",
+      "tabGenres": "Genres",
+      "topArtists": "Top artists",
+      "topGenres": "Top genres",
+      "statsTracks": "Tracks",
+      "statsLibrary": "Library",
+      "statsQueued": "Queued",
+      "unitTracks": "tracks",
+      "unitAlbums": "albums",
+      "emptyArtistsTitle": "No artists yet",
+      "emptyArtistsDescription": "Complete some downloads to see your top artists.",
+      "emptyGenresTitle": "No genres yet",
+      "emptyGenresDescription": "Genres are tracked on new downloads, they will populate as your library grows."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Listening, library and download numbers.",
+      "loadError": "This could not be loaded.",
+      "deltaNew": "New",
+      "plays": {
+        "title": "Plays",
+        "subtitle": "Last 7 days",
+        "info": "Your completed plays from every app in the last 7 days, against the 7 before."
+      },
+      "listeningTime": {
+        "title": "Listening time",
+        "subtitle": "Last 7 days",
+        "info": "Time spent on your completed plays in the last 7 days, against the 7 before.",
+        "value": "{{hours}}h {{minutes}}m"
+      },
+      "added": {
+        "title": "Added",
+        "subtitle": "Last 30 days",
+        "info": "Tracks added to the library in the last 30 days, against the 30 before.",
+        "unit_one": "track",
+        "unit_other": "tracks"
+      },
+      "downloads": {
+        "title": "Downloads",
+        "subtitle": "Last 30 days",
+        "info": "The share of the last 30 days' requests that reached the library instead of failing, and the median time from request to library.",
+        "unit": "landed",
+        "summary": "{{completed}} landed, {{failed}} failed",
+        "median": "Median {{duration}}",
+        "empty": "No downloads in the last 30 days."
+      },
+      "decades": {
+        "title": "By decade",
+        "subtitle": "Albums by release year",
+        "info": "Complete albums by the decade they came out.",
+        "label": "{{decade}}s",
+        "empty": "No release years yet."
+      },
+      "quality": {
+        "title": "Quality mix",
+        "subtitle": "By file format",
+        "info": "The library's tracks by file format.",
+        "empty": "No tracks in the library yet."
+      },
+      "scrobbles": {
+        "title": "Scrobbles",
+        "subtitle": "Last 30 days",
+        "info": "Plays sent to Last.fm and ListenBrainz in the last 30 days, with the ones still waiting and the ones that failed.",
+        "unit_one": "sent",
+        "unit_other": "sent",
+        "sent_one": "{{count}} sent",
+        "sent_other": "{{count}} sent",
+        "pending_one": "{{count}} waiting",
+        "pending_other": "{{count}} waiting",
+        "failed_one": "{{count}} failed",
+        "failed_other": "{{count}} failed",
+        "empty": "Nothing sent in the last 30 days."
+      },
+      "growth": {
+        "title": "Library growth",
+        "subtitle": "Tracks added per week",
+        "info": "Tracks added to the library each week.",
+        "total_one": "{{count}} track in {{weeks}} weeks",
+        "total_other": "{{count}} tracks in {{weeks}} weeks",
+        "start_one": "{{count}} week ago",
+        "start_other": "{{count}} weeks ago",
+        "end": "This week",
+        "empty": "Nothing added recently."
+      },
+      "clock": {
+        "title": "Listening clock",
+        "subtitle": "Plays by weekday and hour",
+        "info": "When you listen: your completed plays by weekday and hour, in your time zone.",
+        "chart": "Plays by weekday and hour",
+        "periodLabel": "Period",
+        "periods": {
+          "7day": "7 days",
+          "1month": "30 days",
+          "3month": "90 days"
+        },
+        "hour": "{{hour}}h",
+        "cell_one": "{{day}} {{hour}}:00, {{count}} play",
+        "cell_other": "{{day}} {{hour}}:00, {{count}} plays",
+        "peak_one": "Busiest at {{day}} {{hour}}:00, {{count}} play in all",
+        "peak_other": "Busiest at {{day}} {{hour}}:00, {{count}} plays in all",
+        "empty": "No plays in this period."
+      }
     }
   },
   "shell": {

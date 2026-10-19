@@ -18,8 +18,8 @@ import {
 import type { LeaderboardHeroProps } from "./types";
 
 export function LeaderboardHero({ entry, mode, onSelect }: LeaderboardHeroProps) {
-  const { t } = useTranslation("discover");
-  const unitLabel = mode === "artists" ? t("leaderboard.unitTracks") : t("leaderboard.unitAlbums");
+  const { t } = useTranslation("settings");
+  const unitLabel = mode === "artists" ? t("overview.leaderboard.unitTracks") : t("overview.leaderboard.unitAlbums");
 
   return (
     <div className={heroFrame()}>

@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import {
-  glassPanelCard,
   skeletonPulse,
   sectionHeader,
   seeAllLink,
@@ -13,32 +12,6 @@ import {
   artistCard,
   hoverBorder,
 } from "../styles";
-
-describe("glassPanelCard", () => {
-  it("returns base classes", () => {
-    const result = glassPanelCard();
-    expect(result).toContain("bg-surface/40");
-    expect(result).toContain("bg-linear-to-br");
-    expect(result).toContain("flex");
-    expect(result).toContain("flex-col");
-    expect(result).toContain("rounded-xl");
-  });
-
-  it("applies height full variant", () => {
-    const result = glassPanelCard({ height: "full" });
-    expect(result).toContain("h-full");
-  });
-
-  it("applies height auto variant", () => {
-    const result = glassPanelCard({ height: "auto" });
-    expect(result).not.toContain("h-full");
-  });
-
-  it("applies width full variant", () => {
-    const result = glassPanelCard({ width: "full" });
-    expect(result).toContain("w-full");
-  });
-});
 
 describe("skeletonPulse", () => {
   it("returns base classes with animation", () => {

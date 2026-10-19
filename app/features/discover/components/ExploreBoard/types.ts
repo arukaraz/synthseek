@@ -2,9 +2,8 @@ import type { ParseKeys } from "i18next";
 import type { LucideIcon } from "lucide-react";
 import type { ComponentType, PointerEvent as ReactPointerEvent } from "react";
 
+import type { BoardDevice } from "@components/BoardGrid";
 import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
-
-export type BoardDevice = "wide" | "narrow";
 
 export type BoardCategory = "now" | "history" | "discover" | "library";
 
@@ -22,11 +21,6 @@ export interface BoardWidgetDefinition {
   sizes: readonly BoardSize[];
   defaultSize: BoardSize;
   narrowSizes?: Partial<Record<BoardSize, BoardSize>>;
-}
-
-export interface BoardSpan {
-  cols: number;
-  rows: number;
 }
 
 export interface PlacedTile {

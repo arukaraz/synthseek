@@ -2,8 +2,9 @@
 
 import { useTranslation } from "react-i18next";
 
-import { WidgetHeaderSkeleton } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeaderSkeleton } from "@components/WidgetHeader";
+
 import { SKELETON_PLACEHOLDERS } from "./constants";
 import { rail, railWrap, skeletonNode, skeletonRow, timeline } from "./styles";
 import type { RecentScrobblesSkeletonProps } from "./types";

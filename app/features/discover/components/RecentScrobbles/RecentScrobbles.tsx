@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 import { Activity } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
 
-import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
 import { LASTFM_USER_URL_BASE } from "./constants";
 import { scrobbleLayoutFor } from "./helpers";
 import { RecentScrobblesEmpty } from "./RecentScrobblesEmpty";

@@ -1371,6 +1371,113 @@
     },
     "jobs": {
       "all": "Toutes les tâches"
+    },
+    "leaderboard": {
+      "errorTitle": "Échec du chargement de la bibliothèque",
+      "errorDescription": "Impossible de récupérer les statistiques de la bibliothèque. Veuillez réessayer.",
+      "tabsAriaLabel": "Mode du classement de la bibliothèque",
+      "tabArtists": "Artistes",
+      "tabGenres": "Genres",
+      "topArtists": "Meilleurs artistes",
+      "topGenres": "Meilleurs genres",
+      "statsTracks": "Pistes",
+      "statsLibrary": "Bibliothèque",
+      "statsQueued": "En file",
+      "unitTracks": "pistes",
+      "unitAlbums": "albums",
+      "emptyArtistsTitle": "Aucun artiste pour l'instant",
+      "emptyArtistsDescription": "Terminez quelques téléchargements pour voir vos meilleurs artistes.",
+      "emptyGenresTitle": "Aucun genre pour l'instant",
+      "emptyGenresDescription": "Les genres sont suivis lors des nouveaux téléchargements, ils se rempliront à mesure que votre bibliothèque grandit."
+    },
+    "analytics": {
+      "title": "Statistiques",
+      "description": "Chiffres d'écoute, de la bibliothèque et des téléchargements.",
+      "loadError": "Chargement impossible.",
+      "deltaNew": "Nouveau",
+      "plays": {
+        "title": "Écoutes",
+        "subtitle": "7 derniers jours",
+        "info": "Vos écoutes complètes depuis toutes vos apps sur les 7 derniers jours, comparées aux 7 précédents."
+      },
+      "listeningTime": {
+        "title": "Temps d'écoute",
+        "subtitle": "7 derniers jours",
+        "info": "Le temps de vos écoutes complètes sur les 7 derniers jours, comparé aux 7 précédents.",
+        "value": "{{hours}} h {{minutes}} min"
+      },
+      "added": {
+        "title": "Ajoutées",
+        "subtitle": "30 derniers jours",
+        "info": "Pistes ajoutées à la bibliothèque sur les 30 derniers jours, comparées aux 30 précédents.",
+        "unit_one": "piste",
+        "unit_other": "pistes"
+      },
+      "downloads": {
+        "title": "Téléchargements",
+        "subtitle": "30 derniers jours",
+        "info": "La part des demandes des 30 derniers jours arrivées dans la bibliothèque au lieu d'échouer, et le temps médian entre la demande et la bibliothèque.",
+        "unit": "arrivées",
+        "summary": "{{completed}} arrivées, {{failed}} échouées",
+        "median": "Médiane de {{duration}}",
+        "empty": "Aucun téléchargement sur les 30 derniers jours."
+      },
+      "decades": {
+        "title": "Par décennie",
+        "subtitle": "Albums par année de sortie",
+        "info": "Les albums complets selon la décennie de leur sortie.",
+        "label": "{{decade}}s",
+        "empty": "Aucune année de sortie pour l'instant."
+      },
+      "quality": {
+        "title": "Qualité",
+        "subtitle": "Par format de fichier",
+        "info": "Les pistes de la bibliothèque par format de fichier.",
+        "empty": "Aucune piste dans la bibliothèque pour l'instant."
+      },
+      "scrobbles": {
+        "title": "Scrobbles",
+        "subtitle": "30 derniers jours",
+        "info": "Écoutes envoyées à Last.fm et ListenBrainz sur les 30 derniers jours, avec celles qui attendent encore et celles qui ont échoué.",
+        "unit_one": "envoyé",
+        "unit_other": "envoyés",
+        "sent_one": "{{count}} envoyé",
+        "sent_other": "{{count}} envoyés",
+        "pending_one": "{{count}} en attente",
+        "pending_other": "{{count}} en attente",
+        "failed_one": "{{count}} échoué",
+        "failed_other": "{{count}} échoués",
+        "empty": "Rien d'envoyé sur les 30 derniers jours."
+      },
+      "growth": {
+        "title": "Croissance de la bibliothèque",
+        "subtitle": "Pistes ajoutées par semaine",
+        "info": "Les pistes ajoutées à la bibliothèque chaque semaine.",
+        "total_one": "{{count}} piste en {{weeks}} semaines",
+        "total_other": "{{count}} pistes en {{weeks}} semaines",
+        "start_one": "Il y a {{count}} semaine",
+        "start_other": "Il y a {{count}} semaines",
+        "end": "Cette semaine",
+        "empty": "Rien d'ajouté récemment."
+      },
+      "clock": {
+        "title": "Horloge d'écoute",
+        "subtitle": "Écoutes par jour et par heure",
+        "info": "Quand vous écoutez : vos écoutes complètes par jour de la semaine et par heure, dans votre fuseau horaire.",
+        "chart": "Écoutes par jour de la semaine et par heure",
+        "periodLabel": "Période",
+        "periods": {
+          "7day": "7 jours",
+          "1month": "30 jours",
+          "3month": "90 jours"
+        },
+        "hour": "{{hour}} h",
+        "cell_one": "{{day}} {{hour}}:00, {{count}} écoute",
+        "cell_other": "{{day}} {{hour}}:00, {{count}} écoutes",
+        "peak_one": "Le plus actif le {{day}} à {{hour}}:00, {{count}} écoute au total",
+        "peak_other": "Le plus actif le {{day}} à {{hour}}:00, {{count}} écoutes au total",
+        "empty": "Aucune écoute sur cette période."
+      }
     }
   },
   "shell": {

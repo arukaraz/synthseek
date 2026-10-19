@@ -3,14 +3,15 @@
 import { Disc3, History } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { useJumpBackIn } from "@hooks/api/queries/analytics/useJumpBackIn";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 
 import { PlaySetCard } from "../PlaySetCard/PlaySetCard";
-import { WidgetHeader } from "../WidgetHeader";
 import { CARD_ROW_SKELETONS } from "../constants";
 import { cardRowLimit } from "../helpers";
-import { cardRow, cardRowBody, cardRowSkeleton, glassPanelCard, widgetNote } from "../styles";
+import { cardRow, cardRowBody, cardRowSkeleton, widgetNote } from "../styles";
 import type { JumpBackInProps } from "./types";
 
 export function JumpBackIn({ size, info }: JumpBackInProps) {

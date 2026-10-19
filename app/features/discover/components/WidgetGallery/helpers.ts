@@ -1,12 +1,7 @@
+import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX, FAMILY_SPANS } from "@components/BoardGrid";
 import type { BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 
-import {
-  BOARD_CATEGORY_ORDER,
-  BOARD_COLUMNS,
-  BOARD_GAP_PX,
-  BOARD_ROW_PX,
-  FAMILY_SPANS,
-} from "../ExploreBoard/constants";
+import { BOARD_CATEGORY_ORDER } from "../ExploreBoard/constants";
 import type { BoardCategory } from "../ExploreBoard/types";
 import { PREVIEW_BOARD_WIDTH, PREVIEW_BOX } from "./constants";
 import type { GalleryEntry, GalleryFilter, GalleryGroup, PreviewFrame } from "./types";

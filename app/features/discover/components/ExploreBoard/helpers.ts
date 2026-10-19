@@ -1,7 +1,8 @@
+import { BOARD_COLUMNS, type BoardDevice, FAMILY_SPANS } from "@components/BoardGrid";
 import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 
-import { BOARD_COLUMNS, BOARD_SCHEMA_VERSION, BOARD_WIDGETS, DEFAULT_BOARD, FAMILY_SPANS } from "./constants";
-import type { BoardDevice, BoardKeyAction, MoveDelta, PlacedTile } from "./types";
+import { BOARD_SCHEMA_VERSION, BOARD_WIDGETS, DEFAULT_BOARD } from "./constants";
+import type { BoardKeyAction, MoveDelta, PlacedTile } from "./types";
 
 export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): BoardKeyAction | null {
   if (event.key === "Delete" || event.key === "Backspace") return { kind: "remove" };

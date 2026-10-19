@@ -6,12 +6,12 @@ import { statsLabel, statsRow, statsValue } from "./styles";
 import type { LibraryStatsRowProps } from "./types";
 
 export function LibraryStatsRow({ summary }: LibraryStatsRowProps) {
-  const { t } = useTranslation("discover");
+  const { t } = useTranslation("settings");
 
   const cells = [
-    { value: summary.tracks.toLocaleString(), label: t("leaderboard.statsTracks") },
-    { value: `${summary.hours}h`, label: t("leaderboard.statsLibrary") },
-    { value: summary.queued.toLocaleString(), label: t("leaderboard.statsQueued") },
+    { value: summary.tracks.toLocaleString(), label: t("overview.leaderboard.statsTracks") },
+    { value: `${summary.hours}h`, label: t("overview.leaderboard.statsLibrary") },
+    { value: summary.queued.toLocaleString(), label: t("overview.leaderboard.statsQueued") },
   ];
 
   return (

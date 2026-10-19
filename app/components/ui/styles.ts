@@ -25,6 +25,26 @@ export const closeButton = cva(
 
 export type CloseButtonProps = VariantProps<typeof closeButton>;
 
+export const glassPanelCard = cva(
+  "border-fg/10 bg-surface/40 from-primary-600/15 to-accent-600/15 relative flex flex-col rounded-xl border bg-linear-to-br p-4",
+  {
+    variants: {
+      height: {
+        full: "h-full",
+        auto: "",
+      },
+      width: {
+        full: "w-full",
+        auto: "",
+      },
+    },
+    defaultVariants: {
+      height: "full",
+      width: "auto",
+    },
+  }
+);
+
 export const dialogOverlay = cva(
   "fixed inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
   {

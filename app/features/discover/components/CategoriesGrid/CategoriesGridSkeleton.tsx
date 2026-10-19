@@ -1,10 +1,10 @@
 "use client";
 
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeaderSkeleton } from "@components/WidgetHeader";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { useTranslation } from "react-i18next";
 
-import { WidgetHeaderSkeleton } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
 import { SIZE_PATTERN } from "./constants";
 import { mosaicGrid, panelBody, skeletonCard } from "./styles";
 import type { CategoriesGridSkeletonProps } from "./types";

@@ -1,18 +1,13 @@
 import type { CssVars } from "@theme/utilities/types";
 import { cva } from "class-variance-authority";
 
-import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX } from "./constants";
-import type { BoardDevice, PlacedTile } from "./types";
+import type { PlacedTile } from "./types";
 
 export const boardRoot = cva("flex flex-col gap-4");
 
 export const boardToolbar = cva("flex min-h-9 flex-wrap items-center justify-end gap-2");
 
 export const boardHint = cva("text-fg/60 mr-auto hidden text-sm md:block");
-
-export const boardGrid = cva(
-  "grid auto-rows-[var(--board-row)] grid-cols-[repeat(var(--board-cols),minmax(0,1fr))] gap-[var(--board-gap)]"
-);
 
 export const boardTile = cva(
   "relative flex min-h-0 min-w-0 rounded-xl outline-none [grid-column:var(--tile-col)] [grid-row:var(--tile-row)]",
@@ -87,14 +82,6 @@ export const editIconPenGlyph = cva("size-full!");
 export const emptyBoard = cva("border-fg/10 flex flex-col items-center gap-2 rounded-2xl border border-dashed pb-8");
 
 export const liveRegion = cva("sr-only");
-
-export function boardGridVars(device: BoardDevice): CssVars {
-  return {
-    "--board-cols": String(BOARD_COLUMNS[device]),
-    "--board-row": `${BOARD_ROW_PX}px`,
-    "--board-gap": `${BOARD_GAP_PX}px`,
-  };
-}
 
 export function tileVars(tile: PlacedTile): CssVars {
   return {

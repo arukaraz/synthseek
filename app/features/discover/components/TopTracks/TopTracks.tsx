@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { glassPanelCard } from "@components/ui/styles";
+import { WidgetHeader } from "@components/WidgetHeader";
 import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
 
-import { WidgetHeader } from "../WidgetHeader";
-import { glassPanelCard } from "../styles";
 import { HERO_LIMIT, LIST_LIMIT } from "./constants";
 import { heroShapeFor } from "./helpers";
 import { TopTrackHero } from "./TopTrackHero";

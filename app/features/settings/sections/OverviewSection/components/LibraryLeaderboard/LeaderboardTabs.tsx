@@ -7,13 +7,13 @@ import { tabActive, tabInactive, tabsContainer } from "./styles";
 import type { LeaderboardMode, LeaderboardTabsProps } from "./types";
 
 export function LeaderboardTabs({ mode, onChange }: LeaderboardTabsProps) {
-  const { t } = useTranslation("discover");
+  const { t } = useTranslation("settings");
 
   const labelFor = (tabMode: LeaderboardMode) =>
-    tabMode === "artists" ? t("leaderboard.tabArtists") : t("leaderboard.tabGenres");
+    tabMode === "artists" ? t("overview.leaderboard.tabArtists") : t("overview.leaderboard.tabGenres");
 
   return (
-    <div role="tablist" aria-label={t("leaderboard.tabsAriaLabel")} className={tabsContainer()}>
+    <div role="tablist" aria-label={t("overview.leaderboard.tabsAriaLabel")} className={tabsContainer()}>
       {TAB_MODES.map((tabMode) => {
         const active = tabMode === mode;
         return (
