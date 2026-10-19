@@ -12,7 +12,17 @@ export const boardDockPill = cva(
 );
 
 export const boardFab = cva(
-  "bg-primary text-primary-foreground shadow-primary-500/40 focus-visible:ring-primary-300 pointer-events-auto flex size-12 items-center justify-center rounded-full shadow-xl transition-transform outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:size-5"
+  "bg-primary text-primary-foreground shadow-primary-500/40 focus-visible:ring-primary-300 flex size-12 items-center justify-center rounded-full shadow-xl transition-[translate,scale,opacity] duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none [&_svg]:size-5",
+  {
+    variants: {
+      revealed: {
+        true: "pointer-events-auto",
+        false:
+          "pointer-events-none translate-y-[calc(100%+1rem)] opacity-0 focus-visible:pointer-events-auto focus-visible:translate-y-0 focus-visible:opacity-100",
+      },
+    },
+    defaultVariants: { revealed: true },
+  }
 );
 
 export const boardFabLabel = cva("sr-only");

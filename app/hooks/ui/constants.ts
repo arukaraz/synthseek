@@ -11,3 +11,5 @@ export const CLIENT_PAGINATION = {
 } as const;
 
 export const SCROLL_EDGE_TOLERANCE_PX = 4;
+
+export const SCROLL_REVEAL_TOLERANCE_PX = 8;
