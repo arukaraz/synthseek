@@ -14,6 +14,16 @@ RUN PRISMA_VERSION="$(node -p "(require('./package.json').devDependencies?.prism
     && npx prisma generate --schema=db/schema.prisma
 
 
+FROM node:22-alpine AS web-native
+
+WORKDIR /build
+
+COPY web/standalone/node_modules/sharp/package.json ./sharp-package.json
+
+RUN SHARP_VERSION="$(node -p "require('./sharp-package.json').version")" \
+    && npm install --no-save --no-package-lock --no-audit --no-fund "sharp@${SHARP_VERSION}"
+
+
 FROM node:22-alpine AS runtime
 
 RUN apk add --no-cache \
@@ -55,6 +65,8 @@ COPY --chown=synthseek:nodejs server/package.json server/package-lock.json ./ser
 COPY --chown=synthseek:nodejs --from=server-deps /build/node_modules ./server/node_modules/
 
 COPY --chown=synthseek:nodejs web/standalone ./web/
+COPY --chown=synthseek:nodejs --from=web-native /build/node_modules/sharp ./web/node_modules/sharp/
+COPY --chown=synthseek:nodejs --from=web-native /build/node_modules/@img ./web/node_modules/@img/
 COPY --chown=synthseek:nodejs web/static ./web/.next/static/
 COPY --chown=synthseek:nodejs web/public ./web/public/
 

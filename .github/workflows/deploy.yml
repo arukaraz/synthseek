@@ -408,7 +408,12 @@ jobs:
             exit 1
           fi
 
-          echo "Smoke test passed: healthy and arch is $REPORTED_ARCH"
+          if ! docker exec -w /app/web "$CID" node -e "const s = require('sharp'); console.log('sharp loads, libvips ' + s.versions.vips + ' on ' + process.arch)"; then
+            echo "Error: the web tier cannot load sharp for $ARCH, so the image optimizer would serve every image unresized"
+            exit 1
+          fi
+
+          echo "Smoke test passed: healthy, arch is $REPORTED_ARCH and sharp loads"
 
       - name: Push image by digest
         id: push
