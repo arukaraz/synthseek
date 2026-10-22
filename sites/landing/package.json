@@ -15,12 +15,12 @@
     "@fontsource/courgette": "^5.3.0",
     "@synthseek/sites-shared": "*",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.2.3",
+    "astro": "^7.2.8",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.5",
     "typescript": "^5.9.3"
   }
 }
