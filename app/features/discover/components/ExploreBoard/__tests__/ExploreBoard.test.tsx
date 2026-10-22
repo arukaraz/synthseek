@@ -60,7 +60,7 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 
 const TWO_TILES: BoardLayout = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   items: [
     { id: "a", widget: "scrobbles", size: "M" },
     { id: "b", widget: "requests", size: "M" },
@@ -110,7 +110,7 @@ describe("ExploreBoard", () => {
 
   it("renders only the saved tiles, passing each widget its size and translated description", () => {
     useBoardLayoutMock.mockReturnValue({
-      data: { schemaVersion: 1, items: [TWO_TILES.items[1], TWO_TILES.items[0]] },
+      data: { schemaVersion: 2, items: [TWO_TILES.items[1], TWO_TILES.items[0]] },
       isLoading: false,
     });
 
@@ -135,13 +135,13 @@ describe("ExploreBoard", () => {
   it("hands each widget its narrow size on a narrow board", () => {
     viewport.wide = false;
     useBoardLayoutMock.mockReturnValue({
-      data: { schemaVersion: 1, items: [{ id: "g", widget: "genres", size: "XL" }] },
+      data: { schemaVersion: 2, items: [{ id: "g", widget: "genres", size: "L" }] },
       isLoading: false,
     });
 
     const { container } = render(<ExploreBoard />);
 
-    expect(container.querySelector("[data-widget='genres']")).toHaveAttribute("data-size", "M+");
+    expect(container.querySelector("[data-widget='genres']")).toHaveAttribute("data-size", "M");
     expect(tile(container, "g").style.getPropertyValue("--tile-col")).toBe("1 / span 4");
   });
 
@@ -194,7 +194,7 @@ describe("ExploreBoard", () => {
   });
 
   it("offers an empty state that opens the widget gallery when every tile is gone", () => {
-    useBoardLayoutMock.mockReturnValue({ data: { schemaVersion: 1, items: [] }, isLoading: false });
+    useBoardLayoutMock.mockReturnValue({ data: { schemaVersion: 2, items: [] }, isLoading: false });
 
     render(<ExploreBoard />);
     expect(screen.getByText(i18n.t("discover:board.empty.title"))).toBeInTheDocument();

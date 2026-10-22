@@ -4,31 +4,34 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, GripVertical, X } from "luci
 import { useTranslation } from "react-i18next";
 
 import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS, BOARD_WIDGETS } from "./constants";
+import { sizesOf } from "./helpers";
 import { controlButton, dragHandle, editControls, sizeChip, sizeGroup } from "./styles";
 import type { BoardTileEditControlsProps } from "./types";
 
 export function BoardTileEditControls({ item, device, name, position, total, actions }: BoardTileEditControlsProps) {
   const { t } = useTranslation("discover");
-  const sizes = BOARD_WIDGETS[item.widget].sizes;
+  const sizes = sizesOf(BOARD_WIDGETS[item.widget]);
   const EarlierIcon = device === "wide" ? ArrowLeft : ArrowUp;
   const LaterIcon = device === "wide" ? ArrowRight : ArrowDown;
 
   return (
     <div className={editControls()}>
-      <div role="group" aria-label={t("board.tile.sizes", { name })} className={sizeGroup()}>
-        {sizes.map((size) => (
-          <button
-            key={size}
-            type="button"
-            aria-pressed={size === item.size}
-            aria-label={t(BOARD_SIZE_NAME_KEYS[size])}
-            className={sizeChip({ active: size === item.size })}
-            onClick={() => actions.resize(item.id, size)}
-          >
-            {t(BOARD_SIZE_LABEL_KEYS[size])}
-          </button>
-        ))}
-      </div>
+      {sizes.length > 1 ? (
+        <div role="group" aria-label={t("board.tile.sizes", { name })} className={sizeGroup()}>
+          {sizes.map((size) => (
+            <button
+              key={size}
+              type="button"
+              aria-pressed={size === item.size}
+              aria-label={t(BOARD_SIZE_NAME_KEYS[size])}
+              className={sizeChip({ active: size === item.size })}
+              onClick={() => actions.resize(item.id, size)}
+            >
+              {t(BOARD_SIZE_LABEL_KEYS[size])}
+            </button>
+          ))}
+        </div>
+      ) : null}
       <button
         type="button"
         className={controlButton()}

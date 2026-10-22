@@ -1,12 +1,6 @@
 import type { ParseKeys } from "i18next";
 
-import type { BoardSize } from "@hooks/api/queries/board/types";
-
-import type { EmptyReason, HeroShape } from "./types";
-
-export function heroShapeFor(size: BoardSize): HeroShape {
-  return size === "M" ? "compact" : "tall";
-}
+import type { EmptyReason } from "./types";
 
 export function formatPlaycount(n: number): string {
   if (n < 1000) return n.toString();

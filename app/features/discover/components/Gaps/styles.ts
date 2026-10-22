@@ -2,12 +2,14 @@ import { cva } from "class-variance-authority";
 
 export const gapsBody = cva("@container flex min-h-0 flex-1 flex-col");
 
-export const gapsGrid = cva("grid gap-4 @3xl:grid-cols-3");
+export const gapsRail = cva("flex h-full snap-x gap-4 [&>*]:w-72 [&>*]:shrink-0 [&>*]:snap-start");
 
-export const gapCard = cva("flex min-w-0 flex-col gap-1");
+export const gapCard = cva("flex h-full min-w-0 flex-col gap-1");
+
+export const gapMissing = cva("min-h-0 flex-1");
 
 export const gapHeader = cva(
-  "hover:bg-fg/[0.07] has-[:focus-visible]:bg-fg/[0.07] relative flex flex-col gap-2 rounded-lg p-1.5 transition-colors"
+  "hover:bg-fg/[0.07] has-[:focus-visible]:bg-fg/[0.07] relative flex shrink-0 flex-col gap-2 rounded-lg p-1.5 transition-colors"
 );
 
 export const gapHead = cva("flex items-center gap-3");

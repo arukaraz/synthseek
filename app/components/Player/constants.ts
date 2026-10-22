@@ -59,8 +59,6 @@ export const SETTLE_EPSILON = 0.0005;
 
 export const FRAME_CEILING_MS = 100;
 
-export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
 export const SEEK_STEP_SECONDS = 5;
 
 export const SEEK_PAGE_SECONDS = 30;

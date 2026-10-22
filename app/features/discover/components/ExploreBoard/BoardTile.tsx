@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import { BOARD_TILE_ATTRIBUTE } from "@hooks/ui/board/constants";
 
 import { BoardTileEditControls } from "./BoardTileEditControls";
-import { BOARD_WIDGETS } from "./constants";
-import { blockWidgetAction, boardKeyAction, cycleSize } from "./helpers";
-import { boardTile, tileBody, tileVars } from "./styles";
+import { BOARD_SIZE_NAME_KEYS, BOARD_WIDGETS } from "./constants";
+import { blockWidgetAction, boardKeyAction, cycleSize, sizesOf } from "./helpers";
+import { boardTile, tileBody, tileSlot, tileSlotName, tileSlotSize, tileVars } from "./styles";
 import type { BoardTileProps } from "./types";
 
 export function BoardTile({ tile, device, editing, dragging, position, total, actions }: BoardTileProps) {
@@ -25,7 +25,7 @@ export function BoardTile({ tile, device, editing, dragging, position, total, ac
     event.preventDefault();
     if (action.kind === "remove") actions.remove(item.id);
     else if (action.kind === "move") actions.move(item.id, action.delta);
-    else actions.resize(item.id, cycleSize(definition.sizes, item.size, action.delta));
+    else actions.resize(item.id, cycleSize(sizesOf(definition), item.size, action.delta));
   };
 
   return (
@@ -38,10 +38,16 @@ export function BoardTile({ tile, device, editing, dragging, position, total, ac
       aria-label={editing ? t("board.tile.label", { name, position, total }) : undefined}
       onKeyDown={handleKeyDown}
     >
-      <div className={tileBody({ editing })} onClickCapture={editing ? blockWidgetAction : undefined}>
+      <div className={tileBody({ editing, dragging })} onClickCapture={editing ? blockWidgetAction : undefined}>
         <Widget size={tile.size} info={t(definition.descriptionKey)} />
       </div>
-      {editing ? (
+      {dragging ? (
+        <div className={tileSlot()} aria-hidden>
+          <span className={tileSlotName()}>{name}</span>
+          <span className={tileSlotSize()}>{t(BOARD_SIZE_NAME_KEYS[tile.size])}</span>
+        </div>
+      ) : null}
+      {editing && !dragging ? (
         <BoardTileEditControls
           item={item}
           device={device}

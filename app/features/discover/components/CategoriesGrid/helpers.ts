@@ -4,7 +4,7 @@ import { SIZE_PATTERN } from "./constants";
 import type { CardSize, MosaicLayout } from "./types";
 
 export function mosaicLayoutFor(size: BoardSize): MosaicLayout {
-  return size === "XL" ? "quad" : "pair";
+  return size === "L" ? "quad" : "pair";
 }
 
 export function getCardSize(index: number, layout: MosaicLayout): CardSize {

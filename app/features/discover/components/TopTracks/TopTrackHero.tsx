@@ -23,13 +23,13 @@ import {
 } from "./styles";
 import type { TopTrackHeroProps } from "./types";
 
-export function TopTrackHero({ track, shape }: TopTrackHeroProps) {
+export function TopTrackHero({ track }: TopTrackHeroProps) {
   const { t } = useTranslation("discover");
   const cover = track.albumImage;
   const fallbackBg = tileGradient(track.catalogTrackId);
 
   return (
-    <div className={hero({ shape })}>
+    <div className={hero()}>
       {cover ? (
         <Image src={artworkProxySrc(cover)} alt="" fill sizes="240px" className={heroImage()} unoptimized />
       ) : (

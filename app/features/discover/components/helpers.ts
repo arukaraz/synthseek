@@ -2,10 +2,15 @@ import i18n from "@locale";
 
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
-import { CARD_ROW_LIMITS } from "./constants";
+import { CARD_FIT, CARD_ROW_LIMITS } from "./constants";
 
 export function cardRowLimit(size: BoardSize): number {
   return size === "M" ? CARD_ROW_LIMITS.half : CARD_ROW_LIMITS.full;
+}
+
+export function cardRowFit(width: number, size: BoardSize): number {
+  const fits = Math.floor((width + CARD_FIT.GAP_PX) / (CARD_FIT.MIN_WIDTH_PX + CARD_FIT.GAP_PX));
+  return Math.min(CARD_FIT.CAPS[size], Math.max(CARD_FIT.MIN_COLUMNS, fits));
 }
 
 export function compactCount(value: number): string {

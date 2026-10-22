@@ -17,9 +17,11 @@ const RECTS: Record<string, DOMRect> = {
 };
 
 const drops = vi.fn<(order: Item[]) => void>();
+const settling = vi.fn<() => boolean>(() => false);
+const sameSlot = vi.fn<(a: Item, b: Item) => boolean>(() => false);
 
 function Board({ items }: { items: Item[] }) {
-  const { order, draggingId, startDrag } = useBoardDrag({ items, onDrop: drops });
+  const { order, draggingId, startDrag } = useBoardDrag({ items, onDrop: drops, settling, sameSlot });
   return (
     <div>
       <p data-testid="order">{(order ?? items).map((item) => item.id).join("")}</p>
@@ -68,6 +70,10 @@ beforeEach(() => {
 afterEach(() => {
   vi.restoreAllMocks();
   drops.mockReset();
+  settling.mockReset();
+  settling.mockImplementation(() => false);
+  sameSlot.mockReset();
+  sameSlot.mockImplementation(() => false);
   document.body.innerHTML = "";
 });
 
@@ -183,6 +189,55 @@ describe("useBoardDrag", () => {
     moveTo("a", 10, 590);
 
     expect(scroller.scrollTop).toBeGreaterThan(500);
+  });
+
+  it("holds the order while the pointer rests, until it travels again", () => {
+    render(<Board items={ITEMS} />);
+
+    startOn("a");
+    moveTo("c", 330);
+    expect(screen.getByTestId("order")).toHaveTextContent("bca");
+
+    moveTo("b", 334);
+    expect(screen.getByTestId("order")).toHaveTextContent("bca");
+
+    moveTo("b", 130);
+    expect(screen.getByTestId("order")).toHaveTextContent("abc");
+  });
+
+  it("does not reorder on the same target and side twice", () => {
+    render(<Board items={ITEMS} />);
+
+    startOn("a");
+    moveTo("c", 330);
+    moveTo("c", 360);
+    moveTo("c", 300);
+
+    expect(screen.getByTestId("order")).toHaveTextContent("bca");
+    act(() => {
+      fireEvent.pointerUp(window, { pointerId: 1 });
+    });
+    expect(drops).toHaveBeenCalledTimes(1);
+  });
+
+  it("ignores what lies under the pointer while the board is still sliding", () => {
+    settling.mockImplementation(() => true);
+    render(<Board items={ITEMS} />);
+
+    startOn("a");
+    moveTo("c", 330);
+
+    expect(screen.getByTestId("order")).toHaveTextContent("abc");
+  });
+
+  it("swaps places with a tile that fills the same slot instead of inserting beside it", () => {
+    sameSlot.mockImplementation((a, b) => a.id === "a" && b.id === "c");
+    render(<Board items={ITEMS} />);
+
+    startOn("a");
+    moveTo("c", 250);
+
+    expect(screen.getByTestId("order")).toHaveTextContent("cba");
   });
 
   it("cancels a drag in progress when the board unmounts", () => {

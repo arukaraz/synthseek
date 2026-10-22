@@ -10,7 +10,6 @@ import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
 
 import { HERO_LIMIT, LIST_LIMIT } from "./constants";
-import { heroShapeFor } from "./helpers";
 import { TopTrackHero } from "./TopTrackHero";
 import { TopTracksEmpty } from "./TopTracksEmpty";
 import { TopTracksList } from "./TopTracksList";
@@ -18,13 +17,11 @@ import { TopTracksSkeleton } from "./TopTracksSkeleton";
 import { body, bodyFrame } from "./styles";
 import type { TopTracksProps } from "./types";
 
-export function TopTracks({ size, info }: TopTracksProps) {
+export function TopTracks({ info }: TopTracksProps) {
   const { t } = useTranslation("discover");
   const { lfmConfig, topTracks, isLoading, isError } = useLastfmFeeds();
 
-  const shape = heroShapeFor(size);
-
-  if (isLoading) return <TopTracksSkeleton shape={shape} />;
+  if (isLoading) return <TopTracksSkeleton />;
   if (isError) return <TopTracksEmpty reason="error" info={info} />;
   if (!lfmConfig || !lfmConfig.enabled) return <TopTracksEmpty reason="disabled" info={info} />;
   if (!lfmConfig.username) return <TopTracksEmpty reason="no-username" info={info} />;
@@ -33,8 +30,7 @@ export function TopTracks({ size, info }: TopTracksProps) {
   }
 
   const hero = topTracks.tracks[0];
-  const listLimit = LIST_LIMIT[shape];
-  const rest = topTracks.tracks.slice(HERO_LIMIT, HERO_LIMIT + listLimit);
+  const rest = topTracks.tracks.slice(HERO_LIMIT, HERO_LIMIT + LIST_LIMIT);
 
   return (
     <motion.section
@@ -52,8 +48,8 @@ export function TopTracks({ size, info }: TopTracksProps) {
         info={info}
       />
       <div className={bodyFrame()}>
-        <div className={body({ shape })}>
-          <TopTrackHero track={hero} shape={shape} />
+        <div className={body()}>
+          <TopTrackHero track={hero} />
           <TopTracksList tracks={rest} startRank={HERO_LIMIT + 1} />
         </div>
       </div>

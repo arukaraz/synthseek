@@ -2,13 +2,14 @@
 
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { ProgressBar } from "@components/ui/ProgressBar";
 
 import { percentOf } from "../helpers";
 import { CoverArt } from "../WidgetRow/CoverArt";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
-import { gapArtist, gapCard, gapCopy, gapCount, gapCover, gapHead, gapHeader, gapPercent } from "./styles";
+import { gapArtist, gapCard, gapCopy, gapCount, gapCover, gapHead, gapHeader, gapMissing, gapPercent } from "./styles";
 import type { GapCardProps } from "./types";
 
 export function GapCard({ gap, onOpen, onRequest, onOpenArtist }: GapCardProps) {
@@ -37,23 +38,25 @@ export function GapCard({ gap, onOpen, onRequest, onOpenArtist }: GapCardProps) 
         </div>
         <ProgressBar progress={share * 100} size="sm" />
       </div>
-      <ul className={widgetList()}>
-        {gap.missing.map((album) => (
-          <WidgetRow
-            key={album.id}
-            cover={album.cover}
-            seed={album.id}
-            title={album.name}
-            subtitle={album.year === null ? t("gaps.missing") : String(album.year)}
-            onSelect={() => onOpen(album)}
-            coverAction={{
-              kind: "request",
-              label: t("requestNamed", { name: album.name }),
-              onClick: () => onRequest(album),
-            }}
-          />
-        ))}
-      </ul>
+      <FadeScroll className={gapMissing()}>
+        <ul className={widgetList()}>
+          {gap.missing.map((album) => (
+            <WidgetRow
+              key={album.id}
+              cover={album.cover}
+              seed={album.id}
+              title={album.name}
+              subtitle={album.year === null ? t("gaps.missing") : String(album.year)}
+              onSelect={() => onOpen(album)}
+              coverAction={{
+                kind: "request",
+                label: t("requestNamed", { name: album.name }),
+                onClick: () => onRequest(album),
+              }}
+            />
+          ))}
+        </ul>
+      </FadeScroll>
     </div>
   );
 }

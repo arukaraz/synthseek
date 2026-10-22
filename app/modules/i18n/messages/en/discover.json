@@ -198,19 +198,13 @@
     },
     "sizes": {
       "S": "S",
-      "C": "C",
       "M": "M",
-      "MPlus": "M+",
-      "L": "L",
-      "XL": "XL"
+      "L": "L"
     },
     "sizeNames": {
       "S": "Small",
-      "C": "Card",
       "M": "Medium",
-      "MPlus": "Medium, tall",
-      "L": "Large",
-      "XL": "Extra large"
+      "L": "Large"
     },
     "gallery": {
       "title": "Add a widget",
@@ -329,7 +323,8 @@
     "plays_other": "{{count}} plays",
     "statPlays": "Plays",
     "statTime": "Listened",
-    "statArtist": "Top artist"
+    "statArtist": "Top artist",
+    "leaderBadge": "This week in {{year}}"
   },
   "stations": {
     "heading": "Stations for you",
@@ -384,17 +379,18 @@
   "rarities": {
     "title": "Your rarities",
     "subtitle": "ListenBrainz listens",
+    "subtitleMedian": "ListenBrainz listens · median {{median}}",
     "empty": "Not enough identified plays yet.",
-    "caption": "of your top tracks have under {{threshold}} listens worldwide. Median {{median}}.",
+    "caption": "of your top tracks have under {{threshold}} listens",
     "yours_one": "{{artist}} · {{count}} play by you",
     "yours_other": "{{artist}} · {{count}} plays by you"
   },
   "orbit": {
     "title": "Expand your orbit",
     "subtitle": "Albums from what you play",
+    "rail": "Albums in your orbit, scroll sideways",
     "empty": "No similar albums for what you play yet.",
-    "because": "Because you played {{title}}",
-    "row": "{{artist}} · because you played {{title}}"
+    "because": "Because you played {{title}}"
   },
   "charts": {
     "title": "Charts",
@@ -431,7 +427,8 @@
     "empty": "Your top artists are complete.",
     "have": "{{have}} of {{total}} releases",
     "missing": "Not in your library",
-    "openArtist": "Open {{artist}}"
+    "openArtist": "Open {{artist}}",
+    "rail": "All artists, scroll sideways"
   },
   "anniversaries": {
     "title": "Anniversaries",

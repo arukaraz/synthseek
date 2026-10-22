@@ -17,6 +17,7 @@ export function WidgetFrame({
   loading,
   note,
   action,
+  aside,
   compactOnPhone = false,
   children,
 }: WidgetFrameProps) {
@@ -33,6 +34,7 @@ export function WidgetFrame({
         titleId={titleId}
         headingLevel="h3"
         action={action}
+        aside={aside}
       />
       {loading ? (
         <div className={widgetFrameSkeleton()} />

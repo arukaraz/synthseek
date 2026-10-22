@@ -16,40 +16,32 @@ function renderInScroller(editing: boolean) {
     element.scrollTop = top;
     fireEvent.scroll(element);
   };
-  return { scroller, inner: screen.getByTestId("inner-list"), scrollTo };
+  return { scroller, scrollTo };
 }
 
 describe("BoardToolbar", () => {
-  it("gets the Customize button out of the way while the reader scrolls down", () => {
+  it("keeps the Customize button in place while the reader scrolls down", () => {
     const { scroller, scrollTo } = renderInScroller(false);
     const fab = screen.getByRole("button", { name: "Customize" });
 
+    scrollTo(scroller, 200);
+
+    expect(fab).toBeVisible();
     expect(fab).not.toHaveClass("opacity-0");
-    scrollTo(scroller, 200);
-
-    expect(fab).toHaveClass("opacity-0");
+    expect(fab).toHaveClass("pointer-events-auto");
   });
 
-  it("brings the Customize button back as soon as the reader scrolls up", () => {
-    const { scroller, scrollTo } = renderInScroller(false);
-    scrollTo(scroller, 200);
+  it("opens edit mode from the Customize button", () => {
+    const onCustomize = vi.fn();
+    render(<BoardToolbar editing={false} onCustomize={onCustomize} onDone={vi.fn()} onAddWidget={vi.fn()} />);
 
-    scrollTo(scroller, 150);
+    fireEvent.click(screen.getByRole("button", { name: "Customize" }));
 
-    expect(screen.getByRole("button", { name: "Customize" })).not.toHaveClass("opacity-0");
-  });
-
-  it("ignores a list scrolling inside a widget", () => {
-    const { inner, scrollTo } = renderInScroller(false);
-
-    scrollTo(inner, 200);
-
-    expect(screen.getByRole("button", { name: "Customize" })).not.toHaveClass("opacity-0");
+    expect(onCustomize).toHaveBeenCalledTimes(1);
   });
 
   it("keeps the edit controls in place whatever the scroll", () => {
     const { scroller, scrollTo } = renderInScroller(true);
-
     scrollTo(scroller, 200);
 
     expect(screen.getByRole("button", { name: "Done" })).toBeVisible();

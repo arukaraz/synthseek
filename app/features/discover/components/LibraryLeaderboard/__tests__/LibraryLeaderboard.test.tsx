@@ -53,7 +53,7 @@ describe("LibraryLeaderboard", () => {
   it("renders the skeleton while loading", () => {
     useLibrarySummaryMock.mockReturnValue(createLoadingQuery<LibrarySummary>());
 
-    const { container } = renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    const { container } = renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     expect(container.querySelector(".animate-pulse")).not.toBeNull();
   });
@@ -61,7 +61,7 @@ describe("LibraryLeaderboard", () => {
   it("renders the error empty state when the query errors", () => {
     useLibrarySummaryMock.mockReturnValue(createErrorQuery<LibrarySummary>(new Error("boom")));
 
-    renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     expect(screen.getByText("Failed to load library")).toBeInTheDocument();
   });
@@ -69,7 +69,7 @@ describe("LibraryLeaderboard", () => {
   it("renders the error empty state when there is no data", () => {
     useLibrarySummaryMock.mockReturnValue(createMockQuery<LibrarySummary | undefined>(undefined));
 
-    renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     expect(screen.getByText("Failed to load library")).toBeInTheDocument();
   });
@@ -77,7 +77,7 @@ describe("LibraryLeaderboard", () => {
   it("renders stats, the top artist hero and the rest of the rows", () => {
     useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary()));
 
-    renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     expect(screen.getByRole("heading", { name: "Your library" })).toBeInTheDocument();
     expect(screen.getByText("1,234")).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe("LibraryLeaderboard", () => {
   it("switches to genres when the genres tab is clicked", async () => {
     useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary()));
 
-    const { user } = renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    const { user } = renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     await user.click(screen.getByRole("tab", { name: "Genres" }));
 
@@ -105,7 +105,7 @@ describe("LibraryLeaderboard", () => {
   it("renders the artists empty state when there are no top artists", () => {
     useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary({ topArtists: [] })));
 
-    renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     expect(screen.getByText("No artists yet")).toBeInTheDocument();
   });
@@ -113,7 +113,7 @@ describe("LibraryLeaderboard", () => {
   it("renders the genres empty state when there are no top genres", async () => {
     useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary({ topGenres: [] })));
 
-    const { user } = renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    const { user } = renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     await user.click(screen.getByRole("tab", { name: "Genres" }));
 
@@ -123,7 +123,7 @@ describe("LibraryLeaderboard", () => {
   it("marks the active tab with aria-selected", () => {
     useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary()));
 
-    renderWithProviders(<LibraryLeaderboard size="M+" info="Library info" />);
+    renderWithProviders(<LibraryLeaderboard size="M" info="Library info" />);
 
     const tablist = screen.getByRole("tablist", { name: "Library leaderboard mode" });
     const artistsTab = within(tablist).getByRole("tab", { name: "Artists" });

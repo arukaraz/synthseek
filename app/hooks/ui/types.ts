@@ -177,10 +177,3 @@ export interface ScrollEdgesState<T extends HTMLElement> extends ScrollEdges {
   ref: (node: T | null) => void;
   node: T | null;
 }
-
-export type ScrollReveal = "show" | "hide" | "keep";
-
-export interface RevealOnScrollUpState<T extends HTMLElement> {
-  ref: (node: T | null) => void;
-  revealed: boolean;
-}

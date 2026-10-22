@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { describeScrobbleAge, scrobbleLayoutFor } from "../helpers";
 
 describe("scrobbleLayoutFor", () => {
-  it("uses the vertical timeline for the half-width M size", () => {
+  it("uses the vertical timeline for the quarter and half widths", () => {
+    expect(scrobbleLayoutFor("S")).toBe("timeline");
     expect(scrobbleLayoutFor("M")).toBe("timeline");
   });
 

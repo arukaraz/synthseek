@@ -1,7 +1,8 @@
-import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX, FAMILY_SPANS } from "@components/BoardGrid";
-import type { BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX } from "@components/BoardGrid";
+import type { BoardWidgetKey } from "@hooks/api/queries/board/types";
 
-import { BOARD_CATEGORY_ORDER } from "../ExploreBoard/constants";
+import { BOARD_CATEGORY_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
+import { spanOf } from "../ExploreBoard/helpers";
 import type { BoardCategory } from "../ExploreBoard/types";
 import { PREVIEW_BOARD_WIDTH, PREVIEW_BOX } from "./constants";
 import type { GalleryEntry, GalleryFilter, GalleryGroup, PreviewFrame } from "./types";
@@ -36,10 +37,10 @@ export function countInCategory(entries: readonly GalleryEntry[], category: Boar
   return entries.filter((entry) => entry.definition.category === category).length;
 }
 
-export function previewFrame(size: BoardSize): PreviewFrame {
+export function previewFrame(widget: BoardWidgetKey): PreviewFrame {
   const columns = BOARD_COLUMNS.wide;
   const column = (PREVIEW_BOARD_WIDTH - (columns - 1) * BOARD_GAP_PX) / columns;
-  const span = FAMILY_SPANS.wide[size];
+  const span = spanOf(widget, BOARD_WIDGETS[widget].defaultSize, "wide");
   const stageWidth = span.cols * column + (span.cols - 1) * BOARD_GAP_PX;
   const stageHeight = span.rows * BOARD_ROW_PX + (span.rows - 1) * BOARD_GAP_PX;
   const scale = Math.min(PREVIEW_BOX.width / stageWidth, PREVIEW_BOX.height / stageHeight);

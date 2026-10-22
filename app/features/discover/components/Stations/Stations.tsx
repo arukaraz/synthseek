@@ -12,9 +12,9 @@ import { useStartRadio } from "@hooks/ui/player";
 import { PlaySetCard } from "../PlaySetCard/PlaySetCard";
 import { CARD_ROW_SKELETONS } from "../constants";
 import { cardRowLimit } from "../helpers";
-import { cardRow, cardRowBody, cardRowSkeleton, widgetNote } from "../styles";
+import { cardRow, cardRowBody, cardRowSkeleton, cardRowVars, railScroller, widgetNote } from "../styles";
 import { STATION_ACCENTS, STATION_TAG_KEYS, STATION_TITLE_KEYS } from "./constants";
-import { stationRail, stationScroller } from "./styles";
+import { stationRail } from "./styles";
 import type { StationsProps } from "./types";
 
 export function Stations({ size, info }: StationsProps) {
@@ -55,7 +55,7 @@ export function Stations({ size, info }: StationsProps) {
       />
       {isLoading ? (
         <div className={cardRowBody()}>
-          <div className={cardRow()}>
+          <div className={cardRow()} style={cardRowVars(limit)}>
             {CARD_ROW_SKELETONS.slice(0, limit).map((index) => (
               <div key={index} className={cardRowSkeleton()} />
             ))}
@@ -65,13 +65,15 @@ export function Stations({ size, info }: StationsProps) {
         <p className={widgetNote()}>{isError ? t("history.error") : t("stations.empty")}</p>
       ) : rail ? (
         <div className={cardRowBody()}>
-          <FadeScroll axis="x" className={stationScroller()} label={t("stations.rail")}>
+          <FadeScroll axis="x" arrows className={railScroller()} label={t("stations.rail")}>
             <div className={stationRail()}>{cards}</div>
           </FadeScroll>
         </div>
       ) : (
         <div className={cardRowBody()}>
-          <div className={cardRow()}>{cards}</div>
+          <div className={cardRow()} style={cardRowVars(limit)}>
+            {cards}
+          </div>
         </div>
       )}
     </section>

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { fireEvent, renderWithProviders, screen } from "@test/test-utils";
+import { fireEvent, renderWithProviders, screen, within } from "@test/test-utils";
 
 import { LastYear } from "../LastYear";
 
@@ -31,17 +31,22 @@ afterEach(() => {
 });
 
 describe("LastYear", () => {
-  it("summarises the week and ranks its tracks", () => {
+  it("leads with the week's top track and its summary, then ranks the rest", () => {
     weekQuery.mockReturnValue({ data: WEEK, isLoading: false, isError: false });
     renderWithProviders(<LastYear size="M" info="x" />);
 
-    expect(screen.getByText("12")).toBeInTheDocument();
-    expect(screen.getByText("2h")).toBeInTheDocument();
+    const leader = screen.getByRole("article");
+    expect(leader).toHaveTextContent("This week in 2025");
+    expect(leader).toHaveTextContent("Joga");
+    expect(leader).toHaveTextContent("4 plays");
+    expect(within(leader).getByText("12")).toBeInTheDocument();
+    expect(within(leader).getByText("2h")).toBeInTheDocument();
     expect(screen.getAllByText("Bjork").length).toBeGreaterThan(1);
     const rows = screen.getAllByRole("listitem");
-    expect(rows[0]).toHaveTextContent("Joga");
-    expect(rows[0]).toHaveTextContent("4 plays");
-    expect(rows[1]).toHaveTextContent("1 play");
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent("Hunter");
+    expect(rows[0]).toHaveTextContent("1 play");
+    expect(screen.getByRole("list")).toHaveAttribute("start", "2");
   });
 
   it("plays that week's tracks from the header", () => {

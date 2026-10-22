@@ -12,6 +12,7 @@ export interface WidgetFrameProps {
   loading: boolean;
   note: string | null;
   action?: WidgetHeaderAction;
+  aside?: ReactNode;
   compactOnPhone?: boolean;
   children: ReactNode;
 }

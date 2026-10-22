@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -8,15 +8,19 @@ import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import { useSaveBoardLayout } from "@hooks/api/mutations/board/useSaveBoardLayout";
 import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import { focusBoardTile } from "@hooks/ui/board/helpers";
+import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
+import { useBoardFlip } from "@hooks/ui/board/useBoardFlip";
 
 import { BOARD_SIZE_NAME_KEYS, BOARD_WIDGETS } from "../components/ExploreBoard/constants";
 import {
   appendWidget,
   layoutOf,
   moveItem,
+  orderKeyOf,
   removeItem,
   resizeItem,
+  sameSlot,
   uniqueTileId,
 } from "../components/ExploreBoard/helpers";
 import type { BoardEditor, MoveDelta } from "../components/ExploreBoard/types";
@@ -27,6 +31,7 @@ export function useBoardEditor(items: BoardItem[]): BoardEditor {
   const [editing, setEditing] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
+  const flipRef = useRef<BoardFlip | null>(null);
 
   const nameOf = useCallback((widget: BoardWidgetKey) => t(BOARD_WIDGETS[widget].titleKey), [t]);
   const commit = useCallback((next: BoardItem[]) => save(layoutOf(next)), [save]);
@@ -47,7 +52,11 @@ export function useBoardEditor(items: BoardItem[]): BoardEditor {
     },
     [commit, offerUndo, items, t]
   );
-  const drag = useBoardDrag({ items, onDrop: drop });
+  const settling = useCallback(() => flipRef.current?.settling() ?? false, []);
+  const drag = useBoardDrag({ items, onDrop: drop, sameSlot, settling });
+  const displayItems = drag.order ?? items;
+  const flip = useBoardFlip({ orderKey: orderKeyOf(displayItems), skipId: drag.draggingId });
+  flipRef.current = flip;
 
   const move = useCallback(
     (id: string, delta: MoveDelta) => {
@@ -119,10 +128,11 @@ export function useBoardEditor(items: BoardItem[]): BoardEditor {
   );
 
   return {
+    rootRef: flip.ref,
     editing,
     galleryOpen,
     announcement,
-    displayItems: drag.order ?? items,
+    displayItems,
     draggingId: drag.draggingId,
     startEditing,
     stopEditing,

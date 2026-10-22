@@ -58,7 +58,7 @@ describe("TopTracks", () => {
   it("renders the skeleton while loading", () => {
     useLastfmFeedsMock.mockReturnValue(buildResult({ isLoading: true }));
 
-    const { container } = renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    const { container } = renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(container.querySelector(".animate-pulse")).not.toBeNull();
     expect(screen.queryByTestId("hero")).not.toBeInTheDocument();
@@ -67,7 +67,7 @@ describe("TopTracks", () => {
   it("renders the error empty state when the query errors", () => {
     useLastfmFeedsMock.mockReturnValue(buildResult({ isError: true }));
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByText(enDiscover.topTracks.empty.error)).toBeInTheDocument();
   });
@@ -75,7 +75,7 @@ describe("TopTracks", () => {
   it("renders the disabled empty state when Last.fm is off", () => {
     useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: buildConfig({ enabled: false }) }));
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByText(enDiscover.topTracks.empty.disabled)).toBeInTheDocument();
   });
@@ -83,7 +83,7 @@ describe("TopTracks", () => {
   it("renders the disabled empty state when the config is missing", () => {
     useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: undefined }));
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByText(enDiscover.topTracks.empty.disabled)).toBeInTheDocument();
   });
@@ -91,7 +91,7 @@ describe("TopTracks", () => {
   it("renders the no-username empty state when the username is empty", () => {
     useLastfmFeedsMock.mockReturnValue(buildResult({ lfmConfig: buildConfig({ username: "" }) }));
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByText(enDiscover.topTracks.empty.noUsername)).toBeInTheDocument();
   });
@@ -99,7 +99,7 @@ describe("TopTracks", () => {
   it("renders the no-data empty state when the feed is not ready", () => {
     useLastfmFeedsMock.mockReturnValue(buildResult({ topTracks: { status: "empty", tracks: [] } }));
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByText(enDiscover.topTracks.empty.noData)).toBeInTheDocument();
   });
@@ -107,7 +107,7 @@ describe("TopTracks", () => {
   it("renders the no-data empty state when the feed is absent", () => {
     useLastfmFeedsMock.mockReturnValue(buildResult({ topTracks: null }));
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByText(enDiscover.topTracks.empty.noData)).toBeInTheDocument();
   });
@@ -117,7 +117,7 @@ describe("TopTracks", () => {
       buildResult({ topTracks: { status: "ready", tracks: [], generatedAt: "2026-05-29T07:00:00.000Z" } })
     );
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByText(enDiscover.topTracks.empty.noData)).toBeInTheDocument();
   });
@@ -137,7 +137,7 @@ describe("TopTracks", () => {
       })
     );
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByTestId("hero")).toHaveAttribute("data-id", "hero");
     expect(screen.getByTestId("list")).toHaveAttribute("data-count", "2");
@@ -145,25 +145,14 @@ describe("TopTracks", () => {
     expect(screen.getByRole("heading", { name: enDiscover.topTracks.title })).toBeInTheDocument();
   });
 
-  it("caps the list at eight rows past the hero in the tall size", () => {
+  it("caps the list at eight rows past the hero", () => {
     const tracks = Array.from({ length: 12 }, (_, i) => createTopTrack({ catalogTrackId: `t-${i}` }));
     useLastfmFeedsMock.mockReturnValue(
       buildResult({ topTracks: { status: "ready", tracks, generatedAt: "2026-05-29T07:00:00.000Z" } })
     );
 
-    renderWithProviders(<TopTracks size="M+" info="Your top tracks" />);
+    renderWithProviders(<TopTracks info="Your top tracks" />);
 
     expect(screen.getByTestId("list")).toHaveAttribute("data-count", "8");
-  });
-
-  it("caps the list at three rows past the hero in the medium size", () => {
-    const tracks = Array.from({ length: 12 }, (_, i) => createTopTrack({ catalogTrackId: `t-${i}` }));
-    useLastfmFeedsMock.mockReturnValue(
-      buildResult({ topTracks: { status: "ready", tracks, generatedAt: "2026-05-29T07:00:00.000Z" } })
-    );
-
-    renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
-
-    expect(screen.getByTestId("list")).toHaveAttribute("data-count", "3");
   });
 });

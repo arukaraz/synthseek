@@ -2,14 +2,13 @@
 
 import { SKELETON_CELLS } from "./constants";
 import { requestsBody, requestsList, skeletonCell } from "./styles";
-import type { RecentRequestsSkeletonProps } from "./types";
 
-export function RecentRequestsSkeleton({ layout }: RecentRequestsSkeletonProps) {
+export function RecentRequestsSkeleton() {
   return (
     <div className={requestsBody()}>
-      <div className={requestsList({ layout })}>
+      <div className={requestsList()}>
         {Array.from({ length: SKELETON_CELLS }).map((_, i) => (
-          <div key={i} className={skeletonCell({ layout })} />
+          <div key={i} className={skeletonCell()} />
         ))}
       </div>
     </div>

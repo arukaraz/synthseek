@@ -24,31 +24,31 @@ export function AnalyticsBoard() {
   return (
     <SettingsCard title={t("overview.analytics.title")} description={t("overview.analytics.description")}>
       <BoardGrid device={device}>
-        <AnalyticsCell device={device} size="S">
+        <AnalyticsCell device={device} size="S" height="short">
           <PlaysTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="S">
+        <AnalyticsCell device={device} size="S" height="short">
           <ListeningTimeTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="S">
+        <AnalyticsCell device={device} size="S" height="short">
           <AddedTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="S">
+        <AnalyticsCell device={device} size="S" height="short">
           <DownloadsTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="M">
+        <AnalyticsCell device={device} size="M" height="regular">
           <DecadesTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="M">
+        <AnalyticsCell device={device} size="M" height="regular">
           <QualityTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="M">
+        <AnalyticsCell device={device} size="M" height="regular">
           <ScrobblesTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="M">
+        <AnalyticsCell device={device} size="M" height="regular">
           <GrowthTile />
         </AnalyticsCell>
-        <AnalyticsCell device={device} size="L">
+        <AnalyticsCell device={device} size="L" height="regular">
           <ListeningClockTile />
         </AnalyticsCell>
       </BoardGrid>

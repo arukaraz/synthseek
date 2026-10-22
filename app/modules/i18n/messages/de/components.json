@@ -45,6 +45,10 @@
   "infoTooltip": {
     "trigger": "Weitere Informationen"
   },
+  "fadeScroll": {
+    "scrollLeft": "Nach links scrollen",
+    "scrollRight": "Nach rechts scrollen"
+  },
   "trackStatus": {
     "moreInfo": "Mehr Infos: {{label}}"
   },

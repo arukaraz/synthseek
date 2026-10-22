@@ -7,22 +7,23 @@ import { artworkProxySrc } from "@utils/artworkProxy";
 import { Disc } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+
 import { cardArt, cardBadge, cardBase, cardCopy, cardMain, cardParent, cardTime, cardTitle } from "./styles";
 import type { RecentRequestCardProps } from "./types";
 
-export function RecentRequestCard({ request, layout }: RecentRequestCardProps) {
+export function RecentRequestCard({ request }: RecentRequestCardProps) {
   const { t } = useTranslation("discover");
   const parentArt = request.parent.album_art;
   const timeAgo = formatRelativeTime(new Date(request.created_at));
 
   return (
-    <article className={cardBase({ layout })}>
-      <span className={cardTime({ layout })}>{timeAgo}</span>
+    <article className={cardBase()}>
+      <span className={cardTime()}>{timeAgo}</span>
       <div className={cardBadge()}>
         <StatusBadge status={request.status} size="sm" showIcon />
       </div>
       <div className={cardMain()}>
-        <div className={cardArt({ layout })}>
+        <div className={cardArt()}>
           {parentArt ? (
             <Image
               src={artworkProxySrc(parentArt)}

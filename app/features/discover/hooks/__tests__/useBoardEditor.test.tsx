@@ -29,7 +29,7 @@ vi.mock("@hooks/ui/board/useBoardDrag", () => ({
 const ITEMS: BoardItem[] = [
   { id: "a", widget: "scrobbles", size: "M" },
   { id: "b", widget: "requests", size: "M" },
-  { id: "c", widget: "mixes", size: "XL" },
+  { id: "c", widget: "mixes", size: "L" },
 ];
 
 function lastSavedIds(): string[] {

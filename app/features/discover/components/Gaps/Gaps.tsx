@@ -10,8 +10,9 @@ import { useContentRequestFlow } from "@features/search/components/ContentReques
 import { useDiscographyGaps } from "@hooks/api/queries/analytics/useDiscographyGaps";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { railScroller } from "../styles";
 import { GapCard } from "./GapCard";
-import { gapsBody, gapsGrid } from "./styles";
+import { gapsBody, gapsRail } from "./styles";
 
 export function Gaps({ info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
@@ -30,8 +31,8 @@ export function Gaps({ info }: BoardWidgetProps) {
       note={isError ? t("board.loadError") : gaps.length === 0 ? t("gaps.empty") : null}
     >
       <div className={gapsBody()}>
-        <FadeScroll>
-          <div className={gapsGrid()}>
+        <FadeScroll axis="x" arrows className={railScroller()} label={t("gaps.rail")}>
+          <div className={gapsRail()}>
             {gaps.map((gap) => (
               <GapCard
                 key={gap.artist}

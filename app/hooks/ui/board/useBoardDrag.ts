@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 
-import { BOARD_TILE_SELECTOR } from "./constants";
+import { BOARD_TILE_SELECTOR, DRAG_REORDER_TRAVEL_PX } from "./constants";
 import {
   autoscrollDelta,
   createGhost,
@@ -11,19 +11,20 @@ import {
   placeGhost,
   reorderAround,
   sameOrder,
+  sameTarget,
   scrollParentOf,
+  swapItems,
   tileUnderPointer,
+  travelled,
   viewportOf,
 } from "./helpers";
-import type { BoardDragItem, BoardDragState, PointerPoint, UseBoardDragOptions } from "./types";
+import type { BoardDragItem, BoardDragState, DropTarget, PointerPoint, UseBoardDragOptions } from "./types";
 
-export function useBoardDrag<T extends BoardDragItem>({ items, onDrop }: UseBoardDragOptions<T>): BoardDragState<T> {
+export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptions<T>): BoardDragState<T> {
   const [order, setOrder] = useState<T[] | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
-  const itemsRef = useRef(items);
-  itemsRef.current = items;
-  const onDropRef = useRef(onDrop);
-  onDropRef.current = onDrop;
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
   const cancelRef = useRef<(() => void) | null>(null);
 
   useEffect(() => () => cancelRef.current?.(), []);
@@ -38,13 +39,15 @@ export function useBoardDrag<T extends BoardDragItem>({ items, onDrop }: UseBoar
     event.preventDefault();
     cancelRef.current?.();
 
-    const start = [...itemsRef.current];
+    const start = [...optionsRef.current.items];
     let current = start;
     const tileRect = tile.getBoundingClientRect();
     const offset = { x: event.clientX - tileRect.left, y: event.clientY - tileRect.top };
     const scroller = scrollParentOf(tile);
     const pointerId = event.pointerId;
     let last: PointerPoint = { x: event.clientX, y: event.clientY };
+    let settledAt: PointerPoint = last;
+    let lastTarget: DropTarget | null = null;
     let frame = 0;
 
     placeGhost(ghost, last, offset);
@@ -61,13 +64,24 @@ export function useBoardDrag<T extends BoardDragItem>({ items, onDrop }: UseBoar
         scroller.scrollTop += delta;
         if (scroller.scrollTop !== before) frame = requestAnimationFrame(tick);
       }
+      if (optionsRef.current.settling?.()) return;
+      if (travelled(settledAt, last) < DRAG_REORDER_TRAVEL_PX) return;
       const target = tileUnderPointer(last, id);
       const targetId = target?.dataset.boardTile;
       if (!target || !targetId) return;
-      const before = insertsBefore(target.getBoundingClientRect(), last, tile.getBoundingClientRect());
-      const next = reorderAround(current, id, targetId, before);
+      const intent: DropTarget = {
+        id: targetId,
+        before: insertsBefore(target.getBoundingClientRect(), last, tile.getBoundingClientRect()),
+      };
+      if (sameTarget(lastTarget, intent)) return;
+      lastTarget = intent;
+      const dragged = current.find((item) => item.id === id);
+      const over = current.find((item) => item.id === targetId);
+      const swap = dragged !== undefined && over !== undefined && optionsRef.current.sameSlot?.(dragged, over) === true;
+      const next = swap ? swapItems(current, id, targetId) : reorderAround(current, id, targetId, intent.before);
       if (sameOrder(next, current)) return;
       current = next;
+      settledAt = last;
       setOrder(next);
     };
 
@@ -86,7 +100,7 @@ export function useBoardDrag<T extends BoardDragItem>({ items, onDrop }: UseBoar
       ghost.remove();
       if (handle.hasPointerCapture(pointerId)) handle.releasePointerCapture(pointerId);
       cancelRef.current = null;
-      if (commit && !sameOrder(current, start)) onDropRef.current(current);
+      if (commit && !sameOrder(current, start)) optionsRef.current.onDrop(current);
       setOrder(null);
       setDraggingId(null);
     };

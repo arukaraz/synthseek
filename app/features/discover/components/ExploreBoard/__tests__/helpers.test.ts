@@ -9,12 +9,15 @@ import {
   boardKeyAction,
   cycleSize,
   displayedSize,
+  heightOf,
   layoutOf,
   moveItem,
   packBoard,
   placementsById,
   removeItem,
   resizeItem,
+  sizesOf,
+  spanOf,
   uniqueTileId,
   widgetsOnBoard,
 } from "../helpers";
@@ -22,6 +25,24 @@ import {
 describe("BOARD_WIDGET_ORDER", () => {
   it("lists every registered widget exactly once", () => {
     expect([...BOARD_WIDGET_ORDER].sort()).toEqual(Object.keys(BOARD_WIDGETS).sort());
+  });
+});
+
+describe("BOARD_WIDGETS", () => {
+  it("offers every widget its default size and keeps every narrow override among its sizes", () => {
+    for (const definition of Object.values(BOARD_WIDGETS)) {
+      expect(sizesOf(definition)).toContain(definition.defaultSize);
+      for (const target of Object.values(definition.narrowSizes ?? {})) {
+        expect(sizesOf(definition)).toContain(target);
+      }
+    }
+  });
+
+  it("packs the default board without leaving a hole on a wide screen", () => {
+    const tiles = packBoard(DEFAULT_BOARD, "wide");
+    const bottom = Math.max(...tiles.map((tile) => tile.row + tile.rows));
+    const covered = tiles.reduce((sum, tile) => sum + tile.cols * tile.rows, 0);
+    expect(covered).toBe(bottom * 12);
   });
 });
 
@@ -43,11 +64,38 @@ describe("boardKeyAction", () => {
   });
 });
 
+describe("sizesOf", () => {
+  it("lists the widths a widget offers from narrowest to widest", () => {
+    expect(sizesOf(BOARD_WIDGETS.scrobbles)).toEqual(["S", "M", "L"]);
+    expect(sizesOf(BOARD_WIDGETS.onRepeat)).toEqual(["S"]);
+    expect(sizesOf(BOARD_WIDGETS.mixes)).toEqual(["M", "L"]);
+  });
+});
+
+describe("heightOf and spanOf", () => {
+  it("reads the height a widget declares for a width", () => {
+    expect(heightOf("mixes", "M")).toBe("tall");
+    expect(heightOf("mixes", "L")).toBe("regular");
+    expect(heightOf("onRepeat", "S")).toBe("tall");
+  });
+
+  it("falls back to the height of the default size for a width the widget does not offer", () => {
+    expect(heightOf("onRepeat", "L")).toBe("tall");
+  });
+
+  it("turns width and height into column and row spans per device", () => {
+    expect(spanOf("onRepeat", "S", "wide")).toEqual({ cols: 3, rows: 7 });
+    expect(spanOf("mixes", "L", "wide")).toEqual({ cols: 12, rows: 4 });
+    expect(spanOf("mixes", "M", "narrow")).toEqual({ cols: 4, rows: 7 });
+    expect(spanOf("scrobbles", "S", "narrow")).toEqual({ cols: 2, rows: 4 });
+  });
+});
+
 describe("cycleSize", () => {
   it("steps through the offered sizes and wraps at both ends", () => {
-    expect(cycleSize(["M", "L", "XL"], "M", 1)).toBe("L");
-    expect(cycleSize(["M", "L", "XL"], "XL", 1)).toBe("M");
-    expect(cycleSize(["M", "L", "XL"], "M", -1)).toBe("XL");
+    expect(cycleSize(["S", "M", "L"], "S", 1)).toBe("M");
+    expect(cycleSize(["S", "M", "L"], "L", 1)).toBe("S");
+    expect(cycleSize(["S", "M", "L"], "S", -1)).toBe("L");
   });
 });
 
@@ -73,7 +121,6 @@ describe("placementsById", () => {
       ],
       "wide"
     );
-
     expect(placementsById(placed).get("y")?.col).toBe(6);
   });
 });
@@ -81,47 +128,44 @@ describe("placementsById", () => {
 const TRENDING: BoardItem = { id: "t", widget: "trending", size: "L" };
 const SCROBBLES: BoardItem = { id: "s", widget: "scrobbles", size: "M" };
 const REQUESTS: BoardItem = { id: "r", widget: "requests", size: "M" };
-const GENRES: BoardItem = { id: "g", widget: "genres", size: "XL" };
+const GENRES: BoardItem = { id: "g", widget: "genres", size: "L" };
 
 describe("boardItemsOf", () => {
   it("returns a fresh copy of the default board when nothing is saved", () => {
     const items = boardItemsOf(null);
-
     expect(items).toEqual(DEFAULT_BOARD);
     expect(items[0]).not.toBe(DEFAULT_BOARD[0]);
   });
 
   it("keeps a saved size the widget offers", () => {
-    expect(boardItemsOf({ schemaVersion: 1, items: [SCROBBLES] })).toEqual([SCROBBLES]);
+    expect(boardItemsOf({ schemaVersion: 2, items: [SCROBBLES] })).toEqual([SCROBBLES]);
   });
 
   it("falls back to the default size when the saved size is not offered by the widget", () => {
-    const items = boardItemsOf({ schemaVersion: 1, items: [{ id: "s", widget: "scrobbles", size: "XL" }] });
-
-    expect(items).toEqual([{ id: "s", widget: "scrobbles", size: "L" }]);
+    const items = boardItemsOf({ schemaVersion: 2, items: [{ id: "o", widget: "onRepeat", size: "L" }] });
+    expect(items).toEqual([{ id: "o", widget: "onRepeat", size: "S" }]);
   });
 
   it("keeps an empty saved board empty", () => {
-    expect(boardItemsOf({ schemaVersion: 1, items: [] })).toEqual([]);
+    expect(boardItemsOf({ schemaVersion: 2, items: [] })).toEqual([]);
   });
 });
 
 describe("layoutOf", () => {
   it("wraps the items with the schema version and copies them", () => {
     const layout = layoutOf([SCROBBLES]);
-
-    expect(layout).toEqual({ schemaVersion: 1, items: [SCROBBLES] });
+    expect(layout).toEqual({ schemaVersion: 2, items: [SCROBBLES] });
     expect(layout.items[0]).not.toBe(SCROBBLES);
   });
 });
 
 describe("displayedSize", () => {
   it("shows the saved size on a wide board", () => {
-    expect(displayedSize(GENRES, "wide")).toBe("XL");
+    expect(displayedSize(GENRES, "wide")).toBe("L");
   });
 
   it("applies the narrow override of the widget on a narrow board", () => {
-    expect(displayedSize(GENRES, "narrow")).toBe("M+");
+    expect(displayedSize(GENRES, "narrow")).toBe("M");
     expect(displayedSize({ ...SCROBBLES, size: "L" }, "narrow")).toBe("M");
   });
 
@@ -133,7 +177,6 @@ describe("displayedSize", () => {
 describe("packBoard", () => {
   it("places two half-width tiles side by side on one row", () => {
     const tiles = packBoard([SCROBBLES, REQUESTS], "wide");
-
     expect(tiles.map(({ col, row, cols, rows }) => ({ col, row, cols, rows }))).toEqual([
       { col: 0, row: 0, cols: 6, rows: 4 },
       { col: 6, row: 0, cols: 6, rows: 4 },
@@ -142,21 +185,24 @@ describe("packBoard", () => {
 
   it("drops a full-row tile below the tiles before it", () => {
     const tiles = packBoard([SCROBBLES, TRENDING], "wide");
-
     expect(tiles[1]).toMatchObject({ col: 0, row: 4, cols: 12, rows: 4 });
   });
 
   it("never places a later tile before an earlier one in reading order", () => {
     const tiles = packBoard([SCROBBLES, TRENDING, REQUESTS], "wide");
-
     expect(tiles[2]).toMatchObject({ col: 0, row: 8 });
+  });
+
+  it("gives a tall tile the rows its widget asks for", () => {
+    const tiles = packBoard([{ id: "o", widget: "onRepeat", size: "S" }, SCROBBLES], "wide");
+    expect(tiles[0]).toMatchObject({ col: 0, row: 0, cols: 3, rows: 7 });
+    expect(tiles[1]).toMatchObject({ col: 3, row: 0, cols: 6, rows: 4 });
   });
 
   it("stacks every tile full width on a narrow board and applies narrow overrides", () => {
     const tiles = packBoard([SCROBBLES, GENRES], "narrow");
-
     expect(tiles[0]).toMatchObject({ col: 0, row: 0, cols: 4, rows: 4, size: "M" });
-    expect(tiles[1]).toMatchObject({ col: 0, row: 4, cols: 4, rows: 7, size: "M+" });
+    expect(tiles[1]).toMatchObject({ col: 0, row: 4, cols: 4, rows: 7, size: "M" });
   });
 
   it("returns no tiles for an empty board", () => {
@@ -180,7 +226,6 @@ describe("moveItem", () => {
   it("returns an unchanged copy for an unknown id or the same index", () => {
     const unknown = moveItem(items, "nope", 0);
     const same = moveItem(items, "s", 1);
-
     expect(unknown).toEqual(items);
     expect(unknown).not.toBe(items);
     expect(same).toEqual(items);
@@ -193,12 +238,11 @@ describe("resizeItem", () => {
   });
 
   it("ignores a size the widget does not offer", () => {
-    expect(resizeItem([SCROBBLES], "s", "XL")).toEqual([SCROBBLES]);
+    expect(resizeItem([REQUESTS], "r", "L")).toEqual([REQUESTS]);
   });
 
   it("leaves other items untouched", () => {
     const next = resizeItem([SCROBBLES, REQUESTS], "s", "L");
-
     expect(next[1]).toBe(REQUESTS);
   });
 });
@@ -211,14 +255,13 @@ describe("removeItem", () => {
 
 describe("appendWidget", () => {
   it("appends the widget at its default size under the given id", () => {
-    expect(appendWidget([SCROBBLES], "mixes", "m")).toEqual([SCROBBLES, { id: "m", widget: "mixes", size: "XL" }]);
+    expect(appendWidget([SCROBBLES], "mixes", "m")).toEqual([SCROBBLES, { id: "m", widget: "mixes", size: "L" }]);
   });
 });
 
 describe("widgetsOnBoard", () => {
   it("maps each widget on the board to its tile id", () => {
     const onBoard = widgetsOnBoard([SCROBBLES, REQUESTS]);
-
     expect(onBoard.get("scrobbles")).toBe("s");
     expect(onBoard.get("requests")).toBe("r");
     expect(onBoard.has("mixes")).toBe(false);

@@ -198,19 +198,13 @@
     },
     "sizes": {
       "S": "S",
-      "C": "C",
       "M": "M",
-      "MPlus": "M+",
-      "L": "L",
-      "XL": "XL"
+      "L": "L"
     },
     "sizeNames": {
       "S": "Pequeño",
-      "C": "Tarjeta",
       "M": "Mediano",
-      "MPlus": "Mediano, alto",
-      "L": "Grande",
-      "XL": "Muy grande"
+      "L": "Grande"
     },
     "gallery": {
       "title": "Añadir un widget",
@@ -329,7 +323,8 @@
     "plays_other": "{{count}} reproducciones",
     "statPlays": "Reproducciones",
     "statTime": "Escuchado",
-    "statArtist": "Artista principal"
+    "statArtist": "Artista principal",
+    "leaderBadge": "Esta semana en {{year}}"
   },
   "stations": {
     "heading": "Radios para ti",
@@ -384,17 +379,18 @@
   "rarities": {
     "title": "Tus rarezas",
     "subtitle": "Escuchas en ListenBrainz",
+    "subtitleMedian": "Escuchas en ListenBrainz · mediana {{median}}",
     "empty": "Aún no hay suficientes reproducciones identificadas.",
-    "caption": "de tus canciones más escuchadas tienen menos de {{threshold}} escuchas en el mundo. Mediana {{median}}.",
+    "caption": "de tus canciones más escuchadas tienen menos de {{threshold}} escuchas",
     "yours_one": "{{artist}} · {{count}} reproducción tuya",
     "yours_other": "{{artist}} · {{count}} reproducciones tuyas"
   },
   "orbit": {
     "title": "Amplía tu órbita",
     "subtitle": "Álbumes a partir de lo que escuchas",
+    "rail": "Álbumes en tu órbita, desliza hacia los lados",
     "empty": "Aún no hay álbumes parecidos a lo que escuchas.",
-    "because": "Porque escuchaste {{title}}",
-    "row": "{{artist}} · porque escuchaste {{title}}"
+    "because": "Porque escuchaste {{title}}"
   },
   "charts": {
     "title": "Listas",
@@ -431,7 +427,8 @@
     "empty": "Tus artistas principales están completos.",
     "have": "{{have}} de {{total}} lanzamientos",
     "missing": "No está en tu biblioteca",
-    "openArtist": "Abrir {{artist}}"
+    "openArtist": "Abrir {{artist}}",
+    "rail": "Todos los artistas, desliza hacia los lados"
   },
   "anniversaries": {
     "title": "Aniversarios",

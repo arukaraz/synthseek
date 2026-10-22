@@ -198,19 +198,13 @@
     },
     "sizes": {
       "S": "S",
-      "C": "C",
       "M": "M",
-      "MPlus": "M+",
-      "L": "L",
-      "XL": "XL"
+      "L": "L"
     },
     "sizeNames": {
       "S": "Klein",
-      "C": "Karte",
       "M": "Mittel",
-      "MPlus": "Mittel, hoch",
-      "L": "Groß",
-      "XL": "Sehr groß"
+      "L": "Groß"
     },
     "gallery": {
       "title": "Widget hinzufügen",
@@ -329,7 +323,8 @@
     "plays_other": "{{count}} Wiedergaben",
     "statPlays": "Wiedergaben",
     "statTime": "Gehört",
-    "statArtist": "Top-Künstler"
+    "statArtist": "Top-Künstler",
+    "leaderBadge": "Diese Woche {{year}}"
   },
   "stations": {
     "heading": "Sender für dich",
@@ -384,17 +379,18 @@
   "rarities": {
     "title": "Deine Raritäten",
     "subtitle": "ListenBrainz-Wiedergaben",
+    "subtitleMedian": "ListenBrainz-Wiedergaben · Median {{median}}",
     "empty": "Noch nicht genug erkannte Wiedergaben.",
-    "caption": "deiner Top-Titel haben weltweit unter {{threshold}} Wiedergaben. Median {{median}}.",
+    "caption": "deiner Top-Titel haben unter {{threshold}} Wiedergaben",
     "yours_one": "{{artist}} · {{count}} Wiedergabe von dir",
     "yours_other": "{{artist}} · {{count}} Wiedergaben von dir"
   },
   "orbit": {
     "title": "Erweitere deinen Orbit",
     "subtitle": "Alben aus dem, was du hörst",
+    "rail": "Alben in deinem Orbit, seitlich scrollen",
     "empty": "Noch keine ähnlichen Alben zu dem, was du hörst.",
-    "because": "Weil du {{title}} gehört hast",
-    "row": "{{artist}} · weil du {{title}} gehört hast"
+    "because": "Weil du {{title}} gehört hast"
   },
   "charts": {
     "title": "Charts",
@@ -431,7 +427,8 @@
     "empty": "Deine Top-Künstler sind vollständig.",
     "have": "{{have}} von {{total}} Veröffentlichungen",
     "missing": "Nicht in deiner Bibliothek",
-    "openArtist": "{{artist}} öffnen"
+    "openArtist": "{{artist}} öffnen",
+    "rail": "Alle Künstler, seitlich scrollen"
   },
   "anniversaries": {
     "title": "Jubiläen",

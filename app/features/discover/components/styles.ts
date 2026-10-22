@@ -1,3 +1,4 @@
+import type { CssVars } from "@theme/utilities/types";
 import { cn } from "@utils/cn";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -9,7 +10,15 @@ export const NAV_BUTTON_CLASSES = cn(
 
 export const cardRowBody = cva("@container flex min-h-0 flex-1 flex-col");
 
-export const cardRow = cva("grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-3 @3xl:grid-cols-4 @3xl:gap-4");
+export const cardRow = cva(
+  "grid min-h-0 flex-1 auto-rows-fr gap-3 [grid-template-columns:repeat(var(--card-cols),minmax(0,1fr))]"
+);
+
+export function cardRowVars(columns: number): CssVars {
+  return { "--card-cols": String(columns) };
+}
+
+export const railScroller = cva("flex min-h-0 flex-1");
 
 export const cardRowSkeleton = cva("bg-fg/5 h-full min-h-32 animate-pulse rounded-2xl");
 

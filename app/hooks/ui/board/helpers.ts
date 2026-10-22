@@ -5,7 +5,7 @@ import {
   BOARD_TILE_SELECTOR,
   DRAG_GHOST_CLASS,
 } from "./constants";
-import type { BoardDragItem, BoxRect, PointerPoint, ScrollViewport } from "./types";
+import type { BoardDragItem, BoxRect, DropTarget, PointerPoint, ScrollViewport, SlideResult } from "./types";
 
 export function reorderAround<T extends BoardDragItem>(
   items: readonly T[],
@@ -20,6 +20,70 @@ export function reorderAround<T extends BoardDragItem>(
   if (at === -1) return [...items];
   rest.splice(before ? at : at + 1, 0, moving);
   return rest;
+}
+
+export function swapItems<T extends BoardDragItem>(items: readonly T[], dragId: string, targetId: string): T[] {
+  const from = items.findIndex((item) => item.id === dragId);
+  const to = items.findIndex((item) => item.id === targetId);
+  if (from === -1 || to === -1 || from === to) return [...items];
+  const next = [...items];
+  const dragged = next[from];
+  const target = next[to];
+  if (!dragged || !target) return [...items];
+  next[from] = target;
+  next[to] = dragged;
+  return next;
+}
+
+export function sameTarget(a: DropTarget | null, b: DropTarget): boolean {
+  return a !== null && a.id === b.id && a.before === b.before;
+}
+
+export function travelled(from: PointerPoint, to: PointerPoint): number {
+  return Math.hypot(to.x - from.x, to.y - from.y);
+}
+
+export function measureTiles(container: HTMLElement): Map<HTMLElement, DOMRect> {
+  const tiles = Array.from(container.querySelectorAll(BOARD_TILE_SELECTOR));
+  return new Map(
+    tiles.flatMap((tile) => (tile instanceof HTMLElement ? [[tile, tile.getBoundingClientRect()] as const] : []))
+  );
+}
+
+export function slideTiles(
+  container: HTMLElement,
+  previous: Map<HTMLElement, DOMRect>,
+  skipId: string | null,
+  durationMs: number,
+  now: number
+): SlideResult {
+  const tiles = Array.from(container.querySelectorAll(BOARD_TILE_SELECTOR)).filter(
+    (tile): tile is HTMLElement => tile instanceof HTMLElement
+  );
+  for (const tile of tiles) {
+    tile.style.transition = "none";
+    tile.style.transform = "";
+  }
+  const rects = new Map(tiles.map((tile) => [tile, tile.getBoundingClientRect()] as const));
+  const moved: HTMLElement[] = [];
+  for (const tile of tiles) {
+    if (tile.dataset.boardTile === skipId) continue;
+    const before = previous.get(tile);
+    const after = rects.get(tile);
+    if (!before || !after) continue;
+    const dx = before.left - after.left;
+    const dy = before.top - after.top;
+    if (dx === 0 && dy === 0) continue;
+    tile.style.transform = `translate(${dx}px, ${dy}px)`;
+    moved.push(tile);
+  }
+  if (moved.length === 0) return { rects, slidUntil: now };
+  void container.offsetWidth;
+  for (const tile of moved) {
+    tile.style.transition = `transform ${durationMs}ms ease`;
+    tile.style.transform = "";
+  }
+  return { rects, slidUntil: now + durationMs };
 }
 
 export function sameOrder(a: readonly BoardDragItem[], b: readonly BoardDragItem[]): boolean {

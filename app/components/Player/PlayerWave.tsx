@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { REDUCED_MOTION_QUERY } from "@hooks/ui/constants";
 import { audioEnergy } from "@hooks/ui/player/energy";
 
 import {
@@ -11,7 +12,6 @@ import {
   FRAME_CEILING_MS,
   PROGRESS_FOLLOW_MS,
   PROGRESS_SNAP_FRACTION,
-  REDUCED_MOTION_QUERY,
   SEEK_PAGE_SECONDS,
   SEEK_STEP_SECONDS,
   SETTLE_EPSILON,

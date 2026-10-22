@@ -65,7 +65,7 @@ describe("WidgetGallery", () => {
     expect(cardTitles()).toHaveLength(25);
     expect(screen.getByRole("heading", { level: 3, name: "Now" })).toBeInTheDocument();
     expect(screen.getByText("1 of 8 on board")).toBeInTheDocument();
-    expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "XL");
+    expect(document.querySelector("[data-preview='mixes']")).toHaveAttribute("data-size", "L");
     expect(screen.getByText(i18n.t("discover:board.gallery.summary", { onBoard: 1, total: 25 }))).toBeInTheDocument();
   });
 

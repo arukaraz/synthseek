@@ -68,7 +68,7 @@ describe("countInCategory", () => {
 
 describe("previewFrame", () => {
   it("scales a full-row tile to the preview width", () => {
-    const frame = previewFrame("XL");
+    const frame = previewFrame("genres");
 
     expect(frame.stageWidth).toBe(1200);
     expect(frame.stageHeight).toBe(600);
@@ -78,7 +78,7 @@ describe("previewFrame", () => {
   });
 
   it("scales a half-width tile to the preview height", () => {
-    const frame = previewFrame("M");
+    const frame = previewFrame("rarities");
 
     expect(frame.stageWidth).toBe(592);
     expect(frame.stageHeight).toBe(336);

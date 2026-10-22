@@ -1,10 +1,16 @@
 import type { MouseEvent } from "react";
 
-import { BOARD_COLUMNS, type BoardDevice, FAMILY_SPANS } from "@components/BoardGrid";
+import { BOARD_COLUMNS, BOARD_SPANS, type BoardDevice, type BoardHeight, type BoardSpan } from "@components/BoardGrid";
 import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 
-import { BOARD_SCHEMA_VERSION, BOARD_WIDGETS, DEFAULT_BOARD, EDIT_PASSTHROUGH_SELECTOR } from "./constants";
-import type { BoardKeyAction, MoveDelta, PlacedTile } from "./types";
+import {
+  BOARD_SCHEMA_VERSION,
+  BOARD_SIZE_ORDER,
+  BOARD_WIDGETS,
+  DEFAULT_BOARD,
+  EDIT_PASSTHROUGH_SELECTOR,
+} from "./constants";
+import type { BoardKeyAction, BoardWidgetDefinition, MoveDelta, PlacedTile } from "./types";
 
 export function blockWidgetAction(event: Pick<MouseEvent, "target" | "preventDefault" | "stopPropagation">): void {
   if (event.target instanceof Element && event.target.closest(EDIT_PASSTHROUGH_SELECTOR)) return;
@@ -22,6 +28,27 @@ export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): 
         : null;
   if (delta === null) return null;
   return event.shiftKey ? { kind: "resize", delta } : { kind: "move", delta };
+}
+
+export function sizesOf(definition: BoardWidgetDefinition): BoardSize[] {
+  return BOARD_SIZE_ORDER.filter((size) => definition.sizes[size] !== undefined);
+}
+
+export function heightOf(widget: BoardWidgetKey, size: BoardSize): BoardHeight {
+  const definition = BOARD_WIDGETS[widget];
+  return definition.sizes[size] ?? definition.sizes[definition.defaultSize] ?? "regular";
+}
+
+export function spanOf(widget: BoardWidgetKey, size: BoardSize, device: BoardDevice): BoardSpan {
+  return BOARD_SPANS[device][size][heightOf(widget, size)];
+}
+
+export function sameSlot(a: BoardItem, b: BoardItem): boolean {
+  return a.size === b.size && heightOf(a.widget, a.size) === heightOf(b.widget, b.size);
+}
+
+export function orderKeyOf(items: readonly BoardItem[]): string {
+  return items.map((item) => `${item.id}:${item.size}`).join(",");
 }
 
 export function cycleSize(sizes: readonly BoardSize[], current: BoardSize, delta: MoveDelta): BoardSize {
@@ -42,7 +69,7 @@ export function boardItemsOf(layout: BoardLayout | null | undefined): BoardItem[
   if (!layout) return DEFAULT_BOARD.map((item) => ({ ...item }));
   return layout.items.map((item) => {
     const definition = BOARD_WIDGETS[item.widget];
-    return definition.sizes.includes(item.size) ? item : { ...item, size: definition.defaultSize };
+    return definition.sizes[item.size] !== undefined ? item : { ...item, size: definition.defaultSize };
   });
 }
 
@@ -77,7 +104,7 @@ export function packBoard(items: readonly BoardItem[], device: BoardDevice): Pla
 
   for (const item of items) {
     const size = displayedSize(item, device);
-    const span = FAMILY_SPANS[device][size];
+    const span = spanOf(item.widget, size, device);
     const cols = Math.min(span.cols, columns);
     let found = false;
     while (!found) {
@@ -118,7 +145,7 @@ export function moveItem(items: readonly BoardItem[], id: string, toIndex: numbe
 
 export function resizeItem(items: readonly BoardItem[], id: string, size: BoardSize): BoardItem[] {
   return items.map((item) =>
-    item.id === id && BOARD_WIDGETS[item.widget].sizes.includes(size) ? { ...item, size } : item
+    item.id === id && BOARD_WIDGETS[item.widget].sizes[size] !== undefined ? { ...item, size } : item
   );
 }
 

@@ -52,11 +52,13 @@ import { TopTracks } from "../TopTracks/TopTracks";
 import { TrendingHero } from "../TrendingHero/TrendingHero";
 import type { BoardCategory, BoardWidgetDefinition } from "./types";
 
-export const BOARD_SCHEMA_VERSION = 1;
+export const BOARD_SCHEMA_VERSION = 2;
 
 export const EDIT_PASSTHROUGH_SELECTOR = "[data-info-tooltip]";
 
 export const BOARD_CATEGORY_ORDER: readonly BoardCategory[] = ["now", "history", "discover", "library"];
+
+export const BOARD_SIZE_ORDER: readonly BoardSize[] = ["S", "M", "L"];
 
 export const BOARD_CATEGORY_KEYS: Record<
   BoardCategory,
@@ -70,20 +72,14 @@ export const BOARD_CATEGORY_KEYS: Record<
 
 export const BOARD_SIZE_LABEL_KEYS: Record<BoardSize, ParseKeys<"discover">> = {
   S: "board.sizes.S",
-  C: "board.sizes.C",
   M: "board.sizes.M",
-  "M+": "board.sizes.MPlus",
   L: "board.sizes.L",
-  XL: "board.sizes.XL",
 };
 
 export const BOARD_SIZE_NAME_KEYS: Record<BoardSize, ParseKeys<"discover">> = {
   S: "board.sizeNames.S",
-  C: "board.sizeNames.C",
   M: "board.sizeNames.M",
-  "M+": "board.sizeNames.MPlus",
   L: "board.sizeNames.L",
-  XL: "board.sizeNames.XL",
 };
 
 export const BOARD_WIDGET_ORDER: readonly BoardWidgetKey[] = [
@@ -121,7 +117,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Zap,
     titleKey: "trendingHero.badge",
     descriptionKey: "board.widgets.trending",
-    sizes: ["M", "L", "XL"],
+    sizes: { M: "regular", L: "regular" },
     defaultSize: "L",
   },
   topTracks: {
@@ -130,9 +126,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Trophy,
     titleKey: "topTracks.title",
     descriptionKey: "board.widgets.topTracks",
-    sizes: ["M", "M+"],
-    defaultSize: "M+",
-    narrowSizes: { M: "M+" },
+    sizes: { M: "tall" },
+    defaultSize: "M",
   },
   scrobbles: {
     component: RecentScrobbles,
@@ -140,7 +135,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Activity,
     titleKey: "recentScrobbles.title",
     descriptionKey: "board.widgets.scrobbles",
-    sizes: ["M", "L"],
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "L",
     narrowSizes: { L: "M" },
   },
@@ -150,8 +145,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Library,
     titleKey: "mixes.title",
     descriptionKey: "board.widgets.mixes",
-    sizes: ["L", "XL"],
-    defaultSize: "XL",
+    sizes: { M: "tall", L: "regular" },
+    defaultSize: "L",
   },
   artistsNext: {
     component: ArtistSpotlight,
@@ -159,8 +154,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Users,
     titleKey: "artistSpotlight.title",
     descriptionKey: "board.widgets.artistsNext",
-    sizes: ["L", "XL"],
-    defaultSize: "XL",
+    sizes: { M: "tall", L: "tall" },
+    defaultSize: "L",
   },
   genres: {
     component: CategoriesGrid,
@@ -168,9 +163,9 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Grid3X3,
     titleKey: "categories.grid.title",
     descriptionKey: "board.widgets.genres",
-    sizes: ["M+", "XL"],
-    defaultSize: "XL",
-    narrowSizes: { XL: "M+" },
+    sizes: { S: "tall", M: "tall", L: "tall" },
+    defaultSize: "L",
+    narrowSizes: { L: "M" },
   },
   requests: {
     component: RecentRequests,
@@ -178,9 +173,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Download,
     titleKey: "recentRequests.title",
     descriptionKey: "board.widgets.requests",
-    sizes: ["M", "L"],
-    defaultSize: "L",
-    narrowSizes: { L: "M" },
+    sizes: { S: "regular", M: "regular" },
+    defaultSize: "M",
   },
   onRepeat: {
     component: OnRepeat,
@@ -188,8 +182,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.onRepeat.icon,
     titleKey: HISTORY_MIXES.onRepeat.titleKey,
     descriptionKey: "board.widgets.onRepeat",
-    sizes: ["C", "M"],
-    defaultSize: "C",
+    sizes: { S: "tall" },
+    defaultSize: "S",
   },
   rewind: {
     component: RepeatRewind,
@@ -197,8 +191,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.rewind.icon,
     titleKey: HISTORY_MIXES.rewind.titleKey,
     descriptionKey: "board.widgets.rewind",
-    sizes: ["C", "M"],
-    defaultSize: "C",
+    sizes: { S: "tall" },
+    defaultSize: "S",
   },
   deepCuts: {
     component: DeepCuts,
@@ -206,8 +200,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.deepCuts.icon,
     titleKey: HISTORY_MIXES.deepCuts.titleKey,
     descriptionKey: "board.widgets.deepCuts",
-    sizes: ["C", "M"],
-    defaultSize: "C",
+    sizes: { S: "tall" },
+    defaultSize: "S",
   },
   forgottenFavorites: {
     component: ForgottenFavorites,
@@ -215,8 +209,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.forgottenFavorites.icon,
     titleKey: HISTORY_MIXES.forgottenFavorites.titleKey,
     descriptionKey: "board.widgets.forgottenFavorites",
-    sizes: ["C", "M"],
-    defaultSize: "C",
+    sizes: { S: "tall" },
+    defaultSize: "S",
   },
   jumpBackIn: {
     component: JumpBackIn,
@@ -224,7 +218,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: RotateCcw,
     titleKey: "jumpBackIn.title",
     descriptionKey: "board.widgets.jumpBackIn",
-    sizes: ["M", "L"],
+    sizes: { M: "regular", L: "regular" },
     defaultSize: "L",
     narrowSizes: { L: "M" },
   },
@@ -234,7 +228,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: CalendarClock,
     titleKey: "lastYear.title",
     descriptionKey: "board.widgets.lastYear",
-    sizes: ["M", "L"],
+    sizes: { S: "tall", M: "tall" },
     defaultSize: "M",
   },
   stations: {
@@ -243,7 +237,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Radio,
     titleKey: "stations.heading",
     descriptionKey: "board.widgets.stations",
-    sizes: ["M", "L"],
+    sizes: { M: "regular", L: "regular" },
     defaultSize: "L",
     narrowSizes: { L: "M" },
   },
@@ -253,7 +247,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: PlayCircle,
     titleKey: "continueListening.title",
     descriptionKey: "board.widgets.continueListening",
-    sizes: ["M", "L"],
+    sizes: { M: "regular", L: "regular" },
     defaultSize: "L",
   },
   rarities: {
@@ -262,7 +256,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Gem,
     titleKey: "rarities.title",
     descriptionKey: "board.widgets.rarities",
-    sizes: ["M", "L"],
+    sizes: { M: "regular" },
     defaultSize: "M",
   },
   orbit: {
@@ -271,8 +265,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: OrbitIcon,
     titleKey: "orbit.title",
     descriptionKey: "board.widgets.orbit",
-    sizes: ["M", "XL"],
-    defaultSize: "XL",
+    sizes: { M: "regular", L: "regular" },
+    defaultSize: "L",
   },
   charts: {
     component: Charts,
@@ -280,8 +274,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Flame,
     titleKey: "charts.title",
     descriptionKey: "board.widgets.charts",
-    sizes: ["L", "XL"],
-    defaultSize: "XL",
+    sizes: { S: "tall", M: "tall" },
+    defaultSize: "M",
   },
   loved: {
     component: LovedNotHere,
@@ -289,7 +283,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Heart,
     titleKey: "loved.title",
     descriptionKey: "board.widgets.loved",
-    sizes: ["M", "L"],
+    sizes: { M: "regular" },
     defaultSize: "M",
   },
   newInLibrary: {
@@ -298,8 +292,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: ListPlus,
     titleKey: "newInLibrary.title",
     descriptionKey: "board.widgets.newInLibrary",
-    sizes: ["M", "M+", "L"],
-    defaultSize: "M+",
+    sizes: { S: "regular", M: "tall" },
+    defaultSize: "M",
   },
   leaderboard: {
     component: LibraryLeaderboard,
@@ -307,8 +301,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Library,
     titleKey: "leaderboard.title",
     descriptionKey: "board.widgets.leaderboard",
-    sizes: ["M+", "L"],
-    defaultSize: "M+",
+    sizes: { M: "tall" },
+    defaultSize: "M",
   },
   gaps: {
     component: Gaps,
@@ -316,9 +310,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Disc3,
     titleKey: "gaps.title",
     descriptionKey: "board.widgets.gaps",
-    sizes: ["M", "L"],
-    defaultSize: "L",
-    narrowSizes: { L: "M" },
+    sizes: { M: "tall", L: "regular" },
+    defaultSize: "M",
   },
   anniversaries: {
     component: Anniversaries,
@@ -326,7 +319,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Cake,
     titleKey: "anniversaries.title",
     descriptionKey: "board.widgets.anniversaries",
-    sizes: ["M"],
+    sizes: { S: "regular", M: "regular" },
     defaultSize: "M",
   },
   landed: {
@@ -335,7 +328,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: PackageCheck,
     titleKey: "landed.title",
     descriptionKey: "board.widgets.landed",
-    sizes: ["M", "L"],
+    sizes: { S: "regular", M: "regular" },
     defaultSize: "M",
   },
   serverPlaylists: {
@@ -344,8 +337,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: MonitorPlay,
     titleKey: "serverPlaylists.title",
     descriptionKey: "board.widgets.serverPlaylists",
-    sizes: ["M", "L"],
-    defaultSize: "L",
+    sizes: { S: "regular", M: "regular" },
+    defaultSize: "M",
   },
 };
 
@@ -353,26 +346,26 @@ export const DEFAULT_BOARD: readonly BoardItem[] = [
   { id: "trending", widget: "trending", size: "L" },
   { id: "continue-listening", widget: "continueListening", size: "L" },
   { id: "jump-back-in", widget: "jumpBackIn", size: "L" },
-  { id: "on-repeat", widget: "onRepeat", size: "C" },
-  { id: "rewind", widget: "rewind", size: "C" },
-  { id: "deep-cuts", widget: "deepCuts", size: "C" },
-  { id: "forgotten-favorites", widget: "forgottenFavorites", size: "C" },
-  { id: "mixes", widget: "mixes", size: "XL" },
-  { id: "top-tracks", widget: "topTracks", size: "M+" },
-  { id: "genres", widget: "genres", size: "M+" },
-  { id: "artists-next", widget: "artistsNext", size: "XL" },
+  { id: "on-repeat", widget: "onRepeat", size: "S" },
+  { id: "rewind", widget: "rewind", size: "S" },
+  { id: "deep-cuts", widget: "deepCuts", size: "S" },
+  { id: "forgotten-favorites", widget: "forgottenFavorites", size: "S" },
+  { id: "mixes", widget: "mixes", size: "L" },
+  { id: "top-tracks", widget: "topTracks", size: "M" },
+  { id: "charts", widget: "charts", size: "M" },
+  { id: "genres", widget: "genres", size: "L" },
+  { id: "artists-next", widget: "artistsNext", size: "L" },
   { id: "stations", widget: "stations", size: "L" },
   { id: "last-year", widget: "lastYear", size: "M" },
+  { id: "new-in-library", widget: "newInLibrary", size: "M" },
   { id: "rarities", widget: "rarities", size: "M" },
-  { id: "charts", widget: "charts", size: "XL" },
-  { id: "new-in-library", widget: "newInLibrary", size: "M+" },
-  { id: "leaderboard", widget: "leaderboard", size: "M+" },
   { id: "loved", widget: "loved", size: "M" },
+  { id: "leaderboard", widget: "leaderboard", size: "M" },
+  { id: "gaps", widget: "gaps", size: "M" },
   { id: "anniversaries", widget: "anniversaries", size: "M" },
-  { id: "gaps", widget: "gaps", size: "L" },
-  { id: "orbit", widget: "orbit", size: "XL" },
   { id: "requests", widget: "requests", size: "M" },
   { id: "landed", widget: "landed", size: "M" },
-  { id: "server-playlists", widget: "serverPlaylists", size: "L" },
+  { id: "server-playlists", widget: "serverPlaylists", size: "M" },
+  { id: "orbit", widget: "orbit", size: "L" },
   { id: "scrobbles", widget: "scrobbles", size: "L" },
 ];

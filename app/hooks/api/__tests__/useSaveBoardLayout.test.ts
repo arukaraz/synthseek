@@ -35,7 +35,7 @@ vi.mock("@utils/trpc", () => ({
 import { BOARD_SAVE_SCOPE } from "../mutations/board/constants";
 import { useSaveBoardLayout } from "../mutations/board/useSaveBoardLayout";
 
-const LAYOUT: BoardLayout = { schemaVersion: 1, items: [{ id: "a", widget: "mixes", size: "L" }] };
+const LAYOUT: BoardLayout = { schemaVersion: 2, items: [{ id: "a", widget: "mixes", size: "L" }] };
 
 function capturedOptions(): CapturedOptions {
   if (captured.options === null) throw new Error("the mutation registered no options");

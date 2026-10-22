@@ -7,22 +7,13 @@ import { SKELETON_LIST_PLACEHOLDERS } from "../constants";
 
 describe("TopTracksSkeleton", () => {
   it("labels the loading region with the widget title for assistive tech", () => {
-    render(<TopTracksSkeleton shape="tall" />);
-
+    render(<TopTracksSkeleton />);
     expect(screen.getByLabelText("Top Tracks")).toBeInTheDocument();
   });
 
   it("renders one row placeholder per skeleton slot beneath a single full-width hero placeholder", () => {
-    const { container } = render(<TopTracksSkeleton shape="tall" />);
-
+    const { container } = render(<TopTracksSkeleton />);
     expect(container.querySelectorAll(".h-14.animate-pulse")).toHaveLength(SKELETON_LIST_PLACEHOLDERS.length);
     expect(container.querySelectorAll(".aspect-\\[4\\/3\\].animate-pulse")).toHaveLength(1);
-  });
-
-  it("puts a narrower hero placeholder beside the rows for the compact shape", () => {
-    const { container } = render(<TopTracksSkeleton shape="compact" />);
-
-    expect(container.querySelectorAll(".w-2\\/5.animate-pulse")).toHaveLength(1);
-    expect(container.querySelector(".aspect-\\[4\\/3\\]")).toBeNull();
   });
 });

@@ -10,13 +10,14 @@ import { useCountry } from "@modules/providers/CountryProvider";
 import { getCountryByCode } from "@utils/countries";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { leaderFrame, leaderLayout } from "../WidgetLeader/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { ChartAction } from "./ChartAction";
 import { ChartsLeader } from "./ChartsLeader";
 import { chartKey } from "./helpers";
-import { chartRank, chartsBody, chartsLayout, chartsList } from "./styles";
+import { chartRank, chartsList } from "./styles";
 
-export function Charts({ size, info }: BoardWidgetProps) {
+export function Charts({ info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { country } = useCountry();
   const { data, isLoading, isError } = useCharts(country);
@@ -33,11 +34,11 @@ export function Charts({ size, info }: BoardWidgetProps) {
       loading={isLoading}
       note={isError ? t("board.loadError") : leaderEntry === undefined ? t("charts.empty") : null}
     >
-      <div className={chartsBody()}>
-        <div className={chartsLayout()}>
+      <div className={leaderFrame()}>
+        <div className={leaderLayout()}>
           {leaderEntry ? <ChartsLeader entry={leaderEntry} country={countryName} /> : null}
           <FadeScroll>
-            <ol className={chartsList({ wide: size === "XL" })} start={2}>
+            <ol className={chartsList()} start={2}>
               {rest.map((entry, index) => (
                 <WidgetRow
                   key={chartKey(entry)}

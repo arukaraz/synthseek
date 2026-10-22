@@ -82,8 +82,17 @@ describe("BoardTile", () => {
     fireEvent.keyDown(tileElement(), { key: "Backspace" });
 
     expect(handlers.move).toHaveBeenCalledWith("t", 1);
-    expect(handlers.resize).toHaveBeenCalledWith("t", "XL");
+    expect(handlers.resize).toHaveBeenCalledWith("t", "M");
     expect(handlers.remove).toHaveBeenCalledWith("t");
+  });
+
+  it("turns into a named slot of its size while it is being dragged", () => {
+    render(<BoardTile tile={TILE} device="wide" editing dragging position={1} total={2} actions={actions()} />);
+
+    expect(tileElement()).toHaveTextContent("Trending now");
+    expect(tileElement()).toHaveTextContent("Large");
+    expect(screen.getByRole("button", { name: "widget L" }).closest(".invisible")).not.toBeNull();
+    expect(screen.queryByRole("button", { name: "Drag Trending now" })).not.toBeInTheDocument();
   });
 
   it("leaves keys pressed on its controls to the controls", () => {

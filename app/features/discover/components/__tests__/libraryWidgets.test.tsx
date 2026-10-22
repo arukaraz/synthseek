@@ -123,13 +123,14 @@ describe("Gaps", () => {
     missing: [{ id: `${artist}-vs`, name: "Vs", artist, cover: null, year: 1993 }],
   });
 
-  it("lists every artist at any size, to scroll through", () => {
+  it("lays every artist on a horizontal rail at any size, scrollable from the keyboard", () => {
     mocks.gaps.mockReturnValue(ready([gap("Pearl Jam"), gap("Tycho")]));
     renderWithProviders(<Gaps size="M" info="x" />);
 
     expect(screen.getByText("Tycho")).toBeInTheDocument();
     expect(screen.getAllByText("1 of 4 releases")).toHaveLength(2);
     expect(screen.getAllByText("25%")).toHaveLength(2);
+    expect(screen.getByRole("region", { name: "All artists, scroll sideways" })).toHaveAttribute("tabindex", "0");
   });
 
   it("opens the artist from its progress header", () => {

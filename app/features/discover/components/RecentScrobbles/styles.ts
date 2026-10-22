@@ -10,27 +10,6 @@ export const axisLine = cva(
   "pointer-events-none absolute left-3 right-3 top-[36px] z-0 h-[2px] bg-linear-to-r from-primary-400 via-fg/15 to-fg/15"
 );
 
-export const railEdge = cva(
-  "pointer-events-none absolute inset-y-0 z-10 flex w-12 items-center justify-center transition-opacity duration-200",
-  {
-    variants: {
-      side: {
-        left: "left-0 from-surface bg-linear-to-r via-surface/45 to-transparent",
-        right: "right-0 from-surface bg-linear-to-l via-surface/45 to-transparent",
-      },
-      visible: {
-        true: "opacity-100",
-        false: "opacity-0",
-      },
-    },
-    defaultVariants: { visible: false },
-  }
-);
-
-export const railEdgeButton = cva(
-  "text-fg/80 hover:text-fg bg-surface/80 pointer-events-auto flex size-7 items-center justify-center rounded-full border border-fg/10 shadow-sm backdrop-blur-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-fg/40"
-);
-
 export const node = cva("relative flex w-[112px] shrink-0 snap-start flex-col items-stretch px-2 sm:w-[120px]");
 
 export const nodeTime = cva(

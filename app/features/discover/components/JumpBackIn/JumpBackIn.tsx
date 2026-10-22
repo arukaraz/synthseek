@@ -6,19 +6,21 @@ import { useTranslation } from "react-i18next";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 import { useJumpBackIn } from "@hooks/api/queries/analytics/useJumpBackIn";
+import { useElementWidth } from "@hooks/ui/useElementWidth";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 
 import { PlaySetCard } from "../PlaySetCard/PlaySetCard";
 import { CARD_ROW_SKELETONS } from "../constants";
-import { cardRowLimit } from "../helpers";
-import { cardRow, cardRowBody, cardRowSkeleton, widgetNote } from "../styles";
+import { cardRowFit } from "../helpers";
+import { cardRow, cardRowBody, cardRowSkeleton, cardRowVars, widgetNote } from "../styles";
 import type { JumpBackInProps } from "./types";
 
 export function JumpBackIn({ size, info }: JumpBackInProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useJumpBackIn();
   const { playEntity } = useEntityPlayback();
-  const limit = cardRowLimit(size);
+  const [bodyRef, width] = useElementWidth<HTMLDivElement>();
+  const limit = cardRowFit(width, size);
   const albums = (data ?? []).slice(0, limit);
 
   return (
@@ -31,8 +33,8 @@ export function JumpBackIn({ size, info }: JumpBackInProps) {
         info={info}
       />
       {isLoading ? (
-        <div className={cardRowBody()}>
-          <div className={cardRow()}>
+        <div ref={bodyRef} className={cardRowBody()}>
+          <div className={cardRow()} style={cardRowVars(limit)}>
             {CARD_ROW_SKELETONS.slice(0, limit).map((index) => (
               <div key={index} className={cardRowSkeleton()} />
             ))}
@@ -41,8 +43,8 @@ export function JumpBackIn({ size, info }: JumpBackInProps) {
       ) : isError || albums.length === 0 ? (
         <p className={widgetNote()}>{isError ? t("history.error") : t("jumpBackIn.empty")}</p>
       ) : (
-        <div className={cardRowBody()}>
-          <div className={cardRow()}>
+        <div ref={bodyRef} className={cardRowBody()}>
+          <div className={cardRow()} style={cardRowVars(limit)}>
             {albums.map((album) => (
               <PlaySetCard
                 key={album.albumExternalId}

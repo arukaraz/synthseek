@@ -77,4 +77,12 @@ describe("WidgetHeader", () => {
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
+
+  it("places an aside at the right of the header, level with the title", () => {
+    render(<WidgetHeader icon={Library} title="Your rarities" subtitle="Deep in the long tail" aside={<b>14%</b>} />);
+
+    const aside = screen.getByText("14%").parentElement;
+    expect(aside).toHaveClass("text-right");
+    expect(aside?.parentElement).toBe(screen.getByRole("banner"));
+  });
 });

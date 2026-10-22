@@ -12,17 +12,7 @@ export const boardDockPill = cva(
 );
 
 export const boardFab = cva(
-  "bg-primary text-primary-foreground shadow-primary-500/40 focus-visible:ring-primary-300 flex size-12 items-center justify-center rounded-full shadow-xl transition-[translate,scale,opacity] duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none [&_svg]:size-5",
-  {
-    variants: {
-      revealed: {
-        true: "pointer-events-auto",
-        false:
-          "pointer-events-none translate-y-[calc(100%+1rem)] opacity-0 focus-visible:pointer-events-auto focus-visible:translate-y-0 focus-visible:opacity-100",
-      },
-    },
-    defaultVariants: { revealed: true },
-  }
+  "from-primary-600 to-accent-600 text-primary-foreground shadow-primary-500/40 hover:from-primary-500 hover:to-accent-500 focus-visible:ring-primary-300 pointer-events-auto flex size-14 items-center justify-center rounded-full bg-linear-to-r shadow-xl transition-all duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
 );
 
 export const boardFabLabel = cva("sr-only");
@@ -38,7 +28,7 @@ export const boardTile = cva(
         false: "",
       },
       dragging: {
-        true: "opacity-30",
+        true: "bg-primary-500/10 outline-primary-400 outline-2 outline-offset-2 outline-dashed",
         false: "",
       },
     },
@@ -52,9 +42,21 @@ export const tileBody = cva("flex min-h-0 min-w-0 flex-1 [&>*]:min-h-0 [&>*]:siz
       true: "select-none [&_*]:pointer-events-none [&_[data-info-tooltip]]:pointer-events-auto",
       false: "",
     },
+    dragging: {
+      true: "invisible",
+      false: "",
+    },
   },
-  defaultVariants: { editing: false },
+  defaultVariants: { editing: false, dragging: false },
 });
+
+export const tileSlot = cva(
+  "pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-1 px-4 text-center"
+);
+
+export const tileSlotName = cva("text-primary-300 truncate text-sm font-semibold");
+
+export const tileSlotSize = cva("text-primary-400/80 font-mono text-[11px] tracking-[0.14em] uppercase");
 
 export const editControls = cva(
   "border-fg/10 bg-surface/90 absolute top-2 right-2 z-20 flex items-center gap-1 rounded-xl border p-1 shadow-lg backdrop-blur-md"
@@ -91,11 +93,13 @@ export const dragHandle = cva(
   "text-fg/60 hover:text-fg bg-fg/5 hover:bg-fg/10 focus-visible:ring-primary-400 flex size-7 cursor-grab touch-none items-center justify-center rounded-md outline-none focus-visible:ring-2 active:cursor-grabbing"
 );
 
-export const editIconFrame = cva("relative inline-flex size-4 shrink-0");
+export const editIconFrame = cva("relative inline-flex size-7 shrink-0");
 
-export const editIconPen = cva("bg-surface absolute -right-1 -bottom-1 size-2.5 rounded-sm p-px");
+export const editIconPen = cva(
+  "bg-primary-foreground text-primary-600 absolute -right-1.5 -bottom-1.5 size-4 rounded-md p-0.5"
+);
 
-export const editIconGlyph = cva("size-4!");
+export const editIconGlyph = cva("size-7!");
 
 export const editIconPenGlyph = cva("size-full!");
 

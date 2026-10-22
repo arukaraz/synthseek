@@ -4,7 +4,6 @@ import { Check, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
-import { useRevealOnScrollUp } from "@hooks/ui/useRevealOnScrollUp";
 
 import { CustomizeIcon } from "./CustomizeIcon";
 import { boardDock, boardDockPill, boardFab, boardFabLabel, boardHint } from "./styles";
@@ -12,7 +11,6 @@ import type { BoardToolbarProps } from "./types";
 
 export function BoardToolbar({ editing, onCustomize, onDone, onAddWidget }: BoardToolbarProps) {
   const { t } = useTranslation("discover");
-  const reveal = useRevealOnScrollUp<HTMLButtonElement>();
 
   return (
     <div className={boardDock()}>
@@ -29,13 +27,7 @@ export function BoardToolbar({ editing, onCustomize, onDone, onAddWidget }: Boar
           </Button>
         </div>
       ) : (
-        <button
-          ref={reveal.ref}
-          type="button"
-          className={boardFab({ revealed: reveal.revealed })}
-          onClick={onCustomize}
-          title={t("board.customize")}
-        >
+        <button type="button" className={boardFab()} onClick={onCustomize} title={t("board.customize")}>
           <CustomizeIcon />
           <span className={boardFabLabel()}>{t("board.customize")}</span>
         </button>

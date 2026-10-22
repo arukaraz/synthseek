@@ -77,9 +77,9 @@ describe("Orbit", () => {
     because: "Black",
   };
 
-  it("shows cards at XL and opens the album to request it", () => {
+  it("shows cards at L and opens the album to request it", () => {
     mocks.orbit.mockReturnValue(ready([album]));
-    renderWithProviders(<Orbit size="XL" info="x" />);
+    renderWithProviders(<Orbit size="L" info="x" />);
 
     fireEvent.click(screen.getByRole("button", { name: /Jar of Flies/ }));
 
@@ -89,11 +89,12 @@ describe("Orbit", () => {
     );
   });
 
-  it("lists rows at M", () => {
+  it("keeps the same card rail at M, scrolling sideways", () => {
     mocks.orbit.mockReturnValue(ready([album]));
     renderWithProviders(<Orbit size="M" info="x" />);
 
-    expect(screen.getByRole("listitem")).toHaveTextContent("Alice in Chains · because you played Black");
+    expect(screen.getByRole("region", { name: "Albums in your orbit, scroll sideways" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Jar of Flies/ })).toBeInTheDocument();
   });
 });
 
@@ -106,7 +107,7 @@ describe("Charts", () => {
         { title: "Lost", artist: "Nobody", libraryTrackId: null, track: null },
       ])
     );
-    renderWithProviders(<Charts size="XL" info="x" />);
+    renderWithProviders(<Charts size="M" info="x" />);
 
     expect(mocks.charts).toHaveBeenCalledWith("MX");
     expect(screen.getByText("Top tracks in Mexico")).toBeInTheDocument();
@@ -179,7 +180,8 @@ describe("Rarities", () => {
     renderWithProviders(<Rarities size="M" info="x" />);
 
     expect(screen.getByText("75%")).toBeInTheDocument();
-    expect(screen.getByText(/under 10K listens worldwide. Median 4.2K/)).toBeInTheDocument();
+    expect(screen.getByText("of your top tracks have under 10K listens")).toBeInTheDocument();
+    expect(screen.getByText("ListenBrainz listens · median 4.2K")).toBeInTheDocument();
     const row = screen.getByRole("listitem");
     expect(row).toHaveTextContent("B · 3 plays by you");
     fireEvent.click(within(row).getByRole("button", { name: "Play Rare" }));

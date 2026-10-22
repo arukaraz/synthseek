@@ -12,4 +12,4 @@ export const CLIENT_PAGINATION = {
 
 export const SCROLL_EDGE_TOLERANCE_PX = 4;
 
-export const SCROLL_REVEAL_TOLERANCE_PX = 8;
+export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";

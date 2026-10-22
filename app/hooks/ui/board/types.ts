@@ -1,4 +1,4 @@
-import type { PointerEvent as ReactPointerEvent } from "react";
+import type { PointerEvent as ReactPointerEvent, RefObject } from "react";
 
 export interface BoardDragItem {
   id: string;
@@ -24,6 +24,28 @@ export interface ScrollViewport {
 export interface UseBoardDragOptions<T extends BoardDragItem> {
   items: readonly T[];
   onDrop: (order: T[]) => void;
+  sameSlot?: (dragged: T, target: T) => boolean;
+  settling?: () => boolean;
+}
+
+export interface DropTarget {
+  id: string;
+  before: boolean;
+}
+
+export interface SlideResult {
+  rects: Map<HTMLElement, DOMRect>;
+  slidUntil: number;
+}
+
+export interface UseBoardFlipOptions {
+  orderKey: string;
+  skipId: string | null;
+}
+
+export interface BoardFlip {
+  ref: RefObject<HTMLElement | null>;
+  settling: () => boolean;
 }
 
 export interface BoardDragState<T extends BoardDragItem> {

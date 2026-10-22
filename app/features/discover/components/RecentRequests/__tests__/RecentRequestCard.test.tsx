@@ -21,7 +21,7 @@ describe("RecentRequestCard", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2024-01-01T01:00:00Z"));
 
-    render(<RecentRequestCard request={createFlatTrackRow({ title: "Avril 14th" })} layout="tile" />);
+    render(<RecentRequestCard request={createFlatTrackRow({ title: "Avril 14th" })} />);
 
     expect(screen.getByText("Avril 14th")).toBeInTheDocument();
     expect(screen.getByText("Drukqs")).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("RecentRequestCard", () => {
   });
 
   it("renders the localized album art alt text when the parent has artwork", () => {
-    render(<RecentRequestCard request={createFlatTrackRow()} layout="tile" />);
+    render(<RecentRequestCard request={createFlatTrackRow()} />);
 
     expect(screen.getByAltText("Album art for Drukqs")).toBeInTheDocument();
   });
@@ -39,25 +39,19 @@ describe("RecentRequestCard", () => {
       parent: { ...createFlatTrackRow().parent, album_art: null },
     });
 
-    render(<RecentRequestCard request={request} layout="tile" />);
+    render(<RecentRequestCard request={request} />);
 
     expect(screen.queryByTestId("cover")).not.toBeInTheDocument();
   });
 
   it("reflects the request status in the badge", () => {
-    render(<RecentRequestCard request={createFlatTrackRow({ status: RequestStatus.enum.failed })} layout="row" />);
+    render(<RecentRequestCard request={createFlatTrackRow({ status: RequestStatus.enum.failed })} />);
 
     expect(screen.getByText("Failed")).toBeInTheDocument();
   });
 
-  it("stacks time and badge above the artwork in the tile layout", () => {
-    render(<RecentRequestCard request={createFlatTrackRow()} layout="tile" />);
-
-    expect(screen.getByRole("article")).toHaveClass("[grid-template-areas:'time_badge'_'main_main']");
-  });
-
-  it("puts the artwork, time and badge on one line in the row layout", () => {
-    render(<RecentRequestCard request={createFlatTrackRow()} layout="row" />);
+  it("puts the artwork, time and badge on one line", () => {
+    render(<RecentRequestCard request={createFlatTrackRow()} />);
 
     expect(screen.getByRole("article")).toHaveClass("[grid-template-areas:'main_time_badge']");
   });

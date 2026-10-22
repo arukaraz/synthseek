@@ -6,7 +6,7 @@ import type { BoardSize } from "@hooks/api/queries/board/types";
 import type { EmptyReason, ScrobbleLayout } from "./types";
 
 export function scrobbleLayoutFor(size: BoardSize): ScrobbleLayout {
-  return size === "M" ? "timeline" : "rail";
+  return size === "L" ? "rail" : "timeline";
 }
 
 const EMPTY_TEXT_KEYS: Record<EmptyReason, ParseKeys<"discover">> = {

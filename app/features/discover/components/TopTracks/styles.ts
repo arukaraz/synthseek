@@ -2,25 +2,12 @@ import { cva } from "class-variance-authority";
 
 export const bodyFrame = cva("@container flex min-h-0 flex-1");
 
-export const body = cva("flex min-h-0 w-full @xl:flex-row @xl:items-stretch @xl:gap-5", {
-  variants: {
-    shape: {
-      compact: "flex-row items-stretch gap-3",
-      tall: "flex-col gap-4",
-    },
-  },
-});
+export const body = cva("flex min-h-0 w-full flex-col gap-4 @xl:flex-row @xl:items-stretch @xl:gap-5");
 
-const heroFrame = "relative shrink-0 overflow-hidden rounded-2xl @xl:aspect-auto @xl:w-[220px] @3xl:w-[240px]";
+const heroFrame =
+  "relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-2xl @xl:aspect-auto @xl:w-[220px] @3xl:w-[240px]";
 
-const heroShapes = {
-  compact: "w-2/5 max-w-[240px]",
-  tall: "aspect-[4/3] w-full",
-};
-
-export const hero = cva(`group flex flex-col justify-end ${heroFrame}`, {
-  variants: { shape: heroShapes },
-});
+export const hero = cva(`group flex flex-col justify-end ${heroFrame}`);
 
 export const heroImage = cva("absolute inset-0 size-full object-cover");
 
@@ -64,8 +51,6 @@ export const itemArtist = cva("text-fg/55 truncate text-[11.5px]");
 
 export const itemPlays = cva("text-fg/40 shrink-0 font-mono text-[11px]");
 
-export const skeletonHero = cva(`bg-fg/5 animate-pulse ${heroFrame}`, {
-  variants: { shape: heroShapes },
-});
+export const skeletonHero = cva(`bg-fg/5 animate-pulse ${heroFrame}`);
 
 export const skeletonRow = cva("bg-fg/5 h-14 w-full animate-pulse rounded-lg");

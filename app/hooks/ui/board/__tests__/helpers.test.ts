@@ -6,11 +6,16 @@ import {
   createGhost,
   focusBoardTile,
   insertsBefore,
+  measureTiles,
   placeGhost,
   reorderAround,
   sameOrder,
+  sameTarget,
   scrollParentOf,
+  slideTiles,
+  swapItems,
   tileUnderPointer,
+  travelled,
   viewportOf,
 } from "../helpers";
 
@@ -168,6 +173,69 @@ describe("ghost", () => {
     expect(ghost.style.width).toBe("300px");
     expect(ghost.style.left).toBe("100px");
     expect(ghost.style.top).toBe("50px");
+  });
+});
+
+describe("swapItems", () => {
+  it("exchanges the dragged item and its target, leaving everything else in place", () => {
+    expect(ids(swapItems([A, B, C, D], "a", "c"))).toBe("cbad");
+    expect(ids(swapItems([A, B, C], "a", "a"))).toBe("abc");
+    expect(ids(swapItems([A, B, C], "a", "zz"))).toBe("abc");
+  });
+});
+
+describe("sameTarget", () => {
+  it("is true only for the same tile on the same side", () => {
+    expect(sameTarget({ id: "b", before: true }, { id: "b", before: true })).toBe(true);
+    expect(sameTarget({ id: "b", before: true }, { id: "b", before: false })).toBe(false);
+    expect(sameTarget(null, { id: "b", before: true })).toBe(false);
+  });
+});
+
+describe("travelled", () => {
+  it("measures the straight-line distance between two pointer positions", () => {
+    expect(travelled({ x: 0, y: 0 }, { x: 3, y: 4 })).toBe(5);
+  });
+});
+
+describe("slideTiles", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+    vi.restoreAllMocks();
+  });
+
+  function boardWith(positions: Record<string, number>): HTMLElement {
+    document.body.innerHTML = '<div id="board"><div data-board-tile="a"></div><div data-board-tile="b"></div></div>';
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function rectOf(this: HTMLElement) {
+      return DOMRect.fromRect({ x: positions[this.dataset.boardTile ?? ""] ?? 0, y: 0, width: 100, height: 100 });
+    });
+    const board = document.getElementById("board");
+    if (!board) throw new Error("board missing");
+    return board;
+  }
+
+  it("inverts every tile that moved, except the one being dragged, and says when the slide ends", () => {
+    const positions = { a: 0, b: 120 };
+    const board = boardWith(positions);
+    const before = measureTiles(board);
+    positions.a = 120;
+    positions.b = 0;
+
+    const result = slideTiles(board, before, "a", 160, 1000);
+
+    expect(result.slidUntil).toBe(1160);
+    expect(result.rects.size).toBe(2);
+    const b = board.querySelector<HTMLElement>('[data-board-tile="b"]');
+    const a = board.querySelector<HTMLElement>('[data-board-tile="a"]');
+    expect(b?.style.transition).toBe("transform 160ms ease");
+    expect(a?.style.transition).toBe("none");
+  });
+
+  it("ends at once when nothing moved", () => {
+    const board = boardWith({ a: 0, b: 120 });
+    const before = measureTiles(board);
+
+    expect(slideTiles(board, before, null, 160, 1000).slidUntil).toBe(1000);
   });
 });
 

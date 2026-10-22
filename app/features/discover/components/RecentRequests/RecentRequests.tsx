@@ -11,17 +11,15 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 import { useRecentRequests } from "../../hooks/useRecentRequests";
-import { requestLayoutFor } from "./helpers";
 import { RecentRequestCard } from "./RecentRequestCard";
 import { RecentRequestsSkeleton } from "./RecentRequestsSkeleton";
 import { requestsBody, requestsList } from "./styles";
 import type { RecentRequestsProps } from "./types";
 
-export function RecentRequests({ size, info }: RecentRequestsProps) {
+export function RecentRequests({ info }: RecentRequestsProps) {
   const { t } = useTranslation("discover");
   const router = useRouter();
   const { recent, isLoading, isError, limit } = useRecentRequests();
-  const layout = requestLayoutFor(size);
 
   const handleOpenRequests = () => {
     router.push("/requests");
@@ -46,7 +44,7 @@ export function RecentRequests({ size, info }: RecentRequestsProps) {
     return (
       <section className={glassPanelCard({ height: "auto" })} aria-labelledby="recent-requests-heading">
         {header}
-        <RecentRequestsSkeleton layout={layout} />
+        <RecentRequestsSkeleton />
       </section>
     );
   }
@@ -83,9 +81,9 @@ export function RecentRequests({ size, info }: RecentRequestsProps) {
       {header}
       <div className={requestsBody()}>
         <FadeScroll>
-          <div className={requestsList({ layout })}>
+          <div className={requestsList()}>
             {recent.map((request) => (
-              <RecentRequestCard key={request.id} request={request} layout={layout} />
+              <RecentRequestCard key={request.id} request={request} />
             ))}
           </div>
         </FadeScroll>

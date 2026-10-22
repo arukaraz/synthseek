@@ -4,6 +4,7 @@ import { InfoTooltip } from "@components/ui/InfoTooltip";
 
 import { WidgetHeaderActionLink } from "./WidgetHeaderActionLink";
 import {
+  widgetHeaderAside,
   widgetHeaderIcon,
   widgetHeaderLead,
   widgetHeaderRow,
@@ -20,6 +21,7 @@ export function WidgetHeader({
   subtitle,
   headingLevel = "h2",
   action,
+  aside,
   titleId,
   info,
 }: WidgetHeaderProps) {
@@ -43,6 +45,7 @@ export function WidgetHeader({
           <p className={widgetHeaderSubtitle()}>{subtitle}</p>
         </div>
       </div>
+      {aside ? <div className={widgetHeaderAside()}>{aside}</div> : null}
       {action ? <WidgetHeaderActionLink action={action} /> : null}
     </header>
   );

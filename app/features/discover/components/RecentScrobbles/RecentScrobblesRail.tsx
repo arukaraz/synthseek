@@ -1,21 +1,19 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ScrollEdge } from "@components/FadeScroll";
 import { useScrollEdges } from "@hooks/ui/useScrollEdges";
 
 import { RAIL_SCROLL_STEP } from "./constants";
 import { RecentScrobbleNode } from "./RecentScrobbleNode";
-import { axisLine, rail, railEdge, railEdgeButton, railWrap } from "./styles";
+import { axisLine, rail, railWrap } from "./styles";
 import type { RecentScrobblesRailProps } from "./types";
 
 export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
   const { t } = useTranslation("discover");
   const edges = useScrollEdges<HTMLDivElement>("x");
-  const canScrollLeft = edges.start;
-  const canScrollRight = edges.end;
   const scroller = edges.node;
 
   const scrollByPage = useCallback(
@@ -37,26 +35,20 @@ export function RecentScrobblesRail({ scrobbles }: RecentScrobblesRailProps) {
           <RecentScrobbleNode key={s.catalogTrackId} scrobble={s} />
         ))}
       </div>
-      <div className={railEdge({ side: "left", visible: canScrollLeft })}>
-        <button
-          type="button"
-          onClick={() => scrollByPage("left")}
-          className={railEdgeButton()}
-          aria-label={t("recentScrobbles.scrollLeftAriaLabel")}
-        >
-          <ChevronLeft className="size-4" />
-        </button>
-      </div>
-      <div className={railEdge({ side: "right", visible: canScrollRight })}>
-        <button
-          type="button"
-          onClick={() => scrollByPage("right")}
-          className={railEdgeButton()}
-          aria-label={t("recentScrobbles.scrollRightAriaLabel")}
-        >
-          <ChevronRight className="size-4" />
-        </button>
-      </div>
+      <ScrollEdge
+        side="left"
+        shade
+        visible={edges.start}
+        label={t("recentScrobbles.scrollLeftAriaLabel")}
+        onClick={() => scrollByPage("left")}
+      />
+      <ScrollEdge
+        side="right"
+        shade
+        visible={edges.end}
+        label={t("recentScrobbles.scrollRightAriaLabel")}
+        onClick={() => scrollByPage("right")}
+      />
     </div>
   );
 }

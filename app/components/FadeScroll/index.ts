@@ -1,2 +1,3 @@
 export { FadeScroll } from "./FadeScroll";
-export type { FadeScrollProps } from "./types";
+export { ScrollEdge } from "./ScrollEdge";
+export type { FadeScrollProps, ScrollEdgeProps, ScrollEdgeSide } from "./types";

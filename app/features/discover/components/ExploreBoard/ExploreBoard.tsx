@@ -30,7 +30,7 @@ export function ExploreBoard() {
   if (isLoading) return <SectionLoading />;
 
   return (
-    <section className={boardRoot()} aria-label={t("board.regionLabel")}>
+    <section ref={editor.rootRef} className={boardRoot()} aria-label={t("board.regionLabel")}>
       {items.length === 0 ? (
         <BoardEmpty onAddWidget={editor.openGallery} />
       ) : (

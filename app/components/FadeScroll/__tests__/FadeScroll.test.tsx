@@ -41,4 +41,37 @@ describe("FadeScroll", () => {
 
     expect(screen.getByRole("region", { name: "All stations" })).toHaveAttribute("tabindex", "0");
   });
+
+  it("lets a vertical list hand the wheel on to the page once it reaches its end", () => {
+    const { container } = render(
+      <FadeScroll>
+        <p>rows</p>
+      </FadeScroll>
+    );
+
+    expect(container.firstElementChild?.className).not.toContain("overscroll-y-contain");
+  });
+
+  it("offers arrows along a horizontal rail when asked, showing each one only while it has somewhere to go", () => {
+    render(
+      <FadeScroll axis="x" arrows>
+        <p>cards</p>
+      </FadeScroll>
+    );
+    const left = screen.getByRole("button", { name: "Scroll left" });
+    const right = screen.getByRole("button", { name: "Scroll right" });
+
+    expect(left.parentElement).toHaveClass("invisible");
+    expect(right.parentElement).toHaveClass("invisible");
+  });
+
+  it("renders no arrows unless asked", () => {
+    render(
+      <FadeScroll axis="x">
+        <p>cards</p>
+      </FadeScroll>
+    );
+
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
 });

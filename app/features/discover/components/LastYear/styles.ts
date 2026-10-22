@@ -1,17 +1,11 @@
 import { cva } from "class-variance-authority";
 
-export const weekBody = cva("@container flex min-h-0 flex-1 flex-col");
+export const weekStats = cva("mb-1 grid w-full grid-cols-[auto_auto_minmax(0,1fr)] items-end gap-x-4");
 
-export const weekLayout = cva(
-  "flex min-h-0 flex-1 flex-col gap-3 @3xl:grid @3xl:grid-cols-[13rem_minmax(0,1fr)] @3xl:gap-5"
-);
+export const weekStat = cva("flex min-w-0 flex-col-reverse");
 
-export const weekStats = cva("grid shrink-0 grid-cols-3 gap-2 @3xl:grid-cols-1 @3xl:content-start");
+export const weekStatValue = cva("text-overlay-fg truncate text-lg leading-tight font-bold tabular-nums");
 
-export const weekStat = cva("bg-fg/[0.04] flex min-w-0 flex-col rounded-xl px-3 py-2");
+export const weekStatLabel = cva("text-overlay-fg/70 truncate font-mono text-[10px] tracking-[0.14em] uppercase");
 
-export const weekStatValue = cva("text-fg truncate text-base font-semibold");
-
-export const weekStatLabel = cva("text-fg/50 text-[11px]");
-
-export const weekSkeleton = cva("bg-fg/5 h-12 shrink-0 animate-pulse rounded-lg");
+export const weekTopPlays = cva("text-overlay-fg/80 font-mono text-[11px] tabular-nums");

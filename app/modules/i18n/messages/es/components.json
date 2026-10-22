@@ -45,6 +45,10 @@
   "infoTooltip": {
     "trigger": "Más información"
   },
+  "fadeScroll": {
+    "scrollLeft": "Desplazar a la izquierda",
+    "scrollRight": "Desplazar a la derecha"
+  },
   "trackStatus": {
     "moreInfo": "Más información: {{label}}"
   },

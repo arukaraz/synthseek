@@ -22,9 +22,9 @@ describe("BoardTileEditControls", () => {
     expect(screen.getByRole("button", { name: "Large" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "Medium" })).toHaveAttribute("aria-pressed", "false");
 
-    fireEvent.click(screen.getByRole("button", { name: "Extra large" }));
+    fireEvent.click(screen.getByRole("button", { name: "Medium" }));
 
-    expect(handlers.resize).toHaveBeenCalledWith("t", "XL");
+    expect(handlers.resize).toHaveBeenCalledWith("t", "M");
   });
 
   it("moves earlier and later, and disables each button at its end of the board", () => {
@@ -72,6 +72,16 @@ describe("BoardTileEditControls", () => {
     );
 
     const group = screen.getByRole("group", { name: "Size of Trending" });
-    expect(group.querySelectorAll("button")).toHaveLength(3);
+    expect(group.querySelectorAll("button")).toHaveLength(2);
+  });
+
+  it("shows no size chips on a widget that comes in one size only", () => {
+    const item: BoardItem = { id: "r", widget: "rarities", size: "M" };
+    render(
+      <BoardTileEditControls item={item} device="wide" name="Rarities" position={1} total={2} actions={actions()} />
+    );
+
+    expect(screen.queryByRole("group", { name: "Size of Rarities" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Medium" })).not.toBeInTheDocument();
   });
 });

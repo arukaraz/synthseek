@@ -198,19 +198,13 @@
     },
     "sizes": {
       "S": "S",
-      "C": "C",
       "M": "M",
-      "MPlus": "M+",
-      "L": "L",
-      "XL": "XL"
+      "L": "L"
     },
     "sizeNames": {
       "S": "Petit",
-      "C": "Carte",
       "M": "Moyen",
-      "MPlus": "Moyen, haut",
-      "L": "Grand",
-      "XL": "Très grand"
+      "L": "Grand"
     },
     "gallery": {
       "title": "Ajouter un widget",
@@ -329,7 +323,8 @@
     "plays_other": "{{count}} écoutes",
     "statPlays": "Écoutes",
     "statTime": "Durée d'écoute",
-    "statArtist": "Artiste principal"
+    "statArtist": "Artiste principal",
+    "leaderBadge": "Cette semaine en {{year}}"
   },
   "stations": {
     "heading": "Radios pour vous",
@@ -384,17 +379,18 @@
   "rarities": {
     "title": "Vos raretés",
     "subtitle": "Écoutes ListenBrainz",
+    "subtitleMedian": "Écoutes ListenBrainz · médiane {{median}}",
     "empty": "Pas encore assez d'écoutes identifiées.",
-    "caption": "de vos titres préférés ont moins de {{threshold}} écoutes dans le monde. Médiane {{median}}.",
+    "caption": "de vos titres préférés ont moins de {{threshold}} écoutes",
     "yours_one": "{{artist}} · {{count}} écoute de votre part",
     "yours_other": "{{artist}} · {{count}} écoutes de votre part"
   },
   "orbit": {
     "title": "Élargissez votre orbite",
     "subtitle": "Des albums à partir de vos écoutes",
+    "rail": "Albums dans votre orbite, faites défiler sur le côté",
     "empty": "Pas encore d'albums proches de vos écoutes.",
-    "because": "Parce que vous avez écouté {{title}}",
-    "row": "{{artist}} · parce que vous avez écouté {{title}}"
+    "because": "Parce que vous avez écouté {{title}}"
   },
   "charts": {
     "title": "Classements",
@@ -431,7 +427,8 @@
     "empty": "Vos artistes principaux sont complets.",
     "have": "{{have}} sorties sur {{total}}",
     "missing": "Pas dans votre bibliothèque",
-    "openArtist": "Ouvrir {{artist}}"
+    "openArtist": "Ouvrir {{artist}}",
+    "rail": "Tous les artistes, faites défiler sur le côté"
   },
   "anniversaries": {
     "title": "Anniversaires",

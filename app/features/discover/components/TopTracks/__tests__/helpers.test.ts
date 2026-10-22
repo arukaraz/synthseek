@@ -1,16 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formatPlaycount, heroShapeFor } from "../helpers";
-
-describe("heroShapeFor", () => {
-  it("puts the hero beside the list for the half-height M size", () => {
-    expect(heroShapeFor("M")).toBe("compact");
-  });
-
-  it("allows the hero to stack above the list for the tall M+ size", () => {
-    expect(heroShapeFor("M+")).toBe("tall");
-  });
-});
+import { formatPlaycount } from "../helpers";
 
 describe("formatPlaycount", () => {
   it("returns plain integer under 1000", () => {

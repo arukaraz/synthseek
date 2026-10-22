@@ -16,6 +16,8 @@ export const widgetHeaderTitle = cva("text-fg text-base leading-tight font-semib
 
 export const widgetHeaderSubtitle = cva("text-fg-muted text-xs");
 
+export const widgetHeaderAside = cva("flex min-w-0 flex-col items-end self-start text-right");
+
 export const widgetHeaderActionLink = cva(
   "text-primary-400 inline-flex shrink-0 items-center gap-1 self-center text-sm font-medium underline-offset-2 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded"
 );

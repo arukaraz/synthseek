@@ -8,7 +8,7 @@ import type { WidgetPreviewProps } from "./types";
 export function WidgetPreview({ widget, info }: WidgetPreviewProps) {
   const definition = BOARD_WIDGETS[widget];
   const Widget = definition.component;
-  const frame = previewFrame(definition.defaultSize);
+  const frame = previewFrame(widget);
 
   return (
     <div className={previewFit()} style={previewVars(frame)} aria-hidden inert>

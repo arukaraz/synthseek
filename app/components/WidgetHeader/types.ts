@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 export type WidgetHeaderHeadingLevel = "h2" | "h3";
 
@@ -16,6 +17,7 @@ export interface WidgetHeaderProps {
   subtitle: string;
   headingLevel?: WidgetHeaderHeadingLevel;
   action?: WidgetHeaderAction;
+  aside?: ReactNode;
   titleId?: string;
   info?: string;
 }
