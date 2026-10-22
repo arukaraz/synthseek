@@ -71,6 +71,7 @@ COPY --chown=synthseek:nodejs web/static ./web/.next/static/
 COPY --chown=synthseek:nodejs web/public ./web/public/
 
 COPY --chown=synthseek:nodejs docker/start.sh ./start.sh
+COPY --chown=synthseek:nodejs docker/append-peer-address.mjs ./web/append-peer-address.mjs
 RUN chmod +x ./start.sh \
     && chmod -R 755 /app/web \
     && rm -f /app/web/.env 2>/dev/null || true

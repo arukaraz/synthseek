@@ -273,7 +273,7 @@ if [ $WAITED -ge $MAX_WAIT ]; then
 fi
 
 cd /app/web
-su-exec synthseek sh -c "cd /app/web && HOSTNAME=0.0.0.0 PORT=$WEB_PORT node server.js" >/dev/null &
+su-exec synthseek sh -c "cd /app/web && HOSTNAME=0.0.0.0 PORT=$WEB_PORT node --import ./append-peer-address.mjs server.js" >/dev/null &
 WEB_PID=$!
 
 sleep 2

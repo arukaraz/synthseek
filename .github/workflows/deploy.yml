@@ -301,6 +301,7 @@ jobs:
           fi
 
           cp docker/start.sh docker-context/docker/
+          cp docker/append-peer-address.mjs docker-context/docker/
           chmod +x docker-context/docker/start.sh
 
           cp Dockerfile docker-context/Dockerfile

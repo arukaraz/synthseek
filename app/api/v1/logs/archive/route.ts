@@ -1,4 +1,5 @@
 import { API_URL } from "@utils/env";
+import { clientAddressHeaders } from "@utils/proxy-headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest): Promise<Response> {
@@ -7,7 +8,7 @@ export async function GET(request: NextRequest): Promise<Response> {
   try {
     const cookie = request.headers.get("cookie");
     const response = await fetch(url, {
-      headers: cookie ? { cookie } : {},
+      headers: { ...(cookie ? { cookie } : {}), ...clientAddressHeaders(request.headers) },
       cache: "no-store",
     });
 
