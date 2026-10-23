@@ -1,4 +1,5 @@
 import { API_URL } from "@utils/env";
+import { clientAddressHeaders } from "@utils/proxy-headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -50,6 +51,7 @@ export async function GET(request: NextRequest): Promise<Response> {
         "content-type": "application/json",
         cookie: cookieHeader,
         ...(correlationId ? { "x-correlation-id": correlationId } : {}),
+        ...clientAddressHeaders(request.headers),
       },
       body: JSON.stringify({ json: { state, code } }),
       cache: "no-store",

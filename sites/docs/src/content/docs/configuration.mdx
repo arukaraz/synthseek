@@ -292,6 +292,7 @@ Two live where you use them rather than in a settings section.
 | Variable          | What it is                                                                                                                                                                                                                                                         |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `PUBLIC_BASE_URL` | The public HTTPS address this instance is reachable at. Required for assistant connectors and for the Spotify OAuth callback, both of which call back over the internet. Discord, ntfy and Telegram notifications link back to it. Leave empty for local-only use. |
+| `TRUSTED_PROXIES` | Who may report a visitor's address in `X-Forwarded-For`, as comma-separated addresses or CIDR ranges. Unset, any address on a private network may. Set it to your reverse proxy's address so nothing else on your network can claim another one.                   |
 
 ### Bootstrap credentials
 
