@@ -2,6 +2,26 @@
 
 ---
 
+# v2.9.1, October 23, 2026
+
+> [!NOTE]
+> After updating, Synthseek checks which MusicBrainz artist each artist in your library is, once, in the background. On a large library this takes a few hours, and some artists' bio, tags and release types change to the right artist.
+
+> [!NOTE]
+> If your reverse proxy reaches Synthseek from a public address, set TRUSTED_PROXIES to that address, or every visitor will appear to come from the proxy. A proxy on a Docker or home network needs nothing.
+
+### The right artist for shared names, and steadier MusicBrainz lookups
+
+- Searching for a name several artists share, such as Queen or Adele, now opens the well-known one.
+- An artist's bio, tags and release types now come from the artist who made their songs, not from the first artist MusicBrainz lists under that name.
+- When MusicBrainz is busy, Synthseek now waits and tries again instead of giving up, and artist and album pages stop waiting on it after a few seconds.
+- Connections to some online services no longer fail now and then when the server has no IPv6.
+- Two downloads retried at the same moment can no longer both get past a quota that has room for only one.
+- A visitor from the internet can no longer fake their address to get past rate limits or into the logs under another one.
+- Dependencies with security advisories are updated.
+
+---
+
 # v2.9.0, October 16, 2026
 
 ### Seven download sources, several library paths, and a simpler Settings
