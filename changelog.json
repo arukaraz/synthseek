@@ -2,6 +2,22 @@
   "schemaVersion": 1,
   "versions": [
     {
+      "version": "2.9.2",
+      "date": "2026-10-23",
+      "type": "patch",
+      "title": "Security updates",
+      "callouts": [],
+      "sections": [
+        {
+          "heading": "Fixes",
+          "category": "fix",
+          "items": [
+            "Dependencies with security advisories are updated, including one that could let an oversized request use up the server's memory."
+          ]
+        }
+      ]
+    },
+    {
       "version": "2.9.1",
       "date": "2026-10-23",
       "type": "patch",

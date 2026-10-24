@@ -2,6 +2,14 @@
 
 ---
 
+# v2.9.2, October 23, 2026
+
+### Security updates
+
+- Dependencies with security advisories are updated, including one that could let an oversized request use up the server's memory.
+
+---
+
 # v2.9.1, October 23, 2026
 
 > [!NOTE]
