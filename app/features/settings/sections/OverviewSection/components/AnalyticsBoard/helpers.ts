@@ -109,7 +109,3 @@ export function weekdayLabels(): string[] {
   const format = new Intl.DateTimeFormat(i18n.language, { weekday: "short", timeZone: "UTC" });
   return Array.from({ length: WEEKDAY_COUNT }, (_, index) => format.format(REFERENCE_MONDAY_UTC + index * DAY_MS));
 }
-
-export function browserTimeZone(): string {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone;
-}

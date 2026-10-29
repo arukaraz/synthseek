@@ -10,6 +10,17 @@ export {
 
 export { createAlbum, createCompletedAlbum, createInProgressAlbum, resetAlbumCounter } from "./album.factory";
 
+export {
+  createAlbumResult,
+  createBucketResult,
+  createFeedAlbumResult,
+  createFeedAlbumRow,
+  createQuestionAlbumRow,
+  createQuestionTrackRow,
+  createTrackResult,
+  createWidget,
+} from "./widget.factory";
+
 export { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "./player.factory";
 
 export {

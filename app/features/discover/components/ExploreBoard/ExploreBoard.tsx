@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { BoardGrid } from "@components/BoardGrid";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { useBoardLayout } from "@hooks/api/queries/board/useBoardLayout";
+import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import { useBoardEditor } from "../../hooks/useBoardEditor";
@@ -13,18 +14,21 @@ import { WidgetGallery } from "../WidgetGallery/WidgetGallery";
 import { BoardEmpty } from "./BoardEmpty";
 import { BoardTile } from "./BoardTile";
 import { BoardToolbar } from "./BoardToolbar";
-import { boardItemsOf, packBoard, placementsById } from "./helpers";
+import { boardItemsOf, customStatusOf, customWidgetsById, packBoard, placementsById } from "./helpers";
 import { boardRoot, liveRegion } from "./styles";
 
 export function ExploreBoard() {
   const { t } = useTranslation("discover");
   const device = useBoardDevice();
   const { data, isLoading } = useBoardLayout();
+  const myWidgets = useMyWidgets();
   const items = useMemo(() => boardItemsOf(data), [data]);
-  const editor = useBoardEditor(items, data);
+  const custom = useMemo(() => customWidgetsById(myWidgets.data), [myWidgets.data]);
+  const customStatus = customStatusOf(myWidgets);
+  const editor = useBoardEditor(items, custom, customStatus);
   const placements = useMemo(
-    () => placementsById(packBoard(editor.displayItems, device)),
-    [editor.displayItems, device]
+    () => placementsById(packBoard(editor.displayItems, device, custom)),
+    [editor.displayItems, device, custom]
   );
 
   if (isLoading) return <SectionLoading />;
@@ -43,6 +47,8 @@ export function ExploreBoard() {
                 key={item.id}
                 tile={tile}
                 device={device}
+                custom={custom}
+                customStatus={customStatus}
                 editing={editor.editing}
                 dragging={editor.draggingId === item.id}
                 position={index + 1}

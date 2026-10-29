@@ -3,7 +3,10 @@ import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@test/test-utils";
 
 import { BoardTile } from "../BoardTile";
+import { customWidgetsById } from "../helpers";
 import type { BoardTileActions, PlacedTile } from "../types";
+
+const NO_CUSTOM = customWidgetsById([]);
 
 const spies = vi.hoisted(() => ({ widget: vi.fn<() => void>(), info: vi.fn<() => void>() }));
 
@@ -33,7 +36,17 @@ function actions(): BoardTileActions {
 
 function renderTile(editing: boolean, handlers = actions()) {
   render(
-    <BoardTile tile={TILE} device="wide" editing={editing} dragging={false} position={1} total={2} actions={handlers} />
+    <BoardTile
+      tile={TILE}
+      device="wide"
+      custom={NO_CUSTOM}
+      customStatus="ready"
+      editing={editing}
+      dragging={false}
+      position={1}
+      total={2}
+      actions={handlers}
+    />
   );
   return handlers;
 }
@@ -87,7 +100,19 @@ describe("BoardTile", () => {
   });
 
   it("turns into a named slot of its size while it is being dragged", () => {
-    render(<BoardTile tile={TILE} device="wide" editing dragging position={1} total={2} actions={actions()} />);
+    render(
+      <BoardTile
+        tile={TILE}
+        device="wide"
+        custom={NO_CUSTOM}
+        customStatus="ready"
+        editing
+        dragging
+        position={1}
+        total={2}
+        actions={actions()}
+      />
+    );
 
     expect(tileElement()).toHaveTextContent("Trending now");
     expect(tileElement()).toHaveTextContent("Large");
@@ -101,5 +126,26 @@ describe("BoardTile", () => {
     fireEvent.keyDown(screen.getByRole("button", { name: "Large" }), { key: "ArrowLeft" });
 
     expect(handlers.move).not.toHaveBeenCalled();
+  });
+
+  it("never labels a custom tile deleted in edit mode when its widget list failed to load", () => {
+    const custom: PlacedTile = { ...TILE, item: { kind: "custom", id: "c", widgetId: "w_1", size: "M" }, size: "M" };
+    render(
+      <BoardTile
+        tile={custom}
+        device="wide"
+        custom={NO_CUSTOM}
+        customStatus="error"
+        editing
+        dragging={false}
+        position={1}
+        total={1}
+        actions={actions()}
+      />
+    );
+
+    expect(screen.queryByText(/Deleted widget/)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Remove Custom widget" })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "Custom widget, position 1 of 1" })).toBeInTheDocument();
   });
 });

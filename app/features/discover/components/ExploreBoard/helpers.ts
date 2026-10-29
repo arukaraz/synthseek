@@ -1,16 +1,28 @@
+import i18n from "@locale";
 import type { MouseEvent } from "react";
 
 import { BOARD_COLUMNS, BOARD_SPANS, type BoardDevice, type BoardHeight, type BoardSpan } from "@components/BoardGrid";
 import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 import {
   BOARD_SCHEMA_VERSION,
   BOARD_SIZE_ORDER,
   BOARD_WIDGETS,
+  CUSTOM_BLOCK_HEIGHTS,
+  CUSTOM_NARROW_SIZES,
   DEFAULT_BOARD,
   EDIT_PASSTHROUGH_SELECTOR,
+  FALLBACK_BLOCK_HEIGHT,
 } from "./constants";
-import type { BoardKeyAction, BoardWidgetDefinition, MoveDelta, PlacedTile } from "./types";
+import type {
+  BoardCustomWidgets,
+  BoardKeyAction,
+  CustomWidgetsStatus,
+  BoardWidgetDefinition,
+  MoveDelta,
+  PlacedTile,
+} from "./types";
 
 export function blockWidgetAction(event: Pick<MouseEvent, "target" | "preventDefault" | "stopPropagation">): void {
   if (event.target instanceof Element && event.target.closest(EDIT_PASSTHROUGH_SELECTOR)) return;
@@ -43,8 +55,47 @@ export function spanOf(widget: BoardWidgetKey, size: BoardSize, device: BoardDev
   return BOARD_SPANS[device][size][heightOf(widget, size)];
 }
 
-export function sameSlot(a: BoardItem, b: BoardItem): boolean {
-  return a.size === b.size && heightOf(a.widget, a.size) === heightOf(b.widget, b.size);
+export function customWidgetsById(widgets: readonly WidgetDocument[] | undefined): BoardCustomWidgets {
+  return new Map((widgets ?? []).map((widget) => [widget.id, widget]));
+}
+
+export function customStatusOf(query: { isLoading: boolean; isError: boolean }): CustomWidgetsStatus {
+  if (query.isLoading) return "loading";
+  return query.isError ? "error" : "ready";
+}
+
+export function tileNameOf(item: BoardItem, custom: BoardCustomWidgets, status: CustomWidgetsStatus): string {
+  if (item.kind === "builtin") return i18n.t(`discover:${BOARD_WIDGETS[item.widget].titleKey}`);
+  const widget = custom.get(item.widgetId);
+  if (widget) return widget.meta.name;
+  return i18n.t(status === "ready" ? "discover:customWidget.deletedName" : "discover:customWidget.unresolvedName");
+}
+
+export function tileSizesOf(item: BoardItem): readonly BoardSize[] {
+  return item.kind === "custom" ? BOARD_SIZE_ORDER : sizesOf(BOARD_WIDGETS[item.widget]);
+}
+
+export function editableSizesOf(item: BoardItem, device: BoardDevice): readonly BoardSize[] {
+  return item.kind === "custom" && device === "narrow" ? [] : tileSizesOf(item);
+}
+
+export function tileHeightOf(item: BoardItem, size: BoardSize, custom: BoardCustomWidgets): BoardHeight {
+  if (item.kind === "builtin") return heightOf(item.widget, size);
+  const block = custom.get(item.widgetId)?.view.block;
+  return (block ? CUSTOM_BLOCK_HEIGHTS[block]?.[size] : undefined) ?? FALLBACK_BLOCK_HEIGHT;
+}
+
+export function tileSpanOf(
+  item: BoardItem,
+  size: BoardSize,
+  device: BoardDevice,
+  custom: BoardCustomWidgets
+): BoardSpan {
+  return BOARD_SPANS[device][size][tileHeightOf(item, size, custom)];
+}
+
+export function sameSlot(a: BoardItem, b: BoardItem, custom: BoardCustomWidgets): boolean {
+  return a.size === b.size && tileHeightOf(a, a.size, custom) === tileHeightOf(b, b.size, custom);
 }
 
 export function orderKeyOf(items: readonly BoardItem[]): string {
@@ -67,21 +118,21 @@ export function uniqueTileId(widget: BoardWidgetKey, items: readonly BoardItem[]
 
 export function boardItemsOf(layout: BoardLayout | null | undefined): BoardItem[] {
   if (!layout) return DEFAULT_BOARD.map((item) => ({ ...item }));
-  return layout.items.flatMap((item) => {
-    if (item.kind !== "builtin") return [];
+  return layout.items.map((item) => {
+    if (item.kind === "custom") return item;
     const definition = BOARD_WIDGETS[item.widget];
-    return [definition.sizes[item.size] !== undefined ? item : { ...item, size: definition.defaultSize }];
+    return definition.sizes[item.size] !== undefined ? item : { ...item, size: definition.defaultSize };
   });
 }
 
-export function layoutOf(items: readonly BoardItem[], stored: BoardLayout | null | undefined): BoardLayout {
-  const unrendered = (stored?.items ?? []).filter((item) => item.kind !== "builtin");
-  return { schemaVersion: BOARD_SCHEMA_VERSION, items: [...items.map((item) => ({ ...item })), ...unrendered] };
+export function layoutOf(items: readonly BoardItem[]): BoardLayout {
+  return { schemaVersion: BOARD_SCHEMA_VERSION, items: items.map((item) => ({ ...item })) };
 }
 
 export function displayedSize(item: BoardItem, device: BoardDevice): BoardSize {
   if (device === "wide") return item.size;
-  return BOARD_WIDGETS[item.widget].narrowSizes?.[item.size] ?? item.size;
+  const narrow = item.kind === "custom" ? CUSTOM_NARROW_SIZES : BOARD_WIDGETS[item.widget].narrowSizes;
+  return narrow?.[item.size] ?? item.size;
 }
 
 function cellKey(row: number, col: number): string {
@@ -97,7 +148,7 @@ function fits(occupied: Set<string>, row: number, col: number, cols: number, row
   return true;
 }
 
-export function packBoard(items: readonly BoardItem[], device: BoardDevice): PlacedTile[] {
+export function packBoard(items: readonly BoardItem[], device: BoardDevice, custom: BoardCustomWidgets): PlacedTile[] {
   const columns = BOARD_COLUMNS[device];
   const occupied = new Set<string>();
   const placed: PlacedTile[] = [];
@@ -106,7 +157,7 @@ export function packBoard(items: readonly BoardItem[], device: BoardDevice): Pla
 
   for (const item of items) {
     const size = displayedSize(item, device);
-    const span = spanOf(item.widget, size, device);
+    const span = tileSpanOf(item, size, device, custom);
     const cols = Math.min(span.cols, columns);
     let found = false;
     while (!found) {
@@ -146,9 +197,7 @@ export function moveItem(items: readonly BoardItem[], id: string, toIndex: numbe
 }
 
 export function resizeItem(items: readonly BoardItem[], id: string, size: BoardSize): BoardItem[] {
-  return items.map((item) =>
-    item.id === id && BOARD_WIDGETS[item.widget].sizes[size] !== undefined ? { ...item, size } : item
-  );
+  return items.map((item) => (item.id === id && tileSizesOf(item).includes(size) ? { ...item, size } : item));
 }
 
 export function removeItem(items: readonly BoardItem[], id: string): BoardItem[] {
@@ -160,5 +209,7 @@ export function appendWidget(items: readonly BoardItem[], widget: BoardWidgetKey
 }
 
 export function widgetsOnBoard(items: readonly BoardItem[]): Map<BoardWidgetKey, string> {
-  return new Map(items.map((item) => [item.widget, item.id]));
+  const onBoard = new Map<BoardWidgetKey, string>();
+  for (const item of items) if (item.kind === "builtin") onBoard.set(item.widget, item.id);
+  return onBoard;
 }

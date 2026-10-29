@@ -27,6 +27,21 @@ describe("BoardTileEditControls", () => {
     expect(handlers.resize).toHaveBeenCalledWith("t", "M");
   });
 
+  it("offers a custom tile every size on a wide board and no size on a narrow one, where it always shows at M", () => {
+    const custom: BoardItem = { kind: "custom", id: "c", widgetId: "w_1", size: "S" };
+    const { rerender } = render(
+      <BoardTileEditControls item={custom} device="wide" name="Mine" position={1} total={1} actions={actions()} />
+    );
+    expect(screen.getByRole("group", { name: "Size of Mine" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Large" })).toBeInTheDocument();
+
+    rerender(
+      <BoardTileEditControls item={custom} device="narrow" name="Mine" position={1} total={1} actions={actions()} />
+    );
+    expect(screen.queryByRole("group", { name: "Size of Mine" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Remove Mine" })).toBeInTheDocument();
+  });
+
   it("moves earlier and later, and disables each button at its end of the board", () => {
     const handlers = actions();
     const { rerender } = render(

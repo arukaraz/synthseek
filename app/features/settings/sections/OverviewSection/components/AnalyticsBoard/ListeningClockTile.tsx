@@ -8,9 +8,10 @@ import { SegmentTabs } from "@components/ui/SegmentTabs";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useListeningClock } from "@hooks/api/queries/analytics/useListeningClock";
 import type { ClockPeriod } from "@hooks/api/queries/analytics/types";
+import { browserTimeZone } from "@utils/time-zone";
 
 import { CLOCK_DEFAULT_PERIOD, CLOCK_PERIOD_KEYS, CLOCK_PERIODS } from "./constants";
-import { browserTimeZone, clockPeak, weekdayLabels } from "./helpers";
+import { clockPeak, weekdayLabels } from "./helpers";
 import { HeatGrid } from "./HeatGrid";
 import { clockFoot } from "./styles";
 

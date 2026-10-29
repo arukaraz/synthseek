@@ -1,0 +1,192 @@
+import { describe, expect, it, vi } from "vitest";
+
+import {
+  createAlbumResult,
+  createBucketResult,
+  createFeedAlbumResult,
+  createFeedAlbumRow,
+  createQuestionAlbumRow,
+  createQuestionTrackRow,
+  createTrackResult,
+} from "@test/factories";
+
+import {
+  calendarPartsOf,
+  customWidgetNote,
+  fieldText,
+  itemControls,
+  measureText,
+  widgetIconOf,
+  widgetItemsOf,
+  widgetStatsOf,
+} from "../helpers";
+import type { WidgetHandlers, WidgetItem } from "../types";
+
+function handlers(): WidgetHandlers {
+  return { play: vi.fn(), request: vi.fn(), open: vi.fn() };
+}
+
+function onlyItem(items: WidgetItem[]): WidgetItem {
+  const [item] = items;
+  if (!item) throw new Error("no item");
+  return item;
+}
+
+describe("widgetItemsOf", () => {
+  it("shows a played track with its measure and plays it by its library id", () => {
+    const item = onlyItem(widgetItemsOf(createTrackResult([createQuestionTrackRow()]), undefined));
+    expect(item).toMatchObject({ title: "Song One", subtitle: "Artist A", value: "12 plays", date: "2026-10-28" });
+    expect(item.play).toEqual({ kind: "tracks", trackIds: ["req-1"] });
+    expect(item.request).toBeNull();
+  });
+
+  it("offers no playback for a track that is not in the library", () => {
+    const item = onlyItem(widgetItemsOf(createTrackResult([createQuestionTrackRow({ inLibrary: false })]), undefined));
+    expect(item.play).toBeNull();
+  });
+
+  it("opens and requests an album by its catalog id and plays it only when it is in the library", () => {
+    const owned = onlyItem(widgetItemsOf(createAlbumResult([createQuestionAlbumRow()]), undefined));
+    expect(owned.play).toEqual({ kind: "album", albumExternalId: "dz-album-1" });
+    expect(owned.open).toMatchObject({ mode: "album", id: "dz-album-1" });
+    expect(owned.request).toMatchObject({ type: "album", id: "dz-album-1", name: "Album One" });
+
+    const missing = onlyItem(
+      widgetItemsOf(createAlbumResult([createQuestionAlbumRow({ inLibrary: false })]), undefined)
+    );
+    expect(missing.play).toBeNull();
+    expect(missing.request).not.toBeNull();
+  });
+
+  it("gives a feed album without a catalog id nothing to open, request or play", () => {
+    const item = onlyItem(widgetItemsOf(createFeedAlbumResult([createFeedAlbumRow()]), undefined));
+    expect(item).toMatchObject({ play: null, request: null, open: null, date: "2026-11-07" });
+  });
+
+  it("plays a feed album that the library already holds through its catalog id", () => {
+    const row = createFeedAlbumRow({ catalogAlbumId: "dz-9", inLibrary: true });
+    const item = onlyItem(widgetItemsOf(createFeedAlbumResult([row]), undefined));
+    expect(item.play).toEqual({ kind: "album", albumExternalId: "dz-9" });
+    expect(item.request).toMatchObject({ id: "dz-9" });
+  });
+
+  it("labels a decade bucket with its suffix and keeps a genre label as it is", () => {
+    const decade = { key: "1990", label: "1990", value: 40, prev: null };
+    expect(onlyItem(widgetItemsOf(createBucketResult([decade], "decades"), undefined)).title).toBe("1990s");
+    const genre = { key: "rock", label: "Rock", value: 5, prev: null };
+    expect(onlyItem(widgetItemsOf(createBucketResult([genre]), undefined)).title).toBe("Rock");
+  });
+
+  it("returns no items for a series or matrix result", () => {
+    const series = { ...createTrackResult([]), dataset: "series" as const, shape: "series" as const, rows: [] };
+    expect(widgetItemsOf(series, undefined)).toEqual([]);
+  });
+
+  it("reads a bound field for a slot and falls back when the field is missing", () => {
+    const result = createTrackResult([createQuestionTrackRow()]);
+    expect(onlyItem(widgetItemsOf(result, { subtitle: "album" })).subtitle).toBe("Album A");
+    expect(onlyItem(widgetItemsOf(result, { subtitle: "nope" })).subtitle).toBe("Artist A");
+  });
+});
+
+describe("fieldText", () => {
+  it("formats numbers and leaves booleans and nulls out", () => {
+    expect(fieldText({ plays: 1200 }, "plays")).toBe("1.2K");
+    expect(fieldText({ inLibrary: true, cover: null }, "inLibrary")).toBeNull();
+    expect(fieldText({ inLibrary: true, cover: null }, "cover")).toBeNull();
+  });
+});
+
+describe("measureText", () => {
+  it("names the movement of a rank delta", () => {
+    expect(measureText("rankDelta", null, null)).toBe("New");
+    expect(measureText("rankDelta", 0, null)).toBe("Same");
+    expect(measureText("rankDelta", 3, null)).toBe("Up 3");
+    expect(measureText("rankDelta", -2, null)).toBe("Down 2");
+  });
+
+  it("rounds minutes and counts tracks", () => {
+    expect(measureText("minutes", 41.6, null)).toBe("42 min");
+    expect(measureText("distinctTracks", 1, null)).toBe("1 track");
+  });
+
+  it("shows the date of a date measure, and nothing without one", () => {
+    expect(measureText("lastPlayed", null, null)).toBeNull();
+    expect(measureText("addedAt", null, new Date(Date.now() - 2 * 86_400_000))).toBe("2d ago");
+  });
+});
+
+describe("widgetStatsOf", () => {
+  it("turns buckets into labelled values with the change against the previous window", () => {
+    const stats = widgetStatsOf(createBucketResult([{ key: "rock", label: "Rock", value: 12, prev: 9 }]));
+    expect(stats).toEqual([{ key: "rock", label: "Rock", value: "12", delta: 3 }]);
+  });
+
+  it("has no stats for a ranked result", () => {
+    expect(widgetStatsOf(createTrackResult([createQuestionTrackRow()]))).toEqual([]);
+  });
+});
+
+describe("itemControls", () => {
+  const item = onlyItem(widgetItemsOf(createAlbumResult([createQuestionAlbumRow()]), undefined));
+
+  it("puts a play button on the cover and opens the details on select", () => {
+    const calls = handlers();
+    const controls = itemControls(item, "play", calls);
+    controls.coverAction?.onClick();
+    controls.onSelect?.();
+    expect(controls.coverAction).toMatchObject({ kind: "play", label: "Play Album One" });
+    expect(calls.play).toHaveBeenCalledWith({ kind: "album", albumExternalId: "dz-album-1" });
+    expect(calls.open).toHaveBeenCalledWith(expect.objectContaining({ id: "dz-album-1" }));
+  });
+
+  it("puts a request button on the cover for the request action", () => {
+    const calls = handlers();
+    itemControls(item, "request", calls).coverAction?.onClick();
+    expect(calls.request).toHaveBeenCalledWith(expect.objectContaining({ type: "album", id: "dz-album-1" }));
+  });
+
+  it("only opens for the open action, and does nothing for none", () => {
+    expect(itemControls(item, "open", handlers()).coverAction).toBeUndefined();
+    expect(itemControls(item, "none", handlers())).toEqual({});
+  });
+
+  it("drops the play button when the item has nothing to play", () => {
+    const controls = itemControls({ ...item, play: null }, "play", handlers());
+    expect(controls.coverAction).toBeUndefined();
+    expect(controls.onSelect).toBeDefined();
+  });
+});
+
+describe("customWidgetNote", () => {
+  const result = createTrackResult([]);
+
+  it("prefers the unsupported note, then the error, then the missing integration, then empty", () => {
+    expect(customWidgetNote({ result, isError: true, empty: true, supported: false })).toBe(
+      "This view arrives in a later update."
+    );
+    expect(customWidgetNote({ result, isError: true, empty: true, supported: true })).toBe(
+      "Couldn't load this right now."
+    );
+    expect(
+      customWidgetNote({ result: createFeedAlbumResult([], "lastfm"), isError: false, empty: true, supported: true })
+    ).toBe("Connect Last.fm in Settings to fill this widget.");
+    expect(customWidgetNote({ result, isError: false, empty: true, supported: true })).toBe(
+      "Nothing matches this widget right now."
+    );
+    expect(customWidgetNote({ result, isError: false, empty: false, supported: true })).toBeNull();
+  });
+});
+
+describe("calendarPartsOf and widgetIconOf", () => {
+  it("splits a calendar day and refuses a partial date", () => {
+    expect(calendarPartsOf("2026-11-07")).toEqual({ month: "Nov", day: "7" });
+    expect(calendarPartsOf("2026")).toBeNull();
+    expect(calendarPartsOf(null)).toBeNull();
+  });
+
+  it("falls back to the default icon for a name it does not know", () => {
+    expect(widgetIconOf("flame")).not.toBe(widgetIconOf("nope"));
+    expect(widgetIconOf("constructor")).toBe(widgetIconOf("sparkles"));
+  });
+});

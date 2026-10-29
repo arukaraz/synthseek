@@ -1,9 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { BoardItem, BoardLayout } from "@hooks/api/queries/board/types";
+import { createWidget } from "@test/factories";
 import { act, fireEvent, renderHook } from "@test/test-utils";
 
+import { customWidgetsById } from "../../components/ExploreBoard/helpers";
 import { useBoardEditor } from "../useBoardEditor";
+
+const NO_CUSTOM = customWidgetsById([]);
 
 interface ToastAction {
   label: string;
@@ -48,7 +52,7 @@ afterEach(() => {
 
 describe("useBoardEditor", () => {
   it("moves a tile one step, saves the whole list and announces the new position", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.actions.move("c", -1));
 
@@ -56,18 +60,30 @@ describe("useBoardEditor", () => {
     expect(result.current.announcement).toBe("Discover Mixes moved to position 2 of 3");
   });
 
-  it("keeps the stored custom tiles in every layout it saves", () => {
-    const custom = { kind: "custom" as const, id: "x", widgetId: "w_1", size: "M" as const };
-    const stored: BoardLayout = { schemaVersion: 3, items: [custom, ...ITEMS] };
-    const { result } = renderHook(() => useBoardEditor(ITEMS, stored));
+  it("keeps a custom tile where it sits and names it after its widget", () => {
+    const custom: BoardItem = { kind: "custom", id: "x", widgetId: "w_1", size: "M" };
+    const base = createWidget();
+    const widgets = customWidgetsById([createWidget({ meta: { ...base.meta, name: "Mine" } })]);
+    const { result } = renderHook(() => useBoardEditor([custom, ...ITEMS], widgets, "ready"));
 
-    act(() => result.current.actions.move("c", -1));
+    act(() => result.current.actions.move("x", 1));
 
-    expect(lastSavedIds()).toEqual(["a", "c", "b", "x"]);
+    expect(lastSavedIds()).toEqual(["a", "x", "b", "c"]);
+    expect(result.current.announcement).toBe("Mine moved to position 2 of 4");
+  });
+
+  it("announces a custom tile by a neutral name when its widget list failed to load", () => {
+    const custom: BoardItem = { kind: "custom", id: "x", widgetId: "w_1", size: "M" };
+    const { result } = renderHook(() => useBoardEditor([custom, ...ITEMS], NO_CUSTOM, "error"));
+
+    act(() => result.current.actions.remove("x"));
+
+    expect(result.current.announcement).toBe("Custom widget removed");
+    expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Custom widget removed");
   });
 
   it("does nothing when a tile is moved past either end", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.actions.move("a", -1));
     act(() => result.current.actions.move("c", 1));
@@ -76,7 +92,7 @@ describe("useBoardEditor", () => {
   });
 
   it("saves a new size and announces it, but skips the size the tile already has", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.actions.resize("a", "M"));
     expect(saveMock).not.toHaveBeenCalled();
@@ -87,7 +103,7 @@ describe("useBoardEditor", () => {
   });
 
   it("removes a tile with an Undo that saves the previous list back", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.actions.remove("b"));
 
@@ -102,7 +118,7 @@ describe("useBoardEditor", () => {
   });
 
   it("saves a dropped order with an Undo back to the order before the drag", () => {
-    renderHook(() => useBoardEditor(ITEMS, null));
+    renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
     const dropped = [ITEMS[2], ITEMS[0], ITEMS[1]];
 
     act(() => dropRef.current?.(dropped));
@@ -114,7 +130,7 @@ describe("useBoardEditor", () => {
   });
 
   it("appends an added widget at its default size under a free id", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.add("trending"));
 
@@ -128,7 +144,7 @@ describe("useBoardEditor", () => {
   });
 
   it("opens the gallery in edit mode and closes both when editing stops", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.openGallery());
     expect(result.current.editing).toBe(true);
@@ -140,7 +156,7 @@ describe("useBoardEditor", () => {
   });
 
   it("leaves edit mode on Escape only while the gallery is closed", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.openGallery());
     act(() => {
@@ -156,7 +172,7 @@ describe("useBoardEditor", () => {
   });
 
   it("stays in edit mode when another layer already handled the Escape", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
     const handled = (event: KeyboardEvent) => event.preventDefault();
     document.addEventListener("keydown", handled, { capture: true });
 

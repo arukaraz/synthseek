@@ -447,5 +447,38 @@
     "tracks_other": "{{count}} pistes",
     "synced": "Synchronisée {{when}}",
     "notSynced": "Non synchronisée"
+  },
+  "customWidget": {
+    "info": "Un widget que vous avez créé dans Mes widgets.",
+    "deletedName": "Widget supprimé",
+    "unresolvedName": "Widget personnalisé",
+    "deleted": "Ce widget n’existe plus. Retirez-le du tableau avec Personnaliser.",
+    "empty": "Rien ne correspond à ce widget pour le moment.",
+    "unsupported": "Cette vue arrive dans une prochaine mise à jour.",
+    "needs": {
+      "lastfm": "Connectez Last.fm dans les Réglages pour remplir ce widget.",
+      "listenbrainz": "Ajoutez votre utilisateur ListenBrainz dans les Réglages pour remplir ce widget."
+    },
+    "rail": "Éléments du widget",
+    "leader": "N° 1",
+    "play": "Lire",
+    "request": "Demander",
+    "decade": "Années {{year}}",
+    "value": {
+      "plays_one": "{{count}} écoute",
+      "plays_other": "{{count}} écoutes",
+      "minutes_one": "{{count}} min",
+      "minutes_other": "{{count}} min",
+      "tracks_one": "{{count}} piste",
+      "tracks_other": "{{count}} pistes",
+      "new": "Nouveau",
+      "same": "Stable",
+      "up": "+{{count}} places",
+      "down": "−{{count}} places"
+    },
+    "delta": {
+      "up": "{{value}} de plus que la période précédente",
+      "down": "{{value}} de moins que la période précédente"
+    }
   }
 }

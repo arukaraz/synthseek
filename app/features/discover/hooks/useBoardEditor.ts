@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import { useSaveBoardLayout } from "@hooks/api/mutations/board/useSaveBoardLayout";
-import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import { focusBoardTile } from "@hooks/ui/board/helpers";
 import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
@@ -21,11 +21,16 @@ import {
   removeItem,
   resizeItem,
   sameSlot,
+  tileNameOf,
   uniqueTileId,
 } from "../components/ExploreBoard/helpers";
-import type { BoardEditor, MoveDelta } from "../components/ExploreBoard/types";
+import type { BoardCustomWidgets, BoardEditor, CustomWidgetsStatus, MoveDelta } from "../components/ExploreBoard/types";
 
-export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | undefined): BoardEditor {
+export function useBoardEditor(
+  items: BoardItem[],
+  custom: BoardCustomWidgets,
+  customStatus: CustomWidgetsStatus
+): BoardEditor {
   const { t } = useTranslation("discover");
   const save = useSaveBoardLayout();
   const [editing, setEditing] = useState(false);
@@ -33,8 +38,8 @@ export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | 
   const [announcement, setAnnouncement] = useState("");
   const flipRef = useRef<BoardFlip | null>(null);
 
-  const nameOf = useCallback((widget: BoardWidgetKey) => t(BOARD_WIDGETS[widget].titleKey), [t]);
-  const commit = useCallback((next: BoardItem[]) => save(layoutOf(next, stored)), [save, stored]);
+  const nameOf = useCallback((item: BoardItem) => tileNameOf(item, custom, customStatus), [custom, customStatus]);
+  const commit = useCallback((next: BoardItem[]) => save(layoutOf(next)), [save]);
   const offerUndo = useCallback(
     (message: string, previous: BoardItem[]) => {
       toast.success(message, {
@@ -53,7 +58,8 @@ export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | 
     [commit, offerUndo, items, t]
   );
   const settling = useCallback(() => flipRef.current?.settling() ?? false, []);
-  const drag = useBoardDrag({ items, onDrop: drop, sameSlot, settling });
+  const sameSlotOn = useCallback((a: BoardItem, b: BoardItem) => sameSlot(a, b, custom), [custom]);
+  const drag = useBoardDrag({ items, onDrop: drop, sameSlot: sameSlotOn, settling });
   const displayItems = drag.order ?? items;
   const flip = useBoardFlip({ orderKey: orderKeyOf(displayItems), skipId: drag.draggingId });
   flipRef.current = flip;
@@ -65,9 +71,7 @@ export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | 
       const item = items[from];
       if (!item || target < 0 || target >= items.length) return;
       commit(moveItem(items, id, target));
-      setAnnouncement(
-        t("board.announce.moved", { name: nameOf(item.widget), position: target + 1, total: items.length })
-      );
+      setAnnouncement(t("board.announce.moved", { name: nameOf(item), position: target + 1, total: items.length }));
       focusBoardTile(id);
     },
     [commit, items, nameOf, t]
@@ -78,7 +82,7 @@ export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | 
       const item = items.find((candidate) => candidate.id === id);
       if (!item || item.size === size) return;
       commit(resizeItem(items, id, size));
-      setAnnouncement(t("board.announce.resized", { name: nameOf(item.widget), size: t(BOARD_SIZE_NAME_KEYS[size]) }));
+      setAnnouncement(t("board.announce.resized", { name: nameOf(item), size: t(BOARD_SIZE_NAME_KEYS[size]) }));
     },
     [commit, items, nameOf, t]
   );
@@ -87,7 +91,7 @@ export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | 
     (id: string) => {
       const item = items.find((candidate) => candidate.id === id);
       if (!item) return;
-      const name = nameOf(item.widget);
+      const name = nameOf(item);
       commit(removeItem(items, id));
       setAnnouncement(t("board.announce.removed", { name }));
       offerUndo(t("board.toast.removed", { name }), items);
@@ -98,9 +102,9 @@ export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | 
   const add = useCallback(
     (widget: BoardWidgetKey) => {
       commit(appendWidget(items, widget, uniqueTileId(widget, items)));
-      toast.success(t("board.toast.added", { name: nameOf(widget) }));
+      toast.success(t("board.toast.added", { name: t(BOARD_WIDGETS[widget].titleKey) }));
     },
-    [commit, items, nameOf, t]
+    [commit, items, t]
   );
 
   const startEditing = useCallback(() => setEditing(true), []);

@@ -3,14 +3,14 @@
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, GripVertical, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS, BOARD_WIDGETS } from "./constants";
-import { sizesOf } from "./helpers";
+import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS } from "./constants";
+import { editableSizesOf } from "./helpers";
 import { controlButton, dragHandle, editControls, sizeChip, sizeGroup } from "./styles";
 import type { BoardTileEditControlsProps } from "./types";
 
 export function BoardTileEditControls({ item, device, name, position, total, actions }: BoardTileEditControlsProps) {
   const { t } = useTranslation("discover");
-  const sizes = sizesOf(BOARD_WIDGETS[item.widget]);
+  const sizes = editableSizesOf(item, device);
   const EarlierIcon = device === "wide" ? ArrowLeft : ArrowUp;
   const LaterIcon = device === "wide" ? ArrowRight : ArrowDown;
 

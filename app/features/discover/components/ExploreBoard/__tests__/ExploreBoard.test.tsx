@@ -12,10 +12,11 @@ interface BoardLayoutResult {
   isLoading: boolean;
 }
 
-const { useBoardLayoutMock, saveMock, viewport, stub } = vi.hoisted(() => ({
+const { useBoardLayoutMock, saveMock, viewport, myWidgets, stub } = vi.hoisted(() => ({
   useBoardLayoutMock: vi.fn<() => BoardLayoutResult>(),
   saveMock: vi.fn<(layout: BoardLayout) => void>(),
   viewport: { wide: true },
+  myWidgets: { data: [], isLoading: false, isError: false },
   stub:
     (name: string) =>
     ({ size, info }: { size: string; info: string }) => <div data-widget={name} data-size={size} data-info={info} />,
@@ -23,6 +24,10 @@ const { useBoardLayoutMock, saveMock, viewport, stub } = vi.hoisted(() => ({
 
 vi.mock("@hooks/api/queries/board/useBoardLayout", () => ({
   useBoardLayout: () => useBoardLayoutMock(),
+}));
+
+vi.mock("@hooks/api/queries/widgets/useMyWidgets", () => ({
+  useMyWidgets: () => myWidgets,
 }));
 
 vi.mock("@hooks/api/mutations/board/useSaveBoardLayout", () => ({
@@ -88,6 +93,21 @@ describe("ExploreBoard", () => {
     useBoardLayoutMock.mockReset();
     saveMock.mockReset();
     viewport.wide = true;
+    myWidgets.isError = false;
+  });
+
+  it("tells a load error apart from a deleted widget on a custom tile", () => {
+    const custom: BoardLayout = { schemaVersion: 3, items: [{ kind: "custom", id: "c", widgetId: "w_1", size: "M" }] };
+    useBoardLayoutMock.mockReturnValue({ data: custom, isLoading: false });
+
+    const { unmount } = render(<ExploreBoard />);
+    expect(screen.getByText("Deleted widget")).toBeInTheDocument();
+    unmount();
+
+    myWidgets.isError = true;
+    render(<ExploreBoard />);
+    expect(screen.queryByText("Deleted widget")).not.toBeInTheDocument();
+    expect(screen.getByText("Couldn't load this right now.")).toBeInTheDocument();
   });
 
   it("shows the section loader while the saved layout loads", () => {

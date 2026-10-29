@@ -22,7 +22,9 @@ import {
   Zap,
 } from "lucide-react";
 
-import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardHeight } from "@components/BoardGrid";
+import type { BoardSize, BoardWidgetKey, BuiltinBoardItem } from "@hooks/api/queries/board/types";
+import type { WidgetBlock } from "@hooks/api/queries/widgets/types";
 
 import { Anniversaries } from "../Anniversaries/Anniversaries";
 import { ArtistSpotlight } from "../ArtistSpotlight/ArtistSpotlight";
@@ -342,7 +344,22 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
   },
 };
 
-export const DEFAULT_BOARD: readonly BoardItem[] = [
+export const CUSTOM_BLOCK_HEIGHTS: Partial<Record<WidgetBlock, Record<BoardSize, BoardHeight>>> = {
+  list: { S: "regular", M: "regular", L: "regular" },
+  cards: { S: "regular", M: "regular", L: "regular" },
+  rail: { S: "regular", M: "regular", L: "regular" },
+  stat: { S: "short", M: "short", L: "short" },
+  stats: { S: "short", M: "short", L: "short" },
+  leader: { S: "regular", M: "tall", L: "tall" },
+  feed: { S: "regular", M: "regular", L: "tall" },
+  calendar: { S: "regular", M: "regular", L: "tall" },
+};
+
+export const FALLBACK_BLOCK_HEIGHT: BoardHeight = "regular";
+
+export const CUSTOM_NARROW_SIZES: Partial<Record<BoardSize, BoardSize>> = { S: "M", L: "M" };
+
+export const DEFAULT_BOARD: readonly BuiltinBoardItem[] = [
   { kind: "builtin", id: "trending", widget: "trending", size: "L" },
   { kind: "builtin", id: "continue-listening", widget: "continueListening", size: "L" },
   { kind: "builtin", id: "jump-back-in", widget: "jumpBackIn", size: "L" },

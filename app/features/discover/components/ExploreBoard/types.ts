@@ -4,8 +4,13 @@ import type { ComponentType, PointerEvent as ReactPointerEvent, RefObject } from
 
 import type { BoardDevice, BoardHeight } from "@components/BoardGrid";
 import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 export type BoardCategory = "now" | "history" | "discover" | "library";
+
+export type BoardCustomWidgets = ReadonlyMap<string, WidgetDocument>;
+
+export type CustomWidgetsStatus = "loading" | "error" | "ready";
 
 export interface BoardWidgetProps {
   size: BoardSize;
@@ -49,6 +54,8 @@ export interface BoardTileActions {
 export interface BoardTileProps {
   tile: PlacedTile;
   device: BoardDevice;
+  custom: BoardCustomWidgets;
+  customStatus: CustomWidgetsStatus;
   editing: boolean;
   dragging: boolean;
   position: number;
