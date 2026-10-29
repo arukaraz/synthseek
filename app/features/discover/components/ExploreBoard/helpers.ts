@@ -67,14 +67,16 @@ export function uniqueTileId(widget: BoardWidgetKey, items: readonly BoardItem[]
 
 export function boardItemsOf(layout: BoardLayout | null | undefined): BoardItem[] {
   if (!layout) return DEFAULT_BOARD.map((item) => ({ ...item }));
-  return layout.items.map((item) => {
+  return layout.items.flatMap((item) => {
+    if (item.kind !== "builtin") return [];
     const definition = BOARD_WIDGETS[item.widget];
-    return definition.sizes[item.size] !== undefined ? item : { ...item, size: definition.defaultSize };
+    return [definition.sizes[item.size] !== undefined ? item : { ...item, size: definition.defaultSize }];
   });
 }
 
-export function layoutOf(items: readonly BoardItem[]): BoardLayout {
-  return { schemaVersion: BOARD_SCHEMA_VERSION, items: items.map((item) => ({ ...item })) };
+export function layoutOf(items: readonly BoardItem[], stored: BoardLayout | null | undefined): BoardLayout {
+  const unrendered = (stored?.items ?? []).filter((item) => item.kind !== "builtin");
+  return { schemaVersion: BOARD_SCHEMA_VERSION, items: [...items.map((item) => ({ ...item })), ...unrendered] };
 }
 
 export function displayedSize(item: BoardItem, device: BoardDevice): BoardSize {
@@ -154,7 +156,7 @@ export function removeItem(items: readonly BoardItem[], id: string): BoardItem[]
 }
 
 export function appendWidget(items: readonly BoardItem[], widget: BoardWidgetKey, id: string): BoardItem[] {
-  return [...items, { id, widget, size: BOARD_WIDGETS[widget].defaultSize }];
+  return [...items, { kind: "builtin", id, widget, size: BOARD_WIDGETS[widget].defaultSize }];
 }
 
 export function widgetsOnBoard(items: readonly BoardItem[]): Map<BoardWidgetKey, string> {

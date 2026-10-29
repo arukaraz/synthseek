@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import { useSaveBoardLayout } from "@hooks/api/mutations/board/useSaveBoardLayout";
-import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import { focusBoardTile } from "@hooks/ui/board/helpers";
 import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
@@ -25,7 +25,7 @@ import {
 } from "../components/ExploreBoard/helpers";
 import type { BoardEditor, MoveDelta } from "../components/ExploreBoard/types";
 
-export function useBoardEditor(items: BoardItem[]): BoardEditor {
+export function useBoardEditor(items: BoardItem[], stored: BoardLayout | null | undefined): BoardEditor {
   const { t } = useTranslation("discover");
   const save = useSaveBoardLayout();
   const [editing, setEditing] = useState(false);
@@ -34,7 +34,7 @@ export function useBoardEditor(items: BoardItem[]): BoardEditor {
   const flipRef = useRef<BoardFlip | null>(null);
 
   const nameOf = useCallback((widget: BoardWidgetKey) => t(BOARD_WIDGETS[widget].titleKey), [t]);
-  const commit = useCallback((next: BoardItem[]) => save(layoutOf(next)), [save]);
+  const commit = useCallback((next: BoardItem[]) => save(layoutOf(next, stored)), [save, stored]);
   const offerUndo = useCallback(
     (message: string, previous: BoardItem[]) => {
       toast.success(message, {

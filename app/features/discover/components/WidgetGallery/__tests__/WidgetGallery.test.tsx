@@ -40,7 +40,7 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 vi.mock("../../LibraryLeaderboard", () => ({ LibraryLeaderboard: stub("leaderboard") }));
 
-const ON_BOARD: BoardItem[] = [{ id: "s1", widget: "scrobbles", size: "M" }];
+const ON_BOARD: BoardItem[] = [{ kind: "builtin", id: "s1", widget: "scrobbles", size: "M" }];
 
 function renderGallery(items: BoardItem[] = ON_BOARD) {
   const handlers = { onAdd: vi.fn(), onRemove: vi.fn(), onClose: vi.fn() };

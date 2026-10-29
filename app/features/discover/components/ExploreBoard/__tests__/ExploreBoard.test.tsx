@@ -60,10 +60,10 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 
 const TWO_TILES: BoardLayout = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   items: [
-    { id: "a", widget: "scrobbles", size: "M" },
-    { id: "b", widget: "requests", size: "M" },
+    { kind: "builtin", id: "a", widget: "scrobbles", size: "M" },
+    { kind: "builtin", id: "b", widget: "requests", size: "M" },
   ],
 };
 
@@ -110,7 +110,7 @@ describe("ExploreBoard", () => {
 
   it("renders only the saved tiles, passing each widget its size and translated description", () => {
     useBoardLayoutMock.mockReturnValue({
-      data: { schemaVersion: 2, items: [TWO_TILES.items[1], TWO_TILES.items[0]] },
+      data: { schemaVersion: 3, items: [TWO_TILES.items[1], TWO_TILES.items[0]] },
       isLoading: false,
     });
 
@@ -135,7 +135,7 @@ describe("ExploreBoard", () => {
   it("hands each widget its narrow size on a narrow board", () => {
     viewport.wide = false;
     useBoardLayoutMock.mockReturnValue({
-      data: { schemaVersion: 2, items: [{ id: "g", widget: "genres", size: "L" }] },
+      data: { schemaVersion: 3, items: [{ kind: "builtin", id: "g", widget: "genres", size: "L" }] },
       isLoading: false,
     });
 
@@ -190,11 +190,16 @@ describe("ExploreBoard", () => {
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
     fireEvent.click(within(tile(container, "a")).getByRole("button", { name: "Large" }));
 
-    expect(saveMock.mock.calls.at(-1)?.[0].items[0]).toEqual({ id: "a", widget: "scrobbles", size: "L" });
+    expect(saveMock.mock.calls.at(-1)?.[0].items[0]).toEqual({
+      kind: "builtin",
+      id: "a",
+      widget: "scrobbles",
+      size: "L",
+    });
   });
 
   it("offers an empty state that opens the widget gallery when every tile is gone", () => {
-    useBoardLayoutMock.mockReturnValue({ data: { schemaVersion: 2, items: [] }, isLoading: false });
+    useBoardLayoutMock.mockReturnValue({ data: { schemaVersion: 3, items: [] }, isLoading: false });
 
     render(<ExploreBoard />);
     expect(screen.getByText(i18n.t("discover:board.empty.title"))).toBeInTheDocument();

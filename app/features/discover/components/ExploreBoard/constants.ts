@@ -52,7 +52,7 @@ import { TopTracks } from "../TopTracks/TopTracks";
 import { TrendingHero } from "../TrendingHero/TrendingHero";
 import type { BoardCategory, BoardWidgetDefinition } from "./types";
 
-export const BOARD_SCHEMA_VERSION = 2;
+export const BOARD_SCHEMA_VERSION = 3;
 
 export const EDIT_PASSTHROUGH_SELECTOR = "[data-info-tooltip]";
 
@@ -343,29 +343,29 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
 };
 
 export const DEFAULT_BOARD: readonly BoardItem[] = [
-  { id: "trending", widget: "trending", size: "L" },
-  { id: "continue-listening", widget: "continueListening", size: "L" },
-  { id: "jump-back-in", widget: "jumpBackIn", size: "L" },
-  { id: "on-repeat", widget: "onRepeat", size: "S" },
-  { id: "rewind", widget: "rewind", size: "S" },
-  { id: "deep-cuts", widget: "deepCuts", size: "S" },
-  { id: "forgotten-favorites", widget: "forgottenFavorites", size: "S" },
-  { id: "mixes", widget: "mixes", size: "L" },
-  { id: "top-tracks", widget: "topTracks", size: "M" },
-  { id: "charts", widget: "charts", size: "M" },
-  { id: "genres", widget: "genres", size: "L" },
-  { id: "artists-next", widget: "artistsNext", size: "L" },
-  { id: "stations", widget: "stations", size: "L" },
-  { id: "last-year", widget: "lastYear", size: "M" },
-  { id: "new-in-library", widget: "newInLibrary", size: "M" },
-  { id: "rarities", widget: "rarities", size: "M" },
-  { id: "loved", widget: "loved", size: "M" },
-  { id: "leaderboard", widget: "leaderboard", size: "M" },
-  { id: "gaps", widget: "gaps", size: "M" },
-  { id: "anniversaries", widget: "anniversaries", size: "M" },
-  { id: "requests", widget: "requests", size: "M" },
-  { id: "landed", widget: "landed", size: "M" },
-  { id: "server-playlists", widget: "serverPlaylists", size: "M" },
-  { id: "orbit", widget: "orbit", size: "L" },
-  { id: "scrobbles", widget: "scrobbles", size: "L" },
+  { kind: "builtin", id: "trending", widget: "trending", size: "L" },
+  { kind: "builtin", id: "continue-listening", widget: "continueListening", size: "L" },
+  { kind: "builtin", id: "jump-back-in", widget: "jumpBackIn", size: "L" },
+  { kind: "builtin", id: "on-repeat", widget: "onRepeat", size: "S" },
+  { kind: "builtin", id: "rewind", widget: "rewind", size: "S" },
+  { kind: "builtin", id: "deep-cuts", widget: "deepCuts", size: "S" },
+  { kind: "builtin", id: "forgotten-favorites", widget: "forgottenFavorites", size: "S" },
+  { kind: "builtin", id: "mixes", widget: "mixes", size: "L" },
+  { kind: "builtin", id: "top-tracks", widget: "topTracks", size: "M" },
+  { kind: "builtin", id: "charts", widget: "charts", size: "M" },
+  { kind: "builtin", id: "genres", widget: "genres", size: "L" },
+  { kind: "builtin", id: "artists-next", widget: "artistsNext", size: "L" },
+  { kind: "builtin", id: "stations", widget: "stations", size: "L" },
+  { kind: "builtin", id: "last-year", widget: "lastYear", size: "M" },
+  { kind: "builtin", id: "new-in-library", widget: "newInLibrary", size: "M" },
+  { kind: "builtin", id: "rarities", widget: "rarities", size: "M" },
+  { kind: "builtin", id: "loved", widget: "loved", size: "M" },
+  { kind: "builtin", id: "leaderboard", widget: "leaderboard", size: "M" },
+  { kind: "builtin", id: "gaps", widget: "gaps", size: "M" },
+  { kind: "builtin", id: "anniversaries", widget: "anniversaries", size: "M" },
+  { kind: "builtin", id: "requests", widget: "requests", size: "M" },
+  { kind: "builtin", id: "landed", widget: "landed", size: "M" },
+  { kind: "builtin", id: "server-playlists", widget: "serverPlaylists", size: "M" },
+  { kind: "builtin", id: "orbit", widget: "orbit", size: "L" },
+  { kind: "builtin", id: "scrobbles", widget: "scrobbles", size: "L" },
 ];

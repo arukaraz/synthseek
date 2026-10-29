@@ -21,7 +21,7 @@ export function ExploreBoard() {
   const device = useBoardDevice();
   const { data, isLoading } = useBoardLayout();
   const items = useMemo(() => boardItemsOf(data), [data]);
-  const editor = useBoardEditor(items);
+  const editor = useBoardEditor(items, data);
   const placements = useMemo(
     () => placementsById(packBoard(editor.displayItems, device)),
     [editor.displayItems, device]

@@ -19,7 +19,7 @@ vi.mock("../../TrendingHero/TrendingHero", () => ({
 }));
 
 const TILE: PlacedTile = {
-  item: { id: "t", widget: "trending", size: "L" },
+  item: { kind: "builtin", id: "t", widget: "trending", size: "L" },
   size: "L",
   col: 0,
   row: 0,

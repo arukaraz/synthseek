@@ -27,9 +27,9 @@ vi.mock("@hooks/ui/board/useBoardDrag", () => ({
 }));
 
 const ITEMS: BoardItem[] = [
-  { id: "a", widget: "scrobbles", size: "M" },
-  { id: "b", widget: "requests", size: "M" },
-  { id: "c", widget: "mixes", size: "L" },
+  { kind: "builtin", id: "a", widget: "scrobbles", size: "M" },
+  { kind: "builtin", id: "b", widget: "requests", size: "M" },
+  { kind: "builtin", id: "c", widget: "mixes", size: "L" },
 ];
 
 function lastSavedIds(): string[] {
@@ -48,7 +48,7 @@ afterEach(() => {
 
 describe("useBoardEditor", () => {
   it("moves a tile one step, saves the whole list and announces the new position", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
 
     act(() => result.current.actions.move("c", -1));
 
@@ -56,8 +56,18 @@ describe("useBoardEditor", () => {
     expect(result.current.announcement).toBe("Discover Mixes moved to position 2 of 3");
   });
 
+  it("keeps the stored custom tiles in every layout it saves", () => {
+    const custom = { kind: "custom" as const, id: "x", widgetId: "w_1", size: "M" as const };
+    const stored: BoardLayout = { schemaVersion: 3, items: [custom, ...ITEMS] };
+    const { result } = renderHook(() => useBoardEditor(ITEMS, stored));
+
+    act(() => result.current.actions.move("c", -1));
+
+    expect(lastSavedIds()).toEqual(["a", "c", "b", "x"]);
+  });
+
   it("does nothing when a tile is moved past either end", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
 
     act(() => result.current.actions.move("a", -1));
     act(() => result.current.actions.move("c", 1));
@@ -66,7 +76,7 @@ describe("useBoardEditor", () => {
   });
 
   it("saves a new size and announces it, but skips the size the tile already has", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
 
     act(() => result.current.actions.resize("a", "M"));
     expect(saveMock).not.toHaveBeenCalled();
@@ -77,7 +87,7 @@ describe("useBoardEditor", () => {
   });
 
   it("removes a tile with an Undo that saves the previous list back", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
 
     act(() => result.current.actions.remove("b"));
 
@@ -92,7 +102,7 @@ describe("useBoardEditor", () => {
   });
 
   it("saves a dropped order with an Undo back to the order before the drag", () => {
-    renderHook(() => useBoardEditor(ITEMS));
+    renderHook(() => useBoardEditor(ITEMS, null));
     const dropped = [ITEMS[2], ITEMS[0], ITEMS[1]];
 
     act(() => dropRef.current?.(dropped));
@@ -104,16 +114,21 @@ describe("useBoardEditor", () => {
   });
 
   it("appends an added widget at its default size under a free id", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
 
     act(() => result.current.add("trending"));
 
-    expect(saveMock.mock.calls.at(-1)?.[0].items.at(-1)).toEqual({ id: "trending", widget: "trending", size: "L" });
+    expect(saveMock.mock.calls.at(-1)?.[0].items.at(-1)).toEqual({
+      kind: "builtin",
+      id: "trending",
+      widget: "trending",
+      size: "L",
+    });
     expect(toastMock.success).toHaveBeenCalledWith("Trending now added at the end");
   });
 
   it("opens the gallery in edit mode and closes both when editing stops", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
 
     act(() => result.current.openGallery());
     expect(result.current.editing).toBe(true);
@@ -125,7 +140,7 @@ describe("useBoardEditor", () => {
   });
 
   it("leaves edit mode on Escape only while the gallery is closed", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
 
     act(() => result.current.openGallery());
     act(() => {
@@ -141,7 +156,7 @@ describe("useBoardEditor", () => {
   });
 
   it("stays in edit mode when another layer already handled the Escape", () => {
-    const { result } = renderHook(() => useBoardEditor(ITEMS));
+    const { result } = renderHook(() => useBoardEditor(ITEMS, null));
     const handled = (event: KeyboardEvent) => event.preventDefault();
     document.addEventListener("keydown", handled, { capture: true });
 

@@ -414,5 +414,17 @@
   "CATALOG_UNAVAILABLE": {
     "title": "Der Musikkatalog antwortet nicht",
     "description": "Versuch es gleich noch einmal."
+  },
+  "WIDGET_NOT_FOUND": {
+    "title": "Widget nicht gefunden",
+    "description": "Dieses Widget existiert nicht mehr. Lade die Seite neu, um deine aktuellen Widgets zu sehen."
+  },
+  "WIDGET_LIMIT_REACHED": {
+    "title": "Zu viele Widgets",
+    "description": "Entferne eines deiner Widgets, bevor du ein neues anlegst."
+  },
+  "WIDGETS_UNREADABLE": {
+    "title": "Deine Widgets konnten nicht gelesen werden",
+    "description": "Deine gespeicherten Widgets liegen in einem Format vor, das diese Version nicht lesen kann, daher wurde nichts geändert. Aktualisiere Synthseek oder wende dich an die Administration."
   }
 }

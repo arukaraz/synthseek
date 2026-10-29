@@ -10,7 +10,7 @@ function actions(): BoardTileActions {
   return { move: vi.fn(), resize: vi.fn(), remove: vi.fn(), startDrag: vi.fn() };
 }
 
-const ITEM: BoardItem = { id: "t", widget: "trending", size: "L" };
+const ITEM: BoardItem = { kind: "builtin", id: "t", widget: "trending", size: "L" };
 
 describe("BoardTileEditControls", () => {
   it("marks the current size and resizes to the chip that is pressed", () => {
@@ -76,7 +76,7 @@ describe("BoardTileEditControls", () => {
   });
 
   it("shows no size chips on a widget that comes in one size only", () => {
-    const item: BoardItem = { id: "r", widget: "rarities", size: "M" };
+    const item: BoardItem = { kind: "builtin", id: "r", widget: "rarities", size: "M" };
     render(
       <BoardTileEditControls item={item} device="wide" name="Rarities" position={1} total={2} actions={actions()} />
     );

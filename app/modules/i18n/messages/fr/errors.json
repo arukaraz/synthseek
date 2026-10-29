@@ -414,5 +414,17 @@
   "CATALOG_UNAVAILABLE": {
     "title": "Le catalogue musical ne répond pas",
     "description": "Réessayez dans un instant."
+  },
+  "WIDGET_NOT_FOUND": {
+    "title": "Widget introuvable",
+    "description": "Ce widget n'existe plus. Rechargez la page pour voir vos widgets actuels."
+  },
+  "WIDGET_LIMIT_REACHED": {
+    "title": "Trop de widgets",
+    "description": "Supprimez l'un de vos widgets avant d'en créer un autre."
+  },
+  "WIDGETS_UNREADABLE": {
+    "title": "Impossible de lire vos widgets",
+    "description": "Vos widgets enregistrés sont dans un format que cette version ne peut pas lire, rien n'a donc été modifié. Mettez à jour Synthseek ou contactez l'administrateur."
   }
 }
