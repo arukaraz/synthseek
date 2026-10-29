@@ -23,10 +23,12 @@ export function CalendarBlock({ items, size, accent, controls }: WidgetBlockProp
                 title={item.title}
                 subtitle={item.subtitle}
                 trailing={
-                  <span className={calendarDate()}>
-                    <span className={calendarMonth()}>{parts?.month ?? ""}</span>
-                    <span className={calendarDay()}>{parts?.day ?? "?"}</span>
-                  </span>
+                  parts ? (
+                    <span className={calendarDate()}>
+                      <span className={calendarMonth()}>{parts.month}</span>
+                      <span className={calendarDay()}>{parts.day}</span>
+                    </span>
+                  ) : undefined
                 }
                 {...controls(item)}
               />

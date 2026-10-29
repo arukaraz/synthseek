@@ -18,7 +18,7 @@ export function CustomWidget({ widget, status, size }: CustomWidgetProps) {
   return (
     <WidgetFrame
       icon={FALLBACK_WIDGET_ICON}
-      title={status === "ready" ? t("customWidget.deletedName") : ""}
+      title={status === "ready" ? t("customWidget.deletedName") : t("customWidget.unresolvedName")}
       subtitle=""
       info=""
       titleId={titleId}

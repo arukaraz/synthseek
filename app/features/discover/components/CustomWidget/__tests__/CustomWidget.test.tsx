@@ -183,13 +183,22 @@ describe("CustomWidget", () => {
   it("never calls a widget deleted when the list failed to load", () => {
     renderWithProviders(<CustomWidget widget={null} status="error" size="M" />);
     expect(screen.getByText("Couldn't load this right now.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 3, name: "Custom widget" })).toBeInTheDocument();
     expect(screen.queryByText("Deleted widget")).not.toBeInTheDocument();
     expect(screen.queryByText(/no longer exists/)).not.toBeInTheDocument();
   });
 
-  it("shows no deleted title while the list is still loading", () => {
+  it("names the frame neutrally and never deleted while the list is still loading", () => {
     renderWithProviders(<CustomWidget widget={null} status="loading" size="M" />);
+    expect(screen.getByRole("heading", { level: 3, name: "Custom widget" })).toBeInTheDocument();
     expect(screen.queryByText("Deleted widget")).not.toBeInTheDocument();
     expect(screen.queryByText(/no longer exists/)).not.toBeInTheDocument();
+  });
+
+  it("leaves the date badge out of a calendar row that has no date", () => {
+    show("calendar", "M", createTrackResult([createQuestionTrackRow({ playedAt: null })]));
+    const [row] = screen.getAllByRole("listitem");
+    expect(row).toHaveTextContent("Song One");
+    expect(row).not.toHaveTextContent("?");
   });
 });
