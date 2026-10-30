@@ -96,6 +96,18 @@ describe("Orbit", () => {
     expect(screen.getByRole("region", { name: "Albums in your orbit, scroll sideways" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Jar of Flies/ })).toBeInTheDocument();
   });
+
+  it("fits two albums in a quarter tile, with no rail to scroll", () => {
+    mocks.orbit.mockReturnValue(
+      ready([album, { ...album, id: "dirt", name: "Dirt" }, { ...album, id: "facelift", name: "Facelift" }])
+    );
+    renderWithProviders(<Orbit size="S" info="x" />);
+
+    expect(screen.getByRole("button", { name: /Jar of Flies/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Dirt/ })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Facelift/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Albums in your orbit, scroll sideways" })).not.toBeInTheDocument();
+  });
 });
 
 describe("Charts", () => {
@@ -123,6 +135,20 @@ describe("Charts", () => {
     expect(mocks.openForResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c1" }));
     expect(within(rows[1]).queryByRole("button")).not.toBeInTheDocument();
   });
+
+  it("splits the rest of the chart in two columns beside the leader across a full row", () => {
+    const chart = ready([
+      { title: "Joga", artist: "Bjork", libraryTrackId: "lib1", track: null },
+      { title: "Awake", artist: "Tycho", libraryTrackId: null, track: null },
+    ]);
+    mocks.charts.mockReturnValue(chart);
+    const { unmount } = renderWithProviders(<Charts size="M" info="x" />);
+    expect(screen.getByRole("list")).not.toHaveClass("grid-cols-2");
+    unmount();
+
+    renderWithProviders(<Charts size="L" info="x" />);
+    expect(screen.getByRole("list")).toHaveClass("grid-cols-2");
+  });
 });
 
 describe("LovedNotHere", () => {
@@ -148,6 +174,26 @@ describe("LovedNotHere", () => {
     renderWithProviders(<LovedNotHere size="M" info="x" />);
 
     expect(screen.getByText("Everything you loved is already here.")).toBeInTheDocument();
+  });
+
+  it("keeps a quarter tile to four tracks and requests from the cover instead of a button", () => {
+    const tracks = ["c1", "c2", "c3", "c4", "c5", "c6"].map(catalogTrack);
+    mocks.loved.mockReturnValue(ready({ status: "ready", tracks }));
+    renderWithProviders(<LovedNotHere size="S" info="x" />);
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(4);
+    expect(screen.queryByRole("button", { name: "Request" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Request Track c2" }));
+    expect(mocks.openForResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c2" }));
+  });
+
+  it("lays every loved track in two columns across a full row", () => {
+    const tracks = ["c1", "c2", "c3", "c4", "c5", "c6"].map(catalogTrack);
+    mocks.loved.mockReturnValue(ready({ status: "ready", tracks }));
+    renderWithProviders(<LovedNotHere size="L" info="x" />);
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(6);
+    expect(screen.getByRole("list")).toHaveClass("grid-cols-2");
   });
 });
 
@@ -193,6 +239,37 @@ describe("Rarities", () => {
     renderWithProviders(<Rarities size="M" info="x" />);
 
     expect(screen.getByText("Not enough identified plays yet.")).toBeInTheDocument();
+  });
+
+  const fiveRare = {
+    index: 75,
+    medianListens: 4200,
+    threshold: 10_000,
+    items: ["t1", "t2", "t3", "t4", "t5"].map((trackId) => ({
+      trackId,
+      title: `Rare ${trackId}`,
+      artist: "B",
+      cover: null,
+      plays: 3,
+      listens: 120,
+    })),
+  };
+
+  it("keeps the index but drops its caption and the fifth track in a quarter tile", () => {
+    mocks.rarities.mockReturnValue(ready(fiveRare));
+    renderWithProviders(<Rarities size="S" info="x" />);
+
+    expect(screen.getByText("75%")).toBeInTheDocument();
+    expect(screen.queryByText("of your top tracks have under 10K listens")).not.toBeInTheDocument();
+    expect(screen.getAllByRole("listitem")).toHaveLength(4);
+  });
+
+  it("lays every rarity in two columns across a full row", () => {
+    mocks.rarities.mockReturnValue(ready(fiveRare));
+    renderWithProviders(<Rarities size="L" info="x" />);
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(5);
+    expect(screen.getByRole("list")).toHaveClass("grid-cols-2");
   });
 });
 
@@ -243,6 +320,15 @@ describe("ContinueListening", () => {
     expect(screen.getByRole("button", { name: "Pause" })).toBeInTheDocument();
     expect(mocks.recentPlays).toHaveBeenCalledWith(true);
     expect(screen.getByRole("listitem")).toHaveTextContent("Symfonium");
+  });
+
+  it("shows only where the queue stopped in a quarter tile, without asking for recent plays", () => {
+    mocks.resume.mockReturnValue({ point, toggle: vi.fn() });
+    mocks.recentPlays.mockReturnValue(ready([]));
+    renderWithProviders(<ContinueListening size="S" info="x" />);
+
+    expect(screen.getByText("Mägo de Oz · 1 of 5")).toBeInTheDocument();
+    expect(mocks.recentPlays).toHaveBeenCalledWith(false);
   });
 
   it("says nothing is waiting when the queue is empty", () => {

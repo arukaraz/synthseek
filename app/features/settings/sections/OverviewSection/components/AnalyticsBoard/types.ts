@@ -15,25 +15,6 @@ export interface WindowTotals {
   previous: number;
 }
 
-export interface SparkPath {
-  line: string;
-  area: string;
-}
-
-export interface SparkBar {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  last: boolean;
-}
-
-export interface ClockPeak {
-  day: number;
-  hour: number;
-  count: number;
-}
-
 export interface QualityRow {
   format: string;
   count: number;
@@ -51,14 +32,4 @@ export interface MetricValueProps {
   value: string;
   unit?: string;
   delta?: Delta | null;
-}
-
-export interface SparkProps {
-  values: readonly number[];
-  fill?: boolean;
-}
-
-export interface HeatGridProps {
-  cells: readonly (readonly number[])[];
-  weekdays: readonly string[];
 }

@@ -13,13 +13,14 @@ import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { formatElapsed, formatRelativeTime } from "@utils/formatters";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { listColumns } from "../helpers";
 import { widgetPill } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { downloadedAlbums } from "./helpers";
 import { landedMeta, landedTook } from "./styles";
 
-export function Landed({ info }: BoardWidgetProps) {
+export function Landed({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useRecentAlbums();
   const sourceLabel = useDownloadSourceLabel();
@@ -38,7 +39,7 @@ export function Landed({ info }: BoardWidgetProps) {
       note={isError ? t("board.loadError") : albums.length === 0 ? t("landed.empty") : null}
     >
       <FadeScroll>
-        <ul className={widgetList()}>
+        <ul className={widgetList({ columns: listColumns(size) })}>
           {albums.map((album) => (
             <WidgetRow
               key={album.albumExternalId}

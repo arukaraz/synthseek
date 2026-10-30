@@ -6,3 +6,8 @@ export interface GapCardProps {
   onRequest: (album: CatalogAlbumRef) => void;
   onOpenArtist: () => void;
 }
+
+export interface GapHeaderProps {
+  gap: DiscographyGap;
+  onOpenArtist: () => void;
+}

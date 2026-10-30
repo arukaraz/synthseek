@@ -16,6 +16,7 @@ import de_search from "./messages/de/search.json";
 import de_settings from "./messages/de/settings.json";
 import de_setup from "./messages/de/setup.json";
 import de_status from "./messages/de/status.json";
+import de_widgets from "./messages/de/widgets.json";
 import en_appShell from "./messages/en/appShell.json";
 import en_auth from "./messages/en/auth.json";
 import en_common from "./messages/en/common.json";
@@ -33,6 +34,7 @@ import en_search from "./messages/en/search.json";
 import en_settings from "./messages/en/settings.json";
 import en_setup from "./messages/en/setup.json";
 import en_status from "./messages/en/status.json";
+import en_widgets from "./messages/en/widgets.json";
 import es_appShell from "./messages/es/appShell.json";
 import es_auth from "./messages/es/auth.json";
 import es_common from "./messages/es/common.json";
@@ -50,6 +52,7 @@ import es_search from "./messages/es/search.json";
 import es_settings from "./messages/es/settings.json";
 import es_setup from "./messages/es/setup.json";
 import es_status from "./messages/es/status.json";
+import es_widgets from "./messages/es/widgets.json";
 import fr_appShell from "./messages/fr/appShell.json";
 import fr_auth from "./messages/fr/auth.json";
 import fr_common from "./messages/fr/common.json";
@@ -67,6 +70,7 @@ import fr_search from "./messages/fr/search.json";
 import fr_settings from "./messages/fr/settings.json";
 import fr_setup from "./messages/fr/setup.json";
 import fr_status from "./messages/fr/status.json";
+import fr_widgets from "./messages/fr/widgets.json";
 
 export const resources = {
   de: {
@@ -87,6 +91,7 @@ export const resources = {
     settings: de_settings,
     setup: de_setup,
     status: de_status,
+    widgets: de_widgets,
   },
   en: {
     appShell: en_appShell,
@@ -106,6 +111,7 @@ export const resources = {
     settings: en_settings,
     setup: en_setup,
     status: en_status,
+    widgets: en_widgets,
   },
   es: {
     appShell: es_appShell,
@@ -125,6 +131,7 @@ export const resources = {
     settings: es_settings,
     setup: es_setup,
     status: es_status,
+    widgets: es_widgets,
   },
   fr: {
     appShell: fr_appShell,
@@ -144,5 +151,6 @@ export const resources = {
     settings: fr_settings,
     setup: fr_setup,
     status: fr_status,
+    widgets: fr_widgets,
   },
 };

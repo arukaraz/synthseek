@@ -69,6 +69,14 @@ describe("JumpBackIn", () => {
     expect(playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "b" });
   });
 
+  it("keeps a quarter tile to two albums however wide it measures", () => {
+    jumpQuery.mockReturnValue({ data: NINE, isLoading: false, isError: false });
+    measured.width = 1400;
+    renderWithProviders(<JumpBackIn size="S" info="x" />);
+
+    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(2);
+  });
+
   it("explains the empty state and a failed load", () => {
     jumpQuery.mockReturnValue({ data: [], isLoading: false, isError: false });
     const { unmount } = renderWithProviders(<JumpBackIn size="L" info="x" />);

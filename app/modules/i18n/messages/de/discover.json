@@ -454,7 +454,6 @@
     "unresolvedName": "Eigenes Widget",
     "deleted": "Dieses Widget gibt es nicht mehr. Entferne es über Anpassen vom Board.",
     "empty": "Gerade passt nichts zu diesem Widget.",
-    "unsupported": "Diese Ansicht kommt mit einem späteren Update.",
     "needs": {
       "lastfm": "Verbinde Last.fm in den Einstellungen, um dieses Widget zu füllen.",
       "listenbrainz": "Trage deinen ListenBrainz-Benutzer in den Einstellungen ein, um dieses Widget zu füllen."
@@ -479,6 +478,30 @@
     "delta": {
       "up": "{{value}} mehr als im vorherigen Zeitraum",
       "down": "{{value}} weniger als im vorherigen Zeitraum"
+    },
+    "chart": {
+      "point": "{{label}}: {{value}}",
+      "bars": "Werte nach Zeitraum",
+      "sparkline": "Verlauf, zuletzt {{label}}: {{value}}"
+    },
+    "heatmap": {
+      "label": "Hören nach Wochentag und Uhrzeit",
+      "days": "Hören nach Wochentag",
+      "cell": "{{day}} {{hour}}:00, {{value}}",
+      "hour": "{{hour}} Uhr",
+      "peak": "Am meisten am {{day}} um {{hour}}:00"
+    },
+    "share": {
+      "label": "Anteil am Gesamtwert",
+      "other": "Sonstige"
+    },
+    "compare": {
+      "current": "Dieser Zeitraum",
+      "previous": "Vorheriger Zeitraum",
+      "row": "{{label}}: {{current}} jetzt, {{previous}} davor"
+    },
+    "yearCalendar": {
+      "total": "{{value}} in diesem Jahr"
     }
   }
 }

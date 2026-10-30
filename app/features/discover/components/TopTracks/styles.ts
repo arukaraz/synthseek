@@ -33,7 +33,15 @@ export const heroBy = cva("text-overlay-fg/80 text-sm");
 
 export const heroPlays = cva("type-text-track type-text-overlay mt-2 font-mono text-xs");
 
-export const list = cva("flex min-w-0 flex-col gap-1");
+export const list = cva("min-w-0", {
+  variants: {
+    columns: {
+      one: "flex flex-col gap-1",
+      two: "grid grid-cols-2 content-start gap-x-6 gap-y-1",
+    },
+  },
+  defaultVariants: { columns: "one" },
+});
 
 export const item = cva("group flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-fg/5");
 

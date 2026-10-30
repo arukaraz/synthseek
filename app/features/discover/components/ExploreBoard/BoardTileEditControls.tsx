@@ -1,7 +1,9 @@
 "use client";
 
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, GripVertical, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, GripVertical, SlidersHorizontal, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
+import { useWidgetPresets } from "@hooks/api/queries/widgets/useWidgetPresets";
 
 import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS } from "./constants";
 import { editableSizesOf } from "./helpers";
@@ -9,8 +11,10 @@ import { controlButton, dragHandle, editControls, sizeChip, sizeGroup } from "./
 import type { BoardTileEditControlsProps } from "./types";
 
 export function BoardTileEditControls({ item, device, name, position, total, actions }: BoardTileEditControlsProps) {
-  const { t } = useTranslation("discover");
-  const sizes = editableSizesOf(item, device);
+  const { t } = useTranslation(["discover", "widgets"]);
+  const presets = useWidgetPresets();
+  const sizes = editableSizesOf(device);
+  const customizable = item.kind === "builtin" && presets.data?.some((preset) => preset.builtin === item.widget);
   const EarlierIcon = device === "wide" ? ArrowLeft : ArrowUp;
   const LaterIcon = device === "wide" ? ArrowRight : ArrowDown;
 
@@ -50,6 +54,17 @@ export function BoardTileEditControls({ item, device, name, position, total, act
       >
         <LaterIcon className="size-4" />
       </button>
+      {customizable && item.kind === "builtin" ? (
+        <button
+          type="button"
+          className={controlButton()}
+          aria-label={t("widgets:customize.actionNamed", { name })}
+          title={t("widgets:customize.action")}
+          onClick={() => actions.customize(item.widget)}
+        >
+          <SlidersHorizontal className="size-4" />
+        </button>
+      ) : null}
       <button
         type="button"
         className={controlButton({ tone: "danger" })}

@@ -9,6 +9,8 @@ export const CARD_FIT = {
 
 export const CARD_ROW_SKELETONS = [0, 1, 2, 3, 4, 5, 6, 7] as const;
 
+export const COMPACT_ROW_LIMIT = 4;
+
 export const LASTFM_SETTINGS_HREF = "/settings/listening#lastfm.feeds";
 
 export const LASTFM_EMPTY_CTA = {

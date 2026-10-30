@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import type { BoardWidgetKey } from "@hooks/api/queries/board/types";
 
 import { BOARD_WIDGETS } from "../../ExploreBoard/constants";
-import { PREVIEW_BOX } from "../constants";
-import { countInCategory, galleryGroups, matchesQuery, previewFrame } from "../helpers";
-import type { GalleryEntry } from "../types";
+import { DEFAULT_GALLERY_FILTERS, PREVIEW_BOX } from "../constants";
+import { countInCategory, galleryGroups, matchesQuery, previewFrame, problemText } from "../helpers";
+import type { GalleryEntry, GalleryFilters } from "../types";
 
 function entry(widget: BoardWidgetKey, title: string, description = ""): GalleryEntry {
   return { widget, definition: BOARD_WIDGETS[widget], title, description };
@@ -32,30 +32,48 @@ describe("matchesQuery", () => {
 });
 
 describe("galleryGroups", () => {
-  it("groups every entry by category in board order when showing all", () => {
-    const groups = galleryGroups(ENTRIES, "", "all", new Map());
+  const widgetsOf = (filters: Partial<GalleryFilters>, onBoard = new Map<BoardWidgetKey, string>()) =>
+    galleryGroups(ENTRIES, { ...DEFAULT_GALLERY_FILTERS, ...filters }, onBoard).map((group) => [
+      group.category,
+      group.entries.map((item) => item.widget),
+    ]);
 
-    expect(groups.map((group) => group.category)).toEqual(["now", "history", "discover", "library"]);
-    expect(groups[1]?.entries.map((item) => item.widget)).toEqual(["topTracks", "scrobbles"]);
+  it("lists every entry in the curated board order without bands by default", () => {
+    expect(widgetsOf({})).toEqual([[null, ["trending", "topTracks", "scrobbles", "mixes", "requests"]]]);
   });
 
-  it("keeps only the chosen category", () => {
-    const groups = galleryGroups(ENTRIES, "", "history", new Map());
-
-    expect(groups.map((group) => group.category)).toEqual(["history"]);
+  it("groups by category in board order only when sorted by category, and reverses both when descending", () => {
+    expect(widgetsOf({ sort: "category" }).map(([category]) => category)).toEqual([
+      "now",
+      "history",
+      "discover",
+      "library",
+    ]);
+    expect(widgetsOf({ sort: "category", direction: "desc" })[0]).toEqual(["library", ["requests"]]);
   });
 
-  it("searches across every category even when one is chosen", () => {
-    const groups = galleryGroups(ENTRIES, "recent", "now", new Map());
-
-    expect(groups.map((group) => group.category)).toEqual(["history", "library"]);
+  it("sorts by name and puts what is on the board first", () => {
+    expect(widgetsOf({ sort: "name" })[0]?.[1]).toEqual(["mixes", "requests", "scrobbles", "topTracks", "trending"]);
+    expect(widgetsOf({ sort: "onBoardFirst" }, new Map([["mixes", "m"]]))[0]?.[1]).toEqual([
+      "mixes",
+      "trending",
+      "topTracks",
+      "scrobbles",
+      "requests",
+    ]);
   });
 
-  it("counts how many of each group's entries are on the board and drops empty groups", () => {
-    const groups = galleryGroups(ENTRIES, "", "all", new Map([["scrobbles", "s"]]));
+  it("keeps only the chosen category, and searches across every category even when one is chosen", () => {
+    expect(widgetsOf({ category: "history" })).toEqual([[null, ["topTracks", "scrobbles"]]]);
+    expect(widgetsOf({ category: "now", query: "recent" })).toEqual([[null, ["scrobbles", "requests"]]]);
+  });
 
-    expect(groups.find((group) => group.category === "history")?.onBoard).toBe(1);
-    expect(galleryGroups(ENTRIES, "nothing matches", "all", new Map())).toEqual([]);
+  it("filters by board presence and counts what is on the board", () => {
+    const onBoard = new Map<BoardWidgetKey, string>([["scrobbles", "s"]]);
+    expect(widgetsOf({ board: "on" }, onBoard)).toEqual([[null, ["scrobbles"]]]);
+    expect(widgetsOf({ board: "off" }, onBoard)[0]?.[1]).not.toContain("scrobbles");
+    expect(galleryGroups(ENTRIES, { ...DEFAULT_GALLERY_FILTERS, sort: "category" }, onBoard)[1]?.onBoard).toBe(1);
+    expect(widgetsOf({ query: "nothing matches" })).toEqual([]);
   });
 });
 
@@ -84,5 +102,13 @@ describe("previewFrame", () => {
     expect(frame.stageHeight).toBe(336);
     expect(frame.height).toBe(PREVIEW_BOX.height);
     expect(frame.width).toBeLessThanOrEqual(PREVIEW_BOX.width);
+  });
+});
+
+describe("problemText", () => {
+  it("names an invalid field without the raw validation code", () => {
+    const text = problemText({ code: "invalidField", reason: "invalid_value" });
+    expect(text).toBe("This value is not valid.");
+    expect(text).not.toContain("invalid_value");
   });
 });

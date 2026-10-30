@@ -1,6 +1,14 @@
 import { cva } from "class-variance-authority";
 
-export const widgetList = cva("flex flex-col gap-0.5");
+export const widgetList = cva("", {
+  variants: {
+    columns: {
+      one: "flex flex-col gap-0.5",
+      two: "grid grid-cols-2 content-start gap-x-6 gap-y-0.5",
+    },
+  },
+  defaultVariants: { columns: "one" },
+});
 
 export const widgetRow = cva(
   "group/row relative flex min-w-0 items-center gap-3 rounded-lg px-1.5 py-1.5 transition-colors",

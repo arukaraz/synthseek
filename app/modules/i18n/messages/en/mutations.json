@@ -122,6 +122,11 @@
     "listenBrainzSaved": "ListenBrainz settings saved",
     "boardSaveFailed": "Could not save your board"
   },
+  "widgets": {
+    "saveFailed": "Could not save this widget",
+    "removeFailed": "Could not delete this widget",
+    "importFailed": "Could not check this JSON"
+  },
   "portability": {
     "importFailed": "Import failed"
   },

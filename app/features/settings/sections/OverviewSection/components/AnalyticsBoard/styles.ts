@@ -13,32 +13,6 @@ export const metricValue = cva("text-fg text-2xl leading-none font-semibold tabu
 
 export const metricUnit = cva("text-fg/60 text-xs");
 
-export const spark = cva("block w-full overflow-visible", {
-  variants: {
-    fill: {
-      true: "min-h-0 flex-1",
-      false: "h-7 shrink-0",
-    },
-  },
-  defaultVariants: { fill: false },
-});
-
-export const sparkLine = cva(
-  "stroke-primary-400 fill-none [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:2]"
-);
-
-export const sparkArea = cva("fill-primary-400/15");
-
-export const sparkBar = cva("", {
-  variants: {
-    last: {
-      true: "fill-primary-400",
-      false: "fill-primary-400/50",
-    },
-  },
-  defaultVariants: { last: false },
-});
-
 export const caption = cva("text-fg/60 truncate text-xs");
 
 export const splitBar = cva("bg-destructive-vivid/60 flex h-1.5 shrink-0 overflow-hidden rounded-full");
@@ -85,24 +59,6 @@ export const serviceName = cva("text-fg text-sm font-medium");
 
 export const servicePills = cva("flex flex-wrap items-center gap-1.5");
 
-export const heatGrid = cva(
-  "grid min-h-0 flex-1 grid-cols-[2.25rem_repeat(24,minmax(0,1fr))] grid-rows-[repeat(7,minmax(0,1fr))_auto] gap-0.5"
-);
-
-export const heatDay = cva("text-fg/60 self-center font-mono text-[10px]");
-
-export const heatCell = cva("rounded-[3px]", {
-  variants: {
-    empty: {
-      true: "bg-fg/5",
-      false: "bg-primary-400 [opacity:var(--heat)]",
-    },
-  },
-  defaultVariants: { empty: true },
-});
-
-export const heatHour = cva("text-fg/60 col-span-6 font-mono text-[10px]");
-
 export const clockFoot = cva("text-fg/60 flex flex-wrap items-center justify-between gap-2 text-xs");
 
 export function cellVars(span: BoardSpan): CssVars {
@@ -115,8 +71,4 @@ export function shareVars(share: number): CssVars {
 
 export function barVars(share: number): CssVars {
   return { "--bar": `${share * 100}%` };
-}
-
-export function heatVars(level: number): CssVars {
-  return { "--heat": String(level) };
 }

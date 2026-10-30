@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+export type WidgetListColumns = "one" | "two";
+
 export interface CoverArtProps {
   src: string | null;
   seed: string;

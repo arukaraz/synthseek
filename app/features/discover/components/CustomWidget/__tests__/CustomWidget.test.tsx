@@ -5,10 +5,13 @@ import type { WidgetBlock, WidgetResult } from "@hooks/api/queries/widgets/types
 import {
   createAlbumResult,
   createBucketResult,
+  createDailySeries,
   createFeedAlbumResult,
   createFeedAlbumRow,
+  createMatrixResult,
   createQuestionAlbumRow,
   createQuestionTrackRow,
+  createSeriesResult,
   createTrackResult,
   createWidget,
 } from "@test/factories";
@@ -51,6 +54,43 @@ const BUCKETS = createBucketResult([
   { key: "folk", label: "Folk", value: 2, prev: null },
   { key: "soul", label: "Soul", value: 1, prev: null },
 ]);
+const YEAR = createSeriesResult(
+  createDailySeries(
+    "2026-01-01",
+    Array.from({ length: 365 }, (_, index) => (index + 4) % 8)
+  )
+);
+const WEEKS = createSeriesResult([
+  { key: "2026-10-05", value: 10, prev: null },
+  { key: "2026-10-12", value: 20, prev: null },
+  { key: "2026-10-19", value: 30, prev: null },
+  { key: "2026-10-26", value: 42, prev: null },
+]);
+const MATRIX = createMatrixResult(
+  Array.from({ length: 7 * 24 }, (_, index) => {
+    const weekday = Math.floor(index / 24);
+    const hour = index % 24;
+    const busy = new Map([
+      ["4:21", 9],
+      ["4:8", 2],
+      ["0:9", 3],
+    ]);
+    return { weekday, hour, value: busy.get(`${weekday}:${hour}`) ?? 0 };
+  })
+);
+const MOVES = {
+  ...createTrackResult(
+    Array.from({ length: 14 }, (_, index) =>
+      createQuestionTrackRow({
+        id: `m${index}`,
+        title: `Mover ${index}`,
+        value: index < 3 ? [3, null, -1][index] : 0,
+      })
+    )
+  ),
+  measure: "rankDelta" as const,
+  previous: { from: new Date("2026-08-30T00:00:00Z"), to: new Date("2026-09-29T00:00:00Z") },
+};
 
 function show(block: WidgetBlock, size: BoardSize, result: WidgetResult, action: "play" | "request" | "none" = "play") {
   dataQuery.mockReturnValue({ data: result, isLoading: false, isError: false });
@@ -160,10 +200,119 @@ describe("CustomWidget", () => {
     expect(screen.queryByRole("button", { name: "Request Fresh One" })).not.toBeInTheDocument();
   });
 
-  it("says when a view is not built yet instead of drawing it", () => {
-    show("heatmap", "M", TRACKS);
-    expect(screen.getByText("This view arrives in a later update.")).toBeInTheDocument();
-    expect(screen.queryByRole("listitem")).not.toBeInTheDocument();
+  it.each([
+    ["S", 8],
+    ["M", 16],
+    ["L", 32],
+  ] as const)("draws the latest %s series points as bars with the first and last labels", (size, bars) => {
+    show("bars", size, YEAR, "none");
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(bars);
+    expect(items.at(-1)).toHaveAccessibleName("Dec 31: 0 plays");
+  });
+
+  it("labels every bucket bar under it", () => {
+    show("bars", "M", BUCKETS, "none");
+    expect(screen.getAllByRole("listitem")).toHaveLength(5);
+    expect(screen.getByRole("listitem", { name: "Rock: 12 plays" })).toHaveTextContent("Rock");
+  });
+
+  it.each(["S", "M", "L"] as const)("draws a sparkline with the latest value in %s", (size) => {
+    show("sparkline", size, WEEKS, "none");
+    expect(screen.getByRole("img", { name: "Trend, latest Oct 26: 42 plays" })).toBeInTheDocument();
+    expect(screen.queryAllByText("Oct 5")).toHaveLength(size === "S" ? 0 : 1);
+  });
+
+  it.each(["M", "L"] as const)("draws the weekday and hour heatmap in %s", (size) => {
+    show("heatmap", size, MATRIX, "none");
+    expect(screen.getByRole("img", { name: "Listening by weekday and hour" })).toBeInTheDocument();
+    expect(screen.getByTitle("Fri 21:00, 9")).toBeInTheDocument();
+    expect(screen.getByText("Busiest at Fri 21:00")).toBeInTheDocument();
+  });
+
+  it("compacts the heatmap to one bar per weekday in S", () => {
+    show("heatmap", "S", MATRIX, "none");
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    const days = screen.getAllByRole("listitem");
+    expect(days).toHaveLength(7);
+    expect(days[4]).toHaveTextContent("Fri");
+    expect(days[4]).toHaveTextContent("11");
+  });
+
+  it.each(["S", "M", "L"] as const)("shows the latest value of a trend with its change in %s", (size) => {
+    show("statTrend", size, WEEKS, "none");
+    expect(screen.getByText("42 plays")).toBeInTheDocument();
+    expect(screen.getByText("12 more than the previous period")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["S", 5],
+    ["M", 8],
+    ["L", 12],
+  ] as const)("ranks %s rows with how far each one moved", (size, rows) => {
+    show("rankingMoves", size, MOVES, "none");
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(rows);
+    expect(items[0]).toHaveTextContent("Up 3");
+    expect(items[1]).toHaveTextContent("New");
+    expect(items[2]).toHaveTextContent("Down 1");
+  });
+
+  it.each([
+    ["S", 3],
+    ["M", 5],
+    ["L", 5],
+  ] as const)("compares %s buckets with the previous period", (size, rows) => {
+    show("compare", size, BUCKETS, "none");
+    expect(screen.getAllByRole("listitem")).toHaveLength(rows);
+    expect(screen.getByRole("listitem", { name: "Rock: 12 plays now, 9 plays before" })).toBeInTheDocument();
+    expect(screen.getByText("Previous period")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["S", 4],
+    ["M", 10],
+    ["L", 20],
+  ] as const)("tiles %s covers in a mosaic and plays one from its cover", (size, tiles) => {
+    show("mosaic", size, TRACKS);
+    expect(screen.getAllByRole("listitem")).toHaveLength(Math.min(tiles, 14));
+    fireEvent.click(screen.getByRole("button", { name: "Play Song 1" }));
+    expect(playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["req-1"] });
+  });
+
+  it.each([
+    ["M", 179],
+    ["L", 368],
+  ] as const)("lays out the latest weeks of daily listening in %s", (size, cells) => {
+    show("yearCalendar", size, YEAR, "none");
+    const grid = screen.getByRole("img", { name: "1.3K in this year" });
+    expect(grid.children).toHaveLength(cells);
+    expect(screen.getByTitle("Dec 30: 7 plays")).toBeInTheDocument();
+  });
+
+  it("turns the year calendar into a trend in S", () => {
+    show("yearCalendar", "S", YEAR, "none");
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.getByText("0 plays")).toBeInTheDocument();
+    expect(screen.getByText("Dec 31")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["S", 4],
+    ["M", 5],
+    ["L", 5],
+  ] as const)("splits the total into %s shares", (size, rows) => {
+    show("share", size, BUCKETS, "none");
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(rows);
+    expect(items[0]).toHaveTextContent("Rock");
+    expect(items[0]).toHaveTextContent("46%");
+    expect(items.at(-1)).toHaveTextContent("Other");
+  });
+
+  it("says nothing matches when every point of a series is zero", () => {
+    show("bars", "M", createSeriesResult([{ key: "2026-10-01", value: 0, prev: null }]), "none");
+    expect(screen.getByText("Nothing matches this widget right now.")).toBeInTheDocument();
   });
 
   it("says which integration a feed is waiting on", () => {

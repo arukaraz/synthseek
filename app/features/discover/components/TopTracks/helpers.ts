@@ -1,6 +1,20 @@
 import type { ParseKeys } from "i18next";
 
-import type { EmptyReason } from "./types";
+import type { LastfmTopTrack } from "@features/discovery-integrations/types";
+import type { BoardSize } from "@hooks/api/queries/board/types";
+
+import { COMPACT_ROW_LIMIT } from "../constants";
+import { HERO_LIMIT, LIST_LIMIT } from "./constants";
+import type { EmptyReason, TopTracksSplit } from "./types";
+
+export function topTracksSplit(tracks: readonly LastfmTopTrack[], size: BoardSize): TopTracksSplit {
+  if (size === "S") return { hero: null, rest: tracks.slice(0, COMPACT_ROW_LIMIT), startRank: 1 };
+  return {
+    hero: tracks[0] ?? null,
+    rest: tracks.slice(HERO_LIMIT, HERO_LIMIT + LIST_LIMIT),
+    startRank: HERO_LIMIT + 1,
+  };
+}
 
 export function formatPlaycount(n: number): string {
   if (n < 1000) return n.toString();

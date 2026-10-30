@@ -10,9 +10,14 @@ interface TrendingPayload {
 }
 
 const useTrendingTracksMock = vi.fn();
+const flow = vi.hoisted(() => ({ openForResult: vi.fn(), requestResult: vi.fn() }));
 
 vi.mock("@hooks/api/queries/useTrendingTracks", () => ({
   useTrendingTracks: () => useTrendingTracksMock(),
+}));
+
+vi.mock("@features/search/components/ContentRequestFlow", () => ({
+  useContentRequestFlow: () => ({ ...flow, openForTarget: vi.fn() }),
 }));
 
 vi.mock("../TrendingHeroSlide", () => ({
@@ -69,7 +74,7 @@ describe("TrendingHero", () => {
   it("renders the skeleton while loading", () => {
     useTrendingTracksMock.mockReturnValue(createLoadingQuery<TrendingPayload>());
 
-    const { container } = renderWithProviders(<TrendingHero info="What is trending right now" />);
+    const { container } = renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
 
     expect(container.querySelector(".bg-fg\\/10")).toBeInTheDocument();
     expect(screen.queryByTestId("slide")).not.toBeInTheDocument();
@@ -78,7 +83,7 @@ describe("TrendingHero", () => {
   it("renders the skeleton when the track list is empty", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(0)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
 
     expect(screen.queryByTestId("slide")).not.toBeInTheDocument();
   });
@@ -86,7 +91,7 @@ describe("TrendingHero", () => {
   it("renders the error empty state when the query errors", () => {
     useTrendingTracksMock.mockReturnValue(createErrorQuery<TrendingPayload>(new Error("boom")));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
 
     expect(screen.getByText("Failed to load trending tracks")).toBeInTheDocument();
   });
@@ -94,7 +99,7 @@ describe("TrendingHero", () => {
   it("renders the active slide and nav with the full track total", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
 
     expect(screen.getByTestId("slide")).toHaveTextContent("Track 0");
     expect(screen.getByTestId("nav")).toHaveAttribute("data-total", "3");
@@ -103,7 +108,7 @@ describe("TrendingHero", () => {
   it("advances to the next track when nav next is clicked", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
     fireEvent.click(screen.getByText("nav-next"));
 
     expect(screen.getByTestId("slide")).toHaveTextContent("Track 1");
@@ -112,7 +117,7 @@ describe("TrendingHero", () => {
   it("wraps to the last track when nav prev is clicked from the first", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
     fireEvent.click(screen.getByText("nav-prev"));
 
     expect(screen.getByTestId("slide")).toHaveTextContent("Track 2");
@@ -121,7 +126,7 @@ describe("TrendingHero", () => {
   it("moves to the previous slide on the ArrowLeft key", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
     fireEvent.keyDown(screen.getByRole("region", { name: "Trending tracks hero" }), { key: "ArrowLeft" });
 
     expect(screen.getByTestId("slide")).toHaveTextContent("Track 2");
@@ -130,7 +135,7 @@ describe("TrendingHero", () => {
   it("moves to the next slide on the ArrowRight key", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
     fireEvent.keyDown(screen.getByRole("region", { name: "Trending tracks hero" }), { key: "ArrowRight" });
 
     expect(screen.getByTestId("slide")).toHaveTextContent("Track 1");
@@ -141,7 +146,7 @@ describe("TrendingHero", () => {
     try {
       useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-      renderWithProviders(<TrendingHero info="What is trending right now" />);
+      renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
       expect(screen.getByTestId("slide")).toHaveTextContent("Track 0");
 
       act(() => {
@@ -159,7 +164,7 @@ describe("TrendingHero", () => {
     try {
       useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-      renderWithProviders(<TrendingHero info="What is trending right now" />);
+      renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
       fireEvent.mouseEnter(screen.getByRole("region", { name: "Trending tracks hero" }));
 
       act(() => {
@@ -177,7 +182,7 @@ describe("TrendingHero", () => {
     try {
       useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-      renderWithProviders(<TrendingHero info="What is trending right now" />);
+      renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
       fireEvent.click(screen.getByText("open-request"));
 
       act(() => {
@@ -198,7 +203,7 @@ describe("TrendingHero", () => {
   it("leaves arrow keys to the open request dialog", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
     fireEvent.click(screen.getByText("open-request"));
     const notPrevented = fireEvent.keyDown(screen.getByRole("region", { name: "Trending tracks hero" }), {
       key: "ArrowRight",
@@ -208,10 +213,39 @@ describe("TrendingHero", () => {
     expect(screen.getByTestId("slide")).toHaveTextContent("Track 0");
   });
 
+  it("lists the first four trending tracks in a quarter tile instead of the rotating hero", () => {
+    const tracks = Array.from({ length: 6 }).map((_, i) =>
+      createTrendingItem({ id: `track-${i}`, title: `Track ${i}`, images: [] })
+    );
+    useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>({ data: { tracks } }));
+
+    renderWithProviders(<TrendingHero size="S" info="What is trending right now" />);
+
+    expect(screen.queryByRole("region", { name: "Trending tracks hero" })).not.toBeInTheDocument();
+    expect(screen.queryByTestId("slide")).not.toBeInTheDocument();
+    expect(screen.getAllByRole("listitem").map((row) => row.textContent)).toEqual([
+      expect.stringContaining("Track 0"),
+      expect.stringContaining("Track 1"),
+      expect.stringContaining("Track 2"),
+      expect.stringContaining("Track 3"),
+    ]);
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Track 1" }));
+    expect(flow.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "track-1" }));
+  });
+
+  it("reports a failed load in a quarter tile instead of waiting on it", () => {
+    useTrendingTracksMock.mockReturnValue(createErrorQuery<TrendingPayload>(new Error("boom")));
+
+    renderWithProviders(<TrendingHero size="S" info="What is trending right now" />);
+
+    expect(screen.getByText("Failed to load trending tracks")).toBeInTheDocument();
+  });
+
   it("ignores a swipe while the request dialog is open", () => {
     useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>(buildPayload(3)));
 
-    renderWithProviders(<TrendingHero info="What is trending right now" />);
+    renderWithProviders(<TrendingHero size="L" info="What is trending right now" />);
     fireEvent.click(screen.getByText("open-request"));
     const region = screen.getByRole("region", { name: "Trending tracks hero" });
     fireEvent.touchStart(region, { touches: [{ clientX: 300 }] });

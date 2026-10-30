@@ -1,7 +1,21 @@
 import type { MusicTrack } from "@api/__generated__/types";
+import type { BoardSize } from "@hooks/api/queries/board/types";
+
+export interface TrendingEntry {
+  track: MusicTrack;
+  addedAt: string;
+}
 
 export interface TrendingHeroProps {
+  size: BoardSize;
   info: string;
+}
+
+export interface TrendingListProps {
+  entries: readonly TrendingEntry[];
+  info: string;
+  loading: boolean;
+  failed: boolean;
 }
 
 export interface TrendingHeroNavProps {
@@ -13,7 +27,7 @@ export interface TrendingHeroNavProps {
 }
 
 export interface TrendingHeroSlideProps {
-  item: { track: MusicTrack; addedAt: string };
+  item: TrendingEntry;
   currentIndex: number;
   total: number;
   onIndexChange: (index: number) => void;

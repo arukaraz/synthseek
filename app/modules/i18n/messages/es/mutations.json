@@ -122,6 +122,11 @@
     "listenBrainzSaved": "Configuración de ListenBrainz guardada",
     "boardSaveFailed": "No se pudo guardar tu tablero"
   },
+  "widgets": {
+    "saveFailed": "No se pudo guardar este widget",
+    "removeFailed": "No se pudo borrar este widget",
+    "importFailed": "No se pudo comprobar este JSON"
+  },
   "portability": {
     "importFailed": "Error en la importación"
   },

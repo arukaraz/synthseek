@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import type { BoardSize } from "@hooks/api/queries/board/types";
 import { fireEvent, renderWithProviders, screen, within } from "@test/test-utils";
 
 import { Anniversaries } from "../Anniversaries/Anniversaries";
@@ -123,7 +124,7 @@ describe("Gaps", () => {
     missing: [{ id: `${artist}-vs`, name: "Vs", artist, cover: null, year: 1993 }],
   });
 
-  it("lays every artist on a horizontal rail at any size, scrollable from the keyboard", () => {
+  it("lays every artist on a horizontal rail at M, scrollable from the keyboard", () => {
     mocks.gaps.mockReturnValue(ready([gap("Pearl Jam"), gap("Tycho")]));
     renderWithProviders(<Gaps size="M" info="x" />);
 
@@ -155,6 +156,19 @@ describe("Gaps", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Request Vs" }));
     expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ type: "album", id: "Pearl Jam-vs" }));
+  });
+
+  it("lists four artists' progress in a quarter tile, without their missing albums or a rail", () => {
+    mocks.gaps.mockReturnValue(ready(["Pearl Jam", "Tycho", "Bjork", "Low", "Mogwai"].map(gap)));
+    renderWithProviders(<Gaps size="S" info="x" />);
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(4);
+    expect(screen.queryByText("Mogwai")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Vs/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "All artists, scroll sideways" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Open Tycho" }));
+    expect(mocks.openForTarget).toHaveBeenCalledWith(expect.objectContaining({ mode: "artist", id: "Tycho-id" }));
   });
 });
 
@@ -212,6 +226,38 @@ describe("ServerPlaylists", () => {
     renderWithProviders(<ServerPlaylists size="L" info="x" />);
 
     expect(screen.getByText("Connect a media server to sync playlists.")).toBeInTheDocument();
+  });
+});
+
+describe("a library list across a full row", () => {
+  it.each([
+    ["New in your library", (size: BoardSize) => <NewInLibrary size={size} info="x" />],
+    ["Landed this week", (size: BoardSize) => <Landed size={size} info="x" />],
+    ["Anniversaries", (size: BoardSize) => <Anniversaries size={size} info="x" />],
+    ["Your playlists on media servers", (size: BoardSize) => <ServerPlaylists size={size} info="x" />],
+  ])("%s splits its rows in two columns at L and keeps one at M", (_name, widget) => {
+    mocks.recentAlbums.mockReturnValue(ready([ALBUM]));
+    mocks.anniversaries.mockReturnValue(
+      ready([
+        {
+          albumExternalId: "e1",
+          name: "Homogenic",
+          artist: "Bjork",
+          cover: null,
+          releaseDate: "1997-10-20",
+          years: 29,
+        },
+      ])
+    );
+    mocks.targets.mockReturnValue(ready([{ server: "plex", name: "Plex" }]));
+    mocks.serverPlaylists.mockReturnValue(ready([{ id: "p1", name: "Road trip", cover: null, tracks: 12, links: [] }]));
+
+    const { unmount } = renderWithProviders(widget("M"));
+    expect(screen.getByRole("list")).not.toHaveClass("grid-cols-2");
+    unmount();
+
+    renderWithProviders(widget("L"));
+    expect(screen.getByRole("list")).toHaveClass("grid-cols-2");
   });
 });
 

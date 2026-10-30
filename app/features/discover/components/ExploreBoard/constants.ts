@@ -112,6 +112,8 @@ export const BOARD_WIDGET_ORDER: readonly BoardWidgetKey[] = [
   "serverPlaylists",
 ];
 
+const HISTORY_MIX_SIZES: Record<BoardSize, BoardHeight> = { S: "tall", M: "regular", L: "short" };
+
 export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
   trending: {
     component: TrendingHero,
@@ -119,7 +121,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Zap,
     titleKey: "trendingHero.badge",
     descriptionKey: "board.widgets.trending",
-    sizes: { M: "regular", L: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "L",
   },
   topTracks: {
@@ -128,7 +130,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Trophy,
     titleKey: "topTracks.title",
     descriptionKey: "board.widgets.topTracks",
-    sizes: { M: "tall" },
+    sizes: { S: "regular", M: "tall", L: "regular" },
     defaultSize: "M",
   },
   scrobbles: {
@@ -139,7 +141,6 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     descriptionKey: "board.widgets.scrobbles",
     sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "L",
-    narrowSizes: { L: "M" },
   },
   mixes: {
     component: DiscoveryMixes,
@@ -147,7 +148,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Library,
     titleKey: "mixes.title",
     descriptionKey: "board.widgets.mixes",
-    sizes: { M: "tall", L: "regular" },
+    sizes: { S: "regular", M: "tall", L: "regular" },
     defaultSize: "L",
   },
   artistsNext: {
@@ -156,7 +157,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Users,
     titleKey: "artistSpotlight.title",
     descriptionKey: "board.widgets.artistsNext",
-    sizes: { M: "tall", L: "tall" },
+    sizes: { S: "regular", M: "tall", L: "tall" },
     defaultSize: "L",
   },
   genres: {
@@ -167,7 +168,6 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     descriptionKey: "board.widgets.genres",
     sizes: { S: "tall", M: "tall", L: "tall" },
     defaultSize: "L",
-    narrowSizes: { L: "M" },
   },
   requests: {
     component: RecentRequests,
@@ -175,7 +175,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Download,
     titleKey: "recentRequests.title",
     descriptionKey: "board.widgets.requests",
-    sizes: { S: "regular", M: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "M",
   },
   onRepeat: {
@@ -184,7 +184,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.onRepeat.icon,
     titleKey: HISTORY_MIXES.onRepeat.titleKey,
     descriptionKey: "board.widgets.onRepeat",
-    sizes: { S: "tall" },
+    sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
   },
   rewind: {
@@ -193,7 +193,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.rewind.icon,
     titleKey: HISTORY_MIXES.rewind.titleKey,
     descriptionKey: "board.widgets.rewind",
-    sizes: { S: "tall" },
+    sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
   },
   deepCuts: {
@@ -202,7 +202,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.deepCuts.icon,
     titleKey: HISTORY_MIXES.deepCuts.titleKey,
     descriptionKey: "board.widgets.deepCuts",
-    sizes: { S: "tall" },
+    sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
   },
   forgottenFavorites: {
@@ -211,7 +211,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: HISTORY_MIXES.forgottenFavorites.icon,
     titleKey: HISTORY_MIXES.forgottenFavorites.titleKey,
     descriptionKey: "board.widgets.forgottenFavorites",
-    sizes: { S: "tall" },
+    sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
   },
   jumpBackIn: {
@@ -220,9 +220,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: RotateCcw,
     titleKey: "jumpBackIn.title",
     descriptionKey: "board.widgets.jumpBackIn",
-    sizes: { M: "regular", L: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "L",
-    narrowSizes: { L: "M" },
   },
   lastYear: {
     component: LastYear,
@@ -230,7 +229,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: CalendarClock,
     titleKey: "lastYear.title",
     descriptionKey: "board.widgets.lastYear",
-    sizes: { S: "tall", M: "tall" },
+    sizes: { S: "tall", M: "tall", L: "regular" },
     defaultSize: "M",
   },
   stations: {
@@ -239,9 +238,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Radio,
     titleKey: "stations.heading",
     descriptionKey: "board.widgets.stations",
-    sizes: { M: "regular", L: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "L",
-    narrowSizes: { L: "M" },
   },
   continueListening: {
     component: ContinueListening,
@@ -249,7 +247,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: PlayCircle,
     titleKey: "continueListening.title",
     descriptionKey: "board.widgets.continueListening",
-    sizes: { M: "regular", L: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "L",
   },
   rarities: {
@@ -258,7 +256,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Gem,
     titleKey: "rarities.title",
     descriptionKey: "board.widgets.rarities",
-    sizes: { M: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "M",
   },
   orbit: {
@@ -267,7 +265,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: OrbitIcon,
     titleKey: "orbit.title",
     descriptionKey: "board.widgets.orbit",
-    sizes: { M: "regular", L: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "L",
   },
   charts: {
@@ -276,7 +274,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Flame,
     titleKey: "charts.title",
     descriptionKey: "board.widgets.charts",
-    sizes: { S: "tall", M: "tall" },
+    sizes: { S: "tall", M: "tall", L: "regular" },
     defaultSize: "M",
   },
   loved: {
@@ -285,7 +283,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Heart,
     titleKey: "loved.title",
     descriptionKey: "board.widgets.loved",
-    sizes: { M: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "M",
   },
   newInLibrary: {
@@ -294,7 +292,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: ListPlus,
     titleKey: "newInLibrary.title",
     descriptionKey: "board.widgets.newInLibrary",
-    sizes: { S: "regular", M: "tall" },
+    sizes: { S: "regular", M: "tall", L: "regular" },
     defaultSize: "M",
   },
   leaderboard: {
@@ -303,7 +301,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Library,
     titleKey: "leaderboard.title",
     descriptionKey: "board.widgets.leaderboard",
-    sizes: { M: "tall" },
+    sizes: { S: "regular", M: "tall", L: "tall" },
     defaultSize: "M",
   },
   gaps: {
@@ -312,7 +310,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Disc3,
     titleKey: "gaps.title",
     descriptionKey: "board.widgets.gaps",
-    sizes: { M: "tall", L: "regular" },
+    sizes: { S: "regular", M: "tall", L: "regular" },
     defaultSize: "M",
   },
   anniversaries: {
@@ -321,7 +319,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: Cake,
     titleKey: "anniversaries.title",
     descriptionKey: "board.widgets.anniversaries",
-    sizes: { S: "regular", M: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "M",
   },
   landed: {
@@ -330,7 +328,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: PackageCheck,
     titleKey: "landed.title",
     descriptionKey: "board.widgets.landed",
-    sizes: { S: "regular", M: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "M",
   },
   serverPlaylists: {
@@ -339,12 +337,12 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     icon: MonitorPlay,
     titleKey: "serverPlaylists.title",
     descriptionKey: "board.widgets.serverPlaylists",
-    sizes: { S: "regular", M: "regular" },
+    sizes: { S: "regular", M: "regular", L: "regular" },
     defaultSize: "M",
   },
 };
 
-export const CUSTOM_BLOCK_HEIGHTS: Partial<Record<WidgetBlock, Record<BoardSize, BoardHeight>>> = {
+export const CUSTOM_BLOCK_HEIGHTS: Record<WidgetBlock, Record<BoardSize, BoardHeight>> = {
   list: { S: "regular", M: "regular", L: "regular" },
   cards: { S: "regular", M: "regular", L: "regular" },
   rail: { S: "regular", M: "regular", L: "regular" },
@@ -353,11 +351,20 @@ export const CUSTOM_BLOCK_HEIGHTS: Partial<Record<WidgetBlock, Record<BoardSize,
   leader: { S: "regular", M: "tall", L: "tall" },
   feed: { S: "regular", M: "regular", L: "tall" },
   calendar: { S: "regular", M: "regular", L: "tall" },
+  bars: { S: "regular", M: "regular", L: "regular" },
+  sparkline: { S: "short", M: "regular", L: "regular" },
+  heatmap: { S: "regular", M: "regular", L: "regular" },
+  statTrend: { S: "short", M: "short", L: "short" },
+  rankingMoves: { S: "regular", M: "regular", L: "regular" },
+  compare: { S: "regular", M: "regular", L: "tall" },
+  mosaic: { S: "regular", M: "regular", L: "regular" },
+  yearCalendar: { S: "short", M: "regular", L: "regular" },
+  share: { S: "regular", M: "regular", L: "regular" },
 };
 
 export const FALLBACK_BLOCK_HEIGHT: BoardHeight = "regular";
 
-export const CUSTOM_NARROW_SIZES: Partial<Record<BoardSize, BoardSize>> = { S: "M", L: "M" };
+export const NARROW_TILE_SIZE: BoardSize = "M";
 
 export const DEFAULT_BOARD: readonly BuiltinBoardItem[] = [
   { kind: "builtin", id: "trending", widget: "trending", size: "L" },

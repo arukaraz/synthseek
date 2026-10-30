@@ -65,7 +65,7 @@ describe("ArtistSpotlight", () => {
   it("always renders the widget header", () => {
     useArtistsForYouMock.mockReturnValue(buildQuery());
 
-    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     expect(screen.getByRole("heading", { name: enDiscover.artistSpotlight.title })).toBeInTheDocument();
     expect(useArtistsForYouMock).toHaveBeenCalledWith("United States");
@@ -74,7 +74,7 @@ describe("ArtistSpotlight", () => {
   it("renders the loading skeleton while the query is pending", () => {
     useArtistsForYouMock.mockReturnValue(buildQuery({ isLoading: true, data: undefined }));
 
-    const { container } = renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
+    const { container } = renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     expect(container.querySelector(".animate-pulse")).not.toBeNull();
     expect(screen.queryByTestId("artist-card")).not.toBeInTheDocument();
@@ -83,7 +83,7 @@ describe("ArtistSpotlight", () => {
   it("renders the error empty state when the query errors", () => {
     useArtistsForYouMock.mockReturnValue(buildQuery({ isError: true, data: undefined }));
 
-    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     expect(screen.getByText(enDiscover.artistSpotlight.errorTitle)).toBeInTheDocument();
     expect(screen.getByText(enDiscover.artistSpotlight.errorDescription)).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe("ArtistSpotlight", () => {
   it("renders the empty state when the resolved artist list is empty", () => {
     useArtistsForYouMock.mockReturnValue(buildQuery({ data: [] }));
 
-    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     expect(screen.getByText(enDiscover.artistSpotlight.emptyTitle)).toBeInTheDocument();
     expect(screen.getByText(enDiscover.artistSpotlight.emptyDescription)).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe("ArtistSpotlight", () => {
   it("renders the empty state when the query data is absent and not loading or erroring", () => {
     useArtistsForYouMock.mockReturnValue(buildQuery({ data: undefined }));
 
-    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     expect(screen.getByText(enDiscover.artistSpotlight.emptyTitle)).toBeInTheDocument();
   });
@@ -111,17 +111,42 @@ describe("ArtistSpotlight", () => {
       buildQuery({ data: [buildArtist("a", "Boards of Canada"), buildArtist("b", "Autechre")] })
     );
 
-    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     const cards = screen.getAllByTestId("artist-card");
     expect(cards).toHaveLength(2);
     expect(cards[0]).toHaveAttribute("data-id", "a");
   });
 
+  it("lists the artists as rows with their latest release in a quarter tile, without the photo cards", () => {
+    useArtistsForYouMock.mockReturnValue(
+      buildQuery({
+        data: [
+          {
+            ...buildArtist("a", "Boards of Canada"),
+            latestAlbum: { id: "al", name: "Tomorrow's Harvest", images: [] },
+          },
+          buildArtist("b", "Autechre"),
+        ],
+      })
+    );
+
+    renderWithProviders(<ArtistSpotlight size="S" info="Artists to explore next" />);
+
+    expect(screen.queryByTestId("artist-card")).not.toBeInTheDocument();
+    const rows = screen.getAllByRole("listitem");
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveTextContent("Tomorrow's Harvest");
+    expect(rows[1]).toHaveTextContent(enDiscover.artistSpotlight.noAlbums);
+
+    fireEvent.click(screen.getByRole("button", { name: /Autechre/ }));
+    expect(openForResult.mock.calls[0][0]).toMatchObject({ id: "b", name: "Autechre" });
+  });
+
   it("opens the request flow for the clicked artist", () => {
     useArtistsForYouMock.mockReturnValue(buildQuery({ data: [buildArtist("a", "Squarepusher")] }));
 
-    renderWithProviders(<ArtistSpotlight info="Artists to explore next" />);
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
     fireEvent.click(screen.getByTestId("artist-card"));
 
     expect(openForResult).toHaveBeenCalledTimes(1);

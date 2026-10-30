@@ -1,4 +1,7 @@
+import type { BoardSize } from "@hooks/api/queries/board/types";
+
 export interface ArtistSpotlightProps {
+  size: BoardSize;
   info: string;
 }
 

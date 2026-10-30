@@ -40,6 +40,10 @@ export const headerBlock = cva("shrink-0 px-4 pt-4 [&>header]:mb-3");
 
 export const emptyFrame = cva("flex flex-1 items-center justify-center p-6");
 
+export const rankingFrame = cva("flex min-h-0 min-w-0 flex-1 flex-col");
+
+export const rankingColumns = cva("divide-fg/10 grid min-h-0 flex-1 grid-cols-2 grid-rows-[minmax(0,1fr)] divide-x");
+
 export const tabsContainer = cva(
   "border-fg/10 bg-surface/40 inline-flex rounded-lg border p-0.5 text-[11px] font-medium"
 );

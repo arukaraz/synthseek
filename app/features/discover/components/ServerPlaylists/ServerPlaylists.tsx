@@ -13,12 +13,13 @@ import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { formatRelativeTime } from "@utils/formatters";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { listColumns } from "../helpers";
 import { widgetPill } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { syncState } from "./styles";
 
-export function ServerPlaylists({ info }: BoardWidgetProps) {
+export function ServerPlaylists({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const playlists = useServerPlaylists();
   const targets = usePlaylistSyncTargets();
@@ -47,7 +48,7 @@ export function ServerPlaylists({ info }: BoardWidgetProps) {
       }
     >
       <FadeScroll>
-        <ul className={widgetList()}>
+        <ul className={widgetList({ columns: listColumns(size) })}>
           {rows.map((playlist) => (
             <WidgetRow
               key={playlist.id}

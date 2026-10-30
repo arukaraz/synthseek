@@ -10,14 +10,16 @@ import { useCountry } from "@modules/providers/CountryProvider";
 import { getCountryByCode } from "@utils/countries";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { listColumns } from "../helpers";
 import { leaderFrame, leaderLayout } from "../WidgetLeader/styles";
+import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { ChartAction } from "./ChartAction";
 import { ChartsLeader } from "./ChartsLeader";
 import { chartKey } from "./helpers";
-import { chartRank, chartsList } from "./styles";
+import { chartRank } from "./styles";
 
-export function Charts({ info }: BoardWidgetProps) {
+export function Charts({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { country } = useCountry();
   const { data, isLoading, isError } = useCharts(country);
@@ -38,7 +40,7 @@ export function Charts({ info }: BoardWidgetProps) {
         <div className={leaderLayout()}>
           {leaderEntry ? <ChartsLeader entry={leaderEntry} country={countryName} /> : null}
           <FadeScroll>
-            <ol className={chartsList()} start={2}>
+            <ol className={widgetList({ columns: listColumns(size) })} start={2}>
               {rest.map((entry, index) => (
                 <WidgetRow
                   key={chartKey(entry)}

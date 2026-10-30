@@ -36,7 +36,7 @@ export function BoardTile({
     event.preventDefault();
     if (action.kind === "remove") actions.remove(item.id);
     else if (action.kind === "move") actions.move(item.id, action.delta);
-    else actions.resize(item.id, cycleSize(editableSizesOf(item, device), item.size, action.delta));
+    else actions.resize(item.id, cycleSize(editableSizesOf(device), item.size, action.delta));
   };
 
   return (

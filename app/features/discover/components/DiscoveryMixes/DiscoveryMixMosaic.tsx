@@ -8,7 +8,7 @@ import { tileGradient } from "./helpers";
 import { mosaicFallback, mosaicGrid, mosaicImage, mosaicTile } from "./styles";
 import type { DiscoveryMixMosaicProps } from "./types";
 
-export function DiscoveryMixMosaic({ covers: images, fallbackSeed }: DiscoveryMixMosaicProps) {
+export function DiscoveryMixMosaic({ covers: images, fallbackSeed, shape = "square" }: DiscoveryMixMosaicProps) {
   if (images.length === 0) {
     const background = tileGradient(fallbackSeed);
     return <div style={{ background }} className={mosaicFallback()} />;
@@ -18,7 +18,7 @@ export function DiscoveryMixMosaic({ covers: images, fallbackSeed }: DiscoveryMi
   while (tiles.length < 4) tiles.push(null);
 
   return (
-    <div className={mosaicGrid()}>
+    <div className={mosaicGrid({ shape })}>
       {tiles.map((url, index) => {
         const key = `${fallbackSeed}-${index}`;
         if (url) {

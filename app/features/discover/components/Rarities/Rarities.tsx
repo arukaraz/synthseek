@@ -8,17 +8,20 @@ import { WidgetFrame } from "@components/WidgetFrame";
 import { useRarities } from "@hooks/api/queries/analytics/useRarities";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 
+import { COMPACT_ROW_LIMIT } from "../constants";
 import type { BoardWidgetProps } from "../ExploreBoard/types";
-import { compactCount, percentOf } from "../helpers";
+import { compactCount, listColumns, percentOf } from "../helpers";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { rarityAside, rarityCaption, rarityValue } from "./styles";
 
-export function Rarities({ info }: BoardWidgetProps) {
+export function Rarities({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useRarities();
   const { playEntity } = useEntityPlayback();
+  const compact = size === "S";
   const index = data?.index ?? null;
+  const items = data ? (compact ? data.items.slice(0, COMPACT_ROW_LIMIT) : data.items) : [];
 
   return (
     <WidgetFrame
@@ -37,17 +40,19 @@ export function Rarities({ info }: BoardWidgetProps) {
         data && index !== null ? (
           <span className={rarityAside()}>
             <span className={rarityValue()}>{percentOf(index / 100)}</span>
-            <span className={rarityCaption()}>
-              {t("rarities.caption", { threshold: compactCount(data.threshold) })}
-            </span>
+            {compact ? null : (
+              <span className={rarityCaption()}>
+                {t("rarities.caption", { threshold: compactCount(data.threshold) })}
+              </span>
+            )}
           </span>
         ) : undefined
       }
     >
       {data && index !== null ? (
         <FadeScroll>
-          <ul className={widgetList()}>
-            {data.items.map((item) => (
+          <ul className={widgetList({ columns: listColumns(size) })}>
+            {items.map((item) => (
               <WidgetRow
                 key={item.trackId}
                 cover={item.cover}

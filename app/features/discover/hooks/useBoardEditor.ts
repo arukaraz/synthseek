@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import { useSaveBoardLayout } from "@hooks/api/mutations/board/useSaveBoardLayout";
 import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 import { focusBoardTile } from "@hooks/ui/board/helpers";
 import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
@@ -14,6 +15,7 @@ import { useBoardFlip } from "@hooks/ui/board/useBoardFlip";
 
 import { BOARD_SIZE_NAME_KEYS, BOARD_WIDGETS } from "../components/ExploreBoard/constants";
 import {
+  appendCustomWidget,
   appendWidget,
   layoutOf,
   moveItem,
@@ -31,10 +33,11 @@ export function useBoardEditor(
   custom: BoardCustomWidgets,
   customStatus: CustomWidgetsStatus
 ): BoardEditor {
-  const { t } = useTranslation("discover");
+  const { t } = useTranslation(["discover", "widgets"]);
   const save = useSaveBoardLayout();
   const [editing, setEditing] = useState(false);
-  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryOpen, setGalleryOpenState] = useState(false);
+  const [customizeTarget, setCustomizeTarget] = useState<BoardWidgetKey | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const flipRef = useRef<BoardFlip | null>(null);
 
@@ -107,15 +110,34 @@ export function useBoardEditor(
     [commit, items, t]
   );
 
+  const addCustom = useCallback(
+    (widget: WidgetDocument) => {
+      commit(appendCustomWidget(items, widget));
+      toast.success(t("widgets:mine.added", { name: widget.meta.name }));
+    },
+    [commit, items, t]
+  );
+
+  const setGalleryOpen = useCallback((open: boolean) => {
+    setGalleryOpenState(open);
+    if (!open) setCustomizeTarget(null);
+  }, []);
   const startEditing = useCallback(() => setEditing(true), []);
   const stopEditing = useCallback(() => {
     setEditing(false);
     setGalleryOpen(false);
-  }, []);
+  }, [setGalleryOpen]);
   const openGallery = useCallback(() => {
     setEditing(true);
     setGalleryOpen(true);
-  }, []);
+  }, [setGalleryOpen]);
+  const customize = useCallback(
+    (widget: BoardWidgetKey) => {
+      setCustomizeTarget(widget);
+      setGalleryOpen(true);
+    },
+    [setGalleryOpen]
+  );
 
   useEffect(() => {
     if (!editing || galleryOpen) return;
@@ -127,8 +149,8 @@ export function useBoardEditor(
   }, [editing, galleryOpen]);
 
   const actions = useMemo(
-    () => ({ move, resize, remove, startDrag: drag.startDrag }),
-    [move, resize, remove, drag.startDrag]
+    () => ({ move, resize, remove, startDrag: drag.startDrag, customize }),
+    [move, resize, remove, drag.startDrag, customize]
   );
 
   return {
@@ -142,7 +164,9 @@ export function useBoardEditor(
     stopEditing,
     openGallery,
     setGalleryOpen,
+    customizeTarget,
     add,
+    addCustom,
     actions,
   };
 }

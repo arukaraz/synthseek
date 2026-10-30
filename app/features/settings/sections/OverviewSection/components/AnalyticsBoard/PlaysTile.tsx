@@ -3,13 +3,13 @@
 import { Play } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { SparkLine } from "@components/MiniChart";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useListeningSummary } from "@hooks/api/queries/analytics/useListeningSummary";
 
 import { SUMMARY_WINDOW_DAYS } from "./constants";
 import { deltaOf, windowTotals } from "./helpers";
 import { MetricValue } from "./MetricValue";
-import { SparkLine } from "./SparkLine";
 
 export function PlaysTile() {
   const { t } = useTranslation("settings");

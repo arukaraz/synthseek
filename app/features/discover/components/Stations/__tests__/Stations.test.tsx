@@ -51,6 +51,17 @@ describe("Stations", () => {
     expect(screen.getByRole("region", { name: "All stations, scroll sideways" })).toHaveAttribute("tabindex", "0");
   });
 
+  it("shows two stations side by side in a quarter tile, with no rail to scroll", () => {
+    stationsQuery.mockReturnValue({ data: STATIONS, isLoading: false, isError: false });
+    renderWithProviders(<Stations size="S" info="x" />);
+
+    expect(screen.getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      "Bjork",
+      "Your favorites",
+    ]);
+    expect(screen.queryByRole("region", { name: "All stations, scroll sideways" })).not.toBeInTheDocument();
+  });
+
   it("explains the empty state", () => {
     stationsQuery.mockReturnValue({ data: [], isLoading: false, isError: false });
     renderWithProviders(<Stations size="L" info="x" />);

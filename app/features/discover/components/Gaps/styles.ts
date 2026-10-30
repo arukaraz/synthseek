@@ -6,6 +6,8 @@ export const gapsRail = cva("flex h-full snap-x gap-4 [&>*]:w-72 [&>*]:shrink-0 
 
 export const gapCard = cva("flex h-full min-w-0 flex-col gap-1");
 
+export const gapsList = cva("flex flex-col gap-1");
+
 export const gapMissing = cva("min-h-0 flex-1");
 
 export const gapHeader = cva(

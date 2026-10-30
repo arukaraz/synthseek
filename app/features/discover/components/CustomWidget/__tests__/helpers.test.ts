@@ -5,8 +5,10 @@ import {
   createBucketResult,
   createFeedAlbumResult,
   createFeedAlbumRow,
+  createMatrixResult,
   createQuestionAlbumRow,
   createQuestionTrackRow,
+  createSeriesResult,
   createTrackResult,
 } from "@test/factories";
 
@@ -16,11 +18,22 @@ import {
   fieldText,
   itemControls,
   measureText,
+  moveDirection,
+  moveOf,
+  moveText,
+  suggestBlocks,
+  viewIsEmpty,
+  widgetCellsOf,
   widgetIconOf,
   widgetItemsOf,
+  widgetPointsOf,
   widgetStatsOf,
+  widgetViewOf,
 } from "../helpers";
+import { WIDGET_ICONS } from "../constants";
 import type { WidgetHandlers, WidgetItem } from "../types";
+
+const WINDOW = { from: new Date("2026-08-30T00:00:00Z"), to: new Date("2026-09-29T00:00:00Z") };
 
 function handlers(): WidgetHandlers {
   return { play: vi.fn(), request: vi.fn(), open: vi.fn() };
@@ -161,20 +174,126 @@ describe("itemControls", () => {
 describe("customWidgetNote", () => {
   const result = createTrackResult([]);
 
-  it("prefers the unsupported note, then the error, then the missing integration, then empty", () => {
-    expect(customWidgetNote({ result, isError: true, empty: true, supported: false })).toBe(
-      "This view arrives in a later update."
+  it("prefers the error, then the missing integration, then empty", () => {
+    expect(customWidgetNote({ result, isError: true, empty: true })).toBe("Couldn't load this right now.");
+    expect(customWidgetNote({ result: createFeedAlbumResult([], "lastfm"), isError: false, empty: true })).toBe(
+      "Connect Last.fm in Settings to fill this widget."
     );
-    expect(customWidgetNote({ result, isError: true, empty: true, supported: true })).toBe(
-      "Couldn't load this right now."
+    expect(customWidgetNote({ result, isError: false, empty: true })).toBe("Nothing matches this widget right now.");
+    expect(customWidgetNote({ result, isError: false, empty: false })).toBeNull();
+  });
+});
+
+describe("moveOf and moveText", () => {
+  it("reads a rank delta as places moved and a missing one as new", () => {
+    expect(moveOf("rankDelta", { value: 3, prev: null }, true)).toEqual({ kind: "rank", by: 3 });
+    expect(moveOf("rankDelta", { value: null, prev: null }, true)).toEqual({ kind: "new" });
+    expect(moveText({ kind: "rank", by: -2 })).toBe("Down 2");
+  });
+
+  it("measures the change of any other measure only when the question compares", () => {
+    expect(moveOf("plays", { value: 12, prev: 9 }, true)).toEqual({ kind: "value", by: 3 });
+    expect(moveOf("plays", { value: 12, prev: null }, true)).toEqual({ kind: "new" });
+    expect(moveOf("plays", { value: 12, prev: 9 }, false)).toBeNull();
+    expect(moveText({ kind: "value", by: 3 })).toBe("+3");
+    expect(moveDirection({ kind: "value", by: 0 })).toBe("same");
+  });
+
+  it("carries the move of a compared track row into its item", () => {
+    const result = { ...createTrackResult([createQuestionTrackRow({ value: 5, prev: 8 })]), previous: WINDOW };
+    expect(onlyItem(widgetItemsOf(result, undefined)).move).toEqual({ kind: "value", by: -3 });
+  });
+});
+
+describe("widgetPointsOf and widgetCellsOf", () => {
+  it("labels daily and monthly series keys as dates and keeps the measure text", () => {
+    const points = widgetPointsOf(
+      createSeriesResult([
+        { key: "2026-10-27", value: 4, prev: 2 },
+        { key: "2026-10", value: 30, prev: null },
+      ])
     );
-    expect(
-      customWidgetNote({ result: createFeedAlbumResult([], "lastfm"), isError: false, empty: true, supported: true })
-    ).toBe("Connect Last.fm in Settings to fill this widget.");
-    expect(customWidgetNote({ result, isError: false, empty: true, supported: true })).toBe(
-      "Nothing matches this widget right now."
+    expect(points.map((point) => point.label)).toEqual(["Oct 27", "Oct 2026"]);
+    expect(points[0]).toMatchObject({ value: 4, prev: 2, text: "4 plays", prevText: "2 plays" });
+  });
+
+  it("counts an empty bucket as zero", () => {
+    const [point] = widgetPointsOf(createBucketResult([{ key: "jazz", label: "Jazz", value: null, prev: null }]));
+    expect(point).toMatchObject({ value: 0, label: "Jazz" });
+  });
+
+  it("lays a matrix out as seven days of twenty-four hours from Monday", () => {
+    const cells = widgetCellsOf(
+      createMatrixResult([
+        { weekday: 0, hour: 9, value: 3 },
+        { weekday: 6, hour: 23, value: 5 },
+      ])
     );
-    expect(customWidgetNote({ result, isError: false, empty: false, supported: true })).toBeNull();
+    expect(cells).toHaveLength(7);
+    expect(cells[0]?.[9]).toBe(3);
+    expect(cells[6]?.[23]).toBe(5);
+    expect(cells[3]?.reduce((sum, value) => sum + value, 0)).toBe(0);
+  });
+});
+
+describe("viewIsEmpty", () => {
+  it("is empty only without items, without a non-zero point and without a non-zero cell", () => {
+    const empty = widgetViewOf(createSeriesResult([{ key: "2026-10-01", value: 0, prev: null }]), undefined);
+    expect(viewIsEmpty(empty)).toBe(true);
+    const busy = widgetViewOf(createSeriesResult([{ key: "2026-10-01", value: 2, prev: null }]), undefined);
+    expect(viewIsEmpty(busy)).toBe(false);
+    const matrix = widgetViewOf(createMatrixResult([{ weekday: 1, hour: 2, value: 1 }]), undefined);
+    expect(viewIsEmpty(matrix)).toBe(false);
+    expect(viewIsEmpty(widgetViewOf(undefined, undefined))).toBe(true);
+  });
+});
+
+describe("suggestBlocks", () => {
+  const contracts = [
+    { key: "list", shapes: ["ranked", "buckets"], needsCompare: false },
+    { key: "mosaic", shapes: ["ranked"], needsCompare: false },
+    { key: "rankingMoves", shapes: ["ranked"], needsCompare: true },
+    { key: "leader", shapes: ["ranked"], needsCompare: false },
+    { key: "feed", shapes: ["ranked"], needsCompare: false },
+    { key: "bars", shapes: ["series", "buckets"], needsCompare: false },
+    { key: "yearCalendar", shapes: ["series"], needsCompare: false },
+    { key: "sparkline", shapes: ["series"], needsCompare: false },
+    { key: "statTrend", shapes: ["series", "single"], needsCompare: false },
+    { key: "share", shapes: ["buckets"], needsCompare: false },
+    { key: "compare", shapes: ["buckets"], needsCompare: true },
+  ] as const;
+
+  it("orders the views that fit a shape by the suggestion table and puts the rest after", () => {
+    expect(suggestBlocks(contracts, { shape: "ranked", compare: false, dailyYear: false })).toEqual([
+      "list",
+      "leader",
+      "mosaic",
+      "feed",
+    ]);
+  });
+
+  it("offers views that need a comparison only when the question compares", () => {
+    expect(suggestBlocks(contracts, { shape: "buckets", compare: true, dailyYear: false })).toEqual([
+      "share",
+      "bars",
+      "compare",
+      "list",
+    ]);
+    expect(suggestBlocks(contracts, { shape: "ranked", compare: true, dailyYear: false })).toContain("rankingMoves");
+  });
+
+  it("offers the year calendar only for a long daily series", () => {
+    expect(suggestBlocks(contracts, { shape: "series", compare: false, dailyYear: true })).toEqual([
+      "bars",
+      "sparkline",
+      "yearCalendar",
+      "statTrend",
+    ]);
+    expect(suggestBlocks(contracts, { shape: "series", compare: false, dailyYear: false })).toEqual([
+      "bars",
+      "sparkline",
+      "statTrend",
+    ]);
   });
 });
 
@@ -185,8 +304,9 @@ describe("calendarPartsOf and widgetIconOf", () => {
     expect(calendarPartsOf(null)).toBeNull();
   });
 
-  it("falls back to the default icon for a name it does not know", () => {
-    expect(widgetIconOf("flame")).not.toBe(widgetIconOf("nope"));
-    expect(widgetIconOf("constructor")).toBe(widgetIconOf("sparkles"));
+  it("draws every published icon name with its own glyph", () => {
+    const glyphs = Object.values(WIDGET_ICONS);
+    expect(new Set(glyphs).size).toBe(glyphs.length);
+    expect(widgetIconOf("flame")).not.toBe(widgetIconOf("sparkles"));
   });
 });

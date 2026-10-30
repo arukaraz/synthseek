@@ -1,6 +1,37 @@
 import { cva } from "class-variance-authority";
 
-export const playSetPoster = cva("relative min-h-24 w-full flex-1 overflow-hidden");
+export const playSetCard = cva("", {
+  variants: {
+    layout: {
+      stack: "",
+      side: "flex-row",
+      banner: "flex-row",
+    },
+  },
+  defaultVariants: { layout: "stack" },
+});
+
+export const playSetPoster = cva("relative overflow-hidden", {
+  variants: {
+    layout: {
+      stack: "min-h-24 w-full flex-1",
+      side: "aspect-square h-full max-w-[50%] shrink-0",
+      banner: "aspect-[4/1] h-full max-w-[65%] shrink-0",
+    },
+  },
+  defaultVariants: { layout: "stack" },
+});
+
+export const playSetInfo = cva("", {
+  variants: {
+    layout: {
+      stack: "",
+      side: "min-w-0 flex-1 justify-center",
+      banner: "min-w-0 flex-1 justify-center",
+    },
+  },
+  defaultVariants: { layout: "stack" },
+});
 
 export const singleCover = cva("object-cover");
 

@@ -1,0 +1,430 @@
+{
+  "gallery": {
+    "tabs": {
+      "label": "Widget-Listen",
+      "widgets": "Widgets",
+      "mine": "Meine Widgets"
+    },
+    "filter": {
+      "category": "Kategorie",
+      "board": "Board",
+      "sort": "Sortieren nach",
+      "all": "Alle",
+      "onBoard": "Auf dem Board",
+      "offBoard": "Nicht auf dem Board",
+      "suggested": "Empfohlen",
+      "name": "Name",
+      "byCategory": "Kategorie",
+      "onBoardFirst": "Board zuerst",
+      "nothing": "Nichts passt zu diesen Filtern."
+    }
+  },
+  "mine": {
+    "label": "Meine Widgets",
+    "empty": "Du hast noch kein Widget gebaut. Starte mit der +-Karte.",
+    "newWidget": "Neues Widget",
+    "fromJson": "Aus JSON",
+    "basedOn": "Basiert auf {{name}}",
+    "meta": "{{view}} · {{kind}}",
+    "addToBoard": "Zum Board hinzufügen",
+    "addNamed": "{{name}} zum Board hinzufügen",
+    "onBoard": "Auf dem Board",
+    "edit": "Bearbeiten",
+    "editNamed": "{{name}} bearbeiten",
+    "duplicate": "Duplizieren",
+    "duplicateNamed": "{{name}} duplizieren",
+    "copyName": "{{name}} (Kopie)",
+    "json": "JSON",
+    "jsonNamed": "JSON von {{name}} kopieren",
+    "delete": "Löschen",
+    "deleteNamed": "{{name}} löschen",
+    "accent": "Akzent: {{accent}}",
+    "added": "{{name}} zu deinem Board hinzugefügt",
+    "saved": "{{name}} gespeichert",
+    "duplicated": "{{name}} dupliziert",
+    "jsonCopied": "JSON von {{name}} kopiert",
+    "jsonCopyFailed": "Das JSON konnte nicht kopiert werden",
+    "deleted": "{{name}} gelöscht",
+    "deleteTitle": "{{name}} löschen?",
+    "deleteMessage": "Das Widget wird aus Meine Widgets entfernt.",
+    "deleteWithTiles_one": "Das Widget wird aus Meine Widgets und von seiner Kachel auf deinem Board entfernt.",
+    "deleteWithTiles_other": "Das Widget wird aus Meine Widgets und von seinen {{count}} Kacheln auf deinem Board entfernt."
+  },
+  "import": {
+    "title": "Widget aus JSON",
+    "description": "Füge ein Widget-Dokument ein. Es wird geprüft, bevor es in der Werkstatt öffnet.",
+    "field": "Widget-JSON",
+    "placeholder": "{ \"kind\": \"synthseek-widget\", ... }",
+    "check": "Prüfen und öffnen",
+    "problems_one": "Dieses JSON hat 1 Problem:",
+    "problems_other": "Dieses JSON hat {{count}} Probleme:"
+  },
+  "problems": {
+    "measureNotForSubject": "{{measure}} ist kein Maß für {{subject}}.",
+    "rankDeltaNeedsCompare": "Gewonnene Plätze brauchen einen Vergleich mit dem vorherigen Zeitraum.",
+    "groupByNotForSubject": "{{subject}} lässt sich nicht nach Zeit gruppieren.",
+    "groupByNotForMeasure": "{{measure}} lässt sich nicht nach Zeit gruppieren.",
+    "pickByNotMeasure": "Auswahl nur nach {{measure}} oder nach Name.",
+    "ruleNotForSubject": "Die Regel {{field}} gilt nicht für {{subject}}.",
+    "ruleNotForSource": "Die Regel {{field}} gilt nicht für {{source}}.",
+    "pickByNotForSource": "{{source}} lässt sich nicht nach {{by}} sortieren.",
+    "blockNotForShape": "Die Ansicht {{block}} kann dieses Ergebnis nicht zeigen.",
+    "tooLarge": "Das JSON ist größer als {{kb}} KB.",
+    "invalidJson": "Das ist kein gültiges JSON.",
+    "invalidField": "Dieser Wert ist ungültig."
+  },
+  "kinds": {
+    "question": "Rezept",
+    "feed": "Feed"
+  },
+  "workshop": {
+    "back": "Zurück",
+    "newTitle": "Neues Widget",
+    "editTitle": "{{name}} bearbeiten",
+    "save": "Widget speichern",
+    "saving": "Wird gespeichert",
+    "cancel": "Abbrechen",
+    "buildUsing": "Bauen mit:",
+    "kindLabel": "Widget-Typ",
+    "recipeHelp": "Eine Zeile pro Teil des Rezepts.",
+    "feedHelp": "Wähle eine Quelle und grenze dann ein, was sie liefert.",
+    "startFrom": "Starten mit",
+    "sections": {
+      "look": "Aussehen",
+      "details": "Details"
+    },
+    "preview": "Vorschau",
+    "previewHint": "Die Vorschau führt das Widget mit deinen eigenen Daten aus.",
+    "discard": {
+      "title": "Änderungen verwerfen?",
+      "message": "Deine Änderungen an diesem Widget gehen verloren.",
+      "keep": "Weiter bearbeiten",
+      "confirm": "Verwerfen"
+    }
+  },
+  "steps": {
+    "show": "Zeigen",
+    "measure": "Maß",
+    "when": "Wann",
+    "groupBy": "Gruppieren nach",
+    "compare": "Vergleichen",
+    "pickBy": "Auswahl",
+    "where": "Wobei",
+    "source": "Quelle",
+    "seed": "Ausgangspunkt",
+    "params": "Optionen",
+    "remove": "{{step}} entfernen",
+    "add": {
+      "groupBy": "Gruppieren nach",
+      "compare": "Vergleichen",
+      "where": "Wobei"
+    },
+    "limitNamed": "Anzahl der Einträge",
+    "compareText": "mit dem vorherigen Zeitraum",
+    "random": "Rotation"
+  },
+  "subjects": {
+    "tracks": "Titel",
+    "albums": "Alben",
+    "artists": "Künstler",
+    "genres": "Genres",
+    "decades": "Jahrzehnte",
+    "requests": "Anfragen"
+  },
+  "measures": {
+    "plays": "Wiedergaben",
+    "minutes": "gehörten Minuten",
+    "distinctTracks": "verschiedenen Titel",
+    "lastPlayed": "letzten Wiedergabe",
+    "addedAt": "Hinzufügedatum",
+    "rankDelta": "gewonnenen Plätze"
+  },
+  "orders": {
+    "desc": "meisten",
+    "asc": "wenigsten"
+  },
+  "pickBy": {
+    "measure": "nach dem Maß",
+    "name": "nach Name"
+  },
+  "rotations": {
+    "none": "Immer gleich",
+    "daily": "Jeden Tag neu",
+    "weekly": "Jede Woche neu"
+  },
+  "timeModes": {
+    "relative": "Letzte Tage",
+    "named": "Zeitraum",
+    "absolute": "Jahr",
+    "sameLastYear": "Gleiche Tage im Vorjahr"
+  },
+  "periods": {
+    "thisWeek": "diese Woche",
+    "thisMonth": "diesen Monat",
+    "thisYear": "dieses Jahr",
+    "all": "insgesamt"
+  },
+  "units": {
+    "hour": "Tageszeit",
+    "weekday": "Wochentag",
+    "day": "Tag",
+    "week": "Woche",
+    "month": "Monat"
+  },
+  "time": {
+    "days": "Tage",
+    "month": "Monat",
+    "wholeYear": "Ganzes Jahr",
+    "relative_one": "am letzten Tag",
+    "relative_other": "in den letzten {{count}} Tagen",
+    "absoluteYear": "im Jahr {{year}}",
+    "absoluteMonth": "im {{month}} {{year}}",
+    "sameLastYear_one": "am gleichen Tag im Vorjahr",
+    "sameLastYear_other": "in den gleichen {{count}} Tagen im Vorjahr"
+  },
+  "rules": {
+    "match": "Erfülle",
+    "matchSuffix": "davon",
+    "all": "alle",
+    "any": "eine",
+    "add": "Regel",
+    "addRule": "Regel hinzufügen",
+    "saveRule": "Speichern",
+    "cancel": "Abbrechen",
+    "edit": "Regel bearbeiten: {{rule}}",
+    "remove": "Regel entfernen: {{rule}}",
+    "field": "Feld",
+    "op": "Bedingung",
+    "value": "Wert",
+    "fields": {
+      "plays": "Wiedergaben im Zeitraum",
+      "notPlayedInLast": "Nicht gehört seit",
+      "addedOlderThan": "Hinzugefügt vor mehr als",
+      "bitrate": "Bitrate",
+      "ownedShare": "Vorhandener Anteil",
+      "favorite": "Favorit",
+      "inLibrary": "In meiner Bibliothek",
+      "requestStatus": "Anfragestatus",
+      "genre": "Genre",
+      "decade": "Jahrzehnt",
+      "artistInMyTop": "Künstler in meinen Top",
+      "inCurrentTimeSlot": "Um diese Zeit gehört",
+      "releaseType": "Veröffentlichungstyp",
+      "listeners": "Last.fm-Hörer",
+      "artistInLibrary": "Künstler in meiner Bibliothek"
+    },
+    "ops": {
+      "gte": "mindestens",
+      "lte": "höchstens",
+      "lt": "unter",
+      "is": "ist",
+      "isNot": "ist nicht",
+      "days": "Tage",
+      "inMyTop": "in meinen Top",
+      "within": "innerhalb"
+    },
+    "yes": "Ja",
+    "no": "Nein",
+    "myTop": "Mein Top-Jahrzehnt",
+    "topN": "Top",
+    "overDays": "über Tage",
+    "kbps": "kbit/s",
+    "percent": "%",
+    "text": {
+      "plays_gte": "mindestens {{value}} Wiedergaben im Zeitraum",
+      "plays_lte": "höchstens {{value}} Wiedergaben im Zeitraum",
+      "notPlayedInLast": "seit {{value}} Tagen nicht gehört",
+      "addedOlderThan": "vor mehr als {{value}} Tagen hinzugefügt",
+      "bitrate_lt": "Bitrate unter {{value}} kbit/s",
+      "bitrate_gte": "Bitrate mindestens {{value}} kbit/s",
+      "ownedShare_lt": "vorhandener Anteil unter {{value}}",
+      "ownedShare_gte": "vorhandener Anteil mindestens {{value}}",
+      "favorite_true": "ist ein Favorit",
+      "favorite_false": "ist kein Favorit",
+      "inLibrary_true": "ist in meiner Bibliothek",
+      "inLibrary_false": "ist nicht in meiner Bibliothek",
+      "requestStatus": "Anfragestatus ist {{value}}",
+      "genre": "Genre in meinen Top {{value}}",
+      "decade": "aus den {{value}}",
+      "decadeMyTop": "aus meinem Top-Jahrzehnt",
+      "artistInMyTop": "Künstler in meinen Top {{n}} der letzten {{days}} Tage",
+      "inCurrentTimeSlot": "um diese Zeit der Woche gehört",
+      "releaseType_is": "Veröffentlichungstyp ist {{value}}",
+      "releaseType_isNot": "Veröffentlichungstyp ist nicht {{value}}",
+      "listeners_lt": "weniger als {{value}} Last.fm-Hörer",
+      "listeners_gte": "mindestens {{value}} Last.fm-Hörer",
+      "artistInLibrary_true": "Künstler ist in meiner Bibliothek",
+      "artistInLibrary_false": "Künstler ist nicht in meiner Bibliothek"
+    },
+    "releaseTypes": {
+      "album": "Album",
+      "ep": "EP",
+      "single": "Single",
+      "other": "Sonstiges"
+    }
+  },
+  "readback": {
+    "show_one": "Zeig mir die {{subject}} mit den {{order}} {{measure}} {{time}}",
+    "show_other": "Zeig mir {{count}} {{subject}} mit den {{order}} {{measure}} {{time}}",
+    "pick_one": "Zeig mir eine {{rotation}} Auswahl von {{count}} {{subject}} mit den {{order}} {{measure}} {{time}}",
+    "pick_other": "Zeig mir eine {{rotation}} Auswahl von {{count}} {{subject}} mit den {{order}} {{measure}} {{time}}",
+    "daily": "tägliche",
+    "weekly": "wöchentliche",
+    "series": "Zeig mir die {{measure}} {{time}}, nach {{unit}}",
+    "compared": ", verglichen mit dem vorherigen Zeitraum",
+    "where": ", wobei {{rules}}",
+    "and": " und ",
+    "or": " oder ",
+    "end": ".",
+    "feed": "Zeig mir {{count}} Einträge aus {{source}}"
+  },
+  "feeds": {
+    "sources": {
+      "lastfm": {
+        "similarArtists": "Ähnliche Künstler (Last.fm)",
+        "similarTracks": "Ähnliche Titel (Last.fm)",
+        "charts": "Meistgehörte Titel nach Land (Last.fm)",
+        "lovedTracks": "Meine geliebten Titel (Last.fm)"
+      },
+      "catalog": {
+        "related": "Verwandte Künstler (Katalog)",
+        "artistAlbums": "Alben von Künstlern (Katalog)",
+        "trending": "Titel im Trend (Katalog)"
+      },
+      "listenbrainz": {
+        "recommendations": "Empfehlungen (ListenBrainz)",
+        "freshReleases": "Neue Veröffentlichungen (ListenBrainz)",
+        "playlists": "Für dich erstellte Playlists (ListenBrainz)"
+      }
+    },
+    "playlist": "Playlist",
+    "playlists": {
+      "weekly-jams": "Weekly jams",
+      "weekly-exploration": "Weekly exploration",
+      "daily-jams": "Daily jams"
+    },
+    "country": "Land",
+    "needs": {
+      "lastfm": "Braucht Last.fm",
+      "listenbrainz": "Braucht deinen ListenBrainz-Benutzer"
+    },
+    "seeds": {
+      "myTopArtists": "Meine Top-Künstler",
+      "favorites": "Meine Favoriten"
+    },
+    "overDays": "der letzten",
+    "releasedInLast": "Veröffentlicht in den letzten",
+    "items": "Einträge",
+    "pickBy": {
+      "rank": "Reihenfolge der Quelle",
+      "name": "Name",
+      "plays": "Meine Wiedergaben",
+      "lastPlayed": "Zuletzt gehört",
+      "releaseDate": "Veröffentlichungsdatum",
+      "listeners": "Last.fm-Hörer"
+    },
+    "orders": {
+      "asc": "Aufsteigend",
+      "desc": "Absteigend"
+    }
+  },
+  "look": {
+    "label": "Ansicht",
+    "suggested": "Empfohlen",
+    "allViews": "Alle {{count}} Ansichten",
+    "fittingViews": "Nur passende Ansichten",
+    "notFitting": "Passt nicht zu diesem Ergebnis",
+    "action": "Beim Antippen",
+    "accent": "Akzent"
+  },
+  "blocks": {
+    "list": "Liste",
+    "cards": "Karten",
+    "rail": "Leiste",
+    "stat": "Zahl",
+    "stats": "Zahlen",
+    "leader": "Spitzenreiter",
+    "feed": "Schlagzeilen",
+    "calendar": "Kalender",
+    "bars": "Balken",
+    "sparkline": "Verlaufslinie",
+    "heatmap": "Heatmap",
+    "statTrend": "Zahl mit Trend",
+    "rankingMoves": "Ranglistenbewegung",
+    "compare": "Vergleich",
+    "mosaic": "Mosaik",
+    "yearCalendar": "Jahreskalender",
+    "share": "Anteile"
+  },
+  "actions": {
+    "play": "Abspielen",
+    "request": "Anfordern",
+    "open": "Details öffnen",
+    "none": "Nichts"
+  },
+  "accents": {
+    "daily": "Pink",
+    "weekly": "Violett",
+    "explore": "Cyan",
+    "cf": "Grün"
+  },
+  "details": {
+    "name": "Name",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Optional, erscheint unter dem Namen",
+    "icon": "Symbol",
+    "iconSearch": "Symbole suchen",
+    "iconNone": "Kein Symbol passt.",
+    "iconNamed": "Symbol {{name}}",
+    "size": "Größe beim Hinzufügen zum Board"
+  },
+  "sizes": {
+    "S": "S",
+    "M": "M",
+    "L": "L"
+  },
+  "customize": {
+    "action": "Anpassen",
+    "actionNamed": "{{name}} anpassen",
+    "name": "{{name}} (angepasst)",
+    "fixed": "Hinter diesem Widget steht kein Dokument, deshalb lässt es sich nicht anpassen."
+  },
+  "presets": {
+    "topTracks": "Top-Titel",
+    "recentPlays": "Zuletzt gehört",
+    "onRepeat": "In Dauerschleife",
+    "repeatRewind": "Zurückgespult",
+    "deepCuts": "Verborgene Perlen",
+    "forgottenFavorites": "Vergessene Favoriten",
+    "thisTimeLastYear": "Vor einem Jahr",
+    "rarities": "Raritäten",
+    "recentRequests": "Letzte Anfragen",
+    "newInLibrary": "Neu in der Bibliothek",
+    "libraryLeaderboard": "Bibliotheks-Rangliste",
+    "landed": "Angekommen",
+    "jumpBackIn": "Weitermachen",
+    "rediscover": "Wiederentdecken",
+    "whenYouListen": "Wann du hörst",
+    "genresMonthVsLast": "Genres, dieser Monat und der letzte",
+    "artistsOnAStreak": "Künstler im Aufwind",
+    "halfDiscographies": "Halbe Diskografien",
+    "deserveBetterQuality": "Verdienen bessere Qualität",
+    "minutesByWeek": "Minuten pro Woche",
+    "yearOfListening": "Ein Jahr Hören",
+    "untouchedArrivals": "Ungehörte Neuzugänge",
+    "libraryByDecade": "Deine Bibliothek nach Jahrzehnt",
+    "rightNow": "Genau jetzt",
+    "yourDecade": "Dein Jahrzehnt",
+    "trending": "Trends",
+    "charts": "Charts",
+    "mixes": "Weekly jams",
+    "artistsForYou": "Künstler für dich",
+    "orbit": "Umlaufbahn",
+    "loved": "Geliebt, noch nicht hier",
+    "gaps": "Lücken",
+    "releaseRadar": "Release-Radar",
+    "discoverWeekly": "Wöchentliche Entdeckungen",
+    "newThisWeek": "Neu diese Woche",
+    "freshFinds": "Frische Funde"
+  }
+}

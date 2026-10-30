@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Plus, X } from "lucide-react";
+import { Check, Plus, SlidersHorizontal, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -8,6 +8,7 @@ import { InfoTooltip } from "@components/ui/InfoTooltip";
 
 import {
   cardAction,
+  cardActions,
   cardFooter,
   cardIcon,
   cardPreview,
@@ -19,8 +20,8 @@ import {
 import type { WidgetGalleryCardProps } from "./types";
 import { WidgetPreview } from "./WidgetPreview";
 
-export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove }: WidgetGalleryCardProps) {
-  const { t } = useTranslation("discover");
+export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove, onCustomize }: WidgetGalleryCardProps) {
+  const { t } = useTranslation(["discover", "widgets"]);
   const Icon = entry.definition.icon;
   const name = entry.title;
 
@@ -41,30 +42,47 @@ export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove }: WidgetGall
         </span>
         <div className={cardTitleRow()}>
           <h4 className={cardTitle()}>{name}</h4>
-          <InfoTooltip title={name} description={entry.description} />
+          <InfoTooltip
+            title={name}
+            description={onCustomize ? entry.description : `${entry.description} ${t("widgets:customize.fixed")}`}
+          />
         </div>
-        {tileId !== undefined ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cardAction()}
-            aria-label={t("board.tile.remove", { name })}
-            onClick={() => onRemove(tileId)}
-          >
-            <X />
-            {t("board.gallery.remove")}
-          </Button>
-        ) : (
-          <Button
-            size="sm"
-            className={cardAction()}
-            aria-label={t("board.gallery.addNamed", { name })}
-            onClick={() => onAdd(entry.widget)}
-          >
-            <Plus />
-            {t("board.gallery.add")}
-          </Button>
-        )}
+        <div className={cardActions()}>
+          {onCustomize ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cardAction()}
+              aria-label={t("widgets:customize.actionNamed", { name })}
+              onClick={onCustomize}
+            >
+              <SlidersHorizontal />
+              {t("widgets:customize.action")}
+            </Button>
+          ) : null}
+          {tileId !== undefined ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cardAction()}
+              aria-label={t("board.tile.remove", { name })}
+              onClick={() => onRemove(tileId)}
+            >
+              <X />
+              {t("board.gallery.remove")}
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              className={cardAction()}
+              aria-label={t("board.gallery.addNamed", { name })}
+              onClick={() => onAdd(entry.widget)}
+            >
+              <Plus />
+              {t("board.gallery.add")}
+            </Button>
+          )}
+        </div>
       </div>
     </article>
   );

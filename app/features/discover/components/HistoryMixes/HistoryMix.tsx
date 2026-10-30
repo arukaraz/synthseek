@@ -6,10 +6,10 @@ import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 
 import { skeletonCard } from "../DiscoveryMixes/styles";
 import { PlaySetCard } from "../PlaySetCard/PlaySetCard";
-import { HISTORY_MIXES } from "./constants";
+import { HISTORY_MIX_LAYOUTS, HISTORY_MIXES } from "./constants";
 import type { HistoryMixProps } from "./types";
 
-export function HistoryMix({ kind, query, info }: HistoryMixProps) {
+export function HistoryMix({ kind, query, size, info }: HistoryMixProps) {
   const { t } = useTranslation("discover");
   const { playEntity } = useEntityPlayback();
   const config = HISTORY_MIXES[kind];
@@ -34,6 +34,7 @@ export function HistoryMix({ kind, query, info }: HistoryMixProps) {
       info={info}
       playLabel={t("history.play", { name: title })}
       onPlay={playable ? () => void playEntity({ kind: "tracks", trackIds }) : null}
+      layout={HISTORY_MIX_LAYOUTS[size]}
     />
   );
 }

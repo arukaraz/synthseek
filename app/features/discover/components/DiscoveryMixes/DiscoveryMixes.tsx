@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Library } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
 import { playlistPreloadedTarget } from "@features/content-detail";
@@ -11,12 +12,14 @@ import { useContentRequestFlow } from "@features/search/components/ContentReques
 import { useDiscoveryMixes } from "@hooks/api/queries/discovery/useDiscoveryMixes";
 import { fadeIn } from "@utils/animations";
 
+import { widgetList } from "../WidgetRow/styles";
+import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { DiscoveryMixCard } from "./DiscoveryMixCard";
 import { DiscoveryMixCardEmpty } from "./DiscoveryMixCardEmpty";
 import { DiscoveryMixesEmpty } from "./DiscoveryMixesEmpty";
 import { DiscoveryMixesSkeleton } from "./DiscoveryMixesSkeleton";
-import { LB_KIND_METADATA } from "./constants";
-import { synthesizePlaylist, synthesizeTrack } from "./helpers";
+import { LB_KIND_LABEL_KEYS, LB_KIND_METADATA } from "./constants";
+import { candidateCovers, describeEmptyReason, synthesizePlaylist, synthesizeTrack } from "./helpers";
 import { mixBody, mixGrid } from "./styles";
 import type { DiscoveryMixesProps, ReadyMix } from "./types";
 
@@ -66,15 +69,42 @@ export function DiscoveryMixes({ size, info }: DiscoveryMixesProps) {
         info={info}
       />
       <div className={mixBody()}>
-        <div className={mixGrid()}>
-          {mixes.map((mix) =>
-            mix.status === "ready" ? (
-              <DiscoveryMixCard key={mix.kind} mix={mix} compact={compact} onClick={() => handleCardClick(mix)} />
-            ) : (
-              <DiscoveryMixCardEmpty key={mix.kind} mix={mix} compact={compact} />
-            )
-          )}
-        </div>
+        {size === "S" ? (
+          <FadeScroll>
+            <ul className={widgetList()}>
+              {mixes.map((mix) =>
+                mix.status === "ready" ? (
+                  <WidgetRow
+                    key={mix.kind}
+                    cover={candidateCovers(mix.candidates)[0] ?? null}
+                    seed={mix.kind}
+                    title={t(LB_KIND_LABEL_KEYS[mix.kind])}
+                    subtitle={t("mixes.trackCount", { count: mix.candidates.length })}
+                    onSelect={() => handleCardClick(mix)}
+                  />
+                ) : (
+                  <WidgetRow
+                    key={mix.kind}
+                    cover={null}
+                    seed={mix.kind}
+                    title={t(LB_KIND_LABEL_KEYS[mix.kind])}
+                    subtitle={describeEmptyReason(mix)}
+                  />
+                )
+              )}
+            </ul>
+          </FadeScroll>
+        ) : (
+          <div className={mixGrid()}>
+            {mixes.map((mix) =>
+              mix.status === "ready" ? (
+                <DiscoveryMixCard key={mix.kind} mix={mix} compact={compact} onClick={() => handleCardClick(mix)} />
+              ) : (
+                <DiscoveryMixCardEmpty key={mix.kind} mix={mix} compact={compact} />
+              )
+            )}
+          </div>
+        )}
       </div>
     </motion.section>
   );

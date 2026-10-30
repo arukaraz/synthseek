@@ -1,5 +1,6 @@
 "use client";
 
+import { FadeScroll } from "@components/FadeScroll";
 import { EmptyState } from "@components/ui/EmptyState";
 import { glassPanelCard } from "@components/ui/styles";
 import { WidgetHeader } from "@components/WidgetHeader";
@@ -13,12 +14,14 @@ import { DEFAULT_COUNTRY, getCountryByCode } from "@utils/countries";
 import { motion } from "framer-motion";
 import { AlertCircle, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { widgetList } from "../WidgetRow/styles";
+import { WidgetRow } from "../WidgetRow/WidgetRow";
 import { ArtistSpotlightCard } from "./ArtistSpotlightCard";
 import { ArtistSpotlightSkeleton } from "./ArtistSpotlightSkeleton";
 import { spotlightBody, spotlightGrid } from "./styles";
 import type { ArtistSpotlightProps } from "./types";
 
-export function ArtistSpotlight({ info }: ArtistSpotlightProps) {
+export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
   const { t } = useTranslation("discover");
   const { country } = useCountry();
   const countryData = getCountryByCode(country) ?? getCountryByCode(DEFAULT_COUNTRY);
@@ -70,7 +73,24 @@ export function ArtistSpotlight({ info }: ArtistSpotlightProps) {
           />
         )}
 
-        {!isLoading && !isError && artists.length > 0 && (
+        {!isLoading && !isError && artists.length > 0 && size === "S" && (
+          <FadeScroll>
+            <ul className={widgetList()}>
+              {artists.map((item) => (
+                <WidgetRow
+                  key={item.artist.id}
+                  cover={item.artist.images[0]?.url ?? null}
+                  seed={item.artist.id}
+                  title={item.artist.name}
+                  subtitle={item.latestAlbum?.name ?? t("artistSpotlight.noAlbums")}
+                  onSelect={() => handleArtistClick(item.artist)}
+                />
+              ))}
+            </ul>
+          </FadeScroll>
+        )}
+
+        {!isLoading && !isError && artists.length > 0 && size !== "S" && (
           <div className={spotlightGrid()}>
             {artists.map((item) => (
               <ArtistSpotlightCard

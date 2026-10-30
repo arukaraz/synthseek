@@ -13,12 +13,18 @@ export { createAlbum, createCompletedAlbum, createInProgressAlbum, resetAlbumCou
 export {
   createAlbumResult,
   createBucketResult,
+  createDailySeries,
   createFeedAlbumResult,
   createFeedAlbumRow,
+  createMatrixResult,
   createQuestionAlbumRow,
   createQuestionTrackRow,
+  createSeriesResult,
   createTrackResult,
   createWidget,
+  createWidgetCatalog,
+  createWidgetGrammar,
+  createWidgetPreset,
 } from "./widget.factory";
 
 export { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "./player.factory";

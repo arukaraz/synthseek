@@ -30,8 +30,10 @@ const TILE: PlacedTile = {
   rows: 4,
 };
 
+vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({ useWidgetPresets: () => ({ data: [] }) }));
+
 function actions(): BoardTileActions {
-  return { move: vi.fn(), resize: vi.fn(), remove: vi.fn(), startDrag: vi.fn() };
+  return { move: vi.fn(), resize: vi.fn(), remove: vi.fn(), startDrag: vi.fn(), customize: vi.fn() };
 }
 
 function renderTile(editing: boolean, handlers = actions()) {
@@ -87,15 +89,17 @@ describe("BoardTile", () => {
     expect(spies.info).toHaveBeenCalledTimes(1);
   });
 
-  it("maps the tile's own keys to move, resize to the next size, and remove", () => {
+  it("maps the tile's own keys to move, resize to the neighbouring size, and remove", () => {
     const handlers = renderTile(true);
 
     fireEvent.keyDown(tileElement(), { key: "ArrowRight" });
+    fireEvent.keyDown(tileElement(), { key: "ArrowLeft", shiftKey: true });
     fireEvent.keyDown(tileElement(), { key: "ArrowRight", shiftKey: true });
     fireEvent.keyDown(tileElement(), { key: "Backspace" });
 
     expect(handlers.move).toHaveBeenCalledWith("t", 1);
-    expect(handlers.resize).toHaveBeenCalledWith("t", "M");
+    expect(handlers.resize).toHaveBeenNthCalledWith(1, "t", "M");
+    expect(handlers.resize).toHaveBeenNthCalledWith(2, "t", "S");
     expect(handlers.remove).toHaveBeenCalledWith("t");
   });
 

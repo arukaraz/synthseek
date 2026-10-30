@@ -14,7 +14,9 @@ import type {
   QuestionWidgetResult,
   WidgetAction,
   WidgetBindSlot,
+  WidgetBlock,
   WidgetDocument,
+  WidgetIcon,
   WidgetMeasure,
   WidgetResult,
   WidgetRowOf,
@@ -22,8 +24,20 @@ import type {
 import { calendarDateOf, formatCalendarDate, formatRelativeTime, isoDayOf } from "@utils/formatters";
 
 import { compactCount } from "../helpers";
-import { FALLBACK_WIDGET_ICON, WIDGET_ICONS } from "./constants";
-import type { CustomWidgetNoteInput, WidgetHandlers, WidgetItem, WidgetItemControls, WidgetStat } from "./types";
+import { MATRIX_HOURS, MATRIX_WEEKDAYS, MONTH_KEY_LENGTH, SUGGESTED_BLOCKS, WIDGET_ICONS } from "./constants";
+import type {
+  BlockContractView,
+  BlockSuggestionInput,
+  CustomWidgetNoteInput,
+  MoveDirection,
+  WidgetHandlers,
+  WidgetItem,
+  WidgetItemControls,
+  WidgetMove,
+  WidgetPoint,
+  WidgetStat,
+  WidgetView,
+} from "./types";
 
 type Bind = WidgetDocument["view"]["bind"];
 type QuestionTrack = WidgetRowOf<QuestionWidgetResult, "tracks">;
@@ -34,8 +48,8 @@ type FeedTrack = WidgetRowOf<FeedWidgetResult, "tracks">;
 type FeedAlbum = WidgetRowOf<FeedWidgetResult, "albums">;
 type FeedArtist = WidgetRowOf<FeedWidgetResult, "artists">;
 
-export function widgetIconOf(name: string): LucideIcon {
-  return WIDGET_ICONS.get(name) ?? FALLBACK_WIDGET_ICON;
+export function widgetIconOf(name: WidgetIcon): LucideIcon {
+  return WIDGET_ICONS[name];
 }
 
 function fieldValue(row: object, field: string | undefined): unknown {
@@ -100,7 +114,18 @@ function whenOf(measure: WidgetMeasure, row: { playedAt: Date | null; addedAt?: 
   return measure === "addedAt" ? (row.addedAt ?? null) : row.playedAt;
 }
 
-function questionTrackItem(row: QuestionTrack, measure: WidgetMeasure, bind: Bind): WidgetItem {
+export function moveOf(
+  measure: WidgetMeasure,
+  row: { value: number | null; prev: number | null },
+  compared: boolean
+): WidgetMove | null {
+  if (measure === "rankDelta") return row.value === null ? { kind: "new" } : { kind: "rank", by: row.value };
+  if (!compared || row.value === null) return null;
+  return row.prev === null ? { kind: "new" } : { kind: "value", by: row.value - row.prev };
+}
+
+function questionTrackItem(row: QuestionTrack, result: QuestionWidgetResult, bind: Bind): WidgetItem {
+  const { measure } = result;
   return {
     key: row.id,
     title: bound(row, bind, "title", row.title) ?? row.title,
@@ -108,13 +133,15 @@ function questionTrackItem(row: QuestionTrack, measure: WidgetMeasure, bind: Bin
     cover: bound(row, bind, "cover", row.cover),
     value: bound(row, bind, "value", measureText(measure, row.value, whenOf(measure, row))),
     date: dayOf(whenOf(measure, row) ?? row.playedAt),
+    move: moveOf(measure, row, result.previous !== null),
     play: row.inLibrary ? { kind: "tracks", trackIds: [row.trackId] } : null,
     request: null,
     open: null,
   };
 }
 
-function questionAlbumItem(row: QuestionAlbum, measure: WidgetMeasure, bind: Bind): WidgetItem {
+function questionAlbumItem(row: QuestionAlbum, result: QuestionWidgetResult, bind: Bind): WidgetItem {
+  const { measure } = result;
   const album = { id: row.albumExternalId, name: row.name, artistName: row.artist, cover: row.cover };
   return {
     key: row.id,
@@ -123,13 +150,15 @@ function questionAlbumItem(row: QuestionAlbum, measure: WidgetMeasure, bind: Bin
     cover: bound(row, bind, "cover", row.cover),
     value: bound(row, bind, "value", measureText(measure, row.value, whenOf(measure, row))),
     date: row.releaseDate.length > 0 ? row.releaseDate : null,
+    move: moveOf(measure, row, result.previous !== null),
     play: row.inLibrary ? { kind: "album", albumExternalId: row.albumExternalId } : null,
     request: albumRequestItem(album),
     open: albumTarget(album),
   };
 }
 
-function questionArtistItem(row: QuestionArtist, measure: WidgetMeasure, bind: Bind): WidgetItem {
+function questionArtistItem(row: QuestionArtist, result: QuestionWidgetResult, bind: Bind): WidgetItem {
+  const { measure } = result;
   return {
     key: row.id,
     title: bound(row, bind, "title", row.name) ?? row.name,
@@ -137,6 +166,7 @@ function questionArtistItem(row: QuestionArtist, measure: WidgetMeasure, bind: B
     cover: bound(row, bind, "cover", row.cover),
     value: bound(row, bind, "value", measureText(measure, row.value, row.playedAt)),
     date: dayOf(row.playedAt),
+    move: moveOf(measure, row, result.previous !== null),
     play: row.tracks > 0 ? { kind: "artist", artist: row.name } : null,
     request: null,
     open: null,
@@ -155,6 +185,7 @@ function questionBucketItem(result: QuestionWidgetResult, row: QuestionBucket, b
     cover: null,
     value: bound(row, bind, "value", measureText(result.measure, row.value, null)),
     date: null,
+    move: moveOf(result.measure, row, result.previous !== null),
     play: null,
     request: null,
     open: null,
@@ -180,6 +211,7 @@ function feedTrackItem(row: FeedTrack, bind: Bind): WidgetItem {
     cover: bound(row, bind, "cover", row.cover),
     value: bound(row, bind, "value", row.plays > 0 ? measureText("plays", row.plays, null) : null),
     date: null,
+    move: null,
     play: row.trackId ? { kind: "tracks", trackIds: [row.trackId] } : null,
     request,
     open: null,
@@ -197,6 +229,7 @@ function feedAlbumItem(row: FeedAlbum, bind: Bind): WidgetItem {
     cover: bound(row, bind, "cover", row.cover),
     value: bound(row, bind, "value", formatCalendarDate(row.releaseDate)),
     date: row.releaseDate,
+    move: null,
     play: row.inLibrary && row.catalogAlbumId ? { kind: "album", albumExternalId: row.catalogAlbumId } : null,
     request: album ? albumRequestItem(album) : null,
     open: album ? albumTarget(album) : null,
@@ -212,6 +245,7 @@ function feedArtistItem(row: FeedArtist, bind: Bind): WidgetItem {
     cover: bound(row, bind, "cover", row.cover),
     value: bound(row, bind, "value", row.plays > 0 ? measureText("plays", row.plays, null) : null),
     date: null,
+    move: null,
     play: row.artistId ? { kind: "artist", artist: row.name } : null,
     request: artist ? artistRequestItem(artist) : null,
     open: artist ? artistTarget(artist) : null,
@@ -221,11 +255,11 @@ function feedArtistItem(row: FeedArtist, bind: Bind): WidgetItem {
 function questionItems(result: QuestionWidgetResult, bind: Bind): WidgetItem[] {
   switch (result.dataset) {
     case "tracks":
-      return result.rows.map((row) => questionTrackItem(row, result.measure, bind));
+      return result.rows.map((row) => questionTrackItem(row, result, bind));
     case "albums":
-      return result.rows.map((row) => questionAlbumItem(row, result.measure, bind));
+      return result.rows.map((row) => questionAlbumItem(row, result, bind));
     case "artists":
-      return result.rows.map((row) => questionArtistItem(row, result.measure, bind));
+      return result.rows.map((row) => questionArtistItem(row, result, bind));
     case "buckets":
       return result.rows.map((row) => questionBucketItem(result, row, bind));
     case "series":
@@ -257,6 +291,108 @@ export function widgetStatsOf(result: WidgetResult): WidgetStat[] {
     value: row.value === null ? "" : compactCount(row.value),
     delta: row.value !== null && row.prev !== null ? row.value - row.prev : null,
   }));
+}
+
+function seriesLabel(key: string): string {
+  const month = key.length === MONTH_KEY_LENGTH;
+  const date = calendarDateOf(month ? `${key}-01` : key);
+  if (!date) return key;
+  return date.toLocaleDateString(
+    i18n.language,
+    month ? { month: "short", year: "numeric" } : { month: "short", day: "numeric" }
+  );
+}
+
+function pointText(measure: WidgetMeasure, value: number): string {
+  return measureText(measure, value, null) ?? compactCount(value);
+}
+
+export function widgetPointsOf(result: WidgetResult): WidgetPoint[] {
+  if (result.type !== "question") return [];
+  switch (result.dataset) {
+    case "series":
+      return result.rows.map((row) => ({
+        key: row.key,
+        label: seriesLabel(row.key),
+        value: row.value,
+        prev: row.prev,
+        text: pointText(result.measure, row.value),
+        prevText: row.prev === null ? null : pointText(result.measure, row.prev),
+      }));
+    case "buckets":
+      return result.rows.map((row) => ({
+        key: row.key,
+        label: bucketLabel(result, row),
+        value: row.value ?? 0,
+        prev: row.prev,
+        text: pointText(result.measure, row.value ?? 0),
+        prevText: row.prev === null ? null : pointText(result.measure, row.prev),
+      }));
+    default:
+      return [];
+  }
+}
+
+export function widgetCellsOf(result: WidgetResult): number[][] {
+  if (result.type !== "question" || result.dataset !== "matrix") return [];
+  const cells = Array.from({ length: MATRIX_WEEKDAYS }, () => Array.from({ length: MATRIX_HOURS }, () => 0));
+  for (const row of result.rows) {
+    const day = cells[row.weekday];
+    if (day && row.hour >= 0 && row.hour < MATRIX_HOURS) day[row.hour] = row.value;
+  }
+  return cells;
+}
+
+export function widgetViewOf(result: WidgetResult | undefined, bind: Bind): WidgetView {
+  if (!result) return { shape: null, items: [], stats: [], points: [], cells: [] };
+  return {
+    shape: result.shape,
+    items: widgetItemsOf(result, bind),
+    stats: widgetStatsOf(result),
+    points: widgetPointsOf(result),
+    cells: widgetCellsOf(result),
+  };
+}
+
+export function viewIsEmpty(view: WidgetView): boolean {
+  return (
+    view.items.length === 0 &&
+    !view.points.some((point) => point.value > 0) &&
+    !view.cells.some((row) => row.some((value) => value > 0))
+  );
+}
+
+export function suggestBlocks(
+  contracts: readonly BlockContractView[],
+  { shape, compare, dailyYear }: BlockSuggestionInput
+): WidgetBlock[] {
+  const order = SUGGESTED_BLOCKS[shape];
+  const rankOf = (block: WidgetBlock) => {
+    const index = order.indexOf(block);
+    return index === -1 ? order.length : index;
+  };
+  return contracts
+    .filter((contract) => contract.shapes.includes(shape) && (!contract.needsCompare || compare))
+    .map((contract) => contract.key)
+    .filter((block) => block !== "yearCalendar" || dailyYear)
+    .sort((left, right) => rankOf(left) - rankOf(right));
+}
+
+export function moveText(move: WidgetMove): string {
+  switch (move.kind) {
+    case "new":
+      return i18n.t("discover:customWidget.value.new");
+    case "rank":
+      return rankDeltaText(move.by);
+    case "value":
+      return new Intl.NumberFormat(i18n.language, { signDisplay: "exceptZero" }).format(move.by);
+  }
+}
+
+export function moveDirection(move: WidgetMove): MoveDirection {
+  if (move.kind === "new") return "new";
+  if (move.by === 0) return "same";
+  return move.by > 0 ? "up" : "down";
 }
 
 export function deltaText(delta: number | null): string | null {
@@ -294,8 +430,7 @@ export function itemControls(item: WidgetItem, action: WidgetAction, handlers: W
   return { onSelect };
 }
 
-export function customWidgetNote({ result, isError, empty, supported }: CustomWidgetNoteInput): string | null {
-  if (!supported) return i18n.t("discover:customWidget.unsupported");
+export function customWidgetNote({ result, isError, empty }: CustomWidgetNoteInput): string | null {
   if (isError) return i18n.t("discover:board.loadError");
   if (result?.type === "feed" && result.needs !== null) {
     return i18n.t(`discover:customWidget.needs.${result.needs}`);

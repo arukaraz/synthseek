@@ -454,7 +454,6 @@
     "unresolvedName": "Widget personnalisé",
     "deleted": "Ce widget n’existe plus. Retirez-le du tableau avec Personnaliser.",
     "empty": "Rien ne correspond à ce widget pour le moment.",
-    "unsupported": "Cette vue arrive dans une prochaine mise à jour.",
     "needs": {
       "lastfm": "Connectez Last.fm dans les Réglages pour remplir ce widget.",
       "listenbrainz": "Ajoutez votre utilisateur ListenBrainz dans les Réglages pour remplir ce widget."
@@ -479,6 +478,30 @@
     "delta": {
       "up": "{{value}} de plus que la période précédente",
       "down": "{{value}} de moins que la période précédente"
+    },
+    "chart": {
+      "point": "{{label}} : {{value}}",
+      "bars": "Valeurs par période",
+      "sparkline": "Tendance, dernier point {{label}} : {{value}}"
+    },
+    "heatmap": {
+      "label": "Écoute par jour de la semaine et par heure",
+      "days": "Écoute par jour de la semaine",
+      "cell": "{{day}} {{hour}} h, {{value}}",
+      "hour": "{{hour}} h",
+      "peak": "Pic le {{day}} à {{hour}} h"
+    },
+    "share": {
+      "label": "Répartition du total",
+      "other": "Autres"
+    },
+    "compare": {
+      "current": "Cette période",
+      "previous": "Période précédente",
+      "row": "{{label}} : {{current}} maintenant, {{previous}} avant"
+    },
+    "yearCalendar": {
+      "total": "{{value}} cette année"
     }
   }
 }

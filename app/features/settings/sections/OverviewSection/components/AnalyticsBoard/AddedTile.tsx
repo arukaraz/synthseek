@@ -3,12 +3,12 @@
 import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { SparkBars } from "@components/MiniChart";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useLibraryGrowth } from "@hooks/api/queries/analytics/useLibraryGrowth";
 
 import { deltaOf } from "./helpers";
 import { MetricValue } from "./MetricValue";
-import { SparkBars } from "./SparkBars";
 
 export function AddedTile() {
   const { t } = useTranslation("settings");

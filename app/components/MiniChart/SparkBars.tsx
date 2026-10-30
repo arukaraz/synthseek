@@ -3,13 +3,13 @@ import { sparkBars } from "./helpers";
 import { spark, sparkBar } from "./styles";
 import type { SparkProps } from "./types";
 
-export function SparkBars({ values, fill = false }: SparkProps) {
+export function SparkBars({ values, fill = false, tone = "primary" }: SparkProps) {
   return (
     <svg className={spark({ fill })} viewBox={SPARK_VIEWBOX} preserveAspectRatio="none" aria-hidden>
       {sparkBars(values).map((bar) => (
         <rect
           key={bar.x}
-          className={sparkBar({ last: bar.last })}
+          className={sparkBar({ last: bar.last, tone })}
           x={bar.x}
           y={bar.y}
           width={bar.width}

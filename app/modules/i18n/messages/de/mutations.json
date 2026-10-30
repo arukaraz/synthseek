@@ -122,6 +122,11 @@
     "listenBrainzSaved": "ListenBrainz-Einstellungen gespeichert",
     "boardSaveFailed": "Dein Board konnte nicht gespeichert werden"
   },
+  "widgets": {
+    "saveFailed": "Dieses Widget konnte nicht gespeichert werden",
+    "removeFailed": "Dieses Widget konnte nicht gelöscht werden",
+    "importFailed": "Dieses JSON konnte nicht geprüft werden"
+  },
   "portability": {
     "importFailed": "Import fehlgeschlagen"
   },

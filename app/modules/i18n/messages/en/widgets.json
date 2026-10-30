@@ -1,0 +1,430 @@
+{
+  "gallery": {
+    "tabs": {
+      "label": "Widget lists",
+      "widgets": "Widgets",
+      "mine": "My widgets"
+    },
+    "filter": {
+      "category": "Category",
+      "board": "Board",
+      "sort": "Sort by",
+      "all": "All",
+      "onBoard": "On the board",
+      "offBoard": "Not on the board",
+      "suggested": "Suggested",
+      "name": "Name",
+      "byCategory": "Category",
+      "onBoardFirst": "On board first",
+      "nothing": "Nothing matches these filters."
+    }
+  },
+  "mine": {
+    "label": "My widgets",
+    "empty": "You have not built a widget yet. Start one with the + card.",
+    "newWidget": "New widget",
+    "fromJson": "From JSON",
+    "basedOn": "Based on {{name}}",
+    "meta": "{{view}} · {{kind}}",
+    "addToBoard": "Add to board",
+    "addNamed": "Add {{name}} to the board",
+    "onBoard": "On board",
+    "edit": "Edit",
+    "editNamed": "Edit {{name}}",
+    "duplicate": "Duplicate",
+    "duplicateNamed": "Duplicate {{name}}",
+    "copyName": "{{name}} (copy)",
+    "json": "JSON",
+    "jsonNamed": "Copy the JSON of {{name}}",
+    "delete": "Delete",
+    "deleteNamed": "Delete {{name}}",
+    "accent": "Accent: {{accent}}",
+    "added": "{{name}} added to your board",
+    "saved": "{{name}} saved",
+    "duplicated": "{{name}} duplicated",
+    "jsonCopied": "JSON of {{name}} copied",
+    "jsonCopyFailed": "Could not copy the JSON",
+    "deleted": "{{name}} deleted",
+    "deleteTitle": "Delete {{name}}?",
+    "deleteMessage": "The widget is removed from My widgets.",
+    "deleteWithTiles_one": "The widget is removed from My widgets and from its tile on your board.",
+    "deleteWithTiles_other": "The widget is removed from My widgets and from its {{count}} tiles on your board."
+  },
+  "import": {
+    "title": "Widget from JSON",
+    "description": "Paste a widget document. It is checked before it opens in the workshop.",
+    "field": "Widget JSON",
+    "placeholder": "{ \"kind\": \"synthseek-widget\", ... }",
+    "check": "Check and open",
+    "problems_one": "This JSON has 1 problem:",
+    "problems_other": "This JSON has {{count}} problems:"
+  },
+  "problems": {
+    "measureNotForSubject": "{{measure}} is not a measure for {{subject}}.",
+    "rankDeltaNeedsCompare": "Places climbed needs a comparison with the previous period.",
+    "groupByNotForSubject": "{{subject}} cannot be grouped by time.",
+    "groupByNotForMeasure": "{{measure}} cannot be grouped by time.",
+    "pickByNotMeasure": "Items can only be picked by {{measure}} or by name.",
+    "ruleNotForSubject": "The rule {{field}} does not apply to {{subject}}.",
+    "ruleNotForSource": "The rule {{field}} does not apply to {{source}}.",
+    "pickByNotForSource": "{{source}} cannot be ordered by {{by}}.",
+    "blockNotForShape": "The {{block}} view cannot show this result.",
+    "tooLarge": "The JSON is larger than {{kb}} KB.",
+    "invalidJson": "This is not valid JSON.",
+    "invalidField": "This value is not valid."
+  },
+  "kinds": {
+    "question": "Recipe",
+    "feed": "Feed"
+  },
+  "workshop": {
+    "back": "Back",
+    "newTitle": "New widget",
+    "editTitle": "Edit {{name}}",
+    "save": "Save widget",
+    "saving": "Saving",
+    "cancel": "Cancel",
+    "buildUsing": "Build using:",
+    "kindLabel": "Widget type",
+    "recipeHelp": "One line per part of the recipe.",
+    "feedHelp": "Pick a source, then narrow what it brings back.",
+    "startFrom": "Start from",
+    "sections": {
+      "look": "Look",
+      "details": "Details"
+    },
+    "preview": "Preview",
+    "previewHint": "The preview runs the widget on your own data.",
+    "discard": {
+      "title": "Discard changes?",
+      "message": "Your changes to this widget will be lost.",
+      "keep": "Keep editing",
+      "confirm": "Discard"
+    }
+  },
+  "steps": {
+    "show": "Show",
+    "measure": "Measure",
+    "when": "When",
+    "groupBy": "Group by",
+    "compare": "Compare",
+    "pickBy": "Pick",
+    "where": "Where",
+    "source": "Source",
+    "seed": "Seed",
+    "params": "Options",
+    "remove": "Remove {{step}}",
+    "add": {
+      "groupBy": "Group by",
+      "compare": "Compare",
+      "where": "Where"
+    },
+    "limitNamed": "Number of items",
+    "compareText": "with the previous period",
+    "random": "Rotation"
+  },
+  "subjects": {
+    "tracks": "tracks",
+    "albums": "albums",
+    "artists": "artists",
+    "genres": "genres",
+    "decades": "decades",
+    "requests": "requests"
+  },
+  "measures": {
+    "plays": "plays",
+    "minutes": "minutes listened",
+    "distinctTracks": "different tracks",
+    "lastPlayed": "last played",
+    "addedAt": "date added",
+    "rankDelta": "places climbed"
+  },
+  "orders": {
+    "desc": "most",
+    "asc": "least"
+  },
+  "pickBy": {
+    "measure": "by the measure",
+    "name": "by name"
+  },
+  "rotations": {
+    "none": "Always the same",
+    "daily": "New pick every day",
+    "weekly": "New pick every week"
+  },
+  "timeModes": {
+    "relative": "Last days",
+    "named": "Period",
+    "absolute": "Year",
+    "sameLastYear": "Same days last year"
+  },
+  "periods": {
+    "thisWeek": "this week",
+    "thisMonth": "this month",
+    "thisYear": "this year",
+    "all": "all time"
+  },
+  "units": {
+    "hour": "hour of the day",
+    "weekday": "weekday",
+    "day": "day",
+    "week": "week",
+    "month": "month"
+  },
+  "time": {
+    "days": "days",
+    "month": "Month",
+    "wholeYear": "Whole year",
+    "relative_one": "in the last day",
+    "relative_other": "in the last {{count}} days",
+    "absoluteYear": "in {{year}}",
+    "absoluteMonth": "in {{month}} {{year}}",
+    "sameLastYear_one": "on the same day last year",
+    "sameLastYear_other": "in the same {{count}} days last year"
+  },
+  "rules": {
+    "match": "Match",
+    "matchSuffix": "of these",
+    "all": "all",
+    "any": "any",
+    "add": "Rule",
+    "addRule": "Add rule",
+    "saveRule": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit rule: {{rule}}",
+    "remove": "Remove rule: {{rule}}",
+    "field": "Field",
+    "op": "Condition",
+    "value": "Value",
+    "fields": {
+      "plays": "Plays in the window",
+      "notPlayedInLast": "Not played in the last",
+      "addedOlderThan": "Added more than",
+      "bitrate": "Bitrate",
+      "ownedShare": "Owned share",
+      "favorite": "Favorite",
+      "inLibrary": "In my library",
+      "requestStatus": "Request status",
+      "genre": "Genre",
+      "decade": "Decade",
+      "artistInMyTop": "Artist in my top",
+      "inCurrentTimeSlot": "Played around this time",
+      "releaseType": "Release type",
+      "listeners": "Last.fm listeners",
+      "artistInLibrary": "Artist in my library"
+    },
+    "ops": {
+      "gte": "at least",
+      "lte": "at most",
+      "lt": "below",
+      "is": "is",
+      "isNot": "is not",
+      "days": "days",
+      "inMyTop": "in my top",
+      "within": "within"
+    },
+    "yes": "Yes",
+    "no": "No",
+    "myTop": "My top decade",
+    "topN": "Top",
+    "overDays": "over days",
+    "kbps": "kbps",
+    "percent": "%",
+    "text": {
+      "plays_gte": "plays in the window at least {{value}}",
+      "plays_lte": "plays in the window at most {{value}}",
+      "notPlayedInLast": "not played in the last {{value}} days",
+      "addedOlderThan": "added more than {{value}} days ago",
+      "bitrate_lt": "bitrate below {{value}} kbps",
+      "bitrate_gte": "bitrate at least {{value}} kbps",
+      "ownedShare_lt": "owned share below {{value}}",
+      "ownedShare_gte": "owned share at least {{value}}",
+      "favorite_true": "is a favorite",
+      "favorite_false": "is not a favorite",
+      "inLibrary_true": "is in my library",
+      "inLibrary_false": "is not in my library",
+      "requestStatus": "request status is {{value}}",
+      "genre": "genre in my top {{value}}",
+      "decade": "from the {{value}}",
+      "decadeMyTop": "from my top decade",
+      "artistInMyTop": "artist in my top {{n}} of the last {{days}} days",
+      "inCurrentTimeSlot": "played around this time of the week",
+      "releaseType_is": "release type is {{value}}",
+      "releaseType_isNot": "release type is not {{value}}",
+      "listeners_lt": "fewer than {{value}} Last.fm listeners",
+      "listeners_gte": "at least {{value}} Last.fm listeners",
+      "artistInLibrary_true": "artist is in my library",
+      "artistInLibrary_false": "artist is not in my library"
+    },
+    "releaseTypes": {
+      "album": "album",
+      "ep": "EP",
+      "single": "single",
+      "other": "other"
+    }
+  },
+  "readback": {
+    "show_one": "Show me the {{subject}} with the {{order}} {{measure}} {{time}}",
+    "show_other": "Show me {{count}} {{subject}} with the {{order}} {{measure}} {{time}}",
+    "pick_one": "Show me a {{rotation}} pick of {{count}} {{subject}} with the {{order}} {{measure}} {{time}}",
+    "pick_other": "Show me a {{rotation}} pick of {{count}} {{subject}} with the {{order}} {{measure}} {{time}}",
+    "daily": "daily",
+    "weekly": "weekly",
+    "series": "Show me {{measure}} {{time}}, by {{unit}}",
+    "compared": ", compared with the previous period",
+    "where": ", where {{rules}}",
+    "and": " and ",
+    "or": " or ",
+    "end": ".",
+    "feed": "Show me {{count}} items from {{source}}"
+  },
+  "feeds": {
+    "sources": {
+      "lastfm": {
+        "similarArtists": "Similar artists (Last.fm)",
+        "similarTracks": "Similar tracks (Last.fm)",
+        "charts": "Top tracks by country (Last.fm)",
+        "lovedTracks": "My loved tracks (Last.fm)"
+      },
+      "catalog": {
+        "related": "Related artists (catalog)",
+        "artistAlbums": "Albums by artists (catalog)",
+        "trending": "Trending tracks (catalog)"
+      },
+      "listenbrainz": {
+        "recommendations": "Recommendations (ListenBrainz)",
+        "freshReleases": "Fresh releases (ListenBrainz)",
+        "playlists": "Playlists made for you (ListenBrainz)"
+      }
+    },
+    "playlist": "Playlist",
+    "playlists": {
+      "weekly-jams": "Weekly jams",
+      "weekly-exploration": "Weekly exploration",
+      "daily-jams": "Daily jams"
+    },
+    "country": "Country",
+    "needs": {
+      "lastfm": "Needs Last.fm",
+      "listenbrainz": "Needs your ListenBrainz user"
+    },
+    "seeds": {
+      "myTopArtists": "My top artists",
+      "favorites": "My favorites"
+    },
+    "overDays": "over the last",
+    "releasedInLast": "Released in the last",
+    "items": "items",
+    "pickBy": {
+      "rank": "Source order",
+      "name": "Name",
+      "plays": "My plays",
+      "lastPlayed": "Last played",
+      "releaseDate": "Release date",
+      "listeners": "Last.fm listeners"
+    },
+    "orders": {
+      "asc": "Ascending",
+      "desc": "Descending"
+    }
+  },
+  "look": {
+    "label": "View",
+    "suggested": "Suggested",
+    "allViews": "All {{count}} views",
+    "fittingViews": "Only views that fit",
+    "notFitting": "Does not fit this result",
+    "action": "On tap",
+    "accent": "Accent"
+  },
+  "blocks": {
+    "list": "List",
+    "cards": "Cards",
+    "rail": "Rail",
+    "stat": "Number",
+    "stats": "Numbers",
+    "leader": "Leader",
+    "feed": "Headlines",
+    "calendar": "Calendar",
+    "bars": "Bars",
+    "sparkline": "Sparkline",
+    "heatmap": "Heatmap",
+    "statTrend": "Number with trend",
+    "rankingMoves": "Ranking moves",
+    "compare": "Compare",
+    "mosaic": "Mosaic",
+    "yearCalendar": "Year calendar",
+    "share": "Share"
+  },
+  "actions": {
+    "play": "Play",
+    "request": "Request",
+    "open": "Open details",
+    "none": "Nothing"
+  },
+  "accents": {
+    "daily": "Pink",
+    "weekly": "Violet",
+    "explore": "Cyan",
+    "cf": "Green"
+  },
+  "details": {
+    "name": "Name",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional, shown under the name",
+    "icon": "Icon",
+    "iconSearch": "Search icons",
+    "iconNone": "No icon matches.",
+    "iconNamed": "Icon {{name}}",
+    "size": "Size when added to the board"
+  },
+  "sizes": {
+    "S": "S",
+    "M": "M",
+    "L": "L"
+  },
+  "customize": {
+    "action": "Customize",
+    "actionNamed": "Customize {{name}}",
+    "name": "{{name}} (custom)",
+    "fixed": "This widget has no document behind it, so it cannot be customized."
+  },
+  "presets": {
+    "topTracks": "Top tracks",
+    "recentPlays": "Recent plays",
+    "onRepeat": "On repeat",
+    "repeatRewind": "Repeat rewind",
+    "deepCuts": "Deep cuts",
+    "forgottenFavorites": "Forgotten favorites",
+    "thisTimeLastYear": "This time last year",
+    "rarities": "Rarities",
+    "recentRequests": "Recent requests",
+    "newInLibrary": "New in library",
+    "libraryLeaderboard": "Library leaderboard",
+    "landed": "Landed",
+    "jumpBackIn": "Jump back in",
+    "rediscover": "Rediscover",
+    "whenYouListen": "When you listen",
+    "genresMonthVsLast": "Genres, this month vs last",
+    "artistsOnAStreak": "Artists on a streak",
+    "halfDiscographies": "Half discographies",
+    "deserveBetterQuality": "Deserve better quality",
+    "minutesByWeek": "Minutes by week",
+    "yearOfListening": "A year of listening",
+    "untouchedArrivals": "Untouched arrivals",
+    "libraryByDecade": "Your library by decade",
+    "rightNow": "Right now",
+    "yourDecade": "Your decade",
+    "trending": "Trending",
+    "charts": "Charts",
+    "mixes": "Weekly jams",
+    "artistsForYou": "Artists for you",
+    "orbit": "Orbit",
+    "loved": "Loved, not here yet",
+    "gaps": "Gaps",
+    "releaseRadar": "Release radar",
+    "discoverWeekly": "Discover weekly",
+    "newThisWeek": "New this week",
+    "freshFinds": "Fresh finds"
+  }
+}

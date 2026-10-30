@@ -3,9 +3,14 @@ import i18n from "@locale";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
 import { CARD_FIT, CARD_ROW_LIMITS } from "./constants";
+import type { WidgetListColumns } from "./WidgetRow/types";
 
 export function cardRowLimit(size: BoardSize): number {
-  return size === "M" ? CARD_ROW_LIMITS.half : CARD_ROW_LIMITS.full;
+  return size === "L" ? CARD_ROW_LIMITS.full : CARD_ROW_LIMITS.half;
+}
+
+export function listColumns(size: BoardSize): WidgetListColumns {
+  return size === "L" ? "two" : "one";
 }
 
 export function cardRowFit(width: number, size: BoardSize): number {

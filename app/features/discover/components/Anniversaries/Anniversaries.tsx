@@ -12,11 +12,12 @@ import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { formatCalendarDate } from "@utils/formatters";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { listColumns } from "../helpers";
 import { widgetPill } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 
-export function Anniversaries({ info }: BoardWidgetProps) {
+export function Anniversaries({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useAnniversaries();
   const { playEntity } = useEntityPlayback();
@@ -34,7 +35,7 @@ export function Anniversaries({ info }: BoardWidgetProps) {
       note={isError ? t("board.loadError") : albums.length === 0 ? t("anniversaries.empty") : null}
     >
       <FadeScroll>
-        <ul className={widgetList()}>
+        <ul className={widgetList({ columns: listColumns(size) })}>
           {albums.map((album) => (
             <WidgetRow
               key={album.albumExternalId}

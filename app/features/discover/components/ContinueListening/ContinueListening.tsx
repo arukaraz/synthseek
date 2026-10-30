@@ -20,7 +20,7 @@ export function ContinueListening({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { point, toggle } = useResumePoint();
   const { playEntity } = useEntityPlayback();
-  const withRecent = size !== "M";
+  const withRecent = size === "L";
   const recent = useRecentPlays(withRecent);
   const plays = withRecent ? (recent.data ?? []) : [];
 

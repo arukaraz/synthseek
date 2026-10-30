@@ -6,43 +6,24 @@ import { useLibrarySummary } from "@hooks/api/queries/useLibrarySummary";
 import { useResolveArtistAndOpen } from "@hooks/ui/useResolveArtistAndOpen";
 import { fadeIn } from "@utils/animations";
 import { motion } from "framer-motion";
-import { AlertCircle, Crown, Library, Music } from "lucide-react";
-import { useMemo, useState } from "react";
+import { AlertCircle, Library } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
-import { TOP_LIMIT } from "./constants";
-import { LeaderboardHero } from "./LeaderboardHero";
-import { LeaderboardRows } from "./LeaderboardRows";
+import { TAB_MODES } from "./constants";
+import { leaderboardEntries } from "./helpers";
+import { LeaderboardRanking } from "./LeaderboardRanking";
 import { LeaderboardSkeleton } from "./LeaderboardSkeleton";
-import { LeaderboardTabs } from "./LeaderboardTabs";
 import { LibraryStatsRow } from "./LibraryStatsRow";
-import { emptyFrame, errorFrame, headerBlock, panelFrame, sectionHeaderLabel, sectionHeaderRow } from "./styles";
-import type { LeaderboardEntry, LeaderboardMode } from "./types";
+import { errorFrame, headerBlock, panelFrame, rankingColumns } from "./styles";
+import type { LeaderboardMode } from "./types";
 
-export function LibraryLeaderboard({ info }: BoardWidgetProps) {
+export function LibraryLeaderboard({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useLibrarySummary();
   const [mode, setMode] = useState<LeaderboardMode>("artists");
   const openArtistByName = useResolveArtistAndOpen();
-
-  const onSelectArtist = mode === "artists" ? openArtistByName : undefined;
-
-  const entries = useMemo<LeaderboardEntry[]>(() => {
-    if (!data) return [];
-    if (mode === "artists") {
-      return data.topArtists.slice(0, TOP_LIMIT).map((row) => ({
-        name: row.artist,
-        count: row.trackCount,
-        image: row.image,
-      }));
-    }
-    return data.topGenres.slice(0, TOP_LIMIT).map((row) => ({
-      name: row.genre,
-      count: row.albumCount,
-      image: row.image,
-    }));
-  }, [data, mode]);
 
   if (isLoading) return <LeaderboardSkeleton />;
 
@@ -64,14 +45,7 @@ export function LibraryLeaderboard({ info }: BoardWidgetProps) {
     hours: totalHours,
     queued: data.queuedTracks,
   };
-  const top = entries[0];
-  const rest = entries.slice(1);
-  const maxCount = top?.count ?? 0;
-
-  const emptyIcon = mode === "artists" ? Music : Crown;
-  const emptyTitle = mode === "artists" ? t("leaderboard.emptyArtistsTitle") : t("leaderboard.emptyGenresTitle");
-  const emptyDescription =
-    mode === "artists" ? t("leaderboard.emptyArtistsDescription") : t("leaderboard.emptyGenresDescription");
+  const selectFor = (ranked: LeaderboardMode) => (ranked === "artists" ? openArtistByName : undefined);
 
   return (
     <motion.section
@@ -92,22 +66,26 @@ export function LibraryLeaderboard({ info }: BoardWidgetProps) {
       </div>
       <LibraryStatsRow summary={summary} />
 
-      <div className={sectionHeaderRow()}>
-        <div className={sectionHeaderLabel()}>
-          {mode === "artists" ? t("leaderboard.topArtists") : t("leaderboard.topGenres")}
+      {size === "L" ? (
+        <div className={rankingColumns()}>
+          {TAB_MODES.map((ranked) => (
+            <LeaderboardRanking
+              key={ranked}
+              mode={ranked}
+              entries={leaderboardEntries(data, ranked)}
+              compact={false}
+              onSelect={selectFor(ranked)}
+            />
+          ))}
         </div>
-        <LeaderboardTabs mode={mode} onChange={setMode} />
-      </div>
-
-      {top ? (
-        <>
-          <LeaderboardHero entry={top} mode={mode} onSelect={onSelectArtist} />
-          <LeaderboardRows entries={rest} maxCount={maxCount} onSelect={onSelectArtist} />
-        </>
       ) : (
-        <div className={emptyFrame()}>
-          <EmptyState icon={emptyIcon} title={emptyTitle} description={emptyDescription} />
-        </div>
+        <LeaderboardRanking
+          mode={mode}
+          entries={leaderboardEntries(data, mode)}
+          compact={size === "S"}
+          onSelect={selectFor(mode)}
+          onModeChange={setMode}
+        />
       )}
     </motion.section>
   );

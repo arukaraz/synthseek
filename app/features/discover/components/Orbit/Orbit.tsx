@@ -11,17 +11,19 @@ import type { OrbitAlbum } from "@hooks/api/queries/analytics/types";
 import { useOrbitAlbums } from "@hooks/api/queries/analytics/useOrbitAlbums";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { cardRowLimit } from "../helpers";
+import { cardRow, cardRowBody, cardRowVars, railScroller } from "../styles";
 import { OrbitCard } from "./OrbitCard";
-import { railScroller } from "../styles";
 import { orbitBody, orbitRail } from "./styles";
 
-export function Orbit({ info }: BoardWidgetProps) {
+export function Orbit({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useOrbitAlbums();
   const { openForTarget } = useContentRequestFlow();
   const albums = data ?? [];
   const open = (album: OrbitAlbum) =>
     openForTarget(albumTarget({ id: album.id, name: album.name, artistName: album.artist, cover: album.cover }));
+  const limit = cardRowLimit(size);
 
   return (
     <WidgetFrame
@@ -33,15 +35,25 @@ export function Orbit({ info }: BoardWidgetProps) {
       loading={isLoading}
       note={isError ? t("history.error") : albums.length === 0 ? t("orbit.empty") : null}
     >
-      <div className={orbitBody()}>
-        <FadeScroll axis="x" arrows className={railScroller()} label={t("orbit.rail")}>
-          <div className={orbitRail()}>
-            {albums.map((album) => (
+      {size === "S" ? (
+        <div className={cardRowBody()}>
+          <div className={cardRow()} style={cardRowVars(limit)}>
+            {albums.slice(0, limit).map((album) => (
               <OrbitCard key={album.id} album={album} onOpen={() => open(album)} />
             ))}
           </div>
-        </FadeScroll>
-      </div>
+        </div>
+      ) : (
+        <div className={orbitBody()}>
+          <FadeScroll axis="x" arrows className={railScroller()} label={t("orbit.rail")}>
+            <div className={orbitRail()}>
+              {albums.map((album) => (
+                <OrbitCard key={album.id} album={album} onOpen={() => open(album)} />
+              ))}
+            </div>
+          </FadeScroll>
+        </div>
+      )}
     </WidgetFrame>
   );
 }

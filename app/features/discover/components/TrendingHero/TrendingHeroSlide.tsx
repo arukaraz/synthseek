@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Download, Zap } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { trendingArtist, trendingTitle } from "./helpers";
 import {
   heroCanvas,
   heroContent,
@@ -26,8 +27,8 @@ export function TrendingHeroSlide({ item, onRequestOpenChange, info }: TrendingH
   const { t } = useTranslation("discover");
   const [requestedTrack, setRequestedTrack] = useState<MusicTrack | null>(null);
   const track = item.track;
-  const trackName = track.title ?? t("trendingHero.unknownTrack");
-  const artistName = track.artists?.[0]?.name ?? track.artist ?? t("trendingHero.unknownArtist");
+  const trackName = trendingTitle(track);
+  const artistName = trendingArtist(track);
   const imageUrl = track.images?.[0]?.url ?? null;
 
   const handleRequest = useCallback(

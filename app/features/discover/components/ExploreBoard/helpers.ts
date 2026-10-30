@@ -10,19 +10,12 @@ import {
   BOARD_SIZE_ORDER,
   BOARD_WIDGETS,
   CUSTOM_BLOCK_HEIGHTS,
-  CUSTOM_NARROW_SIZES,
   DEFAULT_BOARD,
   EDIT_PASSTHROUGH_SELECTOR,
   FALLBACK_BLOCK_HEIGHT,
+  NARROW_TILE_SIZE,
 } from "./constants";
-import type {
-  BoardCustomWidgets,
-  BoardKeyAction,
-  CustomWidgetsStatus,
-  BoardWidgetDefinition,
-  MoveDelta,
-  PlacedTile,
-} from "./types";
+import type { BoardCustomWidgets, BoardKeyAction, CustomWidgetsStatus, MoveDelta, PlacedTile } from "./types";
 
 export function blockWidgetAction(event: Pick<MouseEvent, "target" | "preventDefault" | "stopPropagation">): void {
   if (event.target instanceof Element && event.target.closest(EDIT_PASSTHROUGH_SELECTOR)) return;
@@ -42,13 +35,8 @@ export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): 
   return event.shiftKey ? { kind: "resize", delta } : { kind: "move", delta };
 }
 
-export function sizesOf(definition: BoardWidgetDefinition): BoardSize[] {
-  return BOARD_SIZE_ORDER.filter((size) => definition.sizes[size] !== undefined);
-}
-
 export function heightOf(widget: BoardWidgetKey, size: BoardSize): BoardHeight {
-  const definition = BOARD_WIDGETS[widget];
-  return definition.sizes[size] ?? definition.sizes[definition.defaultSize] ?? "regular";
+  return BOARD_WIDGETS[widget].sizes[size];
 }
 
 export function spanOf(widget: BoardWidgetKey, size: BoardSize, device: BoardDevice): BoardSpan {
@@ -71,18 +59,14 @@ export function tileNameOf(item: BoardItem, custom: BoardCustomWidgets, status: 
   return i18n.t(status === "ready" ? "discover:customWidget.deletedName" : "discover:customWidget.unresolvedName");
 }
 
-export function tileSizesOf(item: BoardItem): readonly BoardSize[] {
-  return item.kind === "custom" ? BOARD_SIZE_ORDER : sizesOf(BOARD_WIDGETS[item.widget]);
-}
-
-export function editableSizesOf(item: BoardItem, device: BoardDevice): readonly BoardSize[] {
-  return item.kind === "custom" && device === "narrow" ? [] : tileSizesOf(item);
+export function editableSizesOf(device: BoardDevice): readonly BoardSize[] {
+  return device === "narrow" ? [] : BOARD_SIZE_ORDER;
 }
 
 export function tileHeightOf(item: BoardItem, size: BoardSize, custom: BoardCustomWidgets): BoardHeight {
   if (item.kind === "builtin") return heightOf(item.widget, size);
   const block = custom.get(item.widgetId)?.view.block;
-  return (block ? CUSTOM_BLOCK_HEIGHTS[block]?.[size] : undefined) ?? FALLBACK_BLOCK_HEIGHT;
+  return block ? CUSTOM_BLOCK_HEIGHTS[block][size] : FALLBACK_BLOCK_HEIGHT;
 }
 
 export function tileSpanOf(
@@ -108,21 +92,17 @@ export function cycleSize(sizes: readonly BoardSize[], current: BoardSize, delta
   return sizes[next] ?? current;
 }
 
-export function uniqueTileId(widget: BoardWidgetKey, items: readonly BoardItem[]): string {
+export function uniqueTileId(base: string, items: readonly BoardItem[]): string {
   const taken = new Set(items.map((item) => item.id));
-  if (!taken.has(widget)) return widget;
+  if (!taken.has(base)) return base;
   let suffix = 2;
-  while (taken.has(`${widget}-${suffix}`)) suffix++;
-  return `${widget}-${suffix}`;
+  while (taken.has(`${base}-${suffix}`)) suffix++;
+  return `${base}-${suffix}`;
 }
 
 export function boardItemsOf(layout: BoardLayout | null | undefined): BoardItem[] {
   if (!layout) return DEFAULT_BOARD.map((item) => ({ ...item }));
-  return layout.items.map((item) => {
-    if (item.kind === "custom") return item;
-    const definition = BOARD_WIDGETS[item.widget];
-    return definition.sizes[item.size] !== undefined ? item : { ...item, size: definition.defaultSize };
-  });
+  return [...layout.items];
 }
 
 export function layoutOf(items: readonly BoardItem[]): BoardLayout {
@@ -130,9 +110,7 @@ export function layoutOf(items: readonly BoardItem[]): BoardLayout {
 }
 
 export function displayedSize(item: BoardItem, device: BoardDevice): BoardSize {
-  if (device === "wide") return item.size;
-  const narrow = item.kind === "custom" ? CUSTOM_NARROW_SIZES : BOARD_WIDGETS[item.widget].narrowSizes;
-  return narrow?.[item.size] ?? item.size;
+  return device === "wide" ? item.size : NARROW_TILE_SIZE;
 }
 
 function cellKey(row: number, col: number): string {
@@ -197,7 +175,7 @@ export function moveItem(items: readonly BoardItem[], id: string, toIndex: numbe
 }
 
 export function resizeItem(items: readonly BoardItem[], id: string, size: BoardSize): BoardItem[] {
-  return items.map((item) => (item.id === id && tileSizesOf(item).includes(size) ? { ...item, size } : item));
+  return items.map((item) => (item.id === id ? { ...item, size } : item));
 }
 
 export function removeItem(items: readonly BoardItem[], id: string): BoardItem[] {
@@ -206,6 +184,13 @@ export function removeItem(items: readonly BoardItem[], id: string): BoardItem[]
 
 export function appendWidget(items: readonly BoardItem[], widget: BoardWidgetKey, id: string): BoardItem[] {
   return [...items, { kind: "builtin", id, widget, size: BOARD_WIDGETS[widget].defaultSize }];
+}
+
+export function appendCustomWidget(items: readonly BoardItem[], widget: WidgetDocument): BoardItem[] {
+  return [
+    ...items,
+    { kind: "custom", id: uniqueTileId(widget.id, items), widgetId: widget.id, size: widget.defaultSize },
+  ];
 }
 
 export function widgetsOnBoard(items: readonly BoardItem[]): Map<BoardWidgetKey, string> {

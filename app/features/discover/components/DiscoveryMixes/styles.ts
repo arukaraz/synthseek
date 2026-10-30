@@ -45,7 +45,15 @@ export const mixFoot = cva("mt-2 flex min-w-0 items-center border-t border-fg/10
 
 export const mixCount = cva("text-fg/50 truncate font-mono text-[11px] whitespace-nowrap");
 
-export const mosaicGrid = cva("grid size-full grid-cols-2 grid-rows-2");
+export const mosaicGrid = cva("grid size-full", {
+  variants: {
+    shape: {
+      square: "grid-cols-2 grid-rows-2",
+      strip: "grid-cols-4 grid-rows-1",
+    },
+  },
+  defaultVariants: { shape: "square" },
+});
 
 export const mosaicTile = cva("relative size-full overflow-hidden");
 

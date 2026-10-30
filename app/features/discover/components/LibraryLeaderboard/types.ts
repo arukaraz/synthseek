@@ -1,3 +1,9 @@
+import type { inferRouterOutputs } from "@trpc/server";
+
+import type { AppRouter } from "@api/__generated__/types";
+
+export type LibrarySummary = inferRouterOutputs<AppRouter>["requests"]["getLibrarySummary"];
+
 export type LeaderboardMode = "artists" | "genres";
 
 export interface LeaderboardEntry {
@@ -31,4 +37,12 @@ export interface LeaderboardRowsProps {
 
 export interface LibraryStatsRowProps {
   summary: LeaderboardSummary;
+}
+
+export interface LeaderboardRankingProps {
+  mode: LeaderboardMode;
+  entries: LeaderboardEntry[];
+  compact: boolean;
+  onSelect?: (name: string) => void;
+  onModeChange?: (mode: LeaderboardMode) => void;
 }

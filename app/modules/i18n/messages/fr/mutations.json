@@ -122,6 +122,11 @@
     "listenBrainzSaved": "Réglages ListenBrainz enregistrés",
     "boardSaveFailed": "Échec de l'enregistrement de votre tableau"
   },
+  "widgets": {
+    "saveFailed": "Échec de l'enregistrement de ce widget",
+    "removeFailed": "Échec de la suppression de ce widget",
+    "importFailed": "Échec de la vérification de ce JSON"
+  },
   "portability": {
     "importFailed": "Échec de l'importation"
   },

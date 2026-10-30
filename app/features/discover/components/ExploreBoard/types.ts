@@ -23,9 +23,8 @@ export interface BoardWidgetDefinition {
   icon: LucideIcon;
   titleKey: ParseKeys<"discover">;
   descriptionKey: ParseKeys<"discover">;
-  sizes: Partial<Record<BoardSize, BoardHeight>>;
+  sizes: Record<BoardSize, BoardHeight>;
   defaultSize: BoardSize;
-  narrowSizes?: Partial<Record<BoardSize, BoardSize>>;
 }
 
 export interface PlacedTile {
@@ -49,6 +48,7 @@ export interface BoardTileActions {
   resize: (id: string, size: BoardSize) => void;
   remove: (id: string) => void;
   startDrag: (event: ReactPointerEvent<HTMLElement>, id: string) => void;
+  customize: (widget: BoardWidgetKey) => void;
 }
 
 export interface BoardTileProps {
@@ -94,6 +94,8 @@ export interface BoardEditor {
   stopEditing: () => void;
   openGallery: () => void;
   setGalleryOpen: (open: boolean) => void;
+  customizeTarget: BoardWidgetKey | null;
   add: (widget: BoardWidgetKey) => void;
+  addCustom: (widget: WidgetDocument) => void;
   actions: BoardTileActions;
 }

@@ -5,6 +5,6 @@ import { useForgottenFavorites } from "@hooks/api/queries/analytics/useForgotten
 import { HistoryMix } from "./HistoryMix";
 import type { HistoryMixWidgetProps } from "./types";
 
-export function ForgottenFavorites({ info }: HistoryMixWidgetProps) {
-  return <HistoryMix kind="forgottenFavorites" query={useForgottenFavorites()} info={info} />;
+export function ForgottenFavorites({ size, info }: HistoryMixWidgetProps) {
+  return <HistoryMix kind="forgottenFavorites" query={useForgottenFavorites()} size={size} info={info} />;
 }

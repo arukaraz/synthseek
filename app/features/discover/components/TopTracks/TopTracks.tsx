@@ -9,7 +9,8 @@ import { WidgetHeader } from "@components/WidgetHeader";
 import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
 
-import { HERO_LIMIT, LIST_LIMIT } from "./constants";
+import { listColumns } from "../helpers";
+import { topTracksSplit } from "./helpers";
 import { TopTrackHero } from "./TopTrackHero";
 import { TopTracksEmpty } from "./TopTracksEmpty";
 import { TopTracksList } from "./TopTracksList";
@@ -17,7 +18,7 @@ import { TopTracksSkeleton } from "./TopTracksSkeleton";
 import { body, bodyFrame } from "./styles";
 import type { TopTracksProps } from "./types";
 
-export function TopTracks({ info }: TopTracksProps) {
+export function TopTracks({ size, info }: TopTracksProps) {
   const { t } = useTranslation("discover");
   const { lfmConfig, topTracks, isLoading, isError } = useLastfmFeeds();
 
@@ -29,8 +30,7 @@ export function TopTracks({ info }: TopTracksProps) {
     return <TopTracksEmpty reason="no-data" info={info} />;
   }
 
-  const hero = topTracks.tracks[0];
-  const rest = topTracks.tracks.slice(HERO_LIMIT, HERO_LIMIT + LIST_LIMIT);
+  const { hero, rest, startRank } = topTracksSplit(topTracks.tracks, size);
 
   return (
     <motion.section
@@ -49,8 +49,8 @@ export function TopTracks({ info }: TopTracksProps) {
       />
       <div className={bodyFrame()}>
         <div className={body()}>
-          <TopTrackHero track={hero} />
-          <TopTracksList tracks={rest} startRank={HERO_LIMIT + 1} />
+          {hero ? <TopTrackHero track={hero} /> : null}
+          <TopTracksList tracks={rest} startRank={startRank} columns={listColumns(size)} />
         </div>
       </div>
     </motion.section>

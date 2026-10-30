@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import type { BoardItem } from "@hooks/api/queries/board/types";
+import { BOARD_SPANS } from "@components/BoardGrid";
+import type { BoardItem, BoardSize } from "@hooks/api/queries/board/types";
 import { createWidget } from "@test/factories";
 
 import { BOARD_WIDGET_ORDER, BOARD_WIDGETS, DEFAULT_BOARD } from "../constants";
@@ -21,17 +22,17 @@ import {
   removeItem,
   resizeItem,
   sameSlot,
-  sizesOf,
   spanOf,
   tileHeightOf,
   tileNameOf,
-  tileSizesOf,
   tileSpanOf,
   uniqueTileId,
   widgetsOnBoard,
 } from "../helpers";
 
 const NO_CUSTOM = customWidgetsById([]);
+
+const EVERY_SIZE: readonly BoardSize[] = ["S", "M", "L"];
 
 describe("BOARD_WIDGET_ORDER", () => {
   it("lists every registered widget exactly once", () => {
@@ -40,13 +41,10 @@ describe("BOARD_WIDGET_ORDER", () => {
 });
 
 describe("BOARD_WIDGETS", () => {
-  it("offers every widget its default size and keeps every narrow override among its sizes", () => {
-    for (const definition of Object.values(BOARD_WIDGETS)) {
-      expect(sizesOf(definition)).toContain(definition.defaultSize);
-      for (const target of Object.values(definition.narrowSizes ?? {})) {
-        expect(sizesOf(definition)).toContain(target);
-      }
-    }
+  it.each(BOARD_WIDGET_ORDER)("offers %s in exactly S, M and L, each with a height", (widget) => {
+    const { sizes } = BOARD_WIDGETS[widget];
+    expect(Object.keys(sizes).sort()).toEqual(["L", "M", "S"]);
+    for (const size of EVERY_SIZE) expect(["short", "regular", "tall"]).toContain(sizes[size]);
   });
 
   it("packs the default board without leaving a hole on a wide screen", () => {
@@ -75,11 +73,14 @@ describe("boardKeyAction", () => {
   });
 });
 
-describe("sizesOf", () => {
-  it("lists the widths a widget offers from narrowest to widest", () => {
-    expect(sizesOf(BOARD_WIDGETS.scrobbles)).toEqual(["S", "M", "L"]);
-    expect(sizesOf(BOARD_WIDGETS.onRepeat)).toEqual(["S"]);
-    expect(sizesOf(BOARD_WIDGETS.mixes)).toEqual(["M", "L"]);
+describe("editableSizesOf", () => {
+  it("offers the three sizes from narrowest to widest on a wide board", () => {
+    expect(editableSizesOf("wide")).toEqual(["S", "M", "L"]);
+  });
+
+  it("offers nothing to resize on a narrow board, where every size shows as M", () => {
+    expect(editableSizesOf("narrow")).toEqual([]);
+    expect(cycleSize(editableSizesOf("narrow"), "S", 1)).toBe("S");
   });
 });
 
@@ -88,17 +89,15 @@ describe("heightOf and spanOf", () => {
     expect(heightOf("mixes", "M")).toBe("tall");
     expect(heightOf("mixes", "L")).toBe("regular");
     expect(heightOf("onRepeat", "S")).toBe("tall");
-  });
-
-  it("falls back to the height of the default size for a width the widget does not offer", () => {
-    expect(heightOf("onRepeat", "L")).toBe("tall");
+    expect(heightOf("onRepeat", "M")).toBe("regular");
+    expect(heightOf("onRepeat", "L")).toBe("short");
   });
 
   it("turns width and height into column and row spans per device", () => {
     expect(spanOf("onRepeat", "S", "wide")).toEqual({ cols: 3, rows: 7 });
+    expect(spanOf("onRepeat", "L", "wide")).toEqual({ cols: 12, rows: 2 });
     expect(spanOf("mixes", "L", "wide")).toEqual({ cols: 12, rows: 4 });
     expect(spanOf("mixes", "M", "narrow")).toEqual({ cols: 4, rows: 7 });
-    expect(spanOf("scrobbles", "S", "narrow")).toEqual({ cols: 2, rows: 4 });
   });
 });
 
@@ -154,12 +153,9 @@ describe("boardItemsOf", () => {
     expect(boardItemsOf({ schemaVersion: 3, items: [SCROBBLES] })).toEqual([SCROBBLES]);
   });
 
-  it("falls back to the default size when the saved size is not offered by the widget", () => {
-    const items = boardItemsOf({
-      schemaVersion: 3,
-      items: [{ kind: "builtin", id: "o", widget: "onRepeat", size: "L" }],
-    });
-    expect(items).toEqual([{ kind: "builtin", id: "o", widget: "onRepeat", size: "S" }]);
+  it("keeps a size saved outside the widget's default, since every widget offers all three", () => {
+    const saved: BoardItem = { kind: "builtin", id: "o", widget: "onRepeat", size: "L" };
+    expect(boardItemsOf({ schemaVersion: 3, items: [saved] })).toEqual([saved]);
   });
 
   it("keeps an empty saved board empty", () => {
@@ -188,13 +184,11 @@ describe("displayedSize", () => {
     expect(displayedSize(GENRES, "wide")).toBe("L");
   });
 
-  it("applies the narrow override of the widget on a narrow board", () => {
+  it("shows every builtin tile at M on a narrow board, whatever size it saved", () => {
     expect(displayedSize(GENRES, "narrow")).toBe("M");
-    expect(displayedSize({ ...SCROBBLES, size: "L" }, "narrow")).toBe("M");
-  });
-
-  it("keeps the saved size on a narrow board when the widget has no override for it", () => {
-    expect(displayedSize(TRENDING, "narrow")).toBe("L");
+    expect(displayedSize(TRENDING, "narrow")).toBe("M");
+    expect(displayedSize({ ...SCROBBLES, size: "S" }, "narrow")).toBe("M");
+    expect(displayedSize({ kind: "builtin", id: "o", widget: "onRepeat", size: "S" }, "narrow")).toBe("M");
   });
 });
 
@@ -227,10 +221,24 @@ describe("packBoard", () => {
     expect(tiles[1]).toMatchObject({ col: 3, row: 0, cols: 6, rows: 4 });
   });
 
-  it("stacks every tile full width on a narrow board and applies narrow overrides", () => {
-    const tiles = packBoard([SCROBBLES, GENRES], "narrow", NO_CUSTOM);
+  it("stacks every tile full width at M on a narrow board", () => {
+    const onRepeat: BoardItem = { kind: "builtin", id: "o", widget: "onRepeat", size: "S" };
+    const tiles = packBoard([SCROBBLES, GENRES, onRepeat, TRENDING], "narrow", NO_CUSTOM);
     expect(tiles[0]).toMatchObject({ col: 0, row: 0, cols: 4, rows: 4, size: "M" });
     expect(tiles[1]).toMatchObject({ col: 0, row: 4, cols: 4, rows: 7, size: "M" });
+    expect(tiles[2]).toMatchObject({ col: 0, row: 11, cols: 4, rows: 4, size: "M" });
+    expect(tiles[3]).toMatchObject({ col: 0, row: 15, cols: 4, rows: 4, size: "M" });
+  });
+
+  it.each(EVERY_SIZE)("places every widget saved at %s as M across the whole narrow board", (size) => {
+    const items: BoardItem[] = [
+      ...BOARD_WIDGET_ORDER.map((widget): BoardItem => ({ kind: "builtin", id: widget, widget, size })),
+      { ...CUSTOM, size },
+    ];
+    for (const tile of packBoard(items, "narrow", NO_CUSTOM)) {
+      const rows = BOARD_SPANS.narrow.M[tileHeightOf(tile.item, "M", NO_CUSTOM)].rows;
+      expect(tile).toMatchObject({ size: "M", col: 0, cols: 4, rows });
+    }
   });
 
   it("returns no tiles for an empty board", () => {
@@ -259,16 +267,9 @@ describe("packBoard", () => {
 describe("custom tiles", () => {
   const stat = customWidgetsById([createWidget({ view: { block: "stat", action: "none" } })]);
 
-  it("leaves a custom tile nothing to resize on a narrow board, where every size shows as M", () => {
-    expect(editableSizesOf(CUSTOM, "narrow")).toEqual([]);
-    expect(editableSizesOf(CUSTOM, "wide")).toEqual(["S", "M", "L"]);
-    expect(editableSizesOf(SCROBBLES, "narrow")).toEqual(["S", "M", "L"]);
-    expect(cycleSize(editableSizesOf(CUSTOM, "narrow"), "S", 1)).toBe("S");
-  });
-
-  it("offers every size to a custom tile", () => {
-    expect(tileSizesOf(CUSTOM)).toEqual(["S", "M", "L"]);
+  it("resizes a custom tile to any size", () => {
     expect(resizeItem([CUSTOM], "c", "L")).toEqual([{ ...CUSTOM, size: "L" }]);
+    expect(resizeItem([CUSTOM], "c", "S")).toEqual([{ ...CUSTOM, size: "S" }]);
   });
 
   it("reads the height from the block of the widget the tile shows", () => {
@@ -336,12 +337,12 @@ describe("moveItem", () => {
 });
 
 describe("resizeItem", () => {
-  it("changes the size when the widget offers it", () => {
+  it("changes the size of the tile with the id", () => {
     expect(resizeItem([SCROBBLES], "s", "L")).toEqual([{ ...SCROBBLES, size: "L" }]);
   });
 
-  it("ignores a size the widget does not offer", () => {
-    expect(resizeItem([REQUESTS], "r", "L")).toEqual([REQUESTS]);
+  it("resizes any builtin tile to the full row", () => {
+    expect(resizeItem([REQUESTS], "r", "L")).toEqual([{ ...REQUESTS, size: "L" }]);
   });
 
   it("leaves other items untouched", () => {

@@ -13,24 +13,26 @@ import { errorFrame, heroFrame } from "./styles";
 import { TrendingHeroNav } from "./TrendingHeroNav";
 import { TrendingHeroSkeleton } from "./TrendingHeroSkeleton";
 import { TrendingHeroSlide } from "./TrendingHeroSlide";
+import { TrendingList } from "./TrendingList";
 import type { TrendingHeroProps } from "./types";
 
-export function TrendingHero({ info }: TrendingHeroProps) {
+export function TrendingHero({ size, info }: TrendingHeroProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useTrendingTracks();
   const tracks = useMemo(() => data?.data?.tracks ?? [], [data?.data?.tracks]);
+  const compact = size === "S";
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isRequestOpen, setIsRequestOpen] = useState(false);
 
   useEffect(() => {
-    if (!isAutoPlaying || isRequestOpen || tracks.length === 0) return;
+    if (compact || !isAutoPlaying || isRequestOpen || tracks.length === 0) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % tracks.length);
     }, AUTO_ROTATE_INTERVAL);
     return () => clearInterval(interval);
-  }, [isAutoPlaying, isRequestOpen, tracks.length]);
+  }, [compact, isAutoPlaying, isRequestOpen, tracks.length]);
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -62,6 +64,17 @@ export function TrendingHero({ info }: TrendingHeroProps) {
     onSwipeLeft: isRequestOpen ? undefined : handleNext,
     onSwipeRight: isRequestOpen ? undefined : handlePrev,
   });
+
+  if (compact) {
+    return (
+      <TrendingList
+        entries={tracks}
+        info={info}
+        loading={!isError && (isLoading || tracks.length === 0)}
+        failed={isError}
+      />
+    );
+  }
 
   if (isError) {
     return (

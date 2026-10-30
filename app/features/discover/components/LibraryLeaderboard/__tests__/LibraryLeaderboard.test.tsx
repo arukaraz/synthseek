@@ -120,6 +120,33 @@ describe("LibraryLeaderboard", () => {
     expect(screen.getByText("No genres yet")).toBeInTheDocument();
   });
 
+  it("keeps the stats, the tabs and only the #1 in a quarter tile", async () => {
+    useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary()));
+
+    const { user } = renderWithProviders(<LibraryLeaderboard size="S" info="Library info" />);
+
+    expect(screen.getByText("1,234")).toBeInTheDocument();
+    expect(screen.getByText("Aphex Twin")).toBeInTheDocument();
+    expect(screen.queryByText("Boards of Canada")).not.toBeInTheDocument();
+    expect(screen.queryByText("Top artists")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Genres" }));
+    expect(screen.getByText("IDM")).toBeInTheDocument();
+    expect(screen.queryByText("Ambient")).not.toBeInTheDocument();
+  });
+
+  it("ranks artists and genres side by side across a full row, with no tabs", () => {
+    useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary()));
+
+    renderWithProviders(<LibraryLeaderboard size="L" info="Library info" />);
+
+    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+    expect(screen.getByText("Top artists")).toBeInTheDocument();
+    expect(screen.getByText("Top genres")).toBeInTheDocument();
+    expect(screen.getByText("Autechre")).toBeInTheDocument();
+    expect(screen.getByText("Ambient")).toBeInTheDocument();
+  });
+
   it("marks the active tab with aria-selected", () => {
     useLibrarySummaryMock.mockReturnValue(createMockQuery(buildSummary()));
 

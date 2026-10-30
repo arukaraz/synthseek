@@ -11,12 +11,14 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 import { useRecentRequests } from "../../hooks/useRecentRequests";
+import { listColumns } from "../helpers";
+import { widgetList } from "../WidgetRow/styles";
 import { RecentRequestCard } from "./RecentRequestCard";
 import { RecentRequestsSkeleton } from "./RecentRequestsSkeleton";
-import { requestsBody, requestsList } from "./styles";
+import { requestsBody } from "./styles";
 import type { RecentRequestsProps } from "./types";
 
-export function RecentRequests({ info }: RecentRequestsProps) {
+export function RecentRequests({ size, info }: RecentRequestsProps) {
   const { t } = useTranslation("discover");
   const router = useRouter();
   const { recent, isLoading, isError, limit } = useRecentRequests();
@@ -81,7 +83,7 @@ export function RecentRequests({ info }: RecentRequestsProps) {
       {header}
       <div className={requestsBody()}>
         <FadeScroll>
-          <div className={requestsList()}>
+          <div className={widgetList({ columns: listColumns(size) })}>
             {recent.map((request) => (
               <RecentRequestCard key={request.id} request={request} />
             ))}

@@ -24,6 +24,7 @@ describe("TopTracksList", () => {
           createTopTrack({ catalogTrackId: "c", title: "C" }),
         ]}
         startRank={2}
+        columns="one"
       />
     );
 
@@ -35,6 +36,7 @@ describe("TopTracksList", () => {
       <TopTracksList
         tracks={[createTopTrack({ catalogTrackId: "a" }), createTopTrack({ catalogTrackId: "b" })]}
         startRank={2}
+        columns="one"
       />
     );
 
@@ -42,8 +44,17 @@ describe("TopTracksList", () => {
     expect(ranks).toEqual(["2", "3"]);
   });
 
+  it("lays the rows in two columns when asked to", () => {
+    const tracks = [createTopTrack({ catalogTrackId: "a" }), createTopTrack({ catalogTrackId: "b" })];
+    const { rerender } = render(<TopTracksList tracks={tracks} startRank={2} columns="one" />);
+    expect(screen.getAllByTestId("row")[0].parentElement).not.toHaveClass("grid-cols-2");
+
+    rerender(<TopTracksList tracks={tracks} startRank={2} columns="two" />);
+    expect(screen.getAllByTestId("row")[0].parentElement).toHaveClass("grid-cols-2");
+  });
+
   it("renders nothing when the track list is empty", () => {
-    render(<TopTracksList tracks={[]} startRank={2} />);
+    render(<TopTracksList tracks={[]} startRank={2} columns="one" />);
 
     expect(screen.queryByTestId("row")).not.toBeInTheDocument();
   });

@@ -12,11 +12,12 @@ import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { formatRelativeTime } from "@utils/formatters";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
+import { listColumns } from "../helpers";
 import { widgetPill } from "../styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 
-export function NewInLibrary({ info }: BoardWidgetProps) {
+export function NewInLibrary({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useRecentAlbums();
   const { playEntity } = useEntityPlayback();
@@ -34,7 +35,7 @@ export function NewInLibrary({ info }: BoardWidgetProps) {
       note={isError ? t("board.loadError") : albums.length === 0 ? t("newInLibrary.empty") : null}
     >
       <FadeScroll>
-        <ul className={widgetList()}>
+        <ul className={widgetList({ columns: listColumns(size) })}>
           {albums.map((album) => (
             <WidgetRow
               key={album.albumExternalId}

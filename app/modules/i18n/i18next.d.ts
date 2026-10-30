@@ -18,6 +18,7 @@ import search from "./messages/en/search.json";
 import settings from "./messages/en/settings.json";
 import setup from "./messages/en/setup.json";
 import status from "./messages/en/status.json";
+import widgets from "./messages/en/widgets.json";
 
 declare module "i18next" {
   interface CustomTypeOptions {
@@ -40,6 +41,7 @@ declare module "i18next" {
       settings: typeof settings;
       setup: typeof setup;
       status: typeof status;
+      widgets: typeof widgets;
     };
   }
 }

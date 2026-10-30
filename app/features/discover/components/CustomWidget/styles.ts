@@ -1,6 +1,8 @@
 import type { CssVars } from "@theme/utilities/types";
 import { cva } from "class-variance-authority";
 
+export const visuallyHidden = cva("sr-only");
+
 export const blockBody = cva("@container flex min-h-0 flex-1 flex-col");
 
 export const blockList = cva("flex flex-col gap-0.5", {
@@ -94,3 +96,32 @@ export const calendarDate = cva(
 export const calendarMonth = cva("text-[9.5px] font-bold uppercase tracking-wider");
 
 export const calendarDay = cva("text-fg text-base font-bold tabular-nums");
+
+export const moveBadge = cva(
+  "inline-flex shrink-0 items-center gap-0.5 rounded-full px-2 py-0.5 text-[10.5px] font-semibold whitespace-nowrap [&_svg]:size-3",
+  {
+    variants: {
+      direction: {
+        up: "bg-fg/10 text-[var(--mix-acc)]",
+        down: "bg-fg/5 text-fg/60",
+        same: "bg-fg/5 text-fg/50",
+        new: "bg-fg/10 text-fg",
+      },
+    },
+    defaultVariants: { direction: "same" },
+  }
+);
+
+export const mosaicGrid = cva(
+  "grid min-h-0 flex-1 gap-2 [grid-template-columns:repeat(var(--mosaic-cols),minmax(0,1fr))] [grid-template-rows:repeat(var(--mosaic-rows),minmax(0,1fr))] @max-md:[grid-template-columns:repeat(3,minmax(0,1fr))] @max-md:[&>li:nth-child(n+7)]:hidden"
+);
+
+export const mosaicTile = cva("bg-surface-sunken relative min-h-0 overflow-hidden rounded-lg [&_img]:object-cover");
+
+export const mosaicButton = cva(
+  "absolute inset-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-inset hover:bg-black/20"
+);
+
+export function mosaicVars(columns: number, rows: number): CssVars {
+  return { "--mosaic-cols": String(columns), "--mosaic-rows": String(rows) };
+}

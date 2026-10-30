@@ -3,13 +3,13 @@
 import { Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { SparkBars } from "@components/MiniChart";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useListeningSummary } from "@hooks/api/queries/analytics/useListeningSummary";
 
 import { SUMMARY_WINDOW_DAYS } from "./constants";
 import { deltaOf, listeningTimeLabel, windowTotals } from "./helpers";
 import { MetricValue } from "./MetricValue";
-import { SparkBars } from "./SparkBars";
 
 export function ListeningTimeTile() {
   const { t } = useTranslation("settings");

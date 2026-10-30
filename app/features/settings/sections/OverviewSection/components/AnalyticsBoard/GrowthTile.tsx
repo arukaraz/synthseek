@@ -3,11 +3,11 @@
 import { TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { SparkLine } from "@components/MiniChart";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useLibraryGrowth } from "@hooks/api/queries/analytics/useLibraryGrowth";
 
 import { totalOf } from "./helpers";
-import { SparkLine } from "./SparkLine";
 import { axisRow, caption } from "./styles";
 
 export function GrowthTile() {

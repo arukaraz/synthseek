@@ -3,7 +3,15 @@ import { cva } from "class-variance-authority";
 
 import type { PreviewFrame } from "./types";
 
-export const galleryDialog = cva("sm:h-[min(90vh,880px)] sm:max-w-5xl");
+export const galleryDialog = cva("sm:h-[min(90vh,880px)]", {
+  variants: {
+    workshop: {
+      true: "sm:max-w-6xl",
+      false: "sm:max-w-5xl",
+    },
+  },
+  defaultVariants: { workshop: false },
+});
 
 export const galleryHeader = cva("flex flex-wrap items-center gap-3 px-4 pt-4 pr-14 pb-3 sm:pt-6 sm:pr-16 sm:pl-6");
 
@@ -14,8 +22,6 @@ export const gallerySearch = cva("relative w-full sm:w-72");
 export const searchIcon = cva("text-fg/40 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2");
 
 export const searchField = cva("pl-9");
-
-export const galleryTabs = cva("px-4 sm:px-6");
 
 export const galleryScroll = cva("min-h-0 flex-1 overflow-y-auto px-4 pb-10 sm:px-6");
 
@@ -69,7 +75,9 @@ export const onBoardBadge = cva(
   "bg-success-vivid/15 text-success-vivid absolute top-2.5 right-2.5 z-[1] inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold backdrop-blur-sm"
 );
 
-export const cardFooter = cva("flex min-w-0 items-center gap-2.5 px-3 py-2.5");
+export const cardFooter = cva("flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 px-3 py-2.5");
+
+export const cardActions = cva("flex basis-full items-center justify-end gap-1.5");
 
 export const cardAction = cva("shrink-0");
 
@@ -80,6 +88,54 @@ export const cardIcon = cva(
 export const cardTitleRow = cva("flex min-w-0 flex-1 items-center gap-1");
 
 export const cardTitle = cva("text-fg text-sm leading-tight font-semibold text-balance break-words");
+
+export const visuallyHidden = cva("sr-only");
+
+export const galleryToolbar = cva("flex flex-wrap items-center gap-3 px-4 sm:px-6");
+
+export const galleryToolbarEnd = cva("ml-auto flex items-center gap-2");
+
+export const mineCard = cva(
+  "bg-fg/[0.02] border-fg/10 hover:border-primary-400/50 focus-within:border-primary-400/50 flex min-w-0 flex-col gap-2 rounded-2xl border p-3 transition-colors"
+);
+
+export const mineHead = cva("flex min-w-0 items-center gap-2");
+
+export const mineTitle = cva("text-fg min-w-0 flex-1 truncate text-sm font-semibold");
+
+export const mineAccent = cva("size-3 shrink-0 rounded-full bg-[var(--mix-acc)]");
+
+export const mineMeta = cva("text-fg/60 truncate text-xs");
+
+export const mineBasedOn = cva("text-fg/50 truncate text-[11px]");
+
+export const mineActions = cva("mt-auto flex min-w-0 flex-nowrap items-center gap-1.5 overflow-hidden pt-1");
+
+export const mineActionsEnd = cva("ml-auto flex shrink-0 items-center gap-1");
+
+export const onBoardPill = cva(
+  "bg-success-vivid/15 text-success-vivid inline-flex h-9 shrink-0 items-center gap-1 rounded-md px-3 text-xs font-semibold"
+);
+
+export const newCard = cva(
+  "border-fg/20 flex min-h-36 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-3"
+);
+
+export const newCardButton = cva(
+  "bg-primary-500/15 text-primary-400 hover:bg-primary-500/25 focus-visible:ring-primary-400 flex size-14 items-center justify-center rounded-full outline-none focus-visible:ring-2 [&_svg]:size-7"
+);
+
+export const importBody = cva("flex flex-col gap-3 p-6 sm:max-w-xl");
+
+export const importField = cva(
+  "border-fg/15 bg-fg/5 text-fg focus:border-primary-500/50 focus:ring-primary-500/30 h-56 w-full resize-y rounded-lg border p-3 font-mono text-xs outline-none focus:ring-2"
+);
+
+export const importProblems = cva("text-destructive-vivid mt-1 flex list-disc flex-col gap-1 pl-5 text-xs");
+
+export const importProblem = cva("break-words");
+
+export const importActions = cva("flex justify-end gap-2");
 
 export function previewVars(frame: PreviewFrame): CssVars {
   return {

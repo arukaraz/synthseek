@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { LbConfig } from "@features/discovery-integrations/types";
+import i18n from "@locale";
 import enDiscover from "@modules/i18n/messages/en/discover.json";
-import { fireEvent, renderWithProviders, screen } from "@test/test-utils";
+import { fireEvent, renderWithProviders, screen, within } from "@test/test-utils";
 
 import { DiscoveryMixes } from "../DiscoveryMixes";
 import type { DiscoveryMix } from "../types";
@@ -125,6 +126,30 @@ describe("DiscoveryMixes", () => {
     expect(screen.getByTestId("ready-card")).toHaveAttribute("data-kind", "daily-jams");
     expect(screen.getByTestId("empty-card")).toHaveAttribute("data-kind", "weekly-jams");
     expect(screen.getByRole("heading", { name: enDiscover.mixes.title })).toBeInTheDocument();
+  });
+
+  it("lists each mix as a row in a quarter tile, opening only the ready ones", () => {
+    useDiscoveryMixesMock.mockReturnValue(
+      buildResult({
+        lbConfig: buildConfig({ selectedKinds: ["daily-jams", "weekly-jams"] }),
+        mixes: [
+          createReadyMix({ kind: "daily-jams", candidates: [createCandidate({ albumImage: null })] }),
+          createEmptyMix({ kind: "weekly-jams" }),
+        ],
+      })
+    );
+
+    renderWithProviders(<DiscoveryMixes size="S" info="Your ListenBrainz mixes" />);
+
+    expect(screen.queryByTestId("ready-card")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("empty-card")).not.toBeInTheDocument();
+    const rows = screen.getAllByRole("listitem");
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveTextContent(i18n.t("discover:mixes.trackCount", { count: 1 }));
+    expect(within(rows[1]).queryByRole("button")).not.toBeInTheDocument();
+
+    fireEvent.click(within(rows[0]).getByRole("button"));
+    expect(openForTarget).toHaveBeenCalledTimes(1);
   });
 
   it("opens the request flow with a synthesized playlist target when a ready card is clicked", () => {

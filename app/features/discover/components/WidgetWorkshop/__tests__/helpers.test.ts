@@ -1,0 +1,191 @@
+import { describe, expect, it } from "vitest";
+
+import type { FeedQuery, QuestionQuery } from "@hooks/api/queries/widgets/types";
+import { createWidgetCatalog, createWidgetGrammar } from "@test/factories";
+
+import { DEFAULT_QUERIES, NEW_WIDGET_DRAFT } from "../../../constants";
+import {
+  clampedNumber,
+  dailyYearOf,
+  feedReadbackOf,
+  matchingIcons,
+  previewableDraft,
+  previewHeightOf,
+  questionShapeOf,
+  readbackOf,
+  rotationChoicesOf,
+  ruleText,
+  viewChoicesOf,
+  withFittingView,
+  withMeasure,
+  withSource,
+  withSubject,
+} from "../helpers";
+
+const grammar = createWidgetGrammar();
+const catalog = createWidgetCatalog();
+const QUESTION: QuestionQuery = DEFAULT_QUERIES.question;
+
+describe("questionShapeOf and dailyYearOf", () => {
+  it("names the shape the server will return for each question", () => {
+    expect(questionShapeOf(QUESTION, grammar)).toBe("ranked");
+    expect(questionShapeOf({ ...QUESTION, groupBy: "hour" }, grammar)).toBe("matrix");
+    expect(questionShapeOf({ ...QUESTION, groupBy: "week" }, grammar)).toBe("series");
+    expect(questionShapeOf({ ...QUESTION, subject: "genres" }, grammar)).toBe("buckets");
+    expect(questionShapeOf({ ...QUESTION, subject: "genres", pick: { ...QUESTION.pick, limit: 1 } }, grammar)).toBe(
+      "single"
+    );
+  });
+
+  it("follows the shape rule the grammar publishes rather than its own", () => {
+    const moved = {
+      ...grammar,
+      groupByShapes: { ...grammar.groupByShapes, week: "matrix" },
+      subjectShapes: { ...grammar.subjectShapes, genres: { single: "ranked", many: "series" } },
+    } satisfies typeof grammar;
+    expect(questionShapeOf({ ...QUESTION, groupBy: "week" }, moved)).toBe("matrix");
+    expect(questionShapeOf({ ...QUESTION, subject: "genres" }, moved)).toBe("series");
+    expect(rotationChoicesOf(grammar)).toEqual(["none", ...grammar.pick.rotations]);
+  });
+
+  it("treats a daily series over half a year or more as a year", () => {
+    expect(dailyYearOf({ ...QUESTION, groupBy: "day", time: { mode: "named", value: "thisYear" } })).toBe(true);
+    expect(dailyYearOf({ ...QUESTION, groupBy: "day", time: { mode: "relative", days: 90 } })).toBe(false);
+    expect(dailyYearOf({ ...QUESTION, groupBy: "week", time: { mode: "named", value: "thisYear" } })).toBe(false);
+  });
+});
+
+describe("withSubject and withMeasure", () => {
+  it("keeps a measure the new subject offers and falls back to its first one otherwise", () => {
+    expect(withSubject({ ...QUESTION, measure: "minutes" }, "albums", grammar).measure).toBe("minutes");
+    expect(withSubject({ ...QUESTION, measure: "lastPlayed" }, "genres", grammar).measure).toBe("plays");
+  });
+
+  it("drops the rules and the grouping the new subject cannot take", () => {
+    const question: QuestionQuery = {
+      ...QUESTION,
+      groupBy: "day",
+      rules: {
+        all: [
+          { field: "notPlayedInLast", op: "days", value: 90 },
+          { field: "plays", op: "gte", value: 3 },
+        ],
+      },
+    };
+    const albums = withSubject(question, "albums", grammar);
+    expect(albums.rules).toEqual({ all: [{ field: "plays", op: "gte", value: 3 }] });
+    expect(albums.groupBy).toBeUndefined();
+    expect(withSubject(question, "genres", grammar).rules).toBeUndefined();
+  });
+
+  it("turns the comparison on for places climbed and picks by the measure", () => {
+    const moved = withMeasure(QUESTION, "rankDelta", grammar);
+    expect(moved.compare).toBe("previous");
+    expect(moved.pick.by).toBe("rankDelta");
+    expect(withMeasure({ ...QUESTION, groupBy: "day" }, "lastPlayed", grammar).groupBy).toBeUndefined();
+  });
+});
+
+describe("withFittingView and viewChoicesOf", () => {
+  it("moves to the first suggested view when the current one no longer fits", () => {
+    const draft = { ...NEW_WIDGET_DRAFT, query: { ...QUESTION, groupBy: "hour" as const } };
+    expect(withFittingView(draft, catalog, grammar).view.block).toBe("heatmap");
+    expect(withFittingView(NEW_WIDGET_DRAFT, catalog, grammar).view.block).toBe("list");
+  });
+
+  it("marks the first fitting view as suggested and shows the rest only on request, disabled", () => {
+    const fitting = ["share", "bars", "list"] as const;
+    expect(viewChoicesOf(catalog, fitting, false)).toEqual([
+      { block: "share", fits: true, suggested: true },
+      { block: "bars", fits: true, suggested: false },
+      { block: "list", fits: true, suggested: false },
+    ]);
+    const all = viewChoicesOf(catalog, fitting, true);
+    expect(all).toHaveLength(catalog.blocks.length);
+    expect(all.find((choice) => choice.block === "heatmap")).toEqual({
+      block: "heatmap",
+      fits: false,
+      suggested: false,
+    });
+  });
+});
+
+describe("readbackOf and ruleText", () => {
+  it("reads a recipe back as one sentence", () => {
+    expect(readbackOf(QUESTION)).toBe("Show me 10 tracks with the most plays in the last 30 days.");
+    expect(
+      readbackOf({
+        ...QUESTION,
+        compare: "previous",
+        rules: {
+          any: [
+            { field: "favorite", op: "is", value: true },
+            { field: "bitrate", op: "lt", value: 256 },
+          ],
+        },
+      })
+    ).toBe(
+      "Show me 10 tracks with the most plays in the last 30 days, compared with the previous period, where is a favorite or bitrate below 256 kbps."
+    );
+    expect(readbackOf({ ...QUESTION, groupBy: "week" })).toBe("Show me plays in the last 30 days, by week.");
+  });
+
+  it("puts the number before the unit for day rules and spells out a share", () => {
+    expect(ruleText({ field: "notPlayedInLast", op: "days", value: 180 })).toBe("not played in the last 180 days");
+    expect(ruleText({ field: "ownedShare", op: "lt", value: 0.5 })).toBe("owned share below 50%");
+    expect(ruleText({ field: "decade", op: "is", value: 1990 })).toBe("from the 1990s");
+  });
+});
+
+describe("withSource and feedReadbackOf", () => {
+  const FEED: FeedQuery = {
+    ...DEFAULT_QUERIES.feed,
+    pick: { by: "plays", order: "desc", limit: 5, random: null },
+    rules: { all: [{ field: "inLibrary", op: "is", value: false }] },
+  };
+
+  it("swaps the source, keeping the rules and the order it accepts", () => {
+    const fresh = withSource(FEED, "listenbrainz.freshReleases", catalog, "US");
+    expect(fresh).toMatchObject({ source: "listenbrainz.freshReleases", params: { days: 30 } });
+    expect(fresh.rules).toBeUndefined();
+    expect(fresh.pick.by).toBe("rank");
+    const back = withSource(fresh, "lastfm.similarArtists", catalog, "US");
+    expect(back.params).toEqual({ seed: { kind: "myTopArtists", n: 10, days: 90 } });
+  });
+
+  it("charts the member's chosen country, not one guessed from the language", () => {
+    expect(withSource(FEED, "lastfm.charts", catalog, "MX").params).toEqual({ country: "MX" });
+  });
+
+  it("reads a feed back with its rules", () => {
+    expect(feedReadbackOf(FEED)).toBe("Show me 5 items from Similar artists (Last.fm), where is not in my library.");
+  });
+});
+
+describe("previewableDraft", () => {
+  it("lends a cleared name a placeholder so the preview still runs, and keeps a real one", () => {
+    const cleared = { ...NEW_WIDGET_DRAFT, meta: { ...NEW_WIDGET_DRAFT.meta, name: "  " } };
+    expect(previewableDraft(cleared, "New widget").meta.name).toBe("New widget");
+    const named = { ...NEW_WIDGET_DRAFT, meta: { ...NEW_WIDGET_DRAFT.meta, name: "Night owl" } };
+    expect(previewableDraft(named, "New widget")).toBe(named);
+  });
+});
+
+describe("clampedNumber, matchingIcons and previewHeightOf", () => {
+  it("rounds and bounds a typed number and ignores an empty field", () => {
+    expect(clampedNumber("7.6", 1, 50)).toBe(8);
+    expect(clampedNumber("900", 1, 50)).toBe(50);
+    expect(clampedNumber("", 1, 50)).toBeNull();
+    expect(clampedNumber("abc", 1, 50)).toBeNull();
+  });
+
+  it("filters icon names by the search text", () => {
+    expect(matchingIcons(["music", "music-2", "heart"], " MUS ")).toEqual(["music", "music-2"]);
+    expect(matchingIcons(["music", "heart"], "")).toEqual(["music", "heart"]);
+  });
+
+  it("sizes the preview to the board height of the block at that size", () => {
+    expect(previewHeightOf("list", "M")).toBe(4 * 72 + 3 * 16);
+    expect(previewHeightOf("leader", "L")).toBe(7 * 72 + 6 * 16);
+  });
+});

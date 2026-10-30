@@ -73,7 +73,9 @@ export function ExploreBoard() {
       {editor.galleryOpen ? (
         <WidgetGallery
           items={items}
+          customize={editor.customizeTarget}
           onAdd={editor.add}
+          onAddCustom={editor.addCustom}
           onRemove={editor.actions.remove}
           onClose={() => editor.setGalleryOpen(false)}
         />
