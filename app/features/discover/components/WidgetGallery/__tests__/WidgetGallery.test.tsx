@@ -2,6 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@locale";
+import { TooltipProvider } from "@components/ui/Tooltip";
 import type { BoardItem } from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 import { createWidget, createWidgetCatalog, createWidgetGrammar, createWidgetPreset } from "@test/factories";
@@ -18,13 +19,6 @@ const { stub, viewport } = vi.hoisted(() => ({
 }));
 
 vi.mock("@hooks/ui/useMediaQuery", () => ({ useMediaQuery: () => viewport.wide }));
-vi.mock("../../BoardSettings/BoardSettingsPanel", () => ({
-  BoardSettingsPanel: ({ onApplied }: { onApplied: (applied: string) => void }) => (
-    <button type="button" onClick={() => onApplied("applied-board")}>
-      apply-stub
-    </button>
-  ),
-}));
 vi.mock("../../TrendingHero/TrendingHero", () => ({ TrendingHero: stub("trending") }));
 vi.mock("../../DiscoveryMixes/DiscoveryMixes", () => ({ DiscoveryMixes: stub("mixes") }));
 vi.mock("../../ArtistSpotlight/ArtistSpotlight", () => ({ ArtistSpotlight: stub("artistsNext") }));
@@ -88,7 +82,7 @@ vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({
         draft: {
           ...createWidgetPreset().draft,
           query: {
-            type: "question",
+            type: "recipe",
             subject: "tracks",
             measure: "plays",
             time: { mode: "named", value: "all" },
@@ -143,10 +137,13 @@ function renderGallery(items: BoardItem[] = ON_BOARD, target: BoardGalleryTarget
     onAdd: vi.fn(),
     onAddCustom: vi.fn(),
     onRemove: vi.fn(),
-    onTemplateApplied: vi.fn(),
     onClose: vi.fn(),
   };
-  render(<WidgetGallery items={items} target={target} {...handlers} />);
+  render(
+    <TooltipProvider>
+      <WidgetGallery items={items} target={target} {...handlers} />
+    </TooltipProvider>
+  );
   return handlers;
 }
 
@@ -198,14 +195,11 @@ describe("WidgetGallery", () => {
     expect(screen.getAllByText(i18n.t("discover:board.gallery.onBoard"))).toHaveLength(1);
   });
 
-  it("hands an applied template to the board and closes from the Board tab", () => {
-    const handlers = renderGallery();
+  it("offers the widgets and My widgets, with no Board tab", () => {
+    renderGallery();
 
-    fireEvent.click(screen.getByRole("tab", { name: "Board" }));
-    fireEvent.click(screen.getByRole("button", { name: "apply-stub" }));
-
-    expect(handlers.onTemplateApplied).toHaveBeenCalledWith("applied-board");
-    expect(handlers.onClose).toHaveBeenCalled();
+    expect(screen.getByRole("dialog", { name: i18n.t("discover:board.gallery.title") })).toBeInTheDocument();
+    expect(screen.getAllByRole("tab").map((tab) => tab.textContent)).toEqual(["Widgets", "My widgets"]);
   });
 
   it("closes from its close button", () => {
@@ -409,7 +403,7 @@ describe("WidgetGallery", () => {
     expect(second).toHaveAccessibleName("Customize Charts");
   });
 
-  it("draws a preview, the description and the smart playlist badge on my widget's card", () => {
+  it("draws a preview, the description and the smart playlist icon on my widget's card", () => {
     myWidgets.data = [
       createWidget({
         meta: { ...createWidget().meta, description: "Night listening" },
@@ -424,7 +418,16 @@ describe("WidgetGallery", () => {
     if (!(preview instanceof HTMLElement)) throw new Error("preview missing");
     expect(within(preview).getByRole("heading", { name: "Most played", hidden: true })).toBeInTheDocument();
     expect(within(card).getAllByText("Night listening")).toHaveLength(2);
-    expect(within(card).getByText("Smart playlist · Weekly")).toBeInTheDocument();
+    const playlist = within(card).getByRole("img", { name: "Smart playlist · Weekly" });
+    const json = within(card).getByRole("button", { name: "Copy the JSON of Most played" });
+    expect(playlist.compareDocumentPosition(json) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("describes My widgets under its title", () => {
+    renderGallery();
+    openMine();
+
+    expect(screen.getByRole("dialog")).toHaveAccessibleDescription(/^Widgets you built or customized/);
   });
 
   it("moves the size and the JSON to the preview, and the playlist choice to the footer", () => {
@@ -503,7 +506,7 @@ describe("WidgetGallery", () => {
         playlistId: null,
         name: "Night owl",
         refresh: "daily",
-        query: expect.objectContaining({ type: "question", subject: "tracks" }),
+        query: expect.objectContaining({ type: "recipe", subject: "tracks" }),
       }),
       expect.anything()
     );

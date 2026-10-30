@@ -41,7 +41,7 @@ vi.mock("@hooks/api/queries/widgets/useSmartPlaylistRule", () => ({
           refresh: "weekly",
           timeZone: "UTC",
           query: {
-            type: "question",
+            type: "recipe",
             subject: "tracks",
             measure: "plays",
             time: { mode: "relative", days: 14 },

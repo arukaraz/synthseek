@@ -3,8 +3,7 @@
     "tabs": {
       "label": "Widget-Listen",
       "widgets": "Widgets",
-      "mine": "Meine Widgets",
-      "board": "Board"
+      "mine": "Meine Widgets"
     },
     "filter": {
       "category": "Kategorie",
@@ -22,6 +21,7 @@
   },
   "mine": {
     "label": "Meine Widgets",
+    "subtitle": "Widgets, die du gebaut oder angepasst hast. Füg eines zum Board hinzu, bearbeite es oder kopiere sein JSON, um es zu teilen.",
     "empty": "Du hast noch kein Widget gebaut. Starte mit der +-Karte.",
     "newWidget": "Neues Widget",
     "fromJson": "Aus JSON",
@@ -56,22 +56,26 @@
     "appearance": {
       "title": "Aussehen",
       "density": "Dichte",
-      "densityHint": "Abstand zwischen Widgets und Höhe jeder Reihe",
       "densities": {
         "compact": "Kompakt",
         "comfortable": "Bequem",
         "spacious": "Großzügig"
       },
       "text": "Text",
-      "textHint": "Größe des Texts in den Widgets",
       "texts": {
         "small": "Klein",
         "default": "Normal",
         "large": "Groß"
+      },
+      "background": "Hintergrund",
+      "backgrounds": {
+        "on": "An",
+        "off": "Aus"
       }
     },
     "templates": {
       "title": "Vorlagen",
+      "docs": "Dokumentation",
       "export": "Dieses Board exportieren",
       "exportHint": "JSON mit deinen Widgets, ihren Größen und diesem Aussehen.",
       "name": "Name der Vorlage",
@@ -138,7 +142,7 @@
     "invalidField": "Dieser Wert ist ungültig."
   },
   "kinds": {
-    "question": "Rezept",
+    "recipe": "Rezept",
     "feed": "Feed",
     "recap": "Rückblick"
   },

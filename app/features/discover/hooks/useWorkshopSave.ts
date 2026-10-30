@@ -20,7 +20,7 @@ export function useWorkshopSave(
 
   const save = () => {
     const { query, playlist } = draft;
-    if (!playlist || query.type !== "question") {
+    if (!playlist || query.type !== "recipe") {
       storeWidget(draft);
       return;
     }

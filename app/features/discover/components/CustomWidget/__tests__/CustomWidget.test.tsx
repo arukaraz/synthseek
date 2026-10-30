@@ -10,8 +10,8 @@ import {
   createFeedAlbumRow,
   createMatrixResult,
   createNewsResult,
-  createQuestionAlbumRow,
-  createQuestionTrackRow,
+  createRecipeAlbumRow,
+  createRecipeTrackRow,
   createRecapResult,
   createSeriesResult,
   createTrackResult,
@@ -41,12 +41,12 @@ vi.mock("next/image", () => ({
 
 const TRACKS = createTrackResult(
   Array.from({ length: 14 }, (_, index) =>
-    createQuestionTrackRow({ id: `t${index}`, trackId: `req-${index}`, title: `Song ${index}` })
+    createRecipeTrackRow({ id: `t${index}`, trackId: `req-${index}`, title: `Song ${index}` })
   )
 );
 const ALBUMS = createAlbumResult(
   Array.from({ length: 12 }, (_, index) =>
-    createQuestionAlbumRow({ id: `a${index}`, albumExternalId: `dz-${index}`, name: `Album ${index}` })
+    createRecipeAlbumRow({ id: `a${index}`, albumExternalId: `dz-${index}`, name: `Album ${index}` })
   )
 );
 const BUCKETS = createBucketResult([
@@ -83,7 +83,7 @@ const MATRIX = createMatrixResult(
 const MOVES = {
   ...createTrackResult(
     Array.from({ length: 14 }, (_, index) =>
-      createQuestionTrackRow({
+      createRecipeTrackRow({
         id: `m${index}`,
         title: `Mover ${index}`,
         value: index < 3 ? [3, null, -1][index] : 0,
@@ -495,7 +495,7 @@ describe("CustomWidget", () => {
   });
 
   it("leaves the date badge out of a calendar row that has no date", () => {
-    show("calendar", "M", createTrackResult([createQuestionTrackRow({ playedAt: null })]));
+    show("calendar", "M", createTrackResult([createRecipeTrackRow({ playedAt: null })]));
     const [row] = screen.getAllByRole("listitem");
     expect(row).toHaveTextContent("Song One");
     expect(row).not.toHaveTextContent("?");

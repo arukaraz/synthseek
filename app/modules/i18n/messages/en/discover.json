@@ -187,10 +187,20 @@
     "customize": "Customize",
     "done": "Done",
     "addWidget": "Add widget",
+    "manageWidgets": "Manage widgets",
+    "add": {
+      "action": "Add"
+    },
+    "spacer": {
+      "name": "Spacer",
+      "shorter": "Make the spacer shorter",
+      "taller": "Make the spacer taller"
+    },
     "arrange": {
       "action": "Arrange",
       "title": "Arrange your board",
-      "hint": "Drag a widget to move it, and pick its size or remove it from its bar. Nothing changes until you save.",
+      "hint": "Drag a widget to move it, or drop it below the board to start a new row. Nothing changes until you save.",
+      "newRow": "New row",
       "empty": "Your board will be empty.",
       "cancel": "Cancel",
       "save": "Save changes",
@@ -202,8 +212,13 @@
       }
     },
     "tile": {
-      "moveEarlier": "Move {{name}} earlier",
-      "moveLater": "Move {{name}} later",
+      "settings": "Settings for {{name}}",
+      "moveEarlier": "Move earlier",
+      "moveLater": "Move later",
+      "moveTop": "Move to top",
+      "moveBottom": "Move to bottom",
+      "backgroundOn": "Show background",
+      "backgroundOff": "Hide background",
       "remove": "Remove {{name}}",
       "drag": "Drag {{name}}",
       "sizes": "Size of {{name}}",
@@ -220,8 +235,10 @@
       "L": "Large"
     },
     "gallery": {
-      "title": "Add a widget",
+      "title": "Manage widgets",
       "subtitle": "Add puts a widget at the end of the board, where you resize it. Customize opens a copy in the workshop.",
+      "seeMore": "See more",
+      "seeLess": "See less",
       "summary": "{{onBoard}} of {{total}} on your board. A new widget lands at the end, then move it where you want.",
       "search": "Search widgets",
       "all": "All",
@@ -237,6 +254,8 @@
       "added": "{{name}} added at the end",
       "removed": "{{name}} removed",
       "moved": "Board layout saved",
+      "backgroundsOn": "Backgrounds on for every widget",
+      "backgroundsOff": "Backgrounds off for every widget",
       "undo": "Undo"
     },
     "announce": {

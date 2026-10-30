@@ -18,6 +18,7 @@ import type { ArrangeTileProps } from "./types";
 export function ArrangeTile({
   tile,
   device,
+  boardWidth,
   metrics,
   layout,
   custom,
@@ -55,9 +56,9 @@ export function ArrangeTile({
         </div>
       ) : (
         <>
-          <ArrangeTileBar item={item} device={device} name={name} showName={tile.size !== "S"} actions={actions} />
+          <ArrangeTileBar item={item} device={device} name={name} position={position} total={total} actions={actions} />
           <div className={arrangeTileBody()}>
-            <ScaledPreview frame={arrangeFrameOf(tile, device, metrics, layout)}>
+            <ScaledPreview frame={arrangeFrameOf(tile, device, boardWidth, metrics, layout)}>
               <BoardTileWidget item={item} size={tile.size} custom={custom} customStatus={customStatus} info={false} />
             </ScaledPreview>
           </div>

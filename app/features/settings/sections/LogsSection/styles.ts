@@ -1,5 +1,7 @@
 import { cva } from "class-variance-authority";
 
+import { terminalSurface } from "@components/ui/styles";
+
 import type { LogLevelName } from "./types";
 
 export const viewerToolbar = cva("flex flex-wrap items-center gap-3");
@@ -28,7 +30,7 @@ export const toolbarActions = cva("flex w-full flex-wrap items-center gap-2 sm:w
 export const exportActions = cva("flex flex-wrap items-center gap-3");
 
 export const logTerminal = cva(
-  "border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] w-full min-w-0 overflow-auto rounded-lg border bg-black/40 p-3 font-mono text-xs leading-relaxed"
+  `border-fg/10 mt-1 max-h-[28rem] min-h-[8rem] w-full min-w-0 overflow-auto rounded-lg border ${terminalSurface} p-3 font-mono text-xs leading-relaxed`
 );
 
 export const logLine = cva("whitespace-pre-wrap break-words");

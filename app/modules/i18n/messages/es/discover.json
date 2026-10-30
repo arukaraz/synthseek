@@ -187,10 +187,20 @@
     "customize": "Personalizar",
     "done": "Listo",
     "addWidget": "Añadir widget",
+    "manageWidgets": "Gestionar widgets",
+    "add": {
+      "action": "Añadir"
+    },
+    "spacer": {
+      "name": "Espaciador",
+      "shorter": "Hacer el espaciador más bajo",
+      "taller": "Hacer el espaciador más alto"
+    },
     "arrange": {
       "action": "Ordenar",
       "title": "Ordena tu tablero",
-      "hint": "Arrastra un widget para moverlo, y elige su tamaño o quítalo desde su barra. Nada cambia hasta que guardes.",
+      "hint": "Arrastra un widget para moverlo, o suéltalo bajo el tablero para empezar una fila nueva. Nada cambia hasta que guardes.",
+      "newRow": "Fila nueva",
       "empty": "Tu tablero quedará vacío.",
       "cancel": "Cancelar",
       "save": "Guardar cambios",
@@ -202,8 +212,13 @@
       }
     },
     "tile": {
-      "moveEarlier": "Mover {{name}} antes",
-      "moveLater": "Mover {{name}} después",
+      "settings": "Ajustes de {{name}}",
+      "moveEarlier": "Mover antes",
+      "moveLater": "Mover después",
+      "moveTop": "Mover arriba del todo",
+      "moveBottom": "Mover abajo del todo",
+      "backgroundOn": "Mostrar el fondo",
+      "backgroundOff": "Quitar el fondo",
       "remove": "Quitar {{name}}",
       "drag": "Arrastrar {{name}}",
       "sizes": "Tamaño de {{name}}",
@@ -220,8 +235,10 @@
       "L": "Grande"
     },
     "gallery": {
-      "title": "Añadir un widget",
+      "title": "Gestionar widgets",
       "subtitle": "Añadir coloca un widget al final del tablero, donde cambias su tamaño. Personalizar abre una copia en el taller.",
+      "seeMore": "Ver más",
+      "seeLess": "Ver menos",
       "summary": "{{onBoard}} de {{total}} en tu tablero. Un widget nuevo se coloca al final; luego muévelo donde quieras.",
       "search": "Buscar widgets",
       "all": "Todos",
@@ -237,6 +254,8 @@
       "added": "{{name}} añadido al final",
       "removed": "{{name}} quitado",
       "moved": "Tablero guardado",
+      "backgroundsOn": "Fondo activado en todos los widgets",
+      "backgroundsOff": "Fondo desactivado en todos los widgets",
       "undo": "Deshacer"
     },
     "announce": {

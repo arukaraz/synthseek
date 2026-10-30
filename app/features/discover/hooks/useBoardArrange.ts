@@ -9,8 +9,17 @@ import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
 import { useBoardFlip } from "@hooks/ui/board/useBoardFlip";
 
 import type { UseBoardArrangeOptions } from "../components/BoardArrange/types";
-import { moveItem, orderKeyOf, removeItem, resizeItem, sameSlot } from "../components/ExploreBoard/helpers";
-import type { MoveDelta } from "../components/ExploreBoard/types";
+import {
+  moveItem,
+  moveItemToEdge,
+  orderKeyOf,
+  removeItem,
+  resizeItem,
+  resizeSpacer,
+  sameSlot,
+  toggleBackground,
+} from "../components/ExploreBoard/helpers";
+import type { BoardEdge, MoveDelta } from "../components/ExploreBoard/types";
 
 export function useBoardArrange({ items, custom }: UseBoardArrangeOptions) {
   const [draft, setDraft] = useState<BoardItem[]>(() => [...items]);
@@ -30,12 +39,32 @@ export function useBoardArrange({ items, custom }: UseBoardArrangeOptions) {
     },
     [flip.ref]
   );
+  const moveToEdge = useCallback(
+    (id: string, edge: BoardEdge) => {
+      setDraft((current) => moveItemToEdge(current, id, edge));
+      focusBoardTile(id, flip.ref.current ?? document);
+    },
+    [flip.ref]
+  );
   const resize = useCallback((id: string, size: BoardSize) => setDraft((current) => resizeItem(current, id, size)), []);
+  const resizeSpacerTile = useCallback(
+    (id: string, delta: MoveDelta) => setDraft((current) => resizeSpacer(current, id, delta)),
+    []
+  );
+  const toggleTileBackground = useCallback((id: string) => setDraft((current) => toggleBackground(current, id)), []);
   const remove = useCallback((id: string) => setDraft((current) => removeItem(current, id)), []);
 
   const actions = useMemo(
-    () => ({ move, resize, remove, startDrag: drag.startDrag }),
-    [move, resize, remove, drag.startDrag]
+    () => ({
+      move,
+      moveToEdge,
+      resize,
+      resizeSpacer: resizeSpacerTile,
+      toggleBackground: toggleTileBackground,
+      remove,
+      startDrag: drag.startDrag,
+    }),
+    [move, moveToEdge, resize, resizeSpacerTile, toggleTileBackground, remove, drag.startDrag]
   );
 
   return {

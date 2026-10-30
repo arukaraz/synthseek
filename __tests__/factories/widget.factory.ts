@@ -1,6 +1,6 @@
 import type {
   FeedWidgetResult,
-  QuestionWidgetResult,
+  RecipeWidgetResult,
   RecapWidgetResult,
   WidgetCatalog,
   WidgetDocument,
@@ -9,11 +9,11 @@ import type {
   WidgetRowOf,
 } from "@hooks/api/queries/widgets/types";
 
-type QuestionTrackRow = WidgetRowOf<QuestionWidgetResult, "tracks">;
-type QuestionAlbumRow = WidgetRowOf<QuestionWidgetResult, "albums">;
-type QuestionBucketRow = WidgetRowOf<QuestionWidgetResult, "buckets">;
-type QuestionSeriesRow = WidgetRowOf<QuestionWidgetResult, "series">;
-type QuestionMatrixRow = WidgetRowOf<QuestionWidgetResult, "matrix">;
+type RecipeTrackRow = WidgetRowOf<RecipeWidgetResult, "tracks">;
+type RecipeAlbumRow = WidgetRowOf<RecipeWidgetResult, "albums">;
+type RecipeBucketRow = WidgetRowOf<RecipeWidgetResult, "buckets">;
+type RecipeSeriesRow = WidgetRowOf<RecipeWidgetResult, "series">;
+type RecipeMatrixRow = WidgetRowOf<RecipeWidgetResult, "matrix">;
 type FeedAlbumRow = WidgetRowOf<FeedWidgetResult, "albums">;
 type FeedPlaylistRow = WidgetRowOf<FeedWidgetResult, "playlists">;
 
@@ -26,7 +26,7 @@ export function createWidget(overrides: Partial<WidgetDocument> = {}): WidgetDoc
     schemaVersion: 2,
     meta: { name: "Most played", description: "Your month", icon: "flame", accent: "daily", visibility: "private" },
     query: {
-      type: "question",
+      type: "recipe",
       subject: "tracks",
       measure: "plays",
       time: { mode: "relative", days: 30 },
@@ -40,7 +40,7 @@ export function createWidget(overrides: Partial<WidgetDocument> = {}): WidgetDoc
   };
 }
 
-export function createQuestionTrackRow(overrides: Partial<QuestionTrackRow> = {}): QuestionTrackRow {
+export function createRecipeTrackRow(overrides: Partial<RecipeTrackRow> = {}): RecipeTrackRow {
   return {
     id: "t1",
     trackId: "req-1",
@@ -61,7 +61,7 @@ export function createQuestionTrackRow(overrides: Partial<QuestionTrackRow> = {}
   };
 }
 
-export function createQuestionAlbumRow(overrides: Partial<QuestionAlbumRow> = {}): QuestionAlbumRow {
+export function createRecipeAlbumRow(overrides: Partial<RecipeAlbumRow> = {}): RecipeAlbumRow {
   return {
     id: "a1",
     albumExternalId: "dz-album-1",
@@ -107,32 +107,32 @@ export function createFeedAlbumRow(overrides: Partial<FeedAlbumRow> = {}): FeedA
   };
 }
 
-const QUESTION_BASE = { type: "question", measure: "plays", window: WINDOW, previous: null, privacy: null } as const;
+const RECIPE_BASE = { type: "recipe", measure: "plays", window: WINDOW, previous: null, privacy: null } as const;
 
-export function createTrackResult(rows: QuestionTrackRow[]): QuestionWidgetResult {
-  return { ...QUESTION_BASE, subject: "tracks", total: rows.length, dataset: "tracks", shape: "ranked", rows };
+export function createTrackResult(rows: RecipeTrackRow[]): RecipeWidgetResult {
+  return { ...RECIPE_BASE, subject: "tracks", total: rows.length, dataset: "tracks", shape: "ranked", rows };
 }
 
-export function createAlbumResult(rows: QuestionAlbumRow[]): QuestionWidgetResult {
-  return { ...QUESTION_BASE, subject: "albums", total: rows.length, dataset: "albums", shape: "ranked", rows };
+export function createAlbumResult(rows: RecipeAlbumRow[]): RecipeWidgetResult {
+  return { ...RECIPE_BASE, subject: "albums", total: rows.length, dataset: "albums", shape: "ranked", rows };
 }
 
 export function createBucketResult(
-  rows: QuestionBucketRow[],
+  rows: RecipeBucketRow[],
   subject: "genres" | "decades" = "genres"
-): QuestionWidgetResult {
-  return { ...QUESTION_BASE, subject, total: rows.length, dataset: "buckets", shape: "buckets", rows };
+): RecipeWidgetResult {
+  return { ...RECIPE_BASE, subject, total: rows.length, dataset: "buckets", shape: "buckets", rows };
 }
 
 export function createSeriesResult(
-  rows: QuestionSeriesRow[],
-  measure: QuestionWidgetResult["measure"] = "plays"
-): QuestionWidgetResult {
-  return { ...QUESTION_BASE, measure, subject: "tracks", total: rows.length, dataset: "series", shape: "series", rows };
+  rows: RecipeSeriesRow[],
+  measure: RecipeWidgetResult["measure"] = "plays"
+): RecipeWidgetResult {
+  return { ...RECIPE_BASE, measure, subject: "tracks", total: rows.length, dataset: "series", shape: "series", rows };
 }
 
-export function createMatrixResult(rows: QuestionMatrixRow[]): QuestionWidgetResult {
-  return { ...QUESTION_BASE, subject: "tracks", total: rows.length, dataset: "matrix", shape: "matrix", rows };
+export function createMatrixResult(rows: RecipeMatrixRow[]): RecipeWidgetResult {
+  return { ...RECIPE_BASE, subject: "tracks", total: rows.length, dataset: "matrix", shape: "matrix", rows };
 }
 
 export function createNewsResult(
@@ -168,7 +168,7 @@ export function createRecapResult(
   };
 }
 
-export function createDailySeries(from: string, values: readonly number[]): QuestionSeriesRow[] {
+export function createDailySeries(from: string, values: readonly number[]): RecipeSeriesRow[] {
   const start = new Date(`${from}T12:00:00Z`);
   return values.map((value, index) => {
     const day = new Date(start.getTime() + index * 86_400_000);

@@ -14,21 +14,28 @@ import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
 import { useBoardFlip } from "@hooks/ui/board/useBoardFlip";
 
-import { BOARD_SIZE_NAME_KEYS, BOARD_WIDGETS } from "../components/ExploreBoard/constants";
+import { BOARD_SIZE_NAME_KEYS, BOARD_WIDGETS, SPACER_ID } from "../components/ExploreBoard/constants";
 import {
   appendCustomWidget,
+  appendSpacer,
   appendWidget,
   layoutOf,
   moveItem,
+  moveItemToEdge,
   orderKeyOf,
   removeItem,
   resizeItem,
+  resizeSpacer,
   sameSlot,
+  tileHasBackground,
   tileNameOf,
+  toggleBackground,
   uniqueTileId,
+  withBackgrounds,
 } from "../components/ExploreBoard/helpers";
 import type {
   BoardCustomWidgets,
+  BoardEdge,
   BoardEditor,
   BoardGalleryTarget,
   CustomWidgetsStatus,
@@ -45,7 +52,8 @@ export function useBoardEditor(
   const [editing, setEditing] = useState(false);
   const [galleryOpen, setGalleryOpenState] = useState(false);
   const [galleryTarget, setGalleryTarget] = useState<BoardGalleryTarget | null>(null);
-  const [arrangeOpen, setArrangeOpen] = useState(false);
+  const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [arrangeWidth, setArrangeWidth] = useState<number | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const flipRef = useRef<BoardFlip | null>(null);
 
@@ -105,6 +113,19 @@ export function useBoardEditor(
     [commit, items, nameOf, t]
   );
 
+  const moveToEdge = useCallback(
+    (id: string, edge: BoardEdge) => {
+      const from = items.findIndex((item) => item.id === id);
+      const target = edge === "top" ? 0 : items.length - 1;
+      const item = items[from];
+      if (!item || target === from) return;
+      commit(moveItemToEdge(items, id, edge));
+      setAnnouncement(t("board.announce.moved", { name: nameOf(item), position: target + 1, total: items.length }));
+      focusBoardTile(id);
+    },
+    [commit, items, nameOf, t]
+  );
+
   const resize = useCallback(
     (id: string, size: BoardSize) => {
       const item = items.find((candidate) => candidate.id === id);
@@ -113,6 +134,22 @@ export function useBoardEditor(
       setAnnouncement(t("board.announce.resized", { name: nameOf(item), size: t(BOARD_SIZE_NAME_KEYS[size]) }));
     },
     [commit, items, nameOf, t]
+  );
+
+  const resizeSpacerTile = useCallback(
+    (id: string, delta: MoveDelta) => commit(resizeSpacer(items, id, delta)),
+    [commit, items]
+  );
+
+  const toggleTileBackground = useCallback((id: string) => commit(toggleBackground(items, id)), [commit, items]);
+
+  const setBackgrounds = useCallback(
+    (shown: boolean) => {
+      if (items.every((item) => tileHasBackground(item) === shown)) return;
+      commit(withBackgrounds(items, shown));
+      offerUndo(t(shown ? "board.toast.backgroundsOn" : "board.toast.backgroundsOff"), items);
+    },
+    [commit, items, offerUndo, t]
   );
 
   const remove = useCallback(
@@ -143,6 +180,11 @@ export function useBoardEditor(
     [commit, items, t]
   );
 
+  const addSpacer = useCallback(() => {
+    commit(appendSpacer(items, uniqueTileId(SPACER_ID, items)));
+    toast.success(t("board.toast.added", { name: t("board.spacer.name") }));
+  }, [commit, items, t]);
+
   const setGalleryOpen = useCallback((open: boolean) => {
     setGalleryOpenState(open);
     if (!open) setGalleryTarget(null);
@@ -151,6 +193,7 @@ export function useBoardEditor(
   const stopEditing = useCallback(() => {
     setEditing(false);
     setGalleryOpen(false);
+    setTemplatesOpen(false);
   }, [setGalleryOpen]);
   const openGallery = useCallback(() => {
     setEditing(true);
@@ -166,11 +209,16 @@ export function useBoardEditor(
   const customize = useCallback((widget: BoardWidgetKey) => openTarget({ kind: "builtin", widget }), [openTarget]);
   const edit = useCallback((widgetId: string) => openTarget({ kind: "custom", widgetId }), [openTarget]);
 
-  const openArrange = useCallback(() => setArrangeOpen(true), []);
-  const closeArrange = useCallback(() => setArrangeOpen(false), []);
+  const openArrange = useCallback(() => setArrangeWidth(flip.ref.current?.clientWidth ?? 0), [flip.ref]);
+  const closeArrange = useCallback(() => setArrangeWidth(null), []);
+  const openTemplates = useCallback(() => {
+    setEditing(true);
+    setTemplatesOpen(true);
+  }, []);
+  const closeTemplates = useCallback(() => setTemplatesOpen(false), []);
   const saveArrangement = useCallback(
     (next: BoardItem[]) => {
-      setArrangeOpen(false);
+      setArrangeWidth(null);
       commit(next);
       offerUndo(t("board.toast.moved"), items);
     },
@@ -178,24 +226,35 @@ export function useBoardEditor(
   );
 
   useEffect(() => {
-    if (!editing || galleryOpen || arrangeOpen) return;
+    if (!editing || galleryOpen || templatesOpen || arrangeWidth !== null) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && !event.defaultPrevented) setEditing(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [arrangeOpen, editing, galleryOpen]);
+  }, [arrangeWidth, editing, galleryOpen, templatesOpen]);
 
   const actions = useMemo(
-    () => ({ move, resize, remove, startDrag: drag.startDrag, customize, edit }),
-    [move, resize, remove, drag.startDrag, customize, edit]
+    () => ({
+      move,
+      moveToEdge,
+      resize,
+      resizeSpacer: resizeSpacerTile,
+      toggleBackground: toggleTileBackground,
+      remove,
+      startDrag: drag.startDrag,
+      customize,
+      edit,
+    }),
+    [move, moveToEdge, resize, resizeSpacerTile, toggleTileBackground, remove, drag.startDrag, customize, edit]
   );
 
   return {
     rootRef: flip.ref,
     editing,
     galleryOpen,
-    arrangeOpen,
+    templatesOpen,
+    arrangeWidth,
     announcement,
     displayItems,
     draggingId: drag.draggingId,
@@ -205,10 +264,14 @@ export function useBoardEditor(
     setGalleryOpen,
     openArrange,
     closeArrange,
+    openTemplates,
+    closeTemplates,
     saveArrangement,
     galleryTarget,
     add,
     addCustom,
+    addSpacer,
+    setBackgrounds,
     templateApplied,
     actions,
   };

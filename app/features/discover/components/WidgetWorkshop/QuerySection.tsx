@@ -51,9 +51,7 @@ export function QuerySection({ workshop, context }: WorkshopSectionProps) {
           </div>
         ) : null}
       </div>
-      <p className={sectionHelp()}>
-        {workshop.kind === "question" ? t("workshop.recipeHelp") : t("workshop.feedHelp")}
-      </p>
+      <p className={sectionHelp()}>{workshop.kind === "recipe" ? t("workshop.recipeHelp") : t("workshop.feedHelp")}</p>
       {query.type === "feed" ? (
         <FeedSteps workshop={workshop} feed={query} context={context} />
       ) : (
@@ -81,13 +79,13 @@ export function QuerySection({ workshop, context }: WorkshopSectionProps) {
               </div>
             </FadeScroll>
           </div>
-          {query.type === "question" ? (
-            <RecipeSteps workshop={workshop} question={query} grammar={context.grammar} people={context.people} />
+          {query.type === "recipe" ? (
+            <RecipeSteps workshop={workshop} recipe={query} grammar={context.grammar} people={context.people} />
           ) : (
             <RecapSteps workshop={workshop} recap={query} context={context} />
           )}
           <p className={readback()} aria-live="polite">
-            {query.type === "question" ? readbackOf(query, context.people) : recapReadbackOf(query)}
+            {query.type === "recipe" ? readbackOf(query, context.people) : recapReadbackOf(query)}
           </p>
         </>
       )}

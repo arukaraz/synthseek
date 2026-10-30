@@ -9,7 +9,7 @@ import type {
   ListenBrainzPlaylist,
   MediaServer,
   NamedPeriod,
-  QuestionGroupBy,
+  RecipeGroupBy,
   RuleField,
   SmartRefresh,
   TimeMode,
@@ -21,7 +21,7 @@ export const PREVIEW_DEBOUNCE_MS = 400;
 
 export const WORKSHOP_SIZES: readonly BoardSize[] = ["S", "M", "L"];
 
-export const WIDGET_KINDS: readonly WidgetKind[] = ["question", "feed"];
+export const WIDGET_KINDS: readonly WidgetKind[] = ["recipe", "feed"];
 
 export const TIME_MODES: readonly TimeMode[] = ["relative", "named", "absolute", "sameLastYear"];
 
@@ -37,7 +37,7 @@ export const NO_ROTATION = "none";
 
 export const DEFAULT_DAYS = 30;
 
-export const DEFAULT_GROUP_BY: QuestionGroupBy = "day";
+export const DEFAULT_GROUP_BY: RecipeGroupBy = "day";
 
 export const DEFAULT_FEED_SEED: FeedSeed = { kind: "myTopArtists", n: 10, days: 90 };
 

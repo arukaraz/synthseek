@@ -1,6 +1,13 @@
 import type { BoardItem, BoardTemplateApplied, BoardTemplatePreview } from "@hooks/api/queries/board/types";
 
+import type { BoardBackground } from "../ExploreBoard/types";
+
 export type ReadableTemplate = Extract<BoardTemplatePreview, { ok: true }>;
+
+export interface AppearanceTrayProps {
+  background: BoardBackground;
+  onBackground: (shown: boolean) => void;
+}
 
 export type ReportTone = "info" | "warning" | "danger";
 
@@ -10,9 +17,10 @@ export interface ReportLine {
   tone: ReportTone;
 }
 
-export interface BoardSettingsPanelProps {
+export interface BoardTemplatesDialogProps {
   items: BoardItem[];
   onApplied: (applied: BoardTemplateApplied) => void;
+  onClose: () => void;
 }
 
 export interface TemplateExportProps {

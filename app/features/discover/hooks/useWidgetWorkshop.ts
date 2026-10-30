@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import type { BoardSize } from "@hooks/api/queries/board/types";
 import type {
-  QuestionQuery,
+  RecipeQuery,
   RecapPeriod,
   WidgetAccent,
   WidgetAction,
@@ -29,7 +29,7 @@ import {
   withSubject,
 } from "../components/WidgetWorkshop/helpers";
 import type {
-  RecipeSubject,
+  WorkshopSubject,
   RuleDraft,
   SmartRefresh,
   RuleMode,
@@ -82,9 +82,9 @@ export function useWidgetWorkshop(
 
   const setQuery = useCallback((query: WidgetQuery) => change((current) => ({ ...current, query })), [change]);
 
-  const updateQuestion = useCallback(
-    (update: (question: QuestionQuery) => QuestionQuery) =>
-      change((current) => (current.query.type === "question" ? { ...current, query: update(current.query) } : current)),
+  const updateRecipe = useCallback(
+    (update: (recipe: RecipeQuery) => RecipeQuery) =>
+      change((current) => (current.query.type === "recipe" ? { ...current, query: update(current.query) } : current)),
     [change]
   );
 
@@ -97,12 +97,12 @@ export function useWidgetWorkshop(
   );
 
   const setRecipeSubject = useCallback(
-    (subject: RecipeSubject) => {
+    (subject: WorkshopSubject) => {
       setRuleDraft(null);
       change((current) => {
         if (subject === RECAP_SUBJECT)
           return current.query.type === "recap" ? current : { ...current, query: DEFAULT_RECAP };
-        const base = current.query.type === "question" ? current.query : DEFAULT_QUERIES.question;
+        const base = current.query.type === "recipe" ? current.query : DEFAULT_QUERIES.recipe;
         return { ...current, query: withSubject(base, subject, grammar) };
       });
     },
@@ -197,7 +197,7 @@ export function useWidgetWorkshop(
     ruleDraft,
     previewDraft,
     setKind,
-    updateQuestion,
+    updateRecipe,
     setRecapPeriod,
     setRecipeSubject,
     setQuery,

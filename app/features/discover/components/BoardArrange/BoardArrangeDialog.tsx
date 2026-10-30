@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { boardMetricsOf } from "@components/BoardGrid";
+import { BOARD_COLUMNS, boardMetricsOf } from "@components/BoardGrid";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { ModalActionBar } from "@components/ui/ModalActionBar";
@@ -16,12 +16,16 @@ import { galleryDialog } from "../WidgetGallery/styles";
 import { ArrangeTile } from "./ArrangeTile";
 import { arrangeLayoutOf } from "./helpers";
 import {
+  arrangeBoard,
+  arrangeBoardVars,
   arrangeEmpty,
   arrangeFrame,
   arrangeGrid,
-  arrangeGridVars,
+  arrangeGuide,
+  arrangeGuides,
   arrangeHeader,
   arrangeHint,
+  arrangeNewRow,
   arrangeRoot,
   arrangeViewport,
 } from "./styles";
@@ -30,6 +34,7 @@ import type { BoardArrangeDialogProps } from "./types";
 export function BoardArrangeDialog({
   items,
   device,
+  boardWidth,
   appearance,
   custom,
   customStatus,
@@ -51,10 +56,13 @@ export function BoardArrangeDialog({
     [measureHeight, measureWidth]
   );
 
-  const tiles = useMemo(() => packBoard(arrange.displayItems, device, custom), [arrange.displayItems, device, custom]);
-  const placements = useMemo(() => placementsById(tiles), [tiles]);
+  const placements = useMemo(
+    () => placementsById(packBoard(arrange.displayItems, device, custom)),
+    [arrange.displayItems, device, custom]
+  );
+  const settled = useMemo(() => packBoard(arrange.draft, device, custom), [arrange.draft, device, custom]);
   const base = boardMetricsOf(appearance);
-  const layout = arrangeLayoutOf({ width, height }, device, tiles, base);
+  const layout = arrangeLayoutOf({ width, height }, device, boardWidth, settled, base);
   const requestClose = () => (arrange.dirty ? setConfirming(true) : onClose());
 
   return (
@@ -87,26 +95,37 @@ export function BoardArrangeDialog({
               <p className={arrangeEmpty()}>{t("board.arrange.empty")}</p>
             ) : layout.scale > 0 ? (
               <section ref={arrange.rootRef} className={arrangeRoot()}>
-                <div className={arrangeGrid()} style={arrangeGridVars(device, appearance, layout)}>
-                  {arrange.draft.map((item, index) => {
-                    const tile = placements.get(item.id);
-                    if (!tile) return null;
-                    return (
-                      <ArrangeTile
-                        key={item.id}
-                        tile={tile}
-                        device={device}
-                        metrics={base}
-                        layout={layout}
-                        custom={custom}
-                        customStatus={customStatus}
-                        dragging={arrange.draggingId === item.id}
-                        position={index + 1}
-                        total={arrange.draft.length}
-                        actions={arrange.actions}
-                      />
-                    );
-                  })}
+                <div className={arrangeBoard()} style={arrangeBoardVars(device, appearance, layout)}>
+                  <div className={arrangeGuides()} aria-hidden>
+                    {Array.from({ length: BOARD_COLUMNS[device] }, (_, column) => (
+                      <span key={column} className={arrangeGuide()} />
+                    ))}
+                  </div>
+                  <div className={arrangeGrid()}>
+                    {arrange.draft.map((item, index) => {
+                      const tile = placements.get(item.id);
+                      if (!tile) return null;
+                      return (
+                        <ArrangeTile
+                          key={item.id}
+                          tile={tile}
+                          device={device}
+                          boardWidth={boardWidth}
+                          metrics={base}
+                          layout={layout}
+                          custom={custom}
+                          customStatus={customStatus}
+                          dragging={arrange.draggingId === item.id}
+                          position={index + 1}
+                          total={arrange.draft.length}
+                          actions={arrange.actions}
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className={arrangeNewRow()} aria-hidden>
+                    {t("board.arrange.newRow")}
+                  </div>
                 </div>
               </section>
             ) : null}

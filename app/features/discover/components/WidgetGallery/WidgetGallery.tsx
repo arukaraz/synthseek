@@ -21,7 +21,6 @@ import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 import { useCountry } from "@modules/providers/CountryProvider";
 
 import { NEW_WIDGET_DRAFT } from "../../constants";
-import { BoardSettingsPanel } from "../BoardSettings/BoardSettingsPanel";
 import { BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
 import { widgetsOnBoard } from "../ExploreBoard/helpers";
 import type { WorkshopOpening } from "../WidgetWorkshop/types";
@@ -51,15 +50,7 @@ import {
 import type { GalleryFilters, GalleryLeave, GalleryMode, WidgetGalleryProps } from "./types";
 import { WidgetGalleryCard } from "./WidgetGalleryCard";
 
-export function WidgetGallery({
-  items,
-  target,
-  onAdd,
-  onAddCustom,
-  onRemove,
-  onTemplateApplied,
-  onClose,
-}: WidgetGalleryProps) {
+export function WidgetGallery({ items, target, onAdd, onAddCustom, onRemove, onClose }: WidgetGalleryProps) {
   const { t } = useTranslation(["discover", "widgets"]);
   const [mode, setMode] = useState<GalleryMode>("widgets");
   const [filters, setFilters] = useState<GalleryFilters>(DEFAULT_GALLERY_FILTERS);
@@ -191,15 +182,9 @@ export function WidgetGallery({
           <>
             <div className={galleryHeader()}>
               <div className={galleryTitleBlock()}>
-                <DialogTitle>
-                  {mode === "mine"
-                    ? t("widgets:mine.label")
-                    : mode === "board"
-                      ? t("widgets:gallery.tabs.board")
-                      : t("board.gallery.title")}
-                </DialogTitle>
-                <DialogDescription className={mode === "widgets" ? gallerySubtitle() : visuallyHidden()}>
-                  {t("board.gallery.subtitle")}
+                <DialogTitle>{mode === "mine" ? t("widgets:mine.label") : t("board.gallery.title")}</DialogTitle>
+                <DialogDescription className={gallerySubtitle()}>
+                  {mode === "mine" ? t("widgets:mine.subtitle") : t("board.gallery.subtitle")}
                 </DialogDescription>
               </div>
             </div>
@@ -232,15 +217,7 @@ export function WidgetGallery({
               />
             </div>
             <div className={galleryScroll()}>
-              {mode === "board" ? (
-                <BoardSettingsPanel
-                  items={items}
-                  onApplied={(applied) => {
-                    onTemplateApplied(applied);
-                    onClose();
-                  }}
-                />
-              ) : mode === "mine" ? (
+              {mode === "mine" ? (
                 myWidgets.data ? (
                   <MyWidgetsPanel
                     widgets={myWidgets.data}

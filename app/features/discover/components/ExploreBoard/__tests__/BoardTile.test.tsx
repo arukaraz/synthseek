@@ -33,7 +33,17 @@ const TILE: PlacedTile = {
 vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({ useWidgetPresets: () => ({ data: [] }) }));
 
 function actions(): BoardTileActions {
-  return { move: vi.fn(), resize: vi.fn(), remove: vi.fn(), startDrag: vi.fn(), customize: vi.fn(), edit: vi.fn() };
+  return {
+    move: vi.fn(),
+    moveToEdge: vi.fn(),
+    resize: vi.fn(),
+    resizeSpacer: vi.fn(),
+    toggleBackground: vi.fn(),
+    remove: vi.fn(),
+    startDrag: vi.fn(),
+    customize: vi.fn(),
+    edit: vi.fn(),
+  };
 }
 
 function renderTile(editing: boolean, handlers = actions()) {

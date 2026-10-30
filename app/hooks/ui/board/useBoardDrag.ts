@@ -3,31 +3,62 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 
-import { BOARD_TILE_SELECTOR, DRAG_REORDER_TRAVEL_PX } from "./constants";
+import { REDUCED_MOTION_QUERY } from "../constants";
+import { useMediaQuery } from "../useMediaQuery";
+import { BOARD_TILE_SELECTOR, DRAG_DWELL_MS, DRAG_REORDER_TRAVEL_PX } from "./constants";
 import {
   autoscrollDelta,
+  clipParentOf,
   createGhost,
   insertsBefore,
+  landGhost,
+  liftGhost,
+  moveToNewRow,
+  openSpaceTarget,
   placeGhost,
   reorderAround,
   sameOrder,
   sameTarget,
   scrollParentOf,
   swapItems,
+  tileBoxes,
   tileUnderPointer,
   travelled,
   viewportOf,
 } from "./helpers";
 import type { BoardDragItem, BoardDragState, DropTarget, PointerPoint, UseBoardDragOptions } from "./types";
 
+function dropInto<T extends BoardDragItem>(
+  items: readonly T[],
+  id: string,
+  intent: DropTarget,
+  sameSlot: UseBoardDragOptions<T>["sameSlot"]
+): T[] {
+  if (intent.kind === "newRow") return moveToNewRow(items, id);
+  const dragged = items.find((item) => item.id === id);
+  const over = items.find((item) => item.id === intent.id);
+  const swap =
+    intent.kind === "tile" && dragged !== undefined && over !== undefined && sameSlot?.(dragged, over) === true;
+  return swap ? swapItems(items, id, intent.id) : reorderAround(items, id, intent.id, intent.before);
+}
+
 export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptions<T>): BoardDragState<T> {
   const [order, setOrder] = useState<T[] | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const optionsRef = useRef(options);
   optionsRef.current = options;
+  const stillnessRef = useRef(false);
+  stillnessRef.current = useMediaQuery(REDUCED_MOTION_QUERY);
   const cancelRef = useRef<(() => void) | null>(null);
+  const landedRef = useRef<(() => void) | null>(null);
 
-  useEffect(() => () => cancelRef.current?.(), []);
+  useEffect(
+    () => () => {
+      cancelRef.current?.();
+      landedRef.current?.();
+    },
+    []
+  );
 
   const startDrag = useCallback((event: ReactPointerEvent<HTMLElement>, id: string) => {
     if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -38,6 +69,7 @@ export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptio
     if (!ghost) return;
     event.preventDefault();
     cancelRef.current?.();
+    landedRef.current?.();
 
     const start = [...optionsRef.current.items];
     let current = start;
@@ -48,12 +80,19 @@ export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptio
     let last: PointerPoint = { x: event.clientX, y: event.clientY };
     let settledAt: PointerPoint = last;
     let lastTarget: DropTarget | null = null;
+    let pending: DropTarget | null = null;
+    let pendingSince = 0;
     let frame = 0;
 
     placeGhost(ghost, last, offset);
+    if (!stillnessRef.current) liftGhost(ghost);
     handle.setPointerCapture(pointerId);
     setDraggingId(id);
     setOrder(start);
+
+    const nextFrame = () => {
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
 
     const tick = () => {
       frame = 0;
@@ -62,23 +101,48 @@ export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptio
       if (delta !== 0) {
         const before = scroller.scrollTop;
         scroller.scrollTop += delta;
-        if (scroller.scrollTop !== before) frame = requestAnimationFrame(tick);
+        if (scroller.scrollTop !== before) nextFrame();
       }
-      if (optionsRef.current.settling?.()) return;
+      if (optionsRef.current.settling?.()) {
+        if (pending) nextFrame();
+        return;
+      }
       if (travelled(settledAt, last) < DRAG_REORDER_TRAVEL_PX) return;
-      const target = tileUnderPointer(last, id, tile.parentElement);
+      const grid = tile.parentElement;
+      if (!grid) return;
+      const target = tileUnderPointer(last, id, grid);
       const targetId = target?.dataset.boardTile;
-      if (!target || !targetId) return;
-      const intent: DropTarget = {
-        id: targetId,
-        before: insertsBefore(target.getBoundingClientRect(), last, tile.getBoundingClientRect()),
-      };
-      if (sameTarget(lastTarget, intent)) return;
+      const intent: DropTarget | null =
+        target && targetId
+          ? {
+              kind: "tile",
+              id: targetId,
+              before: insertsBefore(target.getBoundingClientRect(), last, tile.getBoundingClientRect()),
+            }
+          : openSpaceTarget(last, {
+              tiles: tileBoxes(
+                grid,
+                current.filter((item) => item.id !== id).map((item) => item.id)
+              ),
+              grid: grid.getBoundingClientRect(),
+              viewport: viewportOf(clipParentOf(tile)),
+              placeholder: tile.getBoundingClientRect(),
+            });
+      if (!intent || sameTarget(lastTarget, intent)) {
+        pending = null;
+        return;
+      }
+      if (!sameTarget(pending, intent)) {
+        pending = intent;
+        pendingSince = performance.now();
+      }
+      if (performance.now() - pendingSince < DRAG_DWELL_MS) {
+        nextFrame();
+        return;
+      }
+      pending = null;
       lastTarget = intent;
-      const dragged = current.find((item) => item.id === id);
-      const over = current.find((item) => item.id === targetId);
-      const swap = dragged !== undefined && over !== undefined && optionsRef.current.sameSlot?.(dragged, over) === true;
-      const next = swap ? swapItems(current, id, targetId) : reorderAround(current, id, targetId, intent.before);
+      const next = dropInto(current, id, intent, optionsRef.current.sameSlot);
       if (sameOrder(next, current)) return;
       current = next;
       settledAt = last;
@@ -88,7 +152,7 @@ export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptio
     const onMove = (moveEvent: PointerEvent) => {
       if (moveEvent.pointerId !== pointerId) return;
       last = { x: moveEvent.clientX, y: moveEvent.clientY };
-      if (!frame) frame = requestAnimationFrame(tick);
+      nextFrame();
     };
 
     const finish = (commit: boolean) => {
@@ -97,12 +161,31 @@ export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptio
       window.removeEventListener("pointercancel", onCancel);
       window.removeEventListener("keydown", onKey, true);
       if (frame) cancelAnimationFrame(frame);
-      ghost.remove();
       if (handle.hasPointerCapture(pointerId)) handle.releasePointerCapture(pointerId);
       cancelRef.current = null;
       if (commit && !sameOrder(current, start)) optionsRef.current.onDrop(current);
-      setOrder(null);
-      setDraggingId(null);
+      else setOrder(null);
+
+      const landed = () => {
+        if (landedRef.current !== landed) return;
+        landedRef.current = null;
+        ghost.remove();
+        setOrder(null);
+        setDraggingId(null);
+      };
+      landedRef.current = landed;
+      if (stillnessRef.current) {
+        landed();
+        return;
+      }
+      requestAnimationFrame(() => {
+        if (landedRef.current !== landed) return;
+        if (!tile.isConnected) {
+          landed();
+          return;
+        }
+        void landGhost(ghost, tile.getBoundingClientRect()).finished.then(landed, landed);
+      });
     };
 
     const onUp = (upEvent: PointerEvent) => {

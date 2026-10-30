@@ -1,0 +1,85 @@
+---
+const SVGS = import.meta.glob<string>("../../../node_modules/lucide-static/icons/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+
+const NAMES = [
+  "activity",
+  "album",
+  "audio-lines",
+  "audio-waveform",
+  "bookmark",
+  "cake",
+  "calendar-clock",
+  "calendar-days",
+  "chart-column",
+  "clock",
+  "coffee",
+  "compass",
+  "crown",
+  "disc-3",
+  "download",
+  "drum",
+  "ear",
+  "flame",
+  "gem",
+  "globe",
+  "guitar",
+  "headphones",
+  "heart",
+  "history",
+  "hourglass",
+  "house",
+  "leaf",
+  "library",
+  "list-music",
+  "map",
+  "medal",
+  "mic-vocal",
+  "moon",
+  "mountain",
+  "music",
+  "music-2",
+  "orbit",
+  "package-check",
+  "party-popper",
+  "piano",
+  "radio",
+  "repeat",
+  "rocket",
+  "rotate-ccw",
+  "shuffle",
+  "snowflake",
+  "sparkles",
+  "star",
+  "sun",
+  "sunrise",
+  "target",
+  "trending-up",
+  "trophy",
+  "user",
+  "users",
+  "wand-sparkles",
+  "waves",
+  "zap",
+];
+
+const icons = NAMES.map((name) => {
+  const svg = SVGS[`../../../node_modules/lucide-static/icons/${name}.svg`];
+  if (!svg) throw new Error(`Widget icon ${name} is not in lucide-static`);
+  return { name, svg };
+});
+---
+
+<ul class="not-prose my-5 grid list-none grid-cols-2 gap-x-4 gap-y-2 p-0 sm:grid-cols-3">
+  {
+    icons.map(({ name, svg }) => (
+      <li class="text-fg-muted flex items-center gap-2.5 font-mono text-[13px]">
+        <span class="text-fg inline-flex size-5 shrink-0 [&>svg]:size-5" set:html={svg} aria-hidden="true" />
+        {name}
+      </li>
+    ))
+  }
+</ul>

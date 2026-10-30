@@ -1,12 +1,15 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { AUTOSCROLL_EDGE_PX, AUTOSCROLL_STEP_PX } from "../constants";
+import { AUTOSCROLL_EDGE_PX, AUTOSCROLL_STEP_PX, BOARD_FLIP_MS, BOARD_FLIP_SETTLE_MS } from "../constants";
 import {
   autoscrollDelta,
+  clipParentOf,
   createGhost,
   focusBoardTile,
   insertsBefore,
   measureTiles,
+  moveToNewRow,
+  openSpaceTarget,
   placeGhost,
   reorderAround,
   sameOrder,
@@ -18,11 +21,12 @@ import {
   travelled,
   viewportOf,
 } from "../helpers";
+import type { BoardDragItem } from "../types";
 
-const A = { id: "a" };
-const B = { id: "b" };
-const C = { id: "c" };
-const D = { id: "d" };
+const A: BoardDragItem = { id: "a" };
+const B: BoardDragItem = { id: "b" };
+const C: BoardDragItem = { id: "c" };
+const D: BoardDragItem = { id: "d" };
 
 function ids(list: readonly { id: string }[]): string {
   return list.map((item) => item.id).join("");
@@ -86,6 +90,17 @@ describe("autoscrollDelta", () => {
 describe("scrollParentOf and viewportOf", () => {
   afterEach(() => {
     document.body.innerHTML = "";
+  });
+
+  it("bounds a board by its overflow container even while it has nothing to scroll", () => {
+    const idle = document.createElement("div");
+    idle.style.overflowY = "auto";
+    const tile = document.createElement("div");
+    idle.appendChild(tile);
+    document.body.appendChild(idle);
+
+    expect(clipParentOf(tile)).toBe(idle);
+    expect(scrollParentOf(tile)).toBe(document.documentElement);
   });
 
   it("finds the nearest ancestor that actually scrolls", () => {
@@ -181,8 +196,8 @@ describe("ghost", () => {
     expect(ghost.className).toContain("pointer-events-none");
     expect(ghost.style.position).toBe("fixed");
     expect(ghost.style.width).toBe("300px");
-    expect(ghost.style.left).toBe("100px");
-    expect(ghost.style.top).toBe("50px");
+    expect(ghost.style.left).toBe("0px");
+    expect(ghost.style.top).toBe("0px");
   });
 });
 
@@ -196,9 +211,74 @@ describe("swapItems", () => {
 
 describe("sameTarget", () => {
   it("is true only for the same tile on the same side", () => {
-    expect(sameTarget({ id: "b", before: true }, { id: "b", before: true })).toBe(true);
-    expect(sameTarget({ id: "b", before: true }, { id: "b", before: false })).toBe(false);
-    expect(sameTarget(null, { id: "b", before: true })).toBe(false);
+    const tile = { kind: "tile", id: "b", before: true } as const;
+
+    expect(sameTarget(tile, { kind: "tile", id: "b", before: true })).toBe(true);
+    expect(sameTarget(tile, { kind: "tile", id: "b", before: false })).toBe(false);
+    expect(sameTarget(tile, { kind: "space", id: "b", before: true })).toBe(false);
+    expect(sameTarget(tile, { kind: "newRow" })).toBe(false);
+    expect(sameTarget({ kind: "newRow" }, { kind: "newRow" })).toBe(true);
+    expect(sameTarget(null, tile)).toBe(false);
+  });
+});
+
+describe("new rows", () => {
+  it("sends the dragged item to the end of the board on a row of its own", () => {
+    const next = moveToNewRow([A, B, C], "a");
+
+    expect(ids(next)).toBe("bca");
+    expect(next[2]?.newRow).toBe(true);
+  });
+
+  it("drops the new row of an item placed beside another one", () => {
+    const next = reorderAround([{ ...A, newRow: true }, B, C], "a", "c", true);
+
+    expect(ids(next)).toBe("bac");
+    expect(next[1]?.newRow).toBeFalsy();
+  });
+
+  it("leaves a new row on its slot when two items swap, so the layout around them holds", () => {
+    const next = swapItems([A, { ...B, newRow: true }, C], "a", "b");
+
+    expect(ids(next)).toBe("bac");
+    expect(next[0]?.newRow).toBeFalsy();
+    expect(next[1]?.newRow).toBe(true);
+  });
+
+  it("counts a new row as a change, so a drop that only adds one still saves", () => {
+    expect(sameOrder([A, B], [A, { ...B, newRow: true }])).toBe(false);
+  });
+});
+
+describe("openSpaceTarget", () => {
+  const box = (left: number, top: number, width = 100, height = 100) => ({ left, top, width, height });
+  const space = {
+    tiles: [
+      { id: "a", rect: box(0, 0) },
+      { id: "b", rect: box(110, 0) },
+      { id: "c", rect: box(0, 110) },
+    ],
+    grid: box(0, 0, 330, 210),
+    viewport: { top: 0, bottom: 500 },
+    placeholder: box(220, 0),
+  };
+
+  it("takes a cell with nothing in it as the place after the tile before it", () => {
+    expect(openSpaceTarget({ x: 150, y: 150 }, space)).toEqual({ kind: "space", id: "c", before: false });
+  });
+
+  it("starts a new row below the last tile", () => {
+    expect(openSpaceTarget({ x: 50, y: 300 }, space)).toEqual({ kind: "newRow" });
+  });
+
+  it("does nothing while the pointer is on the dragged tile's own slot", () => {
+    expect(openSpaceTarget({ x: 250, y: 50 }, space)).toBeNull();
+  });
+
+  it("ignores a pointer beside the board, above it or below what the scroller shows", () => {
+    expect(openSpaceTarget({ x: 400, y: 150 }, space)).toBeNull();
+    expect(openSpaceTarget({ x: 50, y: -10 }, space)).toBeNull();
+    expect(openSpaceTarget({ x: 50, y: 600 }, space)).toBeNull();
   });
 });
 
@@ -216,36 +296,53 @@ describe("slideTiles", () => {
 
   function boardWith(positions: Record<string, number>): HTMLElement {
     document.body.innerHTML = '<div id="board"><div data-board-tile="a"></div><div data-board-tile="b"></div></div>';
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function rectOf(this: HTMLElement) {
-      return DOMRect.fromRect({ x: positions[this.dataset.boardTile ?? ""] ?? 0, y: 0, width: 100, height: 100 });
+    HTMLElement.prototype.animate = vi.fn();
+    vi.spyOn(HTMLElement.prototype, "offsetLeft", "get").mockImplementation(function leftOf(this: HTMLElement) {
+      return positions[this.dataset.boardTile ?? ""] ?? 0;
     });
+    vi.spyOn(HTMLElement.prototype, "offsetTop", "get").mockReturnValue(0);
     const board = document.getElementById("board");
     if (!board) throw new Error("board missing");
     return board;
   }
 
-  it("inverts every tile that moved, except the one being dragged, and says when the slide ends", () => {
+  it("slides every tile that moved from where it was, except the one being dragged, and says when it settles", () => {
     const positions = { a: 0, b: 120 };
     const board = boardWith(positions);
     const before = measureTiles(board);
     positions.a = 120;
     positions.b = 0;
+    const animate = vi.spyOn(HTMLElement.prototype, "animate");
 
-    const result = slideTiles(board, before, "a", 160, 1000);
+    const result = slideTiles(board, before, "a", 1000);
 
-    expect(result.slidUntil).toBe(1160);
+    expect(result.slidUntil).toBe(1000 + BOARD_FLIP_SETTLE_MS);
     expect(result.rects.size).toBe(2);
-    const b = board.querySelector<HTMLElement>('[data-board-tile="b"]');
-    const a = board.querySelector<HTMLElement>('[data-board-tile="a"]');
-    expect(b?.style.transition).toBe("transform 160ms ease");
-    expect(a?.style.transition).toBe("none");
+    expect(animate).toHaveBeenCalledTimes(1);
+    expect(animate.mock.contexts[0]).toBe(board.querySelector('[data-board-tile="b"]'));
+    expect(animate.mock.calls[0]?.[0]).toEqual([
+      { transform: "translate(120px, 0px)" },
+      { transform: "translate(0px, 0px)" },
+    ]);
+  });
+
+  it("adds a slide to one already running, so a tile sent elsewhere mid-flight never jumps", () => {
+    const positions = { a: 0, b: 120 };
+    const board = boardWith(positions);
+    const before = measureTiles(board);
+    positions.b = 0;
+    const animate = vi.spyOn(HTMLElement.prototype, "animate");
+
+    slideTiles(board, before, null, 1000);
+
+    expect(animate.mock.calls[0]?.[1]).toMatchObject({ duration: BOARD_FLIP_MS, composite: "add" });
   });
 
   it("ends at once when nothing moved", () => {
     const board = boardWith({ a: 0, b: 120 });
     const before = measureTiles(board);
 
-    expect(slideTiles(board, before, null, 160, 1000).slidUntil).toBe(1000);
+    expect(slideTiles(board, before, null, 1000).slidUntil).toBe(1000);
   });
 });
 

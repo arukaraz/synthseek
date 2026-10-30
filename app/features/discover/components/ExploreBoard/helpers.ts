@@ -14,14 +14,21 @@ import {
   EDIT_PASSTHROUGH_SELECTOR,
   FALLBACK_BLOCK_HEIGHT,
   NARROW_TILE_SIZE,
+  SPACER_DEFAULT_ROWS,
+  SPACER_DEFAULT_SIZE,
+  SPACER_MAX_ROWS,
+  SPACER_MIN_ROWS,
 } from "./constants";
 import type {
+  BoardBackground,
   BoardCustomWidgets,
+  BoardEdge,
   BoardKeyAction,
   BoardTileLayoutActions,
   CustomWidgetsStatus,
   MoveDelta,
   PlacedTile,
+  WidgetTile,
 } from "./types";
 
 export function blockWidgetAction(event: Pick<MouseEvent, "target" | "preventDefault" | "stopPropagation">): void {
@@ -75,6 +82,7 @@ export function customStatusOf(query: { isLoading: boolean; isError: boolean }):
 
 export function tileNameOf(item: BoardItem, custom: BoardCustomWidgets, status: CustomWidgetsStatus): string {
   if (item.kind === "builtin") return i18n.t(`discover:${BOARD_WIDGETS[item.widget].titleKey}`);
+  if (item.kind === "spacer") return i18n.t("discover:board.spacer.name");
   const widget = custom.get(item.widgetId);
   if (widget) return widget.meta.name;
   return i18n.t(status === "ready" ? "discover:customWidget.deletedName" : "discover:customWidget.unresolvedName");
@@ -84,7 +92,7 @@ export function editableSizesOf(device: BoardDevice): readonly BoardSize[] {
   return device === "narrow" ? [] : BOARD_SIZE_ORDER;
 }
 
-export function tileHeightOf(item: BoardItem, size: BoardSize, custom: BoardCustomWidgets): BoardHeight {
+export function tileHeightOf(item: WidgetTile, size: BoardSize, custom: BoardCustomWidgets): BoardHeight {
   if (item.kind === "builtin") return heightOf(item.widget, size);
   const block = custom.get(item.widgetId)?.view.block;
   return block ? CUSTOM_BLOCK_HEIGHTS[block][size] : FALLBACK_BLOCK_HEIGHT;
@@ -96,15 +104,41 @@ export function tileSpanOf(
   device: BoardDevice,
   custom: BoardCustomWidgets
 ): BoardSpan {
+  if (item.kind === "spacer") return { cols: BOARD_SPANS[device][size].regular.cols, rows: item.rows };
   return BOARD_SPANS[device][size][tileHeightOf(item, size, custom)];
 }
 
 export function sameSlot(a: BoardItem, b: BoardItem, custom: BoardCustomWidgets): boolean {
-  return a.size === b.size && tileHeightOf(a, a.size, custom) === tileHeightOf(b, b.size, custom);
+  const rowsOf = (item: BoardItem) => tileSpanOf(item, item.size, "wide", custom).rows;
+  return a.size === b.size && rowsOf(a) === rowsOf(b);
+}
+
+export function tileHasBackground(item: BoardItem): boolean {
+  return item.background ?? true;
+}
+
+export function boardBackgroundOf(items: readonly BoardItem[]): BoardBackground {
+  const shown = items.filter(tileHasBackground).length;
+  if (shown === items.length) return "on";
+  return shown === 0 ? "off" : "mixed";
+}
+
+export function withBackgrounds(items: readonly BoardItem[], background: boolean): BoardItem[] {
+  return items.map((item) => ({ ...item, background }));
 }
 
 export function orderKeyOf(items: readonly BoardItem[]): string {
-  return items.map((item) => `${item.id}:${item.size}`).join(",");
+  return items
+    .map((item) =>
+      [
+        item.id,
+        item.size,
+        item.newRow ? "row" : "flow",
+        tileHasBackground(item) ? "card" : "bare",
+        item.kind === "spacer" ? item.rows : "",
+      ].join(":")
+    )
+    .join(",");
 }
 
 export function cycleSize(sizes: readonly BoardSize[], current: BoardSize, delta: MoveDelta): BoardSize {
@@ -155,6 +189,10 @@ export function packBoard(items: readonly BoardItem[], device: BoardDevice, cust
   let col = 0;
 
   for (const item of items) {
+    if (item.newRow) {
+      row = placed.reduce((bottom, tile) => Math.max(bottom, tile.row + tile.rows), 0);
+      col = 0;
+    }
     const size = displayedSize(item, device);
     const span = tileSpanOf(item, size, device, custom);
     const cols = Math.min(span.cols, columns);
@@ -191,12 +229,37 @@ export function moveItem(items: readonly BoardItem[], id: string, toIndex: numbe
   if (target === from) return [...items];
   const next = [...items];
   const [moved] = next.splice(from, 1);
-  next.splice(target, 0, moved);
+  next.splice(target, 0, { ...moved, newRow: undefined });
   return next;
+}
+
+export function moveItemToEdge(items: readonly BoardItem[], id: string, edge: BoardEdge): BoardItem[] {
+  return moveItem(items, id, edge === "top" ? 0 : items.length - 1);
 }
 
 export function resizeItem(items: readonly BoardItem[], id: string, size: BoardSize): BoardItem[] {
   return items.map((item) => (item.id === id ? { ...item, size } : item));
+}
+
+export function toggleBackground(items: readonly BoardItem[], id: string): BoardItem[] {
+  return items.map((item) => (item.id === id ? { ...item, background: !tileHasBackground(item) } : item));
+}
+
+export function resizeSpacer(items: readonly BoardItem[], id: string, delta: MoveDelta): BoardItem[] {
+  return items.map((item) =>
+    item.id === id && item.kind === "spacer"
+      ? { ...item, rows: Math.max(SPACER_MIN_ROWS, Math.min(SPACER_MAX_ROWS, item.rows + delta)) }
+      : item
+  );
+}
+
+export function appendSpacer(items: readonly BoardItem[], id: string): BoardItem[] {
+  return [...items, { kind: "spacer", id, size: SPACER_DEFAULT_SIZE, rows: SPACER_DEFAULT_ROWS }];
+}
+
+export function shownItems(items: readonly BoardItem[], device: BoardDevice, editing: boolean): BoardItem[] {
+  if (device === "wide" || editing) return [...items];
+  return items.filter((item) => item.kind !== "spacer" || tileHasBackground(item));
 }
 
 export function removeItem(items: readonly BoardItem[], id: string): BoardItem[] {

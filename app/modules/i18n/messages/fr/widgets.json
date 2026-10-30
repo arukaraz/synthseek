@@ -3,8 +3,7 @@
     "tabs": {
       "label": "Listes de widgets",
       "widgets": "Widgets",
-      "mine": "Mes widgets",
-      "board": "Tableau"
+      "mine": "Mes widgets"
     },
     "filter": {
       "category": "Catégorie",
@@ -22,6 +21,7 @@
   },
   "mine": {
     "label": "Mes widgets",
+    "subtitle": "Les widgets que vous avez créés ou personnalisés. Ajoutez-en un au tableau, modifiez-le ou copiez son JSON pour le partager.",
     "empty": "Vous n’avez encore créé aucun widget. Commencez avec la carte +.",
     "newWidget": "Nouveau widget",
     "fromJson": "Depuis un JSON",
@@ -56,22 +56,26 @@
     "appearance": {
       "title": "Apparence",
       "density": "Densité",
-      "densityHint": "Espace entre les widgets et hauteur de chaque rangée",
       "densities": {
         "compact": "Compacte",
         "comfortable": "Confortable",
         "spacious": "Aérée"
       },
       "text": "Texte",
-      "textHint": "Taille du texte dans les widgets",
       "texts": {
         "small": "Petit",
         "default": "Normal",
         "large": "Grand"
+      },
+      "background": "Fond",
+      "backgrounds": {
+        "on": "Oui",
+        "off": "Non"
       }
     },
     "templates": {
       "title": "Modèles",
+      "docs": "Documentation",
       "export": "Exporter ce tableau",
       "exportHint": "JSON avec vos widgets, leurs tailles et cette apparence.",
       "name": "Nom du modèle",
@@ -138,7 +142,7 @@
     "invalidField": "Cette valeur n’est pas valide."
   },
   "kinds": {
-    "question": "Recette",
+    "recipe": "Recette",
     "feed": "Flux",
     "recap": "Bilan"
   },

@@ -3,8 +3,7 @@
     "tabs": {
       "label": "Widget lists",
       "widgets": "Widgets",
-      "mine": "My widgets",
-      "board": "Board"
+      "mine": "My widgets"
     },
     "filter": {
       "category": "Category",
@@ -22,6 +21,7 @@
   },
   "mine": {
     "label": "My widgets",
+    "subtitle": "Widgets you built or customized. Add one to the board, edit it, or copy its JSON to share it.",
     "empty": "You have not built a widget yet. Start one with the + card.",
     "newWidget": "New widget",
     "fromJson": "From JSON",
@@ -56,22 +56,26 @@
     "appearance": {
       "title": "Appearance",
       "density": "Density",
-      "densityHint": "Space between widgets and the height of each row",
       "densities": {
         "compact": "Compact",
         "comfortable": "Comfortable",
         "spacious": "Spacious"
       },
       "text": "Text",
-      "textHint": "Size of the text inside widgets",
       "texts": {
         "small": "Small",
         "default": "Default",
         "large": "Large"
+      },
+      "background": "Background",
+      "backgrounds": {
+        "on": "On",
+        "off": "Off"
       }
     },
     "templates": {
       "title": "Templates",
+      "docs": "Documentation",
       "export": "Export this board",
       "exportHint": "JSON with your widgets, their sizes and this look.",
       "name": "Template name",
@@ -138,7 +142,7 @@
     "invalidField": "This value is not valid."
   },
   "kinds": {
-    "question": "Recipe",
+    "recipe": "Recipe",
     "feed": "Feed",
     "recap": "Recap"
   },

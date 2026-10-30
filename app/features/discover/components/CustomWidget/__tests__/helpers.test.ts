@@ -6,8 +6,8 @@ import {
   createFeedAlbumResult,
   createFeedAlbumRow,
   createMatrixResult,
-  createQuestionAlbumRow,
-  createQuestionTrackRow,
+  createRecipeAlbumRow,
+  createRecipeTrackRow,
   createSeriesResult,
   createServerPlaylistResult,
   createServerPlaylistRow,
@@ -49,26 +49,24 @@ function onlyItem(items: WidgetItem[]): WidgetItem {
 
 describe("widgetItemsOf", () => {
   it("shows a played track with its measure and plays it by its library id", () => {
-    const item = onlyItem(widgetItemsOf(createTrackResult([createQuestionTrackRow()]), undefined));
+    const item = onlyItem(widgetItemsOf(createTrackResult([createRecipeTrackRow()]), undefined));
     expect(item).toMatchObject({ title: "Song One", subtitle: "Artist A", value: "12 plays", date: "2026-10-28" });
     expect(item.play).toEqual({ kind: "tracks", trackIds: ["req-1"] });
     expect(item.request).toBeNull();
   });
 
   it("offers no playback for a track that is not in the library", () => {
-    const item = onlyItem(widgetItemsOf(createTrackResult([createQuestionTrackRow({ inLibrary: false })]), undefined));
+    const item = onlyItem(widgetItemsOf(createTrackResult([createRecipeTrackRow({ inLibrary: false })]), undefined));
     expect(item.play).toBeNull();
   });
 
   it("opens and requests an album by its catalog id and plays it only when it is in the library", () => {
-    const owned = onlyItem(widgetItemsOf(createAlbumResult([createQuestionAlbumRow()]), undefined));
+    const owned = onlyItem(widgetItemsOf(createAlbumResult([createRecipeAlbumRow()]), undefined));
     expect(owned.play).toEqual({ kind: "album", albumExternalId: "dz-album-1" });
     expect(owned.open).toMatchObject({ mode: "album", id: "dz-album-1" });
     expect(owned.request).toMatchObject({ type: "album", id: "dz-album-1", name: "Album One" });
 
-    const missing = onlyItem(
-      widgetItemsOf(createAlbumResult([createQuestionAlbumRow({ inLibrary: false })]), undefined)
-    );
+    const missing = onlyItem(widgetItemsOf(createAlbumResult([createRecipeAlbumRow({ inLibrary: false })]), undefined));
     expect(missing.play).toBeNull();
     expect(missing.request).not.toBeNull();
   });
@@ -111,7 +109,7 @@ describe("widgetItemsOf", () => {
   });
 
   it("reads a bound field for a slot and falls back when the field is missing", () => {
-    const result = createTrackResult([createQuestionTrackRow()]);
+    const result = createTrackResult([createRecipeTrackRow()]);
     expect(onlyItem(widgetItemsOf(result, { subtitle: "album" })).subtitle).toBe("Album A");
     expect(onlyItem(widgetItemsOf(result, { subtitle: "nope" })).subtitle).toBe("Artist A");
   });
@@ -151,12 +149,12 @@ describe("widgetStatsOf", () => {
   });
 
   it("has no stats for a ranked result", () => {
-    expect(widgetStatsOf(createTrackResult([createQuestionTrackRow()]))).toEqual([]);
+    expect(widgetStatsOf(createTrackResult([createRecipeTrackRow()]))).toEqual([]);
   });
 });
 
 describe("itemControls", () => {
-  const item = onlyItem(widgetItemsOf(createAlbumResult([createQuestionAlbumRow()]), undefined));
+  const item = onlyItem(widgetItemsOf(createAlbumResult([createRecipeAlbumRow()]), undefined));
 
   it("puts a play button on the cover and opens the details on select", () => {
     const calls = handlers();
@@ -206,7 +204,7 @@ describe("moveOf and moveText", () => {
     expect(moveText({ kind: "rank", by: -2 })).toBe("Down 2");
   });
 
-  it("measures the change of any other measure only when the question compares", () => {
+  it("measures the change of any other measure only when the recipe compares", () => {
     expect(moveOf("plays", { value: 12, prev: 9 }, true)).toEqual({ kind: "value", by: 3 });
     expect(moveOf("plays", { value: 12, prev: null }, true)).toEqual({ kind: "new" });
     expect(moveOf("plays", { value: 12, prev: 9 }, false)).toBeNull();
@@ -215,7 +213,7 @@ describe("moveOf and moveText", () => {
   });
 
   it("carries the move of a compared track row into its item", () => {
-    const result = { ...createTrackResult([createQuestionTrackRow({ value: 5, prev: 8 })]), previous: WINDOW };
+    const result = { ...createTrackResult([createRecipeTrackRow({ value: 5, prev: 8 })]), previous: WINDOW };
     expect(onlyItem(widgetItemsOf(result, undefined)).move).toEqual({ kind: "value", by: -3 });
   });
 });
@@ -287,7 +285,7 @@ describe("suggestBlocks", () => {
     ]);
   });
 
-  it("offers views that need a comparison only when the question compares", () => {
+  it("offers views that need a comparison only when the recipe compares", () => {
     expect(suggestBlocks(contracts, { shape: "buckets", compare: true, dailyYear: false })).toEqual([
       "share",
       "bars",

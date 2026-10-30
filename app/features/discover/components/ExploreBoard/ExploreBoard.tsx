@@ -12,11 +12,20 @@ import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import { useBoardEditor } from "../../hooks/useBoardEditor";
 import { BoardArrangeDialog } from "../BoardArrange/BoardArrangeDialog";
+import { BoardTemplatesDialog } from "../BoardSettings/BoardTemplatesDialog";
 import { WidgetGallery } from "../WidgetGallery/WidgetGallery";
 import { BoardEmpty } from "./BoardEmpty";
 import { BoardTile } from "./BoardTile";
 import { BoardToolbar } from "./BoardToolbar";
-import { boardItemsOf, customStatusOf, customWidgetsById, packBoard, placementsById } from "./helpers";
+import {
+  boardBackgroundOf,
+  boardItemsOf,
+  customStatusOf,
+  customWidgetsById,
+  packBoard,
+  placementsById,
+  shownItems,
+} from "./helpers";
 import { boardRoot, liveRegion } from "./styles";
 
 export function ExploreBoard() {
@@ -30,14 +39,18 @@ export function ExploreBoard() {
   const customStatus = customStatusOf(myWidgets);
   const editor = useBoardEditor(items, custom, customStatus);
   const placements = useMemo(
-    () => placementsById(packBoard(editor.displayItems, device, custom)),
-    [editor.displayItems, device, custom]
+    () => placementsById(packBoard(shownItems(editor.displayItems, device, editor.editing), device, custom)),
+    [editor.displayItems, editor.editing, device, custom]
   );
 
   if (isLoading) return <SectionLoading />;
 
   return (
-    <section ref={editor.rootRef} className={boardRoot()} aria-label={t("board.regionLabel")}>
+    <section
+      ref={editor.rootRef}
+      className={boardRoot({ editing: editor.editing })}
+      aria-label={t("board.regionLabel")}
+    >
       {items.length === 0 ? (
         <BoardEmpty onAddWidget={editor.openGallery} />
       ) : (
@@ -62,22 +75,25 @@ export function ExploreBoard() {
           })}
         </BoardGrid>
       )}
-      {items.length > 0 ? (
-        <BoardToolbar
-          editing={editor.editing}
-          onCustomize={editor.startEditing}
-          onDone={editor.stopEditing}
-          onAddWidget={editor.openGallery}
-          onArrange={editor.openArrange}
-        />
-      ) : null}
+      <BoardToolbar
+        editing={editor.editing}
+        onCustomize={editor.startEditing}
+        onDone={editor.stopEditing}
+        onManageWidgets={editor.openGallery}
+        onAddSpacer={editor.addSpacer}
+        onArrange={editor.openArrange}
+        onTemplates={editor.openTemplates}
+        background={boardBackgroundOf(items)}
+        onBackground={editor.setBackgrounds}
+      />
       <p className={liveRegion()} aria-live="polite">
         {editor.announcement}
       </p>
-      {editor.arrangeOpen ? (
+      {editor.arrangeWidth !== null ? (
         <BoardArrangeDialog
           items={items}
           device={device}
+          boardWidth={editor.arrangeWidth}
           appearance={appearance.data}
           custom={custom}
           customStatus={customStatus}
@@ -92,8 +108,17 @@ export function ExploreBoard() {
           onAdd={editor.add}
           onAddCustom={editor.addCustom}
           onRemove={editor.actions.remove}
-          onTemplateApplied={editor.templateApplied}
           onClose={() => editor.setGalleryOpen(false)}
+        />
+      ) : null}
+      {editor.templatesOpen ? (
+        <BoardTemplatesDialog
+          items={items}
+          onApplied={(applied) => {
+            editor.templateApplied(applied);
+            editor.closeTemplates();
+          }}
+          onClose={editor.closeTemplates}
         />
       ) : null}
     </section>

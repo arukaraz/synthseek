@@ -1,10 +1,10 @@
-import type { FeedQuery, QuestionQuery, RecapQuery, WidgetDraft } from "@hooks/api/queries/widgets/types";
+import type { FeedQuery, RecipeQuery, RecapQuery, WidgetDraft } from "@hooks/api/queries/widgets/types";
 
 export const DEFAULT_RECAP: RecapQuery = { type: "recap", period: { mode: "named", value: "thisYear" } };
 
-export const DEFAULT_QUERIES: { question: QuestionQuery; feed: FeedQuery } = {
-  question: {
-    type: "question",
+export const DEFAULT_QUERIES: { recipe: RecipeQuery; feed: FeedQuery } = {
+  recipe: {
+    type: "recipe",
     subject: "tracks",
     measure: "plays",
     time: { mode: "relative", days: 30 },
@@ -22,7 +22,7 @@ export const NEW_WIDGET_DRAFT: WidgetDraft = {
   kind: "synthseek-widget",
   schemaVersion: 2,
   meta: { name: "", description: "", icon: "sparkles", accent: "weekly", visibility: "private" },
-  query: DEFAULT_QUERIES.question,
+  query: DEFAULT_QUERIES.recipe,
   view: { block: "list", action: "play" },
   defaultSize: "M",
   basedOn: null,

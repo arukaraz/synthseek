@@ -36,7 +36,13 @@ export interface PlacedTile {
   rows: number;
 }
 
+export type WidgetTile = Exclude<BoardItem, { kind: "spacer" }>;
+
 export type MoveDelta = -1 | 1;
+
+export type BoardEdge = "top" | "bottom";
+
+export type BoardBackground = "on" | "off" | "mixed";
 
 export type BoardKeyAction =
   | { kind: "move"; delta: MoveDelta }
@@ -45,7 +51,10 @@ export type BoardKeyAction =
 
 export interface BoardTileLayoutActions {
   move: (id: string, delta: MoveDelta) => void;
+  moveToEdge: (id: string, edge: BoardEdge) => void;
   resize: (id: string, size: BoardSize) => void;
+  resizeSpacer: (id: string, delta: MoveDelta) => void;
+  toggleBackground: (id: string) => void;
   remove: (id: string) => void;
   startDrag: (event: ReactPointerEvent<HTMLElement>, id: string) => void;
 }
@@ -79,12 +88,33 @@ export interface BoardTileEditControlsProps {
   actions: BoardTileActions;
 }
 
+export interface TileMenuOpener {
+  icon: LucideIcon;
+  label: string;
+  onSelect: () => void;
+}
+
+export interface TileSettingsMenuProps {
+  item: BoardItem;
+  device: BoardDevice;
+  name: string;
+  position: number;
+  total: number;
+  dense?: boolean;
+  actions: BoardTileLayoutActions;
+  opener?: TileMenuOpener;
+}
+
 export interface BoardTileWidgetProps {
   item: BoardItem;
   size: BoardSize;
   custom: BoardCustomWidgets;
   customStatus: CustomWidgetsStatus;
   info?: boolean;
+}
+
+export interface BoardTileContentProps extends BoardTileWidgetProps {
+  info: boolean;
 }
 
 export interface BoardTileSizesProps {
@@ -99,8 +129,12 @@ export interface BoardToolbarProps {
   editing: boolean;
   onCustomize: () => void;
   onDone: () => void;
-  onAddWidget: () => void;
+  onManageWidgets: () => void;
+  onAddSpacer: () => void;
   onArrange: () => void;
+  onTemplates: () => void;
+  background: BoardBackground;
+  onBackground: (shown: boolean) => void;
 }
 
 export interface BoardEmptyProps {
@@ -111,7 +145,8 @@ export interface BoardEditor {
   rootRef: RefObject<HTMLElement | null>;
   editing: boolean;
   galleryOpen: boolean;
-  arrangeOpen: boolean;
+  templatesOpen: boolean;
+  arrangeWidth: number | null;
   announcement: string;
   displayItems: BoardItem[];
   draggingId: string | null;
@@ -121,10 +156,14 @@ export interface BoardEditor {
   setGalleryOpen: (open: boolean) => void;
   openArrange: () => void;
   closeArrange: () => void;
+  openTemplates: () => void;
+  closeTemplates: () => void;
   saveArrangement: (next: BoardItem[]) => void;
   galleryTarget: BoardGalleryTarget | null;
   add: (widget: BoardWidgetKey) => void;
   addCustom: (widget: WidgetDocument) => void;
+  addSpacer: () => void;
+  setBackgrounds: (shown: boolean) => void;
   templateApplied: (applied: BoardTemplateApplied) => void;
   actions: BoardTileActions;
 }

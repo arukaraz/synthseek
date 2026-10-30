@@ -187,10 +187,20 @@
     "customize": "Anpassen",
     "done": "Fertig",
     "addWidget": "Widget hinzufügen",
+    "manageWidgets": "Widgets verwalten",
+    "add": {
+      "action": "Hinzufügen"
+    },
+    "spacer": {
+      "name": "Abstandshalter",
+      "shorter": "Abstandshalter niedriger machen",
+      "taller": "Abstandshalter höher machen"
+    },
     "arrange": {
       "action": "Anordnen",
       "title": "Board anordnen",
-      "hint": "Zieh ein Widget, um es zu verschieben, und wähl in seiner Leiste die Größe oder entferne es. Erst beim Speichern ändert sich etwas.",
+      "hint": "Zieh ein Widget, um es zu verschieben, oder lass es unter dem Board los, um eine neue Reihe zu beginnen. Erst beim Speichern ändert sich etwas.",
+      "newRow": "Neue Reihe",
       "empty": "Dein Board wird leer sein.",
       "cancel": "Abbrechen",
       "save": "Änderungen speichern",
@@ -202,8 +212,13 @@
       }
     },
     "tile": {
-      "moveEarlier": "{{name}} nach vorne verschieben",
-      "moveLater": "{{name}} nach hinten verschieben",
+      "settings": "Einstellungen für {{name}}",
+      "moveEarlier": "Nach vorne verschieben",
+      "moveLater": "Nach hinten verschieben",
+      "moveTop": "Ganz nach oben",
+      "moveBottom": "Ganz nach unten",
+      "backgroundOn": "Hintergrund anzeigen",
+      "backgroundOff": "Hintergrund ausblenden",
       "remove": "{{name}} entfernen",
       "drag": "{{name}} ziehen",
       "sizes": "Größe von {{name}}",
@@ -220,8 +235,10 @@
       "L": "Groß"
     },
     "gallery": {
-      "title": "Widget hinzufügen",
+      "title": "Widgets verwalten",
       "subtitle": "Hinzufügen setzt ein Widget ans Ende des Boards, dort änderst du die Größe. Anpassen öffnet eine Kopie in der Werkstatt.",
+      "seeMore": "Mehr anzeigen",
+      "seeLess": "Weniger anzeigen",
       "summary": "{{onBoard}} von {{total}} auf deinem Board. Ein neues Widget landet am Ende, danach verschiebst du es, wohin du willst.",
       "search": "Widgets suchen",
       "all": "Alle",
@@ -237,6 +254,8 @@
       "added": "{{name}} am Ende hinzugefügt",
       "removed": "{{name}} entfernt",
       "moved": "Board-Layout gespeichert",
+      "backgroundsOn": "Hintergrund für alle Widgets eingeschaltet",
+      "backgroundsOff": "Hintergrund für alle Widgets ausgeschaltet",
       "undo": "Rückgängig"
     },
     "announce": {

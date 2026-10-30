@@ -15,7 +15,7 @@ export const GALLERY_CATEGORY_ICONS: Record<BoardCategory, LucideIcon> = {
   library: Library,
 };
 
-export const GALLERY_MODES: readonly GalleryMode[] = ["widgets", "mine", "board"];
+export const GALLERY_MODES: readonly GalleryMode[] = ["widgets", "mine"];
 
 export const GALLERY_SORTS: readonly GallerySort[] = ["suggested", "name", "category", "onBoardFirst"];
 

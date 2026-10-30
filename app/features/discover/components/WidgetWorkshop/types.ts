@@ -4,7 +4,7 @@ import type { BoardSize } from "@hooks/api/queries/board/types";
 import type {
   FeedQuery,
   HouseholdMember,
-  QuestionQuery,
+  RecipeQuery,
   RecapPeriod,
   RecapQuery,
   WidgetAccent,
@@ -19,20 +19,20 @@ import type {
   WidgetResult,
 } from "@hooks/api/queries/widgets/types";
 
-export type WidgetKind = "question" | "feed";
-export type RecipeSubject = QuestionQuery["subject"] | "recap";
+export type WidgetKind = "recipe" | "feed";
+export type WorkshopSubject = RecipeQuery["subject"] | "recap";
 export type RecapNamedPeriod = Extract<RecapPeriod, { mode: "named" }>["value"];
-export type QuestionTime = QuestionQuery["time"];
-export type QuestionSubject = QuestionQuery["subject"];
-export type QuestionMeasure = QuestionQuery["measure"];
-export type QuestionGroupBy = NonNullable<QuestionQuery["groupBy"]>;
-export type WidgetRules = NonNullable<QuestionQuery["rules"]>;
+export type RecipeTime = RecipeQuery["time"];
+export type RecipeSubject = RecipeQuery["subject"];
+export type RecipeMeasure = RecipeQuery["measure"];
+export type RecipeGroupBy = NonNullable<RecipeQuery["groupBy"]>;
+export type WidgetRules = NonNullable<RecipeQuery["rules"]>;
 export type WidgetRule = NonNullable<WidgetRules["all"]>[number];
 export type RuleField = WidgetRule["field"];
 export type RuleMode = "all" | "any";
 export type GrammarSubject = WidgetGrammar["subjects"][number];
-export type TimeMode = QuestionTime["mode"];
-export type NamedPeriod = Extract<QuestionTime, { mode: "named" }>["value"];
+export type TimeMode = RecipeTime["mode"];
+export type NamedPeriod = Extract<RecipeTime, { mode: "named" }>["value"];
 export type FeedSource = FeedQuery["source"];
 export type FeedSeed = Extract<FeedQuery, { source: "lastfm.similarArtists" }>["params"]["seed"];
 export type FeedSeedKind = "myTopArtists" | "favorites";
@@ -124,9 +124,9 @@ export interface WidgetWorkshopState {
   ruleDraft: RuleDraft | null;
   previewDraft: WidgetDraft;
   setKind: (kind: WidgetKind) => void;
-  updateQuestion: (change: (question: QuestionQuery) => QuestionQuery) => void;
+  updateRecipe: (change: (recipe: RecipeQuery) => RecipeQuery) => void;
   setRecapPeriod: (period: RecapPeriod) => void;
-  setRecipeSubject: (subject: RecipeSubject) => void;
+  setRecipeSubject: (subject: WorkshopSubject) => void;
   setQuery: (query: WidgetQuery) => void;
   applyPreset: (preset: WidgetPreset) => void;
   setBlock: (block: WidgetBlock) => void;
@@ -205,7 +205,7 @@ export interface WhereStepProps {
 
 export interface RecipeStepsProps {
   workshop: WidgetWorkshopState;
-  question: QuestionQuery;
+  recipe: RecipeQuery;
   grammar: WidgetGrammar;
   people: readonly HouseholdMember[];
 }
@@ -218,7 +218,7 @@ export interface RecapStepsProps {
 
 export interface SubjectSelectProps {
   workshop: WidgetWorkshopState;
-  value: RecipeSubject;
+  value: WorkshopSubject;
   grammar: WidgetGrammar;
 }
 
@@ -229,11 +229,11 @@ export interface FeedStepsProps {
 }
 
 export interface WhenControlsProps {
-  time: QuestionTime;
+  time: RecipeTime;
   modes: readonly TimeMode[];
   periods: readonly NamedPeriod[];
   limits: { daysMax: number; yearMin: number; yearMax: number };
-  onChange: (time: QuestionTime) => void;
+  onChange: (time: RecipeTime) => void;
 }
 
 export interface IconPickerProps {

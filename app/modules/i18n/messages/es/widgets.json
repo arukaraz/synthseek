@@ -3,8 +3,7 @@
     "tabs": {
       "label": "Listas de widgets",
       "widgets": "Widgets",
-      "mine": "Mis widgets",
-      "board": "Tablero"
+      "mine": "Mis widgets"
     },
     "filter": {
       "category": "Categoría",
@@ -22,6 +21,7 @@
   },
   "mine": {
     "label": "Mis widgets",
+    "subtitle": "Los widgets que creaste o personalizaste. Añade uno al tablero, edítalo o copia su JSON para compartirlo.",
     "empty": "Aún no has creado ningún widget. Empieza con la tarjeta +.",
     "newWidget": "Nuevo widget",
     "fromJson": "Desde JSON",
@@ -56,22 +56,26 @@
     "appearance": {
       "title": "Aspecto",
       "density": "Densidad",
-      "densityHint": "Espacio entre widgets y alto de cada fila",
       "densities": {
         "compact": "Compacta",
         "comfortable": "Cómoda",
         "spacious": "Amplia"
       },
       "text": "Texto",
-      "textHint": "Tamaño del texto dentro de los widgets",
       "texts": {
         "small": "Pequeño",
         "default": "Normal",
         "large": "Grande"
+      },
+      "background": "Fondo",
+      "backgrounds": {
+        "on": "Sí",
+        "off": "No"
       }
     },
     "templates": {
       "title": "Plantillas",
+      "docs": "Documentación",
       "export": "Exportar este tablero",
       "exportHint": "JSON con tus widgets, sus tamaños y este aspecto.",
       "name": "Nombre de la plantilla",
@@ -138,7 +142,7 @@
     "invalidField": "Este valor no es válido."
   },
   "kinds": {
-    "question": "Receta",
+    "recipe": "Receta",
     "feed": "Feed",
     "recap": "Resumen"
   },

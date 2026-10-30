@@ -187,10 +187,20 @@
     "customize": "Personnaliser",
     "done": "Terminé",
     "addWidget": "Ajouter un widget",
+    "manageWidgets": "Gérer les widgets",
+    "add": {
+      "action": "Ajouter"
+    },
+    "spacer": {
+      "name": "Espaceur",
+      "shorter": "Réduire la hauteur de l’espaceur",
+      "taller": "Augmenter la hauteur de l’espaceur"
+    },
     "arrange": {
       "action": "Organiser",
       "title": "Organisez votre tableau",
-      "hint": "Faites glisser un widget pour le déplacer, et choisissez sa taille ou retirez-le depuis sa barre. Rien ne change avant d’enregistrer.",
+      "hint": "Faites glisser un widget pour le déplacer, ou déposez-le sous le tableau pour commencer une nouvelle rangée. Rien ne change avant d’enregistrer.",
+      "newRow": "Nouvelle rangée",
       "empty": "Votre tableau sera vide.",
       "cancel": "Annuler",
       "save": "Enregistrer les modifications",
@@ -202,8 +212,13 @@
       }
     },
     "tile": {
-      "moveEarlier": "Avancer {{name}}",
-      "moveLater": "Reculer {{name}}",
+      "settings": "Réglages de {{name}}",
+      "moveEarlier": "Avancer",
+      "moveLater": "Reculer",
+      "moveTop": "Placer tout en haut",
+      "moveBottom": "Placer tout en bas",
+      "backgroundOn": "Afficher le fond",
+      "backgroundOff": "Masquer le fond",
       "remove": "Retirer {{name}}",
       "drag": "Faire glisser {{name}}",
       "sizes": "Taille de {{name}}",
@@ -220,8 +235,10 @@
       "L": "Grand"
     },
     "gallery": {
-      "title": "Ajouter un widget",
+      "title": "Gérer les widgets",
       "subtitle": "Ajouter place un widget à la fin du tableau, où vous changez sa taille. Personnaliser ouvre une copie dans l’atelier.",
+      "seeMore": "Voir plus",
+      "seeLess": "Voir moins",
       "summary": "{{onBoard}} sur {{total}} dans votre tableau. Un nouveau widget arrive à la fin, déplacez-le ensuite où vous voulez.",
       "search": "Rechercher des widgets",
       "all": "Tous",
@@ -237,6 +254,8 @@
       "added": "{{name}} ajouté à la fin",
       "removed": "{{name}} retiré",
       "moved": "Disposition du tableau enregistrée",
+      "backgroundsOn": "Fond activé sur tous les widgets",
+      "backgroundsOff": "Fond désactivé sur tous les widgets",
       "undo": "Annuler"
     },
     "announce": {

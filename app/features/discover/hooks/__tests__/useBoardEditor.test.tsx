@@ -64,6 +64,29 @@ describe("useBoardEditor", () => {
     expect(result.current.announcement).toBe("Discover Mixes moved to position 2 of 3");
   });
 
+  it("sets the background of every tile, spacers too, with an Undo back to the board it replaced", () => {
+    const mixed: BoardItem[] = [ITEMS[0], { kind: "spacer", id: "s", size: "S", rows: 2, background: false }];
+    const { result } = renderHook(() => useBoardEditor(mixed, NO_CUSTOM, "ready"));
+
+    act(() => result.current.setBackgrounds(false));
+
+    expect(saveMock.mock.calls.at(-1)?.[0].items.map((item) => item.background)).toEqual([false, false]);
+    expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Backgrounds off for every widget");
+
+    act(() => lastToastAction().onClick());
+
+    expect(saveMock.mock.calls.at(-1)?.[0].items.map((item) => item.background)).toEqual([undefined, false]);
+  });
+
+  it("saves nothing when every tile already shows what was picked", () => {
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
+
+    act(() => result.current.setBackgrounds(true));
+
+    expect(saveMock).not.toHaveBeenCalled();
+    expect(toastMock.success).not.toHaveBeenCalled();
+  });
+
   it("keeps a custom tile where it sits and names it after its widget", () => {
     const custom: BoardItem = { kind: "custom", id: "x", widgetId: "w_1", size: "M" };
     const base = createWidget();
@@ -160,12 +183,12 @@ describe("useBoardEditor", () => {
     const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 
     act(() => result.current.openArrange());
-    expect(result.current.arrangeOpen).toBe(true);
+    expect(result.current.arrangeWidth).not.toBeNull();
     expect(saveMock).not.toHaveBeenCalled();
 
     act(() => result.current.saveArrangement([ITEMS[1], ITEMS[0]]));
 
-    expect(result.current.arrangeOpen).toBe(false);
+    expect(result.current.arrangeWidth).toBeNull();
     expect(lastSavedIds()).toEqual(["b", "a"]);
     lastToastAction().onClick();
     expect(lastSavedIds()).toEqual(["a", "b", "c"]);

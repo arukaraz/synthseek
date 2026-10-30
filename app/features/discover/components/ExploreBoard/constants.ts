@@ -56,6 +56,16 @@ import type { BoardCategory, BoardWidgetDefinition } from "./types";
 
 export const BOARD_SCHEMA_VERSION = 3;
 
+export const SPACER_ID = "spacer";
+
+export const SPACER_DEFAULT_SIZE: BoardSize = "S";
+
+export const SPACER_DEFAULT_ROWS = 4;
+
+export const SPACER_MIN_ROWS = 1;
+
+export const SPACER_MAX_ROWS = 7;
+
 export const EDIT_PASSTHROUGH_SELECTOR = "[data-info-tooltip]";
 
 export const BOARD_CATEGORY_ORDER: readonly BoardCategory[] = ["now", "history", "discover", "library"];

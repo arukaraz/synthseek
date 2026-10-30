@@ -34,9 +34,21 @@ vi.mock("@hooks/api/mutations/board/useSaveBoardLayout", () => ({
   useSaveBoardLayout: () => saveMock,
 }));
 
-vi.mock("@hooks/api/queries/board/useBoardAppearance", () => ({ useBoardAppearance: () => ({ data: undefined }) }));
+vi.mock("@hooks/api/queries/board/useBoardAppearance", () => ({
+  useBoardAppearance: () => ({ data: { density: "comfortable", text: "default" } }),
+}));
+vi.mock("@hooks/api/mutations/board/useSetBoardAppearance", () => ({ useSetBoardAppearance: () => vi.fn() }));
 vi.mock("@hooks/api/mutations/board/useUndoBoardTemplate", () => ({
   useUndoBoardTemplate: () => ({ mutate: vi.fn() }),
+}));
+vi.mock("@hooks/api/mutations/board/usePreviewBoardTemplate", () => ({
+  usePreviewBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+vi.mock("@hooks/api/mutations/board/useApplyBoardTemplate", () => ({
+  useApplyBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+vi.mock("@hooks/api/mutations/board/useExportBoardTemplate", () => ({
+  useExportBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
 }));
 vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", () => ({ useWidgetCatalog: () => ({ data: undefined }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({ useWidgetGrammar: () => ({ data: undefined }) }));
@@ -188,7 +200,7 @@ describe("ExploreBoard", () => {
 
     expect(screen.getAllByRole("button", { name: /^Remove/ })).toHaveLength(2);
     expect(tile(container, "a")).toHaveAttribute("tabindex", "0");
-    expect(screen.getByRole("toolbar")).toHaveTextContent(/^Add widgetArrangeDone$/);
+    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddManage widgetsArrangeAppearanceTemplates$/);
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.done") }));
 
@@ -247,10 +259,61 @@ describe("ExploreBoard", () => {
 
     render(<ExploreBoard />);
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.addWidget") }));
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.manageWidgets") }));
     const dialog = screen.getByRole("dialog");
     fireEvent.click(within(dialog).getByRole("button", { name: /^Add Discover Mixes/i }));
 
     expect(savedIds()).toEqual(["a", "b", "mixes"]);
+  });
+
+  it("keeps the edit menu on an empty board, so a template can still be brought in", () => {
+    useBoardLayoutMock.mockReturnValue({ data: { schemaVersion: 3, items: [] }, isLoading: false });
+
+    render(<ExploreBoard />);
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.templates.title") }));
+
+    expect(screen.getByRole("dialog", { name: i18n.t("widgets:board.templates.title") })).toBeInTheDocument();
+  });
+
+  async function openTileSettings(element: HTMLElement) {
+    fireEvent.pointerDown(within(element).getByRole("button", { name: /^Settings for/ }), {
+      button: 0,
+      ctrlKey: false,
+    });
+    await screen.findByRole("menu");
+  }
+
+  it("sends a tile to the bottom of the board and saves the whole list", async () => {
+    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
+
+    const { container } = render(<ExploreBoard />);
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+    await openTileSettings(tile(container, "a"));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Move to bottom" }));
+
+    expect(savedIds()).toEqual(["b", "a"]);
+  });
+
+  it("saves a tile without its background when it is switched off", async () => {
+    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
+
+    const { container } = render(<ExploreBoard />);
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+    await openTileSettings(tile(container, "a"));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Hide background" }));
+
+    expect(saveMock.mock.calls.at(-1)?.[0].items[0]).toMatchObject({ id: "a", background: false });
+  });
+
+  it("switches every tile's background off from Appearance", () => {
+    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
+
+    render(<ExploreBoard />);
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.appearance.title") }));
+    fireEvent.click(screen.getByRole("radio", { name: "Off" }));
+
+    expect(saveMock.mock.calls.at(-1)?.[0].items.map((item) => item.background)).toEqual([false, false]);
   });
 });

@@ -1,11 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { BoardAppearance, BoardTemplateApplied, BoardTemplatePreview } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardTemplateApplied, BoardTemplatePreview } from "@hooks/api/queries/board/types";
 import { act, fireEvent, render, screen } from "@test/test-utils";
 
 const mocks = vi.hoisted(() => ({
-  appearance: vi.fn<() => BoardAppearance | undefined>(),
-  setAppearance: vi.fn<(appearance: BoardAppearance) => void>(),
   preview: vi.fn<(input: { json: string }, options: { onSuccess: (report: BoardTemplatePreview) => void }) => void>(),
   apply: vi.fn<(input: { json: string }, options: { onSuccess: (applied: BoardTemplateApplied) => void }) => void>(),
   exporter: vi.fn<(input: unknown, options: { onSuccess: (template: unknown) => void }) => void>(),
@@ -14,12 +12,6 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("sonner", () => ({ toast: mocks.toast }));
 
-vi.mock("@hooks/api/queries/board/useBoardAppearance", () => ({
-  useBoardAppearance: () => ({ data: mocks.appearance() }),
-}));
-vi.mock("@hooks/api/mutations/board/useSetBoardAppearance", () => ({
-  useSetBoardAppearance: () => mocks.setAppearance,
-}));
 vi.mock("@hooks/api/mutations/board/usePreviewBoardTemplate", () => ({
   usePreviewBoardTemplate: () => ({ mutate: mocks.preview, isPending: false }),
 }));
@@ -30,7 +22,7 @@ vi.mock("@hooks/api/mutations/board/useExportBoardTemplate", () => ({
   useExportBoardTemplate: () => ({ mutate: mocks.exporter, isPending: false }),
 }));
 
-import { BoardSettingsPanel } from "../BoardSettingsPanel";
+import { BoardTemplatesDialog } from "../BoardTemplatesDialog";
 
 const READABLE: BoardTemplatePreview = {
   ok: true,
@@ -51,40 +43,47 @@ const APPLIED: BoardTemplateApplied = {
   undo: { layout: null, appearance: { density: "comfortable", text: "default" }, widgetIds: [] },
 };
 
+function openDialog(items: BoardItem[] = [], onApplied = vi.fn(), onClose = vi.fn()) {
+  render(<BoardTemplatesDialog items={items} onApplied={onApplied} onClose={onClose} />);
+}
+
 function pasteTemplate(json: string) {
   fireEvent.change(screen.getByLabelText("Board template JSON"), { target: { value: json } });
 }
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mocks.appearance.mockReturnValue({ density: "comfortable", text: "default" });
 });
 
-describe("BoardSettingsPanel", () => {
-  it("saves the density and the text size the member picks, keeping the other axis", () => {
-    const onApplied = vi.fn();
-    render(<BoardSettingsPanel items={[]} onApplied={onApplied} />);
+describe("BoardTemplatesDialog", () => {
+  it("shows the templates alone, with no choice of look", () => {
+    openDialog();
 
-    fireEvent.click(screen.getByRole("tab", { name: "Compact" }));
-    fireEvent.click(screen.getByRole("tab", { name: "Large" }));
-
-    expect(mocks.setAppearance.mock.calls).toEqual([
-      [{ density: "compact", text: "default" }],
-      [{ density: "comfortable", text: "large" }],
-    ]);
+    expect(screen.getByRole("dialog", { name: "Templates" })).toBeInTheDocument();
+    expect(screen.queryByRole("radio")).toBeNull();
   });
 
-  it("offers no density or text choice until the member's own look has loaded", () => {
-    mocks.appearance.mockReturnValue(undefined);
-    render(<BoardSettingsPanel items={[]} onApplied={vi.fn()} />);
+  it("closes from its close button", () => {
+    const onClose = vi.fn();
+    openDialog([], vi.fn(), onClose);
 
-    expect(screen.queryByRole("tab", { name: "Comfortable" })).toBeNull();
-    expect(screen.queryByRole("tab", { name: "Default" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("links the templates to their documentation", () => {
+    openDialog();
+
+    expect(screen.getByRole("link", { name: "Documentation" })).toHaveAttribute(
+      "href",
+      "https://docs.synthseek.dev/widget-templates"
+    );
   });
 
   it("checks a pasted template before applying it, then hands the applied board up", () => {
     const onApplied = vi.fn();
-    render(<BoardSettingsPanel items={[]} onApplied={onApplied} />);
+    openDialog([], onApplied);
     pasteTemplate('{"kind":"synthseek-board-template"}');
     expect(screen.queryByRole("button", { name: "Apply template" })).toBeNull();
 
@@ -99,7 +98,7 @@ describe("BoardSettingsPanel", () => {
   });
 
   it("drops a check that answers for text the member has since replaced", () => {
-    render(<BoardSettingsPanel items={[]} onApplied={vi.fn()} />);
+    openDialog();
     pasteTemplate('{"name":"A"}');
     fireEvent.click(screen.getByRole("button", { name: "Check" }));
     pasteTemplate('{"name":"B"}');
@@ -111,7 +110,7 @@ describe("BoardSettingsPanel", () => {
   });
 
   it("does not let a template that would pass a limit be applied", () => {
-    render(<BoardSettingsPanel items={[]} onApplied={vi.fn()} />);
+    openDialog();
     pasteTemplate("{}");
     fireEvent.click(screen.getByRole("button", { name: "Check" }));
     act(() => mocks.preview.mock.calls[0]?.[1].onSuccess({ ...READABLE, blocked: { reason: "feedLimit", max: 6 } }));
@@ -121,7 +120,7 @@ describe("BoardSettingsPanel", () => {
   });
 
   it("lists the problems of a file that is not a template and offers no apply", () => {
-    render(<BoardSettingsPanel items={[]} onApplied={vi.fn()} />);
+    openDialog();
     pasteTemplate("nope");
     fireEvent.click(screen.getByRole("button", { name: "Check" }));
     act(() =>
@@ -137,7 +136,7 @@ describe("BoardSettingsPanel", () => {
 
   it("exports the board it is given under the name typed", () => {
     const items = [{ kind: "builtin" as const, id: "t", widget: "charts" as const, size: "M" as const }];
-    render(<BoardSettingsPanel items={items} onApplied={vi.fn()} />);
+    openDialog(items);
     fireEvent.change(screen.getByLabelText("Template name"), { target: { value: "  Crates  " } });
 
     fireEvent.click(screen.getByRole("button", { name: "Copy JSON" }));
@@ -146,10 +145,10 @@ describe("BoardSettingsPanel", () => {
   });
 
   it("says so when a chosen template file cannot be read", async () => {
-    const { container } = render(<BoardSettingsPanel items={[]} onApplied={vi.fn()} />);
+    openDialog();
     const file = new File(["{}"], "board.json", { type: "application/json" });
     Object.defineProperty(file, "text", { value: () => Promise.reject(new Error("gone")) });
-    const input = container.querySelector("input[type=file]");
+    const input = document.querySelector("input[type=file]");
     if (!input) throw new Error("no file input");
 
     fireEvent.change(input, { target: { files: [file] } });
@@ -161,7 +160,7 @@ describe("BoardSettingsPanel", () => {
 
   it("says so when the browser will not copy the exported template", async () => {
     vi.stubGlobal("navigator", { clipboard: { writeText: vi.fn(async () => Promise.reject(new Error("denied"))) } });
-    render(<BoardSettingsPanel items={[]} onApplied={vi.fn()} />);
+    openDialog();
 
     fireEvent.click(screen.getByRole("button", { name: "Copy JSON" }));
     mocks.exporter.mock.calls[0]?.[1].onSuccess({ kind: "synthseek-board-template" });

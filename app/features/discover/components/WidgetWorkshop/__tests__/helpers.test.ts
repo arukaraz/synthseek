@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { FeedQuery, QuestionQuery } from "@hooks/api/queries/widgets/types";
+import type { FeedQuery, RecipeQuery } from "@hooks/api/queries/widgets/types";
 import { createWidgetCatalog, createWidgetGrammar } from "@test/factories";
 
 import { DEFAULT_QUERIES, NEW_WIDGET_DRAFT } from "../../../constants";
@@ -11,7 +11,7 @@ import {
   feedServerOf,
   matchingIcons,
   previewableDraft,
-  questionShapeOf,
+  recipeShapeOf,
   readbackOf,
   rotationChoicesOf,
   ruleText,
@@ -26,17 +26,15 @@ import {
 
 const grammar = createWidgetGrammar();
 const catalog = createWidgetCatalog();
-const QUESTION: QuestionQuery = DEFAULT_QUERIES.question;
+const RECIPE: RecipeQuery = DEFAULT_QUERIES.recipe;
 
-describe("questionShapeOf and dailyYearOf", () => {
-  it("names the shape the server will return for each question", () => {
-    expect(questionShapeOf(QUESTION, grammar)).toBe("ranked");
-    expect(questionShapeOf({ ...QUESTION, groupBy: "hour" }, grammar)).toBe("matrix");
-    expect(questionShapeOf({ ...QUESTION, groupBy: "week" }, grammar)).toBe("series");
-    expect(questionShapeOf({ ...QUESTION, subject: "genres" }, grammar)).toBe("buckets");
-    expect(questionShapeOf({ ...QUESTION, subject: "genres", pick: { ...QUESTION.pick, limit: 1 } }, grammar)).toBe(
-      "single"
-    );
+describe("recipeShapeOf and dailyYearOf", () => {
+  it("names the shape the server will return for each recipe", () => {
+    expect(recipeShapeOf(RECIPE, grammar)).toBe("ranked");
+    expect(recipeShapeOf({ ...RECIPE, groupBy: "hour" }, grammar)).toBe("matrix");
+    expect(recipeShapeOf({ ...RECIPE, groupBy: "week" }, grammar)).toBe("series");
+    expect(recipeShapeOf({ ...RECIPE, subject: "genres" }, grammar)).toBe("buckets");
+    expect(recipeShapeOf({ ...RECIPE, subject: "genres", pick: { ...RECIPE.pick, limit: 1 } }, grammar)).toBe("single");
   });
 
   it("follows the shape rule the grammar publishes rather than its own", () => {
@@ -45,27 +43,27 @@ describe("questionShapeOf and dailyYearOf", () => {
       groupByShapes: { ...grammar.groupByShapes, week: "matrix" },
       subjectShapes: { ...grammar.subjectShapes, genres: { single: "ranked", many: "series" } },
     } satisfies typeof grammar;
-    expect(questionShapeOf({ ...QUESTION, groupBy: "week" }, moved)).toBe("matrix");
-    expect(questionShapeOf({ ...QUESTION, subject: "genres" }, moved)).toBe("series");
+    expect(recipeShapeOf({ ...RECIPE, groupBy: "week" }, moved)).toBe("matrix");
+    expect(recipeShapeOf({ ...RECIPE, subject: "genres" }, moved)).toBe("series");
     expect(rotationChoicesOf(grammar)).toEqual(["none", ...grammar.pick.rotations]);
   });
 
   it("treats a daily series over half a year or more as a year", () => {
-    expect(dailyYearOf({ ...QUESTION, groupBy: "day", time: { mode: "named", value: "thisYear" } })).toBe(true);
-    expect(dailyYearOf({ ...QUESTION, groupBy: "day", time: { mode: "relative", days: 90 } })).toBe(false);
-    expect(dailyYearOf({ ...QUESTION, groupBy: "week", time: { mode: "named", value: "thisYear" } })).toBe(false);
+    expect(dailyYearOf({ ...RECIPE, groupBy: "day", time: { mode: "named", value: "thisYear" } })).toBe(true);
+    expect(dailyYearOf({ ...RECIPE, groupBy: "day", time: { mode: "relative", days: 90 } })).toBe(false);
+    expect(dailyYearOf({ ...RECIPE, groupBy: "week", time: { mode: "named", value: "thisYear" } })).toBe(false);
   });
 });
 
 describe("withSubject and withMeasure", () => {
   it("keeps a measure the new subject offers and falls back to its first one otherwise", () => {
-    expect(withSubject({ ...QUESTION, measure: "minutes" }, "albums", grammar).measure).toBe("minutes");
-    expect(withSubject({ ...QUESTION, measure: "lastPlayed" }, "genres", grammar).measure).toBe("plays");
+    expect(withSubject({ ...RECIPE, measure: "minutes" }, "albums", grammar).measure).toBe("minutes");
+    expect(withSubject({ ...RECIPE, measure: "lastPlayed" }, "genres", grammar).measure).toBe("plays");
   });
 
   it("drops the rules and the grouping the new subject cannot take", () => {
-    const question: QuestionQuery = {
-      ...QUESTION,
+    const recipe: RecipeQuery = {
+      ...RECIPE,
       groupBy: "day",
       rules: {
         all: [
@@ -74,29 +72,29 @@ describe("withSubject and withMeasure", () => {
         ],
       },
     };
-    const albums = withSubject(question, "albums", grammar);
+    const albums = withSubject(recipe, "albums", grammar);
     expect(albums.rules).toEqual({ all: [{ field: "plays", op: "gte", value: 3 }] });
     expect(albums.groupBy).toBeUndefined();
-    expect(withSubject(question, "genres", grammar).rules).toBeUndefined();
+    expect(withSubject(recipe, "genres", grammar).rules).toBeUndefined();
   });
 
   it("turns the comparison on for places climbed and picks by the measure", () => {
-    const moved = withMeasure(QUESTION, "rankDelta", grammar);
+    const moved = withMeasure(RECIPE, "rankDelta", grammar);
     expect(moved.compare).toBe("previous");
     expect(moved.pick.by).toBe("rankDelta");
-    expect(withMeasure({ ...QUESTION, groupBy: "day" }, "lastPlayed", grammar).groupBy).toBeUndefined();
+    expect(withMeasure({ ...RECIPE, groupBy: "day" }, "lastPlayed", grammar).groupBy).toBeUndefined();
   });
 });
 
 describe("withFittingView and viewChoicesOf", () => {
   it("moves to the first suggested view when the current one no longer fits", () => {
-    const draft = { ...NEW_WIDGET_DRAFT, query: { ...QUESTION, groupBy: "hour" as const } };
+    const draft = { ...NEW_WIDGET_DRAFT, query: { ...RECIPE, groupBy: "hour" as const } };
     expect(withFittingView(draft, catalog, grammar).view.block).toBe("heatmap");
     expect(withFittingView(NEW_WIDGET_DRAFT, catalog, grammar).view.block).toBe("list");
   });
 
   it("keeps a view the server accepts though the workshop would not suggest it", () => {
-    const shortDaily = { ...QUESTION, groupBy: "day" as const, time: { mode: "relative" as const, days: 30 } };
+    const shortDaily = { ...RECIPE, groupBy: "day" as const, time: { mode: "relative" as const, days: 30 } };
     const draft = {
       ...NEW_WIDGET_DRAFT,
       query: shortDaily,
@@ -141,10 +139,10 @@ describe("withFittingView and viewChoicesOf", () => {
 
 describe("readbackOf and ruleText", () => {
   it("reads a recipe back as one sentence", () => {
-    expect(readbackOf(QUESTION)).toBe("Show me 10 tracks with the most plays in the last 30 days.");
+    expect(readbackOf(RECIPE)).toBe("Show me 10 tracks with the most plays in the last 30 days.");
     expect(
       readbackOf({
-        ...QUESTION,
+        ...RECIPE,
         compare: "previous",
         rules: {
           any: [
@@ -156,7 +154,7 @@ describe("readbackOf and ruleText", () => {
     ).toBe(
       "Show me 10 tracks with the most plays in the last 30 days, compared with the previous period, where is a favorite or bitrate below 256 kbps."
     );
-    expect(readbackOf({ ...QUESTION, groupBy: "week" })).toBe("Show me plays in the last 30 days, by week.");
+    expect(readbackOf({ ...RECIPE, groupBy: "week" })).toBe("Show me plays in the last 30 days, by week.");
   });
 
   it("puts the number before the unit for day rules and spells out a share", () => {

@@ -2,10 +2,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { act, fireEvent, render, screen } from "@test/test-utils";
 
+import { DRAG_DWELL_MS } from "../constants";
 import { useBoardDrag } from "../useBoardDrag";
+
+const motion = vi.hoisted(() => ({ reduced: true }));
+
+vi.mock("../../useMediaQuery", () => ({ useMediaQuery: () => motion.reduced }));
 
 interface Item {
   id: string;
+  newRow?: boolean;
 }
 
 const ITEMS: Item[] = [{ id: "a" }, { id: "b" }, { id: "c" }];
@@ -14,6 +20,7 @@ const RECTS: Record<string, DOMRect> = {
   a: DOMRect.fromRect({ x: 0, y: 0, width: 100, height: 100 }),
   b: DOMRect.fromRect({ x: 120, y: 0, width: 100, height: 100 }),
   c: DOMRect.fromRect({ x: 240, y: 0, width: 100, height: 100 }),
+  grid: DOMRect.fromRect({ x: 0, y: 0, width: 400, height: 100 }),
 };
 
 const drops = vi.fn<(order: Item[]) => void>();
@@ -23,7 +30,7 @@ const sameSlot = vi.fn<(a: Item, b: Item) => boolean>(() => false);
 function Board({ items }: { items: Item[] }) {
   const { order, draggingId, startDrag } = useBoardDrag({ items, onDrop: drops, settling, sameSlot });
   return (
-    <div>
+    <div data-rect="grid">
       <p data-testid="order">{(order ?? items).map((item) => item.id).join("")}</p>
       <p data-testid="dragging">{draggingId ?? "none"}</p>
       {items.map((item) => (
@@ -52,15 +59,21 @@ function flushFrame() {
   pending.forEach((callback) => callback(0));
 }
 
+let now = 0;
+
 beforeEach(() => {
   frames.length = 0;
+  now = 0;
+  motion.reduced = true;
+  vi.spyOn(performance, "now").mockImplementation(() => now);
   vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
     frames.push(callback);
     return frames.length;
   });
   vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function rectOf(this: HTMLElement) {
-    return RECTS[this.dataset.boardTile ?? ""] ?? DOMRect.fromRect({ x: 0, y: 0, width: 0, height: 0 });
+    const key = this.dataset.boardTile ?? this.dataset.rect ?? "";
+    return RECTS[key] ?? DOMRect.fromRect({ x: 0, y: 0, width: 0, height: 0 });
   });
   HTMLElement.prototype.setPointerCapture = vi.fn();
   HTMLElement.prototype.releasePointerCapture = vi.fn();
@@ -81,7 +94,7 @@ function startOn(id: string) {
   fireEvent.pointerDown(screen.getByLabelText(`grip ${id}`), { pointerId: 1, button: 0, clientX: 10, clientY: 10 });
 }
 
-function moveTo(id: string, clientX: number, clientY = 400) {
+function passOver(id: string, clientX: number, clientY = 400) {
   pointAt(id);
   act(() => {
     fireEvent.pointerMove(window, { pointerId: 1, clientX, clientY });
@@ -89,7 +102,76 @@ function moveTo(id: string, clientX: number, clientY = 400) {
   });
 }
 
+function dwell() {
+  act(() => {
+    now += DRAG_DWELL_MS;
+    flushFrame();
+  });
+}
+
+function moveTo(id: string, clientX: number, clientY = 400) {
+  passOver(id, clientX, clientY);
+  dwell();
+}
+
 describe("useBoardDrag", () => {
+  it("does not reorder for a tile the pointer only crosses on its way past", () => {
+    render(<Board items={ITEMS} />);
+
+    startOn("a");
+    passOver("b", 200);
+    now += DRAG_DWELL_MS - 1;
+    passOver("c", 330);
+    now += DRAG_DWELL_MS - 1;
+    act(() => flushFrame());
+
+    expect(screen.getByTestId("order")).toHaveTextContent("abc");
+  });
+
+  it("reorders once the pointer has rested on a tile, without needing another move", () => {
+    render(<Board items={ITEMS} />);
+
+    startOn("a");
+    passOver("c", 330);
+    expect(screen.getByTestId("order")).toHaveTextContent("abc");
+
+    dwell();
+
+    expect(screen.getByTestId("order")).toHaveTextContent("bca");
+  });
+
+  it("flies the ghost to the slot on release and keeps the slot held until it lands", async () => {
+    motion.reduced = false;
+    let land = () => {};
+    const finished = new Promise<void>((resolve) => {
+      land = resolve;
+    });
+    const animate = vi.fn(() => ({ finished }));
+    Object.defineProperty(HTMLElement.prototype, "animate", { configurable: true, value: animate });
+    render(<Board items={ITEMS} />);
+
+    startOn("a");
+    moveTo("c", 330);
+    act(() => {
+      fireEvent.pointerUp(window, { pointerId: 1 });
+    });
+    act(() => flushFrame());
+
+    expect(drops).toHaveBeenCalledTimes(1);
+    expect(animate).toHaveBeenCalledTimes(2);
+    expect(screen.getByTestId("dragging")).toHaveTextContent("a");
+    expect(document.querySelectorAll("body > [aria-hidden='true']")).toHaveLength(1);
+
+    await act(async () => {
+      land();
+      await finished;
+    });
+
+    expect(screen.getByTestId("dragging")).toHaveTextContent("none");
+    expect(document.querySelectorAll("body > [aria-hidden='true']")).toHaveLength(0);
+    Reflect.deleteProperty(HTMLElement.prototype, "animate");
+  });
+
   it("previews the new order while dragging and hands the whole list over on release", () => {
     render(<Board items={ITEMS} />);
 
@@ -238,6 +320,36 @@ describe("useBoardDrag", () => {
     moveTo("c", 250);
 
     expect(screen.getByTestId("order")).toHaveTextContent("cba");
+  });
+
+  it("places a tile dropped on an empty cell after the one before it, without swapping", () => {
+    sameSlot.mockImplementation(() => true);
+    render(<Board items={ITEMS} />);
+    startOn("a");
+
+    act(() => {
+      document.elementsFromPoint = vi.fn(() => []);
+      fireEvent.pointerMove(window, { pointerId: 1, clientX: 360, clientY: 50 });
+      flushFrame();
+    });
+    dwell();
+
+    expect(screen.getByTestId("order")).toHaveTextContent("bca");
+  });
+
+  it("starts a new row when the tile is dropped below the last one", () => {
+    render(<Board items={ITEMS} />);
+    startOn("a");
+
+    act(() => {
+      document.elementsFromPoint = vi.fn(() => []);
+      fireEvent.pointerMove(window, { pointerId: 1, clientX: 50, clientY: 300 });
+      flushFrame();
+    });
+    dwell();
+    fireEvent.pointerUp(window, { pointerId: 1 });
+
+    expect(drops).toHaveBeenCalledWith([{ id: "b" }, { id: "c" }, { id: "a", newRow: true }]);
   });
 
   it("cancels a drag in progress when the board unmounts", () => {

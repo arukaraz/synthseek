@@ -2,6 +2,7 @@ import type { PointerEvent as ReactPointerEvent, RefObject } from "react";
 
 export interface BoardDragItem {
   id: string;
+  newRow?: boolean;
 }
 
 export interface PointerPoint {
@@ -28,13 +29,27 @@ export interface UseBoardDragOptions<T extends BoardDragItem> {
   settling?: () => boolean;
 }
 
-export interface DropTarget {
+export type DropTarget = { kind: "tile" | "space"; id: string; before: boolean } | { kind: "newRow" };
+
+export interface TileBox {
   id: string;
-  before: boolean;
+  rect: BoxRect;
+}
+
+export interface OpenSpace {
+  tiles: readonly TileBox[];
+  grid: BoxRect;
+  viewport: ScrollViewport;
+  placeholder: BoxRect;
+}
+
+export interface TilePosition {
+  left: number;
+  top: number;
 }
 
 export interface SlideResult {
-  rects: Map<HTMLElement, DOMRect>;
+  rects: Map<HTMLElement, TilePosition>;
   slidUntil: number;
 }
 

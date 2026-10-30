@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 
 import { BOARD_CATEGORY_KEYS } from "../ExploreBoard/constants";
+import { ClampedText } from "./ClampedText";
 import {
   cardAction,
   cardActions,
@@ -46,7 +47,7 @@ export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove, onCustomize 
           <h4 className={cardTitle()}>{name}</h4>
           <span className={cardCategory()}>{t(BOARD_CATEGORY_KEYS[entry.definition.category].title)}</span>
         </div>
-        <p className={cardDescription()}>{entry.description}</p>
+        <ClampedText text={entry.description} className={cardDescription()} />
         <div className={cardActions()}>
           {tileId !== undefined ? (
             <Button

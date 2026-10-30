@@ -18,13 +18,14 @@ export interface ArrangeSpace {
 export interface ArrangeLayout {
   scale: number;
   width: number;
+  rowPx: number;
   gapPx: number;
-  rowHeights: readonly number[];
 }
 
 export interface BoardArrangeDialogProps {
   items: readonly BoardItem[];
   device: BoardDevice;
+  boardWidth: number;
   appearance?: BoardAppearance;
   custom: BoardCustomWidgets;
   customStatus: CustomWidgetsStatus;
@@ -35,6 +36,7 @@ export interface BoardArrangeDialogProps {
 export interface ArrangeTileProps {
   tile: PlacedTile;
   device: BoardDevice;
+  boardWidth: number;
   metrics: BoardMetrics;
   layout: ArrangeLayout;
   custom: BoardCustomWidgets;
@@ -49,7 +51,8 @@ export interface ArrangeTileBarProps {
   item: BoardItem;
   device: BoardDevice;
   name: string;
-  showName: boolean;
+  position: number;
+  total: number;
   actions: BoardTileLayoutActions;
 }
 
@@ -58,4 +61,4 @@ export interface UseBoardArrangeOptions {
   custom: BoardCustomWidgets;
 }
 
-export type StartsTileDragEvent = Pick<ReactPointerEvent<HTMLElement>, "pointerType" | "target">;
+export type StartsTileDragEvent = Pick<ReactPointerEvent<HTMLElement>, "pointerType" | "target" | "currentTarget">;

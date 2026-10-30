@@ -1,12 +1,26 @@
 import { cva } from "class-variance-authority";
 
-export const settingsGrid = cva("grid items-start gap-4 pt-4 lg:grid-cols-2");
+export const trayFrame = cva("overflow-hidden");
 
-export const settingsSection = cva("border-fg/10 bg-fg/[0.02] flex min-w-0 flex-col gap-4 rounded-2xl border p-4");
+export const trayBody = cva(
+  "border-fg/10 flex w-0 min-w-full flex-wrap items-center justify-center gap-x-6 gap-y-2 border-b px-2 pt-1.5 pb-2.5"
+);
 
-export const settingsTitle = cva("text-fg/60 font-mono text-[11px] font-medium tracking-[0.14em] uppercase");
+export const trayChoice = cva("flex items-center gap-2");
 
-export const settingRow = cva("flex flex-col gap-2");
+export const trayLabel = cva("text-fg/60 font-mono text-[11px] font-medium tracking-[0.08em] uppercase");
+
+export const templatesDialog = cva("sm:h-auto sm:max-h-[90vh] sm:max-w-2xl");
+
+export const templatesHead = cva("flex flex-col gap-1 px-4 pt-4 pr-14 pb-3 sm:pt-6 sm:pr-16 sm:pl-6");
+
+export const templatesHint = cva("flex");
+
+export const templatesBody = cva("flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 pb-6 sm:px-6");
+
+export const settingsLink = cva(
+  "text-primary-400 hover:text-primary-300 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1 rounded text-xs font-medium outline-none focus-visible:ring-2"
+);
 
 export const settingLabel = cva("text-fg text-sm font-medium");
 

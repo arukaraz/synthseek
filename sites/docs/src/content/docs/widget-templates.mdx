@@ -1,0 +1,474 @@
+---
+title: "Widget Templates"
+blurb: "The JSON behind a custom widget and a shared board, and the values it accepts."
+group: "Reference"
+order: 11
+---
+
+import WidgetIcons from "../../components/WidgetIcons.astro";
+
+## What a template is
+
+A template is a JSON document you can copy, keep, edit and share. Pasting it into another account or another Synthseek server builds the same thing there.
+
+There are two kinds.
+
+| Kind            | Carries                                        | Copy it from                   | Bring it in with      |
+| --------------- | ---------------------------------------------- | ------------------------------ | --------------------- |
+| Widget template | One widget: what it asks and how it looks      | The `{}` icon on a widget      | **From JSON**         |
+| Board template  | A whole board, its look and its custom widgets | **Copy JSON** in **Templates** | **Import a template** |
+
+All of this starts from **Customize**.
+
+## Share a widget
+
+1. Open **Manage widgets**, then **My widgets**, and press the `{}` icon on the widget. Its JSON goes to your clipboard.
+2. Paste it wherever you keep it, or send it to someone.
+3. To bring it in, open **My widgets** and choose **From JSON** on the new-widget card.
+4. Paste the JSON and press **Check and open**. A template with a problem lists each one, in plain words.
+5. The widget opens in the workshop. Adjust it, then save it to **My widgets**.
+
+The workshop shows the same JSON behind the `{}` icon next to its preview, which is the quickest way to learn the format. Build a widget by hand, then read what it wrote.
+
+## Share a board
+
+1. Open **Templates**, name the template and press **Copy JSON**.
+2. To bring one in, paste it under **Import a template**, or choose a `.json` file.
+3. Press **Check**. Nothing changes yet. You see how many tiles and new widgets it brings, its look, and anything it will skip.
+4. Press **Apply template**.
+
+Applying replaces your board and its look. The widgets it brings are added to **My widgets** as new copies, and the ones you already had stay. The confirmation offers **Undo**, which puts your board, your look and your widgets back.
+
+## A widget template
+
+This is a complete widget. It lists your ten most played tracks of the last thirty days.
+
+```json
+{
+  "kind": "synthseek-widget",
+  "schemaVersion": 2,
+  "meta": {
+    "name": "Most played",
+    "description": "My top tracks this month",
+    "icon": "trophy",
+    "accent": "weekly",
+    "visibility": "private"
+  },
+  "query": {
+    "type": "recipe",
+    "subject": "tracks",
+    "measure": "plays",
+    "time": { "mode": "relative", "days": 30 },
+    "pick": { "by": "plays", "order": "desc", "limit": 10, "random": null }
+  },
+  "view": { "block": "list", "action": "play" },
+  "defaultSize": "M",
+  "basedOn": null,
+  "playlist": null
+}
+```
+
+| Field           | Required | Value                                                           |
+| --------------- | -------- | --------------------------------------------------------------- |
+| `kind`          | Yes      | Always `synthseek-widget`.                                      |
+| `schemaVersion` | Yes      | Always `2`.                                                     |
+| `meta`          | Yes      | Its name, icon and colour. See [Name and look](#name-and-look). |
+| `query`         | Yes      | What the widget asks. See [The query](#the-query).              |
+| `view`          | Yes      | How the results are drawn. See [The view](#the-view).           |
+| `defaultSize`   | Yes      | `S`, `M` or `L`, the size it takes on the board.                |
+| `basedOn`       | Yes      | The built-in widget it was customized from, as text, or `null`. |
+| `playlist`      | Yes      | `null`, or a [smart playlist](#smart-playlists).                |
+| `id`            | No       | Ignored here. The widget gets a new id when you save it.        |
+
+Unknown fields are refused rather than dropped, so a typo in a name shows up as a problem.
+
+### Name and look
+
+| Field         | Value                                                        |
+| ------------- | ------------------------------------------------------------ |
+| `name`        | Up to 60 characters. Required.                               |
+| `description` | Up to 200 characters. Use `""` for none.                     |
+| `icon`        | One of the icons below.                                      |
+| `accent`      | `daily` pink, `weekly` violet, `explore` cyan or `cf` green. |
+| `visibility`  | Always `private`.                                            |
+
+The icons:
+
+<WidgetIcons />
+
+### The view
+
+| Field    | Required | Value                                                                                                                                                      |
+| -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `block`  | Yes      | The view that draws the results, from the table below.                                                                                                     |
+| `action` | Yes      | What pressing an item does: `play`, `request`, `open`, `openUrl` or `none`.                                                                                |
+| `bind`   | No       | Replaces the text of a slot with a field of each row. Slots are `cover`, `title`, `subtitle` and `value`. A field with nothing in it keeps the usual text. |
+
+Each view can draw some kinds of result and not others. The kind comes from the query, as the next section shows.
+
+| `block`        | In the workshop   | Draws                      |
+| -------------- | ----------------- | -------------------------- |
+| `list`         | List              | Ranked, buckets            |
+| `cards`        | Cards             | Ranked                     |
+| `rail`         | Rail              | Ranked                     |
+| `leader`       | Leader            | Ranked                     |
+| `mosaic`       | Mosaic            | Ranked                     |
+| `calendar`     | Calendar          | Ranked                     |
+| `rankingMoves` | Ranking moves     | Ranked, with a comparison  |
+| `feed`         | Headlines         | Ranked, headlines          |
+| `stat`         | Number            | Single                     |
+| `stats`        | Numbers           | Buckets, single            |
+| `statTrend`    | Number with trend | Series, single             |
+| `bars`         | Bars              | Series, buckets            |
+| `sparkline`    | Sparkline         | Series                     |
+| `yearCalendar` | Year calendar     | Series                     |
+| `heatmap`      | Heatmap           | Matrix                     |
+| `share`        | Share             | Buckets                    |
+| `compare`      | Compare           | Buckets, with a comparison |
+| `story`        | Story             | Recap                      |
+
+## The query
+
+`query.type` picks one of three ways to get results.
+
+| `type`   | In the workshop | Reads                                                      |
+| -------- | --------------- | ---------------------------------------------------------- |
+| `recipe` | Recipe          | Your own plays, library and requests.                      |
+| `feed`   | Feed            | An outside source, narrowed by your own library and plays. |
+| `recap`  | Recap           | A year or a month in your listening, as a story.           |
+
+## Recipes
+
+A recipe says what to count, over which period, and how many to show.
+
+| Field     | Required | Value                                                             |
+| --------- | -------- | ----------------------------------------------------------------- |
+| `type`    | Yes      | Always `recipe`.                                                  |
+| `subject` | Yes      | `tracks`, `albums`, `artists`, `genres`, `decades` or `requests`. |
+| `measure` | Yes      | What to count, from the table below.                              |
+| `time`    | Yes      | The period. See [Periods](#periods).                              |
+| `pick`    | Yes      | How many, and in what order. See [Picking](#picking).             |
+| `compare` | No       | `previous` compares the period with the one before it.            |
+| `groupBy` | No       | `hour`, `weekday`, `day`, `week` or `month`. Tracks only.         |
+| `rules`   | No       | Narrows the result. See [Rules](#rules).                          |
+
+| `measure`        | In the workshop  | Works with                       |
+| ---------------- | ---------------- | -------------------------------- |
+| `plays`          | plays            | Every subject                    |
+| `minutes`        | minutes listened | Every subject                    |
+| `distinctTracks` | different tracks | Artists, albums, genres, decades |
+| `lastPlayed`     | last played      | Tracks, albums, artists          |
+| `addedAt`        | date added       | Tracks, albums, requests         |
+| `rankDelta`      | places climbed   | Tracks, albums, artists, genres  |
+
+`rankDelta` needs `compare`. `groupBy` works with `plays`, `minutes` and `distinctTracks`.
+
+The recipe decides the kind of result, and so which views can draw it.
+
+| A recipe with                               | Gives   |
+| ------------------------------------------- | ------- |
+| `tracks`, `albums`, `artists` or `requests` | Ranked  |
+| `genres` or `decades`                       | Buckets |
+| `genres` or `decades`, with a `limit` of 1  | Single  |
+| `groupBy` of `day`, `week` or `month`       | Series  |
+| `groupBy` of `hour` or `weekday`            | Matrix  |
+
+### Periods
+
+| `mode`         | Other fields                            | Means                                         |
+| -------------- | --------------------------------------- | --------------------------------------------- |
+| `relative`     | `days`, 1 to 3650                       | The last so many days.                        |
+| `named`        | `value`                                 | `thisWeek`, `thisMonth`, `thisYear` or `all`. |
+| `absolute`     | `year`, and optionally `month`, 1 to 12 | One calendar year or month.                   |
+| `sameLastYear` | `days`, 1 to 3650                       | The same stretch of days, one year ago.       |
+
+### Picking
+
+Recipes and feeds both use `pick`.
+
+| Field    | Value                                                                                                                                       |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `by`     | In a recipe, the same value as `measure`, or `name`. For a feed, see [Feeds](#feeds).                                                       |
+| `order`  | `desc` or `asc`.                                                                                                                            |
+| `limit`  | 1 to 50.                                                                                                                                    |
+| `random` | `null` for the top of the list, or `{ "rotate": "daily" }` or `{ "rotate": "weekly" }` for a fresh draw that holds for the day or the week. |
+
+Series and matrix results ignore `limit`, but the field is still required.
+
+### Rules
+
+`rules` holds a list of up to eight rules, under `all` when every rule must match, or `any` when one is enough. It takes one of those, never both.
+
+```json
+{
+  "type": "recipe",
+  "subject": "tracks",
+  "measure": "plays",
+  "time": { "mode": "named", "value": "all" },
+  "rules": {
+    "all": [
+      { "field": "favorite", "op": "is", "value": true },
+      { "field": "notPlayedInLast", "op": "days", "value": 180 }
+    ]
+  },
+  "pick": { "by": "plays", "order": "desc", "limit": 20, "random": null }
+}
+```
+
+The first subjects column is for recipes. The second is for feeds, by [what the source returns](#feeds).
+
+| `field`             | `op`                  | `value`                               | Recipes                 | Feeds                   |
+| ------------------- | --------------------- | ------------------------------------- | ----------------------- | ----------------------- |
+| `plays`             | `gte`, `lte`          | A count                               | Tracks, albums, artists | Tracks, albums, artists |
+| `notPlayedInLast`   | `days`                | 1 to 3650                             | Tracks, albums, artists | Tracks, albums, artists |
+| `addedOlderThan`    | `days`                | 1 to 3650                             | Tracks, albums          | None                    |
+| `bitrate`           | `lt`, `gte`           | 32 to 10000, in kbps                  | Tracks                  | None                    |
+| `ownedShare`        | `lt`, `gte`           | 0 to 1, the part of an album you own  | Albums                  | None                    |
+| `favorite`          | `is`                  | `true` or `false`                     | Tracks, albums, artists | Tracks, albums, artists |
+| `inLibrary`         | `is`                  | `true` or `false`                     | Tracks, albums          | Tracks, albums, artists |
+| `requestStatus`     | `is`                  | A [request status](/download-engine)  | Albums, requests        | Albums                  |
+| `genre`             | `inMyTop`             | 1 to 50, how far down your top genres | Albums                  | Albums, artists         |
+| `decade`            | `is`                  | A year such as `1990`, or `myTop`     | Tracks, albums          | Albums                  |
+| `artistInMyTop`     | `within`              | `{ "n": 20, "days": 90 }`             | Tracks, albums, artists | Tracks, albums, artists |
+| `inCurrentTimeSlot` | `is`                  | `true`                                | Tracks                  | None                    |
+| `releaseType`       | `is`, `isNot`         | `album`, `ep`, `single` or `other`    | None                    | Albums                  |
+| `listeners`         | `lt`, `gte`           | A count of Last.fm listeners          | None                    | Tracks, albums, artists |
+| `artistInLibrary`   | `is`                  | `true` or `false`                     | None                    | Tracks, albums          |
+| `user`              | `is`, `isNot`, `with` | `me`, `household` or a member's id    | Tracks, albums, artists | None                    |
+
+`user` chooses whose listening a recipe reads. It can appear once, under `all`.
+
+## Feeds
+
+A feed starts from an outside source. You then narrow it with [rules](#rules) and [`pick`](#picking).
+
+| Field    | Required | Value                                             |
+| -------- | -------- | ------------------------------------------------- |
+| `type`   | Yes      | Always `feed`.                                    |
+| `source` | Yes      | Where the rows come from, from the table below.   |
+| `params` | Yes      | That source's options. Use `{}` when it has none. |
+| `pick`   | Yes      | How many, and in what order.                      |
+| `rules`  | No       | Narrows what the source brought back.             |
+
+```json
+{
+  "type": "feed",
+  "source": "lastfm.similarArtists",
+  "params": { "seed": { "kind": "myTopArtists", "n": 10, "days": 90 } },
+  "rules": { "all": [{ "field": "inLibrary", "op": "is", "value": false }] },
+  "pick": { "by": "rank", "order": "asc", "limit": 12, "random": null }
+}
+```
+
+| `source`                       | Returns   | `params`                                     | Needs                      |
+| ------------------------------ | --------- | -------------------------------------------- | -------------------------- |
+| `lastfm.similarArtists`        | Artists   | `seed`                                       | Last.fm                    |
+| `lastfm.similarTracks`         | Tracks    | `seed`                                       | Last.fm                    |
+| `lastfm.charts`                | Tracks    | `country`, a two-letter code                 | Last.fm                    |
+| `lastfm.lovedTracks`           | Tracks    | None                                         | Your Last.fm username      |
+| `catalog.related`              | Artists   | `seed`                                       | Nothing                    |
+| `catalog.artistAlbums`         | Albums    | `seed`                                       | Nothing                    |
+| `catalog.trending`             | Tracks    | None                                         | Nothing                    |
+| `listenbrainz.recommendations` | Tracks    | None                                         | Your ListenBrainz username |
+| `listenbrainz.playlists`       | Tracks    | `playlist`                                   | Your ListenBrainz username |
+| `listenbrainz.freshReleases`   | Albums    | `days`, 1 to 90                              | Nothing                    |
+| `feed.rss`                     | Headlines | `url`, an RSS or Atom address                | Nothing                    |
+| `feed.curated`                 | Headlines | `feed`                                       | Nothing                    |
+| `events.upcoming`              | Shows     | `seed`, `country` or `null`, `days` 1 to 180 | A Bandsintown app ID       |
+| `mediaServer.recentlyAdded`    | Albums    | `server`                                     | Your linked account        |
+| `mediaServer.mostPlayed`       | Albums    | `server`                                     | Your linked account        |
+| `mediaServer.nowPlaying`       | Tracks    | `server`                                     | Your linked account        |
+| `mediaServer.playlists`        | Playlists | `server`                                     | Your linked account        |
+| `lidarr.calendar`              | Albums    | `days`, 1 to 90                              | Lidarr, admin or trusted   |
+| `lidarr.wanted`                | Albums    | None                                         | Lidarr, admin or trusted   |
+
+| Option     | Values                                               |
+| ---------- | ---------------------------------------------------- |
+| `playlist` | `weekly-jams`, `weekly-exploration` or `daily-jams`. |
+| `feed`     | `pitchforkBestNewAlbums` or `nprMusic`.              |
+| `server`   | `plex`, `navidrome` or `jellyfin`.                   |
+
+A `seed` tells a source where to start.
+
+| `kind`         | Other fields                  | Starts from            |
+| -------------- | ----------------------------- | ---------------------- |
+| `myTopArtists` | `n` 1 to 50, `days` 1 to 3650 | Your top artists.      |
+| `favorites`    | None                          | Your favorites.        |
+| `artist`       | `id`                          | One artist.            |
+| `playlist`     | `id`                          | One of your playlists. |
+
+What you can put in `pick.by` depends on what the source returns.
+
+| `by`                               | Works with                                     |
+| ---------------------------------- | ---------------------------------------------- |
+| `rank`                             | Every source. It keeps the source's own order. |
+| `name`                             | Tracks, albums, artists, playlists             |
+| `plays`, `lastPlayed`, `listeners` | Tracks, albums, artists                        |
+| `releaseDate`                      | Albums, headlines, shows                       |
+
+Headlines give headlines results. Everything else gives ranked results.
+
+## Recaps
+
+A recap tells the story of a period in pages, one per highlight that has data. It draws with the `story` view only, and it needs at least 20 plays in the period.
+
+```json
+{ "type": "recap", "period": { "mode": "named", "value": "thisYear" } }
+```
+
+| `mode`     | Other fields                            |
+| ---------- | --------------------------------------- |
+| `named`    | `value`, `thisYear` or `thisMonth`      |
+| `absolute` | `year`, and optionally `month`, 1 to 12 |
+
+## Smart playlists
+
+A recipe that lists tracks, without `groupBy`, can also keep a playlist up to date.
+
+```json
+{ "refresh": "weekly", "playlistId": null }
+```
+
+`refresh` is `daily` or `weekly`. Leave `playlistId` as `null` when you write one by hand. A board template clears it on export.
+
+## A board template
+
+This one puts one built-in widget and one custom widget on a board, the second starting a new row.
+
+```json
+{
+  "kind": "synthseek-board-template",
+  "schemaVersion": 1,
+  "name": "Sunday morning",
+  "description": "A slower start",
+  "appearance": { "density": "comfortable", "text": "default" },
+  "items": [
+    { "kind": "builtin", "widget": "continueListening", "size": "M" },
+    { "kind": "custom", "widget": "w_top", "size": "M", "newRow": true }
+  ],
+  "widgets": [
+    {
+      "id": "w_top",
+      "kind": "synthseek-widget",
+      "schemaVersion": 2,
+      "meta": {
+        "name": "Most played",
+        "description": "",
+        "icon": "trophy",
+        "accent": "weekly",
+        "visibility": "private"
+      },
+      "query": {
+        "type": "recipe",
+        "subject": "tracks",
+        "measure": "plays",
+        "time": { "mode": "relative", "days": 30 },
+        "pick": { "by": "plays", "order": "desc", "limit": 10, "random": null }
+      },
+      "view": { "block": "list", "action": "play" },
+      "defaultSize": "M",
+      "basedOn": null,
+      "playlist": null
+    }
+  ]
+}
+```
+
+| Field           | Required | Value                                                |
+| --------------- | -------- | ---------------------------------------------------- |
+| `kind`          | Yes      | Always `synthseek-board-template`.                   |
+| `schemaVersion` | Yes      | Always `1`.                                          |
+| `name`          | Yes      | Up to 60 characters.                                 |
+| `description`   | Yes      | Up to 200 characters. Use `""` for none.             |
+| `appearance`    | Yes      | The board's look, from the table below.              |
+| `items`         | Yes      | The tiles, in order. A list of up to 48.             |
+| `widgets`       | Yes      | The custom widgets the tiles use. Use `[]` for none. |
+
+| `appearance` field | Value                                |
+| ------------------ | ------------------------------------ |
+| `density`          | `compact`, `comfortable`, `spacious` |
+| `text`             | `small`, `default`, `large`          |
+
+Each entry of `items` is one tile.
+
+| Field        | Required     | Value                                                                          |
+| ------------ | ------------ | ------------------------------------------------------------------------------ |
+| `kind`       | Yes          | `builtin`, `custom` or `spacer`.                                               |
+| `widget`     | Not a spacer | For `builtin`, a key from the table below. For `custom`, an `id` in `widgets`. |
+| `rows`       | Spacers only | The spacer's height, 1 to 7.                                                   |
+| `size`       | Yes          | `S` is a quarter of the board, `M` half and `L` the full width.                |
+| `newRow`     | No           | `true` starts a new row with this tile.                                        |
+| `background` | No           | `false` hides the tile's background.                                           |
+
+A spacer is an empty tile that holds a place on the board.
+
+A widget inside `widgets` is a [widget template](#a-widget-template) with one more field. Its `id` starts with `w_` and only needs to match the tiles that point at it. Applying gives each widget a new id.
+
+Tiles fill the board in order, each one beside the last while it fits. On a phone every widget shows at one size, in the same order.
+
+| Built-in `widget`    | Title                           |
+| -------------------- | ------------------------------- |
+| `trending`           | Trending now                    |
+| `continueListening`  | Continue listening              |
+| `jumpBackIn`         | Jump back in                    |
+| `stations`           | Stations for you                |
+| `onRepeat`           | On repeat                       |
+| `rewind`             | Repeat rewind                   |
+| `deepCuts`           | Deep cuts                       |
+| `forgottenFavorites` | Forgotten favorites             |
+| `lastYear`           | This time last year             |
+| `topTracks`          | Top Tracks                      |
+| `scrobbles`          | Recent Scrobbles                |
+| `requests`           | Recent requests                 |
+| `mixes`              | Discover Mixes                  |
+| `artistsNext`        | Artists you might want next     |
+| `orbit`              | Expand your orbit               |
+| `rarities`           | Your rarities                   |
+| `charts`             | Charts                          |
+| `genres`             | Genres                          |
+| `loved`              | Loved on Last.fm, not here      |
+| `newInLibrary`       | New in your library             |
+| `leaderboard`        | Your library                    |
+| `gaps`               | Complete the discography        |
+| `anniversaries`      | Anniversaries                   |
+| `landed`             | Landed this week                |
+| `serverPlaylists`    | Your playlists on media servers |
+
+## Bringing a template to another server
+
+A template carries what a widget asks, not the data behind it. The same widget shows the new listener's own plays and library.
+
+- A feed that needs a service you have not connected still applies. The check names what is missing, and so does the tile.
+- A seed that names a playlist, and a rule that names a member, point at things on the server they came from. They may find nothing on another one.
+- The board check skips what it cannot read and says so. A tile whose widget is missing or refused is left out, and the rest applies.
+
+## When a template is refused
+
+| The message is about                     | What to change                                                          |
+| ---------------------------------------- | ----------------------------------------------------------------------- |
+| JSON that is not valid                   | Check the commas and quotes.                                            |
+| A template that is too large             | Trim it. See [Limits](#limits).                                         |
+| A value that is not valid                | The field named before the message has a value this page does not list. |
+| A view that cannot show the result       | Pick a `block` that draws this kind of result.                          |
+| A measure for the wrong subject          | Use a `measure` the subject works with.                                 |
+| Places climbed without a comparison      | Add `"compare": "previous"`.                                            |
+| Grouping by time                         | Remove `groupBy`, or use tracks with a measure it works with.           |
+| What items can be picked by              | Set `pick.by` to the `measure`, or to `name`.                           |
+| A rule that does not apply               | Check the rule's row in the [rules table](#rules).                      |
+| A source that cannot be ordered that way | Pick a `by` that [the source supports](#feeds).                         |
+| A playlist on the wrong recipe           | Set `playlist` to `null`, or use `tracks` without `groupBy`.            |
+| Whose listening                          | Keep one `user` rule, under `all`.                                      |
+
+The board check can also stop before applying, when the template would take you past a limit below.
+
+## Limits
+
+| Limit                                  | Value  |
+| -------------------------------------- | ------ |
+| Size of a widget template              | 16 KB  |
+| Size of a board template               | 400 KB |
+| Custom widgets per member              | 24     |
+| Tiles on a board                       | 48     |
+| Different RSS addresses across widgets | 6      |
+| Rules in a widget                      | 8      |
+| Items in `pick.limit`                  | 50     |

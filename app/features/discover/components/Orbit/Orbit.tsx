@@ -12,9 +12,9 @@ import { useOrbitAlbums } from "@hooks/api/queries/analytics/useOrbitAlbums";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { cardRowLimit } from "../helpers";
-import { cardRow, cardRowBody, cardRowVars, railScroller } from "../styles";
+import { cardRowBody, cardRowVars, railScroller } from "../styles";
 import { OrbitCard } from "./OrbitCard";
-import { orbitBody, orbitRail } from "./styles";
+import { orbitBody, orbitGrid, orbitRail } from "./styles";
 
 export function Orbit({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
@@ -37,7 +37,7 @@ export function Orbit({ size, info }: BoardWidgetProps) {
     >
       {size === "S" ? (
         <div className={cardRowBody()}>
-          <div className={cardRow()} style={cardRowVars(limit)}>
+          <div className={orbitGrid()} style={cardRowVars(limit)}>
             {albums.slice(0, limit).map((album) => (
               <OrbitCard key={album.id} album={album} onOpen={() => open(album)} />
             ))}

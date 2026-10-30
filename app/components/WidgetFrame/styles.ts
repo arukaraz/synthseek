@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 
 export const widgetFrame = cva("min-h-0 overflow-hidden");
 
-export const widgetFrameBody = cva("flex min-h-0 flex-1 flex-col gap-2");
+export const widgetFrameBody = cva("flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto");
 
 export const widgetFrameSkeleton = cva("bg-fg/5 min-h-0 flex-1 animate-pulse rounded-lg");
 

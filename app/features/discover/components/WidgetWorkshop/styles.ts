@@ -1,5 +1,7 @@
 import { cva } from "class-variance-authority";
 
+import { terminalSurface } from "@components/ui/styles";
+
 export const workshopRoot = cva("flex min-h-0 flex-1 flex-col");
 
 export const workshopHeader = cva(
@@ -176,7 +178,7 @@ export const previewBox = cva("min-w-0");
 export const previewHint = cva("text-fg/50 text-[11px]");
 
 export const previewJson = cva(
-  "border-fg/10 bg-fg/[0.03] text-fg/80 max-h-80 overflow-auto rounded-lg border p-3 font-mono text-[11px] break-words whitespace-pre-wrap"
+  `border-fg/10 ${terminalSurface} text-fg/80 max-h-80 overflow-auto rounded-lg border p-3 font-mono text-[11px] break-words whitespace-pre-wrap`
 );
 
 export const previewCopy = cva("self-start");

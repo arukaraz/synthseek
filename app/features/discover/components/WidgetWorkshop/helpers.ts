@@ -4,7 +4,7 @@ import { matchesTerms, searchTerms } from "@utils/search";
 import type {
   FeedQuery,
   HouseholdMember,
-  QuestionQuery,
+  RecipeQuery,
   RecapPeriod,
   RecapQuery,
   WidgetBlock,
@@ -48,10 +48,10 @@ import type {
   GrammarSubject,
   MediaServer,
   PickRotation,
-  QuestionMeasure,
+  RecipeMeasure,
   RecapNamedPeriod,
-  QuestionSubject,
-  QuestionTime,
+  RecipeSubject,
+  RecipeTime,
   RuleField,
   RuleList,
   RuleMode,
@@ -62,16 +62,16 @@ import type {
   WidgetRules,
 } from "./types";
 
-export function questionShapeOf(question: QuestionQuery, grammar: WidgetGrammar): WidgetShape {
-  if (question.groupBy !== undefined) return grammar.groupByShapes[question.groupBy];
-  const shapes = grammar.subjectShapes[question.subject];
-  return question.pick.limit === grammar.pick.limitMin ? shapes.single : shapes.many;
+export function recipeShapeOf(recipe: RecipeQuery, grammar: WidgetGrammar): WidgetShape {
+  if (recipe.groupBy !== undefined) return grammar.groupByShapes[recipe.groupBy];
+  const shapes = grammar.subjectShapes[recipe.subject];
+  return recipe.pick.limit === grammar.pick.limitMin ? shapes.single : shapes.many;
 }
 
 function queryShapeOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetShape {
   switch (query.type) {
-    case "question":
-      return questionShapeOf(query, grammar);
+    case "recipe":
+      return recipeShapeOf(query, grammar);
     case "feed":
       return feedSourceOf(catalog, query.source)?.shape ?? DEFAULT_FEED_SHAPE;
     case "recap":
@@ -87,7 +87,7 @@ export function webUrlOf(text: string): string | null {
 }
 
 export function listsTracksOf(query: WidgetQuery): boolean {
-  return query.type === "question" && query.subject === "tracks" && query.groupBy === undefined;
+  return query.type === "recipe" && query.subject === "tracks" && query.groupBy === undefined;
 }
 
 export function withFittingPlaylist(draft: WidgetDraft): WidgetDraft {
@@ -95,10 +95,10 @@ export function withFittingPlaylist(draft: WidgetDraft): WidgetDraft {
 }
 
 export function kindOf(query: WidgetQuery): WidgetKind {
-  return query.type === "feed" ? "feed" : "question";
+  return query.type === "feed" ? "feed" : "recipe";
 }
 
-export function recapPeriodFrom(time: QuestionTime, periods: readonly RecapNamedPeriod[]): RecapPeriod {
+export function recapPeriodFrom(time: RecipeTime, periods: readonly RecapNamedPeriod[]): RecapPeriod {
   if (time.mode === "absolute") return time;
   const [first = "thisYear"] = periods;
   const named = time.mode === "named" ? periods.find((period) => period === time.value) : undefined;
@@ -114,10 +114,10 @@ export function rotationChoicesOf(grammar: WidgetGrammar): PickRotation[] {
 }
 
 function comparesOf(query: WidgetQuery): boolean {
-  return query.type === "question" && query.compare === "previous";
+  return query.type === "recipe" && query.compare === "previous";
 }
 
-function windowDaysOf(time: QuestionTime): number {
+function windowDaysOf(time: RecipeTime): number {
   switch (time.mode) {
     case "relative":
     case "sameLastYear":
@@ -130,7 +130,7 @@ function windowDaysOf(time: QuestionTime): number {
 }
 
 export function dailyYearOf(query: WidgetQuery): boolean {
-  return query.type === "question" && query.groupBy === "day" && windowDaysOf(query.time) >= DAILY_YEAR_MIN_DAYS;
+  return query.type === "recipe" && query.groupBy === "day" && windowDaysOf(query.time) >= DAILY_YEAR_MIN_DAYS;
 }
 
 function suggestionInputOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): BlockSuggestionInput {
@@ -151,7 +151,7 @@ export function withFittingView(draft: WidgetDraft, catalog: WidgetCatalog, gram
   return first ? { ...draft, view: { ...draft.view, block: first } } : draft;
 }
 
-export function grammarSubjectOf(grammar: WidgetGrammar, subject: QuestionSubject): GrammarSubject | undefined {
+export function grammarSubjectOf(grammar: WidgetGrammar, subject: RecipeSubject): GrammarSubject | undefined {
   return grammar.subjects.find((entry) => entry.key === subject);
 }
 
@@ -165,41 +165,41 @@ export function rulesFrom(mode: RuleMode, list: readonly WidgetRule[]): WidgetRu
   return mode === "all" ? { all: [...list] } : { any: [...list] };
 }
 
-export function ruleFieldsOf(grammar: WidgetGrammar, subject: QuestionSubject): RuleField[] {
+export function ruleFieldsOf(grammar: WidgetGrammar, subject: RecipeSubject): RuleField[] {
   return grammarSubjectOf(grammar, subject)?.rules.map((rule) => rule.field) ?? [];
 }
 
-export function canGroupBy(grammar: WidgetGrammar, question: QuestionQuery): boolean {
-  const entry = grammarSubjectOf(grammar, question.subject);
-  return (entry?.groupBy.length ?? 0) > 0 && grammar.groupByMeasures.includes(question.measure);
+export function canGroupBy(grammar: WidgetGrammar, recipe: RecipeQuery): boolean {
+  const entry = grammarSubjectOf(grammar, recipe.subject);
+  return (entry?.groupBy.length ?? 0) > 0 && grammar.groupByMeasures.includes(recipe.measure);
 }
 
-function reconciled(question: QuestionQuery, grammar: WidgetGrammar): QuestionQuery {
-  const fields = ruleFieldsOf(grammar, question.subject);
-  const { mode, list } = ruleListOf(question.rules);
+function reconciled(recipe: RecipeQuery, grammar: WidgetGrammar): RecipeQuery {
+  const fields = ruleFieldsOf(grammar, recipe.subject);
+  const { mode, list } = ruleListOf(recipe.rules);
   return {
-    ...question,
+    ...recipe,
     rules: rulesFrom(
       mode,
       list.filter((rule) => fields.includes(rule.field))
     ),
-    groupBy: canGroupBy(grammar, question) ? question.groupBy : undefined,
-    compare: question.measure === "rankDelta" ? "previous" : question.compare,
-    pick: { ...question.pick, by: question.pick.by === "name" ? "name" : question.measure },
+    groupBy: canGroupBy(grammar, recipe) ? recipe.groupBy : undefined,
+    compare: recipe.measure === "rankDelta" ? "previous" : recipe.compare,
+    pick: { ...recipe.pick, by: recipe.pick.by === "name" ? "name" : recipe.measure },
   };
 }
 
-export function withSubject(question: QuestionQuery, subject: QuestionSubject, grammar: WidgetGrammar): QuestionQuery {
+export function withSubject(recipe: RecipeQuery, subject: RecipeSubject, grammar: WidgetGrammar): RecipeQuery {
   const measures = grammarSubjectOf(grammar, subject)?.measures ?? [];
-  const measure = measures.includes(question.measure) ? question.measure : (measures[0] ?? question.measure);
-  return reconciled({ ...question, subject, measure }, grammar);
+  const measure = measures.includes(recipe.measure) ? recipe.measure : (measures[0] ?? recipe.measure);
+  return reconciled({ ...recipe, subject, measure }, grammar);
 }
 
-export function withMeasure(question: QuestionQuery, measure: QuestionMeasure, grammar: WidgetGrammar): QuestionQuery {
-  return reconciled({ ...question, measure }, grammar);
+export function withMeasure(recipe: RecipeQuery, measure: RecipeMeasure, grammar: WidgetGrammar): RecipeQuery {
+  return reconciled({ ...recipe, measure }, grammar);
 }
 
-export function timeFor(mode: TimeMode, now: Date): QuestionTime {
+export function timeFor(mode: TimeMode, now: Date): RecipeTime {
   switch (mode) {
     case "relative":
       return { mode, days: DEFAULT_DAYS };
@@ -212,12 +212,12 @@ export function timeFor(mode: TimeMode, now: Date): QuestionTime {
   }
 }
 
-export function rotationOf(question: QuestionQuery): PickRotation {
-  return question.pick.random?.rotate ?? NO_ROTATION;
+export function rotationOf(recipe: RecipeQuery): PickRotation {
+  return recipe.pick.random?.rotate ?? NO_ROTATION;
 }
 
-export function withRotation(question: QuestionQuery, rotation: PickRotation): QuestionQuery {
-  return { ...question, pick: { ...question.pick, random: rotation === NO_ROTATION ? null : { rotate: rotation } } };
+export function withRotation(recipe: RecipeQuery, rotation: PickRotation): RecipeQuery {
+  return { ...recipe, pick: { ...recipe.pick, random: rotation === NO_ROTATION ? null : { rotate: rotation } } };
 }
 
 export function defaultRuleFor(field: RuleField): WidgetRule {
@@ -279,7 +279,7 @@ export function monthName(month: number): string {
   return new Date(MONTH_NAME_REFERENCE_YEAR, month - 1, 1).toLocaleDateString(i18n.language, { month: "long" });
 }
 
-function timeText(time: QuestionTime): string {
+function timeText(time: RecipeTime): string {
   switch (time.mode) {
     case "relative":
       return i18n.t("widgets:time.relative", { count: time.days });
@@ -294,32 +294,32 @@ function timeText(time: QuestionTime): string {
   }
 }
 
-function headOf(question: QuestionQuery): string {
-  const measure = i18n.t(`widgets:measures.${question.measure}`);
-  const time = timeText(question.time);
-  if (question.groupBy) {
-    return i18n.t("widgets:readback.series", { measure, time, unit: i18n.t(`widgets:units.${question.groupBy}`) });
+function headOf(recipe: RecipeQuery): string {
+  const measure = i18n.t(`widgets:measures.${recipe.measure}`);
+  const time = timeText(recipe.time);
+  if (recipe.groupBy) {
+    return i18n.t("widgets:readback.series", { measure, time, unit: i18n.t(`widgets:units.${recipe.groupBy}`) });
   }
   const parts = {
-    count: question.pick.limit,
-    subject: i18n.t(`widgets:subjects.${question.subject}`),
-    order: i18n.t(`widgets:orders.${question.pick.order}`),
+    count: recipe.pick.limit,
+    subject: i18n.t(`widgets:subjects.${recipe.subject}`),
+    order: i18n.t(`widgets:orders.${recipe.pick.order}`),
     measure,
     time,
   };
-  const rotation = question.pick.random?.rotate;
+  const rotation = recipe.pick.random?.rotate;
   return rotation
     ? i18n.t("widgets:readback.pick", { ...parts, rotation: i18n.t(`widgets:readback.${rotation}`) })
     : i18n.t("widgets:readback.show", parts);
 }
 
-export function readbackOf(question: QuestionQuery, people: readonly HouseholdMember[] = []): string {
-  const { mode, list } = ruleListOf(question.rules);
+export function readbackOf(recipe: RecipeQuery, people: readonly HouseholdMember[] = []): string {
+  const { mode, list } = ruleListOf(recipe.rules);
   const joiner = i18n.t(mode === "all" ? "widgets:readback.and" : "widgets:readback.or");
   const rules = list.map((rule) => ruleText(rule, people)).join(joiner);
   return [
-    headOf(question),
-    question.compare === "previous" ? i18n.t("widgets:readback.compared") : "",
+    headOf(recipe),
+    recipe.compare === "previous" ? i18n.t("widgets:readback.compared") : "",
     list.length > 0 ? i18n.t("widgets:readback.where", { rules }) : "",
     i18n.t("widgets:readback.end"),
   ].join("");

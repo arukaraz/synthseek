@@ -40,6 +40,7 @@ function renderDialog(items: BoardItem[] = ITEMS, device: "wide" | "narrow" = "w
     <BoardArrangeDialog
       items={items}
       device={device}
+      boardWidth={1200}
       custom={customWidgetsById([])}
       customStatus="ready"
       onSave={onSave}
@@ -131,6 +132,7 @@ describe("BoardArrangeDialog", () => {
   it("starts a drag from a mouse press on the tile but not from its buttons", () => {
     HTMLElement.prototype.setPointerCapture = vi.fn();
     HTMLElement.prototype.hasPointerCapture = vi.fn(() => false);
+    HTMLElement.prototype.animate = vi.fn();
     renderDialog();
     const tile = tileNamed(/^Recent Scrobbles/);
     const ghosts = () => Array.from(document.body.children).filter((node) => node.className.includes(DRAG_GHOST_CLASS));
@@ -140,5 +142,46 @@ describe("BoardArrangeDialog", () => {
 
     fireEvent.pointerDown(tile, { pointerType: "mouse", button: 0 });
     expect(ghosts()).toHaveLength(1);
+  });
+
+  it("keeps the handle, the title, the sizes, the settings and the remove button on the bar of every size", () => {
+    renderDialog([{ kind: "builtin", id: "a", widget: "scrobbles", size: "S" }]);
+    const tile = tileNamed(/^Recent Scrobbles/);
+
+    expect(within(tile).getByText("Recent Scrobbles")).toBeInTheDocument();
+    expect(
+      within(tile)
+        .getAllByRole("button")
+        .map((button) => button.getAttribute("aria-label"))
+    ).toEqual([
+      "Drag Recent Scrobbles",
+      "Small",
+      "Medium",
+      "Large",
+      "Settings for Recent Scrobbles",
+      "Remove Recent Scrobbles",
+    ]);
+  });
+
+  it("changes the draft from the settings menu without starting a drag from the press", async () => {
+    HTMLElement.prototype.setPointerCapture = vi.fn();
+    HTMLElement.prototype.hasPointerCapture = vi.fn(() => false);
+    HTMLElement.prototype.animate = vi.fn();
+    const { onSave } = renderDialog();
+    const settings = screen.getByRole("button", { name: "Settings for Recent Scrobbles" });
+    const ghosts = () => Array.from(document.body.children).filter((node) => node.className.includes(DRAG_GHOST_CLASS));
+
+    fireEvent.pointerDown(settings, { pointerType: "mouse", button: 0, ctrlKey: false });
+    const item = await screen.findByRole("menuitem", { name: "Hide background" });
+    fireEvent.pointerDown(item, { pointerType: "mouse", button: 0 });
+    expect(ghosts()).toHaveLength(0);
+    fireEvent.click(item);
+    fireEvent.keyDown(screen.getByRole("menu"), { key: "Escape" });
+    fireEvent.click(await screen.findByRole("button", { name: "Save changes" }));
+
+    expect(onSave).toHaveBeenCalledWith([
+      expect.objectContaining({ id: "a", background: false }),
+      expect.not.objectContaining({ background: false }),
+    ]);
   });
 });

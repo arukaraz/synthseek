@@ -1,13 +1,14 @@
 "use client";
 
-import { GripVertical, X } from "lucide-react";
+import { Move, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { BoardTileSizes } from "../ExploreBoard/BoardTileSizes";
-import { arrangeBar, arrangeButton, arrangeHandle, arrangeName } from "./styles";
+import { TileSettingsMenu } from "../ExploreBoard/TileSettingsMenu";
+import { arrangeBar, arrangeButton, arrangeHandle, arrangeName, arrangeTools } from "./styles";
 import type { ArrangeTileBarProps } from "./types";
 
-export function ArrangeTileBar({ item, device, name, showName, actions }: ArrangeTileBarProps) {
+export function ArrangeTileBar({ item, device, name, position, total, actions }: ArrangeTileBarProps) {
   const { t } = useTranslation("discover");
 
   return (
@@ -22,13 +23,24 @@ export function ArrangeTileBar({ item, device, name, showName, actions }: Arrang
           actions.startDrag(event, item.id);
         }}
       >
-        <GripVertical className="size-3.5" />
+        <Move className="size-3.5" />
       </button>
-      {showName ? <span className={arrangeName()}>{name}</span> : null}
-      <BoardTileSizes item={item} device={device} name={name} dense onResize={actions.resize} />
+      <span className={arrangeName()}>{name}</span>
+      <div className={arrangeTools()}>
+        <BoardTileSizes item={item} device={device} name={name} dense onResize={actions.resize} />
+        <TileSettingsMenu
+          item={item}
+          device={device}
+          name={name}
+          position={position}
+          total={total}
+          dense
+          actions={actions}
+        />
+      </div>
       <button
         type="button"
-        className={arrangeButton({ end: !showName })}
+        className={arrangeButton()}
         aria-label={t("board.tile.remove", { name })}
         onClick={() => actions.remove(item.id)}
       >

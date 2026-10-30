@@ -11,7 +11,7 @@ export type WidgetIcon = WidgetDocument["meta"]["icon"];
 export type WidgetCatalog = WidgetOutputs["catalog"];
 export type WidgetGrammar = WidgetOutputs["grammar"];
 export type WidgetQuery = WidgetDocument["query"];
-export type QuestionQuery = Extract<WidgetQuery, { type: "question" }>;
+export type RecipeQuery = Extract<WidgetQuery, { type: "recipe" }>;
 export type FeedQuery = Extract<WidgetQuery, { type: "feed" }>;
 export type RecapQuery = Extract<WidgetQuery, { type: "recap" }>;
 export type RecapPeriod = RecapQuery["period"];
@@ -24,13 +24,13 @@ export type WidgetBindSlot = keyof NonNullable<WidgetDocument["view"]["bind"]>;
 export type WidgetResult = WidgetOutputs["data"];
 export type WidgetRuleOfPlaylist = WidgetOutputs["playlistRule"];
 export type HouseholdMember = WidgetOutputs["household"][number];
-export type QuestionWidgetResult = Extract<WidgetResult, { type: "question" }>;
+export type RecipeWidgetResult = Extract<WidgetResult, { type: "recipe" }>;
 export type FeedWidgetResult = Extract<WidgetResult, { type: "feed" }>;
 export type RecapWidgetResult = Extract<WidgetResult, { type: "recap" }>;
 export type RecapFact = RecapWidgetResult["facts"][number];
-export type WidgetMeasure = QuestionWidgetResult["measure"];
+export type WidgetMeasure = RecipeWidgetResult["measure"];
 export type WidgetShape = WidgetResult["shape"];
-export type WidgetRowOf<R extends QuestionWidgetResult | FeedWidgetResult, D extends R["dataset"]> = Extract<
+export type WidgetRowOf<R extends RecipeWidgetResult | FeedWidgetResult, D extends R["dataset"]> = Extract<
   R,
   { dataset: D }
 >["rows"][number];

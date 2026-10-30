@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { render } from "@test/test-utils";
 
-import { BOARD_FLIP_MS } from "../constants";
 import { useBoardFlip } from "../useBoardFlip";
 
 const positions: Record<string, number> = { a: 0, b: 120 };
@@ -29,13 +28,18 @@ function tile(id: string): HTMLElement {
   return node;
 }
 
+function animatedTiles(animate: { mock: { contexts: unknown[] } }): unknown[] {
+  return animate.mock.contexts;
+}
+
 beforeEach(() => {
   positions.a = 0;
   positions.b = 120;
-  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function rectOf(this: HTMLElement) {
-    const x = positions[this.dataset.boardTile ?? ""] ?? 0;
-    return DOMRect.fromRect({ x, y: 0, width: 100, height: 100 });
+  HTMLElement.prototype.animate = vi.fn();
+  vi.spyOn(HTMLElement.prototype, "offsetLeft", "get").mockImplementation(function leftOf(this: HTMLElement) {
+    return positions[this.dataset.boardTile ?? ""] ?? 0;
   });
+  vi.spyOn(HTMLElement.prototype, "offsetTop", "get").mockReturnValue(0);
 });
 
 afterEach(() => {
@@ -43,45 +47,38 @@ afterEach(() => {
 });
 
 describe("useBoardFlip", () => {
-  it("slides a tile from where it was to where it is when the order changes, and reports settling meanwhile", () => {
+  it("slides a tile from where it was to where it is when the order changes", () => {
     const { rerender } = render(<Board orderKey="a,b" skipId={null} />);
-    const transitions: string[] = [];
-    const observed = tile("b");
-    const descriptor = Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype, "transition");
-    Object.defineProperty(observed.style, "transition", {
-      configurable: true,
-      get: () => descriptor?.get?.call(observed.style),
-      set: (value: string) => {
-        transitions.push(value);
-        descriptor?.set?.call(observed.style, value);
-      },
-    });
+    const animate = vi.spyOn(HTMLElement.prototype, "animate");
 
     positions.b = 0;
     positions.a = 120;
     rerender(<Board orderKey="b,a" skipId={null} />);
 
-    expect(transitions).toEqual(["none", `transform ${BOARD_FLIP_MS}ms ease`]);
-    expect(tile("b").style.transform).toBe("");
-    expect(tile("a").style.transition).toBe(`transform ${BOARD_FLIP_MS}ms ease`);
+    expect(animatedTiles(animate)).toEqual([tile("a"), tile("b")]);
+    expect(animate.mock.calls[1]?.[0]).toEqual([
+      { transform: "translate(120px, 0px)" },
+      { transform: "translate(0px, 0px)" },
+    ]);
   });
 
   it("leaves the dragged tile and unmoved tiles alone", () => {
     const { rerender } = render(<Board orderKey="a,b" skipId="a" />);
+    const animate = vi.spyOn(HTMLElement.prototype, "animate");
 
     positions.a = 300;
     rerender(<Board orderKey="b,a" skipId="a" />);
 
-    expect(tile("a").style.transition).toBe("none");
-    expect(tile("b").style.transition).toBe("none");
+    expect(animate).not.toHaveBeenCalled();
   });
 
   it("does not animate when the order key is unchanged", () => {
     const { rerender } = render(<Board orderKey="a,b" skipId={null} />);
+    const animate = vi.spyOn(HTMLElement.prototype, "animate");
 
     positions.a = 300;
     rerender(<Board orderKey="a,b" skipId={null} />);
 
-    expect(tile("a").style.transition).toBe("");
+    expect(animate).not.toHaveBeenCalled();
   });
 });

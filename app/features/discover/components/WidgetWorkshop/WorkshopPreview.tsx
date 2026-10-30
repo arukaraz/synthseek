@@ -1,9 +1,11 @@
 "use client";
 
+import { Braces } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { IconButton } from "@components/ui/IconButton";
 import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { useElementWidth } from "@hooks/ui/useElementWidth";
 
@@ -32,9 +34,16 @@ export function WorkshopPreview({ draft, result, isLoading, isError, onSizeChang
             options={WORKSHOP_SIZES.map((value) => ({ value, label: t(`sizes.${value}`) }))}
             onChange={onSizeChange}
           />
-          <Button variant="ghost" size="sm" aria-pressed={showJson} onClick={() => setShowJson((shown) => !shown)}>
-            {t("mine.json")}
-          </Button>
+          <IconButton
+            icon={Braces}
+            size="lg"
+            variant="ghost"
+            animated={false}
+            aria-label={t("mine.json")}
+            aria-pressed={showJson}
+            title={t("mine.json")}
+            onClick={() => setShowJson((shown) => !shown)}
+          />
         </div>
       </div>
       <div ref={measure} className={previewBox()}>

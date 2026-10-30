@@ -12,7 +12,7 @@ import {
 } from "@features/content-detail";
 import type {
   FeedWidgetResult,
-  QuestionWidgetResult,
+  RecipeWidgetResult,
   WidgetAction,
   WidgetBindSlot,
   WidgetBlock,
@@ -43,10 +43,10 @@ import type {
 } from "./types";
 
 type Bind = WidgetDocument["view"]["bind"];
-type QuestionTrack = WidgetRowOf<QuestionWidgetResult, "tracks">;
-type QuestionAlbum = WidgetRowOf<QuestionWidgetResult, "albums">;
-type QuestionArtist = WidgetRowOf<QuestionWidgetResult, "artists">;
-type QuestionBucket = WidgetRowOf<QuestionWidgetResult, "buckets">;
+type RecipeTrack = WidgetRowOf<RecipeWidgetResult, "tracks">;
+type RecipeAlbum = WidgetRowOf<RecipeWidgetResult, "albums">;
+type RecipeArtist = WidgetRowOf<RecipeWidgetResult, "artists">;
+type RecipeBucket = WidgetRowOf<RecipeWidgetResult, "buckets">;
 type FeedTrack = WidgetRowOf<FeedWidgetResult, "tracks">;
 type FeedAlbum = WidgetRowOf<FeedWidgetResult, "albums">;
 type FeedArtist = WidgetRowOf<FeedWidgetResult, "artists">;
@@ -130,7 +130,7 @@ export function moveOf(
   return row.prev === null ? { kind: "new" } : { kind: "value", by: row.value - row.prev };
 }
 
-function questionTrackItem(row: QuestionTrack, result: QuestionWidgetResult, bind: Bind): WidgetItem {
+function recipeTrackItem(row: RecipeTrack, result: RecipeWidgetResult, bind: Bind): WidgetItem {
   const { measure } = result;
   return {
     key: row.id,
@@ -147,7 +147,7 @@ function questionTrackItem(row: QuestionTrack, result: QuestionWidgetResult, bin
   };
 }
 
-function questionAlbumItem(row: QuestionAlbum, result: QuestionWidgetResult, bind: Bind): WidgetItem {
+function recipeAlbumItem(row: RecipeAlbum, result: RecipeWidgetResult, bind: Bind): WidgetItem {
   const { measure } = result;
   const album = { id: row.albumExternalId, name: row.name, artistName: row.artist, cover: row.cover };
   return {
@@ -165,7 +165,7 @@ function questionAlbumItem(row: QuestionAlbum, result: QuestionWidgetResult, bin
   };
 }
 
-function questionArtistItem(row: QuestionArtist, result: QuestionWidgetResult, bind: Bind): WidgetItem {
+function recipeArtistItem(row: RecipeArtist, result: RecipeWidgetResult, bind: Bind): WidgetItem {
   const { measure } = result;
   return {
     key: row.id,
@@ -182,11 +182,11 @@ function questionArtistItem(row: QuestionArtist, result: QuestionWidgetResult, b
   };
 }
 
-function bucketLabel(result: QuestionWidgetResult, row: QuestionBucket): string {
+function bucketLabel(result: RecipeWidgetResult, row: RecipeBucket): string {
   return result.subject === "decades" ? i18n.t("discover:customWidget.decade", { year: row.label }) : row.label;
 }
 
-function questionBucketItem(result: QuestionWidgetResult, row: QuestionBucket, bind: Bind): WidgetItem {
+function recipeBucketItem(result: RecipeWidgetResult, row: RecipeBucket, bind: Bind): WidgetItem {
   return {
     key: row.key,
     title: bound(row, bind, "title", bucketLabel(result, row)) ?? row.label,
@@ -317,16 +317,16 @@ function serverPlaylistItem(row: FeedPlaylist, bind: Bind): WidgetItem {
   };
 }
 
-function questionItems(result: QuestionWidgetResult, bind: Bind): WidgetItem[] {
+function recipeItems(result: RecipeWidgetResult, bind: Bind): WidgetItem[] {
   switch (result.dataset) {
     case "tracks":
-      return result.rows.map((row) => questionTrackItem(row, result, bind));
+      return result.rows.map((row) => recipeTrackItem(row, result, bind));
     case "albums":
-      return result.rows.map((row) => questionAlbumItem(row, result, bind));
+      return result.rows.map((row) => recipeAlbumItem(row, result, bind));
     case "artists":
-      return result.rows.map((row) => questionArtistItem(row, result, bind));
+      return result.rows.map((row) => recipeArtistItem(row, result, bind));
     case "buckets":
-      return result.rows.map((row) => questionBucketItem(result, row, bind));
+      return result.rows.map((row) => recipeBucketItem(result, row, bind));
     case "series":
     case "matrix":
       return [];
@@ -352,8 +352,8 @@ function feedItems(result: FeedWidgetResult, bind: Bind): WidgetItem[] {
 
 export function widgetItemsOf(result: WidgetResult, bind: Bind): WidgetItem[] {
   switch (result.type) {
-    case "question":
-      return questionItems(result, bind);
+    case "recipe":
+      return recipeItems(result, bind);
     case "feed":
       return feedItems(result, bind);
     case "recap":
@@ -362,7 +362,7 @@ export function widgetItemsOf(result: WidgetResult, bind: Bind): WidgetItem[] {
 }
 
 export function widgetStatsOf(result: WidgetResult): WidgetStat[] {
-  if (result.type !== "question" || result.dataset !== "buckets") return [];
+  if (result.type !== "recipe" || result.dataset !== "buckets") return [];
   return result.rows.map((row) => ({
     key: row.key,
     label: bucketLabel(result, row),
@@ -386,7 +386,7 @@ function pointText(measure: WidgetMeasure, value: number): string {
 }
 
 export function widgetPointsOf(result: WidgetResult): WidgetPoint[] {
-  if (result.type !== "question") return [];
+  if (result.type !== "recipe") return [];
   switch (result.dataset) {
     case "series":
       return result.rows.map((row) => ({
@@ -412,7 +412,7 @@ export function widgetPointsOf(result: WidgetResult): WidgetPoint[] {
 }
 
 export function widgetCellsOf(result: WidgetResult): number[][] {
-  if (result.type !== "question" || result.dataset !== "matrix") return [];
+  if (result.type !== "recipe" || result.dataset !== "matrix") return [];
   const cells = Array.from({ length: MATRIX_WEEKDAYS }, () => Array.from({ length: MATRIX_HOURS }, () => 0));
   for (const row of result.rows) {
     const day = cells[row.weekday];
@@ -529,7 +529,7 @@ export function customWidgetNote({ result, isError, empty }: CustomWidgetNoteInp
   }
   const story = storyNoteOf(result);
   if (story) return story;
-  if (result?.type === "question" && result.privacy !== null) {
+  if (result?.type === "recipe" && result.privacy !== null) {
     return result.privacy.reason === "notShared"
       ? i18n.t("discover:customWidget.privacy.notShared", {
           name: result.privacy.name ?? i18n.t("widgets:rules.people.someone"),
