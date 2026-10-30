@@ -1,12 +1,16 @@
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
+import type { WidgetShape } from "@hooks/api/queries/widgets/types";
+
 import type {
+  CuratedFeed,
   FeedSeed,
   FeedSeedKind,
   ListenBrainzPlaylist,
   NamedPeriod,
   QuestionGroupBy,
   RuleField,
+  SmartRefresh,
   TimeMode,
   WidgetKind,
   WidgetRule,
@@ -20,6 +24,14 @@ export const WIDGET_KINDS: readonly WidgetKind[] = ["question", "feed"];
 
 export const TIME_MODES: readonly TimeMode[] = ["relative", "named", "absolute", "sameLastYear"];
 
+export const RECAP_TIME_MODES: readonly TimeMode[] = ["named", "absolute"];
+
+export const RECAP_SUBJECT = "recap";
+
+export const SMART_REFRESHES: readonly SmartRefresh[] = ["daily", "weekly"];
+
+export const DEFAULT_SMART_REFRESH: SmartRefresh = "weekly";
+
 export const NO_ROTATION = "none";
 
 export const DEFAULT_DAYS = 30;
@@ -31,6 +43,16 @@ export const DEFAULT_FEED_SEED: FeedSeed = { kind: "myTopArtists", n: 10, days: 
 export const DEFAULT_FRESH_RELEASE_DAYS = 30;
 
 export const DEFAULT_LISTENBRAINZ_PLAYLIST: ListenBrainzPlaylist = "weekly-jams";
+
+export const DEFAULT_CURATED_FEED: CuratedFeed = "pitchforkBestNewAlbums";
+
+export const DEFAULT_EVENTS_DAYS = 90;
+
+export const ANY_COUNTRY = "any";
+
+export const DEFAULT_NEWS_URL = "https://feeds.npr.org/1039/rss.xml";
+
+export const DEFAULT_FEED_SHAPE: WidgetShape = "ranked";
 
 export const FEED_SEED_KINDS: readonly FeedSeedKind[] = ["myTopArtists", "favorites"];
 
@@ -71,7 +93,12 @@ export const DEFAULT_RULES: Record<RuleField, WidgetRule> = {
   releaseType: { field: "releaseType", op: "isNot", value: "single" },
   listeners: { field: "listeners", op: "lt", value: 50_000 },
   artistInLibrary: { field: "artistInLibrary", op: "is", value: true },
+  user: { field: "user", op: "isNot", value: "me" },
 };
+
+export const USER_RULE_OPS = ["is", "isNot", "with"] as const;
+
+export const USER_RULE_GROUPS = ["me", "household"] as const;
 
 export const DECADE_CHOICES: readonly number[] = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
 

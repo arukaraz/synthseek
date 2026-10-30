@@ -19,6 +19,8 @@ export {
   createMatrixResult,
   createQuestionAlbumRow,
   createQuestionTrackRow,
+  createNewsResult,
+  createRecapResult,
   createSeriesResult,
   createTrackResult,
   createWidget,

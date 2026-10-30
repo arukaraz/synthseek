@@ -1,4 +1,6 @@
-import type { FeedQuery, QuestionQuery, WidgetDraft } from "@hooks/api/queries/widgets/types";
+import type { FeedQuery, QuestionQuery, RecapQuery, WidgetDraft } from "@hooks/api/queries/widgets/types";
+
+export const DEFAULT_RECAP: RecapQuery = { type: "recap", period: { mode: "named", value: "thisYear" } };
 
 export const DEFAULT_QUERIES: { question: QuestionQuery; feed: FeedQuery } = {
   question: {

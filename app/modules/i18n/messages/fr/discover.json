@@ -456,7 +456,17 @@
     "empty": "Rien ne correspond à ce widget pour le moment.",
     "needs": {
       "lastfm": "Connectez Last.fm dans les Réglages pour remplir ce widget.",
-      "listenbrainz": "Ajoutez votre utilisateur ListenBrainz dans les Réglages pour remplir ce widget."
+      "listenbrainz": "Ajoutez votre utilisateur ListenBrainz dans les Réglages pour remplir ce widget.",
+      "bandsintown": "Ajoutez un app id Bandsintown dans Réglages, Intégrations, pour remplir ce widget."
+    },
+    "events": {
+      "refused": "Bandsintown a refusé l’app id. Vérifiez-le dans Réglages, Intégrations.",
+      "unreachable": "Bandsintown est injoignable pour le moment."
+    },
+    "news": {
+      "unreachable": "Le flux est injoignable pour le moment.",
+      "blocked": "Cette adresse de flux n’est pas autorisée : elle doit être une adresse publique http ou https.",
+      "unreadable": "Cette adresse n’a pas répondu avec un flux RSS ou Atom."
     },
     "rail": "Éléments du widget",
     "leader": "N° 1",
@@ -502,6 +512,40 @@
     },
     "yearCalendar": {
       "total": "{{value}} cette année"
+    },
+    "story": {
+      "label": {
+        "plays": "Vous avez lancé la lecture",
+        "minutes": "Minutes écoutées",
+        "topArtist": "Votre artiste numéro un",
+        "topTrack": "Votre titre numéro un",
+        "topAlbums": "Vos albums préférés",
+        "topGenres": "Vos genres préférés",
+        "newArtists": "Nouveaux artistes",
+        "listeningAge": "Votre âge musical",
+        "busiestDay": "Votre jour le plus chargé",
+        "peakHour": "Votre heure de pointe"
+      },
+      "detail": {
+        "plays": "fois sur cette période",
+        "minutes": "Environ {{hours}} heures de musique",
+        "byArtist": "{{artist}} · {{plays}}",
+        "newArtists": "Dont {{names}}",
+        "listeningAge": "{{share}} de vos écoutes venaient de musique sortie ces années-là"
+      },
+      "rank": "{{rank}}. {{name}}",
+      "years": "De {{from}} à {{to}}",
+      "notEnough": "Pas encore assez d’écoutes : {{plays}} sur les {{minimum}} que ce bilan demande.",
+      "role": "bilan",
+      "position": "Bilan, page {{current}} sur {{total}}",
+      "counter": "{{current}} / {{total}}",
+      "previous": "Page précédente",
+      "next": "Page suivante",
+      "goTo": "Aller à {{page}}"
+    },
+    "privacy": {
+      "notShared": "{{name}} n’a pas partagé ses écoutes.",
+      "nobodyShares": "Personne d’autre dans le foyer ne partage encore ses écoutes."
     }
   }
 }

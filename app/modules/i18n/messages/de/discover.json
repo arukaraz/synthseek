@@ -456,7 +456,17 @@
     "empty": "Gerade passt nichts zu diesem Widget.",
     "needs": {
       "lastfm": "Verbinde Last.fm in den Einstellungen, um dieses Widget zu füllen.",
-      "listenbrainz": "Trage deinen ListenBrainz-Benutzer in den Einstellungen ein, um dieses Widget zu füllen."
+      "listenbrainz": "Trage deinen ListenBrainz-Benutzer in den Einstellungen ein, um dieses Widget zu füllen.",
+      "bandsintown": "Trage unter Einstellungen, Integrationen eine Bandsintown-App-ID ein, um dieses Widget zu füllen."
+    },
+    "events": {
+      "refused": "Bandsintown hat die App-ID abgelehnt. Prüfe sie unter Einstellungen, Integrationen.",
+      "unreachable": "Bandsintown ist gerade nicht erreichbar."
+    },
+    "news": {
+      "unreachable": "Der Feed ist gerade nicht erreichbar.",
+      "blocked": "Diese Feed-Adresse ist nicht erlaubt: Sie muss eine öffentliche http- oder https-Adresse sein.",
+      "unreadable": "Diese Adresse hat nicht mit einem RSS- oder Atom-Feed geantwortet."
     },
     "rail": "Widget-Einträge",
     "leader": "Nr. 1",
@@ -502,6 +512,40 @@
     },
     "yearCalendar": {
       "total": "{{value}} in diesem Jahr"
+    },
+    "story": {
+      "label": {
+        "plays": "Du hast auf Play gedrückt",
+        "minutes": "Gehörte Minuten",
+        "topArtist": "Dein Top-Artist",
+        "topTrack": "Dein Top-Song",
+        "topAlbums": "Deine Top-Alben",
+        "topGenres": "Deine Top-Genres",
+        "newArtists": "Neue Artists",
+        "listeningAge": "Dein Hör-Alter",
+        "busiestDay": "Dein stärkster Tag",
+        "peakHour": "Deine Hauptzeit"
+      },
+      "detail": {
+        "plays": "Mal in diesem Zeitraum",
+        "minutes": "Etwa {{hours}} Stunden Musik",
+        "byArtist": "{{artist}} · {{plays}}",
+        "newArtists": "Darunter {{names}}",
+        "listeningAge": "{{share}} deiner Wiedergaben stammten aus Musik dieser Jahre"
+      },
+      "rank": "{{rank}}. {{name}}",
+      "years": "{{from}} bis {{to}}",
+      "notEnough": "Noch nicht genug gehört: {{plays}} von {{minimum}} Wiedergaben, die dieser Rückblick braucht.",
+      "role": "Rückblick",
+      "position": "Rückblick, Seite {{current}} von {{total}}",
+      "counter": "{{current}} / {{total}}",
+      "previous": "Vorherige Seite",
+      "next": "Nächste Seite",
+      "goTo": "Zu {{page}}"
+    },
+    "privacy": {
+      "notShared": "{{name}} hat das eigene Hören nicht geteilt.",
+      "nobodyShares": "Noch niemand sonst im Haushalt teilt das eigene Hören."
     }
   }
 }

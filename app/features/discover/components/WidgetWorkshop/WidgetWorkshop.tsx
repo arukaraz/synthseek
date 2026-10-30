@@ -6,14 +6,15 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { DialogTitle } from "@components/ui/Dialog";
-import { useSaveWidget } from "@hooks/api/mutations/widgets/useSaveWidget";
 import { useWidgetPreview } from "@hooks/api/queries/widgets/useWidgetPreview";
 import { browserTimeZone } from "@utils/time-zone";
 
 import { useWidgetWorkshop } from "../../hooks/useWidgetWorkshop";
+import { useWorkshopSave } from "../../hooks/useWorkshopSave";
 import { DetailsSection } from "./DetailsSection";
 import { previewableDraft } from "./helpers";
 import { LookSection } from "./LookSection";
+import { PlaylistSection } from "./PlaylistSection";
 import { QuerySection } from "./QuerySection";
 import {
   workshopActions,
@@ -34,9 +35,9 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
   const workshop = useWidgetWorkshop(opening, context);
   const [timeZone] = useState(browserTimeZone);
   const preview = useWidgetPreview(previewableDraft(workshop.previewDraft, t("workshop.newTitle")), timeZone);
-  const save = useSaveWidget();
-  const { draft, dirty, widgetId } = workshop;
-  const named = draft.meta.name.trim().length > 0;
+  const save = useWorkshopSave(workshop, timeZone, onSaved);
+  const { draft, dirty, widgetId, purpose, playlistable } = workshop;
+  const rule = purpose === "rule";
 
   useEffect(() => onDirtyChange(dirty), [dirty, onDirtyChange]);
 
@@ -48,20 +49,18 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
           {t("workshop.back")}
         </Button>
         <DialogTitle className={workshopTitle()}>
-          {widgetId ? t("workshop.editTitle", { name: draft.meta.name }) : t("workshop.newTitle")}
+          {rule
+            ? t("workshop.ruleTitle", { name: draft.meta.name })
+            : widgetId
+              ? t("workshop.editTitle", { name: draft.meta.name })
+              : t("workshop.newTitle")}
         </DialogTitle>
         <div className={workshopActions()}>
           <Button variant="ghost" size="sm" className={workshopCancel()} onClick={onLeave}>
             {t("workshop.cancel")}
           </Button>
-          <Button
-            size="sm"
-            disabled={!named || save.isPending}
-            onClick={() =>
-              save.mutate(widgetId ? { ...draft, id: widgetId } : draft, { onSuccess: (saved) => onSaved(saved) })
-            }
-          >
-            {save.isPending ? t("workshop.saving") : t("workshop.save")}
+          <Button size="sm" disabled={!save.ready || save.pending} onClick={save.save}>
+            {save.pending ? t("workshop.saving") : rule ? t("workshop.saveRule") : t("workshop.save")}
           </Button>
         </div>
       </div>
@@ -77,8 +76,15 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
           </aside>
           <div className={workshopForm()}>
             <QuerySection workshop={workshop} context={context} />
-            <LookSection workshop={workshop} context={context} />
-            <DetailsSection workshop={workshop} context={context} />
+            {rule ? (
+              <PlaylistSection workshop={workshop} number={2} />
+            ) : (
+              <>
+                <LookSection workshop={workshop} context={context} />
+                <DetailsSection workshop={workshop} context={context} />
+                {playlistable ? <PlaylistSection workshop={workshop} number={4} /> : null}
+              </>
+            )}
           </div>
         </div>
       </div>

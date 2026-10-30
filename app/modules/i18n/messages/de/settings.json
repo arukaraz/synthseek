@@ -452,6 +452,10 @@
       "discogsToken": {
         "label": "Discogs-Token (optional)",
         "helper": "Ergänzt Genres, Labels und Release-Details von Discogs. Leer lassen, um Discogs nicht zu nutzen."
+      },
+      "bandsintownAppId": {
+        "label": "Bandsintown-App-ID (optional)",
+        "helper": "Füllt das Widget für kommende Konzerte mit Konzerten deiner Artists. Bandsintown stellt sie kostenlos aus."
       }
     },
     "librarySources": {
@@ -1079,6 +1083,11 @@
         "rejected": "Der Dienst hat die zuletzt gesendeten Wiedergaben abgelehnt."
       }
     },
+    "household": {
+      "title": "Haushalt",
+      "label": "Mein Hören mit dem Haushalt teilen",
+      "description": "Erlaubt den Widgets der anderen Mitglieder, etwa Zu Hause und Blend, zu lesen, was du abspielst. Standardmäßig aus."
+    },
     "quota": {
       "title": "Download-Kontingent",
       "unavailable": "Dein Kontingent konnte nicht geladen werden.",
@@ -1337,6 +1346,10 @@
       "playback-source-links": {
         "name": "Wiedergabequellen-Verknüpfung",
         "description": "Findet, welche deiner Titel deine Medienserver ebenfalls abspielen können, damit sie von dort abgespielt werden können."
+      },
+      "smart-playlists": {
+        "name": "Smarte Playlists",
+        "description": "Erneuert täglich oder wöchentlich die Playlists, deren Titel eine Widget-Regel auswählt."
       }
     }
   },

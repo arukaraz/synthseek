@@ -1,6 +1,7 @@
 import type {
   FeedWidgetResult,
   QuestionWidgetResult,
+  RecapWidgetResult,
   WidgetCatalog,
   WidgetDocument,
   WidgetGrammar,
@@ -105,7 +106,7 @@ export function createFeedAlbumRow(overrides: Partial<FeedAlbumRow> = {}): FeedA
   };
 }
 
-const QUESTION_BASE = { type: "question", measure: "plays", window: WINDOW, previous: null } as const;
+const QUESTION_BASE = { type: "question", measure: "plays", window: WINDOW, previous: null, privacy: null } as const;
 
 export function createTrackResult(rows: QuestionTrackRow[]): QuestionWidgetResult {
   return { ...QUESTION_BASE, subject: "tracks", total: rows.length, dataset: "tracks", shape: "ranked", rows };
@@ -133,6 +134,39 @@ export function createMatrixResult(rows: QuestionMatrixRow[]): QuestionWidgetRes
   return { ...QUESTION_BASE, subject: "tracks", total: rows.length, dataset: "matrix", shape: "matrix", rows };
 }
 
+export function createNewsResult(
+  rows: WidgetRowOf<FeedWidgetResult, "items">[],
+  failure: Extract<FeedWidgetResult, { dataset: "items" }>["failure"] = null
+): FeedWidgetResult {
+  return {
+    type: "feed",
+    source: "feed.rss",
+    needs: null,
+    shape: "feedItems",
+    dataset: "items",
+    failure,
+    total: rows.length,
+    rows,
+  };
+}
+
+export function createRecapResult(
+  facts: RecapWidgetResult["facts"],
+  overrides: Partial<RecapWidgetResult> = {}
+): RecapWidgetResult {
+  return {
+    type: "recap",
+    dataset: "facts",
+    shape: "facts",
+    window: WINDOW,
+    plays: 120,
+    minimumPlays: 20,
+    covers: ["https://img.test/a.jpg", "https://img.test/b.jpg"],
+    facts,
+    ...overrides,
+  };
+}
+
 export function createDailySeries(from: string, values: readonly number[]): QuestionSeriesRow[] {
   const start = new Date(`${from}T12:00:00Z`);
   return values.map((value, index) => {
@@ -157,6 +191,7 @@ export function createWidgetGrammar(): WidgetGrammar {
           { field: "notPlayedInLast", ops: ["days"] },
           { field: "favorite", ops: ["is"] },
           { field: "inLibrary", ops: ["is"] },
+          { field: "user", ops: ["is", "isNot", "with"] },
         ],
         groupBy: ["hour", "weekday", "day", "week", "month"],
       },
@@ -190,6 +225,7 @@ export function createWidgetGrammar(): WidgetGrammar {
       { key: "series", limitApplies: false },
       { key: "matrix", limitApplies: false },
       { key: "buckets", limitApplies: true },
+      { key: "facts", limitApplies: false },
     ],
   };
 }
@@ -210,15 +246,18 @@ export function createWidgetCatalog(): WidgetCatalog {
       { key: "heatmap", shapes: ["matrix"], needsCompare: false },
       { key: "share", shapes: ["buckets"], needsCompare: false },
       { key: "compare", shapes: ["buckets"], needsCompare: true },
+      { key: "story", shapes: ["facts"], needsCompare: false },
+      { key: "feed", shapes: ["ranked", "feedItems"], needsCompare: false },
     ],
     accents: ["daily", "weekly", "explore", "cf"],
-    actions: ["play", "request", "open", "none"],
+    actions: ["play", "request", "open", "openUrl", "none"],
     icons: ["sparkles", "flame", "trophy", "heart", "music"],
     feeds: {
       sources: [
         {
           key: "lastfm.similarArtists",
           dataset: "artists",
+          shape: "ranked",
           integration: "lastfm",
           params: ["seed"],
           rules: ["plays", "inLibrary"],
@@ -227,16 +266,54 @@ export function createWidgetCatalog(): WidgetCatalog {
         {
           key: "listenbrainz.freshReleases",
           dataset: "albums",
+          shape: "ranked",
           integration: null,
           params: ["days"],
           rules: ["releaseType", "artistInLibrary"],
           pickBy: ["rank", "releaseDate"],
         },
+        {
+          key: "events.upcoming",
+          dataset: "events",
+          shape: "ranked",
+          integration: "bandsintown",
+          params: ["seed", "country", "days"],
+          rules: [],
+          pickBy: ["rank", "releaseDate"],
+        },
+        {
+          key: "feed.rss",
+          dataset: "items",
+          shape: "feedItems",
+          integration: null,
+          params: ["url"],
+          rules: [],
+          pickBy: ["rank", "releaseDate"],
+        },
       ],
       seeds: ["myTopArtists", "favorites", "artist", "playlist"],
       playlists: ["weekly-jams", "weekly-exploration", "daily-jams"],
-      shape: "ranked",
-      limits: { freshReleaseDaysMax: 90 },
+      curated: ["pitchforkBestNewAlbums", "nprMusic"],
+      limits: { freshReleaseDaysMax: 90, eventsDaysMax: 180 },
+    },
+    recap: {
+      shape: "facts",
+      namedPeriods: ["thisYear", "thisMonth"],
+      facts: [
+        "plays",
+        "minutes",
+        "topArtist",
+        "topTrack",
+        "topAlbums",
+        "topGenres",
+        "newArtists",
+        "listeningAge",
+        "busiestDay",
+        "peakHour",
+      ],
+      minimumPlays: 20,
+      yearMin: 1900,
+      yearMax: 2100,
     },
     limits: { maxPerUser: 24, nameMaxLength: 60, descriptionMaxLength: 200, importMaxBytes: 16_384 },
   };

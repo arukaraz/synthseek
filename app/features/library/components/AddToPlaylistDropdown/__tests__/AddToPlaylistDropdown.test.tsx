@@ -41,6 +41,7 @@ function makePlaylist(overrides: Partial<LibraryPlaylistItem> = {}): LibraryPlay
     source_provider: null,
     origin: { kind: "created" },
     sync_enabled: false,
+    smart: false,
     created_at: new Date(),
     ...overrides,
   };
@@ -96,6 +97,18 @@ describe("AddToPlaylistDropdown", () => {
     expect(screen.getByText("Local Mix")).toBeInTheDocument();
     expect(screen.getByText("Imported Off")).toBeInTheDocument();
     expect(screen.queryByText("Imported Syncing")).not.toBeInTheDocument();
+  });
+
+  it("leaves out a smart playlist, whose tracks a rule picks", async () => {
+    playlistsQuery.items = [
+      makePlaylist({ id: "pl-local", name: "Local Mix" }),
+      makePlaylist({ id: "pl-smart", name: "On repeat", smart: true }),
+    ];
+    renderDropdown();
+    await open();
+
+    expect(screen.getByText("Local Mix")).toBeInTheDocument();
+    expect(screen.queryByText("On repeat")).not.toBeInTheDocument();
   });
 
   it("shows the empty state when no editable playlists exist", async () => {

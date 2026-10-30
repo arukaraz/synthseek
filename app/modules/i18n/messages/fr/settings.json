@@ -452,6 +452,10 @@
       "discogsToken": {
         "label": "Jeton Discogs (facultatif)",
         "helper": "Ajoute genres, labels et détails d'édition depuis Discogs. Laissez vide pour ne pas utiliser Discogs."
+      },
+      "bandsintownAppId": {
+        "label": "App id Bandsintown (facultatif)",
+        "helper": "Remplit le widget des concerts à venir avec ceux de vos artistes. Bandsintown le fournit gratuitement."
       }
     },
     "librarySources": {
@@ -1079,6 +1083,11 @@
         "rejected": "Le service a refuse les dernieres ecoutes envoyees."
       }
     },
+    "household": {
+      "title": "Foyer",
+      "label": "Partager mes écoutes avec le foyer",
+      "description": "Permet aux widgets des autres membres, comme À la maison et Blend, de lire ce que vous écoutez. Désactivé par défaut."
+    },
     "quota": {
       "title": "Quota de téléchargement",
       "unavailable": "Votre quota n'a pas pu être chargé.",
@@ -1337,6 +1346,10 @@
       "playback-source-links": {
         "name": "Liens des sources de lecture",
         "description": "Trouve quelles pistes vos serveurs multimédias peuvent aussi lire, pour pouvoir les lire depuis ceux-ci."
+      },
+      "smart-playlists": {
+        "name": "Playlists intelligentes",
+        "description": "Renouvelle chaque jour ou chaque semaine les playlists dont une règle de widget choisit les titres."
       }
     }
   },

@@ -25,6 +25,7 @@
     "newWidget": "New widget",
     "fromJson": "From JSON",
     "basedOn": "Based on {{name}}",
+    "playlist": "Smart playlist · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Add to board",
     "addNamed": "Add {{name}} to the board",
@@ -69,18 +70,24 @@
     "ruleNotForSource": "The rule {{field}} does not apply to {{source}}.",
     "pickByNotForSource": "{{source}} cannot be ordered by {{by}}.",
     "blockNotForShape": "The {{block}} view cannot show this result.",
+    "playlistNeedsTracks": "Only a recipe that lists tracks, without grouping, can also be a playlist.",
+    "userRuleOnce": "A recipe can say whose listening it reads only once.",
+    "userRuleNeedsAll": "Whose listening can only be used when every rule must match.",
     "tooLarge": "The JSON is larger than {{kb}} KB.",
     "invalidJson": "This is not valid JSON.",
     "invalidField": "This value is not valid."
   },
   "kinds": {
     "question": "Recipe",
-    "feed": "Feed"
+    "feed": "Feed",
+    "recap": "Recap"
   },
   "workshop": {
     "back": "Back",
     "newTitle": "New widget",
     "editTitle": "Edit {{name}}",
+    "ruleTitle": "Rule of {{name}}",
+    "saveRule": "Save rule",
     "save": "Save widget",
     "saving": "Saving",
     "cancel": "Cancel",
@@ -121,7 +128,9 @@
     },
     "limitNamed": "Number of items",
     "compareText": "with the previous period",
-    "random": "Rotation"
+    "random": "Rotation",
+    "pages": "Pages",
+    "recapPages": "One page per highlight that has data. Needs at least {{minimum}} plays in the period."
   },
   "subjects": {
     "tracks": "tracks",
@@ -129,7 +138,8 @@
     "artists": "artists",
     "genres": "genres",
     "decades": "decades",
-    "requests": "requests"
+    "requests": "requests",
+    "recap": "a recap"
   },
   "measures": {
     "plays": "plays",
@@ -211,7 +221,8 @@
       "inCurrentTimeSlot": "Played around this time",
       "releaseType": "Release type",
       "listeners": "Last.fm listeners",
-      "artistInLibrary": "Artist in my library"
+      "artistInLibrary": "Artist in my library",
+      "user": "Whose listening"
     },
     "ops": {
       "gte": "at least",
@@ -254,7 +265,20 @@
       "listeners_lt": "fewer than {{value}} Last.fm listeners",
       "listeners_gte": "at least {{value}} Last.fm listeners",
       "artistInLibrary_true": "artist is in my library",
-      "artistInLibrary_false": "artist is not in my library"
+      "artistInLibrary_false": "artist is not in my library",
+      "user_is": "played by {{value}}",
+      "user_isNot": "played by anyone but {{value}}",
+      "user_with": "played by me and {{value}}"
+    },
+    "userOps": {
+      "is": "played by",
+      "isNot": "not played by",
+      "with": "played by me and"
+    },
+    "people": {
+      "me": "me",
+      "household": "everyone who shares",
+      "someone": "a household member"
     },
     "releaseTypes": {
       "album": "album",
@@ -276,7 +300,8 @@
     "and": " and ",
     "or": " or ",
     "end": ".",
-    "feed": "Show me {{count}} items from {{source}}"
+    "feed": "Show me {{count}} items from {{source}}",
+    "recap": "Show me a recap of my listening {{time}}."
   },
   "feeds": {
     "sources": {
@@ -295,8 +320,24 @@
         "recommendations": "Recommendations (ListenBrainz)",
         "freshReleases": "Fresh releases (ListenBrainz)",
         "playlists": "Playlists made for you (ListenBrainz)"
+      },
+      "feed": {
+        "rss": "A news feed (RSS or Atom)",
+        "curated": "Music news"
+      },
+      "events": {
+        "upcoming": "Upcoming shows (Bandsintown)"
       }
     },
+    "curatedLabel": "News source",
+    "curated": {
+      "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
+      "nprMusic": "NPR Music"
+    },
+    "url": "Feed address",
+    "urlPlaceholder": "https://example.com/feed.xml",
+    "urlHelp": "Synthseek's server reads the feed, at most every 15 minutes.",
+    "urlInvalid": "Enter an http or https address.",
     "playlist": "Playlist",
     "playlists": {
       "weekly-jams": "Weekly jams",
@@ -304,9 +345,12 @@
       "daily-jams": "Daily jams"
     },
     "country": "Country",
+    "anywhere": "Anywhere",
+    "showsWithin": "in the next",
     "needs": {
       "lastfm": "Needs Last.fm",
-      "listenbrainz": "Needs your ListenBrainz user"
+      "listenbrainz": "Needs your ListenBrainz user",
+      "bandsintown": "Needs a Bandsintown app id"
     },
     "seeds": {
       "myTopArtists": "My top artists",
@@ -354,13 +398,15 @@
     "compare": "Compare",
     "mosaic": "Mosaic",
     "yearCalendar": "Year calendar",
-    "share": "Share"
+    "share": "Share",
+    "story": "Story"
   },
   "actions": {
     "play": "Play",
     "request": "Request",
     "open": "Open details",
-    "none": "Nothing"
+    "none": "Nothing",
+    "openUrl": "Open the link"
   },
   "accents": {
     "daily": "Pink",
@@ -382,6 +428,22 @@
     "S": "S",
     "M": "M",
     "L": "L"
+  },
+  "playlist": {
+    "title": "Playlist",
+    "help": "Keep a playlist of these tracks in your library. Deleting the widget keeps the playlist.",
+    "ruleHelp": "This rule picks the playlist's tracks every time it refreshes.",
+    "loadError": {
+      "title": "The rule could not be loaded",
+      "description": "The playlist may have been deleted, or the server could not be reached. Close this and try again."
+    },
+    "alsoSave": "Also save as a playlist",
+    "saved": "Saved the rule of {{name}}",
+    "refresh": "Refresh",
+    "refreshes": {
+      "daily": "Daily",
+      "weekly": "Weekly"
+    }
   },
   "customize": {
     "action": "Customize",
@@ -415,6 +477,10 @@
     "libraryByDecade": "Your library by decade",
     "rightNow": "Right now",
     "yourDecade": "Your decade",
+    "atHome": "At home",
+    "blend": "Blend",
+    "yourYear": "Your year",
+    "yourMonth": "Your month",
     "trending": "Trending",
     "charts": "Charts",
     "mixes": "Weekly jams",
@@ -425,6 +491,7 @@
     "releaseRadar": "Release radar",
     "discoverWeekly": "Discover weekly",
     "newThisWeek": "New this week",
-    "freshFinds": "Fresh finds"
+    "freshFinds": "Fresh finds",
+    "showsForYourArtists": "Shows for your artists"
   }
 }

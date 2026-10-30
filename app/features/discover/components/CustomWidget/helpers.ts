@@ -24,6 +24,7 @@ import type {
 import { calendarDateOf, formatCalendarDate, formatRelativeTime, isoDayOf } from "@utils/formatters";
 
 import { compactCount } from "../helpers";
+import { storyCoversOf, storyNoteOf, storyPagesOf } from "../WidgetStory/helpers";
 import { MATRIX_HOURS, MATRIX_WEEKDAYS, MONTH_KEY_LENGTH, SUGGESTED_BLOCKS, WIDGET_ICONS } from "./constants";
 import type {
   BlockContractView,
@@ -47,6 +48,8 @@ type QuestionBucket = WidgetRowOf<QuestionWidgetResult, "buckets">;
 type FeedTrack = WidgetRowOf<FeedWidgetResult, "tracks">;
 type FeedAlbum = WidgetRowOf<FeedWidgetResult, "albums">;
 type FeedArtist = WidgetRowOf<FeedWidgetResult, "artists">;
+type FeedItem = WidgetRowOf<FeedWidgetResult, "items">;
+type FeedEvent = WidgetRowOf<FeedWidgetResult, "events">;
 
 export function widgetIconOf(name: WidgetIcon): LucideIcon {
   return WIDGET_ICONS[name];
@@ -137,6 +140,7 @@ function questionTrackItem(row: QuestionTrack, result: QuestionWidgetResult, bin
     play: row.inLibrary ? { kind: "tracks", trackIds: [row.trackId] } : null,
     request: null,
     open: null,
+    link: null,
   };
 }
 
@@ -154,6 +158,7 @@ function questionAlbumItem(row: QuestionAlbum, result: QuestionWidgetResult, bin
     play: row.inLibrary ? { kind: "album", albumExternalId: row.albumExternalId } : null,
     request: albumRequestItem(album),
     open: albumTarget(album),
+    link: null,
   };
 }
 
@@ -170,6 +175,7 @@ function questionArtistItem(row: QuestionArtist, result: QuestionWidgetResult, b
     play: row.tracks > 0 ? { kind: "artist", artist: row.name } : null,
     request: null,
     open: null,
+    link: null,
   };
 }
 
@@ -189,6 +195,7 @@ function questionBucketItem(result: QuestionWidgetResult, row: QuestionBucket, b
     play: null,
     request: null,
     open: null,
+    link: null,
   };
 }
 
@@ -215,6 +222,7 @@ function feedTrackItem(row: FeedTrack, bind: Bind): WidgetItem {
     play: row.trackId ? { kind: "tracks", trackIds: [row.trackId] } : null,
     request,
     open: null,
+    link: null,
   };
 }
 
@@ -233,6 +241,7 @@ function feedAlbumItem(row: FeedAlbum, bind: Bind): WidgetItem {
     play: row.inLibrary && row.catalogAlbumId ? { kind: "album", albumExternalId: row.catalogAlbumId } : null,
     request: album ? albumRequestItem(album) : null,
     open: album ? albumTarget(album) : null,
+    link: null,
   };
 }
 
@@ -249,6 +258,41 @@ function feedArtistItem(row: FeedArtist, bind: Bind): WidgetItem {
     play: row.artistId ? { kind: "artist", artist: row.name } : null,
     request: artist ? artistRequestItem(artist) : null,
     open: artist ? artistTarget(artist) : null,
+    link: null,
+  };
+}
+
+function eventItem(row: FeedEvent, bind: Bind): WidgetItem {
+  const place = [row.venue, row.city, row.country].filter((part) => part !== null && part.length > 0).join(" · ");
+  return {
+    key: row.id,
+    title: bound(row, bind, "title", row.artist) ?? row.artist,
+    subtitle: bound(row, bind, "subtitle", place) ?? "",
+    cover: bound(row, bind, "cover", row.image),
+    value: bound(row, bind, "value", formatCalendarDate(row.date)),
+    date: dayOf(new Date(row.date)),
+    move: null,
+    play: null,
+    request: null,
+    open: null,
+    link: row.url,
+  };
+}
+
+function newsItem(row: FeedItem, bind: Bind): WidgetItem {
+  const published = row.publishedAt ? new Date(row.publishedAt) : null;
+  return {
+    key: row.id,
+    title: bound(row, bind, "title", row.title) ?? row.title,
+    subtitle: bound(row, bind, "subtitle", row.summary) ?? "",
+    cover: bound(row, bind, "cover", row.image),
+    value: bound(row, bind, "value", row.source),
+    date: dayOf(published),
+    move: null,
+    play: null,
+    request: null,
+    open: null,
+    link: row.url,
   };
 }
 
@@ -276,11 +320,22 @@ function feedItems(result: FeedWidgetResult, bind: Bind): WidgetItem[] {
       return result.rows.map((row) => feedAlbumItem(row, bind));
     case "artists":
       return result.rows.map((row) => feedArtistItem(row, bind));
+    case "items":
+      return result.rows.map((row) => newsItem(row, bind));
+    case "events":
+      return result.rows.map((row) => eventItem(row, bind));
   }
 }
 
 export function widgetItemsOf(result: WidgetResult, bind: Bind): WidgetItem[] {
-  return result.type === "question" ? questionItems(result, bind) : feedItems(result, bind);
+  switch (result.type) {
+    case "question":
+      return questionItems(result, bind);
+    case "feed":
+      return feedItems(result, bind);
+    case "recap":
+      return [];
+  }
 }
 
 export function widgetStatsOf(result: WidgetResult): WidgetStat[] {
@@ -344,19 +399,22 @@ export function widgetCellsOf(result: WidgetResult): number[][] {
 }
 
 export function widgetViewOf(result: WidgetResult | undefined, bind: Bind): WidgetView {
-  if (!result) return { shape: null, items: [], stats: [], points: [], cells: [] };
+  if (!result) return { shape: null, items: [], stats: [], points: [], cells: [], pages: [], covers: [] };
   return {
     shape: result.shape,
     items: widgetItemsOf(result, bind),
     stats: widgetStatsOf(result),
     points: widgetPointsOf(result),
     cells: widgetCellsOf(result),
+    pages: storyPagesOf(result),
+    covers: storyCoversOf(result),
   };
 }
 
 export function viewIsEmpty(view: WidgetView): boolean {
   return (
     view.items.length === 0 &&
+    view.pages.length === 0 &&
     !view.points.some((point) => point.value > 0) &&
     !view.cells.some((row) => row.some((value) => value > 0))
   );
@@ -409,7 +467,8 @@ export function deltaText(delta: number | null): string | null {
 
 export function itemControls(item: WidgetItem, action: WidgetAction, handlers: WidgetHandlers): WidgetItemControls {
   if (action === "none") return {};
-  const { open, play, request } = item;
+  const { open, play, request, link } = item;
+  if (action === "openUrl") return link ? { onSelect: () => handlers.openUrl(link) } : {};
   const onSelect = open ? () => handlers.open(open) : undefined;
   if (action === "play" && play) {
     return {
@@ -438,6 +497,21 @@ export function customWidgetNote({ result, isError, empty }: CustomWidgetNoteInp
   if (isError) return i18n.t("discover:board.loadError");
   if (result?.type === "feed" && result.needs !== null) {
     return i18n.t(`discover:customWidget.needs.${result.needs}`);
+  }
+  if (result?.type === "feed" && result.dataset === "items" && result.failure !== null) {
+    return i18n.t(`discover:customWidget.news.${result.failure}`);
+  }
+  if (result?.type === "feed" && result.dataset === "events" && result.failure !== null) {
+    return i18n.t(`discover:customWidget.events.${result.failure}`);
+  }
+  const story = storyNoteOf(result);
+  if (story) return story;
+  if (result?.type === "question" && result.privacy !== null) {
+    return result.privacy.reason === "notShared"
+      ? i18n.t("discover:customWidget.privacy.notShared", {
+          name: result.privacy.name ?? i18n.t("widgets:rules.people.someone"),
+        })
+      : i18n.t("discover:customWidget.privacy.nobodyShares");
   }
   return empty ? i18n.t("discover:customWidget.empty") : null;
 }

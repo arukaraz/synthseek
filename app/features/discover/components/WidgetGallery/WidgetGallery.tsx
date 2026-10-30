@@ -13,6 +13,7 @@ import { SegmentTabs } from "@components/ui/SegmentTabs";
 import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useWidgetCatalog } from "@hooks/api/queries/widgets/useWidgetCatalog";
 import { useWidgetGrammar } from "@hooks/api/queries/widgets/useWidgetGrammar";
+import { useWidgetHousehold } from "@hooks/api/queries/widgets/useWidgetHousehold";
 import { useWidgetPresets } from "@hooks/api/queries/widgets/useWidgetPresets";
 import type { BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetDraft } from "@hooks/api/queries/widgets/types";
@@ -62,6 +63,7 @@ export function WidgetGallery({ items, customize, onAdd, onAddCustom, onRemove, 
   const catalog = useWidgetCatalog();
   const grammar = useWidgetGrammar();
   const presets = useWidgetPresets();
+  const household = useWidgetHousehold();
   const { country } = useCountry();
 
   const entries = useMemo(
@@ -79,7 +81,7 @@ export function WidgetGallery({ items, customize, onAdd, onAddCustom, onRemove, 
   const openWorkshop = useCallback((draft: WidgetDraft, widgetId: string | null, from: GalleryMode) => {
     setDirty(false);
     setReturnTo(from);
-    setOpening({ draft, widgetId });
+    setOpening({ draft, widgetId, purpose: "widget" });
   }, []);
 
   const customizeWidget = useCallback(
@@ -139,11 +141,17 @@ export function WidgetGallery({ items, customize, onAdd, onAddCustom, onRemove, 
             {catalog.data && grammar.data && presets.data ? (
               <WidgetWorkshop
                 opening={opening}
-                context={{ catalog: catalog.data, grammar: grammar.data, presets: presets.data, country }}
+                context={{
+                  catalog: catalog.data,
+                  grammar: grammar.data,
+                  presets: presets.data,
+                  country,
+                  people: household.data ?? [],
+                }}
                 onLeave={() => requestLeave("back")}
                 onDirtyChange={setDirty}
-                onSaved={(saved) => {
-                  toast.success(t("widgets:mine.saved", { name: saved.meta.name }));
+                onSaved={(name) => {
+                  toast.success(t("widgets:mine.saved", { name }));
                   leave("back");
                 }}
               />

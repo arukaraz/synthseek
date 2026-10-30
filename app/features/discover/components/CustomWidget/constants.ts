@@ -74,6 +74,7 @@ import { ShareBlock } from "../WidgetCharts/ShareBlock";
 import { SparklineBlock } from "../WidgetCharts/SparklineBlock";
 import { StatTrendBlock } from "../WidgetCharts/StatTrendBlock";
 import { YearCalendarBlock } from "../WidgetCharts/YearCalendarBlock";
+import { StoryBlock } from "../WidgetStory/StoryBlock";
 import { CalendarBlock } from "./CalendarBlock";
 import { CardsBlock } from "./CardsBlock";
 import { FeedBlock } from "./FeedBlock";
@@ -104,6 +105,7 @@ export const BLOCK_COMPONENTS: Record<WidgetBlock, ComponentType<WidgetBlockProp
   mosaic: MosaicBlock,
   yearCalendar: YearCalendarBlock,
   share: ShareBlock,
+  story: StoryBlock,
 };
 
 export const BLOCK_LIMITS = {
@@ -123,6 +125,8 @@ export const SUGGESTED_BLOCKS: Record<WidgetShape, readonly WidgetBlock[]> = {
   series: ["bars", "sparkline", "yearCalendar", "statTrend"],
   matrix: ["heatmap"],
   buckets: ["share", "bars", "compare"],
+  facts: ["story"],
+  feedItems: ["feed"],
 };
 
 export const MOSAIC_COLUMNS: Record<BoardSize, number> = { S: 2, M: 5, L: 10 };

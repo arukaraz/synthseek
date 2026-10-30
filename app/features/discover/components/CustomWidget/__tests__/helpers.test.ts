@@ -36,7 +36,7 @@ import type { WidgetHandlers, WidgetItem } from "../types";
 const WINDOW = { from: new Date("2026-08-30T00:00:00Z"), to: new Date("2026-09-29T00:00:00Z") };
 
 function handlers(): WidgetHandlers {
-  return { play: vi.fn(), request: vi.fn(), open: vi.fn() };
+  return { play: vi.fn(), request: vi.fn(), open: vi.fn(), openUrl: vi.fn() };
 }
 
 function onlyItem(items: WidgetItem[]): WidgetItem {

@@ -25,6 +25,7 @@ function createLibraryPlaylist(overrides?: Partial<LibraryPlaylistItem>): Librar
     source_provider: null,
     origin: { kind: "created" },
     sync_enabled: false,
+    smart: false,
     created_at: new Date("2024-01-01T00:00:00.000Z"),
     ...overrides,
   };
@@ -78,6 +79,23 @@ describe("PlaylistCard", () => {
 
     expect(screen.getByRole("menuitem", { name: /Rename/i })).not.toHaveAttribute("aria-disabled", "true");
     expect(screen.getByRole("menuitem", { name: /Delete/i })).not.toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("marks a smart playlist and offers its rule only there", async () => {
+    const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist({ smart: true })} />);
+
+    expect(screen.getByText(/^Smart · /)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+    expect(screen.getByRole("menuitem", { name: "Edit rule" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /Rename/i })).not.toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("offers no rule on a plain playlist", async () => {
+    const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} />);
+
+    expect(screen.queryByText(/^Smart · /)).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+    expect(screen.queryByRole("menuitem", { name: "Edit rule" })).not.toBeInTheDocument();
   });
 
   it("disables rename for an imported syncing playlist but keeps delete enabled", async () => {

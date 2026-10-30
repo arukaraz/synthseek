@@ -7,7 +7,7 @@ import { Button } from "@components/ui/Button";
 import { SelectMenu } from "@components/ui/SelectMenu";
 import { COUNTRIES } from "@utils/countries";
 
-import { FEED_SEED_KINDS, NO_ROTATION, NUMBER_BOUNDS } from "./constants";
+import { ANY_COUNTRY, FEED_SEED_KINDS, NO_ROTATION, NUMBER_BOUNDS } from "./constants";
 import {
   defaultRuleFor,
   rotationChoicesOf,
@@ -19,6 +19,7 @@ import {
   withSeed,
   withSource,
 } from "./helpers";
+import { NewsUrlField } from "./NewsUrlField";
 import { NumberField } from "./NumberField";
 import { StepRow } from "./StepRow";
 import { addRow, readback, stepList, stepText } from "./styles";
@@ -117,6 +118,52 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
             />
           </StepRow>
         ) : null}
+        {feed.source === "events.upcoming" ? (
+          <StepRow label={t("steps.params")}>
+            <SelectMenu
+              ariaLabel={t("feeds.country")}
+              value={feed.params.country ?? ANY_COUNTRY}
+              options={[
+                { value: ANY_COUNTRY, label: t("feeds.anywhere") },
+                ...COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
+              ]}
+              onChange={(country) =>
+                workshop.setQuery({
+                  ...feed,
+                  params: { ...feed.params, country: country === ANY_COUNTRY ? null : country },
+                })
+              }
+            />
+            <span className={stepText()}>{t("feeds.showsWithin")}</span>
+            <NumberField
+              label={t("time.days")}
+              value={feed.params.days}
+              min={NUMBER_BOUNDS.daysMin}
+              max={catalog.feeds.limits.eventsDaysMax}
+              onChange={(days) => workshop.setQuery({ ...feed, params: { ...feed.params, days } })}
+            />
+            <span className={stepText()}>{t("time.days")}</span>
+          </StepRow>
+        ) : null}
+        {feed.source === "feed.rss" ? (
+          <StepRow label={t("steps.params")}>
+            <NewsUrlField
+              key={feed.params.url}
+              url={feed.params.url}
+              onCommit={(url) => workshop.setQuery({ ...feed, params: { url } })}
+            />
+          </StepRow>
+        ) : null}
+        {feed.source === "feed.curated" ? (
+          <StepRow label={t("steps.params")}>
+            <SelectMenu
+              ariaLabel={t("feeds.curatedLabel")}
+              value={feed.params.feed}
+              options={catalog.feeds.curated.map((entry) => ({ value: entry, label: t(`feeds.curated.${entry}`) }))}
+              onChange={(entry) => workshop.setQuery({ ...feed, params: { feed: entry } })}
+            />
+          </StepRow>
+        ) : null}
         <StepRow label={t("steps.show")}>
           <NumberField
             label={t("steps.limitNamed")}
@@ -152,7 +199,9 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
             }
           />
         </StepRow>
-        {showWhere ? <WhereStep workshop={workshop} rules={rules} fields={fields} limits={limits} /> : null}
+        {showWhere ? (
+          <WhereStep workshop={workshop} rules={rules} fields={fields} limits={limits} people={context.people} />
+        ) : null}
         {!showWhere && firstField ? (
           <div className={addRow()}>
             <Button

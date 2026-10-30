@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 import type {
   QuestionQuery,
+  RecapPeriod,
   WidgetAccent,
   WidgetAction,
   WidgetBlock,
@@ -13,18 +14,24 @@ import type {
 } from "@hooks/api/queries/widgets/types";
 import { useDebounce } from "@hooks/ui/useDebounce";
 
-import { PREVIEW_DEBOUNCE_MS } from "../components/WidgetWorkshop/constants";
+import { PREVIEW_DEBOUNCE_MS, RECAP_SUBJECT } from "../components/WidgetWorkshop/constants";
 import {
   acceptedBlocksOf,
   draftKeyOf,
   fittingBlocksOf,
+  kindOf,
+  listsTracksOf,
   presetDraftOf,
   ruleListOf,
   rulesFrom,
+  withFittingPlaylist,
   withFittingView,
+  withSubject,
 } from "../components/WidgetWorkshop/helpers";
 import type {
+  RecipeSubject,
   RuleDraft,
+  SmartRefresh,
   RuleMode,
   RuleTarget,
   WidgetKind,
@@ -33,7 +40,7 @@ import type {
   WorkshopContext,
   WorkshopOpening,
 } from "../components/WidgetWorkshop/types";
-import { DEFAULT_QUERIES } from "../constants";
+import { DEFAULT_QUERIES, DEFAULT_RECAP } from "../constants";
 
 export function useWidgetWorkshop(
   opening: WorkshopOpening,
@@ -46,10 +53,31 @@ export function useWidgetWorkshop(
   const [ruleDraft, setRuleDraft] = useState<RuleDraft | null>(null);
   const previewDraft = useDebounce(draft, { delay: PREVIEW_DEBOUNCE_MS });
 
+  const { purpose } = opening;
   const change = useCallback(
     (next: (current: WidgetDraft) => WidgetDraft) =>
-      setDraft((current) => withFittingView(next(current), catalog, grammar)),
-    [catalog, grammar]
+      setDraft((current) => {
+        const fitted = withFittingView(next(current), catalog, grammar);
+        return purpose === "widget" ? withFittingPlaylist(fitted) : fitted;
+      }),
+    [catalog, grammar, purpose]
+  );
+
+  const setPlaylist = useCallback(
+    (refresh: SmartRefresh | null) =>
+      setDraft((current) => ({
+        ...current,
+        playlist: refresh === null ? null : { refresh, playlistId: current.playlist?.playlistId ?? null },
+      })),
+    []
+  );
+
+  const linkPlaylist = useCallback(
+    (playlistId: string) =>
+      setDraft((current) =>
+        current.playlist ? { ...current, playlist: { ...current.playlist, playlistId } } : current
+      ),
+    []
   );
 
   const setQuery = useCallback((query: WidgetQuery) => change((current) => ({ ...current, query })), [change]);
@@ -60,13 +88,35 @@ export function useWidgetWorkshop(
     [change]
   );
 
+  const setRecapPeriod = useCallback(
+    (period: RecapPeriod) =>
+      change((current) =>
+        current.query.type === "recap" ? { ...current, query: { ...current.query, period } } : current
+      ),
+    [change]
+  );
+
+  const setRecipeSubject = useCallback(
+    (subject: RecipeSubject) => {
+      setRuleDraft(null);
+      change((current) => {
+        if (subject === RECAP_SUBJECT)
+          return current.query.type === "recap" ? current : { ...current, query: DEFAULT_RECAP };
+        const base = current.query.type === "question" ? current.query : DEFAULT_QUERIES.question;
+        return { ...current, query: withSubject(base, subject, grammar) };
+      });
+    },
+    [change, grammar]
+  );
+
   const setKind = useCallback(
     (kind: WidgetKind) => {
-      if (draft.query.type === kind) return;
       const leaving = draft.query;
+      const leavingKind = kindOf(leaving);
+      if (leavingKind === kind) return;
       const restored = stash[kind] ?? DEFAULT_QUERIES[kind];
       setRuleDraft(null);
-      setStash((saved) => ({ ...saved, [leaving.type]: leaving }));
+      setStash((saved) => ({ ...saved, [leavingKind]: leaving }));
       change((current) => ({ ...current, query: restored }));
     },
     [change, draft.query, stash]
@@ -96,6 +146,7 @@ export function useWidgetWorkshop(
   const writeRules = useCallback(
     (write: (list: WidgetRule[], mode: RuleMode) => { list: WidgetRule[]; mode: RuleMode }) =>
       change((current) => {
+        if (current.query.type === "recap") return current;
         const { mode, list } = ruleListOf(current.query.rules);
         const next = write([...list], mode);
         return { ...current, query: { ...current.query, rules: rulesFrom(next.mode, next.list) } };
@@ -135,14 +186,20 @@ export function useWidgetWorkshop(
   return {
     draft,
     widgetId: opening.widgetId,
-    kind: draft.query.type,
+    purpose,
+    kind: kindOf(draft.query),
     dirty: draftKeyOf(draft) !== baseline,
+    playlistable: listsTracksOf(draft.query),
+    setPlaylist,
+    linkPlaylist,
     fitting,
     accepted,
     ruleDraft,
     previewDraft,
     setKind,
     updateQuestion,
+    setRecapPeriod,
+    setRecipeSubject,
     setQuery,
     applyPreset,
     setBlock: (block: WidgetBlock) => setView({ block }),

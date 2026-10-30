@@ -25,6 +25,7 @@
     "newWidget": "Nouveau widget",
     "fromJson": "Depuis un JSON",
     "basedOn": "Basé sur {{name}}",
+    "playlist": "Playlist intelligente · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Ajouter au tableau",
     "addNamed": "Ajouter {{name}} au tableau",
@@ -69,18 +70,24 @@
     "ruleNotForSource": "La règle {{field}} ne s’applique pas à {{source}}.",
     "pickByNotForSource": "{{source}} ne peut pas être trié par {{by}}.",
     "blockNotForShape": "La vue {{block}} ne peut pas afficher ce résultat.",
+    "playlistNeedsTracks": "Seule une recette qui liste des titres, sans regroupement, peut aussi être une playlist.",
+    "userRuleOnce": "Une recette ne peut dire qu’une fois de qui elle lit l’écoute.",
+    "userRuleNeedsAll": "L’écoute de qui ne s’utilise que lorsque toutes les règles doivent correspondre.",
     "tooLarge": "Le JSON dépasse {{kb}} Ko.",
     "invalidJson": "Ce n’est pas un JSON valide.",
     "invalidField": "Cette valeur n’est pas valide."
   },
   "kinds": {
     "question": "Recette",
-    "feed": "Flux"
+    "feed": "Flux",
+    "recap": "Bilan"
   },
   "workshop": {
     "back": "Retour",
     "newTitle": "Nouveau widget",
     "editTitle": "Modifier {{name}}",
+    "ruleTitle": "Règle de {{name}}",
+    "saveRule": "Enregistrer la règle",
     "save": "Enregistrer le widget",
     "saving": "Enregistrement",
     "cancel": "Annuler",
@@ -121,6 +128,8 @@
     },
     "limitNamed": "Nombre d’éléments",
     "compareText": "avec la période précédente",
+    "pages": "Pages",
+    "recapPages": "Une page par donnée disponible. Il faut au moins {{minimum}} écoutes sur la période.",
     "random": "Rotation"
   },
   "subjects": {
@@ -129,7 +138,8 @@
     "artists": "artistes",
     "genres": "genres",
     "decades": "décennies",
-    "requests": "demandes"
+    "requests": "demandes",
+    "recap": "un bilan"
   },
   "measures": {
     "plays": "écoutes",
@@ -211,7 +221,8 @@
       "inCurrentTimeSlot": "Écouté à cette heure-ci",
       "releaseType": "Type de sortie",
       "listeners": "Auditeurs Last.fm",
-      "artistInLibrary": "Artiste dans ma bibliothèque"
+      "artistInLibrary": "Artiste dans ma bibliothèque",
+      "user": "Écoute de qui"
     },
     "ops": {
       "gte": "au moins",
@@ -254,7 +265,20 @@
       "listeners_lt": "moins de {{value}} auditeurs Last.fm",
       "listeners_gte": "au moins {{value}} auditeurs Last.fm",
       "artistInLibrary_true": "l’artiste est dans ma bibliothèque",
-      "artistInLibrary_false": "l’artiste n’est pas dans ma bibliothèque"
+      "artistInLibrary_false": "l’artiste n’est pas dans ma bibliothèque",
+      "user_is": "écouté par {{value}}",
+      "user_isNot": "écouté par tous sauf {{value}}",
+      "user_with": "écouté par moi et par {{value}}"
+    },
+    "userOps": {
+      "is": "écouté par",
+      "isNot": "pas écouté par",
+      "with": "écouté par moi et par"
+    },
+    "people": {
+      "me": "moi",
+      "household": "tous ceux qui partagent",
+      "someone": "un membre du foyer"
     },
     "releaseTypes": {
       "album": "album",
@@ -276,7 +300,8 @@
     "and": " et ",
     "or": " ou ",
     "end": ".",
-    "feed": "Montre-moi {{count}} éléments de {{source}}"
+    "feed": "Montre-moi {{count}} éléments de {{source}}",
+    "recap": "Montre-moi un bilan de mes écoutes {{time}}."
   },
   "feeds": {
     "sources": {
@@ -295,8 +320,24 @@
         "recommendations": "Recommandations (ListenBrainz)",
         "freshReleases": "Nouvelles sorties (ListenBrainz)",
         "playlists": "Playlists faites pour vous (ListenBrainz)"
+      },
+      "feed": {
+        "rss": "Un flux d’actualités (RSS ou Atom)",
+        "curated": "Actualités musicales"
+      },
+      "events": {
+        "upcoming": "Concerts à venir (Bandsintown)"
       }
     },
+    "curatedLabel": "Source d’actualités",
+    "curated": {
+      "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
+      "nprMusic": "NPR Music"
+    },
+    "url": "Adresse du flux",
+    "urlPlaceholder": "https://example.com/feed.xml",
+    "urlHelp": "Le serveur de Synthseek lit le flux, au plus toutes les 15 minutes.",
+    "urlInvalid": "Saisissez une adresse http ou https.",
     "playlist": "Playlist",
     "playlists": {
       "weekly-jams": "Weekly jams",
@@ -304,9 +345,12 @@
       "daily-jams": "Daily jams"
     },
     "country": "Pays",
+    "anywhere": "Partout",
+    "showsWithin": "dans les prochains",
     "needs": {
       "lastfm": "Nécessite Last.fm",
-      "listenbrainz": "Nécessite votre utilisateur ListenBrainz"
+      "listenbrainz": "Nécessite votre utilisateur ListenBrainz",
+      "bandsintown": "Nécessite un app id Bandsintown"
     },
     "seeds": {
       "myTopArtists": "Mes artistes favoris",
@@ -354,13 +398,15 @@
     "compare": "Comparaison",
     "mosaic": "Mosaïque",
     "yearCalendar": "Calendrier annuel",
-    "share": "Répartition"
+    "share": "Répartition",
+    "story": "Récit"
   },
   "actions": {
     "play": "Lire",
     "request": "Demander",
     "open": "Ouvrir les détails",
-    "none": "Rien"
+    "none": "Rien",
+    "openUrl": "Ouvrir le lien"
   },
   "accents": {
     "daily": "Rose",
@@ -382,6 +428,22 @@
     "S": "S",
     "M": "M",
     "L": "L"
+  },
+  "playlist": {
+    "title": "Playlist",
+    "help": "Gardez une playlist de ces titres dans votre bibliothèque. Supprimer le widget conserve la playlist.",
+    "ruleHelp": "Cette règle choisit les titres de la playlist à chaque renouvellement.",
+    "loadError": {
+      "title": "Impossible de charger la règle",
+      "description": "La playlist a peut-être été supprimée, ou le serveur ne répond pas. Fermez cette fenêtre et réessayez."
+    },
+    "alsoSave": "Enregistrer aussi comme playlist",
+    "saved": "Règle de {{name}} enregistrée",
+    "refresh": "Renouveler",
+    "refreshes": {
+      "daily": "Chaque jour",
+      "weekly": "Chaque semaine"
+    }
   },
   "customize": {
     "action": "Personnaliser",
@@ -415,6 +477,10 @@
     "libraryByDecade": "Votre bibliothèque par décennie",
     "rightNow": "En ce moment",
     "yourDecade": "Votre décennie",
+    "atHome": "À la maison",
+    "blend": "Blend",
+    "yourYear": "Votre année",
+    "yourMonth": "Votre mois",
     "trending": "Tendances",
     "charts": "Classements",
     "mixes": "Weekly jams",
@@ -425,6 +491,7 @@
     "releaseRadar": "Radar des sorties",
     "discoverWeekly": "Découverte de la semaine",
     "newThisWeek": "Nouveautés de la semaine",
-    "freshFinds": "Trouvailles fraîches"
+    "freshFinds": "Trouvailles fraîches",
+    "showsForYourArtists": "Concerts de vos artistes"
   }
 }

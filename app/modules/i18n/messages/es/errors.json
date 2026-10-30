@@ -103,6 +103,10 @@
     "title": "La canción aún se está descargando",
     "description": "Espera a que termine, o cancélala, antes de quitarla de la playlist."
   },
+  "PLAYLIST_RULE_OWNS_TRACKS": {
+    "title": "Una regla elige estas canciones",
+    "description": "Es una playlist inteligente. Edita su regla para cambiar lo que contiene."
+  },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "No se puede sincronizar ahí",
     "description": "La sincronización de listas con ese servidor está apagada, o la lista viene de él."
@@ -422,6 +426,10 @@
   "WIDGET_LIMIT_REACHED": {
     "title": "Demasiados widgets",
     "description": "Elimina uno de tus widgets antes de crear otro."
+  },
+  "WIDGET_FEED_LIMIT_REACHED": {
+    "title": "Demasiadas direcciones de feed",
+    "description": "Tus widgets pueden leer hasta 6 direcciones de feed distintas. Reutiliza una o elimina un widget que lea otra."
   },
   "WIDGETS_UNREADABLE": {
     "title": "No se pudieron leer tus widgets",

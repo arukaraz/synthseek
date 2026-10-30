@@ -103,6 +103,10 @@
     "title": "Track still downloading",
     "description": "Wait until it finishes, or cancel it, before removing it from the playlist."
   },
+  "PLAYLIST_RULE_OWNS_TRACKS": {
+    "title": "A rule picks these tracks",
+    "description": "This is a smart playlist. Edit its rule to change what it holds."
+  },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "Can't sync there",
     "description": "Playlist sync to that server is off, or this playlist came from it."
@@ -422,6 +426,10 @@
   "WIDGET_LIMIT_REACHED": {
     "title": "Too many widgets",
     "description": "Remove one of your existing widgets before creating another."
+  },
+  "WIDGET_FEED_LIMIT_REACHED": {
+    "title": "Too many feed addresses",
+    "description": "Your widgets can read up to 6 different feed addresses. Reuse one or remove a widget that reads another."
   },
   "WIDGETS_UNREADABLE": {
     "title": "Your widgets could not be read",

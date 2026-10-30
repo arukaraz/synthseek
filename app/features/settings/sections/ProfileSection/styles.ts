@@ -31,6 +31,8 @@ export const listeningToggleRow = cva("flex items-center justify-between gap-3")
 
 export const listeningToggleLabel = cva("text-fg/70 text-xs");
 
+export const householdDescription = cva("flex min-w-0 flex-1 flex-col gap-1");
+
 export const listeningClientList = cva("flex flex-wrap gap-x-4 gap-y-2");
 
 export const listeningClientOption = cva("text-fg/70 flex items-center gap-2 text-xs");

@@ -11,6 +11,7 @@ import type {
 } from "@hooks/api/queries/widgets/types";
 
 import type { CustomWidgetsStatus } from "../ExploreBoard/types";
+import type { StoryPage } from "../WidgetStory/types";
 
 export type WidgetMove = { kind: "rank"; by: number } | { kind: "value"; by: number } | { kind: "new" };
 
@@ -27,6 +28,7 @@ export interface WidgetItem {
   play: PlayableTracksTarget | null;
   request: MusicItem | null;
   open: DetailTarget | null;
+  link: string | null;
 }
 
 export interface WidgetStat {
@@ -53,6 +55,8 @@ export interface WidgetView {
   stats: readonly WidgetStat[];
   points: readonly WidgetPoint[];
   cells: WidgetCells;
+  pages: readonly StoryPage[];
+  covers: readonly string[];
 }
 
 export interface WidgetItemControls {
@@ -66,6 +70,7 @@ export interface WidgetHandlers {
   play: (target: PlayableTracksTarget) => void;
   request: (item: MusicItem) => void;
   open: (target: DetailTarget) => void;
+  openUrl: (url: string) => void;
 }
 
 export interface WidgetBlockProps extends WidgetView {

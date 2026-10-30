@@ -3,12 +3,14 @@ import type { ReactNode } from "react";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 import type {
   FeedQuery,
+  HouseholdMember,
   QuestionQuery,
+  RecapPeriod,
+  RecapQuery,
   WidgetAccent,
   WidgetAction,
   WidgetBlock,
   WidgetCatalog,
-  WidgetDocument,
   WidgetDraft,
   WidgetGrammar,
   WidgetIcon,
@@ -17,7 +19,9 @@ import type {
   WidgetResult,
 } from "@hooks/api/queries/widgets/types";
 
-export type WidgetKind = WidgetQuery["type"];
+export type WidgetKind = "question" | "feed";
+export type RecipeSubject = QuestionQuery["subject"] | "recap";
+export type RecapNamedPeriod = Extract<RecapPeriod, { mode: "named" }>["value"];
 export type QuestionTime = QuestionQuery["time"];
 export type QuestionSubject = QuestionQuery["subject"];
 export type QuestionMeasure = QuestionQuery["measure"];
@@ -34,6 +38,7 @@ export type FeedSeed = Extract<FeedQuery, { source: "lastfm.similarArtists" }>["
 export type FeedSeedKind = "myTopArtists" | "favorites";
 export type ListenBrainzPlaylist = Extract<FeedQuery, { source: "listenbrainz.playlists" }>["params"]["playlist"];
 export type FeedPickBy = FeedQuery["pick"]["by"];
+export type CuratedFeed = Extract<FeedQuery, { source: "feed.curated" }>["params"]["feed"];
 export type CatalogFeedSource = WidgetCatalog["feeds"]["sources"][number];
 
 export interface FeedBase {
@@ -66,24 +71,46 @@ export interface WorkshopContext {
   grammar: WidgetGrammar;
   presets: readonly WidgetPreset[];
   country: string;
+  people: readonly HouseholdMember[];
 }
+
+export type WorkshopPurpose = "widget" | "rule";
+export type SmartRefresh = NonNullable<WidgetDraft["playlist"]>["refresh"];
 
 export interface WorkshopOpening {
   draft: WidgetDraft;
   widgetId: string | null;
+  purpose: WorkshopPurpose;
+}
+
+export interface PlaylistSectionProps {
+  workshop: WidgetWorkshopState;
+  number: number;
+}
+
+export interface WorkshopSave {
+  save: () => void;
+  pending: boolean;
+  ready: boolean;
 }
 
 export interface WidgetWorkshopState {
   draft: WidgetDraft;
   widgetId: string | null;
+  purpose: WorkshopPurpose;
   kind: WidgetKind;
   dirty: boolean;
+  playlistable: boolean;
+  setPlaylist: (refresh: SmartRefresh | null) => void;
+  linkPlaylist: (playlistId: string) => void;
   fitting: readonly WidgetBlock[];
   accepted: readonly WidgetBlock[];
   ruleDraft: RuleDraft | null;
   previewDraft: WidgetDraft;
   setKind: (kind: WidgetKind) => void;
   updateQuestion: (change: (question: QuestionQuery) => QuestionQuery) => void;
+  setRecapPeriod: (period: RecapPeriod) => void;
+  setRecipeSubject: (subject: RecipeSubject) => void;
   setQuery: (query: WidgetQuery) => void;
   applyPreset: (preset: WidgetPreset) => void;
   setBlock: (block: WidgetBlock) => void;
@@ -107,7 +134,7 @@ export interface WidgetWorkshopProps {
   context: WorkshopContext;
   onLeave: () => void;
   onDirtyChange: (dirty: boolean) => void;
-  onSaved: (saved: WidgetDocument) => void;
+  onSaved: (name: string) => void;
 }
 
 export interface WorkshopSectionProps {
@@ -133,6 +160,7 @@ export interface RuleEditorProps {
   draft: RuleDraft;
   fields: readonly RuleField[];
   limits: RuleLimits;
+  people: readonly HouseholdMember[];
   onChange: (rule: WidgetRule) => void;
   onCancel: () => void;
   onCommit: () => void;
@@ -146,6 +174,7 @@ export interface RuleLimits {
 export interface RuleControlsProps {
   rule: WidgetRule;
   limits: RuleLimits;
+  people: readonly HouseholdMember[];
   onChange: (rule: WidgetRule) => void;
 }
 
@@ -154,11 +183,25 @@ export interface WhereStepProps {
   rules: RuleList;
   fields: readonly RuleField[];
   limits: RuleLimits;
+  people: readonly HouseholdMember[];
 }
 
 export interface RecipeStepsProps {
   workshop: WidgetWorkshopState;
   question: QuestionQuery;
+  grammar: WidgetGrammar;
+  people: readonly HouseholdMember[];
+}
+
+export interface RecapStepsProps {
+  workshop: WidgetWorkshopState;
+  recap: RecapQuery;
+  context: WorkshopContext;
+}
+
+export interface SubjectSelectProps {
+  workshop: WidgetWorkshopState;
+  value: RecipeSubject;
   grammar: WidgetGrammar;
 }
 
@@ -180,6 +223,11 @@ export interface IconPickerProps {
   icons: readonly WidgetIcon[];
   value: WidgetIcon;
   onChange: (icon: WidgetIcon) => void;
+}
+
+export interface NewsUrlFieldProps {
+  url: string;
+  onCommit: (url: string) => void;
 }
 
 export interface NumberFieldProps {

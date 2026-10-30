@@ -37,6 +37,7 @@ vi.mock("@hooks/api/mutations/board/useSaveBoardLayout", () => ({
 vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", () => ({ useWidgetCatalog: () => ({ data: undefined }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({ useWidgetGrammar: () => ({ data: undefined }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({ useWidgetPresets: () => ({ data: [] }) }));
+vi.mock("@hooks/api/queries/widgets/useWidgetHousehold", () => ({ useWidgetHousehold: () => ({ data: [] }) }));
 vi.mock("@modules/providers/CountryProvider", () => ({ useCountry: () => ({ country: "US" }) }));
 vi.mock("@hooks/api/mutations/widgets/useImportWidgetPreview", () => ({
   useImportWidgetPreview: () => ({ mutate: vi.fn(), isPending: false }),

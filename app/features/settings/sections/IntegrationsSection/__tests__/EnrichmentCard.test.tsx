@@ -39,6 +39,7 @@ const initial: ConnectionsEnrichment = {
   acoustidApiKey: "",
   musicbrainzEmail: "",
   discogsToken: "",
+  bandsintownAppId: "",
 };
 
 function secretInputFor(label: string): HTMLInputElement {
@@ -58,6 +59,7 @@ describe("EnrichmentCard", () => {
           acoustidApiKey: SECRET_SENTINEL,
           songlinkApiKey: SECRET_SENTINEL,
           discogsToken: SECRET_SENTINEL,
+          bandsintownAppId: SECRET_SENTINEL,
         }}
       />
     );
@@ -69,6 +71,7 @@ describe("EnrichmentCard", () => {
       { section: "connections.enrichment", field: "acoustidApiKey" },
       { section: "connections.enrichment", field: "songlinkApiKey" },
       { section: "connections.enrichment", field: "discogsToken" },
+      { section: "connections.enrichment", field: "bandsintownAppId" },
     ]);
   });
 

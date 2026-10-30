@@ -10,7 +10,7 @@ import { RuleControls } from "./RuleControls";
 import { ruleEditor, ruleEditorActions, ruleEditorControls } from "./styles";
 import type { RuleEditorProps } from "./types";
 
-export function RuleEditor({ draft, fields, limits, onChange, onCancel, onCommit }: RuleEditorProps) {
+export function RuleEditor({ draft, fields, limits, people, onChange, onCancel, onCommit }: RuleEditorProps) {
   const { t } = useTranslation("widgets");
   const adding = draft.target.kind === "new";
 
@@ -23,7 +23,7 @@ export function RuleEditor({ draft, fields, limits, onChange, onCancel, onCommit
           options={fields.map((field) => ({ value: field, label: t(`rules.fields.${field}`) }))}
           onChange={(field) => onChange(defaultRuleFor(field))}
         />
-        <RuleControls rule={draft.rule} limits={limits} onChange={onChange} />
+        <RuleControls rule={draft.rule} limits={limits} people={people} onChange={onChange} />
       </div>
       <div className={ruleEditorActions()}>
         <Button variant="ghost" size="sm" onClick={onCancel}>

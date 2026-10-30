@@ -455,6 +455,10 @@
       "discogsToken": {
         "label": "Token de Discogs (opcional)",
         "helper": "Añade géneros, sellos y datos de edición desde Discogs. Déjalo en blanco para no usar Discogs."
+      },
+      "bandsintownAppId": {
+        "label": "App id de Bandsintown (opcional)",
+        "helper": "Llena el widget de próximos conciertos con conciertos de tus artistas. Bandsintown lo da gratis."
       }
     },
     "librarySources": {
@@ -1082,6 +1086,11 @@
         "rejected": "El servicio ha rechazado las ultimas escuchas enviadas."
       }
     },
+    "household": {
+      "title": "Hogar",
+      "label": "Compartir lo que escucho con el hogar",
+      "description": "Permite que los widgets de los demás miembros, como En casa y Blend, lean lo que reproduces. Apagado por defecto."
+    },
     "quota": {
       "title": "Cuota de descarga",
       "unavailable": "No se pudo cargar tu cuota.",
@@ -1340,6 +1349,10 @@
       "playback-source-links": {
         "name": "Enlaces de fuentes de reproducción",
         "description": "Busca qué canciones tuyas pueden reproducir también tus servidores de medios, para poder reproducirlas desde allí."
+      },
+      "smart-playlists": {
+        "name": "Playlists inteligentes",
+        "description": "Renueva cada día o cada semana las playlists cuyas canciones elige la regla de un widget."
       }
     }
   },

@@ -103,6 +103,10 @@
     "title": "Titel wird noch heruntergeladen",
     "description": "Warte, bis er fertig ist, oder brich ihn ab, bevor du ihn aus der Playlist entfernst."
   },
+  "PLAYLIST_RULE_OWNS_TRACKS": {
+    "title": "Eine Regel wählt diese Titel",
+    "description": "Das ist eine smarte Playlist. Bearbeite ihre Regel, um den Inhalt zu ändern."
+  },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "Dorthin nicht synchronisierbar",
     "description": "Die Playlist-Synchronisierung mit diesem Server ist aus, oder die Playlist stammt von dort."
@@ -422,6 +426,10 @@
   "WIDGET_LIMIT_REACHED": {
     "title": "Zu viele Widgets",
     "description": "Entferne eines deiner Widgets, bevor du ein neues anlegst."
+  },
+  "WIDGET_FEED_LIMIT_REACHED": {
+    "title": "Zu viele Feed-Adressen",
+    "description": "Deine Widgets können bis zu 6 verschiedene Feed-Adressen lesen. Verwende eine erneut oder entferne ein Widget, das eine andere liest."
   },
   "WIDGETS_UNREADABLE": {
     "title": "Deine Widgets konnten nicht gelesen werden",

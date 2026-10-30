@@ -83,7 +83,7 @@ export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
 
       <div className={cardBody()}>
         <p className={cardTitle()}>{item.name}</p>
-        <p className={cardSubtitle()}>{origin}</p>
+        <p className={cardSubtitle()}>{item.smart ? t("playlists.smartOrigin", { origin }) : origin}</p>
         <p className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</p>
       </div>
     </li>

@@ -11,6 +11,7 @@ const owner: PublicUser = {
   loudnessNormalization: true,
   loudnessPreampDb: 0,
   autoplayEnabled: false,
+  shareListening: false,
   plex_username: null,
   plexLinked: false,
   hasPassword: true,

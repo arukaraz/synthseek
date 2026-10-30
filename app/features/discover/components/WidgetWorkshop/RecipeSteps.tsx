@@ -18,16 +18,16 @@ import {
   ruleListOf,
   withMeasure,
   withRotation,
-  withSubject,
 } from "./helpers";
 import { NumberField } from "./NumberField";
 import { StepRow } from "./StepRow";
+import { SubjectSelect } from "./SubjectSelect";
 import { addRow, stepList, stepText } from "./styles";
 import type { RecipeStepsProps } from "./types";
 import { WhenControls } from "./WhenControls";
 import { WhereStep } from "./WhereStep";
 
-export function RecipeSteps({ workshop, question, grammar }: RecipeStepsProps) {
+export function RecipeSteps({ workshop, question, grammar, people }: RecipeStepsProps) {
   const { t } = useTranslation("widgets");
   const update = workshop.updateQuestion;
   const subject = grammarSubjectOf(grammar, question.subject);
@@ -52,12 +52,7 @@ export function RecipeSteps({ workshop, question, grammar }: RecipeStepsProps) {
             onChange={(limit) => update((current) => ({ ...current, pick: { ...current.pick, limit } }))}
           />
         ) : null}
-        <SelectMenu
-          ariaLabel={t("steps.show")}
-          value={question.subject}
-          options={grammar.subjects.map((entry) => ({ value: entry.key, label: t(`subjects.${entry.key}`) }))}
-          onChange={(next) => update((current) => withSubject(current, next, grammar))}
-        />
+        <SubjectSelect workshop={workshop} value={question.subject} grammar={grammar} />
       </StepRow>
       <StepRow label={t("steps.measure")}>
         {question.groupBy ? null : (
@@ -140,7 +135,9 @@ export function RecipeSteps({ workshop, question, grammar }: RecipeStepsProps) {
           ) : null}
         </StepRow>
       ) : null}
-      {showWhere ? <WhereStep workshop={workshop} rules={rules} fields={fields} limits={limits} /> : null}
+      {showWhere ? (
+        <WhereStep workshop={workshop} rules={rules} fields={fields} limits={limits} people={people} />
+      ) : null}
       <div className={addRow()}>
         {groupable && !question.groupBy ? (
           <Button

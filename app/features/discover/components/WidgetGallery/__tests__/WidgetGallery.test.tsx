@@ -1,3 +1,4 @@
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@locale";
@@ -42,8 +43,9 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 vi.mock("../../LibraryLeaderboard", () => ({ LibraryLeaderboard: stub("leaderboard") }));
 
-const { saveWidget, removeWidget, myWidgets } = vi.hoisted(() => ({
+const { saveWidget, savePlaylist, removeWidget, myWidgets } = vi.hoisted(() => ({
   saveWidget: vi.fn(),
+  savePlaylist: vi.fn(),
   removeWidget: vi.fn(),
   myWidgets: { data: new Array<WidgetDocument>() },
 }));
@@ -101,6 +103,12 @@ vi.mock("@hooks/api/queries/widgets/useWidgetPreview", () => ({
 }));
 vi.mock("@hooks/api/mutations/widgets/useSaveWidget", () => ({
   useSaveWidget: () => ({ mutate: saveWidget, isPending: false }),
+}));
+vi.mock("@hooks/api/queries/widgets/useWidgetHousehold", () => ({
+  useWidgetHousehold: () => ({ data: [{ id: "u_bo", name: "bo" }] }),
+}));
+vi.mock("@hooks/api/mutations/widgets/useSaveSmartPlaylist", () => ({
+  useSaveSmartPlaylist: () => ({ mutate: savePlaylist, isPending: false }),
 }));
 vi.mock("@hooks/api/mutations/widgets/useRemoveWidget", () => ({
   useRemoveWidget: () => ({ mutate: removeWidget, isPending: false }),
@@ -320,6 +328,120 @@ describe("WidgetGallery", () => {
   it("opens the workshop on the preset when the board asks to customize a tile", () => {
     renderGallery(ON_BOARD, "forgottenFavorites");
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue("Forgotten favorites (custom)");
+  });
+
+  it("turns the recipe into a recap from the subject menu, with the story view, and back", async () => {
+    const user = userEvent.setup();
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+
+    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /a recap/ }));
+    expect(screen.getByText("Show me a recap of my listening this year.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Measure" })).not.toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /Story/ })).toHaveAttribute("aria-checked", "true");
+
+    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /^tracks/ }));
+    expect(screen.getByText("Show me 10 tracks with the most plays in the last 30 days.")).toBeInTheDocument();
+  });
+
+  it("saves the smart playlist first and keeps its id on the widget", () => {
+    savePlaylist.mockImplementation((_input, options) => options.onSuccess({ id: "pl_1", name: "Night owl" }));
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Night owl" } });
+
+    fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Daily" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+
+    expect(savePlaylist).toHaveBeenCalledWith(
+      expect.objectContaining({
+        playlistId: null,
+        name: "Night owl",
+        refresh: "daily",
+        query: expect.objectContaining({ type: "question", subject: "tracks" }),
+      }),
+      expect.anything()
+    );
+    expect(saveWidget).toHaveBeenCalledWith(
+      expect.objectContaining({ playlist: { refresh: "daily", playlistId: "pl_1" } }),
+      expect.anything()
+    );
+  });
+
+  it("reuses the playlist it already created when the widget failed to save", () => {
+    savePlaylist.mockImplementation((_input, options) => options.onSuccess({ id: "pl_1", name: "Night owl" }));
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Night owl" } });
+    fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+
+    expect(savePlaylist).toHaveBeenCalledTimes(2);
+    expect(savePlaylist.mock.calls[1]?.[0]).toMatchObject({ playlistId: "pl_1" });
+  });
+
+  it("offers a playlist only while the recipe lists tracks, and drops it otherwise", async () => {
+    const user = userEvent.setup();
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
+
+    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /^albums/ }));
+    expect(screen.queryByRole("switch", { name: "Also save as a playlist" })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Show" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /^tracks/ }));
+    expect(screen.getByRole("switch", { name: "Also save as a playlist" })).not.toBeChecked();
+  });
+
+  it("reads a household member's listening by name in the rule and the readback", async () => {
+    const user = userEvent.setup();
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("button", { name: "Where" }));
+
+    await user.click(screen.getByRole("button", { name: "Field" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /Whose listening/ }));
+    await user.click(screen.getByRole("button", { name: "Condition" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /played by me and/ }));
+    await user.click(screen.getByRole("button", { name: "Value" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /^bo/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Add rule" }));
+
+    expect(
+      screen.getByText("Show me 10 tracks with the most plays in the last 30 days, where played by me and bo.")
+    ).toBeInTheDocument();
+  });
+
+  it("takes a news feed address only once it is an http address", async () => {
+    const user = userEvent.setup();
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Feed" }));
+    await user.click(screen.getByRole("button", { name: "Source" }));
+    await user.click(await screen.findByRole("menuitemradio", { name: /A news feed/ }));
+
+    const address = screen.getByRole("textbox", { name: "Feed address" });
+    expect(screen.getByText("Show me 12 items from A news feed (RSS or Atom).")).toBeInTheDocument();
+    fireEvent.change(address, { target: { value: "ftp://feeds.test/rss" } });
+    expect(screen.getByText("Enter an http or https address.")).toBeInTheDocument();
+    expect(address).toHaveAttribute("aria-invalid", "true");
+    fireEvent.change(address, { target: { value: "https://feeds.test/rss" } });
+    fireEvent.blur(address);
+    expect(screen.getByRole("textbox", { name: "Feed address" })).toHaveValue("https://feeds.test/rss");
+    expect(screen.getByRole("radio", { name: /Headlines/ })).toHaveAttribute("aria-checked", "true");
   });
 
   it("switches to a feed and back without losing the recipe", () => {

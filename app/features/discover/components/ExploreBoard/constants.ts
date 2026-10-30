@@ -360,6 +360,7 @@ export const CUSTOM_BLOCK_HEIGHTS: Record<WidgetBlock, Record<BoardSize, BoardHe
   mosaic: { S: "regular", M: "regular", L: "regular" },
   yearCalendar: { S: "short", M: "regular", L: "regular" },
   share: { S: "regular", M: "regular", L: "regular" },
+  story: { S: "regular", M: "tall", L: "tall" },
 };
 
 export const FALLBACK_BLOCK_HEIGHT: BoardHeight = "regular";

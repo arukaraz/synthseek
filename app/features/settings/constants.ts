@@ -247,6 +247,7 @@ export const JOB_NAME_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
   "library-loudness": "jobs.registry.library-loudness.name",
   "scrobble-relay": "jobs.registry.scrobble-relay.name",
   "playback-source-links": "jobs.registry.playback-source-links.name",
+  "smart-playlists": "jobs.registry.smart-playlists.name",
 };
 
 export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings">> = {
@@ -259,6 +260,7 @@ export const JOB_DESCRIPTION_KEYS: Record<JobSummary["id"], ParseKeys<"settings"
   "library-loudness": "jobs.registry.library-loudness.description",
   "scrobble-relay": "jobs.registry.scrobble-relay.description",
   "playback-source-links": "jobs.registry.playback-source-links.description",
+  "smart-playlists": "jobs.registry.smart-playlists.description",
 };
 
 export const SOURCE_TITLE_KEYS: Readonly<Record<DownloadSourceKey, ParseKeys<"settings">>> = {

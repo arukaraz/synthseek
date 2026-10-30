@@ -13,7 +13,12 @@ export function useWidgetControls(action: WidgetAction): WidgetItemActions {
   const { playEntity } = useEntityPlayback();
   const { openForTarget, requestResult } = useContentRequestFlow();
   const handlers = useMemo<WidgetHandlers>(
-    () => ({ play: (target) => void playEntity(target), request: requestResult, open: openForTarget }),
+    () => ({
+      play: (target) => void playEntity(target),
+      request: requestResult,
+      open: openForTarget,
+      openUrl: (url) => void window.open(url, "_blank", "noopener,noreferrer"),
+    }),
     [playEntity, requestResult, openForTarget]
   );
   return useCallback((item: WidgetItem) => itemControls(item, action, handlers), [action, handlers]);

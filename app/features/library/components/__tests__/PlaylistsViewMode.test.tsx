@@ -50,6 +50,7 @@ function createPlaylist(overrides?: Partial<LibraryPlaylistItem>): LibraryPlayli
     source_provider: null,
     origin: { kind: "created" },
     sync_enabled: false,
+    smart: false,
     created_at: new Date("2024-01-01T00:00:00.000Z"),
     ...overrides,
   };

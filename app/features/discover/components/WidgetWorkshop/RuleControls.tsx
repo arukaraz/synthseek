@@ -5,12 +5,20 @@ import { useTranslation } from "react-i18next";
 import { RequestStatus } from "@api/__generated__/types";
 import { SelectMenu } from "@components/ui/SelectMenu";
 
-import { DECADE_CHOICES, NUMBER_BOUNDS, RELEASE_TYPE_CHOICES, SHARE_PERCENT } from "./constants";
+import {
+  DECADE_CHOICES,
+  NUMBER_BOUNDS,
+  RELEASE_TYPE_CHOICES,
+  SHARE_PERCENT,
+  USER_RULE_GROUPS,
+  USER_RULE_OPS,
+} from "./constants";
+import { personName } from "./helpers";
 import { NumberField } from "./NumberField";
 import { stepText } from "./styles";
 import type { RuleControlsProps } from "./types";
 
-export function RuleControls({ rule, limits, onChange }: RuleControlsProps) {
+export function RuleControls({ rule, limits, people, onChange }: RuleControlsProps) {
   const { t } = useTranslation(["widgets", "status", "discover"]);
   const opLabel = t("widgets:rules.op");
   const valueLabel = t("widgets:rules.value");
@@ -21,6 +29,26 @@ export function RuleControls({ rule, limits, onChange }: RuleControlsProps) {
   const days = { min: NUMBER_BOUNDS.daysMin, max: limits.daysMax };
 
   switch (rule.field) {
+    case "user":
+      return (
+        <>
+          <SelectMenu
+            ariaLabel={opLabel}
+            value={rule.op}
+            options={USER_RULE_OPS.map((op) => ({ value: op, label: t(`widgets:rules.userOps.${op}`) }))}
+            onChange={(op) => onChange({ ...rule, op })}
+          />
+          <SelectMenu
+            ariaLabel={valueLabel}
+            value={rule.value}
+            options={[
+              ...USER_RULE_GROUPS.map((group) => ({ value: group, label: personName(group, people) })),
+              ...people.map((person) => ({ value: person.id, label: person.name })),
+            ]}
+            onChange={(value) => onChange({ ...rule, value })}
+          />
+        </>
+      );
     case "plays":
       return (
         <>

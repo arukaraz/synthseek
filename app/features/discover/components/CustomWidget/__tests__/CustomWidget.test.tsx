@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { BoardSize } from "@hooks/api/queries/board/types";
-import type { WidgetBlock, WidgetResult } from "@hooks/api/queries/widgets/types";
+import type { WidgetAction, WidgetBlock, WidgetResult } from "@hooks/api/queries/widgets/types";
 import {
   createAlbumResult,
   createBucketResult,
@@ -9,8 +9,10 @@ import {
   createFeedAlbumResult,
   createFeedAlbumRow,
   createMatrixResult,
+  createNewsResult,
   createQuestionAlbumRow,
   createQuestionTrackRow,
+  createRecapResult,
   createSeriesResult,
   createTrackResult,
   createWidget,
@@ -92,7 +94,20 @@ const MOVES = {
   previous: { from: new Date("2026-08-30T00:00:00Z"), to: new Date("2026-09-29T00:00:00Z") },
 };
 
-function show(block: WidgetBlock, size: BoardSize, result: WidgetResult, action: "play" | "request" | "none" = "play") {
+const RECAP = createRecapResult([
+  { kind: "plays", value: 120 },
+  { kind: "topArtist", name: "Alpha", artistId: "artist-alpha", cover: null, plays: 14 },
+  {
+    kind: "topAlbums",
+    albums: [
+      { id: "al1", name: "Alpha One", artist: "Alpha", cover: null, plays: 14 },
+      { id: "al2", name: "Beta Two", artist: "Beta", cover: null, plays: 11 },
+    ],
+  },
+  { kind: "listeningAge", from: 1995, to: 1999, plays: 14, share: 0.5 },
+]);
+
+function show(block: WidgetBlock, size: BoardSize, result: WidgetResult, action: WidgetAction = "play") {
   dataQuery.mockReturnValue({ data: result, isLoading: false, isError: false });
   renderWithProviders(<CustomWidget widget={createWidget({ view: { block, action } })} status="ready" size={size} />);
 }
@@ -313,6 +328,141 @@ describe("CustomWidget", () => {
   it("says nothing matches when every point of a series is zero", () => {
     show("bars", "M", createSeriesResult([{ key: "2026-10-01", value: 0, prev: null }]), "none");
     expect(screen.getByText("Nothing matches this widget right now.")).toBeInTheDocument();
+  });
+
+  it("pages through a recap with arrows, dots, keys and swipes, wrapping at both ends", () => {
+    show("story", "L", RECAP, "none");
+    const story = screen.getByRole("group", { name: "Recap, page 1 of 4" });
+    expect(within(story).getByText("You pressed play")).toBeInTheDocument();
+    expect(within(story).getByText("120")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Next page" }));
+    expect(screen.getByText("Your top artist")).toBeInTheDocument();
+    expect(screen.getByText("Alpha")).toBeInTheDocument();
+    expect(screen.getByText("14 plays")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Go to Your top albums" }));
+    expect(screen.getByText("1. Alpha One")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Go to Your top albums" })).toHaveAttribute("aria-current", "step");
+
+    fireEvent.keyDown(screen.getByRole("group", { name: "Recap, page 3 of 4" }), { key: "ArrowRight" });
+    expect(screen.getByText("Your listening age")).toBeInTheDocument();
+    expect(screen.getByText("1995 to 1999")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Next page" }));
+    expect(screen.getByText("You pressed play")).toBeInTheDocument();
+
+    const group = screen.getByRole("group", { name: "Recap, page 1 of 4" });
+    fireEvent.touchStart(group, { touches: [{ clientX: 200 }] });
+    fireEvent.touchMove(group, { touches: [{ clientX: 300 }] });
+    fireEvent.touchEnd(group);
+    expect(screen.getByText("Your listening age")).toBeInTheDocument();
+  });
+
+  it("counts pages instead of drawing dots in the compact size", () => {
+    show("story", "S", RECAP, "none");
+    expect(screen.getByText("1 / 4")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Go to/ })).not.toBeInTheDocument();
+  });
+
+  it("says how much listening a recap still needs instead of drawing empty pages", () => {
+    show("story", "M", createRecapResult([], { plays: 7, covers: [] }), "none");
+    expect(screen.getByText("Not enough listening yet: 7 of the 20 plays this recap needs.")).toBeInTheDocument();
+    expect(screen.queryByRole("group", { name: /Recap, page/ })).not.toBeInTheDocument();
+  });
+
+  it("names the member who has not shared instead of an empty widget", () => {
+    show("list", "M", { ...createTrackResult([]), privacy: { reason: "notShared", name: "bo" } });
+    expect(screen.getByText("bo hasn't shared their listening.")).toBeInTheDocument();
+    expect(screen.queryByText("Nothing matches this widget right now.")).not.toBeInTheDocument();
+  });
+
+  it("says when nobody else shares their listening", () => {
+    show("list", "M", { ...createTrackResult([]), privacy: { reason: "nobodyShares" } });
+    expect(screen.getByText("Nobody else in the household shares their listening yet.")).toBeInTheDocument();
+  });
+
+  it("opens a news item's link in a new tab without handing it the opener", () => {
+    const opened = vi.spyOn(window, "open").mockReturnValue(null);
+    show(
+      "feed",
+      "M",
+      createNewsResult([
+        {
+          id: "n1",
+          rank: 1,
+          title: "Best new album",
+          url: "https://reviews.test/a",
+          summary: "A review.",
+          publishedAt: "2026-10-26T04:03:00.000Z",
+          image: null,
+          source: "Reviews",
+        },
+      ]),
+      "openUrl"
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Best new album" }));
+    expect(opened).toHaveBeenCalledWith("https://reviews.test/a", "_blank", "noopener,noreferrer");
+    opened.mockRestore();
+  });
+
+  it("lists upcoming shows by date with the venue, and opens the ticket page", () => {
+    const opened = vi.spyOn(window, "open").mockReturnValue(null);
+    show(
+      "list",
+      "M",
+      {
+        type: "feed",
+        source: "events.upcoming",
+        needs: null,
+        shape: "ranked",
+        dataset: "events",
+        failure: null,
+        total: 1,
+        rows: [
+          {
+            id: "e1",
+            rank: 1,
+            artist: "Alpha",
+            title: "Alpha",
+            date: "2026-11-14T20:00:00.000Z",
+            venue: "Hall",
+            city: "Monterrey",
+            country: "Mexico",
+            url: "https://www.bandsintown.test/e/1",
+            image: null,
+          },
+        ],
+      },
+      "openUrl"
+    );
+    expect(screen.getByText("Hall · Monterrey · Mexico")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^Alpha/ }));
+    expect(opened).toHaveBeenCalledWith("https://www.bandsintown.test/e/1", "_blank", "noopener,noreferrer");
+    opened.mockRestore();
+  });
+
+  it("asks for a Bandsintown app id before it can list shows", () => {
+    show("calendar", "M", {
+      type: "feed",
+      source: "events.upcoming",
+      needs: "bandsintown",
+      shape: "ranked",
+      dataset: "events",
+      failure: null,
+      total: 0,
+      rows: [],
+    });
+    expect(
+      screen.getByText("Add a Bandsintown app id under Settings, Integrations to fill this widget.")
+    ).toBeInTheDocument();
+  });
+
+  it("says why a news feed has nothing to show", () => {
+    show("feed", "M", createNewsResult([], "blocked"), "none");
+    expect(
+      screen.getByText("This feed address is not allowed: it must be a public http or https address.")
+    ).toBeInTheDocument();
   });
 
   it("says which integration a feed is waiting on", () => {

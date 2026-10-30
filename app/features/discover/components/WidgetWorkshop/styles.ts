@@ -137,6 +137,12 @@ export const accentDot = cva(
 
 export const detailsGrid = cva("grid gap-3 @xl:grid-cols-2");
 
+export const playlistToggle = cva("text-fg flex items-center gap-3 text-sm");
+
+export const newsUrl = cva("flex w-full min-w-0 flex-col gap-1");
+
+export const newsUrlHint = cva("text-fg/60 text-[11px]");
+
 export const iconSearch = cva("w-full");
 
 export const iconGrid = cva(

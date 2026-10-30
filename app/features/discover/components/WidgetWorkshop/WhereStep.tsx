@@ -13,7 +13,7 @@ import { StepRow } from "./StepRow";
 import { ruleAdd, ruleList, ruleMatch, ruleRow, ruleTextButton } from "./styles";
 import type { WhereStepProps } from "./types";
 
-export function WhereStep({ workshop, rules, fields, limits }: WhereStepProps) {
+export function WhereStep({ workshop, rules, fields, limits, people }: WhereStepProps) {
   const { t } = useTranslation("widgets");
   const { ruleDraft } = workshop;
   const editingIndex = ruleDraft?.target.kind === "edit" ? ruleDraft.target.index : null;
@@ -23,6 +23,7 @@ export function WhereStep({ workshop, rules, fields, limits }: WhereStepProps) {
       draft={ruleDraft}
       fields={fields}
       limits={limits}
+      people={people}
       onChange={workshop.changeRule}
       onCancel={workshop.closeRule}
       onCommit={workshop.commitRule}
@@ -52,7 +53,7 @@ export function WhereStep({ workshop, rules, fields, limits }: WhereStepProps) {
           </div>
         ) : null}
         {rules.list.map((rule, index) => {
-          const text = ruleText(rule);
+          const text = ruleText(rule, people);
           if (index === editingIndex) return <div key={`edit-${index}`}>{editor}</div>;
           return (
             <div key={`${rule.field}-${index}`} className={ruleRow()}>

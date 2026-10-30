@@ -757,6 +757,12 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
     href: "/settings/metadata",
     anchor: "connections.enrichment.discogsToken",
   },
+  {
+    labelKey: "metadata.enrichment.bandsintownAppId.label",
+    page: "metadata",
+    href: "/settings/metadata",
+    anchor: "connections.enrichment.bandsintownAppId",
+  },
 
   {
     labelKey: "maintenance.review.title",

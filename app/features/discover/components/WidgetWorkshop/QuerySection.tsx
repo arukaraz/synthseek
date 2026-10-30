@@ -8,7 +8,8 @@ import { SegmentTabs } from "@components/ui/SegmentTabs";
 import { widgetIconOf } from "../CustomWidget/helpers";
 import { WIDGET_KINDS } from "./constants";
 import { FeedSteps } from "./FeedSteps";
-import { readbackOf } from "./helpers";
+import { readbackOf, recapReadbackOf } from "./helpers";
+import { RecapSteps } from "./RecapSteps";
 import { RecipeSteps } from "./RecipeSteps";
 import {
   kindLabel,
@@ -35,21 +36,27 @@ export function QuerySection({ workshop, context }: WorkshopSectionProps) {
       <div className={sectionHead()}>
         <span className={sectionNumber()}>1</span>
         <h3 id="workshop-query-title" className={sectionTitle()}>
-          {t(`kinds.${query.type}`)}
+          {t(`kinds.${workshop.kind}`)}
         </h3>
-        <div className={kindSwitch()}>
-          <span className={kindLabel()}>{t("workshop.buildUsing")}</span>
-          <SegmentTabs
-            items={WIDGET_KINDS.map((kind) => ({ value: kind, label: t(`kinds.${kind}`) }))}
-            value={query.type}
-            onValueChange={workshop.setKind}
-            layoutId="widget-workshop-kind"
-            ariaLabel={t("workshop.kindLabel")}
-          />
-        </div>
+        {workshop.purpose === "widget" ? (
+          <div className={kindSwitch()}>
+            <span className={kindLabel()}>{t("workshop.buildUsing")}</span>
+            <SegmentTabs
+              items={WIDGET_KINDS.map((kind) => ({ value: kind, label: t(`kinds.${kind}`) }))}
+              value={workshop.kind}
+              onValueChange={workshop.setKind}
+              layoutId="widget-workshop-kind"
+              ariaLabel={t("workshop.kindLabel")}
+            />
+          </div>
+        ) : null}
       </div>
-      <p className={sectionHelp()}>{query.type === "question" ? t("workshop.recipeHelp") : t("workshop.feedHelp")}</p>
-      {query.type === "question" ? (
+      <p className={sectionHelp()}>
+        {workshop.kind === "question" ? t("workshop.recipeHelp") : t("workshop.feedHelp")}
+      </p>
+      {query.type === "feed" ? (
+        <FeedSteps workshop={workshop} feed={query} context={context} />
+      ) : (
         <>
           <div className={startFromRow()}>
             <span className={startFromLabel()}>{t("workshop.startFrom")}</span>
@@ -74,13 +81,15 @@ export function QuerySection({ workshop, context }: WorkshopSectionProps) {
               </div>
             </FadeScroll>
           </div>
-          <RecipeSteps workshop={workshop} question={query} grammar={context.grammar} />
+          {query.type === "question" ? (
+            <RecipeSteps workshop={workshop} question={query} grammar={context.grammar} people={context.people} />
+          ) : (
+            <RecapSteps workshop={workshop} recap={query} context={context} />
+          )}
           <p className={readback()} aria-live="polite">
-            {readbackOf(query)}
+            {query.type === "question" ? readbackOf(query, context.people) : recapReadbackOf(query)}
           </p>
         </>
-      ) : (
-        <FeedSteps workshop={workshop} feed={query} context={context} />
       )}
     </section>
   );

@@ -5,7 +5,10 @@ import type { BoardSize } from "@hooks/api/queries/board/types";
 import { matchesTerms, searchTerms } from "@utils/search";
 import type {
   FeedQuery,
+  HouseholdMember,
   QuestionQuery,
+  RecapPeriod,
+  RecapQuery,
   WidgetBlock,
   WidgetCatalog,
   WidgetDraft,
@@ -24,7 +27,11 @@ import {
   DEFAULT_DAYS,
   DEFAULT_FEED_SEED,
   DEFAULT_FRESH_RELEASE_DAYS,
+  DEFAULT_CURATED_FEED,
+  DEFAULT_EVENTS_DAYS,
+  DEFAULT_FEED_SHAPE,
   DEFAULT_LISTENBRAINZ_PLAYLIST,
+  DEFAULT_NEWS_URL,
   DEFAULT_RULES,
   MONTH_DAYS,
   MONTH_NAME_REFERENCE_YEAR,
@@ -41,6 +48,7 @@ import type {
   GrammarSubject,
   PickRotation,
   QuestionMeasure,
+  RecapNamedPeriod,
   QuestionSubject,
   QuestionTime,
   RuleField,
@@ -48,6 +56,7 @@ import type {
   RuleMode,
   TimeMode,
   ViewChoice,
+  WidgetKind,
   WidgetRule,
   WidgetRules,
 } from "./types";
@@ -59,7 +68,44 @@ export function questionShapeOf(question: QuestionQuery, grammar: WidgetGrammar)
 }
 
 function queryShapeOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetShape {
-  return query.type === "question" ? questionShapeOf(query, grammar) : catalog.feeds.shape;
+  switch (query.type) {
+    case "question":
+      return questionShapeOf(query, grammar);
+    case "feed":
+      return feedSourceOf(catalog, query.source)?.shape ?? DEFAULT_FEED_SHAPE;
+    case "recap":
+      return catalog.recap.shape;
+  }
+}
+
+export function webUrlOf(text: string): string | null {
+  const trimmed = text.trim();
+  if (!URL.canParse(trimmed)) return null;
+  const { protocol } = new URL(trimmed);
+  return protocol === "http:" || protocol === "https:" ? trimmed : null;
+}
+
+export function listsTracksOf(query: WidgetQuery): boolean {
+  return query.type === "question" && query.subject === "tracks" && query.groupBy === undefined;
+}
+
+export function withFittingPlaylist(draft: WidgetDraft): WidgetDraft {
+  return draft.playlist && !listsTracksOf(draft.query) ? { ...draft, playlist: null } : draft;
+}
+
+export function kindOf(query: WidgetQuery): WidgetKind {
+  return query.type === "feed" ? "feed" : "question";
+}
+
+export function recapPeriodFrom(time: QuestionTime, periods: readonly RecapNamedPeriod[]): RecapPeriod {
+  if (time.mode === "absolute") return time;
+  const [first = "thisYear"] = periods;
+  const named = time.mode === "named" ? periods.find((period) => period === time.value) : undefined;
+  return { mode: "named", value: named ?? first };
+}
+
+export function recapReadbackOf(recap: RecapQuery): string {
+  return i18n.t("widgets:readback.recap", { time: timeText(recap.period) });
 }
 
 export function rotationChoicesOf(grammar: WidgetGrammar): PickRotation[] {
@@ -181,8 +227,16 @@ function yesNo(value: boolean): "true" | "false" {
   return value ? "true" : "false";
 }
 
-export function ruleText(rule: WidgetRule): string {
+export function personName(value: string, people: readonly HouseholdMember[]): string {
+  if (value === "me") return i18n.t("widgets:rules.people.me");
+  if (value === "household") return i18n.t("widgets:rules.people.household");
+  return people.find((person) => person.id === value)?.name ?? i18n.t("widgets:rules.people.someone");
+}
+
+export function ruleText(rule: WidgetRule, people: readonly HouseholdMember[] = []): string {
   switch (rule.field) {
+    case "user":
+      return i18n.t(`widgets:rules.text.user_${rule.op}`, { value: personName(rule.value, people) });
     case "plays":
       return i18n.t(`widgets:rules.text.plays_${rule.op}`, { value: rule.value });
     case "notPlayedInLast":
@@ -258,13 +312,14 @@ function headOf(question: QuestionQuery): string {
     : i18n.t("widgets:readback.show", parts);
 }
 
-export function readbackOf(question: QuestionQuery): string {
+export function readbackOf(question: QuestionQuery, people: readonly HouseholdMember[] = []): string {
   const { mode, list } = ruleListOf(question.rules);
   const joiner = i18n.t(mode === "all" ? "widgets:readback.and" : "widgets:readback.or");
+  const rules = list.map((rule) => ruleText(rule, people)).join(joiner);
   return [
     headOf(question),
     question.compare === "previous" ? i18n.t("widgets:readback.compared") : "",
-    list.length > 0 ? i18n.t("widgets:readback.where", { rules: list.map(ruleText).join(joiner) }) : "",
+    list.length > 0 ? i18n.t("widgets:readback.where", { rules }) : "",
     i18n.t("widgets:readback.end"),
   ].join("");
 }
@@ -279,6 +334,7 @@ export function feedSeedOf(feed: FeedQuery): FeedSeed | null {
     case "lastfm.similarTracks":
     case "catalog.related":
     case "catalog.artistAlbums":
+    case "events.upcoming":
       return feed.params.seed;
     case "listenbrainz.recommendations":
     case "listenbrainz.freshReleases":
@@ -286,6 +342,8 @@ export function feedSeedOf(feed: FeedQuery): FeedSeed | null {
     case "catalog.trending":
     case "lastfm.charts":
     case "lastfm.lovedTracks":
+    case "feed.rss":
+    case "feed.curated":
       return null;
   }
 }
@@ -307,6 +365,12 @@ function feedWithSource(base: FeedBase, source: FeedSource, seed: FeedSeed, coun
       return { ...base, source, params: { playlist: DEFAULT_LISTENBRAINZ_PLAYLIST } };
     case "lastfm.charts":
       return { ...base, source, params: { country } };
+    case "feed.rss":
+      return { ...base, source, params: { url: DEFAULT_NEWS_URL } };
+    case "feed.curated":
+      return { ...base, source, params: { feed: DEFAULT_CURATED_FEED } };
+    case "events.upcoming":
+      return { ...base, source, params: { seed, country: null, days: DEFAULT_EVENTS_DAYS } };
   }
 }
 
@@ -333,12 +397,16 @@ export function withSeed(feed: FeedQuery, seed: FeedSeed): FeedQuery {
     case "catalog.related":
     case "catalog.artistAlbums":
       return { ...feed, params: { seed } };
+    case "events.upcoming":
+      return { ...feed, params: { ...feed.params, seed } };
     case "listenbrainz.recommendations":
     case "listenbrainz.freshReleases":
     case "listenbrainz.playlists":
     case "catalog.trending":
     case "lastfm.charts":
     case "lastfm.lovedTracks":
+    case "feed.rss":
+    case "feed.curated":
       return feed;
   }
 }
@@ -361,7 +429,7 @@ export function feedReadbackOf(feed: FeedQuery): string {
       count: feed.pick.limit,
       source: i18n.t(`widgets:feeds.sources.${feed.source}`),
     }),
-    list.length > 0 ? i18n.t("widgets:readback.where", { rules: list.map(ruleText).join(joiner) }) : "",
+    list.length > 0 ? i18n.t("widgets:readback.where", { rules: list.map((rule) => ruleText(rule)).join(joiner) }) : "",
     i18n.t("widgets:readback.end"),
   ].join("");
 }

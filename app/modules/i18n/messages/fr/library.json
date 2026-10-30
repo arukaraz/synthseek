@@ -502,8 +502,10 @@
     }
   },
   "playlists": {
+    "smartOrigin": "Intelligente · {{origin}}",
     "actions": {
       "rename": "Renommer",
+      "editRule": "Modifier la règle",
       "delete": "Supprimer",
       "menu": "Actions de playlist pour {{name}}",
       "syncTo": "Synchroniser vers...",

@@ -10,6 +10,7 @@ import { contentRoot } from "../../styles";
 import { AccountCard } from "./components/AccountCard";
 import { ChangePasswordCard } from "./components/ChangePasswordCard";
 import { EditProfileCard } from "./components/EditProfileCard";
+import { HouseholdSharingCard } from "./components/HouseholdSharingCard";
 import { QuotaCard } from "./components/QuotaCard";
 
 export function AccountSection() {
@@ -25,6 +26,7 @@ export function AccountSection() {
       <AccountCard user={currentUser} />
       <QuotaCard />
       <EditProfileCard user={currentUser} />
+      <HouseholdSharingCard user={currentUser} />
       <ChangePasswordCard user={currentUser} />
     </div>
   );

@@ -54,6 +54,11 @@ export function MyWidgetCard({ widget, tiles, onAdd, onEdit, onDuplicate, onCopy
         {t("mine.meta", { view: t(`blocks.${widget.view.block}`), kind: t(`kinds.${widget.query.type}`) })}
       </p>
       {widget.basedOn ? <p className={mineBasedOn()}>{t("mine.basedOn", { name: widget.basedOn })}</p> : null}
+      {widget.playlist ? (
+        <p className={mineBasedOn()}>
+          {t("mine.playlist", { refresh: t(`playlist.refreshes.${widget.playlist.refresh}`) })}
+        </p>
+      ) : null}
       <div className={mineActions()}>
         {tiles > 0 ? (
           <span className={onBoardPill()}>

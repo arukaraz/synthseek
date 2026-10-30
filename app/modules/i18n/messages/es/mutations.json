@@ -125,7 +125,8 @@
   "widgets": {
     "saveFailed": "No se pudo guardar este widget",
     "removeFailed": "No se pudo borrar este widget",
-    "importFailed": "No se pudo comprobar este JSON"
+    "importFailed": "No se pudo comprobar este JSON",
+    "savePlaylistFailed": "No se pudo guardar esta playlist inteligente"
   },
   "portability": {
     "importFailed": "Error en la importación"

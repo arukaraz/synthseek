@@ -16,6 +16,7 @@ export type ConnectionsEnrichment = {
   acoustidApiKey: string;
   musicbrainzEmail: string;
   discogsToken: string;
+  bandsintownAppId: string;
 };
 
 export interface ConnectionsSpotify {

@@ -452,6 +452,10 @@
       "discogsToken": {
         "label": "Discogs token (optional)",
         "helper": "Adds genres, labels and release details from Discogs. Leave blank to skip Discogs."
+      },
+      "bandsintownAppId": {
+        "label": "Bandsintown app id (optional)",
+        "helper": "Fills the upcoming shows widget with concerts by your artists. Bandsintown gives one for free."
       }
     },
     "librarySources": {
@@ -1079,6 +1083,11 @@
         "rejected": "The service refused the last plays sent to it."
       }
     },
+    "household": {
+      "title": "Household",
+      "label": "Share my listening with the household",
+      "description": "Lets the other members' widgets, like At home and Blend, read what you play. Off by default."
+    },
     "quota": {
       "title": "Download quota",
       "unavailable": "Your quota could not be loaded.",
@@ -1337,6 +1346,10 @@
       "playback-source-links": {
         "name": "Playback Source Links",
         "description": "Finds which of your tracks your media servers can also play, so they can be played from there."
+      },
+      "smart-playlists": {
+        "name": "Smart Playlists",
+        "description": "Refreshes the playlists whose tracks a widget rule picks, daily or weekly."
       }
     }
   },

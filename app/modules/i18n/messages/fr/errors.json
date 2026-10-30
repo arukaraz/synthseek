@@ -103,6 +103,10 @@
     "title": "Piste en cours de téléchargement",
     "description": "Attendez qu'elle se termine, ou annulez-la, avant de la retirer de la playlist."
   },
+  "PLAYLIST_RULE_OWNS_TRACKS": {
+    "title": "Une règle choisit ces titres",
+    "description": "C'est une playlist intelligente. Modifiez sa règle pour changer son contenu."
+  },
   "PLAYLIST_SYNC_TARGET_UNAVAILABLE": {
     "title": "Synchronisation impossible",
     "description": "La synchronisation des playlists avec ce serveur est désactivée, ou cette playlist en provient."
@@ -422,6 +426,10 @@
   "WIDGET_LIMIT_REACHED": {
     "title": "Trop de widgets",
     "description": "Supprimez l'un de vos widgets avant d'en créer un autre."
+  },
+  "WIDGET_FEED_LIMIT_REACHED": {
+    "title": "Trop d'adresses de flux",
+    "description": "Vos widgets peuvent lire jusqu'à 6 adresses de flux différentes. Réutilisez-en une ou supprimez un widget qui en lit une autre."
   },
   "WIDGETS_UNREADABLE": {
     "title": "Impossible de lire vos widgets",

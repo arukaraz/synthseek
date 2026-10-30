@@ -174,6 +174,12 @@ export function problemText(problem: WidgetProblem): string {
       });
     case "blockNotForShape":
       return i18n.t("widgets:problems.blockNotForShape", { block: i18n.t(`widgets:blocks.${problem.block}`) });
+    case "playlistNeedsTracks":
+      return i18n.t("widgets:problems.playlistNeedsTracks");
+    case "userRuleOnce":
+      return i18n.t("widgets:problems.userRuleOnce");
+    case "userRuleNeedsAll":
+      return i18n.t("widgets:problems.userRuleNeedsAll");
     case "tooLarge":
       return i18n.t("widgets:problems.tooLarge", { kb: Math.round(problem.maxBytes / BYTES_PER_KB) });
     case "invalidJson":

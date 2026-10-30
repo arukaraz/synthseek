@@ -502,8 +502,10 @@
     }
   },
   "playlists": {
+    "smartOrigin": "Smart · {{origin}}",
     "actions": {
       "rename": "Umbenennen",
+      "editRule": "Regel bearbeiten",
       "delete": "Löschen",
       "menu": "Playlist-Aktionen für {{name}}",
       "syncTo": "Synchronisieren mit...",

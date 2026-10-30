@@ -18,6 +18,9 @@ vi.mock("../components/AccountCard", () => ({ AccountCard: () => <div data-testi
 vi.mock("../components/EditProfileCard", () => ({ EditProfileCard: () => <div data-testid="edit-card" /> }));
 vi.mock("../components/ChangePasswordCard", () => ({ ChangePasswordCard: () => <div data-testid="password-card" /> }));
 vi.mock("../components/QuotaCard", () => ({ QuotaCard: () => <div data-testid="quota-card" /> }));
+vi.mock("../components/HouseholdSharingCard", () => ({
+  HouseholdSharingCard: () => <div data-testid="household-card" />,
+}));
 
 import { AccountSection } from "../AccountSection";
 
@@ -38,6 +41,7 @@ describe("AccountSection", () => {
     expect(screen.getByTestId("quota-card")).toBeInTheDocument();
     expect(screen.getByTestId("edit-card")).toBeInTheDocument();
     expect(screen.getByTestId("password-card")).toBeInTheDocument();
+    expect(screen.getByTestId("household-card")).toBeInTheDocument();
   });
 
   it("renders nothing when there is no current user", () => {

@@ -101,6 +101,21 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
         />
       </SettingsField>
 
+      <SettingsField
+        label={t("metadata.enrichment.bandsintownAppId.label")}
+        helper={t("metadata.enrichment.bandsintownAppId.helper")}
+        anchor="connections.enrichment.bandsintownAppId"
+      >
+        <SettingsSecretInput
+          value={draft.bandsintownAppId}
+          onChange={(v) => setField("bandsintownAppId", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "connections.enrichment", field: "bandsintownAppId" }),
+          }}
+        />
+      </SettingsField>
+
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}

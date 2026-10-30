@@ -456,7 +456,17 @@
     "empty": "Nada coincide con este widget ahora mismo.",
     "needs": {
       "lastfm": "Conecta Last.fm en Ajustes para llenar este widget.",
-      "listenbrainz": "Añade tu usuario de ListenBrainz en Ajustes para llenar este widget."
+      "listenbrainz": "Añade tu usuario de ListenBrainz en Ajustes para llenar este widget.",
+      "bandsintown": "Añade un app id de Bandsintown en Ajustes, Integraciones, para llenar este widget."
+    },
+    "events": {
+      "refused": "Bandsintown rechazó el app id. Revísalo en Ajustes, Integraciones.",
+      "unreachable": "No se pudo contactar con Bandsintown en este momento."
+    },
+    "news": {
+      "unreachable": "No se pudo llegar al feed en este momento.",
+      "blocked": "Esta dirección de feed no está permitida: debe ser una dirección pública http o https.",
+      "unreadable": "Esta dirección no respondió con un feed RSS o Atom."
     },
     "rail": "Elementos del widget",
     "leader": "N.º 1",
@@ -502,6 +512,40 @@
     },
     "yearCalendar": {
       "total": "{{value}} en este año"
+    },
+    "story": {
+      "label": {
+        "plays": "Le diste a reproducir",
+        "minutes": "Minutos escuchados",
+        "topArtist": "Tu artista principal",
+        "topTrack": "Tu canción principal",
+        "topAlbums": "Tus álbumes principales",
+        "topGenres": "Tus géneros principales",
+        "newArtists": "Artistas nuevos",
+        "listeningAge": "Tu edad musical",
+        "busiestDay": "Tu día con más escucha",
+        "peakHour": "Tu hora punta"
+      },
+      "detail": {
+        "plays": "veces en este periodo",
+        "minutes": "Unas {{hours}} horas de música",
+        "byArtist": "{{artist}} · {{plays}}",
+        "newArtists": "Entre ellos {{names}}",
+        "listeningAge": "El {{share}} de tus reproducciones fue de música publicada en esos años"
+      },
+      "rank": "{{rank}}. {{name}}",
+      "years": "De {{from}} a {{to}}",
+      "notEnough": "Todavía no hay suficiente escucha: {{plays}} de las {{minimum}} reproducciones que necesita este resumen.",
+      "role": "resumen",
+      "position": "Resumen, página {{current}} de {{total}}",
+      "counter": "{{current}} / {{total}}",
+      "previous": "Página anterior",
+      "next": "Página siguiente",
+      "goTo": "Ir a {{page}}"
+    },
+    "privacy": {
+      "notShared": "{{name}} no ha compartido lo que escucha.",
+      "nobodyShares": "Nadie más del hogar comparte todavía lo que escucha."
     }
   }
 }
