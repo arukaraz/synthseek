@@ -110,6 +110,13 @@ describe("withFittingView and viewChoicesOf", () => {
       "sparkline",
       "yearCalendar",
     ]);
+    const all = viewChoicesOf(catalog, blocks, "bars", true);
+    expect(all.find((choice) => choice.block === "yearCalendar")).toEqual({
+      block: "yearCalendar",
+      fits: true,
+      suggested: false,
+    });
+    expect(all.find((choice) => choice.block === "heatmap")?.fits).toBe(false);
   });
 
   it("marks the first fitting view as suggested and shows the rest only on request, disabled", () => {
