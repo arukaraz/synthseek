@@ -457,7 +457,12 @@
     "needs": {
       "lastfm": "Verbinde Last.fm in den Einstellungen, um dieses Widget zu füllen.",
       "listenbrainz": "Trage deinen ListenBrainz-Benutzer in den Einstellungen ein, um dieses Widget zu füllen.",
-      "bandsintown": "Trage unter Einstellungen, Integrationen eine Bandsintown-App-ID ein, um dieses Widget zu füllen."
+      "bandsintown": "Trage unter Einstellungen, Integrationen eine Bandsintown-App-ID ein, um dieses Widget zu füllen.",
+      "mediaServer": "Dieses Widget braucht einen für den Haushalt verbundenen Medienserver und dein dort unter Verbundene Konten verknüpftes Konto.",
+      "plex": "Dieses Widget braucht ein für den Haushalt verbundenes Plex und dein unter Verbundene Konten verknüpftes Plex-Konto.",
+      "jellyfin": "Dieses Widget braucht ein für den Haushalt verbundenes Jellyfin und dein unter Verbundene Konten verknüpftes Jellyfin-Konto.",
+      "navidrome": "Dieses Widget braucht ein für den Haushalt verbundenes Navidrome und dein unter Verbundene Konten verknüpftes Navidrome-Konto.",
+      "lidarr": "Verbinde Lidarr unter Einstellungen, Integrationen, um dieses Widget zu füllen."
     },
     "events": {
       "refused": "Bandsintown hat die App-ID abgelehnt. Prüfe sie unter Einstellungen, Integrationen.",

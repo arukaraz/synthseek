@@ -40,6 +40,13 @@ export type ListenBrainzPlaylist = Extract<FeedQuery, { source: "listenbrainz.pl
 export type FeedPickBy = FeedQuery["pick"]["by"];
 export type CuratedFeed = Extract<FeedQuery, { source: "feed.curated" }>["params"]["feed"];
 export type CatalogFeedSource = WidgetCatalog["feeds"]["sources"][number];
+export type MediaServer = Extract<FeedQuery, { source: "mediaServer.playlists" }>["params"]["server"];
+
+export interface FeedDefaults {
+  seed: FeedSeed;
+  country: string;
+  server: MediaServer;
+}
 
 export interface FeedBase {
   type: "feed";

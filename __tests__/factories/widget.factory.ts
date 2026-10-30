@@ -15,6 +15,7 @@ type QuestionBucketRow = WidgetRowOf<QuestionWidgetResult, "buckets">;
 type QuestionSeriesRow = WidgetRowOf<QuestionWidgetResult, "series">;
 type QuestionMatrixRow = WidgetRowOf<QuestionWidgetResult, "matrix">;
 type FeedAlbumRow = WidgetRowOf<FeedWidgetResult, "albums">;
+type FeedPlaylistRow = WidgetRowOf<FeedWidgetResult, "playlists">;
 
 const WINDOW = { from: new Date("2026-09-29T00:00:00Z"), to: new Date("2026-10-29T00:00:00Z") };
 
@@ -290,11 +291,31 @@ export function createWidgetCatalog(): WidgetCatalog {
           rules: [],
           pickBy: ["rank", "releaseDate"],
         },
+        {
+          key: "mediaServer.playlists",
+          dataset: "playlists",
+          shape: "ranked",
+          integration: "mediaServer",
+          params: ["server"],
+          rules: [],
+          pickBy: ["rank", "name"],
+        },
+        {
+          key: "lidarr.calendar",
+          dataset: "albums",
+          shape: "ranked",
+          integration: "lidarr",
+          params: ["days"],
+          rules: ["inLibrary", "releaseType"],
+          pickBy: ["rank", "releaseDate"],
+        },
       ],
       seeds: ["myTopArtists", "favorites", "artist", "playlist"],
       playlists: ["weekly-jams", "weekly-exploration", "daily-jams"],
       curated: ["pitchforkBestNewAlbums", "nprMusic"],
-      limits: { freshReleaseDaysMax: 90, eventsDaysMax: 180 },
+      servers: ["plex", "navidrome", "jellyfin"],
+      defaultServer: "jellyfin",
+      limits: { freshReleaseDaysMax: 90, eventsDaysMax: 180, lidarrCalendarDaysMax: 90 },
     },
     recap: {
       shape: "facts",
@@ -327,6 +348,22 @@ export function createFeedAlbumResult(rows: FeedAlbumRow[], needs: FeedWidgetRes
     shape: "ranked",
     total: rows.length,
     dataset: "albums",
+    rows,
+  };
+}
+
+export function createServerPlaylistRow(overrides: Partial<FeedPlaylistRow> = {}): FeedPlaylistRow {
+  return { id: "plex:r-1", rank: 1, name: "Road trip", tracks: 12, server: "plex", playlistId: "pl-1", ...overrides };
+}
+
+export function createServerPlaylistResult(rows: FeedPlaylistRow[]): FeedWidgetResult {
+  return {
+    type: "feed",
+    source: "mediaServer.playlists",
+    needs: null,
+    shape: "ranked",
+    total: rows.length,
+    dataset: "playlists",
     rows,
   };
 }

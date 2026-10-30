@@ -434,5 +434,9 @@
   "WIDGETS_UNREADABLE": {
     "title": "Your widgets could not be read",
     "description": "Your saved widgets are in a format this version cannot read, so nothing was changed. Update Synthseek or contact the administrator."
+  },
+  "BOARD_TEMPLATE_INVALID": {
+    "title": "This board template cannot be used",
+    "description": "The template is not a Synthseek board template this version can read, so nothing was changed. Check the preview for what is wrong."
   }
 }

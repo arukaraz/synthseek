@@ -120,7 +120,12 @@
     "listenBrainzFailed": "ListenBrainz-Einstellungen konnten nicht gespeichert werden",
     "lastfmSaved": "Last.fm-Entdeckungseinstellungen gespeichert",
     "listenBrainzSaved": "ListenBrainz-Einstellungen gespeichert",
-    "boardSaveFailed": "Dein Board konnte nicht gespeichert werden"
+    "boardSaveFailed": "Dein Board konnte nicht gespeichert werden",
+    "appearanceSaveFailed": "Das Aussehen deines Boards konnte nicht gespeichert werden",
+    "templateFailed": "Diese Board-Vorlage konnte nicht gelesen werden",
+    "templateApplyFailed": "Diese Board-Vorlage konnte nicht angewendet werden",
+    "templateUndoFailed": "Die Board-Vorlage konnte nicht rückgängig gemacht werden",
+    "templateExportFailed": "Dein Board konnte nicht exportiert werden"
   },
   "widgets": {
     "saveFailed": "Dieses Widget konnte nicht gespeichert werden",

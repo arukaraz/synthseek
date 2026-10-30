@@ -9,6 +9,8 @@ import {
   createQuestionAlbumRow,
   createQuestionTrackRow,
   createSeriesResult,
+  createServerPlaylistResult,
+  createServerPlaylistRow,
   createTrackResult,
 } from "@test/factories";
 
@@ -81,6 +83,19 @@ describe("widgetItemsOf", () => {
     const item = onlyItem(widgetItemsOf(createFeedAlbumResult([row]), undefined));
     expect(item.play).toEqual({ kind: "album", albumExternalId: "dz-9" });
     expect(item.request).toMatchObject({ id: "dz-9" });
+  });
+
+  it("plays and opens a server playlist through the Synthseek playlist it mirrors, and names its server", () => {
+    const item = onlyItem(widgetItemsOf(createServerPlaylistResult([createServerPlaylistRow()]), undefined));
+    expect(item).toMatchObject({ title: "Road trip", subtitle: "12 tracks · Plex", request: null, link: null });
+    expect(item.play).toEqual({ kind: "playlist", playlistId: "pl-1" });
+    expect(item.open).toMatchObject({ id: "pl-1", name: "Road trip" });
+  });
+
+  it("leaves a server playlist with no Synthseek copy nothing to play or open, and skips an unknown count", () => {
+    const row = createServerPlaylistRow({ playlistId: null, tracks: null, server: "navidrome" });
+    const item = onlyItem(widgetItemsOf(createServerPlaylistResult([row]), undefined));
+    expect(item).toMatchObject({ subtitle: "Navidrome", play: null, open: null });
   });
 
   it("labels a decade bucket with its suffix and keeps a genre label as it is", () => {

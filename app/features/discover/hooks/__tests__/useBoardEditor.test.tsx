@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { BoardItem, BoardLayout } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardLayout, BoardTemplateUndo } from "@hooks/api/queries/board/types";
 import { createWidget } from "@test/factories";
 import { act, fireEvent, renderHook } from "@test/test-utils";
 
@@ -14,13 +14,17 @@ interface ToastAction {
   onClick: () => void;
 }
 
-const { saveMock, toastMock } = vi.hoisted(() => ({
+const { saveMock, toastMock, undoMock } = vi.hoisted(() => ({
   saveMock: vi.fn<(layout: BoardLayout) => void>(),
+  undoMock: vi.fn<(undo: BoardTemplateUndo, options?: { onSuccess?: () => void }) => void>(),
   toastMock: { success: vi.fn<(message: string, options?: { action?: ToastAction; duration?: number }) => void>() },
 }));
 const dropRef = vi.hoisted((): { current: ((order: BoardItem[]) => void) | null } => ({ current: null }));
 
 vi.mock("@hooks/api/mutations/board/useSaveBoardLayout", () => ({ useSaveBoardLayout: () => saveMock }));
+vi.mock("@hooks/api/mutations/board/useUndoBoardTemplate", () => ({
+  useUndoBoardTemplate: () => ({ mutate: undoMock }),
+}));
 vi.mock("sonner", () => ({ toast: toastMock }));
 vi.mock("@hooks/ui/board/helpers", () => ({ focusBoardTile: vi.fn() }));
 vi.mock("@hooks/ui/board/useBoardDrag", () => ({
@@ -115,6 +119,29 @@ describe("useBoardEditor", () => {
     undo.onClick();
 
     expect(lastSavedIds()).toEqual(["a", "b", "c"]);
+  });
+
+  it("offers to undo an applied template with what the server handed back, and confirms once it is undone", () => {
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
+    const undo: BoardTemplateUndo = {
+      layout: null,
+      appearance: { density: "comfortable", text: "default" },
+      widgetIds: ["w_new"],
+    };
+
+    act(() =>
+      result.current.templateApplied({
+        layout: { schemaVersion: 3, items: [] },
+        appearance: { density: "compact", text: "large" },
+        undo,
+      })
+    );
+
+    expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board template applied");
+    lastToastAction().onClick();
+    expect(undoMock).toHaveBeenCalledWith(undo, expect.anything());
+    undoMock.mock.calls.at(-1)?.[1]?.onSuccess?.();
+    expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board restored");
   });
 
   it("saves a dropped order with an Undo back to the order before the drag", () => {

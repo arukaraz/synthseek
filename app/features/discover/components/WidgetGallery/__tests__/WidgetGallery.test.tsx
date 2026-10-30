@@ -17,6 +17,13 @@ const { stub, viewport } = vi.hoisted(() => ({
 }));
 
 vi.mock("@hooks/ui/useMediaQuery", () => ({ useMediaQuery: () => viewport.wide }));
+vi.mock("../../BoardSettings/BoardSettingsPanel", () => ({
+  BoardSettingsPanel: ({ onApplied }: { onApplied: (applied: string) => void }) => (
+    <button type="button" onClick={() => onApplied("applied-board")}>
+      apply-stub
+    </button>
+  ),
+}));
 vi.mock("../../TrendingHero/TrendingHero", () => ({ TrendingHero: stub("trending") }));
 vi.mock("../../DiscoveryMixes/DiscoveryMixes", () => ({ DiscoveryMixes: stub("mixes") }));
 vi.mock("../../ArtistSpotlight/ArtistSpotlight", () => ({ ArtistSpotlight: stub("artistsNext") }));
@@ -128,7 +135,13 @@ const ON_BOARD: BoardItem[] = [
 ];
 
 function renderGallery(items: BoardItem[] = ON_BOARD, customize: BoardWidgetKey | null = null) {
-  const handlers = { onAdd: vi.fn(), onAddCustom: vi.fn(), onRemove: vi.fn(), onClose: vi.fn() };
+  const handlers = {
+    onAdd: vi.fn(),
+    onAddCustom: vi.fn(),
+    onRemove: vi.fn(),
+    onTemplateApplied: vi.fn(),
+    onClose: vi.fn(),
+  };
   render(<WidgetGallery items={items} customize={customize} {...handlers} />);
   return handlers;
 }
@@ -179,6 +192,16 @@ describe("WidgetGallery", () => {
     expect(handlers.onRemove).toHaveBeenCalledWith("s1");
     expect(handlers.onAdd).toHaveBeenCalledWith("trending");
     expect(screen.getAllByText(i18n.t("discover:board.gallery.onBoard"))).toHaveLength(1);
+  });
+
+  it("hands an applied template to the board and closes from the Board tab", () => {
+    const handlers = renderGallery();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Board" }));
+    fireEvent.click(screen.getByRole("button", { name: "apply-stub" }));
+
+    expect(handlers.onTemplateApplied).toHaveBeenCalledWith("applied-board");
+    expect(handlers.onClose).toHaveBeenCalled();
   });
 
   it("closes from its close button", () => {

@@ -21,6 +21,7 @@ import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 import { useCountry } from "@modules/providers/CountryProvider";
 
 import { NEW_WIDGET_DRAFT } from "../../constants";
+import { BoardSettingsPanel } from "../BoardSettings/BoardSettingsPanel";
 import { BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
 import { widgetsOnBoard } from "../ExploreBoard/helpers";
 import type { WorkshopOpening } from "../WidgetWorkshop/types";
@@ -48,7 +49,15 @@ import {
 import type { GalleryFilters, GalleryLeave, GalleryMode, WidgetGalleryProps } from "./types";
 import { WidgetGalleryCard } from "./WidgetGalleryCard";
 
-export function WidgetGallery({ items, customize, onAdd, onAddCustom, onRemove, onClose }: WidgetGalleryProps) {
+export function WidgetGallery({
+  items,
+  customize,
+  onAdd,
+  onAddCustom,
+  onRemove,
+  onTemplateApplied,
+  onClose,
+}: WidgetGalleryProps) {
   const { t } = useTranslation(["discover", "widgets"]);
   const [mode, setMode] = useState<GalleryMode>("widgets");
   const [filters, setFilters] = useState<GalleryFilters>(DEFAULT_GALLERY_FILTERS);
@@ -186,10 +195,7 @@ export function WidgetGallery({ items, customize, onAdd, onAddCustom, onRemove, 
             </div>
             <div className={galleryToolbar()}>
               <SegmentTabs
-                items={GALLERY_MODES.map((value) => ({
-                  value,
-                  label: value === "widgets" ? t("widgets:gallery.tabs.widgets") : t("widgets:gallery.tabs.mine"),
-                }))}
+                items={GALLERY_MODES.map((value) => ({ value, label: t(`widgets:gallery.tabs.${value}`) }))}
                 value={mode}
                 onValueChange={setMode}
                 layoutId="board-gallery-mode"
@@ -202,7 +208,15 @@ export function WidgetGallery({ items, customize, onAdd, onAddCustom, onRemove, 
               ) : null}
             </div>
             <div className={galleryScroll()}>
-              {mode === "mine" ? (
+              {mode === "board" ? (
+                <BoardSettingsPanel
+                  items={items}
+                  onApplied={(applied) => {
+                    onTemplateApplied(applied);
+                    onClose();
+                  }}
+                />
+              ) : mode === "mine" ? (
                 myWidgets.data ? (
                   <MyWidgetsPanel
                     widgets={myWidgets.data}

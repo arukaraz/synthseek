@@ -434,5 +434,9 @@
   "WIDGETS_UNREADABLE": {
     "title": "Deine Widgets konnten nicht gelesen werden",
     "description": "Deine gespeicherten Widgets liegen in einem Format vor, das diese Version nicht lesen kann, daher wurde nichts geändert. Aktualisiere Synthseek oder wende dich an die Administration."
+  },
+  "BOARD_TEMPLATE_INVALID": {
+    "title": "Diese Board-Vorlage kann nicht verwendet werden",
+    "description": "Die Vorlage ist keine Synthseek-Board-Vorlage, die diese Version lesen kann, daher wurde nichts geändert. In der Vorschau steht, was nicht passt."
   }
 }

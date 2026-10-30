@@ -6,7 +6,8 @@ import { toast } from "sonner";
 
 import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import { useSaveBoardLayout } from "@hooks/api/mutations/board/useSaveBoardLayout";
-import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import { useUndoBoardTemplate } from "@hooks/api/mutations/board/useUndoBoardTemplate";
+import type { BoardItem, BoardSize, BoardTemplateApplied, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 import { focusBoardTile } from "@hooks/ui/board/helpers";
 import type { BoardFlip } from "@hooks/ui/board/types";
@@ -40,6 +41,23 @@ export function useBoardEditor(
   const [customizeTarget, setCustomizeTarget] = useState<BoardWidgetKey | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const flipRef = useRef<BoardFlip | null>(null);
+
+  const undoTemplate = useUndoBoardTemplate();
+  const templateApplied = useCallback(
+    (applied: BoardTemplateApplied) => {
+      toast.success(t("widgets:board.templates.applied"), {
+        duration: TOAST_ACTION_DURATION_MS,
+        action: {
+          label: t("widgets:board.templates.undo"),
+          onClick: () =>
+            undoTemplate.mutate(applied.undo, {
+              onSuccess: () => toast.success(t("widgets:board.templates.undone")),
+            }),
+        },
+      });
+    },
+    [t, undoTemplate]
+  );
 
   const nameOf = useCallback((item: BoardItem) => tileNameOf(item, custom, customStatus), [custom, customStatus]);
   const commit = useCallback((next: BoardItem[]) => save(layoutOf(next)), [save]);
@@ -167,6 +185,7 @@ export function useBoardEditor(
     customizeTarget,
     add,
     addCustom,
+    templateApplied,
     actions,
   };
 }

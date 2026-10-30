@@ -3,7 +3,8 @@
     "tabs": {
       "label": "Listes de widgets",
       "widgets": "Widgets",
-      "mine": "Mes widgets"
+      "mine": "Mes widgets",
+      "board": "Tableau"
     },
     "filter": {
       "category": "Catégorie",
@@ -50,6 +51,65 @@
     "deleteMessage": "Le widget est retiré de Mes widgets.",
     "deleteWithTiles_one": "Le widget est retiré de Mes widgets et de sa tuile sur votre tableau.",
     "deleteWithTiles_other": "Le widget est retiré de Mes widgets et de ses {{count}} tuiles sur votre tableau."
+  },
+  "board": {
+    "appearance": {
+      "title": "Apparence",
+      "density": "Densité",
+      "densityHint": "Espace entre les widgets et hauteur de chaque rangée",
+      "densities": {
+        "compact": "Compacte",
+        "comfortable": "Confortable",
+        "spacious": "Aérée"
+      },
+      "text": "Texte",
+      "textHint": "Taille du texte dans les widgets",
+      "texts": {
+        "small": "Petit",
+        "default": "Normal",
+        "large": "Grand"
+      }
+    },
+    "templates": {
+      "title": "Modèles",
+      "export": "Exporter ce tableau",
+      "exportHint": "JSON avec vos widgets, leurs tailles et cette apparence.",
+      "name": "Nom du modèle",
+      "defaultName": "Mon tableau",
+      "copy": "Copier le JSON",
+      "copied": "Modèle de tableau copié",
+      "copyFailed": "Ce navigateur ne l'a pas copié. Réessayez en HTTPS ou autorisez l'accès au presse-papiers.",
+      "import": "Importer un modèle",
+      "importHint": "Collez le JSON ou choisissez un fichier .json. Rien ne change avant de l'appliquer.",
+      "field": "JSON du modèle de tableau",
+      "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
+      "file": "Choisir un fichier",
+      "fileFailed": "Impossible de lire ce fichier. Choisissez-le à nouveau ou collez son JSON.",
+      "check": "Vérifier",
+      "apply": "Appliquer le modèle",
+      "cancel": "Annuler",
+      "summary_one": "{{name}} : {{count}} widget sur le tableau",
+      "summary_other": "{{name}} : {{count}} widgets sur le tableau",
+      "created_one": "{{count}} nouveau widget dans Mes widgets",
+      "created_other": "{{count}} nouveaux widgets dans Mes widgets",
+      "look": "Apparence : {{density}}, texte {{text}}",
+      "skipped": "Case {{position}} ignorée : {{reason}}",
+      "reasons": {
+        "unreadable": "ce n'est pas un widget Synthseek",
+        "unknownWidget": "son widget n'est pas dans le modèle",
+        "rejectedWidget": "son widget n'a pas pu être lu"
+      },
+      "rejected": "Widget {{name}} ignoré : {{problems}}",
+      "unnamed": "n° {{position}}",
+      "blocked": {
+        "widgetLimit": "Vous dépasseriez {{max}} widgets. Supprimez-en quelques-uns d'abord.",
+        "feedLimit": "Cela lirait plus de {{max}} adresses de flux différentes."
+      },
+      "replaces": "Remplace votre tableau et son apparence. Vous pouvez annuler juste après.",
+      "applied": "Modèle de tableau appliqué",
+      "undo": "Annuler",
+      "undone": "Tableau restauré"
+    }
   },
   "import": {
     "title": "Widget depuis un JSON",
@@ -327,8 +387,20 @@
       },
       "events": {
         "upcoming": "Concerts à venir (Bandsintown)"
+      },
+      "mediaServer": {
+        "recentlyAdded": "Ajouts récents (mon serveur multimédia)",
+        "mostPlayed": "Les plus écoutés (mon serveur multimédia)",
+        "nowPlaying": "En cours de lecture (mon serveur multimédia)",
+        "playlists": "Mes playlists (mon serveur multimédia)"
+      },
+      "lidarr": {
+        "calendar": "Sorties à venir (Lidarr)",
+        "wanted": "Albums recherchés (Lidarr)"
       }
     },
+    "server": "Serveur multimédia",
+    "comingWithin": "Sortent dans les prochains",
     "curatedLabel": "Source d’actualités",
     "curated": {
       "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
@@ -350,7 +422,12 @@
     "needs": {
       "lastfm": "Nécessite Last.fm",
       "listenbrainz": "Nécessite votre utilisateur ListenBrainz",
-      "bandsintown": "Nécessite un app id Bandsintown"
+      "bandsintown": "Nécessite un app id Bandsintown",
+      "mediaServer": "Nécessite votre compte de serveur multimédia associé",
+      "plex": "Nécessite votre compte Plex associé",
+      "jellyfin": "Nécessite votre compte Jellyfin associé",
+      "navidrome": "Nécessite votre compte Navidrome associé",
+      "lidarr": "Nécessite Lidarr"
     },
     "seeds": {
       "myTopArtists": "Mes artistes favoris",
@@ -492,6 +569,7 @@
     "discoverWeekly": "Découverte de la semaine",
     "newThisWeek": "Nouveautés de la semaine",
     "freshFinds": "Trouvailles fraîches",
-    "showsForYourArtists": "Concerts de vos artistes"
+    "showsForYourArtists": "Concerts de vos artistes",
+    "serverPlaylists": "Playlists du serveur"
   }
 }

@@ -8,6 +8,7 @@ import {
   clampedNumber,
   dailyYearOf,
   feedReadbackOf,
+  feedServerOf,
   matchingIcons,
   previewableDraft,
   previewHeightOf,
@@ -18,6 +19,8 @@ import {
   viewChoicesOf,
   withFittingView,
   withMeasure,
+  serverChoicesOf,
+  withServer,
   withSource,
   withSubject,
 } from "../helpers";
@@ -186,6 +189,29 @@ describe("withSource and feedReadbackOf", () => {
 
   it("reads a feed back with its rules", () => {
     expect(feedReadbackOf(FEED)).toBe("Show me 5 items from Similar artists (Last.fm), where is not in my library.");
+  });
+
+  it("offers the connected servers and keeps a chosen one that is not connected among the choices", () => {
+    const connected = { ...catalog, feeds: { ...catalog.feeds, servers: ["jellyfin" as const] } };
+    expect(serverChoicesOf(connected, "jellyfin")).toEqual(["jellyfin"]);
+    expect(serverChoicesOf(connected, "plex")).toEqual(["jellyfin", "plex"]);
+  });
+
+  it("starts on the connected media server, keeps the chosen one across sources, and Lidarr's calendar at 30 days", () => {
+    const playlists = withSource(FEED, "mediaServer.playlists", catalog, "US");
+    expect(playlists.params).toEqual({ server: "jellyfin" });
+    expect(
+      withSource(FEED, "mediaServer.playlists", { ...catalog, feeds: { ...catalog.feeds, defaultServer: null } }, "US")
+        .params
+    ).toEqual({ server: "plex" });
+    const onNavidrome = withServer(playlists, "navidrome");
+    expect(feedServerOf(onNavidrome)).toBe("navidrome");
+    expect(withSource(onNavidrome, "mediaServer.nowPlaying", catalog, "US").params).toEqual({ server: "navidrome" });
+    const onJellyfin = withServer(onNavidrome, "jellyfin");
+    const calendar = withSource(onJellyfin, "lidarr.calendar", catalog, "US");
+    expect(calendar.params).toEqual({ days: 30 });
+    expect(feedServerOf(calendar)).toBeNull();
+    expect(withServer(calendar, "plex")).toBe(calendar);
   });
 });
 

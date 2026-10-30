@@ -22,6 +22,8 @@ export {
   createNewsResult,
   createRecapResult,
   createSeriesResult,
+  createServerPlaylistResult,
+  createServerPlaylistRow,
   createTrackResult,
   createWidget,
   createWidgetCatalog,

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { BoardGrid } from "@components/BoardGrid";
 import { SectionLoading } from "@components/ui/SectionLoading";
+import { useBoardAppearance } from "@hooks/api/queries/board/useBoardAppearance";
 import { useBoardLayout } from "@hooks/api/queries/board/useBoardLayout";
 import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
@@ -21,6 +22,7 @@ export function ExploreBoard() {
   const { t } = useTranslation("discover");
   const device = useBoardDevice();
   const { data, isLoading } = useBoardLayout();
+  const appearance = useBoardAppearance();
   const myWidgets = useMyWidgets();
   const items = useMemo(() => boardItemsOf(data), [data]);
   const custom = useMemo(() => customWidgetsById(myWidgets.data), [myWidgets.data]);
@@ -38,7 +40,7 @@ export function ExploreBoard() {
       {items.length === 0 ? (
         <BoardEmpty onAddWidget={editor.openGallery} />
       ) : (
-        <BoardGrid device={device}>
+        <BoardGrid device={device} appearance={appearance.data}>
           {items.map((item, index) => {
             const tile = placements.get(item.id);
             if (!tile) return null;
@@ -77,6 +79,7 @@ export function ExploreBoard() {
           onAdd={editor.add}
           onAddCustom={editor.addCustom}
           onRemove={editor.actions.remove}
+          onTemplateApplied={editor.templateApplied}
           onClose={() => editor.setGalleryOpen(false)}
         />
       ) : null}

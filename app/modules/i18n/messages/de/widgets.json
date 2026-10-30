@@ -3,7 +3,8 @@
     "tabs": {
       "label": "Widget-Listen",
       "widgets": "Widgets",
-      "mine": "Meine Widgets"
+      "mine": "Meine Widgets",
+      "board": "Board"
     },
     "filter": {
       "category": "Kategorie",
@@ -50,6 +51,65 @@
     "deleteMessage": "Das Widget wird aus Meine Widgets entfernt.",
     "deleteWithTiles_one": "Das Widget wird aus Meine Widgets und von seiner Kachel auf deinem Board entfernt.",
     "deleteWithTiles_other": "Das Widget wird aus Meine Widgets und von seinen {{count}} Kacheln auf deinem Board entfernt."
+  },
+  "board": {
+    "appearance": {
+      "title": "Aussehen",
+      "density": "Dichte",
+      "densityHint": "Abstand zwischen Widgets und Höhe jeder Reihe",
+      "densities": {
+        "compact": "Kompakt",
+        "comfortable": "Bequem",
+        "spacious": "Großzügig"
+      },
+      "text": "Text",
+      "textHint": "Größe des Texts in den Widgets",
+      "texts": {
+        "small": "Klein",
+        "default": "Normal",
+        "large": "Groß"
+      }
+    },
+    "templates": {
+      "title": "Vorlagen",
+      "export": "Dieses Board exportieren",
+      "exportHint": "JSON mit deinen Widgets, ihren Größen und diesem Aussehen.",
+      "name": "Name der Vorlage",
+      "defaultName": "Mein Board",
+      "copy": "JSON kopieren",
+      "copied": "Board-Vorlage kopiert",
+      "copyFailed": "Dieser Browser hat sie nicht kopiert. Versuche es über HTTPS oder erlaube den Zugriff auf die Zwischenablage.",
+      "import": "Vorlage importieren",
+      "importHint": "Füge das JSON ein oder wähle eine .json-Datei. Nichts ändert sich, bevor du sie anwendest.",
+      "field": "JSON der Board-Vorlage",
+      "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
+      "file": "Datei wählen",
+      "fileFailed": "Diese Datei konnte nicht gelesen werden. Wähle sie erneut oder füge ihr JSON ein.",
+      "check": "Prüfen",
+      "apply": "Vorlage anwenden",
+      "cancel": "Abbrechen",
+      "summary_one": "{{name}}: {{count}} Widget auf dem Board",
+      "summary_other": "{{name}}: {{count}} Widgets auf dem Board",
+      "created_one": "{{count}} neues Widget in Meine Widgets",
+      "created_other": "{{count}} neue Widgets in Meine Widgets",
+      "look": "Aussehen: {{density}}, Text {{text}}",
+      "skipped": "Kachel {{position}} übersprungen: {{reason}}",
+      "reasons": {
+        "unreadable": "kein Synthseek-Widget",
+        "unknownWidget": "ihr Widget ist nicht in der Vorlage",
+        "rejectedWidget": "ihr Widget konnte nicht gelesen werden"
+      },
+      "rejected": "Widget {{name}} übersprungen: {{problems}}",
+      "unnamed": "Nr. {{position}}",
+      "blocked": {
+        "widgetLimit": "Damit hättest du mehr als {{max}} Widgets. Lösche zuerst einige deiner Widgets.",
+        "feedLimit": "Damit würden mehr als {{max}} verschiedene Feed-Adressen gelesen."
+      },
+      "replaces": "Ersetzt dein Board und sein Aussehen. Du kannst es direkt danach rückgängig machen.",
+      "applied": "Board-Vorlage angewendet",
+      "undo": "Rückgängig",
+      "undone": "Board wiederhergestellt"
+    }
   },
   "import": {
     "title": "Widget aus JSON",
@@ -327,8 +387,20 @@
       },
       "events": {
         "upcoming": "Kommende Konzerte (Bandsintown)"
+      },
+      "mediaServer": {
+        "recentlyAdded": "Neu hinzugefügt (mein Medienserver)",
+        "mostPlayed": "Am meisten gespielt (mein Medienserver)",
+        "nowPlaying": "Läuft gerade (mein Medienserver)",
+        "playlists": "Meine Playlists (mein Medienserver)"
+      },
+      "lidarr": {
+        "calendar": "Kommende Veröffentlichungen (Lidarr)",
+        "wanted": "Gesuchte Alben (Lidarr)"
       }
     },
+    "server": "Medienserver",
+    "comingWithin": "Erscheinen in den nächsten",
     "curatedLabel": "Nachrichtenquelle",
     "curated": {
       "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
@@ -350,7 +422,12 @@
     "needs": {
       "lastfm": "Braucht Last.fm",
       "listenbrainz": "Braucht deinen ListenBrainz-Benutzer",
-      "bandsintown": "Braucht eine Bandsintown-App-ID"
+      "bandsintown": "Braucht eine Bandsintown-App-ID",
+      "mediaServer": "Braucht dein verknüpftes Medienserver-Konto",
+      "plex": "Braucht dein verknüpftes Plex-Konto",
+      "jellyfin": "Braucht dein verknüpftes Jellyfin-Konto",
+      "navidrome": "Braucht dein verknüpftes Navidrome-Konto",
+      "lidarr": "Braucht Lidarr"
     },
     "seeds": {
       "myTopArtists": "Meine Top-Künstler",
@@ -492,6 +569,7 @@
     "discoverWeekly": "Wöchentliche Entdeckungen",
     "newThisWeek": "Neu diese Woche",
     "freshFinds": "Frische Funde",
-    "showsForYourArtists": "Konzerte deiner Artists"
+    "showsForYourArtists": "Konzerte deiner Artists",
+    "serverPlaylists": "Server-Playlists"
   }
 }

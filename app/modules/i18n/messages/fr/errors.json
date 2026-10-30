@@ -434,5 +434,9 @@
   "WIDGETS_UNREADABLE": {
     "title": "Impossible de lire vos widgets",
     "description": "Vos widgets enregistrés sont dans un format que cette version ne peut pas lire, rien n'a donc été modifié. Mettez à jour Synthseek ou contactez l'administrateur."
+  },
+  "BOARD_TEMPLATE_INVALID": {
+    "title": "Impossible d'utiliser ce modèle de board",
+    "description": "Ce modèle n'est pas un modèle de board Synthseek que cette version sait lire, rien n'a donc été modifié. Consultez l'aperçu pour voir ce qui ne va pas."
   }
 }

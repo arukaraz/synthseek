@@ -7,6 +7,7 @@ import type {
   FeedSeed,
   FeedSeedKind,
   ListenBrainzPlaylist,
+  MediaServer,
   NamedPeriod,
   QuestionGroupBy,
   RuleField,
@@ -47,6 +48,10 @@ export const DEFAULT_LISTENBRAINZ_PLAYLIST: ListenBrainzPlaylist = "weekly-jams"
 export const DEFAULT_CURATED_FEED: CuratedFeed = "pitchforkBestNewAlbums";
 
 export const DEFAULT_EVENTS_DAYS = 90;
+
+export const DEFAULT_LIDARR_CALENDAR_DAYS = 30;
+
+export const DEFAULT_MEDIA_SERVER: MediaServer = "plex";
 
 export const ANY_COUNTRY = "any";
 

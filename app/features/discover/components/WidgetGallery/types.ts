@@ -1,9 +1,9 @@
-import type { BoardItem, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardTemplateApplied, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetDocument, WidgetDraft } from "@hooks/api/queries/widgets/types";
 
 import type { BoardCategory, BoardWidgetDefinition } from "../ExploreBoard/types";
 
-export type GalleryMode = "widgets" | "mine";
+export type GalleryMode = "widgets" | "mine" | "board";
 
 export type GalleryCategoryFilter = "all" | BoardCategory;
 
@@ -50,6 +50,7 @@ export interface WidgetGalleryProps {
   onAdd: (widget: BoardWidgetKey) => void;
   onAddCustom: (widget: WidgetDocument) => void;
   onRemove: (id: string) => void;
+  onTemplateApplied: (applied: BoardTemplateApplied) => void;
   onClose: () => void;
 }
 

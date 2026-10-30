@@ -120,7 +120,12 @@
     "listenBrainzFailed": "Échec de l'enregistrement des réglages ListenBrainz",
     "lastfmSaved": "Réglages de découverte Last.fm enregistrés",
     "listenBrainzSaved": "Réglages ListenBrainz enregistrés",
-    "boardSaveFailed": "Échec de l'enregistrement de votre tableau"
+    "boardSaveFailed": "Échec de l'enregistrement de votre tableau",
+    "appearanceSaveFailed": "Échec de l'enregistrement de l'apparence de votre tableau",
+    "templateFailed": "Impossible de lire ce modèle de tableau",
+    "templateApplyFailed": "Impossible d'appliquer ce modèle de tableau",
+    "templateUndoFailed": "Impossible d'annuler le modèle de tableau",
+    "templateExportFailed": "Impossible d'exporter votre tableau"
   },
   "widgets": {
     "saveFailed": "Échec de l'enregistrement de ce widget",

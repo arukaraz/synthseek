@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ComponentType, PointerEvent as ReactPointerEvent, RefObject } from "react";
 
 import type { BoardDevice, BoardHeight } from "@components/BoardGrid";
-import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardSize, BoardTemplateApplied, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 export type BoardCategory = "now" | "history" | "discover" | "library";
@@ -97,5 +97,6 @@ export interface BoardEditor {
   customizeTarget: BoardWidgetKey | null;
   add: (widget: BoardWidgetKey) => void;
   addCustom: (widget: WidgetDocument) => void;
+  templateApplied: (applied: BoardTemplateApplied) => void;
   actions: BoardTileActions;
 }

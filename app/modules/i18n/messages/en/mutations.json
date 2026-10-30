@@ -120,7 +120,12 @@
     "listenBrainzFailed": "Failed to save ListenBrainz settings",
     "lastfmSaved": "Last.fm discovery settings saved",
     "listenBrainzSaved": "ListenBrainz settings saved",
-    "boardSaveFailed": "Could not save your board"
+    "boardSaveFailed": "Could not save your board",
+    "appearanceSaveFailed": "Could not save how your board looks",
+    "templateFailed": "Could not read this board template",
+    "templateApplyFailed": "Could not apply this board template",
+    "templateUndoFailed": "Could not undo the board template",
+    "templateExportFailed": "Could not export your board"
   },
   "widgets": {
     "saveFailed": "Could not save this widget",

@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { SelectMenu } from "@components/ui/SelectMenu";
 import { COUNTRIES } from "@utils/countries";
+import { playbackServerName } from "@utils/playback-servers";
 
 import { ANY_COUNTRY, FEED_SEED_KINDS, NO_ROTATION, NUMBER_BOUNDS } from "./constants";
 import {
@@ -13,10 +14,13 @@ import {
   rotationChoicesOf,
   feedReadbackOf,
   feedSeedOf,
+  feedServerOf,
   feedSourceOf,
   ruleListOf,
   seedFor,
+  serverChoicesOf,
   withSeed,
+  withServer,
   withSource,
 } from "./helpers";
 import { NewsUrlField } from "./NewsUrlField";
@@ -33,6 +37,7 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
   const fields = source?.rules ?? [];
   const rules = ruleListOf(feed.rules);
   const seed = feedSeedOf(feed);
+  const server = feedServerOf(feed);
   const showWhere = rules.list.length > 0 || workshop.ruleDraft !== null;
   const [firstField] = fields;
   const limits = { daysMax: grammar.limits.daysMax, topNMax: grammar.limits.topNMax };
@@ -141,6 +146,32 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
               min={NUMBER_BOUNDS.daysMin}
               max={catalog.feeds.limits.eventsDaysMax}
               onChange={(days) => workshop.setQuery({ ...feed, params: { ...feed.params, days } })}
+            />
+            <span className={stepText()}>{t("time.days")}</span>
+          </StepRow>
+        ) : null}
+        {server ? (
+          <StepRow label={t("steps.params")}>
+            <SelectMenu
+              ariaLabel={t("feeds.server")}
+              value={server}
+              options={serverChoicesOf(catalog, server).map((entry) => ({
+                value: entry,
+                label: playbackServerName(entry),
+              }))}
+              onChange={(next) => workshop.setQuery(withServer(feed, next))}
+            />
+          </StepRow>
+        ) : null}
+        {feed.source === "lidarr.calendar" ? (
+          <StepRow label={t("steps.params")}>
+            <span className={stepText()}>{t("feeds.comingWithin")}</span>
+            <NumberField
+              label={t("time.days")}
+              value={feed.params.days}
+              min={NUMBER_BOUNDS.daysMin}
+              max={catalog.feeds.limits.lidarrCalendarDaysMax}
+              onChange={(days) => workshop.setQuery({ ...feed, params: { days } })}
             />
             <span className={stepText()}>{t("time.days")}</span>
           </StepRow>

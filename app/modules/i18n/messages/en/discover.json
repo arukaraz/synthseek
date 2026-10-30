@@ -457,7 +457,12 @@
     "needs": {
       "lastfm": "Connect Last.fm in Settings to fill this widget.",
       "listenbrainz": "Add your ListenBrainz user in Settings to fill this widget.",
-      "bandsintown": "Add a Bandsintown app id under Settings, Integrations to fill this widget."
+      "bandsintown": "Add a Bandsintown app id under Settings, Integrations to fill this widget.",
+      "mediaServer": "This widget needs a media server connected for the household and your account on it linked under Connected accounts.",
+      "plex": "This widget needs Plex connected for the household and your Plex account linked under Connected accounts.",
+      "jellyfin": "This widget needs Jellyfin connected for the household and your Jellyfin account linked under Connected accounts.",
+      "navidrome": "This widget needs Navidrome connected for the household and your Navidrome account linked under Connected accounts.",
+      "lidarr": "Connect Lidarr under Settings, Integrations to fill this widget."
     },
     "events": {
       "refused": "Bandsintown refused the app id. Check it under Settings, Integrations.",

@@ -30,7 +30,9 @@ import {
   DEFAULT_CURATED_FEED,
   DEFAULT_EVENTS_DAYS,
   DEFAULT_FEED_SHAPE,
+  DEFAULT_LIDARR_CALENDAR_DAYS,
   DEFAULT_LISTENBRAINZ_PLAYLIST,
+  DEFAULT_MEDIA_SERVER,
   DEFAULT_NEWS_URL,
   DEFAULT_RULES,
   MONTH_DAYS,
@@ -42,10 +44,12 @@ import {
 import type {
   CatalogFeedSource,
   FeedBase,
+  FeedDefaults,
   FeedSeed,
   FeedSeedKind,
   FeedSource,
   GrammarSubject,
+  MediaServer,
   PickRotation,
   QuestionMeasure,
   RecapNamedPeriod,
@@ -344,11 +348,44 @@ export function feedSeedOf(feed: FeedQuery): FeedSeed | null {
     case "lastfm.lovedTracks":
     case "feed.rss":
     case "feed.curated":
+    case "mediaServer.recentlyAdded":
+    case "mediaServer.mostPlayed":
+    case "mediaServer.nowPlaying":
+    case "mediaServer.playlists":
+    case "lidarr.calendar":
+    case "lidarr.wanted":
       return null;
   }
 }
 
-function feedWithSource(base: FeedBase, source: FeedSource, seed: FeedSeed, country: string): FeedQuery {
+export function feedServerOf(feed: FeedQuery): MediaServer | null {
+  switch (feed.source) {
+    case "mediaServer.recentlyAdded":
+    case "mediaServer.mostPlayed":
+    case "mediaServer.nowPlaying":
+    case "mediaServer.playlists":
+      return feed.params.server;
+    case "lastfm.similarArtists":
+    case "lastfm.similarTracks":
+    case "catalog.related":
+    case "catalog.artistAlbums":
+    case "events.upcoming":
+    case "listenbrainz.recommendations":
+    case "listenbrainz.freshReleases":
+    case "listenbrainz.playlists":
+    case "catalog.trending":
+    case "lastfm.charts":
+    case "lastfm.lovedTracks":
+    case "feed.rss":
+    case "feed.curated":
+    case "lidarr.calendar":
+    case "lidarr.wanted":
+      return null;
+  }
+}
+
+function feedWithSource(base: FeedBase, source: FeedSource, defaults: FeedDefaults): FeedQuery {
+  const { seed, country, server } = defaults;
   switch (source) {
     case "lastfm.similarArtists":
     case "lastfm.similarTracks":
@@ -371,6 +408,15 @@ function feedWithSource(base: FeedBase, source: FeedSource, seed: FeedSeed, coun
       return { ...base, source, params: { feed: DEFAULT_CURATED_FEED } };
     case "events.upcoming":
       return { ...base, source, params: { seed, country: null, days: DEFAULT_EVENTS_DAYS } };
+    case "mediaServer.recentlyAdded":
+    case "mediaServer.mostPlayed":
+    case "mediaServer.nowPlaying":
+    case "mediaServer.playlists":
+      return { ...base, source, params: { server } };
+    case "lidarr.calendar":
+      return { ...base, source, params: { days: DEFAULT_LIDARR_CALENDAR_DAYS } };
+    case "lidarr.wanted":
+      return { ...base, source, params: {} };
   }
 }
 
@@ -387,7 +433,11 @@ export function withSource(feed: FeedQuery, source: FeedSource, catalog: WidgetC
     ),
     pick: { ...feed.pick, by },
   };
-  return feedWithSource(base, source, feedSeedOf(feed) ?? DEFAULT_FEED_SEED, country);
+  return feedWithSource(base, source, {
+    seed: feedSeedOf(feed) ?? DEFAULT_FEED_SEED,
+    country,
+    server: feedServerOf(feed) ?? catalog.feeds.defaultServer ?? DEFAULT_MEDIA_SERVER,
+  });
 }
 
 export function withSeed(feed: FeedQuery, seed: FeedSeed): FeedQuery {
@@ -407,6 +457,43 @@ export function withSeed(feed: FeedQuery, seed: FeedSeed): FeedQuery {
     case "lastfm.lovedTracks":
     case "feed.rss":
     case "feed.curated":
+    case "mediaServer.recentlyAdded":
+    case "mediaServer.mostPlayed":
+    case "mediaServer.nowPlaying":
+    case "mediaServer.playlists":
+    case "lidarr.calendar":
+    case "lidarr.wanted":
+      return feed;
+  }
+}
+
+export function serverChoicesOf(catalog: WidgetCatalog, chosen: MediaServer): MediaServer[] {
+  const connected = catalog.feeds.servers;
+  return connected.includes(chosen) ? [...connected] : [...connected, chosen];
+}
+
+export function withServer(feed: FeedQuery, server: MediaServer): FeedQuery {
+  switch (feed.source) {
+    case "mediaServer.recentlyAdded":
+    case "mediaServer.mostPlayed":
+    case "mediaServer.nowPlaying":
+    case "mediaServer.playlists":
+      return { ...feed, params: { server } };
+    case "lastfm.similarArtists":
+    case "lastfm.similarTracks":
+    case "catalog.related":
+    case "catalog.artistAlbums":
+    case "events.upcoming":
+    case "listenbrainz.recommendations":
+    case "listenbrainz.freshReleases":
+    case "listenbrainz.playlists":
+    case "catalog.trending":
+    case "lastfm.charts":
+    case "lastfm.lovedTracks":
+    case "feed.rss":
+    case "feed.curated":
+    case "lidarr.calendar":
+    case "lidarr.wanted":
       return feed;
   }
 }

@@ -3,7 +3,8 @@
     "tabs": {
       "label": "Widget lists",
       "widgets": "Widgets",
-      "mine": "My widgets"
+      "mine": "My widgets",
+      "board": "Board"
     },
     "filter": {
       "category": "Category",
@@ -50,6 +51,65 @@
     "deleteMessage": "The widget is removed from My widgets.",
     "deleteWithTiles_one": "The widget is removed from My widgets and from its tile on your board.",
     "deleteWithTiles_other": "The widget is removed from My widgets and from its {{count}} tiles on your board."
+  },
+  "board": {
+    "appearance": {
+      "title": "Appearance",
+      "density": "Density",
+      "densityHint": "Space between widgets and the height of each row",
+      "densities": {
+        "compact": "Compact",
+        "comfortable": "Comfortable",
+        "spacious": "Spacious"
+      },
+      "text": "Text",
+      "textHint": "Size of the text inside widgets",
+      "texts": {
+        "small": "Small",
+        "default": "Default",
+        "large": "Large"
+      }
+    },
+    "templates": {
+      "title": "Templates",
+      "export": "Export this board",
+      "exportHint": "JSON with your widgets, their sizes and this look.",
+      "name": "Template name",
+      "defaultName": "My board",
+      "copy": "Copy JSON",
+      "copied": "Board template copied",
+      "copyFailed": "This browser would not copy it. Try again over HTTPS, or allow clipboard access.",
+      "import": "Import a template",
+      "importHint": "Paste the JSON or choose a .json file. Nothing changes until you apply it.",
+      "field": "Board template JSON",
+      "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
+      "file": "Choose file",
+      "fileFailed": "That file could not be read. Choose it again or paste its JSON.",
+      "check": "Check",
+      "apply": "Apply template",
+      "cancel": "Cancel",
+      "summary_one": "{{name}}: {{count}} widget on the board",
+      "summary_other": "{{name}}: {{count}} widgets on the board",
+      "created_one": "{{count}} new widget in My widgets",
+      "created_other": "{{count}} new widgets in My widgets",
+      "look": "Look: {{density}}, {{text}} text",
+      "skipped": "Tile {{position}} skipped: {{reason}}",
+      "reasons": {
+        "unreadable": "not a Synthseek widget",
+        "unknownWidget": "its widget is not in the template",
+        "rejectedWidget": "its widget could not be read"
+      },
+      "rejected": "Widget {{name}} skipped: {{problems}}",
+      "unnamed": "#{{position}}",
+      "blocked": {
+        "widgetLimit": "This would take you past {{max}} widgets. Delete some of yours first.",
+        "feedLimit": "This would read more than {{max}} different feed addresses."
+      },
+      "replaces": "Replaces your board and its look. You can undo right after.",
+      "applied": "Board template applied",
+      "undo": "Undo",
+      "undone": "Board restored"
+    }
   },
   "import": {
     "title": "Widget from JSON",
@@ -327,8 +387,20 @@
       },
       "events": {
         "upcoming": "Upcoming shows (Bandsintown)"
+      },
+      "mediaServer": {
+        "recentlyAdded": "Recently added (my media server)",
+        "mostPlayed": "Most played (my media server)",
+        "nowPlaying": "Playing now (my media server)",
+        "playlists": "My playlists (my media server)"
+      },
+      "lidarr": {
+        "calendar": "Coming releases (Lidarr)",
+        "wanted": "Wanted albums (Lidarr)"
       }
     },
+    "server": "Media server",
+    "comingWithin": "Releasing in the next",
     "curatedLabel": "News source",
     "curated": {
       "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
@@ -350,7 +422,12 @@
     "needs": {
       "lastfm": "Needs Last.fm",
       "listenbrainz": "Needs your ListenBrainz user",
-      "bandsintown": "Needs a Bandsintown app id"
+      "bandsintown": "Needs a Bandsintown app id",
+      "mediaServer": "Needs your linked media server account",
+      "plex": "Needs your linked Plex account",
+      "jellyfin": "Needs your linked Jellyfin account",
+      "navidrome": "Needs your linked Navidrome account",
+      "lidarr": "Needs Lidarr"
     },
     "seeds": {
       "myTopArtists": "My top artists",
@@ -492,6 +569,7 @@
     "discoverWeekly": "Discover weekly",
     "newThisWeek": "New this week",
     "freshFinds": "Fresh finds",
-    "showsForYourArtists": "Shows for your artists"
+    "showsForYourArtists": "Shows for your artists",
+    "serverPlaylists": "Server playlists"
   }
 }

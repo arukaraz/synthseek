@@ -3,7 +3,8 @@
     "tabs": {
       "label": "Listas de widgets",
       "widgets": "Widgets",
-      "mine": "Mis widgets"
+      "mine": "Mis widgets",
+      "board": "Tablero"
     },
     "filter": {
       "category": "Categoría",
@@ -50,6 +51,65 @@
     "deleteMessage": "El widget se quita de Mis widgets.",
     "deleteWithTiles_one": "El widget se quita de Mis widgets y de su tile en tu tablero.",
     "deleteWithTiles_other": "El widget se quita de Mis widgets y de sus {{count}} tiles en tu tablero."
+  },
+  "board": {
+    "appearance": {
+      "title": "Aspecto",
+      "density": "Densidad",
+      "densityHint": "Espacio entre widgets y alto de cada fila",
+      "densities": {
+        "compact": "Compacta",
+        "comfortable": "Cómoda",
+        "spacious": "Amplia"
+      },
+      "text": "Texto",
+      "textHint": "Tamaño del texto dentro de los widgets",
+      "texts": {
+        "small": "Pequeño",
+        "default": "Normal",
+        "large": "Grande"
+      }
+    },
+    "templates": {
+      "title": "Plantillas",
+      "export": "Exportar este tablero",
+      "exportHint": "JSON con tus widgets, sus tamaños y este aspecto.",
+      "name": "Nombre de la plantilla",
+      "defaultName": "Mi tablero",
+      "copy": "Copiar JSON",
+      "copied": "Plantilla de tablero copiada",
+      "copyFailed": "Este navegador no la copió. Inténtalo por HTTPS o permite el acceso al portapapeles.",
+      "import": "Importar una plantilla",
+      "importHint": "Pega el JSON o elige un archivo .json. No cambia nada hasta que la apliques.",
+      "field": "JSON de la plantilla de tablero",
+      "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
+      "file": "Elegir archivo",
+      "fileFailed": "No se pudo leer ese archivo. Elígelo otra vez o pega su JSON.",
+      "check": "Comprobar",
+      "apply": "Aplicar plantilla",
+      "cancel": "Cancelar",
+      "summary_one": "{{name}}: {{count}} widget en el tablero",
+      "summary_other": "{{name}}: {{count}} widgets en el tablero",
+      "created_one": "{{count}} widget nuevo en Mis widgets",
+      "created_other": "{{count}} widgets nuevos en Mis widgets",
+      "look": "Aspecto: {{density}}, texto {{text}}",
+      "skipped": "Casilla {{position}} omitida: {{reason}}",
+      "reasons": {
+        "unreadable": "no es un widget de Synthseek",
+        "unknownWidget": "su widget no está en la plantilla",
+        "rejectedWidget": "su widget no se pudo leer"
+      },
+      "rejected": "Widget {{name}} omitido: {{problems}}",
+      "unnamed": "n.º {{position}}",
+      "blocked": {
+        "widgetLimit": "Pasarías de {{max}} widgets. Borra algunos de los tuyos primero.",
+        "feedLimit": "Leería más de {{max}} direcciones de feed distintas."
+      },
+      "replaces": "Sustituye tu tablero y su aspecto. Puedes deshacerlo justo después.",
+      "applied": "Plantilla de tablero aplicada",
+      "undo": "Deshacer",
+      "undone": "Tablero restaurado"
+    }
   },
   "import": {
     "title": "Widget desde JSON",
@@ -327,8 +387,20 @@
       },
       "events": {
         "upcoming": "Próximos conciertos (Bandsintown)"
+      },
+      "mediaServer": {
+        "recentlyAdded": "Añadidos recientemente (mi servidor de medios)",
+        "mostPlayed": "Lo más escuchado (mi servidor de medios)",
+        "nowPlaying": "Sonando ahora (mi servidor de medios)",
+        "playlists": "Mis listas (mi servidor de medios)"
+      },
+      "lidarr": {
+        "calendar": "Próximos lanzamientos (Lidarr)",
+        "wanted": "Álbumes buscados (Lidarr)"
       }
     },
+    "server": "Servidor de medios",
+    "comingWithin": "Salen en los próximos",
     "curatedLabel": "Fuente de noticias",
     "curated": {
       "pitchforkBestNewAlbums": "Pitchfork, Best New Albums",
@@ -350,7 +422,12 @@
     "needs": {
       "lastfm": "Necesita Last.fm",
       "listenbrainz": "Necesita tu usuario de ListenBrainz",
-      "bandsintown": "Necesita un app id de Bandsintown"
+      "bandsintown": "Necesita un app id de Bandsintown",
+      "mediaServer": "Necesita tu cuenta vinculada del servidor de medios",
+      "plex": "Necesita tu cuenta de Plex vinculada",
+      "jellyfin": "Necesita tu cuenta de Jellyfin vinculada",
+      "navidrome": "Necesita tu cuenta de Navidrome vinculada",
+      "lidarr": "Necesita Lidarr"
     },
     "seeds": {
       "myTopArtists": "Mis artistas top",
@@ -492,6 +569,7 @@
     "discoverWeekly": "Descubrimiento semanal",
     "newThisWeek": "Novedades de la semana",
     "freshFinds": "Hallazgos frescos",
-    "showsForYourArtists": "Conciertos de tus artistas"
+    "showsForYourArtists": "Conciertos de tus artistas",
+    "serverPlaylists": "Listas del servidor"
   }
 }

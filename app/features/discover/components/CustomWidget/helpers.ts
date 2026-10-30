@@ -7,6 +7,7 @@ import {
   albumTarget,
   artistRequestItem,
   artistTarget,
+  playlistLibraryTarget,
   trackRequestItem,
 } from "@features/content-detail";
 import type {
@@ -22,6 +23,7 @@ import type {
   WidgetRowOf,
 } from "@hooks/api/queries/widgets/types";
 import { calendarDateOf, formatCalendarDate, formatRelativeTime, isoDayOf } from "@utils/formatters";
+import { playbackServerName } from "@utils/playback-servers";
 
 import { compactCount } from "../helpers";
 import { storyCoversOf, storyNoteOf, storyPagesOf } from "../WidgetStory/helpers";
@@ -50,6 +52,7 @@ type FeedAlbum = WidgetRowOf<FeedWidgetResult, "albums">;
 type FeedArtist = WidgetRowOf<FeedWidgetResult, "artists">;
 type FeedItem = WidgetRowOf<FeedWidgetResult, "items">;
 type FeedEvent = WidgetRowOf<FeedWidgetResult, "events">;
+type FeedPlaylist = WidgetRowOf<FeedWidgetResult, "playlists">;
 
 export function widgetIconOf(name: WidgetIcon): LucideIcon {
   return WIDGET_ICONS[name];
@@ -296,6 +299,24 @@ function newsItem(row: FeedItem, bind: Bind): WidgetItem {
   };
 }
 
+function serverPlaylistItem(row: FeedPlaylist, bind: Bind): WidgetItem {
+  const tracks = row.tracks === null ? null : i18n.t("discover:serverPlaylists.tracks", { count: row.tracks });
+  const subtitle = [tracks, playbackServerName(row.server)].filter((part) => part !== null).join(" · ");
+  return {
+    key: row.id,
+    title: bound(row, bind, "title", row.name) ?? row.name,
+    subtitle: bound(row, bind, "subtitle", subtitle) ?? "",
+    cover: bound(row, bind, "cover", null),
+    value: bound(row, bind, "value", null),
+    date: null,
+    move: null,
+    play: row.playlistId ? { kind: "playlist", playlistId: row.playlistId } : null,
+    request: null,
+    open: row.playlistId ? playlistLibraryTarget({ id: row.playlistId, name: row.name, cover: null }) : null,
+    link: null,
+  };
+}
+
 function questionItems(result: QuestionWidgetResult, bind: Bind): WidgetItem[] {
   switch (result.dataset) {
     case "tracks":
@@ -324,6 +345,8 @@ function feedItems(result: FeedWidgetResult, bind: Bind): WidgetItem[] {
       return result.rows.map((row) => newsItem(row, bind));
     case "events":
       return result.rows.map((row) => eventItem(row, bind));
+    case "playlists":
+      return result.rows.map((row) => serverPlaylistItem(row, bind));
   }
 }
 

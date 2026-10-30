@@ -34,6 +34,10 @@ vi.mock("@hooks/api/mutations/board/useSaveBoardLayout", () => ({
   useSaveBoardLayout: () => saveMock,
 }));
 
+vi.mock("@hooks/api/queries/board/useBoardAppearance", () => ({ useBoardAppearance: () => ({ data: undefined }) }));
+vi.mock("@hooks/api/mutations/board/useUndoBoardTemplate", () => ({
+  useUndoBoardTemplate: () => ({ mutate: vi.fn() }),
+}));
 vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", () => ({ useWidgetCatalog: () => ({ data: undefined }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({ useWidgetGrammar: () => ({ data: undefined }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({ useWidgetPresets: () => ({ data: [] }) }));
