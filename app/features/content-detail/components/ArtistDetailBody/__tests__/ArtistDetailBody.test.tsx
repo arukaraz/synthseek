@@ -93,8 +93,9 @@ function target(overrides: Partial<DetailTarget> = {}): DetailTarget {
 
 function renderBody(overrides: Partial<DetailTarget> = {}) {
   const onNavigate = vi.fn();
-  render(<ArtistDetailBody target={target(overrides)} onNavigate={onNavigate} />);
-  return { onNavigate, user: userEvent.setup() };
+  const onClose = vi.fn();
+  render(<ArtistDetailBody target={target(overrides)} onClose={onClose} onNavigate={onNavigate} />);
+  return { onNavigate, onClose, user: userEvent.setup() };
 }
 
 beforeEach(() => {
@@ -195,6 +196,21 @@ describe("what the artist page offers", () => {
     await user.click(screen.getByRole("button", { name: "radio" }));
 
     expect(playback.startRadio).toHaveBeenCalledWith({ kind: "artist", artist: "Daft Punk" });
+  });
+
+  it.each([
+    ["play", "playEntity"],
+    ["radio", "startRadio"],
+  ] as const)("closes the modal once %s has started, and keeps it open when it could not", async (name, source) => {
+    const { user, onClose } = renderBody();
+
+    playback[source].mockResolvedValueOnce(false);
+    await user.click(screen.getByRole("button", { name }));
+    expect(onClose).not.toHaveBeenCalled();
+
+    playback[source].mockResolvedValueOnce(true);
+    await user.click(screen.getByRole("button", { name }));
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("offers neither play nor radio while the library holds nothing playable by the artist", () => {

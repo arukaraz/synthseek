@@ -1,26 +1,30 @@
 "use client";
 
-import { Check, Plus } from "lucide-react";
+import { Check, LayoutGrid, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 
 import { CustomizeIcon } from "./CustomizeIcon";
-import { boardDock, boardDockPill, boardFab, boardFabLabel, boardHint } from "./styles";
+import { boardDock, boardFab, boardFabLabel, boardMenu, boardMenuDivider } from "./styles";
 import type { BoardToolbarProps } from "./types";
 
-export function BoardToolbar({ editing, onCustomize, onDone, onAddWidget }: BoardToolbarProps) {
+export function BoardToolbar({ editing, onCustomize, onDone, onAddWidget, onArrange }: BoardToolbarProps) {
   const { t } = useTranslation("discover");
 
   return (
-    <div className={boardDock()}>
+    <div className={boardDock({ editing })}>
       {editing ? (
-        <div className={boardDockPill()} role="toolbar" aria-label={t("board.customize")}>
-          <p className={boardHint()}>{t("board.editHint")}</p>
+        <div className={boardMenu()} role="toolbar" aria-label={t("board.customize")}>
           <Button variant="ghost" size="sm" onClick={onAddWidget}>
             <Plus />
             {t("board.addWidget")}
           </Button>
+          <Button variant="ghost" size="sm" onClick={onArrange}>
+            <LayoutGrid />
+            {t("board.arrange.action")}
+          </Button>
+          <span className={boardMenuDivider()} aria-hidden />
           <Button size="sm" onClick={onDone}>
             <Check />
             {t("board.done")}

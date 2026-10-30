@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { SelectMenu } from "@components/ui/SelectMenu";
 import { COUNTRIES } from "@utils/countries";
 import { playbackServerName } from "@utils/playback-servers";
@@ -218,7 +219,7 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
             options={grammar.pick.orders.map((order) => ({ value: order, label: t(`feeds.orders.${order}`) }))}
             onChange={(order) => workshop.setQuery({ ...feed, pick: { ...feed.pick, order } })}
           />
-          <SelectMenu
+          <SegmentedControl
             ariaLabel={t("steps.random")}
             value={rotation}
             options={rotationChoicesOf(grammar).map((entry) => ({ value: entry, label: t(`rotations.${entry}`) }))}

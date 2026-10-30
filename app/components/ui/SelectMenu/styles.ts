@@ -31,7 +31,7 @@ export const selectMenuDescription = cva("text-fg/50 block truncate text-xs");
 
 export const selectMenuContent = cva("max-h-72 w-(--radix-dropdown-menu-trigger-width) overflow-y-auto");
 
-export const selectMenuItem = cva("flex flex-col gap-0.5");
+export const selectMenuItem = cva("flex flex-col items-start gap-0.5 text-left");
 
 export const selectMenuItemLabel = cva("text-sm font-medium");
 

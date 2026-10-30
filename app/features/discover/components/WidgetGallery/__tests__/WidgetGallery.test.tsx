@@ -2,11 +2,12 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@locale";
-import type { BoardItem, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardItem } from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 import { createWidget, createWidgetCatalog, createWidgetGrammar, createWidgetPreset } from "@test/factories";
 import { fireEvent, render, screen, within } from "@test/test-utils";
 
+import type { BoardGalleryTarget } from "../../ExploreBoard/types";
 import { WidgetGallery } from "../WidgetGallery";
 
 const { stub, viewport } = vi.hoisted(() => ({
@@ -108,6 +109,9 @@ vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({
 vi.mock("@hooks/api/queries/widgets/useWidgetPreview", () => ({
   useWidgetPreview: () => ({ data: undefined, isLoading: false, isError: false }),
 }));
+vi.mock("@hooks/api/queries/widgets/useWidgetData", () => ({
+  useWidgetData: () => ({ data: undefined, isLoading: false, isError: false }),
+}));
 vi.mock("@hooks/api/mutations/widgets/useSaveWidget", () => ({
   useSaveWidget: () => ({ mutate: saveWidget, isPending: false }),
 }));
@@ -134,7 +138,7 @@ const ON_BOARD: BoardItem[] = [
   { kind: "custom", id: "w_1", widgetId: "w_1", size: "M" },
 ];
 
-function renderGallery(items: BoardItem[] = ON_BOARD, customize: BoardWidgetKey | null = null) {
+function renderGallery(items: BoardItem[] = ON_BOARD, target: BoardGalleryTarget | null = null) {
   const handlers = {
     onAdd: vi.fn(),
     onAddCustom: vi.fn(),
@@ -142,7 +146,7 @@ function renderGallery(items: BoardItem[] = ON_BOARD, customize: BoardWidgetKey 
     onTemplateApplied: vi.fn(),
     onClose: vi.fn(),
   };
-  render(<WidgetGallery items={items} customize={customize} {...handlers} />);
+  render(<WidgetGallery items={items} target={target} {...handlers} />);
   return handlers;
 }
 
@@ -311,7 +315,7 @@ describe("WidgetGallery", () => {
     fireEvent.click(screen.getByRole("button", { name: "Edit Most played" }));
 
     expect(screen.getByRole("heading", { level: 2, name: "Edit Most played" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
     expect(saveWidget).toHaveBeenCalledWith(
       expect.objectContaining({ id: "w_1", meta: expect.objectContaining({ name: "Most played" }) }),
       expect.anything()
@@ -325,7 +329,7 @@ describe("WidgetGallery", () => {
 
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue("Forgotten favorites (custom)");
     expect(screen.getByText(/daily pick of 8 tracks/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save to My widgets" }));
     expect(saveWidget).toHaveBeenCalledWith(
       expect.objectContaining({ basedOn: "Forgotten favorites", view: { block: "rail", action: "play" } }),
       expect.anything()
@@ -339,7 +343,7 @@ describe("WidgetGallery", () => {
   it("customizes the charts on the country the member chose", () => {
     renderGallery();
     fireEvent.click(screen.getByRole("button", { name: "Customize Charts" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save to My widgets" }));
     expect(saveWidget).toHaveBeenCalledWith(
       expect.objectContaining({
         query: expect.objectContaining({ source: "lastfm.charts", params: { country: "MX" } }),
@@ -349,8 +353,120 @@ describe("WidgetGallery", () => {
   });
 
   it("opens the workshop on the preset when the board asks to customize a tile", () => {
-    renderGallery(ON_BOARD, "forgottenFavorites");
+    renderGallery(ON_BOARD, { kind: "builtin", widget: "forgottenFavorites" });
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue("Forgotten favorites (custom)");
+    expect(screen.getByRole("heading", { level: 2, name: "Customize Forgotten favorites" })).toBeInTheDocument();
+    expect(screen.getByText(/A copy of the built-in widget/)).toBeInTheDocument();
+  });
+
+  it("opens Edit directly when the board asks to edit one of my widgets, and goes back to My widgets", () => {
+    myWidgets.data = [createWidget()];
+    renderGallery(ON_BOARD, { kind: "custom", widgetId: "w_1" });
+
+    expect(screen.getByRole("heading", { level: 2, name: "Edit Most played" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
+    expect(screen.getByRole("button", { name: "New widget" })).toBeInTheDocument();
+  });
+
+  it("stays on the gallery when the widget the board asked for is gone", () => {
+    renderGallery(ON_BOARD, { kind: "custom", widgetId: "w_gone" });
+
+    expect(cardTitles()).toHaveLength(25);
+  });
+
+  it("puts the filter first, the search after it and the tabs last", () => {
+    renderGallery();
+    const filter = screen.getByRole("button", { name: "Filter and sort" });
+    const search = screen.getByRole("searchbox");
+    const tabs = screen.getByRole("tablist", { name: "Widget lists" });
+
+    expect(filter.compareDocumentPosition(search) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(search.compareDocumentPosition(tabs) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("offers the category in the filter menu and filters by it", async () => {
+    const user = userEvent.setup();
+    renderGallery();
+
+    await user.click(screen.getByRole("button", { name: "Filter and sort" }));
+    expect(within(await screen.findByRole("menu")).getByRole("group", { name: "Category" })).toBeInTheDocument();
+    await user.click(await screen.findByRole("menuitemradio", { name: /^Library/ }));
+
+    expect(cardTitles()).toContain("New in your library");
+    expect(cardTitles()).not.toContain("Trending now");
+  });
+
+  it("shows the category and the description on the card, with Add before Customize and no info icon", () => {
+    renderGallery();
+    const card = screen.getByRole("heading", { level: 4, name: "Charts" }).closest("article");
+    if (!card) throw new Error("card missing");
+
+    expect(within(card).getByText("Discover")).toBeInTheDocument();
+    expect(within(card).getByText(i18n.t("discover:board.widgets.charts"))).toBeInTheDocument();
+    expect(within(card).queryByRole("button", { name: /about|info/i })).not.toBeInTheDocument();
+    const [first, second] = within(card).getAllByRole("button");
+    expect(first).toHaveAccessibleName("Add Charts");
+    expect(second).toHaveAccessibleName("Customize Charts");
+  });
+
+  it("draws a preview, the description and the smart playlist badge on my widget's card", () => {
+    myWidgets.data = [
+      createWidget({
+        meta: { ...createWidget().meta, description: "Night listening" },
+        playlist: { refresh: "weekly", playlistId: "pl_1" },
+      }),
+    ];
+    renderGallery();
+    openMine();
+    const card = screen.getByRole("article", { name: "Most played" });
+
+    const preview = card.querySelector("[inert]");
+    if (!(preview instanceof HTMLElement)) throw new Error("preview missing");
+    expect(within(preview).getByRole("heading", { name: "Most played", hidden: true })).toBeInTheDocument();
+    expect(within(card).getAllByText("Night listening")).toHaveLength(2);
+    expect(within(card).getByText("Smart playlist · Weekly")).toBeInTheDocument();
+  });
+
+  it("moves the size and the JSON to the preview, and the playlist choice to the footer", () => {
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    const preview = screen.getByRole("complementary", { name: "Preview" });
+
+    fireEvent.click(within(preview).getByRole("radio", { name: "L" }));
+    expect(within(preview).getByRole("radio", { name: "L" })).toHaveAttribute("aria-checked", "true");
+    expect(screen.queryByRole("heading", { name: "Playlist" })).not.toBeInTheDocument();
+
+    fireEvent.click(within(preview).getByRole("button", { name: "JSON" }));
+    expect(within(preview).getByText(/"defaultSize": "L"/)).toBeInTheDocument();
+    expect(within(preview).getByRole("button", { name: "Copy JSON" })).toBeInTheDocument();
+
+    expect(within(preview).queryByRole("switch")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
+    expect(screen.getByRole("radiogroup", { name: "Refresh" })).toBeInTheDocument();
+  });
+
+  it("illustrates each view and keeps All views beside the Look title", () => {
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+    const heading = screen.getByRole("heading", { name: "Look" });
+
+    expect(heading.parentElement).toContainElement(screen.getByRole("button", { name: /^All \d+ views$/ }));
+    const list = screen.getByRole("radio", { name: /^List/ });
+    expect(list.querySelector("[data-thumb='list'] rect")).not.toBeNull();
+  });
+
+  it("picks the rotation from a three option control in one line", () => {
+    renderGallery();
+    openMine();
+    fireEvent.click(screen.getByRole("button", { name: "New widget" }));
+
+    const group = screen.getByRole("radiogroup", { name: i18n.t("widgets:steps.random") });
+    fireEvent.click(within(group).getByRole("radio", { name: "Daily" }));
+
+    expect(within(group).getAllByRole("radio")).toHaveLength(3);
+    expect(screen.getByText(/daily pick of 10 tracks/)).toBeInTheDocument();
   });
 
   it("turns the recipe into a recap from the subject menu, with the story view, and back", async () => {
@@ -378,8 +494,9 @@ describe("WidgetGallery", () => {
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Night owl" } });
 
     fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
-    fireEvent.click(screen.getByRole("tab", { name: "Daily" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+    const refresh = within(screen.getByRole("radiogroup", { name: "Refresh" }));
+    fireEvent.click(refresh.getByRole("radio", { name: "Daily" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save to My widgets" }));
 
     expect(savePlaylist).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -404,8 +521,8 @@ describe("WidgetGallery", () => {
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Night owl" } });
     fireEvent.click(screen.getByRole("switch", { name: "Also save as a playlist" }));
 
-    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save widget" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save to My widgets" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save to My widgets" }));
 
     expect(savePlaylist).toHaveBeenCalledTimes(2);
     expect(savePlaylist.mock.calls[1]?.[0]).toMatchObject({ playlistId: "pl_1" });

@@ -187,7 +187,20 @@
     "customize": "Customize",
     "done": "Done",
     "addWidget": "Add widget",
-    "editHint": "Drag a widget by its handle or move it with the arrows, and pick a size on each one.",
+    "arrange": {
+      "action": "Arrange",
+      "title": "Arrange your board",
+      "hint": "Drag a widget to move it, and pick its size or remove it from its bar. Nothing changes until you save.",
+      "empty": "Your board will be empty.",
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "discard": {
+        "title": "Discard changes?",
+        "message": "Your changes to the board will be lost.",
+        "keep": "Keep arranging",
+        "confirm": "Discard"
+      }
+    },
     "tile": {
       "moveEarlier": "Move {{name}} earlier",
       "moveLater": "Move {{name}} later",
@@ -208,6 +221,7 @@
     },
     "gallery": {
       "title": "Add a widget",
+      "subtitle": "Add puts a widget at the end of the board, where you resize it. Customize opens a copy in the workshop.",
       "summary": "{{onBoard}} of {{total}} on your board. A new widget lands at the end, then move it where you want.",
       "search": "Search widgets",
       "all": "All",
@@ -462,7 +476,7 @@
       "plex": "This widget needs Plex connected for the household and your Plex account linked under Connected accounts.",
       "jellyfin": "This widget needs Jellyfin connected for the household and your Jellyfin account linked under Connected accounts.",
       "navidrome": "This widget needs Navidrome connected for the household and your Navidrome account linked under Connected accounts.",
-      "lidarr": "Connect Lidarr under Settings, Integrations to fill this widget."
+      "lidarr": "This widget needs Lidarr connected under Settings, Integrations, and only admins and trusted members can read it."
     },
     "events": {
       "refused": "Bandsintown refused the app id. Check it under Settings, Integrations.",

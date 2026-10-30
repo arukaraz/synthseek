@@ -11,7 +11,6 @@ import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlayl
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
 import { useSyncPlaylistTo } from "@hooks/api/mutations/requests/useSyncPlaylistTo";
 import { useInlineRename } from "@hooks/ui/useInlineRename";
-import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useRangePreview } from "@hooks/ui/useRangePreview";
 import { useSelection } from "@hooks/ui/useSelection";
 import { playlistOriginLabel } from "@utils/playlist";
@@ -25,6 +24,7 @@ import { catalogPlaylistTracks, computeRequestState, deriveTrackStatusCounts, is
 import { DetailHero, PlaylistSyncToggle } from "../DetailHero";
 import { DetailEmpty, DetailSection } from "../DetailSection";
 import { Tracklist } from "../Tracklist";
+import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { useStableTracklistOrder } from "../../hooks/useStableTracklistOrder";
 import { useTrackArtistNavigation } from "../../hooks/useTrackArtistNavigation";
 import { modalLayout, modalMain, modalScrollArea, selectAllControl, tracklistControls } from "../../styles";
@@ -52,15 +52,9 @@ function PlaylistDetailBodyComponent({
     enabled: isCatalog,
   });
   const { requestPlaylist } = useContentDetailActions();
-  const { playEntity, shuffleEntity } = useEntityPlayback();
-  const handlePlay = useCallback(
-    () => playEntity({ kind: "playlist", playlistId: target.id }),
-    [playEntity, target.id]
-  );
-  const handleShuffle = useCallback(
-    () => shuffleEntity({ kind: "playlist", playlistId: target.id }),
-    [shuffleEntity, target.id]
-  );
+  const { play, shuffle } = useDetailPlayback(onClose);
+  const handlePlay = useCallback(() => play({ kind: "playlist", playlistId: target.id }), [play, target.id]);
+  const handleShuffle = useCallback(() => shuffle({ kind: "playlist", playlistId: target.id }), [shuffle, target.id]);
 
   const removeTracks = useRemoveTracksFromPlaylist();
   const renamePlaylist = useRenamePlaylist();

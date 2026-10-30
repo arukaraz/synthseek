@@ -25,7 +25,7 @@ export type CardPlayOrder = "inOrder" | "shuffled";
 export interface CardCoverActionsProps {
   name: string;
   order: CardPlayOrder;
-  onPlay: () => Promise<void>;
+  onPlay: () => Promise<unknown>;
   onOpen?: () => void;
   menu?: ReactNode;
 }
@@ -44,7 +44,7 @@ export interface AlbumCardProps {
   item: LibraryAlbumItem;
   showLibraryPaths?: boolean;
   onOpen?: () => void;
-  onPlay?: () => Promise<void>;
+  onPlay?: () => Promise<unknown>;
   menu?: ReactNode;
   selection?: CardSelection;
 }
@@ -67,20 +67,20 @@ export interface ArtistCardProps {
   image?: string | null;
   isResolving?: boolean;
   onOpen?: () => void;
-  onPlay?: () => Promise<void>;
+  onPlay?: () => Promise<unknown>;
 }
 
 export interface LibraryArtistCardProps {
   item: LibraryArtistItem;
   resolveEnabled: boolean;
   onOpen?: () => void;
-  onPlay?: () => Promise<void>;
+  onPlay?: () => Promise<unknown>;
 }
 
 export interface PlaylistCardProps {
   item: LibraryPlaylistItem;
   onOpen?: () => void;
-  onPlay?: () => Promise<void>;
+  onPlay?: () => Promise<unknown>;
 }
 
 export interface PlaylistCardMenuProps {

@@ -3,16 +3,14 @@
 import { useTranslation } from "react-i18next";
 
 import { Input } from "@components/ui/Input";
-import { SegmentTabs } from "@components/ui/SegmentTabs";
 
-import { WORKSHOP_SIZES } from "./constants";
 import { IconPicker } from "./IconPicker";
 import { detailsGrid, fieldLabel, section, sectionHead, sectionNumber, sectionTitle } from "./styles";
 import type { WorkshopSectionProps } from "./types";
 
 export function DetailsSection({ workshop, context }: WorkshopSectionProps) {
   const { t } = useTranslation("widgets");
-  const { meta, defaultSize } = workshop.draft;
+  const { meta } = workshop.draft;
   const { limits } = context.catalog;
 
   return (
@@ -47,16 +45,6 @@ export function DetailsSection({ workshop, context }: WorkshopSectionProps) {
       <div className={fieldLabel()}>
         {t("details.icon")}
         <IconPicker icons={context.catalog.icons} value={meta.icon} onChange={workshop.setIcon} />
-      </div>
-      <div className={fieldLabel()}>
-        {t("details.size")}
-        <SegmentTabs
-          items={WORKSHOP_SIZES.map((size) => ({ value: size, label: t(`sizes.${size}`) }))}
-          value={defaultSize}
-          onValueChange={workshop.setSize}
-          layoutId="widget-workshop-size"
-          ariaLabel={t("details.size")}
-        />
       </div>
     </section>
   );

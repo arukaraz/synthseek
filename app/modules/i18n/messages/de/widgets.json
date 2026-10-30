@@ -146,9 +146,13 @@
     "back": "Zurück",
     "newTitle": "Neues Widget",
     "editTitle": "{{name}} bearbeiten",
+    "customizeTitle": "{{name}} anpassen",
+    "customizeHint": "Eine Kopie des eingebauten Widgets. Beim Speichern entsteht ein neues Widget in Meine Widgets; das Original bleibt unverändert.",
     "ruleTitle": "Regel von {{name}}",
     "saveRule": "Regel speichern",
-    "save": "Widget speichern",
+    "saveChanges": "Änderungen speichern",
+    "saveToMine": "In Meine Widgets speichern",
+    "copyJson": "JSON kopieren",
     "saving": "Wird gespeichert",
     "cancel": "Abbrechen",
     "buildUsing": "Bauen mit:",
@@ -218,9 +222,9 @@
     "name": "nach Name"
   },
   "rotations": {
-    "none": "Immer gleich",
-    "daily": "Jeden Tag neu",
-    "weekly": "Jede Woche neu"
+    "none": "Fest",
+    "daily": "Täglich",
+    "weekly": "Wöchentlich"
   },
   "timeModes": {
     "relative": "Letzte Tage",
@@ -427,7 +431,7 @@
       "plex": "Braucht dein verknüpftes Plex-Konto",
       "jellyfin": "Braucht dein verknüpftes Jellyfin-Konto",
       "navidrome": "Braucht dein verknüpftes Navidrome-Konto",
-      "lidarr": "Braucht Lidarr"
+      "lidarr": "Braucht Lidarr, für Admins und vertraute Mitglieder"
     },
     "seeds": {
       "myTopArtists": "Meine Top-Künstler",
@@ -452,6 +456,8 @@
   "look": {
     "label": "Ansicht",
     "suggested": "Empfohlen",
+    "fitHint": "Ansichten, die dieses Ergebnis darstellen können. Die erste ist der Vorschlag.",
+    "allHint": "Alle Ansichten. Die abgeblendeten können dieses Ergebnis nicht darstellen.",
     "allViews": "Alle {{count}} Ansichten",
     "fittingViews": "Nur passende Ansichten",
     "notFitting": "Passt nicht zu diesem Ergebnis",
@@ -525,8 +531,7 @@
   "customize": {
     "action": "Anpassen",
     "actionNamed": "{{name}} anpassen",
-    "name": "{{name}} (angepasst)",
-    "fixed": "Hinter diesem Widget steht kein Dokument, deshalb lässt es sich nicht anpassen."
+    "name": "{{name}} (angepasst)"
   },
   "presets": {
     "topTracks": "Top-Titel",

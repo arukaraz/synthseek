@@ -135,14 +135,24 @@ describe("tileUnderPointer", () => {
     if (!innerA || !innerB) throw new Error("fixture missing");
     document.elementsFromPoint = vi.fn(() => [innerA, innerB]);
 
-    expect(tileUnderPointer({ x: 1, y: 1 }, "a")?.dataset.boardTile).toBe("b");
-    expect(tileUnderPointer({ x: 1, y: 1 }, "z")?.dataset.boardTile).toBe("a");
+    expect(tileUnderPointer({ x: 1, y: 1 }, "a", document.body)?.dataset.boardTile).toBe("b");
+    expect(tileUnderPointer({ x: 1, y: 1 }, "z", document.body)?.dataset.boardTile).toBe("a");
   });
 
   it("returns null when no tile is under the point", () => {
     document.elementsFromPoint = vi.fn(() => [document.body]);
 
-    expect(tileUnderPointer({ x: 1, y: 1 }, "a")).toBeNull();
+    expect(tileUnderPointer({ x: 1, y: 1 }, "a", document.body)).toBeNull();
+  });
+
+  it("ignores a tile of another grid under the same point, such as the board behind a dialog", () => {
+    document.body.innerHTML =
+      '<div id="dialog"><div data-board-tile="a"></div></div><div id="board"><div data-board-tile="b"></div></div>';
+    const behind = document.querySelector("#board [data-board-tile]");
+    if (!behind) throw new Error("fixture missing");
+    document.elementsFromPoint = vi.fn(() => [behind]);
+
+    expect(tileUnderPointer({ x: 1, y: 1 }, "a", document.getElementById("dialog"))).toBeNull();
   });
 });
 

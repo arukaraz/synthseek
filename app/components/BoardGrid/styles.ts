@@ -3,14 +3,8 @@ import { cva } from "class-variance-authority";
 
 import type { BoardAppearance } from "@hooks/api/queries/board/types";
 
-import {
-  BOARD_COLUMNS,
-  BOARD_DENSITY_METRICS,
-  BOARD_GAP_PX,
-  BOARD_ROW_PX,
-  BOARD_TEXT_SCALE,
-  BOARD_TYPE_STEPS_REM,
-} from "./constants";
+import { BOARD_COLUMNS, BOARD_TEXT_SCALE, BOARD_TYPE_STEPS_REM } from "./constants";
+import { boardMetricsOf } from "./helpers";
 import type { BoardDevice, BoardMetrics } from "./types";
 
 export const boardGrid = cva(
@@ -24,10 +18,11 @@ function typeScaleVars(scale: number): CssVars {
   );
 }
 
-export function boardGridVars(device: BoardDevice, appearance?: BoardAppearance): CssVars {
-  const metrics: BoardMetrics = appearance
-    ? BOARD_DENSITY_METRICS[appearance.density]
-    : { rowPx: BOARD_ROW_PX, gapPx: BOARD_GAP_PX };
+export function boardGridVars(
+  device: BoardDevice,
+  appearance?: BoardAppearance,
+  metrics: BoardMetrics = boardMetricsOf(appearance)
+): CssVars {
   return {
     "--board-cols": String(BOARD_COLUMNS[device]),
     "--board-row": `${metrics.rowPx}px`,

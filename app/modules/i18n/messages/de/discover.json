@@ -187,7 +187,20 @@
     "customize": "Anpassen",
     "done": "Fertig",
     "addWidget": "Widget hinzufügen",
-    "editHint": "Zieh ein Widget an seinem Griff oder verschieb es mit den Pfeilen, und wähl für jedes eine Größe.",
+    "arrange": {
+      "action": "Anordnen",
+      "title": "Board anordnen",
+      "hint": "Zieh ein Widget, um es zu verschieben, und wähl in seiner Leiste die Größe oder entferne es. Erst beim Speichern ändert sich etwas.",
+      "empty": "Dein Board wird leer sein.",
+      "cancel": "Abbrechen",
+      "save": "Änderungen speichern",
+      "discard": {
+        "title": "Änderungen verwerfen?",
+        "message": "Deine Änderungen am Board gehen verloren.",
+        "keep": "Weiter anordnen",
+        "confirm": "Verwerfen"
+      }
+    },
     "tile": {
       "moveEarlier": "{{name}} nach vorne verschieben",
       "moveLater": "{{name}} nach hinten verschieben",
@@ -208,6 +221,7 @@
     },
     "gallery": {
       "title": "Widget hinzufügen",
+      "subtitle": "Hinzufügen setzt ein Widget ans Ende des Boards, dort änderst du die Größe. Anpassen öffnet eine Kopie in der Werkstatt.",
       "summary": "{{onBoard}} von {{total}} auf deinem Board. Ein neues Widget landet am Ende, danach verschiebst du es, wohin du willst.",
       "search": "Widgets suchen",
       "all": "Alle",
@@ -462,7 +476,7 @@
       "plex": "Dieses Widget braucht ein für den Haushalt verbundenes Plex und dein unter Verbundene Konten verknüpftes Plex-Konto.",
       "jellyfin": "Dieses Widget braucht ein für den Haushalt verbundenes Jellyfin und dein unter Verbundene Konten verknüpftes Jellyfin-Konto.",
       "navidrome": "Dieses Widget braucht ein für den Haushalt verbundenes Navidrome und dein unter Verbundene Konten verknüpftes Navidrome-Konto.",
-      "lidarr": "Verbinde Lidarr unter Einstellungen, Integrationen, um dieses Widget zu füllen."
+      "lidarr": "Dieses Widget braucht ein unter Einstellungen, Integrationen verbundenes Lidarr, und nur Admins und vertraute Mitglieder können es lesen."
     },
     "events": {
       "refused": "Bandsintown hat die App-ID abgelehnt. Prüfe sie unter Einstellungen, Integrationen.",

@@ -928,7 +928,7 @@
       "submit": "Ausgewählte importieren"
     },
     "roleDescriptions": {
-      "trusted": "Anfragen vertrauter Mitglieder überspringen die Freigabewarteschlange, und Mitglieds-Kontingente begrenzen sie nicht."
+      "trusted": "Anfragen vertrauter Mitglieder überspringen die Freigabewarteschlange, Mitglieds-Kontingente begrenzen sie nicht, und sie können Lidarr-Widgets lesen."
     },
     "approval": {
       "cardTitle": "Anfragen-Freigabe",

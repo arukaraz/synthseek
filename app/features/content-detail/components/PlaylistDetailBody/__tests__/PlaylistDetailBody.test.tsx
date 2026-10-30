@@ -56,8 +56,8 @@ vi.mock("../../../ContentDetailActionsContext", () => ({
 }));
 
 const playback = vi.hoisted(() => ({
-  playEntity: vi.fn(async () => undefined),
-  shuffleEntity: vi.fn(async () => undefined),
+  playEntity: vi.fn(async () => false),
+  shuffleEntity: vi.fn(async () => false),
 }));
 
 vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => playback }));
@@ -149,6 +149,23 @@ describe("PlaylistDetailBody shuffle", () => {
 
     expect(playback.shuffleEntity).toHaveBeenCalledWith({ kind: "playlist", playlistId: "pl-1" });
     expect(playback.playEntity).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ["Play everything we have of Road Trip", "playEntity"],
+    ["Shuffle everything we have of Road Trip", "shuffleEntity"],
+  ] as const)("closes the modal once %s has started, and keeps it open when it could not", async (name, source) => {
+    const onClose = vi.fn();
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={onClose} onNavigate={vi.fn()} />
+    );
+
+    await user.click(screen.getByRole("button", { name }));
+    expect(onClose).not.toHaveBeenCalled();
+
+    playback[source].mockResolvedValueOnce(true);
+    await user.click(screen.getByRole("button", { name }));
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("offers no shuffle for a catalog playlist it cannot play", () => {

@@ -171,18 +171,6 @@ export const serverPickerLocationBadge = cva(
 
 export const memberAvatar = cva("bg-fg/10 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full");
 
-export const segmentedControl = cva("border-fg/15 bg-fg/5 inline-flex rounded-lg border p-0.5");
-
-export const segmentedOption = cva("rounded-md px-3 py-1 text-xs font-medium transition-colors", {
-  variants: {
-    active: {
-      true: "bg-primary-500/20 text-primary-400",
-      false: "text-fg/55 hover:text-fg/85",
-    },
-  },
-  defaultVariants: { active: false },
-});
-
 export const formattingPreview = cva(
   "border-fg/10 bg-fg/[0.04] text-fg/70 mt-1 inline-flex items-center gap-2 rounded-md border px-3 py-1.5 font-mono text-xs"
 );

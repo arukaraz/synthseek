@@ -187,7 +187,20 @@
     "customize": "Personalizar",
     "done": "Listo",
     "addWidget": "Añadir widget",
-    "editHint": "Arrastra un widget por su asa o muévelo con las flechas, y elige un tamaño en cada uno.",
+    "arrange": {
+      "action": "Ordenar",
+      "title": "Ordena tu tablero",
+      "hint": "Arrastra un widget para moverlo, y elige su tamaño o quítalo desde su barra. Nada cambia hasta que guardes.",
+      "empty": "Tu tablero quedará vacío.",
+      "cancel": "Cancelar",
+      "save": "Guardar cambios",
+      "discard": {
+        "title": "¿Descartar los cambios?",
+        "message": "Se perderán los cambios en el tablero.",
+        "keep": "Seguir ordenando",
+        "confirm": "Descartar"
+      }
+    },
     "tile": {
       "moveEarlier": "Mover {{name}} antes",
       "moveLater": "Mover {{name}} después",
@@ -208,6 +221,7 @@
     },
     "gallery": {
       "title": "Añadir un widget",
+      "subtitle": "Añadir coloca un widget al final del tablero, donde cambias su tamaño. Personalizar abre una copia en el taller.",
       "summary": "{{onBoard}} de {{total}} en tu tablero. Un widget nuevo se coloca al final; luego muévelo donde quieras.",
       "search": "Buscar widgets",
       "all": "Todos",
@@ -462,7 +476,7 @@
       "plex": "Este widget necesita Plex conectado para la casa y tu cuenta de Plex vinculada en Cuentas conectadas.",
       "jellyfin": "Este widget necesita Jellyfin conectado para la casa y tu cuenta de Jellyfin vinculada en Cuentas conectadas.",
       "navidrome": "Este widget necesita Navidrome conectado para la casa y tu cuenta de Navidrome vinculada en Cuentas conectadas.",
-      "lidarr": "Conecta Lidarr en Ajustes, Integraciones, para llenar este widget."
+      "lidarr": "Este widget necesita Lidarr conectado en Ajustes, Integraciones, y solo los administradores y los miembros de confianza pueden leerlo."
     },
     "events": {
       "refused": "Bandsintown rechazó el app id. Revísalo en Ajustes, Integraciones.",

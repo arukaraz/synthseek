@@ -1,6 +1,6 @@
 "use client";
 
-import { segmentedControl, segmentedOption } from "../styles";
+import { segmentedControl, segmentedOption } from "./styles";
 import type { SegmentedControlProps } from "./types";
 
 export function SegmentedControl<T extends string>({

@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { SelectMenu } from "@components/ui/SelectMenu";
 
 import { DEFAULT_GROUP_BY, TIME_MODES } from "./constants";
@@ -108,7 +109,7 @@ export function RecipeSteps({ workshop, question, grammar, people }: RecipeSteps
       ) : null}
       {limited ? (
         <StepRow label={t("steps.pickBy")}>
-          <SelectMenu
+          <SegmentedControl
             ariaLabel={t("steps.random")}
             value={rotationOf(question)}
             options={rotationChoicesOf(grammar).map((rotation) => ({

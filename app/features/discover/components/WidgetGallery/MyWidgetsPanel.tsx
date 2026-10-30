@@ -9,7 +9,7 @@ import { useSaveWidget } from "@hooks/api/mutations/widgets/useSaveWidget";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 import { DeleteWidgetDialog } from "./DeleteWidgetDialog";
-import { customTilesOf, duplicateOf, exportJsonOf } from "./helpers";
+import { copyWidgetJson, customTilesOf, duplicateOf, exportJsonOf } from "./helpers";
 import { MyWidgetCard } from "./MyWidgetCard";
 import { NewWidgetCard } from "./NewWidgetCard";
 import { galleryEmpty, galleryGrid } from "./styles";
@@ -37,12 +37,7 @@ export function MyWidgetsPanel({ widgets, items, onAddCustom, onEdit, onCreate, 
                 onSuccess: () => toast.success(t("mine.duplicated", { name })),
               });
             }}
-            onCopyJson={() => {
-              void navigator.clipboard
-                .writeText(exportJsonOf(widget))
-                .then(() => toast.success(t("mine.jsonCopied", { name: widget.meta.name })))
-                .catch(() => toast.error(t("mine.jsonCopyFailed")));
-            }}
+            onCopyJson={() => copyWidgetJson(exportJsonOf(widget), widget.meta.name)}
             onDelete={() => setDeleting(widget)}
           />
         ))}

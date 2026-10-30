@@ -23,11 +23,22 @@ export function GalleryFilterMenu({ filters, counts, onChange }: GalleryFilterMe
     on: t("widgets:gallery.filter.onBoard"),
     off: t("widgets:gallery.filter.offBoard"),
   };
+  const categoryLabel =
+    filters.category === "all"
+      ? t("widgets:gallery.filter.all")
+      : t(BOARD_CATEGORY_KEYS[filters.category].title, { ns: "discover" });
+  const triggerLabel = [
+    categoryLabel,
+    filters.board === "all" ? null : boardLabels[filters.board],
+    sortLabels[filters.sort],
+  ]
+    .filter((part) => part !== null)
+    .join(" · ");
 
   return (
     <FilterSortDropdown<GalleryCategoryFilter, GallerySort>
       triggerIcon={SlidersHorizontal}
-      align="end"
+      triggerLabel={triggerLabel}
       filter={{
         value: filters.category,
         onChange: (category) => onChange({ ...filters, category }),

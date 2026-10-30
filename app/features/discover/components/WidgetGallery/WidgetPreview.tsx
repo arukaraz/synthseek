@@ -2,19 +2,16 @@
 
 import { BOARD_WIDGETS } from "../ExploreBoard/constants";
 import { previewFrame } from "./helpers";
-import { previewFit, previewStage, previewVars } from "./styles";
+import { ScaledPreview } from "./ScaledPreview";
 import type { WidgetPreviewProps } from "./types";
 
-export function WidgetPreview({ widget, info }: WidgetPreviewProps) {
+export function WidgetPreview({ widget }: WidgetPreviewProps) {
   const definition = BOARD_WIDGETS[widget];
   const Widget = definition.component;
-  const frame = previewFrame(widget);
 
   return (
-    <div className={previewFit()} style={previewVars(frame)} aria-hidden inert>
-      <div className={previewStage()}>
-        <Widget size={definition.defaultSize} info={info} />
-      </div>
-    </div>
+    <ScaledPreview frame={previewFrame(widget)}>
+      <Widget size={definition.defaultSize} info="" />
+    </ScaledPreview>
   );
 }

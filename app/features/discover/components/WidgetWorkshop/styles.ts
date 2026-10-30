@@ -1,4 +1,3 @@
-import type { CssVars } from "@theme/utilities/types";
 import { cva } from "class-variance-authority";
 
 export const workshopRoot = cva("flex min-h-0 flex-1 flex-col");
@@ -7,13 +6,13 @@ export const workshopHeader = cva(
   "border-fg/10 flex flex-wrap items-center gap-3 border-b px-4 pt-4 pr-14 pb-3 sm:pt-6 sm:pr-16 sm:pl-6"
 );
 
-export const workshopTitle = cva("text-fg min-w-0 flex-1 truncate text-base font-semibold");
+export const workshopHeading = cva("flex min-w-0 flex-1 flex-col gap-0.5");
 
-export const workshopActions = cva("flex items-center gap-2");
+export const workshopTitle = cva("text-fg min-w-0 truncate text-base font-semibold");
 
-export const workshopCancel = cva("max-sm:hidden");
+export const workshopSubtitle = cva("text-fg/60 text-xs");
 
-export const workshopScroll = cva("min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-10 sm:px-6");
+export const workshopScroll = cva("min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-6 sm:px-6");
 
 export const workshopLayout = cva("grid items-start gap-6 min-[980px]:grid-cols-[minmax(0,1fr)_minmax(300px,400px)]");
 
@@ -93,10 +92,10 @@ export const ruleEditorControls = cva(
 
 export const ruleEditorActions = cva("flex justify-end gap-2");
 
-export const viewGrid = cva("grid grid-cols-2 gap-2 @md:grid-cols-3 @2xl:grid-cols-4");
+export const viewGrid = cva("grid grid-cols-[repeat(auto-fill,minmax(112px,1fr))] gap-2");
 
 export const viewTile = cva(
-  "focus-visible:ring-primary-400 flex min-w-0 flex-col items-start gap-0.5 rounded-xl border px-3 py-2 text-left text-sm outline-none focus-visible:ring-2",
+  "focus-visible:ring-primary-400 flex min-w-0 flex-col items-stretch gap-1.5 rounded-xl border p-2 text-xs font-medium outline-none focus-visible:ring-2",
   {
     variants: {
       selected: {
@@ -112,9 +111,11 @@ export const viewTile = cva(
   }
 );
 
-export const viewSuggested = cva("text-primary-400 text-[10px] font-semibold tracking-wider uppercase");
+export const viewName = cva("min-w-0 text-center");
 
-export const viewToggle = cva("text-primary-400 self-start text-xs font-medium hover:underline");
+export const viewSuggested = cva("text-success-vivid text-center font-mono text-[9.5px] tracking-[0.1em] uppercase");
+
+export const viewToggle = cva("ml-auto");
 
 export const lookGrid = cva("grid gap-3 @xl:grid-cols-2");
 
@@ -137,7 +138,7 @@ export const accentDot = cva(
 
 export const detailsGrid = cva("grid gap-3 @xl:grid-cols-2");
 
-export const playlistToggle = cva("text-fg flex items-center gap-3 text-sm");
+export const playlistChoice = cva("flex min-w-0 items-center gap-3");
 
 export const newsUrl = cva("flex w-full min-w-0 flex-col gap-1");
 
@@ -164,21 +165,18 @@ export const iconButton = cva(
 
 export const iconEmpty = cva("text-fg/60 text-xs");
 
+export const previewBar = cva("flex flex-wrap items-center justify-between gap-2");
+
 export const previewLabel = cva("text-fg/60 font-mono text-[10.5px] tracking-wider uppercase");
 
-export const previewFrame = cva("flex h-[var(--preview-h)] min-h-0 w-full [&>*]:min-h-0 [&>*]:flex-1", {
-  variants: {
-    size: {
-      S: "max-w-[300px]",
-      M: "max-w-full",
-      L: "max-w-full",
-    },
-  },
-  defaultVariants: { size: "M" },
-});
+export const previewTools = cva("flex items-center gap-1.5");
+
+export const previewBox = cva("min-w-0");
 
 export const previewHint = cva("text-fg/50 text-[11px]");
 
-export function previewVars(height: number): CssVars {
-  return { "--preview-h": `${height}px` };
-}
+export const previewJson = cva(
+  "border-fg/10 bg-fg/[0.03] text-fg/80 max-h-80 overflow-auto rounded-lg border p-3 font-mono text-[11px] break-words whitespace-pre-wrap"
+);
+
+export const previewCopy = cva("self-start");

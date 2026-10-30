@@ -17,7 +17,9 @@ export const galleryHeader = cva("flex flex-wrap items-center gap-3 px-4 pt-4 pr
 
 export const galleryTitleBlock = cva("flex min-w-0 flex-1 flex-col gap-1");
 
-export const gallerySearch = cva("relative w-full sm:w-72");
+export const gallerySubtitle = cva("text-fg/60 text-sm");
+
+export const gallerySearch = cva("relative min-w-0 flex-1 sm:w-64 sm:flex-none");
 
 export const searchIcon = cva("text-fg/40 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2");
 
@@ -75,9 +77,11 @@ export const onBoardBadge = cva(
   "bg-success-vivid/15 text-success-vivid absolute top-2.5 right-2.5 z-[1] inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold backdrop-blur-sm"
 );
 
-export const cardFooter = cva("flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 px-3 py-2.5");
+export const cardBody = cva("flex min-w-0 flex-1 flex-col gap-1.5 px-3 py-2.5");
 
-export const cardActions = cva("flex basis-full items-center justify-end gap-1.5");
+export const cardHead = cva("flex min-w-0 items-center gap-2.5");
+
+export const cardActions = cva("mt-auto flex items-center justify-between gap-1.5 pt-1");
 
 export const cardAction = cva("shrink-0");
 
@@ -85,19 +89,25 @@ export const cardIcon = cva(
   "bg-primary-500/15 text-primary-400 flex size-8 shrink-0 items-center justify-center rounded-lg"
 );
 
-export const cardTitleRow = cva("flex min-w-0 flex-1 items-center gap-1");
+export const cardTitle = cva("text-fg min-w-0 flex-1 text-sm leading-tight font-semibold text-balance break-words");
 
-export const cardTitle = cva("text-fg text-sm leading-tight font-semibold text-balance break-words");
+export const cardCategory = cva("text-fg/60 shrink-0 text-[11px]");
+
+export const cardDescription = cva("text-fg/60 line-clamp-2 text-xs");
 
 export const visuallyHidden = cva("sr-only");
 
 export const galleryToolbar = cva("flex flex-wrap items-center gap-3 px-4 sm:px-6");
 
-export const galleryToolbarEnd = cva("ml-auto flex items-center gap-2");
+export const galleryFilters = cva("flex min-w-0 basis-full items-center gap-2 sm:basis-auto");
+
+export const galleryTabs = cva("ml-auto");
 
 export const mineCard = cva(
-  "bg-fg/[0.02] border-fg/10 hover:border-primary-400/50 focus-within:border-primary-400/50 flex min-w-0 flex-col gap-2 rounded-2xl border p-3 transition-colors"
+  "bg-fg/[0.02] border-fg/10 hover:border-primary-400/50 focus-within:border-primary-400/50 flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors"
 );
+
+export const mineBody = cva("flex min-w-0 flex-1 flex-col gap-1.5 p-3");
 
 export const mineHead = cva("flex min-w-0 items-center gap-2");
 
@@ -105,24 +115,32 @@ export const mineTitle = cva("text-fg min-w-0 flex-1 truncate text-sm font-semib
 
 export const mineAccent = cva("size-3 shrink-0 rounded-full bg-[var(--mix-acc)]");
 
+export const mineDescription = cva("text-fg/70 line-clamp-2 text-xs");
+
 export const mineMeta = cva("text-fg/60 truncate text-xs");
 
 export const mineBasedOn = cva("text-fg/50 truncate text-[11px]");
 
-export const mineActions = cva("mt-auto flex min-w-0 flex-nowrap items-center gap-1.5 overflow-hidden pt-1");
+export const mineBadge = cva(
+  "border-success-vivid/45 text-success-vivid inline-flex items-center self-start rounded-full border px-2.5 py-0.5 font-mono text-[11px] tracking-[0.06em] whitespace-nowrap uppercase"
+);
 
-export const mineActionsEnd = cva("ml-auto flex shrink-0 items-center gap-1");
+export const mineActions = cva(
+  "border-fg/10 mt-auto flex min-w-0 flex-nowrap items-center gap-1 overflow-hidden border-t pt-2"
+);
+
+export const mineActionsEnd = cva("ml-auto flex shrink-0 items-center gap-0.5");
 
 export const onBoardPill = cva(
   "bg-success-vivid/15 text-success-vivid inline-flex h-9 shrink-0 items-center gap-1 rounded-md px-3 text-xs font-semibold"
 );
 
 export const newCard = cva(
-  "border-fg/20 flex min-h-36 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-3"
+  "border-fg/20 hover:border-primary-400 flex min-h-60 flex-col items-center justify-center gap-3.5 rounded-2xl border border-dashed p-3 transition-colors"
 );
 
 export const newCardButton = cva(
-  "bg-primary-500/15 text-primary-400 hover:bg-primary-500/25 focus-visible:ring-primary-400 flex size-14 items-center justify-center rounded-full outline-none focus-visible:ring-2 [&_svg]:size-7"
+  "from-primary-600 to-accent-600 text-primary-foreground shadow-primary-600/40 focus-visible:ring-primary-400 flex size-16 items-center justify-center rounded-[18px] bg-linear-to-br shadow-lg transition-transform outline-none hover:scale-105 focus-visible:ring-2 motion-reduce:transition-none [&_svg]:size-8"
 );
 
 export const importBody = cva("flex flex-col gap-3 p-6 sm:max-w-xl");

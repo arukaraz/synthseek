@@ -15,7 +15,14 @@ import {
   FALLBACK_BLOCK_HEIGHT,
   NARROW_TILE_SIZE,
 } from "./constants";
-import type { BoardCustomWidgets, BoardKeyAction, CustomWidgetsStatus, MoveDelta, PlacedTile } from "./types";
+import type {
+  BoardCustomWidgets,
+  BoardKeyAction,
+  BoardTileLayoutActions,
+  CustomWidgetsStatus,
+  MoveDelta,
+  PlacedTile,
+} from "./types";
 
 export function blockWidgetAction(event: Pick<MouseEvent, "target" | "preventDefault" | "stopPropagation">): void {
   if (event.target instanceof Element && event.target.closest(EDIT_PASSTHROUGH_SELECTOR)) return;
@@ -33,6 +40,20 @@ export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): 
         : null;
   if (delta === null) return null;
   return event.shiftKey ? { kind: "resize", delta } : { kind: "move", delta };
+}
+
+export function runBoardKey(
+  event: Pick<KeyboardEvent, "key" | "shiftKey" | "preventDefault">,
+  item: BoardItem,
+  device: BoardDevice,
+  actions: BoardTileLayoutActions
+): void {
+  const action = boardKeyAction(event);
+  if (!action) return;
+  event.preventDefault();
+  if (action.kind === "remove") actions.remove(item.id);
+  else if (action.kind === "move") actions.move(item.id, action.delta);
+  else actions.resize(item.id, cycleSize(editableSizesOf(device), item.size, action.delta));
 }
 
 export function heightOf(widget: BoardWidgetKey, size: BoardSize): BoardHeight {

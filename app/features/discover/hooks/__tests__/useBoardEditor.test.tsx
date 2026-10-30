@@ -156,6 +156,44 @@ describe("useBoardEditor", () => {
     expect(lastSavedIds()).toEqual(["a", "b", "c"]);
   });
 
+  it("saves an arranged board once, closes the modal and offers to undo back to the board it replaced", () => {
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
+
+    act(() => result.current.openArrange());
+    expect(result.current.arrangeOpen).toBe(true);
+    expect(saveMock).not.toHaveBeenCalled();
+
+    act(() => result.current.saveArrangement([ITEMS[1], ITEMS[0]]));
+
+    expect(result.current.arrangeOpen).toBe(false);
+    expect(lastSavedIds()).toEqual(["b", "a"]);
+    lastToastAction().onClick();
+    expect(lastSavedIds()).toEqual(["a", "b", "c"]);
+  });
+
+  it("does not leave edit mode on Escape while the arrange modal is open", () => {
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
+    act(() => result.current.startEditing());
+    act(() => result.current.openArrange());
+
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    });
+
+    expect(result.current.editing).toBe(true);
+  });
+
+  it("opens the gallery on the widget a tile asked to edit, and forgets it once closed", () => {
+    const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
+
+    act(() => result.current.actions.edit("w_1"));
+    expect(result.current.galleryOpen).toBe(true);
+    expect(result.current.galleryTarget).toEqual({ kind: "custom", widgetId: "w_1" });
+
+    act(() => result.current.setGalleryOpen(false));
+    expect(result.current.galleryTarget).toBeNull();
+  });
+
   it("appends an added widget at its default size under a free id", () => {
     const { result } = renderHook(() => useBoardEditor(ITEMS, NO_CUSTOM, "ready"));
 

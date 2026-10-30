@@ -63,7 +63,7 @@ describe("useStartRadio", () => {
     api.fetchRadio.mockResolvedValue({ items: [libraryItem("r1"), libraryItem("r2")] });
     const { result } = renderHook(() => useStartRadio());
 
-    await result.current({ kind: "tracks", trackIds: ["seed"] }, SEED);
+    await expect(result.current({ kind: "tracks", trackIds: ["seed"] }, SEED)).resolves.toBe(true);
 
     expect(api.fetchRadio).toHaveBeenCalledWith({
       seed: { kind: "tracks", trackIds: ["seed"] },
@@ -79,7 +79,7 @@ describe("useStartRadio", () => {
     api.fetchRadio.mockResolvedValue({ items: [] });
     const { result } = renderHook(() => useStartRadio());
 
-    await result.current({ kind: "artist", artist: "Band" }, null);
+    await expect(result.current({ kind: "artist", artist: "Band" }, null)).resolves.toBe(false);
 
     expect(toast.info).toHaveBeenCalledWith("queue.radioEmpty");
     expect(store.playStation).not.toHaveBeenCalled();
@@ -89,7 +89,7 @@ describe("useStartRadio", () => {
     api.fetchRadio.mockRejectedValue(new Error("offline"));
     const { result } = renderHook(() => useStartRadio());
 
-    await result.current({ kind: "album", albumExternalId: "al-1" }, null);
+    await expect(result.current({ kind: "album", albumExternalId: "al-1" }, null)).resolves.toBe(false);
 
     expect(toast.error).toHaveBeenCalledWith("queue.loadFailed");
     expect(store.playStation).not.toHaveBeenCalled();

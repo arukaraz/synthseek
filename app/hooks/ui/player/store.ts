@@ -992,6 +992,9 @@ export const actions = {
   toggleFullscreen(): void {
     publish({ fullscreen: !state.fullscreen, modesOpen: false, lyricsOpen: false });
   },
+  openStage(): void {
+    publish({ fullscreen: true, modesOpen: false, lyricsOpen: false });
+  },
   openLyrics(): void {
     publish({ fullscreen: true, lyricsOpen: true, devicesOpen: false, modesOpen: false });
   },

@@ -188,7 +188,7 @@ describe("ExploreBoard", () => {
 
     expect(screen.getAllByRole("button", { name: /^Remove/ })).toHaveLength(2);
     expect(tile(container, "a")).toHaveAttribute("tabindex", "0");
-    expect(screen.getByText(i18n.t("discover:board.editHint"))).toBeInTheDocument();
+    expect(screen.getByRole("toolbar")).toHaveTextContent(/^Add widgetArrangeDone$/);
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.done") }));
 

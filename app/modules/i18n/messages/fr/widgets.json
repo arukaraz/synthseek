@@ -146,9 +146,13 @@
     "back": "Retour",
     "newTitle": "Nouveau widget",
     "editTitle": "Modifier {{name}}",
+    "customizeTitle": "Personnaliser {{name}}",
+    "customizeHint": "Une copie du widget intégré. Enregistrer crée un nouveau widget dans Mes widgets ; l’original ne change pas.",
     "ruleTitle": "Règle de {{name}}",
     "saveRule": "Enregistrer la règle",
-    "save": "Enregistrer le widget",
+    "saveChanges": "Enregistrer les modifications",
+    "saveToMine": "Enregistrer dans Mes widgets",
+    "copyJson": "Copier le JSON",
     "saving": "Enregistrement",
     "cancel": "Annuler",
     "buildUsing": "Construire avec :",
@@ -218,9 +222,9 @@
     "name": "par nom"
   },
   "rotations": {
-    "none": "Toujours la même",
-    "daily": "Nouvelle sélection chaque jour",
-    "weekly": "Nouvelle sélection chaque semaine"
+    "none": "Fixe",
+    "daily": "Quotidienne",
+    "weekly": "Hebdomadaire"
   },
   "timeModes": {
     "relative": "Derniers jours",
@@ -427,7 +431,7 @@
       "plex": "Nécessite votre compte Plex associé",
       "jellyfin": "Nécessite votre compte Jellyfin associé",
       "navidrome": "Nécessite votre compte Navidrome associé",
-      "lidarr": "Nécessite Lidarr"
+      "lidarr": "Nécessite Lidarr, pour les administrateurs et les membres de confiance"
     },
     "seeds": {
       "myTopArtists": "Mes artistes favoris",
@@ -452,6 +456,8 @@
   "look": {
     "label": "Vue",
     "suggested": "Suggérée",
+    "fitHint": "Les vues qui peuvent afficher ce résultat. La première est la suggestion.",
+    "allHint": "Toutes les vues. Celles atténuées ne peuvent pas afficher ce résultat.",
     "allViews": "Les {{count}} vues",
     "fittingViews": "Seulement les vues adaptées",
     "notFitting": "Ne convient pas à ce résultat",
@@ -525,8 +531,7 @@
   "customize": {
     "action": "Personnaliser",
     "actionNamed": "Personnaliser {{name}}",
-    "name": "{{name}} (personnalisé)",
-    "fixed": "Ce widget n’a pas de document derrière lui, il ne peut donc pas être personnalisé."
+    "name": "{{name}} (personnalisé)"
   },
   "presets": {
     "topTracks": "Top pistes",

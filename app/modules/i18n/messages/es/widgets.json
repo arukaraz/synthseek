@@ -146,9 +146,13 @@
     "back": "Volver",
     "newTitle": "Nuevo widget",
     "editTitle": "Editar {{name}}",
+    "customizeTitle": "Personalizar {{name}}",
+    "customizeHint": "Una copia del widget integrado. Al guardar se crea un widget nuevo en Mis widgets; el original no cambia.",
     "ruleTitle": "Regla de {{name}}",
     "saveRule": "Guardar regla",
-    "save": "Guardar widget",
+    "saveChanges": "Guardar cambios",
+    "saveToMine": "Guardar en Mis widgets",
+    "copyJson": "Copiar JSON",
     "saving": "Guardando",
     "cancel": "Cancelar",
     "buildUsing": "Construir con:",
@@ -218,9 +222,9 @@
     "name": "por nombre"
   },
   "rotations": {
-    "none": "Siempre la misma",
-    "daily": "Nueva selección cada día",
-    "weekly": "Nueva selección cada semana"
+    "none": "Fija",
+    "daily": "Diaria",
+    "weekly": "Semanal"
   },
   "timeModes": {
     "relative": "Últimos días",
@@ -427,7 +431,7 @@
       "plex": "Necesita tu cuenta de Plex vinculada",
       "jellyfin": "Necesita tu cuenta de Jellyfin vinculada",
       "navidrome": "Necesita tu cuenta de Navidrome vinculada",
-      "lidarr": "Necesita Lidarr"
+      "lidarr": "Necesita Lidarr, para administradores y miembros de confianza"
     },
     "seeds": {
       "myTopArtists": "Mis artistas top",
@@ -452,6 +456,8 @@
   "look": {
     "label": "Vista",
     "suggested": "Sugerida",
+    "fitHint": "Vistas que pueden dibujar este resultado. La primera es la sugerida.",
+    "allHint": "Todas las vistas. Las atenuadas no pueden dibujar este resultado.",
     "allViews": "Las {{count}} vistas",
     "fittingViews": "Solo las vistas que encajan",
     "notFitting": "No encaja con este resultado",
@@ -525,8 +531,7 @@
   "customize": {
     "action": "Personalizar",
     "actionNamed": "Personalizar {{name}}",
-    "name": "{{name}} (personalizado)",
-    "fixed": "Este widget no tiene un documento detrás, así que no se puede personalizar."
+    "name": "{{name}} (personalizado)"
   },
   "presets": {
     "topTracks": "Top canciones",

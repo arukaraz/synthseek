@@ -6,12 +6,12 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { useLogTail } from "@hooks/api/queries/useLogTail";
 import { useLocalStorage } from "@hooks/ui/useLocalStorage";
 import { cn } from "@utils/cn";
 import { downloadText } from "@utils/download";
 
-import { SegmentedControl } from "../../components/SegmentedControl";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsTextInput } from "../../components/SettingsTextInput";

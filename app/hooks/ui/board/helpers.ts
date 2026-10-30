@@ -118,9 +118,9 @@ export function viewportOf(scroller: HTMLElement): ScrollViewport {
   return { top: rect.top, bottom: rect.bottom };
 }
 
-export function focusBoardTile(id: string): void {
+export function focusBoardTile(id: string, within: ParentNode = document): void {
   requestAnimationFrame(() => {
-    const tile = document.querySelector(`[${BOARD_TILE_ATTRIBUTE}="${CSS.escape(id)}"]`);
+    const tile = within.querySelector(`[${BOARD_TILE_ATTRIBUTE}="${CSS.escape(id)}"]`);
     if (tile instanceof HTMLElement) tile.focus();
   });
 }
@@ -145,10 +145,17 @@ export function createGhost(tile: HTMLElement): HTMLElement | null {
   return clone;
 }
 
-export function tileUnderPointer(point: PointerPoint, exceptId: string): HTMLElement | null {
+export function tileUnderPointer(point: PointerPoint, exceptId: string, within: Node | null): HTMLElement | null {
   for (const element of document.elementsFromPoint(point.x, point.y)) {
     const tile = element.closest(BOARD_TILE_SELECTOR);
-    if (tile instanceof HTMLElement && tile.dataset.boardTile && tile.dataset.boardTile !== exceptId) return tile;
+    if (
+      tile instanceof HTMLElement &&
+      tile.dataset.boardTile &&
+      tile.dataset.boardTile !== exceptId &&
+      within?.contains(tile)
+    ) {
+      return tile;
+    }
   }
   return null;
 }

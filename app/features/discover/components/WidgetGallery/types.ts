@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 import type { BoardItem, BoardTemplateApplied, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetDocument, WidgetDraft } from "@hooks/api/queries/widgets/types";
 
-import type { BoardCategory, BoardWidgetDefinition } from "../ExploreBoard/types";
+import type { BoardCategory, BoardGalleryTarget, BoardWidgetDefinition } from "../ExploreBoard/types";
 
 export type GalleryMode = "widgets" | "mine" | "board";
 
@@ -34,9 +36,12 @@ export interface GalleryGroup {
   onBoard: number;
 }
 
-export interface PreviewFrame {
+export interface PreviewBox {
   width: number;
   height: number;
+}
+
+export interface PreviewFrame extends PreviewBox {
   stageWidth: number;
   stageHeight: number;
   scale: number;
@@ -46,7 +51,7 @@ export type GalleryLeave = "back" | "close";
 
 export interface WidgetGalleryProps {
   items: BoardItem[];
-  customize: BoardWidgetKey | null;
+  target: BoardGalleryTarget | null;
   onAdd: (widget: BoardWidgetKey) => void;
   onAddCustom: (widget: WidgetDocument) => void;
   onRemove: (id: string) => void;
@@ -64,7 +69,15 @@ export interface WidgetGalleryCardProps {
 
 export interface WidgetPreviewProps {
   widget: BoardWidgetKey;
-  info: string;
+}
+
+export interface CustomWidgetPreviewProps {
+  widget: WidgetDocument;
+}
+
+export interface ScaledPreviewProps {
+  frame: PreviewFrame;
+  children: ReactNode;
 }
 
 export interface CategoryBandProps {

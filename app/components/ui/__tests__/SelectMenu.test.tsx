@@ -31,6 +31,17 @@ describe("SelectMenu", () => {
     expect(onChange).toHaveBeenCalledWith("archive");
   });
 
+  it("lines its options up on the left, where the column layout would otherwise center them", async () => {
+    const user = userEvent.setup();
+    render(<SelectMenu value="music" options={OPTIONS} onChange={vi.fn()} ariaLabel="Path" />);
+
+    await user.click(screen.getByRole("button", { name: "Path" }));
+    const option = await screen.findByRole("menuitemradio", { name: /Archive/ });
+
+    expect(option).toHaveClass("items-start");
+    expect(option).not.toHaveClass("items-center");
+  });
+
   it("keeps a numeric value numeric", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();

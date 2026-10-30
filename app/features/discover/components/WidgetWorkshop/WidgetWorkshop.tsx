@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
-import { DialogTitle } from "@components/ui/Dialog";
+import { DialogDescription, DialogTitle } from "@components/ui/Dialog";
+import { ModalActionBar } from "@components/ui/ModalActionBar";
 import { useWidgetPreview } from "@hooks/api/queries/widgets/useWidgetPreview";
 import { browserTimeZone } from "@utils/time-zone";
 
@@ -14,17 +15,18 @@ import { useWorkshopSave } from "../../hooks/useWorkshopSave";
 import { DetailsSection } from "./DetailsSection";
 import { previewableDraft } from "./helpers";
 import { LookSection } from "./LookSection";
+import { PlaylistChoice } from "./PlaylistChoice";
 import { PlaylistSection } from "./PlaylistSection";
 import { QuerySection } from "./QuerySection";
 import {
-  workshopActions,
   workshopAside,
-  workshopCancel,
   workshopForm,
   workshopHeader,
+  workshopHeading,
   workshopLayout,
   workshopRoot,
   workshopScroll,
+  workshopSubtitle,
   workshopTitle,
 } from "./styles";
 import type { WidgetWorkshopProps } from "./types";
@@ -38,6 +40,15 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
   const save = useWorkshopSave(workshop, timeZone, onSaved);
   const { draft, dirty, widgetId, purpose, playlistable } = workshop;
   const rule = purpose === "rule";
+  const { customizing } = opening;
+  const title = rule
+    ? t("workshop.ruleTitle", { name: draft.meta.name })
+    : widgetId
+      ? t("workshop.editTitle", { name: draft.meta.name })
+      : customizing
+        ? t("workshop.customizeTitle", { name: customizing })
+        : t("workshop.newTitle");
+  const saveLabel = rule ? t("workshop.saveRule") : widgetId ? t("workshop.saveChanges") : t("workshop.saveToMine");
 
   useEffect(() => onDirtyChange(dirty), [dirty, onDirtyChange]);
 
@@ -48,20 +59,11 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
           <ChevronLeft />
           {t("workshop.back")}
         </Button>
-        <DialogTitle className={workshopTitle()}>
-          {rule
-            ? t("workshop.ruleTitle", { name: draft.meta.name })
-            : widgetId
-              ? t("workshop.editTitle", { name: draft.meta.name })
-              : t("workshop.newTitle")}
-        </DialogTitle>
-        <div className={workshopActions()}>
-          <Button variant="ghost" size="sm" className={workshopCancel()} onClick={onLeave}>
-            {t("workshop.cancel")}
-          </Button>
-          <Button size="sm" disabled={!save.ready || save.pending} onClick={save.save}>
-            {save.pending ? t("workshop.saving") : rule ? t("workshop.saveRule") : t("workshop.save")}
-          </Button>
+        <div className={workshopHeading()}>
+          <DialogTitle className={workshopTitle()}>{title}</DialogTitle>
+          {customizing ? (
+            <DialogDescription className={workshopSubtitle()}>{t("workshop.customizeHint")}</DialogDescription>
+          ) : null}
         </div>
       </div>
       <div className={workshopScroll()}>
@@ -72,22 +74,31 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
               result={preview.data}
               isLoading={preview.isLoading}
               isError={preview.isError}
+              onSizeChange={workshop.setSize}
             />
           </aside>
           <div className={workshopForm()}>
             <QuerySection workshop={workshop} context={context} />
             {rule ? (
-              <PlaylistSection workshop={workshop} number={2} />
+              <PlaylistSection workshop={workshop} />
             ) : (
               <>
                 <LookSection workshop={workshop} context={context} />
                 <DetailsSection workshop={workshop} context={context} />
-                {playlistable ? <PlaylistSection workshop={workshop} number={4} /> : null}
               </>
             )}
           </div>
         </div>
       </div>
+      <ModalActionBar
+        choice={!rule && playlistable ? <PlaylistChoice workshop={workshop} /> : undefined}
+        cancel={{ label: t("workshop.cancel"), onClick: onLeave }}
+        save={{
+          label: save.pending ? t("workshop.saving") : saveLabel,
+          onClick: save.save,
+          disabled: !save.ready || save.pending,
+        }}
+      />
     </div>
   );
 }

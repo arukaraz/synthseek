@@ -43,13 +43,19 @@ export type BoardKeyAction =
   | { kind: "resize"; delta: MoveDelta }
   | { kind: "remove" };
 
-export interface BoardTileActions {
+export interface BoardTileLayoutActions {
   move: (id: string, delta: MoveDelta) => void;
   resize: (id: string, size: BoardSize) => void;
   remove: (id: string) => void;
   startDrag: (event: ReactPointerEvent<HTMLElement>, id: string) => void;
-  customize: (widget: BoardWidgetKey) => void;
 }
+
+export interface BoardTileActions extends BoardTileLayoutActions {
+  customize: (widget: BoardWidgetKey) => void;
+  edit: (widgetId: string) => void;
+}
+
+export type BoardGalleryTarget = { kind: "builtin"; widget: BoardWidgetKey } | { kind: "custom"; widgetId: string };
 
 export interface BoardTileProps {
   tile: PlacedTile;
@@ -67,9 +73,26 @@ export interface BoardTileEditControlsProps {
   item: BoardItem;
   device: BoardDevice;
   name: string;
+  editable: boolean;
   position: number;
   total: number;
   actions: BoardTileActions;
+}
+
+export interface BoardTileWidgetProps {
+  item: BoardItem;
+  size: BoardSize;
+  custom: BoardCustomWidgets;
+  customStatus: CustomWidgetsStatus;
+  info?: boolean;
+}
+
+export interface BoardTileSizesProps {
+  item: BoardItem;
+  device: BoardDevice;
+  name: string;
+  dense?: boolean;
+  onResize: (id: string, size: BoardSize) => void;
 }
 
 export interface BoardToolbarProps {
@@ -77,6 +100,7 @@ export interface BoardToolbarProps {
   onCustomize: () => void;
   onDone: () => void;
   onAddWidget: () => void;
+  onArrange: () => void;
 }
 
 export interface BoardEmptyProps {
@@ -87,6 +111,7 @@ export interface BoardEditor {
   rootRef: RefObject<HTMLElement | null>;
   editing: boolean;
   galleryOpen: boolean;
+  arrangeOpen: boolean;
   announcement: string;
   displayItems: BoardItem[];
   draggingId: string | null;
@@ -94,7 +119,10 @@ export interface BoardEditor {
   stopEditing: () => void;
   openGallery: () => void;
   setGalleryOpen: (open: boolean) => void;
-  customizeTarget: BoardWidgetKey | null;
+  openArrange: () => void;
+  closeArrange: () => void;
+  saveArrangement: (next: BoardItem[]) => void;
+  galleryTarget: BoardGalleryTarget | null;
   add: (widget: BoardWidgetKey) => void;
   addCustom: (widget: WidgetDocument) => void;
   templateApplied: (applied: BoardTemplateApplied) => void;

@@ -9,11 +9,11 @@ import { Checkbox } from "@components/ui/Checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
 import { Notice } from "@components/ui/Notice";
 import { Role } from "@api/__generated__/types";
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { usePlexImportableUsers } from "@hooks/api/queries/usePlexImportableUsers";
 import { useImportPlexUsers } from "@hooks/api/mutations/users/useImportPlexUsers";
 
 import { SettingsField } from "../../../components/SettingsField";
-import { SegmentedControl } from "../../../components/SegmentedControl";
 import { buildRoleOptions } from "../helpers";
 import { importEmpty, importList, importRow, pill, userAvatar, userEmail, userName } from "../styles";
 import type { ImportPlexUsersDialogProps, RoleValue } from "../types";

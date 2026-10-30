@@ -928,7 +928,7 @@
       "submit": "Importer la sélection"
     },
     "roleDescriptions": {
-      "trusted": "Les demandes des membres de confiance passent sans file d'approbation, et les quotas de membre ne les limitent pas."
+      "trusted": "Les demandes des membres de confiance passent sans file d'approbation, les quotas de membre ne les limitent pas, et ils peuvent lire les widgets Lidarr."
     },
     "approval": {
       "cardTitle": "Approbation des demandes",

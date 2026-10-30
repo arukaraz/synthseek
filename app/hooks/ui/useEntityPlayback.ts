@@ -9,12 +9,12 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 export function useEntityPlayback(): {
-  playEntity: (target: PlayableTracksTarget) => Promise<void>;
-  shuffleEntity: (target: PlayableTracksTarget) => Promise<void>;
+  playEntity: (target: PlayableTracksTarget) => Promise<boolean>;
+  shuffleEntity: (target: PlayableTracksTarget) => Promise<boolean>;
   enqueueEntity: (target: PlayableTracksTarget) => Promise<boolean>;
   enqueueEntities: (targets: readonly PlayableTracksTarget[]) => Promise<boolean>;
   enqueueTracks: (tracks: readonly PlayerTrack[]) => boolean;
-  startRadio: (target: PlayableTracksTarget) => Promise<void>;
+  startRadio: (target: PlayableTracksTarget) => Promise<boolean>;
 } {
   const { t } = useTranslation("player");
   const fetchPlayable = usePlayableTracksFetcher();
@@ -56,7 +56,9 @@ export function useEntityPlayback(): {
   const playEntity = useCallback(
     async (target: PlayableTracksTarget) => {
       const queue = await queueFor(target);
-      if (queue !== null) playerActions.playQueue(queue, 0);
+      if (queue === null) return false;
+      playerActions.playQueue(queue, 0);
+      return true;
     },
     [queueFor]
   );
@@ -64,7 +66,9 @@ export function useEntityPlayback(): {
   const shuffleEntity = useCallback(
     async (target: PlayableTracksTarget) => {
       const queue = await queueFor(target);
-      if (queue !== null) playerActions.playShuffled(queue);
+      if (queue === null) return false;
+      playerActions.playShuffled(queue);
+      return true;
     },
     [queueFor]
   );

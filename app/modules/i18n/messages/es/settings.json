@@ -931,7 +931,7 @@
       "submit": "Importar seleccionados"
     },
     "roleDescriptions": {
-      "trusted": "Las solicitudes de los miembros de confianza omiten la cola de aprobación, y las cuotas de miembro no los limitan."
+      "trusted": "Las solicitudes de los miembros de confianza omiten la cola de aprobación, las cuotas de miembro no los limitan, y pueden leer los widgets de Lidarr."
     },
     "approval": {
       "cardTitle": "Aprobación de solicitudes",

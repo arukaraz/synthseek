@@ -10,10 +10,6 @@ import {
   autoImportTrigger,
   bbStat,
   bbStatStrong,
-  bottombar,
-  bottombarButtons,
-  bottombarLeft,
-  bottombarRight,
   brandChip,
   brandIcon,
   cfgRow,
@@ -340,20 +336,9 @@ describe("detail empty state", () => {
 });
 
 describe("bottombar", () => {
-  it("lays out stats and actions", () => {
-    expect(bottombar()).toContain("border-t");
-    expect(bottombarLeft()).toContain("flex-wrap");
-    expect(bottombarRight()).toContain("sm:ml-auto");
-    expect(bottombarButtons()).toContain("items-center");
+  it("styles the stats", () => {
     expect(bbStat()).toContain("text-fg/60");
     expect(bbStatStrong()).toContain("font-semibold");
-  });
-
-  it("fits within the modal width on mobile so the save button is not clipped", () => {
-    expect(bottombar()).toContain("w-full");
-    expect(bottombar()).toContain("min-w-0");
-    expect(bottombar()).toContain("pb-[max(0.75rem,env(safe-area-inset-bottom))]");
-    expect(bottombarButtons()).toContain("min-w-0");
   });
 
   it("auto-import trigger reflects active state", () => {

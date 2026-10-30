@@ -8,7 +8,13 @@ function renderInScroller(editing: boolean) {
   render(
     <div data-testid="scroller">
       <div data-testid="inner-list" />
-      <BoardToolbar editing={editing} onCustomize={vi.fn()} onDone={vi.fn()} onAddWidget={vi.fn()} />
+      <BoardToolbar
+        editing={editing}
+        onCustomize={vi.fn()}
+        onDone={vi.fn()}
+        onAddWidget={vi.fn()}
+        onArrange={vi.fn()}
+      />
     </div>
   );
   const scroller = screen.getByTestId("scroller");
@@ -33,11 +39,28 @@ describe("BoardToolbar", () => {
 
   it("opens edit mode from the Customize button", () => {
     const onCustomize = vi.fn();
-    render(<BoardToolbar editing={false} onCustomize={onCustomize} onDone={vi.fn()} onAddWidget={vi.fn()} />);
+    render(
+      <BoardToolbar
+        editing={false}
+        onCustomize={onCustomize}
+        onDone={vi.fn()}
+        onAddWidget={vi.fn()}
+        onArrange={vi.fn()}
+      />
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Customize" }));
 
     expect(onCustomize).toHaveBeenCalledTimes(1);
+  });
+
+  it("opens the arrange modal from the edit menu", () => {
+    const onArrange = vi.fn();
+    render(<BoardToolbar editing onCustomize={vi.fn()} onDone={vi.fn()} onAddWidget={vi.fn()} onArrange={onArrange} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Arrange" }));
+
+    expect(onArrange).toHaveBeenCalledTimes(1);
   });
 
   it("keeps the edit controls in place whatever the scroll", () => {

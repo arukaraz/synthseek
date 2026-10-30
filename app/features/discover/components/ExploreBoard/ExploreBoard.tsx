@@ -11,6 +11,7 @@ import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import { useBoardEditor } from "../../hooks/useBoardEditor";
+import { BoardArrangeDialog } from "../BoardArrange/BoardArrangeDialog";
 import { WidgetGallery } from "../WidgetGallery/WidgetGallery";
 import { BoardEmpty } from "./BoardEmpty";
 import { BoardTile } from "./BoardTile";
@@ -67,15 +68,27 @@ export function ExploreBoard() {
           onCustomize={editor.startEditing}
           onDone={editor.stopEditing}
           onAddWidget={editor.openGallery}
+          onArrange={editor.openArrange}
         />
       ) : null}
       <p className={liveRegion()} aria-live="polite">
         {editor.announcement}
       </p>
+      {editor.arrangeOpen ? (
+        <BoardArrangeDialog
+          items={items}
+          device={device}
+          appearance={appearance.data}
+          custom={custom}
+          customStatus={customStatus}
+          onSave={editor.saveArrangement}
+          onClose={editor.closeArrange}
+        />
+      ) : null}
       {editor.galleryOpen ? (
         <WidgetGallery
           items={items}
-          customize={editor.customizeTarget}
+          target={editor.galleryTarget}
           onAdd={editor.add}
           onAddCustom={editor.addCustom}
           onRemove={editor.actions.remove}

@@ -27,7 +27,13 @@ import {
   tileNameOf,
   uniqueTileId,
 } from "../components/ExploreBoard/helpers";
-import type { BoardCustomWidgets, BoardEditor, CustomWidgetsStatus, MoveDelta } from "../components/ExploreBoard/types";
+import type {
+  BoardCustomWidgets,
+  BoardEditor,
+  BoardGalleryTarget,
+  CustomWidgetsStatus,
+  MoveDelta,
+} from "../components/ExploreBoard/types";
 
 export function useBoardEditor(
   items: BoardItem[],
@@ -38,7 +44,8 @@ export function useBoardEditor(
   const save = useSaveBoardLayout();
   const [editing, setEditing] = useState(false);
   const [galleryOpen, setGalleryOpenState] = useState(false);
-  const [customizeTarget, setCustomizeTarget] = useState<BoardWidgetKey | null>(null);
+  const [galleryTarget, setGalleryTarget] = useState<BoardGalleryTarget | null>(null);
+  const [arrangeOpen, setArrangeOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const flipRef = useRef<BoardFlip | null>(null);
 
@@ -138,7 +145,7 @@ export function useBoardEditor(
 
   const setGalleryOpen = useCallback((open: boolean) => {
     setGalleryOpenState(open);
-    if (!open) setCustomizeTarget(null);
+    if (!open) setGalleryTarget(null);
   }, []);
   const startEditing = useCallback(() => setEditing(true), []);
   const stopEditing = useCallback(() => {
@@ -149,32 +156,46 @@ export function useBoardEditor(
     setEditing(true);
     setGalleryOpen(true);
   }, [setGalleryOpen]);
-  const customize = useCallback(
-    (widget: BoardWidgetKey) => {
-      setCustomizeTarget(widget);
+  const openTarget = useCallback(
+    (target: BoardGalleryTarget) => {
+      setGalleryTarget(target);
       setGalleryOpen(true);
     },
     [setGalleryOpen]
   );
+  const customize = useCallback((widget: BoardWidgetKey) => openTarget({ kind: "builtin", widget }), [openTarget]);
+  const edit = useCallback((widgetId: string) => openTarget({ kind: "custom", widgetId }), [openTarget]);
+
+  const openArrange = useCallback(() => setArrangeOpen(true), []);
+  const closeArrange = useCallback(() => setArrangeOpen(false), []);
+  const saveArrangement = useCallback(
+    (next: BoardItem[]) => {
+      setArrangeOpen(false);
+      commit(next);
+      offerUndo(t("board.toast.moved"), items);
+    },
+    [commit, items, offerUndo, t]
+  );
 
   useEffect(() => {
-    if (!editing || galleryOpen) return;
+    if (!editing || galleryOpen || arrangeOpen) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && !event.defaultPrevented) setEditing(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [editing, galleryOpen]);
+  }, [arrangeOpen, editing, galleryOpen]);
 
   const actions = useMemo(
-    () => ({ move, resize, remove, startDrag: drag.startDrag, customize }),
-    [move, resize, remove, drag.startDrag, customize]
+    () => ({ move, resize, remove, startDrag: drag.startDrag, customize, edit }),
+    [move, resize, remove, drag.startDrag, customize, edit]
   );
 
   return {
     rootRef: flip.ref,
     editing,
     galleryOpen,
+    arrangeOpen,
     announcement,
     displayItems,
     draggingId: drag.draggingId,
@@ -182,7 +203,10 @@ export function useBoardEditor(
     stopEditing,
     openGallery,
     setGalleryOpen,
-    customizeTarget,
+    openArrange,
+    closeArrange,
+    saveArrangement,
+    galleryTarget,
     add,
     addCustom,
     templateApplied,

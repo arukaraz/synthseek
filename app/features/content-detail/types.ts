@@ -1,4 +1,5 @@
 import type { AppRouter, MusicAlbum, MusicArtist, MusicTrack } from "@api/__generated__/types";
+import type { PlayableTracksTarget } from "@hooks/api/queries/library/types";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { ReactNode } from "react";
 
@@ -188,4 +189,10 @@ export interface ContentDetailActions {
 export interface ContentDetailActionsProviderProps {
   actions: ContentDetailActions;
   children: ReactNode;
+}
+
+export interface DetailPlayback {
+  play: (target: PlayableTracksTarget) => Promise<void>;
+  shuffle: (target: PlayableTracksTarget) => Promise<void>;
+  radio: (target: PlayableTracksTarget) => Promise<void>;
 }

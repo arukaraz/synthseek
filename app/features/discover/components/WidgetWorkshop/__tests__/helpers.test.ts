@@ -11,7 +11,6 @@ import {
   feedServerOf,
   matchingIcons,
   previewableDraft,
-  previewHeightOf,
   questionShapeOf,
   readbackOf,
   rotationChoicesOf,
@@ -224,7 +223,7 @@ describe("previewableDraft", () => {
   });
 });
 
-describe("clampedNumber, matchingIcons and previewHeightOf", () => {
+describe("clampedNumber and matchingIcons", () => {
   it("rounds and bounds a typed number and ignores an empty field", () => {
     expect(clampedNumber("7.6", 1, 50)).toBe(8);
     expect(clampedNumber("900", 1, 50)).toBe(50);
@@ -236,10 +235,5 @@ describe("clampedNumber, matchingIcons and previewHeightOf", () => {
     expect(matchingIcons(["music", "music-2", "heart"], " MUS ")).toEqual(["music", "music-2"]);
     expect(matchingIcons(["music", "heart"], "")).toEqual(["music", "heart"]);
     expect(matchingIcons(["calendar-days", "calendar", "clock"], "calendar days")).toEqual(["calendar-days"]);
-  });
-
-  it("sizes the preview to the board height of the block at that size", () => {
-    expect(previewHeightOf("list", "M")).toBe(4 * 72 + 3 * 16);
-    expect(previewHeightOf("leader", "L")).toBe(7 * 72 + 6 * 16);
   });
 });

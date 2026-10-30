@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { Switch } from "@components/ui/Switch";
 import { usePlexConnect } from "@hooks/api/mutations/settings/usePlexConnect";
 import { useUpdateConnectionsPlex } from "@hooks/api/mutations/settings/useUpdateConnections";
@@ -16,7 +17,6 @@ import { cn } from "@utils/cn";
 
 import { EngineRow } from "../../components/EngineRow";
 import { SaveBar } from "../../components/SaveBar";
-import { SegmentedControl } from "../../components/SegmentedControl";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsField } from "../../components/SettingsField";
 import { SettingsTextInput } from "../../components/SettingsTextInput";

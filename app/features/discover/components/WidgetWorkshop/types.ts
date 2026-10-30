@@ -88,11 +88,20 @@ export interface WorkshopOpening {
   draft: WidgetDraft;
   widgetId: string | null;
   purpose: WorkshopPurpose;
+  customizing?: string;
 }
 
 export interface PlaylistSectionProps {
   workshop: WidgetWorkshopState;
-  number: number;
+}
+
+export interface PlaylistChoiceProps {
+  workshop: WidgetWorkshopState;
+}
+
+export interface RefreshPickerProps {
+  value: SmartRefresh;
+  onChange: (refresh: SmartRefresh) => void;
 }
 
 export interface WorkshopSave {
@@ -161,6 +170,7 @@ export interface WorkshopPreviewProps {
   result: WidgetResult | undefined;
   isLoading: boolean;
   isError: boolean;
+  onSizeChange: (size: BoardSize) => void;
 }
 
 export interface RuleEditorProps {

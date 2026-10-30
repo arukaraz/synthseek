@@ -4,16 +4,18 @@ import { Check, Plus, SlidersHorizontal, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
-import { InfoTooltip } from "@components/ui/InfoTooltip";
 
+import { BOARD_CATEGORY_KEYS } from "../ExploreBoard/constants";
 import {
   cardAction,
   cardActions,
-  cardFooter,
+  cardBody,
+  cardCategory,
+  cardDescription,
+  cardHead,
   cardIcon,
   cardPreview,
   cardTitle,
-  cardTitleRow,
   galleryCard,
   onBoardBadge,
 } from "./styles";
@@ -28,7 +30,7 @@ export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove, onCustomize 
   return (
     <article className={galleryCard({ onBoard: tileId !== undefined })}>
       <div className={cardPreview()}>
-        <WidgetPreview widget={entry.widget} info={entry.description} />
+        <WidgetPreview widget={entry.widget} />
         {tileId !== undefined ? (
           <span className={onBoardBadge()}>
             <Check className="size-3" />
@@ -36,30 +38,16 @@ export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove, onCustomize 
           </span>
         ) : null}
       </div>
-      <div className={cardFooter()}>
-        <span className={cardIcon()}>
-          <Icon className="size-4" />
-        </span>
-        <div className={cardTitleRow()}>
+      <div className={cardBody()}>
+        <div className={cardHead()}>
+          <span className={cardIcon()}>
+            <Icon className="size-4" />
+          </span>
           <h4 className={cardTitle()}>{name}</h4>
-          <InfoTooltip
-            title={name}
-            description={onCustomize ? entry.description : `${entry.description} ${t("widgets:customize.fixed")}`}
-          />
+          <span className={cardCategory()}>{t(BOARD_CATEGORY_KEYS[entry.definition.category].title)}</span>
         </div>
+        <p className={cardDescription()}>{entry.description}</p>
         <div className={cardActions()}>
-          {onCustomize ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cardAction()}
-              aria-label={t("widgets:customize.actionNamed", { name })}
-              onClick={onCustomize}
-            >
-              <SlidersHorizontal />
-              {t("widgets:customize.action")}
-            </Button>
-          ) : null}
           {tileId !== undefined ? (
             <Button
               variant="ghost"
@@ -82,6 +70,18 @@ export function WidgetGalleryCard({ entry, tileId, onAdd, onRemove, onCustomize 
               {t("board.gallery.add")}
             </Button>
           )}
+          {onCustomize ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cardAction()}
+              aria-label={t("widgets:customize.actionNamed", { name })}
+              onClick={onCustomize}
+            >
+              <SlidersHorizontal />
+              {t("widgets:customize.action")}
+            </Button>
+          ) : null}
         </div>
       </div>
     </article>

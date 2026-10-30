@@ -111,8 +111,9 @@ function albumWith(tracks: AlbumTrack[], overrides: Record<string, unknown> = {}
 
 function renderBody(overrides: Partial<DetailTarget> = {}) {
   const onNavigate = vi.fn();
-  render(<AlbumDetailBody target={target(overrides)} onNavigate={onNavigate} />);
-  return { onNavigate, user: userEvent.setup() };
+  const onClose = vi.fn();
+  render(<AlbumDetailBody target={target(overrides)} onClose={onClose} onNavigate={onNavigate} />);
+  return { onNavigate, onClose, user: userEvent.setup() };
 }
 
 beforeEach(() => {
@@ -203,6 +204,22 @@ describe("what the album page offers", () => {
     await user.click(screen.getByRole("button", { name: "play" }));
 
     expect(playback.playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "album-1" });
+  });
+
+  it.each([
+    ["play", "playEntity"],
+    ["radio", "startRadio"],
+  ] as const)("closes the modal once %s has started, and keeps it open when it could not", async (name, source) => {
+    api.album = albumWith([{ id: "t1", status: "complete" }]);
+    const { user, onClose } = renderBody();
+
+    playback[source].mockResolvedValueOnce(false);
+    await user.click(screen.getByRole("button", { name }));
+    expect(onClose).not.toHaveBeenCalled();
+
+    playback[source].mockResolvedValueOnce(true);
+    await user.click(screen.getByRole("button", { name }));
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("offers no radio for an album the library does not hold yet", () => {

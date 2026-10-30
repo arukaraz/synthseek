@@ -1,21 +1,21 @@
 "use client";
 
 import { useAlbumCredits, useAlbumDetail, useAlbumStats } from "@hooks/api/queries/content-detail";
-import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES, EMPTY_SOCIALS, EMPTY_TRACKS } from "../../constants";
 import { artistTarget, collectDegradedSources, computeRequestState, deriveTrackStatusCounts } from "../../helpers";
+import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { AlbumCreditsWidget, AlbumDetailWidget, AlbumStatsWidget, MoreFromArtistWidget } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
 import type { AlbumDetailBodyProps } from "./types";
 
-function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
+function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
   const { data: album } = useAlbumDetail({ catalogAlbumId: target.id });
   const { requestAlbum } = useContentDetailActions();
-  const { playEntity, startRadio } = useEntityPlayback();
+  const { play, radio } = useDetailPlayback(onClose);
 
   const artistName = album?.artist ?? target.artistName;
   const { data: albumStats } = useAlbumStats({ artistName, albumName: target.name, mbid: null });
@@ -47,14 +47,8 @@ function AlbumDetailBodyComponent({ target, onNavigate, showInLibraryPill = true
     });
   }, [requestAlbum, target.id, target.name, artistName, cover, genres]);
 
-  const handlePlay = useCallback(
-    () => playEntity({ kind: "album", albumExternalId: target.id }),
-    [playEntity, target.id]
-  );
-  const handleStartRadio = useCallback(
-    () => startRadio({ kind: "album", albumExternalId: target.id }),
-    [startRadio, target.id]
-  );
+  const handlePlay = useCallback(() => play({ kind: "album", albumExternalId: target.id }), [play, target.id]);
+  const handleStartRadio = useCallback(() => radio({ kind: "album", albumExternalId: target.id }), [radio, target.id]);
 
   const handleArtistNavigate = useMemo(
     () =>

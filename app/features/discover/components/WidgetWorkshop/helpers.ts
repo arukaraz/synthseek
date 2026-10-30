@@ -1,7 +1,5 @@
 import i18n from "@locale";
 
-import { BOARD_GAP_PX, BOARD_ROW_PX, BOARD_SPANS } from "@components/BoardGrid";
-import type { BoardSize } from "@hooks/api/queries/board/types";
 import { matchesTerms, searchTerms } from "@utils/search";
 import type {
   FeedQuery,
@@ -20,7 +18,6 @@ import type {
 
 import { acceptedBlocks, suggestBlocks } from "../CustomWidget/helpers";
 import type { BlockSuggestionInput } from "../CustomWidget/types";
-import { CUSTOM_BLOCK_HEIGHTS } from "../ExploreBoard/constants";
 import { compactCount, percentOf } from "../helpers";
 import {
   DAILY_YEAR_MIN_DAYS,
@@ -540,11 +537,6 @@ export function viewChoicesOf(
     .filter((block) => !shown.includes(block))
     .map((block) => ({ block, fits: blocks.accepted.includes(block), suggested: false }));
   return [...fits, ...rest];
-}
-
-export function previewHeightOf(block: WidgetBlock, size: BoardSize): number {
-  const { rows } = BOARD_SPANS.wide[size][CUSTOM_BLOCK_HEIGHTS[block][size]];
-  return rows * BOARD_ROW_PX + (rows - 1) * BOARD_GAP_PX;
 }
 
 export function previewableDraft(draft: WidgetDraft, fallbackName: string): WidgetDraft {

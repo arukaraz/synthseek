@@ -1,9 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createWidgetCatalog, createWidgetGrammar, createWidgetPreset } from "@test/factories";
-import { fireEvent, render, screen } from "@test/test-utils";
+import { fireEvent, render, screen, within } from "@test/test-utils";
 
 import { SmartRuleDialog } from "../SmartRuleDialog";
+
+function refreshPicker() {
+  return within(screen.getByRole("radiogroup", { name: "Refresh" }));
+}
 
 const { savePlaylist, saveWidget, toastSuccess } = vi.hoisted(() => ({
   savePlaylist: vi.fn(),
@@ -81,7 +85,7 @@ describe("SmartRuleDialog", () => {
     expect(screen.getByText("Show me 8 tracks with the most plays in the last 14 days.")).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Look" })).not.toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "Feed" })).not.toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Weekly" })).toHaveAttribute("aria-selected", "true");
+    expect(refreshPicker().getByRole("radio", { name: "Weekly" })).toHaveAttribute("aria-checked", "true");
   });
 
   it("saves the rule onto the same playlist and never makes a widget", () => {
@@ -90,7 +94,7 @@ describe("SmartRuleDialog", () => {
     render(<SmartRuleDialog playlistId="pl_1" open onOpenChange={onOpenChange} />);
 
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), { target: { value: "Repeat" } });
-    fireEvent.click(screen.getByRole("tab", { name: "Daily" }));
+    fireEvent.click(refreshPicker().getByRole("radio", { name: "Daily" }));
     fireEvent.click(screen.getByRole("button", { name: "Save rule" }));
 
     expect(savePlaylist).toHaveBeenCalledWith(

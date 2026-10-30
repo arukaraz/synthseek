@@ -6,8 +6,9 @@ import { useState } from "react";
 
 import "@test/mocks/next.mock";
 
+import { SegmentedControl } from "@components/ui/SegmentedControl";
+
 import { SaveBar } from "../SaveBar";
-import { SegmentedControl } from "../SegmentedControl";
 import { SettingsCard } from "../SettingsCard";
 import { SettingsNumberInput } from "../SettingsNumberInput";
 import { SettingsSecretInput } from "../SettingsSecretInput";

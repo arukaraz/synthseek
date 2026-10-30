@@ -50,7 +50,7 @@ describe("choosing where an album or artist plays from", () => {
     player.chooseSource.mockResolvedValue([{ id: "t2" }]);
     const { result } = renderHook(() => useEntityPlayback());
 
-    await result.current.playEntity(TARGET);
+    await expect(result.current.playEntity(TARGET)).resolves.toBe(true);
 
     expect(player.chooseSource).toHaveBeenCalledWith([
       expect.objectContaining({ id: "t1" }),
@@ -139,7 +139,7 @@ describe("playing a whole album or playlist", () => {
     api.fetchPlayable.mockResolvedValue({ items: [], truncated: false });
     const { result } = renderHook(() => useEntityPlayback());
 
-    await result.current.playEntity(TARGET);
+    await expect(result.current.playEntity(TARGET)).resolves.toBe(false);
 
     expect(toast.info).toHaveBeenCalledWith(enPlayer.queue.nothingPlayable);
     expect(player.playQueue).not.toHaveBeenCalled();

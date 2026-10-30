@@ -1,7 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -35,13 +35,15 @@ import { MyWidgetsPanel } from "./MyWidgetsPanel";
 import {
   galleryDialog,
   galleryEmpty,
+  galleryFilters,
   galleryGrid,
   galleryHeader,
   gallerySearch,
   galleryScroll,
+  gallerySubtitle,
+  galleryTabs,
   galleryTitleBlock,
   galleryToolbar,
-  galleryToolbarEnd,
   searchField,
   searchIcon,
   visuallyHidden,
@@ -51,7 +53,7 @@ import { WidgetGalleryCard } from "./WidgetGalleryCard";
 
 export function WidgetGallery({
   items,
-  customize,
+  target,
   onAdd,
   onAddCustom,
   onRemove,
@@ -63,10 +65,11 @@ export function WidgetGallery({
   const [filters, setFilters] = useState<GalleryFilters>(DEFAULT_GALLERY_FILTERS);
   const [opening, setOpening] = useState<WorkshopOpening | null>(null);
   const [returnTo, setReturnTo] = useState<GalleryMode>("mine");
-  const [pendingCustomize, setPendingCustomize] = useState(customize);
+  const [pendingTarget, setPendingTarget] = useState(target);
   const [dirty, setDirty] = useState(false);
   const [leaving, setLeaving] = useState<GalleryLeave | null>(null);
   const [importing, setImporting] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
   const wide = useBoardDevice() === "wide";
   const myWidgets = useMyWidgets();
   const catalog = useWidgetCatalog();
@@ -87,27 +90,39 @@ export function WidgetGallery({
   const groups = galleryGroups(entries, filters, onBoard);
   const counts = useMemo(() => categoryCounts(entries), [entries]);
 
-  const openWorkshop = useCallback((draft: WidgetDraft, widgetId: string | null, from: GalleryMode) => {
-    setDirty(false);
-    setReturnTo(from);
-    setOpening({ draft, widgetId, purpose: "widget" });
-  }, []);
+  const openWorkshop = useCallback(
+    (draft: WidgetDraft, widgetId: string | null, from: GalleryMode, customizing?: string) => {
+      setDirty(false);
+      setReturnTo(from);
+      setOpening({ draft, widgetId, purpose: "widget", customizing });
+    },
+    []
+  );
 
   const customizeWidget = useCallback(
     (widget: BoardWidgetKey) => {
       const preset = presetFor(presets.data, widget);
       if (preset) {
-        openWorkshop(customizedDraftOf(preset, t(BOARD_WIDGETS[widget].titleKey), country), null, "widgets");
+        const title = t(BOARD_WIDGETS[widget].titleKey);
+        openWorkshop(customizedDraftOf(preset, title, country), null, "widgets", title);
       }
     },
     [country, openWorkshop, presets.data, t]
   );
 
   useEffect(() => {
-    if (!pendingCustomize || !presets.data) return;
-    setPendingCustomize(null);
-    customizeWidget(pendingCustomize);
-  }, [customizeWidget, pendingCustomize, presets.data]);
+    if (!pendingTarget) return;
+    if (pendingTarget.kind === "builtin") {
+      if (!presets.data) return;
+      setPendingTarget(null);
+      customizeWidget(pendingTarget.widget);
+      return;
+    }
+    if (!myWidgets.data) return;
+    setPendingTarget(null);
+    const widget = myWidgets.data.find((candidate) => candidate.id === pendingTarget.widgetId);
+    if (widget) openWorkshop(draftOf(widget), widget.id, "mine");
+  }, [customizeWidget, myWidgets.data, openWorkshop, pendingTarget, presets.data]);
 
   const leave = useCallback(
     (kind: GalleryLeave) => {
@@ -142,7 +157,8 @@ export function WidgetGallery({
         animation="panel"
         className={galleryDialog({ workshop: opening !== null })}
         onOpenAutoFocus={(event) => {
-          if (!wide || opening) event.preventDefault();
+          event.preventDefault();
+          if (wide && !opening) searchRef.current?.focus();
         }}
       >
         {opening ? (
@@ -175,37 +191,45 @@ export function WidgetGallery({
           <>
             <div className={galleryHeader()}>
               <div className={galleryTitleBlock()}>
-                <DialogTitle>{t("board.gallery.title")}</DialogTitle>
-                <DialogDescription className={visuallyHidden()}>{t("board.gallery.title")}</DialogDescription>
+                <DialogTitle>
+                  {mode === "mine"
+                    ? t("widgets:mine.label")
+                    : mode === "board"
+                      ? t("widgets:gallery.tabs.board")
+                      : t("board.gallery.title")}
+                </DialogTitle>
+                <DialogDescription className={mode === "widgets" ? gallerySubtitle() : visuallyHidden()}>
+                  {t("board.gallery.subtitle")}
+                </DialogDescription>
               </div>
-              {mode === "widgets" ? (
-                <label className={gallerySearch()}>
-                  <Search className={searchIcon()} aria-hidden />
-                  <Input
-                    type="search"
-                    size="sm"
-                    value={filters.query}
-                    onChange={(event) => setFilters({ ...filters, query: event.target.value })}
-                    placeholder={t("board.gallery.search")}
-                    aria-label={t("board.gallery.search")}
-                    className={searchField()}
-                  />
-                </label>
-              ) : null}
             </div>
             <div className={galleryToolbar()}>
+              {mode === "widgets" ? (
+                <div className={galleryFilters()}>
+                  <GalleryFilterMenu filters={filters} counts={counts} onChange={setFilters} />
+                  <label className={gallerySearch()}>
+                    <Search className={searchIcon()} aria-hidden />
+                    <Input
+                      ref={searchRef}
+                      type="search"
+                      size="sm"
+                      value={filters.query}
+                      onChange={(event) => setFilters({ ...filters, query: event.target.value })}
+                      placeholder={t("board.gallery.search")}
+                      aria-label={t("board.gallery.search")}
+                      className={searchField()}
+                    />
+                  </label>
+                </div>
+              ) : null}
               <SegmentTabs
                 items={GALLERY_MODES.map((value) => ({ value, label: t(`widgets:gallery.tabs.${value}`) }))}
                 value={mode}
                 onValueChange={setMode}
                 layoutId="board-gallery-mode"
                 ariaLabel={t("widgets:gallery.tabs.label")}
+                className={galleryTabs()}
               />
-              {mode === "widgets" ? (
-                <div className={galleryToolbarEnd()}>
-                  <GalleryFilterMenu filters={filters} counts={counts} onChange={setFilters} />
-                </div>
-              ) : null}
             </div>
             <div className={galleryScroll()}>
               {mode === "board" ? (

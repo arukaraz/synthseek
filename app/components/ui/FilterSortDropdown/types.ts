@@ -33,14 +33,16 @@ export interface FilterSortSortOption<S extends string> {
   label: string;
 }
 
+export interface FilterSortFilter<F extends string> {
+  value: F;
+  onChange: (v: F) => void;
+  options: ReadonlyArray<FilterSortFilterOption<F>>;
+  sectionLabel?: string;
+  sectionIcon?: LucideIcon;
+}
+
 export interface FilterSortDropdownProps<F extends string, S extends string = string> {
-  filter?: {
-    value: F;
-    onChange: (v: F) => void;
-    options: ReadonlyArray<FilterSortFilterOption<F>>;
-    sectionLabel?: string;
-    sectionIcon?: LucideIcon;
-  };
+  filter?: FilterSortFilter<F>;
   filterGroups?: ReadonlyArray<FilterSortFilterGroup>;
   sort?: {
     value: S;

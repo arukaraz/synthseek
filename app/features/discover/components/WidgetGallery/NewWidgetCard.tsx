@@ -1,6 +1,6 @@
 "use client";
 
-import { FileJson, Plus } from "lucide-react";
+import { Braces, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -17,7 +17,7 @@ export function NewWidgetCard({ onCreate, onImport }: NewWidgetCardProps) {
         <Plus aria-hidden />
       </button>
       <Button variant="ghost" size="sm" onClick={onImport}>
-        <FileJson />
+        <Braces />
         {t("mine.fromJson")}
       </Button>
     </div>

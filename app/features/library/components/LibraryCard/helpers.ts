@@ -12,8 +12,8 @@ export function cardCoverTone(selection: CardSelection | undefined): CardCoverTo
 
 export function cardCoverActionsFrom(
   onOpen: (() => void) | undefined,
-  onPlay: (() => Promise<void>) | undefined
-): { open: () => void; play: () => Promise<void> } | null {
+  onPlay: (() => Promise<unknown>) | undefined
+): { open: () => void; play: () => Promise<unknown> } | null {
   if (onOpen === undefined || onPlay === undefined) return null;
   return { open: onOpen, play: onPlay };
 }

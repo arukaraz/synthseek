@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 import { FilterSortOptionItem } from "./FilterSortOptionItem";
 import { FilterSortOrder } from "./FilterSortOrder";
-import { selectedValue } from "./helpers";
+import { filterColumnsOf, selectedValue } from "./helpers";
 import { filterSortColumn, filterSortColumns, filterSortColumnsContent, filterSortTriggerDefault } from "./styles";
 import type { FilterSortDropdownProps } from "./types";
 
@@ -65,22 +65,24 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
       {filterGroups && filterGroups.length > 0 ? (
         <DropdownMenuContent align={align} className={filterSortColumnsContent()}>
           <div className={filterSortColumns()}>
-            {filterGroups.map((group) => {
-              const GroupIcon = group.icon ?? Filter;
-              return (
-                <DropdownMenuGroup key={group.id} aria-label={group.label} className={filterSortColumn()}>
-                  <DropdownMenuLabel className="flex items-center gap-2">
-                    <GroupIcon className="size-3" />
-                    {group.label}
-                  </DropdownMenuLabel>
-                  <DropdownMenuRadioGroup value={group.value} onValueChange={group.onChange}>
-                    {group.options.map((option) => (
-                      <FilterSortOptionItem key={option.value} option={option} />
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuGroup>
-              );
-            })}
+            {filterColumnsOf(filter, filterGroups, t("filterSort.filterLabel", { defaultValue: "Filter" })).map(
+              (group) => {
+                const GroupIcon = group.icon ?? Filter;
+                return (
+                  <DropdownMenuGroup key={group.id} aria-label={group.label} className={filterSortColumn()}>
+                    <DropdownMenuLabel className="flex items-center gap-2">
+                      <GroupIcon className="size-3" />
+                      {group.label}
+                    </DropdownMenuLabel>
+                    <DropdownMenuRadioGroup value={group.value} onValueChange={group.onChange}>
+                      {group.options.map((option) => (
+                        <FilterSortOptionItem key={option.value} option={option} />
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuGroup>
+                );
+              }
+            )}
             {(sort || direction) && (
               <DropdownMenuGroup className={filterSortColumn()}>
                 {sort && (

@@ -1,10 +1,22 @@
 import i18n from "@locale";
+import { toast } from "sonner";
 
-import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX } from "@components/BoardGrid";
-import type { BoardItem, BoardWidgetKey } from "@hooks/api/queries/board/types";
-import type { WidgetDocument, WidgetDraft, WidgetPreset, WidgetProblem } from "@hooks/api/queries/widgets/types";
+import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX, BOARD_SPANS, type BoardSpan } from "@components/BoardGrid";
+import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type {
+  WidgetBlock,
+  WidgetDocument,
+  WidgetDraft,
+  WidgetPreset,
+  WidgetProblem,
+} from "@hooks/api/queries/widgets/types";
 
-import { BOARD_CATEGORY_ORDER, BOARD_WIDGET_ORDER, BOARD_WIDGETS } from "../ExploreBoard/constants";
+import {
+  BOARD_CATEGORY_ORDER,
+  BOARD_WIDGET_ORDER,
+  BOARD_WIDGETS,
+  CUSTOM_BLOCK_HEIGHTS,
+} from "../ExploreBoard/constants";
 import { spanOf } from "../ExploreBoard/helpers";
 import type { BoardCategory } from "../ExploreBoard/types";
 import { BYTES_PER_KB, GALLERY_BOARD_FILTERS, PREVIEW_BOARD_WIDTH, PREVIEW_BOX } from "./constants";
@@ -15,6 +27,7 @@ import type {
   GalleryFilters,
   GalleryGroup,
   GallerySort,
+  PreviewBox,
   PreviewFrame,
 } from "./types";
 
@@ -84,13 +97,12 @@ export function categoryCounts(entries: readonly GalleryEntry[]): Map<GalleryCat
   ]);
 }
 
-export function previewFrame(widget: BoardWidgetKey): PreviewFrame {
+function frameOfSpan(span: BoardSpan, box: PreviewBox): PreviewFrame {
   const columns = BOARD_COLUMNS.wide;
   const column = (PREVIEW_BOARD_WIDTH - (columns - 1) * BOARD_GAP_PX) / columns;
-  const span = spanOf(widget, BOARD_WIDGETS[widget].defaultSize, "wide");
   const stageWidth = span.cols * column + (span.cols - 1) * BOARD_GAP_PX;
   const stageHeight = span.rows * BOARD_ROW_PX + (span.rows - 1) * BOARD_GAP_PX;
-  const scale = Math.min(PREVIEW_BOX.width / stageWidth, PREVIEW_BOX.height / stageHeight);
+  const scale = Math.min(1, box.width / stageWidth, box.height / stageHeight);
   return {
     stageWidth,
     stageHeight,
@@ -98,6 +110,15 @@ export function previewFrame(widget: BoardWidgetKey): PreviewFrame {
     width: Math.round(stageWidth * scale),
     height: Math.round(stageHeight * scale),
   };
+}
+
+export function previewFrame(widget: BoardWidgetKey): PreviewFrame {
+  return frameOfSpan(spanOf(widget, BOARD_WIDGETS[widget].defaultSize, "wide"), PREVIEW_BOX);
+}
+
+export function customPreviewFrame(block: WidgetBlock, size: BoardSize, width?: number): PreviewFrame {
+  const span = BOARD_SPANS.wide[size][CUSTOM_BLOCK_HEIGHTS[block][size]];
+  return frameOfSpan(span, width ? { width, height: Number.POSITIVE_INFINITY } : PREVIEW_BOX);
 }
 
 export function isBoardFilter(value: string): value is GalleryBoardFilter {
@@ -134,8 +155,19 @@ export function customizedDraftOf(preset: WidgetPreset, title: string, country: 
   };
 }
 
+export function draftJsonOf(draft: WidgetDraft): string {
+  return JSON.stringify(draft, null, 2);
+}
+
 export function exportJsonOf(widget: WidgetDocument): string {
-  return JSON.stringify(draftOf(widget), null, 2);
+  return draftJsonOf(draftOf(widget));
+}
+
+export function copyWidgetJson(json: string, name: string): void {
+  void navigator.clipboard
+    .writeText(json)
+    .then(() => toast.success(i18n.t("widgets:mine.jsonCopied", { name })))
+    .catch(() => toast.error(i18n.t("widgets:mine.jsonCopyFailed")));
 }
 
 export function problemText(problem: WidgetProblem): string {

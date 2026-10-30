@@ -3,12 +3,12 @@
 import { useHasPlayableTracks } from "@hooks/api";
 import { useArtistIdentity, useArtistStats } from "@hooks/api/queries/content-detail";
 import { useLidarrAvailable } from "@hooks/api/queries/useLidarrAvailable";
-import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES } from "../../constants";
 import { collectDegradedSources } from "../../helpers";
+import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import {
   ArtistDiscographyWidget,
   ArtistIdentityWidget,
@@ -21,13 +21,13 @@ import { buildSocialLinks } from "../DetailHero/helpers";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
 import type { ArtistDetailBodyProps } from "./types";
 
-function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps) {
+function ArtistDetailBodyComponent({ target, onClose, onNavigate }: ArtistDetailBodyProps) {
   const { data: identity } = useArtistIdentity({ catalogArtistId: target.id, artistName: target.artistName });
   const { data: stats } = useArtistStats({ artistName: target.artistName, mbid: identity?.mbid ?? null });
   const { data: lidarr } = useLidarrAvailable();
   const { data: playable } = useHasPlayableTracks({ kind: "artist", artist: target.name });
   const { requestArtist } = useContentDetailActions();
-  const { playEntity, startRadio } = useEntityPlayback();
+  const { play, radio } = useDetailPlayback(onClose);
 
   const mbid = identity?.mbid ?? null;
   const cover = identity?.image ?? target.cover;
@@ -38,11 +38,8 @@ function ArtistDetailBodyComponent({ target, onNavigate }: ArtistDetailBodyProps
     [identity?.degraded, stats?.degraded]
   );
 
-  const handlePlay = useCallback(() => playEntity({ kind: "artist", artist: target.name }), [playEntity, target.name]);
-  const handleStartRadio = useCallback(
-    () => startRadio({ kind: "artist", artist: target.name }),
-    [startRadio, target.name]
-  );
+  const handlePlay = useCallback(() => play({ kind: "artist", artist: target.name }), [play, target.name]);
+  const handleStartRadio = useCallback(() => radio({ kind: "artist", artist: target.name }), [radio, target.name]);
 
   const artistInput = useMemo(() => ({ id: target.id, name: target.name, cover }), [target.id, target.name, cover]);
 

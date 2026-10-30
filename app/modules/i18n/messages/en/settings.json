@@ -928,7 +928,7 @@
       "submit": "Import selected"
     },
     "roleDescriptions": {
-      "trusted": "Trusted members' requests skip the approval queue, and member quotas do not limit them."
+      "trusted": "Trusted members' requests skip the approval queue, member quotas do not limit them, and they can read Lidarr widgets."
     },
     "approval": {
       "cardTitle": "Request approval",

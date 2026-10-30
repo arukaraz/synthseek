@@ -146,9 +146,13 @@
     "back": "Back",
     "newTitle": "New widget",
     "editTitle": "Edit {{name}}",
+    "customizeTitle": "Customize {{name}}",
+    "customizeHint": "A copy of the built-in widget. Saving creates a new widget in My widgets; the original does not change.",
     "ruleTitle": "Rule of {{name}}",
     "saveRule": "Save rule",
-    "save": "Save widget",
+    "saveChanges": "Save changes",
+    "saveToMine": "Save to My widgets",
+    "copyJson": "Copy JSON",
     "saving": "Saving",
     "cancel": "Cancel",
     "buildUsing": "Build using:",
@@ -218,9 +222,9 @@
     "name": "by name"
   },
   "rotations": {
-    "none": "Always the same",
-    "daily": "New pick every day",
-    "weekly": "New pick every week"
+    "none": "Fixed",
+    "daily": "Daily",
+    "weekly": "Weekly"
   },
   "timeModes": {
     "relative": "Last days",
@@ -427,7 +431,7 @@
       "plex": "Needs your linked Plex account",
       "jellyfin": "Needs your linked Jellyfin account",
       "navidrome": "Needs your linked Navidrome account",
-      "lidarr": "Needs Lidarr"
+      "lidarr": "Needs Lidarr, for admins and trusted members"
     },
     "seeds": {
       "myTopArtists": "My top artists",
@@ -452,6 +456,8 @@
   "look": {
     "label": "View",
     "suggested": "Suggested",
+    "fitHint": "Views that can draw this result. The first is the suggestion.",
+    "allHint": "Every view. The dimmed ones cannot draw this result.",
     "allViews": "All {{count}} views",
     "fittingViews": "Only views that fit",
     "notFitting": "Does not fit this result",
@@ -525,8 +531,7 @@
   "customize": {
     "action": "Customize",
     "actionNamed": "Customize {{name}}",
-    "name": "{{name}} (custom)",
-    "fixed": "This widget has no document behind it, so it cannot be customized."
+    "name": "{{name}} (custom)"
   },
   "presets": {
     "topTracks": "Top tracks",

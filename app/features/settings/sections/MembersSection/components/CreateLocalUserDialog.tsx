@@ -20,7 +20,7 @@ import { SettingsField } from "../../../components/SettingsField";
 import { SettingsTextInput } from "../../../components/SettingsTextInput";
 import { TYPED_SECRET } from "../../../components/constants";
 import { SettingsSecretInput } from "../../../components/SettingsSecretInput";
-import { SegmentedControl } from "../../../components/SegmentedControl";
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { buildRoleOptions } from "../helpers";
 import type { CreateLocalUserDialogProps, RoleValue } from "../types";
 

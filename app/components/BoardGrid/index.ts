@@ -8,4 +8,6 @@ export {
   BOARD_TEXT_SCALE,
   BOARD_WIDE_QUERY,
 } from "./constants";
-export type { BoardDevice, BoardHeight, BoardSpan } from "./types";
+export { boardMetricsOf } from "./helpers";
+export { boardGridVars } from "./styles";
+export type { BoardDevice, BoardHeight, BoardMetrics, BoardSpan } from "./types";

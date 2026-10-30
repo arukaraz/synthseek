@@ -2,10 +2,10 @@
 
 import { useTranslation } from "react-i18next";
 
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { useSettings } from "@hooks/api/queries/useSettings";
 import { useUpdateLogLevel } from "@hooks/api/mutations/settings/useUpdateLogLevel";
 
-import { SegmentedControl } from "../../components/SegmentedControl";
 import { SettingsCard } from "../../components/SettingsCard";
 import type { LogLevelSetting } from "./types";
 

@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@components/ui/Button";
 import { SelectMenu } from "@components/ui/SelectMenu";
 
+import { ViewThumb } from "../ViewThumb/ViewThumb";
 import { viewChoicesOf } from "./helpers";
 import {
   accentDot,
@@ -13,9 +15,11 @@ import {
   lookGrid,
   section,
   sectionHead,
+  sectionHelp,
   sectionNumber,
   sectionTitle,
   viewGrid,
+  viewName,
   viewSuggested,
   viewTile,
   viewToggle,
@@ -35,7 +39,11 @@ export function LookSection({ workshop, context }: WorkshopSectionProps) {
         <h3 id="workshop-look-title" className={sectionTitle()}>
           {t("workshop.sections.look")}
         </h3>
+        <Button variant="ghost" size="sm" className={viewToggle()} onClick={() => setShowAll((value) => !value)}>
+          {showAll ? t("look.fittingViews") : t("look.allViews", { count: context.catalog.blocks.length })}
+        </Button>
       </div>
+      <p className={sectionHelp()}>{showAll ? t("look.allHint") : t("look.fitHint")}</p>
       <div className={viewGrid()} role="radiogroup" aria-label={t("look.label")}>
         {choices.map((choice) => (
           <button
@@ -50,14 +58,12 @@ export function LookSection({ workshop, context }: WorkshopSectionProps) {
               if (choice.fits) workshop.setBlock(choice.block);
             }}
           >
-            <span>{t(`blocks.${choice.block}`)}</span>
+            <ViewThumb block={choice.block} />
+            <span className={viewName()}>{t(`blocks.${choice.block}`)}</span>
             {choice.suggested ? <span className={viewSuggested()}>{t("look.suggested")}</span> : null}
           </button>
         ))}
       </div>
-      <button type="button" className={viewToggle()} onClick={() => setShowAll((value) => !value)}>
-        {showAll ? t("look.fittingViews") : t("look.allViews", { count: context.catalog.blocks.length })}
-      </button>
       <div className={lookGrid()}>
         <label className={fieldLabel()}>
           {t("look.action")}

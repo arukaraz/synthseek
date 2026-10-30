@@ -187,7 +187,20 @@
     "customize": "Personnaliser",
     "done": "Terminé",
     "addWidget": "Ajouter un widget",
-    "editHint": "Faites glisser un widget par sa poignée ou déplacez-le avec les flèches, et choisissez une taille pour chacun.",
+    "arrange": {
+      "action": "Organiser",
+      "title": "Organisez votre tableau",
+      "hint": "Faites glisser un widget pour le déplacer, et choisissez sa taille ou retirez-le depuis sa barre. Rien ne change avant d’enregistrer.",
+      "empty": "Votre tableau sera vide.",
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications",
+      "discard": {
+        "title": "Abandonner les modifications ?",
+        "message": "Vos modifications du tableau seront perdues.",
+        "keep": "Continuer à organiser",
+        "confirm": "Abandonner"
+      }
+    },
     "tile": {
       "moveEarlier": "Avancer {{name}}",
       "moveLater": "Reculer {{name}}",
@@ -208,6 +221,7 @@
     },
     "gallery": {
       "title": "Ajouter un widget",
+      "subtitle": "Ajouter place un widget à la fin du tableau, où vous changez sa taille. Personnaliser ouvre une copie dans l’atelier.",
       "summary": "{{onBoard}} sur {{total}} dans votre tableau. Un nouveau widget arrive à la fin, déplacez-le ensuite où vous voulez.",
       "search": "Rechercher des widgets",
       "all": "Tous",
@@ -462,7 +476,7 @@
       "plex": "Ce widget a besoin de Plex connecté pour le foyer et de votre compte Plex associé dans Comptes connectés.",
       "jellyfin": "Ce widget a besoin de Jellyfin connecté pour le foyer et de votre compte Jellyfin associé dans Comptes connectés.",
       "navidrome": "Ce widget a besoin de Navidrome connecté pour le foyer et de votre compte Navidrome associé dans Comptes connectés.",
-      "lidarr": "Connectez Lidarr dans Réglages, Intégrations, pour remplir ce widget."
+      "lidarr": "Ce widget a besoin de Lidarr connecté dans Réglages, Intégrations, et seuls les administrateurs et les membres de confiance peuvent le lire."
     },
     "events": {
       "refused": "Bandsintown a refusé l’app id. Vérifiez-le dans Réglages, Intégrations.",

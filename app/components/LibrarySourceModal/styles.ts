@@ -262,17 +262,6 @@ export const detailEmptyKbd = cva(
   "rounded border border-fg/10 bg-fg/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-fg/70"
 );
 
-export const bottombar = cva(
-  "flex w-full min-w-0 flex-col items-stretch gap-3 border-t border-fg/10 bg-surface/60 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:flex-row sm:flex-wrap sm:items-center sm:pb-3"
-);
-export const bottombarLeft = cva("flex min-w-0 flex-wrap items-center gap-3");
-export const bottombarRight = cva(
-  "flex min-w-0 flex-col items-stretch gap-3 sm:ml-auto sm:flex-row sm:flex-wrap sm:items-center"
-);
-export const bottombarButtons = cva("flex min-w-0 items-center gap-3");
-
-export const downloadChoice = cva("flex min-w-0 cursor-pointer items-center gap-2 text-xs text-fg/80");
-
 export const bbStat = cva("text-xs text-fg/60");
 export const bbStatStrong = cva("font-mono font-semibold text-fg");
 

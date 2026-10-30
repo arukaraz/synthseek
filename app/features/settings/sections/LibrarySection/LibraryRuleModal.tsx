@@ -8,9 +8,9 @@ import { Button } from "@components/ui/Button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@components/ui/Dialog";
 import { Input } from "@components/ui/Input";
 import { Notice } from "@components/ui/Notice";
+import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { useCreateLibraryRule, useUpdateLibraryRule } from "@hooks/api/mutations/library/useLibraryRules";
 
-import { SegmentedControl } from "../../components/SegmentedControl";
 import { SettingsField } from "../../components/SettingsField";
 import { ConditionRow } from "./ConditionRow";
 import { MAX_RULE_CONDITIONS, RULE_NAME_MAX_LENGTH } from "./constants";

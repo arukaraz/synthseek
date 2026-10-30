@@ -66,7 +66,7 @@ export function useBoardDrag<T extends BoardDragItem>(options: UseBoardDragOptio
       }
       if (optionsRef.current.settling?.()) return;
       if (travelled(settledAt, last) < DRAG_REORDER_TRAVEL_PX) return;
-      const target = tileUnderPointer(last, id);
+      const target = tileUnderPointer(last, id, tile.parentElement);
       const targetId = target?.dataset.boardTile;
       if (!target || !targetId) return;
       const intent: DropTarget = {
