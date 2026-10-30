@@ -2,6 +2,7 @@ import i18n from "@locale";
 
 import { BOARD_GAP_PX, BOARD_ROW_PX, BOARD_SPANS } from "@components/BoardGrid";
 import type { BoardSize } from "@hooks/api/queries/board/types";
+import { matchesTerms, searchTerms } from "@utils/search";
 import type {
   FeedQuery,
   QuestionQuery,
@@ -14,7 +15,8 @@ import type {
   WidgetShape,
 } from "@hooks/api/queries/widgets/types";
 
-import { suggestBlocks } from "../CustomWidget/helpers";
+import { acceptedBlocks, suggestBlocks } from "../CustomWidget/helpers";
+import type { BlockSuggestionInput } from "../CustomWidget/types";
 import { CUSTOM_BLOCK_HEIGHTS } from "../ExploreBoard/constants";
 import { compactCount, percentOf } from "../helpers";
 import {
@@ -84,19 +86,22 @@ export function dailyYearOf(query: WidgetQuery): boolean {
   return query.type === "question" && query.groupBy === "day" && windowDaysOf(query.time) >= DAILY_YEAR_MIN_DAYS;
 }
 
+function suggestionInputOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): BlockSuggestionInput {
+  return { shape: queryShapeOf(query, catalog, grammar), compare: comparesOf(query), dailyYear: dailyYearOf(query) };
+}
+
 export function fittingBlocksOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetBlock[] {
-  return suggestBlocks(catalog.blocks, {
-    shape: queryShapeOf(query, catalog, grammar),
-    compare: comparesOf(query),
-    dailyYear: dailyYearOf(query),
-  });
+  return suggestBlocks(catalog.blocks, suggestionInputOf(query, catalog, grammar));
+}
+
+export function acceptedBlocksOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetBlock[] {
+  return acceptedBlocks(catalog.blocks, suggestionInputOf(query, catalog, grammar));
 }
 
 export function withFittingView(draft: WidgetDraft, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetDraft {
-  const fitting = fittingBlocksOf(draft.query, catalog, grammar);
-  const [first] = fitting;
-  if (!first || fitting.includes(draft.view.block)) return draft;
-  return { ...draft, view: { ...draft.view, block: first } };
+  if (acceptedBlocksOf(draft.query, catalog, grammar).includes(draft.view.block)) return draft;
+  const [first] = fittingBlocksOf(draft.query, catalog, grammar);
+  return first ? { ...draft, view: { ...draft.view, block: first } } : draft;
 }
 
 export function grammarSubjectOf(grammar: WidgetGrammar, subject: QuestionSubject): GrammarSubject | undefined {
@@ -361,13 +366,24 @@ export function feedReadbackOf(feed: FeedQuery): string {
   ].join("");
 }
 
-export function viewChoicesOf(catalog: WidgetCatalog, fitting: readonly WidgetBlock[], showAll: boolean): ViewChoice[] {
-  const fits = fitting.map((block, index) => ({ block, fits: true, suggested: index === 0 }));
+export function viewChoicesOf(
+  catalog: WidgetCatalog,
+  blocks: { fitting: readonly WidgetBlock[]; accepted: readonly WidgetBlock[] },
+  current: WidgetBlock,
+  showAll: boolean
+): ViewChoice[] {
+  const keptCurrent = !blocks.fitting.includes(current) && blocks.accepted.includes(current) ? [current] : [];
+  const shown = [...blocks.fitting, ...keptCurrent];
+  const fits = shown.map((block, index) => ({
+    block,
+    fits: true,
+    suggested: index === 0 && blocks.fitting.length > 0,
+  }));
   if (!showAll) return fits;
   const rest = catalog.blocks
     .map((entry) => entry.key)
-    .filter((block) => !fitting.includes(block))
-    .map((block) => ({ block, fits: false, suggested: false }));
+    .filter((block) => !shown.includes(block))
+    .map((block) => ({ block, fits: blocks.accepted.includes(block), suggested: false }));
   return [...fits, ...rest];
 }
 
@@ -397,6 +413,6 @@ export function clampedNumber(raw: string, min: number, max: number): number | n
 }
 
 export function matchingIcons<T extends string>(icons: readonly T[], query: string): T[] {
-  const needle = query.trim().toLocaleLowerCase();
-  return needle ? icons.filter((icon) => icon.includes(needle)) : [...icons];
+  const terms = searchTerms(query);
+  return terms.length > 0 ? icons.filter((icon) => matchesTerms(terms, [icon])) : [...icons];
 }

@@ -206,6 +206,7 @@ export function createWidgetCatalog(): WidgetCatalog {
       { key: "stat", shapes: ["single"], needsCompare: false },
       { key: "bars", shapes: ["series", "buckets"], needsCompare: false },
       { key: "sparkline", shapes: ["series"], needsCompare: false },
+      { key: "yearCalendar", shapes: ["series"], needsCompare: false },
       { key: "heatmap", shapes: ["matrix"], needsCompare: false },
       { key: "share", shapes: ["buckets"], needsCompare: false },
       { key: "compare", shapes: ["buckets"], needsCompare: true },

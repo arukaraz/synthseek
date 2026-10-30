@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { useWidgetPresets } from "@hooks/api/queries/widgets/useWidgetPresets";
 
+import { presetFor } from "../WidgetGallery/helpers";
 import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS } from "./constants";
 import { editableSizesOf } from "./helpers";
 import { controlButton, dragHandle, editControls, sizeChip, sizeGroup } from "./styles";
@@ -14,7 +15,7 @@ export function BoardTileEditControls({ item, device, name, position, total, act
   const { t } = useTranslation(["discover", "widgets"]);
   const presets = useWidgetPresets();
   const sizes = editableSizesOf(device);
-  const customizable = item.kind === "builtin" && presets.data?.some((preset) => preset.builtin === item.widget);
+  const customizable = item.kind === "builtin" && presetFor(presets.data, item.widget) ? item.widget : null;
   const EarlierIcon = device === "wide" ? ArrowLeft : ArrowUp;
   const LaterIcon = device === "wide" ? ArrowRight : ArrowDown;
 
@@ -54,13 +55,13 @@ export function BoardTileEditControls({ item, device, name, position, total, act
       >
         <LaterIcon className="size-4" />
       </button>
-      {customizable && item.kind === "builtin" ? (
+      {customizable ? (
         <button
           type="button"
           className={controlButton()}
           aria-label={t("widgets:customize.actionNamed", { name })}
           title={t("widgets:customize.action")}
-          onClick={() => actions.customize(item.widget)}
+          onClick={() => actions.customize(customizable)}
         >
           <SlidersHorizontal className="size-4" />
         </button>

@@ -93,14 +93,34 @@ describe("withFittingView and viewChoicesOf", () => {
     expect(withFittingView(NEW_WIDGET_DRAFT, catalog, grammar).view.block).toBe("list");
   });
 
+  it("keeps a view the server accepts though the workshop would not suggest it", () => {
+    const shortDaily = { ...QUESTION, groupBy: "day" as const, time: { mode: "relative" as const, days: 30 } };
+    const draft = {
+      ...NEW_WIDGET_DRAFT,
+      query: shortDaily,
+      view: { ...NEW_WIDGET_DRAFT.view, block: "yearCalendar" as const },
+    };
+    expect(withFittingView(draft, catalog, grammar).view.block).toBe("yearCalendar");
+    const blocks = {
+      fitting: ["bars", "sparkline"] as const,
+      accepted: ["bars", "sparkline", "yearCalendar"] as const,
+    };
+    expect(viewChoicesOf(catalog, blocks, "yearCalendar", false).map((choice) => choice.block)).toEqual([
+      "bars",
+      "sparkline",
+      "yearCalendar",
+    ]);
+  });
+
   it("marks the first fitting view as suggested and shows the rest only on request, disabled", () => {
     const fitting = ["share", "bars", "list"] as const;
-    expect(viewChoicesOf(catalog, fitting, false)).toEqual([
+    const blocks = { fitting, accepted: fitting };
+    expect(viewChoicesOf(catalog, blocks, "share", false)).toEqual([
       { block: "share", fits: true, suggested: true },
       { block: "bars", fits: true, suggested: false },
       { block: "list", fits: true, suggested: false },
     ]);
-    const all = viewChoicesOf(catalog, fitting, true);
+    const all = viewChoicesOf(catalog, blocks, "share", true);
     expect(all).toHaveLength(catalog.blocks.length);
     expect(all.find((choice) => choice.block === "heatmap")).toEqual({
       block: "heatmap",
@@ -182,6 +202,7 @@ describe("clampedNumber, matchingIcons and previewHeightOf", () => {
   it("filters icon names by the search text", () => {
     expect(matchingIcons(["music", "music-2", "heart"], " MUS ")).toEqual(["music", "music-2"]);
     expect(matchingIcons(["music", "heart"], "")).toEqual(["music", "heart"]);
+    expect(matchingIcons(["calendar-days", "calendar", "clock"], "calendar days")).toEqual(["calendar-days"]);
   });
 
   it("sizes the preview to the board height of the block at that size", () => {

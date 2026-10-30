@@ -79,6 +79,7 @@ export interface WidgetWorkshopState {
   kind: WidgetKind;
   dirty: boolean;
   fitting: readonly WidgetBlock[];
+  accepted: readonly WidgetBlock[];
   ruleDraft: RuleDraft | null;
   previewDraft: WidgetDraft;
   setKind: (kind: WidgetKind) => void;

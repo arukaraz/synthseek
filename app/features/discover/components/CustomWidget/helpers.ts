@@ -362,19 +362,23 @@ export function viewIsEmpty(view: WidgetView): boolean {
   );
 }
 
-export function suggestBlocks(
+export function acceptedBlocks(
   contracts: readonly BlockContractView[],
-  { shape, compare, dailyYear }: BlockSuggestionInput
+  { shape, compare }: BlockSuggestionInput
 ): WidgetBlock[] {
-  const order = SUGGESTED_BLOCKS[shape];
+  return contracts
+    .filter((contract) => contract.shapes.includes(shape) && (!contract.needsCompare || compare))
+    .map((contract) => contract.key);
+}
+
+export function suggestBlocks(contracts: readonly BlockContractView[], input: BlockSuggestionInput): WidgetBlock[] {
+  const order = SUGGESTED_BLOCKS[input.shape];
   const rankOf = (block: WidgetBlock) => {
     const index = order.indexOf(block);
     return index === -1 ? order.length : index;
   };
-  return contracts
-    .filter((contract) => contract.shapes.includes(shape) && (!contract.needsCompare || compare))
-    .map((contract) => contract.key)
-    .filter((block) => block !== "yearCalendar" || dailyYear)
+  return acceptedBlocks(contracts, input)
+    .filter((block) => block !== "yearCalendar" || input.dailyYear)
     .sort((left, right) => rankOf(left) - rankOf(right));
 }
 

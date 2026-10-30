@@ -26,7 +26,7 @@ export function LookSection({ workshop, context }: WorkshopSectionProps) {
   const { t } = useTranslation("widgets");
   const [showAll, setShowAll] = useState(false);
   const { view, meta } = workshop.draft;
-  const choices = viewChoicesOf(context.catalog, workshop.fitting, showAll);
+  const choices = viewChoicesOf(context.catalog, workshop, view.block, showAll);
 
   return (
     <section className={section()} aria-labelledby="workshop-look-title">

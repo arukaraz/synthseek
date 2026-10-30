@@ -15,6 +15,7 @@ import { useDebounce } from "@hooks/ui/useDebounce";
 
 import { PREVIEW_DEBOUNCE_MS } from "../components/WidgetWorkshop/constants";
 import {
+  acceptedBlocksOf,
   draftKeyOf,
   fittingBlocksOf,
   presetDraftOf,
@@ -129,6 +130,7 @@ export function useWidgetWorkshop(
   }, [writeRules]);
 
   const fitting = useMemo(() => fittingBlocksOf(draft.query, catalog, grammar), [draft.query, catalog, grammar]);
+  const accepted = useMemo(() => acceptedBlocksOf(draft.query, catalog, grammar), [draft.query, catalog, grammar]);
 
   return {
     draft,
@@ -136,6 +138,7 @@ export function useWidgetWorkshop(
     kind: draft.query.type,
     dirty: draftKeyOf(draft) !== baseline,
     fitting,
+    accepted,
     ruleDraft,
     previewDraft,
     setKind,
