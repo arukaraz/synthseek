@@ -85,16 +85,16 @@ The catalog provides the primary picture of a track, album, artist, or playlist.
 
 Around it sit enrichment providers, each contributing something the catalog does not have:
 
-| Provider          | Contributes                                                   |
-| ----------------- | ------------------------------------------------------------- |
-| MusicBrainz       | Canonical identifiers, used for accurate tagging.             |
-| Cover Art Archive | Album artwork when the catalog has none.                      |
-| fanart.tv         | Artist images.                                                |
-| Last.fm           | Biographies, similar artists, charts, and your scrobbles.     |
-| ListenBrainz      | Recording metadata, recommendations, and generated mixes.     |
-| Discogs           | Additional detail on release pages.                           |
-| Wikidata          | Factual artist details.                                       |
-| Songlink          | Resolving links from other platforms into requestable tracks. |
+| Provider          | Contributes                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| MusicBrainz       | Canonical identifiers, used for tagging and for recognising the album a scanned file is on. |
+| Cover Art Archive | Album artwork when the catalog has none.                                                    |
+| fanart.tv         | Artist images.                                                                              |
+| Last.fm           | Biographies, similar artists, charts, and your scrobbles.                                   |
+| ListenBrainz      | Recording metadata, recommendations, and generated mixes.                                   |
+| Discogs           | Additional detail on release pages.                                                         |
+| Wikidata          | Factual artist details.                                                                     |
+| Songlink          | Resolving links from other platforms into requestable tracks.                               |
 
 Enrichment never blocks anything. If a provider is unavailable, the page renders without it and tells you which source is degraded and for how long. A provider that fails repeatedly is stopped being called for a while, then probed once to see whether it has recovered.
 
