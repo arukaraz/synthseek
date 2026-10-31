@@ -18,6 +18,7 @@ const mocks = vi.hoisted(() => ({
   playEntity: vi.fn(),
   openForTarget: vi.fn(),
   openForResult: vi.fn(),
+  requestResult: vi.fn(),
 }));
 
 vi.mock("@hooks/api/queries/analytics/useOrbitAlbums", () => ({ useOrbitAlbums: () => mocks.orbit() }));
@@ -33,7 +34,11 @@ vi.mock("@hooks/ui/player", () => ({ useResumePoint: () => mocks.resume() }));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => ({ playEntity: mocks.playEntity }) }));
 vi.mock("@modules/providers/CountryProvider", () => ({ useCountry: () => ({ country: "MX" }) }));
 vi.mock("@features/search/components/ContentRequestFlow", () => ({
-  useContentRequestFlow: () => ({ openForTarget: mocks.openForTarget, openForResult: mocks.openForResult }),
+  useContentRequestFlow: () => ({
+    openForTarget: mocks.openForTarget,
+    openForResult: mocks.openForResult,
+    requestResult: mocks.requestResult,
+  }),
 }));
 vi.mock("next/image", () => ({
   // eslint-disable-next-line @next/next/no-img-element
@@ -75,13 +80,33 @@ describe("Orbit", () => {
     cover: null,
     year: null,
     because: "Black",
+    playable: false,
   };
+
+  it("offers Request on an album nothing of which is in the library", () => {
+    mocks.orbit.mockReturnValue(ready([album]));
+    renderWithProviders(<Orbit size="L" info="x" />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^Request / }));
+
+    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "jof", name: "Jar of Flies" }));
+    expect(mocks.playEntity).not.toHaveBeenCalled();
+  });
+
+  it("offers Play on an album the library holds part of", () => {
+    mocks.orbit.mockReturnValue(ready([{ ...album, playable: true }]));
+    renderWithProviders(<Orbit size="L" info="x" />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^Play / }));
+
+    expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "album", albumExternalId: "jof" });
+  });
 
   it("shows cards at L and opens the album to request it", () => {
     mocks.orbit.mockReturnValue(ready([album]));
     renderWithProviders(<Orbit size="L" info="x" />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Jar of Flies/ }));
+    fireEvent.click(screen.getByRole("button", { name: /^Jar of Flies/ }));
 
     expect(screen.getByText("Because you played Black")).toBeInTheDocument();
     expect(mocks.openForTarget).toHaveBeenCalledWith(
@@ -94,7 +119,7 @@ describe("Orbit", () => {
     renderWithProviders(<Orbit size="M" info="x" />);
 
     expect(screen.getByRole("region", { name: "Albums in your orbit, scroll sideways" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Jar of Flies/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Jar of Flies/ })).toBeInTheDocument();
   });
 
   it("fits two albums in a quarter tile, with no rail to scroll", () => {
@@ -103,8 +128,8 @@ describe("Orbit", () => {
     );
     renderWithProviders(<Orbit size="S" info="x" />);
 
-    expect(screen.getByRole("button", { name: /Jar of Flies/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Dirt/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Jar of Flies/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Dirt/ })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Facelift/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("region", { name: "Albums in your orbit, scroll sideways" })).not.toBeInTheDocument();
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { Play } from "lucide-react";
+import { Download, Pin, Play } from "lucide-react";
 import Image from "next/image";
 
 import { InfoTooltip } from "@components/ui/InfoTooltip";
@@ -21,7 +21,17 @@ import {
   mixTitle,
 } from "../DiscoveryMixes/styles";
 import { PLAY_SET_MOSAIC_SHAPES } from "./constants";
-import { playButton, playSetCard, playSetInfo, playSetPoster, singleCover, tagRow, tagText } from "./styles";
+import {
+  pinFlag,
+  playButton,
+  playSetCard,
+  playSetInfo,
+  playSetOpen,
+  playSetPoster,
+  singleCover,
+  tagRow,
+  tagText,
+} from "./styles";
 import type { PlaySetCardProps } from "./types";
 
 export function PlaySetCard({
@@ -36,7 +46,11 @@ export function PlaySetCard({
   info,
   playLabel,
   onPlay,
+  actionKind = "play",
+  onOpen,
+  revealAction = false,
   layout = "stack",
+  pinned = false,
 }: PlaySetCardProps) {
   const [onlyCover] = covers;
   const shape = PLAY_SET_MOSAIC_SHAPES[layout];
@@ -54,9 +68,19 @@ export function PlaySetCard({
         <span className={mixChip()}>
           <Icon className="size-4" />
         </span>
+        {pinned ? (
+          <span className={pinFlag()}>
+            <Pin aria-hidden />
+          </span>
+        ) : null}
         {onPlay ? (
-          <button type="button" className={playButton()} aria-label={playLabel} onClick={onPlay}>
-            <Play />
+          <button
+            type="button"
+            className={playButton({ reveal: revealAction })}
+            aria-label={playLabel}
+            onClick={onPlay}
+          >
+            {actionKind === "play" ? <Play /> : <Download />}
           </button>
         ) : null}
       </div>
@@ -65,7 +89,13 @@ export function PlaySetCard({
           <span className={cn(mixTag(), tagText())}>{tag}</span>
           {info ? <InfoTooltip title={title} description={info} /> : null}
         </span>
-        <h3 className={mixTitle()}>{title}</h3>
+        {onOpen ? (
+          <button type="button" className={cn(mixTitle(), playSetOpen())} onClick={onOpen}>
+            {title}
+          </button>
+        ) : (
+          <h3 className={mixTitle()}>{title}</h3>
+        )}
         {blurb ? <p className={mixBlurb()}>{blurb}</p> : null}
         {footnote ? (
           <div className={mixFoot()}>

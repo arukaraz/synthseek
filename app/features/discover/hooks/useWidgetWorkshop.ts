@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import type { BoardSize } from "@hooks/api/queries/board/types";
 import type {
+  PlaylistSetQuery,
   RecipeQuery,
   RecapPeriod,
   WidgetAccent,
@@ -12,18 +13,29 @@ import type {
   WidgetPreset,
   WidgetQuery,
 } from "@hooks/api/queries/widgets/types";
+import { useSetGrammar } from "@hooks/api/queries/widgets/useSetGrammar";
 import { useDebounce } from "@hooks/ui/useDebounce";
 
-import { PREVIEW_DEBOUNCE_MS, RECAP_SUBJECT } from "../components/WidgetWorkshop/constants";
+import { browserTimeZone } from "@utils/time-zone";
+
 import {
-  acceptedBlocksOf,
+  PLAYLIST_SET_ACTION,
+  PLAYLIST_SET_ACTIONS,
+  PLAYLIST_SET_BLOCK,
+  PLAYLISTS_SUBJECT,
+  PREVIEW_DEBOUNCE_MS,
+  RECAP_SUBJECT,
+} from "../components/WidgetWorkshop/constants";
+import {
   draftKeyOf,
   fittingBlocksOf,
   kindOf,
   listsTracksOf,
   presetDraftOf,
+  reachableBlocksOf,
   ruleListOf,
   rulesFrom,
+  withBlock,
   withFittingPlaylist,
   withFittingView,
   withSubject,
@@ -40,7 +52,12 @@ import type {
   WorkshopContext,
   WorkshopOpening,
 } from "../components/WidgetWorkshop/types";
-import { DEFAULT_QUERIES, DEFAULT_RECAP } from "../constants";
+import { withSlotLabels } from "../components/WidgetWorkshop/PlaylistSteps/helpers";
+import { DEFAULT_PLAYLIST_SET, DEFAULT_QUERIES, DEFAULT_RECAP } from "../constants";
+
+function withLocalClock(set: PlaylistSetQuery): PlaylistSetQuery {
+  return { ...set, refresh: { ...set.refresh, timeZone: browserTimeZone() } };
+}
 
 export function useWidgetWorkshop(
   opening: WorkshopOpening,
@@ -52,6 +69,7 @@ export function useWidgetWorkshop(
   const [stash, setStash] = useState<Partial<Record<WidgetKind, WidgetQuery>>>({});
   const [ruleDraft, setRuleDraft] = useState<RuleDraft | null>(null);
   const previewDraft = useDebounce(draft, { delay: PREVIEW_DEBOUNCE_MS });
+  const { data: setGrammar } = useSetGrammar();
 
   const { purpose } = opening;
   const change = useCallback(
@@ -88,6 +106,14 @@ export function useWidgetWorkshop(
     [change]
   );
 
+  const updateSet = useCallback(
+    (update: (set: PlaylistSetQuery) => PlaylistSetQuery) =>
+      change((current) =>
+        current.query.type === "playlists" ? { ...current, query: update(current.query) } : current
+      ),
+    [change]
+  );
+
   const setRecapPeriod = useCallback(
     (period: RecapPeriod) =>
       change((current) =>
@@ -100,13 +126,19 @@ export function useWidgetWorkshop(
     (subject: WorkshopSubject) => {
       setRuleDraft(null);
       change((current) => {
+        if (subject === PLAYLISTS_SUBJECT) {
+          if (current.query.type === "playlists") return current;
+          const action = PLAYLIST_SET_ACTIONS.includes(current.view.action) ? current.view.action : PLAYLIST_SET_ACTION;
+          const view = { ...current.view, block: PLAYLIST_SET_BLOCK, action };
+          return { ...current, query: withSlotLabels(withLocalClock(DEFAULT_PLAYLIST_SET), setGrammar), view };
+        }
         if (subject === RECAP_SUBJECT)
           return current.query.type === "recap" ? current : { ...current, query: DEFAULT_RECAP };
         const base = current.query.type === "recipe" ? current.query : DEFAULT_QUERIES.recipe;
         return { ...current, query: withSubject(base, subject, grammar) };
       });
     },
-    [change, grammar]
+    [change, grammar, setGrammar]
   );
 
   const setKind = useCallback(
@@ -127,10 +159,12 @@ export function useWidgetWorkshop(
       setRuleDraft(null);
       change((current) => {
         const named = presetDraftOf(preset, current.meta.name);
-        return { ...named, meta: { ...named.meta, description: current.meta.description } };
+        const query =
+          named.query.type === "playlists" ? withSlotLabels(withLocalClock(named.query), setGrammar) : named.query;
+        return { ...named, query, meta: { ...named.meta, description: current.meta.description } };
       });
     },
-    [change]
+    [change, setGrammar]
   );
 
   const setView = useCallback(
@@ -181,7 +215,7 @@ export function useWidgetWorkshop(
   }, [writeRules]);
 
   const fitting = useMemo(() => fittingBlocksOf(draft.query, catalog, grammar), [draft.query, catalog, grammar]);
-  const accepted = useMemo(() => acceptedBlocksOf(draft.query, catalog, grammar), [draft.query, catalog, grammar]);
+  const reachable = useMemo(() => reachableBlocksOf(draft.query, catalog, grammar), [draft.query, catalog, grammar]);
 
   return {
     draft,
@@ -193,16 +227,17 @@ export function useWidgetWorkshop(
     setPlaylist,
     linkPlaylist,
     fitting,
-    accepted,
+    reachable,
     ruleDraft,
     previewDraft,
     setKind,
     updateRecipe,
+    updateSet,
     setRecapPeriod,
     setRecipeSubject,
     setQuery,
     applyPreset,
-    setBlock: (block: WidgetBlock) => setView({ block }),
+    setBlock: (block: WidgetBlock) => change((current) => withBlock(current, block, catalog)),
     setAction: (action: WidgetAction) => setView({ action }),
     setAccent: (accent: WidgetAccent) => setMeta({ accent }),
     setName: (name: string) => setMeta({ name }),

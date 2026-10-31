@@ -423,6 +423,10 @@
     "title": "Widget introuvable",
     "description": "Ce widget n'existe plus. Rechargez la page pour voir vos widgets actuels."
   },
+  "SET_VETO_LIMIT_REACHED": {
+    "title": "Ne jamais inclure est plein",
+    "description": "Retirez une entrée de la liste dans les réglages avant d'en ajouter une autre."
+  },
   "WIDGET_LIMIT_REACHED": {
     "title": "Trop de widgets",
     "description": "Supprimez l'un de vos widgets avant d'en créer un autre."

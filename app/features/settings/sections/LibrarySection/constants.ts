@@ -71,6 +71,12 @@ export const RULE_FIELDS: readonly RuleField[] = [
   "track_count",
 ];
 
+export const PERCENT = 100;
+
+export const AUDIO_ANALYSIS_JOB = "audio-analysis";
+
+export const AUDIO_ANALYSIS_SPEEDS = ["background", "balanced", "fast"] as const;
+
 export const FIELD_OPS: FieldOps = {
   requested_by: ["is", "is_not"],
   genre: ["contains", "not_contains"],

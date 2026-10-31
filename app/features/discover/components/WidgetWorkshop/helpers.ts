@@ -36,6 +36,8 @@ import {
   MONTH_NAME_REFERENCE_YEAR,
   NAMED_PERIOD_DAYS,
   NO_ROTATION,
+  PLAYLIST_SET_BLOCKS,
+  PLAYLIST_SET_SHAPE,
   YEAR_DAYS,
 } from "./constants";
 import type {
@@ -52,6 +54,7 @@ import type {
   RecapNamedPeriod,
   RecipeSubject,
   RecipeTime,
+  RuleChoice,
   RuleField,
   RuleList,
   RuleMode,
@@ -76,6 +79,8 @@ function queryShapeOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: Widge
       return feedSourceOf(catalog, query.source)?.shape ?? DEFAULT_FEED_SHAPE;
     case "recap":
       return catalog.recap.shape;
+    case "playlists":
+      return PLAYLIST_SET_SHAPE;
   }
 }
 
@@ -133,16 +138,39 @@ export function dailyYearOf(query: WidgetQuery): boolean {
   return query.type === "recipe" && query.groupBy === "day" && windowDaysOf(query.time) >= DAILY_YEAR_MIN_DAYS;
 }
 
+function numericOf(query: WidgetQuery, grammar: WidgetGrammar): boolean {
+  return query.type === "recipe" && grammar.numericMeasures.includes(query.measure);
+}
+
 function suggestionInputOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): BlockSuggestionInput {
-  return { shape: queryShapeOf(query, catalog, grammar), compare: comparesOf(query), dailyYear: dailyYearOf(query) };
+  return {
+    shape: queryShapeOf(query, catalog, grammar),
+    compare: comparesOf(query),
+    numeric: numericOf(query, grammar),
+    dailyYear: dailyYearOf(query),
+  };
 }
 
 export function fittingBlocksOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetBlock[] {
+  if (query.type === "playlists") return [...PLAYLIST_SET_BLOCKS];
   return suggestBlocks(catalog.blocks, suggestionInputOf(query, catalog, grammar));
 }
 
-export function acceptedBlocksOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetBlock[] {
+function acceptedBlocksOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetBlock[] {
   return acceptedBlocks(catalog.blocks, suggestionInputOf(query, catalog, grammar));
+}
+
+export function reachableBlocksOf(query: WidgetQuery, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetBlock[] {
+  if (query.type === "playlists") return [...PLAYLIST_SET_BLOCKS];
+  const input = suggestionInputOf(query, catalog, grammar);
+  return acceptedBlocks(catalog.blocks, { ...input, compare: query.type === "recipe" });
+}
+
+export function withBlock(draft: WidgetDraft, block: WidgetBlock, catalog: WidgetCatalog): WidgetDraft {
+  const needsCompare = catalog.blocks.find((entry) => entry.key === block)?.needsCompare ?? false;
+  const view = { ...draft.view, block };
+  if (!needsCompare || draft.query.type !== "recipe") return { ...draft, view };
+  return { ...draft, view, query: { ...draft.query, compare: "previous" } };
 }
 
 export function withFittingView(draft: WidgetDraft, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetDraft {
@@ -234,8 +262,38 @@ export function personName(value: string, people: readonly HouseholdMember[]): s
   return people.find((person) => person.id === value)?.name ?? i18n.t("widgets:rules.people.someone");
 }
 
-export function ruleText(rule: WidgetRule, people: readonly HouseholdMember[] = []): string {
+export function ruleText(
+  rule: WidgetRule,
+  people: readonly HouseholdMember[] = [],
+  playlists: readonly RuleChoice[] = []
+): string {
   switch (rule.field) {
+    case "genreName":
+      return i18n.t(`widgets:rules.text.genreName_${rule.op}`, { value: rule.value });
+    case "artistName":
+      return i18n.t(`widgets:rules.text.artistName_${rule.op}`, { value: rule.value });
+    case "inPlaylist":
+      return i18n.t(`widgets:rules.text.inPlaylist_${rule.op}`, {
+        value: playlists.find((playlist) => playlist.id === rule.value)?.name ?? rule.value,
+      });
+    case "addedInLast":
+      return i18n.t("widgets:rules.text.addedInLast", { value: rule.value });
+    case "playedInLast":
+      return i18n.t("widgets:rules.text.playedInLast", { value: rule.value });
+    case "yearRange":
+      return i18n.t("widgets:rules.text.yearRange", rule.value);
+    case "durationMinutes":
+      return i18n.t(`widgets:rules.text.durationMinutes_${rule.op}`, { value: rule.value });
+    case "rating":
+      return i18n.t(`widgets:rules.text.rating_${rule.op}`, { value: rule.value });
+    case "skips":
+      return i18n.t("widgets:rules.text.skips", { value: rule.value });
+    case "mood":
+      return i18n.t(`widgets:rules.text.mood_${rule.op}`, { value: i18n.t(`widgets:set.moods.${rule.value}`) });
+    case "tempo":
+      return i18n.t("widgets:rules.text.tempo", { value: i18n.t(`widgets:rules.tempos.${rule.value}`) });
+    case "energy":
+      return i18n.t("widgets:rules.text.energy", { value: i18n.t(`widgets:rules.energies.${rule.value}`) });
     case "user":
       return i18n.t(`widgets:rules.text.user_${rule.op}`, { value: personName(rule.value, people) });
     case "plays":
@@ -520,12 +578,13 @@ export function feedReadbackOf(feed: FeedQuery): string {
 
 export function viewChoicesOf(
   catalog: WidgetCatalog,
-  blocks: { fitting: readonly WidgetBlock[]; accepted: readonly WidgetBlock[] },
+  blocks: { fitting: readonly WidgetBlock[]; reachable: readonly WidgetBlock[] },
   current: WidgetBlock,
   showAll: boolean
 ): ViewChoice[] {
-  const keptCurrent = !blocks.fitting.includes(current) && blocks.accepted.includes(current) ? [current] : [];
-  const shown = [...blocks.fitting, ...keptCurrent];
+  const keptCurrent = !blocks.fitting.includes(current) && blocks.reachable.includes(current) ? [current] : [];
+  const extra = blocks.reachable.filter((block) => !blocks.fitting.includes(block) && block !== current);
+  const shown = [...blocks.fitting, ...keptCurrent, ...extra];
   const fits = shown.map((block, index) => ({
     block,
     fits: true,
@@ -535,7 +594,7 @@ export function viewChoicesOf(
   const rest = catalog.blocks
     .map((entry) => entry.key)
     .filter((block) => !shown.includes(block))
-    .map((block) => ({ block, fits: blocks.accepted.includes(block), suggested: false }));
+    .map((block) => ({ block, fits: false, suggested: false }));
   return [...fits, ...rest];
 }
 
@@ -546,6 +605,10 @@ export function previewableDraft(draft: WidgetDraft, fallbackName: string): Widg
 
 export function draftKeyOf(draft: WidgetDraft): string {
   return JSON.stringify(draft);
+}
+
+export function startsFrom(preset: WidgetPreset, query: WidgetQuery): boolean {
+  return preset.startFrom && (query.type !== "playlists" || preset.draft.query.type === "playlists");
 }
 
 export function presetDraftOf(preset: WidgetPreset, name: string): WidgetDraft {

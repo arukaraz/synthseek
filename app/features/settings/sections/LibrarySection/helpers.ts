@@ -18,6 +18,7 @@ import {
   SAMPLE_LABELS,
   TRACK_COUNT_RANGE,
   YEAR_RANGE,
+  PERCENT,
 } from "./constants";
 
 import type {
@@ -336,6 +337,10 @@ export function ruleSummary(
   if (first === undefined) return i18n.t("settings:libraryRules.summary.none");
   const joiner = rule.matchMode === "all" ? "settings:libraryRules.summary.and" : "settings:libraryRules.summary.or";
   return rest.reduce((left, right) => i18n.t(joiner, { left, right }), first);
+}
+
+export function coveragePercent(coverage: { analyzed: number; total: number }): number {
+  return coverage.total === 0 ? 0 : Math.round((coverage.analyzed / coverage.total) * PERCENT);
 }
 
 export function movedIds(ids: readonly string[], index: number, offset: -1 | 1): string[] {

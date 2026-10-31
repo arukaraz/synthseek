@@ -101,41 +101,49 @@ The icons:
 | Field    | Required | Value                                                                                                                                                      |
 | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `block`  | Yes      | The view that draws the results, from the table below.                                                                                                     |
-| `action` | Yes      | What pressing an item does: `play`, `request`, `open`, `openUrl` or `none`.                                                                                |
+| `action` | Yes      | What pressing an item does: `play`, `shuffle`, `radio`, `request`, `open`, `openUrl` or `none`.                                                            |
 | `bind`   | No       | Replaces the text of a slot with a field of each row. Slots are `cover`, `title`, `subtitle` and `value`. A field with nothing in it keeps the usual text. |
 
 Each view can draw some kinds of result and not others. The kind comes from the query, as the next section shows.
 
-| `block`        | In the workshop   | Draws                      |
-| -------------- | ----------------- | -------------------------- |
-| `list`         | List              | Ranked, buckets            |
-| `cards`        | Cards             | Ranked                     |
-| `rail`         | Rail              | Ranked                     |
-| `leader`       | Leader            | Ranked                     |
-| `mosaic`       | Mosaic            | Ranked                     |
-| `calendar`     | Calendar          | Ranked                     |
-| `rankingMoves` | Ranking moves     | Ranked, with a comparison  |
-| `feed`         | Headlines         | Ranked, headlines          |
-| `stat`         | Number            | Single                     |
-| `stats`        | Numbers           | Buckets, single            |
-| `statTrend`    | Number with trend | Series, single             |
-| `bars`         | Bars              | Series, buckets            |
-| `sparkline`    | Sparkline         | Series                     |
-| `yearCalendar` | Year calendar     | Series                     |
-| `heatmap`      | Heatmap           | Matrix                     |
-| `share`        | Share             | Buckets                    |
-| `compare`      | Compare           | Buckets, with a comparison |
-| `story`        | Story             | Recap                      |
+| `block`        | In the workshop   | Draws                                                  |
+| -------------- | ----------------- | ------------------------------------------------------ |
+| `list`         | List              | Everything but a recap                                 |
+| `cards`        | Cards             | Ranked, buckets, single, headlines                     |
+| `rail`         | Rail              | Ranked, buckets, single, headlines                     |
+| `leader`       | Leader            | Ranked, buckets, single, headlines                     |
+| `mosaic`       | Mosaic            | Ranked, buckets, single, headlines                     |
+| `posters`      | Posters           | Ranked, buckets, single, headlines                     |
+| `spotlight`    | Spotlight         | Ranked, buckets, single, headlines                     |
+| `tiles`        | Tiles             | Ranked, buckets, single, headlines                     |
+| `hero`         | Hero              | Ranked, buckets, single, headlines                     |
+| `feed`         | Headlines         | Ranked, buckets, single, headlines                     |
+| `mix`          | Mix card          | Ranked, headlines                                      |
+| `calendar`     | Calendar          | Ranked, headlines                                      |
+| `rankingMoves` | Ranking moves     | Ranked, buckets, with a comparison                     |
+| `stat`         | Number            | Ranked, buckets, single, series, as numbers            |
+| `stats`        | Numbers           | Ranked, buckets, single, series, as numbers            |
+| `bars`         | Bars              | Ranked, buckets, single, series, matrix, as numbers    |
+| `share`        | Share             | Ranked, buckets, single, matrix, as numbers            |
+| `compare`      | Compare           | Ranked, buckets, series, with a comparison, as numbers |
+| `statTrend`    | Number with trend | Series, single                                         |
+| `sparkline`    | Sparkline         | Series, matrix                                         |
+| `yearCalendar` | Year calendar     | Series                                                 |
+| `heatmap`      | Heatmap           | Matrix                                                 |
+| `story`        | Story             | Recap                                                  |
+
+A view marked as numbers needs a `measure` that counts something, so it does not draw `lastPlayed` or `addedAt`.
 
 ## The query
 
-`query.type` picks one of three ways to get results.
+`query.type` picks one of four ways to get results.
 
-| `type`   | In the workshop | Reads                                                      |
-| -------- | --------------- | ---------------------------------------------------------- |
-| `recipe` | Recipe          | Your own plays, library and requests.                      |
-| `feed`   | Feed            | An outside source, narrowed by your own library and plays. |
-| `recap`  | Recap           | A year or a month in your listening, as a story.           |
+| `type`      | In the workshop | Reads                                                      |
+| ----------- | --------------- | ---------------------------------------------------------- |
+| `recipe`    | Recipe          | Your own plays, library and requests.                      |
+| `feed`      | Feed            | An outside source, narrowed by your own library and plays. |
+| `recap`     | Recap           | A year or a month in your listening, as a story.           |
+| `playlists` | Recipe          | Your library, as up to six playlists that refresh.         |
 
 ## Recipes
 
@@ -330,6 +338,67 @@ A recipe that lists tracks, without `groupBy`, can also keep a playlist up to da
 ```
 
 `refresh` is `daily` or `weekly`. Leave `playlistId` as `null` when you write one by hand. A board template clears it on export.
+
+## Playlist sets
+
+A `playlists` query builds up to six playlists in one widget, and keeps them up to date on the day and hour you choose. Pick Show playlists in the workshop to build one.
+
+| Field       | Required | Value                                                                                                                      |
+| ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `type`      | Yes      | Always `playlists`.                                                                                                        |
+| `slots`     | Yes      | One entry per list: where its tracks come from, an optional name, and its pin.                                             |
+| `rules`     | No       | Narrows every list.                                                                                                        |
+| `mix`       | Yes      | Length, caps per artist and album, repeat window and order.                                                                |
+| `refresh`   | Yes      | How often, on which days, at what time, and in which time zone.                                                            |
+| `onRefresh` | Yes      | `replace`, `dated` or `delete`, and how many older versions to keep.                                                       |
+| `outside`   | Yes      | `mode`, `share` and `expireWeeks`, for tracks you do not own yet.                                                          |
+| `allow`     | Yes      | What this widget lets through from your Never include list, as `artists\|<name>` or `tracks\|<id>`. An empty list is fine. |
+
+In `outside`, `mode` is `library`, `suggest` or `download`, and `share` is 5 to 60, the percent of a list offered. `expireWeeks` is 1 to 52 or `null`. After that many weeks, a download nothing kept goes to the recycle bin. Favorites, rated tracks, playlists you made and manual requests stay.
+
+Each slot names an `origin`. These nine take a `param` of `null`: `onRepeat`, `rediscover`, `forgotten`, `deepCuts`, `rewind`, `top`, `favorites`, `unplayed` and `added`. The rest need one:
+
+| `origin` | `param`                                                                                 |
+| -------- | --------------------------------------------------------------------------------------- |
+| `genre`  | A genre, or `top:1` for your top genre                                                  |
+| `artist` | An artist, or `top:1` for your top artist                                               |
+| `decade` | A year such as `1990`                                                                   |
+| `mood`   | `energetic`, `calm`, `aggressive`, `party`, `danceable`, `happy`, `sad`, `instrumental` |
+| `scene`  | `focus`, `workout`, `sleep` or `dinner`                                                 |
+| `taste`  | 1 to 6                                                                                  |
+| `seed`   | An artist. The list sounds like them                                                    |
+
+The `mix` keys:
+
+| Key            | Value                                                |
+| -------------- | ---------------------------------------------------- |
+| `length`       | `by` `tracks`, 5 to 60, or `by` `minutes`, 15 to 360 |
+| `perArtist`    | 1 to 20                                              |
+| `perAlbum`     | 1 to 20                                              |
+| `repeatWindow` | `auto`, `off` or 1 to 3650 days                      |
+| `dial`         | `safe`, `balanced` or `deep`                         |
+| `order`        | `shuffle`, `plays` or `added`                        |
+| `minTracks`    | 1 to 60                                              |
+| `distinct`     | `true` or `false`                                    |
+
+`rules` takes `plays`, `notPlayedInLast`, `addedOlderThan`, `bitrate`, `favorite`, `decade` and `releaseType` from [Rules](#rules), and these:
+
+| `field`           | `op`          | `value`                        |
+| ----------------- | ------------- | ------------------------------ |
+| `playedInLast`    | `days`        | 1 to 3650                      |
+| `addedInLast`     | `days`        | 1 to 3650                      |
+| `rating`          | `gte`, `lte`  | 0 to 5                         |
+| `skips`           | `lte`         | A count                        |
+| `genreName`       | `is`, `isNot` | A genre                        |
+| `artistName`      | `is`, `isNot` | An artist                      |
+| `inPlaylist`      | `is`, `isNot` | A playlist's id                |
+| `yearRange`       | `between`     | `{ "from": 1990, "to": 1999 }` |
+| `durationMinutes` | `gte`, `lte`  | 0 to 600                       |
+| `mood`            | `is`, `isNot` | A mood from the table above    |
+| `tempo`           | `is`          | `slow`, `medium` or `fast`     |
+| `energy`          | `is`          | `high` or `low`                |
+
+Moods, scenarios and Sounds like use audio analysis, so they fill up as it advances. The analysis downloads its [models](https://essentia.upf.edu/models.html) the first time it runs. They are licensed CC BY-NC-SA 4.0, for non-commercial use.
 
 ## A board template
 

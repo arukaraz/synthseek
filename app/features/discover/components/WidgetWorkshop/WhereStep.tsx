@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -37,21 +37,19 @@ export function WhereStep({ workshop, rules, fields, limits, people }: WhereStep
       onRemove={workshop.clearRules}
     >
       <div className={ruleList()}>
-        {rules.list.length >= 2 ? (
-          <div className={ruleMatch()}>
-            <span>{t("rules.match")}</span>
-            <SelectMenu
-              ariaLabel={t("rules.match")}
-              value={rules.mode}
-              options={[
-                { value: "all", label: t("rules.all") },
-                { value: "any", label: t("rules.any") },
-              ]}
-              onChange={workshop.setRuleMode}
-            />
-            <span>{t("rules.matchSuffix")}</span>
-          </div>
-        ) : null}
+        <div className={ruleMatch({ shown: rules.list.length >= 2 })}>
+          <span>{t("rules.match")}</span>
+          <SelectMenu
+            ariaLabel={t("rules.match")}
+            value={rules.mode}
+            options={[
+              { value: "all", label: t("rules.all") },
+              { value: "any", label: t("rules.any") },
+            ]}
+            onChange={workshop.setRuleMode}
+          />
+          <span>{t("rules.matchSuffix")}</span>
+        </div>
         {rules.list.map((rule, index) => {
           const text = ruleText(rule, people);
           if (index === editingIndex) return <div key={`edit-${index}`}>{editor}</div>;
@@ -66,7 +64,7 @@ export function WhereStep({ workshop, rules, fields, limits, people }: WhereStep
                 {text}
               </button>
               <IconButton
-                icon={X}
+                icon={Trash2}
                 size="sm"
                 animated={false}
                 aria-label={t("rules.remove", { rule: text })}

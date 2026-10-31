@@ -121,6 +121,7 @@ vi.mock("@hooks/api/mutations/widgets/useRemoveWidget", () => ({
 vi.mock("@hooks/api/mutations/widgets/useImportWidgetPreview", () => ({
   useImportWidgetPreview: () => ({ mutate: vi.fn(), isPending: false }),
 }));
+vi.mock("@hooks/api/queries/widgets/useSetGrammar", () => ({ useSetGrammar: () => ({ data: undefined }) }));
 vi.mock("@hooks/ui/useDebounce", () => ({ useDebounce: <T,>(value: T) => value }));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => ({ playEntity: vi.fn() }) }));
 vi.mock("@features/search/components/ContentRequestFlow", () => ({

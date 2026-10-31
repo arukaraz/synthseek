@@ -6,6 +6,7 @@ import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { SETTINGS_PAGE_BY_ID } from "../../constants";
 import { contentRoot } from "../../styles";
 import { ListeningServicesCard } from "./components/ListeningServicesCard";
+import { NeverIncludeCard } from "./components/NeverIncludeCard";
 
 export function ListeningSection() {
   const { t } = useTranslation("settings");
@@ -15,6 +16,7 @@ export function ListeningSection() {
     <div className={contentRoot()}>
       <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <ListeningServicesCard />
+      <NeverIncludeCard />
     </div>
   );
 }

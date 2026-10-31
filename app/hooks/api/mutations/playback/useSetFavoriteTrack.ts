@@ -8,6 +8,7 @@ export function useSetFavoriteTrack() {
     onError: (error) => errorToast(error, "playback.favoriteFailed"),
     onSettled: () => {
       void utils.playback.favoriteTrackIds.invalidate();
+      void utils.widgets.setList.invalidate();
     },
   });
 }

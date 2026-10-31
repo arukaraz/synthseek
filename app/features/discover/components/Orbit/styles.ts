@@ -11,11 +11,15 @@ export const orbitGrid = cva(
 );
 
 export const orbitCard = cva(
-  "focus-visible:ring-primary-400 group/orbit row-span-4 grid min-w-0 grid-rows-subgrid gap-y-1 rounded-xl text-left outline-none focus-visible:ring-2"
+  "group/card relative row-span-4 grid min-w-0 grid-rows-subgrid gap-y-1 rounded-xl text-left"
 );
 
 export const orbitCover = cva(
-  "bg-surface-sunken relative h-full max-h-36 min-h-0 w-full overflow-hidden rounded-lg transition-transform group-hover/orbit:scale-[1.02]"
+  "bg-surface-sunken relative h-full max-h-36 min-h-0 w-full overflow-hidden rounded-lg transition-transform group-hover/card:scale-[1.02]"
+);
+
+export const orbitOpen = cva(
+  "focus-visible:ring-primary-400 min-w-0 rounded-sm text-left outline-none after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:after:ring-2"
 );
 
 export const orbitTitle = cva("text-fg text-[13px] font-semibold break-words");

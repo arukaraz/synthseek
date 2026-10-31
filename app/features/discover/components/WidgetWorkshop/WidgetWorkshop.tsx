@@ -17,8 +17,13 @@ import { previewableDraft } from "./helpers";
 import { LookSection } from "./LookSection";
 import { PlaylistChoice } from "./PlaylistChoice";
 import { PlaylistSection } from "./PlaylistSection";
+import { SegmentTabs } from "@components/ui/SegmentTabs";
+
+import { WIDGET_KINDS } from "./constants";
 import { QuerySection } from "./QuerySection";
 import {
+  kindLabel,
+  kindSwitch,
   workshopAside,
   workshopForm,
   workshopHeader,
@@ -65,6 +70,18 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
             <DialogDescription className={workshopSubtitle()}>{t("workshop.customizeHint")}</DialogDescription>
           ) : null}
         </div>
+        {purpose === "widget" ? (
+          <div className={kindSwitch()}>
+            <span className={kindLabel()}>{t("workshop.buildUsing")}</span>
+            <SegmentTabs
+              items={WIDGET_KINDS.map((kind) => ({ value: kind, label: t(`kinds.${kind}`) }))}
+              value={workshop.kind}
+              onValueChange={workshop.setKind}
+              layoutId="widget-workshop-kind"
+              ariaLabel={t("workshop.kindLabel")}
+            />
+          </div>
+        ) : null}
       </div>
       <div className={workshopScroll()}>
         <div className={workshopLayout()}>
@@ -78,7 +95,7 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
             />
           </aside>
           <div className={workshopForm()}>
-            <QuerySection workshop={workshop} context={context} />
+            <QuerySection workshop={workshop} context={context} preview={preview.data} />
             {rule ? (
               <PlaylistSection workshop={workshop} />
             ) : (

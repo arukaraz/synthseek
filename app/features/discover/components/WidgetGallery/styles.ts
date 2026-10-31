@@ -6,7 +6,7 @@ import type { PreviewFrame } from "./types";
 export const galleryDialog = cva("sm:h-[min(90vh,880px)]", {
   variants: {
     workshop: {
-      true: "sm:max-w-6xl",
+      true: "sm:max-w-[1280px]",
       false: "sm:max-w-5xl",
     },
   },

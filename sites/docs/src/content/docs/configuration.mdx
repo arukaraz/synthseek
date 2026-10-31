@@ -152,6 +152,12 @@ Administrators only, in three tabs. Covered on the [Operations page](/operations
 | Track naming | `{albumartist}/{album}/<Disc {disc:02d}>/{track:02d} - {title}` | The folders and filename every track is given when it is filed. |
 | Rules        | None                                                            | The rules that send music to this path.                         |
 
+The same tab holds **Audio analysis**, which shows how much of the library has been analyzed.
+
+| Setting | Default    | What it does                                                                |
+| ------- | ---------- | --------------------------------------------------------------------------- |
+| Speed   | Background | How much of the machine the analysis may use: Background, Balanced or Fast. |
+
 **Rules** lists the conditions a request can match, such as who asked for it, its genre or its release year. When several match, the one higher in the list is tried first.
 
 **Scan** shows what the last library scan found, and the files it could not recognise, behind **Review files**.
@@ -278,6 +284,7 @@ Two live where you use them rather than in a settings section.
 | `RECYCLE_BIN_PATH`        | `/data/recycle`              | Where replaced files go.                                                                                 |
 | `HELD_IMPORTS_PATH`       | `/data/held-imports`         | Where files held for review wait.                                                                        |
 | `ARTWORK_CACHE_PATH`      | `/data/artwork-cache`        | Disk cache for proxied artwork.                                                                          |
+| `AUDIO_MODELS_PATH`       | `/data/models`               | Where the audio analysis models are kept.                                                                |
 
 ### Sessions and cookies
 

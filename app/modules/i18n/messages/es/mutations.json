@@ -13,6 +13,8 @@
     "importedSkipped": " ({{count}} omitidos)"
   },
   "settings": {
+    "audioAnalysisSaved": "Velocidad del análisis de audio guardada",
+    "audioAnalysisFailed": "No se pudo guardar la velocidad del análisis de audio",
     "formattingFailed": "No se pudo guardar el formato",
     "namingFailed": "No se pudo guardar la plantilla de nombrado",
     "libraryPathFailed": "No se pudo guardar la ruta de biblioteca",
@@ -128,6 +130,17 @@
     "templateExportFailed": "No se pudo exportar tu tablero"
   },
   "widgets": {
+    "setRebuilt": "Listas reconstruidas",
+    "setRebuildFailed": "No se pudieron reconstruir las listas",
+    "setPinFailed": "No se pudo cambiar el fijado",
+    "setRestored": "Versión restaurada",
+    "setRestoreFailed": "No se pudo restaurar esta versión",
+    "setCopySaved": "Guardada como playlist",
+    "setCopyFailed": "No se pudo guardar esta versión",
+    "setRateFailed": "No se pudo guardar la valoración",
+    "vetoFailed": "No se pudo actualizar Nunca incluir",
+    "trackBanned": "Pista añadida a Nunca incluir",
+    "artistBanned": "{{artist}} añadido a Nunca incluir",
     "saveFailed": "No se pudo guardar este widget",
     "removeFailed": "No se pudo borrar este widget",
     "importFailed": "No se pudo comprobar este JSON",

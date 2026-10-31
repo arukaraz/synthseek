@@ -189,6 +189,20 @@ export function problemText(problem: WidgetProblem): string {
       });
     case "pickByNotMeasure":
       return i18n.t("widgets:problems.pickByNotMeasure", { measure: i18n.t(`widgets:measures.${problem.measure}`) });
+    case "setRuleNotAllowed":
+      return i18n.t("widgets:problems.setRuleNotAllowed", {
+        field: i18n.t(`widgets:rules.fields.${problem.field}`),
+      });
+    case "setSlotNeedsParam":
+      return i18n.t("widgets:problems.setSlotNeedsParam", {
+        origin: i18n.t(`widgets:set.origins.${problem.origin}`),
+      });
+    case "setSlotParamInvalid":
+      return i18n.t("widgets:problems.setSlotParamInvalid", {
+        origin: i18n.t(`widgets:set.origins.${problem.origin}`),
+      });
+    case "setSlotDuplicate":
+      return i18n.t("widgets:problems.setSlotDuplicate");
     case "ruleNotForSubject":
       return i18n.t("widgets:problems.ruleNotForSubject", {
         field: i18n.t(`widgets:rules.fields.${problem.field}`),

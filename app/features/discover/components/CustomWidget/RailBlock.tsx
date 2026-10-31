@@ -18,7 +18,7 @@ export function RailBlock({ items, size, accent, controls }: WidgetBlockProps) {
       <FadeScroll axis="x" arrows className={railScroller()} label={t("customWidget.rail")}>
         <div className={blockRail()}>
           {items.slice(0, BLOCK_LIMITS.rail[size]).map((item) => (
-            <WidgetCard key={item.key} item={item} accent={accent} controls={controls(item)} />
+            <WidgetCard key={item.key} item={item} accent={accent} controls={controls(item)} surface="bare" />
           ))}
         </div>
       </FadeScroll>

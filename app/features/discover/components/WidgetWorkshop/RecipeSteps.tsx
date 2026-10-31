@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
+import { Checkbox } from "@components/ui/Checkbox";
 import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { SelectMenu } from "@components/ui/SelectMenu";
 
@@ -23,7 +24,7 @@ import {
 import { NumberField } from "./NumberField";
 import { StepRow } from "./StepRow";
 import { SubjectSelect } from "./SubjectSelect";
-import { addRow, stepList, stepText } from "./styles";
+import { addRow, compareField, stepList } from "./styles";
 import type { RecipeStepsProps } from "./types";
 import { WhenControls } from "./WhenControls";
 import { WhereStep } from "./WhereStep";
@@ -39,6 +40,8 @@ export function RecipeSteps({ workshop, recipe, grammar, people }: RecipeStepsPr
   const groupable = canGroupBy(grammar, recipe);
   const showWhere = rules.list.length > 0 || workshop.ruleDraft !== null;
   const [firstField] = fields;
+  const addsGroup = groupable && !recipe.groupBy;
+  const addsWhere = showWhere ? undefined : firstField;
   const limits = { daysMax: grammar.limits.daysMax, topNMax: grammar.limits.topNMax };
 
   return (
@@ -79,6 +82,16 @@ export function RecipeSteps({ workshop, recipe, grammar, people }: RecipeStepsPr
           limits={grammar.limits}
           onChange={(time) => update((current) => ({ ...current, time }))}
         />
+        <label className={compareField()}>
+          <Checkbox
+            checked={recipe.compare === "previous"}
+            disabled={recipe.measure === "rankDelta"}
+            onCheckedChange={(checked) =>
+              update((current) => ({ ...current, compare: checked === true ? "previous" : undefined }))
+            }
+          />
+          {t("steps.compareToggle")}
+        </label>
       </StepRow>
       {recipe.groupBy ? (
         <StepRow
@@ -92,17 +105,6 @@ export function RecipeSteps({ workshop, recipe, grammar, people }: RecipeStepsPr
             options={(subject?.groupBy ?? []).map((unit) => ({ value: unit, label: t(`units.${unit}`) }))}
             onChange={(groupBy) => update((current) => ({ ...current, groupBy }))}
           />
-        </StepRow>
-      ) : null}
-      {recipe.compare === "previous" ? (
-        <StepRow
-          label={t("steps.compare")}
-          removeLabel={t("steps.remove", { step: t("steps.compare") })}
-          onRemove={
-            recipe.measure === "rankDelta" ? undefined : () => update((current) => ({ ...current, compare: undefined }))
-          }
-        >
-          <span className={stepText()}>{t("steps.compareText")}</span>
         </StepRow>
       ) : null}
       {limited ? (
@@ -137,34 +139,30 @@ export function RecipeSteps({ workshop, recipe, grammar, people }: RecipeStepsPr
       {showWhere ? (
         <WhereStep workshop={workshop} rules={rules} fields={fields} limits={limits} people={people} />
       ) : null}
-      <div className={addRow()}>
-        {groupable && !recipe.groupBy ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => update((current) => ({ ...current, groupBy: DEFAULT_GROUP_BY }))}
-          >
-            <Plus />
-            {t("steps.add.groupBy")}
-          </Button>
-        ) : null}
-        {recipe.compare === "previous" ? null : (
-          <Button variant="ghost" size="sm" onClick={() => update((current) => ({ ...current, compare: "previous" }))}>
-            <Plus />
-            {t("steps.add.compare")}
-          </Button>
-        )}
-        {!showWhere && firstField ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => workshop.openRule({ kind: "new" }, defaultRuleFor(firstField))}
-          >
-            <Plus />
-            {t("steps.add.where")}
-          </Button>
-        ) : null}
-      </div>
+      {addsGroup || addsWhere ? (
+        <div className={addRow()}>
+          {addsGroup ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => update((current) => ({ ...current, groupBy: DEFAULT_GROUP_BY }))}
+            >
+              <Plus />
+              {t("steps.add.groupBy")}
+            </Button>
+          ) : null}
+          {addsWhere ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => workshop.openRule({ kind: "new" }, defaultRuleFor(addsWhere))}
+            >
+              <Plus />
+              {t("steps.add.where")}
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

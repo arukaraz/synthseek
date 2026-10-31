@@ -1,5 +1,7 @@
 "use client";
 
+import { Download, Play } from "lucide-react";
+
 import { CoverArt } from "../WidgetRow/CoverArt";
 import { BLOCK_LIMITS, MOSAIC_COLUMNS, MOSAIC_ROWS } from "./constants";
 import { itemMeta } from "./helpers";
@@ -20,7 +22,10 @@ export function MosaicBlock({ items, size, accent, controls }: WidgetBlockProps)
             <li key={item.key} className={mosaicTile()} title={title}>
               <CoverArt src={item.cover} seed={item.key} sizes="160px" />
               {action ? (
-                <button type="button" className={mosaicButton()} aria-label={label} onClick={action} />
+                <button type="button" className={mosaicButton()} aria-label={label} onClick={action}>
+                  {coverAction?.kind === "play" ? <Play /> : null}
+                  {coverAction?.kind === "request" ? <Download /> : null}
+                </button>
               ) : (
                 <span className={visuallyHidden()}>{title}</span>
               )}

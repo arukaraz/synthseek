@@ -9,6 +9,7 @@ import type { ArtistSpotlightCardProps } from "../types";
 interface SpotlightArtist {
   artist: ArtistSpotlightCardProps["artist"];
   latestAlbum: ArtistSpotlightCardProps["latestAlbum"];
+  inLibrary: boolean;
 }
 
 interface SpotlightQuery {
@@ -19,6 +20,7 @@ interface SpotlightQuery {
 
 const useArtistsForYouMock = vi.fn<(countryName: string) => SpotlightQuery>();
 const openForResult = vi.fn();
+const shuffleEntity = vi.fn();
 
 vi.mock("@hooks/api/queries/analytics/useArtistsForYou", () => ({
   useArtistsForYou: (countryName: string) => useArtistsForYouMock(countryName),
@@ -32,11 +34,22 @@ vi.mock("@features/search/components/ContentRequestFlow", () => ({
   useContentRequestFlow: () => ({ openForResult, openForTarget: vi.fn() }),
 }));
 
+vi.mock("@hooks/ui/useEntityPlayback", () => ({
+  useEntityPlayback: () => ({ shuffleEntity }),
+}));
+
 vi.mock("../ArtistSpotlightCard", () => ({
-  ArtistSpotlightCard: ({ artist, onClick }: ArtistSpotlightCardProps) => (
-    <button type="button" data-testid="artist-card" data-id={artist.id} onClick={onClick}>
-      {artist.name}
-    </button>
+  ArtistSpotlightCard: ({ artist, onClick, onPlay }: ArtistSpotlightCardProps) => (
+    <>
+      <button type="button" data-testid="artist-card" data-id={artist.id} onClick={onClick}>
+        {artist.name}
+      </button>
+      {onPlay ? (
+        <button type="button" onClick={onPlay}>
+          play {artist.name}
+        </button>
+      ) : null}
+    </>
   ),
 }));
 
@@ -44,6 +57,7 @@ function buildArtist(id: string, name: string): SpotlightArtist {
   return {
     artist: { id, name, images: [] },
     latestAlbum: null,
+    inLibrary: false,
   };
 }
 
@@ -104,6 +118,18 @@ describe("ArtistSpotlight", () => {
     renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     expect(screen.getByText(enDiscover.artistSpotlight.emptyTitle)).toBeInTheDocument();
+  });
+
+  it("shuffles an artist the library holds and offers nothing to play otherwise", () => {
+    useArtistsForYouMock.mockReturnValue(
+      buildQuery({ data: [{ ...buildArtist("a", "Autechre"), inLibrary: true }, buildArtist("b", "Bonobo")] })
+    );
+
+    renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "play Autechre" }));
+    expect(shuffleEntity).toHaveBeenCalledWith({ kind: "artist", artist: "Autechre" });
+    expect(screen.queryByRole("button", { name: "play Bonobo" })).not.toBeInTheDocument();
   });
 
   it("renders a card per artist when the list resolves", () => {

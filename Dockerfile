@@ -9,6 +9,13 @@ COPY server/db ./db
 
 RUN npm ci --omit=dev
 
+RUN find node_modules/onnxruntime-web/dist -type f \
+    ! -name 'ort.node.min.js' \
+    ! -name 'ort.node.min.mjs' \
+    ! -name 'ort-wasm-simd-threaded.wasm' \
+    ! -name 'ort-wasm-simd-threaded.mjs' \
+    -delete
+
 RUN PRISMA_VERSION="$(node -p "(require('./package.json').devDependencies?.prisma || require('./package.json').dependencies['@prisma/client']).replace(/^[\^~]/,'')")" \
     && npm install --no-save prisma@${PRISMA_VERSION} \
     && npx prisma generate --schema=db/schema.prisma

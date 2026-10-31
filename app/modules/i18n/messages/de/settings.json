@@ -1335,6 +1335,10 @@
         "name": "Bibliotheksscan",
         "description": "Indiziert die Audiodateien auf der Festplatte, ermittelt, welchen Titel jede enthält, und gleicht ab, was verschwunden ist."
       },
+      "audio-analysis": {
+        "name": "Audioanalyse",
+        "description": "Hört jeden Titel an, um Stimmung, Energie und Tempo für die intelligenten Listen zu erkennen."
+      },
       "library-loudness": {
         "name": "Lautheitsmessung",
         "description": "Misst, wie laut jeder Titel ist, damit die Wiedergabe die Lautstärke zwischen ihnen ausgleichen kann."
@@ -1349,7 +1353,7 @@
       },
       "smart-playlists": {
         "name": "Smarte Playlists",
-        "description": "Erneuert täglich oder wöchentlich die Playlists, deren Titel eine Widget-Regel auswählt."
+        "description": "Erneuert die Playlists, deren Titel eine Widget-Regel auswählt, nach dem Zeitplan jeder einzelnen."
       }
     }
   },
@@ -2241,6 +2245,34 @@
     },
     "finishedAbandoned": "{{count}} wurden nie erreicht, weil der Lauf vorzeitig endete.",
     "finishedFailuresTruncated": "Gezeigt werden {{listed}} von {{count}}. Der Rest steht in den Protokollen."
+  },
+  "audioAnalysis": {
+    "title": "Audioanalyse",
+    "description": "Hört deine Dateien einmal an, um Stimmung, Energie und Tempo zu erkennen. Startet von selbst, läuft im Hintergrund und macht nach einem Neustart dort weiter, wo sie aufgehört hat.",
+    "analyzed": "Analysiert",
+    "ofTotal": "{{done}} von {{total}}",
+    "retry": "Nicht lesbar",
+    "state": "Status",
+    "running": "Läuft",
+    "idle": "Wartet auf den nächsten Durchlauf",
+    "speed": "Geschwindigkeit",
+    "speeds": { "background": "Hintergrund", "balanced": "Ausgewogen", "fast": "Schnell" },
+    "pause": "Pausieren",
+    "start": "Jetzt ausführen",
+    "hint": "Stimmungslisten nutzen das bisher Analysierte und wachsen bei jeder Aktualisierung von selbst."
+  },
+  "neverInclude": {
+    "title": "Nie aufnehmen",
+    "description": "Gilt für alle intelligenten Listen deines Kontos. Ein Widget kann einen Eintrag für sich erlauben.",
+    "artists": "Künstler",
+    "tracks": "Titel",
+    "noTaste": "Wiedergaben, die deinen Geschmack nicht prägen",
+    "searchArtists": "Künstler suchen",
+    "searchTracks": "Titel nach Name oder Künstler suchen",
+    "searchGenres": "Genres suchen",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "{{name}} entfernen",
+    "noMatch": "Keine Treffer"
   },
   "libraryScan": {
     "card": {

@@ -14,6 +14,7 @@ import { artworkProxySrc } from "@utils/artworkProxy";
 import {
   COMPRESSOR_PRESETS,
   COMPRESSOR_STORAGE_KEY,
+  EARLY_SKIP_SECONDS,
   CONVERSION_STORAGE_KEY,
   EQUALIZER_PRESETS,
   EQUALIZER_PRESETS_STORAGE_KEY,
@@ -529,9 +530,19 @@ let lastMessages: PlayerMessages = {
 };
 
 let queueClearedHandler: (() => void) | null = null;
+let earlySkipHandler: ((trackId: string) => void) | null = null;
 
 export function setQueueClearedHandler(handler: (() => void) | null): void {
   queueClearedHandler = handler;
+}
+
+export function setEarlySkipHandler(handler: ((trackId: string) => void) | null): void {
+  earlySkipHandler = handler;
+}
+
+function reportEarlySkip(): void {
+  const current = state.queue[state.index];
+  if (current && state.positionSeconds < EARLY_SKIP_SECONDS) earlySkipHandler?.(current.id);
 }
 
 export function setMessages(messages: PlayerMessages): void {
@@ -833,6 +844,7 @@ export const actions = {
     queueClearedHandler?.();
   },
   next(): void {
+    reportEarlySkip();
     advance(false);
   },
   jumpTo(index: number): void {

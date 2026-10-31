@@ -25,9 +25,57 @@ export function viewThumbMarks(block: WidgetBlock): ThumbMark[] {
     case "leader":
       return [box(4, 4, 36, 32, 4, "primary"), ...times(3, (i) => box(46, 6 + i * 10, 48, 5, 2, "muted"))];
     case "cards":
-      return times(3, (i) => box(4 + i * 32, 4, 28, 32, 4, firstLit(i)));
+      return times(4, (i) => {
+        const x = 4 + (i % 2) * 48;
+        const y = 4 + Math.floor(i / 2) * 17;
+        return [
+          box(x, y, 14, 15, 2, firstLit(i)),
+          box(x + 17, y + 3, 24, 4, 1, "muted"),
+          box(x + 17, y + 9, 16, 3, 1, "faint"),
+        ];
+      });
     case "rail":
-      return times(4, (i) => box(4 + i * 24, 6, 20, 28, 4, firstLit(i)));
+      return [
+        ...times(4, (i) => [box(4 + i * 22, 7, 19, 22, 3, firstLit(i)), box(4 + i * 22, 32, 14, 3, 1, "muted")]),
+        { kind: "line", d: "M93,14 l4,5 l-4,5", tone: "primary" },
+      ];
+    case "mix":
+      return [
+        box(4, 4, 15, 15, 2, "primary"),
+        box(21, 4, 15, 15, 2, "muted"),
+        box(4, 21, 15, 15, 2, "muted"),
+        box(21, 21, 15, 15, 2, "primary"),
+        box(44, 8, 44, 6, 2, "primary"),
+        box(44, 18, 34, 4, 2, "muted"),
+        { kind: "dot", cx: 86, cy: 31, r: 5, tone: "primary" },
+      ];
+    case "posters":
+      return times(3, (i) => [
+        box(4 + i * 32, 3, 28, 22, 3, "muted"),
+        { kind: "dot", cx: 25 + i * 32, cy: 19, r: 3, tone: "primary" },
+        box(4 + i * 32, 28, 22, 3, 1, "primary"),
+        box(4 + i * 32, 33, 16, 3, 1, "muted"),
+      ]);
+    case "spotlight":
+      return times(4, (i) => [
+        box(4 + i * 24, 4, 20, 32, 3, "faint"),
+        box(6 + i * 24, 25, 15, 4, 1, firstLit(i)),
+        box(6 + i * 24, 31, 10, 2, 1, "muted"),
+      ]);
+    case "tiles":
+      return [
+        box(4, 3, 44, 34, 3, "primary"),
+        box(51, 3, 21, 16, 3, "muted"),
+        box(75, 3, 21, 16, 3, "faint"),
+        box(51, 21, 45, 16, 3, "muted"),
+      ];
+    case "hero":
+      return [
+        box(4, 3, 92, 34, 5, "muted"),
+        box(10, 22, 40, 6, 2, "primary"),
+        box(10, 30, 24, 3, 1, "faint"),
+        ...times(3, (i) => ({ kind: "dot", cx: 80 + i * 6, cy: 31, r: 1.5, tone: firstLit(i) })),
+      ];
     case "mosaic":
       return times(6, (i) =>
         box(4 + (i % 3) * 32, 3 + Math.floor(i / 3) * 18, 28, 15, 3, i % 2 === 0 ? "primary" : "muted")

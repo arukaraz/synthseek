@@ -230,3 +230,13 @@ export const conditionRow = cva(
 );
 
 export const conditionCell = cva("col-span-2 min-w-0 sm:col-span-1");
+
+export const analysisFacts = cva("grid grid-cols-1 gap-3 sm:grid-cols-3");
+
+export const analysisFact = cva("flex min-w-0 flex-col gap-0.5");
+
+export const analysisFactLabel = cva("text-fg/60 text-xs");
+
+export const analysisFactValue = cva("text-fg text-sm font-medium tabular-nums");
+
+export const analysisRow = cva("flex flex-wrap items-center gap-3");

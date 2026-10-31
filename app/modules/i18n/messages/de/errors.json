@@ -423,6 +423,10 @@
     "title": "Widget nicht gefunden",
     "description": "Dieses Widget existiert nicht mehr. Lade die Seite neu, um deine aktuellen Widgets zu sehen."
   },
+  "SET_VETO_LIMIT_REACHED": {
+    "title": "Nie aufnehmen ist voll",
+    "description": "Entferne in den Einstellungen einen Eintrag, bevor du einen weiteren hinzufügst."
+  },
   "WIDGET_LIMIT_REACHED": {
     "title": "Zu viele Widgets",
     "description": "Entferne eines deiner Widgets, bevor du ein neues anlegst."

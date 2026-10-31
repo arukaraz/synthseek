@@ -23,7 +23,8 @@ Listed under **Settings**, then **System**, then **Jobs**, with what each does, 
 | **Loudness Measurement**  | Measures how loud each track is, so playback can even out volume.                                                       | Every 30 minutes                                     |
 | **Scrobble Relay**        | Sends what you listened to on to your connected listening services.                                                     | Every 10 minutes                                     |
 | **Playback Source Links** | Finds which of your tracks your media servers can also play.                                                            | When a media server is connected, then every 6 hours |
-| **Smart Playlists**       | Refreshes the playlists a widget rule fills.                                                                            | Hourly, when a smart playlist exists                 |
+| **Audio Analysis**        | Listens to each track to learn its mood, energy and tempo for smart playlists.                                          | Every 30 minutes                                     |
+| **Smart Playlists**       | Refreshes the playlists a widget rule fills.                                                                            | Every 5 minutes, when a smart playlist exists        |
 
 Running the discovery sweep by hand checks every feed, including those not due yet. The other jobs do a normal pass, which still honours their own per-item cadence. Neither permanently shifts the schedule.
 
@@ -152,6 +153,7 @@ Your music files live in your library paths, `/music` and any you added, and are
 - The scan settling the copies it proved are the same recording.
 - Clearing the leftover files described above.
 - **Delete files** on the Library page.
+- A track a playlist set downloaded, once the expiry you set passed and nothing kept it.
 
 Each one moves the file to the recycle bin under `/data`, where it stays until the retention sweep clears it.
 

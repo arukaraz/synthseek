@@ -9,13 +9,16 @@ import {
   dailyYearOf,
   feedReadbackOf,
   feedServerOf,
+  fittingBlocksOf,
   matchingIcons,
   previewableDraft,
+  reachableBlocksOf,
   recipeShapeOf,
   readbackOf,
   rotationChoicesOf,
   ruleText,
   viewChoicesOf,
+  withBlock,
   withFittingView,
   withMeasure,
   serverChoicesOf,
@@ -103,7 +106,7 @@ describe("withFittingView and viewChoicesOf", () => {
     expect(withFittingView(draft, catalog, grammar).view.block).toBe("yearCalendar");
     const blocks = {
       fitting: ["bars", "sparkline"] as const,
-      accepted: ["bars", "sparkline", "yearCalendar"] as const,
+      reachable: ["bars", "sparkline", "yearCalendar"] as const,
     };
     expect(viewChoicesOf(catalog, blocks, "yearCalendar", false).map((choice) => choice.block)).toEqual([
       "bars",
@@ -119,9 +122,19 @@ describe("withFittingView and viewChoicesOf", () => {
     expect(all.find((choice) => choice.block === "heatmap")?.fits).toBe(false);
   });
 
+  it("offers a view that only needs the comparison, and picking it turns the comparison on", () => {
+    expect(reachableBlocksOf(RECIPE, catalog, grammar)).toContain("rankingMoves");
+    expect(fittingBlocksOf(RECIPE, catalog, grammar)).not.toContain("rankingMoves");
+    const draft = { ...NEW_WIDGET_DRAFT, query: RECIPE };
+    const picked = withBlock(draft, "rankingMoves", catalog);
+    expect(picked.view.block).toBe("rankingMoves");
+    expect(picked.query).toMatchObject({ compare: "previous" });
+    expect(withFittingView(picked, catalog, grammar).view.block).toBe("rankingMoves");
+  });
+
   it("marks the first fitting view as suggested and shows the rest only on request, disabled", () => {
     const fitting = ["share", "bars", "list"] as const;
-    const blocks = { fitting, accepted: fitting };
+    const blocks = { fitting, reachable: fitting };
     expect(viewChoicesOf(catalog, blocks, "share", false)).toEqual([
       { block: "share", fits: true, suggested: true },
       { block: "bars", fits: true, suggested: false },

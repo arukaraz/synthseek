@@ -5,13 +5,16 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
 import { SelectMenu } from "@components/ui/SelectMenu";
+import { cn } from "@utils/cn";
 
 import { ViewThumb } from "../ViewThumb/ViewThumb";
+import { PLAYLIST_SET_ACTIONS } from "./constants";
 import { viewChoicesOf } from "./helpers";
 import {
   accentDot,
   accentRow,
   fieldLabel,
+  lookAction,
   lookGrid,
   section,
   sectionHead,
@@ -65,12 +68,14 @@ export function LookSection({ workshop, context }: WorkshopSectionProps) {
         ))}
       </div>
       <div className={lookGrid()}>
-        <label className={fieldLabel()}>
+        <label className={cn(fieldLabel(), lookAction())}>
           {t("look.action")}
           <SelectMenu
             ariaLabel={t("look.action")}
             value={view.action}
-            options={context.catalog.actions.map((action) => ({ value: action, label: t(`actions.${action}`) }))}
+            options={(workshop.draft.query.type === "playlists" ? PLAYLIST_SET_ACTIONS : context.catalog.actions).map(
+              (action) => ({ value: action, label: t(`actions.${action}`) })
+            )}
             onChange={workshop.setAction}
           />
         </label>

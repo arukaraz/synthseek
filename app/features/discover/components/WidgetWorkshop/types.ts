@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
 
+import type { SearchComboboxOption } from "@components/ui/SearchCombobox";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 import type {
   FeedQuery,
   HouseholdMember,
+  PlaylistSetQuery,
   RecipeQuery,
   RecapPeriod,
   RecapQuery,
+  SetGrammar,
   WidgetAccent,
   WidgetAction,
   WidgetBlock,
@@ -20,7 +23,7 @@ import type {
 } from "@hooks/api/queries/widgets/types";
 
 export type WidgetKind = "recipe" | "feed";
-export type WorkshopSubject = RecipeQuery["subject"] | "recap";
+export type WorkshopSubject = RecipeQuery["subject"] | "recap" | "playlists";
 export type RecapNamedPeriod = Extract<RecapPeriod, { mode: "named" }>["value"];
 export type RecipeTime = RecipeQuery["time"];
 export type RecipeSubject = RecipeQuery["subject"];
@@ -120,11 +123,12 @@ export interface WidgetWorkshopState {
   setPlaylist: (refresh: SmartRefresh | null) => void;
   linkPlaylist: (playlistId: string) => void;
   fitting: readonly WidgetBlock[];
-  accepted: readonly WidgetBlock[];
+  reachable: readonly WidgetBlock[];
   ruleDraft: RuleDraft | null;
   previewDraft: WidgetDraft;
   setKind: (kind: WidgetKind) => void;
   updateRecipe: (change: (recipe: RecipeQuery) => RecipeQuery) => void;
+  updateSet: (change: (set: PlaylistSetQuery) => PlaylistSetQuery) => void;
   setRecapPeriod: (period: RecapPeriod) => void;
   setRecipeSubject: (subject: WorkshopSubject) => void;
   setQuery: (query: WidgetQuery) => void;
@@ -156,13 +160,16 @@ export interface WidgetWorkshopProps {
 export interface WorkshopSectionProps {
   workshop: WidgetWorkshopState;
   context: WorkshopContext;
+  preview?: WidgetResult;
 }
 
 export interface StepRowProps {
   label: string;
+  info?: ReactNode;
   children: ReactNode;
   onRemove?: () => void;
   removeLabel?: string;
+  flush?: boolean;
 }
 
 export interface WorkshopPreviewProps {
@@ -173,11 +180,17 @@ export interface WorkshopPreviewProps {
   onSizeChange: (size: BoardSize) => void;
 }
 
+export interface RuleChoice {
+  id: string;
+  name: string;
+}
+
 export interface RuleEditorProps {
   draft: RuleDraft;
   fields: readonly RuleField[];
   limits: RuleLimits;
   people: readonly HouseholdMember[];
+  playlists?: readonly RuleChoice[];
   onChange: (rule: WidgetRule) => void;
   onCancel: () => void;
   onCommit: () => void;
@@ -192,7 +205,18 @@ export interface RuleControlsProps {
   rule: WidgetRule;
   limits: RuleLimits;
   people: readonly HouseholdMember[];
+  playlists?: readonly RuleChoice[];
   onChange: (rule: WidgetRule) => void;
+}
+
+export interface NameRuleValueProps {
+  label: string;
+  value: string;
+  kind: "genre" | "artist";
+  display?: string;
+  full?: boolean;
+  extra?: readonly SearchComboboxOption[];
+  onChange: (value: string) => void;
 }
 
 export interface WhereStepProps {
@@ -201,6 +225,15 @@ export interface WhereStepProps {
   fields: readonly RuleField[];
   limits: RuleLimits;
   people: readonly HouseholdMember[];
+  playlists?: readonly RuleChoice[];
+}
+
+export interface PlaylistStepsProps {
+  workshop: WidgetWorkshopState;
+  set: PlaylistSetQuery;
+  grammar: SetGrammar;
+  context: WorkshopContext;
+  preview?: WidgetResult;
 }
 
 export interface RecipeStepsProps {

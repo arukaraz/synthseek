@@ -11,6 +11,7 @@ import type {
 
 type RecipeTrackRow = WidgetRowOf<RecipeWidgetResult, "tracks">;
 type RecipeAlbumRow = WidgetRowOf<RecipeWidgetResult, "albums">;
+type RecipeArtistRow = WidgetRowOf<RecipeWidgetResult, "artists">;
 type RecipeBucketRow = WidgetRowOf<RecipeWidgetResult, "buckets">;
 type RecipeSeriesRow = WidgetRowOf<RecipeWidgetResult, "series">;
 type RecipeMatrixRow = WidgetRowOf<RecipeWidgetResult, "matrix">;
@@ -117,6 +118,10 @@ export function createAlbumResult(rows: RecipeAlbumRow[]): RecipeWidgetResult {
   return { ...RECIPE_BASE, subject: "albums", total: rows.length, dataset: "albums", shape: "ranked", rows };
 }
 
+export function createArtistResult(rows: RecipeArtistRow[]): RecipeWidgetResult {
+  return { ...RECIPE_BASE, subject: "artists", total: rows.length, dataset: "artists", shape: "ranked", rows };
+}
+
 export function createBucketResult(
   rows: RecipeBucketRow[],
   subject: "genres" | "decades" = "genres"
@@ -208,6 +213,7 @@ export function createWidgetGrammar(): WidgetGrammar {
       { key: "genres", measures: ["plays", "minutes", "distinctTracks", "rankDelta"], rules: [], groupBy: [] },
     ],
     groupByMeasures: ["plays", "minutes", "distinctTracks"],
+    numericMeasures: ["plays", "minutes", "distinctTracks", "rankDelta"],
     namedPeriods: ["thisWeek", "thisMonth", "thisYear", "all"],
     pick: { orders: ["desc", "asc"], rotations: ["daily", "weekly"], limitMin: 1, limitMax: 50 },
     limits: { daysMax: 3650, topNMax: 50, rulesMax: 8, yearMin: 1900, yearMax: 2100 },
@@ -234,24 +240,24 @@ export function createWidgetGrammar(): WidgetGrammar {
 export function createWidgetCatalog(): WidgetCatalog {
   return {
     blocks: [
-      { key: "list", shapes: ["ranked", "buckets"], needsCompare: false },
-      { key: "cards", shapes: ["ranked"], needsCompare: false },
-      { key: "rail", shapes: ["ranked"], needsCompare: false },
-      { key: "leader", shapes: ["ranked"], needsCompare: false },
-      { key: "mosaic", shapes: ["ranked"], needsCompare: false },
-      { key: "rankingMoves", shapes: ["ranked"], needsCompare: true },
-      { key: "stat", shapes: ["single"], needsCompare: false },
-      { key: "bars", shapes: ["series", "buckets"], needsCompare: false },
-      { key: "sparkline", shapes: ["series"], needsCompare: false },
-      { key: "yearCalendar", shapes: ["series"], needsCompare: false },
-      { key: "heatmap", shapes: ["matrix"], needsCompare: false },
-      { key: "share", shapes: ["buckets"], needsCompare: false },
-      { key: "compare", shapes: ["buckets"], needsCompare: true },
-      { key: "story", shapes: ["facts"], needsCompare: false },
-      { key: "feed", shapes: ["ranked", "feedItems"], needsCompare: false },
+      { key: "list", shapes: ["ranked", "buckets"], needsCompare: false, needsNumbers: false },
+      { key: "cards", shapes: ["ranked"], needsCompare: false, needsNumbers: false },
+      { key: "rail", shapes: ["ranked"], needsCompare: false, needsNumbers: false },
+      { key: "leader", shapes: ["ranked"], needsCompare: false, needsNumbers: false },
+      { key: "mosaic", shapes: ["ranked"], needsCompare: false, needsNumbers: false },
+      { key: "rankingMoves", shapes: ["ranked"], needsCompare: true, needsNumbers: false },
+      { key: "stat", shapes: ["single"], needsCompare: false, needsNumbers: true },
+      { key: "bars", shapes: ["series", "buckets"], needsCompare: false, needsNumbers: true },
+      { key: "sparkline", shapes: ["series"], needsCompare: false, needsNumbers: false },
+      { key: "yearCalendar", shapes: ["series"], needsCompare: false, needsNumbers: false },
+      { key: "heatmap", shapes: ["matrix"], needsCompare: false, needsNumbers: false },
+      { key: "share", shapes: ["buckets"], needsCompare: false, needsNumbers: true },
+      { key: "compare", shapes: ["buckets"], needsCompare: true, needsNumbers: true },
+      { key: "story", shapes: ["facts"], needsCompare: false, needsNumbers: false },
+      { key: "feed", shapes: ["ranked", "feedItems"], needsCompare: false, needsNumbers: false },
     ],
     accents: ["daily", "weekly", "explore", "cf"],
-    actions: ["play", "request", "open", "openUrl", "none"],
+    actions: ["play", "shuffle", "radio", "request", "open", "openUrl", "none"],
     icons: ["sparkles", "flame", "trophy", "heart", "music"],
     feeds: {
       sources: [

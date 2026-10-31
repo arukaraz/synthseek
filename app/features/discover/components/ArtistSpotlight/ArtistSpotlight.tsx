@@ -7,6 +7,7 @@ import { WidgetHeader } from "@components/WidgetHeader";
 import type { MusicItem } from "@api/__generated__/types";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useArtistsForYou } from "@hooks/api/queries/analytics/useArtistsForYou";
+import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useCountry } from "@modules/providers/CountryProvider";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
@@ -31,10 +32,14 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
   const artists = data ?? [];
 
   const { openForResult } = useContentRequestFlow();
+  const { shuffleEntity } = useEntityPlayback();
 
   const handleArtistClick = (artist: MusicItem) => {
     openForResult(artist);
   };
+
+  const shuffleOf = (name: string, inLibrary: boolean) =>
+    inLibrary ? () => void shuffleEntity({ kind: "artist", artist: name }) : undefined;
 
   return (
     <motion.section
@@ -84,6 +89,15 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
                   title={item.artist.name}
                   subtitle={item.latestAlbum?.name ?? t("artistSpotlight.noAlbums")}
                   onSelect={() => handleArtistClick(item.artist)}
+                  coverAction={
+                    item.inLibrary
+                      ? {
+                          kind: "play",
+                          label: t("history.play", { name: item.artist.name }),
+                          onClick: () => void shuffleEntity({ kind: "artist", artist: item.artist.name }),
+                        }
+                      : undefined
+                  }
                 />
               ))}
             </ul>
@@ -98,6 +112,7 @@ export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
                 artist={item.artist}
                 latestAlbum={item.latestAlbum}
                 onClick={() => handleArtistClick(item.artist)}
+                onPlay={shuffleOf(item.artist.name, item.inLibrary)}
               />
             ))}
           </div>

@@ -1,6 +1,6 @@
 import type { BoardSize } from "@hooks/api/queries/board/types";
 
-import type { WidgetShape } from "@hooks/api/queries/widgets/types";
+import type { WidgetAction, WidgetBlock, WidgetShape } from "@hooks/api/queries/widgets/types";
 
 import type {
   CuratedFeed,
@@ -19,6 +19,12 @@ import type {
 
 export const PREVIEW_DEBOUNCE_MS = 400;
 
+export const SEARCH_DEBOUNCE_MS = 250;
+
+export const SEARCH_MENU_LIMIT = 30;
+
+export const UNSET_RULE_VALUE = "-";
+
 export const WORKSHOP_SIZES: readonly BoardSize[] = ["S", "M", "L"];
 
 export const WIDGET_KINDS: readonly WidgetKind[] = ["recipe", "feed"];
@@ -28,6 +34,8 @@ export const TIME_MODES: readonly TimeMode[] = ["relative", "named", "absolute",
 export const RECAP_TIME_MODES: readonly TimeMode[] = ["named", "absolute"];
 
 export const RECAP_SUBJECT = "recap";
+
+export const PLAYLISTS_SUBJECT = "playlists";
 
 export const SMART_REFRESHES: readonly SmartRefresh[] = ["daily", "weekly"];
 
@@ -58,6 +66,16 @@ export const ANY_COUNTRY = "any";
 export const DEFAULT_NEWS_URL = "https://feeds.npr.org/1039/rss.xml";
 
 export const DEFAULT_FEED_SHAPE: WidgetShape = "ranked";
+
+export const PLAYLIST_SET_SHAPE: WidgetShape = "ranked";
+
+export const PLAYLIST_SET_BLOCK: WidgetBlock = "posters";
+
+export const PLAYLIST_SET_BLOCKS: readonly WidgetBlock[] = ["posters", "cards", "rail", "tiles", "list", "hero"];
+
+export const PLAYLIST_SET_ACTION: WidgetAction = "play";
+
+export const PLAYLIST_SET_ACTIONS: readonly WidgetAction[] = [PLAYLIST_SET_ACTION, "shuffle", "radio", "open"];
 
 export const FEED_SEED_KINDS: readonly FeedSeedKind[] = ["myTopArtists", "favorites"];
 
@@ -99,6 +117,18 @@ export const DEFAULT_RULES: Record<RuleField, WidgetRule> = {
   listeners: { field: "listeners", op: "lt", value: 50_000 },
   artistInLibrary: { field: "artistInLibrary", op: "is", value: true },
   user: { field: "user", op: "isNot", value: "me" },
+  genreName: { field: "genreName", op: "is", value: UNSET_RULE_VALUE },
+  artistName: { field: "artistName", op: "is", value: UNSET_RULE_VALUE },
+  inPlaylist: { field: "inPlaylist", op: "isNot", value: UNSET_RULE_VALUE },
+  addedInLast: { field: "addedInLast", op: "days", value: 60 },
+  playedInLast: { field: "playedInLast", op: "days", value: 30 },
+  yearRange: { field: "yearRange", op: "between", value: { from: 1990, to: 2009 } },
+  durationMinutes: { field: "durationMinutes", op: "gte", value: 2 },
+  rating: { field: "rating", op: "gte", value: 3 },
+  skips: { field: "skips", op: "lte", value: 2 },
+  mood: { field: "mood", op: "is", value: "calm" },
+  tempo: { field: "tempo", op: "is", value: "medium" },
+  energy: { field: "energy", op: "is", value: "high" },
 };
 
 export const USER_RULE_OPS = ["is", "isNot", "with"] as const;
@@ -109,9 +139,27 @@ export const DECADE_CHOICES: readonly number[] = [1950, 1960, 1970, 1980, 1990, 
 
 export const RELEASE_TYPE_CHOICES = ["album", "ep", "single", "other"] as const;
 
+export const TEMPO_CHOICES = ["slow", "medium", "fast"] as const;
+
+export const ENERGY_CHOICES = ["high", "low"] as const;
+
+export const MOOD_CHOICES = [
+  "energetic",
+  "calm",
+  "aggressive",
+  "party",
+  "danceable",
+  "happy",
+  "sad",
+  "instrumental",
+] as const;
+
 export const NUMBER_BOUNDS = {
   daysMin: 1,
   topNMin: 1,
+  year: { min: 1900, max: 2100 },
+  minutes: { min: 0, max: 600 },
+  stars: { min: 0, max: 5 },
   count: { min: 0, max: 100_000 },
   bitrate: { min: 32, max: 10_000, step: 32 },
   percent: { min: 0, max: 100, step: 5 },

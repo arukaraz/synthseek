@@ -7,6 +7,10 @@ vi.mock("../components/ListeningServicesCard", () => ({
   ListeningServicesCard: () => <div data-testid="listening-services-card" />,
 }));
 
+vi.mock("../components/NeverIncludeCard", () => ({
+  NeverIncludeCard: () => <div data-testid="never-include-card" />,
+}));
+
 import { ListeningSection } from "../ListeningSection";
 
 describe("ListeningSection", () => {

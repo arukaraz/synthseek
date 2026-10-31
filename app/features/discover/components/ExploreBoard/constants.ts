@@ -371,6 +371,11 @@ export const CUSTOM_BLOCK_HEIGHTS: Record<WidgetBlock, Record<BoardSize, BoardHe
   yearCalendar: { S: "short", M: "regular", L: "regular" },
   share: { S: "regular", M: "regular", L: "regular" },
   story: { S: "regular", M: "tall", L: "tall" },
+  mix: { S: "tall", M: "regular", L: "short" },
+  posters: { S: "regular", M: "regular", L: "regular" },
+  spotlight: { S: "regular", M: "tall", L: "tall" },
+  tiles: { S: "tall", M: "tall", L: "tall" },
+  hero: { S: "regular", M: "regular", L: "regular" },
 };
 
 export const FALLBACK_BLOCK_HEIGHT: BoardHeight = "regular";

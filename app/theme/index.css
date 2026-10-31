@@ -68,6 +68,7 @@
 @import "./utilities/animations.css";
 @import "./utilities/player.css";
 @import "./utilities/toast.css";
+@import "./utilities/board.css";
 @import "./utilities/accessibility.css";
 
 @custom-variant loading (&:where([data-loading="true"], [data-loading="true"] *));

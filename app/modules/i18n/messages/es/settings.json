@@ -1338,6 +1338,10 @@
         "name": "Escaneo de biblioteca",
         "description": "Indexa los archivos de audio del disco, averigua qué contiene cada uno y reconcilia lo que ha desaparecido."
       },
+      "audio-analysis": {
+        "name": "Análisis de audio",
+        "description": "Escucha cada pista para conocer su estado de ánimo, energía y tempo para las listas inteligentes."
+      },
       "library-loudness": {
         "name": "Medición de sonoridad",
         "description": "Mide lo fuerte que suena cada pista, para que la reproducción pueda igualar el volumen entre ellas."
@@ -1352,7 +1356,7 @@
       },
       "smart-playlists": {
         "name": "Playlists inteligentes",
-        "description": "Renueva cada día o cada semana las playlists cuyas canciones elige la regla de un widget."
+        "description": "Renueva las playlists cuyas canciones elige la regla de un widget, según el horario de cada una."
       }
     }
   },
@@ -2244,6 +2248,34 @@
     },
     "finishedAbandoned": "A {{count}} no se llegó, porque la pasada se detuvo antes de tiempo.",
     "finishedFailuresTruncated": "Se muestran {{listed}} de {{count}}. El resto está en los registros."
+  },
+  "audioAnalysis": {
+    "title": "Análisis de audio",
+    "description": "Escucha tus archivos una vez para conocer su estado de ánimo, energía y tempo. Arranca solo, corre en segundo plano y sigue donde se quedó tras un reinicio.",
+    "analyzed": "Analizadas",
+    "ofTotal": "{{done}} de {{total}}",
+    "retry": "No se pudieron leer",
+    "state": "Estado",
+    "running": "En marcha",
+    "idle": "Esperando su próxima pasada",
+    "speed": "Velocidad",
+    "speeds": { "background": "Segundo plano", "balanced": "Equilibrada", "fast": "Rápida" },
+    "pause": "Pausar",
+    "start": "Ejecutar ahora",
+    "hint": "Las listas de estado de ánimo usan lo analizado hasta ahora y crecen solas en cada refresco."
+  },
+  "neverInclude": {
+    "title": "Nunca incluir",
+    "description": "Se aplica a todas las listas inteligentes de tu cuenta. Un widget puede permitir uno para sí mismo.",
+    "artists": "Artistas",
+    "tracks": "Pistas",
+    "noTaste": "Escuchas que no forman tu gusto",
+    "searchArtists": "Buscar artistas",
+    "searchTracks": "Buscar pistas por título o artista",
+    "searchGenres": "Buscar géneros",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "Quitar {{name}}",
+    "noMatch": "Sin resultados"
   },
   "libraryScan": {
     "card": {

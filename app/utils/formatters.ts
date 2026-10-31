@@ -86,6 +86,32 @@ export function formatDateTime(date: Date): string {
   });
 }
 
+export function formatWeekdayDateTime(date: Date): string {
+  return date.toLocaleString(i18n.language, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+export function formatCount(value: number): string {
+  return value.toLocaleString(i18n.language);
+}
+
+export function formatHour(date: Date): string {
+  return date.toLocaleTimeString(i18n.language, { hour: "numeric" });
+}
+
+export function formatTimeOfDay(date: Date): string {
+  return date.toLocaleTimeString(i18n.language, { hour: "numeric", minute: "2-digit" });
+}
+
+export function formatWeekday(date: Date, width: "short" | "long"): string {
+  return date.toLocaleDateString(i18n.language, { weekday: width });
+}
+
 export function formatDate(date: Date): string {
   return date.toLocaleDateString(i18n.language, {
     year: "numeric",

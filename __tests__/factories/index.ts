@@ -12,6 +12,7 @@ export { createAlbum, createCompletedAlbum, createInProgressAlbum, resetAlbumCou
 
 export {
   createAlbumResult,
+  createArtistResult,
   createBucketResult,
   createDailySeries,
   createFeedAlbumResult,

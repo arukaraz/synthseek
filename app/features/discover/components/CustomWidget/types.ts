@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 import type { MusicItem } from "@api/__generated__/types";
 import type { DetailTarget } from "@features/content-detail";
 import type { BoardSize } from "@hooks/api/queries/board/types";
@@ -29,6 +31,9 @@ export interface WidgetItem {
   request: MusicItem | null;
   open: DetailTarget | null;
   link: string | null;
+  covers?: readonly string[];
+  listSlot?: string;
+  pinned?: boolean;
 }
 
 export interface WidgetStat {
@@ -68,15 +73,24 @@ export type WidgetItemActions = (item: WidgetItem) => WidgetItemControls;
 
 export interface WidgetHandlers {
   play: (target: PlayableTracksTarget) => void;
+  shuffle: (target: PlayableTracksTarget) => void;
+  radio: (target: PlayableTracksTarget) => void;
   request: (item: MusicItem) => void;
   open: (target: DetailTarget) => void;
   openUrl: (url: string) => void;
+}
+
+export interface WidgetBlockHeading {
+  name: string;
+  description: string;
+  icon: LucideIcon;
 }
 
 export interface WidgetBlockProps extends WidgetView {
   size: BoardSize;
   accent: WidgetAccent;
   controls: WidgetItemActions;
+  heading: WidgetBlockHeading;
 }
 
 export interface CustomWidgetProps {
@@ -96,6 +110,7 @@ export interface CustomWidgetContentProps {
   result: WidgetResult | undefined;
   isLoading: boolean;
   isError: boolean;
+  onOpenList?: (slotId: string) => void;
 }
 
 export interface CustomWidgetNoteInput {
@@ -107,6 +122,7 @@ export interface CustomWidgetNoteInput {
 export interface BlockSuggestionInput {
   shape: WidgetShape;
   compare: boolean;
+  numeric: boolean;
   dailyYear: boolean;
 }
 
@@ -114,10 +130,19 @@ export interface BlockContractView {
   key: WidgetBlock;
   shapes: readonly WidgetShape[];
   needsCompare: boolean;
+  needsNumbers: boolean;
 }
+
+export type WidgetCardSurface = "framed" | "bare";
 
 export interface WidgetCardProps {
   item: WidgetItem;
   accent: WidgetAccent;
   controls: WidgetItemControls;
+  surface: WidgetCardSurface;
+  single?: boolean;
+}
+
+export interface CoverActionButtonProps {
+  action: NonNullable<WidgetItemControls["coverAction"]>;
 }

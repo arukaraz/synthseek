@@ -1335,6 +1335,10 @@
         "name": "Analyse de la bibliothèque",
         "description": "Indexe les fichiers audio du disque, détermine quel morceau contient chacun d'eux et réconcilie ce qui a disparu."
       },
+      "audio-analysis": {
+        "name": "Analyse audio",
+        "description": "Écoute chaque titre pour connaître son humeur, son énergie et son tempo pour les listes intelligentes."
+      },
       "library-loudness": {
         "name": "Mesure de sonie",
         "description": "Mesure le volume de chaque morceau, pour que la lecture puisse l'égaliser d'un titre à l'autre."
@@ -1349,7 +1353,7 @@
       },
       "smart-playlists": {
         "name": "Playlists intelligentes",
-        "description": "Renouvelle chaque jour ou chaque semaine les playlists dont une règle de widget choisit les titres."
+        "description": "Renouvelle les playlists dont une règle de widget choisit les titres, selon le calendrier de chacune."
       }
     }
   },
@@ -2241,6 +2245,34 @@
     },
     "finishedAbandoned": "{{count}} n'ont jamais été atteints, car la passe s'est arrêtée avant la fin.",
     "finishedFailuresTruncated": "Affichage de {{listed}} sur {{count}}. Le reste est dans les journaux."
+  },
+  "audioAnalysis": {
+    "title": "Analyse audio",
+    "description": "Écoute vos fichiers une fois pour connaître leur humeur, leur énergie et leur tempo. Elle démarre seule, tourne en arrière-plan et reprend où elle s'était arrêtée après un redémarrage.",
+    "analyzed": "Analysés",
+    "ofTotal": "{{done}} sur {{total}}",
+    "retry": "Illisibles",
+    "state": "État",
+    "running": "En cours",
+    "idle": "En attente du prochain passage",
+    "speed": "Vitesse",
+    "speeds": { "background": "Arrière-plan", "balanced": "Équilibrée", "fast": "Rapide" },
+    "pause": "Mettre en pause",
+    "start": "Lancer maintenant",
+    "hint": "Les listes d'humeur utilisent ce qui est déjà analysé et grandissent seules à chaque actualisation."
+  },
+  "neverInclude": {
+    "title": "Ne jamais inclure",
+    "description": "S'applique à toutes les listes intelligentes de votre compte. Un widget peut en autoriser un pour lui-même.",
+    "artists": "Artistes",
+    "tracks": "Titres",
+    "noTaste": "Écoutes qui ne forment pas vos goûts",
+    "searchArtists": "Rechercher des artistes",
+    "searchTracks": "Rechercher des titres par nom ou artiste",
+    "searchGenres": "Rechercher des genres",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "Retirer {{name}}",
+    "noMatch": "Aucun résultat"
   },
   "libraryScan": {
     "card": {

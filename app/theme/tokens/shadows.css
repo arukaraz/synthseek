@@ -22,4 +22,7 @@
   --shadow-glass: 0 8px 32px oklch(0 0 0 / 0.4), 0 2px 8px oklch(0 0 0 / 0.2);
 
   --shadow-well: inset 0 3px 12px oklch(0 0 0 / 0.4);
+
+  --shadow-menu-glow-base: oklch(0 0 0 / 0.45);
+  --shadow-menu-drop: oklch(0 0 0 / 0.5);
 }

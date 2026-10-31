@@ -59,6 +59,10 @@ vi.mock("@hooks/api", () => ({
   useSavePlaybackPosition: () => ({ mutate: api.position }),
 }));
 
+vi.mock("@hooks/api/mutations/widgets/useSetListActions", () => ({
+  useRecordSkip: () => ({ mutate: vi.fn() }),
+}));
+
 const commands = vi.hoisted(() => ({
   takeOver: null as (() => void) | null,
   unknownTrack: null as ((trackId: string) => void) | null,
@@ -90,6 +94,7 @@ const store = vi.hoisted(() => ({
 }));
 
 vi.mock("../store", () => ({
+  setEarlySkipHandler: vi.fn(),
   setQueueClearedHandler: (handler: (() => void) | null) => {
     store.queueCleared = handler;
   },

@@ -36,7 +36,7 @@ export const sectionTitle = cva("text-fg text-sm font-semibold");
 
 export const sectionHelp = cva("text-fg/60 text-xs");
 
-export const kindSwitch = cva("ml-auto flex items-center gap-2");
+export const kindSwitch = cva("ml-auto flex items-center gap-2 max-sm:order-last max-sm:w-full");
 
 export const kindLabel = cva("text-fg/60 text-xs");
 
@@ -44,7 +44,7 @@ export const startFromRow = cva("flex min-w-0 items-center gap-3");
 
 export const startFromLabel = cva("text-fg/60 shrink-0 font-mono text-[10.5px] tracking-wider uppercase");
 
-export const startFromList = cva("flex gap-2 whitespace-nowrap");
+export const startFromList = cva("flex w-max gap-2 whitespace-nowrap");
 
 export const presetChip = cva(
   "border-fg/15 text-fg hover:border-primary-400/60 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium outline-none focus-visible:ring-2 [&_svg]:size-3.5"
@@ -52,12 +52,18 @@ export const presetChip = cva(
 
 export const stepList = cva("border-fg/10 flex flex-col divide-y divide-fg/10 overflow-hidden rounded-xl border");
 
-export const stepRow = cva(
-  "grid grid-cols-[minmax(0,1fr)_30px] items-start gap-x-3 gap-y-1.5 px-3 py-2.5 @[28rem]:grid-cols-[92px_minmax(0,1fr)_30px]"
-);
+export const stepRow = cva("grid items-start gap-x-3 gap-y-1.5 px-3 py-2.5", {
+  variants: {
+    flush: {
+      true: "grid-cols-[minmax(0,1fr)_30px] @[28rem]:grid-cols-[92px_minmax(0,1fr)]",
+      false: "grid-cols-[minmax(0,1fr)_30px] @[28rem]:grid-cols-[92px_minmax(0,1fr)_30px]",
+    },
+  },
+  defaultVariants: { flush: false },
+});
 
 export const stepLabel = cva(
-  "text-fg/60 col-start-1 row-start-1 pt-3 font-mono text-[10.5px] font-semibold tracking-wider uppercase"
+  "text-fg/60 col-start-1 row-start-1 flex items-center gap-1 pt-3 font-mono text-[10.5px] font-semibold tracking-wider uppercase"
 );
 
 export const stepControls = cva(
@@ -65,7 +71,6 @@ export const stepControls = cva(
 );
 
 export const stepRemove = cva("col-start-2 row-start-1 justify-self-end @[28rem]:col-start-3");
-
 export const stepText = cva("text-fg/70 text-sm");
 
 export const addRow = cva("bg-fg/[0.03] flex flex-wrap gap-2 px-3 py-2.5 @[28rem]:pl-[calc(92px+1.5rem)]");
@@ -76,7 +81,15 @@ export const numberInput = cva("w-20 tabular-nums");
 
 export const ruleList = cva("flex min-w-0 flex-1 flex-col gap-1.5");
 
-export const ruleMatch = cva("text-fg/70 flex flex-wrap items-center gap-2 text-xs [&>button]:w-auto");
+export const ruleMatch = cva("text-fg/70 flex flex-wrap items-center gap-2 text-xs [&>button]:w-auto", {
+  variants: {
+    shown: {
+      true: "",
+      false: "invisible",
+    },
+  },
+  defaultVariants: { shown: true },
+});
 
 export const ruleAdd = cva("self-start");
 
@@ -86,13 +99,25 @@ export const ruleTextButton = cva(
   "text-fg hover:bg-fg/5 focus-visible:ring-primary-400 min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-sm outline-none focus-visible:ring-2"
 );
 
-export const ruleEditor = cva("border-primary-400/40 bg-fg/[0.03] flex flex-col gap-2 rounded-lg border p-2");
-
-export const ruleEditorControls = cva(
-  "flex min-w-0 flex-wrap items-center gap-2 [&>button]:w-auto [&>button]:max-w-full"
+export const ruleEditor = cva(
+  "border-primary-400/40 bg-fg/[0.03] flex min-w-0 flex-wrap items-center gap-2 rounded-lg border p-2 [&>button]:w-auto [&>button]:max-w-full"
 );
 
-export const ruleEditorActions = cva("flex justify-end gap-2");
+export const ruleEditorActions = cva("ml-auto flex shrink-0 items-center gap-1");
+
+export const nameValue = cva("max-w-full min-w-0", {
+  variants: {
+    full: {
+      true: "w-full",
+      false: "w-48",
+    },
+  },
+  defaultVariants: { full: false },
+});
+
+export const compareField = cva(
+  "border-fg/15 bg-fg/5 text-fg hover:border-primary-500/30 flex h-10 w-auto min-w-0 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm transition-colors has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60"
+);
 
 export const viewGrid = cva("grid grid-cols-[repeat(auto-fill,minmax(112px,1fr))] gap-2");
 
@@ -119,7 +144,9 @@ export const viewSuggested = cva("text-success-vivid text-center font-mono text-
 
 export const viewToggle = cva("ml-auto");
 
-export const lookGrid = cva("grid gap-3 @xl:grid-cols-2");
+export const lookGrid = cva("flex flex-wrap items-start gap-x-8 gap-y-3");
+
+export const lookAction = cva("w-48 max-w-full");
 
 export const fieldLabel = cva("text-fg/70 flex min-w-0 flex-col gap-1.5 text-xs");
 

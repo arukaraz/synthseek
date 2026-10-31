@@ -13,6 +13,8 @@
     "importedSkipped": " ({{count}} skipped)"
   },
   "settings": {
+    "audioAnalysisSaved": "Audio analysis speed saved",
+    "audioAnalysisFailed": "Failed to save the audio analysis speed",
     "formattingFailed": "Failed to save formatting",
     "namingFailed": "Failed to save the naming template",
     "libraryPathFailed": "Failed to save the library path",
@@ -128,6 +130,17 @@
     "templateExportFailed": "Could not export your board"
   },
   "widgets": {
+    "setRebuilt": "Lists rebuilt",
+    "setRebuildFailed": "Could not rebuild the lists",
+    "setPinFailed": "Could not change the pin",
+    "setRestored": "Version restored",
+    "setRestoreFailed": "Could not restore this version",
+    "setCopySaved": "Saved as a playlist",
+    "setCopyFailed": "Could not save this version",
+    "setRateFailed": "Could not save the rating",
+    "vetoFailed": "Could not update Never include",
+    "trackBanned": "Track added to Never include",
+    "artistBanned": "{{artist}} added to Never include",
     "saveFailed": "Could not save this widget",
     "removeFailed": "Could not delete this widget",
     "importFailed": "Could not check this JSON",

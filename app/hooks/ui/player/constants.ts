@@ -18,6 +18,8 @@ export const MAX_CONSECUTIVE_FAILURES = 3;
 
 export const SKIP_DELAY_MS = 1200;
 
+export const EARLY_SKIP_SECONDS = 30;
+
 export const VOLUME_STORAGE_KEY = "synthseek.player.volume";
 
 export const ARTWORK_SIZES = ["96x96", "192x192", "512x512"] as const;

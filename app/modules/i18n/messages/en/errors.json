@@ -423,6 +423,10 @@
     "title": "Widget not found",
     "description": "This widget no longer exists. Refresh the page to see your current widgets."
   },
+  "SET_VETO_LIMIT_REACHED": {
+    "title": "Never include is full",
+    "description": "Remove an entry from the list in Settings before adding another."
+  },
   "WIDGET_LIMIT_REACHED": {
     "title": "Too many widgets",
     "description": "Remove one of your existing widgets before creating another."

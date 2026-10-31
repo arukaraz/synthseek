@@ -4,6 +4,7 @@ import type { BoardSize } from "@hooks/api/queries/board/types";
 import type { WidgetAction, WidgetBlock, WidgetResult } from "@hooks/api/queries/widgets/types";
 import {
   createAlbumResult,
+  createArtistResult,
   createBucketResult,
   createDailySeries,
   createFeedAlbumResult,
@@ -21,15 +22,19 @@ import { fireEvent, renderWithProviders, screen, within } from "@test/test-utils
 
 import { CustomWidget } from "../CustomWidget";
 
-const { dataQuery, playEntity, requestResult, measured } = vi.hoisted(() => ({
+const { dataQuery, playEntity, shuffleEntity, startRadio, requestResult, measured } = vi.hoisted(() => ({
   dataQuery: vi.fn(),
   playEntity: vi.fn(),
+  shuffleEntity: vi.fn(),
+  startRadio: vi.fn(),
   requestResult: vi.fn(),
   measured: { width: 0 },
 }));
 
 vi.mock("@hooks/api/queries/widgets/useWidgetData", () => ({ useWidgetData: () => dataQuery() }));
-vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => ({ playEntity }) }));
+vi.mock("@hooks/ui/useEntityPlayback", () => ({
+  useEntityPlayback: () => ({ playEntity, shuffleEntity, startRadio }),
+}));
 vi.mock("@features/search/components/ContentRequestFlow", () => ({
   useContentRequestFlow: () => ({ openForTarget: vi.fn(), requestResult }),
 }));
@@ -49,6 +54,21 @@ const ALBUMS = createAlbumResult(
     createRecipeAlbumRow({ id: `a${index}`, albumExternalId: `dz-${index}`, name: `Album ${index}` })
   )
 );
+const ARTIST_NAME = "Alpha";
+const ARTISTS = createArtistResult([
+  {
+    id: "ar1",
+    artistId: "ar1",
+    name: ARTIST_NAME,
+    cover: null,
+    tracks: 3,
+    plays: 3,
+    playedAt: null,
+    favorite: false,
+    value: 3,
+    prev: null,
+  },
+]);
 const BUCKETS = createBucketResult([
   { key: "rock", label: "Rock", value: 12, prev: 9 },
   { key: "jazz", label: "Jazz", value: 7, prev: 7 },
@@ -140,20 +160,49 @@ describe("CustomWidget", () => {
   });
 
   it("requests an album from a card when the widget asks for requests", () => {
-    measured.width = 640;
     show("cards", "M", ALBUMS, "request");
-    expect(screen.getAllByRole("article")).toHaveLength(4);
+    expect(screen.getAllByRole("article")).toHaveLength(6);
     fireEvent.click(screen.getByRole("button", { name: "Request Album 0" }));
     expect(requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "dz-0", type: "album" }));
   });
 
-  it.each([
-    ["S", 2],
-    ["M", 12],
-    ["L", 12],
-  ] as const)("shows %s rail cards", (size, cards) => {
+  it.each(["S", "M", "L"] as const)("scrolls every item sideways in a %s rail", (size) => {
     show("rail", size, ALBUMS);
-    expect(screen.getAllByRole("article")).toHaveLength(cards);
+    expect(screen.getAllByRole("article")).toHaveLength(12);
+    expect(screen.getByRole("region", { name: "Widget items" })).toBeInTheDocument();
+  });
+
+  it("lays cards out with no scroller, unlike the rail", () => {
+    show("cards", "M", ALBUMS);
+    expect(screen.queryByRole("region", { name: "Widget items" })).not.toBeInTheDocument();
+  });
+
+  it("gives a lone card the whole row", () => {
+    show("cards", "S", createAlbumResult([createRecipeAlbumRow()]));
+    expect(screen.getAllByRole("article")).toHaveLength(1);
+    expect(screen.getByRole("article").parentElement).toHaveStyle("--card-cols: 1");
+  });
+
+  it("draws the mix card as the whole tile and plays every track of it", () => {
+    show("mix", "S", TRACKS);
+    expect(screen.queryByRole("heading", { level: 3, name: "Most played" })).toBeInTheDocument();
+    expect(screen.getByText("Mix")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Play Most played" }));
+    const trackIds = Array.from({ length: 14 }, (_, index) => `req-${index}`);
+    expect(playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds });
+  });
+
+  it("shuffles an artist and plays an album in order", () => {
+    show("list", "M", ARTISTS);
+    fireEvent.click(screen.getByRole("button", { name: `Play ${ARTIST_NAME}` }));
+    expect(shuffleEntity).toHaveBeenCalledWith({ kind: "artist", artist: ARTIST_NAME });
+    expect(playEntity).not.toHaveBeenCalled();
+  });
+
+  it("starts a radio when the widget asks for one", () => {
+    show("list", "M", ARTISTS, "radio");
+    fireEvent.click(screen.getByRole("button", { name: `Start ${ARTIST_NAME} radio` }));
+    expect(startRadio).toHaveBeenCalledWith({ kind: "artist", artist: ARTIST_NAME });
   });
 
   it.each([

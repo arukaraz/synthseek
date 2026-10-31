@@ -19,4 +19,5 @@ export interface ArtistSpotlightCardProps {
     total_tracks?: number;
   } | null;
   onClick?: () => void;
+  onPlay?: () => void;
 }

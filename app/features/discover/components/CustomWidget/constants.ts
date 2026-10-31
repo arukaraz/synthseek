@@ -78,13 +78,18 @@ import { StoryBlock } from "../WidgetStory/StoryBlock";
 import { CalendarBlock } from "./CalendarBlock";
 import { CardsBlock } from "./CardsBlock";
 import { FeedBlock } from "./FeedBlock";
+import { HeroBlock } from "./HeroBlock";
 import { LeaderBlock } from "./LeaderBlock";
 import { ListBlock } from "./ListBlock";
+import { MixBlock } from "./MixBlock";
 import { MosaicBlock } from "./MosaicBlock";
+import { PostersBlock } from "./PostersBlock";
 import { RailBlock } from "./RailBlock";
 import { RankingMovesBlock } from "./RankingMovesBlock";
+import { SpotlightBlock } from "./SpotlightBlock";
 import { StatBlock } from "./StatBlock";
 import { StatsBlock } from "./StatsBlock";
+import { TilesBlock } from "./TilesBlock";
 import type { MoveDirection, WidgetBlockProps } from "./types";
 
 export const BLOCK_COMPONENTS: Record<WidgetBlock, ComponentType<WidgetBlockProps>> = {
@@ -106,7 +111,20 @@ export const BLOCK_COMPONENTS: Record<WidgetBlock, ComponentType<WidgetBlockProp
   yearCalendar: YearCalendarBlock,
   share: ShareBlock,
   story: StoryBlock,
+  mix: MixBlock,
+  posters: PostersBlock,
+  spotlight: SpotlightBlock,
+  tiles: TilesBlock,
+  hero: HeroBlock,
 };
+
+export const FRAMELESS_BLOCKS: ReadonlySet<WidgetBlock> = new Set(["mix", "hero"]);
+
+export const SET_POSTER_COLUMNS = { S: 1, M: 2, L: 6 } as const;
+
+export const SET_POSTER_LIMITS = { S: 2, M: 4, L: 6 } as const;
+
+export const MINUTE_MS = 60_000;
 
 export const BLOCK_LIMITS = {
   list: { S: 5, M: 8, L: 12 },
@@ -114,19 +132,27 @@ export const BLOCK_LIMITS = {
   calendar: { S: 4, M: 6, L: 10 },
   leader: { S: 0, M: 6, L: 8 },
   stats: { S: 1, M: 3, L: 4 },
-  rail: { S: 2, M: 50, L: 50 },
+  rail: { S: 50, M: 50, L: 50 },
   rankingMoves: { S: 5, M: 8, L: 12 },
   mosaic: { S: 4, M: 10, L: 20 },
+  spotlight: { S: 2, M: 4, L: 4 },
+  cards: { S: 4, M: 6, L: 12 },
 } as const satisfies Record<string, Record<BoardSize, number>>;
 
+export const CARD_COLUMNS: Record<BoardSize, number> = { S: 1, M: 2, L: 4 };
+
+export const MIX_COVER_LIMIT = 4;
+
+export const SERIES_STAT_LIMIT = 4;
+
 export const SUGGESTED_BLOCKS: Record<WidgetShape, readonly WidgetBlock[]> = {
-  ranked: ["list", "leader", "cards", "rail", "mosaic", "rankingMoves"],
+  ranked: ["list", "leader", "cards", "rail", "posters", "mix", "spotlight", "hero", "mosaic", "tiles", "rankingMoves"],
   single: ["stat", "statTrend"],
   series: ["bars", "sparkline", "yearCalendar", "statTrend"],
-  matrix: ["heatmap"],
-  buckets: ["share", "bars", "compare"],
+  matrix: ["heatmap", "bars"],
+  buckets: ["share", "bars", "tiles", "compare"],
   facts: ["story"],
-  feedItems: ["feed"],
+  feedItems: ["feed", "list", "cards", "rail"],
 };
 
 export const MOSAIC_COLUMNS: Record<BoardSize, number> = { S: 2, M: 5, L: 10 };
@@ -145,6 +171,8 @@ export const MONTH_KEY_LENGTH = 7;
 export const MATRIX_WEEKDAYS = 7;
 
 export const MATRIX_HOURS = 24;
+
+export const HOUR_LABEL_YEAR = 2024;
 
 export const WIDGET_ICONS: Record<WidgetIcon, LucideIcon> = {
   sparkles: Sparkles,

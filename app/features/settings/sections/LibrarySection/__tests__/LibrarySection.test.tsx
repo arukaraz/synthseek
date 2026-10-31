@@ -9,6 +9,10 @@ vi.mock("../LibraryRulesCard", () => ({
   LibraryRulesCard: () => <section data-testid="library-rules" />,
 }));
 
+vi.mock("../AudioAnalysisCard", () => ({
+  AudioAnalysisCard: () => <section data-testid="audio-analysis" />,
+}));
+
 import { LibrarySection } from "../LibrarySection";
 
 afterEach(() => {

@@ -3,17 +3,14 @@
 import { useTranslation } from "react-i18next";
 
 import { FadeScroll } from "@components/FadeScroll";
-import { SegmentTabs } from "@components/ui/SegmentTabs";
 
 import { widgetIconOf } from "../CustomWidget/helpers";
-import { WIDGET_KINDS } from "./constants";
 import { FeedSteps } from "./FeedSteps";
-import { readbackOf, recapReadbackOf } from "./helpers";
+import { readbackOf, recapReadbackOf, startsFrom } from "./helpers";
+import { PlaylistSteps } from "./PlaylistSteps/PlaylistSteps";
 import { RecapSteps } from "./RecapSteps";
 import { RecipeSteps } from "./RecipeSteps";
 import {
-  kindLabel,
-  kindSwitch,
   presetChip,
   readback,
   section,
@@ -27,7 +24,7 @@ import {
 } from "./styles";
 import type { WorkshopSectionProps } from "./types";
 
-export function QuerySection({ workshop, context }: WorkshopSectionProps) {
+export function QuerySection({ workshop, context, preview }: WorkshopSectionProps) {
   const { t } = useTranslation("widgets");
   const { query } = workshop.draft;
 
@@ -38,20 +35,12 @@ export function QuerySection({ workshop, context }: WorkshopSectionProps) {
         <h3 id="workshop-query-title" className={sectionTitle()}>
           {t(`kinds.${workshop.kind}`)}
         </h3>
-        {workshop.purpose === "widget" ? (
-          <div className={kindSwitch()}>
-            <span className={kindLabel()}>{t("workshop.buildUsing")}</span>
-            <SegmentTabs
-              items={WIDGET_KINDS.map((kind) => ({ value: kind, label: t(`kinds.${kind}`) }))}
-              value={workshop.kind}
-              onValueChange={workshop.setKind}
-              layoutId="widget-workshop-kind"
-              ariaLabel={t("workshop.kindLabel")}
-            />
-          </div>
-        ) : null}
       </div>
-      <p className={sectionHelp()}>{workshop.kind === "recipe" ? t("workshop.recipeHelp") : t("workshop.feedHelp")}</p>
+      {query.type === "playlists" ? null : (
+        <p className={sectionHelp()}>
+          {workshop.kind === "recipe" ? t("workshop.recipeHelp") : t("workshop.feedHelp")}
+        </p>
+      )}
       {query.type === "feed" ? (
         <FeedSteps workshop={workshop} feed={query} context={context} />
       ) : (
@@ -61,7 +50,7 @@ export function QuerySection({ workshop, context }: WorkshopSectionProps) {
             <FadeScroll axis="x" label={t("workshop.startFrom")}>
               <div className={startFromList()}>
                 {context.presets
-                  .filter((preset) => preset.startFrom)
+                  .filter((preset) => startsFrom(preset, query))
                   .map((preset) => {
                     const Icon = widgetIconOf(preset.draft.meta.icon);
                     return (
@@ -79,14 +68,18 @@ export function QuerySection({ workshop, context }: WorkshopSectionProps) {
               </div>
             </FadeScroll>
           </div>
+          {query.type === "playlists" ? (
+            <PlaylistSteps workshop={workshop} set={query} context={context} preview={preview} />
+          ) : null}
           {query.type === "recipe" ? (
             <RecipeSteps workshop={workshop} recipe={query} grammar={context.grammar} people={context.people} />
-          ) : (
-            <RecapSteps workshop={workshop} recap={query} context={context} />
+          ) : null}
+          {query.type === "recap" ? <RecapSteps workshop={workshop} recap={query} context={context} /> : null}
+          {query.type === "playlists" ? null : (
+            <p className={readback()} aria-live="polite">
+              {query.type === "recipe" ? readbackOf(query, context.people) : recapReadbackOf(query)}
+            </p>
           )}
-          <p className={readback()} aria-live="polite">
-            {query.type === "recipe" ? readbackOf(query, context.people) : recapReadbackOf(query)}
-          </p>
         </>
       )}
     </section>

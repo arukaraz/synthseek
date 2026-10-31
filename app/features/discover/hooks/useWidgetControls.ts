@@ -10,16 +10,18 @@ import { itemControls } from "../components/CustomWidget/helpers";
 import type { WidgetHandlers, WidgetItem, WidgetItemActions } from "../components/CustomWidget/types";
 
 export function useWidgetControls(action: WidgetAction): WidgetItemActions {
-  const { playEntity } = useEntityPlayback();
+  const { playEntity, shuffleEntity, startRadio } = useEntityPlayback();
   const { openForTarget, requestResult } = useContentRequestFlow();
   const handlers = useMemo<WidgetHandlers>(
     () => ({
-      play: (target) => void playEntity(target),
+      play: (target) => void (target.kind === "artist" ? shuffleEntity(target) : playEntity(target)),
+      shuffle: (target) => void shuffleEntity(target),
+      radio: (target) => void startRadio(target),
       request: requestResult,
       open: openForTarget,
       openUrl: (url) => void window.open(url, "_blank", "noopener,noreferrer"),
     }),
-    [playEntity, requestResult, openForTarget]
+    [playEntity, shuffleEntity, startRadio, requestResult, openForTarget]
   );
   return useCallback((item: WidgetItem) => itemControls(item, action, handlers), [action, handlers]);
 }

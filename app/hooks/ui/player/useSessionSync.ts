@@ -1,12 +1,13 @@
 "use client";
 
 import { usePlaybackSession, useSavePlaybackPosition, useSavePlaybackSession } from "@hooks/api";
+import { useRecordSkip } from "@hooks/api/mutations/widgets/useSetListActions";
 import { useEffect, useRef } from "react";
 
 import { setTakeOverHandler, setUnknownTrackHandler } from "./commands";
 import { EMPTY_SESSION, SESSION_SAVE_INTERVAL_MS } from "./constants";
 import { playerTrackFrom, queueChanged, queueRewritten, sessionChanged } from "./helpers";
-import { actions, getSnapshot, sessionSnapshot, setQueueClearedHandler, subscribe } from "./store";
+import { actions, getSnapshot, sessionSnapshot, setEarlySkipHandler, setQueueClearedHandler, subscribe } from "./store";
 import type { SessionSnapshot } from "./types";
 
 export function usePlayerSessionSync(): void {
@@ -17,6 +18,12 @@ export function usePlayerSessionSync(): void {
   const session = usePlaybackSession(!restored.current);
   const { mutate: saveSession } = useSavePlaybackSession();
   const { mutate: savePosition } = useSavePlaybackPosition();
+  const { mutate: recordSkip } = useRecordSkip();
+
+  useEffect(() => {
+    setEarlySkipHandler((trackId) => recordSkip({ trackId }));
+    return () => setEarlySkipHandler(null);
+  }, [recordSkip]);
 
   useEffect(() => {
     if (restored.current || session.data === undefined || session.data === null) return;

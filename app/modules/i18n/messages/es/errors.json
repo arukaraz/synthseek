@@ -423,6 +423,10 @@
     "title": "Widget no encontrado",
     "description": "Este widget ya no existe. Recarga la página para ver tus widgets actuales."
   },
+  "SET_VETO_LIMIT_REACHED": {
+    "title": "Nunca incluir está lleno",
+    "description": "Quita una entrada de la lista en Ajustes antes de añadir otra."
+  },
   "WIDGET_LIMIT_REACHED": {
     "title": "Demasiados widgets",
     "description": "Elimina uno de tus widgets antes de crear otro."

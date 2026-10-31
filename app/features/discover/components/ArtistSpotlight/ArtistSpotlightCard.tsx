@@ -4,7 +4,7 @@ import { Badge } from "@components/ui/Badge";
 import { artworkProxySrc } from "@utils/artworkProxy";
 import { scale } from "@utils/animations";
 import { categoryPlaceholder, cardBottomContent, albumThumbnail, hoverBorder, playIcon } from "../styles";
-import { spotlightCard, spotlightCardMedia } from "./styles";
+import { spotlightCard, spotlightCardMedia, spotlightPlay } from "./styles";
 import { motion } from "framer-motion";
 import { Play, User, Music } from "lucide-react";
 import Image from "next/image";
@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ArtistSpotlightCardProps } from "./types";
 
-export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpotlightCardProps) {
+export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: ArtistSpotlightCardProps) {
   const { t } = useTranslation("discover");
   const [imageError, setImageError] = useState(false);
   const [albumImageError, setAlbumImageError] = useState(false);
@@ -99,6 +99,20 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick }: ArtistSpot
         </div>
 
         <div className={hoverBorder()} />
+
+        {onPlay ? (
+          <button
+            type="button"
+            className={spotlightPlay()}
+            aria-label={t("history.play", { name: artist.name })}
+            onClick={(event) => {
+              event.stopPropagation();
+              onPlay();
+            }}
+          >
+            <Play />
+          </button>
+        ) : null}
       </div>
     </motion.div>
   );

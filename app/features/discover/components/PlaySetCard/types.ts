@@ -16,5 +16,9 @@ export interface PlaySetCardProps {
   info?: string;
   playLabel: string;
   onPlay: (() => void) | null;
+  actionKind?: "play" | "request";
+  onOpen?: () => void;
+  revealAction?: boolean;
   layout?: PlaySetLayout;
+  pinned?: boolean;
 }

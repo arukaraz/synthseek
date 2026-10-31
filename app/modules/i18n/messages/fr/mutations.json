@@ -13,6 +13,8 @@
     "importedSkipped": " ({{count}} ignorés)"
   },
   "settings": {
+    "audioAnalysisSaved": "Vitesse de l'analyse audio enregistrée",
+    "audioAnalysisFailed": "Impossible d'enregistrer la vitesse de l'analyse audio",
     "formattingFailed": "Échec de l'enregistrement du formatage",
     "namingFailed": "Échec de l'enregistrement du modèle de nommage",
     "libraryPathFailed": "Échec de l'enregistrement du chemin de bibliothèque",
@@ -128,6 +130,17 @@
     "templateExportFailed": "Impossible d'exporter votre tableau"
   },
   "widgets": {
+    "setRebuilt": "Listes reconstruites",
+    "setRebuildFailed": "Impossible de reconstruire les listes",
+    "setPinFailed": "Impossible de changer l'épingle",
+    "setRestored": "Version restaurée",
+    "setRestoreFailed": "Impossible de restaurer cette version",
+    "setCopySaved": "Enregistrée comme playlist",
+    "setCopyFailed": "Impossible d'enregistrer cette version",
+    "setRateFailed": "Impossible d'enregistrer la note",
+    "vetoFailed": "Impossible de mettre à jour Ne jamais inclure",
+    "trackBanned": "Titre ajouté à Ne jamais inclure",
+    "artistBanned": "{{artist}} ajouté à Ne jamais inclure",
     "saveFailed": "Échec de l'enregistrement de ce widget",
     "removeFailed": "Échec de la suppression de ce widget",
     "importFailed": "Échec de la vérification de ce JSON",

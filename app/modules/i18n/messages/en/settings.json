@@ -1335,6 +1335,10 @@
         "name": "Library Scan",
         "description": "Indexes the audio files on disk, works out what each one holds, and reconciles what disappeared."
       },
+      "audio-analysis": {
+        "name": "Audio Analysis",
+        "description": "Listens to each track to learn its mood, energy and tempo for the smart lists."
+      },
       "library-loudness": {
         "name": "Loudness Measurement",
         "description": "Measures how loud each track is, so playback can even out the volume between them."
@@ -1349,7 +1353,7 @@
       },
       "smart-playlists": {
         "name": "Smart Playlists",
-        "description": "Refreshes the playlists whose tracks a widget rule picks, daily or weekly."
+        "description": "Refreshes the playlists whose tracks a widget rule picks, on the schedule each one sets."
       }
     }
   },
@@ -2241,6 +2245,34 @@
     },
     "finishedAbandoned": "{{count}} were never reached, because the run stopped early.",
     "finishedFailuresTruncated": "Showing {{listed}} of {{count}}. The rest are in the logs."
+  },
+  "audioAnalysis": {
+    "title": "Audio analysis",
+    "description": "Listens to your files once to learn mood, energy and tempo. It starts by itself, runs in the background and picks up where it stopped after a restart.",
+    "analyzed": "Analyzed",
+    "ofTotal": "{{done}} of {{total}}",
+    "retry": "Could not read",
+    "state": "State",
+    "running": "Running",
+    "idle": "Waiting for its next run",
+    "speed": "Speed",
+    "speeds": { "background": "Background", "balanced": "Balanced", "fast": "Fast" },
+    "pause": "Pause",
+    "start": "Run now",
+    "hint": "Mood lists use what is analyzed so far and grow on their own at each refresh."
+  },
+  "neverInclude": {
+    "title": "Never include",
+    "description": "Applies to every smart list of your account. A widget can allow one for itself.",
+    "artists": "Artists",
+    "tracks": "Tracks",
+    "noTaste": "Plays that do not shape your taste",
+    "searchArtists": "Search artists",
+    "searchTracks": "Search tracks by title or artist",
+    "searchGenres": "Search genres",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "Remove {{name}}",
+    "noMatch": "No matches"
   },
   "libraryScan": {
     "card": {

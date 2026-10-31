@@ -27,7 +27,7 @@ export const boardDock = cva(
 );
 
 export const boardMenu = cva(
-  "border-fg/15 bg-surface/95 pointer-events-auto flex max-w-full min-w-0 flex-col rounded-xl border p-1 shadow-2xl backdrop-blur-xl"
+  "board-menu-glow border-accent-500/70 bg-surface/95 pointer-events-auto flex max-w-full min-w-0 flex-col rounded-xl border p-1 backdrop-blur-xl"
 );
 
 export const boardMenuRow = cva("flex min-w-0 items-center gap-1");
@@ -43,7 +43,7 @@ export const boardMenuDivider = cva("bg-fg/15 mx-1 h-6 w-px shrink-0");
 export const boardMenuDone = cva("shrink-0");
 
 export const boardFab = cva(
-  "from-primary-600 to-accent-600 text-primary-foreground shadow-primary-500/40 hover:from-primary-500 hover:to-accent-500 focus-visible:ring-primary-300 pointer-events-auto flex size-14 items-center justify-center rounded-full bg-linear-to-r shadow-xl transition-all duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-500/40 hover:from-primary-500 hover:to-accent-500 focus-visible:ring-primary-300 pointer-events-auto flex size-14 items-center justify-center rounded-full bg-linear-to-r shadow-xl transition-all duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
 );
 
 export const boardFabLabel = cva("sr-only");

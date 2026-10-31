@@ -20,6 +20,7 @@ import {
   fieldText,
   itemControls,
   measureText,
+  mixItemOf,
   moveDirection,
   moveOf,
   moveText,
@@ -38,7 +39,7 @@ import type { WidgetHandlers, WidgetItem } from "../types";
 const WINDOW = { from: new Date("2026-08-30T00:00:00Z"), to: new Date("2026-09-29T00:00:00Z") };
 
 function handlers(): WidgetHandlers {
-  return { play: vi.fn(), request: vi.fn(), open: vi.fn(), openUrl: vi.fn() };
+  return { play: vi.fn(), shuffle: vi.fn(), radio: vi.fn(), request: vi.fn(), open: vi.fn(), openUrl: vi.fn() };
 }
 
 function onlyItem(items: WidgetItem[]): WidgetItem {
@@ -148,8 +149,9 @@ describe("widgetStatsOf", () => {
     expect(stats).toEqual([{ key: "rock", label: "Rock", value: "12", delta: 3 }]);
   });
 
-  it("has no stats for a ranked result", () => {
-    expect(widgetStatsOf(createTrackResult([createRecipeTrackRow()]))).toEqual([]);
+  it("reads a ranked result as one stat per row", () => {
+    const row = createRecipeTrackRow({ value: 12, prev: 10 });
+    expect(widgetStatsOf(createTrackResult([row]))).toEqual([{ key: row.id, label: row.title, value: "12", delta: 2 }]);
   });
 });
 
@@ -263,21 +265,22 @@ describe("viewIsEmpty", () => {
 
 describe("suggestBlocks", () => {
   const contracts = [
-    { key: "list", shapes: ["ranked", "buckets"], needsCompare: false },
-    { key: "mosaic", shapes: ["ranked"], needsCompare: false },
-    { key: "rankingMoves", shapes: ["ranked"], needsCompare: true },
-    { key: "leader", shapes: ["ranked"], needsCompare: false },
-    { key: "feed", shapes: ["ranked"], needsCompare: false },
-    { key: "bars", shapes: ["series", "buckets"], needsCompare: false },
-    { key: "yearCalendar", shapes: ["series"], needsCompare: false },
-    { key: "sparkline", shapes: ["series"], needsCompare: false },
-    { key: "statTrend", shapes: ["series", "single"], needsCompare: false },
-    { key: "share", shapes: ["buckets"], needsCompare: false },
-    { key: "compare", shapes: ["buckets"], needsCompare: true },
+    { key: "list", shapes: ["ranked", "buckets"], needsCompare: false, needsNumbers: false },
+    { key: "mosaic", shapes: ["ranked"], needsCompare: false, needsNumbers: false },
+    { key: "rankingMoves", shapes: ["ranked"], needsCompare: true, needsNumbers: false },
+    { key: "leader", shapes: ["ranked"], needsCompare: false, needsNumbers: false },
+    { key: "feed", shapes: ["ranked"], needsCompare: false, needsNumbers: false },
+    { key: "bars", shapes: ["series", "buckets", "ranked"], needsCompare: false, needsNumbers: true },
+    { key: "yearCalendar", shapes: ["series"], needsCompare: false, needsNumbers: false },
+    { key: "sparkline", shapes: ["series"], needsCompare: false, needsNumbers: false },
+    { key: "statTrend", shapes: ["series", "single"], needsCompare: false, needsNumbers: false },
+    { key: "share", shapes: ["buckets"], needsCompare: false, needsNumbers: true },
+    { key: "compare", shapes: ["buckets"], needsCompare: true, needsNumbers: true },
   ] as const;
+  const input = { compare: false, numeric: true, dailyYear: false };
 
   it("orders the views that fit a shape by the suggestion table and puts the rest after", () => {
-    expect(suggestBlocks(contracts, { shape: "ranked", compare: false, dailyYear: false })).toEqual([
+    expect(suggestBlocks(contracts, { ...input, shape: "ranked", numeric: false })).toEqual([
       "list",
       "leader",
       "mosaic",
@@ -285,28 +288,59 @@ describe("suggestBlocks", () => {
     ]);
   });
 
+  it("offers a chart of ranked rows only when the measure is a number", () => {
+    expect(suggestBlocks(contracts, { ...input, shape: "ranked" })).toContain("bars");
+    expect(suggestBlocks(contracts, { ...input, shape: "ranked", numeric: false })).not.toContain("bars");
+  });
+
   it("offers views that need a comparison only when the recipe compares", () => {
-    expect(suggestBlocks(contracts, { shape: "buckets", compare: true, dailyYear: false })).toEqual([
+    expect(suggestBlocks(contracts, { ...input, shape: "buckets", compare: true })).toEqual([
       "share",
       "bars",
       "compare",
       "list",
     ]);
-    expect(suggestBlocks(contracts, { shape: "ranked", compare: true, dailyYear: false })).toContain("rankingMoves");
+    expect(suggestBlocks(contracts, { ...input, shape: "ranked", compare: true })).toContain("rankingMoves");
   });
 
   it("offers the year calendar only for a long daily series", () => {
-    expect(suggestBlocks(contracts, { shape: "series", compare: false, dailyYear: true })).toEqual([
+    expect(suggestBlocks(contracts, { ...input, shape: "series", dailyYear: true })).toEqual([
       "bars",
       "sparkline",
       "yearCalendar",
       "statTrend",
     ]);
-    expect(suggestBlocks(contracts, { shape: "series", compare: false, dailyYear: false })).toEqual([
-      "bars",
-      "sparkline",
-      "statTrend",
-    ]);
+    expect(suggestBlocks(contracts, { ...input, shape: "series" })).toEqual(["bars", "sparkline", "statTrend"]);
+  });
+});
+
+describe("mixItemOf", () => {
+  const item = (key: string, play: WidgetItem["play"]): WidgetItem => ({
+    key,
+    title: key,
+    subtitle: "",
+    cover: null,
+    value: null,
+    date: null,
+    move: null,
+    play,
+    request: null,
+    open: null,
+    link: null,
+  });
+
+  it("plays every track of the set as one queue", () => {
+    const items = [item("a", { kind: "tracks", trackIds: ["1"] }), item("b", { kind: "tracks", trackIds: ["2"] })];
+    expect(mixItemOf(items, "Mix").play).toEqual({ kind: "tracks", trackIds: ["1", "2"] });
+  });
+
+  it("falls back to the first item when the rows are not tracks", () => {
+    const items = [item("a", { kind: "album", albumExternalId: "al1" }), item("b", null)];
+    expect(mixItemOf(items, "Mix").play).toEqual({ kind: "album", albumExternalId: "al1" });
+  });
+
+  it("has nothing to play for an empty set", () => {
+    expect(mixItemOf([], "Mix").play).toBeNull();
   });
 });
 

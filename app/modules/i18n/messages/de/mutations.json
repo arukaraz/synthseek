@@ -13,6 +13,8 @@
     "importedSkipped": " ({{count}} übersprungen)"
   },
   "settings": {
+    "audioAnalysisSaved": "Geschwindigkeit der Audioanalyse gespeichert",
+    "audioAnalysisFailed": "Geschwindigkeit der Audioanalyse konnte nicht gespeichert werden",
     "formattingFailed": "Formatierung konnte nicht gespeichert werden",
     "namingFailed": "Die Namensvorlage konnte nicht gespeichert werden",
     "libraryPathFailed": "Der Bibliothekspfad konnte nicht gespeichert werden",
@@ -128,6 +130,17 @@
     "templateExportFailed": "Dein Board konnte nicht exportiert werden"
   },
   "widgets": {
+    "setRebuilt": "Listen neu aufgebaut",
+    "setRebuildFailed": "Die Listen konnten nicht neu aufgebaut werden",
+    "setPinFailed": "Das Anheften konnte nicht geändert werden",
+    "setRestored": "Version wiederhergestellt",
+    "setRestoreFailed": "Diese Version konnte nicht wiederhergestellt werden",
+    "setCopySaved": "Als Playlist gespeichert",
+    "setCopyFailed": "Diese Version konnte nicht gespeichert werden",
+    "setRateFailed": "Die Bewertung konnte nicht gespeichert werden",
+    "vetoFailed": "Nie aufnehmen konnte nicht aktualisiert werden",
+    "trackBanned": "Titel zu Nie aufnehmen hinzugefügt",
+    "artistBanned": "{{artist}} zu Nie aufnehmen hinzugefügt",
     "saveFailed": "Dieses Widget konnte nicht gespeichert werden",
     "removeFailed": "Dieses Widget konnte nicht gelöscht werden",
     "importFailed": "Dieses JSON konnte nicht geprüft werden",

@@ -13,6 +13,7 @@ import {
 import type {
   FeedWidgetResult,
   RecipeWidgetResult,
+  SetListResult,
   WidgetAction,
   WidgetBindSlot,
   WidgetBlock,
@@ -22,12 +23,30 @@ import type {
   WidgetResult,
   WidgetRowOf,
 } from "@hooks/api/queries/widgets/types";
-import { calendarDateOf, formatCalendarDate, formatRelativeTime, isoDayOf } from "@utils/formatters";
+import {
+  calendarDateOf,
+  formatCalendarDate,
+  formatHour,
+  formatRelativeTime,
+  formatWeekdayDateTime,
+  isoDayOf,
+} from "@utils/formatters";
 import { playbackServerName } from "@utils/playback-servers";
 
 import { compactCount } from "../helpers";
+import { MINUTES_PER_HOUR } from "../WidgetStory/constants";
 import { storyCoversOf, storyNoteOf, storyPagesOf } from "../WidgetStory/helpers";
-import { MATRIX_HOURS, MATRIX_WEEKDAYS, MONTH_KEY_LENGTH, SUGGESTED_BLOCKS, WIDGET_ICONS } from "./constants";
+import {
+  HOUR_LABEL_YEAR,
+  MATRIX_HOURS,
+  MATRIX_WEEKDAYS,
+  MINUTE_MS,
+  MIX_COVER_LIMIT,
+  MONTH_KEY_LENGTH,
+  SERIES_STAT_LIMIT,
+  SUGGESTED_BLOCKS,
+  WIDGET_ICONS,
+} from "./constants";
 import type {
   BlockContractView,
   BlockSuggestionInput,
@@ -35,6 +54,7 @@ import type {
   MoveDirection,
   WidgetHandlers,
   WidgetItem,
+  WidgetItemActions,
   WidgetItemControls,
   WidgetMove,
   WidgetPoint,
@@ -317,6 +337,22 @@ function serverPlaylistItem(row: FeedPlaylist, bind: Bind): WidgetItem {
   };
 }
 
+function pointItem(point: WidgetPoint): WidgetItem {
+  return {
+    key: point.key,
+    title: point.label,
+    subtitle: "",
+    cover: null,
+    value: point.text,
+    date: null,
+    move: null,
+    play: null,
+    request: null,
+    open: null,
+    link: null,
+  };
+}
+
 function recipeItems(result: RecipeWidgetResult, bind: Bind): WidgetItem[] {
   switch (result.dataset) {
     case "tracks":
@@ -329,7 +365,9 @@ function recipeItems(result: RecipeWidgetResult, bind: Bind): WidgetItem[] {
       return result.rows.map((row) => recipeBucketItem(result, row, bind));
     case "series":
     case "matrix":
-      return [];
+      return widgetPointsOf(result)
+        .filter((point) => point.value > 0)
+        .map(pointItem);
   }
 }
 
@@ -350,6 +388,67 @@ function feedItems(result: FeedWidgetResult, bind: Bind): WidgetItem[] {
   }
 }
 
+function setListValue(list: SetListResult): string {
+  const minutes = Math.round(list.durationMs / MINUTE_MS);
+  const hours = Math.floor(minutes / MINUTES_PER_HOUR);
+  const length =
+    hours > 0
+      ? i18n.t("discover:customWidget.set.hours", { hours, minutes: minutes % MINUTES_PER_HOUR })
+      : i18n.t("discover:customWidget.set.minutes", { minutes });
+  return i18n.t("discover:customWidget.set.length", { count: list.trackIds.length, length });
+}
+
+function setListItem(list: SetListResult): WidgetItem {
+  return {
+    key: list.slotId,
+    title: list.name,
+    subtitle: i18n.t(`widgets:set.origins.${list.origin}`),
+    cover: list.covers[0] ?? null,
+    value: setListValue(list),
+    date: null,
+    move: null,
+    play: list.trackIds.length > 0 ? { kind: "tracks", trackIds: list.trackIds } : null,
+    request: null,
+    open: null,
+    link: null,
+    covers: list.covers.slice(0, MIX_COVER_LIMIT),
+    listSlot: list.slotId,
+    pinned: list.pinned,
+  };
+}
+
+export function setStatusOf(result: WidgetResult | undefined): string | null {
+  if (result?.type !== "playlists") return null;
+  if (result.failedAt) return i18n.t("discover:customWidget.set.failed");
+  const next = result.nextAt
+    ? formatWeekdayDateTime(new Date(result.nextAt))
+    : i18n.t("discover:customWidget.set.onRequest");
+  if (!result.updatedAt) return i18n.t("discover:customWidget.set.nextOnly", { next });
+  return i18n.t("discover:customWidget.set.status", {
+    updated: formatWeekdayDateTime(new Date(result.updatedAt)),
+    next,
+  });
+}
+
+export function setHiddenNote(result: WidgetResult | undefined): string | null {
+  if (result?.type !== "playlists" || result.hidden.length === 0 || result.lists.length === 0) return null;
+  return i18n.t("discover:customWidget.set.hidden", {
+    count: result.hidden.length,
+    names: result.hidden.map((list) => list.name).join(", "),
+  });
+}
+
+export function withListOpening(
+  actions: WidgetItemActions,
+  onOpenList: ((slotId: string) => void) | undefined
+): WidgetItemActions {
+  if (!onOpenList) return actions;
+  return (item) => {
+    const { listSlot } = item;
+    return listSlot === undefined ? actions(item) : { ...actions(item), onSelect: () => onOpenList(listSlot) };
+  };
+}
+
 export function widgetItemsOf(result: WidgetResult, bind: Bind): WidgetItem[] {
   switch (result.type) {
     case "recipe":
@@ -358,16 +457,20 @@ export function widgetItemsOf(result: WidgetResult, bind: Bind): WidgetItem[] {
       return feedItems(result, bind);
     case "recap":
       return [];
+    case "playlists":
+      return result.lists.map(setListItem);
   }
 }
 
 export function widgetStatsOf(result: WidgetResult): WidgetStat[] {
-  if (result.type !== "recipe" || result.dataset !== "buckets") return [];
-  return result.rows.map((row) => ({
-    key: row.key,
-    label: bucketLabel(result, row),
-    value: row.value === null ? "" : compactCount(row.value),
-    delta: row.value !== null && row.prev !== null ? row.value - row.prev : null,
+  if (result.type !== "recipe") return [];
+  const points =
+    result.dataset === "series" ? widgetPointsOf(result).slice(-SERIES_STAT_LIMIT) : widgetPointsOf(result);
+  return points.map((point) => ({
+    key: point.key,
+    label: point.label,
+    value: compactCount(point.value),
+    delta: point.prev === null ? null : point.value - point.prev,
   }));
 }
 
@@ -385,30 +488,76 @@ function pointText(measure: WidgetMeasure, value: number): string {
   return measureText(measure, value, null) ?? compactCount(value);
 }
 
+function measuredPoint(
+  measure: WidgetMeasure,
+  key: string,
+  label: string,
+  value: number,
+  prev: number | null
+): WidgetPoint {
+  return {
+    key,
+    label,
+    value,
+    prev,
+    text: pointText(measure, value),
+    prevText: prev === null ? null : pointText(measure, prev),
+  };
+}
+
+function hourLabel(hour: number): string {
+  return formatHour(new Date(HOUR_LABEL_YEAR, 0, 1, hour));
+}
+
+function hourlyPoints(result: RecipeWidgetResult, rows: readonly { hour: number; value: number }[]): WidgetPoint[] {
+  return Array.from({ length: MATRIX_HOURS }, (_, hour) => {
+    const value = rows.reduce((sum, row) => (row.hour === hour ? sum + row.value : sum), 0);
+    return measuredPoint(result.measure, String(hour), hourLabel(hour), value, null);
+  });
+}
+
 export function widgetPointsOf(result: WidgetResult): WidgetPoint[] {
   if (result.type !== "recipe") return [];
+  const { measure } = result;
   switch (result.dataset) {
+    case "tracks":
+      return result.rows.map((row) => measuredPoint(measure, row.id, row.title, row.value ?? 0, row.prev));
+    case "albums":
+    case "artists":
+      return result.rows.map((row) => measuredPoint(measure, row.id, row.name, row.value ?? 0, row.prev));
     case "series":
-      return result.rows.map((row) => ({
-        key: row.key,
-        label: seriesLabel(row.key),
-        value: row.value,
-        prev: row.prev,
-        text: pointText(result.measure, row.value),
-        prevText: row.prev === null ? null : pointText(result.measure, row.prev),
-      }));
+      return result.rows.map((row) => measuredPoint(measure, row.key, seriesLabel(row.key), row.value, row.prev));
     case "buckets":
-      return result.rows.map((row) => ({
-        key: row.key,
-        label: bucketLabel(result, row),
-        value: row.value ?? 0,
-        prev: row.prev,
-        text: pointText(result.measure, row.value ?? 0),
-        prevText: row.prev === null ? null : pointText(result.measure, row.prev),
-      }));
-    default:
-      return [];
+      return result.rows.map((row) =>
+        measuredPoint(measure, row.key, bucketLabel(result, row), row.value ?? 0, row.prev)
+      );
+    case "matrix":
+      return hourlyPoints(result, result.rows);
   }
+}
+
+export function coversOf(items: readonly WidgetItem[]): string[] {
+  const covers = items.flatMap((item) => (item.cover ? [item.cover] : []));
+  return [...new Set(covers)].slice(0, MIX_COVER_LIMIT);
+}
+
+export function mixItemOf(items: readonly WidgetItem[], title: string): WidgetItem {
+  const trackIds = items.flatMap((item) => (item.play?.kind === "tracks" ? item.play.trackIds : []));
+  const [first] = items;
+  const play = trackIds.length > 0 ? { kind: "tracks" as const, trackIds } : (first?.play ?? null);
+  return {
+    key: title,
+    title,
+    subtitle: "",
+    cover: null,
+    value: null,
+    date: null,
+    move: null,
+    play,
+    request: null,
+    open: null,
+    link: null,
+  };
 }
 
 export function widgetCellsOf(result: WidgetResult): number[][] {
@@ -445,10 +594,13 @@ export function viewIsEmpty(view: WidgetView): boolean {
 
 export function acceptedBlocks(
   contracts: readonly BlockContractView[],
-  { shape, compare }: BlockSuggestionInput
+  { shape, compare, numeric }: BlockSuggestionInput
 ): WidgetBlock[] {
   return contracts
-    .filter((contract) => contract.shapes.includes(shape) && (!contract.needsCompare || compare))
+    .filter(
+      (contract) =>
+        contract.shapes.includes(shape) && (!contract.needsCompare || compare) && (!contract.needsNumbers || numeric)
+    )
     .map((contract) => contract.key);
 }
 
@@ -503,6 +655,26 @@ export function itemControls(item: WidgetItem, action: WidgetAction, handlers: W
       },
     };
   }
+  if (action === "shuffle" && play) {
+    return {
+      onSelect,
+      coverAction: {
+        kind: "play",
+        label: i18n.t("discover:customWidget.set.shuffle", { name: item.title }),
+        onClick: () => handlers.shuffle(play),
+      },
+    };
+  }
+  if (action === "radio" && play) {
+    return {
+      onSelect,
+      coverAction: {
+        kind: "play",
+        label: i18n.t("discover:stations.start", { name: item.title }),
+        onClick: () => handlers.radio(play),
+      },
+    };
+  }
   if (action === "request" && request) {
     return {
       onSelect,
@@ -536,5 +708,6 @@ export function customWidgetNote({ result, isError, empty }: CustomWidgetNoteInp
         })
       : i18n.t("discover:customWidget.privacy.nobodyShares");
   }
+  if (result?.type === "playlists" && empty) return i18n.t("discover:customWidget.set.empty");
   return empty ? i18n.t("discover:customWidget.empty") : null;
 }

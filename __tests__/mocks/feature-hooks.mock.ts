@@ -71,6 +71,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
     library: {
       syncIntervalMinutes: 60,
       recycleBin: { retentionDays: 30 },
+      audioAnalysis: { speed: "background" },
     },
     downloadSources: {
       slskd: { enabled: true, priority: 1 },

@@ -1,0 +1,9 @@
+@layer utilities {
+  .board-menu-glow {
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--color-accent-500) 22%, transparent),
+      0 0 12px color-mix(in oklch, var(--color-accent-500) 32%, transparent),
+      0 0 32px 4px color-mix(in oklch, var(--color-accent-600) 24%, var(--shadow-menu-glow-base)),
+      0 16px 40px -8px var(--shadow-menu-drop);
+  }
+}
