@@ -2,6 +2,22 @@
 
 ---
 
+# v2.9.3, November 1, 2026
+
+> [!NOTE]
+> After updating, Synthseek checks every file its library scan filed, once, in the background, and moves the ones that sat under the wrong album. Favourites, playlists and play history stay with each song. A song that ends up with two copies on one row is handled by the duplicate check, which keeps the better copy and sends the other to the recycle bin.
+
+### Scanned files land on the album they are on
+
+- Files tagged with MusicBrainz, such as by Picard, are now filed under the album they are on, instead of under another album that happens to hold the same recording.
+- An album the catalog does not carry now appears under its own name, as the files describe it, instead of its songs being spread over other albums.
+- An album whose edition the catalog lists under a longer name, such as a deluxe or expanded edition, is recognised again.
+- A cover band's album, a remix, a live take or a demo no longer takes the place of the original when files are filed.
+- Asking to identify a file again no longer waits for the whole background check to finish.
+- Albums the catalog does not know no longer fill the log with warnings at start.
+
+---
+
 # v2.9.2, October 23, 2026
 
 ### Security updates
