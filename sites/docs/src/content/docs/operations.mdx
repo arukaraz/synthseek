@@ -50,7 +50,7 @@ The library scan is not a row in the table. It has its own page, under **Setting
 
 **Review files** opens what Synthseek could not recognise, grouped by folder and album. You can match a group to an album or a file to a song, search again, or ignore a file. Synthseek also searches again later on its own, so an album the catalog publishes after you got the files can still be found. Fixing a file's tags makes it search again at the next scan. An ignored file stays on your disk and out of your library, and Synthseek stops searching for it until you choose **Stop ignoring**.
 
-Duplicates have their own page under **Settings**, then **Maintenance**. It lists them a track at a time, ordered by what settling each one would give back. Copies it can prove are the same recording are settled without anyone pressing anything. It keeps the best file, preferring lossless and then the larger one, points your library at it, and sends the rest to the recycle bin. Proof means the copies agree on both their title and their length. A remix, a live take, a radio edit or a truncated download can carry the title of the track it was filed against while being a different recording. Copies within a couple of seconds of each other count as one length, because that is encoder rounding rather than a different take. What it cannot prove waits under **Needs review**. Each track there says how many clearly different lengths its copies come in. You can play any copy, then choose **Keep this copy** on the one you want, which recycles the others. Nothing is deleted outright. A call you disagree with is listed under **Settings**, then **Maintenance**, then **Recycle bin**. Its **Restore** puts the file back where it came from, for as long as the retention window keeps it.
+Duplicates have their own page under **Settings**, then **Maintenance**. Synthseek compares the copies of a track by their sound. Copies it can tell are the same recording are settled without anyone pressing anything. It keeps the best file, preferring lossless and then the larger one, points your library at it, and sends the rest to the recycle bin. A copy that sounds like another song, and is tagged as one, can leave the track and wait in **Review files**. What it cannot settle on its own, such as a clean edit beside the original, waits on the page for you to listen, with the parts where the copies differ marked. **Keep this copy** keeps the one you want and recycles the others. **None of them fits** recycles them all, quarantines their download if Synthseek recorded one, and can search for the track again. Nothing is deleted outright. A call you disagree with is listed under **Settings**, then **Maintenance**, then **Recycle bin**. Its **Restore** puts the file back where it came from, for as long as the retention window keeps it.
 
 The same page can also find the lyrics, artwork and metadata files left beside a track that is no longer there. It counts them and moves them to the recycle bin. It only judges a folder that still holds music, so a folder of booklet scans and a folder it could not read are both left alone.
 
@@ -146,9 +146,8 @@ Your music files live in your library paths, `/music` and any you added, and are
 
 - Replacing a copy with a better one after a quality upgrade.
 - Keeping one copy you picked on the duplicates page.
-- Resolving one track with **Keep best copy**.
-- Resolving every track under **Safe to resolve** at once.
-- The scan settling the copies it proved are the same recording.
+- Rejecting every copy of a track on the duplicates page.
+- Settling the copies that sound like the same recording.
 - Clearing the leftover files described above.
 - **Delete files** on the Library page.
 

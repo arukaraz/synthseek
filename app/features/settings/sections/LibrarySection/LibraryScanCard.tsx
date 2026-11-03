@@ -10,11 +10,7 @@ import { LoadingDots } from "@components/ui/LoadingDots";
 import { formatRelativeTime } from "@utils/formatters";
 import { Notice } from "@components/ui/Notice";
 import { DataTable } from "@components/ui/Table";
-import {
-  useCancelLibraryScan,
-  useKeepBestLibraryCopies,
-  useScanLibraryPath,
-} from "@hooks/api/mutations/jobs/useLibraryScanControls";
+import { useCancelLibraryScan, useScanLibraryPath } from "@hooks/api/mutations/jobs/useLibraryScanControls";
 import { useTriggerJob } from "@hooks/api/mutations/jobs/useTriggerJob";
 import { useLibraryScanStatus } from "@hooks/api/queries/useLibraryScanStatus";
 
@@ -28,7 +24,6 @@ export function LibraryScanCard() {
   const { data, isLoading, error } = status;
   const cancel = useCancelLibraryScan();
   const trigger = useTriggerJob();
-  const keepBest = useKeepBestLibraryCopies();
   const scanPath = useScanLibraryPath();
   const [review, setReview] = useUrlParam(REVIEW_URL_PARAM, { validValues: [REVIEW_URL_VALUE] });
 
@@ -52,8 +47,7 @@ export function LibraryScanCard() {
 
   const { activeRun, lastRun, inventory, paths } = data;
   const isScanning = activeRun !== null;
-  const reclaiming = data.reclaimRunning || keepBest.isPending;
-  const busy = isScanning || data.identifyRunning || reclaiming || trigger.isPending || scanPath.isPending;
+  const busy = isScanning || data.identifyRunning || data.reclaimRunning || trigger.isPending || scanPath.isPending;
   const columns = buildScanPathColumns({
     t,
     busy,

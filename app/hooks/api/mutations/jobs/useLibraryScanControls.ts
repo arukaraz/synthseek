@@ -32,22 +32,6 @@ export function useScanLibraryPath() {
   });
 }
 
-export function useKeepBestLibraryCopy() {
-  const utils = trpc.useUtils();
-  return trpc.library.scan.keepBestCopy.useMutation({
-    onSuccess: (result) => {
-      utils.library.scan.duplicateGroups.invalidate();
-      utils.library.scan.status.invalidate();
-      toast.success(
-        result.skipped
-          ? i18n.t("settings:libraryScan.duplicates.tidySkipped")
-          : i18n.t("settings:libraryScan.duplicates.tidyDone", { size: formatBytes(result.freedBytes) })
-      );
-    },
-    onError: (error) => errorToast(error, "jobs.runFailed"),
-  });
-}
-
 export function useKeepThisCopy() {
   const utils = trpc.useUtils();
   return trpc.library.scan.keepThisCopy.useMutation({
@@ -60,17 +44,21 @@ export function useKeepThisCopy() {
   });
 }
 
-export function useKeepBestLibraryCopies() {
+export function useRejectCopies() {
   const utils = trpc.useUtils();
-  return trpc.library.scan.keepBestCopies.useMutation({
+  return trpc.library.scan.rejectCopies.useMutation({
     onSuccess: (result) => {
-      utils.library.scan.status.invalidate();
       utils.library.scan.duplicateGroups.invalidate();
-      if (!result.started) {
-        toast.info(i18n.t("settings:libraryScan.duplicates.tidyAllBusy"));
-        return;
-      }
-      toast.success(i18n.t("settings:libraryScan.duplicates.tidyAllRunning"));
+      utils.library.scan.status.invalidate();
+      utils.settings.quarantine.list.invalidate();
+      toast.success(
+        i18n.t(
+          result.searching
+            ? "settings:libraryScan.duplicates.reject.searchingDone"
+            : "settings:libraryScan.duplicates.reject.rejectDone",
+          { count: result.recycled, size: formatBytes(result.freedBytes) }
+        )
+      );
     },
     onError: (error) => errorToast(error, "jobs.runFailed"),
   });

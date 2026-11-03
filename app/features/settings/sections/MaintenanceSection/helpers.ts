@@ -1,11 +1,12 @@
 import type { TFunction } from "i18next";
 
-import { formatBytes } from "@utils/formatters";
+import type { ComparedCopy, TimelineBounds } from "@hooks/ui/copyComparison";
+import { formatTrackDuration } from "@utils/formatters";
 import { matchesTerms, searchTerms } from "@utils/search";
 
 import type { SystemProblem } from "../../types";
-import { CONTAINER_DEFAULT_OWNER_ID } from "./constants";
-import type { DownloadedAlbum, DownloadedAlbumFilter, DuplicateGroupSummary, SystemProblemCopyParams } from "./types";
+import { CONTAINER_DEFAULT_OWNER_ID, MS_PER_SECOND, RULER_TICKS, WAVEFORM } from "./constants";
+import type { DownloadedAlbum, DownloadedAlbumFilter, DuplicateGroup, SystemProblemCopyParams } from "./types";
 
 export function downloadedAlbumsIn(
   entries: readonly DownloadedAlbum[],
@@ -61,23 +62,53 @@ export function problemCopyParams(problem: SystemProblem): SystemProblemCopyPara
   }
 }
 
-export function describeCopies(group: DuplicateGroupSummary, t: TFunction<"settings">): string {
-  const parts = [t("libraryScan.duplicates.copies", { count: group.copies.length })];
-  if (group.formats.length > 0) parts.push(group.formats.map((format) => format.toUpperCase()).join(" + "));
-  const lengths = group.distinctLengths;
-  parts.push(
-    lengths !== null && lengths > 1
-      ? t("libraryScan.duplicates.distinctLengths", { count: lengths })
-      : group.minBytes === group.maxBytes
-        ? t("libraryScan.duplicates.sizeEach", { size: formatBytes(group.maxBytes) })
-        : t("libraryScan.duplicates.sizeRange", {
-            from: formatBytes(group.minBytes),
-            to: formatBytes(group.maxBytes),
-          })
-  );
-  return parts.join(" · ");
+export function describeCopies(group: DuplicateGroup, t: TFunction<"settings">): string {
+  const formats = [...new Set(group.copies.map((copy) => copy.fileFormat.toUpperCase()))].join(", ");
+  return [t("libraryScan.duplicates.copies", { count: group.copies.length }), formats].join(" · ");
 }
 
-export function copyAudioUrl(fileId: string): string {
+export function spansLibraryPaths(group: DuplicateGroup): boolean {
+  return new Set(group.copies.map((copy) => copy.libraryPath)).size > 1;
+}
+
+function copyAudioUrl(fileId: string): string {
   return `/api/v1/library-copies/${encodeURIComponent(fileId)}/audio`;
+}
+
+export function comparedCopiesOf(group: DuplicateGroup): ComparedCopy[] {
+  return group.copies.map((copy) => ({
+    id: copy.id,
+    src: copyAudioUrl(copy.id),
+    offsetSeconds: copy.offsetSeconds,
+    loudnessLufs: copy.loudnessLufs,
+    durationSeconds: copy.durationSeconds,
+  }));
+}
+
+export function waveformPath(peaks: readonly number[]): string {
+  return peaks
+    .map((peak, index) => {
+      const half = Math.max(WAVEFORM.MIN_BAR, (peak / WAVEFORM.PEAK_SCALE) * (WAVEFORM.HEIGHT / 2));
+      return `M${index + 0.5} ${WAVEFORM.HEIGHT / 2 - half}V${WAVEFORM.HEIGHT / 2 + half}`;
+    })
+    .join("");
+}
+
+export function clockLabel(seconds: number): string {
+  const sign = seconds < 0 ? "-" : "";
+  return `${sign}${formatTrackDuration(Math.abs(seconds) * MS_PER_SECOND)}`;
+}
+
+export function rulerTicks(bounds: TimelineBounds): number[] {
+  const span = bounds.end - bounds.start;
+  return Array.from({ length: RULER_TICKS + 1 }, (_, index) => bounds.start + (span * index) / RULER_TICKS);
+}
+
+export function percent(fraction: number): string {
+  return `${Math.min(Math.max(fraction, 0), 1) * 100}%`;
+}
+
+export function positionAtPointer(clientX: number, box: DOMRect, bounds: TimelineBounds): number {
+  const fraction = box.width <= 0 ? 0 : (clientX - box.left) / box.width;
+  return bounds.start + Math.min(Math.max(fraction, 0), 1) * (bounds.end - bounds.start);
 }

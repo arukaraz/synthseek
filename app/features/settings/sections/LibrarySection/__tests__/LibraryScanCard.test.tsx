@@ -73,8 +73,6 @@ vi.mock("@hooks/api/queries/useLibraryScanStatus", () => ({
 vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
   useCancelLibraryScan: () => ({ mutate: cancelMutate, isPending: false }),
   useKeepThisCopy: () => ({ mutate: vi.fn(), isPending: false }),
-  useKeepBestLibraryCopies: () => ({ mutate: vi.fn(), isPending: false }),
-  useKeepBestLibraryCopy: () => ({ mutate: vi.fn(), isPending: false }),
   useScanLibraryPath: () => ({ mutate: scanPathMutate, isPending: false }),
 }));
 

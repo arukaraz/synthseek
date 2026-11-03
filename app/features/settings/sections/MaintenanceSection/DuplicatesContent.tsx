@@ -1,62 +1,45 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronRight, Loader2, Sparkles, TriangleAlert } from "lucide-react";
+import { ChevronRight, Loader2, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@components/ui/Button";
 import { EmptyState } from "@components/ui/EmptyState";
 import { Pagination } from "@components/ui/Pagination";
 import { SectionLoading } from "@components/ui/SectionLoading";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
-import {
-  useKeepBestLibraryCopies,
-  useKeepBestLibraryCopy,
-  useKeepThisCopy,
-} from "@hooks/api/mutations/jobs/useLibraryScanControls";
+import { useKeepThisCopy, useRejectCopies } from "@hooks/api/mutations/jobs/useLibraryScanControls";
 import { useDuplicateGroups } from "@hooks/api/queries/useLibraryScanStatus";
 import { useClientPagination } from "@hooks/ui/useClientPagination";
 import { formatBytes } from "@utils/formatters";
 
 import {
-  dupBanner,
-  dupBannerFigure,
-  dupBannerNote,
-  dupBannerTitle,
   dupCard,
   dupCardHead,
   dupCaret,
-  dupDir,
-  dupFiles,
+  dupComparing,
+  dupListenPill,
   dupReclaim,
   dupScroll,
-  dupTab,
-  dupTabCount,
-  dupTabs,
   dupTrackMeta,
   dupTrackTitle,
 } from "../../styles";
-import { CopyRow } from "./CopyRow";
+import { DuplicateComparator } from "./DuplicateComparator";
 import { describeCopies } from "./helpers";
-import type { DuplicatesContentProps } from "./types";
+import { RejectCopiesDialog } from "./RejectCopiesDialog";
+import type { DuplicateGroup, DuplicatesContentProps } from "./types";
 
 export function DuplicatesContent({ enabled, reclaiming }: DuplicatesContentProps) {
   const { t } = useTranslation("settings");
   const groups = useDuplicateGroups(enabled);
-  const keepAll = useKeepBestLibraryCopies();
-  const keepOne = useKeepBestLibraryCopy();
   const keepThis = useKeepThisCopy();
-  const [prefersSafe, setPrefersSafe] = useState(true);
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const [playingId, setPlayingId] = useState<string | null>(null);
+  const reject = useRejectCopies();
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [rejecting, setRejecting] = useState<DuplicateGroup | null>(null);
 
   const all = groups.data?.groups ?? [];
-  const safe = all.filter((group) => !group.ambiguous);
-  const review = all.filter((group) => group.ambiguous);
-  const safeTab = safe.length > 0 && (prefersSafe || review.length === 0);
-  const rows = safeTab ? safe : review;
-  const pager = useClientPagination(rows);
-  const busy = reclaiming || keepAll.isPending;
+  const comparing = groups.data?.comparing ?? 0;
+  const pager = useClientPagination(all);
+  const busy = reclaiming || keepThis.isPending || reject.isPending;
 
   const wasReclaiming = useRef(reclaiming);
   useEffect(() => {
@@ -64,148 +47,59 @@ export function DuplicatesContent({ enabled, reclaiming }: DuplicatesContentProp
     wasReclaiming.current = reclaiming;
   }, [reclaiming, groups]);
 
+  const openNextAfter = (requestId: string) => {
+    const next = all.find((group) => group.requestId !== requestId);
+    setOpenId(next?.requestId ?? null);
+  };
+
+  if (groups.isLoading) return <SectionLoading />;
+
   return (
     <>
-      {groups.isLoading ? (
-        <SectionLoading />
-      ) : all.length === 0 ? (
+      {comparing > 0 ? (
+        <div className={dupComparing()}>
+          <Loader2 className="size-3.5 animate-spin" aria-hidden />
+          {t("libraryScan.duplicates.comparing", { count: comparing })}
+        </div>
+      ) : null}
+      {all.length === 0 ? (
         <EmptyState
           icon={Sparkles}
           title={t("libraryScan.duplicates.emptyTitle")}
           description={t("libraryScan.duplicates.emptyBody")}
         />
       ) : (
-        <div className="flex flex-col">
-          <div role="tablist" className={dupTabs()}>
-            {[
-              { safe: true, label: t("libraryScan.duplicates.tabSafe"), count: safe.length },
-              { safe: false, label: t("libraryScan.duplicates.tabReview"), count: review.length },
-            ].map((tab) => (
-              <button
-                key={tab.label}
-                type="button"
-                role="tab"
-                aria-selected={safeTab === tab.safe}
-                className={dupTab({ active: safeTab === tab.safe })}
-                onClick={() => {
-                  setPrefersSafe(tab.safe);
-                  pager.onPageChange(1);
-                }}
-              >
-                {tab.label}
-                <span className={dupTabCount()}>{tab.count}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="pt-4">
-            {safeTab ? (
-              <div className={dupBanner({ tone: "safe" })}>
-                <div className="flex min-w-45 flex-1 flex-col gap-0.5">
-                  <span className={dupBannerFigure()}>
-                    {t("libraryScan.duplicates.reclaimable", { size: formatBytes(groups.data?.safeBytes ?? 0) })}
-                  </span>
-                  <span className={dupBannerNote()}>
-                    {t("libraryScan.duplicates.safeNote", { count: safe.length })}
-                  </span>
-                </div>
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => keepAll.mutate()}
-                  disabled={busy || safe.length === 0}
-                  aria-busy={busy}
-                >
-                  {busy ? <Loader2 className="animate-spin" /> : <Sparkles />}
-                  {busy
-                    ? t("libraryScan.duplicates.tidyAllRunning")
-                    : t("libraryScan.duplicates.tidyAll", { count: safe.length })}
-                </Button>
-              </div>
-            ) : (
-              <div className={dupBanner({ tone: "review" })}>
-                <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
-                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className={dupBannerTitle()}>
-                    {t("libraryScan.duplicates.reviewTitle", { count: review.length })}
-                  </span>
-                  <span className={dupBannerNote()}>{t("libraryScan.duplicates.reviewNote")}</span>
-                </div>
-              </div>
-            )}
-          </div>
-
+        <div className="flex flex-col gap-3">
           <div className={dupScroll()}>
             {pager.visible.map((group) => {
-              const open = expanded[group.requestId] === true;
+              const open = openId === group.requestId;
               return (
                 <div key={group.requestId} className={dupCard()}>
-                  <div className={dupCardHead()}>
-                    <button
-                      type="button"
-                      className={dupCaret()}
-                      aria-expanded={open}
-                      aria-label={t("libraryScan.duplicates.showCopies")}
-                      onClick={() => setExpanded((prev) => ({ ...prev, [group.requestId]: !open }))}
-                    >
-                      {open ? <ChevronDown className="size-3.5" /> : <ChevronRight className="size-3.5" />}
-                    </button>
-                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <button
+                    type="button"
+                    className={dupCardHead()}
+                    aria-expanded={open}
+                    onClick={() => setOpenId(open ? null : group.requestId)}
+                  >
+                    <ChevronRight className={dupCaret({ open })} aria-hidden />
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                       <span className={dupTrackTitle()}>
                         {group.artist} - {group.title}
                       </span>
                       <span className={dupTrackMeta()}>{describeCopies(group, t)}</span>
-                      {group.servedFileMissing ? (
-                        <span className="flex items-center gap-1 text-xs text-amber-400">
-                          <TriangleAlert className="size-3 shrink-0" />
-                          {t("libraryScan.duplicates.servedFileMissing")}
-                        </span>
-                      ) : null}
-                    </div>
+                    </span>
+                    <span className={dupListenPill()}>{t("libraryScan.duplicates.listen")}</span>
                     <span className={dupReclaim()}>{formatBytes(group.reclaimableBytes)}</span>
-                    {group.ambiguous ? (
-                      <TooltipProvider delayDuration={150}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span tabIndex={0} className="shrink-0">
-                              <Button size="sm" variant="outline" disabled>
-                                {t("libraryScan.duplicates.tidyOne")}
-                              </Button>
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent side="left" className="max-w-64">
-                            {t(`libraryScan.duplicates.reason.${group.reason ?? "titles_differ"}`)}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    ) : (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => keepOne.mutate({ requestId: group.requestId })}
-                        disabled={busy || keepOne.isPending}
-                      >
-                        {t("libraryScan.duplicates.tidyOne")}
-                      </Button>
-                    )}
-                  </div>
-
+                  </button>
                   {open ? (
-                    <div className={dupFiles()}>
-                      {group.directory.length > 0 ? <span className={dupDir()}>{group.directory}</span> : null}
-                      {group.copies.map((copy) => (
-                        <CopyRow
-                          key={copy.id}
-                          copy={copy}
-                          showPath={group.reason === "different_paths"}
-                          disabled={busy}
-                          keeping={keepThis.isPending}
-                          playing={playingId === copy.id}
-                          onPlayChange={setPlayingId}
-                          onKeep={() => keepThis.mutate({ fileId: copy.id })}
-                        />
-                      ))}
-                    </div>
+                    <DuplicateComparator
+                      group={group}
+                      busy={busy}
+                      onKeep={(copy) =>
+                        keepThis.mutate({ fileId: copy.id }, { onSuccess: () => openNextAfter(group.requestId) })
+                      }
+                      onNoneFits={() => setRejecting(group)}
+                    />
                   ) : null}
                 </div>
               );
@@ -225,6 +119,24 @@ export function DuplicatesContent({ enabled, reclaiming }: DuplicatesContentProp
           ) : null}
         </div>
       )}
+      <RejectCopiesDialog
+        group={rejecting}
+        pending={reject.isPending}
+        onCancel={() => setRejecting(null)}
+        onConfirm={(searchAgain) => {
+          if (rejecting === null) return;
+          const requestId = rejecting.requestId;
+          reject.mutate(
+            { requestId, searchAgain },
+            {
+              onSuccess: () => {
+                setRejecting(null);
+                openNextAfter(requestId);
+              },
+            }
+          );
+        }}
+      />
     </>
   );
 }

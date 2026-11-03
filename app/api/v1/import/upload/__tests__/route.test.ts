@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { API_URL } from "@utils/env";
+
 import { POST } from "../route";
 
 const fetchMock = vi.fn<(url: string, init: RequestInit & { duplex?: string }) => Promise<Response>>();
@@ -42,7 +44,7 @@ describe("the upload proxy", () => {
     const response = await POST(uploadRequest("--x\r\nbody\r\n--x--"));
 
     const [url, init] = fetchMock.mock.calls[0];
-    expect(url).toBe("http://localhost:4401/api/v1/import/upload");
+    expect(url).toBe(`${API_URL}/api/v1/import/upload`);
     expect(init.duplex).toBe("half");
     expect(init.body).toBeInstanceOf(ReadableStream);
     expect(await new Response(init.body).text()).toBe("--x\r\nbody\r\n--x--");

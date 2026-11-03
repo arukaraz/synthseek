@@ -1,4 +1,19 @@
 import { cva } from "class-variance-authority";
+import type { CSSProperties } from "react";
+
+import { percent } from "./helpers";
+
+export function spanStyle(from: number, width: number): CSSProperties {
+  return { left: percent(from), width: percent(width) };
+}
+
+export function atStyle(at: number): CSSProperties {
+  return { left: percent(at) };
+}
+
+export function insetSpanStyle(from: number, width: number): CSSProperties {
+  return { marginLeft: percent(from), width: percent(width) };
+}
 
 export const maintenanceHeader = cva("flex flex-col gap-1");
 

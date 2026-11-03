@@ -3,41 +3,21 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
+import { formatBytes } from "@utils/formatters";
 
-interface Copy {
-  id: string;
-  fileName: string;
-  sizeBytes: number;
-  durationSeconds: number | null;
-  serving: boolean;
-  libraryPath: string;
-}
+import type { DuplicateComparatorProps, DuplicateCopy, DuplicateGroup } from "../types";
 
-interface Group {
-  requestId: string;
-  artist: string;
-  title: string;
-  directory: string;
-  ambiguous: boolean;
-  reason: string | null;
-  reclaimableBytes: number;
-  servedFileMissing: boolean;
-  copies: Copy[];
-  formats: string[];
-  minBytes: number;
-  maxBytes: number;
-  distinctLengths: number | null;
+interface MutateOptions {
+  onSuccess?: () => void;
 }
 
 const api = vi.hoisted(() => ({
-  groups: undefined as { groups: Group[]; safeBytes: number } | undefined,
+  groups: undefined as { groups: DuplicateGroup[]; comparing: number } | undefined,
   loading: false,
   refetch: vi.fn(),
-  keepAll: vi.fn(),
-  keepAllPending: false,
-  keepOne: vi.fn(),
-  keepOnePending: false,
   keepThis: vi.fn(),
+  reject: vi.fn(),
+  rejectPending: false,
   enabledSeen: vi.fn(),
 }));
 
@@ -49,250 +29,228 @@ vi.mock("@hooks/api/queries/useLibraryScanStatus", () => ({
 }));
 
 vi.mock("@hooks/api/mutations/jobs/useLibraryScanControls", () => ({
-  useKeepBestLibraryCopies: () => ({ mutate: api.keepAll, isPending: api.keepAllPending }),
-  useKeepBestLibraryCopy: () => ({ mutate: api.keepOne, isPending: api.keepOnePending }),
   useKeepThisCopy: () => ({ mutate: api.keepThis, isPending: false }),
+  useRejectCopies: () => ({ mutate: api.reject, isPending: api.rejectPending }),
 }));
 
-vi.mock("../CopyRow", () => ({
-  CopyRow: ({ copy, showPath, onKeep }: { copy: Copy; showPath: boolean; onKeep: () => void }) => (
-    <button type="button" onClick={onKeep} data-show-path={showPath}>
-      {copy.fileName}
-    </button>
+vi.mock("../DuplicateComparator", () => ({
+  DuplicateComparator: ({ group, busy, onKeep, onNoneFits }: DuplicateComparatorProps) => (
+    <div data-testid={`comparator-${group.requestId}`} data-busy={busy}>
+      {group.copies.map((copy) => (
+        <button key={copy.id} type="button" onClick={() => onKeep(copy)}>
+          keep {copy.fileName}
+        </button>
+      ))}
+      <button type="button" onClick={onNoneFits}>
+        none fits
+      </button>
+    </div>
   ),
 }));
 
 import { DuplicatesContent } from "../DuplicatesContent";
 
-function group(overrides: Partial<Group> = {}): Group {
+const copies = enSettings.libraryScan.duplicates;
+
+function copy(overrides: Partial<DuplicateCopy> = {}): DuplicateCopy {
+  return {
+    id: "file-1",
+    libraryPath: "Music",
+    relativePath: "Daft Punk/Discovery/03 - Digital Love.flac",
+    fileName: "03 - Digital Love.flac",
+    sizeBytes: 31_457_280,
+    fileFormat: "flac",
+    durationSeconds: 301,
+    loudnessLufs: -9,
+    serving: true,
+    offsetSeconds: 0,
+    peaks: [10, 20, 30],
+    differences: [],
+    ...overrides,
+  };
+}
+
+function group(overrides: Partial<DuplicateGroup> = {}): DuplicateGroup {
   return {
     requestId: "req-1",
     artist: "Daft Punk",
     title: "Digital Love",
-    directory: "/music/Daft Punk/Discovery",
-    ambiguous: false,
-    reason: null,
-    reclaimableBytes: 31_457_280,
-    servedFileMissing: false,
+    reclaimableBytes: 8_388_608,
     copies: [
-      {
-        id: "file-1",
-        fileName: "01 - Digital Love.flac",
-        sizeBytes: 31_457_280,
-        durationSeconds: 301,
-        serving: true,
-        libraryPath: "Music",
-      },
-      {
+      copy(),
+      copy({
         id: "file-2",
-        fileName: "digital love.flac",
-        sizeBytes: 31_457_280,
-        durationSeconds: 301,
+        fileName: "digital love (clean).mp3",
+        fileFormat: "mp3",
+        sizeBytes: 8_388_608,
         serving: false,
-        libraryPath: "Music",
-      },
+        differences: [{ from: 60, to: 62 }],
+      }),
     ],
-    formats: ["flac"],
-    minBytes: 31_457_280,
-    maxBytes: 31_457_280,
-    distinctLengths: 1,
     ...overrides,
   };
 }
 
 function renderContent(reclaiming = false) {
-  render(<DuplicatesContent enabled reclaiming={reclaiming} />);
-  return { user: userEvent.setup() };
+  const view = render(<DuplicatesContent enabled reclaiming={reclaiming} />);
+  return { user: userEvent.setup(), view };
+}
+
+function succeed(options: MutateOptions | undefined) {
+  options?.onSuccess?.();
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
-  api.groups = { groups: [group()], safeBytes: 31_457_280 };
+  vi.resetAllMocks();
+  api.groups = { groups: [group()], comparing: 0 };
   api.loading = false;
-  api.keepAllPending = false;
-  api.keepOnePending = false;
+  api.rejectPending = false;
 });
 
-describe("what the duplicates panel shows", () => {
+describe("what the duplicates panel lists", () => {
   it("shows a spinner while the groups are still being fetched", () => {
     api.loading = true;
     api.groups = undefined;
-
-    const { container } = render(<DuplicatesContent enabled reclaiming={false} />);
-
-    expect(container.querySelector(".animate-spin")).not.toBeNull();
+    renderContent();
+    expect(screen.queryByText("Daft Punk - Digital Love")).not.toBeInTheDocument();
+    expect(screen.queryByText(copies.emptyTitle)).not.toBeInTheDocument();
   });
 
-  it("congratulates the listener when there are no duplicates at all", () => {
-    api.groups = { groups: [], safeBytes: 0 };
-
+  it("says there is nothing to listen to when no song has copies that sound different", () => {
+    api.groups = { groups: [], comparing: 0 };
     renderContent();
-
-    expect(screen.getByText(enSettings.libraryScan.duplicates.emptyTitle)).toBeInTheDocument();
+    expect(screen.getByText(copies.emptyTitle)).toBeInTheDocument();
+    expect(screen.getByText(copies.emptyBody)).toBeInTheDocument();
   });
 
-  it("names the track a group is about", () => {
+  it("counts the songs whose audio is still being compared", () => {
+    api.groups = { groups: [], comparing: 3 };
     renderContent();
+    expect(screen.getByText("Comparing the audio of 3 songs")).toBeInTheDocument();
+  });
 
+  it("says nothing about a comparison when none is running", () => {
+    renderContent();
+    expect(screen.queryByText(/Comparing the audio/)).not.toBeInTheDocument();
+  });
+
+  it("names the song, its copies and their formats, and what keeping one frees", () => {
+    renderContent();
     expect(screen.getByText("Daft Punk - Digital Love")).toBeInTheDocument();
-  });
-
-  it("warns when the copy the library serves is no longer on disk", () => {
-    api.groups = { groups: [group({ servedFileMissing: true })], safeBytes: 0 };
-
-    renderContent();
-
-    expect(screen.getByText(enSettings.libraryScan.duplicates.servedFileMissing)).toBeInTheDocument();
+    expect(screen.getByText("2 copies · FLAC, MP3")).toBeInTheDocument();
+    expect(screen.getByText(formatBytes(8_388_608))).toBeInTheDocument();
+    expect(screen.getByText(copies.listen)).toBeInTheDocument();
   });
 
   it("only asks the server for the groups while the panel is open", () => {
-    renderContent();
-
-    expect(api.enabledSeen).toHaveBeenCalledWith(true);
-  });
-});
-
-describe("the two tabs", () => {
-  it("opens on the safe groups, which need no judgement", () => {
-    api.groups = { groups: [group(), group({ requestId: "req-2", ambiguous: true })], safeBytes: 31_457_280 };
-
-    renderContent();
-
-    expect(screen.getAllByRole("tab")[0]).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText(enSettings.libraryScan.duplicates.safeNote_one)).toBeInTheDocument();
-  });
-
-  it("moves to the groups that need a look", async () => {
-    api.groups = {
-      groups: [group(), group({ requestId: "req-2", title: "Aerodynamic", ambiguous: true })],
-      safeBytes: 31_457_280,
-    };
-    const { user } = renderContent();
-
-    await user.click(screen.getAllByRole("tab")[1] ?? document.body);
-
-    expect(screen.getByText(enSettings.libraryScan.duplicates.reviewNote)).toBeInTheDocument();
-    expect(screen.getByText("Daft Punk - Aerodynamic")).toBeInTheDocument();
-  });
-
-  it("opens on the review tab when nothing is safe to tidy on its own", () => {
-    api.groups = { groups: [group({ ambiguous: true })], safeBytes: 0 };
-
-    renderContent();
-
-    expect(screen.getByText(enSettings.libraryScan.duplicates.reviewNote)).toBeInTheDocument();
-  });
-});
-
-describe("reclaiming the space", () => {
-  it("tidies every safe group at once", async () => {
-    const { user } = renderContent();
-
-    await user.click(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.tidyAll_one }));
-
-    expect(api.keepAll).toHaveBeenCalled();
-  });
-
-  it("says a reclaim is running rather than letting it be pressed twice", () => {
-    api.keepAllPending = true;
-
-    renderContent();
-
-    expect(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.tidyAllRunning })).toBeDisabled();
-  });
-
-  it("waits out a reclaim started elsewhere on the page", () => {
-    renderContent(true);
-
-    expect(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.tidyAllRunning })).toBeDisabled();
+    render(<DuplicatesContent enabled={false} reclaiming={false} />);
+    expect(api.enabledSeen).toHaveBeenLastCalledWith(false);
   });
 
   it("fetches the groups again once a reclaim has finished", () => {
-    const { rerender } = render(<DuplicatesContent enabled reclaiming />);
-
-    rerender(<DuplicatesContent enabled reclaiming={false} />);
-
-    expect(api.refetch).toHaveBeenCalled();
-  });
-
-  it("tidies one group on its own", async () => {
-    const { user } = renderContent();
-
-    await user.click(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.tidyOne }));
-
-    expect(api.keepOne).toHaveBeenCalledWith({ requestId: "req-1" });
-  });
-
-  it("refuses to tidy a group it cannot judge, and says why", async () => {
-    api.groups = { groups: [group({ ambiguous: true, reason: "titles_differ" })], safeBytes: 0 };
-
-    renderContent();
-
-    expect(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.tidyOne })).toBeDisabled();
+    const { view } = renderContent(true);
+    expect(api.refetch).not.toHaveBeenCalled();
+    view.rerender(<DuplicatesContent enabled reclaiming={false} />);
+    expect(api.refetch).toHaveBeenCalledTimes(1);
   });
 });
 
-describe("looking inside a group", () => {
-  it("keeps the copies folded away until they are asked for", () => {
-    renderContent();
-
-    expect(screen.queryByText("01 - Digital Love.flac")).not.toBeInTheDocument();
-  });
-
-  it("lists the copies and the folder they sit in", async () => {
-    const { user } = renderContent();
-
-    await user.click(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.showCopies }));
-
-    expect(screen.getByText("/music/Daft Punk/Discovery")).toBeInTheDocument();
-    expect(screen.getByText("01 - Digital Love.flac")).toBeInTheDocument();
-    expect(screen.getByText("digital love.flac")).toBeInTheDocument();
-  });
-
-  it("folds the copies away again", async () => {
-    const { user } = renderContent();
-    const caret = screen.getByRole("button", { name: enSettings.libraryScan.duplicates.showCopies });
-
-    await user.click(caret);
-    await user.click(caret);
-
-    expect(screen.queryByText("01 - Digital Love.flac")).not.toBeInTheDocument();
-  });
-
-  it("keeps the copy the listener chose", async () => {
-    const { user } = renderContent();
-    await user.click(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.showCopies }));
-
-    await user.click(screen.getByRole("button", { name: "digital love.flac" }));
-
-    expect(api.keepThis).toHaveBeenCalledWith({ fileId: "file-2" });
-  });
-
-  it("names each copy's library path only when the copies live in different paths", async () => {
+describe("listening to one song at a time", () => {
+  beforeEach(() => {
     api.groups = {
-      groups: [
-        group({ requestId: "req-1", ambiguous: true, reason: "different_paths" }),
-        group({ requestId: "req-2", title: "Aerodynamic", ambiguous: true, reason: "titles_differ" }),
-      ],
-      safeBytes: 0,
+      groups: [group(), group({ requestId: "req-2", artist: "Air", title: "La Femme d'Argent" })],
+      comparing: 0,
     };
-    const { user } = renderContent();
-
-    for (const caret of screen.getAllByRole("button", { name: enSettings.libraryScan.duplicates.showCopies })) {
-      await user.click(caret);
-    }
-
-    const rows = screen.getAllByRole("button", { name: "01 - Digital Love.flac" });
-    expect(rows.map((row) => row.getAttribute("data-show-path"))).toEqual(["true", "false"]);
   });
 
-  it("shows no folder line for a group whose copies sit in different places", async () => {
-    api.groups = { groups: [group({ directory: "" })], safeBytes: 0 };
+  it("keeps every comparator folded away until a song is opened", () => {
+    renderContent();
+    expect(screen.queryByTestId("comparator-req-1")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("comparator-req-2")).not.toBeInTheDocument();
+  });
+
+  it("opens the song that was asked for, and closes the one before", async () => {
     const { user } = renderContent();
+    await user.click(screen.getByRole("button", { name: /Daft Punk - Digital Love/ }));
+    expect(screen.getByTestId("comparator-req-1")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /Air - La Femme/ }));
+    expect(screen.queryByTestId("comparator-req-1")).not.toBeInTheDocument();
+    expect(screen.getByTestId("comparator-req-2")).toBeInTheDocument();
+  });
 
-    await user.click(screen.getByRole("button", { name: enSettings.libraryScan.duplicates.showCopies }));
+  it("folds the open song away again", async () => {
+    const { user } = renderContent();
+    const head = screen.getByRole("button", { name: /Daft Punk - Digital Love/ });
+    await user.click(head);
+    expect(head).toHaveAttribute("aria-expanded", "true");
+    await user.click(head);
+    expect(head).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByTestId("comparator-req-1")).not.toBeInTheDocument();
+  });
 
-    expect(screen.getByText("01 - Digital Love.flac")).toBeInTheDocument();
-    expect(screen.queryByText("/music/Daft Punk/Discovery")).not.toBeInTheDocument();
+  it("keeps the copy the listener chose, then opens the next song", async () => {
+    api.keepThis.mockImplementation((_input: unknown, options?: MutateOptions) => succeed(options));
+    const { user } = renderContent();
+    await user.click(screen.getByRole("button", { name: /Daft Punk - Digital Love/ }));
+    await user.click(screen.getByRole("button", { name: "keep digital love (clean).mp3" }));
+    expect(api.keepThis).toHaveBeenCalledWith({ fileId: "file-2" }, expect.anything());
+    expect(screen.getByTestId("comparator-req-2")).toBeInTheDocument();
+  });
+
+  it("leaves the song open when keeping a copy fails", async () => {
+    const { user } = renderContent();
+    await user.click(screen.getByRole("button", { name: /Daft Punk - Digital Love/ }));
+    await user.click(screen.getByRole("button", { name: "keep 03 - Digital Love.flac" }));
+    expect(screen.getByTestId("comparator-req-1")).toBeInTheDocument();
+    expect(screen.queryByTestId("comparator-req-2")).not.toBeInTheDocument();
+  });
+
+  it("holds the comparator while a reclaim is running", async () => {
+    const { user } = renderContent(true);
+    await user.click(screen.getByRole("button", { name: /Daft Punk - Digital Love/ }));
+    expect(screen.getByTestId("comparator-req-1")).toHaveAttribute("data-busy", "true");
+  });
+});
+
+describe("rejecting every copy", () => {
+  async function openDialog() {
+    const result = renderContent();
+    await result.user.click(screen.getByRole("button", { name: /Daft Punk - Digital Love/ }));
+    await result.user.click(screen.getByRole("button", { name: "none fits" }));
+    return result;
+  }
+
+  it("asks how to reject, naming the song and what each choice does", async () => {
+    await openDialog();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Reject the 2 copies of “Digital Love”")).toBeInTheDocument();
+    expect(screen.getByText(copies.reject.quarantines)).toBeInTheDocument();
+    expect(screen.getByText(copies.reject.searches)).toBeInTheDocument();
+  });
+
+  it("rejects without searching again", async () => {
+    const { user } = await openDialog();
+    await user.click(screen.getByRole("button", { name: copies.reject.rejectAction }));
+    expect(api.reject).toHaveBeenCalledWith({ requestId: "req-1", searchAgain: false }, expect.anything());
+  });
+
+  it("rejects and searches again", async () => {
+    const { user } = await openDialog();
+    await user.click(screen.getByRole("button", { name: copies.reject.searchAction }));
+    expect(api.reject).toHaveBeenCalledWith({ requestId: "req-1", searchAgain: true }, expect.anything());
+  });
+
+  it("closes the question once the copies are rejected", async () => {
+    api.reject.mockImplementation((_input: unknown, options?: MutateOptions) => succeed(options));
+    const { user } = await openDialog();
+    await user.click(screen.getByRole("button", { name: copies.reject.rejectAction }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("rejects nothing when the listener cancels", async () => {
+    const { user } = await openDialog();
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(api.reject).not.toHaveBeenCalled();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });
