@@ -576,7 +576,7 @@
       "delete": "Eliminar lote",
       "confirmDelete": {
         "title": "Eliminar lote",
-        "message": "Esto elimina el lote y los archivos que sigan esperando una coincidencia. Las canciones importadas permanecen en tu biblioteca.",
+        "message": "Esto elimina el lote y los archivos que sigan esperando tu decisión. Las canciones importadas permanecen en tu biblioteca.",
         "confirm": "Eliminar"
       }
     },
@@ -594,6 +594,7 @@
       "imported": "Importado",
       "already_in_library": "Ya en la biblioteca",
       "pending_match": "Necesita coincidencia",
+      "awaiting_choice": "Ya hay una copia",
       "discarded": "Descartado",
       "failed": "Fallido"
     },
@@ -605,8 +606,8 @@
       "imported_other": "{{count}} importados",
       "alreadyInLibrary_one": "{{count}} ya en tu biblioteca",
       "alreadyInLibrary_other": "{{count}} ya en tu biblioteca",
-      "pending_one": "{{count}} necesita coincidencia",
-      "pending_other": "{{count}} necesitan coincidencia",
+      "pending_one": "{{count}} espera tu decisión",
+      "pending_other": "{{count}} esperan tu decisión",
       "failed_one": "{{count}} fallido",
       "failed_other": "{{count}} fallidos",
       "discarded_one": "{{count}} descartado",
@@ -620,6 +621,14 @@
       "noResults": "Sin resultados.",
       "pick": "Usar coincidencia",
       "close": "Cerrar"
+    },
+    "collision": {
+      "sameAs": "Suena igual que la copia de \"{{album}}\", otra entrada del catálogo",
+      "inLibrary": "En la biblioteca:",
+      "yours": "Tu archivo:",
+      "unreadable": "No se pudo leer",
+      "useExisting": "Usar la que ya está",
+      "useMine": "Usar mi archivo"
     }
   }
 }

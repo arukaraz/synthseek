@@ -576,7 +576,7 @@
       "delete": "Stapel löschen",
       "confirmDelete": {
         "title": "Stapel löschen",
-        "message": "Dies entfernt den Stapel und alle Dateien, die noch auf eine Zuordnung warten. Importierte Titel bleiben in deiner Bibliothek.",
+        "message": "Dies entfernt den Stapel und alle Dateien, die noch auf dich warten. Importierte Titel bleiben in deiner Bibliothek.",
         "confirm": "Löschen"
       }
     },
@@ -594,6 +594,7 @@
       "imported": "Importiert",
       "already_in_library": "Bereits in der Bibliothek",
       "pending_match": "Zuordnung nötig",
+      "awaiting_choice": "Kopie vorhanden",
       "discarded": "Verworfen",
       "failed": "Fehlgeschlagen"
     },
@@ -605,8 +606,8 @@
       "imported_other": "{{count}} importiert",
       "alreadyInLibrary_one": "{{count}} bereits in deiner Bibliothek",
       "alreadyInLibrary_other": "{{count}} bereits in deiner Bibliothek",
-      "pending_one": "{{count}} braucht eine Zuordnung",
-      "pending_other": "{{count}} brauchen eine Zuordnung",
+      "pending_one": "{{count}} wartet auf dich",
+      "pending_other": "{{count}} warten auf dich",
       "failed_one": "{{count}} fehlgeschlagen",
       "failed_other": "{{count}} fehlgeschlagen",
       "discarded_one": "{{count}} verworfen",
@@ -620,6 +621,14 @@
       "noResults": "Keine Ergebnisse.",
       "pick": "Zuordnung verwenden",
       "close": "Schließen"
+    },
+    "collision": {
+      "sameAs": "Klingt wie die Kopie aus „{{album}}“, einem anderen Katalogeintrag",
+      "inLibrary": "In der Bibliothek:",
+      "yours": "Deine Datei:",
+      "unreadable": "Nicht lesbar",
+      "useExisting": "Vorhandene verwenden",
+      "useMine": "Meine Datei verwenden"
     }
   }
 }

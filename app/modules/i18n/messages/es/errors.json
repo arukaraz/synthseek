@@ -271,6 +271,18 @@
     "title": "El archivo no se puede emparejar",
     "description": "Solo los archivos en espera de coincidencia pueden asignarse a una canción."
   },
+  "DROP_IMPORT_FILE_NOT_AWAITING_CHOICE": {
+    "title": "El archivo no espera una elección",
+    "description": "Ya se eligió. Actualiza el lote."
+  },
+  "DROP_IMPORT_CHOICE_UNREADABLE": {
+    "title": "No se puede leer esta elección",
+    "description": "Descarta el archivo y vuelve a subirlo."
+  },
+  "DROP_IMPORT_COPY_NOT_COMPARED": {
+    "title": "No se pudieron comparar los dos archivos",
+    "description": "No se cambió nada. Vuelve a intentarlo en un momento."
+  },
   "DROP_IMPORT_FILE_IN_FLIGHT": {
     "title": "El archivo se está importando",
     "description": "Espera a que termine la importación y vuelve a intentarlo."

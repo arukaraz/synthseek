@@ -16,6 +16,7 @@ export const FILE_STATUS_KEYS: Record<DropImportFileStatus, ParseKeys<"library">
   imported: "dropImport.fileStatus.imported",
   already_in_library: "dropImport.fileStatus.already_in_library",
   pending_match: "dropImport.fileStatus.pending_match",
+  awaiting_choice: "dropImport.fileStatus.awaiting_choice",
   discarded: "dropImport.fileStatus.discarded",
   failed: "dropImport.fileStatus.failed",
 };
@@ -35,6 +36,7 @@ export const FILE_STATUS_TONES: Record<DropImportFileStatus, StatusChipTone> = {
   imported: "success",
   already_in_library: "info",
   pending_match: "warning",
+  awaiting_choice: "warning",
   discarded: "neutral",
   failed: "danger",
 };

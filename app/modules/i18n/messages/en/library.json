@@ -576,7 +576,7 @@
       "delete": "Delete batch",
       "confirmDelete": {
         "title": "Delete batch",
-        "message": "This removes the batch and any files still waiting for a match. Imported tracks stay in your library.",
+        "message": "This removes the batch and any files still waiting for you. Imported tracks stay in your library.",
         "confirm": "Delete"
       }
     },
@@ -594,6 +594,7 @@
       "imported": "Imported",
       "already_in_library": "Already in library",
       "pending_match": "Needs match",
+      "awaiting_choice": "Copy already there",
       "discarded": "Discarded",
       "failed": "Failed"
     },
@@ -605,8 +606,8 @@
       "imported_other": "{{count}} imported",
       "alreadyInLibrary_one": "{{count}} already in your library",
       "alreadyInLibrary_other": "{{count}} already in your library",
-      "pending_one": "{{count}} needs a match",
-      "pending_other": "{{count}} need a match",
+      "pending_one": "{{count}} waits for you",
+      "pending_other": "{{count}} wait for you",
       "failed_one": "{{count}} failed",
       "failed_other": "{{count}} failed",
       "discarded_one": "{{count}} discarded",
@@ -620,6 +621,14 @@
       "noResults": "No results.",
       "pick": "Use match",
       "close": "Close"
+    },
+    "collision": {
+      "sameAs": "Sounds the same as the copy from \"{{album}}\", another catalog entry",
+      "inLibrary": "In the library:",
+      "yours": "Your file:",
+      "unreadable": "Could not be read",
+      "useExisting": "Use the one already there",
+      "useMine": "Use my file"
     }
   }
 }

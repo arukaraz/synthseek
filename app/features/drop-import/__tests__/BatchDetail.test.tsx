@@ -9,12 +9,14 @@ const spies = vi.hoisted(() => ({
   searchQuery: { data: undefined as unknown, isLoading: false, isError: false },
   discardMutate: vi.fn(),
   matchMutate: vi.fn(),
+  resolveMutate: vi.fn(),
 }));
 
 vi.mock("@hooks/api", () => ({
   useDropImportBatch: () => spies.batchQuery,
   useDiscardDropImportFile: () => ({ mutate: spies.discardMutate, isPending: false }),
   useMatchDropImportFile: () => ({ mutate: spies.matchMutate, isPending: false }),
+  useResolveDropImportCollision: () => ({ mutate: spies.resolveMutate, isPending: false }),
   useSearchContent: () => spies.searchQuery,
 }));
 
@@ -34,6 +36,7 @@ function makeFile(overrides: Partial<DropImportFile> = {}): DropImportFile {
     tag_album: null,
     duration_ms: 180000,
     identified_external_id: null,
+    collision: null,
     error: null,
     created_at: new Date(),
     updated_at: new Date(),
@@ -86,7 +89,7 @@ describe("BatchDetail", () => {
     expect(screen.getByText("3/3 files processed")).toBeInTheDocument();
     expect(screen.getByText("Partial")).toBeInTheDocument();
     expect(screen.getByText("1 imported")).toBeInTheDocument();
-    expect(screen.getByText("1 needs a match")).toBeInTheDocument();
+    expect(screen.getByText("1 waits for you")).toBeInTheDocument();
     expect(screen.getByText("1 failed")).toBeInTheDocument();
     expect(screen.getByText("0 discarded")).toBeInTheDocument();
     expect(screen.getByText(i18n.t("library:dropImport.detail.alreadyInLibrary", { count: 0 }))).toBeInTheDocument();
@@ -178,6 +181,79 @@ describe("BatchDetail", () => {
 
     expect(spies.matchMutate).toHaveBeenCalledTimes(1);
     expect(spies.matchMutate.mock.calls[0][0]).toEqual({ fileId: "file-2", externalId: "cat-track-9" });
+  });
+
+  describe("a file waiting for a choice", () => {
+    const COLLISION = {
+      libraryPathId: "primary",
+      relativePath: "50 Cent/The Massacre/01 - In Da Club.mp3",
+      album: "The Massacre (Bonus)",
+      existing: { format: "mp3", lossless: false, bitrateKbps: 192, sampleRate: 44100, bitsPerSample: null },
+      candidate: { format: "flac", lossless: true, bitrateKbps: 900, sampleRate: 44100, bitsPerSample: 16 },
+    };
+
+    function renderAwaiting(collision: typeof COLLISION | null = COLLISION): void {
+      spies.batchQuery.data = makeBatch({
+        status: "partial",
+        total_files: 1,
+        imported_files: 0,
+        pending_files: 1,
+        failed_files: 0,
+        files: [
+          makeFile({
+            id: "file-9",
+            original_name: "In Da Club.flac",
+            status: "awaiting_choice",
+            collision,
+          }),
+        ],
+      });
+      render(<BatchDetail batchId="batch-1" rejected={[]} onBack={vi.fn()} />);
+    }
+
+    it("names the other entry and shows both qualities", () => {
+      renderAwaiting();
+
+      expect(screen.getByText("Copy already there")).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t("library:dropImport.collision.sameAs", { album: "The Massacre (Bonus)" }))
+      ).toBeInTheDocument();
+      expect(screen.getByText("MP3 192 kbps")).toBeInTheDocument();
+      expect(screen.getByText("FLAC 16/44.1")).toBeInTheDocument();
+    });
+
+    it("keeps the copy already there", async () => {
+      renderAwaiting();
+
+      await userEvent.click(screen.getByRole("button", { name: "Use the one already there" }));
+
+      expect(spies.resolveMutate).toHaveBeenCalledWith({ fileId: "file-9", choice: "existing" });
+    });
+
+    it("uses the uploaded file", async () => {
+      renderAwaiting();
+
+      await userEvent.click(screen.getByRole("button", { name: "Use my file" }));
+
+      expect(spies.resolveMutate).toHaveBeenCalledWith({ fileId: "file-9", choice: "mine" });
+    });
+
+    it("discards the uploaded file", async () => {
+      renderAwaiting();
+
+      await userEvent.click(screen.getByRole("button", { name: "Discard In Da Club.flac" }));
+
+      expect(spies.discardMutate).toHaveBeenCalledWith({ fileId: "file-9" });
+    });
+
+    it("still lets a file be discarded when its stored choice cannot be read", async () => {
+      renderAwaiting(null);
+
+      expect(screen.queryByRole("button", { name: "Use my file" })).not.toBeInTheDocument();
+      await userEvent.click(screen.getByRole("button", { name: "Discard In Da Club.flac" }));
+
+      expect(spies.discardMutate).toHaveBeenCalledWith({ fileId: "file-9" });
+    });
   });
 
   it("renders rejected upload entries above the file list", () => {
