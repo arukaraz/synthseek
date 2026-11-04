@@ -59,7 +59,7 @@ export function ConfirmationModal({
           safeActionRef.current?.focus();
         }}
       >
-        <DialogHeader className="flex-row items-start gap-4 space-y-0 pl-0 text-left">
+        <DialogHeader className="flex-row items-start gap-4 space-y-0 text-left">
           <div className={confirmIconBadge({ variant })}>
             <Icon aria-hidden />
           </div>
