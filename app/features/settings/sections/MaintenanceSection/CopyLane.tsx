@@ -17,7 +17,7 @@ import {
   dupMetaLine,
   dupMetaRow,
   dupPathBadge,
-  dupServingBadge,
+  dupStateBadge,
   dupStat,
   dupTrack,
   dupWave,
@@ -31,6 +31,7 @@ export function CopyLane({ copy, index, comparison, compared, isReference, showP
   const { t } = useTranslation("settings");
   const { bounds, aligned, durations } = comparison;
   const on = comparison.sounding.has(copy.id);
+  const broken = comparison.broken.has(copy.id);
   const length = lengthOf(compared, durations);
   const begins = fractionOf(startOf(compared, aligned), bounds);
   const spans = length <= 0 ? 0 : length / Math.max(bounds.end - bounds.start, length);
@@ -41,6 +42,7 @@ export function CopyLane({ copy, index, comparison, compared, isReference, showP
         type="button"
         className={dupLaneToggle({ on })}
         aria-pressed={on}
+        disabled={broken}
         aria-label={t("libraryScan.duplicates.soundCopy", { number: index + 1 })}
         onClick={() => comparison.toggleCopy(copy.id)}
       >
@@ -86,7 +88,12 @@ export function CopyLane({ copy, index, comparison, compared, isReference, showP
             <span className={dupStat()}>
               {length > 0 ? `${formatBytes(copy.sizeBytes)} • ${clockLabel(length)}` : formatBytes(copy.sizeBytes)}
             </span>
-            {copy.serving ? <span className={dupServingBadge()}>{t("libraryScan.duplicates.inLibrary")}</span> : null}
+            {copy.serving ? (
+              <span className={dupStateBadge({ tone: "success" })}>{t("libraryScan.duplicates.inLibrary")}</span>
+            ) : null}
+            {broken ? (
+              <span className={dupStateBadge({ tone: "destructive" })}>{t("libraryScan.duplicates.wontPlay")}</span>
+            ) : null}
             {showPath ? <span className={dupPathBadge()}>{copy.libraryPath}</span> : null}
             <span className={dupFileName()} title={copy.relativePath}>
               {copy.fileName}

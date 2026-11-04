@@ -2324,6 +2324,7 @@
       "comparing_other": "Comparando el audio de {{count}} canciones",
       "listen": "Escúchalas",
       "inLibrary": "En biblioteca",
+      "wontPlay": "No se reproduce",
       "keepThis": "Conservar esta copia",
       "keepThisDone": "Esa copia se queda, {{size}} recuperados",
       "play": "Reproducir",

@@ -2321,6 +2321,7 @@
       "comparing_other": "Der Klang von {{count}} Titeln wird verglichen",
       "listen": "Anhören",
       "inLibrary": "In der Bibliothek",
+      "wontPlay": "Nicht abspielbar",
       "keepThis": "Diese Kopie behalten",
       "keepThisDone": "Diese Kopie bleibt, {{size}} freigegeben",
       "play": "Abspielen",

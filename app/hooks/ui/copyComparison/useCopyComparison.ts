@@ -35,6 +35,7 @@ export function useCopyComparison(copies: readonly ComparedCopy[]): CopyComparis
   const [loop, setLoop] = useState<TimelineBounds | null>(null);
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(0);
+  const [failedSources, setFailedSources] = useState<ReadonlySet<string>>(() => new Set());
   const clock = useRef({ origin: 0, at: 0 });
 
   const bounds = useMemo(() => timelineBounds(copies, aligned, durations), [copies, aligned, durations]);
@@ -54,6 +55,14 @@ export function useCopyComparison(copies: readonly ComparedCopy[]): CopyComparis
         }
       });
       element.addEventListener("error", () => {
+        setFailedSources((previous) => new Set(previous).add(copy.src));
+        setSounding((previous) => {
+          if (!previous.has(copy.id)) return previous;
+          const next = new Set(previous);
+          next.delete(copy.id);
+          return next;
+        });
+        if (!latest.current.sounding.has(copy.id)) return;
         setPlaying(false);
         for (const other of map.values()) other.pause();
       });
@@ -161,7 +170,15 @@ export function useCopyComparison(copies: readonly ComparedCopy[]): CopyComparis
     place(latest.current.position, false, false);
   }, [place]);
 
+  const broken = useMemo(
+    () => new Set(copies.filter((copy) => failedSources.has(copy.src)).map((copy) => copy.id)),
+    [copies, failedSources]
+  );
+  const latestBroken = useRef(broken);
+  latestBroken.current = broken;
+
   const toggleCopy = useCallback((id: string) => {
+    if (latestBroken.current.has(id)) return;
     setSounding((previous) => {
       const next = new Set(previous);
       if (next.has(id)) next.delete(id);
@@ -183,6 +200,7 @@ export function useCopyComparison(copies: readonly ComparedCopy[]): CopyComparis
     matched,
     loop,
     sounding,
+    broken,
     durations,
     toggle,
     seek,

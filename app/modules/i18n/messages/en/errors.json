@@ -303,6 +303,18 @@
     "title": "Scan already running",
     "description": "A library scan is already in progress. Wait for it to finish or cancel it first."
   },
+  "LIBRARY_ORGANISE_RUNNING": {
+    "title": "Files are being placed",
+    "description": "The library is moving files into place right now. Try again once that finishes."
+  },
+  "LIBRARY_ORPHAN_SWEEP_RUNNING": {
+    "title": "Leftover files are being cleared",
+    "description": "The library is clearing leftover files right now. Try again once that finishes."
+  },
+  "LIBRARY_COPIES_SETTLING": {
+    "title": "Duplicates are being settled",
+    "description": "Another set of duplicate copies is being settled right now. Try again in a moment."
+  },
   "LIBRARY_PATH_NOT_FOUND": {
     "title": "Library path not found",
     "description": "That library path no longer exists."

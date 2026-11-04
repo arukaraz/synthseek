@@ -2321,6 +2321,7 @@
       "comparing_other": "Comparaison du son de {{count}} morceaux",
       "listen": "À écouter",
       "inLibrary": "Dans la bibliothèque",
+      "wontPlay": "Illisible",
       "keepThis": "Garder cette copie",
       "keepThisDone": "Cette copie est conservée, {{size}} récupérés",
       "play": "Lecture",

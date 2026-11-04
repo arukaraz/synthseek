@@ -19,6 +19,7 @@ export interface CopyComparison {
   matched: boolean;
   loop: TimelineBounds | null;
   sounding: ReadonlySet<string>;
+  broken: ReadonlySet<string>;
   durations: ReadonlyMap<string, number>;
   toggle: () => void;
   seek: (position: number) => void;

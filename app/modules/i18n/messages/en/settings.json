@@ -2321,6 +2321,7 @@
       "comparing_other": "Comparing the audio of {{count}} songs",
       "listen": "Listen",
       "inLibrary": "In library",
+      "wontPlay": "Won't play",
       "keepThis": "Keep this copy",
       "keepThisDone": "Kept that copy, {{size}} reclaimed",
       "play": "Play",

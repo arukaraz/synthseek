@@ -101,6 +101,43 @@ describe("playing copies side by side", () => {
     expect(element(0).paused).toBe(true);
   });
 
+  it("marks a copy that cannot load and never switches it on", () => {
+    const { result } = renderHook(() => useCopyComparison(copies));
+    act(() => element(1).fail());
+    act(() => result.current.toggleCopy("b"));
+    act(() => result.current.toggle());
+    expect(result.current.broken).toEqual(new Set(["b"]));
+    expect(result.current.sounding).toEqual(new Set(["a"]));
+    expect(result.current.playing).toBe(true);
+    expect(element(1).paused).toBe(true);
+  });
+
+  it("forgets a copy's failure once its source is replaced", () => {
+    const { result, rerender } = renderHook(({ list }) => useCopyComparison(list), { initialProps: { list: copies } });
+    act(() => element(1).fail());
+    expect(result.current.broken).toEqual(new Set(["b"]));
+    rerender({ list: [copy("a"), copy("b", { src: "/audio/b-replaced" })] });
+    expect(result.current.broken).toEqual(new Set());
+    act(() => result.current.toggleCopy("b"));
+    expect(result.current.sounding).toEqual(new Set(["a", "b"]));
+  });
+
+  it("keeps the others playing when a copy that is switched off fails", () => {
+    const { result } = renderHook(() => useCopyComparison(copies));
+    act(() => result.current.toggle());
+    act(() => element(1).fail());
+    expect(result.current.playing).toBe(true);
+    expect(element(0).paused).toBe(false);
+  });
+
+  it("switches off a playing copy that fails, leaving none sounding", () => {
+    const { result } = renderHook(() => useCopyComparison(copies));
+    act(() => result.current.toggle());
+    act(() => element(0).fail());
+    expect(result.current.sounding).toEqual(new Set());
+    expect(result.current.broken).toEqual(new Set(["a"]));
+  });
+
   it("pauses the main player before the comparison starts", () => {
     const { result } = renderHook(() => useCopyComparison(copies));
     act(() => result.current.toggle());

@@ -86,7 +86,12 @@ export function DialogSurface({ className, children, ref, onInteractOutside, ...
 }
 
 export function DialogHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)} {...props} />;
+  return (
+    <div
+      className={cn("flex flex-col space-y-1.5 px-8 text-center sm:pr-8 sm:pl-0 sm:text-left", className)}
+      {...props}
+    />
+  );
 }
 
 export function DialogFooter({ className, ...props }: HTMLAttributes<HTMLDivElement>) {

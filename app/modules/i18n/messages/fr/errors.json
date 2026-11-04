@@ -303,6 +303,18 @@
     "title": "Analyse déjà en cours",
     "description": "Une analyse de la bibliothèque est déjà en cours. Attendez la fin ou annulez-la d'abord."
   },
+  "LIBRARY_ORGANISE_RUNNING": {
+    "title": "Fichiers en cours de rangement",
+    "description": "La bibliothèque range des fichiers en ce moment. Réessayez une fois terminé."
+  },
+  "LIBRARY_ORPHAN_SWEEP_RUNNING": {
+    "title": "Fichiers restants en cours de nettoyage",
+    "description": "La bibliothèque nettoie des fichiers restants en ce moment. Réessayez une fois terminé."
+  },
+  "LIBRARY_COPIES_SETTLING": {
+    "title": "Doublons en cours de traitement",
+    "description": "D'autres copies en double sont en cours de traitement. Réessayez dans un instant."
+  },
   "LIBRARY_PATH_NOT_FOUND": {
     "title": "Chemin de bibliothèque introuvable",
     "description": "Ce chemin de bibliothèque n'existe plus."

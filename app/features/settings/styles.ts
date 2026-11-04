@@ -384,7 +384,8 @@ export const dupLaneToggle = cva(
     variants: {
       on: {
         true: "border-primary-500 bg-primary-500/15 text-primary-400",
-        false: "border-fg/15 text-fg/45 hover:text-fg/75",
+        false:
+          "border-fg/15 text-fg/45 hover:text-fg/75 disabled:text-fg/25 disabled:cursor-not-allowed disabled:hover:text-fg/25",
       },
     },
     defaultVariants: { on: false },
@@ -402,7 +403,7 @@ export const dupWave = cva("absolute inset-y-0 h-full", {
 
 export const dupLoopBand = cva("bg-primary-400/15 border-primary-400 absolute inset-y-0 border-x-2");
 
-export const dupTimeline = cva("relative flex flex-col gap-3");
+export const dupTimeline = cva("relative isolate flex flex-col gap-3");
 
 export const dupPlayheadLayer = cva("pointer-events-none absolute inset-y-0 right-0 left-11 z-10");
 
@@ -422,8 +423,12 @@ export const dupFormat = cva(
 
 export const dupStat = cva("text-fg shrink-0 text-xs font-semibold tabular-nums");
 
-export const dupServingBadge = cva(
-  "text-success-vivid bg-current/15 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap"
+export const dupStateBadge = cva(
+  "bg-current/15 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase whitespace-nowrap",
+  {
+    variants: { tone: { success: "text-success-vivid", destructive: "text-destructive-vivid" } },
+    defaultVariants: { tone: "success" },
+  }
 );
 
 export const dupPathBadge = cva(

@@ -303,6 +303,18 @@
     "title": "Ya hay un escaneo en curso",
     "description": "Ya se está escaneando la biblioteca. Espera a que termine o cancélalo antes."
   },
+  "LIBRARY_ORGANISE_RUNNING": {
+    "title": "Se están colocando archivos",
+    "description": "La biblioteca está moviendo archivos a su sitio. Vuelve a intentarlo cuando termine."
+  },
+  "LIBRARY_ORPHAN_SWEEP_RUNNING": {
+    "title": "Se están limpiando archivos sobrantes",
+    "description": "La biblioteca está limpiando archivos sobrantes. Vuelve a intentarlo cuando termine."
+  },
+  "LIBRARY_COPIES_SETTLING": {
+    "title": "Se están resolviendo duplicados",
+    "description": "Ahora mismo se están resolviendo otras copias duplicadas. Vuelve a intentarlo en un momento."
+  },
   "LIBRARY_PATH_NOT_FOUND": {
     "title": "Ruta de biblioteca no encontrada",
     "description": "Esa ruta de biblioteca ya no existe."
