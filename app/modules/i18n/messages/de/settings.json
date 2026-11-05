@@ -2226,6 +2226,12 @@
       "truncatedNotice": "Ordne einige Dateien zu oder ignoriere sie, um den Rest zu sehen.",
       "truncatedIgnoredNotice": "Ignoriere einige Dateien nicht mehr, um den Rest zu sehen.",
       "loadError": "Die Liste konnte nicht geladen werden.",
+      "doubt": {
+        "listLabel": "Dateien, die vielleicht mit dem falschen Song verknüpft sind",
+        "linkedTo": "Verknüpft mit „{{title}}“ {{length}}, eine andere Version?",
+        "keep": "Verknüpfung behalten",
+        "reject": "Nicht dieser Song"
+      },
       "empty": {
         "reviewTitle": "Alles erledigt",
         "reviewBody": "Keine Datei wartet darauf, dass du Synthseek sagst, was sie ist.",
@@ -2257,7 +2263,13 @@
         "secondCopy_one": "{{count}} Datei ist eine zweite Kopie eines Titels, den du schon hattest.",
         "secondCopy_other": "{{count}} Dateien sind zweite Kopien von Titeln, die du schon hattest.",
         "skipped_one": "{{count}} Datei konnte nicht hinzugefügt werden.",
-        "skipped_other": "{{count}} Dateien konnten nicht hinzugefügt werden."
+        "skipped_other": "{{count}} Dateien konnten nicht hinzugefügt werden.",
+        "linkKept_one": "{{count}} Verknüpfung behalten.",
+        "linkKept_other": "{{count}} Verknüpfungen behalten.",
+        "linkRejected_one": "{{count}} Datei gelöst. Ihr Song kann erneut gesucht werden.",
+        "linkRejected_other": "{{count}} Dateien gelöst. Ihre Songs können erneut gesucht werden.",
+        "keptTheirName_one": "{{count}} Datei konnte nicht umbenannt werden, daher passt der neue Download ihres Songs womöglich nicht daneben. Benenne sie um oder korrigiere ihre Tags.",
+        "keptTheirName_other": "{{count}} Dateien konnten nicht umbenannt werden, daher passen die neuen Downloads ihrer Songs womöglich nicht daneben. Benenne sie um oder korrigiere ihre Tags."
       },
       "match": {
         "back": "Zurück zur Liste",

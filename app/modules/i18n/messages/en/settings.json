@@ -2226,6 +2226,12 @@
       "truncatedNotice": "Match or ignore some files to see the rest.",
       "truncatedIgnoredNotice": "Stop ignoring some files to see the rest.",
       "loadError": "The list could not be loaded.",
+      "doubt": {
+        "listLabel": "Files that may be linked to the wrong song",
+        "linkedTo": "Linked to \"{{title}}\" {{length}}, another version?",
+        "keep": "Keep the link",
+        "reject": "Not this song"
+      },
       "empty": {
         "reviewTitle": "All caught up",
         "reviewBody": "No file is waiting for you to tell Synthseek what it is.",
@@ -2257,7 +2263,13 @@
         "secondCopy_one": "{{count}} file is a second copy of a song you already had.",
         "secondCopy_other": "{{count}} files are second copies of songs you already had.",
         "skipped_one": "{{count}} file could not be added.",
-        "skipped_other": "{{count}} files could not be added."
+        "skipped_other": "{{count}} files could not be added.",
+        "linkKept_one": "{{count}} link kept.",
+        "linkKept_other": "{{count}} links kept.",
+        "linkRejected_one": "{{count}} file unlinked. Its song can be searched again.",
+        "linkRejected_other": "{{count}} files unlinked. Their songs can be searched again.",
+        "keptTheirName_one": "{{count}} file could not be renamed, so its song's new download may not fit beside it. Rename it or fix its tags.",
+        "keptTheirName_other": "{{count}} files could not be renamed, so their songs' new downloads may not fit beside them. Rename them or fix their tags."
       },
       "match": {
         "back": "Back to the list",

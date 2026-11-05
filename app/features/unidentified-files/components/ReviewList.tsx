@@ -16,6 +16,8 @@ import { SegmentTabs } from "@components/ui/SegmentTabs";
 import { Spinner } from "@components/ui/Spinner";
 import {
   useIgnoreUnidentified,
+  useKeepVersionLinks,
+  useRejectVersionLinks,
   useRetryUnidentified,
   useStopIgnoringUnidentified,
 } from "@hooks/api/mutations/library/useUnidentifiedActions";
@@ -27,6 +29,7 @@ import { useSelection } from "@hooks/ui/useSelection";
 import { REVIEW_DEFAULT_PAGE_SIZE, REVIEW_LAYOUT_ID, REVIEW_PAGE_SIZES } from "../constants";
 import {
   centered,
+  doubtList,
   emptyBox,
   errorText,
   groupList,
@@ -42,6 +45,7 @@ import {
   toolRow,
 } from "../styles";
 import type { ReviewListProps, ReviewTab } from "../types";
+import { DoubtRow } from "./DoubtRow";
 import { GroupRow } from "./GroupRow";
 
 export function ReviewList({ enabled, active, onMatchAlbum, onMatchSong }: ReviewListProps) {
@@ -58,9 +62,13 @@ export function ReviewList({ enabled, active, onMatchAlbum, onMatchSong }: Revie
   const retry = useRetryUnidentified();
   const ignore = useIgnoreUnidentified();
   const stopIgnoring = useStopIgnoringUnidentified();
-  const busy = retry.isPending || ignore.isPending || stopIgnoring.isPending;
+  const keepLinks = useKeepVersionLinks();
+  const rejectLinks = useRejectVersionLinks();
+  const busy =
+    retry.isPending || ignore.isPending || stopIgnoring.isPending || keepLinks.isPending || rejectLinks.isPending;
 
   const groups = list.data?.groups ?? [];
+  const doubts = list.data?.doubts ?? [];
   const counts = list.data?.counts ?? { review: 0, ignored: 0 };
   const totalGroups = list.data?.totalGroups ?? 0;
   const orderedKeys = groups.map((group) => group.key);
@@ -204,7 +212,7 @@ export function ReviewList({ enabled, active, onMatchAlbum, onMatchSong }: Revie
           </div>
         ) : list.isError ? (
           <p className={errorText()}>{t("libraryScan.review.loadError")}</p>
-        ) : groups.length === 0 ? (
+        ) : groups.length === 0 && doubts.length === 0 ? (
           <EmptyState
             className={emptyBox()}
             icon={search.length > 0 ? Search : CheckCircle2}
@@ -212,27 +220,44 @@ export function ReviewList({ enabled, active, onMatchAlbum, onMatchSong }: Revie
             description={emptyCopy.body}
           />
         ) : (
-          <ul className={groupList()}>
-            {groups.map((group) => (
-              <GroupRow
-                key={group.key}
-                group={group}
-                tab={tab}
-                selected={selection.isSelected(group.key)}
-                previewTone={previewToneFor(group.key)}
-                busy={busy}
-                onSelect={(extend) =>
-                  extend ? selection.extendTo(orderedKeys, group.key) : selection.toggle(group.key)
-                }
-                onPreviewHover={(hovering) => trackRow(hovering ? group.key : null)}
-                onMatchAlbum={() => onMatchAlbum(group)}
-                onMatchSong={(file) => onMatchSong(group, file)}
-                onRetry={(fileIds) => retry.mutate({ kind: "files", fileIds })}
-                onIgnore={(fileIds) => ignore.mutate({ fileIds })}
-                onStopIgnoring={(fileIds) => stopIgnoring.mutate({ fileIds, searchAgain: true })}
-              />
-            ))}
-          </ul>
+          <>
+            {doubts.length > 0 ? (
+              <ul className={doubtList()} aria-label={t("libraryScan.review.doubt.listLabel")}>
+                {doubts.map((doubt) => (
+                  <DoubtRow
+                    key={doubt.id}
+                    doubt={doubt}
+                    busy={busy}
+                    onKeep={() => keepLinks.mutate({ fileIds: [doubt.id] })}
+                    onReject={() => rejectLinks.mutate({ fileIds: [doubt.id] })}
+                  />
+                ))}
+              </ul>
+            ) : null}
+            {groups.length > 0 ? (
+              <ul className={groupList()}>
+                {groups.map((group) => (
+                  <GroupRow
+                    key={group.key}
+                    group={group}
+                    tab={tab}
+                    selected={selection.isSelected(group.key)}
+                    previewTone={previewToneFor(group.key)}
+                    busy={busy}
+                    onSelect={(extend) =>
+                      extend ? selection.extendTo(orderedKeys, group.key) : selection.toggle(group.key)
+                    }
+                    onPreviewHover={(hovering) => trackRow(hovering ? group.key : null)}
+                    onMatchAlbum={() => onMatchAlbum(group)}
+                    onMatchSong={(file) => onMatchSong(group, file)}
+                    onRetry={(fileIds) => retry.mutate({ kind: "files", fileIds })}
+                    onIgnore={(fileIds) => ignore.mutate({ fileIds })}
+                    onStopIgnoring={(fileIds) => stopIgnoring.mutate({ fileIds, searchAgain: true })}
+                  />
+                ))}
+              </ul>
+            ) : null}
+          </>
         )}
       </div>
 

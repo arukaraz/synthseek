@@ -2226,6 +2226,12 @@
       "truncatedNotice": "Associez ou ignorez des fichiers pour voir le reste.",
       "truncatedIgnoredNotice": "Cessez d’ignorer des fichiers pour voir le reste.",
       "loadError": "Impossible de charger la liste.",
+      "doubt": {
+        "listLabel": "Fichiers peut-être liés au mauvais morceau",
+        "linkedTo": "Lié à « {{title}} » {{length}}, une autre version ?",
+        "keep": "Garder le lien",
+        "reject": "Pas ce morceau"
+      },
       "empty": {
         "reviewTitle": "Tout est à jour",
         "reviewBody": "Aucun fichier n’attend que vous disiez à Synthseek ce qu’il est.",
@@ -2257,7 +2263,13 @@
         "secondCopy_one": "{{count}} fichier est une deuxième copie d’un titre que vous aviez déjà.",
         "secondCopy_other": "{{count}} fichiers sont des deuxièmes copies de titres que vous aviez déjà.",
         "skipped_one": "{{count}} fichier n’a pas pu être ajouté.",
-        "skipped_other": "{{count}} fichiers n’ont pas pu être ajoutés."
+        "skipped_other": "{{count}} fichiers n’ont pas pu être ajoutés.",
+        "linkKept_one": "{{count}} lien gardé.",
+        "linkKept_other": "{{count}} liens gardés.",
+        "linkRejected_one": "{{count}} fichier délié. Son morceau peut être recherché à nouveau.",
+        "linkRejected_other": "{{count}} fichiers déliés. Leurs morceaux peuvent être recherchés à nouveau.",
+        "keptTheirName_one": "{{count}} fichier n'a pas pu être renommé, le nouveau téléchargement de son morceau risque de ne pas trouver sa place. Renommez-le ou corrigez ses tags.",
+        "keptTheirName_other": "{{count}} fichiers n'ont pas pu être renommés, les nouveaux téléchargements de leurs morceaux risquent de ne pas trouver leur place. Renommez-les ou corrigez leurs tags."
       },
       "match": {
         "back": "Retour à la liste",

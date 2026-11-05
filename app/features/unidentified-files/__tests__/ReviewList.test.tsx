@@ -5,10 +5,11 @@ import i18n from "@modules/i18n";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
-import type { UnidentifiedGroup } from "../types";
+import type { UnidentifiedGroup, VersionDoubt } from "../types";
 
 interface ListData {
   groups: UnidentifiedGroup[];
+  doubts: VersionDoubt[];
   totalGroups: number;
   truncated: boolean;
   counts: { review: number; ignored: number };
@@ -18,6 +19,8 @@ const state = vi.hoisted(() => ({
   retry: vi.fn(),
   ignore: vi.fn(),
   stopIgnoring: vi.fn(),
+  keepLinks: vi.fn(),
+  rejectLinks: vi.fn(),
   lastInput: null as unknown,
 }));
 
@@ -34,6 +37,8 @@ vi.mock("@hooks/api/mutations/library/useUnidentifiedActions", () => ({
   useRetryUnidentified: () => ({ mutate: state.retry, isPending: false }),
   useIgnoreUnidentified: () => ({ mutate: state.ignore, isPending: false }),
   useStopIgnoringUnidentified: () => ({ mutate: state.stopIgnoring, isPending: false }),
+  useKeepVersionLinks: () => ({ mutate: state.keepLinks, isPending: false }),
+  useRejectVersionLinks: () => ({ mutate: state.rejectLinks, isPending: false }),
 }));
 
 vi.mock("@components/ui/Dialog", () => ({
@@ -75,10 +80,24 @@ function group(overrides: Partial<UnidentifiedGroup> = {}): UnidentifiedGroup {
 function listOf(
   groups: UnidentifiedGroup[],
   counts = { review: 2, ignored: 0 },
-  truncated = false
+  truncated = false,
+  doubts: VersionDoubt[] = []
 ): MockQueryResult<ListData | undefined> {
-  return createMockQuery<ListData | undefined>({ groups, totalGroups: groups.length, truncated, counts });
+  return createMockQuery<ListData | undefined>({ groups, doubts, totalGroups: groups.length, truncated, counts });
 }
+
+const LIVE_TAKE: VersionDoubt = {
+  id: "live",
+  fileName: "03.flac",
+  relativePath: "Underworld/03.flac",
+  libraryPath: "Music",
+  title: "Threat Of Rain (Live)",
+  artist: "Underworld",
+  album: "Everything, Everything",
+  durationSeconds: 272,
+  format: "flac",
+  linkedTo: { title: "Threat Of Rain", artist: "Underworld", durationSeconds: 364 },
+};
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);
@@ -90,6 +109,34 @@ afterEach(() => {
 });
 
 describe("ReviewList", () => {
+  it("shows a file linked to another version with the song it is linked to, and keeps or rejects that link", () => {
+    listQuery = listOf([], { review: 1, ignored: 0 }, false, [LIVE_TAKE]);
+
+    render(<ReviewList enabled active onMatchAlbum={vi.fn()} onMatchSong={vi.fn()} />);
+
+    const doubts = screen.getByRole("list", { name: "Files that may be linked to the wrong song" });
+    expect(doubts).toHaveTextContent("Underworld · Everything, Everything");
+    expect(doubts).toHaveTextContent("Threat Of Rain (Live)");
+    expect(doubts).toHaveTextContent("4:32");
+    expect(doubts).toHaveTextContent('Linked to "Threat Of Rain" 6:04, another version?');
+    expect(screen.queryByText(enSettings.libraryScan.review.empty.reviewTitle)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Keep the link" }));
+    expect(state.keepLinks).toHaveBeenCalledWith({ fileIds: ["live"] });
+    fireEvent.click(screen.getByRole("button", { name: "Not this song" }));
+    expect(state.rejectLinks).toHaveBeenCalledWith({ fileIds: ["live"] });
+  });
+
+  it("lists a doubted link above the files that wait for a match", () => {
+    listQuery = listOf([group()], { review: 3, ignored: 0 }, false, [LIVE_TAKE]);
+
+    render(<ReviewList enabled active onMatchAlbum={vi.fn()} onMatchSong={vi.fn()} />);
+
+    const lists = screen.getAllByRole("list");
+    expect(lists[0]).toHaveTextContent("Threat Of Rain (Live)");
+    expect(lists[1]).toHaveTextContent("The Beatles · Bournemouth 1963");
+  });
+
   it("lists a release once, with how many files and discs it holds", () => {
     listQuery = listOf([group()]);
 

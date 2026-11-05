@@ -58,6 +58,8 @@ vi.mock("@utils/trpc", () => ({
         unidentified: {
           ignore: procedure("ignore"),
           assign: procedure("assign"),
+          keepLinks: procedure("keepLinks"),
+          rejectLinks: procedure("rejectLinks"),
         },
       },
     },
@@ -66,7 +68,12 @@ vi.mock("@utils/trpc", () => ({
 
 import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 
-import { useAssignUnidentified, useIgnoreUnidentified } from "../useUnidentifiedActions";
+import {
+  useAssignUnidentified,
+  useIgnoreUnidentified,
+  useKeepVersionLinks,
+  useRejectVersionLinks,
+} from "../useUnidentifiedActions";
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -113,6 +120,48 @@ describe("useIgnoreUnidentified", () => {
 
     expect(spies.toastSuccess).not.toHaveBeenCalled();
     expect(spies.invalidateList).toHaveBeenCalledOnce();
+  });
+});
+
+describe("keeping or rejecting a doubted link", () => {
+  it("refreshes the review list and the scan counts, and says how many links were kept", () => {
+    renderHook(() => useKeepVersionLinks());
+    spies.captured.keepLinks?.onSuccess?.({ kept: 1 }, { fileIds: ["a"] });
+
+    expect(spies.toastSuccess).toHaveBeenCalledOnce();
+    expect(spies.invalidateList).toHaveBeenCalledOnce();
+    expect(spies.invalidateStatus).toHaveBeenCalledOnce();
+  });
+
+  it("refreshes the review list after a rejection, and stays quiet when nothing was rejected", () => {
+    renderHook(() => useRejectVersionLinks());
+    spies.captured.rejectLinks?.onSuccess?.({ outcome: "done", rejected: 0, keptTheirName: 0 }, { fileIds: ["a"] });
+
+    expect(spies.toastInfo).not.toHaveBeenCalled();
+    expect(spies.invalidateList).toHaveBeenCalledOnce();
+
+    spies.captured.rejectLinks?.onSuccess?.(
+      { outcome: "done", rejected: 2, keptTheirName: 0 },
+      { fileIds: ["a", "b"] }
+    );
+    expect(spies.toastInfo).toHaveBeenCalledOnce();
+    expect(spies.toastWarning).not.toHaveBeenCalled();
+  });
+
+  it("warns when a rejected file could not be renamed, since its new download may not fit beside it", () => {
+    renderHook(() => useRejectVersionLinks());
+    spies.captured.rejectLinks?.onSuccess?.({ outcome: "done", rejected: 1, keptTheirName: 1 }, { fileIds: ["a"] });
+
+    expect(spies.toastWarning).toHaveBeenCalledOnce();
+  });
+
+  it("says the library is busy and refreshes nothing when another job holds it", () => {
+    renderHook(() => useRejectVersionLinks());
+    spies.captured.rejectLinks?.onSuccess?.({ outcome: "busy" }, { fileIds: ["a"] });
+
+    expect(spies.toastWarning).toHaveBeenCalledOnce();
+    expect(spies.toastInfo).not.toHaveBeenCalled();
+    expect(spies.invalidateList).not.toHaveBeenCalled();
   });
 });
 

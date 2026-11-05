@@ -111,6 +111,18 @@ export const fileLengthMobile = cva("text-fg/50 text-xs tabular-nums sm:hidden")
 
 export const fileLength = cva("text-fg/50 hidden text-right text-xs tabular-nums sm:block");
 
+export const doubtList = cva("border-fg/10 bg-surface/40 mb-3 flex flex-col rounded-xl border");
+
+export const doubtRow = cva("border-fg/10 flex flex-col gap-2 border-b px-3 py-3 last:border-b-0 sm:px-4");
+
+export const doubtFile = cva("text-fg/70 flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 text-[13px]");
+
+export const doubtChip = cva(
+  "text-warning-vivid inline-flex w-fit max-w-full items-center rounded-full border border-current/40 px-2 py-0.5 text-xs font-medium"
+);
+
+export const doubtActions = cva("flex flex-wrap items-center gap-2");
+
 export const showMoreRow = cva("border-fg/10 border-t px-3 py-2");
 
 export const menuTrigger = cva(

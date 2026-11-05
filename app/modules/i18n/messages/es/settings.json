@@ -2229,6 +2229,12 @@
       "truncatedNotice": "Empareja o ignora algunos archivos para ver el resto.",
       "truncatedIgnoredNotice": "Deja de ignorar algunos archivos para ver el resto.",
       "loadError": "No se pudo cargar la lista.",
+      "doubt": {
+        "listLabel": "Archivos que quizá estén ligados a la canción equivocada",
+        "linkedTo": "Ligado a \"{{title}}\" {{length}}, ¿otra versión?",
+        "keep": "Mantener el vínculo",
+        "reject": "No es esta canción"
+      },
       "empty": {
         "reviewTitle": "Todo al día",
         "reviewBody": "Ningún archivo espera a que le digas a Synthseek qué es.",
@@ -2260,7 +2266,13 @@
         "secondCopy_one": "{{count}} archivo es una segunda copia de una canción que ya tenías.",
         "secondCopy_other": "{{count}} archivos son segundas copias de canciones que ya tenías.",
         "skipped_one": "No se pudo añadir {{count}} archivo.",
-        "skipped_other": "No se pudieron añadir {{count}} archivos."
+        "skipped_other": "No se pudieron añadir {{count}} archivos.",
+        "linkKept_one": "{{count}} vínculo mantenido.",
+        "linkKept_other": "{{count}} vínculos mantenidos.",
+        "linkRejected_one": "{{count}} archivo desligado. Su canción se puede buscar de nuevo.",
+        "linkRejected_other": "{{count}} archivos desligados. Sus canciones se pueden buscar de nuevo.",
+        "keptTheirName_one": "{{count}} archivo no se pudo renombrar, así que la nueva descarga de su canción puede no caber a su lado. Renómbralo o corrige sus etiquetas.",
+        "keptTheirName_other": "{{count}} archivos no se pudieron renombrar, así que las nuevas descargas de sus canciones pueden no caber a su lado. Renómbralos o corrige sus etiquetas."
       },
       "match": {
         "back": "Volver a la lista",
