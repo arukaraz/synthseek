@@ -2228,7 +2228,7 @@
       "loadError": "The list could not be loaded.",
       "doubt": {
         "listLabel": "Files that may be linked to the wrong song",
-        "linkedTo": "Linked to \"{{title}}\" {{length}}, another version?",
+        "linkedTo": "Linked to \"{{title}}\" {{length}}, another version or another song?",
         "keep": "Keep the link",
         "reject": "Not this song"
       },

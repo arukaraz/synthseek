@@ -2228,7 +2228,7 @@
       "loadError": "Impossible de charger la liste.",
       "doubt": {
         "listLabel": "Fichiers peut-être liés au mauvais morceau",
-        "linkedTo": "Lié à « {{title}} » {{length}}, une autre version ?",
+        "linkedTo": "Lié à « {{title}} » {{length}}, une autre version ou un autre morceau ?",
         "keep": "Garder le lien",
         "reject": "Pas ce morceau"
       },

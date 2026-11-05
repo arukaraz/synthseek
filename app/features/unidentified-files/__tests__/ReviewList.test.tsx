@@ -118,7 +118,7 @@ describe("ReviewList", () => {
     expect(doubts).toHaveTextContent("Underworld · Everything, Everything");
     expect(doubts).toHaveTextContent("Threat Of Rain (Live)");
     expect(doubts).toHaveTextContent("4:32");
-    expect(doubts).toHaveTextContent('Linked to "Threat Of Rain" 6:04, another version?');
+    expect(doubts).toHaveTextContent('Linked to "Threat Of Rain" 6:04, another version or another song?');
     expect(screen.queryByText(enSettings.libraryScan.review.empty.reviewTitle)).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Keep the link" }));

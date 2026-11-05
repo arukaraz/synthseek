@@ -2231,7 +2231,7 @@
       "loadError": "No se pudo cargar la lista.",
       "doubt": {
         "listLabel": "Archivos que quizá estén ligados a la canción equivocada",
-        "linkedTo": "Ligado a \"{{title}}\" {{length}}, ¿otra versión?",
+        "linkedTo": "Ligado a \"{{title}}\" {{length}}, ¿otra versión u otra canción?",
         "keep": "Mantener el vínculo",
         "reject": "No es esta canción"
       },
