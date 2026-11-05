@@ -26,6 +26,7 @@ export const REVIEW_REASON_KEYS: Record<ImportReviewReason, ParseKeys<"settings"
   tag_mismatch: "quarantine.reason.tag_mismatch",
   duration_mismatch: "quarantine.reason.duration_mismatch",
   tags_unreadable: "quarantine.reason.tags_unreadable",
+  rejected_recording: "quarantine.reason.rejected_recording",
 };
 
 export const REVIEW_REASON_TONES: Record<ImportReviewReason, ReasonBadgeTone> = {
@@ -35,6 +36,7 @@ export const REVIEW_REASON_TONES: Record<ImportReviewReason, ReasonBadgeTone> = 
   tag_mismatch: "warning",
   duration_mismatch: "warning",
   tags_unreadable: "info",
+  rejected_recording: "danger",
 };
 
 export const HELD_IMPORT_ERROR_KEYS: Record<HeldImportErrorToken, ParseKeys<"requests">> = {

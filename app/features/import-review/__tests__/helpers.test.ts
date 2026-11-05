@@ -95,6 +95,17 @@ describe("evidenceSentence", () => {
     );
   });
 
+  it("names the rejected copy a refused download sounds like", () => {
+    const item = makeReviewItem({
+      reason: "rejected_recording",
+      evidence: { artist: null, title: null, score: null, rejectedPath: "Artist/Album/01 - Song.mp3" },
+    });
+
+    expect(evidenceSentence(item, t)).toBe(
+      "It sounds like Artist/Album/01 - Song.mp3, a copy you rejected as not this song."
+    );
+  });
+
   it("renders the legacy reasons as pre-evidence rejections", () => {
     const legacy = "This file was rejected before the granular checks started recording evidence.";
 

@@ -59,6 +59,9 @@ export function evidenceSentence(item: ImportReviewItem, t: TFunction<"requests"
       });
     case "tags_unreadable":
       return t("review.evidence.tagsUnreadable");
+    case "rejected_recording":
+      if (evidence.rejectedPath === null) break;
+      return t("review.evidence.rejectedRecording", { path: evidence.rejectedPath });
     case "wrong_file":
     case "verify_failed":
       return t("review.evidence.legacy");

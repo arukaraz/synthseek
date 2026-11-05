@@ -28,6 +28,7 @@ export function makeReviewItem(overrides: ReviewItemOverrides = {}): ImportRevie
       expectedConfidence: null,
       observedDurationMs: null,
       expectedDurationMs: null,
+      rejectedPath: null,
       ...evidence,
     },
     track: {

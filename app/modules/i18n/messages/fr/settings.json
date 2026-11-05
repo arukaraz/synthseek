@@ -308,7 +308,8 @@
       "fingerprint_mismatch": "Empreinte différente",
       "tag_mismatch": "Les tags ne correspondent pas",
       "duration_mismatch": "Durée différente",
-      "tags_unreadable": "Tags illisibles"
+      "tags_unreadable": "Tags illisibles",
+      "rejected_recording": "Sonne comme une copie rejetée"
     },
     "sourceTrust": {
       "title": "Confiance des sources",
@@ -2269,7 +2270,9 @@
         "linkRejected_one": "{{count}} fichier délié. Son morceau peut être recherché à nouveau.",
         "linkRejected_other": "{{count}} fichiers déliés. Leurs morceaux peuvent être recherchés à nouveau.",
         "keptTheirName_one": "{{count}} fichier n'a pas pu être renommé, le nouveau téléchargement de son morceau risque de ne pas trouver sa place. Renommez-le ou corrigez ses tags.",
-        "keptTheirName_other": "{{count}} fichiers n'ont pas pu être renommés, les nouveaux téléchargements de leurs morceaux risquent de ne pas trouver leur place. Renommez-les ou corrigez leurs tags."
+        "keptTheirName_other": "{{count}} fichiers n'ont pas pu être renommés, les nouveaux téléchargements de leurs morceaux risquent de ne pas trouver leur place. Renommez-les ou corrigez leurs tags.",
+        "unheard_one": "L'audio de {{count}} fichier n'a pas pu être lu, un téléchargement qui sonne comme lui n'est donc pas refusé.",
+        "unheard_other": "L'audio de {{count}} fichiers n'a pas pu être lu, un téléchargement qui sonne comme eux n'est donc pas refusé."
       },
       "match": {
         "back": "Retour à la liste",
@@ -2352,16 +2355,20 @@
         "rejectHeading": "Rejeter",
         "recycles_one": "La copie part à la corbeille ({{size}}), où vous pouvez la restaurer.",
         "recycles_other": "Les {{count}} copies partent à la corbeille ({{size}}), où vous pouvez les restaurer.",
-        "quarantines": "Si Synthseek a enregistré le téléchargement d'où elle vient, il est mis en quarantaine pour ce morceau et n'est donc plus récupéré.",
+        "remembers_one": "Synthseek retient son son et refuse pour ce morceau un téléchargement qui sonne pareil. La restaurer depuis la corbeille annule ce refus.",
+        "remembers_other": "Synthseek retient leur son et refuse pour ce morceau un téléchargement qui sonne pareil. Restaurer une copie depuis la corbeille annule ce refus.",
         "fails": "La demande repasse en échec, sans fichier, jusqu'à ce que vous la relanciez.",
         "rejectAction": "Rejeter",
         "searchHeading": "Rejeter et chercher à nouveau",
         "same": "Comme Rejeter.",
-        "searches": "Puis une nouvelle recherche démarre, sans aucun téléchargement en quarantaine.",
+        "searches_one": "Puis une nouvelle recherche démarre, en refusant ce qui sonne comme elle.",
+        "searches_other": "Puis une nouvelle recherche démarre, en refusant ce qui sonne comme elles.",
         "nothingLeft": "Si rien d'autre n'est trouvé, la demande repasse en échec.",
         "searchAction": "Rejeter et chercher",
         "rejectDone_one": "Copie rejetée, {{size}} à la corbeille",
         "rejectDone_other": "{{count}} copies rejetées, {{size}} à la corbeille",
+        "unheard_one": "L'audio de {{count}} copie n'a pas pu être lu, un téléchargement qui sonne comme elle n'est donc pas refusé.",
+        "unheard_other": "L'audio de {{count}} copies n'a pas pu être lu, un téléchargement qui sonne comme elles n'est donc pas refusé.",
         "searchingDone_one": "Copie rejetée, nouvelle recherche en cours",
         "searchingDone_other": "{{count}} copies rejetées, nouvelle recherche en cours"
       }

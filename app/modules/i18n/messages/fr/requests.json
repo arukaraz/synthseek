@@ -249,6 +249,7 @@
       "tagMismatch": "Les tags du fichier ont obtenu {{observed}} sur 100 de confiance, en dessous des {{expected}} exigés par cette vérification.",
       "durationMismatch": "L'audio dure {{observed}} alors que la piste demandée dure {{expected}}.",
       "tagsUnreadable": "Les tags du fichier n'ont pas pu être lus, il n'y avait donc rien à comparer avec la demande.",
+      "rejectedRecording": "Il sonne comme {{path}}, une copie que vous avez rejetée car ce n'était pas ce morceau.",
       "legacy": "Ce fichier a été refusé avant que les vérifications détaillées n'enregistrent des preuves.",
       "unavailable": "Aucune preuve n'a été enregistrée pour ce refus.",
       "unknownTitle": "un enregistrement sans nom"

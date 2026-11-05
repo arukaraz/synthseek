@@ -66,7 +66,7 @@ If a source cannot deliver, the engine moves to the next source in the chain. A 
 
 ## Step 4, verification
 
-Before anything reaches your library, Synthseek checks that what arrived is what you asked for. Some checks read the file's own tags and compare them against your request. One listens to the audio itself.
+Before anything reaches your library, Synthseek checks that what arrived is what you asked for. Some checks read the file's own tags and compare them against your request. Others listen to the audio itself.
 
 Not every failure means the same thing. Some simply stop the import. Others are treated as evidence that the source sent the wrong thing. Those put the file in the review queue and set that source and file pairing aside, so a retry looks elsewhere.
 
@@ -74,7 +74,7 @@ Not every failure means the same thing. Some simply stop the import. Others are 
 
 **Metadata confidence threshold.** How closely a file's tags must match your request before it is accepted. Raise it to reject more, lower it to accept more. A retry of a previously rejected import is judged more leniently, on the reasoning that you asked for the retry deliberately.
 
-**AcoustID identity gate.** Whether the audio is fingerprinted and identified before import. This is what catches a file whose tags look right but whose audio is by a different artist. It needs a free AcoustID key, and without one it does not run and only the tag checks apply. It is the single most valuable optional key you can configure.
+**AcoustID identity gate.** Whether the audio is fingerprinted and identified before import. This is what catches a file whose tags look right but whose audio is by a different artist. It needs a free AcoustID key, and without one it does not run. It is the single most valuable optional key you can configure.
 
 ### What identification can and cannot tell you
 
@@ -84,7 +84,7 @@ An inconclusive identification does not block the import. AcoustID's database is
 
 ### What reaches the review queue
 
-A file lands there when something positively contradicted your request. That means tags that do not match, audio that identifies as another artist, or tags that cannot be read at all. A file that merely could not be identified does not.
+A file lands there when something positively contradicted your request. That means tags that do not match, audio that identifies as another artist, audio that sounds like a copy you rejected for that song, or tags that cannot be read at all. A file that merely could not be identified does not.
 
 For each held file you can see why it was rejected, listen to it, and then approve or discard it.
 

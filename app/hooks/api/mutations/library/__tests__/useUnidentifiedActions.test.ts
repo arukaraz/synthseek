@@ -135,13 +135,16 @@ describe("keeping or rejecting a doubted link", () => {
 
   it("refreshes the review list after a rejection, and stays quiet when nothing was rejected", () => {
     renderHook(() => useRejectVersionLinks());
-    spies.captured.rejectLinks?.onSuccess?.({ outcome: "done", rejected: 0, keptTheirName: 0 }, { fileIds: ["a"] });
+    spies.captured.rejectLinks?.onSuccess?.(
+      { outcome: "done", rejected: 0, keptTheirName: 0, unheard: 0 },
+      { fileIds: ["a"] }
+    );
 
     expect(spies.toastInfo).not.toHaveBeenCalled();
     expect(spies.invalidateList).toHaveBeenCalledOnce();
 
     spies.captured.rejectLinks?.onSuccess?.(
-      { outcome: "done", rejected: 2, keptTheirName: 0 },
+      { outcome: "done", rejected: 2, keptTheirName: 0, unheard: 0 },
       { fileIds: ["a", "b"] }
     );
     expect(spies.toastInfo).toHaveBeenCalledOnce();
@@ -150,9 +153,23 @@ describe("keeping or rejecting a doubted link", () => {
 
   it("warns when a rejected file could not be renamed, since its new download may not fit beside it", () => {
     renderHook(() => useRejectVersionLinks());
-    spies.captured.rejectLinks?.onSuccess?.({ outcome: "done", rejected: 1, keptTheirName: 1 }, { fileIds: ["a"] });
+    spies.captured.rejectLinks?.onSuccess?.(
+      { outcome: "done", rejected: 1, keptTheirName: 1, unheard: 0 },
+      { fileIds: ["a"] }
+    );
 
     expect(spies.toastWarning).toHaveBeenCalledOnce();
+  });
+
+  it("warns when a rejected file's audio could not be read, since a download that sounds like it is not refused", () => {
+    renderHook(() => useRejectVersionLinks());
+    spies.captured.rejectLinks?.onSuccess?.(
+      { outcome: "done", rejected: 1, keptTheirName: 0, unheard: 1 },
+      { fileIds: ["a"] }
+    );
+
+    expect(spies.toastWarning).toHaveBeenCalledOnce();
+    expect(spies.toastWarning).toHaveBeenCalledWith(expect.stringContaining("could not be read"));
   });
 
   it("says the library is busy and refreshes nothing when another job holds it", () => {

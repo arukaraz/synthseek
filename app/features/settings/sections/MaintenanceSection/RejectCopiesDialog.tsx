@@ -26,7 +26,7 @@ export function RejectCopiesDialog({ group, pending, onCancel, onConfirm }: Reje
             <h4 className={dupRejectHeading()}>{t("libraryScan.duplicates.reject.rejectHeading")}</h4>
             <ul className={dupRejectList()}>
               <li>{t("libraryScan.duplicates.reject.recycles", { count, size })}</li>
-              <li>{t("libraryScan.duplicates.reject.quarantines")}</li>
+              <li>{t("libraryScan.duplicates.reject.remembers", { count })}</li>
               <li>{t("libraryScan.duplicates.reject.fails")}</li>
             </ul>
             <Button variant="destructive" size="sm" disabled={pending} onClick={() => onConfirm(false)}>
@@ -38,7 +38,7 @@ export function RejectCopiesDialog({ group, pending, onCancel, onConfirm }: Reje
             <h4 className={dupRejectHeading()}>{t("libraryScan.duplicates.reject.searchHeading")}</h4>
             <ul className={dupRejectList()}>
               <li>{t("libraryScan.duplicates.reject.same")}</li>
-              <li>{t("libraryScan.duplicates.reject.searches")}</li>
+              <li>{t("libraryScan.duplicates.reject.searches", { count })}</li>
               <li>{t("libraryScan.duplicates.reject.nothingLeft")}</li>
             </ul>
             <Button variant="destructive" size="sm" disabled={pending} onClick={() => onConfirm(true)}>

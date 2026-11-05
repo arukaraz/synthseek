@@ -224,8 +224,8 @@ describe("rejecting every copy", () => {
     await openDialog();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByText("Reject the 2 copies of “Digital Love”")).toBeInTheDocument();
-    expect(screen.getByText(copies.reject.quarantines)).toBeInTheDocument();
-    expect(screen.getByText(copies.reject.searches)).toBeInTheDocument();
+    expect(screen.getByText(copies.reject.remembers_other)).toBeInTheDocument();
+    expect(screen.getByText(copies.reject.searches_other)).toBeInTheDocument();
   });
 
   it("rejects without searching again", async () => {

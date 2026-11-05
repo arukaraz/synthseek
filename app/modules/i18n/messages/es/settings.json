@@ -311,7 +311,8 @@
       "fingerprint_mismatch": "Huella acústica distinta",
       "tag_mismatch": "Las etiquetas no coinciden",
       "duration_mismatch": "Duración distinta",
-      "tags_unreadable": "Etiquetas ilegibles"
+      "tags_unreadable": "Etiquetas ilegibles",
+      "rejected_recording": "Suena como una copia rechazada"
     },
     "sourceTrust": {
       "title": "Confianza en las fuentes",
@@ -2272,7 +2273,9 @@
         "linkRejected_one": "{{count}} archivo desligado. Su canción se puede buscar de nuevo.",
         "linkRejected_other": "{{count}} archivos desligados. Sus canciones se pueden buscar de nuevo.",
         "keptTheirName_one": "{{count}} archivo no se pudo renombrar, así que la nueva descarga de su canción puede no caber a su lado. Renómbralo o corrige sus etiquetas.",
-        "keptTheirName_other": "{{count}} archivos no se pudieron renombrar, así que las nuevas descargas de sus canciones pueden no caber a su lado. Renómbralos o corrige sus etiquetas."
+        "keptTheirName_other": "{{count}} archivos no se pudieron renombrar, así que las nuevas descargas de sus canciones pueden no caber a su lado. Renómbralos o corrige sus etiquetas.",
+        "unheard_one": "No se pudo leer el audio de {{count}} archivo, así que una descarga que suene como él no se rechaza.",
+        "unheard_other": "No se pudo leer el audio de {{count}} archivos, así que una descarga que suene como ellos no se rechaza."
       },
       "match": {
         "back": "Volver a la lista",
@@ -2355,16 +2358,20 @@
         "rejectHeading": "Rechazar",
         "recycles_one": "La copia va a la papelera de reciclaje ({{size}}), recuperable.",
         "recycles_other": "Las {{count}} copias van a la papelera de reciclaje ({{size}}), recuperables.",
-        "quarantines": "Si Synthseek registró la descarga de la que llegó, esa descarga entra a la cuarentena de esta canción, así que no se vuelve a bajar.",
+        "remembers_one": "Synthseek recuerda cómo suena y rechaza para esta canción una descarga que suene igual. Restaurarla desde la papelera lo deshace.",
+        "remembers_other": "Synthseek recuerda cómo suenan y rechaza para esta canción una descarga que suene igual. Restaurar una desde la papelera lo deshace.",
         "fails": "La petición vuelve a fallida, sin archivo, hasta que la reintentes.",
         "rejectAction": "Rechazar",
         "searchHeading": "Rechazar y buscar de nuevo",
         "same": "Lo mismo que Rechazar.",
-        "searches": "Después busca de nuevo, saltándose cualquier descarga en cuarentena.",
+        "searches_one": "Después busca de nuevo, rechazando lo que suene como ella.",
+        "searches_other": "Después busca de nuevo, rechazando lo que suene como ellas.",
         "nothingLeft": "Si no aparece nada más, la petición vuelve a fallida.",
         "searchAction": "Rechazar y buscar",
         "rejectDone_one": "Copia rechazada, {{size}} a la papelera",
         "rejectDone_other": "{{count}} copias rechazadas, {{size}} a la papelera",
+        "unheard_one": "No se pudo leer el audio de {{count}} copia, así que una descarga que suene como ella no se rechaza.",
+        "unheard_other": "No se pudo leer el audio de {{count}} copias, así que una descarga que suene como ellas no se rechaza.",
         "searchingDone_one": "Copia rechazada, buscando de nuevo",
         "searchingDone_other": "{{count}} copias rechazadas, buscando de nuevo"
       }

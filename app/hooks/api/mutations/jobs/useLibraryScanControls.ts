@@ -59,6 +59,9 @@ export function useRejectCopies() {
           { count: result.recycled, size: formatBytes(result.freedBytes) }
         )
       );
+      if (result.unheard > 0) {
+        toast.warning(i18n.t("settings:libraryScan.duplicates.reject.unheard", { count: result.unheard }));
+      }
     },
     onError: (error) => errorToast(error, "jobs.runFailed"),
   });

@@ -112,6 +112,9 @@ export function useRejectVersionLinks() {
       if (result.keptTheirName > 0) {
         toast.warning(i18n.t("settings:libraryScan.review.toast.keptTheirName", { count: result.keptTheirName }));
       }
+      if (result.unheard > 0) {
+        toast.warning(i18n.t("settings:libraryScan.review.toast.unheard", { count: result.unheard }));
+      }
     },
     onError: (error) => errorToast(error),
   });

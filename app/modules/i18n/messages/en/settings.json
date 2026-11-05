@@ -308,7 +308,8 @@
       "fingerprint_mismatch": "Fingerprint mismatch",
       "tag_mismatch": "Tags do not match",
       "duration_mismatch": "Duration mismatch",
-      "tags_unreadable": "Tags unreadable"
+      "tags_unreadable": "Tags unreadable",
+      "rejected_recording": "Sounds like a rejected copy"
     },
     "sourceTrust": {
       "title": "Source trust",
@@ -2269,7 +2270,9 @@
         "linkRejected_one": "{{count}} file unlinked. Its song can be searched again.",
         "linkRejected_other": "{{count}} files unlinked. Their songs can be searched again.",
         "keptTheirName_one": "{{count}} file could not be renamed, so its song's new download may not fit beside it. Rename it or fix its tags.",
-        "keptTheirName_other": "{{count}} files could not be renamed, so their songs' new downloads may not fit beside them. Rename them or fix their tags."
+        "keptTheirName_other": "{{count}} files could not be renamed, so their songs' new downloads may not fit beside them. Rename them or fix their tags.",
+        "unheard_one": "The audio of {{count}} file could not be read, so a download that sounds like it is not refused.",
+        "unheard_other": "The audio of {{count}} files could not be read, so a download that sounds like them is not refused."
       },
       "match": {
         "back": "Back to the list",
@@ -2352,16 +2355,20 @@
         "rejectHeading": "Reject",
         "recycles_one": "The copy goes to the recycle bin ({{size}}), where you can restore it.",
         "recycles_other": "The {{count}} copies go to the recycle bin ({{size}}), where you can restore them.",
-        "quarantines": "If Synthseek recorded the download it came from, that download is quarantined for this song, so it is not fetched again.",
+        "remembers_one": "Synthseek remembers how it sounds, and refuses a download for this song that sounds the same. Restoring it from the recycle bin takes that back.",
+        "remembers_other": "Synthseek remembers how they sound, and refuses a download for this song that sounds the same. Restoring one from the recycle bin takes that back.",
         "fails": "The request goes back to failed, with no file, until you retry it.",
         "rejectAction": "Reject",
         "searchHeading": "Reject and search again",
         "same": "The same as Reject.",
-        "searches": "Then it searches again, skipping any quarantined download.",
+        "searches_one": "Then it searches again, refusing what sounds like it.",
+        "searches_other": "Then it searches again, refusing what sounds like them.",
         "nothingLeft": "If nothing else turns up, the request goes back to failed.",
         "searchAction": "Reject and search",
         "rejectDone_one": "Rejected the copy, {{size}} to the recycle bin",
         "rejectDone_other": "Rejected {{count}} copies, {{size}} to the recycle bin",
+        "unheard_one": "The audio of {{count}} copy could not be read, so a download that sounds like it is not refused.",
+        "unheard_other": "The audio of {{count}} copies could not be read, so a download that sounds like them is not refused.",
         "searchingDone_one": "Rejected the copy, searching again",
         "searchingDone_other": "Rejected {{count}} copies, searching again"
       }

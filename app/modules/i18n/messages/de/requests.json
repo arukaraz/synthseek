@@ -249,6 +249,7 @@
       "tagMismatch": "Die Datei-Tags erreichten {{observed}} von 100 Punkten Konfidenz und damit weniger als die von dieser Prüfung verlangten {{expected}}.",
       "durationMismatch": "Das Audio läuft {{observed}}, der angeforderte Titel dagegen {{expected}}.",
       "tagsUnreadable": "Die Datei-Tags waren nicht lesbar, es gab also nichts, was mit der Anfrage verglichen werden konnte.",
+      "rejectedRecording": "Es klingt wie {{path}}, eine Kopie, die du abgelehnt hast, weil sie nicht dieser Song war.",
       "legacy": "Diese Datei wurde abgelehnt, bevor die detaillierten Prüfungen Belege aufgezeichnet haben.",
       "unavailable": "Für diese Ablehnung wurden keine Belege aufgezeichnet.",
       "unknownTitle": "eine unbenannte Aufnahme"
