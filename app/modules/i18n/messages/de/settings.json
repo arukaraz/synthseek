@@ -2229,7 +2229,8 @@
       "loadError": "Die Liste konnte nicht geladen werden.",
       "doubt": {
         "listLabel": "Dateien, die vielleicht mit dem falschen Song verknüpft sind",
-        "linkedTo": "Verknüpft mit „{{title}}“ {{length}}, eine andere Version oder ein anderer Song?",
+        "linkedTo": "Verknüpft mit {{artist}} · {{title}} · {{length}}",
+        "linkedToNoLength": "Verknüpft mit {{artist}} · {{title}}",
         "keep": "Verknüpfung behalten",
         "reject": "Nicht dieser Song"
       },

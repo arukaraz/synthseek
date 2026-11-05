@@ -88,12 +88,7 @@ function listOf(
 
 const LIVE_TAKE: VersionDoubt = {
   id: "live",
-  fileName: "03.flac",
-  relativePath: "Underworld/03.flac",
-  libraryPath: "Music",
-  title: "Threat Of Rain (Live)",
-  artist: "Underworld",
-  album: "Everything, Everything",
+  relativePath: "Underworld/03 - Threat Of Rain (Live).flac",
   durationSeconds: 272,
   format: "flac",
   linkedTo: { title: "Threat Of Rain", artist: "Underworld", durationSeconds: 364 },
@@ -115,16 +110,27 @@ describe("ReviewList", () => {
     render(<ReviewList enabled active onMatchAlbum={vi.fn()} onMatchSong={vi.fn()} />);
 
     const doubts = screen.getByRole("list", { name: "Files that may be linked to the wrong song" });
-    expect(doubts).toHaveTextContent("Underworld · Everything, Everything");
-    expect(doubts).toHaveTextContent("Threat Of Rain (Live)");
+    expect(doubts).toHaveTextContent("Linked to Underworld · Threat Of Rain · 6:04");
+    expect(doubts).toHaveTextContent("Underworld/03 - Threat Of Rain (Live).flac");
     expect(doubts).toHaveTextContent("4:32");
-    expect(doubts).toHaveTextContent('Linked to "Threat Of Rain" 6:04, another version or another song?');
+    expect(
+      screen.getByRole("button", { name: "More actions for Underworld/03 - Threat Of Rain (Live).flac" })
+    ).toBeInTheDocument();
     expect(screen.queryByText(enSettings.libraryScan.review.empty.reviewTitle)).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Keep the link" }));
     expect(state.keepLinks).toHaveBeenCalledWith({ fileIds: ["live"] });
     fireEvent.click(screen.getByRole("button", { name: "Not this song" }));
     expect(state.rejectLinks).toHaveBeenCalledWith({ fileIds: ["live"] });
+  });
+
+  it("names the linked song without a length when the song has none", () => {
+    const noLength: VersionDoubt = { ...LIVE_TAKE, linkedTo: { ...LIVE_TAKE.linkedTo, durationSeconds: null } };
+    listQuery = listOf([], { review: 1, ignored: 0 }, false, [noLength]);
+
+    render(<ReviewList enabled active onMatchAlbum={vi.fn()} onMatchSong={vi.fn()} />);
+
+    expect(screen.getByText("Linked to Underworld · Threat Of Rain")).toBeInTheDocument();
   });
 
   it("lists a doubted link above the files that wait for a match", () => {
