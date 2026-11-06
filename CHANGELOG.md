@@ -2,6 +2,37 @@
 
 ---
 
+# v2.9.4, November 6, 2026
+
+> [!NOTE]
+> After updating, Synthseek listens once, in the background, to the songs that have more than one copy, and checks the files its library scan filed for another version of their song. Copies it can tell are the same recording are settled on their own. The rest wait for you on the duplicates page, and a file that may be linked to the wrong song waits in Review files.
+
+> [!NOTE]
+> The duplicates page no longer has the Safe to resolve and Needs review tabs, or the button that resolved every safe track. Copies that sound the same are settled without you, and what is left is listed for you to listen to and choose.
+
+### Duplicates settled by how they sound
+
+- Duplicates are compared by their audio. On the duplicates page you can play the copies side by side, align them, match their loudness, and loop the part where they differ.
+- None of them fits recycles every copy of a song, and a later download that sounds like one of them is refused until you restore it.
+- Review files now holds a file that may be another version of its song, or another song. Keep the link, or choose Not this song.
+- When a file you upload is already in your library, you choose whether to keep the copy there or use yours.
+- An album the catalog search misses is now found in the artist's discography.
+
+---
+
+### Fixes
+
+- A copy another song plays is never recycled or renamed.
+- A duplicate copy you restore from the recycle bin is kept.
+- An import is tagged as the version of the song you asked for, not another cut of it.
+- A download whose library path is already taken is settled by its audio, instead of completing with no file.
+- Matching a file by hand completes a song that had failed.
+- When two copies of a song share a name in one folder, recycling one no longer takes the lyrics and cover art the other still uses.
+- Copies that cannot be played are marked as such.
+- Dependencies were updated for security advisories.
+
+---
+
 # v2.9.3, November 1, 2026
 
 > [!NOTE]
