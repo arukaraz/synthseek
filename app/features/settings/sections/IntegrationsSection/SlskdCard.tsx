@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { HashLink } from "@components/HashLink";
+import { HashLink, inlineLink } from "@components/HashLink";
 import { Button } from "@components/ui/Button";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
@@ -246,10 +246,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
               i18nKey="slskd.bannedUploaders.helper"
               components={{
                 threshold: (
-                  <HashLink
-                    href="/settings/download-sources?source=slskd#ban-threshold"
-                    className="text-primary-400 underline-offset-2 hover:underline"
-                  />
+                  <HashLink href="/settings/download-sources?source=slskd#ban-threshold" className={inlineLink()} />
                 ),
               }}
             />

@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 export const modalContent = cva(
   [
     "flex w-full flex-col p-4 sm:p-6",
-    "bg-surface/95 sm:bg-surface/90 sm:backdrop-blur-2xl",
+    "bg-surface/95",
     "h-[100dvh] max-w-none !max-h-[100dvh] !top-0 !left-0 !translate-x-0 !rounded-none",
     "sm:h-auto sm:max-w-2xl sm:!max-h-[90vh] sm:!top-[50%] sm:!left-[50%] sm:!translate-x-[-50%] sm:!translate-y-[-50%] sm:!rounded-2xl",
   ].join(" ")

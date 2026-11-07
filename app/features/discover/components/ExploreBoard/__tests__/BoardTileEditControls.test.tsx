@@ -161,7 +161,7 @@ describe("BoardTileEditControls", () => {
     ["a builtin", { kind: "builtin", id: "o", widget: "onRepeat", size: "S" }],
     ["a custom", { kind: "custom", id: "c", widgetId: "w_1", size: "S" }],
   ])(
-    "offers %s tile every size on a wide board and no size on a narrow one, where it always shows at M",
+    "offers %s tile every size on both a wide and a narrow board, since each arrangement keeps its own sizes",
     (_kind, item) => {
       const { rerender } = render(
         <BoardTileEditControls
@@ -188,7 +188,8 @@ describe("BoardTileEditControls", () => {
           actions={actions()}
         />
       );
-      expect(screen.queryByRole("group", { name: "Size of Mine" })).not.toBeInTheDocument();
+      const narrow = screen.getByRole("group", { name: "Size of Mine" });
+      expect(Array.from(narrow.querySelectorAll("button"), (button) => button.textContent)).toEqual(["S", "M", "L"]);
       expect(screen.getByRole("button", { name: "Remove Mine" })).toBeInTheDocument();
     }
   );

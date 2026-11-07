@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { Music } from "lucide-react";
 import Image from "next/image";
 import { categoryPlaceholder } from "../styles";
@@ -29,13 +29,12 @@ export function CategoryCard({ category, size = "small", onClick }: CategoryCard
     >
       {imageUrl && !imageError ? (
         <Image
-          src={artworkProxySrc(imageUrl)}
+          {...artworkImage(imageUrl)}
           alt={category.name}
           fill
           className="object-cover"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           onError={() => setImageError(true)}
-          unoptimized
         />
       ) : (
         <div className={categoryPlaceholder()}>

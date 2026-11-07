@@ -2,20 +2,16 @@
 
 import { useTranslation } from "react-i18next";
 
-import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS } from "./constants";
-import { editableSizesOf } from "./helpers";
+import { BOARD_SIZE_LABEL_KEYS, BOARD_SIZE_NAME_KEYS, BOARD_SIZE_ORDER } from "./constants";
 import { sizeChip, sizeGroup } from "./styles";
 import type { BoardTileSizesProps } from "./types";
 
-export function BoardTileSizes({ item, device, name, dense = false, onResize }: BoardTileSizesProps) {
+export function BoardTileSizes({ item, name, dense = false, onResize }: BoardTileSizesProps) {
   const { t } = useTranslation("discover");
-  const sizes = editableSizesOf(device);
-
-  if (sizes.length < 2) return null;
 
   return (
     <div role="group" aria-label={t("board.tile.sizes", { name })} className={sizeGroup()}>
-      {sizes.map((size) => (
+      {BOARD_SIZE_ORDER.map((size) => (
         <button
           key={size}
           type="button"

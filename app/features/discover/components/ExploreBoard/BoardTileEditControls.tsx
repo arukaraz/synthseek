@@ -50,7 +50,7 @@ export function BoardTileEditControls({
       </button>
       <span className={tileBarName()}>{name}</span>
       <div className={tileBarTools()}>
-        <BoardTileSizes item={item} device={device} name={name} onResize={actions.resize} />
+        <BoardTileSizes item={item} name={name} onResize={actions.resize} />
         <TileSettingsMenu
           item={item}
           device={device}

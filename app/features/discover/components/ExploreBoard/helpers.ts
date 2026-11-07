@@ -2,7 +2,14 @@ import i18n from "@locale";
 import type { MouseEvent } from "react";
 
 import { BOARD_COLUMNS, BOARD_SPANS, type BoardDevice, type BoardHeight, type BoardSpan } from "@components/BoardGrid";
-import type { BoardItem, BoardLayout, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type {
+  BoardItem,
+  BoardLayout,
+  BoardList,
+  BoardLists,
+  BoardSize,
+  BoardWidgetKey,
+} from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 import {
@@ -13,7 +20,7 @@ import {
   DEFAULT_BOARD,
   EDIT_PASSTHROUGH_SELECTOR,
   FALLBACK_BLOCK_HEIGHT,
-  NARROW_TILE_SIZE,
+  MOBILE_COPY_SIZE,
   SPACER_DEFAULT_ROWS,
   SPACER_DEFAULT_SIZE,
   SPACER_MAX_ROWS,
@@ -52,7 +59,6 @@ export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): 
 export function runBoardKey(
   event: Pick<KeyboardEvent, "key" | "shiftKey" | "preventDefault">,
   item: BoardItem,
-  device: BoardDevice,
   actions: BoardTileLayoutActions
 ): void {
   const action = boardKeyAction(event);
@@ -60,7 +66,7 @@ export function runBoardKey(
   event.preventDefault();
   if (action.kind === "remove") actions.remove(item.id);
   else if (action.kind === "move") actions.move(item.id, action.delta);
-  else actions.resize(item.id, cycleSize(editableSizesOf(device), item.size, action.delta));
+  else actions.resize(item.id, cycleSize(BOARD_SIZE_ORDER, item.size, action.delta));
 }
 
 export function heightOf(widget: BoardWidgetKey, size: BoardSize): BoardHeight {
@@ -86,10 +92,6 @@ export function tileNameOf(item: BoardItem, custom: BoardCustomWidgets, status: 
   const widget = custom.get(item.widgetId);
   if (widget) return widget.meta.name;
   return i18n.t(status === "ready" ? "discover:customWidget.deletedName" : "discover:customWidget.unresolvedName");
-}
-
-export function editableSizesOf(device: BoardDevice): readonly BoardSize[] {
-  return device === "narrow" ? [] : BOARD_SIZE_ORDER;
 }
 
 export function tileHeightOf(item: WidgetTile, size: BoardSize, custom: BoardCustomWidgets): BoardHeight {
@@ -118,9 +120,7 @@ export function tileHasBackground(item: BoardItem): boolean {
 }
 
 export function boardBackgroundOf(items: readonly BoardItem[]): BoardBackground {
-  const shown = items.filter(tileHasBackground).length;
-  if (shown === items.length) return "on";
-  return shown === 0 ? "off" : "mixed";
+  return items.length > 0 && !items.some(tileHasBackground) ? "off" : "on";
 }
 
 export function withBackgrounds(items: readonly BoardItem[], background: boolean): BoardItem[] {
@@ -155,17 +155,30 @@ export function uniqueTileId(base: string, items: readonly BoardItem[]): string 
   return `${base}-${suffix}`;
 }
 
-export function boardItemsOf(layout: BoardLayout | null | undefined): BoardItem[] {
-  if (!layout) return DEFAULT_BOARD.map((item) => ({ ...item }));
-  return [...layout.items];
+export function mobileCopyOf(items: readonly BoardItem[]): BoardItem[] {
+  return items
+    .filter((item) => item.kind !== "spacer" || tileHasBackground(item))
+    .map((item) => ({ ...item, size: MOBILE_COPY_SIZE }));
 }
 
-export function layoutOf(items: readonly BoardItem[]): BoardLayout {
-  return { schemaVersion: BOARD_SCHEMA_VERSION, items: items.map((item) => ({ ...item })) };
+export function boardListsOf(layout: BoardLayout | null | undefined): BoardLists {
+  if (!layout) {
+    const items = DEFAULT_BOARD.map((item) => ({ ...item }));
+    return { items, mobile: mobileCopyOf(items) };
+  }
+  return { items: [...layout.items], mobile: [...layout.mobile] };
 }
 
-export function displayedSize(item: BoardItem, device: BoardDevice): BoardSize {
-  return device === "wide" ? item.size : NARROW_TILE_SIZE;
+export function layoutOf(lists: BoardLists): BoardLayout {
+  return {
+    schemaVersion: BOARD_SCHEMA_VERSION,
+    items: lists.items.map((item) => ({ ...item })),
+    mobile: lists.mobile.map((item) => ({ ...item })),
+  };
+}
+
+export function withList(lists: BoardLists, list: BoardList, items: readonly BoardItem[]): BoardLists {
+  return { ...lists, [list]: [...items] };
 }
 
 function cellKey(row: number, col: number): string {
@@ -193,7 +206,7 @@ export function packBoard(items: readonly BoardItem[], device: BoardDevice, cust
       row = placed.reduce((bottom, tile) => Math.max(bottom, tile.row + tile.rows), 0);
       col = 0;
     }
-    const size = displayedSize(item, device);
+    const { size } = item;
     const span = tileSpanOf(item, size, device, custom);
     const cols = Math.min(span.cols, columns);
     let found = false;
@@ -255,11 +268,6 @@ export function resizeSpacer(items: readonly BoardItem[], id: string, delta: Mov
 
 export function appendSpacer(items: readonly BoardItem[], id: string): BoardItem[] {
   return [...items, { kind: "spacer", id, size: SPACER_DEFAULT_SIZE, rows: SPACER_DEFAULT_ROWS }];
-}
-
-export function shownItems(items: readonly BoardItem[], device: BoardDevice, editing: boolean): BoardItem[] {
-  if (device === "wide" || editing) return [...items];
-  return items.filter((item) => item.kind !== "spacer" || tileHasBackground(item));
 }
 
 export function removeItem(items: readonly BoardItem[], id: string): BoardItem[] {

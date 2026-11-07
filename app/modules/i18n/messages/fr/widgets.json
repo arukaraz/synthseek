@@ -29,6 +29,8 @@
     "playlist": "Playlist intelligente · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Ajouter au tableau",
+    "addWhileTemplate": "Enregistrez ou annulez d'abord le modèle, puis ajoutez vos widgets.",
+    "deleteWhileTemplate": "Enregistrez ou annulez d'abord le modèle, puis supprimez votre widget.",
     "addNamed": "Ajouter {{name}} au tableau",
     "onBoard": "Sur le tableau",
     "edit": "Modifier",
@@ -53,6 +55,25 @@
     "deleteWithTiles_other": "Le widget est retiré de Mes widgets et de ses {{count}} tuiles sur votre tableau."
   },
   "board": {
+    "customization": {
+      "action": "Personnalisation du tableau",
+      "title": "Personnalisation du tableau",
+      "sections": {
+        "label": "Sections de la personnalisation du tableau",
+        "board": "Tableau",
+        "widgets": "Widgets"
+      }
+    },
+    "layouts": {
+      "label": "Disposition",
+      "items": "Ordinateur",
+      "mobile": "Mobile",
+      "both": "Les deux"
+    },
+    "settings": {
+      "tabs": "Sections des réglages du tableau",
+      "discardForTemplate": "Le modèle remplace le tableau, donc vos modifications non enregistrées seront perdues."
+    },
     "appearance": {
       "title": "Apparence",
       "density": "Densité",
@@ -84,20 +105,24 @@
       "copied": "Modèle de tableau copié",
       "copyFailed": "Ce navigateur ne l'a pas copié. Réessayez en HTTPS ou autorisez l'accès au presse-papiers.",
       "import": "Importer un modèle",
-      "importHint": "Collez le JSON ou choisissez un fichier .json. Rien ne change avant de l'appliquer.",
+      "importHint": "Collez le JSON ou choisissez un fichier .json. L'appliquer l'affiche dans la disposition, et rien ne change avant d'enregistrer.",
       "field": "JSON du modèle de tableau",
       "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
       "file": "Choisir un fichier",
       "fileFailed": "Impossible de lire ce fichier. Choisissez-le à nouveau ou collez son JSON.",
       "check": "Vérifier",
       "apply": "Appliquer le modèle",
+      "staged": "Ce modèle est dans la disposition. Enregistrez les modifications pour le mettre sur votre tableau.",
       "cancel": "Annuler",
-      "summary_one": "{{name}} : {{count}} widget sur le tableau",
-      "summary_other": "{{name}} : {{count}} widgets sur le tableau",
+      "summary_one": "{{name}} : {{count}} widget sur Ordinateur",
+      "summary_other": "{{name}} : {{count}} widgets sur Ordinateur",
+      "mobileSummary_one": "{{count}} widget sur Mobile",
+      "mobileSummary_other": "{{count}} widgets sur Mobile",
       "created_one": "{{count}} nouveau widget dans Mes widgets",
       "created_other": "{{count}} nouveaux widgets dans Mes widgets",
       "look": "Apparence : {{density}}, texte {{text}}",
       "skipped": "Case {{position}} ignorée : {{reason}}",
+      "skippedMobile": "Case mobile {{position}} ignorée : {{reason}}",
       "reasons": {
         "unreadable": "ce n'est pas un widget Synthseek",
         "unknownWidget": "son widget n'est pas dans le modèle",
@@ -337,6 +362,7 @@
     "topN": "Top",
     "overDays": "sur jours",
     "kbps": "kbit/s",
+    "times": "fois",
     "percent": "%",
     "text": {
       "genreName_is": "le genre est {{value}}",

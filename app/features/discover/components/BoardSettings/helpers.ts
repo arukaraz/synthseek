@@ -1,9 +1,13 @@
 import i18n from "@locale";
 
 import { BOARD_DENSITY_METRICS, BOARD_TEXT_SCALE } from "@components/BoardGrid";
-import type { BoardDensity, BoardTemplate, BoardTextScale } from "@hooks/api/queries/board/types";
+import type { BoardAppearance, BoardDensity, BoardTemplate, BoardTextScale } from "@hooks/api/queries/board/types";
+import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
+import { feedNeedNote } from "../CustomWidget/helpers";
+import type { BoardCustomWidgets } from "../ExploreBoard/types";
 import { problemText } from "../WidgetGallery/helpers";
+import { TEMPLATE_SKIPPED_KEYS } from "./constants";
 import type { ReadableTemplate, ReportLine } from "./types";
 
 function isDensity(key: string): key is BoardDensity {
@@ -12,6 +16,18 @@ function isDensity(key: string): key is BoardDensity {
 
 function isTextScale(key: string): key is BoardTextScale {
   return Object.hasOwn(BOARD_TEXT_SCALE, key);
+}
+
+export function sameAppearance(a: BoardAppearance, b: BoardAppearance): boolean {
+  return a.density === b.density && a.text === b.text;
+}
+
+export function withStagedWidgets(
+  custom: BoardCustomWidgets,
+  documents: readonly WidgetDocument[]
+): BoardCustomWidgets {
+  if (documents.length === 0) return custom;
+  return new Map([...custom, ...documents.map((widget) => [widget.id, widget] as const)]);
 }
 
 export function densityChoices(): BoardDensity[] {
@@ -28,6 +44,11 @@ export function templateReportLines(report: ReadableTemplate): ReportLine[] {
       key: "summary",
       tone: "info",
       text: i18n.t("widgets:board.templates.summary", { name: report.name, count: report.tiles }),
+    },
+    {
+      key: "mobileSummary",
+      tone: "info",
+      text: i18n.t("widgets:board.templates.mobileSummary", { count: report.mobileTiles }),
     },
   ];
   if (report.widgets > 0) {
@@ -47,9 +68,9 @@ export function templateReportLines(report: ReadableTemplate): ReportLine[] {
   });
   for (const skipped of report.skippedItems) {
     lines.push({
-      key: `skipped-${skipped.index}`,
+      key: `skipped-${skipped.list}-${skipped.index}`,
       tone: "warning",
-      text: i18n.t("widgets:board.templates.skipped", {
+      text: i18n.t(TEMPLATE_SKIPPED_KEYS[skipped.list], {
         position: skipped.index + 1,
         reason: i18n.t(`widgets:board.templates.reasons.${skipped.reason}`),
       }),
@@ -66,7 +87,7 @@ export function templateReportLines(report: ReadableTemplate): ReportLine[] {
     });
   }
   for (const need of report.needs) {
-    lines.push({ key: `needs-${need}`, tone: "warning", text: i18n.t(`discover:customWidget.needs.${need}`) });
+    lines.push({ key: `needs-${need}`, tone: "warning", text: feedNeedNote(need) });
   }
   lines.push(
     report.blocked

@@ -65,7 +65,7 @@ import {
 import type { ComponentType } from "react";
 
 import type { BoardSize } from "@hooks/api/queries/board/types";
-import type { WidgetBlock, WidgetIcon, WidgetShape } from "@hooks/api/queries/widgets/types";
+import type { FeedNeed, WidgetBlock, WidgetIcon, WidgetShape } from "@hooks/api/queries/widgets/types";
 
 import { BarsBlock } from "../WidgetCharts/BarsBlock";
 import { CompareBlock } from "../WidgetCharts/CompareBlock";
@@ -236,3 +236,14 @@ export const WIDGET_ICONS: Record<WidgetIcon, LucideIcon> = {
 };
 
 export const FALLBACK_WIDGET_ICON: LucideIcon = Sparkles;
+
+export const FEED_NEED_HREFS: Record<FeedNeed, string> = {
+  lastfm: "/settings/listening#lastfm",
+  listenbrainz: "/settings/listening#listenbrainz",
+  bandsintown: "/settings/metadata#connections.enrichment.bandsintownAppId",
+  mediaServer: "/settings/connected-accounts",
+  plex: "/settings/connected-accounts#plex",
+  jellyfin: "/settings/connected-accounts#jellyfin",
+  navidrome: "/settings/connected-accounts#navidrome",
+  lidarr: "/settings/download-sources?source=lidarr#lidarr",
+};

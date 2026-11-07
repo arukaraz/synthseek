@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { artworkProxySrc } from "../artworkProxy";
+import { artworkImage, artworkProxySrc } from "../artworkProxy";
 
 describe("artworkProxySrc", () => {
   it("rewrites a Deezer CDN url through the proxy", () => {
@@ -63,5 +63,17 @@ describe("artworkProxySrc", () => {
     expect(result).toContain("a%20b");
     expect(result).toContain("x%3D1%26y%3D2");
     expect(result).not.toContain("a b");
+  });
+});
+
+describe("artworkImage", () => {
+  it("lets Next resize a cover the proxy serves", () => {
+    const url = "https://cdn-images.dzcdn.net/images/cover/abc/1000x1000.jpg";
+    expect(artworkImage(url)).toEqual({ src: `/api/artwork?url=${encodeURIComponent(url)}`, unoptimized: false });
+  });
+
+  it("serves a host Next has no pattern for as it is, so the image does not throw", () => {
+    const url = "https://lastfm.freetls.fastly.net/i/u/300x300/abc.jpg";
+    expect(artworkImage(url)).toEqual({ src: url, unoptimized: true });
   });
 });

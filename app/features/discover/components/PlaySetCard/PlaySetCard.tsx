@@ -4,7 +4,7 @@ import { Download, Pin, Play } from "lucide-react";
 import Image from "next/image";
 
 import { InfoTooltip } from "@components/ui/InfoTooltip";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";
 
 import { DiscoveryMixMosaic } from "../DiscoveryMixes/DiscoveryMixMosaic";
@@ -59,7 +59,7 @@ export function PlaySetCard({
     <article data-acc={accent} className={cn(mixCard(), playSetCard({ layout }))}>
       <div className={playSetPoster({ layout })}>
         {shape === "square" && covers.length === 1 && onlyCover ? (
-          <Image src={artworkProxySrc(onlyCover)} alt="" fill sizes="320px" className={singleCover()} unoptimized />
+          <Image {...artworkImage(onlyCover)} alt="" fill sizes="320px" className={singleCover()} />
         ) : (
           <DiscoveryMixMosaic covers={covers} fallbackSeed={seed} shape={shape} />
         )}

@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import { tileGradient } from "@features/discover/components/DiscoveryMixes/helpers";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 
 import { formatPlaycount } from "./helpers";
 import { item, itemArtist, itemCover, itemMeta, itemPlays, itemRank, itemTitle } from "./styles";
@@ -18,7 +18,7 @@ export function TopTrackRow({ track, rank }: TopTrackRowProps) {
       <span className={itemRank()}>{rank}</span>
       <div className={itemCover()}>
         {cover ? (
-          <Image src={artworkProxySrc(cover)} alt="" fill sizes="42px" className="object-cover" unoptimized />
+          <Image {...artworkImage(cover)} alt="" fill sizes="42px" className="object-cover" />
         ) : (
           <div style={{ background: fallbackBg }} className="size-full" />
         )}

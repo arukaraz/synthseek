@@ -4,7 +4,7 @@ import { ArrowRight, History } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { getContentTypeIcon } from "@utils/content-type-helpers";
 
 import { optionText } from "../helpers";
@@ -29,7 +29,7 @@ export function OmniOptionRow({ option, id, highlighted, onSelect, onHover }: Om
     >
       <span className={optionVisual()} aria-hidden>
         {option.kind === "result" && option.image ? (
-          <Image src={artworkProxySrc(option.image)} alt="" fill sizes="32px" className="object-cover" unoptimized />
+          <Image {...artworkImage(option.image)} alt="" fill sizes="32px" className="object-cover" />
         ) : ResultIcon ? (
           <ResultIcon />
         ) : GotoIcon ? (

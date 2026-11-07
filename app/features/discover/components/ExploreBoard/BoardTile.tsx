@@ -29,7 +29,7 @@ export function BoardTile({
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!editing || event.target !== event.currentTarget) return;
-    runBoardKey(event, item, device, actions);
+    runBoardKey(event, item, actions);
   };
 
   return (

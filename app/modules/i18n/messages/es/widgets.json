@@ -29,6 +29,8 @@
     "playlist": "Playlist inteligente · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Añadir al tablero",
+    "addWhileTemplate": "Guarda o cancela la plantilla primero y luego añade tus widgets.",
+    "deleteWhileTemplate": "Guarda o cancela la plantilla primero y luego borra tu widget.",
     "addNamed": "Añadir {{name}} al tablero",
     "onBoard": "En el tablero",
     "edit": "Editar",
@@ -53,6 +55,25 @@
     "deleteWithTiles_other": "El widget se quita de Mis widgets y de sus {{count}} tiles en tu tablero."
   },
   "board": {
+    "customization": {
+      "action": "Personalización del tablero",
+      "title": "Personalización del tablero",
+      "sections": {
+        "label": "Secciones de la personalización del tablero",
+        "board": "Tablero",
+        "widgets": "Widgets"
+      }
+    },
+    "layouts": {
+      "label": "Disposición",
+      "items": "Escritorio",
+      "mobile": "Móvil",
+      "both": "Ambos"
+    },
+    "settings": {
+      "tabs": "Secciones de los ajustes del tablero",
+      "discardForTemplate": "La plantilla reemplaza el tablero, así que se perderán los cambios que no guardaste."
+    },
     "appearance": {
       "title": "Aspecto",
       "density": "Densidad",
@@ -84,20 +105,24 @@
       "copied": "Plantilla de tablero copiada",
       "copyFailed": "Este navegador no la copió. Inténtalo por HTTPS o permite el acceso al portapapeles.",
       "import": "Importar una plantilla",
-      "importHint": "Pega el JSON o elige un archivo .json. No cambia nada hasta que la apliques.",
+      "importHint": "Pega el JSON o elige un archivo .json. Al aplicarla se ve en el orden, y no cambia nada hasta que guardes.",
       "field": "JSON de la plantilla de tablero",
       "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
       "file": "Elegir archivo",
       "fileFailed": "No se pudo leer ese archivo. Elígelo otra vez o pega su JSON.",
       "check": "Comprobar",
       "apply": "Aplicar plantilla",
+      "staged": "Esta plantilla está en el orden. Guarda los cambios para ponerla en tu tablero.",
       "cancel": "Cancelar",
-      "summary_one": "{{name}}: {{count}} widget en el tablero",
-      "summary_other": "{{name}}: {{count}} widgets en el tablero",
+      "summary_one": "{{name}}: {{count}} widget en Escritorio",
+      "summary_other": "{{name}}: {{count}} widgets en Escritorio",
+      "mobileSummary_one": "{{count}} widget en Móvil",
+      "mobileSummary_other": "{{count}} widgets en Móvil",
       "created_one": "{{count}} widget nuevo en Mis widgets",
       "created_other": "{{count}} widgets nuevos en Mis widgets",
       "look": "Aspecto: {{density}}, texto {{text}}",
       "skipped": "Casilla {{position}} omitida: {{reason}}",
+      "skippedMobile": "Casilla móvil {{position}} omitida: {{reason}}",
       "reasons": {
         "unreadable": "no es un widget de Synthseek",
         "unknownWidget": "su widget no está en la plantilla",
@@ -291,7 +316,7 @@
       "mood": "Estado de ánimo",
       "tempo": "Tempo",
       "energy": "Energía",
-      "plays": "Reproducciones en la ventana",
+      "plays": "Reproducciones en el periodo",
       "notPlayedInLast": "Sin escuchar en los últimos",
       "addedOlderThan": "Añadido hace más de",
       "bitrate": "Bitrate",
@@ -337,6 +362,7 @@
     "topN": "Top",
     "overDays": "en días",
     "kbps": "kbps",
+    "times": "veces",
     "percent": "%",
     "text": {
       "genreName_is": "el género es {{value}}",
@@ -357,8 +383,8 @@
       "mood_isNot": "el estado de ánimo no es {{value}}",
       "tempo": "el tempo es {{value}}",
       "energy": "la energía es {{value}}",
-      "plays_gte": "reproducciones en la ventana al menos {{value}}",
-      "plays_lte": "reproducciones en la ventana como mucho {{value}}",
+      "plays_gte": "escuchada al menos {{value}} veces en el periodo",
+      "plays_lte": "escuchada como mucho {{value}} veces en el periodo",
       "notPlayedInLast": "sin escuchar en los últimos {{value}} días",
       "addedOlderThan": "añadido hace más de {{value}} días",
       "bitrate_lt": "bitrate por debajo de {{value}} kbps",

@@ -2,7 +2,7 @@ import type { BoardDensity, BoardSize, BoardTextScale } from "@hooks/api/queries
 
 import type { BoardDevice, BoardHeight, BoardMetrics, BoardSpan } from "./types";
 
-export const BOARD_WIDE_QUERY = "(min-width: 64rem)";
+export const BOARD_WIDE_QUERY = "(min-width: 48rem)";
 
 export const BOARD_COLUMNS: Record<BoardDevice, number> = { wide: 12, narrow: 4 };
 

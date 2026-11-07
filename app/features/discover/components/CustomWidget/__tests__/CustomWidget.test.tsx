@@ -20,10 +20,12 @@ import {
 } from "@test/factories";
 import { fireEvent, renderWithProviders, screen, within } from "@test/test-utils";
 
+import { StagedWidgetsContext } from "../context";
 import { CustomWidget } from "../CustomWidget";
 
-const { dataQuery, playEntity, shuffleEntity, startRadio, requestResult, measured } = vi.hoisted(() => ({
+const { dataQuery, previewQuery, playEntity, shuffleEntity, startRadio, requestResult, measured } = vi.hoisted(() => ({
   dataQuery: vi.fn(),
+  previewQuery: vi.fn(),
   playEntity: vi.fn(),
   shuffleEntity: vi.fn(),
   startRadio: vi.fn(),
@@ -31,7 +33,13 @@ const { dataQuery, playEntity, shuffleEntity, startRadio, requestResult, measure
   measured: { width: 0 },
 }));
 
-vi.mock("@hooks/api/queries/widgets/useWidgetData", () => ({ useWidgetData: () => dataQuery() }));
+vi.mock("@hooks/api/queries/widgets/useWidgetData", () => ({
+  useWidgetData: (_widget: unknown, _timeZone: string, enabled: boolean) => dataQuery(enabled),
+}));
+vi.mock("@hooks/api/queries/widgets/useWidgetPreview", () => ({
+  useWidgetPreview: (draft: unknown) => previewQuery(draft),
+}));
+vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => ({ isAdmin: true }) }));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({
   useEntityPlayback: () => ({ playEntity, shuffleEntity, startRadio }),
 }));
@@ -142,6 +150,23 @@ describe("CustomWidget", () => {
     show("list", "M", TRACKS);
     expect(screen.getByRole("heading", { level: 3, name: "Most played" })).toBeInTheDocument();
     expect(screen.getByText("Your month")).toBeInTheDocument();
+  });
+
+  it("draws a widget staged from a template from its draft, without asking for a saved widget", () => {
+    dataQuery.mockReturnValue({ data: undefined, isLoading: true, isError: false });
+    previewQuery.mockReturnValue({ data: TRACKS, isLoading: false, isError: false });
+    const widget = createWidget({ id: "w_staged", view: { block: "list", action: "play" } });
+
+    renderWithProviders(
+      <StagedWidgetsContext.Provider value={new Set(["w_staged"])}>
+        <CustomWidget widget={widget} status="ready" size="M" />
+      </StagedWidgetsContext.Provider>
+    );
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(8);
+    expect(dataQuery).toHaveBeenLastCalledWith(false);
+    expect(previewQuery).toHaveBeenLastCalledWith(expect.objectContaining({ meta: widget.meta }));
+    expect(previewQuery.mock.lastCall?.[0]).not.toHaveProperty("id");
   });
 
   it.each([
@@ -502,9 +527,26 @@ describe("CustomWidget", () => {
       total: 0,
       rows: [],
     });
-    expect(
-      screen.getByText("Add a Bandsintown app id under Settings, Integrations to fill this widget.")
-    ).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: "Bandsintown app id" });
+    expect(link).toHaveAttribute("href", "/settings/metadata#connections.enrichment.bandsintownAppId");
+    expect(link.closest("p")).toHaveTextContent(/^Add a Bandsintown app id to fill this widget\.$/);
+  });
+
+  it("links a refused Bandsintown app id to its field", () => {
+    show("calendar", "M", {
+      type: "feed",
+      source: "events.upcoming",
+      needs: null,
+      shape: "ranked",
+      dataset: "events",
+      failure: "refused",
+      total: 0,
+      rows: [],
+    });
+    expect(screen.getByRole("link", { name: "Bandsintown app id" })).toHaveAttribute(
+      "href",
+      "/settings/metadata#connections.enrichment.bandsintownAppId"
+    );
   });
 
   it("says why a news feed has nothing to show", () => {
@@ -516,7 +558,10 @@ describe("CustomWidget", () => {
 
   it("says which integration a feed is waiting on", () => {
     show("list", "M", createFeedAlbumResult([], "listenbrainz"));
-    expect(screen.getByText("Add your ListenBrainz user in Settings to fill this widget.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "ListenBrainz user" })).toHaveAttribute(
+      "href",
+      "/settings/listening#listenbrainz"
+    );
   });
 
   it("shows a deleted widget as a note once the list has loaded", () => {

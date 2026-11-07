@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { tileGradient } from "@features/discover/components/DiscoveryMixes/helpers";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 
 import { formatPlaycount } from "./helpers";
 import {
@@ -31,7 +31,7 @@ export function TopTrackHero({ track }: TopTrackHeroProps) {
   return (
     <div className={hero()}>
       {cover ? (
-        <Image src={artworkProxySrc(cover)} alt="" fill sizes="240px" className={heroImage()} unoptimized />
+        <Image {...artworkImage(cover)} alt="" fill sizes="240px" className={heroImage()} />
       ) : (
         <div style={{ background: fallbackBg }} className={heroFallback()} />
       )}

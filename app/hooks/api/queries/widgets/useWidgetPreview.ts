@@ -8,5 +8,6 @@ export function useWidgetPreview(draft: WidgetDraft | null, timeZone: string) {
   return trpc.widgets.preview.useQuery(draft ? { draft, timeZone } : skipToken, {
     placeholderData: keepPreviousData,
     retry: false,
+    trpc: { context: { skipBatch: draft?.query.type === "feed" } },
   });
 }

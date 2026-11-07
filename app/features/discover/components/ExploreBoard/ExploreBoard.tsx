@@ -11,36 +11,29 @@ import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import { useBoardEditor } from "../../hooks/useBoardEditor";
-import { BoardArrangeDialog } from "../BoardArrange/BoardArrangeDialog";
-import { BoardTemplatesDialog } from "../BoardSettings/BoardTemplatesDialog";
-import { WidgetGallery } from "../WidgetGallery/WidgetGallery";
+import { BoardCustomizationDialog } from "../BoardCustomization/BoardCustomizationDialog";
 import { BoardEmpty } from "./BoardEmpty";
 import { BoardTile } from "./BoardTile";
 import { BoardToolbar } from "./BoardToolbar";
-import {
-  boardBackgroundOf,
-  boardItemsOf,
-  customStatusOf,
-  customWidgetsById,
-  packBoard,
-  placementsById,
-  shownItems,
-} from "./helpers";
+import { BOARD_LIST_OF } from "./constants";
+import { boardListsOf, customStatusOf, customWidgetsById, packBoard, placementsById } from "./helpers";
 import { boardRoot, liveRegion } from "./styles";
 
 export function ExploreBoard() {
   const { t } = useTranslation("discover");
   const device = useBoardDevice();
+  const list = BOARD_LIST_OF[device];
   const { data, isLoading } = useBoardLayout();
   const appearance = useBoardAppearance();
   const myWidgets = useMyWidgets();
-  const items = useMemo(() => boardItemsOf(data), [data]);
+  const lists = useMemo(() => boardListsOf(data), [data]);
+  const items = lists[list];
   const custom = useMemo(() => customWidgetsById(myWidgets.data), [myWidgets.data]);
   const customStatus = customStatusOf(myWidgets);
-  const editor = useBoardEditor(items, custom, customStatus);
+  const editor = useBoardEditor(lists, list, custom, customStatus);
   const placements = useMemo(
-    () => placementsById(packBoard(shownItems(editor.displayItems, device, editor.editing), device, custom)),
-    [editor.displayItems, editor.editing, device, custom]
+    () => placementsById(packBoard(editor.displayItems, device, custom)),
+    [editor.displayItems, device, custom]
   );
 
   if (isLoading) return <SectionLoading />;
@@ -52,7 +45,7 @@ export function ExploreBoard() {
       aria-label={t("board.regionLabel")}
     >
       {items.length === 0 ? (
-        <BoardEmpty onAddWidget={editor.openGallery} />
+        <BoardEmpty onAddWidget={() => editor.openCustomization("widgets")} />
       ) : (
         <BoardGrid device={device} appearance={appearance.data}>
           {items.map((item, index) => {
@@ -79,46 +72,23 @@ export function ExploreBoard() {
         editing={editor.editing}
         onCustomize={editor.startEditing}
         onDone={editor.stopEditing}
-        onManageWidgets={editor.openGallery}
         onAddSpacer={editor.addSpacer}
-        onArrange={editor.openArrange}
-        onTemplates={editor.openTemplates}
-        background={boardBackgroundOf(items)}
-        onBackground={editor.setBackgrounds}
+        onCustomization={() => editor.openCustomization("board")}
       />
       <p className={liveRegion()} aria-live="polite">
         {editor.announcement}
       </p>
-      {editor.arrangeWidth !== null ? (
-        <BoardArrangeDialog
-          items={items}
+      {editor.customization ? (
+        <BoardCustomizationDialog
+          lists={lists}
           device={device}
-          boardWidth={editor.arrangeWidth}
+          opening={editor.customization}
           appearance={appearance.data}
           custom={custom}
           customStatus={customStatus}
-          onSave={editor.saveArrangement}
-          onClose={editor.closeArrange}
-        />
-      ) : null}
-      {editor.galleryOpen ? (
-        <WidgetGallery
-          items={items}
-          target={editor.galleryTarget}
-          onAdd={editor.add}
-          onAddCustom={editor.addCustom}
-          onRemove={editor.actions.remove}
-          onClose={() => editor.setGalleryOpen(false)}
-        />
-      ) : null}
-      {editor.templatesOpen ? (
-        <BoardTemplatesDialog
-          items={items}
-          onApplied={(applied) => {
-            editor.templateApplied(applied);
-            editor.closeTemplates();
-          }}
-          onClose={editor.closeTemplates}
+          onSave={editor.saveCustomization}
+          onTemplateApplied={editor.templateApplied}
+          onClose={editor.closeCustomization}
         />
       ) : null}
     </section>

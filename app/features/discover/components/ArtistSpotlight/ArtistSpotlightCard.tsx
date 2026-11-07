@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@components/ui/Badge";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { scale } from "@utils/animations";
 import { categoryPlaceholder, cardBottomContent, albumThumbnail, hoverBorder, playIcon } from "../styles";
 import { spotlightCard, spotlightCardMedia, spotlightPlay } from "./styles";
@@ -33,13 +33,12 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: Ar
       <div className={spotlightCardMedia()}>
         {artistImage && !imageError ? (
           <Image
-            src={artworkProxySrc(artistImage)}
+            {...artworkImage(artistImage)}
             alt={artist.name}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             onError={() => setImageError(true)}
-            unoptimized
           />
         ) : (
           <div className={categoryPlaceholder()}>
@@ -63,13 +62,12 @@ export function ArtistSpotlightCard({ artist, latestAlbum, onClick, onPlay }: Ar
               <div className={albumThumbnail()}>
                 {albumImage && !albumImageError ? (
                   <Image
-                    src={artworkProxySrc(albumImage)}
+                    {...artworkImage(albumImage)}
                     alt={latestAlbum.name}
                     fill
                     className="object-cover"
                     sizes="48px"
                     onError={() => setAlbumImageError(true)}
-                    unoptimized
                   />
                 ) : (
                   <div className="bg-fg/10 flex h-full w-full items-center justify-center">

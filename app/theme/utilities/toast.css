@@ -15,10 +15,6 @@ body:has([data-board-dock]) [data-sonner-toaster] {
   --toast-dock-clearance: 4.5rem;
 }
 
-body:has([data-board-tray]) [data-sonner-toaster] {
-  --toast-dock-clearance: 12.5rem;
-}
-
 [data-sonner-toaster] [data-sonner-toast][data-type="success"] {
   --toast-accent: var(--color-success);
   --toast-accent-glow: var(--shadow-neon-success);

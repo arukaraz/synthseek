@@ -187,7 +187,6 @@
     "customize": "Customize",
     "done": "Done",
     "addWidget": "Add widget",
-    "manageWidgets": "Manage widgets",
     "add": {
       "action": "Add"
     },
@@ -197,8 +196,6 @@
       "taller": "Make the spacer taller"
     },
     "arrange": {
-      "action": "Arrange",
-      "title": "Arrange your board",
       "hint": "Drag a widget to move it, or drop it below the board to start a new row. Nothing changes until you save.",
       "newRow": "New row",
       "empty": "Your board will be empty.",
@@ -235,8 +232,7 @@
       "L": "Large"
     },
     "gallery": {
-      "title": "Manage widgets",
-      "subtitle": "Add puts a widget at the end of the board, where you resize it. Customize opens a copy in the workshop.",
+      "subtitle": "Add puts a widget at the end of the layout you pick. Customize opens a copy in the workshop.",
       "seeMore": "See more",
       "seeLess": "See less",
       "summary": "{{onBoard}} of {{total}} on your board. A new widget lands at the end, then move it where you want.",
@@ -254,8 +250,7 @@
       "added": "{{name}} added at the end",
       "removed": "{{name}} removed",
       "moved": "Board layout saved",
-      "backgroundsOn": "Backgrounds on for every widget",
-      "backgroundsOff": "Backgrounds off for every widget",
+      "saved": "Board saved",
       "undo": "Undo"
     },
     "announce": {
@@ -544,17 +539,17 @@
     "deleted": "This widget no longer exists. Remove it from the board with Customize.",
     "empty": "Nothing matches this widget right now.",
     "needs": {
-      "lastfm": "Connect Last.fm in Settings to fill this widget.",
-      "listenbrainz": "Add your ListenBrainz user in Settings to fill this widget.",
-      "bandsintown": "Add a Bandsintown app id under Settings, Integrations to fill this widget.",
-      "mediaServer": "This widget needs a media server connected for the household and your account on it linked under Connected accounts.",
-      "plex": "This widget needs Plex connected for the household and your Plex account linked under Connected accounts.",
-      "jellyfin": "This widget needs Jellyfin connected for the household and your Jellyfin account linked under Connected accounts.",
-      "navidrome": "This widget needs Navidrome connected for the household and your Navidrome account linked under Connected accounts.",
-      "lidarr": "This widget needs Lidarr connected under Settings, Integrations, and only admins and trusted members can read it."
+      "lastfm": "Connect <field>Last.fm</field> to fill this widget.",
+      "listenbrainz": "Add your <field>ListenBrainz user</field> to fill this widget.",
+      "bandsintown": "Add a <field>Bandsintown app id</field> to fill this widget.",
+      "mediaServer": "Link your <field>media server account</field> to fill this widget, once a media server is connected for the household.",
+      "plex": "Link your <field>Plex account</field> to fill this widget, once Plex is connected for the household.",
+      "jellyfin": "Link your <field>Jellyfin account</field> to fill this widget, once Jellyfin is connected for the household.",
+      "navidrome": "Link your <field>Navidrome account</field> to fill this widget, once Navidrome is connected for the household.",
+      "lidarr": "Configure <field>Lidarr</field> to fill this widget. Only admins and trusted members can read it."
     },
     "events": {
-      "refused": "Bandsintown refused the app id. Check it under Settings, Integrations.",
+      "refused": "Bandsintown refused the app id. Check the <field>Bandsintown app id</field>.",
       "unreachable": "Bandsintown could not be reached right now."
     },
     "news": {

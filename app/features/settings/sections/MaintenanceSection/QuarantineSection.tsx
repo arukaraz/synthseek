@@ -4,7 +4,7 @@ import { ShieldCheck, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
-import { HashLink } from "@components/HashLink";
+import { HashLink, inlineLink } from "@components/HashLink";
 import { Button } from "@components/ui/Button";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { EmptyState } from "@components/ui/EmptyState";
@@ -22,7 +22,7 @@ import { SettingsCard } from "../../components/SettingsCard";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader } from "../../styles";
 import { QuarantineGroupRow } from "./QuarantineGroupRow";
-import { quarantineLink, quarantineList, quarantineListHeader, quarantineValue } from "./styles";
+import { quarantineList, quarantineListHeader, quarantineValue } from "./styles";
 import type { QuarantineCardProps } from "./types";
 
 export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps) {
@@ -65,7 +65,7 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
           t={t}
           i18nKey="quarantine.reviewQueue.hint"
           components={{
-            review: <HashLink href="/requests#review" className={quarantineLink()} />,
+            review: <HashLink href="/requests#review" className={inlineLink()} />,
           }}
         />
       </p>
@@ -123,9 +123,7 @@ export function QuarantineSection({ initial, sourceTrust }: QuarantineCardProps)
           t={t}
           i18nKey="quarantine.sourceTrust.manage"
           components={{
-            slskd: (
-              <HashLink href="/settings/download-sources?source=slskd#ban-threshold" className={quarantineLink()} />
-            ),
+            slskd: <HashLink href="/settings/download-sources?source=slskd#ban-threshold" className={inlineLink()} />,
           }}
         />
       </p>

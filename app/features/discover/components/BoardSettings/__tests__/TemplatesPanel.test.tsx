@@ -1,11 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { BoardItem, BoardTemplateApplied, BoardTemplatePreview } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardTemplatePreview } from "@hooks/api/queries/board/types";
 import { act, fireEvent, render, screen } from "@test/test-utils";
 
 const mocks = vi.hoisted(() => ({
   preview: vi.fn<(input: { json: string }, options: { onSuccess: (report: BoardTemplatePreview) => void }) => void>(),
-  apply: vi.fn<(input: { json: string }, options: { onSuccess: (applied: BoardTemplateApplied) => void }) => void>(),
   exporter: vi.fn<(input: unknown, options: { onSuccess: (template: unknown) => void }) => void>(),
   toast: { success: vi.fn(), error: vi.fn() },
 }));
@@ -15,14 +14,12 @@ vi.mock("sonner", () => ({ toast: mocks.toast }));
 vi.mock("@hooks/api/mutations/board/usePreviewBoardTemplate", () => ({
   usePreviewBoardTemplate: () => ({ mutate: mocks.preview, isPending: false }),
 }));
-vi.mock("@hooks/api/mutations/board/useApplyBoardTemplate", () => ({
-  useApplyBoardTemplate: () => ({ mutate: mocks.apply, isPending: false }),
-}));
 vi.mock("@hooks/api/mutations/board/useExportBoardTemplate", () => ({
   useExportBoardTemplate: () => ({ mutate: mocks.exporter, isPending: false }),
 }));
 
-import { BoardTemplatesDialog } from "../BoardTemplatesDialog";
+import { TemplatesPanel } from "../TemplatesPanel";
+import type { StageTemplate } from "../types";
 
 const READABLE: BoardTemplatePreview = {
   ok: true,
@@ -30,21 +27,28 @@ const READABLE: BoardTemplatePreview = {
   description: "",
   appearance: { density: "spacious", text: "small" },
   tiles: 3,
+  mobileTiles: 3,
   widgets: 0,
   skippedItems: [],
   rejectedWidgets: [],
   needs: [],
   blocked: null,
+  layout: { items: [], mobile: [] },
+  documents: [],
 };
 
-const APPLIED: BoardTemplateApplied = {
-  layout: { schemaVersion: 3, items: [] },
-  appearance: { density: "spacious", text: "small" },
-  undo: { layout: null, appearance: { density: "comfortable", text: "default" }, widgetIds: [] },
-};
+interface PanelHandlers {
+  staged?: boolean;
+  onStage?: StageTemplate;
+  onUnstage?: () => void;
+}
 
-function openDialog(items: BoardItem[] = [], onApplied = vi.fn(), onClose = vi.fn()) {
-  render(<BoardTemplatesDialog items={items} onApplied={onApplied} onClose={onClose} />);
+function openDialog(
+  items: BoardItem[] = [],
+  { staged = false, onStage = vi.fn(), onUnstage = vi.fn() }: PanelHandlers = {},
+  mobile: BoardItem[] = []
+) {
+  return render(<TemplatesPanel lists={{ items, mobile }} staged={staged} onStage={onStage} onUnstage={onUnstage} />);
 }
 
 function pasteTemplate(json: string) {
@@ -55,46 +59,43 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe("BoardTemplatesDialog", () => {
+describe("TemplatesPanel", () => {
   it("shows the templates alone, with no choice of look", () => {
     openDialog();
 
-    expect(screen.getByRole("dialog", { name: "Templates" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Board template JSON")).toBeInTheDocument();
     expect(screen.queryByRole("radio")).toBeNull();
   });
 
-  it("closes from its close button", () => {
-    const onClose = vi.fn();
-    openDialog([], vi.fn(), onClose);
-
-    fireEvent.click(screen.getByRole("button", { name: "Close" }));
-
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("links the templates to their documentation", () => {
-    openDialog();
-
-    expect(screen.getByRole("link", { name: "Documentation" })).toHaveAttribute(
-      "href",
-      "https://docs.synthseek.dev/widget-templates"
-    );
-  });
-
-  it("checks a pasted template before applying it, then hands the applied board up", () => {
-    const onApplied = vi.fn();
-    openDialog([], onApplied);
+  it("checks a pasted template before staging it, and hands it up without applying anything", () => {
+    const onStage = vi.fn<StageTemplate>();
+    openDialog([], { onStage });
     pasteTemplate('{"kind":"synthseek-board-template"}');
     expect(screen.queryByRole("button", { name: "Apply template" })).toBeNull();
 
     fireEvent.click(screen.getByRole("button", { name: "Check" }));
     act(() => mocks.preview.mock.calls[0]?.[1].onSuccess(READABLE));
 
-    expect(screen.getByText("Crates: 3 widgets on the board")).toBeInTheDocument();
+    expect(screen.getByText("Crates: 3 widgets on Desktop")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Apply template" }));
-    expect(mocks.apply.mock.calls[0]?.[0]).toEqual({ json: '{"kind":"synthseek-board-template"}' });
-    act(() => mocks.apply.mock.calls[0]?.[1].onSuccess(APPLIED));
-    expect(onApplied).toHaveBeenCalledWith(APPLIED);
+    expect(onStage).toHaveBeenCalledWith('{"kind":"synthseek-board-template"}', READABLE);
+  });
+
+  it("says a staged template waits for Save, and takes it back out when the field changes", () => {
+    const onUnstage = vi.fn();
+    const view = openDialog([], { onUnstage });
+    pasteTemplate("{}");
+    fireEvent.click(screen.getByRole("button", { name: "Check" }));
+    act(() => mocks.preview.mock.calls[0]?.[1].onSuccess(READABLE));
+
+    view.rerender(<TemplatesPanel lists={{ items: [], mobile: [] }} staged onStage={vi.fn()} onUnstage={onUnstage} />);
+
+    expect(
+      screen.getByText("This template is in the arrangement. Save changes to put it on your board.")
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Apply template" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(onUnstage).toHaveBeenCalledTimes(1);
   });
 
   it("drops a check that answers for text the member has since replaced", () => {
@@ -105,7 +106,7 @@ describe("BoardTemplatesDialog", () => {
 
     act(() => mocks.preview.mock.calls[0]?.[1].onSuccess(READABLE));
 
-    expect(screen.queryByText("Crates: 3 widgets on the board")).toBeNull();
+    expect(screen.queryByText("Crates: 3 widgets on Desktop")).toBeNull();
     expect(screen.queryByRole("button", { name: "Apply template" })).toBeNull();
   });
 
@@ -134,14 +135,15 @@ describe("BoardTemplatesDialog", () => {
     expect(screen.queryByRole("button", { name: "Apply template" })).toBeNull();
   });
 
-  it("exports the board it is given under the name typed", () => {
-    const items = [{ kind: "builtin" as const, id: "t", widget: "charts" as const, size: "M" as const }];
-    openDialog(items);
+  it("exports both arrangements of the board it is given under the name typed", () => {
+    const items: BoardItem[] = [{ kind: "builtin", id: "t", widget: "charts", size: "M" }];
+    const mobile: BoardItem[] = [{ kind: "builtin", id: "m", widget: "genres", size: "S" }];
+    openDialog(items, {}, mobile);
     fireEvent.change(screen.getByLabelText("Template name"), { target: { value: "  Crates  " } });
 
     fireEvent.click(screen.getByRole("button", { name: "Copy JSON" }));
 
-    expect(mocks.exporter.mock.calls[0]?.[0]).toEqual({ name: "Crates", description: "", items });
+    expect(mocks.exporter.mock.calls[0]?.[0]).toEqual({ name: "Crates", description: "", items, mobile });
   });
 
   it("says so when a chosen template file cannot be read", async () => {

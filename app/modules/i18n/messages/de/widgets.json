@@ -29,6 +29,8 @@
     "playlist": "Smarte Playlist · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Zum Board hinzufügen",
+    "addWhileTemplate": "Speichere oder verwirf zuerst die Vorlage, dann füge deine Widgets hinzu.",
+    "deleteWhileTemplate": "Speichere oder verwirf zuerst die Vorlage, dann lösche dein Widget.",
     "addNamed": "{{name}} zum Board hinzufügen",
     "onBoard": "Auf dem Board",
     "edit": "Bearbeiten",
@@ -53,6 +55,25 @@
     "deleteWithTiles_other": "Das Widget wird aus Meine Widgets und von seinen {{count}} Kacheln auf deinem Board entfernt."
   },
   "board": {
+    "customization": {
+      "action": "Board-Anpassung",
+      "title": "Board-Anpassung",
+      "sections": {
+        "label": "Bereiche der Board-Anpassung",
+        "board": "Board",
+        "widgets": "Widgets"
+      }
+    },
+    "layouts": {
+      "label": "Anordnung",
+      "items": "Desktop",
+      "mobile": "Mobil",
+      "both": "Beide"
+    },
+    "settings": {
+      "tabs": "Bereiche der Board-Einstellungen",
+      "discardForTemplate": "Die Vorlage ersetzt das Board, daher gehen deine ungespeicherten Änderungen verloren."
+    },
     "appearance": {
       "title": "Aussehen",
       "density": "Dichte",
@@ -84,20 +105,24 @@
       "copied": "Board-Vorlage kopiert",
       "copyFailed": "Dieser Browser hat sie nicht kopiert. Versuche es über HTTPS oder erlaube den Zugriff auf die Zwischenablage.",
       "import": "Vorlage importieren",
-      "importHint": "Füge das JSON ein oder wähle eine .json-Datei. Nichts ändert sich, bevor du sie anwendest.",
+      "importHint": "Füge das JSON ein oder wähle eine .json-Datei. Beim Anwenden erscheint sie in der Anordnung, und nichts ändert sich, bevor du speicherst.",
       "field": "JSON der Board-Vorlage",
       "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
       "file": "Datei wählen",
       "fileFailed": "Diese Datei konnte nicht gelesen werden. Wähle sie erneut oder füge ihr JSON ein.",
       "check": "Prüfen",
       "apply": "Vorlage anwenden",
+      "staged": "Diese Vorlage ist in der Anordnung. Speichere die Änderungen, um sie auf dein Board zu bringen.",
       "cancel": "Abbrechen",
-      "summary_one": "{{name}}: {{count}} Widget auf dem Board",
-      "summary_other": "{{name}}: {{count}} Widgets auf dem Board",
+      "summary_one": "{{name}}: {{count}} Widget auf Desktop",
+      "summary_other": "{{name}}: {{count}} Widgets auf Desktop",
+      "mobileSummary_one": "{{count}} Widget auf Mobil",
+      "mobileSummary_other": "{{count}} Widgets auf Mobil",
       "created_one": "{{count}} neues Widget in Meine Widgets",
       "created_other": "{{count}} neue Widgets in Meine Widgets",
       "look": "Aussehen: {{density}}, Text {{text}}",
       "skipped": "Kachel {{position}} übersprungen: {{reason}}",
+      "skippedMobile": "Mobile Kachel {{position}} übersprungen: {{reason}}",
       "reasons": {
         "unreadable": "kein Synthseek-Widget",
         "unknownWidget": "ihr Widget ist nicht in der Vorlage",
@@ -337,6 +362,7 @@
     "topN": "Top",
     "overDays": "über Tage",
     "kbps": "kbit/s",
+    "times": "Mal",
     "percent": "%",
     "text": {
       "genreName_is": "Genre ist {{value}}",

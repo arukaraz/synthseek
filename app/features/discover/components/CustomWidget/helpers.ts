@@ -11,6 +11,7 @@ import {
   trackRequestItem,
 } from "@features/content-detail";
 import type {
+  FeedNeed,
   FeedWidgetResult,
   RecipeWidgetResult,
   SetListResult,
@@ -37,6 +38,7 @@ import { compactCount } from "../helpers";
 import { MINUTES_PER_HOUR } from "../WidgetStory/constants";
 import { storyCoversOf, storyNoteOf, storyPagesOf } from "../WidgetStory/helpers";
 import {
+  FEED_NEED_HREFS,
   HOUR_LABEL_YEAR,
   MATRIX_HOURS,
   MATRIX_WEEKDAYS,
@@ -52,6 +54,7 @@ import type {
   BlockSuggestionInput,
   CustomWidgetNoteInput,
   MoveDirection,
+  SettingsLinkNoteProps,
   WidgetHandlers,
   WidgetItem,
   WidgetItemActions,
@@ -688,13 +691,22 @@ export function itemControls(item: WidgetItem, action: WidgetAction, handlers: W
   return { onSelect };
 }
 
-export function customWidgetNote({ result, isError, empty }: CustomWidgetNoteInput): string | null {
+export function feedNeedNote(need: FeedNeed): SettingsLinkNoteProps {
+  return { i18nKey: `customWidget.needs.${need}`, href: FEED_NEED_HREFS[need] };
+}
+
+export function customWidgetNote({
+  result,
+  isError,
+  empty,
+}: CustomWidgetNoteInput): string | SettingsLinkNoteProps | null {
   if (isError) return i18n.t("discover:board.loadError");
-  if (result?.type === "feed" && result.needs !== null) {
-    return i18n.t(`discover:customWidget.needs.${result.needs}`);
-  }
+  if (result?.type === "feed" && result.needs !== null) return feedNeedNote(result.needs);
   if (result?.type === "feed" && result.dataset === "items" && result.failure !== null) {
     return i18n.t(`discover:customWidget.news.${result.failure}`);
+  }
+  if (result?.type === "feed" && result.dataset === "events" && result.failure === "refused") {
+    return { i18nKey: "customWidget.events.refused", href: FEED_NEED_HREFS.bandsintown };
   }
   if (result?.type === "feed" && result.dataset === "events" && result.failure !== null) {
     return i18n.t(`discover:customWidget.events.${result.failure}`);

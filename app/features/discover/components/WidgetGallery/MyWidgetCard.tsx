@@ -1,6 +1,6 @@
 "use client";
 
-import { Braces, Check, Copy, ListMusic, Pencil, Plus, Trash2 } from "lucide-react";
+import { Braces, Check, Copy, ListMusic, Pencil, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
@@ -10,6 +10,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@components/ui/Tooltip"
 import { widgetIconOf } from "../CustomWidget/helpers";
 import { ClampedText } from "./ClampedText";
 import { CustomWidgetPreview } from "./CustomWidgetPreview";
+import { LayoutMenu } from "./LayoutMenu";
+import { LockedAction } from "./LockedAction";
 import {
   cardIcon,
   cardPreview,
@@ -28,7 +30,16 @@ import {
 } from "./styles";
 import type { MyWidgetCardProps } from "./types";
 
-export function MyWidgetCard({ widget, tiles, onAdd, onEdit, onDuplicate, onCopyJson, onDelete }: MyWidgetCardProps) {
+export function MyWidgetCard({
+  widget,
+  free,
+  templateStaged,
+  onAdd,
+  onEdit,
+  onDuplicate,
+  onCopyJson,
+  onDelete,
+}: MyWidgetCardProps) {
   const { t } = useTranslation("widgets");
   const Icon = widgetIconOf(widget.meta.icon);
   const name = widget.meta.name;
@@ -81,16 +92,20 @@ export function MyWidgetCard({ widget, tiles, onAdd, onEdit, onDuplicate, onCopy
         </p>
         {widget.basedOn ? <p className={mineBasedOn()}>{t("mine.basedOn", { name: widget.basedOn })}</p> : null}
         <div className={mineActions()}>
-          {tiles > 0 ? (
+          {free.length === 0 ? (
             <span className={onBoardPill()}>
               <Check className="size-3.5" aria-hidden />
               {t("mine.onBoard")}
             </span>
           ) : (
-            <Button size="sm" aria-label={t("mine.addNamed", { name })} onClick={onAdd}>
-              <Plus />
-              {t("mine.addToBoard")}
-            </Button>
+            <LayoutMenu
+              lists={free}
+              tone="add"
+              label={t("mine.addToBoard")}
+              ariaLabel={t("mine.addNamed", { name })}
+              onPick={onAdd}
+              lockedHint={templateStaged ? t("mine.addWhileTemplate") : undefined}
+            />
           )}
           <Button variant="ghost" size="sm" aria-label={t("mine.editNamed", { name })} onClick={onEdit}>
             <Pencil />
@@ -106,15 +121,30 @@ export function MyWidgetCard({ widget, tiles, onAdd, onEdit, onDuplicate, onCopy
               title={t("mine.duplicate")}
               onClick={onDuplicate}
             />
-            <IconButton
-              icon={Trash2}
-              size="lg"
-              variant="ghostRed"
-              animated={false}
-              aria-label={t("mine.deleteNamed", { name })}
-              title={t("mine.delete")}
-              onClick={onDelete}
-            />
+            {templateStaged ? (
+              <LockedAction label={t("mine.deleteNamed", { name })} hint={t("mine.deleteWhileTemplate")}>
+                <IconButton
+                  icon={Trash2}
+                  size="lg"
+                  variant="ghostRed"
+                  animated={false}
+                  aria-label={t("mine.deleteNamed", { name })}
+                  aria-hidden
+                  tabIndex={-1}
+                  disabled
+                />
+              </LockedAction>
+            ) : (
+              <IconButton
+                icon={Trash2}
+                size="lg"
+                variant="ghostRed"
+                animated={false}
+                aria-label={t("mine.deleteNamed", { name })}
+                title={t("mine.delete")}
+                onClick={onDelete}
+              />
+            )}
           </span>
         </div>
       </div>

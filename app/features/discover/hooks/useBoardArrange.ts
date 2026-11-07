@@ -8,6 +8,7 @@ import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
 import { useBoardFlip } from "@hooks/ui/board/useBoardFlip";
 
+import { rebaseDraft } from "../components/BoardArrange/helpers";
 import type { UseBoardArrangeOptions } from "../components/BoardArrange/types";
 import {
   moveItem,
@@ -18,11 +19,17 @@ import {
   resizeSpacer,
   sameSlot,
   toggleBackground,
+  withBackgrounds,
 } from "../components/ExploreBoard/helpers";
 import type { BoardEdge, MoveDelta } from "../components/ExploreBoard/types";
 
 export function useBoardArrange({ items, custom }: UseBoardArrangeOptions) {
   const [draft, setDraft] = useState<BoardItem[]>(() => [...items]);
+  const [baseline, setBaseline] = useState(items);
+  if (baseline !== items) {
+    setBaseline(items);
+    setDraft((current) => rebaseDraft(current, baseline, items));
+  }
   const flipRef = useRef<BoardFlip | null>(null);
 
   const settling = useCallback(() => flipRef.current?.settling() ?? false, []);
@@ -53,6 +60,9 @@ export function useBoardArrange({ items, custom }: UseBoardArrangeOptions) {
   );
   const toggleTileBackground = useCallback((id: string) => setDraft((current) => toggleBackground(current, id)), []);
   const remove = useCallback((id: string) => setDraft((current) => removeItem(current, id)), []);
+  const replace = useCallback((next: readonly BoardItem[]) => setDraft([...next]), []);
+  const update = useCallback((change: (current: BoardItem[]) => BoardItem[]) => setDraft(change), []);
+  const setBackgrounds = useCallback((shown: boolean) => setDraft((current) => withBackgrounds(current, shown)), []);
 
   const actions = useMemo(
     () => ({
@@ -73,6 +83,9 @@ export function useBoardArrange({ items, custom }: UseBoardArrangeOptions) {
     displayItems,
     draggingId: drag.draggingId,
     dirty: orderKeyOf(draft) !== orderKeyOf(items),
+    replace,
+    update,
+    setBackgrounds,
     actions,
   };
 }

@@ -2,6 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
+import { SettingsLinkNote } from "../CustomWidget/SettingsLinkNote";
 import { problemText } from "../WidgetGallery/helpers";
 import { importProblem, importProblems } from "../WidgetGallery/styles";
 import { templateReportLines } from "./helpers";
@@ -34,7 +35,7 @@ export function TemplateReport({ report }: TemplateReportProps) {
           <span className={reportBullet()} aria-hidden>
             •
           </span>
-          <span>{line.text}</span>
+          <span>{typeof line.text === "string" ? line.text : <SettingsLinkNote {...line.text} />}</span>
         </li>
       ))}
     </ul>

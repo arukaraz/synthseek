@@ -8,17 +8,27 @@ import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 import { createWidget, createWidgetCatalog, createWidgetGrammar, createWidgetPreset } from "@test/factories";
 import { fireEvent, render, screen, within } from "@test/test-utils";
 
-import type { BoardGalleryTarget } from "../../ExploreBoard/types";
-import { WidgetGallery } from "../WidgetGallery";
+import { customWidgetsById } from "../../ExploreBoard/helpers";
+import type { BoardCustomizationSave, BoardGalleryTarget } from "../../ExploreBoard/types";
+import { BoardCustomizationDialog } from "../BoardCustomizationDialog";
 
-const { stub, viewport } = vi.hoisted(() => ({
+const { stub } = vi.hoisted(() => ({
   stub:
     (name: string) =>
     ({ size }: { size: string }) => <div data-preview={name} data-size={size} />,
-  viewport: { wide: true },
 }));
 
-vi.mock("@hooks/ui/useMediaQuery", () => ({ useMediaQuery: () => viewport.wide }));
+vi.mock("@hooks/ui/useElementWidth", () => ({ useElementWidth: () => [() => undefined, 0] }));
+vi.mock("@hooks/ui/useElementHeight", () => ({ useElementHeight: () => [() => undefined, 0] }));
+vi.mock("@hooks/api/mutations/board/usePreviewBoardTemplate", () => ({
+  usePreviewBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+vi.mock("@hooks/api/mutations/board/useApplyBoardTemplate", () => ({
+  useApplyBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+vi.mock("@hooks/api/mutations/board/useExportBoardTemplate", () => ({
+  useExportBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
+}));
 vi.mock("../../TrendingHero/TrendingHero", () => ({ TrendingHero: stub("trending") }));
 vi.mock("../../DiscoveryMixes/DiscoveryMixes", () => ({ DiscoveryMixes: stub("mixes") }));
 vi.mock("../../ArtistSpotlight/ArtistSpotlight", () => ({ ArtistSpotlight: stub("artistsNext") }));
@@ -135,14 +145,21 @@ const ON_BOARD: BoardItem[] = [
 
 function renderGallery(items: BoardItem[] = ON_BOARD, target: BoardGalleryTarget | null = null) {
   const handlers = {
-    onAdd: vi.fn(),
-    onAddCustom: vi.fn(),
-    onRemove: vi.fn(),
+    onSave: vi.fn<(save: BoardCustomizationSave) => void>(),
+    onTemplateApplied: vi.fn(),
     onClose: vi.fn(),
   };
   render(
     <TooltipProvider>
-      <WidgetGallery items={items} target={target} {...handlers} />
+      <BoardCustomizationDialog
+        lists={{ items, mobile: items }}
+        device="wide"
+        opening={{ section: "widgets", target, boardWidth: 1200 }}
+        appearance={{ density: "comfortable", text: "default" }}
+        custom={customWidgetsById(myWidgets.data)}
+        customStatus="ready"
+        {...handlers}
+      />
     </TooltipProvider>
   );
   return handlers;
@@ -158,13 +175,17 @@ function cardTitles(): string[] {
     .map((heading) => heading.textContent ?? "");
 }
 
+async function pickLayout(trigger: string, layout: string) {
+  fireEvent.pointerDown(screen.getByRole("button", { name: trigger }), { button: 0, pointerType: "mouse" });
+  fireEvent.click(await screen.findByRole("menuitem", { name: layout }));
+}
+
 afterEach(() => {
-  viewport.wide = true;
   myWidgets.data = [];
   vi.clearAllMocks();
 });
 
-describe("WidgetGallery", () => {
+describe("BoardCustomizationDialog widgets", () => {
   it("lists every widget in the suggested order with a scaled live preview at the default size", () => {
     renderGallery();
 
@@ -185,22 +206,33 @@ describe("WidgetGallery", () => {
     expect(screen.getByText(i18n.t("discover:board.gallery.empty", { query: "zzz" }))).toBeInTheDocument();
   });
 
-  it("removes a widget already on the board by its tile id and adds one that is not", () => {
+  it("takes a widget off the board and puts another on it in the draft, reaching the board on Save", async () => {
     const handlers = renderGallery();
 
-    fireEvent.click(screen.getByRole("button", { name: "Remove Recent Scrobbles" }));
-    fireEvent.click(screen.getByRole("button", { name: "Add Trending now" }));
+    await pickLayout("Remove Recent Scrobbles", "Both");
+    await pickLayout("Add Trending now", "Desktop");
 
-    expect(handlers.onRemove).toHaveBeenCalledWith("s1");
-    expect(handlers.onAdd).toHaveBeenCalledWith("trending");
+    expect(handlers.onSave).not.toHaveBeenCalled();
     expect(screen.getAllByText(i18n.t("discover:board.gallery.onBoard"))).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+    expect(handlers.onSave).toHaveBeenCalledWith({
+      lists: {
+        items: [ON_BOARD[1], expect.objectContaining({ kind: "builtin", widget: "trending" })],
+        mobile: [ON_BOARD[1]],
+      },
+      appearance: null,
+    });
   });
 
-  it("offers the widgets and My widgets, with no Board tab", () => {
+  it("offers the widgets and My widgets as the lists of the Widgets section", () => {
     renderGallery();
 
-    expect(screen.getByRole("dialog", { name: i18n.t("discover:board.gallery.title") })).toBeInTheDocument();
-    expect(screen.getAllByRole("tab").map((tab) => tab.textContent)).toEqual(["Widgets", "My widgets"]);
+    expect(screen.getByRole("dialog", { name: "Board Customization" })).toBeInTheDocument();
+    expect(
+      within(screen.getByRole("tablist", { name: "Widget lists" }))
+        .getAllByRole("tab")
+        .map((tab) => tab.textContent)
+    ).toEqual(["Widgets", "My widgets"]);
   });
 
   it("closes from its close button", () => {
@@ -211,19 +243,7 @@ describe("WidgetGallery", () => {
     expect(handlers.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("puts the focus in the search field on a wide screen", () => {
-    renderGallery();
-    expect(document.activeElement).toBe(screen.getByRole("searchbox"));
-  });
-
-  it("leaves the search field unfocused on a phone, where focus would raise the keyboard", () => {
-    viewport.wide = false;
-    renderGallery();
-
-    expect(document.activeElement).not.toBe(screen.getByRole("searchbox"));
-  });
-
-  it("shows my widgets with their board state and ends the grid with the new widget card", () => {
+  it("shows my widgets with their board state and ends the grid with the new widget card", async () => {
     myWidgets.data = [createWidget(), createWidget({ id: "w_2", meta: { ...createWidget().meta, name: "Deep" } })];
     const handlers = renderGallery();
     openMine();
@@ -232,20 +252,28 @@ describe("WidgetGallery", () => {
     expect(cards.map((card) => card.getAttribute("aria-label"))).toEqual(["Most played", "Deep"]);
     expect(within(cards[0]).getByText("On board")).toBeInTheDocument();
     expect(within(cards[0]).getByText("List · Recipe")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Add Deep to the board" }));
-    expect(handlers.onAddCustom).toHaveBeenCalledWith(expect.objectContaining({ id: "w_2" }));
     expect(screen.getByRole("button", { name: "New widget" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "From JSON" })).toBeInTheDocument();
+    await pickLayout("Add Deep to the board", "Mobile");
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
+
+    expect(handlers.onSave).toHaveBeenCalledWith({
+      lists: {
+        items: ON_BOARD,
+        mobile: [...ON_BOARD, expect.objectContaining({ kind: "custom", widgetId: "w_2" })],
+      },
+      appearance: null,
+    });
   });
 
-  it("asks before deleting a widget and names its tiles on the board", () => {
+  it("asks before deleting a widget and counts its tiles on both layouts", () => {
     myWidgets.data = [createWidget()];
     renderGallery();
     openMine();
 
     fireEvent.click(screen.getByRole("button", { name: "Delete Most played" }));
     expect(
-      screen.getByText("The widget is removed from My widgets and from its tile on your board.")
+      screen.getByText("The widget is removed from My widgets and from its 2 tiles on your board.")
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Delete" }));
     expect(removeWidget).toHaveBeenCalledWith({ id: "w_1" }, expect.anything());
@@ -261,10 +289,10 @@ describe("WidgetGallery", () => {
 
     expect(
       screen.getByText(
-        "Show me a daily pick of 8 tracks with the most plays all time, where plays in the window at least 10 and not played in the last 180 days."
+        "Show me a daily pick of 8 tracks with the most plays all time, where played at least 10 times in the period and not played in the last 180 days."
       )
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Remove rule: plays in the window at least 10" }));
+    fireEvent.click(screen.getByRole("button", { name: "Remove rule: played at least 10 times in the period" }));
     expect(
       screen.getByText(
         "Show me a daily pick of 8 tracks with the most plays all time, where not played in the last 180 days."
@@ -279,9 +307,12 @@ describe("WidgetGallery", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Where" }));
     expect(screen.queryByRole("button", { name: /^Edit rule/ })).not.toBeInTheDocument();
+    expect(screen.getByText("times")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Add rule" }));
-    expect(screen.getByRole("button", { name: "Edit rule: plays in the window at least 5" })).toBeInTheDocument();
-    expect(screen.getByText(/where plays in the window at least 5\.$/)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Edit rule: played at least 5 times in the period" })
+    ).toBeInTheDocument();
+    expect(screen.getByText(/where played at least 5 times in the period\.$/)).toBeInTheDocument();
   });
 
   it("leaves a clean workshop without asking and asks before discarding changes", () => {

@@ -6,3 +6,9 @@ export function splitHashHref(href: string): HashHrefParts {
 
   return { path: href.slice(0, separator), hash: href.slice(separator + 1) };
 }
+
+export function pathnameOf(href: string): string {
+  const { path } = splitHashHref(href);
+  const query = path.indexOf("?");
+  return query === -1 ? path : path.slice(0, query);
+}

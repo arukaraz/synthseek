@@ -29,6 +29,8 @@
     "playlist": "Smart playlist · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Add to board",
+    "addWhileTemplate": "Save or cancel the template first, then add your own widgets.",
+    "deleteWhileTemplate": "Save or cancel the template first, then delete your widget.",
     "addNamed": "Add {{name}} to the board",
     "onBoard": "On board",
     "edit": "Edit",
@@ -53,6 +55,25 @@
     "deleteWithTiles_other": "The widget is removed from My widgets and from its {{count}} tiles on your board."
   },
   "board": {
+    "customization": {
+      "action": "Board Customization",
+      "title": "Board Customization",
+      "sections": {
+        "label": "Board Customization sections",
+        "board": "Board",
+        "widgets": "Widgets"
+      }
+    },
+    "layouts": {
+      "label": "Arrangement",
+      "items": "Desktop",
+      "mobile": "Mobile",
+      "both": "Both"
+    },
+    "settings": {
+      "tabs": "Board settings sections",
+      "discardForTemplate": "The template replaces the board, so your unsaved changes will be lost."
+    },
     "appearance": {
       "title": "Appearance",
       "density": "Density",
@@ -84,20 +105,24 @@
       "copied": "Board template copied",
       "copyFailed": "This browser would not copy it. Try again over HTTPS, or allow clipboard access.",
       "import": "Import a template",
-      "importHint": "Paste the JSON or choose a .json file. Nothing changes until you apply it.",
+      "importHint": "Paste the JSON or choose a .json file. Applying it shows it in the arrangement, and nothing changes until you save.",
       "field": "Board template JSON",
       "placeholder": "{ \"kind\": \"synthseek-board-template\", ... }",
       "file": "Choose file",
       "fileFailed": "That file could not be read. Choose it again or paste its JSON.",
       "check": "Check",
       "apply": "Apply template",
+      "staged": "This template is in the arrangement. Save changes to put it on your board.",
       "cancel": "Cancel",
-      "summary_one": "{{name}}: {{count}} widget on the board",
-      "summary_other": "{{name}}: {{count}} widgets on the board",
+      "summary_one": "{{name}}: {{count}} widget on Desktop",
+      "summary_other": "{{name}}: {{count}} widgets on Desktop",
+      "mobileSummary_one": "{{count}} widget on Mobile",
+      "mobileSummary_other": "{{count}} widgets on Mobile",
       "created_one": "{{count}} new widget in My widgets",
       "created_other": "{{count}} new widgets in My widgets",
       "look": "Look: {{density}}, {{text}} text",
       "skipped": "Tile {{position}} skipped: {{reason}}",
+      "skippedMobile": "Mobile tile {{position}} skipped: {{reason}}",
       "reasons": {
         "unreadable": "not a Synthseek widget",
         "unknownWidget": "its widget is not in the template",
@@ -291,7 +316,7 @@
       "mood": "Mood",
       "tempo": "Tempo",
       "energy": "Energy",
-      "plays": "Plays in the window",
+      "plays": "Plays in the period",
       "notPlayedInLast": "Not played in the last",
       "addedOlderThan": "Added more than",
       "bitrate": "Bitrate",
@@ -337,6 +362,7 @@
     "topN": "Top",
     "overDays": "over days",
     "kbps": "kbps",
+    "times": "times",
     "percent": "%",
     "text": {
       "genreName_is": "genre is {{value}}",
@@ -357,8 +383,8 @@
       "mood_isNot": "mood is not {{value}}",
       "tempo": "tempo is {{value}}",
       "energy": "energy is {{value}}",
-      "plays_gte": "plays in the window at least {{value}}",
-      "plays_lte": "plays in the window at most {{value}}",
+      "plays_gte": "played at least {{value}} times in the period",
+      "plays_lte": "played at most {{value}} times in the period",
       "notPlayedInLast": "not played in the last {{value}} days",
       "addedOlderThan": "added more than {{value}} days ago",
       "bitrate_lt": "bitrate below {{value}} kbps",

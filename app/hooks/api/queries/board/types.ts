@@ -5,6 +5,8 @@ type BoardOutputs = inferRouterOutputs<AppRouter>["discovery"]["board"];
 type BoardInputs = inferRouterInputs<AppRouter>["discovery"]["board"];
 
 export type BoardLayout = BoardOutputs["save"];
+export type BoardList = Exclude<keyof BoardLayout, "schemaVersion">;
+export type BoardLists = Pick<BoardLayout, BoardList>;
 export type BoardItem = BoardLayout["items"][number];
 export type BuiltinBoardItem = Extract<BoardItem, { kind: "builtin" }>;
 export type BoardWidgetKey = BuiltinBoardItem["widget"];

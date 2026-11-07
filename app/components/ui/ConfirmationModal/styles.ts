@@ -40,7 +40,7 @@ export const confirmActionButton = cva(
 
 export type ConfirmActionButtonProps = VariantProps<typeof confirmActionButton>;
 
-export const confirmDialogContent = "max-w-md bg-surface/95 sm:bg-surface/90 sm:backdrop-blur-2xl";
+export const confirmDialogContent = "max-w-md bg-surface/95";
 
 export const confirmFooter = "mt-6 gap-2 sm:gap-3";
 

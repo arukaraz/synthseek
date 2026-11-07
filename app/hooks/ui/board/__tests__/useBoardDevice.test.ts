@@ -13,10 +13,10 @@ vi.mock("@hooks/ui/useMediaQuery", () => ({
 }));
 
 describe("useBoardDevice", () => {
-  it("is wide from 64rem and narrow below it", () => {
+  it("is wide from 48rem, a tablet included, and narrow below it", () => {
     media.matches = true;
     expect(renderHook(() => useBoardDevice()).result.current).toBe("wide");
-    expect(media.query).toHaveBeenCalledWith("(min-width: 64rem)", true);
+    expect(media.query).toHaveBeenCalledWith("(min-width: 48rem)", true);
 
     media.matches = false;
     expect(renderHook(() => useBoardDevice()).result.current).toBe("narrow");

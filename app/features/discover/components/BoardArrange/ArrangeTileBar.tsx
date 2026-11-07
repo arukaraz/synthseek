@@ -27,7 +27,7 @@ export function ArrangeTileBar({ item, device, name, position, total, actions }:
       </button>
       <span className={arrangeName()}>{name}</span>
       <div className={arrangeTools()}>
-        <BoardTileSizes item={item} device={device} name={name} dense onResize={actions.resize} />
+        <BoardTileSizes item={item} name={name} dense onResize={actions.resize} />
         <TileSettingsMenu
           item={item}
           device={device}

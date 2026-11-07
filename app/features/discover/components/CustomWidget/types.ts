@@ -5,6 +5,7 @@ import type { DetailTarget } from "@features/content-detail";
 import type { BoardSize } from "@hooks/api/queries/board/types";
 import type { PlayableTracksTarget } from "@hooks/api/queries/library/types";
 import type {
+  FeedNeed,
   WidgetAccent,
   WidgetBlock,
   WidgetDocument,
@@ -14,6 +15,11 @@ import type {
 
 import type { CustomWidgetsStatus } from "../ExploreBoard/types";
 import type { StoryPage } from "../WidgetStory/types";
+
+export interface SettingsLinkNoteProps {
+  i18nKey: `customWidget.needs.${FeedNeed}` | "customWidget.events.refused";
+  href: string;
+}
 
 export type WidgetMove = { kind: "rank"; by: number } | { kind: "value"; by: number } | { kind: "new" };
 

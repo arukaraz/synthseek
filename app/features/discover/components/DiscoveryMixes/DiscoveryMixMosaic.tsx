@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 
 import { tileGradient } from "./helpers";
 import { mosaicFallback, mosaicGrid, mosaicImage, mosaicTile } from "./styles";
@@ -24,7 +24,7 @@ export function DiscoveryMixMosaic({ covers: images, fallbackSeed, shape = "squa
         if (url) {
           return (
             <div key={key} className={mosaicTile()}>
-              <Image src={artworkProxySrc(url)} alt="" fill sizes="120px" className={mosaicImage()} unoptimized />
+              <Image {...artworkImage(url)} alt="" fill sizes="120px" className={mosaicImage()} />
             </div>
           );
         }

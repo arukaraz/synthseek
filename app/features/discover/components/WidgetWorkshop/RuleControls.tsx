@@ -233,6 +233,7 @@ export function RuleControls({ rule, limits, people, playlists = [], onChange }:
             {...NUMBER_BOUNDS.count}
             onChange={(value) => onChange({ ...rule, value })}
           />
+          <span className={stepText()}>{t("widgets:rules.times")}</span>
         </>
       );
     case "notPlayedInLast":

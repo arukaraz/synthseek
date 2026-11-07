@@ -187,7 +187,6 @@
     "customize": "Personalizar",
     "done": "Listo",
     "addWidget": "Añadir widget",
-    "manageWidgets": "Gestionar widgets",
     "add": {
       "action": "Añadir"
     },
@@ -197,8 +196,6 @@
       "taller": "Hacer el espaciador más alto"
     },
     "arrange": {
-      "action": "Ordenar",
-      "title": "Ordena tu tablero",
       "hint": "Arrastra un widget para moverlo, o suéltalo bajo el tablero para empezar una fila nueva. Nada cambia hasta que guardes.",
       "newRow": "Fila nueva",
       "empty": "Tu tablero quedará vacío.",
@@ -235,8 +232,7 @@
       "L": "Grande"
     },
     "gallery": {
-      "title": "Gestionar widgets",
-      "subtitle": "Añadir coloca un widget al final del tablero, donde cambias su tamaño. Personalizar abre una copia en el taller.",
+      "subtitle": "Añadir coloca un widget al final de la disposición que elijas. Personalizar abre una copia en el taller.",
       "seeMore": "Ver más",
       "seeLess": "Ver menos",
       "summary": "{{onBoard}} de {{total}} en tu tablero. Un widget nuevo se coloca al final; luego muévelo donde quieras.",
@@ -254,8 +250,7 @@
       "added": "{{name}} añadido al final",
       "removed": "{{name}} quitado",
       "moved": "Tablero guardado",
-      "backgroundsOn": "Fondo activado en todos los widgets",
-      "backgroundsOff": "Fondo desactivado en todos los widgets",
+      "saved": "Cambios del tablero guardados",
       "undo": "Deshacer"
     },
     "announce": {
@@ -544,17 +539,17 @@
     "deleted": "Este widget ya no existe. Quítalo del tablero con Personalizar.",
     "empty": "Nada coincide con este widget ahora mismo.",
     "needs": {
-      "lastfm": "Conecta Last.fm en Ajustes para llenar este widget.",
-      "listenbrainz": "Añade tu usuario de ListenBrainz en Ajustes para llenar este widget.",
-      "bandsintown": "Añade un app id de Bandsintown en Ajustes, Integraciones, para llenar este widget.",
-      "mediaServer": "Este widget necesita un servidor de medios conectado para la casa y tu cuenta en él vinculada en Cuentas conectadas.",
-      "plex": "Este widget necesita Plex conectado para la casa y tu cuenta de Plex vinculada en Cuentas conectadas.",
-      "jellyfin": "Este widget necesita Jellyfin conectado para la casa y tu cuenta de Jellyfin vinculada en Cuentas conectadas.",
-      "navidrome": "Este widget necesita Navidrome conectado para la casa y tu cuenta de Navidrome vinculada en Cuentas conectadas.",
-      "lidarr": "Este widget necesita Lidarr conectado en Ajustes, Integraciones, y solo los administradores y los miembros de confianza pueden leerlo."
+      "lastfm": "Conecta <field>Last.fm</field> para llenar este widget.",
+      "listenbrainz": "Añade tu <field>usuario de ListenBrainz</field> para llenar este widget.",
+      "bandsintown": "Añade un <field>app id de Bandsintown</field> para llenar este widget.",
+      "mediaServer": "Vincula tu <field>cuenta del servidor de medios</field> para llenar este widget, cuando haya un servidor de medios conectado para la casa.",
+      "plex": "Vincula tu <field>cuenta de Plex</field> para llenar este widget, cuando Plex esté conectado para la casa.",
+      "jellyfin": "Vincula tu <field>cuenta de Jellyfin</field> para llenar este widget, cuando Jellyfin esté conectado para la casa.",
+      "navidrome": "Vincula tu <field>cuenta de Navidrome</field> para llenar este widget, cuando Navidrome esté conectado para la casa.",
+      "lidarr": "Configura <field>Lidarr</field> para llenar este widget. Solo los administradores y los miembros de confianza pueden leerlo."
     },
     "events": {
-      "refused": "Bandsintown rechazó el app id. Revísalo en Ajustes, Integraciones.",
+      "refused": "Bandsintown rechazó el app id. Revisa el <field>app id de Bandsintown</field>.",
       "unreachable": "No se pudo contactar con Bandsintown en este momento."
     },
     "news": {

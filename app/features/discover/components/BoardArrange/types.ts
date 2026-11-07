@@ -3,6 +3,8 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import type { BoardDevice, BoardMetrics } from "@components/BoardGrid";
 import type { BoardAppearance, BoardItem } from "@hooks/api/queries/board/types";
 
+import type { useBoardArrange } from "../../hooks/useBoardArrange";
+
 import type {
   BoardCustomWidgets,
   BoardTileLayoutActions,
@@ -22,15 +24,15 @@ export interface ArrangeLayout {
   gapPx: number;
 }
 
-export interface BoardArrangeDialogProps {
-  items: readonly BoardItem[];
+export type BoardArrangeState = ReturnType<typeof useBoardArrange>;
+
+export interface BoardArrangePanelProps {
+  arrange: BoardArrangeState;
   device: BoardDevice;
   boardWidth: number;
   appearance?: BoardAppearance;
   custom: BoardCustomWidgets;
   customStatus: CustomWidgetsStatus;
-  onSave: (next: BoardItem[]) => void;
-  onClose: () => void;
 }
 
 export interface ArrangeTileProps {

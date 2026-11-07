@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Button } from "@components/ui/Button";
-import { useApplyBoardTemplate } from "@hooks/api/mutations/board/useApplyBoardTemplate";
 import { usePreviewBoardTemplate } from "@hooks/api/mutations/board/usePreviewBoardTemplate";
 import type { BoardTemplatePreview } from "@hooks/api/queries/board/types";
 
@@ -15,20 +14,19 @@ import { hiddenInput, settingHint, settingLabel, templateActions, templateBlock,
 import { TemplateReport } from "./TemplateReport";
 import type { TemplateImportProps } from "./types";
 
-export function TemplateImport({ onApplied }: TemplateImportProps) {
+export function TemplateImport({ staged, onStage, onUnstage }: TemplateImportProps) {
   const { t } = useTranslation("widgets");
   const [json, setJson] = useState("");
   const [report, setReport] = useState<BoardTemplatePreview | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const current = useRef(json);
   const preview = usePreviewBoardTemplate();
-  const apply = useApplyBoardTemplate();
   const reset = (next: string) => {
     current.current = next;
     setJson(next);
     setReport(null);
+    if (staged) onUnstage();
   };
-  const applicable = report?.ok === true && report.blocked === null;
 
   return (
     <div className={templateBlock()}>
@@ -61,6 +59,7 @@ export function TemplateImport({ onApplied }: TemplateImportProps) {
         }}
       />
       {report ? <TemplateReport report={report} /> : null}
+      {staged ? <span className={settingHint()}>{t("board.templates.staged")}</span> : null}
       <div className={templateActions()}>
         <Button variant="ghost" size="sm" onClick={() => fileInput.current?.click()}>
           <FileUp />
@@ -71,21 +70,7 @@ export function TemplateImport({ onApplied }: TemplateImportProps) {
             <Button variant="ghost" size="sm" onClick={() => reset("")}>
               {t("board.templates.cancel")}
             </Button>
-            <Button
-              size="sm"
-              disabled={!applicable || apply.isPending}
-              onClick={() =>
-                apply.mutate(
-                  { json },
-                  {
-                    onSuccess: (applied) => {
-                      reset("");
-                      onApplied(applied);
-                    },
-                  }
-                )
-              }
-            >
+            <Button size="sm" disabled={staged || report.blocked !== null} onClick={() => onStage(json, report)}>
               {t("board.templates.apply")}
             </Button>
           </>

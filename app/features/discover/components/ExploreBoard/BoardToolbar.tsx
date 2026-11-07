@@ -1,7 +1,6 @@
 "use client";
 
-import { Blocks, Check, LayoutGrid, LayoutTemplate, Palette, Plus, SquareDashed } from "lucide-react";
-import { AnimatePresence } from "framer-motion";
+import { Check, Plus, Settings2, SquareDashed } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -14,9 +13,7 @@ import { toastOffsetVars } from "@components/ui/Toaster/styles";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { useDockJobs } from "@hooks/api/subscriptions";
 import { usePlayerBottomDock } from "@hooks/ui/player";
-import { isTextEntryTarget } from "@utils/text-entry";
 
-import { AppearanceTray } from "../BoardSettings/AppearanceTray";
 import { CustomizeIcon } from "./CustomizeIcon";
 import {
   boardDock,
@@ -31,42 +28,15 @@ import {
 } from "./styles";
 import type { BoardToolbarProps } from "./types";
 
-export function BoardToolbar({
-  editing,
-  onCustomize,
-  onDone,
-  onManageWidgets,
-  onAddSpacer,
-  onArrange,
-  onTemplates,
-  background,
-  onBackground,
-}: BoardToolbarProps) {
+export function BoardToolbar({ editing, onCustomize, onDone, onAddSpacer, onCustomization }: BoardToolbarProps) {
   const { t } = useTranslation(["discover", "widgets"]);
   const dockVisible = useDockJobs().length > 0;
   const playerDock = usePlayerBottomDock();
   const [host, setHost] = useState<HTMLElement | null>(null);
-  const [trayOpen, setTrayOpen] = useState(false);
 
   useEffect(() => setHost(document.body), []);
 
-  useEffect(() => {
-    if (!trayOpen) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || event.defaultPrevented || isTextEntryTarget(event.target)) return;
-      event.preventDefault();
-      setTrayOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [trayOpen]);
-
   if (!host) return null;
-
-  const closingTray = (action: () => void) => () => {
-    setTrayOpen(false);
-    action();
-  };
 
   return createPortal(
     <div
@@ -79,9 +49,6 @@ export function BoardToolbar({
     >
       {editing ? (
         <div className={boardMenu()} role="toolbar" aria-label={t("board.customize")}>
-          <AnimatePresence initial={false}>
-            {trayOpen ? <AppearanceTray key="appearance" background={background} onBackground={onBackground} /> : null}
-          </AnimatePresence>
           <div className={boardMenuRow()}>
             <FadeScroll axis="x">
               <div className={boardMenuActions()}>
@@ -99,27 +66,9 @@ export function BoardToolbar({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button variant="ghost" size="sm" onClick={closingTray(onManageWidgets)}>
-                  <Blocks />
-                  {t("board.manageWidgets")}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={closingTray(onArrange)}>
-                  <LayoutGrid />
-                  {t("board.arrange.action")}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={boardMenuToggle()}
-                  aria-expanded={trayOpen}
-                  onClick={() => setTrayOpen((open) => !open)}
-                >
-                  <Palette />
-                  {t("widgets:board.appearance.title")}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={closingTray(onTemplates)}>
-                  <LayoutTemplate />
-                  {t("widgets:board.templates.title")}
+                <Button variant="ghost" size="sm" onClick={onCustomization}>
+                  <Settings2 />
+                  {t("widgets:board.customization.action")}
                 </Button>
               </div>
             </FadeScroll>
@@ -127,12 +76,7 @@ export function BoardToolbar({
             <TooltipProvider delayDuration={150}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    size="sm"
-                    className={boardMenuDone()}
-                    aria-label={t("board.done")}
-                    onClick={closingTray(onDone)}
-                  >
+                  <Button size="sm" className={boardMenuDone()} aria-label={t("board.done")} onClick={onDone}>
                     <Check />
                   </Button>
                 </TooltipTrigger>

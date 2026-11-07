@@ -2,7 +2,7 @@
 
 import { Badge } from "@components/ui/Badge";
 import { scale } from "@utils/animations";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { cardImagePlaceholder, cardHoverBorder, resultCard, cardInfo, cardTitle } from "../styles";
 import { motion } from "framer-motion";
 import { Music } from "lucide-react";
@@ -34,13 +34,12 @@ export function Card({ result, onResultClick }: CardProps) {
       <div className="relative aspect-square">
         {result.image && !imageError ? (
           <Image
-            src={artworkProxySrc(result.image)}
+            {...artworkImage(result.image)}
             alt={result.name}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority
-            unoptimized
             onError={() => setImageError(true)}
           />
         ) : (

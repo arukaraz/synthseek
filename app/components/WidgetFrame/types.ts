@@ -10,7 +10,7 @@ export interface WidgetFrameProps {
   info: string;
   titleId: string;
   loading: boolean;
-  note: string | null;
+  note: ReactNode;
   action?: WidgetHeaderAction;
   aside?: ReactNode;
   compactOnPhone?: boolean;

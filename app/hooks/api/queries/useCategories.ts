@@ -6,6 +6,7 @@ export function useCategories(limit = 30) {
     {
       staleTime: 60 * 60 * 1000,
       gcTime: 2 * 60 * 60 * 1000,
+      trpc: { context: { skipBatch: true } },
     }
   );
 }

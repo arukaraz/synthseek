@@ -13,7 +13,7 @@ import { templateJsonOf } from "./helpers";
 import { settingHint, settingLabel, templateBlock, templateNameField, templateRow } from "./styles";
 import type { TemplateExportProps } from "./types";
 
-export function TemplateExport({ items }: TemplateExportProps) {
+export function TemplateExport({ lists }: TemplateExportProps) {
   const { t } = useTranslation("widgets");
   const [name, setName] = useState(() => t("board.templates.defaultName"));
   const exporter = useExportBoardTemplate();
@@ -36,7 +36,7 @@ export function TemplateExport({ items }: TemplateExportProps) {
           disabled={name.trim() === "" || exporter.isPending}
           onClick={() =>
             exporter.mutate(
-              { name: name.trim(), description: "", items },
+              { name: name.trim(), description: "", items: lists.items, mobile: lists.mobile },
               {
                 onSuccess: (template) => {
                   void Promise.resolve()

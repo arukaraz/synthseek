@@ -11,19 +11,22 @@ import {
   Heart,
   Library,
   ListPlus,
+  type LucideIcon,
+  Monitor,
   MonitorPlay,
   Orbit as OrbitIcon,
   PackageCheck,
   PlayCircle,
   Radio,
   RotateCcw,
+  Smartphone,
   Trophy,
   Users,
   Zap,
 } from "lucide-react";
 
-import type { BoardHeight } from "@components/BoardGrid";
-import type { BoardSize, BoardWidgetKey, BuiltinBoardItem } from "@hooks/api/queries/board/types";
+import type { BoardDevice, BoardHeight } from "@components/BoardGrid";
+import type { BoardList, BoardSize, BoardWidgetKey, BuiltinBoardItem } from "@hooks/api/queries/board/types";
 import type { WidgetBlock } from "@hooks/api/queries/widgets/types";
 
 import { Anniversaries } from "../Anniversaries/Anniversaries";
@@ -54,7 +57,7 @@ import { TopTracks } from "../TopTracks/TopTracks";
 import { TrendingHero } from "../TrendingHero/TrendingHero";
 import type { BoardCategory, BoardWidgetDefinition } from "./types";
 
-export const BOARD_SCHEMA_VERSION = 3;
+export const BOARD_SCHEMA_VERSION = 4;
 
 export const SPACER_ID = "spacer";
 
@@ -380,7 +383,20 @@ export const CUSTOM_BLOCK_HEIGHTS: Record<WidgetBlock, Record<BoardSize, BoardHe
 
 export const FALLBACK_BLOCK_HEIGHT: BoardHeight = "regular";
 
-export const NARROW_TILE_SIZE: BoardSize = "M";
+export const MOBILE_COPY_SIZE: BoardSize = "M";
+
+export const BOARD_LISTS: readonly BoardList[] = ["items", "mobile"];
+
+export const BOARD_LIST_OF: Record<BoardDevice, BoardList> = { wide: "items", narrow: "mobile" };
+
+export const BOARD_DEVICE_OF: Record<BoardList, BoardDevice> = { items: "wide", mobile: "narrow" };
+
+export const BOARD_LIST_KEYS = {
+  items: "widgets:board.layouts.items",
+  mobile: "widgets:board.layouts.mobile",
+} as const;
+
+export const BOARD_LIST_ICONS: Record<BoardList, LucideIcon> = { items: Monitor, mobile: Smartphone };
 
 export const DEFAULT_BOARD: readonly BuiltinBoardItem[] = [
   { kind: "builtin", id: "trending", widget: "trending", size: "L" },

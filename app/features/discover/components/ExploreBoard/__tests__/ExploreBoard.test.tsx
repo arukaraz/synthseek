@@ -90,12 +90,27 @@ vi.mock("../../Landed/Landed", () => ({ Landed: stub("landed") }));
 vi.mock("../../ServerPlaylists/ServerPlaylists", () => ({ ServerPlaylists: stub("serverPlaylists") }));
 
 const TWO_TILES: BoardLayout = {
-  schemaVersion: 3,
+  schemaVersion: 4,
   items: [
     { kind: "builtin", id: "a", widget: "scrobbles", size: "M" },
     { kind: "builtin", id: "b", widget: "requests", size: "M" },
   ],
+  mobile: [{ kind: "builtin", id: "g", widget: "genres", size: "S" }],
 };
+
+function only(items: BoardLayout["items"]): BoardLayout {
+  return { schemaVersion: 4, items, mobile: items };
+}
+
+function openCustomization() {
+  fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+  fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.customization.action") }));
+}
+
+function openSection(name: string) {
+  const sections = screen.getByRole("tablist", { name: i18n.t("widgets:board.customization.sections.label") });
+  fireEvent.click(within(sections).getByRole("tab", { name }));
+}
 
 function renderedTileIds(container: HTMLElement): string[] {
   return Array.from(container.querySelectorAll<HTMLElement>("[data-board-tile]")).map(
@@ -122,7 +137,7 @@ describe("ExploreBoard", () => {
   });
 
   it("tells a load error apart from a deleted widget on a custom tile", () => {
-    const custom: BoardLayout = { schemaVersion: 3, items: [{ kind: "custom", id: "c", widgetId: "w_1", size: "M" }] };
+    const custom = only([{ kind: "custom", id: "c", widgetId: "w_1", size: "M" }]);
     useBoardLayoutMock.mockReturnValue({ data: custom, isLoading: false });
 
     const { unmount } = render(<ExploreBoard />);
@@ -155,7 +170,7 @@ describe("ExploreBoard", () => {
 
   it("renders only the saved tiles, passing each widget its size and translated description", () => {
     useBoardLayoutMock.mockReturnValue({
-      data: { schemaVersion: 3, items: [TWO_TILES.items[1], TWO_TILES.items[0]] },
+      data: { ...TWO_TILES, items: [TWO_TILES.items[1], TWO_TILES.items[0]] },
       isLoading: false,
     });
 
@@ -177,17 +192,29 @@ describe("ExploreBoard", () => {
     expect(second.style.getPropertyValue("--tile-row")).toBe("1 / span 4");
   });
 
-  it("hands each widget its narrow size on a narrow board", () => {
+  it("shows the mobile arrangement on a narrow board, at the sizes it saved", () => {
     viewport.wide = false;
-    useBoardLayoutMock.mockReturnValue({
-      data: { schemaVersion: 3, items: [{ kind: "builtin", id: "g", widget: "genres", size: "L" }] },
-      isLoading: false,
-    });
+    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
     const { container } = render(<ExploreBoard />);
 
-    expect(container.querySelector("[data-widget='genres']")).toHaveAttribute("data-size", "M");
-    expect(tile(container, "g").style.getPropertyValue("--tile-col")).toBe("1 / span 4");
+    expect(renderedTileIds(container)).toEqual(["g"]);
+    expect(container.querySelector("[data-widget='genres']")).toHaveAttribute("data-size", "S");
+    expect(tile(container, "g").style.getPropertyValue("--tile-col")).toBe("1 / span 2");
+  });
+
+  it("saves an edit made on a narrow board to the mobile arrangement alone", () => {
+    viewport.wide = false;
+    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
+
+    const { container } = render(<ExploreBoard />);
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
+    fireEvent.click(within(tile(container, "g")).getByRole("button", { name: "Large" }));
+
+    expect(saveMock.mock.calls.at(-1)?.[0]).toEqual({
+      ...TWO_TILES,
+      mobile: [{ kind: "builtin", id: "g", widget: "genres", size: "L" }],
+    });
   });
 
   it("shows no edit controls until Customize is pressed, and hides them again on Done", () => {
@@ -200,7 +227,7 @@ describe("ExploreBoard", () => {
 
     expect(screen.getAllByRole("button", { name: /^Remove/ })).toHaveLength(2);
     expect(tile(container, "a")).toHaveAttribute("tabindex", "0");
-    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddManage widgetsArrangeAppearanceTemplates$/);
+    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddBoard Customization$/);
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.done") }));
 
@@ -243,37 +270,48 @@ describe("ExploreBoard", () => {
     });
   });
 
-  it("offers an empty state that opens the widget gallery when every tile is gone", () => {
-    useBoardLayoutMock.mockReturnValue({ data: { schemaVersion: 3, items: [] }, isLoading: false });
+  it("offers an empty state that opens Board Customization on its widgets when every tile is gone", () => {
+    useBoardLayoutMock.mockReturnValue({ data: only([]), isLoading: false });
 
     render(<ExploreBoard />);
     expect(screen.getByText(i18n.t("discover:board.empty.title"))).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.addWidget") }));
 
-    expect(screen.getByRole("dialog", { name: i18n.t("discover:board.gallery.title") })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Board Customization" })).toBeInTheDocument();
+    const sections = screen.getByRole("tablist", { name: i18n.t("widgets:board.customization.sections.label") });
+    expect(within(sections).getByRole("tab", { name: "Widgets" })).toHaveAttribute("aria-selected", "true");
   });
 
-  it("adds a widget from the gallery at the end of the board", () => {
+  it("adds a widget to the layout picked at the end of that arrangement, only once the member saves", async () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
     render(<ExploreBoard />);
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.manageWidgets") }));
+    openCustomization();
+    openSection("Widgets");
     const dialog = screen.getByRole("dialog");
-    fireEvent.click(within(dialog).getByRole("button", { name: /^Add Discover Mixes/i }));
+    fireEvent.pointerDown(within(dialog).getByRole("button", { name: "Add Discover Mixes" }), {
+      button: 0,
+      pointerType: "mouse",
+    });
+    fireEvent.click(await screen.findByRole("menuitem", { name: "Desktop" }));
+    expect(saveMock).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.arrange.save") }));
 
     expect(savedIds()).toEqual(["a", "b", "mixes"]);
+    expect(saveMock.mock.calls.at(-1)?.[0].mobile).toEqual(TWO_TILES.mobile);
   });
 
   it("keeps the edit menu on an empty board, so a template can still be brought in", () => {
-    useBoardLayoutMock.mockReturnValue({ data: { schemaVersion: 3, items: [] }, isLoading: false });
+    useBoardLayoutMock.mockReturnValue({ data: only([]), isLoading: false });
 
     render(<ExploreBoard />);
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.templates.title") }));
+    openCustomization();
+    fireEvent.click(screen.getByRole("tab", { name: i18n.t("widgets:board.templates.title") }));
 
-    expect(screen.getByRole("dialog", { name: i18n.t("widgets:board.templates.title") })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Board Customization" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Board template JSON")).toBeInTheDocument();
   });
 
   async function openTileSettings(element: HTMLElement) {
@@ -306,14 +344,19 @@ describe("ExploreBoard", () => {
     expect(saveMock.mock.calls.at(-1)?.[0].items[0]).toMatchObject({ id: "a", background: false });
   });
 
-  it("switches every tile's background off from Appearance", () => {
+  it("switches every tile's background off on both arrangements only once the member saves", () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
     render(<ExploreBoard />);
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.appearance.title") }));
+    openCustomization();
+    fireEvent.click(screen.getByRole("tab", { name: i18n.t("widgets:board.appearance.title") }));
     fireEvent.click(screen.getByRole("radio", { name: "Off" }));
+    expect(saveMock).not.toHaveBeenCalled();
 
-    expect(saveMock.mock.calls.at(-1)?.[0].items.map((item) => item.background)).toEqual([false, false]);
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.arrange.save") }));
+
+    const saved = saveMock.mock.calls.at(-1)?.[0];
+    expect(saved?.items.map((item) => item.background)).toEqual([false, false]);
+    expect(saved?.mobile.map((item) => item.background)).toEqual([false]);
   });
 });

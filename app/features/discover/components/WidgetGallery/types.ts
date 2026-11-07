@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 
-import type { BoardItem, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardList, BoardLists, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetDocument, WidgetDraft } from "@hooks/api/queries/widgets/types";
 
-import type { BoardCategory, BoardGalleryTarget, BoardWidgetDefinition } from "../ExploreBoard/types";
+import type { BoardCategory, BoardWidgetDefinition } from "../ExploreBoard/types";
 
 export type GalleryMode = "widgets" | "mine";
 
@@ -49,13 +49,26 @@ export interface PreviewFrame extends PreviewBox {
 
 export type GalleryLeave = "back" | "close";
 
-export interface WidgetGalleryProps {
-  items: BoardItem[];
-  target: BoardGalleryTarget | null;
-  onAdd: (widget: BoardWidgetKey) => void;
-  onAddCustom: (widget: WidgetDocument) => void;
-  onRemove: (id: string) => void;
-  onClose: () => void;
+export interface LayoutPlacement {
+  placed: BoardList[];
+  free: BoardList[];
+}
+
+export type PickLayouts = (lists: readonly BoardList[]) => void;
+
+export interface LayoutMenuProps {
+  lists: readonly BoardList[];
+  tone: "add" | "remove";
+  label: string;
+  ariaLabel: string;
+  onPick: PickLayouts;
+  lockedHint?: string;
+}
+
+export interface LockedActionProps {
+  label: string;
+  hint: string;
+  children: ReactNode;
 }
 
 export interface ClampedTextProps {
@@ -65,9 +78,10 @@ export interface ClampedTextProps {
 
 export interface WidgetGalleryCardProps {
   entry: GalleryEntry;
-  tileId: string | undefined;
-  onAdd: (widget: BoardWidgetKey) => void;
-  onRemove: (id: string) => void;
+  placed: readonly BoardList[];
+  free: readonly BoardList[];
+  onAdd: (widget: BoardWidgetKey, lists: readonly BoardList[]) => void;
+  onRemove: (widget: BoardWidgetKey, lists: readonly BoardList[]) => void;
   onCustomize?: () => void;
 }
 
@@ -98,17 +112,20 @@ export interface GalleryFilterMenuProps {
 
 export interface MyWidgetsPanelProps {
   widgets: readonly WidgetDocument[];
-  items: readonly BoardItem[];
-  onAddCustom: (widget: WidgetDocument) => void;
+  lists: BoardLists;
+  templateStaged: boolean;
+  onAddCustom: (widget: WidgetDocument, lists: readonly BoardList[]) => void;
   onEdit: (widget: WidgetDocument) => void;
   onCreate: () => void;
   onImport: () => void;
+  onDeleted: (widgetId: string) => void;
 }
 
 export interface MyWidgetCardProps {
   widget: WidgetDocument;
-  tiles: number;
-  onAdd: () => void;
+  free: readonly BoardList[];
+  templateStaged: boolean;
+  onAdd: PickLayouts;
   onEdit: () => void;
   onDuplicate: () => void;
   onCopyJson: () => void;

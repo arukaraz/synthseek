@@ -20,7 +20,7 @@ vi.mock("next/link", () => ({
 import { clearHashTargetGlow } from "@utils/hash-target-glow";
 
 import { HashLink } from "../HashLink";
-import { splitHashHref } from "../helpers";
+import { pathnameOf, splitHashHref } from "../helpers";
 
 const GLOW_ATTR = "data-glow";
 const SAME_PAGE_HREF = "/settings/integrations/download-sources#ban-threshold";
@@ -95,5 +95,16 @@ describe("splitHashHref", () => {
 
   it("returns an empty hash for a plain path", () => {
     expect(splitHashHref("/settings/engine")).toEqual({ path: "/settings/engine", hash: "" });
+  });
+});
+
+describe("pathnameOf", () => {
+  it.each([
+    ["/settings/download-sources?source=slskd#ban-threshold", "/settings/download-sources"],
+    ["/settings/metadata?tab=lidarr", "/settings/metadata"],
+    ["/settings/engine#queue", "/settings/engine"],
+    ["/settings/engine", "/settings/engine"],
+  ])("reads %s as the page %s", (href, pathname) => {
+    expect(pathnameOf(href)).toBe(pathname);
   });
 });

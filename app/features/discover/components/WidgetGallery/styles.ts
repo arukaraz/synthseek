@@ -13,12 +13,6 @@ export const galleryDialog = cva("sm:h-[min(90vh,880px)]", {
   defaultVariants: { workshop: false },
 });
 
-export const galleryHeader = cva("flex flex-wrap items-center gap-3 px-4 pt-4 pr-14 pb-3 sm:pt-6 sm:pr-16 sm:pl-6");
-
-export const galleryTitleBlock = cva("flex min-w-0 flex-1 flex-col gap-1");
-
-export const gallerySubtitle = cva("text-fg/60 text-sm");
-
 export const gallerySearch = cva("relative min-w-0 flex-1 sm:w-64 sm:flex-none");
 
 export const searchIcon = cva("text-fg/40 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2");
@@ -31,7 +25,7 @@ export const galleryGrid = cva("grid grid-cols-1 gap-3 pt-4 sm:grid-cols-2 lg:gr
 
 export const galleryEmpty = cva("text-fg/60 py-12 text-center text-sm");
 
-export const band = cva("sticky top-0 z-20 col-span-full -mx-4 backdrop-blur-xl sm:-mx-6");
+export const band = cva("bg-surface/95 sticky top-0 z-20 col-span-full -mx-4 sm:-mx-6");
 
 export const bandInner = cva(
   "border-primary-500/20 from-primary-500/20 via-primary-500/10 to-primary-500/5 flex items-center gap-3 border-y bg-linear-to-r px-4 py-2.5 sm:px-6"
@@ -50,7 +44,7 @@ export const bandDescription = cva("text-fg/60 hidden truncate text-xs sm:block"
 export const bandCount = cva("text-fg/50 ml-auto shrink-0 font-mono text-[10.5px] tracking-wider uppercase");
 
 export const galleryCard = cva(
-  "bg-fg/[0.02] hover:border-primary-400/50 focus-within:border-primary-400/50 flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors",
+  "bg-fg/[0.02] hover:border-primary-400/50 focus-within:border-primary-400/50 flex min-w-0 flex-col overflow-hidden rounded-2xl border transition-colors [contain-intrinsic-size:auto_320px] [content-visibility:auto]",
   {
     variants: {
       onBoard: {
@@ -70,20 +64,26 @@ export const previewFit = cva(
 );
 
 export const previewStage = cva(
-  "pointer-events-none absolute top-0 left-0 flex h-[var(--stage-h)] w-[var(--stage-w)] origin-top-left scale-[var(--preview-scale)] [&>*]:size-full"
+  "pointer-events-none absolute top-0 left-0 flex h-[var(--stage-h)] w-[var(--stage-w)] origin-top-left scale-[var(--preview-scale)] [&_*]:[backdrop-filter:none] [&>*]:size-full"
 );
 
 export const onBoardBadge = cva(
-  "bg-success-vivid/15 text-success-vivid absolute top-2.5 right-2.5 z-[1] inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold backdrop-blur-sm"
+  "bg-surface/90 border-success-vivid/40 text-success-vivid absolute top-2.5 right-2.5 z-[1] inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold"
 );
 
 export const cardBody = cva("flex min-w-0 flex-1 flex-col gap-1.5 px-3 py-2.5 [&>:nth-last-child(2)]:mb-2.5");
 
 export const cardHead = cva("flex min-w-0 items-center gap-2.5");
 
-export const cardActions = cva("border-fg/10 mt-auto flex items-center justify-between gap-1.5 border-t pt-2");
+export const cardActions = cva("border-fg/10 mt-auto flex flex-wrap items-center gap-1.5 border-t pt-2");
+
+export const layoutChevron = cva("size-3.5 opacity-70");
 
 export const cardAction = cva("shrink-0");
+
+export const lockedAction = cva(
+  "focus-visible:ring-primary-400 inline-flex shrink-0 cursor-not-allowed rounded-md outline-none focus-visible:ring-2"
+);
 
 export const cardIcon = cva(
   "bg-primary-500/15 text-primary-400 flex size-8 shrink-0 items-center justify-center rounded-lg"
@@ -156,7 +156,7 @@ export const newCard = cva(
 );
 
 export const newCardButton = cva(
-  "from-primary-600 to-accent-600 text-primary-foreground shadow-primary-600/40 focus-visible:ring-primary-400 my-auto flex size-16 items-center justify-center rounded-[18px] bg-linear-to-br shadow-lg transition-transform outline-none hover:scale-105 focus-visible:ring-2 motion-reduce:transition-none [&_svg]:size-8"
+  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-600/40 focus-visible:ring-primary-400 my-auto flex size-16 items-center justify-center rounded-[18px] bg-linear-to-br shadow-lg transition-transform outline-none hover:scale-105 focus-visible:ring-2 motion-reduce:transition-none [&_svg]:size-8"
 );
 
 export const importBody = cva("flex flex-col gap-3 p-6 sm:max-w-xl");

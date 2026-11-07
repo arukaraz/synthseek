@@ -13,16 +13,16 @@ A template is a JSON document you can copy, keep, edit and share. Pasting it int
 
 There are two kinds.
 
-| Kind            | Carries                                        | Copy it from                   | Bring it in with      |
-| --------------- | ---------------------------------------------- | ------------------------------ | --------------------- |
-| Widget template | One widget: what it asks and how it looks      | The `{}` icon on a widget      | **From JSON**         |
-| Board template  | A whole board, its look and its custom widgets | **Copy JSON** in **Templates** | **Import a template** |
+| Kind            | Carries                                        | Copy it from                                            | Bring it in with      |
+| --------------- | ---------------------------------------------- | ------------------------------------------------------- | --------------------- |
+| Widget template | One widget: what it asks and how it looks      | The `{}` icon on a widget                               | **From JSON**         |
+| Board template  | A whole board, its look and its custom widgets | **Copy JSON** in **Board Customization**, **Templates** | **Import a template** |
 
 All of this starts from **Customize**.
 
 ## Share a widget
 
-1. Open **Manage widgets**, then **My widgets**, and press the `{}` icon on the widget. Its JSON goes to your clipboard.
+1. Open **Board Customization**, then **Widgets** and **My widgets**, and press the `{}` icon on the widget. Its JSON goes to your clipboard.
 2. Paste it wherever you keep it, or send it to someone.
 3. To bring it in, open **My widgets** and choose **From JSON** on the new-widget card.
 4. Paste the JSON and press **Check and open**. A template with a problem lists each one, in plain words.
@@ -32,12 +32,13 @@ The workshop shows the same JSON behind the `{}` icon next to its preview, which
 
 ## Share a board
 
-1. Open **Templates**, name the template and press **Copy JSON**.
+1. Open **Board Customization**, then **Templates**, name the template and press **Copy JSON**.
 2. To bring one in, paste it under **Import a template**, or choose a `.json` file.
 3. Press **Check**. Nothing changes yet. You see how many tiles and new widgets it brings, its look, and anything it will skip.
-4. Press **Apply template**.
+4. Press **Apply template**. The scaled board shows the template, which you can still arrange and restyle.
+5. Press **Save changes**.
 
-Applying replaces your board and its look. The widgets it brings are added to **My widgets** as new copies, and the ones you already had stay. The confirmation offers **Undo**, which puts your board, your look and your widgets back.
+Saving replaces your board and its look. The widgets it brings are added to **My widgets** as new copies, and the ones you already had stay. The confirmation offers **Undo**, which puts your board, your look and your widgets back.
 
 ## A widget template
 
@@ -402,18 +403,22 @@ Moods, scenarios and Sounds like use audio analysis, so they fill up as it advan
 
 ## A board template
 
-This one puts one built-in widget and one custom widget on a board, the second starting a new row.
+This one puts one built-in widget and one custom widget on a board, the second starting a new row, and on a phone shows the custom one first.
 
 ```json
 {
   "kind": "synthseek-board-template",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "name": "Sunday morning",
   "description": "A slower start",
   "appearance": { "density": "comfortable", "text": "default" },
   "items": [
     { "kind": "builtin", "widget": "continueListening", "size": "M" },
     { "kind": "custom", "widget": "w_top", "size": "M", "newRow": true }
+  ],
+  "mobile": [
+    { "kind": "custom", "widget": "w_top", "size": "M" },
+    { "kind": "builtin", "widget": "continueListening", "size": "S" }
   ],
   "widgets": [
     {
@@ -446,11 +451,12 @@ This one puts one built-in widget and one custom widget on a board, the second s
 | Field           | Required | Value                                                |
 | --------------- | -------- | ---------------------------------------------------- |
 | `kind`          | Yes      | Always `synthseek-board-template`.                   |
-| `schemaVersion` | Yes      | Always `1`.                                          |
+| `schemaVersion` | Yes      | Always `2`.                                          |
 | `name`          | Yes      | Up to 60 characters.                                 |
 | `description`   | Yes      | Up to 200 characters. Use `""` for none.             |
 | `appearance`    | Yes      | The board's look, from the table below.              |
-| `items`         | Yes      | The tiles, in order. A list of up to 48.             |
+| `items`         | Yes      | The wider-screen tiles, in order. Up to 48.          |
+| `mobile`        | No       | The phone tiles, in order. Up to 48.                 |
 | `widgets`       | Yes      | The custom widgets the tiles use. Use `[]` for none. |
 
 | `appearance` field | Value                                |
@@ -458,7 +464,7 @@ This one puts one built-in widget and one custom widget on a board, the second s
 | `density`          | `compact`, `comfortable`, `spacious` |
 | `text`             | `small`, `default`, `large`          |
 
-Each entry of `items` is one tile.
+Each entry of `items` and `mobile` is one tile.
 
 | Field        | Required     | Value                                                                          |
 | ------------ | ------------ | ------------------------------------------------------------------------------ |
@@ -473,7 +479,7 @@ A spacer is an empty tile that holds a place on the board.
 
 A widget inside `widgets` is a [widget template](#a-widget-template) with one more field. Its `id` starts with `w_` and only needs to match the tiles that point at it. Applying gives each widget a new id.
 
-Tiles fill the board in order, each one beside the last while it fits. On a phone every widget shows at one size, in the same order.
+Tiles fill the board in order, each one beside the last while it fits. On a phone `S` is half the width, and `M` and `L` take all of it. Without `mobile`, the phone layout is the `items` tiles at `M`, leaving out spacers with no background.
 
 | Built-in `widget`    | Title                           |
 | -------------------- | ------------------------------- |

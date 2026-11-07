@@ -8,15 +8,14 @@ import {
   appendSpacer,
   appendWidget,
   boardBackgroundOf,
-  boardItemsOf,
   boardKeyAction,
+  boardListsOf,
   customStatusOf,
   customWidgetsById,
   cycleSize,
-  editableSizesOf,
-  displayedSize,
   heightOf,
   layoutOf,
+  mobileCopyOf,
   moveItem,
   moveItemToEdge,
   orderKeyOf,
@@ -26,7 +25,6 @@ import {
   resizeItem,
   resizeSpacer,
   sameSlot,
-  shownItems,
   spanOf,
   tileHasBackground,
   tileHeightOf,
@@ -36,6 +34,7 @@ import {
   uniqueTileId,
   widgetsOnBoard,
   withBackgrounds,
+  withList,
 } from "../helpers";
 
 const NO_CUSTOM = customWidgetsById([]);
@@ -79,12 +78,13 @@ describe("spacers and backgrounds", () => {
     expect(shown).toEqual([false, false]);
   });
 
-  it("reads the board as on, off or mixed, an absent background counting as on", () => {
+  it("reads the board as off only when every tile hides its background, an absent background counting as on", () => {
     const off: BoardItem = { ...WIDGET, background: false };
 
     expect(boardBackgroundOf([WIDGET, { ...SPACER, background: true }])).toBe("on");
     expect(boardBackgroundOf([off, { ...SPACER, background: false }])).toBe("off");
-    expect(boardBackgroundOf([off, SPACER])).toBe("mixed");
+    expect(boardBackgroundOf([off, SPACER])).toBe("on");
+    expect(boardBackgroundOf([])).toBe("on");
   });
 
   it("sends a tile to either end and clears its new row", () => {
@@ -109,13 +109,10 @@ describe("spacers and backgrounds", () => {
     expect(sameSlot(regular, { ...SPACER, rows: 1 }, NO_CUSTOM)).toBe(false);
   });
 
-  it("drops a bare spacer on a phone, where it would only leave a hole, except while editing", () => {
+  it("leaves a bare spacer out of the mobile copy, where it would only leave a hole, and keeps one with a background", () => {
     const bare: BoardItem = { ...SPACER, background: false };
 
-    expect(shownItems([WIDGET, bare], "narrow", false)).toEqual([WIDGET]);
-    expect(shownItems([WIDGET, SPACER], "narrow", false)).toEqual([WIDGET, SPACER]);
-    expect(shownItems([WIDGET, bare], "narrow", true)).toEqual([WIDGET, bare]);
-    expect(shownItems([WIDGET, bare], "wide", false)).toEqual([WIDGET, bare]);
+    expect(mobileCopyOf([WIDGET, bare, SPACER]).map((item) => item.id)).toEqual(["w", "s"]);
   });
 });
 
@@ -157,17 +154,6 @@ describe("boardKeyAction", () => {
   it("ignores every other key", () => {
     expect(boardKeyAction({ key: "Enter", shiftKey: false })).toBeNull();
     expect(boardKeyAction({ key: "a", shiftKey: true })).toBeNull();
-  });
-});
-
-describe("editableSizesOf", () => {
-  it("offers the three sizes from narrowest to widest on a wide board", () => {
-    expect(editableSizesOf("wide")).toEqual(["S", "M", "L"]);
-  });
-
-  it("offers nothing to resize on a narrow board, where every size shows as M", () => {
-    expect(editableSizesOf("narrow")).toEqual([]);
-    expect(cycleSize(editableSizesOf("narrow"), "S", 1)).toBe("S");
   });
 });
 
@@ -229,53 +215,56 @@ const REQUESTS: BoardItem = { kind: "builtin", id: "r", widget: "requests", size
 const GENRES: BoardItem = { kind: "builtin", id: "g", widget: "genres", size: "L" };
 const CUSTOM: BoardItem = { kind: "custom", id: "c", widgetId: "w_1", size: "M" };
 
-describe("boardItemsOf", () => {
-  it("returns a fresh copy of the default board when nothing is saved", () => {
-    const items = boardItemsOf(null);
-    expect(items).toEqual(DEFAULT_BOARD);
-    expect(items[0]).not.toBe(DEFAULT_BOARD[0]);
+describe("boardListsOf", () => {
+  it("returns a fresh copy of the default board and its mobile copy when nothing is saved", () => {
+    const lists = boardListsOf(null);
+    expect(lists.items).toEqual(DEFAULT_BOARD);
+    expect(lists.items[0]).not.toBe(DEFAULT_BOARD[0]);
+    expect(lists.mobile).toEqual(mobileCopyOf(DEFAULT_BOARD));
   });
 
-  it("keeps a saved size the widget offers", () => {
-    expect(boardItemsOf({ schemaVersion: 3, items: [SCROBBLES] })).toEqual([SCROBBLES]);
-  });
-
-  it("keeps a size saved outside the widget's default, since every widget offers all three", () => {
+  it("keeps each saved arrangement apart, sizes and custom tiles included", () => {
     const saved: BoardItem = { kind: "builtin", id: "o", widget: "onRepeat", size: "L" };
-    expect(boardItemsOf({ schemaVersion: 3, items: [saved] })).toEqual([saved]);
+    expect(boardListsOf({ schemaVersion: 4, items: [SCROBBLES, CUSTOM], mobile: [saved] })).toEqual({
+      items: [SCROBBLES, CUSTOM],
+      mobile: [saved],
+    });
   });
 
-  it("keeps an empty saved board empty", () => {
-    expect(boardItemsOf({ schemaVersion: 3, items: [] })).toEqual([]);
+  it("keeps an empty saved board empty on both devices", () => {
+    expect(boardListsOf({ schemaVersion: 4, items: [], mobile: [] })).toEqual({ items: [], mobile: [] });
   });
+});
 
-  it("keeps a custom tile in its saved place and size", () => {
-    expect(boardItemsOf({ schemaVersion: 3, items: [SCROBBLES, CUSTOM] })).toEqual([SCROBBLES, CUSTOM]);
+describe("mobileCopyOf", () => {
+  it("copies every tile at M in the same order, without touching the originals", () => {
+    const copy = mobileCopyOf([GENRES, { ...CUSTOM, size: "S" }]);
+    expect(copy).toEqual([
+      { ...GENRES, size: "M" },
+      { ...CUSTOM, size: "M" },
+    ]);
+    expect(GENRES.size).toBe("L");
   });
 });
 
 describe("layoutOf", () => {
-  it("wraps the items with the schema version and copies them", () => {
-    const layout = layoutOf([SCROBBLES]);
-    expect(layout).toEqual({ schemaVersion: 3, items: [SCROBBLES] });
+  it("wraps both arrangements with the schema version and copies them", () => {
+    const layout = layoutOf({ items: [SCROBBLES], mobile: [GENRES] });
+    expect(layout).toEqual({ schemaVersion: 4, items: [SCROBBLES], mobile: [GENRES] });
     expect(layout.items[0]).not.toBe(SCROBBLES);
+    expect(layout.mobile[0]).not.toBe(GENRES);
   });
 
   it("saves a custom tile at the position it holds on the board", () => {
-    expect(layoutOf([CUSTOM, SCROBBLES]).items).toEqual([CUSTOM, SCROBBLES]);
+    expect(layoutOf({ items: [CUSTOM, SCROBBLES], mobile: [] }).items).toEqual([CUSTOM, SCROBBLES]);
   });
 });
 
-describe("displayedSize", () => {
-  it("shows the saved size on a wide board", () => {
-    expect(displayedSize(GENRES, "wide")).toBe("L");
-  });
-
-  it("shows every builtin tile at M on a narrow board, whatever size it saved", () => {
-    expect(displayedSize(GENRES, "narrow")).toBe("M");
-    expect(displayedSize(TRENDING, "narrow")).toBe("M");
-    expect(displayedSize({ ...SCROBBLES, size: "S" }, "narrow")).toBe("M");
-    expect(displayedSize({ kind: "builtin", id: "o", widget: "onRepeat", size: "S" }, "narrow")).toBe("M");
+describe("withList", () => {
+  it("replaces one arrangement and leaves the other as it was", () => {
+    const lists = { items: [SCROBBLES], mobile: [GENRES] };
+    expect(withList(lists, "mobile", [CUSTOM])).toEqual({ items: [SCROBBLES], mobile: [CUSTOM] });
+    expect(withList(lists, "items", [CUSTOM])).toEqual({ items: [CUSTOM], mobile: [GENRES] });
   });
 });
 
@@ -326,23 +315,26 @@ describe("packBoard", () => {
     expect(tiles[1]).toMatchObject({ col: 3, row: 0, cols: 6, rows: 4 });
   });
 
-  it("stacks every tile full width at M on a narrow board", () => {
-    const onRepeat: BoardItem = { kind: "builtin", id: "o", widget: "onRepeat", size: "S" };
-    const tiles = packBoard([SCROBBLES, GENRES, onRepeat, TRENDING], "narrow", NO_CUSTOM);
-    expect(tiles[0]).toMatchObject({ col: 0, row: 0, cols: 4, rows: 4, size: "M" });
-    expect(tiles[1]).toMatchObject({ col: 0, row: 4, cols: 4, rows: 7, size: "M" });
-    expect(tiles[2]).toMatchObject({ col: 0, row: 11, cols: 4, rows: 4, size: "M" });
-    expect(tiles[3]).toMatchObject({ col: 0, row: 15, cols: 4, rows: 4, size: "M" });
+  it("honours the saved size on a narrow board: two small tiles share a row, M and L take it whole", () => {
+    const small: BoardItem = { kind: "builtin", id: "o", widget: "onRepeat", size: "S" };
+    const tiles = packBoard([small, { ...small, id: "o2" }, SCROBBLES, GENRES], "narrow", NO_CUSTOM);
+    expect(tiles.map(({ col, cols, size }) => ({ col, cols, size }))).toEqual([
+      { col: 0, cols: 2, size: "S" },
+      { col: 2, cols: 2, size: "S" },
+      { col: 0, cols: 4, size: "M" },
+      { col: 0, cols: 4, size: "L" },
+    ]);
+    expect(tiles[1]?.row).toBe(0);
   });
 
-  it.each(EVERY_SIZE)("places every widget saved at %s as M across the whole narrow board", (size) => {
+  it.each(EVERY_SIZE)("places every widget saved at %s at that size on the narrow board", (size) => {
     const items: BoardItem[] = [
       ...BOARD_WIDGET_ORDER.map((widget): BoardItem => ({ kind: "builtin", id: widget, widget, size })),
       { ...CUSTOM, size },
     ];
     for (const tile of packBoard(items, "narrow", NO_CUSTOM)) {
-      const { rows } = tileSpanOf(tile.item, "M", "narrow", NO_CUSTOM);
-      expect(tile).toMatchObject({ size: "M", col: 0, cols: 4, rows });
+      const span = tileSpanOf(tile.item, size, "narrow", NO_CUSTOM);
+      expect(tile).toMatchObject({ size, cols: span.cols, rows: span.rows });
     }
   });
 
@@ -380,13 +372,6 @@ describe("custom tiles", () => {
   it("reads the height from the block of the widget the tile shows", () => {
     expect(tileHeightOf(CUSTOM, "M", stat)).toBe("short");
     expect(tileSpanOf(CUSTOM, "M", "narrow", stat)).toEqual({ cols: 4, rows: 2 });
-  });
-
-  it("shows every custom tile at M, full width, on a narrow board", () => {
-    expect(displayedSize({ ...CUSTOM, size: "S" }, "narrow")).toBe("M");
-    expect(displayedSize({ ...CUSTOM, size: "L" }, "narrow")).toBe("M");
-    expect(displayedSize({ ...CUSTOM, size: "S" }, "wide")).toBe("S");
-    expect(displayedSize({ ...CUSTOM, size: "L" }, "wide")).toBe("L");
   });
 
   it("treats two tiles as the same slot only when size and block height agree", () => {

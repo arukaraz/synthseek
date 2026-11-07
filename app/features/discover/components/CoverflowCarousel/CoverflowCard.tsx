@@ -117,7 +117,7 @@ export const CoverflowCard = memo(function CoverflowCard({
             <Button
               onClick={handleDownload}
               size="sm"
-              className={`${primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" })} text-overlay-fg mt-2 font-semibold sm:mt-3`}
+              className={`${primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" })} mt-2 font-semibold sm:mt-3`}
             >
               <Download className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-4 sm:w-4" />
               {t("coverflow.download")}

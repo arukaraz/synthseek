@@ -16,6 +16,7 @@ import {
   widgetViewOf,
   withListOpening,
 } from "./helpers";
+import { SettingsLinkNote } from "./SettingsLinkNote";
 import { framelessBlock, setHiddenLine } from "./styles";
 import type { CustomWidgetContentProps } from "./types";
 
@@ -33,7 +34,8 @@ export function CustomWidgetContent({
   const controls = useMemo(() => withListOpening(itemActions, onOpenList), [itemActions, onOpenList]);
   const Block = BLOCK_COMPONENTS[widget.view.block];
   const view = useMemo(() => widgetViewOf(result, widget.view.bind), [result, widget.view.bind]);
-  const note = customWidgetNote({ result, isError, empty: viewIsEmpty(view) });
+  const noted = customWidgetNote({ result, isError, empty: viewIsEmpty(view) });
+  const note = noted === null || typeof noted === "string" ? noted : <SettingsLinkNote {...noted} />;
   const icon = widgetIconOf(widget.meta.icon);
   const blockProps = {
     ...view,

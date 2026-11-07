@@ -1,5 +1,7 @@
 import { BOARD_COLUMNS, type BoardDevice, type BoardMetrics } from "@components/BoardGrid";
+import type { BoardItem } from "@hooks/api/queries/board/types";
 
+import { orderKeyOf, tileHasBackground } from "../ExploreBoard/helpers";
 import type { PlacedTile } from "../ExploreBoard/types";
 import type { PreviewFrame } from "../WidgetGallery/types";
 import {
@@ -65,6 +67,23 @@ export function arrangeFrameOf(
     width: stageWidth * layout.scale,
     height: stageHeight * layout.scale,
   };
+}
+
+export function rebaseDraft(
+  draft: readonly BoardItem[],
+  before: readonly BoardItem[],
+  after: readonly BoardItem[]
+): BoardItem[] {
+  if (orderKeyOf(draft) === orderKeyOf(before)) return [...after];
+  const backgroundOf = (items: readonly BoardItem[], id: string) => {
+    const item = items.find((candidate) => candidate.id === id);
+    return item ? tileHasBackground(item) : null;
+  };
+  return draft.map((item) => {
+    const was = backgroundOf(before, item.id);
+    const now = backgroundOf(after, item.id);
+    return was === null || now === null || was === now ? item : { ...item, background: now };
+  });
 }
 
 export function startsTileDrag(event: StartsTileDragEvent): boolean {

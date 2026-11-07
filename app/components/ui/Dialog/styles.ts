@@ -6,7 +6,7 @@ export const dialogHeader = cva("flex flex-col space-y-1.5 text-center sm:text-l
 });
 
 export const dialogContent = cva(
-  "border-fg/10 bg-surface/95 sm:bg-surface/90 from-primary-600/15 to-accent-600/15 fixed z-50 w-full border bg-linear-to-br shadow-2xl duration-200 sm:backdrop-blur-2xl",
+  "border-fg/10 bg-surface/95 from-primary-600/15 to-accent-600/15 fixed z-50 w-full border bg-linear-to-br shadow-2xl duration-200",
   {
     variants: {
       animation: {

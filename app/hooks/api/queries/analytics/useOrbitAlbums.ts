@@ -1,5 +1,5 @@
 import { trpc } from "@utils/trpc";
 
 export function useOrbitAlbums() {
-  return trpc.analytics.discover.orbit.useQuery();
+  return trpc.analytics.discover.orbit.useQuery(undefined, { trpc: { context: { skipBatch: true } } });
 }

@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const modalContainer = cva(
-  "bg-surface/95 sm:bg-surface/90 sm:backdrop-blur-2xl !top-0 !left-1/2 !flex !h-[100dvh] !max-h-[100dvh] !w-[min(1040px,100%)] !max-w-none !-translate-x-1/2 !translate-y-0 !flex-col !gap-0 !rounded-none !border-0 !overflow-hidden !p-0 shadow-2xl sm:!top-0 sm:!max-h-[100dvh] sm:!translate-y-0"
+  "bg-surface/95 !top-0 !left-1/2 !flex !h-[100dvh] !max-h-[100dvh] !w-[min(1040px,100%)] !max-w-none !-translate-x-1/2 !translate-y-0 !flex-col !gap-0 !rounded-none !border-0 !overflow-hidden !p-0 shadow-2xl sm:!top-0 sm:!max-h-[100dvh] sm:!translate-y-0"
 );
 
 export const modalShell = cva(
@@ -17,7 +17,7 @@ export const modalScrollArea = cva(
 export const miniStickyRoot = cva("pointer-events-none sticky top-0 z-30 h-0 sm:hidden");
 
 export const miniBar = cva(
-  "border-fg/10 bg-surface/85 flex items-center gap-3 border-b pb-3 pl-4 pr-14 pt-[max(1rem,env(safe-area-inset-top,0px))] backdrop-blur-xl transition-all duration-200",
+  "border-fg/10 bg-surface/95 flex items-center gap-3 border-b pb-3 pl-4 pr-14 pt-[max(1rem,env(safe-area-inset-top,0px))] transition-all duration-200",
   {
     variants: {
       visible: {

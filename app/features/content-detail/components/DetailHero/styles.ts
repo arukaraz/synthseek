@@ -17,7 +17,7 @@ export const avatarWrap = cva("relative shrink-0");
 export const shareFanRoot = cva("absolute inset-0 hidden sm:block");
 
 export const shareFab = cva(
-  "border-fg/10 from-primary-600 to-accent-600 text-fg absolute right-0 bottom-0 z-20 grid size-8 place-items-center rounded-full border bg-linear-to-br shadow-lg transition-transform",
+  "border-fg/10 from-primary-600 to-accent-600 text-overlay-fg absolute right-0 bottom-0 z-20 grid size-8 place-items-center rounded-full border bg-linear-to-br shadow-lg transition-transform",
   {
     variants: {
       open: {

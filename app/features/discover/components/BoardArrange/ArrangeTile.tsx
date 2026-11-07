@@ -33,7 +33,7 @@ export function ArrangeTile({
   const name = tileNameOf(item, custom, customStatus);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) runBoardKey(event, item, device, actions);
+    if (event.target === event.currentTarget) runBoardKey(event, item, actions);
   };
 
   return (

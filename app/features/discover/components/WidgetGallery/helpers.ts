@@ -2,7 +2,7 @@ import i18n from "@locale";
 import { toast } from "sonner";
 
 import { BOARD_COLUMNS, BOARD_GAP_PX, BOARD_ROW_PX, BOARD_SPANS, type BoardSpan } from "@components/BoardGrid";
-import type { BoardItem, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardList, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type {
   WidgetBlock,
   WidgetDocument,
@@ -13,6 +13,7 @@ import type {
 
 import {
   BOARD_CATEGORY_ORDER,
+  BOARD_LISTS,
   BOARD_WIDGET_ORDER,
   BOARD_WIDGETS,
   CUSTOM_BLOCK_HEIGHTS,
@@ -27,6 +28,7 @@ import type {
   GalleryFilters,
   GalleryGroup,
   GallerySort,
+  LayoutPlacement,
   PreviewBox,
   PreviewFrame,
 } from "./types";
@@ -127,6 +129,11 @@ export function isBoardFilter(value: string): value is GalleryBoardFilter {
 
 export function customTilesOf(items: readonly BoardItem[], widgetId: string): number {
   return items.filter((item) => item.kind === "custom" && item.widgetId === widgetId).length;
+}
+
+export function layoutPlacementOf(onList: (list: BoardList) => boolean): LayoutPlacement {
+  const placed = BOARD_LISTS.filter(onList);
+  return { placed, free: BOARD_LISTS.filter((list) => !placed.includes(list)) };
 }
 
 export function draftOf(widget: WidgetDocument): WidgetDraft {

@@ -35,6 +35,7 @@ export type WidgetRuleOfPlaylist = WidgetOutputs["playlistRule"];
 export type HouseholdMember = WidgetOutputs["household"][number];
 export type RecipeWidgetResult = Extract<WidgetResult, { type: "recipe" }>;
 export type FeedWidgetResult = Extract<WidgetResult, { type: "feed" }>;
+export type FeedNeed = NonNullable<FeedWidgetResult["needs"]>;
 export type RecapWidgetResult = Extract<WidgetResult, { type: "recap" }>;
 export type PlaylistSetWidgetResult = Extract<WidgetResult, { type: "playlists" }>;
 export type SetListResult = PlaylistSetWidgetResult["lists"][number];

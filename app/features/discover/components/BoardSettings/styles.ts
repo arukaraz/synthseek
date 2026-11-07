@@ -1,25 +1,34 @@
 import { cva } from "class-variance-authority";
 
-export const trayFrame = cva("overflow-hidden");
-
-export const trayBody = cva(
-  "border-fg/10 flex w-0 min-w-full flex-wrap items-center justify-center gap-x-6 gap-y-2 border-b px-2 pt-1.5 pb-2.5"
+export const settingsHeader = cva(
+  "flex flex-wrap items-end justify-between gap-3 px-4 pt-4 pr-14 pb-3 outline-none sm:pt-6 sm:pr-16 sm:pl-6"
 );
 
-export const trayChoice = cva("flex items-center gap-2");
+export const settingsTitleBlock = cva("flex min-w-0 flex-col gap-1");
 
-export const trayLabel = cva("text-fg/60 font-mono text-[11px] font-medium tracking-[0.08em] uppercase");
+export const settingsHint = cva("text-fg/60 flex min-h-5 items-center text-sm");
 
-export const templatesDialog = cva("sm:h-auto sm:max-h-[90vh] sm:max-w-2xl");
+export const settingsPanel = cva("flex-col", {
+  variants: {
+    shown: {
+      true: "flex",
+      false: "hidden",
+    },
+  },
+});
 
-export const templatesHead = cva("flex flex-col gap-1 px-4 pt-4 pr-14 pb-3 sm:pt-6 sm:pr-16 sm:pl-6");
+export const settingsSplit = cva("flex min-h-0 flex-1 flex-col lg:flex-row");
 
-export const templatesHint = cva("flex");
+export const settingsArrangeColumn = cva("flex min-h-0 min-w-0 flex-1 flex-col");
 
-export const templatesBody = cva("flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 pb-6 sm:px-6");
+export const settingsAside = cva(
+  "order-first flex shrink-0 flex-col gap-4 overflow-y-auto px-4 pb-4 max-lg:max-h-[50%] sm:px-6 lg:order-none lg:w-104 lg:pl-0 [&>*]:shrink-0"
+);
+
+export const templatesBody = cva("flex flex-col gap-3");
 
 export const settingsLink = cva(
-  "text-primary-400 hover:text-primary-300 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1 rounded text-xs font-medium outline-none focus-visible:ring-2"
+  "text-primary-400 hover:text-primary-300 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1 self-start rounded text-xs font-medium outline-none focus-visible:ring-2"
 );
 
 export const settingLabel = cva("text-fg text-sm font-medium");

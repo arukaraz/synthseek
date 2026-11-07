@@ -187,7 +187,6 @@
     "customize": "Anpassen",
     "done": "Fertig",
     "addWidget": "Widget hinzufügen",
-    "manageWidgets": "Widgets verwalten",
     "add": {
       "action": "Hinzufügen"
     },
@@ -197,8 +196,6 @@
       "taller": "Abstandshalter höher machen"
     },
     "arrange": {
-      "action": "Anordnen",
-      "title": "Board anordnen",
       "hint": "Zieh ein Widget, um es zu verschieben, oder lass es unter dem Board los, um eine neue Reihe zu beginnen. Erst beim Speichern ändert sich etwas.",
       "newRow": "Neue Reihe",
       "empty": "Dein Board wird leer sein.",
@@ -235,8 +232,7 @@
       "L": "Groß"
     },
     "gallery": {
-      "title": "Widgets verwalten",
-      "subtitle": "Hinzufügen setzt ein Widget ans Ende des Boards, dort änderst du die Größe. Anpassen öffnet eine Kopie in der Werkstatt.",
+      "subtitle": "Hinzufügen setzt ein Widget ans Ende der gewählten Anordnung. Anpassen öffnet eine Kopie in der Werkstatt.",
       "seeMore": "Mehr anzeigen",
       "seeLess": "Weniger anzeigen",
       "summary": "{{onBoard}} von {{total}} auf deinem Board. Ein neues Widget landet am Ende, danach verschiebst du es, wohin du willst.",
@@ -254,8 +250,7 @@
       "added": "{{name}} am Ende hinzugefügt",
       "removed": "{{name}} entfernt",
       "moved": "Board-Layout gespeichert",
-      "backgroundsOn": "Hintergrund für alle Widgets eingeschaltet",
-      "backgroundsOff": "Hintergrund für alle Widgets ausgeschaltet",
+      "saved": "Board gespeichert",
       "undo": "Rückgängig"
     },
     "announce": {
@@ -544,17 +539,17 @@
     "deleted": "Dieses Widget gibt es nicht mehr. Entferne es über Anpassen vom Board.",
     "empty": "Gerade passt nichts zu diesem Widget.",
     "needs": {
-      "lastfm": "Verbinde Last.fm in den Einstellungen, um dieses Widget zu füllen.",
-      "listenbrainz": "Trage deinen ListenBrainz-Benutzer in den Einstellungen ein, um dieses Widget zu füllen.",
-      "bandsintown": "Trage unter Einstellungen, Integrationen eine Bandsintown-App-ID ein, um dieses Widget zu füllen.",
-      "mediaServer": "Dieses Widget braucht einen für den Haushalt verbundenen Medienserver und dein dort unter Verbundene Konten verknüpftes Konto.",
-      "plex": "Dieses Widget braucht ein für den Haushalt verbundenes Plex und dein unter Verbundene Konten verknüpftes Plex-Konto.",
-      "jellyfin": "Dieses Widget braucht ein für den Haushalt verbundenes Jellyfin und dein unter Verbundene Konten verknüpftes Jellyfin-Konto.",
-      "navidrome": "Dieses Widget braucht ein für den Haushalt verbundenes Navidrome und dein unter Verbundene Konten verknüpftes Navidrome-Konto.",
-      "lidarr": "Dieses Widget braucht ein unter Einstellungen, Integrationen verbundenes Lidarr, und nur Admins und vertraute Mitglieder können es lesen."
+      "lastfm": "Verbinde <field>Last.fm</field>, um dieses Widget zu füllen.",
+      "listenbrainz": "Trage deinen <field>ListenBrainz-Benutzer</field> ein, um dieses Widget zu füllen.",
+      "bandsintown": "Trage eine <field>Bandsintown-App-ID</field> ein, um dieses Widget zu füllen.",
+      "mediaServer": "Verknüpfe dein <field>Medienserver-Konto</field>, um dieses Widget zu füllen, sobald ein Medienserver für den Haushalt verbunden ist.",
+      "plex": "Verknüpfe dein <field>Plex-Konto</field>, um dieses Widget zu füllen, sobald Plex für den Haushalt verbunden ist.",
+      "jellyfin": "Verknüpfe dein <field>Jellyfin-Konto</field>, um dieses Widget zu füllen, sobald Jellyfin für den Haushalt verbunden ist.",
+      "navidrome": "Verknüpfe dein <field>Navidrome-Konto</field>, um dieses Widget zu füllen, sobald Navidrome für den Haushalt verbunden ist.",
+      "lidarr": "Richte <field>Lidarr</field> ein, um dieses Widget zu füllen. Nur Admins und vertraute Mitglieder können es lesen."
     },
     "events": {
-      "refused": "Bandsintown hat die App-ID abgelehnt. Prüfe sie unter Einstellungen, Integrationen.",
+      "refused": "Bandsintown hat die App-ID abgelehnt. Prüfe die <field>Bandsintown-App-ID</field>.",
       "unreachable": "Bandsintown ist gerade nicht erreichbar."
     },
     "news": {

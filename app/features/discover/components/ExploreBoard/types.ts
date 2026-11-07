@@ -3,7 +3,14 @@ import type { LucideIcon } from "lucide-react";
 import type { ComponentType, PointerEvent as ReactPointerEvent, RefObject } from "react";
 
 import type { BoardDevice, BoardHeight } from "@components/BoardGrid";
-import type { BoardItem, BoardSize, BoardTemplateApplied, BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type {
+  BoardAppearance,
+  BoardItem,
+  BoardLists,
+  BoardSize,
+  BoardTemplateApplied,
+  BoardWidgetKey,
+} from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 export type BoardCategory = "now" | "history" | "discover" | "library";
@@ -42,7 +49,20 @@ export type MoveDelta = -1 | 1;
 
 export type BoardEdge = "top" | "bottom";
 
-export type BoardBackground = "on" | "off" | "mixed";
+export type BoardBackground = "on" | "off";
+
+export interface BoardCustomizationSave {
+  lists: BoardLists | null;
+  appearance: { next: BoardAppearance; previous: BoardAppearance } | null;
+}
+
+export type CustomizationSection = "board" | "widgets";
+
+export interface BoardCustomizationOpening {
+  section: CustomizationSection;
+  target: BoardGalleryTarget | null;
+  boardWidth: number;
+}
 
 export type BoardKeyAction =
   | { kind: "move"; delta: MoveDelta }
@@ -119,7 +139,6 @@ export interface BoardTileContentProps extends BoardTileWidgetProps {
 
 export interface BoardTileSizesProps {
   item: BoardItem;
-  device: BoardDevice;
   name: string;
   dense?: boolean;
   onResize: (id: string, size: BoardSize) => void;
@@ -129,12 +148,8 @@ export interface BoardToolbarProps {
   editing: boolean;
   onCustomize: () => void;
   onDone: () => void;
-  onManageWidgets: () => void;
   onAddSpacer: () => void;
-  onArrange: () => void;
-  onTemplates: () => void;
-  background: BoardBackground;
-  onBackground: (shown: boolean) => void;
+  onCustomization: () => void;
 }
 
 export interface BoardEmptyProps {
@@ -144,26 +159,16 @@ export interface BoardEmptyProps {
 export interface BoardEditor {
   rootRef: RefObject<HTMLElement | null>;
   editing: boolean;
-  galleryOpen: boolean;
-  templatesOpen: boolean;
-  arrangeWidth: number | null;
+  customization: BoardCustomizationOpening | null;
   announcement: string;
   displayItems: BoardItem[];
   draggingId: string | null;
   startEditing: () => void;
   stopEditing: () => void;
-  openGallery: () => void;
-  setGalleryOpen: (open: boolean) => void;
-  openArrange: () => void;
-  closeArrange: () => void;
-  openTemplates: () => void;
-  closeTemplates: () => void;
-  saveArrangement: (next: BoardItem[]) => void;
-  galleryTarget: BoardGalleryTarget | null;
-  add: (widget: BoardWidgetKey) => void;
-  addCustom: (widget: WidgetDocument) => void;
+  openCustomization: (section: CustomizationSection) => void;
+  closeCustomization: () => void;
+  saveCustomization: (save: BoardCustomizationSave) => void;
   addSpacer: () => void;
-  setBackgrounds: (shown: boolean) => void;
   templateApplied: (applied: BoardTemplateApplied) => void;
   actions: BoardTileActions;
 }
