@@ -275,6 +275,18 @@
     "title": "Datei kann nicht zugeordnet werden",
     "description": "Nur Dateien, die auf eine Zuordnung warten, können einem Titel zugewiesen werden."
   },
+  "DROP_IMPORT_FILE_NOT_AWAITING_CHOICE": {
+    "title": "Datei wartet auf keine Wahl",
+    "description": "Die Wahl wurde schon getroffen. Lade den Stapel neu."
+  },
+  "DROP_IMPORT_CHOICE_UNREADABLE": {
+    "title": "Diese Wahl ist nicht lesbar",
+    "description": "Verwirf die Datei und lade sie erneut hoch."
+  },
+  "DROP_IMPORT_COPY_NOT_COMPARED": {
+    "title": "Die beiden Dateien ließen sich nicht vergleichen",
+    "description": "Es wurde nichts geändert. Versuche es gleich noch einmal."
+  },
   "DROP_IMPORT_FILE_IN_FLIGHT": {
     "title": "Datei wird importiert",
     "description": "Warte, bis der Import abgeschlossen ist, und versuche es erneut."
@@ -306,6 +318,18 @@
   "LIBRARY_SCAN_ALREADY_RUNNING": {
     "title": "Scan läuft bereits",
     "description": "Ein Bibliotheksscan läuft bereits. Warte, bis er fertig ist, oder brich ihn zuerst ab."
+  },
+  "LIBRARY_ORGANISE_RUNNING": {
+    "title": "Dateien werden einsortiert",
+    "description": "Die Bibliothek verschiebt gerade Dateien an ihren Platz. Versuche es erneut, sobald das fertig ist."
+  },
+  "LIBRARY_ORPHAN_SWEEP_RUNNING": {
+    "title": "Übrige Dateien werden entfernt",
+    "description": "Die Bibliothek räumt gerade übrige Dateien auf. Versuche es erneut, sobald das fertig ist."
+  },
+  "LIBRARY_COPIES_SETTLING": {
+    "title": "Duplikate werden bereinigt",
+    "description": "Gerade werden andere doppelte Kopien bereinigt. Versuche es gleich noch einmal."
   },
   "LIBRARY_PATH_NOT_FOUND": {
     "title": "Bibliothekspfad nicht gefunden",

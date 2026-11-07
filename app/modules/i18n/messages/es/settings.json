@@ -311,7 +311,8 @@
       "fingerprint_mismatch": "Huella acústica distinta",
       "tag_mismatch": "Las etiquetas no coinciden",
       "duration_mismatch": "Duración distinta",
-      "tags_unreadable": "Etiquetas ilegibles"
+      "tags_unreadable": "Etiquetas ilegibles",
+      "rejected_recording": "Suena como una copia rechazada"
     },
     "sourceTrust": {
       "title": "Confianza en las fuentes",
@@ -2367,6 +2368,13 @@
       "truncatedNotice": "Empareja o ignora algunos archivos para ver el resto.",
       "truncatedIgnoredNotice": "Deja de ignorar algunos archivos para ver el resto.",
       "loadError": "No se pudo cargar la lista.",
+      "doubt": {
+        "listLabel": "Archivos que quizá estén ligados a la canción equivocada",
+        "linkedTo": "Ligado a {{artist}} · {{title}} · {{length}}",
+        "linkedToNoLength": "Ligado a {{artist}} · {{title}}",
+        "keep": "Mantener el vínculo",
+        "reject": "No es esta canción"
+      },
       "empty": {
         "reviewTitle": "Todo al día",
         "reviewBody": "Ningún archivo espera a que le digas a Synthseek qué es.",
@@ -2398,7 +2406,15 @@
         "secondCopy_one": "{{count}} archivo es una segunda copia de una canción que ya tenías.",
         "secondCopy_other": "{{count}} archivos son segundas copias de canciones que ya tenías.",
         "skipped_one": "No se pudo añadir {{count}} archivo.",
-        "skipped_other": "No se pudieron añadir {{count}} archivos."
+        "skipped_other": "No se pudieron añadir {{count}} archivos.",
+        "linkKept_one": "{{count}} vínculo mantenido.",
+        "linkKept_other": "{{count}} vínculos mantenidos.",
+        "linkRejected_one": "{{count}} archivo desligado. Su canción se puede buscar de nuevo.",
+        "linkRejected_other": "{{count}} archivos desligados. Sus canciones se pueden buscar de nuevo.",
+        "keptTheirName_one": "{{count}} archivo no se pudo renombrar, así que la nueva descarga de su canción puede no caber a su lado. Renómbralo o corrige sus etiquetas.",
+        "keptTheirName_other": "{{count}} archivos no se pudieron renombrar, así que las nuevas descargas de sus canciones pueden no caber a su lado. Renómbralos o corrige sus etiquetas.",
+        "unheard_one": "No se pudo leer el audio de {{count}} archivo, así que una descarga que suene como él no se rechaza.",
+        "unheard_other": "No se pudo leer el audio de {{count}} archivos, así que una descarga que suene como ellos no se rechaza."
       },
       "match": {
         "back": "Volver a la lista",
@@ -2456,44 +2472,48 @@
     "duplicates": {
       "copies_one": "{{count}} copia",
       "copies_other": "{{count}} copias",
-      "tidyAllRunning": "Revisándolas",
-      "tidyAllBusy": "La biblioteca está ocupada, esto esperará a que termine",
-      "tidyOne": "Quedarse con la mejor",
       "emptyTitle": "Sin duplicados",
-      "emptyBody": "Cada pista de tu biblioteca está guardada una sola vez.",
-      "tabSafe": "Se pueden resolver",
-      "tabReview": "Necesitan revisión",
-      "reclaimable": "{{size}} recuperables",
-      "reviewNote": "De estas copias no se ha podido probar que sean la misma grabación. Abre una pista y decide copia por copia.",
-      "showCopies": "Ver copias",
-      "servedFileMissing": "El fichero que sonaba en esta pista ya no está, así que no sonará hasta que elijas una de abajo",
-      "inLibrary": "En la biblioteca",
-      "sizeEach": "{{size}} cada una",
-      "sizeRange": "de {{from}} a {{to}}",
-      "reason": {
-        "titles_differ": "Las copias llevan títulos distintos, así que una puede ser un directo, un remix u otra versión. Resolver automáticamente podría reciclar una grabación que no vuelve.",
-        "untitled_copy": "Al menos una copia no tiene título, así que nada avala que sea la misma grabación. Decide esta copia por copia.",
-        "lengths_differ": "Los títulos coinciden pero las copias no duran lo mismo, así que una será un edit, una versión extendida u otra toma. Resolver automáticamente podría reciclar una grabación que no vuelve.",
-        "length_unknown": "Una copia todavía no se ha medido, así que nada avala que sea la misma grabación. El próximo escaneo de la biblioteca la medirá.",
-        "different_paths": "Las copias están en rutas de biblioteca distintas, así que cada una puede estar ahí a propósito. Elige la que quieres con Quedarse con esta."
-      },
-      "tidyDone": "Se quedó la mejor copia, {{size}} recuperados",
-      "tidySkipped": "Esa pista se deja en paz, sus copias no coinciden",
-      "keepThis": "Quedarse con esta",
+      "emptyBody": "Ninguna canción tiene copias esperando a que las escuches.",
+      "comparing_one": "Comparando el audio de una canción",
+      "comparing_other": "Comparando el audio de {{count}} canciones",
+      "listen": "Escúchalas",
+      "inLibrary": "En biblioteca",
+      "wontPlay": "No se reproduce",
+      "keepThis": "Conservar esta copia",
       "keepThisDone": "Esa copia se queda, {{size}} recuperados",
-      "play": "Reproducir esta copia",
+      "play": "Reproducir",
       "pause": "Pausar",
-      "loading": "Cargando esta copia",
-      "distinctLengths_one": "{{count}} duración claramente distinta",
-      "distinctLengths_other": "{{count}} duraciones claramente distintas",
-      "safeNote_one": "Una pista cuyas copias coinciden en título y en duración.",
-      "safeNote_other": "En {{count}} pistas cuyas copias coinciden en título y en duración.",
-      "description_one": "Una pista tiene más de una copia en el disco. No se borra nada. Todo lo que resuelvas va a la papelera.",
-      "description_other": "{{count}} pistas tienen más de una copia en disco. No se borra nada. Todo lo que resuelvas va a la papelera.",
-      "tidyAll_one": "Resolver la pista segura",
-      "tidyAll_other": "Resolver las {{count}} pistas seguras",
-      "reviewTitle_one": "Una pista no se puede resolver automáticamente",
-      "reviewTitle_other": "{{count}} pistas no se pueden resolver automáticamente"
+      "align": "Alinear",
+      "matchLoudness": "Igualar volumen",
+      "loop": "Bucle de {{seconds}} s",
+      "loopOff": "Quitar bucle",
+      "loopRange": "Bucle de {{from}} a {{to}}",
+      "position": "Posición",
+      "soundCopy": "Sonar copia {{number}}",
+      "noneFits": "Ninguna sirve…",
+      "reject": {
+        "title_one": "Rechazar la copia de “{{title}}”",
+        "title_other": "Rechazar las {{count}} copias de “{{title}}”",
+        "rejectHeading": "Rechazar",
+        "recycles_one": "La copia va a la papelera de reciclaje ({{size}}), recuperable.",
+        "recycles_other": "Las {{count}} copias van a la papelera de reciclaje ({{size}}), recuperables.",
+        "remembers_one": "Synthseek recuerda cómo suena y rechaza para esta canción una descarga que suene igual. Restaurarla desde la papelera lo deshace.",
+        "remembers_other": "Synthseek recuerda cómo suenan y rechaza para esta canción una descarga que suene igual. Restaurar una desde la papelera lo deshace.",
+        "fails": "La petición vuelve a fallida, sin archivo, hasta que la reintentes.",
+        "rejectAction": "Rechazar",
+        "searchHeading": "Rechazar y buscar de nuevo",
+        "same": "Lo mismo que Rechazar.",
+        "searches_one": "Después busca de nuevo, rechazando lo que suene como ella.",
+        "searches_other": "Después busca de nuevo, rechazando lo que suene como ellas.",
+        "nothingLeft": "Si no aparece nada más, la petición vuelve a fallida.",
+        "searchAction": "Rechazar y buscar",
+        "rejectDone_one": "Copia rechazada, {{size}} a la papelera",
+        "rejectDone_other": "{{count}} copias rechazadas, {{size}} a la papelera",
+        "unheard_one": "No se pudo leer el audio de {{count}} copia, así que una descarga que suene como ella no se rechaza.",
+        "unheard_other": "No se pudo leer el audio de {{count}} copias, así que una descarga que suene como ellas no se rechaza.",
+        "searchingDone_one": "Copia rechazada, buscando de nuevo",
+        "searchingDone_other": "{{count}} copias rechazadas, buscando de nuevo"
+      }
     },
     "header": {
       "running": "Escaneando",
@@ -2509,7 +2529,7 @@
     },
     "duplicates": {
       "title": "Pistas duplicadas",
-      "description": "Pistas con más de una copia en el disco. Las que se pudieron probar idénticas ya están resueltas."
+      "description": "Canciones con más de una copia en disco que Synthseek no pudo resolver por su cuenta. Escúchalas y quédate con la que quieras."
     },
     "recycleBin": {
       "title": "Papelera",

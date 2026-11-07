@@ -2,6 +2,61 @@
 
 ---
 
+# v2.9.4, November 6, 2026
+
+> [!NOTE]
+> After updating, Synthseek listens once, in the background, to the songs that have more than one copy, and checks the files its library scan filed for another version of their song. Copies it can tell are the same recording are settled on their own. The rest wait for you on the duplicates page, and a file that may be linked to the wrong song waits in Review files.
+
+> [!NOTE]
+> The duplicates page no longer has the Safe to resolve and Needs review tabs, or the button that resolved every safe track. Copies that sound the same are settled without you, and what is left is listed for you to listen to and choose.
+
+### Duplicates settled by how they sound
+
+- Duplicates are compared by their audio. On the duplicates page you can play the copies side by side, align them, match their loudness, and loop the part where they differ.
+- None of them fits recycles every copy of a song, and a later download that sounds like one of them is refused until you restore it.
+- Review files now holds a file that may be another version of its song, or another song. Keep the link, or choose Not this song.
+- When a file you upload is already in your library, you choose whether to keep the copy there or use yours.
+- An album the catalog search misses is now found in the artist's discography.
+
+---
+
+### Fixes
+
+- A copy another song plays is never recycled or renamed.
+- A duplicate copy you restore from the recycle bin is kept.
+- An import is tagged as the version of the song you asked for, not another cut of it.
+- A download whose library path is already taken is settled by its audio, instead of completing with no file.
+- Matching a file by hand completes a song that had failed.
+- When two copies of a song share a name in one folder, recycling one no longer takes the lyrics and cover art the other still uses.
+- Copies that cannot be played are marked as such.
+- Dependencies were updated for security advisories.
+
+---
+
+# v2.9.3, November 1, 2026
+
+> [!NOTE]
+> After updating, Synthseek checks every file its library scan filed, once, in the background, and moves the ones that sat under the wrong album. Favourites, playlists and play history stay with each song. A song that ends up with two copies on one row is handled by the duplicate check, which keeps the better copy and sends the other to the recycle bin.
+
+### Scanned files land on the album they are on
+
+- Files tagged with MusicBrainz, such as by Picard, are now filed under the album they are on, instead of under another album that happens to hold the same recording.
+- An album the catalog does not carry now appears under its own name, as the files describe it, instead of its songs being spread over other albums.
+- An album whose edition the catalog lists under a longer name, such as a deluxe or expanded edition, is recognised again.
+- A cover band's album, a remix, a live take or a demo no longer takes the place of the original when files are filed.
+- Asking to identify a file again no longer waits for the whole background check to finish.
+- Albums the catalog does not know no longer fill the log with warnings at start.
+
+---
+
+# v2.9.2, October 23, 2026
+
+### Security updates
+
+- Dependencies with security advisories are updated, including one that could let an oversized request use up the server's memory.
+
+---
+
 # v2.9.1, October 23, 2026
 
 > [!NOTE]

@@ -308,7 +308,8 @@
       "fingerprint_mismatch": "Empreinte différente",
       "tag_mismatch": "Les tags ne correspondent pas",
       "duration_mismatch": "Durée différente",
-      "tags_unreadable": "Tags illisibles"
+      "tags_unreadable": "Tags illisibles",
+      "rejected_recording": "Sonne comme une copie rejetée"
     },
     "sourceTrust": {
       "title": "Confiance des sources",
@@ -2364,6 +2365,13 @@
       "truncatedNotice": "Associez ou ignorez des fichiers pour voir le reste.",
       "truncatedIgnoredNotice": "Cessez d’ignorer des fichiers pour voir le reste.",
       "loadError": "Impossible de charger la liste.",
+      "doubt": {
+        "listLabel": "Fichiers peut-être liés au mauvais morceau",
+        "linkedTo": "Lié à {{artist}} · {{title}} · {{length}}",
+        "linkedToNoLength": "Lié à {{artist}} · {{title}}",
+        "keep": "Garder le lien",
+        "reject": "Pas ce morceau"
+      },
       "empty": {
         "reviewTitle": "Tout est à jour",
         "reviewBody": "Aucun fichier n’attend que vous disiez à Synthseek ce qu’il est.",
@@ -2395,7 +2403,15 @@
         "secondCopy_one": "{{count}} fichier est une deuxième copie d’un titre que vous aviez déjà.",
         "secondCopy_other": "{{count}} fichiers sont des deuxièmes copies de titres que vous aviez déjà.",
         "skipped_one": "{{count}} fichier n’a pas pu être ajouté.",
-        "skipped_other": "{{count}} fichiers n’ont pas pu être ajoutés."
+        "skipped_other": "{{count}} fichiers n’ont pas pu être ajoutés.",
+        "linkKept_one": "{{count}} lien gardé.",
+        "linkKept_other": "{{count}} liens gardés.",
+        "linkRejected_one": "{{count}} fichier délié. Son morceau peut être recherché à nouveau.",
+        "linkRejected_other": "{{count}} fichiers déliés. Leurs morceaux peuvent être recherchés à nouveau.",
+        "keptTheirName_one": "{{count}} fichier n'a pas pu être renommé, le nouveau téléchargement de son morceau risque de ne pas trouver sa place. Renommez-le ou corrigez ses tags.",
+        "keptTheirName_other": "{{count}} fichiers n'ont pas pu être renommés, les nouveaux téléchargements de leurs morceaux risquent de ne pas trouver leur place. Renommez-les ou corrigez leurs tags.",
+        "unheard_one": "L'audio de {{count}} fichier n'a pas pu être lu, un téléchargement qui sonne comme lui n'est donc pas refusé.",
+        "unheard_other": "L'audio de {{count}} fichiers n'a pas pu être lu, un téléchargement qui sonne comme eux n'est donc pas refusé."
       },
       "match": {
         "back": "Retour à la liste",
@@ -2453,44 +2469,48 @@
     "duplicates": {
       "copies_one": "{{count}} copie",
       "copies_other": "{{count}} copies",
-      "tidyAllRunning": "Traitement en cours",
-      "tidyAllBusy": "La bibliothèque est occupée, ceci attendra qu'elle finisse",
-      "tidyOne": "Garder la meilleure",
       "emptyTitle": "Aucun doublon",
-      "emptyBody": "Chaque titre de votre bibliothèque n'existe qu'une fois.",
-      "tabSafe": "Résolvables",
-      "tabReview": "À vérifier",
-      "reclaimable": "{{size}} récupérables",
-      "reviewNote": "Rien ne prouve que ces copies soient le même enregistrement. Ouvrez un morceau et décidez copie par copie.",
-      "showCopies": "Voir les copies",
-      "servedFileMissing": "Le fichier que lisait ce morceau a disparu, il ne sera pas lu tant que vous n'en aurez pas choisi une ci-dessous",
+      "emptyBody": "Aucun morceau n'a de copies qui attendent votre écoute.",
+      "comparing_one": "Comparaison du son d'un morceau",
+      "comparing_other": "Comparaison du son de {{count}} morceaux",
+      "listen": "À écouter",
       "inLibrary": "Dans la bibliothèque",
-      "sizeEach": "{{size}} chacune",
-      "sizeRange": "de {{from}} à {{to}}",
-      "reason": {
-        "titles_differ": "Les copies portent des titres différents, l'une peut être un live, un remix ou une autre version. Résoudre automatiquement risquerait de mettre à la corbeille un enregistrement irrécupérable.",
-        "untitled_copy": "Au moins une copie n'a pas de titre, donc rien ne garantit qu'il s'agisse du même enregistrement. Décidez copie par copie.",
-        "lengths_differ": "Les titres correspondent mais les copies ne durent pas pareil, l'une est donc sans doute un edit, une version longue ou une autre prise. Résoudre automatiquement risquerait de mettre à la corbeille un enregistrement irrécupérable.",
-        "length_unknown": "Une copie n'a pas encore été mesurée, donc rien ne garantit qu'il s'agisse du même enregistrement. Le prochain scan de la bibliothèque la mesurera.",
-        "different_paths": "Les copies sont dans des chemins de bibliothèque différents, chacune peut donc y être volontairement. Choisissez celle à garder avec Garder cette copie."
-      },
-      "tidyDone": "Meilleure copie conservée, {{size}} récupérés",
-      "tidySkipped": "Ce titre est laissé tel quel, ses copies ne correspondent pas",
+      "wontPlay": "Illisible",
       "keepThis": "Garder cette copie",
       "keepThisDone": "Cette copie est conservée, {{size}} récupérés",
-      "play": "Écouter cette copie",
+      "play": "Lecture",
       "pause": "Pause",
-      "loading": "Chargement de cette copie",
-      "distinctLengths_one": "{{count}} durée nettement différente",
-      "distinctLengths_other": "{{count}} durées nettement différentes",
-      "safeNote_one": "Un morceau dont les copies concordent en titre et en durée.",
-      "safeNote_other": "Sur {{count}} morceaux dont les copies concordent en titre et en durée.",
-      "description_one": "Un morceau a plus d'une copie sur le disque. Rien n'est supprimé. Tout ce que vous résolvez part à la corbeille.",
-      "description_other": "{{count}} titres existent en plusieurs copies sur le disque. Rien n'est supprimé. Tout ce que vous résolvez part à la corbeille.",
-      "tidyAll_one": "Résoudre le morceau sûr",
-      "tidyAll_other": "Résoudre les {{count}} titres sûrs",
-      "reviewTitle_one": "Un morceau ne peut pas être résolu automatiquement",
-      "reviewTitle_other": "{{count}} titres ne peuvent pas être résolus automatiquement"
+      "align": "Aligner",
+      "matchLoudness": "Égaliser le volume",
+      "loop": "Boucle de {{seconds}} s",
+      "loopOff": "Retirer la boucle",
+      "loopRange": "Boucle de {{from}} à {{to}}",
+      "position": "Position",
+      "soundCopy": "Écouter la copie {{number}}",
+      "noneFits": "Aucune ne convient…",
+      "reject": {
+        "title_one": "Rejeter la copie de « {{title}} »",
+        "title_other": "Rejeter les {{count}} copies de « {{title}} »",
+        "rejectHeading": "Rejeter",
+        "recycles_one": "La copie part à la corbeille ({{size}}), où vous pouvez la restaurer.",
+        "recycles_other": "Les {{count}} copies partent à la corbeille ({{size}}), où vous pouvez les restaurer.",
+        "remembers_one": "Synthseek retient son son et refuse pour ce morceau un téléchargement qui sonne pareil. La restaurer depuis la corbeille annule ce refus.",
+        "remembers_other": "Synthseek retient leur son et refuse pour ce morceau un téléchargement qui sonne pareil. Restaurer une copie depuis la corbeille annule ce refus.",
+        "fails": "La demande repasse en échec, sans fichier, jusqu'à ce que vous la relanciez.",
+        "rejectAction": "Rejeter",
+        "searchHeading": "Rejeter et chercher à nouveau",
+        "same": "Comme Rejeter.",
+        "searches_one": "Puis une nouvelle recherche démarre, en refusant ce qui sonne comme elle.",
+        "searches_other": "Puis une nouvelle recherche démarre, en refusant ce qui sonne comme elles.",
+        "nothingLeft": "Si rien d'autre n'est trouvé, la demande repasse en échec.",
+        "searchAction": "Rejeter et chercher",
+        "rejectDone_one": "Copie rejetée, {{size}} à la corbeille",
+        "rejectDone_other": "{{count}} copies rejetées, {{size}} à la corbeille",
+        "unheard_one": "L'audio de {{count}} copie n'a pas pu être lu, un téléchargement qui sonne comme elle n'est donc pas refusé.",
+        "unheard_other": "L'audio de {{count}} copies n'a pas pu être lu, un téléchargement qui sonne comme elles n'est donc pas refusé.",
+        "searchingDone_one": "Copie rejetée, nouvelle recherche en cours",
+        "searchingDone_other": "{{count}} copies rejetées, nouvelle recherche en cours"
+      }
     },
     "header": {
       "running": "Analyse",
@@ -2506,7 +2526,7 @@
     },
     "duplicates": {
       "title": "Morceaux en double",
-      "description": "Morceaux ayant plus d'une copie sur le disque. Ceux prouvés identiques sont déjà réglés."
+      "description": "Morceaux ayant plus d'une copie sur le disque que Synthseek n'a pas pu régler seul. Écoutez-les et gardez celle que vous voulez."
     },
     "recycleBin": {
       "title": "Corbeille",

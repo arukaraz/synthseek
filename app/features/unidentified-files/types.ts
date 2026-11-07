@@ -8,6 +8,7 @@ type UnidentifiedOutputs = inferRouterOutputs<AppRouter>["library"]["scan"]["uni
 
 export type UnidentifiedGroup = UnidentifiedOutputs["list"]["groups"][number];
 export type UnidentifiedFile = UnidentifiedGroup["files"][number];
+export type VersionDoubt = UnidentifiedOutputs["list"]["doubts"][number];
 export type AlbumCandidate = UnidentifiedOutputs["albumCandidates"]["candidates"][number];
 export type AlbumProposal = UnidentifiedOutputs["albumProposal"];
 export type ProposalFile = AlbumProposal["files"][number];
@@ -78,6 +79,13 @@ export interface FileRowProps {
   onMatchSong: () => void;
   onRetry: () => void;
   onIgnore: () => void;
+}
+
+export interface DoubtRowProps {
+  doubt: VersionDoubt;
+  busy: boolean;
+  onKeep: () => void;
+  onReject: () => void;
 }
 
 export interface StepHeaderProps {

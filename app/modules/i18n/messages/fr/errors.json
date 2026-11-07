@@ -275,6 +275,18 @@
     "title": "Fichier impossible à associer",
     "description": "Seuls les fichiers en attente de correspondance peuvent être associés à un titre."
   },
+  "DROP_IMPORT_FILE_NOT_AWAITING_CHOICE": {
+    "title": "Le fichier n'attend pas de choix",
+    "description": "Le choix a déjà été fait. Actualisez le lot."
+  },
+  "DROP_IMPORT_CHOICE_UNREADABLE": {
+    "title": "Ce choix est illisible",
+    "description": "Écartez le fichier et téléversez-le à nouveau."
+  },
+  "DROP_IMPORT_COPY_NOT_COMPARED": {
+    "title": "Les deux fichiers n'ont pas pu être comparés",
+    "description": "Rien n'a été modifié. Réessayez dans un instant."
+  },
   "DROP_IMPORT_FILE_IN_FLIGHT": {
     "title": "Fichier en cours d'import",
     "description": "Attendez la fin de l'import, puis réessayez."
@@ -306,6 +318,18 @@
   "LIBRARY_SCAN_ALREADY_RUNNING": {
     "title": "Analyse déjà en cours",
     "description": "Une analyse de la bibliothèque est déjà en cours. Attendez la fin ou annulez-la d'abord."
+  },
+  "LIBRARY_ORGANISE_RUNNING": {
+    "title": "Fichiers en cours de rangement",
+    "description": "La bibliothèque range des fichiers en ce moment. Réessayez une fois terminé."
+  },
+  "LIBRARY_ORPHAN_SWEEP_RUNNING": {
+    "title": "Fichiers restants en cours de nettoyage",
+    "description": "La bibliothèque nettoie des fichiers restants en ce moment. Réessayez une fois terminé."
+  },
+  "LIBRARY_COPIES_SETTLING": {
+    "title": "Doublons en cours de traitement",
+    "description": "D'autres copies en double sont en cours de traitement. Réessayez dans un instant."
   },
   "LIBRARY_PATH_NOT_FOUND": {
     "title": "Chemin de bibliothèque introuvable",

@@ -78,6 +78,7 @@ export { useDropImportBatches } from "./queries/import/useDropImportBatches";
 export { useDropImportBatch } from "./queries/import/useDropImportBatch";
 export { useMatchDropImportFile } from "./mutations/import/useMatchDropImportFile";
 export { useDiscardDropImportFile } from "./mutations/import/useDiscardDropImportFile";
+export { useResolveDropImportCollision } from "./mutations/import/useResolveDropImportCollision";
 export { useDeleteDropImportBatch } from "./mutations/import/useDeleteDropImportBatch";
 export { useDropImportUpload } from "./mutations/import/useDropImportUpload";
 export type {

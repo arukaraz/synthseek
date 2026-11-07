@@ -308,7 +308,8 @@
       "fingerprint_mismatch": "Fingerabdruck weicht ab",
       "tag_mismatch": "Tags stimmen nicht überein",
       "duration_mismatch": "Abweichende Dauer",
-      "tags_unreadable": "Tags nicht lesbar"
+      "tags_unreadable": "Tags nicht lesbar",
+      "rejected_recording": "Klingt wie eine abgelehnte Kopie"
     },
     "sourceTrust": {
       "title": "Quellenvertrauen",
@@ -2364,6 +2365,13 @@
       "truncatedNotice": "Ordne einige Dateien zu oder ignoriere sie, um den Rest zu sehen.",
       "truncatedIgnoredNotice": "Ignoriere einige Dateien nicht mehr, um den Rest zu sehen.",
       "loadError": "Die Liste konnte nicht geladen werden.",
+      "doubt": {
+        "listLabel": "Dateien, die vielleicht mit dem falschen Song verknüpft sind",
+        "linkedTo": "Verknüpft mit {{artist}} · {{title}} · {{length}}",
+        "linkedToNoLength": "Verknüpft mit {{artist}} · {{title}}",
+        "keep": "Verknüpfung behalten",
+        "reject": "Nicht dieser Song"
+      },
       "empty": {
         "reviewTitle": "Alles erledigt",
         "reviewBody": "Keine Datei wartet darauf, dass du Synthseek sagst, was sie ist.",
@@ -2395,7 +2403,15 @@
         "secondCopy_one": "{{count}} Datei ist eine zweite Kopie eines Titels, den du schon hattest.",
         "secondCopy_other": "{{count}} Dateien sind zweite Kopien von Titeln, die du schon hattest.",
         "skipped_one": "{{count}} Datei konnte nicht hinzugefügt werden.",
-        "skipped_other": "{{count}} Dateien konnten nicht hinzugefügt werden."
+        "skipped_other": "{{count}} Dateien konnten nicht hinzugefügt werden.",
+        "linkKept_one": "{{count}} Verknüpfung behalten.",
+        "linkKept_other": "{{count}} Verknüpfungen behalten.",
+        "linkRejected_one": "{{count}} Datei gelöst. Ihr Song kann erneut gesucht werden.",
+        "linkRejected_other": "{{count}} Dateien gelöst. Ihre Songs können erneut gesucht werden.",
+        "keptTheirName_one": "{{count}} Datei konnte nicht umbenannt werden, daher passt der neue Download ihres Songs womöglich nicht daneben. Benenne sie um oder korrigiere ihre Tags.",
+        "keptTheirName_other": "{{count}} Dateien konnten nicht umbenannt werden, daher passen die neuen Downloads ihrer Songs womöglich nicht daneben. Benenne sie um oder korrigiere ihre Tags.",
+        "unheard_one": "Der Ton von {{count}} Datei ließ sich nicht lesen, daher wird ein Download, der wie sie klingt, nicht abgelehnt.",
+        "unheard_other": "Der Ton von {{count}} Dateien ließ sich nicht lesen, daher wird ein Download, der wie sie klingt, nicht abgelehnt."
       },
       "match": {
         "back": "Zurück zur Liste",
@@ -2453,44 +2469,48 @@
     "duplicates": {
       "copies_one": "{{count}} Kopie",
       "copies_other": "{{count}} Kopien",
-      "tidyAllRunning": "Wird bearbeitet",
-      "tidyAllBusy": "Die Bibliothek ist beschäftigt, das wartet bis sie fertig ist",
-      "tidyOne": "Beste Kopie behalten",
       "emptyTitle": "Keine Duplikate",
-      "emptyBody": "Jeder Titel deiner Bibliothek liegt genau einmal vor.",
-      "tabSafe": "Sicher auflösbar",
-      "tabReview": "Prüfung nötig",
-      "reclaimable": "{{size}} wiedergewinnbar",
-      "reviewNote": "Bei diesen Kopien liess sich nicht belegen, dass es dieselbe Aufnahme ist. Öffne einen Titel und entscheide Kopie für Kopie.",
-      "showCopies": "Kopien anzeigen",
-      "servedFileMissing": "Die Datei dieses Titels ist weg, er wird erst wieder abgespielt, wenn du unten eine auswählst",
+      "emptyBody": "Kein Titel hat Kopien, die darauf warten, dass du sie anhörst.",
+      "comparing_one": "Der Klang eines Titels wird verglichen",
+      "comparing_other": "Der Klang von {{count}} Titeln wird verglichen",
+      "listen": "Anhören",
       "inLibrary": "In der Bibliothek",
-      "sizeEach": "je {{size}}",
-      "sizeRange": "{{from}} bis {{to}}",
-      "reason": {
-        "titles_differ": "Die Kopien tragen verschiedene Titel, eine könnte eine Live-Version, ein Remix oder eine andere Fassung sein. Automatisch aufzulösen könnte eine unwiederbringliche Aufnahme in den Papierkorb schieben.",
-        "untitled_copy": "Mindestens eine Kopie hat kein Titel-Tag, also kann nichts bestätigen, dass es dieselbe Aufnahme ist. Entscheide hier Kopie für Kopie.",
-        "lengths_differ": "Die Titel stimmen überein, aber die Kopien sind nicht gleich lang, eine ist also vermutlich ein Edit, eine verlängerte Fassung oder eine andere Aufnahme. Automatisch aufzulösen könnte eine unwiederbringliche Aufnahme in den Papierkorb schieben.",
-        "length_unknown": "Eine Kopie wurde noch nicht gemessen, also kann nichts bestätigen, dass es dieselbe Aufnahme ist. Der nächste Bibliotheksscan misst sie.",
-        "different_paths": "Die Kopien liegen in verschiedenen Bibliothekspfaden, jede kann also absichtlich dort sein. Wähle mit Diese Kopie behalten die, die bleiben soll."
-      },
-      "tidyDone": "Beste Kopie behalten, {{size}} freigegeben",
-      "tidySkipped": "Dieser Titel bleibt unberührt, seine Kopien stimmen nicht überein",
+      "wontPlay": "Nicht abspielbar",
       "keepThis": "Diese Kopie behalten",
       "keepThisDone": "Diese Kopie bleibt, {{size}} freigegeben",
-      "play": "Diese Kopie abspielen",
+      "play": "Abspielen",
       "pause": "Pause",
-      "loading": "Kopie wird geladen",
-      "distinctLengths_one": "{{count}} deutlich unterschiedliche Länge",
-      "distinctLengths_other": "{{count}} deutlich unterschiedliche Längen",
-      "safeNote_one": "Ein Titel, dessen Kopien in Titel und Länge übereinstimmen.",
-      "safeNote_other": "Über {{count}} Titel, deren Kopien in Titel und Länge übereinstimmen.",
-      "description_one": "Ein Titel hat mehr als eine Kopie auf der Festplatte. Nichts wird gelöscht. Alles, was du aufloest, wandert in den Papierkorb.",
-      "description_other": "{{count}} Titel liegen mehrfach auf der Festplatte. Nichts wird gelöscht. Alles, was du auflöst, wandert in den Papierkorb.",
-      "tidyAll_one": "Den einen sicheren Titel aufloesen",
-      "tidyAll_other": "Alle {{count}} sicheren Titel auflösen",
-      "reviewTitle_one": "Ein Titel kann nicht automatisch aufgeloest werden",
-      "reviewTitle_other": "{{count}} Titel lassen sich nicht automatisch auflösen"
+      "align": "Ausrichten",
+      "matchLoudness": "Lautstärke angleichen",
+      "loop": "{{seconds}}-s-Schleife",
+      "loopOff": "Schleife entfernen",
+      "loopRange": "Schleife {{from}} bis {{to}}",
+      "position": "Position",
+      "soundCopy": "Kopie {{number}} abspielen",
+      "noneFits": "Keine passt…",
+      "reject": {
+        "title_one": "Die Kopie von „{{title}}“ ablehnen",
+        "title_other": "Die {{count}} Kopien von „{{title}}“ ablehnen",
+        "rejectHeading": "Ablehnen",
+        "recycles_one": "Die Kopie wandert in den Papierkorb ({{size}}), wo du sie wiederherstellen kannst.",
+        "recycles_other": "Die {{count}} Kopien wandern in den Papierkorb ({{size}}), wo du sie wiederherstellen kannst.",
+        "remembers_one": "Synthseek merkt sich ihren Klang und lehnt für diesen Titel einen Download ab, der gleich klingt. Sie aus dem Papierkorb wiederherzustellen hebt das auf.",
+        "remembers_other": "Synthseek merkt sich ihren Klang und lehnt für diesen Titel einen Download ab, der gleich klingt. Eine Kopie aus dem Papierkorb wiederherzustellen hebt das auf.",
+        "fails": "Die Anfrage gilt wieder als fehlgeschlagen, ohne Datei, bis du sie erneut versuchst.",
+        "rejectAction": "Ablehnen",
+        "searchHeading": "Ablehnen und neu suchen",
+        "same": "Wie Ablehnen.",
+        "searches_one": "Danach wird neu gesucht, und was wie sie klingt, wird abgelehnt.",
+        "searches_other": "Danach wird neu gesucht, und was wie sie klingt, wird abgelehnt.",
+        "nothingLeft": "Findet sich nichts anderes, gilt die Anfrage wieder als fehlgeschlagen.",
+        "searchAction": "Ablehnen und suchen",
+        "rejectDone_one": "Kopie abgelehnt, {{size}} im Papierkorb",
+        "rejectDone_other": "{{count}} Kopien abgelehnt, {{size}} im Papierkorb",
+        "unheard_one": "Der Ton von {{count}} Kopie ließ sich nicht lesen, daher wird ein Download, der wie sie klingt, nicht abgelehnt.",
+        "unheard_other": "Der Ton von {{count}} Kopien ließ sich nicht lesen, daher wird ein Download, der wie sie klingt, nicht abgelehnt.",
+        "searchingDone_one": "Kopie abgelehnt, es wird neu gesucht",
+        "searchingDone_other": "{{count}} Kopien abgelehnt, es wird neu gesucht"
+      }
     },
     "header": {
       "running": "Scannt",
@@ -2506,7 +2526,7 @@
     },
     "duplicates": {
       "title": "Doppelte Titel",
-      "description": "Titel mit mehr als einer Kopie auf der Festplatte. Die nachweislich identischen sind bereits erledigt."
+      "description": "Songs mit mehr als einer Kopie auf der Festplatte, die Synthseek nicht selbst klären konnte. Hör sie dir an und behalte die, die du willst."
     },
     "recycleBin": {
       "title": "Papierkorb",

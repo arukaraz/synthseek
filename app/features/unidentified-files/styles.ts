@@ -89,6 +89,8 @@ export const rowActions = cva("flex items-center gap-1.5");
 
 export const desktopOnly = cva("hidden sm:inline-flex");
 
+export const mobileOnly = cva("inline-flex sm:hidden");
+
 export const busyChip = cva(
   "border-primary-500/40 text-primary-400 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium [&_svg]:size-3.5"
 );
@@ -110,6 +112,12 @@ export const filePath = cva("text-fg/50 truncate font-mono text-[11px]");
 export const fileLengthMobile = cva("text-fg/50 text-xs tabular-nums sm:hidden");
 
 export const fileLength = cva("text-fg/50 hidden text-right text-xs tabular-nums sm:block");
+
+export const doubtList = cva("border-fg/10 bg-surface/40 mb-3 flex flex-col rounded-xl border");
+
+export const doubtMeta = cva("text-fg/55 flex min-w-0 items-center gap-x-2.5 text-xs");
+
+export const doubtPath = cva("min-w-0 truncate");
 
 export const showMoreRow = cva("border-fg/10 border-t px-3 py-2");
 

@@ -84,6 +84,42 @@ export function useAssignUnidentified() {
   });
 }
 
+export function useKeepVersionLinks() {
+  const utils = trpc.useUtils();
+  return trpc.library.scan.unidentified.keepLinks.useMutation({
+    onSuccess: (result) => {
+      refreshReview(utils);
+      if (result.kept > 0) {
+        toast.success(i18n.t("settings:libraryScan.review.toast.linkKept", { count: result.kept }));
+      }
+    },
+    onError: (error) => errorToast(error),
+  });
+}
+
+export function useRejectVersionLinks() {
+  const utils = trpc.useUtils();
+  return trpc.library.scan.unidentified.rejectLinks.useMutation({
+    onSuccess: (result) => {
+      if (result.outcome === "busy") {
+        toast.warning(i18n.t("library:files.outcome.busy"));
+        return;
+      }
+      refreshReview(utils);
+      if (result.rejected > 0) {
+        toast.info(i18n.t("settings:libraryScan.review.toast.linkRejected", { count: result.rejected }));
+      }
+      if (result.keptTheirName > 0) {
+        toast.warning(i18n.t("settings:libraryScan.review.toast.keptTheirName", { count: result.keptTheirName }));
+      }
+      if (result.unheard > 0) {
+        toast.warning(i18n.t("settings:libraryScan.review.toast.unheard", { count: result.unheard }));
+      }
+    },
+    onError: (error) => errorToast(error),
+  });
+}
+
 export function useResolveUnidentifiedLink() {
   return trpc.library.scan.unidentified.resolveLink.useMutation({
     onError: (error) => errorToast(error),

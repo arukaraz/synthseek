@@ -83,7 +83,23 @@ export const detailCounts = cva("text-fg/50 flex flex-wrap gap-x-3 gap-y-0.5 tex
 
 export const fileList = cva("flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto");
 
-export const fileRow = cva("hover:bg-fg/5 flex items-center gap-2.5 rounded-lg px-2 py-1.5");
+export const fileRow = cva("hover:bg-fg/5 flex gap-2.5 rounded-lg px-2 py-1.5", {
+  variants: {
+    align: {
+      center: "items-center",
+      start: "items-start",
+    },
+  },
+  defaultVariants: { align: "center" },
+});
+
+export const collisionText = cva("text-fg/70 pt-1 text-xs");
+
+export const collisionQualities = cva("text-fg/60 grid grid-cols-[auto_1fr] gap-x-2 pt-1 text-xs");
+
+export const collisionQualityValue = cva("text-fg/80 tabular-nums");
+
+export const collisionActions = cva("flex flex-wrap items-center gap-2 pt-2");
 
 export const fileInfo = cva("flex min-w-0 flex-1 flex-col");
 

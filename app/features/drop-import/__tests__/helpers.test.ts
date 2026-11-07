@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   batchProcessedCount,
   batchProgressPercent,
+  collisionQualityLabel,
   defaultMatchQuery,
   fileDisplayTags,
   stripExtension,
@@ -37,12 +38,31 @@ function makeFile(overrides: Partial<DropImportFile> = {}): DropImportFile {
     tag_album: null,
     duration_ms: null,
     identified_external_id: null,
+    collision: null,
     error: null,
     created_at: new Date(),
     updated_at: new Date(),
     ...overrides,
   };
 }
+
+describe("collisionQualityLabel", () => {
+  const base = { format: "flac", lossless: true, bitrateKbps: 900, sampleRate: 44100, bitsPerSample: 16 };
+
+  it("names a lossless file by bit depth and sample rate", () => {
+    expect(collisionQualityLabel(base)).toBe("FLAC 16/44.1");
+    expect(collisionQualityLabel({ ...base, sampleRate: 96000, bitsPerSample: 24 })).toBe("FLAC 24/96");
+  });
+
+  it("names a lossy file by bitrate", () => {
+    expect(collisionQualityLabel({ ...base, format: "mp3", lossless: false, bitrateKbps: 192 })).toBe("MP3 192 kbps");
+  });
+
+  it("falls back to the format when the numbers are unknown", () => {
+    expect(collisionQualityLabel({ ...base, bitsPerSample: null })).toBe("FLAC");
+    expect(collisionQualityLabel({ ...base, format: "mp3", lossless: false, bitrateKbps: null })).toBe("MP3");
+  });
+});
 
 describe("stripExtension", () => {
   it("drops the last extension and keeps dotless names intact", () => {

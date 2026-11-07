@@ -249,6 +249,7 @@
       "tagMismatch": "The file tags scored {{observed}} out of 100 for confidence, below the {{expected}} this check requires.",
       "durationMismatch": "The audio runs {{observed}} while the requested track runs {{expected}}.",
       "tagsUnreadable": "The file tags could not be read, so nothing could be compared against the request.",
+      "rejectedRecording": "It sounds like {{path}}, a copy you rejected as not this song.",
       "legacy": "This file was rejected before the granular checks started recording evidence.",
       "unavailable": "No evidence was recorded for this rejection.",
       "unknownTitle": "an unnamed recording"

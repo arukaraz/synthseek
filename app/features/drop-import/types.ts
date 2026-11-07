@@ -8,6 +8,13 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type DropImportBatch = RouterOutputs["import"]["listBatches"][number];
 export type DropImportBatchWithFiles = RouterOutputs["import"]["getBatch"];
 export type DropImportFile = DropImportBatchWithFiles["files"][number];
+export type DropImportCollision = NonNullable<DropImportFile["collision"]>;
+export type CollisionQuality = NonNullable<DropImportCollision["existing"]>;
+
+export interface CollisionChoiceProps {
+  file: DropImportFile;
+  collision: DropImportCollision;
+}
 
 export interface DropImportModalProps {
   open: boolean;

@@ -41,7 +41,7 @@ https://github.com/user-attachments/assets/50c3988e-7ec1-41dc-9a9e-a8407043b552
 
 - **No API keys to get started.** The catalog is provider-agnostic and runs on Deezer by default, so a first run needs nothing you have to register for.
 - **Seven download sources, and you decide the order.** Peer-to-peer, Usenet, torrent, another Subsonic server, and fallbacks to YouTube, SoundCloud and the Internet Archive, chosen per request rather than once globally.
-- **It treats your library as something to keep honest.** Files are checked before they are imported, duplicate copies are only settled when they can be proven identical, and nothing in your library is ever deleted outright.
+- **It treats your library as something to keep honest.** Files are checked before they are imported, Synthseek only recycles a duplicate on its own when it sounds like the same recording, and nothing in your library is ever deleted outright.
 
 ## Quick start
 

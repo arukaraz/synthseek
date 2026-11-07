@@ -27,9 +27,6 @@ The user Synthseek runs as, set by `PUID` and `PGID`, does not own those folders
 **My library is on a NAS or an external drive and mounts read-only.**
 Synthseek still boots and browsing works, and it says so at startup. Imports into the library will fail while it stays read-only, so fix the ownership before requesting anything.
 
-**The container used to crash with a `chown` error on `/music`.**
-Fixed in 1.2.1. Your music and downloads volumes are no longer chowned recursively; instead the folders are probed at boot and a clear diagnostic is emitted. Boot is also instant on large libraries, since nothing walks them.
-
 ## Downloads
 
 **Everything is stuck at queued and nothing downloads.**
@@ -56,10 +53,10 @@ Yes. Settings, then Download sources. You can also choose which sources to try, 
 ## Library and imports
 
 **Files downloaded but nothing appears in my library.**
-Filing may be disabled, in which case files stay in the downloads folder. Check both `ENABLE_LIBRARY_IMPORT` and the older `ENABLE_BEETS_IMPORT`, since either one set to false turns it off. Otherwise check the log for the import phase.
+Filing may be disabled, in which case files stay in the downloads folder. Check both `ENABLE_LIBRARY_IMPORT` and `ENABLE_BEETS_IMPORT`, since either one set to false turns it off. Otherwise check the log for the import phase.
 
 **An artist appears twice in my library.**
-Two causes. A past bug stored names in a simplified form, and updating merges those. More often, two programs are writing into the same music root under different naming conventions, typically Lidarr using MusicBrainz spelling and Synthseek using the catalog's. Check which program created each folder before treating it as a bug.
+Usually two programs are writing into the same music root under different naming conventions, typically Lidarr using MusicBrainz spelling and Synthseek using the catalog's. Check which program created each folder before treating it as a bug.
 
 **Can I import music I already have?**
 Yes, three ways. Drag files or zip archives in. Connect a library source such as Spotify and import from it. Or import a playlist file in JSPF, XSPF, or Exportify CSV.
@@ -87,7 +84,7 @@ In the web app itself, through your media server, or straight from Synthseek wit
 Yes, and not only in the browser. Your queue and your position are kept on the server, so a reload brings them back where you stopped. It is the same queue your Subsonic app uses, so you can leave a queue on your phone and find it in the browser. Favourites are the same mark in both, and what you play can be sent on to Last.fm or ListenBrainz once you connect one.
 
 **Do I need a media server for that?**
-No. That is the point of it. A media server remains useful for everything else it does, but it is no longer the only way to hear what Synthseek downloaded.
+No. The web app and music apps play straight from Synthseek, with or without a media server.
 
 **Can my music app change things in Synthseek, or only play them?**
 It can change things, and that is deliberate. Favourites, playlists, what you played and the queue you left behind are all written back. The app and the web app agree with each other instead of each keeping a private copy. Three limits are worth knowing. Favourites are per person, so yours are invisible to everyone else on the instance. What you are playing right now is not: any music app on the instance can see who is listening to what, which is how the Subsonic protocol defines that feature. And deleting a playlist from a music app deletes the playlist only. The tracks stay in your library, even the ones downloaded for that playlist that live nowhere else. Deleting the music itself happens in the web app, by your hand or by an expiry you set on a playlist set.

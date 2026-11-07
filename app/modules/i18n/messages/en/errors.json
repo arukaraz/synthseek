@@ -275,6 +275,18 @@
     "title": "File cannot be matched",
     "description": "Only files waiting for a match can be assigned a track."
   },
+  "DROP_IMPORT_FILE_NOT_AWAITING_CHOICE": {
+    "title": "File is not waiting for a choice",
+    "description": "Its choice was already made. Refresh the batch."
+  },
+  "DROP_IMPORT_CHOICE_UNREADABLE": {
+    "title": "This choice cannot be read",
+    "description": "Discard the file and upload it again."
+  },
+  "DROP_IMPORT_COPY_NOT_COMPARED": {
+    "title": "The two files could not be compared",
+    "description": "Nothing was changed. Try again in a moment."
+  },
   "DROP_IMPORT_FILE_IN_FLIGHT": {
     "title": "File is importing",
     "description": "Wait for the import to finish, then retry."
@@ -306,6 +318,18 @@
   "LIBRARY_SCAN_ALREADY_RUNNING": {
     "title": "Scan already running",
     "description": "A library scan is already in progress. Wait for it to finish or cancel it first."
+  },
+  "LIBRARY_ORGANISE_RUNNING": {
+    "title": "Files are being placed",
+    "description": "The library is moving files into place right now. Try again once that finishes."
+  },
+  "LIBRARY_ORPHAN_SWEEP_RUNNING": {
+    "title": "Leftover files are being cleared",
+    "description": "The library is clearing leftover files right now. Try again once that finishes."
+  },
+  "LIBRARY_COPIES_SETTLING": {
+    "title": "Duplicates are being settled",
+    "description": "Another set of duplicate copies is being settled right now. Try again in a moment."
   },
   "LIBRARY_PATH_NOT_FOUND": {
     "title": "Library path not found",

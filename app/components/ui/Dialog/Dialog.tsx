@@ -4,11 +4,12 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { X } from "lucide-react";
-import type { HTMLAttributes } from "react";
+import { type HTMLAttributes, use } from "react";
 import { useTranslation } from "react-i18next";
 import { closeButton } from "../styles";
+import { DialogCloseShownContext } from "./context";
 import { keepOpenForToasts } from "./helpers";
-import { dialogContent } from "./styles";
+import { dialogContent, dialogHeader } from "./styles";
 import type {
   DialogContentProps,
   DialogDescriptionProps,
@@ -57,7 +58,9 @@ export function DialogContent({
       >
         <div className={gradientOverlay({ direction: "toBr", intensity: "mixed", rounded: "2xl" })} />
 
-        <div className="relative z-10 flex h-full flex-col">{children}</div>
+        <DialogCloseShownContext value={showClose}>
+          <div className="relative z-10 flex h-full flex-col">{children}</div>
+        </DialogCloseShownContext>
 
         {showClose && (
           <DialogPrimitive.Close className={closeButton()}>
@@ -86,7 +89,8 @@ export function DialogSurface({ className, children, ref, onInteractOutside, ...
 }
 
 export function DialogHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)} {...props} />;
+  const closeShown = use(DialogCloseShownContext);
+  return <div className={cn(dialogHeader({ closeShown }), className)} {...props} />;
 }
 
 export function DialogFooter({ className, ...props }: HTMLAttributes<HTMLDivElement>) {

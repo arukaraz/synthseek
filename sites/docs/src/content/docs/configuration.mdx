@@ -160,7 +160,7 @@ The same tab holds **Audio analysis**, which shows how much of the library has b
 
 **Rules** lists the conditions a request can match, such as who asked for it, its genre or its release year. When several match, the one higher in the list is tried first.
 
-**Scan** shows what the last library scan found, and the files it could not recognise, behind **Review files**.
+**Scan** shows what the last library scan found, and the files it could not recognise or wants you to confirm, behind **Review files**.
 
 **Sources** is where members' libraries come from. Connect Spotify to import an existing library. It requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet. Members can also import playlists from your media servers, through the account each one links under **Connected accounts**.
 
@@ -213,7 +213,7 @@ The files held back because they failed verification, with the reason for each. 
 
 **Duplicates**
 
-Tracks with more than one copy on disk. Copies it can prove identical wait under **Safe to resolve** until the library scan settles them, or until you resolve them yourself. What it cannot prove waits under **Needs review**.
+Tracks with more than one copy on disk that Synthseek could not settle on its own. Listen to the copies and keep the one you want.
 
 **Recycle bin**
 
@@ -234,7 +234,7 @@ The albums Usenet and torrent fetched whole that are still on disk. Each shows i
 | AcoustID identity gate | On             | Fingerprint the audio and identify it before import, so a file whose tags look right but whose audio is by a different artist is refused. Needs an AcoustID key. |
 | Auto-ban threshold     | 0, meaning off | Ban a peer after this many failures. Shown here, and changed with slskd's settings under **Download sources**.                                                   |
 
-Below them, the list of current entries with the reason for each, and the **Banned uploaders** list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tags do not match, duration mismatch, and tags unreadable.
+Below them, the list of current entries with the reason for each, and the **Banned uploaders** list. A quarantined pairing stays excluded until you remove that entry, clear the list, or approve the held file it came from. Reasons are: wrong file, verification failed, fingerprint mismatch, tags do not match, duration mismatch, tags unreadable, and sounds like a rejected copy.
 
 **System status**
 
@@ -314,7 +314,7 @@ A fresh install needs none of them. The setup wizard collects the same values an
 
 | Variable                | Default                          | What it is                                                                                                                                                             |
 | ----------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ENABLE_LIBRARY_IMPORT` | true                             | Whether to tag and file at all. Replaces `ENABLE_BEETS_IMPORT`, which is still honoured: either one set to false leaves files in the downloads folder.                 |
+| `ENABLE_LIBRARY_IMPORT` | true                             | Whether to tag and file at all. `ENABLE_BEETS_IMPORT` set to false also leaves files in the downloads folder.                                                          |
 | `USE_ACOUSTIC_ID`       | true                             | Identify tracks by their audio when tagging.                                                                                                                           |
 | `BEETS_COMMAND`         | `beet`                           | Path to the beets executable, used only for the presence check behind the Beets CLI row in Settings.                                                                   |
 | `BEETS_CONFIG`          | `/data/config/beets-config.yaml` | Path to a Beets configuration, read only to find the database of an existing Beets library and pick up its MusicBrainz identities. A default is created on first boot. |

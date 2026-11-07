@@ -68,7 +68,7 @@ The handoff is validated before anything is created. Synthseek resolves the arti
 
 ## Beets
 
-Beets no longer tags or files anything. It is still bundled, and what Synthseek normally runs it for is the presence check behind the Beets CLI row in Settings. One opt-in repair pass, off unless you turn it on, still drives it to resync its own database.
+Synthseek tags and files your music itself. The bundled Beets runs for the presence check behind the Beets CLI row in Settings. One opt-in repair pass, off unless you turn it on, also has it resync its own database.
 
 If you are moving an existing Beets library over, Synthseek reads its database once to pick up the MusicBrainz identities Beets had collected. It looks for that database where the Beets configuration at `BEETS_CONFIG` declares it, so point that at your own configuration to hand the identities over.
 
@@ -87,16 +87,16 @@ The catalog provides the primary picture of a track, album, artist, or playlist.
 
 Around it sit enrichment providers, each contributing something the catalog does not have:
 
-| Provider          | Contributes                                                   |
-| ----------------- | ------------------------------------------------------------- |
-| MusicBrainz       | Canonical identifiers, used for accurate tagging.             |
-| Cover Art Archive | Album artwork when the catalog has none.                      |
-| fanart.tv         | Artist images.                                                |
-| Last.fm           | Biographies, similar artists, charts, and your scrobbles.     |
-| ListenBrainz      | Recording metadata, recommendations, and generated mixes.     |
-| Discogs           | Additional detail on release pages.                           |
-| Wikidata          | Factual artist details.                                       |
-| Songlink          | Resolving links from other platforms into requestable tracks. |
+| Provider          | Contributes                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| MusicBrainz       | Canonical identifiers, used for tagging and for recognising the album a scanned file is on. |
+| Cover Art Archive | Album artwork when the catalog has none.                                                    |
+| fanart.tv         | Artist images.                                                                              |
+| Last.fm           | Biographies, similar artists, charts, and your scrobbles.                                   |
+| ListenBrainz      | Recording metadata, recommendations, and generated mixes.                                   |
+| Discogs           | Additional detail on release pages.                                                         |
+| Wikidata          | Factual artist details.                                                                     |
+| Songlink          | Resolving links from other platforms into requestable tracks.                               |
 
 Enrichment never blocks anything. If a provider is unavailable, the page renders without it and tells you which source is degraded and for how long. A provider that fails repeatedly is stopped being called for a while, then probed once to see whether it has recovered.
 

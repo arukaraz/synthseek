@@ -5,6 +5,7 @@ import type { EngineImportSettings, MaintenanceCounts, SystemProblem } from "../
 import type { inferRouterOutputs } from "@trpc/server";
 
 import type { AppRouter } from "@api/__generated__/types";
+import type { ComparedCopy, CopyComparison } from "@hooks/ui/copyComparison";
 
 export type MaintenanceSurfaceKey = keyof MaintenanceCounts;
 
@@ -51,27 +52,35 @@ export interface DuplicatesContentProps {
   reclaiming: boolean;
 }
 
-export interface DuplicateGroupSummary {
-  copies: readonly unknown[];
-  formats: readonly string[];
-  minBytes: number;
-  maxBytes: number;
-  distinctLengths: number | null;
+export type DuplicateGroup = inferRouterOutputs<AppRouter>["library"]["scan"]["duplicateGroups"]["groups"][number];
+
+export type DuplicateCopy = DuplicateGroup["copies"][number];
+
+export interface DuplicateComparatorProps {
+  group: DuplicateGroup;
+  busy: boolean;
+  onKeep: (copy: DuplicateCopy) => void;
+  onNoneFits: () => void;
 }
 
-export interface CopyRowProps {
-  copy: {
-    id: string;
-    fileName: string;
-    sizeBytes: number;
-    durationSeconds: number | null;
-    serving: boolean;
-    libraryPath: string;
-  };
+export interface CopyLaneProps {
+  copy: DuplicateCopy;
+  index: number;
+  comparison: CopyComparison;
+  compared: ComparedCopy;
+  isReference: boolean;
   showPath: boolean;
-  disabled: boolean;
-  keeping: boolean;
-  playing: boolean;
-  onPlayChange: (id: string | null) => void;
+  busy: boolean;
   onKeep: () => void;
+}
+
+export interface RejectCopiesDialogProps {
+  group: DuplicateGroup | null;
+  pending: boolean;
+  onCancel: () => void;
+  onConfirm: (searchAgain: boolean) => void;
+}
+
+export interface ComparatorTransportProps {
+  comparison: CopyComparison;
 }

@@ -578,7 +578,7 @@
       "delete": "Supprimer le lot",
       "confirmDelete": {
         "title": "Supprimer le lot",
-        "message": "Cela supprime le lot et les fichiers en attente de correspondance. Les titres importés restent dans votre bibliothèque.",
+        "message": "Cela supprime le lot et les fichiers en attente de votre choix. Les titres importés restent dans votre bibliothèque.",
         "confirm": "Supprimer"
       }
     },
@@ -596,6 +596,7 @@
       "imported": "Importé",
       "already_in_library": "Déjà dans la bibliothèque",
       "pending_match": "Correspondance requise",
+      "awaiting_choice": "Copie déjà présente",
       "discarded": "Écarté",
       "failed": "Échoué"
     },
@@ -607,8 +608,8 @@
       "imported_other": "{{count}} importés",
       "alreadyInLibrary_one": "{{count}} déjà dans votre bibliothèque",
       "alreadyInLibrary_other": "{{count}} déjà dans votre bibliothèque",
-      "pending_one": "{{count}} en attente de correspondance",
-      "pending_other": "{{count}} en attente de correspondance",
+      "pending_one": "{{count}} attend votre choix",
+      "pending_other": "{{count}} attendent votre choix",
       "failed_one": "{{count}} échoué",
       "failed_other": "{{count}} échoués",
       "discarded_one": "{{count}} écarté",
@@ -622,6 +623,14 @@
       "noResults": "Aucun résultat.",
       "pick": "Utiliser",
       "close": "Fermer"
+    },
+    "collision": {
+      "sameAs": "Sonne comme la copie de « {{album}} », une autre entrée du catalogue",
+      "inLibrary": "Dans la bibliothèque :",
+      "yours": "Votre fichier :",
+      "unreadable": "Illisible",
+      "useExisting": "Garder celle déjà présente",
+      "useMine": "Utiliser mon fichier"
     }
   }
 }

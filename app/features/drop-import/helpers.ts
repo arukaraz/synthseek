@@ -1,4 +1,17 @@
-import type { DropImportBatch, DropImportFile } from "./types";
+import type { CollisionQuality, DropImportBatch, DropImportFile } from "./types";
+
+function kilohertz(sampleRate: number): string {
+  return String(Number((sampleRate / 1000).toFixed(1)));
+}
+
+export function collisionQualityLabel(quality: CollisionQuality): string {
+  const format = quality.format.toUpperCase();
+  if (quality.lossless && quality.bitsPerSample !== null && quality.sampleRate !== null) {
+    return `${format} ${quality.bitsPerSample}/${kilohertz(quality.sampleRate)}`;
+  }
+  if (!quality.lossless && quality.bitrateKbps !== null) return `${format} ${quality.bitrateKbps} kbps`;
+  return format;
+}
 
 export function stripExtension(name: string): string {
   const dot = name.lastIndexOf(".");

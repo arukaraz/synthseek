@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 
-import { Dialog, DialogContent, DialogDescription, DialogSurface, DialogTitle } from "../Dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogSurface, DialogTitle } from "../Dialog";
 
 afterEach(() => {
   cleanup();
@@ -25,6 +25,30 @@ async function pressOutside(name: string): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, 0));
   fireEvent.pointerDown(screen.getByRole("button", { name, hidden: true }));
 }
+
+describe("DialogHeader", () => {
+  function headerOf(showClose: boolean): HTMLElement {
+    render(
+      <Dialog open>
+        <DialogContent showClose={showClose}>
+          <DialogHeader data-testid="header">
+            <DialogTitle>Reject the 3 copies of a song with a long title</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>Files</DialogDescription>
+        </DialogContent>
+      </Dialog>
+    );
+    return screen.getByTestId("header");
+  }
+
+  it("keeps the title clear of the close button when the dialog shows one", () => {
+    expect(headerOf(true).className).toContain("sm:pr-8");
+  });
+
+  it("gives the title the whole width when the dialog has no close button", () => {
+    expect(headerOf(false).className).not.toMatch(/\bp[rx]-8\b/);
+  });
+});
 
 describe("DialogContent", () => {
   it("stays open when a toast is pressed, so the toast's action can run", async () => {
