@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { playlistOriginLabel } from "@utils/playlist";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -50,7 +50,7 @@ export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
           </span>
         ) : tiles.length === 1 ? (
           <Image
-            src={artworkProxySrc(tiles[0])}
+            {...artworkImage(tiles[0])}
             alt=""
             fill
             sizes="(max-width: 640px) 50vw, 20vw"
@@ -61,7 +61,7 @@ export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
             {tiles.map((src, index) => (
               <div key={`${src}-${index}`} className={cardMosaicTile()}>
                 <Image
-                  src={artworkProxySrc(src)}
+                  {...artworkImage(src)}
                   alt=""
                   fill
                   sizes="(max-width: 640px) 25vw, 10vw"

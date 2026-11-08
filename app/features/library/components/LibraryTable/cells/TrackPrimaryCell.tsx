@@ -1,7 +1,7 @@
 "use client";
 
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { Music, Play } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -16,13 +16,7 @@ export function TrackPrimaryCell({ item, onPlay }: TrackPrimaryCellProps) {
     <div className={primaryCellRow()}>
       <div className={primaryCellArtwork()}>
         {item.albumArt ? (
-          <Image
-            src={artworkProxySrc(item.albumArt)}
-            alt=""
-            width={40}
-            height={40}
-            className="rounded-md object-cover"
-          />
+          <Image {...artworkImage(item.albumArt)} alt="" width={40} height={40} className="rounded-md object-cover" />
         ) : (
           <ImagePlaceholder size="sm" icon={Music} />
         )}

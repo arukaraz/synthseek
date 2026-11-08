@@ -3,7 +3,7 @@
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
 import { StatusBadge } from "@components/StatusBadge";
 import { formatRelativeTime } from "@utils/formatters";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { Disc } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,7 @@ export function RecentRequestCard({ request }: RecentRequestCardProps) {
         <div className={cardArt()}>
           {parentArt ? (
             <Image
-              src={artworkProxySrc(parentArt)}
+              {...artworkImage(parentArt)}
               alt={t("recentRequests.albumArtAlt", { name: request.parent.name })}
               fill
               className="object-cover"

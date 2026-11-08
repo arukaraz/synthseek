@@ -6,7 +6,7 @@ import { Music } from "lucide-react";
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
 import { circularImagePlaceholder } from "../ui/styles";
 import { cn } from "@utils/cn";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { FallbackIcon } from "./FallbackIcon";
 import type { ImageWithFallbackProps } from "./types";
 
@@ -37,12 +37,12 @@ export function ImageWithFallback({
     return <ImagePlaceholder size={placeholderSize} icon={fallbackIcon} className={className} />;
   }
 
-  const resolvedSrc = artworkProxySrc(src);
+  const image = artworkImage(src);
 
   if (fill) {
     return (
       <Image
-        src={resolvedSrc}
+        {...image}
         alt={alt}
         fill
         sizes={sizes}
@@ -55,7 +55,7 @@ export function ImageWithFallback({
 
   return (
     <Image
-      src={resolvedSrc}
+      {...image}
       alt={alt}
       width={width}
       height={height}

@@ -4,7 +4,7 @@ import { Button } from "@components/ui/Button";
 import { IconButton } from "@components/ui/IconButton";
 import { StatusBadge } from "@components/StatusBadge";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";
 import { formatDateTime } from "@utils/formatters";
 import { ArrowLeft, ListPlus, Loader2, RefreshCw } from "lucide-react";
@@ -84,7 +84,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
   const openDetail = detailTarget ? () => openForTarget(detailTarget) : null;
   const artwork = request.album_art ? (
     <Image
-      src={artworkProxySrc(request.album_art)}
+      {...artworkImage(request.album_art)}
       alt={request.name}
       fill
       sizes="(max-width: 640px) 96px, 112px"
@@ -97,7 +97,7 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
       <div className={heroBanner()} aria-hidden="true">
         {request.album_art ? (
           <Image
-            src={artworkProxySrc(request.album_art)}
+            {...artworkImage(request.album_art)}
             alt=""
             fill
             sizes="100vw"

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { artworkImage, artworkProxySrc } from "../artworkProxy";
+import artworkLoader from "../artworkLoader";
+import { artworkImage, artworkProxySrc, sizedArtworkSrc } from "../artworkProxy";
 
 describe("artworkProxySrc", () => {
   it("rewrites a Deezer CDN url through the proxy", () => {
@@ -72,8 +73,34 @@ describe("artworkImage", () => {
     expect(artworkImage(url)).toEqual({ src: `/api/artwork?url=${encodeURIComponent(url)}`, unoptimized: false });
   });
 
-  it("serves a host Next has no pattern for as it is, so the image does not throw", () => {
+  it("serves a host the proxy does not take as it is, unsized", () => {
     const url = "https://lastfm.freetls.fastly.net/i/u/300x300/abc.jpg";
     expect(artworkImage(url)).toEqual({ src: url, unoptimized: true });
+  });
+
+  it("keeps a source already pointing at the proxy sized, without proxying it twice", () => {
+    const proxied = `/api/artwork?url=${encodeURIComponent("https://cdn-images.dzcdn.net/images/cover/abc/1000x1000.jpg")}`;
+    expect(artworkImage(proxied)).toEqual({ src: proxied, unoptimized: false });
+  });
+});
+
+describe("sizedArtworkSrc", () => {
+  it("asks the proxy for the width the image is drawn at", () => {
+    const proxied = `/api/artwork?url=${encodeURIComponent("https://cdn-images.dzcdn.net/images/cover/abc/1000x1000.jpg")}`;
+    expect(sizedArtworkSrc(proxied, 256)).toBe(`${proxied}&w=256`);
+  });
+
+  it("leaves a source the proxy does not serve untouched", () => {
+    expect(sizedArtworkSrc("https://lastfm.freetls.fastly.net/i/u/300x300/abc.jpg", 256)).toBe(
+      "https://lastfm.freetls.fastly.net/i/u/300x300/abc.jpg"
+    );
+    expect(sizedArtworkSrc("/api/v1/other?url=x", 256)).toBe("/api/v1/other?url=x");
+  });
+});
+
+describe("artworkLoader", () => {
+  it("is the image loader Next calls, sizing proxied covers by width", () => {
+    const proxied = `/api/artwork?url=${encodeURIComponent("https://coverartarchive.org/release/abc/front")}`;
+    expect(artworkLoader({ src: proxied, width: 640, quality: 75 })).toBe(`${proxied}&w=640`);
   });
 });

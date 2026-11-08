@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@utils/cn";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { Check, Download } from "lucide-react";
 import Image from "next/image";
 
@@ -37,7 +37,7 @@ export function ContentCard({ item, onSelect }: ContentCardProps) {
       <div className={cardCover()}>
         {item.image ? (
           <Image
-            src={artworkProxySrc(item.image)}
+            {...artworkImage(item.image)}
             alt=""
             fill
             sizes="(max-width: 640px) 50vw, 20vw"

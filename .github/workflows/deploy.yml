@@ -409,8 +409,8 @@ jobs:
             exit 1
           fi
 
-          if ! docker exec -w /app/web "$CID" node -e "const s = require('sharp'); console.log('sharp loads, libvips ' + s.versions.vips + ' on ' + process.arch)"; then
-            echo "Error: the web tier cannot load sharp for $ARCH, so the image optimizer would serve every image unresized"
+          if ! docker exec -w /app/server "$CID" node -e "const s = require('sharp'); s({ create: { width: 8, height: 8, channels: 3, background: '#000' } }).resize({ width: 4 }).webp().toBuffer().then((b) => console.log('sharp resizes, libvips ' + s.versions.vips + ' on ' + process.arch + ', ' + b.length + ' bytes'))"; then
+            echo "Error: the server cannot resize with sharp on $ARCH, so every sized cover would fail back to the original"
             exit 1
           fi
 

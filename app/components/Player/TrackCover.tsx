@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { artworkImage } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";
 
 import { cover, coverArtwork, coverGlow, coverInitials } from "./styles";
@@ -13,7 +14,7 @@ export function TrackCover({ initials, tone, size, artworkUrl = null }: PlayerCo
           {initials}
         </span>
       ) : (
-        <Image className={coverArtwork()} src={artworkUrl} alt="" fill sizes="256px" />
+        <Image className={coverArtwork()} {...artworkImage(artworkUrl)} alt="" fill sizes="256px" />
       )}
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { Checkbox } from "@components/ui/Checkbox";
 import { cn } from "@utils/cn";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
@@ -69,7 +69,7 @@ export function AlbumCard({ item, showLibraryPaths = false, onOpen, onPlay, menu
       <div className={cardCover({ tone: cardCoverTone(selection) })}>
         {item.album_art ? (
           <Image
-            src={artworkProxySrc(item.album_art)}
+            {...artworkImage(item.album_art)}
             alt=""
             fill
             sizes="(max-width: 640px) 50vw, 20vw"

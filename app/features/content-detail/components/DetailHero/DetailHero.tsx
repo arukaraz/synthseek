@@ -6,7 +6,7 @@ import { SocialIcon } from "@components/ui/SocialIcon";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 import { Check, CheckCircle, Download, EllipsisVertical, Pencil, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { memo } from "react";
@@ -88,7 +88,7 @@ function DetailHeroComponent({
     <header className={hero()}>
       {cover ? (
         <div className={heroBackdrop()} aria-hidden>
-          <Image src={artworkProxySrc(cover)} alt="" fill sizes="100vw" className={heroBackdropImage()} />
+          <Image {...artworkImage(cover)} alt="" fill sizes="100vw" className={heroBackdropImage()} />
           <span className={heroBackdropVeil()} />
         </div>
       ) : null}
@@ -96,7 +96,7 @@ function DetailHeroComponent({
       <div className={avatarWrap()}>
         <div className={heroCover({ shape: isArtist ? "round" : "square" })}>
           {cover ? (
-            <Image src={artworkProxySrc(cover)} alt="" fill sizes="160px" className={heroImage()} />
+            <Image {...artworkImage(cover)} alt="" fill sizes="160px" className={heroImage()} />
           ) : (
             <span aria-hidden className={heroInitials()}>
               {detailInitials(name)}

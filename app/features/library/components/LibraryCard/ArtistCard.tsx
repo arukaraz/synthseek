@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 
 import { CardCoverActions } from "./CardCoverActions";
 import { cardCoverActionsFrom, cardInitials, handleCardActivationKey } from "./helpers";
@@ -38,13 +38,7 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay }:
     >
       <div className={cardCover()}>
         {cover ? (
-          <Image
-            src={artworkProxySrc(cover)}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 50vw, 20vw"
-            className={cardImage()}
-          />
+          <Image {...artworkImage(cover)} alt="" fill sizes="(max-width: 640px) 50vw, 20vw" className={cardImage()} />
         ) : (
           <span aria-hidden className={cardInitialsStyle()}>
             {cardInitials(item.artist)}

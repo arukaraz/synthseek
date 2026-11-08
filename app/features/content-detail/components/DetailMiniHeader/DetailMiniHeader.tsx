@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { memo } from "react";
 
-import { artworkProxySrc } from "@utils/artworkProxy";
+import { artworkImage } from "@utils/artworkProxy";
 
 import { detailInitials } from "../../helpers";
 import { miniBack, miniBar, miniImage, miniInitials, miniName, miniStickyRoot, miniThumb } from "../../styles";
@@ -30,7 +30,7 @@ function DetailMiniHeaderComponent({
 
         <div className={miniThumb({ shape: mode === "artist" ? "round" : "square" })}>
           {cover ? (
-            <Image src={artworkProxySrc(cover)} alt="" fill sizes="36px" className={miniImage()} />
+            <Image {...artworkImage(cover)} alt="" fill sizes="36px" className={miniImage()} />
           ) : (
             <span aria-hidden className={miniInitials()}>
               {detailInitials(name)}

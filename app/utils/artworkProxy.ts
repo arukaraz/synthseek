@@ -3,6 +3,8 @@ export interface ArtworkImage {
   unoptimized: boolean;
 }
 
+const ARTWORK_PROXY_PREFIX = "/api/artwork?url=";
+
 const ARTWORK_PROXY_HOSTS = [
   "cdn-images.dzcdn.net",
   "e-cdns-images.dzcdn.net",
@@ -33,7 +35,11 @@ function proxiedArtworkPath(url: string): string | null {
     return null;
   }
 
-  return `/api/artwork?url=${encodeURIComponent(url)}`;
+  return `${ARTWORK_PROXY_PREFIX}${encodeURIComponent(url)}`;
+}
+
+function isProxiedArtworkSrc(src: string): boolean {
+  return src.startsWith(ARTWORK_PROXY_PREFIX);
 }
 
 export function artworkProxySrc(url: string): string {
@@ -41,6 +47,11 @@ export function artworkProxySrc(url: string): string {
 }
 
 export function artworkImage(url: string): ArtworkImage {
+  if (isProxiedArtworkSrc(url)) return { src: url, unoptimized: false };
   const proxied = proxiedArtworkPath(url);
   return proxied === null ? { src: url, unoptimized: true } : { src: proxied, unoptimized: false };
+}
+
+export function sizedArtworkSrc(src: string, width: number): string {
+  return isProxiedArtworkSrc(src) ? `${src}&w=${width}` : src;
 }
