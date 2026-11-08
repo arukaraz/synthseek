@@ -24,30 +24,19 @@ export const selectionCountLabel = cva("text-fg/70 truncate text-sm");
 export const selectionActions = cva("flex shrink-0 items-center gap-1.5");
 
 export const selectionAction = cva(
-  "inline-flex shrink-0 items-center gap-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+  "border-fg/10 bg-fg/[0.03] text-fg/70 hover:bg-fg/[0.06] hover:text-fg inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:px-2.5"
+);
+
+export const prominentAction = cva(
+  "focus-visible:ring-primary-400 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
-      appearance: {
-        compact: "rounded-md border px-2 py-1 text-xs font-medium sm:px-2.5",
-        prominent:
-          "focus-visible:ring-primary-400 h-9 rounded-lg px-3 text-sm font-semibold focus-visible:ring-2 focus-visible:outline-none",
+      tone: {
+        default: "bg-fg/[0.06] text-fg hover:bg-fg/10",
+        danger: "bg-destructive-vivid/15 text-destructive-vivid hover:bg-destructive-vivid/25",
       },
-      tone: { default: "", danger: "" },
     },
-    compoundVariants: [
-      {
-        appearance: "compact",
-        tone: "default",
-        class: "border-fg/10 bg-fg/[0.03] text-fg/70 hover:bg-fg/[0.06] hover:text-fg",
-      },
-      { appearance: "prominent", tone: "default", class: "bg-fg/[0.06] text-fg hover:bg-fg/10" },
-      {
-        appearance: "prominent",
-        tone: "danger",
-        class: "bg-destructive-vivid/15 text-destructive-vivid hover:bg-destructive-vivid/25",
-      },
-    ],
-    defaultVariants: { appearance: "compact", tone: "default" },
+    defaultVariants: { tone: "default" },
   }
 );
 

@@ -1,29 +1,28 @@
 import { trpc } from "@utils/trpc";
 import { getQueryKey } from "@trpc/react-query";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { type InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef } from "react";
 
 import { LIBRARY_BATCH_LIMIT, LIBRARY_BATCH_LIMIT_MAX, LIBRARY_GC_TIME, LIBRARY_STALE_TIME } from "./constants";
-import { batchLimitThrough, getNextOffset, loadedCount, stripPaging } from "./helpers";
-import type { LibraryArtistsInfiniteResult, LibraryArtistsInput } from "./types";
+import { batchLimitThrough, cachedPageSize, getNextOffset, loadedCount, stripPaging } from "./helpers";
+import type { LibraryArtistsInfiniteResult, LibraryArtistsInput, LibraryArtistsResult } from "./types";
 
 export function useLibraryArtists(input: LibraryArtistsInput, enabled: boolean): LibraryArtistsInfiniteResult {
   const utils = trpc.useUtils();
+  const queryClient = useQueryClient();
   const throughRef = useRef(0);
-  const pageSizesRef = useRef(new Map<string, number>());
-  const scope = JSON.stringify(stripPaging(input));
+  const queryKey = getQueryKey(trpc.library.getArtists, stripPaging(input), "infinite");
 
   const query = useInfiniteQuery({
-    queryKey: getQueryKey(trpc.library.getArtists, stripPaging(input), "infinite"),
-    queryFn: async ({ pageParam, signal }) => {
-      const sizeKey = `${scope}:${pageParam}`;
-      const limit =
-        pageSizesRef.current.get(sizeKey) ??
-        batchLimitThrough(pageParam, throughRef.current, LIBRARY_BATCH_LIMIT, LIBRARY_BATCH_LIMIT_MAX);
-      const page = await utils.library.getArtists.fetch({ ...input, offset: pageParam, limit });
-      if (!signal.aborted) pageSizesRef.current.set(sizeKey, limit);
-      return page;
-    },
+    queryKey,
+    queryFn: ({ pageParam }) =>
+      utils.library.getArtists.fetch({
+        ...input,
+        offset: pageParam,
+        limit:
+          cachedPageSize(queryClient.getQueryData<InfiniteData<LibraryArtistsResult, number>>(queryKey), pageParam) ??
+          batchLimitThrough(pageParam, throughRef.current, LIBRARY_BATCH_LIMIT, LIBRARY_BATCH_LIMIT_MAX),
+      }),
     initialPageParam: 0,
     getNextPageParam: getNextOffset,
     enabled,

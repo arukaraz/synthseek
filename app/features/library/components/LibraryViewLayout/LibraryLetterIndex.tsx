@@ -1,5 +1,6 @@
 "use client";
 
+import { LibraryIndexLetter } from "@api/__generated__/types";
 import { AlphabetIndex } from "@components/ui/AlphabetIndex";
 import { useTranslation } from "react-i18next";
 
@@ -13,6 +14,7 @@ export function LibraryLetterIndex({ index, scrollRoot }: LibraryLetterIndexProp
   return (
     <AlphabetIndex
       entries={index.entries}
+      letters={LibraryIndexLetter.options}
       descending={index.descending}
       label={t("page.shelf.letterIndex")}
       letterLabel={(letter) => t("page.shelf.jumpToLetter", { letter })}

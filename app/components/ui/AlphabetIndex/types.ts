@@ -10,6 +10,7 @@ export interface AlphabetIndexSlot {
 
 export interface AlphabetIndexProps {
   entries: readonly AlphabetIndexEntry[];
+  letters: readonly string[];
   descending?: boolean;
   label: string;
   letterLabel: (letter: string) => string;

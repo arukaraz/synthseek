@@ -198,20 +198,6 @@ describe("useSheetDrag", () => {
     expect(sheet.style.transform).toBe("");
   });
 
-  it("does not drag from inside a no-drag zone", () => {
-    const { sheet } = mountSheet();
-    const zone = document.createElement("div");
-    zone.setAttribute("data-sheet-no-drag", "");
-    sheet.append(zone);
-
-    drag(zone, [
-      { y: 100, t: 0 },
-      { y: 300, t: 100 },
-    ]);
-
-    expect(sheet.style.transform).toBe("");
-  });
-
   it("ignores a second finger", () => {
     const { sheet, content } = mountSheet();
 

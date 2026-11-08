@@ -22,5 +22,4 @@ export const SHEET_DRAG = {
   DISMISS_FRACTION: 0.25,
   DISMISS_VELOCITY_PX_PER_MS: 0.5,
   SETTLE_MS: 220,
-  NO_DRAG_SELECTOR: "[data-sheet-no-drag]",
 } as const;

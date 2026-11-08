@@ -7,13 +7,15 @@ const ENTRIES = [
   { letter: "D", offset: 7 },
 ];
 
+const LETTERS = [..."#ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+
 function targetOf(letter: string, descending: boolean) {
-  return alphabetIndexSlots(ENTRIES, descending).find((slot) => slot.letter === letter)?.target ?? null;
+  return alphabetIndexSlots(ENTRIES, LETTERS, descending).find((slot) => slot.letter === letter)?.target ?? null;
 }
 
 describe("alphabetIndexSlots", () => {
-  it("offers every letter, sending a missing one to the next letter that has entries", () => {
-    const slots = alphabetIndexSlots(ENTRIES, false);
+  it("offers every letter it is given, sending a missing one to the next letter that has entries", () => {
+    const slots = alphabetIndexSlots(ENTRIES, LETTERS, false);
 
     expect(slots.map((slot) => slot.letter).join("")).toBe("#ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     expect(targetOf("A", false)).toEqual({ letter: "A", offset: 0 });
@@ -23,7 +25,7 @@ describe("alphabetIndexSlots", () => {
   });
 
   it("reverses the strip when descending, so a missing letter targets the next entry in that order", () => {
-    const slots = alphabetIndexSlots(ENTRIES, true);
+    const slots = alphabetIndexSlots(ENTRIES, LETTERS, true);
 
     expect(slots[0].letter).toBe("Z");
     expect(slots.at(-1)?.letter).toBe("#");

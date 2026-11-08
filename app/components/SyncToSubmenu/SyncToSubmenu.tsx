@@ -12,10 +12,10 @@ import {
   DropdownMenuSubTrigger,
 } from "@components/ui/DropdownMenu";
 import { usePlaylistSyncTargets } from "@hooks/api";
+import { PHONE_QUERY } from "@hooks/ui/constants";
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { cn } from "@utils/cn";
 
-import { INLINE_TARGETS_QUERY } from "./constants";
 import { edgeSeparator, syncTargetChip, syncTargetItem } from "./styles";
 import type { SyncToSubmenuProps } from "./types";
 
@@ -27,7 +27,7 @@ export function SyncToSubmenu({
   onSelect,
 }: SyncToSubmenuProps) {
   const { data: targets } = usePlaylistSyncTargets();
-  const inline = useMediaQuery(INLINE_TARGETS_QUERY);
+  const inline = useMediaQuery(PHONE_QUERY);
   const destinations = (targets ?? []).filter((target) => target.server !== excludeServer);
 
   if (destinations.length === 0) return null;

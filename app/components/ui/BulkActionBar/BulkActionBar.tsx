@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { cn } from "@utils/cn";
 
 import {
+  prominentAction,
   selectionAction,
   selectionActionCount,
   selectionActionLabel,
@@ -20,21 +21,18 @@ import {
 } from "./styles";
 import type { BulkActionBarProps } from "./types";
 
-export function BulkActionBar({
-  count,
-  countLabel,
-  actions,
-  clearLabel,
-  onClear,
-  appearance = "compact",
-  trailing,
-  className,
-  ref,
-}: BulkActionBarProps) {
-  if (appearance === "prominent") {
+export function BulkActionBar(props: BulkActionBarProps) {
+  const { count, countLabel, clearLabel, onClear, trailing, className, ref } = props;
+
+  if (props.appearance === "prominent") {
     return (
-      <div ref={ref} className={cn(selectionBar({ appearance }), className)}>
-        <button type="button" className={selectionClear({ appearance })} onClick={onClear} aria-label={clearLabel}>
+      <div ref={ref} className={cn(selectionBar({ appearance: "prominent" }), className)}>
+        <button
+          type="button"
+          className={selectionClear({ appearance: "prominent" })}
+          onClick={onClear}
+          aria-label={clearLabel}
+        >
           <X className="size-4" aria-hidden />
         </button>
         <p className={selectionCount()} role="status" aria-live="polite">
@@ -42,11 +40,11 @@ export function BulkActionBar({
           <span className={selectionCountLabel()}>{countLabel}</span>
         </p>
         <div className={selectionActions()}>
-          {actions.map(({ icon: Icon, label, onClick, disabled, tone }) => (
+          {props.actions.map(({ icon: Icon, label, onClick, disabled, tone }) => (
             <button
               key={label}
               type="button"
-              className={selectionAction({ appearance, tone })}
+              className={prominentAction({ tone })}
               onClick={onClick}
               disabled={disabled}
             >
@@ -61,18 +59,18 @@ export function BulkActionBar({
   }
 
   return (
-    <div ref={ref} className={cn(selectionBar({ appearance }), className)}>
+    <div ref={ref} className={cn(selectionBar(), className)}>
       <span className={selectionChip()} role="status" aria-live="polite">
         <span className={selectionChipDot()} />
         <span className={selectionChipNum()}>{count}</span>
         {countLabel}
       </span>
 
-      {actions.map(({ icon: Icon, label, onClick, count: actionCount, disabled, tone }) => (
+      {props.actions.map(({ icon: Icon, label, onClick, count: actionCount, disabled }) => (
         <button
           key={label}
           type="button"
-          className={selectionAction({ appearance, tone })}
+          className={selectionAction()}
           onClick={onClick}
           disabled={disabled}
           aria-label={label}
@@ -91,7 +89,7 @@ export function BulkActionBar({
 
       {trailing}
 
-      <button type="button" className={selectionClear({ appearance })} onClick={onClear} aria-label={clearLabel}>
+      <button type="button" className={selectionClear()} onClick={onClear} aria-label={clearLabel}>
         <X className="size-3.5 shrink-0" aria-hidden />
         <span className={selectionActionLabel()} aria-hidden>
           {clearLabel}

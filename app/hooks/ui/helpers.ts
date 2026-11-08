@@ -1,9 +1,7 @@
-import { SHEET_DRAG } from "./constants";
 import type { ScrollAxis, ScrollEdges, ScrollMetrics } from "./types";
 
 export function canStartSheetDrag(target: EventTarget | null, boundary: HTMLElement): boolean {
   if (!(target instanceof Element)) return false;
-  if (target.closest(SHEET_DRAG.NO_DRAG_SELECTOR)) return false;
   let node: Element | null = target;
   while (node && node !== boundary) {
     if (node instanceof HTMLElement && node.scrollTop > 0) {

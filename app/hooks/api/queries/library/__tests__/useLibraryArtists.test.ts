@@ -7,6 +7,7 @@ import type { LibraryArtistsInput, LibraryArtistsResult } from "../types";
 import { useLibraryArtists } from "../useLibraryArtists";
 
 const TOTAL = 130;
+const HELD_AFTER_JUMP = TOTAL - LIBRARY_BATCH_LIMIT;
 
 const fetchArtists = vi.hoisted(() => vi.fn());
 
@@ -92,7 +93,7 @@ describe("useLibraryArtists", () => {
 
     expect(fetchArtists.mock.calls.map(([call]) => call)).toEqual([
       { sort: "name", offset: 0, limit: LIBRARY_BATCH_LIMIT },
-      { sort: "name", offset: 50, limit: 110 },
+      { sort: "name", offset: 50, limit: HELD_AFTER_JUMP },
     ]);
     expect(result.current.items).toHaveLength(TOTAL);
   });
@@ -123,8 +124,34 @@ describe("useLibraryArtists", () => {
 
     expect(fetchArtists.mock.calls.map(([call]) => call)).toEqual([
       { sort: "name", offset: 0, limit: LIBRARY_BATCH_LIMIT },
-      { sort: "name", offset: 50, limit: 110 },
+      { sort: "name", offset: 50, limit: HELD_AFTER_JUMP },
     ]);
+    expect(result.current.items).toHaveLength(TOTAL);
+  });
+
+  it("keeps the jumped-to rows of a search the reader comes back to, when it refetches", async () => {
+    const queryClient = createTestQueryClient();
+    const { result, rerender } = renderHookWithProviders(
+      ({ input }: { input: LibraryArtistsInput }) => useLibraryArtists(input, true),
+      { queryClient, initialProps: { input: INPUT } }
+    );
+    await waitFor(() => expect(result.current.items).toHaveLength(LIBRARY_BATCH_LIMIT));
+    await act(() => result.current.loadThrough(110));
+    await waitFor(() => expect(result.current.items).toHaveLength(TOTAL));
+
+    rerender({ input: { ...INPUT, q: "daft" } });
+    await waitFor(() => expect(result.current.items).toHaveLength(LIBRARY_BATCH_LIMIT));
+    rerender({ input: INPUT });
+    await waitFor(() => expect(result.current.items).toHaveLength(TOTAL));
+    fetchArtists.mockClear();
+
+    await act(() => queryClient.refetchQueries({ type: "active" }));
+
+    expect(fetchArtists.mock.calls.map(([call]) => call)).toEqual([
+      { sort: "name", offset: 0, limit: LIBRARY_BATCH_LIMIT },
+      { sort: "name", offset: 50, limit: HELD_AFTER_JUMP },
+    ]);
+    expect(result.current.items).toHaveLength(TOTAL);
   });
 
   it("does not fetch for an offset that is already loaded", async () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import type { MediaServerKey } from "@api/__generated__/types";
-import { BulkActionBar, type BulkAction } from "@components/ui/BulkActionBar";
+import { BulkActionBar, type ProminentBulkAction } from "@components/ui/BulkActionBar";
 import { Checkbox, type CheckboxPreview } from "@components/ui/Checkbox";
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { DeletePlaylistDialog } from "@components/DeletePlaylistDialog";
@@ -180,7 +180,7 @@ function PlaylistDetailBodyComponent({
     [syncPlaylistTo, target.id]
   );
 
-  const selectionActions: BulkAction[] = [
+  const selectionActions: ProminentBulkAction[] = [
     {
       icon: Trash2,
       label: tLibrary("playlists.bulk.remove"),

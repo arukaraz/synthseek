@@ -8,11 +8,13 @@ import type { AlphabetIndexEntry } from "../types";
 const A: AlphabetIndexEntry = { letter: "A", offset: 0 };
 const D: AlphabetIndexEntry = { letter: "D", offset: 7 };
 const SLOT_PX = 10;
+const LETTERS = [..."#ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
 
 function renderIndex(onSelect = vi.fn()) {
   renderWithProviders(
     <AlphabetIndex
       entries={[A, D]}
+      letters={LETTERS}
       label="Jump to a letter"
       letterLabel={(letter) => `Jump to ${letter}`}
       onSelect={onSelect}

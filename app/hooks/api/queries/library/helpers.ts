@@ -12,6 +12,14 @@ export function batchLimitThrough(offset: number, through: number, batch: number
   return Math.min(max, Math.max(batch, through - offset + batch));
 }
 
+export function cachedPageSize(
+  data: { pages: readonly PageWithItemsAndTotal[]; pageParams: readonly unknown[] } | undefined,
+  pageParam: number
+): number | undefined {
+  const size = data?.pages[data.pageParams.indexOf(pageParam)]?.items.length;
+  return size ? size : undefined;
+}
+
 export function loadedCount(pages: readonly PageWithItemsAndTotal[] | undefined): number {
   return (pages ?? []).reduce((count, page) => count + page.items.length, 0);
 }

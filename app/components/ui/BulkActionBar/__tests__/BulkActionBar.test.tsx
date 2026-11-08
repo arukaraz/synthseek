@@ -3,13 +3,13 @@ import { ListPlus, RefreshCcw } from "lucide-react";
 import { describe, expect, it, vi } from "vitest";
 
 import { BulkActionBar } from "../BulkActionBar";
-import type { BulkActionBarProps } from "../types";
+import type { CompactBulkActionBarProps } from "../types";
 
-function renderBar(overrides: Partial<BulkActionBarProps> = {}) {
+function renderBar(overrides: Partial<CompactBulkActionBarProps> = {}) {
   const onRetry = vi.fn();
   const onAdd = vi.fn();
   const onClear = vi.fn();
-  const props: BulkActionBarProps = {
+  const props: CompactBulkActionBarProps = {
     count: 4,
     countLabel: "selected",
     clearLabel: "Clear",
@@ -74,18 +74,26 @@ describe("BulkActionBar", () => {
   });
 
   it("shows the prominent count with its label and spelled-out actions, clear first", () => {
-    const { onClear, onAdd } = renderBar({
-      appearance: "prominent",
-      countLabel: "of 70 selected",
-      actions: [{ icon: ListPlus, label: "Remove", onClick: vi.fn(), tone: "danger" }],
-    });
+    const onClear = vi.fn();
+    const onRemove = vi.fn();
+    render(
+      <BulkActionBar
+        appearance="prominent"
+        count={4}
+        countLabel="of 70 selected"
+        clearLabel="Clear"
+        onClear={onClear}
+        actions={[{ icon: ListPlus, label: "Remove", onClick: onRemove, tone: "danger" }]}
+      />
+    );
 
     expect(screen.getByRole("status")).toHaveTextContent("4of 70 selected");
     const buttons = screen.getAllByRole("button");
     expect(buttons.map((button) => button.textContent)).toEqual(["", "Remove"]);
     fireEvent.click(buttons[0]);
+    fireEvent.click(buttons[1]);
     expect(onClear).toHaveBeenCalledTimes(1);
-    expect(onAdd).not.toHaveBeenCalled();
+    expect(onRemove).toHaveBeenCalledTimes(1);
   });
 
   it("disables an action when its descriptor is disabled", () => {

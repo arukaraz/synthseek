@@ -39,12 +39,6 @@ describe("canStartSheetDrag", () => {
     expect(canStartSheetDrag(sheet.firstChild, sheet)).toBe(false);
   });
 
-  it("refuses a drag that starts inside a no-drag zone", () => {
-    const sheet = sheetWith(`<div data-sheet-no-drag><button id="inner">x</button></div>`);
-
-    expect(canStartSheetDrag(byId(sheet, "inner"), sheet)).toBe(false);
-  });
-
   it("refuses a drag inside a scroll area that is scrolled away from its top", () => {
     const sheet = sheetWith(`<div id="list" style="overflow-y: auto"><p id="row">x</p></div>`);
     scrolledBy(byId(sheet, "list"), 40);

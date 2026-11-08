@@ -10,13 +10,14 @@ import type { AlphabetIndexProps, AlphabetIndexScrub } from "./types";
 
 export function AlphabetIndex({
   entries,
+  letters,
   descending = false,
   label,
   letterLabel,
   onSelect,
   className,
 }: AlphabetIndexProps) {
-  const slots = useMemo(() => alphabetIndexSlots(entries, descending), [entries, descending]);
+  const slots = useMemo(() => alphabetIndexSlots(entries, letters, descending), [entries, letters, descending]);
   const stripRef = useRef<HTMLDivElement | null>(null);
   const scrubbingRef = useRef(false);
   const lastLetterRef = useRef<string | null>(null);
