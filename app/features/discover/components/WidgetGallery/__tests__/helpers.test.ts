@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { BoardWidgetKey } from "@hooks/api/queries/board/types";
+import type { WidgetProblem } from "@hooks/api/queries/widgets/types";
 
 import { BOARD_WIDGETS } from "../../ExploreBoard/constants";
 import { DEFAULT_GALLERY_FILTERS, PREVIEW_BOX } from "../constants";
@@ -110,5 +111,37 @@ describe("problemText", () => {
     const text = problemText({ code: "invalidField", reason: "invalid_value" });
     expect(text).toBe("This value is not valid.");
     expect(text).not.toContain("invalid_value");
+  });
+
+  it.each<[WidgetProblem, string]>([
+    [{ code: "measureNotForSubject", measure: "plays", subject: "tracks" }, "plays is not a measure for tracks."],
+    [{ code: "rankDeltaNeedsCompare" }, "Places climbed needs a comparison with the previous period."],
+    [{ code: "groupByNotForSubject", subject: "tracks" }, "tracks cannot be grouped by time."],
+    [{ code: "groupByNotForMeasure", measure: "plays" }, "plays cannot be grouped by time."],
+    [{ code: "pickByNotMeasure", measure: "plays" }, "Items can only be picked by plays or by name."],
+    [{ code: "setRuleNotAllowed", field: "genreName" }, "Genre name is not available on playlists."],
+    [{ code: "setSlotNeedsParam", origin: "onRepeat" }, "On repeat needs a value."],
+    [{ code: "setSlotParamInvalid", origin: "onRepeat" }, "The value of On repeat is not valid."],
+    [{ code: "setSlotDuplicate" }, "Two lists share one id."],
+    [
+      { code: "ruleNotForSubject", field: "genreName", subject: "tracks" },
+      "The rule Genre name does not apply to tracks.",
+    ],
+    [
+      { code: "ruleNotForSource", field: "genreName", source: "lastfm.charts" },
+      "The rule Genre name does not apply to Top tracks by country (Last.fm).",
+    ],
+    [
+      { code: "pickByNotForSource", by: "plays", source: "lastfm.charts" },
+      "Top tracks by country (Last.fm) cannot be ordered by My plays.",
+    ],
+    [{ code: "blockNotForShape", block: "list", shape: "ranked" }, "The List view cannot show this result."],
+    [{ code: "playlistNeedsTracks" }, "Only a recipe that lists tracks, without grouping, can also be a playlist."],
+    [{ code: "userRuleOnce" }, "A recipe can say whose listening it reads only once."],
+    [{ code: "userRuleNeedsAll" }, "Whose listening can only be used when every rule must match."],
+    [{ code: "tooLarge", maxBytes: 16_384 }, "The JSON is larger than 16 KB."],
+    [{ code: "invalidJson" }, "This is not valid JSON."],
+  ])("explains %j in words with its names filled in", (problem, text) => {
+    expect(problemText(problem)).toBe(text);
   });
 });

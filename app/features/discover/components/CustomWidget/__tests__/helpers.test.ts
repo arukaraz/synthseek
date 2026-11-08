@@ -2,15 +2,25 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   createAlbumResult,
+  createArtistResult,
   createBucketResult,
   createFeedAlbumResult,
   createFeedAlbumRow,
+  createFeedArtistResult,
+  createFeedArtistRow,
+  createFeedEventResult,
+  createFeedEventRow,
+  createFeedTrackResult,
+  createFeedTrackRow,
   createMatrixResult,
+  createNewsResult,
   createRecipeAlbumRow,
   createRecipeTrackRow,
   createSeriesResult,
   createServerPlaylistResult,
   createServerPlaylistRow,
+  createSetList,
+  createSetResult,
   createTrackResult,
 } from "@test/factories";
 
@@ -24,6 +34,8 @@ import {
   moveDirection,
   moveOf,
   moveText,
+  setHiddenNote,
+  setStatusOf,
   suggestBlocks,
   viewIsEmpty,
   widgetCellsOf,
@@ -32,11 +44,25 @@ import {
   widgetPointsOf,
   widgetStatsOf,
   widgetViewOf,
+  withListOpening,
 } from "../helpers";
 import { WIDGET_ICONS } from "../constants";
-import type { WidgetHandlers, WidgetItem } from "../types";
+import type { WidgetHandlers, WidgetItem, WidgetItemControls } from "../types";
 
 const WINDOW = { from: new Date("2026-08-30T00:00:00Z"), to: new Date("2026-09-29T00:00:00Z") };
+
+const ARTIST_ROW = {
+  id: "r1",
+  artistId: null,
+  name: "Artist F",
+  cover: null,
+  tracks: 0,
+  plays: 0,
+  playedAt: null,
+  favorite: false,
+  value: 0,
+  prev: null,
+};
 
 function handlers(): WidgetHandlers {
   return { play: vi.fn(), shuffle: vi.fn(), radio: vi.fn(), request: vi.fn(), open: vi.fn(), openUrl: vi.fn() };
@@ -356,5 +382,150 @@ describe("calendarPartsOf and widgetIconOf", () => {
     const glyphs = Object.values(WIDGET_ICONS);
     expect(new Set(glyphs).size).toBe(glyphs.length);
     expect(widgetIconOf("flame")).not.toBe(widgetIconOf("sparkles"));
+  });
+});
+
+describe("widgetItemsOf for feed rows", () => {
+  it("requests a feed track by its catalog id and plays it only when the library has it", () => {
+    const row = createFeedTrackRow({
+      catalogTrackId: "dz-9",
+      trackId: "lib-9",
+      plays: 3,
+      album: "Disc",
+      durationMs: 1000,
+    });
+    const item = onlyItem(widgetItemsOf(createFeedTrackResult([row]), undefined));
+    expect(item).toMatchObject({ title: "Hit One", subtitle: "Artist C", value: "3 plays" });
+    expect(item.play).toEqual({ kind: "tracks", trackIds: ["lib-9"] });
+    expect(item.request).not.toBeNull();
+  });
+
+  it("gives a feed track outside the catalog and the library nothing to request, play or count", () => {
+    const item = onlyItem(widgetItemsOf(createFeedTrackResult([createFeedTrackRow()]), undefined));
+    expect(item).toMatchObject({ play: null, request: null, value: null });
+  });
+
+  it("opens and requests a feed artist by catalog id, plays a library artist, and counts their plays", () => {
+    const known = createFeedArtistRow({ catalogArtistId: "dz-a", artistId: "lib-a", plays: 5 });
+    const item = onlyItem(widgetItemsOf(createFeedArtistResult([known]), undefined));
+    expect(item).toMatchObject({ subtitle: "", value: "5 plays", play: { kind: "artist", artist: "Artist D" } });
+    expect(item.open).not.toBeNull();
+    expect(item.request).not.toBeNull();
+    const unknown = onlyItem(widgetItemsOf(createFeedArtistResult([createFeedArtistRow()]), undefined));
+    expect(unknown).toMatchObject({ play: null, request: null, open: null, value: null });
+  });
+
+  it("places an event by its venue and country, skipping a missing city, and links out", () => {
+    const item = onlyItem(widgetItemsOf(createFeedEventResult([createFeedEventRow()]), undefined));
+    expect(item).toMatchObject({
+      title: "Artist E",
+      subtitle: "Hall · MX",
+      link: "https://events.test/e1",
+      date: "2026-12-01",
+    });
+  });
+
+  it("dates a news item only when it says when it was published", () => {
+    const row = {
+      id: "n1",
+      rank: 1,
+      title: "Story",
+      url: null,
+      summary: "Sum",
+      publishedAt: null,
+      image: null,
+      source: "Pitchfork",
+    };
+    expect(onlyItem(widgetItemsOf(createNewsResult([row]), undefined))).toMatchObject({
+      date: null,
+      value: "Pitchfork",
+    });
+    const dated = { ...row, publishedAt: "2026-11-01T10:00:00Z" };
+    expect(onlyItem(widgetItemsOf(createNewsResult([dated]), undefined)).date).toBe("2026-11-01");
+  });
+
+  it("reads a bound field on every kind of row before its own default", () => {
+    const album = createAlbumResult([createRecipeAlbumRow()]);
+    expect(onlyItem(widgetItemsOf(album, { title: "artist", value: "tracks" }))).toMatchObject({
+      title: "Artist A",
+      value: "10",
+    });
+    const artist = createArtistResult([{ ...ARTIST_ROW, tracks: 4, plays: 9, value: 9 }]);
+    expect(onlyItem(widgetItemsOf(artist, { subtitle: "name" })).subtitle).toBe("Artist F");
+    const event = createFeedEventResult([createFeedEventRow()]);
+    expect(onlyItem(widgetItemsOf(event, { title: "title" })).title).toBe("Live");
+  });
+
+  it("has nothing to play for an artist without library tracks, and no date for an album without a release day", () => {
+    const artist = createArtistResult([{ ...ARTIST_ROW, tracks: 0, plays: 0, value: 0 }]);
+    expect(onlyItem(widgetItemsOf(artist, undefined)).play).toBeNull();
+    const album = createAlbumResult([createRecipeAlbumRow({ releaseDate: "", inLibrary: false })]);
+    expect(onlyItem(widgetItemsOf(album, undefined))).toMatchObject({ date: null, play: null });
+  });
+});
+
+describe("playlist sets", () => {
+  it("shows each list with its length in hours or minutes and plays it as one queue", () => {
+    const short = createSetList({ durationMs: 50 * 60_000 });
+    const long = createSetList({ slotId: "s2", durationMs: 135 * 60_000, trackIds: [] });
+    const [first, second] = widgetItemsOf(createSetResult({ lists: [short, long] }), undefined);
+    expect(first).toMatchObject({ subtitle: "On repeat", value: "2 tracks · 50 min", listSlot: "s1" });
+    expect(first?.play).toEqual({ kind: "tracks", trackIds: ["t1", "t2"] });
+    expect(second).toMatchObject({ value: "0 tracks · 2 h 15 min", play: null });
+  });
+
+  it("states when the set refreshes, and says so when the last refresh failed", () => {
+    expect(setStatusOf(undefined)).toBeNull();
+    expect(setStatusOf(createTrackResult([]))).toBeNull();
+    expect(setStatusOf(createSetResult())).toBe("Next only when you ask");
+    expect(setStatusOf(createSetResult({ failedAt: new Date() }))).toBe(
+      "Last refresh failed. Showing the previous lists."
+    );
+    const both = setStatusOf(
+      createSetResult({ updatedAt: new Date("2026-11-01T10:00:00Z"), nextAt: new Date("2026-11-08T10:00:00Z") })
+    );
+    expect(both).toMatch(/^Updated .+ · Next .+/);
+    expect(both).not.toContain("only when you ask");
+  });
+
+  it("names the hidden lists only when some list is still shown", () => {
+    const hidden = [{ slotId: "s9", name: "Deep cuts", found: 2 }];
+    expect(setHiddenNote(createSetResult({ hidden }))).toBe("1 hidden, under the minimum: Deep cuts");
+    expect(setHiddenNote(createSetResult())).toBeNull();
+    expect(setHiddenNote(createSetResult({ hidden, lists: [] }))).toBeNull();
+    expect(setHiddenNote(undefined)).toBeNull();
+  });
+
+  it("opens a set's list on select and leaves other items with their own actions", () => {
+    const actions = vi.fn((): WidgetItemControls => ({}));
+    expect(withListOpening(actions, undefined)).toBe(actions);
+    const onOpenList = vi.fn();
+    const opening = withListOpening(actions, onOpenList);
+    const [list] = widgetItemsOf(createSetResult(), undefined);
+    if (!list) throw new Error("no list");
+    opening(list).onSelect?.();
+    expect(onOpenList).toHaveBeenCalledWith("s1");
+    const plain = onlyItem(widgetItemsOf(createTrackResult([createRecipeTrackRow()]), undefined));
+    expect(opening(plain).onSelect).toBeUndefined();
+  });
+});
+
+describe("measureText and fieldText edges", () => {
+  it("shows nothing for a missing count, minutes or tracks", () => {
+    expect(measureText("plays", null, null)).toBeNull();
+    expect(measureText("minutes", null, null)).toBeNull();
+    expect(measureText("distinctTracks", null, null)).toBeNull();
+  });
+
+  it("keeps a string, drops an empty one, and reads a date as relative time", () => {
+    expect(fieldText({ name: "Song" }, "name")).toBe("Song");
+    expect(fieldText({ name: "" }, "name")).toBeNull();
+    expect(fieldText({ at: new Date(Date.now() - 2 * 86_400_000) }, "at")).toBe("2d ago");
+  });
+
+  it("dates an added-at track by when it was added", () => {
+    const row = createRecipeTrackRow({ addedAt: new Date("2026-01-15T12:00:00Z") });
+    const result = { ...createTrackResult([row]), measure: "addedAt" as const };
+    expect(onlyItem(widgetItemsOf(result, undefined)).date).toBe("2026-01-15");
   });
 });

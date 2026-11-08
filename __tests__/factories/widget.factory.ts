@@ -1,6 +1,8 @@
 import type {
   FeedWidgetResult,
+  PlaylistSetWidgetResult,
   RecipeWidgetResult,
+  SetListResult,
   RecapWidgetResult,
   WidgetCatalog,
   WidgetDocument,
@@ -371,5 +373,126 @@ export function createServerPlaylistResult(rows: FeedPlaylistRow[]): FeedWidgetR
     total: rows.length,
     dataset: "playlists",
     rows,
+  };
+}
+
+type FeedTrackRow = WidgetRowOf<FeedWidgetResult, "tracks">;
+type FeedArtistRow = WidgetRowOf<FeedWidgetResult, "artists">;
+type FeedEventRow = WidgetRowOf<FeedWidgetResult, "events">;
+
+const FEED_LOCAL = { inLibrary: false, plays: 0, lastPlayed: null, favorite: false, listeners: null };
+
+export function createFeedTrackRow(overrides: Partial<FeedTrackRow> = {}): FeedTrackRow {
+  return {
+    id: "ft1",
+    rank: 1,
+    title: "Hit One",
+    artist: "Artist C",
+    album: null,
+    cover: null,
+    durationMs: null,
+    catalogTrackId: null,
+    isrc: null,
+    trackId: null,
+    artistInLibrary: false,
+    ...FEED_LOCAL,
+    ...overrides,
+  };
+}
+
+export function createFeedTrackResult(rows: FeedTrackRow[]): FeedWidgetResult {
+  return {
+    type: "feed",
+    source: "lastfm.charts",
+    needs: null,
+    shape: "ranked",
+    total: rows.length,
+    dataset: "tracks",
+    rows,
+  };
+}
+
+export function createFeedArtistRow(overrides: Partial<FeedArtistRow> = {}): FeedArtistRow {
+  return {
+    id: "fa1",
+    rank: 1,
+    name: "Artist D",
+    cover: null,
+    catalogArtistId: null,
+    artistId: null,
+    ...FEED_LOCAL,
+    ...overrides,
+  };
+}
+
+export function createFeedArtistResult(rows: FeedArtistRow[]): FeedWidgetResult {
+  return {
+    type: "feed",
+    source: "lastfm.similarArtists",
+    needs: null,
+    shape: "ranked",
+    total: rows.length,
+    dataset: "artists",
+    rows,
+  };
+}
+
+export function createFeedEventRow(overrides: Partial<FeedEventRow> = {}): FeedEventRow {
+  return {
+    id: "e1",
+    rank: 1,
+    artist: "Artist E",
+    title: "Live",
+    date: "2026-12-01T20:00:00Z",
+    venue: "Hall",
+    city: null,
+    country: "MX",
+    url: "https://events.test/e1",
+    image: null,
+    ...overrides,
+  };
+}
+
+export function createFeedEventResult(rows: FeedEventRow[]): FeedWidgetResult {
+  return {
+    type: "feed",
+    source: "events.upcoming",
+    needs: null,
+    shape: "ranked",
+    total: rows.length,
+    dataset: "events",
+    failure: null,
+    rows,
+  };
+}
+
+export function createSetList(overrides: Partial<SetListResult> = {}): SetListResult {
+  return {
+    slotId: "s1",
+    playlistId: null,
+    name: "On repeat",
+    origin: "onRepeat",
+    artists: [],
+    covers: [],
+    trackIds: ["t1", "t2"],
+    durationMs: 50 * 60_000,
+    version: 1,
+    pinned: false,
+    notes: [],
+    ...overrides,
+  };
+}
+
+export function createSetResult(overrides: Partial<PlaylistSetWidgetResult> = {}): PlaylistSetWidgetResult {
+  return {
+    type: "playlists",
+    dataset: "sets",
+    shape: "ranked",
+    lists: [createSetList()],
+    hidden: [],
+    updatedAt: null,
+    nextAt: null,
+    failedAt: null,
+    ...overrides,
   };
 }
