@@ -12,7 +12,12 @@ export function useDebouncedDraft(
 ): [string, (next: string) => void] {
   const [draft, setDraft] = useState(value);
   const committed = useRef(value);
+  const commitRef = useRef(onCommit);
   const debounced = useDebounce(draft, { delay });
+
+  useEffect(() => {
+    commitRef.current = onCommit;
+  }, [onCommit]);
 
   useEffect(() => {
     if (value === committed.current) return;
@@ -24,8 +29,8 @@ export function useDebouncedDraft(
     if (debounced !== draft) return;
     if (debounced === committed.current) return;
     committed.current = debounced;
-    onCommit(debounced);
-  }, [debounced, draft, onCommit]);
+    commitRef.current(debounced);
+  }, [debounced, draft]);
 
   return [draft, setDraft];
 }

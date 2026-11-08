@@ -8,14 +8,16 @@ import { useResolveArtistAndOpen } from "@hooks/ui/useResolveArtistAndOpen";
 import { useCallback, useMemo } from "react";
 
 import { VIEW_CONFIG } from "../constants";
-import { buildArtistsInput } from "../helpers";
+import { buildArtistsInput, shellCardChrome, shellListsRows } from "../helpers";
 import type { LibraryViewModeProps } from "../types";
 import { LibraryArtistCard } from "./LibraryCard";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
-export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
+export function ArtistsViewMode({ controller, shell }: LibraryViewModeProps) {
   const openArtistByName = useResolveArtistAndOpen();
   const { shuffleEntity } = useEntityPlayback();
+  const chrome = shellCardChrome(shell);
+  const asRows = shellListsRows(shell);
 
   const input = useMemo(
     () =>
@@ -39,11 +41,13 @@ export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }
       <LibraryArtistCard
         item={item}
         resolveEnabled={isArtistsView}
-        onPlay={() => shuffleEntity({ kind: "artist", artist: item.artist })}
+        chrome={chrome}
+        variant={asRows ? "row" : "card"}
+        onPlay={chrome === "bare" && !asRows ? undefined : () => shuffleEntity({ kind: "artist", artist: item.artist })}
         onOpen={() => openArtistByName(item.artist)}
       />
     ),
-    [openArtistByName, isArtistsView, shuffleEntity]
+    [openArtistByName, isArtistsView, shuffleEntity, chrome, asRows]
   );
 
   return (
@@ -61,9 +65,16 @@ export function ArtistsViewMode({ controller, filtersOpen, onFiltersOpenChange }
         hasNextPage: query.hasNextPage,
         isFetchingNextPage: query.isFetchingNextPage,
         fetchNextPage: query.fetchNextPage,
+        letterIndex:
+          controller.sort === "name"
+            ? {
+                entries: query.letterIndex,
+                descending: controller.effectiveDirection === "desc",
+                loadThrough: query.loadThrough,
+              }
+            : undefined,
       }}
-      filtersOpen={filtersOpen}
-      onFiltersOpenChange={onFiltersOpenChange}
+      shell={shell}
     />
   );
 }

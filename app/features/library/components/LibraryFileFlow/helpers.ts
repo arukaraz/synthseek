@@ -9,7 +9,7 @@ import i18n from "@locale";
 import { formatBytes } from "@utils/formatters";
 import { FolderInput, Trash2 } from "lucide-react";
 
-import type { LibraryFileActions, LibraryFileJob, LibraryFileTarget } from "../../types";
+import type { LibraryFileActions, LibraryFileJob, LibraryFileTarget, LibraryMenuAction } from "../../types";
 import { PATH_STATE_KEYS } from "./constants";
 import type { DeleteCopy, FileJobSummary, PathOptionState } from "./types";
 
@@ -24,6 +24,37 @@ export function fileSelectionOf(target: LibraryFileTarget): LibraryFileSelection
     case "albums":
       return { trackIds: [], albumIds: target.albumIds };
   }
+}
+
+export function fileMenuActions(
+  target: LibraryFileTarget,
+  actions: LibraryFileActions,
+  isAdmin: boolean
+): LibraryMenuAction[] {
+  if (!isAdmin) return [];
+  const inLibrary = target.pathIds.length > 0;
+  const remove: LibraryMenuAction = {
+    key: "delete",
+    icon: Trash2,
+    label:
+      target.scope === "track" ? i18n.t("library:page.actions.deleteFile") : i18n.t("library:page.actions.deleteFiles"),
+    onSelect: () => actions.openDelete(target),
+    disabled: !inLibrary,
+    tone: "danger",
+    separated: !actions.canMove,
+  };
+  if (!actions.canMove) return [remove];
+  return [
+    {
+      key: "move",
+      icon: FolderInput,
+      label: i18n.t("library:page.actions.moveToPath"),
+      onSelect: () => actions.openMove(target),
+      disabled: !inLibrary,
+      separated: true,
+    },
+    remove,
+  ];
 }
 
 export function fileBulkActions(target: LibraryFileTarget, count: number, actions: LibraryFileActions): BulkAction[] {

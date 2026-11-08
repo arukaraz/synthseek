@@ -9,15 +9,10 @@ import { useLibraryTrackActions } from "../hooks/useLibraryTrackActions";
 import { buildTracksInput } from "../helpers";
 import { buildTrackColumns } from "./LibraryTable/columns";
 import type { TracksViewModeProps } from "../types";
+import { LibraryTrackRows } from "./LibraryTrackRows";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
-export function TracksViewMode({
-  controller,
-  filtersOpen,
-  onFiltersOpenChange,
-  selection,
-  fileActions,
-}: TracksViewModeProps) {
+export function TracksViewMode({ controller, shell, selection, fileActions }: TracksViewModeProps) {
   const { prefetchNextPage } = useLibraryTracksPrefetch();
   const { searchBetterQuality } = useLibraryTrackActions();
   const offset = (controller.page - 1) * controller.pageSize;
@@ -82,10 +77,26 @@ export function TracksViewMode({
         layout: "table",
         columns,
         getRowId: (item) => item.id,
-        selection: { items, selection, onEnqueue: enqueue, fileActions },
+        selection: {
+          items,
+          selection,
+          onEnqueue: enqueue,
+          fileActions,
+          collapsed: shell.phone && !shell.selectMode,
+        },
+        rows: shell.phone ? (
+          <LibraryTrackRows
+            items={items}
+            selection={selection}
+            selecting={shell.selectMode}
+            onPlay={play}
+            onEnqueue={enqueue}
+            onSearchBetterQuality={searchBetterQuality}
+            fileActions={fileActions}
+          />
+        ) : undefined,
       }}
-      filtersOpen={filtersOpen}
-      onFiltersOpenChange={onFiltersOpenChange}
+      shell={shell}
     />
   );
 }

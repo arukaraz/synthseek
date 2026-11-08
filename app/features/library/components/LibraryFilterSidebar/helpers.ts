@@ -39,6 +39,19 @@ function statusFacetLabel(value: string, t: TFunction<"status">): string {
   return sentenceCaseValue(value);
 }
 
+export function facetValueLabel(
+  def: FacetDef,
+  value: string,
+  values: readonly LibraryFacetValue[],
+  t: TFunction<"status">,
+  localLabel: string
+): string {
+  if (def.staticValues) return statusFacetLabel(value, t);
+  if (def.labelNs === "playbackSource") return sourceLabelFor(value, localLabel);
+  if (def.labelNs === "origin") return capitalize(value);
+  return values.find((entry) => entry.value === value)?.label ?? value;
+}
+
 export function staticFacetValues(
   staticValues: readonly string[],
   values: LibraryFacetValue[],

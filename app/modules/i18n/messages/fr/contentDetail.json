@@ -19,8 +19,8 @@
   "retryTrack": "Réessayer {{title}}",
   "selectTrack": "Sélectionner {{title}}",
   "selection": {
-    "selected": "sélectionnées",
     "selectAll": "Tout sélectionner",
+    "ofTotal": "sur {{total}} sélectionnées",
     "clear": "Effacer"
   },
   "sort": {

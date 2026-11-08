@@ -1,4 +1,6 @@
 import type { RequestStatus } from "@api/__generated__/types";
+import type { LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
+import type { TFunction } from "i18next";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
 import type { KeyboardEvent } from "react";
 
@@ -8,6 +10,18 @@ export function cardCoverTone(selection: CardSelection | undefined): CardCoverTo
   if (selection === undefined) return "none";
   if (selection.preview !== "none") return selection.preview;
   return selection.selected ? "selected" : "none";
+}
+
+export function artistSubtitle(item: LibraryArtistItem, albumsLabel: string): string {
+  return item.genre ? `${albumsLabel} · ${item.genre}` : albumsLabel;
+}
+
+export function playlistSubtitle(item: LibraryPlaylistItem, origin: string, t: TFunction<"library">): string {
+  return item.smart ? t("playlists.smartOrigin", { origin }) : origin;
+}
+
+export function joinMeta(parts: readonly (string | number | null | undefined)[]): string {
+  return parts.filter((part) => part !== null && part !== undefined && part !== "").join(" · ");
 }
 
 export function cardCoverActionsFrom(

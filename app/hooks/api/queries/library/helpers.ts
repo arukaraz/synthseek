@@ -8,6 +8,14 @@ export function getNextOffset(lastPage: PageWithItemsAndTotal, allPages: PageWit
   return loaded < lastPage.total ? loaded : undefined;
 }
 
+export function batchLimitThrough(offset: number, through: number, batch: number, max: number): number {
+  return Math.min(max, Math.max(batch, through - offset + batch));
+}
+
+export function loadedCount(pages: readonly PageWithItemsAndTotal[] | undefined): number {
+  return (pages ?? []).reduce((count, page) => count + page.items.length, 0);
+}
+
 export function stripPaging<TInput extends { offset?: number; limit?: number }>(
   input: TInput
 ): Omit<TInput, "offset" | "limit"> {

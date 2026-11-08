@@ -1,4 +1,5 @@
 import type { ColumnDef } from "@components/ui/Table";
+import type { ReactNode } from "react";
 
 import type { LibrarySelection } from "../../hooks/useLibrarySelection";
 import type { LibraryFileActions } from "../../types";
@@ -18,6 +19,7 @@ export interface LibraryTableProps<TItem> {
   getRowId: (item: TItem) => string;
   emptyMessage: string;
   selection?: TrackSelectionConfig;
+  rows?: ReactNode;
 }
 
 export interface TrackSelectionConfig {
@@ -25,6 +27,7 @@ export interface TrackSelectionConfig {
   selection: LibrarySelection;
   onEnqueue: (trackIds: string[]) => Promise<boolean>;
   fileActions: LibraryFileActions;
+  collapsed?: boolean;
 }
 
 export interface SelectHeaderProps {

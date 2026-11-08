@@ -15,17 +15,20 @@ import type { SelectionRange } from "@hooks/ui/useSelection";
 import { isTextEntryTarget } from "@utils/text-entry";
 import type { KeyboardEvent } from "react";
 
-import { LIBRARY_PAGE_SIZE_OPTIONS, VIEW_CONFIG } from "./constants";
+import { GRID_ITEMS_SELECTOR, LIBRARY_PAGE_SIZE_OPTIONS, VIEW_CONFIG } from "./constants";
 import type {
   FacetSearchState,
   FilterParamMap,
   LibraryFileJob,
   LibraryFileRequest,
+  LibraryDensity,
   LibraryFileTarget,
   LibraryView,
+  LibraryViewShell,
   SelectionShortcutTarget,
   SortDirection,
   ViewConfig,
+  CardChrome,
 } from "./types";
 
 const FILTER_VALUE_SEPARATOR = ",";
@@ -217,6 +220,26 @@ export function topFacetValues(values: LibraryFacetValue[], topN: number, hasSea
 
 export function isLibraryView(value: string | undefined): value is LibraryView {
   return value === "tracks" || value === "albums" || value === "artists" || value === "playlists";
+}
+
+export function scrollChildToTop(root: HTMLElement, index: number): boolean {
+  const child = root.querySelector(GRID_ITEMS_SELECTOR)?.children.item(index);
+  if (!child) return false;
+  root.scrollTop += child.getBoundingClientRect().top - root.getBoundingClientRect().top;
+  return true;
+}
+
+export function shellCardChrome(shell: LibraryViewShell): CardChrome {
+  if (!shell.phone) return "overlay";
+  return shell.density === "compact" ? "bare" : "corner";
+}
+
+export function shellListsRows(shell: LibraryViewShell): boolean {
+  return shell.phone && shell.density === "list";
+}
+
+export function isLibraryDensity(value: string): value is LibraryDensity {
+  return value === "comfortable" || value === "compact" || value === "list";
 }
 
 export function viewCountFor(view: LibraryView, counts: LibraryCountsResult | undefined): number | undefined {

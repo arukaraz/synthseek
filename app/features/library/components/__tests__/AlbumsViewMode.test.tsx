@@ -5,7 +5,8 @@ import { Fragment, type KeyboardEvent, type ReactNode } from "react";
 import { renderWithProviders, screen, within } from "@test/test-utils";
 import type { LibraryAlbumItem } from "@hooks/api/queries/library/types";
 import { useSelection } from "@hooks/ui/useSelection";
-import type { AlbumsViewModeProps } from "../../types";
+import { createLibraryShell } from "@test/factories";
+import type { AlbumsViewModeProps, LibraryViewShell } from "../../types";
 
 import { AlbumsViewMode } from "../AlbumsViewMode";
 
@@ -86,7 +87,7 @@ function createAlbum(overrides?: Partial<LibraryAlbumItem>): LibraryAlbumItem {
 
 const fileActions = { canMove: true, openMove: vi.fn(), openDelete: vi.fn() };
 
-function makeProps(): Omit<AlbumsViewModeProps, "selection"> {
+function makeProps(shell?: Partial<LibraryViewShell>): Omit<AlbumsViewModeProps, "selection"> {
   return {
     controller: {
       view: "albums",
@@ -96,15 +97,14 @@ function makeProps(): Omit<AlbumsViewModeProps, "selection"> {
       filters: {},
       facetSearch: {},
     } as unknown as AlbumsViewModeProps["controller"],
-    filtersOpen: false,
-    onFiltersOpenChange: vi.fn(),
+    shell: createLibraryShell(shell),
     fileActions,
   };
 }
 
-function AlbumsHarness() {
+function AlbumsHarness({ shell }: { shell?: Partial<LibraryViewShell> }) {
   const selection = useSelection<LibraryAlbumItem>();
-  return <AlbumsViewMode {...makeProps()} selection={selection} />;
+  return <AlbumsViewMode {...makeProps(shell)} selection={selection} />;
 }
 
 function showAlbums(items: LibraryAlbumItem[]) {
@@ -235,6 +235,45 @@ describe("AlbumsViewMode", () => {
     renderWithProviders(<AlbumsHarness />);
 
     expect(useLibraryAlbumsMock).toHaveBeenCalledWith(expect.anything(), true);
+  });
+
+  describe("on a phone", () => {
+    it("lists albums as rows under an artist and year line, and opens the detail on tap", async () => {
+      const { user } = renderWithProviders(<AlbumsHarness shell={{ phone: true, density: "list" }} />);
+
+      expect(screen.getByText("Daft Punk · 2001")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: /Open details for Discovery/i }));
+
+      expect(openForResultMock).toHaveBeenCalledTimes(1);
+    });
+
+    it("offers no select checkbox outside select mode, even with a selection carried over", async () => {
+      const { user, rerender } = renderWithProviders(<AlbumsHarness />);
+
+      await user.click(screen.getByRole("checkbox", { name: "Select Discovery" }));
+      rerender(<AlbumsHarness shell={{ phone: true }} />);
+
+      expect(screen.queryAllByRole("checkbox")).toHaveLength(0);
+
+      await user.click(screen.getByText("Discovery"));
+
+      expect(openForResultMock).toHaveBeenCalledTimes(1);
+    });
+
+    it("toggles a row on tap in select mode instead of opening its detail", async () => {
+      const { user } = renderWithProviders(
+        <AlbumsHarness shell={{ phone: true, density: "list", selectMode: true }} />
+      );
+
+      const row = screen.getByRole("button", { name: "Select Discovery" });
+      expect(row).toHaveAttribute("aria-pressed", "false");
+
+      await user.click(row);
+
+      expect(row).toHaveAttribute("aria-pressed", "true");
+      expect(openForResultMock).not.toHaveBeenCalled();
+    });
   });
 
   describe("selecting albums", () => {

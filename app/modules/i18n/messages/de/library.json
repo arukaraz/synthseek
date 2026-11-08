@@ -325,7 +325,36 @@
       "tracks_one": "{{count}} Titel",
       "tracks_other": "{{count}} Titel",
       "albums_one": "{{count}} Album",
-      "albums_other": "{{count}} Alben"
+      "albums_other": "{{count}} Alben",
+      "artists_one": "{{count}} Künstler",
+      "artists_other": "{{count}} Künstler",
+      "playlists_one": "{{count}} Playlist",
+      "playlists_other": "{{count}} Playlists"
+    },
+    "shelf": {
+      "title": "Bibliothek",
+      "matches": {
+        "tracks_one": "{{count}} Titel passt",
+        "tracks_other": "{{count}} Titel passen",
+        "albums_one": "{{count}} Album passt",
+        "albums_other": "{{count}} Alben passen",
+        "artists_one": "{{count}} Künstler passt",
+        "artists_other": "{{count}} Künstler passen",
+        "playlists_one": "{{count}} Playlist passt",
+        "playlists_other": "{{count}} Playlists passen"
+      },
+      "clearSearch": "Suche löschen",
+      "density": "Ansicht",
+      "comfortable": "Großes Raster",
+      "compact": "Kleines Raster",
+      "list": "Liste",
+      "selectMode": "Auswählen",
+      "removeFilter": "Filter {{label}} entfernen",
+      "activeFilters_one": "{{view}} · {{count}} aktiv",
+      "activeFilters_other": "{{view}} · {{count}} aktiv",
+      "showResults": "{{results}} anzeigen",
+      "letterIndex": "Zu einem Buchstaben springen",
+      "jumpToLetter": "Zu {{letter}} springen"
     },
     "origin": {
       "imported": "Importiert",
@@ -357,8 +386,7 @@
     },
     "filters": {
       "title": "Filter",
-      "clear": "Leeren",
-      "done": "Fertig"
+      "clear": "Leeren"
     },
     "selection": {
       "selected": "ausgewählt",
@@ -373,6 +401,7 @@
       "selectAll": "Alle auf dieser Seite auswählen",
       "selectRow": "Titel auswählen",
       "selectAlbum": "{{name}} auswählen",
+      "selectTrack": "{{title}} auswählen",
       "selectAllShown": "Alle angezeigten auswählen",
       "selectedAlbums": "ausgewählt"
     },
@@ -529,8 +558,7 @@
       "confirm": "Entfernen"
     },
     "bulk": {
-      "remove": "Entfernen",
-      "removeCount": "{{count}} entfernen"
+      "remove": "Entfernen"
     },
     "dropdown": {
       "addToPlaylist": "Zur Playlist hinzufügen",

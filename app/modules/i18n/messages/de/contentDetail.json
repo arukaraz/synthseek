@@ -19,8 +19,8 @@
   "retryTrack": "{{title}} erneut versuchen",
   "selectTrack": "{{title}} auswählen",
   "selection": {
-    "selected": "ausgewählt",
     "selectAll": "Alle auswählen",
+    "ofTotal": "von {{total}} ausgewählt",
     "clear": "Leeren"
   },
   "sort": {

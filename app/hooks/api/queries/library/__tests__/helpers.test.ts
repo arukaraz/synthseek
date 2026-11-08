@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getNextOffset, stripPaging } from "../helpers";
+import { batchLimitThrough, getNextOffset, loadedCount, stripPaging } from "../helpers";
 
 function page(itemCount: number, total: number) {
   return { items: Array.from({ length: itemCount }, (_, index) => index), total };
@@ -33,6 +33,32 @@ describe("getNextOffset", () => {
   it("returns undefined for an empty result set", () => {
     const empty = page(0, 0);
     expect(getNextOffset(empty, [empty])).toBeUndefined();
+  });
+});
+
+describe("batchLimitThrough", () => {
+  it("asks for one batch when nothing further is wanted", () => {
+    expect(batchLimitThrough(100, 0, 50, 500)).toBe(50);
+    expect(batchLimitThrough(100, 80, 50, 500)).toBe(50);
+  });
+
+  it("stretches the batch to reach the wanted offset with one batch to spare", () => {
+    expect(batchLimitThrough(100, 230, 50, 500)).toBe(180);
+  });
+
+  it("never asks for more than the maximum", () => {
+    expect(batchLimitThrough(0, 2000, 50, 500)).toBe(500);
+  });
+});
+
+describe("loadedCount", () => {
+  it("counts the items across every loaded page", () => {
+    expect(loadedCount([page(50, 120), page(20, 120)])).toBe(70);
+  });
+
+  it("counts nothing before the first page arrives", () => {
+    expect(loadedCount(undefined)).toBe(0);
+    expect(loadedCount([])).toBe(0);
   });
 });
 

@@ -3,7 +3,6 @@ import type { LibraryAlbumItem, LibraryArtistItem, LibraryPlaylistItem } from "@
 import type { Selection } from "@hooks/ui/useSelection";
 import type { ParseKeys } from "i18next";
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
 
 import type { LibrarySelection } from "./hooks/useLibrarySelection";
 import type { LibraryUrlController } from "./hooks/useLibraryUrlState";
@@ -15,6 +14,10 @@ export type LibraryView = "tracks" | "albums" | "artists" | "playlists";
 export type LibraryLayout = "table" | "grid";
 
 export type SortDirection = "asc" | "desc";
+
+export type LibraryDensity = "comfortable" | "compact" | "list";
+
+export type CardChrome = "overlay" | "corner" | "bare";
 
 export type FacetKey =
   | "status"
@@ -70,21 +73,18 @@ export interface TracksViewConfig extends BaseViewConfig {
 export interface AlbumsViewConfig extends BaseViewConfig {
   view: "albums";
   layout: "grid";
-  renderCard: (item: LibraryAlbumItem) => ReactNode;
   getCardId: (item: LibraryAlbumItem) => string;
 }
 
 export interface ArtistsViewConfig extends BaseViewConfig {
   view: "artists";
   layout: "grid";
-  renderCard: (item: LibraryArtistItem) => ReactNode;
   getCardId: (item: LibraryArtistItem) => string;
 }
 
 export interface PlaylistsViewConfig extends BaseViewConfig {
   view: "playlists";
   layout: "grid";
-  renderCard: (item: LibraryPlaylistItem) => ReactNode;
   getCardId: (item: LibraryPlaylistItem) => string;
 }
 
@@ -131,10 +131,30 @@ export interface LibraryFileActions {
   openDelete: (target: LibraryFileTarget) => void;
 }
 
-export interface LibraryViewModeProps {
-  controller: LibraryUrlController;
+export interface LibraryMenuAction {
+  key: string;
+  icon: LucideIcon;
+  label: string;
+  onSelect: () => void;
+  disabled?: boolean;
+  tone?: "default" | "danger";
+  separated?: boolean;
+}
+
+export interface LibraryViewShell {
   filtersOpen: boolean;
   onFiltersOpenChange: (open: boolean) => void;
+  onViewChange: (view: LibraryView) => void;
+  density: LibraryDensity;
+  onDensityChange: (density: LibraryDensity) => void;
+  phone: boolean;
+  selectMode: boolean;
+  onSelectModeChange: (on: boolean) => void;
+}
+
+export interface LibraryViewModeProps {
+  controller: LibraryUrlController;
+  shell: LibraryViewShell;
 }
 
 export type AlbumSelection = Selection<LibraryAlbumItem>;

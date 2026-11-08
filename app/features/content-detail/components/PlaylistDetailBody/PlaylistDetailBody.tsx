@@ -180,12 +180,13 @@ function PlaylistDetailBodyComponent({
     [syncPlaylistTo, target.id]
   );
 
-  const bulkActions: BulkAction[] = [
+  const selectionActions: BulkAction[] = [
     {
       icon: Trash2,
-      label: tLibrary("playlists.bulk.removeCount", { count: selection.selectedCount }),
+      label: tLibrary("playlists.bulk.remove"),
       onClick: () => setConfirmRemoveOpen(true),
       disabled: removeTracks.isPending,
+      tone: "danger",
     },
   ];
 
@@ -241,16 +242,6 @@ function PlaylistDetailBodyComponent({
 
       <div className={modalScrollArea()}>
         <div className={modalMain()}>
-          {canEdit && selection.selectedCount > 0 ? (
-            <BulkActionBar
-              count={selection.selectedCount}
-              countLabel={t("selection.selected")}
-              actions={bulkActions}
-              clearLabel={t("selection.clear")}
-              onClear={selection.clear}
-            />
-          ) : null}
-
           <DetailSection
             title={t("sections.tracklist")}
             isLoading={isLibrary ? !playlist : isCatalog ? isCatalogLoading : false}
@@ -279,6 +270,16 @@ function PlaylistDetailBodyComponent({
               </div>
             }
           >
+            {canEdit && selection.selectedCount > 0 ? (
+              <BulkActionBar
+                appearance="prominent"
+                count={selection.selectedCount}
+                countLabel={t("selection.ofTotal", { total: removableIds.length })}
+                actions={selectionActions}
+                clearLabel={t("selection.clear")}
+                onClear={selection.clear}
+              />
+            ) : null}
             {sortedTracks.length > 0 ? (
               <Tracklist
                 tracks={sortedTracks}

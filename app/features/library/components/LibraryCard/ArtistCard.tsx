@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next";
 import { artworkImage } from "@utils/artworkProxy";
 
 import { CardCoverActions } from "./CardCoverActions";
-import { cardCoverActionsFrom, cardInitials, handleCardActivationKey } from "./helpers";
+import { CardPlayButton } from "./CardPlayButton";
+import { artistSubtitle, cardCoverActionsFrom, cardInitials, handleCardActivationKey } from "./helpers";
 import {
   cardBody,
   cardCover,
@@ -19,12 +20,11 @@ import {
 } from "./styles";
 import type { ArtistCardProps } from "./types";
 
-export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay }: ArtistCardProps) {
+export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, chrome = "overlay" }: ArtistCardProps) {
   const { t } = useTranslation(["library", "contentDetail"]);
-  const albumsLabel = t("library:page.counts.albums", { count: item.albumCount });
-  const subtitle = item.genre ? `${albumsLabel} · ${item.genre}` : albumsLabel;
+  const subtitle = artistSubtitle(item, t("library:page.counts.albums", { count: item.albumCount }));
   const cover = isResolving ? null : (image ?? item.albumArt);
-  const coverActions = cardCoverActionsFrom(onOpen, onPlay);
+  const coverActions = chrome === "overlay" ? cardCoverActionsFrom(onOpen, onPlay) : null;
   const activates = !!onOpen && coverActions === null;
 
   return (
@@ -46,6 +46,9 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay }:
         )}
         {coverActions ? (
           <CardCoverActions name={item.artist} order="shuffled" onPlay={coverActions.play} onOpen={coverActions.open} />
+        ) : null}
+        {onPlay && chrome === "corner" ? (
+          <CardPlayButton name={item.artist} order="shuffled" onPlay={onPlay} placement="corner" />
         ) : null}
       </div>
 

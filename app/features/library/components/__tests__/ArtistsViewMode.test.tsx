@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import type { ReactNode } from "react";
 
+import { createLibraryShell } from "@test/factories";
 import { renderWithProviders, screen, waitFor } from "@test/test-utils";
 import type { LibraryArtistItem } from "@hooks/api/queries/library/types";
 import type { LibraryViewModeProps } from "../../types";
@@ -75,8 +76,7 @@ function makeProps(): LibraryViewModeProps {
   };
   return {
     controller: controller as unknown as LibraryViewModeProps["controller"],
-    filtersOpen: false,
-    onFiltersOpenChange: vi.fn(),
+    shell: createLibraryShell(),
   };
 }
 

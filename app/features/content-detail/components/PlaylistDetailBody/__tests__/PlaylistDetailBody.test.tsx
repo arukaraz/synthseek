@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { renderWithProviders, screen } from "@test/test-utils";
+import { renderWithProviders, screen, within } from "@test/test-utils";
 import type { DetailTarget } from "../../../types";
 
 const usePlaylistDetailMock = vi.fn();
@@ -367,11 +367,13 @@ describe("PlaylistDetailBody editing", () => {
     );
 
     await user.click(screen.getByLabelText("Select all"));
-    expect(screen.getByText("selected")).toBeInTheDocument();
+    expect(screen.getByText("of 1 selected")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
 
     await user.click(screen.getByRole("switch"));
 
-    expect(screen.queryByText("selected")).not.toBeInTheDocument();
+    expect(screen.queryByText("of 1 selected")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
   });
 
   it("shows the already-in-library pill by default but hides it when showInLibraryPill is false", () => {
@@ -428,12 +430,16 @@ describe("PlaylistDetailBody editing", () => {
     );
 
     await user.click(screen.getByLabelText("Select all"));
-    await user.click(screen.getByRole("button", { name: "Remove 2" }));
 
-    expect(removeMutate).not.toHaveBeenCalled();
-    expect(screen.getByText("Remove 2 tracks?")).toBeInTheDocument();
+    expect(screen.getByText("of 2 selected")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Remove" }));
+
+    expect(removeMutate).not.toHaveBeenCalled();
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByText("Remove 2 tracks?")).toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole("button", { name: "Remove" }));
 
     expect(removeMutate).toHaveBeenCalledWith(
       { playlistId: "pl-1", trackIds: ["r1", "r2"] },

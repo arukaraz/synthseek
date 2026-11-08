@@ -1,6 +1,9 @@
 "use client";
 
 import type { LibraryAlbumItem } from "@hooks/api/queries/library/types";
+import { PHONE_QUERY } from "@hooks/ui/constants";
+import { useLocalStorage } from "@hooks/ui/useLocalStorage";
+import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { useSelection } from "@hooks/ui/useSelection";
 import { useState } from "react";
 
@@ -10,12 +13,13 @@ import { LibraryFileFlow } from "./components/LibraryFileFlow";
 import { LibraryToolbar } from "./components/LibraryToolbar/LibraryToolbar";
 import { PlaylistsViewMode } from "./components/PlaylistsViewMode";
 import { TracksViewMode } from "./components/TracksViewMode";
-import { countActiveFilters, spendsSelection } from "./helpers";
+import { LIBRARY_DENSITY_STORAGE_KEY } from "./constants";
+import { countActiveFilters, isLibraryDensity, spendsSelection } from "./helpers";
 import { useLibraryFileRequest } from "./hooks/useLibraryFileRequest";
 import { useLibrarySelection } from "./hooks/useLibrarySelection";
 import { useLibraryUrlState } from "./hooks/useLibraryUrlState";
-import { libraryBody, libraryScreen } from "./styles";
-import type { LibraryView } from "./types";
+import { libraryBody, libraryScreen, libraryToolbarRow } from "./styles";
+import type { LibraryView, LibraryViewShell } from "./types";
 
 export function LibraryScreen() {
   const controller = useLibraryUrlState();
@@ -23,23 +27,43 @@ export function LibraryScreen() {
   const albumSelection = useSelection<LibraryAlbumItem>();
   const fileRequest = useLibraryFileRequest();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [storedDensity, setDensity] = useLocalStorage(LIBRARY_DENSITY_STORAGE_KEY, "comfortable", isLibraryDensity);
+  const density = isLibraryDensity(storedDensity) ? storedDensity : "comfortable";
+  const phone = useMediaQuery(PHONE_QUERY);
+  const [selectMode, setSelectMode] = useState(false);
 
   const clearSelections = () => {
     trackSelection.clear();
     albumSelection.clear();
   };
 
+  const handleSelectModeChange = (on: boolean) => {
+    if (!on) clearSelections();
+    setSelectMode(on);
+  };
+
   const handleViewChange = (view: LibraryView) => {
     clearSelections();
+    setSelectMode(false);
     controller.setTab(view);
   };
 
   const activeFilterCount = countActiveFilters(controller.filters);
-  const viewProps = { controller, filtersOpen, onFiltersOpenChange: setFiltersOpen };
+  const shell: LibraryViewShell = {
+    filtersOpen,
+    onFiltersOpenChange: setFiltersOpen,
+    onViewChange: handleViewChange,
+    density,
+    onDensityChange: setDensity,
+    phone,
+    selectMode: phone && selectMode,
+    onSelectModeChange: handleSelectModeChange,
+  };
+  const viewProps = { controller, shell };
 
   return (
     <div className={libraryScreen()}>
-      <div className="px-4 pt-4 sm:px-6">
+      <div className={libraryToolbarRow()}>
         <LibraryToolbar
           controller={controller}
           searchValue={controller.search}

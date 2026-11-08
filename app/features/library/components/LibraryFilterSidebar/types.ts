@@ -13,6 +13,7 @@ export interface LibraryFilterSidebarProps {
   onClear: () => void;
   hasActiveFilters: boolean;
   isRefreshing?: boolean;
+  showHeader?: boolean;
 }
 
 export interface FacetGroupProps {

@@ -1,31 +1,38 @@
 "use client";
 
+import { BottomSheet, BottomSheetHeader, bottomSheetBody, bottomSheetFooter } from "@components/ui/BottomSheet";
 import { Button } from "@components/ui/Button";
-import { Dialog, DialogContent, DialogTitle } from "@components/ui/Dialog";
 import { useTranslation } from "react-i18next";
 
+import { countActiveFilters } from "../../helpers";
 import { LibraryFilterSidebar } from "../LibraryFilterSidebar/LibraryFilterSidebar";
-import { sheetBody, sheetContent, sheetFooter, sheetHeader, sheetTitle } from "./styles";
+import { sheetBody } from "./styles";
 import type { LibraryFilterSheetProps } from "./types";
 
-export function LibraryFilterSheet({ open, onOpenChange, ...sidebarProps }: LibraryFilterSheetProps) {
+export function LibraryFilterSheet({ open, onOpenChange, total, ...sidebarProps }: LibraryFilterSheetProps) {
   const { t } = useTranslation("library");
+  const activeCount = countActiveFilters(sidebarProps.filters);
+  const viewLabel = t(sidebarProps.config.labelKey);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={sheetContent()} animation="sheet" showClose={false}>
-        <div className={sheetHeader()}>
-          <DialogTitle className={sheetTitle()}>{t("page.filters.title")}</DialogTitle>
-        </div>
-        <div className={sheetBody()}>
-          <LibraryFilterSidebar {...sidebarProps} />
-        </div>
-        <div className={sheetFooter()}>
-          <Button className="w-full" onClick={() => onOpenChange(false)}>
-            {t("page.filters.done")}
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <BottomSheet open={open} onOpenChange={onOpenChange} size="full" showClose={false}>
+      <BottomSheetHeader
+        title={t("page.filters.title")}
+        subtitle={activeCount > 0 ? t("page.shelf.activeFilters", { view: viewLabel, count: activeCount }) : viewLabel}
+      />
+      <div className={bottomSheetBody({ className: sheetBody() })}>
+        <LibraryFilterSidebar {...sidebarProps} showHeader={false} />
+      </div>
+      <div className={bottomSheetFooter()}>
+        <Button variant="ghost" onClick={sidebarProps.onClear} disabled={!sidebarProps.hasActiveFilters}>
+          {t("page.filters.clear")}
+        </Button>
+        <Button className="flex-1" onClick={() => onOpenChange(false)}>
+          {t("page.shelf.showResults", {
+            results: t(`page.counts.${sidebarProps.config.view}`, { count: total }),
+          })}
+        </Button>
+      </div>
+    </BottomSheet>
   );
 }

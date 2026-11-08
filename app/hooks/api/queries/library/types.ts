@@ -23,6 +23,7 @@ export type LibraryArtistItem = LibraryArtistsResult["items"][number];
 export type LibraryPlaylistItem = LibraryPlaylistsResult["items"][number];
 
 export type LibraryFacetValue = LibraryTracksResult["facets"][string][number];
+export type LibraryLetterIndexEntry = LibraryArtistsResult["letterIndex"][number];
 
 export type LibraryFileSelection = LibraryInputs["files"]["previewMove"]["selection"];
 export type LibraryMovePreview = LibraryOutputs["files"]["previewMove"];
@@ -39,4 +40,9 @@ export interface LibraryInfiniteResult<TItem> {
   isFetchingNextPage: boolean;
   isLoading: boolean;
   isError: boolean;
+}
+
+export interface LibraryArtistsInfiniteResult extends LibraryInfiniteResult<LibraryArtistItem> {
+  letterIndex: LibraryLetterIndexEntry[];
+  loadThrough: (offset: number) => Promise<void>;
 }

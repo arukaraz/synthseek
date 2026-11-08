@@ -7,10 +7,19 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { CardCoverActions } from "./CardCoverActions";
-import { cardCoverActionsFrom, cardInitials, handleCardActivationKey, mosaicTiles, statusDotClass } from "./helpers";
+import { CardPlayButton } from "./CardPlayButton";
+import {
+  cardCoverActionsFrom,
+  cardInitials,
+  handleCardActivationKey,
+  mosaicTiles,
+  playlistSubtitle,
+  statusDotClass,
+} from "./helpers";
 import { PlaylistCardMenu } from "./PlaylistCardMenu";
 import {
   cardBody,
+  cardBodyRow,
   cardCover,
   cardImage,
   cardInitials as cardInitialsStyle,
@@ -25,12 +34,12 @@ import {
 } from "./styles";
 import type { PlaylistCardProps } from "./types";
 
-export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
+export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: PlaylistCardProps) {
   const { t } = useTranslation("library");
   const { t: tDetail } = useTranslation("contentDetail");
   const tiles = mosaicTiles(item.images, item.image);
   const origin = playlistOriginLabel(item.origin, t);
-  const coverActions = cardCoverActionsFrom(onOpen, onPlay);
+  const coverActions = chrome === "overlay" ? cardCoverActionsFrom(onOpen, onPlay) : null;
   const activates = !!onOpen && coverActions === null;
   const openLabel = activates ? tDetail("openDetail", { name: item.name }) : undefined;
 
@@ -75,16 +84,22 @@ export function PlaylistCard({ item, onOpen, onPlay }: PlaylistCardProps) {
           <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
-        <PlaylistCardMenu item={item} />
+        {chrome === "overlay" ? <PlaylistCardMenu item={item} /> : null}
         {coverActions ? (
           <CardCoverActions name={item.name} order="inOrder" onPlay={coverActions.play} onOpen={coverActions.open} />
         ) : null}
+        {onPlay && chrome === "corner" ? (
+          <CardPlayButton name={item.name} order="inOrder" onPlay={onPlay} placement="corner" />
+        ) : null}
       </div>
 
-      <div className={cardBody()}>
-        <p className={cardTitle()}>{item.name}</p>
-        <p className={cardSubtitle()}>{item.smart ? t("playlists.smartOrigin", { origin }) : origin}</p>
-        <p className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</p>
+      <div className={cardBodyRow()}>
+        <div className={cardBody()}>
+          <p className={cardTitle()}>{item.name}</p>
+          <p className={cardSubtitle()}>{playlistSubtitle(item, origin, t)}</p>
+          <p className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</p>
+        </div>
+        {chrome === "corner" ? <PlaylistCardMenu item={item} appearance="inline" /> : null}
       </div>
     </li>
   );

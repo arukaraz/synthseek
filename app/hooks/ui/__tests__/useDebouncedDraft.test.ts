@@ -1,4 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
+import { useCallback, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDebouncedDraft } from "../useDebouncedDraft";
@@ -81,6 +82,38 @@ describe("useDebouncedDraft", () => {
     settle();
 
     expect(onCommit).not.toHaveBeenCalled();
+  });
+
+  it("does not commit its stale draft when the value and the commit callback change together", () => {
+    const first = vi.fn();
+    const next = vi.fn();
+    const { result, rerender } = renderHook(({ value, onCommit }) => useDebouncedDraft(value, onCommit), {
+      initialProps: { value: "", onCommit: first },
+    });
+
+    rerender({ value: "abc", onCommit: next });
+    settle();
+
+    expect(result.current[0]).toBe("abc");
+    expect(first).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it("keeps two drafts bound to one value in step when the commit callback changes with the value", () => {
+    const { result } = renderHook(() => {
+      const [value, setValue] = useState("");
+      const onCommit = useCallback((next: string) => setValue(next), [value]);
+      return { value, toolbar: useDebouncedDraft(value, onCommit), shelf: useDebouncedDraft(value, onCommit) };
+    });
+
+    act(() => result.current.toolbar[1]("abc"));
+    settle();
+    settle();
+    settle();
+
+    expect(result.current.value).toBe("abc");
+    expect(result.current.shelf[0]).toBe("abc");
+    expect(result.current.toolbar[0]).toBe("abc");
   });
 
   it("commits nothing on the first render", () => {

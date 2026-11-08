@@ -1,7 +1,17 @@
 import { cva } from "class-variance-authority";
 
 export const cardGrid = cva(
-  "grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+  "grid grid-cols-2 gap-x-3 gap-y-3.5 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6",
+  {
+    variants: {
+      density: {
+        comfortable: "",
+        compact: "max-sm:grid-cols-3 max-sm:gap-x-2.5 max-sm:gap-y-3",
+        list: "max-sm:grid-cols-1 max-sm:gap-y-0",
+      },
+    },
+    defaultVariants: { density: "comfortable" },
+  }
 );
 
 export const cardRoot = cva("group flex min-w-0 flex-col gap-2", {
@@ -81,7 +91,54 @@ export const cardKebab = cva(
   "absolute top-1.5 right-1.5 grid size-7 place-items-center rounded-md bg-black/55 text-white backdrop-blur-sm transition-opacity hover:bg-black/70 focus-visible:opacity-100 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
 );
 
-export const cardBody = cva("flex min-w-0 flex-col gap-0.5 px-0.5");
+export const cardPlayButton = cva(
+  "focus-visible:ring-primary-400 grid size-9 shrink-0 place-items-center rounded-full transition-transform active:scale-95 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60",
+  {
+    variants: {
+      placement: {
+        corner: "bg-primary-500 text-primary-foreground absolute right-2 bottom-2 z-1 shadow-lg",
+        inline: "text-primary-400 hover:bg-fg/10",
+      },
+    },
+    defaultVariants: { placement: "corner" },
+  }
+);
+
+export const cardInlineKebab = cva(
+  "text-fg/60 hover:text-fg hover:bg-fg/10 focus-visible:ring-primary-400 -mr-1 grid size-8 shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none"
+);
+
+export const cardBodyRow = cva("flex min-w-0 items-start gap-1");
+
+export const cardBody = cva("flex min-w-0 flex-1 flex-col gap-0.5 px-0.5");
+
+export const listRow = cva(
+  "focus-visible:ring-primary-500/60 flex min-w-0 cursor-pointer items-center gap-3 rounded-lg py-1.5 outline-none focus-visible:ring-2",
+  {
+    variants: {
+      selected: { true: "bg-primary-500/12", false: "" },
+    },
+    defaultVariants: { selected: false },
+  }
+);
+
+export const listRowArt = cva(
+  "from-primary-500/20 to-accent-500/20 ring-fg/10 relative size-14 shrink-0 overflow-hidden bg-linear-to-br ring-1",
+  {
+    variants: {
+      round: { true: "rounded-full", false: "rounded-md" },
+    },
+    defaultVariants: { round: false },
+  }
+);
+
+export const listRowText = cva("flex min-w-0 flex-1 flex-col gap-0.5");
+
+export const listRowTitle = cva("text-fg truncate text-[15px] font-semibold");
+
+export const listRowSubtitle = cva("text-fg/60 truncate text-[13px]");
+
+export const listRowCheck = cva("pointer-events-none shrink-0");
 
 export const cardTitle = cva("text-fg truncate text-sm font-semibold");
 

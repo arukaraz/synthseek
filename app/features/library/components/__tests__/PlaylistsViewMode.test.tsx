@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import type { ReactNode } from "react";
 
+import { createLibraryShell } from "@test/factories";
 import { renderWithProviders, screen } from "@test/test-utils";
 import type { LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 import type { LibraryViewModeProps } from "../../types";
@@ -66,8 +67,7 @@ function makeProps(): LibraryViewModeProps {
       filters: {},
       facetSearch: {},
     } as unknown as LibraryViewModeProps["controller"],
-    filtersOpen: false,
-    onFiltersOpenChange: vi.fn(),
+    shell: createLibraryShell(),
   };
 }
 

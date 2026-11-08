@@ -1,3 +1,2 @@
-export { FileActionMenuItems } from "./FileActionMenuItems";
-export { fileBulkActions } from "./helpers";
+export { fileBulkActions, fileMenuActions } from "./helpers";
 export { LibraryFileFlow } from "./LibraryFileFlow";

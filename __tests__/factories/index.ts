@@ -42,6 +42,8 @@ export {
 
 export { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "./player.factory";
 
+export { createLibraryController, createLibraryShell } from "./library.factory";
+
 export {
   createMockImage,
   createMockArtistSimplified,

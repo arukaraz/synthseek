@@ -325,7 +325,36 @@
       "tracks_one": "{{count}} piste",
       "tracks_other": "{{count}} pistes",
       "albums_one": "{{count}} album",
-      "albums_other": "{{count}} albums"
+      "albums_other": "{{count}} albums",
+      "artists_one": "{{count}} artiste",
+      "artists_other": "{{count}} artistes",
+      "playlists_one": "{{count}} playlist",
+      "playlists_other": "{{count}} playlists"
+    },
+    "shelf": {
+      "title": "Bibliothèque",
+      "matches": {
+        "tracks_one": "{{count}} piste correspond",
+        "tracks_other": "{{count}} pistes correspondent",
+        "albums_one": "{{count}} album correspond",
+        "albums_other": "{{count}} albums correspondent",
+        "artists_one": "{{count}} artiste correspond",
+        "artists_other": "{{count}} artistes correspondent",
+        "playlists_one": "{{count}} playlist correspond",
+        "playlists_other": "{{count}} playlists correspondent"
+      },
+      "clearSearch": "Effacer la recherche",
+      "density": "Affichage",
+      "comfortable": "Grande grille",
+      "compact": "Petite grille",
+      "list": "Liste",
+      "selectMode": "Sélectionner",
+      "removeFilter": "Retirer le filtre {{label}}",
+      "activeFilters_one": "{{view}} · {{count}} actif",
+      "activeFilters_other": "{{view}} · {{count}} actifs",
+      "showResults": "Afficher {{results}}",
+      "letterIndex": "Aller à une lettre",
+      "jumpToLetter": "Aller à {{letter}}"
     },
     "origin": {
       "imported": "Importé",
@@ -357,8 +386,7 @@
     },
     "filters": {
       "title": "Filtres",
-      "clear": "Effacer",
-      "done": "Terminé"
+      "clear": "Effacer"
     },
     "selection": {
       "selected": "sélectionnées",
@@ -373,6 +401,7 @@
       "selectAll": "Tout sélectionner sur cette page",
       "selectRow": "Sélectionner la piste",
       "selectAlbum": "Sélectionner {{name}}",
+      "selectTrack": "Sélectionner {{title}}",
       "selectAllShown": "Tout sélectionner à l'écran",
       "selectedAlbums": "sélectionnés"
     },
@@ -529,8 +558,7 @@
       "confirm": "Retirer"
     },
     "bulk": {
-      "remove": "Retirer",
-      "removeCount": "Retirer {{count}}"
+      "remove": "Retirer"
     },
     "dropdown": {
       "addToPlaylist": "Ajouter à une playlist",

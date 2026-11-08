@@ -17,7 +17,14 @@ import { useLibraryTrackActions } from "../../hooks/useLibraryTrackActions";
 import { selectCell, tableWrap } from "./styles";
 import type { LibraryTableProps } from "./types";
 
-export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, selection }: LibraryTableProps<TItem>) {
+export function LibraryTable<TItem>({
+  items,
+  columns,
+  getRowId,
+  emptyMessage,
+  selection,
+  rows,
+}: LibraryTableProps<TItem>) {
   const { t } = useTranslation("library");
   const { isAdmin } = useAuthContext();
   const actions = useLibraryTrackActions();
@@ -27,7 +34,7 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
 
   const selectionItems = selection?.items;
   const trackItems = selectionItems ?? [];
-  const sel = selection?.selection;
+  const sel = selection?.collapsed ? undefined : selection?.selection;
   const allSelected = sel?.selectors.allSelectedOnPage(trackItems) ?? false;
   const someSelected = sel?.selectors.someSelectedOnPage(trackItems) ?? false;
   const failedIds = sel?.selectors.selectedFailedIds(trackItems) ?? [];
@@ -174,17 +181,19 @@ export function LibraryTable<TItem>({ items, columns, getRowId, emptyMessage, se
         />
       ) : null}
 
-      <DataTable
-        data={items}
-        columns={tableColumns}
-        getRowId={getRowId}
-        emptyMessage={emptyMessage}
-        fixedLayout
-        stickyOffset={barHeight}
-        rowAttrs={(item) => ({
-          "data-range-preview": previewTone !== "none" && previewIds.has(getRowId(item)) ? previewTone : undefined,
-        })}
-      />
+      {rows ?? (
+        <DataTable
+          data={items}
+          columns={tableColumns}
+          getRowId={getRowId}
+          emptyMessage={emptyMessage}
+          fixedLayout
+          stickyOffset={barHeight}
+          rowAttrs={(item) => ({
+            "data-range-preview": previewTone !== "none" && previewIds.has(getRowId(item)) ? previewTone : undefined,
+          })}
+        />
+      )}
     </div>
   );
 }

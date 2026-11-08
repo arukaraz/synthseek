@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 import { CardCoverActions } from "./CardCoverActions";
+import { CardPlayButton } from "./CardPlayButton";
 import {
   albumMetaLine,
   cardCoverTone,
@@ -17,6 +18,7 @@ import {
 } from "./helpers";
 import {
   cardBody,
+  cardBodyRow,
   cardCover,
   cardImage,
   cardInitials as cardInitialsStyle,
@@ -31,7 +33,15 @@ import {
 } from "./styles";
 import type { AlbumCardProps } from "./types";
 
-export function AlbumCard({ item, showLibraryPaths = false, onOpen, onPlay, menu, selection }: AlbumCardProps) {
+export function AlbumCard({
+  item,
+  showLibraryPaths = false,
+  onOpen,
+  onPlay,
+  menu,
+  selection,
+  chrome = "overlay",
+}: AlbumCardProps) {
   const { t } = useTranslation(["contentDetail", "library"]);
   const meta = albumMetaLine(
     item.year,
@@ -84,8 +94,13 @@ export function AlbumCard({ item, showLibraryPaths = false, onOpen, onPlay, menu
           <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
-        {onPlay ? <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} menu={menu} /> : null}
-        {selection ? (
+        {onPlay && chrome === "overlay" ? (
+          <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} menu={menu} />
+        ) : null}
+        {onPlay && chrome === "corner" && !selecting ? (
+          <CardPlayButton name={item.name} order="inOrder" onPlay={onPlay} placement="corner" />
+        ) : null}
+        {selection && (chrome === "overlay" || selecting) ? (
           <div
             className={cardSelectBox({ shown: selecting })}
             onMouseDownCapture={(event) => {
@@ -108,10 +123,13 @@ export function AlbumCard({ item, showLibraryPaths = false, onOpen, onPlay, menu
         ) : null}
       </div>
 
-      <div className={cardBody()}>
-        <p className={cardTitle()}>{item.name}</p>
-        <p className={cardSubtitle()}>{item.artist}</p>
-        {meta ? <p className={cardMeta()}>{meta}</p> : null}
+      <div className={cardBodyRow()}>
+        <div className={cardBody()}>
+          <p className={cardTitle()}>{item.name}</p>
+          <p className={cardSubtitle()}>{item.artist}</p>
+          {meta ? <p className={cardMeta()}>{meta}</p> : null}
+        </div>
+        {chrome === "corner" && !selecting ? menu : null}
       </div>
     </li>
   );

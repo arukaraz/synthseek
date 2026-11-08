@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const modalContainer = cva(
-  "bg-surface/95 !top-0 !left-1/2 !flex !h-[100dvh] !max-h-[100dvh] !w-[min(1040px,100%)] !max-w-none !-translate-x-1/2 !translate-y-0 !flex-col !gap-0 !rounded-none !border-0 !overflow-hidden !p-0 shadow-2xl sm:!top-0 sm:!max-h-[100dvh] sm:!translate-y-0"
+  "bg-surface/95 !flex !flex-col !gap-0 !overflow-hidden !px-0 !pt-0 shadow-2xl sm:!top-0 sm:!pb-0 sm:!bottom-auto sm:!left-1/2 sm:!h-[100dvh] sm:!max-h-[100dvh] sm:!w-[min(1040px,100%)] sm:!max-w-none sm:!-translate-x-1/2 sm:!translate-y-0 sm:!rounded-none sm:!border-0"
 );
 
 export const modalShell = cva(

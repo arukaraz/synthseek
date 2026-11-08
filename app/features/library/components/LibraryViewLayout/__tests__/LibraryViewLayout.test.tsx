@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 
+import { createLibraryShell } from "@test/factories";
 import { renderWithProviders, screen } from "@test/test-utils";
 
 vi.mock("react-i18next", () => ({
@@ -24,6 +25,16 @@ vi.mock("../../LibraryTable/LibraryTable", () => ({
 
 vi.mock("../../LibraryCard", () => ({
   LibraryInfiniteGrid: () => <div data-testid="grid" />,
+}));
+
+vi.mock("../../LibraryShelf", () => ({
+  LibraryShelfHeader: () => <div data-testid="shelf" />,
+}));
+
+vi.mock("../LibraryLetterIndex", () => ({
+  LibraryLetterIndex: ({ index }: { index: { entries: readonly { letter: string }[] } }) => (
+    <nav data-testid="letter-index">{index.entries.map((entry) => entry.letter).join("")}</nav>
+  ),
 }));
 
 vi.mock("@components/ui/Pagination", () => ({
@@ -68,8 +79,7 @@ function tableProps(overrides?: Partial<LibraryViewLayoutProps<Row>>): LibraryVi
       columns: [],
       getRowId: (item: Row) => item.id,
     },
-    filtersOpen: false,
-    onFiltersOpenChange: vi.fn(),
+    shell: createLibraryShell(),
     ...overrides,
   };
 }
@@ -124,8 +134,36 @@ describe("LibraryViewLayout", () => {
     expect(screen.queryByTestId("pagination")).not.toBeInTheDocument();
   });
 
+  it("shows a letter index on a grid only once it has more than one letter to jump to", () => {
+    const grid = gridProps();
+    const withIndex = (letters: string[]): LibraryViewLayoutProps<Row> => ({
+      ...grid,
+      content: {
+        layout: "grid",
+        renderCard: () => <li>card</li>,
+        getCardId: (item: Row) => item.id,
+        hasNextPage: false,
+        isFetchingNextPage: false,
+        fetchNextPage: vi.fn(),
+        letterIndex: {
+          entries: letters.map((letter, offset) => ({ letter, offset })),
+          descending: false,
+          loadThrough: vi.fn(async () => undefined),
+        },
+      },
+    });
+
+    const { rerender } = renderWithProviders(<LibraryViewLayout {...withIndex(["A"])} />);
+
+    expect(screen.queryByTestId("letter-index")).not.toBeInTheDocument();
+
+    rerender(<LibraryViewLayout {...withIndex(["A", "D"])} />);
+
+    expect(screen.getByTestId("letter-index")).toHaveTextContent("AD");
+  });
+
   it("passes the filtersOpen flag through to the mobile sheet", () => {
-    renderWithProviders(<LibraryViewLayout {...tableProps({ filtersOpen: true })} />);
+    renderWithProviders(<LibraryViewLayout {...tableProps({ shell: createLibraryShell({ filtersOpen: true }) })} />);
 
     expect(screen.getByTestId("sheet")).toHaveTextContent("open");
   });

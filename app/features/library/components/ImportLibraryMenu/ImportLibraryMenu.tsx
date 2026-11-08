@@ -20,9 +20,10 @@ import { FileJson, FileUp, Import } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { importChip, importMenuItem, importTrigger } from "./styles";
+import { importChip, importIconTrigger, importMenuItem, importTrigger } from "./styles";
+import type { ImportLibraryMenuProps } from "./types";
 
-export function ImportLibraryMenu() {
+export function ImportLibraryMenu({ appearance = "button" }: ImportLibraryMenuProps) {
   const { t } = useTranslation("library");
   const sources = useLibrarySources();
   const configuredSources = (sources.data ?? []).filter((source) => source.configured);
@@ -40,17 +41,28 @@ export function ImportLibraryMenu() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <motion.button
-            type="button"
-            className={cn(primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" }), importTrigger())}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            title={t("page.toolbar.import.trigger")}
-            aria-label={t("page.toolbar.import.trigger")}
-          >
-            <Import className="size-3.5" />
-            <span className="hidden sm:inline">{t("page.toolbar.import.trigger")}</span>
-          </motion.button>
+          {appearance === "icon" ? (
+            <button
+              type="button"
+              className={importIconTrigger()}
+              title={t("page.toolbar.import.trigger")}
+              aria-label={t("page.toolbar.import.trigger")}
+            >
+              <Import className="size-5" />
+            </button>
+          ) : (
+            <motion.button
+              type="button"
+              className={cn(primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" }), importTrigger())}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              title={t("page.toolbar.import.trigger")}
+              aria-label={t("page.toolbar.import.trigger")}
+            >
+              <Import className="size-3.5" />
+              <span className="hidden sm:inline">{t("page.toolbar.import.trigger")}</span>
+            </motion.button>
+          )}
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="min-w-64">

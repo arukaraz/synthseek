@@ -325,7 +325,36 @@
       "tracks_one": "{{count}} track",
       "tracks_other": "{{count}} tracks",
       "albums_one": "{{count}} album",
-      "albums_other": "{{count}} albums"
+      "albums_other": "{{count}} albums",
+      "artists_one": "{{count}} artist",
+      "artists_other": "{{count}} artists",
+      "playlists_one": "{{count}} playlist",
+      "playlists_other": "{{count}} playlists"
+    },
+    "shelf": {
+      "title": "Library",
+      "matches": {
+        "tracks_one": "{{count}} track matches",
+        "tracks_other": "{{count}} tracks match",
+        "albums_one": "{{count}} album matches",
+        "albums_other": "{{count}} albums match",
+        "artists_one": "{{count}} artist matches",
+        "artists_other": "{{count}} artists match",
+        "playlists_one": "{{count}} playlist matches",
+        "playlists_other": "{{count}} playlists match"
+      },
+      "clearSearch": "Clear search",
+      "density": "Layout",
+      "comfortable": "Large grid",
+      "compact": "Small grid",
+      "list": "List",
+      "selectMode": "Select",
+      "removeFilter": "Remove filter {{label}}",
+      "activeFilters_one": "{{view}} · {{count}} active",
+      "activeFilters_other": "{{view}} · {{count}} active",
+      "showResults": "Show {{results}}",
+      "letterIndex": "Jump to a letter",
+      "jumpToLetter": "Jump to {{letter}}"
     },
     "origin": {
       "imported": "Imported",
@@ -357,8 +386,7 @@
     },
     "filters": {
       "title": "Filters",
-      "clear": "Clear",
-      "done": "Done"
+      "clear": "Clear"
     },
     "selection": {
       "selected": "selected",
@@ -373,6 +401,7 @@
       "selectAll": "Select all on this page",
       "selectRow": "Select track",
       "selectAlbum": "Select {{name}}",
+      "selectTrack": "Select {{title}}",
       "selectAllShown": "Select all shown",
       "selectedAlbums": "selected"
     },
@@ -529,8 +558,7 @@
       "confirm": "Remove"
     },
     "bulk": {
-      "remove": "Remove",
-      "removeCount": "Remove {{count}}"
+      "remove": "Remove"
     },
     "dropdown": {
       "addToPlaylist": "Add to playlist",

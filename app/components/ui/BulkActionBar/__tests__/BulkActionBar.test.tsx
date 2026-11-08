@@ -73,6 +73,21 @@ describe("BulkActionBar", () => {
     expect(onClear).toHaveBeenCalledTimes(1);
   });
 
+  it("shows the prominent count with its label and spelled-out actions, clear first", () => {
+    const { onClear, onAdd } = renderBar({
+      appearance: "prominent",
+      countLabel: "of 70 selected",
+      actions: [{ icon: ListPlus, label: "Remove", onClick: vi.fn(), tone: "danger" }],
+    });
+
+    expect(screen.getByRole("status")).toHaveTextContent("4of 70 selected");
+    const buttons = screen.getAllByRole("button");
+    expect(buttons.map((button) => button.textContent)).toEqual(["", "Remove"]);
+    fireEvent.click(buttons[0]);
+    expect(onClear).toHaveBeenCalledTimes(1);
+    expect(onAdd).not.toHaveBeenCalled();
+  });
+
   it("disables an action when its descriptor is disabled", () => {
     renderBar({
       actions: [{ icon: RefreshCcw, label: "Retry 2 failed", onClick: vi.fn(), count: 2, disabled: true }],

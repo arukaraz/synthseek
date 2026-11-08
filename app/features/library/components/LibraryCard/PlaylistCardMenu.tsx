@@ -2,48 +2,58 @@
 
 import { DeletePlaylistDialog } from "@components/DeletePlaylistDialog";
 import { RenamePlaylistDialog } from "@components/RenamePlaylistDialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { SmartRuleDialog } from "@features/discover";
-import { MoreVertical, Pencil, Trash2, WandSparkles } from "lucide-react";
+import { Pencil, Trash2, WandSparkles } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { libraryMenuItem, libraryMenuItemDanger } from "../../styles";
-import { cardKebab } from "./styles";
+import type { LibraryMenuAction } from "../../types";
+import { LibraryActionMenu } from "../LibraryActionMenu";
+import { cardInlineKebab, cardKebab } from "./styles";
 import type { PlaylistCardMenuProps } from "./types";
 
-export function PlaylistCardMenu({ item }: PlaylistCardMenuProps) {
+export function PlaylistCardMenu({ item, appearance = "cover" }: PlaylistCardMenuProps) {
   const { t } = useTranslation("library");
   const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [ruleOpen, setRuleOpen] = useState(false);
 
   const canEdit = item.source_provider == null || !item.sync_enabled;
+  const actions: LibraryMenuAction[] = [
+    {
+      key: "rename",
+      icon: Pencil,
+      label: t("playlists.actions.rename"),
+      onSelect: () => setRenameOpen(true),
+      disabled: !canEdit,
+    },
+    ...(item.smart
+      ? [
+          {
+            key: "rule",
+            icon: WandSparkles,
+            label: t("playlists.actions.editRule"),
+            onSelect: () => setRuleOpen(true),
+          },
+        ]
+      : []),
+    {
+      key: "delete",
+      icon: Trash2,
+      label: t("playlists.actions.delete"),
+      onSelect: () => setDeleteOpen(true),
+      tone: "danger",
+    },
+  ];
 
   return (
     <div onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
-      <DropdownMenu>
-        <DropdownMenuTrigger className={cardKebab()} aria-label={t("playlists.actions.menu", { name: item.name })}>
-          <MoreVertical className="size-4" aria-hidden />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem className={libraryMenuItem()} disabled={!canEdit} onSelect={() => setRenameOpen(true)}>
-            <Pencil className="size-4" aria-hidden />
-            {t("playlists.actions.rename")}
-          </DropdownMenuItem>
-          {item.smart ? (
-            <DropdownMenuItem className={libraryMenuItem()} onSelect={() => setRuleOpen(true)}>
-              <WandSparkles className="size-4" aria-hidden />
-              {t("playlists.actions.editRule")}
-            </DropdownMenuItem>
-          ) : null}
-          <DropdownMenuItem className={libraryMenuItemDanger()} onSelect={() => setDeleteOpen(true)}>
-            <Trash2 className="size-4" aria-hidden />
-            {t("playlists.actions.delete")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
+      <LibraryActionMenu
+        title={item.name}
+        triggerLabel={t("playlists.actions.menu", { name: item.name })}
+        triggerClassName={appearance === "inline" ? cardInlineKebab() : cardKebab()}
+        actions={actions}
+      />
       <RenamePlaylistDialog
         open={renameOpen}
         onOpenChange={setRenameOpen}

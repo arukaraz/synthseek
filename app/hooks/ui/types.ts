@@ -4,6 +4,13 @@ import type { DetailTarget } from "@features/content-detail";
 import type { LucideIcon } from "lucide-react";
 import type { PointerEventHandler, RefObject } from "react";
 
+export interface UseSheetDragOptions {
+  onDismiss: () => void;
+  enabled?: boolean;
+}
+
+export type SheetDragPhase = "idle" | "pending" | "drag" | "ignore";
+
 export interface RequestContext {
   parentAlbum?: MusicItem;
 }

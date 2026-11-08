@@ -8,6 +8,8 @@ import { VIEW_CONFIG } from "../constants";
 import {
   applySelectionShortcut,
   buildAlbumsInput,
+  buildArtistsInput,
+  buildPlaylistsInput,
   buildTracksInput,
   clampPage,
   computePageCount,
@@ -248,6 +250,60 @@ describe("buildTracksInput", () => {
       facetSearch: baseFacetSearch,
     });
     expect(withDir.direction).toBe("asc");
+  });
+});
+
+describe("sort and facet search per view", () => {
+  const base = { limit: 40, offset: 0, q: undefined, direction: undefined, filters: {}, facetSearch: {} };
+
+  it("keeps every tracks sort option as chosen", () => {
+    for (const option of VIEW_CONFIG.tracks.sortOptions) {
+      expect(buildTracksInput({ ...base, sort: option.value }).sort).toBe(option.value);
+    }
+  });
+
+  it("keeps each grid view's own sorts and falls back to that view's default otherwise", () => {
+    for (const sort of ["name", "artist", "year", "tracks"]) {
+      expect(buildAlbumsInput({ ...base, sort }).sort).toBe(sort);
+    }
+    expect(buildAlbumsInput({ ...base, sort: "duration" }).sort).toBe("recent");
+
+    for (const sort of ["tracks", "albums"]) {
+      expect(buildArtistsInput({ ...base, sort }).sort).toBe(sort);
+    }
+    expect(buildArtistsInput({ ...base, sort: "recent" }).sort).toBe("name");
+
+    for (const sort of ["name", "tracks"]) {
+      expect(buildPlaylistsInput({ ...base, sort }).sort).toBe(sort);
+    }
+    expect(buildPlaylistsInput({ ...base, sort: "year" }).sort).toBe("recent");
+  });
+
+  it("forwards only the facet searches that carry a term, and none when every term is blank", () => {
+    expect(
+      buildPlaylistsInput({ ...base, sort: "name", facetSearch: { owner: "ann", playlist: "mix" } }).facetSearch
+    ).toEqual({ owner: "ann", playlist: "mix" });
+    expect(
+      buildArtistsInput({ ...base, sort: "name", facetSearch: { genre: "rock", artist: "" } }).facetSearch
+    ).toEqual({
+      genre: "rock",
+    });
+    expect(buildArtistsInput({ ...base, sort: "name" }).facetSearch).toBeUndefined();
+  });
+
+  it("sends the artists and playlists filters, leaving out the empty ones", () => {
+    const filters: FilterParamMap = { genre: ["rock"], origin: [], status: ["complete", "bogus"], owner: ["u1"] };
+
+    expect(buildArtistsInput({ ...base, sort: "name", filters }).filters).toEqual({
+      genre: ["rock"],
+      origin: undefined,
+      status: ["complete"],
+    });
+    expect(buildPlaylistsInput({ ...base, sort: "name", filters }).filters).toEqual({
+      origin: undefined,
+      owner: ["u1"],
+      status: ["complete"],
+    });
   });
 });
 

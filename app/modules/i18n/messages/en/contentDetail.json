@@ -19,8 +19,8 @@
   "retryTrack": "Retry {{title}}",
   "selectTrack": "Select {{title}}",
   "selection": {
-    "selected": "selected",
     "selectAll": "Select all",
+    "ofTotal": "of {{total}} selected",
     "clear": "Clear"
   },
   "sort": {

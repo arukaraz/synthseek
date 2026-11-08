@@ -28,18 +28,21 @@ export function LibraryFilterSidebar({
   onClear,
   hasActiveFilters,
   isRefreshing = false,
+  showHeader = true,
 }: LibraryFilterSidebarProps) {
   const { t } = useTranslation("library");
   const orphanActive = (filters.orphan ?? []).includes("true");
 
   return (
     <div className={sidebarShell()}>
-      <div className={sidebarHeader()}>
-        <p className={sidebarTitle()}>{t("page.filters.title")}</p>
-        <button type="button" className={clearButton()} onClick={onClear} disabled={!hasActiveFilters}>
-          {t("page.filters.clear")}
-        </button>
-      </div>
+      {showHeader ? (
+        <div className={sidebarHeader()}>
+          <p className={sidebarTitle()}>{t("page.filters.title")}</p>
+          <button type="button" className={clearButton()} onClick={onClear} disabled={!hasActiveFilters}>
+            {t("page.filters.clear")}
+          </button>
+        </div>
+      ) : null}
 
       {facetDefsWithChoice(config.facets, facets).map((def) => (
         <FacetGroup

@@ -1,7 +1,6 @@
 import { ContentType, RequestStatus } from "@api/__generated__/types";
 import { Disc3, ListMusic, Music, User } from "lucide-react";
 
-import { AlbumCard, ArtistCard, PlaylistCard } from "./components/LibraryCard";
 import type {
   AlbumsViewConfig,
   ArtistsViewConfig,
@@ -17,6 +16,12 @@ export const LIBRARY_VIEWS: readonly LibraryView[] = ["tracks", "albums", "artis
 export const LIBRARY_PAGE_SIZE_OPTIONS = [50, 100, 200] as const;
 export const LIBRARY_DEFAULT_PAGE_SIZE = "50";
 export const LIBRARY_DEFAULT_PAGE = "1";
+
+export const LIBRARY_DENSITY_STORAGE_KEY = "synthseek.library.density";
+
+export const GRID_ITEMS_SELECTOR = "[data-library-grid]";
+
+export const GRID_JUMP_MAX_FRAMES = 60;
 
 export const LIBRARY_FACET_TOP_N = 8;
 
@@ -136,7 +141,6 @@ const ALBUMS_CONFIG: AlbumsViewConfig = {
   contentType: ContentType.enum.album,
   layout: "grid",
   interactive: false,
-  renderCard: (item) => <AlbumCard item={item} />,
   getCardId: (item) => item.id,
   searchPlaceholderKey: "page.toolbar.searchAlbums",
   emptyTitleKey: "page.empty.albumsTitle",
@@ -167,7 +171,6 @@ const ARTISTS_CONFIG: ArtistsViewConfig = {
   contentType: ContentType.enum.artist,
   layout: "grid",
   interactive: false,
-  renderCard: (item) => <ArtistCard item={item} />,
   getCardId: (item) => item.artist,
   searchPlaceholderKey: "page.toolbar.searchArtists",
   emptyTitleKey: "page.empty.artistsTitle",
@@ -193,7 +196,6 @@ const PLAYLISTS_CONFIG: PlaylistsViewConfig = {
   contentType: ContentType.enum.playlist,
   layout: "grid",
   interactive: false,
-  renderCard: (item) => <PlaylistCard item={item} />,
   getCardId: (item) => item.id,
   searchPlaceholderKey: "page.toolbar.searchPlaylists",
   emptyTitleKey: "page.empty.playlistsTitle",

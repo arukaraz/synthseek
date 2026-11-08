@@ -6,16 +6,23 @@ import { useLibraryPlaylists } from "@hooks/api";
 import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
 import type { LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
+import { playlistOriginLabel } from "@utils/playlist";
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { VIEW_CONFIG } from "../constants";
-import { buildPlaylistsInput } from "../helpers";
+import { buildPlaylistsInput, shellCardChrome, shellListsRows } from "../helpers";
 import type { LibraryViewModeProps } from "../types";
-import { PlaylistCard } from "./LibraryCard";
+import { CardArtwork, LibraryListRow, PlaylistCard, PlaylistCardMenu } from "./LibraryCard";
+import { joinMeta, playlistSubtitle } from "./LibraryCard/helpers";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
-export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange }: LibraryViewModeProps) {
+export function PlaylistsViewMode({ controller, shell }: LibraryViewModeProps) {
+  const { t } = useTranslation("library");
+  const { t: tDetail } = useTranslation("contentDetail");
   const { openForTarget } = useContentRequestFlow();
+  const chrome = shellCardChrome(shell);
+  const asRows = shellListsRows(shell);
   const { playEntity } = useEntityPlayback();
   const input = useMemo(
     () =>
@@ -34,22 +41,36 @@ export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange
   const query = useLibraryPlaylists(input, controller.view === "playlists");
 
   const renderCard = useCallback(
-    (item: LibraryPlaylistItem) => (
-      <PlaylistCard
-        item={item}
-        onPlay={() => playEntity({ kind: "playlist", playlistId: item.id })}
-        onOpen={() =>
-          openForTarget(
-            playlistLibraryTarget({
-              id: item.id,
-              name: item.name,
-              cover: item.image ?? item.images[0] ?? null,
-            })
-          )
-        }
-      />
-    ),
-    [openForTarget, playEntity]
+    (item: LibraryPlaylistItem) => {
+      const cover = item.image ?? item.images[0] ?? null;
+      const open = () => openForTarget(playlistLibraryTarget({ id: item.id, name: item.name, cover }));
+
+      if (asRows) {
+        return (
+          <LibraryListRow
+            title={item.name}
+            subtitle={joinMeta([
+              playlistSubtitle(item, playlistOriginLabel(item.origin, t), t),
+              t("page.counts.tracks", { count: item.total_tracks }),
+            ])}
+            openLabel={tDetail("openDetail", { name: item.name })}
+            artwork={<CardArtwork src={cover} name={item.name} sizes="56px" />}
+            onOpen={open}
+            trailing={<PlaylistCardMenu item={item} appearance="inline" />}
+          />
+        );
+      }
+
+      return (
+        <PlaylistCard
+          item={item}
+          chrome={chrome}
+          onPlay={chrome === "bare" ? undefined : () => playEntity({ kind: "playlist", playlistId: item.id })}
+          onOpen={open}
+        />
+      );
+    },
+    [openForTarget, playEntity, chrome, asRows, t, tDetail]
   );
 
   return (
@@ -68,8 +89,7 @@ export function PlaylistsViewMode({ controller, filtersOpen, onFiltersOpenChange
         isFetchingNextPage: query.isFetchingNextPage,
         fetchNextPage: query.fetchNextPage,
       }}
-      filtersOpen={filtersOpen}
-      onFiltersOpenChange={onFiltersOpenChange}
+      shell={shell}
     />
   );
 }

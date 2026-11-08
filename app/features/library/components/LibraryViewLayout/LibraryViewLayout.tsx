@@ -9,12 +9,22 @@ import { useTranslation } from "react-i18next";
 
 import { LIBRARY_PAGE_SIZE_OPTIONS } from "../../constants";
 import { computePageCount, countActiveFilters, toggleFilterValue } from "../../helpers";
-import { mainColumn, resultsOverlay, resultsScroll, resultsShell, sidebarColumn, stateWrap } from "../../styles";
+import {
+  mainColumn,
+  pagerWrap,
+  resultsOverlay,
+  resultsScroll,
+  resultsShell,
+  sidebarColumn,
+  stateWrap,
+} from "../../styles";
 import { LibraryInfiniteGrid } from "../LibraryCard";
 import { LibraryFilterSheet } from "../LibraryFilterSheet/LibraryFilterSheet";
 import { LibraryFilterSidebar } from "../LibraryFilterSidebar/LibraryFilterSidebar";
+import { LibraryShelfHeader } from "../LibraryShelf";
 import type { LibraryFilterSidebarProps } from "../LibraryFilterSidebar/types";
 import { LibraryTable } from "../LibraryTable/LibraryTable";
+import { LibraryLetterIndex } from "./LibraryLetterIndex";
 import type { LibraryViewLayoutProps } from "./types";
 
 export function LibraryViewLayout<TItem>({
@@ -26,8 +36,7 @@ export function LibraryViewLayout<TItem>({
   isError,
   isRefreshing = false,
   content,
-  filtersOpen,
-  onFiltersOpenChange,
+  shell,
 }: LibraryViewLayoutProps<TItem>) {
   const { t } = useTranslation("library");
   const { config } = controller;
@@ -50,6 +59,10 @@ export function LibraryViewLayout<TItem>({
   };
 
   const pageCount = computePageCount(total, controller.pageSize);
+  const letterIndex =
+    content.layout === "grid" && content.letterIndex && content.letterIndex.entries.length > 1
+      ? content.letterIndex
+      : undefined;
 
   return (
     <>
@@ -58,6 +71,7 @@ export function LibraryViewLayout<TItem>({
       </aside>
 
       <div className={mainColumn()}>
+        <LibraryShelfHeader controller={controller} total={total} facets={facets} shell={shell} />
         {isError ? (
           <div className={stateWrap()}>
             <EmptyState icon={AlertTriangle} title={t("page.error.title")} description={t("page.error.description")} />
@@ -82,9 +96,10 @@ export function LibraryViewLayout<TItem>({
                   <Spinner size="lg" label={t("page.loading")} />
                 </div>
               ) : null}
+              {letterIndex ? <LibraryLetterIndex index={letterIndex} scrollRoot={scrollRoot} /> : null}
               <div
                 ref={setScrollRoot}
-                className={resultsScroll({ stale: isRefreshing })}
+                className={resultsScroll({ stale: isRefreshing, indexed: letterIndex !== undefined })}
                 onKeyDown={content.layout === "grid" ? content.onKeyDown : undefined}
               >
                 {content.layout === "table" ? (
@@ -94,6 +109,7 @@ export function LibraryViewLayout<TItem>({
                     getRowId={content.getRowId}
                     emptyMessage={t(config.emptyTitleKey)}
                     selection={content.selection}
+                    rows={content.rows}
                   />
                 ) : (
                   <>
@@ -101,6 +117,7 @@ export function LibraryViewLayout<TItem>({
                     <LibraryInfiniteGrid
                       items={items ?? []}
                       ariaLabel={t(config.labelKey)}
+                      density={shell.phone ? shell.density : "comfortable"}
                       renderCard={content.renderCard}
                       getCardId={content.getCardId}
                       scrollRoot={scrollRoot}
@@ -113,21 +130,28 @@ export function LibraryViewLayout<TItem>({
               </div>
             </div>
             {content.layout === "table" ? (
-              <Pagination
-                page={controller.page}
-                pageCount={pageCount}
-                pageSize={controller.pageSize}
-                totalItems={total}
-                pageSizeOptions={[...LIBRARY_PAGE_SIZE_OPTIONS]}
-                onPageChange={controller.setPage}
-                onPageSizeChange={controller.setPageSize}
-              />
+              <div className={pagerWrap()}>
+                <Pagination
+                  page={controller.page}
+                  pageCount={pageCount}
+                  pageSize={controller.pageSize}
+                  totalItems={total}
+                  pageSizeOptions={[...LIBRARY_PAGE_SIZE_OPTIONS]}
+                  onPageChange={controller.setPage}
+                  onPageSizeChange={controller.setPageSize}
+                />
+              </div>
             ) : null}
           </>
         )}
       </div>
 
-      <LibraryFilterSheet {...sidebarProps} open={filtersOpen} onOpenChange={onFiltersOpenChange} />
+      <LibraryFilterSheet
+        {...sidebarProps}
+        open={shell.filtersOpen}
+        onOpenChange={shell.onFiltersOpenChange}
+        total={total}
+      />
     </>
   );
 }

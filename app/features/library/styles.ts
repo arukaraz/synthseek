@@ -2,7 +2,9 @@ import { cva } from "class-variance-authority";
 
 export const libraryScreen = cva("flex h-full min-h-0 flex-col");
 
-export const libraryBody = cva("flex min-h-0 flex-1 gap-4 px-4 pt-4 pb-6 sm:px-6");
+export const libraryToolbarRow = cva("px-4 pt-4 max-sm:hidden sm:px-6");
+
+export const libraryBody = cva("flex min-h-0 flex-1 gap-4 px-4 pt-0 pb-0 sm:px-6 sm:pt-4 sm:pb-6");
 
 export const sidebarColumn = cva("hidden w-64 shrink-0 lg:block");
 
@@ -16,11 +18,18 @@ export const resultsScroll = cva("min-h-0 flex-1 overflow-y-auto transition-opac
       true: "pointer-events-none opacity-40",
       false: "",
     },
+    indexed: {
+      true: "max-sm:pr-7 max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden",
+      false: "",
+    },
   },
   defaultVariants: {
     stale: false,
+    indexed: false,
   },
 });
+
+export const pagerWrap = cva("max-sm:pb-4");
 
 export const resultsOverlay = cva("absolute inset-0 z-10 grid place-items-center");
 

@@ -2,16 +2,18 @@ import type { LibraryAlbumItem, LibraryArtistItem, LibraryPlaylistItem } from "@
 import type { CheckboxPreview } from "@components/ui/Checkbox";
 import type { ReactNode } from "react";
 
-import type { AlbumSelection, LibraryFileActions } from "../../types";
+import type { AlbumSelection, CardChrome, LibraryDensity, LibraryFileActions } from "../../types";
 
 export interface LibraryCardGridProps {
   children: ReactNode;
   ariaLabel: string;
+  density?: LibraryDensity;
 }
 
 export interface LibraryInfiniteGridProps<TItem> {
   items: TItem[];
   ariaLabel: string;
+  density?: LibraryDensity;
   renderCard: (item: TItem) => ReactNode;
   getCardId: (item: TItem) => string;
   scrollRoot: HTMLElement | null;
@@ -21,6 +23,33 @@ export interface LibraryInfiniteGridProps<TItem> {
 }
 
 export type CardPlayOrder = "inOrder" | "shuffled";
+
+export type CardMenuAppearance = "cover" | "inline";
+
+export interface CardPlayButtonProps {
+  name: string;
+  order: CardPlayOrder;
+  onPlay: () => Promise<unknown>;
+  placement: "corner" | "inline";
+}
+
+export interface LibraryListRowProps {
+  title: string;
+  subtitle: string;
+  openLabel: string;
+  artwork: ReactNode;
+  round?: boolean;
+  onOpen?: () => void;
+  trailing?: ReactNode;
+  selection?: CardSelection;
+  selectLabel?: string;
+}
+
+export interface CardArtworkProps {
+  src: string | null | undefined;
+  name: string;
+  sizes: string;
+}
 
 export interface CardCoverActionsProps {
   name: string;
@@ -47,6 +76,7 @@ export interface AlbumCardProps {
   onPlay?: () => Promise<unknown>;
   menu?: ReactNode;
   selection?: CardSelection;
+  chrome?: CardChrome;
 }
 
 export interface AlbumSelectionBarProps {
@@ -60,6 +90,7 @@ export interface AlbumCardMenuProps {
   item: LibraryAlbumItem;
   onEnqueue: () => void;
   fileActions: LibraryFileActions;
+  appearance?: CardMenuAppearance;
 }
 
 export interface ArtistCardProps {
@@ -68,6 +99,7 @@ export interface ArtistCardProps {
   isResolving?: boolean;
   onOpen?: () => void;
   onPlay?: () => Promise<unknown>;
+  chrome?: CardChrome;
 }
 
 export interface LibraryArtistCardProps {
@@ -75,14 +107,18 @@ export interface LibraryArtistCardProps {
   resolveEnabled: boolean;
   onOpen?: () => void;
   onPlay?: () => Promise<unknown>;
+  chrome?: CardChrome;
+  variant?: "card" | "row";
 }
 
 export interface PlaylistCardProps {
   item: LibraryPlaylistItem;
   onOpen?: () => void;
   onPlay?: () => Promise<unknown>;
+  chrome?: CardChrome;
 }
 
 export interface PlaylistCardMenuProps {
   item: LibraryPlaylistItem;
+  appearance?: CardMenuAppearance;
 }

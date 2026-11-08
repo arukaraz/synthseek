@@ -5,7 +5,7 @@ import type {
   LibraryPathRecord,
 } from "@hooks/api/queries/library/types";
 
-import type { LibraryFileActions, LibraryFileJob, LibraryFileRequest, LibraryFileTarget } from "../../types";
+import type { LibraryFileJob, LibraryFileRequest, LibraryFileTarget } from "../../types";
 
 export type PathOptionState = "available" | "current" | "disabled" | "readonly" | "unreachable";
 
@@ -56,11 +56,6 @@ export interface FileJobDialogProps {
 export interface FileFailureListProps {
   failures: LibraryFileFailure[];
   failedCount: number;
-}
-
-export interface FileActionMenuItemsProps {
-  target: LibraryFileTarget;
-  actions: LibraryFileActions;
 }
 
 export interface DeleteCopy {

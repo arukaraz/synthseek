@@ -7,21 +7,25 @@ import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useRangePreview } from "@hooks/ui/useRangePreview";
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { VIEW_CONFIG } from "../constants";
-import { applySelectionShortcut, buildAlbumsInput, rangePreviewTone } from "../helpers";
+import {
+  applySelectionShortcut,
+  buildAlbumsInput,
+  rangePreviewTone,
+  shellCardChrome,
+  shellListsRows,
+} from "../helpers";
 import type { AlbumsViewModeProps } from "../types";
-import { AlbumCard, AlbumCardMenu, AlbumSelectionBar } from "./LibraryCard";
+import { AlbumCard, AlbumCardMenu, AlbumSelectionBar, CardArtwork, LibraryListRow } from "./LibraryCard";
+import { joinMeta } from "./LibraryCard/helpers";
+import type { CardSelection } from "./LibraryCard/types";
 import type { LibraryAlbumItem, PlayableTracksTarget } from "@hooks/api/queries/library/types";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
-export function AlbumsViewMode({
-  controller,
-  filtersOpen,
-  onFiltersOpenChange,
-  selection,
-  fileActions,
-}: AlbumsViewModeProps) {
+export function AlbumsViewMode({ controller, shell, selection, fileActions }: AlbumsViewModeProps) {
+  const { t } = useTranslation(["library", "contentDetail"]);
   const { openForResult } = useContentRequestFlow();
   const { playEntity, enqueueEntity, enqueueEntities } = useEntityPlayback();
   const { previewId, trackRow } = useRangePreview();
@@ -45,8 +49,11 @@ export function AlbumsViewMode({
   const orderedIds = useMemo(() => items.map((item) => item.id), [items]);
   const preview = previewId ? selection.rangeTo(orderedIds, previewId) : null;
   const previewTone = rangePreviewTone(preview);
-  const selecting = selection.selectedCount > 0;
+  const selecting = selection.selectedCount > 0 || shell.selectMode;
   const showLibraryPaths = (query.facets.libraryPath ?? []).length > 1;
+  const chrome = shellCardChrome(shell);
+  const asRows = shellListsRows(shell);
+  const selectable = !shell.phone || shell.selectMode;
 
   const enqueueAlbums = useCallback(
     (albums: LibraryAlbumItem[]) =>
@@ -57,50 +64,81 @@ export function AlbumsViewMode({
   );
 
   const renderCard = useCallback(
-    (item: LibraryAlbumItem) => (
-      <AlbumCard
-        item={item}
-        showLibraryPaths={showLibraryPaths}
-        onPlay={() => playEntity({ kind: "album", albumExternalId: item.external_id })}
-        onOpen={() =>
-          openForResult(
-            albumRequestItem({
-              id: item.external_id,
-              name: item.name,
-              artistName: item.artist,
-              cover: item.album_art,
-              genres: item.genres,
-            })
-          )
-        }
-        menu={
-          <AlbumCardMenu
-            item={item}
-            onEnqueue={() => void enqueueEntity({ kind: "album", albumExternalId: item.external_id })}
-            fileActions={fileActions}
+    (item: LibraryAlbumItem) => {
+      const open = () =>
+        openForResult(
+          albumRequestItem({
+            id: item.external_id,
+            name: item.name,
+            artistName: item.artist,
+            cover: item.album_art,
+            genres: item.genres,
+          })
+        );
+      const menu = (
+        <AlbumCardMenu
+          item={item}
+          onEnqueue={() => void enqueueEntity({ kind: "album", albumExternalId: item.external_id })}
+          fileActions={fileActions}
+          appearance={chrome === "overlay" ? "cover" : "inline"}
+        />
+      );
+      const cardSelection: CardSelection | undefined = selectable
+        ? {
+            selected: selection.isSelected(item.id),
+            selecting,
+            preview: preview?.ids.includes(item.id) ? previewTone : "none",
+            onToggle: (extend: boolean) =>
+              extend ? selection.extendTo(orderedIds, item.id) : selection.toggle(item.id),
+            onHover: (hovered: boolean) => trackRow(hovered ? item.id : null),
+          }
+        : undefined;
+
+      if (asRows) {
+        return (
+          <LibraryListRow
+            title={item.name}
+            subtitle={joinMeta([item.artist, item.year])}
+            openLabel={t("contentDetail:openDetail", { name: item.name })}
+            selectLabel={t("library:page.selection.selectAlbum", { name: item.name })}
+            artwork={<CardArtwork src={item.album_art} name={item.name} sizes="56px" />}
+            onOpen={open}
+            trailing={menu}
+            selection={cardSelection}
           />
-        }
-        selection={{
-          selected: selection.isSelected(item.id),
-          selecting,
-          preview: preview?.ids.includes(item.id) ? previewTone : "none",
-          onToggle: (extend) => (extend ? selection.extendTo(orderedIds, item.id) : selection.toggle(item.id)),
-          onHover: (hovered) => trackRow(hovered ? item.id : null),
-        }}
-      />
-    ),
+        );
+      }
+
+      return (
+        <AlbumCard
+          item={item}
+          showLibraryPaths={showLibraryPaths}
+          chrome={chrome}
+          onPlay={
+            chrome === "bare" ? undefined : () => playEntity({ kind: "album", albumExternalId: item.external_id })
+          }
+          onOpen={open}
+          menu={chrome === "bare" ? undefined : menu}
+          selection={cardSelection}
+        />
+      );
+    },
     [
+      t,
       openForResult,
       playEntity,
       enqueueEntity,
       fileActions,
       selection,
       selecting,
+      selectable,
       preview,
       previewTone,
       orderedIds,
       trackRow,
       showLibraryPaths,
+      chrome,
+      asRows,
     ]
   );
 
@@ -126,8 +164,7 @@ export function AlbumsViewMode({
           applySelectionShortcut(event, selection, orderedIds);
         },
       }}
-      filtersOpen={filtersOpen}
-      onFiltersOpenChange={onFiltersOpenChange}
+      shell={shell}
     />
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
+import { BottomSheet } from "@components/ui/BottomSheet";
+import { DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { useAlbumDetail, useArtistIdentity, usePlaylistDetail } from "@hooks/api/queries/content-detail";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -60,75 +61,77 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
   const backAriaLabel = previous ? t("back", { name: previous.name }) : t("backFallback");
 
   return (
-    <Dialog open={open} onOpenChange={(nextOpen) => handleOpenChange(nextOpen, onClose)}>
-      <DialogContent
-        className={modalContainer()}
-        aria-describedby="content-detail-description"
-        onOpenAutoFocus={(event) => {
-          event.preventDefault();
-          openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-          shellRef.current?.focus();
-        }}
-        onCloseAutoFocus={(event) => {
-          event.preventDefault();
-          if (openerRef.current?.isConnected) openerRef.current.focus();
-        }}
-      >
-        <ContentDetailActionsProvider actions={actions}>
-          <DialogTitle className="sr-only">{t("dialogTitle", { name: current.name })}</DialogTitle>
-          <DialogDescription id="content-detail-description" className="sr-only">
-            {t("dialogDescription", { name: current.name })}
-          </DialogDescription>
+    <BottomSheet
+      open={open}
+      onOpenChange={(nextOpen) => handleOpenChange(nextOpen, onClose)}
+      size="full"
+      placement="overlay"
+      className={modalContainer()}
+      aria-describedby="content-detail-description"
+      onOpenAutoFocus={(event) => {
+        event.preventDefault();
+        openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        shellRef.current?.focus();
+      }}
+      onCloseAutoFocus={(event) => {
+        event.preventDefault();
+        if (openerRef.current?.isConnected) openerRef.current.focus();
+      }}
+    >
+      <ContentDetailActionsProvider actions={actions}>
+        <DialogTitle className="sr-only">{t("dialogTitle", { name: current.name })}</DialogTitle>
+        <DialogDescription id="content-detail-description" className="sr-only">
+          {t("dialogDescription", { name: current.name })}
+        </DialogDescription>
 
-          <div
-            ref={shellRef}
-            tabIndex={-1}
-            className={modalShell()}
-            onScroll={(event) => setMiniVisible(event.currentTarget.scrollTop > MINI_HEADER_SCROLL_THRESHOLD)}
-          >
-            <DetailMiniHeader
-              name={current.name}
-              cover={heroImage}
-              mode={current.mode}
-              canGoBack={canGoBack}
-              onBack={goBack}
-              backAriaLabel={backAriaLabel}
-              visible={miniVisible}
+        <div
+          ref={shellRef}
+          tabIndex={-1}
+          className={modalShell()}
+          onScroll={(event) => setMiniVisible(event.currentTarget.scrollTop > MINI_HEADER_SCROLL_THRESHOLD)}
+        >
+          <DetailMiniHeader
+            name={current.name}
+            cover={heroImage}
+            mode={current.mode}
+            canGoBack={canGoBack}
+            onBack={goBack}
+            backAriaLabel={backAriaLabel}
+            visible={miniVisible}
+          />
+
+          {canGoBack ? (
+            <div className={backBar()}>
+              <DetailBackButton label={backLabel} ariaLabel={backAriaLabel} onClick={goBack} />
+            </div>
+          ) : null}
+
+          {current.mode === "artist" ? (
+            <ArtistDetailBody
+              key={current.id}
+              target={current}
+              onClose={() => handleOpenChange(false, onClose)}
+              onNavigate={navigateTo}
             />
-
-            {canGoBack ? (
-              <div className={backBar()}>
-                <DetailBackButton label={backLabel} ariaLabel={backAriaLabel} onClick={goBack} />
-              </div>
-            ) : null}
-
-            {current.mode === "artist" ? (
-              <ArtistDetailBody
-                key={current.id}
-                target={current}
-                onClose={() => handleOpenChange(false, onClose)}
-                onNavigate={navigateTo}
-              />
-            ) : current.mode === "playlist" ? (
-              <PlaylistDetailBody
-                key={current.id}
-                target={current}
-                onClose={() => handleOpenChange(false, onClose)}
-                onNavigate={navigateTo}
-                showInLibraryPill={showInLibraryPill}
-              />
-            ) : (
-              <AlbumDetailBody
-                key={current.id}
-                target={current}
-                onClose={() => handleOpenChange(false, onClose)}
-                onNavigate={navigateTo}
-                showInLibraryPill={showInLibraryPill}
-              />
-            )}
-          </div>
-        </ContentDetailActionsProvider>
-      </DialogContent>
-    </Dialog>
+          ) : current.mode === "playlist" ? (
+            <PlaylistDetailBody
+              key={current.id}
+              target={current}
+              onClose={() => handleOpenChange(false, onClose)}
+              onNavigate={navigateTo}
+              showInLibraryPill={showInLibraryPill}
+            />
+          ) : (
+            <AlbumDetailBody
+              key={current.id}
+              target={current}
+              onClose={() => handleOpenChange(false, onClose)}
+              onNavigate={navigateTo}
+              showInLibraryPill={showInLibraryPill}
+            />
+          )}
+        </div>
+      </ContentDetailActionsProvider>
+    </BottomSheet>
   );
 }

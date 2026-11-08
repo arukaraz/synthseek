@@ -13,3 +13,14 @@ export const CLIENT_PAGINATION = {
 export const SCROLL_EDGE_TOLERANCE_PX = 4;
 
 export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+export const PHONE_QUERY = "(max-width: 639px)";
+
+export const SHEET_DRAG = {
+  AXIS_LOCK_PX: 6,
+  DISMISS_DISTANCE_PX: 120,
+  DISMISS_FRACTION: 0.25,
+  DISMISS_VELOCITY_PX_PER_MS: 0.5,
+  SETTLE_MS: 220,
+  NO_DRAG_SELECTOR: "[data-sheet-no-drag]",
+} as const;

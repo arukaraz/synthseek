@@ -42,7 +42,6 @@
     "app/features/library/components/LibraryCard/__tests__/LibraryArtistCard.test.tsx",
     "app/features/library/components/LibraryTable/__tests__/LibraryTable.test.tsx",
     "app/features/library/components/LibraryTable/cells/__tests__/TrackPrimaryCell.test.tsx",
-    "app/features/library/components/__tests__/TracksViewMode.test.tsx",
     "app/features/library/hooks/__tests__/useLibrarySelection.test.ts",
     "app/features/requests/components/RequestDetail/__tests__/RequestDetailHero.test.tsx",
     "app/features/requests/components/RequestDetail/__tests__/RequestDetailHeroMenu.test.tsx",
