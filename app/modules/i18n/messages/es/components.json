@@ -45,6 +45,9 @@
   "infoTooltip": {
     "trigger": "Más información"
   },
+  "adminOnly": {
+    "label": "Solo administradores"
+  },
   "fadeScroll": {
     "scrollLeft": "Desplazar a la izquierda",
     "scrollRight": "Desplazar a la derecha"
@@ -57,6 +60,7 @@
     "mobileNav": "Móvil",
     "search": "Buscar",
     "clearSearch": "Limpiar búsqueda",
+    "closeSearch": "Cerrar búsqueda",
     "discover": "Descubrir",
     "requests": "Solicitudes",
     "library": "Biblioteca",

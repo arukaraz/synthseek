@@ -45,6 +45,9 @@
   "infoTooltip": {
     "trigger": "Weitere Informationen"
   },
+  "adminOnly": {
+    "label": "Nur für Admins"
+  },
   "fadeScroll": {
     "scrollLeft": "Nach links scrollen",
     "scrollRight": "Nach rechts scrollen"
@@ -57,6 +60,7 @@
     "mobileNav": "Mobil",
     "search": "Suchen",
     "clearSearch": "Suche leeren",
+    "closeSearch": "Suche schließen",
     "discover": "Entdecken",
     "requests": "Anfragen",
     "library": "Bibliothek",

@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminOnlyMark } from "@components/ui/AdminOnlyMark";
 import { BottomSheet, BottomSheetHeader, bottomSheetBody } from "@components/ui/BottomSheet";
 import { ArrowDown, ArrowUp, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -24,7 +25,7 @@ export function ShelfSortSheet({ controller, open, onOpenChange }: ShelfSortShee
       <BottomSheetHeader title={t("page.toolbar.sort")} subtitle={t(config.labelKey)} />
       <div className={bottomSheetBody()}>
         <p className={sheetGroupHeading()}>{t("components:filterSort.sortLabel")}</p>
-        {config.sortOptions.map((option) => (
+        {controller.sortOptions.map((option) => (
           <button
             key={option.value}
             type="button"
@@ -33,6 +34,7 @@ export function ShelfSortSheet({ controller, open, onOpenChange }: ShelfSortShee
             aria-pressed={sort === option.value}
           >
             <span className="min-w-0 flex-1">{t(option.labelKey)}</span>
+            {option.adminOnly ? <AdminOnlyMark /> : null}
             {sort === option.value ? <Check className={sheetMenuCheck()} /> : null}
           </button>
         ))}

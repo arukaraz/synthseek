@@ -78,6 +78,15 @@ export interface CustomizationNavProps {
   onValueChange: (section: CustomizationSection) => void;
 }
 
+export type BoardPane = "arrange" | "settings";
+
+export type PhonePane = "arrange" | BoardSettingsTab | "widgets";
+
+export interface CustomizationTabBarProps {
+  value: PhonePane;
+  onValueChange: (pane: PhonePane) => void;
+}
+
 export interface BoardSectionProps {
   draft: CustomizationDraft;
   saved: BoardLists;
@@ -85,6 +94,7 @@ export interface BoardSectionProps {
   onListChange: (list: BoardList) => void;
   tab: BoardSettingsTab;
   onTabChange: (tab: BoardSettingsTab) => void;
+  pane: BoardPane;
   boardWidth: number;
   customStatus: CustomWidgetsStatus;
   onStage: StageTemplate;

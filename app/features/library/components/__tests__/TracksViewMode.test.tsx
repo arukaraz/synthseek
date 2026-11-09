@@ -1,10 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import type { ColumnDef } from "@components/ui/Table";
-import type { ReactNode } from "react";
-import { createLibraryShell } from "@test/factories";
+import { useState, type ReactNode } from "react";
+import { act, fireEvent } from "@testing-library/react";
+import { LONG_PRESS_MS } from "@hooks/ui/constants";
+import { createLibraryController, createLibraryShell } from "@test/factories";
 import { renderWithProviders, screen } from "@test/test-utils";
-import type { LibraryTrackItem } from "@hooks/api/queries/library/types";
+import type { LibraryTrackItem, LibraryTracksInfiniteResult } from "@hooks/api/queries/library/types";
 import { useLibrarySelection } from "../../hooks/useLibrarySelection";
 import type { LibraryViewShell, TracksViewModeProps } from "../../types";
 import type { TrackSelectionConfig } from "../LibraryTable/types";
@@ -12,7 +14,6 @@ import type { TrackSelectionConfig } from "../LibraryTable/types";
 import { TracksViewMode } from "../TracksViewMode";
 
 const useLibraryTracksMock = vi.hoisted(() => vi.fn());
-const prefetchNextPageMock = vi.hoisted(() => vi.fn());
 const libraryPlaybackMock = vi.hoisted(() => vi.fn(() => ({ play: vi.fn(), enqueue: vi.fn() })));
 
 vi.mock("../../hooks/useLibraryPlayback", () => ({ useLibraryPlayback: libraryPlaybackMock }));
@@ -28,7 +29,6 @@ vi.mock("../../hooks/useLibraryTrackActions", () => ({
 
 vi.mock("@hooks/api", () => ({
   useLibraryTracks: useLibraryTracksMock,
-  useLibraryTracksPrefetch: () => ({ prefetchNextPage: prefetchNextPageMock }),
   usePlayableTracksFetcher: () => vi.fn(async () => ({ items: [], truncated: false })),
   useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
@@ -44,10 +44,14 @@ interface CapturedLayout {
   total: number;
   isLoading: boolean;
   isError: boolean;
+  isRefreshing: boolean;
   content: {
     layout: "table";
     columns: ColumnDef<LibraryTrackItem>[];
     getRowId: (item: LibraryTrackItem) => string;
+    hasNextPage: boolean;
+    isFetchingNextPage: boolean;
+    fetchNextPage: () => void;
     selection?: TrackSelectionConfig;
     rows?: ReactNode;
   };
@@ -121,34 +125,37 @@ function makeProps(
   shell?: Partial<LibraryViewShell>
 ): HarnessProps {
   return {
-    controller: {
-      view: "tracks",
-      search: "",
-      sort: "recent",
-      direction: undefined,
-      filters: {},
-      facetSearch: {},
-      page: 1,
-      pageSize: 50,
-      ...overrides,
-    } as unknown as TracksViewModeProps["controller"],
+    controller: createLibraryController(overrides),
     shell: createLibraryShell(shell),
     fileActions: { canMove: true, openMove: vi.fn(), openDelete: vi.fn() },
+  };
+}
+
+function tracksResult(overrides?: Partial<LibraryTracksInfiniteResult>): LibraryTracksInfiniteResult {
+  return {
+    items: [createTrack()],
+    total: 1,
+    facets: {},
+    appliedSources: [],
+    hasNextPage: false,
+    fetchNextPage: vi.fn(),
+    isFetchingNextPage: false,
+    isLoading: false,
+    isError: false,
+    isRefreshing: false,
+    ...overrides,
   };
 }
 
 describe("TracksViewMode", () => {
   beforeEach(() => {
     captured.props = undefined;
-    prefetchNextPageMock.mockReset();
-    useLibraryTracksMock.mockReturnValue({
-      data: { items: [createTrack()], total: 1, facets: {} },
-      isLoading: false,
-      isError: false,
-    });
+    useLibraryTracksMock.mockReturnValue(tracksResult());
   });
 
   afterEach(() => {
+    fireEvent.pointerDown(document.body);
+    vi.useRealTimers();
     vi.clearAllMocks();
   });
 
@@ -159,31 +166,50 @@ describe("TracksViewMode", () => {
     expect(useLibraryTracksMock).toHaveBeenCalledWith(expect.anything(), true);
   });
 
-  it("does not prefetch when the current page is the last page", () => {
-    renderWithProviders(<TracksHarness {...makeProps()} />);
+  it("disables the tracks query while another view is active", () => {
+    renderWithProviders(<TracksHarness {...makeProps({ view: "albums" })} />);
 
-    expect(prefetchNextPageMock).not.toHaveBeenCalled();
+    expect(useLibraryTracksMock).toHaveBeenCalledWith(expect.anything(), false);
   });
 
-  it("prefetches the next page when more results remain", () => {
-    useLibraryTracksMock.mockReturnValue({
-      data: { items: [createTrack()], total: 120, facets: {} },
-      isLoading: false,
-      isError: false,
-    });
+  it("asks for the tracks from the controller's search, sort and direction", () => {
+    renderWithProviders(
+      <TracksHarness
+        {...makeProps({ search: "daft", sort: "title", direction: "asc", filters: { genre: ["house"] } })}
+      />
+    );
+
+    expect(useLibraryTracksMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        q: "daft",
+        sort: "title",
+        direction: "asc",
+        filters: expect.objectContaining({ genre: ["house"] }),
+      }),
+      true
+    );
+  });
+
+  it("hands the query's paging state to the layout so it can load more", () => {
+    const fetchNextPage = vi.fn();
+    useLibraryTracksMock.mockReturnValue(tracksResult({ hasNextPage: true, isFetchingNextPage: true, fetchNextPage }));
 
     renderWithProviders(<TracksHarness {...makeProps()} />);
 
-    expect(prefetchNextPageMock).toHaveBeenCalledTimes(1);
-    expect(prefetchNextPageMock).toHaveBeenCalledWith(expect.anything(), 50);
+    expect(captured.props?.content.hasNextPage).toBe(true);
+    expect(captured.props?.content.isFetchingNextPage).toBe(true);
+    expect(captured.props?.content.fetchNextPage).toBe(fetchNextPage);
+  });
+
+  it("reports no further page when the query has none", () => {
+    renderWithProviders(<TracksHarness {...makeProps()} />);
+
+    expect(captured.props?.content.hasNextPage).toBe(false);
+    expect(captured.props?.content.isFetchingNextPage).toBe(false);
   });
 
   it("plays from the sources the server filtered by, not the ones the url asks for", () => {
-    useLibraryTracksMock.mockReturnValue({
-      data: { items: [createTrack()], total: 1, facets: {}, appliedSources: [] },
-      isLoading: false,
-      isError: false,
-    });
+    useLibraryTracksMock.mockReturnValue(tracksResult({ appliedSources: [] }));
 
     renderWithProviders(<TracksHarness {...makeProps({ filters: { source: ["navidrome"] } })} />);
 
@@ -191,11 +217,7 @@ describe("TracksViewMode", () => {
   });
 
   it("hands the applied sources to playback in the order the server reports them", () => {
-    useLibraryTracksMock.mockReturnValue({
-      data: { items: [createTrack()], total: 1, facets: {}, appliedSources: ["jellyfin", "local"] },
-      isLoading: false,
-      isError: false,
-    });
+    useLibraryTracksMock.mockReturnValue(tracksResult({ appliedSources: ["jellyfin", "local"] }));
 
     renderWithProviders(<TracksHarness {...makeProps({ filters: { source: ["jellyfin", "local", "gone"] } })} />);
 
@@ -203,11 +225,23 @@ describe("TracksViewMode", () => {
   });
 
   it("forwards the total and loading state to the layout", () => {
+    useLibraryTracksMock.mockReturnValue(tracksResult({ total: 120, isLoading: true, isRefreshing: true }));
+
     renderWithProviders(<TracksHarness {...makeProps()} />);
 
-    expect(captured.props?.total).toBe(1);
-    expect(captured.props?.isLoading).toBe(false);
+    expect(captured.props?.total).toBe(120);
+    expect(captured.props?.isLoading).toBe(true);
+    expect(captured.props?.isRefreshing).toBe(true);
     expect(captured.props?.isError).toBe(false);
+  });
+
+  it("forwards the error state to the layout", () => {
+    useLibraryTracksMock.mockReturnValue(tracksResult({ items: undefined, total: 0, isError: true }));
+
+    renderWithProviders(<TracksHarness {...makeProps()} />);
+
+    expect(captured.props?.isError).toBe(true);
+    expect(captured.props?.items).toBeUndefined();
   });
 
   it("derives a table row id from the track id", () => {
@@ -250,4 +284,27 @@ describe("TracksViewMode", () => {
     expect(row).toHaveAttribute("aria-pressed", "true");
     expect(play).not.toHaveBeenCalled();
   });
+
+  it("enters select mode on a phone with the held track already picked", () => {
+    const play = vi.fn();
+    libraryPlaybackMock.mockReturnValue({ play, enqueue: vi.fn() });
+    renderWithProviders(<SelectModeHarness {...makeProps(undefined, { phone: true })} />);
+    vi.useFakeTimers();
+
+    fireEvent.pointerDown(screen.getByText("Aerodynamic"), { pointerType: "touch" });
+    act(() => {
+      vi.advanceTimersByTime(LONG_PRESS_MS);
+    });
+    const row = screen.getByRole("button", { name: "Select Aerodynamic" });
+    fireEvent.pointerUp(row);
+    fireEvent.click(row);
+
+    expect(row).toHaveAttribute("aria-pressed", "true");
+    expect(play).not.toHaveBeenCalled();
+  });
 });
+
+function SelectModeHarness(props: HarnessProps) {
+  const [selectMode, setSelectMode] = useState(false);
+  return <TracksHarness {...props} shell={{ ...props.shell, selectMode, onSelectModeChange: setSelectMode }} />;
+}

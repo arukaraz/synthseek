@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "@locale";
 import type { BoardLayout } from "@hooks/api/queries/board/types";
+import { PHONE_QUERY } from "@hooks/ui/constants";
 import { fireEvent, render, screen, within } from "@test/test-utils";
 
 import { ExploreBoard } from "../ExploreBoard";
@@ -60,7 +61,7 @@ vi.mock("@hooks/api/mutations/widgets/useImportWidgetPreview", () => ({
 }));
 
 vi.mock("@hooks/ui/useMediaQuery", () => ({
-  useMediaQuery: () => viewport.wide,
+  useMediaQuery: (query: string) => (query === PHONE_QUERY ? !viewport.wide : viewport.wide),
 }));
 
 vi.mock("../../TrendingHero/TrendingHero", () => ({ TrendingHero: stub("trending") }));

@@ -28,7 +28,7 @@ export function NeverIncludeCard() {
   const artistTerm = useDebounce(artistQuery.trim(), { delay: VETO_SEARCH_DEBOUNCE_MS });
   const trackTerm = useDebounce(trackQuery.trim(), { delay: VETO_SEARCH_DEBOUNCE_MS });
   const artists = useLibraryArtists({ q: artistTerm.length > 0 ? artistTerm : undefined }, artistTerm.length > 0);
-  const trackResults = useLibraryTracks({ q: trackTerm, limit: VETO_MENU_LIMIT }, trackTerm.length > 0);
+  const trackResults = useLibraryTracks({ q: trackTerm }, trackTerm.length > 0);
   const genres = useSetGenres();
 
   const artistOptions = useMemo(
@@ -41,10 +41,11 @@ export function NeverIncludeCard() {
   );
   const trackOptions = useMemo(
     () =>
-      (trackResults.data?.items ?? [])
+      (trackResults.items ?? [])
         .filter((track) => !veto.tracks.includes(track.id))
+        .slice(0, VETO_MENU_LIMIT)
         .map((track) => ({ value: track.id, label: track.title, hint: track.artist })),
-    [trackResults.data?.items, veto.tracks]
+    [trackResults.items, veto.tracks]
   );
   const genreOptions = useMemo(() => {
     const terms = searchTerms(genreQuery);

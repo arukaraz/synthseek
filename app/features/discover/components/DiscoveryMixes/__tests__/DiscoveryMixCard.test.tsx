@@ -85,6 +85,22 @@ describe("DiscoveryMixCard", () => {
     expect(screen.queryByText(/Updated|Synced/)).not.toBeInTheDocument();
   });
 
+  it("says how fresh a full card is in its footer, beside the track count, clear of the poster's icon", () => {
+    render(<DiscoveryMixCard mix={createReadyMix()} compact={false} onClick={() => {}} />);
+
+    const fresh = screen.getByText(/Updated|Synced/);
+    expect(fresh.parentElement).toBe(screen.getByText(/tracks?$/).parentElement);
+    expect(fresh).not.toHaveAttribute("title");
+  });
+
+  it("keeps the freshness on the poster of a compact card, which has no footer, whole in its title", () => {
+    render(<DiscoveryMixCard mix={createReadyMix()} compact onClick={() => {}} />);
+
+    const fresh = screen.getByText(/Updated|Synced/);
+    expect(fresh).toHaveAttribute("title", fresh.textContent);
+    expect(fresh.closest("h3, p")).toBeNull();
+  });
+
   it("invokes onClick when the card is pressed", () => {
     const onClick = vi.fn();
     render(<DiscoveryMixCard mix={createReadyMix()} compact={false} onClick={onClick} />);

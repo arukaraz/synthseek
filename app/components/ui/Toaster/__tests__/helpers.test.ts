@@ -5,10 +5,10 @@ import type { PlayerDockState } from "@hooks/ui/player";
 import {
   TOAST_OFFSET_ABOVE_PLAYER,
   TOAST_OFFSET_ABOVE_PLAYER_CHAIN,
-  TOAST_OFFSET_ABOVE_PLAYER_CHAIN_MOBILE,
-  TOAST_OFFSET_ABOVE_PLAYER_MOBILE,
   TOAST_OFFSET_DEFAULT,
+  TOAST_OFFSET_DEFAULT_MOBILE,
   TOAST_OFFSET_WITH_DOCK,
+  TOAST_OFFSET_WITH_DOCK_MOBILE,
 } from "../constants";
 import { resolveToastMobileOffset, resolveToastOffset } from "../helpers";
 
@@ -43,13 +43,19 @@ describe("resolveToastOffset", () => {
 
 describe("resolveToastMobileOffset", () => {
   it("clears the bottom navigation in every state, since a phone always shows it", () => {
-    for (const [dock, player] of everyState()) {
-      expect(resolveToastMobileOffset(dock, player)).toContain("var(--height-bottom-nav)");
+    for (const dock of DOCK_STATES) {
+      expect(resolveToastMobileOffset(dock)).toContain("var(--height-bottom-nav)");
     }
   });
 
-  it("lifts the toasts above the bottom navigation and the player bar", () => {
-    expect(resolveToastMobileOffset(false, "bar")).toBe(TOAST_OFFSET_ABOVE_PLAYER_MOBILE);
-    expect(resolveToastMobileOffset(true, "chain")).toBe(TOAST_OFFSET_ABOVE_PLAYER_CHAIN_MOBILE);
+  it("reserves no room for a player bar, which sits in the header on a phone", () => {
+    for (const dock of DOCK_STATES) {
+      expect(resolveToastMobileOffset(dock)).not.toContain("player");
+    }
+  });
+
+  it("lifts the toasts above the progress dock while it shows", () => {
+    expect(resolveToastMobileOffset(true)).toBe(TOAST_OFFSET_WITH_DOCK_MOBILE);
+    expect(resolveToastMobileOffset(false)).toBe(TOAST_OFFSET_DEFAULT_MOBILE);
   });
 });

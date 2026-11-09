@@ -21,6 +21,7 @@ export function BoardSection({
   onListChange,
   tab,
   onTabChange,
+  pane,
   boardWidth,
   customStatus,
   onStage,
@@ -29,7 +30,7 @@ export function BoardSection({
 
   return (
     <div className={settingsSplit()}>
-      <div className={settingsArrangeColumn()}>
+      <div className={settingsArrangeColumn({ phoneShown: pane === "arrange" })}>
         <SegmentTabs
           items={BOARD_LISTS.map((value) => ({ value, label: t(BOARD_LIST_KEYS[value]) }))}
           value={list}
@@ -50,7 +51,7 @@ export function BoardSection({
           />
         </StagedWidgetsContext.Provider>
       </div>
-      <aside className={settingsAside()}>
+      <aside className={settingsAside({ phoneShown: pane === "settings" })}>
         <SegmentTabs
           items={BOARD_SETTINGS_TABS.map((value) => ({ value, label: t(BOARD_SETTINGS_TAB_KEYS[value]) }))}
           value={tab}

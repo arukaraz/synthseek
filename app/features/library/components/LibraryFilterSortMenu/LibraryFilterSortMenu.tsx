@@ -22,9 +22,10 @@ export function LibraryFilterSortMenu({ controller, onViewChange }: LibraryFilte
     count: viewCountFor(value, counts),
   }));
 
-  const sortOptions = config.sortOptions.map((option) => ({
+  const sortOptions = controller.sortOptions.map((option) => ({
     value: option.value,
     label: t(option.labelKey),
+    adminOnly: option.adminOnly,
   }));
 
   return (

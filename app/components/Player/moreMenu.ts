@@ -67,7 +67,12 @@ function trackEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"pl
   ];
 }
 
-function soundEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry[] {
+function soundEntries(
+  view: PlayerView,
+  actions: PlayerActions,
+  t: TFunction<"player">,
+  docked: boolean
+): MoreMenuEntry[] {
   const settings: MoreMenuEntry[] =
     view.mode === "mini"
       ? []
@@ -81,6 +86,18 @@ function soundEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"pl
             onSelect: actions.toggleSettings,
           },
         ];
+  const chain: MoreMenuEntry[] = docked
+    ? [
+        {
+          kind: "toggle",
+          key: "chain",
+          icon: Info,
+          label: t("controls.chain"),
+          checked: view.chainVisible,
+          onToggle: actions.toggleChain,
+        },
+      ]
+    : [];
   return [
     {
       kind: "action",
@@ -95,18 +112,16 @@ function soundEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"pl
       onSelect: actions.toggleDevices,
     },
     ...settings,
-    {
-      kind: "toggle",
-      key: "chain",
-      icon: Info,
-      label: t("controls.chain"),
-      checked: view.chainVisible,
-      onToggle: actions.toggleChain,
-    },
+    ...chain,
   ];
 }
 
-function sessionEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry[] {
+function sessionEntries(
+  view: PlayerView,
+  actions: PlayerActions,
+  t: TFunction<"player">,
+  docked: boolean
+): MoreMenuEntry[] {
   const scrobbleState = { text: t(`menu.scrobblingState.${view.scrobble}`), tone: view.scrobble };
   const scrobbling: MoreMenuEntry = view.scrobbleActionable
     ? {
@@ -146,10 +161,15 @@ function sessionEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"
           keepOpen: false,
           onSelect: () => actions.selectMode("normal"),
         };
-  return [scrobbling, mode];
+  return docked ? [scrobbling, mode] : [scrobbling];
 }
 
-export function moreMenuGroups(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuGroup[] {
+export function moreMenuGroups(
+  view: PlayerView,
+  actions: PlayerActions,
+  t: TFunction<"player">,
+  docked: boolean
+): MoreMenuGroup[] {
   return [
     {
       key: "playback",
@@ -175,7 +195,7 @@ export function moreMenuGroups(view: PlayerView, actions: PlayerActions, t: TFun
       ],
     },
     { key: "track", label: t("menu.track"), entries: trackEntries(view, actions, t) },
-    { key: "sound", label: t("menu.sound"), entries: soundEntries(view, actions, t) },
-    { key: "session", label: null, entries: sessionEntries(view, actions, t) },
+    { key: "sound", label: t("menu.sound"), entries: soundEntries(view, actions, t, docked) },
+    { key: "session", label: null, entries: sessionEntries(view, actions, t, docked) },
   ];
 }

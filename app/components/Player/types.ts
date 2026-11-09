@@ -292,6 +292,7 @@ export interface PanelAnchorPoint {
 
 export interface PlayerPlacement {
   target: HTMLElement | null;
+  masthead: HTMLElement | null;
   effective: PlayerMode;
 }
 
@@ -472,7 +473,7 @@ export type PlayerLyricsProps = PlayerProps;
 export interface PlayerCoverProps {
   initials: string;
   tone: PlayerTone;
-  size: "row" | "bar" | "stage" | "fluid" | "sideways";
+  size: "row" | "bar" | "masthead" | "stage" | "fluid" | "sideways";
   artworkUrl?: string | null;
 }
 

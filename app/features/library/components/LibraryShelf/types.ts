@@ -10,11 +10,13 @@ export interface LibraryShelfHeaderProps {
   total: number;
   facets: Readonly<Record<string, LibraryFacetValue[]>>;
   shell: LibraryViewShell;
+  collapsed: boolean;
 }
 
 export interface ShelfTitleBarProps {
   controller: LibraryUrlController;
   total: number;
+  collapsed: boolean;
 }
 
 export interface ShelfViewPillsProps {

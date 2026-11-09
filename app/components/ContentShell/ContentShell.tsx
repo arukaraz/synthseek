@@ -3,6 +3,7 @@
 import { fadeIn, slideUp } from "@utils/animations";
 import { decorativeBlob, glassContainer, gradientOverlay } from "@theme/utilities/styles";
 import { usePlayerDock } from "@hooks/ui/player";
+import { useChromeCollapsed } from "@hooks/ui/useChromeCollapsed";
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
 import { contentShell, gridBackgroundStyle } from "./styles";
@@ -10,10 +11,15 @@ import type { ContentShellProps } from "./types";
 
 export function ContentShell({ children, banner }: ContentShellProps) {
   const dock = usePlayerDock();
+  const collapsed = useChromeCollapsed();
 
   return (
     <motion.div
-      className={contentShell({ player: dock === "hidden" ? "hidden" : "docked", chain: dock === "chain" })}
+      className={contentShell({
+        player: dock === "hidden" ? "hidden" : "docked",
+        chain: dock === "chain",
+        collapsed,
+      })}
       initial="hidden"
       animate="visible"
       variants={fadeIn}

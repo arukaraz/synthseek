@@ -1,8 +1,9 @@
 "use client";
 
 import { Checkbox } from "@components/ui/Checkbox";
+import { useLongPress } from "@hooks/ui/useLongPress";
 
-import { handleCardActivationKey } from "./helpers";
+import { handleCardActivationKey, onOwnClick } from "./helpers";
 import { listRow, listRowArt, listRowCheck, listRowSubtitle, listRowText, listRowTitle } from "./styles";
 import type { LibraryListRowProps } from "./types";
 
@@ -16,8 +17,10 @@ export function LibraryListRow({
   trailing,
   selection,
   selectLabel,
+  onHold,
 }: LibraryListRowProps) {
   const selecting = selection?.selecting === true;
+  const longPress = useLongPress(onHold);
   const activate = () => {
     if (selection?.selecting) selection.onToggle(false);
     else onOpen?.();
@@ -31,8 +34,9 @@ export function LibraryListRow({
       tabIndex={activates ? 0 : undefined}
       aria-label={selecting ? selectLabel : openLabel}
       aria-pressed={selecting ? selection?.selected : undefined}
-      onClick={activates ? activate : undefined}
+      onClick={activates ? onOwnClick(activate) : undefined}
       onKeyDown={activates ? (event) => handleCardActivationKey(event, activate) : undefined}
+      {...longPress}
     >
       {selecting && selection ? (
         <Checkbox checked={selection.selected} tabIndex={-1} aria-hidden className={listRowCheck()} />

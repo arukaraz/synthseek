@@ -3,14 +3,14 @@ import { getQueryKey } from "@trpc/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { LIBRARY_BATCH_LIMIT, LIBRARY_GC_TIME, LIBRARY_STALE_TIME } from "./constants";
-import { getNextOffset, stripPaging } from "./helpers";
-import type { LibraryAlbumItem, LibraryAlbumsInput, LibraryInfiniteResult } from "./types";
+import { getNextOffset } from "./helpers";
+import type { LibraryAlbumItem, LibraryAlbumsQuery, LibraryInfiniteResult } from "./types";
 
-export function useLibraryAlbums(input: LibraryAlbumsInput, enabled: boolean): LibraryInfiniteResult<LibraryAlbumItem> {
+export function useLibraryAlbums(input: LibraryAlbumsQuery, enabled: boolean): LibraryInfiniteResult<LibraryAlbumItem> {
   const utils = trpc.useUtils();
 
   const query = useInfiniteQuery({
-    queryKey: getQueryKey(trpc.library.getAlbums, stripPaging(input), "infinite"),
+    queryKey: getQueryKey(trpc.library.getAlbums, input, "infinite"),
     queryFn: ({ pageParam }) =>
       utils.library.getAlbums.fetch({ ...input, offset: pageParam, limit: LIBRARY_BATCH_LIMIT }),
     initialPageParam: 0,

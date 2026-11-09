@@ -3,17 +3,17 @@ import { getQueryKey } from "@trpc/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { LIBRARY_BATCH_LIMIT, LIBRARY_GC_TIME, LIBRARY_STALE_TIME } from "./constants";
-import { getNextOffset, stripPaging } from "./helpers";
-import type { LibraryInfiniteResult, LibraryPlaylistItem, LibraryPlaylistsInput } from "./types";
+import { getNextOffset } from "./helpers";
+import type { LibraryInfiniteResult, LibraryPlaylistItem, LibraryPlaylistsQuery } from "./types";
 
 export function useLibraryPlaylists(
-  input: LibraryPlaylistsInput,
+  input: LibraryPlaylistsQuery,
   enabled: boolean
 ): LibraryInfiniteResult<LibraryPlaylistItem> {
   const utils = trpc.useUtils();
 
   const query = useInfiniteQuery({
-    queryKey: getQueryKey(trpc.library.getPlaylists, stripPaging(input), "infinite"),
+    queryKey: getQueryKey(trpc.library.getPlaylists, input, "infinite"),
     queryFn: ({ pageParam }) =>
       utils.library.getPlaylists.fetch({ ...input, offset: pageParam, limit: LIBRARY_BATCH_LIMIT }),
     initialPageParam: 0,

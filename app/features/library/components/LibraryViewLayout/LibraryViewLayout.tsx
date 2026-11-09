@@ -1,28 +1,20 @@
 "use client";
 
 import { EmptyState } from "@components/ui/EmptyState";
-import { Pagination } from "@components/ui/Pagination";
 import { Spinner } from "@components/ui/Spinner";
 import { AlertTriangle } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { LIBRARY_PAGE_SIZE_OPTIONS } from "../../constants";
-import { computePageCount, countActiveFilters, toggleFilterValue } from "../../helpers";
-import {
-  mainColumn,
-  pagerWrap,
-  resultsOverlay,
-  resultsScroll,
-  resultsShell,
-  sidebarColumn,
-  stateWrap,
-} from "../../styles";
+import { countActiveFilters, toggleFilterValue } from "../../helpers";
+import { useShelfCollapse } from "../../hooks/useShelfCollapse";
+import { mainColumn, resultsOverlay, resultsScroll, resultsShell, sidebarColumn, stateWrap } from "../../styles";
 import { LibraryInfiniteGrid } from "../LibraryCard";
 import { LibraryFilterSheet } from "../LibraryFilterSheet/LibraryFilterSheet";
 import { LibraryFilterSidebar } from "../LibraryFilterSidebar/LibraryFilterSidebar";
 import { LibraryShelfHeader } from "../LibraryShelf";
 import type { LibraryFilterSidebarProps } from "../LibraryFilterSidebar/types";
+import { LibraryLoadMore } from "../LibraryLoadMore/LibraryLoadMore";
 import { LibraryTable } from "../LibraryTable/LibraryTable";
 import { LibraryLetterIndex } from "./LibraryLetterIndex";
 import type { LibraryViewLayoutProps } from "./types";
@@ -42,6 +34,7 @@ export function LibraryViewLayout<TItem>({
   const { config } = controller;
   const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
   const activeFilterCount = countActiveFilters(controller.filters);
+  const collapsed = useShelfCollapse(scrollRoot, shell.phone);
 
   const sidebarProps: LibraryFilterSidebarProps = {
     config,
@@ -58,7 +51,6 @@ export function LibraryViewLayout<TItem>({
     isRefreshing,
   };
 
-  const pageCount = computePageCount(total, controller.pageSize);
   const letterIndex =
     content.layout === "grid" && content.letterIndex && content.letterIndex.entries.length > 1
       ? content.letterIndex
@@ -71,7 +63,7 @@ export function LibraryViewLayout<TItem>({
       </aside>
 
       <div className={mainColumn()}>
-        <LibraryShelfHeader controller={controller} total={total} facets={facets} shell={shell} />
+        <LibraryShelfHeader controller={controller} total={total} facets={facets} shell={shell} collapsed={collapsed} />
         {isError ? (
           <div className={stateWrap()}>
             <EmptyState icon={AlertTriangle} title={t("page.error.title")} description={t("page.error.description")} />
@@ -103,14 +95,22 @@ export function LibraryViewLayout<TItem>({
                 onKeyDown={content.layout === "grid" ? content.onKeyDown : undefined}
               >
                 {content.layout === "table" ? (
-                  <LibraryTable
-                    items={items ?? []}
-                    columns={content.columns}
-                    getRowId={content.getRowId}
-                    emptyMessage={t(config.emptyTitleKey)}
-                    selection={content.selection}
-                    rows={content.rows}
-                  />
+                  <>
+                    <LibraryTable
+                      items={items ?? []}
+                      columns={content.columns}
+                      getRowId={content.getRowId}
+                      emptyMessage={t(config.emptyTitleKey)}
+                      selection={content.selection}
+                      rows={content.rows}
+                    />
+                    <LibraryLoadMore
+                      scrollRoot={scrollRoot}
+                      hasNextPage={content.hasNextPage}
+                      isFetchingNextPage={content.isFetchingNextPage}
+                      fetchNextPage={content.fetchNextPage}
+                    />
+                  </>
                 ) : (
                   <>
                     {content.bulkBar}
@@ -129,19 +129,6 @@ export function LibraryViewLayout<TItem>({
                 )}
               </div>
             </div>
-            {content.layout === "table" ? (
-              <div className={pagerWrap()}>
-                <Pagination
-                  page={controller.page}
-                  pageCount={pageCount}
-                  pageSize={controller.pageSize}
-                  totalItems={total}
-                  pageSizeOptions={[...LIBRARY_PAGE_SIZE_OPTIONS]}
-                  onPageChange={controller.setPage}
-                  onPageSizeChange={controller.setPageSize}
-                />
-              </div>
-            ) : null}
           </>
         )}
       </div>

@@ -1,12 +1,8 @@
 import { cva } from "class-variance-authority";
 
 export const settingsHeader = cva(
-  "flex flex-wrap items-end justify-between gap-3 px-4 pt-4 pr-14 pb-3 outline-none sm:pt-6 sm:pr-16 sm:pl-6"
+  "flex flex-wrap items-end justify-between gap-3 px-4 pt-4 pr-14 pb-5 outline-none sm:pt-6 sm:pr-16 sm:pb-3 sm:pl-6"
 );
-
-export const settingsTitleBlock = cva("flex min-w-0 flex-col gap-1");
-
-export const settingsHint = cva("text-fg/60 flex min-h-5 items-center text-sm");
 
 export const settingsPanel = cva("flex-col", {
   variants: {
@@ -19,10 +15,21 @@ export const settingsPanel = cva("flex-col", {
 
 export const settingsSplit = cva("flex min-h-0 flex-1 flex-col lg:flex-row");
 
-export const settingsArrangeColumn = cva("flex min-h-0 min-w-0 flex-1 flex-col");
+export const settingsArrangeColumn = cva("flex min-h-0 min-w-0 flex-1 flex-col", {
+  variants: {
+    phoneShown: { true: "", false: "max-sm:hidden" },
+  },
+  defaultVariants: { phoneShown: true },
+});
 
 export const settingsAside = cva(
-  "order-first flex shrink-0 flex-col gap-4 overflow-y-auto px-4 pb-4 max-lg:max-h-[50%] sm:px-6 lg:order-none lg:w-104 lg:pl-0 [&>*]:shrink-0"
+  "order-first flex shrink-0 flex-col gap-4 overflow-y-auto px-4 pb-4 max-lg:max-h-[50%] sm:px-6 lg:order-none lg:w-104 lg:pl-0 [&>*]:shrink-0",
+  {
+    variants: {
+      phoneShown: { true: "max-sm:max-h-none max-sm:flex-1 max-sm:pt-1", false: "max-sm:hidden" },
+    },
+    defaultVariants: { phoneShown: true },
+  }
 );
 
 export const templatesBody = cva("flex flex-col gap-3");

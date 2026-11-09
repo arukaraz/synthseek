@@ -91,7 +91,7 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 ### Listen anywhere
 
 - Play your library in the web app, with media keys, a lock screen and a full screen view, and nothing to turn on first
-- The player can shrink into the top bar, or pop out into a small floating window where your browser supports one
+- On a larger screen, the player can shrink into the top bar, or pop out into a small floating window where your browser supports one
 - Your queue and position are kept on the server, so they survive a reload and are the same ones your phone picks up
 - With autoplay on, the queue does not run out: the player adds the closest tracks your library has to what you chose, and you can start a radio from any track, album or artist
 - An equalizer, a preamp, a compressor and gapless or blended transitions in the player, with presets or curves of your own, kept per browser

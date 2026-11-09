@@ -12,6 +12,6 @@ export const actionBarEnd = cva(
 
 export const actionBarButtons = cva("flex min-w-0 items-center gap-3");
 
-export const actionBarButton = cva("flex-1 sm:flex-none");
+export const actionBarButton = cva("flex-1 max-sm:h-11 max-sm:text-[15px] sm:flex-none");
 
 export const modalChoice = cva("flex min-w-0 cursor-pointer items-center gap-2 text-xs text-fg/80");

@@ -42,6 +42,13 @@ export type ConfirmActionButtonProps = VariantProps<typeof confirmActionButton>;
 
 export const confirmDialogContent = "max-w-md bg-surface/95";
 
-export const confirmFooter = "mt-6 gap-2 sm:gap-3";
+export const confirmFooter = "mt-6 flex-row gap-3";
+
+export const confirmFooterButton = cva("max-sm:h-11 max-sm:text-[15px]", {
+  variants: {
+    paired: { true: "flex-1 sm:flex-none", false: "w-full" },
+  },
+  defaultVariants: { paired: true },
+});
 
 export const confirmBody = "mt-5 flex flex-col gap-4";

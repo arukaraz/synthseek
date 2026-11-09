@@ -61,7 +61,8 @@
       "sections": {
         "label": "Secciones de la personalización del tablero",
         "board": "Tablero",
-        "widgets": "Widgets"
+        "widgets": "Widgets",
+        "arrange": "Organizar"
       }
     },
     "layouts": {

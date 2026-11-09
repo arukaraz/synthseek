@@ -1,22 +1,27 @@
 import { RequestFormat, RequestStatus } from "@api/__generated__/types";
 import type {
   LibraryAlbumItem,
-  LibraryAlbumsInput,
-  LibraryArtistsInput,
+  LibraryAlbumsQuery,
+  LibraryArtistsQuery,
   LibraryCountsResult,
   LibraryFacetValue,
   LibraryFilesStatus,
-  LibraryPlaylistsInput,
+  LibraryPlaylistsQuery,
   LibraryTrackItem,
   LibraryTracksInput,
+  LibraryTracksQuery,
 } from "@hooks/api/queries/library/types";
 import type { CheckboxPreview } from "@components/ui/Checkbox";
 import type { SelectionRange } from "@hooks/ui/useSelection";
 import { isTextEntryTarget } from "@utils/text-entry";
 import type { KeyboardEvent } from "react";
 
-import { GRID_ITEMS_SELECTOR, LIBRARY_PAGE_SIZE_OPTIONS, VIEW_CONFIG } from "./constants";
+import { GRID_ITEMS_SELECTOR, SHELF_COLLAPSE_AFTER_PX, SHELF_COLLAPSE_MIN_OVERFLOW_PX, VIEW_CONFIG } from "./constants";
 import type {
+  AlbumSort,
+  ArtistSort,
+  PlaylistSort,
+  TrackSort,
   FacetSearchState,
   FilterParamMap,
   LibraryFileJob,
@@ -27,6 +32,7 @@ import type {
   LibraryViewShell,
   SelectionShortcutTarget,
   SortDirection,
+  SortOptionDef,
   ViewConfig,
   CardChrome,
 } from "./types";
@@ -85,8 +91,6 @@ function buildFacetSearch(facetSearch: FacetSearchState): LibraryTracksInput["fa
 }
 
 interface InputBaseArgs {
-  limit: number;
-  offset: number;
   q: string | undefined;
   sort: string;
   direction: SortDirection | undefined;
@@ -94,11 +98,9 @@ interface InputBaseArgs {
   facetSearch: FacetSearchState;
 }
 
-export function buildTracksInput(args: InputBaseArgs): LibraryTracksInput {
+export function buildTracksInput(args: InputBaseArgs): LibraryTracksQuery {
   const { filters } = args;
   return {
-    limit: args.limit,
-    offset: args.offset,
     q: args.q,
     sort: resolveTrackSort(args.sort),
     direction: args.direction,
@@ -119,11 +121,9 @@ export function buildTracksInput(args: InputBaseArgs): LibraryTracksInput {
   };
 }
 
-export function buildAlbumsInput(args: InputBaseArgs): LibraryAlbumsInput {
+export function buildAlbumsInput(args: InputBaseArgs): LibraryAlbumsQuery {
   const { filters } = args;
   return {
-    limit: args.limit,
-    offset: args.offset,
     q: args.q,
     sort: resolveAlbumSort(args.sort),
     direction: args.direction,
@@ -139,11 +139,9 @@ export function buildAlbumsInput(args: InputBaseArgs): LibraryAlbumsInput {
   };
 }
 
-export function buildArtistsInput(args: InputBaseArgs): LibraryArtistsInput {
+export function buildArtistsInput(args: InputBaseArgs): LibraryArtistsQuery {
   const { filters } = args;
   return {
-    limit: args.limit,
-    offset: args.offset,
     q: args.q,
     sort: resolveArtistSort(args.sort),
     direction: args.direction,
@@ -156,11 +154,9 @@ export function buildArtistsInput(args: InputBaseArgs): LibraryArtistsInput {
   };
 }
 
-export function buildPlaylistsInput(args: InputBaseArgs): LibraryPlaylistsInput {
+export function buildPlaylistsInput(args: InputBaseArgs): LibraryPlaylistsQuery {
   const { filters } = args;
   return {
-    limit: args.limit,
-    offset: args.offset,
     q: args.q,
     sort: resolvePlaylistSort(args.sort),
     direction: args.direction,
@@ -173,44 +169,36 @@ export function buildPlaylistsInput(args: InputBaseArgs): LibraryPlaylistsInput 
   };
 }
 
-function resolveTrackSort(sort: string): NonNullable<LibraryTracksInput["sort"]> {
-  const options = VIEW_CONFIG.tracks.sortOptions.map((option) => option.value);
-  const match = options.find((value) => value === sort);
-  if (match === "oldest" || match === "artist" || match === "album" || match === "title") return match;
-  if (match === "duration" || match === "status" || match === "recent") return match;
-  return "recent";
+function pickSort<TSort extends string>(
+  sort: string,
+  config: { sortOptions: readonly SortOptionDef<TSort>[]; defaultSort: TSort }
+): TSort {
+  return config.sortOptions.find((option) => option.value === sort)?.value ?? config.defaultSort;
 }
 
-function resolveAlbumSort(sort: string): NonNullable<LibraryAlbumsInput["sort"]> {
-  if (sort === "name" || sort === "artist" || sort === "year" || sort === "tracks") return sort;
-  return "recent";
+function resolveTrackSort(sort: string): TrackSort {
+  return pickSort(sort, VIEW_CONFIG.tracks);
 }
 
-function resolveArtistSort(sort: string): NonNullable<LibraryArtistsInput["sort"]> {
-  if (sort === "tracks" || sort === "albums") return sort;
-  return "name";
+function resolveAlbumSort(sort: string): AlbumSort {
+  return pickSort(sort, VIEW_CONFIG.albums);
 }
 
-function resolvePlaylistSort(sort: string): NonNullable<LibraryPlaylistsInput["sort"]> {
-  if (sort === "name" || sort === "tracks") return sort;
-  return "recent";
+function resolveArtistSort(sort: string): ArtistSort {
+  return pickSort(sort, VIEW_CONFIG.artists);
 }
 
-export function clampPage(rawPage: string): number {
-  const parsed = Number.parseInt(rawPage, 10);
-  if (!Number.isFinite(parsed) || parsed < 1) return 1;
-  return parsed;
+function resolvePlaylistSort(sort: string): PlaylistSort {
+  return pickSort(sort, VIEW_CONFIG.playlists);
 }
 
-export function resolvePageSize(rawRows: string): number {
-  const parsed = Number.parseInt(rawRows, 10);
-  const match = LIBRARY_PAGE_SIZE_OPTIONS.find((size) => size === parsed);
-  return match ?? LIBRARY_PAGE_SIZE_OPTIONS[0];
+export function visibleSortOptions(config: ViewConfig, isAdmin: boolean): SortOptionDef[] {
+  return config.sortOptions.filter((option) => isAdmin || !option.adminOnly);
 }
 
-export function computePageCount(total: number, pageSize: number): number {
-  if (total <= 0 || pageSize <= 0) return 1;
-  return Math.max(1, Math.ceil(total / pageSize));
+export function resolveVisibleSort(config: ViewConfig, rawSort: string, isAdmin: boolean): string {
+  const visible = visibleSortOptions(config, isAdmin);
+  return visible.some((option) => option.value === rawSort) ? rawSort : config.defaultSort;
 }
 
 export function topFacetValues(values: LibraryFacetValue[], topN: number, hasSearch: boolean): LibraryFacetValue[] {
@@ -333,4 +321,10 @@ export function selectedAlbumsFileTarget(
   const chosen = items.filter((item) => wanted.has(item.id));
   const pathIds = new Set(chosen.flatMap((item) => item.libraryPaths.map((path) => path.id)));
   return { scope: "albums", albumIds: chosen.map((item) => item.id), pathIds: [...pathIds] };
+}
+
+export function nextShelfCollapsed(collapsed: boolean, scrollTop: number, overflow: number): boolean {
+  if (scrollTop <= 0) return false;
+  if (collapsed) return true;
+  return scrollTop > SHELF_COLLAPSE_AFTER_PX && overflow > SHELF_COLLAPSE_MIN_OVERFLOW_PX;
 }

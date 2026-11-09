@@ -1,9 +1,8 @@
 "use client";
 
-import { useLibraryTracks, useLibraryTracksPrefetch } from "@hooks/api";
-import { useEffect, useMemo } from "react";
+import { useLibraryTracks } from "@hooks/api";
+import { useMemo } from "react";
 
-import { NO_CHOSEN_SOURCES } from "../constants";
 import { useLibraryPlayback } from "../hooks/useLibraryPlayback";
 import { useLibraryTrackActions } from "../hooks/useLibraryTrackActions";
 import { buildTracksInput } from "../helpers";
@@ -13,37 +12,25 @@ import { LibraryTrackRows } from "./LibraryTrackRows";
 import { LibraryViewLayout } from "./LibraryViewLayout/LibraryViewLayout";
 
 export function TracksViewMode({ controller, shell, selection, fileActions }: TracksViewModeProps) {
-  const { prefetchNextPage } = useLibraryTracksPrefetch();
   const { searchBetterQuality } = useLibraryTrackActions();
-  const offset = (controller.page - 1) * controller.pageSize;
 
   const input = useMemo(
     () =>
       buildTracksInput({
-        limit: controller.pageSize,
-        offset,
         q: controller.search || undefined,
         sort: controller.sort,
         direction: controller.direction,
         filters: controller.filters,
         facetSearch: controller.facetSearch,
       }),
-    [
-      controller.pageSize,
-      offset,
-      controller.search,
-      controller.sort,
-      controller.direction,
-      controller.filters,
-      controller.facetSearch,
-    ]
+    [controller.search, controller.sort, controller.direction, controller.filters, controller.facetSearch]
   );
 
   const query = useLibraryTracks(input, controller.view === "tracks");
 
-  const items = useMemo(() => query.data?.items ?? [], [query.data?.items]);
-  const { play, enqueue } = useLibraryPlayback(items, query.data?.appliedSources ?? NO_CHOSEN_SOURCES);
-  const showLibraryPath = (query.data?.facets.libraryPath ?? []).length > 1;
+  const items = useMemo(() => query.items ?? [], [query.items]);
+  const { play, enqueue } = useLibraryPlayback(items, query.appliedSources);
+  const showLibraryPath = (query.facets.libraryPath ?? []).length > 1;
   const columns = useMemo(
     () =>
       buildTrackColumns({
@@ -56,27 +43,22 @@ export function TracksViewMode({ controller, shell, selection, fileActions }: Tr
     [play, enqueue, searchBetterQuality, fileActions, showLibraryPath]
   );
 
-  const total = query.data?.total ?? 0;
-  const hasNextPage = offset + controller.pageSize < total;
-
-  useEffect(() => {
-    if (!hasNextPage) return;
-    prefetchNextPage(input, offset + controller.pageSize);
-  }, [prefetchNextPage, input, offset, controller.pageSize, hasNextPage]);
-
   return (
     <LibraryViewLayout
       controller={controller}
-      items={query.data?.items}
-      total={total}
-      facets={query.data?.facets ?? {}}
+      items={query.items}
+      total={query.total}
+      facets={query.facets}
       isLoading={query.isLoading}
       isError={query.isError}
-      isRefreshing={query.isPlaceholderData}
+      isRefreshing={query.isRefreshing}
       content={{
         layout: "table",
         columns,
         getRowId: (item) => item.id,
+        hasNextPage: query.hasNextPage,
+        isFetchingNextPage: query.isFetchingNextPage,
+        fetchNextPage: query.fetchNextPage,
         selection: {
           items,
           selection,
@@ -89,6 +71,14 @@ export function TracksViewMode({ controller, shell, selection, fileActions }: Tr
             items={items}
             selection={selection}
             selecting={shell.selectMode}
+            onHold={
+              shell.selectMode
+                ? undefined
+                : (trackId) => {
+                    shell.onSelectModeChange(true);
+                    selection.toggle(trackId);
+                  }
+            }
             onPlay={play}
             onEnqueue={enqueue}
             onSearchBetterQuality={searchBetterQuality}

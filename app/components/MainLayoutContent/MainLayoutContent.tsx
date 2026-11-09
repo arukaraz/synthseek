@@ -39,7 +39,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
   };
 
   return (
-    <div className="bg-surface min-h-screen overflow-hidden">
+    <div className="bg-surface h-dvh overflow-hidden">
       <ContentRequestFlow>
         <TopHeader onSearch={handleSearch} initialQuery={searchQuery} initialScope={searchScope} />
         <ContentShell banner={<SystemStatusBanner />}>{children}</ContentShell>

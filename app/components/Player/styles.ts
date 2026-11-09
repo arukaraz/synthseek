@@ -274,6 +274,7 @@ export const playButton = cva(
         bar: "size-11 @player:size-9.5",
         stage: "size-14 @player:size-15",
         ring: "size-15 shadow-neon-primary",
+        masthead: "size-9",
       },
     },
     defaultVariants: { size: "bar" },
@@ -290,6 +291,7 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
     size: {
       row: "size-7 rounded",
       bar: "size-10 rounded-md @player:size-12.5",
+      masthead: "size-9 rounded-lg",
       stage: "size-[min(60vw,24vh,268px)] rounded-xl @player:size-[min(60vw,32vh,268px)]",
       fluid: "size-[min(100cqw,100cqh,268px)] rounded-xl",
       sideways: "size-16 rounded-lg",
@@ -316,6 +318,7 @@ export const coverInitials = cva("text-fg font-mono", {
     size: {
       row: "text-[8px]",
       bar: "text-[10px]",
+      masthead: "text-[10px]",
       stage: "text-[26px]",
       fluid: "text-[26px]",
       sideways: "text-[14px]",
@@ -339,6 +342,22 @@ export const waveCanvas = cva("pointer-events-none block size-full");
 export const barMobileProgress = cva("bg-fg-muted/20 absolute inset-x-0 -bottom-0.5 h-0.5 @player:hidden");
 
 export const barMobileProgressFill = cva("player-bar-progress bg-primary-400 h-0.5");
+
+export const masthead = cva("flex h-full min-w-0 flex-1 items-center gap-3");
+
+export const mastheadIdentity = cva(
+  "focus-visible:ring-primary-500 flex min-w-0 flex-1 items-center gap-3 rounded-lg text-left outline-none focus-visible:ring-2"
+);
+
+export const mastheadText = cva("flex min-w-0 flex-col");
+
+export const mastheadTitle = cva("text-fg truncate text-sm font-semibold");
+
+export const mastheadArtist = cva("text-fg-muted truncate text-xs");
+
+export const mastheadNext = cva("text-fg");
+
+export const mastheadProgress = cva("bg-fg-muted/20 pointer-events-none absolute inset-x-0 bottom-0 h-0.5");
 
 export const volumeTrack = cva("flex h-4 cursor-pointer items-center touch-none", {
   variants: {

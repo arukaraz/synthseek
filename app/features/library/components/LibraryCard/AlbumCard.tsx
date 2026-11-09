@@ -1,6 +1,7 @@
 "use client";
 
 import { Checkbox } from "@components/ui/Checkbox";
+import { useLongPress } from "@hooks/ui/useLongPress";
 import { cn } from "@utils/cn";
 import { artworkImage } from "@utils/artworkProxy";
 import Image from "next/image";
@@ -13,6 +14,7 @@ import {
   cardCoverTone,
   cardInitials,
   handleCardActivationKey,
+  onOwnClick,
   shieldCardActivationKey,
   statusDotClass,
 } from "./helpers";
@@ -41,7 +43,9 @@ export function AlbumCard({
   menu,
   selection,
   chrome = "overlay",
+  onHold,
 }: AlbumCardProps) {
+  const longPress = useLongPress(onHold);
   const { t } = useTranslation(["contentDetail", "library"]);
   const meta = albumMetaLine(
     item.year,
@@ -64,7 +68,7 @@ export function AlbumCard({
       tabIndex={activates ? 0 : undefined}
       aria-label={selecting ? selectLabel : activates ? t("contentDetail:openDetail", { name: item.name }) : undefined}
       aria-pressed={selecting ? selection?.selected : undefined}
-      onClick={activates ? (event) => activate(event.shiftKey) : undefined}
+      onClick={activates ? onOwnClick((event) => activate(event.shiftKey)) : undefined}
       onKeyDown={activates ? (event) => handleCardActivationKey(event, () => activate(event.shiftKey)) : undefined}
       onMouseDown={
         selecting
@@ -75,6 +79,7 @@ export function AlbumCard({
       }
       onMouseEnter={selection ? () => selection.onHover(true) : undefined}
       onMouseLeave={selection ? () => selection.onHover(false) : undefined}
+      {...longPress}
     >
       <div className={cardCover({ tone: cardCoverTone(selection) })}>
         {item.album_art ? (

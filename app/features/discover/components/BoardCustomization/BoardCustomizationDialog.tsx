@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { ConfirmationModal } from "@components/ui/ConfirmationModal";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@components/ui/Dialog";
+import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { ModalActionBar } from "@components/ui/ModalActionBar";
 import { SectionLoading } from "@components/ui/SectionLoading";
 import { useApplyBoardTemplate } from "@hooks/api/mutations/board/useApplyBoardTemplate";
@@ -14,11 +15,13 @@ import { useWidgetCatalog } from "@hooks/api/queries/widgets/useWidgetCatalog";
 import { useWidgetGrammar } from "@hooks/api/queries/widgets/useWidgetGrammar";
 import { useWidgetHousehold } from "@hooks/api/queries/widgets/useWidgetHousehold";
 import { useWidgetPresets } from "@hooks/api/queries/widgets/useWidgetPresets";
+import { PHONE_QUERY } from "@hooks/ui/constants";
+import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { useCountry } from "@modules/providers/CountryProvider";
 
 import { useCustomizationDraft } from "../../hooks/useCustomizationDraft";
 import { useGalleryWorkshop } from "../../hooks/useGalleryWorkshop";
-import { settingsHeader, settingsHint, settingsTitleBlock } from "../BoardSettings/styles";
+import { settingsHeader } from "../BoardSettings/styles";
 import type { BoardSettingsDiscard, BoardSettingsTab, StageTemplate } from "../BoardSettings/types";
 import { BOARD_DEVICE_OF, BOARD_LIST_OF } from "../ExploreBoard/constants";
 import type { CustomizationSection } from "../ExploreBoard/types";
@@ -30,8 +33,10 @@ import { WidgetWorkshop } from "../WidgetWorkshop/WidgetWorkshop";
 import { BoardSection } from "./BoardSection";
 import { PREVIEW_BOARD_WIDTH_PX } from "./constants";
 import { CustomizationNav } from "./CustomizationNav";
-import { customizationBody, customizationPanel } from "./styles";
-import type { BoardCustomizationDialogProps } from "./types";
+import { CustomizationTabBar } from "./CustomizationTabBar";
+import { phonePaneOf } from "./helpers";
+import { customizationBody, customizationPanel, customizationTitleRow } from "./styles";
+import type { BoardCustomizationDialogProps, BoardPane, PhonePane } from "./types";
 import { WidgetsSection } from "./WidgetsSection";
 
 export function BoardCustomizationDialog({
@@ -50,6 +55,8 @@ export function BoardCustomizationDialog({
   const [widgetsSeen, setWidgetsSeen] = useState(opening.section === "widgets");
   const [list, setList] = useState<BoardList>(BOARD_LIST_OF[device]);
   const [tab, setTab] = useState<BoardSettingsTab>("appearance");
+  const [boardPane, setBoardPane] = useState<BoardPane>("arrange");
+  const phone = useMediaQuery(PHONE_QUERY);
   const [filters, setFilters] = useState<GalleryFilters>(DEFAULT_GALLERY_FILTERS);
   const [discard, setDiscard] = useState<BoardSettingsDiscard | null>(null);
   const [leaving, setLeaving] = useState<GalleryLeave | null>(null);
@@ -94,6 +101,19 @@ export function BoardCustomizationDialog({
   const showSection = (next: CustomizationSection) => {
     setSection(next);
     if (next === "widgets") setWidgetsSeen(true);
+  };
+  const showPhonePane = (pane: PhonePane) => {
+    if (pane === "widgets") {
+      showSection("widgets");
+      return;
+    }
+    showSection("board");
+    if (pane === "arrange") {
+      setBoardPane("arrange");
+      return;
+    }
+    setBoardPane("settings");
+    setTab(pane);
   };
   const stage: StageTemplate = (json, template) => {
     const run = () => draft.stage({ json, template });
@@ -175,9 +195,10 @@ export function BoardCustomizationDialog({
         ) : null}
         <div hidden={workshopOpen} className={customizationPanel()}>
           <div ref={headerRef} tabIndex={-1} className={settingsHeader()}>
-            <div className={settingsTitleBlock()}>
+            <div className={customizationTitleRow()}>
               <Title>{t("widgets:board.customization.title")}</Title>
-              <Description className={settingsHint()}>{description}</Description>
+              <InfoTooltip description={description} side="bottom" align="start" />
+              <Description className={visuallyHidden()}>{description}</Description>
             </div>
           </div>
           <div className={customizationBody()}>
@@ -190,6 +211,7 @@ export function BoardCustomizationDialog({
                 onListChange={setList}
                 tab={tab}
                 onTabChange={setTab}
+                pane={boardPane}
                 boardWidth={boardWidth}
                 customStatus={customStatus}
                 onStage={stage}
@@ -207,6 +229,9 @@ export function BoardCustomizationDialog({
               </div>
             ) : null}
           </div>
+          {phone ? (
+            <CustomizationTabBar value={phonePaneOf(section, boardPane, tab)} onValueChange={showPhonePane} />
+          ) : null}
           <ModalActionBar
             cancel={{ label: t("board.arrange.cancel"), onClick: requestClose }}
             save={{

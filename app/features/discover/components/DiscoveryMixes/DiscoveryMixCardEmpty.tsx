@@ -11,6 +11,7 @@ import {
   mixInfo,
   mixPoster,
   mixPosterShade,
+  mixPosterTop,
   mixTag,
   mixTitle,
   mosaicFallback,
@@ -29,8 +30,10 @@ export function DiscoveryMixCardEmpty({ mix, compact }: DiscoveryMixCardEmptyPro
       <div className={mixPoster()}>
         <div style={{ background }} className={mosaicFallback()} />
         <span className={mixPosterShade()} />
-        <span className={mixChip()}>
-          <Icon className="size-4 opacity-70" />
+        <span className={mixPosterTop()}>
+          <span className={mixChip()}>
+            <Icon className="size-4 opacity-70" />
+          </span>
         </span>
       </div>
       <div className={mixInfo()}>

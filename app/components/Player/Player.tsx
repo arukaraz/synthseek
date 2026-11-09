@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { DeviceMenu } from "./DeviceMenu";
 import { MiniPlayer } from "./MiniPlayer";
 import { PlayerBar } from "./PlayerBar";
+import { PlayerMasthead } from "./PlayerMasthead";
 import { PlayerModeMenu } from "./PlayerModeMenu";
 import { PlayerStage } from "./PlayerStage";
 import { QueueMenu } from "./QueueMenu";
@@ -18,7 +19,7 @@ import type { PlayerProps } from "./types";
 
 export function Player({ view, actions }: PlayerProps) {
   const anchorToChain = view.chainVisible && !view.fullscreen;
-  const { target, effective } = usePlayerPlacement(view.mode, view.fullscreen);
+  const { target, masthead, effective } = usePlayerPlacement(view.mode, view.fullscreen);
   const hanging = effective === "compact" && !view.fullscreen;
 
   return (
@@ -58,7 +59,8 @@ export function Player({ view, actions }: PlayerProps) {
             target
           )
         : null}
-      {view.fullscreen || target !== null ? null : (
+      {masthead !== null ? createPortal(<PlayerMasthead view={view} actions={actions} />, masthead) : null}
+      {view.fullscreen || target !== null || masthead !== null ? null : (
         <div className={playerRoot()} data-cy="player">
           <div className={playerDock()}>
             <AnimatePresence>

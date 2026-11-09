@@ -15,7 +15,14 @@ import { cn } from "@utils/cn";
 import { useTranslation } from "react-i18next";
 
 import { VARIANT_ICONS } from "./constants";
-import { confirmActionButton, confirmBody, confirmDialogContent, confirmFooter, confirmIconBadge } from "./styles";
+import {
+  confirmActionButton,
+  confirmBody,
+  confirmDialogContent,
+  confirmFooter,
+  confirmFooterButton,
+  confirmIconBadge,
+} from "./styles";
 import type { ConfirmationModalProps } from "./types";
 
 export function ConfirmationModal({
@@ -73,7 +80,7 @@ export function ConfirmationModal({
 
         <DialogFooter className={confirmFooter}>
           {showCancel && (
-            <Button ref={safeActionRef} variant="outline" size="sm" onClick={onClose} className="flex-1 sm:flex-none">
+            <Button ref={safeActionRef} variant="outline" size="sm" onClick={onClose} className={confirmFooterButton()}>
               {resolvedCancelText}
             </Button>
           )}
@@ -81,7 +88,7 @@ export function ConfirmationModal({
             ref={showCancel ? undefined : safeActionRef}
             size="sm"
             onClick={handleConfirm}
-            className={cn(confirmActionButton({ variant }), showCancel ? "flex-1 sm:flex-none" : "w-full")}
+            className={cn(confirmActionButton({ variant }), confirmFooterButton({ paired: showCancel }))}
           >
             {resolvedConfirmText}
           </Button>

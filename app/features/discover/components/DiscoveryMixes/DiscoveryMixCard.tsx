@@ -11,11 +11,13 @@ import {
   mixChip,
   mixCount,
   mixFoot,
+  mixFootFresh,
   mixFreshPill,
   mixInfo,
   mixPoster,
   mixPosterShade,
   mixPosterTint,
+  mixPosterTop,
   mixTag,
   mixTitle,
 } from "./styles";
@@ -35,10 +37,16 @@ export function DiscoveryMixCard({ mix, onClick, compact }: DiscoveryMixCardProp
         <DiscoveryMixMosaic covers={candidateCovers(mix.candidates.slice(0, 4))} fallbackSeed={mix.kind} />
         <span className={mixPosterTint()} />
         <span className={mixPosterShade()} />
-        <span className={mixChip()}>
-          <Icon className="size-4" />
+        <span className={mixPosterTop()}>
+          <span className={mixChip()}>
+            <Icon className="size-4" />
+          </span>
+          {freshness && compact ? (
+            <span className={mixFreshPill()} title={freshness}>
+              {freshness}
+            </span>
+          ) : null}
         </span>
-        {freshness ? <span className={mixFreshPill()}>{freshness}</span> : null}
       </div>
       <div className={mixInfo()}>
         <span className={mixTag()}>{t(LB_KIND_TAG_KEYS[mix.kind])}</span>
@@ -48,6 +56,7 @@ export function DiscoveryMixCard({ mix, onClick, compact }: DiscoveryMixCardProp
             <p className={mixBlurb()}>{t(LB_KIND_BLURB_KEYS[mix.kind])}</p>
             <div className={mixFoot()}>
               <span className={mixCount()}>{t("mixes.trackCount", { count: mix.candidates.length })}</span>
+              {freshness ? <span className={mixFootFresh()}>{freshness}</span> : null}
             </div>
           </>
         )}

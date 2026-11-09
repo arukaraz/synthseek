@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
+
+import { setChromeCollapsed } from "@hooks/ui/useChromeCollapsed";
 
 import { ContentShell } from "../ContentShell";
 
@@ -32,5 +34,21 @@ describe("ContentShell", () => {
     );
 
     expect(screen.getByText("page").parentElement?.previousElementSibling).toBeNull();
+  });
+
+  it("takes back the header's height on a phone while the header is slid away", () => {
+    const { container } = render(
+      <ContentShell>
+        <p>page</p>
+      </ContentShell>
+    );
+    const shell = container.firstElementChild;
+    const reclaimed = "max-sm:h-[calc(100dvh-var(--height-bottom-nav))]";
+
+    expect(shell).not.toHaveClass(reclaimed);
+    act(() => setChromeCollapsed(true));
+    expect(shell).toHaveClass(reclaimed);
+    act(() => setChromeCollapsed(false));
+    expect(shell).not.toHaveClass(reclaimed);
   });
 });

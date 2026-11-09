@@ -8,7 +8,42 @@ export const shelfTitleText = cva("flex min-w-0 flex-1 flex-col");
 
 export const shelfTitle = cva("text-fg text-2xl leading-tight font-extrabold tracking-tight");
 
-export const shelfCount = cva("text-fg/60 text-[12.5px] tabular-nums");
+export const shelfTitleLine = cva("flex min-w-0 items-baseline gap-2");
+
+export const shelfViewName = cva(
+  "flex min-w-0 items-baseline gap-2 transition-[opacity,translate] duration-300 ease-out motion-reduce:transition-none",
+  {
+    variants: {
+      shown: {
+        true: "translate-x-0 opacity-100",
+        false: "pointer-events-none -translate-x-1 opacity-0",
+      },
+    },
+    defaultVariants: { shown: false },
+  }
+);
+
+export const shelfViewSlash = cva("text-fg/25 text-xl leading-tight font-light");
+
+export const shelfViewLabel = cva("text-primary-400 truncate text-xl leading-tight font-bold tracking-tight");
+
+export const shelfCount = cva(
+  "text-fg/60 overflow-hidden text-[12.5px] tabular-nums transition-[max-height,opacity] duration-300 ease-out motion-reduce:transition-none",
+  {
+    variants: { collapsed: { true: "max-h-0 opacity-0", false: "max-h-5 opacity-100" } },
+    defaultVariants: { collapsed: false },
+  }
+);
+
+export const shelfFold = cva(
+  "-mx-4 grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none",
+  {
+    variants: { collapsed: { true: "grid-rows-[0fr] opacity-0", false: "grid-rows-[1fr] opacity-100" } },
+    defaultVariants: { collapsed: false },
+  }
+);
+
+export const shelfFoldInner = cva("flex min-h-0 flex-col overflow-hidden px-4");
 
 export const shelfIconButton = cva(
   "text-fg/60 hover:bg-fg/10 hover:text-fg relative grid size-10 shrink-0 place-items-center rounded-full transition-colors",

@@ -1,11 +1,15 @@
 "use client";
 
 import { cn } from "@utils/cn";
+import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import type { LogoIconProps } from "./types";
 
 export function LogoIcon({ className }: LogoIconProps) {
   const { t } = useTranslation("components");
+  const id = useId();
+  const gradientId = `${id}gradient`;
+  const maskId = `${id}mask`;
   return (
     <svg
       viewBox="0 0 155.5029585798817 300"
@@ -14,7 +18,7 @@ export function LogoIcon({ className }: LogoIconProps) {
     >
       <defs>
         <linearGradient
-          id="logoGradient"
+          id={gradientId}
           x2="1"
           gradientUnits="userSpaceOnUse"
           gradientTransform="matrix(-193.816,153.712,-123.222,-155.371,183.021,74.174)"
@@ -22,7 +26,7 @@ export function LogoIcon({ className }: LogoIconProps) {
           <stop offset="0" stopColor="#00d4ff" />
           <stop offset="1" stopColor="#ff00ff" />
         </linearGradient>
-        <mask id="logoMask">
+        <mask id={maskId}>
           <path
             fill="white"
             d="m117.28 2.98c3.08-0.44 6.74 0.33 9.42 1.84 9.2 5.15 11.78 16.98 11.58 26.7-0.43 21.98-11.01 42.71-21.42 61.52 9.68 18.88 20.09 40.27 22.69 61.5 1.94 15.89-2.74 33.48-11.9 46.65-8.95 13.13-22.79 22.13-38.41 24.99-17.04 3.02-32.05-1.16-46.05-10.94-3.53 7.4-9.73 22.26-10.92 30.01-0.94 6.1-0.55 12.49 0.84 18.5 1.72 7.43 5.35 15.56 12.07 19.74 4.73 2.93 9.82 3.11 15.12 1.85-7.84-2.92-14.45-11.03-12.97-19.78 1.59-9.37 11.09-15.46 20.37-13.76 10.43 1.92 16.63 10.8 14.64 21.28-2.92 15.13-17.86 23.64-32.54 20.82-8.15-1.57-14.09-6.12-18.73-12.87-0.31-0.42-0.66-0.99-0.94-1.45-7.68-12.75-7.87-29.33-2.89-43.11 1.08-2.99 2.23-5.93 3.4-8.85q3.36-8.44 7.13-16.72c-3.95-3.81-7.42-8.26-9.83-13.21-4.9-10.12-5.54-21.79-1.77-32.39 3.9-11.36 12.12-20.72 22.89-26.05 10.88-5.26 21.9-5.24 33.15-1.33 2.04-3.24 5.32-7.38 7.62-10.72 3.62-5.28 6.34-9.74 9.43-15.31-4.06-8.35-8.75-18.38-11.87-27.14-6.02-16.96-5.02-35.64 2.78-51.87 3.68-7.74 12.34-19.47 23.1-15.24 3.31 1.3 5.35 5.63 6.48 8.86-1.6-2.14-3.44-4.33-6.04-5.3-1.46-0.55-3-0.37-4.37 0.31-3.36 1.68-6.24 5.83-7.34 9.32-5.23 16.71 5.16 42.23 12.38 57.02 4.56-8.27 8.12-17.06 10.6-26.18 4.35-16.11 6.66-40.97-13.06-47.72-4.33-1.49-9.8 1.18-13.44 3.31 5.28-6.54 9.98-13.09 18.8-14.28z"
@@ -37,7 +41,7 @@ export function LogoIcon({ className }: LogoIconProps) {
           />
         </mask>
       </defs>
-      <rect x="0" y="0" width="156" height="300" fill="url(#logoGradient)" mask="url(#logoMask)" />
+      <rect x="0" y="0" width="156" height="300" fill={`url(#${gradientId})`} mask={`url(#${maskId})`} />
     </svg>
   );
 }

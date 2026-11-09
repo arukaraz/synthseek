@@ -61,7 +61,8 @@
       "sections": {
         "label": "Board Customization sections",
         "board": "Board",
-        "widgets": "Widgets"
+        "widgets": "Widgets",
+        "arrange": "Arrange"
       }
     },
     "layouts": {

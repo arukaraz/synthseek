@@ -16,6 +16,14 @@ export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 export const PHONE_QUERY = "(max-width: 639px)";
 
+export const LONG_PRESS_MS = 450;
+
+export const LONG_PRESS_SLOP_PX = 10;
+
+export const LONG_PRESS_CLICK_GRACE_MS = 350;
+
+export const LONG_PRESS_IGNORED_SELECTOR = "button, a, input, select, textarea, [role=menuitem]";
+
 export const SHEET_DRAG = {
   AXIS_LOCK_PX: 6,
   DISMISS_DISTANCE_PX: 120,

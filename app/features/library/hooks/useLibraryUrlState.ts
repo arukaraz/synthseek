@@ -2,16 +2,17 @@
 
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import type { UrlParamConfig } from "@hooks/ui/useUrlParam";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useCallback, useMemo } from "react";
 
 import { LIBRARY_ALL_FILTER_KEYS, LIBRARY_BASE_PARAMS, LIBRARY_FACET_SEARCH_KEYS, VIEW_CONFIG } from "../constants";
 import {
-  clampPage,
   isLibraryView,
   parseFilterValues,
   resolveEffectiveDirection,
-  resolvePageSize,
+  resolveVisibleSort,
   serializeFilterValues,
+  visibleSortOptions,
 } from "../helpers";
 import type { FacetSearchState, FilterParamMap, LibraryView, SortDirection } from "../types";
 
@@ -21,8 +22,6 @@ function buildSchema() {
     q: LIBRARY_BASE_PARAMS.q,
     sort: LIBRARY_BASE_PARAMS.sort,
     dir: LIBRARY_BASE_PARAMS.dir,
-    page: LIBRARY_BASE_PARAMS.page,
-    rows: LIBRARY_BASE_PARAMS.rows,
   };
   for (const key of LIBRARY_ALL_FILTER_KEYS) schema[key] = { defaultValue: "" };
   for (const key of LIBRARY_FACET_SEARCH_KEYS) schema[`fs_${key}`] = { defaultValue: "" };
@@ -37,15 +36,15 @@ function isSortDirection(value: string | undefined): value is SortDirection {
 
 export function useLibraryUrlState() {
   const { values, set, setMany } = useUrlParams(SCHEMA);
+  const { isAdmin } = useAuthContext();
 
   const view: LibraryView = isLibraryView(values.tab) ? values.tab : "tracks";
   const config = VIEW_CONFIG[view];
+  const sortOptions = useMemo(() => visibleSortOptions(config, isAdmin), [config, isAdmin]);
 
-  const sort = values.sort || config.defaultSort;
+  const sort = resolveVisibleSort(config, values.sort || config.defaultSort, isAdmin);
   const rawDir = isSortDirection(values.dir) ? values.dir : undefined;
   const effectiveDirection = resolveEffectiveDirection(config, sort, rawDir);
-  const page = clampPage(values.page ?? "");
-  const pageSize = resolvePageSize(values.rows ?? "");
 
   const filters = useMemo<FilterParamMap>(() => {
     const map: FilterParamMap = {};
@@ -66,21 +65,21 @@ export function useLibraryUrlState() {
 
   const setTab = useCallback(
     (next: LibraryView) => {
-      setMany({ tab: next, sort: null, dir: null, page: null });
+      setMany({ tab: next, sort: null, dir: null });
     },
     [setMany]
   );
 
   const setSearch = useCallback(
     (next: string) => {
-      setMany({ q: next || null, page: null });
+      set("q", next || null);
     },
-    [setMany]
+    [set]
   );
 
   const setSort = useCallback(
     (next: string) => {
-      setMany({ sort: next === config.defaultSort ? null : next, dir: null, page: null });
+      setMany({ sort: next === config.defaultSort ? null : next, dir: null });
     },
     [setMany, config.defaultSort]
   );
@@ -88,37 +87,23 @@ export function useLibraryUrlState() {
   const setDir = useCallback(
     (next: SortDirection) => {
       const sortDefault = resolveEffectiveDirection(config, sort, undefined);
-      setMany({ dir: next === sortDefault ? null : next, page: null });
+      set("dir", next === sortDefault ? null : next);
     },
-    [setMany, config, sort]
-  );
-
-  const setPage = useCallback(
-    (next: number) => {
-      set("page", next <= 1 ? null : String(next));
-    },
-    [set]
-  );
-
-  const setPageSize = useCallback(
-    (next: number) => {
-      setMany({ rows: String(next), page: null });
-    },
-    [setMany]
+    [set, config, sort]
   );
 
   const setFilterValues = useCallback(
     (key: string, nextValues: string[]) => {
-      setMany({ [key]: serializeFilterValues(nextValues), page: null });
+      set(key, serializeFilterValues(nextValues));
     },
-    [setMany]
+    [set]
   );
 
   const setOrphan = useCallback(
     (next: boolean) => {
-      setMany({ orphan: next ? "true" : null, page: null });
+      set("orphan", next ? "true" : null);
     },
-    [setMany]
+    [set]
   );
 
   const setFacetSearch = useCallback(
@@ -129,7 +114,7 @@ export function useLibraryUrlState() {
   );
 
   const clearFilters = useCallback(() => {
-    const changes: Record<string, string | null> = { page: null };
+    const changes: Record<string, string | null> = {};
     for (const key of LIBRARY_ALL_FILTER_KEYS) changes[key] = null;
     for (const key of LIBRARY_FACET_SEARCH_KEYS) changes[`fs_${key}`] = null;
     setMany(changes);
@@ -138,20 +123,17 @@ export function useLibraryUrlState() {
   return {
     view,
     config,
+    sortOptions,
     search: values.q ?? "",
     sort,
     direction: rawDir,
     effectiveDirection,
-    page,
-    pageSize,
     filters,
     facetSearch,
     setTab,
     setSearch,
     setSort,
     setDir,
-    setPage,
-    setPageSize,
     setFilterValues,
     setOrphan,
     setFacetSearch,

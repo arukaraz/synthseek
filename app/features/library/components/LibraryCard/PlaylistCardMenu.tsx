@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 
 import type { LibraryMenuAction } from "../../types";
 import { LibraryActionMenu } from "../LibraryActionMenu";
+import { shieldOwnClick } from "./helpers";
 import { cardInlineKebab, cardKebab } from "./styles";
 import type { PlaylistCardMenuProps } from "./types";
 
@@ -47,7 +48,7 @@ export function PlaylistCardMenu({ item, appearance = "cover" }: PlaylistCardMen
   ];
 
   return (
-    <div onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
+    <div onClick={shieldOwnClick} onKeyDown={(event) => event.stopPropagation()}>
       <LibraryActionMenu
         title={item.name}
         triggerLabel={t("playlists.actions.menu", { name: item.name })}

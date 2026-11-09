@@ -5,17 +5,15 @@ import type {
   AlbumsViewConfig,
   ArtistsViewConfig,
   LibraryView,
+  PlaySort,
   PlaylistsViewConfig,
   SortDirection,
+  SortOptionDef,
   TracksViewConfig,
   ViewConfigMap,
 } from "./types";
 
 export const LIBRARY_VIEWS: readonly LibraryView[] = ["tracks", "albums", "artists", "playlists"];
-
-export const LIBRARY_PAGE_SIZE_OPTIONS = [50, 100, 200] as const;
-export const LIBRARY_DEFAULT_PAGE_SIZE = "50";
-export const LIBRARY_DEFAULT_PAGE = "1";
 
 export const LIBRARY_DENSITY_STORAGE_KEY = "synthseek.library.density";
 
@@ -24,8 +22,6 @@ export const GRID_ITEMS_SELECTOR = "[data-library-grid]";
 export const GRID_JUMP_MAX_FRAMES = 60;
 
 export const LIBRARY_FACET_TOP_N = 8;
-
-export const NO_CHOSEN_SOURCES: readonly string[] = [];
 
 export const LIBRARY_STATUS_FACET_VALUES = RequestStatus.options;
 
@@ -63,13 +59,17 @@ export const LIBRARY_FACET_SEARCH_KEYS = ["artist", "genre", "playlist", "owner"
 
 export const LIBRARY_SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"];
 
+const PLAY_SORT_OPTIONS: readonly SortOptionDef<PlaySort>[] = [
+  { value: "lastPlayed", labelKey: "page.sort.lastPlayed", defaultDirection: "desc" },
+  { value: "myPlays", labelKey: "page.sort.myPlays", defaultDirection: "desc" },
+  { value: "allPlays", labelKey: "page.sort.allPlays", defaultDirection: "desc", adminOnly: true },
+];
+
 export const LIBRARY_BASE_PARAMS = {
   tab: { defaultValue: "tracks" as LibraryView, validValues: LIBRARY_VIEWS },
   q: { defaultValue: "" as string },
   sort: { defaultValue: "" as string },
   dir: { validValues: LIBRARY_SORT_DIRECTIONS },
-  page: { defaultValue: LIBRARY_DEFAULT_PAGE as string },
-  rows: { defaultValue: LIBRARY_DEFAULT_PAGE_SIZE as string },
 } as const;
 
 export const LIBRARY_ALL_FILTER_KEYS = [
@@ -107,6 +107,7 @@ const TRACKS_CONFIG: TracksViewConfig = {
     { value: "title", labelKey: "page.sort.title", defaultDirection: "asc" },
     { value: "duration", labelKey: "page.sort.duration", defaultDirection: "desc" },
     { value: "status", labelKey: "page.sort.status", defaultDirection: "asc" },
+    ...PLAY_SORT_OPTIONS,
   ],
   filterParamKeys: [
     "status",
@@ -152,6 +153,7 @@ const ALBUMS_CONFIG: AlbumsViewConfig = {
     { value: "artist", labelKey: "page.sort.artist", defaultDirection: "asc" },
     { value: "year", labelKey: "page.sort.year", defaultDirection: "desc" },
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
+    ...PLAY_SORT_OPTIONS,
   ],
   filterParamKeys: ["status", "artist", "genre", "year", "origin", "libraryPath"],
   facets: [
@@ -180,6 +182,7 @@ const ARTISTS_CONFIG: ArtistsViewConfig = {
     { value: "name", labelKey: "page.sort.name", defaultDirection: "asc" },
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
     { value: "albums", labelKey: "page.sort.albums", defaultDirection: "desc" },
+    ...PLAY_SORT_OPTIONS,
   ],
   filterParamKeys: ["genre", "origin", "status"],
   facets: [
@@ -205,6 +208,7 @@ const PLAYLISTS_CONFIG: PlaylistsViewConfig = {
     { value: "recent", labelKey: "page.sort.newest", defaultDirection: "desc" },
     { value: "name", labelKey: "page.sort.name", defaultDirection: "asc" },
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
+    ...PLAY_SORT_OPTIONS,
   ],
   filterParamKeys: ["origin", "owner", "status"],
   facets: [
@@ -220,3 +224,7 @@ export const VIEW_CONFIG: ViewConfigMap = {
   artists: ARTISTS_CONFIG,
   playlists: PLAYLISTS_CONFIG,
 };
+
+export const SHELF_COLLAPSE_AFTER_PX = 24;
+
+export const SHELF_COLLAPSE_MIN_OVERFLOW_PX = 320;

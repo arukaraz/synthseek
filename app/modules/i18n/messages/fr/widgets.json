@@ -61,7 +61,8 @@
       "sections": {
         "label": "Sections de la personnalisation du tableau",
         "board": "Tableau",
-        "widgets": "Widgets"
+        "widgets": "Widgets",
+        "arrange": "Disposition"
       }
     },
     "layouts": {

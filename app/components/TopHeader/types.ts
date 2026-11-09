@@ -12,6 +12,10 @@ export interface TopHeaderProps {
 
 export type OmniState = OmniSearchState<FilterType>;
 
+export interface SearchEmblemProps {
+  onOpen: () => void;
+}
+
 export type OmniOption =
   | {
       kind: "result";

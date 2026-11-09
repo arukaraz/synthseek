@@ -1,5 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { PLAYER_MASTHEAD_SLOT_ID } from "@components/Player";
+import type { PlayerDockState } from "@hooks/ui/player";
+import { setChromeCollapsed } from "@hooks/ui/useChromeCollapsed";
 import { act, fireEvent, renderWithProviders, screen, within } from "@test/test-utils";
 
 import { TopHeader } from "../TopHeader";
@@ -16,6 +19,7 @@ const { pathnameMock, pushMock, openForResultMock } = vi.hoisted(() => ({
 }));
 const searchData = vi.hoisted((): { current: unknown } => ({ current: undefined }));
 const auth = vi.hoisted((): { current: AuthState } => ({ current: { currentUser: null, isAdmin: false } }));
+const dock = vi.hoisted((): { current: PlayerDockState } => ({ current: "hidden" }));
 
 vi.mock("next/navigation", () => ({
   usePathname: () => pathnameMock(),
@@ -34,6 +38,11 @@ vi.mock("@hooks/api/queries/useSearchContent", () => ({
 }));
 
 vi.mock("@hooks/ui/useDebounce", () => ({ useDebounce: <T,>(value: T) => value }));
+
+vi.mock("@hooks/ui/player", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@hooks/ui/player")>()),
+  usePlayerDock: () => dock.current,
+}));
 
 vi.mock("@features/search/components/ContentRequestFlow", () => ({
   useContentRequestFlow: () => ({ openForResult: openForResultMock }),
@@ -72,6 +81,7 @@ beforeEach(() => {
   pathnameMock.mockReturnValue("/");
   searchData.current = { results: { tracks: { items: [TRACK] } } };
   auth.current = { currentUser: null, isAdmin: false };
+  dock.current = "hidden";
 });
 
 afterEach(() => {
@@ -239,6 +249,57 @@ describe("TopHeader", () => {
     fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
 
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+  });
+
+  it("opens the search from the phone's emblem over the player, and closes it with the X", () => {
+    renderHeader();
+    const masthead = document.getElementById(PLAYER_MASTHEAD_SLOT_ID);
+
+    expect(screen.queryByRole("button", { name: "Close search" })).not.toBeInTheDocument();
+    expect(masthead).not.toHaveClass("hidden");
+    act(() => {
+      fireEvent.click(screen.getAllByRole("button", { name: "Search" })[0]);
+    });
+
+    expect(screen.getByRole("combobox")).toHaveFocus();
+    expect(masthead).toHaveClass("hidden");
+    act(() => {
+      fireEvent.click(screen.getByRole("button", { name: "Close search" }));
+    });
+
+    expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Close search" })).not.toBeInTheDocument();
+    expect(masthead).not.toHaveClass("hidden");
+  });
+
+  it.each([
+    ["bar", true],
+    ["chain", true],
+    ["hidden", false],
+  ] as const)("folds the closed search field away on a phone while the dock is %s: %s", (state, folded) => {
+    dock.current = state;
+    renderHeader();
+    const field = screen.getAllByRole("button", { name: "Search" })[1];
+
+    expect(field.closest(".max-sm\\:hidden") !== null).toBe(folded);
+  });
+
+  it("slides out of a phone's way while a list is scrolled, out of the tab order too", () => {
+    renderHeader();
+    const header = document.querySelector("[data-cy=app-header]");
+
+    expect(header).not.toHaveClass("max-sm:-mt-16");
+    act(() => {
+      setChromeCollapsed(true);
+    });
+    expect(header).toHaveClass("max-sm:-mt-16");
+    expect(header).toHaveAttribute("inert");
+
+    act(() => {
+      setChromeCollapsed(false);
+    });
+    expect(header).not.toHaveClass("max-sm:-mt-16");
+    expect(header).not.toHaveAttribute("inert");
   });
 
   it("shows the settings gear and the user's avatar on the right when signed in", () => {

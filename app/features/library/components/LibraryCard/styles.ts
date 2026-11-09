@@ -14,15 +14,18 @@ export const cardGrid = cva(
   }
 );
 
-export const cardRoot = cva("group flex min-w-0 flex-col gap-2", {
-  variants: {
-    interactive: {
-      true: "focus-visible:ring-primary-500/60 cursor-pointer rounded-lg outline-none focus-visible:ring-2",
-      false: "",
+export const cardRoot = cva(
+  "group flex min-w-0 flex-col gap-2 max-sm:select-none max-sm:[-webkit-touch-callout:none]",
+  {
+    variants: {
+      interactive: {
+        true: "focus-visible:ring-primary-500/60 cursor-pointer rounded-lg outline-none focus-visible:ring-2",
+        false: "",
+      },
     },
-  },
-  defaultVariants: { interactive: false },
-});
+    defaultVariants: { interactive: false },
+  }
+);
 
 export const cardCover = cva(
   "from-primary-500/20 to-accent-500/20 relative aspect-square w-full overflow-hidden rounded-lg bg-linear-to-br",
@@ -105,7 +108,7 @@ export const cardPlayButton = cva(
 );
 
 export const cardInlineKebab = cva(
-  "text-fg/60 hover:text-fg hover:bg-fg/10 focus-visible:ring-primary-400 -mr-1 grid size-8 shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none"
+  "text-fg/60 hover:text-fg hover:bg-fg/10 focus-visible:ring-primary-400 grid size-8 shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none"
 );
 
 export const cardBodyRow = cva("flex min-w-0 items-start gap-1");
@@ -113,7 +116,7 @@ export const cardBodyRow = cva("flex min-w-0 items-start gap-1");
 export const cardBody = cva("flex min-w-0 flex-1 flex-col gap-0.5 px-0.5");
 
 export const listRow = cva(
-  "focus-visible:ring-primary-500/60 flex min-w-0 cursor-pointer items-center gap-3 rounded-lg py-1.5 outline-none focus-visible:ring-2",
+  "focus-visible:ring-primary-500/60 flex min-w-0 cursor-pointer items-center gap-3 rounded-lg py-1.5 outline-none focus-visible:ring-2 max-sm:select-none max-sm:[-webkit-touch-callout:none]",
   {
     variants: {
       selected: { true: "bg-primary-500/12", false: "" },
@@ -145,7 +148,3 @@ export const cardTitle = cva("text-fg truncate text-sm font-semibold");
 export const cardSubtitle = cva("text-fg/60 truncate text-xs");
 
 export const cardMeta = cva("text-fg/45 truncate text-[11px]");
-
-export const infiniteSentinel = cva("h-px w-full");
-
-export const infiniteSpinnerRow = cva("flex w-full items-center justify-center py-6");

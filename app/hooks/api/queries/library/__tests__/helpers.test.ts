@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { batchLimitThrough, getNextOffset, loadedCount, stripPaging } from "../helpers";
+import { batchLimitThrough, getNextOffset, loadedCount } from "../helpers";
 
 function page(itemCount: number, total: number) {
   return { items: Array.from({ length: itemCount }, (_, index) => index), total };
@@ -59,17 +59,5 @@ describe("loadedCount", () => {
   it("counts nothing before the first page arrives", () => {
     expect(loadedCount(undefined)).toBe(0);
     expect(loadedCount([])).toBe(0);
-  });
-});
-
-describe("stripPaging", () => {
-  it("drops offset and limit but keeps the filter-bearing fields", () => {
-    const stripped = stripPaging({ offset: 100, limit: 50, q: "rock", sort: "name" });
-    expect(stripped).toEqual({ q: "rock", sort: "name" });
-  });
-
-  it("leaves an input without paging fields untouched", () => {
-    const stripped = stripPaging({ q: "jazz" });
-    expect(stripped).toEqual({ q: "jazz" });
   });
 });

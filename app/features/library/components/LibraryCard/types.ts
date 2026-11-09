@@ -43,6 +43,7 @@ export interface LibraryListRowProps {
   trailing?: ReactNode;
   selection?: CardSelection;
   selectLabel?: string;
+  onHold?: () => void;
 }
 
 export interface CardArtworkProps {
@@ -77,6 +78,7 @@ export interface AlbumCardProps {
   menu?: ReactNode;
   selection?: CardSelection;
   chrome?: CardChrome;
+  onHold?: () => void;
 }
 
 export interface AlbumSelectionBarProps {

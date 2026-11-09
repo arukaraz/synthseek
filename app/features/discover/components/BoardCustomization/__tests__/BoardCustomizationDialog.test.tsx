@@ -1,10 +1,11 @@
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { TooltipProvider } from "@components/ui/Tooltip";
 import type { BoardAppearance, BoardItem, BoardLists, BoardTemplatePreview } from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 import { DRAG_GHOST_CLASS } from "@hooks/ui/board/constants";
+import { PHONE_QUERY } from "@hooks/ui/constants";
 import { createWidget, createWidgetCatalog, createWidgetGrammar } from "@test/factories";
 import { act, fireEvent, render, screen, within } from "@test/test-utils";
 
@@ -563,5 +564,99 @@ describe("BoardCustomizationDialog", () => {
     await user.click(remove);
     expect(screen.queryByRole("button", { name: "Delete" })).toBeNull();
     expect(removeWidget).not.toHaveBeenCalled();
+  });
+
+  it("keeps the phone's tab bar off a wider screen", () => {
+    renderDialog();
+
+    expect(screen.getAllByRole("tablist", { name: "Board Customization sections" })).toHaveLength(1);
+  });
+});
+
+describe("BoardCustomizationDialog on a phone", () => {
+  beforeEach(() => {
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      configurable: true,
+      value: (query: string) => ({
+        matches: query === PHONE_QUERY,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }),
+    });
+  });
+
+  afterEach(() => {
+    Object.defineProperty(window, "matchMedia", { writable: true, configurable: true, value: undefined });
+  });
+
+  function tabBar(): HTMLElement {
+    const bar = screen.getAllByRole("tablist", { name: "Board Customization sections" }).at(-1);
+    if (!(bar instanceof HTMLElement)) throw new Error("no tab bar");
+    return bar;
+  }
+
+  function showPane(name: string) {
+    fireEvent.click(within(tabBar()).getByRole("tab", { name }));
+  }
+
+  function selectedSetting(): string | null {
+    const tabs = within(screen.getByRole("tablist", { name: "Board settings sections" })).getAllByRole("tab");
+    return tabs.find((tab) => tab.getAttribute("aria-selected") === "true")?.textContent ?? null;
+  }
+
+  function sectionPanels(): HTMLElement[] {
+    return screen.getAllByRole("tabpanel", { hidden: true }).filter((panel) => panel.parentElement === panelsRoot());
+  }
+
+  function panelsRoot(): HTMLElement | null {
+    return screen.getAllByRole("tablist", { name: "Board Customization sections" })[0].parentElement;
+  }
+
+  it("lays the four panes out as a bottom tab bar, starting on the arrangement", () => {
+    renderDialog();
+
+    expect(
+      within(tabBar())
+        .getAllByRole("tab")
+        .map((tab) => tab.textContent)
+    ).toEqual(["Arrange", "Appearance", "Templates", "Widgets"]);
+    expect(within(tabBar()).getByRole("tab", { name: "Arrange" })).toHaveAttribute("aria-selected", "true");
+    expect(settingsColumn()).toHaveClass("max-sm:hidden");
+  });
+
+  it("shows the board settings tab it was given, in place of the arrangement", () => {
+    renderDialog();
+
+    showPane("Templates");
+
+    expect(within(tabBar()).getByRole("tab", { name: "Templates" })).toHaveAttribute("aria-selected", "true");
+    expect(selectedSetting()).toBe("Templates");
+    expect(settingsColumn()).not.toHaveClass("max-sm:hidden");
+    expect(sectionPanels().map((panel) => panel.hidden)).toEqual([false]);
+
+    showPane("Appearance");
+
+    expect(selectedSetting()).toBe("Appearance");
+  });
+
+  it("moves to the widgets and back to the arrangement", () => {
+    renderDialog();
+
+    showPane("Widgets");
+
+    expect(within(tabBar()).getByRole("tab", { name: "Widgets" })).toHaveAttribute("aria-selected", "true");
+    expect(sectionPanels().map((panel) => panel.hidden)).toEqual([true, false]);
+
+    showPane("Arrange");
+
+    expect(within(tabBar()).getByRole("tab", { name: "Arrange" })).toHaveAttribute("aria-selected", "true");
+    expect(sectionPanels().map((panel) => panel.hidden)).toEqual([false, true]);
+    expect(settingsColumn()).toHaveClass("max-sm:hidden");
   });
 });

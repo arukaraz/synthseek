@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 export const trackRowList = cva("flex flex-col");
 
 export const trackRow = cva(
-  "focus-visible:ring-primary-500/60 flex min-h-16 min-w-0 items-center gap-3 rounded-xl py-1.5 pr-0 pl-1 outline-none focus-visible:ring-2",
+  "focus-visible:ring-primary-500/60 flex min-h-16 min-w-0 items-center gap-3 rounded-xl py-1.5 pr-0 pl-1 outline-none focus-visible:ring-2 max-sm:select-none max-sm:[-webkit-touch-callout:none]",
   {
     variants: {
       selected: { true: "bg-primary-500/12", false: "" },

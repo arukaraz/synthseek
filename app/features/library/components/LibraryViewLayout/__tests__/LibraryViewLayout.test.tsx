@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 
-import { createLibraryShell } from "@test/factories";
-import { renderWithProviders, screen } from "@test/test-utils";
+import { createLibraryController, createLibraryShell } from "@test/factories";
+import { act, renderWithProviders, screen } from "@test/test-utils";
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key: string) => key }),
@@ -28,7 +28,9 @@ vi.mock("../../LibraryCard", () => ({
 }));
 
 vi.mock("../../LibraryShelf", () => ({
-  LibraryShelfHeader: () => <div data-testid="shelf" />,
+  LibraryShelfHeader: ({ collapsed }: { collapsed: boolean }) => (
+    <div data-testid="shelf" data-collapsed={String(collapsed)} />
+  ),
 }));
 
 vi.mock("../LibraryLetterIndex", () => ({
@@ -37,8 +39,13 @@ vi.mock("../LibraryLetterIndex", () => ({
   ),
 }));
 
-vi.mock("@components/ui/Pagination", () => ({
-  Pagination: () => <div data-testid="pagination" />,
+const loadMoreProps = vi.hoisted(() => ({ current: undefined as Record<string, unknown> | undefined }));
+
+vi.mock("../../LibraryLoadMore/LibraryLoadMore", () => ({
+  LibraryLoadMore: (props: Record<string, unknown>) => {
+    loadMoreProps.current = props;
+    return <div data-testid="load-more" />;
+  },
 }));
 
 import { VIEW_CONFIG } from "../../../constants";
@@ -51,19 +58,7 @@ interface Row {
 }
 
 function makeController() {
-  return {
-    config: VIEW_CONFIG.tracks,
-    filters: {},
-    facetSearch: {},
-    page: 1,
-    pageSize: 50,
-    setFilterValues: vi.fn(),
-    setOrphan: vi.fn(),
-    setFacetSearch: vi.fn(),
-    clearFilters: vi.fn(),
-    setPage: vi.fn(),
-    setPageSize: vi.fn(),
-  } as unknown as LibraryViewLayoutProps<Row>["controller"];
+  return createLibraryController();
 }
 
 function tableProps(overrides?: Partial<LibraryViewLayoutProps<Row>>): LibraryViewLayoutProps<Row> {
@@ -78,6 +73,9 @@ function tableProps(overrides?: Partial<LibraryViewLayoutProps<Row>>): LibraryVi
       layout: "table",
       columns: [],
       getRowId: (item: Row) => item.id,
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      fetchNextPage: vi.fn(),
     },
     shell: createLibraryShell(),
     ...overrides,
@@ -87,7 +85,7 @@ function tableProps(overrides?: Partial<LibraryViewLayoutProps<Row>>): LibraryVi
 function gridProps(overrides?: Partial<LibraryViewLayoutProps<Row>>): LibraryViewLayoutProps<Row> {
   return {
     ...tableProps(),
-    controller: { ...makeController(), config: VIEW_CONFIG.albums },
+    controller: createLibraryController({ view: "albums", config: VIEW_CONFIG.albums }),
     content: {
       layout: "grid",
       renderCard: () => <li>card</li>,
@@ -99,6 +97,38 @@ function gridProps(overrides?: Partial<LibraryViewLayoutProps<Row>>): LibraryVie
     ...overrides,
   };
 }
+
+describe("LibraryViewLayout scrolling on a phone", () => {
+  function scrollList(top: number) {
+    const list = screen.getByTestId("table").parentElement;
+    if (!(list instanceof HTMLElement)) throw new Error("no list");
+    Object.defineProperty(list, "clientHeight", { configurable: true, value: 500 });
+    Object.defineProperty(list, "scrollHeight", { configurable: true, value: 3000 });
+    act(() => {
+      list.scrollTop = top;
+      list.dispatchEvent(new Event("scroll"));
+    });
+  }
+
+  it("folds the shelf while the list is scrolled down and unfolds it back at the top", () => {
+    renderWithProviders(<LibraryViewLayout {...tableProps({ shell: createLibraryShell({ phone: true }) })} />);
+    expect(screen.getByTestId("shelf")).toHaveAttribute("data-collapsed", "false");
+
+    scrollList(400);
+    expect(screen.getByTestId("shelf")).toHaveAttribute("data-collapsed", "true");
+
+    scrollList(0);
+    expect(screen.getByTestId("shelf")).toHaveAttribute("data-collapsed", "false");
+  });
+
+  it("never folds the shelf on a wider screen", () => {
+    renderWithProviders(<LibraryViewLayout {...tableProps()} />);
+
+    scrollList(400);
+
+    expect(screen.getByTestId("shelf")).toHaveAttribute("data-collapsed", "false");
+  });
+});
 
 describe("LibraryViewLayout", () => {
   it("renders the error empty-state when isError is true", () => {
@@ -120,18 +150,38 @@ describe("LibraryViewLayout", () => {
     expect(screen.getByText(VIEW_CONFIG.tracks.emptyTitleKey)).toBeInTheDocument();
   });
 
-  it("renders the table and pagination for a table layout with results", () => {
+  it("renders the table with the load-more sentinel for a table layout with results", () => {
     renderWithProviders(<LibraryViewLayout {...tableProps()} />);
 
     expect(screen.getByTestId("table")).toBeInTheDocument();
-    expect(screen.getByTestId("pagination")).toBeInTheDocument();
+    expect(screen.getByTestId("load-more")).toBeInTheDocument();
   });
 
-  it("renders the infinite grid and no pagination for a grid layout", () => {
+  it("hands the table's paging state to the load-more control", () => {
+    const fetchNextPage = vi.fn();
+    const base = tableProps();
+    renderWithProviders(
+      <LibraryViewLayout
+        {...base}
+        content={{
+          layout: "table",
+          columns: [],
+          getRowId: (item: Row) => item.id,
+          hasNextPage: true,
+          isFetchingNextPage: true,
+          fetchNextPage,
+        }}
+      />
+    );
+
+    expect(loadMoreProps.current).toMatchObject({ hasNextPage: true, isFetchingNextPage: true, fetchNextPage });
+  });
+
+  it("renders the infinite grid and no table load-more for a grid layout", () => {
     renderWithProviders(<LibraryViewLayout {...gridProps()} />);
 
     expect(screen.getByTestId("grid")).toBeInTheDocument();
-    expect(screen.queryByTestId("pagination")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("load-more")).not.toBeInTheDocument();
   });
 
   it("shows a letter index on a grid only once it has more than one letter to jump to", () => {
@@ -171,7 +221,7 @@ describe("LibraryViewLayout", () => {
   it("routes a sidebar facet toggle into the controller's setFilterValues", async () => {
     const setFilterValues = vi.fn();
     const props = tableProps();
-    props.controller = { ...makeController(), setFilterValues } as unknown as typeof props.controller;
+    props.controller = createLibraryController({ setFilterValues });
 
     const { user } = renderWithProviders(<LibraryViewLayout {...props} />);
 

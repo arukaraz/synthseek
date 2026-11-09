@@ -23,10 +23,7 @@ export function Toaster({ ...props }: ToasterProps) {
       gap={12}
       icons={TOAST_ICONS}
       toastOptions={{ classNames: TOAST_CLASS_NAMES }}
-      style={toastOffsetVars(
-        resolveToastMobileOffset(dockVisible, playerDock),
-        resolveToastOffset(dockVisible, playerDock)
-      )}
+      style={toastOffsetVars(resolveToastMobileOffset(dockVisible), resolveToastOffset(dockVisible, playerDock))}
       offset={TOAST_OFFSET_AT_LAYOUT_BREAKPOINT}
       mobileOffset={TOAST_OFFSET_AT_LAYOUT_BREAKPOINT}
       duration={2000}

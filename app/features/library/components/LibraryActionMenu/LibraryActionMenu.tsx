@@ -14,6 +14,7 @@ import { MoreVertical } from "lucide-react";
 import { Fragment, useState } from "react";
 
 import { libraryMenuItem, libraryMenuItemDanger } from "../../styles";
+import { shieldOwnClick } from "../LibraryCard/helpers";
 import { sheetMenuItem, sheetSeparator } from "../LibraryShelf/styles";
 import { actionMenuShield } from "./styles";
 import type { LibraryActionMenuProps } from "./types";
@@ -31,11 +32,7 @@ export function LibraryActionMenu({
 
   if (phone) {
     return (
-      <div
-        className={actionMenuShield()}
-        onClick={(event) => event.stopPropagation()}
-        onKeyDown={(event) => event.stopPropagation()}
-      >
+      <div className={actionMenuShield()} onClick={shieldOwnClick} onKeyDown={(event) => event.stopPropagation()}>
         <button
           type="button"
           className={triggerClassName}
@@ -73,11 +70,7 @@ export function LibraryActionMenu({
   }
 
   return (
-    <div
-      className={actionMenuShield()}
-      onClick={(event) => event.stopPropagation()}
-      onKeyDown={(event) => event.stopPropagation()}
-    >
+    <div className={actionMenuShield()} onClick={shieldOwnClick} onKeyDown={(event) => event.stopPropagation()}>
       <DropdownMenu>
         <DropdownMenuTrigger className={triggerClassName} aria-label={triggerLabel}>
           <MoreVertical className={iconClassName} aria-hidden />

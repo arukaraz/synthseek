@@ -29,8 +29,6 @@ export const resultsScroll = cva("min-h-0 flex-1 overflow-y-auto transition-opac
   },
 });
 
-export const pagerWrap = cva("max-sm:pb-4");
-
 export const resultsOverlay = cva("absolute inset-0 z-10 grid place-items-center");
 
 export const stateWrap = cva("flex min-h-64 flex-1 items-center justify-center");

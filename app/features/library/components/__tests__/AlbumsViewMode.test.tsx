@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { Fragment, type KeyboardEvent, type ReactNode } from "react";
+import { Fragment, useState, type KeyboardEvent, type ReactNode } from "react";
+import { act, fireEvent } from "@testing-library/react";
 
+import { LONG_PRESS_MS } from "@hooks/ui/constants";
 import { renderWithProviders, screen, within } from "@test/test-utils";
 import type { LibraryAlbumItem } from "@hooks/api/queries/library/types";
 import { useSelection } from "@hooks/ui/useSelection";
@@ -107,6 +109,11 @@ function AlbumsHarness({ shell }: { shell?: Partial<LibraryViewShell> }) {
   return <AlbumsViewMode {...makeProps(shell)} selection={selection} />;
 }
 
+function SelectModeHarness({ shell }: { shell?: Partial<LibraryViewShell> }) {
+  const [selectMode, setSelectMode] = useState(false);
+  return <AlbumsHarness shell={{ ...shell, selectMode, onSelectModeChange: setSelectMode }} />;
+}
+
 function showAlbums(items: LibraryAlbumItem[]) {
   useLibraryAlbumsMock.mockReturnValue({
     items,
@@ -149,6 +156,8 @@ describe("AlbumsViewMode", () => {
   });
 
   afterEach(() => {
+    fireEvent.pointerDown(document.body);
+    vi.useRealTimers();
     vi.clearAllMocks();
   });
 
@@ -273,6 +282,38 @@ describe("AlbumsViewMode", () => {
 
       expect(row).toHaveAttribute("aria-pressed", "true");
       expect(openForResultMock).not.toHaveBeenCalled();
+    });
+
+    it.each(["comfortable", "list"] as const)(
+      "enters select mode from a %s hold with the held album already picked",
+      (density) => {
+        renderWithProviders(<SelectModeHarness shell={{ phone: true, density }} />);
+        vi.useFakeTimers();
+
+        fireEvent.pointerDown(screen.getByText("Discovery"), { pointerType: "touch" });
+        act(() => {
+          vi.advanceTimersByTime(LONG_PRESS_MS);
+        });
+        const row = screen.getByRole("button", { name: "Select Discovery" });
+        fireEvent.pointerUp(row);
+        fireEvent.click(row);
+
+        expect(row).toHaveAttribute("aria-pressed", "true");
+        expect(openForResultMock).not.toHaveBeenCalled();
+      }
+    );
+
+    it("leaves a desktop card to its checkbox, with no hold to enter select mode", () => {
+      const onSelectModeChange = vi.fn();
+      renderWithProviders(<AlbumsHarness shell={{ onSelectModeChange }} />);
+      vi.useFakeTimers();
+
+      fireEvent.pointerDown(screen.getByText("Discovery"), { pointerType: "touch" });
+      act(() => {
+        vi.advanceTimersByTime(LONG_PRESS_MS);
+      });
+
+      expect(onSelectModeChange).not.toHaveBeenCalled();
     });
   });
 

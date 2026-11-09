@@ -2,7 +2,7 @@ import type { RequestStatus } from "@api/__generated__/types";
 import type { LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 import type { TFunction } from "i18next";
 import { REQUEST_STATUS_CONFIG } from "@utils/statusConfig";
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
 
 import type { CardCoverTone, CardSelection } from "./types";
 
@@ -45,6 +45,22 @@ export function handleCardActivationKey(event: KeyboardEvent<HTMLElement>, onOpe
 
 export function shieldCardActivationKey(event: KeyboardEvent<HTMLElement>): void {
   if (isCardActivationKey(event)) event.stopPropagation();
+}
+
+function isOwnEvent(event: SyntheticEvent<HTMLElement>): boolean {
+  return event.target instanceof Node && event.currentTarget.contains(event.target);
+}
+
+export function onOwnClick(
+  handler: (event: MouseEvent<HTMLElement>) => void
+): (event: MouseEvent<HTMLElement>) => void {
+  return (event) => {
+    if (isOwnEvent(event)) handler(event);
+  };
+}
+
+export function shieldOwnClick(event: MouseEvent<HTMLElement>): void {
+  if (isOwnEvent(event)) event.stopPropagation();
 }
 
 export function cardInitials(name: string): string {

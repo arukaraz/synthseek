@@ -3,7 +3,6 @@
 import { albumRequestItem } from "@features/content-detail";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useLibraryAlbums } from "@hooks/api";
-import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { useRangePreview } from "@hooks/ui/useRangePreview";
 import { useCallback, useMemo } from "react";
@@ -32,8 +31,6 @@ export function AlbumsViewMode({ controller, shell, selection, fileActions }: Al
   const input = useMemo(
     () =>
       buildAlbumsInput({
-        limit: LIBRARY_BATCH_LIMIT,
-        offset: 0,
         q: controller.search || undefined,
         sort: controller.sort,
         direction: controller.direction,
@@ -93,6 +90,13 @@ export function AlbumsViewMode({ controller, shell, selection, fileActions }: Al
             onHover: (hovered: boolean) => trackRow(hovered ? item.id : null),
           }
         : undefined;
+      const onHold =
+        shell.phone && !shell.selectMode
+          ? () => {
+              shell.onSelectModeChange(true);
+              selection.toggle(item.id);
+            }
+          : undefined;
 
       if (asRows) {
         return (
@@ -105,6 +109,7 @@ export function AlbumsViewMode({ controller, shell, selection, fileActions }: Al
             onOpen={open}
             trailing={menu}
             selection={cardSelection}
+            onHold={onHold}
           />
         );
       }
@@ -120,6 +125,7 @@ export function AlbumsViewMode({ controller, shell, selection, fileActions }: Al
           onOpen={open}
           menu={chrome === "bare" ? undefined : menu}
           selection={cardSelection}
+          onHold={onHold}
         />
       );
     },
@@ -139,6 +145,7 @@ export function AlbumsViewMode({ controller, shell, selection, fileActions }: Al
       showLibraryPaths,
       chrome,
       asRows,
+      shell,
     ]
   );
 

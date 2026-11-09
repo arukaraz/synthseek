@@ -1,5 +1,13 @@
 import type { ContentType } from "@api/__generated__/types";
-import type { LibraryAlbumItem, LibraryArtistItem, LibraryPlaylistItem } from "@hooks/api/queries/library/types";
+import type {
+  LibraryAlbumItem,
+  LibraryAlbumsInput,
+  LibraryArtistItem,
+  LibraryArtistsInput,
+  LibraryPlaylistItem,
+  LibraryPlaylistsInput,
+  LibraryTracksInput,
+} from "@hooks/api/queries/library/types";
 import type { Selection } from "@hooks/ui/useSelection";
 import type { ParseKeys } from "i18next";
 import type { LucideIcon } from "lucide-react";
@@ -14,6 +22,12 @@ export type LibraryView = "tracks" | "albums" | "artists" | "playlists";
 export type LibraryLayout = "table" | "grid";
 
 export type SortDirection = "asc" | "desc";
+
+export type TrackSort = NonNullable<LibraryTracksInput["sort"]>;
+export type AlbumSort = NonNullable<LibraryAlbumsInput["sort"]>;
+export type ArtistSort = NonNullable<LibraryArtistsInput["sort"]>;
+export type PlaylistSort = NonNullable<LibraryPlaylistsInput["sort"]>;
+export type PlaySort = Extract<TrackSort, "lastPlayed" | "myPlays" | "allPlays">;
 
 export type LibraryDensity = "comfortable" | "compact" | "list";
 
@@ -43,21 +57,22 @@ export interface FacetDef {
   hideWithoutChoice?: boolean;
 }
 
-export interface SortOptionDef {
-  value: string;
+export interface SortOptionDef<TSort extends string = string> {
+  value: TSort;
   labelKey: LibraryKey;
   defaultDirection: SortDirection;
+  adminOnly?: boolean;
 }
 
-interface BaseViewConfig {
+interface BaseViewConfig<TSort extends string> {
   view: LibraryView;
   labelKey: LibraryKey;
   icon: LucideIcon;
   contentType: ContentType;
   layout: LibraryLayout;
   facets: FacetDef[];
-  sortOptions: SortOptionDef[];
-  defaultSort: string;
+  sortOptions: SortOptionDef<TSort>[];
+  defaultSort: TSort;
   interactive: boolean;
   filterParamKeys: string[];
   searchPlaceholderKey: LibraryKey;
@@ -65,24 +80,24 @@ interface BaseViewConfig {
   emptyDescriptionKey: LibraryKey;
 }
 
-export interface TracksViewConfig extends BaseViewConfig {
+export interface TracksViewConfig extends BaseViewConfig<TrackSort> {
   view: "tracks";
   layout: "table";
 }
 
-export interface AlbumsViewConfig extends BaseViewConfig {
+export interface AlbumsViewConfig extends BaseViewConfig<AlbumSort> {
   view: "albums";
   layout: "grid";
   getCardId: (item: LibraryAlbumItem) => string;
 }
 
-export interface ArtistsViewConfig extends BaseViewConfig {
+export interface ArtistsViewConfig extends BaseViewConfig<ArtistSort> {
   view: "artists";
   layout: "grid";
   getCardId: (item: LibraryArtistItem) => string;
 }
 
-export interface PlaylistsViewConfig extends BaseViewConfig {
+export interface PlaylistsViewConfig extends BaseViewConfig<PlaylistSort> {
   view: "playlists";
   layout: "grid";
   getCardId: (item: LibraryPlaylistItem) => string;

@@ -3,12 +3,13 @@
 import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 import { Checkbox } from "@components/ui/Checkbox";
 import { ImagePlaceholder } from "@components/ui/ImagePlaceholder";
+import { useLongPress } from "@hooks/ui/useLongPress";
 import { artworkImage } from "@utils/artworkProxy";
 import { Music, Play } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
-import { handleCardActivationKey, joinMeta } from "../LibraryCard/helpers";
+import { handleCardActivationKey, joinMeta, onOwnClick, shieldOwnClick } from "../LibraryCard/helpers";
 import { LibraryDurationCell } from "../LibraryTable/cells/LibraryDurationCell";
 import { TrackActionsCell } from "../LibraryTable/cells/TrackActionsCell";
 import {
@@ -32,8 +33,10 @@ export function LibraryTrackRow({
   onEnqueue,
   onSearchBetterQuality,
   fileActions,
+  onHold,
 }: LibraryTrackRowProps) {
   const { t } = useTranslation("library");
+  const longPress = useLongPress(onHold);
   const activates = selecting || item.playable;
   const activate = () => {
     if (selecting) onToggle();
@@ -51,8 +54,9 @@ export function LibraryTrackRow({
           ? t("page.selection.selectTrack", { title: item.title })
           : t("page.actions.playTrack", { title: item.title })
       }
-      onClick={activates ? activate : undefined}
+      onClick={activates ? onOwnClick(activate) : undefined}
       onKeyDown={activates ? (event) => handleCardActivationKey(event, activate) : undefined}
+      {...longPress}
     >
       {selecting ? <Checkbox checked={selected} tabIndex={-1} aria-hidden className={trackRowCheck()} /> : null}
       <div className={trackRowArt()}>
@@ -74,7 +78,7 @@ export function LibraryTrackRow({
       </div>
       <LibraryDurationCell durationMs={item.duration_ms} />
       {selecting ? null : (
-        <div onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
+        <div onClick={shieldOwnClick} onKeyDown={(event) => event.stopPropagation()}>
           <TrackActionsCell
             item={item}
             onEnqueue={onEnqueue}

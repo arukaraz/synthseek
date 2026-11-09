@@ -61,7 +61,8 @@
       "sections": {
         "label": "Bereiche der Board-Anpassung",
         "board": "Board",
-        "widgets": "Widgets"
+        "widgets": "Widgets",
+        "arrange": "Anordnen"
       }
     },
     "layouts": {

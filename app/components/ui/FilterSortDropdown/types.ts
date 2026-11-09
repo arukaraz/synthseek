@@ -31,6 +31,11 @@ export interface FilterSortFilterGroup {
 export interface FilterSortSortOption<S extends string> {
   value: S;
   label: string;
+  adminOnly?: boolean;
+}
+
+export interface FilterSortSortItemProps {
+  option: FilterSortSortOption<string>;
 }
 
 export interface FilterSortFilter<F extends string> {

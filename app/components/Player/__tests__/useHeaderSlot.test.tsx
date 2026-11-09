@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { PLAYER_HEADER_SLOT_ID, PLAYER_MODE_ATTRIBUTE } from "../constants";
+import { PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID, PLAYER_MODE_ATTRIBUTE } from "../constants";
 
 const mini = vi.hoisted(() => ({
   body: null as HTMLElement | null,
@@ -167,5 +167,58 @@ describe("usePlayerPlacement", () => {
     unmount();
 
     expect(document.documentElement.getAttribute(PLAYER_MODE_ATTRIBUTE)).toBeNull();
+  });
+});
+
+describe("usePlayerPlacement on a phone", () => {
+  function addMastheadSlot(): HTMLElement {
+    const slot = document.createElement("div");
+    slot.id = PLAYER_MASTHEAD_SLOT_ID;
+    document.body.appendChild(slot);
+    return slot;
+  }
+
+  afterEach(() => {
+    document.getElementById(PLAYER_MASTHEAD_SLOT_ID)?.remove();
+  });
+
+  it.each(["normal", "compact"] as const)("moves the %s player into the header's masthead slot", (mode) => {
+    wide = false;
+    const slot = addMastheadSlot();
+
+    const { result } = renderHook(() => usePlayerPlacement(mode, false));
+
+    expect(result.current.masthead).toBe(slot);
+  });
+
+  it("keeps the masthead empty on a wide screen", () => {
+    addMastheadSlot();
+
+    const { result } = renderHook(() => usePlayerPlacement("normal", false));
+
+    expect(result.current.masthead).toBeNull();
+  });
+
+  it("gives the masthead up while the full stage is open", () => {
+    wide = false;
+    addMastheadSlot();
+
+    const { result } = renderHook(() => usePlayerPlacement("normal", true));
+
+    expect(result.current.masthead).toBeNull();
+  });
+
+  it("follows the screen as it widens past the phone", () => {
+    wide = false;
+    const slot = addMastheadSlot();
+    const { result } = renderHook(() => usePlayerPlacement("normal", false));
+    expect(result.current.masthead).toBe(slot);
+
+    wide = true;
+    act(() => {
+      mediaListeners.forEach((listener) => listener());
+    });
+
+    expect(result.current.masthead).toBeNull();
   });
 });

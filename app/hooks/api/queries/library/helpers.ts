@@ -23,10 +23,3 @@ export function cachedPageSize(
 export function loadedCount(pages: readonly PageWithItemsAndTotal[] | undefined): number {
   return (pages ?? []).reduce((count, page) => count + page.items.length, 0);
 }
-
-export function stripPaging<TInput extends { offset?: number; limit?: number }>(
-  input: TInput
-): Omit<TInput, "offset" | "limit"> {
-  const { offset: _offset, limit: _limit, ...rest } = input;
-  return rest;
-}

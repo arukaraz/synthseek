@@ -13,6 +13,7 @@ import {
   cardInitials,
   handleCardActivationKey,
   mosaicTiles,
+  onOwnClick,
   playlistSubtitle,
   statusDotClass,
 } from "./helpers";
@@ -49,7 +50,7 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
       role={activates ? "button" : undefined}
       tabIndex={activates ? 0 : undefined}
       aria-label={openLabel}
-      onClick={activates ? onOpen : undefined}
+      onClick={activates && onOpen ? onOwnClick(onOpen) : undefined}
       onKeyDown={activates && onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
     >
       <div className={cardCover()}>

@@ -303,7 +303,10 @@
       "name": "Name",
       "year": "Jahr",
       "tracks": "Titel",
-      "albums": "Alben"
+      "albums": "Alben",
+      "lastPlayed": "Zuletzt gehört",
+      "myPlays": "Meistgehört (von dir)",
+      "allPlays": "Meistgehört (von allen)"
     },
     "columns": {
       "track": "Titel",

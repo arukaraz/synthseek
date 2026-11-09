@@ -2,7 +2,15 @@ import type { ContentType, MusicItem, MusicTrack } from "@api/__generated__/type
 import type { ConfigRequestMode } from "@features/search/components/ConfigRequestModal/types";
 import type { DetailTarget } from "@features/content-detail";
 import type { LucideIcon } from "lucide-react";
-import type { PointerEventHandler, RefObject } from "react";
+import type { MouseEventHandler, PointerEventHandler, RefObject } from "react";
+
+export interface LongPressHandlers {
+  onPointerDown: PointerEventHandler<HTMLElement>;
+  onPointerMove: PointerEventHandler<HTMLElement>;
+  onPointerUp: () => void;
+  onPointerCancel: () => void;
+  onContextMenu: MouseEventHandler<HTMLElement>;
+}
 
 export interface UseSheetDragOptions {
   onDismiss: () => void;

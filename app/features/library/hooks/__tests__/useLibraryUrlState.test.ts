@@ -9,11 +9,15 @@ const replaceMock = vi.fn((url: string) => {
   currentSearch = queryIndex >= 0 ? url.slice(queryIndex + 1) : "";
 });
 
+const auth = vi.hoisted(() => ({ isAdmin: false }));
+
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: replaceMock, push: vi.fn(), back: vi.fn(), forward: vi.fn(), refresh: vi.fn() }),
   usePathname: () => "/library",
   useSearchParams: () => new URLSearchParams(currentSearch),
 }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => auth }));
 
 function lastReplacedParams(): URLSearchParams {
   if (replaceMock.mock.calls.length === 0) return new URLSearchParams();
@@ -25,6 +29,7 @@ function lastReplacedParams(): URLSearchParams {
 describe("useLibraryUrlState", () => {
   beforeEach(() => {
     currentSearch = "";
+    auth.isAdmin = false;
     replaceMock.mockClear();
   });
 
@@ -32,14 +37,13 @@ describe("useLibraryUrlState", () => {
     vi.clearAllMocks();
   });
 
-  it("persists the FULL search string and resets the page in one write", () => {
+  it("persists the FULL search string", () => {
     const { result, rerender } = renderHook(() => useLibraryUrlState());
 
     act(() => result.current.setSearch("rock"));
     rerender();
 
     expect(lastReplacedParams().get("q")).toBe("rock");
-    expect(lastReplacedParams().get("page")).toBeNull();
   });
 
   it("persists the FULL facet-search value, not just the last character", () => {
@@ -63,60 +67,15 @@ describe("useLibraryUrlState", () => {
     const params = lastReplacedParams();
     expect(params.get("status")).toBe("failed");
     expect(params.get("q")).toBe("rock");
-    expect(params.get("page")).toBeNull();
   });
 
-  it("writes the sort param and resets the page together", () => {
+  it("writes the sort param", () => {
     const { result, rerender } = renderHook(() => useLibraryUrlState());
 
     act(() => result.current.setSort("title"));
     rerender();
 
     expect(lastReplacedParams().get("sort")).toBe("title");
-    expect(lastReplacedParams().get("page")).toBeNull();
-  });
-
-  it("round-trips the page numerically through Next and Previous arithmetic", () => {
-    currentSearch = "status=failed";
-    const { result, rerender } = renderHook(() => useLibraryUrlState());
-
-    expect(result.current.page).toBe(1);
-
-    act(() => result.current.setPage(result.current.page + 1));
-    rerender();
-    expect(result.current.page).toBe(2);
-    expect(lastReplacedParams().get("page")).toBe("2");
-    expect(lastReplacedParams().get("status")).toBe("failed");
-
-    act(() => result.current.setPage(result.current.page + 1));
-    rerender();
-    expect(result.current.page).toBe(3);
-    expect(lastReplacedParams().get("page")).toBe("3");
-    expect(lastReplacedParams().get("status")).toBe("failed");
-
-    act(() => result.current.setPage(result.current.page - 1));
-    rerender();
-    expect(result.current.page).toBe(2);
-    expect(lastReplacedParams().get("page")).toBe("2");
-
-    act(() => result.current.setPage(result.current.page - 1));
-    rerender();
-    expect(result.current.page).toBe(1);
-    expect(lastReplacedParams().get("page")).toBeNull();
-    expect(lastReplacedParams().get("status")).toBe("failed");
-  });
-
-  it("advances the page without dropping active filters and search", () => {
-    currentSearch = "q=rock&status=failed";
-    const { result, rerender } = renderHook(() => useLibraryUrlState());
-
-    act(() => result.current.setPage(2));
-    rerender();
-
-    const params = lastReplacedParams();
-    expect(params.get("page")).toBe("2");
-    expect(params.get("q")).toBe("rock");
-    expect(params.get("status")).toBe("failed");
   });
 
   it("composes cumulative params across successive control changes", () => {
@@ -128,26 +87,11 @@ describe("useLibraryUrlState", () => {
     rerender();
     act(() => result.current.setSort("title"));
     rerender();
-    act(() => result.current.setPage(2));
-    rerender();
 
     const params = lastReplacedParams();
     expect(params.get("status")).toBe("failed");
     expect(params.get("q")).toBe("rock");
     expect(params.get("sort")).toBe("title");
-    expect(params.get("page")).toBe("2");
-  });
-
-  it("changes rows-per-page and resets the page in one write", () => {
-    currentSearch = "page=3";
-    const { result, rerender } = renderHook(() => useLibraryUrlState());
-
-    act(() => result.current.setPageSize(100));
-    rerender();
-
-    const params = lastReplacedParams();
-    expect(params.get("rows")).toBe("100");
-    expect(params.get("page")).toBeNull();
   });
 
   it("reflects the active sort's default direction when dir is unset", () => {
@@ -157,14 +101,13 @@ describe("useLibraryUrlState", () => {
     expect(result.current.effectiveDirection).toBe("desc");
   });
 
-  it("writes dir to the URL only when it differs from the sort default, and resets the page", () => {
+  it("writes dir to the URL only when it differs from the sort default", () => {
     const { result, rerender } = renderHook(() => useLibraryUrlState());
 
     act(() => result.current.setDir("asc"));
     rerender();
 
     expect(lastReplacedParams().get("dir")).toBe("asc");
-    expect(lastReplacedParams().get("page")).toBeNull();
     expect(result.current.direction).toBe("asc");
     expect(result.current.effectiveDirection).toBe("asc");
   });
@@ -181,7 +124,7 @@ describe("useLibraryUrlState", () => {
     expect(lastReplacedParams().get("dir")).toBeNull();
   });
 
-  it("clears dir and sort when the sort changes", () => {
+  it("clears dir when the sort changes", () => {
     currentSearch = "sort=title&dir=desc";
     const { result, rerender } = renderHook(() => useLibraryUrlState());
 
@@ -191,11 +134,10 @@ describe("useLibraryUrlState", () => {
     const params = lastReplacedParams();
     expect(params.get("sort")).toBe("artist");
     expect(params.get("dir")).toBeNull();
-    expect(params.get("page")).toBeNull();
   });
 
-  it("clears sort, dir and page when the view changes", () => {
-    currentSearch = "tab=albums&sort=name&dir=asc&page=2";
+  it("clears sort and dir when the view changes", () => {
+    currentSearch = "tab=albums&sort=name&dir=asc";
     const { result, rerender } = renderHook(() => useLibraryUrlState());
 
     act(() => result.current.setTab("artists"));
@@ -205,7 +147,6 @@ describe("useLibraryUrlState", () => {
     expect(params.get("tab")).toBe("artists");
     expect(params.get("sort")).toBeNull();
     expect(params.get("dir")).toBeNull();
-    expect(params.get("page")).toBeNull();
   });
 
   it("round-trips an ignored dir value back to undefined", () => {
@@ -222,15 +163,13 @@ describe("useLibraryUrlState", () => {
     expect(result.current.filters.libraryPath).toEqual(["music", "archive"]);
   });
 
-  it("writes a library path choice to the URL and resets the page", () => {
-    currentSearch = "page=3";
+  it("writes a library path choice to the URL", () => {
     const { result, rerender } = renderHook(() => useLibraryUrlState());
 
     act(() => result.current.setFilterValues("libraryPath", ["archive"]));
     rerender();
 
     expect(lastReplacedParams().get("libraryPath")).toBe("archive");
-    expect(lastReplacedParams().get("page")).toBeNull();
   });
 
   it("drops the library path filter with the rest when the filters are cleared", () => {
@@ -241,5 +180,45 @@ describe("useLibraryUrlState", () => {
     rerender();
 
     expect(lastReplacedParams().get("libraryPath")).toBeNull();
+  });
+
+  describe("admin-only sorts", () => {
+    it.each(["tracks", "albums", "artists", "playlists"])("never lists allPlays for a member on the %s view", (tab) => {
+      currentSearch = `tab=${tab}`;
+      const { result } = renderHook(() => useLibraryUrlState());
+
+      const values = result.current.sortOptions.map((option) => option.value);
+      expect(values).not.toContain("allPlays");
+      expect(values).toContain("myPlays");
+    });
+
+    it("lists allPlays for an admin", () => {
+      auth.isAdmin = true;
+      const { result } = renderHook(() => useLibraryUrlState());
+
+      expect(result.current.sortOptions.map((option) => option.value)).toContain("allPlays");
+    });
+
+    it("falls back to the view default when a member's URL asks for allPlays", () => {
+      currentSearch = "sort=allPlays";
+      const { result } = renderHook(() => useLibraryUrlState());
+
+      expect(result.current.sort).toBe("recent");
+    });
+
+    it("keeps allPlays from the URL for an admin", () => {
+      auth.isAdmin = true;
+      currentSearch = "sort=allPlays";
+      const { result } = renderHook(() => useLibraryUrlState());
+
+      expect(result.current.sort).toBe("allPlays");
+    });
+
+    it("keeps a sort a member can see", () => {
+      currentSearch = "sort=myPlays";
+      const { result } = renderHook(() => useLibraryUrlState());
+
+      expect(result.current.sort).toBe("myPlays");
+    });
   });
 });

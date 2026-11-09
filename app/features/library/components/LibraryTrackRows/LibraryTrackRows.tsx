@@ -14,6 +14,7 @@ export function LibraryTrackRows({
   onEnqueue,
   onSearchBetterQuality,
   fileActions,
+  onHold,
 }: LibraryTrackRowsProps) {
   const { t } = useTranslation("library");
 
@@ -30,6 +31,7 @@ export function LibraryTrackRows({
           onEnqueue={onEnqueue}
           onSearchBetterQuality={onSearchBetterQuality}
           fileActions={fileActions}
+          onHold={onHold ? () => onHold(item.id) : undefined}
         />
       ))}
     </ul>

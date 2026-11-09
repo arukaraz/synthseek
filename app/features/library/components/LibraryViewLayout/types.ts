@@ -11,6 +11,9 @@ interface TableContent<TItem> {
   layout: "table";
   columns: ColumnDef<TItem>[];
   getRowId: (item: TItem) => string;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  fetchNextPage: () => void;
   selection?: TrackSelectionConfig;
   rows?: ReactNode;
 }

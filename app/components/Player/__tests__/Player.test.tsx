@@ -6,7 +6,7 @@ import "@test/mocks/next.mock";
 import { createPlayerActions, createPlayerDevice, createPlayerTrack, createPlayerView } from "@test/factories";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
-import { PLAYER_HEADER_SLOT_ID } from "../constants";
+import { PLAYER_HEADER_SLOT_ID, PLAYER_MASTHEAD_SLOT_ID } from "../constants";
 import { Player } from "../Player";
 import type { PlayerView } from "../types";
 
@@ -60,6 +60,7 @@ beforeEach(() => {
 
 afterEach(() => {
   document.getElementById(PLAYER_HEADER_SLOT_ID)?.remove();
+  document.getElementById(PLAYER_MASTHEAD_SLOT_ID)?.remove();
 });
 
 describe("the player dock", () => {
@@ -95,6 +96,19 @@ describe("the player dock", () => {
 
     expect(screen.getByRole("button", { name: enPlayer.controls.more })).toBeInTheDocument();
     slot.remove();
+  });
+
+  it("moves into the phone's header with no bottom bar left behind", () => {
+    const slot = document.createElement("div");
+    slot.id = PLAYER_MASTHEAD_SLOT_ID;
+    document.body.appendChild(slot);
+    wideScreen = false;
+
+    const { container } = renderPlayer();
+
+    expect(container.querySelector("[data-cy=player]")).toBeNull();
+    expect(slot.querySelector("[data-cy=player]")).not.toBeNull();
+    expect(within(slot).getByRole("button", { name: enPlayer.controls.next })).toBeInTheDocument();
   });
 
   it("names the track, the artist and the album it is playing", () => {

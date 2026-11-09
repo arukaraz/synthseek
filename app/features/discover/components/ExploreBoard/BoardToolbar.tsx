@@ -42,10 +42,7 @@ export function BoardToolbar({ editing, onCustomize, onDone, onAddSpacer, onCust
     <div
       data-board-dock
       className={boardDock({ editing })}
-      style={toastOffsetVars(
-        resolveToastMobileOffset(dockVisible, playerDock),
-        resolveToastOffset(dockVisible, playerDock)
-      )}
+      style={toastOffsetVars(resolveToastMobileOffset(dockVisible), resolveToastOffset(dockVisible, playerDock))}
     >
       {editing ? (
         <div className={boardMenu()} role="toolbar" aria-label={t("board.customize")}>

@@ -11,6 +11,13 @@ export type LibraryAlbumsInput = LibraryInputs["getAlbums"];
 export type LibraryArtistsInput = LibraryInputs["getArtists"];
 export type LibraryPlaylistsInput = LibraryInputs["getPlaylists"];
 
+type WithoutPaging<TInput> = Omit<TInput, "offset" | "limit">;
+
+export type LibraryTracksQuery = WithoutPaging<LibraryTracksInput>;
+export type LibraryAlbumsQuery = WithoutPaging<LibraryAlbumsInput>;
+export type LibraryArtistsQuery = WithoutPaging<LibraryArtistsInput>;
+export type LibraryPlaylistsQuery = WithoutPaging<LibraryPlaylistsInput>;
+
 export type LibraryTracksResult = LibraryOutputs["getTracks"];
 export type LibraryAlbumsResult = LibraryOutputs["getAlbums"];
 export type LibraryArtistsResult = LibraryOutputs["getArtists"];
@@ -40,6 +47,11 @@ export interface LibraryInfiniteResult<TItem> {
   isFetchingNextPage: boolean;
   isLoading: boolean;
   isError: boolean;
+}
+
+export interface LibraryTracksInfiniteResult extends LibraryInfiniteResult<LibraryTrackItem> {
+  appliedSources: string[];
+  isRefreshing: boolean;
 }
 
 export interface LibraryArtistsInfiniteResult extends LibraryInfiniteResult<LibraryArtistItem> {

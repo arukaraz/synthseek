@@ -37,7 +37,7 @@ export function PlayerMoreMenu({ view, actions }: PlayerProps) {
   const { attention, name } = useMoreAttention(view);
   const wide = useMediaQuery(STAGE_WIDE_QUERY, true);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const groups = moreMenuGroups(view, actions, t);
+  const groups = moreMenuGroups(view, actions, t, wide);
 
   const trigger = (
     <button

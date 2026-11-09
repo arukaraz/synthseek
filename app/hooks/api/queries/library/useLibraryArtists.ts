@@ -4,14 +4,14 @@ import { type InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/r
 import { useCallback, useMemo, useRef } from "react";
 
 import { LIBRARY_BATCH_LIMIT, LIBRARY_BATCH_LIMIT_MAX, LIBRARY_GC_TIME, LIBRARY_STALE_TIME } from "./constants";
-import { batchLimitThrough, cachedPageSize, getNextOffset, loadedCount, stripPaging } from "./helpers";
-import type { LibraryArtistsInfiniteResult, LibraryArtistsInput, LibraryArtistsResult } from "./types";
+import { batchLimitThrough, cachedPageSize, getNextOffset, loadedCount } from "./helpers";
+import type { LibraryArtistsInfiniteResult, LibraryArtistsQuery, LibraryArtistsResult } from "./types";
 
-export function useLibraryArtists(input: LibraryArtistsInput, enabled: boolean): LibraryArtistsInfiniteResult {
+export function useLibraryArtists(input: LibraryArtistsQuery, enabled: boolean): LibraryArtistsInfiniteResult {
   const utils = trpc.useUtils();
   const queryClient = useQueryClient();
   const throughRef = useRef(0);
-  const queryKey = getQueryKey(trpc.library.getArtists, stripPaging(input), "infinite");
+  const queryKey = getQueryKey(trpc.library.getArtists, input, "infinite");
 
   const query = useInfiniteQuery({
     queryKey,

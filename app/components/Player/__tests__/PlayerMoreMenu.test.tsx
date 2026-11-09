@@ -1,8 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { createPlayerActions, createPlayerDevice, createPlayerView } from "@test/factories";
+import { mockMatchMedia } from "@test/mocks";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
 import { PlayerMoreMenu } from "../PlayerMoreMenu";
@@ -291,5 +292,32 @@ describe("the more menu on the narrow bar", () => {
     await user.click(screen.getByRole("menuitem", { name: enPlayer.controls.restoreMode }));
 
     expect(actions.selectMode).toHaveBeenCalledWith("normal");
+  });
+});
+
+describe("the more sheet on a phone", () => {
+  beforeEach(() => {
+    mockMatchMedia(false);
+  });
+
+  afterEach(() => {
+    mockMatchMedia(true);
+  });
+
+  it.each(["normal", "compact"] as const)("leaves the player mode out while in %s mode", async (mode) => {
+    const { user } = renderMenu({ mode });
+    await opened(user);
+
+    expect(screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.menu.scrobbling}`) })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: enPlayer.controls.modes })).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: enPlayer.controls.restoreMode })).not.toBeInTheDocument();
+  });
+
+  it("leaves the signal chain out, since no dock draws it on a phone", async () => {
+    const { user } = renderMenu();
+    await opened(user);
+
+    expect(screen.getByRole("menuitemcheckbox", { name: enPlayer.controls.shuffle })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitemcheckbox", { name: enPlayer.controls.chain })).not.toBeInTheDocument();
   });
 });

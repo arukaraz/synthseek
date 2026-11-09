@@ -9,17 +9,24 @@ export const gridBackgroundStyle: CSSProperties = {
   backgroundSize: "50px 50px",
 };
 
-export const contentShell = cva("relative flex overflow-hidden", {
-  variants: {
-    player: {
-      hidden: "h-screen-minus-header-and-nav sm:h-screen-minus-header",
-      docked:
-        "player-metrics h-[calc(var(--height-screen-minus-header-and-nav)-var(--player-dock-height))] sm:h-[calc(var(--height-screen-minus-header)-var(--player-dock-height))]",
+export const contentShell = cva(
+  "relative flex overflow-hidden max-sm:transition-[height] max-sm:duration-300 max-sm:ease-out motion-reduce:transition-none",
+  {
+    variants: {
+      collapsed: {
+        true: "max-sm:h-[calc(100dvh-var(--height-bottom-nav))]",
+        false: "",
+      },
+      player: {
+        hidden: "h-screen-minus-header-and-nav sm:h-screen-minus-header",
+        docked:
+          "player-metrics h-[calc(var(--height-screen-minus-header-and-nav)-var(--player-dock-height))] sm:h-[calc(var(--height-screen-minus-header)-var(--player-dock-height))]",
+      },
+      chain: {
+        true: "player-metrics-chain",
+        false: "",
+      },
     },
-    chain: {
-      true: "player-metrics-chain",
-      false: "",
-    },
-  },
-  defaultVariants: { player: "hidden", chain: false },
-});
+    defaultVariants: { player: "hidden", chain: false, collapsed: false },
+  }
+);

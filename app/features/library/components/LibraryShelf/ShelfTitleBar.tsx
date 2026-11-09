@@ -15,12 +15,16 @@ import {
   shelfSearchInput,
   shelfSearchRow,
   shelfTitle,
+  shelfTitleLine,
   shelfTitleRow,
   shelfTitleText,
+  shelfViewLabel,
+  shelfViewName,
+  shelfViewSlash,
 } from "./styles";
 import type { ShelfTitleBarProps } from "./types";
 
-export function ShelfTitleBar({ controller, total }: ShelfTitleBarProps) {
+export function ShelfTitleBar({ controller, total, collapsed }: ShelfTitleBarProps) {
   const { t } = useTranslation(["library", "common"]);
   const [searchOpen, setSearchOpen] = useState(false);
   const [input, setInput] = useDebouncedDraft(controller.search, controller.setSearch);
@@ -42,8 +46,16 @@ export function ShelfTitleBar({ controller, total }: ShelfTitleBarProps) {
     <>
       <div className={shelfTitleRow()}>
         <div className={shelfTitleText()}>
-          <h1 className={shelfTitle()}>{t("page.shelf.title")}</h1>
-          <span className={shelfCount()}>
+          <div className={shelfTitleLine()}>
+            <h1 className={shelfTitle()}>{t("page.shelf.title")}</h1>
+            <span className={shelfViewName({ shown: collapsed })} aria-hidden={!collapsed} data-shelf-view>
+              <span className={shelfViewSlash()} aria-hidden>
+                /
+              </span>
+              <span className={shelfViewLabel()}>{t(controller.config.labelKey)}</span>
+            </span>
+          </div>
+          <span className={shelfCount({ collapsed })} aria-hidden={collapsed}>
             {narrowed
               ? t(`page.shelf.matches.${controller.view}`, { count: total })
               : t(`page.counts.${controller.view}`, { count: total })}

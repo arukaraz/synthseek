@@ -49,6 +49,13 @@
     --player-dock-height: calc(var(--player-bar-height) + var(--height-player-chain) + var(--player-dock-gap));
   }
 
+  @media (max-width: 39.999rem) {
+    .player-metrics,
+    .player-metrics-chain {
+      --player-dock-height: 0rem;
+    }
+  }
+
   .player-stage-ring {
     --player-ring-side: 3.25rem;
     --player-ring-gap: 0.625rem;

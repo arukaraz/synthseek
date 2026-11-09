@@ -14,6 +14,7 @@ export interface LibraryTrackRowsProps extends TrackRowActions {
   items: LibraryTrackItem[];
   selection: LibrarySelection;
   selecting: boolean;
+  onHold?: (trackId: string) => void;
 }
 
 export interface LibraryTrackRowProps extends TrackRowActions {
@@ -21,4 +22,5 @@ export interface LibraryTrackRowProps extends TrackRowActions {
   selecting: boolean;
   selected: boolean;
   onToggle: () => void;
+  onHold?: () => void;
 }

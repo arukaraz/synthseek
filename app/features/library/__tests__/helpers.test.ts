@@ -11,15 +11,14 @@ import {
   buildArtistsInput,
   buildPlaylistsInput,
   buildTracksInput,
-  clampPage,
-  computePageCount,
   countActiveFilters,
   fileJobReport,
   isLibraryView,
   parseFilterValues,
   resolveEffectiveDirection,
   rangePreviewTone,
-  resolvePageSize,
+  nextShelfCollapsed,
+  resolveVisibleSort,
   selectedAlbumsFileTarget,
   selectedTracksFileTarget,
   serializeFilterValues,
@@ -28,8 +27,23 @@ import {
   topFacetValues,
   trackFileTarget,
   viewCountFor,
+  visibleSortOptions,
 } from "../helpers";
 import type { FacetSearchState, FilterParamMap, LibraryFileJob, LibraryFileTarget, LibraryView } from "../types";
+
+describe("nextShelfCollapsed", () => {
+  it("folds past the threshold only when the list has room to keep scrolling once folded", () => {
+    expect(nextShelfCollapsed(false, 25, 321)).toBe(true);
+    expect(nextShelfCollapsed(false, 24, 2000)).toBe(false);
+    expect(nextShelfCollapsed(false, 400, 320)).toBe(false);
+  });
+
+  it("stays folded anywhere but the very top", () => {
+    expect(nextShelfCollapsed(true, 1, 0)).toBe(true);
+    expect(nextShelfCollapsed(true, 0, 2000)).toBe(false);
+    expect(nextShelfCollapsed(true, -8, 2000)).toBe(false);
+  });
+});
 
 describe("parseFilterValues", () => {
   it("returns an empty array for undefined or empty input", () => {
@@ -62,38 +76,42 @@ describe("toggleFilterValue", () => {
   });
 });
 
-describe("clampPage", () => {
-  it("falls back to 1 for invalid or out-of-range input", () => {
-    expect(clampPage("0")).toBe(1);
-    expect(clampPage("-3")).toBe(1);
-    expect(clampPage("abc")).toBe(1);
+describe("visibleSortOptions", () => {
+  const views: LibraryView[] = ["tracks", "albums", "artists", "playlists"];
+
+  it.each(views)("hides the admin-only play-count sort from a member on the %s view", (view) => {
+    const values = visibleSortOptions(VIEW_CONFIG[view], false).map((option) => option.value);
+
+    expect(values).not.toContain("allPlays");
+    expect(values).toContain("myPlays");
+    expect(values).toContain("lastPlayed");
   });
 
-  it("parses a valid page number", () => {
-    expect(clampPage("7")).toBe(7);
-  });
-});
+  it.each(views)("offers an admin every sort on the %s view", (view) => {
+    const config = VIEW_CONFIG[view];
 
-describe("resolvePageSize", () => {
-  it("falls back to the first option for an unknown size", () => {
-    expect(resolvePageSize("999")).toBe(50);
-    expect(resolvePageSize("abc")).toBe(50);
-  });
-
-  it("accepts an allowed size", () => {
-    expect(resolvePageSize("100")).toBe(100);
-    expect(resolvePageSize("200")).toBe(200);
+    expect(visibleSortOptions(config, true)).toEqual(config.sortOptions);
+    expect(visibleSortOptions(config, true).map((option) => option.value)).toContain("allPlays");
   });
 });
 
-describe("computePageCount", () => {
-  it("returns at least 1 for an empty result", () => {
-    expect(computePageCount(0, 50)).toBe(1);
+describe("resolveVisibleSort", () => {
+  it("keeps a sort the member can see", () => {
+    expect(resolveVisibleSort(VIEW_CONFIG.tracks, "myPlays", false)).toBe("myPlays");
   });
 
-  it("rounds up partial pages", () => {
-    expect(computePageCount(101, 50)).toBe(3);
-    expect(computePageCount(100, 50)).toBe(2);
+  it("falls back to the view default when a member asks for an admin-only sort", () => {
+    expect(resolveVisibleSort(VIEW_CONFIG.tracks, "allPlays", false)).toBe("recent");
+    expect(resolveVisibleSort(VIEW_CONFIG.artists, "allPlays", false)).toBe("name");
+  });
+
+  it("keeps an admin-only sort for an admin", () => {
+    expect(resolveVisibleSort(VIEW_CONFIG.tracks, "allPlays", true)).toBe("allPlays");
+  });
+
+  it("falls back to the view default for a sort the view does not have", () => {
+    expect(resolveVisibleSort(VIEW_CONFIG.albums, "nonsense", true)).toBe("recent");
+    expect(resolveVisibleSort(VIEW_CONFIG.albums, "nonsense", false)).toBe("recent");
   });
 });
 
@@ -143,8 +161,6 @@ describe("buildTracksInput", () => {
 
   it("maps valid status and format values and drops unknown ones", () => {
     const input = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "recent",
       direction: undefined,
@@ -158,8 +174,6 @@ describe("buildTracksInput", () => {
 
   it("omits empty filter arrays as undefined", () => {
     const input = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "recent",
       direction: undefined,
@@ -173,8 +187,6 @@ describe("buildTracksInput", () => {
 
   it("encodes the orphan flag and forwards facet search terms", () => {
     const input = buildTracksInput({
-      limit: 50,
-      offset: 100,
       q: "love",
       sort: "title",
       direction: undefined,
@@ -186,14 +198,11 @@ describe("buildTracksInput", () => {
     expect(input.filters?.artist).toEqual(["Foo"]);
     expect(input.sort).toBe("title");
     expect(input.q).toBe("love");
-    expect(input.offset).toBe(100);
     expect(input.facetSearch).toEqual({ artist: "Fo" });
   });
 
   it("forwards requestedBy user ids and omits the empty list", () => {
     const withRequester = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "recent",
       direction: undefined,
@@ -203,8 +212,6 @@ describe("buildTracksInput", () => {
     expect(withRequester.filters?.requestedBy).toEqual(["user-1", "user-2"]);
 
     const withoutRequester = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "recent",
       direction: undefined,
@@ -216,8 +223,6 @@ describe("buildTracksInput", () => {
 
   it("falls back to the recent sort for an unknown sort value", () => {
     const input = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "nonsense",
       direction: undefined,
@@ -230,8 +235,6 @@ describe("buildTracksInput", () => {
 
   it("omits direction when unset and forwards it when present", () => {
     const withoutDir = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "recent",
       direction: undefined,
@@ -241,8 +244,6 @@ describe("buildTracksInput", () => {
     expect(withoutDir.direction).toBeUndefined();
 
     const withDir = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "recent",
       direction: "asc",
@@ -254,7 +255,7 @@ describe("buildTracksInput", () => {
 });
 
 describe("sort and facet search per view", () => {
-  const base = { limit: 40, offset: 0, q: undefined, direction: undefined, filters: {}, facetSearch: {} };
+  const base = { q: undefined, direction: undefined, filters: {}, facetSearch: {} };
 
   it("keeps every tracks sort option as chosen", () => {
     for (const option of VIEW_CONFIG.tracks.sortOptions) {
@@ -435,8 +436,6 @@ describe("library path facet", () => {
 
   it("sends the chosen path ids with the tracks query", () => {
     const input = buildTracksInput({
-      limit: 50,
-      offset: 0,
       q: undefined,
       sort: "recent",
       direction: undefined,
@@ -448,7 +447,7 @@ describe("library path facet", () => {
   });
 
   it("sends the chosen path ids with the albums query, and nothing when none is chosen", () => {
-    const base = { limit: 50, offset: 0, q: undefined, sort: "recent", direction: undefined, facetSearch: {} };
+    const base = { q: undefined, sort: "recent", direction: undefined, facetSearch: {} };
 
     expect(buildAlbumsInput({ ...base, filters: { libraryPath: ["archive"] } }).filters?.libraryPath).toEqual([
       "archive",

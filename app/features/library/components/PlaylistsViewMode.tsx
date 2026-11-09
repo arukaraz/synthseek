@@ -3,7 +3,6 @@
 import { playlistLibraryTarget } from "@features/content-detail";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useLibraryPlaylists } from "@hooks/api";
-import { LIBRARY_BATCH_LIMIT } from "@hooks/api/queries/library/constants";
 import type { LibraryPlaylistItem } from "@hooks/api/queries/library/types";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { playlistOriginLabel } from "@utils/playlist";
@@ -27,8 +26,6 @@ export function PlaylistsViewMode({ controller, shell }: LibraryViewModeProps) {
   const input = useMemo(
     () =>
       buildPlaylistsInput({
-        limit: LIBRARY_BATCH_LIMIT,
-        offset: 0,
         q: controller.search || undefined,
         sort: controller.sort,
         direction: controller.direction,

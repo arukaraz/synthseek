@@ -20,7 +20,6 @@ export { useGetPlaylistSyncAllState } from "./queries/useGetPlaylistSyncAllState
 export { usePlaylistSyncTargets } from "./queries/usePlaylistSyncTargets";
 
 export { useLibraryTracks } from "./queries/library/useLibraryTracks";
-export { useLibraryTracksPrefetch } from "./queries/library/useLibraryTracksPrefetch";
 export { useLibraryAlbums } from "./queries/library/useLibraryAlbums";
 export { useLibraryArtists } from "./queries/library/useLibraryArtists";
 export { useLibraryPlaylists } from "./queries/library/useLibraryPlaylists";

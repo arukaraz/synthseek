@@ -1,9 +1,13 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const headerContainer = cva(
-  "sticky top-0 z-50 h-16 w-full border-b border-fg/5 sm:h-[var(--height-header-wide)]",
+  "sticky top-0 z-50 h-16 w-full border-b border-fg/5 max-sm:relative max-sm:transition-[margin-top] max-sm:duration-300 max-sm:ease-out sm:h-[var(--height-header-wide)] motion-reduce:transition-none",
   {
     variants: {
+      collapsed: {
+        true: "max-sm:-mt-16",
+        false: "",
+      },
       blur: {
         none: "bg-surface/80",
         responsive: "bg-surface/80 sm:bg-surface/40 sm:backdrop-blur-2xl",
@@ -11,6 +15,7 @@ export const headerContainer = cva(
     },
     defaultVariants: {
       blur: "responsive",
+      collapsed: false,
     },
   }
 );
@@ -84,6 +89,36 @@ export const kbd = cva(
 export const clearButton = cva("text-fg/40 hover:bg-fg/10 hover:text-fg shrink-0 rounded p-1 transition-colors");
 
 export const playerSlot = cva("hidden shrink-0 items-center empty:hidden sm:flex");
+
+export const searchEmblem = cva(
+  "focus-visible:ring-primary-400 flex h-11 shrink-0 items-end rounded-lg pb-2 outline-none focus-visible:ring-2 sm:hidden"
+);
+
+export const searchEmblemLogo = cva("h-[27px] w-[14px]");
+
+export const searchEmblemLens = cva("text-fg -ml-0.5 size-3.5");
+
+export const omniSlot = cva("flex min-w-0 flex-1", {
+  variants: {
+    phone: {
+      collapsed: "max-sm:hidden",
+      open: "omni-reveal",
+      shown: "",
+    },
+  },
+  defaultVariants: { phone: "shown" },
+});
+
+export const omniClose = cva(
+  "text-fg/70 hover:text-fg hover:bg-fg/10 focus-visible:ring-primary-400 grid size-10 shrink-0 place-items-center rounded-full outline-none focus-visible:ring-2 sm:hidden"
+);
+
+export const mastheadSlot = cva("flex min-w-0 flex-1 items-center self-stretch empty:hidden sm:hidden", {
+  variants: {
+    covered: { true: "hidden", false: "" },
+  },
+  defaultVariants: { covered: false },
+});
 
 export const rightCluster = cva("hidden shrink-0 items-center gap-2.5 sm:flex");
 
