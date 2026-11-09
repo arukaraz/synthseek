@@ -199,6 +199,28 @@ describe("content-detail helpers", () => {
       ).toBe("inLibrary");
     });
 
+    it("returns requestMissing while one track is in flight and the rest were never requested", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 1,
+          failedTrackCount: 0,
+          libraryTrackCount: 0,
+          totalTracks: 14,
+        })
+      ).toBe("requestMissing");
+    });
+
+    it("returns requestMissing while some tracks are in flight beside failures and never-requested gaps", () => {
+      expect(
+        computeRequestState({
+          requestedTrackCount: 8,
+          failedTrackCount: 2,
+          libraryTrackCount: 5,
+          totalTracks: 12,
+        })
+      ).toBe("requestMissing");
+    });
+
     it("returns requestMissing once it settles with failures and nothing in flight", () => {
       expect(
         computeRequestState({
@@ -235,7 +257,7 @@ describe("content-detail helpers", () => {
     it("returns inLibrary when failures coexist with in-flight tracks", () => {
       expect(
         computeRequestState({
-          requestedTrackCount: 8,
+          requestedTrackCount: 10,
           failedTrackCount: 2,
           libraryTrackCount: 5,
           totalTracks: 12,
