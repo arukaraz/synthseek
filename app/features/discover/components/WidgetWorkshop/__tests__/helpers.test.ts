@@ -20,6 +20,7 @@ import {
   viewChoicesOf,
   withBlock,
   withFittingView,
+  withLockedSize,
   withMeasure,
   serverChoicesOf,
   withServer,
@@ -120,6 +121,17 @@ describe("withFittingView and viewChoicesOf", () => {
       suggested: false,
     });
     expect(all.find((choice) => choice.block === "heatmap")?.fits).toBe(false);
+  });
+
+  it("pins the default size to the only size a locked look comes in, and leaves the others alone", () => {
+    const mix = {
+      ...NEW_WIDGET_DRAFT,
+      defaultSize: "L" as const,
+      view: { ...NEW_WIDGET_DRAFT.view, block: "mix" as const },
+    };
+    expect(withLockedSize(mix).defaultSize).toBe("S");
+    const list = { ...NEW_WIDGET_DRAFT, defaultSize: "L" as const };
+    expect(withLockedSize(list)).toBe(list);
   });
 
   it("offers a view that only needs the comparison, and picking it turns the comparison on", () => {

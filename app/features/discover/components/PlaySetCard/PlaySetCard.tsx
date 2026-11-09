@@ -20,18 +20,7 @@ import {
   mixTag,
   mixTitle,
 } from "../DiscoveryMixes/styles";
-import { PLAY_SET_MOSAIC_SHAPES } from "./constants";
-import {
-  pinFlag,
-  playButton,
-  playSetCard,
-  playSetInfo,
-  playSetOpen,
-  playSetPoster,
-  singleCover,
-  tagRow,
-  tagText,
-} from "./styles";
+import { pinFlag, playButton, playSetOpen, playSetPoster, singleCover, tagRow, tagText } from "./styles";
 import type { PlaySetCardProps } from "./types";
 
 export function PlaySetCard({
@@ -49,19 +38,17 @@ export function PlaySetCard({
   actionKind = "play",
   onOpen,
   revealAction = false,
-  layout = "stack",
   pinned = false,
 }: PlaySetCardProps) {
   const [onlyCover] = covers;
-  const shape = PLAY_SET_MOSAIC_SHAPES[layout];
 
   return (
-    <article data-acc={accent} className={cn(mixCard(), playSetCard({ layout }))}>
-      <div className={playSetPoster({ layout })}>
-        {shape === "square" && covers.length === 1 && onlyCover ? (
+    <article data-acc={accent} className={mixCard()}>
+      <div className={playSetPoster()}>
+        {covers.length === 1 && onlyCover ? (
           <Image {...artworkImage(onlyCover)} alt="" fill sizes="320px" className={singleCover()} />
         ) : (
-          <DiscoveryMixMosaic covers={covers} fallbackSeed={seed} shape={shape} />
+          <DiscoveryMixMosaic covers={covers} fallbackSeed={seed} />
         )}
         <span className={mixPosterTint()} />
         <span className={mixPosterShade()} />
@@ -84,7 +71,7 @@ export function PlaySetCard({
           </button>
         ) : null}
       </div>
-      <div className={cn(mixInfo(), playSetInfo({ layout }))}>
+      <div className={mixInfo()}>
         <span className={tagRow()}>
           <span className={cn(mixTag(), tagText())}>{tag}</span>
           {info ? <InfoTooltip title={title} description={info} /> : null}

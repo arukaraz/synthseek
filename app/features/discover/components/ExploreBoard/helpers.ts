@@ -10,13 +10,14 @@ import type {
   BoardSize,
   BoardWidgetKey,
 } from "@hooks/api/queries/board/types";
-import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
+import type { WidgetBlock, WidgetDocument } from "@hooks/api/queries/widgets/types";
 
 import {
   BOARD_SCHEMA_VERSION,
   BOARD_SIZE_ORDER,
   BOARD_WIDGETS,
   CUSTOM_BLOCK_HEIGHTS,
+  CUSTOM_BLOCK_LOCKS,
   DEFAULT_BOARD,
   EDIT_PASSTHROUGH_SELECTOR,
   FALLBACK_BLOCK_HEIGHT,
@@ -59,14 +60,36 @@ export function boardKeyAction(event: Pick<KeyboardEvent, "key" | "shiftKey">): 
 export function runBoardKey(
   event: Pick<KeyboardEvent, "key" | "shiftKey" | "preventDefault">,
   item: BoardItem,
-  actions: BoardTileLayoutActions
+  actions: BoardTileLayoutActions,
+  custom: BoardCustomWidgets
 ): void {
   const action = boardKeyAction(event);
   if (!action) return;
   event.preventDefault();
   if (action.kind === "remove") actions.remove(item.id);
   else if (action.kind === "move") actions.move(item.id, action.delta);
-  else actions.resize(item.id, cycleSize(BOARD_SIZE_ORDER, item.size, action.delta));
+  else actions.resize(item.id, cycleSize(allowedSizesOf(item, custom), item.size, action.delta));
+}
+
+export function lockedBlockSize(block: WidgetBlock): BoardSize | undefined {
+  return CUSTOM_BLOCK_LOCKS[block];
+}
+
+function lockedSizeOf(item: BoardItem, custom: BoardCustomWidgets): BoardSize | undefined {
+  if (item.kind === "builtin") return BOARD_WIDGETS[item.widget].lockedTo;
+  if (item.kind === "spacer") return undefined;
+  const block = custom.get(item.widgetId)?.view.block;
+  return block ? lockedBlockSize(block) : undefined;
+}
+
+export function allowedSizesOf(item: BoardItem, custom: BoardCustomWidgets): readonly BoardSize[] {
+  const locked = lockedSizeOf(item, custom);
+  return locked ? [locked] : BOARD_SIZE_ORDER;
+}
+
+function withAllowedSize(item: BoardItem, custom: BoardCustomWidgets): BoardItem {
+  const locked = lockedSizeOf(item, custom);
+  return locked === undefined || locked === item.size ? item : { ...item, size: locked };
 }
 
 export function heightOf(widget: BoardWidgetKey, size: BoardSize): BoardHeight {
@@ -155,18 +178,21 @@ export function uniqueTileId(base: string, items: readonly BoardItem[]): string 
   return `${base}-${suffix}`;
 }
 
-export function mobileCopyOf(items: readonly BoardItem[]): BoardItem[] {
+export function mobileCopyOf(items: readonly BoardItem[], custom: BoardCustomWidgets): BoardItem[] {
   return items
     .filter((item) => item.kind !== "spacer" || tileHasBackground(item))
-    .map((item) => ({ ...item, size: MOBILE_COPY_SIZE }));
+    .map((item) => withAllowedSize({ ...item, size: MOBILE_COPY_SIZE }, custom));
 }
 
-export function boardListsOf(layout: BoardLayout | null | undefined): BoardLists {
+export function boardListsOf(layout: BoardLists | null | undefined, custom: BoardCustomWidgets): BoardLists {
   if (!layout) {
     const items = DEFAULT_BOARD.map((item) => ({ ...item }));
-    return { items, mobile: mobileCopyOf(items) };
+    return { items, mobile: mobileCopyOf(items, custom) };
   }
-  return { items: [...layout.items], mobile: [...layout.mobile] };
+  return {
+    items: layout.items.map((item) => withAllowedSize(item, custom)),
+    mobile: layout.mobile.map((item) => withAllowedSize(item, custom)),
+  };
 }
 
 export function layoutOf(lists: BoardLists): BoardLayout {
@@ -228,7 +254,19 @@ export function packBoard(items: readonly BoardItem[], device: BoardDevice, cust
     placed.push({ item, size, col, row, cols, rows: span.rows });
   }
 
-  return placed;
+  return placed.map((tile) => stretchToNextTile(tile, placed));
+}
+
+function sharesColumns(a: PlacedTile, b: PlacedTile): boolean {
+  return a.col < b.col + b.cols && b.col < a.col + a.cols;
+}
+
+function stretchToNextTile(tile: PlacedTile, placed: readonly PlacedTile[]): PlacedTile {
+  if (tile.item.kind === "spacer") return tile;
+  const nextRow = placed
+    .filter((other) => other.row > tile.row && sharesColumns(tile, other))
+    .reduce((top, other) => Math.min(top, other.row), Number.POSITIVE_INFINITY);
+  return Number.isFinite(nextRow) ? { ...tile, rows: nextRow - tile.row } : tile;
 }
 
 export function placementsById(tiles: readonly PlacedTile[]): Map<string, PlacedTile> {
@@ -250,8 +288,13 @@ export function moveItemToEdge(items: readonly BoardItem[], id: string, edge: Bo
   return moveItem(items, id, edge === "top" ? 0 : items.length - 1);
 }
 
-export function resizeItem(items: readonly BoardItem[], id: string, size: BoardSize): BoardItem[] {
-  return items.map((item) => (item.id === id ? { ...item, size } : item));
+export function resizeItem(
+  items: readonly BoardItem[],
+  id: string,
+  size: BoardSize,
+  custom: BoardCustomWidgets
+): BoardItem[] {
+  return items.map((item) => (item.id === id ? withAllowedSize({ ...item, size }, custom) : item));
 }
 
 export function toggleBackground(items: readonly BoardItem[], id: string): BoardItem[] {
@@ -281,7 +324,12 @@ export function appendWidget(items: readonly BoardItem[], widget: BoardWidgetKey
 export function appendCustomWidget(items: readonly BoardItem[], widget: WidgetDocument): BoardItem[] {
   return [
     ...items,
-    { kind: "custom", id: uniqueTileId(widget.id, items), widgetId: widget.id, size: widget.defaultSize },
+    {
+      kind: "custom",
+      id: uniqueTileId(widget.id, items),
+      widgetId: widget.id,
+      size: lockedBlockSize(widget.view.block) ?? widget.defaultSize,
+    },
   ];
 }
 

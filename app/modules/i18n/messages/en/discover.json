@@ -219,7 +219,8 @@
       "remove": "Remove {{name}}",
       "drag": "Drag {{name}}",
       "sizes": "Size of {{name}}",
-      "label": "{{name}}, position {{position}} of {{total}}"
+      "label": "{{name}}, position {{position}} of {{total}}",
+      "sizeLocked": "{{name}} only comes in {{size}}"
     },
     "sizes": {
       "S": "S",
@@ -397,12 +398,12 @@
     "title": "Continue listening",
     "subtitle": "Your play queue",
     "empty": "Nothing waiting. Play something and it stays here.",
-    "position": "{{artist}} · {{index}} of {{total}}",
     "time": "{{position}} / {{duration}}",
     "resume": "Resume",
     "pause": "Pause",
     "recent": "Recently played",
-    "played": "{{artist}} · {{when}}"
+    "played": "{{artist}} · {{when}}",
+    "queueBadge": "Up next · {{index}} of {{total}}"
   },
   "rarities": {
     "title": "Your rarities",

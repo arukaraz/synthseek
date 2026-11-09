@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import type { BoardItem } from "@hooks/api/queries/board/types";
 
 import { MOBILE_COPY_SIZE } from "../constants";
-import { mobileCopyOf } from "../helpers";
+import { customWidgetsById, mobileCopyOf } from "../helpers";
 
 const serverConstantsPath = resolve(process.cwd(), "../server/utils/constants/board.ts");
 const serverServicePath = resolve(process.cwd(), "../server/services/board/board-layout.service.ts");
@@ -17,7 +17,7 @@ function serverSource(path: string): string {
 }
 
 describe.skipIf(!serverSourcePresent)("mobile copy parity (web <-> server)", () => {
-  it("copies every tile at the size the server copies it at", () => {
+  it("copies every unlocked tile at the size the server copies it at", () => {
     expect(/MOBILE_COPY_SIZE:\s*"([SML])"/.exec(serverSource(serverConstantsPath))?.[1]).toBe(MOBILE_COPY_SIZE);
   });
 
@@ -29,7 +29,7 @@ describe.skipIf(!serverSourcePresent)("mobile copy parity (web <-> server)", () 
     const shown: BoardItem = { kind: "spacer", id: "t", size: "S", rows: 2 };
     const widget: BoardItem = { kind: "builtin", id: "w", widget: "mixes", size: "L", background: false };
 
-    expect(mobileCopyOf([bare, shown, widget]).map((item) => item.id)).toEqual(["t", "w"]);
+    expect(mobileCopyOf([bare, shown, widget], customWidgetsById([])).map((item) => item.id)).toEqual(["t", "w"]);
   });
 });
 

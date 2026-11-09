@@ -17,10 +17,16 @@ export function OrbitCard({ album, onOpen, action }: OrbitCardProps) {
         <CoverActionButton action={action} />
       </span>
       <button type="button" className={orbitOpen()} onClick={onOpen}>
-        <span className={orbitTitle()}>{album.name}</span>
+        <span className={orbitTitle()} title={album.name}>
+          {album.name}
+        </span>
       </button>
-      <span className={orbitArtist()}>{album.artist}</span>
-      <span className={orbitBecause()}>{t("orbit.because", { title: album.because })}</span>
+      <span className={orbitArtist()} title={album.artist}>
+        {album.artist}
+      </span>
+      <span className={orbitBecause()} title={t("orbit.because", { title: album.because })}>
+        {t("orbit.because", { title: album.because })}
+      </span>
     </article>
   );
 }

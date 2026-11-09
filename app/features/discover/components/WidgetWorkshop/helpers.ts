@@ -18,6 +18,7 @@ import type {
 
 import { acceptedBlocks, suggestBlocks } from "../CustomWidget/helpers";
 import type { BlockSuggestionInput } from "../CustomWidget/types";
+import { lockedBlockSize } from "../ExploreBoard/helpers";
 import { compactCount, percentOf } from "../helpers";
 import {
   DAILY_YEAR_MIN_DAYS,
@@ -174,9 +175,14 @@ export function withBlock(draft: WidgetDraft, block: WidgetBlock, catalog: Widge
 }
 
 export function withFittingView(draft: WidgetDraft, catalog: WidgetCatalog, grammar: WidgetGrammar): WidgetDraft {
-  if (acceptedBlocksOf(draft.query, catalog, grammar).includes(draft.view.block)) return draft;
+  if (acceptedBlocksOf(draft.query, catalog, grammar).includes(draft.view.block)) return withLockedSize(draft);
   const [first] = fittingBlocksOf(draft.query, catalog, grammar);
-  return first ? { ...draft, view: { ...draft.view, block: first } } : draft;
+  return withLockedSize(first ? { ...draft, view: { ...draft.view, block: first } } : draft);
+}
+
+export function withLockedSize(draft: WidgetDraft): WidgetDraft {
+  const locked = lockedBlockSize(draft.view.block);
+  return locked === undefined || locked === draft.defaultSize ? draft : { ...draft, defaultSize: locked };
 }
 
 export function grammarSubjectOf(grammar: WidgetGrammar, subject: RecipeSubject): GrammarSubject | undefined {

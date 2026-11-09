@@ -201,6 +201,7 @@
     },
     "preview": "Preview",
     "previewHint": "The preview runs the widget on your own data.",
+    "sizeLocked": "This look only comes in {{size}}",
     "discard": {
       "title": "Discard changes?",
       "message": "Your changes to this widget will be lost.",

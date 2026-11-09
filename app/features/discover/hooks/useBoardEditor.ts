@@ -138,10 +138,10 @@ export function useBoardEditor(
     (id: string, size: BoardSize) => {
       const item = items.find((candidate) => candidate.id === id);
       if (!item || item.size === size) return;
-      commit(resizeItem(items, id, size));
+      commit(resizeItem(items, id, size, custom));
       setAnnouncement(t("board.announce.resized", { name: nameOf(item), size: t(BOARD_SIZE_NAME_KEYS[size]) }));
     },
-    [commit, items, nameOf, t]
+    [commit, custom, items, nameOf, t]
   );
 
   const resizeSpacerTile = useCallback(

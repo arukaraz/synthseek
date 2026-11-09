@@ -32,6 +32,7 @@ export interface BoardWidgetDefinition {
   descriptionKey: ParseKeys<"discover">;
   sizes: Record<BoardSize, BoardHeight>;
   defaultSize: BoardSize;
+  lockedTo?: BoardSize;
 }
 
 export interface PlacedTile {
@@ -102,6 +103,7 @@ export interface BoardTileEditControlsProps {
   item: BoardItem;
   device: BoardDevice;
   name: string;
+  custom: BoardCustomWidgets;
   editable: boolean;
   position: number;
   total: number;
@@ -140,6 +142,7 @@ export interface BoardTileContentProps extends BoardTileWidgetProps {
 export interface BoardTileSizesProps {
   item: BoardItem;
   name: string;
+  custom: BoardCustomWidgets;
   dense?: boolean;
   onResize: (id: string, size: BoardSize) => void;
 }

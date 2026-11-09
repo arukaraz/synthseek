@@ -2,8 +2,6 @@ import type { LucideIcon } from "lucide-react";
 
 export type PlaySetAccent = "daily" | "weekly" | "explore" | "cf";
 
-export type PlaySetLayout = "stack" | "side" | "banner";
-
 export interface PlaySetCardProps {
   accent: PlaySetAccent;
   icon: LucideIcon;
@@ -19,6 +17,5 @@ export interface PlaySetCardProps {
   actionKind?: "play" | "request";
   onOpen?: () => void;
   revealAction?: boolean;
-  layout?: PlaySetLayout;
   pinned?: boolean;
 }

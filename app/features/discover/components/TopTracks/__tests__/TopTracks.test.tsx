@@ -25,6 +25,10 @@ vi.mock("../TopTrackHero", () => ({
   TopTrackHero: ({ track }: TopTrackHeroProps) => <div data-testid="hero" data-id={track.catalogTrackId} />,
 }));
 
+vi.mock("../TopTrackLeader", () => ({
+  TopTrackLeader: ({ track }: TopTrackHeroProps) => <div data-testid="leader" data-id={track.catalogTrackId} />,
+}));
+
 vi.mock("../TopTracksList", () => ({
   TopTracksList: ({ tracks, startRank, columns }: TopTracksListProps) => (
     <div data-testid="list" data-count={tracks.length} data-start={startRank} data-columns={columns} />
@@ -137,12 +141,31 @@ describe("TopTracks", () => {
       })
     );
 
-    renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
+    renderWithProviders(<TopTracks size="L" info="Your top tracks" />);
 
     expect(screen.getByTestId("hero")).toHaveAttribute("data-id", "hero");
+    expect(screen.queryByTestId("leader")).not.toBeInTheDocument();
     expect(screen.getByTestId("list")).toHaveAttribute("data-count", "2");
     expect(screen.getByTestId("list")).toHaveAttribute("data-start", "2");
     expect(screen.getByRole("heading", { name: enDiscover.topTracks.title })).toBeInTheDocument();
+  });
+
+  it("shows the top track as a leader, the way Charts does, in a half-row tile", () => {
+    useLastfmFeedsMock.mockReturnValue(
+      buildResult({
+        topTracks: {
+          status: "ready",
+          generatedAt: "2026-05-29T07:00:00.000Z",
+          tracks: [createTopTrack({ catalogTrackId: "hero" }), createTopTrack({ catalogTrackId: "r1" })],
+        },
+      })
+    );
+
+    renderWithProviders(<TopTracks size="M" info="Your top tracks" />);
+
+    expect(screen.getByTestId("leader")).toHaveAttribute("data-id", "hero");
+    expect(screen.queryByTestId("hero")).not.toBeInTheDocument();
+    expect(screen.getByTestId("list")).toHaveAttribute("data-start", "2");
   });
 
   it("caps the list at eight rows past the hero", () => {

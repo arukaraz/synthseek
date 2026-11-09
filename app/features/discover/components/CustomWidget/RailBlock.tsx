@@ -6,7 +6,7 @@ import { FadeScroll } from "@components/FadeScroll";
 
 import { railScroller } from "../styles";
 import { BLOCK_LIMITS } from "./constants";
-import { blockBody, blockRail } from "./styles";
+import { blockRail, blockRailBody } from "./styles";
 import type { WidgetBlockProps } from "./types";
 import { WidgetCard } from "./WidgetCard";
 
@@ -14,7 +14,7 @@ export function RailBlock({ items, size, accent, controls }: WidgetBlockProps) {
   const { t } = useTranslation("discover");
 
   return (
-    <div className={blockBody()}>
+    <div className={blockRailBody()}>
       <FadeScroll axis="x" arrows className={railScroller()} label={t("customWidget.rail")}>
         <div className={blockRail()}>
           {items.slice(0, BLOCK_LIMITS.rail[size]).map((item) => (

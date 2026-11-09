@@ -69,17 +69,17 @@ This is a complete widget. It lists your ten most played tracks of the last thir
 }
 ```
 
-| Field           | Required | Value                                                           |
-| --------------- | -------- | --------------------------------------------------------------- |
-| `kind`          | Yes      | Always `synthseek-widget`.                                      |
-| `schemaVersion` | Yes      | Always `2`.                                                     |
-| `meta`          | Yes      | Its name, icon and colour. See [Name and look](#name-and-look). |
-| `query`         | Yes      | What the widget asks. See [The query](#the-query).              |
-| `view`          | Yes      | How the results are drawn. See [The view](#the-view).           |
-| `defaultSize`   | Yes      | `S`, `M` or `L`, the size it takes on the board.                |
-| `basedOn`       | Yes      | The built-in widget it was customized from, as text, or `null`. |
-| `playlist`      | Yes      | `null`, or a [smart playlist](#smart-playlists).                |
-| `id`            | No       | Ignored here. The widget gets a new id when you save it.        |
+| Field           | Required | Value                                                                                            |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `kind`          | Yes      | Always `synthseek-widget`.                                                                       |
+| `schemaVersion` | Yes      | Always `2`.                                                                                      |
+| `meta`          | Yes      | Its name, icon and colour. See [Name and look](#name-and-look).                                  |
+| `query`         | Yes      | What the widget asks. See [The query](#the-query).                                               |
+| `view`          | Yes      | How the results are drawn. See [The view](#the-view).                                            |
+| `defaultSize`   | Yes      | `S`, `M` or `L`, the size it takes on the board. A Mix card widget takes `S` whatever this says. |
+| `basedOn`       | Yes      | The built-in widget it was customized from, as text, or `null`.                                  |
+| `playlist`      | Yes      | `null`, or a [smart playlist](#smart-playlists).                                                 |
+| `id`            | No       | Ignored here. The widget gets a new id when you save it.                                         |
 
 Unknown fields are refused rather than dropped, so a typo in a name shows up as a problem.
 
@@ -466,20 +466,20 @@ This one puts one built-in widget and one custom widget on a board, the second s
 
 Each entry of `items` and `mobile` is one tile.
 
-| Field        | Required     | Value                                                                          |
-| ------------ | ------------ | ------------------------------------------------------------------------------ |
-| `kind`       | Yes          | `builtin`, `custom` or `spacer`.                                               |
-| `widget`     | Not a spacer | For `builtin`, a key from the table below. For `custom`, an `id` in `widgets`. |
-| `rows`       | Spacers only | The spacer's height, 1 to 7.                                                   |
-| `size`       | Yes          | `S` is a quarter of the board, `M` half and `L` the full width.                |
-| `newRow`     | No           | `true` starts a new row with this tile.                                        |
-| `background` | No           | `false` hides the tile's background.                                           |
+| Field        | Required     | Value                                                                                                                                                                                                 |
+| ------------ | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`       | Yes          | `builtin`, `custom` or `spacer`.                                                                                                                                                                      |
+| `widget`     | Not a spacer | For `builtin`, a key from the table below. For `custom`, an `id` in `widgets`.                                                                                                                        |
+| `rows`       | Spacers only | The spacer's height, 1 to 7.                                                                                                                                                                          |
+| `size`       | Yes          | `S` is a quarter of the board, `M` half and `L` the full width. A Mix card tile (On repeat, Repeat rewind, Deep cuts, Forgotten favorites, or your own Mix card widget) takes `S` whatever this says. |
+| `newRow`     | No           | `true` starts a new row with this tile.                                                                                                                                                               |
+| `background` | No           | `false` hides the tile's background.                                                                                                                                                                  |
 
 A spacer is an empty tile that holds a place on the board.
 
 A widget inside `widgets` is a [widget template](#a-widget-template) with one more field. Its `id` starts with `w_` and only needs to match the tiles that point at it. Applying gives each widget a new id.
 
-Tiles fill the board in order, each one beside the last while it fits. On a phone `S` is half the width, and `M` and `L` take all of it. Without `mobile`, the phone layout is the `items` tiles at `M`, leaving out spacers with no background.
+Tiles fill the board in order, each one beside the last while it fits. On a phone `S` is half the width, and `M` and `L` take all of it. Without `mobile`, the phone layout is the `items` tiles at `M`, Mix card tiles at `S`, leaving out spacers with no background.
 
 | Built-in `widget`    | Title                           |
 | -------------------- | ------------------------------- |

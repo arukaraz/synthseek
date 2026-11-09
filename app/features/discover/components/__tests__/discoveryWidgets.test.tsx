@@ -319,7 +319,9 @@ describe("ContinueListening", () => {
     mocks.recentPlays.mockReturnValue(ready([]));
     renderWithProviders(<ContinueListening size="M" info="x" />);
 
-    expect(screen.getByText("Mägo de Oz · 1 of 5")).toBeInTheDocument();
+    expect(screen.getByText("Up next · 1 of 5")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 3, name: "Si Te Vas" })).toBeInTheDocument();
+    expect(screen.getByText("Mägo de Oz")).toBeInTheDocument();
     expect(screen.getByText("0:05 / 5:58")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Resume" }));
     expect(toggle).toHaveBeenCalledTimes(1);
@@ -352,7 +354,7 @@ describe("ContinueListening", () => {
     mocks.recentPlays.mockReturnValue(ready([]));
     renderWithProviders(<ContinueListening size="S" info="x" />);
 
-    expect(screen.getByText("Mägo de Oz · 1 of 5")).toBeInTheDocument();
+    expect(screen.getByText("Up next · 1 of 5")).toBeInTheDocument();
     expect(mocks.recentPlays).toHaveBeenCalledWith(false);
   });
 

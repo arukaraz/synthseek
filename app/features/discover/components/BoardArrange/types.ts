@@ -53,6 +53,7 @@ export interface ArrangeTileBarProps {
   item: BoardItem;
   device: BoardDevice;
   name: string;
+  custom: BoardCustomWidgets;
   position: number;
   total: number;
   actions: BoardTileLayoutActions;

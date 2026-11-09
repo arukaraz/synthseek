@@ -48,12 +48,9 @@ export interface DiscoveryMixCardEmptyProps {
   compact: boolean;
 }
 
-export type MosaicShape = "square" | "strip";
-
 export interface DiscoveryMixMosaicProps {
   covers: readonly string[];
   fallbackSeed: string;
-  shape?: MosaicShape;
 }
 
 export type DiscoveryMixesEmptyReason = "error" | "disabled" | "no-username" | "no-kinds";

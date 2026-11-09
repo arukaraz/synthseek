@@ -29,7 +29,7 @@ export function BoardTile({
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!editing || event.target !== event.currentTarget) return;
-    runBoardKey(event, item, actions);
+    runBoardKey(event, item, actions, custom);
   };
 
   return (
@@ -47,6 +47,7 @@ export function BoardTile({
           item={item}
           device={device}
           name={name}
+          custom={custom}
           editable={item.kind === "custom" && custom.has(item.widgetId)}
           position={position}
           total={total}

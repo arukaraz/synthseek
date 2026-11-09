@@ -8,6 +8,8 @@ export interface TopTracksProps {
   info: string;
 }
 
+export type TopTrackLook = "hero" | "leader";
+
 export interface TopTracksSplit {
   hero: LastfmTopTrack | null;
   rest: LastfmTopTrack[];

@@ -87,13 +87,13 @@ describe("countInCategory", () => {
 
 describe("previewFrame", () => {
   it("scales a full-row tile to the preview width", () => {
-    const frame = previewFrame("genres");
+    const frame = previewFrame("trending");
 
     expect(frame.stageWidth).toBe(1200);
-    expect(frame.stageHeight).toBe(600);
+    expect(frame.stageHeight).toBe(336);
     expect(frame.scale).toBeCloseTo(0.25);
     expect(frame.width).toBe(PREVIEW_BOX.width);
-    expect(frame.height).toBe(PREVIEW_BOX.height);
+    expect(frame.height).toBe(84);
   });
 
   it("scales a half-width tile to the preview height", () => {

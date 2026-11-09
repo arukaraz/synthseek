@@ -8,7 +8,7 @@ import { TileSettingsMenu } from "../ExploreBoard/TileSettingsMenu";
 import { arrangeBar, arrangeButton, arrangeHandle, arrangeName, arrangeTools } from "./styles";
 import type { ArrangeTileBarProps } from "./types";
 
-export function ArrangeTileBar({ item, device, name, position, total, actions }: ArrangeTileBarProps) {
+export function ArrangeTileBar({ item, device, name, custom, position, total, actions }: ArrangeTileBarProps) {
   const { t } = useTranslation("discover");
 
   return (
@@ -27,7 +27,7 @@ export function ArrangeTileBar({ item, device, name, position, total, actions }:
       </button>
       <span className={arrangeName()}>{name}</span>
       <div className={arrangeTools()}>
-        <BoardTileSizes item={item} name={name} dense onResize={actions.resize} />
+        <BoardTileSizes item={item} name={name} custom={custom} dense onResize={actions.resize} />
         <TileSettingsMenu
           item={item}
           device={device}

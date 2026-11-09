@@ -5,7 +5,16 @@ export const leaderFrame = cva("@container flex min-h-0 flex-1 flex-col");
 export const leaderLayout = cva("flex min-h-0 flex-1 flex-col gap-3 @3xl:flex-row @3xl:gap-5");
 
 export const leader = cva(
-  "relative flex min-h-52 shrink-0 overflow-hidden rounded-2xl @3xl:min-h-0 @3xl:w-[clamp(14rem,30%,18rem)]"
+  "relative flex min-h-52 shrink-0 overflow-hidden rounded-2xl @3xl:min-h-0 @3xl:w-[clamp(14rem,30%,18rem)]",
+  {
+    variants: {
+      fill: {
+        true: "flex-1 @3xl:flex-none",
+        false: "",
+      },
+    },
+    defaultVariants: { fill: false },
+  }
 );
 
 export const leaderCover = cva("absolute inset-0 [&_img]:object-cover");

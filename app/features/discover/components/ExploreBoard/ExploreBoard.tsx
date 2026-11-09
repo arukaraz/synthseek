@@ -26,9 +26,9 @@ export function ExploreBoard() {
   const { data, isLoading } = useBoardLayout();
   const appearance = useBoardAppearance();
   const myWidgets = useMyWidgets();
-  const lists = useMemo(() => boardListsOf(data), [data]);
-  const items = lists[list];
   const custom = useMemo(() => customWidgetsById(myWidgets.data), [myWidgets.data]);
+  const lists = useMemo(() => boardListsOf(data, custom), [data, custom]);
+  const items = lists[list];
   const customStatus = customStatusOf(myWidgets);
   const editor = useBoardEditor(lists, list, custom, customStatus);
   const placements = useMemo(

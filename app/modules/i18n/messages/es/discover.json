@@ -219,7 +219,8 @@
       "remove": "Quitar {{name}}",
       "drag": "Arrastrar {{name}}",
       "sizes": "Tamaño de {{name}}",
-      "label": "{{name}}, posición {{position}} de {{total}}"
+      "label": "{{name}}, posición {{position}} de {{total}}",
+      "sizeLocked": "{{name}} solo existe en {{size}}"
     },
     "sizes": {
       "S": "S",
@@ -397,12 +398,12 @@
     "title": "Seguir escuchando",
     "subtitle": "Tu cola de reproducción",
     "empty": "Nada en espera. Reproduce algo y aquí se queda.",
-    "position": "{{artist}} · {{index}} de {{total}}",
     "time": "{{position}} / {{duration}}",
     "resume": "Continuar",
     "pause": "Pausar",
     "recent": "Escuchado hace poco",
-    "played": "{{artist}} · {{when}}"
+    "played": "{{artist}} · {{when}}",
+    "queueBadge": "A continuación · {{index}} de {{total}}"
   },
   "rarities": {
     "title": "Tus rarezas",

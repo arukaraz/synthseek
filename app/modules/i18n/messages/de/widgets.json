@@ -201,6 +201,7 @@
     },
     "preview": "Vorschau",
     "previewHint": "Die Vorschau führt das Widget mit deinen eigenen Daten aus.",
+    "sizeLocked": "Diesen Look gibt es nur in {{size}}",
     "discard": {
       "title": "Änderungen verwerfen?",
       "message": "Deine Änderungen an diesem Widget gehen verloren.",

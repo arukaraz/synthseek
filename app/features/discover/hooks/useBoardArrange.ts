@@ -53,7 +53,10 @@ export function useBoardArrange({ items, custom }: UseBoardArrangeOptions) {
     },
     [flip.ref]
   );
-  const resize = useCallback((id: string, size: BoardSize) => setDraft((current) => resizeItem(current, id, size)), []);
+  const resize = useCallback(
+    (id: string, size: BoardSize) => setDraft((current) => resizeItem(current, id, size, custom)),
+    [custom]
+  );
   const resizeSpacerTile = useCallback(
     (id: string, delta: MoveDelta) => setDraft((current) => resizeSpacer(current, id, delta)),
     []

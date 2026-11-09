@@ -2,7 +2,6 @@ import type { ParseKeys } from "i18next";
 import type { LucideIcon } from "lucide-react";
 
 import type { ListeningMix } from "@hooks/api/queries/analytics/types";
-import type { BoardSize } from "@hooks/api/queries/board/types";
 
 import type { PlaySetAccent } from "../PlaySetCard/types";
 
@@ -26,11 +25,9 @@ export interface HistoryMixQuery {
 export interface HistoryMixProps {
   kind: HistoryMixKind;
   query: HistoryMixQuery;
-  size: BoardSize;
   info: string;
 }
 
 export interface HistoryMixWidgetProps {
-  size: BoardSize;
   info: string;
 }

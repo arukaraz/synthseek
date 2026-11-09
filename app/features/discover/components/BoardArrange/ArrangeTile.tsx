@@ -33,7 +33,7 @@ export function ArrangeTile({
   const name = tileNameOf(item, custom, customStatus);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) runBoardKey(event, item, actions);
+    if (event.target === event.currentTarget) runBoardKey(event, item, actions, custom);
   };
 
   return (
@@ -56,7 +56,15 @@ export function ArrangeTile({
         </div>
       ) : (
         <>
-          <ArrangeTileBar item={item} device={device} name={name} position={position} total={total} actions={actions} />
+          <ArrangeTileBar
+            item={item}
+            device={device}
+            name={name}
+            custom={custom}
+            position={position}
+            total={total}
+            actions={actions}
+          />
           <div className={arrangeTileBody()}>
             <ScaledPreview frame={arrangeFrameOf(tile, device, boardWidth, metrics, layout)}>
               <BoardTileWidget item={item} size={tile.size} custom={custom} customStatus={customStatus} info={false} />

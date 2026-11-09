@@ -2,12 +2,11 @@
 
 import { useTranslation } from "react-i18next";
 
-import { HISTORY_MIX_LAYOUTS } from "../HistoryMixes/constants";
 import { PlaySetCard } from "../PlaySetCard/PlaySetCard";
 import { coversOf, mixItemOf } from "./helpers";
 import type { WidgetBlockProps } from "./types";
 
-export function MixBlock({ items, size, accent, controls, heading }: WidgetBlockProps) {
+export function MixBlock({ items, accent, controls, heading }: WidgetBlockProps) {
   const { t } = useTranslation("discover");
   const { coverAction } = controls(mixItemOf(items, heading.name));
 
@@ -23,7 +22,6 @@ export function MixBlock({ items, size, accent, controls, heading }: WidgetBlock
       seed={heading.name}
       playLabel={t("history.play", { name: heading.name })}
       onPlay={coverAction?.kind === "play" ? coverAction.onClick : null}
-      layout={HISTORY_MIX_LAYOUTS[size]}
     />
   );
 }

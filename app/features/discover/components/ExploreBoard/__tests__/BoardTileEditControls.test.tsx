@@ -1,10 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { TooltipProvider } from "@components/ui/Tooltip";
 import type { BoardItem } from "@hooks/api/queries/board/types";
 import { createWidgetPreset } from "@test/factories";
 import { fireEvent, render, screen, waitFor } from "@test/test-utils";
 
 import { BoardTileEditControls } from "../BoardTileEditControls";
+import { customWidgetsById } from "../helpers";
 import type { BoardTileActions } from "../types";
 
 vi.mock("@hooks/api/queries/widgets/useWidgetPresets", () => ({
@@ -27,6 +29,8 @@ function actions(): BoardTileActions {
 
 const ITEM: BoardItem = { kind: "builtin", id: "t", widget: "trending", size: "L" };
 
+const NO_CUSTOM = customWidgetsById([]);
+
 const SPACER: BoardItem = { kind: "spacer", id: "s", size: "S", rows: 4 };
 
 function renderControls(item: BoardItem, handlers = actions(), position = 2, total = 3) {
@@ -39,6 +43,7 @@ function renderControls(item: BoardItem, handlers = actions(), position = 2, tot
       position={position}
       total={total}
       actions={handlers}
+      custom={NO_CUSTOM}
     />
   );
 }
@@ -62,6 +67,34 @@ describe("BoardTileEditControls", () => {
 
     expect(barButtons()).toEqual(["Drag Tile", "Small", "Medium", "Large", "Settings for Tile", "Remove Tile"]);
     expect(screen.getByText("Tile")).toBeInTheDocument();
+  });
+
+  it("locks a history mix to its only size, keeping the other chips visible but inert", () => {
+    const handlers = actions();
+    render(
+      <TooltipProvider>
+        <BoardTileEditControls
+          item={{ kind: "builtin", id: "o", widget: "onRepeat", size: "S" }}
+          device="wide"
+          name="Tile"
+          editable={false}
+          position={1}
+          total={1}
+          actions={handlers}
+          custom={NO_CUSTOM}
+        />
+      </TooltipProvider>
+    );
+
+    const locked = screen.getAllByRole("button", { name: /Medium|Large/ });
+    expect(locked).toHaveLength(2);
+    for (const chip of locked) {
+      expect(chip).toHaveAttribute("aria-disabled", "true");
+      fireEvent.click(chip);
+    }
+    expect(handlers.resize).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Small" }));
+    expect(handlers.resize).toHaveBeenCalledWith("o", "S");
   });
 
   it("moves the tile one step and to either end from the settings menu", async () => {
@@ -158,7 +191,7 @@ describe("BoardTileEditControls", () => {
   });
 
   it.each<[string, BoardItem]>([
-    ["a builtin", { kind: "builtin", id: "o", widget: "onRepeat", size: "S" }],
+    ["a builtin", { kind: "builtin", id: "o", widget: "trending", size: "S" }],
     ["a custom", { kind: "custom", id: "c", widgetId: "w_1", size: "S" }],
   ])(
     "offers %s tile every size on both a wide and a narrow board, since each arrangement keeps its own sizes",
@@ -172,6 +205,7 @@ describe("BoardTileEditControls", () => {
           position={1}
           total={1}
           actions={actions()}
+          custom={NO_CUSTOM}
         />
       );
       const group = screen.getByRole("group", { name: "Size of Mine" });
@@ -186,6 +220,7 @@ describe("BoardTileEditControls", () => {
           position={1}
           total={1}
           actions={actions()}
+          custom={NO_CUSTOM}
         />
       );
       const narrow = screen.getByRole("group", { name: "Size of Mine" });
@@ -253,6 +288,7 @@ describe("BoardTileEditControls", () => {
         position={1}
         total={2}
         actions={handlers}
+        custom={NO_CUSTOM}
       />
     );
     await openSettings();

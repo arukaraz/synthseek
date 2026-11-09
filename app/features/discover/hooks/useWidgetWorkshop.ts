@@ -243,7 +243,7 @@ export function useWidgetWorkshop(
     setName: (name: string) => setMeta({ name }),
     setDescription: (description: string) => setMeta({ description }),
     setIcon: (icon: WidgetIcon) => setMeta({ icon }),
-    setSize: (defaultSize: BoardSize) => setDraft((current) => ({ ...current, defaultSize })),
+    setSize: (defaultSize: BoardSize) => change((current) => ({ ...current, defaultSize })),
     openRule: (target: RuleTarget, rule: WidgetRule) => setRuleDraft({ target, rule }),
     changeRule: (rule: WidgetRule) => setRuleDraft((current) => (current ? { ...current, rule } : current)),
     commitRule,

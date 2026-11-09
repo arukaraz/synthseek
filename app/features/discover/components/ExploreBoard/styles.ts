@@ -116,6 +116,7 @@ export const sizeChip = cva(
       active: {
         true: "bg-primary text-primary-foreground shadow-sm",
         false: "text-fg/60 hover:text-fg hover:bg-fg/10",
+        locked: "text-fg/25 inline-flex items-center justify-center",
       },
       dense: {
         true: "h-5 min-w-5 px-1 text-[10px]",

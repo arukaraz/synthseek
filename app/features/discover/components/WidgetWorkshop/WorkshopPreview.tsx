@@ -10,7 +10,9 @@ import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { useElementWidth } from "@hooks/ui/useElementWidth";
 
 import { CustomWidgetContent } from "../CustomWidget/CustomWidgetContent";
+import { lockedBlockSize } from "../ExploreBoard/helpers";
 import { copyWidgetJson, customPreviewFrame, draftJsonOf } from "../WidgetGallery/helpers";
+import { LockedAction } from "../WidgetGallery/LockedAction";
 import { ScaledPreview } from "../WidgetGallery/ScaledPreview";
 import { WORKSHOP_SIZES } from "./constants";
 import { previewBar, previewBox, previewCopy, previewHint, previewJson, previewLabel, previewTools } from "./styles";
@@ -21,19 +23,30 @@ export function WorkshopPreview({ draft, result, isLoading, isError, onSizeChang
   const [showJson, setShowJson] = useState(false);
   const [measure, width] = useElementWidth<HTMLDivElement>();
   const size = draft.defaultSize;
+  const locked = lockedBlockSize(draft.view.block);
   const json = draftJsonOf(draft);
+  const sizes = (
+    <SegmentedControl
+      ariaLabel={t("details.size")}
+      value={size}
+      options={WORKSHOP_SIZES.map((value) => ({ value, label: t(`sizes.${value}`) }))}
+      onChange={onSizeChange}
+      disabled={locked !== undefined}
+    />
+  );
 
   return (
     <>
       <div className={previewBar()}>
         <span className={previewLabel()}>{t("workshop.preview")}</span>
         <div className={previewTools()}>
-          <SegmentedControl
-            ariaLabel={t("details.size")}
-            value={size}
-            options={WORKSHOP_SIZES.map((value) => ({ value, label: t(`sizes.${value}`) }))}
-            onChange={onSizeChange}
-          />
+          {locked === undefined ? (
+            sizes
+          ) : (
+            <LockedAction label={t("details.size")} hint={t("workshop.sizeLocked", { size: t(`sizes.${locked}`) })}>
+              {sizes}
+            </LockedAction>
+          )}
           <IconButton
             icon={Braces}
             size="lg"

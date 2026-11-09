@@ -21,7 +21,11 @@ export const blockValue = cva(
   "inline-flex shrink-0 items-center rounded-full bg-fg/10 px-2 py-0.5 font-sans text-[10.5px] font-semibold whitespace-nowrap text-[var(--mix-acc)]"
 );
 
-export const blockRail = cva("flex h-full snap-x gap-3 [&>*]:w-32 [&>*]:shrink-0 [&>*]:snap-start");
+export const blockRailBody = cva("flex min-h-0 flex-1 flex-col [container-type:size]");
+
+export const blockRail = cva(
+  "flex h-full snap-x gap-3 [&>*]:w-[clamp(8rem,calc(100cqh-4.25rem),16rem)] [&>*]:shrink-0 [&>*]:snap-start"
+);
 
 export const card = cva("group/card flex min-h-0 min-w-0", {
   variants: {

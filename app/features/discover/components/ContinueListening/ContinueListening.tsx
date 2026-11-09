@@ -12,9 +12,11 @@ import { formatRelativeTime } from "@utils/formatters";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { widgetEyebrow, widgetNote } from "../styles";
+import { leaderFrame, leaderLayout } from "../WidgetLeader/styles";
 import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
-import { ResumeCard } from "./ResumeCard";
+import { ResumeLeader } from "./ResumeLeader";
+import { resumeAside } from "./styles";
 
 export function ContinueListening({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
@@ -34,38 +36,42 @@ export function ContinueListening({ size, info }: BoardWidgetProps) {
       loading={false}
       note={null}
     >
-      {point ? (
-        <ResumeCard point={point} onToggle={toggle} />
-      ) : (
-        <p className={widgetNote()}>{t("continueListening.empty")}</p>
-      )}
-      {plays.length > 0 ? (
-        <>
-          <span className={widgetEyebrow()}>{t("continueListening.recent")}</span>
-          <FadeScroll>
-            <ul className={widgetList()}>
-              {plays.map((play) => (
-                <WidgetRow
-                  key={`${play.trackId}-${play.playedAt.getTime()}`}
-                  cover={play.cover}
-                  seed={play.trackId}
-                  title={play.title}
-                  subtitle={t("continueListening.played", {
-                    artist: play.artist,
-                    when: formatRelativeTime(play.playedAt),
-                  })}
-                  trailing={play.client ?? undefined}
-                  coverAction={{
-                    kind: "play",
-                    label: t("history.play", { name: play.title }),
-                    onClick: () => void playEntity({ kind: "tracks", trackIds: [play.trackId] }),
-                  }}
-                />
-              ))}
-            </ul>
-          </FadeScroll>
-        </>
-      ) : null}
+      <div className={leaderFrame()}>
+        <div className={leaderLayout()}>
+          {point ? (
+            <ResumeLeader point={point} fill={plays.length === 0} onToggle={toggle} />
+          ) : (
+            <p className={widgetNote()}>{t("continueListening.empty")}</p>
+          )}
+          {plays.length > 0 ? (
+            <div className={resumeAside()}>
+              <span className={widgetEyebrow()}>{t("continueListening.recent")}</span>
+              <FadeScroll>
+                <ul className={widgetList()}>
+                  {plays.map((play) => (
+                    <WidgetRow
+                      key={`${play.trackId}-${play.playedAt.getTime()}`}
+                      cover={play.cover}
+                      seed={play.trackId}
+                      title={play.title}
+                      subtitle={t("continueListening.played", {
+                        artist: play.artist,
+                        when: formatRelativeTime(play.playedAt),
+                      })}
+                      trailing={play.client ?? undefined}
+                      coverAction={{
+                        kind: "play",
+                        label: t("history.play", { name: play.title }),
+                        onClick: () => void playEntity({ kind: "tracks", trackIds: [play.trackId] }),
+                      }}
+                    />
+                  ))}
+                </ul>
+              </FadeScroll>
+            </div>
+          ) : null}
+        </div>
+      </div>
     </WidgetFrame>
   );
 }

@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { formatPlaycount } from "../helpers";
+import { formatPlaycount, topTrackLookOf } from "../helpers";
+
+describe("topTrackLookOf", () => {
+  it("uses the Charts leader look only in a half-row tile", () => {
+    expect(topTrackLookOf("M")).toBe("leader");
+    expect(topTrackLookOf("S")).toBe("hero");
+    expect(topTrackLookOf("L")).toBe("hero");
+  });
+});
 
 describe("formatPlaycount", () => {
   it("returns plain integer under 1000", () => {

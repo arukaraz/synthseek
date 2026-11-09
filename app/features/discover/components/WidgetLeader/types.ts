@@ -10,5 +10,6 @@ export interface WidgetLeaderProps {
   cover: string | null;
   seed: string;
   badge: WidgetLeaderBadge;
+  fill?: boolean;
   children: ReactNode;
 }

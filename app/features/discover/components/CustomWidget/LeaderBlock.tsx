@@ -23,7 +23,12 @@ export function LeaderBlock({ items, size, accent, controls }: WidgetBlockProps)
   return (
     <div data-acc={accent} className={leaderFrame()}>
       <div className={leaderLayout()}>
-        <WidgetLeader cover={first.cover} seed={first.key} badge={{ icon: Trophy, label: t("customWidget.leader") }}>
+        <WidgetLeader
+          cover={first.cover}
+          seed={first.key}
+          badge={{ icon: Trophy, label: t("customWidget.leader") }}
+          fill={others.length === 0}
+        >
           {onSelect ? (
             <button type="button" className={leaderLink()} onClick={onSelect}>
               {first.title}

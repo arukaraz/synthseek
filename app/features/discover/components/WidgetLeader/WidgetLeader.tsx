@@ -4,9 +4,9 @@ import { CoverArt } from "../WidgetRow/CoverArt";
 import { leader, leaderBadge, leaderBody, leaderCover, leaderShade } from "./styles";
 import type { WidgetLeaderProps } from "./types";
 
-export function WidgetLeader({ cover, seed, badge: { icon: Icon, label }, children }: WidgetLeaderProps) {
+export function WidgetLeader({ cover, seed, badge: { icon: Icon, label }, fill = false, children }: WidgetLeaderProps) {
   return (
-    <article className={leader()}>
+    <article className={leader({ fill })}>
       <span className={leaderCover()}>
         <CoverArt src={cover} seed={seed} sizes="280px" />
       </span>

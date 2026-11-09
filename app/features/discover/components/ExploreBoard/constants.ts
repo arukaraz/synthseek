@@ -125,7 +125,7 @@ export const BOARD_WIDGET_ORDER: readonly BoardWidgetKey[] = [
   "serverPlaylists",
 ];
 
-const HISTORY_MIX_SIZES: Record<BoardSize, BoardHeight> = { S: "tall", M: "regular", L: "short" };
+const HISTORY_MIX_SIZES: Record<BoardSize, BoardHeight> = { S: "tall", M: "tall", L: "tall" };
 
 export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
   trending: {
@@ -199,6 +199,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     descriptionKey: "board.widgets.onRepeat",
     sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
+    lockedTo: "S",
   },
   rewind: {
     component: RepeatRewind,
@@ -208,6 +209,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     descriptionKey: "board.widgets.rewind",
     sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
+    lockedTo: "S",
   },
   deepCuts: {
     component: DeepCuts,
@@ -217,6 +219,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     descriptionKey: "board.widgets.deepCuts",
     sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
+    lockedTo: "S",
   },
   forgottenFavorites: {
     component: ForgottenFavorites,
@@ -226,6 +229,7 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
     descriptionKey: "board.widgets.forgottenFavorites",
     sizes: HISTORY_MIX_SIZES,
     defaultSize: "S",
+    lockedTo: "S",
   },
   jumpBackIn: {
     component: JumpBackIn,
@@ -355,6 +359,8 @@ export const BOARD_WIDGETS: Record<BoardWidgetKey, BoardWidgetDefinition> = {
   },
 };
 
+export const CUSTOM_BLOCK_LOCKS: Partial<Record<WidgetBlock, BoardSize>> = { mix: "S" };
+
 export const CUSTOM_BLOCK_HEIGHTS: Record<WidgetBlock, Record<BoardSize, BoardHeight>> = {
   list: { S: "regular", M: "regular", L: "regular" },
   cards: { S: "regular", M: "regular", L: "regular" },
@@ -374,7 +380,7 @@ export const CUSTOM_BLOCK_HEIGHTS: Record<WidgetBlock, Record<BoardSize, BoardHe
   yearCalendar: { S: "short", M: "regular", L: "regular" },
   share: { S: "regular", M: "regular", L: "regular" },
   story: { S: "regular", M: "tall", L: "tall" },
-  mix: { S: "tall", M: "regular", L: "short" },
+  mix: { S: "tall", M: "tall", L: "tall" },
   posters: { S: "regular", M: "regular", L: "regular" },
   spotlight: { S: "regular", M: "tall", L: "tall" },
   tiles: { S: "tall", M: "tall", L: "tall" },

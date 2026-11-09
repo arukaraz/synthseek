@@ -10,8 +10,10 @@ import { useLastfmFeeds } from "@hooks/api/queries/discovery/useLastfmFeeds";
 import { fadeIn } from "@utils/animations";
 
 import { listColumns } from "../helpers";
-import { topTracksSplit } from "./helpers";
+import { leaderFrame, leaderLayout } from "../WidgetLeader/styles";
+import { topTrackLookOf, topTracksSplit } from "./helpers";
 import { TopTrackHero } from "./TopTrackHero";
+import { TopTrackLeader } from "./TopTrackLeader";
 import { TopTracksEmpty } from "./TopTracksEmpty";
 import { TopTracksList } from "./TopTracksList";
 import { TopTracksSkeleton } from "./TopTracksSkeleton";
@@ -31,6 +33,7 @@ export function TopTracks({ size, info }: TopTracksProps) {
   }
 
   const { hero, rest, startRank } = topTracksSplit(topTracks.tracks, size);
+  const look = topTrackLookOf(size);
 
   return (
     <motion.section
@@ -47,9 +50,9 @@ export function TopTracks({ size, info }: TopTracksProps) {
         titleId="top-tracks-heading"
         info={info}
       />
-      <div className={bodyFrame()}>
-        <div className={body()}>
-          {hero ? <TopTrackHero track={hero} /> : null}
+      <div className={look === "leader" ? leaderFrame() : bodyFrame()}>
+        <div className={look === "leader" ? leaderLayout() : body()}>
+          {hero ? look === "leader" ? <TopTrackLeader track={hero} /> : <TopTrackHero track={hero} /> : null}
           <TopTracksList tracks={rest} startRank={startRank} columns={listColumns(size)} />
         </div>
       </div>

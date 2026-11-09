@@ -30,9 +30,9 @@ export const BOARD_TYPE_STEPS_REM = {
 
 export const BOARD_SPANS: Record<BoardDevice, Record<BoardSize, Record<BoardHeight, BoardSpan>>> = {
   wide: {
-    S: { short: { cols: 3, rows: 2 }, regular: { cols: 3, rows: 4 }, tall: { cols: 3, rows: 7 } },
-    M: { short: { cols: 6, rows: 2 }, regular: { cols: 6, rows: 4 }, tall: { cols: 6, rows: 7 } },
-    L: { short: { cols: 12, rows: 2 }, regular: { cols: 12, rows: 4 }, tall: { cols: 12, rows: 7 } },
+    S: { short: { cols: 3, rows: 2 }, regular: { cols: 3, rows: 4 }, tall: { cols: 3, rows: 8 } },
+    M: { short: { cols: 6, rows: 2 }, regular: { cols: 6, rows: 4 }, tall: { cols: 6, rows: 8 } },
+    L: { short: { cols: 12, rows: 2 }, regular: { cols: 12, rows: 4 }, tall: { cols: 12, rows: 8 } },
   },
   narrow: {
     S: { short: { cols: 2, rows: 2 }, regular: { cols: 2, rows: 4 }, tall: { cols: 2, rows: 5 } },

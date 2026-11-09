@@ -5,7 +5,11 @@ import type { BoardSize } from "@hooks/api/queries/board/types";
 
 import { COMPACT_ROW_LIMIT } from "../constants";
 import { HERO_LIMIT, LIST_LIMIT } from "./constants";
-import type { EmptyReason, TopTracksSplit } from "./types";
+import type { EmptyReason, TopTrackLook, TopTracksSplit } from "./types";
+
+export function topTrackLookOf(size: BoardSize): TopTrackLook {
+  return size === "M" ? "leader" : "hero";
+}
 
 export function topTracksSplit(tracks: readonly LastfmTopTrack[], size: BoardSize): TopTracksSplit {
   if (size === "S") return { hero: null, rest: tracks.slice(0, COMPACT_ROW_LIMIT), startRank: 1 };

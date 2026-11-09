@@ -51,15 +51,7 @@ export const mixCount = cva("text-fg/50 truncate font-mono text-[11px] whitespac
 
 export const mixFootFresh = cva("text-fg/40 font-mono text-[10px] tracking-wide whitespace-nowrap uppercase");
 
-export const mosaicGrid = cva("grid size-full", {
-  variants: {
-    shape: {
-      square: "grid-cols-2 grid-rows-2",
-      strip: "grid-cols-4 grid-rows-1",
-    },
-  },
-  defaultVariants: { shape: "square" },
-});
+export const mosaicGrid = cva("grid size-full grid-cols-2 grid-rows-2");
 
 export const mosaicTile = cva("relative size-full overflow-hidden");
 

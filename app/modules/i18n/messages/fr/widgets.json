@@ -201,6 +201,7 @@
     },
     "preview": "Aperçu",
     "previewHint": "L’aperçu exécute le widget sur vos propres données.",
+    "sizeLocked": "Ce look n’existe qu’en {{size}}",
     "discard": {
       "title": "Abandonner les modifications ?",
       "message": "Les modifications de ce widget seront perdues.",

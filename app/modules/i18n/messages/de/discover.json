@@ -219,7 +219,8 @@
       "remove": "{{name}} entfernen",
       "drag": "{{name}} ziehen",
       "sizes": "Größe von {{name}}",
-      "label": "{{name}}, Position {{position}} von {{total}}"
+      "label": "{{name}}, Position {{position}} von {{total}}",
+      "sizeLocked": "{{name}} gibt es nur in {{size}}"
     },
     "sizes": {
       "S": "S",
@@ -397,12 +398,12 @@
     "title": "Weiterhören",
     "subtitle": "Deine Warteschlange",
     "empty": "Nichts wartet. Spiel etwas ab, dann bleibt es hier.",
-    "position": "{{artist}} · {{index}} von {{total}}",
     "time": "{{position}} / {{duration}}",
     "resume": "Fortsetzen",
     "pause": "Pausieren",
     "recent": "Zuletzt gehört",
-    "played": "{{artist}} · {{when}}"
+    "played": "{{artist}} · {{when}}",
+    "queueBadge": "Als Nächstes · {{index}} von {{total}}"
   },
   "rarities": {
     "title": "Deine Raritäten",

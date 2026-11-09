@@ -12,6 +12,7 @@ import {
   appendCustomWidget,
   appendWidget,
   boardBackgroundOf,
+  boardListsOf,
   removeItem,
   uniqueTileId,
   widgetsOnBoard,
@@ -78,12 +79,13 @@ export function useCustomizationDraft({ lists, appearance, custom }: UseCustomiz
 
   const stage = useCallback(
     (next: StagedTemplate) => {
+      const locked = boardListsOf(next.template.layout, withStagedWidgets(custom, next.template.documents));
       setStaged(next);
       setStyled(next.template.appearance);
-      replaceDesktop(next.template.layout.items);
-      replaceMobile(next.template.layout.mobile);
+      replaceDesktop(locked.items);
+      replaceMobile(locked.mobile);
     },
-    [replaceDesktop, replaceMobile]
+    [custom, replaceDesktop, replaceMobile]
   );
   const unstage = useCallback(() => {
     setStaged(null);

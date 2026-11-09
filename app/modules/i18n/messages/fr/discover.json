@@ -219,7 +219,8 @@
       "remove": "Retirer {{name}}",
       "drag": "Faire glisser {{name}}",
       "sizes": "Taille de {{name}}",
-      "label": "{{name}}, position {{position}} sur {{total}}"
+      "label": "{{name}}, position {{position}} sur {{total}}",
+      "sizeLocked": "{{name}} n'existe qu'en {{size}}"
     },
     "sizes": {
       "S": "S",
@@ -397,12 +398,12 @@
     "title": "Reprendre l'écoute",
     "subtitle": "Votre file d'attente",
     "empty": "Rien en attente. Lancez quelque chose et ça restera ici.",
-    "position": "{{artist}} · {{index}} sur {{total}}",
     "time": "{{position}} / {{duration}}",
     "resume": "Reprendre",
     "pause": "Pause",
     "recent": "Écouté récemment",
-    "played": "{{artist}} · {{when}}"
+    "played": "{{artist}} · {{when}}",
+    "queueBadge": "À suivre · {{index}} sur {{total}}"
   },
   "rarities": {
     "title": "Vos raretés",
