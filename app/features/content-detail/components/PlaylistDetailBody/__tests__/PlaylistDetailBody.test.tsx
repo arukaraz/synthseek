@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import enContentDetail from "@modules/i18n/messages/en/contentDetail.json";
 import { renderWithProviders, screen } from "@test/test-utils";
 import type { DetailTarget } from "../../../types";
 
@@ -368,6 +369,26 @@ describe("PlaylistDetailBody editing", () => {
     rerender(
       <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} showInLibraryPill={false} />
     );
+    expect(screen.queryByRole("img", { name: "Already in library" })).not.toBeInTheDocument();
+  });
+
+  it("offers to request a cancelled track while another one is still downloading", () => {
+    const [complete, downloading] = playlistDetail().data.tracks;
+    usePlaylistDetailMock.mockReturnValue(
+      playlistDetail({
+        totalTracks: 3,
+        tracks: [
+          { ...complete, status: "downloading", inLibrary: false },
+          downloading,
+          { ...complete, externalId: "t3", title: "Third", requestId: "r3", status: "cancelled", inLibrary: false },
+        ],
+      })
+    );
+    renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} showInLibraryPill />
+    );
+
+    expect(screen.getByRole("button", { name: new RegExp(enContentDetail.requestMissing) })).toBeInTheDocument();
     expect(screen.queryByRole("img", { name: "Already in library" })).not.toBeInTheDocument();
   });
 
