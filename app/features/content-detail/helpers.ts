@@ -116,6 +116,8 @@ export function computeRequestState({
   const inProgressCount = requestedTrackCount - libraryTrackCount;
   const exists = requestedTrackCount > 0 || failedTrackCount > 0;
   if (!exists) return "request";
+  const neverRequestedCount = totalTracks - requestedTrackCount - failedTrackCount;
+  if (neverRequestedCount > 0) return "requestMissing";
   if (inProgressCount > 0) return "inLibrary";
   const missingCount = totalTracks - libraryTrackCount;
   if (missingCount > 0) return "requestMissing";
