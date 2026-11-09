@@ -19,7 +19,6 @@ export const createLibraryShell = (overrides: Partial<LibraryViewShell> = {}): L
 export const createLibraryController = (overrides: Partial<LibraryUrlController> = {}): LibraryUrlController => ({
   view: "tracks",
   config: VIEW_CONFIG.tracks,
-  sortOptions: (overrides.config ?? VIEW_CONFIG.tracks).sortOptions,
   search: "",
   sort: "recent",
   direction: undefined,

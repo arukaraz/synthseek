@@ -5,6 +5,8 @@ export const dialogHeader = cva("flex flex-col space-y-1.5 text-center sm:text-l
   defaultVariants: { closeShown: false },
 });
 
+export const dialogFrame = cva("relative z-10 flex h-full min-h-0 flex-col");
+
 export const dialogContent = cva(
   "border-fg/10 bg-surface/95 from-primary-600/15 to-accent-600/15 fixed z-50 w-full border bg-linear-to-br shadow-2xl duration-200",
   {

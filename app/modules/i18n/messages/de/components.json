@@ -45,9 +45,6 @@
   "infoTooltip": {
     "trigger": "Weitere Informationen"
   },
-  "adminOnly": {
-    "label": "Nur für Admins"
-  },
   "fadeScroll": {
     "scrollLeft": "Nach links scrollen",
     "scrollRight": "Nach rechts scrollen"

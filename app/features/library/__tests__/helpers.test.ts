@@ -18,7 +18,6 @@ import {
   resolveEffectiveDirection,
   rangePreviewTone,
   nextShelfCollapsed,
-  resolveVisibleSort,
   selectedAlbumsFileTarget,
   selectedTracksFileTarget,
   serializeFilterValues,
@@ -27,7 +26,6 @@ import {
   topFacetValues,
   trackFileTarget,
   viewCountFor,
-  visibleSortOptions,
 } from "../helpers";
 import type { FacetSearchState, FilterParamMap, LibraryFileJob, LibraryFileTarget, LibraryView } from "../types";
 
@@ -76,42 +74,13 @@ describe("toggleFilterValue", () => {
   });
 });
 
-describe("visibleSortOptions", () => {
+describe("play-count sorts", () => {
   const views: LibraryView[] = ["tracks", "albums", "artists", "playlists"];
 
-  it.each(views)("hides the admin-only play-count sort from a member on the %s view", (view) => {
-    const values = visibleSortOptions(VIEW_CONFIG[view], false).map((option) => option.value);
+  it.each(views)("offers all three on the %s view", (view) => {
+    const values = VIEW_CONFIG[view].sortOptions.map((option) => option.value);
 
-    expect(values).not.toContain("allPlays");
-    expect(values).toContain("myPlays");
-    expect(values).toContain("lastPlayed");
-  });
-
-  it.each(views)("offers an admin every sort on the %s view", (view) => {
-    const config = VIEW_CONFIG[view];
-
-    expect(visibleSortOptions(config, true)).toEqual(config.sortOptions);
-    expect(visibleSortOptions(config, true).map((option) => option.value)).toContain("allPlays");
-  });
-});
-
-describe("resolveVisibleSort", () => {
-  it("keeps a sort the member can see", () => {
-    expect(resolveVisibleSort(VIEW_CONFIG.tracks, "myPlays", false)).toBe("myPlays");
-  });
-
-  it("falls back to the view default when a member asks for an admin-only sort", () => {
-    expect(resolveVisibleSort(VIEW_CONFIG.tracks, "allPlays", false)).toBe("recent");
-    expect(resolveVisibleSort(VIEW_CONFIG.artists, "allPlays", false)).toBe("name");
-  });
-
-  it("keeps an admin-only sort for an admin", () => {
-    expect(resolveVisibleSort(VIEW_CONFIG.tracks, "allPlays", true)).toBe("allPlays");
-  });
-
-  it("falls back to the view default for a sort the view does not have", () => {
-    expect(resolveVisibleSort(VIEW_CONFIG.albums, "nonsense", true)).toBe("recent");
-    expect(resolveVisibleSort(VIEW_CONFIG.albums, "nonsense", false)).toBe("recent");
+    expect(values).toEqual(expect.arrayContaining(["lastPlayed", "myPlays", "allPlays"]));
   });
 });
 

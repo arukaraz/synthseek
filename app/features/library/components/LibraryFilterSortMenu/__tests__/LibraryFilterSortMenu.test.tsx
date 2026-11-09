@@ -16,7 +16,7 @@ vi.mock("@hooks/api", () => ({
 
 interface CapturedProps {
   filter: { value: string; options: { value: string; count?: number }[] };
-  sort: { value: string; options: { value: string; adminOnly?: boolean }[] };
+  sort: { value: string; options: { value: string }[] };
   direction: { value: string };
 }
 
@@ -38,7 +38,6 @@ vi.mock("@components/ui/FilterSortDropdown", () => ({
 }));
 
 import { VIEW_CONFIG } from "../../../constants";
-import { visibleSortOptions } from "../../../helpers";
 import { LibraryFilterSortMenu } from "../LibraryFilterSortMenu";
 
 function makeController(overrides?: Partial<LibraryUrlController>): LibraryUrlController {
@@ -83,30 +82,5 @@ describe("LibraryFilterSortMenu", () => {
     expect(captured.props?.sort.options.map((option) => option.value)).toEqual(
       VIEW_CONFIG.tracks.sortOptions.map((option) => option.value)
     );
-  });
-
-  it("offers only the sorts the controller exposes, so a member never gets the admin-only one", () => {
-    useLibraryCountsMock.mockReturnValue({ data: undefined });
-
-    renderWithProviders(
-      <LibraryFilterSortMenu
-        controller={makeController({ sortOptions: visibleSortOptions(VIEW_CONFIG.tracks, false) })}
-        onViewChange={vi.fn()}
-      />
-    );
-
-    const values = captured.props?.sort.options.map((option) => option.value);
-    expect(values).not.toContain("allPlays");
-    expect(values).toContain("myPlays");
-  });
-
-  it("flags the admin-only sort so the dropdown can mark it", () => {
-    useLibraryCountsMock.mockReturnValue({ data: undefined });
-
-    renderWithProviders(<LibraryFilterSortMenu controller={makeController()} onViewChange={vi.fn()} />);
-
-    const options = captured.props?.sort.options ?? [];
-    expect(options.find((option) => option.value === "allPlays")?.adminOnly).toBe(true);
-    expect(options.find((option) => option.value === "myPlays")?.adminOnly).toBeUndefined();
   });
 });

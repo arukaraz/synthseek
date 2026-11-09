@@ -2,18 +2,10 @@
 
 import { useUrlParams } from "@hooks/ui/useUrlParam";
 import type { UrlParamConfig } from "@hooks/ui/useUrlParam";
-import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useCallback, useMemo } from "react";
 
 import { LIBRARY_ALL_FILTER_KEYS, LIBRARY_BASE_PARAMS, LIBRARY_FACET_SEARCH_KEYS, VIEW_CONFIG } from "../constants";
-import {
-  isLibraryView,
-  parseFilterValues,
-  resolveEffectiveDirection,
-  resolveVisibleSort,
-  serializeFilterValues,
-  visibleSortOptions,
-} from "../helpers";
+import { isLibraryView, parseFilterValues, resolveEffectiveDirection, serializeFilterValues } from "../helpers";
 import type { FacetSearchState, FilterParamMap, LibraryView, SortDirection } from "../types";
 
 function buildSchema() {
@@ -36,13 +28,11 @@ function isSortDirection(value: string | undefined): value is SortDirection {
 
 export function useLibraryUrlState() {
   const { values, set, setMany } = useUrlParams(SCHEMA);
-  const { isAdmin } = useAuthContext();
 
   const view: LibraryView = isLibraryView(values.tab) ? values.tab : "tracks";
   const config = VIEW_CONFIG[view];
-  const sortOptions = useMemo(() => visibleSortOptions(config, isAdmin), [config, isAdmin]);
 
-  const sort = resolveVisibleSort(config, values.sort || config.defaultSort, isAdmin);
+  const sort = values.sort || config.defaultSort;
   const rawDir = isSortDirection(values.dir) ? values.dir : undefined;
   const effectiveDirection = resolveEffectiveDirection(config, sort, rawDir);
 
@@ -123,7 +113,6 @@ export function useLibraryUrlState() {
   return {
     view,
     config,
-    sortOptions,
     search: values.q ?? "",
     sort,
     direction: rawDir,

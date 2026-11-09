@@ -61,7 +61,6 @@ export interface SortOptionDef<TSort extends string = string> {
   value: TSort;
   labelKey: LibraryKey;
   defaultDirection: SortDirection;
-  adminOnly?: boolean;
 }
 
 interface BaseViewConfig<TSort extends string> {

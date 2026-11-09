@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { closeButton } from "../styles";
 import { DialogCloseShownContext } from "./context";
 import { keepOpenForToasts } from "./helpers";
-import { dialogContent, dialogHeader } from "./styles";
+import { dialogContent, dialogFrame, dialogHeader } from "./styles";
 import type {
   DialogContentProps,
   DialogDescriptionProps,
@@ -59,7 +59,7 @@ export function DialogContent({
         <div className={gradientOverlay({ direction: "toBr", intensity: "mixed", rounded: "2xl" })} />
 
         <DialogCloseShownContext value={showClose}>
-          <div className="relative z-10 flex h-full flex-col">{children}</div>
+          <div className={dialogFrame()}>{children}</div>
         </DialogCloseShownContext>
 
         {showClose && (

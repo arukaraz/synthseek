@@ -6,6 +6,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@components/ui/DropdownMenu";
@@ -16,7 +17,6 @@ import { useTranslation } from "react-i18next";
 
 import { FilterSortOptionItem } from "./FilterSortOptionItem";
 import { FilterSortOrder } from "./FilterSortOrder";
-import { FilterSortSortItem } from "./FilterSortSortItem";
 import { filterColumnsOf, selectedValue } from "./helpers";
 import { filterSortColumn, filterSortColumns, filterSortColumnsContent, filterSortTriggerDefault } from "./styles";
 import type { FilterSortDropdownProps } from "./types";
@@ -99,7 +99,9 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                       }}
                     >
                       {sort.options.map((option) => (
-                        <FilterSortSortItem key={option.value} option={option} />
+                        <DropdownMenuRadioItem key={option.value} value={option.value}>
+                          {option.label}
+                        </DropdownMenuRadioItem>
                       ))}
                     </DropdownMenuRadioGroup>
                   </>
@@ -152,7 +154,9 @@ export function FilterSortDropdown<F extends string, S extends string = string>(
                 }}
               >
                 {sort.options.map((option) => (
-                  <FilterSortSortItem key={option.value} option={option} />
+                  <DropdownMenuRadioItem key={option.value} value={option.value}>
+                    {option.label}
+                  </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
             </>

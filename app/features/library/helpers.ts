@@ -192,15 +192,6 @@ function resolvePlaylistSort(sort: string): PlaylistSort {
   return pickSort(sort, VIEW_CONFIG.playlists);
 }
 
-export function visibleSortOptions(config: ViewConfig, isAdmin: boolean): SortOptionDef[] {
-  return config.sortOptions.filter((option) => isAdmin || !option.adminOnly);
-}
-
-export function resolveVisibleSort(config: ViewConfig, rawSort: string, isAdmin: boolean): string {
-  const visible = visibleSortOptions(config, isAdmin);
-  return visible.some((option) => option.value === rawSort) ? rawSort : config.defaultSort;
-}
-
 export function topFacetValues(values: LibraryFacetValue[], topN: number, hasSearch: boolean): LibraryFacetValue[] {
   if (hasSearch) return values;
   return values.slice(0, topN);

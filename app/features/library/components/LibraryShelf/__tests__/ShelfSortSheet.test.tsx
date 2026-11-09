@@ -6,7 +6,6 @@ import enComponents from "@modules/i18n/messages/en/components.json";
 import enLibrary from "@modules/i18n/messages/en/library.json";
 
 import { VIEW_CONFIG } from "../../../constants";
-import { visibleSortOptions } from "../../../helpers";
 import { ShelfSortSheet } from "../ShelfSortSheet";
 
 const sortNames = enLibrary.page.sort;
@@ -53,24 +52,14 @@ describe("ShelfSortSheet", () => {
     expect(controller.setDir).toHaveBeenLastCalledWith("desc");
   });
 
-  it("marks the admin-only sort and no other", async () => {
+  it("offers the three play-count sorts to whoever opens it", async () => {
     const controller = createLibraryController();
     renderWithProviders(<ShelfSortSheet controller={controller} open onOpenChange={vi.fn()} />);
 
     const sheet = await screen.findByRole("dialog");
-    const allPlays = within(sheet).getByRole("button", { name: startsWith(sortNames.allPlays) });
-    expect(within(allPlays).getByRole("img", { name: enComponents.adminOnly.label })).toBeInTheDocument();
-    expect(within(sheet).getAllByRole("img", { name: enComponents.adminOnly.label })).toHaveLength(1);
-  });
-
-  it("lists only the sorts the controller exposes", async () => {
-    const controller = createLibraryController({ sortOptions: visibleSortOptions(VIEW_CONFIG.tracks, false) });
-    renderWithProviders(<ShelfSortSheet controller={controller} open onOpenChange={vi.fn()} />);
-
-    const sheet = await screen.findByRole("dialog");
-    expect(within(sheet).queryByRole("button", { name: startsWith(sortNames.allPlays) })).not.toBeInTheDocument();
-    expect(within(sheet).getByRole("button", { name: startsWith(sortNames.myPlays) })).toBeInTheDocument();
-    expect(within(sheet).queryByRole("img", { name: enComponents.adminOnly.label })).not.toBeInTheDocument();
+    for (const name of [sortNames.lastPlayed, sortNames.myPlays, sortNames.allPlays]) {
+      expect(within(sheet).getByRole("button", { name: startsWith(name) })).toBeInTheDocument();
+    }
   });
 
   it("renders nothing while closed", () => {

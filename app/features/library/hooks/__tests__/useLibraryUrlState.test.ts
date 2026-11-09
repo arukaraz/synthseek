@@ -9,15 +9,11 @@ const replaceMock = vi.fn((url: string) => {
   currentSearch = queryIndex >= 0 ? url.slice(queryIndex + 1) : "";
 });
 
-const auth = vi.hoisted(() => ({ isAdmin: false }));
-
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: replaceMock, push: vi.fn(), back: vi.fn(), forward: vi.fn(), refresh: vi.fn() }),
   usePathname: () => "/library",
   useSearchParams: () => new URLSearchParams(currentSearch),
 }));
-
-vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => auth }));
 
 function lastReplacedParams(): URLSearchParams {
   if (replaceMock.mock.calls.length === 0) return new URLSearchParams();
@@ -29,7 +25,6 @@ function lastReplacedParams(): URLSearchParams {
 describe("useLibraryUrlState", () => {
   beforeEach(() => {
     currentSearch = "";
-    auth.isAdmin = false;
     replaceMock.mockClear();
   });
 
@@ -182,43 +177,10 @@ describe("useLibraryUrlState", () => {
     expect(lastReplacedParams().get("libraryPath")).toBeNull();
   });
 
-  describe("admin-only sorts", () => {
-    it.each(["tracks", "albums", "artists", "playlists"])("never lists allPlays for a member on the %s view", (tab) => {
-      currentSearch = `tab=${tab}`;
-      const { result } = renderHook(() => useLibraryUrlState());
+  it("reads the play-count sort from the URL", () => {
+    currentSearch = "sort=allPlays";
+    const { result } = renderHook(() => useLibraryUrlState());
 
-      const values = result.current.sortOptions.map((option) => option.value);
-      expect(values).not.toContain("allPlays");
-      expect(values).toContain("myPlays");
-    });
-
-    it("lists allPlays for an admin", () => {
-      auth.isAdmin = true;
-      const { result } = renderHook(() => useLibraryUrlState());
-
-      expect(result.current.sortOptions.map((option) => option.value)).toContain("allPlays");
-    });
-
-    it("falls back to the view default when a member's URL asks for allPlays", () => {
-      currentSearch = "sort=allPlays";
-      const { result } = renderHook(() => useLibraryUrlState());
-
-      expect(result.current.sort).toBe("recent");
-    });
-
-    it("keeps allPlays from the URL for an admin", () => {
-      auth.isAdmin = true;
-      currentSearch = "sort=allPlays";
-      const { result } = renderHook(() => useLibraryUrlState());
-
-      expect(result.current.sort).toBe("allPlays");
-    });
-
-    it("keeps a sort a member can see", () => {
-      currentSearch = "sort=myPlays";
-      const { result } = renderHook(() => useLibraryUrlState());
-
-      expect(result.current.sort).toBe("myPlays");
-    });
+    expect(result.current.sort).toBe("allPlays");
   });
 });

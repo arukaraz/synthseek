@@ -62,7 +62,7 @@ export const LIBRARY_SORT_DIRECTIONS: readonly SortDirection[] = ["asc", "desc"]
 const PLAY_SORT_OPTIONS: readonly SortOptionDef<PlaySort>[] = [
   { value: "lastPlayed", labelKey: "page.sort.lastPlayed", defaultDirection: "desc" },
   { value: "myPlays", labelKey: "page.sort.myPlays", defaultDirection: "desc" },
-  { value: "allPlays", labelKey: "page.sort.allPlays", defaultDirection: "desc", adminOnly: true },
+  { value: "allPlays", labelKey: "page.sort.allPlays", defaultDirection: "desc" },
 ];
 
 export const LIBRARY_BASE_PARAMS = {

@@ -45,9 +45,6 @@
   "infoTooltip": {
     "trigger": "Más información"
   },
-  "adminOnly": {
-    "label": "Solo administradores"
-  },
   "fadeScroll": {
     "scrollLeft": "Desplazar a la izquierda",
     "scrollRight": "Desplazar a la derecha"
