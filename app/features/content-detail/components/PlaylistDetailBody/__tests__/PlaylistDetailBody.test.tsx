@@ -55,6 +55,8 @@ vi.mock("../../../ContentDetailActionsContext", () => ({
   useContentDetailActions: () => ({ requestPlaylist: vi.fn(), requestTrack: vi.fn() }),
 }));
 
+vi.mock("../../../ContentDetailCloseContext", () => ({ useContentDetailClose: () => vi.fn() }));
+
 const playback = vi.hoisted(() => ({
   playEntity: vi.fn(async () => false),
   shuffleEntity: vi.fn(async () => false),

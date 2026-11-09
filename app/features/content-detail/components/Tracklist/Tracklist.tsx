@@ -5,7 +5,9 @@ import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
 import { playerActions, useQueuePresence } from "@hooks/ui/player";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
+import { useContentDetailClose } from "../../ContentDetailCloseContext";
 import { isRemovableTrack, playableTrackId } from "../../helpers";
+import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { tracklistRoot } from "../../styles";
 import { TrackRow } from "./TrackRow";
 import type { TracklistProps } from "./types";
@@ -22,7 +24,9 @@ export function Tracklist({
 }: TracklistProps) {
   const { requestTrack } = useContentDetailActions();
   const retryTracks = useRetryTracks();
-  const { playEntity, enqueueEntity } = useEntityPlayback();
+  const { enqueueEntity } = useEntityPlayback();
+  const closeDetail = useContentDetailClose();
+  const { playTrack } = useDetailPlayback(closeDetail);
   const presenceOf = useQueuePresence();
   const retryingId = retryTracks.isPending ? retryTracks.variables?.trackIds[0] : undefined;
 
@@ -42,7 +46,7 @@ export function Tracklist({
             onSelectTrack={selectableId ? (extend) => onSelectTrack?.(selectableId, extend) : undefined}
             onPreviewHover={selectableId ? (hovering) => onPreviewHover?.(hovering ? selectableId : null) : undefined}
             previewTone={selectableId ? previewTone?.(selectableId) : undefined}
-            onPlayNow={playableId === null ? undefined : () => playEntity({ kind: "tracks", trackIds: [playableId] })}
+            onPlayNow={playableId === null ? undefined : () => playTrack(playableId)}
             onEnqueue={
               playableId === null ? undefined : () => enqueueEntity({ kind: "tracks", trackIds: [playableId] })
             }

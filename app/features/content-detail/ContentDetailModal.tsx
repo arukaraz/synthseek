@@ -4,7 +4,7 @@ import { BottomSheet } from "@components/ui/BottomSheet";
 import { DialogDescription, DialogTitle } from "@components/ui/Dialog";
 import { useAlbumDetail, useArtistIdentity, usePlaylistDetail } from "@hooks/api/queries/content-detail";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AlbumDetailBody } from "./components/AlbumDetailBody";
@@ -13,6 +13,7 @@ import { DetailBackButton } from "./components/DetailBackButton";
 import { DetailMiniHeader } from "./components/DetailMiniHeader";
 import { PlaylistDetailBody } from "./components/PlaylistDetailBody";
 import { ContentDetailActionsProvider } from "./ContentDetailActionsContext";
+import { ContentDetailCloseProvider } from "./ContentDetailCloseContext";
 import { MINI_HEADER_SCROLL_THRESHOLD } from "./constants";
 import { showsInLibraryPill } from "./helpers";
 import { useContentDetail } from "./hooks/useContentDetail";
@@ -53,6 +54,8 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
     if (shellRef.current) shellRef.current.scrollTop = 0;
   }, [currentId]);
 
+  const close = useCallback(() => handleOpenChange(false, onClose), [handleOpenChange, onClose]);
+
   if (!current) return null;
 
   const heroImage = (isArtist ? identity?.image : isPlaylist ? playlist?.cover : album?.cover) ?? current.cover;
@@ -79,58 +82,55 @@ export function ContentDetailModal({ open, onClose, target, actions }: ContentDe
       }}
     >
       <ContentDetailActionsProvider actions={actions}>
-        <DialogTitle className="sr-only">{t("dialogTitle", { name: current.name })}</DialogTitle>
-        <DialogDescription id="content-detail-description" className="sr-only">
-          {t("dialogDescription", { name: current.name })}
-        </DialogDescription>
+        <ContentDetailCloseProvider onClose={close}>
+          <DialogTitle className="sr-only">{t("dialogTitle", { name: current.name })}</DialogTitle>
+          <DialogDescription id="content-detail-description" className="sr-only">
+            {t("dialogDescription", { name: current.name })}
+          </DialogDescription>
 
-        <div
-          ref={shellRef}
-          tabIndex={-1}
-          className={modalShell()}
-          onScroll={(event) => setMiniVisible(event.currentTarget.scrollTop > MINI_HEADER_SCROLL_THRESHOLD)}
-        >
-          <DetailMiniHeader
-            name={current.name}
-            cover={heroImage}
-            mode={current.mode}
-            canGoBack={canGoBack}
-            onBack={goBack}
-            backAriaLabel={backAriaLabel}
-            visible={miniVisible}
-          />
+          <div
+            ref={shellRef}
+            tabIndex={-1}
+            className={modalShell()}
+            onScroll={(event) => setMiniVisible(event.currentTarget.scrollTop > MINI_HEADER_SCROLL_THRESHOLD)}
+          >
+            <DetailMiniHeader
+              name={current.name}
+              cover={heroImage}
+              mode={current.mode}
+              canGoBack={canGoBack}
+              onBack={goBack}
+              backAriaLabel={backAriaLabel}
+              visible={miniVisible}
+            />
 
-          {canGoBack ? (
-            <div className={backBar()}>
-              <DetailBackButton label={backLabel} ariaLabel={backAriaLabel} onClick={goBack} />
-            </div>
-          ) : null}
+            {canGoBack ? (
+              <div className={backBar()}>
+                <DetailBackButton label={backLabel} ariaLabel={backAriaLabel} onClick={goBack} />
+              </div>
+            ) : null}
 
-          {current.mode === "artist" ? (
-            <ArtistDetailBody
-              key={current.id}
-              target={current}
-              onClose={() => handleOpenChange(false, onClose)}
-              onNavigate={navigateTo}
-            />
-          ) : current.mode === "playlist" ? (
-            <PlaylistDetailBody
-              key={current.id}
-              target={current}
-              onClose={() => handleOpenChange(false, onClose)}
-              onNavigate={navigateTo}
-              showInLibraryPill={showInLibraryPill}
-            />
-          ) : (
-            <AlbumDetailBody
-              key={current.id}
-              target={current}
-              onClose={() => handleOpenChange(false, onClose)}
-              onNavigate={navigateTo}
-              showInLibraryPill={showInLibraryPill}
-            />
-          )}
-        </div>
+            {current.mode === "artist" ? (
+              <ArtistDetailBody key={current.id} target={current} onClose={close} onNavigate={navigateTo} />
+            ) : current.mode === "playlist" ? (
+              <PlaylistDetailBody
+                key={current.id}
+                target={current}
+                onClose={close}
+                onNavigate={navigateTo}
+                showInLibraryPill={showInLibraryPill}
+              />
+            ) : (
+              <AlbumDetailBody
+                key={current.id}
+                target={current}
+                onClose={close}
+                onNavigate={navigateTo}
+                showInLibraryPill={showInLibraryPill}
+              />
+            )}
+          </div>
+        </ContentDetailCloseProvider>
       </ContentDetailActionsProvider>
     </BottomSheet>
   );

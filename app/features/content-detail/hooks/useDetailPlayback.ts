@@ -14,14 +14,15 @@ export function useDetailPlayback(onClose: () => void): DetailPlayback {
   const { playEntity, shuffleEntity, startRadio } = useEntityPlayback();
   const wide = useMediaQuery(STAGE_WIDE_QUERY, true);
   const sideways = useMediaQuery(TOUCH_SHORT_LANDSCAPE_QUERY);
+  const onPhone = !wide || sideways;
 
   const leaveFor = useCallback(
     (started: boolean) => {
       if (!started) return;
       onClose();
-      if (!wide || sideways) playerActions.openStage();
+      if (onPhone) playerActions.openStage();
     },
-    [onClose, sideways, wide]
+    [onClose, onPhone]
   );
 
   const play = useCallback(
@@ -36,6 +37,13 @@ export function useDetailPlayback(onClose: () => void): DetailPlayback {
     async (target: PlayableTracksTarget) => leaveFor(await startRadio(target)),
     [leaveFor, startRadio]
   );
+  const playTrack = useCallback(
+    async (trackId: string) => {
+      const started = await playEntity({ kind: "tracks", trackIds: [trackId] });
+      if (onPhone) leaveFor(started);
+    },
+    [leaveFor, onPhone, playEntity]
+  );
 
-  return { play, shuffle, radio };
+  return { play, shuffle, radio, playTrack };
 }

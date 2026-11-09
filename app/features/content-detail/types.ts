@@ -191,8 +191,14 @@ export interface ContentDetailActionsProviderProps {
   children: ReactNode;
 }
 
+export interface ContentDetailCloseProviderProps {
+  onClose: () => void;
+  children: ReactNode;
+}
+
 export interface DetailPlayback {
   play: (target: PlayableTracksTarget) => Promise<void>;
   shuffle: (target: PlayableTracksTarget) => Promise<void>;
   radio: (target: PlayableTracksTarget) => Promise<void>;
+  playTrack: (trackId: string) => Promise<void>;
 }

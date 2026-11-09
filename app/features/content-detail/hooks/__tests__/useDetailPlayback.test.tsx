@@ -64,6 +64,55 @@ describe("useDetailPlayback", () => {
     expect(stage.openStage).toHaveBeenCalledTimes(1);
   });
 
+  it("leaves for the full screen player when a single track starts on a phone", async () => {
+    media.matches = new Set();
+    const order: string[] = [];
+    playback.playEntity.mockResolvedValue(true);
+    stage.openStage.mockImplementation(() => order.push("stage"));
+    const { result } = renderHook(() => useDetailPlayback(() => order.push("close")));
+
+    await act(() => result.current.playTrack("tr_1"));
+
+    expect(playback.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["tr_1"] });
+    expect(order).toEqual(["close", "stage"]);
+  });
+
+  it("leaves for the full screen player when a single track starts on a phone held sideways", async () => {
+    media.matches = new Set([STAGE_WIDE_QUERY, TOUCH_SHORT_LANDSCAPE_QUERY]);
+    playback.playEntity.mockResolvedValue(true);
+    const onClose = vi.fn();
+    const { result } = renderHook(() => useDetailPlayback(onClose));
+
+    await act(() => result.current.playTrack("tr_1"));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(stage.openStage).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the modal open when a single track starts on a wide screen, so browsing goes on", async () => {
+    playback.playEntity.mockResolvedValue(true);
+    const onClose = vi.fn();
+    const { result } = renderHook(() => useDetailPlayback(onClose));
+
+    await act(() => result.current.playTrack("tr_1"));
+
+    expect(playback.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["tr_1"] });
+    expect(onClose).not.toHaveBeenCalled();
+    expect(stage.openStage).not.toHaveBeenCalled();
+  });
+
+  it("stays in the modal on a phone when the single track did not start", async () => {
+    media.matches = new Set();
+    playback.playEntity.mockResolvedValue(false);
+    const onClose = vi.fn();
+    const { result } = renderHook(() => useDetailPlayback(onClose));
+
+    await act(() => result.current.playTrack("tr_1"));
+
+    expect(onClose).not.toHaveBeenCalled();
+    expect(stage.openStage).not.toHaveBeenCalled();
+  });
+
   it("keeps the modal open when nothing started, so the reason can be read", async () => {
     media.matches = new Set();
     playback.startRadio.mockResolvedValue(false);
