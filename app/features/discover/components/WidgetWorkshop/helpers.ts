@@ -1,7 +1,7 @@
 import i18n from "@locale";
 
-import type { SearchComboboxOption } from "@components/ui/SearchCombobox";
-import { COUNTRIES, getCountryByCode } from "@utils/countries";
+import type { SelectMenuOption } from "@components/ui/SelectMenu";
+import { COUNTRIES } from "@utils/countries";
 import { matchesTerms, searchTerms } from "@utils/search";
 import type {
   FeedQuery,
@@ -54,6 +54,7 @@ import type {
   GrammarSubject,
   MediaServer,
   PickRotation,
+  PreviewRefreshInput,
   RecipeMeasure,
   RecapNamedPeriod,
   RecipeSubject,
@@ -484,17 +485,11 @@ function feedWithSource(base: FeedBase, source: FeedSource, defaults: FeedDefaul
   }
 }
 
-export function chartCountryOptions(query: string, worldwide: string): SearchComboboxOption[] {
-  const terms = searchTerms(query);
-  const options = [
-    { value: ANY_COUNTRY, label: worldwide },
+export function countryOptions(anyLabel: string): SelectMenuOption<string>[] {
+  return [
+    { value: ANY_COUNTRY, label: anyLabel },
     ...COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
   ];
-  return terms.length === 0 ? options : options.filter((option) => matchesTerms(terms, [option.label]));
-}
-
-export function chartCountryLabel(country: string | null, worldwide: string): string {
-  return country === null ? worldwide : (getCountryByCode(country)?.name ?? country);
 }
 
 export function withSource(feed: FeedQuery, source: FeedSource, catalog: WidgetCatalog, country: string): FeedQuery {
@@ -623,6 +618,15 @@ export function viewChoicesOf(
 export function previewableDraft(draft: WidgetDraft, fallbackName: string): WidgetDraft {
   if (draft.meta.name.trim().length > 0) return draft;
   return { ...draft, meta: { ...draft.meta, name: fallbackName } };
+}
+
+export function previewIsRefreshing({
+  draft,
+  previewDraft,
+  isPlaceholderData,
+  isFetching,
+}: PreviewRefreshInput): boolean {
+  return draft !== previewDraft || (isPlaceholderData && isFetching);
 }
 
 export function draftKeyOf(draft: WidgetDraft): string {

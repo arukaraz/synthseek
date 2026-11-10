@@ -1,20 +1,17 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components/ui/Button";
-import { SearchCombobox } from "@components/ui/SearchCombobox";
+import { SearchSelect } from "@components/ui/SearchSelect";
 import { SegmentedControl } from "@components/ui/SegmentedControl";
 import { SelectMenu } from "@components/ui/SelectMenu";
-import { COUNTRIES } from "@utils/countries";
 import { playbackServerName } from "@utils/playback-servers";
 
 import { ANY_COUNTRY, FEED_SEED_KINDS, NO_ROTATION, NUMBER_BOUNDS } from "./constants";
 import {
-  chartCountryLabel,
-  chartCountryOptions,
+  countryOptions,
   defaultRuleFor,
   rotationChoicesOf,
   feedReadbackOf,
@@ -38,7 +35,6 @@ import { WhereStep } from "./WhereStep";
 export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
   const { t } = useTranslation("widgets");
   const { catalog, grammar, country } = context;
-  const [countryQuery, setCountryQuery] = useState("");
   const source = feedSourceOf(catalog, feed.source);
   const fields = source?.rules ?? [];
   const rules = ruleListOf(feed.rules);
@@ -121,32 +117,26 @@ export function FeedSteps({ workshop, feed, context }: FeedStepsProps) {
         ) : null}
         {feed.source === "lastfm.charts" ? (
           <StepRow label={t("steps.params")}>
-            <span className={stepText()}>{chartCountryLabel(feed.params.country, t("feeds.worldwide"))}</span>
-            <SearchCombobox
-              label={t("feeds.country")}
-              placeholder={t("feeds.searchCountry")}
-              options={chartCountryOptions(countryQuery, t("feeds.worldwide"))}
-              query={countryQuery}
-              onQueryChange={setCountryQuery}
-              onPick={(option) =>
-                workshop.setQuery({
-                  ...feed,
-                  params: { country: option.value === ANY_COUNTRY ? null : option.value },
-                })
-              }
+            <SearchSelect
+              ariaLabel={t("feeds.country")}
+              searchPlaceholder={t("feeds.searchCountry")}
               emptyText={t("feeds.noCountry")}
+              value={feed.params.country ?? ANY_COUNTRY}
+              options={countryOptions(t("feeds.worldwide"))}
+              onChange={(country) =>
+                workshop.setQuery({ ...feed, params: { country: country === ANY_COUNTRY ? null : country } })
+              }
             />
           </StepRow>
         ) : null}
         {feed.source === "events.upcoming" ? (
           <StepRow label={t("steps.params")}>
-            <SelectMenu
+            <SearchSelect
               ariaLabel={t("feeds.country")}
+              searchPlaceholder={t("feeds.searchCountry")}
+              emptyText={t("feeds.noCountry")}
               value={feed.params.country ?? ANY_COUNTRY}
-              options={[
-                { value: ANY_COUNTRY, label: t("feeds.anywhere") },
-                ...COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
-              ]}
+              options={countryOptions(t("feeds.anywhere"))}
               onChange={(country) =>
                 workshop.setQuery({
                   ...feed,

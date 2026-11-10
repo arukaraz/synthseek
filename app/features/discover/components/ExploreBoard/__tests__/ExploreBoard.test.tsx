@@ -99,9 +99,13 @@ function only(items: BoardLayout["items"]): BoardLayout {
   return { schemaVersion: 4, items, mobile: items };
 }
 
-function openWidgets() {
+async function openWidgets() {
   fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-  fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.widgetsDialog.action") }));
+  fireEvent.pointerDown(screen.getByRole("button", { name: i18n.t("discover:board.add.action") }), {
+    button: 0,
+    ctrlKey: false,
+  });
+  fireEvent.click(await screen.findByRole("menuitem", { name: i18n.t("widgets:board.widgetsDialog.action") }));
 }
 
 function renderedTileIds(container: HTMLElement): string[] {
@@ -219,7 +223,7 @@ describe("ExploreBoard", () => {
 
     expect(screen.getAllByRole("button", { name: /^Remove/ })).toHaveLength(2);
     expect(tile(container, "a")).toHaveAttribute("tabindex", "0");
-    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddWidgetsAppearance$/);
+    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddAppearance$/);
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.done") }));
 
@@ -278,7 +282,7 @@ describe("ExploreBoard", () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
     render(<ExploreBoard />);
-    openWidgets();
+    await openWidgets();
     const dialog = screen.getByRole("dialog");
     fireEvent.pointerDown(within(dialog).getByRole("button", { name: "Add Discover Mixes" }), {
       button: 0,
@@ -293,7 +297,7 @@ describe("ExploreBoard", () => {
     expect(saveMock.mock.calls.at(-1)?.[0].mobile).toEqual(TWO_TILES.mobile);
   });
 
-  it("keeps the edit menu on an empty board, so widgets can still be added and the board settings reached", () => {
+  it("keeps the edit menu on an empty board, so widgets can still be added and the board settings reached", async () => {
     useBoardLayoutMock.mockReturnValue({ data: only([]), isLoading: false });
 
     render(<ExploreBoard />);
@@ -303,7 +307,11 @@ describe("ExploreBoard", () => {
       "href",
       "/settings/appearance/board"
     );
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.widgetsDialog.action") }));
+    fireEvent.pointerDown(screen.getByRole("button", { name: i18n.t("discover:board.add.action") }), {
+      button: 0,
+      ctrlKey: false,
+    });
+    fireEvent.click(await screen.findByRole("menuitem", { name: i18n.t("widgets:board.widgetsDialog.action") }));
     expect(screen.getByRole("dialog", { name: i18n.t("widgets:board.widgetsDialog.title") })).toBeInTheDocument();
   });
 

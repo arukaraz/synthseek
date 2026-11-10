@@ -5,6 +5,7 @@ import { useId, useState } from "react";
 import type { KeyboardEvent } from "react";
 
 import { Input } from "@components/ui/Input";
+import { stepIndex } from "@utils/list-navigation";
 
 import { comboEmpty, comboHint, comboIcon, comboInput, comboLabel, comboList, comboOption, comboRoot } from "./styles";
 import type { SearchComboboxOption, SearchComboboxProps } from "./types";
@@ -41,7 +42,7 @@ export function SearchCombobox({
       event.preventDefault();
       setOpen(true);
       const step = event.key === "ArrowDown" ? 1 : -1;
-      setActive((current) => (options.length === 0 ? 0 : (current + step + options.length) % options.length));
+      setActive((current) => stepIndex(current, step, options.length));
       return;
     }
     const option = options[active];

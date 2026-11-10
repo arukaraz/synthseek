@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@components/ui/Button";
 import { IconButton } from "@components/ui/IconButton";
 import { SegmentedControl } from "@components/ui/SegmentedControl";
+import { Spinner } from "@components/ui/Spinner";
 import { useElementWidth } from "@hooks/ui/useElementWidth";
 
 import { CustomWidgetContent } from "../CustomWidget/CustomWidgetContent";
@@ -15,10 +16,27 @@ import { copyWidgetJson, customPreviewFrame, draftJsonOf } from "../WidgetGaller
 import { LockedAction } from "../WidgetGallery/LockedAction";
 import { ScaledPreview } from "../WidgetGallery/ScaledPreview";
 import { WORKSHOP_SIZES } from "./constants";
-import { previewBar, previewBox, previewCopy, previewHint, previewJson, previewLabel, previewTools } from "./styles";
+import {
+  previewBar,
+  previewBox,
+  previewBusy,
+  previewCopy,
+  previewHint,
+  previewJson,
+  previewLabel,
+  previewStale,
+  previewTools,
+} from "./styles";
 import type { WorkshopPreviewProps } from "./types";
 
-export function WorkshopPreview({ draft, result, isLoading, isError, onSizeChange }: WorkshopPreviewProps) {
+export function WorkshopPreview({
+  draft,
+  result,
+  isLoading,
+  isRefreshing,
+  isError,
+  onSizeChange,
+}: WorkshopPreviewProps) {
   const { t } = useTranslation("widgets");
   const [showJson, setShowJson] = useState(false);
   const [measure, width] = useElementWidth<HTMLDivElement>();
@@ -59,10 +77,17 @@ export function WorkshopPreview({ draft, result, isLoading, isError, onSizeChang
           />
         </div>
       </div>
-      <div ref={measure} className={previewBox()}>
-        <ScaledPreview frame={customPreviewFrame(draft.view.block, size, width)}>
-          <CustomWidgetContent widget={draft} size={size} result={result} isLoading={isLoading} isError={isError} />
-        </ScaledPreview>
+      <div ref={measure} className={previewBox()} aria-busy={isRefreshing}>
+        <div className={previewStale({ stale: isRefreshing })}>
+          <ScaledPreview frame={customPreviewFrame(draft.view.block, size, width)}>
+            <CustomWidgetContent widget={draft} size={size} result={result} isLoading={isLoading} isError={isError} />
+          </ScaledPreview>
+        </div>
+        {isRefreshing ? (
+          <div className={previewBusy()}>
+            <Spinner size="lg" label={t("workshop.previewUpdating")} />
+          </div>
+        ) : null}
       </div>
       {showJson ? (
         <>

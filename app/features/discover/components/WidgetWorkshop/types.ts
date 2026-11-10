@@ -172,10 +172,18 @@ export interface StepRowProps {
   flush?: boolean;
 }
 
+export interface PreviewRefreshInput {
+  draft: WidgetDraft;
+  previewDraft: WidgetDraft;
+  isPlaceholderData: boolean;
+  isFetching: boolean;
+}
+
 export interface WorkshopPreviewProps {
   draft: WidgetDraft;
   result: WidgetResult | undefined;
   isLoading: boolean;
+  isRefreshing: boolean;
   isError: boolean;
   onSizeChange: (size: BoardSize) => void;
 }

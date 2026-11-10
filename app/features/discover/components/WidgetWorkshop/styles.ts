@@ -200,7 +200,16 @@ export const previewLabel = cva("text-fg/60 font-mono text-[10.5px] tracking-wid
 
 export const previewTools = cva("flex items-center gap-1.5");
 
-export const previewBox = cva("min-w-0");
+export const previewBox = cva("relative min-w-0");
+
+export const previewStale = cva("transition-opacity", {
+  variants: {
+    stale: { true: "pointer-events-none opacity-40", false: "" },
+  },
+  defaultVariants: { stale: false },
+});
+
+export const previewBusy = cva("absolute inset-0 flex items-center justify-center");
 
 export const previewHint = cva("text-fg/50 text-[11px]");
 

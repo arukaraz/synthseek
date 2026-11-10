@@ -13,6 +13,7 @@ import {
   fittingBlocksOf,
   matchingIcons,
   previewableDraft,
+  previewIsRefreshing,
   reachableBlocksOf,
   recipeShapeOf,
   readbackOf,
@@ -27,8 +28,7 @@ import {
   withServer,
   withSource,
   withSubject,
-  chartCountryLabel,
-  chartCountryOptions,
+  countryOptions,
 } from "../helpers";
 
 const grammar = createWidgetGrammar();
@@ -208,17 +208,28 @@ describe("withSource and feedReadbackOf", () => {
     expect(back.params).toEqual({ seed: { kind: "myTopArtists", n: 10, days: 90 } });
   });
 
-  it("offers the worldwide chart first, then every country whose name matches the search", () => {
-    const all = chartCountryOptions("", "Worldwide");
-    expect(all[0]).toEqual({ value: "any", label: "Worldwide" });
-    expect(all).toHaveLength(COUNTRIES.length + 1);
-    expect(chartCountryOptions("mex", "Worldwide").map((option) => option.value)).toEqual(["MX"]);
-    expect(chartCountryOptions("zzzz", "Worldwide")).toEqual([]);
+  it("calls the preview out of date while a change waits on the debounce or its fetch, and never for a query that cannot run", () => {
+    const edited = { ...NEW_WIDGET_DRAFT, meta: { ...NEW_WIDGET_DRAFT.meta, name: "Edited" } };
+    const settled = { draft: NEW_WIDGET_DRAFT, previewDraft: NEW_WIDGET_DRAFT };
+
+    expect(
+      previewIsRefreshing({
+        draft: edited,
+        previewDraft: NEW_WIDGET_DRAFT,
+        isPlaceholderData: false,
+        isFetching: false,
+      })
+    ).toBe(true);
+    expect(previewIsRefreshing({ ...settled, isPlaceholderData: true, isFetching: true })).toBe(true);
+    expect(previewIsRefreshing({ ...settled, isPlaceholderData: true, isFetching: false })).toBe(false);
+    expect(previewIsRefreshing({ ...settled, isPlaceholderData: false, isFetching: true })).toBe(false);
   });
 
-  it("names the chart's country, or the worldwide chart when it has none", () => {
-    expect(chartCountryLabel("MX", "Worldwide")).toBe("Mexico");
-    expect(chartCountryLabel(null, "Worldwide")).toBe("Worldwide");
+  it("offers the any-country choice first, then every country by name", () => {
+    const all = countryOptions("Worldwide");
+    expect(all[0]).toEqual({ value: "any", label: "Worldwide" });
+    expect(all).toHaveLength(COUNTRIES.length + 1);
+    expect(all.find((option) => option.value === "MX")?.label).toBe("Mexico");
   });
 
   it("charts the member's chosen country, not one guessed from the language", () => {

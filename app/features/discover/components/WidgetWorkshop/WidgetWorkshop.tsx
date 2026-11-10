@@ -13,7 +13,7 @@ import { browserTimeZone } from "@utils/time-zone";
 import { useWidgetWorkshop } from "../../hooks/useWidgetWorkshop";
 import { useWorkshopSave } from "../../hooks/useWorkshopSave";
 import { DetailsSection } from "./DetailsSection";
-import { previewableDraft } from "./helpers";
+import { previewableDraft, previewIsRefreshing } from "./helpers";
 import { LookSection } from "./LookSection";
 import { PlaylistChoice } from "./PlaylistChoice";
 import { PlaylistSection } from "./PlaylistSection";
@@ -90,6 +90,12 @@ export function WidgetWorkshop({ opening, context, onLeave, onDirtyChange, onSav
               draft={draft}
               result={preview.data}
               isLoading={preview.isLoading}
+              isRefreshing={previewIsRefreshing({
+                draft,
+                previewDraft: workshop.previewDraft,
+                isPlaceholderData: preview.isPlaceholderData,
+                isFetching: preview.isFetching,
+              })}
               isError={preview.isError}
               onSizeChange={workshop.setSize}
             />

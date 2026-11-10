@@ -193,6 +193,7 @@
     },
     "preview": "Vista previa",
     "previewHint": "La vista previa ejecuta el widget sobre tus propios datos.",
+    "previewUpdating": "Actualizando la vista previa",
     "sizeLocked": "Este look solo existe en {{size}}",
     "discard": {
       "title": "¿Descartar los cambios?",

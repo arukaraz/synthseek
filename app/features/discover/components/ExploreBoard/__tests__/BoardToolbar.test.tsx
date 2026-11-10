@@ -61,19 +61,16 @@ describe("BoardToolbar", () => {
     expect(actions.onCustomize).toHaveBeenCalledTimes(1);
   });
 
-  it.each([
-    ["Widgets", "onWidgets"],
-    ["Done", "onDone"],
-  ] as const)("runs %s from the edit menu", (name, handler) => {
+  it("runs Done from the edit menu", () => {
     const actions = handlers();
     render(<BoardToolbar editing {...actions} />);
 
-    fireEvent.click(screen.getByRole("button", { name }));
+    fireEvent.click(screen.getByRole("button", { name: "Done" }));
 
-    expect(actions[handler]).toHaveBeenCalledTimes(1);
+    expect(actions.onDone).toHaveBeenCalledTimes(1);
   });
 
-  it("leads the menu with Add, then Widgets and Appearance, and keeps Done outside the part that scrolls", () => {
+  it("leads the menu with Add, then Appearance, and keeps Done outside the part that scrolls", () => {
     render(<BoardToolbar editing {...handlers()} />);
     const add = screen.getByRole("button", { name: "Add" });
     const scroller = add.parentElement?.parentElement;
@@ -81,7 +78,6 @@ describe("BoardToolbar", () => {
     expect(scroller).toHaveClass("overflow-x-auto");
     expect(Array.from(add.parentElement?.children ?? [], (button) => button.textContent)).toEqual([
       "Add",
-      "Widgets",
       "Appearance",
     ]);
     expect(scroller).not.toContainElement(screen.getByRole("button", { name: "Done" }));
@@ -110,14 +106,25 @@ describe("BoardToolbar", () => {
     expect(screen.getByRole("button", { name: "Done" })).toHaveTextContent(/^$/);
   });
 
-  it("adds a spacer from the Add menu", async () => {
+  it.each([
+    ["Widgets", "onWidgets"],
+    ["Spacer", "onAddSpacer"],
+  ] as const)("runs %s from the Add menu", async (name, handler) => {
     const actions = handlers();
     render(<BoardToolbar editing {...actions} />);
 
     fireEvent.pointerDown(screen.getByRole("button", { name: "Add" }), { button: 0, ctrlKey: false });
-    fireEvent.click(await screen.findByRole("menuitem", { name: "Spacer" }));
+    fireEvent.click(await screen.findByRole("menuitem", { name }));
 
-    expect(actions.onAddSpacer).toHaveBeenCalledTimes(1);
+    expect(actions[handler]).toHaveBeenCalledTimes(1);
+  });
+
+  it("lists Widgets before Spacer in the Add menu", async () => {
+    render(<BoardToolbar editing {...handlers()} />);
+
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Add" }), { button: 0, ctrlKey: false });
+
+    expect((await screen.findAllByRole("menuitem")).map((item) => item.textContent)).toEqual(["Widgets", "Spacer"]);
   });
 
   it("keeps the edit controls in place whatever the scroll", () => {

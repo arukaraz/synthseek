@@ -59,16 +59,16 @@ export function BoardToolbar({ editing, onCustomize, onDone, onAddSpacer, onWidg
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent side="top" align="center">
+                    <DropdownMenuItem onSelect={onWidgets}>
+                      <Blocks />
+                      {t("widgets:board.widgetsDialog.action")}
+                    </DropdownMenuItem>
                     <DropdownMenuItem onSelect={onAddSpacer}>
                       <SquareDashed />
                       {t("board.spacer.name")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button variant="ghost" size="sm" onClick={onWidgets}>
-                  <Blocks />
-                  {t("widgets:board.widgetsDialog.action")}
-                </Button>
                 <Button variant="ghost" size="sm" asChild>
                   <Link href={BOARD_SETTINGS_HREF}>
                     <Palette />

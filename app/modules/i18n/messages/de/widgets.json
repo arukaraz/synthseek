@@ -193,6 +193,7 @@
     },
     "preview": "Vorschau",
     "previewHint": "Die Vorschau führt das Widget mit deinen eigenen Daten aus.",
+    "previewUpdating": "Vorschau wird aktualisiert",
     "sizeLocked": "Diesen Look gibt es nur in {{size}}",
     "discard": {
       "title": "Änderungen verwerfen?",
