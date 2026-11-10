@@ -284,7 +284,7 @@
     "widgets": {
       "trending": "Die angesagten Titel aus den Katalog-Charts, einer nach dem anderen. Anfordern holt einen Titel in deine Bibliothek.",
       "mixes": "Die Playlists, die ListenBrainz aus deinen Scrobbles erstellt. Öffne eine, um ihre Titel zu sehen und Fehlendes anzufordern.",
-      "artistsNext": "Künstler, die denen ähneln, die du am meisten hörst, und die nicht in deiner Bibliothek sind, mit ihrer neuesten Veröffentlichung. Ohne Verlauf die Top-Künstler deiner Region.",
+      "artistsNext": "Künstler, die denen ähneln, die du am meisten hörst, und die nicht in deiner Bibliothek sind, mit ihrer neuesten Veröffentlichung. Ohne Verlauf die weltweiten Top-Künstler.",
       "genres": "Katalog-Kategorien zum Stöbern. Öffne eine, um ihre Alben und redaktionellen Playlists zu sehen.",
       "topTracks": "Deine meistgescrobbelten Titel auf Last.fm, aller Zeiten.",
       "scrobbles": "Deine neuesten Last.fm-Scrobbles, sobald sie eintreffen, die neuesten zuerst.",
@@ -299,7 +299,7 @@
       "continueListening": "Deine Warteschlange dort, wo du aufgehört hast, und deine letzten Wiedergaben aus allen Apps.",
       "rarities": "Titel, die du hörst und die nur wenige hören, nach den Zahlen von ListenBrainz.",
       "orbit": "Alben, die du nicht besitzt, ausgewählt aus Titeln, die deinen meistgehörten ähneln.",
-      "charts": "Die meistgehörten Titel dieser Woche in deiner Region auf Last.fm. Spiel ab, was du hast, und fordere den Rest an.",
+      "charts": "Die meistgehörten Titel dieser Woche weltweit auf Last.fm. Spiel ab, was du hast, und fordere den Rest an.",
       "loved": "Titel, die du auf Last.fm geliebt hast und die noch nicht in deiner Bibliothek sind.",
       "newInLibrary": "Alben, die in den letzten 7 Tagen angekommen sind, und ob du sie gehört hast.",
       "gaps": "Veröffentlichungen, die von deinen meistvertretenen Künstlern fehlen, verglichen mit dem Katalog.",

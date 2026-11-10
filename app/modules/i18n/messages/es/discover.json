@@ -284,7 +284,7 @@
     "widgets": {
       "trending": "Las canciones en tendencia en las listas del catálogo, una a una. Solicitar trae la canción a tu biblioteca.",
       "mixes": "Las listas que ListenBrainz crea con tus scrobbles. Abre una para ver sus canciones y solicitar lo que te falta.",
-      "artistsNext": "Artistas parecidos a los que más escuchas que no están en tu biblioteca, con su último lanzamiento. Sin historial, los más escuchados en tu región.",
+      "artistsNext": "Artistas parecidos a los que más escuchas que no están en tu biblioteca, con su último lanzamiento. Sin historial, los más escuchados en todo el mundo.",
       "genres": "Categorías del catálogo para explorar. Abre una para ver sus álbumes y listas editoriales.",
       "topTracks": "Tus canciones con más scrobbles en Last.fm, de siempre.",
       "scrobbles": "Tus últimos scrobbles de Last.fm según llegan, el más reciente primero.",
@@ -299,7 +299,7 @@
       "continueListening": "Tu cola de reproducción donde la dejaste, y lo último que escuchaste desde cualquier app.",
       "rarities": "Canciones que escuchas y que poca gente escucha, según los conteos de ListenBrainz.",
       "orbit": "Álbumes que no tienes, elegidos a partir de canciones parecidas a las que más escuchas.",
-      "charts": "Las canciones más escuchadas esta semana en tu región en Last.fm. Reproduce las que tienes y solicita el resto.",
+      "charts": "Las canciones más escuchadas esta semana en todo el mundo en Last.fm. Reproduce las que tienes y solicita el resto.",
       "loved": "Canciones que marcaste como favoritas en Last.fm y que aún no están en tu biblioteca.",
       "newInLibrary": "Álbumes que llegaron en los últimos 7 días, y si ya los escuchaste.",
       "gaps": "Lanzamientos que faltan de los artistas que más tienes, comparados con el catálogo.",

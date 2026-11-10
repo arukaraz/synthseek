@@ -284,7 +284,7 @@
     "widgets": {
       "trending": "The tracks trending on the catalog charts, one at a time. Request pulls a track into your library.",
       "mixes": "The playlists ListenBrainz builds from your scrobbles. Open one to see its tracks and request what you are missing.",
-      "artistsNext": "Artists similar to the ones you play most that are not in your library, with their latest release. Without history, the top artists in your region.",
+      "artistsNext": "Artists similar to the ones you play most that are not in your library, with their latest release. Without history, the top artists worldwide.",
       "genres": "Catalog categories to browse. Open one to see its albums and editorial playlists.",
       "topTracks": "Your most scrobbled tracks on Last.fm, all time.",
       "scrobbles": "Your latest Last.fm scrobbles as they arrive, newest first.",
@@ -299,7 +299,7 @@
       "continueListening": "Your play queue where you left it, and your latest plays from every app.",
       "rarities": "Tracks you play that few people listen to, from ListenBrainz listen counts.",
       "orbit": "Albums you do not own, picked from tracks similar to the ones you play most.",
-      "charts": "This week's top tracks in your region on Last.fm. Play the ones you have and request the rest.",
+      "charts": "This week's top tracks worldwide on Last.fm. Play the ones you have and request the rest.",
       "loved": "Tracks you loved on Last.fm that are not in your library yet.",
       "newInLibrary": "Albums that landed in the last 7 days, and whether you played them.",
       "gaps": "Releases missing from the artists you own most, compared with the catalog.",
