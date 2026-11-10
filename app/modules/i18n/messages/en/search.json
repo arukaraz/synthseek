@@ -107,6 +107,12 @@
         "flexible": {
           "label": "Flexible",
           "description": "Best available match"
+        },
+        "losslessStrict": {
+          "description": "FLAC only, nothing else"
+        },
+        "losslessFlexible": {
+          "description": "FLAC first, else the best lossy file"
         }
       },
       "qualityMode": {
@@ -116,7 +122,7 @@
         },
         "lossless": {
           "label": "Lossless",
-          "description": "FLAC only, exact match"
+          "description": "FLAC files"
         }
       },
       "uploadSpeed": {
@@ -246,6 +252,17 @@
       "invalidItem": "Invalid item",
       "fetchFailed": "Failed to fetch {{type}} tracks",
       "lidarrIncomplete": "Select a root folder, quality profile, and metadata profile"
+    },
+    "presetUnavailable": "Your request settings could not be loaded. Requesting now uses your preset.",
+    "presetLocked": "This request uses your request preset: {{summary}}. Ask an admin to change it."
+  },
+  "direct": {
+    "confirm": {
+      "title": "Request {{name}}?",
+      "message_one": "This sends {{count}} track with your request preset.",
+      "message_other": "This sends {{count}} tracks with your request preset.",
+      "action_one": "Request {{count}} track",
+      "action_other": "Request {{count}} tracks"
     }
   }
 }

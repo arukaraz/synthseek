@@ -1,6 +1,7 @@
 "use client";
 
 import { Download, Play } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { CoverArt } from "../WidgetRow/CoverArt";
 import { BLOCK_LIMITS, MOSAIC_COLUMNS, MOSAIC_ROWS } from "./constants";
@@ -9,13 +10,19 @@ import { blockBody, mosaicButton, mosaicGrid, mosaicTile, mosaicVars, visuallyHi
 import type { WidgetBlockProps } from "./types";
 
 export function MosaicBlock({ items, size, accent, controls }: WidgetBlockProps) {
+  const { t } = useTranslation("discover");
   return (
     <div data-acc={accent} className={blockBody()}>
       <ul className={mosaicGrid()} style={mosaicVars(MOSAIC_COLUMNS[size], MOSAIC_ROWS)}>
         {items.slice(0, BLOCK_LIMITS.mosaic[size]).map((item) => {
           const { onSelect, coverAction } = controls(item);
           const action = coverAction?.onClick ?? onSelect;
-          const label = coverAction?.label ?? item.title;
+          const label =
+            coverAction?.kind === "play"
+              ? coverAction.label
+              : coverAction?.kind === "request"
+                ? t("requestNamed", { name: coverAction.name })
+                : item.title;
           const meta = itemMeta(item);
           const title = meta ? `${item.title} · ${meta}` : item.title;
           return (

@@ -15,6 +15,13 @@
     "confirm": "Confirmer",
     "cancel": "Annuler"
   },
+  "requestSplit": {
+    "direct": "Demander {{name}}",
+    "directTitle": "Demander avec votre préréglage",
+    "directLabelled": "{{label}} : {{name}}",
+    "customize": "Demander {{name}} avec des réglages personnalisés",
+    "customizeTitle": "Demander avec des réglages personnalisés"
+  },
   "dialog": {
     "close": "Fermer"
   },

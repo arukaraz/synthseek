@@ -1,4 +1,10 @@
 {
+  "requestPreset": {
+    "saved": "Request preset saved",
+    "serverSaved": "Server request preset saved",
+    "memberSaved": "Member's request preset saved",
+    "saveFailed": "Failed to save the request preset"
+  },
   "users": {
     "deleteFailed": "Failed to delete user",
     "deleteManyFailed": "Failed to delete users",

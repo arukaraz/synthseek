@@ -6,7 +6,7 @@ import { playerActions, useQueuePresence } from "@hooks/ui/player";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { useContentDetailClose } from "../../ContentDetailCloseContext";
-import { isRemovableTrack, playableTrackId } from "../../helpers";
+import { isRemovableTrack, playableTrackId, trackRequestInput } from "../../helpers";
 import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { tracklistRoot } from "../../styles";
 import { TrackRow } from "./TrackRow";
@@ -53,17 +53,8 @@ export function Tracklist({
             onRemoveFromQueue={playableId === null ? undefined : () => playerActions.removeTrackFromQueue(playableId)}
             queuePresence={playableId === null ? "absent" : presenceOf(playableId)}
             onArtistNavigate={onArtistNavigate ? () => onArtistNavigate(track) : undefined}
-            onRequest={() =>
-              requestTrack({
-                id: track.externalId,
-                title: track.title,
-                artistName: track.artist,
-                durationMs: track.durationMs,
-                trackNumber: track.trackNumber,
-                isrc: null,
-                album: track.album,
-              })
-            }
+            onRequest={() => requestTrack(trackRequestInput(track), "direct")}
+            onCustomizeRequest={() => requestTrack(trackRequestInput(track), "customize")}
             onRetry={() => {
               if (track.requestId) retryTracks.mutate({ trackIds: [track.requestId] });
             }}

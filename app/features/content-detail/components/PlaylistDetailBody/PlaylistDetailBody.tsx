@@ -30,6 +30,7 @@ import { useTrackArtistNavigation } from "../../hooks/useTrackArtistNavigation";
 import { modalLayout, modalMain, modalScrollArea, selectAllControl, tracklistControls } from "../../styles";
 import { DEFAULT_SORT_KEY } from "./constants";
 import { TracklistSort } from "./TracklistSort";
+import type { RequestIntent } from "../../types";
 import type { PlaylistDetailBodyProps, SortDirection, TracklistSortKey } from "./types";
 
 function PlaylistDetailBodyComponent({
@@ -117,17 +118,25 @@ function PlaylistDetailBodyComponent({
 
   const rename = useInlineRename({ value: playlistName, onSave: handleSaveName });
 
-  const handleRequest = useCallback(() => {
-    if (target.requestDisabled) return;
-    if (isLibrary && !playlist) return;
-    requestPlaylist({
-      id: target.id,
-      name: target.name,
-      cover: heroCover,
-      totalTracks: displayTracks.length,
-      tracks: displayTracks,
-    });
-  }, [requestPlaylist, target.requestDisabled, target.id, target.name, isLibrary, playlist, heroCover, displayTracks]);
+  const requestWith = useCallback(
+    (intent: RequestIntent) => {
+      if (target.requestDisabled) return;
+      if (isLibrary && !playlist) return;
+      requestPlaylist(
+        {
+          id: target.id,
+          name: target.name,
+          cover: heroCover,
+          totalTracks: displayTracks.length,
+          tracks: displayTracks,
+        },
+        intent
+      );
+    },
+    [requestPlaylist, target.requestDisabled, target.id, target.name, isLibrary, playlist, heroCover, displayTracks]
+  );
+  const handleRequest = useCallback(() => requestWith("direct"), [requestWith]);
+  const handleCustomizeRequest = useCallback(() => requestWith("customize"), [requestWith]);
 
   const tracklistCount =
     displayTracks.length > 0
@@ -232,6 +241,7 @@ function PlaylistDetailBodyComponent({
         requestState={requestState}
         showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
+        onCustomizeRequest={handleCustomizeRequest}
         onPlay={isLibrary ? handlePlay : undefined}
         onShuffle={isLibrary ? handleShuffle : undefined}
         requestDisabled={target.requestDisabled}

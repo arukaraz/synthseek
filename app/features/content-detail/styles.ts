@@ -135,10 +135,6 @@ export const sectionDivider = cva("bg-fg/10 h-px min-w-6 flex-1");
 
 export const sectionTrailing = cva("flex shrink-0 items-center gap-2");
 
-export const sectionActionButton = cva(
-  "border-fg/15 bg-fg/[0.06] text-fg/80 hover:bg-fg/[0.12] hover:text-fg focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none"
-);
-
 export const sectionSkeleton = cva("bg-fg/5 w-full animate-pulse rounded-xl");
 
 export const sectionEmpty = cva("text-fg/50 text-sm");
@@ -170,10 +166,6 @@ export const trackArtistLink = cva(
 export const trackMeta = cva("text-fg/50 flex shrink-0 items-center gap-2.5 text-xs tabular-nums");
 
 export const trackStatusCell = cva("flex w-16 shrink-0 items-center justify-end gap-1");
-
-export const trackDownloadButton = cva(
-  "text-fg/30 hover:text-fg flex size-7 items-center justify-center rounded-full transition-colors hover:bg-fg/10"
-);
 
 export const trackRetryButton = cva(
   "text-fg/50 hover:text-fg focus-visible:ring-primary-400 flex size-7 shrink-0 items-center justify-center rounded-full transition-[color,background-color,opacity] hover:bg-fg/10 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100"

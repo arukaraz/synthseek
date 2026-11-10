@@ -1,5 +1,6 @@
 "use client";
 
+import { RequestSplitButton } from "@components/RequestSplitButton";
 import { SyncToSubmenu } from "@components/SyncToSubmenu";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 import { SocialIcon } from "@components/ui/SocialIcon";
@@ -62,6 +63,7 @@ function DetailHeroComponent({
   socials,
   statsSlot,
   onRequest,
+  onCustomizeRequest,
   onPlay,
   onShuffle,
   onStartRadio,
@@ -208,6 +210,17 @@ function DetailHeroComponent({
                   <TooltipContent>{t("alreadyInLibrary")}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
+            ) : showRequestButton && onRequest && onCustomizeRequest ? (
+              <RequestSplitButton
+                name={name}
+                label={requestState === "requestMissing" ? t("requestMissing") : t("request")}
+                size="lg"
+                onRequest={onRequest}
+                onCustomize={onCustomizeRequest}
+                disabled={requestDisabled}
+                disabledReason={requestDisabledTooltip}
+                dataCy="hero-request"
+              />
             ) : showRequestButton ? (
               <button
                 type="button"

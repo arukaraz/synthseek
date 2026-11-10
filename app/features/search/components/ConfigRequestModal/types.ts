@@ -1,4 +1,11 @@
-import type { AppRouter, ContentType, MusicItem, MusicTrack } from "@api/__generated__/types";
+import type {
+  AppRouter,
+  ContentType,
+  MusicItem,
+  MusicTrack,
+  RequestFormat,
+  RequestMatchingMode,
+} from "@api/__generated__/types";
 import type { SelectMenuOption } from "@components/ui/SelectMenu";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { ParseKeys } from "i18next";
@@ -7,7 +14,20 @@ import type { ReactNode } from "react";
 type RouterInputs = inferRouterInputs<AppRouter>;
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 
-export type DownloadSourceKey = NonNullable<RouterInputs["requests"]["batchRequest"]["config"]["sourceChain"]>[number];
+export type RequestPreset = RouterOutputs["requestPreset"]["mine"]["factory"];
+
+export type RequestPresetOrigin = RouterOutputs["requestPreset"]["mine"]["effective"]["origin"];
+
+export type DownloadSourceKey = NonNullable<RequestPreset["sourceChain"]>[number];
+
+export type CatalogContents = RouterOutputs["music"]["getContents"];
+
+export type CatalogContentEntry = CatalogContents["content"][number];
+
+export interface CatalogEntryView {
+  type?: unknown;
+  track?: unknown;
+}
 
 export type AlbumDelegate = NonNullable<RouterInputs["requests"]["batchRequest"]["delegate"]>;
 
@@ -164,6 +184,24 @@ export interface UploadSpeedOption {
 }
 
 export type AvailabilityMode = "any" | "free";
+
+export interface RequestSelection {
+  qualityMode: QualityMode;
+  bitrate: number;
+  format: RequestFormat;
+  bitrateMatching: RequestMatchingMode;
+  formatMatching: RequestMatchingMode;
+  minUploadSpeed: number;
+  availability: AvailabilityMode;
+  acquisition: AcquisitionSelection;
+}
+
+export interface RequestPresetFieldsProps {
+  value: RequestSelection;
+  onChange: (value: RequestSelection) => void;
+  lidarrAvailable?: boolean;
+  lidarrSlot?: ReactNode;
+}
 
 export interface AvailabilityOption {
   value: AvailabilityMode;

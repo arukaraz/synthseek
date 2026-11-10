@@ -1,4 +1,10 @@
 {
+  "requestPreset": {
+    "saved": "Préréglage de demande enregistré",
+    "serverSaved": "Préréglage de demande du serveur enregistré",
+    "memberSaved": "Préréglage de demande du membre enregistré",
+    "saveFailed": "Impossible d'enregistrer le préréglage de demande"
+  },
   "users": {
     "deleteFailed": "Échec de la suppression de l'utilisateur",
     "deleteManyFailed": "Échec de la suppression des utilisateurs",

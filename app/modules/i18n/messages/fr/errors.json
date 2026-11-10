@@ -31,6 +31,10 @@
     "title": "Seules vos propres demandes sont modifiables",
     "description": "Vous ne pouvez modifier que vos propres demandes."
   },
+  "REQUEST_PRESET_NOT_EDITABLE": {
+    "title": "Le préréglage de demande est défini par un admin",
+    "description": "Pour les membres, un admin définit le préréglage de demande. Demandez à un admin de le modifier."
+  },
   "EMAIL_MANAGED_BY_PLEX": {
     "title": "E-mail géré par Plex",
     "description": "Votre e-mail est géré par Plex."

@@ -1,4 +1,41 @@
 {
+  "requestPreset": {
+    "choiceAriaLabel": "Qué ajustes usan las solicitudes",
+    "unavailable": "No se pudo cargar el preset de solicitud. Inténtalo más tarde.",
+    "server": {
+      "title": "Preset de solicitud",
+      "description": "Lo usa todo aquel sin preset propio: la mitad izquierda de los botones Solicitar divididos, las solicitudes del asistente sin calidad y las solicitudes automáticas. No cubre los envíos a Lidarr.",
+      "followLabel": "Valores de fábrica",
+      "customLabel": "Preset del servidor",
+      "followSummary": "Quien no tiene preset usa los ajustes de su última solicitud, o los valores de fábrica ({{summary}}) si no hay ninguna."
+    },
+    "own": {
+      "title": "Tu preset de solicitud",
+      "description": "Lo que usa para ti la mitad izquierda de los botones Solicitar divididos.",
+      "followLabel": "Seguir al servidor",
+      "customLabel": "El mío",
+      "followServer": "Tus solicitudes siguen el preset del servidor: {{summary}}.",
+      "followDefault": "No hay preset del servidor, así que tus solicitudes usan los ajustes de tu última solicitud, o los valores de fábrica ({{summary}}) si no hay ninguna."
+    },
+    "locked": {
+      "byAdmin": "Tu cuenta tiene su propio preset: {{summary}}. Pide a un admin que lo cambie.",
+      "server": "Usas el preset del servidor: {{summary}}. Pide a un admin que lo cambie.",
+      "last": "Usas los ajustes de tu última solicitud: {{summary}}. Pide a un admin que configure un preset.",
+      "default": "Usas los ajustes por defecto: {{summary}}. Pide a un admin que lo cambie."
+    },
+    "member": {
+      "action": "Preset de solicitud de {{username}}",
+      "title": "Preset de solicitud de {{username}}",
+      "description": "Lo que usan las solicitudes de este miembro. Los miembros no pueden cambiarlo.",
+      "followLabel": "Seguir al servidor",
+      "customLabel": "El suyo",
+      "unavailable": "No se pudo cargar el preset de solicitud de este miembro. Inténtalo más tarde.",
+      "followServer": "Las solicitudes de este miembro siguen el preset del servidor: {{summary}}.",
+      "followDefault": "No hay preset del servidor, así que las solicitudes de este miembro usan los ajustes de su última solicitud, o los valores de fábrica ({{summary}}) si no hay ninguna.",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    }
+  },
   "notifications": {
     "pageTitle": "Notificaciones",
     "pageDescription": "Entérate fuera de Synthseek cuando pase algo. Cada destino elige sus propias notificaciones, y solo se envía lo que cambió.",
@@ -1630,6 +1667,7 @@
         "playbackBrowser": "ecualizador compresor crossfade fundido gapless transición conversión bitrate mp3",
         "theme": "oscuro medianoche océano color",
         "language": "inglés español francés alemán",
+        "members": "rol confiable cuota preset solicitud calidad formato",
         "board": "densidad tamaño de texto fondo plantillas organizar disposición widgets",
         "scrobble": "scrobble reproducciones historial escucha",
         "channels": "discord ntfy telegram webhook apprise",

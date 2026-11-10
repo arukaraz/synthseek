@@ -14,7 +14,10 @@ import {
   type ContentDetailActions,
 } from "@features/content-detail";
 import { useContentRequestModals } from "@hooks/ui/useContentRequestModals";
+
+import { useDirectRequest } from "../../hooks/useDirectRequest";
 import { ConfigRequestModal } from "../ConfigRequestModal/ConfigRequestModal";
+import { DirectRequestConfirm } from "../DirectRequestConfirm";
 import type { ContentRequestFlowProps, FlowContextValue } from "./types";
 
 const ContentRequestFlowContext = createContext<FlowContextValue | null>(null);
@@ -27,6 +30,7 @@ export function useContentRequestFlow(): FlowContextValue {
 
 export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
   const flow = useContentRequestModals();
+  const direct = useDirectRequest();
 
   const detailTarget =
     flow.directTarget ??
@@ -36,18 +40,36 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
 
   const detailActions = useMemo<ContentDetailActions>(
     () => ({
-      requestAlbum: (input) => flow.requestContent(albumRequestItem(input)),
+      requestAlbum: (input, intent = "direct") => {
+        const item = albumRequestItem(input);
+        if (intent === "customize") flow.requestContent(item);
+        else void direct.request({ item, mode: "download" });
+      },
       requestArtist: (input) => flow.requestArtistLidarr(artistRequestItem(input)),
-      requestTrack: (input) => flow.requestContent(trackRequestItem(input)),
-      requestPlaylist: (input) =>
-        flow.requestPlaylistConfig(
-          playlistOpenItem({ id: input.id, name: input.name, cover: input.cover, totalTracks: input.totalTracks }),
-          playlistRequestTracks(input.tracks)
-        ),
-      requestTopTracks: (input) =>
-        flow.requestArtistTracksConfig(artistRequestItem(input.artist), playlistRequestTracks(input.tracks)),
+      requestTrack: (input, intent = "direct") => {
+        const item = trackRequestItem(input);
+        if (intent === "customize") flow.requestContent(item);
+        else void direct.request({ item, mode: "download" });
+      },
+      requestPlaylist: (input, intent = "direct") => {
+        const item = playlistOpenItem({
+          id: input.id,
+          name: input.name,
+          cover: input.cover,
+          totalTracks: input.totalTracks,
+        });
+        const tracks = playlistRequestTracks(input.tracks);
+        if (intent === "customize") flow.requestPlaylistConfig(item, tracks);
+        else void direct.request({ item, mode: "download", tracks });
+      },
+      requestTopTracks: (input, intent = "direct") => {
+        const item = artistRequestItem(input.artist);
+        const tracks = playlistRequestTracks(input.tracks);
+        if (intent === "customize") flow.requestArtistTracksConfig(item, tracks);
+        else void direct.request({ item, mode: "artist-tracks", tracks });
+      },
     }),
-    [flow]
+    [flow, direct]
   );
 
   return (
@@ -55,7 +77,10 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
       value={{
         openForResult: flow.openForResult,
         openForTarget: flow.openForTarget,
-        requestResult: (result) => flow.requestContent(result),
+        requestResult: (result, intent = "direct") => {
+          if (intent === "customize") flow.requestContent(result);
+          else void direct.request({ item: result, mode: "download" });
+        },
       }}
     >
       {children}
@@ -66,6 +91,7 @@ export function ContentRequestFlow({ children }: ContentRequestFlowProps) {
         actions={detailActions}
       />
       {flow.selectedContentToRequest && <ConfigRequestModal {...flow.configModalProps} onSuccess={() => {}} />}
+      <DirectRequestConfirm pending={direct.pending} onConfirm={direct.confirm} onCancel={direct.cancel} />
     </ContentRequestFlowContext.Provider>
   );
 }

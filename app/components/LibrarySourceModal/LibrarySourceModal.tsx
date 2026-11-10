@@ -19,7 +19,7 @@ import { MasterTable } from "./components/MasterTable";
 import { DetailPanel } from "./components/DetailPanel";
 import { SelectionBulkBar } from "./components/SelectionBulkBar";
 import { ConnectPrompt } from "./components/ConnectPrompt";
-import { DEFAULT_IMPORT_CONFIG, PROVIDER_ERROR_CATEGORY } from "./constants";
+import { PROVIDER_ERROR_CATEGORY } from "./constants";
 import { aggregateToggleState, resolveToggleTarget } from "./helpers";
 import { useFilteredItems } from "./hooks/useFilteredItems";
 import { useLibraryDraftState } from "./hooks/useLibraryDraftState";
@@ -215,7 +215,6 @@ export function LibrarySourceModal({ provider, open, onOpenChange }: LibrarySour
             watch_saved_albums: draft.state.autoWatch.savedAlbums,
           }
         : undefined,
-      config: DEFAULT_IMPORT_CONFIG,
     });
 
     onOpenChange(false);

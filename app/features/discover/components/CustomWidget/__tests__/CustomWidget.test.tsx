@@ -39,7 +39,10 @@ vi.mock("@hooks/api/queries/widgets/useWidgetData", () => ({
 vi.mock("@hooks/api/queries/widgets/useWidgetPreview", () => ({
   useWidgetPreview: (draft: unknown) => previewQuery(draft),
 }));
-vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => ({ isAdmin: true }) }));
+const auth = vi.hoisted(() => ({ role: "admin" }));
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ isAdmin: auth.role === "admin", currentUser: { role: auth.role } }),
+}));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({
   useEntityPlayback: () => ({ playEntity, shuffleEntity, startRadio }),
 }));
@@ -143,6 +146,7 @@ function show(block: WidgetBlock, size: BoardSize, result: WidgetResult, action:
 afterEach(() => {
   vi.clearAllMocks();
   measured.width = 0;
+  auth.role = "admin";
 });
 
 describe("CustomWidget", () => {
@@ -188,7 +192,19 @@ describe("CustomWidget", () => {
     show("cards", "M", ALBUMS, "request");
     expect(screen.getAllByRole("article")).toHaveLength(6);
     fireEvent.click(screen.getByRole("button", { name: "Request Album 0" }));
-    expect(requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "dz-0", type: "album" }));
+    expect(requestResult).toHaveBeenLastCalledWith(expect.objectContaining({ id: "dz-0", type: "album" }), "direct");
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Album 1 with custom settings" }));
+    expect(requestResult).toHaveBeenLastCalledWith(expect.objectContaining({ id: "dz-1", type: "album" }), "customize");
+    expect(requestResult).toHaveBeenCalledTimes(2);
+  });
+
+  it("offers a member only the direct request on a card", () => {
+    auth.role = "member";
+    show("cards", "M", ALBUMS, "request");
+
+    expect(screen.getByRole("button", { name: "Request Album 0" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Album 0 with custom settings" })).not.toBeInTheDocument();
   });
 
   it.each(["S", "M", "L"] as const)("scrolls every item sideways in a %s rail", (size) => {

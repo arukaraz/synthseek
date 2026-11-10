@@ -75,10 +75,11 @@ export function buildMemberColumns(args: BuildMemberColumnsArgs): ColumnDef<Memb
           member={member}
           currentUserId={args.currentUserId}
           onEdit={() => args.onEdit(member)}
+          onEditPreset={() => args.onEditPreset(member)}
           onDelete={() => args.onDelete(member)}
         />
       ),
-      className: "w-24",
+      className: "w-32",
     },
   ];
 }

@@ -22,19 +22,20 @@ export function usePlaylistRequest() {
       if (context) failRequestDockJob(context.dockJobId, err, false);
       errorToastDetailed(err, "requests.playlistDownloadFailed");
     },
-    onSuccess: ({ outcome, requestId, data }, _vars, context) => {
+    onSuccess: (result, _vars, context) => {
       if (context) {
-        if (outcome === "created") correlateRequestDockJob(context.dockJobId, requestId);
+        if (result.outcome === "created") correlateRequestDockJob(context.dockJobId, result.requestId);
         else settleRequestDockJob(context.dockJobId, "complete", false);
       }
       notifyReclaimOutcome({
-        outcome,
+        outcome: result.outcome,
         kind: "playlist",
-        itemName: data?.name ?? i18n.t("mutations:requests.reclaim.playlist"),
+        itemName: result.data?.name || i18n.t("mutations:requests.reclaim.playlist"),
       });
     },
     onSettled: () => {
       void utils.requests.getAll.invalidate();
+      void utils.requestPreset.mine.invalidate();
       void utils.contentDetail.playlistDetail.invalidate();
     },
   });

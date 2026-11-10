@@ -1,6 +1,8 @@
 "use client";
 
-import { Download, Play } from "lucide-react";
+import { Play } from "lucide-react";
+
+import { RequestSplitButton } from "@components/RequestSplitButton";
 
 import { CoverArt } from "./CoverArt";
 import {
@@ -29,14 +31,14 @@ export function WidgetRow({ cover, seed, title, subtitle, lead, trailing, onSele
       {lead === undefined ? null : <span className={widgetRowLead()}>{lead}</span>}
       <span className={widgetRowCover()}>
         <CoverArt src={cover} seed={seed} sizes="40px" />
-        {coverAction ? (
+        {coverAction?.kind === "play" ? (
           <button
             type="button"
             className={widgetRowCoverAction()}
             aria-label={coverAction.label}
             onClick={coverAction.onClick}
           >
-            {coverAction.kind === "play" ? <Play /> : <Download />}
+            <Play />
           </button>
         ) : null}
       </span>
@@ -48,6 +50,17 @@ export function WidgetRow({ cover, seed, title, subtitle, lead, trailing, onSele
         <span className={widgetRowMain()}>{copy}</span>
       )}
       {trailing === undefined ? null : <span className={widgetRowTrailing()}>{trailing}</span>}
+      {coverAction?.kind === "request" ? (
+        <span className={widgetRowTrailing()}>
+          <RequestSplitButton
+            name={coverAction.name}
+            size="sm"
+            tone="ghost"
+            onRequest={coverAction.onClick}
+            onCustomize={coverAction.onCustomize}
+          />
+        </span>
+      ) : null}
     </li>
   );
 }

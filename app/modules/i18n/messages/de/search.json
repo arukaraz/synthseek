@@ -107,6 +107,12 @@
         "flexible": {
           "label": "Flexibel",
           "description": "Beste verfügbare Übereinstimmung"
+        },
+        "losslessStrict": {
+          "description": "Nur FLAC, sonst nichts"
+        },
+        "losslessFlexible": {
+          "description": "Zuerst FLAC, sonst die beste verlustbehaftete Datei"
         }
       },
       "qualityMode": {
@@ -116,7 +122,7 @@
         },
         "lossless": {
           "label": "Verlustfrei",
-          "description": "Nur FLAC, exakte Übereinstimmung"
+          "description": "FLAC-Dateien"
         }
       },
       "uploadSpeed": {
@@ -246,6 +252,17 @@
       "invalidItem": "Ungültiger Eintrag",
       "fetchFailed": "Titel von {{type}} konnten nicht abgerufen werden",
       "lidarrIncomplete": "Wähle einen Stammordner, ein Qualitätsprofil und ein Metadatenprofil"
+    },
+    "presetUnavailable": "Deine Anfrage-Einstellungen konnten nicht geladen werden. Eine Anfrage jetzt nutzt deine Voreinstellung.",
+    "presetLocked": "Diese Anfrage nutzt deine Anfrage-Voreinstellung: {{summary}}. Bitte einen Admin, sie zu ändern."
+  },
+  "direct": {
+    "confirm": {
+      "title": "{{name}} anfordern?",
+      "message_one": "Es wird {{count}} Titel mit deiner Anfrage-Voreinstellung angefordert.",
+      "message_other": "Es werden {{count}} Titel mit deiner Anfrage-Voreinstellung angefordert.",
+      "action_one": "{{count}} Titel anfordern",
+      "action_other": "{{count}} Titel anfordern"
     }
   }
 }

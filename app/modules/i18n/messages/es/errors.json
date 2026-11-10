@@ -31,6 +31,10 @@
     "title": "Solo puedes modificar tus propias solicitudes",
     "description": "Solo puedes modificar tus propias solicitudes."
   },
+  "REQUEST_PRESET_NOT_EDITABLE": {
+    "title": "Un administrador fija el preset de solicitud",
+    "description": "El preset de solicitud de los miembros lo fija un administrador. Pídele que lo cambie."
+  },
   "EMAIL_MANAGED_BY_PLEX": {
     "title": "El correo lo gestiona Plex",
     "description": "Tu correo electrónico lo gestiona Plex."

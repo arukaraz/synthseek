@@ -58,6 +58,10 @@ vi.mock("../../../ContentDetailActionsContext", () => ({
 
 vi.mock("../../../ContentDetailCloseContext", () => ({ useContentDetailClose: () => vi.fn() }));
 
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: "admin" } }),
+}));
+
 const playback = vi.hoisted(() => ({
   playEntity: vi.fn(async () => false),
   shuffleEntity: vi.fn(async () => false),

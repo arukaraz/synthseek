@@ -26,6 +26,7 @@ function buildArgs(overrides: Partial<BuildMemberColumnsArgs> = {}): BuildMember
     onToggle: vi.fn(),
     onToggleAll: vi.fn(),
     onEdit: vi.fn(),
+    onEditPreset: vi.fn(),
     onDelete: vi.fn(),
     ...overrides,
   };

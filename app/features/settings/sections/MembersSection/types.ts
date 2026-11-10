@@ -26,6 +26,7 @@ export interface BuildMemberColumnsArgs {
   onToggle: (id: string) => void;
   onToggleAll: () => void;
   onEdit: (member: MemberListItem) => void;
+  onEditPreset: (member: MemberListItem) => void;
   onDelete: (member: MemberListItem) => void;
 }
 
@@ -43,6 +44,7 @@ export interface MemberActionsCellProps {
   member: MemberListItem;
   currentUserId: string | undefined;
   onEdit: () => void;
+  onEditPreset: () => void;
   onDelete: () => void;
 }
 
@@ -68,6 +70,11 @@ export interface EditUserDialogProps {
   member: MemberListItem | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+}
+
+export interface MemberRequestPresetDialogProps {
+  member: MemberListItem | null;
+  onClose: () => void;
 }
 
 export interface ImportPlexUsersDialogProps {

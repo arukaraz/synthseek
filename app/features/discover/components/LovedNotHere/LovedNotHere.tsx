@@ -1,10 +1,10 @@
 "use client";
 
-import { Download, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { FadeScroll } from "@components/FadeScroll";
-import { Button } from "@components/ui/Button";
+import { RequestSplitButton } from "@components/RequestSplitButton";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import type { LovedTrack } from "@hooks/api/queries/analytics/types";
@@ -13,13 +13,13 @@ import { useLovedNotHere } from "@hooks/api/queries/analytics/useLovedNotHere";
 import { COMPACT_ROW_LIMIT, LASTFM_SETTINGS_HREF } from "../constants";
 import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { listColumns } from "../helpers";
-import { widgetList, widgetRowButton } from "../WidgetRow/styles";
+import { widgetList } from "../WidgetRow/styles";
 import { WidgetRow } from "../WidgetRow/WidgetRow";
 
 export function LovedNotHere({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
   const { data, isLoading, isError } = useLovedNotHere();
-  const { openForResult } = useContentRequestFlow();
+  const { openForResult, requestResult } = useContentRequestFlow();
   const compact = size === "S";
   const unlinked = data?.status === "unlinked";
   const tracks: LovedTrack[] = data?.status === "ready" ? data.tracks : [];
@@ -52,17 +52,21 @@ export function LovedNotHere({ size, info }: BoardWidgetProps) {
                 compact
                   ? {
                       kind: "request",
-                      label: t("requestNamed", { name: track.title }),
-                      onClick: () => openForResult(track),
+                      name: track.title,
+                      onClick: () => requestResult(track, "direct"),
+                      onCustomize: () => requestResult(track, "customize"),
                     }
                   : undefined
               }
               trailing={
                 compact ? undefined : (
-                  <Button size="sm" variant="accent" className={widgetRowButton()} onClick={() => openForResult(track)}>
-                    <Download />
-                    {t("loved.request")}
-                  </Button>
+                  <RequestSplitButton
+                    name={track.title}
+                    label={t("loved.request")}
+                    size="sm"
+                    onRequest={() => requestResult(track, "direct")}
+                    onCustomize={() => requestResult(track, "customize")}
+                  />
                 )
               }
             />

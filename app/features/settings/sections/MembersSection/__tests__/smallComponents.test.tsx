@@ -110,6 +110,7 @@ describe("MemberActionsCell", () => {
         member={createMockUser({ id: "m1", username: "alice" })}
         currentUserId="current"
         onEdit={vi.fn()}
+        onEditPreset={vi.fn()}
         onDelete={vi.fn()}
       />
     );
@@ -122,6 +123,7 @@ describe("MemberActionsCell", () => {
         member={createMockUser({ id: "self", username: "self" })}
         currentUserId="self"
         onEdit={vi.fn()}
+        onEditPreset={vi.fn()}
         onDelete={vi.fn()}
       />
     );
@@ -134,6 +136,7 @@ describe("MemberActionsCell", () => {
         member={createMockUser({ id: "owner", username: "owner", isOwner: true })}
         currentUserId="current"
         onEdit={vi.fn()}
+        onEditPreset={vi.fn()}
         onDelete={vi.fn()}
       />
     );

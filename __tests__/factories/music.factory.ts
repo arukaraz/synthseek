@@ -1,7 +1,77 @@
+import type { MusicAlbum, MusicArtist, MusicPlaylist, MusicPlaylistTrack, MusicTrack } from "@api/__generated__/types";
+
 interface MusicImage {
   url: string;
   height?: number | null;
   width?: number | null;
+}
+
+export function createMusicTrack(overrides: Partial<MusicTrack> = {}): MusicTrack {
+  return {
+    type: "track",
+    id: "track-001",
+    title: "Test Track",
+    artist: "Test Artist",
+    artists: [{ id: "artist-001", name: "Test Artist" }],
+    album: { id: "album-001", name: "Test Album", images: [] },
+    duration_ms: 180000,
+    track_number: 1,
+    disc_number: 1,
+    isrc: null,
+    explicit: false,
+    popularity: null,
+    preview_url: null,
+    images: [],
+    ...overrides,
+  };
+}
+
+export function createMusicAlbum(overrides: Partial<MusicAlbum> = {}): MusicAlbum {
+  return {
+    type: "album",
+    id: "album-001",
+    name: "Test Album",
+    artist: "Test Artist",
+    artists: [{ id: "artist-001", name: "Test Artist" }],
+    images: [],
+    release_date: "2024-01-01",
+    total_tracks: 10,
+    genres: [],
+    label: null,
+    upc: null,
+    tracks: [],
+    ...overrides,
+  };
+}
+
+export function createMusicArtist(overrides: Partial<MusicArtist> = {}): MusicArtist {
+  return {
+    type: "artist",
+    id: "artist-001",
+    name: "Test Artist",
+    images: [],
+    genres: [],
+    followers: null,
+    ...overrides,
+  };
+}
+
+export function createMusicPlaylist(overrides: Partial<MusicPlaylist> = {}): MusicPlaylist {
+  return {
+    type: "playlist",
+    id: "playlist-001",
+    name: "Test Playlist",
+    description: null,
+    images: [],
+    owner: { id: "user-001", name: "Test User" },
+    total_tracks: 50,
+    tracks: [],
+    ...overrides,
+  };
+}
+
+export function createMusicPlaylistTrack(track: MusicTrack = createMusicTrack()): MusicPlaylistTrack {
+  return { added_at: "2024-01-01T00:00:00Z", track };
 }
 
 interface ArtistRef {

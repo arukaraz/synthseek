@@ -1,4 +1,10 @@
 {
+  "requestPreset": {
+    "saved": "Anfrage-Voreinstellung gespeichert",
+    "serverSaved": "Anfrage-Voreinstellung des Servers gespeichert",
+    "memberSaved": "Anfrage-Voreinstellung des Mitglieds gespeichert",
+    "saveFailed": "Anfrage-Voreinstellung konnte nicht gespeichert werden"
+  },
   "users": {
     "deleteFailed": "Benutzer konnte nicht gelöscht werden",
     "deleteManyFailed": "Benutzer konnten nicht gelöscht werden",

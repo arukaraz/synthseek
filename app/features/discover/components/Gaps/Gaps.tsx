@@ -58,14 +58,15 @@ export function Gaps({ size, info }: BoardWidgetProps) {
                       albumTarget({ id: album.id, name: album.name, artistName: album.artist, cover: album.cover })
                     )
                   }
-                  onRequest={(album) =>
+                  onRequest={(album, intent) =>
                     requestResult(
                       albumRequestItem({
                         id: album.id,
                         name: album.name,
                         artistName: album.artist,
                         cover: album.cover,
-                      })
+                      }),
+                      intent
                     )
                   }
                   onOpenArtist={() => openArtist(gap)}

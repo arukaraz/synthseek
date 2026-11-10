@@ -11,6 +11,11 @@ interface TrendingPayload {
 
 const useTrendingTracksMock = vi.fn();
 const flow = vi.hoisted(() => ({ openForResult: vi.fn(), requestResult: vi.fn() }));
+const auth = vi.hoisted(() => ({ role: "admin" }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: auth.role } }),
+}));
 
 vi.mock("@hooks/api/queries/useTrendingTracks", () => ({
   useTrendingTracks: () => useTrendingTracksMock(),
@@ -69,6 +74,7 @@ describe("TrendingHero", () => {
   afterEach(() => {
     vi.clearAllMocks();
     useTrendingTracksMock.mockReset();
+    auth.role = "admin";
   });
 
   it("renders the skeleton while loading", () => {
@@ -231,7 +237,22 @@ describe("TrendingHero", () => {
     ]);
 
     fireEvent.click(screen.getByRole("button", { name: "Request Track 1" }));
-    expect(flow.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "track-1" }));
+    expect(flow.requestResult).toHaveBeenLastCalledWith(expect.objectContaining({ id: "track-1" }), "direct");
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Track 2 with custom settings" }));
+    expect(flow.requestResult).toHaveBeenLastCalledWith(expect.objectContaining({ id: "track-2" }), "customize");
+    expect(flow.requestResult).toHaveBeenCalledTimes(2);
+  });
+
+  it("leaves a member only the direct request on each row of the quarter tile", () => {
+    auth.role = "member";
+    const tracks = [createTrendingItem({ id: "track-0", title: "Track 0", images: [] })];
+    useTrendingTracksMock.mockReturnValue(createMockQuery<TrendingPayload>({ data: { tracks } }));
+
+    renderWithProviders(<TrendingHero size="S" info="What is trending right now" />);
+
+    expect(screen.getByRole("button", { name: "Request Track 0" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Track 0 with custom settings" })).not.toBeInTheDocument();
   });
 
   it("reports a failed load in a quarter tile instead of waiting on it", () => {

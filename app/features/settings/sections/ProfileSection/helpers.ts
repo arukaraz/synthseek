@@ -1,7 +1,15 @@
 import i18n from "@locale";
 import { formatBytes } from "@utils/formatters";
 
+import type { RequestPresetOrigin } from "@features/search/components/ConfigRequestModal/types";
+import type { ParseKeys } from "i18next";
+
+import { LOCKED_PRESET_KEYS } from "./constants";
 import type { QuotaUsageView } from "./types";
+
+export function lockedPresetKey(origin: RequestPresetOrigin): ParseKeys<"settings"> {
+  return LOCKED_PRESET_KEYS[origin];
+}
 
 export function quotaTracksValue(tracks: QuotaUsageView["tracks"]): string {
   if (tracks.limit === null) return i18n.t("settings:profile.quota.unlimited");

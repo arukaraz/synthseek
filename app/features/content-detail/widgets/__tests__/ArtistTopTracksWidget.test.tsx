@@ -9,6 +9,11 @@ const api = vi.hoisted(() => {
   return state;
 });
 const actions = vi.hoisted(() => ({ requestTopTracks: vi.fn() }));
+const auth = vi.hoisted(() => ({ role: "admin" }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: auth.role } }),
+}));
 
 vi.mock("@hooks/api/queries/content-detail", () => ({
   useArtistTopTracks: () => ({ data: api.tracks, isLoading: false }),
@@ -53,6 +58,7 @@ function track(externalId: string, status: TracklistTrack["status"]): TracklistT
 beforeEach(() => {
   vi.clearAllMocks();
   api.tracks = undefined;
+  auth.role = "admin";
 });
 
 describe("the top tracks section", () => {
@@ -66,12 +72,36 @@ describe("the top tracks section", () => {
     const user = userEvent.setup();
     render(<ArtistTopTracksWidget artist={artist} />);
 
-    await user.click(screen.getByRole("button", { name: "Request top tracks" }));
+    await user.click(screen.getByRole("button", { name: "Request top tracks: *NSYNC" }));
 
     expect(actions.requestTopTracks).toHaveBeenCalledTimes(1);
-    const input = actions.requestTopTracks.mock.calls[0][0];
+    const [input, intent] = actions.requestTopTracks.mock.calls[0];
     expect(input.artist).toEqual(artist);
     expect(input.tracks.map((row: TracklistTrack) => row.externalId)).toEqual(["new", "failed"]);
+    expect(intent).toBe("direct");
+  });
+
+  it("customizes the same missing top tracks from the second half of the button", async () => {
+    api.tracks = [track("new", null), track("done", "complete")];
+    const user = userEvent.setup();
+    render(<ArtistTopTracksWidget artist={artist} />);
+
+    await user.click(screen.getByRole("button", { name: "Request *NSYNC with custom settings" }));
+
+    expect(actions.requestTopTracks).toHaveBeenCalledTimes(1);
+    const [input, intent] = actions.requestTopTracks.mock.calls[0];
+    expect(input.tracks.map((row: TracklistTrack) => row.externalId)).toEqual(["new"]);
+    expect(intent).toBe("customize");
+  });
+
+  it("gives a member only the direct half", () => {
+    auth.role = "member";
+    api.tracks = [track("new", null)];
+
+    render(<ArtistTopTracksWidget artist={artist} />);
+
+    expect(screen.getByRole("button", { name: "Request top tracks: *NSYNC" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request *NSYNC with custom settings" })).not.toBeInTheDocument();
   });
 
   it("offers no request once every top track is in the library or on its way", () => {
@@ -79,6 +109,6 @@ describe("the top tracks section", () => {
 
     render(<ArtistTopTracksWidget artist={artist} />);
 
-    expect(screen.queryByRole("button", { name: "Request top tracks" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request top tracks: *NSYNC" })).not.toBeInTheDocument();
   });
 });

@@ -47,7 +47,6 @@
     "slideAriaLabel": "Go to slide {{number}}",
     "badge": "Trending now",
     "request": "Request",
-    "requestAriaLabel": "Request {{title}}",
     "coverAlt": "{{title}} by {{artist}}",
     "unknownTrack": "Unknown Track",
     "unknownArtist": "Unknown Artist"

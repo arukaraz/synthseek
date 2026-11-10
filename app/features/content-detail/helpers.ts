@@ -391,6 +391,18 @@ export function artistRequestItem({ id, name, cover }: ArtistRequestInput): Musi
   };
 }
 
+export function trackRequestInput(track: TracklistTrack): TrackRequestInput {
+  return {
+    id: track.externalId,
+    title: track.title,
+    artistName: track.artist,
+    durationMs: track.durationMs,
+    trackNumber: track.trackNumber,
+    isrc: null,
+    album: track.album,
+  };
+}
+
 export function trackRequestItem({
   id,
   title,

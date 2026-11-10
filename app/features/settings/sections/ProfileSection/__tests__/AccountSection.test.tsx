@@ -18,6 +18,9 @@ vi.mock("../components/AccountCard", () => ({ AccountCard: () => <div data-testi
 vi.mock("../components/EditProfileCard", () => ({ EditProfileCard: () => <div data-testid="edit-card" /> }));
 vi.mock("../components/ChangePasswordCard", () => ({ ChangePasswordCard: () => <div data-testid="password-card" /> }));
 vi.mock("../components/QuotaCard", () => ({ QuotaCard: () => <div data-testid="quota-card" /> }));
+vi.mock("../components/MyRequestPresetCard", () => ({
+  MyRequestPresetCard: () => <div data-testid="request-preset-card" />,
+}));
 vi.mock("../components/HouseholdSharingCard", () => ({
   HouseholdSharingCard: () => <div data-testid="household-card" />,
 }));
@@ -34,11 +37,12 @@ afterEach(() => {
 });
 
 describe("AccountSection", () => {
-  it("renders the page header and the account, quota, profile and password cards", () => {
+  it("renders the page header and the account, quota, request preset, profile and password cards", () => {
     render(<AccountSection />);
     expect(screen.getByRole("heading", { name: enSettings.shell.pages.account.title })).toBeInTheDocument();
     expect(screen.getByTestId("account-card")).toBeInTheDocument();
     expect(screen.getByTestId("quota-card")).toBeInTheDocument();
+    expect(screen.getByTestId("request-preset-card")).toBeInTheDocument();
     expect(screen.getByTestId("edit-card")).toBeInTheDocument();
     expect(screen.getByTestId("password-card")).toBeInTheDocument();
     expect(screen.getByTestId("household-card")).toBeInTheDocument();

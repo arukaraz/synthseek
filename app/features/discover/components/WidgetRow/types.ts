@@ -8,11 +8,9 @@ export interface CoverArtProps {
   sizes: string;
 }
 
-export interface WidgetRowCoverAction {
-  kind: "play" | "request";
-  label: string;
-  onClick: () => void;
-}
+export type WidgetRowCoverAction =
+  | { kind: "play"; label: string; onClick: () => void }
+  | { kind: "request"; name: string; onClick: () => void; onCustomize: () => void };
 
 export interface WidgetRowProps {
   cover: string | null;

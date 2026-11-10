@@ -47,7 +47,6 @@
     "slideAriaLabel": "Zu Folie {{number}} springen",
     "badge": "Gerade angesagt",
     "request": "Anfordern",
-    "requestAriaLabel": "{{title}} anfordern",
     "coverAlt": "{{title}} von {{artist}}",
     "unknownTrack": "Unbekannter Titel",
     "unknownArtist": "Unbekannter Künstler"

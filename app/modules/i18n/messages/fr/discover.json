@@ -47,7 +47,6 @@
     "slideAriaLabel": "Aller à la diapositive {{number}}",
     "badge": "Tendance actuelle",
     "request": "Demander",
-    "requestAriaLabel": "Demander {{title}}",
     "coverAlt": "{{title}} de {{artist}}",
     "unknownTrack": "Piste inconnue",
     "unknownArtist": "Artiste inconnu"

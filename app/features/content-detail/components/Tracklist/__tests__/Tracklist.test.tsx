@@ -19,6 +19,9 @@ const { playback, stage, media } = vi.hoisted(() => ({
 vi.mock("@hooks/api", () => ({
   useRetryTracks: () => ({ isPending: false, variables: undefined, mutate: vi.fn() }),
 }));
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: "admin" } }),
+}));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => playback }));
 vi.mock("@hooks/ui/player", () => ({ playerActions: stage, useQueuePresence: () => () => "absent" }));
 vi.mock("@hooks/ui/useMediaQuery", () => ({
@@ -75,13 +78,29 @@ describe("Tracklist", () => {
     const user = userEvent.setup();
     const requestTrack = renderTracklist([createTrack()]);
 
-    await user.click(screen.getByRole("button", { name: /Get Lucky/i }));
+    await user.click(screen.getByRole("button", { name: "Request Get Lucky" }));
 
     expect(requestTrack).toHaveBeenCalledWith(
       expect.objectContaining({
         id: "t1",
         album: { externalId: "a1", name: "Discovery", cover: "https://img/a1" },
-      })
+      }),
+      "direct"
+    );
+  });
+
+  it("opens the custom settings for the same track from the second half of the button", async () => {
+    const user = userEvent.setup();
+    const requestTrack = renderTracklist([createTrack()]);
+
+    await user.click(screen.getByRole("button", { name: "Request Get Lucky with custom settings" }));
+
+    expect(requestTrack).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: "t1",
+        album: { externalId: "a1", name: "Discovery", cover: "https://img/a1" },
+      }),
+      "customize"
     );
   });
 
@@ -96,10 +115,11 @@ describe("Tracklist", () => {
       }),
     ]);
 
-    await user.click(screen.getByRole("button", { name: /Aerodynamic/i }));
+    await user.click(screen.getByRole("button", { name: "Request Aerodynamic" }));
 
     expect(requestTrack).toHaveBeenCalledWith(
-      expect.objectContaining({ id: "t2", album: { externalId: "a2", name: "Homework", cover: null } })
+      expect.objectContaining({ id: "t2", album: { externalId: "a2", name: "Homework", cover: null } }),
+      "direct"
     );
   });
 
@@ -132,8 +152,8 @@ describe("Tracklist", () => {
     const user = userEvent.setup();
     const requestTrack = renderTracklist([createTrack({ album: null })]);
 
-    await user.click(screen.getByRole("button", { name: /Get Lucky/i }));
+    await user.click(screen.getByRole("button", { name: "Request Get Lucky" }));
 
-    expect(requestTrack).toHaveBeenCalledWith(expect.objectContaining({ album: null }));
+    expect(requestTrack).toHaveBeenCalledWith(expect.objectContaining({ album: null }), "direct");
   });
 });

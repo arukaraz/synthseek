@@ -15,6 +15,7 @@ import type {
 
 import type { CustomWidgetsStatus } from "../ExploreBoard/types";
 import type { StoryPage } from "../WidgetStory/types";
+import type { WidgetRowCoverAction } from "../WidgetRow/types";
 
 export interface SettingsLinkNoteProps {
   i18nKey: `customWidget.needs.${FeedNeed}` | "customWidget.events.refused";
@@ -72,7 +73,7 @@ export interface WidgetView {
 
 export interface WidgetItemControls {
   onSelect?: () => void;
-  coverAction?: { kind: "play" | "request"; label: string; onClick: () => void };
+  coverAction?: WidgetRowCoverAction;
 }
 
 export type WidgetItemActions = (item: WidgetItem) => WidgetItemControls;
@@ -82,6 +83,7 @@ export interface WidgetHandlers {
   shuffle: (target: PlayableTracksTarget) => void;
   radio: (target: PlayableTracksTarget) => void;
   request: (item: MusicItem) => void;
+  customize: (item: MusicItem) => void;
   open: (target: DetailTarget) => void;
   openUrl: (url: string) => void;
 }
@@ -151,4 +153,11 @@ export interface WidgetCardProps {
 
 export interface CoverActionButtonProps {
   action: NonNullable<WidgetItemControls["coverAction"]>;
+}
+
+export type RequestCoverAction = Extract<WidgetRowCoverAction, { kind: "request" }>;
+
+export interface CoverRequestActionProps {
+  action: RequestCoverAction;
+  placement: "card" | "poster";
 }

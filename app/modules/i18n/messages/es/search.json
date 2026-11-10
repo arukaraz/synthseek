@@ -107,6 +107,12 @@
         "flexible": {
           "label": "Flexible",
           "description": "Mejor coincidencia disponible"
+        },
+        "losslessStrict": {
+          "description": "Solo FLAC, nada más"
+        },
+        "losslessFlexible": {
+          "description": "FLAC primero, si no, el mejor archivo con pérdida"
         }
       },
       "qualityMode": {
@@ -116,7 +122,7 @@
         },
         "lossless": {
           "label": "Lossless",
-          "description": "Solo FLAC, coincidencia exacta"
+          "description": "Archivos FLAC"
         }
       },
       "uploadSpeed": {
@@ -246,6 +252,17 @@
       "invalidItem": "Elemento no válido",
       "fetchFailed": "No se pudieron obtener las canciones de {{type}}",
       "lidarrIncomplete": "Selecciona una carpeta raíz, un perfil de calidad y un perfil de metadatos"
+    },
+    "presetUnavailable": "No se pudo cargar tu configuración de solicitud. Si solicitas ahora, se usa tu preset.",
+    "presetLocked": "Esta solicitud usa tu preset de solicitud: {{summary}}. Pide a un admin que lo cambie."
+  },
+  "direct": {
+    "confirm": {
+      "title": "¿Solicitar {{name}}?",
+      "message_one": "Se envía {{count}} canción con tu preset de solicitud.",
+      "message_other": "Se envían {{count}} canciones con tu preset de solicitud.",
+      "action_one": "Solicitar {{count}} canción",
+      "action_other": "Solicitar {{count}} canciones"
     }
   }
 }

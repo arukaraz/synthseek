@@ -1,14 +1,14 @@
 "use client";
 
 import { ContentType } from "@api/__generated__/types";
-import { Button } from "@components/ui/Button";
 import { ImageWithFallback } from "@components/ImageWithFallback/ImageWithFallback";
+import { RequestSplitButton } from "@components/RequestSplitButton";
 import { ConfigRequestModal } from "@features/search/components/ConfigRequestModal/ConfigRequestModal";
-import { primaryGradientButton } from "@theme/utilities/styles";
+import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { trendingBadgeContainer, cardBottomContentLg } from "../styles";
 import { cn } from "@utils/cn";
 import { motion } from "framer-motion";
-import { Download, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { memo, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -27,14 +27,10 @@ export const CoverflowCard = memo(function CoverflowCard({
   const { translateX, rotateY, scale, opacity, zIndex } = transform;
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const { requestResult } = useContentRequestFlow();
 
   const trackName = track?.title ?? t("coverflow.unknownTrack");
   const artistName = track?.artists?.[0]?.name ?? t("coverflow.unknownArtist");
-
-  const handleDownload = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowModal(true);
-  }, []);
 
   const handleClick = useCallback(() => {
     if (!isCenter) onClick(index);
@@ -113,16 +109,16 @@ export const CoverflowCard = memo(function CoverflowCard({
             {artistName}
           </p>
 
-          {isCenter && (
-            <Button
-              onClick={handleDownload}
+          {isCenter && track ? (
+            <RequestSplitButton
+              name={trackName}
+              label={t("coverflow.download")}
               size="sm"
-              className={`${primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" })} mt-2 font-semibold sm:mt-3`}
-            >
-              <Download className="mr-1 h-3 w-3 sm:mr-1.5 sm:h-4 sm:w-4" />
-              {t("coverflow.download")}
-            </Button>
-          )}
+              className="mt-2 sm:mt-3"
+              onRequest={() => requestResult(track, "direct")}
+              onCustomize={() => setShowModal(true)}
+            />
+          ) : null}
         </div>
       </div>
 

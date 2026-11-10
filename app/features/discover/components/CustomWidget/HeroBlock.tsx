@@ -1,9 +1,10 @@
 "use client";
 
-import { Download, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { RequestSplitButton } from "@components/RequestSplitButton";
 import { primaryGradientButton } from "@theme/utilities/styles";
 
 import { AUTO_ROTATE_INTERVAL } from "../TrendingHero/constants";
@@ -61,16 +62,25 @@ export function HeroBlock({ items, accent, controls, heading }: WidgetBlockProps
           <h2 className={heroTitle()}>{item.title}</h2>
         )}
         <p className={heroSubtitle()}>{item.subtitle}</p>
-        {coverAction ? (
+        {coverAction?.kind === "play" ? (
           <button
             type="button"
             className={primaryGradientButton({ size: "sm", glow: "primary", hover: "lighten" })}
             aria-label={coverAction.label}
             onClick={coverAction.onClick}
           >
-            {coverAction.kind === "play" ? <Play className="h-3.5 w-3.5" /> : <Download className="h-3.5 w-3.5" />}
-            {coverAction.kind === "play" ? t("customWidget.play") : t("customWidget.request")}
+            <Play className="h-3.5 w-3.5" />
+            {t("customWidget.play")}
           </button>
+        ) : null}
+        {coverAction?.kind === "request" ? (
+          <RequestSplitButton
+            name={coverAction.name}
+            label={t("customWidget.request")}
+            size="sm"
+            onRequest={coverAction.onClick}
+            onCustomize={coverAction.onCustomize}
+          />
         ) : null}
       </div>
       <TrendingHeroNav

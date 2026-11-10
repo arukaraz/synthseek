@@ -1,17 +1,24 @@
 import {
   ContentType,
+  FORMAT_OPTIONS,
+  RequestFormat,
+  RequestMatchingMode,
   type MusicAlbum,
   type MusicItem,
+  type MusicPlaylistTrack,
   type MusicTrack,
-  type RequestFormat,
 } from "@api/__generated__/types";
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
 import { matchesTerms, searchTerms } from "@utils/search";
-import { SOURCE_PRIORITY_ORDER } from "./constants";
+import type { TFunction } from "i18next";
+import { SOURCE_PRIORITY_ORDER, SOURCE_ROW_LABELS } from "./constants";
 import type {
   AcquisitionSelection,
   AlbumDelegate,
   ArtistDelegateInput,
+  CatalogContentEntry,
+  CatalogContents,
+  CatalogEntryView,
   ConfigRequestMode,
   DestinationPreview,
   DestinationRequest,
@@ -23,6 +30,9 @@ import type {
   LidarrRootFolder,
   LidarrSelectOption,
   LidarrSelection,
+  QualityMode,
+  RequestPreset,
+  RequestSelection,
 } from "./types";
 
 export function offeredSources(
@@ -98,6 +108,85 @@ export function usesSlskd(selection: AcquisitionSelection): boolean {
 
 export function allowsLossless(selection: AcquisitionSelection): boolean {
   return usesSlskd(selection);
+}
+
+export function acquisitionFromChain(
+  chain: DownloadSourceKey[] | undefined,
+  offered: DownloadSourceKey[]
+): AcquisitionSelection {
+  if (!chain) return defaultSelection(offered);
+  const active = chain.filter((key) => offered.includes(key));
+  if (active.length === 0) return defaultSelection(offered);
+  return { mode: "manual", order: [...active, ...offered.filter((key) => !active.includes(key))], active };
+}
+
+export function selectionFromPreset(preset: RequestPreset, offered: DownloadSourceKey[]): RequestSelection {
+  const acquisition = acquisitionFromChain(preset.sourceChain, offered);
+  const lossless = preset.format.value === RequestFormat.enum.flac && allowsLossless(acquisition);
+  return {
+    qualityMode: lossless ? "lossless" : "standard",
+    bitrate: preset.bitrate.value,
+    format: preset.format.value,
+    bitrateMatching: preset.bitrate.matching,
+    formatMatching: preset.format.matching,
+    minUploadSpeed: preset.minUploadSpeed,
+    availability: preset.requireFreeSlot ? "free" : "any",
+    acquisition,
+  };
+}
+
+export function summarizePreset(preset: RequestPreset, t: TFunction<"search">): string {
+  const formatLabel =
+    FORMAT_OPTIONS.find((option) => option.value === preset.format.value)?.label ?? preset.format.value;
+  const matching = t(
+    preset.format.matching === RequestMatchingMode.enum.strict
+      ? "config.options.matching.strict.label"
+      : "config.options.matching.flexible.label"
+  );
+  const quality =
+    preset.format.value === RequestFormat.enum.flac
+      ? `${t("config.options.qualityMode.lossless.label")} (${matching})`
+      : `${formatLabel} ${preset.bitrate.value} kbps (${matching})`;
+  const sources = preset.sourceChain
+    ? preset.sourceChain.map((key) => t(SOURCE_ROW_LABELS[key].labelKey)).join(" → ")
+    : t("config.options.acquisition.auto.label");
+  return `${quality} · ${sources}`;
+}
+
+export function withQualityMode(selection: RequestSelection, qualityMode: QualityMode): RequestSelection {
+  if (qualityMode === selection.qualityMode) return selection;
+  if (qualityMode === "lossless") return { ...selection, qualityMode, formatMatching: RequestMatchingMode.enum.strict };
+  return { ...selection, qualityMode };
+}
+
+export function presetFromSelection(selection: RequestSelection): RequestPreset {
+  const sourceChain = buildSourceChain(selection.acquisition);
+  const lossless = selection.qualityMode === "lossless" && allowsLossless(selection.acquisition);
+  return {
+    bitrate: { value: selection.bitrate, matching: selection.bitrateMatching },
+    format: { value: lossless ? RequestFormat.enum.flac : selection.format, matching: selection.formatMatching },
+    minUploadSpeed: selection.minUploadSpeed,
+    requireFreeSlot: selection.availability === "free",
+    ...(sourceChain ? { sourceChain } : {}),
+  };
+}
+
+function isPlaylistEntry(entry: CatalogContentEntry): entry is MusicPlaylistTrack {
+  const view: CatalogEntryView = entry;
+  return typeof view.track === "object" && view.track !== null;
+}
+
+function trackOfEntry(entry: CatalogContentEntry): MusicTrack | null {
+  if (isPlaylistEntry(entry)) return entry.track;
+  return entry.type === ContentType.enum.track ? entry : null;
+}
+
+export function tracksFromContents(response: CatalogContents | undefined): MusicTrack[] {
+  if (!response?.success) return [];
+  return response.content.flatMap((entry) => {
+    const track = trackOfEntry(entry);
+    return track ? [track] : [];
+  });
 }
 
 export function isLidarrSelectionComplete(selection: {

@@ -2,72 +2,47 @@
 
 import { Button } from "@components/ui/Button";
 import { Dialog, DialogContent, DialogTitle } from "@components/ui/Dialog";
+import { ContentType } from "@api/__generated__/types";
 import {
-  ContentType,
-  RequestFormat,
-  RequestMatchingMode,
-  FORMAT_OPTIONS,
-  type MusicPlaylistTrack,
-  type MusicTrack,
-} from "@api/__generated__/types";
-import {
-  useBatchRequest,
   useDelegateArtist,
   useDownloadSourcesAvailability,
   useGetContents,
   useLidarrAvailable,
-  usePlaylistRequest,
-  useRequest,
-  useRequestTracks,
+  useMyRequestPreset,
 } from "@hooks/api";
 import { Input } from "@components/ui/Input";
 import { Spinner } from "@components/ui/Spinner";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { primaryGradientButton } from "@theme/utilities/styles";
+import { canCustomizeRequestsFE } from "@utils/authorization";
 import { titleCase } from "@utils/formatters";
 import { Download } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { AcquisitionOrderList } from "./AcquisitionOrderList";
+
+import { useContentRequestSubmit } from "../../hooks/useContentRequestSubmit";
 import { ConfigHeader } from "./ConfigHeader";
 import { DestinationField } from "./DestinationField";
 import { LidarrInputs } from "./LidarrInputs";
-import { OptionGrid } from "./OptionGrid";
+import { RequestPresetFields } from "./RequestPresetFields";
+import { DEFAULT_ARTIST_MONITOR_SCOPE, DEFAULT_MONITOR_SCOPE } from "./constants";
 import {
-  AVAILABILITY_OPTIONS,
-  BITRATE_OPTIONS,
-  DEFAULT_ARTIST_MONITOR_SCOPE,
-  DEFAULT_MONITOR_SCOPE,
-  MATCHING_OPTIONS,
-  QUALITY_MODE_OPTIONS,
-  UPLOAD_SPEED_OPTIONS,
-} from "./constants";
-import {
-  allowsLossless,
   buildAlbumDelegate,
   buildArtistDelegate,
-  buildSourceChain,
-  extractItemMetadata,
-  defaultSelection,
   destinationRequestFor,
-  offeredSources,
-  reconcileSelection,
+  extractItemMetadata,
   getItemDisplayName,
   isLidarrSelected,
-  mapTrackFields,
-  usesSlskd,
+  offeredSources,
+  presetFromSelection,
+  reconcileSelection,
+  selectionFromPreset,
+  summarizePreset,
+  tracksFromContents,
 } from "./helpers";
-import { configDialogContent, fieldGroup, fieldLabel } from "./styles";
-import type {
-  AcquisitionSelection,
-  AvailabilityMode,
-  ConfigRequestModalProps,
-  LidarrArtistSelection,
-  LidarrSelection,
-  Option,
-  QualityMode,
-} from "./types";
+import { configDialogContent, fieldGroup, fieldLabel, presetNote, sectionHeading, sectionStack } from "./styles";
+import type { ConfigRequestModalProps, LidarrArtistSelection, LidarrSelection, RequestSelection } from "./types";
 
 export function ConfigRequestModal({
   isOpen,
@@ -79,14 +54,7 @@ export function ConfigRequestModal({
   parentAlbum,
   preloadedTracks,
 }: ConfigRequestModalProps) {
-  const [bitrate, setBitrate] = useState(320);
-  const [format, setFormat] = useState<RequestFormat>(RequestFormat.enum.mp3);
-  const [bitrateMatching, setBitrateMatching] = useState<RequestMatchingMode>(RequestMatchingMode.enum.flexible);
-  const [formatMatching, setFormatMatching] = useState<RequestMatchingMode>(RequestMatchingMode.enum.flexible);
-  const [qualityMode, setQualityMode] = useState<QualityMode>("standard");
-  const [minUploadSpeed, setMinUploadSpeed] = useState(0);
-  const [availability, setAvailability] = useState<AvailabilityMode>("any");
-  const [acquisition, setAcquisition] = useState<AcquisitionSelection>({ mode: "auto", order: [], active: [] });
+  const [selection, setSelection] = useState<RequestSelection | null>(null);
   const [lidarrSelection, setLidarrSelection] = useState<LidarrSelection>({
     rootFolderPath: undefined,
     qualityProfileId: undefined,
@@ -103,44 +71,41 @@ export function ConfigRequestModal({
   });
   const [renameValue, setRenameValue] = useState("");
   const [destinationPathId, setDestinationPathId] = useState<string | null>(null);
-  const losslessActive = qualityMode === "lossless";
-  const { isAdmin } = useAuthContext();
+  const { isAdmin, currentUser } = useAuthContext();
+  const canCustomize = canCustomizeRequestsFE(currentUser);
+  const { t } = useTranslation("search");
 
   const isLidarrArtistMode = mode === "lidarr-artist";
+  const isArtistTracksMode = mode === "artist-tracks";
+  const isAlbumItem = item?.type === ContentType.enum.album;
+
+  const { data: sourcesAvailability, isPending: isLoadingSources } = useDownloadSourcesAvailability();
+  const { data: lidarrAvailability } = useLidarrAvailable({ enabled: isAlbumItem });
+  const presetQuery = useMyRequestPreset();
+  const offered = useMemo(() => offeredSources(sourcesAvailability, isAlbumItem), [sourcesAvailability, isAlbumItem]);
+  const lidarrOffered = isAlbumItem && (lidarrAvailability?.available ?? false);
+  const effectivePreset = presetQuery.data?.effective.preset;
 
   useEffect(() => {
     setRenameValue("");
     setDestinationPathId(null);
+    setSelection(null);
   }, [item?.id, isOpen]);
 
-  const { t } = useTranslation("search");
-
-  const isAlbumItem = item?.type === ContentType.enum.album;
-
-  const { data: sourcesAvailability } = useDownloadSourcesAvailability();
-  const { data: lidarrAvailability } = useLidarrAvailable({ enabled: isAlbumItem });
-  const offered = useMemo(() => offeredSources(sourcesAvailability, isAlbumItem), [sourcesAvailability, isAlbumItem]);
-  const lidarrOffered = isAlbumItem && (lidarrAvailability?.available ?? false);
-
   useEffect(() => {
-    setAcquisition((current) =>
-      current.order.length === 0 ? defaultSelection(offered) : reconcileSelection(current, offered, lidarrOffered)
+    if (!isOpen || isLoadingSources || effectivePreset === undefined) return;
+    setSelection((current) =>
+      current === null
+        ? selectionFromPreset(effectivePreset, offered)
+        : { ...current, acquisition: reconcileSelection(current.acquisition, offered, lidarrOffered) }
     );
-  }, [offered, lidarrOffered]);
+  }, [isOpen, isLoadingSources, effectivePreset, offered, lidarrOffered]);
 
-  useEffect(() => {
-    if (!allowsLossless(acquisition) && qualityMode === "lossless") setQualityMode("standard");
-  }, [acquisition, qualityMode]);
-
-  const lidarrSelected = isLidarrSelected(acquisition);
-  const destinationRequest = isAdmin
-    ? destinationRequestFor(item, parentAlbum, losslessActive ? RequestFormat.enum.flac : format, mode)
-    : null;
+  const lidarrSelected = selection !== null && isLidarrSelected(selection.acquisition);
+  const config = selection === null || !canCustomize ? undefined : presetFromSelection(selection);
+  const destinationRequest =
+    isAdmin && config ? destinationRequestFor(item, parentAlbum, config.format.value, mode) : null;
   const showDestination = destinationRequest !== null && !lidarrSelected;
-  const chosenDestination = showDestination && destinationPathId !== null ? { destinationPathId } : {};
-  const showSlskdControls = usesSlskd(acquisition);
-  const losslessAvailable = allowsLossless(acquisition);
-  const showMatchingControls = !lidarrSelected && losslessAvailable;
 
   const needsTrackList =
     !isLidarrArtistMode &&
@@ -153,75 +118,23 @@ export function ConfigRequestModal({
     needsTrackList,
     item?.type ?? ContentType.enum.album
   );
+  const trackList = useMemo(
+    () => preloadedTracks ?? tracksFromContents(contentResponse),
+    [preloadedTracks, contentResponse]
+  );
 
-  const trackList = useMemo<MusicTrack[]>(() => {
-    if (preloadedTracks) return preloadedTracks;
-    if (!contentResponse?.success || !contentResponse.content) return [];
-    const content = Array.isArray(contentResponse.content) ? contentResponse.content : [];
-    if (item?.type === ContentType.enum.playlist) {
-      const playlistTracks = content as MusicPlaylistTrack[];
-      return playlistTracks.filter((pt) => pt?.track).map((pt) => pt.track);
-    }
-    return content as MusicTrack[];
-  }, [preloadedTracks, contentResponse, item?.type]);
-
-  const isArtistTracksMode = mode === "artist-tracks";
   const metadata = useMemo(() => {
     const base = extractItemMetadata(item, parentAlbum);
     return isArtistTracksMode ? { ...base, artist: t("config.header.topTracks"), totalTracks: trackList.length } : base;
   }, [item, parentAlbum, isArtistTracksMode, trackList.length, t]);
 
-  const bitrateGridOptions: Option<number>[] = BITRATE_OPTIONS.map((opt) => ({
-    value: opt.value,
-    label: opt.label,
-    description: t(opt.descriptionKey),
-  }));
-
-  const formatGridOptions: Option<RequestFormat>[] = FORMAT_OPTIONS.map((opt) => ({
-    value: opt.value,
-    label: opt.label,
-    description: opt.desc,
-  }));
-
-  const matchingGridOptions: Option<RequestMatchingMode>[] = MATCHING_OPTIONS.map((opt) => ({
-    value: RequestMatchingMode.enum[opt.value],
-    label: t(opt.labelKey),
-    description: t(opt.descriptionKey),
-  }));
-
-  const qualityGridOptions: Option<QualityMode>[] = QUALITY_MODE_OPTIONS.filter(
-    (opt) => losslessAvailable || opt.value !== "lossless"
-  ).map((opt) => ({
-    value: opt.value,
-    label: t(opt.labelKey),
-    description: t(opt.descriptionKey),
-  }));
-
-  const uploadSpeedGridOptions: Option<number>[] = UPLOAD_SPEED_OPTIONS.map((opt) => ({
-    value: opt.value,
-    label: opt.labelKey ? t(opt.labelKey) : (opt.label ?? ""),
-    description: t(opt.descriptionKey),
-  }));
-
-  const availabilityGridOptions: Option<AvailabilityMode>[] = AVAILABILITY_OPTIONS.map((opt) => ({
-    value: opt.value,
-    label: t(opt.labelKey),
-    description: t(opt.descriptionKey),
-  }));
-
-  const downloadMutation = useRequest();
-  const downloadAlbumMutation = useBatchRequest();
-  const downloadPlaylistMutation = usePlaylistRequest();
-  const downloadTracksMutation = useRequestTracks(metadata.name);
+  const { submit, isSubmitting: isRequesting } = useContentRequestSubmit();
   const delegateArtistMutation = useDelegateArtist();
 
-  const isSubmitting =
-    downloadMutation.isPending ||
-    downloadAlbumMutation.isPending ||
-    downloadPlaylistMutation.isPending ||
-    downloadTracksMutation.isPending ||
-    delegateArtistMutation.isPending;
-  const isLoadingData = !isLidarrArtistMode && needsTrackList && isLoadingTracks;
+  const isSubmitting = isRequesting || delegateArtistMutation.isPending;
+  const presetUnavailable = presetQuery.isError;
+  const isLoadingPreset = !isLidarrArtistMode && selection === null && !presetUnavailable;
+  const isLoadingData = !isLidarrArtistMode && ((needsTrackList && isLoadingTracks) || isLoadingPreset);
   const isBusy = isSubmitting || isLoadingData;
 
   const handleClose = () => {
@@ -249,89 +162,30 @@ export function ConfigRequestModal({
       return;
     }
 
-    const sourceChain = buildSourceChain(acquisition);
-    const config = {
-      bitrate: { value: bitrate, matching: bitrateMatching },
-      format: losslessActive
-        ? { value: RequestFormat.enum.flac, matching: RequestMatchingMode.enum.strict }
-        : { value: format, matching: formatMatching },
-      minUploadSpeed,
-      requireFreeSlot: availability === "free",
-      ...(sourceChain ? { sourceChain } : {}),
-    };
-
-    const itemName = getItemDisplayName(item);
-
-    if (item.type === ContentType.enum.track) {
-      downloadMutation.mutate({
-        track: mapTrackFields(item),
-        config,
-        album_external_id: parentAlbum?.id ?? item.album.id,
-        ...chosenDestination,
-      });
-      onSuccess?.(itemName);
-      onClose();
+    const delegate = lidarrSelected && isAlbumItem ? buildAlbumDelegate(lidarrSelection) : undefined;
+    if (lidarrSelected && isAlbumItem && !delegate) {
+      toast.error(t("config.errors.lidarrIncomplete"));
       return;
     }
 
-    if (trackList.length === 0) {
+    const playlistName = item.type === ContentType.enum.playlist ? renameValue.trim() || item.name : undefined;
+    const outcome = submit({
+      item,
+      mode,
+      parentAlbum,
+      tracks: trackList,
+      config,
+      delegate,
+      destinationPathId: showDestination && destinationPathId !== null ? destinationPathId : undefined,
+      playlistName,
+    });
+
+    if (outcome === "noTracks") {
       toast.error(t("config.errors.fetchFailed", { type: titleCase(item.type) }));
       return;
     }
-
-    if (isArtistTracksMode) {
-      downloadTracksMutation.mutate({
-        tracks: trackList.map((track) => ({ track: mapTrackFields(track), album_external_id: track.album.id })),
-        config,
-      });
-      onSuccess?.(itemName);
-      onClose();
-      return;
-    }
-
-    if (item.type === ContentType.enum.album) {
-      const delegate = lidarrSelected ? buildAlbumDelegate(lidarrSelection) : undefined;
-      if (lidarrSelected && !delegate) {
-        toast.error(t("config.errors.lidarrIncomplete"));
-        return;
-      }
-      downloadAlbumMutation.mutate({
-        external_id: item.id,
-        name: item.name,
-        credited_artist: item.artists[0]?.name || item.artist,
-        album_art: item.images[0]?.url ?? null,
-        total_tracks: item.total_tracks || trackList.length,
-        tracks: trackList.map(mapTrackFields),
-        config,
-        ...(delegate ? { delegate } : {}),
-        ...chosenDestination,
-      });
-      onSuccess?.(itemName);
-      onClose();
-      return;
-    }
-
-    if (item.type === ContentType.enum.playlist) {
-      const effectiveName = renameValue.trim() || item.name;
-      downloadPlaylistMutation.mutate({
-        external_id: item.id,
-        name: effectiveName,
-        description: item.description ?? null,
-        owner: item.owner?.name ?? "Unknown",
-        image: item.images?.[0]?.url ?? null,
-        total_tracks: item.total_tracks || trackList.length,
-        tracks: trackList.map((t) => ({
-          ...mapTrackFields(t),
-          album_external_id: t.album.id,
-          album_name: t.album.name,
-          album_artist: t.artists?.[0]?.name || t.artist || "Unknown Artist",
-          album_image: t.album.images?.[0]?.url ?? null,
-        })),
-        config,
-      });
-      onSuccess?.(effectiveName);
-      onClose();
-    }
+    onSuccess?.(playlistName ?? getItemDisplayName(item));
+    onClose();
   };
 
   if (!item) return null;
@@ -363,10 +217,8 @@ export function ConfigRequestModal({
 
         <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
           {isLidarrArtistMode ? (
-            <div className="space-y-3 sm:space-y-4">
-              <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                {t("config.sections.lidarr")}
-              </h3>
+            <div className={sectionStack()}>
+              <h3 className={sectionHeading()}>{t("config.sections.lidarr")}</h3>
               <p className="text-fg/60 text-sm">{t("config.artistLidarr.description")}</p>
               <LidarrInputs monitorMode="artist" value={lidarrArtistSelection} onChange={setLidarrArtistSelection} />
             </div>
@@ -387,105 +239,31 @@ export function ConfigRequestModal({
                 </div>
               )}
 
-              <div className="space-y-3 sm:space-y-4">
-                <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                  {t("config.sections.acquisition")}
-                </h3>
-                <AcquisitionOrderList
-                  label={t("config.fields.acquisition")}
-                  selection={acquisition}
+              {presetUnavailable && selection === null ? (
+                <p className={presetNote()} data-cy="request-preset-unavailable">
+                  {t("config.presetUnavailable")}
+                </p>
+              ) : null}
+
+              {selection !== null && !canCustomize && effectivePreset !== undefined ? (
+                <p className={presetNote()} data-cy="request-preset-locked">
+                  {t("config.presetLocked", { summary: summarizePreset(effectivePreset, t) })}
+                </p>
+              ) : null}
+
+              {selection !== null && canCustomize ? (
+                <RequestPresetFields
+                  value={selection}
+                  onChange={setSelection}
                   lidarrAvailable={lidarrOffered}
-                  onChange={setAcquisition}
+                  lidarrSlot={
+                    <div className={sectionStack()}>
+                      <h3 className={sectionHeading()}>{t("config.sections.lidarr")}</h3>
+                      <LidarrInputs monitorMode="album" value={lidarrSelection} onChange={setLidarrSelection} />
+                    </div>
+                  }
                 />
-              </div>
-
-              {!lidarrSelected && (
-                <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                    {t("config.sections.quality")}
-                  </h3>
-                  <OptionGrid
-                    label={t("config.fields.quality")}
-                    options={qualityGridOptions}
-                    value={qualityMode}
-                    onChange={setQualityMode}
-                    columns={2}
-                    showCheckmark
-                  />
-                  <OptionGrid
-                    label={t("config.fields.bitrate")}
-                    options={bitrateGridOptions}
-                    value={bitrate}
-                    onChange={setBitrate}
-                    columns={4}
-                  />
-                  <OptionGrid
-                    label={t("config.fields.format")}
-                    options={formatGridOptions}
-                    value={format}
-                    onChange={setFormat}
-                    columns={4}
-                    disabled={losslessActive}
-                  />
-                </div>
-              )}
-
-              {showMatchingControls && (
-                <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                    {t("config.sections.matching")}
-                  </h3>
-                  <OptionGrid
-                    label={t("config.fields.bitrateMatching")}
-                    options={matchingGridOptions}
-                    value={bitrateMatching}
-                    onChange={setBitrateMatching}
-                    columns={2}
-                    showCheckmark
-                  />
-                  <OptionGrid
-                    label={t("config.fields.formatMatching")}
-                    options={matchingGridOptions}
-                    value={formatMatching}
-                    onChange={setFormatMatching}
-                    columns={2}
-                    showCheckmark
-                    disabled={losslessActive}
-                  />
-                </div>
-              )}
-
-              {lidarrSelected && (
-                <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                    {t("config.sections.lidarr")}
-                  </h3>
-                  <LidarrInputs monitorMode="album" value={lidarrSelection} onChange={setLidarrSelection} />
-                </div>
-              )}
-
-              {showSlskdControls && (
-                <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm">
-                    {t("config.sections.peer")}
-                  </h3>
-                  <OptionGrid
-                    label={t("config.fields.minUploadSpeed")}
-                    options={uploadSpeedGridOptions}
-                    value={minUploadSpeed}
-                    onChange={setMinUploadSpeed}
-                    columns={4}
-                  />
-                  <OptionGrid
-                    label={t("config.fields.availability")}
-                    options={availabilityGridOptions}
-                    value={availability}
-                    onChange={setAvailability}
-                    columns={2}
-                    showCheckmark
-                  />
-                </div>
-              )}
+              ) : null}
 
               {showDestination && destinationRequest !== null ? (
                 <DestinationField

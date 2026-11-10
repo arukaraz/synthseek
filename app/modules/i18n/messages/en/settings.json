@@ -1,4 +1,41 @@
 {
+  "requestPreset": {
+    "choiceAriaLabel": "Which settings requests use",
+    "unavailable": "The request preset could not be loaded. Try again later.",
+    "server": {
+      "title": "Request preset",
+      "description": "Used by everyone without a preset of their own: the left half of the split Request buttons, assistant requests without a quality, and automatic requests. Lidarr handoffs are not covered.",
+      "followLabel": "Factory defaults",
+      "customLabel": "Server preset",
+      "followSummary": "Users without a preset use their last request's settings, or the factory defaults ({{summary}}) when there is none."
+    },
+    "own": {
+      "title": "Your request preset",
+      "description": "What the left half of the split Request buttons uses for you.",
+      "followLabel": "Follow the server",
+      "customLabel": "My own",
+      "followServer": "Your requests follow the server preset: {{summary}}.",
+      "followDefault": "There is no server preset, so your requests use your last request's settings, or the factory defaults ({{summary}}) when there is none."
+    },
+    "locked": {
+      "byAdmin": "Your account has its own preset: {{summary}}. Ask an admin to change it.",
+      "server": "You use the server preset: {{summary}}. Ask an admin to change it.",
+      "last": "You use the settings of your last request: {{summary}}. Ask an admin to set a preset.",
+      "default": "You use the default settings: {{summary}}. Ask an admin to change it."
+    },
+    "member": {
+      "action": "Request preset for {{username}}",
+      "title": "{{username}}'s request preset",
+      "description": "What this member's requests use. Members can't change it themselves.",
+      "followLabel": "Follow the server",
+      "customLabel": "Their own",
+      "unavailable": "This member's request preset could not be loaded. Try again later.",
+      "followServer": "This member's requests follow the server preset: {{summary}}.",
+      "followDefault": "There is no server preset, so this member's requests use their last request's settings, or the factory defaults ({{summary}}) when there is none.",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
   "notifications": {
     "pageTitle": "Notifications",
     "pageDescription": "Get told outside Synthseek when something happens. Each destination picks its own notifications, and only what changed is ever sent.",
@@ -1627,6 +1664,7 @@
         "playbackBrowser": "equalizer compressor crossfade gapless transition conversion bitrate mp3",
         "theme": "dark midnight ocean color colour",
         "language": "english spanish french german",
+        "members": "role trusted quota request preset quality format",
         "board": "density text size background templates arrange layout widgets",
         "scrobble": "scrobble plays listening history",
         "channels": "discord ntfy telegram webhook apprise",

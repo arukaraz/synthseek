@@ -19,6 +19,11 @@ const mocks = vi.hoisted(() => ({
   openForTarget: vi.fn(),
   openForResult: vi.fn(),
   requestResult: vi.fn(),
+  role: "admin",
+}));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: mocks.role } }),
 }));
 
 vi.mock("@hooks/api/queries/analytics/useRecentAlbums", () => ({ useRecentAlbums: () => mocks.recentAlbums() }));
@@ -59,6 +64,7 @@ const ALBUM = {
 
 afterEach(() => {
   vi.clearAllMocks();
+  mocks.role = "admin";
 });
 
 describe("NewInLibrary", () => {
@@ -155,7 +161,26 @@ describe("Gaps", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Request Vs" }));
-    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ type: "album", id: "Pearl Jam-vs" }));
+    expect(mocks.requestResult).toHaveBeenLastCalledWith(
+      expect.objectContaining({ type: "album", id: "Pearl Jam-vs" }),
+      "direct"
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Vs with custom settings" }));
+    expect(mocks.requestResult).toHaveBeenLastCalledWith(
+      expect.objectContaining({ type: "album", id: "Pearl Jam-vs" }),
+      "customize"
+    );
+    expect(mocks.requestResult).toHaveBeenCalledTimes(2);
+  });
+
+  it("offers a member only the direct request on a missing album", () => {
+    mocks.role = "member";
+    mocks.gaps.mockReturnValue(ready([gap("Pearl Jam")]));
+    renderWithProviders(<Gaps size="M" info="x" />);
+
+    expect(screen.getByRole("button", { name: "Request Vs" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Vs with custom settings" })).not.toBeInTheDocument();
   });
 
   it("lists four artists' progress in a quarter tile, without their missing albums or a rail", () => {

@@ -1,9 +1,25 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 import { createMockTrackFull, createMockAlbumSimplified } from "@test/factories";
+import { createMockUser } from "@test/mocks/feature-hooks.mock";
 import { mockRouter } from "@test/mocks/next.mock";
 
-import type { DestinationPreview, DownloadSourcesAvailability } from "../types";
+import type { AcquisitionSelection, DestinationPreview, DownloadSourcesAvailability, RequestPreset } from "../types";
+
+const MP3_320: RequestPreset = {
+  bitrate: { value: 320, matching: "flexible" },
+  format: { value: "mp3", matching: "flexible" },
+  minUploadSpeed: 0,
+  requireFreeSlot: false,
+};
+
+const LOSSLESS_PEERS: RequestPreset = {
+  bitrate: { value: 256, matching: "strict" },
+  format: { value: "flac", matching: "strict" },
+  minUploadSpeed: 50,
+  requireFreeSlot: true,
+  sourceChain: ["ytdlp", "slskd"],
+};
 
 const mocks = vi.hoisted(() => ({
   requestMutate: vi.fn(),
@@ -17,7 +33,11 @@ const mocks = vi.hoisted(() => ({
 const { requestMutate, batchMutate, playlistMutate, tracksMutate, delegateMutate, toastError } = mocks;
 
 let sourcesAvailability: DownloadSourcesAvailability | undefined;
+let sourcesPending: boolean;
+let effectivePreset: RequestPreset | undefined;
+let presetFailed: boolean;
 let isAdmin: boolean;
+let role: "admin" | "trusted" | "member";
 let destinationPreview: DestinationPreview | undefined;
 const destinationQuery = vi.fn();
 let lidarrAvailable: { available: boolean } | undefined;
@@ -32,7 +52,11 @@ let pendingFlags: {
 };
 
 vi.mock("@hooks/api", () => ({
-  useDownloadSourcesAvailability: () => ({ data: sourcesAvailability }),
+  useDownloadSourcesAvailability: () => ({ data: sourcesAvailability, isPending: sourcesPending }),
+  useMyRequestPreset: () => ({
+    data: effectivePreset === undefined ? undefined : { effective: { preset: effectivePreset, origin: "server" } },
+    isError: presetFailed,
+  }),
   useLidarrAvailable: () => ({ data: lidarrAvailable }),
   useGetContents: () => ({ data: contentResponse, isLoading: isLoadingTracks }),
   useRequest: () => ({ mutate: mocks.requestMutate, isPending: pendingFlags.request }),
@@ -47,7 +71,7 @@ vi.mock("@hooks/api", () => ({
 }));
 
 vi.mock("@modules/providers/AuthProvider", () => ({
-  useAuthContext: () => ({ isAdmin, currentUser: null, isLoading: false }),
+  useAuthContext: () => ({ isAdmin, currentUser: createMockUser({ role }), isLoading: false }),
 }));
 
 vi.mock("sonner", () => ({
@@ -59,12 +83,20 @@ vi.mock("../ConfigHeader", () => ({
 }));
 
 vi.mock("../AcquisitionOrderList", () => ({
-  AcquisitionOrderList: (props: { selection: { mode: string; order: string[] } }) => (
+  AcquisitionOrderList: (props: {
+    selection: AcquisitionSelection;
+    onChange: (next: AcquisitionSelection) => void;
+  }) => (
     <div
       data-testid="acquisition-order-list"
       data-mode={props.selection.mode}
       data-order={props.selection.order.join(",")}
-    />
+      data-active={props.selection.active.join(",")}
+    >
+      <button type="button" onClick={() => props.onChange({ ...props.selection, mode: "lidarr" })}>
+        use-lidarr
+      </button>
+    </div>
   ),
 }));
 
@@ -137,8 +169,12 @@ describe("ConfigRequestModal", () => {
       subsonic: { enabled: false, allowsSingleTracks: true },
       torrent: { enabled: false, allowsSingleTracks: false },
     };
+    sourcesPending = false;
     lidarrAvailable = { available: false };
+    effectivePreset = MP3_320;
+    presetFailed = false;
     isAdmin = false;
+    role = "trusted";
     destinationPreview = undefined;
     contentResponse = { success: true, content: [makeTrack()] };
     isLoadingTracks = false;
@@ -231,6 +267,150 @@ describe("ConfigRequestModal", () => {
     expect(batchMutate).toHaveBeenCalledTimes(1);
     expect(batchMutate.mock.calls[0][0].external_id).toBe("al1");
     expect(batchMutate.mock.calls[0][1]).toBeUndefined();
+  });
+
+  describe("the request preset", () => {
+    it("sends the config of the preset the caller resolved, untouched", async () => {
+      const user = userEvent.setup();
+      effectivePreset = LOSSLESS_PEERS;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(confirmButton());
+
+      expect(batchMutate.mock.calls[0][0].config).toEqual({
+        bitrate: { value: 256, matching: "strict" },
+        format: { value: "flac", matching: "strict" },
+        minUploadSpeed: 50,
+        requireFreeSlot: true,
+        sourceChain: ["ytdlp", "slskd"],
+      });
+    });
+
+    it("shows a member their preset read only and sends no config, so the server applies it", async () => {
+      const user = userEvent.setup();
+      role = "member";
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      expect(document.querySelector('[data-cy="request-preset-locked"]')?.textContent).toContain("MP3 320");
+      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+
+      await user.click(confirmButton());
+
+      expect(requestMutate).toHaveBeenCalledTimes(1);
+      expect(requestMutate.mock.calls[0][0]).not.toHaveProperty("config");
+    });
+
+    it("sends the factory-style config when that is what the preset resolves to", async () => {
+      const user = userEvent.setup();
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+      await user.click(confirmButton());
+
+      expect(requestMutate.mock.calls[0][0].config).toEqual(MP3_320);
+    });
+
+    it("starts the source list from the preset's chain, with the other sources left off", () => {
+      effectivePreset = LOSSLESS_PEERS;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+      const list = screen.getByTestId("acquisition-order-list");
+      expect(list).toHaveAttribute("data-mode", "manual");
+      expect(list).toHaveAttribute("data-order", "ytdlp,slskd");
+      expect(list).toHaveAttribute("data-active", "ytdlp,slskd");
+    });
+
+    it("asks the destination for the preset's format, not a fixed one", () => {
+      isAdmin = true;
+      effectivePreset = LOSSLESS_PEERS;
+      destinationPreview = undefined;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+      expect(destinationQuery).toHaveBeenLastCalledWith(
+        { albumExternalId: "al1", format: "flac", requestType: ContentType.enum.album },
+        true
+      );
+    });
+
+    it("waits for the preset before it lets the request go", () => {
+      effectivePreset = undefined;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      expect(confirmButton()).toBeDisabled();
+      expect(confirmButton()).toHaveTextContent(/loading tracks/i);
+      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+    });
+
+    it("waits for the source list before it lets the request go", () => {
+      sourcesAvailability = undefined;
+      sourcesPending = true;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      expect(confirmButton()).toBeDisabled();
+      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+    });
+
+    it("still opens on the preset when the source list cannot be read", () => {
+      sourcesAvailability = undefined;
+      sourcesPending = false;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      expect(confirmButton()).toBeEnabled();
+      expect(screen.getByTestId("acquisition-order-list")).toBeInTheDocument();
+    });
+
+    it("hides the fields and says so when the preset cannot be read, and sends no config", async () => {
+      const user = userEvent.setup();
+      effectivePreset = undefined;
+      presetFailed = true;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+
+      expect(document.querySelector('[data-cy="request-preset-unavailable"]')).not.toBeNull();
+      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+
+      await user.click(confirmButton());
+
+      expect(batchMutate).toHaveBeenCalledTimes(1);
+      expect(batchMutate.mock.calls[0][0]).not.toHaveProperty("config");
+    });
+  });
+
+  describe("lidarr for an album", () => {
+    it("swaps the quality fields for the Lidarr inputs, drops the destination and refuses an incomplete delegate", async () => {
+      const user = userEvent.setup();
+      isAdmin = true;
+      lidarrAvailable = { available: true };
+      destinationPreview = {
+        pathId: "primary",
+        matched: [],
+        winnerRuleId: null,
+        lock: null,
+        paths: [
+          { id: "primary", label: "Music", accepts: true },
+          { id: "soundtracks", label: "Soundtracks", accepts: true },
+        ],
+      };
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      expect(document.querySelector('[data-cy="request-destination"]')).not.toBeNull();
+      expect(screen.queryByTestId("lidarr-inputs")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "use-lidarr" }));
+
+      expect(screen.getByTestId("lidarr-inputs")).toHaveAttribute("data-mode", "album");
+      expect(document.querySelector('[data-cy="request-destination"]')).toBeNull();
+
+      await user.click(confirmButton());
+
+      expect(toastError).toHaveBeenCalled();
+      expect(batchMutate).not.toHaveBeenCalled();
+    });
   });
 
   describe("destination", () => {
@@ -535,7 +715,7 @@ describe("ConfigRequestModal", () => {
   it("does not close while a mutation is pending", async () => {
     const onClose = vi.fn();
     const user = userEvent.setup();
-    pendingFlags = { request: true, batch: false, playlist: false, delegate: false };
+    pendingFlags = { request: true, batch: false, playlist: false, tracks: false, delegate: false };
 
     render(<ConfigRequestModal isOpen onClose={onClose} item={makeTrack()} itemType={ContentType.enum.track} />);
 
@@ -569,7 +749,7 @@ describe("ConfigRequestModal", () => {
   });
 
   it("shows the submitting label while a mutation is pending", () => {
-    pendingFlags = { request: true, batch: false, playlist: false, delegate: false };
+    pendingFlags = { request: true, batch: false, playlist: false, tracks: false, delegate: false };
 
     render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
 

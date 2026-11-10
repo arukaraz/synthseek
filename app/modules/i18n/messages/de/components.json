@@ -15,6 +15,13 @@
     "confirm": "Bestätigen",
     "cancel": "Abbrechen"
   },
+  "requestSplit": {
+    "direct": "{{name}} anfordern",
+    "directTitle": "Mit deiner Voreinstellung anfordern",
+    "directLabelled": "{{label}}: {{name}}",
+    "customize": "{{name}} mit eigenen Einstellungen anfordern",
+    "customizeTitle": "Mit eigenen Einstellungen anfordern"
+  },
   "dialog": {
     "close": "Schließen"
   },

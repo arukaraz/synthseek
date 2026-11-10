@@ -1,4 +1,41 @@
 {
+  "requestPreset": {
+    "choiceAriaLabel": "Welche Einstellungen Anfragen nutzen",
+    "unavailable": "Die Anfrage-Voreinstellung konnte nicht geladen werden. Versuche es später erneut.",
+    "server": {
+      "title": "Anfrage-Voreinstellung",
+      "description": "Gilt für alle ohne eigene Voreinstellung: die linke Hälfte der geteilten Anfordern-Buttons, Assistenten-Anfragen ohne Qualität und automatische Anfragen. Lidarr-Übergaben sind nicht abgedeckt.",
+      "followLabel": "Werkseinstellungen",
+      "customLabel": "Server-Voreinstellung",
+      "followSummary": "Nutzer ohne Voreinstellung nutzen die Einstellungen ihrer letzten Anfrage, oder die Werkseinstellungen ({{summary}}), wenn es keine gibt."
+    },
+    "own": {
+      "title": "Deine Anfrage-Voreinstellung",
+      "description": "Was die linke Hälfte der geteilten Anfordern-Buttons für dich nutzt.",
+      "followLabel": "Dem Server folgen",
+      "customLabel": "Eigene",
+      "followServer": "Deine Anfragen folgen der Server-Voreinstellung: {{summary}}.",
+      "followDefault": "Es gibt keine Server-Voreinstellung, daher nutzen deine Anfragen die Einstellungen deiner letzten Anfrage, oder die Werkseinstellungen ({{summary}}), wenn es keine gibt."
+    },
+    "locked": {
+      "byAdmin": "Dein Konto hat eine eigene Voreinstellung: {{summary}}. Bitte einen Admin, sie zu ändern.",
+      "server": "Du nutzt die Server-Voreinstellung: {{summary}}. Bitte einen Admin, es zu ändern.",
+      "last": "Du nutzt die Einstellungen deiner letzten Anfrage: {{summary}}. Bitte einen Admin, eine Voreinstellung festzulegen.",
+      "default": "Du nutzt die Standardeinstellungen: {{summary}}. Bitte einen Admin, es zu ändern."
+    },
+    "member": {
+      "action": "Anfrage-Voreinstellung für {{username}}",
+      "title": "Anfrage-Voreinstellung von {{username}}",
+      "description": "Was die Anfragen dieses Mitglieds nutzen. Mitglieder können sie nicht selbst ändern.",
+      "followLabel": "Dem Server folgen",
+      "customLabel": "Eigene",
+      "unavailable": "Die Anfrage-Voreinstellung dieses Mitglieds konnte nicht geladen werden. Versuche es später erneut.",
+      "followServer": "Die Anfragen dieses Mitglieds folgen der Server-Voreinstellung: {{summary}}.",
+      "followDefault": "Es gibt keine Server-Voreinstellung, daher nutzen die Anfragen dieses Mitglieds die Einstellungen seiner letzten Anfrage, oder die Werkseinstellungen ({{summary}}), wenn es keine gibt.",
+      "cancel": "Abbrechen",
+      "save": "Speichern"
+    }
+  },
   "notifications": {
     "pageTitle": "Benachrichtigungen",
     "pageDescription": "Erfahre außerhalb von Synthseek, wenn etwas passiert. Jedes Ziel wählt seine eigenen Benachrichtigungen, und es wird nur gesendet, was sich geändert hat.",
@@ -1627,6 +1664,7 @@
         "playbackBrowser": "equalizer kompressor crossfade gapless übergang konvertierung bitrate mp3",
         "theme": "dunkel mitternacht ozean farbe",
         "language": "englisch spanisch französisch deutsch",
+        "members": "rolle vertrauenswürdig kontingent anfrage voreinstellung qualität format",
         "board": "dichte textgröße hintergrund vorlagen anordnen anordnung widgets",
         "scrobble": "scrobble wiedergaben hörverlauf",
         "channels": "discord ntfy telegram webhook apprise",

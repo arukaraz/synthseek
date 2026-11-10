@@ -1,9 +1,10 @@
 "use client";
 
-import { Download, Play, Trophy } from "lucide-react";
+import { Play, Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { FadeScroll } from "@components/FadeScroll";
+import { RequestSplitButton } from "@components/RequestSplitButton";
 
 import { WidgetLeader } from "../WidgetLeader/WidgetLeader";
 import { leaderFrame, leaderLayout, leaderSubtitle, leaderTitle } from "../WidgetLeader/styles";
@@ -37,16 +38,25 @@ export function LeaderBlock({ items, size, accent, controls }: WidgetBlockProps)
             <span className={leaderTitle()}>{first.title}</span>
           )}
           <span className={leaderSubtitle()}>{itemMeta(first)}</span>
-          {coverAction ? (
+          {coverAction?.kind === "play" ? (
             <button
               type="button"
               className={leaderAction()}
               aria-label={coverAction.label}
               onClick={coverAction.onClick}
             >
-              {coverAction.kind === "play" ? <Play /> : <Download />}
-              {coverAction.kind === "play" ? t("customWidget.play") : t("customWidget.request")}
+              <Play />
+              {t("customWidget.play")}
             </button>
+          ) : null}
+          {coverAction?.kind === "request" ? (
+            <RequestSplitButton
+              name={coverAction.name}
+              label={t("customWidget.request")}
+              size="sm"
+              onRequest={coverAction.onClick}
+              onCustomize={coverAction.onCustomize}
+            />
           ) : null}
         </WidgetLeader>
         {others.length > 0 ? (

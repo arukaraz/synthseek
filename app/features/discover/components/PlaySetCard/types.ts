@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
+import type { RequestCoverAction } from "../CustomWidget/types";
+
 export type PlaySetAccent = "daily" | "weekly" | "explore" | "cf";
 
 export interface PlaySetCardProps {
@@ -14,7 +16,7 @@ export interface PlaySetCardProps {
   info?: string;
   playLabel: string;
   onPlay: (() => void) | null;
-  actionKind?: "play" | "request";
+  requestAction?: RequestCoverAction;
   onOpen?: () => void;
   revealAction?: boolean;
   pinned?: boolean;

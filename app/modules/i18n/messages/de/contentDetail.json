@@ -15,7 +15,6 @@
   "close": "Schließen",
   "request": "Anfordern",
   "requestMissing": "Fehlende anfordern",
-  "requestTrack": "{{title}} anfordern",
   "retryTrack": "{{title}} erneut versuchen",
   "selectTrack": "{{title}} auswählen",
   "selection": {

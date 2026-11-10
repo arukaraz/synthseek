@@ -21,6 +21,7 @@ import { ApprovalCard } from "./components/ApprovalCard";
 import { BulkEditBar } from "./components/BulkEditBar";
 import { CreateLocalUserDialog } from "./components/CreateLocalUserDialog";
 import { EditUserDialog } from "./components/EditUserDialog";
+import { MemberRequestPresetDialog } from "./components/MemberRequestPresetDialog";
 import { ImportPlexUsersDialog } from "./components/ImportPlexUsersDialog";
 import { MembersToolbar } from "./components/MembersToolbar";
 import { QuotasCard } from "./components/QuotasCard";
@@ -41,6 +42,7 @@ export function MembersSection() {
   const [createOpen, setCreateOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [editMember, setEditMember] = useState<MemberListItem | null>(null);
+  const [presetMember, setPresetMember] = useState<MemberListItem | null>(null);
 
   const deleteUser = useDeleteUser();
   const bulkRole = useBulkUpdateRole();
@@ -102,6 +104,7 @@ export function MembersSection() {
         onToggle: toggle,
         onToggleAll: toggleAll,
         onEdit: setEditMember,
+        onEditPreset: setPresetMember,
         onDelete: handleDelete,
       }),
     [t, currentUser?.id, selected, allSelected, someSelected, toggle, toggleAll, handleDelete]
@@ -188,6 +191,7 @@ export function MembersSection() {
           if (!open) setEditMember(null);
         }}
       />
+      <MemberRequestPresetDialog member={presetMember} onClose={() => setPresetMember(null)} />
     </div>
   );
 }

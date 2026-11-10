@@ -1,8 +1,9 @@
 "use client";
 
-import { Download, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { RequestSplitButton } from "@components/RequestSplitButton";
 import { Button } from "@components/ui/Button";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
@@ -12,7 +13,7 @@ import type { ChartActionProps } from "./types";
 
 export function ChartAction({ entry }: ChartActionProps) {
   const { t } = useTranslation("discover");
-  const { openForResult } = useContentRequestFlow();
+  const { requestResult } = useContentRequestFlow();
   const { playEntity } = useEntityPlayback();
   const { libraryTrackId, track } = entry;
 
@@ -31,16 +32,13 @@ export function ChartAction({ entry }: ChartActionProps) {
   }
   if (track) {
     return (
-      <Button
+      <RequestSplitButton
+        name={entry.title}
+        label={t("charts.request")}
         size="sm"
-        variant="accent"
-        className={widgetRowButton()}
-        aria-label={t("requestNamed", { name: entry.title })}
-        onClick={() => openForResult(track)}
-      >
-        <Download />
-        {t("charts.request")}
-      </Button>
+        onRequest={() => requestResult(track, "direct")}
+        onCustomize={() => requestResult(track, "customize")}
+      />
     );
   }
   return null;

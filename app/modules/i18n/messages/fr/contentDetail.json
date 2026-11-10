@@ -15,7 +15,6 @@
   "close": "Fermer",
   "request": "Demander",
   "requestMissing": "Demander les manquantes",
-  "requestTrack": "Demander {{title}}",
   "retryTrack": "Réessayer {{title}}",
   "selectTrack": "Sélectionner {{title}}",
   "selection": {

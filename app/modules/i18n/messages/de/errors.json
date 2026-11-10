@@ -31,6 +31,10 @@
     "title": "Nur eigene Anfragen änderbar",
     "description": "Du kannst nur deine eigenen Anfragen ändern."
   },
+  "REQUEST_PRESET_NOT_EDITABLE": {
+    "title": "Die Anfrage-Voreinstellung legt ein Admin fest",
+    "description": "Für Mitglieder legt ein Admin die Anfrage-Voreinstellung fest. Bitte einen Admin, sie zu ändern."
+  },
   "EMAIL_MANAGED_BY_PLEX": {
     "title": "E-Mail wird von Plex verwaltet",
     "description": "Deine E-Mail wird von Plex verwaltet."

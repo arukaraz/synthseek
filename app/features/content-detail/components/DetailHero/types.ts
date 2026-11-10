@@ -47,6 +47,7 @@ export interface DetailHeroProps {
   socials: SocialLink[];
   statsSlot?: ReactNode;
   onRequest?: () => void;
+  onCustomizeRequest?: () => void;
   onPlay?: () => Promise<void>;
   onShuffle?: () => Promise<void>;
   onStartRadio?: () => Promise<void>;

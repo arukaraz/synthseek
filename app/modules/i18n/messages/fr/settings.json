@@ -1,4 +1,41 @@
 {
+  "requestPreset": {
+    "choiceAriaLabel": "Quels réglages les demandes utilisent",
+    "unavailable": "Impossible de charger le préréglage de demande. Réessayez plus tard.",
+    "server": {
+      "title": "Préréglage de demande",
+      "description": "Utilisé par tous ceux qui n'ont pas de préréglage propre : la moitié gauche des boutons Demander scindés, les demandes de l'assistant sans qualité et les demandes automatiques. Les transferts vers Lidarr ne sont pas concernés.",
+      "followLabel": "Réglages d'usine",
+      "customLabel": "Préréglage du serveur",
+      "followSummary": "Les utilisateurs sans préréglage utilisent les réglages de leur dernière demande, ou les réglages d'usine ({{summary}}) s'il n'y en a pas."
+    },
+    "own": {
+      "title": "Votre préréglage de demande",
+      "description": "Ce qu'utilise pour vous la moitié gauche des boutons Demander scindés.",
+      "followLabel": "Suivre le serveur",
+      "customLabel": "Le mien",
+      "followServer": "Vos demandes suivent le préréglage du serveur : {{summary}}.",
+      "followDefault": "Il n'y a pas de préréglage du serveur, vos demandes utilisent donc les réglages de votre dernière demande, ou les réglages d'usine ({{summary}}) s'il n'y en a pas."
+    },
+    "locked": {
+      "byAdmin": "Votre compte a son propre préréglage : {{summary}}. Demandez à un admin de le changer.",
+      "server": "Vous utilisez le préréglage du serveur : {{summary}}. Demandez à un admin de le changer.",
+      "last": "Vous utilisez les réglages de votre dernière demande : {{summary}}. Demandez à un admin de définir un préréglage.",
+      "default": "Vous utilisez les réglages par défaut : {{summary}}. Demandez à un admin de le changer."
+    },
+    "member": {
+      "action": "Préréglage de demande de {{username}}",
+      "title": "Préréglage de demande de {{username}}",
+      "description": "Ce qu'utilisent les demandes de ce membre. Les membres ne peuvent pas le changer eux-mêmes.",
+      "followLabel": "Suivre le serveur",
+      "customLabel": "Le sien",
+      "unavailable": "Impossible de charger le préréglage de demande de ce membre. Réessayez plus tard.",
+      "followServer": "Les demandes de ce membre suivent le préréglage du serveur : {{summary}}.",
+      "followDefault": "Il n'y a pas de préréglage du serveur, les demandes de ce membre utilisent donc les réglages de sa dernière demande, ou les réglages d'usine ({{summary}}) s'il n'y en a pas.",
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    }
+  },
   "notifications": {
     "pageTitle": "Notifications",
     "pageDescription": "Soyez prévenu hors de Synthseek quand quelque chose se passe. Chaque destination choisit ses propres notifications, et seul ce qui a changé est envoyé.",
@@ -1627,6 +1664,7 @@
         "playbackBrowser": "égaliseur compresseur crossfade fondu gapless transition conversion débit mp3",
         "theme": "sombre minuit océan couleur",
         "language": "anglais espagnol français allemand",
+        "members": "rôle confiance quota préréglage demande qualité format",
         "board": "densité taille du texte arrière-plan modèles organiser disposition widgets",
         "scrobble": "scrobble écoutes historique",
         "channels": "discord ntfy telegram webhook apprise",

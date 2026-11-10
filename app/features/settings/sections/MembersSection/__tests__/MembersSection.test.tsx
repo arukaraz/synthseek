@@ -60,6 +60,17 @@ vi.mock("../components/ImportPlexUsersDialog", () => ({
   ImportPlexUsersDialog: ({ open }: { open: boolean }) => (open ? <div data-testid="import-dialog" /> : null),
 }));
 vi.mock("../components/QuotasCard", () => ({ QuotasCard: () => <div data-testid="quotas-card" /> }));
+vi.mock("../components/MemberRequestPresetDialog", () => ({
+  MemberRequestPresetDialog: ({ member, onClose }: { member: { id: string } | null; onClose: () => void }) =>
+    member ? (
+      <div data-testid="preset-dialog">
+        {member.id}
+        <button type="button" onClick={onClose}>
+          close-preset
+        </button>
+      </div>
+    ) : null,
+}));
 vi.mock("../components/EditUserDialog", () => ({
   EditUserDialog: ({ open }: { open: boolean }) => (open ? <div data-testid="edit-dialog" /> : null),
 }));
@@ -197,5 +208,33 @@ describe("MembersSection", () => {
 
     await userEvent.click(screen.getByLabelText("Edit alice"));
     expect(screen.getByTestId("edit-dialog")).toBeInTheDocument();
+    expect(screen.queryByTestId("preset-dialog")).not.toBeInTheDocument();
+  });
+
+  it("opens the request preset dialog for the member whose row action was pressed, and closes it again", async () => {
+    usersQuery = createMockQuery<MemberListItem[]>([
+      createMockUser({ id: "m1", username: "alice" }),
+      createMockUser({ id: "m2", username: "bob" }),
+    ]);
+    render(<MembersSection />);
+    expect(screen.queryByTestId("preset-dialog")).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByLabelText("Request preset for bob"));
+    expect(screen.getByTestId("preset-dialog")).toHaveTextContent("m2");
+    expect(screen.queryByTestId("edit-dialog")).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "close-preset" }));
+    expect(screen.queryByTestId("preset-dialog")).not.toBeInTheDocument();
+  });
+
+  it("offers no request preset on an admin's row, since only members are bound by one", () => {
+    usersQuery = createMockQuery<MemberListItem[]>([
+      createMockUser({ id: "m1", username: "alice" }),
+      createMockUser({ id: "a1", username: "root", role: Role.enum.admin }),
+    ]);
+    render(<MembersSection />);
+
+    expect(screen.getByLabelText("Request preset for alice")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Request preset for root")).not.toBeInTheDocument();
   });
 });

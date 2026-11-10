@@ -11,24 +11,26 @@ Search covers tracks, albums, artists, and playlists from the connected music ca
 
 The search bar at the top shows quick results as you type and can be narrowed to one kind of result. Ctrl+K, or Cmd+K on a Mac, opens it from any page outside Settings, where the same keys open the settings search.
 
-Every request opens a window where you can set, per request:
+The **Request** button on a song, album, playlist or an artist's top songs has two halves, except on the album tiles of a Mosaic widget, which request at once. The left one requests with your request preset. The right one, offered to trusted members and administrators, opens a window where you can set, per request, the options below. Picking a song in Search opens the same window, where a plain member sees their preset without changing it.
 
-| Option           | What it does                                                                            |
-| ---------------- | --------------------------------------------------------------------------------------- |
-| Quality          | Standard lets you pick the format and bitrate. Lossless asks for FLAC and nothing else. |
-| Format           | The audio format you want: mp3, flac, aac, m4a, ogg, wav, or opus.                      |
-| Format matching  | Strict accepts only that format. Flexible accepts near equivalents.                     |
-| Bitrate          | A target between 128 and 320.                                                           |
-| Bitrate matching | Strict holds out for the target. Flexible falls back through lower tiers.               |
-| Min upload speed | Skip peers slower than this.                                                            |
-| Availability     | **Available now** only considers peers that can start immediately.                      |
-| Source           | Which sources to try and in what order, or hand the request to Lidarr instead.          |
-| Rename playlist  | For playlists, an optional name so it lands in your library the way you want it.        |
-| Library path     | Administrators only, for an album or a track: the library path it is saved to.          |
+| Option           | What it does                                                                                                                                 |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Quality          | Standard lets you pick the format and bitrate. Lossless asks for FLAC.                                                                       |
+| Format           | The audio format you want: mp3, flac, aac, m4a, ogg, wav, or opus.                                                                           |
+| Format matching  | Strict accepts only that format. Flexible accepts near equivalents. With Lossless, Flexible takes the best other file when no FLAC is found. |
+| Bitrate          | A target between 128 and 320.                                                                                                                |
+| Bitrate matching | Strict holds out for the target. Flexible falls back through lower tiers.                                                                    |
+| Min upload speed | Skip peers slower than this.                                                                                                                 |
+| Availability     | **Available now** only considers peers that can start immediately.                                                                           |
+| Source           | Which sources to try and in what order, or hand the request to Lidarr instead.                                                               |
+| Rename playlist  | For playlists, an optional name so it lands in your library the way you want it.                                                             |
+| Library path     | Administrators only, for an album or a track: the library path it is saved to.                                                               |
 
 Lossless, the two matching options and the peer options are offered while slskd is one of the sources.
 
-These choices are stored on the request itself, so a retry weeks later still honours what you originally asked for.
+The window opens on your preset. These choices are stored on the request itself, so a retry weeks later still honours what you originally asked for.
+
+Your request preset is set under **Settings**, then **Account**. Without one, you get the server's preset, set under **Download engine**. Without that, you get the settings of your last request, or MP3 at 320 kbps. The same preset is used by automatic requests and by an assistant that does not name a quality. A plain member's preset is set by an administrator, under **Members & access**.
 
 ### The requests screen
 

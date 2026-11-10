@@ -11,6 +11,7 @@ import { AccountCard } from "./components/AccountCard";
 import { ChangePasswordCard } from "./components/ChangePasswordCard";
 import { EditProfileCard } from "./components/EditProfileCard";
 import { HouseholdSharingCard } from "./components/HouseholdSharingCard";
+import { MyRequestPresetCard } from "./components/MyRequestPresetCard";
 import { QuotaCard } from "./components/QuotaCard";
 
 export function AccountSection() {
@@ -25,6 +26,7 @@ export function AccountSection() {
       <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <AccountCard user={currentUser} />
       <QuotaCard />
+      <MyRequestPresetCard />
       <EditProfileCard user={currentUser} />
       <HouseholdSharingCard user={currentUser} />
       <ChangePasswordCard user={currentUser} />

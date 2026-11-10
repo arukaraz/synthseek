@@ -20,6 +20,11 @@ const mocks = vi.hoisted(() => ({
   openForTarget: vi.fn(),
   openForResult: vi.fn(),
   requestResult: vi.fn(),
+  role: "admin",
+}));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: mocks.role } }),
 }));
 
 vi.mock("@hooks/api/queries/analytics/useOrbitAlbums", () => ({ useOrbitAlbums: () => mocks.orbit() }));
@@ -71,6 +76,7 @@ function catalogTrack(id: string) {
 
 afterEach(() => {
   vi.clearAllMocks();
+  mocks.role = "admin";
 });
 
 describe("Orbit", () => {
@@ -88,10 +94,36 @@ describe("Orbit", () => {
     mocks.orbit.mockReturnValue(ready([album]));
     renderWithProviders(<Orbit size="L" info="x" />);
 
-    fireEvent.click(screen.getByRole("button", { name: /^Request / }));
+    fireEvent.click(screen.getByRole("button", { name: "Request Jar of Flies" }));
 
-    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "jof", name: "Jar of Flies" }));
+    expect(mocks.requestResult).toHaveBeenCalledTimes(1);
+    expect(mocks.requestResult).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "jof", name: "Jar of Flies" }),
+      "direct"
+    );
     expect(mocks.playEntity).not.toHaveBeenCalled();
+  });
+
+  it("customizes the request for that album from the second half of the button", () => {
+    mocks.orbit.mockReturnValue(ready([album]));
+    renderWithProviders(<Orbit size="L" info="x" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Jar of Flies with custom settings" }));
+
+    expect(mocks.requestResult).toHaveBeenCalledTimes(1);
+    expect(mocks.requestResult).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "jof", name: "Jar of Flies" }),
+      "customize"
+    );
+  });
+
+  it("offers a member only the direct request", () => {
+    mocks.role = "member";
+    mocks.orbit.mockReturnValue(ready([album]));
+    renderWithProviders(<Orbit size="L" info="x" />);
+
+    expect(screen.getByRole("button", { name: "Request Jar of Flies" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Jar of Flies with custom settings" })).not.toBeInTheDocument();
   });
 
   it("offers Play on an album the library holds part of", () => {
@@ -154,11 +186,27 @@ describe("Charts", () => {
 
     const rows = screen.getAllByRole("listitem");
     expect(rows).toHaveLength(2);
-    fireEvent.click(within(rows[0]).getByRole("button", { name: "Request Awake" }));
+    fireEvent.click(within(rows[0]).getByRole("button", { name: new RegExp(`^${enDiscover.charts.request}: `) }));
 
     expect(mocks.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["lib1"] });
-    expect(mocks.openForResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c1" }));
+    expect(mocks.requestResult).toHaveBeenCalledTimes(1);
+    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c1" }), "direct");
     expect(within(rows[1]).queryByRole("button")).not.toBeInTheDocument();
+  });
+
+  it("customizes the request for a charted track from the second half of the button", () => {
+    mocks.charts.mockReturnValue(
+      ready([
+        { title: "Joga", artist: "Bjork", libraryTrackId: "lib1", track: null },
+        { title: "Awake", artist: "Tycho", libraryTrackId: null, track: catalogTrack("c1") },
+      ])
+    );
+    renderWithProviders(<Charts size="M" info="x" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Awake with custom settings" }));
+
+    expect(mocks.requestResult).toHaveBeenCalledTimes(1);
+    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c1" }), "customize");
   });
 
   it("splits the rest of the chart in two columns beside the leader across a full row", () => {
@@ -192,9 +240,20 @@ describe("LovedNotHere", () => {
     mocks.loved.mockReturnValue(ready({ status: "ready", tracks: [catalogTrack("c9")] }));
     renderWithProviders(<LovedNotHere size="M" info="x" />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Request" }));
+    fireEvent.click(screen.getByRole("button", { name: /^Request: / }));
 
-    expect(mocks.openForResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c9" }));
+    expect(mocks.requestResult).toHaveBeenCalledTimes(1);
+    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c9" }), "direct");
+  });
+
+  it("customizes the request for a loved track from the second half of the button", () => {
+    mocks.loved.mockReturnValue(ready({ status: "ready", tracks: [catalogTrack("c9")] }));
+    renderWithProviders(<LovedNotHere size="M" info="x" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Request Track c9 with custom settings" }));
+
+    expect(mocks.requestResult).toHaveBeenCalledTimes(1);
+    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c9" }), "customize");
   });
 
   it("says when everything loved is already here", () => {
@@ -210,9 +269,10 @@ describe("LovedNotHere", () => {
     renderWithProviders(<LovedNotHere size="S" info="x" />);
 
     expect(screen.getAllByRole("listitem")).toHaveLength(4);
-    expect(screen.queryByRole("button", { name: "Request" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Request: / })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Request Track c2" }));
-    expect(mocks.openForResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c2" }));
+    expect(mocks.requestResult).toHaveBeenCalledTimes(1);
+    expect(mocks.requestResult).toHaveBeenCalledWith(expect.objectContaining({ id: "c2" }), "direct");
   });
 
   it("lays every loved track in two columns across a full row", () => {

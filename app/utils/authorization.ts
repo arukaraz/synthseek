@@ -4,6 +4,10 @@ export function isAdminFE(user: PublicUser | null | undefined): boolean {
   return user?.role === Role.enum.admin;
 }
 
+export function canCustomizeRequestsFE(user: PublicUser | null | undefined): boolean {
+  return !!user && user.role !== Role.enum.member;
+}
+
 /**
  * Client-side replica of the backend `isOwnerOrAdmin` helper. The backend
  * enforces the real check; this is only to decide whether to render UI

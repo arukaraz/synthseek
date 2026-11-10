@@ -47,6 +47,7 @@ export interface TrackRowProps {
   track: TracklistTrack;
   showArtist: boolean;
   onRequest: () => void;
+  onCustomizeRequest: () => void;
   onRetry: () => void;
   isRetrying: boolean;
   selectable?: boolean;

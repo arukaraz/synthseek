@@ -31,6 +31,10 @@
     "title": "Can only modify own requests",
     "description": "You can only modify your own requests."
   },
+  "REQUEST_PRESET_NOT_EDITABLE": {
+    "title": "Request preset is set by an admin",
+    "description": "An admin sets the request preset for members. Ask an admin to change it."
+  },
   "EMAIL_MANAGED_BY_PLEX": {
     "title": "Email managed by Plex",
     "description": "Your email is managed by Plex."

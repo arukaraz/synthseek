@@ -15,6 +15,13 @@
     "confirm": "Confirm",
     "cancel": "Cancel"
   },
+  "requestSplit": {
+    "direct": "Request {{name}}",
+    "directTitle": "Request with your preset",
+    "directLabelled": "{{label}}: {{name}}",
+    "customize": "Request {{name}} with custom settings",
+    "customizeTitle": "Request with custom settings"
+  },
   "dialog": {
     "close": "Close"
   },

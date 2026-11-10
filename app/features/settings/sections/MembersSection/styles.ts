@@ -50,3 +50,7 @@ export const importRow = cva("hover:bg-fg/5 flex items-center gap-3 rounded-lg p
 });
 
 export const importEmpty = cva("text-fg/60 py-8 text-center text-sm");
+
+export const memberPresetDialog = cva("max-h-[90dvh] overflow-y-auto sm:max-w-lg");
+
+export const memberPresetLoading = cva("text-fg/60 text-sm");

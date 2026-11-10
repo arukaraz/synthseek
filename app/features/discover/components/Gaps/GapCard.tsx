@@ -28,8 +28,9 @@ export function GapCard({ gap, onOpen, onRequest, onOpenArtist }: GapCardProps) 
               onSelect={() => onOpen(album)}
               coverAction={{
                 kind: "request",
-                label: t("requestNamed", { name: album.name }),
-                onClick: () => onRequest(album),
+                name: album.name,
+                onClick: () => onRequest(album, "direct"),
+                onCustomize: () => onRequest(album, "customize"),
               }}
             />
           ))}

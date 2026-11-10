@@ -16,6 +16,7 @@ const spies = vi.hoisted(() => {
   return {
     captured,
     invalidate: vi.fn(),
+    presetInvalidate: vi.fn(),
     notifyTracksRequested: vi.fn(),
     errorToastDetailed: vi.fn(),
   };
@@ -25,6 +26,7 @@ vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: { getAll: { invalidate: spies.invalidate } },
+      requestPreset: { mine: { invalidate: spies.presetInvalidate } },
       contentDetail: {
         albumDetail: { invalidate: spies.invalidate },
         artistTopTracks: { invalidate: spies.invalidate },
@@ -57,6 +59,14 @@ function readJob(jobId: string | undefined) {
   return result.current.find((job) => job.id === jobId);
 }
 
+describe("useRequestTracks settle", () => {
+  it("refreshes the caller's preset, which can follow their last request", () => {
+    renderHook(() => useRequestTracks(() => "Top tracks"));
+    spies.captured.options?.onSettled?.();
+    expect(spies.presetInvalidate).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("useRequestTracks dock lifecycle", () => {
   beforeEach(() => {
     resetDockStore();
@@ -65,7 +75,7 @@ describe("useRequestTracks dock lifecycle", () => {
   });
 
   it("seeds a running dock job with one row per requested track", () => {
-    renderHook(() => useRequestTracks("Top tracks"));
+    renderHook(() => useRequestTracks(() => "Top tracks"));
 
     const context = spies.captured.options?.onMutate?.(tracksVars());
 
@@ -74,7 +84,7 @@ describe("useRequestTracks dock lifecycle", () => {
   });
 
   it("settles the dock job as complete when every track was placed", () => {
-    renderHook(() => useRequestTracks("Top tracks"));
+    renderHook(() => useRequestTracks(() => "Top tracks"));
 
     const context = spies.captured.options?.onMutate?.(tracksVars());
     spies.captured.options?.onSuccess?.({ created: 3, requeued: 0, failed: 0 }, tracksVars(), context);
@@ -84,7 +94,7 @@ describe("useRequestTracks dock lifecycle", () => {
   });
 
   it("settles the dock job as failed when some tracks could not be placed", () => {
-    renderHook(() => useRequestTracks("Top tracks"));
+    renderHook(() => useRequestTracks(() => "Top tracks"));
 
     const context = spies.captured.options?.onMutate?.(tracksVars());
     spies.captured.options?.onSuccess?.({ created: 2, requeued: 0, failed: 1 }, tracksVars(), context);
@@ -93,7 +103,7 @@ describe("useRequestTracks dock lifecycle", () => {
   });
 
   it("keeps the quota that refused the tracks on the dock job, so the card can name it", () => {
-    renderHook(() => useRequestTracks("Top tracks"));
+    renderHook(() => useRequestTracks(() => "Top tracks"));
 
     const context = spies.captured.options?.onMutate?.(tracksVars());
     spies.captured.options?.onError?.(

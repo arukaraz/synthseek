@@ -23,6 +23,8 @@ The search box at the top of the sidebar finds settings by name and opens the pa
 
 Your username, email, avatar and password, and how much of your download quota you have used. This is also where you log out.
 
+Your **Request preset** is here too: the quality and sources the left half of a **Request** button uses. Administrators and trusted members set their own; a plain member sees theirs, read only. See [Features](/features#search-and-requests).
+
 ### Appearance & language
 
 | Setting  | What it does                                                                                                                                           |
@@ -68,6 +70,8 @@ Administrators only. Covered on the [Users and Permissions page](/users-permissi
 | Storage per member           | 0 GB    | Space a member's music can take. 0 is no limit.                      |
 | Whole library                | 0 GB    | Downloads stop once the library reaches this size. 0 is no limit.    |
 
+Each plain member's row also sets that member's request preset.
+
 ### Notifications
 
 Available to every member. Each member sets up their own destinations and picks what each one receives.
@@ -91,6 +95,10 @@ Administrators only. Enable, disable, and order slskd, another Subsonic server, 
 ### Download engine
 
 Administrators only. Most cards have a reset to defaults.
+
+**Request preset**
+
+The preset for everyone without one of their own. Off by default, which leaves each person on their last request, or MP3 at 320 kbps. Requests handed to Lidarr do not use it.
 
 **Queue & concurrency**
 
@@ -257,10 +265,10 @@ The patch notes timeline, and whether a newer version is available.
 
 Two live where you use them rather than in a settings section.
 
-| Setting                                               | Default                   | Where                                                                                  |
-| ----------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------- |
-| Keep for, in the review queue                         | 14 days                   | The footer of the review queue, on the Requests screen or under Maintenance. 1 to 365. |
-| Per-request format, bitrate, matching, speed, sources | See [Features](/features) | The request window, stored on the request itself.                                      |
+| Setting                                               | Default                   | Where                                                                                                    |
+| ----------------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Keep for, in the review queue                         | 14 days                   | The footer of the review queue, on the Requests screen or under Maintenance. 1 to 365.                   |
+| Per-request format, bitrate, matching, speed, sources | See [Features](/features) | The request window, opened from the right half of a **Request** button and stored on the request itself. |
 
 ## Environment variables
 

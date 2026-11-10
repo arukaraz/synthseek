@@ -11,4 +11,11 @@ export {
   playlistRequestTracks,
   trackRequestItem,
 } from "./helpers";
-export type { ContentDetailActions, ContentDetailModalProps, DetailMode, DetailTarget, PlaylistSource } from "./types";
+export type {
+  ContentDetailActions,
+  ContentDetailModalProps,
+  DetailMode,
+  DetailTarget,
+  PlaylistSource,
+  RequestIntent,
+} from "./types";

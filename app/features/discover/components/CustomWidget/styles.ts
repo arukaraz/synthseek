@@ -64,6 +64,19 @@ export const cardCover = cva("bg-surface-sunken relative overflow-hidden [&_img]
   defaultVariants: { surface: "bare", single: false },
 });
 
+export const cardRequestAction = cva(
+  "absolute z-10 opacity-0 transition focus-within:opacity-100 [@media(hover:none)]:opacity-100",
+  {
+    variants: {
+      placement: {
+        card: "right-2 bottom-2 group-hover/card:opacity-100",
+        poster: "right-3 bottom-3 group-hover:opacity-100",
+      },
+    },
+    defaultVariants: { placement: "card" },
+  }
+);
+
 export const cardAction = cva(
   "text-overlay-fg focus-visible:ring-primary-400 absolute right-2 bottom-2 z-10 flex size-9 items-center justify-center rounded-full border border-white/20 bg-black/55 opacity-0 backdrop-blur-sm transition outline-none group-hover/card:opacity-100 hover:bg-[var(--mix-acc)] focus-visible:opacity-100 focus-visible:ring-2 [@media(hover:none)]:opacity-100 [&_svg]:size-4 [&_svg]:fill-current"
 );

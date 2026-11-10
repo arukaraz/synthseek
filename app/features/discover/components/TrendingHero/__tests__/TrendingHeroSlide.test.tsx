@@ -4,6 +4,16 @@ import { TrendingHeroSlide } from "../TrendingHeroSlide";
 import { createTrendingItem } from "./fixtures";
 
 const configModalMock = vi.fn();
+const flow = vi.hoisted(() => ({ requestResult: vi.fn() }));
+const auth = vi.hoisted(() => ({ role: "admin" }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: auth.role } }),
+}));
+
+vi.mock("@features/search/components/ContentRequestFlow", () => ({
+  useContentRequestFlow: () => ({ requestResult: flow.requestResult }),
+}));
 
 vi.mock("@features/search/components/ConfigRequestModal/ConfigRequestModal", () => ({
   ConfigRequestModal: (props: { isOpen: boolean; item: { title?: string }; onClose: () => void }) => {
@@ -34,6 +44,7 @@ const baseProps = {
 describe("TrendingHeroSlide", () => {
   afterEach(() => {
     vi.clearAllMocks();
+    auth.role = "admin";
   });
 
   it("renders the track title and primary artist name", () => {
@@ -71,31 +82,55 @@ describe("TrendingHeroSlide", () => {
     expect(screen.queryByTestId("config-request-modal")).not.toBeInTheDocument();
   });
 
-  it("opens the request modal when the request button is clicked", () => {
+  it("requests the track straight away from the first half, without opening the modal", () => {
+    const item = createTrendingItem({ title: "Open Me" });
+    render(<TrendingHeroSlide item={item} {...baseProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^Request: / }));
+
+    expect(flow.requestResult).toHaveBeenCalledTimes(1);
+    expect(flow.requestResult).toHaveBeenCalledWith(item.track, "direct");
+    expect(screen.queryByTestId("config-request-modal")).not.toBeInTheDocument();
+    expect(baseProps.onRequestOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("opens the request modal from the custom settings half, without requesting", () => {
     render(<TrendingHeroSlide item={createTrendingItem({ title: "Open Me" })} {...baseProps} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Request Open Me" }));
+    fireEvent.click(screen.getByRole("button", { name: "Request Open Me with custom settings" }));
 
     expect(screen.getByTestId("config-request-modal")).toBeInTheDocument();
+    expect(flow.requestResult).not.toHaveBeenCalled();
   });
 
-  it("stops propagation so a slide click does not bubble when requesting", () => {
-    const onParentClick = vi.fn();
-    render(
-      <div onClick={onParentClick}>
-        <TrendingHeroSlide item={createTrendingItem()} {...baseProps} />
-      </div>
-    );
+  it("gives a member only the direct half", () => {
+    auth.role = "member";
+    render(<TrendingHeroSlide item={createTrendingItem({ title: "Open Me" })} {...baseProps} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Request/ }));
-
-    expect(onParentClick).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: /^Request: / })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Open Me with custom settings" })).not.toBeInTheDocument();
   });
+
+  it.each(["Request: Bubble", "Request Bubble with custom settings"])(
+    "stops propagation so a slide click does not bubble when pressing %s",
+    (name) => {
+      const onParentClick = vi.fn();
+      render(
+        <div onClick={onParentClick}>
+          <TrendingHeroSlide item={createTrendingItem({ title: "Bubble" })} {...baseProps} />
+        </div>
+      );
+
+      fireEvent.click(screen.getByRole("button", { name }));
+
+      expect(onParentClick).not.toHaveBeenCalled();
+    }
+  );
 
   it("closes the request modal via the onClose callback", () => {
-    render(<TrendingHeroSlide item={createTrendingItem()} {...baseProps} />);
+    render(<TrendingHeroSlide item={createTrendingItem({ title: "Close" })} {...baseProps} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Request/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Request Close with custom settings" }));
     expect(screen.getByTestId("config-request-modal")).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("close-modal"));
@@ -103,9 +138,9 @@ describe("TrendingHeroSlide", () => {
   });
 
   it("reports the request dialog opening and closing", () => {
-    render(<TrendingHeroSlide item={createTrendingItem()} {...baseProps} />);
+    render(<TrendingHeroSlide item={createTrendingItem({ title: "Report" })} {...baseProps} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Request/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Request Report with custom settings" }));
     expect(baseProps.onRequestOpenChange).toHaveBeenLastCalledWith(true);
 
     fireEvent.click(screen.getByText("close-modal"));
@@ -115,7 +150,7 @@ describe("TrendingHeroSlide", () => {
   it("keeps the request dialog on the track it was opened for when the slide changes", () => {
     const { rerender } = render(<TrendingHeroSlide item={createTrendingItem({ title: "First" })} {...baseProps} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Request First" }));
+    fireEvent.click(screen.getByRole("button", { name: "Request First with custom settings" }));
     rerender(<TrendingHeroSlide item={createTrendingItem({ id: "other", title: "Second" })} {...baseProps} />);
 
     expect(screen.getByTestId("config-request-modal")).toHaveAttribute("data-item-title", "First");

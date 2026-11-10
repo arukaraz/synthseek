@@ -40,8 +40,9 @@ export function Orbit({ size, info }: BoardWidgetProps) {
         }
       : {
           kind: "request",
-          label: t("requestNamed", { name: album.name }),
-          onClick: () => requestResult(albumRequestItem(reference(album))),
+          name: album.name,
+          onClick: () => requestResult(albumRequestItem(reference(album)), "direct"),
+          onCustomize: () => requestResult(albumRequestItem(reference(album)), "customize"),
         };
   const limit = cardRowLimit(size);
 

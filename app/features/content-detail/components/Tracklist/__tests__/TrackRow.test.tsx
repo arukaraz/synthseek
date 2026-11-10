@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithProviders, screen } from "@test/test-utils";
 import type { TracklistTrack } from "../types";
@@ -25,6 +25,12 @@ function createTrack(overrides?: Partial<TracklistTrack>): TracklistTrack {
   };
 }
 
+const auth = vi.hoisted(() => ({ role: "admin" }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: auth.role } }),
+}));
+
 const noop = () => {};
 
 describe("TrackRow selection", () => {
@@ -34,6 +40,7 @@ describe("TrackRow selection", () => {
         track={createTrack({ requestId: "r1", status: "complete" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
       />
@@ -48,6 +55,7 @@ describe("TrackRow selection", () => {
         track={createTrack({ requestId: "r1", status: "complete" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         selectable
@@ -65,6 +73,7 @@ describe("TrackRow selection", () => {
         track={createTrack({ requestId: "r1", status: "failed" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         selectable
@@ -82,6 +91,7 @@ describe("TrackRow selection", () => {
         track={createTrack({ requestId: "r1", status: "downloading" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         selectable
@@ -100,6 +110,7 @@ describe("TrackRow selection", () => {
         track={createTrack({ requestId: "r1", status: "complete" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         selectable
@@ -121,6 +132,7 @@ describe("TrackRow selection", () => {
         track={createTrack({ requestId: "r1", status: "complete" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         selectable
@@ -142,6 +154,7 @@ describe("TrackRow selection", () => {
         track={createTrack({ requestId: "r1", status: "complete" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         selectable
@@ -165,6 +178,7 @@ describe("TrackRow status", () => {
         track={createTrack({ requestId: "r1", status: "cancelled" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={onRetry}
         isRetrying={false}
       />
@@ -189,6 +203,7 @@ describe("TrackRow artist", () => {
         track={createTrack()}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         onArtistNavigate={onArtistNavigate}
@@ -202,7 +217,14 @@ describe("TrackRow artist", () => {
 
   it("keeps the name as plain text when there is nowhere to go", () => {
     renderWithProviders(
-      <TrackRow track={createTrack()} showArtist onRequest={noop} onRetry={noop} isRetrying={false} />
+      <TrackRow
+        track={createTrack()}
+        showArtist
+        onRequest={noop}
+        onCustomizeRequest={noop}
+        onRetry={noop}
+        isRetrying={false}
+      />
     );
 
     expect(screen.queryByRole("button", { name: "View artist Daft Punk" })).not.toBeInTheDocument();
@@ -217,6 +239,7 @@ describe("TrackRow queue actions", () => {
         track={createTrack({ requestId: "r1", status: "complete" })}
         showArtist
         onRequest={noop}
+        onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
         onPlayNow={async () => {}}
@@ -249,5 +272,46 @@ describe("TrackRow queue actions", () => {
 
     expect(queueControls()).toEqual([]);
     expect(screen.getByRole("img", { name: "Get Lucky is playing" })).toBeInTheDocument();
+  });
+});
+
+describe("TrackRow request", () => {
+  function renderRequestable(onRequest: () => void, onCustomizeRequest: () => void) {
+    return renderWithProviders(
+      <TrackRow
+        track={createTrack()}
+        showArtist
+        onRequest={onRequest}
+        onCustomizeRequest={onCustomizeRequest}
+        onRetry={noop}
+        isRetrying={false}
+      />
+    );
+  }
+
+  afterEach(() => {
+    auth.role = "admin";
+  });
+
+  it("requests straight away from the first half and customizes from the second", async () => {
+    const onRequest = vi.fn();
+    const onCustomizeRequest = vi.fn();
+    const { user } = renderRequestable(onRequest, onCustomizeRequest);
+
+    await user.click(screen.getByRole("button", { name: "Request Get Lucky" }));
+    expect(onRequest).toHaveBeenCalledTimes(1);
+    expect(onCustomizeRequest).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Request Get Lucky with custom settings" }));
+    expect(onCustomizeRequest).toHaveBeenCalledTimes(1);
+    expect(onRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it("gives a member only the direct half", () => {
+    auth.role = "member";
+    renderRequestable(vi.fn(), vi.fn());
+
+    expect(screen.getByRole("button", { name: "Request Get Lucky" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Get Lucky with custom settings" })).not.toBeInTheDocument();
   });
 });

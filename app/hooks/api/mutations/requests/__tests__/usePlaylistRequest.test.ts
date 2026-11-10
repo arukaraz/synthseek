@@ -16,6 +16,7 @@ const spies = vi.hoisted(() => {
   return {
     captured,
     invalidate: vi.fn(),
+    presetInvalidate: vi.fn(),
     notifyReclaimOutcome: vi.fn(),
     errorToastDetailed: vi.fn(),
   };
@@ -25,6 +26,7 @@ vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: { getAll: { invalidate: spies.invalidate } },
+      requestPreset: { mine: { invalidate: spies.presetInvalidate } },
       contentDetail: { playlistDetail: { invalidate: spies.invalidate } },
     }),
     requests: {
@@ -57,6 +59,14 @@ function readJob(jobId: string | undefined) {
 function readStatus(jobId: string): string | undefined {
   return readJob(jobId)?.status;
 }
+
+describe("usePlaylistRequest settle", () => {
+  it("refreshes the caller's preset, which can follow their last request", () => {
+    renderHook(() => usePlaylistRequest());
+    spies.captured.options?.onSettled?.();
+    expect(spies.presetInvalidate).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe("usePlaylistRequest dock lifecycle", () => {
   beforeEach(() => {

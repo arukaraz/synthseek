@@ -26,7 +26,7 @@ export function useRequest() {
         notifyPendingApproval(itemName);
         return;
       }
-      if (vars.config.upgrade === true) {
+      if (vars.config?.upgrade === true) {
         notifyUpgradeOutcome({ outcome, itemName });
         return;
       }
@@ -34,6 +34,7 @@ export function useRequest() {
     },
     onSettled: () => {
       void utils.requests.getAll.invalidate();
+      void utils.requestPreset.mine.invalidate();
       void utils.contentDetail.albumDetail.invalidate();
       void utils.contentDetail.artistTopTracks.invalidate();
       void utils.contentDetail.playlistDetail.invalidate();

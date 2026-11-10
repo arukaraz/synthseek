@@ -10,6 +10,7 @@ import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { AlbumCreditsWidget, AlbumDetailWidget, AlbumStatsWidget, MoreFromArtistWidget } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
 import { modalFullRow, modalGrid, modalLayout, modalMain, modalScrollArea, modalSide } from "../../styles";
+import type { RequestIntent } from "../../types";
 import type { AlbumDetailBodyProps } from "./types";
 
 function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
@@ -37,15 +38,12 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
     totalTracks: tracks.length,
   });
 
-  const handleRequest = useCallback(() => {
-    requestAlbum({
-      id: target.id,
-      name: target.name,
-      artistName,
-      cover,
-      genres,
-    });
-  }, [requestAlbum, target.id, target.name, artistName, cover, genres]);
+  const requestWith = useCallback(
+    (intent: RequestIntent) => requestAlbum({ id: target.id, name: target.name, artistName, cover, genres }, intent),
+    [requestAlbum, target.id, target.name, artistName, cover, genres]
+  );
+  const handleRequest = useCallback(() => requestWith("direct"), [requestWith]);
+  const handleCustomizeRequest = useCallback(() => requestWith("customize"), [requestWith]);
 
   const handlePlay = useCallback(() => play({ kind: "album", albumExternalId: target.id }), [play, target.id]);
   const handleStartRadio = useCallback(() => radio({ kind: "album", albumExternalId: target.id }), [radio, target.id]);
@@ -74,6 +72,7 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
         requestState={requestState}
         showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
+        onCustomizeRequest={handleCustomizeRequest}
         onPlay={counts.completeCount > 0 ? handlePlay : undefined}
         onStartRadio={counts.completeCount > 0 ? handleStartRadio : undefined}
         onSubtitleClick={handleArtistNavigate}

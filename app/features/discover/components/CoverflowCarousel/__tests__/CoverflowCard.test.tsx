@@ -4,6 +4,17 @@ import type { MusicTrack } from "@api/__generated__/types";
 import { CoverflowCard } from "../CoverflowCard";
 import type { CardTransform } from "../types";
 
+const flow = vi.hoisted(() => ({ requestResult: vi.fn() }));
+const auth = vi.hoisted(() => ({ role: "admin" }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: { role: auth.role } }),
+}));
+
+vi.mock("@features/search/components/ContentRequestFlow", () => ({
+  useContentRequestFlow: () => ({ requestResult: flow.requestResult }),
+}));
+
 vi.mock("@features/search/components/ConfigRequestModal/ConfigRequestModal", () => ({
   ConfigRequestModal: (props: { onClose: () => void }) => (
     <div data-testid="config-request-modal">
@@ -56,6 +67,7 @@ function buildProps(overrides: Partial<React.ComponentProps<typeof CoverflowCard
 describe("CoverflowCard", () => {
   afterEach(() => {
     vi.clearAllMocks();
+    auth.role = "admin";
   });
 
   it("renders the track title and artist", () => {
@@ -73,14 +85,14 @@ describe("CoverflowCard", () => {
     render(<CoverflowCard {...buildProps({ isCenter: true })} />);
 
     expect(screen.getByText("Trending")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Download/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Download: / })).toBeInTheDocument();
   });
 
   it("hides the badge and download button when not centered", () => {
     render(<CoverflowCard {...buildProps({ isCenter: false })} />);
 
     expect(screen.queryByText("Trending")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /Download/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Download: / })).not.toBeInTheDocument();
   });
 
   it("renders unknown fallbacks when title and artist are missing", () => {
@@ -111,28 +123,53 @@ describe("CoverflowCard", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  it("opens the request modal when the download button is clicked", () => {
-    render(<CoverflowCard {...buildProps({ isCenter: true })} />);
+  it("requests the track straight away from the download half, without opening the modal", () => {
+    const track = createTrack();
+    render(<CoverflowCard {...buildProps({ isCenter: true, track })} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^Download: / }));
+
+    expect(flow.requestResult).toHaveBeenCalledTimes(1);
+    expect(flow.requestResult).toHaveBeenCalledWith(track, "direct");
+    expect(screen.queryByTestId("config-request-modal")).not.toBeInTheDocument();
+  });
+
+  it("opens the request modal from the custom settings half, without requesting", () => {
+    render(<CoverflowCard {...buildProps({ isCenter: true, track: createTrack({ title: "Cover Track" }) })} />);
 
     expect(screen.queryByTestId("config-request-modal")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /Download/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Request Cover Track with custom settings" }));
 
     expect(screen.getByTestId("config-request-modal")).toBeInTheDocument();
+    expect(flow.requestResult).not.toHaveBeenCalled();
   });
 
-  it("does not propagate the card click when downloading from the center card", () => {
-    const onClick = vi.fn();
-    render(<CoverflowCard {...buildProps({ isCenter: true, onClick })} />);
+  it("gives a member only the download half", () => {
+    auth.role = "member";
+    render(<CoverflowCard {...buildProps({ isCenter: true, track: createTrack({ title: "Cover Track" }) })} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Download/ }));
-
-    expect(onClick).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: /^Download: / })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Request Cover Track with custom settings" })).not.toBeInTheDocument();
   });
+
+  it.each(["Download: Cover Track", "Request Cover Track with custom settings"])(
+    "does not propagate the card click when pressing %s on the center card",
+    (name) => {
+      const onClick = vi.fn();
+      render(
+        <CoverflowCard {...buildProps({ isCenter: true, onClick, track: createTrack({ title: "Cover Track" }) })} />
+      );
+
+      fireEvent.click(screen.getByRole("button", { name }));
+
+      expect(onClick).not.toHaveBeenCalled();
+    }
+  );
 
   it("closes the request modal via onClose", () => {
-    render(<CoverflowCard {...buildProps({ isCenter: true })} />);
+    render(<CoverflowCard {...buildProps({ isCenter: true, track: createTrack({ title: "Cover Track" }) })} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Download/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Request Cover Track with custom settings" }));
     fireEvent.click(screen.getByText("close-modal"));
 
     expect(screen.queryByTestId("config-request-modal")).not.toBeInTheDocument();

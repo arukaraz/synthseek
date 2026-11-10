@@ -65,7 +65,15 @@ const ARTIST_ROW = {
 };
 
 function handlers(): WidgetHandlers {
-  return { play: vi.fn(), shuffle: vi.fn(), radio: vi.fn(), request: vi.fn(), open: vi.fn(), openUrl: vi.fn() };
+  return {
+    play: vi.fn(),
+    shuffle: vi.fn(),
+    radio: vi.fn(),
+    request: vi.fn(),
+    customize: vi.fn(),
+    open: vi.fn(),
+    openUrl: vi.fn(),
+  };
 }
 
 function onlyItem(items: WidgetItem[]): WidgetItem {
@@ -198,6 +206,14 @@ describe("itemControls", () => {
     const calls = handlers();
     itemControls(item, "request", calls).coverAction?.onClick();
     expect(calls.request).toHaveBeenCalledWith(expect.objectContaining({ type: "album", id: "dz-album-1" }));
+  });
+
+  it("offers no request button for an artist, which has nothing to request directly", () => {
+    const artistItem: WidgetItem = {
+      ...item,
+      request: { type: "artist", id: "dz-artist-1", name: "Artist One", images: [], genres: [], followers: null },
+    };
+    expect(itemControls(artistItem, "request", handlers()).coverAction).toBeUndefined();
   });
 
   it("only opens for the open action, and does nothing for none", () => {

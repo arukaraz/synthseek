@@ -29,9 +29,9 @@ export function PostersBlock({ items, size, accent, controls, heading }: WidgetB
               pinned={item.pinned}
               covers={item.covers ?? (item.cover ? [item.cover] : [])}
               seed={item.key}
-              playLabel={coverAction?.label ?? item.title}
-              onPlay={coverAction?.onClick ?? null}
-              actionKind={coverAction?.kind}
+              playLabel={coverAction?.kind === "play" ? coverAction.label : item.title}
+              onPlay={coverAction?.kind === "play" ? coverAction.onClick : null}
+              requestAction={coverAction?.kind === "request" ? coverAction : undefined}
               onOpen={onSelect}
               revealAction
             />

@@ -4,6 +4,12 @@ export const configDialogContent = cva("bg-surface/95 max-w-[95vw] gap-0 p-0 sha
 
 export const fieldGroup = cva("space-y-3");
 
+export const sectionStack = cva("space-y-3 sm:space-y-4");
+
+export const sectionHeading = cva("text-fg/90 text-xs font-semibold tracking-wide uppercase sm:text-sm");
+
+export const presetNote = cva("text-fg/60 text-sm");
+
 export const fieldLabel = cva("text-fg/90 mb-1.5 block text-sm font-medium");
 
 export const destinationNote = cva("text-fg/60 flex flex-wrap items-center gap-1.5 text-xs");

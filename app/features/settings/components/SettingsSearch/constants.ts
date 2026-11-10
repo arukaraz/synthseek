@@ -14,6 +14,7 @@ const MEDIA = "/settings/media";
 export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
   { labelKey: "profile.account.title", page: "account", href: "/settings/account", anchor: "account" },
   { labelKey: "profile.quota.title", page: "account", href: "/settings/account", anchor: "quota" },
+  { labelKey: "requestPreset.own.title", page: "account", href: "/settings/account", anchor: "requestPreset" },
   { labelKey: "profile.edit.title", page: "account", href: "/settings/account", anchor: "profile" },
   { labelKey: "profile.edit.usernameLabel", page: "account", href: "/settings/account", anchor: "profile.username" },
   { labelKey: "profile.edit.emailLabel", page: "account", href: "/settings/account", anchor: "profile.email" },
@@ -223,7 +224,13 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
     adminOnly: true,
   },
 
-  { labelKey: "members.cardTitle", page: "members", href: "/settings/members", anchor: "members" },
+  {
+    labelKey: "members.cardTitle",
+    page: "members",
+    href: "/settings/members",
+    anchor: "members",
+    keywordsKey: "shell.search.keywords.members",
+  },
   {
     labelKey: "members.approval.requireForMembers.label",
     page: "members",
@@ -587,6 +594,12 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
     placeKey: "lidarr.title",
   },
 
+  {
+    labelKey: "requestPreset.server.title",
+    page: "engine",
+    href: "/settings/engine",
+    anchor: "engine.requestPreset",
+  },
   { labelKey: "search.smartSearchHeader", page: "engine", href: "/settings/engine", anchor: "smart-search" },
   {
     labelKey: "search.customMoodKeywords.label",

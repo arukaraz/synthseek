@@ -1,4 +1,10 @@
 {
+  "requestPreset": {
+    "saved": "Preset de solicitud guardado",
+    "serverSaved": "Preset de solicitud del servidor guardado",
+    "memberSaved": "Preset de solicitud del miembro guardado",
+    "saveFailed": "No se pudo guardar el preset de solicitud"
+  },
   "users": {
     "deleteFailed": "No se pudo eliminar el usuario",
     "deleteManyFailed": "No se pudieron eliminar los usuarios",

@@ -53,4 +53,9 @@ export {
   createMockArtistFull,
   createMockPlaylistSimplified,
   createMockPlaylistTrack,
+  createMusicAlbum,
+  createMusicArtist,
+  createMusicPlaylist,
+  createMusicPlaylistTrack,
+  createMusicTrack,
 } from "./music.factory";

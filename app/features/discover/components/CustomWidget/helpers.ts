@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
+import { ContentType } from "@api/__generated__/types";
 import i18n from "@locale";
 
 import {
@@ -678,13 +679,14 @@ export function itemControls(item: WidgetItem, action: WidgetAction, handlers: W
       },
     };
   }
-  if (action === "request" && request) {
+  if (action === "request" && request && request.type !== ContentType.enum.artist) {
     return {
       onSelect,
       coverAction: {
         kind: "request",
-        label: i18n.t("discover:requestNamed", { name: item.title }),
+        name: item.title,
         onClick: () => handlers.request(request),
+        onCustomize: () => handlers.customize(request),
       },
     };
   }

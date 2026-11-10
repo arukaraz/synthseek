@@ -1,9 +1,8 @@
 "use client";
 
-import { Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@components/ui/Button";
+import { RequestSplitButton } from "@components/RequestSplitButton";
 import { trackRequestItem } from "@features/content-detail";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { formatTrackDuration } from "@utils/formatters";
@@ -15,6 +14,15 @@ import type { SmartSuggestionRowProps } from "./types";
 export function SmartSuggestionRow({ suggestion }: SmartSuggestionRowProps) {
   const { t } = useTranslation("discover");
   const { requestResult } = useContentRequestFlow();
+  const suggestionItem = trackRequestItem({
+    id: suggestion.catalogTrackId,
+    title: suggestion.title,
+    artistName: suggestion.artist,
+    durationMs: suggestion.durationMs ?? 0,
+    trackNumber: 1,
+    isrc: suggestion.isrc,
+    album: null,
+  });
 
   return (
     <div className={row()}>
@@ -28,26 +36,14 @@ export function SmartSuggestionRow({ suggestion }: SmartSuggestionRowProps) {
       {suggestion.durationMs === null ? null : (
         <span className={rowTime()}>{formatTrackDuration(suggestion.durationMs)}</span>
       )}
-      <Button
-        variant="secondary"
+      <RequestSplitButton
+        name={suggestion.title}
+        label={t("smartList.request")}
         size="sm"
-        onClick={() =>
-          requestResult(
-            trackRequestItem({
-              id: suggestion.catalogTrackId,
-              title: suggestion.title,
-              artistName: suggestion.artist,
-              durationMs: suggestion.durationMs ?? 0,
-              trackNumber: 1,
-              isrc: suggestion.isrc,
-              album: null,
-            })
-          )
-        }
-      >
-        <Download />
-        {t("smartList.request")}
-      </Button>
+        tone="ghost"
+        onRequest={() => requestResult(suggestionItem, "direct")}
+        onCustomize={() => requestResult(suggestionItem, "customize")}
+      />
     </div>
   );
 }

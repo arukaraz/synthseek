@@ -42,8 +42,9 @@ export function TrendingList({ entries, info, loading, failed }: TrendingListPro
                 onSelect={() => openForResult(track)}
                 coverAction={{
                   kind: "request",
-                  label: t("trendingHero.requestAriaLabel", { title }),
-                  onClick: () => requestResult(track),
+                  name: title,
+                  onClick: () => requestResult(track, "direct"),
+                  onCustomize: () => requestResult(track, "customize"),
                 }}
               />
             );

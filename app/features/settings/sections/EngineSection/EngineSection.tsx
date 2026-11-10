@@ -10,6 +10,7 @@ import { contentRoot, emptyPanel, sectionGrid } from "../../styles";
 import { ImportCard } from "./ImportCard";
 import { QualityCard } from "./QualityCard";
 import { QueueCard } from "./QueueCard";
+import { ServerRequestPresetCard } from "./ServerRequestPresetCard";
 import { SmartSearchCard } from "./SmartSearchCard";
 import { TimeoutsCard } from "./TimeoutsCard";
 import { WantedCard } from "./WantedCard";
@@ -47,6 +48,7 @@ export function EngineSection() {
     <div className={contentRoot()}>
       <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <div className={sectionGrid()}>
+        <ServerRequestPresetCard />
         <SmartSearchCard initial={data.engine.smartSearch} />
         <TimeoutsCard initial={data.engine.timeouts} />
         <QueueCard initial={data.engine.queue} />

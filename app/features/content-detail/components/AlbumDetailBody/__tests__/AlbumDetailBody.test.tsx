@@ -49,6 +49,9 @@ vi.mock("../../DetailHero/DetailHero", () => ({
         <button type="button" onClick={props.onRequest as () => void}>
           request
         </button>
+        <button type="button" onClick={props.onCustomizeRequest as () => void}>
+          customize
+        </button>
         {typeof props.onPlay === "function" ? (
           <button type="button" onClick={props.onPlay as () => void}>
             play
@@ -174,19 +177,30 @@ describe("what the album page shows", () => {
 });
 
 describe("what the album page offers", () => {
-  it("asks for the album under the name and artwork on screen", async () => {
+  const albumOnScreen = {
+    id: "album-1",
+    name: "Discovery",
+    artistName: "Daft Punk",
+    cover: "/cover.jpg",
+    genres: ["house"],
+  };
+
+  it("asks for the album straight away under the name and artwork on screen", async () => {
     api.album = albumWith([]);
     const { user } = renderBody();
 
     await user.click(screen.getByRole("button", { name: "request" }));
 
-    expect(actions.requestAlbum).toHaveBeenCalledWith({
-      id: "album-1",
-      name: "Discovery",
-      artistName: "Daft Punk",
-      cover: "/cover.jpg",
-      genres: ["house"],
-    });
+    expect(actions.requestAlbum).toHaveBeenCalledWith(albumOnScreen, "direct");
+  });
+
+  it("opens the custom settings for the same album from the second half of the button", async () => {
+    api.album = albumWith([]);
+    const { user } = renderBody();
+
+    await user.click(screen.getByRole("button", { name: "customize" }));
+
+    expect(actions.requestAlbum).toHaveBeenCalledWith(albumOnScreen, "customize");
   });
 
   it("offers no play button for an album the library does not hold yet", () => {

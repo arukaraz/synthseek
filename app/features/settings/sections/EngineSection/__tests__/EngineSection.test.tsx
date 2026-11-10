@@ -31,6 +31,9 @@ vi.mock("@hooks/api/queries/useSettings", () => ({
   useSettings: () => settingsQuery,
 }));
 
+vi.mock("../ServerRequestPresetCard", () => ({
+  ServerRequestPresetCard: () => <div data-testid="server-request-preset-card" />,
+}));
 vi.mock("../SmartSearchCard", () => ({ SmartSearchCard: () => <div data-testid="smart-search-card" /> }));
 vi.mock("../TimeoutsCard", () => ({ TimeoutsCard: () => <div data-testid="timeouts-card" /> }));
 vi.mock("../QueueCard", () => ({ QueueCard: () => <div data-testid="queue-card" /> }));
@@ -89,9 +92,10 @@ describe("EngineSection", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the six engine cards when data is present, with quarantine now under Maintenance", () => {
+  it("renders the seven engine cards when data is present, with quarantine now under Maintenance", () => {
     settingsQuery = createMockQuery<SettingsData | undefined>(data);
     render(<EngineSection />);
+    expect(screen.getByTestId("server-request-preset-card")).toBeInTheDocument();
     expect(screen.getByTestId("smart-search-card")).toBeInTheDocument();
     expect(screen.getByTestId("timeouts-card")).toBeInTheDocument();
     expect(screen.getByTestId("queue-card")).toBeInTheDocument();

@@ -178,12 +178,14 @@ export interface TrackRequestInput {
   album: { externalId: string; name: string; cover: string | null } | null;
 }
 
+export type RequestIntent = "direct" | "customize";
+
 export interface ContentDetailActions {
-  requestAlbum: (input: AlbumRequestInput) => void;
+  requestAlbum: (input: AlbumRequestInput, intent?: RequestIntent) => void;
   requestArtist: (input: ArtistRequestInput) => void;
-  requestTrack: (input: TrackRequestInput) => void;
-  requestPlaylist: (input: PlaylistRequestInput) => void;
-  requestTopTracks: (input: TopTracksRequestInput) => void;
+  requestTrack: (input: TrackRequestInput, intent?: RequestIntent) => void;
+  requestPlaylist: (input: PlaylistRequestInput, intent?: RequestIntent) => void;
+  requestTopTracks: (input: TopTracksRequestInput, intent?: RequestIntent) => void;
 }
 
 export interface ContentDetailActionsProviderProps {

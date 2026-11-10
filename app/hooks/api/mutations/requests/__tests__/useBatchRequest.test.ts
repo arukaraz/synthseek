@@ -16,6 +16,7 @@ const spies = vi.hoisted(() => {
   return {
     captured,
     invalidate: vi.fn(),
+    presetInvalidate: vi.fn(),
     notifyReclaimOutcome: vi.fn(),
     notifyPendingApproval: vi.fn(),
     errorToastDetailed: vi.fn(),
@@ -26,6 +27,7 @@ vi.mock("@utils/trpc", () => ({
   trpc: {
     useUtils: () => ({
       requests: { getAll: { invalidate: spies.invalidate } },
+      requestPreset: { mine: { invalidate: spies.presetInvalidate } },
       contentDetail: {
         albumDetail: { invalidate: spies.invalidate },
         artistTopTracks: { invalidate: spies.invalidate },
@@ -64,6 +66,14 @@ function readJob(jobId: string | undefined) {
 function readStatus(jobId: string): string | undefined {
   return readJob(jobId)?.status;
 }
+
+describe("useBatchRequest settle", () => {
+  it("refreshes the caller's preset, which can follow their last request", () => {
+    renderHook(() => useBatchRequest());
+    spies.captured.options?.onSettled?.();
+    expect(spies.presetInvalidate).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe("useBatchRequest dock lifecycle", () => {
   beforeEach(() => {

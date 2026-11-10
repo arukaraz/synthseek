@@ -1,12 +1,13 @@
 "use client";
 
-import { Download, Pin, Play } from "lucide-react";
+import { Pin, Play } from "lucide-react";
 import Image from "next/image";
 
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { artworkImage } from "@utils/artworkProxy";
 import { cn } from "@utils/cn";
 
+import { CoverRequestAction } from "../CustomWidget/CoverRequestAction";
 import { DiscoveryMixMosaic } from "../DiscoveryMixes/DiscoveryMixMosaic";
 import {
   mixBlurb,
@@ -35,7 +36,7 @@ export function PlaySetCard({
   info,
   playLabel,
   onPlay,
-  actionKind = "play",
+  requestAction,
   onOpen,
   revealAction = false,
   pinned = false,
@@ -60,14 +61,16 @@ export function PlaySetCard({
             <Pin aria-hidden />
           </span>
         ) : null}
-        {onPlay ? (
+        {requestAction ? (
+          <CoverRequestAction action={requestAction} placement="poster" />
+        ) : onPlay ? (
           <button
             type="button"
             className={playButton({ reveal: revealAction })}
             aria-label={playLabel}
             onClick={onPlay}
           >
-            {actionKind === "play" ? <Play /> : <Download />}
+            <Play />
           </button>
         ) : null}
       </div>

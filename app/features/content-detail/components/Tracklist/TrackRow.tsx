@@ -1,18 +1,18 @@
 "use client";
 
+import { RequestSplitButton } from "@components/RequestSplitButton";
 import { Checkbox } from "@components/ui/Checkbox";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 import { isRetryableStatus } from "@utils/status-helpers";
 import { formatTrackDuration } from "@utils/formatters";
-import { Download, Loader2, RotateCcw } from "lucide-react";
+import { Loader2, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { formatPlays, isRemovableTrack } from "../../helpers";
 import {
   trackArtist,
   trackArtistLink,
-  trackDownloadButton,
   trackInfo,
   trackMeta,
   trackRetryButton,
@@ -29,6 +29,7 @@ export function TrackRow({
   track,
   showArtist,
   onRequest,
+  onCustomizeRequest,
   onRetry,
   isRetrying,
   selectable = false,
@@ -137,14 +138,14 @@ export function TrackRow({
             </TooltipProvider>
           </>
         ) : (
-          <button
-            type="button"
-            className={trackDownloadButton()}
-            onClick={onRequest}
-            aria-label={t("requestTrack", { title: track.title })}
-          >
-            <Download className="size-4" aria-hidden />
-          </button>
+          <RequestSplitButton
+            name={track.title}
+            size="sm"
+            tone="ghost"
+            onRequest={onRequest}
+            onCustomize={onCustomizeRequest}
+            dataCy="track-request"
+          />
         )}
       </div>
     </li>

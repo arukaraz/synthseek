@@ -15,7 +15,6 @@
   "close": "Close",
   "request": "Request",
   "requestMissing": "Request missing",
-  "requestTrack": "Request {{title}}",
   "retryTrack": "Retry {{title}}",
   "selectTrack": "Select {{title}}",
   "selection": {

@@ -1,8 +1,16 @@
+import type { RequestPresetOrigin } from "@features/search/components/ConfigRequestModal/types";
 import type { ParseKeys } from "i18next";
 
 import type { SourceLinkOutcome } from "./types";
 
 export const PLEX_SOURCE_KEY = "plex";
+
+export const LOCKED_PRESET_KEYS: Readonly<Record<RequestPresetOrigin, ParseKeys<"settings">>> = {
+  user: "requestPreset.locked.byAdmin",
+  server: "requestPreset.locked.server",
+  last: "requestPreset.locked.last",
+  factory: "requestPreset.locked.default",
+};
 
 export const REPORT_FAILURE_KEYS: Readonly<Record<string, ParseKeys<"settings">>> = {
   unauthorized: "profile.connected.plex.reporting.unauthorized",

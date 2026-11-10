@@ -107,6 +107,12 @@
         "flexible": {
           "label": "Flexible",
           "description": "Meilleure correspondance disponible"
+        },
+        "losslessStrict": {
+          "description": "FLAC uniquement, rien d'autre"
+        },
+        "losslessFlexible": {
+          "description": "FLAC d'abord, sinon le meilleur fichier avec perte"
         }
       },
       "qualityMode": {
@@ -116,7 +122,7 @@
         },
         "lossless": {
           "label": "Sans perte",
-          "description": "FLAC uniquement, correspondance exacte"
+          "description": "Fichiers FLAC"
         }
       },
       "uploadSpeed": {
@@ -246,6 +252,17 @@
       "invalidItem": "Élément invalide",
       "fetchFailed": "Échec de récupération des pistes de {{type}}",
       "lidarrIncomplete": "Sélectionnez un dossier racine, un profil de qualité et un profil de métadonnées"
+    },
+    "presetUnavailable": "Impossible de charger vos réglages de demande. Une demande maintenant utilise votre préréglage.",
+    "presetLocked": "Cette demande utilise votre préréglage de demande : {{summary}}. Demandez à un admin de le changer."
+  },
+  "direct": {
+    "confirm": {
+      "title": "Demander {{name}} ?",
+      "message_one": "Cela envoie {{count}} piste avec votre préréglage de demande.",
+      "message_other": "Cela envoie {{count}} pistes avec votre préréglage de demande.",
+      "action_one": "Demander {{count}} piste",
+      "action_other": "Demander {{count}} pistes"
     }
   }
 }
