@@ -6,15 +6,20 @@ import { renderWithProviders, screen } from "@test/test-utils";
 import { ConfigHeader } from "../ConfigHeader";
 
 describe("ConfigHeader", () => {
-  it("renders the content-type badge, title and artist", () => {
+  it("renders the content-type badge, the title and one meta line", () => {
     renderWithProviders(
-      <ConfigHeader name="Discovery" artist="Daft Punk" itemType={ContentType.enum.album} year="2001" />
+      <ConfigHeader
+        name="Discovery"
+        artist="Daft Punk"
+        itemType={ContentType.enum.album}
+        year="2001"
+        totalTracks={14}
+      />
     );
 
     expect(screen.getByText("Album")).toBeInTheDocument();
     expect(screen.getByText("Discovery")).toBeInTheDocument();
-    expect(screen.getByText("Daft Punk")).toBeInTheDocument();
-    expect(screen.getByText("2001")).toBeInTheDocument();
+    expect(screen.getByText("Daft Punk · 2001 · 14 tracks")).toBeInTheDocument();
   });
 
   it("renders the cover image when one is provided", () => {
@@ -32,12 +37,12 @@ describe("ConfigHeader", () => {
     expect(container.querySelector("svg")).not.toBeNull();
   });
 
-  it("shows the album name only for track items", () => {
+  it("puts the album name in the meta line only for track items", () => {
     renderWithProviders(
       <ConfigHeader name="One More Time" artist="Daft Punk" albumName="Discovery" itemType={ContentType.enum.track} />
     );
 
-    expect(screen.getByText("Discovery")).toBeInTheDocument();
+    expect(screen.getByText("Daft Punk · Discovery")).toBeInTheDocument();
   });
 
   it("does not show the album name for non-track items", () => {
@@ -45,12 +50,12 @@ describe("ConfigHeader", () => {
       <ConfigHeader name="Discovery" albumName="Should Not Show" itemType={ContentType.enum.album} />
     );
 
-    expect(screen.queryByText("Should Not Show")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Should Not Show/)).not.toBeInTheDocument();
   });
 
-  it("renders a pluralized track count when provided", () => {
-    renderWithProviders(<ConfigHeader name="Discovery" totalTracks={14} itemType={ContentType.enum.album} />);
+  it("leaves the meta line out when there is nothing to show", () => {
+    const { container } = renderWithProviders(<ConfigHeader name="Discovery" itemType={ContentType.enum.album} />);
 
-    expect(screen.getByText("14 tracks")).toBeInTheDocument();
+    expect(container.querySelector("p")).toBeNull();
   });
 });

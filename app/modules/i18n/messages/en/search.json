@@ -63,8 +63,7 @@
       "matching": "Matching Mode",
       "acquisition": "Acquisition Method",
       "peer": "Peer Preferences",
-      "lidarr": "Lidarr Handoff",
-      "destination": "Destination"
+      "lidarr": "Lidarr Handoff"
     },
     "destination": {
       "lockedInPath_one": "{{count}} song of this album is already in {{label}}, the rest go with it.",
@@ -83,6 +82,7 @@
       "acquisition": "Source",
       "minUploadSpeed": "Min Upload Speed",
       "availability": "Availability",
+      "ifNoFlac": "If there is no FLAC",
       "lidarrRootFolder": "Root Folder",
       "lidarrQualityProfile": "Quality Profile",
       "lidarrMetadataProfile": "Metadata Profile",
@@ -123,7 +123,12 @@
         "lossless": {
           "label": "Lossless",
           "description": "FLAC files"
-        }
+        },
+        "losslessNeedsSlskd": "Lossless needs Slskd in the source chain."
+      },
+      "ifNoFlac": {
+        "strict": "Don't download",
+        "flexible": "Best lossy"
       },
       "uploadSpeed": {
         "any": {
@@ -190,6 +195,11 @@
           "label": "Internet Archive",
           "description": "Free music from the collections you allowed."
         },
+        "manual": {
+          "label": "Choose order"
+        },
+        "autoHint": "Uses the configured source order: {{order}}.",
+        "lidarrHint": "Lidarr searches and downloads on its own, with its profiles.",
         "orderHint": "Sources are tried top to bottom. Untick one to skip it.",
         "moveUp": "Move {{source}} up",
         "moveDown": "Move {{source}} down",
@@ -253,8 +263,32 @@
       "fetchFailed": "Failed to fetch {{type}} tracks",
       "lidarrIncomplete": "Select a root folder, quality profile, and metadata profile"
     },
-    "presetUnavailable": "Your request settings could not be loaded. Requesting now uses your preset.",
-    "presetLocked": "This request uses your request preset: {{summary}}. Ask an admin to change it."
+    "rows": {
+      "source": "Source",
+      "quality": "Quality",
+      "matching": "Matching",
+      "peer": "Peers",
+      "destination": "Destination"
+    },
+    "preset": {
+      "heading": "Your preset",
+      "changes_one": "{{count}} change to your preset",
+      "changes_other": "{{count}} changes to your preset",
+      "restoreAll": "Restore all",
+      "restoreRow": "Back to preset",
+      "changed": "Changed",
+      "adminOnly": "Only an admin can change it",
+      "forThisRequest": "Only for this request",
+      "sameAsDirect": "Same as a direct Request",
+      "matchingMixed": "Bitrate {{bitrate}}, format {{format}}",
+      "origin": {
+        "user": "Your own preset",
+        "server": "Server preset",
+        "last": "Your last request",
+        "factory": "Factory defaults"
+      }
+    },
+    "presetUnavailable": "Your request settings could not be loaded. Requesting now uses your preset."
   },
   "direct": {
     "confirm": {

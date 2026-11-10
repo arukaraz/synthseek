@@ -48,6 +48,17 @@ describe("AccountSection", () => {
     expect(screen.getByTestId("household-card")).toBeInTheDocument();
   });
 
+  it("puts the profile editor right under the profile, then quota and request preset side by side in one row", () => {
+    render(<AccountSection />);
+    const order = Array.from(document.querySelectorAll("[data-testid]")).map((node) =>
+      node.getAttribute("data-testid")
+    );
+    expect(order.slice(0, 4)).toEqual(["account-card", "edit-card", "quota-card", "request-preset-card"]);
+    const quotaRow = screen.getByTestId("quota-card").parentElement;
+    expect(quotaRow).toBe(screen.getByTestId("request-preset-card").parentElement);
+    expect(quotaRow?.className).toContain("lg:grid-cols-2");
+  });
+
   it("renders nothing when there is no current user", () => {
     authUser = null;
     const { container } = render(<AccountSection />);

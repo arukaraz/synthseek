@@ -63,8 +63,7 @@
       "matching": "Mode de correspondance",
       "acquisition": "Méthode d'acquisition",
       "peer": "Préférences de pairs",
-      "lidarr": "Transfert vers Lidarr",
-      "destination": "Destination"
+      "lidarr": "Transfert vers Lidarr"
     },
     "destination": {
       "lockedInPath_one": "{{count}} titre de cet album est déjà dans {{label}}, le reste le rejoint.",
@@ -83,6 +82,7 @@
       "acquisition": "Source",
       "minUploadSpeed": "Vitesse d'envoi min",
       "availability": "Disponibilité",
+      "ifNoFlac": "S'il n'y a pas de FLAC",
       "lidarrRootFolder": "Dossier racine",
       "lidarrQualityProfile": "Profil de qualité",
       "lidarrMetadataProfile": "Profil de métadonnées",
@@ -123,7 +123,12 @@
         "lossless": {
           "label": "Sans perte",
           "description": "Fichiers FLAC"
-        }
+        },
+        "losslessNeedsSlskd": "Le sans perte nécessite Slskd dans la chaîne de sources."
+      },
+      "ifNoFlac": {
+        "strict": "Ne pas télécharger",
+        "flexible": "Meilleur avec perte"
       },
       "uploadSpeed": {
         "any": {
@@ -190,6 +195,11 @@
           "label": "Internet Archive",
           "description": "Musique gratuite, issue des collections que vous avez autorisées."
         },
+        "manual": {
+          "label": "Choisir l'ordre"
+        },
+        "autoHint": "Utilise l'ordre des sources configuré : {{order}}.",
+        "lidarrHint": "Lidarr cherche et télécharge seul, avec ses profils.",
         "orderHint": "Les sources sont essayées de haut en bas. Décochez-en une pour l'ignorer.",
         "moveUp": "Monter {{source}}",
         "moveDown": "Descendre {{source}}",
@@ -253,8 +263,32 @@
       "fetchFailed": "Échec de récupération des pistes de {{type}}",
       "lidarrIncomplete": "Sélectionnez un dossier racine, un profil de qualité et un profil de métadonnées"
     },
-    "presetUnavailable": "Impossible de charger vos réglages de demande. Une demande maintenant utilise votre préréglage.",
-    "presetLocked": "Cette demande utilise votre préréglage de demande : {{summary}}. Demandez à un admin de le changer."
+    "rows": {
+      "source": "Source",
+      "quality": "Qualité",
+      "matching": "Correspondance",
+      "peer": "Pairs",
+      "destination": "Destination"
+    },
+    "preset": {
+      "heading": "Votre préréglage",
+      "changes_one": "{{count}} modification de votre préréglage",
+      "changes_other": "{{count}} modifications de votre préréglage",
+      "restoreAll": "Tout rétablir",
+      "restoreRow": "Revenir au préréglage",
+      "changed": "Modifié",
+      "adminOnly": "Seul un admin peut le modifier",
+      "forThisRequest": "Uniquement pour cette demande",
+      "sameAsDirect": "Comme une demande directe",
+      "matchingMixed": "Débit {{bitrate}}, format {{format}}",
+      "origin": {
+        "user": "Votre propre préréglage",
+        "server": "Préréglage du serveur",
+        "last": "Votre dernière demande",
+        "factory": "Réglages d'usine"
+      }
+    },
+    "presetUnavailable": "Impossible de charger vos réglages de demande. Une demande maintenant utilise votre préréglage."
   },
   "direct": {
     "confirm": {

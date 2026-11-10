@@ -11,7 +11,13 @@ import {
 import { getMusicItemArtist, getMusicItemName } from "@utils/content-type-helpers";
 import { matchesTerms, searchTerms } from "@utils/search";
 import type { TFunction } from "i18next";
-import { SOURCE_PRIORITY_ORDER, SOURCE_ROW_LABELS } from "./constants";
+import {
+  AVAILABILITY_OPTIONS,
+  MATCHING_LABEL_KEYS,
+  SOURCE_PRIORITY_ORDER,
+  SOURCE_ROW_LABELS,
+  UPLOAD_SPEED_OPTIONS,
+} from "./constants";
 import type {
   AcquisitionSelection,
   AlbumDelegate,
@@ -28,11 +34,16 @@ import type {
   LidarrMetadataProfile,
   LidarrQualityProfile,
   LidarrRootFolder,
+  LidarrProfiles,
   LidarrSelectOption,
   LidarrSelection,
+  LidarrSelectionBase,
   QualityMode,
+  RecipeDestination,
+  RecipeRowKey,
   RequestPreset,
   RequestSelection,
+  RestorableRowKey,
 } from "./types";
 
 export function offeredSources(
@@ -135,22 +146,180 @@ export function selectionFromPreset(preset: RequestPreset, offered: DownloadSour
   };
 }
 
+function formatLabel(format: RequestFormat): string {
+  return FORMAT_OPTIONS.find((option) => option.value === format)?.label ?? format;
+}
+
+export function describeSourceChain(chain: DownloadSourceKey[] | undefined, t: TFunction<"search">): string {
+  return chain
+    ? chain.map((key) => t(SOURCE_ROW_LABELS[key].labelKey)).join(" → ")
+    : t("config.options.acquisition.auto.label");
+}
+
 export function summarizePreset(preset: RequestPreset, t: TFunction<"search">): string {
-  const formatLabel =
-    FORMAT_OPTIONS.find((option) => option.value === preset.format.value)?.label ?? preset.format.value;
-  const matching = t(
-    preset.format.matching === RequestMatchingMode.enum.strict
-      ? "config.options.matching.strict.label"
-      : "config.options.matching.flexible.label"
-  );
+  const matching = t(MATCHING_LABEL_KEYS[preset.format.matching]);
   const quality =
     preset.format.value === RequestFormat.enum.flac
       ? `${t("config.options.qualityMode.lossless.label")} (${matching})`
-      : `${formatLabel} ${preset.bitrate.value} kbps (${matching})`;
-  const sources = preset.sourceChain
-    ? preset.sourceChain.map((key) => t(SOURCE_ROW_LABELS[key].labelKey)).join(" → ")
-    : t("config.options.acquisition.auto.label");
-  return `${quality} · ${sources}`;
+      : `${formatLabel(preset.format.value)} ${preset.bitrate.value} kbps (${matching})`;
+  return `${quality} · ${describeSourceChain(preset.sourceChain, t)}`;
+}
+
+export function isLosslessActive(selection: RequestSelection): boolean {
+  return selection.qualityMode === "lossless" && allowsLossless(selection.acquisition);
+}
+
+function sentFormat(selection: RequestSelection): RequestFormat {
+  return isLosslessActive(selection) ? RequestFormat.enum.flac : selection.format;
+}
+
+export function describeSource(selection: AcquisitionSelection, t: TFunction<"search">): string {
+  if (selection.mode === "lidarr") return t("config.options.acquisition.lidarr.label");
+  return describeSourceChain(buildSourceChain(selection), t);
+}
+
+export function describeQuality(selection: RequestSelection, t: TFunction<"search">): string {
+  if (isLosslessActive(selection)) {
+    return `${t("config.options.qualityMode.lossless.label")} (${t(MATCHING_LABEL_KEYS[selection.formatMatching])})`;
+  }
+  return `${formatLabel(selection.format)} ${selection.bitrate} kbps`;
+}
+
+export function summarizeSelection(selection: RequestSelection, t: TFunction<"search">): string {
+  return `${describeQuality(selection, t)} · ${describeSource(selection.acquisition, t)}`;
+}
+
+export function describeMatching(selection: RequestSelection, t: TFunction<"search">): string {
+  if (selection.bitrateMatching === selection.formatMatching) return t(MATCHING_LABEL_KEYS[selection.bitrateMatching]);
+  return t("config.preset.matchingMixed", {
+    bitrate: t(MATCHING_LABEL_KEYS[selection.bitrateMatching]),
+    format: t(MATCHING_LABEL_KEYS[selection.formatMatching]),
+  });
+}
+
+export function describeUploadSpeed(speed: number, t: TFunction<"search">): string {
+  const option = UPLOAD_SPEED_OPTIONS.find((entry) => entry.value === speed);
+  if (option?.labelKey) return t(option.labelKey);
+  return option?.label ?? `${Math.round(speed / 1024)} KB/s`;
+}
+
+export function describePeers(selection: RequestSelection, t: TFunction<"search">): string {
+  const availability = AVAILABILITY_OPTIONS.find((option) => option.value === selection.availability);
+  const speed = describeUploadSpeed(selection.minUploadSpeed, t);
+  return availability ? `${speed} · ${t(availability.labelKey)}` : speed;
+}
+
+export function chosenDestinationId(preview: DestinationPreview, value: string | null): string {
+  return preview.lock !== null ? preview.pathId : (value ?? preview.pathId);
+}
+
+export function describeDestination(preview: DestinationPreview, value: string | null): string {
+  const id = chosenDestinationId(preview, value);
+  return preview.paths.find((path) => path.id === id)?.label ?? "";
+}
+
+export function describeLidarr(
+  selection: LidarrSelectionBase<string>,
+  profiles: LidarrProfiles | undefined,
+  t: TFunction<"search">
+): string {
+  const profile = profiles?.qualityProfiles.find((entry) => entry.id === selection.qualityProfileId)?.name;
+  return [t("config.options.acquisition.lidarr.label"), profile, selection.rootFolderPath]
+    .filter((part): part is string => typeof part === "string" && part.length > 0)
+    .join(" · ");
+}
+
+function sameChain(left: DownloadSourceKey[], right: DownloadSourceKey[]): boolean {
+  return left.length === right.length && left.every((key, index) => key === right[index]);
+}
+
+export function sameAcquisition(left: AcquisitionSelection, right: AcquisitionSelection): boolean {
+  if (left.mode !== right.mode) return false;
+  if (left.mode !== "manual") return true;
+  return sameChain(buildSourceChain(left) ?? [], buildSourceChain(right) ?? []);
+}
+
+export function recipeRows(selection: RequestSelection, hasDestination: boolean): RecipeRowKey[] {
+  if (isLidarrSelected(selection.acquisition)) return ["source"];
+  const rows: RecipeRowKey[] = ["source", "quality"];
+  if (usesSlskd(selection.acquisition)) {
+    if (!isLosslessActive(selection)) rows.push("matching");
+    rows.push("peer");
+  }
+  if (hasDestination) rows.push("destination");
+  return rows;
+}
+
+export function isRowChanged(
+  key: RecipeRowKey,
+  selection: RequestSelection,
+  base: RequestSelection,
+  destinationPathId: string | null
+): boolean {
+  switch (key) {
+    case "source":
+      return !sameAcquisition(selection.acquisition, base.acquisition);
+    case "quality": {
+      if (sentFormat(selection) !== sentFormat(base) || selection.bitrate !== base.bitrate) return true;
+      if (!isLosslessActive(selection)) return false;
+      return selection.formatMatching !== base.formatMatching || selection.bitrateMatching !== base.bitrateMatching;
+    }
+    case "matching":
+      return selection.bitrateMatching !== base.bitrateMatching || selection.formatMatching !== base.formatMatching;
+    case "peer":
+      return selection.minUploadSpeed !== base.minUploadSpeed || selection.availability !== base.availability;
+    case "destination":
+      return destinationPathId !== null;
+  }
+}
+
+export function changedRecipeRows(
+  selection: RequestSelection,
+  base: RequestSelection,
+  hasDestination: boolean,
+  destinationPathId: string | null
+): RecipeRowKey[] {
+  return recipeRows(selection, hasDestination).filter((key) => isRowChanged(key, selection, base, destinationPathId));
+}
+
+export function describeRow(
+  key: RecipeRowKey,
+  selection: RequestSelection,
+  destination: RecipeDestination | null,
+  t: TFunction<"search">
+): string {
+  switch (key) {
+    case "source":
+      return describeSource(selection.acquisition, t);
+    case "quality":
+      return describeQuality(selection, t);
+    case "matching":
+      return describeMatching(selection, t);
+    case "peer":
+      return describePeers(selection, t);
+    case "destination":
+      return destination ? describeDestination(destination.preview, destination.value) : "";
+  }
+}
+
+export function restoreRow(
+  key: RestorableRowKey,
+  selection: RequestSelection,
+  base: RequestSelection
+): RequestSelection {
+  switch (key) {
+    case "source":
+      return { ...selection, acquisition: base.acquisition };
+    case "quality": {
+      const quality = { ...selection, qualityMode: base.qualityMode, format: base.format, bitrate: base.bitrate };
+      if (!isLosslessActive(selection) && !isLosslessActive(base)) return quality;
+      return { ...quality, bitrateMatching: base.bitrateMatching, formatMatching: base.formatMatching };
+    }
+    case "matching":
+      return { ...selection, bitrateMatching: base.bitrateMatching, formatMatching: base.formatMatching };
+    case "peer":
+      return { ...selection, minUploadSpeed: base.minUploadSpeed, availability: base.availability };
+  }
 }
 
 export function withQualityMode(selection: RequestSelection, qualityMode: QualityMode): RequestSelection {
@@ -161,10 +330,9 @@ export function withQualityMode(selection: RequestSelection, qualityMode: Qualit
 
 export function presetFromSelection(selection: RequestSelection): RequestPreset {
   const sourceChain = buildSourceChain(selection.acquisition);
-  const lossless = selection.qualityMode === "lossless" && allowsLossless(selection.acquisition);
   return {
     bitrate: { value: selection.bitrate, matching: selection.bitrateMatching },
-    format: { value: lossless ? RequestFormat.enum.flac : selection.format, matching: selection.formatMatching },
+    format: { value: sentFormat(selection), matching: selection.formatMatching },
     minUploadSpeed: selection.minUploadSpeed,
     requireFreeSlot: selection.availability === "free",
     ...(sourceChain ? { sourceChain } : {}),

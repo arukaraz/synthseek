@@ -63,8 +63,7 @@
       "matching": "Abgleichmodus",
       "acquisition": "Beschaffungsmethode",
       "peer": "Peer-Einstellungen",
-      "lidarr": "Übergabe an Lidarr",
-      "destination": "Ziel"
+      "lidarr": "Übergabe an Lidarr"
     },
     "destination": {
       "lockedInPath_one": "{{count}} Titel dieses Albums liegt schon in {{label}}, der Rest kommt dazu.",
@@ -83,6 +82,7 @@
       "acquisition": "Quelle",
       "minUploadSpeed": "Min. Upload-Geschwindigkeit",
       "availability": "Verfügbarkeit",
+      "ifNoFlac": "Wenn kein FLAC da ist",
       "lidarrRootFolder": "Stammordner",
       "lidarrQualityProfile": "Qualitätsprofil",
       "lidarrMetadataProfile": "Metadatenprofil",
@@ -123,7 +123,12 @@
         "lossless": {
           "label": "Verlustfrei",
           "description": "FLAC-Dateien"
-        }
+        },
+        "losslessNeedsSlskd": "Verlustfrei braucht Slskd in der Quellenkette."
+      },
+      "ifNoFlac": {
+        "strict": "Nicht herunterladen",
+        "flexible": "Bestes verlustbehaftetes"
       },
       "uploadSpeed": {
         "any": {
@@ -190,6 +195,11 @@
           "label": "Internet Archive",
           "description": "Kostenlose Musik aus den Sammlungen, die du erlaubt hast."
         },
+        "manual": {
+          "label": "Reihenfolge wählen"
+        },
+        "autoHint": "Nutzt die konfigurierte Quellenreihenfolge: {{order}}.",
+        "lidarrHint": "Lidarr sucht und lädt selbst herunter, mit seinen Profilen.",
         "orderHint": "Quellen werden von oben nach unten versucht. Abwählen überspringt eine.",
         "moveUp": "{{source}} nach oben",
         "moveDown": "{{source}} nach unten",
@@ -253,8 +263,32 @@
       "fetchFailed": "Titel von {{type}} konnten nicht abgerufen werden",
       "lidarrIncomplete": "Wähle einen Stammordner, ein Qualitätsprofil und ein Metadatenprofil"
     },
-    "presetUnavailable": "Deine Anfrage-Einstellungen konnten nicht geladen werden. Eine Anfrage jetzt nutzt deine Voreinstellung.",
-    "presetLocked": "Diese Anfrage nutzt deine Anfrage-Voreinstellung: {{summary}}. Bitte einen Admin, sie zu ändern."
+    "rows": {
+      "source": "Quelle",
+      "quality": "Qualität",
+      "matching": "Abgleich",
+      "peer": "Peers",
+      "destination": "Ziel"
+    },
+    "preset": {
+      "heading": "Deine Voreinstellung",
+      "changes_one": "{{count}} Änderung an deiner Voreinstellung",
+      "changes_other": "{{count}} Änderungen an deiner Voreinstellung",
+      "restoreAll": "Alles zurücksetzen",
+      "restoreRow": "Zurück zur Voreinstellung",
+      "changed": "Geändert",
+      "adminOnly": "Nur ein Admin kann sie ändern",
+      "forThisRequest": "Nur für diese Anfrage",
+      "sameAsDirect": "Wie direktes Anfordern",
+      "matchingMixed": "Bitrate {{bitrate}}, Format {{format}}",
+      "origin": {
+        "user": "Deine eigene Voreinstellung",
+        "server": "Server-Voreinstellung",
+        "last": "Deine letzte Anfrage",
+        "factory": "Werkseinstellungen"
+      }
+    },
+    "presetUnavailable": "Deine Anfrage-Einstellungen konnten nicht geladen werden. Eine Anfrage jetzt nutzt deine Voreinstellung."
   },
   "direct": {
     "confirm": {

@@ -1,6 +1,7 @@
 export interface SegmentedOption<T extends string> {
   value: T;
   label: string;
+  disabled?: boolean;
 }
 
 export interface SegmentedControlProps<T extends string> {
@@ -9,4 +10,5 @@ export interface SegmentedControlProps<T extends string> {
   onChange: (next: T) => void;
   disabled?: boolean;
   ariaLabel?: string;
+  block?: boolean;
 }

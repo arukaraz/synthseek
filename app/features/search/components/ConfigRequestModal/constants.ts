@@ -1,14 +1,53 @@
+import type { RequestMatchingMode } from "@api/__generated__/types";
+import type { ParseKeys } from "i18next";
+
 import type {
   AlbumScopeChoice,
   ArtistMonitorScopeOption,
   AvailabilityOption,
   BitrateOption,
+  LossFallbackOption,
   MatchingOption,
   DownloadSourceKey,
   QualityModeOption,
+  RecipeRowKey,
+  RequestPresetOrigin,
   SourceRowLabels,
   UploadSpeedOption,
 } from "./types";
+
+export const RECIPE_ROW_LABEL_KEYS: Readonly<Record<RecipeRowKey, ParseKeys<"search">>> = {
+  source: "config.rows.source",
+  quality: "config.rows.quality",
+  matching: "config.rows.matching",
+  peer: "config.rows.peer",
+  destination: "config.rows.destination",
+};
+
+export const PRESET_ORIGIN_KEYS: Readonly<Record<RequestPresetOrigin, ParseKeys<"search">>> = {
+  user: "config.preset.origin.user",
+  server: "config.preset.origin.server",
+  last: "config.preset.origin.last",
+  factory: "config.preset.origin.factory",
+};
+
+export const MATCHING_LABEL_KEYS: Readonly<Record<RequestMatchingMode, ParseKeys<"search">>> = {
+  strict: "config.options.matching.strict.label",
+  flexible: "config.options.matching.flexible.label",
+};
+
+export const LOSS_FALLBACK_OPTIONS: LossFallbackOption[] = [
+  {
+    value: "strict",
+    labelKey: "config.options.ifNoFlac.strict",
+    descriptionKey: "config.options.matching.losslessStrict.description",
+  },
+  {
+    value: "flexible",
+    labelKey: "config.options.ifNoFlac.flexible",
+    descriptionKey: "config.options.matching.losslessFlexible.description",
+  },
+];
 
 export const SOURCE_PRIORITY_ORDER: DownloadSourceKey[] = [
   "slskd",

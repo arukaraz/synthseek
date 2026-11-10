@@ -6,7 +6,7 @@ import { useAuthContext } from "@modules/providers/AuthProvider";
 
 import { SettingsPageHeader } from "../../components/SettingsPageHeader";
 import { SETTINGS_PAGE_BY_ID } from "../../constants";
-import { contentRoot } from "../../styles";
+import { contentRoot, sectionGrid } from "../../styles";
 import { AccountCard } from "./components/AccountCard";
 import { ChangePasswordCard } from "./components/ChangePasswordCard";
 import { EditProfileCard } from "./components/EditProfileCard";
@@ -25,9 +25,11 @@ export function AccountSection() {
     <div className={contentRoot()}>
       <SettingsPageHeader title={t(page.labelKey)} description={t(page.descriptionKey)} />
       <AccountCard user={currentUser} />
-      <QuotaCard />
-      <MyRequestPresetCard />
       <EditProfileCard user={currentUser} />
+      <div className={sectionGrid()}>
+        <QuotaCard />
+        <MyRequestPresetCard />
+      </div>
       <HouseholdSharingCard user={currentUser} />
       <ChangePasswordCard user={currentUser} />
     </div>

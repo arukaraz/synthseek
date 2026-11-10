@@ -57,19 +57,6 @@ export const cardHoverBorder = cva(
 
 export type CardHoverBorderProps = VariantProps<typeof cardHoverBorder>;
 
-export const configHeader = cva("absolute inset-0 flex items-center justify-center rounded-t-2xl bg-linear-to-br", {
-  variants: {
-    gradient: {
-      primary: "from-primary-500/30 to-accent-500/30",
-    },
-  },
-  defaultVariants: {
-    gradient: "primary",
-  },
-});
-
-export type ConfigHeaderProps = VariantProps<typeof configHeader>;
-
 export const modalContainer = cva("h-modal-max bg-surface/95 !flex flex-col gap-0 overflow-hidden p-0 shadow-2xl", {
   variants: {
     size: {

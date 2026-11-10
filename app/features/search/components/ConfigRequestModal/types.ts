@@ -139,10 +139,92 @@ export interface DestinationNoteProps {
   preview: DestinationPreview;
 }
 
-export interface DestinationFieldProps {
-  request: DestinationRequest;
+export type DestinationFieldProps = RecipeDestination;
+
+export type RecipeRowKey = "source" | "quality" | "matching" | "peer" | "destination";
+
+export type RestorableRowKey = Exclude<RecipeRowKey, "destination">;
+
+export interface RecipeDestination {
+  preview: DestinationPreview;
   value: string | null;
   onChange: (pathId: string | null) => void;
+  refreshing: boolean;
+}
+
+export interface RequestRecipeProps {
+  selection: RequestSelection;
+  base: RequestSelection;
+  onChange: (selection: RequestSelection) => void;
+  locked: boolean;
+  origin: RequestPresetOrigin | undefined;
+  offered: DownloadSourceKey[];
+  lidarrAvailable: boolean;
+  lidarrSlot: ReactNode;
+  destination: RecipeDestination | null;
+}
+
+export interface RecipeRowProps {
+  label: string;
+  value: string;
+  changed: boolean;
+  locked: boolean;
+  open: boolean;
+  onToggle: () => void;
+  onRestore: () => void;
+  dataCy?: string;
+  children: ReactNode;
+}
+
+export interface SourceEditorProps {
+  selection: AcquisitionSelection;
+  offered: DownloadSourceKey[];
+  lidarrAvailable: boolean;
+  lidarrSlot: ReactNode;
+  onChange: (selection: AcquisitionSelection) => void;
+}
+
+export interface SourceOrderListProps {
+  selection: AcquisitionSelection;
+  onChange: (selection: AcquisitionSelection) => void;
+  compact: boolean;
+  ariaLabelledBy?: string;
+  ariaLabel?: string;
+}
+
+export interface SelectionEditorProps {
+  value: RequestSelection;
+  onChange: (value: RequestSelection) => void;
+}
+
+export interface EditorFieldProps {
+  label: string;
+  help?: string;
+  children: ReactNode;
+}
+
+export interface ChoicePillOption<T extends string> {
+  value: T;
+  label: string;
+}
+
+export interface ChoicePillsProps<T extends string> {
+  ariaLabel: string;
+  options: ReadonlyArray<ChoicePillOption<T>>;
+  value: T;
+  onChange: (value: T) => void;
+}
+
+export interface RequestFooterProps {
+  summary: string | null;
+  note: string | null;
+  children: ReactNode;
+}
+
+export interface LossFallbackOption {
+  value: RequestMatchingMode;
+  labelKey: ParseKeys<"search">;
+  descriptionKey: ParseKeys<"search">;
 }
 
 export interface ConfigRequestModalProps {

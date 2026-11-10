@@ -229,6 +229,41 @@ describe("SegmentedControl", () => {
     await userEvent.click(screen.getByRole("radio", { name: "Beta" }));
     expect(onChange).toHaveBeenCalledWith("b");
   });
+
+  it("turns off only the option marked disabled", async () => {
+    const onChange = vi.fn();
+    render(
+      <SegmentedControl
+        value="a"
+        options={[
+          { value: "a", label: "Alpha" },
+          { value: "b", label: "Beta", disabled: true },
+        ]}
+        onChange={onChange}
+      />
+    );
+    expect(screen.getByRole("radio", { name: "Alpha" })).toBeEnabled();
+    expect(screen.getByRole("radio", { name: "Beta" })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "Beta" }).className).toContain("opacity-40");
+    expect(screen.getByRole("radio", { name: "Alpha" }).className).not.toContain("opacity-40");
+    await userEvent.click(screen.getByRole("radio", { name: "Beta" }));
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("keeps a wholly disabled control at full strength, as before options could be turned off", () => {
+    render(<SegmentedControl value="a" options={[{ value: "a", label: "Alpha" }]} onChange={vi.fn()} disabled />);
+    expect(screen.getByRole("radio", { name: "Alpha" })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "Alpha" }).className).not.toContain("opacity-40");
+  });
+
+  it("stretches to the full width only as a block", () => {
+    const options = [{ value: "a", label: "Alpha" }];
+    const { rerender } = render(<SegmentedControl value="a" options={options} onChange={vi.fn()} />);
+    expect(screen.getByRole("radiogroup").className).toContain("inline-flex");
+    rerender(<SegmentedControl value="a" options={options} onChange={vi.fn()} block />);
+    expect(screen.getByRole("radiogroup").className).toContain("w-full");
+    expect(screen.getByRole("radiogroup").className).not.toContain("inline-flex");
+  });
 });
 
 describe("SaveBar", () => {

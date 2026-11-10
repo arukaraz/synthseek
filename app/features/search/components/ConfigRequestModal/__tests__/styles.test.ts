@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  configDialogContent,
+  configSheet,
   fieldGroup,
   fieldLabel,
   lidarrTagChip,
@@ -11,11 +11,9 @@ import {
   lidarrTagsField,
 } from "../styles";
 
-describe("configDialogContent", () => {
-  it("clamps the modal width on mobile and desktop", () => {
-    const result = configDialogContent();
-    expect(result).toContain("max-w-[95vw]");
-    expect(result).toContain("sm:max-w-lg");
+describe("configSheet", () => {
+  it("widens the sheet past the narrow default on desktop", () => {
+    expect(configSheet()).toContain("sm:max-w-lg");
   });
 });
 

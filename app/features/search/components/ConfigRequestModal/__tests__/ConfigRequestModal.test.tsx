@@ -4,7 +4,7 @@ import { createMockTrackFull, createMockAlbumSimplified } from "@test/factories"
 import { createMockUser } from "@test/mocks/feature-hooks.mock";
 import { mockRouter } from "@test/mocks/next.mock";
 
-import type { AcquisitionSelection, DestinationPreview, DownloadSourcesAvailability, RequestPreset } from "../types";
+import type { DestinationPreview, DestinationRequest, DownloadSourcesAvailability, RequestPreset } from "../types";
 
 const MP3_320: RequestPreset = {
   bitrate: { value: 320, matching: "flexible" },
@@ -39,6 +39,7 @@ let presetFailed: boolean;
 let isAdmin: boolean;
 let role: "admin" | "trusted" | "member";
 let destinationPreview: DestinationPreview | undefined;
+let destinationRefreshing: boolean;
 const destinationQuery = vi.fn();
 let lidarrAvailable: { available: boolean } | undefined;
 let contentResponse: { success: boolean; content: unknown } | undefined;
@@ -58,15 +59,16 @@ vi.mock("@hooks/api", () => ({
     isError: presetFailed,
   }),
   useLidarrAvailable: () => ({ data: lidarrAvailable }),
+  useLidarrProfiles: () => ({ data: undefined }),
   useGetContents: () => ({ data: contentResponse, isLoading: isLoadingTracks }),
   useRequest: () => ({ mutate: mocks.requestMutate, isPending: pendingFlags.request }),
   useBatchRequest: () => ({ mutate: mocks.batchMutate, isPending: pendingFlags.batch }),
   usePlaylistRequest: () => ({ mutate: mocks.playlistMutate, isPending: pendingFlags.playlist }),
   useRequestTracks: () => ({ mutate: mocks.tracksMutate, isPending: pendingFlags.tracks }),
   useDelegateArtist: () => ({ mutate: mocks.delegateMutate, isPending: pendingFlags.delegate }),
-  useLibraryDestination: (...args: unknown[]) => {
-    destinationQuery(...args);
-    return { data: destinationPreview };
+  useLibraryDestination: (input: DestinationRequest | null) => {
+    destinationQuery(input);
+    return { data: input === null ? undefined : destinationPreview, isPlaceholderData: destinationRefreshing };
   },
 }));
 
@@ -82,30 +84,8 @@ vi.mock("../ConfigHeader", () => ({
   ConfigHeader: (props: { name: string }) => <div data-testid="config-header">{props.name}</div>,
 }));
 
-vi.mock("../AcquisitionOrderList", () => ({
-  AcquisitionOrderList: (props: {
-    selection: AcquisitionSelection;
-    onChange: (next: AcquisitionSelection) => void;
-  }) => (
-    <div
-      data-testid="acquisition-order-list"
-      data-mode={props.selection.mode}
-      data-order={props.selection.order.join(",")}
-      data-active={props.selection.active.join(",")}
-    >
-      <button type="button" onClick={() => props.onChange({ ...props.selection, mode: "lidarr" })}>
-        use-lidarr
-      </button>
-    </div>
-  ),
-}));
-
 vi.mock("../LidarrInputs", () => ({
   LidarrInputs: (props: { monitorMode: string }) => <div data-testid="lidarr-inputs" data-mode={props.monitorMode} />,
-}));
-
-vi.mock("../OptionGrid", () => ({
-  OptionGrid: (props: { label: string }) => <div data-testid="option-grid">{props.label}</div>,
 }));
 
 import { ContentType } from "@api/__generated__/types";
@@ -118,6 +98,18 @@ function confirmButton(): HTMLElement {
   const button = document.querySelector<HTMLElement>('[data-cy="confirm-download-btn"]');
   if (!button) throw new Error("confirm button not found");
   return button;
+}
+
+function recipeRows(): HTMLElement | null {
+  return document.querySelector<HTMLElement>('[data-cy="request-preset-rows"]');
+}
+
+function row(label: string): HTMLElement {
+  return screen.getByRole("button", { name: new RegExp(`^${label}`) });
+}
+
+function closeButton(): HTMLElement {
+  return screen.getByRole("button", { name: "Close" });
 }
 
 function makeTrack() {
@@ -176,6 +168,7 @@ describe("ConfigRequestModal", () => {
     isAdmin = false;
     role = "trusted";
     destinationPreview = undefined;
+    destinationRefreshing = false;
     contentResponse = { success: true, content: [makeTrack()] };
     isLoadingTracks = false;
     pendingFlags = { request: false, batch: false, playlist: false, tracks: false, delegate: false };
@@ -193,14 +186,36 @@ describe("ConfigRequestModal", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("renders the download configuration for a track", () => {
+  it("shows the preset as one closed row per setting, each with its value", () => {
     render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
 
     expect(screen.getByTestId("config-header")).toBeInTheDocument();
-    expect(screen.getByTestId("acquisition-order-list")).toBeInTheDocument();
+    expect(screen.getByText("Your preset")).toBeInTheDocument();
+    expect(screen.getByText("Server preset")).toBeInTheDocument();
+    expect(row("Source")).toHaveTextContent("Auto");
+    expect(row("Quality")).toHaveTextContent("MP3 320 kbps");
+    expect(row("Matching")).toHaveTextContent("Flexible");
+    expect(row("Peers")).toHaveTextContent("Any · Any peer");
+    expect(row("Source")).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("radiogroup")).not.toBeInTheDocument();
+    expect(screen.getByText("MP3 320 kbps · Auto")).toBeInTheDocument();
+    expect(screen.getByText("Same as a direct Request")).toBeInTheDocument();
   });
 
-  it("leaves an album-only source out of a track request", () => {
+  it("opens one row at a time", async () => {
+    const user = userEvent.setup();
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+    await user.click(row("Source"));
+    expect(row("Source")).toHaveAttribute("aria-expanded", "true");
+
+    await user.click(row("Quality"));
+    expect(row("Source")).toHaveAttribute("aria-expanded", "false");
+    expect(row("Quality")).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("leaves an album-only source out of a track request", async () => {
+    const user = userEvent.setup();
     sourcesAvailability = {
       slskd: { enabled: true, allowsSingleTracks: true },
       ytdlp: { enabled: true, allowsSingleTracks: true },
@@ -212,11 +227,13 @@ describe("ConfigRequestModal", () => {
     };
 
     render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+    await user.click(row("Source"));
 
-    expect(screen.getByTestId("acquisition-order-list")).toHaveAttribute("data-order", "slskd,ytdlp");
+    expect(screen.getByText("Uses the configured source order: Slskd → YouTube.")).toBeInTheDocument();
   });
 
-  it("offers an album-only source for an album request", () => {
+  it("offers an album-only source for an album request", async () => {
+    const user = userEvent.setup();
     sourcesAvailability = {
       slskd: { enabled: true, allowsSingleTracks: true },
       ytdlp: { enabled: true, allowsSingleTracks: true },
@@ -228,8 +245,9 @@ describe("ConfigRequestModal", () => {
     };
 
     render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+    await user.click(row("Source"));
 
-    expect(screen.getByTestId("acquisition-order-list")).toHaveAttribute("data-order", "slskd,usenet,ytdlp");
+    expect(screen.getByText("Uses the configured source order: Slskd → Usenet → YouTube.")).toBeInTheDocument();
   });
 
   it("fires the track mutation without per-call dock callbacks and closes immediately", async () => {
@@ -269,6 +287,98 @@ describe("ConfigRequestModal", () => {
     expect(batchMutate.mock.calls[0][1]).toBeUndefined();
   });
 
+  describe("overriding the preset", () => {
+    it("marks a changed row, counts it, and puts it back on Back to preset", async () => {
+      const user = userEvent.setup();
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      await user.click(row("Quality"));
+      await user.click(screen.getByRole("radio", { name: "Lossless" }));
+
+      expect(screen.getByText("1 change to your preset")).toBeInTheDocument();
+      expect(row("Quality")).toHaveTextContent("Lossless (Strict)");
+      expect(row("Quality")).toHaveAccessibleName(/Changed/);
+      expect(screen.queryByRole("button", { name: /^Matching/ })).not.toBeInTheDocument();
+      expect(screen.getByText("Only for this request")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Back to preset" }));
+
+      expect(screen.getByText("Your preset")).toBeInTheDocument();
+      expect(row("Quality")).toHaveTextContent("MP3 320 kbps");
+      expect(screen.getByText("Same as a direct Request")).toBeInTheDocument();
+
+      await user.click(confirmButton());
+      expect(requestMutate.mock.calls[0][0].config).toEqual(MP3_320);
+    });
+
+    it("sends an override for this request and puts every row back on Restore all", async () => {
+      const user = userEvent.setup();
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      await user.click(row("Quality"));
+      await user.click(screen.getByRole("radio", { name: "256" }));
+      await user.click(row("Peers"));
+      await user.click(screen.getByRole("radio", { name: "Available now" }));
+
+      expect(screen.getByText("2 changes to your preset")).toBeInTheDocument();
+      expect(screen.getByText("MP3 256 kbps · Auto")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Restore all" }));
+
+      expect(screen.getByText("Your preset")).toBeInTheDocument();
+      await user.click(confirmButton());
+      expect(requestMutate.mock.calls[0][0].config).toEqual(MP3_320);
+    });
+
+    it("sends the override itself when the user keeps it", async () => {
+      const user = userEvent.setup();
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      await user.click(row("Quality"));
+      await user.click(screen.getByRole("radio", { name: "256" }));
+      await user.click(screen.getByRole("radio", { name: "AAC" }));
+      await user.click(confirmButton());
+
+      expect(requestMutate.mock.calls[0][0].config).toEqual({
+        ...MP3_320,
+        bitrate: { value: 256, matching: "flexible" },
+        format: { value: "aac", matching: "flexible" },
+      });
+    });
+
+    it("turns Lossless off with its reason, and drops the matching and peer rows, once Slskd leaves the chain", async () => {
+      const user = userEvent.setup();
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+      await user.click(row("Source"));
+      await user.click(screen.getByRole("radio", { name: "Choose order" }));
+      await user.click(screen.getByRole("checkbox", { name: "Use Slskd" }));
+
+      expect(row("Source")).toHaveTextContent("YouTube");
+      expect(screen.queryByRole("button", { name: /^Matching/ })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /^Peers/ })).not.toBeInTheDocument();
+
+      await user.click(row("Quality"));
+      expect(screen.getByRole("radio", { name: "Lossless" })).toBeDisabled();
+      expect(screen.getByText("Lossless needs Slskd in the source chain.")).toBeInTheDocument();
+
+      await user.click(confirmButton());
+      expect(requestMutate.mock.calls[0][0].config.sourceChain).toEqual(["ytdlp"]);
+    });
+  });
+
+  it("shows a FLAC preset's format as picked once Slskd leaves the chain, so the window never hides what it sends", async () => {
+    const user = userEvent.setup();
+    effectivePreset = LOSSLESS_PEERS;
+
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+    await user.click(row("Source"));
+    await user.click(screen.getByRole("checkbox", { name: "Use Slskd" }));
+    await user.click(row("Quality"));
+
+    expect(screen.getByRole("radio", { name: "FLAC" })).toBeChecked();
+  });
+
   describe("the request preset", () => {
     it("sends the config of the preset the caller resolved, untouched", async () => {
       const user = userEvent.setup();
@@ -286,14 +396,16 @@ describe("ConfigRequestModal", () => {
       });
     });
 
-    it("shows a member their preset read only and sends no config, so the server applies it", async () => {
+    it("shows a member their preset as locked rows and sends no config, so the server applies it", async () => {
       const user = userEvent.setup();
       role = "member";
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
 
       expect(document.querySelector('[data-cy="request-preset-locked"]')?.textContent).toContain("MP3 320");
-      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+      expect(screen.getByText("Only an admin can change it")).toBeInTheDocument();
+      expect(row("Source")).toBeDisabled();
+      expect(row("Quality")).toBeDisabled();
 
       await user.click(confirmButton());
 
@@ -310,15 +422,23 @@ describe("ConfigRequestModal", () => {
       expect(requestMutate.mock.calls[0][0].config).toEqual(MP3_320);
     });
 
-    it("starts the source list from the preset's chain, with the other sources left off", () => {
+    it("starts the source row from the preset's chain, with the other sources left off", async () => {
+      const user = userEvent.setup();
       effectivePreset = LOSSLESS_PEERS;
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
 
-      const list = screen.getByTestId("acquisition-order-list");
-      expect(list).toHaveAttribute("data-mode", "manual");
-      expect(list).toHaveAttribute("data-order", "ytdlp,slskd");
-      expect(list).toHaveAttribute("data-active", "ytdlp,slskd");
+      expect(row("Source")).toHaveTextContent("YouTube → Slskd");
+      expect(row("Quality")).toHaveTextContent("Lossless (Strict)");
+
+      await user.click(row("Source"));
+
+      expect(screen.getByRole("radio", { name: "Choose order" })).toBeChecked();
+      expect(screen.getByRole("checkbox", { name: "Use YouTube" })).toBeChecked();
+      expect(screen.getByRole("checkbox", { name: "Use Slskd" })).toBeChecked();
+      const items = screen.getAllByRole("listitem").map((item) => item.textContent);
+      expect(items[0]).toContain("YouTube");
+      expect(items[1]).toContain("Slskd");
     });
 
     it("asks the destination for the preset's format, not a fixed one", () => {
@@ -328,10 +448,11 @@ describe("ConfigRequestModal", () => {
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
 
-      expect(destinationQuery).toHaveBeenLastCalledWith(
-        { albumExternalId: "al1", format: "flac", requestType: ContentType.enum.album },
-        true
-      );
+      expect(destinationQuery).toHaveBeenLastCalledWith({
+        albumExternalId: "al1",
+        format: "flac",
+        requestType: ContentType.enum.album,
+      });
     });
 
     it("waits for the preset before it lets the request go", () => {
@@ -341,7 +462,7 @@ describe("ConfigRequestModal", () => {
 
       expect(confirmButton()).toBeDisabled();
       expect(confirmButton()).toHaveTextContent(/loading tracks/i);
-      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+      expect(recipeRows()).toBeNull();
     });
 
     it("waits for the source list before it lets the request go", () => {
@@ -351,7 +472,7 @@ describe("ConfigRequestModal", () => {
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
 
       expect(confirmButton()).toBeDisabled();
-      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+      expect(recipeRows()).toBeNull();
     });
 
     it("still opens on the preset when the source list cannot be read", () => {
@@ -361,10 +482,10 @@ describe("ConfigRequestModal", () => {
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
 
       expect(confirmButton()).toBeEnabled();
-      expect(screen.getByTestId("acquisition-order-list")).toBeInTheDocument();
+      expect(recipeRows()).not.toBeNull();
     });
 
-    it("hides the fields and says so when the preset cannot be read, and sends no config", async () => {
+    it("hides the rows and says so when the preset cannot be read, and sends no config", async () => {
       const user = userEvent.setup();
       effectivePreset = undefined;
       presetFailed = true;
@@ -372,7 +493,7 @@ describe("ConfigRequestModal", () => {
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
 
       expect(document.querySelector('[data-cy="request-preset-unavailable"]')).not.toBeNull();
-      expect(screen.queryByTestId("acquisition-order-list")).not.toBeInTheDocument();
+      expect(recipeRows()).toBeNull();
 
       await user.click(confirmButton());
 
@@ -382,7 +503,7 @@ describe("ConfigRequestModal", () => {
   });
 
   describe("lidarr for an album", () => {
-    it("swaps the quality fields for the Lidarr inputs, drops the destination and refuses an incomplete delegate", async () => {
+    it("swaps the quality rows for the Lidarr inputs, drops the destination and refuses an incomplete delegate", async () => {
       const user = userEvent.setup();
       isAdmin = true;
       lidarrAvailable = { available: true };
@@ -401,10 +522,14 @@ describe("ConfigRequestModal", () => {
       expect(document.querySelector('[data-cy="request-destination"]')).not.toBeNull();
       expect(screen.queryByTestId("lidarr-inputs")).not.toBeInTheDocument();
 
-      await user.click(screen.getByRole("button", { name: "use-lidarr" }));
+      await user.click(row("Source"));
+      await user.click(screen.getByRole("radio", { name: "Lidarr" }));
 
       expect(screen.getByTestId("lidarr-inputs")).toHaveAttribute("data-mode", "album");
+      expect(row("Source")).toHaveTextContent("Lidarr");
+      expect(screen.queryByRole("button", { name: /^Quality/ })).not.toBeInTheDocument();
       expect(document.querySelector('[data-cy="request-destination"]')).toBeNull();
+      expect(destinationQuery).toHaveBeenLastCalledWith(null);
 
       await user.click(confirmButton());
 
@@ -436,21 +561,27 @@ describe("ConfigRequestModal", () => {
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
 
       expect(document.querySelector('[data-cy="request-destination"]')).toBeNull();
-      expect(destinationQuery).not.toHaveBeenCalled();
+      expect(destinationQuery.mock.calls.every(([input]) => input === null)).toBe(true);
       await user.click(confirmButton());
       expect(batchMutate.mock.calls[0][0]).not.toHaveProperty("destinationPathId");
     });
 
-    it("shows an admin where the rules send the album and which rules matched", () => {
+    it("shows an admin where the rules send the album and which rules matched", async () => {
+      const user = userEvent.setup();
       isAdmin = true;
       destinationPreview = preview();
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
 
-      expect(destinationQuery).toHaveBeenCalledWith(
-        { albumExternalId: "al1", format: "mp3", requestType: ContentType.enum.album },
-        true
-      );
+      expect(destinationQuery).toHaveBeenCalledWith({
+        albumExternalId: "al1",
+        format: "mp3",
+        requestType: ContentType.enum.album,
+      });
+      expect(row("Destination")).toHaveTextContent("Soundtracks");
+
+      await user.click(row("Destination"));
+
       expect(screen.getByRole("button", { name: "Library path" })).toHaveTextContent("Soundtracks");
       expect(screen.getByText(/Matched 1 rule:/)).toBeInTheDocument();
       expect(screen.getByText("Soundtracks", { selector: "p span" })).toBeInTheDocument();
@@ -467,14 +598,19 @@ describe("ConfigRequestModal", () => {
       expect(batchMutate.mock.calls[0][0]).not.toHaveProperty("destinationPathId");
     });
 
-    it("sends the path an admin picks instead of the rules' choice", async () => {
+    it("sends the path an admin picks instead of the rules' choice, and counts it as a change", async () => {
       const user = userEvent.setup();
       isAdmin = true;
       destinationPreview = preview();
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(row("Destination"));
       await user.click(screen.getByRole("button", { name: "Library path" }));
       await user.click(await screen.findByRole("menuitemradio", { name: "Music" }));
+
+      expect(row("Destination")).toHaveTextContent("Music");
+      expect(screen.getByText("1 change to your preset")).toBeInTheDocument();
+
       await user.click(confirmButton());
 
       expect(batchMutate.mock.calls[0][0].destinationPathId).toBe("primary");
@@ -486,13 +622,15 @@ describe("ConfigRequestModal", () => {
       destinationPreview = preview();
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(row("Destination"));
       await user.click(screen.getByRole("button", { name: "Library path" }));
 
       expect(await screen.findByRole("menuitemradio", { name: "Music" })).toBeInTheDocument();
       expect(screen.queryByRole("menuitemradio", { name: "Archive" })).toBeNull();
     });
 
-    it("locks the field when the album already has songs in a path", () => {
+    it("locks the field when the album already has songs in a path", async () => {
+      const user = userEvent.setup();
       isAdmin = true;
       destinationPreview = preview({
         pathId: "primary",
@@ -502,6 +640,7 @@ describe("ConfigRequestModal", () => {
       });
 
       render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(row("Destination"));
 
       expect(screen.getByRole("button", { name: "Library path" })).toBeDisabled();
       expect(
@@ -509,7 +648,19 @@ describe("ConfigRequestModal", () => {
       ).toBeInTheDocument();
     });
 
-    it("hides the field when there is only one path", () => {
+    it("holds the path picker while the preview for a new format loads, so a pick is never read against the old one", async () => {
+      const user = userEvent.setup();
+      isAdmin = true;
+      destinationPreview = preview();
+      destinationRefreshing = true;
+
+      render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeAlbum()} itemType={ContentType.enum.album} />);
+      await user.click(row("Destination"));
+
+      expect(screen.getByRole("button", { name: "Library path" })).toBeDisabled();
+    });
+
+    it("hides the row when there is only one path", () => {
       isAdmin = true;
       destinationPreview = preview({ paths: [{ id: "primary", label: "Music", accepts: true }], pathId: "primary" });
 
@@ -526,10 +677,11 @@ describe("ConfigRequestModal", () => {
       const { unmount } = render(
         <ConfigRequestModal isOpen onClose={vi.fn()} item={track} itemType={ContentType.enum.track} />
       );
-      expect(destinationQuery).toHaveBeenLastCalledWith(
-        { albumExternalId: track.album.id, format: "mp3", requestType: ContentType.enum.track },
-        true
-      );
+      expect(destinationQuery).toHaveBeenLastCalledWith({
+        albumExternalId: track.album.id,
+        format: "mp3",
+        requestType: ContentType.enum.track,
+      });
       unmount();
       destinationQuery.mockClear();
 
@@ -542,7 +694,7 @@ describe("ConfigRequestModal", () => {
           preloadedTracks={[makeTrack()]}
         />
       );
-      expect(destinationQuery).not.toHaveBeenCalled();
+      expect(destinationQuery.mock.calls.every(([input]) => input === null)).toBe(true);
     });
   });
 
@@ -687,7 +839,7 @@ describe("ConfigRequestModal", () => {
     expect(onSuccess).toHaveBeenCalledWith("Playlist One");
   });
 
-  it("renders the artist lidarr delegation flow and submits a complete delegate", async () => {
+  it("renders the artist lidarr delegation flow and refuses an incomplete delegate", async () => {
     const user = userEvent.setup();
     delegateMutate.mockImplementation((_payload, opts) => opts.onSuccess?.());
     const onClose = vi.fn();
@@ -719,7 +871,7 @@ describe("ConfigRequestModal", () => {
 
     render(<ConfigRequestModal isOpen onClose={onClose} item={makeTrack()} itemType={ContentType.enum.track} />);
 
-    await user.click(screen.getByText(/cancel/i));
+    await user.click(closeButton());
 
     expect(onClose).not.toHaveBeenCalled();
   });
@@ -735,7 +887,7 @@ describe("ConfigRequestModal", () => {
     expect(confirmButton()).not.toHaveTextContent(/requesting/i);
   });
 
-  it("allows cancel while the track list is still loading on open", async () => {
+  it("allows closing while the track list is still loading on open", async () => {
     const onClose = vi.fn();
     const user = userEvent.setup();
     isLoadingTracks = true;
@@ -743,7 +895,7 @@ describe("ConfigRequestModal", () => {
 
     render(<ConfigRequestModal isOpen onClose={onClose} item={makeAlbum()} itemType={ContentType.enum.album} />);
 
-    await user.click(screen.getByText(/cancel/i));
+    await user.click(closeButton());
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
@@ -757,13 +909,13 @@ describe("ConfigRequestModal", () => {
     expect(confirmButton()).toHaveTextContent(/requesting/i);
   });
 
-  it("closes on cancel when idle", async () => {
+  it("closes on the close button when idle", async () => {
     const onClose = vi.fn();
     const user = userEvent.setup();
 
     render(<ConfigRequestModal isOpen onClose={onClose} item={makeTrack()} itemType={ContentType.enum.track} />);
 
-    await user.click(screen.getByText(/cancel/i));
+    await user.click(closeButton());
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });

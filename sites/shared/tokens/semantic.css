@@ -84,7 +84,6 @@
     --shadow-dark: oklch(0 0 0 / 0.3);
 
     --height-hero: 200px;
-    --height-config-header: 140px;
 
     --spacing-page-x: 1rem;
     --spacing-page-y: 1.5rem;
@@ -139,7 +138,6 @@
   @media (min-width: 640px) {
     :root {
       --height-hero: 240px;
-      --height-config-header: 120px;
       --spacing-page-x: 1.5rem;
       --spacing-page-y: 2rem;
       --spacing-modal: 1.5rem;
@@ -150,7 +148,6 @@
   @media (min-width: 1024px) {
     :root {
       --height-hero: 320px;
-      --height-config-header: 160px;
       --spacing-page-x: 2rem;
       --spacing-page-y: 2rem;
       --spacing-modal: 1.5rem;

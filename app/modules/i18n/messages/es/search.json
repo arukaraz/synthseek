@@ -63,8 +63,7 @@
       "matching": "Modo de coincidencia",
       "acquisition": "Método de adquisición",
       "peer": "Preferencias de pares",
-      "lidarr": "Delegar a Lidarr",
-      "destination": "Destino"
+      "lidarr": "Delegar a Lidarr"
     },
     "destination": {
       "lockedInPath_one": "{{count}} canción de este álbum ya está en {{label}}, el resto va con ella.",
@@ -83,6 +82,7 @@
       "acquisition": "Fuente",
       "minUploadSpeed": "Velocidad mínima de subida",
       "availability": "Disponibilidad",
+      "ifNoFlac": "Si no hay FLAC",
       "lidarrRootFolder": "Carpeta raíz",
       "lidarrQualityProfile": "Perfil de calidad",
       "lidarrMetadataProfile": "Perfil de metadatos",
@@ -123,7 +123,12 @@
         "lossless": {
           "label": "Lossless",
           "description": "Archivos FLAC"
-        }
+        },
+        "losslessNeedsSlskd": "Lossless necesita Slskd en la cadena de fuentes."
+      },
+      "ifNoFlac": {
+        "strict": "No descargar",
+        "flexible": "Mejor con pérdida"
       },
       "uploadSpeed": {
         "any": {
@@ -190,6 +195,11 @@
           "label": "Internet Archive",
           "description": "Música gratuita de las colecciones que permitiste."
         },
+        "manual": {
+          "label": "Elegir orden"
+        },
+        "autoHint": "Usa el orden de fuentes configurado: {{order}}.",
+        "lidarrHint": "Lidarr busca y descarga por su cuenta, con sus perfiles.",
         "orderHint": "Las fuentes se intentan de arriba abajo. Desmarca una para saltártela.",
         "moveUp": "Subir {{source}}",
         "moveDown": "Bajar {{source}}",
@@ -253,8 +263,32 @@
       "fetchFailed": "No se pudieron obtener las canciones de {{type}}",
       "lidarrIncomplete": "Selecciona una carpeta raíz, un perfil de calidad y un perfil de metadatos"
     },
-    "presetUnavailable": "No se pudo cargar tu configuración de solicitud. Si solicitas ahora, se usa tu preset.",
-    "presetLocked": "Esta solicitud usa tu preset de solicitud: {{summary}}. Pide a un admin que lo cambie."
+    "rows": {
+      "source": "Fuente",
+      "quality": "Calidad",
+      "matching": "Coincidencia",
+      "peer": "Pares",
+      "destination": "Destino"
+    },
+    "preset": {
+      "heading": "Tu preset",
+      "changes_one": "{{count}} cambio sobre tu preset",
+      "changes_other": "{{count}} cambios sobre tu preset",
+      "restoreAll": "Restaurar todo",
+      "restoreRow": "Volver al preset",
+      "changed": "Cambiado",
+      "adminOnly": "Solo un admin lo cambia",
+      "forThisRequest": "Solo para esta solicitud",
+      "sameAsDirect": "Igual que Solicitar directo",
+      "matchingMixed": "Tasa de bits {{bitrate}}, formato {{format}}",
+      "origin": {
+        "user": "Tu preset propio",
+        "server": "Preset del servidor",
+        "last": "Tu última solicitud",
+        "factory": "Valores de fábrica"
+      }
+    },
+    "presetUnavailable": "No se pudo cargar tu configuración de solicitud. Si solicitas ahora, se usa tu preset."
   },
   "direct": {
     "confirm": {

@@ -1,13 +1,17 @@
 "use client";
 
+import { BottomSheet, bottomSheetBody } from "@components/ui/BottomSheet";
+import { cn } from "@utils/cn";
 import { Button } from "@components/ui/Button";
-import { Dialog, DialogContent, DialogTitle } from "@components/ui/Dialog";
+import { DialogTitle } from "@components/ui/Dialog";
 import { ContentType } from "@api/__generated__/types";
 import {
   useDelegateArtist,
   useDownloadSourcesAvailability,
   useGetContents,
+  useLibraryDestination,
   useLidarrAvailable,
+  useLidarrProfiles,
   useMyRequestPreset,
 } from "@hooks/api";
 import { Input } from "@components/ui/Input";
@@ -23,13 +27,15 @@ import { toast } from "sonner";
 
 import { useContentRequestSubmit } from "../../hooks/useContentRequestSubmit";
 import { ConfigHeader } from "./ConfigHeader";
-import { DestinationField } from "./DestinationField";
 import { LidarrInputs } from "./LidarrInputs";
-import { RequestPresetFields } from "./RequestPresetFields";
+import { RequestFooter } from "./RequestFooter";
+import { RequestRecipe } from "./RequestRecipe";
 import { DEFAULT_ARTIST_MONITOR_SCOPE, DEFAULT_MONITOR_SCOPE } from "./constants";
 import {
   buildAlbumDelegate,
   buildArtistDelegate,
+  changedRecipeRows,
+  describeLidarr,
   destinationRequestFor,
   extractItemMetadata,
   getItemDisplayName,
@@ -38,11 +44,17 @@ import {
   presetFromSelection,
   reconcileSelection,
   selectionFromPreset,
-  summarizePreset,
+  summarizeSelection,
   tracksFromContents,
 } from "./helpers";
-import { configDialogContent, fieldGroup, fieldLabel, presetNote, sectionHeading, sectionStack } from "./styles";
-import type { ConfigRequestModalProps, LidarrArtistSelection, LidarrSelection, RequestSelection } from "./types";
+import { configBody, configSheet, fieldGroup, fieldLabel, presetNote, sectionHeading, sectionStack } from "./styles";
+import type {
+  ConfigRequestModalProps,
+  LidarrArtistSelection,
+  LidarrSelection,
+  RecipeDestination,
+  RequestSelection,
+} from "./types";
 
 export function ConfigRequestModal({
   isOpen,
@@ -86,6 +98,11 @@ export function ConfigRequestModal({
   const lidarrOffered = isAlbumItem && (lidarrAvailability?.available ?? false);
   const effectivePreset = presetQuery.data?.effective.preset;
 
+  const base = useMemo(
+    () => (effectivePreset === undefined || isLoadingSources ? null : selectionFromPreset(effectivePreset, offered)),
+    [effectivePreset, isLoadingSources, offered]
+  );
+
   useEffect(() => {
     setRenameValue("");
     setDestinationPathId(null);
@@ -104,8 +121,19 @@ export function ConfigRequestModal({
   const lidarrSelected = selection !== null && isLidarrSelected(selection.acquisition);
   const config = selection === null || !canCustomize ? undefined : presetFromSelection(selection);
   const destinationRequest =
-    isAdmin && config ? destinationRequestFor(item, parentAlbum, config.format.value, mode) : null;
-  const showDestination = destinationRequest !== null && !lidarrSelected;
+    isAdmin && config && !lidarrSelected ? destinationRequestFor(item, parentAlbum, config.format.value, mode) : null;
+  const { data: destinationPreview, isPlaceholderData: destinationRefreshing } =
+    useLibraryDestination(destinationRequest);
+  const destination: RecipeDestination | null =
+    destinationRequest !== null && destinationPreview !== undefined && destinationPreview.paths.length > 1
+      ? {
+          preview: destinationPreview,
+          value: destinationPathId,
+          onChange: setDestinationPathId,
+          refreshing: destinationRefreshing,
+        }
+      : null;
+  const { data: lidarrProfiles } = useLidarrProfiles({ enabled: lidarrSelected || isLidarrArtistMode });
 
   const needsTrackList =
     !isLidarrArtistMode &&
@@ -124,8 +152,10 @@ export function ConfigRequestModal({
   );
 
   const metadata = useMemo(() => {
-    const base = extractItemMetadata(item, parentAlbum);
-    return isArtistTracksMode ? { ...base, artist: t("config.header.topTracks"), totalTracks: trackList.length } : base;
+    const itemMetadata = extractItemMetadata(item, parentAlbum);
+    return isArtistTracksMode
+      ? { ...itemMetadata, artist: t("config.header.topTracks"), totalTracks: trackList.length }
+      : itemMetadata;
   }, [item, parentAlbum, isArtistTracksMode, trackList.length, t]);
 
   const { submit, isSubmitting: isRequesting } = useContentRequestSubmit();
@@ -136,6 +166,22 @@ export function ConfigRequestModal({
   const isLoadingPreset = !isLidarrArtistMode && selection === null && !presetUnavailable;
   const isLoadingData = !isLidarrArtistMode && ((needsTrackList && isLoadingTracks) || isLoadingPreset);
   const isBusy = isSubmitting || isLoadingData;
+
+  const changedCount =
+    selection !== null && base !== null && canCustomize
+      ? changedRecipeRows(selection, base, destination !== null, destinationPathId).length
+      : 0;
+  const footerSummary = isLidarrArtistMode
+    ? describeLidarr(lidarrArtistSelection, lidarrProfiles, t)
+    : selection === null
+      ? null
+      : lidarrSelected
+        ? describeLidarr(lidarrSelection, lidarrProfiles, t)
+        : summarizeSelection(selection, t);
+  const footerNote =
+    isLidarrArtistMode || selection === null
+      ? null
+      : t(changedCount > 0 ? "config.preset.forThisRequest" : "config.preset.sameAsDirect");
 
   const handleClose = () => {
     if (!isSubmitting) onClose();
@@ -176,7 +222,7 @@ export function ConfigRequestModal({
       tracks: trackList,
       config,
       delegate,
-      destinationPathId: showDestination && destinationPathId !== null ? destinationPathId : undefined,
+      destinationPathId: destination !== null && destinationPathId !== null ? destinationPathId : undefined,
       playlistName,
     });
 
@@ -191,125 +237,105 @@ export function ConfigRequestModal({
   if (!item) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent
-        data-cy="download-config-modal"
-        className={configDialogContent()}
-        aria-describedby="config-modal-description"
-      >
-        <DialogTitle className="sr-only">
-          {t("config.dialogTitle", { type: titleCase(itemType), name: metadata.name })}
-        </DialogTitle>
+    <BottomSheet
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) handleClose();
+      }}
+      className={configSheet()}
+      data-cy="download-config-modal"
+      aria-describedby="config-modal-description"
+    >
+      <DialogTitle className="sr-only">
+        {t("config.dialogTitle", { type: titleCase(itemType), name: metadata.name })}
+      </DialogTitle>
 
-        <div id="config-modal-description" className="sr-only">
-          {t("config.dialogDescription", { name: metadata.name })}
-        </div>
+      <div id="config-modal-description" className="sr-only">
+        {t("config.dialogDescription", { name: metadata.name })}
+      </div>
 
-        <ConfigHeader
-          name={metadata.name}
-          artist={metadata.artist}
-          image={metadata.image}
-          year={metadata.year}
-          itemType={itemType}
-          totalTracks={metadata.totalTracks}
-          albumName={metadata.albumName}
-        />
+      <ConfigHeader
+        name={metadata.name}
+        artist={metadata.artist}
+        image={metadata.image}
+        year={metadata.year}
+        itemType={itemType}
+        totalTracks={metadata.totalTracks}
+        albumName={metadata.albumName}
+      />
 
-        <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
-          {isLidarrArtistMode ? (
-            <div className={sectionStack()}>
-              <h3 className={sectionHeading()}>{t("config.sections.lidarr")}</h3>
-              <p className="text-fg/60 text-sm">{t("config.artistLidarr.description")}</p>
-              <LidarrInputs monitorMode="artist" value={lidarrArtistSelection} onChange={setLidarrArtistSelection} />
-            </div>
+      <div className={cn(bottomSheetBody(), configBody())}>
+        {isLidarrArtistMode ? (
+          <div className={sectionStack()}>
+            <h3 className={sectionHeading()}>{t("config.sections.lidarr")}</h3>
+            <p className={presetNote()}>{t("config.artistLidarr.description")}</p>
+            <LidarrInputs monitorMode="artist" value={lidarrArtistSelection} onChange={setLidarrArtistSelection} />
+          </div>
+        ) : (
+          <>
+            {item.type === ContentType.enum.playlist && (
+              <div className={fieldGroup()}>
+                <label className={fieldLabel()} htmlFor="playlist-rename-input">
+                  {t("config.fields.renamePlaylist")}
+                </label>
+                <Input
+                  id="playlist-rename-input"
+                  value={renameValue}
+                  onChange={(event) => setRenameValue(event.target.value)}
+                  placeholder={item.name}
+                  data-cy="playlist-rename-input"
+                />
+              </div>
+            )}
+
+            {presetUnavailable && selection === null ? (
+              <p className={presetNote()} data-cy="request-preset-unavailable">
+                {t("config.presetUnavailable")}
+              </p>
+            ) : null}
+
+            {selection !== null && base !== null ? (
+              <RequestRecipe
+                selection={selection}
+                base={base}
+                onChange={setSelection}
+                locked={!canCustomize}
+                origin={presetQuery.data?.effective.origin}
+                offered={offered}
+                lidarrAvailable={lidarrOffered}
+                lidarrSlot={<LidarrInputs monitorMode="album" value={lidarrSelection} onChange={setLidarrSelection} />}
+                destination={destination}
+              />
+            ) : null}
+          </>
+        )}
+      </div>
+
+      <RequestFooter summary={footerSummary} note={footerNote}>
+        <Button
+          onClick={isLidarrArtistMode ? handleDelegateArtist : handleDownload}
+          disabled={isBusy}
+          className={`${primaryGradientButton({ size: "md", glow: "primary", hover: "lighten" })} shrink-0 font-semibold disabled:cursor-not-allowed disabled:opacity-50`}
+          data-cy="confirm-download-btn"
+        >
+          {isSubmitting ? (
+            <>
+              <Spinner size="sm" decorative className="mr-2" />
+              {t("config.actions.requesting")}
+            </>
+          ) : isLoadingData ? (
+            <>
+              <Spinner size="sm" decorative className="mr-2" />
+              {t("config.actions.loadingTracks")}
+            </>
           ) : (
             <>
-              {item.type === ContentType.enum.playlist && (
-                <div className={fieldGroup()}>
-                  <label className={fieldLabel()} htmlFor="playlist-rename-input">
-                    {t("config.fields.renamePlaylist")}
-                  </label>
-                  <Input
-                    id="playlist-rename-input"
-                    value={renameValue}
-                    onChange={(event) => setRenameValue(event.target.value)}
-                    placeholder={item.name}
-                    data-cy="playlist-rename-input"
-                  />
-                </div>
-              )}
-
-              {presetUnavailable && selection === null ? (
-                <p className={presetNote()} data-cy="request-preset-unavailable">
-                  {t("config.presetUnavailable")}
-                </p>
-              ) : null}
-
-              {selection !== null && !canCustomize && effectivePreset !== undefined ? (
-                <p className={presetNote()} data-cy="request-preset-locked">
-                  {t("config.presetLocked", { summary: summarizePreset(effectivePreset, t) })}
-                </p>
-              ) : null}
-
-              {selection !== null && canCustomize ? (
-                <RequestPresetFields
-                  value={selection}
-                  onChange={setSelection}
-                  lidarrAvailable={lidarrOffered}
-                  lidarrSlot={
-                    <div className={sectionStack()}>
-                      <h3 className={sectionHeading()}>{t("config.sections.lidarr")}</h3>
-                      <LidarrInputs monitorMode="album" value={lidarrSelection} onChange={setLidarrSelection} />
-                    </div>
-                  }
-                />
-              ) : null}
-
-              {showDestination && destinationRequest !== null ? (
-                <DestinationField
-                  request={destinationRequest}
-                  value={destinationPathId}
-                  onChange={setDestinationPathId}
-                />
-              ) : null}
+              <Download className="mr-2 h-4 w-4" />
+              {isLidarrArtistMode ? t("config.actions.addToLidarr") : t("config.actions.request")}
             </>
           )}
-
-          <div className="flex gap-3 pt-2">
-            <Button
-              onClick={handleClose}
-              variant="outline"
-              className="border-fg/20 bg-fg/5 text-fg hover:bg-fg/10 flex-1"
-              disabled={isSubmitting}
-            >
-              {t("config.actions.cancel")}
-            </Button>
-            <Button
-              onClick={isLidarrArtistMode ? handleDelegateArtist : handleDownload}
-              disabled={isBusy}
-              className={`${primaryGradientButton({ size: "md", glow: "primary", hover: "lighten" })} flex-1 font-semibold disabled:cursor-not-allowed disabled:opacity-50`}
-              data-cy="confirm-download-btn"
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner size="sm" decorative className="mr-2" />
-                  {t("config.actions.requesting")}
-                </>
-              ) : isLoadingData ? (
-                <>
-                  <Spinner size="sm" decorative className="mr-2" />
-                  {t("config.actions.loadingTracks")}
-                </>
-              ) : (
-                <>
-                  <Download className="mr-2 h-4 w-4" />
-                  {isLidarrArtistMode ? t("config.actions.addToLidarr") : t("config.actions.request")}
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </Button>
+      </RequestFooter>
+    </BottomSheet>
   );
 }
