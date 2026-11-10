@@ -384,8 +384,13 @@ describe("buildSourceChain", () => {
 });
 
 describe("usesSlskd", () => {
-  it("assumes slskd on automatic, since the server order may reach it", () => {
-    expect(usesSlskd({ mode: "auto", order: ["ytdlp"], active: ["ytdlp"] })).toBe(true);
+  it("follows the offered sources on automatic, since the server order reaches only enabled ones", () => {
+    expect(usesSlskd({ mode: "auto", order: ["slskd", "ytdlp"], active: ["slskd", "ytdlp"] })).toBe(true);
+    expect(usesSlskd({ mode: "auto", order: ["ytdlp"], active: ["ytdlp"] })).toBe(false);
+  });
+
+  it("assumes slskd on automatic when the sources could not be read", () => {
+    expect(usesSlskd({ mode: "auto", order: [], active: [] })).toBe(true);
   });
 
   it("is false for lidarr", () => {

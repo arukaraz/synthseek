@@ -367,6 +367,27 @@ describe("ConfigRequestModal", () => {
     });
   });
 
+  it("offers neither Lossless nor the peer row on Auto when Slskd is not among the sources", async () => {
+    const user = userEvent.setup();
+    sourcesAvailability = {
+      slskd: { enabled: false, allowsSingleTracks: true },
+      ytdlp: { enabled: true, allowsSingleTracks: true },
+      usenet: { enabled: false, allowsSingleTracks: false },
+      archive: { enabled: false, allowsSingleTracks: true },
+      soundcloud: { enabled: false, allowsSingleTracks: true },
+      subsonic: { enabled: false, allowsSingleTracks: true },
+      torrent: { enabled: false, allowsSingleTracks: false },
+    };
+
+    render(<ConfigRequestModal isOpen onClose={vi.fn()} item={makeTrack()} itemType={ContentType.enum.track} />);
+
+    expect(row("Source")).toHaveTextContent("Auto");
+    expect(screen.queryByRole("button", { name: /^Matching/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Peers/ })).not.toBeInTheDocument();
+    await user.click(row("Quality"));
+    expect(screen.getByRole("radio", { name: "Lossless" })).toBeDisabled();
+  });
+
   it("shows a FLAC preset's format as picked once Slskd leaves the chain, so the window never hides what it sends", async () => {
     const user = userEvent.setup();
     effectivePreset = LOSSLESS_PEERS;

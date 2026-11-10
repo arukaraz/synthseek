@@ -113,8 +113,8 @@ export function isLidarrSelected(selection: AcquisitionSelection): boolean {
 
 export function usesSlskd(selection: AcquisitionSelection): boolean {
   if (selection.mode === "lidarr") return false;
-  if (selection.mode === "auto") return true;
-  return selection.order.some((key) => key === "slskd" && selection.active.includes(key));
+  if (selection.mode === "auto" && selection.active.length === 0) return true;
+  return selection.active.includes("slskd");
 }
 
 export function allowsLossless(selection: AcquisitionSelection): boolean {
