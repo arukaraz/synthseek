@@ -139,6 +139,7 @@ export function DownloadSourcesSection() {
           <div hidden={hiddenUnless("slskd")}>
             <SlskdCard
               initial={{
+                source: data.downloadSources.slskd,
                 connection: data.connections.slskd,
                 search: data.engine.search,
                 timeouts: data.engine.timeouts,

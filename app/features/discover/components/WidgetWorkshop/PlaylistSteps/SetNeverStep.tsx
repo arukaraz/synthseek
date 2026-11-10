@@ -1,22 +1,18 @@
 "use client";
 
-import { Settings, Undo2, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Undo2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@components/ui/Button";
 import { IconButton } from "@components/ui/IconButton";
 import { useVeto, useVetoTracks } from "@hooks/api/queries/widgets/useVeto";
 
 import { StepRow } from "../StepRow";
 import { stepText } from "../styles";
-import { NEVER_SETTINGS_HREF } from "./constants";
 import { hint, line, stack, tag, tagList, tagText } from "./styles";
 import type { SetStepProps } from "./types";
 
 export function SetNeverStep({ set, onChange }: Pick<SetStepProps, "set" | "onChange">) {
   const { t } = useTranslation("widgets");
-  const router = useRouter();
   const veto = useVeto();
   const vetoTracks = useVetoTracks();
   const entries = [
@@ -55,10 +51,6 @@ export function SetNeverStep({ set, onChange }: Pick<SetStepProps, "set" | "onCh
               })}
             </span>
           ) : null}
-          <Button variant="ghost" size="sm" onClick={() => router.push(NEVER_SETTINGS_HREF)}>
-            <Settings />
-            {t("set.neverEdit")}
-          </Button>
         </div>
         <span className={hint()}>{t("set.neverHint")}</span>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, Plus, Settings2, SquareDashed } from "lucide-react";
+import { Blocks, Check, Palette, Plus, SquareDashed } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -14,6 +15,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@compo
 import { useDockJobs } from "@hooks/api/subscriptions";
 import { usePlayerBottomDock } from "@hooks/ui/player";
 
+import { BOARD_SETTINGS_HREF } from "./constants";
 import { CustomizeIcon } from "./CustomizeIcon";
 import {
   boardDock,
@@ -28,7 +30,7 @@ import {
 } from "./styles";
 import type { BoardToolbarProps } from "./types";
 
-export function BoardToolbar({ editing, onCustomize, onDone, onAddSpacer, onCustomization }: BoardToolbarProps) {
+export function BoardToolbar({ editing, onCustomize, onDone, onAddSpacer, onWidgets }: BoardToolbarProps) {
   const { t } = useTranslation(["discover", "widgets"]);
   const dockVisible = useDockJobs().length > 0;
   const playerDock = usePlayerBottomDock();
@@ -63,9 +65,15 @@ export function BoardToolbar({ editing, onCustomize, onDone, onAddSpacer, onCust
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button variant="ghost" size="sm" onClick={onCustomization}>
-                  <Settings2 />
-                  {t("widgets:board.customization.action")}
+                <Button variant="ghost" size="sm" onClick={onWidgets}>
+                  <Blocks />
+                  {t("widgets:board.widgetsDialog.action")}
+                </Button>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href={BOARD_SETTINGS_HREF}>
+                    <Palette />
+                    {t("widgets:board.appearance.title")}
+                  </Link>
                 </Button>
               </div>
             </FadeScroll>

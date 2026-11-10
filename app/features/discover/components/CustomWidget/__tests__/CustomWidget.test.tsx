@@ -560,7 +560,7 @@ describe("CustomWidget", () => {
     show("list", "M", createFeedAlbumResult([], "listenbrainz"));
     expect(screen.getByRole("link", { name: "ListenBrainz user" })).toHaveAttribute(
       "href",
-      "/settings/listening#listenbrainz"
+      "/settings/connections/services#listenbrainz"
     );
   });
 

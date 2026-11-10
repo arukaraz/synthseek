@@ -10,40 +10,39 @@ const t = i18n.getFixedT("en", "settings");
 
 const endpoint: SettingsSearchEntry = {
   labelKey: "mcp.endpointLabel",
-  page: "apps",
-  href: "/settings/apps",
+  page: "connections",
+  href: "/settings/connections/apps",
   anchor: "ai-assistants",
   placeKey: "mcp.title",
 };
 
 const assistants: SettingsSearchEntry = {
   labelKey: "mcp.title",
-  page: "apps",
-  href: "/settings/apps",
+  page: "connections",
+  href: "/settings/connections/apps",
   anchor: "ai-assistants",
 };
 
 const theme: SettingsSearchEntry = {
   labelKey: "general.theme.title",
   page: "appearance",
-  href: "/settings/appearance",
+  href: "/settings/appearance/theme",
   anchor: "theme",
   keywordsKey: "shell.search.keywords.theme",
 };
 
-const lastfmCredentials: SettingsSearchEntry = {
-  labelKey: "shell.search.entries.lastfmCredentials",
-  page: "listening",
-  href: "/settings/listening",
-  anchor: "lastfm.credentials",
-  placeKey: "profile.listening.lastfm.name",
+const memberNtfy: SettingsSearchEntry = {
+  labelKey: "notifications.memberServer.title",
+  page: "notifications",
+  href: "/settings/notifications",
+  anchor: "member-ntfy",
   adminOnly: true,
 };
 
 const lastfmFeeds: SettingsSearchEntry = {
   labelKey: "shell.search.entries.lastfmFeeds",
-  page: "listening",
-  href: "/settings/listening",
+  page: "connections",
+  href: "/settings/connections/services",
   anchor: "lastfm.feeds",
   placeKey: "profile.listening.lastfm.name",
 };
@@ -88,17 +87,18 @@ describe("searchSettings", () => {
   });
 
   it("shows a member neither admin only entries nor entries on server pages", () => {
-    const entries = [lastfmCredentials, lastfmFeeds, slskd];
+    const entries = [memberNtfy, lastfmFeeds, slskd];
     expect(searchSettings("last", entries, t, false).map((result) => result.entry)).toEqual([lastfmFeeds]);
+    expect(searchSettings(t("notifications.memberServer.title"), entries, t, false)).toEqual([]);
     expect(searchSettings(t("slskd.title"), entries, t, false)).toEqual([]);
   });
 
   it("shows an admin every entry", () => {
-    const entries = [lastfmCredentials, lastfmFeeds, slskd];
-    expect(searchSettings("last", entries, t, true).map((result) => result.entry)).toEqual([
-      lastfmCredentials,
-      lastfmFeeds,
-    ]);
+    const entries = [memberNtfy, lastfmFeeds, slskd];
+    expect(searchSettings("last", entries, t, true).map((result) => result.entry)).toEqual([lastfmFeeds]);
+    expect(
+      searchSettings(t("notifications.memberServer.title"), entries, t, true).map((result) => result.entry)
+    ).toEqual([memberNtfy]);
     expect(searchSettings(t("slskd.title"), entries, t, true).map((result) => result.entry)).toEqual([slskd]);
   });
 
@@ -106,7 +106,7 @@ describe("searchSettings", () => {
     const [result] = searchSettings("endpoint", [endpoint], t, true);
     expect(result.place).toBe(
       i18n.t("settings:shell.search.place", {
-        page: t("shell.pages.apps.title"),
+        page: t("shell.pages.connections.title"),
         place: t("mcp.title"),
       })
     );
@@ -218,7 +218,7 @@ describe("highlightParts", () => {
 
 describe("entryHref", () => {
   it("appends the anchor as a hash", () => {
-    expect(entryHref(endpoint)).toBe("/settings/apps#ai-assistants");
+    expect(entryHref(endpoint)).toBe("/settings/connections/apps#ai-assistants");
   });
 
   it("returns the page href when there is no anchor", () => {

@@ -21,8 +21,6 @@ export const SCENE_CHOICES = ["focus", "workout", "sleep", "dinner"] as const;
 
 export const MINUTE_CHARS = 2;
 
-export const NEVER_SETTINGS_HREF = "/settings/listening";
-
 export const LENGTH_STEP = 5;
 
 export const MINUTES_STEP = 15;

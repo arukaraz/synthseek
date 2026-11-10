@@ -1,26 +1,13 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import enLibrary from "@modules/i18n/messages/en/library.json";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
-import { SECRET_SENTINEL } from "@features/settings/components/constants";
-
-interface Enrichment {
-  lastfmApiKey: string;
-  lastfmApiSecret: string;
-  fanartApiKey: string;
-}
-
 const api = vi.hoisted(() => ({
   updateLastfm: vi.fn(async () => undefined),
   updateLastfmPending: false,
-  updateEnrichment: vi.fn(async () => undefined),
-  updateEnrichmentPending: false,
-  reveal: vi.fn(async () => "real"),
-  settings: undefined as { connections: { enrichment: Enrichment } } | undefined,
-  settingsOptions: vi.fn(),
   isAdmin: true,
 }));
 
@@ -28,27 +15,16 @@ vi.mock("@hooks/api/mutations/discovery/useUpdateLastfm", () => ({
   useUpdateLastfm: () => ({ mutateAsync: api.updateLastfm, isPending: api.updateLastfmPending }),
 }));
 
-vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
-  useUpdateConnectionsEnrichment: () => ({
-    mutateAsync: api.updateEnrichment,
-    isPending: api.updateEnrichmentPending,
-  }),
-}));
-
-vi.mock("@hooks/api/queries/useSettings", () => ({
-  useSettings: (options?: { enabled?: boolean }) => {
-    api.settingsOptions(options);
-    return { data: options?.enabled === false ? undefined : api.settings };
-  },
-}));
-
 vi.mock("@modules/providers/AuthProvider", () => ({ useAuthContext: () => ({ isAdmin: api.isAdmin }) }));
 
-vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => api.reveal }));
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/settings/connections/services",
+}));
 
 import { LastfmCard } from "../LastfmCard";
 
 const lastfm = enLibrary.discoveryIntegrations.lastfm;
+const metadataPage = enSettings.shell.pages.metadata.title;
 
 function config(overrides: { enabled?: boolean; username?: string | null } = {}) {
   return { enabled: false, username: null, ...overrides };
@@ -59,53 +35,18 @@ function renderCard(overrides: { enabled?: boolean; username?: string | null } =
   return { user: userEvent.setup() };
 }
 
-function inputOf(label: string): HTMLElement {
-  const input = screen.getByText(label).parentElement?.querySelector("input");
-  if (!input) throw new Error(`no input under ${label}`);
-  return input;
-}
-
 beforeEach(() => {
   vi.clearAllMocks();
   api.updateLastfmPending = false;
-  api.updateEnrichmentPending = false;
   api.isAdmin = true;
-  api.settings = { connections: { enrichment: { lastfmApiKey: "", lastfmApiSecret: "", fanartApiKey: "fan" } } };
 });
 
 describe("what the card shows", () => {
-  it("asks for the saved key and secret by their own fields when their eyes are clicked", async () => {
-    api.settings = {
-      connections: {
-        enrichment: { lastfmApiKey: SECRET_SENTINEL, lastfmApiSecret: SECRET_SENTINEL, fanartApiKey: "" },
-      },
-    };
-    const { user } = renderCard();
-
-    for (const eye of screen.getAllByLabelText(enSettings.shell.secretInput.reveal)) await user.click(eye);
-
-    expect(api.reveal.mock.calls.map((call) => call.at(0))).toEqual([
-      { section: "connections.enrichment", field: "lastfmApiKey" },
-      { section: "connections.enrichment", field: "lastfmApiSecret" },
-    ]);
-  });
-
   it("titles its panel as the discovery feeds and offers a switch for them", () => {
     renderCard();
 
     expect(screen.getByText(enLibrary.discoveryIntegrations.feedsTitle)).toBeInTheDocument();
     expect(screen.getByRole("switch", { name: lastfm.enableAria })).toBeInTheDocument();
-  });
-
-  it("reads the server settings only for an administrator", () => {
-    api.isAdmin = false;
-    renderCard();
-    expect(api.settingsOptions).toHaveBeenLastCalledWith({ enabled: false });
-    cleanup();
-
-    api.isAdmin = true;
-    renderCard();
-    expect(api.settingsOptions).toHaveBeenLastCalledWith({ enabled: true });
   });
 
   it("shows the switch in the state the server reported", () => {
@@ -120,22 +61,21 @@ describe("what the card shows", () => {
     expect(screen.getByDisplayValue("arukaraz")).toBeInTheDocument();
   });
 
-  it("offers an administrator the server credentials in a panel of their own", () => {
+  it("points an administrator at the server credentials under Metadata", () => {
     renderCard();
 
-    expect(screen.getByText(lastfm.credentialsTitle)).toBeInTheDocument();
-    expect(screen.getByText(lastfm.adminBadge)).toBeInTheDocument();
-    expect(screen.getByText(lastfm.apiKeyLabel)).toBeInTheDocument();
-    expect(screen.getByText(lastfm.apiSecretLabel)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: metadataPage })).toHaveAttribute(
+      "href",
+      "/settings/metadata#connections.enrichment.lastfmApiKey"
+    );
   });
 
-  it("keeps the server credentials panel away from an ordinary listener", () => {
+  it("keeps that pointer away from an ordinary listener", () => {
     api.isAdmin = false;
 
     renderCard();
 
-    expect(screen.queryByText(lastfm.credentialsTitle)).not.toBeInTheDocument();
-    expect(screen.queryByText(lastfm.apiKeyLabel)).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: metadataPage })).not.toBeInTheDocument();
   });
 
   it("tells an ordinary listener to ask the administrator when the server has no key", () => {
@@ -154,11 +94,11 @@ describe("what the card shows", () => {
     expect(screen.queryByText(lastfm.apiKeyWarning)).not.toBeInTheDocument();
   });
 
-  it("does not warn an administrator, who can set the key right below", () => {
+  it("does not warn an administrator, who is pointed at the key instead", () => {
     renderCard({}, false);
 
     expect(screen.queryByText(lastfm.apiKeyWarning)).not.toBeInTheDocument();
-    expect(screen.getByText(lastfm.credentialsTitle)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: metadataPage })).toBeInTheDocument();
   });
 });
 
@@ -196,23 +136,7 @@ describe("saving the card", () => {
     expect(api.updateLastfm).toHaveBeenCalledWith({ enabled: true, username: null });
   });
 
-  it("saves a changed shared key alongside the rest of the enrichment settings", async () => {
-    const { user } = renderCard();
-
-    await user.type(inputOf(lastfm.apiKeyLabel), "new-key");
-    await user.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
-
-    await waitFor(() =>
-      expect(api.updateEnrichment).toHaveBeenCalledWith({
-        lastfmApiKey: "new-key",
-        lastfmApiSecret: "",
-        fanartApiKey: "fan",
-      })
-    );
-    expect(api.updateLastfm).not.toHaveBeenCalled();
-  });
-
-  it("does not offer to save a credential change an ordinary listener cannot make", () => {
+  it("offers an ordinary listener nothing to save until they change their own feeds", () => {
     api.isAdmin = false;
 
     renderCard();

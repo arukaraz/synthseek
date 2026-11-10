@@ -29,8 +29,6 @@
     "playlist": "Smarte Playlist · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Zum Board hinzufügen",
-    "addWhileTemplate": "Speichere oder verwirf zuerst die Vorlage, dann füge deine Widgets hinzu.",
-    "deleteWhileTemplate": "Speichere oder verwirf zuerst die Vorlage, dann lösche dein Widget.",
     "addNamed": "{{name}} zum Board hinzufügen",
     "onBoard": "Auf dem Board",
     "edit": "Bearbeiten",
@@ -55,15 +53,9 @@
     "deleteWithTiles_other": "Das Widget wird aus Meine Widgets und von seinen {{count}} Kacheln auf deinem Board entfernt."
   },
   "board": {
-    "customization": {
-      "action": "Board-Anpassung",
-      "title": "Board-Anpassung",
-      "sections": {
-        "label": "Bereiche der Board-Anpassung",
-        "board": "Board",
-        "widgets": "Widgets",
-        "arrange": "Anordnen"
-      }
+    "widgetsDialog": {
+      "action": "Widgets",
+      "title": "Widgets"
     },
     "layouts": {
       "label": "Anordnung",
@@ -508,6 +500,9 @@
     },
     "country": "Land",
     "anywhere": "Überall",
+    "worldwide": "Weltweit",
+    "searchCountry": "Land suchen",
+    "noCountry": "Kein Land passt.",
     "showsWithin": "in den nächsten",
     "needs": {
       "lastfm": "Braucht Last.fm",
@@ -646,8 +641,7 @@
     "tracks": "Titeln",
     "never": "Nie aufnehmen",
     "neverEmpty": "Noch nichts. Nutze die Sperrtaste in einer beliebigen Liste.",
-    "neverEdit": "Für alle Widgets bearbeiten",
-    "neverHint": "Kommt aus deinem Konto. Mit X erlaubst du einen Eintrag nur in diesem Widget.",
+    "neverHint": "Kommt aus deinem Konto, unter Meine Widgets. Mit X erlaubst du einen Eintrag nur in diesem Widget.",
     "allowHere": "{{name}} in diesem Widget erlauben",
     "excludeHere": "{{name}} hier wieder ausschließen",
     "mix": "Mischung",
@@ -802,5 +796,18 @@
     "stations": "Sender",
     "genres": "Genres",
     "continueListening": "Weiterhören"
+  },
+  "neverInclude": {
+    "title": "Nie aufnehmen",
+    "description": "Gilt für alle intelligenten Listen deines Kontos. Ein Widget kann einen Eintrag für sich erlauben.",
+    "artists": "Künstler",
+    "tracks": "Titel",
+    "noTaste": "Wiedergaben, die deinen Geschmack nicht prägen",
+    "searchArtists": "Künstler suchen",
+    "searchTracks": "Titel nach Name oder Künstler suchen",
+    "searchGenres": "Genres suchen",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "{{name}} entfernen",
+    "noMatch": "Keine Treffer"
   }
 }

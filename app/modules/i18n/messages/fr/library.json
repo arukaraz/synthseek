@@ -13,8 +13,8 @@
       "bodyExpired": "Votre connexion {{provider}} a expiré ou a été révoquée. Reconnectez-vous pour recharger votre bibliothèque.",
       "reconnect": "Reconnecter {{provider}}",
       "connect": "Connecter {{provider}}",
-      "bodyAccount": "Associez votre compte {{provider}} dans Comptes connectés pour que Synthseek puisse lire vos playlists.",
-      "linkAccount": "Associer {{provider}} dans Comptes connectés"
+      "bodyAccount": "Associez votre compte {{provider}} dans Connexions pour que Synthseek puisse lire vos playlists.",
+      "linkAccount": "Associer {{provider}} dans Connexions"
     },
     "loadFailed": {
       "title": "Impossible de charger votre bibliothèque {{provider}}",
@@ -204,18 +204,12 @@
     },
     "lastfm": {
       "enableAria": "Activer les flux de découverte Last.fm",
-      "credentialsTitle": "Identifiants du serveur",
-      "credentialsTooltip": "La clé et le secret de l'API Last.fm qu'utilise la connexion de chaque membre. Seuls les administrateurs voient cette partie.",
-      "adminBadge": "Admin",
+      "credentialsElsewhere": "La clé et le secret de l'API qu'utilise la connexion de chaque membre sont sous <metadata>Métadonnées</metadata>.",
       "tooltip": "Scrobbles récents et meilleures pistes de toujours de votre compte Last.fm. Les flux sont fixes.",
       "apiKeyWarning": "La clé API Last.fm n'est pas configurée. Demandez à votre administrateur de la définir avant d'activer cette intégration.",
-      "apiKeyLabel": "Clé API",
-      "apiKeyHelper": "Clé API Last.fm pour tout le système. Partagée entre tous les utilisateurs.",
       "usernameLabel": "Nom d'utilisateur",
       "usernameHelper": "Votre nom d'utilisateur Last.fm public.",
-      "usernamePlaceholder": "ex. votrenom",
-      "apiSecretLabel": "Secret partage de l'API",
-      "apiSecretHelper": "Necessaire uniquement pour envoyer vos ecoutes a Last.fm. Fourni avec la cle de l'API."
+      "usernamePlaceholder": "ex. votrenom"
     },
     "listenbrainz": {
       "enableAria": "Activer les flux de découverte ListenBrainz",

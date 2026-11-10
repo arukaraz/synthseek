@@ -6,8 +6,6 @@ export const accountAvatar = cva(
 
 export const accountMeta = cva("text-fg/50 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs");
 
-export const logoutRow = cva("border-fg/10 mt-4 border-t pt-4");
-
 export const accountChip = cva("flex size-9 shrink-0 items-center justify-center rounded-full");
 
 export const listeningChip = cva("flex size-9 shrink-0 items-center justify-center rounded-full bg-current/15", {
@@ -48,15 +46,3 @@ export const quotaValue = cva("text-fg tabular-nums");
 export const quotaNote = cva("text-fg/50 w-full text-xs");
 
 export const quotaMessage = cva("text-fg/60 text-sm");
-
-export const vetoBlock = cva("flex min-w-0 flex-col gap-1.5");
-
-export const vetoLabel = cva("text-fg/70 text-xs font-medium");
-
-export const vetoTagList = cva("flex flex-wrap gap-1.5");
-
-export const vetoTag = cva(
-  "border-fg/15 text-fg inline-flex max-w-full min-w-0 items-center gap-1 rounded-full border py-0.5 pr-1 pl-2.5 text-xs"
-);
-
-export const vetoTagText = cva("min-w-0 truncate");

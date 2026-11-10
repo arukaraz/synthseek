@@ -1,7 +1,5 @@
-"use client";
-
-import { AppsSection } from "@features/settings/sections/GeneralSection/AppsSection";
+import { redirect } from "next/navigation";
 
 export default function AppsPage() {
-  return <AppsSection />;
+  redirect("/settings/connections/apps");
 }

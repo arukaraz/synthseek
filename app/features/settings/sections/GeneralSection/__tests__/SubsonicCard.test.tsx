@@ -82,11 +82,24 @@ describe("SubsonicCard anchors", () => {
     expect(cardAnchor).toBeDefined();
     expect(transcodingAnchor).toBeDefined();
 
-    const title = screen.getByRole("heading", { level: 2, name: enSettings.subsonic.title });
+    const title = screen.getByText(enSettings.subsonic.title);
     expect(title.closest("section")).toHaveAttribute("data-anchor-target", cardAnchor);
     expect(screen.getByText(enSettings.subsonic.transcoding.label).closest("[data-anchor-target]")).toHaveAttribute(
       "data-anchor-target",
       transcodingAnchor
+    );
+  });
+});
+
+describe("SubsonicCard admin marks", () => {
+  it("marks the server-wide switch and the conversion row as admin", () => {
+    render(<SubsonicCard />);
+
+    const pills = screen.getAllByText(enSettings.shell.card.admin);
+    expect(pills).toHaveLength(2);
+    expect(screen.getByText(enSettings.subsonic.title).closest("h2")).toContainElement(pills[0] ?? null);
+    expect(screen.getByText(enSettings.subsonic.transcoding.label).closest("[data-anchor-target]")).toContainElement(
+      pills[1] ?? null
     );
   });
 });

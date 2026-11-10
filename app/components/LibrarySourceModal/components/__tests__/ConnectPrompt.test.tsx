@@ -108,7 +108,7 @@ describe("ConnectPrompt", () => {
 
     expect(screen.getByText(named(enLibrary.librarySource.connect.bodyAccount, "Navidrome"))).toBeInTheDocument();
     const link = screen.getByRole("link", { name: named(enLibrary.librarySource.connect.linkAccount, "Navidrome") });
-    expect(link).toHaveAttribute("href", "/settings/connected-accounts");
+    expect(link).toHaveAttribute("href", "/settings/connections/services");
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
     expect(connect.mutate).not.toHaveBeenCalled();
   });

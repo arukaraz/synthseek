@@ -25,20 +25,21 @@ Your username, email, avatar and password, and how much of your download quota y
 
 ### Appearance & language
 
-| Setting  | What it does                                               |
-| -------- | ---------------------------------------------------------- |
-| Theme    | Synthseek, Midnight, or Ocean.                             |
-| Language | English, Español, Deutsch, or Français. Switches in place. |
+| Setting  | What it does                                                                                                                                           |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Theme    | Synthseek, Midnight, or Ocean. Kept in this browser.                                                                                                   |
+| Language | English, Español, Deutsch, or Français. Switches in place.                                                                                             |
+| Board    | Both layouts of your Discover board, its spacing, text size and backgrounds, and its templates. Saved to your account when you press **Save changes**. |
 
-### Connected accounts
+### Playback
 
-Your own accounts on Spotify, Plex, Navidrome and Jellyfin, which Synthseek uses on your behalf. Each server's row also offers to count your plays on that server.
+Volume normalization, the extra gain on top of it and autoplay, for your account on every device. Below them, the equalizer, compressor, transitions and conversion, which belong to the browser you set them in. The player's own settings menu holds the same controls.
 
-### Listening & discovery
+### Connections
 
-Your Last.fm and ListenBrainz connections, which send what you play to them, and the discovery mixes each one brings to Discover. Administrators also set the Last.fm API key and shared secret here, which every member's Last.fm connection uses.
+Two tabs. **Services** holds your own accounts on Spotify, Plex, Navidrome and Jellyfin, which Synthseek uses on your behalf, and your Last.fm and ListenBrainz connections, which send what you play to them and bring their discovery mixes to Discover. Each server's row also offers to count your plays on that server.
 
-### Apps & API keys
+**Apps & API keys** holds what connects to your Synthseek from outside.
 
 | Setting            | What it does                                                                                                            |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
@@ -162,7 +163,7 @@ The same tab holds **Audio analysis**, which shows how much of the library has b
 
 **Scan** shows what the last library scan found, and the files it could not recognise or wants you to confirm, behind **Review files**.
 
-**Sources** is where members' libraries come from. Connect Spotify to import an existing library. It requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet. Members can also import playlists from your media servers, through the account each one links under **Connected accounts**.
+**Sources** is where members' libraries come from. Connect Spotify to import an existing library. It requires a Spotify client ID and a public base URL, since the OAuth callback comes back over the internet. Members can also import playlists from your media servers, through the account each one links under **Connections**.
 
 | Setting                 | Default    | What it does                                                                                    |
 | ----------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
@@ -197,11 +198,11 @@ Administrators only. All optional, all free:
 | AcoustID                  | Verifying a download by its audio, and identifying a track for tagging when other methods cannot. The most valuable one. |
 | fanart.tv                 | High quality artist images.                                                                                              |
 | MusicBrainz contact email | A higher rate limit against MusicBrainz.                                                                                 |
+| Last.fm API key           | Similar artists, global charts, and your scrobble history. Every member's Last.fm connection uses it.                    |
+| Last.fm shared secret     | Lets members send their plays to Last.fm. Issued with the API key.                                                       |
 | Songlink                  | A higher rate limit when turning a link from another platform, such as Spotify, into a track.                            |
 | Discogs                   | Additional metadata depth on the content detail views.                                                                   |
 | Bandsintown app ID        | Upcoming shows for your artists in a Discover widget.                                                                    |
-
-The Last.fm key and shared secret are under **Listening & discovery**. The key brings similar artists, global charts, and your scrobble history; the secret lets members send plays to Last.fm.
 
 ### Maintenance
 

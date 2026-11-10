@@ -6,8 +6,6 @@ import { useTranslation } from "react-i18next";
 import { FadeScroll } from "@components/FadeScroll";
 import { WidgetFrame } from "@components/WidgetFrame";
 import { useCharts } from "@hooks/api/queries/analytics/useCharts";
-import { useCountry } from "@modules/providers/CountryProvider";
-import { getCountryByCode } from "@utils/countries";
 
 import type { BoardWidgetProps } from "../ExploreBoard/types";
 import { listColumns } from "../helpers";
@@ -21,16 +19,14 @@ import { chartRank } from "./styles";
 
 export function Charts({ size, info }: BoardWidgetProps) {
   const { t } = useTranslation("discover");
-  const { country } = useCountry();
-  const { data, isLoading, isError } = useCharts(country);
-  const countryName = getCountryByCode(country)?.name ?? country;
+  const { data, isLoading, isError } = useCharts();
   const [leaderEntry, ...rest] = data ?? [];
 
   return (
     <WidgetFrame
       icon={Flame}
       title={t("charts.title")}
-      subtitle={t("charts.subtitle", { country: countryName })}
+      subtitle={t("charts.subtitle")}
       info={info}
       titleId="charts-heading"
       loading={isLoading}
@@ -38,7 +34,7 @@ export function Charts({ size, info }: BoardWidgetProps) {
     >
       <div className={leaderFrame()}>
         <div className={leaderLayout()}>
-          {leaderEntry ? <ChartsLeader entry={leaderEntry} country={countryName} /> : null}
+          {leaderEntry ? <ChartsLeader entry={leaderEntry} /> : null}
           <FadeScroll>
             <ol className={widgetList({ columns: listColumns(size) })} start={2}>
               {rest.map((entry, index) => (

@@ -156,8 +156,12 @@
     },
     "theme": {
       "title": "Theme",
-      "description": "Pick the theme that matches your environment.",
+      "description": "Pick the theme that matches your environment. Only in this browser.",
       "groupLabel": "Color theme"
+    },
+    "board": {
+      "title": "Board",
+      "description": "Arrange both layouts, set the look of the board and import or export templates. Saved for your account when you press Save."
     }
   },
   "header": {
@@ -200,8 +204,20 @@
       "placeholder": "e.g. block party, my favorites"
     }
   },
+  "playback": {
+    "account": {
+      "title": "Your account",
+      "description": "For your account, on every device.",
+      "household": "Who sees what you play is set in <household>Account > Household</household>."
+    },
+    "browser": {
+      "title": "This browser",
+      "description": "The player's settings menu holds the same controls. Only in this browser."
+    }
+  },
   "timeouts": {
     "title": "Timeouts",
+    "soulseek": "Soulseek's own timeouts are with the rest of slskd's settings, under <slskd>Download sources</slskd>.",
     "searchPhase": {
       "label": "Search phase",
       "description": "How long slskd keeps each search request open on the Soulseek network before stopping collection of new results.",
@@ -446,6 +462,14 @@
         "label": "AcoustID API key",
         "helper": "Audio fingerprinting fallback for tracks without reliable tag metadata."
       },
+      "lastfmKey": {
+        "label": "Last.fm API key",
+        "helper": "Similar artists, charts and scrobble history. Every member's Last.fm connection uses it."
+      },
+      "lastfmSecret": {
+        "label": "Last.fm shared secret",
+        "helper": "Lets members send their plays to Last.fm. Issued with the API key."
+      },
       "songlinkKey": {
         "label": "Songlink API key (optional)",
         "helper": "Resolves track URLs across platforms for cross-platform playlist imports. Synthseek uses the public endpoint by default. Leave blank unless you have a key."
@@ -534,6 +558,11 @@
   "slskd": {
     "title": "Slskd",
     "description": "Required for downloads.",
+    "enable": {
+      "label": "Enable",
+      "description": "When on, track requests are searched on the Soulseek network through slskd.",
+      "ariaLabel": "Enable slskd source"
+    },
     "apiUrl": {
       "label": "API URL",
       "placeholder": "http://localhost:5030"
@@ -979,8 +1008,7 @@
       "plexAccount": "Plex account",
       "localAccount": "Local account",
       "logout": "Log out",
-      "loggingOut": "Logging out…",
-      "logoutDescription": "End your session in this browser."
+      "loggingOut": "Logging out…"
     },
     "edit": {
       "title": "Edit profile",
@@ -1000,10 +1028,11 @@
       "newLabel": "New password",
       "newAriaLabel": "New password",
       "submit": "Change password",
-      "managedByPlex": "You sign in with Plex. To use a password instead, disconnect Plex under Connected accounts."
+      "managedByPlex": "You sign in with Plex. To use a password instead, disconnect Plex under Connections."
     },
     "connected": {
       "title": "Services",
+      "description": "Accounts on other services that Synthseek uses on your behalf. Plays sent to Last.fm and ListenBrainz are kept on the server, so they arrive even if you close the tab.",
       "empty": "No connected sources are available right now.",
       "connect": "Connect",
       "reconnect": "Reconnect",
@@ -1059,8 +1088,6 @@
       }
     },
     "listening": {
-      "title": "Listening services",
-      "description": "Send what you play to Last.fm and ListenBrainz. Plays are kept on the server, so they arrive even if you close the tab.",
       "unavailable": "Your listening services could not be loaded.",
       "connected": "Connected",
       "notConnected": "Not connected",
@@ -1482,7 +1509,8 @@
   },
   "shell": {
     "card": {
-      "optional": "(Optional)"
+      "optional": "(Optional)",
+      "admin": "Admin"
     },
     "sidebar": {
       "ariaLabel": "Settings sections",
@@ -1500,22 +1528,18 @@
       },
       "appearance": {
         "title": "Appearance & language",
-        "description": "The theme and the language Synthseek uses for you."
+        "description": "The theme and the language Synthseek uses for you, and how your board is laid out."
       },
-      "connectedAccounts": {
-        "title": "Connected accounts",
-        "description": "Accounts on other services that Synthseek uses on your behalf."
+      "playback": {
+        "title": "Playback",
+        "description": "How Synthseek plays: for your account on every device, and in this browser alone."
       },
-      "listening": {
-        "title": "Listening & discovery",
-        "description": "Send what you play to Last.fm and ListenBrainz, and bring their recommendations to Discover."
+      "connections": {
+        "title": "Connections",
+        "description": "The services Synthseek uses on your behalf, and the apps and keys that use your Synthseek."
       },
       "notifications": {
         "title": "Notifications"
-      },
-      "apps": {
-        "title": "Apps & API keys",
-        "description": "Music apps, AI assistants and scripts that connect to your Synthseek."
       },
       "overview": {
         "title": "Overview",
@@ -1556,6 +1580,10 @@
       }
     },
     "tabs": {
+      "appearance": {
+        "theme": "Theme & language",
+        "board": "Board"
+      },
       "library": {
         "paths": "Paths & rules",
         "scan": "Scan",
@@ -1572,6 +1600,10 @@
       "system": {
         "jobs": "Jobs",
         "logs": "Logs"
+      },
+      "connections": {
+        "services": "Services",
+        "apps": "Apps & API keys"
       }
     },
     "search": {
@@ -1587,13 +1619,15 @@
         "navidromeAccount": "Navidrome account",
         "jellyfinAccount": "Jellyfin account",
         "lastfmFeeds": "Last.fm discovery feeds",
-        "lastfmCredentials": "Last.fm API key and secret",
         "listenbrainzFeeds": "ListenBrainz discovery feeds",
         "listenbrainzAutoRequest": "Request ListenBrainz playlists automatically"
       },
       "keywords": {
+        "playbackAccount": "volume normalization loudness gain autoplay similar tracks",
+        "playbackBrowser": "equalizer compressor crossfade gapless transition conversion bitrate mp3",
         "theme": "dark midnight ocean color colour",
         "language": "english spanish french german",
+        "board": "density text size background templates arrange layout widgets",
         "scrobble": "scrobble plays listening history",
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub credential",
@@ -1828,7 +1862,7 @@
     },
     "mediaServerSources": {
       "title": "Your media servers",
-      "description": "Members can also import playlists from Plex, Navidrome and Jellyfin. Nothing is set here: the server connection lives in Media & playback, and each member imports with the account they link in Connected accounts.",
+      "description": "Members can also import playlists from Plex, Navidrome and Jellyfin. Nothing is set here: the server connection lives in Media & playback, and each member imports with the account they link in Connections.",
       "available": "Available to members",
       "notConfigured": "Not configured",
       "open": "Open",
@@ -2261,19 +2295,6 @@
     "pause": "Pause",
     "start": "Run now",
     "hint": "Mood lists use what is analyzed so far and grow on their own at each refresh."
-  },
-  "neverInclude": {
-    "title": "Never include",
-    "description": "Applies to every smart list of your account. A widget can allow one for itself.",
-    "artists": "Artists",
-    "tracks": "Tracks",
-    "noTaste": "Plays that do not shape your taste",
-    "searchArtists": "Search artists",
-    "searchTracks": "Search tracks by title or artist",
-    "searchGenres": "Search genres",
-    "trackBy": "{{title}} · {{artist}}",
-    "remove": "Remove {{name}}",
-    "noMatch": "No matches"
   },
   "libraryScan": {
     "card": {

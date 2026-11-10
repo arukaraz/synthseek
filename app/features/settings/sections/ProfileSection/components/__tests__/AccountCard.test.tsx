@@ -9,7 +9,7 @@ import { createMockUser } from "@test/mocks/feature-hooks.mock";
 
 import { AccountCard } from "../AccountCard";
 
-vi.mock("../LogOutRow", () => ({ LogOutRow: () => <div data-testid="logout-row" /> }));
+vi.mock("../LogOutButton", () => ({ LogOutButton: () => <button type="button">Log out</button> }));
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);

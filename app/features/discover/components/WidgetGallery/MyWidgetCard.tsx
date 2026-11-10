@@ -11,7 +11,6 @@ import { widgetIconOf } from "../CustomWidget/helpers";
 import { ClampedText } from "./ClampedText";
 import { CustomWidgetPreview } from "./CustomWidgetPreview";
 import { LayoutMenu } from "./LayoutMenu";
-import { LockedAction } from "./LockedAction";
 import {
   cardIcon,
   cardPreview,
@@ -30,16 +29,7 @@ import {
 } from "./styles";
 import type { MyWidgetCardProps } from "./types";
 
-export function MyWidgetCard({
-  widget,
-  free,
-  templateStaged,
-  onAdd,
-  onEdit,
-  onDuplicate,
-  onCopyJson,
-  onDelete,
-}: MyWidgetCardProps) {
+export function MyWidgetCard({ widget, free, onAdd, onEdit, onDuplicate, onCopyJson, onDelete }: MyWidgetCardProps) {
   const { t } = useTranslation("widgets");
   const Icon = widgetIconOf(widget.meta.icon);
   const name = widget.meta.name;
@@ -104,7 +94,6 @@ export function MyWidgetCard({
               label={t("mine.addToBoard")}
               ariaLabel={t("mine.addNamed", { name })}
               onPick={onAdd}
-              lockedHint={templateStaged ? t("mine.addWhileTemplate") : undefined}
             />
           )}
           <Button variant="ghost" size="sm" aria-label={t("mine.editNamed", { name })} onClick={onEdit}>
@@ -121,30 +110,15 @@ export function MyWidgetCard({
               title={t("mine.duplicate")}
               onClick={onDuplicate}
             />
-            {templateStaged ? (
-              <LockedAction label={t("mine.deleteNamed", { name })} hint={t("mine.deleteWhileTemplate")}>
-                <IconButton
-                  icon={Trash2}
-                  size="lg"
-                  variant="ghostRed"
-                  animated={false}
-                  aria-label={t("mine.deleteNamed", { name })}
-                  aria-hidden
-                  tabIndex={-1}
-                  disabled
-                />
-              </LockedAction>
-            ) : (
-              <IconButton
-                icon={Trash2}
-                size="lg"
-                variant="ghostRed"
-                animated={false}
-                aria-label={t("mine.deleteNamed", { name })}
-                title={t("mine.delete")}
-                onClick={onDelete}
-              />
-            )}
+            <IconButton
+              icon={Trash2}
+              size="lg"
+              variant="ghostRed"
+              animated={false}
+              aria-label={t("mine.deleteNamed", { name })}
+              title={t("mine.delete")}
+              onClick={onDelete}
+            />
           </span>
         </div>
       </div>

@@ -18,10 +18,8 @@ import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useTranslation } from "react-i18next";
 
 import { setAccountRefreshHandler } from "./commands";
-import { compressorPresetMatching } from "./compressor";
 import { CONVERTED_BITRATE_KBPS } from "./constants";
 import { deviceKindFrom } from "./device";
-import { appliedEqualizerGains, equalizerPresetOf, headroomDbFor } from "./equalizer";
 import {
   asPlayedFrom,
   isMirroring,
@@ -35,9 +33,11 @@ import {
   sourceOptionFrom,
   upcomingQueueIds,
 } from "./helpers";
+import { playerSettingsActionsOf, playerSettingsViewOf } from "./settingsSlice";
 import {
   actions,
   currentTrack,
+  EMPTY_STATE,
   getSnapshot,
   setAutoplayPreference,
   setLoudnessPreferences,
@@ -52,7 +52,6 @@ import { usePlayReporter } from "./usePlayReporter";
 import { useStartRadio } from "./useStartRadio";
 import type { NowPlayingTrack, PlayerDockState, PlayerSessionState } from "./types";
 
-const EMPTY_STATE = getSnapshot();
 const EMPTY_QUEUED_IDS: ReadonlySet<string> = new Set<string>();
 
 function dockSnapshot(): PlayerDockState {
@@ -319,22 +318,9 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     toggleScrobbling,
     toggleDevices: actions.toggleDevices,
     toggleSettings: actions.toggleSettings,
-    setEqualizerEnabled: actions.setEqualizerEnabled,
-    setEqualizerBand: actions.setEqualizerBand,
-    setEqualizerPreamp: actions.setEqualizerPreamp,
-    applyEqualizerPreset: actions.applyEqualizerPreset,
-    saveEqualizerPreset: actions.saveEqualizerPreset,
-    deleteEqualizerPreset: actions.deleteEqualizerPreset,
-    setCompressorEnabled: actions.setCompressorEnabled,
-    applyCompressorPreset: actions.applyCompressorPreset,
-    setCompressorParam: actions.setCompressorParam,
-    setLoudnessEnabled: (enabled: boolean) => setProfile({ loudnessNormalization: enabled }),
-    setLoudnessPreamp: (preAmpDb: number) => setProfile({ loudnessPreampDb: preAmpDb }),
-    setAutoplayEnabled: (enabled: boolean) => setProfile({ autoplayEnabled: enabled }),
+    ...playerSettingsActionsOf(setProfile),
     startRadio,
-    setConversion: actions.setConversion,
     setSource: actions.setSource,
-    setTransition: actions.setTransition,
     toggleModes: actions.toggleModes,
     toggleQueue: actions.toggleQueue,
     selectMode: actions.selectMode,
@@ -350,8 +336,9 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
 
   const activeDevice = mirroring && mirrored !== null ? mirrored : here;
   const chainTranscoding = mirroring && playingOn !== null ? playingOn.transcoding : session.transcoding;
-  const equalizerPreset = equalizerPresetOf(session.equalizerPresets, session.equalizer.gainsDb);
-  const headroomDb = headroomDbFor(appliedEqualizerGains(session.equalizer));
+  const settings = playerSettingsViewOf(session, currentUser);
+  const equalizerPreset = settings.equalizer.preset;
+  const headroomDb = settings.equalizer.headroomDb;
   const presetName =
     equalizerPreset === null
       ? t("equalizer.custom")
@@ -405,23 +392,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     chainVisible: session.chainVisible,
     devicesOpen: session.devicesOpen,
     settingsOpen: session.settingsOpen,
-    equalizer: {
-      enabled: session.equalizer.enabled,
-      gainsDb: session.equalizer.gainsDb,
-      preampDb: session.equalizer.preampDb,
-      preset: equalizerPreset,
-      headroomDb,
-      customPresets: session.equalizerPresets.map((preset) => preset.name),
-    },
-    compressor: { ...session.compressor, preset: compressorPresetMatching(session.compressor) },
-    loudness: {
-      enabled: currentUser?.loudnessNormalization ?? true,
-      preAmpDb: currentUser?.loudnessPreampDb ?? 0,
-    },
-    autoplay: currentUser?.autoplayEnabled ?? false,
+    ...settings,
     sourceOptions,
-    conversion: session.conversion,
-    transition: session.transition,
     modesOpen: session.modesOpen,
     queueOpen: session.queueOpen,
     queueEditable: !mirroring,

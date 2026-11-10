@@ -107,14 +107,15 @@
       "caption": "VOLUME NORMALIZATION",
       "enabled": "Normalize volume",
       "preamp": "Extra gain",
-      "hint": "Evens out the volume from one track to the next."
+      "hint": "Evens out the volume from one track to the next. For your account, on every device.",
+      "alsoIn": "Also in <settings>Settings > Playback</settings>."
     },
     "conversion": {
       "caption": "CONVERSION",
       "enabled": "Convert to mp3 in this browser",
       "bitrate": "Bitrate",
       "bitrateValue": "{{kbps}} kbps",
-      "hint": "Saves data on a slow connection. Off, the original file plays unless the browser cannot decode it."
+      "hint": "Saves data on a slow connection. Off, the original file plays unless the browser cannot decode it. Only in this browser."
     },
     "source": {
       "caption": "PLAYING FROM",
@@ -135,13 +136,13 @@
       },
       "hints": {
         "gapless": "One track runs straight into the next. Only in this browser.",
-        "crossfade": "Each track blends into the next, when it ends and when you skip."
+        "crossfade": "Each track blends into the next, when it ends and when you skip. Only in this browser."
       }
     },
     "autoplay": {
       "caption": "AUTOPLAY",
       "enabled": "Keep playing similar tracks",
-      "hint": "When the queue runs out, tracks from your library that sound like what you chose keep it going."
+      "hint": "When the queue runs out, tracks from your library that sound like what you chose keep it going. For your account, on every device."
     }
   },
   "equalizer": {
@@ -153,7 +154,7 @@
     "band": "{{band}} Hz band",
     "gain": "{{value}} dB",
     "headroom": "Headroom {{value}} dB, the loudest point of this curve",
-    "remoteHint": "Shapes only what plays in this browser",
+    "hint": "Only in this browser.",
     "preamp": "Preamp",
     "savePreset": "Save",
     "presetName": "Preset name",

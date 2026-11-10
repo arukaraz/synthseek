@@ -44,9 +44,9 @@ import {
   settingsSectionHeader,
   settingsSectionTitle,
 } from "./styles";
-import type { PlayerSettingsSectionProps } from "./types";
+import type { PlayerSettingsControlProps } from "./types";
 
-export function EqualizerSection({ view, actions }: PlayerSettingsSectionProps) {
+export function EqualizerSection({ view, actions }: PlayerSettingsControlProps) {
   const { t } = useTranslation("player");
   const { equalizer } = view;
   const [draftName, setDraftName] = useState("");
@@ -188,14 +188,12 @@ export function EqualizerSection({ view, actions }: PlayerSettingsSectionProps) 
           </Button>
         </form>
 
-        {equalizer.headroomDb < 0 || !view.activeDevice.local ? (
-          <div className={equalizerFootnote()}>
-            {equalizer.headroomDb < 0 ? (
-              <span>{t("equalizer.headroom", { value: equalizer.headroomDb.toFixed(1) })}</span>
-            ) : null}
-            {view.activeDevice.local ? null : <span className={settingsHint()}>{t("equalizer.remoteHint")}</span>}
-          </div>
-        ) : null}
+        <div className={equalizerFootnote()}>
+          {equalizer.headroomDb < 0 ? (
+            <span>{t("equalizer.headroom", { value: equalizer.headroomDb.toFixed(1) })}</span>
+          ) : null}
+          <span className={settingsHint()}>{t("equalizer.hint")}</span>
+        </div>
       </div>
     </section>
   );

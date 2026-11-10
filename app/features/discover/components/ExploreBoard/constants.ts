@@ -393,6 +393,8 @@ export const MOBILE_COPY_SIZE: BoardSize = "M";
 
 export const BOARD_LISTS: readonly BoardList[] = ["items", "mobile"];
 
+export const BOARD_SETTINGS_HREF = "/settings/appearance/board";
+
 export const BOARD_LIST_OF: Record<BoardDevice, BoardList> = { wide: "items", narrow: "mobile" };
 
 export const BOARD_DEVICE_OF: Record<BoardList, BoardDevice> = { items: "wide", mobile: "narrow" };

@@ -1,7 +1,5 @@
-"use client";
-
-import { ListeningSection } from "@features/settings/sections/ProfileSection/ListeningSection";
+import { redirect } from "next/navigation";
 
 export default function ListeningPage() {
-  return <ListeningSection />;
+  redirect("/settings/connections/services");
 }

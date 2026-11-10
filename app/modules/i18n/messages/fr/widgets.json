@@ -29,8 +29,6 @@
     "playlist": "Playlist intelligente · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Ajouter au tableau",
-    "addWhileTemplate": "Enregistrez ou annulez d'abord le modèle, puis ajoutez vos widgets.",
-    "deleteWhileTemplate": "Enregistrez ou annulez d'abord le modèle, puis supprimez votre widget.",
     "addNamed": "Ajouter {{name}} au tableau",
     "onBoard": "Sur le tableau",
     "edit": "Modifier",
@@ -55,15 +53,9 @@
     "deleteWithTiles_other": "Le widget est retiré de Mes widgets et de ses {{count}} tuiles sur votre tableau."
   },
   "board": {
-    "customization": {
-      "action": "Personnalisation du tableau",
-      "title": "Personnalisation du tableau",
-      "sections": {
-        "label": "Sections de la personnalisation du tableau",
-        "board": "Tableau",
-        "widgets": "Widgets",
-        "arrange": "Disposition"
-      }
+    "widgetsDialog": {
+      "action": "Widgets",
+      "title": "Widgets"
     },
     "layouts": {
       "label": "Disposition",
@@ -508,6 +500,9 @@
     },
     "country": "Pays",
     "anywhere": "Partout",
+    "worldwide": "Monde entier",
+    "searchCountry": "Chercher un pays",
+    "noCountry": "Aucun pays ne correspond.",
     "showsWithin": "dans les prochains",
     "needs": {
       "lastfm": "Nécessite Last.fm",
@@ -646,8 +641,7 @@
     "tracks": "titres",
     "never": "Ne jamais inclure",
     "neverEmpty": "Rien pour l'instant. Utilisez le bouton de bannissement dans une liste.",
-    "neverEdit": "Modifier pour tous les widgets",
-    "neverHint": "Vient de votre compte. Appuyez sur X pour en autoriser un dans ce widget seulement.",
+    "neverHint": "Vient de votre compte, dans Mes widgets. Appuyez sur X pour en autoriser un dans ce widget seulement.",
     "allowHere": "Autoriser {{name}} dans ce widget",
     "excludeHere": "Exclure de nouveau {{name}} ici",
     "mix": "Mélange",
@@ -810,5 +804,18 @@
     "stations": "Stations",
     "genres": "Genres",
     "continueListening": "Reprendre l’écoute"
+  },
+  "neverInclude": {
+    "title": "Ne jamais inclure",
+    "description": "S'applique à toutes les listes intelligentes de votre compte. Un widget peut en autoriser un pour lui-même.",
+    "artists": "Artistes",
+    "tracks": "Titres",
+    "noTaste": "Écoutes qui ne forment pas vos goûts",
+    "searchArtists": "Rechercher des artistes",
+    "searchTracks": "Rechercher des titres par nom ou artiste",
+    "searchGenres": "Rechercher des genres",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "Retirer {{name}}",
+    "noMatch": "Aucun résultat"
   }
 }

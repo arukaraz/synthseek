@@ -7,7 +7,7 @@ import type { BoardAppearance } from "@hooks/api/queries/board/types";
 import { ARRANGE_FRAME_BORDER_PX, ARRANGE_FRAME_INSET_PX, ARRANGE_NEW_ROW_SPAN } from "./constants";
 import type { ArrangeLayout } from "./types";
 
-export const arrangeFrame = cva("min-h-0 flex-1 px-4 pb-4 sm:px-6");
+export const arrangeFrame = cva("min-h-0 flex-1");
 
 export const arrangeViewport = cva("h-full overflow-y-auto");
 

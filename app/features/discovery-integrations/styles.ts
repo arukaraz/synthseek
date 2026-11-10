@@ -66,6 +66,8 @@ export const feedPanel = cva("border-fg/10 flex flex-col gap-4 border-t pt-3");
 
 export const feedPanelHeader = cva("flex items-center justify-between gap-3");
 
+export const feedPanelNote = cva("text-fg/55 text-xs");
+
 export const feedPanelTitle = cva(
   "text-fg/70 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
 );

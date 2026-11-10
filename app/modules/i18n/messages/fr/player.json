@@ -107,14 +107,15 @@
       "caption": "NORMALISATION DU VOLUME",
       "enabled": "Normaliser le volume",
       "preamp": "Gain supplémentaire",
-      "hint": "Égalise le volume d'une piste à l'autre."
+      "hint": "Égalise le volume d'une piste à l'autre. Pour votre compte, sur tous les appareils.",
+      "alsoIn": "Aussi dans <settings>Paramètres > Lecture</settings>."
     },
     "conversion": {
       "caption": "CONVERSION",
       "enabled": "Convertir en mp3 dans ce navigateur",
       "bitrate": "Débit",
       "bitrateValue": "{{kbps}} kbps",
-      "hint": "Économise des données sur une connexion lente. Désactivé, le fichier d'origine est lu sauf si le navigateur ne peut pas le décoder."
+      "hint": "Économise des données sur une connexion lente. Désactivé, le fichier d'origine est lu sauf si le navigateur ne peut pas le décoder. Uniquement dans ce navigateur."
     },
     "source": {
       "caption": "LECTURE DEPUIS",
@@ -134,14 +135,14 @@
         "linear": "Linéaire"
       },
       "hints": {
-        "gapless": "Une piste enchaîne sur la suivante sans coupure. Seulement dans ce navigateur.",
-        "crossfade": "Chaque piste se fond dans la suivante, quand elle se termine et quand vous passez à la suivante."
+        "gapless": "Une piste enchaîne sur la suivante sans coupure. Uniquement dans ce navigateur.",
+        "crossfade": "Chaque piste se fond dans la suivante, quand elle se termine et quand vous passez à la suivante. Uniquement dans ce navigateur."
       }
     },
     "autoplay": {
       "caption": "LECTURE AUTOMATIQUE",
       "enabled": "Continuer avec des pistes similaires",
-      "hint": "Quand la file est vide, des pistes de votre bibliothèque proches de ce que vous avez choisi prennent le relais."
+      "hint": "Quand la file est vide, des pistes de votre bibliothèque proches de ce que vous avez choisi prennent le relais. Pour votre compte, sur tous les appareils."
     }
   },
   "equalizer": {
@@ -153,7 +154,7 @@
     "band": "Bande {{band}} Hz",
     "gain": "{{value}} dB",
     "headroom": "Marge de {{value}} dB, le point le plus fort de cette courbe",
-    "remoteHint": "N'agit que sur ce qui joue dans ce navigateur",
+    "hint": "Uniquement dans ce navigateur.",
     "preamp": "Préampli",
     "savePreset": "Enregistrer",
     "presetName": "Nom du préréglage",

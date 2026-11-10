@@ -6,16 +6,7 @@ import { toast } from "sonner";
 
 import { TOAST_ACTION_DURATION_MS } from "@components/ui/Toaster/constants";
 import { useSaveBoardLayout } from "@hooks/api/mutations/board/useSaveBoardLayout";
-import { useSetBoardAppearance } from "@hooks/api/mutations/board/useSetBoardAppearance";
-import { useUndoBoardTemplate } from "@hooks/api/mutations/board/useUndoBoardTemplate";
-import type {
-  BoardItem,
-  BoardList,
-  BoardLists,
-  BoardSize,
-  BoardTemplateApplied,
-  BoardWidgetKey,
-} from "@hooks/api/queries/board/types";
+import type { BoardItem, BoardList, BoardLists, BoardSize, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import { focusBoardTile } from "@hooks/ui/board/helpers";
 import type { BoardFlip } from "@hooks/ui/board/types";
 import { useBoardDrag } from "@hooks/ui/board/useBoardDrag";
@@ -38,16 +29,16 @@ import {
   withList,
 } from "../components/ExploreBoard/helpers";
 import type {
-  BoardCustomizationOpening,
-  BoardCustomizationSave,
   BoardCustomWidgets,
   BoardEdge,
   BoardEditor,
   BoardGalleryTarget,
-  CustomizationSection,
+  BoardSave,
   CustomWidgetsStatus,
   MoveDelta,
+  WidgetsDialogOpening,
 } from "../components/ExploreBoard/types";
+import { useBoardSave } from "./useBoardSave";
 
 export function useBoardEditor(
   lists: BoardLists,
@@ -57,30 +48,12 @@ export function useBoardEditor(
 ): BoardEditor {
   const { t } = useTranslation(["discover", "widgets"]);
   const save = useSaveBoardLayout();
-  const setAppearance = useSetBoardAppearance();
+  const board = useBoardSave(lists);
   const [editing, setEditing] = useState(false);
-  const [customization, setCustomization] = useState<BoardCustomizationOpening | null>(null);
+  const [widgets, setWidgets] = useState<WidgetsDialogOpening | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const flipRef = useRef<BoardFlip | null>(null);
   const items = lists[list];
-
-  const undoTemplate = useUndoBoardTemplate();
-  const templateApplied = useCallback(
-    (applied: BoardTemplateApplied) => {
-      setCustomization(null);
-      toast.success(t("widgets:board.templates.applied"), {
-        duration: TOAST_ACTION_DURATION_MS,
-        action: {
-          label: t("widgets:board.templates.undo"),
-          onClick: () =>
-            undoTemplate.mutate(applied.undo, {
-              onSuccess: () => toast.success(t("widgets:board.templates.undone")),
-            }),
-        },
-      });
-    },
-    [t, undoTemplate]
-  );
 
   const nameOf = useCallback((item: BoardItem) => tileNameOf(item, custom, customStatus), [custom, customStatus]);
   const commit = useCallback((next: BoardItem[]) => save(layoutOf(withList(lists, list, next))), [save, lists, list]);
@@ -168,51 +141,36 @@ export function useBoardEditor(
     toast.success(t("board.toast.added", { name: t("board.spacer.name") }));
   }, [commit, items, t]);
 
-  const open = useCallback(
-    (section: CustomizationSection, target: BoardGalleryTarget | null) => {
-      setEditing(true);
-      setCustomization({ section, target, boardWidth: flip.ref.current?.clientWidth ?? 0 });
-    },
-    [flip.ref]
-  );
-  const openCustomization = useCallback((section: CustomizationSection) => open(section, null), [open]);
-  const closeCustomization = useCallback(() => setCustomization(null), []);
+  const open = useCallback((target: BoardGalleryTarget | null) => {
+    setEditing(true);
+    setWidgets({ target });
+  }, []);
+  const openWidgets = useCallback(() => open(null), [open]);
+  const closeWidgets = useCallback(() => setWidgets(null), []);
   const startEditing = useCallback(() => setEditing(true), []);
   const stopEditing = useCallback(() => {
     setEditing(false);
-    setCustomization(null);
+    setWidgets(null);
   }, []);
-  const customize = useCallback((widget: BoardWidgetKey) => open("widgets", { kind: "builtin", widget }), [open]);
-  const edit = useCallback((widgetId: string) => open("widgets", { kind: "custom", widgetId }), [open]);
+  const customize = useCallback((widget: BoardWidgetKey) => open({ kind: "builtin", widget }), [open]);
+  const edit = useCallback((widgetId: string) => open({ kind: "custom", widgetId }), [open]);
 
-  const saveCustomization = useCallback(
-    ({ lists: next, appearance }: BoardCustomizationSave) => {
-      setCustomization(null);
-      if (next) save(layoutOf(next));
-      if (appearance) setAppearance(appearance.next);
-      if (!next && !appearance) return;
-      toast.success(t("board.toast.saved"), {
-        duration: TOAST_ACTION_DURATION_MS,
-        action: {
-          label: t("board.toast.undo"),
-          onClick: () => {
-            if (next) save(layoutOf(lists));
-            if (appearance) setAppearance(appearance.previous);
-          },
-        },
-      });
+  const saveBoard = useCallback(
+    (changes: BoardSave) => {
+      setWidgets(null);
+      void board.saveChanges(changes);
     },
-    [lists, save, setAppearance, t]
+    [board]
   );
 
   useEffect(() => {
-    if (!editing || customization !== null) return;
+    if (!editing || widgets !== null) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && !event.defaultPrevented) setEditing(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [editing, customization]);
+  }, [editing, widgets]);
 
   const actions = useMemo(
     () => ({
@@ -232,17 +190,16 @@ export function useBoardEditor(
   return {
     rootRef: flip.ref,
     editing,
-    customization,
+    widgets,
     announcement,
     displayItems,
     draggingId: drag.draggingId,
     startEditing,
     stopEditing,
-    openCustomization,
-    closeCustomization,
-    saveCustomization,
+    openWidgets,
+    closeWidgets,
+    saveBoard,
     addSpacer,
-    templateApplied,
     actions,
   };
 }

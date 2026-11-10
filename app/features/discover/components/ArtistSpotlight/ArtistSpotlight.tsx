@@ -8,10 +8,8 @@ import type { MusicItem } from "@api/__generated__/types";
 import { useContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { useArtistsForYou } from "@hooks/api/queries/analytics/useArtistsForYou";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
-import { useCountry } from "@modules/providers/CountryProvider";
 import { gradientOverlay } from "@theme/utilities/styles";
 import { fadeIn } from "@utils/animations";
-import { DEFAULT_COUNTRY, getCountryByCode } from "@utils/countries";
 import { motion } from "framer-motion";
 import { AlertCircle, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -24,11 +22,8 @@ import type { ArtistSpotlightProps } from "./types";
 
 export function ArtistSpotlight({ size, info }: ArtistSpotlightProps) {
   const { t } = useTranslation("discover");
-  const { country } = useCountry();
-  const countryData = getCountryByCode(country) ?? getCountryByCode(DEFAULT_COUNTRY);
-  const countryName = countryData?.name ?? "";
 
-  const { data, isLoading, isError } = useArtistsForYou(countryName);
+  const { data, isLoading, isError } = useArtistsForYou();
   const artists = data ?? [];
 
   const { openForResult } = useContentRequestFlow();

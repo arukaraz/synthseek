@@ -18,16 +18,12 @@ interface SpotlightQuery {
   isError: boolean;
 }
 
-const useArtistsForYouMock = vi.fn<(countryName: string) => SpotlightQuery>();
+const useArtistsForYouMock = vi.fn<() => SpotlightQuery>();
 const openForResult = vi.fn();
 const shuffleEntity = vi.fn();
 
 vi.mock("@hooks/api/queries/analytics/useArtistsForYou", () => ({
-  useArtistsForYou: (countryName: string) => useArtistsForYouMock(countryName),
-}));
-
-vi.mock("@modules/providers/CountryProvider", () => ({
-  useCountry: () => ({ country: "US" }),
+  useArtistsForYou: () => useArtistsForYouMock(),
 }));
 
 vi.mock("@features/search/components/ContentRequestFlow", () => ({
@@ -82,7 +78,7 @@ describe("ArtistSpotlight", () => {
     renderWithProviders(<ArtistSpotlight size="L" info="Artists to explore next" />);
 
     expect(screen.getByRole("heading", { name: enDiscover.artistSpotlight.title })).toBeInTheDocument();
-    expect(useArtistsForYouMock).toHaveBeenCalledWith("United States");
+    expect(useArtistsForYouMock).toHaveBeenCalledWith();
   });
 
   it("renders the loading skeleton while the query is pending", () => {

@@ -3,6 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ComponentType, PointerEvent as ReactPointerEvent, RefObject } from "react";
 
 import type { BoardDevice, BoardHeight } from "@components/BoardGrid";
+import type { BoardWriteMode } from "@hooks/api/mutations/board/types";
 import type {
   BoardAppearance,
   BoardItem,
@@ -52,17 +53,18 @@ export type BoardEdge = "top" | "bottom";
 
 export type BoardBackground = "on" | "off";
 
-export interface BoardCustomizationSave {
+export interface BoardSave {
   lists: BoardLists | null;
   appearance: { next: BoardAppearance; previous: BoardAppearance } | null;
 }
 
-export type CustomizationSection = "board" | "widgets";
+export interface BoardSaver {
+  saveChanges: (changes: BoardSave, mode?: BoardWriteMode) => Promise<boolean>;
+  templateApplied: (applied: BoardTemplateApplied) => void;
+}
 
-export interface BoardCustomizationOpening {
-  section: CustomizationSection;
+export interface WidgetsDialogOpening {
   target: BoardGalleryTarget | null;
-  boardWidth: number;
 }
 
 export type BoardKeyAction =
@@ -152,7 +154,7 @@ export interface BoardToolbarProps {
   onCustomize: () => void;
   onDone: () => void;
   onAddSpacer: () => void;
-  onCustomization: () => void;
+  onWidgets: () => void;
 }
 
 export interface BoardEmptyProps {
@@ -162,16 +164,15 @@ export interface BoardEmptyProps {
 export interface BoardEditor {
   rootRef: RefObject<HTMLElement | null>;
   editing: boolean;
-  customization: BoardCustomizationOpening | null;
+  widgets: WidgetsDialogOpening | null;
   announcement: string;
   displayItems: BoardItem[];
   draggingId: string | null;
   startEditing: () => void;
   stopEditing: () => void;
-  openCustomization: (section: CustomizationSection) => void;
-  closeCustomization: () => void;
-  saveCustomization: (save: BoardCustomizationSave) => void;
+  openWidgets: () => void;
+  closeWidgets: () => void;
+  saveBoard: (changes: BoardSave) => void;
   addSpacer: () => void;
-  templateApplied: (applied: BoardTemplateApplied) => void;
   actions: BoardTileActions;
 }

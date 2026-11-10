@@ -96,7 +96,7 @@ describe("SettingsShell access", () => {
 
   it("shows a member their own pages", () => {
     state.isAdmin = false;
-    state.pathname = "/settings/listening";
+    state.pathname = "/settings/connections/services";
     renderShell();
     expect(screen.getByText("page body")).toBeInTheDocument();
   });

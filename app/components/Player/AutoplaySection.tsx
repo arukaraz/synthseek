@@ -11,9 +11,9 @@ import {
   settingsSectionHeader,
   settingsSectionTitle,
 } from "./styles";
-import type { PlayerSettingsSectionProps } from "./types";
+import type { PlayerSettingsControlProps } from "./types";
 
-export function AutoplaySection({ view, actions }: PlayerSettingsSectionProps) {
+export function AutoplaySection({ view, actions }: PlayerSettingsControlProps) {
   const { t } = useTranslation("player");
 
   return (

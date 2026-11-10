@@ -16,6 +16,7 @@ import { useSubsonicStatus } from "@hooks/api/queries/useSubsonicStatus";
 import { useAuthContext } from "@modules/providers/AuthProvider";
 import { confirm } from "@utils/confirm";
 
+import { Pill } from "../../components/Pill";
 import { SettingsCard } from "../../components/SettingsCard";
 import { ConnectionValueField } from "./ConnectionValueField";
 import { CreateSubsonicCredentialDialog } from "./CreateSubsonicCredentialDialog";
@@ -58,9 +59,12 @@ export function SubsonicCard() {
     publicConfig.data?.publicBaseUrl || undefined
   );
 
+  const adminPill = <Pill tone="info">{t("shell.card.admin")}</Pill>;
+
   return (
     <SettingsCard
       title={t("subsonic.title")}
+      titleTrailing={isAdmin ? adminPill : null}
       description={t("subsonic.description")}
       anchor="music-players"
       trailing={
@@ -132,7 +136,10 @@ export function SubsonicCard() {
         {enabled && isAdmin ? (
           <div className={connectionFooterRow()} data-anchor-target="connectApps.subsonicTranscodingEnabled">
             <div className={connectionBody()}>
-              <span className="text-fg text-sm font-medium">{t("subsonic.transcoding.label")}</span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="text-fg text-sm font-medium">{t("subsonic.transcoding.label")}</span>
+                {adminPill}
+              </span>
               <span className={connectionMeta()}>{t("subsonic.transcoding.description")}</span>
             </div>
             <Switch

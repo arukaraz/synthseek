@@ -15,7 +15,7 @@ interface BoardLayoutResult {
 
 const { useBoardLayoutMock, saveMock, viewport, myWidgets, stub } = vi.hoisted(() => ({
   useBoardLayoutMock: vi.fn<() => BoardLayoutResult>(),
-  saveMock: vi.fn<(layout: BoardLayout) => void>(),
+  saveMock: vi.fn<(layout: BoardLayout) => Promise<boolean>>(() => Promise.resolve(true)),
   viewport: { wide: true },
   myWidgets: { data: [], isLoading: false, isError: false },
   stub:
@@ -38,18 +38,14 @@ vi.mock("@hooks/api/mutations/board/useSaveBoardLayout", () => ({
 vi.mock("@hooks/api/queries/board/useBoardAppearance", () => ({
   useBoardAppearance: () => ({ data: { density: "comfortable", text: "default" } }),
 }));
-vi.mock("@hooks/api/mutations/board/useSetBoardAppearance", () => ({ useSetBoardAppearance: () => vi.fn() }));
+vi.mock("@hooks/api/mutations/board/useSetBoardAppearance", () => ({
+  useSetBoardAppearance: () => () => Promise.resolve(true),
+}));
 vi.mock("@hooks/api/mutations/board/useUndoBoardTemplate", () => ({
   useUndoBoardTemplate: () => ({ mutate: vi.fn() }),
 }));
-vi.mock("@hooks/api/mutations/board/usePreviewBoardTemplate", () => ({
-  usePreviewBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
-}));
-vi.mock("@hooks/api/mutations/board/useApplyBoardTemplate", () => ({
-  useApplyBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
-}));
-vi.mock("@hooks/api/mutations/board/useExportBoardTemplate", () => ({
-  useExportBoardTemplate: () => ({ mutate: vi.fn(), isPending: false }),
+vi.mock("../../NeverInclude/NeverIncludeCard", () => ({
+  NeverIncludeCard: () => <section data-testid="never-include" />,
 }));
 vi.mock("@hooks/api/queries/widgets/useWidgetCatalog", () => ({ useWidgetCatalog: () => ({ data: undefined }) }));
 vi.mock("@hooks/api/queries/widgets/useWidgetGrammar", () => ({ useWidgetGrammar: () => ({ data: undefined }) }));
@@ -103,14 +99,9 @@ function only(items: BoardLayout["items"]): BoardLayout {
   return { schemaVersion: 4, items, mobile: items };
 }
 
-function openCustomization() {
+function openWidgets() {
   fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
-  fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.customization.action") }));
-}
-
-function openSection(name: string) {
-  const sections = screen.getByRole("tablist", { name: i18n.t("widgets:board.customization.sections.label") });
-  fireEvent.click(within(sections).getByRole("tab", { name }));
+  fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.widgetsDialog.action") }));
 }
 
 function renderedTileIds(container: HTMLElement): string[] {
@@ -228,7 +219,7 @@ describe("ExploreBoard", () => {
 
     expect(screen.getAllByRole("button", { name: /^Remove/ })).toHaveLength(2);
     expect(tile(container, "a")).toHaveAttribute("tabindex", "0");
-    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddBoard Customization$/);
+    expect(screen.getByRole("toolbar")).toHaveTextContent(/^AddWidgetsAppearance$/);
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.done") }));
 
@@ -271,7 +262,7 @@ describe("ExploreBoard", () => {
     });
   });
 
-  it("offers an empty state that opens Board Customization on its widgets when every tile is gone", () => {
+  it("offers an empty state that opens the Widgets dialog when every tile is gone", () => {
     useBoardLayoutMock.mockReturnValue({ data: only([]), isLoading: false });
 
     render(<ExploreBoard />);
@@ -279,17 +270,15 @@ describe("ExploreBoard", () => {
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.addWidget") }));
 
-    expect(screen.getByRole("dialog", { name: "Board Customization" })).toBeInTheDocument();
-    const sections = screen.getByRole("tablist", { name: i18n.t("widgets:board.customization.sections.label") });
-    expect(within(sections).getByRole("tab", { name: "Widgets" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("dialog", { name: i18n.t("widgets:board.widgetsDialog.title") })).toBeInTheDocument();
+    expect(within(screen.getByRole("dialog")).getByRole("button", { name: "Add Discover Mixes" })).toBeInTheDocument();
   });
 
   it("adds a widget to the layout picked at the end of that arrangement, only once the member saves", async () => {
     useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
 
     render(<ExploreBoard />);
-    openCustomization();
-    openSection("Widgets");
+    openWidgets();
     const dialog = screen.getByRole("dialog");
     fireEvent.pointerDown(within(dialog).getByRole("button", { name: "Add Discover Mixes" }), {
       button: 0,
@@ -304,15 +293,18 @@ describe("ExploreBoard", () => {
     expect(saveMock.mock.calls.at(-1)?.[0].mobile).toEqual(TWO_TILES.mobile);
   });
 
-  it("keeps the edit menu on an empty board, so a template can still be brought in", () => {
+  it("keeps the edit menu on an empty board, so widgets can still be added and the board settings reached", () => {
     useBoardLayoutMock.mockReturnValue({ data: only([]), isLoading: false });
 
     render(<ExploreBoard />);
-    openCustomization();
-    fireEvent.click(screen.getByRole("tab", { name: i18n.t("widgets:board.templates.title") }));
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.customize") }));
 
-    expect(screen.getByRole("dialog", { name: "Board Customization" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Board template JSON")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: i18n.t("widgets:board.appearance.title") })).toHaveAttribute(
+      "href",
+      "/settings/appearance/board"
+    );
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("widgets:board.widgetsDialog.action") }));
+    expect(screen.getByRole("dialog", { name: i18n.t("widgets:board.widgetsDialog.title") })).toBeInTheDocument();
   });
 
   async function openTileSettings(element: HTMLElement) {
@@ -343,21 +335,5 @@ describe("ExploreBoard", () => {
     fireEvent.click(screen.getByRole("menuitem", { name: "Hide background" }));
 
     expect(saveMock.mock.calls.at(-1)?.[0].items[0]).toMatchObject({ id: "a", background: false });
-  });
-
-  it("switches every tile's background off on both arrangements only once the member saves", () => {
-    useBoardLayoutMock.mockReturnValue({ data: TWO_TILES, isLoading: false });
-
-    render(<ExploreBoard />);
-    openCustomization();
-    fireEvent.click(screen.getByRole("tab", { name: i18n.t("widgets:board.appearance.title") }));
-    fireEvent.click(screen.getByRole("radio", { name: "Off" }));
-    expect(saveMock).not.toHaveBeenCalled();
-
-    fireEvent.click(screen.getByRole("button", { name: i18n.t("discover:board.arrange.save") }));
-
-    const saved = saveMock.mock.calls.at(-1)?.[0];
-    expect(saved?.items.map((item) => item.background)).toEqual([false, false]);
-    expect(saved?.mobile.map((item) => item.background)).toEqual([false]);
   });
 });

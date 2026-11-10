@@ -18,6 +18,13 @@ function isTextScale(key: string): key is BoardTextScale {
   return Object.hasOwn(BOARD_TEXT_SCALE, key);
 }
 
+export class BoardNotSavedError extends Error {
+  constructor() {
+    super("The server refused the board");
+    this.name = "BoardNotSavedError";
+  }
+}
+
 export function sameAppearance(a: BoardAppearance, b: BoardAppearance): boolean {
   return a.density === b.density && a.text === b.text;
 }

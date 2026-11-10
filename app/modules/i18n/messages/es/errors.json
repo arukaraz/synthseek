@@ -113,7 +113,7 @@
   },
   "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
     "title": "Cuenta sin vincular",
-    "description": "El dueño de la lista tiene que vincular antes su cuenta de ese servidor en Cuentas conectadas."
+    "description": "El dueño de la lista tiene que vincular antes su cuenta de ese servidor en Conexiones."
   },
   "TRACK_NOT_FOUND": {
     "title": "Canción no encontrada",

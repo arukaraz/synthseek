@@ -95,7 +95,7 @@ describe("SettingsPalette searching", () => {
     const texts = itemTexts(dialog);
     expect(texts).toEqual([
       `${t("mcp.endpointLabel")}${i18n.t("settings:shell.search.place", {
-        page: t("shell.pages.apps.title"),
+        page: t("shell.pages.connections.title"),
         place: t("mcp.title"),
       })}`,
     ]);
@@ -114,7 +114,7 @@ describe("SettingsPalette searching", () => {
     const { dialog, input, onOpenChange } = renderPalette();
     await userEvent.type(input, "endpoint");
     await userEvent.click(within(dialog).getByRole("button"));
-    expect(state.push).toHaveBeenCalledWith("/settings/apps#ai-assistants");
+    expect(state.push).toHaveBeenCalledWith("/settings/connections/apps#ai-assistants");
     expect(onOpenChange).toHaveBeenCalledWith(false);
     expect(state.mutate).not.toHaveBeenCalled();
   });
@@ -146,7 +146,7 @@ describe("SettingsPalette keyboard", () => {
     const { input } = renderPalette();
     await userEvent.type(input, "endpoint");
     await userEvent.keyboard("{ArrowDown}{ArrowDown}{Enter}");
-    expect(state.push).toHaveBeenCalledWith("/settings/apps#ai-assistants");
+    expect(state.push).toHaveBeenCalledWith("/settings/connections/apps#ai-assistants");
   });
 
   it("does nothing on Enter when nothing matches", async () => {

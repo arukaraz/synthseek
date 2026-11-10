@@ -113,7 +113,7 @@
   },
   "PLAYLIST_SYNC_ACCOUNT_REQUIRED": {
     "title": "Compte non lié",
-    "description": "Le propriétaire de la playlist doit d'abord lier son compte pour ce serveur dans Comptes connectés."
+    "description": "Le propriétaire de la playlist doit d'abord lier son compte pour ce serveur dans Connexions."
   },
   "TRACK_NOT_FOUND": {
     "title": "Piste introuvable",

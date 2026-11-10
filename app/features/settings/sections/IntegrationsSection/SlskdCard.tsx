@@ -1,7 +1,7 @@
 "use client";
 
 import { Plug } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -10,6 +10,7 @@ import { Button } from "@components/ui/Button";
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { Switch } from "@components/ui/Switch";
 
+import { useUpdateDownloadSources } from "@hooks/api/mutations/settings/useDownloadSources";
 import { useRevealSettingsSecret } from "@hooks/api/mutations/settings/useRevealSecret";
 import { useTestSlskd, useUpdateConnectionsSlskd } from "@hooks/api/mutations/settings/useUpdateConnections";
 import { useUpdateEngineSearch, useUpdateEngineTimeouts } from "@hooks/api/mutations/settings/useUpdateEngine";
@@ -26,24 +27,29 @@ import { SettingsTextInput } from "../../components/SettingsTextInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
 import { cardDivider, cardSectionHeader, fieldError, fieldWarning } from "../../styles";
 import { MS } from "./constants";
+import { withoutPriority } from "./helpers";
 import { SlskdStatusBadge } from "./SlskdStatusBadge";
 import type { SlskdCardProps } from "./types";
 
 export function SlskdCard({ initial }: SlskdCardProps) {
   const { t } = useTranslation("settings");
+  const updateSource = useUpdateDownloadSources();
   const updateConnection = useUpdateConnectionsSlskd();
   const reveal = useRevealSettingsSecret();
   const updateSearch = useUpdateEngineSearch();
   const updateTimeouts = useUpdateEngineTimeouts();
   const testConnection = useTestSlskd();
   const status = useSlskdStatus();
+  const storedSource = useMemo(() => withoutPriority(initial.source), [initial.source]);
+  const sourceForm = useSettingsForm(storedSource);
   const connectionForm = useSettingsForm(initial.connection);
   const searchForm = useSettingsForm(initial.search);
   const timeoutsForm = useSettingsForm(initial.timeouts);
   const [testing, setTesting] = useState(false);
 
-  if (!connectionForm.draft || !searchForm.draft || !timeoutsForm.draft) return null;
+  if (!sourceForm.draft || !connectionForm.draft || !searchForm.draft || !timeoutsForm.draft) return null;
 
+  const source = sourceForm.draft;
   const connection = connectionForm.draft;
   const search = searchForm.draft;
   const timeouts = timeoutsForm.draft;
@@ -52,8 +58,8 @@ export function SlskdCard({ initial }: SlskdCardProps) {
   const urlError = connection.apiUrl.length > 0 && !urlCheck.ok ? urlCheck.error : undefined;
   const urlWarning = urlCheck.ok ? urlCheck.warning : undefined;
 
-  const isDirty = connectionForm.isDirty || searchForm.isDirty || timeoutsForm.isDirty;
-  const isSaving = connectionForm.isSaving || searchForm.isSaving || timeoutsForm.isSaving;
+  const isDirty = sourceForm.isDirty || connectionForm.isDirty || searchForm.isDirty || timeoutsForm.isDirty;
+  const isSaving = sourceForm.isSaving || connectionForm.isSaving || searchForm.isSaving || timeoutsForm.isSaving;
 
   const handleTest = async () => {
     setTesting(true);
@@ -69,6 +75,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
   const handleSave = async () => {
     connectionForm.setField("apiUrl", urlCheck.normalized);
     const promises: Promise<unknown>[] = [];
+    if (sourceForm.isDirty) promises.push(sourceForm.save((slskd) => updateSource.mutateAsync({ slskd })));
     if (connectionForm.isDirty) {
       promises.push(
         connectionForm.save((payload) => updateConnection.mutateAsync({ ...payload, apiUrl: urlCheck.normalized }))
@@ -80,6 +87,7 @@ export function SlskdCard({ initial }: SlskdCardProps) {
   };
 
   const handleCancel = () => {
+    sourceForm.reset();
     connectionForm.reset();
     searchForm.reset();
     timeoutsForm.reset();
@@ -101,6 +109,18 @@ export function SlskdCard({ initial }: SlskdCardProps) {
         ) : null
       }
     >
+      <EngineRow
+        label={t("slskd.enable.label")}
+        description={t("slskd.enable.description")}
+        control={
+          <Switch
+            checked={source.enabled}
+            onCheckedChange={(v) => sourceForm.setField("enabled", v)}
+            aria-label={t("slskd.enable.ariaLabel")}
+          />
+        }
+      />
+
       <SettingsField label={t("slskd.apiUrl.label")} helper="" anchor="connections.slskd.apiUrl">
         <SettingsTextInput
           value={connection.apiUrl}

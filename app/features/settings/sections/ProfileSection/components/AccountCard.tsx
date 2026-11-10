@@ -9,7 +9,7 @@ import { formatDate } from "@utils/formatters";
 import { SettingsCard } from "../../../components/SettingsCard";
 import { accountAvatar, accountMeta } from "../styles";
 import type { ProfileCardProps } from "../types";
-import { LogOutRow } from "./LogOutRow";
+import { LogOutButton } from "./LogOutButton";
 
 export function AccountCard({ user }: ProfileCardProps) {
   const { t } = useTranslation("settings");
@@ -27,7 +27,7 @@ export function AccountCard({ user }: ProfileCardProps) {
             <UserIcon className="text-fg/60 size-6" />
           )}
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-fg truncate text-base font-semibold">{user.username}</p>
           <p className="text-fg/50 truncate text-sm">{user.email}</p>
           <div className={accountMeta()}>
@@ -43,8 +43,8 @@ export function AccountCard({ user }: ProfileCardProps) {
             </span>
           </div>
         </div>
+        <LogOutButton />
       </div>
-      <LogOutRow />
     </SettingsCard>
   );
 }

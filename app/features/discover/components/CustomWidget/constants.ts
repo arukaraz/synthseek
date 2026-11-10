@@ -238,12 +238,12 @@ export const WIDGET_ICONS: Record<WidgetIcon, LucideIcon> = {
 export const FALLBACK_WIDGET_ICON: LucideIcon = Sparkles;
 
 export const FEED_NEED_HREFS: Record<FeedNeed, string> = {
-  lastfm: "/settings/listening#lastfm",
-  listenbrainz: "/settings/listening#listenbrainz",
+  lastfm: "/settings/connections/services#lastfm",
+  listenbrainz: "/settings/connections/services#listenbrainz",
   bandsintown: "/settings/metadata#connections.enrichment.bandsintownAppId",
-  mediaServer: "/settings/connected-accounts",
-  plex: "/settings/connected-accounts#plex",
-  jellyfin: "/settings/connected-accounts#jellyfin",
-  navidrome: "/settings/connected-accounts#navidrome",
+  mediaServer: "/settings/connections/services",
+  plex: "/settings/connections/services#plex",
+  jellyfin: "/settings/connections/services#jellyfin",
+  navidrome: "/settings/connections/services#navidrome",
   lidarr: "/settings/download-sources?source=lidarr#lidarr",
 };

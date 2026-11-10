@@ -85,7 +85,7 @@ describe("templateReportLines", () => {
       "Tile 3 skipped: not a Synthseek widget",
       "Mobile tile 1 skipped: not a Synthseek widget",
       expect.stringMatching(/^Widget #1 skipped: /),
-      { i18nKey: "customWidget.needs.plex", href: "/settings/connected-accounts#plex" },
+      { i18nKey: "customWidget.needs.plex", href: "/settings/connections/services#plex" },
     ]);
   });
 

@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
+import { HashLink, inlineLink } from "@components/HashLink";
 import { useUpdateEngineTimeouts } from "@hooks/api/mutations/settings/useUpdateEngine";
 
 import { EngineRow } from "../../components/EngineRow";
@@ -10,6 +11,7 @@ import { SaveBar } from "../../components/SaveBar";
 import { SettingsCard } from "../../components/SettingsCard";
 import { SettingsNumberInput } from "../../components/SettingsNumberInput";
 import { useSettingsForm } from "../../hooks/useSettingsForm";
+import { fieldHelper } from "../../styles";
 import { ENGINE_DEFAULTS } from "./defaults";
 import { MS } from "./constants";
 import type { TimeoutsCardProps } from "./types";
@@ -65,6 +67,20 @@ export function TimeoutsCard({ initial }: TimeoutsCardProps) {
           />
         }
       />
+      <span className={fieldHelper()}>
+        <Trans
+          t={t}
+          i18nKey="timeouts.soulseek"
+          components={{
+            slskd: (
+              <HashLink
+                href="/settings/download-sources?source=slskd#engine.timeouts.searchPhase"
+                className={inlineLink()}
+              />
+            ),
+          }}
+        />
+      </span>
       <SaveBar
         isDirty={isDirty}
         isSaving={isSaving}

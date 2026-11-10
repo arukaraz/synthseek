@@ -13,16 +13,16 @@ A template is a JSON document you can copy, keep, edit and share. Pasting it int
 
 There are two kinds.
 
-| Kind            | Carries                                        | Copy it from                                            | Bring it in with      |
-| --------------- | ---------------------------------------------- | ------------------------------------------------------- | --------------------- |
-| Widget template | One widget: what it asks and how it looks      | The `{}` icon on a widget                               | **From JSON**         |
-| Board template  | A whole board, its look and its custom widgets | **Copy JSON** in **Board Customization**, **Templates** | **Import a template** |
+| Kind            | Carries                                        | Copy it from                                                                          | Bring it in with      |
+| --------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------- |
+| Widget template | One widget: what it asks and how it looks      | The `{}` icon on a widget                                                             | **From JSON**         |
+| Board template  | A whole board, its look and its custom widgets | **Copy JSON** under **Settings**, **Appearance & language**, **Board**, **Templates** | **Import a template** |
 
-All of this starts from **Customize**.
+A widget starts from **Customize**, then **Widgets**. A board starts from **Settings**, then **Appearance & language**, then **Board**.
 
 ## Share a widget
 
-1. Open **Board Customization**, then **Widgets** and **My widgets**, and press the `{}` icon on the widget. Its JSON goes to your clipboard.
+1. Open **Customize**, then **Widgets** and **My widgets**, and press the `{}` icon on the widget. Its JSON goes to your clipboard.
 2. Paste it wherever you keep it, or send it to someone.
 3. To bring it in, open **My widgets** and choose **From JSON** on the new-widget card.
 4. Paste the JSON and press **Check and open**. A template with a problem lists each one, in plain words.
@@ -32,7 +32,7 @@ The workshop shows the same JSON behind the `{}` icon next to its preview, which
 
 ## Share a board
 
-1. Open **Board Customization**, then **Templates**, name the template and press **Copy JSON**.
+1. Open **Settings**, then **Appearance & language**, then **Board**, then **Templates**, name the template and press **Copy JSON**.
 2. To bring one in, paste it under **Import a template**, or choose a `.json` file.
 3. Press **Check**. Nothing changes yet. You see how many tiles and new widgets it brings, its look, and anything it will skip.
 4. Press **Apply template**. The scaled board shows the template, which you can still arrange and restyle.
@@ -269,27 +269,27 @@ A feed starts from an outside source. You then narrow it with [rules](#rules) an
 }
 ```
 
-| `source`                       | Returns   | `params`                                     | Needs                      |
-| ------------------------------ | --------- | -------------------------------------------- | -------------------------- |
-| `lastfm.similarArtists`        | Artists   | `seed`                                       | Last.fm                    |
-| `lastfm.similarTracks`         | Tracks    | `seed`                                       | Last.fm                    |
-| `lastfm.charts`                | Tracks    | `country`, a two-letter code                 | Last.fm                    |
-| `lastfm.lovedTracks`           | Tracks    | None                                         | Your Last.fm username      |
-| `catalog.related`              | Artists   | `seed`                                       | Nothing                    |
-| `catalog.artistAlbums`         | Albums    | `seed`                                       | Nothing                    |
-| `catalog.trending`             | Tracks    | None                                         | Nothing                    |
-| `listenbrainz.recommendations` | Tracks    | None                                         | Your ListenBrainz username |
-| `listenbrainz.playlists`       | Tracks    | `playlist`                                   | Your ListenBrainz username |
-| `listenbrainz.freshReleases`   | Albums    | `days`, 1 to 90                              | Nothing                    |
-| `feed.rss`                     | Headlines | `url`, an RSS or Atom address                | Nothing                    |
-| `feed.curated`                 | Headlines | `feed`                                       | Nothing                    |
-| `events.upcoming`              | Shows     | `seed`, `country` or `null`, `days` 1 to 180 | A Bandsintown app ID       |
-| `mediaServer.recentlyAdded`    | Albums    | `server`                                     | Your linked account        |
-| `mediaServer.mostPlayed`       | Albums    | `server`                                     | Your linked account        |
-| `mediaServer.nowPlaying`       | Tracks    | `server`                                     | Your linked account        |
-| `mediaServer.playlists`        | Playlists | `server`                                     | Your linked account        |
-| `lidarr.calendar`              | Albums    | `days`, 1 to 90                              | Lidarr, admin or trusted   |
-| `lidarr.wanted`                | Albums    | None                                         | Lidarr, admin or trusted   |
+| `source`                       | Returns   | `params`                                                        | Needs                      |
+| ------------------------------ | --------- | --------------------------------------------------------------- | -------------------------- |
+| `lastfm.similarArtists`        | Artists   | `seed`                                                          | Last.fm                    |
+| `lastfm.similarTracks`         | Tracks    | `seed`                                                          | Last.fm                    |
+| `lastfm.charts`                | Tracks    | `country`, a two-letter code, or `null` for the worldwide chart | Last.fm                    |
+| `lastfm.lovedTracks`           | Tracks    | None                                                            | Your Last.fm username      |
+| `catalog.related`              | Artists   | `seed`                                                          | Nothing                    |
+| `catalog.artistAlbums`         | Albums    | `seed`                                                          | Nothing                    |
+| `catalog.trending`             | Tracks    | None                                                            | Nothing                    |
+| `listenbrainz.recommendations` | Tracks    | None                                                            | Your ListenBrainz username |
+| `listenbrainz.playlists`       | Tracks    | `playlist`                                                      | Your ListenBrainz username |
+| `listenbrainz.freshReleases`   | Albums    | `days`, 1 to 90                                                 | Nothing                    |
+| `feed.rss`                     | Headlines | `url`, an RSS or Atom address                                   | Nothing                    |
+| `feed.curated`                 | Headlines | `feed`                                                          | Nothing                    |
+| `events.upcoming`              | Shows     | `seed`, `country` or `null`, `days` 1 to 180                    | A Bandsintown app ID       |
+| `mediaServer.recentlyAdded`    | Albums    | `server`                                                        | Your linked account        |
+| `mediaServer.mostPlayed`       | Albums    | `server`                                                        | Your linked account        |
+| `mediaServer.nowPlaying`       | Tracks    | `server`                                                        | Your linked account        |
+| `mediaServer.playlists`        | Playlists | `server`                                                        | Your linked account        |
+| `lidarr.calendar`              | Albums    | `days`, 1 to 90                                                 | Lidarr, admin or trusted   |
+| `lidarr.wanted`                | Albums    | None                                                            | Lidarr, admin or trusted   |
 
 | Option     | Values                                               |
 | ---------- | ---------------------------------------------------- |

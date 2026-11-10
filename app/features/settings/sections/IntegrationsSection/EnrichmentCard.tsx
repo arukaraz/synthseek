@@ -72,6 +72,36 @@ export function EnrichmentCard({ initial }: EnrichmentCardProps) {
       </SettingsField>
 
       <SettingsField
+        label={t("metadata.enrichment.lastfmKey.label")}
+        helper={t("metadata.enrichment.lastfmKey.helper")}
+        anchor="connections.enrichment.lastfmApiKey"
+      >
+        <SettingsSecretInput
+          value={draft.lastfmApiKey}
+          onChange={(v) => setField("lastfmApiKey", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "connections.enrichment", field: "lastfmApiKey" }),
+          }}
+        />
+      </SettingsField>
+
+      <SettingsField
+        label={t("metadata.enrichment.lastfmSecret.label")}
+        helper={t("metadata.enrichment.lastfmSecret.helper")}
+        anchor="connections.enrichment.lastfmApiSecret"
+      >
+        <SettingsSecretInput
+          value={draft.lastfmApiSecret}
+          onChange={(v) => setField("lastfmApiSecret", v)}
+          source={{
+            kind: "stored",
+            reveal: () => reveal({ section: "connections.enrichment", field: "lastfmApiSecret" }),
+          }}
+        />
+      </SettingsField>
+
+      <SettingsField
         label={t("metadata.enrichment.songlinkKey.label")}
         helper={t("metadata.enrichment.songlinkKey.helper")}
         anchor="connections.enrichment.songlinkApiKey"

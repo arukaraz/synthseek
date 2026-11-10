@@ -13,8 +13,8 @@
       "bodyExpired": "Deine {{provider}}-Verbindung ist abgelaufen oder wurde widerrufen. Verbinde dich erneut, um deine Bibliothek wieder zu laden.",
       "reconnect": "{{provider}} erneut verbinden",
       "connect": "{{provider}} verbinden",
-      "bodyAccount": "Verknüpfe dein {{provider}}-Konto unter Verbundene Konten, damit Synthseek deine Playlists lesen kann.",
-      "linkAccount": "{{provider}} unter Verbundene Konten verknüpfen"
+      "bodyAccount": "Verknüpfe dein {{provider}}-Konto unter Verbindungen, damit Synthseek deine Playlists lesen kann.",
+      "linkAccount": "{{provider}} unter Verbindungen verknüpfen"
     },
     "loadFailed": {
       "title": "Deine {{provider}}-Bibliothek konnte nicht geladen werden",
@@ -204,18 +204,12 @@
     },
     "lastfm": {
       "enableAria": "Last.fm-Entdeckungsfeeds aktivieren",
-      "credentialsTitle": "Server-Zugangsdaten",
-      "credentialsTooltip": "Der Last.fm-API-Schlüssel und das Secret, die die Verbindung jedes Mitglieds nutzt. Nur Administratoren sehen diesen Teil.",
-      "adminBadge": "Admin",
+      "credentialsElsewhere": "API-Schlüssel und Secret, die die Verbindung jedes Mitglieds nutzt, stehen unter <metadata>Metadaten</metadata>.",
       "tooltip": "Letzte Scrobbles und meistgespielte Titel aller Zeiten von deinem Last.fm-Konto. Die Feeds sind fest.",
       "apiKeyWarning": "Der Last.fm-API-Schlüssel ist nicht konfiguriert. Bitte deinen Administrator, ihn festzulegen, bevor du diese Integration aktivierst.",
-      "apiKeyLabel": "API-Schlüssel",
-      "apiKeyHelper": "Systemweiter Last.fm-API-Schlüssel. Wird von allen Benutzern gemeinsam genutzt.",
       "usernameLabel": "Benutzername",
       "usernameHelper": "Dein öffentlicher Last.fm-Benutzername.",
-      "usernamePlaceholder": "z. B. deinname",
-      "apiSecretLabel": "Gemeinsames API-Geheimnis",
-      "apiSecretHelper": "Nur nötig, um deine Wiedergaben an Last.fm zu senden. Wird zusammen mit dem API-Schlüssel ausgegeben."
+      "usernamePlaceholder": "z. B. deinname"
     },
     "listenbrainz": {
       "enableAria": "ListenBrainz-Entdeckungsfeeds aktivieren",

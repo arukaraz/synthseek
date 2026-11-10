@@ -72,6 +72,12 @@ describe("MemberNtfyServerCard", () => {
     expect(screen.getByLabelText(copy.label)).toHaveValue("");
   });
 
+  it("marks itself as an administrator setting", () => {
+    render(<MemberNtfyServerCard />);
+
+    expect(screen.getByText(copy.title).closest("h2")).toContainElement(screen.getByText(enSettings.shell.card.admin));
+  });
+
   it("keeps the field locked until the settings arrive", () => {
     settings = createLoadingQuery<AdminSettings>();
     render(<MemberNtfyServerCard />);

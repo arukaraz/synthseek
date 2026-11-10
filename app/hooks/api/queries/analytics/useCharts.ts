@@ -1,5 +1,5 @@
 import { trpc } from "@utils/trpc";
 
-export function useCharts(country: string) {
-  return trpc.analytics.discover.charts.useQuery({ country }, { trpc: { context: { skipBatch: true } } });
+export function useCharts() {
+  return trpc.analytics.discover.charts.useQuery(undefined, { trpc: { context: { skipBatch: true } } });
 }

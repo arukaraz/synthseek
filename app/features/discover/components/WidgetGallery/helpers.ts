@@ -156,7 +156,10 @@ export function customizedDraftOf(preset: WidgetPreset, title: string, country: 
   const { query } = preset.draft;
   return {
     ...preset.draft,
-    query: query.type === "feed" && query.source === "lastfm.charts" ? { ...query, params: { country } } : query,
+    query:
+      query.type === "feed" && query.source === "lastfm.charts" && query.params.country === null
+        ? { ...query, params: { country } }
+        : query,
     meta: { ...preset.draft.meta, name: i18n.t("widgets:customize.name", { name: title }) },
     basedOn: title,
   };

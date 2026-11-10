@@ -13,8 +13,8 @@
       "bodyExpired": "Tu conexión con {{provider}} expiró o fue revocada. Reconecta para volver a cargar tu biblioteca.",
       "reconnect": "Reconectar {{provider}}",
       "connect": "Conectar {{provider}}",
-      "bodyAccount": "Vincula tu cuenta de {{provider}} en Cuentas conectadas para que Synthseek pueda leer tus listas de reproducción.",
-      "linkAccount": "Vincular {{provider}} en Cuentas conectadas"
+      "bodyAccount": "Vincula tu cuenta de {{provider}} en Conexiones para que Synthseek pueda leer tus listas de reproducción.",
+      "linkAccount": "Vincular {{provider}} en Conexiones"
     },
     "loadFailed": {
       "title": "No se pudo cargar tu biblioteca de {{provider}}",
@@ -204,18 +204,12 @@
     },
     "lastfm": {
       "enableAria": "Activar los feeds de descubrimiento de Last.fm",
-      "credentialsTitle": "Credenciales del servidor",
-      "credentialsTooltip": "La clave y el secreto de la API de Last.fm que usa la conexión de cada miembro. Solo los administradores ven esta parte.",
-      "adminBadge": "Admin",
+      "credentialsElsewhere": "La clave y el secreto de la API que usa la conexión de cada miembro están en <metadata>Metadatos</metadata>.",
       "tooltip": "Scrobbles recientes y canciones más escuchadas de todos los tiempos en tu cuenta de Last.fm. Los feeds son fijos.",
       "apiKeyWarning": "La clave de API de Last.fm no está configurada. Pide a tu administrador que la configure antes de activar esta integración.",
-      "apiKeyLabel": "Clave de API",
-      "apiKeyHelper": "Clave de API de Last.fm para todo el sistema. Compartida entre todos los usuarios.",
       "usernameLabel": "Nombre de usuario",
       "usernameHelper": "Tu nombre de usuario público de Last.fm.",
-      "usernamePlaceholder": "p. ej. tunombre",
-      "apiSecretLabel": "Secreto compartido de la API",
-      "apiSecretHelper": "Solo hace falta para enviar tus escuchas a Last.fm. Se entrega junto a la clave de la API."
+      "usernamePlaceholder": "p. ej. tunombre"
     },
     "listenbrainz": {
       "enableAria": "Activar los feeds de descubrimiento de ListenBrainz",

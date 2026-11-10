@@ -18,7 +18,6 @@ import type { MyWidgetsPanelProps } from "./types";
 export function MyWidgetsPanel({
   widgets,
   lists,
-  templateStaged,
   onAddCustom,
   onEdit,
   onCreate,
@@ -39,7 +38,6 @@ export function MyWidgetsPanel({
             key={widget.id}
             widget={widget}
             free={layoutPlacementOf((list) => customTilesOf(lists[list], widget.id) > 0).free}
-            templateStaged={templateStaged}
             onAdd={(targets) => onAddCustom(widget, targets)}
             onEdit={() => onEdit(widget)}
             onDuplicate={() => {

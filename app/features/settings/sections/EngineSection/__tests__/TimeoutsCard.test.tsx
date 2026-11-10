@@ -18,6 +18,10 @@ vi.mock("@hooks/api/mutations/settings/useUpdateEngine", () => ({
   useUpdateEngineTimeouts: () => update,
 }));
 
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/settings/engine",
+}));
+
 import { TimeoutsCard } from "../TimeoutsCard";
 
 beforeAll(() => {
@@ -44,6 +48,15 @@ describe("TimeoutsCard", () => {
     expect(screen.getByText(enSettings.timeouts.title)).toBeInTheDocument();
     expect(screen.getByLabelText(enSettings.timeouts.downloadPhase.ariaLabel)).toHaveValue(1200);
     expect(screen.getByLabelText(enSettings.timeouts.importPhase.ariaLabel)).toHaveValue(300);
+  });
+
+  it("points at the Soulseek timeouts under Download sources", () => {
+    render(<TimeoutsCard initial={initial} />);
+
+    expect(screen.getByRole("link", { name: enSettings.shell.pages.downloadSources.title })).toHaveAttribute(
+      "href",
+      "/settings/download-sources?source=slskd#engine.timeouts.searchPhase"
+    );
   });
 
   it("saves the timeouts converting seconds back to milliseconds", async () => {

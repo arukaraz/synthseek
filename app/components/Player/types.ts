@@ -456,6 +456,34 @@ export interface PlayerSettingsSliderProps {
 
 export type PlayerSettingsSectionProps = PlayerProps;
 
+export type PlayerSettingsView = Pick<
+  PlayerView,
+  "equalizer" | "compressor" | "loudness" | "autoplay" | "conversion" | "transition"
+>;
+
+export type PlayerSettingsActions = Pick<
+  PlayerActions,
+  | "setEqualizerEnabled"
+  | "setEqualizerBand"
+  | "setEqualizerPreamp"
+  | "applyEqualizerPreset"
+  | "saveEqualizerPreset"
+  | "deleteEqualizerPreset"
+  | "setCompressorEnabled"
+  | "applyCompressorPreset"
+  | "setCompressorParam"
+  | "setLoudnessEnabled"
+  | "setLoudnessPreamp"
+  | "setAutoplayEnabled"
+  | "setConversion"
+  | "setTransition"
+>;
+
+export interface PlayerSettingsControlProps {
+  view: PlayerSettingsView;
+  actions: PlayerSettingsActions;
+}
+
 export interface PlayerTrackButtonProps extends PlayerProps {
   size?: "compact" | "stage";
   className?: string;

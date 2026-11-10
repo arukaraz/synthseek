@@ -219,7 +219,7 @@ describe("customWidgetNote", () => {
     expect(customWidgetNote({ result, isError: true, empty: true })).toBe("Couldn't load this right now.");
     expect(customWidgetNote({ result: createFeedAlbumResult([], "lastfm"), isError: false, empty: true })).toEqual({
       i18nKey: "customWidget.needs.lastfm",
-      href: "/settings/listening#lastfm",
+      href: "/settings/connections/services#lastfm",
     });
     expect(customWidgetNote({ result, isError: false, empty: true })).toBe("Nothing matches this widget right now.");
     expect(customWidgetNote({ result, isError: false, empty: false })).toBeNull();

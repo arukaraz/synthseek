@@ -6,5 +6,4 @@ export interface ChartActionProps {
 
 export interface ChartsLeaderProps {
   entry: ChartEntry;
-  country: string;
 }

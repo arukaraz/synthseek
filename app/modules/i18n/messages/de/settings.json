@@ -156,8 +156,12 @@
     },
     "theme": {
       "title": "Design",
-      "description": "Wähle das Design, das zu deiner Umgebung passt.",
+      "description": "Wähle das Design, das zu deiner Umgebung passt. Nur in diesem Browser.",
       "groupLabel": "Farbdesign"
+    },
+    "board": {
+      "title": "Board",
+      "description": "Ordne beide Anordnungen, lege das Aussehen des Boards fest und importiere oder exportiere Vorlagen. Wird beim Speichern in deinem Konto gesichert."
     }
   },
   "header": {
@@ -200,8 +204,20 @@
       "placeholder": "z. B. Party, meine Favoriten"
     }
   },
+  "playback": {
+    "account": {
+      "title": "Dein Konto",
+      "description": "Für dein Konto, auf jedem Gerät.",
+      "household": "Wer sieht, was du hörst, legst du unter <household>Konto > Haushalt</household> fest."
+    },
+    "browser": {
+      "title": "Dieser Browser",
+      "description": "Das Einstellungsmenü des Players hat dieselben Regler. Nur in diesem Browser."
+    }
+  },
   "timeouts": {
     "title": "Zeitlimits",
+    "soulseek": "Die eigenen Zeitlimits von Soulseek stehen bei den übrigen slskd-Einstellungen unter <slskd>Download-Quellen</slskd>.",
     "searchPhase": {
       "label": "Suchphase",
       "description": "Wie lange slskd jede Suchanfrage im Soulseek-Netzwerk offen hält, bevor das Sammeln neuer Ergebnisse gestoppt wird.",
@@ -446,6 +462,14 @@
         "label": "AcoustID-API-Schlüssel",
         "helper": "Audio-Fingerprinting-Ausweichweg für Titel ohne zuverlässige Tag-Metadaten."
       },
+      "lastfmKey": {
+        "label": "Last.fm-API-Schlüssel",
+        "helper": "Ähnliche Künstler, Charts und Scrobble-Verlauf. Die Last.fm-Verbindung jedes Mitglieds nutzt ihn."
+      },
+      "lastfmSecret": {
+        "label": "Last.fm Shared Secret",
+        "helper": "Lässt Mitglieder ihre Wiedergaben an Last.fm senden. Wird zusammen mit dem API-Schlüssel ausgegeben."
+      },
       "songlinkKey": {
         "label": "Songlink-API-Schlüssel (optional)",
         "helper": "Löst Titel-URLs plattformübergreifend für plattformübergreifende Playlist-Importe auf. Synthseek verwendet standardmäßig den öffentlichen Endpunkt. Lass es leer, es sei denn, du hast einen Schlüssel."
@@ -534,6 +558,11 @@
   "slskd": {
     "title": "Slskd",
     "description": "Erforderlich für Downloads.",
+    "enable": {
+      "label": "Aktivieren",
+      "description": "Wenn aktiv, werden Titel-Anfragen über slskd im Soulseek-Netzwerk gesucht.",
+      "ariaLabel": "slskd-Quelle aktivieren"
+    },
     "apiUrl": {
       "label": "API-URL",
       "placeholder": "http://localhost:5030"
@@ -979,8 +1008,7 @@
       "plexAccount": "Plex-Konto",
       "localAccount": "Lokales Konto",
       "logout": "Abmelden",
-      "loggingOut": "Abmeldung läuft…",
-      "logoutDescription": "Beende deine Sitzung in diesem Browser."
+      "loggingOut": "Abmeldung läuft…"
     },
     "edit": {
       "title": "Profil bearbeiten",
@@ -1000,10 +1028,11 @@
       "newLabel": "Neues Passwort",
       "newAriaLabel": "Neues Passwort",
       "submit": "Passwort ändern",
-      "managedByPlex": "Du meldest dich mit Plex an. Um ein Passwort zu nutzen, trenne Plex unter Verbundene Konten."
+      "managedByPlex": "Du meldest dich mit Plex an. Um ein Passwort zu nutzen, trenne Plex unter Verbindungen."
     },
     "connected": {
       "title": "Dienste",
+      "description": "Konten bei anderen Diensten, die Synthseek in deinem Namen nutzt. An Last.fm und ListenBrainz gesendete Wiedergaben liegen auf dem Server, also kommen sie auch an, wenn du den Tab schließt.",
       "empty": "Derzeit sind keine verbundenen Quellen verfügbar.",
       "connect": "Verbinden",
       "reconnect": "Neu verbinden",
@@ -1059,8 +1088,6 @@
       }
     },
     "listening": {
-      "title": "Hoerdienste",
-      "description": "Sende, was du abspielst, an Last.fm und ListenBrainz. Wiedergaben liegen auf dem Server, also kommen sie auch an, wenn du den Tab schliesst.",
       "unavailable": "Deine Hoerdienste konnten nicht geladen werden.",
       "connected": "Verbunden",
       "notConnected": "Nicht verbunden",
@@ -1482,7 +1509,8 @@
   },
   "shell": {
     "card": {
-      "optional": "(Optional)"
+      "optional": "(Optional)",
+      "admin": "Admin"
     },
     "sidebar": {
       "ariaLabel": "Einstellungsbereiche",
@@ -1500,22 +1528,18 @@
       },
       "appearance": {
         "title": "Darstellung und Sprache",
-        "description": "Das Design und die Sprache, die Synthseek für dich verwendet."
+        "description": "Das Design und die Sprache, die Synthseek für dich verwendet, und wie dein Board aufgebaut ist."
       },
-      "connectedAccounts": {
-        "title": "Verbundene Konten",
-        "description": "Konten bei anderen Diensten, die Synthseek in deinem Namen nutzt."
+      "playback": {
+        "title": "Wiedergabe",
+        "description": "Wie Synthseek abspielt: für dein Konto auf jedem Gerät, und nur in diesem Browser."
       },
-      "listening": {
-        "title": "Hören und Entdecken",
-        "description": "Sende, was du hörst, an Last.fm und ListenBrainz, und hol ihre Empfehlungen nach Entdecken."
+      "connections": {
+        "title": "Verbindungen",
+        "description": "Die Dienste, die Synthseek in deinem Namen nutzt, und die Apps und Schlüssel, die dein Synthseek nutzen."
       },
       "notifications": {
         "title": "Benachrichtigungen"
-      },
-      "apps": {
-        "title": "Apps und API-Schlüssel",
-        "description": "Musik-Apps, KI-Assistenten und Skripte, die sich mit deinem Synthseek verbinden."
       },
       "overview": {
         "title": "Übersicht",
@@ -1556,6 +1580,10 @@
       }
     },
     "tabs": {
+      "appearance": {
+        "theme": "Design und Sprache",
+        "board": "Board"
+      },
       "library": {
         "paths": "Pfade und Regeln",
         "scan": "Scan",
@@ -1572,6 +1600,10 @@
       "system": {
         "jobs": "Aufgaben",
         "logs": "Protokolle"
+      },
+      "connections": {
+        "services": "Dienste",
+        "apps": "Apps und API-Schlüssel"
       }
     },
     "search": {
@@ -1587,13 +1619,15 @@
         "navidromeAccount": "Navidrome-Konto",
         "jellyfinAccount": "Jellyfin-Konto",
         "lastfmFeeds": "Last.fm-Entdeckungsfeeds",
-        "lastfmCredentials": "Last.fm-API-Schlüssel und -Secret",
         "listenbrainzFeeds": "ListenBrainz-Entdeckungsfeeds",
         "listenbrainzAutoRequest": "ListenBrainz-Playlists automatisch anfragen"
       },
       "keywords": {
+        "playbackAccount": "lautstärke normalisierung lautheit gain autoplay ähnliche titel",
+        "playbackBrowser": "equalizer kompressor crossfade gapless übergang konvertierung bitrate mp3",
         "theme": "dunkel mitternacht ozean farbe",
         "language": "englisch spanisch französisch deutsch",
+        "board": "dichte textgröße hintergrund vorlagen anordnen anordnung widgets",
         "scrobble": "scrobble wiedergaben hörverlauf",
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub zugangsdaten",
@@ -1828,7 +1862,7 @@
     },
     "mediaServerSources": {
       "title": "Deine Medienserver",
-      "description": "Mitglieder können auch Playlists aus Plex, Navidrome und Jellyfin importieren. Hier wird nichts eingestellt: Die Serververbindung liegt unter Medien und Wiedergabe, und jedes Mitglied importiert mit dem Konto, das es unter Verbundene Konten verknüpft.",
+      "description": "Mitglieder können auch Playlists aus Plex, Navidrome und Jellyfin importieren. Hier wird nichts eingestellt: Die Serververbindung liegt unter Medien und Wiedergabe, und jedes Mitglied importiert mit dem Konto, das es unter Verbindungen verknüpft.",
       "available": "Für Mitglieder verfügbar",
       "notConfigured": "Nicht eingerichtet",
       "open": "Öffnen",
@@ -2261,19 +2295,6 @@
     "pause": "Pausieren",
     "start": "Jetzt ausführen",
     "hint": "Stimmungslisten nutzen das bisher Analysierte und wachsen bei jeder Aktualisierung von selbst."
-  },
-  "neverInclude": {
-    "title": "Nie aufnehmen",
-    "description": "Gilt für alle intelligenten Listen deines Kontos. Ein Widget kann einen Eintrag für sich erlauben.",
-    "artists": "Künstler",
-    "tracks": "Titel",
-    "noTaste": "Wiedergaben, die deinen Geschmack nicht prägen",
-    "searchArtists": "Künstler suchen",
-    "searchTracks": "Titel nach Name oder Künstler suchen",
-    "searchGenres": "Genres suchen",
-    "trackBy": "{{title}} · {{artist}}",
-    "remove": "{{name}} entfernen",
-    "noMatch": "Keine Treffer"
   },
   "libraryScan": {
     "card": {

@@ -13,8 +13,8 @@
       "bodyExpired": "Your {{provider}} connection expired or was revoked. Reconnect to load your library again.",
       "reconnect": "Reconnect {{provider}}",
       "connect": "Connect {{provider}}",
-      "bodyAccount": "Link your {{provider}} account under Connected accounts so Synthseek can read your playlists.",
-      "linkAccount": "Link {{provider}} in Connected accounts"
+      "bodyAccount": "Link your {{provider}} account under Connections so Synthseek can read your playlists.",
+      "linkAccount": "Link {{provider}} in Connections"
     },
     "loadFailed": {
       "title": "Could not load your {{provider}} library",
@@ -204,18 +204,12 @@
     },
     "lastfm": {
       "enableAria": "Turn on Last.fm discovery feeds",
-      "credentialsTitle": "Server credentials",
-      "credentialsTooltip": "The Last.fm API key and secret every member's connection uses. Only administrators see this part.",
-      "adminBadge": "Admin",
+      "credentialsElsewhere": "The API key and secret every member's connection uses are under <metadata>Metadata</metadata>.",
       "tooltip": "Recent scrobbles and lifetime top tracks from your Last.fm account. Feeds are fixed.",
       "apiKeyWarning": "Last.fm API key is not configured. Ask your administrator to set it before enabling this integration.",
-      "apiKeyLabel": "API key",
-      "apiKeyHelper": "System-wide Last.fm API key. Shared across all users.",
       "usernameLabel": "Username",
       "usernameHelper": "Your public Last.fm username.",
-      "usernamePlaceholder": "e.g. yourname",
-      "apiSecretLabel": "API shared secret",
-      "apiSecretHelper": "Needed only to send your plays to Last.fm. Issued with the API key."
+      "usernamePlaceholder": "e.g. yourname"
     },
     "listenbrainz": {
       "enableAria": "Turn on ListenBrainz discovery feeds",

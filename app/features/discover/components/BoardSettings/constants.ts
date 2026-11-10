@@ -1,4 +1,8 @@
+import type { BoardDevice } from "@components/BoardGrid";
+
 export const TEMPLATE_FILE_ACCEPT = ".json,application/json";
+
+export const PREVIEW_BOARD_WIDTH_PX: Record<BoardDevice, number> = { wide: 1200, narrow: 390 };
 
 export const BOARD_SETTINGS_TABS = ["appearance", "templates"] as const;
 

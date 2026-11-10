@@ -107,14 +107,15 @@
       "caption": "LAUTSTÄRKE-NORMALISIERUNG",
       "enabled": "Lautstärke normalisieren",
       "preamp": "Zusätzliche Verstärkung",
-      "hint": "Gleicht die Lautstärke von Titel zu Titel an."
+      "hint": "Gleicht die Lautstärke von Titel zu Titel an. Für dein Konto, auf jedem Gerät.",
+      "alsoIn": "Auch unter <settings>Einstellungen > Wiedergabe</settings>."
     },
     "conversion": {
       "caption": "UMWANDLUNG",
       "enabled": "In diesem Browser zu mp3 umwandeln",
       "bitrate": "Bitrate",
       "bitrateValue": "{{kbps}} kbps",
-      "hint": "Spart Daten bei langsamer Verbindung. Aus spielt die Originaldatei, außer der Browser kann sie nicht dekodieren."
+      "hint": "Spart Daten bei langsamer Verbindung. Aus spielt die Originaldatei, außer der Browser kann sie nicht dekodieren. Nur in diesem Browser."
     },
     "source": {
       "caption": "WIEDERGABE VON",
@@ -135,13 +136,13 @@
       },
       "hints": {
         "gapless": "Ein Titel geht ohne Pause in den nächsten über. Nur in diesem Browser.",
-        "crossfade": "Jeder Titel wird in den nächsten übergeblendet, wenn er endet und wenn du überspringst."
+        "crossfade": "Jeder Titel wird in den nächsten übergeblendet, wenn er endet und wenn du überspringst. Nur in diesem Browser."
       }
     },
     "autoplay": {
       "caption": "AUTOPLAY",
       "enabled": "Mit ähnlichen Titeln weiterspielen",
-      "hint": "Wenn die Warteschlange leer ist, geht es mit Titeln aus deiner Bibliothek weiter, die zu deiner Auswahl passen."
+      "hint": "Wenn die Warteschlange leer ist, geht es mit Titeln aus deiner Bibliothek weiter, die zu deiner Auswahl passen. Für dein Konto, auf jedem Gerät."
     }
   },
   "equalizer": {
@@ -153,7 +154,7 @@
     "band": "{{band}}-Hz-Band",
     "gain": "{{value}} dB",
     "headroom": "Headroom {{value}} dB, der lauteste Punkt dieser Kurve",
-    "remoteHint": "Wirkt nur auf das, was in diesem Browser spielt",
+    "hint": "Nur in diesem Browser.",
     "preamp": "Vorverstärker",
     "savePreset": "Speichern",
     "presetName": "Name der Voreinstellung",

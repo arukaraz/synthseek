@@ -26,9 +26,9 @@ import {
   settingsSectionHeader,
   settingsSectionTitle,
 } from "./styles";
-import type { PlayerSettingsSectionProps } from "./types";
+import type { PlayerSettingsControlProps } from "./types";
 
-export function CompressorSection({ view, actions }: PlayerSettingsSectionProps) {
+export function CompressorSection({ view, actions }: PlayerSettingsControlProps) {
   const { t } = useTranslation("player");
   const { compressor } = view;
   const presetName =

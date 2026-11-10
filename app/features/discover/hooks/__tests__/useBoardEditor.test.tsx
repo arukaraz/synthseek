@@ -1,13 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type {
-  BoardAppearance,
-  BoardItem,
-  BoardLayout,
-  BoardList,
-  BoardLists,
-  BoardTemplateUndo,
-} from "@hooks/api/queries/board/types";
+import type { BoardAppearance, BoardItem, BoardLayout, BoardList, BoardLists } from "@hooks/api/queries/board/types";
 import { createWidget } from "@test/factories";
 import { act, fireEvent, renderHook } from "@test/test-utils";
 
@@ -22,10 +15,9 @@ interface ToastAction {
   onClick: () => void;
 }
 
-const { saveMock, appearanceMock, toastMock, undoMock } = vi.hoisted(() => ({
-  saveMock: vi.fn<(layout: BoardLayout) => void>(),
-  appearanceMock: vi.fn<(appearance: BoardAppearance) => void>(),
-  undoMock: vi.fn<(undo: BoardTemplateUndo, options?: { onSuccess?: () => void }) => void>(),
+const { saveMock, appearanceMock, toastMock } = vi.hoisted(() => ({
+  saveMock: vi.fn<(layout: BoardLayout) => Promise<boolean>>(() => Promise.resolve(true)),
+  appearanceMock: vi.fn<(appearance: BoardAppearance) => Promise<boolean>>(() => Promise.resolve(true)),
   toastMock: { success: vi.fn<(message: string, options?: { action?: ToastAction; duration?: number }) => void>() },
 }));
 const dropRef = vi.hoisted((): { current: ((order: BoardItem[]) => void) | null } => ({ current: null }));
@@ -33,7 +25,7 @@ const dropRef = vi.hoisted((): { current: ((order: BoardItem[]) => void) | null 
 vi.mock("@hooks/api/mutations/board/useSaveBoardLayout", () => ({ useSaveBoardLayout: () => saveMock }));
 vi.mock("@hooks/api/mutations/board/useSetBoardAppearance", () => ({ useSetBoardAppearance: () => appearanceMock }));
 vi.mock("@hooks/api/mutations/board/useUndoBoardTemplate", () => ({
-  useUndoBoardTemplate: () => ({ mutate: undoMock }),
+  useUndoBoardTemplate: () => ({ mutate: vi.fn() }),
 }));
 vi.mock("sonner", () => ({ toast: toastMock }));
 vi.mock("@hooks/ui/board/helpers", () => ({ focusBoardTile: vi.fn() }));
@@ -172,29 +164,6 @@ describe("useBoardEditor", () => {
     expect(lastSaved().mobile.at(-1)?.kind).toBe("spacer");
   });
 
-  it("offers to undo an applied template with what the server handed back, and confirms once it is undone", () => {
-    const { result } = editor();
-    const undo: BoardTemplateUndo = {
-      layout: null,
-      appearance: { density: "comfortable", text: "default" },
-      widgetIds: ["w_new"],
-    };
-
-    act(() =>
-      result.current.templateApplied({
-        layout: { schemaVersion: 4, items: [], mobile: [] },
-        appearance: { density: "compact", text: "large" },
-        undo,
-      })
-    );
-
-    expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board template applied");
-    lastToastAction().onClick();
-    expect(undoMock).toHaveBeenCalledWith(undo, expect.anything());
-    undoMock.mock.calls.at(-1)?.[1]?.onSuccess?.();
-    expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board restored");
-  });
-
   it("saves a dropped order with an Undo back to the order before the drag", () => {
     editor();
     const dropped = [ITEMS[2], ITEMS[0], ITEMS[1]];
@@ -207,99 +176,80 @@ describe("useBoardEditor", () => {
     expect(lastSavedIds()).toEqual(["a", "b", "c"]);
   });
 
-  it("opens Board Customization on the section asked for, in edit mode", () => {
+  it("opens the Widgets dialog on no widget in particular, in edit mode", () => {
     const { result } = editor();
 
-    act(() => result.current.openCustomization("board"));
+    act(() => result.current.openWidgets());
 
     expect(result.current.editing).toBe(true);
-    expect(result.current.customization).toEqual({ section: "board", target: null, boardWidth: 0 });
+    expect(result.current.widgets).toEqual({ target: null });
     expect(saveMock).not.toHaveBeenCalled();
   });
 
-  it("saves both arranged lists once, closes the modal and offers to undo back to the board it replaced", () => {
+  it("saves both arranged lists once, closes the dialog and offers to undo back to the board it replaced", () => {
     const { result } = editor();
-    act(() => result.current.openCustomization("board"));
+    act(() => result.current.openWidgets());
     const next: BoardLists = { items: [ITEMS[1], ITEMS[0]], mobile: [MOBILE[0]] };
 
-    act(() => result.current.saveCustomization({ lists: next, appearance: null }));
+    act(() => result.current.saveBoard({ lists: next, appearance: null }));
 
-    expect(result.current.customization).toBeNull();
-    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 4, ...next }]]);
+    expect(result.current.widgets).toBeNull();
+    expect(saveMock.mock.calls).toEqual([[{ schemaVersion: 4, ...next }, "optimistic"]]);
     expect(toastMock.success.mock.calls.at(-1)?.[0]).toBe("Board saved");
-    expect(appearanceMock).not.toHaveBeenCalled();
     lastToastAction().onClick();
     expect(lastSaved()).toEqual({ schemaVersion: 4, items: ITEMS, mobile: MOBILE });
-    expect(appearanceMock).not.toHaveBeenCalled();
-  });
-
-  it("saves a new look alone and undoes it back to the look it replaced", () => {
-    const { result } = editor();
-    const previous: BoardAppearance = { density: "comfortable", text: "default" };
-    const next: BoardAppearance = { density: "compact", text: "large" };
-
-    act(() => result.current.saveCustomization({ lists: null, appearance: { next, previous } }));
-
-    expect(saveMock).not.toHaveBeenCalled();
-    expect(appearanceMock.mock.calls).toEqual([[next]]);
-    lastToastAction().onClick();
-    expect(appearanceMock.mock.calls.at(-1)).toEqual([previous]);
-    expect(saveMock).not.toHaveBeenCalled();
   });
 
   it("closes without saving or offering an undo when nothing changed", () => {
     const { result } = editor();
-    act(() => result.current.openCustomization("board"));
+    act(() => result.current.openWidgets());
 
-    act(() => result.current.saveCustomization({ lists: null, appearance: null }));
+    act(() => result.current.saveBoard({ lists: null, appearance: null }));
 
-    expect(result.current.customization).toBeNull();
+    expect(result.current.widgets).toBeNull();
     expect(saveMock).not.toHaveBeenCalled();
     expect(toastMock.success).not.toHaveBeenCalled();
   });
 
-  it("opens the widgets section on the widget a tile asked to edit, and forgets it once closed", () => {
+  it("opens the dialog on the widget a tile asked to edit, and forgets it once closed", () => {
     const { result } = editor();
 
     act(() => result.current.actions.edit("w_1"));
-    expect(result.current.customization).toMatchObject({
-      section: "widgets",
-      target: { kind: "custom", widgetId: "w_1" },
-    });
+    expect(result.current.widgets).toEqual({ target: { kind: "custom", widgetId: "w_1" } });
 
-    act(() => result.current.closeCustomization());
-    expect(result.current.customization).toBeNull();
+    act(() => result.current.closeWidgets());
+    expect(result.current.widgets).toBeNull();
     expect(result.current.editing).toBe(true);
   });
 
-  it("opens the widgets section on the built-in widget a tile asked to customize", () => {
+  it("opens the dialog on the built-in widget a tile asked to customize", () => {
     const { result } = editor();
 
     act(() => result.current.actions.customize("trending"));
 
-    expect(result.current.customization?.target).toEqual({ kind: "builtin", widget: "trending" });
+    expect(result.current.widgets?.target).toEqual({ kind: "builtin", widget: "trending" });
   });
 
-  it("closes Board Customization when editing stops", () => {
+  it("closes the Widgets dialog when editing stops", () => {
     const { result } = editor();
-    act(() => result.current.openCustomization("widgets"));
+    act(() => result.current.openWidgets());
 
     act(() => result.current.stopEditing());
 
     expect(result.current.editing).toBe(false);
-    expect(result.current.customization).toBeNull();
+    expect(result.current.widgets).toBeNull();
   });
 
-  it("leaves edit mode on Escape only while Board Customization is closed", () => {
+  it("leaves edit mode on Escape only while the Widgets dialog is closed", () => {
     const { result } = editor();
 
-    act(() => result.current.openCustomization("board"));
+    act(() => result.current.openWidgets());
     act(() => {
       fireEvent.keyDown(window, { key: "Escape" });
     });
     expect(result.current.editing).toBe(true);
 
-    act(() => result.current.closeCustomization());
+    act(() => result.current.closeWidgets());
     act(() => {
       fireEvent.keyDown(window, { key: "Escape" });
     });

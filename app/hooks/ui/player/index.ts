@@ -1,4 +1,5 @@
 export { usePlayer, usePlayerBottomDock, usePlayerDock, useQueuePresence, playerActions } from "./usePlayer";
+export { usePlayerSettings } from "./usePlayerSettings";
 export { playableOnlyFrom, playerTrackFrom, sourceLabelFor } from "./helpers";
 export { settleSourcePick, tracksFromChosenSource, useSourcePickerRequest } from "./sourcePicker";
 export type { PlayerDockState, ResumePoint, SourceCount, SourcePick, SourcePickerRequest } from "./types";

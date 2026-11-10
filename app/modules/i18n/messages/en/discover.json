@@ -423,11 +423,11 @@
   },
   "charts": {
     "title": "Charts",
-    "subtitle": "Top tracks in {{country}}",
-    "empty": "No chart for this region right now.",
+    "subtitle": "Top tracks worldwide",
+    "empty": "No chart right now.",
     "play": "Play",
     "request": "Request",
-    "leaderBadge": "#1 in {{country}}"
+    "leaderBadge": "#1 worldwide"
   },
   "loved": {
     "title": "Loved on Last.fm, not here",

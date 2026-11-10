@@ -62,7 +62,6 @@ export interface LayoutMenuProps {
   label: string;
   ariaLabel: string;
   onPick: PickLayouts;
-  lockedHint?: string;
 }
 
 export interface LockedActionProps {
@@ -113,7 +112,6 @@ export interface GalleryFilterMenuProps {
 export interface MyWidgetsPanelProps {
   widgets: readonly WidgetDocument[];
   lists: BoardLists;
-  templateStaged: boolean;
   onAddCustom: (widget: WidgetDocument, lists: readonly BoardList[]) => void;
   onEdit: (widget: WidgetDocument) => void;
   onCreate: () => void;
@@ -124,7 +122,6 @@ export interface MyWidgetsPanelProps {
 export interface MyWidgetCardProps {
   widget: WidgetDocument;
   free: readonly BoardList[];
-  templateStaged: boolean;
   onAdd: PickLayouts;
   onEdit: () => void;
   onDuplicate: () => void;

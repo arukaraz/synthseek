@@ -4,9 +4,11 @@ import type { BoardAppearance } from "@hooks/api/queries/board/types";
 import { errorToast } from "@modules/errors";
 import { trpc } from "@utils/trpc";
 
-export function useSetBoardAppearance(): (appearance: BoardAppearance) => void {
+import type { BoardWriteMode } from "./types";
+
+export function useSetBoardAppearance(): (appearance: BoardAppearance, mode?: BoardWriteMode) => Promise<boolean> {
   const utils = trpc.useUtils();
-  const { mutate } = trpc.discovery.board.setAppearance.useMutation({
+  const { mutateAsync } = trpc.discovery.board.setAppearance.useMutation({
     onError: (error) => {
       void utils.discovery.board.appearance.invalidate();
       errorToast(error, "discovery.appearanceSaveFailed");
@@ -14,11 +16,19 @@ export function useSetBoardAppearance(): (appearance: BoardAppearance) => void {
   });
 
   return useCallback(
-    (appearance: BoardAppearance) => {
-      void utils.discovery.board.appearance.cancel();
-      utils.discovery.board.appearance.setData(undefined, appearance);
-      mutate(appearance);
+    (appearance: BoardAppearance, mode: BoardWriteMode = "optimistic") => {
+      if (mode === "optimistic") {
+        void utils.discovery.board.appearance.cancel();
+        utils.discovery.board.appearance.setData(undefined, appearance);
+      }
+      return mutateAsync(appearance).then(
+        (saved) => {
+          if (mode === "confirmed") utils.discovery.board.appearance.setData(undefined, saved);
+          return true;
+        },
+        () => false
+      );
     },
-    [utils, mutate]
+    [utils, mutateAsync]
   );
 }

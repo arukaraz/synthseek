@@ -29,8 +29,6 @@
     "playlist": "Smart playlist · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Add to board",
-    "addWhileTemplate": "Save or cancel the template first, then add your own widgets.",
-    "deleteWhileTemplate": "Save or cancel the template first, then delete your widget.",
     "addNamed": "Add {{name}} to the board",
     "onBoard": "On board",
     "edit": "Edit",
@@ -55,15 +53,9 @@
     "deleteWithTiles_other": "The widget is removed from My widgets and from its {{count}} tiles on your board."
   },
   "board": {
-    "customization": {
-      "action": "Board Customization",
-      "title": "Board Customization",
-      "sections": {
-        "label": "Board Customization sections",
-        "board": "Board",
-        "widgets": "Widgets",
-        "arrange": "Arrange"
-      }
+    "widgetsDialog": {
+      "action": "Widgets",
+      "title": "Widgets"
     },
     "layouts": {
       "label": "Arrangement",
@@ -508,6 +500,9 @@
     },
     "country": "Country",
     "anywhere": "Anywhere",
+    "worldwide": "Worldwide",
+    "searchCountry": "Search a country",
+    "noCountry": "No country matches.",
     "showsWithin": "in the next",
     "needs": {
       "lastfm": "Needs Last.fm",
@@ -646,8 +641,7 @@
     "tracks": "tracks",
     "never": "Never include",
     "neverEmpty": "Nothing yet. Use the ban button inside any list.",
-    "neverEdit": "Edit for all widgets",
-    "neverHint": "Comes from your account. Press X to allow one in this widget only.",
+    "neverHint": "Comes from your account, under My widgets. Press X to allow one in this widget only.",
     "allowHere": "Allow {{name}} in this widget",
     "excludeHere": "Exclude {{name}} here again",
     "mix": "Mix",
@@ -802,5 +796,18 @@
     "stations": "Stations",
     "genres": "Genres",
     "continueListening": "Continue listening"
+  },
+  "neverInclude": {
+    "title": "Never include",
+    "description": "Applies to every smart list of your account. A widget can allow one for itself.",
+    "artists": "Artists",
+    "tracks": "Tracks",
+    "noTaste": "Plays that do not shape your taste",
+    "searchArtists": "Search artists",
+    "searchTracks": "Search tracks by title or artist",
+    "searchGenres": "Search genres",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "Remove {{name}}",
+    "noMatch": "No matches"
   }
 }

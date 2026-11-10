@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { BoardAppearance, BoardItem, BoardList, BoardWidgetKey } from "@hooks/api/queries/board/types";
 import type { WidgetDocument } from "@hooks/api/queries/widgets/types";
 
-import type { CustomizationDraft, UseCustomizationDraftOptions } from "../components/BoardCustomization/types";
+import type { CustomizationDraft, UseCustomizationDraftOptions } from "../components/WidgetsDialog/types";
 import { sameAppearance, withStagedWidgets } from "../components/BoardSettings/helpers";
 import type { StagedTemplate } from "../components/BoardSettings/types";
 import {
@@ -93,6 +93,7 @@ export function useCustomizationDraft({ lists, appearance, custom }: UseCustomiz
     replaceDesktop(lists.items);
     replaceMobile(lists.mobile);
   }, [replaceDesktop, replaceMobile, lists]);
+  const settle = useCallback(() => setStyled(null), []);
 
   return {
     arranges: { items: desktop, mobile },
@@ -114,5 +115,6 @@ export function useCustomizationDraft({ lists, appearance, custom }: UseCustomiz
     dropCustom,
     stage,
     unstage,
+    settle,
   };
 }

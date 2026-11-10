@@ -9,14 +9,14 @@ import { ChartAction } from "./ChartAction";
 import { chartKey } from "./helpers";
 import type { ChartsLeaderProps } from "./types";
 
-export function ChartsLeader({ entry, country }: ChartsLeaderProps) {
+export function ChartsLeader({ entry }: ChartsLeaderProps) {
   const { t } = useTranslation("discover");
 
   return (
     <WidgetLeader
       cover={entry.track?.album.images[0]?.url ?? null}
       seed={chartKey(entry)}
-      badge={{ icon: Flame, label: t("charts.leaderBadge", { country }) }}
+      badge={{ icon: Flame, label: t("charts.leaderBadge") }}
     >
       <span className={leaderRank()}>1</span>
       <h3 className={leaderTitle()}>{entry.title}</h3>

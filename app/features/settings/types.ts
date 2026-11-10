@@ -40,10 +40,9 @@ export type SettingsPageGroup = "you" | "server" | "about";
 export type SettingsPageId =
   | "account"
   | "appearance"
-  | "connectedAccounts"
-  | "listening"
+  | "playback"
+  | "connections"
   | "notifications"
-  | "apps"
   | "overview"
   | "members"
   | "downloadSources"
@@ -67,7 +66,7 @@ export interface SettingsPage {
   badge?: SettingsBadgeKey;
 }
 
-export type SettingsTabbedPageId = "library" | "maintenance" | "system";
+export type SettingsTabbedPageId = "appearance" | "connections" | "library" | "maintenance" | "system";
 
 export interface SettingsTab {
   href: string;

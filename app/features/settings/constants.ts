@@ -1,6 +1,7 @@
 import {
   Activity,
   ArrowUpCircle,
+  AudioLines,
   Bell,
   CopyCheck,
   Download,
@@ -13,9 +14,10 @@ import {
   LayoutGrid,
   Library,
   Link2,
+  LayoutDashboard,
   ListOrdered,
   Palette,
-  Radio,
+  Plug,
   ScanSearch,
   Server,
   ShieldBan,
@@ -52,21 +54,21 @@ export const SETTINGS_PAGE_BY_ID = {
     descriptionKey: "shell.pages.appearance.description",
     icon: Palette,
   },
-  connectedAccounts: {
-    id: "connectedAccounts",
+  playback: {
+    id: "playback",
     group: "you",
-    href: "/settings/connected-accounts",
-    labelKey: "shell.pages.connectedAccounts.title",
-    descriptionKey: "shell.pages.connectedAccounts.description",
-    icon: Link2,
+    href: "/settings/playback",
+    labelKey: "shell.pages.playback.title",
+    descriptionKey: "shell.pages.playback.description",
+    icon: AudioLines,
   },
-  listening: {
-    id: "listening",
+  connections: {
+    id: "connections",
     group: "you",
-    href: "/settings/listening",
-    labelKey: "shell.pages.listening.title",
-    descriptionKey: "shell.pages.listening.description",
-    icon: Radio,
+    href: "/settings/connections",
+    labelKey: "shell.pages.connections.title",
+    descriptionKey: "shell.pages.connections.description",
+    icon: Plug,
   },
   notifications: {
     id: "notifications",
@@ -75,14 +77,6 @@ export const SETTINGS_PAGE_BY_ID = {
     labelKey: "shell.pages.notifications.title",
     descriptionKey: "notifications.pageDescription",
     icon: Bell,
-  },
-  apps: {
-    id: "apps",
-    group: "you",
-    href: "/settings/apps",
-    labelKey: "shell.pages.apps.title",
-    descriptionKey: "shell.pages.apps.description",
-    icon: KeyRound,
   },
   overview: {
     id: "overview",
@@ -175,6 +169,14 @@ export const YOU_PAGES: readonly SettingsPage[] = SETTINGS_PAGES.filter((page) =
 export const SERVER_PAGES: readonly SettingsPage[] = SETTINGS_PAGES.filter((page) => page.group === "server");
 
 export const SETTINGS_TABS: Readonly<Record<SettingsTabbedPageId, readonly SettingsTab[]>> = {
+  appearance: [
+    { href: "/settings/appearance/theme", labelKey: "shell.tabs.appearance.theme", icon: Palette },
+    { href: "/settings/appearance/board", labelKey: "shell.tabs.appearance.board", icon: LayoutDashboard },
+  ],
+  connections: [
+    { href: "/settings/connections/services", labelKey: "shell.tabs.connections.services", icon: Link2 },
+    { href: "/settings/connections/apps", labelKey: "shell.tabs.connections.apps", icon: KeyRound },
+  ],
   library: [
     { href: "/settings/library/paths", labelKey: "shell.tabs.library.paths", icon: FolderTree },
     { href: "/settings/library/scan", labelKey: "shell.tabs.library.scan", icon: ScanSearch },

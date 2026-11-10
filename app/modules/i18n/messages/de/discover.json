@@ -423,11 +423,11 @@
   },
   "charts": {
     "title": "Charts",
-    "subtitle": "Top-Titel in {{country}}",
-    "empty": "Gerade keine Charts für diese Region.",
+    "subtitle": "Top-Titel weltweit",
+    "empty": "Gerade keine Charts.",
     "play": "Abspielen",
     "request": "Anfordern",
-    "leaderBadge": "#1 in {{country}}"
+    "leaderBadge": "#1 weltweit"
   },
   "loved": {
     "title": "Auf Last.fm geliebt, hier nicht",

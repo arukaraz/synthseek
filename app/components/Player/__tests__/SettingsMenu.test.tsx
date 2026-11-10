@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { createPlayerActions, createPlayerDevice, createPlayerView } from "@test/factories";
+import { createPlayerActions, createPlayerView } from "@test/factories";
 import { EQUALIZER_MAX_DB, EQUALIZER_MIN_DB, EQUALIZER_PRESETS, EQUALIZER_STEP_DB } from "@hooks/ui/player/constants";
 import enPlayer from "@modules/i18n/messages/en/player.json";
 
@@ -64,6 +64,18 @@ describe("the playback settings panel", () => {
     expect(within(dialog).getByText(enPlayer.settings.transition.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.autoplay.caption)).toBeInTheDocument();
     expect(within(dialog).getByText(enPlayer.settings.conversion.caption)).toBeInTheDocument();
+  });
+
+  it("offers the Playback settings page and closes itself on the way there", async () => {
+    const { actions, user } = renderMenu();
+
+    const link = screen.getByRole("link");
+    expect(enPlayer.settings.loudness.alsoIn).toContain(`<settings>${link.textContent}</settings>`);
+    expect(link).toHaveAttribute("href", "/settings/playback");
+
+    await user.click(link);
+
+    expect(actions.toggleSettings).toHaveBeenCalledTimes(1);
   });
 
   it("offers no source choice for a track only one source can play", () => {
@@ -319,11 +331,10 @@ describe("the equaliser controls", () => {
     expect(screen.getByText(enPlayer.equalizer.headroom.replace("{{value}}", "-6.1"))).toBeInTheDocument();
   });
 
-  it("says it shapes only this browser when the sound is somewhere else", () => {
-    const kitchen = createPlayerDevice({ id: "kitchen", name: "Kitchen", local: false, active: true });
-    renderMenu({}, { activeDevice: kitchen, devices: [createPlayerDevice({ active: false }), kitchen] });
+  it("says it shapes only this browser, whichever device plays", () => {
+    renderMenu();
 
-    expect(screen.getByText(enPlayer.equalizer.remoteHint)).toBeInTheDocument();
+    expect(screen.getByText(enPlayer.equalizer.hint)).toBeInTheDocument();
   });
 });
 

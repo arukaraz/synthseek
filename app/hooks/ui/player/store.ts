@@ -150,6 +150,8 @@ let state: PlayerSessionState = {
   failedSources: null,
 };
 
+export const EMPTY_STATE: PlayerSessionState = state;
+
 let mirrorTimer: ReturnType<typeof setInterval> | undefined;
 let skipTimer: ReturnType<typeof setTimeout> | undefined;
 let connected = false;

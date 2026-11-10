@@ -33,9 +33,9 @@ import {
   settingsSlider,
   settingsSliderLabel,
 } from "./styles";
-import type { PlayerSettingsSectionProps } from "./types";
+import type { PlayerSettingsControlProps } from "./types";
 
-export function TransitionSection({ view, actions }: PlayerSettingsSectionProps) {
+export function TransitionSection({ view, actions }: PlayerSettingsControlProps) {
   const { t } = useTranslation("player");
   const { transition } = view;
   const [draftSeconds, setDraftSeconds] = useState(transition.seconds);

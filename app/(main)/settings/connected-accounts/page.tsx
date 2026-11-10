@@ -1,7 +1,5 @@
-"use client";
-
-import { ConnectedAccountsSection } from "@features/settings/sections/ProfileSection/ConnectedAccountsSection";
+import { redirect } from "next/navigation";
 
 export default function ConnectedAccountsPage() {
-  return <ConnectedAccountsSection />;
+  redirect("/settings/connections/services");
 }

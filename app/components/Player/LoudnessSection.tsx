@@ -15,9 +15,9 @@ import {
   settingsSectionHeader,
   settingsSectionTitle,
 } from "./styles";
-import type { PlayerSettingsSectionProps } from "./types";
+import type { PlayerSettingsControlProps } from "./types";
 
-export function LoudnessSection({ view, actions }: PlayerSettingsSectionProps) {
+export function LoudnessSection({ view, actions }: PlayerSettingsControlProps) {
   const { t } = useTranslation("player");
   const { loudness } = view;
   const [draftPreamp, setDraftPreamp] = useState(loudness.preAmpDb);

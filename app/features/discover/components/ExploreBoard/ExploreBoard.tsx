@@ -11,7 +11,7 @@ import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useBoardDevice } from "@hooks/ui/board/useBoardDevice";
 
 import { useBoardEditor } from "../../hooks/useBoardEditor";
-import { BoardCustomizationDialog } from "../BoardCustomization/BoardCustomizationDialog";
+import { WidgetsDialog } from "../WidgetsDialog/WidgetsDialog";
 import { BoardEmpty } from "./BoardEmpty";
 import { BoardTile } from "./BoardTile";
 import { BoardToolbar } from "./BoardToolbar";
@@ -45,7 +45,7 @@ export function ExploreBoard() {
       aria-label={t("board.regionLabel")}
     >
       {items.length === 0 ? (
-        <BoardEmpty onAddWidget={() => editor.openCustomization("widgets")} />
+        <BoardEmpty onAddWidget={editor.openWidgets} />
       ) : (
         <BoardGrid device={device} appearance={appearance.data}>
           {items.map((item, index) => {
@@ -73,22 +73,18 @@ export function ExploreBoard() {
         onCustomize={editor.startEditing}
         onDone={editor.stopEditing}
         onAddSpacer={editor.addSpacer}
-        onCustomization={() => editor.openCustomization("board")}
+        onWidgets={editor.openWidgets}
       />
       <p className={liveRegion()} aria-live="polite">
         {editor.announcement}
       </p>
-      {editor.customization ? (
-        <BoardCustomizationDialog
+      {editor.widgets ? (
+        <WidgetsDialog
           lists={lists}
-          device={device}
-          opening={editor.customization}
-          appearance={appearance.data}
+          opening={editor.widgets}
           custom={custom}
-          customStatus={customStatus}
-          onSave={editor.saveCustomization}
-          onTemplateApplied={editor.templateApplied}
-          onClose={editor.closeCustomization}
+          onSave={editor.saveBoard}
+          onClose={editor.closeWidgets}
         />
       ) : null}
     </section>

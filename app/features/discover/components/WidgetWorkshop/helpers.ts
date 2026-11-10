@@ -1,5 +1,7 @@
 import i18n from "@locale";
 
+import type { SearchComboboxOption } from "@components/ui/SearchCombobox";
+import { COUNTRIES, getCountryByCode } from "@utils/countries";
 import { matchesTerms, searchTerms } from "@utils/search";
 import type {
   FeedQuery,
@@ -21,6 +23,7 @@ import type { BlockSuggestionInput } from "../CustomWidget/types";
 import { lockedBlockSize } from "../ExploreBoard/helpers";
 import { compactCount, percentOf } from "../helpers";
 import {
+  ANY_COUNTRY,
   DAILY_YEAR_MIN_DAYS,
   DEFAULT_DAYS,
   DEFAULT_FEED_SEED,
@@ -479,6 +482,19 @@ function feedWithSource(base: FeedBase, source: FeedSource, defaults: FeedDefaul
     case "lidarr.wanted":
       return { ...base, source, params: {} };
   }
+}
+
+export function chartCountryOptions(query: string, worldwide: string): SearchComboboxOption[] {
+  const terms = searchTerms(query);
+  const options = [
+    { value: ANY_COUNTRY, label: worldwide },
+    ...COUNTRIES.map((country) => ({ value: country.code, label: country.name })),
+  ];
+  return terms.length === 0 ? options : options.filter((option) => matchesTerms(terms, [option.label]));
+}
+
+export function chartCountryLabel(country: string | null, worldwide: string): string {
+  return country === null ? worldwide : (getCountryByCode(country)?.name ?? country);
 }
 
 export function withSource(feed: FeedQuery, source: FeedSource, catalog: WidgetCatalog, country: string): FeedQuery {

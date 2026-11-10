@@ -11,7 +11,7 @@ import type { SettingsSearchResult } from "../../../types";
 
 function result(anchor: string, label: string, place: string): SettingsSearchResult {
   return {
-    entry: { labelKey: "mcp.title", page: "apps", href: "/settings/apps", anchor },
+    entry: { labelKey: "mcp.title", page: "connections", href: "/settings/connections/apps", anchor },
     label,
     place,
   };

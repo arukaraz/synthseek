@@ -55,6 +55,7 @@ export interface EngineTimeouts {
 
 export interface SlskdCardProps {
   initial: {
+    source: DownloadSourcesConfig["slskd"];
     connection: { apiUrl: string; apiKey: string; bannedUsers: string[] };
     search: SlskdEngineSearch;
     timeouts: EngineTimeouts;

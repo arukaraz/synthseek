@@ -22,9 +22,9 @@ import {
   settingsSectionHeader,
   settingsSectionTitle,
 } from "./styles";
-import type { PlayerSettingsSectionProps } from "./types";
+import type { PlayerSettingsControlProps } from "./types";
 
-export function ConversionSection({ view, actions }: PlayerSettingsSectionProps) {
+export function ConversionSection({ view, actions }: PlayerSettingsControlProps) {
   const { t } = useTranslation("player");
   const { conversion } = view;
 

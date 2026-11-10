@@ -7,26 +7,13 @@ import { Button } from "@components/ui/Button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@components/ui/DropdownMenu";
 
 import { BOARD_LIST_ICONS, BOARD_LIST_KEYS } from "../ExploreBoard/constants";
-import { LockedAction } from "./LockedAction";
 import { cardAction, layoutChevron } from "./styles";
 import type { LayoutMenuProps } from "./types";
 
-export function LayoutMenu({ lists, tone, label, ariaLabel, onPick, lockedHint }: LayoutMenuProps) {
+export function LayoutMenu({ lists, tone, label, ariaLabel, onPick }: LayoutMenuProps) {
   const { t } = useTranslation(["widgets"]);
   const Icon = tone === "add" ? Plus : X;
   const variant = tone === "add" ? "default" : "ghost";
-
-  if (lockedHint) {
-    return (
-      <LockedAction label={ariaLabel} hint={lockedHint}>
-        <Button size="sm" variant={variant} className={cardAction()} disabled aria-hidden tabIndex={-1}>
-          <Icon />
-          {label}
-          <ChevronDown className={layoutChevron()} aria-hidden />
-        </Button>
-      </LockedAction>
-    );
-  }
 
   return (
     <DropdownMenu>

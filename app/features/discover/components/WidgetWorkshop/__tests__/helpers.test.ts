@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { FeedQuery, RecipeQuery } from "@hooks/api/queries/widgets/types";
 import { createWidgetCatalog, createWidgetGrammar } from "@test/factories";
+import { COUNTRIES } from "@utils/countries";
 
 import { DEFAULT_QUERIES, NEW_WIDGET_DRAFT } from "../../../constants";
 import {
@@ -26,6 +27,8 @@ import {
   withServer,
   withSource,
   withSubject,
+  chartCountryLabel,
+  chartCountryOptions,
 } from "../helpers";
 
 const grammar = createWidgetGrammar();
@@ -203,6 +206,19 @@ describe("withSource and feedReadbackOf", () => {
     expect(fresh.pick.by).toBe("rank");
     const back = withSource(fresh, "lastfm.similarArtists", catalog, "US");
     expect(back.params).toEqual({ seed: { kind: "myTopArtists", n: 10, days: 90 } });
+  });
+
+  it("offers the worldwide chart first, then every country whose name matches the search", () => {
+    const all = chartCountryOptions("", "Worldwide");
+    expect(all[0]).toEqual({ value: "any", label: "Worldwide" });
+    expect(all).toHaveLength(COUNTRIES.length + 1);
+    expect(chartCountryOptions("mex", "Worldwide").map((option) => option.value)).toEqual(["MX"]);
+    expect(chartCountryOptions("zzzz", "Worldwide")).toEqual([]);
+  });
+
+  it("names the chart's country, or the worldwide chart when it has none", () => {
+    expect(chartCountryLabel("MX", "Worldwide")).toBe("Mexico");
+    expect(chartCountryLabel(null, "Worldwide")).toBe("Worldwide");
   });
 
   it("charts the member's chosen country, not one guessed from the language", () => {

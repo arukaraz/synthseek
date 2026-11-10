@@ -57,6 +57,8 @@ describe("EnrichmentCard", () => {
           ...initial,
           fanartApiKey: SECRET_SENTINEL,
           acoustidApiKey: SECRET_SENTINEL,
+          lastfmApiKey: SECRET_SENTINEL,
+          lastfmApiSecret: SECRET_SENTINEL,
           songlinkApiKey: SECRET_SENTINEL,
           discogsToken: SECRET_SENTINEL,
           bandsintownAppId: SECRET_SENTINEL,
@@ -69,6 +71,8 @@ describe("EnrichmentCard", () => {
     expect(reveal.mock.calls.map(([ref]) => ref)).toEqual([
       { section: "connections.enrichment", field: "fanartApiKey" },
       { section: "connections.enrichment", field: "acoustidApiKey" },
+      { section: "connections.enrichment", field: "lastfmApiKey" },
+      { section: "connections.enrichment", field: "lastfmApiSecret" },
       { section: "connections.enrichment", field: "songlinkApiKey" },
       { section: "connections.enrichment", field: "discogsToken" },
       { section: "connections.enrichment", field: "bandsintownAppId" },
@@ -96,6 +100,22 @@ describe("EnrichmentCard", () => {
 
     await waitFor(() => {
       expect(update.mutateAsync).toHaveBeenCalledWith({ ...initial, musicbrainzEmail: "me@example.com" });
+    });
+  });
+
+  it("carries the Last.fm key and secret and saves them with the rest of the enrichment settings", async () => {
+    render(<EnrichmentCard initial={initial} />);
+
+    await userEvent.type(secretInputFor(enSettings.metadata.enrichment.lastfmKey.label), "lfm-key");
+    await userEvent.type(secretInputFor(enSettings.metadata.enrichment.lastfmSecret.label), "lfm-secret");
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(update.mutateAsync).toHaveBeenCalledWith({
+        ...initial,
+        lastfmApiKey: "lfm-key",
+        lastfmApiSecret: "lfm-secret",
+      });
     });
   });
 

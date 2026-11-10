@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { fireEvent, render, screen } from "@test/test-utils";
+import enWidgets from "@modules/i18n/messages/en/widgets.json";
 
 import { BoardToolbar } from "../BoardToolbar";
 import type { BoardToolbarProps } from "../types";
@@ -10,7 +11,7 @@ function handlers(): Omit<BoardToolbarProps, "editing"> {
     onCustomize: vi.fn(),
     onDone: vi.fn(),
     onAddSpacer: vi.fn(),
-    onCustomization: vi.fn(),
+    onWidgets: vi.fn(),
   };
 }
 
@@ -61,7 +62,7 @@ describe("BoardToolbar", () => {
   });
 
   it.each([
-    ["Board Customization", "onCustomization"],
+    ["Widgets", "onWidgets"],
     ["Done", "onDone"],
   ] as const)("runs %s from the edit menu", (name, handler) => {
     const actions = handlers();
@@ -72,7 +73,7 @@ describe("BoardToolbar", () => {
     expect(actions[handler]).toHaveBeenCalledTimes(1);
   });
 
-  it("leads the menu with Add, then Board Customization, and keeps Done outside the part that scrolls", () => {
+  it("leads the menu with Add, then Widgets and Appearance, and keeps Done outside the part that scrolls", () => {
     render(<BoardToolbar editing {...handlers()} />);
     const add = screen.getByRole("button", { name: "Add" });
     const scroller = add.parentElement?.parentElement;
@@ -80,9 +81,19 @@ describe("BoardToolbar", () => {
     expect(scroller).toHaveClass("overflow-x-auto");
     expect(Array.from(add.parentElement?.children ?? [], (button) => button.textContent)).toEqual([
       "Add",
-      "Board Customization",
+      "Widgets",
+      "Appearance",
     ]);
     expect(scroller).not.toContainElement(screen.getByRole("button", { name: "Done" }));
+  });
+
+  it("takes Appearance to the board tab under Settings, where the arrangement, look and templates live", () => {
+    render(<BoardToolbar editing {...handlers()} />);
+
+    expect(screen.getByRole("link", { name: enWidgets.board.appearance.title })).toHaveAttribute(
+      "href",
+      "/settings/appearance/board"
+    );
   });
 
   it("draws the pencil as part of the grid, with no badge of its own", () => {

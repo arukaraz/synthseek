@@ -107,14 +107,15 @@
       "caption": "NORMALIZACIÓN DE VOLUMEN",
       "enabled": "Normalizar el volumen",
       "preamp": "Ganancia extra",
-      "hint": "Iguala el volumen de una pista a la siguiente."
+      "hint": "Iguala el volumen de una pista a la siguiente. Para tu cuenta, en todos los dispositivos.",
+      "alsoIn": "También en <settings>Ajustes > Reproducción</settings>."
     },
     "conversion": {
       "caption": "CONVERSIÓN",
       "enabled": "Convertir a mp3 en este navegador",
       "bitrate": "Tasa de bits",
       "bitrateValue": "{{kbps}} kbps",
-      "hint": "Ahorra datos en una conexión lenta. Apagado, suena el fichero original salvo que el navegador no pueda decodificarlo."
+      "hint": "Ahorra datos en una conexión lenta. Apagado, suena el fichero original salvo que el navegador no pueda decodificarlo. Solo en este navegador."
     },
     "source": {
       "caption": "SONANDO DESDE",
@@ -135,13 +136,13 @@
       },
       "hints": {
         "gapless": "Una canción sigue a la otra sin corte. Solo en este navegador.",
-        "crossfade": "Cada canción se funde con la siguiente, cuando acaba y cuando saltas."
+        "crossfade": "Cada canción se funde con la siguiente, cuando acaba y cuando saltas. Solo en este navegador."
       }
     },
     "autoplay": {
       "caption": "REPRODUCCIÓN AUTOMÁTICA",
       "enabled": "Seguir con canciones parecidas",
-      "hint": "Cuando la cola se acaba, siguen sonando canciones de tu biblioteca parecidas a lo que elegiste."
+      "hint": "Cuando la cola se acaba, siguen sonando canciones de tu biblioteca parecidas a lo que elegiste. Para tu cuenta, en todos los dispositivos."
     }
   },
   "equalizer": {
@@ -153,7 +154,7 @@
     "band": "Banda de {{band}} Hz",
     "gain": "{{value}} dB",
     "headroom": "Margen de {{value}} dB, el punto más alto de esta curva",
-    "remoteHint": "Solo afecta a lo que suena en este navegador",
+    "hint": "Solo en este navegador.",
     "preamp": "Preamplificador",
     "savePreset": "Guardar",
     "presetName": "Nombre del preajuste",

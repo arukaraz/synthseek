@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { fireEvent, renderWithProviders, screen, within } from "@test/test-utils";
+import enDiscover from "@modules/i18n/messages/en/discover.json";
 
 import { Charts } from "../Charts/Charts";
 import { ContinueListening } from "../ContinueListening/ContinueListening";
@@ -23,7 +24,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("@hooks/api/queries/analytics/useOrbitAlbums", () => ({ useOrbitAlbums: () => mocks.orbit() }));
 vi.mock("@hooks/api/queries/analytics/useCharts", () => ({
-  useCharts: (country: string) => mocks.charts(country),
+  useCharts: () => mocks.charts(),
 }));
 vi.mock("@hooks/api/queries/analytics/useLovedNotHere", () => ({ useLovedNotHere: () => mocks.loved() }));
 vi.mock("@hooks/api/queries/analytics/useRarities", () => ({ useRarities: () => mocks.rarities() }));
@@ -136,7 +137,7 @@ describe("Orbit", () => {
 });
 
 describe("Charts", () => {
-  it("asks for the member's country, plays what is owned and requests the rest", () => {
+  it("shows the worldwide chart, plays what is owned and requests the rest", () => {
     mocks.charts.mockReturnValue(
       ready([
         { title: "Joga", artist: "Bjork", libraryTrackId: "lib1", track: null },
@@ -146,10 +147,9 @@ describe("Charts", () => {
     );
     renderWithProviders(<Charts size="M" info="x" />);
 
-    expect(mocks.charts).toHaveBeenCalledWith("MX");
-    expect(screen.getByText("Top tracks in Mexico")).toBeInTheDocument();
+    expect(screen.getByText(enDiscover.charts.subtitle)).toBeInTheDocument();
     const leader = screen.getByRole("article");
-    expect(leader).toHaveTextContent("#1 in Mexico");
+    expect(leader).toHaveTextContent(enDiscover.charts.leaderBadge);
     fireEvent.click(within(leader).getByRole("button", { name: "Play Joga" }));
 
     const rows = screen.getAllByRole("listitem");
@@ -182,7 +182,10 @@ describe("LovedNotHere", () => {
     renderWithProviders(<LovedNotHere size="M" info="x" />);
 
     expect(screen.getByText("Add your Last.fm username to see these.")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Settings/ })).toHaveAttribute("href", "/settings/listening#lastfm.feeds");
+    expect(screen.getByRole("link", { name: /Settings/ })).toHaveAttribute(
+      "href",
+      "/settings/connections/services#lastfm.feeds"
+    );
   });
 
   it("requests a loved track the library is missing", () => {

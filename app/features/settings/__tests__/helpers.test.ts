@@ -42,6 +42,12 @@ describe("settingsPageAt", () => {
   it("finds the page owning a nested path", () => {
     expect(settingsPageAt("/settings/library/scan")).toBe(SETTINGS_PAGE_BY_ID.library);
     expect(settingsPageAt("/settings/maintenance/recycle-bin")).toBe(SETTINGS_PAGE_BY_ID.maintenance);
+    expect(settingsPageAt("/settings/connections/apps")).toBe(SETTINGS_PAGE_BY_ID.connections);
+    expect(settingsPageAt("/settings/appearance/board")).toBe(SETTINGS_PAGE_BY_ID.appearance);
+  });
+
+  it("does not let the old connected accounts route fall under the connections page", () => {
+    expect(settingsPageAt("/settings/connected-accounts")).toBeUndefined();
   });
 
   it("finds no page for the root or an unknown path", () => {

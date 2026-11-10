@@ -423,11 +423,11 @@
   },
   "charts": {
     "title": "Listas",
-    "subtitle": "Lo más escuchado en {{country}}",
-    "empty": "No hay lista para esta región ahora mismo.",
+    "subtitle": "Lo más escuchado en el mundo",
+    "empty": "No hay lista ahora mismo.",
     "play": "Reproducir",
     "request": "Solicitar",
-    "leaderBadge": "#1 en {{country}}"
+    "leaderBadge": "#1 en el mundo"
   },
   "loved": {
     "title": "Favoritas en Last.fm que no tienes",

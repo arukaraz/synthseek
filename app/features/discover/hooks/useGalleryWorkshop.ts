@@ -9,7 +9,7 @@ import { useMyWidgets } from "@hooks/api/queries/widgets/useMyWidgets";
 import { useWidgetPresets } from "@hooks/api/queries/widgets/useWidgetPresets";
 import { useCountry } from "@modules/providers/CountryProvider";
 
-import type { GalleryWorkshop } from "../components/BoardCustomization/types";
+import type { GalleryWorkshop } from "../components/WidgetsDialog/types";
 import { BOARD_WIDGETS } from "../components/ExploreBoard/constants";
 import type { BoardGalleryTarget } from "../components/ExploreBoard/types";
 import { customizedDraftOf, draftOf, presetFor } from "../components/WidgetGallery/helpers";

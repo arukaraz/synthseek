@@ -19,6 +19,7 @@ interface SlskdStatusData {
 }
 
 const updateConnection = createMockMutation();
+const updateSource = createMockMutation();
 const updateSearch = createMockMutation();
 const updateTimeouts = createMockMutation();
 const testConnection = createMockMutation();
@@ -32,6 +33,10 @@ vi.mock("@hooks/api/mutations/settings/useUpdateConnections", () => ({
 }));
 
 vi.mock("@hooks/api/mutations/settings/useRevealSecret", () => ({ useRevealSettingsSecret: () => reveal }));
+
+vi.mock("@hooks/api/mutations/settings/useDownloadSources", () => ({
+  useUpdateDownloadSources: () => updateSource,
+}));
 
 vi.mock("@hooks/api/mutations/settings/useUpdateEngine", () => ({
   useUpdateEngineSearch: () => updateSearch,
@@ -62,6 +67,7 @@ afterEach(() => {
 });
 
 const initial: SlskdCardProps["initial"] = {
+  source: { enabled: true, priority: 0 },
   connection: { apiUrl: "http://localhost:5030", apiKey: "secret-key", bannedUsers: [] },
   search: {
     maxPeerAttempts: 3,
@@ -138,6 +144,20 @@ describe("SlskdCard", () => {
     await userEvent.click(screen.getByRole("button", { name: enSettings.slskd.testConnection }));
 
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Refused"));
+  });
+
+  it("saves only the source switch, without its priority, after turning slskd off", async () => {
+    render(<SlskdCard initial={initial} />);
+
+    await userEvent.click(screen.getByRole("switch", { name: enSettings.slskd.enable.ariaLabel }));
+    await userEvent.click(screen.getByRole("button", { name: enSettings.shell.saveBar.save }));
+
+    await waitFor(() => {
+      expect(updateSource.mutateAsync).toHaveBeenCalledWith({ slskd: { enabled: false } });
+    });
+    expect(updateConnection.mutateAsync).not.toHaveBeenCalled();
+    expect(updateSearch.mutateAsync).not.toHaveBeenCalled();
+    expect(updateTimeouts.mutateAsync).not.toHaveBeenCalled();
   });
 
   it("saves only the dirty search section after toggling a search switch", async () => {

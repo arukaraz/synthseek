@@ -423,11 +423,11 @@
   },
   "charts": {
     "title": "Classements",
-    "subtitle": "Meilleurs titres en {{country}}",
-    "empty": "Aucun classement pour cette région pour le moment.",
+    "subtitle": "Meilleurs titres dans le monde",
+    "empty": "Aucun classement pour le moment.",
     "play": "Lire",
     "request": "Demander",
-    "leaderBadge": "N°1 en {{country}}"
+    "leaderBadge": "N°1 dans le monde"
   },
   "loved": {
     "title": "Aimés sur Last.fm, absents ici",

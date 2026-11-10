@@ -29,8 +29,6 @@
     "playlist": "Playlist inteligente · {{refresh}}",
     "meta": "{{view}} · {{kind}}",
     "addToBoard": "Añadir al tablero",
-    "addWhileTemplate": "Guarda o cancela la plantilla primero y luego añade tus widgets.",
-    "deleteWhileTemplate": "Guarda o cancela la plantilla primero y luego borra tu widget.",
     "addNamed": "Añadir {{name}} al tablero",
     "onBoard": "En el tablero",
     "edit": "Editar",
@@ -55,15 +53,9 @@
     "deleteWithTiles_other": "El widget se quita de Mis widgets y de sus {{count}} tiles en tu tablero."
   },
   "board": {
-    "customization": {
-      "action": "Personalización del tablero",
-      "title": "Personalización del tablero",
-      "sections": {
-        "label": "Secciones de la personalización del tablero",
-        "board": "Tablero",
-        "widgets": "Widgets",
-        "arrange": "Organizar"
-      }
+    "widgetsDialog": {
+      "action": "Widgets",
+      "title": "Widgets"
     },
     "layouts": {
       "label": "Disposición",
@@ -508,6 +500,9 @@
     },
     "country": "País",
     "anywhere": "Cualquier lugar",
+    "worldwide": "Todo el mundo",
+    "searchCountry": "Buscar un país",
+    "noCountry": "Ningún país coincide.",
     "showsWithin": "en los próximos",
     "needs": {
       "lastfm": "Necesita Last.fm",
@@ -646,8 +641,7 @@
     "tracks": "pistas",
     "never": "Nunca incluir",
     "neverEmpty": "Nada todavía. Usa el botón de vetar dentro de cualquier lista.",
-    "neverEdit": "Editar para todos los widgets",
-    "neverHint": "Viene de tu cuenta. Pulsa X para permitir uno solo en este widget.",
+    "neverHint": "Viene de tu cuenta, en Mis widgets. Pulsa X para permitir uno solo en este widget.",
     "allowHere": "Permitir {{name}} en este widget",
     "excludeHere": "Volver a excluir {{name}} aquí",
     "mix": "Mezcla",
@@ -802,5 +796,18 @@
     "stations": "Estaciones",
     "genres": "Géneros",
     "continueListening": "Seguir escuchando"
+  },
+  "neverInclude": {
+    "title": "Nunca incluir",
+    "description": "Se aplica a todas las listas inteligentes de tu cuenta. Un widget puede permitir uno para sí mismo.",
+    "artists": "Artistas",
+    "tracks": "Pistas",
+    "noTaste": "Escuchas que no forman tu gusto",
+    "searchArtists": "Buscar artistas",
+    "searchTracks": "Buscar pistas por título o artista",
+    "searchGenres": "Buscar géneros",
+    "trackBy": "{{title}} · {{artist}}",
+    "remove": "Quitar {{name}}",
+    "noMatch": "Sin resultados"
   }
 }

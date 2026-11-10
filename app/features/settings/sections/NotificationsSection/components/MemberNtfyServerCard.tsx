@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@components/ui/Input";
 import { useNotificationAdminSettings, useUpdateNotificationAdminSettings } from "@hooks/api";
 
+import { Pill } from "../../../components/Pill";
 import { SaveBar } from "../../../components/SaveBar";
 import { SettingsCard } from "../../../components/SettingsCard";
 import { SettingsField } from "../../../components/SettingsField";
@@ -22,6 +23,7 @@ export function MemberNtfyServerCard() {
   return (
     <SettingsCard
       title={t("notifications.memberServer.title")}
+      titleTrailing={<Pill tone="info">{t("shell.card.admin")}</Pill>}
       optional
       description={t("notifications.memberServer.description")}
       anchor="member-ntfy"
