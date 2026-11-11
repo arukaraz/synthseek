@@ -1,6 +1,16 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync } from "node:fs";
+import {
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,6 +20,7 @@ const WEB = join(SITES, "..");
 const SITE_NAMES = ["docs", "landing"];
 const DEPENDENCY_FOLDERS = ["node_modules", "shared/node_modules", "docs/node_modules", "landing/node_modules"];
 const SKIPPED_FOLDERS = new Set(["_astro", "pagefind"]);
+const CACHE_ENTRIES = new Set([".astro", ".vite", ".cache"]);
 
 const MAIN = /<main\b[^>]*>([\s\S]*?)<\/main>/i;
 const BODY = /<body\b[^>]*>([\s\S]*?)<\/body>/i;
@@ -126,17 +137,53 @@ function report(before, after) {
   return sections.length === 0 ? "No reader-visible text changed on either site.\n" : `${sections.join("\n\n")}\n`;
 }
 
+function workspacePathOf(resolved) {
+  const inside = relative(SITES, resolved);
+  if (inside === "" || inside.startsWith("..") || inside.split(sep).includes("node_modules")) return null;
+  return inside;
+}
+
+function linkEntry(source, target, sitesRoot) {
+  const stats = lstatSync(source);
+  if (!stats.isSymbolicLink()) {
+    symlinkSync(source, target, stats.isDirectory() ? "dir" : "file");
+    return;
+  }
+  if (!existsSync(source)) {
+    process.stderr.write(`Skipping ${source}: its link points at nothing\n`);
+    return;
+  }
+  const resolved = realpathSync(source);
+  const workspace = workspacePathOf(resolved);
+  symlinkSync(workspace === null ? resolved : join(sitesRoot, workspace), target, "dir");
+}
+
+function linkFolder(source, target, sitesRoot) {
+  mkdirSync(target, { recursive: true });
+  for (const name of readdirSync(source)) {
+    if (CACHE_ENTRIES.has(name)) continue;
+    const from = join(source, name);
+    const to = join(target, name);
+    if (name.startsWith("@") && lstatSync(from).isDirectory()) linkFolder(from, to, sitesRoot);
+    else linkEntry(from, to, sitesRoot);
+  }
+}
+
+function linkDependencies(sitesRoot) {
+  for (const folder of DEPENDENCY_FOLDERS) {
+    const source = join(SITES, folder);
+    const target = join(sitesRoot, folder);
+    if (existsSync(source) && !existsSync(target)) linkFolder(source, target, sitesRoot);
+  }
+}
+
 function pagesAt(ref) {
   const scratch = mkdtempSync(join(tmpdir(), "sites-prose-diff-"));
   const checkout = join(scratch, "web");
   execFileSync("git", ["-C", WEB, "worktree", "add", "--detach", checkout, ref], { stdio: "ignore" });
   try {
     const sitesRoot = join(checkout, "sites");
-    for (const folder of DEPENDENCY_FOLDERS) {
-      if (existsSync(join(SITES, folder)) && !existsSync(join(sitesRoot, folder))) {
-        symlinkSync(join(SITES, folder), join(sitesRoot, folder), "dir");
-      }
-    }
+    linkDependencies(sitesRoot);
     build(sitesRoot);
     return pagesOf(sitesRoot);
   } finally {
