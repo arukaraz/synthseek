@@ -108,7 +108,7 @@ export const clampedBody = cva("min-w-0", {
 });
 
 export const clampedToggle = cva(
-  "text-primary-400 hover:text-primary-300 focus-visible:ring-primary-400 rounded text-xs font-medium outline-none focus-visible:ring-2"
+  "text-primary-400 hover:text-primary-500 focus-visible:ring-primary-400 rounded text-xs font-medium outline-none focus-visible:ring-2"
 );
 
 export const visuallyHidden = cva("sr-only");

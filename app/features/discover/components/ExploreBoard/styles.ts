@@ -43,7 +43,7 @@ export const boardMenuDivider = cva("bg-fg/15 mx-1 h-6 w-px shrink-0");
 export const boardMenuDone = cva("shrink-0");
 
 export const boardFab = cva(
-  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-500/40 hover:from-primary-500 hover:to-accent-500 focus-visible:ring-primary-300 pointer-events-auto flex size-14 items-center justify-center rounded-full bg-linear-to-r shadow-xl transition-all duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+  "from-primary-600 to-accent-600 text-overlay-fg shadow-primary-500/40 hover:from-primary-500 hover:to-accent-500 focus-visible:ring-primary-400 pointer-events-auto flex size-14 items-center justify-center rounded-full bg-linear-to-r shadow-xl transition-all duration-200 outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
 );
 
 export const boardFabLabel = cva("sr-only");
@@ -93,7 +93,7 @@ export const tileSlot = cva(
   "pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-1 px-4 text-center"
 );
 
-export const tileSlotName = cva("text-primary-300 max-w-full truncate text-sm font-semibold");
+export const tileSlotName = cva("text-primary-400 max-w-full truncate text-sm font-semibold");
 
 export const tileSlotSize = cva("text-primary-400/80 font-mono text-[11px] tracking-[0.14em] uppercase");
 

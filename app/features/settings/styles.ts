@@ -450,5 +450,5 @@ export const binDir = cva("text-fg/45 font-mono text-[11px] break-all");
 export const binRowMeta = cva("text-fg/50 font-mono text-[11px] tabular-nums");
 
 export const binRestore = cva(
-  "text-primary-400 hover:text-primary-300 mt-0.5 focus-visible:ring-primary-500/50 inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
+  "text-primary-400 hover:text-primary-500 mt-0.5 focus-visible:ring-primary-500/50 inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-1 text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
 );

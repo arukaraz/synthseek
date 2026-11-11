@@ -45,11 +45,12 @@ export function TrackRow({
   onEnqueue,
   onRemoveFromQueue,
   queuePresence = "absent",
+  previewSlot,
   onArtistNavigate,
 }: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
   const { t: tStatus } = useTranslation("status");
-  const preview = useTrackPreview(catalogPreviewClip(track.externalId, track.title));
+  const preview = useTrackPreview(catalogPreviewClip(track.externalId, track.title, previewSlot));
   const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
   const showCheckbox = selectable && isRemovableTrack(track);
 

@@ -33,7 +33,7 @@ export function Tracklist({
 
   return (
     <ul className={tracklistRoot()}>
-      {tracks.map((track) => {
+      {tracks.map((track, position) => {
         const playableId = playableTrackId(track);
         const selectableId = selectable && isRemovableTrack(track) ? track.requestId : null;
         return (
@@ -54,6 +54,7 @@ export function Tracklist({
             }
             onRemoveFromQueue={playableId === null ? undefined : () => playerActions.removeTrackFromQueue(playableId)}
             queuePresence={playableId === null ? "absent" : presenceOf(playableId)}
+            previewSlot={position}
             onArtistNavigate={onArtistNavigate ? () => onArtistNavigate(track) : undefined}
             onRequest={() => requestTrack(trackRequestInput(track), "direct")}
             onCustomizeRequest={() => requestTrack(trackRequestInput(track), "customize")}

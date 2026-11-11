@@ -45,9 +45,10 @@ function renderRows(tracks: TracklistTrack[]) {
   return renderWithProviders(
     <>
       <ul>
-        {tracks.map((track) => (
+        {tracks.map((track, position) => (
           <TrackRow
-            key={track.externalId}
+            key={`${track.externalId}-${position}`}
+            previewSlot={position}
             track={track}
             showArtist
             onRequest={noop}
@@ -87,6 +88,17 @@ describe("the preview on a track row", () => {
 
     expect(screen.getByText("6:09")).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("The preview of Get Lucky finished.");
+  });
+
+  it("lights only the row pressed when a list holds the same song twice", async () => {
+    const { user } = renderRows([createTrack(), createTrack()]);
+
+    await user.click(screen.getAllByRole("button", { name: "Play the 30 second preview of Get Lucky" })[1]);
+    act(() => FakeAudio.only().emit("playing"));
+
+    expect(screen.getAllByRole("button", { name: "Stop the preview of Get Lucky" })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: "Play the 30 second preview of Get Lucky" })).toHaveLength(1);
+    expect(FakeAudio.only().src).toBe("/api/v1/catalog/tracks/t1/preview");
   });
 
   it("moves the one sound to the next row pressed", async () => {

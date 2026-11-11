@@ -1,9 +1,10 @@
 import { TRACK_PREVIEW } from "./constants";
 import type { PreviewClip, PreviewClock, PreviewSnapshot, PreviewStatus } from "./types";
 
-export function catalogPreviewClip(trackId: string, title: string): PreviewClip {
+export function catalogPreviewClip(trackId: string, title: string, slot?: number): PreviewClip {
+  const place = slot === undefined ? "" : `${TRACK_PREVIEW.SLOT_SEPARATOR}${slot}`;
   return {
-    key: `${TRACK_PREVIEW.CATALOG_KEY_PREFIX}${trackId}`,
+    key: `${TRACK_PREVIEW.CATALOG_KEY_PREFIX}${trackId}${place}`,
     subject: "preview",
     src: `${TRACK_PREVIEW.CATALOG_PATH_PREFIX}${encodeURIComponent(trackId)}${TRACK_PREVIEW.CATALOG_PATH_SUFFIX}`,
     title,

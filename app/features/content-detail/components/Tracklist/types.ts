@@ -62,5 +62,6 @@ export interface TrackRowProps {
   onEnqueue?: () => Promise<boolean>;
   onRemoveFromQueue?: () => void;
   queuePresence?: QueuePresence;
+  previewSlot?: number;
   onArtistNavigate?: () => void;
 }

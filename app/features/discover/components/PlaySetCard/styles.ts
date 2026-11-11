@@ -9,7 +9,7 @@ export const pinFlag = cva(
 );
 
 export const playButton = cva(
-  "bg-primary text-primary-foreground shadow-primary-500/40 focus-visible:ring-primary-300 absolute right-3 bottom-3 z-10 flex size-11 items-center justify-center rounded-full shadow-lg transition outline-none hover:scale-105 focus-visible:ring-2 [&_svg]:size-5 [&_svg]:fill-current",
+  "bg-primary text-primary-foreground shadow-primary-500/40 focus-visible:ring-primary-400 absolute right-3 bottom-3 z-10 flex size-11 items-center justify-center rounded-full shadow-lg transition outline-none hover:scale-105 focus-visible:ring-2 [&_svg]:size-5 [&_svg]:fill-current",
   {
     variants: {
       reveal: {

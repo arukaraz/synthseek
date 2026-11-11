@@ -22,7 +22,7 @@ export const settingsTabs = cva("self-end");
 export const templatesBody = cva("flex flex-col gap-3");
 
 export const settingsLink = cva(
-  "text-primary-400 hover:text-primary-300 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1 self-start rounded text-xs font-medium outline-none focus-visible:ring-2"
+  "text-primary-400 hover:text-primary-500 focus-visible:ring-primary-400 inline-flex shrink-0 items-center gap-1 self-start rounded text-xs font-medium outline-none focus-visible:ring-2"
 );
 
 export const settingLabel = cva("text-fg text-sm font-medium");

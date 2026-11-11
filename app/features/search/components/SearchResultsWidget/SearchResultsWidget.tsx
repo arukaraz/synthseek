@@ -8,10 +8,10 @@ import { titleCase } from "@utils/formatters";
 import { AnimatePresence, motion } from "framer-motion";
 import { Inbox, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { startTransition, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { MAX_RESULTS_DISPLAY } from "../../constants";
+import { FILTER_TRANSITION_MS, MAX_RESULTS_DISPLAY } from "../../constants";
 import { useContentRequestFlow } from "../ContentRequestFlow/ContentRequestFlow";
 import { AllResults } from "../Results/AllResults";
 import { FilterTabs } from "../Results/FilterTabs";
@@ -27,6 +27,14 @@ export function SearchResultsWidget() {
   const searchParams = useSearchParams();
   const { openForResult } = useContentRequestFlow();
   const [isFilterTransitioning, setIsFilterTransitioning] = useState(false);
+  const transitionTimer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+    },
+    []
+  );
 
   const query = searchParams.get("q") ?? "";
   const filterParam = searchParams.get("filter");
@@ -65,9 +73,11 @@ export function SearchResultsWidget() {
       router.replace(`/search?${params.toString()}`, { scroll: false });
     });
 
-    setTimeout(() => {
+    if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+    transitionTimer.current = window.setTimeout(() => {
+      transitionTimer.current = null;
       setIsFilterTransitioning(false);
-    }, 300);
+    }, FILTER_TRANSITION_MS);
   };
 
   if (!query) {
