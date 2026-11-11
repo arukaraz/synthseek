@@ -203,6 +203,8 @@
     "playingTrack": "{{title}} läuft gerade",
     "pausedTrack": "{{title}} ist pausiert",
     "playTrack": "{{title}} jetzt abspielen",
+    "pauseTrack": "{{title}} pausieren",
+    "resumeTrack": "{{title}} fortsetzen",
     "added_one": "{{count}} Titel zur Warteschlange hinzugefügt",
     "added_other": "{{count}} Titel zur Warteschlange hinzugefügt",
     "nothingAdded": "Diese Titel stehen bereits in der Warteschlange",

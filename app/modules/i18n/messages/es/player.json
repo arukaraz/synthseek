@@ -203,6 +203,8 @@
     "playingTrack": "{{title}} está sonando",
     "pausedTrack": "{{title}} está en pausa",
     "playTrack": "Reproducir {{title}} ahora",
+    "pauseTrack": "Pausar {{title}}",
+    "resumeTrack": "Reanudar {{title}}",
     "added_one": "Se añadió {{count}} pista a la cola",
     "added_other": "Se añadieron {{count}} pistas a la cola",
     "nothingAdded": "Esas pistas ya están en la cola",

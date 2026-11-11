@@ -41,6 +41,7 @@ export function TrackRow({
   onPreviewHover,
   previewTone = "none",
   onPlayNow,
+  onTogglePlay,
   onEnqueue,
   onRemoveFromQueue,
   queuePresence = "absent",
@@ -113,6 +114,7 @@ export function TrackRow({
             title={track.title}
             presence={queuePresence}
             onPlayNow={onPlayNow}
+            onTogglePlay={onTogglePlay}
             onEnqueue={onEnqueue}
             onRemove={onRemoveFromQueue}
           />

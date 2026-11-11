@@ -1,18 +1,31 @@
 "use client";
 
 import { QueueAddButton } from "@components/ui/QueueAddButton";
-import { Play } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { trackPlaybackActions, trackPlayButton } from "../../styles";
 import type { TrackPlaybackActionsProps } from "./types";
 
-export function TrackPlaybackActions({ title, presence, onPlayNow, onEnqueue, onRemove }: TrackPlaybackActionsProps) {
+export function TrackPlaybackActions({
+  title,
+  presence,
+  onPlayNow,
+  onTogglePlay,
+  onEnqueue,
+  onRemove,
+}: TrackPlaybackActionsProps) {
   const { t } = useTranslation("player");
   const [starting, setStarting] = useState(false);
+  const playing = presence === "playing";
+  const current = onTogglePlay !== undefined && (playing || presence === "paused");
 
   const handlePlay = useCallback(async () => {
+    if (current && onTogglePlay !== undefined) {
+      onTogglePlay();
+      return;
+    }
     if (starting) return;
     setStarting(true);
     try {
@@ -20,19 +33,22 @@ export function TrackPlaybackActions({ title, presence, onPlayNow, onEnqueue, on
     } finally {
       setStarting(false);
     }
-  }, [onPlayNow, starting]);
+  }, [current, onPlayNow, onTogglePlay, starting]);
+
+  const Glyph = current && playing ? Pause : Play;
+  const label = current && playing ? "queue.pauseTrack" : current ? "queue.resumeTrack" : "queue.playTrack";
 
   return (
     <span className={trackPlaybackActions()}>
       <QueueAddButton title={title} presence={presence} onAdd={onEnqueue} onRemove={onRemove} revealOnHover />
       <button
         type="button"
-        className={trackPlayButton()}
+        className={trackPlayButton({ current })}
         onClick={handlePlay}
         disabled={starting}
-        aria-label={t("queue.playTrack", { title })}
+        aria-label={t(label, { title })}
       >
-        <Play className="size-4 fill-current" />
+        <Glyph className="size-4 fill-current" />
       </button>
     </span>
   );

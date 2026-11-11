@@ -203,6 +203,8 @@
     "playingTrack": "{{title}} is playing",
     "pausedTrack": "{{title}} is paused",
     "playTrack": "Play {{title}} now",
+    "pauseTrack": "Pause {{title}}",
+    "resumeTrack": "Resume {{title}}",
     "added_one": "Added {{count}} track to the queue",
     "added_other": "Added {{count}} tracks to the queue",
     "nothingAdded": "Those tracks are already in the queue",

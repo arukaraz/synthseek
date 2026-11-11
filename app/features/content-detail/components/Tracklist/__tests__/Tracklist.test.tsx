@@ -10,9 +10,10 @@ import type { ContentDetailActions } from "../../../types";
 import type { TracklistTrack } from "../types";
 import { Tracklist } from "../Tracklist";
 
-const { playback, stage, media } = vi.hoisted(() => ({
+const { playback, stage, media, player } = vi.hoisted(() => ({
+  player: { presence: "absent", resumableHere: true },
   playback: { playEntity: vi.fn(async () => true), enqueueEntity: vi.fn(async () => true) },
-  stage: { openStage: vi.fn(), removeTrackFromQueue: vi.fn() },
+  stage: { openStage: vi.fn(), removeTrackFromQueue: vi.fn(), togglePlay: vi.fn() },
   media: { wide: true },
 }));
 
@@ -23,7 +24,11 @@ vi.mock("@modules/providers/AuthProvider", () => ({
   useAuthContext: () => ({ currentUser: { role: "admin" } }),
 }));
 vi.mock("@hooks/ui/useEntityPlayback", () => ({ useEntityPlayback: () => playback }));
-vi.mock("@hooks/ui/player", () => ({ playerActions: stage, useQueuePresence: () => () => "absent" }));
+vi.mock("@hooks/ui/player", () => ({
+  playerActions: stage,
+  useQueuePresence: () => () => player.presence,
+  usePlayerResumableHere: () => player.resumableHere,
+}));
 vi.mock("@hooks/ui/useMediaQuery", () => ({
   useMediaQuery: (query: string) => query === STAGE_WIDE_QUERY && media.wide,
 }));
@@ -31,6 +36,8 @@ vi.mock("@hooks/ui/useMediaQuery", () => ({
 beforeEach(() => {
   vi.clearAllMocks();
   media.wide = true;
+  player.presence = "absent";
+  player.resumableHere = true;
 });
 
 function createTrack(overrides?: Partial<TracklistTrack>): TracklistTrack {
@@ -135,6 +142,29 @@ describe("Tracklist", () => {
     expect(playback.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["req_1"] });
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(stage.openStage).toHaveBeenCalledTimes(1);
+  });
+
+  it("pauses the row that is playing here instead of starting it over", async () => {
+    player.presence = "playing";
+    const user = userEvent.setup();
+    renderTracklist([createTrack({ requestId: "req_1", status: "complete" })], vi.fn());
+
+    await user.click(screen.getByRole("button", { name: "Pause Get Lucky" }));
+
+    expect(stage.togglePlay).toHaveBeenCalledTimes(1);
+    expect(playback.playEntity).not.toHaveBeenCalled();
+  });
+
+  it("still offers to play here a row the player cannot simply resume on this device", async () => {
+    player.presence = "paused";
+    player.resumableHere = false;
+    const user = userEvent.setup();
+    renderTracklist([createTrack({ requestId: "req_1", status: "complete" })], vi.fn());
+
+    await user.click(screen.getByRole("button", { name: /Play Get Lucky now/i }));
+
+    expect(stage.togglePlay).not.toHaveBeenCalled();
+    expect(playback.playEntity).toHaveBeenCalledWith({ kind: "tracks", trackIds: ["req_1"] });
   });
 
   it("keeps the modal open when a row is played on a wide screen", async () => {

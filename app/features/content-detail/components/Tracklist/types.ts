@@ -40,6 +40,7 @@ export interface TrackPlaybackActionsProps {
   title: string;
   presence: QueuePresence;
   onPlayNow: () => Promise<unknown>;
+  onTogglePlay?: () => void;
   onEnqueue: () => Promise<boolean>;
   onRemove: () => void;
 }
@@ -57,6 +58,7 @@ export interface TrackRowProps {
   onPreviewHover?: (hovering: boolean) => void;
   previewTone?: CheckboxPreview;
   onPlayNow?: () => Promise<unknown>;
+  onTogglePlay?: () => void;
   onEnqueue?: () => Promise<boolean>;
   onRemoveFromQueue?: () => void;
   queuePresence?: QueuePresence;

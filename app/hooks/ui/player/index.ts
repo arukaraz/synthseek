@@ -1,4 +1,11 @@
-export { usePlayer, usePlayerBottomDock, usePlayerDock, useQueuePresence, playerActions } from "./usePlayer";
+export {
+  usePlayer,
+  usePlayerBottomDock,
+  usePlayerDock,
+  usePlayerResumableHere,
+  useQueuePresence,
+  playerActions,
+} from "./usePlayer";
 export { getSnapshot as playerSnapshot, subscribe as subscribePlayer } from "./store";
 export { usePlayerSettings } from "./usePlayerSettings";
 export { playableOnlyFrom, playerTrackFrom, sourceLabelFor } from "./helpers";

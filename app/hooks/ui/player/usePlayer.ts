@@ -23,6 +23,7 @@ import { deviceKindFrom } from "./device";
 import {
   asPlayedFrom,
   isMirroring,
+  isResumableHere,
   mirroredPositionSeconds,
   nowPlayingOf,
   playingSourceOf,
@@ -115,6 +116,14 @@ export function useQueuePresence(): (trackId: string) => QueuePresence {
   const upcoming = useSyncExternalStore(subscribe, upcomingTrackIdsSnapshot, () => EMPTY_QUEUED_IDS);
   const current = useSyncExternalStore(subscribe, nowPlayingSnapshot, () => null);
   return useCallback((trackId: string) => queuePresenceOf(trackId, current, upcoming), [current, upcoming]);
+}
+
+export function resumableHereSnapshot(): boolean {
+  return isResumableHere(getSnapshot());
+}
+
+export function usePlayerResumableHere(): boolean {
+  return useSyncExternalStore(subscribe, resumableHereSnapshot, () => false);
 }
 
 function usePlayerSession(): PlayerSessionState {

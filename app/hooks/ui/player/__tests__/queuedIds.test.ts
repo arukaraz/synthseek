@@ -58,8 +58,8 @@ function track(id: string): PlayerTrack {
 async function freshModules() {
   vi.resetModules();
   const store = await import("../store");
-  const { nowPlayingSnapshot, upcomingTrackIdsSnapshot } = await import("../usePlayer");
-  return { store, nowPlayingSnapshot, upcomingTrackIdsSnapshot };
+  const { nowPlayingSnapshot, resumableHereSnapshot, upcomingTrackIdsSnapshot } = await import("../usePlayer");
+  return { store, nowPlayingSnapshot, resumableHereSnapshot, upcomingTrackIdsSnapshot };
 }
 
 describe("upcomingTrackIdsSnapshot", () => {
@@ -142,6 +142,28 @@ describe("nowPlayingSnapshot", () => {
     store.actions.seekTo(42);
 
     expect(nowPlayingSnapshot()).toBe(before);
+  });
+});
+
+describe("resumableHereSnapshot", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("says the current track can be resumed here while the queue still has it", async () => {
+    const { store, resumableHereSnapshot } = await freshModules();
+    store.actions.playQueue([track("a"), track("b")], 0);
+
+    expect(resumableHereSnapshot()).toBe(true);
+  });
+
+  it("says it cannot once the queue ran out, when a press would move to another track", async () => {
+    const { store, resumableHereSnapshot } = await freshModules();
+    store.actions.playQueue([track("a")], 0);
+    store.actions.next();
+
+    expect(store.getSnapshot().halt).toBe("queueEnd");
+    expect(resumableHereSnapshot()).toBe(false);
   });
 });
 

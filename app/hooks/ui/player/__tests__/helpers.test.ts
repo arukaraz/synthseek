@@ -14,6 +14,7 @@ import {
   hiddenQueuePositions,
   insertBeforeAutoplay,
   isMirroring,
+  isResumableHere,
   queueSections,
   listenIsDue,
   listenRestarted,
@@ -519,6 +520,36 @@ describe("queueRewritten", () => {
   it("does not fire when only the pointer moved, to another track or further into the same one", () => {
     expect(queueRewritten(base, { ...base, currentTrackId: "t2" })).toBe(false);
     expect(queueRewritten(base, { ...base, positionMs: 90_000 })).toBe(false);
+  });
+});
+
+const mirroredElsewhere = {
+  deviceId: "d1",
+  deviceName: "Web Player (Firefox)",
+  confirmed: true,
+  playing: true,
+  track: null,
+  positionSeconds: 10,
+  shuffle: false,
+  repeat: "off" as const,
+  volume: 0.8,
+  muted: false,
+  transcoding: false,
+  updatedAt: 1_000,
+};
+
+describe("isResumableHere", () => {
+  it("can resume the current track here while it is paused or stopped on this device", () => {
+    expect(isResumableHere(sessionWith({ remote: null, halt: null }))).toBe(true);
+    expect(isResumableHere(sessionWith({ remote: null, halt: "stopped" }))).toBe(true);
+  });
+
+  it("cannot resume it here while another device holds the audio", () => {
+    expect(isResumableHere(sessionWith({ remote: mirroredElsewhere }))).toBe(false);
+  });
+
+  it("cannot resume it here once the queue ran out", () => {
+    expect(isResumableHere(sessionWith({ remote: null, halt: "queueEnd" }))).toBe(false);
   });
 });
 

@@ -234,7 +234,12 @@ describe("TrackRow artist", () => {
 });
 
 describe("TrackRow queue actions", () => {
-  function renderPlayable(queuePresence: "absent" | "upcoming" | "playing") {
+  const onPlayNow = vi.fn(async () => {});
+  const onTogglePlay = vi.fn();
+
+  function renderPlayable(queuePresence: "absent" | "upcoming" | "playing" | "paused") {
+    onPlayNow.mockClear();
+    onTogglePlay.mockClear();
     return renderWithProviders(
       <TrackRow
         track={createTrack({ requestId: "r1", status: "complete" })}
@@ -243,7 +248,8 @@ describe("TrackRow queue actions", () => {
         onCustomizeRequest={noop}
         onRetry={noop}
         isRetrying={false}
-        onPlayNow={async () => {}}
+        onPlayNow={onPlayNow}
+        onTogglePlay={onTogglePlay}
         onEnqueue={async () => true}
         onRemoveFromQueue={noop}
         queuePresence={queuePresence}
@@ -266,6 +272,37 @@ describe("TrackRow queue actions", () => {
     expect(queueControls().map((button) => button.getAttribute("aria-label"))).toEqual([
       "Remove Get Lucky from the queue",
     ]);
+  });
+
+  it("starts a track that is not the one in the player", async () => {
+    const user = userEvent.setup();
+    renderPlayable("upcoming");
+
+    await user.click(screen.getByRole("button", { name: "Play Get Lucky now" }));
+
+    expect(onPlayNow).toHaveBeenCalledTimes(1);
+    expect(onTogglePlay).not.toHaveBeenCalled();
+  });
+
+  it("offers to pause the track that is playing, and does not start it over", async () => {
+    const user = userEvent.setup();
+    renderPlayable("playing");
+
+    expect(screen.queryByRole("button", { name: "Play Get Lucky now" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Pause Get Lucky" }));
+
+    expect(onTogglePlay).toHaveBeenCalledTimes(1);
+    expect(onPlayNow).not.toHaveBeenCalled();
+  });
+
+  it("offers to resume the track that is paused, and does not start it over", async () => {
+    const user = userEvent.setup();
+    renderPlayable("paused");
+
+    await user.click(screen.getByRole("button", { name: "Resume Get Lucky" }));
+
+    expect(onTogglePlay).toHaveBeenCalledTimes(1);
+    expect(onPlayNow).not.toHaveBeenCalled();
   });
 
   it("shows the track that is playing instead of a queue control", () => {

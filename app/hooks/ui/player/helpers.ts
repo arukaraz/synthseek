@@ -556,6 +556,10 @@ export function isMirroring(session: PlayerSessionState): boolean {
   return session.remote !== null && !session.playing;
 }
 
+export function isResumableHere(session: PlayerSessionState): boolean {
+  return !isMirroring(session) && session.halt !== "queueEnd";
+}
+
 export function beginListen(trackId: string, startedAt: number, positionSeconds: number): ListenProgress {
   return { trackId, startedAt, listenedSeconds: 0, lastPositionSeconds: positionSeconds, recorded: false };
 }

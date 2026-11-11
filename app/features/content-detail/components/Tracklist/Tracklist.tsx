@@ -2,7 +2,7 @@
 
 import { useRetryTracks } from "@hooks/api";
 import { useEntityPlayback } from "@hooks/ui/useEntityPlayback";
-import { playerActions, useQueuePresence } from "@hooks/ui/player";
+import { playerActions, usePlayerResumableHere, useQueuePresence } from "@hooks/ui/player";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { useContentDetailClose } from "../../ContentDetailCloseContext";
@@ -28,6 +28,7 @@ export function Tracklist({
   const closeDetail = useContentDetailClose();
   const { playTrack } = useDetailPlayback(closeDetail);
   const presenceOf = useQueuePresence();
+  const resumableHere = usePlayerResumableHere();
   const retryingId = retryTracks.isPending ? retryTracks.variables?.trackIds[0] : undefined;
 
   return (
@@ -47,6 +48,7 @@ export function Tracklist({
             onPreviewHover={selectableId ? (hovering) => onPreviewHover?.(hovering ? selectableId : null) : undefined}
             previewTone={selectableId ? previewTone?.(selectableId) : undefined}
             onPlayNow={playableId === null ? undefined : () => playTrack(playableId)}
+            onTogglePlay={playableId === null || !resumableHere ? undefined : playerActions.togglePlay}
             onEnqueue={
               playableId === null ? undefined : () => enqueueEntity({ kind: "tracks", trackIds: [playableId] })
             }
