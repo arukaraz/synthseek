@@ -131,4 +131,48 @@ describe("changelogSchema", () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it("rejects a version without sections, which the server would refuse", () => {
+    const { sections: _sections, ...withoutSections } = fixture().versions[0];
+    const result = changelogSchema.safeParse({ schemaVersion: 1, versions: [withoutSections] });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts highlights that link inside the app", () => {
+    const base = fixture();
+    const result = changelogSchema.safeParse({
+      ...base,
+      versions: [{ ...base.versions[0], highlights: [{ title: "The Stage", body: "Full screen.", link: "/library" }] }],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a highlight that links outside the app", () => {
+    const base = fixture();
+    for (const link of [
+      "https://example.com",
+      "//example.com",
+      "library",
+      "/\\evil",
+      "/a\\b",
+      "/a b",
+      "/settings/updates ",
+    ]) {
+      const result = changelogSchema.safeParse({
+        ...base,
+        versions: [{ ...base.versions[0], highlights: [{ title: "Out", body: "Leaves the app.", link }] }],
+      });
+      expect(result.success, link).toBe(false);
+    }
+  });
+
+  it("rejects more than four highlights", () => {
+    const base = fixture();
+    const highlight = { title: "Item", body: "Body." };
+    const result = changelogSchema.safeParse({
+      ...base,
+      versions: [{ ...base.versions[0], highlights: Array.from({ length: 5 }, () => highlight) }],
+    });
+    expect(result.success).toBe(false);
+  });
 });

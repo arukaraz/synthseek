@@ -6,8 +6,10 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { createMockQuery } from "@test/mocks/trpc.mock";
 
-import type { PatchNotes, UpdateCheckResult } from "../types";
-import { makeEntry } from "./fixtures";
+import type { PatchNotes } from "@features/settings/components/PatchNotes";
+import { makeEntry } from "@features/settings/components/PatchNotes/__tests__/fixtures";
+
+import type { UpdateCheckResult } from "../types";
 
 const patchNotesData: PatchNotes = {
   schemaVersion: 1,
@@ -31,6 +33,14 @@ vi.mock("@hooks/api/queries/useCurrentVersion", () => ({
 
 vi.mock("@hooks/api/queries/useUpdateCheck", () => ({
   useUpdateCheck: () => createMockQuery(checkData),
+}));
+
+vi.mock("@hooks/api/queries/useWhatsNew", () => ({
+  useWhatsNew: () => createMockQuery(undefined),
+}));
+
+vi.mock("@hooks/api/mutations/updates/useDismissWhatsNew", () => ({
+  useDismissWhatsNew: () => ({ mutate: vi.fn() }),
 }));
 
 import { UpdatesSection } from "../UpdatesSection";

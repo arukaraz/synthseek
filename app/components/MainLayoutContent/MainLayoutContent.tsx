@@ -10,6 +10,7 @@ import { TopHeader } from "@components/TopHeader";
 import type { FilterType } from "@api/__generated__/types";
 import { ContentRequestFlow } from "@features/search/components/ContentRequestFlow";
 import { getActiveFilter } from "@features/search/components/SearchResultsWidget/helpers";
+import { WhatsNewGate } from "@features/settings/components/WhatsNew";
 import {
   useRehydratePlaylistSyncDock,
   useRehydrateRequestDock,
@@ -48,6 +49,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
       <ProgressDock />
       <PlayerDock />
       <PlaybackSourcePicker />
+      <WhatsNewGate />
     </div>
   );
 }

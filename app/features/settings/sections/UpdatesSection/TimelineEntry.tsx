@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { EntryBody } from "@features/settings/components/PatchNotes";
 import { cn } from "@utils/cn";
 
-import { EntryBody } from "./EntryBody";
 import { formatEntryDate } from "./helpers";
 import {
   badge,

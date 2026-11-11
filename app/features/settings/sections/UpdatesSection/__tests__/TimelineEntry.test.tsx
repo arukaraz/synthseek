@@ -6,7 +6,7 @@ import i18n from "@modules/i18n";
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
 import { TimelineEntry } from "../TimelineEntry";
-import { makeEntry } from "./fixtures";
+import { makeEntry } from "@features/settings/components/PatchNotes/__tests__/fixtures";
 
 beforeAll(() => {
   i18n.addResourceBundle("en", "settings", enSettings, true, true);

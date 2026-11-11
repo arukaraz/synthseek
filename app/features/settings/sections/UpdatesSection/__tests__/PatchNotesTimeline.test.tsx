@@ -7,8 +7,8 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createLoadingQuery, createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 import { PATCH_NOTES_URL } from "@utils/version";
 
-import type { PatchNotes } from "../types";
-import { makeEntry } from "./fixtures";
+import type { PatchNotes } from "@features/settings/components/PatchNotes";
+import { makeEntry } from "@features/settings/components/PatchNotes/__tests__/fixtures";
 
 type CurrentVersion = { currentVersion: string };
 

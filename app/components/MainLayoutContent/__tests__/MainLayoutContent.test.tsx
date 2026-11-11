@@ -80,6 +80,10 @@ vi.mock("@features/search/components/ContentRequestFlow", () => ({
   ContentRequestFlow: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
+vi.mock("@features/settings/components/WhatsNew", () => ({
+  WhatsNewGate: () => <div data-testid="whats-new-gate" />,
+}));
+
 describe("MainLayoutContent", () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -108,6 +112,16 @@ describe("MainLayoutContent", () => {
     );
 
     expect(screen.getByTestId("content-shell")).toHaveTextContent("child");
+  });
+
+  it("mounts the what's new announcement on every page", () => {
+    render(
+      <MainLayoutContent>
+        <p>child</p>
+      </MainLayoutContent>
+    );
+
+    expect(screen.getByTestId("whats-new-gate")).toBeInTheDocument();
   });
 
   it("mounts the system status notice in the content shell's banner slot, so it spans every page", () => {

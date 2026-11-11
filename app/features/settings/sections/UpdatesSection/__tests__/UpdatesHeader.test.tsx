@@ -8,6 +8,7 @@ import enSettings from "@modules/i18n/messages/en/settings.json";
 import { createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 
 import type { UpdateCheckResult } from "../types";
+import { makeEntry } from "@features/settings/components/PatchNotes/__tests__/fixtures";
 
 type CurrentVersion = { currentVersion: string };
 
@@ -33,6 +34,18 @@ vi.mock("@hooks/api/queries/useUpdateCheck", () => ({
   useUpdateCheck: () => checkQuery,
 }));
 
+type WhatsNewData = { entry: ReturnType<typeof makeEntry> | null; pending: boolean };
+
+let whatsNewQuery: MockQueryResult<WhatsNewData | undefined> = createMockQuery<WhatsNewData | undefined>(undefined);
+
+vi.mock("@hooks/api/queries/useWhatsNew", () => ({
+  useWhatsNew: () => whatsNewQuery,
+}));
+
+vi.mock("@hooks/api/mutations/updates/useDismissWhatsNew", () => ({
+  useDismissWhatsNew: () => ({ mutate: vi.fn() }),
+}));
+
 import { UpdatesHeader } from "../UpdatesHeader";
 
 beforeAll(() => {
@@ -44,6 +57,7 @@ afterEach(() => {
   vi.clearAllMocks();
   currentQuery = createMockQuery<CurrentVersion | undefined>({ currentVersion: "2.3.0" });
   checkQuery = createMockQuery<UpdateCheckResult | undefined>(checkData);
+  whatsNewQuery = createMockQuery<WhatsNewData | undefined>(undefined);
 });
 
 describe("UpdatesHeader", () => {
@@ -84,5 +98,22 @@ describe("UpdatesHeader", () => {
     checkQuery = createMockQuery<UpdateCheckResult | undefined>(checkData, { isFetching: true });
     render(<UpdatesHeader />);
     expect(screen.getByRole("button", { name: enSettings.updates.header.checking })).toBeDisabled();
+  });
+
+  it("offers to reopen the latest announcement when there is one", async () => {
+    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({
+      entry: makeEntry({ version: "2.3.0" }),
+      pending: false,
+    });
+    render(<UpdatesHeader />);
+
+    await userEvent.click(screen.getByRole("button", { name: enSettings.updates.whatsNew.open }));
+
+    expect(screen.getByRole("heading", { name: enSettings.updates.whatsNew.heading })).toBeInTheDocument();
+  });
+
+  it("hides the reopen button when nothing was announced", () => {
+    render(<UpdatesHeader />);
+    expect(screen.queryByRole("button", { name: enSettings.updates.whatsNew.open })).not.toBeInTheDocument();
   });
 });

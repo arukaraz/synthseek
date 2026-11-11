@@ -1285,6 +1285,18 @@
   },
   "updates": {
     "versionTag": "v{{version}}",
+    "whatsNew": {
+      "heading": "Novedades",
+      "open": "Ver novedades",
+      "goTo": "Ir a {{current}} de {{total}}",
+      "position": "{{current}} de {{total}}",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "done": "Listo",
+      "tryIt": "Probarlo",
+      "summaryTitle": "También en esta versión",
+      "fullChangelog": "Ver el changelog completo"
+    },
     "header": {
       "currentVersion": "Versión actual",
       "checked": "Comprobado {{time}}",

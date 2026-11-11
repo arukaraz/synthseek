@@ -10,9 +10,11 @@ import { useUpdateCheck } from "@hooks/api/queries/useUpdateCheck";
 import { cn } from "@utils/cn";
 import { formatRelativeTime } from "@utils/formatters";
 
+import { WhatsNewButton } from "../../components/WhatsNew";
 import { backToSections } from "../../styles";
 import {
   checkButton,
+  headerActions,
   headerRoot,
   headerTitleBlock,
   metaChecked,
@@ -60,10 +62,13 @@ export function UpdatesHeader() {
           ) : null}
         </div>
       </div>
-      <button type="button" className={checkButton()} onClick={() => check.refetch()} disabled={check.isFetching}>
-        <RefreshCw className={cn("size-4", check.isFetching && "animate-spin")} />
-        {check.isFetching ? t("updates.header.checking") : t("updates.header.checkNow")}
-      </button>
+      <div className={headerActions()}>
+        <WhatsNewButton />
+        <button type="button" className={checkButton()} onClick={() => check.refetch()} disabled={check.isFetching}>
+          <RefreshCw className={cn("size-4", check.isFetching && "animate-spin")} />
+          {check.isFetching ? t("updates.header.checking") : t("updates.header.checkNow")}
+        </button>
+      </div>
     </div>
   );
 }

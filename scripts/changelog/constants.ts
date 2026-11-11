@@ -24,3 +24,5 @@ export const CALLOUT_ADMONITION: Record<ChangelogCalloutLevel, string> = {
 export const DOCUMENT_TITLE = "# Patch Notes";
 
 export const SECTION_SEPARATOR = "---";
+
+export const WHATS_NEW_MAX_HIGHLIGHTS = 4;
