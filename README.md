@@ -60,6 +60,7 @@ Open the web interface and follow the setup wizard: an admin account, slskd, the
 ### Find and request
 
 - Search tracks, albums, artists, and playlists across a provider-agnostic catalog
+- Hear a 30 second sample of a song before you request it, when the catalog has one
 - Request a single track, a whole album, or an entire playlist
 - Request with one click on your preset, or, as a trusted member or administrator, choose the quality and the source order per request
 - A queue you can reorder, pause, and resume, with live progress

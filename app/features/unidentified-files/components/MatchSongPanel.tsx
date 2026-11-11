@@ -14,6 +14,7 @@ import {
   useResolveUnidentifiedLink,
 } from "@hooks/api/mutations/library/useUnidentifiedActions";
 import { useUnidentifiedSongCandidates } from "@hooks/api/queries/useUnidentifiedFiles";
+import { stopPreview } from "@hooks/ui/trackPreview";
 
 import { lengthLabel } from "../helpers";
 import {
@@ -32,6 +33,7 @@ import {
   toolRow,
 } from "../styles";
 import type { MatchSongPanelProps, SongCandidate } from "../types";
+import { FileAudition } from "./FileAudition";
 import { LinkField } from "./LinkField";
 import { SongCandidateRow } from "./SongCandidateRow";
 import { StepHeader } from "./StepHeader";
@@ -67,6 +69,7 @@ export function MatchSongPanel({ group, file, onBack }: MatchSongPanelProps) {
       />
 
       <div className={panelTools()}>
+        <FileAudition file={file} />
         <form
           className={toolRow()}
           onSubmit={(event) => {
@@ -161,7 +164,10 @@ export function MatchSongPanel({ group, file, onBack }: MatchSongPanelProps) {
               variant="secondary"
               size="sm"
               disabled={ignore.isPending}
-              onClick={() => ignore.mutate({ fileIds: [file.id] }, { onSuccess: onBack })}
+              onClick={() => {
+                stopPreview();
+                ignore.mutate({ fileIds: [file.id] }, { onSuccess: onBack });
+              }}
             >
               <Ban aria-hidden />
               {t("libraryScan.review.match.ignore")}
@@ -171,6 +177,7 @@ export function MatchSongPanel({ group, file, onBack }: MatchSongPanelProps) {
               disabled={picked === null || assign.isPending}
               onClick={() => {
                 if (picked === null) return;
+                stopPreview();
                 assign.mutate({ pairs: [{ fileId: file.id, trackId: picked.trackId }] }, { onSuccess: onBack });
               }}
             >

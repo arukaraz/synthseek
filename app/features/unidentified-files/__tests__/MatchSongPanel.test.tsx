@@ -61,6 +61,7 @@ function song(overrides: Partial<SongCandidate>): SongCandidate {
     albumName: "In Joy And Sorrow / Pretending",
     durationSeconds: 222,
     image: null,
+    hasPreview: true,
     verdict: "different_version",
     ...overrides,
   };

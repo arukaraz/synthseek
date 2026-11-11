@@ -25,6 +25,48 @@
   "dialog": {
     "close": "Close"
   },
+  "preview": {
+    "play": "Play the {{seconds}} second preview of {{title}}",
+    "stop": "Stop the preview of {{title}}",
+    "playHint": "{{seconds}} s preview",
+    "stopHint": "Stop preview",
+    "none": "No preview available for {{title}}",
+    "noneHint": "This track has no preview",
+    "noneShort": "No preview",
+    "failed": "Preview unavailable: {{title}}",
+    "failedHint": "Couldn't load the preview.",
+    "failedShort": "Couldn't load",
+    "time": "{{elapsed}} / {{total}}",
+    "filePlay": "Play the file {{title}}",
+    "fileStop": "Stop the file {{title}}",
+    "filePlayHint": "Play the file",
+    "fileStopHint": "Stop the file",
+    "fileSeek": "Position in the file {{title}}",
+    "fileFailed": "File unavailable: {{title}}",
+    "fileFailedHint": "Couldn't load the file.",
+    "fileNotice": {
+      "playing": "Playing the file {{title}}.",
+      "playingHeld": "Playing the file {{title}}. The player stays paused meanwhile.",
+      "stopped": "Stopped the file {{title}}.",
+      "stoppedResumes": "Stopped the file {{title}}. The player picks up where it was.",
+      "ended": "The file {{title}} finished.",
+      "endedResumes": "The file {{title}} finished. The player picks up where it was.",
+      "failed": "Couldn't load the file {{title}}.",
+      "failedResumes": "Couldn't load the file {{title}}. The player picks up where it was.",
+      "interrupted": "The player started, so the file {{title}} stopped."
+    },
+    "notice": {
+      "playing": "Playing the preview of {{title}}.",
+      "playingHeld": "Playing the preview of {{title}}. The player stays paused meanwhile.",
+      "stopped": "Stopped the preview of {{title}}.",
+      "stoppedResumes": "Stopped the preview of {{title}}. The player picks up where it was.",
+      "ended": "The preview of {{title}} finished.",
+      "endedResumes": "The preview of {{title}} finished. The player picks up where it was.",
+      "failed": "Couldn't load the preview of {{title}}.",
+      "failedResumes": "Couldn't load the preview of {{title}}. The player picks up where it was.",
+      "interrupted": "The player started, so the preview of {{title}} stopped."
+    }
+  },
   "filterSort": {
     "trigger": "Filter and sort",
     "filterLabel": "Filter",

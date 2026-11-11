@@ -1,6 +1,7 @@
 import type { TFunction } from "i18next";
 
 import type { ComparedCopy, TimelineBounds } from "@hooks/ui/copyComparison";
+import { libraryCopyAudioSrc } from "@hooks/ui/trackPreview";
 import { formatTrackDuration } from "@utils/formatters";
 import { matchesTerms, searchTerms } from "@utils/search";
 
@@ -71,14 +72,10 @@ export function spansLibraryPaths(group: DuplicateGroup): boolean {
   return new Set(group.copies.map((copy) => copy.libraryPath)).size > 1;
 }
 
-function copyAudioUrl(fileId: string): string {
-  return `/api/v1/library-copies/${encodeURIComponent(fileId)}/audio`;
-}
-
 export function comparedCopiesOf(group: DuplicateGroup): ComparedCopy[] {
   return group.copies.map((copy) => ({
     id: copy.id,
-    src: copyAudioUrl(copy.id),
+    src: libraryCopyAudioSrc(copy.id),
     offsetSeconds: copy.offsetSeconds,
     loudnessLufs: copy.loudnessLufs,
     durationSeconds: copy.durationSeconds,

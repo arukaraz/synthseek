@@ -25,6 +25,48 @@
   "dialog": {
     "close": "Fermer"
   },
+  "preview": {
+    "play": "Lire l'extrait de {{seconds}} secondes de {{title}}",
+    "stop": "Arrêter l'extrait de {{title}}",
+    "playHint": "Extrait de {{seconds}} s",
+    "stopHint": "Arrêter l'extrait",
+    "none": "Aucun extrait disponible pour {{title}}",
+    "noneHint": "Ce titre n'a pas d'extrait",
+    "noneShort": "Pas d'extrait",
+    "failed": "Extrait indisponible : {{title}}",
+    "failedHint": "Impossible de charger l'extrait.",
+    "failedShort": "Échec du chargement",
+    "time": "{{elapsed}} / {{total}}",
+    "filePlay": "Lire le fichier {{title}}",
+    "fileStop": "Arrêter le fichier {{title}}",
+    "filePlayHint": "Lire le fichier",
+    "fileStopHint": "Arrêter le fichier",
+    "fileSeek": "Position dans le fichier {{title}}",
+    "fileFailed": "Fichier indisponible : {{title}}",
+    "fileFailedHint": "Impossible de charger le fichier.",
+    "fileNotice": {
+      "playing": "Lecture du fichier {{title}}.",
+      "playingHeld": "Lecture du fichier {{title}}. Le lecteur reste en pause pendant ce temps.",
+      "stopped": "Fichier {{title}} arrêté.",
+      "stoppedResumes": "Fichier {{title}} arrêté. Le lecteur reprend là où il en était.",
+      "ended": "Le fichier {{title}} est terminé.",
+      "endedResumes": "Le fichier {{title}} est terminé. Le lecteur reprend là où il en était.",
+      "failed": "Impossible de charger le fichier {{title}}.",
+      "failedResumes": "Impossible de charger le fichier {{title}}. Le lecteur reprend là où il en était.",
+      "interrupted": "Le lecteur a démarré, le fichier {{title}} s'est donc arrêté."
+    },
+    "notice": {
+      "playing": "Lecture de l'extrait de {{title}}.",
+      "playingHeld": "Lecture de l'extrait de {{title}}. Le lecteur reste en pause pendant ce temps.",
+      "stopped": "Extrait de {{title}} arrêté.",
+      "stoppedResumes": "Extrait de {{title}} arrêté. Le lecteur reprend là où il en était.",
+      "ended": "L'extrait de {{title}} est terminé.",
+      "endedResumes": "L'extrait de {{title}} est terminé. Le lecteur reprend là où il en était.",
+      "failed": "Impossible de charger l'extrait de {{title}}.",
+      "failedResumes": "Impossible de charger l'extrait de {{title}}. Le lecteur reprend là où il en était.",
+      "interrupted": "Le lecteur a démarré, l'extrait de {{title}} s'est donc arrêté."
+    }
+  },
   "filterSort": {
     "trigger": "Filtrer et trier",
     "filterLabel": "Filtrer",

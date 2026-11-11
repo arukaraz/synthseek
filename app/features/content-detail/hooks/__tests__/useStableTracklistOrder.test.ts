@@ -16,6 +16,7 @@ function track(externalId: string, status: RequestStatus): TracklistTrack {
     durationMs: 200000,
     trackNumber: 1,
     plays: null,
+    hasPreview: true,
     album: null,
     inLibrary: status === "complete",
     requestId: `req_${externalId}`,

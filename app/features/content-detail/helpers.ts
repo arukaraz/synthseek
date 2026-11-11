@@ -259,6 +259,7 @@ export function preloadedTrack(track: MusicTrack): TracklistTrack {
     durationMs: track.duration_ms,
     trackNumber: track.track_number,
     plays: null,
+    hasPreview: track.preview_url !== null,
     album: { externalId: track.album.id, name: track.album.name, cover: track.album.images[0]?.url ?? null },
     inLibrary: false,
     requestId: null,
@@ -294,7 +295,10 @@ export function playlistPreloadedTarget({
     artistName: name,
     cover,
     playlistSource: "preloaded",
-    preloadedTracks: tracks.map(preloadedTrack),
+    preloadedTracks: tracks.map((track) => ({
+      ...preloadedTrack(track),
+      hasPreview: !MISSING_CATALOG_IDS.has(track.id),
+    })),
     requestDisabled,
     requestDisabledTooltip,
   };

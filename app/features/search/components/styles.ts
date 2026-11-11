@@ -100,3 +100,15 @@ export const filterTabsContainer = cva("mb-4 flex items-center gap-2 overflow-x-
 });
 
 export type FilterTabsContainerProps = VariantProps<typeof filterTabsContainer>;
+
+export const cardPreviewSlot = cva(
+  "absolute top-1.5 right-1.5 z-10 flex flex-col-reverse items-end gap-1.5 sm:top-2.5 sm:right-2.5"
+);
+
+export const cardPreviewTime = cva(
+  "bg-surface-overlay/70 text-overlay-fg rounded-full px-2 py-0.5 text-xs font-semibold backdrop-blur-sm"
+);
+
+export const cardPreviewEdge = cva(
+  "border-accent-400/85 glow-accent pointer-events-none absolute inset-0 rounded-lg border-2"
+);

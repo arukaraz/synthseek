@@ -555,6 +555,7 @@ describe("content-detail helpers", () => {
         durationMs: 369000,
         trackNumber: 8,
         plays: null,
+        hasPreview: false,
         album: { externalId: "al1", name: "RAM", cover: null },
         inLibrary: false,
         requestId: null,
@@ -562,6 +563,11 @@ describe("content-detail helpers", () => {
         status: null,
         failureReason: null,
       });
+    });
+
+    it("offers a preview on the row only for a track the catalog lists one for", () => {
+      const row = preloadedTrack(createMusicTrack({ preview_url: "https://preview.catalog.test/1.mp3" }));
+      expect(row.hasPreview).toBe(true);
     });
 
     it("carries the catalog album through to the row so a request can identify it", () => {
@@ -600,6 +606,24 @@ describe("content-detail helpers", () => {
       expect(target.preloadedTracks?.[0].status).toBeNull();
       expect(target.requestDisabled).toBe(true);
       expect(target.requestDisabledTooltip).toBe("Auto-request is on");
+    });
+  });
+
+  describe("a preloaded playlist row built without a preview signal", () => {
+    it("offers the preview for a real catalog id and keeps it locked for a missing one", () => {
+      const target = playlistPreloadedTarget({
+        id: "discovery:listenbrainz:weekly-jams:2026",
+        name: "Weekly Jams",
+        cover: null,
+        tracks: [
+          createMusicTrack({ id: "3135556", preview_url: null }),
+          createMusicTrack({ id: "0", preview_url: null }),
+        ],
+        requestDisabled: false,
+        requestDisabledTooltip: undefined,
+      });
+
+      expect(target.preloadedTracks?.map((row) => row.hasPreview)).toEqual([true, false]);
     });
   });
 

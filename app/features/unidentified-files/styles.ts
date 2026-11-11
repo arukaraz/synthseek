@@ -141,6 +141,14 @@ export const errorText = cva("text-destructive-vivid py-6 text-center text-sm");
 
 export const resultList = cva("flex flex-col gap-1");
 
+export const candidateLine = cva("flex items-center gap-2");
+
+export const fileAudition = cva("bg-fg/5 flex items-center gap-3 rounded-lg px-3 py-2");
+
+export const fileAuditionSeek = cva("accent-primary-500 min-w-0 flex-1 disabled:opacity-40");
+
+export const fileAuditionTime = cva("text-fg/60 shrink-0 text-xs tabular-nums");
+
 export const resultRow = cva(
   "grid w-full cursor-pointer grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border px-3 py-2 text-left transition-colors sm:grid-cols-[2.5rem_minmax(0,1fr)_auto_auto]",
   {

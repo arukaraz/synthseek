@@ -25,6 +25,48 @@
   "dialog": {
     "close": "Cerrar"
   },
+  "preview": {
+    "play": "Reproducir el preview de {{seconds}} segundos de {{title}}",
+    "stop": "Detener el preview de {{title}}",
+    "playHint": "Preview de {{seconds}} s",
+    "stopHint": "Detener preview",
+    "none": "No hay preview disponible de {{title}}",
+    "noneHint": "Esta canción no tiene preview",
+    "noneShort": "Sin preview",
+    "failed": "Preview no disponible: {{title}}",
+    "failedHint": "No se pudo cargar el preview.",
+    "failedShort": "No se pudo cargar",
+    "time": "{{elapsed}} / {{total}}",
+    "filePlay": "Reproducir el archivo {{title}}",
+    "fileStop": "Detener el archivo {{title}}",
+    "filePlayHint": "Reproducir el archivo",
+    "fileStopHint": "Detener el archivo",
+    "fileSeek": "Posición en el archivo {{title}}",
+    "fileFailed": "Archivo no disponible: {{title}}",
+    "fileFailedHint": "No se pudo cargar el archivo.",
+    "fileNotice": {
+      "playing": "Suena el archivo {{title}}.",
+      "playingHeld": "Suena el archivo {{title}}. El reproductor queda en pausa mientras tanto.",
+      "stopped": "Se detuvo el archivo {{title}}.",
+      "stoppedResumes": "Se detuvo el archivo {{title}}. El reproductor vuelve donde estaba.",
+      "ended": "Terminó el archivo {{title}}.",
+      "endedResumes": "Terminó el archivo {{title}}. El reproductor vuelve donde estaba.",
+      "failed": "No se pudo cargar el archivo {{title}}.",
+      "failedResumes": "No se pudo cargar el archivo {{title}}. El reproductor vuelve donde estaba.",
+      "interrupted": "Arrancó el reproductor, así que el archivo {{title}} se detuvo."
+    },
+    "notice": {
+      "playing": "Suena el preview de {{title}}.",
+      "playingHeld": "Suena el preview de {{title}}. El reproductor queda en pausa mientras tanto.",
+      "stopped": "Se detuvo el preview de {{title}}.",
+      "stoppedResumes": "Se detuvo el preview de {{title}}. El reproductor vuelve donde estaba.",
+      "ended": "Terminó el preview de {{title}}.",
+      "endedResumes": "Terminó el preview de {{title}}. El reproductor vuelve donde estaba.",
+      "failed": "No se pudo cargar el preview de {{title}}.",
+      "failedResumes": "No se pudo cargar el preview de {{title}}. El reproductor vuelve donde estaba.",
+      "interrupted": "Arrancó el reproductor, así que el preview de {{title}} se detuvo."
+    }
+  },
   "filterSort": {
     "trigger": "Filtrar y ordenar",
     "filterLabel": "Filtrar",

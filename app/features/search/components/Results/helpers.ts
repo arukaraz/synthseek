@@ -17,6 +17,7 @@ export function transformResultForDisplay(item: MusicItem): Result {
         artist: artistName,
         album: item.album.name,
         image: item.images?.[0]?.url || item.album.images?.[0]?.url,
+        hasPreview: item.preview_url !== null,
       };
     case ContentType.enum.album:
       return {

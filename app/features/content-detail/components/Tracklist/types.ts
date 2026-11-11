@@ -16,6 +16,7 @@ export interface TracklistTrack {
   durationMs: number;
   trackNumber: number;
   plays: number | null;
+  hasPreview: boolean;
   album: TrackAlbumContext | null;
   inLibrary: boolean;
   requestId: string | null;

@@ -15,6 +15,7 @@ function createTrack(overrides?: Partial<TracklistTrack>): TracklistTrack {
     durationMs: 369000,
     trackNumber: 8,
     plays: null,
+    hasPreview: true,
     album: null,
     inLibrary: false,
     requestId: null,

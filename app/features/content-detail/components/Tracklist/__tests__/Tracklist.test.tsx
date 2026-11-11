@@ -42,6 +42,7 @@ function createTrack(overrides?: Partial<TracklistTrack>): TracklistTrack {
     durationMs: 369000,
     trackNumber: 8,
     plays: null,
+    hasPreview: true,
     album: { externalId: "a1", name: "Discovery", cover: "https://img/a1" },
     inLibrary: false,
     requestId: null,

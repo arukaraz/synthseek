@@ -140,8 +140,28 @@ export const sectionSkeleton = cva("bg-fg/5 w-full animate-pulse rounded-xl");
 export const sectionEmpty = cva("text-fg/50 text-sm");
 
 export const trackRow = cva(
-  "group border-fg/5 hover:bg-fg/5 flex items-center gap-2 rounded-lg border-b px-2 py-2.5 transition-colors last:border-b-0"
+  "group border-fg/5 flex items-center gap-2 rounded-lg border-b px-2 py-2.5 transition-colors last:border-b-0",
+  {
+    variants: {
+      previewing: {
+        true: "bg-accent-500/10",
+        false: "hover:bg-fg/5",
+      },
+    },
+    defaultVariants: { previewing: false },
+  }
 );
+
+export const trackTime = cva("", {
+  variants: {
+    tone: {
+      rest: "",
+      previewing: "text-accent-400 font-semibold",
+      failed: "text-warning-vivid",
+    },
+  },
+  defaultVariants: { tone: "rest" },
+});
 
 export const tracklistRoot = cva(
   "[&_li[data-range-preview=clear]]:bg-fg/10 [&_li[data-range-preview=select]]:bg-primary-500/10"

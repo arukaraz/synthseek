@@ -25,6 +25,48 @@
   "dialog": {
     "close": "Schließen"
   },
+  "preview": {
+    "play": "Die {{seconds}}-Sekunden-Vorschau von {{title}} abspielen",
+    "stop": "Die Vorschau von {{title}} stoppen",
+    "playHint": "{{seconds}} s Vorschau",
+    "stopHint": "Vorschau stoppen",
+    "none": "Keine Vorschau für {{title}} verfügbar",
+    "noneHint": "Dieser Titel hat keine Vorschau",
+    "noneShort": "Keine Vorschau",
+    "failed": "Vorschau nicht verfügbar: {{title}}",
+    "failedHint": "Die Vorschau konnte nicht geladen werden.",
+    "failedShort": "Nicht geladen",
+    "time": "{{elapsed}} / {{total}}",
+    "filePlay": "Die Datei {{title}} abspielen",
+    "fileStop": "Die Datei {{title}} stoppen",
+    "filePlayHint": "Datei abspielen",
+    "fileStopHint": "Datei stoppen",
+    "fileSeek": "Position in der Datei {{title}}",
+    "fileFailed": "Datei nicht verfügbar: {{title}}",
+    "fileFailedHint": "Die Datei konnte nicht geladen werden.",
+    "fileNotice": {
+      "playing": "Die Datei {{title}} läuft.",
+      "playingHeld": "Die Datei {{title}} läuft. Der Player bleibt solange pausiert.",
+      "stopped": "Die Datei {{title}} wurde gestoppt.",
+      "stoppedResumes": "Die Datei {{title}} wurde gestoppt. Der Player macht dort weiter, wo er war.",
+      "ended": "Die Datei {{title}} ist zu Ende.",
+      "endedResumes": "Die Datei {{title}} ist zu Ende. Der Player macht dort weiter, wo er war.",
+      "failed": "Die Datei {{title}} konnte nicht geladen werden.",
+      "failedResumes": "Die Datei {{title}} konnte nicht geladen werden. Der Player macht dort weiter, wo er war.",
+      "interrupted": "Der Player wurde gestartet, daher wurde die Datei {{title}} gestoppt."
+    },
+    "notice": {
+      "playing": "Die Vorschau von {{title}} läuft.",
+      "playingHeld": "Die Vorschau von {{title}} läuft. Der Player bleibt solange pausiert.",
+      "stopped": "Die Vorschau von {{title}} wurde gestoppt.",
+      "stoppedResumes": "Die Vorschau von {{title}} wurde gestoppt. Der Player macht dort weiter, wo er war.",
+      "ended": "Die Vorschau von {{title}} ist zu Ende.",
+      "endedResumes": "Die Vorschau von {{title}} ist zu Ende. Der Player macht dort weiter, wo er war.",
+      "failed": "Die Vorschau von {{title}} konnte nicht geladen werden.",
+      "failedResumes": "Die Vorschau von {{title}} konnte nicht geladen werden. Der Player macht dort weiter, wo er war.",
+      "interrupted": "Der Player wurde gestartet, daher wurde die Vorschau von {{title}} gestoppt."
+    }
+  },
   "filterSort": {
     "trigger": "Filtern und sortieren",
     "filterLabel": "Filtern",

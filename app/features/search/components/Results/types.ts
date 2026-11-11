@@ -17,6 +17,13 @@ export interface Result {
   image?: string;
   year?: string;
   trackCount?: number;
+  hasPreview?: boolean;
+}
+
+export interface CardPreviewProps {
+  trackId: string;
+  title: string;
+  available: boolean;
 }
 
 export interface CardProps {

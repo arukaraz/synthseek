@@ -2,6 +2,8 @@
 
 import { RequestSplitButton } from "@components/RequestSplitButton";
 import { Checkbox } from "@components/ui/Checkbox";
+import { PreviewButton, PreviewStateLabel, PreviewTime } from "@components/ui/PreviewButton";
+import { catalogPreviewClip, useTrackPreview } from "@hooks/ui/trackPreview";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/Tooltip";
 import { TrackStatusIndicator } from "@components/TrackStatusIndicator";
 import { isRetryableStatus } from "@utils/status-helpers";
@@ -20,6 +22,7 @@ import {
   trackSelectCell,
   trackStatusCell,
   trackStatusIcon,
+  trackTime,
   trackTitle,
 } from "../../styles";
 import { TrackPlaybackActions } from "./TrackPlaybackActions";
@@ -45,11 +48,15 @@ export function TrackRow({
 }: TrackRowProps) {
   const { t } = useTranslation("contentDetail");
   const { t: tStatus } = useTranslation("status");
+  const preview = useTrackPreview(catalogPreviewClip(track.externalId, track.title));
   const canRetry = !!track.requestId && !!track.status && isRetryableStatus(track.status);
   const showCheckbox = selectable && isRemovableTrack(track);
 
   return (
-    <li className={trackRow()} data-range-preview={previewTone === "none" ? undefined : previewTone}>
+    <li
+      className={trackRow({ previewing: preview.active })}
+      data-range-preview={previewTone === "none" ? undefined : previewTone}
+    >
       {selectable ? (
         <span
           className={trackSelectCell()}
@@ -75,6 +82,14 @@ export function TrackRow({
           ) : null}
         </span>
       ) : null}
+
+      <PreviewButton
+        title={track.title}
+        status={preview.status}
+        clock={preview.clock}
+        available={track.hasPreview}
+        onToggle={preview.toggle}
+      />
 
       <div className={trackInfo()}>
         <span className={trackTitle()}>{track.title}</span>
@@ -105,7 +120,21 @@ export function TrackRow({
         {track.plays !== null ? (
           <span>{t("trackPlays", { count: track.plays, plays: formatPlays(track.plays) })}</span>
         ) : null}
-        <span>{formatTrackDuration(track.durationMs)}</span>
+        {preview.clock ? (
+          <span className={trackTime({ tone: "previewing" })}>
+            <PreviewTime clock={preview.clock} />
+          </span>
+        ) : preview.status === "error" ? (
+          <span className={trackTime({ tone: "failed" })}>
+            <PreviewStateLabel state="failed" />
+          </span>
+        ) : track.hasPreview ? (
+          <span className={trackTime()}>{formatTrackDuration(track.durationMs)}</span>
+        ) : (
+          <span className={trackTime()}>
+            <PreviewStateLabel state="none" />
+          </span>
+        )}
       </div>
 
       <div className={trackStatusCell()}>

@@ -4,6 +4,7 @@ import { BottomNav } from "@components/BottomNav";
 import { ContentShell } from "@components/ContentShell";
 import { PlaybackSourcePicker } from "@components/Player";
 import { PlayerDock } from "@components/PlayerDock";
+import { PreviewAnnouncer } from "@components/ui/PreviewButton";
 import { ProgressDock } from "@components/ui/ProgressDock";
 import { SystemStatusBanner } from "@components/SystemStatusBanner";
 import { TopHeader } from "@components/TopHeader";
@@ -49,6 +50,7 @@ export function MainLayoutContent({ children }: MainLayoutContentProps) {
       <ProgressDock />
       <PlayerDock />
       <PlaybackSourcePicker />
+      <PreviewAnnouncer />
       <WhatsNewGate />
     </div>
   );

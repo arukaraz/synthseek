@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { Music } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { ContentType } from "@api/__generated__/types";
+import { CardPreview } from "./CardPreview";
 import type { CardProps } from "./types";
 import { getSecondaryInfo } from "./helpers";
 import { getContentTypeLabel } from "@utils/content-type-helpers";
@@ -68,6 +70,10 @@ export function Card({ result, onResultClick }: CardProps) {
         </div>
 
         <div className={cardHoverBorder()} />
+
+        {result.type === ContentType.enum.track ? (
+          <CardPreview trackId={result.id} title={result.name} available={result.hasPreview === true} />
+        ) : null}
       </div>
     </motion.div>
   );
