@@ -41,6 +41,8 @@ export const visual = cva(
 
 export const visualIcon = cva("text-fg/90 size-14 sm:size-16");
 
+export const mediaFrame = cva("border-fg/10 bg-fg/5 block aspect-[16/7] w-full rounded-xl border object-contain");
+
 export const cardTitle = cva("text-fg text-2xl font-bold tracking-tight text-balance sm:text-3xl");
 
 export const cardBody = cva("text-fg/70 max-w-[60ch] text-base leading-relaxed");

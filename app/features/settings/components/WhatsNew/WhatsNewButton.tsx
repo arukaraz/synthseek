@@ -30,7 +30,7 @@ export function WhatsNewButton() {
         <Sparkles className={openButtonIcon()} />
         {t("updates.whatsNew.open")}
       </button>
-      <WhatsNewDialog entry={entry} open={open} onOpenChange={handleOpenChange} />
+      <WhatsNewDialog entry={entry} mediaPath={data.mediaPath} open={open} onOpenChange={handleOpenChange} />
     </>
   );
 }

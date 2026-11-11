@@ -23,7 +23,7 @@ import {
 } from "./styles";
 import type { WhatsNewDialogProps } from "./types";
 
-export function WhatsNewDialog({ entry, open, onOpenChange }: WhatsNewDialogProps) {
+export function WhatsNewDialog({ entry, mediaPath, open, onOpenChange }: WhatsNewDialogProps) {
   const { t } = useTranslation("settings");
   const [index, setIndex] = useState(0);
   const primaryRef = useRef<HTMLButtonElement>(null);
@@ -65,7 +65,7 @@ export function WhatsNewDialog({ entry, open, onOpenChange }: WhatsNewDialogProp
 
         <div className={body()} aria-live="polite">
           {highlight ? (
-            <HighlightCard key={current} highlight={highlight} onNavigate={close} />
+            <HighlightCard key={current} highlight={highlight} mediaPath={mediaPath} onNavigate={close} />
           ) : (
             <SummaryCard entry={entry} hasHighlights={highlights.length > 0} onNavigate={close} />
           )}

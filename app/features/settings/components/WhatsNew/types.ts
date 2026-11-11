@@ -6,16 +6,29 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export type WhatsNewEntry = NonNullable<RouterOutputs["updates"]["whatsNew"]["entry"]>;
 export type WhatsNewHighlight = NonNullable<WhatsNewEntry["highlights"]>[number];
+export type WhatsNewMedia = NonNullable<WhatsNewHighlight["media"]>;
 
 export interface WhatsNewDialogProps {
   entry: WhatsNewEntry;
+  mediaPath: string | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 export interface HighlightCardProps {
   highlight: WhatsNewHighlight;
+  mediaPath: string | null;
   onNavigate: () => void;
+}
+
+export interface HighlightMediaProps {
+  media: WhatsNewMedia;
+  mediaPath: string;
+}
+
+export interface HighlightVisualProps {
+  media: WhatsNewMedia | undefined;
+  mediaPath: string | null;
 }
 
 export interface SummaryCardProps {

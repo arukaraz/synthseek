@@ -43,5 +43,7 @@ export function WhatsNewGate() {
     dismiss.mutate({ version: entry.version });
   };
 
-  return <WhatsNewDialog entry={entry} open={open} onOpenChange={handleOpenChange} />;
+  return (
+    <WhatsNewDialog entry={entry} mediaPath={data?.mediaPath ?? null} open={open} onOpenChange={handleOpenChange} />
+  );
 }

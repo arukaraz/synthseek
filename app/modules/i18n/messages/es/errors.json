@@ -311,6 +311,10 @@
     "title": "Falta el archivo retenido",
     "description": "El audio guardado ya no está en el disco, así que no se puede importar ni reproducir."
   },
+  "WHATS_NEW_MEDIA_NOT_FOUND": {
+    "title": "Vista previa no disponible",
+    "description": "Esta vista previa aún no se ha publicado o no se pudo descargar. Las notas se muestran igualmente."
+  },
   "HELD_IMPORT_IN_FLIGHT": {
     "title": "Ya aprobado",
     "description": "Este archivo retenido está en cola para importarse. Espera a que termine."

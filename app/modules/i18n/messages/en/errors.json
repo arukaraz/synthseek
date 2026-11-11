@@ -311,6 +311,10 @@
     "title": "Held file missing",
     "description": "The retained audio is no longer on disk, so it cannot be imported or played."
   },
+  "WHATS_NEW_MEDIA_NOT_FOUND": {
+    "title": "Preview not available",
+    "description": "This preview has not been published yet or could not be downloaded. The notes are still shown."
+  },
   "HELD_IMPORT_IN_FLIGHT": {
     "title": "Already approved",
     "description": "This held file is queued for import. Wait for it to finish."

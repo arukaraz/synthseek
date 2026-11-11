@@ -9,7 +9,7 @@ import { createMockQuery, type MockQueryResult } from "@test/mocks/trpc.mock";
 import type { WhatsNewEntry } from "../types";
 import { makeWhatsNewEntry } from "./fixtures";
 
-type WhatsNewData = { entry: WhatsNewEntry | null; pending: boolean };
+type WhatsNewData = { entry: WhatsNewEntry | null; pending: boolean; mediaPath: string | null };
 
 let whatsNewQuery: MockQueryResult<WhatsNewData | undefined> = createMockQuery<WhatsNewData | undefined>(undefined);
 const mutate = vi.fn();
@@ -50,7 +50,11 @@ function advance(ms: number) {
 
 describe("WhatsNewGate", () => {
   it("opens a pending announcement once the app has settled", () => {
-    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({ entry: makeWhatsNewEntry(), pending: true });
+    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({
+      entry: makeWhatsNewEntry(),
+      pending: true,
+      mediaPath: null,
+    });
     render(<WhatsNewGate />);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -59,7 +63,11 @@ describe("WhatsNewGate", () => {
   });
 
   it("stays closed when the announcement was already seen", () => {
-    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({ entry: makeWhatsNewEntry(), pending: false });
+    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({
+      entry: makeWhatsNewEntry(),
+      pending: false,
+      mediaPath: null,
+    });
     render(<WhatsNewGate />);
 
     advance(10_000);
@@ -71,7 +79,11 @@ describe("WhatsNewGate", () => {
     other.setAttribute("role", "dialog");
     other.setAttribute("data-state", "open");
     document.body.appendChild(other);
-    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({ entry: makeWhatsNewEntry(), pending: true });
+    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({
+      entry: makeWhatsNewEntry(),
+      pending: true,
+      mediaPath: null,
+    });
     render(<WhatsNewGate />);
 
     advance(5000);
@@ -83,7 +95,11 @@ describe("WhatsNewGate", () => {
   });
 
   it("records the version when closed and does not reopen", () => {
-    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({ entry: makeWhatsNewEntry(), pending: true });
+    whatsNewQuery = createMockQuery<WhatsNewData | undefined>({
+      entry: makeWhatsNewEntry(),
+      pending: true,
+      mediaPath: null,
+    });
     render(<WhatsNewGate />);
     advance(1200);
 

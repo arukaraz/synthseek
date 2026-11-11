@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-import { WHATS_NEW_MAX_HIGHLIGHTS } from "./constants";
+import { BARE_VERSION_MESSAGE, IMAGE_FILE_MESSAGE, VIDEO_FILE_MESSAGE, WHATS_NEW_MAX_HIGHLIGHTS } from "./constants";
+import { isImageFile, isVideoFile } from "./media";
+import { isBareVersion } from "./version";
 
 const calloutSchema = z.object({
   level: z.enum(["important", "warning", "note"]),
@@ -19,6 +21,20 @@ function isAppRoute(value: string): boolean {
   return [...value].every((character) => character.trim() !== "");
 }
 
+const mediaSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("image"),
+    file: z.string().refine(isImageFile, { message: IMAGE_FILE_MESSAGE }),
+    alt: z.string().min(1),
+  }),
+  z.object({
+    type: z.literal("video"),
+    file: z.string().refine(isVideoFile, { message: VIDEO_FILE_MESSAGE }),
+    alt: z.string().min(1),
+    poster: z.string().refine(isImageFile, { message: IMAGE_FILE_MESSAGE }).optional(),
+  }),
+]);
+
 const highlightSchema = z.object({
   title: z.string().min(1),
   body: z.string().min(1),
@@ -28,10 +44,11 @@ const highlightSchema = z.object({
       message: "A highlight link must be a path inside the app, such as /library",
     })
     .optional(),
+  media: mediaSchema.optional(),
 });
 
 const versionSchema = z.object({
-  version: z.string(),
+  version: z.string().refine(isBareVersion, { message: BARE_VERSION_MESSAGE }),
   date: z.string(),
   type: z.enum(["major", "minor", "patch"]),
   title: z.string(),
@@ -45,3 +62,5 @@ export const changelogSchema = z.object({
   schemaVersion: z.number(),
   versions: z.array(versionSchema),
 });
+
+export type ParsedChangelog = z.infer<typeof changelogSchema>;

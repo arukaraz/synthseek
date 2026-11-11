@@ -311,6 +311,10 @@
     "title": "Fichier conservé manquant",
     "description": "L'audio conservé n'est plus sur le disque, il ne peut donc être ni importé ni lu."
   },
+  "WHATS_NEW_MEDIA_NOT_FOUND": {
+    "title": "Aperçu indisponible",
+    "description": "Cet aperçu n'est pas encore publié ou n'a pas pu être téléchargé. Les notes restent affichées."
+  },
   "HELD_IMPORT_IN_FLIGHT": {
     "title": "Déjà validé",
     "description": "Ce fichier conservé est en file pour l'import. Attendez la fin de l'opération."

@@ -20,7 +20,7 @@ afterEach(() => {
 
 describe("WhatsNewDialog", () => {
   it("opens on the first highlight under the heading and the version", () => {
-    render(<WhatsNewDialog entry={makeWhatsNewEntry()} open onOpenChange={vi.fn()} />);
+    render(<WhatsNewDialog entry={makeWhatsNewEntry()} mediaPath={null} open onOpenChange={vi.fn()} />);
 
     expect(screen.getByRole("heading", { name: copy.heading })).toBeInTheDocument();
     expect(screen.getByText("v3.0.0")).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("WhatsNewDialog", () => {
   });
 
   it("puts the focus on the primary action when it opens", () => {
-    render(<WhatsNewDialog entry={makeWhatsNewEntry()} open onOpenChange={vi.fn()} />);
+    render(<WhatsNewDialog entry={makeWhatsNewEntry()} mediaPath={null} open onOpenChange={vi.fn()} />);
 
     expect(screen.getByRole("button", { name: copy.next })).toHaveFocus();
   });
@@ -38,7 +38,7 @@ describe("WhatsNewDialog", () => {
   it("walks the highlights and ends on the summary card", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
-    render(<WhatsNewDialog entry={makeWhatsNewEntry()} open onOpenChange={onOpenChange} />);
+    render(<WhatsNewDialog entry={makeWhatsNewEntry()} mediaPath={null} open onOpenChange={onOpenChange} />);
 
     await user.click(screen.getByRole("button", { name: copy.next }));
     expect(screen.getByRole("heading", { name: "Presets for requests" })).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe("WhatsNewDialog", () => {
 
   it("goes back a card and jumps to a card from the progress bar", async () => {
     const user = userEvent.setup();
-    render(<WhatsNewDialog entry={makeWhatsNewEntry()} open onOpenChange={vi.fn()} />);
+    render(<WhatsNewDialog entry={makeWhatsNewEntry()} mediaPath={null} open onOpenChange={vi.fn()} />);
 
     await user.click(screen.getByRole("button", { name: "Go to 3 of 3" }));
     expect(screen.getByRole("heading", { name: copy.summaryTitle })).toBeInTheDocument();
@@ -65,7 +65,7 @@ describe("WhatsNewDialog", () => {
   });
 
   it("moves between cards with the arrow keys", () => {
-    render(<WhatsNewDialog entry={makeWhatsNewEntry()} open onOpenChange={vi.fn()} />);
+    render(<WhatsNewDialog entry={makeWhatsNewEntry()} mediaPath={null} open onOpenChange={vi.fn()} />);
     const dialog = screen.getByRole("dialog");
 
     fireEvent.keyDown(dialog, { key: "ArrowRight" });
@@ -77,17 +77,42 @@ describe("WhatsNewDialog", () => {
   });
 
   it("shows a single card titled with the release when there are no highlights", () => {
-    render(<WhatsNewDialog entry={makeWhatsNewEntry({ highlights: undefined })} open onOpenChange={vi.fn()} />);
+    render(
+      <WhatsNewDialog
+        entry={makeWhatsNewEntry({ highlights: undefined })}
+        mediaPath={null}
+        open
+        onOpenChange={vi.fn()}
+      />
+    );
 
     expect(screen.getByRole("heading", { name: "A whole new Synthseek" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Go to/ })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: copy.done })).toBeInTheDocument();
   });
 
+  it("shows a highlight's media through the server's media path", () => {
+    const entry = makeWhatsNewEntry({
+      highlights: [
+        {
+          title: "The Stage",
+          body: "Your music, full screen.",
+          media: { type: "image", file: "stage.png", alt: "The Stage player" },
+        },
+      ],
+    });
+    render(<WhatsNewDialog entry={entry} mediaPath="/api/v1/whats-new/media/3.0.0" open onOpenChange={vi.fn()} />);
+
+    expect(screen.getByRole("img", { name: "The Stage player" })).toHaveAttribute(
+      "src",
+      expect.stringContaining("/api/v1/whats-new/media/3.0.0/stage.png")
+    );
+  });
+
   it("closes when a highlight's link is followed", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
-    render(<WhatsNewDialog entry={makeWhatsNewEntry()} open onOpenChange={onOpenChange} />);
+    render(<WhatsNewDialog entry={makeWhatsNewEntry()} mediaPath={null} open onOpenChange={onOpenChange} />);
 
     await user.click(screen.getByRole("link", { name: copy.tryIt }));
 

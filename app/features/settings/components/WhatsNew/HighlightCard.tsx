@@ -1,21 +1,20 @@
 "use client";
 
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 import { InlineMarkdown } from "../PatchNotes";
-import { card, cardBody, cardLink, cardLinkIcon, cardTitle, visual, visualIcon } from "./styles";
+import { HighlightVisual } from "./HighlightVisual";
+import { card, cardBody, cardLink, cardLinkIcon, cardTitle } from "./styles";
 import type { HighlightCardProps } from "./types";
 
-export function HighlightCard({ highlight, onNavigate }: HighlightCardProps) {
+export function HighlightCard({ highlight, mediaPath, onNavigate }: HighlightCardProps) {
   const { t } = useTranslation("settings");
 
   return (
     <article className={card()}>
-      <div className={visual()} aria-hidden>
-        <Sparkles className={visualIcon()} />
-      </div>
+      <HighlightVisual media={highlight.media} mediaPath={mediaPath} />
       <h3 className={cardTitle()}>{highlight.title}</h3>
       <p className={cardBody()}>
         <InlineMarkdown text={highlight.body} />

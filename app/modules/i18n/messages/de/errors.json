@@ -311,6 +311,10 @@
     "title": "Zurückgehaltene Datei fehlt",
     "description": "Das aufbewahrte Audio liegt nicht mehr auf der Festplatte und kann weder importiert noch abgespielt werden."
   },
+  "WHATS_NEW_MEDIA_NOT_FOUND": {
+    "title": "Vorschau nicht verfügbar",
+    "description": "Diese Vorschau ist noch nicht veröffentlicht oder konnte nicht geladen werden. Die Hinweise werden trotzdem angezeigt."
+  },
   "HELD_IMPORT_IN_FLIGHT": {
     "title": "Bereits freigegeben",
     "description": "Diese zurückgehaltene Datei steht zum Import an. Warte, bis der Vorgang abgeschlossen ist."
