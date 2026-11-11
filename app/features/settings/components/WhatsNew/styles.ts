@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const dialogRoot = cva(
-  "sm:h-auto sm:max-h-[min(90dvh,860px)] sm:w-[calc(100vw-2rem)] sm:max-w-[760px] pb-[env(safe-area-inset-bottom,0px)] sm:pb-0"
+  "sm:h-[min(90dvh,720px)] sm:max-h-none sm:w-[calc(100vw-2rem)] sm:max-w-[760px] pb-[env(safe-area-inset-bottom,0px)] sm:pb-0"
 );
 
 export const header = cva("flex flex-wrap items-center gap-x-4 gap-y-2 px-5 pt-6 pr-16 sm:px-7 sm:pt-7");
