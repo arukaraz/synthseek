@@ -45,6 +45,7 @@
     "startRadio": "Radio mit diesem Titel starten",
     "scrobbling": "Scrobbling",
     "scrobblingState": { "off": "Aus", "sending": "An", "retrying": "Erneuter Versuch", "failed": "Fehlgeschlagen" },
+    "scrobblingLocked": { "private": "Erst die private Sitzung beenden", "account": "Aus in Datenschutz" },
     "playingOn": "Läuft auf {{device}}"
   },
   "chain": {
@@ -244,10 +245,27 @@
     "off": "Scrobbeln aus",
     "sending": "Scrobbeln",
     "retrying": "Scrobbeln, erneuter Versuch",
-    "failed": "Scrobbeln fehlgeschlagen"
+    "failed": "Scrobbeln fehlgeschlagen",
+    "locked": {
+      "private": "Scrobbeln ist aus, solange eine private Sitzung läuft. Beende die private Sitzung, um es wieder einzuschalten.",
+      "account": "Scrobbeln ist in deinen Datenschutz-Einstellungen aus. Schalte es zuerst dort ein."
+    }
+  },
+  "listening": {
+    "title": "Hören gerade",
+    "close": "Hören gerade schließen",
+    "empty": "Gerade hört sonst niemand.",
+    "earlier": "ZUVOR",
+    "nobody": "Niemand",
+    "started": "{{name}} hört jetzt",
+    "live_one": "{{count}} hört",
+    "live_other": "{{count}} hören",
+    "count_one": "{{count}} Person hört gerade",
+    "count_other": "{{count}} Personen hören gerade"
   },
   "privateSession": {
     "label": "Private Sitzung",
+    "on": "Private Sitzung aktiv",
     "end": "Private Sitzung aktiv. Beenden"
   },
   "nowPlaying": "{{title}} · {{artist}}"

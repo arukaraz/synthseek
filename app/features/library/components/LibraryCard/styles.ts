@@ -66,7 +66,7 @@ export const cardMosaic = cva("grid h-full w-full grid-cols-2 grid-rows-2");
 export const cardMosaicTile = cva("relative h-full w-full overflow-hidden");
 
 export const cardStatusBadge = cva(
-  "absolute top-1.5 left-1.5 inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-white backdrop-blur-sm"
+  "absolute top-1.5 left-1.5 z-2 inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-white backdrop-blur-sm"
 );
 
 export const cardStatusDot = cva("size-1.5 shrink-0 rounded-full");
@@ -83,7 +83,7 @@ export const cardCoverAction = cva(
     variants: {
       tone: {
         play: "bg-primary-500 text-primary-foreground",
-        neutral: "bg-black/60 text-white hover:bg-black/75",
+        neutral: "bg-black/60 text-white",
       },
     },
     defaultVariants: { tone: "neutral" },
@@ -91,7 +91,7 @@ export const cardCoverAction = cva(
 );
 
 export const cardKebab = cva(
-  "absolute top-1.5 right-1.5 grid size-7 place-items-center rounded-md bg-black/55 text-white backdrop-blur-sm transition-opacity hover:bg-black/70 focus-visible:opacity-100 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
+  "absolute top-1.5 right-1.5 z-2 grid size-7 place-items-center rounded-md bg-black/55 text-white backdrop-blur-sm transition-opacity focus-visible:opacity-100 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
 );
 
 export const cardPlayButton = cva(

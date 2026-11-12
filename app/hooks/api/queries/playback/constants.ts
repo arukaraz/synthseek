@@ -1,1 +1,3 @@
 export const FAVORITE_STALE_TIME = 60_000;
+
+export const LISTENING_NOW_REFETCH_MS = 20_000;

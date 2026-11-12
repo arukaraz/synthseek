@@ -400,6 +400,8 @@
   },
   "privacy": {
     "privateSessionFailed": "Could not change the private session",
+    "channelFailed": "Could not save that privacy switch",
+    "sessionLengthFailed": "Could not save the private session length",
     "clearHistoryFailed": "Could not clear your listening history",
     "historyCleared_one": "Removed {{count}} play from your history",
     "historyCleared_other": "Removed {{count}} plays from your history",

@@ -15,6 +15,8 @@ export interface PlaylistHeroLabels {
   menu: string;
   rename: string;
   delete: string;
+  makePrivate: string;
+  makeShared: string;
   nameField: string;
   save: string;
   syncTo: string;
@@ -25,6 +27,8 @@ export interface PlaylistHeroControls {
   canEdit: boolean;
   onRename: () => void;
   onDelete: () => void;
+  isPrivate: boolean;
+  onToggleVisibility: () => void;
   onSyncTo?: (server: MediaServerKey) => void;
   syncExcludeServer: string | null;
   isSyncing: boolean;

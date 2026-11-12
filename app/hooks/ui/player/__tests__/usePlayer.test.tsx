@@ -5,7 +5,14 @@ import enPlayer from "@modules/i18n/messages/en/player.json";
 
 import type { PlayerTrack } from "@components/Player";
 
-import type { KnownDevice, ListeningConnectionStatus, PlayerSessionState, RemotePlayback } from "../types";
+import { LISTENING_ARRIVAL_MS } from "../constants";
+import type {
+  KnownDevice,
+  ListeningConnectionStatus,
+  ListeningNowRow,
+  PlayerSessionState,
+  RemotePlayback,
+} from "../types";
 
 vi.mock("@components/Player", async () => {
   const helpers = await vi.importActual<typeof import("@components/Player/helpers")>("@components/Player/helpers");
@@ -22,6 +29,7 @@ const api = vi.hoisted(() => ({
   favoritePending: false,
   setScrobbleEnabled: vi.fn(),
   setPrivateSession: vi.fn(),
+  listeningNow: undefined as ListeningNowRow[] | undefined,
   scrobblePending: false,
   scrobbleVariables: undefined as { service: string; enabled: boolean } | undefined,
   upgradeTracks: vi.fn(),
@@ -70,6 +78,7 @@ vi.mock("@hooks/api", () => ({
   },
   useUpgradeTracks: () => ({ mutate: api.upgradeTracks, isPending: api.upgradePending }),
   useSetPrivateSession: () => ({ mutate: api.setPrivateSession }),
+  useListeningNow: () => ({ data: api.listeningNow }),
 }));
 
 const devices = vi.hoisted(() => ({
@@ -152,11 +161,25 @@ const auth = vi.hoisted(() => ({
     string,
     unknown
   > | null,
+  playChannels: {
+    history: { default: true, private: false },
+    scrobble: { default: true, private: false },
+    mediaServer: { default: true, private: false },
+    nowPlaying: { default: true, private: false },
+  },
 }));
 
 vi.mock("@modules/providers/AuthProvider", () => ({
   useAuthContext: () => ({
-    currentUser: auth.currentUser,
+    currentUser:
+      auth.currentUser === null
+        ? null
+        : {
+            playChannels: auth.playChannels,
+            privateSessionUntil: null,
+            privateSessionOpen: false,
+            ...auth.currentUser,
+          },
     isLoading: false,
     isError: false,
     isAdmin: true,
@@ -234,6 +257,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     transition: { mode: "gapless", seconds: 5, curve: "equalPower" },
     modesOpen: false,
     queueOpen: false,
+    roomOpen: false,
     mode: "normal",
     lyricsOpen: false,
     fullscreen: false,
@@ -281,8 +305,32 @@ function connection(overrides: Partial<ListeningConnectionStatus> = {}): Listeni
   };
 }
 
+function listener(overrides: Partial<ListeningNowRow> = {}): ListeningNowRow {
+  return {
+    userId: "u1",
+    username: "Ana",
+    avatarUrl: null,
+    trackId: "t9",
+    title: "Dreams",
+    artist: "Fleetwood Mac",
+    album: "Rumours",
+    artworkUrl: null,
+    playedAt: new Date(1_000),
+    client: null,
+    playing: true,
+    ...overrides,
+  };
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
+  api.listeningNow = undefined;
+  auth.playChannels = {
+    history: { default: true, private: false },
+    scrobble: { default: true, private: false },
+    mediaServer: { default: true, private: false },
+    nowPlaying: { default: true, private: false },
+  };
   store.listeners.clear();
   store.snapshot = sessionState();
   auth.currentUser = { loudnessNormalization: true, loudnessPreampDb: 0 };
@@ -803,6 +851,87 @@ describe("usePlayer scrobbling", () => {
     result.current.actions.togglePrivateSession();
 
     expect(api.setPrivateSession).toHaveBeenLastCalledWith({ enabled: false });
+  });
+
+  it("locks scrobbling while a private session runs with scrobbling off for it", () => {
+    api.connections = [connection()];
+    auth.currentUser = { ...auth.currentUser, privateSessionOpen: true };
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.scrobbleLock).toBe("private");
+    expect(result.current.view?.scrobble).toBe("off");
+    expect(result.current.view?.scrobbleActionable).toBe(false);
+  });
+
+  it("leaves scrobbling alone in a private session that keeps it on", () => {
+    api.connections = [connection()];
+    auth.currentUser = { ...auth.currentUser, privateSessionOpen: true };
+    auth.playChannels = { ...auth.playChannels, scrobble: { default: true, private: true } };
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.scrobbleLock).toBeNull();
+    expect(result.current.view?.scrobble).toBe("sending");
+    expect(result.current.view?.scrobbleActionable).toBe(true);
+  });
+
+  it("locks scrobbling on the account when its default switch is off, private session or not", () => {
+    api.connections = [connection()];
+    auth.playChannels = { ...auth.playChannels, scrobble: { default: false, private: false } };
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.scrobbleLock).toBe("account");
+    expect(result.current.view?.scrobbleActionable).toBe(false);
+  });
+
+  it("splits the household into who is listening now and who was, newest first", () => {
+    api.listeningNow = [
+      listener({ userId: "u1", username: "Ana", playedAt: new Date(1_000) }),
+      listener({ userId: "u2", username: "Luis", playing: false, playedAt: new Date(500) }),
+      listener({ userId: "u3", username: "Carla", playedAt: new Date(2_000) }),
+    ];
+    const { result } = renderHook(() => usePlayer());
+
+    expect(result.current.view?.listening.live.map((member) => member.name)).toEqual(["Carla", "Ana"]);
+    expect(result.current.view?.listening.earlier.map((member) => member.name)).toEqual(["Luis"]);
+    expect(result.current.view?.listening.arrival).toBeNull();
+  });
+
+  it("announces a member who starts listening after the first look, and lets it go by itself", () => {
+    vi.useFakeTimers();
+    api.listeningNow = [listener({ userId: "u1", username: "Ana" })];
+    const { result, rerender } = renderHook(() => usePlayer());
+    expect(result.current.view?.listening.arrival).toBeNull();
+
+    api.listeningNow = [listener({ userId: "u1", username: "Ana" }), listener({ userId: "u2", username: "Luis" })];
+    rerender();
+    expect(result.current.view?.listening.arrival?.name).toBe("Luis");
+
+    act(() => {
+      vi.advanceTimersByTime(LISTENING_ARRIVAL_MS);
+    });
+    expect(result.current.view?.listening.arrival).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it("stays quiet about someone who only moved to the earlier list", () => {
+    api.listeningNow = [listener({ userId: "u1", username: "Ana" })];
+    const { result, rerender } = renderHook(() => usePlayer());
+
+    api.listeningNow = [listener({ userId: "u1", username: "Ana", playing: false })];
+    rerender();
+
+    expect(result.current.view?.listening.arrival).toBeNull();
+  });
+
+  it("holds the arrival back while the room is open", () => {
+    api.listeningNow = [];
+    const { result, rerender } = renderHook(() => usePlayer());
+    api.listeningNow = [listener({ userId: "u2", username: "Luis" })];
+    store.snapshot = sessionState({ roomOpen: true });
+    rerender();
+
+    expect(result.current.view?.listening.roomOpen).toBe(true);
+    expect(result.current.view?.listening.arrival).toBeNull();
   });
 
   it("turns scrobbling off on every connected service at once", () => {

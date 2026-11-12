@@ -245,7 +245,7 @@
     "account": {
       "title": "Dein Konto",
       "description": "Für dein Konto, auf jedem Gerät.",
-      "household": "Wer sieht, was du hörst, legst du unter <household>Privatsphäre > Haushalt</household> fest."
+      "household": "Wer sieht, was du hörst, legst du unter <household>Privatsphäre</household> fest."
     },
     "browser": {
       "title": "Dieser Browser",
@@ -1039,10 +1039,46 @@
     }
   },
   "privacy": {
+    "channels": {
+      "default": "Standard",
+      "private": "Private Sitzung",
+      "privateHint": "Was während einer privaten Sitzung an bleibt. Du startest sie im Menü des Players. Eine Zeile, die standardmäßig aus ist, bleibt aus.",
+      "switch": "{{channel}}: {{scope}}",
+      "nowPlayingOff": "Aktuelle Wiedergabe ist auf diesem Server ausgeschaltet.",
+      "history": {
+        "label": "In meinem Hörverlauf behalten",
+        "description": "Dein Verlauf, deine Ranglisten und deine Widgets zählen, was du abspielst."
+      },
+      "scrobble": {
+        "label": "Scrobbling",
+        "description": "Sendet, was du abspielst, an die Last.fm- und ListenBrainz-Konten, die du verbunden hast."
+      },
+      "mediaServer": {
+        "label": "An die Medienserver melden",
+        "description": "Zählt, was du abspielst, auf den Medienservern, die mit deinem Konto verknüpft sind."
+      },
+      "nowPlaying": {
+        "label": "In Aktuelle Wiedergabe zeigen",
+        "description": "Zeigt den anderen Mitgliedern, was du gerade abspielst, in ihren Musik-Apps unter Aktuelle Wiedergabe und in Hört gerade, das auch zeigt, was du zuletzt abgespielt hast. Standardmäßig aus."
+      }
+    },
+    "sessionLength": {
+      "label": "Dauer der privaten Sitzung",
+      "description": "Wie lange eine private Sitzung dauert, bevor sie sich selbst ausschaltet.",
+      "custom": "Dauer der privaten Sitzung in Minuten",
+      "minutes": "Min",
+      "options": {
+        "30": "30 Minuten",
+        "60": "1 Stunde",
+        "120": "2 Stunden",
+        "360": "6 Stunden",
+        "open": "Bis ich sie ausschalte",
+        "custom": "Eigene"
+      }
+    },
     "household": {
       "label": "Mein Hören mit dem Haushalt teilen",
-      "description": "Erlaubt den Widgets der anderen Mitglieder, etwa Zu Hause und Blend, zu lesen, was du abspielst, und zeigt dich in ihren Musik-Apps unter Aktuelle Wiedergabe. Standardmäßig aus.",
-      "nowPlayingOff": "Aktuelle Wiedergabe ist auf diesem Server ausgeschaltet."
+      "description": "Erlaubt den Widgets der anderen Mitglieder, etwa Zu Hause und Blend, und ihrer Sortierung \"Meistgehört (von allen)\" in der Bibliothek, mitzuzählen, was du abspielst. Standardmäßig aus."
     },
     "playlists": {
       "description": "Geteilt: Jedes Mitglied sieht sie und spielt sie ab. Privat: nur du und Administratoren. Eine einzelne Playlist änderst du über ihr Menü in der Bibliothek.",
@@ -1056,12 +1092,6 @@
       "locked": "Auf diesem Server sehen Mitglieder nur ihre eigenen Anfragen, es gibt also keinen Namen zu verbergen."
     },
     "history": {
-      "title": "Hörverlauf",
-      "session": {
-        "label": "Private Sitzung",
-        "description": "Was du abspielst, bleibt aus deinem Hörverlauf, wird nicht gescrobbelt oder an deinen Medienserver gemeldet, und du erscheinst nicht unter Aktuelle Wiedergabe. Sie schaltet sich nach einigen Stunden selbst aus.",
-        "until": "An bis {{time}}."
-      },
       "clear": {
         "label": "Hörverlauf löschen",
         "description": "Deine Widgets und Ranglisten zählen diese Wiedergaben nicht mehr. Was schon an Last.fm, ListenBrainz oder deinen Medienserver gesendet wurde, bleibt dort.",
@@ -1101,7 +1131,7 @@
       },
       "nowPlaying": {
         "label": "Aktuelle Wiedergabe in Musik-Apps",
-        "description": "Wenn aus, zeigen Musik-Apps niemanden unter Aktuelle Wiedergabe, egal was jedes Mitglied teilt."
+        "description": "Wenn aus, zeigen Musik-Apps niemanden unter Aktuelle Wiedergabe und der Player niemanden unter Hören gerade, egal was jedes Mitglied teilt."
       }
     }
   },

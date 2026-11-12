@@ -400,6 +400,8 @@
   },
   "privacy": {
     "privateSessionFailed": "Impossible de modifier la session privée",
+    "channelFailed": "Impossible d'enregistrer ce réglage de confidentialité",
+    "sessionLengthFailed": "Impossible d'enregistrer la durée de la session privée",
     "clearHistoryFailed": "Impossible d'effacer votre historique d'écoute",
     "historyCleared_one": "{{count}} lecture retirée de votre historique",
     "historyCleared_other": "{{count}} lectures retirées de votre historique",

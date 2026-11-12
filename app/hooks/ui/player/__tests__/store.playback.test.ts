@@ -1126,6 +1126,13 @@ describe("player store volume and panels", () => {
     expect(store.getSnapshot().modesOpen).toBe(false);
     expect(store.getSnapshot().queueOpen).toBe(true);
 
+    store.actions.toggleRoom();
+    expect(store.getSnapshot().queueOpen).toBe(false);
+    expect(store.getSnapshot().roomOpen).toBe(true);
+
+    store.actions.toggleQueue();
+    expect(store.getSnapshot().roomOpen).toBe(false);
+
     store.actions.toggleSettings();
     expect(store.getSnapshot().queueOpen).toBe(false);
     expect(store.getSnapshot().settingsOpen).toBe(true);

@@ -63,11 +63,17 @@ afterEach(() => {
   document.getElementById(PLAYER_MASTHEAD_SLOT_ID)?.remove();
 });
 
+function moreButtons(layout: "narrow" | "wide"): HTMLElement[] {
+  return screen
+    .queryAllByRole("button", { name: enPlayer.controls.more })
+    .filter((button) => button.classList.contains("hidden") === (layout === "wide"));
+}
+
 describe("the player dock", () => {
   it("keeps the more menu while the screen is not short and sideways", () => {
     renderPlayer();
 
-    expect(screen.getByRole("button", { name: enPlayer.controls.more })).toBeInTheDocument();
+    expect(moreButtons("narrow")).toHaveLength(1);
   });
 
   it("drops the more menu from the bottom bar of a phone held sideways, where it would not fit above the bar", () => {
@@ -75,14 +81,50 @@ describe("the player dock", () => {
     touchScreen = true;
     renderPlayer();
 
-    expect(screen.queryByRole("button", { name: enPlayer.controls.more })).not.toBeInTheDocument();
+    expect(moreButtons("narrow")).toHaveLength(0);
   });
 
   it("keeps the more menu in a short desktop window, which has no touch screen", () => {
     shortScreen = true;
     renderPlayer();
 
-    expect(screen.getByRole("button", { name: enPlayer.controls.more })).toBeInTheDocument();
+    expect(moreButtons("narrow")).toHaveLength(1);
+  });
+
+  it("gives the wide bar a more menu of its own holding devices, player mode, private session and the room", async () => {
+    const { actions, user } = renderPlayer();
+    const [wide] = moreButtons("wide");
+
+    await user.click(wide);
+
+    const menu = await screen.findByRole("menu");
+    const items = Array.from(menu.querySelectorAll('[role^="menuitem"]'));
+    expect(items.map((item) => item.textContent)).toEqual([
+      `${enPlayer.controls.devices}${enPlayer.devices.thisBrowser}`,
+      enPlayer.controls.modes,
+      enPlayer.privateSession.label,
+      `${enPlayer.listening.title}${enPlayer.listening.nobody}`,
+    ]);
+
+    await user.click(screen.getByRole("menuitemcheckbox", { name: enPlayer.privateSession.label }));
+
+    expect(actions.togglePrivateSession).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves devices and player mode to that menu instead of repeating them as buttons on the bar", () => {
+    renderPlayer();
+
+    expect(screen.queryByRole("button", { name: enPlayer.controls.devices })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: enPlayer.controls.modes })).not.toBeInTheDocument();
+  });
+
+  it("marks both more buttons while a private session runs and shows no separate indicator on the bar", () => {
+    renderPlayer({ privateSession: true });
+
+    expect(
+      screen.getAllByRole("button", { name: `${enPlayer.controls.more}: ${enPlayer.privateSession.on}` })
+    ).toHaveLength(2);
+    expect(screen.queryByRole("button", { name: enPlayer.privateSession.end })).not.toBeInTheDocument();
   });
 
   it("keeps the more menu in the compact header player, where it holds the way back to the normal player", () => {
@@ -94,7 +136,7 @@ describe("the player dock", () => {
 
     renderPlayer({ mode: "compact" });
 
-    expect(screen.getByRole("button", { name: enPlayer.controls.more })).toBeInTheDocument();
+    expect(moreButtons("narrow")).toHaveLength(1);
     slot.remove();
   });
 
@@ -307,11 +349,10 @@ describe("the private session indicator", () => {
     expect(screen.queryByRole("button", { name: enPlayer.privateSession.end })).not.toBeInTheDocument();
   });
 
-  it("shows while a private session runs and ends it on a press", async () => {
-    const { actions, user } = renderPlayer({ privateSession: true });
+  it("shows on the stage, which has no more menu, while a private session runs and ends it on a press", async () => {
+    const { actions, user } = renderPlayer({ privateSession: true, fullscreen: true });
 
-    const indicator = screen.getAllByRole("button", { name: enPlayer.privateSession.end })[0];
-    if (indicator !== undefined) await user.click(indicator);
+    await user.click(screen.getByRole("button", { name: enPlayer.privateSession.end }));
 
     expect(actions.endPrivateSession).toHaveBeenCalledTimes(1);
   });

@@ -45,6 +45,10 @@
     "startRadio": "Lancer une radio à partir de cette piste",
     "scrobbling": "Scrobbling",
     "scrobblingState": { "off": "Désactivé", "sending": "Actif", "retrying": "Nouvel essai", "failed": "Échec" },
+    "scrobblingLocked": {
+      "private": "Terminez d'abord la session privée",
+      "account": "Désactivé dans Confidentialité"
+    },
     "playingOn": "Lecture sur {{device}}"
   },
   "chain": {
@@ -244,10 +248,27 @@
     "off": "Scrobbling désactivé",
     "sending": "Scrobbling",
     "retrying": "Scrobbling, nouvelle tentative",
-    "failed": "Échec du scrobbling"
+    "failed": "Échec du scrobbling",
+    "locked": {
+      "private": "Le scrobbling est désactivé pendant une session privée. Terminez la session privée pour le réactiver.",
+      "account": "Le scrobbling est désactivé dans vos paramètres de confidentialité. Activez-le d'abord là-bas."
+    }
+  },
+  "listening": {
+    "title": "En écoute",
+    "close": "Fermer En écoute",
+    "empty": "Personne d'autre n'écoute en ce moment.",
+    "earlier": "PLUS TÔT",
+    "nobody": "Personne",
+    "started": "{{name}} a commencé à écouter",
+    "live_one": "{{count}} en écoute",
+    "live_other": "{{count}} en écoute",
+    "count_one": "{{count}} personne en écoute",
+    "count_other": "{{count}} personnes en écoute"
   },
   "privateSession": {
     "label": "Session privée",
+    "on": "Session privée active",
     "end": "Session privée active. La terminer"
   },
   "nowPlaying": "{{title}} · {{artist}}"

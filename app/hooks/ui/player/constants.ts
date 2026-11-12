@@ -10,7 +10,15 @@ import type { CompressorParam, CompressorParams, SessionSnapshot } from "./types
 
 export const LOAD_TIMEOUT_MS = 15000;
 
-export const NO_PANEL_OPEN = { devicesOpen: false, settingsOpen: false, modesOpen: false, queueOpen: false } as const;
+export const NO_PANEL_OPEN = {
+  devicesOpen: false,
+  settingsOpen: false,
+  modesOpen: false,
+  queueOpen: false,
+  roomOpen: false,
+} as const;
+
+export const LISTENING_ARRIVAL_MS = 7000;
 
 export const STALL_TIMEOUT_MS = 15000;
 

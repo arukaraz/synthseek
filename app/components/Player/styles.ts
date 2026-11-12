@@ -168,13 +168,24 @@ export const moreBadge = cva("ring-surface-overlay absolute top-1 right-1 size-2
       warning: "bg-warning-vivid animate-pulse",
       danger: "bg-destructive-vivid",
       notice: "bg-warning-vivid",
+      private: "bg-primary-400",
+      friends: "bg-accent-400",
+      arrival: "bg-accent-400 animate-pulse",
     },
   },
 });
 
 export const moreMenuContent = cva("max-h-(--radix-dropdown-menu-content-available-height) overflow-auto");
 
-export const moreTrigger = cva("relative @player:hidden");
+export const moreTrigger = cva("relative", {
+  variants: {
+    layout: {
+      narrow: "@player:hidden",
+      wide: "hidden @player:grid",
+    },
+  },
+  defaultVariants: { layout: "narrow" },
+});
 
 export const moreTriggerIcon = cva("size-5");
 
@@ -211,6 +222,7 @@ export const menuState = cva("ml-auto shrink-0 pl-3 text-[11px]", {
       on: "text-secondary-400",
       sending: "text-secondary-400",
       remote: "text-secondary-400",
+      friends: "text-accent-400",
       retrying: "text-warning-vivid",
       failed: "text-destructive-vivid",
     },
@@ -290,6 +302,7 @@ export const cover = cva("relative grid shrink-0 place-items-center overflow-hid
     },
     size: {
       row: "size-7 rounded",
+      card: "size-11 rounded-md",
       bar: "size-10 rounded-md @player:size-12.5",
       masthead: "size-9 rounded-lg",
       stage: "size-[min(60vw,24vh,268px)] rounded-xl @player:size-[min(60vw,32vh,268px)]",
@@ -317,6 +330,7 @@ export const coverInitials = cva("text-fg font-mono", {
   variants: {
     size: {
       row: "text-[8px]",
+      card: "text-[10px]",
       bar: "text-[10px]",
       masthead: "text-[10px]",
       stage: "text-[26px]",
@@ -381,6 +395,7 @@ export const panelAnchor = cva("player-metrics pointer-events-auto fixed z-70", 
     width: {
       devices: "sm:w-[306px]",
       settings: "sm:w-[400px]",
+      room: "sm:w-[340px]",
       queue: "",
     },
     chain: {
@@ -870,8 +885,12 @@ export const scrobbleStatus = cva(
         bar: "size-7",
         stage: "size-9",
       },
+      locked: {
+        true: "cursor-not-allowed opacity-50",
+        false: "",
+      },
     },
-    defaultVariants: { state: "off", size: "bar" },
+    defaultVariants: { state: "off", size: "bar", locked: false },
   }
 );
 
@@ -947,3 +966,56 @@ export const lyricsLine = cva(
 export const lyricsEmpty = cva("text-fg-muted py-10 text-center text-base");
 
 export const lyricsUntimed = cva("text-fg-muted text-center text-xs");
+
+export const listeningAvatars = cva(
+  "focus-visible:ring-primary-500 pointer-events-auto flex items-center rounded-full transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      placement: {
+        dock: "player-metrics absolute right-3 bottom-[calc(var(--player-bar-height)+var(--height-bottom-nav)-0.875rem)] sm:right-[calc(var(--player-dock-gap)+1.25rem)] sm:bottom-[calc(var(--player-dock-height)-1rem)]",
+        stage: "",
+      },
+      chain: {
+        true: "player-metrics-chain",
+        false: "",
+      },
+    },
+    defaultVariants: { placement: "dock", chain: false },
+  }
+);
+
+export const listeningAvatar = cva("relative -ml-2.5 rounded-full shadow-lg first:ml-0");
+
+export const listeningMore = cva(
+  "bg-surface-overlay/80 text-fg absolute inset-0 grid place-items-center rounded-full text-[11px] font-semibold"
+);
+
+export const roomSurface = cva("max-h-[inherit]");
+
+export const roomBody = cva(
+  "scrollbar-none flex max-h-[60dvh] min-h-0 flex-col gap-2 overflow-y-auto px-3.5 pt-1 pb-3.5 [&>*]:shrink-0"
+);
+
+export const roomCard = cva("border-accent-400/45 flex items-center gap-3 rounded-xl border px-3 py-2.5");
+
+export const roomRow = cva("flex items-center gap-3 px-1 py-1");
+
+export const roomText = cva("flex min-w-0 flex-1 flex-col");
+
+export const roomName = cva("text-fg flex min-w-0 items-center gap-1.5 text-[13px] font-semibold");
+
+export const roomTrack = cva("text-fg truncate text-[12px]");
+
+export const roomDetail = cva("text-fg-muted truncate text-[11px]");
+
+export const roomAgo = cva("text-fg-muted shrink-0 text-[11px]");
+
+export const roomEmpty = cva("text-fg-muted px-1 py-3 text-[13px]");
+
+export const roomLiveDot = cva("bg-accent-400 size-1.5 shrink-0 animate-pulse rounded-full");
+
+export const listeningNotice = cva(
+  "bg-surface-overlay border-fg/10 focus-visible:ring-primary-500 flex w-full items-center gap-3 rounded-xl border p-3 text-left shadow-2xl focus-visible:ring-2 focus-visible:outline-none"
+);
+
+export const listeningNoticeLead = cva("text-fg-muted truncate text-[11px]");

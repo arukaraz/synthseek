@@ -12,10 +12,11 @@ import {
   Settings2,
   Shuffle,
   Sparkles,
+  Users,
 } from "lucide-react";
 
 import { MODE_MENU_ICON, RESTORE_MODE_ICON } from "./constants";
-import type { MoreMenuEntry, MoreMenuGroup, PlayerActions, PlayerView } from "./types";
+import type { MoreMenuEntry, MoreMenuGroup, MoreMenuLayout, PlayerActions, PlayerView } from "./types";
 
 function trackEntries(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry[] {
   const queue: MoreMenuEntry[] =
@@ -99,22 +100,69 @@ function soundEntries(
         },
       ]
     : [];
-  return [
-    {
-      kind: "action",
-      key: "devices",
-      icon: MonitorSpeaker,
-      label: t("controls.devices"),
-      state: {
-        text: view.activeDevice.local ? t("devices.thisBrowser") : view.activeDevice.name,
-        tone: view.activeDevice.local ? "muted" : "remote",
-      },
-      keepOpen: false,
-      onSelect: actions.toggleDevices,
+  return [devicesEntry(view, actions, t), ...settings, ...chain];
+}
+
+function devicesEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
+  return {
+    kind: "action",
+    key: "devices",
+    icon: MonitorSpeaker,
+    label: t("controls.devices"),
+    state: {
+      text: view.activeDevice.local ? t("devices.thisBrowser") : view.activeDevice.name,
+      tone: view.activeDevice.local ? "muted" : "remote",
     },
-    ...settings,
-    ...chain,
-  ];
+    keepOpen: false,
+    onSelect: actions.toggleDevices,
+  };
+}
+
+function modeEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
+  return view.mode === "normal"
+    ? {
+        kind: "action",
+        key: "modes",
+        icon: MODE_MENU_ICON,
+        label: t("controls.modes"),
+        keepOpen: false,
+        onSelect: actions.toggleModes,
+      }
+    : {
+        kind: "action",
+        key: "modes",
+        icon: RESTORE_MODE_ICON,
+        label: view.mode === "mini" ? t("controls.exitMini") : t("controls.restoreMode"),
+        keepOpen: false,
+        onSelect: () => actions.selectMode("normal"),
+      };
+}
+
+function privateSessionEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
+  return {
+    kind: "toggle",
+    key: "privateSession",
+    icon: EyeOff,
+    label: t("privateSession.label"),
+    checked: view.privateSession,
+    onToggle: actions.togglePrivateSession,
+  };
+}
+
+function listeningEntry(view: PlayerView, actions: PlayerActions, t: TFunction<"player">): MoreMenuEntry {
+  const live = view.listening.live.length;
+  return {
+    kind: "action",
+    key: "listening",
+    icon: Users,
+    label: t("listening.title"),
+    state: {
+      text: live > 0 ? t("listening.live", { count: live }) : t("listening.nobody"),
+      tone: live > 0 ? "friends" : "muted",
+    },
+    keepOpen: false,
+    onSelect: actions.toggleRoom,
+  };
 }
 
 function sessionEntries(
@@ -123,7 +171,13 @@ function sessionEntries(
   t: TFunction<"player">,
   docked: boolean
 ): MoreMenuEntry[] {
-  const scrobbleState = { text: t(`menu.scrobblingState.${view.scrobble}`), tone: view.scrobble };
+  const scrobbleState = {
+    text:
+      view.scrobbleLock === null
+        ? t(`menu.scrobblingState.${view.scrobble}`)
+        : t(`menu.scrobblingLocked.${view.scrobbleLock}`),
+    tone: view.scrobble,
+  };
   const scrobbling: MoreMenuEntry = view.scrobbleActionable
     ? {
         kind: "toggle",
@@ -144,41 +198,34 @@ function sessionEntries(
         keepOpen: false,
         onSelect: actions.toggleScrobbling,
       };
-  const mode: MoreMenuEntry =
-    view.mode === "normal"
-      ? {
-          kind: "action",
-          key: "modes",
-          icon: MODE_MENU_ICON,
-          label: t("controls.modes"),
-          keepOpen: false,
-          onSelect: actions.toggleModes,
-        }
-      : {
-          kind: "action",
-          key: "modes",
-          icon: RESTORE_MODE_ICON,
-          label: view.mode === "mini" ? t("controls.exitMini") : t("controls.restoreMode"),
-          keepOpen: false,
-          onSelect: () => actions.selectMode("normal"),
-        };
-  const privateSession: MoreMenuEntry = {
-    kind: "toggle",
-    key: "privateSession",
-    icon: EyeOff,
-    label: t("privateSession.label"),
-    checked: view.privateSession,
-    onToggle: actions.togglePrivateSession,
-  };
-  return docked ? [scrobbling, privateSession, mode] : [scrobbling, privateSession];
+  const privateSession = privateSessionEntry(view, actions, t);
+  const listening = listeningEntry(view, actions, t);
+  return docked
+    ? [scrobbling, privateSession, listening, modeEntry(view, actions, t)]
+    : [scrobbling, privateSession, listening];
 }
 
 export function moreMenuGroups(
   view: PlayerView,
   actions: PlayerActions,
   t: TFunction<"player">,
-  docked: boolean
+  docked: boolean,
+  layout: MoreMenuLayout = "narrow"
 ): MoreMenuGroup[] {
+  if (layout === "wide") {
+    return [
+      {
+        key: "session",
+        label: null,
+        entries: [
+          devicesEntry(view, actions, t),
+          modeEntry(view, actions, t),
+          privateSessionEntry(view, actions, t),
+          listeningEntry(view, actions, t),
+        ],
+      },
+    ];
+  }
   return [
     {
       key: "playback",

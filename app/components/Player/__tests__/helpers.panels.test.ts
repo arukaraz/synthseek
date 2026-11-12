@@ -55,4 +55,16 @@ describe("what the more button has to announce", () => {
     expect(moreAttention(createPlayerView({ activeDevice: kitchen, scrobble: "retrying" }))).toBe("warning");
     expect(moreAttention(createPlayerView({ activeDevice: kitchen, scrobble: "failed" }))).toBe("danger");
   });
+
+  it("points at a running private session only when nothing else needs saying", () => {
+    expect(moreAttention(createPlayerView({ privateSession: true }))).toBe("private");
+    expect(moreAttention(createPlayerView({ privateSession: true, activeDevice: kitchen }))).toBe("remote");
+    expect(moreAttention(createPlayerView({ privateSession: true, scrobble: "retrying" }))).toBe("warning");
+  });
+
+  it("leaves scrobbling out on the wide bar, which shows it beside the button, and keeps the rest", () => {
+    expect(moreAttention(createPlayerView({ scrobble: "failed" }), "wide")).toBeNull();
+    expect(moreAttention(createPlayerView({ privateSession: true, scrobble: "failed" }), "wide")).toBe("private");
+    expect(moreAttention(createPlayerView({ activeDevice: kitchen, scrobble: "failed" }), "wide")).toBe("remote");
+  });
 });

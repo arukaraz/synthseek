@@ -55,4 +55,14 @@ describe("the more menu on a phone", () => {
     expect(actions.openLyrics).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
+
+  it("opens the listening room from the sheet and closes behind it", async () => {
+    const { user, actions } = renderPhoneMenu();
+    await openSheet(user);
+
+    await user.click(screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.listening.title}`) }));
+
+    expect(actions.toggleRoom).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
 });

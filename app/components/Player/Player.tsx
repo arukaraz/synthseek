@@ -4,6 +4,10 @@ import { AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 
 import { DeviceMenu } from "./DeviceMenu";
+import { ListeningAvatars } from "./ListeningAvatars";
+import { ListeningArrival } from "./ListeningArrival";
+import { ListeningRoom } from "./ListeningRoom";
+import { panelOpen } from "./helpers";
 import { MiniPlayer } from "./MiniPlayer";
 import { PlayerBar } from "./PlayerBar";
 import { PlayerMasthead } from "./PlayerMasthead";
@@ -21,6 +25,7 @@ export function Player({ view, actions }: PlayerProps) {
   const anchorToChain = view.chainVisible && !view.fullscreen;
   const { target, masthead, effective } = usePlayerPlacement(view.mode, view.fullscreen);
   const hanging = effective === "compact" && !view.fullscreen;
+  const docked = target === null && masthead === null;
 
   return (
     <>
@@ -46,7 +51,17 @@ export function Player({ view, actions }: PlayerProps) {
         {view.queueOpen && !view.fullscreen ? (
           <QueueMenu view={view} actions={actions} chain={anchorToChain} hanging={hanging} />
         ) : null}
+        {view.listening.roomOpen ? (
+          <ListeningRoom
+            view={view}
+            actions={actions}
+            chain={anchorToChain}
+            anchored={view.fullscreen}
+            hanging={hanging}
+          />
+        ) : null}
       </AnimatePresence>
+      <ListeningArrival view={view} actions={actions} />
       {target !== null
         ? createPortal(
             effective === "mini" ? (
@@ -60,7 +75,7 @@ export function Player({ view, actions }: PlayerProps) {
           )
         : null}
       {masthead !== null ? createPortal(<PlayerMasthead view={view} actions={actions} />, masthead) : null}
-      {view.fullscreen || target !== null || masthead !== null ? null : (
+      {view.fullscreen || !docked ? null : (
         <div className={playerRoot()} data-cy="player">
           <div className={playerDock()}>
             <AnimatePresence>
@@ -68,6 +83,7 @@ export function Player({ view, actions }: PlayerProps) {
             </AnimatePresence>
             <PlayerBar view={view} actions={actions} />
           </div>
+          {panelOpen(view) ? null : <ListeningAvatars view={view} actions={actions} placement="dock" />}
         </div>
       )}
     </>

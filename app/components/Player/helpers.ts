@@ -16,7 +16,9 @@ import type {
   SettingsUnit,
   PanelAnchorPoint,
   PanelEdge,
+  MoreMenuLayout,
   PlayerAttention,
+  PlayerListeningMember,
   PlayerLyrics,
   PlayerMode,
   PlayerQueueEntry,
@@ -406,9 +408,24 @@ export function panelClosesUpward(edge: PanelEdge, point: PanelAnchorPoint | nul
   return edge === "header" || (edge === "floating" && point?.below === true);
 }
 
-export function moreAttention(view: PlayerView): PlayerAttention | null {
-  if (view.scrobble === "failed") return "danger";
-  if (view.scrobble === "retrying") return "warning";
+export function moreAttention(
+  view: PlayerView,
+  layout: MoreMenuLayout = "narrow",
+  compact = false
+): PlayerAttention | null {
+  if (layout === "narrow" && view.scrobble === "failed") return "danger";
+  if (layout === "narrow" && view.scrobble === "retrying") return "warning";
   if (!view.activeDevice.local) return "remote";
+  if (view.privateSession) return "private";
+  if (compact && view.listening.arrival !== null) return "arrival";
+  if (compact && view.listening.live.length > 0) return "friends";
   return null;
+}
+
+export function panelOpen(view: PlayerView): boolean {
+  return view.queueOpen || view.devicesOpen || view.settingsOpen || view.modesOpen || view.listening.roomOpen;
+}
+
+export function listeningNoticeId(member: PlayerListeningMember): string {
+  return `listening-${member.userId}-${member.playedAt.getTime()}`;
 }

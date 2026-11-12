@@ -17,6 +17,7 @@ export function PlayerExtraControls({
   actions,
   omitTransport = false,
   onStage = false,
+  besideMoreMenu = false,
 }: PlayerExtraControlsProps) {
   const { t } = useTranslation("player");
 
@@ -43,10 +44,13 @@ export function PlayerExtraControls({
           </button>
         </>
       )}
-      <PrivateSessionStatus active={view.privateSession} size="bar" onEnd={actions.endPrivateSession} />
+      {besideMoreMenu ? null : (
+        <PrivateSessionStatus active={view.privateSession} size="bar" onEnd={actions.endPrivateSession} />
+      )}
       <ScrobbleStatus
         state={view.scrobble}
         actionable={view.scrobbleActionable}
+        lock={view.scrobbleLock}
         size="bar"
         onToggle={actions.toggleScrobbling}
       />
@@ -83,17 +87,19 @@ export function PlayerExtraControls({
           <ListMusic className="@player:size-4 size-5" />
         </button>
       )}
-      <button
-        type="button"
-        className={iconButton({ tone: view.activeDevice.local ? "muted" : "remote" })}
-        onClick={actions.toggleDevices}
-        {...labelled(t("controls.devices"))}
-        aria-expanded={view.devicesOpen}
-        data-player-devices-toggle
-      >
-        <MonitorSpeaker className="@player:size-4 size-5" />
-      </button>
-      {onStage ? null : view.mode === "normal" ? (
+      {besideMoreMenu ? null : (
+        <button
+          type="button"
+          className={iconButton({ tone: view.activeDevice.local ? "muted" : "remote" })}
+          onClick={actions.toggleDevices}
+          {...labelled(t("controls.devices"))}
+          aria-expanded={view.devicesOpen}
+          data-player-devices-toggle
+        >
+          <MonitorSpeaker className="@player:size-4 size-5" />
+        </button>
+      )}
+      {onStage || besideMoreMenu ? null : view.mode === "normal" ? (
         <button
           type="button"
           className={iconButton()}

@@ -248,7 +248,7 @@
     "account": {
       "title": "Tu cuenta",
       "description": "Para tu cuenta, en todos los dispositivos.",
-      "household": "Quién ve lo que escuchas se decide en <household>Privacidad > Hogar</household>."
+      "household": "Quién ve lo que escuchas se decide en <household>Privacidad</household>."
     },
     "browser": {
       "title": "Este navegador",
@@ -1042,10 +1042,46 @@
     }
   },
   "privacy": {
+    "channels": {
+      "default": "Por defecto",
+      "private": "Sesión privada",
+      "privateHint": "Lo que sigue activo durante una sesión privada. La inicias desde el menú del reproductor. Una fila apagada por defecto sigue apagada.",
+      "switch": "{{channel}}: {{scope}}",
+      "nowPlayingOff": "Reproduciendo ahora está apagado en este servidor.",
+      "history": {
+        "label": "Guardar en mi historial de escucha",
+        "description": "Tu historial, tus rankings y tus widgets cuentan lo que reproduces."
+      },
+      "scrobble": {
+        "label": "Scrobbling",
+        "description": "Envía lo que reproduces a las cuentas de Last.fm y ListenBrainz que conectaste."
+      },
+      "mediaServer": {
+        "label": "Reportar a los servidores de medios",
+        "description": "Cuenta lo que reproduces en los servidores de medios vinculados a tu cuenta."
+      },
+      "nowPlaying": {
+        "label": "Mostrar en Reproduciendo ahora",
+        "description": "Muestra a los demás miembros lo que estás reproduciendo, en Reproduciendo ahora de sus apps de música y en Escuchando ahora, que también muestra lo último que reprodujiste. Apagado por defecto."
+      }
+    },
+    "sessionLength": {
+      "label": "Duración de la sesión privada",
+      "description": "Cuánto dura una sesión privada antes de apagarse sola.",
+      "custom": "Duración de la sesión privada en minutos",
+      "minutes": "min",
+      "options": {
+        "30": "30 minutos",
+        "60": "1 hora",
+        "120": "2 horas",
+        "360": "6 horas",
+        "open": "Hasta que la apague",
+        "custom": "Personalizada"
+      }
+    },
     "household": {
       "label": "Compartir lo que escucho con el hogar",
-      "description": "Permite que los widgets de los demás miembros, como En casa y Blend, lean lo que reproduces, y te muestra en Reproduciendo ahora de sus apps de música. Apagado por defecto.",
-      "nowPlayingOff": "Reproduciendo ahora está apagado en este servidor."
+      "description": "Permite que los widgets de los demás miembros, como En casa y Blend, y su orden \"Más escuchado (por todos)\" en Biblioteca cuenten lo que reproduces. Apagado por defecto."
     },
     "playlists": {
       "description": "Compartida: todos los miembros la ven y la reproducen. Privada: solo tú y los administradores. Cambia una playlist desde su menú en la Biblioteca.",
@@ -1059,12 +1095,6 @@
       "locked": "En este servidor cada miembro solo ve sus propias peticiones, así que no hay nombre que ocultar."
     },
     "history": {
-      "title": "Historial de escucha",
-      "session": {
-        "label": "Sesión privada",
-        "description": "Lo que reproduces queda fuera de tu historial de escucha, no se envía como scrobble ni se reporta a tu servidor de medios, y no apareces en Reproduciendo ahora. Se apaga sola a las pocas horas.",
-        "until": "Activa hasta las {{time}}."
-      },
       "clear": {
         "label": "Borrar el historial de escucha",
         "description": "Tus widgets y rankings dejan de contar estas reproducciones. Las que ya se enviaron a Last.fm, ListenBrainz o tu servidor de medios se quedan allí.",
@@ -1104,7 +1134,7 @@
       },
       "nowPlaying": {
         "label": "Reproduciendo ahora en las apps de música",
-        "description": "Si está apagado, las apps de música no muestran a nadie en Reproduciendo ahora, comparta lo que comparta cada miembro."
+        "description": "Si está apagado, las apps de música no muestran a nadie en Reproduciendo ahora y el reproductor no muestra a nadie en Escuchando ahora, comparta lo que comparta cada miembro."
       }
     }
   },

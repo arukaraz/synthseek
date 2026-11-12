@@ -32,6 +32,7 @@ import {
   playingSourceOf,
   queuePresenceOf,
   queueSections,
+  scrobbleLockFrom,
   scrobbleStateFrom,
   sourceLabelFor,
   sourceOptionFrom,
@@ -49,6 +50,7 @@ import {
   subscribe,
 } from "./store";
 import { useAutoplayFill } from "./useAutoplayFill";
+import { useListeningRoom } from "./useListeningRoom";
 import { useTrackSilence } from "./useTrackSilence";
 import { usePlayerDevices } from "./useDevices";
 import { usePlayerDocumentTitle } from "./useDocumentTitle";
@@ -142,6 +144,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   useAutoplayFill();
   useTrackSilence();
   const startStation = useStartRadio();
+  const room = useListeningRoom();
   const mirroring = isMirroring(session);
   const localKind = typeof navigator === "undefined" ? "computer" : deviceKindFrom(navigator.userAgent);
   const playingTrack = (mirroring ? (session.remote?.track ?? null) : (session.queue[session.index] ?? null)) ?? null;
@@ -179,7 +182,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
   }, [connected, setScrobbleEnabled]);
   const now = useNow();
   const { mutate: setPrivateSession } = useSetPrivateSession();
-  const privateSession = privateSessionActive(currentUser?.privateSessionUntil, now);
+  const privateSession = privateSessionActive(currentUser, now);
+  const scrobbleLock = scrobbleLockFrom(currentUser?.playChannels.scrobble, privateSession);
   const endPrivateSession = useCallback(() => setPrivateSession({ enabled: false }), [setPrivateSession]);
   const togglePrivateSession = useCallback(
     () => setPrivateSession({ enabled: !privateSession }),
@@ -345,6 +349,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     setSource: actions.setSource,
     toggleModes: actions.toggleModes,
     toggleQueue: actions.toggleQueue,
+    toggleRoom: actions.toggleRoom,
+    dismissArrival: room.dismissArrival,
     selectMode: actions.selectMode,
     jumpTo: actions.jumpTo,
     removeFromQueue: actions.removeFromQueue,
@@ -418,6 +424,12 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     sourceOptions,
     modesOpen: session.modesOpen,
     queueOpen: session.queueOpen,
+    listening: {
+      live: room.live,
+      earlier: room.earlier,
+      roomOpen: session.roomOpen,
+      arrival: session.roomOpen ? null : room.arrival,
+    },
     queueEditable: !mirroring,
     queue: {
       playing: track === null ? null : { index: session.index, track },
@@ -429,12 +441,15 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     lyricsLoading: lyrics.isLoading,
     lyricsFailure: lyrics.isError ? resolveFriendlyError(lyrics.error).title : null,
     scrobble:
-      scrobblePending && scrobbleVariables !== undefined
-        ? scrobbleVariables.enabled
-          ? "sending"
-          : "off"
-        : scrobbleStateFrom(connections.data ?? []),
-    scrobbleActionable: connected.length > 0,
+      scrobbleLock !== null
+        ? "off"
+        : scrobblePending && scrobbleVariables !== undefined
+          ? scrobbleVariables.enabled
+            ? "sending"
+            : "off"
+          : scrobbleStateFrom(connections.data ?? []),
+    scrobbleActionable: scrobbleLock === null && connected.length > 0,
+    scrobbleLock,
     privateSession,
     upgrading: upgradePending,
     fullscreen: session.fullscreen,

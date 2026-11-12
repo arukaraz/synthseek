@@ -400,6 +400,8 @@
   },
   "privacy": {
     "privateSessionFailed": "Die private Sitzung konnte nicht geändert werden",
+    "channelFailed": "Dieser Datenschutzschalter konnte nicht gespeichert werden",
+    "sessionLengthFailed": "Die Dauer der privaten Sitzung konnte nicht gespeichert werden",
     "clearHistoryFailed": "Dein Hörverlauf konnte nicht gelöscht werden",
     "historyCleared_one": "{{count}} Wiedergabe aus deinem Verlauf entfernt",
     "historyCleared_other": "{{count}} Wiedergaben aus deinem Verlauf entfernt",

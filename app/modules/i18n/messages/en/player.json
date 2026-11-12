@@ -45,6 +45,7 @@
     "startRadio": "Start radio from this track",
     "scrobbling": "Scrobbling",
     "scrobblingState": { "off": "Off", "sending": "On", "retrying": "Retrying", "failed": "Failed" },
+    "scrobblingLocked": { "private": "End the private session first", "account": "Off in Privacy settings" },
     "playingOn": "Playing on {{device}}"
   },
   "chain": {
@@ -244,10 +245,27 @@
     "off": "Scrobbling off",
     "sending": "Scrobbling",
     "retrying": "Scrobbling, retrying",
-    "failed": "Scrobbling failed"
+    "failed": "Scrobbling failed",
+    "locked": {
+      "private": "Scrobbling is off while a private session is on. End the private session to turn it back on.",
+      "account": "Scrobbling is off in your Privacy settings. Turn it on there first."
+    }
+  },
+  "listening": {
+    "title": "Listening now",
+    "close": "Close Listening now",
+    "empty": "Nobody else is listening right now.",
+    "earlier": "EARLIER",
+    "nobody": "Nobody",
+    "started": "{{name}} started listening",
+    "live_one": "{{count}} listening",
+    "live_other": "{{count}} listening",
+    "count_one": "{{count}} person listening now",
+    "count_other": "{{count}} people listening now"
   },
   "privateSession": {
     "label": "Private session",
+    "on": "Private session on",
     "end": "Private session on. End it"
   },
   "nowPlaying": "{{title}} · {{artist}}"

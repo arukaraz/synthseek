@@ -11,6 +11,7 @@ export function useSetPlaylistVisibility() {
     onError: (error) => errorToast(error, "playlists.visibilityFailed"),
     onSettled: () => {
       void utils.library.getPlaylists.invalidate();
+      void utils.contentDetail.playlistDetail.invalidate();
       void utils.library.getCounts.invalidate();
       void utils.requests.getAll.invalidate();
     },

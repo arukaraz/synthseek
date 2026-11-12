@@ -147,6 +147,7 @@ function sessionState(overrides: Partial<PlayerSessionState> = {}): PlayerSessio
     transition: { mode: "gapless", seconds: 5, curve: "equalPower" },
     modesOpen: false,
     queueOpen: false,
+    roomOpen: false,
     mode: "normal",
     lyricsOpen: false,
     fullscreen: false,

@@ -7,7 +7,7 @@ import { artworkImage } from "@utils/artworkProxy";
 
 import { CardCoverActions } from "./CardCoverActions";
 import { CardPlayButton } from "./CardPlayButton";
-import { artistSubtitle, cardCoverActionsFrom, cardInitials, handleCardActivationKey } from "./helpers";
+import { artistSubtitle, cardInitials, handleCardActivationKey, onOwnClick } from "./helpers";
 import {
   cardBody,
   cardCover,
@@ -24,8 +24,7 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, c
   const { t } = useTranslation(["library", "contentDetail"]);
   const subtitle = artistSubtitle(item, t("library:page.counts.albums", { count: item.albumCount }));
   const cover = isResolving ? null : (image ?? item.albumArt);
-  const coverActions = chrome === "overlay" ? cardCoverActionsFrom(onOpen, onPlay) : null;
-  const activates = !!onOpen && coverActions === null;
+  const activates = onOpen !== undefined;
 
   return (
     <li
@@ -33,7 +32,7 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, c
       role={activates ? "button" : undefined}
       tabIndex={activates ? 0 : undefined}
       aria-label={activates ? t("contentDetail:openDetail", { name: item.artist }) : undefined}
-      onClick={activates ? onOpen : undefined}
+      onClick={onOpen ? onOwnClick(onOpen) : undefined}
       onKeyDown={activates && onOpen ? (event) => handleCardActivationKey(event, onOpen) : undefined}
     >
       <div className={cardCover()}>
@@ -44,8 +43,8 @@ export function ArtistCard({ item, image, isResolving = false, onOpen, onPlay, c
             {cardInitials(item.artist)}
           </span>
         )}
-        {coverActions ? (
-          <CardCoverActions name={item.artist} order="shuffled" onPlay={coverActions.play} onOpen={coverActions.open} />
+        {onPlay && chrome === "overlay" ? (
+          <CardCoverActions name={item.artist} order="shuffled" onPlay={onPlay} />
         ) : null}
         {onPlay && chrome === "corner" ? (
           <CardPlayButton name={item.artist} order="shuffled" onPlay={onPlay} placement="corner" />

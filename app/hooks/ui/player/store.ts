@@ -140,6 +140,7 @@ let state: PlayerSessionState = {
   transition: defaultTransition(),
   modesOpen: false,
   queueOpen: false,
+  roomOpen: false,
   mode: "normal",
   lyricsOpen: false,
   fullscreen: false,
@@ -990,6 +991,9 @@ export const actions = {
   },
   toggleQueue(): void {
     publish({ ...NO_PANEL_OPEN, queueOpen: !state.queueOpen });
+  },
+  toggleRoom(): void {
+    publish({ ...NO_PANEL_OPEN, roomOpen: !state.roomOpen });
   },
   selectMode(mode: PlayerMode): void {
     if (state.mode === "mini" && mode !== "mini") closeMiniWindow();

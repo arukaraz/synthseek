@@ -7,6 +7,7 @@ import type { DetailTarget } from "../../../types";
 const usePlaylistDetailMock = vi.fn();
 const removeMutate = vi.fn();
 const setSyncMutate = vi.fn();
+const setVisibilityMutate = vi.fn();
 const renameMutate = vi.fn();
 const deleteMutate = vi.fn();
 const syncToMutate = vi.fn();
@@ -38,6 +39,10 @@ vi.mock("@hooks/api/mutations/playlists/useRemoveTracksFromPlaylist", () => ({
 
 vi.mock("@hooks/api/mutations/playlists/useSetPlaylistSync", () => ({
   useSetPlaylistSync: () => ({ mutate: setSyncMutate, isPending: setSyncPending }),
+}));
+
+vi.mock("@hooks/api/mutations/playlists/useSetPlaylistVisibility", () => ({
+  useSetPlaylistVisibility: () => ({ mutate: setVisibilityMutate, isPending: false }),
 }));
 
 vi.mock("@hooks/api/mutations/playlists/useRenamePlaylist", () => ({
@@ -102,6 +107,7 @@ function playlistDetail(overrides?: Partial<Record<string, unknown>>) {
       sourceProvider: null,
       origin: { kind: "created" },
       syncEnabled: false,
+      visibility: "shared",
       totalTracks: 2,
       libraryTrackCount: 1,
       requestedTrackCount: 2,
@@ -231,6 +237,21 @@ describe("PlaylistDetailBody editing", () => {
     await user.click(screen.getByRole("menuitem", { name: "Delete" }));
 
     expect(screen.getByText("Delete playlist?")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["shared", "Make private", "private"],
+    ["private", "Share with everyone", "shared"],
+  ])("offers to change who sees a %s playlist from the kebab", async (visibility, label, next) => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail({ visibility }));
+    const { user } = renderWithProviders(
+      <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />
+    );
+
+    await user.click(screen.getByRole("button", { name: "Playlist actions for Road Trip" }));
+    await user.click(screen.getByRole("menuitem", { name: label }));
+
+    expect(setVisibilityMutate).toHaveBeenCalledWith({ playlistId: "pl-1", visibility: next });
   });
 
   it("syncs the playlist to the server picked in the Sync to submenu", async () => {

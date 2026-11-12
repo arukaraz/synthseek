@@ -34,6 +34,20 @@ describe("ArtistCard", () => {
     expect(screen.queryByRole("button", { name: "Play everything we have of Daft Punk" })).not.toBeInTheDocument();
   });
 
+  it("opens the detail from the name with the shuffle button shown, and shuffling does not open it", async () => {
+    const onOpen = vi.fn();
+    const onPlay = vi.fn(async () => undefined);
+    const { user } = renderWithProviders(<ArtistCard item={createLibraryArtist()} onOpen={onOpen} onPlay={onPlay} />);
+
+    await user.click(screen.getByText("Daft Punk"));
+    expect(onOpen).toHaveBeenCalledTimes(1);
+
+    await user.click(screen.getByRole("button", { name: "Shuffle everything we have of Daft Punk" }));
+    expect(onPlay).toHaveBeenCalledTimes(1);
+    expect(onOpen).toHaveBeenCalledTimes(1);
+    expect(screen.getAllByRole("button", { name: /Open details for Daft Punk/i })).toHaveLength(1);
+  });
+
   it("opens the detail flow on click when onOpen is provided", async () => {
     const onOpen = vi.fn();
     const { user } = renderWithProviders(<ArtistCard item={createLibraryArtist()} onOpen={onOpen} />);

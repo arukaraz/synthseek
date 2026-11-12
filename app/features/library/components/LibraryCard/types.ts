@@ -56,7 +56,6 @@ export interface CardCoverActionsProps {
   name: string;
   order: CardPlayOrder;
   onPlay: () => Promise<unknown>;
-  onOpen?: () => void;
   menu?: ReactNode;
 }
 

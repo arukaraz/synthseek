@@ -285,6 +285,24 @@ describe("the more menu on the narrow bar", () => {
     );
   });
 
+  it("opens the listening room from its item, which says nobody until someone listens", async () => {
+    const { actions, user } = renderMenu();
+    await opened(user);
+    const item = screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.listening.title}`) });
+    expect(item).toHaveTextContent(enPlayer.listening.nobody);
+
+    await user.click(item);
+
+    expect(actions.toggleRoom).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the listening room one item away in the mini player too", async () => {
+    const { user } = renderMenu({ mode: "mini" });
+    await opened(user);
+
+    expect(screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.listening.title}`) })).toBeInTheDocument();
+  });
+
   it("leaves scrobbling read-only when no listening service is connected", async () => {
     const { user } = renderMenu({ scrobble: "off", scrobbleActionable: false });
     await opened(user);
@@ -293,6 +311,18 @@ describe("the more menu on the narrow bar", () => {
       "aria-disabled",
       "true"
     );
+  });
+
+  it.each([
+    ["private", enPlayer.menu.scrobblingLocked.private],
+    ["account", enPlayer.menu.scrobblingLocked.account],
+  ] as const)("writes why scrobbling is locked on its item, for the %s lock", async (scrobbleLock, reason) => {
+    const { user } = renderMenu({ scrobble: "off", scrobbleActionable: false, scrobbleLock });
+    await opened(user);
+
+    const scrobbling = screen.getByRole("menuitem", { name: new RegExp(`^${enPlayer.menu.scrobbling}`) });
+    expect(scrobbling).toHaveTextContent(reason);
+    expect(scrobbling).toHaveAttribute("aria-disabled", "true");
   });
 
   it("keeps the queue and the settings out of the mini player and offers the way back", async () => {

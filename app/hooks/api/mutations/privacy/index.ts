@@ -1,1 +1,7 @@
-export { useClearListeningHistory, useSetPrivateSession, useUpdateServerPrivacy } from "./usePrivacyMutations";
+export {
+  useClearListeningHistory,
+  useSetPlayChannel,
+  useSetPrivateSession,
+  useSetPrivateSessionMinutes,
+  useUpdateServerPrivacy,
+} from "./usePrivacyMutations";

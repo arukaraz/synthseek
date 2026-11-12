@@ -9,7 +9,6 @@ import { useTranslation } from "react-i18next";
 import { CardCoverActions } from "./CardCoverActions";
 import { CardPlayButton } from "./CardPlayButton";
 import {
-  cardCoverActionsFrom,
   cardInitials,
   handleCardActivationKey,
   mosaicTiles,
@@ -40,8 +39,7 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
   const { t: tDetail } = useTranslation("contentDetail");
   const tiles = mosaicTiles(item.images, item.image);
   const origin = playlistOriginLabel(item.origin, t);
-  const coverActions = chrome === "overlay" ? cardCoverActionsFrom(onOpen, onPlay) : null;
-  const activates = !!onOpen && coverActions === null;
+  const activates = onOpen !== undefined;
   const openLabel = activates ? tDetail("openDetail", { name: item.name }) : undefined;
 
   return (
@@ -86,9 +84,7 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
           {item.completed_tracks}/{item.total_tracks}
         </span>
         {chrome === "overlay" ? <PlaylistCardMenu item={item} /> : null}
-        {coverActions ? (
-          <CardCoverActions name={item.name} order="inOrder" onPlay={coverActions.play} onOpen={coverActions.open} />
-        ) : null}
+        {onPlay && chrome === "overlay" ? <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} /> : null}
         {onPlay && chrome === "corner" ? (
           <CardPlayButton name={item.name} order="inOrder" onPlay={onPlay} placement="corner" />
         ) : null}

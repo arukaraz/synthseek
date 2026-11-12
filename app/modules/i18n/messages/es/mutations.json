@@ -400,6 +400,8 @@
   },
   "privacy": {
     "privateSessionFailed": "No se pudo cambiar la sesión privada",
+    "channelFailed": "No se pudo guardar ese interruptor de privacidad",
+    "sessionLengthFailed": "No se pudo guardar la duración de la sesión privada",
     "clearHistoryFailed": "No se pudo borrar tu historial de escucha",
     "historyCleared_one": "Se quitó {{count}} reproducción de tu historial",
     "historyCleared_other": "Se quitaron {{count}} reproducciones de tu historial",

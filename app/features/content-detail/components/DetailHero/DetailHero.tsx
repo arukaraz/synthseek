@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@compo
 import { primaryGradientButton } from "@theme/utilities/styles";
 import { cn } from "@utils/cn";
 import { artworkImage } from "@utils/artworkProxy";
-import { Check, CheckCircle, Download, EllipsisVertical, Pencil, Trash2, Upload } from "lucide-react";
+import { Check, CheckCircle, Download, EllipsisVertical, Lock, Pencil, Trash2, Upload, Users } from "lucide-react";
 import Image from "next/image";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
@@ -167,6 +167,16 @@ function DetailHeroComponent({
                     />
                   )
                 ) : null}
+                <DropdownMenuItem className={heroMenuItem()} onSelect={playlistControls.onToggleVisibility}>
+                  {playlistControls.isPrivate ? (
+                    <Users className="size-4" aria-hidden />
+                  ) : (
+                    <Lock className="size-4" aria-hidden />
+                  )}
+                  {playlistControls.isPrivate
+                    ? playlistControls.labels.makeShared
+                    : playlistControls.labels.makePrivate}
+                </DropdownMenuItem>
                 <DropdownMenuItem className={heroMenuItemDanger()} onSelect={playlistControls.onDelete}>
                   <Trash2 className="size-4" aria-hidden />
                   {playlistControls.labels.delete}

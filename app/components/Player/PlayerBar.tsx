@@ -115,7 +115,7 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
 
         <div className={barExtras()}>
           <div className={barDesktopExtras()}>
-            <PlayerExtraControls view={view} actions={actions} />
+            <PlayerExtraControls view={view} actions={actions} besideMoreMenu />
           </div>
           <button
             type="button"
@@ -126,7 +126,10 @@ export function PlayerBar({ view, actions, placement = "dock" }: PlayerBarProps)
           >
             <Maximize className="size-4" />
           </button>
-          {placement === "dock" && phoneSideways ? null : <PlayerMoreMenu view={view} actions={actions} />}
+          {placement === "dock" && phoneSideways ? null : (
+            <PlayerMoreMenu view={view} actions={actions} compact={placement === "header"} />
+          )}
+          <PlayerMoreMenu view={view} actions={actions} layout="wide" compact={placement === "header"} />
         </div>
       </div>
 

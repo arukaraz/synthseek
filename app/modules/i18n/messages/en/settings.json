@@ -245,7 +245,7 @@
     "account": {
       "title": "Your account",
       "description": "For your account, on every device.",
-      "household": "Who sees what you play is set in <household>Privacy > Household</household>."
+      "household": "Who sees what you play is set in <household>Privacy</household>."
     },
     "browser": {
       "title": "This browser",
@@ -1039,10 +1039,46 @@
     }
   },
   "privacy": {
+    "channels": {
+      "default": "Default",
+      "private": "Private session",
+      "privateHint": "What stays on during a private session. You start one from the player's menu. A row that is off by default stays off.",
+      "switch": "{{channel}}: {{scope}}",
+      "nowPlayingOff": "Now playing is turned off on this server.",
+      "history": {
+        "label": "Keep in my listening history",
+        "description": "Your history, rankings and widgets count what you play."
+      },
+      "scrobble": {
+        "label": "Scrobbling",
+        "description": "Sends what you play to the Last.fm and ListenBrainz accounts you connected."
+      },
+      "mediaServer": {
+        "label": "Report to the media servers",
+        "description": "Counts what you play on the media servers linked to your account."
+      },
+      "nowPlaying": {
+        "label": "Show in Now playing",
+        "description": "Shows the other members what you are playing, under Now playing in their music apps and in Listening now, which also shows the last thing you played. Off by default."
+      }
+    },
+    "sessionLength": {
+      "label": "Private session length",
+      "description": "How long a private session lasts before it turns itself off.",
+      "custom": "Private session length in minutes",
+      "minutes": "min",
+      "options": {
+        "30": "30 minutes",
+        "60": "1 hour",
+        "120": "2 hours",
+        "360": "6 hours",
+        "open": "Until I turn it off",
+        "custom": "Custom"
+      }
+    },
     "household": {
       "label": "Share my listening with the household",
-      "description": "Lets the other members' widgets, like At home and Blend, read what you play, and shows you under Now playing in their music apps. Off by default.",
-      "nowPlayingOff": "Now playing is turned off on this server."
+      "description": "Lets the other members' widgets, like At home and Blend, and their \"Most played (by everyone)\" order in Library count what you play. Off by default."
     },
     "playlists": {
       "description": "Shared: every member sees and plays it. Private: only you and administrators. Change one playlist from its menu in Library.",
@@ -1056,12 +1092,6 @@
       "locked": "Members only see their own requests on this server, so there is no name to hide."
     },
     "history": {
-      "title": "Listening history",
-      "session": {
-        "label": "Private session",
-        "description": "What you play stays out of your listening history, is not scrobbled or reported to your media server, and you do not appear under Now playing. It turns itself off after a few hours.",
-        "until": "On until {{time}}."
-      },
       "clear": {
         "label": "Clear listening history",
         "description": "Your widgets and rankings stop counting these plays. Plays already sent to Last.fm, ListenBrainz or your media server stay there.",
@@ -1101,7 +1131,7 @@
       },
       "nowPlaying": {
         "label": "Now playing in music apps",
-        "description": "When off, music apps show nobody under Now playing, whatever each member shares."
+        "description": "When off, music apps show nobody under Now playing and the player shows nobody in Listening now, whatever each member shares."
       }
     }
   },

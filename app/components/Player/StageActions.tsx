@@ -1,6 +1,6 @@
 "use client";
 
-import { Mic2, MonitorSpeaker, Settings2 } from "lucide-react";
+import { Mic2, MonitorSpeaker, Settings2, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { FavouriteButton } from "./FavouriteButton";
@@ -22,6 +22,7 @@ export function StageActions({ view, actions }: StageActionsProps) {
       <ScrobbleStatus
         state={view.scrobble}
         actionable={view.scrobbleActionable}
+        lock={view.scrobbleLock}
         size="stage"
         onToggle={actions.toggleScrobbling}
       />
@@ -43,6 +44,16 @@ export function StageActions({ view, actions }: StageActionsProps) {
         data-player-settings-toggle
       >
         <Settings2 className="size-4" />
+      </button>
+      <button
+        type="button"
+        className={iconButton({ tone: view.listening.live.length > 0 ? "favorite" : "muted", size: "stage" })}
+        onClick={actions.toggleRoom}
+        {...labelled(t("listening.title"))}
+        aria-expanded={view.listening.roomOpen}
+        data-player-room-toggle
+      >
+        <Users className="size-4" />
       </button>
       <button
         type="button"

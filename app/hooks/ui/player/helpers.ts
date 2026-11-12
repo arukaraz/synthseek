@@ -1,5 +1,6 @@
 import type {
   PlayerQueueEntry,
+  PlayerScrobbleLock,
   PlayerScrobbleState,
   PlayerSource,
   PlayerSourceOption,
@@ -614,6 +615,15 @@ export function scrobbleStateFrom(connections: readonly ListeningConnectionStatu
   }
   if (sending.some((connection) => connection.lastFailure === "unavailable")) return "retrying";
   return "sending";
+}
+
+export function scrobbleLockFrom(
+  channel: { default: boolean; private: boolean } | undefined,
+  privateSession: boolean
+): PlayerScrobbleLock | null {
+  if (channel === undefined) return null;
+  if (!channel.default) return "account";
+  return privateSession && !channel.private ? "private" : null;
 }
 
 export function isPlayPauseShortcut(event: KeyboardEvent): boolean {

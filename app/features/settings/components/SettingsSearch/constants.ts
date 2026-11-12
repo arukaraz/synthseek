@@ -29,28 +29,40 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
   },
 
   {
-    labelKey: "privacy.household.label",
+    labelKey: "privacy.channels.history.label",
     page: "privacy",
     href: "/settings/privacy",
-    anchor: "household",
+    anchor: "privacy.channels.history",
     keywordsKey: "shell.search.keywords.privacy",
   },
+  {
+    labelKey: "privacy.channels.scrobble.label",
+    page: "privacy",
+    href: "/settings/privacy",
+    anchor: "privacy.channels.scrobble",
+  },
+  {
+    labelKey: "privacy.channels.mediaServer.label",
+    page: "privacy",
+    href: "/settings/privacy",
+    anchor: "privacy.channels.mediaServer",
+  },
+  {
+    labelKey: "privacy.channels.nowPlaying.label",
+    page: "privacy",
+    href: "/settings/privacy",
+    anchor: "privacy.channels.nowPlaying",
+  },
+  {
+    labelKey: "privacy.sessionLength.label",
+    page: "privacy",
+    href: "/settings/privacy",
+    anchor: "privacy.sessionLength",
+  },
+  { labelKey: "privacy.household.label", page: "privacy", href: "/settings/privacy", anchor: "household" },
   { labelKey: "privacy.playlists.label", page: "privacy", href: "/settings/privacy", anchor: "privacy.playlists" },
   { labelKey: "privacy.requests.label", page: "privacy", href: "/settings/privacy", anchor: "privacy.requests" },
-  {
-    labelKey: "privacy.history.session.label",
-    page: "privacy",
-    href: "/settings/privacy",
-    anchor: "privacy.session",
-    placeKey: "privacy.history.title",
-  },
-  {
-    labelKey: "privacy.history.clear.label",
-    page: "privacy",
-    href: "/settings/privacy",
-    anchor: "privacy.clear",
-    placeKey: "privacy.history.title",
-  },
+  { labelKey: "privacy.history.clear.label", page: "privacy", href: "/settings/privacy", anchor: "privacy.clear" },
   { labelKey: "privacy.leaving.title", page: "privacy", href: "/settings/privacy", anchor: "privacy.leaving" },
 
   {

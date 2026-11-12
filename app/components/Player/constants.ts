@@ -99,6 +99,12 @@ export const MODES_TOGGLE_SELECTOR = `[data-player-modes-toggle], ${MORE_TOGGLE_
 
 export const QUEUE_TOGGLE_SELECTOR = `[data-player-queue-toggle], ${MORE_TOGGLE_SELECTOR}`;
 
+export const ROOM_TOGGLE_SELECTOR = `[data-player-room-toggle], ${MORE_TOGGLE_SELECTOR}`;
+
+export const ROOM_PANEL_WIDTH_PX = 340;
+
+export const LISTENING_AVATAR_LIMIT = 4;
+
 export const FULLSCREEN_TOGGLE_SELECTOR = "[data-player-fullscreen-toggle]";
 
 export const OPEN_TRACK_SELECTOR = "[data-player-open-track]";

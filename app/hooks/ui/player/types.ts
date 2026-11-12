@@ -1,6 +1,7 @@
 import type { AppRouter, PlayerCommandPayload } from "@api/__generated__/types";
 import type {
   PlayerDeviceKind,
+  PlayerListeningMember,
   PlayerMode,
   PlayerRepeat,
   PlayerTrack,
@@ -10,6 +11,15 @@ import type {
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 export type ListeningConnectionStatus = inferRouterOutputs<AppRouter>["playback"]["scrobble"]["connections"][number];
+
+export type ListeningNowRow = inferRouterOutputs<AppRouter>["playback"]["listeningNow"][number];
+
+export interface ListeningRoom {
+  live: readonly PlayerListeningMember[];
+  earlier: readonly PlayerListeningMember[];
+  arrival: PlayerListeningMember | null;
+  dismissArrival: () => void;
+}
 
 export type TrackSilence = inferRouterOutputs<AppRouter>["playback"]["trackSilence"][number];
 
@@ -83,6 +93,7 @@ export interface PlayerSessionState {
   transition: PlayerTransition;
   modesOpen: boolean;
   queueOpen: boolean;
+  roomOpen: boolean;
   mode: PlayerMode;
   lyricsOpen: boolean;
   fullscreen: boolean;

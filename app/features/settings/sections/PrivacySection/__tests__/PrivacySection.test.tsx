@@ -19,7 +19,8 @@ interface PrivacyTestState {
   connections: ListeningConnectionView[];
   accounts: SourceAccountView[];
   updateProfile: ReturnType<typeof vi.fn>;
-  setSession: ReturnType<typeof vi.fn>;
+  setChannel: ReturnType<typeof vi.fn>;
+  setMinutes: ReturnType<typeof vi.fn>;
   clearHistory: ReturnType<typeof vi.fn>;
 }
 
@@ -30,7 +31,8 @@ const state = vi.hoisted<PrivacyTestState>(() => ({
   connections: [],
   accounts: [],
   updateProfile: vi.fn(),
-  setSession: vi.fn(),
+  setChannel: vi.fn(),
+  setMinutes: vi.fn(),
   clearHistory: vi.fn(),
 }));
 
@@ -44,7 +46,8 @@ vi.mock("@hooks/api/mutations/auth/useUpdateProfile", () => ({
 
 vi.mock("@hooks/api", () => ({
   usePrivacyOverview: () => ({ data: state.overview }),
-  useSetPrivateSession: () => ({ mutate: state.setSession, isPending: false }),
+  useSetPlayChannel: () => ({ mutate: state.setChannel, isPending: false }),
+  useSetPrivateSessionMinutes: () => ({ mutate: state.setMinutes, isPending: false }),
   useClearListeningHistory: () => ({ mutate: state.clearHistory, isPending: false }),
   useListeningConnections: () => ({ data: state.connections }),
   usePlaybackSourceAccounts: () => ({ data: state.accounts }),
@@ -100,24 +103,33 @@ describe("PrivacySection", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("holds every choice in one untitled card, with the listening history under its own heading", () => {
+  it("holds every choice in one untitled card: channels first, clearing the history last", () => {
     render(<PrivacySection />);
 
     const privacy = screen.getByRole("region", { name: enSettings.shell.pages.privacy.title });
-    const labels = within(privacy)
-      .getAllByText(/./, { selector: "span.text-fg" })
-      .map((label) => label.textContent);
-    expect(labels).toEqual([
-      copy.household.label,
-      copy.playlists.label,
-      copy.requests.label,
-      copy.history.session.label,
-      copy.history.clear.label,
+    const anchors = Array.from(privacy.querySelectorAll<HTMLElement>("[data-anchor-target]")).map(
+      (element) => element.dataset.anchorTarget
+    );
+    expect(anchors).toEqual([
+      "privacy.channels.history",
+      "privacy.channels.scrobble",
+      "privacy.channels.mediaServer",
+      "privacy.channels.nowPlaying",
+      "privacy.sessionLength",
+      "household",
+      "privacy.playlists",
+      "privacy.requests",
+      "privacy.clear",
     ]);
     expect(screen.getAllByRole("heading", { level: 2 }).map((heading) => heading.textContent)).toEqual([
-      copy.history.title,
       copy.leaving.title,
     ]);
+  });
+
+  it("offers no private session switch here, which lives in the player", () => {
+    render(<PrivacySection />);
+
+    expect(screen.queryByRole("switch", { name: /^Private session$/ })).not.toBeInTheDocument();
   });
 
   it("keeps the server's settings off this page, for an administrator too", () => {
@@ -146,21 +158,154 @@ describe("Household row", () => {
     expect(state.updateProfile).toHaveBeenCalledWith({ shareListening: true });
   });
 
-  it("leaves the now playing note out while the server allows it", async () => {
+  it("explains what the switch reaches, which is no longer Now playing", async () => {
     render(<PrivacySection />);
 
     const explanation = await explanationOf("household");
 
     expect(explanation).toHaveTextContent(copy.household.description);
-    expect(explanation).not.toHaveTextContent(copy.household.nowPlayingOff);
+    expect(explanation).not.toHaveTextContent(copy.channels.nowPlayingOff);
+  });
+});
+
+function channelSwitch(channel: keyof typeof channelLabels, scope: "default" | "private"): HTMLElement {
+  return screen.getByRole("switch", {
+    name: copy.channels.switch
+      .replace("{{channel}}", channelLabels[channel])
+      .replace("{{scope}}", copy.channels[scope]),
+  });
+}
+
+const channelLabels = {
+  history: copy.channels.history.label,
+  scrobble: copy.channels.scrobble.label,
+  mediaServer: copy.channels.mediaServer.label,
+  nowPlaying: copy.channels.nowPlaying.label,
+};
+
+describe("Play channels table", () => {
+  it("draws a Default and a Private session switch for each of the four channels", () => {
+    render(<PrivacySection />);
+
+    expect(screen.getAllByRole("columnheader").map((header) => header.textContent)).toEqual([
+      copy.channels.default,
+      copy.channels.private,
+    ]);
+    expect(within(screen.getByRole("table")).getAllByRole("switch")).toHaveLength(8);
+    expect(channelSwitch("history", "default")).toBeChecked();
+    expect(channelSwitch("history", "private")).not.toBeChecked();
+    expect(channelSwitch("nowPlaying", "default")).not.toBeChecked();
   });
 
-  it("says so when the server has turned now playing off", async () => {
+  it("saves the switch that was pressed, naming its channel and its column", async () => {
+    render(<PrivacySection />);
+
+    await userEvent.click(channelSwitch("scrobble", "private"));
+    expect(state.setChannel).toHaveBeenLastCalledWith({ channel: "scrobble", scope: "private", enabled: true });
+
+    await userEvent.click(channelSwitch("mediaServer", "default"));
+    expect(state.setChannel).toHaveBeenLastCalledWith({ channel: "mediaServer", scope: "default", enabled: false });
+  });
+
+  it("locks the private switch of a channel that is off by default, and shows it off whatever was saved", () => {
+    const user = createMockUser();
+    state.user = { ...user, playChannels: { ...user.playChannels, scrobble: { default: false, private: true } } };
+
+    render(<PrivacySection />);
+
+    expect(channelSwitch("scrobble", "private")).toBeDisabled();
+    expect(channelSwitch("scrobble", "private")).not.toBeChecked();
+    expect(channelSwitch("history", "private")).toBeEnabled();
+  });
+
+  it("shows a private switch as on once its channel keeps running in a private session", () => {
+    const user = createMockUser();
+    state.user = { ...user, playChannels: { ...user.playChannels, history: { default: true, private: true } } };
+
+    render(<PrivacySection />);
+
+    expect(channelSwitch("history", "private")).toBeChecked();
+  });
+
+  it("leaves the server note out of Now playing while the server allows it", async () => {
+    render(<PrivacySection />);
+
+    const explanation = await explanationOf("privacy.channels.nowPlaying");
+
+    expect(explanation).toHaveTextContent(copy.channels.nowPlaying.description);
+    expect(explanation).not.toHaveTextContent(copy.channels.nowPlayingOff);
+  });
+
+  it("says so on Now playing when the server has turned it off", async () => {
     state.overview = overview({ nowPlayingEnabled: false });
 
     render(<PrivacySection />);
 
-    expect(await explanationOf("household")).toHaveTextContent(copy.household.nowPlayingOff);
+    expect(await explanationOf("privacy.channels.nowPlaying")).toHaveTextContent(copy.channels.nowPlayingOff);
+  });
+});
+
+describe("Private session length row", () => {
+  const lengthMenu = () => screen.getByRole("button", { name: copy.sessionLength.label });
+
+  it("shows the saved length as its preset", () => {
+    state.user = createMockUser({ privateSessionMinutes: 120 });
+
+    render(<PrivacySection />);
+
+    expect(lengthMenu()).toHaveTextContent(copy.sessionLength.options["120"]);
+    expect(screen.queryByRole("spinbutton", { name: copy.sessionLength.custom })).not.toBeInTheDocument();
+  });
+
+  it("saves a preset in minutes", async () => {
+    render(<PrivacySection />);
+
+    await userEvent.click(lengthMenu());
+    await userEvent.click(await screen.findByRole("menuitemradio", { name: copy.sessionLength.options["30"] }));
+
+    expect(state.setMinutes).toHaveBeenCalledWith({ minutes: 30 });
+  });
+
+  it("saves no end at all for a session that lasts until it is turned off, and shows it", async () => {
+    render(<PrivacySection />);
+
+    await userEvent.click(lengthMenu());
+    await userEvent.click(await screen.findByRole("menuitemradio", { name: copy.sessionLength.options.open }));
+    expect(state.setMinutes).toHaveBeenCalledWith({ minutes: null });
+
+    cleanup();
+    state.user = createMockUser({ privateSessionMinutes: null });
+    render(<PrivacySection />);
+    expect(lengthMenu()).toHaveTextContent(copy.sessionLength.options.open);
+  });
+
+  it("shows a length that is no preset as Custom, with its minutes", () => {
+    state.user = createMockUser({ privateSessionMinutes: 45 });
+
+    render(<PrivacySection />);
+
+    expect(lengthMenu()).toHaveTextContent(copy.sessionLength.options.custom);
+    expect(screen.getByLabelText(copy.sessionLength.custom)).toHaveValue(45);
+  });
+
+  it("opens the minutes field on Custom without saving while a preset length stands", async () => {
+    render(<PrivacySection />);
+
+    await userEvent.click(lengthMenu());
+    await userEvent.click(await screen.findByRole("menuitemradio", { name: copy.sessionLength.options.custom }));
+
+    expect(state.setMinutes).not.toHaveBeenCalled();
+    expect(screen.getByLabelText(copy.sessionLength.custom)).toHaveValue(360);
+  });
+
+  it("gives Custom a length to start from when the session had no end", async () => {
+    state.user = createMockUser({ privateSessionMinutes: null });
+    render(<PrivacySection />);
+
+    await userEvent.click(lengthMenu());
+    await userEvent.click(await screen.findByRole("menuitemradio", { name: copy.sessionLength.options.custom }));
+
+    expect(state.setMinutes).toHaveBeenCalledWith({ minutes: 360 });
   });
 });
 
@@ -209,37 +354,7 @@ describe("Requests row", () => {
   });
 });
 
-describe("Listening history rows", () => {
-  it("starts a private session", async () => {
-    render(<PrivacySection />);
-
-    await userEvent.click(screen.getByRole("switch", { name: copy.history.session.label }));
-
-    expect(state.setSession).toHaveBeenCalledWith({ enabled: true });
-  });
-
-  it("shows a running session as on, with when it ends, and ends it", async () => {
-    state.user = createMockUser({ privateSessionUntil: new Date(Date.now() + 60 * 60 * 1000) });
-
-    render(<PrivacySection />);
-
-    const toggle = screen.getByRole("switch", { name: copy.history.session.label });
-    expect(toggle).toBeChecked();
-    expect(screen.getByText(/^On until /)).toBeInTheDocument();
-    await userEvent.click(toggle);
-
-    expect(state.setSession).toHaveBeenCalledWith({ enabled: false });
-  });
-
-  it("treats a session whose end has passed as off", () => {
-    state.user = createMockUser({ privateSessionUntil: new Date(Date.now() - 1000) });
-
-    render(<PrivacySection />);
-
-    expect(screen.getByRole("switch", { name: copy.history.session.label })).not.toBeChecked();
-    expect(screen.queryByText(/^On until /)).not.toBeInTheDocument();
-  });
-
+describe("Clear listening history row", () => {
   it("clears the range the member picked, showing how many plays each range holds", async () => {
     render(<PrivacySection />);
 

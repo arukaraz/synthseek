@@ -42,24 +42,34 @@ A plain member, as these pages call one, has the **User** role. Administrator-on
 
 - The music library on disk. Everyone's downloads go into the same library paths, and an administrator decides which path each request goes to.
 - The download queue.
-- A member's listening, only once that member turns on **Share my listening with the household** under **Settings**, then **Privacy**.
+- A member's listening, only once that member turns on **Share my listening with the household** or **Show in Now playing** under **Settings**, then **Privacy**.
 - Every other setting.
 
 ## Privacy
 
 Each member decides what the others see, under **Settings**, then **Privacy**.
 
-- **Share my listening with the household.** Lets the other members' widgets read what you play, and shows you under Now playing in their music apps. Off by default.
+Four switches decide where what you play goes. Each has a **Default** setting and a **Private session** one:
+
+- **Keep in my listening history.** Your history, rankings and widgets count what you play.
+- **Scrobbling.** Sends what you play to the Last.fm and ListenBrainz accounts you connected.
+- **Report to the media servers.** Counts what you play on the media servers linked to your account.
+- **Show in Now playing.** Shows the other members what you are playing, under Now playing in their music apps and in Listening now in the player, which also shows the last thing you played. Off by default.
+
+A private session is started from the player's menu, and while it runs the **Private session** column applies instead. It can only turn things off: a switch that is off by default stays off. Until you change them, every Private session switch is off, so a private session keeps, sends and shows nothing. **Private session length** sets how long one lasts before it turns itself off, or keeps it on until you end it.
+
+The rest of the page:
+
+- **Share my listening with the household.** Lets the other members' widgets, and their "Most played (by everyone)" order in the library, count what you play. Off by default.
 - **Default playlists privacy.** Whether your new playlists start shared or private. Change one playlist from its menu in the library.
 - **Show my name on my requests.** When off, other members see "A member". Administrators see who asked in Requests. Your shared playlists keep your name in the library.
-- **Private session.** What you play stays out of your listening history and is not scrobbled or reported to your media server. It turns itself off after a few hours.
 - **Clear listening history.** Removes your plays from the last hour, day, week, or all of them. Plays already sent to Last.fm, ListenBrainz or a media server stay there.
 
 An administrator sets three things for everyone, under **Settings**, then **Members & access**:
 
 - Whether the Requests list shows members each other's requests.
 - Whether new playlists start shared or private, for members who have not picked their own.
-- Whether music apps show Now playing at all.
+- Whether music apps show Now playing, and the player shows Listening now, at all.
 
 ## The approval queue
 

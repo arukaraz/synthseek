@@ -1,8 +1,66 @@
 import type { ParseKeys } from "i18next";
 
-import type { HistoryRange, LeavingStatus, ScrobbleService } from "./types";
+import type {
+  ChannelScope,
+  HistoryRange,
+  LeavingStatus,
+  PlayChannelRow,
+  ScrobbleService,
+  SessionLengthChoice,
+} from "./types";
 
 export const CONNECTIONS_HREF = "/settings/connections/services";
+
+export const PLAY_CHANNEL_ROWS: readonly PlayChannelRow[] = [
+  {
+    channel: "history",
+    anchor: "privacy.channels.history",
+    labelKey: "privacy.channels.history.label",
+    descriptionKey: "privacy.channels.history.description",
+  },
+  {
+    channel: "scrobble",
+    anchor: "privacy.channels.scrobble",
+    labelKey: "privacy.channels.scrobble.label",
+    descriptionKey: "privacy.channels.scrobble.description",
+  },
+  {
+    channel: "mediaServer",
+    anchor: "privacy.channels.mediaServer",
+    labelKey: "privacy.channels.mediaServer.label",
+    descriptionKey: "privacy.channels.mediaServer.description",
+  },
+  {
+    channel: "nowPlaying",
+    anchor: "privacy.channels.nowPlaying",
+    labelKey: "privacy.channels.nowPlaying.label",
+    descriptionKey: "privacy.channels.nowPlaying.description",
+  },
+];
+
+export const CHANNEL_SCOPE_KEYS: Readonly<Record<ChannelScope, ParseKeys<"settings">>> = {
+  default: "privacy.channels.default",
+  private: "privacy.channels.private",
+};
+
+export const CHANNEL_SCOPES: readonly ChannelScope[] = ["default", "private"];
+
+export const SESSION_CUSTOM_MIN_MINUTES = 1;
+
+export const SESSION_CUSTOM_MAX_MINUTES = 1440;
+
+export const SESSION_CUSTOM_START_MINUTES = 360;
+
+export const SESSION_LENGTH_KEYS: Readonly<Record<SessionLengthChoice, ParseKeys<"settings">>> = {
+  "30": "privacy.sessionLength.options.30",
+  "60": "privacy.sessionLength.options.60",
+  "120": "privacy.sessionLength.options.120",
+  "360": "privacy.sessionLength.options.360",
+  open: "privacy.sessionLength.options.open",
+  custom: "privacy.sessionLength.options.custom",
+};
+
+export const SESSION_LENGTH_ORDER: readonly SessionLengthChoice[] = ["30", "60", "120", "360", "open", "custom"];
 
 export const DEFAULT_HISTORY_RANGE: HistoryRange = "hour";
 

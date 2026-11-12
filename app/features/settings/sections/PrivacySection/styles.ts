@@ -1,8 +1,24 @@
 import { cva } from "class-variance-authority";
 
-export const privacyNote = cva("text-fg/55 text-xs");
+export const privacyControl = cva("flex items-center justify-end gap-3");
 
-export const privacyControl = cva("flex flex-wrap items-center gap-3");
+export const sessionMinutes = cva("w-28 shrink-0 sm:w-24");
+
+export const sessionSelect = cva("min-w-0 flex-1 sm:w-36 sm:flex-none");
+
+export const channelTable = cva("grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-4 gap-y-4 sm:gap-x-8");
+
+export const channelHead = cva(
+  "text-fg/55 flex items-center justify-center gap-1.5 text-center text-xs font-medium tracking-wide"
+);
+
+export const channelRow = cva("col-span-full grid grid-cols-subgrid items-center");
+
+export const channelLabel = cva("flex min-w-0 items-center gap-2");
+
+export const channelName = cva("text-fg text-sm font-medium");
+
+export const channelCell = cva("flex justify-center");
 
 export const rangeList = cva("flex flex-col gap-1.5");
 

@@ -9,6 +9,7 @@ import { useCatalogPlaylistTracks, usePlaylistDetail } from "@hooks/api/queries/
 import { useRemoveTracksFromPlaylist } from "@hooks/api/mutations/playlists/useRemoveTracksFromPlaylist";
 import { useRenamePlaylist } from "@hooks/api/mutations/playlists/useRenamePlaylist";
 import { useSetPlaylistSync } from "@hooks/api/mutations/playlists/useSetPlaylistSync";
+import { useSetPlaylistVisibility } from "@hooks/api/mutations/playlists/useSetPlaylistVisibility";
 import { useSyncPlaylistTo } from "@hooks/api/mutations/requests/useSyncPlaylistTo";
 import { useInlineRename } from "@hooks/ui/useInlineRename";
 import { useRangePreview } from "@hooks/ui/useRangePreview";
@@ -60,6 +61,7 @@ function PlaylistDetailBodyComponent({
   const removeTracks = useRemoveTracksFromPlaylist();
   const renamePlaylist = useRenamePlaylist();
   const setSync = useSetPlaylistSync();
+  const setVisibility = useSetPlaylistVisibility();
   const syncPlaylistTo = useSyncPlaylistTo();
   const selection = useSelection<{ id: string }>();
   const { previewId, trackRow } = useRangePreview();
@@ -182,6 +184,12 @@ function PlaylistDetailBodyComponent({
     [selection, setSync, target.id]
   );
 
+  const visibility = playlist?.visibility;
+  const handleToggleVisibility = useCallback(() => {
+    if (visibility === undefined) return;
+    setVisibility.mutate({ playlistId: target.id, visibility: visibility === "private" ? "shared" : "private" });
+  }, [setVisibility, target.id, visibility]);
+
   const handleSyncTo = useCallback(
     (server: MediaServerKey) => {
       syncPlaylistTo.mutate({ playlistId: target.id, server });
@@ -207,6 +215,8 @@ function PlaylistDetailBodyComponent({
           canEdit,
           onRename: rename.start,
           onDelete: () => setDeleteOpen(true),
+          isPrivate: playlist.visibility === "private",
+          onToggleVisibility: handleToggleVisibility,
           onSyncTo: handleSyncTo,
           syncExcludeServer: sourceProvider,
           isSyncing: syncPlaylistTo.isPending,
@@ -219,6 +229,8 @@ function PlaylistDetailBodyComponent({
             menu: tLibrary("playlists.actions.menu", { name: playlistName }),
             rename: tLibrary("playlists.actions.rename"),
             delete: tLibrary("playlists.actions.delete"),
+            makePrivate: tLibrary("playlists.actions.makePrivate"),
+            makeShared: tLibrary("playlists.actions.makeShared"),
             nameField: tLibrary("playlists.renameDialog.placeholder"),
             save: tLibrary("playlists.renameDialog.confirm"),
             syncTo: tLibrary("playlists.actions.syncTo"),

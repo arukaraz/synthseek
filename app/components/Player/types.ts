@@ -79,6 +79,8 @@ export interface SourceMarkProps {
 
 export type PlayerScrobbleState = "off" | "sending" | "retrying" | "failed";
 
+export type PlayerScrobbleLock = "private" | "account";
+
 export type PlayerMode = "normal" | "compact" | "mini";
 
 export interface PlayerQueueEntry {
@@ -168,7 +170,49 @@ export interface PlayerSignalChain {
   equalizerActive: boolean;
 }
 
-export type PlayerAttention = "remote" | "warning" | "danger";
+export type PlayerAttention = "remote" | "warning" | "danger" | "private" | "friends" | "arrival";
+
+export type MoreMenuLayout = "narrow" | "wide";
+
+export interface PlayerMoreMenuProps extends PlayerProps {
+  layout?: MoreMenuLayout;
+  compact?: boolean;
+}
+
+export interface PlayerListeningMember {
+  userId: string;
+  name: string;
+  avatarUrl: string | null;
+  title: string;
+  artist: string;
+  album: string;
+  artworkUrl: string | null;
+  playedAt: Date;
+  client: string | null;
+  playing: boolean;
+}
+
+export interface PlayerListening {
+  live: readonly PlayerListeningMember[];
+  earlier: readonly PlayerListeningMember[];
+  roomOpen: boolean;
+  arrival: PlayerListeningMember | null;
+}
+
+export type ListeningPlacement = "dock" | "stage";
+
+export interface ListeningAvatarsProps extends PlayerProps {
+  placement: ListeningPlacement;
+}
+
+export interface ListeningNoticeProps {
+  member: PlayerListeningMember;
+  onOpen: () => void;
+}
+
+export interface ListeningMemberProps {
+  member: PlayerListeningMember;
+}
 
 export interface PlayerView {
   track: PlayerTrack;
@@ -201,10 +245,12 @@ export interface PlayerView {
   lyricsFailure: string | null;
   scrobble: PlayerScrobbleState;
   scrobbleActionable: boolean;
+  scrobbleLock: PlayerScrobbleLock | null;
   privateSession: boolean;
   upgrading: boolean;
   modesOpen: boolean;
   queueOpen: boolean;
+  listening: PlayerListening;
   queueEditable: boolean;
   queue: PlayerQueue;
   mode: PlayerMode;
@@ -243,6 +289,8 @@ export interface PlayerActions {
   setTransition: (transition: PlayerTransition) => void;
   toggleModes: () => void;
   toggleQueue: () => void;
+  toggleRoom: () => void;
+  dismissArrival: () => void;
   selectMode: (mode: PlayerMode) => void;
   jumpTo: (index: number) => void;
   removeFromQueue: (index: number) => void;
@@ -306,6 +354,7 @@ export interface PlayerTransportProps extends PlayerProps {
 export interface PlayerExtraControlsProps extends PlayerProps {
   omitTransport?: boolean;
   onStage?: boolean;
+  besideMoreMenu?: boolean;
 }
 
 export interface MiniPlayerProps extends PlayerProps {
@@ -495,6 +544,7 @@ export interface PlayerTrackButtonProps extends PlayerProps {
 export interface PlayerScrobbleProps {
   state: PlayerScrobbleState;
   actionable: boolean;
+  lock: PlayerScrobbleLock | null;
   size: "bar" | "stage";
   onToggle: () => void;
 }
@@ -510,11 +560,11 @@ export type PlayerLyricsProps = PlayerProps;
 export interface PlayerCoverProps {
   initials: string;
   tone: PlayerTone;
-  size: "row" | "bar" | "masthead" | "stage" | "fluid" | "sideways";
+  size: "row" | "card" | "bar" | "masthead" | "stage" | "fluid" | "sideways";
   artworkUrl?: string | null;
 }
 
-export type MoreMenuTone = "muted" | "on" | "remote" | PlayerScrobbleState;
+export type MoreMenuTone = "muted" | "on" | "remote" | "friends" | PlayerScrobbleState;
 
 export interface MoreMenuState {
   text: string;

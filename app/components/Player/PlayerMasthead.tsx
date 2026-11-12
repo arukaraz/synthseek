@@ -63,7 +63,7 @@ export function PlayerMasthead({ view, actions }: PlayerProps) {
       >
         <SkipForward className="size-4 fill-current" />
       </button>
-      <PlayerMoreMenu view={view} actions={actions} />
+      <PlayerMoreMenu view={view} actions={actions} compact />
       <div className={mastheadProgress()} style={progressVars(progress)}>
         <div className={barMobileProgressFill()} />
       </div>

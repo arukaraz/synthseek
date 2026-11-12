@@ -37,6 +37,7 @@ export { useHasPlayableTracks } from "./queries/library/useHasPlayableTracks";
 export {
   useActivePlayback,
   useFavoriteTracks,
+  useListeningNow,
   usePlaybackSession,
   usePlaybackSourceAccounts,
 } from "./queries/playback";
@@ -58,7 +59,13 @@ export {
 
 export { useListeningConnections, useSeenPlaybackClients } from "./queries/scrobble";
 export { usePrivacyOverview } from "./queries/privacy";
-export { useClearListeningHistory, useSetPrivateSession, useUpdateServerPrivacy } from "./mutations/privacy";
+export {
+  useClearListeningHistory,
+  useSetPlayChannel,
+  useSetPrivateSession,
+  useSetPrivateSessionMinutes,
+  useUpdateServerPrivacy,
+} from "./mutations/privacy";
 export {
   useNotificationAdminSettings,
   useNotificationCatalog,

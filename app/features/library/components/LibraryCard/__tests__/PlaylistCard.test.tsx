@@ -74,6 +74,38 @@ describe("PlaylistCard", () => {
     expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
+  it("opens the detail from the name and from the cover, with the play button shown and no info button", async () => {
+    const onOpen = vi.fn();
+    const onPlay = vi.fn(async () => undefined);
+    const { user, container } = renderWithProviders(
+      <PlaylistCard item={createLibraryPlaylist()} onOpen={onOpen} onPlay={onPlay} />
+    );
+
+    await user.click(screen.getByText("Road Trip"));
+    const cover = container.querySelector("li > div");
+    if (cover === null) throw new Error("no cover");
+    await user.click(cover);
+
+    expect(onOpen).toHaveBeenCalledTimes(2);
+    expect(onPlay).not.toHaveBeenCalled();
+    expect(screen.getAllByRole("button", { name: /Open details for Road Trip/i })).toHaveLength(1);
+  });
+
+  it("plays from the play button and opens its menu without opening the detail", async () => {
+    const onOpen = vi.fn();
+    const onPlay = vi.fn(async () => undefined);
+    const { user } = renderWithProviders(
+      <PlaylistCard item={createLibraryPlaylist()} onOpen={onOpen} onPlay={onPlay} />
+    );
+
+    await user.click(screen.getByRole("button", { name: /Play everything we have of Road Trip/i }));
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+
+    expect(onPlay).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("menuitem", { name: /Rename/i })).toBeInTheDocument();
+    expect(onOpen).not.toHaveBeenCalled();
+  });
+
   it("activates with Enter and Space when interactive", async () => {
     const onOpen = vi.fn();
     const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} onOpen={onOpen} />);

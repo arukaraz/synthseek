@@ -245,7 +245,7 @@
     "account": {
       "title": "Votre compte",
       "description": "Pour votre compte, sur tous les appareils.",
-      "household": "Qui voit ce que vous écoutez se règle dans <household>Confidentialité > Foyer</household>."
+      "household": "Qui voit ce que vous écoutez se règle dans <household>Confidentialité</household>."
     },
     "browser": {
       "title": "Ce navigateur",
@@ -1039,10 +1039,46 @@
     }
   },
   "privacy": {
+    "channels": {
+      "default": "Par défaut",
+      "private": "Session privée",
+      "privateHint": "Ce qui reste actif pendant une session privée. Vous la démarrez depuis le menu du lecteur. Une ligne désactivée par défaut reste désactivée.",
+      "switch": "{{channel}} : {{scope}}",
+      "nowPlayingOff": "Lecture en cours est désactivé sur ce serveur.",
+      "history": {
+        "label": "Garder dans mon historique d'écoute",
+        "description": "Votre historique, vos classements et vos widgets comptent ce que vous écoutez."
+      },
+      "scrobble": {
+        "label": "Scrobbling",
+        "description": "Envoie ce que vous écoutez aux comptes Last.fm et ListenBrainz que vous avez connectés."
+      },
+      "mediaServer": {
+        "label": "Signaler aux serveurs multimédias",
+        "description": "Compte ce que vous écoutez sur les serveurs multimédias liés à votre compte."
+      },
+      "nowPlaying": {
+        "label": "Afficher dans Lecture en cours",
+        "description": "Montre aux autres membres ce que vous écoutez, sous Lecture en cours dans leurs applications musicales et dans En écoute, qui montre aussi la dernière chose que vous avez écoutée. Désactivé par défaut."
+      }
+    },
+    "sessionLength": {
+      "label": "Durée de la session privée",
+      "description": "Combien de temps dure une session privée avant de se désactiver d'elle-même.",
+      "custom": "Durée de la session privée en minutes",
+      "minutes": "min",
+      "options": {
+        "30": "30 minutes",
+        "60": "1 heure",
+        "120": "2 heures",
+        "360": "6 heures",
+        "open": "Jusqu'à ce que je la désactive",
+        "custom": "Personnalisée"
+      }
+    },
     "household": {
       "label": "Partager mes écoutes avec le foyer",
-      "description": "Permet aux widgets des autres membres, comme À la maison et Blend, de lire ce que vous écoutez, et vous affiche sous Lecture en cours dans leurs applications musicales. Désactivé par défaut.",
-      "nowPlayingOff": "Lecture en cours est désactivé sur ce serveur."
+      "description": "Permet aux widgets des autres membres, comme À la maison et Blend, et à leur tri \"Les plus écoutés (par tous)\" dans la Bibliothèque de compter ce que vous écoutez. Désactivé par défaut."
     },
     "playlists": {
       "description": "Partagée : chaque membre la voit et la lit. Privée : vous et les administrateurs. Modifiez une playlist depuis son menu dans la Bibliothèque.",
@@ -1056,12 +1092,6 @@
       "locked": "Sur ce serveur, chaque membre ne voit que ses propres demandes, il n'y a donc aucun nom à masquer."
     },
     "history": {
-      "title": "Historique d'écoute",
-      "session": {
-        "label": "Session privée",
-        "description": "Ce que vous écoutez reste hors de votre historique d'écoute, n'est ni scrobblé ni signalé à votre serveur multimédia, et vous n'apparaissez pas sous Lecture en cours. Elle se désactive d'elle-même après quelques heures.",
-        "until": "Active jusqu'à {{time}}."
-      },
       "clear": {
         "label": "Effacer l'historique d'écoute",
         "description": "Vos widgets et classements cessent de compter ces lectures. Celles déjà envoyées à Last.fm, ListenBrainz ou votre serveur multimédia y restent.",
@@ -1101,7 +1131,7 @@
       },
       "nowPlaying": {
         "label": "Lecture en cours dans les applications musicales",
-        "description": "Si désactivé, les applications musicales n'affichent personne sous Lecture en cours, quoi que partage chaque membre."
+        "description": "Si désactivé, les applications musicales n'affichent personne sous Lecture en cours et le lecteur n'affiche personne dans En écoute, quoi que partage chaque membre."
       }
     }
   },

@@ -12,6 +12,22 @@ export function useSetPrivateSession() {
   });
 }
 
+export function useSetPlayChannel() {
+  const utils = trpc.useUtils();
+  return trpc.privacy.setPlayChannel.useMutation({
+    onSuccess: () => utils.auth.me.invalidate(),
+    onError: (error) => errorToast(error, "privacy.channelFailed"),
+  });
+}
+
+export function useSetPrivateSessionMinutes() {
+  const utils = trpc.useUtils();
+  return trpc.privacy.setPrivateSessionMinutes.useMutation({
+    onSuccess: () => utils.auth.me.invalidate(),
+    onError: (error) => errorToast(error, "privacy.sessionLengthFailed"),
+  });
+}
+
 export function useClearListeningHistory() {
   const utils = trpc.useUtils();
   return trpc.privacy.clearHistory.useMutation({

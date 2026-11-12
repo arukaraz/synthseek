@@ -1,5 +1,6 @@
 import type { AppRouter, PublicUser } from "@api/__generated__/types";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+import type { ParseKeys } from "i18next";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 
@@ -12,6 +13,19 @@ export type HistoryRange = inferRouterInputs<AppRouter>["privacy"]["clearHistory
 export interface PrivacyCardProps {
   user: PublicUser;
 }
+
+export type PlayChannel = inferRouterInputs<AppRouter>["privacy"]["setPlayChannel"]["channel"];
+
+export type ChannelScope = inferRouterInputs<AppRouter>["privacy"]["setPlayChannel"]["scope"];
+
+export interface PlayChannelRow {
+  channel: PlayChannel;
+  anchor: string;
+  labelKey: ParseKeys<"settings">;
+  descriptionKey: ParseKeys<"settings">;
+}
+
+export type SessionLengthChoice = "30" | "60" | "120" | "360" | "open" | "custom";
 
 export interface ClearHistoryDialogProps {
   open: boolean;

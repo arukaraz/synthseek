@@ -29,20 +29,20 @@ import {
   moreTrigger,
   moreTriggerIcon,
 } from "./styles";
-import type { PlayerProps } from "./types";
+import type { PlayerMoreMenuProps } from "./types";
 import { useMoreAttention } from "./useMoreAttention";
 
-export function PlayerMoreMenu({ view, actions }: PlayerProps) {
+export function PlayerMoreMenu({ view, actions, layout = "narrow", compact = false }: PlayerMoreMenuProps) {
   const { t } = useTranslation("player");
-  const { attention, name } = useMoreAttention(view);
+  const { attention, name } = useMoreAttention(view, layout, compact);
   const wide = useMediaQuery(STAGE_WIDE_QUERY, true);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const groups = moreMenuGroups(view, actions, t, wide);
+  const groups = moreMenuGroups(view, actions, t, wide, layout);
 
   const trigger = (
     <button
       type="button"
-      className={cn(iconButton({ tone: attention === "remote" ? "remote" : "muted" }), moreTrigger())}
+      className={cn(iconButton({ tone: attention === "remote" ? "remote" : "muted" }), moreTrigger({ layout }))}
       data-player-more-toggle
       onClick={wide ? undefined : () => setSheetOpen(true)}
       {...labelled(name)}

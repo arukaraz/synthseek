@@ -9,6 +9,7 @@ import { Dialog, DialogSurface, DialogTitle } from "@components/ui/Dialog";
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { stageFlip as stageFlipVariants, stageFade } from "@utils/animations";
 
+import { ListeningAvatars } from "./ListeningAvatars";
 import { MiniPlayer } from "./MiniPlayer";
 import { PlayerLyrics } from "./PlayerLyrics";
 import { PlayerTransport } from "./PlayerTransport";
@@ -84,6 +85,7 @@ export function PlayerStage({ view, actions }: PlayerProps) {
         <div className={stageTint({ tone: view.track.tone })} />
 
         <div className={stageHeader()}>
+          {view.listening.roomOpen ? null : <ListeningAvatars view={view} actions={actions} placement="stage" />}
           <button
             type="button"
             className={iconButton()}

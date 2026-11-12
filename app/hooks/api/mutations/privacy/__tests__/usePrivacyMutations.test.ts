@@ -18,6 +18,7 @@ const spies = vi.hoisted(() => {
     invalidatePlaylists: vi.fn(),
     invalidateCounts: vi.fn(),
     invalidateRequests: vi.fn(),
+    invalidatePlaylistDetail: vi.fn(),
     errorToast: vi.fn(),
     toastSuccess: vi.fn(),
   };
@@ -52,6 +53,7 @@ vi.mock("@utils/trpc", () => ({
         getCounts: { invalidate: spies.invalidateCounts },
       },
       requests: { getAll: { invalidate: spies.invalidateRequests } },
+      contentDetail: { playlistDetail: { invalidate: spies.invalidatePlaylistDetail } },
     }),
     privacy: {
       setPrivateSession: procedure("session"),
@@ -130,6 +132,7 @@ describe("useSetPlaylistVisibility", () => {
     expect(spies.invalidatePlaylists).toHaveBeenCalledOnce();
     expect(spies.invalidateCounts).toHaveBeenCalledOnce();
     expect(spies.invalidateRequests).toHaveBeenCalledOnce();
+    expect(spies.invalidatePlaylistDetail).toHaveBeenCalledOnce();
   });
 
   it("reports a failure under its own message", () => {

@@ -25,14 +25,6 @@ export function joinMeta(parts: readonly (string | number | null | undefined)[])
   return parts.filter((part) => part !== null && part !== undefined && part !== "").join(" · ");
 }
 
-export function cardCoverActionsFrom(
-  onOpen: (() => void) | undefined,
-  onPlay: (() => Promise<unknown>) | undefined
-): { open: () => void; play: () => Promise<unknown> } | null {
-  if (onOpen === undefined || onPlay === undefined) return null;
-  return { open: onOpen, play: onPlay };
-}
-
 function isCardActivationKey(event: KeyboardEvent<HTMLElement>): boolean {
   return event.key === "Enter" || event.key === " ";
 }
