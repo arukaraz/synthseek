@@ -5,6 +5,7 @@ import { PHONE_QUERY } from "@hooks/ui/constants";
 import { useLocalStorage } from "@hooks/ui/useLocalStorage";
 import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { useSelection } from "@hooks/ui/useSelection";
+import { useAuthContext } from "@modules/providers/AuthProvider";
 import { useState } from "react";
 
 import { AlbumsViewMode } from "./components/AlbumsViewMode";
@@ -30,6 +31,7 @@ export function LibraryScreen() {
   const [storedDensity, setDensity] = useLocalStorage(LIBRARY_DENSITY_STORAGE_KEY, "comfortable", isLibraryDensity);
   const density = isLibraryDensity(storedDensity) ? storedDensity : "comfortable";
   const phone = useMediaQuery(PHONE_QUERY);
+  const { isAdmin } = useAuthContext();
   const [selectMode, setSelectMode] = useState(false);
 
   const clearSelections = () => {
@@ -56,6 +58,7 @@ export function LibraryScreen() {
     density,
     onDensityChange: setDensity,
     phone,
+    admin: isAdmin,
     selectMode: phone && selectMode,
     onSelectModeChange: handleSelectModeChange,
   };

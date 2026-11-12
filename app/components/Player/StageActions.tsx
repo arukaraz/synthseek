@@ -4,6 +4,7 @@ import { Mic2, MonitorSpeaker, Settings2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { FavouriteButton } from "./FavouriteButton";
+import { PrivateSessionStatus } from "./PrivateSessionStatus";
 import { ScrobbleStatus } from "./ScrobbleStatus";
 import { UpgradeButton } from "./UpgradeButton";
 import { labelled } from "./helpers";
@@ -17,6 +18,7 @@ export function StageActions({ view, actions }: StageActionsProps) {
     <>
       <FavouriteButton view={view} actions={actions} size="stage" />
       <UpgradeButton view={view} actions={actions} size="stage" />
+      <PrivateSessionStatus active={view.privateSession} size="stage" onEnd={actions.endPrivateSession} />
       <ScrobbleStatus
         state={view.scrobble}
         actionable={view.scrobbleActionable}

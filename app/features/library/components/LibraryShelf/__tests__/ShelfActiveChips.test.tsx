@@ -46,6 +46,19 @@ describe("ShelfActiveChips", () => {
     expect(controller.setOrphan).toHaveBeenCalledWith(false);
   });
 
+  it("shows the all-members scope as a chip and turns it off", async () => {
+    const controller = createLibraryController({
+      view: "playlists",
+      config: VIEW_CONFIG.playlists,
+      filters: { everyone: ["true"] },
+    });
+    const { user } = renderWithProviders(<ShelfActiveChips controller={controller} facets={{}} />);
+
+    await user.click(screen.getByRole("button", { name: removeLabel(page.facets.everyoneAll) }));
+
+    expect(controller.setFilterValues).toHaveBeenCalledWith("everyone", []);
+  });
+
   it("ignores a loose-tracks flag on a view that cannot use it", () => {
     const controller = createLibraryController({
       view: "albums",

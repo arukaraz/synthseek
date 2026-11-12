@@ -245,7 +245,7 @@
     "account": {
       "title": "Dein Konto",
       "description": "Für dein Konto, auf jedem Gerät.",
-      "household": "Wer sieht, was du hörst, legst du unter <household>Konto > Haushalt</household> fest."
+      "household": "Wer sieht, was du hörst, legst du unter <household>Privatsphäre > Haushalt</household> fest."
     },
     "browser": {
       "title": "Dieser Browser",
@@ -1038,6 +1038,73 @@
       "unitGb": "GB"
     }
   },
+  "privacy": {
+    "household": {
+      "label": "Mein Hören mit dem Haushalt teilen",
+      "description": "Erlaubt den Widgets der anderen Mitglieder, etwa Zu Hause und Blend, zu lesen, was du abspielst, und zeigt dich in ihren Musik-Apps unter Aktuelle Wiedergabe. Standardmäßig aus.",
+      "nowPlayingOff": "Aktuelle Wiedergabe ist auf diesem Server ausgeschaltet."
+    },
+    "playlists": {
+      "description": "Geteilt: Jedes Mitglied sieht sie und spielt sie ab. Privat: nur du und Administratoren. Eine einzelne Playlist änderst du über ihr Menü in der Bibliothek.",
+      "label": "Standard-Privatsphäre für Playlists",
+      "shared": "Geteilt",
+      "private": "Privat"
+    },
+    "requests": {
+      "label": "Meinen Namen bei meinen Anfragen zeigen",
+      "description": "Wenn aus, sehen andere Mitglieder unter Anfragen \"Ein Mitglied\". Administratoren sehen unter Anfragen, wer angefragt hat. Deine geteilten Playlists behalten deinen Namen in der Bibliothek.",
+      "locked": "Auf diesem Server sehen Mitglieder nur ihre eigenen Anfragen, es gibt also keinen Namen zu verbergen."
+    },
+    "history": {
+      "title": "Hörverlauf",
+      "session": {
+        "label": "Private Sitzung",
+        "description": "Was du abspielst, bleibt aus deinem Hörverlauf, wird nicht gescrobbelt oder an deinen Medienserver gemeldet, und du erscheinst nicht unter Aktuelle Wiedergabe. Sie schaltet sich nach einigen Stunden selbst aus.",
+        "until": "An bis {{time}}."
+      },
+      "clear": {
+        "label": "Hörverlauf löschen",
+        "description": "Deine Widgets und Ranglisten zählen diese Wiedergaben nicht mehr. Was schon an Last.fm, ListenBrainz oder deinen Medienserver gesendet wurde, bleibt dort.",
+        "open": "Löschen…",
+        "confirm": "Löschen",
+        "rangeLabel": "Wie weit zurück",
+        "ranges": {
+          "hour": "Die letzte Stunde",
+          "day": "Die letzten 24 Stunden",
+          "week": "Die letzten 7 Tage",
+          "all": "Alles"
+        },
+        "count_one": "{{count}} Wiedergabe",
+        "count_other": "{{count}} Wiedergaben"
+      }
+    },
+    "leaving": {
+      "title": "Was diesen Server verlässt",
+      "description": "Das wird unter Verbindungen eingestellt. Diese Karte zeigt nur den Stand.",
+      "lastfm": "Wiedergaben an Last.fm scrobbeln",
+      "listenbrainz": "Wiedergaben an ListenBrainz scrobbeln",
+      "server": "Meine Wiedergaben in {{server}} zählen",
+      "on": "An",
+      "off": "Aus",
+      "notConnected": "Nicht verbunden",
+      "manage": "In Verbindungen verwalten"
+    },
+    "server": {
+      "title": "Privatsphäre",
+      "requests": {
+        "label": "Mitglieder sehen die Anfragen der anderen",
+        "description": "Wenn aus, zeigt die Anfragenliste jedem Mitglied nur die eigenen."
+      },
+      "playlists": {
+        "label": "Standard-Privatsphäre für Playlists",
+        "description": "Für jedes Mitglied, das in seinen Privatsphäre-Einstellungen nicht selbst gewählt hat."
+      },
+      "nowPlaying": {
+        "label": "Aktuelle Wiedergabe in Musik-Apps",
+        "description": "Wenn aus, zeigen Musik-Apps niemanden unter Aktuelle Wiedergabe, egal was jedes Mitglied teilt."
+      }
+    }
+  },
   "profile": {
     "account": {
       "title": "Profil",
@@ -1147,11 +1214,6 @@
         "unavailable": "Der Dienst war nicht erreichbar. Deine Wiedergaben warten.",
         "rejected": "Der Dienst hat die zuletzt gesendeten Wiedergaben abgelehnt."
       }
-    },
-    "household": {
-      "title": "Haushalt",
-      "label": "Mein Hören mit dem Haushalt teilen",
-      "description": "Erlaubt den Widgets der anderen Mitglieder, etwa Zu Hause und Blend, zu lesen, was du abspielst. Standardmäßig aus."
     },
     "quota": {
       "title": "Download-Kontingent",
@@ -1587,6 +1649,10 @@
         "title": "Verbindungen",
         "description": "Die Dienste, die Synthseek in deinem Namen nutzt, und die Apps und Schlüssel, die dein Synthseek nutzen."
       },
+      "privacy": {
+        "title": "Privatsphäre",
+        "description": "Was die anderen Mitglieder dieses Servers von dir sehen können."
+      },
       "notifications": {
         "title": "Benachrichtigungen"
       },
@@ -1679,6 +1745,7 @@
         "members": "rolle vertrauenswürdig kontingent anfrage voreinstellung qualität format",
         "board": "dichte textgröße hintergrund vorlagen anordnen anordnung widgets",
         "scrobble": "scrobble wiedergaben hörverlauf",
+        "privacy": "privat sichtbarkeit teilen aktuelle wiedergabe inkognito verlauf löschen name",
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub zugangsdaten",
         "libraryPaths": "ordner benennung vorlage umbenennen",

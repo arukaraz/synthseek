@@ -3,7 +3,10 @@
 import { DeletePlaylistDialog } from "@components/DeletePlaylistDialog";
 import { RenamePlaylistDialog } from "@components/RenamePlaylistDialog";
 import { SmartRuleDialog } from "@features/discover";
-import { Pencil, Trash2, WandSparkles } from "lucide-react";
+import { useSetPlaylistVisibility } from "@hooks/api/mutations/playlists/useSetPlaylistVisibility";
+import { useAuthContext } from "@modules/providers/AuthProvider";
+import { isOwnerOrAdminFE } from "@utils/authorization";
+import { Lock, Pencil, Trash2, Users, WandSparkles } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -19,7 +22,12 @@ export function PlaylistCardMenu({ item, appearance = "cover" }: PlaylistCardMen
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [ruleOpen, setRuleOpen] = useState(false);
 
+  const { currentUser } = useAuthContext();
+  const setVisibility = useSetPlaylistVisibility();
+
   const canEdit = item.source_provider == null || !item.sync_enabled;
+  const canShare = isOwnerOrAdminFE({ id: item.owner_id }, currentUser);
+  const isPrivate = item.visibility === "private";
   const actions: LibraryMenuAction[] = [
     {
       key: "rename",
@@ -38,6 +46,14 @@ export function PlaylistCardMenu({ item, appearance = "cover" }: PlaylistCardMen
           },
         ]
       : []),
+    {
+      key: "visibility",
+      icon: isPrivate ? Users : Lock,
+      label: t(isPrivate ? "playlists.actions.makeShared" : "playlists.actions.makePrivate"),
+      onSelect: () => setVisibility.mutate({ playlistId: item.id, visibility: isPrivate ? "shared" : "private" }),
+      disabled: !canShare,
+      hint: canShare ? undefined : t("playlists.actions.ownerOnly"),
+    },
     {
       key: "delete",
       icon: Trash2,

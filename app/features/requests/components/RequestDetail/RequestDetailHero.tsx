@@ -184,14 +184,16 @@ export function RequestDetailHero({ request, tracks, onBack }: RequestDetailHero
                   request.name
                 )}
               </h1>
-              <p className="text-fg/60 truncate text-sm">{request.credited_artist}</p>
+              {request.credited_artist === "" ? null : (
+                <p className="text-fg/60 truncate text-sm">{request.credited_artist}</p>
+              )}
               <div className="mt-2 space-y-0.5">
                 <p className="text-fg/40 truncate text-xs">
                   <Trans
                     t={t}
                     i18nKey="detail.requestedBy"
                     values={{
-                      username: request.requestedBy.username,
+                      username: request.requestedBy.username ?? t("detail.aMember"),
                       date: formatDateTime(new Date(request.requested_at)),
                     }}
                     components={{ value: <span className={heroMetaValue()} /> }}

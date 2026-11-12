@@ -201,6 +201,7 @@ export interface PlayerView {
   lyricsFailure: string | null;
   scrobble: PlayerScrobbleState;
   scrobbleActionable: boolean;
+  privateSession: boolean;
   upgrading: boolean;
   modesOpen: boolean;
   queueOpen: boolean;
@@ -250,6 +251,8 @@ export interface PlayerActions {
   toggleLyrics: () => void;
   openLyrics: () => void;
   toggleScrobbling: () => void;
+  endPrivateSession: () => void;
+  togglePrivateSession: () => void;
   searchBetterQuality: () => void;
   toggleFullscreen: () => void;
   toggleFavorite: () => void;
@@ -494,6 +497,12 @@ export interface PlayerScrobbleProps {
   actionable: boolean;
   size: "bar" | "stage";
   onToggle: () => void;
+}
+
+export interface PrivateSessionStatusProps {
+  active: boolean;
+  size: "bar" | "stage";
+  onEnd: () => void;
 }
 
 export type PlayerLyricsProps = PlayerProps;

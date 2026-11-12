@@ -13,7 +13,7 @@ import { useMediaQuery } from "@hooks/ui/useMediaQuery";
 import { MoreVertical } from "lucide-react";
 import { Fragment, useState } from "react";
 
-import { libraryMenuItem, libraryMenuItemDanger } from "../../styles";
+import { libraryMenuHint, libraryMenuItem, libraryMenuItemDanger, libraryMenuLabel } from "../../styles";
 import { shieldOwnClick } from "../LibraryCard/helpers";
 import { sheetMenuItem, sheetSeparator } from "../LibraryShelf/styles";
 import { actionMenuShield } from "./styles";
@@ -59,7 +59,10 @@ export function LibraryActionMenu({
                   }}
                 >
                   <action.icon className="size-5 shrink-0" aria-hidden />
-                  {action.label}
+                  <span className={libraryMenuLabel()}>
+                    {action.label}
+                    {action.hint ? <span className={libraryMenuHint()}>{action.hint}</span> : null}
+                  </span>
                 </button>
               </Fragment>
             ))}
@@ -84,8 +87,11 @@ export function LibraryActionMenu({
                 disabled={action.disabled}
                 onSelect={action.onSelect}
               >
-                <action.icon className="size-4" aria-hidden />
-                {action.label}
+                <action.icon className="size-4 shrink-0" aria-hidden />
+                <span className={libraryMenuLabel()}>
+                  {action.label}
+                  {action.hint ? <span className={libraryMenuHint()}>{action.hint}</span> : null}
+                </span>
               </DropdownMenuItem>
             </Fragment>
           ))}

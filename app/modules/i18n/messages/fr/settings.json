@@ -245,7 +245,7 @@
     "account": {
       "title": "Votre compte",
       "description": "Pour votre compte, sur tous les appareils.",
-      "household": "Qui voit ce que vous écoutez se règle dans <household>Compte > Foyer</household>."
+      "household": "Qui voit ce que vous écoutez se règle dans <household>Confidentialité > Foyer</household>."
     },
     "browser": {
       "title": "Ce navigateur",
@@ -1038,6 +1038,73 @@
       "unitGb": "Go"
     }
   },
+  "privacy": {
+    "household": {
+      "label": "Partager mes écoutes avec le foyer",
+      "description": "Permet aux widgets des autres membres, comme À la maison et Blend, de lire ce que vous écoutez, et vous affiche sous Lecture en cours dans leurs applications musicales. Désactivé par défaut.",
+      "nowPlayingOff": "Lecture en cours est désactivé sur ce serveur."
+    },
+    "playlists": {
+      "description": "Partagée : chaque membre la voit et la lit. Privée : vous et les administrateurs. Modifiez une playlist depuis son menu dans la Bibliothèque.",
+      "label": "Confidentialité par défaut des playlists",
+      "shared": "Partagée",
+      "private": "Privée"
+    },
+    "requests": {
+      "label": "Afficher mon nom sur mes demandes",
+      "description": "Si désactivé, les autres membres voient \"Un membre\" dans Demandes. Les administrateurs voient qui a demandé dans Demandes. Vos playlists partagées gardent votre nom dans la Bibliothèque.",
+      "locked": "Sur ce serveur, chaque membre ne voit que ses propres demandes, il n'y a donc aucun nom à masquer."
+    },
+    "history": {
+      "title": "Historique d'écoute",
+      "session": {
+        "label": "Session privée",
+        "description": "Ce que vous écoutez reste hors de votre historique d'écoute, n'est ni scrobblé ni signalé à votre serveur multimédia, et vous n'apparaissez pas sous Lecture en cours. Elle se désactive d'elle-même après quelques heures.",
+        "until": "Active jusqu'à {{time}}."
+      },
+      "clear": {
+        "label": "Effacer l'historique d'écoute",
+        "description": "Vos widgets et classements cessent de compter ces lectures. Celles déjà envoyées à Last.fm, ListenBrainz ou votre serveur multimédia y restent.",
+        "open": "Effacer…",
+        "confirm": "Effacer",
+        "rangeLabel": "Jusqu'où remonter",
+        "ranges": {
+          "hour": "La dernière heure",
+          "day": "Les dernières 24 heures",
+          "week": "Les 7 derniers jours",
+          "all": "Tout"
+        },
+        "count_one": "{{count}} lecture",
+        "count_other": "{{count}} lectures"
+      }
+    },
+    "leaving": {
+      "title": "Ce qui quitte ce serveur",
+      "description": "Cela se règle dans Connexions. Cette carte montre seulement où en sont les réglages.",
+      "lastfm": "Scrobbler les lectures vers Last.fm",
+      "listenbrainz": "Scrobbler les lectures vers ListenBrainz",
+      "server": "Compter mes lectures sur {{server}}",
+      "on": "Activé",
+      "off": "Désactivé",
+      "notConnected": "Non connecté",
+      "manage": "Gérer dans Connexions"
+    },
+    "server": {
+      "title": "Confidentialité",
+      "requests": {
+        "label": "Les membres voient les demandes des autres",
+        "description": "Si désactivé, la liste des Demandes ne montre à chaque membre que les siennes."
+      },
+      "playlists": {
+        "label": "Confidentialité par défaut des playlists",
+        "description": "Pour chaque membre qui n'a pas choisi la sienne dans ses réglages de Confidentialité."
+      },
+      "nowPlaying": {
+        "label": "Lecture en cours dans les applications musicales",
+        "description": "Si désactivé, les applications musicales n'affichent personne sous Lecture en cours, quoi que partage chaque membre."
+      }
+    }
+  },
   "profile": {
     "account": {
       "title": "Profil",
@@ -1147,11 +1214,6 @@
         "unavailable": "Le service n'a pas pu etre joint. Vos ecoutes attendent.",
         "rejected": "Le service a refuse les dernieres ecoutes envoyees."
       }
-    },
-    "household": {
-      "title": "Foyer",
-      "label": "Partager mes écoutes avec le foyer",
-      "description": "Permet aux widgets des autres membres, comme À la maison et Blend, de lire ce que vous écoutez. Désactivé par défaut."
     },
     "quota": {
       "title": "Quota de téléchargement",
@@ -1587,6 +1649,10 @@
         "title": "Connexions",
         "description": "Les services que Synthseek utilise en votre nom, et les applications et clés qui utilisent votre Synthseek."
       },
+      "privacy": {
+        "title": "Confidentialité",
+        "description": "Ce que les autres membres de ce serveur peuvent voir de vous."
+      },
       "notifications": {
         "title": "Notifications"
       },
@@ -1679,6 +1745,7 @@
         "members": "rôle confiance quota préréglage demande qualité format",
         "board": "densité taille du texte arrière-plan modèles organiser disposition widgets",
         "scrobble": "scrobble écoutes historique",
+        "privacy": "privé visibilité partager lecture en cours incognito historique effacer nom",
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub identifiant",
         "libraryPaths": "dossier nommage modèle renommer",

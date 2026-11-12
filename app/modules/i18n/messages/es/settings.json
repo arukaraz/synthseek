@@ -248,7 +248,7 @@
     "account": {
       "title": "Tu cuenta",
       "description": "Para tu cuenta, en todos los dispositivos.",
-      "household": "Quién ve lo que escuchas se decide en <household>Cuenta > Hogar</household>."
+      "household": "Quién ve lo que escuchas se decide en <household>Privacidad > Hogar</household>."
     },
     "browser": {
       "title": "Este navegador",
@@ -1041,6 +1041,73 @@
       "unitGb": "GB"
     }
   },
+  "privacy": {
+    "household": {
+      "label": "Compartir lo que escucho con el hogar",
+      "description": "Permite que los widgets de los demás miembros, como En casa y Blend, lean lo que reproduces, y te muestra en Reproduciendo ahora de sus apps de música. Apagado por defecto.",
+      "nowPlayingOff": "Reproduciendo ahora está apagado en este servidor."
+    },
+    "playlists": {
+      "description": "Compartida: todos los miembros la ven y la reproducen. Privada: solo tú y los administradores. Cambia una playlist desde su menú en la Biblioteca.",
+      "label": "Privacidad predeterminada de las playlists",
+      "shared": "Compartida",
+      "private": "Privada"
+    },
+    "requests": {
+      "label": "Mostrar mi nombre en mis peticiones",
+      "description": "Si está apagado, los demás miembros ven \"Un miembro\" en Peticiones. Los administradores ven quién pidió en Peticiones. Tus playlists compartidas conservan tu nombre en la Biblioteca.",
+      "locked": "En este servidor cada miembro solo ve sus propias peticiones, así que no hay nombre que ocultar."
+    },
+    "history": {
+      "title": "Historial de escucha",
+      "session": {
+        "label": "Sesión privada",
+        "description": "Lo que reproduces queda fuera de tu historial de escucha, no se envía como scrobble ni se reporta a tu servidor de medios, y no apareces en Reproduciendo ahora. Se apaga sola a las pocas horas.",
+        "until": "Activa hasta las {{time}}."
+      },
+      "clear": {
+        "label": "Borrar el historial de escucha",
+        "description": "Tus widgets y rankings dejan de contar estas reproducciones. Las que ya se enviaron a Last.fm, ListenBrainz o tu servidor de medios se quedan allí.",
+        "open": "Borrar…",
+        "confirm": "Borrar",
+        "rangeLabel": "Desde cuándo",
+        "ranges": {
+          "hour": "La última hora",
+          "day": "Las últimas 24 horas",
+          "week": "Los últimos 7 días",
+          "all": "Todo"
+        },
+        "count_one": "{{count}} reproducción",
+        "count_other": "{{count}} reproducciones"
+      }
+    },
+    "leaving": {
+      "title": "Qué sale de este servidor",
+      "description": "Esto se configura en Conexiones. Esta tarjeta solo muestra cómo está.",
+      "lastfm": "Enviar scrobbles a Last.fm",
+      "listenbrainz": "Enviar scrobbles a ListenBrainz",
+      "server": "Contar mis reproducciones en {{server}}",
+      "on": "Activo",
+      "off": "Apagado",
+      "notConnected": "Sin conectar",
+      "manage": "Gestionar en Conexiones"
+    },
+    "server": {
+      "title": "Privacidad",
+      "requests": {
+        "label": "Los miembros ven las peticiones de los demás",
+        "description": "Si está apagado, la lista de Peticiones le muestra a cada miembro solo las suyas."
+      },
+      "playlists": {
+        "label": "Privacidad predeterminada de las playlists",
+        "description": "Para cada miembro que no eligió la suya en sus ajustes de Privacidad."
+      },
+      "nowPlaying": {
+        "label": "Reproduciendo ahora en las apps de música",
+        "description": "Si está apagado, las apps de música no muestran a nadie en Reproduciendo ahora, comparta lo que comparta cada miembro."
+      }
+    }
+  },
   "profile": {
     "account": {
       "title": "Perfil",
@@ -1150,11 +1217,6 @@
         "unavailable": "No se ha podido contactar con el servicio. Tus escuchas estan esperando.",
         "rejected": "El servicio ha rechazado las ultimas escuchas enviadas."
       }
-    },
-    "household": {
-      "title": "Hogar",
-      "label": "Compartir lo que escucho con el hogar",
-      "description": "Permite que los widgets de los demás miembros, como En casa y Blend, lean lo que reproduces. Apagado por defecto."
     },
     "quota": {
       "title": "Cuota de descarga",
@@ -1590,6 +1652,10 @@
         "title": "Conexiones",
         "description": "Los servicios que Synthseek usa en tu nombre, y las apps y claves que usan tu Synthseek."
       },
+      "privacy": {
+        "title": "Privacidad",
+        "description": "Lo que los demás miembros de este servidor pueden ver de ti."
+      },
       "notifications": {
         "title": "Notificaciones"
       },
@@ -1682,6 +1748,7 @@
         "members": "rol confiable cuota preset solicitud calidad formato",
         "board": "densidad tamaño de texto fondo plantillas organizar disposición widgets",
         "scrobble": "scrobble reproducciones historial escucha",
+        "privacy": "privado visibilidad compartir reproduciendo ahora incógnito historial borrar nombre",
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub credencial",
         "libraryPaths": "carpeta nombres plantilla renombrar",

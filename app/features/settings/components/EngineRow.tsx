@@ -11,7 +11,7 @@ export function EngineRow({ label, labelTrailing, description, control, anchor }
           <span className="text-fg text-sm font-medium">{label}</span>
           {labelTrailing}
         </div>
-        <span className="text-fg/55 text-xs">{description}</span>
+        {description ? <span className="text-fg/55 text-xs">{description}</span> : null}
       </div>
       <div className="shrink-0">{control}</div>
     </div>

@@ -66,7 +66,7 @@ describe("PlaybackSection", () => {
     expect(account.getByRole("switch", { name: enPlayer.settings.autoplay.enabled })).toBeChecked();
     const household = account.getByRole("link");
     expect(enSettings.playback.account.household).toContain(`<household>${household.textContent}</household>`);
-    expect(household).toHaveAttribute("href", "/settings/account#household");
+    expect(household).toHaveAttribute("href", "/settings/privacy#household");
   });
 
   it("keeps the browser-only controls in the browser card", () => {

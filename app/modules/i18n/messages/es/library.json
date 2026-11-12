@@ -379,6 +379,8 @@
       "moreHint_other": "{{count}} más, escribe para buscar",
       "orphan": "Canciones sueltas",
       "orphanOnly": "Solo canciones que no están en una lista",
+      "everyone": "Miembros",
+      "everyoneAll": "Las playlists de todos los miembros",
       "libraryPath": "Ruta de biblioteca"
     },
     "filters": {
@@ -529,7 +531,11 @@
   },
   "playlists": {
     "smartOrigin": "Inteligente · {{origin}}",
+    "privateOrigin": "Privada · {{origin}}",
     "actions": {
+      "makePrivate": "Hacer privada",
+      "makeShared": "Compartir con todos",
+      "ownerOnly": "Solo su dueño o un administrador puede cambiar esto",
       "rename": "Renombrar",
       "editRule": "Editar regla",
       "delete": "Eliminar",

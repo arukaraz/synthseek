@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { MODE_MENU_ICON, RESTORE_MODE_ICON } from "./constants";
 import { labelled } from "./helpers";
 import { PlayerVolume } from "./PlayerVolume";
+import { PrivateSessionStatus } from "./PrivateSessionStatus";
 import { ScrobbleStatus } from "./ScrobbleStatus";
 import { iconButton } from "./styles";
 import type { PlayerExtraControlsProps } from "./types";
@@ -42,6 +43,7 @@ export function PlayerExtraControls({
           </button>
         </>
       )}
+      <PrivateSessionStatus active={view.privateSession} size="bar" onEnd={actions.endPrivateSession} />
       <ScrobbleStatus
         state={view.scrobble}
         actionable={view.scrobbleActionable}

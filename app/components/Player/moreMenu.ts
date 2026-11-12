@@ -1,5 +1,6 @@
 import type { TFunction } from "i18next";
 import {
+  EyeOff,
   Info,
   ListMusic,
   Mic2,
@@ -161,7 +162,15 @@ function sessionEntries(
           keepOpen: false,
           onSelect: () => actions.selectMode("normal"),
         };
-  return docked ? [scrobbling, mode] : [scrobbling];
+  const privateSession: MoreMenuEntry = {
+    kind: "toggle",
+    key: "privateSession",
+    icon: EyeOff,
+    label: t("privateSession.label"),
+    checked: view.privateSession,
+    onToggle: actions.togglePrivateSession,
+  };
+  return docked ? [scrobbling, privateSession, mode] : [scrobbling, privateSession];
 }
 
 export function moreMenuGroups(

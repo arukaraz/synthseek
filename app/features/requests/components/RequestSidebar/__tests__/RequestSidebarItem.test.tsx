@@ -36,6 +36,31 @@ function release(overrides: Partial<ActiveRelease> = {}): ActiveRelease {
   };
 }
 
+describe("RequestSidebarItem, naming who asked", () => {
+  it("shows the requester's name, and a member when the name is withheld", () => {
+    const { rerender } = render(
+      <RequestSidebarItem
+        request={makeRequestWithTracks({ requestedBy: makeRequestsUser({ username: "alice" }) })}
+        isSelected={false}
+        onSelect={() => {}}
+      />
+    );
+
+    expect(screen.getByTestId("sidebar-request-item")).toHaveTextContent("alice");
+
+    rerender(
+      <RequestSidebarItem
+        request={makeRequestWithTracks({ requestedBy: { id: "user-9", username: null, avatar_url: null } })}
+        isSelected={false}
+        onSelect={() => {}}
+      />
+    );
+
+    expect(screen.getByTestId("sidebar-request-item")).toHaveTextContent("A member");
+    expect(screen.getByTestId("sidebar-request-item")).not.toHaveTextContent("alice");
+  });
+});
+
 describe("RequestSidebarItem, while its album is fetched as one release", () => {
   it("says how far the album has got", () => {
     releaseState.current = release();

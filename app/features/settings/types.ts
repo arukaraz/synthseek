@@ -39,6 +39,7 @@ export type SettingsPageGroup = "you" | "server" | "about";
 
 export type SettingsPageId =
   | "account"
+  | "privacy"
   | "appearance"
   | "playback"
   | "connections"

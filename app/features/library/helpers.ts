@@ -16,7 +16,14 @@ import type { SelectionRange } from "@hooks/ui/useSelection";
 import { isTextEntryTarget } from "@utils/text-entry";
 import type { KeyboardEvent } from "react";
 
-import { GRID_ITEMS_SELECTOR, SHELF_COLLAPSE_AFTER_PX, SHELF_COLLAPSE_MIN_OVERFLOW_PX, VIEW_CONFIG } from "./constants";
+import {
+  EVERYONE_FILTER_KEY,
+  FILTER_ON,
+  GRID_ITEMS_SELECTOR,
+  SHELF_COLLAPSE_AFTER_PX,
+  SHELF_COLLAPSE_MIN_OVERFLOW_PX,
+  VIEW_CONFIG,
+} from "./constants";
 import type {
   AlbumSort,
   ArtistSort,
@@ -166,7 +173,12 @@ export function buildPlaylistsInput(args: InputBaseArgs): LibraryPlaylistsQuery 
       owner: emptyToUndefined(filters.owner ?? []),
       status: emptyToUndefined(toStatusValues(filters.status ?? [])),
     },
+    everyone: everyoneScopeActive(filters) ? true : undefined,
   };
+}
+
+export function everyoneScopeActive(filters: FilterParamMap): boolean {
+  return (filters[EVERYONE_FILTER_KEY] ?? []).includes(FILTER_ON);
 }
 
 function pickSort<TSort extends string>(

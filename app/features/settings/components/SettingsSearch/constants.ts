@@ -29,6 +29,31 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
   },
 
   {
+    labelKey: "privacy.household.label",
+    page: "privacy",
+    href: "/settings/privacy",
+    anchor: "household",
+    keywordsKey: "shell.search.keywords.privacy",
+  },
+  { labelKey: "privacy.playlists.label", page: "privacy", href: "/settings/privacy", anchor: "privacy.playlists" },
+  { labelKey: "privacy.requests.label", page: "privacy", href: "/settings/privacy", anchor: "privacy.requests" },
+  {
+    labelKey: "privacy.history.session.label",
+    page: "privacy",
+    href: "/settings/privacy",
+    anchor: "privacy.session",
+    placeKey: "privacy.history.title",
+  },
+  {
+    labelKey: "privacy.history.clear.label",
+    page: "privacy",
+    href: "/settings/privacy",
+    anchor: "privacy.clear",
+    placeKey: "privacy.history.title",
+  },
+  { labelKey: "privacy.leaving.title", page: "privacy", href: "/settings/privacy", anchor: "privacy.leaving" },
+
+  {
     labelKey: "playback.account.title",
     page: "playback",
     href: "/settings/playback",
@@ -261,6 +286,27 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
     page: "members",
     href: "/settings/members",
     anchor: "quotas.libraryStorageGb",
+  },
+  {
+    labelKey: "privacy.server.requests.label",
+    page: "members",
+    href: "/settings/members",
+    anchor: "privacy.server.requests",
+    placeKey: "privacy.server.title",
+  },
+  {
+    labelKey: "privacy.server.playlists.label",
+    page: "members",
+    href: "/settings/members",
+    anchor: "privacy.server.playlists",
+    placeKey: "privacy.server.title",
+  },
+  {
+    labelKey: "privacy.server.nowPlaying.label",
+    page: "members",
+    href: "/settings/members",
+    anchor: "privacy.server.nowPlaying",
+    placeKey: "privacy.server.title",
   },
 
   { labelKey: "shell.downloadSources.order", page: "downloadSources", href: SOURCES, anchor: "search-order" },

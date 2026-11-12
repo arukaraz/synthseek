@@ -151,6 +151,7 @@ export interface LibraryMenuAction {
   label: string;
   onSelect: () => void;
   disabled?: boolean;
+  hint?: string;
   tone?: "default" | "danger";
   separated?: boolean;
 }
@@ -162,6 +163,7 @@ export interface LibraryViewShell {
   density: LibraryDensity;
   onDensityChange: (density: LibraryDensity) => void;
   phone: boolean;
+  admin: boolean;
   selectMode: boolean;
   onSelectModeChange: (on: boolean) => void;
 }

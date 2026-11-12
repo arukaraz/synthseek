@@ -29,8 +29,8 @@ A plain member, as these pages call one, has the **User** role. Administrator-on
 
 **Per member:**
 
-- Their own requests, which show who made them.
-- Their own playlists.
+- Their own requests. Unless an administrator turns it off, other members see them in the Requests list, except playlists the member made private, with the name unless the member hides it.
+- Their own playlists, each one shared with the other members or private. Administrators can still see a private playlist.
 - Their own connected accounts: Spotify, Last.fm, ListenBrainz, Plex, Navidrome, Jellyfin.
 - Their own discovery mixes.
 - Their own Discover board, its widgets and how it looks.
@@ -42,8 +42,24 @@ A plain member, as these pages call one, has the **User** role. Administrator-on
 
 - The music library on disk. Everyone's downloads go into the same library paths, and an administrator decides which path each request goes to.
 - The download queue.
-- A member's listening, only once that member turns on **Share my listening with the household** under **Settings**, then **Account**.
+- A member's listening, only once that member turns on **Share my listening with the household** under **Settings**, then **Privacy**.
 - Every other setting.
+
+## Privacy
+
+Each member decides what the others see, under **Settings**, then **Privacy**.
+
+- **Share my listening with the household.** Lets the other members' widgets read what you play, and shows you under Now playing in their music apps. Off by default.
+- **Default playlists privacy.** Whether your new playlists start shared or private. Change one playlist from its menu in the library.
+- **Show my name on my requests.** When off, other members see "A member". Administrators see who asked in Requests. Your shared playlists keep your name in the library.
+- **Private session.** What you play stays out of your listening history and is not scrobbled or reported to your media server. It turns itself off after a few hours.
+- **Clear listening history.** Removes your plays from the last hour, day, week, or all of them. Plays already sent to Last.fm, ListenBrainz or a media server stay there.
+
+An administrator sets three things for everyone, under **Settings**, then **Members & access**:
+
+- Whether the Requests list shows members each other's requests.
+- Whether new playlists start shared or private, for members who have not picked their own.
+- Whether music apps show Now playing at all.
 
 ## The approval queue
 

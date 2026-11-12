@@ -334,7 +334,12 @@
     "tracksRemoved": "Tracks removed from playlist",
     "tracksRemovedFailed": "Failed to remove tracks from playlist",
     "syncUpdated": "Sync setting updated",
-    "syncUpdatedFailed": "Failed to update sync setting"
+    "syncUpdatedFailed": "Failed to update sync setting",
+    "visibility": {
+      "shared": "Playlist shared with everyone on this server",
+      "private": "Playlist is now private"
+    },
+    "visibilityFailed": "Failed to change who sees the playlist"
   },
   "dropImport": {
     "fileMatched": "File matched and queued for import",
@@ -392,5 +397,12 @@
     "testFailed": "Could not send the test notification",
     "revealSecretFailed": "Could not show the saved value",
     "settingsFailed": "Could not save the notification settings"
+  },
+  "privacy": {
+    "privateSessionFailed": "Could not change the private session",
+    "clearHistoryFailed": "Could not clear your listening history",
+    "historyCleared_one": "Removed {{count}} play from your history",
+    "historyCleared_other": "Removed {{count}} plays from your history",
+    "serverFailed": "Could not save the privacy settings"
   }
 }

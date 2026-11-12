@@ -126,6 +126,7 @@ export function createMockSettings(overrides: Partial<SettingsOutput> = {}): Set
     connectApps: { subsonicEnabled: false, subsonicTranscodingEnabled: false },
     quotas: { tracksPerWindow: 0, windowDays: 7, userStorageGb: 0, libraryStorageGb: 0 },
     notifications: { memberNtfyServer: "" },
+    privacy: { membersSeeRequests: true, defaultPlaylistVisibility: "shared", nowPlayingEnabled: true },
     ...overrides,
   };
 }
@@ -146,6 +147,9 @@ export function createMockUser(overrides: Partial<UsersOutput[number]> = {}): Us
     loudnessPreampDb: 0,
     autoplayEnabled: false,
     shareListening: false,
+    playlistVisibility: null,
+    showRequestName: true,
+    privateSessionUntil: null,
     plex_username: null,
     plexLinked: false,
     hasPassword: true,

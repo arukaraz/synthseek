@@ -101,6 +101,12 @@ describe("RequestDetailHero", () => {
     expect(screen.getByText(/alice/)).toBeInTheDocument();
   });
 
+  it("says a member asked when the requester's name is withheld", () => {
+    renderHero({}, { requestedBy: { id: "user-9", username: null, avatar_url: null } });
+
+    expect(screen.getByText("A member")).toBeInTheDocument();
+  });
+
   it("hides the kebab menu when no actions are permitted", () => {
     renderHero();
 

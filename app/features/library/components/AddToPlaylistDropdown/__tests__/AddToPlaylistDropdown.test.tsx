@@ -42,6 +42,8 @@ function makePlaylist(overrides: Partial<LibraryPlaylistItem> = {}): LibraryPlay
     origin: { kind: "created" },
     sync_enabled: false,
     smart: false,
+    visibility: "shared",
+    owner_id: "user-1",
     created_at: new Date(),
     ...overrides,
   };

@@ -21,6 +21,7 @@ function makeProps(overrides?: Partial<LibraryFilterSidebarProps>): LibraryFilte
     onFacetSearch: vi.fn(),
     onClear: vi.fn(),
     hasActiveFilters: false,
+    allMembers: false,
     ...overrides,
   };
 }
@@ -93,6 +94,34 @@ describe("LibraryFilterSidebar", () => {
 
     if (orphanCheckbox) await user.click(orphanCheckbox);
     expect(onOrphanChange).toHaveBeenCalledWith(true);
+  });
+
+  it("offers the all-members scope only where the layout allows it, and toggles the filter", async () => {
+    const onToggleValue = vi.fn();
+    const { user, rerender } = renderWithProviders(
+      <LibraryFilterSidebar {...makeProps({ config: VIEW_CONFIG.playlists, onToggleValue })} />
+    );
+    expect(screen.queryByText("page.facets.everyoneAll")).not.toBeInTheDocument();
+
+    rerender(
+      <LibraryFilterSidebar {...makeProps({ config: VIEW_CONFIG.playlists, onToggleValue, allMembers: true })} />
+    );
+    const checkbox = screen.getByText("page.facets.everyoneAll").closest("label")?.querySelector("[role=checkbox]");
+    expect(checkbox).toHaveAttribute("aria-checked", "false");
+    if (checkbox) await user.click(checkbox);
+
+    expect(onToggleValue).toHaveBeenCalledWith("everyone", "true");
+  });
+
+  it("shows the all-members scope as on when the filter carries it", () => {
+    renderWithProviders(
+      <LibraryFilterSidebar
+        {...makeProps({ config: VIEW_CONFIG.playlists, allMembers: true, filters: { everyone: ["true"] } })}
+      />
+    );
+
+    const checkbox = screen.getByText("page.facets.everyoneAll").closest("label")?.querySelector("[role=checkbox]");
+    expect(checkbox).toHaveAttribute("aria-checked", "true");
   });
 
   it("hides the orphan toggle for a non-interactive config", () => {

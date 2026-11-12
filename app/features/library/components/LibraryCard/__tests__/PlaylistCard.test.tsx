@@ -9,6 +9,18 @@ vi.mock("@hooks/api/mutations/playlists/useRenamePlaylist", () => ({
   useRenamePlaylist: () => ({ mutate: renameMutate, isPending: false }),
 }));
 
+const setVisibilityMutate = vi.fn();
+
+vi.mock("@hooks/api/mutations/playlists/useSetPlaylistVisibility", () => ({
+  useSetPlaylistVisibility: () => ({ mutate: setVisibilityMutate, isPending: false }),
+}));
+
+const viewer = vi.hoisted(() => ({ id: "user-1", role: "member" }));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: viewer, isAdmin: viewer.role === "admin" }),
+}));
+
 import { PlaylistCard } from "../PlaylistCard";
 
 function createLibraryPlaylist(overrides?: Partial<LibraryPlaylistItem>): LibraryPlaylistItem {
@@ -26,6 +38,8 @@ function createLibraryPlaylist(overrides?: Partial<LibraryPlaylistItem>): Librar
     origin: { kind: "created" },
     sync_enabled: false,
     smart: false,
+    visibility: "shared",
+    owner_id: "user-1",
     created_at: new Date("2024-01-01T00:00:00.000Z"),
     ...overrides,
   };
@@ -88,6 +102,55 @@ describe("PlaylistCard", () => {
     await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
     expect(screen.getByRole("menuitem", { name: "Edit rule" })).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: /Rename/i })).not.toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("marks only a private playlist under its name", () => {
+    const { rerender } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist({ visibility: "private" })} />);
+
+    expect(screen.getByText(/^Private · /)).toBeInTheDocument();
+
+    rerender(<PlaylistCard item={createLibraryPlaylist()} />);
+
+    expect(screen.queryByText(/^Private · /)).not.toBeInTheDocument();
+  });
+
+  it("lets the owner make a shared playlist private, and a private one shared", async () => {
+    viewer.id = "user-1";
+    viewer.role = "member";
+    const { user, rerender } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} />);
+
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+    await user.click(screen.getByRole("menuitem", { name: "Make private" }));
+
+    expect(setVisibilityMutate).toHaveBeenLastCalledWith({ playlistId: "pl-1", visibility: "private" });
+
+    rerender(<PlaylistCard item={createLibraryPlaylist({ visibility: "private" })} />);
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+    await user.click(screen.getByRole("menuitem", { name: "Share with everyone" }));
+
+    expect(setVisibilityMutate).toHaveBeenLastCalledWith({ playlistId: "pl-1", visibility: "shared" });
+  });
+
+  it("locks the visibility of someone else's playlist for a member and says why", async () => {
+    viewer.id = "user-2";
+    viewer.role = "member";
+    const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} />);
+
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+
+    const item = screen.getByRole("menuitem", { name: /Make private/ });
+    expect(item).toHaveAttribute("aria-disabled", "true");
+    expect(item).toHaveTextContent("Only its owner or an administrator can change this");
+  });
+
+  it("lets an administrator change the visibility of someone else's playlist", async () => {
+    viewer.id = "user-2";
+    viewer.role = "admin";
+    const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} />);
+
+    await user.click(screen.getByRole("button", { name: /Playlist actions for Road Trip/i }));
+
+    expect(screen.getByRole("menuitem", { name: "Make private" })).not.toHaveAttribute("aria-disabled", "true");
   });
 
   it("offers no rule on a plain playlist", async () => {

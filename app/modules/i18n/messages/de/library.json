@@ -379,6 +379,8 @@
       "moreHint_other": "{{count}} weitere, tippen zum Suchen",
       "orphan": "Lose Titel",
       "orphanOnly": "Nur Titel, die in keiner Playlist sind",
+      "everyone": "Mitglieder",
+      "everyoneAll": "Playlists aller Mitglieder",
       "libraryPath": "Bibliothekspfad"
     },
     "filters": {
@@ -529,7 +531,11 @@
   },
   "playlists": {
     "smartOrigin": "Smart · {{origin}}",
+    "privateOrigin": "Privat · {{origin}}",
     "actions": {
+      "makePrivate": "Privat machen",
+      "makeShared": "Mit allen teilen",
+      "ownerOnly": "Nur der Besitzer oder ein Administrator kann das ändern",
       "rename": "Umbenennen",
       "editRule": "Regel bearbeiten",
       "delete": "Löschen",

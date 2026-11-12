@@ -27,6 +27,14 @@ vi.mock("@hooks/api", () => ({
   useRadioTracksFetcher: () => vi.fn(async () => ({ items: [] })),
 }));
 
+vi.mock("@hooks/api/mutations/playlists/useSetPlaylistVisibility", () => ({
+  useSetPlaylistVisibility: () => ({ mutate: vi.fn(), isPending: false }),
+}));
+
+vi.mock("@modules/providers/AuthProvider", () => ({
+  useAuthContext: () => ({ currentUser: null, isAdmin: false }),
+}));
+
 vi.mock("../LibraryViewLayout/LibraryViewLayout", () => ({
   LibraryViewLayout: ({
     items,
@@ -52,6 +60,8 @@ function createPlaylist(overrides?: Partial<LibraryPlaylistItem>): LibraryPlayli
     origin: { kind: "created" },
     sync_enabled: false,
     smart: false,
+    visibility: "shared",
+    owner_id: "user-1",
     created_at: new Date("2024-01-01T00:00:00.000Z"),
     ...overrides,
   };

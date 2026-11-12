@@ -21,6 +21,7 @@ const api = vi.hoisted(() => ({
   favoriteVariables: undefined as { trackId: string; favorite: boolean } | undefined,
   favoritePending: false,
   setScrobbleEnabled: vi.fn(),
+  setPrivateSession: vi.fn(),
   scrobblePending: false,
   scrobbleVariables: undefined as { service: string; enabled: boolean } | undefined,
   upgradeTracks: vi.fn(),
@@ -68,6 +69,7 @@ vi.mock("@hooks/api", () => ({
     return api.lyrics;
   },
   useUpgradeTracks: () => ({ mutate: api.upgradeTracks, isPending: api.upgradePending }),
+  useSetPrivateSession: () => ({ mutate: api.setPrivateSession }),
 }));
 
 const devices = vi.hoisted(() => ({
@@ -759,6 +761,48 @@ describe("usePlayer scrobbling", () => {
 
     expect(result.current.view?.scrobble).toBe("sending");
     expect(result.current.view?.scrobbleActionable).toBe(true);
+  });
+
+  it("reports a private session only while its end is still ahead", () => {
+    auth.currentUser = {
+      loudnessNormalization: true,
+      loudnessPreampDb: 0,
+      privateSessionUntil: new Date(Date.now() + 60 * 60 * 1000),
+    };
+    const running = renderHook(() => usePlayer());
+
+    expect(running.result.current.view?.privateSession).toBe(true);
+    running.unmount();
+
+    auth.currentUser = {
+      loudnessNormalization: true,
+      loudnessPreampDb: 0,
+      privateSessionUntil: new Date(Date.now() - 1000),
+    };
+    const ended = renderHook(() => usePlayer());
+
+    expect(ended.result.current.view?.privateSession).toBe(false);
+  });
+
+  it("ends the private session from the player", () => {
+    const { result } = renderHook(() => usePlayer());
+
+    result.current.actions.endPrivateSession();
+
+    expect(api.setPrivateSession).toHaveBeenCalledWith({ enabled: false });
+  });
+
+  it("starts a private session from the menu, and ends the one that is running", () => {
+    const { result, rerender } = renderHook(() => usePlayer());
+
+    result.current.actions.togglePrivateSession();
+    expect(api.setPrivateSession).toHaveBeenLastCalledWith({ enabled: true });
+
+    auth.currentUser = { ...auth.currentUser, privateSessionUntil: new Date(Date.now() + 60_000) };
+    rerender();
+    result.current.actions.togglePrivateSession();
+
+    expect(api.setPrivateSession).toHaveBeenLastCalledWith({ enabled: false });
   });
 
   it("turns scrobbling off on every connected service at once", () => {

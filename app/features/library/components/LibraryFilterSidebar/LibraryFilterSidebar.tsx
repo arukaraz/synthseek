@@ -3,6 +3,8 @@
 import { Checkbox } from "@components/ui/Checkbox";
 import { useTranslation } from "react-i18next";
 
+import { EVERYONE_FILTER_KEY, FILTER_ON } from "../../constants";
+import { everyoneScopeActive } from "../../helpers";
 import { FacetGroup } from "./FacetGroup";
 import { facetDefsWithChoice, facetSearchTerm } from "./helpers";
 import {
@@ -27,11 +29,13 @@ export function LibraryFilterSidebar({
   onFacetSearch,
   onClear,
   hasActiveFilters,
+  allMembers,
   isRefreshing = false,
   showHeader = true,
 }: LibraryFilterSidebarProps) {
   const { t } = useTranslation("library");
   const orphanActive = (filters.orphan ?? []).includes("true");
+  const everyoneActive = everyoneScopeActive(filters);
 
   return (
     <div className={sidebarShell()}>
@@ -56,6 +60,16 @@ export function LibraryFilterSidebar({
           onSearch={(term) => (def.facetSearchKey ? onFacetSearch(def.facetSearchKey, term) : undefined)}
         />
       ))}
+
+      {allMembers ? (
+        <div className={group()}>
+          <p className={groupLabel()}>{t("page.facets.everyone")}</p>
+          <label className={facetRow({ checked: everyoneActive })}>
+            <Checkbox checked={everyoneActive} onCheckedChange={() => onToggleValue(EVERYONE_FILTER_KEY, FILTER_ON)} />
+            <span className={facetLabel()}>{t("page.facets.everyoneAll")}</span>
+          </label>
+        </div>
+      ) : null}
 
       {config.interactive ? (
         <div className={group()}>

@@ -10,12 +10,13 @@ import {
   isValidQuotaInput,
   parseQuotaInput,
   quotaInputOf,
+  sameServerPrivacy,
   quotaSummary,
   roleLabel,
   roleTone,
   sortMembers,
 } from "../helpers";
-import type { MemberSort } from "../types";
+import type { MemberSort, ServerPrivacy } from "../types";
 
 import enSettings from "@modules/i18n/messages/en/settings.json";
 
@@ -200,5 +201,25 @@ describe("sortMembers", () => {
     const rows = [createMockUser({ id: "a" }), createMockUser({ id: "b" })];
     const sorted = sortMembers(rows, { field: "unknown", direction: "asc" });
     expect(sorted.map((row) => row.id)).toEqual(["a", "b"]);
+  });
+});
+
+describe("sameServerPrivacy", () => {
+  const server: ServerPrivacy = {
+    membersSeeRequests: true,
+    defaultPlaylistVisibility: "shared",
+    nowPlayingEnabled: true,
+  };
+
+  it("holds for two equal settings", () => {
+    expect(sameServerPrivacy(server, { ...server })).toBe(true);
+  });
+
+  it.each([
+    { membersSeeRequests: false },
+    { defaultPlaylistVisibility: "private" as const },
+    { nowPlayingEnabled: false },
+  ])("sees a change in %o", (change) => {
+    expect(sameServerPrivacy(server, { ...server, ...change })).toBe(false);
   });
 });

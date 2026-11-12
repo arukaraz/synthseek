@@ -9,6 +9,7 @@ type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type MemberListItem = RouterOutputs["users"]["list"][number];
 export type PlexImportableUser = RouterOutputs["users"]["plexImportable"][number];
 export type RoleValue = MemberListItem["role"];
+export type ServerPrivacy = RouterOutputs["privacy"]["overview"]["server"];
 
 export interface RoleOption {
   value: RoleValue;

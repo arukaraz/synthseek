@@ -264,6 +264,27 @@ describe("the more menu on the narrow bar", () => {
     expect(actions.toggleScrobbling).toHaveBeenCalled();
   });
 
+  it("starts a private session from its item, unchecked until one runs", async () => {
+    const { actions, user } = renderMenu({ privateSession: false });
+    await opened(user);
+    const item = screen.getByRole("menuitemcheckbox", { name: enPlayer.privateSession.label });
+    expect(item).toHaveAttribute("aria-checked", "false");
+
+    await user.click(item);
+
+    expect(actions.togglePrivateSession).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows a running private session as checked", async () => {
+    const { user } = renderMenu({ privateSession: true });
+    await opened(user);
+
+    expect(screen.getByRole("menuitemcheckbox", { name: enPlayer.privateSession.label })).toHaveAttribute(
+      "aria-checked",
+      "true"
+    );
+  });
+
   it("leaves scrobbling read-only when no listening service is connected", async () => {
     const { user } = renderMenu({ scrobble: "off", scrobbleActionable: false });
     await opened(user);

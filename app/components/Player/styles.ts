@@ -875,6 +875,19 @@ export const scrobbleStatus = cva(
   }
 );
 
+export const privateSessionStatus = cva(
+  "focus-visible:ring-primary-500 text-primary-400 hover:bg-fg/8 grid shrink-0 place-items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none",
+  {
+    variants: {
+      size: {
+        bar: "size-7",
+        stage: "size-9",
+      },
+    },
+    defaultVariants: { size: "bar" },
+  }
+);
+
 export const scrobbleDot = cva("absolute right-0.5 bottom-0.5 size-1.5 rounded-full", {
   variants: {
     state: {

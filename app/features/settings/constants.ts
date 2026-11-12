@@ -20,6 +20,7 @@ import {
   Plug,
   ScanSearch,
   Server,
+  Shield,
   ShieldBan,
   Tags,
   Timer,
@@ -45,6 +46,14 @@ export const SETTINGS_PAGE_BY_ID = {
     labelKey: "shell.pages.account.title",
     descriptionKey: "shell.pages.account.description",
     icon: User,
+  },
+  privacy: {
+    id: "privacy",
+    group: "you",
+    href: "/settings/privacy",
+    labelKey: "shell.pages.privacy.title",
+    descriptionKey: "shell.pages.privacy.description",
+    icon: Shield,
   },
   appearance: {
     id: "appearance",

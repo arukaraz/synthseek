@@ -11,6 +11,7 @@ export const createLibraryShell = (overrides: Partial<LibraryViewShell> = {}): L
   density: "comfortable",
   onDensityChange: vi.fn(),
   phone: false,
+  admin: false,
   selectMode: false,
   onSelectModeChange: vi.fn(),
   ...overrides,

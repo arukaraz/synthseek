@@ -334,7 +334,12 @@
     "tracksRemoved": "Titel aus der Playlist entfernt",
     "tracksRemovedFailed": "Titel konnten nicht aus der Playlist entfernt werden",
     "syncUpdated": "Synchronisierungseinstellung aktualisiert",
-    "syncUpdatedFailed": "Synchronisierungseinstellung konnte nicht aktualisiert werden"
+    "syncUpdatedFailed": "Synchronisierungseinstellung konnte nicht aktualisiert werden",
+    "visibility": {
+      "shared": "Playlist mit allen auf diesem Server geteilt",
+      "private": "Die Playlist ist jetzt privat"
+    },
+    "visibilityFailed": "Die Sichtbarkeit der Playlist konnte nicht geändert werden"
   },
   "dropImport": {
     "fileMatched": "Datei zugeordnet und zum Import eingereiht",
@@ -392,5 +397,12 @@
     "testFailed": "Die Testbenachrichtigung konnte nicht gesendet werden",
     "revealSecretFailed": "Der gespeicherte Wert konnte nicht angezeigt werden",
     "settingsFailed": "Die Benachrichtigungseinstellungen konnten nicht gespeichert werden"
+  },
+  "privacy": {
+    "privateSessionFailed": "Die private Sitzung konnte nicht geändert werden",
+    "clearHistoryFailed": "Dein Hörverlauf konnte nicht gelöscht werden",
+    "historyCleared_one": "{{count}} Wiedergabe aus deinem Verlauf entfernt",
+    "historyCleared_other": "{{count}} Wiedergaben aus deinem Verlauf entfernt",
+    "serverFailed": "Die Datenschutzeinstellungen konnten nicht gespeichert werden"
   }
 }

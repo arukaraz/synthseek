@@ -275,6 +275,12 @@ describe("sort and facet search per view", () => {
       status: ["complete"],
     });
   });
+
+  it("asks for every member's playlists only when the scope filter is on", () => {
+    expect(buildPlaylistsInput({ ...base, sort: "name" }).everyone).toBeUndefined();
+    expect(buildPlaylistsInput({ ...base, sort: "name", filters: { everyone: ["false"] } }).everyone).toBeUndefined();
+    expect(buildPlaylistsInput({ ...base, sort: "name", filters: { everyone: ["true"] } }).everyone).toBe(true);
+  });
 });
 
 describe("resolveEffectiveDirection", () => {

@@ -3,7 +3,8 @@
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { toggleFilterValue } from "../../helpers";
+import { EVERYONE_FILTER_KEY } from "../../constants";
+import { everyoneScopeActive, toggleFilterValue } from "../../helpers";
 import { facetValueLabel } from "../LibraryFilterSidebar/helpers";
 import { shelfActiveChips } from "./helpers";
 import { shelfActiveChip, shelfActiveChipX, shelfActiveClear, shelfActiveRow } from "./styles";
@@ -23,10 +24,25 @@ export function ShelfActiveChips({ controller, facets }: ShelfActiveChipsProps) 
       `${t(def.labelKey)}: ${facetValueLabel(def, value, values, tStatus, tPlayer("source.local"))}`
   );
 
-  if (chips.length === 0 && !orphanActive) return null;
+  const everyoneActive = everyoneScopeActive(filters);
+
+  if (chips.length === 0 && !orphanActive && !everyoneActive) return null;
 
   return (
     <div className={shelfActiveRow()}>
+      {everyoneActive ? (
+        <button
+          type="button"
+          className={shelfActiveChip()}
+          onClick={() => controller.setFilterValues(EVERYONE_FILTER_KEY, [])}
+          aria-label={t("page.shelf.removeFilter", { label: t("page.facets.everyoneAll") })}
+        >
+          {t("page.facets.everyoneAll")}
+          <span className={shelfActiveChipX()}>
+            <X className="size-3" />
+          </span>
+        </button>
+      ) : null}
       {orphanActive ? (
         <button
           type="button"

@@ -379,6 +379,8 @@
       "moreHint_other": "{{count}} de plus, tapez pour rechercher",
       "orphan": "Pistes isolées",
       "orphanOnly": "Uniquement les pistes hors playlist",
+      "everyone": "Membres",
+      "everyoneAll": "Les playlists de tous les membres",
       "libraryPath": "Chemin de bibliothèque"
     },
     "filters": {
@@ -529,7 +531,11 @@
   },
   "playlists": {
     "smartOrigin": "Intelligente · {{origin}}",
+    "privateOrigin": "Privée · {{origin}}",
     "actions": {
+      "makePrivate": "Rendre privée",
+      "makeShared": "Partager avec tout le monde",
+      "ownerOnly": "Seul son propriétaire ou un administrateur peut modifier ceci",
       "rename": "Renommer",
       "editRule": "Modifier la règle",
       "delete": "Supprimer",

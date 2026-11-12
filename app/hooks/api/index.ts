@@ -57,6 +57,8 @@ export {
 } from "./mutations/playback";
 
 export { useListeningConnections, useSeenPlaybackClients } from "./queries/scrobble";
+export { usePrivacyOverview } from "./queries/privacy";
+export { useClearListeningHistory, useSetPrivateSession, useUpdateServerPrivacy } from "./mutations/privacy";
 export {
   useNotificationAdminSettings,
   useNotificationCatalog,

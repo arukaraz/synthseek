@@ -5,7 +5,15 @@ import type { RoleTone } from "@components/ui/RoleChip";
 import i18n from "@locale";
 import { formatBytes } from "@utils/formatters";
 
-import type { MemberListItem, MemberSort, RoleOption } from "./types";
+import type { MemberListItem, MemberSort, RoleOption, ServerPrivacy } from "./types";
+
+export function sameServerPrivacy(a: ServerPrivacy, b: ServerPrivacy): boolean {
+  return (
+    a.membersSeeRequests === b.membersSeeRequests &&
+    a.defaultPlaylistVisibility === b.defaultPlaylistVisibility &&
+    a.nowPlayingEnabled === b.nowPlayingEnabled
+  );
+}
 
 export function formatJoinedDate(date: Date): string {
   return date.toLocaleDateString(i18n.language, { year: "numeric", month: "long", day: "numeric" });

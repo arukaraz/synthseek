@@ -246,5 +246,9 @@
     "retrying": "Scrobbeln, erneuter Versuch",
     "failed": "Scrobbeln fehlgeschlagen"
   },
+  "privateSession": {
+    "label": "Private Sitzung",
+    "end": "Private Sitzung aktiv. Beenden"
+  },
   "nowPlaying": "{{title}} · {{artist}}"
 }

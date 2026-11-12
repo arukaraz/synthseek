@@ -379,6 +379,8 @@
       "moreHint_other": "{{count}} more, type to search",
       "orphan": "Loose tracks",
       "orphanOnly": "Only tracks not in a playlist",
+      "everyone": "Members",
+      "everyoneAll": "All members' playlists",
       "libraryPath": "Library path"
     },
     "filters": {
@@ -529,9 +531,13 @@
   },
   "playlists": {
     "smartOrigin": "Smart · {{origin}}",
+    "privateOrigin": "Private · {{origin}}",
     "actions": {
       "rename": "Rename",
       "editRule": "Edit rule",
+      "makePrivate": "Make private",
+      "makeShared": "Share with everyone",
+      "ownerOnly": "Only its owner or an administrator can change this",
       "delete": "Delete",
       "menu": "Playlist actions for {{name}}",
       "syncTo": "Sync to...",

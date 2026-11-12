@@ -12,7 +12,7 @@ import { sidebarItem } from "./styles";
 import type { RequestSidebarItemProps } from "./types";
 
 export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSidebarItemProps) {
-  const { t } = useTranslation("status");
+  const { t } = useTranslation(["status", "requests"]);
   const statusConfig = REQUEST_STATUS_CONFIG[request.status];
   const isActive = ACTIVE_STATUSES.includes(request.status as (typeof ACTIVE_STATUSES)[number]);
   const typeLabel = getContentTypeLabel(request.contentType).toUpperCase();
@@ -36,7 +36,8 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
           <span className="text-fg/40 truncate text-[10px] font-semibold tracking-wider">
-            <span className={`type-text-${request.contentType}`}>{typeLabel}</span> · {request.requestedBy.username}
+            <span className={`type-text-${request.contentType}`}>{typeLabel}</span> ·{" "}
+            {request.requestedBy.username ?? t("requests:detail.aMember")}
           </span>
           <span
             className={cn("h-1.5 w-1.5 shrink-0 rounded-full", statusConfig.glowColor)}
@@ -50,7 +51,7 @@ export function RequestSidebarItem({ request, isSelected, onSelect }: RequestSid
 
       <div className="min-w-0">
         <p className={cn("truncate text-sm font-semibold", isSelected ? "text-fg" : "text-fg/90")}>{request.name}</p>
-        <p className="text-fg/50 truncate text-xs">{request.credited_artist}</p>
+        <p className="text-fg/50 min-h-4 truncate text-xs">{request.credited_artist}</p>
         {request.contentType === ContentType.enum.album ? <RequestSidebarRelease albumId={request.id} /> : null}
       </div>
 

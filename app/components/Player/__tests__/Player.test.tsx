@@ -300,6 +300,23 @@ describe("the player dock", () => {
   });
 });
 
+describe("the private session indicator", () => {
+  it("stays out of the player while no private session runs", () => {
+    renderPlayer();
+
+    expect(screen.queryByRole("button", { name: enPlayer.privateSession.end })).not.toBeInTheDocument();
+  });
+
+  it("shows while a private session runs and ends it on a press", async () => {
+    const { actions, user } = renderPlayer({ privateSession: true });
+
+    const indicator = screen.getAllByRole("button", { name: enPlayer.privateSession.end })[0];
+    if (indicator !== undefined) await user.click(indicator);
+
+    expect(actions.endPrivateSession).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("the scrobbling indicator", () => {
   it("reports the state without offering a press when no service is connected", () => {
     renderPlayer();

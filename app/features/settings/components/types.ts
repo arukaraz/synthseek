@@ -1,3 +1,4 @@
+import type { PlaylistVisibility } from "@api/__generated__/types";
 import type { VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
 import type { HTMLInputAutoCompleteAttribute, KeyboardEvent, ReactNode } from "react";
@@ -15,10 +16,17 @@ export interface ChipsInputProps {
   disabled?: boolean;
 }
 
+export interface VisibilityChoiceProps {
+  value: PlaylistVisibility;
+  disabled: boolean;
+  ariaLabel: string;
+  onChange: (next: PlaylistVisibility) => void;
+}
+
 export interface EngineRowProps {
   label: string;
   labelTrailing?: ReactNode;
-  description: string;
+  description?: string;
   control: ReactNode;
   anchor?: string;
 }

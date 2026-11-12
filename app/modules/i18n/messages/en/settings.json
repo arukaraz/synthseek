@@ -245,7 +245,7 @@
     "account": {
       "title": "Your account",
       "description": "For your account, on every device.",
-      "household": "Who sees what you play is set in <household>Account > Household</household>."
+      "household": "Who sees what you play is set in <household>Privacy > Household</household>."
     },
     "browser": {
       "title": "This browser",
@@ -1038,6 +1038,73 @@
       "unitGb": "GB"
     }
   },
+  "privacy": {
+    "household": {
+      "label": "Share my listening with the household",
+      "description": "Lets the other members' widgets, like At home and Blend, read what you play, and shows you under Now playing in their music apps. Off by default.",
+      "nowPlayingOff": "Now playing is turned off on this server."
+    },
+    "playlists": {
+      "description": "Shared: every member sees and plays it. Private: only you and administrators. Change one playlist from its menu in Library.",
+      "label": "Default playlists privacy",
+      "shared": "Shared",
+      "private": "Private"
+    },
+    "requests": {
+      "label": "Show my name on my requests",
+      "description": "When off, other members see \"A member\" in Requests. Administrators see who asked in Requests. Your shared playlists keep your name in Library.",
+      "locked": "Members only see their own requests on this server, so there is no name to hide."
+    },
+    "history": {
+      "title": "Listening history",
+      "session": {
+        "label": "Private session",
+        "description": "What you play stays out of your listening history, is not scrobbled or reported to your media server, and you do not appear under Now playing. It turns itself off after a few hours.",
+        "until": "On until {{time}}."
+      },
+      "clear": {
+        "label": "Clear listening history",
+        "description": "Your widgets and rankings stop counting these plays. Plays already sent to Last.fm, ListenBrainz or your media server stay there.",
+        "open": "Clear…",
+        "confirm": "Clear",
+        "rangeLabel": "How far back",
+        "ranges": {
+          "hour": "The last hour",
+          "day": "The last 24 hours",
+          "week": "The last 7 days",
+          "all": "Everything"
+        },
+        "count_one": "{{count}} play",
+        "count_other": "{{count}} plays"
+      }
+    },
+    "leaving": {
+      "title": "What leaves this server",
+      "description": "These are set in Connections. This card only shows where they stand.",
+      "lastfm": "Scrobble plays to Last.fm",
+      "listenbrainz": "Scrobble plays to ListenBrainz",
+      "server": "Count my plays on {{server}}",
+      "on": "On",
+      "off": "Off",
+      "notConnected": "Not connected",
+      "manage": "Manage in Connections"
+    },
+    "server": {
+      "title": "Privacy",
+      "requests": {
+        "label": "Members see each other's requests",
+        "description": "When off, the Requests list shows each member only their own."
+      },
+      "playlists": {
+        "label": "Default playlists privacy",
+        "description": "For every member who has not picked their own in their Privacy settings."
+      },
+      "nowPlaying": {
+        "label": "Now playing in music apps",
+        "description": "When off, music apps show nobody under Now playing, whatever each member shares."
+      }
+    }
+  },
   "profile": {
     "account": {
       "title": "Profile",
@@ -1147,11 +1214,6 @@
         "unavailable": "The service could not be reached. Your plays are waiting.",
         "rejected": "The service refused the last plays sent to it."
       }
-    },
-    "household": {
-      "title": "Household",
-      "label": "Share my listening with the household",
-      "description": "Lets the other members' widgets, like At home and Blend, read what you play. Off by default."
     },
     "quota": {
       "title": "Download quota",
@@ -1587,6 +1649,10 @@
         "title": "Connections",
         "description": "The services Synthseek uses on your behalf, and the apps and keys that use your Synthseek."
       },
+      "privacy": {
+        "title": "Privacy",
+        "description": "What the other members of this server can see of you."
+      },
       "notifications": {
         "title": "Notifications"
       },
@@ -1679,6 +1745,7 @@
         "members": "role trusted quota request preset quality format",
         "board": "density text size background templates arrange layout widgets",
         "scrobble": "scrobble plays listening history",
+        "privacy": "private visibility share now playing incognito history clear name",
         "channels": "discord ntfy telegram webhook apprise",
         "musicApps": "subsonic feishin symfonium dsub credential",
         "libraryPaths": "folder naming template rename",

@@ -334,7 +334,12 @@
     "tracksRemoved": "Pistes retirées de la playlist",
     "tracksRemovedFailed": "Échec du retrait des pistes de la playlist",
     "syncUpdated": "Réglage de synchronisation mis à jour",
-    "syncUpdatedFailed": "Échec de la mise à jour du réglage de synchronisation"
+    "syncUpdatedFailed": "Échec de la mise à jour du réglage de synchronisation",
+    "visibility": {
+      "shared": "Playlist partagée avec tout le monde sur ce serveur",
+      "private": "La playlist est désormais privée"
+    },
+    "visibilityFailed": "Impossible de modifier la visibilité de la playlist"
   },
   "dropImport": {
     "fileMatched": "Fichier associé et mis en file pour l'import",
@@ -392,5 +397,12 @@
     "testFailed": "Impossible d'envoyer la notification de test",
     "revealSecretFailed": "Impossible d'afficher la valeur enregistrée",
     "settingsFailed": "Impossible d'enregistrer les réglages des notifications"
+  },
+  "privacy": {
+    "privateSessionFailed": "Impossible de modifier la session privée",
+    "clearHistoryFailed": "Impossible d'effacer votre historique d'écoute",
+    "historyCleared_one": "{{count}} lecture retirée de votre historique",
+    "historyCleared_other": "{{count}} lectures retirées de votre historique",
+    "serverFailed": "Impossible d'enregistrer les réglages de confidentialité"
   }
 }

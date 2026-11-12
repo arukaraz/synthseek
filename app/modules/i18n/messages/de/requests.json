@@ -87,6 +87,7 @@
   "detail": {
     "backToList": "Zurück zur Anfragenliste",
     "requestedBy": "Angefordert von <value>{{username}}</value> · <value>{{date}}</value>",
+    "aMember": "Ein Mitglied",
     "lastUpdated": "Zuletzt aktualisiert <value>{{date}}</value>",
     "delegatedTo": "Delegiert an: <value>{{name}}</value>",
     "moreActions": "Weitere Aktionen",

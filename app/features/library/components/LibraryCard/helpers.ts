@@ -17,7 +17,8 @@ export function artistSubtitle(item: LibraryArtistItem, albumsLabel: string): st
 }
 
 export function playlistSubtitle(item: LibraryPlaylistItem, origin: string, t: TFunction<"library">): string {
-  return item.smart ? t("playlists.smartOrigin", { origin }) : origin;
+  const described = item.smart ? t("playlists.smartOrigin", { origin }) : origin;
+  return item.visibility === "private" ? t("playlists.privateOrigin", { origin: described }) : described;
 }
 
 export function joinMeta(parts: readonly (string | number | null | undefined)[]): string {

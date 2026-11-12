@@ -35,6 +35,10 @@ export const stateWrap = cva("flex min-h-64 flex-1 items-center justify-center")
 
 export const libraryMenuItem = cva("text-fg/80 focus:bg-fg/5 focus:text-fg gap-2.5 py-2");
 
+export const libraryMenuLabel = cva("flex min-w-0 flex-col");
+
+export const libraryMenuHint = cva("text-fg/60 text-xs leading-snug font-normal");
+
 export const libraryMenuItemDanger = cva(
   "text-destructive-vivid hover:bg-destructive-vivid/10 hover:text-destructive-vivid focus:bg-destructive-vivid/10 focus:text-destructive-vivid active:bg-destructive-vivid/15 gap-2.5 py-2"
 );

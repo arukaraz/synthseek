@@ -6,12 +6,15 @@ import {
   useFavoriteTracks,
   useListeningConnections,
   useSetFavoriteTrack,
+  useSetPrivateSession,
   useSetScrobbleEnabled,
   useTrackLyrics,
   useUpgradeTracks,
 } from "@hooks/api";
 import { useSetPlaybackProfile } from "@hooks/api/mutations/auth/useSetPlaybackProfile";
 import { useRefreshCurrentUser } from "@hooks/api/queries/useRefreshCurrentUser";
+import { useNow } from "@hooks/ui/useNow";
+import { privateSessionActive } from "@utils/private-session";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { resolveFriendlyError } from "@modules/errors";
 import { useAuthContext } from "@modules/providers/AuthProvider";
@@ -174,6 +177,14 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     const enabled = !connected.some((connection) => connection.scrobbleEnabled);
     for (const connection of connected) setScrobbleEnabled({ service: connection.service, enabled });
   }, [connected, setScrobbleEnabled]);
+  const now = useNow();
+  const { mutate: setPrivateSession } = useSetPrivateSession();
+  const privateSession = privateSessionActive(currentUser?.privateSessionUntil, now);
+  const endPrivateSession = useCallback(() => setPrivateSession({ enabled: false }), [setPrivateSession]);
+  const togglePrivateSession = useCallback(
+    () => setPrivateSession({ enabled: !privateSession }),
+    [privateSession, setPrivateSession]
+  );
   const lyrics = useTrackLyrics(session.lyricsOpen && track !== null ? track.id : null);
   const { mutate: setFavorite, isPending, variables } = useSetFavoriteTrack();
   const pendingForThisTrack = isPending && variables.trackId === track?.id;
@@ -325,6 +336,8 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
     toggleLyrics: actions.toggleLyrics,
     openLyrics: actions.openLyrics,
     toggleScrobbling,
+    endPrivateSession,
+    togglePrivateSession,
     toggleDevices: actions.toggleDevices,
     toggleSettings: actions.toggleSettings,
     ...playerSettingsActionsOf(setProfile),
@@ -422,6 +435,7 @@ export function usePlayer(): { view: PlayerView | null; actions: PlayerActions }
           : "off"
         : scrobbleStateFrom(connections.data ?? []),
     scrobbleActionable: connected.length > 0,
+    privateSession,
     upgrading: upgradePending,
     fullscreen: session.fullscreen,
   };

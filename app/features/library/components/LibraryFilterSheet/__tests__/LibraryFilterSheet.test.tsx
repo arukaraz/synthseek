@@ -24,6 +24,7 @@ function makeProps(overrides?: Partial<LibraryFilterSheetProps>): LibraryFilterS
     onFacetSearch: vi.fn(),
     onClear: vi.fn(),
     hasActiveFilters: false,
+    allMembers: false,
     ...overrides,
   };
 }

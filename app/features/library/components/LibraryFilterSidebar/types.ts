@@ -12,6 +12,7 @@ export interface LibraryFilterSidebarProps {
   onFacetSearch: (key: string, term: string) => void;
   onClear: () => void;
   hasActiveFilters: boolean;
+  allMembers: boolean;
   isRefreshing?: boolean;
   showHeader?: boolean;
 }

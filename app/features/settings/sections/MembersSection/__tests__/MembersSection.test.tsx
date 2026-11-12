@@ -60,6 +60,9 @@ vi.mock("../components/ImportPlexUsersDialog", () => ({
   ImportPlexUsersDialog: ({ open }: { open: boolean }) => (open ? <div data-testid="import-dialog" /> : null),
 }));
 vi.mock("../components/QuotasCard", () => ({ QuotasCard: () => <div data-testid="quotas-card" /> }));
+vi.mock("../components/MembersPrivacyCard", () => ({
+  MembersPrivacyCard: () => <div data-testid="privacy-card" />,
+}));
 vi.mock("../components/MemberRequestPresetDialog", () => ({
   MemberRequestPresetDialog: ({ member, onClose }: { member: { id: string } | null; onClose: () => void }) =>
     member ? (
@@ -122,6 +125,11 @@ describe("MembersSection", () => {
   it("offers the download quota settings to an admin", () => {
     render(<MembersSection />);
     expect(screen.getByTestId("quotas-card")).toBeInTheDocument();
+  });
+
+  it("puts the server's privacy settings right under the download quotas", () => {
+    render(<MembersSection />);
+    expect(screen.getByTestId("quotas-card").nextElementSibling).toBe(screen.getByTestId("privacy-card"));
   });
 
   it("opens the create and import dialogs from the toolbar", async () => {

@@ -21,9 +21,6 @@ vi.mock("../components/QuotaCard", () => ({ QuotaCard: () => <div data-testid="q
 vi.mock("../components/MyRequestPresetCard", () => ({
   MyRequestPresetCard: () => <div data-testid="request-preset-card" />,
 }));
-vi.mock("../components/HouseholdSharingCard", () => ({
-  HouseholdSharingCard: () => <div data-testid="household-card" />,
-}));
 
 import { AccountSection } from "../AccountSection";
 
@@ -45,7 +42,6 @@ describe("AccountSection", () => {
     expect(screen.getByTestId("request-preset-card")).toBeInTheDocument();
     expect(screen.getByTestId("edit-card")).toBeInTheDocument();
     expect(screen.getByTestId("password-card")).toBeInTheDocument();
-    expect(screen.getByTestId("household-card")).toBeInTheDocument();
   });
 
   it("puts the profile editor right under the profile, then quota and request preset side by side in one row", () => {

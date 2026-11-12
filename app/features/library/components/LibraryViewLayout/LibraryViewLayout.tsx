@@ -48,6 +48,7 @@ export function LibraryViewLayout<TItem>({
     onFacetSearch: controller.setFacetSearch,
     onClear: controller.clearFilters,
     hasActiveFilters: activeFilterCount > 0 || Object.values(controller.facetSearch).some(Boolean),
+    allMembers: shell.admin && config.view === "playlists",
     isRefreshing,
   };
 

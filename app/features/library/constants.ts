@@ -72,6 +72,8 @@ export const LIBRARY_BASE_PARAMS = {
   dir: { validValues: LIBRARY_SORT_DIRECTIONS },
 } as const;
 
+export const EVERYONE_FILTER_KEY = "everyone";
+
 export const LIBRARY_ALL_FILTER_KEYS = [
   "status",
   "origin",
@@ -86,7 +88,10 @@ export const LIBRARY_ALL_FILTER_KEYS = [
   "owner",
   "libraryPath",
   "orphan",
+  EVERYONE_FILTER_KEY,
 ] as const;
+
+export const FILTER_ON = "true";
 
 const TRACKS_CONFIG: TracksViewConfig = {
   view: "tracks",
@@ -210,7 +215,7 @@ const PLAYLISTS_CONFIG: PlaylistsViewConfig = {
     { value: "tracks", labelKey: "page.sort.tracks", defaultDirection: "desc" },
     ...PLAY_SORT_OPTIONS,
   ],
-  filterParamKeys: ["origin", "owner", "status"],
+  filterParamKeys: ["origin", "owner", "status", EVERYONE_FILTER_KEY],
   facets: [
     ORIGIN_FACET_DEF,
     { key: "owner", labelKey: "page.facets.owner", searchable: true, facetSearchKey: "owner" },

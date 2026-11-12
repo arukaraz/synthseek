@@ -25,7 +25,7 @@ export function AccountPlaybackCard() {
         <Trans
           t={t}
           i18nKey="playback.account.household"
-          components={{ household: <HashLink href="/settings/account#household" className={inlineLink()} /> }}
+          components={{ household: <HashLink href="/settings/privacy#household" className={inlineLink()} /> }}
         />
       </span>
     </SettingsCard>
