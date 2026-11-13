@@ -28,5 +28,6 @@ export function resyncPushFedQueries(utils: Utils): void {
   void utils.settings.quarantine.list.invalidate();
   void utils.playback.favoriteTrackIds.invalidate();
   void utils.playback.scrobble.connections.invalidate();
+  void utils.playback.listeningNow.invalidate();
   invalidateLibraryViews(utils);
 }

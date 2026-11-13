@@ -5,7 +5,13 @@ import { memo, useCallback, useMemo } from "react";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES, EMPTY_SOCIALS, EMPTY_TRACKS } from "../../constants";
-import { artistTarget, collectDegradedSources, computeRequestState, deriveTrackStatusCounts } from "../../helpers";
+import {
+  artistTarget,
+  collectDegradedSources,
+  computeRequestState,
+  deriveTrackStatusCounts,
+  failedToLoad,
+} from "../../helpers";
 import { useDetailPlayback } from "../../hooks/useDetailPlayback";
 import { AlbumCreditsWidget, AlbumDetailWidget, AlbumStatsWidget, MoreFromArtistWidget } from "../../widgets";
 import { DetailHero } from "../DetailHero/DetailHero";
@@ -14,7 +20,8 @@ import type { RequestIntent } from "../../types";
 import type { AlbumDetailBodyProps } from "./types";
 
 function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPill = true }: AlbumDetailBodyProps) {
-  const { data: album } = useAlbumDetail({ catalogAlbumId: target.id });
+  const albumQuery = useAlbumDetail({ catalogAlbumId: target.id });
+  const { data: album } = albumQuery;
   const { requestAlbum } = useContentDetailActions();
   const { play, radio } = useDetailPlayback(onClose);
 
@@ -71,6 +78,7 @@ function AlbumDetailBodyComponent({ target, onClose, onNavigate, showInLibraryPi
         genres={genres}
         requestState={requestState}
         showInLibraryPill={showInLibraryPill}
+        showRequest={!failedToLoad(albumQuery)}
         onRequest={handleRequest}
         onCustomizeRequest={handleCustomizeRequest}
         onPlay={counts.completeCount > 0 ? handlePlay : undefined}

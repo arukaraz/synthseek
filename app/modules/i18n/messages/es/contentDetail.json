@@ -15,6 +15,7 @@
   "close": "Cerrar",
   "request": "Solicitar",
   "requestMissing": "Solicitar faltantes",
+  "requestOwnerOnly": "Solo el dueño de la playlist puede solicitar las pistas que le faltan",
   "retryTrack": "Reintentar {{title}}",
   "selectTrack": "Seleccionar {{title}}",
   "selection": {
@@ -114,6 +115,7 @@
   "trackPlays_one": "{{plays}} reproduccion",
   "trackPlays_other": "{{plays}} reproducciones",
   "libraryTrackCount": "{{count}} / {{total}}",
+  "loadFailed": "No se pudo cargar. Ciérralo y vuelve a intentarlo.",
   "empty": {
     "topTracks": "No hay pistas destacadas disponibles.",
     "discography": "No hay lanzamientos disponibles.",

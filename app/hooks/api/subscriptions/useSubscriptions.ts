@@ -22,6 +22,7 @@ import {
   handleTrackUpdate,
 } from "./handlers/requests";
 import {
+  handleListeningNowUpdate,
   handleMaintenanceUpdate,
   handleSettingsUpdate,
   handleUserActivity,
@@ -119,6 +120,9 @@ export function useSubscriptions() {
           break;
         case SubscriptionEventType.UserActivity:
           handleUserActivity(event, utils);
+          break;
+        case SubscriptionEventType.ListeningNowUpdate:
+          handleListeningNowUpdate(utils);
           break;
         default: {
           const _unhandledEventType: never = event;

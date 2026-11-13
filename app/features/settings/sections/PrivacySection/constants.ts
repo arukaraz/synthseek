@@ -45,12 +45,6 @@ export const CHANNEL_SCOPE_KEYS: Readonly<Record<ChannelScope, ParseKeys<"settin
 
 export const CHANNEL_SCOPES: readonly ChannelScope[] = ["default", "private"];
 
-export const SESSION_CUSTOM_MIN_MINUTES = 1;
-
-export const SESSION_CUSTOM_MAX_MINUTES = 1440;
-
-export const SESSION_CUSTOM_START_MINUTES = 360;
-
 export const SESSION_LENGTH_KEYS: Readonly<Record<SessionLengthChoice, ParseKeys<"settings">>> = {
   "30": "privacy.sessionLength.options.30",
   "60": "privacy.sessionLength.options.60",

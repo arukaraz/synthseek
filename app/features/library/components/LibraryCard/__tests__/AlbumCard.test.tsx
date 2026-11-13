@@ -91,8 +91,8 @@ describe("AlbumCard", () => {
     expect(onOpen).not.toHaveBeenCalled();
   });
 
-  it("puts the menu where the info button was, so the card keeps a single way into the detail", () => {
-    renderWithProviders(
+  it("keeps the menu beside the title, off the cover, so the hover shows only play", () => {
+    const { container } = renderWithProviders(
       <AlbumCard
         item={createLibraryAlbum()}
         onOpen={vi.fn()}
@@ -101,7 +101,12 @@ describe("AlbumCard", () => {
       />
     );
 
-    expect(screen.getByRole("button", { name: "album menu" })).toBeInTheDocument();
+    const menu = screen.getByRole("button", { name: "album menu" });
+    const play = screen.getByRole("button", { name: /Play everything we have of Discovery/i });
+    const cover = play.parentElement?.parentElement;
+    expect(cover).not.toBeNull();
+    expect(cover).not.toContainElement(menu);
+    expect(container).toContainElement(menu);
     expect(screen.getAllByRole("button", { name: /Open details for Discovery/i })).toHaveLength(1);
   });
 

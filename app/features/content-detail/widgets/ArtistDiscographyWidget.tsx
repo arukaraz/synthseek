@@ -11,7 +11,7 @@ import { Discography } from "../components/Discography";
 import { orderedGroups, releaseMeta } from "../components/Discography/helpers";
 import type { DiscographyGroup, DiscographyRecordType } from "../components/Discography/types";
 import { DetailEmpty, DetailSection } from "../components/DetailSection";
-import { albumTarget } from "../helpers";
+import { albumTarget, failedToLoad } from "../helpers";
 import type { ArtistDiscographyWidgetProps, ContentCardItem } from "../types";
 
 function ArtistDiscographyWidgetComponent({
@@ -20,7 +20,8 @@ function ArtistDiscographyWidgetComponent({
   onSelectAlbum,
 }: ArtistDiscographyWidgetProps) {
   const { t } = useTranslation("contentDetail");
-  const { data, isLoading } = useArtistDiscography({ catalogArtistId, artistName });
+  const query = useArtistDiscography({ catalogArtistId, artistName });
+  const { data, isLoading } = query;
 
   const groups: DiscographyGroup[] = (data?.groups ?? []).map((group) => ({
     recordType: group.recordType,
@@ -65,6 +66,7 @@ function ArtistDiscographyWidgetComponent({
     <DetailSection
       title={t("sections.discography")}
       isLoading={isLoading}
+      errorMessage={failedToLoad(query) ? t("loadFailed") : null}
       skeletonHeight="h-56"
       count={visibleGroups.length > 0 ? totalCount : undefined}
       inlineSlot={inlineSlot}

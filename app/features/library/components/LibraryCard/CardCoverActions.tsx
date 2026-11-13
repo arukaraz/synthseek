@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { cardCoverAction, cardCoverActions, cardCoverScrim } from "./styles";
 import type { CardCoverActionsProps } from "./types";
 
-export function CardCoverActions({ name, order, onPlay, menu }: CardCoverActionsProps) {
+export function CardCoverActions({ name, order, onPlay }: CardCoverActionsProps) {
   const { t } = useTranslation(["library", "contentDetail"]);
   const [starting, setStarting] = useState(false);
 
@@ -30,7 +30,7 @@ export function CardCoverActions({ name, order, onPlay, menu }: CardCoverActions
       <span aria-hidden className={cardCoverScrim()} />
       <button
         type="button"
-        className={cardCoverAction({ tone: "play" })}
+        className={cardCoverAction()}
         onClick={handlePlay}
         disabled={starting}
         aria-label={
@@ -39,7 +39,6 @@ export function CardCoverActions({ name, order, onPlay, menu }: CardCoverActions
       >
         {order === "shuffled" ? <Shuffle className="size-5" /> : <Play className="size-5 fill-current" />}
       </button>
-      {menu}
     </div>
   );
 }

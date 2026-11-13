@@ -108,6 +108,8 @@ function playlistDetail(overrides?: Partial<Record<string, unknown>>) {
       origin: { kind: "created" },
       syncEnabled: false,
       visibility: "shared",
+      canManage: true,
+      ownedByViewer: true,
       totalTracks: 2,
       libraryTrackCount: 1,
       requestedTrackCount: 2,
@@ -434,8 +436,32 @@ describe("PlaylistDetailBody editing", () => {
       <PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} showInLibraryPill />
     );
 
-    expect(screen.getByRole("button", { name: new RegExp(enContentDetail.requestMissing) })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: new RegExp(enContentDetail.requestMissing) })).toBeEnabled();
     expect(screen.queryByRole("img", { name: "Already in library" })).not.toBeInTheDocument();
+  });
+
+  it.each([
+    { who: "a member who only sees it", canManage: false },
+    { who: "an admin who manages it", canManage: true },
+  ])("locks the request for $who, since requesting would take the playlist from its owner", ({ canManage }) => {
+    const [complete, downloading] = playlistDetail().data.tracks;
+    usePlaylistDetailMock.mockReturnValue(
+      playlistDetail({
+        canManage,
+        ownedByViewer: false,
+        totalTracks: 3,
+        tracks: [
+          complete,
+          downloading,
+          { ...complete, externalId: "t3", title: "Third", requestId: "r3", status: "cancelled", inLibrary: false },
+        ],
+      })
+    );
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+
+    const request = screen.getByRole("button", { name: new RegExp(enContentDetail.requestMissing) });
+    expect(request).toBeDisabled();
+    expect(screen.getByTitle(enContentDetail.requestOwnerOnly)).toContainElement(request);
   });
 
   it("confirms before removing the selected tracks in bulk", async () => {
@@ -545,6 +571,39 @@ describe("PlaylistDetailBody editing", () => {
 
     const descTitles = screen.getAllByText(/Apple|Banana/).map((node) => node.textContent);
     expect(descTitles).toEqual(["Banana", "Apple"]);
+  });
+
+  it("draws no playlist menu and no selection for a playlist the viewer cannot manage", () => {
+    usePlaylistDetailMock.mockReturnValue(playlistDetail({ canManage: false }));
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+
+    expect(screen.getByText("First")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Playlist actions for Road Trip" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("checkbox", { name: "Select all" })).not.toBeInTheDocument();
+  });
+});
+
+describe("PlaylistDetailBody failed load", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("says the playlist could not be loaded instead of loading forever, and offers nothing to act on", () => {
+    usePlaylistDetailMock.mockReturnValue({ data: undefined, isError: true });
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+
+    expect(screen.getByRole("alert")).toHaveTextContent(enContentDetail.loadFailed);
+    expect(screen.queryByRole("button", { name: /Request/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Play everything we have of/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Shuffle everything we have of/ })).not.toBeInTheDocument();
+  });
+
+  it("keeps showing a playlist it already has when a later refresh fails", () => {
+    usePlaylistDetailMock.mockReturnValue({ ...playlistDetail(), isError: true });
+    renderWithProviders(<PlaylistDetailBody target={libraryTarget()} onClose={vi.fn()} onNavigate={vi.fn()} />);
+
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByText("First")).toBeInTheDocument();
   });
 });
 

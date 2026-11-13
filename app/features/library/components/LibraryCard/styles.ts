@@ -78,16 +78,7 @@ export const cardCoverActions = cva(
 export const cardCoverScrim = cva("absolute inset-0 -z-1 bg-black/45");
 
 export const cardCoverAction = cva(
-  "focus-visible:ring-primary-400 pointer-events-auto grid size-10 place-items-center rounded-full backdrop-blur-sm transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60",
-  {
-    variants: {
-      tone: {
-        play: "bg-primary-500 text-primary-foreground",
-        neutral: "bg-black/60 text-white",
-      },
-    },
-    defaultVariants: { tone: "neutral" },
-  }
+  "focus-visible:ring-primary-400 bg-primary-500 text-primary-foreground pointer-events-auto grid size-10 place-items-center rounded-full backdrop-blur-sm transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
 );
 
 export const cardKebab = cva(

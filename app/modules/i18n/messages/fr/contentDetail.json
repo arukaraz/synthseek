@@ -15,6 +15,7 @@
   "close": "Fermer",
   "request": "Demander",
   "requestMissing": "Demander les manquantes",
+  "requestOwnerOnly": "Seul le propriétaire de la playlist peut demander ses pistes manquantes",
   "retryTrack": "Réessayer {{title}}",
   "selectTrack": "Sélectionner {{title}}",
   "selection": {
@@ -114,6 +115,7 @@
   "trackPlays_one": "{{plays}} écoute",
   "trackPlays_other": "{{plays}} écoutes",
   "libraryTrackCount": "{{count}} / {{total}}",
+  "loadFailed": "Le chargement a échoué. Fermez et réessayez.",
   "empty": {
     "topTracks": "Aucune piste populaire disponible.",
     "discography": "Aucune sortie disponible.",

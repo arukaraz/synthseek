@@ -15,6 +15,7 @@
   "close": "Schließen",
   "request": "Anfordern",
   "requestMissing": "Fehlende anfordern",
+  "requestOwnerOnly": "Nur der Besitzer der Playlist kann ihre fehlenden Titel anfordern",
   "retryTrack": "{{title}} erneut versuchen",
   "selectTrack": "{{title}} auswählen",
   "selection": {
@@ -114,6 +115,7 @@
   "trackPlays_one": "{{plays}} Wiedergabe",
   "trackPlays_other": "{{plays}} Wiedergaben",
   "libraryTrackCount": "{{count}} / {{total}}",
+  "loadFailed": "Das konnte nicht geladen werden. Schließe es und versuche es erneut.",
   "empty": {
     "topTracks": "Keine Top-Titel verfügbar.",
     "discography": "Keine Veröffentlichungen verfügbar.",

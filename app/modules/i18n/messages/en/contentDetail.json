@@ -15,6 +15,7 @@
   "close": "Close",
   "request": "Request",
   "requestMissing": "Request missing",
+  "requestOwnerOnly": "Only the playlist's owner can request its missing tracks",
   "retryTrack": "Retry {{title}}",
   "selectTrack": "Select {{title}}",
   "selection": {
@@ -114,6 +115,7 @@
   "trackPlays_one": "{{plays}} play",
   "trackPlays_other": "{{plays}} plays",
   "libraryTrackCount": "{{count}} / {{total}}",
+  "loadFailed": "This could not be loaded. Close it and try again.",
   "empty": {
     "topTracks": "No top tracks available.",
     "discography": "No releases available.",

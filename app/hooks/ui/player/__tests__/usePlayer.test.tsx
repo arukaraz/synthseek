@@ -318,6 +318,7 @@ function listener(overrides: Partial<ListeningNowRow> = {}): ListeningNowRow {
     playedAt: new Date(1_000),
     client: null,
     playing: true,
+    remainingMs: 60_000,
     ...overrides,
   };
 }

@@ -234,3 +234,13 @@ describe("isDuplicate ReleaseProgress", () => {
     expect(isDuplicate(releaseProgress(10), cache)).toBe(true);
   });
 });
+
+describe("isDuplicate ListeningNowUpdate", () => {
+  it("lets every announcement through, since the server's trailing one carries the last change", () => {
+    const cache = new Map<string, number>();
+    const event: SubscriptionEvent = { eventType: SubscriptionEventType.ListeningNowUpdate };
+
+    expect(isDuplicate(event, cache)).toBe(false);
+    expect(isDuplicate(event, cache)).toBe(false);
+  });
+});

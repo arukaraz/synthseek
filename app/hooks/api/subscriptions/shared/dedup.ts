@@ -31,6 +31,8 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.deviceId}:${event.issuedAt}:${event.playing}:${event.track?.id ?? ""}:${event.positionSeconds}`;
     case SubscriptionEventType.UserActivity:
       return `${event.eventType}:${event.subject}`;
+    case SubscriptionEventType.ListeningNowUpdate:
+      return event.eventType;
     case SubscriptionEventType.ReleaseProgress:
       return `${event.eventType}:${event.userId}:${event.source}:${event.releaseKey}:${event.release?.state ?? "gone"}:${event.release?.percent ?? ""}:${event.release?.title ?? ""}:${event.release?.etaMinutes === null ? "no-eta" : "eta"}:${event.release?.trackRequestIds.join(",") ?? ""}`;
     case SubscriptionEventType.DropImportUpdate:
@@ -40,6 +42,7 @@ function eventKey(event: SubscriptionEvent): string {
 
 export function isDuplicate(event: SubscriptionEvent, cache: Map<string, number>): boolean {
   if (event.eventType === SubscriptionEventType.UserActivity) return false;
+  if (event.eventType === SubscriptionEventType.ListeningNowUpdate) return false;
 
   const key = eventKey(event);
   const lastTimestamp = cache.get(key);

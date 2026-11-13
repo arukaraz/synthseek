@@ -99,9 +99,7 @@ export function AlbumCard({
           <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
-        {onPlay && chrome === "overlay" ? (
-          <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} menu={menu} />
-        ) : null}
+        {onPlay && chrome === "overlay" ? <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} /> : null}
         {onPlay && chrome === "corner" && !selecting ? (
           <CardPlayButton name={item.name} order="inOrder" onPlay={onPlay} placement="corner" />
         ) : null}
@@ -134,7 +132,7 @@ export function AlbumCard({
           <p className={cardSubtitle()}>{item.artist}</p>
           {meta ? <p className={cardMeta()}>{meta}</p> : null}
         </div>
-        {chrome === "corner" && !selecting ? menu : null}
+        {selecting ? null : menu}
       </div>
     </li>
   );

@@ -11,13 +11,14 @@ interface AlbumTrack {
 
 const api = vi.hoisted(() => ({
   album: undefined as Record<string, unknown> | undefined,
+  albumFailed: false,
   stats: undefined as Record<string, unknown> | undefined,
   credits: undefined as Record<string, unknown> | undefined,
   statsArgs: vi.fn(),
 }));
 
 vi.mock("@hooks/api/queries/content-detail", () => ({
-  useAlbumDetail: () => ({ data: api.album }),
+  useAlbumDetail: () => ({ data: api.album, isError: api.albumFailed }),
   useAlbumStats: (args: unknown) => {
     api.statsArgs(args);
     return { data: api.stats };
@@ -122,6 +123,7 @@ function renderBody(overrides: Partial<DetailTarget> = {}) {
 beforeEach(() => {
   vi.clearAllMocks();
   api.album = undefined;
+  api.albumFailed = false;
   api.stats = undefined;
   api.credits = undefined;
   hero.props = null;
@@ -135,6 +137,19 @@ describe("what the album page shows", () => {
     expect(screen.getByTestId("credits")).toBeInTheDocument();
     expect(screen.getByTestId("stats-about")).toBeInTheDocument();
     expect(screen.getByTestId("more-from-artist")).toBeInTheDocument();
+  });
+
+  it("offers a request while the album loads and after it loaded, and none once the load failed", () => {
+    renderBody();
+    expect(hero.props?.showRequest).toBe(true);
+
+    api.albumFailed = true;
+    renderBody();
+    expect(hero.props?.showRequest).toBe(false);
+
+    api.album = albumWith([]);
+    renderBody();
+    expect(hero.props?.showRequest).toBe(true);
   });
 
   it("uses the name the caller already had before the album has been fetched", () => {

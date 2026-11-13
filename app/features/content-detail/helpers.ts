@@ -241,6 +241,10 @@ export function playlistLibraryTarget(args: { id: string; name: string; cover: s
   };
 }
 
+export function failedToLoad(query: { isError: boolean; data: unknown }): boolean {
+  return query.isError && query.data === undefined;
+}
+
 export function showsInLibraryPill(pathname: string): boolean {
   return pathname === DISCOVER_ROUTE || pathname.startsWith(SEARCH_ROUTE);
 }

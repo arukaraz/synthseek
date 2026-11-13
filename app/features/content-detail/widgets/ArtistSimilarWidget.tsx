@@ -9,14 +9,15 @@ import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { RAIL_SCROLL_STEP } from "../components/MoreFromArtist/constants";
 import { SimilarArtists } from "../components/SimilarArtists";
 import type { SimilarArtistEntry } from "../components/SimilarArtists/types";
-import { artistTarget } from "../helpers";
+import { artistTarget, failedToLoad } from "../helpers";
 import { railNav } from "../styles";
 import type { ArtistSimilarWidgetProps } from "../types";
 
 function ArtistSimilarWidgetComponent({ artistName, onSelectArtist }: ArtistSimilarWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const { data, isLoading } = useArtistSimilar({ artistName });
+  const query = useArtistSimilar({ artistName });
+  const { data, isLoading } = query;
 
   const artists = data ?? [];
 
@@ -45,6 +46,7 @@ function ArtistSimilarWidgetComponent({ artistName, onSelectArtist }: ArtistSimi
     <DetailSection
       title={t("sections.similar")}
       isLoading={isLoading}
+      errorMessage={failedToLoad(query) ? t("loadFailed") : null}
       skeletonHeight="h-32"
       count={artists.length > 0 ? artists.length : undefined}
       trailingSlot={trailingSlot}

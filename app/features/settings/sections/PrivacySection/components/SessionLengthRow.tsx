@@ -5,17 +5,11 @@ import { useTranslation } from "react-i18next";
 
 import { InfoTooltip } from "@components/ui/InfoTooltip";
 import { SelectMenu } from "@components/ui/SelectMenu";
-import { useSetPrivateSessionMinutes } from "@hooks/api";
+import { usePrivacyOverview, useSetPrivateSessionMinutes } from "@hooks/api";
 
 import { EngineRow } from "../../../components/EngineRow";
 import { SettingsNumberInput } from "../../../components/SettingsNumberInput";
-import {
-  SESSION_CUSTOM_MAX_MINUTES,
-  SESSION_CUSTOM_MIN_MINUTES,
-  SESSION_CUSTOM_START_MINUTES,
-  SESSION_LENGTH_KEYS,
-  SESSION_LENGTH_ORDER,
-} from "../constants";
+import { SESSION_LENGTH_KEYS, SESSION_LENGTH_ORDER } from "../constants";
 import { minutesOfChoice, sessionLengthChoice } from "../helpers";
 import { privacyControl, sessionMinutes, sessionSelect } from "../styles";
 import type { PrivacyCardProps, SessionLengthChoice } from "../types";
@@ -23,6 +17,7 @@ import type { PrivacyCardProps, SessionLengthChoice } from "../types";
 export function SessionLengthRow({ user }: PrivacyCardProps) {
   const { t } = useTranslation("settings");
   const update = useSetPrivateSessionMinutes();
+  const bounds = usePrivacyOverview().data?.sessionMinutes;
   const [custom, setCustom] = useState(false);
   const choice = sessionLengthChoice(user.privateSessionMinutes, custom);
 
@@ -30,7 +25,7 @@ export function SessionLengthRow({ user }: PrivacyCardProps) {
     const minutes = minutesOfChoice(next);
     setCustom(next === "custom");
     if (minutes !== undefined) update.mutate({ minutes });
-    else if (user.privateSessionMinutes === null) update.mutate({ minutes: SESSION_CUSTOM_START_MINUTES });
+    else if (user.privateSessionMinutes === null && bounds) update.mutate({ minutes: bounds.customStart });
   };
 
   return (
@@ -40,17 +35,17 @@ export function SessionLengthRow({ user }: PrivacyCardProps) {
       labelTrailing={<InfoTooltip description={t("privacy.sessionLength.description")} />}
       control={
         <div className={privacyControl()}>
-          {choice === "custom" && user.privateSessionMinutes !== null ? (
+          {choice === "custom" && user.privateSessionMinutes !== null && bounds ? (
             <SettingsNumberInput
               value={user.privateSessionMinutes}
-              min={SESSION_CUSTOM_MIN_MINUTES}
-              max={SESSION_CUSTOM_MAX_MINUTES}
+              min={bounds.min}
+              max={bounds.max}
               step={1}
               suffix={t("privacy.sessionLength.minutes")}
               ariaLabel={t("privacy.sessionLength.custom")}
               className={sessionMinutes()}
               onChange={(minutes) => {
-                if (minutes >= SESSION_CUSTOM_MIN_MINUTES && minutes <= SESSION_CUSTOM_MAX_MINUTES) {
+                if (minutes >= bounds.min && minutes <= bounds.max) {
                   update.mutate({ minutes: Math.round(minutes) });
                 }
               }}
@@ -59,6 +54,7 @@ export function SessionLengthRow({ user }: PrivacyCardProps) {
           <div className={sessionSelect()}>
             <SelectMenu
               value={choice}
+              disabled={!bounds}
               options={SESSION_LENGTH_ORDER.map((value) => ({ value, label: t(SESSION_LENGTH_KEYS[value]) }))}
               onChange={choose}
               ariaLabel={t("privacy.sessionLength.label")}

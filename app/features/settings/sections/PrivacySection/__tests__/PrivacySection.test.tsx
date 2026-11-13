@@ -59,6 +59,7 @@ function overview(overrides: Partial<PrivacyOverview["server"]> = {}): PrivacyOv
   return {
     server: { membersSeeRequests: true, defaultPlaylistVisibility: "shared", nowPlayingEnabled: true, ...overrides },
     history: { hour: 1, day: 4, week: 9, all: 120 },
+    sessionMinutes: { min: 1, max: 1440, customStart: 360 },
   };
 }
 
@@ -306,6 +307,29 @@ describe("Private session length row", () => {
     await userEvent.click(await screen.findByRole("menuitemradio", { name: copy.sessionLength.options.custom }));
 
     expect(state.setMinutes).toHaveBeenCalledWith({ minutes: 360 });
+  });
+
+  it("takes the starting length and the bounds from the server, not from a copy of them", async () => {
+    state.user = createMockUser({ privateSessionMinutes: null });
+    state.overview = { ...overview(), sessionMinutes: { min: 5, max: 90, customStart: 45 } };
+    const view = render(<PrivacySection />);
+
+    await userEvent.click(lengthMenu());
+    await userEvent.click(await screen.findByRole("menuitemradio", { name: copy.sessionLength.options.custom }));
+    expect(state.setMinutes).toHaveBeenCalledWith({ minutes: 45 });
+
+    state.user = createMockUser({ privateSessionMinutes: 45 });
+    view.rerender(<PrivacySection />);
+    const field = screen.getByLabelText(copy.sessionLength.custom);
+    expect(field).toHaveAttribute("min", "5");
+    expect(field).toHaveAttribute("max", "90");
+  });
+
+  it("waits for the server's bounds before letting the length change", () => {
+    state.overview = undefined;
+    render(<PrivacySection />);
+
+    expect(lengthMenu()).toBeDisabled();
   });
 });
 

@@ -56,7 +56,6 @@ export interface CardCoverActionsProps {
   name: string;
   order: CardPlayOrder;
   onPlay: () => Promise<unknown>;
-  menu?: ReactNode;
 }
 
 export interface CardSelection {
@@ -91,7 +90,6 @@ export interface AlbumCardMenuProps {
   item: LibraryAlbumItem;
   onEnqueue: () => void;
   fileActions: LibraryFileActions;
-  appearance?: CardMenuAppearance;
 }
 
 export interface ArtistCardProps {

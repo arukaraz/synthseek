@@ -21,7 +21,13 @@ import { useTranslation } from "react-i18next";
 
 import { useContentDetailActions } from "../../ContentDetailActionsContext";
 import { EMPTY_GENRES, EMPTY_SOCIALS, EMPTY_TRACKS } from "../../constants";
-import { catalogPlaylistTracks, computeRequestState, deriveTrackStatusCounts, isRemovableTrack } from "../../helpers";
+import {
+  catalogPlaylistTracks,
+  computeRequestState,
+  deriveTrackStatusCounts,
+  failedToLoad,
+  isRemovableTrack,
+} from "../../helpers";
 import { DetailHero, PlaylistSyncToggle } from "../DetailHero";
 import { DetailEmpty, DetailSection } from "../DetailSection";
 import { Tracklist } from "../Tracklist";
@@ -48,11 +54,13 @@ function PlaylistDetailBodyComponent({
   const isLibrary = source === "library";
   const isCatalog = source === "catalog";
 
-  const { data: playlist } = usePlaylistDetail({ playlistId: target.id, enabled: isLibrary });
-  const { data: catalogContent, isLoading: isCatalogLoading } = useCatalogPlaylistTracks({
-    playlistId: target.id,
-    enabled: isCatalog,
-  });
+  const playlistQuery = usePlaylistDetail({ playlistId: target.id, enabled: isLibrary });
+  const { data: playlist } = playlistQuery;
+  const catalogQuery = useCatalogPlaylistTracks({ playlistId: target.id, enabled: isCatalog });
+  const { data: catalogContent, isLoading: isCatalogLoading } = catalogQuery;
+  const loadFailed = failedToLoad(isLibrary ? playlistQuery : catalogQuery);
+  const canManage = isLibrary && playlist?.canManage === true;
+  const requestLocked = isLibrary && playlist?.ownedByViewer === false;
   const { requestPlaylist } = useContentDetailActions();
   const { play, shuffle } = useDetailPlayback(onClose);
   const handlePlay = useCallback(() => play({ kind: "playlist", playlistId: target.id }), [play, target.id]);
@@ -108,7 +116,7 @@ function PlaylistDetailBodyComponent({
 
   const syncEnabled = playlist?.syncEnabled ?? false;
   const isImported = sourceProvider != null;
-  const canEdit = isLibrary && !!playlist && (sourceProvider == null || !syncEnabled);
+  const canEdit = canManage && (sourceProvider == null || !syncEnabled);
   const playlistName = isLibrary && playlist ? playlist.name : target.name;
 
   const handleSaveName = useCallback(
@@ -122,7 +130,7 @@ function PlaylistDetailBodyComponent({
 
   const requestWith = useCallback(
     (intent: RequestIntent) => {
-      if (target.requestDisabled) return;
+      if (target.requestDisabled || requestLocked) return;
       if (isLibrary && !playlist) return;
       requestPlaylist(
         {
@@ -135,7 +143,17 @@ function PlaylistDetailBodyComponent({
         intent
       );
     },
-    [requestPlaylist, target.requestDisabled, target.id, target.name, isLibrary, playlist, heroCover, displayTracks]
+    [
+      requestPlaylist,
+      target.requestDisabled,
+      requestLocked,
+      target.id,
+      target.name,
+      isLibrary,
+      playlist,
+      heroCover,
+      displayTracks,
+    ]
   );
   const handleRequest = useCallback(() => requestWith("direct"), [requestWith]);
   const handleCustomizeRequest = useCallback(() => requestWith("customize"), [requestWith]);
@@ -210,7 +228,7 @@ function PlaylistDetailBodyComponent({
   const removeDialogTitle = tLibrary("playlists.removeDialog.title", { count: selection.selectedCount });
 
   const playlistControls =
-    isLibrary && playlist
+    canManage && playlist
       ? {
           canEdit,
           onRename: rename.start,
@@ -254,10 +272,11 @@ function PlaylistDetailBodyComponent({
         showInLibraryPill={showInLibraryPill}
         onRequest={handleRequest}
         onCustomizeRequest={handleCustomizeRequest}
-        onPlay={isLibrary ? handlePlay : undefined}
-        onShuffle={isLibrary ? handleShuffle : undefined}
-        requestDisabled={target.requestDisabled}
-        requestDisabledTooltip={target.requestDisabledTooltip}
+        showRequest={!loadFailed}
+        onPlay={isLibrary && !loadFailed ? handlePlay : undefined}
+        onShuffle={isLibrary && !loadFailed ? handleShuffle : undefined}
+        requestDisabled={target.requestDisabled || requestLocked}
+        requestDisabledTooltip={requestLocked ? t("requestOwnerOnly") : target.requestDisabledTooltip}
         socials={EMPTY_SOCIALS}
         playlistControls={playlistControls}
       />
@@ -267,6 +286,7 @@ function PlaylistDetailBodyComponent({
           <DetailSection
             title={t("sections.tracklist")}
             isLoading={isLibrary ? !playlist : isCatalog ? isCatalogLoading : false}
+            errorMessage={loadFailed ? t("loadFailed") : null}
             skeletonHeight="h-72"
             count={tracklistCount}
             trailingSlot={
@@ -320,7 +340,7 @@ function PlaylistDetailBodyComponent({
         </div>
       </div>
 
-      {isLibrary && playlist ? (
+      {canManage ? (
         <>
           <ConfirmationModal
             isOpen={confirmRemoveOpen}

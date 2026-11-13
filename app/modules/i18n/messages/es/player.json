@@ -255,7 +255,7 @@
     "title": "Escuchando ahora",
     "close": "Cerrar Escuchando ahora",
     "empty": "Nadie más está escuchando en este momento.",
-    "earlier": "ANTES",
+    "earlier": "ÚLTIMA ACTIVIDAD",
     "nobody": "Nadie",
     "started": "{{name}} empezó a escuchar",
     "live_one": "{{count}} escuchando",

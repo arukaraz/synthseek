@@ -255,7 +255,7 @@
     "title": "Listening now",
     "close": "Close Listening now",
     "empty": "Nobody else is listening right now.",
-    "earlier": "EARLIER",
+    "earlier": "LATEST ACTIVITY",
     "nobody": "Nobody",
     "started": "{{name}} started listening",
     "live_one": "{{count}} listening",

@@ -255,7 +255,7 @@
     "title": "Hören gerade",
     "close": "Hören gerade schließen",
     "empty": "Gerade hört sonst niemand.",
-    "earlier": "ZUVOR",
+    "earlier": "LETZTE AKTIVITÄT",
     "nobody": "Niemand",
     "started": "{{name}} hört jetzt",
     "live_one": "{{count}} hört",

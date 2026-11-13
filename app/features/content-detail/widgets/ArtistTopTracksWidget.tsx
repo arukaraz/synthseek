@@ -9,13 +9,14 @@ import { DetailEmpty, DetailSection } from "../components/DetailSection";
 import { Tracklist } from "../components/Tracklist";
 import { useContentDetailActions } from "../ContentDetailActionsContext";
 import { EMPTY_TRACKS } from "../constants";
-import { unrequestedTracks } from "../helpers";
+import { failedToLoad, unrequestedTracks } from "../helpers";
 import type { ArtistTopTracksWidgetProps } from "../types";
 
 function ArtistTopTracksWidgetComponent({ artist }: ArtistTopTracksWidgetProps) {
   const { t } = useTranslation("contentDetail");
   const { requestTopTracks } = useContentDetailActions();
-  const { data, isLoading } = useArtistTopTracks({ catalogArtistId: artist.id });
+  const query = useArtistTopTracks({ catalogArtistId: artist.id });
+  const { data, isLoading } = query;
 
   const tracks = data ?? EMPTY_TRACKS;
   const missing = useMemo(() => unrequestedTracks(tracks), [tracks]);
@@ -37,6 +38,7 @@ function ArtistTopTracksWidgetComponent({ artist }: ArtistTopTracksWidgetProps) 
     <DetailSection
       title={t("sections.topTracks")}
       isLoading={isLoading}
+      errorMessage={failedToLoad(query) ? t("loadFailed") : null}
       skeletonHeight="h-64"
       trailingSlot={trailingSlot}
     >

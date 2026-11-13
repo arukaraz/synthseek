@@ -1,5 +1,6 @@
 "use client";
 
+import { Notice } from "@components/ui/Notice";
 import { cn } from "@utils/cn";
 
 import {
@@ -22,7 +23,17 @@ export function DetailSection({
   inlineSlot,
   trailingSlot,
   children,
+  errorMessage,
 }: DetailSectionProps) {
+  if (errorMessage) {
+    return (
+      <section className={sectionRoot()}>
+        <h3 className={sectionTitle()}>{title}</h3>
+        <Notice variant="danger" title={errorMessage} />
+      </section>
+    );
+  }
+
   if (isLoading) {
     return (
       <section className={sectionRoot()}>

@@ -77,7 +77,6 @@ export function AlbumsViewMode({ controller, shell, selection, fileActions }: Al
           item={item}
           onEnqueue={() => void enqueueEntity({ kind: "album", albumExternalId: item.external_id })}
           fileActions={fileActions}
-          appearance={chrome === "overlay" ? "cover" : "inline"}
         />
       );
       const cardSelection: CardSelection | undefined = selectable

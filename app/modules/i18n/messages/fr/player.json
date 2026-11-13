@@ -258,7 +258,7 @@
     "title": "En écoute",
     "close": "Fermer En écoute",
     "empty": "Personne d'autre n'écoute en ce moment.",
-    "earlier": "PLUS TÔT",
+    "earlier": "DERNIÈRE ACTIVITÉ",
     "nobody": "Personne",
     "started": "{{name}} a commencé à écouter",
     "live_one": "{{count}} en écoute",

@@ -41,6 +41,7 @@ export interface DetailSectionProps {
   inlineSlot?: ReactNode;
   trailingSlot?: ReactNode;
   children?: ReactNode;
+  errorMessage?: string | null;
 }
 
 export interface DetailEmptyProps {

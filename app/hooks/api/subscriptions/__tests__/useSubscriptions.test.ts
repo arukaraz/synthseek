@@ -59,6 +59,7 @@ const utilsStub = vi.hoisted(() => ({
     activeState: { refetch: vi.fn() },
     favoriteTrackIds: { invalidate: vi.fn() },
     scrobble: { connections: { invalidate: vi.fn() } },
+    listeningNow: { invalidate: vi.fn() },
   },
   library: {
     getAlbums: { invalidate: vi.fn() },
@@ -97,6 +98,7 @@ const everyPushFedInvalidate = [
   utilsStub.settings.quarantine.list.invalidate,
   utilsStub.playback.favoriteTrackIds.invalidate,
   utilsStub.playback.scrobble.connections.invalidate,
+  utilsStub.playback.listeningNow.invalidate,
   utilsStub.library.getAlbums.invalidate,
   utilsStub.library.getArtists.invalidate,
   utilsStub.library.getPlaylists.invalidate,
@@ -145,10 +147,16 @@ vi.mock("../handlers/requests", () => ({
   handleTrackUpdate: vi.fn(),
 }));
 
-vi.mock("../handlers/system", () => ({
-  handleSettingsUpdate: vi.fn(),
-  handleVersionUpdate: vi.fn(),
-}));
+vi.mock("../handlers/system", async () => {
+  const actual = await vi.importActual<typeof import("../handlers/system/listeningNowUpdate")>(
+    "../handlers/system/listeningNowUpdate"
+  );
+  return {
+    handleSettingsUpdate: vi.fn(),
+    handleVersionUpdate: vi.fn(),
+    handleListeningNowUpdate: actual.handleListeningNowUpdate,
+  };
+});
 
 const plexEvent: PlaylistSyncAllProgressPayload = {
   eventType: SubscriptionEventType.PlaylistSyncAllProgress,
@@ -282,6 +290,15 @@ describe("useSubscriptions", () => {
     });
 
     expect(utilsStub.requests.keptReleases.invalidate).toHaveBeenCalledTimes(1);
+  });
+
+  it("refetches who is listening on every Listening now event, the trailing one included", () => {
+    renderHookWithProviders(() => useSubscriptions());
+
+    captured.onData?.({ eventType: SubscriptionEventType.ListeningNowUpdate });
+    captured.onData?.({ eventType: SubscriptionEventType.ListeningNowUpdate });
+
+    expect(utilsStub.playback.listeningNow.invalidate).toHaveBeenCalledTimes(2);
   });
 
   it("resyncs again on every further reconnect, not only the first one", () => {
