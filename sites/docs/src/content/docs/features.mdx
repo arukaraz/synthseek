@@ -38,14 +38,14 @@ Your request preset is set under **Settings**, then **Account**. Without one, yo
 
 Requests are grouped by album and playlist, with a sidebar of groups and a detail panel for the selected one. The list is ordered by most recent activity, so anything you just asked for, or that just changed, is at the top. Each row shows when it was requested and when it last moved. You can filter it by status or by download source. The track table shows where each track came from, with a link to its licence when it has one.
 
-From here you can retry a failed track, retry a whole group, cancel anything in flight, delete a request, prioritise it, or pause it.
+From here you can retry a failed track, retry a whole group, cancel anything in flight, delete a request, prioritise it, or pause it. Cancelling or pausing a playlist leaves alone a track that another playlist is still waiting for.
 
 ## The download queue
 
 Downloads are worked through album by album and playlist by playlist, in the order you asked, so albums finish one after another instead of five arriving half done. An album from Usenet or torrent downloads alongside, without holding the rest up.
 
 - **Jump the queue.** Move any track, album, or playlist to the front from its actions menu. A badge shows it took effect. Retried tracks are prioritised automatically.
-- **Pause and resume.** Pause an individual album or playlist, or the entire queue, from the toolbar. A paused album or playlist stays parked until you resume it, including across a restart. Pausing the whole queue lasts until you resume it or the container restarts.
+- **Pause and resume.** Pause an individual album or playlist, or the entire queue, from the toolbar. A paused album or playlist stays parked until you resume it, including across a restart, except a track another playlist is still waiting for, which keeps downloading. Pausing the whole queue lasts until you resume it or the container restarts.
 - **Restart recovery.** If Synthseek restarts mid-queue, it rebuilds the queue from the database on boot and picks up where it left off. Paused work stays paused, and work already handed to Lidarr is left alone.
 
 ## Verified imports
