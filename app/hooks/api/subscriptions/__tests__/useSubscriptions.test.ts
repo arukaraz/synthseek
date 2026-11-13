@@ -10,7 +10,7 @@ import {
 import { renderHookWithProviders } from "@test/test-utils";
 
 import { useSubscriptions } from "../useSubscriptions";
-import { resetRequestListInvalidation } from "../shared/requestListInvalidation";
+import { resetThrottledInvalidations } from "../shared/throttledInvalidation";
 
 const auth = vi.hoisted(() => ({ currentUser: null as { id: string } | null }));
 
@@ -59,7 +59,7 @@ const utilsStub = vi.hoisted(() => ({
     activeState: { refetch: vi.fn() },
     favoriteTrackIds: { invalidate: vi.fn() },
     scrobble: { connections: { invalidate: vi.fn() } },
-    listeningNow: { invalidate: vi.fn() },
+    listeningNow: { invalidate: vi.fn(), setData: vi.fn() },
   },
   library: {
     getAlbums: { invalidate: vi.fn() },
@@ -195,7 +195,7 @@ function emitAll(): void {
 }
 
 beforeEach(() => {
-  resetRequestListInvalidation();
+  resetThrottledInvalidations();
   auth.currentUser = null;
   captured.onData = null;
   captured.onStarted = null;
@@ -203,6 +203,7 @@ beforeEach(() => {
   handlers.portability.mockReset();
   handlers.libraryImport.mockReset();
   for (const invalidate of everyPushFedInvalidate) invalidate.mockReset();
+  utilsStub.playback.listeningNow.setData.mockReset();
 });
 
 describe("useSubscriptions", () => {
@@ -279,6 +280,34 @@ describe("useSubscriptions", () => {
     expect(handlers.releaseProgress).toHaveBeenCalledWith(event, expect.anything());
   });
 
+  it("refreshes the library once when an album's tracks complete in a run, and once more when the run ends", () => {
+    vi.useFakeTimers();
+    try {
+      renderHookWithProviders(() => useSubscriptions());
+
+      for (let track = 0; track < 20; track++) {
+        captured.onData?.({
+          eventType: SubscriptionEventType.TrackUpdate,
+          requestId: `req_${track}`,
+          status: "complete",
+          message: "done",
+        });
+      }
+
+      expect(utilsStub.library.getTracks.invalidate).toHaveBeenCalledTimes(1);
+      expect(utilsStub.requests.getLibrarySummary.invalidate).toHaveBeenCalledTimes(1);
+      expect(utilsStub.requests.keptReleases.invalidate).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(1000);
+
+      expect(utilsStub.library.getTracks.invalidate).toHaveBeenCalledTimes(2);
+      expect(utilsStub.requests.getLibrarySummary.invalidate).toHaveBeenCalledTimes(2);
+      expect(utilsStub.requests.keptReleases.invalidate).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("refreshes what a request keeps on disk once one of its tracks completes", () => {
     renderHookWithProviders(() => useSubscriptions());
 
@@ -292,13 +321,42 @@ describe("useSubscriptions", () => {
     expect(utilsStub.requests.keptReleases.invalidate).toHaveBeenCalledTimes(1);
   });
 
-  it("refetches who is listening on every Listening now event, the trailing one included", () => {
+  it("writes who is listening from every Listening now event, without the viewer and without asking the server", () => {
+    auth.currentUser = { id: "u_self" };
+    renderHookWithProviders(() => useSubscriptions());
+    const member = (userId: string) => ({
+      userId,
+      username: userId,
+      avatarUrl: null,
+      trackId: "t1",
+      title: "Airbag",
+      artist: "Radiohead",
+      album: "OK Computer",
+      artworkUrl: null,
+      playedAt: new Date(1_000),
+      client: null,
+      playing: true,
+    });
+
+    captured.onData?.({
+      eventType: SubscriptionEventType.ListeningNowUpdate,
+      members: [member("u_self"), member("u_ana")],
+    });
+    captured.onData?.({ eventType: SubscriptionEventType.ListeningNowUpdate, members: [member("u_self")] });
+
+    expect(utilsStub.playback.listeningNow.setData).toHaveBeenCalledTimes(2);
+    expect(utilsStub.playback.listeningNow.setData).toHaveBeenNthCalledWith(1, undefined, [member("u_ana")]);
+    expect(utilsStub.playback.listeningNow.setData).toHaveBeenNthCalledWith(2, undefined, []);
+    expect(utilsStub.playback.listeningNow.invalidate).not.toHaveBeenCalled();
+  });
+
+  it("asks the server instead when it cannot tell which roster row is the viewer's own", () => {
     renderHookWithProviders(() => useSubscriptions());
 
-    captured.onData?.({ eventType: SubscriptionEventType.ListeningNowUpdate });
-    captured.onData?.({ eventType: SubscriptionEventType.ListeningNowUpdate });
+    captured.onData?.({ eventType: SubscriptionEventType.ListeningNowUpdate, members: [] });
 
-    expect(utilsStub.playback.listeningNow.invalidate).toHaveBeenCalledTimes(2);
+    expect(utilsStub.playback.listeningNow.setData).not.toHaveBeenCalled();
+    expect(utilsStub.playback.listeningNow.invalidate).toHaveBeenCalledTimes(1);
   });
 
   it("resyncs again on every further reconnect, not only the first one", () => {

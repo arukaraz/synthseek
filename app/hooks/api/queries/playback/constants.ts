@@ -1,3 +1,1 @@
 export const FAVORITE_STALE_TIME = 60_000;
-
-export const LISTENING_NOW_END_MARGIN_MS = 1_000;

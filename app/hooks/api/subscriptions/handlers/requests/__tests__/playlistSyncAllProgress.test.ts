@@ -7,7 +7,7 @@ import { handlePlaylistSyncAllProgress } from "../playlistSyncAllProgress";
 import { subscribePlaylistSyncAll, type PlaylistSyncAllUpdate } from "../../../shared/playlistSyncAll";
 import { dismissDockJob, resetDockStore, seedPlaylistSyncDockJob, useDockJobs } from "../../../shared/progressDock";
 import type { DockJob } from "../../../shared/progressDock";
-import { resetRequestListInvalidation } from "../../../shared/requestListInvalidation";
+import { resetThrottledInvalidations } from "../../../shared/throttledInvalidation";
 
 const spies = vi.hoisted(() => ({
   setData: vi.fn(),
@@ -54,7 +54,7 @@ function syncJob(): DockJob | undefined {
 }
 
 beforeEach(() => {
-  resetRequestListInvalidation();
+  resetThrottledInvalidations();
   spies.setData.mockReset();
   spies.invalidate.mockReset();
   spies.invalidateItems.mockReset();

@@ -1,8 +1,7 @@
-import type { SettingsUpdatePayload } from "@api/__generated__/types";
-import type { trpc } from "@utils/trpc";
+import { throttledInvalidation } from "../../shared/throttledInvalidation";
 
-type TrpcUtils = ReturnType<typeof trpc.useUtils>;
+const settings = throttledInvalidation((utils) => {
+  void utils.settings.get.invalidate();
+});
 
-export function handleSettingsUpdate(_event: SettingsUpdatePayload, utils: TrpcUtils): void {
-  utils.settings.get.invalidate();
-}
+export const handleSettingsUpdate = settings.run;

@@ -58,64 +58,29 @@ describe("isDuplicate PlaylistUpdate", () => {
   });
 });
 
-function dropImportUpdate(
-  overrides: Partial<Extract<SubscriptionEvent, { eventType: SubscriptionEventType.DropImportUpdate }>>
-): SubscriptionEvent {
-  return {
-    eventType: SubscriptionEventType.DropImportUpdate,
-    batchId: "batch-1",
-    status: "processing",
-    totalFiles: 3,
-    importedFiles: 1,
-    alreadyInLibraryFiles: 0,
-    pendingFiles: 0,
-    failedFiles: 0,
-    discardedFiles: 0,
-    ...overrides,
-  };
-}
-
 describe("isDuplicate DropImportUpdate", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it("dedupes two identical batch ticks within the window", () => {
+  it("lets every update through, since each one carries the rows a later one may return to", () => {
     const cache = new Map<string, number>();
+    const event: SubscriptionEvent = {
+      eventType: SubscriptionEventType.DropImportUpdate,
+      batchId: "batch-1",
+      batch: {
+        id: "batch-1",
+        user_id: "u1",
+        status: "processing",
+        total_files: 3,
+        imported_files: 1,
+        already_in_library_files: 0,
+        pending_files: 0,
+        failed_files: 0,
+        discarded_files: 0,
+        created_at: new Date(1_000),
+        updated_at: new Date(2_000),
+      },
+    };
 
-    expect(isDuplicate(dropImportUpdate({}), cache)).toBe(false);
-    vi.advanceTimersByTime(10);
-    expect(isDuplicate(dropImportUpdate({}), cache)).toBe(true);
-  });
-
-  it("keeps events for different files distinct", () => {
-    const cache = new Map<string, number>();
-
-    expect(isDuplicate(dropImportUpdate({ file: { id: "f1", name: "a.mp3", status: "imported" } }), cache)).toBe(false);
-    vi.advanceTimersByTime(10);
-    expect(isDuplicate(dropImportUpdate({ file: { id: "f2", name: "b.mp3", status: "imported" } }), cache)).toBe(false);
-  });
-
-  it("keeps a file status change distinct from the previous status", () => {
-    const cache = new Map<string, number>();
-
-    expect(isDuplicate(dropImportUpdate({ file: { id: "f1", name: "a.mp3", status: "importing" } }), cache)).toBe(
-      false
-    );
-    vi.advanceTimersByTime(10);
-    expect(isDuplicate(dropImportUpdate({ file: { id: "f1", name: "a.mp3", status: "imported" } }), cache)).toBe(false);
-  });
-
-  it("keeps ticks that differ only in the already-in-library count distinct", () => {
-    const cache = new Map<string, number>();
-
-    expect(isDuplicate(dropImportUpdate({ alreadyInLibraryFiles: 1 }), cache)).toBe(false);
-    vi.advanceTimersByTime(10);
-    expect(isDuplicate(dropImportUpdate({ alreadyInLibraryFiles: 2 }), cache)).toBe(false);
+    expect(isDuplicate(event, cache)).toBe(false);
+    expect(isDuplicate(event, cache)).toBe(false);
   });
 });
 
@@ -238,7 +203,7 @@ describe("isDuplicate ReleaseProgress", () => {
 describe("isDuplicate ListeningNowUpdate", () => {
   it("lets every announcement through, since the server's trailing one carries the last change", () => {
     const cache = new Map<string, number>();
-    const event: SubscriptionEvent = { eventType: SubscriptionEventType.ListeningNowUpdate };
+    const event: SubscriptionEvent = { eventType: SubscriptionEventType.ListeningNowUpdate, members: [] };
 
     expect(isDuplicate(event, cache)).toBe(false);
     expect(isDuplicate(event, cache)).toBe(false);

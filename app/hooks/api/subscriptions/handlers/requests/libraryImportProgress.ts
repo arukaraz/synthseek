@@ -2,7 +2,11 @@ import type { LibraryImportProgressPayload } from "@api/__generated__/types";
 import type { trpc } from "@utils/trpc";
 
 import { isForeignJobEvent } from "../../shared/eventOwnership";
-import { invalidateLibraryViews } from "../../shared/libraryInvalidation";
+import {
+  invalidateLibrarySummaryNow,
+  invalidateLibraryViews,
+  invalidateLibraryViewsNow,
+} from "../../shared/libraryInvalidation";
 import { finalizeDockJob, markDockItem } from "../../shared/progressDock";
 import { invalidateRequestList, invalidateRequestListNow } from "../../shared/requestListInvalidation";
 
@@ -26,8 +30,8 @@ export function handleLibraryImportProgress(
 
   if (event.phase === "complete") {
     if (!isForeignImport) finalizeDockJob(event.jobId);
-    void utils.requests.getLibrarySummary.invalidate();
+    invalidateLibrarySummaryNow(utils);
     invalidateRequestListNow(utils);
-    invalidateLibraryViews(utils);
+    invalidateLibraryViewsNow(utils);
   }
 }

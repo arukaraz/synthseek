@@ -17,7 +17,7 @@ import {
 } from "../../../shared/progressDock";
 import { renderHook } from "@testing-library/react";
 import { handlePlaylistUpdate } from "../playlistUpdate";
-import { resetRequestListInvalidation } from "../../../shared/requestListInvalidation";
+import { resetThrottledInvalidations } from "../../../shared/throttledInvalidation";
 
 const spies = vi.hoisted(() => ({
   getData: vi.fn(),
@@ -89,7 +89,7 @@ function makeInitialEvent(playlistId: string, totalTracks: number): PlaylistUpda
 
 describe("handlePlaylistUpdate", () => {
   beforeEach(() => {
-    resetRequestListInvalidation();
+    resetThrottledInvalidations();
     spies.getData.mockReset();
     spies.setData.mockReset();
     spies.invalidate.mockReset();

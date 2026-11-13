@@ -6,7 +6,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { trpc } from "@utils/trpc";
 
 import { resyncPushFedQueries } from "../pushFedResync";
-import { resetRequestListInvalidation } from "../requestListInvalidation";
+import { resetThrottledInvalidations } from "../throttledInvalidation";
 
 const recorder = vi.hoisted(() => {
   const invalidated: string[] = [];
@@ -55,7 +55,7 @@ function resyncedQueryPaths(): string[] {
 }
 
 beforeEach(() => {
-  resetRequestListInvalidation();
+  resetThrottledInvalidations();
   recorder.invalidated.length = 0;
 });
 

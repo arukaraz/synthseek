@@ -1,10 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-  invalidateRequestList,
-  invalidateRequestListNow,
-  resetRequestListInvalidation,
-} from "../requestListInvalidation";
+import { invalidateRequestList, invalidateRequestListNow } from "../requestListInvalidation";
+import { resetThrottledInvalidations } from "../throttledInvalidation";
 
 const invalidateAll = vi.fn();
 const invalidateRecent = vi.fn();
@@ -20,14 +17,14 @@ const utils = {
 
 beforeEach(() => {
   vi.useFakeTimers();
-  resetRequestListInvalidation();
+  resetThrottledInvalidations();
   invalidateAll.mockClear();
   invalidateRecent.mockClear();
   invalidateDetail.mockClear();
 });
 
 afterEach(() => {
-  resetRequestListInvalidation();
+  resetThrottledInvalidations();
   vi.useRealTimers();
 });
 

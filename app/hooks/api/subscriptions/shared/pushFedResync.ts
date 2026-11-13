@@ -1,13 +1,13 @@
 import type { trpc } from "@utils/trpc";
 
-import { invalidateLibraryViews } from "./libraryInvalidation";
+import { invalidateLibrarySummaryNow, invalidateLibraryViewsNow } from "./libraryInvalidation";
 import { invalidateRequestListNow } from "./requestListInvalidation";
 
 type Utils = ReturnType<typeof trpc.useUtils>;
 
 export function resyncPushFedQueries(utils: Utils): void {
   invalidateRequestListNow(utils);
-  void utils.requests.getLibrarySummary.invalidate();
+  invalidateLibrarySummaryNow(utils);
   void utils.requests.activeReleases.invalidate();
   void utils.requests.keptReleases.invalidate();
   void utils.requests.getPlaylistSyncAllItems.invalidate();
@@ -29,5 +29,5 @@ export function resyncPushFedQueries(utils: Utils): void {
   void utils.playback.favoriteTrackIds.invalidate();
   void utils.playback.scrobble.connections.invalidate();
   void utils.playback.listeningNow.invalidate();
-  invalidateLibraryViews(utils);
+  invalidateLibraryViewsNow(utils);
 }

@@ -6,7 +6,7 @@ import { trpc } from "@utils/trpc";
 import { handleLibraryImportProgress } from "../libraryImportProgress";
 import { buildDockItems, resetDockStore, seedDockJob, useDockJobs } from "../../../shared/progressDock";
 import type { DockJob } from "../../../shared/progressDock";
-import { resetRequestListInvalidation } from "../../../shared/requestListInvalidation";
+import { resetThrottledInvalidations } from "../../../shared/throttledInvalidation";
 
 const spies = vi.hoisted(() => ({
   invalidateSummary: vi.fn(),
@@ -78,7 +78,7 @@ function seedLib(): void {
 }
 
 beforeEach(() => {
-  resetRequestListInvalidation();
+  resetThrottledInvalidations();
   spies.invalidateSummary.mockReset();
   spies.invalidateAll.mockReset();
   spies.invalidateAlbums.mockReset();

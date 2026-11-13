@@ -29,7 +29,7 @@ import {
   handleVersionUpdate,
 } from "./handlers/system";
 import { isDuplicate } from "./shared/dedup";
-import { invalidateLibraryViews } from "./shared/libraryInvalidation";
+import { invalidateKeptReleases, invalidateLibrarySummary, invalidateLibraryViews } from "./shared/libraryInvalidation";
 import { resyncPushFedQueries } from "./shared/pushFedResync";
 import { invalidateRequestListNow } from "./shared/requestListInvalidation";
 
@@ -72,11 +72,11 @@ export function useSubscriptions() {
         case SubscriptionEventType.TrackUpdate:
           handleTrackUpdate(event, utils, queryClient);
           if (TERMINAL_STATUSES.has(event.status)) {
-            utils.requests.getLibrarySummary.invalidate();
+            invalidateLibrarySummary(utils);
           }
           if (event.status === RequestStatus.enum.complete) {
             invalidateLibraryViews(utils);
-            void utils.requests.keptReleases.invalidate();
+            invalidateKeptReleases(utils);
           }
           break;
         case SubscriptionEventType.ReleaseProgress:
@@ -98,7 +98,7 @@ export function useSubscriptions() {
           handleVersionUpdate(event);
           break;
         case SubscriptionEventType.SettingsUpdate:
-          handleSettingsUpdate(event, utils);
+          handleSettingsUpdate(utils);
           break;
         case SubscriptionEventType.MaintenanceUpdate:
           handleMaintenanceUpdate(event, utils);
@@ -119,10 +119,10 @@ export function useSubscriptions() {
           applyPlaybackState(event);
           break;
         case SubscriptionEventType.UserActivity:
-          handleUserActivity(event, utils);
+          handleUserActivity(event, utils, queryClient, viewerId);
           break;
         case SubscriptionEventType.ListeningNowUpdate:
-          handleListeningNowUpdate(utils);
+          handleListeningNowUpdate(event, utils, viewerId);
           break;
         default: {
           const _unhandledEventType: never = event;

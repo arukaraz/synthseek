@@ -3,7 +3,17 @@ import { SubscriptionEventType, type SubscriptionEvent } from "@api/__generated_
 const DEDUP_WINDOW_MS = 1000;
 const DEDUP_MAX_ENTRIES = 100;
 
-function eventKey(event: SubscriptionEvent): string {
+type StateCarryingEvent = Extract<
+  SubscriptionEvent,
+  {
+    eventType:
+      | SubscriptionEventType.UserActivity
+      | SubscriptionEventType.ListeningNowUpdate
+      | SubscriptionEventType.DropImportUpdate;
+  }
+>;
+
+function eventKey(event: Exclude<SubscriptionEvent, StateCarryingEvent>): string {
   switch (event.eventType) {
     case SubscriptionEventType.MaintenanceUpdate:
       return `${event.eventType}:${event.surface}`;
@@ -29,20 +39,15 @@ function eventKey(event: SubscriptionEvent): string {
       return `${event.eventType}:${event.deviceId}:${event.issuedAt}:${event.command}`;
     case SubscriptionEventType.PlaybackState:
       return `${event.eventType}:${event.deviceId}:${event.issuedAt}:${event.playing}:${event.track?.id ?? ""}:${event.positionSeconds}`;
-    case SubscriptionEventType.UserActivity:
-      return `${event.eventType}:${event.subject}`;
-    case SubscriptionEventType.ListeningNowUpdate:
-      return event.eventType;
     case SubscriptionEventType.ReleaseProgress:
       return `${event.eventType}:${event.userId}:${event.source}:${event.releaseKey}:${event.release?.state ?? "gone"}:${event.release?.percent ?? ""}:${event.release?.title ?? ""}:${event.release?.etaMinutes === null ? "no-eta" : "eta"}:${event.release?.trackRequestIds.join(",") ?? ""}`;
-    case SubscriptionEventType.DropImportUpdate:
-      return `${event.eventType}:${event.batchId}:${event.status}:${event.importedFiles}:${event.alreadyInLibraryFiles}:${event.pendingFiles}:${event.failedFiles}:${event.discardedFiles}:${event.file?.id ?? ""}:${event.file?.status ?? ""}`;
   }
 }
 
 export function isDuplicate(event: SubscriptionEvent, cache: Map<string, number>): boolean {
   if (event.eventType === SubscriptionEventType.UserActivity) return false;
   if (event.eventType === SubscriptionEventType.ListeningNowUpdate) return false;
+  if (event.eventType === SubscriptionEventType.DropImportUpdate) return false;
 
   const key = eventKey(event);
   const lastTimestamp = cache.get(key);
