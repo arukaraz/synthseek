@@ -9,14 +9,14 @@ interface ThrottleState {
   timer: ReturnType<typeof setTimeout> | null;
 }
 
-export interface ThrottledInvalidation {
-  run: (utils: Utils) => void;
-  runNow: (utils: Utils) => void;
+export interface ThrottledInvalidation<Needs = Utils> {
+  run: (utils: Needs) => void;
+  runNow: (utils: Needs) => void;
 }
 
 const states = new Set<ThrottleState>();
 
-export function throttledInvalidation(refetch: (utils: Utils) => void): ThrottledInvalidation {
+export function throttledInvalidation<Needs = Utils>(refetch: (utils: Needs) => void): ThrottledInvalidation<Needs> {
   const state: ThrottleState = { lastRunAt: 0, timer: null };
   states.add(state);
 

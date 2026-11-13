@@ -10,7 +10,6 @@ vi.mock("@utils/trpc", () => ({ trpc: { playback: { favoriteTrackIds: {} } } }))
 import { handleUserActivity } from "../userActivity";
 
 const invalidateFavorites = vi.fn();
-const invalidateTracks = vi.fn();
 const invalidateConnections = vi.fn();
 
 const utils = {
@@ -18,8 +17,7 @@ const utils = {
     favoriteTrackIds: { invalidate: invalidateFavorites },
     scrobble: { connections: { invalidate: invalidateConnections } },
   },
-  library: { getTracks: { invalidate: invalidateTracks } },
-} as unknown as Parameters<typeof handleUserActivity>[1];
+};
 
 function keyFor(trackIds: string[]) {
   return [FAVORITES_PATH, { input: { trackIds }, type: "query" }];
@@ -53,7 +51,18 @@ describe("handleUserActivity", () => {
     expect(client.getQueryData(keyFor(["t1", "t2"]))).toEqual(["t2", "t1"]);
     expect(client.getQueryData(keyFor(["t9"]))).toEqual(["t9"]);
     expect(invalidateFavorites).not.toHaveBeenCalled();
-    expect(invalidateTracks).not.toHaveBeenCalled();
+  });
+
+  it("rereads an answer whose question it cannot read, instead of leaving it stale", () => {
+    const unreadable = [FAVORITES_PATH, { type: "query" }];
+    client.setQueryData(unreadable, ["t9"]);
+    client.setQueryData(keyFor(["t1"]), []);
+
+    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client, "u1");
+
+    expect(client.getQueryState(unreadable)?.isInvalidated).toBe(true);
+    expect(client.getQueryState(keyFor(["t1"]))?.isInvalidated).toBe(false);
+    expect(client.getQueryData(keyFor(["t1"]))).toEqual(["t1"]);
   });
 
   it("takes the mark off again, and never lists a track twice when it is marked twice", () => {

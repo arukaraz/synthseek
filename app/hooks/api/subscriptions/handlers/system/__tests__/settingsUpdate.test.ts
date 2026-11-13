@@ -5,7 +5,7 @@ import { handleSettingsUpdate } from "../settingsUpdate";
 
 const invalidate = vi.fn();
 
-const utils = { settings: { get: { invalidate } } } as unknown as Parameters<typeof handleSettingsUpdate>[0];
+const utils = { settings: { get: { invalidate } } };
 
 beforeEach(() => {
   vi.useFakeTimers();

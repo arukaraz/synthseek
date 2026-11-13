@@ -1,6 +1,10 @@
 import { throttledInvalidation } from "../../shared/throttledInvalidation";
 
-const settings = throttledInvalidation((utils) => {
+interface SettingsReader {
+  settings: { get: { invalidate: () => unknown } };
+}
+
+const settings = throttledInvalidation<SettingsReader>((utils) => {
   void utils.settings.get.invalidate();
 });
 
