@@ -13,10 +13,10 @@ import { useTranslation } from "react-i18next";
 import type { LibraryMenuAction } from "../../types";
 import { LibraryActionMenu } from "../LibraryActionMenu";
 import { shieldOwnClick } from "./helpers";
-import { cardInlineKebab, cardKebab } from "./styles";
+import { cardInlineKebab } from "./styles";
 import type { PlaylistCardMenuProps } from "./types";
 
-export function PlaylistCardMenu({ item, appearance = "cover" }: PlaylistCardMenuProps) {
+export function PlaylistCardMenu({ item }: PlaylistCardMenuProps) {
   const { t } = useTranslation("library");
   const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -68,7 +68,7 @@ export function PlaylistCardMenu({ item, appearance = "cover" }: PlaylistCardMen
       <LibraryActionMenu
         title={item.name}
         triggerLabel={t("playlists.actions.menu", { name: item.name })}
-        triggerClassName={appearance === "inline" ? cardInlineKebab() : cardKebab()}
+        triggerClassName={cardInlineKebab()}
         actions={actions}
       />
       <RenamePlaylistDialog

@@ -106,6 +106,27 @@ describe("PlaylistCard", () => {
     expect(onOpen).not.toHaveBeenCalled();
   });
 
+  it.each(["overlay", "corner"] as const)(
+    "keeps its menu beside the name and off the cover with the %s chrome",
+    (chrome) => {
+      const { container } = renderWithProviders(
+        <PlaylistCard
+          item={createLibraryPlaylist()}
+          onOpen={vi.fn()}
+          onPlay={vi.fn(async () => undefined)}
+          chrome={chrome}
+        />
+      );
+
+      const cover = container.querySelector("li > div");
+      if (cover === null) throw new Error("no cover");
+      const menu = screen.getByRole("button", { name: /Playlist actions for Road Trip/i });
+
+      expect(cover).not.toContainElement(menu);
+      expect(screen.getByText("Road Trip").closest("div")?.parentElement).toContainElement(menu);
+    }
+  );
+
   it("activates with Enter and Space when interactive", async () => {
     const onOpen = vi.fn();
     const { user } = renderWithProviders(<PlaylistCard item={createLibraryPlaylist()} onOpen={onOpen} />);

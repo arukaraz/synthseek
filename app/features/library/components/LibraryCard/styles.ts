@@ -81,10 +81,6 @@ export const cardCoverAction = cva(
   "focus-visible:ring-primary-400 bg-primary-500 text-primary-foreground pointer-events-auto grid size-10 place-items-center rounded-full backdrop-blur-sm transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60"
 );
 
-export const cardKebab = cva(
-  "absolute top-1.5 right-1.5 z-2 grid size-7 place-items-center rounded-md bg-black/55 text-white backdrop-blur-sm transition-opacity focus-visible:opacity-100 focus-visible:outline-none sm:opacity-0 sm:group-hover:opacity-100 data-[state=open]:opacity-100"
-);
-
 export const cardPlayButton = cva(
   "focus-visible:ring-primary-400 grid size-9 shrink-0 place-items-center rounded-full transition-transform active:scale-95 focus-visible:ring-2 focus-visible:outline-none disabled:opacity-60",
   {

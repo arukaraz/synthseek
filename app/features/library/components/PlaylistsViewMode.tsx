@@ -53,7 +53,7 @@ export function PlaylistsViewMode({ controller, shell }: LibraryViewModeProps) {
             openLabel={tDetail("openDetail", { name: item.name })}
             artwork={<CardArtwork src={cover} name={item.name} sizes="56px" />}
             onOpen={open}
-            trailing={<PlaylistCardMenu item={item} appearance="inline" />}
+            trailing={<PlaylistCardMenu item={item} />}
           />
         );
       }

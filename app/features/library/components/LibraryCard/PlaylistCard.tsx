@@ -83,7 +83,6 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
           <span className={cn(cardStatusDot(), statusDotClass(item.status))} />
           {item.completed_tracks}/{item.total_tracks}
         </span>
-        {chrome === "overlay" ? <PlaylistCardMenu item={item} /> : null}
         {onPlay && chrome === "overlay" ? <CardCoverActions name={item.name} order="inOrder" onPlay={onPlay} /> : null}
         {onPlay && chrome === "corner" ? (
           <CardPlayButton name={item.name} order="inOrder" onPlay={onPlay} placement="corner" />
@@ -96,7 +95,7 @@ export function PlaylistCard({ item, onOpen, onPlay, chrome = "overlay" }: Playl
           <p className={cardSubtitle()}>{playlistSubtitle(item, origin, t)}</p>
           <p className={cardMeta()}>{t("page.counts.tracks", { count: item.total_tracks })}</p>
         </div>
-        {chrome === "corner" ? <PlaylistCardMenu item={item} appearance="inline" /> : null}
+        <PlaylistCardMenu item={item} />
       </div>
     </li>
   );

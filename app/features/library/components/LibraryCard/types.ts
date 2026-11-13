@@ -24,8 +24,6 @@ export interface LibraryInfiniteGridProps<TItem> {
 
 export type CardPlayOrder = "inOrder" | "shuffled";
 
-export type CardMenuAppearance = "cover" | "inline";
-
 export interface CardPlayButtonProps {
   name: string;
   order: CardPlayOrder;
@@ -119,5 +117,4 @@ export interface PlaylistCardProps {
 
 export interface PlaylistCardMenuProps {
   item: LibraryPlaylistItem;
-  appearance?: CardMenuAppearance;
 }
