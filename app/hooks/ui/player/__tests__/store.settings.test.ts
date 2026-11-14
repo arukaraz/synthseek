@@ -286,11 +286,45 @@ describe("conversion the listener asks for", () => {
   });
 
   it("comes back on the next visit", async () => {
-    window.localStorage.setItem(CONVERSION_STORAGE_KEY, JSON.stringify({ enabled: true, bitrateKbps: 320 }));
+    window.localStorage.setItem(CONVERSION_STORAGE_KEY, JSON.stringify({ enabled: true, bitrateKbps: 256 }));
     const store = await freshStore();
 
     store.actions.restorePlaybackSettings();
     store.actions.playQueue([track("a")], 0);
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?format=mp3&maxBitrate=256",
+      0.8,
+      false,
+      0
+    );
+  });
+
+  it("plays a track that is already the chosen format within the chosen bitrate as the original", async () => {
+    const store = await freshStore();
+    store.actions.setConversion({ enabled: true, bitrateKbps: 320 });
+
+    store.actions.playQueue([track("a")], 0);
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith("/api/v1/library/tracks/a/stream", 0.8, false, 0);
+    expect(store.getSnapshot().transcoding).toBe(false);
+  });
+
+  it("resumes such a track at the saved second inside the original, so the bar and the sound agree", async () => {
+    const store = await freshStore();
+    store.actions.setConversion({ enabled: true, bitrateKbps: 320 });
+
+    store.actions.restoreSession([track("a")], "a", 120, null, [], null);
+
+    expect(engine.loadAt).toHaveBeenLastCalledWith("/api/v1/library/tracks/a/stream", 120, 0.8, false);
+    expect(store.getSnapshot().transcoding).toBe(false);
+  });
+
+  it("still converts a track of the chosen format whose bitrate was never measured", async () => {
+    const store = await freshStore();
+    store.actions.setConversion({ enabled: true, bitrateKbps: 320 });
+
+    store.actions.playQueue([{ ...track("a"), bitrateKbps: 0 }], 0);
 
     expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
       "/api/v1/library/tracks/a/stream?format=mp3&maxBitrate=320",
@@ -298,6 +332,21 @@ describe("conversion the listener asks for", () => {
       false,
       0
     );
+  });
+
+  it("still converts a lossless track under the same setting", async () => {
+    const store = await freshStore();
+    store.actions.setConversion({ enabled: true, bitrateKbps: 320 });
+
+    store.actions.playQueue([{ ...track("a"), format: "flac", bitrateKbps: 900, lossless: true }], 0);
+
+    expect(engine.loadAndPlay).toHaveBeenLastCalledWith(
+      "/api/v1/library/tracks/a/stream?format=mp3&maxBitrate=320",
+      0.8,
+      false,
+      0
+    );
+    expect(store.getSnapshot().transcoding).toBe(true);
   });
 
   it("ignores a saved bitrate the server would not honour", async () => {

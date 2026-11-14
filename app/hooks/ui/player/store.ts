@@ -231,7 +231,7 @@ function sourceFor(track: PlayerTrack): string | null {
 
 function conversionFor(track: PlayerTrack): StreamConversion | null {
   const played = asPlayedFrom(track, playingSourceOf(track, state.sourceChoice));
-  return streamConversionFor(needsConversion(played.format, canPlayMime), state.conversion);
+  return streamConversionFor(played, needsConversion(played.format, canPlayMime), state.conversion);
 }
 
 function streamUrlOf(track: PlayerTrack, conversion: StreamConversion | null, fromSeconds: number): string {
