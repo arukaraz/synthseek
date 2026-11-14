@@ -119,7 +119,7 @@ export function useSubscriptions() {
           applyPlaybackState(event);
           break;
         case SubscriptionEventType.UserActivity:
-          handleUserActivity(event, utils, queryClient, viewerId);
+          handleUserActivity(event, utils, queryClient);
           break;
         case SubscriptionEventType.ListeningNowUpdate:
           handleListeningNowUpdate(event, utils, viewerId);

@@ -33,11 +33,11 @@ function writeFavoriteTracks(change: FavoriteTracksChange, queryClient: QueryCli
   }
 }
 
-type Redraw = (event: UserActivityPayload, utils: TrpcUtils, client: QueryClient, viewerKnown: boolean) => void;
+type Redraw = (event: UserActivityPayload, utils: TrpcUtils, client: QueryClient) => void;
 
 const REDRAW: Record<UserActivitySubject, Redraw> = {
-  favorites: (event, utils, client, viewerKnown) => {
-    if (event.favoriteTracks === undefined || !viewerKnown) {
+  favorites: (event, utils, client) => {
+    if (event.favoriteTracks === undefined) {
       void utils.playback.favoriteTrackIds.invalidate();
       return;
     }
@@ -48,12 +48,6 @@ const REDRAW: Record<UserActivitySubject, Redraw> = {
   },
 };
 
-export function handleUserActivity(
-  event: UserActivityPayload,
-  utils: TrpcUtils,
-  queryClient: QueryClient,
-  viewerId: string | null
-): void {
-  if (viewerId !== null && event.userId !== viewerId) return;
-  REDRAW[event.subject](event, utils, queryClient, viewerId !== null);
+export function handleUserActivity(event: UserActivityPayload, utils: TrpcUtils, queryClient: QueryClient): void {
+  REDRAW[event.subject](event, utils, queryClient);
 }

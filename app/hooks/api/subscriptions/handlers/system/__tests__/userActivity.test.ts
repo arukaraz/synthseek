@@ -45,7 +45,7 @@ describe("handleUserActivity", () => {
     client.setQueryData(keyFor(["t1", "t2"]), ["t2"]);
     client.setQueryData(keyFor(["t9"]), ["t9"]);
 
-    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client, "u1");
+    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client);
 
     expect(client.getQueryData(keyFor(["t1"]))).toEqual(["t1"]);
     expect(client.getQueryData(keyFor(["t1", "t2"]))).toEqual(["t2", "t1"]);
@@ -58,7 +58,7 @@ describe("handleUserActivity", () => {
     client.setQueryData(unreadable, ["t9"]);
     client.setQueryData(keyFor(["t1"]), []);
 
-    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client, "u1");
+    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client);
 
     expect(client.getQueryState(unreadable)?.isInvalidated).toBe(true);
     expect(client.getQueryState(keyFor(["t1"]))?.isInvalidated).toBe(false);
@@ -68,11 +68,11 @@ describe("handleUserActivity", () => {
   it("takes the mark off again, and never lists a track twice when it is marked twice", () => {
     client.setQueryData(keyFor(["t1", "t2"]), ["t1", "t2"]);
 
-    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client, "u1");
+    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client);
 
     expect(client.getQueryData(keyFor(["t1", "t2"]))).toEqual(["t2", "t1"]);
 
-    handleUserActivity(favorites({ trackIds: ["t1"], favorite: false }), utils, client, "u1");
+    handleUserActivity(favorites({ trackIds: ["t1"], favorite: false }), utils, client);
 
     expect(client.getQueryData(keyFor(["t1", "t2"]))).toEqual(["t2"]);
   });
@@ -80,32 +80,14 @@ describe("handleUserActivity", () => {
   it("never adds a track to an answer that did not ask about it", () => {
     client.setQueryData(keyFor(["t2"]), []);
 
-    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client, "u1");
+    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client);
 
     expect(client.getQueryData(keyFor(["t2"]))).toEqual([]);
   });
 
   it("asks the server when a favorites event does not say which tracks changed", () => {
-    handleUserActivity(favorites(), utils, client, "u1");
+    handleUserActivity(favorites(), utils, client);
 
-    expect(invalidateFavorites).toHaveBeenCalledTimes(1);
-  });
-
-  it("ignores what another member marked, which an administrator's screen is also sent", () => {
-    client.setQueryData(keyFor(["t1"]), []);
-
-    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client, "u_admin");
-
-    expect(client.getQueryData(keyFor(["t1"]))).toEqual([]);
-    expect(invalidateFavorites).not.toHaveBeenCalled();
-  });
-
-  it("asks the server instead of writing while it does not yet know who is watching", () => {
-    client.setQueryData(keyFor(["t1"]), []);
-
-    handleUserActivity(favorites({ trackIds: ["t1"], favorite: true }), utils, client, null);
-
-    expect(client.getQueryData(keyFor(["t1"]))).toEqual([]);
     expect(invalidateFavorites).toHaveBeenCalledTimes(1);
   });
 
@@ -113,8 +95,7 @@ describe("handleUserActivity", () => {
     handleUserActivity(
       { eventType: SubscriptionEventType.UserActivity, userId: "u1", subject: "listeningServices" },
       utils,
-      client,
-      "u1"
+      client
     );
 
     expect(invalidateConnections).toHaveBeenCalledTimes(1);
